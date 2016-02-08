@@ -45,8 +45,6 @@ class BaseProperties(object):
         except Exception, e:
             self._set_error(e, prop, value)
 
-        self._prop_changed_callback(self, prop, value)
-
     def _check_interface(self, interface):
         if interface and interface != self.interface:
             msg = "%s does not handle properties for %s" % (self.interface, interface)
@@ -58,13 +56,6 @@ class BaseProperties(object):
             msg = "org.freedesktop.DBus.Error.AccessDenied: "
             "Property '%s' does not exist" % property
             raise dbus.exceptions.DBusException(msg)
-
-    # FIXME: This would def be better with a gobject and it's properties, so
-    #        we can let it take care of coaalescing.
-    def _prop_changed_callback(self, *args, **kwargs):
-        log.debug("args=%s kwargs=%s", *args, **kwargs)
-        if self.prop_changed_callback:
-            self.prop_changed_callback(*args, **kwargs)
 
     def _set_error(self, exception, prop, value):
         log.exception(exception)

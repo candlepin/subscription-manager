@@ -131,8 +131,7 @@ class Hardware(object):
 
         # we need this so we can decide which of the
         # arch specific code bases to follow
-        self.arch = get_arch(prefix=prefix,
-                             testing=testing)
+        self.arch = get_arch(prefix=prefix)
 
     def get_uname_info(self):
 
