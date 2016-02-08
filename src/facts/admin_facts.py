@@ -29,7 +29,7 @@ _ = gettext.gettext
 
 # TODO/FIXME: This can go away, or at the very least, move
 #             to a utility module
-def get_output(self, cmd):
+def get_output(cmd):
     log.debug("Running '%s'" % cmd)
     process = subprocess.Popen([cmd],
                                stdout=subprocess.PIPE,
@@ -67,8 +67,8 @@ class CalledProcessError(Exception):
         return "Command '%s' returned non-zero exit status %d" % (self.cmd, self.returncode)
 
 
-class AdminHardware(object):
-    """Collect hardware facts that require elevated privs (ie, root).
+class AdminFacts(object):
+    """Collect facts that require elevated privs (ie, root).
 
     hwprobe.Hardware() can be invoked as a user, but this class
     will need to run as root or equilivent.
@@ -78,6 +78,8 @@ class AdminHardware(object):
     def __init__(self, prefix=None, testing=None):
         self.allhw = {}
         self.arch = hwprobe.get_arch()
+        self.prefix = prefix or ''
+        self.testing = testing or False
 
         # Note: unlike system uuid in DMI info, the virt.uuid is
         # available to non-root users on ppc64*
@@ -85,13 +87,22 @@ class AdminHardware(object):
         # so parts of this don't need to be in AdminHardware
         self.devicetree_vm_uuid_arches = ['ppc64', 'ppc64le']
 
+        self.hardware_methods = [self.get_firmware_info,
+                                 self.get_virt_info,
+                                 self.get_virt_uuid]
+
     def get_all(self):
-        # get_platform_specific_info
-        # get_virt_info
-        # get_virt_uuid
-        # we need to know the DMI info and VirtInfo before determining UUID.
-        # Thus, we can't figure it out within the main data collection loop.
-        self.get_virt_uuid()
+
+        # try each hardware method, and try/except around, since
+        # these tend to be fragile
+        for hardware_method in self.hardware_methods:
+            try:
+                hardware_method()
+            except Exception, e:
+                log.exception(e)
+                raise
+                log.warn("%s" % hardware_method)
+                log.warn("Hardware detection failed: %s" % e)
 
         log.info("collected virt facts: virt.is_guest=%s, virt.host_type=%s, virt.uuid=%s",
                  self.allhw.get('virt.is_guest', 'Not Set'),
@@ -121,7 +132,7 @@ class AdminHardware(object):
         virt_dict = {}
 
         try:
-            host_type = self._get_output('virt-what')
+            host_type = get_output('virt-what')
             # BZ1018807 xen can report xen and xen-hvm.
             # Force a single line
             host_type = ", ".join(host_type.splitlines())

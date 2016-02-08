@@ -133,6 +133,15 @@ class Hardware(object):
         # arch specific code bases to follow
         self.arch = get_arch(prefix=prefix)
 
+        self.hardware_methods = [self.get_uname_info,
+                                 self.get_release_info,
+                                 self.get_mem_info,
+                                 self.get_proc_cpuinfo,
+                                 self.get_cpu_info,
+                                 self.get_ls_cpu_info,
+                                 self.get_network_info,
+                                 self.get_network_interfaces]
+
     def get_uname_info(self):
 
         uname_data = os.uname()
@@ -718,18 +727,10 @@ class Hardware(object):
         return hwaddr
 
     def get_all(self):
-        hardware_methods = [self.get_uname_info,
-                            self.get_release_info,
-                            self.get_mem_info,
-                            self.get_proc_cpuinfo,
-                            self.get_cpu_info,
-                            self.get_ls_cpu_info,
-                            self.get_network_info,
-                            self.get_network_interfaces]
 
         # try each hardware method, and try/except around, since
         # these tend to be fragile
-        for hardware_method in hardware_methods:
+        for hardware_method in self.hardware_methods:
             try:
                 hardware_method()
             except Exception, e:
