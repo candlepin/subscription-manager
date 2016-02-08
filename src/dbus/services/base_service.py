@@ -105,6 +105,9 @@ class BaseService(slip.dbus.service.Object):
         self.props.set(interface=interface_name,
                        prop=property_name,
                        value=new_value)
+        self.PropertiesChanged(interface_name,
+                               {property_name: new_value},
+                               [])
 
     @dbus.service.signal(dbus.PROPERTIES_IFACE, signature='sa{sv}as')
     def PropertiesChanged(self, interface_name, changed_properties,
