@@ -11,32 +11,37 @@ import dbus.mainloop.glib
 import slip.dbus
 import slip.dbus.service
 
+from rhsm.facts import admin_facts
+
 from rhsm.dbus.services import decorators
 from rhsm.dbus.services import base_service
 from rhsm.dbus.services import base_properties
+from rhsm.dbus.services.facts import server
 
 # Note facts and facts-root provide the same interface on
 # different object paths
 FACTS_ROOT_DBUS_BUS_NAME = "com.redhat.Subscriptions1.Facts.Root"
 FACTS_ROOT_DBUS_INTERFACE = "com.redhat.Subscriptions1.Facts"
 FACTS_ROOT_DBUS_PATH = "/com/redhat/Subscriptions1/Facts/Root"
-PK_FACTS_COLLECT = "com.redhat.Subscriptions1.Facts.collect"
+PK_FACTS_ROOT_COLLECT = "com.redhat.Subscriptions1.Facts.Root.collect"
 
 
-class FactsRoot(base_service.BaseService):
+class FactsRoot(server.Facts):
 
-    default_polkit_auth_required = PK_FACTS_COLLECT
+    default_polkit_auth_required = PK_FACTS_ROOT_COLLECT
     persistent = True
-    # FIXME: almost surely this is already available
+    facts_collector_class = admin_facts.AdminFacts
 
     def __init__(self, *args, **kwargs):
         super(FactsRoot, self).__init__(*args, **kwargs)
+
         self._interface_name = FACTS_ROOT_DBUS_INTERFACE
+
         self._props = base_properties.BaseProperties(interface=self._interface_name,
                                                      data={},
                                                      prop_changed_callback=self.PropertiesChanged)
 
-    @slip.dbus.polkit.require_auth(PK_FACTS_COLLECT)
+    @slip.dbus.polkit.require_auth(PK_FACTS_ROOT_COLLECT)
     @decorators.dbus_service_method(dbus_interface=FACTS_ROOT_DBUS_INTERFACE,
                                     in_signature='ii',
                                     out_signature='i')
@@ -46,7 +51,7 @@ class FactsRoot(base_service.BaseService):
         total = int_a + int_b
         return total
 
-    @slip.dbus.polkit.require_auth(PK_FACTS_COLLECT)
+    @slip.dbus.polkit.require_auth(PK_FACTS_ROOT_COLLECT)
     @decorators.dbus_service_method(dbus_interface=FACTS_ROOT_DBUS_INTERFACE,
                                    out_signature='s')
     @decorators.dbus_handle_exceptions

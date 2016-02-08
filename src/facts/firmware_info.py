@@ -25,6 +25,7 @@ except ImportError, e:
     dmiinfo = None
 
 FIRMWARE_DUMP_FILENAME = "dmi.dump"
+ARCHES_WITHOUT_DMI = ["ppc64", "ppc64le", "s390x"]
 
 log = logging.getLogger(__name__)
 
@@ -44,7 +45,7 @@ class NullFirmwareInfoProvider(object):
 #             version of dmidecode (> 3.0), most of the dmi info is readable
 #             by a user. However, the system-uuid is not readable by a user,
 #             and that is pretty much the only thing from DMI we care about,
-def get_firmware_provider(self, arch, prefix=None, testing=None):
+def get_firmware_provider(arch, prefix=None, testing=None):
     """
     Return a class that can be used to get firmware info specific to
     this systems platform.
@@ -56,11 +57,11 @@ def get_firmware_provider(self, arch, prefix=None, testing=None):
     # but at the moment, it is just firmware/dmi stuff.
 
     dump_file = None
-    if self.testing and self.prefix:
+    if testing and prefix:
         dump_file = os.path.join(prefix, FIRMWARE_DUMP_FILENAME)
 
-    if self.arch in self.no_dmi_arches:
-        log.debug("Not looking for DMI info since it is not available on '%s'" % self.arch)
+    if arch in ARCHES_WITHOUT_DMI:
+        log.debug("Not looking for DMI info since it is not available on '%s'" % arch)
         firmware_provider_class = NullFirmwareInfoProvider
     else:
         if dmiinfo:

@@ -214,6 +214,7 @@ dbus-install-and-reload: dbus-install polkit-install selinux-restorecon systemd-
 polkit-install:
 	# TODO: verify we can share the polkit policy if we are using the same action ids
 	install -m0644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.policy /usr/share/polkit-1/actions/
+	install -m0644 $(DBUS_SERVICES_SRC_DIR)/facts_root/com.redhat.Subscriptions1.Facts.Root.policy /usr/share/polkit-1/actions/
 	install -m0644 $(DBUS_SERVICES_SRC_DIR)/com.redhat.Subscriptions1.policy /usr/share/polkit-1/actions/
 
 install-conf:
