@@ -37,6 +37,8 @@ ANACONDA_ADDON_SRC_DIR := $(BASE_SRC_DIR)/initial-setup
 ANACONDA_ADDON_MODULE_SRC_DIR := $(ANACONDA_ADDON_SRC_DIR)/$(ANACONDA_ADDON_NAME)
 DBUS_SRC_DIR := $(BASE_SRC_DIR)/dbus
 DBUS_SERVICES_SRC_DIR = $(DBUS_SRC_DIR)/services
+DBUS_COMMON_SRC_DIR = $(DBUS_SRC_DIR)/common
+DBUS_CLIENTS_SRC_DIR = $(DBUS_SRC_DIR)/clients
 FACTS_SRC_DIR := $(BASE_SRC_DIR)/facts
 
 # dirs we install to
@@ -52,6 +54,8 @@ RHSM_LOCALE_DIR := $(PREFIX)/$(INSTALL_DIR)/locale
 # rhsm modules go to lib64/ and we want to be a subpackage...
 DBUS_INSTALL_DIR := $(PREFIX)/$(PYTHON_SITELIB64)/$(INSTALL_MODULE)/dbus
 DBUS_SERVICES_INSTALL_DIR := $(DBUS_INSTALL_DIR)/services
+DBUS_CLIENTS_INSTALL_DIR := $(DBUS_INSTALL_DIR)/clients
+DBUS_COMMON_INSTALL_DIR := $(DBUS_INSTALL_DIR)/common
 # facts package
 FACTS_INSTALL_DIR := $(PREFIX)/$(PYTHON_SITELIB64)/$(INSTALL_MODULE)/facts
 
@@ -146,8 +150,14 @@ dbus-common-install:
 	install -d $(PREFIX)/etc/bash_completion.d
 	install -d $(DBUS_INSTALL_DIR)
 	install -d $(DBUS_SERVICES_INSTALL_DIR)
+	install -d $(DBUS_CLIENTS_INSTALL_DIR)
+	install -d $(DBUS_COMMON_INSTALL_DIR)
 	install -m 644 -p $(DBUS_SRC_DIR)/__init__.py $(DBUS_INSTALL_DIR)
+	install -m 644 -p $(DBUS_COMMON_SRC_DIR)/__init__.py $(DBUS_COMMON_INSTALL_DIR)
+	install -m 644 -p $(DBUS_CLIENTS_SRC_DIR)/__init__.py $(DBUS_CLIENTS_INSTALL_DIR)
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/__init__.py $(DBUS_SERVICES_INSTALL_DIR)
+	install -m 644 -p $(DBUS_COMMON_SRC_DIR)/*.py $(DBUS_COMMON_INSTALL_DIR)
+	install -m 644 -p $(DBUS_CLIENTS_SRC_DIR)/*.py $(DBUS_CLIENTS_INSTALL_DIR)
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/*.py $(DBUS_SERVICES_INSTALL_DIR)
 	
 
@@ -168,7 +178,8 @@ dbus-facts-root-service-install: dbus-common-install facts-install
 		$(PREFIX)/etc/dbus-1/system.d
 	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts_root/rhsm-facts-root.service \
 		$(SYSTEMD_INST_DIR)
-	install -m 744 $(DBUS_SERVICES_SRC_DIR)/facts_root/rhsm-facts-root-service \
+	# Needs to be executable by the rhsm user
+	install -m 755 $(DBUS_SERVICES_SRC_DIR)/facts_root/rhsm-facts-root-service \
 		$(PREFIX)/usr/libexec/rhsm-facts-root-service
 
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts_root/__init__.py $(DBUS_SERVICES_INSTALL_DIR)/facts_root
@@ -182,15 +193,22 @@ dbus-facts-service-install: dbus-common-install facts-install
 		$(PREFIX)/etc/dbus-1/system.d
 	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/rhsm-facts.service \
 		$(SYSTEMD_INST_DIR)
-	install -m 744 $(DBUS_SERVICES_SRC_DIR)/facts/rhsm-facts-service \
+	# Needs to be executable by the rhsm user
+	install -m 755 $(DBUS_SERVICES_SRC_DIR)/facts/rhsm-facts-service \
 		$(PREFIX)/usr/libexec/rhsm-facts-service
 
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/__init__.py $(DBUS_SERVICES_INSTALL_DIR)/facts
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/server.py $(DBUS_SERVICES_INSTALL_DIR)/facts
 
+dbus-clients-install: dbus-common-install
+	install -d $(DBUS_CLIENTS_INSTALL_DIR)/facts
+	install -m 644 -p $(DBUS_CLIENTS_SRC_DIR)/facts/__init__.py $(DBUS_CLIENTS_INSTALL_DIR)/facts
+	install -m 644 -p $(DBUS_CLIENTS_SRC_DIR)/facts/client.py $(DBUS_CLIENTS_INSTALL_DIR)/facts
+
 dbus-reload:
 	 # magic from python-slip examples make file. Likely unneeded.
-	 touch $(PREFIX)/etc/dbus-1/system.d/com.redhat.Subscriptions1.Facts.conf
+	 touch $(PREFIX)/etc/dbus-1/system.d/com.redhat.Subscriptions1.Facts.User.conf
+	 touch $(PREFIX)/etc/dbus-1/system.d/com.redhat.Subscriptions1.Facts.Root.conf
 	 dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig
 
 systemd-reload:
@@ -202,7 +220,7 @@ systemd-reload:
 	systemctl status -l rhsm-facts.service
 	systemctl status -l rhsm-facts-root.service
 
-dbus-install: dbus-rhsmd-service-install dbus-facts-service-install dbus-facts-root-service-install
+dbus-install: dbus-clients-install dbus-rhsmd-service-install dbus-facts-service-install dbus-facts-root-service-install
 
 selinux-restorecon:
 	restorecon -v -R /usr/libexec /usr/share/dbus-1/system-services /etc/dbus-1/system.d /usr/share/polkit-1/actions

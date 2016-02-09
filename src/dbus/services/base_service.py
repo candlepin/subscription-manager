@@ -1,18 +1,21 @@
 #!/usr/bin/python
 
 import logging
-import sys
+#import sys
 
 log = logging.getLogger(__name__)
 
+from rhsm.dbus.common import gi_kluge
+gi_kluge.kluge_it()
+
 # gobject and gi and python module loading tricks are fun.
-gmodules = [x for x in sys.modules.keys() if x.startswith('gobject')]
-for gmodule in gmodules:
-    del sys.modules[gmodule]
+#gmodules = [x for x in sys.modules.keys() if x.startswith('gobject')]
+#for gmodule in gmodules:
+#    del sys.modules[gmodule]
 
 
-import slip._wrappers
-slip._wrappers._gobject = None
+#import slip._wrappers
+#slip._wrappers._gobject = None
 
 from gi.repository import GLib
 
@@ -23,7 +26,7 @@ import dbus.mainloop.glib
 import slip.dbus
 import slip.dbus.service
 
-from rhsm.dbus.services import decorators
+from rhsm.dbus.common import decorators
 from rhsm.dbus.services import base_properties
 
 # TODO: move these to a config/constants module

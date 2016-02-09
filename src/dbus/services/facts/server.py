@@ -2,7 +2,7 @@
 
 import logging
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 import dbus
 import dbus.service
@@ -11,7 +11,7 @@ import dbus.mainloop.glib
 import slip.dbus
 import slip.dbus.service
 
-from rhsm.dbus.services import decorators
+from rhsm.dbus.common import decorators
 from rhsm.dbus.services import base_service
 from rhsm.dbus.services import base_properties
 
@@ -26,7 +26,7 @@ PK_FACTS_COLLECT = "com.redhat.Subscriptions1.Facts.collect"
 
 class Facts(base_service.BaseService):
 
-    default_polkit_auth_required = PK_FACTS_COLLECT
+    default_polkit_auth_required = None
     persistent = True
     default_props_data = {'version': '-infinity+37',
                           'answer': '42',
