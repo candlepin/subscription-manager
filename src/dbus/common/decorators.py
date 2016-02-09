@@ -5,7 +5,7 @@ import logging
 import dbus
 import dbus.exceptions
 
-log = logging.getLogger("rhsm-app." + __name__)
+log = logging.getLogger(__name__)
 
 # TODO: mv to shared config/constants module
 DBUS_INTERFACE = "com.redhat.Subscriptions1"
@@ -31,10 +31,14 @@ def dbus_handle_exceptions(func, *args, **kwargs):
 #        log.error(str(error))
 #        raise FirewallDBusException(str(error))
     except dbus.DBusException as e:
+        dbus_message = e.get_dbus_message()  # returns unicode
+        dbus_name = e.get_dbus_name()
         # only log DBusExceptions once
         log.debug("DbusException caught")
         log.exception(e)
-        raise e
+        log.debug("dbus_message=%s", dbus_message)
+        log.debug("dbus_name=%s", dbus_name)
+        raise
     except Exception as e:
         log.debug("Exception caught")
         log.exception(e)

@@ -2,7 +2,7 @@
 
 import logging
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 import dbus
 import dbus.service
@@ -13,7 +13,7 @@ import slip.dbus.service
 
 from rhsm.facts import admin_facts
 
-from rhsm.dbus.services import decorators
+from rhsm.dbus.common import decorators
 from rhsm.dbus.services import base_service
 from rhsm.dbus.services import base_properties
 from rhsm.dbus.services.facts import server
