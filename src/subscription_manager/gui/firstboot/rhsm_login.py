@@ -77,7 +77,7 @@ class moduleClass(module.Module, object):
         reg_info = registergui.RegisterInfo()
         self.backend = managergui.Backend()
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
-        self.register_widget = registergui.RegisterWidget(self.backend, Facts(), reg_info)
+        self.register_widget = registergui.FirstbootWidget(self.backend, Facts(), reg_info)
 
         # Will be False if we are on an older RHEL version where
         # rhn-client-tools already does some things so we don't have to.
@@ -215,6 +215,7 @@ class moduleClass(module.Module, object):
             return True
 
     def on_finished(self, obj):
+        log.debug('FINISHED!!!!!!!!')
         self.finished = True
         self.page_status = constants.RESULT_SUCCESS
         return False
@@ -348,6 +349,7 @@ class moduleClass(module.Module, object):
         # EL6:
         else:
             if self.interface is not None:
+                log.debug('RHSMLOGIN CHANGING SENSITIVITY %s' % sensitive)
                 self.interface.backButton.set_sensitive(sensitive)
                 self.interface.nextButton.set_sensitive(sensitive)
 

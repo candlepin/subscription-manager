@@ -228,7 +228,7 @@ class RegisterWidget(widgets.SubmanBaseWidget):
     # TODO: a prop equilivent to initial-setups 'completed' and 'status' props
 
     def __init__(self, backend, facts, reg_info=None,
-                 parent_window=None):
+                 parent_window=None, screen_classes=None):
         super(RegisterWidget, self).__init__()
 
         self.backend = backend
@@ -277,17 +277,16 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         # To update the 'next/register' button in the parent dialog based on the new page
         self.register_notebook.connect('switch-page',
                                        self._on_switch_page)
-
-        screen_classes = [ChooseServerScreen, ActivationKeyScreen,
-                          CredentialsScreen, OrganizationScreen,
-                          EnvironmentScreen, PerformRegisterScreen,
-                          SelectSLAScreen, ConfirmSubscriptionsScreen,
-                          PerformSubscribeScreen, RefreshSubscriptionsScreen,
-                          InfoScreen, DoneScreen]
+        self.screen_classes = screen_classes or [ChooseServerScreen, ActivationKeyScreen,
+                                                 CredentialsScreen, OrganizationScreen,
+                                                 EnvironmentScreen, PerformRegisterScreen,
+                                                 SelectSLAScreen, ConfirmSubscriptionsScreen,
+                                                 PerformSubscribeScreen, RefreshSubscriptionsScreen,
+                                                 InfoScreen, DoneScreen]
         self._screens = []
 
         # TODO: current_screen as a gobject property
-        for idx, screen_class in enumerate(screen_classes):
+        for idx, screen_class in enumerate(self.screen_classes):
             self.add_screen(idx, screen_class)
 
         self._current_screen = self.initial_screen
@@ -582,16 +581,18 @@ class RegisterWidget(widgets.SubmanBaseWidget):
 
     def _on_screen_ready_change(self, obj, param):
         # This could potentially be self.current_sceen.get_property('ready')
-
+        log.debug('ORIGINAL SCREEN READY CHANGE')
         ready = obj.get_property('ready')
 
         # property for parent dialog to use for nav button sensitivity
         self.set_property('screen-ready', ready)
 
         if ready:
+            log.debug('Unblocking proceed and back')
             self.handler_unblock(self.proceed_handler)
             self.handler_unblock(self.back_handler)
         else:
+            log.debug('Blocking proceed and back')
             self.handler_block(self.proceed_handler)
             self.handler_block(self.back_handler)
 
@@ -792,6 +793,31 @@ class AutoBindWidget(RegisterWidget):
 
     def choose_initial_screen(self):
         self.current_screen.emit('move-to-screen', SELECT_SLA_PAGE)
+        self.register_widget.show_all()
+        return False
+
+
+class FirstbootWidget(RegisterWidget):
+    # A RegisterWidget for use in firstboot.
+    # This widget, along with the PerformForceRegisterScreen, will ensure that
+    # all screens are shown, and the user is allowed to register again.
+    __gtype_name__ = "FirstbootWidget"
+
+    initial_screen = CHOOSE_SERVER_PAGE
+
+    def __init__(self, backend, facts, reg_info=None,
+                 parent_window=None, screen_classes=None):
+        screen_classes = screen_classes or [ChooseServerScreen, ActivationKeyScreen,
+                                            CredentialsScreen, OrganizationScreen,
+                                            EnvironmentScreen, PerformForceRegisterScreen,
+                                            SelectSLAScreen, ConfirmSubscriptionsScreen,
+                                            PerformSubscribeScreen, RefreshSubscriptionsScreen,
+                                            InfoScreen, DoneScreen]
+        super(FirstbootWidget, self).__init__(backend, facts, reg_info,
+                                             parent_window, screen_classes=screen_classes)
+
+    def choose_initial_screen(self):
+        self.current_screen.emit('move-to-screen', self.initial_screen)
         self.register_widget.show_all()
         return False
 
@@ -1007,7 +1033,6 @@ class PerformRegisterScreen(NoGuiScreen):
                  (self.info.get_property('owner-key'),
                   self.info.get_property('environment'))
         self.info.set_property('register-status', msg)
-
         self.async.register_consumer(self.info.get_property('consumername'),
                                      self.facts,
                                      self.info.get_property('owner-key'),
@@ -1016,6 +1041,33 @@ class PerformRegisterScreen(NoGuiScreen):
                                      self._on_registration_finished_cb)
 
         return True
+
+
+class PerformForceRegisterScreen(PerformRegisterScreen):
+
+    def _on_unregistration_finished_cb(self, retval, error=None):
+        self.__register_consumer()
+
+    def __register_consumer(self):
+        self.async.register_consumer(self.info.get_property('consumername'),
+                                     self.facts,
+                                     self.info.get_property('owner-key'),
+                                     self.info.get_property('environment'),
+                                     self.info.get_property('activation-keys'),
+                                     self._on_registration_finished_cb)
+
+    def pre(self):
+        msg = _("Registering to owner: %s environment: %s") % \
+                 (self.info.get_property('owner-key'),
+                  self.info.get_property('environment'))
+        self.info.set_property('register-status', msg)
+        if self.info.identity.is_valid():
+            #self.info.set_property('register-state', RegisterState.REGISTERING)
+            self.async.unregister_consumer(self.info.identity.uuid, self._on_unregistration_finished_cb)
+        else:
+            self.__register_consumer()
+        return True
+
 
 
 class PerformSubscribeScreen(NoGuiScreen):
@@ -1517,7 +1569,7 @@ class CredentialsScreen(Screen):
         self.info.set_property('password', password)
         self.info.set_property('skip-auto-bind', skip_auto_bind)
         self.info.set_property('consumername', consumername)
-
+        self.info.set_property('register-state', RegisterState.REGISTERING)
         self.emit('move-to-screen', OWNER_SELECT_PAGE)
         return True
 
@@ -1689,6 +1741,7 @@ class ChooseServerScreen(Screen):
         pass
 
     def apply(self):
+        log.debug('CHOOSE SERVER APPLY!!!!!!!!!!!!!!!!!!!!')
         self.stay()
         server = self.server_entry.get_text()
 
@@ -1729,10 +1782,12 @@ class ChooseServerScreen(Screen):
         self.info.set_property('prefix', prefix)
 
         if self.activation_key_checkbox.get_active():
+            log.debug('ACTIVATION_PAGE')
             self.emit('move-to-screen', ACTIVATION_KEY_PAGE)
             return True
 
         else:
+            log.debug('CRED_PAGE!')
             self.emit('move-to-screen', CREDENTIALS_PAGE)
             return True
 
@@ -1992,6 +2047,18 @@ class AsyncBackend(object):
         except Exception:
             self.queue.put((callback, None, sys.exc_info()))
 
+    def __unregister_consumer(self, consumer_uuid):
+        # Method to actually do the unregister bits
+        cp = self.backend.cp_provider.get_consumer_auth_cp()
+        managerlib.unregister(cp, consumer_uuid)
+
+    def _unregister_consumer(self, consumer_uuid, callback):
+        try:
+            self.__unregister_consumer(consumer_uuid)
+            self.queue.put((callback, None, None))
+        except Exception:
+            self.queue.put((callback, None, sys.exc_info()))
+
     def get_owner_list(self, username, callback):
         ga_GObject.idle_add(self._watch_thread)
         threading.Thread(target=self._get_owner_list,
@@ -2032,6 +2099,12 @@ class AsyncBackend(object):
         threading.Thread(target=self._refresh,
                          name="RefreshThread",
                          args=(callback,)).start()
+
+    def unregister_consumer(self, consumer_uuid, callback):
+        ga_GObject.idle_add(self._watch_thread)
+        threading.Thread(target=self._unregister_consumer,
+                         name="UnregisterThread",
+                         args=(consumer_uuid, callback)).start()
 
 
 # TODO: make this a more informative 'summary' page.
