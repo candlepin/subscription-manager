@@ -77,7 +77,7 @@ class moduleClass(module.Module, object):
         reg_info = registergui.RegisterInfo()
         self.backend = managergui.Backend()
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
-        self.register_widget = registergui.RegisterWidget(self.backend, Facts(), reg_info)
+        self.register_widget = registergui.FirstbootWidget(self.backend, Facts(), reg_info)
 
         # Will be False if we are on an older RHEL version where
         # rhn-client-tools already does some things so we don't have to.
@@ -103,6 +103,7 @@ class moduleClass(module.Module, object):
         self._registration_finished = False
 
         self.interface = None
+        self.finished = False
 
         self.proxies_were_enabled_from_gui = None
         self._apply_result = constants.RESULT_FAILURE
@@ -155,11 +156,17 @@ class moduleClass(module.Module, object):
         # Need to make sure that each time the UI is initialized we reset back
         # to the main register screen.
 
+        if self.finished:
+            self.register_widget.done()
+            return
+
         # Note, even if we are standalone firstboot mode (no rhn modules),
         # we may still have RHN installed, and possibly configured.
         self._read_rhn_proxy_settings()
 
         self.register_widget.initialize()
+        # Make sure to show the unregister screen
+        self.register_widget.info.set_property('enable-unregister', True)
 
     def needsNetwork(self):
         """
@@ -223,6 +230,11 @@ class moduleClass(module.Module, object):
         self.error_dialog(msg)
 
     def handle_register_exception(self, obj, msg, exc_info):
+        if isinstance(exc_info[1], registergui.RemoteUnregisterException):
+            # Don't show a message box when we cannot unregister from the server
+            # Instead log the exception
+            log.exception(exc_info[1])
+            return
         message = format_exception(exc_info, msg)
         self.error_dialog(message)
 
