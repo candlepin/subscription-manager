@@ -114,7 +114,7 @@ def get_arch(prefix=None):
     try:
         with open(arch_file, 'r') as arch_fd:
             return arch_fd.read().strip()
-    except IOError, e:
+    except IOError as e:
         # If we specify a prefix, and there is no 'arch' file,
         # consider that fatal.
         log.exception(e)
@@ -143,21 +143,20 @@ class Hardware(object):
                                  self.get_network_interfaces]
 
     def get_uname_info(self):
-
+        uname_info = {}
         uname_data = os.uname()
         uname_keys = ('uname.sysname', 'uname.nodename', 'uname.release',
                       'uname.version', 'uname.machine')
-        self.unameinfo = dict(zip(uname_keys, uname_data))
-        self.allhw.update(self.unameinfo)
-        return self.unameinfo
+        uname_info = dict(zip(uname_keys, uname_data))
+        return uname_info
 
     def get_release_info(self):
-        distro_keys = ('distribution.name', 'distribution.version',
-                       'distribution.id', 'distribution.version.modifier')
-        self.releaseinfo = dict(filter(lambda (key, value): value,
-            zip(distro_keys, self.get_distribution())))
-        self.allhw.update(self.releaseinfo)
-        return self.releaseinfo
+        distro_info = self.get_distribution()
+        release_info = {'distribution.name': distro_info[0],
+                        'distribution.version': distro_info[1],
+                        'distribution.id': distro_info[2],
+                        'distribution.version.modifier': distro_info[3]}
+        return release_info
 
     def _open_release(self, filename):
         return open(filename, 'r')
@@ -222,7 +221,7 @@ class Hardware(object):
         return distname, version, dist_id, version_modifier
 
     def get_mem_info(self):
-        self.meminfo = {}
+        meminfo = {}
 
         # most of this mem info changes constantly, which makes decding
         # when to update facts painful, so lets try to just collect the
@@ -239,11 +238,10 @@ class Hardware(object):
                 key, value = match.groups(['key', 'value'])
                 if key in useful:
                     nkey = '.'.join(["memory", key.lower()])
-                    self.meminfo[nkey] = "%s" % int(value)
-        except Exception, e:
+                    meminfo[nkey] = "%s" % int(value)
+        except Exception as e:
             print _("Error reading system memory information:"), e
-        self.allhw.update(self.meminfo)
-        return self.meminfo
+        return meminfo
 
     def count_cpumask_entries(self, cpu, field):
         try:
@@ -376,7 +374,6 @@ class Hardware(object):
 
         # we could enumerate each processor here as proc_cpuinfo.cpu.3.key =
         # value, but that is a lot of fact table entries
-        self.allhw.update(proc_cpuinfo)
         return proc_cpuinfo
 
     def get_cpu_info(self):
@@ -543,7 +540,6 @@ class Hardware(object):
             cpu_info["cpu.book(s)"] = book_count
 
         log.debug("cpu info: %s" % cpu_info)
-        self.allhw.update(cpu_info)
         return cpu_info
 
     def get_ls_cpu_info(self):
@@ -552,7 +548,7 @@ class Hardware(object):
         if not os.access('/usr/bin/lscpu', os.R_OK):
             return
 
-        self.lscpuinfo = {}
+        lscpuinfo = {}
         # let us specify a test dir of /sys info for testing
         # If the user env sets LC_ALL, it overrides a LANG here, so
         # use LC_ALL here. See rhbz#1225435
@@ -572,37 +568,35 @@ class Hardware(object):
                     # sometimes lscpu outputs weird things. Or fails.
                     #
                     pass
-        except Exception, e:
+        except Exception as e:
             log.warn('Error reading system CPU information: %s', e)
 
-        self.allhw.update(self.lscpuinfo)
-        return self.lscpuinfo
+        return lscpuinfo
 
     def get_network_info(self):
-        self.netinfo = {}
+        netinfo = {}
         try:
             host = socket.gethostname()
-            self.netinfo['network.hostname'] = host
+            netinfo['network.hostname'] = host
 
             try:
                 info = socket.getaddrinfo(host, None, socket.AF_INET, socket.SOCK_STREAM)
                 ip_list = set([x[4][0] for x in info])
-                self.netinfo['network.ipv4_address'] = ', '.join(ip_list)
+                netinfo['network.ipv4_address'] = ', '.join(ip_list)
             except Exception:
-                self.netinfo['network.ipv4_address'] = "127.0.0.1"
+                netinfo['network.ipv4_address'] = "127.0.0.1"
 
             try:
                 info = socket.getaddrinfo(host, None, socket.AF_INET6, socket.SOCK_STREAM)
                 ip_list = set([x[4][0] for x in info])
-                self.netinfo['network.ipv6_address'] = ', '.join(ip_list)
+                netinfo['network.ipv6_address'] = ', '.join(ip_list)
             except Exception:
-                self.netinfo['network.ipv6_address'] = "::1"
+                netinfo['network.ipv6_address'] = "::1"
 
-        except Exception, e:
+        except Exception as e:
             log.warn('Error reading networking information: %s', e)
 
-        self.allhw.update(self.netinfo)
-        return self.netinfo
+        return netinfo
 
     def _should_get_mac_address(self, device):
         if (device.startswith('sit') or device.startswith('lo')):
@@ -700,7 +694,6 @@ class Hardware(object):
 
         except Exception:
             print _("Error reading network interface information:"), sys.exc_type
-        self.allhw.update(netinfdict)
         return netinfdict
 
     # from rhn-client-tools  hardware.py
@@ -730,14 +723,18 @@ class Hardware(object):
 
         # try each hardware method, and try/except around, since
         # these tend to be fragile
+        all_hw_info = {}
         for hardware_method in self.hardware_methods:
+            info_dict = {}
             try:
-                hardware_method()
-            except Exception, e:
+                info_dict = hardware_method()
+            except Exception as e:
                 log.warn("%s" % hardware_method)
                 log.warn("Hardware detection failed: %s" % e)
 
-        return self.allhw
+            all_hw_info.update(info_dict)
+
+        return all_hw_info
 
 
 if __name__ == '__main__':
