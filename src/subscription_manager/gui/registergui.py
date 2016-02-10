@@ -28,7 +28,7 @@ from subscription_manager.ga import GObject as ga_GObject
 
 import rhsm.config as config
 from rhsm.utils import ServerUrlParseError
-from rhsm.connection import GoneException, RestlibException
+from rhsm.connection import GoneException, RestlibException, UEPConnection
 
 from subscription_manager.branding import get_branding
 from subscription_manager.action_client import ActionClient
@@ -66,20 +66,28 @@ PROGRESS_PAGE = -1
 CHOOSE_SERVER_PAGE = 0
 ACTIVATION_KEY_PAGE = 1
 CREDENTIALS_PAGE = 2
-OWNER_SELECT_PAGE = 3
-ENVIRONMENT_SELECT_PAGE = 4
-PERFORM_REGISTER_PAGE = 5
-SELECT_SLA_PAGE = 6
-CONFIRM_SUBS_PAGE = 7
-PERFORM_SUBSCRIBE_PAGE = 8
-REFRESH_SUBSCRIPTIONS_PAGE = 9
-INFO_PAGE = 10
-DONE_PAGE = 11
+PERFORM_UNREGISTER_PAGE = 3
+OWNER_SELECT_PAGE = 4
+ENVIRONMENT_SELECT_PAGE = 5
+PERFORM_REGISTER_PAGE = 6
+SELECT_SLA_PAGE = 7
+CONFIRM_SUBS_PAGE = 8
+PERFORM_SUBSCRIBE_PAGE = 9
+REFRESH_SUBSCRIPTIONS_PAGE = 10
+INFO_PAGE = 11
+DONE_PAGE = 12
 FINISH = 100
 
 REGISTER_ERROR = _("<b>Unable to register the system.</b>") + \
     "\n%s\n" + \
     _("Please see /var/log/rhsm/rhsm.log for more information.")
+
+
+class RemoteUnregisterException(Exception):
+    """
+    This exception is to be used when we are unable to unregister from the server.
+    """
+    pass
 
 
 # from old smolt code.. Force glibc to call res_init()
@@ -108,6 +116,16 @@ def reset_resolver():
         log.warning("reset_resolver failed: %s", e)
         pass
 
+def server_info_from_config(config):
+    return {
+            "host": config.get('server', 'hostname'),
+            "ssl_port": config.get_int('server', 'port'),
+            "handler": config.get('server', 'prefix'),
+            "proxy_hostname": config.get('server', 'proxy_hostname'),
+            "proxy_port": config.get_int('server', 'proxy_port'),
+            "proxy_user": config.get('server', 'proxy_user'),
+            "proxy_password": config.get('server', 'proxy_password')
+           }
 
 # FIXME: TODO: subclass collections.MutableSequence
 class UniqueList(object):
@@ -152,6 +170,11 @@ class RegisterInfo(ga_GObject.GObject):
     hostname = ga_GObject.property(type=str, default='')
     port = ga_GObject.property(type=str, default='')
     prefix = ga_GObject.property(type=str, default='')
+
+    server_info = ga_GObject.property(type=ga_GObject.TYPE_PYOBJECT, default=None)
+
+    # Used to control whether or not we should use the PerformUnregisterScreen
+    enable_unregister = ga_GObject.property(type=bool, default=False)
 
     # rhsm model info
     environment = ga_GObject.property(type=str, default='')
@@ -279,11 +302,12 @@ class RegisterWidget(widgets.SubmanBaseWidget):
                                        self._on_switch_page)
 
         screen_classes = [ChooseServerScreen, ActivationKeyScreen,
-                          CredentialsScreen, OrganizationScreen,
-                          EnvironmentScreen, PerformRegisterScreen,
-                          SelectSLAScreen, ConfirmSubscriptionsScreen,
-                          PerformSubscribeScreen, RefreshSubscriptionsScreen,
-                          InfoScreen, DoneScreen]
+                          CredentialsScreen, PerformUnregisterScreen,
+                          OrganizationScreen, EnvironmentScreen,
+                          PerformRegisterScreen, SelectSLAScreen,
+                          ConfirmSubscriptionsScreen, PerformSubscribeScreen,
+                          RefreshSubscriptionsScreen, InfoScreen,
+                          DoneScreen]
         self._screens = []
 
         # TODO: current_screen as a gobject property
@@ -367,6 +391,11 @@ class RegisterWidget(widgets.SubmanBaseWidget):
     def do_register_finished(self):
         msg = _("System '%s' successfully registered.\n") % self.info.identity.name
         self.info.set_property('register-status', msg)
+        CFG.save()
+        last_server_info = server_info_from_config(CFG)
+        last_server_info['cert_file'] = self.backend.cp_provider.cert_file
+        last_server_info['key_file'] = self.backend.cp_provider.key_file
+        self.info.set_property('server-info', last_server_info)
 
     def do_finished(self):
         """Class closure signal handler for the 'finished' signal.
@@ -796,6 +825,20 @@ class AutoBindWidget(RegisterWidget):
         return False
 
 
+class FirstbootWidget(RegisterWidget):
+    # A RegisterWidget for use in firstboot.
+    # This widget, along with the PerformUnregisterScreen, will ensure that
+    # all screens are shown, and the user is allowed to register again.
+    __gtype_name__ = "FirstbootWidget"
+
+    initial_screen = CHOOSE_SERVER_PAGE
+
+    def choose_initial_screen(self):
+        self.current_screen.emit('move-to-screen', self.initial_screen)
+        self.register_widget.show_all()
+        return False
+
+
 class AutobindWizardDialog(RegisterDialog):
     __gtype_name__ = "AutobindWizardDialog"
 
@@ -1016,6 +1059,37 @@ class PerformRegisterScreen(NoGuiScreen):
                                      self._on_registration_finished_cb)
 
         return True
+
+
+class PerformUnregisterScreen(NoGuiScreen):
+
+    screen_enum = PERFORM_UNREGISTER_PAGE
+
+    def _on_unregistration_finished_cb(self, retval, error=None):
+        if error is not None:
+            self.emit('register-error',
+                      _('Unable to unregister'),
+                      error)
+        # clean all local data regardless of the success of the network unregister
+        managerlib.clean_all_data(backup=False)
+        self.emit('move-to-screen', OWNER_SELECT_PAGE)
+        self.pre_done()
+        return
+
+    def pre(self):
+        msg = _("Unregistering")
+        self.info.set_property('register-status', msg)
+        self.info.set_property('details-label-txt', msg)
+        self.info.set_property('register-state', RegisterState.REGISTERING)
+        # Unregister if we have gotten here with a valid identity and have old server info
+        if self.info.identity.is_valid() and self.info.get_property('server-info') and self.info.get_property('enable-unregister'):
+            self.async.unregister_consumer(self.info.identity.uuid,
+                                           self.info.get_property('server-info'),
+                                           self._on_unregistration_finished_cb)
+            return True
+        self.emit('move-to-screen', OWNER_SELECT_PAGE)
+        self.pre_done()
+        return False
 
 
 class PerformSubscribeScreen(NoGuiScreen):
@@ -1435,6 +1509,7 @@ class CredentialsScreen(Screen):
                                           'registration_header_label']
 
     gui_file = "credentials"
+    screen_enum = CREDENTIALS_PAGE
 
     def __init__(self, reg_info, async_backend, facts, parent_window):
         super(CredentialsScreen, self).__init__(reg_info, async_backend, facts, parent_window)
@@ -1517,8 +1592,7 @@ class CredentialsScreen(Screen):
         self.info.set_property('password', password)
         self.info.set_property('skip-auto-bind', skip_auto_bind)
         self.info.set_property('consumername', consumername)
-
-        self.emit('move-to-screen', OWNER_SELECT_PAGE)
+        self.emit('move-to-screen', PERFORM_UNREGISTER_PAGE)
         return True
 
     def clear(self):
@@ -1530,6 +1604,7 @@ class CredentialsScreen(Screen):
 
 
 class ActivationKeyScreen(Screen):
+    screen_enum = ACTIVATION_KEY_PAGE
     widget_names = Screen.widget_names + [
                 'activation_key_entry',
                 'organization_entry',
@@ -1722,7 +1797,10 @@ class ChooseServerScreen(Screen):
                       None)
             return False
 
-        CFG.save()
+        # NOTE: Do not persist the new information once we validate
+        # wait until after we successfully register
+        # We are using CFG as a singleton to track changes in the config in memory
+        # between classes (including the firstboot bits in rhsm_login.py)
 
         self.info.set_property('hostname', hostname)
         self.info.set_property('port', port)
@@ -1992,6 +2070,25 @@ class AsyncBackend(object):
         except Exception:
             self.queue.put((callback, None, sys.exc_info()))
 
+    def __unregister_consumer(self, consumer_uuid, server_info):
+        # Method to actually do the unregister bits from the server
+        try:
+            old_cp = UEPConnection(**server_info)
+            old_cp.unregisterConsumer(consumer_uuid)
+        except Exception, e:
+            log.exception(e)
+            # Reraise any exception as a RemoteUnregisterException
+            # This will be passed all the way back to the parent window
+            raise RemoteUnregisterException
+
+
+    def _unregister_consumer(self, consumer_uuid, server_info, callback):
+        try:
+            self.__unregister_consumer(consumer_uuid, server_info)
+            self.queue.put((callback, None, None))
+        except Exception:
+            self.queue.put((callback, None, sys.exc_info()))
+
     def get_owner_list(self, username, callback):
         ga_GObject.idle_add(self._watch_thread)
         threading.Thread(target=self._get_owner_list,
@@ -2032,6 +2129,14 @@ class AsyncBackend(object):
         threading.Thread(target=self._refresh,
                          name="RefreshThread",
                          args=(callback,)).start()
+
+    def unregister_consumer(self, consumer_uuid, server_info, callback):
+        ga_GObject.idle_add(self._watch_thread)
+        threading.Thread(target=self._unregister_consumer,
+                         name="UnregisterThread",
+                         args=(consumer_uuid,
+                               server_info,
+                               callback)).start()
 
 
 # TODO: make this a more informative 'summary' page.
