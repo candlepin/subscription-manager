@@ -45,7 +45,8 @@ class BaseService(slip.dbus.service.Object):
 
     persistent = True
     _interface_name = DBUS_INTERFACE
-    default_polkit_auth_required = PK_DEFAULT_ACTION
+    #default_polkit_auth_required = PK_DEFAULT_ACTION
+    default_polkit_auth_required = None
 
     def __init__(self, *args, **kwargs):
         super(BaseService, self).__init__(*args, **kwargs)
@@ -54,6 +55,22 @@ class BaseService(slip.dbus.service.Object):
                                                      'default_sample_value'},
                                                     self.PropertiesChanged)
         self.persistent = True
+
+    # override the rhel7 slip version with a newer version that
+    # includes upstream ea81f96a7746a4872e923b31dae646d1afa0043b
+    # ie, don't listen to all NameOwnerChanged signals
+    def sender_seen(self, sender):
+        if (sender, self.connection) not in BaseService.senders:
+            BaseService.senders.add((sender, self.connection))
+            if self.connection not in BaseService.connections_senders:
+                BaseService.connections_senders[self.connection] = set()
+                BaseService.connections_smobjs[self.connection] = \
+                    self.connection.add_signal_receiver(
+                        handler_function=self._name_owner_changed,
+                        signal_name='NameOwnerChanged',
+                        dbus_interface='org.freedesktop.DBus',
+                        arg1=sender)
+            BaseService.connections_senders[self.connection].add(sender)
 
     @property
     def props(self):
