@@ -1,3 +1,4 @@
+#!/usr/bin/python
 #
 # Client DBus proxy for rhsm facts service
 #
@@ -34,7 +35,7 @@ gi_kluge.kluge_it()
 #        be up to the 'app'
 from gi.repository import GLib
 
-import slip.dbus
+#import slip.dbus
 import slip.dbus.polkit
 
 #from slip.dbus import polkit
@@ -89,20 +90,28 @@ class FactsProxy(object):
                                            sender_keyword='sender', destination_keyword='destination',
                                            interface_keyword='interface', member_keyword='member',
                                            path_keyword='path')
-        self.dbus_intf.connect_to_signal("NameOwnerChanged", self._on_name_owner_changed,
-                                         sender_keyword='sender', destination_keyword='destination',
-                                         interface_keyword='interface', member_keyword='member',
-                                         path_keyword='path')
+        #self.dbus_intf.connect_to_signal("NameOwnerChanged", self._on_name_owner_changed,
+        #                                 sender_keyword='sender', destination_keyword='destination',
+        #                                 interface_keyword='interface', member_keyword='member',
+        #                                 path_keyword='path')
 
         self.bus.call_on_disconnection(self._on_bus_disconnect)
 
     @decorators.dbus_handle_exceptions
-    @slip.dbus.polkit.enable_proxy
+#    @slip.dbus.polkit.enable_proxy
     def Return42(self):
         log.debug("Return42 pre")
-        ret = self.facts.Return41()
+        ret = self.facts.Return42()
         log.debug("Return42 post, ret=%s", ret)
         return ret
+
+    def reply_handler(self, *args):
+        log.debug("reply_handler called args=%s", args)
+        print args
+
+    def error_handler(self, exception):
+        log.exception(exception)
+        print exception
 
     def signal_handler(self, *args, **kwargs):
         print "signal_handler"
@@ -111,12 +120,15 @@ class FactsProxy(object):
         log.debug("signal_handler args=%s kwargs=%s", args, kwargs)
 
     def _on_service_started(self, *args, **kwargs):
+        log.debug("ServiceStarted")
         self.signal_handler(*args, **kwargs)
 
     def _on_properties_changed(self, *args, **kwargs):
+        log.debug("PropertiesChanged")
         self.signal_handler(*args, **kwargs)
 
     def _on_name_owner_changed(self, *args, **kwargs):
+        log.debug("NameOwnerChanged")
         self.signal_handler(*args, **kwargs)
 
     def _on_bus_disconnect(self, connection):
@@ -138,10 +150,10 @@ def get_props(props_proxy, intf):
 
 def main():
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-    #dbus.mainloop.glib.threads_init()
+    dbus.mainloop.glib.threads_init()
 
     mainloop = GLib.MainLoop()
-    slip.dbus.service.set_mainloop(mainloop)
+    #slip.dbus.service.set_mainloop(mainloop)
 
     facts_proxy = FactsProxy()
 #    ret = facts_proxy.facts.Return42()
@@ -152,10 +164,11 @@ def main():
 #    log.debug("GetAll=%s", dir(ret))
 #    print ret
 
-    GLib.idle_add(call_42, facts_proxy.facts)
-    GLib.idle_add(get_props,
-                  facts_proxy.facts_props, 'com.redhat.Subscriptions1.Facts')
-
+    GLib.timeout_add_seconds(5, facts_proxy.Return42)
+    #GLib.idle_add(call_42, facts_proxy.facts)
+    #GLib.idle_add(get_props,
+    #              facts_proxy.facts_props,
+    #              'com.redhat.Subscriptions1.Facts')
     try:
         mainloop.run()
     except KeyboardInterrupt, e:
