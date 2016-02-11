@@ -25,7 +25,7 @@ def dbus_handle_exceptions(func, *args, **kwargs):
     try:
         log.debug("about to call %s %s", args, kwargs)
         ret = func(*args, **kwargs)
-        log.debug("about to return ret=%s", ret)
+        #log.debug("about to return ret=%s", ret)
         return ret
 #    except FirewallError as error:
 #        log.error(str(error))

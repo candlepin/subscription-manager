@@ -47,21 +47,40 @@ log = logging.getLogger('rhsm.dbus.clients.facts.client')
 
 # TODO: share
 #FACTS_DBUS_BUS_NAME = "com.redhat.Subscriptions1.Facts.User"
-FACTS_DBUS_BUS_NAME = "com.redhat.Subscriptions1.Facts.Root"
-FACTS_DBUS_INTERFACE = "com.redhat.Subscriptions1.Facts"
+FACTS_ROOT_BUS_NAME = "com.redhat.Subscriptions1.Facts.Root"
+FACTS_USER_BUS_NAME = "com.redhat.Subscriptions1.Facts.User"
+FACTS_INTERFACE_NAME = "com.redhat.Subscriptions1.Facts"
 #FACTS_DBUS_PATH = "/com/redhat/Subscriptions1/Facts/User"
-FACTS_DBUS_PATH = "/com/redhat/Subscriptions1/Facts/Root"
+FACTS_ROOT_OBJECT_PATH = "/com/redhat/Subscriptions1/Facts/Root"
+FACTS_USER_OBJECT_PATH = "/com/redhat/Subscriptions1/Facts/User"
+
+
+def error_handler(action_id=None):
+    print "Authorization problem:", action_id
+    log.debug("auth fail %s", action_id)
+
+
+class MyAuthError(Exception):
+    def __init__(self, *args, **kwargs):
+        action_id = kwargs.pop("action_id")
+        super(MyAuthError, self).__init__(*args, **kwargs)
+        self.action_id = action_id
 
 
 class FactsClient(object):
+    bus_name = FACTS_ROOT_BUS_NAME
+    object_path = FACTS_ROOT_OBJECT_PATH
+    interface_name = FACTS_INTERFACE_NAME
+
     def __init__(self):
+        self.log = logging.getLogger(__name__ + '.' + self.__class__.__name__)
         self.bus = dbus.SystemBus()
         self.dbus_proxy_object = slip.dbus.proxies.ProxyObject(conn=self.bus,
-                                                               bus_name=FACTS_DBUS_BUS_NAME,
-                                                               object_path=FACTS_DBUS_PATH,
+                                                               bus_name=self.bus_name,
+                                                               object_path=self.object_path,
                                                                follow_name_owner_changes=True)
         self.interface = dbus.Interface(self.dbus_proxy_object,
-                                        dbus_interface=FACTS_DBUS_INTERFACE)
+                                        dbus_interface=self.interface_name)
 
         self.interface.connect_to_signal("PropertiesChanged", self._on_properties_changed,
                                          dbus_interface=dbus.PROPERTIES_IFACE,
@@ -69,146 +88,80 @@ class FactsClient(object):
                                          interface_keyword='interface', member_keyword='member',
                                          path_keyword='path')
 
-    @decorators.dbus_handle_exceptions
-    @slip.dbus.polkit.enable_proxy
-    def Return42(self):
-        log.debug("Return42 pre")
-        ret = self.interface.Return42()
-        log.debug("Return42 post, ret=%s", ret)
-        print '42'
-        return ret
-
-    @decorators.dbus_handle_exceptions
-    @slip.dbus.polkit.enable_proxy
-    def GetFacts(self):
-        log.debug("GetFacts pre")
-        ret = self.interface.GetFacts()
-        log.debug("GetFacts post, ret=%s", ret)
-        print ret
-        return ret
-
-    def signal_handler(self, *args, **kwargs):
-        print "signal_handler"
-        print args
-        print kwargs
-        log.debug("signal_handler args=%s kwargs=%s", args, kwargs)
-
-    def _on_properties_changed(self, *args, **kwargs):
-        log.debug("PropertiesChanged")
-        self.signal_handler(*args, **kwargs)
-
-    def _on_name_owner_changed(self, *args, **kwargs):
-        log.debug("NameOwnerChanged")
-        self.signal_handler(*args, **kwargs)
-
-    def _on_bus_disconnect(self, connection):
-        self.dbus_bus_object = None
-        log.debug("disconnected")
-
-
-class FactsProxy(object):
-    default_bus_class = dbus.SystemBus
-    default_bus_name = FACTS_DBUS_BUS_NAME
-    default_interface = FACTS_DBUS_INTERFACE
-    default_path = FACTS_DBUS_PATH
-
-    def __init__(self,
-                 dbus_bus_class=None,
-                 dbus_bus_name=None,
-                 dbus_interface=None,
-                 dbus_path=None):
-        self.bus_class = dbus_bus_class or self.default_bus_class
-        self.bus_name = dbus_bus_name or self.default_bus_name
-        self.interface = dbus_interface or self.default_interface
-        self.path = dbus_path or self.default_path
-
-        self.bus = self.bus_class()
-        self.dbus_object = self.bus.get_object(self.bus_name,
-                                               self.path)
-        self.facts = dbus.Interface(self.dbus_object,
-                                    dbus_interface=self.interface)
-        self.facts_props = dbus.Interface(self.dbus_object,
-                                          dbus_interface=dbus.PROPERTIES_IFACE)
-
-        self.dbus_bus_object = self.bus.get_object(dbus.BUS_DAEMON_NAME,
-                                                  dbus.BUS_DAEMON_PATH)
-        self.dbus_intf = dbus.Interface(self.dbus_bus_object,
-                                        dbus_interface=dbus.BUS_DAEMON_IFACE)
-
-        self.facts.connect_to_signal("ServiceStarted", self._on_service_started,
-                                     sender_keyword='sender', destination_keyword='destination',
-                                     interface_keyword='interface', member_keyword='member',
-                                     path_keyword='path')
-        self.facts_props.connect_to_signal("PropertiesChanged", self._on_properties_changed,
-                                           sender_keyword='sender', destination_keyword='destination',
-                                           interface_keyword='interface', member_keyword='member',
-                                           path_keyword='path')
-        self.dbus_intf.connect_to_signal("NameOwnerChanged", self._on_name_owner_changed,
+        self.bus.call_on_disconnection(self._on_bus_disconnect)
+        self.interface.connect_to_signal("ServiceStarted", self._on_service_started,
                                          sender_keyword='sender', destination_keyword='destination',
                                          interface_keyword='interface', member_keyword='member',
                                          path_keyword='path')
 
-        self.bus.call_on_disconnection(self._on_bus_disconnect)
+    #@slip.dbus.polkit.enable_proxy(authfail_result=False,
+    #                               authfail_callback=error_handler)
 
-    @decorators.dbus_handle_exceptions
-    @slip.dbus.polkit.enable_proxy
+#    @decorators.dbus_handle_exceptions
+    @slip.dbus.polkit.enable_proxy(authfail_exception=MyAuthError)
     def Return42(self):
-        log.debug("Return42 pre")
-        ret = self.facts.Return42()
-        log.debug("Return42 post, ret=%s", ret)
+        self.log.debug("Return42 pre")
+        ret = self.interface.Return42(timeout=5)
+        self.log.debug("Return42 post, ret=%s", ret)
         print '42'
         return ret
 
-    @decorators.dbus_handle_exceptions
-    @slip.dbus.polkit.enable_proxy
+#    @decorators.dbus_handle_exceptions
+    @slip.dbus.polkit.enable_proxy(authfail_exception=MyAuthError)
     def GetFacts(self):
-        log.debug("GetFacts pre")
-        ret = self.facts.GetFacts()
-        log.debug("GetFacts post, ret=%s", ret)
+        self.log.debug("GetFacts pre")
+        ret = self.interface.GetFacts(timeout=5)
+#       self.log.debug("GetFacts post, ret=%s", ret)
         print ret
         return ret
-
-    def reply_handler(self, *args):
-        log.debug("reply_handler called args=%s", args)
-        print args
-
-    def error_handler(self, exception):
-        log.exception(exception)
-        print exception
 
     def signal_handler(self, *args, **kwargs):
         print "signal_handler"
         print args
         print kwargs
-        log.debug("signal_handler args=%s kwargs=%s", args, kwargs)
-
-    def _on_service_started(self, *args, **kwargs):
-        log.debug("ServiceStarted")
-        self.signal_handler(*args, **kwargs)
+        self.log.debug("signal_handler args=%s kwargs=%s", args, kwargs)
 
     def _on_properties_changed(self, *args, **kwargs):
-        log.debug("PropertiesChanged")
+        self.log.debug("PropertiesChanged")
         self.signal_handler(*args, **kwargs)
 
     def _on_name_owner_changed(self, *args, **kwargs):
-        log.debug("NameOwnerChanged")
+        self.log.debug("NameOwnerChanged")
         self.signal_handler(*args, **kwargs)
 
     def _on_bus_disconnect(self, connection):
-        self.dbus_bus_object = None
-        log.debug("disconnected")
+        self.dbus_proxy_object = None
+        self.log.debug("disconnected")
+
+    def _on_service_started(self, *args, **kwargs):
+        self.log.debug("ServiceStarted")
+        self.signal_handler(*args, **kwargs)
 
 
-def call_42(fact_proxy):
-    ret = fact_proxy.Return42()
-    log.debug("call_42 ret=%s", ret)
-    return False
+class FactsRootClient(FactsClient):
+    #    @decorators.dbus_handle_exceptions
+    @slip.dbus.polkit.enable_proxy(authfail_exception=MyAuthError)
+    def Return42(self):
+        self.log.debug("Return42 pre")
+        ret = self.interface.Return42(timeout=5)
+        self.log.debug("Return42 post, ret=%s", ret)
+        print '42'
+        return ret
+
+#    @decorators.dbus_handle_exceptions
+    @slip.dbus.polkit.enable_proxy(authfail_exception=MyAuthError)
+    def GetFacts(self):
+        self.log.debug("GetFacts pre")
+        ret = self.interface.GetFacts(timeout=5)
+#       self.log.debug("GetFacts post, ret=%s", ret)
+        print ret
+        return ret
 
 
-def get_props(props_proxy, intf):
-    ret = props_proxy.GetAll(intf)
-    log.debug("get_props ret=%s", str(ret))
-    return False
+class FactsUserClient(FactsClient):
+    bus_name = FACTS_USER_BUS_NAME
+    object_path = FACTS_USER_OBJECT_PATH
+    interface_name = FACTS_INTERFACE_NAME
 
 
 def main():
@@ -218,18 +171,22 @@ def main():
     mainloop = GLib.MainLoop()
     #slip.dbus.service.set_mainloop(mainloop)
 
-    facts_client = FactsClient()
-    #facts_proxy = FactsProxy
-#    ret = facts_proxy.facts.Return42()
-#    log.debug("return42=%s", ret)
-#    print ret
+    facts_root_client = FactsRootClient()
+    facts_user_client = FactsUserClient()
 
 #    ret = facts_proxy.facts_props.GetAll('com.redhat.Subscriptions1.Facts')
 #    log.debug("GetAll=%s", dir(ret))
 #    print ret
+    def get_facts():
+        facts_user_client.GetFacts()
+        facts_root_client.GetFacts()
+        return False
 
-    GLib.timeout_add_seconds(5, facts_client.Return42)
-    GLib.timeout_add_seconds(3, facts_client.GetFacts)
+    GLib.idle_add(get_facts)
+    GLib.timeout_add_seconds(5, facts_root_client.Return42)
+    GLib.timeout_add_seconds(15, facts_root_client.GetFacts)
+    GLib.timeout_add_seconds(5, facts_user_client.Return42)
+    GLib.timeout_add_seconds(15, facts_user_client.GetFacts)
     #GLib.idle_add(call_42, facts_proxy.facts)
     #GLib.idle_add(get_props,
     #              facts_proxy.facts_props,
@@ -243,6 +200,8 @@ def main():
         log.debug("system exit")
     except Exception, e:
         log.exception(e)
+
+    mainloop.quit()
 
 if __name__ == "__main__":
     sys.exit(main())
