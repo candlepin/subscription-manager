@@ -46,11 +46,11 @@ from rhsm.dbus.common import decorators
 log = logging.getLogger('rhsm.dbus.clients.facts.client')
 
 # TODO: share
-FACTS_DBUS_BUS_NAME = "com.redhat.Subscriptions1.Facts.User"
-#FACTS_DBUS_BUS_NAME = "com.redhat.Subscriptions1.Facts.Root"
+#FACTS_DBUS_BUS_NAME = "com.redhat.Subscriptions1.Facts.User"
+FACTS_DBUS_BUS_NAME = "com.redhat.Subscriptions1.Facts.Root"
 FACTS_DBUS_INTERFACE = "com.redhat.Subscriptions1.Facts"
-FACTS_DBUS_PATH = "/com/redhat/Subscriptions1/Facts/User"
-#FACTS_DBUS_PATH = "/com/redhat/Subscriptions1/Facts/Root"
+#FACTS_DBUS_PATH = "/com/redhat/Subscriptions1/Facts/User"
+FACTS_DBUS_PATH = "/com/redhat/Subscriptions1/Facts/Root"
 
 
 class FactsProxy(object):
@@ -90,19 +90,29 @@ class FactsProxy(object):
                                            sender_keyword='sender', destination_keyword='destination',
                                            interface_keyword='interface', member_keyword='member',
                                            path_keyword='path')
-        #self.dbus_intf.connect_to_signal("NameOwnerChanged", self._on_name_owner_changed,
-        #                                 sender_keyword='sender', destination_keyword='destination',
-        #                                 interface_keyword='interface', member_keyword='member',
-        #                                 path_keyword='path')
+        self.dbus_intf.connect_to_signal("NameOwnerChanged", self._on_name_owner_changed,
+                                         sender_keyword='sender', destination_keyword='destination',
+                                         interface_keyword='interface', member_keyword='member',
+                                         path_keyword='path')
 
         self.bus.call_on_disconnection(self._on_bus_disconnect)
 
     @decorators.dbus_handle_exceptions
-#    @slip.dbus.polkit.enable_proxy
+    @slip.dbus.polkit.enable_proxy
     def Return42(self):
         log.debug("Return42 pre")
         ret = self.facts.Return42()
         log.debug("Return42 post, ret=%s", ret)
+        print '42'
+        return ret
+
+    @decorators.dbus_handle_exceptions
+    @slip.dbus.polkit.enable_proxy
+    def GetFacts(self):
+        log.debug("GetFacts pre")
+        ret = self.facts.GetFacts()
+        log.debug("GetFacts post, ret=%s", ret)
+        print ret
         return ret
 
     def reply_handler(self, *args):
@@ -165,6 +175,7 @@ def main():
 #    print ret
 
     GLib.timeout_add_seconds(5, facts_proxy.Return42)
+    GLib.timeout_add_seconds(3, facts_proxy.GetFacts)
     #GLib.idle_add(call_42, facts_proxy.facts)
     #GLib.idle_add(get_props,
     #              facts_proxy.facts_props,
