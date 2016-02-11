@@ -563,7 +563,7 @@ class Hardware(object):
                 try:
                     key, value = info.split(":")
                     nkey = '.'.join(["lscpu", key.lower().strip().replace(" ", "_")])
-                    self.lscpuinfo[nkey] = "%s" % value.strip()
+                    lscpuinfo[nkey] = "%s" % value.strip()
                 except ValueError:
                     # sometimes lscpu outputs weird things. Or fails.
                     #
