@@ -26,6 +26,7 @@ import logging
 import subprocess
 import urllib2
 import webbrowser
+import os
 
 
 import rhsm.config as config
@@ -462,7 +463,9 @@ class MainWindow(widgets.SubmanBaseWidget):
     def _getting_started_item_clicked(self, widget):
         try:
             # unfortunately, Gtk.show_uri does not work in RHEL 5
-            subprocess.call(["gnome-open", "ghelp:subscription-manager"])
+            DEVNULL = open(os.devnull, 'w')
+            subprocess.call(["gnome-open", "ghelp:subscription-manager"],
+                            stderr=DEVNULL)
         except Exception, e:
             # if we can't open it, it's probably because the user didn't
             # install the docs, or yelp. no need to bother them.
