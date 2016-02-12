@@ -28,7 +28,7 @@ from subscription_manager.ga import GObject as ga_GObject
 
 import rhsm.config as config
 from rhsm.utils import ServerUrlParseError
-from rhsm.connection import GoneException, RestlibException
+from rhsm.connection import GoneException, RestlibException, UEPConnection
 
 from subscription_manager.branding import get_branding
 from subscription_manager.action_client import ActionClient
@@ -137,6 +137,16 @@ class UniqueList(object):
         p = self._list.pop()
         return p
 
+class ServerInfo(object):
+    """Object holding server connection information
+
+    A container class useful for holding the connection information
+    retreived via the screens.
+    """
+    def __init__(self, hostname=None, port=None, prefix=None):
+        self.hostname = hostname
+        self.port = port
+        self.prefix = prefix
 
 class RegisterInfo(ga_GObject.GObject):
     """GObject holding registration info and state.
@@ -1045,8 +1055,14 @@ class PerformRegisterScreen(NoGuiScreen):
 
 class PerformForceRegisterScreen(PerformRegisterScreen):
 
+    def __init__(self, reg_info, async_backend, facts, parent_window):
+        super(PerformForceRegisterScreen, self).__init__(reg_info, async_backend, facts, parent_window)
+
     def _on_unregistration_finished_cb(self, retval, error=None):
         self.__register_consumer()
+
+    def _on_registration_finished_cb(self, retval, error=None):
+        super(PerformForceRegisterScreen, self)._on_registration_finished_cb(retval, error)
 
     def __register_consumer(self):
         self.async.register_consumer(self.info.get_property('consumername'),
@@ -1062,8 +1078,8 @@ class PerformForceRegisterScreen(PerformRegisterScreen):
                   self.info.get_property('environment'))
         self.info.set_property('register-status', msg)
         if self.info.identity.is_valid():
-            #self.info.set_property('register-state', RegisterState.REGISTERING)
-            self.async.unregister_consumer(self.info.identity.uuid, self._on_unregistration_finished_cb)
+            self.async.unregister_consumer(self.info.identity.uuid,
+                                           self._on_unregistration_finished_cb)
         else:
             self.__register_consumer()
         return True
@@ -2049,6 +2065,7 @@ class AsyncBackend(object):
 
     def __unregister_consumer(self, consumer_uuid):
         # Method to actually do the unregister bits
+        # TODO: Make use of old connection info here
         cp = self.backend.cp_provider.get_consumer_auth_cp()
         managerlib.unregister(cp, consumer_uuid)
 
@@ -2104,7 +2121,8 @@ class AsyncBackend(object):
         ga_GObject.idle_add(self._watch_thread)
         threading.Thread(target=self._unregister_consumer,
                          name="UnregisterThread",
-                         args=(consumer_uuid, callback)).start()
+                         args=(consumer_uuid,
+                               callback)).start()
 
 
 # TODO: make this a more informative 'summary' page.
