@@ -143,10 +143,21 @@ class ServerInfo(object):
     A container class useful for holding the connection information
     retreived via the screens.
     """
-    def __init__(self, hostname=None, port=None, prefix=None):
+    def __init__(self,
+                 hostname=None,
+                 port=None,
+                 prefix=None,
+                 proxy_hostname=None,
+                 proxy_port=None,
+                 proxy_username=None,
+                 proxy_password=None):
         self.hostname = hostname
         self.port = port
         self.prefix = prefix
+        self.proxy_hostname = proxy_hostname
+        self.proxy_port = proxy_port
+        self.proxy_username = proxy_username
+        self.proxy_password = proxy_password
 
 class RegisterInfo(ga_GObject.GObject):
     """GObject holding registration info and state.
@@ -162,6 +173,8 @@ class RegisterInfo(ga_GObject.GObject):
     hostname = ga_GObject.property(type=str, default='')
     port = ga_GObject.property(type=str, default='')
     prefix = ga_GObject.property(type=str, default='')
+
+    server_info = ga_GObject.property(type=ga_GObject.TYPE_PYOBJECT, default=None)
 
     # rhsm model info
     environment = ga_GObject.property(type=str, default='')
@@ -564,6 +577,22 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         steps are finished, and not neccasarily that the gui should be close.
         It may need to auto attach, etc. The 'finished' signal indicates register
         and attach are finished, while 'register-finished' is just the first part."""
+
+        # if self.info.get_property('server-info-changed'):
+        #     # Persist the new server info as we know at this point the data
+        #     # is good
+        #     serverinfo = self.info.get_property('server-info')
+        #     self.info.set_property('last-successful-server-info', serverinfo)
+
+        CFG.save()
+        last_server_info = ServerInfo(hostname=CFG.get('server', 'hostname'),
+                                      port=CFG.get('server','port'),
+                                      prefix=CFG.get('server' 'prefix'),
+                                      proxy_hostname=CFG.get('server', 'proxy_hostname'),
+                                      proxy_port=CFG.get('server', 'proxy_port'),
+                                      proxy_username=CFG.get('server', 'proxy_user'),
+                                      proxy_password=CFG.get('server', 'proxy_password'))
+        self.info.set_property('last-successful-server-info', last_server_info)
 
         self.emit('register-finished')
 
@@ -1757,7 +1786,6 @@ class ChooseServerScreen(Screen):
         pass
 
     def apply(self):
-        log.debug('CHOOSE SERVER APPLY!!!!!!!!!!!!!!!!!!!!')
         self.stay()
         server = self.server_entry.get_text()
 
@@ -1790,8 +1818,9 @@ class ChooseServerScreen(Screen):
                         "hostname[:port][/prefix]"),
                       None)
             return False
-
-        CFG.save()
+        # Do not persist the new information once we vaildate
+        # wait until after we successfully register
+        #CFG.save()
 
         self.info.set_property('hostname', hostname)
         self.info.set_property('port', port)
@@ -2063,15 +2092,22 @@ class AsyncBackend(object):
         except Exception:
             self.queue.put((callback, None, sys.exc_info()))
 
-    def __unregister_consumer(self, consumer_uuid):
+    def __unregister_consumer(self, consumer_uuid, server_info):
         # Method to actually do the unregister bits
         # TODO: Make use of old connection info here
+        cp = UEPConnection(host=server_info.hostname,
+                           ssl_port=server_info.port,
+                           handler=server_info.prefix,
+                           proxy_hostname=server_info.proxy_hostname,
+                           proxy_port=server_info.proxy_port,
+                           proxy_user=server_info.proxy_username,
+                           proxy_password=server_info.proxy_password)
         cp = self.backend.cp_provider.get_consumer_auth_cp()
         managerlib.unregister(cp, consumer_uuid)
 
-    def _unregister_consumer(self, consumer_uuid, callback):
+    def _unregister_consumer(self, consumer_uuid, server_info, callback):
         try:
-            self.__unregister_consumer(consumer_uuid)
+            self.__unregister_consumer(consumer_uuid, server_info)
             self.queue.put((callback, None, None))
         except Exception:
             self.queue.put((callback, None, sys.exc_info()))
@@ -2117,11 +2153,12 @@ class AsyncBackend(object):
                          name="RefreshThread",
                          args=(callback,)).start()
 
-    def unregister_consumer(self, consumer_uuid, callback):
+    def unregister_consumer(self, consumer_uuid, server_info, callback):
         ga_GObject.idle_add(self._watch_thread)
         threading.Thread(target=self._unregister_consumer,
                          name="UnregisterThread",
                          args=(consumer_uuid,
+                               server_info,
                                callback)).start()
 
 
