@@ -159,13 +159,13 @@ class ServerInfo(object):
         self.proxy_username = proxy_username
         self.proxy_password = proxy_password
 
-    @classmethod
+    @staticmethod
     def from_config(config):
         return ServerInfo(hostname=config.get('server', 'hostname'),
-                          port=config.get('server','port'),
-                          prefix=config.get('server' 'prefix'),
+                          port=config.get_int('server', 'port'),
+                          prefix=config.get('server', 'prefix'),
                           proxy_hostname=config.get('server', 'proxy_hostname'),
-                          proxy_port=config.get('server', 'proxy_port'),
+                          proxy_port=config.get_int('server', 'proxy_port'),
                           proxy_username=config.get('server', 'proxy_user'),
                           proxy_password=config.get('server', 'proxy_password'))
 
@@ -609,14 +609,8 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         #     self.info.set_property('last-successful-server-info', serverinfo)
 
         CFG.save()
-        last_server_info = ServerInfo(hostname=CFG.get('server', 'hostname'),
-                                      port=CFG.get('server','port'),
-                                      prefix=CFG.get('server' 'prefix'),
-                                      proxy_hostname=CFG.get('server', 'proxy_hostname'),
-                                      proxy_port=CFG.get('server', 'proxy_port'),
-                                      proxy_username=CFG.get('server', 'proxy_user'),
-                                      proxy_password=CFG.get('server', 'proxy_password'))
-        self.info.set_property('last-successful-server-info', last_server_info)
+        last_server_info = ServerInfo.from_config(CFG)
+        self.info.set_property('server-info', last_server_info)
 
         self.emit('register-finished')
 
@@ -1130,8 +1124,12 @@ class PerformForceRegisterScreen(PerformRegisterScreen):
                  (self.info.get_property('owner-key'),
                   self.info.get_property('environment'))
         self.info.set_property('register-status', msg)
-        if self.info.identity.is_valid():
+        log.debug('FORCE PRE PRE PRE PRE PRE PRE PRE PRE PRE PRE')
+        # Unregister if we have gotten here with a valid identity and have old server info
+        if self.info.identity.is_valid() and self.info.get_property('server-info'):
+            log.debug('AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH')
             self.async.unregister_consumer(self.info.identity.uuid,
+                                           self.info.get_property('server-info'),
                                            self._on_unregistration_finished_cb)
         else:
             self.__register_consumer()
@@ -2118,16 +2116,14 @@ class AsyncBackend(object):
 
     def __unregister_consumer(self, consumer_uuid, server_info):
         # Method to actually do the unregister bits
-        # TODO: Make use of old connection info here
-        cp = UEPConnection(host=server_info.hostname,
-                           ssl_port=server_info.port,
-                           handler=server_info.prefix,
-                           proxy_hostname=server_info.proxy_hostname,
-                           proxy_port=server_info.proxy_port,
-                           proxy_user=server_info.proxy_username,
-                           proxy_password=server_info.proxy_password)
+        # TUse the last successful connection info
+        self.backend.cp_provider.set_connection_info(**server_info.as_dict())
         cp = self.backend.cp_provider.get_consumer_auth_cp()
         managerlib.unregister(cp, consumer_uuid)
+
+        # Ensure we reset the connection info to whatever is in the config now
+        self.backend.cp_provider.set_connection_info()
+
 
     def _unregister_consumer(self, consumer_uuid, server_info, callback):
         try:
