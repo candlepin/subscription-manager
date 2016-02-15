@@ -16,7 +16,7 @@ from rhsm.facts import admin_facts
 from rhsm.dbus.common import decorators
 from rhsm.dbus.services import base_service
 from rhsm.dbus.services import base_properties
-from rhsm.dbus.services.facts import server
+from rhsm.dbus.services.facts_user import server
 
 # Note facts and facts-root provide the same interface on
 # different object paths
