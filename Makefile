@@ -156,6 +156,7 @@ dbus-common-install:
 	install -d $(DBUS_SERVICES_INSTALL_DIR)
 	install -d $(DBUS_CLIENTS_INSTALL_DIR)
 	install -d $(DBUS_COMMON_INSTALL_DIR)
+	install -d $(SYSTEMD_INST_DIR)
 	install -m 644 -p $(DBUS_SRC_DIR)/__init__.py $(DBUS_INSTALL_DIR)
 	install -m 644 -p $(DBUS_COMMON_SRC_DIR)/__init__.py $(DBUS_COMMON_INSTALL_DIR)
 	install -m 644 -p $(DBUS_CLIENTS_SRC_DIR)/__init__.py $(DBUS_CLIENTS_INSTALL_DIR)
@@ -258,6 +259,7 @@ dbus-install-and-reload: dbus-install polkit-install selinux-restorecon systemd-
 
 
 polkit-install:
+	install -d $(POLKIT_ACTIONS_INSTALL_DIR)
 	# TODO: verify we can share the polkit policy if we are using the same action ids
 	install -m0644 $(DBUS_SERVICES_SRC_DIR)/facts_user/com.redhat.Subscriptions1.Facts.User.policy $(POLKIT_ACTIONS_INSTALL_DIR)
 	install -m0644 $(DBUS_SERVICES_SRC_DIR)/facts_root/com.redhat.Subscriptions1.Facts.Root.policy $(POLKIT_ACTIONS_INSTALL_DIR)
@@ -431,6 +433,8 @@ clean-versions:
 	rm -rf $(SRC_DIR)/version.py
 	rm -rf $(RCT_SRC_DIR)/version.py
 
+install-dbus: dbus-install polkit-install
+
 install-glade:
 	install -d $(GLADE_INST_DIR)
 	install -m 644 $(SRC_DIR)/gui/data/glade/*.glade $(SUBMAN_INST_DIR)/gui/data/glade/
@@ -442,7 +446,7 @@ install-ui:
 # We could choose here, but it doesn't matter.
 install-gui: install-glade install-ui
 
-install-files: set-versions dbus-install desktop-files install-plugins install-post-boot install-ga install-gui
+install-files: set-versions install-dbus desktop-files install-plugins install-post-boot install-ga install-gui
 	install -d $(PYTHON_INST_DIR)/api
 	install -d $(PYTHON_INST_DIR)/gui
 	install -d $(PYTHON_INST_DIR)/gui/data/icons

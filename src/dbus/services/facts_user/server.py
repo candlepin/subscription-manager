@@ -41,7 +41,7 @@ class Facts(base_service.BaseService):
                                                      data=self.default_props_data,
                                                      prop_changed_callback=self.PropertiesChanged)
 
-#    @slip.dbus.polkit.require_auth(PK_FACTS_COLLECT)
+    @slip.dbus.polkit.require_auth(PK_FACTS_COLLECT)
     @decorators.dbus_service_method(dbus_interface=FACTS_DBUS_INTERFACE,
                                    out_signature='a{ss}')
     @decorators.dbus_handle_exceptions
@@ -51,7 +51,7 @@ class Facts(base_service.BaseService):
         dbus_dict = dbus.Dictionary(cleaned, signature="ss")
         return dbus_dict
 
-#    @slip.dbus.polkit.require_auth(PK_FACTS_COLLECT)
+    @slip.dbus.polkit.require_auth(PK_FACTS_COLLECT)
     @decorators.dbus_service_method(dbus_interface=FACTS_DBUS_INTERFACE,
                                     in_signature='ii',
                                     out_signature='i')
@@ -61,7 +61,7 @@ class Facts(base_service.BaseService):
         total = int_a + int_b
         return total
 
-#    @slip.dbus.polkit.require_auth(PK_FACTS_COLLECT)
+    @slip.dbus.polkit.require_auth(PK_FACTS_COLLECT)
     @decorators.dbus_service_method(dbus_interface=FACTS_DBUS_INTERFACE,
                                    out_signature='s')
     @decorators.dbus_handle_exceptions
