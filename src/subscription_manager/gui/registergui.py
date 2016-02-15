@@ -378,6 +378,12 @@ class RegisterWidget(widgets.SubmanBaseWidget):
     def do_register_finished(self):
         msg = _("System '%s' successfully registered.\n") % self.info.identity.name
         self.info.set_property('register-status', msg)
+        CFG.save()
+        log.debug('SAVING SERVERINFO')
+        last_server_info = server_info_from_config(CFG)
+        last_server_info['cert_file'] = self.backend.cp_provider.cert_file
+        last_server_info['key_file'] = self.backend.cp_provider.key_file
+        self.info.set_property('server-info', last_server_info)
 
     def do_finished(self):
         """Class closure signal handler for the 'finished' signal.
@@ -572,13 +578,6 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         #     # is good
         #     serverinfo = self.info.get_property('server-info')
         #     self.info.set_property('last-successful-server-info', serverinfo)
-
-        CFG.save()
-
-        last_server_info = server_info_from_config(CFG)
-        last_server_info['cert_file'] = self.backend.cp_provider.cert_file
-        last_server_info['key_file'] = self.backend.cp_provider.key_file
-        self.info.set_property('server-info', last_server_info)
 
         self.emit('register-finished')
 
