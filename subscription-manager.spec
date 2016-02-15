@@ -81,6 +81,7 @@ Requires:  python-iniparse
 Requires:  virt-what
 Requires:  python-rhsm >= 1.17.0
 Requires:  dbus-python
+Requires:  python-slip
 Requires:  yum >= 3.2.29-73
 Requires:  usermode
 Requires:  python-dateutil
@@ -351,8 +352,6 @@ rm -rf %{buildroot}
 %attr(755,root,root) %dir %{_sysconfdir}/pki/consumer
 %attr(755,root,root) %dir %{_sysconfdir}/pki/entitlement
 
-%config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.SubscriptionManager.conf
-
 # PAM config
 %{_sysconfdir}/pam.d/subscription-manager
 %{_sysconfdir}/security/console.apps/subscription-manager
@@ -368,8 +367,31 @@ rm -rf %{buildroot}
 # misc system config
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/logrotate.d/subscription-manager
 %attr(700,root,root) %{_sysconfdir}/cron.daily/rhsmd
-%{_datadir}/dbus-1/system-services/com.redhat.SubscriptionManager.service
 
+# dbus services config
+%config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.SubscriptionManager.conf
+%config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.Subscriptions1.Facts.User.conf
+%config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.Subscriptions1.Facts.Root.conf
+
+# dbus services execs
+%attr(755,root,root) %{_libexecdir}/rhsm-facts-user-service
+%attr(755,root,root) %{_libexecdir}/rhsm-facts-root-service
+
+# polkit policy actions
+%{_datadir}/polkit-1/actions/com.redhat.Subscriptions1.Facts.User.policy
+%{_datadir}/polkit-1/actions/com.redhat.Subscriptions1.Facts.Root.policy
+
+# dbus activation services for systemd
+%if %use_systemd
+    # TODO: These assume systemd. Need versions for rhel6 as well.
+    %{_datadir}/dbus-1/system-services/com.redhat.Subscriptions1.Facts.User.service
+    %{_datadir}/dbus-1/system-services/com.redhat.Subscriptions1.Facts.Root.service
+    %{_unitdir}/rhsm-facts-user.service
+    %{_unitdir}/rhsm-facts-root.service
+%endif
+
+# This doesn't use systemd dbus activation yet
+%{_datadir}/dbus-1/system-services/com.redhat.SubscriptionManager.service
 
 # /var
 %attr(755,root,root) %dir %{_var}/log/rhsm
@@ -397,6 +419,7 @@ rm -rf %{buildroot}
 %dir %{_datadir}/rhsm/subscription_manager/branding
 %dir %{_datadir}/rhsm/subscription_manager/model
 %dir %{_datadir}/rhsm/subscription_manager/plugin
+%dir %{python_sitearch}/rhsm/
 
 # code, python modules and packages
 %{_datadir}/rhsm/subscription_manager/*.py*
@@ -430,7 +453,6 @@ rm -rf %{buildroot}
 %{_prefix}/lib/yum-plugins/product-id.py*
 %{_prefix}/lib/yum-plugins/search-disabled-repos.py*
 
-
 # Incude rt CLI tool
 %dir %{_datadir}/rhsm/rct
 %{_datadir}/rhsm/rct/__init__.py*
@@ -446,6 +468,35 @@ rm -rf %{buildroot}
 %{_datadir}/rhsm/rhsm_debug/cli.py*
 %{_datadir}/rhsm/rhsm_debug/*commands.py*
 %attr(755,root,root) %{_bindir}/rhsm-debug
+
+# facts modules, so to sitelib
+%dir %{python_sitearch}/rhsm/facts
+%{python_sitearch}/rhsm/facts/*.py*
+
+# dbus modules
+%dir %{python_sitearch}/rhsm/dbus
+%dir %{python_sitearch}/rhsm/dbus/clients
+%dir %{python_sitearch}/rhsm/dbus/services
+%dir %{python_sitearch}/rhsm/dbus/common
+
+# dbus common and base modules
+%{python_sitearch}/rhsm/dbus/*.py*
+%{python_sitearch}/rhsm/dbus/services/*.py*
+%{python_sitearch}/rhsm/dbus/common/*.py*
+
+# dbus facts services
+%dir %{python_sitearch}/rhsm/dbus/services/facts_user
+%{python_sitearch}/rhsm/dbus/services/facts_user/*.py*
+%dir %{python_sitearch}/rhsm/dbus/services/facts_root
+%{python_sitearch}/rhsm/dbus/services/facts_root/*.py*
+
+# dbus client
+%{python_sitearch}/rhsm/dbus/clients/*.py*
+
+# dbus facts client
+%dir %{python_sitearch}/rhsm/dbus/clients/facts
+%{python_sitearch}/rhsm/dbus/clients/facts/*.py*
+
 
 %doc
 %{_mandir}/man8/subscription-manager.8*
