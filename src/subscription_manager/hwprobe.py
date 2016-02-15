@@ -820,8 +820,6 @@ class Hardware:
         """
         no_uuid_platforms = ['powervm_lx86', 'xen-dom0', 'ibm_systemz']
 
-        self.allhw['virt.uuid'] = 'Unknown'
-
         try:
             for v in no_uuid_platforms:
                 if self.allhw['virt.host_type'].find(v) > -1:
