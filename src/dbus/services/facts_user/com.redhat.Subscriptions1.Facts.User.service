@@ -1,7 +1,7 @@
 [D-BUS Service]
 Name=com.redhat.Subscriptions1.Facts.User
-Exec=/usr/libexec/rhsm-facts-service
+Exec=/usr/libexec/rhsm-facts-user-service
 # TODO/FIXME: stop running as root, run as rhsm
 #User=root
 User=rhsm
-SystemdService=rhsm-facts.service
+SystemdService=rhsm-facts-user.service
