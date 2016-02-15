@@ -108,6 +108,16 @@ def reset_resolver():
         log.warning("reset_resolver failed: %s", e)
         pass
 
+def server_info_from_config(config):
+    return {
+            "host": config.get('server', 'hostname'),
+            "ssl_port": config.get_int('server', 'port'),
+            "handler": config.get('server', 'prefix'),
+            "proxy_hostname": config.get('server', 'proxy_hostname'),
+            "proxy_port": config.get_int('server', 'proxy_port'),
+            "proxy_user": config.get('server', 'proxy_user'),
+            "proxy_password": config.get('server', 'proxy_password')
+           }
 
 # FIXME: TODO: subclass collections.MutableSequence
 class UniqueList(object):
@@ -609,7 +619,10 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         #     self.info.set_property('last-successful-server-info', serverinfo)
 
         CFG.save()
-        last_server_info = ServerInfo.from_config(CFG)
+
+        last_server_info = server_info_from_config(CFG)
+        last_server_info['cert_file'] = self.backend.cp_provider.cert_file
+        last_server_info['key_file'] = self.backend.cp_provider.key_file
         self.info.set_property('server-info', last_server_info)
 
         self.emit('register-finished')
@@ -2117,12 +2130,8 @@ class AsyncBackend(object):
     def __unregister_consumer(self, consumer_uuid, server_info):
         # Method to actually do the unregister bits
         # TUse the last successful connection info
-        self.backend.cp_provider.set_connection_info(**server_info.as_dict())
-        cp = self.backend.cp_provider.get_consumer_auth_cp()
-        managerlib.unregister(cp, consumer_uuid)
-
-        # Ensure we reset the connection info to whatever is in the config now
-        self.backend.cp_provider.set_connection_info()
+        old_cp = UEPConnection(server_info)
+        managerlib.unregister(old_cp, consumer_uuid)
 
 
     def _unregister_consumer(self, consumer_uuid, server_info, callback):
