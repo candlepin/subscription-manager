@@ -147,51 +147,6 @@ class UniqueList(object):
         p = self._list.pop()
         return p
 
-class ServerInfo(object):
-    """Object holding server connection information
-
-    A container class useful for holding the connection information
-    retreived via the screens.
-    """
-    def __init__(self,
-                 hostname=None,
-                 port=None,
-                 prefix=None,
-                 proxy_hostname=None,
-                 proxy_port=None,
-                 proxy_username=None,
-                 proxy_password=None):
-        self.hostname = hostname
-        self.port = port
-        self.prefix = prefix
-        self.proxy_hostname = proxy_hostname
-        self.proxy_port = proxy_port
-        self.proxy_username = proxy_username
-        self.proxy_password = proxy_password
-
-    @staticmethod
-    def from_config(config):
-        return ServerInfo(hostname=config.get('server', 'hostname'),
-                          port=config.get_int('server', 'port'),
-                          prefix=config.get('server', 'prefix'),
-                          proxy_hostname=config.get('server', 'proxy_hostname'),
-                          proxy_port=config.get_int('server', 'proxy_port'),
-                          proxy_username=config.get('server', 'proxy_user'),
-                          proxy_password=config.get('server', 'proxy_password'))
-
-    def as_dict(self):
-        # returns this object as a dict with keywords matching those expected by
-        # cp_provider.set_connection_info
-        new_dict = {
-            "host": self.hostname,
-            "ssl_port": self.port,
-            "handler": self.prefix,
-            "proxy_hostname_arg": self.proxy_hostname,
-            "proxy_port_arg": self.proxy_port,
-            "proxy_user_arg": self.proxy_username,
-            "proxy_password_arg": self.proxy_password
-        }
-        return new_dict
 
 class RegisterInfo(ga_GObject.GObject):
     """GObject holding registration info and state.
