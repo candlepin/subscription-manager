@@ -302,6 +302,36 @@ class HardwareProbeTests(fixture.SubManFixture):
         self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS',
             'distribution.id': 'Go4It', 'distribution.version.modifier': 'be:ta'})
 
+    def test_default_virt_uuid_physical(self):
+        """Check that physical systems dont set an 'Unknown' virt.uuid."""
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+        hw.allhw['virt.host_type'] = 'Not Applicable'
+        hw.allhw['virt.is_guest'] = False
+        hw.get_virt_uuid()
+        self.assertFalse('virt.uuid' in hw.allhw)
+
+    def test_default_virt_uuid_guest_no_uuid(self):
+        """Check that virt guest systems dont set an 'Unknown' virt.uuid if not found."""
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+        hw.allhw['virt.host_type'] = 'kvm'
+        hw.allhw['virt.is_guest'] = True
+        hw.get_virt_uuid()
+        self.assertFalse('virt.uuid' in hw.allhw)
+
+    def test_default_virt_uuid_guest_with_uuid(self):
+        """Check that virt guest systems dont set an 'Unknown' virt.uuid if virt.uuid is found."""
+        reload(hwprobe)
+        hw = hwprobe.Hardware()
+        hw.allhw['virt.host_type'] = 'kvm'
+        hw.allhw['virt.is_guest'] = True
+        fake_virt_uuid = 'this-is-a-weird-uuid'
+        hw.allhw['dmi.system.uuid'] = fake_virt_uuid
+        hw.get_virt_uuid()
+        self.assertTrue('virt.uuid' in hw.allhw)
+        self.assertEquals(fake_virt_uuid, hw.allhw['virt.uuid'])
+
     def test_get_arch(self):
         reload(hwprobe)
         hw = hwprobe.Hardware()
