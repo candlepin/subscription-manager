@@ -56,6 +56,7 @@ CFG = config.initConfig()
 
 
 class RegisterState(object):
+    UNREGISTERING = -1
     REGISTERING = 0
     SUBSCRIBING = 1
 
@@ -66,15 +67,16 @@ PROGRESS_PAGE = -1
 CHOOSE_SERVER_PAGE = 0
 ACTIVATION_KEY_PAGE = 1
 CREDENTIALS_PAGE = 2
-OWNER_SELECT_PAGE = 3
-ENVIRONMENT_SELECT_PAGE = 4
-PERFORM_REGISTER_PAGE = 5
-SELECT_SLA_PAGE = 6
-CONFIRM_SUBS_PAGE = 7
-PERFORM_SUBSCRIBE_PAGE = 8
-REFRESH_SUBSCRIPTIONS_PAGE = 9
-INFO_PAGE = 10
-DONE_PAGE = 11
+PERFORM_UNREGISTER_PAGE = 3
+OWNER_SELECT_PAGE = 4
+ENVIRONMENT_SELECT_PAGE = 5
+PERFORM_REGISTER_PAGE = 6
+SELECT_SLA_PAGE = 7
+CONFIRM_SUBS_PAGE = 8
+PERFORM_SUBSCRIBE_PAGE = 9
+REFRESH_SUBSCRIPTIONS_PAGE = 10
+INFO_PAGE = 11
+DONE_PAGE = 12
 FINISH = 100
 
 REGISTER_ERROR = _("<b>Unable to register the system.</b>") + \
@@ -164,6 +166,7 @@ class RegisterInfo(ga_GObject.GObject):
     prefix = ga_GObject.property(type=str, default='')
 
     server_info = ga_GObject.property(type=ga_GObject.TYPE_PYOBJECT, default=None)
+    confirm_unregister = ga_GObject.property(type=bool, default=True)
 
     # rhsm model info
     environment = ga_GObject.property(type=str, default='')
@@ -290,11 +293,12 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         self.register_notebook.connect('switch-page',
                                        self._on_switch_page)
         self.screen_classes = screen_classes or [ChooseServerScreen, ActivationKeyScreen,
-                                                 CredentialsScreen, OrganizationScreen,
-                                                 EnvironmentScreen, PerformRegisterScreen,
-                                                 SelectSLAScreen, ConfirmSubscriptionsScreen,
-                                                 PerformSubscribeScreen, RefreshSubscriptionsScreen,
-                                                 InfoScreen, DoneScreen]
+                                                 CredentialsScreen,
+                                                 OrganizationScreen, EnvironmentScreen,
+                                                 PerformRegisterScreen, SelectSLAScreen,
+                                                 ConfirmSubscriptionsScreen, PerformSubscribeScreen,
+                                                 RefreshSubscriptionsScreen, InfoScreen,
+                                                 DoneScreen]
         self._screens = []
 
         # TODO: current_screen as a gobject property
@@ -654,6 +658,8 @@ class RegisterWidget(widgets.SubmanBaseWidget):
             self.progress_label.set_markup(_("<b>Registering</b>"))
         elif state == RegisterState.SUBSCRIBING:
             self.progress_label.set_markup(_("<b>Attaching</b>"))
+        elif state == RegisterState.UNREGISTERING:
+            self.progress_label.set_markup(_("<b>Unregistering</b>"))
 
     # Various bits for starting/stopping the timer used to pulse the progress bar
 
@@ -826,7 +832,7 @@ class AutoBindWidget(RegisterWidget):
 
 class FirstbootWidget(RegisterWidget):
     # A RegisterWidget for use in firstboot.
-    # This widget, along with the PerformForceRegisterScreen, will ensure that
+    # This widget, along with the PerformUnregisterScreen, will ensure that
     # all screens are shown, and the user is allowed to register again.
     __gtype_name__ = "FirstbootWidget"
 
@@ -835,8 +841,8 @@ class FirstbootWidget(RegisterWidget):
     def __init__(self, backend, facts, reg_info=None,
                  parent_window=None, screen_classes=None):
         screen_classes = screen_classes or [ChooseServerScreen, ActivationKeyScreen,
-                                            CredentialsScreen, OrganizationScreen,
-                                            EnvironmentScreen, PerformForceRegisterScreen,
+                                            CredentialsScreen, PerformUnregisterScreen,
+                                            OrganizationScreen, EnvironmentScreen, PerformRegisterScreen,
                                             SelectSLAScreen, ConfirmSubscriptionsScreen,
                                             PerformSubscribeScreen, RefreshSubscriptionsScreen,
                                             InfoScreen, DoneScreen]
@@ -919,6 +925,7 @@ class Screen(widgets.SubmanBaseWidget):
         return False
 
     def pre_done(self):
+        log.debug('GF %s.pre_done called' % self.__class__)
         self.set_property('ready', True)
 
     # do whatever the screen indicates, and emit any signals indicating where
@@ -980,6 +987,7 @@ class NoGuiScreen(ga_GObject.GObject):
         return True
 
     def pre_done(self):
+        log.debug('GF %s.pre_done called' % self.__class__)
         self.set_property('ready', True)
 
     def apply(self):
@@ -1070,40 +1078,31 @@ class PerformRegisterScreen(NoGuiScreen):
         return True
 
 
-class PerformForceRegisterScreen(PerformRegisterScreen):
+class PerformUnregisterScreen(NoGuiScreen):
 
-    def __init__(self, reg_info, async_backend, facts, parent_window):
-        super(PerformForceRegisterScreen, self).__init__(reg_info, async_backend, facts, parent_window)
+    screen_enum = PERFORM_UNREGISTER_PAGE
 
     def _on_unregistration_finished_cb(self, retval, error=None):
-        self.__register_consumer()
-
-    def _on_registration_finished_cb(self, retval, error=None):
-        super(PerformForceRegisterScreen, self)._on_registration_finished_cb(retval, error)
-
-    def __register_consumer(self):
-        self.async.register_consumer(self.info.get_property('consumername'),
-                                     self.facts,
-                                     self.info.get_property('owner-key'),
-                                     self.info.get_property('environment'),
-                                     self.info.get_property('activation-keys'),
-                                     self._on_registration_finished_cb)
+        log.debug('GF UN')
+        self.emit('move-to-screen', OWNER_SELECT_PAGE)
+        self.pre_done()
+        return
 
     def pre(self):
-        msg = _("Registering to owner: %s environment: %s") % \
-                 (self.info.get_property('owner-key'),
-                  self.info.get_property('environment'))
+        msg = _("Unregistering")
         self.info.set_property('register-status', msg)
-        log.debug('FORCE PRE PRE PRE PRE PRE PRE PRE PRE PRE PRE')
         # Unregister if we have gotten here with a valid identity and have old server info
         if self.info.identity.is_valid() and self.info.get_property('server-info'):
-            log.debug('AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH')
-            self.async.unregister_consumer(self.info.identity.uuid,
-                                           self.info.get_property('server-info'),
-                                           self._on_unregistration_finished_cb)
-        else:
-            self.__register_consumer()
-        return True
+            if not self.info.get_property('confirm-unregister'):
+                log.debug('GF AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH')
+                self.async.unregister_consumer(self.info.identity.uuid,
+                                               self.info.get_property('server-info'),
+                                               self._on_unregistration_finished_cb)
+                return True
+
+        self.emit('move-to-screen', OWNER_SELECT_PAGE)
+        self.pre_done()
+        return False
 
 
 
@@ -1524,6 +1523,7 @@ class CredentialsScreen(Screen):
                                           'registration_header_label']
 
     gui_file = "credentials"
+    screen_enum = CREDENTIALS_PAGE
 
     def __init__(self, reg_info, async_backend, facts, parent_window):
         super(CredentialsScreen, self).__init__(reg_info, async_backend, facts, parent_window)
@@ -1606,8 +1606,7 @@ class CredentialsScreen(Screen):
         self.info.set_property('password', password)
         self.info.set_property('skip-auto-bind', skip_auto_bind)
         self.info.set_property('consumername', consumername)
-        self.info.set_property('register-state', RegisterState.REGISTERING)
-        self.emit('move-to-screen', OWNER_SELECT_PAGE)
+        self.emit('move-to-screen', PERFORM_UNREGISTER_PAGE)
         return True
 
     def clear(self):
@@ -1619,6 +1618,7 @@ class CredentialsScreen(Screen):
 
 
 class ActivationKeyScreen(Screen):
+    screen_enum = ACTIVATION_KEY_PAGE
     widget_names = Screen.widget_names + [
                 'activation_key_entry',
                 'organization_entry',

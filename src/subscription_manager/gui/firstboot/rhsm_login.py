@@ -160,6 +160,7 @@ class moduleClass(module.Module, object):
         self._read_rhn_proxy_settings()
 
         self.register_widget.initialize()
+        self.register_widget.info.set_property('confirm-unregister', False)
 
     def needsNetwork(self):
         """
@@ -215,7 +216,7 @@ class moduleClass(module.Module, object):
             return True
 
     def on_finished(self, obj):
-        log.debug('FINISHED!!!!!!!!')
+        log.debug('GF FINISHED!!!!!!!!')
         self.finished = True
         self.page_status = constants.RESULT_SUCCESS
         return False
@@ -380,6 +381,7 @@ class moduleClass(module.Module, object):
         pass
 
     def finish_registration(self, failed=False):
+        log.debug('GF finish_registration')
         log.info("Finishing registration, failed=%s" % failed)
         if failed:
             self._set_navigation_sensitive(True)
@@ -395,6 +397,7 @@ class moduleClass(module.Module, object):
 
         Assumes that there is only _one_ rhsm screen
         """
+        log.debug('GF skip_remaining')
         if self._is_compat:
             # el5 is easy, we can just pretend the next button was clicked,
             # and tell our own logic not to run for the button press.
