@@ -464,6 +464,9 @@ class RegisterWidget(widgets.SubmanBaseWidget):
 
         This can be used to send the UI to any other screen, including the next screen.
         For example, to skip SLA selection if there is only one SLA."""
+        log.debug('GF Current Screen Class: %s\nGF Next Screen ID: %s\nGF Next Screen Class: %s' % (current_screen, next_screen_id, self._screens[next_screen_id].__class__))
+        log.debug('GF applied_screen_history: %s' % self.applied_screen_history)
+        log.debug('GF screen_history: %s' % self.screen_history)
         self.change_screen(next_screen_id)
 
     def change_screen(self, next_screen_id):
