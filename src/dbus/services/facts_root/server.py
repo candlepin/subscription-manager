@@ -20,17 +20,19 @@ from rhsm.dbus.services.facts_user import server
 
 # Note facts and facts-root provide the same interface on
 # different object paths
-FACTS_ROOT_DBUS_BUS_NAME = "com.redhat.Subscriptions1.Facts.Root"
+#FACTS_ROOT_DBUS_BUS_NAME = "com.redhat.Subscriptions1.Facts.Root"
 FACTS_ROOT_DBUS_INTERFACE = "com.redhat.Subscriptions1.Facts"
 FACTS_ROOT_DBUS_PATH = "/com/redhat/Subscriptions1/Facts/Root"
 PK_FACTS_ROOT_COLLECT = "com.redhat.Subscriptions1.Facts.Root.collect"
 
 
-class FactsRoot(server.Facts):
+class FactsRoot(server.FactsUser):
 
     default_polkit_auth_required = PK_FACTS_ROOT_COLLECT
     persistent = True
     facts_collector_class = admin_facts.AdminFacts
+    default_dbus_path = FACTS_ROOT_DBUS_PATH
+#    default_dbus_name = FACTS_ROOT_DBUS_BUS_NAME
 
     def __init__(self, *args, **kwargs):
         super(FactsRoot, self).__init__(*args, **kwargs)
@@ -67,8 +69,11 @@ class FactsRoot(server.Facts):
 
 
 def run():
-    base_service.run_service(dbus.SystemBus,
-                             FACTS_ROOT_DBUS_BUS_NAME,
-                             FACTS_ROOT_DBUS_INTERFACE,
-                             FACTS_ROOT_DBUS_PATH,
-                             FactsRoot)
+    base_service.service_classes.append(FactsRoot)
+    base_service.service_classes.append(server.FactsUser)
+    base_service.service_classes.append(base_service.BaseService)
+    base_service.run()
+    #base_service.run_service(dbus.SystemBus,
+    #                         FACTS_ROOT_DBUS_BUS_NAME,
+    #                         FACTS_ROOT_DBUS_INTERFACE,
+    #                         FactsRoot)

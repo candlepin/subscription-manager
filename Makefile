@@ -176,30 +176,30 @@ dbus-rhsmd-service-install: dbus-common-install
 # TODO: move src/dbus to setup.py? it's own makefile? autoconf?
 dbus-facts-root-service-install: dbus-common-install facts-install
 	install -d $(DBUS_SERVICES_INSTALL_DIR)/facts_root/
-	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts_root/com.redhat.Subscriptions1.Facts.Root.service \
+	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts_root/com.redhat.Subscriptions1.Facts.service \
 		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
-	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts_root/com.redhat.Subscriptions1.Facts.Root.conf \
+	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts_root/com.redhat.Subscriptions1.Facts.conf \
 		$(PREFIX)/etc/dbus-1/system.d
-	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts_root/rhsm-facts-root.service \
+	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts_root/rhsm-facts.service \
 		$(SYSTEMD_INST_DIR)
 	# Needs to be executable by the rhsm user
-	install -m 755 $(DBUS_SERVICES_SRC_DIR)/facts_root/rhsm-facts-root-service \
-		$(PREFIX)/usr/libexec/rhsm-facts-root-service
+	install -m 755 $(DBUS_SERVICES_SRC_DIR)/facts_root/rhsm-facts-service \
+		$(PREFIX)/usr/libexec/rhsm-facts-service
 
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts_root/__init__.py $(DBUS_SERVICES_INSTALL_DIR)/facts_root
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts_root/server.py $(DBUS_SERVICES_INSTALL_DIR)/facts_root
 
 dbus-facts-user-service-install: dbus-common-install facts-install
 	install -d $(DBUS_SERVICES_INSTALL_DIR)/facts_user
-	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts_user/com.redhat.Subscriptions1.Facts.User.service \
-		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
-	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts_user/com.redhat.Subscriptions1.Facts.User.conf \
-		$(PREFIX)/etc/dbus-1/system.d
-	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts_user/rhsm-facts-user.service \
-		$(SYSTEMD_INST_DIR)
+	#install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts_user/com.redhat.Subscriptions1.Facts.User.service \
+	#	$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
+	#install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts_user/com.redhat.Subscriptions1.Facts.User.conf \
+	#	$(PREFIX)/etc/dbus-1/system.d
+	#install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts_user/rhsm-facts-user.service \
+	#	$(SYSTEMD_INST_DIR)
 	# Needs to be executable by the rhsm user
-	install -m 755 $(DBUS_SERVICES_SRC_DIR)/facts_user/rhsm-facts-user-service \
-		$(PREFIX)/usr/libexec/rhsm-facts-user-service
+	#install -m 755 $(DBUS_SERVICES_SRC_DIR)/facts_user/rhsm-facts-user-service \
+	#	$(PREFIX)/usr/libexec/rhsm-facts-user-service
 
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts_user/__init__.py $(DBUS_SERVICES_INSTALL_DIR)/facts_user
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts_user/server.py $(DBUS_SERVICES_INSTALL_DIR)/facts_user
@@ -225,18 +225,14 @@ dbus-reload:
 
 dbus-touch:
 	 # magic from python-slip examples make file. Likely unneeded.
-	 touch $(PREFIX)/etc/dbus-1/system.d/com.redhat.Subscriptions1.Facts.User.conf
-	 touch $(PREFIX)/etc/dbus-1/system.d/com.redhat.Subscriptions1.Facts.Root.conf
+	 touch $(PREFIX)/etc/dbus-1/system.d/com.redhat.Subscriptions1.Facts.conf
 
 systemd-reload: systemd-services-shutdown systemd-daemon-reload
-	systemctl start rhsm-facts-user.service
-	systemctl start rhsm-facts-root.service
-	systemctl status -l rhsm-facts-user.service
-	systemctl status -l rhsm-facts-root.service
+	systemctl start rhsm-facts.service
+	systemctl status -l rhsm-facts.service
 
 systemd-services-shutdown:
-	-systemctl stop rhsm-facts-user.service
-	-systemctl stop rhsm-facts-root.service
+	-systemctl stop rhsm-facts.service
 
 systemd-daemon-reload:
 	systemctl daemon-reload
@@ -261,12 +257,12 @@ dbus-install-and-reload: dbus-install polkit-install selinux-restorecon systemd-
 polkit-install:
 	install -d $(POLKIT_ACTIONS_INSTALL_DIR)
 	# TODO: verify we can share the polkit policy if we are using the same action ids
-	install -m0644 $(DBUS_SERVICES_SRC_DIR)/facts_user/com.redhat.Subscriptions1.Facts.User.policy $(POLKIT_ACTIONS_INSTALL_DIR)
-	install -m0644 $(DBUS_SERVICES_SRC_DIR)/facts_root/com.redhat.Subscriptions1.Facts.Root.policy $(POLKIT_ACTIONS_INSTALL_DIR)
+	#install -m0644 $(DBUS_SERVICES_SRC_DIR)/facts_user/com.redhat.Subscriptions1.Facts.User.policy $(POLKIT_ACTIONS_INSTALL_DIR)
+	install -m0644 $(DBUS_SERVICES_SRC_DIR)/facts_root/com.redhat.Subscriptions1.Facts.policy $(POLKIT_ACTIONS_INSTALL_DIR)
 	#install -m0644 $(DBUS_SERVICES_SRC_DIR)/com.redhat.Subscriptions1.policy /usr/share/polkit-1/actions/
 
 polkit-uninstall:
-	rm -rf $(POLKIT_ACTIONS_INSTALL_DIR)/com.redhat.Subscriptions1.Facts.Root.policy
+	rm -rf $(POLKIT_ACTIONS_INSTALL_DIR)/com.redhat.Subscriptions1.Facts.policy
 
 install-conf:
 	install etc-conf/rhsm.conf $(PREFIX)/etc/rhsm/
