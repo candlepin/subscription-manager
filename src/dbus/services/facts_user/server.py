@@ -18,23 +18,25 @@ from rhsm.dbus.services import base_properties
 from rhsm.facts import hwprobe
 
 # TODO: move these to a config/constants module
-FACTS_DBUS_BUS_NAME = "com.redhat.Subscriptions1.Facts.User"
+#FACTS_USER_DBUS_BUS_NAME = "com.redhat.Subscriptions1.Facts.User"
 FACTS_DBUS_INTERFACE = "com.redhat.Subscriptions1.Facts"
-FACTS_DBUS_PATH = "/com/redhat/Subscriptions1/Facts/User"
+FACTS_USER_DBUS_PATH = "/com/redhat/Subscriptions1/Facts/User"
 PK_FACTS_COLLECT = "com.redhat.Subscriptions1.Facts.User.collect"
 
 
-class Facts(base_service.BaseService):
+class FactsUser(base_service.BaseService):
 
-    default_polkit_auth_required = None
+    default_polkit_auth_required = PK_FACTS_COLLECT
     persistent = True
     default_props_data = {'version': '-infinity+37',
                           'answer': '42',
                           'last_update': 'before now, probably'}
     facts_collector_class = hwprobe.Hardware
+    default_dbus_path = FACTS_USER_DBUS_PATH
+    #default_dbus_name = FACTS_USER_DBUS_BUS_NAME
 
     def __init__(self, *args, **kwargs):
-        super(Facts, self).__init__(*args, **kwargs)
+        super(FactsUser, self).__init__(*args, **kwargs)
         self._interface_name = FACTS_DBUS_INTERFACE
         self.facts_collector = self.facts_collector_class()
         self._props = base_properties.BaseProperties(self._interface_name,
@@ -83,9 +85,10 @@ class Facts(base_service.BaseService):
         log.debug("Facts serviceStarted emit")
 
 
-def run():
-    base_service.run_service(dbus.SystemBus,
-                             FACTS_DBUS_BUS_NAME,
-                             FACTS_DBUS_INTERFACE,
-                             FACTS_DBUS_PATH,
-                             Facts)
+#def run():
+#
+#    base_service.run_service(dbus.SystemBus,
+#                             FACTS_DBUS_BUS_NAME,
+#                             FACTS_DBUS_INTERFACE,
+#                             FACTS_DBUS_PATH,
+#                             Facts)

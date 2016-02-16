@@ -31,21 +31,22 @@ from rhsm.dbus.services import base_properties
 
 # TODO: move these to a config/constants module
 # Name of the dbus service
-DBUS_BUS_NAME = "com.redhat.Subscriptions1"
+FACTS_DBUS_BUS_NAME = "com.redhat.Subscriptions1.Facts"
 # Name of the DBus interface provided by this object
 # Note: This could become multiple interfaces
-DBUS_INTERFACE = "com.redhat.Subscriptions1"
+FACTS_DBUS_INTERFACE = "com.redhat.Subscriptions1.Facts"
 # Where in the DBus object namespace does this object live
-DBUS_PATH = "/com/redhat/Subscriptions1/"
+FACTS_DBUS_PATH = "/com/redhat/Subscriptions1/Facts"
 # The polkit action-id to use by default if none are specified
-PK_DEFAULT_ACTION = "com.redhat.Subscriptions1.default"
+PK_DEFAULT_ACTION = "com.redhat.Subscriptions1.Facts.default"
 
 
 class BaseService(slip.dbus.service.Object):
 
     persistent = True
-    _interface_name = DBUS_INTERFACE
+    _interface_name = FACTS_DBUS_INTERFACE
     #default_polkit_auth_required = PK_DEFAULT_ACTION
+    default_dbus_path = FACTS_DBUS_PATH
     default_polkit_auth_required = None
 
     def __init__(self, *args, **kwargs):
@@ -78,7 +79,7 @@ class BaseService(slip.dbus.service.Object):
         return self._props
 
     @slip.dbus.polkit.require_auth(PK_DEFAULT_ACTION)
-    @decorators.dbus_service_method(dbus_interface=DBUS_INTERFACE,
+    @decorators.dbus_service_method(dbus_interface=FACTS_DBUS_INTERFACE,
                                     out_signature='s')
     @decorators.dbus_handle_exceptions
     def Foos(self, sender=None):
@@ -86,7 +87,7 @@ class BaseService(slip.dbus.service.Object):
         log.debug("Foos")
         return "Foos"
 
-    @dbus.service.signal(dbus_interface=DBUS_INTERFACE,
+    @dbus.service.signal(dbus_interface=FACTS_DBUS_INTERFACE,
                          signature='')
     @decorators.dbus_handle_exceptions
     def ServiceStarted(self):
@@ -140,18 +141,25 @@ def start_signal(service):
     return False
 
 
+service_classes = []
+
+
 # factory?
-def run_service(bus_class, bus_name, dbus_interface, dbus_path, service_class):
+def run_services(bus_class=None):
     """bus == dbus.SystemBus() etc.
     service_class is the the class implementing a DBus Object/service."""
 
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
     dbus.mainloop.glib.threads_init()
 
+    bus_class = bus_class or dbus.SystemBus
     bus = bus_class()
 
-    name = dbus.service.BusName(bus_name, bus)
-    service = service_class(name, dbus_path)
+    BUS_NAME = "com.redhat.Subscriptions1.Facts"
+    for service_class in service_classes:
+        name = dbus.service.BusName(BUS_NAME, bus)
+        service = service_class(name,
+                                service_class.default_dbus_path)
 
     mainloop = GLib.MainLoop()
     slip.dbus.service.set_mainloop(mainloop)
@@ -173,4 +181,5 @@ def run_service(bus_class, bus_name, dbus_interface, dbus_path, service_class):
 
 
 def run():
-    run_service(dbus.SystemBus(), DBUS_BUS_NAME, DBUS_INTERFACE, DBUS_PATH, BaseService)
+    run_services()
+    #run_service(dbus.SystemBus(), DBUS_BUS_NAME, DBUS_INTERFACE, DBUS_PATH, BaseService)
