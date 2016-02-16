@@ -6,7 +6,8 @@ After=syslog.target network.target
 Type=dbus
 BusName=com.redhat.Subscriptions1.Facts.User
 ExecStart=/usr/libexec/rhsm-facts-user-service
-User=root
+#User=root
+User=rhsm
 
 [Install]
 WantedBy=basic.target
