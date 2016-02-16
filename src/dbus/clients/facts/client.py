@@ -19,38 +19,21 @@
 import logging
 import sys
 
-# FIXME: Remove, just needed for testing
-sys.path.append("/usr/share/rhsm")
-from subscription_manager import logutil
-logutil.init_logger()
-
 import dbus
-import dbus.mainloop.glib
 
 from rhsm.dbus.common import gi_kluge
 gi_kluge.kluge_it()
 
-# FIXME: GLib imported to start it's main loop,
-#        but this is a library-ish module, that should
-#        be up to the 'app'
-from gi.repository import GLib
-
-#import slip.dbus
 import slip.dbus.polkit
-
-#from slip.dbus import polkit
 
 from rhsm.dbus.common import decorators
 
-
-log = logging.getLogger('rhsm.dbus.clients.facts.client')
+log = logging.getLogger(__name__)
 
 # TODO: share
-#FACTS_DBUS_BUS_NAME = "com.redhat.Subscriptions1.Facts.User"
 FACTS_ROOT_BUS_NAME = "com.redhat.Subscriptions1.Facts.Root"
 FACTS_USER_BUS_NAME = "com.redhat.Subscriptions1.Facts.User"
 FACTS_INTERFACE_NAME = "com.redhat.Subscriptions1.Facts"
-#FACTS_DBUS_PATH = "/com/redhat/Subscriptions1/Facts/User"
 FACTS_ROOT_OBJECT_PATH = "/com/redhat/Subscriptions1/Facts/Root"
 FACTS_USER_OBJECT_PATH = "/com/redhat/Subscriptions1/Facts/User"
 
@@ -64,6 +47,7 @@ class MyAuthError(Exception):
     def __init__(self, *args, **kwargs):
         action_id = kwargs.pop("action_id")
         super(MyAuthError, self).__init__(*args, **kwargs)
+        log.debug("MyAuthError created for %s", action_id)
         self.action_id = action_id
 
 
@@ -97,7 +81,7 @@ class FactsClient(object):
     #@slip.dbus.polkit.enable_proxy(authfail_result=False,
     #                               authfail_callback=error_handler)
 
-#    @decorators.dbus_handle_exceptions
+    #@decorators.dbus_handle_exceptions
     @slip.dbus.polkit.enable_proxy(authfail_exception=MyAuthError)
     def Return42(self):
         self.log.debug("Return42 pre")
@@ -165,6 +149,18 @@ class FactsUserClient(FactsClient):
 
 
 def main():
+    import dbus.mainloop.glib
+    from gi.repository import GLib
+
+    # FIXME: Remove, just needed for testing
+    sys.path.append("/usr/share/rhsm")
+    from subscription_manager import logutil
+    logutil.init_logger()
+
+    # ick, but otherwise logger name is __main__
+    global log
+    log = logging.getLogger('rhsm.dbus.clients.facts.client')
+
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
     dbus.mainloop.glib.threads_init()
 
