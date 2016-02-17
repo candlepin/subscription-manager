@@ -47,7 +47,8 @@ class BaseProperties(object):
 
     def _check_interface(self, interface):
         if interface and interface != self.interface:
-            msg = "%s does not handle properties for %s" % (self.interface, interface)
+            msg = "org.freedesktop.DBus.Error.UnknownInterface: "
+            "%s does not handle properties for %s" % (self.interface, interface)
             raise dbus.exceptions.DBusException(msg)
         # Unset None/'' interface is default
 
