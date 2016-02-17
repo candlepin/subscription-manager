@@ -67,11 +67,50 @@ class FactsRoot(server.FactsUser):
     def ServiceStarted(self):
         log.debug("Facts serviceStarted emit")
 
+    #@slip.dbus.polkit.require_auth(PK_DEFAULT_ACTION)
+    @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
+                                    in_signature='s',
+                                    out_signature='a{sv}')
+    @decorators.dbus_handle_exceptions
+    def GetAll(self, interface_name, sender=None):
+        return {}
+        #pass
+        # TODO: use better test type conversion ala dbus_utils.py
+#        log.debug("GetAll interface_name=%s, sender=%s", interface_name, sender)
+
+#        return self.props.get_all(interface=interface_name)
+
+    #@slip.dbus.polkit.require_auth(PK_DEFAULT_ACTION)
+    @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
+                                    in_signature='ss',
+                                    out_signature='v')
+    @decorators.dbus_handle_exceptions
+    def Get(self, interface_name, property_name, sender=None):
+        log.debug("Get Property ifact=%s property_name=%s", interface_name, property_name)
+        return self.props.get(interface=interface_name,
+                              prop=property_name)
+
+    @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
+                                    in_signature='ssv')
+    @decorators.dbus_handle_exceptions
+    def Set(self, interface_name, property_name, new_value, sender=None):
+        self.props.set(interface=interface_name,
+                       prop=property_name,
+                       value=new_value)
+        self.PropertiesChanged(interface_name,
+                               {property_name: new_value},
+                               [])
+
+    @dbus.service.signal(dbus.PROPERTIES_IFACE, signature='sa{sv}as')
+    def PropertiesChanged(self, interface_name, changed_properties,
+                          invalidated_properties):
+        log.debug("Properties Changed emitted.")
+
 
 def run():
+    base_service.service_classes.append(base_service.BaseService)
     base_service.service_classes.append(FactsRoot)
     base_service.service_classes.append(server.FactsUser)
-    base_service.service_classes.append(base_service.BaseService)
     base_service.run()
     #base_service.run_service(dbus.SystemBus,
     #                         FACTS_ROOT_DBUS_BUS_NAME,
