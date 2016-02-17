@@ -166,7 +166,6 @@ class RegisterInfo(ga_GObject.GObject):
     prefix = ga_GObject.property(type=str, default='')
 
     server_info = ga_GObject.property(type=ga_GObject.TYPE_PYOBJECT, default=None)
-    confirm_unregister = ga_GObject.property(type=bool, default=True)
 
     # rhsm model info
     environment = ga_GObject.property(type=str, default='')
