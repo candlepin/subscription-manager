@@ -17,6 +17,7 @@ from rhsm.dbus.common import decorators
 from rhsm.dbus.services import base_service
 from rhsm.dbus.services import base_properties
 from rhsm.dbus.services.facts_user import server
+from rhsm.dbus.common import dbus_utils
 
 # Note facts and facts-root provide the same interface on
 # different object paths
@@ -32,6 +33,11 @@ class FactsRoot(server.FactsUser):
     persistent = True
     facts_collector_class = admin_facts.AdminFacts
     default_dbus_path = FACTS_ROOT_DBUS_PATH
+    default_props_data = {'version': '11',
+                          'daemon': 'root',
+                          'answer': '42',
+                          'polkit_auth_action': PK_FACTS_ROOT_COLLECT,
+                          'last_update': 'before now, probably'}
 #    default_dbus_name = FACTS_ROOT_DBUS_BUS_NAME
 
     def __init__(self, *args, **kwargs):
@@ -49,7 +55,7 @@ class FactsRoot(server.FactsUser):
                                     out_signature='i')
     @decorators.dbus_handle_exceptions
     def AddInts(self, int_a, int_b, sender=None):
-        log.debug("AddInts %s %s, int_a, int_b")
+        log.debug("AddInts %s %s", int_a, int_b)
         total = int_a + int_b
         return total
 
@@ -73,6 +79,9 @@ class FactsRoot(server.FactsUser):
                                     out_signature='a{sv}')
     @decorators.dbus_handle_exceptions
     def GetAll(self, interface_name, sender=None):
+        interface_name = dbus_utils.dbus_to_python(interface_name, str)
+        log.debug("GetAll() interface_name=%s", interface_name)
+        log.debug("sender=%s", sender)
         return {}
         #pass
         # TODO: use better test type conversion ala dbus_utils.py
@@ -86,6 +95,9 @@ class FactsRoot(server.FactsUser):
                                     out_signature='v')
     @decorators.dbus_handle_exceptions
     def Get(self, interface_name, property_name, sender=None):
+        interface_name = dbus_utils.dbus_to_python(interface_name, str)
+        property_name = dbus_utils.dbus_to_python(property_name, str)
+        log.debug("Get() interface_name=%s property_name=%s", interface_name, property_name)
         log.debug("Get Property ifact=%s property_name=%s", interface_name, property_name)
         return self.props.get(interface=interface_name,
                               prop=property_name)
@@ -94,6 +106,10 @@ class FactsRoot(server.FactsUser):
                                     in_signature='ssv')
     @decorators.dbus_handle_exceptions
     def Set(self, interface_name, property_name, new_value, sender=None):
+        interface_name = dbus_utils.dbus_to_python(interface_name, str)
+        property_name = dbus_utils.dbus_to_python(property_name, str)
+        log.debug("Set() interface_name=%s property_name=%s", interface_name, property_name)
+
         self.props.set(interface=interface_name,
                        prop=property_name,
                        value=new_value)

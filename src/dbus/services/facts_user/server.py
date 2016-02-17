@@ -30,6 +30,8 @@ class FactsUser(base_service.BaseService):
     persistent = True
     default_props_data = {'version': '-infinity+37',
                           'answer': '42',
+                          'daemon': 'user',
+                          'polkit_auth_action': PK_FACTS_COLLECT,
                           'last_update': 'before now, probably'}
     facts_collector_class = hwprobe.Hardware
     default_dbus_path = FACTS_USER_DBUS_PATH
@@ -59,7 +61,7 @@ class FactsUser(base_service.BaseService):
                                     out_signature='i')
     @decorators.dbus_handle_exceptions
     def AddInts(self, int_a, int_b, sender=None):
-        log.debug("AddInts %s %s, int_a, int_b")
+        log.debug("AddInts %s %s", int_a, int_b)
         total = int_a + int_b
         return total
 
@@ -84,6 +86,46 @@ class FactsUser(base_service.BaseService):
     def ServiceStarted(self):
         log.debug("Facts serviceStarted emit")
 
+    # cut and paste for now, testing props stuff
+
+    #@slip.dbus.polkit.require_auth(PK_DEFAULT_ACTION)
+    @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
+                                    in_signature='s',
+                                    out_signature='a{sv}')
+    @decorators.dbus_handle_exceptions
+    def GetAll(self, interface_name, sender=None):
+        return {}
+        #pass
+        # TODO: use better test type conversion ala dbus_utils.py
+#        log.debug("GetAll interface_name=%s, sender=%s", interface_name, sender)
+
+#        return self.props.get_all(interface=interface_name)
+
+    #@slip.dbus.polkit.require_auth(PK_DEFAULT_ACTION)
+    @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
+                                    in_signature='ss',
+                                    out_signature='v')
+    @decorators.dbus_handle_exceptions
+    def Get(self, interface_name, property_name, sender=None):
+        log.debug("Get Property ifact=%s property_name=%s", interface_name, property_name)
+        return self.props.get(interface=interface_name,
+                              prop=property_name)
+
+    @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
+                                    in_signature='ssv')
+    @decorators.dbus_handle_exceptions
+    def Set(self, interface_name, property_name, new_value, sender=None):
+        self.props.set(interface=interface_name,
+                       prop=property_name,
+                       value=new_value)
+        self.PropertiesChanged(interface_name,
+                               {property_name: new_value},
+                               [])
+
+    @dbus.service.signal(dbus.PROPERTIES_IFACE, signature='sa{sv}as')
+    def PropertiesChanged(self, interface_name, changed_properties,
+                          invalidated_properties):
+        log.debug("Properties Changed emitted.")
 
 #def run():
 #
