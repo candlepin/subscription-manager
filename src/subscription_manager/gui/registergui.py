@@ -1103,8 +1103,6 @@ class PerformUnregisterScreen(NoGuiScreen):
     def _on_unregistration_finished_cb(self, retval, error=None):
         if error:
             self.emit('register-error', REGISTER_ERROR, error)
-            self.pre_done()
-            return
         self.emit('move-to-screen', OWNER_SELECT_PAGE)
         self.pre_done()
         return
@@ -1120,8 +1118,8 @@ class PerformUnregisterScreen(NoGuiScreen):
                                                self.info.get_property('server-info'),
                                                self._on_unregistration_finished_cb)
                 return True
-        self.pre_done()
         self.emit('move-to-screen', OWNER_SELECT_PAGE)
+        self.pre_done()
         return False
 
 
