@@ -1101,12 +1101,12 @@ class PerformUnregisterScreen(NoGuiScreen):
     screen_enum = PERFORM_UNREGISTER_PAGE
 
     def _on_unregistration_finished_cb(self, retval, error=None):
-        log.debug('GF UN')
         if error:
-            import traceback
-            log.debug('RZ UNREGISTRATION ERROR %s' % traceback.format_exception(*error))
-        self.pre_done()
+            self.emit('register-error', REGISTER_ERROR, error)
+            self.pre_done()
+            return
         self.emit('move-to-screen', OWNER_SELECT_PAGE)
+        self.pre_done()
         return
 
     def pre(self):
