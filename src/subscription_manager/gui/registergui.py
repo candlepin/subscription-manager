@@ -383,10 +383,10 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         msg = _("System '%s' successfully registered.\n") % self.info.identity.name
         self.info.set_property('register-status', msg)
         CFG.save()
-        log.debug('SAVING SERVERINFO')
         last_server_info = server_info_from_config(CFG)
         last_server_info['cert_file'] = self.backend.cp_provider.cert_file
         last_server_info['key_file'] = self.backend.cp_provider.key_file
+        log.debug('RZ SAVING SERVERINFO %s' % last_server_info)
         self.info.set_property('server-info', last_server_info)
 
     def do_finished(self):
@@ -468,7 +468,7 @@ class RegisterWidget(widgets.SubmanBaseWidget):
 
         This can be used to send the UI to any other screen, including the next screen.
         For example, to skip SLA selection if there is only one SLA."""
-        log.debug('GF Current Screen Class: %s\nGF Next Screen ID: %s\nGF Next Screen Class: %s' % (current_screen, next_screen_id, self._screens[next_screen_id].__class__))
+        log.debug('RZ GF Current Screen Class: %s\nGF Next Screen ID: %s\nRZ GF Next Screen Class: %s' % (current_screen, next_screen_id, self._screens[next_screen_id].__class__))
         log.debug('GF applied_screen_history: %s' % self.applied_screen_history)
         log.debug('GF screen_history: %s' % self.screen_history)
         self.change_screen(next_screen_id)
@@ -873,6 +873,16 @@ class AutobindWizardDialog(RegisterDialog):
         return autobind_widget
 
 
+class myDec(object):
+    def __init__(self, f, class_name):
+        self.f = f
+        self.class_name = class_name
+
+    def __call__(self, *args):
+        log.debug('RZ calling %s.%s%s' % (self.class_name, self.f.__name__, args))
+        return self.f(*args)
+
+
 # TODO: Screen could be a container widget, that has the rest of the gui as
 #       a child. That way, we could add the Screen class to the
 #       register_notebook directly, and follow up to the parent the normal
@@ -915,6 +925,10 @@ class Screen(widgets.SubmanBaseWidget):
         self.info = reg_info
         self.async = async_backend
         self.facts = facts
+
+        for v in dir(self):
+            if callable(getattr(self, v)) and v in ['pre', 'pre_done']:
+                setattr(self, v, myDec(getattr(self, v), self.__class__))
 
     def stay(self):
         self.emit('stay-on-screen')
@@ -978,6 +992,10 @@ class NoGuiScreen(ga_GObject.GObject):
         self.button_label = None
         self.needs_gui = False
         self.pre_message = "Default Pre Message"
+
+        for v in dir(self):
+            if callable(getattr(self, v)) and v in ['pre', 'pre_done']:
+                setattr(self, v, myDec(getattr(self, v), self.__class__))
 
     # FIXME: a do_register_error could be used for logging?
     #        Otherwise it's up to the parent dialog to do the logging.
@@ -1084,8 +1102,11 @@ class PerformUnregisterScreen(NoGuiScreen):
 
     def _on_unregistration_finished_cb(self, retval, error=None):
         log.debug('GF UN')
-        self.emit('move-to-screen', OWNER_SELECT_PAGE)
+        if error:
+            import traceback
+            log.debug('RZ UNREGISTRATION ERROR %s' % traceback.format_exception(*error))
         self.pre_done()
+        self.emit('move-to-screen', OWNER_SELECT_PAGE)
         return
 
     def pre(self):
@@ -1094,14 +1115,13 @@ class PerformUnregisterScreen(NoGuiScreen):
         # Unregister if we have gotten here with a valid identity and have old server info
         if self.info.identity.is_valid() and self.info.get_property('server-info'):
             if not self.info.get_property('confirm-unregister'):
-                log.debug('GF AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH')
+                log.debug('RZ GF AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH')
                 self.async.unregister_consumer(self.info.identity.uuid,
                                                self.info.get_property('server-info'),
                                                self._on_unregistration_finished_cb)
                 return True
-
-        self.emit('move-to-screen', OWNER_SELECT_PAGE)
         self.pre_done()
+        self.emit('move-to-screen', OWNER_SELECT_PAGE)
         return False
 
 
@@ -2086,8 +2106,7 @@ class AsyncBackend(object):
 
     def __unregister_consumer(self, consumer_uuid, server_info):
         # Method to actually do the unregister bits
-        # TUse the last successful connection info
-        old_cp = UEPConnection(server_info)
+        old_cp = UEPConnection(**server_info)
         managerlib.unregister(old_cp, consumer_uuid)
 
 
