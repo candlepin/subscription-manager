@@ -38,7 +38,7 @@ def dbus_handle_exceptions(func, *args, **kwargs):
         log.exception(e)
         log.debug("dbus_message=%s", dbus_message)
         log.debug("dbus_name=%s", dbus_name)
-        raise
+#        raise
     except Exception as e:
         log.debug("Exception caught")
         log.exception(e)
