@@ -10,6 +10,9 @@ INTRO_INTF="org.freedesktop.DBus.Introspectable"
 
 busctl | grep 'rhsm'
 busctl status "${FACTS}"
+
+pkaction | grep 'Subscriptions1'
+
 busctl tree "${FACTS}"
 SERVICE="${FACTS}"
 OBJECT_PATH="${FACTS_PATH}"
