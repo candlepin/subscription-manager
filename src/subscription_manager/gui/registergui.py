@@ -301,17 +301,17 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         # To update the 'next/register' button in the parent dialog based on the new page
         self.register_notebook.connect('switch-page',
                                        self._on_switch_page)
-        self.screen_classes = screen_classes or [ChooseServerScreen, ActivationKeyScreen,
-                                                 CredentialsScreen,
-                                                 OrganizationScreen, EnvironmentScreen,
-                                                 PerformRegisterScreen, SelectSLAScreen,
-                                                 ConfirmSubscriptionsScreen, PerformSubscribeScreen,
-                                                 RefreshSubscriptionsScreen, InfoScreen,
-                                                 DoneScreen]
+        screen_classes = [ChooseServerScreen, ActivationKeyScreen,
+                          CredentialsScreen, PerformUnregisterScreen,
+                          OrganizationScreen, EnvironmentScreen,
+                          PerformRegisterScreen, SelectSLAScreen,
+                          ConfirmSubscriptionsScreen, PerformSubscribeScreen,
+                          RefreshSubscriptionsScreen, InfoScreen,
+                          DoneScreen]
         self._screens = []
 
         # TODO: current_screen as a gobject property
-        for idx, screen_class in enumerate(self.screen_classes):
+        for idx, screen_class in enumerate(screen_classes):
             self.add_screen(idx, screen_class)
 
         self._current_screen = self.initial_screen
@@ -846,17 +846,6 @@ class FirstbootWidget(RegisterWidget):
     __gtype_name__ = "FirstbootWidget"
 
     initial_screen = CHOOSE_SERVER_PAGE
-
-    def __init__(self, backend, facts, reg_info=None,
-                 parent_window=None, screen_classes=None):
-        screen_classes = screen_classes or [ChooseServerScreen, ActivationKeyScreen,
-                                            CredentialsScreen, PerformUnregisterScreen,
-                                            OrganizationScreen, EnvironmentScreen, PerformRegisterScreen,
-                                            SelectSLAScreen, ConfirmSubscriptionsScreen,
-                                            PerformSubscribeScreen, RefreshSubscriptionsScreen,
-                                            InfoScreen, DoneScreen]
-        super(FirstbootWidget, self).__init__(backend, facts, reg_info,
-                                             parent_window, screen_classes=screen_classes)
 
     def choose_initial_screen(self):
         self.current_screen.emit('move-to-screen', self.initial_screen)
