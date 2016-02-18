@@ -84,6 +84,13 @@ REGISTER_ERROR = _("<b>Unable to register the system.</b>") + \
     _("Please see /var/log/rhsm/rhsm.log for more information.")
 
 
+class RemoteUnregisterException(Exception):
+    """
+    This exception is to be used when we are unable to unregister from the server.
+    """
+    pass
+
+
 # from old smolt code.. Force glibc to call res_init()
 # to rest the resolv configuration, including reloading
 # resolv.conf. This attempt to handle the case where we
@@ -166,6 +173,9 @@ class RegisterInfo(ga_GObject.GObject):
     prefix = ga_GObject.property(type=str, default='')
 
     server_info = ga_GObject.property(type=ga_GObject.TYPE_PYOBJECT, default=None)
+
+    # Used to control whether or not we should use the PerformUnregisterScreen
+    do_unregister = ga_GObject.property(type=bool, default=False)
 
     # rhsm model info
     environment = ga_GObject.property(type=str, default='')
@@ -1100,8 +1110,12 @@ class PerformUnregisterScreen(NoGuiScreen):
     screen_enum = PERFORM_UNREGISTER_PAGE
 
     def _on_unregistration_finished_cb(self, retval, error=None):
-        if error:
-            self.emit('register-error', REGISTER_ERROR, error)
+        if error is not None:
+            self.emit('register-error',
+                      _('Unable to unregister'),
+                      error)
+        # clean all local data regardless of the success of the network unregister
+        managerlib.clean_all_data(backup=False)
         self.emit('move-to-screen', OWNER_SELECT_PAGE)
         self.pre_done()
         return
@@ -1110,17 +1124,15 @@ class PerformUnregisterScreen(NoGuiScreen):
         msg = _("Unregistering")
         self.info.set_property('register-status', msg)
         # Unregister if we have gotten here with a valid identity and have old server info
-        if self.info.identity.is_valid() and self.info.get_property('server-info'):
-            if not self.info.get_property('confirm-unregister'):
-                log.debug('RZ GF AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH')
-                self.async.unregister_consumer(self.info.identity.uuid,
-                                               self.info.get_property('server-info'),
-                                               self._on_unregistration_finished_cb)
-                return True
+        if self.info.identity.is_valid() and self.info.get_property('server-info') and self.info.get_property('do-unregister'):
+            log.debug('RZ GF AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH')
+            self.async.unregister_consumer(self.info.identity.uuid,
+                                           self.info.get_property('server-info'),
+                                           self._on_unregistration_finished_cb)
+            return True
         self.emit('move-to-screen', OWNER_SELECT_PAGE)
         self.pre_done()
         return False
-
 
 
 class PerformSubscribeScreen(NoGuiScreen):
@@ -2102,9 +2114,14 @@ class AsyncBackend(object):
             self.queue.put((callback, None, sys.exc_info()))
 
     def __unregister_consumer(self, consumer_uuid, server_info):
-        # Method to actually do the unregister bits
-        old_cp = UEPConnection(**server_info)
-        managerlib.unregister(old_cp, consumer_uuid)
+        # Method to actually do the unregister bits from the server
+        try:
+            old_cp = UEPConnection(**server_info)
+            old_cp.unregisterConsumer(consumer_uuid)
+        except Exception:
+            # Reraise any exception as a RemoteUnregisterException
+            # This will be passed all the way back to the parent window
+            raise RemoteUnregisterException
 
 
     def _unregister_consumer(self, consumer_uuid, server_info, callback):

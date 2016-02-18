@@ -160,7 +160,8 @@ class moduleClass(module.Module, object):
         self._read_rhn_proxy_settings()
 
         self.register_widget.initialize()
-        self.register_widget.info.set_property('confirm-unregister', False)
+        # Make sure to show the unregister screen
+        self.register_widget.info.set_property('do-unregister', True)
 
     def needsNetwork(self):
         """
@@ -225,6 +226,11 @@ class moduleClass(module.Module, object):
         self.error_dialog(msg)
 
     def handle_register_exception(self, obj, msg, exc_info):
+        if isinstance(exc_info[1], registergui.RemoteUnregisterException):
+            # Don't show a message box when we cannot unregister from the server
+            # Instead log the exception
+            log.exception(exc_info[1])
+            return
         message = format_exception(exc_info, msg)
         self.error_dialog(message)
 
