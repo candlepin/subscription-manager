@@ -49,8 +49,20 @@ class BaseService(slip.dbus.service.Object):
     default_dbus_path = FACTS_DBUS_PATH
     default_polkit_auth_required = None
 
-    def __init__(self, *args, **kwargs):
-        super(BaseService, self).__init__(*args, **kwargs)
+    def __init__(self, conn=None, object_path=None, bus_name=None):
+        self.log = logging.getLogger(__name__ + '.' + self.__class__.__name__)
+        #self.log.debug("args=%s", args)
+        #self.log.debug("kwargs=%s", kwargs)
+        self.log.debug("conn=%s", conn)
+        self.log.debug("object_path=%s", object_path)
+        self.log.debug("bus_name=%s", bus_name)
+        self.log.debug("self._interface_name=%s", self._interface_name)
+        self.log.debug("self.default_dbus_path=%s", self.default_dbus_path)
+
+        super(BaseService, self).__init__(conn=conn,
+                                          object_path=self.default_dbus_path,
+                                          bus_name=bus_name)
+
         self._props = base_properties.BaseProperties(self._interface_name,
                                                     {'default_sample_prop':
                                                      'default_sample_value'},
@@ -75,7 +87,7 @@ class BaseService(slip.dbus.service.Object):
 
     @property
     def props(self):
-        log.debug("accessing props @property")
+        self.log.debug("accessing props @property")
         return self._props
 
     @slip.dbus.polkit.require_auth(PK_DEFAULT_ACTION)
@@ -84,18 +96,18 @@ class BaseService(slip.dbus.service.Object):
     @decorators.dbus_handle_exceptions
     def Foos(self, sender=None):
         """Just an example method that is easy to test."""
-        log.debug("Foos")
+        self.log.debug("Foos")
         return "Foos"
 
     @dbus.service.signal(dbus_interface=FACTS_DBUS_INTERFACE,
                          signature='')
     @decorators.dbus_handle_exceptions
     def ServiceStarted(self):
-        log.debug("serviceStarted emit")
+        self.log.debug("serviceStarted emit")
 
     def stop(self):
         """If there were shutdown tasks to do, do it here."""
-        log.debug("shutting down")
+        self.log.debug("shutting down")
 
     #
     # org.freedesktop.DBus.Properties interface
@@ -136,7 +148,7 @@ class BaseService(slip.dbus.service.Object):
 #    @dbus.service.signal(dbus.PROPERTIES_IFACE, signature='sa{sv}as')
     def PropertiesChanged(self, interface_name, changed_properties,
                           invalidated_properties):
-        log.debug("Properties Changed emitted.")
+        self.log.debug("Properties Changed emitted.")
 
 
 def start_signal(service):
@@ -159,8 +171,11 @@ def run_services(bus_class=None):
     bus = bus_class()
 
     BUS_NAME = "com.redhat.Subscriptions1.Facts"
+    log.debug("service_classes=%s", service_classes)
     for service_class in service_classes:
         name = dbus.service.BusName(BUS_NAME, bus)
+        log.debug("service_class=%s", service_class)
+        log.debug("service_class.default_dbus_path=%s", service_class.default_dbus_path)
         service = service_class(name,
                                 service_class.default_dbus_path)
 
