@@ -9,7 +9,6 @@ from rhsm.dbus.services import base_service
 from rhsm.facts import hwprobe
 
 # TODO: move these to a config/constants module
-#FACTS_USER_DBUS_BUS_NAME = "com.redhat.Subscriptions1.Facts.User"
 FACTS_DBUS_INTERFACE = "com.redhat.Subscriptions1.Facts"
 FACTS_USER_DBUS_PATH = "/com/redhat/Subscriptions1/Facts/User"
 PK_FACTS_COLLECT = "com.redhat.Subscriptions1.Facts.User.collect"
