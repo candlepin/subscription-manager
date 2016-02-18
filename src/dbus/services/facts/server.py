@@ -17,14 +17,13 @@ from rhsm.dbus.common import decorators
 from rhsm.dbus.services import base_service
 from rhsm.dbus.services import base_properties
 from rhsm.dbus.services.facts_user import server
-from rhsm.dbus.common import dbus_utils
 
 # Note facts and facts-root provide the same interface on
 # different object paths
 #FACTS_ROOT_DBUS_BUS_NAME = "com.redhat.Subscriptions1.Facts.Root"
 FACTS_DBUS_INTERFACE = "com.redhat.Subscriptions1.Facts"
 FACTS_ROOT_DBUS_PATH = "/com/redhat/Subscriptions1/Facts/Root"
-PK_FACTS_COLLECT = "com.redhat.Subscriptions1.Facts.Root.collect"
+PK_FACTS_COLLECT = "com.redhat.Subscriptions1.Facts.Default.collect"
 
 
 class BaseFacts(base_service.BaseService):
@@ -64,54 +63,6 @@ class BaseFacts(base_service.BaseService):
         #                       {'answer': 'What was the question?'},
         #                      [])
         return '42'
-
-    @dbus.service.signal(dbus_interface=FACTS_DBUS_INTERFACE,
-                         signature='')
-    @decorators.dbus_handle_exceptions
-    def ServiceStarted(self):
-        self.log.debug("Facts serviceStarted emit")
-
-    @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
-                                    in_signature='s',
-                                    out_signature='a{sv}')
-    @decorators.dbus_handle_exceptions
-    def GetAll(self, interface_name, sender=None):
-        interface_name = dbus_utils.dbus_to_python(interface_name, str)
-        self.log.debug("GetAll() interface_name=%s", interface_name)
-        self.log.debug("sender=%s", sender)
-        return {}
-
-    @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
-                                    in_signature='ss',
-                                    out_signature='v')
-    @decorators.dbus_handle_exceptions
-    def Get(self, interface_name, property_name, sender=None):
-        interface_name = dbus_utils.dbus_to_python(interface_name, str)
-        property_name = dbus_utils.dbus_to_python(property_name, str)
-        self.log.debug("Get() interface_name=%s property_name=%s", interface_name, property_name)
-        self.log.debug("Get Property ifact=%s property_name=%s", interface_name, property_name)
-        return self.props.get(interface=interface_name,
-                              prop=property_name)
-
-    @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
-                                    in_signature='ssv')
-    @decorators.dbus_handle_exceptions
-    def Set(self, interface_name, property_name, new_value, sender=None):
-        interface_name = dbus_utils.dbus_to_python(interface_name, str)
-        property_name = dbus_utils.dbus_to_python(property_name, str)
-        log.debug("Set() interface_name=%s property_name=%s", interface_name, property_name)
-
-        self.props.set(interface=interface_name,
-                       prop=property_name,
-                       value=new_value)
-        self.PropertiesChanged(interface_name,
-                               {property_name: new_value},
-                               [])
-
-    @dbus.service.signal(dbus.PROPERTIES_IFACE, signature='sa{sv}as')
-    def PropertiesChanged(self, interface_name, changed_properties,
-                          invalidated_properties):
-        self.log.debug("Properties Changed emitted.")
 
 
 class FactsTest(BaseFacts):

@@ -1,21 +1,11 @@
 #!/usr/bin/python
 
 import logging
-#import sys
 
 log = logging.getLogger(__name__)
 
 from rhsm.dbus.common import gi_kluge
 gi_kluge.kluge_it()
-
-# gobject and gi and python module loading tricks are fun.
-#gmodules = [x for x in sys.modules.keys() if x.startswith('gobject')]
-#for gmodule in gmodules:
-#    del sys.modules[gmodule]
-
-
-#import slip._wrappers
-#slip._wrappers._gobject = None
 
 from gi.repository import GLib
 
@@ -28,31 +18,33 @@ import slip.dbus.service
 
 from rhsm.dbus.common import decorators
 from rhsm.dbus.services import base_properties
+from rhsm.dbus.common import dbus_utils
 
 # TODO: move these to a config/constants module
 # Name of the dbus service
-FACTS_DBUS_BUS_NAME = "com.redhat.Subscriptions1.Facts"
+DEFAULT_DBUS_BUS_NAME = "com.redhat.Subscriptions1"
+
 # Name of the DBus interface provided by this object
 # Note: This could become multiple interfaces
-FACTS_DBUS_INTERFACE = "com.redhat.Subscriptions1.Facts"
+DEFAULT_DBUS_INTERFACE = "com.redhat.Subscriptions1"
+
 # Where in the DBus object namespace does this object live
-FACTS_DBUS_PATH = "/com/redhat/Subscriptions1/Facts"
+DEFAULT_DBUS_PATH = "/com/redhat/Subscriptions1"
+
 # The polkit action-id to use by default if none are specified
-PK_DEFAULT_ACTION = "com.redhat.Subscriptions1.Facts.default"
+PK_DEFAULT_ACTION = "com.redhat.Subscriptions1.default"
 
 
 class BaseService(slip.dbus.service.Object):
 
     persistent = True
-    _interface_name = FACTS_DBUS_INTERFACE
-    #default_polkit_auth_required = PK_DEFAULT_ACTION
-    default_dbus_path = FACTS_DBUS_PATH
+    _interface_name = DEFAULT_DBUS_INTERFACE
+    default_polkit_auth_required = PK_DEFAULT_ACTION
+    default_dbus_path = DEFAULT_DBUS_PATH
     default_polkit_auth_required = None
 
     def __init__(self, conn=None, object_path=None, bus_name=None):
         self.log = logging.getLogger(__name__ + '.' + self.__class__.__name__)
-        #self.log.debug("args=%s", args)
-        #self.log.debug("kwargs=%s", kwargs)
         self.log.debug("conn=%s", conn)
         self.log.debug("object_path=%s", object_path)
         self.log.debug("bus_name=%s", bus_name)
@@ -90,16 +82,7 @@ class BaseService(slip.dbus.service.Object):
         self.log.debug("accessing props @property")
         return self._props
 
-    @slip.dbus.polkit.require_auth(PK_DEFAULT_ACTION)
-    @decorators.dbus_service_method(dbus_interface=FACTS_DBUS_INTERFACE,
-                                    out_signature='s')
-    @decorators.dbus_handle_exceptions
-    def Foos(self, sender=None):
-        """Just an example method that is easy to test."""
-        self.log.debug("Foos")
-        return "Foos"
-
-    @dbus.service.signal(dbus_interface=FACTS_DBUS_INTERFACE,
+    @dbus.service.signal(dbus_interface=DEFAULT_DBUS_INTERFACE,
                          signature='')
     @decorators.dbus_handle_exceptions
     def ServiceStarted(self):
@@ -112,40 +95,44 @@ class BaseService(slip.dbus.service.Object):
     #
     # org.freedesktop.DBus.Properties interface
     #
-#    @slip.dbus.polkit.require_auth(PK_DEFAULT_ACTION)
-#    @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
-#                                    in_signature='ss',
-#                                    out_signature='v')
-#    #@decorators.dbus_handle_exceptions
-#    def Get(self, interface_name, property_name, sender=None):
-#        log.debug("Get Property ifact=%s property_name=%s", interface_name, property_name)
-#        return self.props.get(interface=interface_name,
-#                              prop=property_name)
+    @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
+                                    in_signature='s',
+                                    out_signature='a{sv}')
+    @decorators.dbus_handle_exceptions
+    def GetAll(self, interface_name, sender=None):
+        interface_name = dbus_utils.dbus_to_python(interface_name, str)
+        self.log.debug("GetAll() interface_name=%s", interface_name)
+        self.log.debug("sender=%s", sender)
+        return self.props.get_all(interface=interface_name)
 
-#    @slip.dbus.polkit.require_auth(PK_DEFAULT_ACTION)
-#    @decorators.dbus_service_method(dbus.PROPERTIES_IFACE, in_signature='s',
-#                                   out_signature='a{sv}')
-    #@decorators.dbus_handle_exceptions
-#    def GetAll(self, interface_name, sender=None):
-#        # TODO: use better test type conversion ala dbus_utils.py
-#        log.debug("GetAll interface_name=%s, sender=%s", interface_name, sender)
+    @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
+                                    in_signature='ss',
+                                    out_signature='v')
+    @decorators.dbus_handle_exceptions
+    def Get(self, interface_name, property_name, sender=None):
+        interface_name = dbus_utils.dbus_to_python(interface_name, str)
+        property_name = dbus_utils.dbus_to_python(property_name, str)
+        self.log.debug("Get() interface_name=%s property_name=%s", interface_name, property_name)
+        self.log.debug("Get Property ifact=%s property_name=%s", interface_name, property_name)
+        return self.props.get(interface=interface_name,
+                              prop=property_name)
 
-#        return self.props.get_all(interface=interface_name)
+    @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
+                                    in_signature='ssv')
+    @decorators.dbus_handle_exceptions
+    def Set(self, interface_name, property_name, new_value, sender=None):
+        interface_name = dbus_utils.dbus_to_python(interface_name, str)
+        property_name = dbus_utils.dbus_to_python(property_name, str)
+        log.debug("Set() interface_name=%s property_name=%s", interface_name, property_name)
 
-    # TODO: pk action for changing properties
-#    @slip.dbus.polkit.require_auth(PK_DEFAULT_ACTION)
-#    @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
-#                                    in_signature='ssv')
-    #@decorators.dbus_handle_exceptions
-#    def Set(self, interface_name, property_name, new_value, sender=None):
-#        self.props.set(interface=interface_name,
-#                       prop=property_name,
-#                       value=new_value)
-#        self.PropertiesChanged(interface_name,
-#                               {property_name: new_value},
-#                               [])
+        self.props.set(interface=interface_name,
+                       prop=property_name,
+                       value=new_value)
+        self.PropertiesChanged(interface_name,
+                               {property_name: new_value},
+                               [])
 
-#    @dbus.service.signal(dbus.PROPERTIES_IFACE, signature='sa{sv}as')
+    @dbus.service.signal(dbus.PROPERTIES_IFACE, signature='sa{sv}as')
     def PropertiesChanged(self, interface_name, changed_properties,
                           invalidated_properties):
         self.log.debug("Properties Changed emitted.")

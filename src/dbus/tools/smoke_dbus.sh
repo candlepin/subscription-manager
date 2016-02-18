@@ -36,11 +36,9 @@ per_fact_object () {
     dbus_call Get ss "${FACTS_INTF}" "version"
     dbus_call Get ss "${FACTS_INTF}" "some_prop_that_doesnt_exist"
 
-
     INTF="${FACTS_INTF}"
     dbus_call Return42
     dbus_call GetFacts
-    dbus_call AddInts ii "2" "1000000000"
 
     INTF="${INTRO_INTF}"
     dbus_call Introspect
