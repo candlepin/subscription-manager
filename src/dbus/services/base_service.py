@@ -18,7 +18,7 @@ import slip.dbus.service
 
 from rhsm.dbus.common import decorators
 from rhsm.dbus.services import base_properties
-from rhsm.dbus.common import dbus_utils
+#from rhsm.dbus.common import dbus_utils
 
 # TODO: move these to a config/constants module
 # Name of the dbus service
@@ -55,27 +55,15 @@ class BaseService(slip.dbus.service.Object):
                                           object_path=self.default_dbus_path,
                                           bus_name=bus_name)
 
-        self._props = base_properties.BaseProperties(self._interface_name,
+        self._props = self._create_props()
+        self.persistent = True
+
+    def _create_props(self):
+        properties = base_properties.BaseProperties(self._interface_name,
                                                     {'default_sample_prop':
                                                      'default_sample_value'},
                                                     self.PropertiesChanged)
-        self.persistent = True
-
-    # override the rhel7 slip version with a newer version that
-    # includes upstream ea81f96a7746a4872e923b31dae646d1afa0043b
-    # ie, don't listen to all NameOwnerChanged signals
-    def sender_seen(self, sender):
-        if (sender, self.connection) not in BaseService.senders:
-            BaseService.senders.add((sender, self.connection))
-            if self.connection not in BaseService.connections_senders:
-                BaseService.connections_senders[self.connection] = set()
-                BaseService.connections_smobjs[self.connection] = \
-                    self.connection.add_signal_receiver(
-                        handler_function=self._name_owner_changed,
-                        signal_name='NameOwnerChanged',
-                        dbus_interface='org.freedesktop.DBus',
-                        arg1=sender)
-            BaseService.connections_senders[self.connection].add(sender)
+        return properties
 
     @property
     def props(self):
@@ -88,6 +76,7 @@ class BaseService(slip.dbus.service.Object):
     def ServiceStarted(self):
         self.log.debug("serviceStarted emit")
 
+    # FIXME: more of a 'server' than 'service', so move it when we split
     def stop(self):
         """If there were shutdown tasks to do, do it here."""
         self.log.debug("shutting down")
@@ -95,47 +84,68 @@ class BaseService(slip.dbus.service.Object):
     #
     # org.freedesktop.DBus.Properties interface
     #
+    @dbus.service.signal(dbus.PROPERTIES_IFACE, signature='sa{sv}as')
+    def PropertiesChanged(self, interface_name, changed_properties,
+                          invalidated_properties):
+        self.log.debug("Properties Changed emitted.")
+
     @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
                                     in_signature='s',
                                     out_signature='a{sv}')
     @decorators.dbus_handle_exceptions
     def GetAll(self, interface_name, sender=None):
-        interface_name = dbus_utils.dbus_to_python(interface_name, str)
         self.log.debug("GetAll() interface_name=%s", interface_name)
         self.log.debug("sender=%s", sender)
-        return self.props.get_all(interface=interface_name)
+        return self.props.get_all(interface_name=interface_name)
 
     @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
                                     in_signature='ss',
                                     out_signature='v')
     @decorators.dbus_handle_exceptions
     def Get(self, interface_name, property_name, sender=None):
-        interface_name = dbus_utils.dbus_to_python(interface_name, str)
-        property_name = dbus_utils.dbus_to_python(property_name, str)
         self.log.debug("Get() interface_name=%s property_name=%s", interface_name, property_name)
         self.log.debug("Get Property ifact=%s property_name=%s", interface_name, property_name)
-        return self.props.get(interface=interface_name,
-                              prop=property_name)
+        return self.props.get(interface_name=interface_name,
+                              property_name=property_name)
 
     @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
                                     in_signature='ssv')
     @decorators.dbus_handle_exceptions
     def Set(self, interface_name, property_name, new_value, sender=None):
-        interface_name = dbus_utils.dbus_to_python(interface_name, str)
-        property_name = dbus_utils.dbus_to_python(property_name, str)
+        """Set a DBus property on this object.
+
+        This is the base service class, and defaults to DBus properties
+        being read-only. Attempts to Set a property will raise a
+        DBusException of type org.freedesktop.DBus.Error.AccessDenied.
+
+        Subclasses that need settable properties should override this."""
+
         log.debug("Set() interface_name=%s property_name=%s", interface_name, property_name)
+        log.debug("Set() PPPPPPPPPPPPP self.props=%s %s", self.props, type(self.props))
 
-        self.props.set(interface=interface_name,
-                       prop=property_name,
-                       value=new_value)
-        self.PropertiesChanged(interface_name,
-                               {property_name: new_value},
-                               [])
+        self.props.set(interface_name=interface_name,
+                       property_name=property_name,
+                       new_value=new_value)
 
-    @dbus.service.signal(dbus.PROPERTIES_IFACE, signature='sa{sv}as')
-    def PropertiesChanged(self, interface_name, changed_properties,
-                          invalidated_properties):
-        self.log.debug("Properties Changed emitted.")
+    # Kluges
+
+    # override the rhel7 slip version with a newer version that
+    # includes upstream ea81f96a7746a4872e923b31dae646d1afa0043b
+    # ie, don't listen to all NameOwnerChanged signals
+    # TODO: This is likely optional on RHEL7, and should be removed
+    #       especially if python-slip gets updated for RHEL7.
+    def sender_seen(self, sender):
+        if (sender, self.connection) not in BaseService.senders:
+            BaseService.senders.add((sender, self.connection))
+            if self.connection not in BaseService.connections_senders:
+                BaseService.connections_senders[self.connection] = set()
+                BaseService.connections_smobjs[self.connection] = \
+                    self.connection.add_signal_receiver(
+                        handler_function=self._name_owner_changed,
+                        signal_name='NameOwnerChanged',
+                        dbus_interface='org.freedesktop.DBus',
+                        arg1=sender)
+            BaseService.connections_senders[self.connection].add(sender)
 
 
 def start_signal(service):
