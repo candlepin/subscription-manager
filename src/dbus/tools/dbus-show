@@ -23,9 +23,6 @@ else
 fi
 
 
-echo "$@"
-echo "${SERVICENAMES[@]}"
-# for f in "${files[@]}"
 for service_name in "${SERVICENAMES[@]}"
 do
 
@@ -34,24 +31,31 @@ do
 
     if [ "${tree_exit_code}" -eq "1" ]
     then
-        echo "Service name ${service_name} not found on this bus."
+        printf "Service name %s not found on this bus." "${service_name}"
         continue
     fi
 
+    printf "service name: %s" "${service_name}"
     for dbus_path in ${dbus_paths}
     do
-        echo "service name: ${service_name}"
-        echo "object path: ${dbus_path}"
-        intro_data=$(busctl "--${BUS}" introspect --no-legend "${service_name}" "${dbus_path}")
+        declare -a intro_data
+        printf "  object path: %s\n" "${dbus_path}"
+
+        # pull the intro_data into an array, one line per array entry (split on newline via readarray -t)
+        # So that we can indent it slightly for purely cosmetic reasons.
+        intro_data_raw=$(busctl "--${BUS}" "introspect" "--no-legend" "${service_name}" "${dbus_path}")
+        readarray -t intro_data <<<"${intro_data_raw}"
 
         if [ -n "${intro_data}" ]
         then
-            echo "${intro_data}"
+            for intro_data_line in "${intro_data[@]}"
+            do
+                printf "    %s\n" "${intro_data_line}"
+            done
+            echo
         fi
 
-        echo
     done
-
     echo
 done
 
