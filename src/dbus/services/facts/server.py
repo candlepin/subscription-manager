@@ -23,10 +23,11 @@ from rhsm.dbus.services.facts_user import server
 #FACTS_ROOT_DBUS_BUS_NAME = "com.redhat.Subscriptions1.Facts.Root"
 FACTS_DBUS_INTERFACE = "com.redhat.Subscriptions1.Facts"
 FACTS_ROOT_DBUS_PATH = "/com/redhat/Subscriptions1/Facts/Root"
-PK_FACTS_COLLECT = "com.redhat.Subscriptions1.Facts.Default.collect"
+PK_FACTS_COLLECT = "com.redhat.Subscriptions1.Facts.collect"
 
 
 class BaseFacts(base_service.BaseService):
+    _interface_name = FACTS_DBUS_INTERFACE
     facts_collector_class = None
 
     def __init__(self, conn=None, object_path=None, bus_name=None):
@@ -35,9 +36,10 @@ class BaseFacts(base_service.BaseService):
         if self.facts_collector_class:
             self.facts_collector = self.facts_collector_class()
 
-        self._props = base_properties.BaseProperties(self._interface_name,
-                                                     data=self.default_props_data,
-                                                     prop_changed_callback=self.PropertiesChanged)
+    def _create_props(self):
+        return base_properties.BaseProperties(self._interface_name,
+                                              data=self.default_props_data,
+                                              properties_changed_callback=self.PropertiesChanged)
 
     @slip.dbus.polkit.require_auth(PK_FACTS_COLLECT)
     @decorators.dbus_service_method(dbus_interface=FACTS_DBUS_INTERFACE,
@@ -55,18 +57,10 @@ class BaseFacts(base_service.BaseService):
     @decorators.dbus_handle_exceptions
     def Return42(self, sender=None):
         self.log.debug("Return42")
-        self.props.set(self._interface_name, 'answer', 'What was the question?')
-
-        # FIXME: trigger a props chang signal for testing, this should
-        #        become the duty of the properties object
-        #self.PropertiesChanged(self._interface_name,
-        #                       {'answer': 'What was the question?'},
-        #                      [])
         return '42'
 
 
 class FactsTest(BaseFacts):
-    _interface_name = "com.redhat.Subscriptions1.Facts"
     default_polkit_auth_required = PK_FACTS_COLLECT
     persistent = True
     facts_collector_class = admin_facts.AdminFacts
@@ -78,9 +72,25 @@ class FactsTest(BaseFacts):
                           'last_update': 'soon'}
 
 
-class FactsRoot(BaseFacts):
+class FactsReadWrite(BaseFacts):
+    default_polkit_auth_required = PK_FACTS_COLLECT
+    persistent = True
+    facts_collector_class = None
+    default_dbus_path = "/com/redhat/Subscriptions1/Facts/ReadWriteProps"
+    default_props_data = {'version': '11',
+                          'daemon': 'root',
+                          'answer': '42',
+                          'changeme': 'I am the default value',
+                          'polkit_auth_action': PK_FACTS_COLLECT,
+                          'last_update': 'before now, probably'}
 
-    _interface_name = FACTS_DBUS_INTERFACE
+    def _create_props(self):
+        return base_properties.ReadWriteProperties(self._interface_name,
+                                              data=self.default_props_data,
+                                              properties_changed_callback=self.PropertiesChanged)
+
+
+class FactsRoot(BaseFacts):
     default_polkit_auth_required = PK_FACTS_COLLECT
     persistent = True
     facts_collector_class = admin_facts.AdminFacts
@@ -96,6 +106,7 @@ class FactsRoot(BaseFacts):
 
         self.log.debug("FactsRoot even object_path=%s", object_path)
         self.other = FactsTest(conn=conn, object_path=object_path, bus_name=bus_name)
+        self.read_write = FactsReadWrite(conn=conn, object_path=object_path, bus_name=bus_name)
 
     @slip.dbus.polkit.require_auth(PK_FACTS_COLLECT)
     @decorators.dbus_service_method(dbus_interface=FACTS_DBUS_INTERFACE,
