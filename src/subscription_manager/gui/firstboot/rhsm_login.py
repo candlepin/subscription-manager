@@ -103,6 +103,7 @@ class moduleClass(module.Module, object):
         self._registration_finished = False
 
         self.interface = None
+        self.finished = False
 
         self.proxies_were_enabled_from_gui = None
         self._apply_result = constants.RESULT_FAILURE
@@ -151,14 +152,16 @@ class moduleClass(module.Module, object):
         # login_text.grab_focus()
 
     def initializeUI(self):
-        log.debug("initializeUi %s", self)
         # Need to make sure that each time the UI is initialized we reset back
         # to the main register screen.
+
+        if self.finished:
+            self.register_widget.done()
+            return
 
         # Note, even if we are standalone firstboot mode (no rhn modules),
         # we may still have RHN installed, and possibly configured.
         self._read_rhn_proxy_settings()
-
         self.register_widget.initialize()
         # Make sure to show the unregister screen
         self.register_widget.info.set_property('do-unregister', True)
