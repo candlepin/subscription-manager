@@ -395,7 +395,6 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         last_server_info = server_info_from_config(CFG)
         last_server_info['cert_file'] = self.backend.cp_provider.cert_file
         last_server_info['key_file'] = self.backend.cp_provider.key_file
-        log.debug('RZ SAVING SERVERINFO %s' % last_server_info)
         self.info.set_property('server-info', last_server_info)
 
     def do_finished(self):
@@ -477,10 +476,6 @@ class RegisterWidget(widgets.SubmanBaseWidget):
 
         This can be used to send the UI to any other screen, including the next screen.
         For example, to skip SLA selection if there is only one SLA."""
-        log.debug('RZ GF Current Screen Class: %s\nGF Next Screen ID: %s\nRZ GF Next Screen Class: %s',
-                   current_screen, next_screen_id, self._screens[next_screen_id].__class__)
-        log.debug('GF applied_screen_history: %s' % self.applied_screen_history)
-        log.debug('GF screen_history: %s' % self.screen_history)
         self.change_screen(next_screen_id)
 
     def change_screen(self, next_screen_id):
@@ -622,18 +617,15 @@ class RegisterWidget(widgets.SubmanBaseWidget):
 
     def _on_screen_ready_change(self, obj, param):
         # This could potentially be self.current_sceen.get_property('ready')
-        log.debug('ORIGINAL SCREEN READY CHANGE')
         ready = obj.get_property('ready')
 
         # property for parent dialog to use for nav button sensitivity
         self.set_property('screen-ready', ready)
 
         if ready:
-            log.debug('Unblocking proceed and back')
             self.handler_unblock(self.proceed_handler)
             self.handler_unblock(self.back_handler)
         else:
-            log.debug('Blocking proceed and back')
             self.handler_block(self.proceed_handler)
             self.handler_block(self.back_handler)
 
@@ -872,16 +864,6 @@ class AutobindWizardDialog(RegisterDialog):
         return autobind_widget
 
 
-class myDec(object):
-    def __init__(self, f, class_name):
-        self.f = f
-        self.class_name = class_name
-
-    def __call__(self, *args):
-        log.debug('RZ calling %s.%s%s' % (self.class_name, self.f.__name__, args))
-        return self.f(*args)
-
-
 # TODO: Screen could be a container widget, that has the rest of the gui as
 #       a child. That way, we could add the Screen class to the
 #       register_notebook directly, and follow up to the parent the normal
@@ -925,9 +907,6 @@ class Screen(widgets.SubmanBaseWidget):
         self.async = async_backend
         self.facts = facts
 
-        for v in dir(self):
-            if callable(getattr(self, v)) and v in ['pre', 'pre_done']:
-                setattr(self, v, myDec(getattr(self, v), self.__class__))
 
     def stay(self):
         self.emit('stay-on-screen')
@@ -938,7 +917,6 @@ class Screen(widgets.SubmanBaseWidget):
         return False
 
     def pre_done(self):
-        log.debug('GF %s.pre_done called' % self.__class__)
         self.set_property('ready', True)
 
     # do whatever the screen indicates, and emit any signals indicating where
@@ -992,9 +970,6 @@ class NoGuiScreen(ga_GObject.GObject):
         self.needs_gui = False
         self.pre_message = "Default Pre Message"
 
-        for v in dir(self):
-            if callable(getattr(self, v)) and v in ['pre', 'pre_done']:
-                setattr(self, v, myDec(getattr(self, v), self.__class__))
 
     # FIXME: a do_register_error could be used for logging?
     #        Otherwise it's up to the parent dialog to do the logging.
@@ -1004,7 +979,6 @@ class NoGuiScreen(ga_GObject.GObject):
         return True
 
     def pre_done(self):
-        log.debug('GF %s.pre_done called' % self.__class__)
         self.set_property('ready', True)
 
     def apply(self):
@@ -1115,7 +1089,6 @@ class PerformUnregisterScreen(NoGuiScreen):
         self.info.set_property('register-status', msg)
         # Unregister if we have gotten here with a valid identity and have old server info
         if self.info.identity.is_valid() and self.info.get_property('server-info') and self.info.get_property('do-unregister'):
-            log.debug('RZ GF AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH')
             self.async.unregister_consumer(self.info.identity.uuid,
                                            self.info.get_property('server-info'),
                                            self._on_unregistration_finished_cb)
@@ -1838,12 +1811,10 @@ class ChooseServerScreen(Screen):
         self.info.set_property('prefix', prefix)
 
         if self.activation_key_checkbox.get_active():
-            log.debug('ACTIVATION_PAGE')
             self.emit('move-to-screen', ACTIVATION_KEY_PAGE)
             return True
 
         else:
-            log.debug('CRED_PAGE!')
             self.emit('move-to-screen', CREDENTIALS_PAGE)
             return True
 
