@@ -56,7 +56,6 @@ CFG = config.initConfig()
 
 
 class RegisterState(object):
-    UNREGISTERING = -1
     REGISTERING = 0
     SUBSCRIBING = 1
 
@@ -660,8 +659,6 @@ class RegisterWidget(widgets.SubmanBaseWidget):
             self.progress_label.set_markup(_("<b>Registering</b>"))
         elif state == RegisterState.SUBSCRIBING:
             self.progress_label.set_markup(_("<b>Attaching</b>"))
-        elif state == RegisterState.UNREGISTERING:
-            self.progress_label.set_markup(_("<b>Unregistering</b>"))
 
     # Various bits for starting/stopping the timer used to pulse the progress bar
 
