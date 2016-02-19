@@ -500,6 +500,8 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         if async:
             self.start_progress_timer()
             next_screen.emit('move-to-screen', PROGRESS_PAGE)
+        else:
+            self.current_screen.set_property('ready', True)
 
     def _set_screen(self, screen):
         """Handle both updating self._current_screen, and updating register_notebook."""
@@ -547,7 +549,7 @@ class RegisterWidget(widgets.SubmanBaseWidget):
                               self.current_screen.button_label)
 
     def done(self):
-        self.change_screen(DONE_PAGE)
+        self.current_screen.emit('move-to-screen', DONE_PAGE)
 
     def clear_screens(self):
         for screen in self._screens:
@@ -1111,6 +1113,7 @@ class PerformUnregisterScreen(NoGuiScreen):
         return
 
     def pre(self):
+        self.set_property('ready', False)
         msg = _("Unregistering")
         self.info.set_property('register-status', msg)
         # Unregister if we have gotten here with a valid identity and have old server info
@@ -2183,6 +2186,9 @@ class DoneScreen(Screen):
         # TODO: We could start cleanup tasks here.
         self.pre_done()
         return False
+
+    # def pre_done(self):
+    #     pass
 
 
 class InfoScreen(Screen):

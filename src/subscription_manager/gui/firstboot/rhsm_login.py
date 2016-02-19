@@ -78,6 +78,7 @@ class moduleClass(module.Module, object):
         self.backend = managergui.Backend()
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
         self.register_widget = registergui.FirstbootWidget(self.backend, Facts(), reg_info)
+        self.register_widget.connect('notify::screen-ready', self._on_screen_ready_change)
 
         # Will be False if we are on an older RHEL version where
         # rhn-client-tools already does some things so we don't have to.
@@ -108,6 +109,9 @@ class moduleClass(module.Module, object):
         self._apply_result = constants.RESULT_FAILURE
 
         self.page_status = constants.RESULT_FAILURE
+
+    def _on_screen_ready_change(self, obj, param):
+        self._set_navigation_sensitive(obj.get_property('screen-ready'))
 
     def apply(self, interface, testing=False):
         """
@@ -356,7 +360,7 @@ class moduleClass(module.Module, object):
         # EL6:
         else:
             if self.interface is not None:
-                log.debug('RHSMLOGIN CHANGING SENSITIVITY %s' % sensitive)
+                log.debug('RZ RHSMLOGIN CHANGING SENSITIVITY %s' % sensitive)
                 self.interface.backButton.set_sensitive(sensitive)
                 self.interface.nextButton.set_sensitive(sensitive)
 
