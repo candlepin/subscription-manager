@@ -186,8 +186,14 @@ dbus-facts-service-install: dbus-common-install facts-install
 	install -m 755 $(DBUS_SERVICES_SRC_DIR)/facts/rhsm-facts-service \
 		$(PREFIX)/usr/libexec/rhsm-facts-service
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/__init__.py $(DBUS_SERVICES_INSTALL_DIR)/facts
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/constants.py $(DBUS_SERVICES_INSTALL_DIR)/facts
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/base_facts.py $(DBUS_SERVICES_INSTALL_DIR)/facts
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/server.py $(DBUS_SERVICES_INSTALL_DIR)/facts
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/service.py $(DBUS_SERVICES_INSTALL_DIR)/facts
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/root.py $(DBUS_SERVICES_INSTALL_DIR)/facts
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/host.py $(DBUS_SERVICES_INSTALL_DIR)/facts
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/example.py $(DBUS_SERVICES_INSTALL_DIR)/facts
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/user.py $(DBUS_SERVICES_INSTALL_DIR)/facts
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/read_write.py $(DBUS_SERVICES_INSTALL_DIR)/facts
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts_user/__init__.py $(DBUS_SERVICES_INSTALL_DIR)/facts_user
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts_user/service.py $(DBUS_SERVICES_INSTALL_DIR)/facts_user
 

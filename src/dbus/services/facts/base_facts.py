@@ -1,17 +1,21 @@
+import logging
 
 import dbus
 import slip.dbus
 
 from rhsm.dbus.common import decorators
-from rhsm.dbus.services import base_service
 from rhsm.dbus.services import base_properties
+from rhsm.dbus.services import base_service
+from rhsm.dbus.services.facts import constants
 
 FACTS_DBUS_INTERFACE = "com.redhat.Subscriptions1.Facts"
 PK_FACTS_COLLECT = "com.redhat.Subscriptions1.Facts.collect"
 
+log = logging.getLogger(__name__)
+
 
 class BaseFacts(base_service.BaseService):
-    _interface_name = FACTS_DBUS_INTERFACE
+    _interface_name = constants.FACTS_DBUS_INTERFACE
     facts_collector_class = None
 
     def __init__(self, conn=None, object_path=None, bus_name=None):
@@ -25,8 +29,8 @@ class BaseFacts(base_service.BaseService):
                                               data=self.default_props_data,
                                               properties_changed_callback=self.PropertiesChanged)
 
-    @slip.dbus.polkit.require_auth(PK_FACTS_COLLECT)
-    @decorators.dbus_service_method(dbus_interface=FACTS_DBUS_INTERFACE,
+    @slip.dbus.polkit.require_auth(constants.PK_FACTS_COLLECT)
+    @decorators.dbus_service_method(dbus_interface=constants.FACTS_DBUS_INTERFACE,
                                    out_signature='a{ss}')
     @decorators.dbus_handle_exceptions
     def GetFacts(self, sender=None):
@@ -35,8 +39,8 @@ class BaseFacts(base_service.BaseService):
         dbus_dict = dbus.Dictionary(cleaned, signature="ss")
         return dbus_dict
 
-    @slip.dbus.polkit.require_auth(PK_FACTS_COLLECT)
-    @decorators.dbus_service_method(dbus_interface=FACTS_DBUS_INTERFACE,
+    @slip.dbus.polkit.require_auth(constants.PK_FACTS_COLLECT)
+    @decorators.dbus_service_method(dbus_interface=constants.FACTS_DBUS_INTERFACE,
                                    out_signature='s')
     @decorators.dbus_handle_exceptions
     def Return42(self, sender=None):
