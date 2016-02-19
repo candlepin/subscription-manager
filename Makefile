@@ -183,13 +183,13 @@ dbus-facts-service-install: dbus-common-install facts-install
 		$(PREFIX)/etc/dbus-1/system.d
 	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/rhsm-facts.service \
 		$(SYSTEMD_INST_DIR)
-	# Needs to be executable by the rhsm user
 	install -m 755 $(DBUS_SERVICES_SRC_DIR)/facts/rhsm-facts-service \
 		$(PREFIX)/usr/libexec/rhsm-facts-service
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/__init__.py $(DBUS_SERVICES_INSTALL_DIR)/facts
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/server.py $(DBUS_SERVICES_INSTALL_DIR)/facts
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/service.py $(DBUS_SERVICES_INSTALL_DIR)/facts
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts_user/__init__.py $(DBUS_SERVICES_INSTALL_DIR)/facts_user
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts_user/server.py $(DBUS_SERVICES_INSTALL_DIR)/facts_user
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts_user/service.py $(DBUS_SERVICES_INSTALL_DIR)/facts_user
 
 
 dbus-config-and-services-uninstall: systemd-services-shutdown
