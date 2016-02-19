@@ -13,6 +13,7 @@ class BaseProperties(object):
     def __init__(self, interface_name,
                  data=None,
                  properties_changed_callback=None):
+        self.log = logging.getLogger(__name__ + '.' + self.__class__.__name__)
         self.data = data
         self.interface_name = interface_name
         self.properties_changed_callback = properties_changed_callback
@@ -24,7 +25,7 @@ class BaseProperties(object):
         try:
             return self.data[property_name]
         except KeyError, e:
-            log.exception(e)
+            self.log.exception(e)
             self.raise_access_denied_or_unknown_property(property_name)
 
     def get_all(self, interface_name=None):
@@ -81,31 +82,35 @@ class BaseProperties(object):
                                          invalidated_properties)
 
     def _error_on_set(self, exception, prop, value):
-        log.debug("Exception on Properties.Set prop=%s value=%s", prop, value)
-        log.exception(exception)
+        self.log.debug("Exception on Properties.Set prop=%s value=%s", prop, value)
+        self.log.exception(exception)
         msg = "Error setting property %s=%s on interface_name=%s: %s" % \
             (prop, value, self.interface_name, exception)
-        log.debug('msg=%s', msg)
+        self.log.debug('msg=%s', msg)
         raise dbus.exceptions.DBusException(msg)
 
     def raise_access_denied(self, property_name):
+        self.log.debug('rae')
         # The base service assumes that properties are read only.
         raise dbus.exceptions.DBusException(
             "org.freedesktop.DBus.Error.AccessDenied: "
             "Property '%s' is not settable" % property_name)
 
     def raise_property_does_not_exist(self, property_name):
-        msg = "org.freedesktop.DBus.Error.AccessDenied: "
+        self.log.debug('rpdne')
+        msg = "org.freedesktop.DBus.Error.AccessDenied: " \
         "Property '%s' does not exist" % property_name
         raise dbus.exceptions.DBusException(msg)
 
     def raise_unknown_interface(self, interface_name):
-        msg = "org.freedesktop.DBus.Error.UnknownInterface: "
+        self.log.debug('rui')
+        msg = "org.freedesktop.DBus.Error.UnknownInterface: " \
         "%s does not handle properties for %s" % (self.interface_name, interface_name)
         raise dbus.exceptions.DBusException(msg)
 
     def raise_access_denied_or_unknown_property(self, property_name):
-        msg = "org.freedesktop.DBus.Error.AccessDenied: "
+        self.log.debug('radoup')
+        msg = "org.freedesktop.DBus.Error.AccessDenied: " \
         "Property '%s' isn't exported (or may not exist) on interface: %s" % \
             (property_name, self.interface_name)
 
@@ -132,4 +137,7 @@ class ReadWriteProperties(BaseProperties):
             # WARNING: if emitting a signal causes an exception...?
             self._emit_properties_changed(property_name, new_value)
         except Exception, e:
+            self.log.debug("ReadWriteProperties Exception i=% p=% n=%",
+                           interface_name, property_name, new_value)
+            self.log.exception(e)
             self._error_on_set(e, property_name, new_value)
