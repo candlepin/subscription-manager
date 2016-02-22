@@ -2070,7 +2070,8 @@ class AsyncBackend(object):
         try:
             old_cp = UEPConnection(**server_info)
             old_cp.unregisterConsumer(consumer_uuid)
-        except Exception:
+        except Exception, e:
+            log.exception(e)
             # Reraise any exception as a RemoteUnregisterException
             # This will be passed all the way back to the parent window
             raise RemoteUnregisterException
