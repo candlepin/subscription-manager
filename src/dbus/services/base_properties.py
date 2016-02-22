@@ -4,6 +4,7 @@ import dbus
 
 from rhsm.dbus.common import dbus_utils
 
+
 log = logging.getLogger(__name__)
 
 
@@ -47,6 +48,44 @@ class BaseProperties(object):
         a ReadWriteBaseProperties instead of BaseProperties."""
 
         self.raise_access_denied(property_name)
+
+    # FIXME: This is kind of weird. Would be easier if we track the DBus
+    #        signature for each property.
+    def add_introspection_xml(self, interface_xml):
+        ret = dbus_utils.add_properties(interface_xml, self.interface_name,
+                                        self.to_introspection_props())
+        log.debug("introspection_xml=%s", ret)
+        return ret
+
+    # FIXME: This only supports string type values at the moment.
+    def to_introspection_props(self):
+        """ Transform self.data (a dict) to:
+
+        data = {'blah': '1', 'blip': some_int_value}
+        props_tup = ({'p_t': 's',
+                      'p_name': 'blah',
+                      'p_access': 'read' },
+                      {'p_t': 'i',
+                      'p_name': blip,
+                      'p_access': 'read'}))
+        """
+        props_list = []
+        props_dict = {}
+        for prop_key, prop_value in self.data.items():
+            #p_t = dbus_utils._type_map(type(prop_value))
+            # FIXME: all strings atm
+            p_t = 's'
+            props_dict = dict(p_t=p_t, p_name=prop_key,
+                              p_access=self.access_mask(prop_key))
+            props_list.append(props_dict)
+
+        log.debug("props_list=%s", props_list)
+        return props_list
+
+    # FIXME: THis is a read only props class, ReadWriteProperties needs
+    #        to be smarter
+    def access_mask(self, prop_key):
+        return 'read'
 
     def _check_interface(self, interface_name):
         if interface_name != self.interface_name:
@@ -141,3 +180,7 @@ class ReadWriteProperties(BaseProperties):
                            interface_name, property_name, new_value)
             self.log.exception(e)
             self._error_on_set(e, property_name, new_value)
+
+    # FIXME: track read/write per property
+    def access_mask(self, prop_key):
+        return 'write'
