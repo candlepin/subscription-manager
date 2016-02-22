@@ -10,6 +10,7 @@ import dbus.mainloop.glib
 
 import slip.dbus
 import slip.dbus.service
+import slip.dbus.introspection
 
 from rhsm.dbus.common import decorators
 from rhsm.dbus.services import base_properties
@@ -75,6 +76,17 @@ class BaseService(slip.dbus.service.Object):
     def stop(self):
         """If there were shutdown tasks to do, do it here."""
         self.log.debug("shutting down")
+
+    @dbus.service.method(dbus.INTROSPECTABLE_IFACE, in_signature='', out_signature='s',
+                        path_keyword='object_path', connection_keyword='connection')
+    def Introspect(self, object_path, connection):
+        ret = super(BaseService, self).Introspect(object_path, connection)
+        log.debug("introspect xml %s", ret)
+        et = slip.dbus.introspection.introspect(ret)
+        log.debug('et=%s', et)
+        bloop = self.props.add_introspection_xml(ret)
+        log.debug("bloop=%s", bloop)
+        return bloop
 
     #
     # org.freedesktop.DBus.Properties interface
