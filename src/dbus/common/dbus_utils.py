@@ -22,8 +22,10 @@
 import dbus
 import pwd
 import sys
+import xml.etree.ElementTree as Et
 
 PY2 = sys.version < '3'
+
 
 def command_of_pid(pid):
     """ Get command for pid from /proc """
@@ -34,8 +36,9 @@ def command_of_pid(pid):
         return None
     return cmd
 
+
 def pid_of_sender(bus, sender):
-    """ Get pid from sender string using 
+    """ Get pid from sender string using
     org.freedesktop.DBus.GetConnectionUnixProcessID """
 
     dbus_obj = bus.get_object('org.freedesktop.DBus', '/org/freedesktop/DBus')
@@ -47,8 +50,9 @@ def pid_of_sender(bus, sender):
         return None
     return pid
 
+
 def uid_of_sender(bus, sender):
-    """ Get user id from sender string using 
+    """ Get user id from sender string using
     org.freedesktop.DBus.GetConnectionUnixUser """
 
     dbus_obj = bus.get_object('org.freedesktop.DBus', '/org/freedesktop/DBus')
@@ -60,6 +64,7 @@ def uid_of_sender(bus, sender):
         return None
     return uid
 
+
 def user_of_uid(uid):
     """ Get user for uid from pwd """
 
@@ -69,27 +74,31 @@ def user_of_uid(uid):
         return None
     return pws[0]
 
+
 def context_of_sender(bus, sender):
-    """ Get SELinux context from sender string using 
+    """ Get SELinux context from sender string using
     org.freedesktop.DBus.GetConnectionSELinuxSecurityContext """
 
     dbus_obj = bus.get_object('org.freedesktop.DBus', '/org/freedesktop/DBus')
     dbus_iface = dbus.Interface(dbus_obj, 'org.freedesktop.DBus')
 
     try:
-        context =  dbus_iface.GetConnectionSELinuxSecurityContext(sender)
+        context = dbus_iface.GetConnectionSELinuxSecurityContext(sender)
     except:
         return None
 
     return "".join(map(chr, dbus_to_python(context)))
+
 
 def command_of_sender(bus, sender):
     """ Return command of D-Bus sender """
 
     return command_of_pid(pid_of_sender(bus, sender))
 
+
 def user_of_sender(bus, sender):
     return user_of_uid(uid_of_sender(bus, sender))
+
 
 def dbus_to_python(obj, expected_type=None):
     if obj is None:
@@ -138,3 +147,56 @@ def dbus_to_python(obj, expected_type=None):
             raise TypeError("%s is %s, expected %s" % (python_obj, type(python_obj), expected_type))
 
     return python_obj
+
+# From lvm-dubstep/lvmdbus/utils.py  (GPLv2, copyright Red Hat)
+# https://github.com/tasleson/lvm-dubstep
+_type_map = dict(
+    s=dbus.String,
+    o=dbus.ObjectPath,
+    t=dbus.UInt64,
+    x=dbus.Int64,
+    u=dbus.UInt32,
+    i=dbus.Int32,
+    n=dbus.Int16,
+    q=dbus.UInt16,
+    d=dbus.Double,
+    y=dbus.Byte,
+    b=dbus.Boolean)
+
+
+def _pass_through(v):
+    """
+    If we have something which is not a simple type we return the original
+    value un-wrapped.
+    :param v:
+    :return:"""
+    return v
+
+
+def _dbus_type(t, value):
+    return _type_map.get(t, _pass_through)(value)
+
+
+def add_properties(xml, interface, props):
+    """
+    Given xml that describes the interface, add property values to the XML
+    for the specified interface.
+    :param xml:         XML to edit
+    :param interface:   Interface to add the properties too
+    :param props:       Output from get_properties
+    :return: updated XML string
+    """
+    root = Et.fromstring(xml)
+
+    if props:
+
+        for c in root:
+            # print c.attrib['name']
+            if c.attrib['name'] == interface:
+                for p in props:
+                    temp = '<property type="%s" name="%s" access="%s"/>\n' % \
+                        (p['p_t'], p['p_name'], p['p_access'])
+                    c.append(Et.fromstring(temp))
+
+        return Et.tostring(root, encoding='utf8')
+    return xml
