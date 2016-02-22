@@ -197,6 +197,24 @@ dbus-facts-service-install: dbus-common-install facts-install
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts_user/__init__.py $(DBUS_SERVICES_INSTALL_DIR)/facts_user
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts_user/service.py $(DBUS_SERVICES_INSTALL_DIR)/facts_user
 
+# TODO: move src/dbus to setup.py? it's own makefile? autoconf?
+dbus-subscriptions-service-install: dbus-common-install 
+	install -d $(DBUS_SERVICES_INSTALL_DIR)/subscriptions
+	install -m 644 $(DBUS_SERVICES_SRC_DIR)/subscriptions/com.redhat.Subscriptions1.Subscriptions.service \
+		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
+	install -m 644 $(DBUS_SERVICES_SRC_DIR)/subscriptions/com.redhat.Subscriptions1.Subscriptions.conf \
+		$(PREFIX)/etc/dbus-1/system.d
+	install -m 644 $(DBUS_SERVICES_SRC_DIR)/subscriptions/rhsm-subscriptions.service \
+		$(SYSTEMD_INST_DIR)
+	install -m 755 $(DBUS_SERVICES_SRC_DIR)/subscriptions/rhsm-subscriptions-service \
+		$(PREFIX)/usr/libexec/rhsm-subscriptions-service
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/subscriptions/__init__.py $(DBUS_SERVICES_INSTALL_DIR)/subscriptions
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/subscriptions/constants.py $(DBUS_SERVICES_INSTALL_DIR)/subscriptions
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/subscriptions/server.py $(DBUS_SERVICES_INSTALL_DIR)/subscriptions
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/subscriptions/subscriptions.py $(DBUS_SERVICES_INSTALL_DIR)/subscriptions
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/subscriptions/root.py $(DBUS_SERVICES_INSTALL_DIR)/subscriptions
+
+
 
 dbus-config-and-services-uninstall: systemd-services-shutdown
 	rm -rf $(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services/com.redhat.Subscriptions1.Facts.service
@@ -219,7 +237,9 @@ dbus-touch:
 
 systemd-reload: systemd-services-shutdown systemd-daemon-reload
 	systemctl start rhsm-facts.service
+	systemctl start rhsm-subscriptions.service
 	systemctl status -l rhsm-facts.service
+	systemctl status -l rhsm-subscriptions.service
 
 systemd-services-shutdown:
 	-systemctl stop rhsm-facts.service
@@ -227,7 +247,7 @@ systemd-services-shutdown:
 systemd-daemon-reload:
 	systemctl daemon-reload
 
-dbus-install: dbus-clients-install dbus-rhsmd-service-install dbus-facts-service-install
+dbus-install: dbus-clients-install dbus-rhsmd-service-install dbus-facts-service-install dbus-subscriptions-service-install
 
 dbus-uninstall: dbus-config-and-services-uninstall
 	# This make target is for developer utility, it uninstalls our dbus related code with no subtlety.
@@ -246,6 +266,8 @@ polkit-install:
 	install -d $(POLKIT_ACTIONS_INSTALL_DIR)
 	install -m0644 $(DBUS_SERVICES_SRC_DIR)/com.redhat.Subscriptions1.policy $(POLKIT_ACTIONS_INSTALL_DIR)
 	install -m0644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.policy $(POLKIT_ACTIONS_INSTALL_DIR)
+	install -m0644 $(DBUS_SERVICES_SRC_DIR)/subscriptions/com.redhat.Subscriptions1.Subscriptions.policy $(POLKIT_ACTIONS_INSTALL_DIR)
+
 
 polkit-uninstall:
 	# Removing all com.redhat.Subscriptions1.* actions
