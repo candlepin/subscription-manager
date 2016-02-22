@@ -61,7 +61,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.17.1
+Version: 1.17.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -577,6 +577,10 @@ fi
 %endif
 
 %changelog
+* Fri Feb 19 2016 Alex Wood <awood@redhat.com> 1.17.2-1
+- 1308732: Leave hw fact virt.uuid unset if unknown (alikins@redhat.com)
+- 1290885: Display formatted error if no DISPLAY exists. (awood@redhat.com)
+
 * Mon Feb 01 2016 Christopher Snyder <csnyder@redhat.com> 1.17.1-1
 - 1300259: Select service level label no longer overlaps dropdown box
   (csnyder@redhat.com)
