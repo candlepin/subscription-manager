@@ -584,12 +584,6 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         It may need to auto attach, etc. The 'finished' signal indicates register
         and attach are finished, while 'register-finished' is just the first part."""
 
-        # if self.info.get_property('server-info-changed'):
-        #     # Persist the new server info as we know at this point the data
-        #     # is good
-        #     serverinfo = self.info.get_property('server-info')
-        #     self.info.set_property('last-successful-server-info', serverinfo)
-
         self.emit('register-finished')
 
         # We are done if there is auto bind is being skipped ("Manually attach
