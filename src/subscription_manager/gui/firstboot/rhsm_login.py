@@ -164,7 +164,7 @@ class moduleClass(module.Module, object):
         self._read_rhn_proxy_settings()
         self.register_widget.initialize()
         # Make sure to show the unregister screen
-        self.register_widget.info.set_property('do-unregister', True)
+        self.register_widget.info.set_property('enable-unregister', True)
 
     def needsNetwork(self):
         """

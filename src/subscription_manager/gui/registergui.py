@@ -174,7 +174,7 @@ class RegisterInfo(ga_GObject.GObject):
     server_info = ga_GObject.property(type=ga_GObject.TYPE_PYOBJECT, default=None)
 
     # Used to control whether or not we should use the PerformUnregisterScreen
-    do_unregister = ga_GObject.property(type=bool, default=False)
+    enable_unregister = ga_GObject.property(type=bool, default=False)
 
     # rhsm model info
     environment = ga_GObject.property(type=str, default='')
@@ -1079,7 +1079,7 @@ class PerformUnregisterScreen(NoGuiScreen):
         msg = _("Unregistering")
         self.info.set_property('register-status', msg)
         # Unregister if we have gotten here with a valid identity and have old server info
-        if self.info.identity.is_valid() and self.info.get_property('server-info') and self.info.get_property('do-unregister'):
+        if self.info.identity.is_valid() and self.info.get_property('server-info') and self.info.get_property('enable-unregister'):
             self.async.unregister_consumer(self.info.identity.uuid,
                                            self.info.get_property('server-info'),
                                            self._on_unregistration_finished_cb)
