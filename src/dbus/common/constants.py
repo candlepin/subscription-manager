@@ -30,4 +30,4 @@ ROOT_DBUS_PATH = '/' + TOP_LEVEL_DOMAIN + '/' + DOMAIN_NAME + '/' + SERVICE_SUB_
 PK_ACTION_PREFIX = SERVICE_NAME
 
 # com.redhat.Subscriptions1.default
-PK_DEFAULT_ACTION = PK_ACTION_PREFIX + '.' + 'default'
+PK_ACTION_DEFAULT = PK_ACTION_PREFIX + '.' + 'default'

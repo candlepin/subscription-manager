@@ -30,11 +30,3 @@ class BaseSubscriptions(base_service.BaseService):
         cleaned = {'Not A Real Subscription': 'Not any useful info about a readl subscription.'}
         dbus_dict = dbus.Dictionary(cleaned, signature="ss")
         return dbus_dict
-
-    @slip.dbus.polkit.require_auth(constants.PK_SUBSCRIPTIONS_DEFAULT)
-    @decorators.dbus_service_method(dbus_interface=constants.SUBSCRIPTIONS_DBUS_INTERFACE,
-                                    out_signature='s')
-    @decorators.dbus_handle_exceptions
-    def Return42(self, sender=None):
-        self.log.debug("Return42")
-        return '42'
