@@ -13,6 +13,8 @@ import dbus.mainloop.glib
 import slip.dbus
 import slip.dbus.service
 
+from rhsm.dbus.common import constants
+
 log = logging.getLogger(__name__)
 
 
@@ -22,7 +24,7 @@ def run_services(bus_class=None, bus_name=None, service_classes=None):
     service_class is the the class implementing a DBus Object/service."""
 
     service_classes = service_classes or None
-    bus_name = bus_name or "com.redhat.Subscriptions1"
+    bus_name = bus_name or constants.SERVICE_NAME
 
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
     dbus.mainloop.glib.threads_init()
@@ -32,11 +34,11 @@ def run_services(bus_class=None, bus_name=None, service_classes=None):
 
     log.debug("service_classes=%s", service_classes)
     for service_class in service_classes:
-        name = dbus.service.BusName(bus_name, bus)
+        connection_name = dbus.service.BusName(bus_name, bus)
         log.debug("service_class=%s", service_class)
         log.debug("service_class.default_dbus_path=%s", service_class.default_dbus_path)
-        service = service_class(name,
-                                service_class.default_dbus_path)
+        service = service_class(conn=connection_name,
+                                object_path=service_class.default_dbus_path)
 
     mainloop = GLib.MainLoop()
     slip.dbus.service.set_mainloop(mainloop)
@@ -60,15 +62,3 @@ def run_services(bus_class=None, bus_name=None, service_classes=None):
 def start_signal_idle_callback(service):
     service.ServiceStarted()
     return False
-
-#def run():
-#    run_services(service_classes=[base_service.BaseService,
-#                                  FactsRoot])
-    #base_service.service_classes.append(base_service.BaseService)
-    #base_service.service_classes.append(FactsRoot)
-    #base_service.service_classes.append(server.FactsUser)
-    #base_service.run()
-    #base_service.run_service(dbus.SystemBus,
-    #                         FACTS_ROOT_DBUS_BUS_NAME,
-    #                         FACTS_DBUS_INTERFACE,
-    #                         FactsRoot)
