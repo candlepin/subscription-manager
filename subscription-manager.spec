@@ -62,7 +62,7 @@
 
 Name: subscription-manager
 Version: 1.16.8
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -577,6 +577,19 @@ fi
 %endif
 
 %changelog
+* Tue Feb 23 2016 Christopher Snyder <csnyder@redhat.com> 1.16.8-3
+- 1303768: Adds updated keys and translations from zanata. (csnyder@redhat.com)
+- 1303092: GUI issues in Repos and Help (wpoteat@redhat.com)
+- 1304280: Tab stop needed on cancel button (wpoteat@redhat.com)
+- 1308523: Navigation buttons sensitivity matches the current_screen.ready
+  (csnyder@redhat.com)
+- 1302775: Navigate through all rhsm firstboot screens (csnyder@redhat.com)
+- 1308732: Leave hw fact virt.uuid unset if unknown (alikins@redhat.com)
+- 1290885: Display formatted error if no DISPLAY exists. (awood@redhat.com)
+- 1220283: Choose server text no longer overlapped by icon.
+  (csnyder@redhat.com)
+- 1300791: Update man page footers (wpoteat@redhat.com)
+
 * Tue Feb 09 2016 Christopher Snyder <csnyder@redhat.com> 1.16.8-2
 - 1300259: Select service level label no longer overlaps dropdown box
   (csnyder@redhat.com)
