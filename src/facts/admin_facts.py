@@ -19,8 +19,8 @@ import gettext
 import logging
 import subprocess
 
-from rhsm.facts import hwprobe
 from rhsm.facts import firmware_info
+from rhsm.facts import collector
 
 log = logging.getLogger(__name__)
 
@@ -67,19 +67,10 @@ class CalledProcessError(Exception):
         return "Command '%s' returned non-zero exit status %d" % (self.cmd, self.returncode)
 
 
-class AdminFacts(object):
-    """Collect facts that require elevated privs (ie, root).
-
-    hwprobe.Hardware() can be invoked as a user, but this class
-    will need to run as root or equilivent.
-
-    Facts collected include DMI info and virt status and virt.uuid."""
-
-    def __init__(self, prefix=None, testing=None):
-        self.allhw = {}
-        self.arch = hwprobe.get_arch()
-        self.prefix = prefix or ''
-        self.testing = testing or False
+class VirtCollector(collector.FactsCollector):
+    def __init__(self, prefix=None, testing=None, collected_hw_info=None):
+        super(VirtCollector, self).__init__(prefix=prefix, testing=testing,
+                                            collected_hw_info=collected_hw_info)
 
         # Note: unlike system uuid in DMI info, the virt.uuid is
         # available to non-root users on ppc64*
@@ -87,45 +78,15 @@ class AdminFacts(object):
         # so parts of this don't need to be in AdminHardware
         self.devicetree_vm_uuid_arches = ['ppc64', 'ppc64le']
 
-        self.hardware_methods = [self.get_firmware_info,
-                                 self.get_virt_info,
+        # Note: Unlike FactsCollector base class or hwprobe.Hardware, the
+        #       methods in hardware_methods here have side effects, most
+        #       importantly, they update self.allhw themselves, in addition
+        #       to returning the new fields. This is because the methods
+        #       depend on data collected (ie, self.collected_hw_info['virt.is_guest']) to
+        #       change behavior. Though, self.allhw here is only the virt related
+        #       info.
+        self.hardware_methods = [self.get_virt_info,
                                  self.get_virt_uuid]
-
-    def get_all(self):
-
-        # try each hardware method, and try/except around, since
-        # these tend to be fragile
-        for hardware_method in self.hardware_methods:
-            try:
-                hardware_method()
-            except Exception, e:
-                log.exception(e)
-                raise
-                log.warn("%s" % hardware_method)
-                log.warn("Hardware detection failed: %s" % e)
-
-        log.info("collected virt facts: virt.is_guest=%s, virt.host_type=%s, virt.uuid=%s",
-                 self.allhw.get('virt.is_guest', 'Not Set'),
-                 self.allhw.get('virt.host_type', 'Not Set'),
-                 self.allhw.get('virt.uuid', 'Not Set'))
-
-        return self.allhw
-
-    def get_firmware_info(self):
-        """Read and parse data that comes from platform specific interfaces.
-
-        This is only dmi/smbios data for now (which isn't on ppc/s390).
-        """
-        firmware_info_provider = firmware_info.get_firmware_provider(arch=self.arch,
-                                                                     prefix=self.prefix,
-                                                                     testing=self.testing)
-
-        # Pass in collected hardware so DMI etc can potentially override it
-        firmware_info_dict = firmware_info_provider.get_info(all_hwinfo=self.allhw)
-
-        # This can potentially overrite facts that already existed in self.allhw
-        # (and is supposed to).
-        self.allhw.update(firmware_info_dict)
 
     # NOTE/TODO/FIXME: Not all platforms require admin privs to determine virt type or uuid
     def get_virt_info(self):
@@ -160,7 +121,7 @@ class AdminFacts(object):
             # if host_type is not defined, do nothing (#768397)
             pass
 
-        self.allhw.update(virt_dict)
+        self._virt_info_dict = virt_dict
         return virt_dict
 
     def get_virt_uuid(self):
@@ -171,28 +132,27 @@ class AdminFacts(object):
         """
         no_uuid_platforms = ['powervm_lx86', 'xen-dom0', 'ibm_systemz']
 
-        self.allhw['virt.uuid'] = 'Unknown'
-
+        virt_uuid_dict = {}
         try:
             for v in no_uuid_platforms:
-                if self.allhw['virt.host_type'].find(v) > -1:
+                if self._collected_hw_info['virt.host_type'].find(v) > -1:
                     # FIXME: better exception class
                     raise Exception(_("Virtualization platform does not support UUIDs"))
         except Exception, e:
             log.warn(_("Error finding UUID: %s"), e)
-            return  # nothing more to do
+            return virt_uuid_dict  # nothing more to do
 
         # most virt platforms record UUID via DMI/SMBIOS info.
         # But only for guests, otherwise it's physical system uuid.
-        if self.allhw.get('virt.is_guest') and 'dmi.system.uuid' in self.allhw:
-            self.allhw['virt.uuid'] = self.allhw['dmi.system.uuid']
+        if self._virt_info_dict.get('virt.is_guest') and 'dmi.system.uuid' in self._collected_hw_info:
+            virt_uuid_dict['virt.uuid'] = self._collected_hw_info['dmi.system.uuid']
 
         # For ppc64, virt uuid is in /proc/device-tree/vm,uuid
         # just the uuid in txt, one line
 
         # ie, ppc64/ppc64le
         if self.arch in self.devicetree_vm_uuid_arches:
-            self.allhw.update(self._get_devicetree_vm_uuid())
+            virt_uuid_dict.update(self._get_devicetree_vm_uuid())
 
         # potentially override DMI-determined UUID with
         # what is on the file system (xen para-virt)
@@ -201,9 +161,11 @@ class AdminFacts(object):
             uuid_file = open('/sys/hypervisor/uuid', 'r')
             uuid = uuid_file.read()
             uuid_file.close()
-            self.allhw['virt.uuid'] = uuid.rstrip("\r\n")
+            virt_uuid_dict['virt.uuid'] = uuid.rstrip("\r\n")
         except IOError:
             pass
+
+        return virt_uuid_dict
 
     def _get_devicetree_vm_uuid(self):
         """Collect the virt.uuid fact from device-tree/vm,uuid
@@ -226,3 +188,38 @@ class AdminFacts(object):
             log.warn("Tried to read %s but there was an error: %s", vm_uuid_path, e)
 
         return virt_dict
+
+
+class AdminFacts(collector.FactsCollector):
+    """Collect facts that require elevated privs (ie, root).
+
+    hwprobe.Hardware() can be invoked as a user, but this class
+    will need to run as root or equilivent.
+
+    Facts collected include DMI info and virt status and virt.uuid."""
+
+    def __init__(self, prefix=None, testing=None, collected_hw_info=None):
+        super(AdminFacts, self).__init__(prefix=prefix, testing=testing,
+                                         collected_hw_info=collected_hw_info)
+
+        self.virt_collector = VirtCollector(prefix=prefix, testing=testing,
+                                            collected_hw_info=collected_hw_info)
+
+        self.hardware_methods = [self.virt_collector.get_all,
+                                 self.get_firmware_info]
+
+    def get_firmware_info(self):
+        """Read and parse data that comes from platform specific interfaces.
+
+        This is only dmi/smbios data for now (which isn't on ppc/s390).
+        """
+        firmware_info_provider = firmware_info.get_firmware_provider(arch=self.arch,
+                                                                     prefix=self.prefix,
+                                                                     testing=self.testing)
+
+        # Pass in collected hardware so DMI etc can potentially override it
+        firmware_info_dict = firmware_info_provider.get_info(all_hwinfo=self.collected_hw_info)
+
+        # This can potentially clobber facts that already existed in self.allhw
+        # (and is supposed to).
+        return firmware_info_dict

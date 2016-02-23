@@ -28,6 +28,7 @@ import socket
 import sys
 
 from rhsm.facts import cpuinfo
+from rhsm.facts import collector
 
 _ = gettext.gettext
 
@@ -87,51 +88,11 @@ class GenericPlatformSpecificInfoProvider(object):
         pass
 
 
-def get_arch(prefix=None):
-    """Get the systems architecture.
+class Hardware(collector.FactsCollector):
 
-    This relies on portable means, like uname to determine
-    a high level system arch (ie, x86_64, ppx64,etc).
-
-    We need that so we can decide how to collect the
-    arch specific hardware infomation.
-
-    Also support a 'prefix' arg that allows us to override
-    the results. The contents of the '/prefix/arch' will
-    override the arch. The 'prefix' arg defaults to None,
-    equiv to '/'. This is intended only for test purposes.
-
-    Returns a string containing the arch."""
-
-    DEFAULT_PREFIX = '/'
-    ARCH_FILE_NAME = 'arch'
-    prefix = prefix or DEFAULT_PREFIX
-
-    if prefix == DEFAULT_PREFIX:
-        return platform.machine()
-
-    arch_file = os.path.join(prefix, ARCH_FILE_NAME)
-    try:
-        with open(arch_file, 'r') as arch_fd:
-            return arch_fd.read().strip()
-    except IOError as e:
-        # If we specify a prefix, and there is no 'arch' file,
-        # consider that fatal.
-        log.exception(e)
-        raise
-
-
-class Hardware(object):
-
-    def __init__(self, prefix=None, testing=None):
-        self.allhw = {}
-        # prefix to look for /sys, for testing
-        self.prefix = prefix or ''
-        self.testing = testing or False
-
-        # we need this so we can decide which of the
-        # arch specific code bases to follow
-        self.arch = get_arch(prefix=prefix)
+    def __init__(self, arch=None, prefix=None, testing=None, hardware_methods=None):
+        super(Hardware, self).__init__(arch=arch, prefix=prefix,
+                                       testing=testing)
 
         self.hardware_methods = [self.get_uname_info,
                                  self.get_release_info,
@@ -543,12 +504,13 @@ class Hardware(object):
         return cpu_info
 
     def get_ls_cpu_info(self):
+        lscpuinfo = {}
+
         # if we have `lscpu`, let's use it for facts as well, under
         # the `lscpu` name space
         if not os.access('/usr/bin/lscpu', os.R_OK):
-            return
+            return lscpuinfo
 
-        lscpuinfo = {}
         # let us specify a test dir of /sys info for testing
         # If the user env sets LC_ALL, it overrides a LANG here, so
         # use LC_ALL here. See rhbz#1225435
@@ -718,23 +680,6 @@ class Hardware(object):
 
         bonding.close()
         return hwaddr
-
-    def get_all(self):
-
-        # try each hardware method, and try/except around, since
-        # these tend to be fragile
-        all_hw_info = {}
-        for hardware_method in self.hardware_methods:
-            info_dict = {}
-            try:
-                info_dict = hardware_method()
-            except Exception as e:
-                log.warn("%s" % hardware_method)
-                log.warn("Hardware detection failed: %s" % e)
-
-            all_hw_info.update(info_dict)
-
-        return all_hw_info
 
 
 if __name__ == '__main__':
