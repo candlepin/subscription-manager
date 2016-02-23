@@ -9,7 +9,7 @@ log = logging.getLogger(__name__)
 
 
 class FactsReadWrite(base_facts.BaseFacts):
-    default_polkit_auth_required = constants.PK_FACTS_COLLECT
+    default_polkit_auth_required = constants.PK_ACTION_FACTS_COLLECT
     persistent = True
     facts_collector_class = None
     default_dbus_path = constants.FACTS_READ_WRITE_DBUS_PATH
@@ -17,7 +17,7 @@ class FactsReadWrite(base_facts.BaseFacts):
                           'answer': '42',
                           'name': constants.FACTS_READ_WRITE_NAME,
                           'changeme': 'I am the default value',
-                          'polkit_auth_action': constants.PK_FACTS_COLLECT,
+                          'polkit_auth_action': constants.PK_ACTION_FACTS_COLLECT,
                           'last_update': 'before now, probably'}
 
     def _create_props(self):

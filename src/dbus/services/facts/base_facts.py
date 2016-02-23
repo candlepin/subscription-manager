@@ -8,9 +8,6 @@ from rhsm.dbus.services import base_properties
 from rhsm.dbus.services import base_service
 from rhsm.dbus.services.facts import constants
 
-FACTS_DBUS_INTERFACE = "com.redhat.Subscriptions1.Facts"
-PK_FACTS_COLLECT = "com.redhat.Subscriptions1.Facts.collect"
-
 log = logging.getLogger(__name__)
 
 
@@ -29,7 +26,7 @@ class BaseFacts(base_service.BaseService):
                                               data=self.default_props_data,
                                               properties_changed_callback=self.PropertiesChanged)
 
-    @slip.dbus.polkit.require_auth(constants.PK_FACTS_COLLECT)
+    @slip.dbus.polkit.require_auth(constants.PK_ACTION_FACTS_COLLECT)
     @decorators.dbus_service_method(dbus_interface=constants.FACTS_DBUS_INTERFACE,
                                    out_signature='a{ss}')
     @decorators.dbus_handle_exceptions
@@ -39,7 +36,7 @@ class BaseFacts(base_service.BaseService):
         dbus_dict = dbus.Dictionary(cleaned, signature="ss")
         return dbus_dict
 
-    @slip.dbus.polkit.require_auth(constants.PK_FACTS_COLLECT)
+    @slip.dbus.polkit.require_auth(constants.PK_ACTION_FACTS_COLLECT)
     @decorators.dbus_service_method(dbus_interface=constants.FACTS_DBUS_INTERFACE,
                                    out_signature='s')
     @decorators.dbus_handle_exceptions
