@@ -23,7 +23,7 @@ class BaseService(slip.dbus.service.Object):
     persistent = True
     # Name of the DBus interface provided by this object
     _interface_name = constants.DBUS_INTERFACE
-    default_polkit_auth_required = constants.PK_DEFAULT_ACTION
+    default_polkit_auth_required = constants.PK_ACTION_DEFAULT
     default_dbus_path = constants.ROOT_DBUS_PATH
     default_polkit_auth_required = None
 

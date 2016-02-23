@@ -36,11 +36,3 @@ class BaseFacts(base_service.BaseService):
         cleaned = dict([(str(key), str(value)) for key, value in facts_dict.items()])
         dbus_dict = dbus.Dictionary(cleaned, signature="ss")
         return dbus_dict
-
-    @slip.dbus.polkit.require_auth(constants.PK_ACTION_FACTS_COLLECT)
-    @decorators.dbus_service_method(dbus_interface=constants.FACTS_DBUS_INTERFACE,
-                                   out_signature='s')
-    @decorators.dbus_handle_exceptions
-    def Return42(self, sender=None):
-        self.log.debug("Return42")
-        return '42'

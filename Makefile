@@ -214,6 +214,20 @@ dbus-subscriptions-service-install: dbus-common-install
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/subscriptions/subscriptions.py $(DBUS_SERVICES_INSTALL_DIR)/subscriptions
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/subscriptions/root.py $(DBUS_SERVICES_INSTALL_DIR)/subscriptions
 
+# TODO: move src/dbus to setup.py? it's own makefile? autoconf?
+dbus-examples-service-install: dbus-common-install 
+	install -d $(DBUS_SERVICES_INSTALL_DIR)/examples
+	install -m 644 $(DBUS_SERVICES_SRC_DIR)/examples/com.redhat.Subscriptions1.Examples.service \
+		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
+	install -m 644 $(DBUS_SERVICES_SRC_DIR)/examples/com.redhat.Subscriptions1.Examples.conf \
+		$(PREFIX)/etc/dbus-1/system.d
+	install -m 644 $(DBUS_SERVICES_SRC_DIR)/examples/rhsm-examples.service \
+		$(SYSTEMD_INST_DIR)
+	install -m 755 $(DBUS_SERVICES_SRC_DIR)/examples/rhsm-examples-service \
+		$(PREFIX)/usr/libexec/rhsm-examples-service
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/examples/*.py $(DBUS_SERVICES_INSTALL_DIR)/examples
+	install -d $(POLKIT_ACTIONS_INSTALL_DIR)
+	install -m0644 $(DBUS_SERVICES_SRC_DIR)/examples/com.redhat.Subscriptions1.Examples.policy $(POLKIT_ACTIONS_INSTALL_DIR)
 
 
 dbus-config-and-services-uninstall: systemd-services-shutdown
@@ -235,11 +249,14 @@ dbus-touch:
 	 # magic from python-slip examples make file. Likely unneeded.
 	 touch $(PREFIX)/etc/dbus-1/system.d/com.redhat.Subscriptions1.Facts.conf
 
+# TODO: parameterize
 systemd-reload: systemd-services-shutdown systemd-daemon-reload
 	systemctl start rhsm-facts.service
 	systemctl start rhsm-subscriptions.service
+	systemctl start rhsm-examples.service
 	systemctl status -l rhsm-facts.service
 	systemctl status -l rhsm-subscriptions.service
+	systemctl status -l rhsm-examples.service
 
 systemd-services-shutdown:
 	-systemctl stop rhsm-facts.service
@@ -247,7 +264,7 @@ systemd-services-shutdown:
 systemd-daemon-reload:
 	systemctl daemon-reload
 
-dbus-install: dbus-clients-install dbus-rhsmd-service-install dbus-facts-service-install dbus-subscriptions-service-install
+dbus-install: dbus-clients-install dbus-rhsmd-service-install dbus-facts-service-install dbus-subscriptions-service-install dbus-examples-service-install
 
 dbus-uninstall: dbus-config-and-services-uninstall
 	# This make target is for developer utility, it uninstalls our dbus related code with no subtlety.
