@@ -191,13 +191,13 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
 
         self.overrides_store.clear()
         self.other_overrides.clear()
-        self.main_content_container.remove(self.details_vbox)
+
+        self.main_content_container.show_all()
 
         # Switch the dialog view depending on content availability
         if (current_repos):
             self.widget_switcher.set_active(1)
-            self.main_content_container.add(self.details_vbox)
-            #self.details_vbox.set_visible(True)
+            self.details_vbox.show()
         else:
             ent_count = len(self.ent_dir.list_valid())
             no_repos_message = self.ENTS_PROVIDE_NO_REPOS
@@ -210,10 +210,8 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
 
             self.no_repos_label.set_markup("<b>%s</b>" % no_repos_message)
 
-#            self.details_vbox.set_visible(False)
+            self.details_vbox.hide()
             self.widget_switcher.set_active(0)
-
-        self.main_content_container.show_all()
 
         # Update the table model from our gathered override/repo data
         for repo in current_repos:
