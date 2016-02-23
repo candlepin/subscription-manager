@@ -11,7 +11,6 @@ log = logging.getLogger(__name__)
 class FactsReadWrite(base_facts.BaseFacts):
     default_polkit_auth_required = constants.PK_ACTION_FACTS_COLLECT
     persistent = True
-    facts_collector_class = None
     default_dbus_path = constants.FACTS_READ_WRITE_DBUS_PATH
     default_props_data = {'version': constants.FACTS_READ_WRITE_VERSION,
                           'answer': '42',
