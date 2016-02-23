@@ -26,6 +26,10 @@ gi_kluge.kluge_it()
 
 import slip.dbus.polkit
 
+# TODO: This is very glib2/dbus-python based. That is likely a requirement
+#       for the services, but it may be worthwhile to use something more
+#       modern for the client (ie, GIO based dbus support).
+
 # TODO: maybe common.constants should just import all the constants
 
 # FIXME: This makes client code depend on the services code being installed
@@ -34,20 +38,12 @@ from rhsm.dbus.services.facts import constants as facts_constants
 
 log = logging.getLogger(__name__)
 
-# TODO: share
-FACTS_ROOT_BUS_NAME = "com.redhat.Subscriptions1.Facts.Root"
 
-
-def error_handler(action_id=None):
-    print "Authorization problem:", action_id
-    log.debug("auth fail %s", action_id)
-
-
-class MyAuthError(Exception):
+class FactsClientAuthenticationError(Exception):
     def __init__(self, *args, **kwargs):
         action_id = kwargs.pop("action_id")
-        super(MyAuthError, self).__init__(*args, **kwargs)
-        log.debug("MyAuthError created for %s", action_id)
+        super(FactsClientAuthenticationError, self).__init__(*args, **kwargs)
+        log.debug("FactsClientAuthenticationError created for %s", action_id)
         self.action_id = action_id
 
 
@@ -92,28 +88,13 @@ class FactsClient(object):
                                          interface_keyword='interface', member_keyword='member',
                                          path_keyword='path')
 
-    #@slip.dbus.polkit.enable_proxy(authfail_result=False,
-    #                               authfail_callback=error_handler)
-
-    #@decorators.dbus_handle_exceptions
-    @slip.dbus.polkit.enable_proxy(authfail_exception=MyAuthError)
-    def Return42(self):
-        self.log.debug("Return42 pre")
-        ret = self.interface.Return42(timeout=5)
-        self.log.debug("Return42 post, ret=%s", ret)
-        print '42'
-        return ret
-
-#    @decorators.dbus_handle_exceptions
-    @slip.dbus.polkit.enable_proxy(authfail_exception=MyAuthError)
+    @slip.dbus.polkit.enable_proxy(authfail_exception=FactsClientAuthenticationError)
     def GetFacts(self):
         self.log.debug("GetFacts pre")
         ret = self.interface.GetFacts(timeout=5)
-#       self.log.debug("GetFacts post, ret=%s", ret)
-        print ret
         return ret
 
-    @slip.dbus.polkit.enable_proxy(authfail_exception=MyAuthError)
+    @slip.dbus.polkit.enable_proxy(authfail_exception=FactsClientAuthenticationError)
     def GetAll(self):
         self.log.debug("GetAll")
         ret = self.props_interface.GetAll(facts_constants.FACTS_DBUS_INTERFACE)
@@ -121,9 +102,6 @@ class FactsClient(object):
         return ret
 
     def signal_handler(self, *args, **kwargs):
-        print "signal_handler"
-        print args
-        print kwargs
         self.log.debug("signal_handler args=%s kwargs=%s", args, kwargs)
 
     def _on_properties_changed(self, *args, **kwargs):
@@ -172,9 +150,6 @@ def main():
     # Test passing in the object path
     facts_read_write_client = FactsClient(object_path=facts_constants.FACTS_READ_WRITE_DBUS_PATH)
 
-#    ret = facts_proxy.facts_props.GetAll('com.redhat.Subscriptions1.Facts')
-#    log.debug("GetAll=%s", dir(ret))
-#    print ret
     def get_facts():
         facts_host_client.GetFacts()
         facts_client.GetFacts()
@@ -193,10 +168,7 @@ def main():
     GLib.timeout_add_seconds(7, facts_host_client.Return42)
     GLib.timeout_add_seconds(11, facts_host_client.GetFacts)
     GLib.timeout_add_seconds(13, facts_read_write_client.GetAll)
-    #GLib.idle_add(call_42, facts_proxy.facts)
-    #GLib.idle_add(get_props,
-    #              facts_proxy.facts_props,
-    #              'com.redhat.Subscriptions1.Facts')
+
     try:
         mainloop.run()
     except KeyboardInterrupt, e:
