@@ -13,30 +13,18 @@ import slip.dbus.service
 import slip.dbus.introspection
 
 from rhsm.dbus.common import decorators
+from rhsm.dbus.common import constants
 from rhsm.dbus.services import base_properties
 #from rhsm.dbus.common import dbus_utils
-
-# TODO: move these to a config/constants module
-# Name of the dbus service
-DEFAULT_DBUS_BUS_NAME = "com.redhat.Subscriptions1"
-
-# Name of the DBus interface provided by this object
-# Note: This could become multiple interfaces
-DEFAULT_DBUS_INTERFACE = "com.redhat.Subscriptions1"
-
-# Where in the DBus object namespace does this object live
-DEFAULT_DBUS_PATH = "/com/redhat/Subscriptions1"
-
-# The polkit action-id to use by default if none are specified
-PK_DEFAULT_ACTION = "com.redhat.Subscriptions1.default"
 
 
 class BaseService(slip.dbus.service.Object):
 
     persistent = True
-    _interface_name = DEFAULT_DBUS_INTERFACE
-    default_polkit_auth_required = PK_DEFAULT_ACTION
-    default_dbus_path = DEFAULT_DBUS_PATH
+    # Name of the DBus interface provided by this object
+    _interface_name = constants.DBUS_INTERFACE
+    default_polkit_auth_required = constants.PK_DEFAULT_ACTION
+    default_dbus_path = constants.ROOT_DBUS_PATH
     default_polkit_auth_required = None
 
     def __init__(self, conn=None, object_path=None, bus_name=None):
@@ -66,7 +54,7 @@ class BaseService(slip.dbus.service.Object):
         self.log.debug("accessing props @property")
         return self._props
 
-    @dbus.service.signal(dbus_interface=DEFAULT_DBUS_INTERFACE,
+    @dbus.service.signal(dbus_interface=constants.DBUS_INTERFACE,
                          signature='')
     @decorators.dbus_handle_exceptions
     def ServiceStarted(self):

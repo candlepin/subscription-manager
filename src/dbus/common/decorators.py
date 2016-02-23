@@ -5,15 +5,14 @@ import logging
 import dbus
 import dbus.exceptions
 
+from rhsm.dbus.common import constants
 log = logging.getLogger(__name__)
-
-# TODO: mv to shared config/constants module
-DBUS_INTERFACE = "com.redhat.Subscriptions1"
 
 
 # From system-config-firewall
 class Subscriptions1DBusException(dbus.DBusException):
-    _dbus_error_name = "%s.Exception" % DBUS_INTERFACE
+    """Base exceptions. com.redhat.Subscriptions1.Exception"""
+    _dbus_error_name = "%s.Exception" % constants.DBUS_INTERFACE
 
 
 @decorator.decorator
