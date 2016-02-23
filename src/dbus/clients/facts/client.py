@@ -26,16 +26,16 @@ gi_kluge.kluge_it()
 
 import slip.dbus.polkit
 
-from rhsm.dbus.common import decorators
+# TODO: maybe common.constants should just import all the constants
+
+# FIXME: This makes client code depend on the services code being installed
+#        (which it will be, but...)
+from rhsm.dbus.services.facts import constants as facts_constants
 
 log = logging.getLogger(__name__)
 
 # TODO: share
 FACTS_ROOT_BUS_NAME = "com.redhat.Subscriptions1.Facts.Root"
-FACTS_USER_BUS_NAME = "com.redhat.Subscriptions1.Facts.User"
-FACTS_INTERFACE_NAME = "com.redhat.Subscriptions1.Facts"
-FACTS_ROOT_OBJECT_PATH = "/com/redhat/Subscriptions1/Facts/Root"
-FACTS_USER_OBJECT_PATH = "/com/redhat/Subscriptions1/Facts/User"
 
 
 def error_handler(action_id=None):
@@ -52,19 +52,33 @@ class MyAuthError(Exception):
 
 
 class FactsClient(object):
-    bus_name = FACTS_ROOT_BUS_NAME
-    object_path = FACTS_ROOT_OBJECT_PATH
-    interface_name = FACTS_INTERFACE_NAME
+    bus_name = facts_constants.FACTS_BUS_NAME
+    object_path = facts_constants.FACTS_ROOT_DBUS_PATH
+    interface_name = facts_constants.FACTS_DBUS_INTERFACE
 
-    def __init__(self):
+    def __init__(self, bus=None, bus_name=None, object_path=None, interface_name=None):
         self.log = logging.getLogger(__name__ + '.' + self.__class__.__name__)
-        self.bus = dbus.SystemBus()
+        self.bus = bus or dbus.SystemBus()
+
+        if bus_name:
+            self.bus_name = bus_name
+
+        if object_path:
+            self.object_path = object_path
+
+        if interface_name:
+            self.interface_name = interface_name
+
         self.dbus_proxy_object = slip.dbus.proxies.ProxyObject(conn=self.bus,
                                                                bus_name=self.bus_name,
                                                                object_path=self.object_path,
                                                                follow_name_owner_changes=True)
+
         self.interface = dbus.Interface(self.dbus_proxy_object,
                                         dbus_interface=self.interface_name)
+
+        self.props_interface = dbus.Interface(self.dbus_proxy_object,
+                                             dbus_interface=dbus.PROPERTIES_IFACE)
 
         self.interface.connect_to_signal("PropertiesChanged", self._on_properties_changed,
                                          dbus_interface=dbus.PROPERTIES_IFACE,
@@ -99,6 +113,13 @@ class FactsClient(object):
         print ret
         return ret
 
+    @slip.dbus.polkit.enable_proxy(authfail_exception=MyAuthError)
+    def GetAll(self):
+        self.log.debug("GetAll")
+        ret = self.props_interface.GetAll(facts_constants.FACTS_DBUS_INTERFACE)
+        self.log.debug("GetAll res=%s", ret)
+        return ret
+
     def signal_handler(self, *args, **kwargs):
         print "signal_handler"
         print args
@@ -122,30 +143,8 @@ class FactsClient(object):
         self.signal_handler(*args, **kwargs)
 
 
-class FactsRootClient(FactsClient):
-    #    @decorators.dbus_handle_exceptions
-    @slip.dbus.polkit.enable_proxy(authfail_exception=MyAuthError)
-    def Return42(self):
-        self.log.debug("Return42 pre")
-        ret = self.interface.Return42(timeout=5)
-        self.log.debug("Return42 post, ret=%s", ret)
-        print '42'
-        return ret
-
-#    @decorators.dbus_handle_exceptions
-    @slip.dbus.polkit.enable_proxy(authfail_exception=MyAuthError)
-    def GetFacts(self):
-        self.log.debug("GetFacts pre")
-        ret = self.interface.GetFacts(timeout=5)
-#       self.log.debug("GetFacts post, ret=%s", ret)
-        print ret
-        return ret
-
-
-class FactsUserClient(FactsClient):
-    bus_name = FACTS_USER_BUS_NAME
-    object_path = FACTS_USER_OBJECT_PATH
-    interface_name = FACTS_INTERFACE_NAME
+class FactsHostClient(FactsClient):
+    object_path = facts_constants.FACTS_HOST_DBUS_PATH
 
 
 def main():
@@ -167,22 +166,33 @@ def main():
     mainloop = GLib.MainLoop()
     #slip.dbus.service.set_mainloop(mainloop)
 
-    facts_root_client = FactsRootClient()
-    facts_user_client = FactsUserClient()
+    facts_client = FactsClient()
+    facts_host_client = FactsHostClient()
+
+    # Test passing in the object path
+    facts_read_write_client = FactsClient(object_path=facts_constants.FACTS_READ_WRITE_DBUS_PATH)
 
 #    ret = facts_proxy.facts_props.GetAll('com.redhat.Subscriptions1.Facts')
 #    log.debug("GetAll=%s", dir(ret))
 #    print ret
     def get_facts():
-        facts_user_client.GetFacts()
-        facts_root_client.GetFacts()
+        facts_host_client.GetFacts()
+        facts_client.GetFacts()
+        facts_read_write_client.GetFacts()
         return False
 
+    def get_all_properties():
+        facts_client.GetAll()
+        facts_read_write_client.GetAll()
+
     GLib.idle_add(get_facts)
-    GLib.timeout_add_seconds(5, facts_root_client.Return42)
-    GLib.timeout_add_seconds(15, facts_root_client.GetFacts)
-    GLib.timeout_add_seconds(5, facts_user_client.Return42)
-    GLib.timeout_add_seconds(15, facts_user_client.GetFacts)
+    GLib.idle_add(get_all_properties)
+
+    GLib.timeout_add_seconds(7, facts_client.Return42)
+    GLib.timeout_add_seconds(9, facts_client.GetFacts)
+    GLib.timeout_add_seconds(7, facts_host_client.Return42)
+    GLib.timeout_add_seconds(11, facts_host_client.GetFacts)
+    GLib.timeout_add_seconds(13, facts_read_write_client.GetAll)
     #GLib.idle_add(call_42, facts_proxy.facts)
     #GLib.idle_add(get_props,
     #              facts_proxy.facts_props,
