@@ -19,6 +19,7 @@ log = logging.getLogger(__name__)
 
 
 class FactsRoot(base_facts.BaseFacts):
+    """Implement the 'root' of the Facts objectpath tree."""
     default_polkit_auth_required = constants.PK_FACTS_COLLECT
     persistent = True
     facts_collector_class = admin_facts.AdminFacts
