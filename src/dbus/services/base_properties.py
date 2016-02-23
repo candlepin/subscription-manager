@@ -54,7 +54,6 @@ class BaseProperties(object):
     def add_introspection_xml(self, interface_xml):
         ret = dbus_utils.add_properties(interface_xml, self.interface_name,
                                         self.to_introspection_props())
-        log.debug("introspection_xml=%s", ret)
         return ret
 
     # FIXME: This only supports string type values at the moment.
@@ -79,7 +78,6 @@ class BaseProperties(object):
                               p_access=self.access_mask(prop_key))
             props_list.append(props_dict)
 
-        log.debug("props_list=%s", props_list)
         return props_list
 
     # FIXME: THis is a read only props class, ReadWriteProperties needs

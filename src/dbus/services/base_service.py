@@ -69,11 +69,7 @@ class BaseService(slip.dbus.service.Object):
                         path_keyword='object_path', connection_keyword='connection')
     def Introspect(self, object_path, connection):
         ret = super(BaseService, self).Introspect(object_path, connection)
-        log.debug("introspect xml %s", ret)
-        et = slip.dbus.introspection.introspect(ret)
-        log.debug('et=%s', et)
         bloop = self.props.add_introspection_xml(ret)
-        log.debug("bloop=%s", bloop)
         return bloop
 
     #
