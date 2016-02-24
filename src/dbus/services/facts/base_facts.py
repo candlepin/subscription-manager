@@ -14,13 +14,13 @@ log = logging.getLogger(__name__)
 
 class BaseFacts(base_service.BaseService):
     _interface_name = constants.FACTS_DBUS_INTERFACE
-    facts_collector_class = collector.FactsCollector
+    _default_facts_collector_class = collector.FactsCollector
 
     def __init__(self, conn=None, object_path=None, bus_name=None):
         super(BaseFacts, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
 
         # Default is an empty FactsCollector
-        self.facts_collector = self.facts_collector_class()
+        self.facts_collector = self._default_facts_collector_class()
 
     def _create_props(self):
         return base_properties.BaseProperties(self._interface_name,

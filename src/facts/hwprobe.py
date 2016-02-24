@@ -90,9 +90,11 @@ class GenericPlatformSpecificInfoProvider(object):
 
 class Hardware(collector.FactsCollector):
 
-    def __init__(self, arch=None, prefix=None, testing=None, hardware_methods=None):
+    def __init__(self, arch=None, prefix=None, testing=None,
+                 collected_hw_info=None):
         super(Hardware, self).__init__(arch=arch, prefix=prefix,
-                                       testing=testing)
+                                       testing=testing,
+                                       collected_hw_info=None)
 
         self.hardware_methods = [self.get_uname_info,
                                  self.get_release_info,
