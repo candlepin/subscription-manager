@@ -16,6 +16,7 @@ EXAMPLES_NAME = "Example service."
 
 class Examples(base_service.BaseService):
     _interface_name = DBUS_INTERFACE
+    default_polkit_auth_required = constants.PK_ACTION_DEFAULT
     default_dbus_path = DBUS_PATH
     default_props_data = {'version': EXAMPLES_VERSION,
                           'name': EXAMPLES_NAME}
