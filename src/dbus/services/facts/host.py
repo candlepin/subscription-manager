@@ -1,7 +1,7 @@
 
 import logging
 
-from rhsm.facts import hwprobe
+from rhsm.facts import host_collector
 from rhsm.dbus.services.facts import constants
 from rhsm.dbus.services.facts import base_facts
 
@@ -17,4 +17,7 @@ class FactsHost(base_facts.BaseFacts):
                           'polkit_auth_action': constants.PK_ACTION_FACTS_COLLECT,
                           'last_update': 'before now, probably'}
     default_dbus_path = constants.FACTS_HOST_DBUS_PATH
-    facts_collector_class = hwprobe.Hardware
+
+    def __init__(self, conn=None, object_path=None, bus_name=None):
+        super(FactsHost, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
+        self.facts_collector = host_collector.HostCollector()

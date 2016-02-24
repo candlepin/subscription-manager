@@ -29,19 +29,30 @@ except ImportError:
     log.warn("Unable to load dmidecode module. No DMI info will be collected")
     raise
 
+from rhsm.facts import collector
+
 _ = gettext.gettext
 
+FIRMWARE_DUMP_FILENAME = "dmi.dump"
 
-class DmiFirmwareInfoProvider(object):
 
-    def __init__(self):
-        self.info = {}
-        self.socket_designation = []
+class DmiFirmwareInfoCollector(collector.FactsCollector):
+
+    def __init__(self, prefix=None, testing=None, collected_hw_info=None):
+        super(DmiFirmwareInfoCollector, self).__init__(prefix=prefix,
+                                                       testing=testing,
+                                                       collected_hw_info=collected_hw_info)
+
+        self._socket_designation = []
+        self._socket_counter = 0
+
         self.dump_file = None
+        if testing and prefix:
+            self.dump_file = os.path.join(prefix, FIRMWARE_DUMP_FILENAME)
+            self.use_dump_file()
 
-    @classmethod
-    def from_dump_file(cls, dump_file):
-        """Create an instance from a dmidecode dump file.
+    def use_dump_file(self):
+        """Set this instances to use a dmidecode dump file.
 
         WARNING: This involves settings a module global
         attribute in 'dmidecode', not just for this class
@@ -49,16 +60,12 @@ class DmiFirmwareInfoProvider(object):
 
         To 'unset' it, it can be set back to '/dev/mem', or
         re set it to another dump file."""
-        dmi_provider = cls()
-        dmi_provider.dump_file = dump_file
-        #
-        if os.access(dump_file, os.R_OK):
-            dmidecode.set_dev(dump_file)
-        return dmi_provider
+        if os.access(self.dump_file, os.R_OK):
+            dmidecode.set_dev(self.dump_file)
 
     # This needs all of the previously collected hwinfo, so it can decide
     # what is bogus enough that the DMI info is better.
-    def get_info(self, all_hwinfo):
+    def get_all(self):
 
         dmiinfo = {}
         dmi_data = {
@@ -77,19 +84,6 @@ class DmiFirmwareInfoProvider(object):
                 dmiinfo = self._get_dmi_data(func, tag, dmiinfo)
         except Exception, e:
             log.warn(_("Error reading system DMI information: %s"), e)
-
-        # cpu topology reporting on xen dom0 machines is wrong. So
-        # if we are a xen dom0, and we found socket info in dmiinfo,
-        # replace our normal cpu socket calculation with the dmiinfo one
-        # we have to do it after the virt data and cpu data collection
-        if 'virt.host_type' in all_hwinfo:
-            if all_hwinfo['virt.host_type'].find('dom0') > -1:
-                if self.socket_designation:
-                    socket_count = len(self.socket_designation)
-                    dmiinfo['cpu.cpu_socket(s)'] = socket_count
-                    if 'cpu.cpu(s)' in all_hwinfo:
-                        dmiinfo['cpu.core(s)_per_socket'] = \
-                            int(all_hwinfo['cpu.cpu(s)']) / socket_count
 
         return dmiinfo
 
@@ -116,5 +110,10 @@ class DmiFirmwareInfoProvider(object):
 
                 nkey = ''.join([tag, key1.lower()]).replace(" ", "_")
                 ddict[nkey] = str(value1)
+
+        # Populate how many socket descriptions we saw in a faux-fact, so we can
+        # use it to munge lscpu info later if needed.
+        if self.socket_designation:
+            ddict['dmi.meta.cpu_socket_count'] = str(len(self.socket_designation))
 
         return ddict
