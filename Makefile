@@ -258,8 +258,10 @@ systemd-reload: systemd-services-shutdown systemd-daemon-reload
 	systemctl status -l rhsm-subscriptions.service
 	systemctl status -l rhsm-examples.service
 
-systemd-services-shutdown:
+systemd-services-shutdown: systemd-daemon-reload
 	-systemctl stop rhsm-facts.service
+	-systemctl stop rhsm-subscriptions.service
+	-systemctl stop rhsm-examples.service
 
 systemd-daemon-reload:
 	systemctl daemon-reload
