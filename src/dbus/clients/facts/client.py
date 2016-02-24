@@ -54,6 +54,10 @@ class FactsClient(object):
 
     def __init__(self, bus=None, bus_name=None, object_path=None, interface_name=None):
         self.log = logging.getLogger(__name__ + '.' + self.__class__.__name__)
+
+        # use default mainloop for dbus
+        dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+
         self.bus = bus or dbus.SystemBus()
 
         if bus_name:
