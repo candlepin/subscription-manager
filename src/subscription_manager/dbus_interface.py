@@ -14,6 +14,7 @@
 #
 
 import dbus
+import dbus.mainloop
 import inspect
 import logging
 import subscription_manager.injection as inj
@@ -29,6 +30,8 @@ class DbusIface(object):
         try:
             # Only follow names if there is a default main loop
             self.has_main_loop = self._get_main_loop() is not None
+            log.debug("self.has_main_loop=%s", self.has_main_loop)
+            dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
             self.bus = dbus.SystemBus()
             validity_obj = self._get_validity_object(self.service_name,

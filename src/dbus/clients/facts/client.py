@@ -89,15 +89,16 @@ class FactsClient(object):
                                          path_keyword='path')
 
     @slip.dbus.polkit.enable_proxy(authfail_exception=FactsClientAuthenticationError)
-    def GetFacts(self):
+    def GetFacts(self, *args, **kwargs):
         self.log.debug("GetFacts pre")
-        ret = self.interface.GetFacts(timeout=5)
+        ret = self.interface.GetFacts(*args, **kwargs)
         return ret
 
     @slip.dbus.polkit.enable_proxy(authfail_exception=FactsClientAuthenticationError)
-    def GetAll(self):
+    def GetAll(self, *args, **kwargs):
         self.log.debug("GetAll")
-        ret = self.props_interface.GetAll(facts_constants.FACTS_DBUS_INTERFACE)
+        ret = self.props_interface.GetAll(facts_constants.FACTS_DBUS_INTERFACE,
+                                          *args, **kwargs)
         self.log.debug("GetAll res=%s", ret)
         return ret
 
