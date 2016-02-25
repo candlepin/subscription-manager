@@ -40,7 +40,7 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
                     'system_id_label', 'system_id_title']
     gui_file = "factsdialog"
 
-    def __init__(self, facts=None):
+    def __init__(self):
 
         super(SystemFactsDialog, self).__init__()
 
@@ -48,7 +48,6 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
         self.identity = inj.require(inj.IDENTITY)
         self.cp_provider = inj.require(inj.CP_PROVIDER)
 
-        # self.facts = facts
         self.facts = facts_client.FactsHostClient()
 
         self.connect_signals({
@@ -122,6 +121,9 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
 
     def display_facts(self):
         """Updates the list store with the current system facts."""
+        # make sure we get fresh facts, since entitlement validity status could
+        self.facts.GetFacts(reply_handler=self._on_get_facts_reply_handler,
+                            error_handler=self._on_get_facts_error_handler)
 
         # make last_update a Facts dbus property?
         #last_update = self.facts.get_last_update()
@@ -130,11 +132,6 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
             self.last_update_label.set_text(last_update.strftime("%c"))
         else:
             self.last_update_label.set_text(_('No previous update'))
-
-        # make sure we get fresh facts, since entitlement validity status could         # change
-        #system_facts_dict = self.facts.get_facts()
-        self.facts.GetFacts(reply_handler=self._on_get_facts_reply_handler,
-                            error_handler=self._on_get_facts_error_handler)
 
         identity = inj.require(inj.IDENTITY)
         self._display_system_id(identity)

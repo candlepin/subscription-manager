@@ -153,14 +153,6 @@ class MainWindow(widgets.SubmanBaseWidget):
         self.backend = backend or Backend()
         self.identity = require(IDENTITY)
 
-        self.facts = facts or Facts(self.backend.entitlement_dir,
-                self.backend.product_dir)
-        # We need to make sure facts are loaded immediately, some GUI operations
-        # are done in separate threads, and if facts try to load in another
-        # thread the virt guest detection code breaks due to hwprobe's use of
-        # signals.
-        self.facts.get_facts()
-
         log.debug("Client Versions: %s " % get_client_versions())
         # Log the server version asynchronously
         ga_GLib.idle_add(self.log_server_version, self.backend.cp_provider.get_consumer_auth_cp())
@@ -178,7 +170,7 @@ class MainWindow(widgets.SubmanBaseWidget):
         self.product_dir = prod_dir or self.backend.product_dir
         self.entitlement_dir = ent_dir or self.backend.entitlement_dir
 
-        self.system_facts_dialog = factsgui.SystemFactsDialog(self.facts)
+        self.system_facts_dialog = factsgui.SystemFactsDialog()
 
         self.preferences_dialog = PreferencesDialog(self.backend,
                                                     self._get_window())
@@ -197,11 +189,11 @@ class MainWindow(widgets.SubmanBaseWidget):
                 ga_Gtk.IconSize.MENU)
 
         self.installed_tab = InstalledProductsTab(self.backend,
-                                                  self.facts,
                                                   self.installed_tab_icon,
                                                   self,
                                                   ent_dir=self.entitlement_dir,
                                                   prod_dir=self.product_dir)
+
         self.my_subs_tab = MySubscriptionsTab(self.backend,
                                               self.main_window,
                                               ent_dir=self.entitlement_dir,
