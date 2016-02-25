@@ -36,7 +36,6 @@ from subscription_manager.ga import GLib as ga_GLib
 
 from subscription_manager.branding import get_branding
 from subscription_manager.entcertlib import EntCertActionInvoker
-from subscription_manager.facts import Facts
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager import managerlib
 from subscription_manager.utils import get_client_versions, get_server_versions, parse_baseurl_info, restart_virt_who
@@ -145,7 +144,7 @@ class MainWindow(widgets.SubmanBaseWidget):
         # Remove this from the GTK main loop
         return False
 
-    def __init__(self, backend=None, facts=None,
+    def __init__(self, backend=None,
                  ent_dir=None, prod_dir=None,
                  auto_launch_registration=False):
         super(MainWindow, self).__init__()
@@ -357,7 +356,7 @@ class MainWindow(widgets.SubmanBaseWidget):
             self.redeem_menu_item.set_sensitive(False)
 
     def _register_item_clicked(self, widget):
-        registration_dialog = registergui.RegisterDialog(self.backend, self.facts)
+        registration_dialog = registergui.RegisterDialog(self.backend)
         registration_dialog.register_dialog.connect('destroy',
                                                     self._on_dialog_destroy,
                                                     widget)
@@ -436,7 +435,7 @@ class MainWindow(widgets.SubmanBaseWidget):
         self.import_sub_dialog.show()
 
     def _update_certificates_button_clicked(self, widget):
-        autobind_wizard = registergui.AutobindWizardDialog(self.backend, self.facts)
+        autobind_wizard = registergui.AutobindWizardDialog(self.backend)
         autobind_wizard.register_dialog.connect('destroy',
                                                 self._on_dialog_destroy,
                                                 widget)
