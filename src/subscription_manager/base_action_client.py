@@ -27,10 +27,7 @@ class BaseActionClient(object):
     An object used to update the certficates, yum repos, and facts for the system.
     """
 
-    # can we inject both of these?
-    def __init__(self, facts=None):
-
-        self.facts = facts
+    def __init__(self):
 
         self._libset = self._get_libset()
         self.lock = inj.require(inj.ACTION_LOCK)
