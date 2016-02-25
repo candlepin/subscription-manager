@@ -139,6 +139,7 @@ class moduleClass(module.Module, object):
 
         self.register_widget.connect('finished', self.on_finished)
         self.register_widget.connect('register-error', self.on_register_error)
+        self.register_widget.connect('register-message', self.on_register_message)
 
         # In firstboot, we leverage the RHN setup proxy settings already
         # presented to the user, so hide the choose server screen's proxy
@@ -216,6 +217,10 @@ class moduleClass(module.Module, object):
         identity = inj.require(inj.IDENTITY)
         return not identity.is_valid()
 
+    def on_register_message(self, obj, msg, message_type=None):
+        message_type = message_type or ga_Gtk.MessageType.ERROR
+        self.error_dialog(msg, message_type=message_type)
+
     def on_register_error(self, obj, msg, exc_list):
         self.page_status = constants.RESULT_FAILURE
 
@@ -243,8 +248,9 @@ class moduleClass(module.Module, object):
         message = format_exception(exc_info, msg)
         self.error_dialog(message)
 
-    def error_dialog(self, text):
-        dlg = ga_Gtk.MessageDialog(None, 0, ga_Gtk.MessageType.ERROR,
+    def error_dialog(self, text, message_type=None):
+        message_type = message_type or ga_Gtk.MessageType.ERROR
+        dlg = ga_Gtk.MessageDialog(None, 0, message_type,
                                    ga_Gtk.ButtonsType.OK, text)
         dlg.set_markup(text)
         dlg.set_skip_taskbar_hint(True)
