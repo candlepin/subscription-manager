@@ -33,6 +33,10 @@ log = logging.getLogger('rhsm-app.' + __name__)
 CERT_VERSION = "3.2"
 
 
+# FIXME: likely need to split this into a 'client' object that mostly wraps
+#        the dbus facts proxy (with the service handling read caching).
+#        And a... syncer? Consumer model proxy? cache manager? Something that
+#        will be resposible for updating candlepin with the latest collected facts.
 class Facts(CacheManager):
     """
     Manages the facts for this system, maintains a cache of the most
