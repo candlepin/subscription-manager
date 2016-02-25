@@ -66,7 +66,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.pb = None
         self.timer = 0
 
-        self.pool_stash = managerlib.PoolStash(self.facts)
+        self.pool_stash = managerlib.PoolStash()
 
         self.async_bind = async.AsyncBind(self.backend.certlib)
 
