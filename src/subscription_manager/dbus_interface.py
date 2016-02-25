@@ -15,6 +15,8 @@
 
 import dbus
 import dbus.mainloop
+import dbus.mainloop.glib
+
 import inspect
 import logging
 import subscription_manager.injection as inj
