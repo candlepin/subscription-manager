@@ -57,6 +57,7 @@ class FactsClient(object):
 
         # use default mainloop for dbus
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+        dbus.mainloop.glib.threads_init()
 
         self.bus = bus or dbus.SystemBus()
 
