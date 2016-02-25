@@ -116,6 +116,7 @@ def reset_resolver():
         log.warning("reset_resolver failed: %s", e)
         pass
 
+
 def server_info_from_config(config):
     return {
             "host": config.get('server', 'hostname'),
@@ -126,6 +127,7 @@ def server_info_from_config(config):
             "proxy_user": config.get('server', 'proxy_user'),
             "proxy_password": config.get('server', 'proxy_password')
            }
+
 
 # FIXME: TODO: subclass collections.MutableSequence
 class UniqueList(object):
@@ -2080,7 +2082,6 @@ class AsyncBackend(object):
             # Reraise any exception as a RemoteUnregisterException
             # This will be passed all the way back to the parent window
             raise RemoteUnregisterException
-
 
     def _unregister_consumer(self, consumer_uuid, server_info, callback):
         try:
