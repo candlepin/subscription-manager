@@ -35,7 +35,7 @@ from subscription_manager.facts import Facts
 from subscription_manager.injection import require, CERT_SORTER, \
         IDENTITY, ENTITLEMENT_STATUS_CACHE, \
         PROD_STATUS_CACHE, ENT_DIR, PROD_DIR, CP_PROVIDER, OVERRIDE_STATUS_CACHE, \
-        POOLTYPE_CACHE, RELEASE_STATUS_CACHE
+        POOLTYPE_CACHE, RELEASE_STATUS_CACHE, FACTS
 from subscription_manager import isodate
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.repolib import RepoActionInvoker
@@ -259,14 +259,16 @@ class PoolFilter(object):
         return filtered_pools
 
 
-def list_pools(uep, consumer_uuid, facts, list_all=False, active_on=None, filter_string=None):
+def list_pools(uep, consumer_uuid, list_all=False, active_on=None, filter_string=None):
     """
     Wrapper around the UEP call to fetch pools, which forces a facts update
     if anything has changed before making the request. This ensures the
     rule checks server side will have the most up to date info about the
     consumer possible.
     """
-    facts.update_check(uep, consumer_uuid)
+    # FIXME: for testing, replace with dbus client
+    require(FACTS).update_check(uep, consumer_uuid)
+    #facts.update_check(uep, consumer_uuid)
 
     profile_mgr = cache.ProfileManager()
     profile_mgr.update_check(uep, consumer_uuid)
@@ -281,13 +283,10 @@ def list_pools(uep, consumer_uuid, facts, list_all=False, active_on=None, filter
 # TODO: This method is morphing the actual pool json and returning a new
 # dict which does not contain all the pool info. Not sure if this is really
 # necessary. Also some "view" specific things going on in here.
-def get_available_entitlements(facts, get_all=False, active_on=None,
-        overlapping=False, uninstalled=False, text=None, filter_string=None):
+def get_available_entitlements(get_all=False, active_on=None, overlapping=False,
+                               uninstalled=False, text=None, filter_string=None):
     """
     Returns a list of entitlement pools from the server.
-
-    Facts will be updated if appropriate before making the request, to ensure
-    the rules on the server will pass if appropriate.
 
     The 'all' setting can be used to return all pools, even if the rules do
     not pass. (i.e. show pools that are incompatible for your hardware)
@@ -309,7 +308,7 @@ def get_available_entitlements(facts, get_all=False, active_on=None,
         'management_enabled'
     ]
 
-    pool_stash = PoolStash(Facts(require(ENT_DIR), require(PROD_DIR)))
+    pool_stash = PoolStash()
     dlist = pool_stash.get_filtered_pools_list(active_on, not get_all,
            overlapping, uninstalled, text, filter_string)
 
@@ -444,9 +443,8 @@ class PoolStash(object):
     Object used to fetch pools from the server, sort them into compatible,
     incompatible, and installed lists. Also does filtering based on name.
     """
-    def __init__(self, facts):
+    def __init__(self):
         self.identity = require(IDENTITY)
-        self.facts = facts
         self.sorter = None
 
         # Pools which passed rules server side for this consumer:
@@ -477,7 +475,7 @@ class PoolStash(object):
         self.compatible_pools = {}
         log.debug("Refreshing pools from server...")
         for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
-                self.identity.uuid, self.facts, active_on=active_on):
+                self.identity.uuid, active_on=active_on):
             self.compatible_pools[pool['id']] = pool
             self.all_pools[pool['id']] = pool
 
@@ -485,7 +483,7 @@ class PoolStash(object):
         # Sadly this currently requires a second query to the server.
         self.incompatible_pools = {}
         for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
-                self.identity.uuid, self.facts, list_all=True, active_on=active_on):
+                self.identity.uuid, list_all=True, active_on=active_on):
             if not pool['id'] in self.compatible_pools:
                 self.incompatible_pools[pool['id']] = pool
                 self.all_pools[pool['id']] = pool
@@ -516,11 +514,11 @@ class PoolStash(object):
 
         if incompatible:
             for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
-                    self.identity.uuid, self.facts, active_on=active_on, filter_string=filter_string):
+                    self.identity.uuid, active_on=active_on, filter_string=filter_string):
                 self.compatible_pools[pool['id']] = pool
         else:  # --all has been used
             for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
-                    self.identity.uuid, self.facts, list_all=True, active_on=active_on, filter_string=filter_string):
+                    self.identity.uuid, list_all=True, active_on=active_on, filter_string=filter_string):
                 self.all_pools[pool['id']] = pool
 
         return self._filter_pools(incompatible, overlapping, uninstalled, False, text)

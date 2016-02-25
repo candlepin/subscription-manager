@@ -2137,7 +2137,7 @@ class ConfigCommand(CliCommand):
 
         if self.options.remove:
             for r in self.options.remove:
-                if not "." in r:
+                if not "." in r:  # pragma: noqa
                     system_exit(os.EX_USAGE, _("Error: configuration entry designation for removal must be of format [section.name]"))
 
                 section = r.split('.')[0]
@@ -2279,9 +2279,7 @@ class ListCommand(CliCommand):
                     system_exit(os.EX_DATAERR,
                                 msg.format(dateexample=dateexample))
 
-            facts = inj.require(inj.FACTS)
-            epools = managerlib.get_available_entitlements(facts=facts,
-                                                           get_all=self.options.all,
+            epools = managerlib.get_available_entitlements(get_all=self.options.all,
                                                            active_on=on_date,
                                                            overlapping=self.options.no_overlap,
                                                            uninstalled=self.options.match_installed,

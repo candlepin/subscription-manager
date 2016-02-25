@@ -200,7 +200,6 @@ class MainWindow(widgets.SubmanBaseWidget):
                                               prod_dir=self.product_dir)
 
         self.all_subs_tab = AllSubscriptionsTab(self.backend,
-                                                self.facts,
                                                 self.main_window)
 
         hbox = ga_Gtk.HBox(spacing=6)
