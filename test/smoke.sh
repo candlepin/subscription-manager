@@ -272,6 +272,9 @@ run_sm "0" refresh
 run_sm "0" redeem --email "${REDEEM_EMAIL}"
 
 run_sm "0" facts
+run_sm "0" facts --list
+run_sm "0" facts --update
+
 run_sm "0" identity
 run_sm "0" orgs --username "${USERNAME}" --password "${PASSWORD}"
 
