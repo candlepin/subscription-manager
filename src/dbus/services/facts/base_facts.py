@@ -36,3 +36,7 @@ class BaseFacts(base_service.BaseService):
         cleaned = dict([(str(key), str(value)) for key, value in facts_dict.items()])
         dbus_dict = dbus.Dictionary(cleaned, signature="ss")
         return dbus_dict
+
+    # TODO: cache management
+    #         - update cache (subman.facts.Facts.update_check)
+    #         - delete/cleanup cache  (subman.facts.Facts.delete_cache)
