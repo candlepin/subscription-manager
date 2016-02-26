@@ -405,6 +405,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
 
     def _on_update_failure(self, e):
         handle_gui_exception(e, _("Unable to update overrides."), self._get_dialog_widget())
+        self._clear_progress_bar()
 
     def _on_close(self, button, event=None):
         override_mapping = self._get_changed_overrides()
