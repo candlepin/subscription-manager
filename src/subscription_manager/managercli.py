@@ -60,6 +60,8 @@ from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, \
         none_wrap_columnize_callback, echo_columnize_callback, highlight_by_filter_string_columnize_callback
 
+from rhsm.dbus.clients.facts import client as facts_client
+
 _ = gettext.gettext
 
 log = logging.getLogger('rhsm-app.' + __name__)
@@ -1058,7 +1060,8 @@ class RegisterCommand(UserPassCommand):
 
         self.cp_provider.clean()
 
-        facts = inj.require(inj.FACTS)
+        # A proxy to the dbus service
+        facts_dbus_client = facts_client.FactsHostClient()
 
         # Proceed with new registration:
         try:
@@ -1070,10 +1073,14 @@ class RegisterCommand(UserPassCommand):
             else:
                 admin_cp = self.cp_provider.get_no_auth_cp()
 
-            facts_dic = facts.get_facts()
+            # TODO/FIXME: revisit register cli refactor branch and combine it and
+            #             AsyncBackend to run this as a series of states triggered by events
+            # This is blocking and not async, which aside from blocking here, also
+            # means things like following name owner changes gets weird.
+            facts_dict = facts_dbus_client.GetFacts()
 
             self.plugin_manager.run("pre_register_consumer", name=consumername,
-                                    facts=facts_dic)
+                                    facts=facts_dict)
 
             if self.options.consumerid:
                 # TODO remove the username/password
@@ -1096,14 +1103,14 @@ class RegisterCommand(UserPassCommand):
                         self.options.environment)
 
                 consumer = admin_cp.registerConsumer(name=consumername,
-                     type=self.options.consumertype, facts=facts_dic,
+                     type=self.options.consumertype, facts=facts_dict,
                      owner=owner_key, environment=environment_id,
                      keys=self.options.activation_keys,
                      installed_products=self.installed_mgr.format_for_server(),
                      content_tags=self.installed_mgr.tags)
                 self.installed_mgr.write_cache()
             self.plugin_manager.run("post_register_consumer", consumer=consumer,
-                                    facts=facts_dic)
+                                    facts=facts_dict)
         except connection.RestlibException, re:
             log.exception(re)
             system_exit(os.EX_SOFTWARE, re.msg)
@@ -1131,7 +1138,11 @@ class RegisterCommand(UserPassCommand):
         # Must update facts to clear out the old ones:
         if self.options.consumerid:
             log.info("Updating facts")
-            facts.update_check(self.cp, consumer['uuid'], force=True)
+            #
+            # FIXME: Need a ConsumerFacts.sync or update or something
+            # TODO: We register, with facts, then update facts again...?
+            #       Are we trying to sync potential new or dynamic facts?
+            #facts.update_check(self.cp, consumer['uuid'], force=True)
 
         profile_mgr = inj.require(inj.PROFILE_MANAGER)
         # 767265: always force an upload of the packages when registering
@@ -1139,7 +1150,8 @@ class RegisterCommand(UserPassCommand):
 
         # Facts and installed products went out with the registration request,
         # manually write caches to disk:
-        facts.write_cache()
+        # facts service job now(soon)
+        #facts.write_cache()
         self.installed_mgr.update_check(self.cp, consumer['uuid'])
 
         if self.options.release:
@@ -1320,9 +1332,14 @@ class RedeemCommand(CliCommand):
         try:
             # FIXME: why just facts and package profile update here?
             # update facts first, if we need to
-            facts = inj.require(inj.FACTS)
-            facts.update_check(self.cp, self.identity.uuid)
 
+            # FIXME: either do above, or add a ConsumerFacts model and populate
+            #        it from dbus call, and update_check() to send to candlepin
+            #facts = inj.require(inj.FACTS)
+            #facts.update_check(self.cp, self.identity.uuid)
+
+            # ie, don't forget to fix me
+            raise Exception('facts syncing not implemented yet, so this should fail tests.')
             profile_mgr = inj.require(inj.PROFILE_MANAGER)
             profile_mgr.update_check(self.cp, self.identity.uuid)
 
@@ -1788,27 +1805,36 @@ class FactsCommand(CliCommand):
     def _do_command(self):
         self._validate_options()
 
-        identity = inj.require(inj.IDENTITY)
         if self.options.list:
-            facts = inj.require(inj.FACTS)
-            fact_dict = facts.get_facts()
-            fact_keys = fact_dict.keys()
-            fact_keys.sort()
-            for key in fact_keys:
-                value = fact_dict[key]
+            # A proxy to the dbus service
+            facts_dbus_client = facts_client.FactsHostClient()
+
+            facts_dict = facts_dbus_client.GetFacts()
+            facts_keys = facts_dict.keys()
+            facts_keys.sort()
+
+            for key in facts_keys:
+                value = facts_dict[key]
                 if str(value).strip() == "":
                     value = _("Unknown")
                 print "%s: %s" % (key, value)
 
         if self.options.update:
-            facts = inj.require(inj.FACTS)
-            try:
-                facts.update_check(self.cp, identity.uuid, force=True)
-            except connection.RestlibException, re:
-                log.exception(re)
-                system_exit(os.EX_SOFTWARE, re.msg)
-            log.info("Succesfully updated the system facts.")
-            print _("Successfully updated the system facts.")
+            #identity = inj.require(inj.IDENTITY)
+            # A proxy to the dbus service
+            facts_dbus_client = facts_client.FactsHostClient()
+
+            # FIXME/TODO: add ConsumerFacts.update
+
+            raise Exception('Consumer facts updating not implemented yet (facts command)')
+
+            #try:
+            #    facts.update_check(self.cp, identity.uuid, force=True)
+            #except connection.RestlibException, re:
+            #    log.exception(re)
+            #    system_exit(os.EX_SOFTWARE, re.msg)
+            #log.info("Succesfully updated the system facts.")
+            #print _("Successfully updated the system facts.")
 
 
 class ImportCertCommand(CliCommand):
