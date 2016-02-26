@@ -31,7 +31,6 @@ from rhsm.certificate import Key, CertificateException, create_from_pem
 import subscription_manager.cache as cache
 from subscription_manager.cert_sorter import StackingGroupSorter, ComplianceManager
 from subscription_manager import identity
-from subscription_manager.facts import Facts
 from subscription_manager.injection import require, CERT_SORTER, \
         IDENTITY, ENTITLEMENT_STATUS_CACHE, \
         PROD_STATUS_CACHE, ENT_DIR, PROD_DIR, CP_PROVIDER, OVERRIDE_STATUS_CACHE, \
@@ -267,6 +266,21 @@ def list_pools(uep, consumer_uuid, list_all=False, active_on=None, filter_string
     consumer possible.
     """
     # FIXME: for testing, replace with dbus client
+    # client tells service 'look for facts again'
+    # if service finds new facts:
+    #     -emit a signal?
+    #     - or just update properties
+    #       - and set a 'been_synced' property to False
+    # client waits for facts check to finish
+    # if no changes or been_synced=True, continue
+    # if changes or unsynced:
+    #    subman updates candlepin with the latest version of services GetFacts() [blocking]
+    #    when finished, subman emit's 'factsSyncFinished'
+    #        - then service flops 'been_synced' property
+    #    -or- subman calls 'here_are_the_latest_facts_to_the_server()' on service
+    #         then service flops 'been_synced' property
+    # subman gets signal that props changed, and that been_synced is now true
+    # since it's been synced, then subman continues
     require(FACTS).update_check(uep, consumer_uuid)
     #facts.update_check(uep, consumer_uuid)
 
@@ -860,7 +874,9 @@ def clean_all_data(backup=True):
     # for deleting persistent caches
     cache.ProfileManager.delete_cache()
     cache.InstalledProductsManager.delete_cache()
-    Facts.delete_cache()
+
+    # FIXME: implement as dbus client to facts service DeleteCache() once implemented
+    #Facts.delete_cache()
 
     # WrittenOverridesCache is also a subclass of cache.CacheManager, but
     # it is deleted in RepoActionInvoker.delete_repo_file() below.
