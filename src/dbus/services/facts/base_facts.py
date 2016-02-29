@@ -23,9 +23,14 @@ class BaseFacts(base_service.BaseService):
         self.facts_collector = self._default_facts_collector_class()
 
     def _create_props(self):
-        return base_properties.BaseProperties(self._interface_name,
-                                              data=self.default_props_data,
-                                              properties_changed_callback=self.PropertiesChanged)
+        properties = base_properties.BaseProperties.from_string_to_string_dict(self._interface_name,
+                                                                               self.default_props_data,
+                                                                               self.PropertiesChanged)
+        properties.props_data.append(base_properties.Property(name='facts',
+                                                              value=dbus.Dictionary({}, signature='ss'),
+                                                              value_signature='a{ss}',
+                                                              access='read'))
+        return properties
 
     @slip.dbus.polkit.require_auth(constants.PK_ACTION_FACTS_COLLECT)
     @decorators.dbus_service_method(dbus_interface=constants.FACTS_DBUS_INTERFACE,
@@ -40,3 +45,7 @@ class BaseFacts(base_service.BaseService):
     # TODO: cache management
     #         - update cache (subman.facts.Facts.update_check)
     #         - delete/cleanup cache  (subman.facts.Facts.delete_cache)
+    #       - signal handler for 'someone updated the facts to candlepin' (update_check, etc)
+    #
+    #       - facts.CheckUpdate(), emit FactsChecked() (and bool for 'yes, new facst' in signal?)
+    #       - track a 'factsMayNeedToBeSyncedToCandlepin' prop?

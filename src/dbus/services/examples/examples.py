@@ -25,9 +25,10 @@ class Examples(base_service.BaseService):
         super(Examples, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
 
     def _create_props(self):
-        return base_properties.BaseProperties(self._interface_name,
-                                              data=self.default_props_data,
-                                              properties_changed_callback=self.PropertiesChanged)
+        properties = base_properties.BaseProperties.from_string_to_string_dict(self._interface_name,
+                                                                               self.default_props_data,
+                                                                               self.PropertiesChanged)
+        return properties
 
     @slip.dbus.polkit.require_auth(constants.PK_ACTION_DEFAULT)
     @decorators.dbus_service_method(dbus_interface=DBUS_INTERFACE,
