@@ -43,10 +43,10 @@ class BaseService(slip.dbus.service.Object):
         self.persistent = True
 
     def _create_props(self):
-        properties = base_properties.BaseProperties(self._interface_name,
-                                                    {'default_sample_prop':
-                                                     'default_sample_value'},
-                                                    self.PropertiesChanged)
+        properties = base_properties.BaseProperties.from_string_to_string_dict(self._interface_name,
+                                                                               {'default_sample_prop':
+                                                                                'default_sample_value'},
+                                                                               self.PropertiesChanged)
         return properties
 
     @property
@@ -69,6 +69,7 @@ class BaseService(slip.dbus.service.Object):
                         path_keyword='object_path', connection_keyword='connection')
     def Introspect(self, object_path, connection):
         ret = super(BaseService, self).Introspect(object_path, connection)
+        self.log.debug("super.Introspect ret=%s", ret)
         bloop = self.props.add_introspection_xml(ret)
         return bloop
 
@@ -87,7 +88,10 @@ class BaseService(slip.dbus.service.Object):
     def GetAll(self, interface_name, sender=None):
         self.log.debug("GetAll() interface_name=%s", interface_name)
         self.log.debug("sender=%s", sender)
-        return self.props.get_all(interface_name=interface_name)
+        dr = dbus.Dictionary(self.props.get_all(interface_name=interface_name),
+                             signature='sv')
+        self.log.debug('dr=%s', dr)
+        return dr
 
     @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
                                     in_signature='ss',

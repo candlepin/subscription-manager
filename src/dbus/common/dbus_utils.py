@@ -19,12 +19,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import dbus
+import logging
 import pwd
 import sys
 import xml.etree.ElementTree as Et
 
+import dbus
+
 PY2 = sys.version < '3'
+
+log = logging.getLogger(__name__)
 
 
 def command_of_pid(pid):
@@ -196,6 +200,7 @@ def add_properties(xml, interface, props):
                 for p in props:
                     temp = '<property type="%s" name="%s" access="%s"/>\n' % \
                         (p['p_t'], p['p_name'], p['p_access'])
+                    log.debug("intro xml temp buf=%s", temp)
                     c.append(Et.fromstring(temp))
 
         return Et.tostring(root, encoding='utf8')

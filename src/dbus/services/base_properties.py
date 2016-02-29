@@ -8,6 +8,17 @@ from rhsm.dbus.common import dbus_utils
 log = logging.getLogger(__name__)
 
 
+class Property(object):
+    default_access = 'read'
+    default_value_signature = 's'
+
+    def __init__(self, name, value, value_signature=None, access=None):
+        self.access = access or self.default_access
+        self.name = name
+        self.value = value
+        self.value_signature = value_signature or self.default_value_signature
+
+
 # TODO: Make properties class a gobject, so we can reused it's prop handling
 #       (And maybe python-dbus can do something useful with a Gobject?
 class BaseProperties(object):
@@ -15,16 +26,29 @@ class BaseProperties(object):
                  data=None,
                  properties_changed_callback=None):
         self.log = logging.getLogger(__name__ + '.' + self.__class__.__name__)
-        self.data = data
+        # iterable of Property's
+        self.props_data = data
         self.interface_name = interface_name
         self.properties_changed_callback = properties_changed_callback
+
+    @classmethod
+    def from_string_to_string_dict(cls, interface_name, prop_dict, properties_changed_callback=None):
+        base_prop = cls(interface_name,
+                        properties_changed_callback=properties_changed_callback)
+        props = []
+        for prop_key, prop_value in prop_dict.items():
+            prop = Property(name=prop_key, value=prop_value)
+            props.append(prop)
+
+        base_prop.props_data = props
+        return base_prop
 
     def get(self, interface_name=None, property_name=None):
         self._check_interface(interface_name)
         self._check_prop(property_name)
 
         try:
-            return self.data[property_name]
+            return self.data[property_name].value
         except KeyError, e:
             self.log.exception(e)
             self.raise_access_denied_or_unknown_property(property_name)
@@ -34,7 +58,10 @@ class BaseProperties(object):
 
         # For now at least, likely need to filter.
         # Or perhaps a self.data.to_dbus() etc.
-        return self.data
+        a = dict([(p_v.name, p_v.value) for p_v in self.props_data])
+        log.debug('a=%s', a)
+        return a
+        #return self.data
 
     def set(self, interface_name, property_name, new_value):
         """On attempts to set a property, raise AccessDenied.
@@ -70,14 +97,15 @@ class BaseProperties(object):
         """
         props_list = []
         props_dict = {}
-        for prop_key, prop_value in self.data.items():
+        for prop_info in self.props_data:
             #p_t = dbus_utils._type_map(type(prop_value))
             # FIXME: all strings atm
-            p_t = 's'
-            props_dict = dict(p_t=p_t, p_name=prop_key,
-                              p_access=self.access_mask(prop_key))
+            props_dict = dict(p_t=prop_info.value_signature,
+                              p_name=prop_info.name,
+                              p_access=self.access_mask(prop_info.access))
             props_list.append(props_dict)
 
+        self.log.debug("t_i_p=%s", props_list)
         return props_list
 
     # FIXME: THis is a read only props class, ReadWriteProperties needs
