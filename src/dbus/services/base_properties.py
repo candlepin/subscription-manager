@@ -26,7 +26,7 @@ class BaseProperties(object):
                  data=None,
                  properties_changed_callback=None):
         self.log = logging.getLogger(__name__ + '.' + self.__class__.__name__)
-        # iterable of Property's
+        # dict of  of prop_name:a_Property_object
         self.props_data = data
         self.interface_name = interface_name
         self.properties_changed_callback = properties_changed_callback
@@ -35,10 +35,10 @@ class BaseProperties(object):
     def from_string_to_string_dict(cls, interface_name, prop_dict, properties_changed_callback=None):
         base_prop = cls(interface_name,
                         properties_changed_callback=properties_changed_callback)
-        props = []
+        props = {}
         for prop_key, prop_value in prop_dict.items():
             prop = Property(name=prop_key, value=prop_value)
-            props.append(prop)
+            props[prop.name] = prop
 
         base_prop.props_data = props
         return base_prop
@@ -48,7 +48,7 @@ class BaseProperties(object):
         self._check_prop(property_name)
 
         try:
-            return self.data[property_name].value
+            return self.props_data[property_name].value
         except KeyError, e:
             self.log.exception(e)
             self.raise_access_denied_or_unknown_property(property_name)
@@ -57,11 +57,10 @@ class BaseProperties(object):
         self._check_interface(interface_name)
 
         # For now at least, likely need to filter.
-        # Or perhaps a self.data.to_dbus() etc.
-        a = dict([(p_v.name, p_v.value) for p_v in self.props_data])
+        # Or perhaps a self.props_data.to_dbus() etc.
+        a = dict([(p_name, p_v.value) for p_name, p_v in self.props_data.items()])
         log.debug('a=%s', a)
         return a
-        #return self.data
 
     def set(self, interface_name, property_name, new_value):
         """On attempts to set a property, raise AccessDenied.
@@ -76,6 +75,30 @@ class BaseProperties(object):
 
         self.raise_access_denied(property_name)
 
+    def _set(self, interface_name, property_name, new_value):
+        """Set a property to given value, ignoring access writes.
+
+        Ie, BaseProperties.set() can be exposed through the dbus.Properties 'Set()'
+        method, where it will check access rights. But internal use can use _set."""
+        interface_name = dbus_utils.dbus_to_python(interface_name, str)
+        property_name = dbus_utils.dbus_to_python(property_name, str)
+        new_value = dbus_utils.dbus_to_python(new_value)
+
+        self._check_interface(interface_name)
+        self._check_prop(property_name)
+
+        # FIXME/TODO: Plug in access checks and data validation
+        # FIXME/TODO: Plug in checking if prop should emit a change signal.
+        try:
+            self.props_data[property_name].value = new_value
+            # WARNING: if emitting a signal causes an exception...?
+            self._emit_properties_changed(property_name, new_value)
+        except Exception, e:
+            self.log.debug("ReadWriteProperties Exception i=%s p=%s n=%s",
+                           interface_name, property_name, new_value)
+            self.log.exception(e)
+            self._error_on_set(e, property_name, new_value)
+
     # FIXME: This is kind of weird. Would be easier if we track the DBus
     #        signature for each property.
     def add_introspection_xml(self, interface_xml):
@@ -85,7 +108,7 @@ class BaseProperties(object):
 
     # FIXME: This only supports string type values at the moment.
     def to_introspection_props(self):
-        """ Transform self.data (a dict) to:
+        """ Transform self.props_data (a dict) to:
 
         data = {'blah': '1', 'blip': some_int_value}
         props_tup = ({'p_t': 's',
@@ -97,9 +120,10 @@ class BaseProperties(object):
         """
         props_list = []
         props_dict = {}
-        for prop_info in self.props_data:
+        for prop_info in self.props_data.values():
             #p_t = dbus_utils._type_map(type(prop_value))
             # FIXME: all strings atm
+            self.log.debug("prop_info=%s", prop_info)
             props_dict = dict(p_t=prop_info.value_signature,
                               p_name=prop_info.name,
                               p_access=self.access_mask(prop_info.access))
@@ -127,11 +151,12 @@ class BaseProperties(object):
         Default is to raise UnknownInterace for ''.
 
         If subclasses overrides so this doesn't raise an exception,
-        the default behavior is for get_all() to return self.data"""
+        the default behavior is for get_all() to return self.props_data"""
         self.raise_unknown_interface('')
 
     def _check_prop(self, property_name):
-        if property_name not in self.data:
+        if property_name not in self.props_data:
+            # if not any([prop for prop in self.props_data if prop.name == property_name]):
             self.raise_property_does_not_exist(property_name)
 
     # FIXME: likely a more idiomatic way to do this.
@@ -189,23 +214,10 @@ class ReadWriteProperties(BaseProperties):
     on a service."""
 
     def set(self, interface_name, property_name, new_value):
-        interface_name = dbus_utils.dbus_to_python(interface_name, str)
-        property_name = dbus_utils.dbus_to_python(property_name, str)
-        new_value = dbus_utils.dbus_to_python(new_value)
+        if self.access_mask(property_name) != 'write':
+            self.raise_access_denied(property_name)
 
-        self._check_interface(interface_name)
-        self._check_prop(property_name)
-
-        # FIXME/TODO: Plug in access checks and data validation
-        try:
-            self.data[property_name] = new_value
-            # WARNING: if emitting a signal causes an exception...?
-            self._emit_properties_changed(property_name, new_value)
-        except Exception, e:
-            self.log.debug("ReadWriteProperties Exception i=% p=% n=%",
-                           interface_name, property_name, new_value)
-            self.log.exception(e)
-            self._error_on_set(e, property_name, new_value)
+        return self._set(interface_name, property_name, new_value)
 
     # FIXME: track read/write per property
     def access_mask(self, prop_key):

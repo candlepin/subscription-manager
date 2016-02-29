@@ -26,10 +26,10 @@ class BaseFacts(base_service.BaseService):
         properties = base_properties.BaseProperties.from_string_to_string_dict(self._interface_name,
                                                                                self.default_props_data,
                                                                                self.PropertiesChanged)
-        properties.props_data.append(base_properties.Property(name='facts',
-                                                              value=dbus.Dictionary({}, signature='ss'),
-                                                              value_signature='a{ss}',
-                                                              access='read'))
+        properties.props_data['facts'] = base_properties.Property(name='facts',
+                                                                  value=dbus.Dictionary({}, signature='ss'),
+                                                                  value_signature='a{ss}',
+                                                                  access='read')
         return properties
 
     @slip.dbus.polkit.require_auth(constants.PK_ACTION_FACTS_COLLECT)
@@ -39,8 +39,12 @@ class BaseFacts(base_service.BaseService):
     def GetFacts(self, sender=None):
         facts_dict = self.facts_collector.get_all()
         cleaned = dict([(str(key), str(value)) for key, value in facts_dict.items()])
-        dbus_dict = dbus.Dictionary(cleaned, signature="ss")
-        return dbus_dict
+        facts_dbus_dict = dbus.Dictionary(cleaned, signature="ss")
+
+        self.props._set(interface_name=constants.FACTS_DBUS_INTERFACE,
+                        property_name='facts',
+                        new_value=facts_dbus_dict)
+        return facts_dbus_dict
 
     # TODO: cache management
     #         - update cache (subman.facts.Facts.update_check)
