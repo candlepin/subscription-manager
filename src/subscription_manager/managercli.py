@@ -1081,7 +1081,11 @@ class RegisterCommand(UserPassCommand):
                         self.options.consumerid)
                 consumer = admin_cp.getConsumer(self.options.consumerid,
                         self.username, self.password)
-                if consumer['type']['manifest']:
+                try:
+                    consumer_type = consumer['type']
+                except KeyError:
+                    log.warn('Unable to determine consumer type, proceeding with registration.')
+                if consumer.get('type', {}).get('manifest', {}):
                     log.error("registration attempted with consumerid = Subscription Management Application's uuid: %s" % self.options.consumerid)
                     system_exit(os.EX_USAGE, _("Error: Cannot register with an ID of a Subscription Management Application: %s" % self.options.consumerid))
 
