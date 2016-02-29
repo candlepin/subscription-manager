@@ -99,7 +99,7 @@ class BaseService(slip.dbus.service.Object):
     @decorators.dbus_handle_exceptions
     def Get(self, interface_name, property_name, sender=None):
         self.log.debug("Get() interface_name=%s property_name=%s", interface_name, property_name)
-        self.log.debug("Get Property ifact=%s property_name=%s", interface_name, property_name)
+        self.log.debug("Get Property iface=%s property_name=%s", interface_name, property_name)
         return self.props.get(interface_name=interface_name,
                               property_name=property_name)
 
