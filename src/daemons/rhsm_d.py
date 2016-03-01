@@ -34,6 +34,7 @@ def excepthook_base(exc_type, exc_value, exc_traceback):
 
 sys.excepthook = excepthook_base
 
+import contextlib
 import syslog
 import dbus
 import dbus.service
@@ -71,7 +72,6 @@ init_dep_injection()
 
 from subscription_manager.branding import get_branding
 from subscription_manager.injection import require, IDENTITY, CERT_SORTER, RHSM_ICON_CACHE
-from subscription_manager.cache import RhsmIconCache
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.i18n_optparse import OptionParser, \
     WrappedIndentedHelpFormatter, USAGE
@@ -118,6 +118,7 @@ def pre_check_status(force_signal):
     return None
 
 
+# TODO: add a async version, and method to StatusChecker
 def check_status(force_signal):
     pre_result = pre_check_status(force_signal)
     if pre_result is not None:
@@ -128,25 +129,22 @@ def check_status(force_signal):
     return sorter.get_status_for_icon()
 
 
-def check_if_ran_once(checker, loop):
-    if checker.has_run:
-        msg = "D-Bus com.redhat.SubscriptionManager.EntitlementStatus.check_status called once, exiting"
-        debug(msg)
-        loop.quit()
-    return True
-
-
 class StatusChecker(dbus.service.Object):
 
     def __init__(self, bus, keep_alive, force_signal, loop):
         name = dbus.service.BusName("com.redhat.SubscriptionManager", bus)
         dbus.service.Object.__init__(self, name, "/EntitlementStatus")
-        self.has_run = False
         #this will get set after first invocation
         self.rhsm_icon_cache = require(RHSM_ICON_CACHE)
         self.keep_alive = keep_alive
         self.force_signal = force_signal
         self.loop = loop
+        self.timeout_seconds = 240
+
+        # a timer src that should be reset (remove the old timer, add a new one) on any activity
+        # Add a timeout for the case where the service starts up, but no methods
+        # are ever called.
+        self.timeout_src = self._setup_timeout()
 
     @dbus.service.signal(
         dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus',
@@ -155,11 +153,38 @@ class StatusChecker(dbus.service.Object):
         log.debug("D-Bus signal com.redhat.SubscriptionManager.EntitlementStatus.entitlement_status_changed emitted")
         debug("signal fired! code is " + str(status_code))
 
-    #this is so we can guarantee exit after the dbus stuff is done, since
-    #certain parts of that are async
+    # Start or reset a timeout when we get activity
+    @contextlib.contextmanager
     def watchdog(self):
-        if not self.keep_alive:
-            ga_GObject.idle_add(check_if_ran_once, self, self.loop)
+        # remove the existing timeout
+        if self.timeout_src:
+            ga_GObject.source_remove(self.timeout_src)
+
+        # Everything before is the _enter
+        yield
+
+        self.timeout_src = self._setup_timeout()
+
+    def _setup_timeout(self):
+        # Don't even add the quit timeout if keep_alive
+        if self.keep_alive:
+            return None
+
+        # and reset it by creating a new timeout src
+        return ga_GObject.timeout_add_seconds(self.timeout_seconds,
+                                              self.timeout_callback)
+
+    # To avoid a long running process
+    def timeout_callback(self):
+        """Exit timeout_seconds after the last activity."""
+        ga_GObject.idle_add(self.quit)
+        return False
+
+    def quit(self):
+        msg = "DBus activated rhsmd is shutting down after %s seconds of inactivity." % self.timeout_seconds
+        log.debug(msg)
+        self.loop.quit()
+        return False
 
     @dbus.service.method(
         dbus_interface="com.redhat.SubscriptionManager.EntitlementStatus",
@@ -170,33 +195,30 @@ class StatusChecker(dbus.service.Object):
                  2 if close to expiry
         """
         log.debug("D-Bus interface com.redhat.SubscriptionManager.EntitlementStatus.check_status called")
-        status = check_status(self.force_signal)
-        if (status != self.rhsm_icon_cache._read_cache()):
-            debug("Validity status changed, fire signal in check_status")
-            self.entitlement_status_changed(status)
-        self.rhsm_icon_cache.data = status
-        self.rhsm_icon_cache.write_cache()
-        self.has_run = True
-        self.watchdog()
-        return status
+        with self.watchdog():
+            status = check_status(self.force_signal)
+            if (status != self.rhsm_icon_cache._read_cache()):
+                debug("Validity status changed, fire signal in check_status")
+                self.entitlement_status_changed(status)
+            self.rhsm_icon_cache.data = status
+            self.rhsm_icon_cache.write_cache()
+            # TODO: replace with content manager? decorator?
+            return status
 
     @dbus.service.method(
             dbus_interface="com.redhat.SubscriptionManager.EntitlementStatus",
             in_signature='i')
     def update_status(self, status):
         log.debug("D-Bus interface com.redhat.SubscriptionManager.EntitlementStatus.update_status called with status = %s" % status)
-        pre_result = pre_check_status(self.force_signal)
-        if pre_result is not None:
-            status = pre_result
-        # At comment time, update status is called every time we start the GUI. So we use
-        # a persistant cache to ensure we fire a signal only when the status changes.
-        if (status != self.rhsm_icon_cache._read_cache()):
-            debug("Validity status changed, fire signal")
-            self.entitlement_status_changed(status)
-        self.rhsm_icon_cache.data = status
-        self.rhsm_icon_cache.write_cache()
-        self.has_run = True
-        self.watchdog()
+        with self.watchdog():
+            pre_result = pre_check_status(self.force_signal)
+            if pre_result is not None:
+                status = pre_result
+            if (status != self.rhsm_icon_cache._read_cache()):
+                debug("Validity status changed, fire signal")
+                self.entitlement_status_changed(status)
+            self.rhsm_icon_cache.data = status
+            self.rhsm_icon_cache.write_cache()
 
 
 def parse_force_signal(cli_arg):
@@ -238,7 +260,7 @@ def main():
     parser.add_option("-d", "--debug", dest="debug",
             help="Display debug messages", action="store_true", default=False)
     parser.add_option("-k", "--keep-alive", dest="keep_alive",
-            help="Stay running (don't shut down after the first dbus call)",
+            help="Stay running (don't shutwown after inactivity)",
             action="store_true", default=False)
     parser.add_option("-s", "--syslog", dest="syslog",
             help="Run standalone and log result to syslog",

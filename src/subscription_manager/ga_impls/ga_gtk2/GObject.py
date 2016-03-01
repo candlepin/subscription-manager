@@ -6,7 +6,7 @@ from gobject import MainLoop
 
 # methods
 from gobject import add_emission_hook, idle_add, property
-from gobject import source_remove, timeout_add
+from gobject import source_remove, timeout_add, timeout_add_seconds
 from gobject import markup_escape_text
 
 # enums
@@ -20,7 +20,7 @@ class SignalFlags(object):
 
 constants = [TYPE_BOOLEAN, TYPE_PYOBJECT, PARAM_READWRITE]
 methods = [add_emission_hook, idle_add, markup_escape_text,
-           property, source_remove, timeout_add]
+           property, source_remove, timeout_add, timeout_add_seconds]
 enums = [SignalFlags]
 objects = [GObject, MainLoop]
 __all__ = objects + methods + constants + enums
