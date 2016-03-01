@@ -172,6 +172,12 @@ class SubManFixture(unittest.TestCase):
         self.is_valid_server_patcher = patch("subscription_manager.managercli.is_valid_server_info")
         is_valid_server_mock = self.is_valid_server_patcher.start()
         is_valid_server_mock.return_value = True
+        # No tests should be trying to test the proxy connection
+        # so really, everything needs this mock. May need to be in __init__, or
+        # better, all test classes need to use SubManFixture
+        self.test_proxy_connection_patcher = patch("subscription_manager.managercli.CliCommand.test_proxy_connection")
+        test_proxy_connection_mock = self.test_proxy_connection_patcher.start()
+        test_proxy_connection_mock.return_value = True
 
         self.files_to_cleanup = []
 
@@ -179,6 +185,7 @@ class SubManFixture(unittest.TestCase):
         self.dbus_patcher.stop()
         self.mock_repofile_path_exists_patcher.stop()
         self.is_valid_server_patcher.stop()
+        self.test_proxy_connection_patcher.stop()
 
         for f in self.files_to_cleanup:
             # Assuming these are tempfile.NamedTemporaryFile, created with
