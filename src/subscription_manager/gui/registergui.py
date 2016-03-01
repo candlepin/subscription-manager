@@ -1294,7 +1294,7 @@ class SelectSLAScreen(Screen):
                 return
             else:
                 log.exception(error)
-                self.emit('register-error', _("Error subscribing"), error)
+                self.emit('register-error', _("Error subscribing: %s"), error)
                 self.emit('attach-finished')
                 self.pre_done()
                 return
