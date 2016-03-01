@@ -106,6 +106,7 @@ class Facts(CacheManager):
         import hwprobe
         return hwprobe.Hardware().get_all()
 
+    # FIXME: move to src/facts/
     def _parse_facts_json(self, json_buffer, file_path):
         custom_facts = None
 
