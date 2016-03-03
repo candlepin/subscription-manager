@@ -5,6 +5,7 @@ import logging
 
 _ = lambda x: gettext.ldgettext("rhsm", x)
 
+sys.path.append("/usr/share/rhsm")
 
 from subscription_manager import ga_loader
 ga_loader.init_ga()
@@ -15,8 +16,6 @@ from subscription_manager.ga import gtk_compat
 gtk_compat.threads_init()
 
 import rhsm
-
-sys.path.append("/usr/share/rhsm")
 
 # enable logging for firstboot
 from subscription_manager import logutil
