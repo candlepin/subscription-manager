@@ -3,6 +3,7 @@
 # John Sefler <jsefler@redhat.com>, 2015. #zanata
 # noriko <noriko@fedoraproject.org>, 2015. #zanata
 # tchuang <tchuang@redhat.com>, 2015. #zanata
+# Chester Cheng <ccheng@redhat.com>, 2016. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -11,8 +12,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2015-09-25 03:32-0400\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2016-02-25 11:02-0500\n"
+"Last-Translator: Chester Cheng <ccheng@redhat.com>\n"
 "Language-Team: Chinese (Traditional, Taiwan)\n"
 "Language: zh-Hant-TW\n"
 "Plural-Forms: nplurals=1; plural=0\n"
@@ -23,7 +24,7 @@ msgstr ""
 msgid ""
 "consumer_uuid=%s is not a valid consumer_uuid. Not attempting to sync %s "
 "cache with server."
-msgstr ""
+msgstr "consumer_uuid=%s 不是合於規定的 consumer_uuid。不會試圖與伺服器同步 %s。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/cache.py:168
@@ -59,7 +60,7 @@ msgstr "您輸入了無效的選擇。請從上方的選單做出選擇。"
 #: ../src/subscription_manager/migrate/migrate.py:147
 #, python-format
 msgid "Could not read legacy system id at %s"
-msgstr ""
+msgstr "無法從 %s 讀取舊有系統 ID"
 
 #: ../src/subscription_manager/migrate/migrate.py:178
 msgid "Legacy username: "
@@ -767,7 +768,7 @@ msgstr "系統憑證已損毀。請進行註冊。"
 msgid ""
 "Consumer profile \"%s\" has been deleted from the server. You can use "
 "command clean or unregister to remove local profile."
-msgstr ""
+msgstr "消耗者設定檔 \"%s\" 已從伺服器上刪除。您可以使用 clean 或 unregister 指令來移除本地設定檔。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:534
@@ -1176,6 +1177,8 @@ msgid ""
 "with consumerid. Please use --force without --consumerid to re-register or "
 "use the clean command and try again without --force."
 msgstr ""
+"錯誤：試著使用 consumerid 復原時，無法強制註冊。請使用 --force 選項而不加上 --consumerid 以重新註冊，或使用 "
+"clean 指令而不加上 --force。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:1054
@@ -1193,7 +1196,7 @@ msgstr "正在向 %s:%s%s 註冊"
 msgid ""
 "Error: Cannot register with an ID of a Subscription Management Application: "
 "%s"
-msgstr ""
+msgstr "錯誤：無法使用訂閱管理員應用程式的 ID 註冊：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:1107
@@ -1329,12 +1332,12 @@ msgstr "可用發行版"
 
 #: ../src/subscription_manager/managercli.py:1431
 msgid "The ID of the pool to attach (can be specified more than once)"
-msgstr ""
+msgstr "欲連接至的集區之 ID（可多次指定）"
 
 #: ../src/subscription_manager/managercli.py:1433
 msgid ""
 "Number of subscriptions to attach. May not be used with an auto-attach."
-msgstr ""
+msgstr "要連接的訂閱數量。也許無法使用自動連結。"
 
 #: ../src/subscription_manager/managercli.py:1435
 msgid ""
@@ -1346,7 +1349,7 @@ msgstr "自動將相容的訂閱附加至此系統。這是預設的動作。"
 msgid ""
 "Automatically attach only subscriptions matching the specified service "
 "level; only used with --auto"
-msgstr ""
+msgstr "僅自動連結與特定服務等級相符的訂閱服務；只能與 --auto 合用"
 
 #: ../src/subscription_manager/managercli.py:1439
 msgid ""
@@ -1385,7 +1388,7 @@ msgstr "錯誤：數量必須是正整數。"
 
 #: ../src/subscription_manager/managercli.py:1476
 msgid "Error: --quantity may not be used with an auto-attach"
-msgstr ""
+msgstr "錯誤：--quantity 無法與自動連結合用"
 
 #: ../src/subscription_manager/managercli.py:1487
 msgid "Error: Received data does not contain any pool IDs."
@@ -1440,7 +1443,7 @@ msgstr "欲移除的憑證序列號碼（可指定多次）"
 
 #: ../src/subscription_manager/managercli.py:1618
 msgid "the ID of the pool to remove (can be specified more than once)"
-msgstr ""
+msgstr "要移除的集區 ID（可多次指定）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:1620
@@ -1462,23 +1465,24 @@ msgstr "錯誤：「%s」非有效的序列號碼"
 msgid ""
 "Error: The registered entitlement server does not support remove --pool.\n"
 "Instead, use the remove --serial option."
-msgstr ""
+msgstr "錯誤：已註冊的權利伺服器並不支援 remove --pool。\n"
+"相反地，請使用 remove --serial 選項。"
 
 #: ../src/subscription_manager/managercli.py:1645
 msgid ""
 "Error: This command requires that you specify one of --serial, --pool or --"
 "all."
-msgstr ""
+msgstr "錯誤：這指令需要您指定 --serial、--pool 或 --all。"
 
 #: ../src/subscription_manager/managercli.py:1663
 #, python-format
 msgid "%s successfully removed at the server:"
-msgstr ""
+msgstr "已成功在伺服器上移除了 %s："
 
 #: ../src/subscription_manager/managercli.py:1667
 #, python-format
 msgid "%s unsuccessfully removed at the server:"
-msgstr ""
+msgstr "在伺服器上移除 %s 失敗："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:1685
@@ -1575,7 +1579,7 @@ msgstr "匯入憑證時發生了一項錯誤。請檢查日誌檔案以取得更
 
 #: ../src/subscription_manager/managercli.py:1874
 msgid "View and configure with 'subscription-manager plugins'"
-msgstr ""
+msgstr "使用「subscription-manager 外掛程式」檢視並配置"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author tchuang
 #: ../src/subscription_manager/managercli.py:1878
@@ -2848,7 +2852,7 @@ msgstr "註冊"
 #. for the status message.
 #: ../src/subscription_manager/gui/registergui.py:383
 msgid "Error during registration."
-msgstr ""
+msgstr "註冊期間發生錯誤。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:655
@@ -2877,15 +2881,15 @@ msgstr "訂閱連結"
 #: ../src/subscription_manager/gui/registergui.py:1049
 #, python-format
 msgid "Registering to owner: %s environment: %s"
-msgstr ""
+msgstr "註冊至擁有者：%s 環境：%s"
 
 #: ../src/subscription_manager/gui/registergui.py:1071
 msgid "Unable to unregister"
-msgstr ""
+msgstr "無法取消註冊"
 
 #: ../src/subscription_manager/gui/registergui.py:1080
 msgid "Unregistering"
-msgstr ""
+msgstr "取消註冊"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:1100
@@ -3439,7 +3443,7 @@ msgstr "UUID"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/rct/manifest_commands.py:207
 msgid "Consumer:"
-msgstr "使用者："
+msgstr "消耗者："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/rct/manifest_commands.py:221
@@ -5099,7 +5103,7 @@ msgstr "* 點選以調整數量"
 
 #: ../src/subscription_manager/gui/data/glade/register_dialog.glade.h:3
 msgid "back_button"
-msgstr ""
+msgstr "back_button"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/glade/register_dialog.glade.h:5
@@ -5217,25 +5221,25 @@ msgstr "register_notebook"
 
 #: ../po/tmp_ui_links/credentials.ui.glade.h:1
 msgid "<b>Please enter your Red Hat account information:</b>"
-msgstr ""
+msgstr "<b>請輸入 Red Hat 帳號資訊：</b>"
 
 #: ../po/tmp_ui_links/credentials.ui.glade.h:4
 msgid ""
 "<small>Tip: Forgot your login or password? Look it up at http://redhat.com/"
 "forgot_password</small>"
-msgstr ""
+msgstr "<small>提示：忘記登入帳號或密碼？請參閱 http://redhat.com/forgot_password</small>"
 
 #: ../po/tmp_ui_links/credentials.ui.glade.h:5
 msgid "credentials_grid"
-msgstr ""
+msgstr "credentials_grid"
 
 #: ../po/tmp_ui_links/credentials.ui.glade.h:12
 msgid "system_name_grid"
-msgstr ""
+msgstr "system_name_grid"
 
 #: ../po/tmp_ui_links/choose_server.ui.glade.h:13
 msgid "If required, please configure your proxy before moving forward. "
-msgstr ""
+msgstr "若有必要，請在繼續進行前配置您的代理伺服器。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../po/tmp_ui_links/selectsla.ui.glade.h:2
@@ -5249,6 +5253,8 @@ msgid ""
 "Awesome OS 14, Awesome OS 14 Super Edition, Awesome Middle Ware For Awesome "
 "App Platform Awesome Developer Editition"
 msgstr ""
+"Awesome OS 14, Awesome OS 14 Super 版, Awesome Middle Ware For Awesome App "
+"Platform Awesome 開發版"
 
 #: ../po/tmp_ui_links/repositories.ui.glade.h:5
 msgid "apply_button"
@@ -5258,11 +5264,11 @@ msgstr "apply_button"
 msgid ""
 "This assistant will guide you through the process of registering your system "
 "with Red Hat to receive software updates and other benefits. "
-msgstr ""
+msgstr "這助理將引導您完成向 Red Hat 註冊系統，以收到軟體更新與其它好處的過程。"
 
 #: ../po/tmp_ui_links/registration_info.ui.glade.h:3
 msgid " You will need the following to register:"
-msgstr ""
+msgstr "您需要以下事物以進行註冊："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../po/tmp_ui_links/registration_info.ui.glade.h:4

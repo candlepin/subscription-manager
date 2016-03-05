@@ -1,6 +1,7 @@
 # gcintra <gcintra@fedoraproject.org>, 2014. #zanata
 # John Sefler <jsefler@redhat.com>, 2015. #zanata
 # gcintra <gcintra@fedoraproject.org>, 2015. #zanata
+# Maria Andrada <msuppesd@redhat.com>, 2016. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -9,8 +10,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2015-09-25 02:53-0400\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2016-03-02 04:47-0500\n"
+"Last-Translator: Maria Andrada <msuppesd@redhat.com>\n"
 "Language-Team: Portuguese (Brazil)\n"
 "Language: pt-BR\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -22,6 +23,8 @@ msgid ""
 "consumer_uuid=%s is not a valid consumer_uuid. Not attempting to sync %s "
 "cache with server."
 msgstr ""
+"consumer_uuid=%s não é um consumer_uuid válido. Não haverá tentativa de "
+"sincronizar o cache %s com o servidor."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/cache.py:168
@@ -60,7 +63,7 @@ msgstr ""
 #: ../src/subscription_manager/migrate/migrate.py:147
 #, python-format
 msgid "Could not read legacy system id at %s"
-msgstr ""
+msgstr "Não foi possível ler a id do sistema legado em %s"
 
 #: ../src/subscription_manager/migrate/migrate.py:178
 msgid "Legacy username: "
@@ -815,6 +818,8 @@ msgid ""
 "Consumer profile \"%s\" has been deleted from the server. You can use "
 "command clean or unregister to remove local profile."
 msgstr ""
+"O perfil do cliente \"%s\" foi excluído do servidor. Você pode usar o "
+"comando clean (limpar) ou cancelar o registro para remover o perfil local. "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:534
@@ -1245,6 +1250,10 @@ msgid ""
 "with consumerid. Please use --force without --consumerid to re-register or "
 "use the clean command and try again without --force."
 msgstr ""
+"Erro: Não é possível forçar o registro enquanto estiver tentando se "
+"recuperar do registro com o consumerid. Por favor, use --force sem --"
+"consumerid para fazer o registro novamente ou use o comando clean (limpar) e "
+"tente mais uma vez sem --force. "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:1054
@@ -1263,6 +1272,8 @@ msgid ""
 "Error: Cannot register with an ID of a Subscription Management Application: "
 "%s"
 msgstr ""
+"Erro: Não é possível registrar com uma ID de um Aplicativo de Gerenciamento "
+"de Subscrição: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:1107
@@ -1409,12 +1420,14 @@ msgstr "Lançamentos Disponíveis"
 
 #: ../src/subscription_manager/managercli.py:1431
 msgid "The ID of the pool to attach (can be specified more than once)"
-msgstr ""
+msgstr "A ID do pool para anexar (pode ser especificada mais de uma vez) "
 
 #: ../src/subscription_manager/managercli.py:1433
 msgid ""
 "Number of subscriptions to attach. May not be used with an auto-attach."
 msgstr ""
+"Número de subscrições para anexar. Pode não ser usado com uma anexação "
+"automática. "
 
 #: ../src/subscription_manager/managercli.py:1435
 msgid ""
@@ -1429,6 +1442,8 @@ msgid ""
 "Automatically attach only subscriptions matching the specified service "
 "level; only used with --auto"
 msgstr ""
+"Anexar automaticamente somente as subscrições correspondendo ao nível do "
+"serviço especificado; somente usado com --auto"
 
 #: ../src/subscription_manager/managercli.py:1439
 msgid ""
@@ -1472,7 +1487,7 @@ msgstr "Erro: Quantidade deve ser um inteiro positivo."
 
 #: ../src/subscription_manager/managercli.py:1476
 msgid "Error: --quantity may not be used with an auto-attach"
-msgstr ""
+msgstr "Erro: --quantity pode não ser usado com uma anexação automática"
 
 #: ../src/subscription_manager/managercli.py:1487
 msgid "Error: Received data does not contain any pool IDs."
@@ -1535,7 +1550,7 @@ msgstr ""
 
 #: ../src/subscription_manager/managercli.py:1618
 msgid "the ID of the pool to remove (can be specified more than once)"
-msgstr ""
+msgstr "A ID do pool para remover (pode ser especificada mais de uma vez) "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:1620
@@ -1558,22 +1573,25 @@ msgid ""
 "Error: The registered entitlement server does not support remove --pool.\n"
 "Instead, use the remove --serial option."
 msgstr ""
+"Erro: O servidor intitulado registrado não fornece suporte a remove --pool. \n"
+"No lugar disto, use a opção remove --serial. "
 
 #: ../src/subscription_manager/managercli.py:1645
 msgid ""
 "Error: This command requires that you specify one of --serial, --pool or --"
 "all."
 msgstr ""
+"Erro: Este comando necessita que você especifique --serial, --pool ou --all."
 
 #: ../src/subscription_manager/managercli.py:1663
 #, python-format
 msgid "%s successfully removed at the server:"
-msgstr ""
+msgstr "%s removido(s) com êxito no servidor: "
 
 #: ../src/subscription_manager/managercli.py:1667
 #, python-format
 msgid "%s unsuccessfully removed at the server:"
-msgstr ""
+msgstr "%s removido(s) com êxito no servidor:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:1685
@@ -1678,7 +1696,7 @@ msgstr ""
 
 #: ../src/subscription_manager/managercli.py:1874
 msgid "View and configure with 'subscription-manager plugins'"
-msgstr ""
+msgstr "Visualizar e configurar com 'plugins subscription-manager'"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author gcintra
 #: ../src/subscription_manager/managercli.py:1878
@@ -3048,7 +3066,7 @@ msgstr "Registrar"
 #. for the status message.
 #: ../src/subscription_manager/gui/registergui.py:383
 msgid "Error during registration."
-msgstr ""
+msgstr "Erro durante registro."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:655
@@ -3077,15 +3095,15 @@ msgstr "Anexo de Subscrição"
 #: ../src/subscription_manager/gui/registergui.py:1049
 #, python-format
 msgid "Registering to owner: %s environment: %s"
-msgstr ""
+msgstr "Registrando ao proprietário: %s ambiente: %s"
 
 #: ../src/subscription_manager/gui/registergui.py:1071
 msgid "Unable to unregister"
-msgstr ""
+msgstr "Não é possível cancelar o registro"
 
 #: ../src/subscription_manager/gui/registergui.py:1080
 msgid "Unregistering"
-msgstr ""
+msgstr "Cancelando o registro"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:1100
@@ -5371,7 +5389,7 @@ msgstr "* Clique para Ajustar Quantidade"
 
 #: ../src/subscription_manager/gui/data/glade/register_dialog.glade.h:3
 msgid "back_button"
-msgstr ""
+msgstr "back_button"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/glade/register_dialog.glade.h:5
@@ -5497,25 +5515,27 @@ msgstr "Registrar_notebook"
 
 #: ../po/tmp_ui_links/credentials.ui.glade.h:1
 msgid "<b>Please enter your Red Hat account information:</b>"
-msgstr ""
+msgstr "<b>Por favor, insira as informações da sua conta Red Hat:</b>"
 
 #: ../po/tmp_ui_links/credentials.ui.glade.h:4
 msgid ""
 "<small>Tip: Forgot your login or password? Look it up at http://redhat.com/"
 "forgot_password</small>"
 msgstr ""
+"<small>Dica: Esqueceu seu login ou senha? Consulte http://redhat.com/"
+"forgot_password</small>"
 
 #: ../po/tmp_ui_links/credentials.ui.glade.h:5
 msgid "credentials_grid"
-msgstr ""
+msgstr "credentials_grid"
 
 #: ../po/tmp_ui_links/credentials.ui.glade.h:12
 msgid "system_name_grid"
-msgstr ""
+msgstr "system_name_grid"
 
 #: ../po/tmp_ui_links/choose_server.ui.glade.h:13
 msgid "If required, please configure your proxy before moving forward. "
-msgstr ""
+msgstr "Caso necessário, configure seu proxy antes de seguir adiante."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../po/tmp_ui_links/selectsla.ui.glade.h:2
@@ -5531,6 +5551,8 @@ msgid ""
 "Awesome OS 14, Awesome OS 14 Super Edition, Awesome Middle Ware For Awesome "
 "App Platform Awesome Developer Editition"
 msgstr ""
+"Awesome OS 14, Awesome OS 14 Super Edition, Awesome Middle Ware For Awesome "
+"App Platform Awesome Developer Editition"
 
 #: ../po/tmp_ui_links/repositories.ui.glade.h:5
 msgid "apply_button"
@@ -5541,10 +5563,13 @@ msgid ""
 "This assistant will guide you through the process of registering your system "
 "with Red Hat to receive software updates and other benefits. "
 msgstr ""
+"Este assistente o(a) guiará durante o processo de registro do seu sistema "
+"com a Red Hat para que receba as atualizações de software e outros "
+"benefícios. "
 
 #: ../po/tmp_ui_links/registration_info.ui.glade.h:3
 msgid " You will need the following to register:"
-msgstr ""
+msgstr "Você precisará do seguinte para se registrar:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../po/tmp_ui_links/registration_info.ui.glade.h:4
