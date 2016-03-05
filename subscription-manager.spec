@@ -62,7 +62,7 @@
 
 Name: subscription-manager
 Version: 1.16.8
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -577,6 +577,21 @@ fi
 %endif
 
 %changelog
+* Sat Mar 05 2016 Christopher Snyder <csnyder@redhat.com> 1.16.8-4
+- 1303768: Adds additional updated translations from zanata.
+  (csnyder@redhat.com)
+- 1312367: Progress bar needs to go away on repo update connection fail
+  (wpoteat@redhat.com)
+- 1302564: Push 'Done' box as close to center of firstboot page as possible
+  (wpoteat@redhat.com)
+- 1309553: Do not fail on check for consumer["type"]["manifest"]
+  (csnyder@redhat.com)
+- 1304427: Fixes system path to properly import from module
+  subscription_manager (csnyder@redhat.com)
+- 1311935: Stylish fixups for firstboot fixes. (alikins@redhat.com)
+- 1311935: Emits register-message instead of register-error for display of user
+  errors (csnyder@redhat.com)
+
 * Tue Feb 23 2016 Christopher Snyder <csnyder@redhat.com> 1.16.8-3
 - 1303768: Adds updated keys and translations from zanata. (csnyder@redhat.com)
 - 1303092: GUI issues in Repos and Help (wpoteat@redhat.com)
