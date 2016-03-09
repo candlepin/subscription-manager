@@ -37,8 +37,15 @@ class BaseFacts(base_service.BaseService):
                                    out_signature='a{ss}')
     @decorators.dbus_handle_exceptions
     def GetFacts(self, sender=None):
-        facts_dict = self.facts_collector.get_all()
-        cleaned = dict([(str(key), str(value)) for key, value in facts_dict.items()])
+        # Return a FactsCollection that has a FactsDict
+        collection = self.facts_collector.collect()
+
+        self.log.debug("collection=%s", collection)
+        self.log.debug("collections.data=%s", collection.data)
+        # no cache comparison yet
+
+        cleaned = dict([(str(key), str(value)) for key, value in collection.data.items()])
+
         facts_dbus_dict = dbus.Dictionary(cleaned, signature="ss")
 
         self.props._set(interface_name=constants.FACTS_DBUS_INTERFACE,

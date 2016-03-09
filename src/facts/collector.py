@@ -3,6 +3,8 @@ import logging
 import os
 import platform
 
+from rhsm.facts import collection
+
 log = logging.getLogger(__name__)
 
 
@@ -63,6 +65,11 @@ class FactsCollector(object):
         self.arch = arch or get_arch(prefix=self.prefix)
 
         self.hardware_methods = hardware_methods or []
+
+    def collect(self):
+        facts_dict = self.get_all()
+        facts_collection = collection.FactsCollection(facts_dict=facts_dict)
+        return facts_collection
 
     def get_all(self):
 
