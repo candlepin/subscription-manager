@@ -46,7 +46,7 @@ def get_arch(prefix=None):
 
 class FactsCollector(object):
     def __init__(self, arch=None, prefix=None, testing=None,
-                 hardware_methods=None, collected_hw_info=None):
+                 hardware_methods=None, collected_hw_info=None, collectors=None):
         """Base class for facts collecting classes.
 
         self._collected_hw_info will reference the passed collected_hw_info
@@ -55,6 +55,9 @@ class FactsCollector(object):
         based on facts collector from other modules/classes.
         self._collected_hw_info isn't meant to be altered as a side effect, but
         no promises."""
+        self.log = logging.getLogger(__name__ + '.' + self.__class__.__name__)
+        self.log.debug("FactsCollector init")
+
         self.allhw = {}
         self.prefix = prefix or ''
         self.testing = testing or False
@@ -65,10 +68,14 @@ class FactsCollector(object):
         self.arch = arch or get_arch(prefix=self.prefix)
 
         self.hardware_methods = hardware_methods or []
+        self.collectors = collectors or iter([])
 
     def collect(self):
+        self.log.debug("in _collect")
         facts_dict = self.get_all()
+        self.log.debug("facts_dict=%s", facts_dict)
         facts_collection = collection.FactsCollection(facts_dict=facts_dict)
+        self.log.debug("facts_collection=%s", facts_collection)
         return facts_collection
 
     def get_all(self):
@@ -87,3 +94,15 @@ class FactsCollector(object):
             all_hw_info.update(info_dict)
 
         return all_hw_info
+
+
+class CachedFactsCollector(FactsCollector):
+    def __init__(self, arch=None, prefix=None, testing=None,
+                 hardware_methods=None, collected_hw_info=None):
+        pass
+
+    def get_all(self):
+        pass
+
+    def collect(self):
+        return self.collection

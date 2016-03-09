@@ -37,6 +37,17 @@ class BaseFacts(base_service.BaseService):
                                    out_signature='a{ss}')
     @decorators.dbus_handle_exceptions
     def GetFacts(self, sender=None):
+        self.log.debug("GetFacts")
+
+        # Are we using the cache or force?
+
+        # If using the cache, load the CachedFactsCollection if possible
+
+        # if cache is not expired, load the cache
+        # if not cached.expired()
+        #     CachedCollection.collect() would just load the file from it's cache store
+        #     facts_collection = cached.collect()
+
         # Return a FactsCollection that has a FactsDict
         collection = self.facts_collector.collect()
 
