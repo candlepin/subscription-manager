@@ -30,6 +30,14 @@ class BaseFacts(base_service.BaseService):
                                                                   value=dbus.Dictionary({}, signature='ss'),
                                                                   value_signature='a{ss}',
                                                                   access='read')
+        properties.props_data['lastUpdatedTime'] = base_properties.Property(name='lastUpdatedTime',
+                                                                        value=dbus.UInt64(0),
+                                                                        value_signature='t',
+                                                                        access='read')
+        properties.props_data['cacheExpiryTime'] = base_properties.Property(name='cacheExpiryTime',
+                                                                        value=dbus.UInt64(0),
+                                                                        value_signature='t',
+                                                                        access='read')
         return properties
 
     @slip.dbus.polkit.require_auth(constants.PK_ACTION_FACTS_COLLECT)
@@ -43,25 +51,36 @@ class BaseFacts(base_service.BaseService):
 
         # If using the cache, load the CachedFactsCollection if possible
 
+        # CacheCollector?
         # if cache is not expired, load the cache
         # if not cached.expired()
+        #     CachedCollection has a FileCache (JsonFileCache for ex)
         #     CachedCollection.collect() would just load the file from it's cache store
+        #       CachedCollection.collect calls it's self.cache.read() and returns the result
         #     facts_collection = cached.collect()
 
         # Return a FactsCollection that has a FactsDict
+        # facts_collector is responsible for dealing with the cache
+
+        # changed_callback that could emit a changed signal so that
+        # we listen for the changed signal and save cache async?
         collection = self.facts_collector.collect()
 
         self.log.debug("collection=%s", collection)
         self.log.debug("collections.data=%s", collection.data)
         # no cache comparison yet
 
-        cleaned = dict([(str(key), str(value)) for key, value in collection.data.items()])
+        cleaned = dict([(str(key), str(value)) for key, value in collection])
 
         facts_dbus_dict = dbus.Dictionary(cleaned, signature="ss")
 
-        self.props._set(interface_name=constants.FACTS_DBUS_INTERFACE,
-                        property_name='facts',
-                        new_value=facts_dbus_dict)
+        props_iterable = [('facts', facts_dbus_dict),
+                          ('lastUpdatedTime', collection.collection_datetime),
+                          ('cacheExpiryTime', collection.expiry_datetime)]
+
+        self.props._set_props(interface_name=constants.FACTS_DBUS_INTERFACE,
+                              properties_iterable=props_iterable)
+
         return facts_dbus_dict
 
     # TODO: cache management

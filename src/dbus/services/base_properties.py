@@ -80,11 +80,23 @@ class BaseProperties(object):
 
         Ie, BaseProperties.set() can be exposed through the dbus.Properties 'Set()'
         method, where it will check access rights. But internal use can use _set."""
+        props = [(property_name, new_value)]
+        self._set_props(interface_name, props)
+
+    def _set_props(self, interface_name, properties_iterable):
         interface_name = dbus_utils.dbus_to_python(interface_name, str)
+
+        self._check_interface(interface_name)
+
+        for property_name, new_value in properties_iterable:
+            self._set_prop(interface_name, property_name, new_value)
+
+        self._emit_properties_changed(properties_iterable)
+
+    def _set_prop(self, interface_name, property_name, new_value):
         property_name = dbus_utils.dbus_to_python(property_name, str)
         new_value = dbus_utils.dbus_to_python(new_value)
 
-        self._check_interface(interface_name)
         self._check_prop(property_name)
 
         # FIXME/TODO: Plug in access checks and data validation
@@ -92,7 +104,6 @@ class BaseProperties(object):
         try:
             self.props_data[property_name].value = new_value
             # WARNING: if emitting a signal causes an exception...?
-            self._emit_properties_changed(property_name, new_value)
         except Exception, e:
             self.log.debug("ReadWriteProperties Exception i=%s p=%s n=%s",
                            interface_name, property_name, new_value)
@@ -160,12 +171,15 @@ class BaseProperties(object):
             self.raise_property_does_not_exist(property_name)
 
     # FIXME: likely a more idiomatic way to do this.
-    def _emit_properties_changed(self, property_name, new_value):
+    def _emit_properties_changed(self, properties_iterable):
         if not self.properties_changed_callback:
             return
 
-        changed_properties = {property_name: new_value}
+        changed_properties = {}
         invalidated_properties = []
+
+        for property_name, new_value in properties_iterable:
+            changed_properties[property_name] = new_value
 
         self.properties_changed_callback(self.interface_name,
                                          changed_properties,

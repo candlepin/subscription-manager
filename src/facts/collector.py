@@ -100,23 +100,24 @@ class FactsCollector(object):
 class CachedFactsCollector(FactsCollector):
 
     def save_to_cache(self, facts_collection):
+        # Create a new FactsCollection with new timestamp
         cached_facts = collection.FactsCollection.from_facts_collection(facts_collection)
         cached_facts.save()
 
     def collect(self):
-        cached_facts = collection.FactsCollection.from_cache_file(self.cache_file)
-        fresh_facts = collection.FactsCollection()
+        cached_collection = collection.FactsCollection.from_cache_file(self.cache_file)
+        fresh_collection = collection.FactsCollection()
 
         # not really '==', but more of a 'close-enough-to-equals', ie
         # the cache isn't expired, so don't bother looking any closer.
         #
         #
-        if cached_facts == fresh_facts:
-            return cached_facts
+        if cached_collection == fresh_collection:
+            return cached_collection
 
         # replace with an iterator
-        fresh_facts.data = self.get_all()
+        fresh_collection.data = self.get_all()
         # Most of the time, we still haven't collected any facts yet.
         # Until we iterate over fresh_facts, does it's iter start collection
-        return fresh_facts
+        return fresh_collection
         #return self.collection
