@@ -1,9 +1,7 @@
 #!/bin/bash
 
 FACTS="com.redhat.Subscriptions1.Facts"
-FACTS_PATH="/com/redhat/Subscriptions1/Facts"
-FACTS_USER_PATH="${FACTS_PATH}/User"
-FACTS_ROOT_PATH="${FACTS_PATH}/Root"
+FACTS_PATH="/com/redhat/Subscriptions1/Facts/Host"
 FACTS_INTF="com.redhat.Subscriptions1.Facts"
 PROPS_INTF="org.freedesktop.DBus.Properties"
 INTRO_INTF="org.freedesktop.DBus.Introspectable"
@@ -37,14 +35,12 @@ per_fact_object () {
     dbus_call Get ss "${FACTS_INTF}" "some_prop_that_doesnt_exist"
 
     INTF="${FACTS_INTF}"
-    dbus_call Return42
     dbus_call GetFacts
 
     INTF="${INTRO_INTF}"
     dbus_call Introspect
 }
 
-per_fact_object "${FACTS_USER_PATH}"
-per_fact_object "${FACTS_ROOT_PATH}"
+per_fact_object "${FACTS_PATH}"
 
 #CALL_ARGS="${SERVICE} ${OBJECT_PATH} ${INTF}"

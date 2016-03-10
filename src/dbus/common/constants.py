@@ -24,6 +24,10 @@ DBUS_INTERFACE = SERVICE_NAME
 # /com/redhat/Subscriptions1
 ROOT_DBUS_PATH = '/' + TOP_LEVEL_DOMAIN + '/' + DOMAIN_NAME + '/' + SERVICE_SUB_DOMAIN_NAME_VER
 
+SERVICE_VAR_PATH = '/var/lib/rhsm/cache'
+
+DBUS_SERVICE_CACHE_PATH = SERVICE_VAR_PATH + '/' + 'dbus'
+
 # Default base of policy kit action ids
 
 # com.redhat.Subscriptions1

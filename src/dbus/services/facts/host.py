@@ -2,10 +2,16 @@
 import logging
 
 from rhsm.facts import host_collector
+
+from rhsm.dbus.services.facts import cache
 from rhsm.dbus.services.facts import constants
 from rhsm.dbus.services.facts import base_facts
 
 log = logging.getLogger(__name__)
+
+
+class FactsHostCacheFile(cache.JsonFileCache):
+    CACHE_FILE = constants.FACTS_HOST_CACHE_FILE
 
 
 class FactsHost(base_facts.BaseFacts):
@@ -20,4 +26,6 @@ class FactsHost(base_facts.BaseFacts):
 
     def __init__(self, conn=None, object_path=None, bus_name=None):
         super(FactsHost, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
-        self.facts_collector = host_collector.HostCollector()
+
+        host_cache = FactsHostCacheFile()
+        self.facts_collector = host_collector.HostCollector(cache=host_cache)
