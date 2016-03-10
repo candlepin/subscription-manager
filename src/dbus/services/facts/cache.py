@@ -17,8 +17,17 @@ import os
 
 # FIXME: We can likely dump this now
 from rhsm import ourjson as json
+from rhsm.dbus.common import exceptions
 
 log = logging.getLogger(__name__)
+
+
+class CacheError(exceptions.Error):
+    pass
+
+
+class CacheReadError(CacheError):
+    pass
 
 
 class Cache(object):
@@ -36,7 +45,9 @@ class Cache(object):
 
     @property
     def valid(self):
-        return self.store.valid
+        if self.exists and self.timestamp:
+            return True
+        return False
 
     def write(self, data):
         self.store.write(data)
@@ -81,8 +92,9 @@ class FileStore(Store):
                 return fd.read()
         except EnvironmentError as e:
             log.exception(e)
-            log.error('Unable to read cache store at %s: %s', self.path, e)
+            msg = 'Unable to read cache store at %s: %s' % (self.path, e)
             # FIXME: raise a specific useful exception
+            raise CacheReadError(msg)
 
     def write(self, data):
         try:
@@ -99,9 +111,12 @@ class FileStore(Store):
         except EnvironmentError as e:
             log.debug('Unable to delete cache store at %s: %s', self.path, e)
 
-    # TODO: write properties
+    # TODO: write properties (ie, set mtime on cache file to match the collection time)
     @property
     def timestamp(self):
+        if not self.exists:
+            return None
+
         try:
             return datetime.fromtimestamp(os.stat(self.path).st_mtime)
         except Exception:
@@ -120,12 +135,12 @@ class FileStore(Store):
 class FileCache(Cache):
     CACHE_FILE = None
 
-    def __init__(self, file_store):
+    def __init__(self, file_store=None):
         self.store = file_store or FileStore(path=self.CACHE_FILE)
 
 
 class JsonFileCache(FileCache):
-    def __init__(self, file_store):
+    def __init__(self, file_store=None):
         super(JsonFileCache, self).__init__(file_store)
         self._json_encoder = json.JSONEncoder(default=json.encode)
         self._json_decoder = json.JSONDecoder()
@@ -133,11 +148,12 @@ class JsonFileCache(FileCache):
     def write(self, data):
         self.store.write(self._json_encode(data))
 
+    # TODO: add CacheReadError / CacheDecodeError ?
     def read(self):
         return self._json_decode(self.store.read())
 
     def _json_encode(self, data):
-        return self._json_encoder(data)
+        return self._json_encoder.encode(data)
 
     def _json_decode(self, json_string):
         return self._json_decoder.decode(json_string)

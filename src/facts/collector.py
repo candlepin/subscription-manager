@@ -44,6 +44,7 @@ def get_arch(prefix=None):
 # An empty FactsCollector should just return an empty dict on get_all()
 
 
+# FIXME: ditch most of these optional args
 class FactsCollector(object):
     def __init__(self, arch=None, prefix=None, testing=None,
                  hardware_methods=None, collected_hw_info=None, collectors=None):
@@ -95,29 +96,3 @@ class FactsCollector(object):
             all_hw_info.update(info_dict)
 
         return all_hw_info
-
-
-class CachedFactsCollector(FactsCollector):
-
-    def save_to_cache(self, facts_collection):
-        # Create a new FactsCollection with new timestamp
-        cached_facts = collection.FactsCollection.from_facts_collection(facts_collection)
-        cached_facts.save()
-
-    def collect(self):
-        cached_collection = collection.FactsCollection.from_cache_file(self.cache_file)
-        fresh_collection = collection.FactsCollection()
-
-        # not really '==', but more of a 'close-enough-to-equals', ie
-        # the cache isn't expired, so don't bother looking any closer.
-        #
-        #
-        if cached_collection == fresh_collection:
-            return cached_collection
-
-        # replace with an iterator
-        fresh_collection.data = self.get_all()
-        # Most of the time, we still haven't collected any facts yet.
-        # Until we iterate over fresh_facts, does it's iter start collection
-        return fresh_collection
-        #return self.collection

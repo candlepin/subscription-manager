@@ -69,6 +69,11 @@ class BaseFacts(base_service.BaseService):
         self.log.debug("collection=%s", collection)
         self.log.debug("collections.data=%s", collection.data)
         # no cache comparison yet
+        for i in collection:
+            self.log.debug("collection i=%s", i)
+
+        for i in collection.data:
+            self.log.debug("collection.data i=%s", i)
 
         cleaned = dict([(str(key), str(value)) for key, value in collection])
 

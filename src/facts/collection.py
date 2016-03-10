@@ -75,11 +75,30 @@ class FactsCollection(object):
         # Or just assume we'll get a datetime.timedelta
         self.cache_lifetime = cache_lifetime or 0
 
+    @classmethod
+    def from_facts_collection(cls, facts_collection):
+        """Create a FactsCollection with the data from facts_collection, but new timestamps.
+
+        ie, a copy(), more or less."""
+        fc = cls()
+        fc.data = facts_collection.data
+        return fc
+
+    @classmethod
+    def from_cache(cls, cache, cache_lifetime=None):
+        """Create a FactsCollection from a Cache object.
+
+        Any errors reading the Cache can raise CacheError exceptions."""
+        return cls(cache.read(), cache.timestamp, cache_lifetime)
+
     @property
     def expiry_datetime(self):
         return self.collection_datetime + datetime.timedelta(seconds=self.cache_lifetime)
 
     def __eq__(self, other):
+        if other is None:
+            return False
+
         if not hasattr(other, 'data'):
             return False
 
@@ -114,6 +133,9 @@ class FactsCollection(object):
     # just_born_facts_set_a >= cached_valid_facts_set_a        True
 
     def __ne__(self, other):
+        if other is None:
+            return True
+
         # If current time isn't within either collections valid lifetime, they are
         # not equals
         if any(self.expired(), other.expired()):

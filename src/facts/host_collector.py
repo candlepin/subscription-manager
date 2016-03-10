@@ -1,11 +1,12 @@
-from rhsm.facts import collector
 from rhsm.facts import hwprobe
 from rhsm.facts import cleanup
 from rhsm.facts import virt
 from rhsm.facts import firmware_info
 
+from rhsm.dbus.services.facts import cached_collector
 
-class HostCollector(collector.CachedFactsCollector):
+
+class HostCollector(cached_collector.CachedFactsCollector):
     """Collect facts for a host system.
 
     'host' in this case means approx something running
@@ -21,10 +22,6 @@ class HostCollector(collector.CachedFactsCollector):
 
 
     Facts collected include DMI info and virt status and virt.uuid."""
-
-    def __init__(self, prefix=None, testing=None, collected_hw_info=None):
-        super(HostCollector, self).__init__(prefix=prefix, testing=testing,
-                                         collected_hw_info=collected_hw_info)
 
     def get_all(self):
         host_facts = {}
