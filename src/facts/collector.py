@@ -74,10 +74,16 @@ class FactsCollector(object):
     def collect(self):
         """Return a FactsCollection iterable."""
         self.log.debug("in _collect")
-        facts_dict = self.get_all()
+
+        facts_dict = collection.FactsDict()
+        facts_dict.update(self.get_all())
+
         self.log.debug("facts_dict=%s", facts_dict)
+
         facts_collection = collection.FactsCollection(facts_dict=facts_dict)
+
         self.log.debug("facts_collection=%s", facts_collection)
+
         return facts_collection
 
     def get_all(self):

@@ -68,6 +68,7 @@ class BaseFacts(base_service.BaseService):
 
         self.log.debug("collection=%s", collection)
         self.log.debug("collections.data=%s", collection.data)
+        self.log.debug("collections.data type=%s", type(collection.data))
         # no cache comparison yet
         for i in collection:
             self.log.debug("collection i=%s", i)
@@ -75,7 +76,7 @@ class BaseFacts(base_service.BaseService):
         for i in collection.data:
             self.log.debug("collection.data i=%s", i)
 
-        cleaned = dict([(str(key), str(value)) for key, value in collection])
+        cleaned = dict([(str(key), str(value)) for key, value in collection.data])
 
         facts_dbus_dict = dbus.Dictionary(cleaned, signature="ss")
 
