@@ -71,6 +71,7 @@ class FactsCollector(object):
         self.collectors = collectors or iter([])
 
     def collect(self):
+        """Return a FactsCollection iterable."""
         self.log.debug("in _collect")
         facts_dict = self.get_all()
         self.log.debug("facts_dict=%s", facts_dict)
@@ -97,12 +98,25 @@ class FactsCollector(object):
 
 
 class CachedFactsCollector(FactsCollector):
-    def __init__(self, arch=None, prefix=None, testing=None,
-                 hardware_methods=None, collected_hw_info=None):
-        pass
 
-    def get_all(self):
-        pass
+    def save_to_cache(self, facts_collection):
+        cached_facts = collection.FactsCollection.from_facts_collection(facts_collection)
+        cached_facts.save()
 
     def collect(self):
-        return self.collection
+        cached_facts = collection.FactsCollection.from_cache_file(self.cache_file)
+        fresh_facts = collection.FactsCollection()
+
+        # not really '==', but more of a 'close-enough-to-equals', ie
+        # the cache isn't expired, so don't bother looking any closer.
+        #
+        #
+        if cached_facts == fresh_facts:
+            return cached_facts
+
+        # replace with an iterator
+        fresh_facts.data = self.get_all()
+        # Most of the time, we still haven't collected any facts yet.
+        # Until we iterate over fresh_facts, does it's iter start collection
+        return fresh_facts
+        #return self.collection

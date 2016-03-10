@@ -5,7 +5,7 @@ from rhsm.facts import virt
 from rhsm.facts import firmware_info
 
 
-class HostCollector(collector.FactsCollector):
+class HostCollector(collector.CachedFactsCollector):
     """Collect facts for a host system.
 
     'host' in this case means approx something running
