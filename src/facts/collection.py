@@ -46,7 +46,8 @@ class FactsDict(collections.MutableMapping):
         del self.data[key]
 
     def __iter__(self):
-        return itertools.chain(self.data, self.gray_data)
+        return itertools.chain(self.data.iteritems(),
+                               self.gray_data.iteritems())
         #return iter(self.data)
 
     def __len__(self):
@@ -88,7 +89,9 @@ class FactsCollection(object):
             return False
 
         return True
-        return self.data == other.data
+
+    def __iter__(self):
+        return iter(self.data)
 
     # cached_valid_facts_set_b = ()
     # cached_valid_facts_set_a
