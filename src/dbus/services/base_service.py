@@ -51,7 +51,7 @@ class BaseService(slip.dbus.service.Object):
 
     @property
     def props(self):
-        self.log.debug("accessing props @property")
+        # self.log.debug("accessing props @property")
         return self._props
 
     @dbus.service.signal(dbus_interface=constants.DBUS_INTERFACE,
@@ -69,7 +69,7 @@ class BaseService(slip.dbus.service.Object):
                         path_keyword='object_path', connection_keyword='connection')
     def Introspect(self, object_path, connection):
         ret = super(BaseService, self).Introspect(object_path, connection)
-        self.log.debug("super.Introspect ret=%s", ret)
+        #self.log.debug("super.Introspect ret=%s", ret)
         bloop = self.props.add_introspection_xml(ret)
         return bloop
 

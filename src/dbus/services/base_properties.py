@@ -134,13 +134,13 @@ class BaseProperties(object):
         for prop_info in self.props_data.values():
             #p_t = dbus_utils._type_map(type(prop_value))
             # FIXME: all strings atm
-            self.log.debug("prop_info=%s", prop_info)
+            # self.log.debug("prop_info=%s", prop_info)
             props_dict = dict(p_t=prop_info.value_signature,
                               p_name=prop_info.name,
                               p_access=self.access_mask(prop_info.access))
             props_list.append(props_dict)
 
-        self.log.debug("t_i_p=%s", props_list)
+        # self.log.debug("t_i_p=%s", props_list)
         return props_list
 
     # FIXME: THis is a read only props class, ReadWriteProperties needs

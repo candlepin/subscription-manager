@@ -28,9 +28,6 @@ class CleanupCollector(collector.FactsCollector):
         return True
 
     def replace_socket_count_with_dmi(self):
-        log.debug("collected_hw_info=%s", self._collected_hw_info)
-        log.debug("id=%s", id(self._collected_hw_info))
-
         cleanup_info = {}
         # cpu topology reporting on xen dom0 machines is wrong. So
         # if we are a xen dom0, and we found socket info in dmiinfo,

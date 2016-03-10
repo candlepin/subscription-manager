@@ -14,7 +14,9 @@
 import collections
 import datetime
 import functools
-import itertools
+import logging
+
+log = logging.getLogger(__name__)
 
 
 # TODO: Likely a bit much for this case
@@ -22,49 +24,53 @@ import itertools
 class FactsDict(collections.MutableMapping):
     """A dict for facts that ignores items in 'graylist' on compares."""
 
-    graylist = ['cpu.cpu_mhz', 'lscpu.cpu_mhz']
+    graylist = set(['cpu.cpu_mhz', 'lscpu.cpu_mhz'])
 
     def __init__(self, *args, **kwargs):
         super(FactsDict, self).__init__(*args, **kwargs)
         self.data = {}
-        self.gray_data = {}
-
-    def __missing__(self, key):
-        # If key is not found in data, try self.gray_data, if still missing key error
-        return self.gray_data[key]
 
     def __getitem__(self, key):
         return self.data[key]
 
     def __setitem__(self, key, value):
-        if key in self.graylist:
-            self.gray_data[key] = value
-        else:
-            self.data[key] = value
+        self.data[key] = value
 
     def __delitem__(self, key):
         del self.data[key]
 
     def __iter__(self):
-        return itertools.chain(self.data,
-                               self.gray_data)
-        #return iter(self.data)
+        return iter(self.data)
 
     def __len__(self):
         return len(self.data)
 
     def __eq__(self, other):
         """Compares all of the items in self.data, except it ignores keys in self.graylist."""
-        try:
-            return dict(self.data.items()) == dict(other.data.items())
-        except AttributeError:
-            return False
+        if not isinstance(other, FactsDict):
+            return NotImplemented
+
+        log.debug("FactsDict _eq_ %s == %s", self, other)
+        keys_self = set(self.data).difference(self.graylist)
+        keys_other = set(other.data).difference(self.graylist)
+        if keys_self == keys_other:
+            if all(self.data[k] == other.data[k] for k in keys_self):
+                log.debug("FactsDict %s == %s is true?", self, other)
+                return True
+
+        return False
 
     # Maybe total_ordering is a bit overkill for just a custom compare
     def __lt__(self, other):
-        return len(self.data) < len(other.data)
+        return len(self) < len(other)
 
 # Support a @from_previous_collection could also populate a list/map of changed facts...
+
+
+def compare_with_graylist(dict_a, dict_b, graylist):
+    ka = set(dict_a).difference(graylist)
+    kb = set(dict_b).difference(graylist)
+    return ka == kb and all(dict_a[k] == dict_b[k] for k in ka)
 
 
 @functools.total_ordering
@@ -74,6 +80,13 @@ class FactsCollection(object):
         self.collection_datetime = collection_datetime or datetime.datetime.utcnow()
         # Or just assume we'll get a datetime.timedelta
         self.cache_lifetime = cache_lifetime or 0
+        log.debug("init %s", repr(self.collection_datetime))
+        log.debug(self)
+
+    def __repr__(self):
+        buf = "%s(facts_dict=%s, collection_datetime=%s, cache_lifetime=%s)" % \
+            (self.__class__.__name__, self.collection_datetime, self.cache_lifetime)
+        return buf
 
     @classmethod
     def from_facts_collection(cls, facts_collection):
@@ -82,6 +95,7 @@ class FactsCollection(object):
         ie, a copy(), more or less."""
         fc = cls()
         fc.data.update(facts_collection.data)
+        log.debug("FC.from_facts_collection fc=%s", fc)
         return fc
 
     @classmethod
@@ -89,13 +103,16 @@ class FactsCollection(object):
         """Create a FactsCollection from a Cache object.
 
         Any errors reading the Cache can raise CacheError exceptions."""
+        log.debug("FC.from_cache")
         return cls(cache.read(), cache.timestamp, cache_lifetime)
 
     @property
     def expiry_datetime(self):
+        #log.debug("expiry_datetime")
         return self.collection_datetime + datetime.timedelta(seconds=self.cache_lifetime)
 
     def __eq__(self, other):
+        log.debug("FactsCollection.__eq__ comparing %s == %s", self, other)
         if other is None:
             return False
 
@@ -104,7 +121,8 @@ class FactsCollection(object):
 
         # If current time isn't within either collections valid lifetime, they are
         # not equals
-        if any(self.expired(), other.expired()):
+        if any([self.expired(), other.expired()]):
+            log.debug("FactsCollection cache expire for %s and %s", self, other)
             return False
 
         return True
@@ -134,28 +152,40 @@ class FactsCollection(object):
     # just_born_facts_set_a >= cached_valid_facts_set_a        True
 
     def __ne__(self, other):
+        log.debug("__ne__ %s != %s", self, other)
         if other is None:
             return True
 
         # If current time isn't within either collections valid lifetime, they are
         # not equals
         if any(self.expired(), other.expired()):
+            log.debug("Not ne, expired...")
             return False
 
         return self.data != other.data
 
     def expired(self, at_time=None):
         at_time = at_time or datetime.datetime.utcnow()
-        return self.expiry_datetime > at_time
+        log.debug("Self=%s", self)
+        log.debug("FC    expire check expdt=%s at_time=%s", repr(self.expiry_datetime), repr(at_time))
+        log.debug("FC    expire check expdt=%s at_time=%s", self.expiry_datetime, at_time)
+        log.debug("FC    expire check exp < at_time = %s", self.expiry_datetime < at_time)
+        return self.expiry_datetime < at_time
 
     def __gt__(self, other):
         # type check?
         # expiring/expired at later date then other is greater
+        log.debug("_gt_ %s > %s", self, other)
         if self == other:
             return False
-        return self.expiry_datetime > other.expiry_datetime
+        ret = self.expiry_datetime > other.expiry_datetime
+        log.debug("_gt_ %s > %s == %s", self.expiry_datetime, other.expiry_datetime)
+        return ret
 
     def __gte__(self, other):
+        log.debug("_gte_ %s >= %s", self, other)
         if self == other:
             return True
-        return self.expiry_datetime >= other.expiry_datetime
+        ret = self.expiry_datetime >= other.expiry_datetime
+        log.debug("_gte_ %s >= %s == %s", self.expiry_datetime, other.expiry_datetime)
+        return ret
