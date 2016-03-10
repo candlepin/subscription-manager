@@ -27,6 +27,7 @@ BIN_FILES := $(BIN_DIR)/subscription-manager $(BIN_DIR)/subscription-manager-gui
 
 # Where various bits of code live in the git repo
 BASE_SRC_DIR := src
+BASE_RHSM_SRC_DIR := $(BASE_SRC_DIR)/$(INSTALL_MODULE)
 SRC_DIR := $(BASE_SRC_DIR)/subscription_manager
 RCT_SRC_DIR := $(BASE_SRC_DIR)/rct
 RD_SRC_DIR := $(BASE_SRC_DIR)/rhsm_debug
@@ -36,11 +37,11 @@ EXAMPLE_PLUGINS_SRC_DIR := example-plugins/
 CONTENT_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/content_plugins/
 ANACONDA_ADDON_SRC_DIR := $(BASE_SRC_DIR)/initial-setup
 ANACONDA_ADDON_MODULE_SRC_DIR := $(ANACONDA_ADDON_SRC_DIR)/$(ANACONDA_ADDON_NAME)
-DBUS_SRC_DIR := $(BASE_SRC_DIR)/dbus
+DBUS_SRC_DIR := $(BASE_RHSM_SRC_DIR)/dbus
 DBUS_SERVICES_SRC_DIR = $(DBUS_SRC_DIR)/services
 DBUS_COMMON_SRC_DIR = $(DBUS_SRC_DIR)/common
 DBUS_CLIENTS_SRC_DIR = $(DBUS_SRC_DIR)/clients
-FACTS_SRC_DIR := $(BASE_SRC_DIR)/facts
+FACTS_SRC_DIR := $(BASE_RHSM_SRC_DIR)/facts
 
 # dirs we install to
 SUBMAN_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/$(PKGNAME)
