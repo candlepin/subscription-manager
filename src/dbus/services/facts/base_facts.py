@@ -1,4 +1,5 @@
 import logging
+import time
 
 import dbus
 import slip.dbus
@@ -69,20 +70,14 @@ class BaseFacts(base_service.BaseService):
         self.log.debug("collection=%s", collection)
         self.log.debug("collections.data=%s", collection.data)
         self.log.debug("collections.data type=%s", type(collection.data))
-        # no cache comparison yet
-        for i in collection:
-            self.log.debug("collection i=%s", i)
 
-        for i in collection.data:
-            self.log.debug("collection.data i=%s", i)
-
-        cleaned = dict([(str(key), str(value)) for key, value in collection.data])
+        cleaned = dict([(str(key), str(value)) for key, value in collection.data.items()])
 
         facts_dbus_dict = dbus.Dictionary(cleaned, signature="ss")
 
         props_iterable = [('facts', facts_dbus_dict),
-                          ('lastUpdatedTime', collection.collection_datetime),
-                          ('cacheExpiryTime', collection.expiry_datetime)]
+                          ('lastUpdatedTime', time.mktime(collection.collection_datetime.timetuple())),
+                          ('cacheExpiryTime', time.mktime(collection.expiry_datetime.timetuple()))]
 
         self.props._set_props(interface_name=constants.FACTS_DBUS_INTERFACE,
                               properties_iterable=props_iterable)

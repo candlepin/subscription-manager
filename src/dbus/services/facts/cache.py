@@ -146,10 +146,12 @@ class JsonFileCache(FileCache):
         self._json_decoder = json.JSONDecoder()
 
     def write(self, data):
+        log.debug("writing json file cache to %s", self.store.path)
         self.store.write(self._json_encode(data))
 
     # TODO: add CacheReadError / CacheDecodeError ?
     def read(self):
+        log.debug("Reading json file cache from %s", self.store.path)
         return self._json_decode(self.store.read())
 
     def _json_encode(self, data):

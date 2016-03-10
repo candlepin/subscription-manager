@@ -23,10 +23,12 @@ class CachedFactsCollector(collector.FactsCollector):
     def save_to_cache(self, facts_collection):
         # Create a new FactsCollection with new timestamp
         cached_facts = collection.FactsCollection.from_facts_collection(facts_collection)
-        self.cache.write(cached_facts.data)
+        log.debug("save_to_cache facts_collection=%s", cached_facts)
+        self.cache.write(dict(cached_facts.data))
 
     def collect(self):
-        fresh_collection = collection.FactsCollection()
+        log.debug("duration=%s", constants.FACTS_HOST_CACHE_DURATION)
+        fresh_collection = collection.FactsCollection(cache_lifetime=constants.FACTS_HOST_CACHE_DURATION)
 
         try:
             cached_collection = collection.FactsCollection.from_cache(self.cache,
@@ -40,6 +42,7 @@ class CachedFactsCollector(collector.FactsCollector):
         #
         #
         # Should be able to compare None == facts_collection
+        log.debug("cached_collection == fresh_collection: %s", cached_collection == fresh_collection)
         if cached_collection == fresh_collection:
             return cached_collection
 
