@@ -46,8 +46,8 @@ class FactsDict(collections.MutableMapping):
         del self.data[key]
 
     def __iter__(self):
-        return itertools.chain(self.data.iteritems(),
-                               self.gray_data.iteritems())
+        return itertools.chain(self.data,
+                               self.gray_data)
         #return iter(self.data)
 
     def __len__(self):
@@ -81,7 +81,7 @@ class FactsCollection(object):
 
         ie, a copy(), more or less."""
         fc = cls()
-        fc.data = facts_collection.data
+        fc.data.update(facts_collection.data)
         return fc
 
     @classmethod
@@ -110,7 +110,8 @@ class FactsCollection(object):
         return True
 
     def __iter__(self):
-        return iter(self.data)
+        return self.data
+        #return iter(self.data)
 
     # cached_valid_facts_set_b = ()
     # cached_valid_facts_set_a

@@ -44,7 +44,9 @@ class CachedFactsCollector(collector.FactsCollector):
             return cached_collection
 
         # replace with an iterator
-        fresh_collection.data = self.get_all()
+        facts_dict = collection.FactsDict()
+        facts_dict.update(self.get_all())
+        fresh_collection.data = facts_dict
         # Most of the time, we still haven't collected any facts yet.
         # Until we iterate over fresh_facts, does it's iter start collection
 
