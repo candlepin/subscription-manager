@@ -13,10 +13,10 @@
 
 import datetime
 import logging
+import json
 import os
 
 # FIXME: We can likely dump this now
-from rhsm import ourjson as json
 from rhsm.dbus.common import exceptions
 
 log = logging.getLogger(__name__)
@@ -142,7 +142,7 @@ class FileCache(Cache):
 class JsonFileCache(FileCache):
     def __init__(self, file_store=None):
         super(JsonFileCache, self).__init__(file_store)
-        self._json_encoder = json.JSONEncoder(default=json.encode)
+        self._json_encoder = json.JSONEncoder(default=self.default_encode)
         self._json_decoder = json.JSONDecoder()
 
     def write(self, data):
@@ -159,3 +159,8 @@ class JsonFileCache(FileCache):
 
     def _json_decode(self, json_string):
         return self._json_decoder.decode(json_string)
+
+    def default_encode(self, obj):
+        if isinstance(obj, set):
+            return list(obj)
+        raise TypeError(repr(obj) + " is not JSON serializable")
