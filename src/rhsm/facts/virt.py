@@ -17,53 +17,15 @@
 
 import gettext
 import logging
-import subprocess
 
 from rhsm.facts import collector
+
+# For python2.6 that doesn't have subprocess.check_output
+from rhsm.compat.subprocess_check_output import check_output as compat_check_output
 
 log = logging.getLogger(__name__)
 
 _ = gettext.gettext
-
-
-# TODO/FIXME: This can go away, or at the very least, move
-#             to a utility module
-def get_output(cmd):
-    log.debug("Running '%s'" % cmd)
-    process = subprocess.Popen([cmd],
-                               stdout=subprocess.PIPE,
-                               stderr=subprocess.PIPE)
-    (std_output, std_error) = process.communicate()
-
-    log.debug("%s stdout: %s" % (cmd, std_output))
-    log.debug("%s stderr: %s" % (cmd, std_error))
-
-    output = std_output.strip()
-
-    returncode = process.poll()
-    if returncode:
-        raise CalledProcessError(returncode, cmd,
-                                 output=output)
-
-    return output
-
-
-# FIXME: ditto, move or remove
-# Exception classes used by this module.
-# from later versions of subprocess, but not there on 2.4, so include our version
-class CalledProcessError(Exception):
-    """This exception is raised when a process run by check_call() or
-    check_output() returns a non-zero exit status.
-    The exit status will be stored in the returncode attribute;
-    check_output() will also store the output in the output attribute.
-    """
-    def __init__(self, returncode, cmd, output=None):
-        self.returncode = returncode
-        self.cmd = cmd
-        self.output = output
-
-    def __str__(self):
-        return "Command '%s' returned non-zero exit status %d" % (self.cmd, self.returncode)
 
 
 class VirtWhatCollector(collector.FactsCollector):
@@ -75,7 +37,7 @@ class VirtWhatCollector(collector.FactsCollector):
         virt_dict = {}
 
         try:
-            host_type = get_output('virt-what')
+            host_type = compat_check_output('virt-what')
             # BZ1018807 xen can report xen and xen-hvm.
             # Force a single line
             host_type = ", ".join(host_type.splitlines())
