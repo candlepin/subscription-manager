@@ -7,16 +7,23 @@ PYTHON_SITELIB ?= usr/lib/$(PYTHON_VER)/site-packages
 PYTHON_SITELIB64 ?= usr/lib64/$(PYTHON_VER)/site-packages
 
 INSTALL_DIR = usr/share
-INSTALL_MODULE = rhsm
+RCT_MODULE = rct
+RHSM_DEBUD_MODULE = rhsm_debug
+RHSM_MODULE = rhsm
+RHSMLIB_MODULE = rhsmlib
+SUBMAN_MODULE = subscription_manager
+
+
 PKGNAME = subscription_manager
 ANACONDA_ADDON_NAME = com_redhat_subscription_manager
 
 # where most of our python modules live. Note this is not on
 # the default python system path. If you are importing modules from here, and
 # you can't commit to this repo, you should feel bad and stop doing that.
-PYTHON_INST_DIR = $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/$(PKGNAME)
+USR_SHARE_PYTHON_INST_DIR = $(PREFIX)/$(INSTALL_DIR)/$(RHSM_MODULE)
 
-RHSM_INSTALL_DIR ?= $(PREFIX)/$(PYTHON_SITELIB64)/$(INSTALL_MODULE)
+PYTHON_SITE_PACKAGES_DIR ?= $(PREFIX)/$(PYTHON_SITELIB64)
+
 
 OS = $(shell lsb_release -i | awk '{ print $$3 }' | awk -F. '{ print $$1}')
 OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
@@ -29,8 +36,9 @@ BIN_FILES := $(BIN_DIR)/subscription-manager $(BIN_DIR)/subscription-manager-gui
 
 # Where various bits of code live in the git repo
 BASE_SRC_DIR := src
-BASE_RHSM_SRC_DIR := $(BASE_SRC_DIR)/$(INSTALL_MODULE)
-SRC_DIR := $(BASE_SRC_DIR)/subscription_manager
+RHSMLIB_SRC_DIR := $(BASE_SRC_DIR)/$(RHSMLIB_MODULE)
+RHSM_SERVICES_SRC_DIR := $(RHSMLIB_SRC_DIR)
+SUBMAN_SRC_DIR := $(BASE_SRC_DIR)/$(SUBMAN_MODULE)
 RCT_SRC_DIR := $(BASE_SRC_DIR)/rct
 RD_SRC_DIR := $(BASE_SRC_DIR)/rhsm_debug
 RHSM_ICON_SRC_DIR := $(BASE_SRC_DIR)/rhsm_icon
@@ -39,35 +47,38 @@ EXAMPLE_PLUGINS_SRC_DIR := example-plugins/
 CONTENT_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/content_plugins/
 ANACONDA_ADDON_SRC_DIR := $(BASE_SRC_DIR)/initial-setup
 ANACONDA_ADDON_MODULE_SRC_DIR := $(ANACONDA_ADDON_SRC_DIR)/$(ANACONDA_ADDON_NAME)
-DBUS_SRC_DIR := $(BASE_RHSM_SRC_DIR)/dbus
+DBUS_SRC_DIR := $(RHSM_SERVICES_SRC_DIR)/dbus
 DBUS_SERVICES_SRC_DIR = $(DBUS_SRC_DIR)/services
 DBUS_COMMON_SRC_DIR = $(DBUS_SRC_DIR)/common
 DBUS_CLIENTS_SRC_DIR = $(DBUS_SRC_DIR)/clients
-FACTS_SRC_DIR := $(BASE_RHSM_SRC_DIR)/facts
-COMPAT_SRC_DIR := $(BASE_RHSM_SRC_DIR)/compat
+FACTS_SRC_DIR := $(RHSMLIB_SRC_DIR)/facts
+COMPAT_SRC_DIR := $(RHSMLIB_SRC_DIR)/compat
 
 # dirs we install to
-SUBMAN_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/$(PKGNAME)
+RHSMLIB_INST_DIR ?= $(PYTHON_SITE_PACKAGES_DIR)/$(RHSMLIB_MODULE)
+SUBMAN_INST_DIR := $(USR_SHARE_PYTHON_INST_DIR)/$(SUBMAN_MODULE)
+RCT_INST_DIR := $(USR_SHARE_PYTHON_INST_DIR)/rct
+RD_INST_DIR := $(USR_SHARE_PYTHON_INST_DIR)/rhsm_debug
+RHSM_SERVICES_INST_DIR := $(RHSMLIB_INST_DIR)
 SYSTEMD_INST_DIR := $(PREFIX)/usr/lib/systemd/system
 RHSM_PLUGIN_DIR := $(PREFIX)/usr/share/rhsm-plugins/
 RHSM_PLUGIN_CONF_DIR := $(PREFIX)/etc/rhsm/pluginconf.d/
 ANACONDA_ADDON_INST_DIR := $(PREFIX)/usr/share/anaconda/addons
 INITIAL_SETUP_INST_DIR := $(ANACONDA_ADDON_INST_DIR)/$(ANACONDA_ADDON_NAME)
-RCT_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rct
-RD_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rhsm_debug
+
 RHSM_LOCALE_DIR := $(PREFIX)/$(INSTALL_DIR)/locale
-# rhsm modules go to lib64/ and we want to be a subpackage...
-DBUS_INSTALL_DIR := $(RHSM_INSTALL_DIR)/dbus
-DBUS_SERVICES_INSTALL_DIR := $(DBUS_INSTALL_DIR)/services
-DBUS_CLIENTS_INSTALL_DIR := $(DBUS_INSTALL_DIR)/clients
-DBUS_COMMON_INSTALL_DIR := $(DBUS_INSTALL_DIR)/common
-POLKIT_INSTALL_DIR := $(PREFIX)/$(INSTALL_DIR)/polkit-1
-POLKIT_ACTIONS_INSTALL_DIR := $(POLKIT_INSTALL_DIR)/actions
+DBUS_INST_DIR := $(RHSM_SERVICES_INST_DIR)/dbus
+DBUS_SERVICES_INST_DIR := $(DBUS_INST_DIR)/services
+DBUS_CLIENTS_INST_DIR := $(DBUS_INST_DIR)/clients
+DBUS_COMMON_INST_DIR := $(DBUS_INST_DIR)/common
+
+POLKIT_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/polkit-1
+POLKIT_ACTIONS_INST_DIR := $(POLKIT_INST_DIR)/actions
 
 # facts package
-FACTS_INSTALL_DIR := $(RHSM_INSTALL_DIR)/facts
+FACTS_INST_DIR := $(RHSMLIB_INST_DIR)/facts
 # compat package
-COMPAT_INSTALL_DIR := $(RHSM_INSTALL_DIR)/compat
+COMPAT_INST_DIR := $(RHSMLIB_INST_DIR)/compat
 
 # ui builder data files
 GLADE_INST_DIR := $(SUBMAN_INST_DIR)/gui/data/glade
@@ -99,7 +110,7 @@ YUM_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/plugins
 INSTALL_DNF_PLUGINS ?= false
 DNF_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/plugins
 
-ALL_SRC_DIRS := $(SRC_DIR) $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(CONTENT_PLUGINS_SRC_DIR) $(EXAMPLE_PLUGINS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR) $(DNF_PLUGINS_SRC_DIR) $(DBUS_SRC_DIR) $(DBUS_SERVICES_SRC_DIR) $(FACTS_SRC_DIR)
+ALL_SRC_DIRS := $(SUBMAN_SRC_DIR) $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(CONTENT_PLUGINS_SRC_DIR) $(EXAMPLE_PLUGINS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR) $(DNF_PLUGINS_SRC_DIR) $(DBUS_SRC_DIR) $(DBUS_SERVICES_SRC_DIR) $(FACTS_SRC_DIR)
 # sets a version that is more or less latest tag plus commit sha
 VERSION ?= $(shell git describe | awk ' { sub(/subscription-manager-/,"")};1' )
 
@@ -148,14 +159,18 @@ check-syntax:
 rhsm-icon: $(RHSM_ICON_SRC_DIR)/rhsm_icon.c bin
 	$(CC) $(CFLAGS) $(LDFLAGS) $(ICON_FLAGS) -o bin/rhsm-icon $(RHSM_ICON_SRC_DIR)/rhsm_icon.c
 
-# TODO: replace with setup.py. Maybe in each src/*/ sub dir? different repo? differ srpm?
-facts-install:
-	install -d $(FACTS_INSTALL_DIR)
-	install -m 644 -p $(FACTS_SRC_DIR)/*.py $(FACTS_INSTALL_DIR)
+install-rhsmlib:
+	install -d $(RHSMLIB_INST_DIR)
+	install -m 644 -p $(RHSMLIB_SRC_DIR)/*.py $(RHSMLIB_INST_DIR)/
 
-compat-install:
-	install -d $(COMPAT_INSTALL_DIR)
-	install -m 644 -p $(COMPAT_SRC_DIR)/*.py $(COMPAT_INSTALL_DIR)
+# TODO: replace with setup.py. Maybe in each src/*/ sub dir? different repo? differ srpm?
+facts-install: install-rhsmlib
+	install -d $(FACTS_INST_DIR)
+	install -m 644 -p $(FACTS_SRC_DIR)/*.py $(FACTS_INST_DIR)
+
+compat-install: 
+	install -d $(COMPAT_INST_DIR)
+	install -m 644 -p $(COMPAT_SRC_DIR)/*.py $(COMPAT_INST_DIR)
 
 dbus-support-install: facts-install compat-install
 
@@ -164,18 +179,18 @@ dbus-common-install:
 	install -d $(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
 	install -d $(PREFIX)/usr/libexec
 	install -d $(PREFIX)/etc/bash_completion.d
-	install -d $(DBUS_INSTALL_DIR)
-	install -d $(DBUS_SERVICES_INSTALL_DIR)
-	install -d $(DBUS_CLIENTS_INSTALL_DIR)
-	install -d $(DBUS_COMMON_INSTALL_DIR)
+	install -d $(DBUS_INST_DIR)
+	install -d $(DBUS_SERVICES_INST_DIR)
+	install -d $(DBUS_CLIENTS_INST_DIR)
+	install -d $(DBUS_COMMON_INST_DIR)
 	install -d $(SYSTEMD_INST_DIR)
-	install -m 644 -p $(DBUS_SRC_DIR)/__init__.py $(DBUS_INSTALL_DIR)
-	install -m 644 -p $(DBUS_COMMON_SRC_DIR)/__init__.py $(DBUS_COMMON_INSTALL_DIR)
-	install -m 644 -p $(DBUS_CLIENTS_SRC_DIR)/__init__.py $(DBUS_CLIENTS_INSTALL_DIR)
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/__init__.py $(DBUS_SERVICES_INSTALL_DIR)
-	install -m 644 -p $(DBUS_COMMON_SRC_DIR)/*.py $(DBUS_COMMON_INSTALL_DIR)
-	install -m 644 -p $(DBUS_CLIENTS_SRC_DIR)/*.py $(DBUS_CLIENTS_INSTALL_DIR)
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/*.py $(DBUS_SERVICES_INSTALL_DIR)
+	install -m 644 -p $(DBUS_SRC_DIR)/__init__.py $(DBUS_INST_DIR)
+	install -m 644 -p $(DBUS_COMMON_SRC_DIR)/__init__.py $(DBUS_COMMON_INST_DIR)
+	install -m 644 -p $(DBUS_CLIENTS_SRC_DIR)/__init__.py $(DBUS_CLIENTS_INST_DIR)
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/__init__.py $(DBUS_SERVICES_INST_DIR)
+	install -m 644 -p $(DBUS_COMMON_SRC_DIR)/*.py $(DBUS_COMMON_INST_DIR)
+	install -m 644 -p $(DBUS_CLIENTS_SRC_DIR)/*.py $(DBUS_CLIENTS_INST_DIR)
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/*.py $(DBUS_SERVICES_INST_DIR)
 
 dbus-rhsmd-service-install: dbus-common-install
 	install -m 644 etc-conf/com.redhat.SubscriptionManager.conf \
@@ -187,8 +202,7 @@ dbus-rhsmd-service-install: dbus-common-install
 
 # TODO: move src/dbus to setup.py? it's own makefile? autoconf?
 dbus-facts-service-install: dbus-common-install dbus-support-install
-	install -d $(DBUS_SERVICES_INSTALL_DIR)/facts
-	install -d $(DBUS_SERVICES_INSTALL_DIR)/facts_user
+	install -d $(DBUS_SERVICES_INST_DIR)/facts
 	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.service \
 		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
 	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.conf \
@@ -197,23 +211,11 @@ dbus-facts-service-install: dbus-common-install dbus-support-install
 		$(SYSTEMD_INST_DIR)
 	install -m 755 $(DBUS_SERVICES_SRC_DIR)/facts/rhsm-facts-service \
 		$(PREFIX)/usr/libexec/rhsm-facts-service
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/__init__.py $(DBUS_SERVICES_INSTALL_DIR)/facts
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/cache.py $(DBUS_SERVICES_INSTALL_DIR)/facts
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/cached_collector.py $(DBUS_SERVICES_INSTALL_DIR)/facts
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/constants.py $(DBUS_SERVICES_INSTALL_DIR)/facts
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/base_facts.py $(DBUS_SERVICES_INSTALL_DIR)/facts
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/server.py $(DBUS_SERVICES_INSTALL_DIR)/facts
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/root.py $(DBUS_SERVICES_INSTALL_DIR)/facts
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/host.py $(DBUS_SERVICES_INSTALL_DIR)/facts
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/example.py $(DBUS_SERVICES_INSTALL_DIR)/facts
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/user.py $(DBUS_SERVICES_INSTALL_DIR)/facts
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/read_write.py $(DBUS_SERVICES_INSTALL_DIR)/facts
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts_user/__init__.py $(DBUS_SERVICES_INSTALL_DIR)/facts_user
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts_user/service.py $(DBUS_SERVICES_INSTALL_DIR)/facts_user
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/*.py $(DBUS_SERVICES_INST_DIR)/facts
 
 # TODO: move src/dbus to setup.py? it's own makefile? autoconf?
 dbus-subscriptions-service-install: dbus-common-install 
-	install -d $(DBUS_SERVICES_INSTALL_DIR)/subscriptions
+	install -d $(DBUS_SERVICES_INST_DIR)/subscriptions
 	install -m 644 $(DBUS_SERVICES_SRC_DIR)/subscriptions/com.redhat.Subscriptions1.Subscriptions.service \
 		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
 	install -m 644 $(DBUS_SERVICES_SRC_DIR)/subscriptions/com.redhat.Subscriptions1.Subscriptions.conf \
@@ -222,15 +224,15 @@ dbus-subscriptions-service-install: dbus-common-install
 		$(SYSTEMD_INST_DIR)
 	install -m 755 $(DBUS_SERVICES_SRC_DIR)/subscriptions/rhsm-subscriptions-service \
 		$(PREFIX)/usr/libexec/rhsm-subscriptions-service
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/subscriptions/__init__.py $(DBUS_SERVICES_INSTALL_DIR)/subscriptions
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/subscriptions/constants.py $(DBUS_SERVICES_INSTALL_DIR)/subscriptions
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/subscriptions/server.py $(DBUS_SERVICES_INSTALL_DIR)/subscriptions
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/subscriptions/subscriptions.py $(DBUS_SERVICES_INSTALL_DIR)/subscriptions
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/subscriptions/root.py $(DBUS_SERVICES_INSTALL_DIR)/subscriptions
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/subscriptions/__init__.py $(DBUS_SERVICES_INST_DIR)/subscriptions
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/subscriptions/constants.py $(DBUS_SERVICES_INST_DIR)/subscriptions
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/subscriptions/server.py $(DBUS_SERVICES_INST_DIR)/subscriptions
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/subscriptions/subscriptions.py $(DBUS_SERVICES_INST_DIR)/subscriptions
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/subscriptions/root.py $(DBUS_SERVICES_INST_DIR)/subscriptions
 
 # TODO: move src/dbus to setup.py? it's own makefile? autoconf?
 dbus-examples-service-install: dbus-common-install 
-	install -d $(DBUS_SERVICES_INSTALL_DIR)/examples
+	install -d $(DBUS_SERVICES_INST_DIR)/examples
 	install -m 644 $(DBUS_SERVICES_SRC_DIR)/examples/com.redhat.Subscriptions1.Examples.service \
 		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
 	install -m 644 $(DBUS_SERVICES_SRC_DIR)/examples/com.redhat.Subscriptions1.Examples.conf \
@@ -239,9 +241,9 @@ dbus-examples-service-install: dbus-common-install
 		$(SYSTEMD_INST_DIR)
 	install -m 755 $(DBUS_SERVICES_SRC_DIR)/examples/rhsm-examples-service \
 		$(PREFIX)/usr/libexec/rhsm-examples-service
-	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/examples/*.py $(DBUS_SERVICES_INSTALL_DIR)/examples
-	install -d $(POLKIT_ACTIONS_INSTALL_DIR)
-	install -m0644 $(DBUS_SERVICES_SRC_DIR)/examples/com.redhat.Subscriptions1.Examples.policy $(POLKIT_ACTIONS_INSTALL_DIR)
+	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/examples/*.py $(DBUS_SERVICES_INST_DIR)/examples
+	install -d $(POLKIT_ACTIONS_INST_DIR)
+	install -m0644 $(DBUS_SERVICES_SRC_DIR)/examples/com.redhat.Subscriptions1.Examples.policy $(POLKIT_ACTIONS_INST_DIR)
 
 
 dbus-config-and-services-uninstall: systemd-services-shutdown
@@ -252,9 +254,9 @@ dbus-config-and-services-uninstall: systemd-services-shutdown
 
 
 dbus-clients-install: dbus-common-install
-	install -d $(DBUS_CLIENTS_INSTALL_DIR)/facts
-	install -m 644 -p $(DBUS_CLIENTS_SRC_DIR)/facts/__init__.py $(DBUS_CLIENTS_INSTALL_DIR)/facts
-	install -m 644 -p $(DBUS_CLIENTS_SRC_DIR)/facts/client.py $(DBUS_CLIENTS_INSTALL_DIR)/facts
+	install -d $(DBUS_CLIENTS_INST_DIR)/facts
+	install -m 644 -p $(DBUS_CLIENTS_SRC_DIR)/facts/__init__.py $(DBUS_CLIENTS_INST_DIR)/facts
+	install -m 644 -p $(DBUS_CLIENTS_SRC_DIR)/facts/client.py $(DBUS_CLIENTS_INST_DIR)/facts
 
 dbus-reload:
 	 dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig
@@ -296,15 +298,15 @@ selinux-restorecon:
 dbus-install-and-reload: dbus-install polkit-install selinux-restorecon systemd-reload dbus-touch dbus-reload
 
 polkit-install:
-	install -d $(POLKIT_ACTIONS_INSTALL_DIR)
-	install -m0644 $(DBUS_SERVICES_SRC_DIR)/com.redhat.Subscriptions1.policy $(POLKIT_ACTIONS_INSTALL_DIR)
-	install -m0644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.policy $(POLKIT_ACTIONS_INSTALL_DIR)
-	install -m0644 $(DBUS_SERVICES_SRC_DIR)/subscriptions/com.redhat.Subscriptions1.Subscriptions.policy $(POLKIT_ACTIONS_INSTALL_DIR)
+	install -d $(POLKIT_ACTIONS_INST_DIR)
+	install -m0644 $(DBUS_SERVICES_SRC_DIR)/com.redhat.Subscriptions1.policy $(POLKIT_ACTIONS_INST_DIR)
+	install -m0644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.policy $(POLKIT_ACTIONS_INST_DIR)
+	install -m0644 $(DBUS_SERVICES_SRC_DIR)/subscriptions/com.redhat.Subscriptions1.Subscriptions.policy $(POLKIT_ACTIONS_INST_DIR)
 
 
 polkit-uninstall:
 	# Removing all com.redhat.Subscriptions1.* actions
-	rm -rf $(POLKIT_ACTIONS_INSTALL_DIR)/com.redhat.Subscriptions1.*
+	rm -rf $(POLKIT_ACTIONS_INST_DIR)/com.redhat.Subscriptions1.*
 
 install-conf:
 	install etc-conf/rhsm.conf $(PREFIX)/etc/rhsm/
@@ -381,20 +383,20 @@ install-plugins: install-plugins-dir install-content-plugins
 
 .PHONY: install-ga-dir
 install-ga-dir:
-	install -d $(PYTHON_INST_DIR)/ga_impls
+	install -d $(SUBMAN_INST_DIR)/ga_impls
 
 # Install our gtk2/gtk3 compat modules
 # just the gtk3 stuff
 .PHONY: install-ga-gtk3
 install-ga-gtk3: install-ga-dir
-	install -m 644 -p $(SRC_DIR)/ga_impls/__init__.py* $(PYTHON_INST_DIR)/ga_impls
-	install -m 644 -p $(SRC_DIR)/ga_impls/ga_gtk3.py* $(PYTHON_INST_DIR)/ga_impls
+	install -m 644 -p $(SUBMAN_SRC_DIR)/ga_impls/__init__.py* $(SUBMAN_INST_DIR)/ga_impls
+	install -m 644 -p $(SUBMAN_SRC_DIR)/ga_impls/ga_gtk3.py* $(SUBMAN_INST_DIR)/ga_impls
 
 .PHONY: install-ga-gtk2
 install-ga-gtk2: install-ga-dir
-	install -d $(PYTHON_INST_DIR)/ga_impls/ga_gtk2
-	install -m 644 -p $(SRC_DIR)/ga_impls/__init__.py* $(PYTHON_INST_DIR)/ga_impls
-	install -m 644 -p $(SRC_DIR)/ga_impls/ga_gtk2/*.py $(PYTHON_INST_DIR)/ga_impls/ga_gtk2
+	install -d $(SUBMAN_INST_DIR)/ga_impls/ga_gtk2
+	install -m 644 -p $(SUBMAN_SRC_DIR)/ga_impls/__init__.py* $(SUBMAN_INST_DIR)/ga_impls
+	install -m 644 -p $(SUBMAN_SRC_DIR)/ga_impls/ga_gtk2/*.py $(SUBMAN_INST_DIR)/ga_impls/ga_gtk2
 
 .PHONY: install-ga
 ifeq ($(GTK_VERSION),2)
@@ -436,7 +438,7 @@ install-initial-setup-real:
 install-firstboot-real:
 	echo "Installing firstboot to $(FIRSTBOOT_MODULES_DIR)"; \
 	install -d $(FIRSTBOOT_MODULES_DIR); \
-	install -m644 $(SRC_DIR)/gui/firstboot/*.py* $(FIRSTBOOT_MODULES_DIR)/;\
+	install -m644 $(SUBMAN_SRC_DIR)/gui/firstboot/*.py* $(FIRSTBOOT_MODULES_DIR)/;\
 
 
 .PHONY: install-firstboot
@@ -460,7 +462,7 @@ install-post-boot: install-firstboot install-initial-setup
 install: install-files install-po install-conf install-help-files install-plugins-conf
 
 set-versions:
-	sed -e 's/RPM_VERSION/$(VERSION)/g' -e 's/GTK_VERSION/$(GTK_VERSION)/g' $(SRC_DIR)/version.py.in > $(SRC_DIR)/version.py
+	sed -e 's/RPM_VERSION/$(VERSION)/g' -e 's/GTK_VERSION/$(GTK_VERSION)/g' $(SUBMAN_SRC_DIR)/version.py.in > $(SUBMAN_SRC_DIR)/version.py
 	sed -e 's/RPM_VERSION/$(VERSION)/g' $(RCT_SRC_DIR)/version.py.in > $(RCT_SRC_DIR)/version.py
 
 install-po: compile-po
@@ -468,33 +470,34 @@ install-po: compile-po
 	cp -R po/build/* $(RHSM_LOCALE_DIR)/
 
 clean-versions:
-	rm -rf $(SRC_DIR)/version.py
+	rm -rf $(SUBMAN_SRC_DIR)/version.py
 	rm -rf $(RCT_SRC_DIR)/version.py
 
 install-dbus: dbus-install polkit-install
 
 install-glade:
 	install -d $(GLADE_INST_DIR)
-	install -m 644 $(SRC_DIR)/gui/data/glade/*.glade $(SUBMAN_INST_DIR)/gui/data/glade/
+	install -m 644 $(SUBMAN_SRC_DIR)/gui/data/glade/*.glade $(SUBMAN_INST_DIR)/gui/data/glade/
 
 install-ui:
 	install -d $(UI_INST_DIR)
-	install -m 644 $(SRC_DIR)/gui/data/ui/*.ui $(SUBMAN_INST_DIR)/gui/data/ui/
+	install -m 644 $(SUBMAN_SRC_DIR)/gui/data/ui/*.ui $(SUBMAN_INST_DIR)/gui/data/ui/
 
 # We could choose here, but it doesn't matter.
 install-gui: install-glade install-ui
 
+
 install-files: set-versions install-dbus desktop-files install-plugins install-post-boot install-ga install-gui
-	install -d $(PYTHON_INST_DIR)/api
-	install -d $(PYTHON_INST_DIR)/gui
-	install -d $(PYTHON_INST_DIR)/gui/data/icons
-	install -d $(PYTHON_INST_DIR)/branding
-	install -d $(PYTHON_INST_DIR)/model
-	install -d $(PYTHON_INST_DIR)/migrate
-	install -d $(PYTHON_INST_DIR)/plugin
-	install -d $(PYTHON_INST_DIR)/plugin/ostree
-	install -d $(PYTHON_INST_DIR)/plugin
-	install -d $(PYTHON_INST_DIR)/plugin/ostree
+	install -d $(SUBMAN_INST_DIR)/api
+	install -d $(SUBMAN_INST_DIR)/gui
+	install -d $(SUBMAN_INST_DIR)/gui/data/icons
+	install -d $(SUBMAN_INST_DIR)/branding
+	install -d $(SUBMAN_INST_DIR)/model
+	install -d $(SUBMAN_INST_DIR)/migrate
+	install -d $(SUBMAN_INST_DIR)/plugin
+	install -d $(SUBMAN_INST_DIR)/plugin/ostree
+	install -d $(SUBMAN_INST_DIR)/plugin
+	install -d $(SUBMAN_INST_DIR)/plugin/ostree
 	install -d $(PREFIX)/$(INSTALL_DIR)/locale/
 	install -d $(PREFIX)/usr/sbin
 	install -d $(PREFIX)/etc/rhsm
@@ -532,17 +535,17 @@ install-files: set-versions install-dbus desktop-files install-plugins install-p
 	install -m 755 $(DAEMONS_SRC_DIR)/rhsmcertd-worker.py \
 		$(PREFIX)/usr/libexec/rhsmcertd-worker
 
-	install -m 644 -p $(SRC_DIR)/*.py $(PYTHON_INST_DIR)/
-	install -m 644 -p $(SRC_DIR)/api/*.py $(PYTHON_INST_DIR)/api
-	install -m 644 -p $(SRC_DIR)/gui/*.py $(PYTHON_INST_DIR)/gui
-	install -m 644 -p $(SRC_DIR)/migrate/*.py $(PYTHON_INST_DIR)/migrate
-	install -m 644 -p $(SRC_DIR)/branding/*.py $(PYTHON_INST_DIR)/branding
-	install -m 644 -p $(SRC_DIR)/model/*.py $(PYTHON_INST_DIR)/model
-	install -m 644 -p $(SRC_DIR)/plugin/*.py $(PYTHON_INST_DIR)/plugin
+	install -m 644 -p $(SUBMAN_SRC_DIR)/*.py $(SUBMAN_INST_DIR)/
+	install -m 644 -p $(SUBMAN_SRC_DIR)/api/*.py $(SUBMAN_INST_DIR)/api
+	install -m 644 -p $(SUBMAN_SRC_DIR)/gui/*.py $(SUBMAN_INST_DIR)/gui
+	install -m 644 -p $(SUBMAN_SRC_DIR)/migrate/*.py $(SUBMAN_INST_DIR)/migrate
+	install -m 644 -p $(SUBMAN_SRC_DIR)/branding/*.py $(SUBMAN_INST_DIR)/branding
+	install -m 644 -p $(SUBMAN_SRC_DIR)/model/*.py $(SUBMAN_INST_DIR)/model
+	install -m 644 -p $(SUBMAN_SRC_DIR)/plugin/*.py $(SUBMAN_INST_DIR)/plugin
 	install -m 644 etc-conf/subscription-manager-gui.completion.sh $(PREFIX)/etc/bash_completion.d/subscription-manager-gui
 
 	if [ "$(INSTALL_OSTREE_PLUGIN)" = "true" ] ; then \
-		install -m 644 -p $(SRC_DIR)/plugin/ostree/*.py $(SUBMAN_INST_DIR)/plugin/ostree ; \
+		install -m 644 -p $(SUBMAN_SRC_DIR)/plugin/ostree/*.py $(SUBMAN_INST_DIR)/plugin/ostree ; \
 	fi
 	if [ "$(INSTALL_YUM_PLUGINS)" = "true" ] ; then \
 		echo "YUM" ; \
@@ -557,23 +560,23 @@ install-files: set-versions install-dbus desktop-files install-plugins install-p
 	fi ; \
 
 	#icons
-	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/16x16/apps/*.png \
+	install -m 644 $(SUBMAN_SRC_DIR)/gui/data/icons/hicolor/16x16/apps/*.png \
 		$(PREFIX)/usr/share/icons/hicolor/16x16/apps
-	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/22x22/apps/*.png \
+	install -m 644 $(SUBMAN_SRC_DIR)/gui/data/icons/hicolor/22x22/apps/*.png \
 		$(PREFIX)/usr/share/icons/hicolor/22x22/apps
-	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/24x24/apps/*.png \
+	install -m 644 $(SUBMAN_SRC_DIR)/gui/data/icons/hicolor/24x24/apps/*.png \
 		$(PREFIX)/usr/share/icons/hicolor/24x24/apps
-	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/32x32/apps/*.png \
+	install -m 644 $(SUBMAN_SRC_DIR)/gui/data/icons/hicolor/32x32/apps/*.png \
 		$(PREFIX)/usr/share/icons/hicolor/32x32/apps
-	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/48x48/apps/*.png \
+	install -m 644 $(SUBMAN_SRC_DIR)/gui/data/icons/hicolor/48x48/apps/*.png \
 		$(PREFIX)/usr/share/icons/hicolor/48x48/apps
-	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/96x96/apps/*.png \
+	install -m 644 $(SUBMAN_SRC_DIR)/gui/data/icons/hicolor/96x96/apps/*.png \
 		$(PREFIX)/usr/share/icons/hicolor/96x96/apps
-	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/256x256/apps/*.png \
+	install -m 644 $(SUBMAN_SRC_DIR)/gui/data/icons/hicolor/256x256/apps/*.png \
 		$(PREFIX)/usr/share/icons/hicolor/256x256/apps
-	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/scalable/apps/*.svg \
+	install -m 644 $(SUBMAN_SRC_DIR)/gui/data/icons/hicolor/scalable/apps/*.svg \
 		$(PREFIX)/usr/share/icons/hicolor/scalable/apps
-	install -m 644 $(SRC_DIR)/gui/data/icons/*.svg \
+	install -m 644 $(SUBMAN_SRC_DIR)/gui/data/icons/*.svg \
 		$(SUBMAN_INST_DIR)/gui/data/icons
 
 	install bin/subscription-manager $(PREFIX)/usr/sbin
@@ -674,12 +677,12 @@ coverage-jenkins:
 po/POTFILES.in:
 	# generate the POTFILES.in file expected by intltool. it wants one
 	# file per line, but we're lazy.
-	find $(SRC_DIR)/ $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR) -name "*.py" > po/POTFILES.in
-	find $(SRC_DIR)/gui/data/glade/ -name "*.glade" >> po/POTFILES.in
+	find $(SUBMAN_SRC_DIR)/ $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR) -name "*.py" > po/POTFILES.in
+	find $(SUBMAN_SRC_DIR)/gui/data/glade/ -name "*.glade" >> po/POTFILES.in
 	# intltool-update doesn't recognize .ui as glade files, so
 	# build a dir of .glade symlinks to the .ui files and add to POTFILES.in
 	mkdir -p po/tmp_ui_links
-	for ui_file in ./$(SRC_DIR)/gui/data/ui/*.ui ; do \
+	for ui_file in ./$(SUBMAN_SRC_DIR)/gui/data/ui/*.ui ; do \
 		ui_base=$$(basename "$$ui_file") ; \
 		ln -f -s "../../$$ui_file" "po/tmp_ui_links/$$ui_base.glade" ; \
 	done ;
