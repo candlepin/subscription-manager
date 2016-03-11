@@ -116,12 +116,12 @@ def file_config(logging_config):
         logging.config.fileConfig(logging_config,
                                   defaults={'logfilepath': LOGFILE_PATH},
                                   disable_existing_loggers=False)
-    except ConfigParser.Error, e:
+    except ConfigParser.Error as e:
         # If the log config file doesn't exist, or is empty, we end up
         # with ConfigParser errors.
 
         # TODO: fallback default logger?
-        print e
+        print(e)
 
 
 def init_logger():
