@@ -16,6 +16,8 @@ ANACONDA_ADDON_NAME = com_redhat_subscription_manager
 # you can't commit to this repo, you should feel bad and stop doing that.
 PYTHON_INST_DIR = $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/$(PKGNAME)
 
+RHSM_INSTALL_DIR ?= $(PREFIX)/$(PYTHON_SITELIB64)/$(INSTALL_MODULE)
+
 OS = $(shell lsb_release -i | awk '{ print $$3 }' | awk -F. '{ print $$1}')
 OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
 OS_DIST ?= $(shell rpm --eval='%dist')
@@ -42,6 +44,7 @@ DBUS_SERVICES_SRC_DIR = $(DBUS_SRC_DIR)/services
 DBUS_COMMON_SRC_DIR = $(DBUS_SRC_DIR)/common
 DBUS_CLIENTS_SRC_DIR = $(DBUS_SRC_DIR)/clients
 FACTS_SRC_DIR := $(BASE_RHSM_SRC_DIR)/facts
+COMPAT_SRC_DIR := $(BASE_RHSM_SRC_DIR)/compat
 
 # dirs we install to
 SUBMAN_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/$(PKGNAME)
@@ -54,7 +57,7 @@ RCT_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rct
 RD_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rhsm_debug
 RHSM_LOCALE_DIR := $(PREFIX)/$(INSTALL_DIR)/locale
 # rhsm modules go to lib64/ and we want to be a subpackage...
-DBUS_INSTALL_DIR := $(PREFIX)/$(PYTHON_SITELIB64)/$(INSTALL_MODULE)/dbus
+DBUS_INSTALL_DIR := $(RHSM_INSTALL_DIR)/dbus
 DBUS_SERVICES_INSTALL_DIR := $(DBUS_INSTALL_DIR)/services
 DBUS_CLIENTS_INSTALL_DIR := $(DBUS_INSTALL_DIR)/clients
 DBUS_COMMON_INSTALL_DIR := $(DBUS_INSTALL_DIR)/common
@@ -62,7 +65,9 @@ POLKIT_INSTALL_DIR := $(PREFIX)/$(INSTALL_DIR)/polkit-1
 POLKIT_ACTIONS_INSTALL_DIR := $(POLKIT_INSTALL_DIR)/actions
 
 # facts package
-FACTS_INSTALL_DIR := $(PREFIX)/$(PYTHON_SITELIB64)/$(INSTALL_MODULE)/facts
+FACTS_INSTALL_DIR := $(RHSM_INSTALL_DIR)/facts
+# compat package
+COMPAT_INSTALL_DIR := $(RHSM_INSTALL_DIR)/compat
 
 # ui builder data files
 GLADE_INST_DIR := $(SUBMAN_INST_DIR)/gui/data/glade
@@ -148,6 +153,12 @@ facts-install:
 	install -d $(FACTS_INSTALL_DIR)
 	install -m 644 -p $(FACTS_SRC_DIR)/*.py $(FACTS_INSTALL_DIR)
 
+compat-install:
+	install -d $(COMPAT_INSTALL_DIR)
+	install -m 644 -p $(COMPAT_SRC_DIR)/*.py $(COMPAT_INSTALL_DIR)
+
+dbus-support-install: facts-install compat-install
+
 dbus-common-install:
 	install -d $(PREFIX)/etc/dbus-1/system.d
 	install -d $(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
@@ -175,7 +186,7 @@ dbus-rhsmd-service-install: dbus-common-install
 		$(PREFIX)/usr/libexec/rhsmd
 
 # TODO: move src/dbus to setup.py? it's own makefile? autoconf?
-dbus-facts-service-install: dbus-common-install facts-install
+dbus-facts-service-install: dbus-common-install dbus-support-install
 	install -d $(DBUS_SERVICES_INSTALL_DIR)/facts
 	install -d $(DBUS_SERVICES_INSTALL_DIR)/facts_user
 	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.service \
@@ -500,6 +511,7 @@ install-files: set-versions install-dbus desktop-files install-plugins install-p
 	install -d $(PREFIX)/var/spool/rhsm/debug
 	install -d $(PREFIX)/var/run/rhsm
 	install -d $(PREFIX)/var/lib/rhsm/facts
+	install -d $(PREFIX)/var/lib/rhsm/common
 	install -d $(PREFIX)/var/lib/rhsm/packages
 	install -d $(PREFIX)/var/lib/rhsm/cache
 	install -d $(PREFIX)/usr/bin

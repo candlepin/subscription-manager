@@ -19,8 +19,6 @@
 
 from __future__ import print_function
 
-import commands
-import ethtool
 import gettext
 import logging
 import os
@@ -35,6 +33,17 @@ from rhsm.facts import collector
 _ = gettext.gettext
 
 log = logging.getLogger(__name__)
+
+# There is no python3 version of python-ethtool
+ethtool = None
+try:
+    import ethtool
+except ImportError as e:
+    log.warn("Unable to import the 'ethtool' module.")
+
+# For python2.6 that doesn't have subprocess.check_output
+from rhsm.compat.subprocess_check_output import check_output as compat_check_output
+from rhsm.compat.subprocess_check_output import CalledProcessError
 
 
 class ClassicCheck:
@@ -508,36 +517,57 @@ class Hardware(collector.FactsCollector):
         return cpu_info
 
     def get_ls_cpu_info(self):
-        lscpuinfo = {}
+        lscpu_info = {}
+
+        LSCPU_CMD = '/usr/bin/lscpu'
 
         # if we have `lscpu`, let's use it for facts as well, under
         # the `lscpu` name space
-        if not os.access('/usr/bin/lscpu', os.R_OK):
-            return lscpuinfo
+        if not os.access(LSCPU_CMD, os.R_OK):
+            return lscpu_info
+
+        # copy of parent process environment
+        parent_env = dict(os.environ)
 
         # let us specify a test dir of /sys info for testing
         # If the user env sets LC_ALL, it overrides a LANG here, so
         # use LC_ALL here. See rhbz#1225435
-        ls_cpu_path = 'LC_ALL=en_US.UTF-8 /usr/bin/lscpu'
-        ls_cpu_cmd = ls_cpu_path
+        lscpu_env = parent_env.update({'LC_ALL': 'en_US.UTF-8'})
+        lscpu_cmd = [LSCPU_CMD]
 
         if self.testing:
-            ls_cpu_cmd = "%s -s %s" % (ls_cpu_cmd, self.prefix)
+            lscpu_cmd += ['-s', self.prefix]
+
+        # For display/message only
+        lscpu_cmd_string = ' '.join(lscpu_cmd)
+
         try:
-            cpudata = commands.getstatusoutput(ls_cpu_cmd)[-1].split('\n')
-            for info in cpudata:
+            lscpu_out = compat_check_output(lscpu_cmd,
+                                            env=lscpu_env)
+        except CalledProcessError as e:
+            log.exception(e)
+            log.warn('Error with lscpu (%s) subprocess: %s', lscpu_cmd_string, e)
+            return lscpu_info
+
+        errors = []
+        try:
+            cpu_data = lscpu_out.strip().split('\n')
+            for info in cpu_data:
                 try:
                     key, value = info.split(":")
                     nkey = '.'.join(["lscpu", key.lower().strip().replace(" ", "_")])
-                    lscpuinfo[nkey] = "%s" % value.strip()
-                except ValueError:
+                    lscpu_info[nkey] = "%s" % value.strip()
+                except ValueError as e:
                     # sometimes lscpu outputs weird things. Or fails.
-                    #
-                    pass
+                    # But this is per line, so keep track but let it pass.
+                    errors.append(e)
+
         except Exception as e:
             log.warn('Error reading system CPU information: %s', e)
+        if errors:
+            log.debuf('Errors while parsing lscpu output: %s', errors)
 
-        return lscpuinfo
+        return lscpu_info
 
     def get_network_info(self):
         netinfo = {}
