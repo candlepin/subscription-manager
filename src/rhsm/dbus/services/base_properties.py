@@ -49,7 +49,7 @@ class BaseProperties(object):
 
         try:
             return self.props_data[property_name].value
-        except KeyError, e:
+        except KeyError as e:
             self.log.exception(e)
             self.raise_access_denied_or_unknown_property(property_name)
 
@@ -104,7 +104,7 @@ class BaseProperties(object):
         try:
             self.props_data[property_name].value = new_value
             # WARNING: if emitting a signal causes an exception...?
-        except Exception, e:
+        except Exception as e:
             self.log.debug("ReadWriteProperties Exception i=%s p=%s n=%s",
                            interface_name, property_name, new_value)
             self.log.exception(e)

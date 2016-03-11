@@ -175,12 +175,12 @@ def main():
 
     try:
         mainloop.run()
-    except KeyboardInterrupt, e:
+    except KeyboardInterrupt as e:
         log.exception(e)
-    except SystemExit, e:
+    except SystemExit as e:
         log.exception(e)
         log.debug("system exit")
-    except Exception, e:
+    except Exception as e:
         log.exception(e)
 
     mainloop.quit()
