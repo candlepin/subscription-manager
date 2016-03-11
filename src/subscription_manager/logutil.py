@@ -9,7 +9,6 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 
-import ConfigParser
 import logging
 import logging.handlers
 import logging.config
@@ -116,7 +115,7 @@ def file_config(logging_config):
         logging.config.fileConfig(logging_config,
                                   defaults={'logfilepath': LOGFILE_PATH},
                                   disable_existing_loggers=False)
-    except ConfigParser.Error as e:
+    except Exception as e:
         # If the log config file doesn't exist, or is empty, we end up
         # with ConfigParser errors.
 
