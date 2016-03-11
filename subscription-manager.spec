@@ -60,6 +60,10 @@
 %define install_dnf_plugins INSTALL_DNF_PLUGINS=false
 %endif
 
+%define subman_install_dir %{_datadir}/rhsm/subscription_manager
+%define rct_install_dir %{_datadir}/rhsm/rct
+%define rhsm_debug_install_dir %{_datadir}/rhsm/rhsm_debug
+
 Name: subscription-manager
 Version: 1.17.4
 Release: 1%{?dist}
@@ -151,7 +155,7 @@ the remote in the currently deployed .origin file.
 %defattr(-,root,root,-)
 %{_sysconfdir}/rhsm/pluginconf.d/ostree_content.OstreeContentPlugin.conf
 %{rhsm_plugins_dir}/ostree_content.py*
-%{_datadir}/rhsm/subscription_manager/plugin/ostree/*.py*
+%{subman_install_dir}/plugin/ostree/*.py*
 %endif
 
 %package -n subscription-manager-plugin-container
@@ -167,7 +171,7 @@ from the server. Populates /etc/docker/certs.d appropriately.
 %defattr(-,root,root,-)
 %{_sysconfdir}/rhsm/pluginconf.d/container_content.ContainerContentPlugin.conf
 %{rhsm_plugins_dir}/container_content.py*
-%{_datadir}/rhsm/subscription_manager/plugin/container.py*
+%{subman_install_dir}/plugin/container.py*
 # Copying Red Hat CA cert into each directory:
 %attr(755,root,root) %dir %{_sysconfdir}/docker/certs.d/cdn.redhat.com
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/redhat-entitlement-authority.pem
@@ -368,28 +372,6 @@ rm -rf %{buildroot}
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/logrotate.d/subscription-manager
 %attr(700,root,root) %{_sysconfdir}/cron.daily/rhsmd
 
-# dbus services config
-%config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.SubscriptionManager.conf
-%config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.Subscriptions1.Facts.User.conf
-%config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.Subscriptions1.Facts.Root.conf
-
-# dbus services execs
-%attr(755,root,root) %{_libexecdir}/rhsm-facts-user-service
-%attr(755,root,root) %{_libexecdir}/rhsm-facts-root-service
-
-# polkit policy actions
-%{_datadir}/polkit-1/actions/com.redhat.Subscriptions1.Facts.User.policy
-%{_datadir}/polkit-1/actions/com.redhat.Subscriptions1.Facts.Root.policy
-
-# dbus activation services for systemd
-%if %use_systemd
-    # TODO: These assume systemd. Need versions for rhel6 as well.
-    %{_datadir}/dbus-1/system-services/com.redhat.Subscriptions1.Facts.User.service
-    %{_datadir}/dbus-1/system-services/com.redhat.Subscriptions1.Facts.Root.service
-    %{_unitdir}/rhsm-facts-user.service
-    %{_unitdir}/rhsm-facts-root.service
-%endif
-
 # This doesn't use systemd dbus activation yet
 %{_datadir}/dbus-1/system-services/com.redhat.SubscriptionManager.service
 
@@ -413,34 +395,33 @@ rm -rf %{buildroot}
 
 # code
 # python package dirs
-%dir %{_datadir}/rhsm
-%dir %{_datadir}/rhsm/subscription_manager
-%dir %{_datadir}/rhsm/subscription_manager/api
-%dir %{_datadir}/rhsm/subscription_manager/branding
-%dir %{_datadir}/rhsm/subscription_manager/model
-%dir %{_datadir}/rhsm/subscription_manager/plugin
-%dir %{python_sitearch}/rhsm/
+%dir %{subman_install_dir}
+%dir %{subman_install_dir}/api
+%dir %{subman_install_dir}/branding
+%dir %{subman_install_dir}/model
+%dir %{subman_install_dir}/plugin
+
 
 # code, python modules and packages
-%{_datadir}/rhsm/subscription_manager/*.py*
+%{subman_install_dir}/*.py*
 
-%{_datadir}/rhsm/subscription_manager/api/*.py*
-%{_datadir}/rhsm/subscription_manager/branding/*.py*
+%{subman_install_dir}/api/*.py*
+%{subman_install_dir}/branding/*.py*
 
 # our gtk2/gtk3 compat modules
-%dir %{_datadir}/rhsm/subscription_manager/ga_impls
-%{_datadir}/rhsm/subscription_manager/ga_impls/__init__.py*
+%dir %{subman_install_dir}/ga_impls
+%{subman_install_dir}/ga_impls/__init__.py*
 
 %if %use_gtk3
-%{_datadir}/rhsm/subscription_manager/ga_impls/ga_gtk3.py*
+%{subman_install_dir}/ga_impls/ga_gtk3.py*
 %else
-%dir %{_datadir}/rhsm/subscription_manager/ga_impls/ga_gtk2
-%{_datadir}/rhsm/subscription_manager/ga_impls/ga_gtk2/*.py*
+%dir %{subman_install_dir}/ga_impls/ga_gtk2
+%{subman_install_dir}/ga_impls/ga_gtk2/*.py*
 %endif
 
-%{_datadir}/rhsm/subscription_manager/model/*.py*
+%{subman_install_dir}/model/*.py*
 
-%{_datadir}/rhsm/subscription_manager/plugin/*.py*
+%{subman_install_dir}/plugin/*.py*
 
 # subscription-manager plugins
 %dir %{rhsm_plugins_dir}
@@ -454,48 +435,72 @@ rm -rf %{buildroot}
 %{_prefix}/lib/yum-plugins/search-disabled-repos.py*
 
 # Incude rt CLI tool
-%dir %{_datadir}/rhsm/rct
-%{_datadir}/rhsm/rct/__init__.py*
-%{_datadir}/rhsm/rct/cli.py*
-%{_datadir}/rhsm/rct/*commands.py*
-%{_datadir}/rhsm/rct/printing.py*
-%{_datadir}/rhsm/rct/version.py*
+%dir %{rct_install_dir}
+%{rct_install_dir}/__init__.py*
+%{rct_install_dir}/cli.py*
+%{rct_install_dir}/*commands.py*
+%{rct_install_dir}/printing.py*
+%{rct_install_dir}/version.py*
 %attr(755,root,root) %{_bindir}/rct
 
 # Include consumer debug CLI tool
-%dir %{_datadir}/rhsm/rhsm_debug
-%{_datadir}/rhsm/rhsm_debug/__init__.py*
-%{_datadir}/rhsm/rhsm_debug/cli.py*
-%{_datadir}/rhsm/rhsm_debug/*commands.py*
+%dir %{rhsm_debug_install_dir}
+%{rhsm_debug_install_dir}/__init__.py*
+%{rhsm_debug_install_dir}/cli.py*
+%{rhsm_debug_install_dir}/*commands.py*
 %attr(755,root,root) %{_bindir}/rhsm-debug
 
+# base rhsmlib
+%dir %{python_sitearch}/rhsmlib
+%{python_sitearch}/rhsmlib/*.py*
+
 # facts modules, so to sitelib
-%dir %{python_sitearch}/rhsm/facts
-%{python_sitearch}/rhsm/facts/*.py*
+%dir %{python_sitearch}/rhsmlib/facts
+%{python_sitearch}/rhsmlib/facts/*.py*
+
+# compat modules, so to sitelib
+%dir %{python_sitearch}/rhsmlib/compat
+%{python_sitearch}/rhsmlib/compat/*.py*
 
 # dbus modules
-%dir %{python_sitearch}/rhsm/dbus
-%dir %{python_sitearch}/rhsm/dbus/clients
-%dir %{python_sitearch}/rhsm/dbus/services
-%dir %{python_sitearch}/rhsm/dbus/common
+%dir %{python_sitearch}/rhsmlib/dbus
+%dir %{python_sitearch}/rhsmlib/dbus/clients
+%dir %{python_sitearch}/rhsmlib/dbus/services
+%dir %{python_sitearch}/rhsmlib/dbus/common
 
 # dbus common and base modules
-%{python_sitearch}/rhsm/dbus/*.py*
-%{python_sitearch}/rhsm/dbus/services/*.py*
-%{python_sitearch}/rhsm/dbus/common/*.py*
+%{python_sitearch}/rhsmlib/dbus/*.py*
+%{python_sitearch}/rhsmlib/dbus/services/*.py*
+%{python_sitearch}/rhsmlib/dbus/common/*.py*
+
+#%config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.SubscriptionManager.conf
 
 # dbus facts services
-%dir %{python_sitearch}/rhsm/dbus/services/facts_user
-%{python_sitearch}/rhsm/dbus/services/facts_user/*.py*
-%dir %{python_sitearch}/rhsm/dbus/services/facts_root
-%{python_sitearch}/rhsm/dbus/services/facts_root/*.py*
+%config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.*.conf
+%{_datadir}/polkit-1/actions/com.redhat.*.policy
+%attr(755,root,root) %{_libexecdir}/rhsm-*-service
+# dbus activation services for systemd
+%if %use_systemd
+    # TODO: These assume systemd. Need versions for rhel6 as well.
+    %{_datadir}/dbus-1/system-services/com.redhat.*.service
+    %{_unitdir}/rhsm-*.service
+%endif
+
+%dir %{python_sitearch}/rhsmlib/dbus/services/facts
+%{python_sitearch}/rhsmlib/dbus/services/facts/*.py*
+
+%dir %{python_sitearch}/rhsmlib/dbus/services/subscriptions
+%{python_sitearch}/rhsmlib/dbus/services/subscriptions/*.py*
+
+%dir %{python_sitearch}/rhsmlib/dbus/services/examples
+%{python_sitearch}/rhsmlib/dbus/services/examples/*.py*
 
 # dbus client
-%{python_sitearch}/rhsm/dbus/clients/*.py*
+%{python_sitearch}/rhsmlib/dbus/clients/*.py*
 
 # dbus facts client
-%dir %{python_sitearch}/rhsm/dbus/clients/facts
-%{python_sitearch}/rhsm/dbus/clients/facts/*.py*
+%dir %{python_sitearch}/rhsmlib/dbus/clients/facts
+%{python_sitearch}/rhsmlib/dbus/clients/facts/*.py*
 
 
 %doc
@@ -513,14 +518,14 @@ rm -rf %{buildroot}
 # symlink to console-helper
 %{_bindir}/subscription-manager-gui
 %{_bindir}/rhsm-icon
-%dir %{_datadir}/rhsm/subscription_manager/gui
-%dir %{_datadir}/rhsm/subscription_manager/gui/data
-%dir %{_datadir}/rhsm/subscription_manager/gui/data/ui
-%dir %{_datadir}/rhsm/subscription_manager/gui/data/glade
-%dir %{_datadir}/rhsm/subscription_manager/gui/data/icons
-%{_datadir}/rhsm/subscription_manager/gui/data/ui/*.ui
-%{_datadir}/rhsm/subscription_manager/gui/data/glade/*.glade
-%{_datadir}/rhsm/subscription_manager/gui/data/icons/*.svg
+%dir %{subman_install_dir}/gui
+%dir %{subman_install_dir}/gui/data
+%dir %{subman_install_dir}/gui/data/ui
+%dir %{subman_install_dir}/gui/data/glade
+%dir %{subman_install_dir}/gui/data/icons
+%{subman_install_dir}/gui/data/ui/*.ui
+%{subman_install_dir}/gui/data/glade/*.glade
+%{subman_install_dir}/gui/data/icons/*.svg
 %{_datadir}/applications/subscription-manager-gui.desktop
 %{_datadir}/icons/hicolor/16x16/apps/*.png
 %{_datadir}/icons/hicolor/22x22/apps/*.png
@@ -533,7 +538,7 @@ rm -rf %{buildroot}
 %{_datadir}/appdata/subscription-manager-gui.appdata.xml
 
 # code and modules
-%{_datadir}/rhsm/subscription_manager/gui/*.py*
+%{subman_install_dir}/gui/*.py*
 
 # gui system config files
 %{_sysconfdir}/xdg/autostart/rhsm-icon.desktop
@@ -571,8 +576,8 @@ rm -rf %{buildroot}
 
 %files -n subscription-manager-migration
 %defattr(-,root,root,-)
-%dir %{_datadir}/rhsm/subscription_manager/migrate
-%{_datadir}/rhsm/subscription_manager/migrate/*.py*
+%dir %{subman_install_dir}/migrate
+%{subman_install_dir}/migrate/*.py*
 %attr(755,root,root) %{_sbindir}/rhn-migrate-classic-to-rhsm
 
 %doc
