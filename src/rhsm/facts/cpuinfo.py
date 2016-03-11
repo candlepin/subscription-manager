@@ -469,8 +469,6 @@ class SystemCpuInfoFactory(object):
 
     @classmethod
     def from_uname_machine(cls, uname_machine, prefix=None):
-        print 'fum', prefix
-        print 'uname_machine', uname_machine
         if uname_machine not in SystemCpuInfoFactory.uname_to_cpuinfo:
             # er?
             raise NotImplementedError
