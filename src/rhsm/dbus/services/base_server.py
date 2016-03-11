@@ -47,12 +47,12 @@ def run_services(bus_class=None, bus_name=None, service_classes=None):
 
     try:
         mainloop.run()
-    except KeyboardInterrupt, e:
+    except KeyboardInterrupt as e:
         log.exception(e)
-    except SystemExit, e:
+    except SystemExit as e:
         log.exception(e)
         log.debug("system exit")
-    except Exception, e:
+    except Exception as e:
         log.exception(e)
 
     if service:
