@@ -19,7 +19,7 @@ import logging
 # The dmiinfo module will raise a ImportError if the 'dmidecode' module
 # fails to import. So expect that.
 try:
-    import dmiinfo
+    from rhsm.facts import dmiinfo
 except ImportError, e:
     dmiinfo = None
 
