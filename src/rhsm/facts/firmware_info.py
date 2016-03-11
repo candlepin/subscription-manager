@@ -20,7 +20,7 @@ import logging
 # fails to import. So expect that.
 try:
     from rhsm.facts import dmiinfo
-except ImportError, e:
+except ImportError as e:
     dmiinfo = None
 
 from rhsm.facts import collector

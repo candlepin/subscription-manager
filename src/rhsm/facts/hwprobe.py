@@ -17,6 +17,8 @@
 # in this software or its documentation.
 #
 
+from __future__ import print_function
+
 import commands
 import ethtool
 import gettext
@@ -686,6 +688,7 @@ class Hardware(collector.FactsCollector):
 
 
 if __name__ == '__main__':
+
     _LIBPATH = "/usr/share/rhsm"
     # add to the path if need be
     if _LIBPATH not in sys.path:
@@ -705,7 +708,7 @@ if __name__ == '__main__':
     # anything else
     if len(sys.argv) > 2:
         for hkey, hvalue in sorted(hw_dict.items()):
-            print "'%s' : '%s'" % (hkey, hvalue)
+            print("'%s' : '%s'" % (hkey, hvalue))
 
     if not hw.testing:
         sys.exit(0)
@@ -734,13 +737,13 @@ if __name__ == '__main__':
     missing_set = set(must_haves).difference(set(hw_dict))
 
     if failed:
-        print "cpu detection error"
+        print("cpu detection error")
     for failed in failed_list:
-        print "The values %s %s do not match (|%s| != |%s|)" % (failed[0], failed[1],
-                                                                failed[2], failed[3])
+        print("The values %s %s do not match (|%s| != |%s|)" % (failed[0], failed[1],
+                                                                failed[2], failed[3]))
     if missing_set:
         for missing in missing_set:
-            print "cpu info fact: %s was missing" % missing
+            print("cpu info fact: %s was missing" % missing)
 
     if failed:
         sys.exit(1)

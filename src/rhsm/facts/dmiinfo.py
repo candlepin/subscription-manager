@@ -82,7 +82,7 @@ class DmiFirmwareInfoCollector(collector.FactsCollector):
         try:
             for tag, func in dmi_data.items():
                 dmiinfo = self._get_dmi_data(func, tag, dmiinfo)
-        except Exception, e:
+        except Exception as e:
             log.warn(_("Error reading system DMI information: %s"), e)
 
         return dmiinfo
@@ -90,7 +90,7 @@ class DmiFirmwareInfoCollector(collector.FactsCollector):
     def _read_dmi(self, func):
         try:
             return func()
-        except Exception, e:
+        except Exception as e:
             log.warn(_("Error reading system DMI information with %s: %s"), func, e)
             return None
 
