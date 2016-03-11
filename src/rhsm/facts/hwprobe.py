@@ -203,7 +203,7 @@ class Hardware(collector.FactsCollector):
                     nkey = '.'.join(["memory", key.lower()])
                     meminfo[nkey] = "%s" % int(value)
         except Exception as e:
-            print _("Error reading system memory information:"), e
+            log.warn("Error reading system memory information: %s", e)
         return meminfo
 
     def count_cpumask_entries(self, cpu, field):
@@ -656,8 +656,9 @@ class Hardware(collector.FactsCollector):
                     key = '.'.join(['net.interface', info.device, "permanent_mac_address"])
                     netinfdict[key] = permanent_mac_addr
 
-        except Exception:
-            print _("Error reading network interface information:"), sys.exc_type
+        except Exception as e:
+            log.exception(e)
+            log.warn("Error reading network interface information: %s", e)
         return netinfdict
 
     # from rhn-client-tools  hardware.py
