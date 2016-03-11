@@ -89,7 +89,7 @@ class VirtWhatCollector(collector.FactsCollector):
                 virt_dict['virt.is_guest'] = False
                 virt_dict['virt.host_type'] = "Not Applicable"
         # TODO:  Should this only catch OSErrors?
-        except Exception, e:
+        except Exception as e:
             # Otherwise there was an error running virt-what - who knows
             log.exception(e)
             virt_dict['virt.is_guest'] = 'Unknown'
@@ -168,7 +168,7 @@ class VirtUuidCollector(collector.FactsCollector):
                 contents = fo.read()
                 vm_uuid = contents.strip()
                 virt_dict['virt.uuid'] = vm_uuid
-        except IOError, e:
+        except IOError as e:
             log.warn("Tried to read %s but there was an error: %s", vm_uuid_path, e)
 
         return virt_dict
