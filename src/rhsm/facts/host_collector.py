@@ -16,9 +16,12 @@ class HostCollector(cached_collector.CachedFactsCollector):
     or a data center, or a distributed computing framework, or
     a non-linux hypervisor, etc.
 
-    This in turns runs hwprobe.Hardware() [regular hardware facts]
-    and admin_facts.AdminFacts() [info that needs elevated perms to
-    access, including virt.uuid].
+    This in turns runs:
+        hwprobe.Hardware()      [regular hardware facts]
+        virt.VirtCollector()    [virt facts, results from virt-what etc]
+        firmware_info.FirmwareCollector()  [dmiinfo, devicetree, etc]
+        cleanup.CleanupCollector()  [Collapse redundant facts, alter any
+                                     facts that depend on output of other facts, etc]
 
 
     Facts collected include DMI info and virt status and virt.uuid."""

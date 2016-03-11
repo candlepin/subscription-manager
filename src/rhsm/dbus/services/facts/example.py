@@ -2,7 +2,7 @@
 
 import logging
 
-from rhsm.facts import admin_facts
+from rhsm.facts import virt
 from rhsm.dbus.services.facts import constants
 from rhsm.dbus.services.facts import base_facts
 
@@ -12,7 +12,7 @@ log = logging.getLogger(__name__)
 class FactsExample(base_facts.BaseFacts):
     default_polkit_auth_required = constants.PK_ACTION_FACTS_COLLECT
     persistent = True
-    facts_collector_class = admin_facts.AdminFacts
+    facts_collector_class = virt.VirtCollector
     default_dbus_path = constants.FACTS_EXAMPLE_DBUS_PATH
     default_props_data = {'version': constants.FACTS_EXAMPLE_VERSION,
                           'answer': '2112',
