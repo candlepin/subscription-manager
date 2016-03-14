@@ -1397,7 +1397,7 @@ class EnvironmentScreen(Screen):
 
         envs = [(env['id'], env['name']) for env in environments]
         if len(envs) == 1:
-            self.set_environement(envs[0][0])
+            self.set_environment(envs[0][0])
             self.emit('move-to-screen', PERFORM_REGISTER_PAGE)
             self.pre_done()
             return
