@@ -61,7 +61,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.17.2
+Version: 1.17.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -577,6 +577,27 @@ fi
 %endif
 
 %changelog
+* Thu Mar 10 2016 Alex Wood <awood@redhat.com> 1.17.3-1
+- 1304427: Fixes system path to properly import from module
+  subscription_manager (csnyder@redhat.com)
+- 1266935: Turn sub-man logging to INFO level. (awood@redhat.com)
+- register screen -> reg screen and pkg profile (alikins@redhat.com)
+- 1264964: Always use cert auth for package profile (alikins@redhat.com)
+- 1309553: Do not fail on check for consumer["type"]["manifest"]
+  (csnyder@redhat.com)
+- 1304680: Include error detail in message (wpoteat@redhat.com)
+- 1312367: Progress bar needs to go away on repo update connection fail
+  (wpoteat@redhat.com)
+- 1311935: Emits register-message instead of register-error for display of user
+  errors (csnyder@redhat.com)
+- 1302564: Push 'Done' box as close to center of firstboot page as possible
+  (wpoteat@redhat.com)
+- 1308523: Navigation buttons sensitivity matches the current_screen.ready
+  (csnyder@redhat.com)
+- 1302775: Navigate through all rhsm firstboot screens (csnyder@redhat.com)
+- 1304280: Tab stop needed on cancel button (wpoteat@redhat.com)
+- 1303092: GUI issues in Repos and Help (wpoteat@redhat.com)
+
 * Fri Feb 19 2016 Alex Wood <awood@redhat.com> 1.17.2-1
 - 1308732: Leave hw fact virt.uuid unset if unknown (alikins@redhat.com)
 - 1290885: Display formatted error if no DISPLAY exists. (awood@redhat.com)
