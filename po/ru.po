@@ -1,6 +1,7 @@
 # ypoyarko <ypoyarko@redhat.com>, 2014. #zanata
 # John Sefler <jsefler@redhat.com>, 2015. #zanata
 # ypoyarko <ypoyarko@redhat.com>, 2015. #zanata
+# John Sefler <jsefler@redhat.com>, 2016. #zanata
 # ypoyarko <ypoyarko@redhat.com>, 2016. #zanata
 msgid ""
 msgstr ""
@@ -10,8 +11,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2016-03-05 01:18-0500\n"
-"Last-Translator: ypoyarko <ypoyarko@redhat.com>\n"
+"PO-Revision-Date: 2016-03-14 05:24-0400\n"
+"Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Russian\n"
 "Language: ru\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
@@ -337,7 +338,7 @@ msgid ""
 "Please ensure system has subscriptions attached, and see '%s' to enable "
 "additional repositories"
 msgstr ""
-"Убедитесь, что у системы есть подписки.  «%s» поможет получить информацию о "
+"Убедитесь, что система уже подписана.  «%s» поможет получить информацию о "
 "добавлении репозиториев."
 
 #: ../src/subscription_manager/migrate/migrate.py:793
@@ -358,7 +359,7 @@ msgid ""
 "don't execute the auto-attach option while registering with subscription "
 "manager"
 msgstr ""
-"не назначать подписки автоматически при регистрации с помощью менеджера "
+"не оформлять подписки автоматически при регистрации с помощью менеджера "
 "подписок"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -367,7 +368,7 @@ msgid ""
 "service level to follow when attaching subscriptions, for no service level "
 "use --servicelevel=\"\""
 msgstr ""
-"Уровень обслуживания для назначения подписок. Если не требуется, укажите --"
+"Уровень обслуживания для оформления подписки. Если не требуется, укажите --"
 "servicelevel=\"\"."
 
 #: ../src/subscription_manager/migrate/migrate.py:829
@@ -416,7 +417,7 @@ msgstr "введите пароль доступа к старому серве�
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/migrate/migrate.py:863
 msgid "specify the subscription management server to migrate to"
-msgstr "Укажите сервер управления подписками для миграции"
+msgstr "Укажите новый сервер управления подписками"
 
 #: ../src/subscription_manager/migrate/migrate.py:865
 msgid "specify the user name on the destination server"
@@ -753,7 +754,7 @@ msgid ""
 "subscription-manager is disabled when running inside a container. Please "
 "refer to your host system for subscription management.\n"
 msgstr ""
-"В контейнере subscription-manager отключается. Используйте инструменты "
+"subscription-manager отключается в контейнерах. Используйте инструменты "
 "управления подписками его хост-системы.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -1155,7 +1156,7 @@ msgstr "Устарел (см. --auto-attach)"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:984
 msgid "automatically attach compatible subscriptions to this system"
-msgstr "автоматически выбрать подписки"
+msgstr "автоматически подобрать подписки"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:986
@@ -1168,8 +1169,8 @@ msgid ""
 "system preference used when subscribing automatically, requires --auto-"
 "attach"
 msgstr ""
-"при автоматической подписке учитывать настроенные предпочтения (требует --"
-"auto-attach)"
+"при автоматическом оформлении подписки учитывать настроенные предпочтения "
+"(требует --auto-attach)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:995
@@ -1185,7 +1186,9 @@ msgstr "Ошибка. Имя системы не может быть пусты�
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:999
 msgid "Error: Activation keys do not require user credentials."
-msgstr "Ошибка. Ключи активации не требуют указания реквизитов пользователя."
+msgstr ""
+"Ошибка. Ключи активации не требуют указания регистрационных данных "
+"пользователя."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:1001
@@ -1431,7 +1434,7 @@ msgstr "В обновлении подписок нет необходимост
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:1454
 msgid "Attach a specified subscription to the registered system"
-msgstr "Назначить подписку зарегистрированной системе"
+msgstr "Оформить подписку для зарегистрированной системы"
 
 #: ../src/subscription_manager/managercli.py:1465
 msgid "Error: --auto may not be used when specifying pools."
@@ -1478,7 +1481,7 @@ msgstr "Укажите числовой ID."
 #: ../src/subscription_manager/managercli.py:1528
 #, python-format
 msgid "Successfully attached a subscription for: %s"
-msgstr "Подписка назначена: %s"
+msgstr "Подписка оформлена: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:1551
@@ -3021,7 +3024,7 @@ msgstr "Отмена регистрации"
 #: ../src/subscription_manager/gui/registergui.py:1100
 #: ../src/subscription_manager/gui/registergui.py:1691
 msgid "Attaching subscriptions"
-msgstr "Присвоение подписок"
+msgstr "Оформление подписки"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:1104
@@ -3055,7 +3058,7 @@ msgstr "Далее"
 #: ../src/subscription_manager/gui/registergui.py:1253
 msgid "Unable to auto-attach, server does not support service levels."
 msgstr ""
-"Ошибка автоматического назначения: сервер не поддерживает уровни "
+"Ошибка автоматического оформления подписки: сервер не поддерживает уровни "
 "обслуживания."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -3063,7 +3066,7 @@ msgstr ""
 msgid ""
 "No installed products on system. No need to attach subscriptions at this "
 "time."
-msgstr "Нет установленных продуктов. В добавлении подписок нет необходимости."
+msgstr "Нет установленных продуктов. В оформлении подписки нет необходимости."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/registergui.py:1268
@@ -3387,12 +3390,12 @@ msgstr "Нет предыдущих обновлений"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/reposgui.py:54
 msgid "Attached subscriptions do not provide any repositories."
-msgstr "Назначенные подписки не предоставляют репозитории."
+msgstr "Оформленные подписки не предоставляют доступа к репозиториям."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/reposgui.py:55
 msgid "No repositories are available without an attached subscription."
-msgstr "Для доступа к репозиториям необходимо выбрать подписки."
+msgstr "Для доступа к репозиториям необходимо оформить подписку."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/reposgui.py:127 ../src/rct/printing.py:108
@@ -4859,7 +4862,7 @@ msgstr "метка"
 #: ../src/subscription_manager/gui/data/glade/installed.glade.h:3
 #: ../po/tmp_ui_links/installed.ui.glade.h:3
 msgid "Overall Status"
-msgstr "Общий статус:"
+msgstr "Общий статус"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/glade/installed.glade.h:5
@@ -4871,7 +4874,7 @@ msgstr "Регистрация"
 #: ../src/subscription_manager/gui/data/glade/installed.glade.h:6
 #: ../po/tmp_ui_links/installed.ui.glade.h:6
 msgid "Auto-attach"
-msgstr "Назначить автоматически"
+msgstr "Подписать автоматически"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/glade/installed.glade.h:7
@@ -5410,7 +5413,7 @@ msgstr "system_name_grid"
 
 #: ../po/tmp_ui_links/choose_server.ui.glade.h:13
 msgid "If required, please configure your proxy before moving forward. "
-msgstr "Если необходимо, настройте прокси-сервер."
+msgstr "Если необходимо, настройте прокси-сервер. "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../po/tmp_ui_links/selectsla.ui.glade.h:2
@@ -5419,7 +5422,7 @@ msgid ""
 "levels."
 msgstr ""
 "Возможно, установленные продукты могли бы контролироваться уровнями "
-"обслуживания. "
+"обслуживания."
 
 #: ../po/tmp_ui_links/selectsla.ui.glade.h:4
 msgid ""
@@ -5439,11 +5442,11 @@ msgid ""
 "with Red Hat to receive software updates and other benefits. "
 msgstr ""
 "Помощник последовательно проведет вас через процесс регистрации системы в "
-"Red Hat."
+"Red Hat. "
 
 #: ../po/tmp_ui_links/registration_info.ui.glade.h:3
 msgid " You will need the following to register:"
-msgstr "Для регистрации вам потребуются:"
+msgstr " Для регистрации вам потребуются:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../po/tmp_ui_links/registration_info.ui.glade.h:4

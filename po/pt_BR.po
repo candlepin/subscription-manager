@@ -1,6 +1,7 @@
 # gcintra <gcintra@fedoraproject.org>, 2014. #zanata
 # John Sefler <jsefler@redhat.com>, 2015. #zanata
 # gcintra <gcintra@fedoraproject.org>, 2015. #zanata
+# John Sefler <jsefler@redhat.com>, 2016. #zanata
 # Maria Andrada <msuppesd@redhat.com>, 2016. #zanata
 msgid ""
 msgstr ""
@@ -10,8 +11,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2016-03-02 04:47-0500\n"
-"Last-Translator: Maria Andrada <msuppesd@redhat.com>\n"
+"PO-Revision-Date: 2016-03-14 05:27-0400\n"
+"Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Portuguese (Brazil)\n"
 "Language: pt-BR\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -819,7 +820,7 @@ msgid ""
 "command clean or unregister to remove local profile."
 msgstr ""
 "O perfil do cliente \"%s\" foi excluído do servidor. Você pode usar o "
-"comando clean (limpar) ou cancelar o registro para remover o perfil local. "
+"comando clean (limpar) ou cancelar o registro para remover o perfil local."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:534
@@ -1253,7 +1254,7 @@ msgstr ""
 "Erro: Não é possível forçar o registro enquanto estiver tentando se "
 "recuperar do registro com o consumerid. Por favor, use --force sem --"
 "consumerid para fazer o registro novamente ou use o comando clean (limpar) e "
-"tente mais uma vez sem --force. "
+"tente mais uma vez sem --force."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:1054
@@ -1420,14 +1421,14 @@ msgstr "Lançamentos Disponíveis"
 
 #: ../src/subscription_manager/managercli.py:1431
 msgid "The ID of the pool to attach (can be specified more than once)"
-msgstr "A ID do pool para anexar (pode ser especificada mais de uma vez) "
+msgstr "A ID do pool para anexar (pode ser especificada mais de uma vez)"
 
 #: ../src/subscription_manager/managercli.py:1433
 msgid ""
 "Number of subscriptions to attach. May not be used with an auto-attach."
 msgstr ""
 "Número de subscrições para anexar. Pode não ser usado com uma anexação "
-"automática. "
+"automática."
 
 #: ../src/subscription_manager/managercli.py:1435
 msgid ""
@@ -1550,7 +1551,7 @@ msgstr ""
 
 #: ../src/subscription_manager/managercli.py:1618
 msgid "the ID of the pool to remove (can be specified more than once)"
-msgstr "A ID do pool para remover (pode ser especificada mais de uma vez) "
+msgstr "A ID do pool para remover (pode ser especificada mais de uma vez)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/managercli.py:1620
@@ -1574,7 +1575,7 @@ msgid ""
 "Instead, use the remove --serial option."
 msgstr ""
 "Erro: O servidor intitulado registrado não fornece suporte a remove --pool. \n"
-"No lugar disto, use a opção remove --serial. "
+"No lugar disto, use a opção remove --serial."
 
 #: ../src/subscription_manager/managercli.py:1645
 msgid ""
@@ -1586,7 +1587,7 @@ msgstr ""
 #: ../src/subscription_manager/managercli.py:1663
 #, python-format
 msgid "%s successfully removed at the server:"
-msgstr "%s removido(s) com êxito no servidor: "
+msgstr "%s removido(s) com êxito no servidor:"
 
 #: ../src/subscription_manager/managercli.py:1667
 #, python-format
@@ -1696,7 +1697,7 @@ msgstr ""
 
 #: ../src/subscription_manager/managercli.py:1874
 msgid "View and configure with 'subscription-manager plugins'"
-msgstr "Visualizar e configurar com 'plugins subscription-manager'"
+msgstr "Visualizar e configurar com 'subscription-manager plugins'"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author gcintra
 #: ../src/subscription_manager/managercli.py:1878
@@ -5535,7 +5536,7 @@ msgstr "system_name_grid"
 
 #: ../po/tmp_ui_links/choose_server.ui.glade.h:13
 msgid "If required, please configure your proxy before moving forward. "
-msgstr "Caso necessário, configure seu proxy antes de seguir adiante."
+msgstr "Caso necessário, configure seu proxy antes de seguir adiante. "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../po/tmp_ui_links/selectsla.ui.glade.h:2
@@ -5569,7 +5570,7 @@ msgstr ""
 
 #: ../po/tmp_ui_links/registration_info.ui.glade.h:3
 msgid " You will need the following to register:"
-msgstr "Você precisará do seguinte para se registrar:"
+msgstr " Você precisará do seguinte para se registrar:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../po/tmp_ui_links/registration_info.ui.glade.h:4
