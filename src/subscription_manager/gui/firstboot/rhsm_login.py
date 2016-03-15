@@ -143,8 +143,8 @@ class moduleClass(module.Module, object):
         # In firstboot, we leverage the RHN setup proxy settings already
         # presented to the user, so hide the choose server screen's proxy
         # text and button. But, if we are standalone, show our versions.
-        if not self.standalone and False:
-            screen = self._screens[registergui.CHOOSE_SERVER_PAGE]
+        if not self.standalone:
+            screen = self.register_widget._screens[registergui.CHOOSE_SERVER_PAGE]
             screen.proxy_frame.destroy()
 
     def focus(self):
