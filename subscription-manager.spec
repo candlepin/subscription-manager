@@ -62,7 +62,7 @@
 
 Name: subscription-manager
 Version: 1.16.8
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -577,6 +577,10 @@ fi
 %endif
 
 %changelog
+* Tue Mar 15 2016 Christopher Snyder <csnyder@redhat.com> 1.16.8-5
+- 1303768: Adds translations from zanata. (csnyder@redhat.com)
+- 1313631: Registration with one environment proceeds as normal
+  (csnyder@redhat.com)
 * Sat Mar 05 2016 Christopher Snyder <csnyder@redhat.com> 1.16.8-4
 - 1303768: Adds additional updated translations from zanata.
   (csnyder@redhat.com)
