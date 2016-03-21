@@ -11,8 +11,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2016-03-14 05:24-0400\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2016-03-17 08:46-0400\n"
+"Last-Translator: ypoyarko <ypoyarko@redhat.com>\n"
 "Language-Team: Russian\n"
 "Language: ru\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
@@ -4462,7 +4462,7 @@ msgid ""
 "with Red Hat to receive software updates and other benefits. You will need "
 "the following to register:"
 msgstr ""
-"Помощник выполнит пошаговую регистрацию системы в Red Hat. Для этого "
+"Мастер регистрации поможет зарегистрировать вашу систему Red Hat. Для этого "
 "необходимо:"
 
 #: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:2
@@ -4513,7 +4513,7 @@ msgstr "_Да, зарегистрироваться сейчас"
 #: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:10
 #: ../po/tmp_ui_links/registration_info.ui.glade.h:12
 msgid "_No, I prefer to register at a later time."
-msgstr "Нет, _зарегистрируюсь позже"
+msgstr "_Нет, зарегистрируюсь позже"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:11
@@ -4551,7 +4551,7 @@ msgstr "Закрыть"
 #: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:15
 #: ../po/tmp_ui_links/registration_info.ui.glade.h:17
 msgid "<b>Security &amp; Updates:</b>"
-msgstr "<b>Защита и обновления:</b>"
+msgstr "<b>Защита и обновление</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:16
@@ -4567,7 +4567,7 @@ msgstr ""
 #: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:17
 #: ../po/tmp_ui_links/registration_info.ui.glade.h:19
 msgid "<b>Downloads &amp; Upgrades:</b>"
-msgstr "<b>Загрузки и обновления:</b>"
+msgstr "<b>Загрузки и обновления</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:18
@@ -4577,13 +4577,13 @@ msgid ""
 "including new releases."
 msgstr ""
 "Загрузите установочные образы Red Hat Enterprise Linux, включая последние "
-"выпуски."
+"релизы."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:19
 #: ../po/tmp_ui_links/registration_info.ui.glade.h:21
 msgid "<b>Support:</b>"
-msgstr "<b>Поддержка:</b>"
+msgstr "<b>Поддержка</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:20
@@ -4591,13 +4591,15 @@ msgstr "<b>Поддержка:</b>"
 msgid ""
 "Access to the technical support experts at Red Hat or Red Hat's partners for "
 "help with any issues you might encounter with this system."
-msgstr "Доступ к технической поддержке Red Hat и получение помощи."
+msgstr ""
+"Консультационные услуги и помощь экспертов службы технической поддержки Red "
+"Hat."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:21
 #: ../po/tmp_ui_links/registration_info.ui.glade.h:23
 msgid "<b>Management:</b>"
-msgstr "<b>Управление:</b>"
+msgstr "<b>Управление</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:22
@@ -4612,8 +4614,8 @@ msgid ""
 "Manage subscriptions and systems registered to Customer Portal via access."
 "redhat.com or through one of our other subscription management services."
 msgstr ""
-"Управление подписками и системами на access.redhat.com и при помощи служб "
-"управления подписками."
+"Управление подписками и системами на портале access.redhat.com или при "
+"помощи сервисов управления подписками."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author ypoyarko
 #: ../src/subscription_manager/gui/data/glade/registration_info.glade.h:24
@@ -5441,8 +5443,8 @@ msgid ""
 "This assistant will guide you through the process of registering your system "
 "with Red Hat to receive software updates and other benefits. "
 msgstr ""
-"Помощник последовательно проведет вас через процесс регистрации системы в "
-"Red Hat. "
+"Мастер регистрации поможет зарегистрировать вашу систему Red Hat, после чего "
+"вы сможете воспользоваться всеми преимуществами подписки."
 
 #: ../po/tmp_ui_links/registration_info.ui.glade.h:3
 msgid " You will need the following to register:"
@@ -5523,9 +5525,9 @@ msgid ""
 "system must be registered with the Customer Portal. Please enter your Red "
 "Hat login to ensure your system is up-to-date."
 msgstr ""
-"Для поддержки системы в обновленном состоянии необходимо ее зарегистрировать "
-"на портале пользователей. Введите имя пользователя и пароль Red Hat, чтобы "
-"проверить наличие обновлений."
+"Для поддержки обновленного состояния системы зарегистрируйте ее на портале "
+"пользователей. Введите имя пользователя и пароль Red Hat, чтобы проверить "
+"наличие обновлений."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../src/rhsm_icon/rhsm_icon.c:213
@@ -5662,7 +5664,7 @@ msgstr "Управление подписками Red Hat"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../etc-conf/rhsm-icon.desktop.in.h:1
 msgid "Red Hat Subscription Validity Applet"
-msgstr "Апплет проверки подписок Red Hat"
+msgstr "Апплет подписки Red Hat"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: ../../../../..//usr/lib64/python2.7/optparse.py:140
