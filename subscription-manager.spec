@@ -62,7 +62,7 @@
 
 Name: subscription-manager
 Version: 1.16.8
-Release: 6%{?dist}
+Release: 7%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -577,6 +577,10 @@ fi
 %endif
 
 %changelog
+* Mon Mar 21 2016 Christopher Snyder <csnyder@redhat.com> 1.16.8-7
+- 1303768: Adds updated translations in the KO and RU locales.
+  (csnyder@redhat.com)
+
 * Mon Mar 21 2016 Christopher Snyder <csnyder@redhat.com> 1.16.8-6
 - 1315859: Only show one proxy dialog (csnyder@redhat.com)
 
