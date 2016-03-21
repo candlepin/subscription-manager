@@ -462,6 +462,10 @@ rm -rf %{buildroot}
 %dir %{python_sitearch}/rhsmlib/compat
 %{python_sitearch}/rhsmlib/compat/*.py*
 
+# candlepin api helper modules, so to sitelib
+%dir %{python_sitearch}/rhsmlib/candlepin
+%{python_sitearch}/rhsmlib/candlepin/*.py*
+
 # dbus modules
 %dir %{python_sitearch}/rhsmlib/dbus
 %dir %{python_sitearch}/rhsmlib/dbus/clients
