@@ -107,6 +107,13 @@ class FactsClient(object):
         self.log.debug("GetAll res=%s", ret)
         return ret
 
+    @slip.dbus.polkit.enable_proxy(authfail_exception=FactsClientAuthenticationError)
+    def Get(self, property_name):
+        self.log.debug("Get %s", property_name)
+        ret = self.props_interface.Get(facts_constants.FACTS_DBUS_INTERFACE,
+                                       property_name=property_name)
+        return ret
+
     def signal_handler(self, *args, **kwargs):
         self.log.debug("signal_handler args=%s kwargs=%s", args, kwargs)
 
