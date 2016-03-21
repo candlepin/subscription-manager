@@ -21,7 +21,7 @@ import sys
 
 import dbus
 
-from rhsm.dbus.common import gi_kluge
+from rhsmlib.dbus.common import gi_kluge
 gi_kluge.kluge_it()
 
 import slip.dbus.polkit
@@ -34,7 +34,7 @@ import slip.dbus.polkit
 
 # FIXME: This makes client code depend on the services code being installed
 #        (which it will be, but...)
-from rhsm.dbus.services.facts import constants as facts_constants
+from rhsmlib.dbus.services.facts import constants as facts_constants
 
 log = logging.getLogger(__name__)
 

@@ -1,6 +1,6 @@
 import logging
 
-from rhsm.facts import collector
+from rhsmlib.facts import collector
 
 log = logging.getLogger(__name__)
 

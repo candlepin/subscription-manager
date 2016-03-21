@@ -3,10 +3,10 @@ import logging
 import dbus
 import slip.dbus
 
-from rhsm.dbus.common import decorators
-from rhsm.dbus.services import base_properties
-from rhsm.dbus.services import base_service
-from rhsm.dbus.services.subscriptions import constants
+from rhsmlib.dbus.common import decorators
+from rhsmlib.dbus.services import base_properties
+from rhsmlib.dbus.services import base_service
+from rhsmlib.dbus.services.subscriptions import constants
 
 log = logging.getLogger(__name__)
 

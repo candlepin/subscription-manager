@@ -5,7 +5,7 @@ import logging
 import dbus
 import dbus.exceptions
 
-from rhsm.dbus.common import constants
+from rhsmlib.dbus.common import constants
 log = logging.getLogger(__name__)
 
 

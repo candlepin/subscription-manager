@@ -19,11 +19,11 @@ import logging
 # The dmiinfo module will raise a ImportError if the 'dmidecode' module
 # fails to import. So expect that.
 try:
-    from rhsm.facts import dmiinfo
+    from rhsmlib.facts import dmiinfo
 except ImportError as e:
     dmiinfo = None
 
-from rhsm.facts import collector
+from rhsmlib.facts import collector
 
 ARCHES_WITHOUT_DMI = ["ppc64", "ppc64le", "s390x"]
 

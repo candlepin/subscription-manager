@@ -3,8 +3,8 @@ import logging
 
 import dbus
 
-from rhsm.dbus.services import base_server
-from rhsm.dbus.services.examples import examples
+from rhsmlib.dbus.services import base_server
+from rhsmlib.dbus.services.examples import examples
 
 log = logging.getLogger(__name__)
 

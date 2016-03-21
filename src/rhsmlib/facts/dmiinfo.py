@@ -29,7 +29,7 @@ except ImportError:
     log.warn("Unable to load dmidecode module. No DMI info will be collected")
     raise
 
-from rhsm.facts import collector
+from rhsmlib.facts import collector
 
 _ = gettext.gettext
 

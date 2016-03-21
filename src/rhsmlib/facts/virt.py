@@ -18,10 +18,10 @@
 import gettext
 import logging
 
-from rhsm.facts import collector
+from rhsmlib.facts import collector
 
 # For python2.6 that doesn't have subprocess.check_output
-from rhsm.compat.subprocess_check_output import check_output as compat_check_output
+from rhsmlib.compat.subprocess_check_output import check_output as compat_check_output
 
 log = logging.getLogger(__name__)
 

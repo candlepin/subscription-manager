@@ -3,9 +3,9 @@ import logging
 
 import dbus
 
-from rhsm.dbus.services import base_server
-from rhsm.dbus.services.subscriptions import constants
-from rhsm.dbus.services.subscriptions import root
+from rhsmlib.dbus.services import base_server
+from rhsmlib.dbus.services.subscriptions import constants
+from rhsmlib.dbus.services.subscriptions import root
 
 log = logging.getLogger(__name__)
 

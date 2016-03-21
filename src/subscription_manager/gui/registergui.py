@@ -46,7 +46,7 @@ from subscription_manager.gui.autobind import DryRunResult, \
         NoProductsException
 from subscription_manager.jsonwrapper import PoolWrapper
 
-from rhsm.dbus.clients.facts import client as facts_client
+from rhsmlib.dbus.clients.facts import client as facts_client
 
 _ = lambda x: gettext.ldgettext("rhsm", x)
 
