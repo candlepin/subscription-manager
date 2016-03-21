@@ -1,11 +1,11 @@
 
 import logging
 
-from rhsm.facts import host_collector
+from rhsmlib.facts import host_collector
 
-from rhsm.dbus.services.facts import cache
-from rhsm.dbus.services.facts import constants
-from rhsm.dbus.services.facts import base_facts
+from rhsmlib.dbus.services.facts import cache
+from rhsmlib.dbus.services.facts import constants
+from rhsmlib.dbus.services.facts import base_facts
 
 log = logging.getLogger(__name__)
 

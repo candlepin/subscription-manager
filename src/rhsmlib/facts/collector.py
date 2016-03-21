@@ -3,7 +3,7 @@ import logging
 import os
 import platform
 
-from rhsm.facts import collection
+from rhsmlib.facts import collection
 
 log = logging.getLogger(__name__)
 

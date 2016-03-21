@@ -17,7 +17,7 @@ import json
 import os
 
 # FIXME: We can likely dump this now
-from rhsm.dbus.common import exceptions
+from rhsmlib.dbus.common import exceptions
 
 log = logging.getLogger(__name__)
 

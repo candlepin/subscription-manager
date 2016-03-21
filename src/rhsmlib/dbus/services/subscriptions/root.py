@@ -1,8 +1,8 @@
 import logging
 
 # FIXME: relative imports
-from rhsm.dbus.services import base_service
-from rhsm.dbus.services.subscriptions import constants
+from rhsmlib.dbus.services import base_service
+from rhsmlib.dbus.services.subscriptions import constants
 
 log = logging.getLogger(__name__)
 

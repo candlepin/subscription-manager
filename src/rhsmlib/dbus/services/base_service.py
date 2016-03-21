@@ -12,10 +12,10 @@ import slip.dbus
 import slip.dbus.service
 import slip.dbus.introspection
 
-from rhsm.dbus.common import decorators
-from rhsm.dbus.common import constants
-from rhsm.dbus.services import base_properties
-#from rhsm.dbus.common import dbus_utils
+from rhsmlib.dbus.common import decorators
+from rhsmlib.dbus.common import constants
+from rhsmlib.dbus.services import base_properties
+#from rhsmlib.dbus.common import dbus_utils
 
 
 class BaseService(slip.dbus.service.Object):

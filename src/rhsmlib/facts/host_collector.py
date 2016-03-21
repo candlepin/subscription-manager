@@ -1,9 +1,9 @@
-from rhsm.facts import hwprobe
-from rhsm.facts import cleanup
-from rhsm.facts import virt
-from rhsm.facts import firmware_info
+from rhsmlib.facts import hwprobe
+from rhsmlib.facts import cleanup
+from rhsmlib.facts import virt
+from rhsmlib.facts import firmware_info
 
-from rhsm.dbus.services.facts import cached_collector
+from rhsmlib.dbus.services.facts import cached_collector
 
 
 class HostCollector(cached_collector.CachedFactsCollector):

@@ -1,11 +1,11 @@
 import logging
 
-from rhsm.facts import collection
-from rhsm.facts import collector
+from rhsmlib.facts import collection
+from rhsmlib.facts import collector
 
 # TODO: mv to common or services/?
-from rhsm.dbus.services.facts import cache
-from rhsm.dbus.services.facts import constants
+from rhsmlib.dbus.services.facts import cache
+from rhsmlib.dbus.services.facts import constants
 
 log = logging.getLogger(__name__)
 

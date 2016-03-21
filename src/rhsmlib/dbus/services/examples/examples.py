@@ -2,10 +2,10 @@ import dbus
 import dbus.service
 import slip.dbus
 
-from rhsm.dbus.common import decorators
-from rhsm.dbus.common import constants
-from rhsm.dbus.services import base_service
-from rhsm.dbus.services import base_properties
+from rhsmlib.dbus.common import decorators
+from rhsmlib.dbus.common import constants
+from rhsmlib.dbus.services import base_service
+from rhsmlib.dbus.services import base_properties
 
 DBUS_NAME = "com.redhat.Subscriptions1.Examples"
 DBUS_INTERFACE = "com.redhat.Subscriptions1.Examples"

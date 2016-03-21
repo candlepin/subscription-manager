@@ -1,9 +1,9 @@
 
 import logging
 
-from rhsm.facts import hwprobe
-from rhsm.dbus.services.facts import constants
-from rhsm.dbus.services.facts import base_facts
+from rhsmlib.facts import hwprobe
+from rhsmlib.dbus.services.facts import constants
+from rhsmlib.dbus.services.facts import base_facts
 
 log = logging.getLogger(__name__)
 

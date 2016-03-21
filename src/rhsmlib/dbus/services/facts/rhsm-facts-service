@@ -7,7 +7,7 @@ sys.path.append("/usr/share/rhsm")
 from subscription_manager import logutil
 logutil.init_logger()
 
-from rhsm.dbus.services.facts import server
+from rhsmlib.dbus.services.facts import server
 
 
 def main(args):

@@ -2,10 +2,10 @@
 
 import logging
 
-from rhsm.dbus.services.facts import constants
-from rhsm.dbus.services.facts import base_facts
+from rhsmlib.dbus.services.facts import constants
+from rhsmlib.dbus.services.facts import base_facts
 
-from rhsm.dbus.services.facts import host
+from rhsmlib.dbus.services.facts import host
 
 log = logging.getLogger(__name__)
 

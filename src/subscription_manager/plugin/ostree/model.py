@@ -18,8 +18,8 @@ import re
 import os
 
 # For python2.6 that doesn't have subprocess.check_output
-from rhsm.compat.subprocess_check_output import check_output as compat_check_output
-from rhsm.compat.subprocess_check_output import CalledProcessError
+from rhsmlib.compat.subprocess_check_output import check_output as compat_check_output
+from rhsmlib.compat.subprocess_check_output import CalledProcessError
 
 from subscription_manager.plugin.ostree import config
 

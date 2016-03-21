@@ -27,8 +27,8 @@ import re
 import socket
 import sys
 
-from rhsm.facts import cpuinfo
-from rhsm.facts import collector
+from rhsmlib.facts import cpuinfo
+from rhsmlib.facts import collector
 
 _ = gettext.gettext
 
@@ -42,8 +42,8 @@ except ImportError as e:
     log.warn("Unable to import the 'ethtool' module.")
 
 # For python2.6 that doesn't have subprocess.check_output
-from rhsm.compat.subprocess_check_output import check_output as compat_check_output
-from rhsm.compat.subprocess_check_output import CalledProcessError
+from rhsmlib.compat.subprocess_check_output import check_output as compat_check_output
+from rhsmlib.compat.subprocess_check_output import CalledProcessError
 
 
 class ClassicCheck:
