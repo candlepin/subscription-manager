@@ -53,6 +53,7 @@ DBUS_COMMON_SRC_DIR = $(DBUS_SRC_DIR)/common
 DBUS_CLIENTS_SRC_DIR = $(DBUS_SRC_DIR)/clients
 FACTS_SRC_DIR := $(RHSMLIB_SRC_DIR)/facts
 COMPAT_SRC_DIR := $(RHSMLIB_SRC_DIR)/compat
+CANDLEPIN_SRC_DIR := $(RHSMLIB_SRC_DIR)/candlepin
 
 # dirs we install to
 RHSMLIB_INST_DIR ?= $(PYTHON_SITE_PACKAGES_DIR)/$(RHSMLIB_MODULE)
@@ -79,6 +80,8 @@ POLKIT_ACTIONS_INST_DIR := $(POLKIT_INST_DIR)/actions
 FACTS_INST_DIR := $(RHSMLIB_INST_DIR)/facts
 # compat package
 COMPAT_INST_DIR := $(RHSMLIB_INST_DIR)/compat
+# candlepin api package
+CANDLEPIN_INST_DIR := $(RHSMLIB_INST_DIR)/candlepin
 
 # ui builder data files
 GLADE_INST_DIR := $(SUBMAN_INST_DIR)/gui/data/glade
@@ -172,7 +175,11 @@ compat-install:
 	install -d $(COMPAT_INST_DIR)
 	install -m 644 -p $(COMPAT_SRC_DIR)/*.py $(COMPAT_INST_DIR)
 
-dbus-support-install: facts-install compat-install
+candlepin-install:
+	install -d $(CANDLEPIN_INST_DIR)
+	install -m 644 -p $(CANDLEPIN_SRC_DIR)/*.py $(CANDLEPIN_INST_DIR)
+
+dbus-support-install: facts-install compat-install candlepin-install
 
 dbus-common-install:
 	install -d $(PREFIX)/etc/dbus-1/system.d
