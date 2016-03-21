@@ -62,7 +62,7 @@
 
 Name: subscription-manager
 Version: 1.16.8
-Release: 5%{?dist}
+Release: 6%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -577,6 +577,9 @@ fi
 %endif
 
 %changelog
+* Mon Mar 21 2016 Christopher Snyder <csnyder@redhat.com> 1.16.8-6
+- 1315859: Only show one proxy dialog (csnyder@redhat.com)
+
 * Tue Mar 15 2016 Christopher Snyder <csnyder@redhat.com> 1.16.8-5
 - 1303768: Adds translations from zanata. (csnyder@redhat.com)
 - 1313631: Registration with one environment proceeds as normal
