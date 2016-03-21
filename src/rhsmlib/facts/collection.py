@@ -85,7 +85,7 @@ class FactsCollection(object):
 
     def __repr__(self):
         buf = "%s(facts_dict=%s, collection_datetime=%s, cache_lifetime=%s)" % \
-            (self.__class__.__name__, self.collection_datetime, self.cache_lifetime)
+            (self.__class__.__name__, self.data, self.collection_datetime, self.cache_lifetime)
         return buf
 
     @classmethod
