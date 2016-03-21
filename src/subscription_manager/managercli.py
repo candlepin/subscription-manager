@@ -38,6 +38,7 @@ from rhsm.certificate import GMT
 
 from subscription_manager.branding import get_branding
 from subscription_manager.entcertlib import EntCertActionInvoker
+from subscription_manager.factlib import FactsActionCommand
 from subscription_manager.action_client import ActionClient, UnregisterActionClient
 from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBED, \
         SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
@@ -60,7 +61,7 @@ from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, \
         none_wrap_columnize_callback, echo_columnize_callback, highlight_by_filter_string_columnize_callback
 
-from rhsm.dbus.clients.facts import client as facts_client
+from rhsmlib.dbus.clients.facts import client as facts_client
 
 _ = gettext.gettext
 
@@ -1823,6 +1824,8 @@ class FactsCommand(CliCommand):
             #identity = inj.require(inj.IDENTITY)
             # A proxy to the dbus service
             facts_dbus_client = facts_client.FactsHostClient()
+            facts_action_command = FactsActionCommand()
+            facts_action_command.update_force()
 
             # tell service to check if the facts need to be synced to server
             # service will check the 'last_synced' info against a 'last_collected' attribute
@@ -1847,7 +1850,7 @@ class FactsCommand(CliCommand):
             #
             # FIXME/TODO: add ConsumerFacts.update
 
-            raise Exception('Consumer facts updating not implemented yet (facts command)')
+            #raise Exception('Consumer facts updating not implemented yet (facts command)')
 
             #try:
             #    facts.update_check(self.cp, identity.uuid, force=True)
