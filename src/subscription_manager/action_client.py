@@ -39,6 +39,7 @@ class ActionClient(base_action_client.BaseActionClient):
 
     def _get_libset(self):
 
+        # TODO: replace with FSM thats progress through this async and wait/joins if needed
         self.entcertlib = EntCertActionInvoker()
         self.content_client = ContentActionClient()
         self.factlib = FactsActionInvoker()

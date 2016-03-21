@@ -21,7 +21,6 @@ import rhsm.config
 
 from subscription_manager.injection import PLUGIN_MANAGER, require
 from subscription_manager.cache import CacheManager
-import subscription_manager.injection as inj
 from rhsm import ourjson as json
 
 _ = gettext.gettext
@@ -37,6 +36,11 @@ CERT_VERSION = "3.2"
 #        the dbus facts proxy (with the service handling read caching).
 #        And a... syncer? Consumer model proxy? cache manager? Something that
 #        will be resposible for updating candlepin with the latest collected facts.
+
+class NewFacts(object):
+    pass
+
+
 class Facts(CacheManager):
     """
     Manages the facts for this system, maintains a cache of the most
@@ -47,11 +51,9 @@ class Facts(CacheManager):
     """
     CACHE_FILE = "/var/lib/rhsm/facts/facts.json"
 
-    def __init__(self, ent_dir=None, prod_dir=None):
+    def __init__(self):
         self.facts = {}
 
-        self.entitlement_dir = ent_dir or inj.require(inj.ENT_DIR)
-        self.product_dir = prod_dir or inj.require(inj.PROD_DIR)
         # see bz #627962
         # we would like to have this info, but for now, since it
         # can change constantly on laptops, it makes for a lot of
