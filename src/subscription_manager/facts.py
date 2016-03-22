@@ -13,11 +13,8 @@
 
 from datetime import datetime
 import gettext
-import glob
 import logging
 import os
-
-import rhsm.config
 
 from subscription_manager.injection import PLUGIN_MANAGER, require
 from subscription_manager.cache import CacheManager
