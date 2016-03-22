@@ -477,8 +477,6 @@ rm -rf %{buildroot}
 %{python_sitearch}/rhsmlib/dbus/services/*.py*
 %{python_sitearch}/rhsmlib/dbus/common/*.py*
 
-#%config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.SubscriptionManager.conf
-
 # dbus facts services
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.*.conf
 %{_datadir}/polkit-1/actions/com.redhat.*.policy
