@@ -1029,7 +1029,7 @@ class MergedPoolsTests(unittest.TestCase):
 class PoolStashTest(unittest.TestCase):
 
     def test_empty_stash_zero_length(self):
-        my_stash = PoolStash(None)
+        my_stash = PoolStash()
         self.assertTrue(my_stash.all_pools_size() == 0)
 
 
@@ -1103,7 +1103,7 @@ class TestGetAvailableEntitlements(SubManFixture):
         # get the injected stub uep
         cp = self.get_consumer_cp()
         cp.getPoolsList = Mock(return_value=[])
-        res = managerlib.get_available_entitlements(facts={})
+        res = managerlib.get_available_entitlements()
         self.assertEquals(0, len(res))
 
     def test_incompatible(self):
@@ -1119,10 +1119,10 @@ class TestGetAvailableEntitlements(SubManFixture):
 
         cp.getPoolsList = Mock(side_effect=get_pools_list)
 
-        res = managerlib.get_available_entitlements(facts={}, get_all=True)
+        res = managerlib.get_available_entitlements(get_all=True)
         self.assertEquals(2, len(res))
 
-        res = managerlib.get_available_entitlements(facts={}, get_all=False)
+        res = managerlib.get_available_entitlements(get_all=False)
         self.assertEquals(1, len(res))
 
     def test_installed(self):
@@ -1141,10 +1141,10 @@ class TestGetAvailableEntitlements(SubManFixture):
         product_directory = StubProductDirectory(pids=['some_product'])
         provide(PROD_DIR, product_directory)
 
-        res = managerlib.get_available_entitlements(facts={}, get_all=True, uninstalled=True)
+        res = managerlib.get_available_entitlements(get_all=True, uninstalled=True)
         self.assertEquals(2, len(res))
 
-        res = managerlib.get_available_entitlements(facts={}, uninstalled=True)
+        res = managerlib.get_available_entitlements(uninstalled=True)
         self.assertEquals(1, len(res))
 
     def build_pool_dict(self, pool_id, provided_products=[]):
