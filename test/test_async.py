@@ -63,7 +63,7 @@ class TestAsyncPool(fixture.SubManFixture):
         inj.provide(inj.CERT_SORTER, stubs.StubCertSorter())
 
         self.pool_stash = \
-                managerlib.PoolStash(facts=self.stub_facts)
+                managerlib.PoolStash()
 
         self.ap = async.AsyncPool(self.pool_stash)
 

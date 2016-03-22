@@ -28,7 +28,6 @@ class RegisterWidgetTests(SubManFixture):
 
         self.reg_info = RegisterInfo()
         self.rs = RegisterWidget(backend=self.backend,
-                                 facts=self.facts,
                                  reg_info=self.reg_info)
 
         self.rs._screens[CHOOSE_SERVER_PAGE] = Mock()
@@ -145,7 +144,6 @@ class CredentialsScreenTests(SubManFixture):
         stub_reg = StubReg()
         self.screen = CredentialsScreen(reg_info=stub_reg.reg_info,
                                         async_backend=stub_reg.async,
-                                        facts=stub_reg.facts,
                                         parent_window=stub_reg.parent_window)
 
     def test_clear_credentials_dialog(self):
@@ -169,7 +167,6 @@ class ActivationKeyScreenTests(SubManFixture):
         stub_reg = StubReg()
         self.screen = ActivationKeyScreen(reg_info=stub_reg.reg_info,
                                           async_backend=stub_reg.async,
-                                          facts=stub_reg.facts,
                                           parent_window=stub_reg.parent_window)
 
     def test_split_activation_keys(self):
@@ -185,7 +182,6 @@ class ChooseServerScreenTests(SubManFixture):
         stub_reg = StubReg()
         self.screen = ChooseServerScreen(reg_info=stub_reg.reg_info,
                                          async_backend=stub_reg.async,
-                                         facts=stub_reg.facts,
                                          parent_window=stub_reg.parent_window)
 
     def test_activation_key_checkbox_sensitive(self):
