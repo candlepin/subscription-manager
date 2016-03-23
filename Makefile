@@ -72,6 +72,7 @@ DBUS_INST_DIR := $(RHSM_SERVICES_INST_DIR)/dbus
 DBUS_SERVICES_INST_DIR := $(DBUS_INST_DIR)/services
 DBUS_CLIENTS_INST_DIR := $(DBUS_INST_DIR)/clients
 DBUS_COMMON_INST_DIR := $(DBUS_INST_DIR)/common
+DBUS_SERVICES_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
 
 POLKIT_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/polkit-1
 POLKIT_ACTIONS_INST_DIR := $(POLKIT_INST_DIR)/actions
@@ -97,13 +98,29 @@ ifeq ($(OS_DIST),.el6)
    FIRSTBOOT_MODULES_DIR?=$(PREFIX)/usr/share/rhn/up2date_client/firstboot
    INSTALL_FIRSTBOOT?=true
    INSTALL_INITIAL_SETUP?=false
+   DBUS_SERVICE_FILE_TYPE?=dbus
 else
    GTK_VERSION?=3
    FIRSTBOOT_MODULES_DIR?=$(PREFIX)/usr/share/firstboot/modules
    INSTALL_FIRSTBOOT?=true
    INSTALL_INITIAL_SETUP?=true
+   DBUS_SERVICE_FILE_TYPE?=systemd
 endif
 
+
+FACTS_INST_DBUS_SERVICE_FILE = $(DBUS_SERVICES_INST_DIR)/facts/com.redhat.Subscriptions1.Facts.service
+EXAMPLES_INST_DBUS_SERVICE_FILE = $(DBUS_SERVICES_INST_DIR)/examples/com.redhat.Subscriptions1.Examples.service
+SUBSCRIPTIONS_INST_DBUS_SERVICE_FILE = $(DBUS_SERVICES_INST_DIR)/subscriptions/com.redhat.Subscriptions1.Subscriptions.service
+
+ifeq ($(DBUS_SERVICE_FILE_TYPE),dbus)
+FACTS_SRC_DBUS_SERVICE_FILE = $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.service-dbus
+EXAMPLES_SRC_DBUS_SERVICE_FILE = $(DBUS_SERVICES_SRC_DIR)/examples/com.redhat.Subscriptions1.Examples.service-dbus
+SUBSCRIPTIONS_SRC_DBUS_SERVICE_FILE = $(DBUS_SERVICES_SRC_DIR)/subscriptions/com.redhat.Subscriptions1.Subscriptions.service-dbus
+else
+FACTS_SRC_DBUS_SERVICE_FILE = $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.service
+EXAMPLES_SRC_DBUS_SERVICE_FILE = $(DBUS_SERVICES_SRC_DIR)/examples/com.redhat.Subscriptions1.Examples.service
+SUBSCRIPTIONS_SRC_DBUS_SERVICE_FILE = $(DBUS_SERVICES_SRC_DIR)/subscriptions/com.redhat.Subscriptions1.Subscriptions.service
+endif
 
 # always true until fedora is just dnf
 INSTALL_YUM_PLUGINS ?= true
@@ -210,12 +227,12 @@ dbus-rhsmd-service-install: dbus-common-install
 # TODO: move src/dbus to setup.py? it's own makefile? autoconf?
 dbus-facts-service-install: dbus-common-install dbus-support-install
 	install -d $(DBUS_SERVICES_INST_DIR)/facts
-	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.service \
-		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
-	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.conf \
-		$(PREFIX)/etc/dbus-1/system.d
+	install -m 644 $(FACTS_SRC_DBUS_SERVICE_FILE) \
+		$(FACTS_INST_DBUS_SERVICE_FILE)
 	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/rhsm-facts.service \
 		$(SYSTEMD_INST_DIR)
+	install -m 644 $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.conf \
+		$(PREFIX)/etc/dbus-1/system.d
 	install -m 755 $(DBUS_SERVICES_SRC_DIR)/facts/rhsm-facts-service \
 		$(PREFIX)/usr/libexec/rhsm-facts-service
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/*.py $(DBUS_SERVICES_INST_DIR)/facts
@@ -223,12 +240,12 @@ dbus-facts-service-install: dbus-common-install dbus-support-install
 # TODO: move src/dbus to setup.py? it's own makefile? autoconf?
 dbus-subscriptions-service-install: dbus-common-install 
 	install -d $(DBUS_SERVICES_INST_DIR)/subscriptions
-	install -m 644 $(DBUS_SERVICES_SRC_DIR)/subscriptions/com.redhat.Subscriptions1.Subscriptions.service \
-		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
-	install -m 644 $(DBUS_SERVICES_SRC_DIR)/subscriptions/com.redhat.Subscriptions1.Subscriptions.conf \
-		$(PREFIX)/etc/dbus-1/system.d
+	install -m 644 $(SUBSCRIPTIONS_SRC_DBUS_SERVICE_FILE) \
+		$(SUBSCRIPTIONS_INST_DBUS_SERVICE_FILE)
 	install -m 644 $(DBUS_SERVICES_SRC_DIR)/subscriptions/rhsm-subscriptions.service \
 		$(SYSTEMD_INST_DIR)
+	install -m 644 $(DBUS_SERVICES_SRC_DIR)/subscriptions/com.redhat.Subscriptions1.Subscriptions.conf \
+		$(PREFIX)/etc/dbus-1/system.d
 	install -m 755 $(DBUS_SERVICES_SRC_DIR)/subscriptions/rhsm-subscriptions-service \
 		$(PREFIX)/usr/libexec/rhsm-subscriptions-service
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/subscriptions/__init__.py $(DBUS_SERVICES_INST_DIR)/subscriptions
@@ -240,12 +257,14 @@ dbus-subscriptions-service-install: dbus-common-install
 # TODO: move src/dbus to setup.py? it's own makefile? autoconf?
 dbus-examples-service-install: dbus-common-install 
 	install -d $(DBUS_SERVICES_INST_DIR)/examples
+	install -m 644 $(EXAMPLES_SRC_DBUS_SERVICE_FILE) \
+		$(EXAMPLES_INST_DBUS_SERVICE_FILE)
 	install -m 644 $(DBUS_SERVICES_SRC_DIR)/examples/com.redhat.Subscriptions1.Examples.service \
 		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
-	install -m 644 $(DBUS_SERVICES_SRC_DIR)/examples/com.redhat.Subscriptions1.Examples.conf \
-		$(PREFIX)/etc/dbus-1/system.d
 	install -m 644 $(DBUS_SERVICES_SRC_DIR)/examples/rhsm-examples.service \
 		$(SYSTEMD_INST_DIR)
+	install -m 644 $(DBUS_SERVICES_SRC_DIR)/examples/com.redhat.Subscriptions1.Examples.conf \
+		$(PREFIX)/etc/dbus-1/system.d
 	install -m 755 $(DBUS_SERVICES_SRC_DIR)/examples/rhsm-examples-service \
 		$(PREFIX)/usr/libexec/rhsm-examples-service
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/examples/*.py $(DBUS_SERVICES_INST_DIR)/examples
