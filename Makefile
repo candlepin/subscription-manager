@@ -2,7 +2,7 @@ SHELL := /bin/bash
 PREFIX ?=
 SYSCONF ?= etc
 PYTHON ?= python
-PYTHON_VER ?= python2.7
+PYTHON_VER ?= python2.6
 PYTHON_SITELIB ?= usr/lib/$(PYTHON_VER)/site-packages
 PYTHON_SITELIB64 ?= usr/lib64/$(PYTHON_VER)/site-packages
 
@@ -72,7 +72,7 @@ DBUS_INST_DIR := $(RHSM_SERVICES_INST_DIR)/dbus
 DBUS_SERVICES_INST_DIR := $(DBUS_INST_DIR)/services
 DBUS_CLIENTS_INST_DIR := $(DBUS_INST_DIR)/clients
 DBUS_COMMON_INST_DIR := $(DBUS_INST_DIR)/common
-DBUS_SERVICES_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
+DBUS_SERVICES_CONF_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
 
 POLKIT_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/polkit-1
 POLKIT_ACTIONS_INST_DIR := $(POLKIT_INST_DIR)/actions
@@ -108,9 +108,9 @@ else
 endif
 
 
-FACTS_INST_DBUS_SERVICE_FILE = $(DBUS_SERVICES_INST_DIR)/facts/com.redhat.Subscriptions1.Facts.service
-EXAMPLES_INST_DBUS_SERVICE_FILE = $(DBUS_SERVICES_INST_DIR)/examples/com.redhat.Subscriptions1.Examples.service
-SUBSCRIPTIONS_INST_DBUS_SERVICE_FILE = $(DBUS_SERVICES_INST_DIR)/subscriptions/com.redhat.Subscriptions1.Subscriptions.service
+FACTS_INST_DBUS_SERVICE_FILE = $(DBUS_SERVICES_CONF_INST_DIR)/com.redhat.Subscriptions1.Facts.service
+EXAMPLES_INST_DBUS_SERVICE_FILE = $(DBUS_SERVICES_CONF_INST_DIR)/com.redhat.Subscriptions1.Examples.service
+SUBSCRIPTIONS_INST_DBUS_SERVICE_FILE = $(DBUS_SERVICES_CONF_INST_DIR)/com.redhat.Subscriptions1.Subscriptions.service
 
 ifeq ($(DBUS_SERVICE_FILE_TYPE),dbus)
 FACTS_SRC_DBUS_SERVICE_FILE = $(DBUS_SERVICES_SRC_DIR)/facts/com.redhat.Subscriptions1.Facts.service-dbus
@@ -321,7 +321,8 @@ selinux-restorecon:
 
 
 # Not entirely sure if daemon-reload should before or after dbus reloadConfig
-dbus-install-and-reload: dbus-install polkit-install selinux-restorecon systemd-reload dbus-touch dbus-reload
+#dbus-install-and-reload: dbus-install polkit-install selinux-restorecon systemd-reload dbus-touch dbus-reload
+dbus-install-and-reload: dbus-install polkit-install selinux-restorecon dbus-touch dbus-reload
 
 polkit-install:
 	install -d $(POLKIT_ACTIONS_INST_DIR)
