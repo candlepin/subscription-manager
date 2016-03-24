@@ -12,6 +12,7 @@ log = logging.getLogger(__name__)
 
 class FactsHostCacheFile(cache.JsonFileCache):
     CACHE_FILE = constants.FACTS_HOST_CACHE_FILE
+    default_duration_seconds = constants.FACTS_HOST_CACHE_DURATION
 
 
 class FactsHost(base_facts.BaseFacts):

@@ -5,7 +5,7 @@ from rhsmlib.facts import collector
 
 # TODO: mv to common or services/?
 from rhsmlib.dbus.services.facts import cache
-from rhsmlib.dbus.services.facts import constants
+from rhsmlib.dbus.services.facts import expiration
 
 log = logging.getLogger(__name__)
 
@@ -19,42 +19,39 @@ class CachedFactsCollector(collector.FactsCollector):
                                                    collected_hw_info=collected_hw_info,
                                                    collectors=collectors)
         self.cache = cache
+        # On creation, a Cached collector is dirty until it is persisted.
+        # If it created from a cache, then dirty is flipped to false.
+        self.dirty = True
 
-    def save_to_cache(self, facts_collection):
-        # Create a new FactsCollection with new timestamp
-        cached_facts = collection.FactsCollection.from_facts_collection(facts_collection)
-        log.debug("save_to_cache facts_collection=%s", cached_facts)
-        self.cache.write(dict(cached_facts.data))
+    def cache_save_start(self, facts_collection):
+        # Create a new Cached FactsCollection with new timestamp
+        # cached
+        log.debug("save_to_cache facts_collection=%s", facts_collection)
+
+        #self.cache.write(dict(cached_facts.data))
+
+    def cache_save_finished(self, facts_collection):
+        log.debug("cache_save_finished facts_collection=%s", facts_collection)
 
     def collect(self):
-        log.debug("duration=%s", constants.FACTS_HOST_CACHE_DURATION)
-        fresh_collection = collection.FactsCollection(cache_lifetime=constants.FACTS_HOST_CACHE_DURATION)
+        log.debug("duration=%s", cache.expiration.duration_seconds)
+        # A new expiration, of the same duration, but starting now.
+        host_facts_expiration = expiration.Expiration(duration_seconds=self.cache.expiration.duration_seconds)
+        fresh_collection = collection.FactsCollection(expiration=host_facts_expiration)
 
         try:
-            cached_collection = collection.FactsCollection.from_cache(self.cache,
-                                                                      constants.FACTS_HOST_CACHE_DURATION)
+            cached_collection = collection.FactsCollection.from_cache(self.cache)
         except cache.CacheError as e:
             log.exception(e)
             cached_collection = None
 
-        # not really '==', but more of a 'close-enough-to-equals', ie
-        # the cache isn't expired, so don't bother looking any closer.
-        #
-        #
-        # Should be able to compare None == facts_collection
-        log.debug("cached_collection == fresh_collection: %s", cached_collection == fresh_collection)
-        if cached_collection == fresh_collection:
-            return cached_collection
+        new_enough_collection = cached_collection.merge(fresh_collection)
 
-        # replace with an iterator
-        facts_dict = collection.FactsDict()
-        facts_dict.update(self.get_all())
-        fresh_collection.data = facts_dict
         # Most of the time, we still haven't collected any facts yet.
         # Until we iterate over fresh_facts, does it's iter start collection
 
         # FIXME: This could wait until we get the facts property change signal?
-        self.save_to_cache(fresh_collection)
+        self.cache_save_start(new_enough_collection)
 
         return fresh_collection
         #return self.collection
