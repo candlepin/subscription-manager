@@ -62,27 +62,27 @@ class Candlepin(object):
         try:
             args = self.default_args + args
             return rest_method(*args, **kwargs)
-        except AttributeError, e:
+        except AttributeError as e:
             log.exception(e)
             raise
-        except SSL.SSLError, ex:
+        except SSL.SSLError as ex:
             log.exception(ex)
             self.last_error = ex
             log.error("Consumer certificate is invalid")
             # FIXME: we can get the consumer identity here, and point to the uuid/cert
             raise CandlepinApiSSLError('SSL related error (consumer identity cert is invalid?): %s' % ex)
-        except rhsm.connection.RestlibException, ex:
+        except rhsm.connection.RestlibException as ex:
             # Indicates we may be talking to a very old candlepin server
             # which does not have the necessary API call.
             log.exception(ex)
             self.last_error = ex
             raise CandlepinApiRestlibError('Error from candlepin: %s' % ex)
-        except rhsm.connection.AuthenticationException, ex:
+        except rhsm.connection.AuthenticationException as ex:
             log.error("Could not authenticate with server, check registration status.")
             log.exception(ex)
             self.last_error = ex
             raise CandlepinApiAuthenticationError("Could not authenticate with server, check registration status.: %s" % ex)
-        except rhsm.connection.ExpiredIdentityCertException, ex:
+        except rhsm.connection.ExpiredIdentityCertException as ex:
             log.exception(ex)
             self.last_error = ex
             msg = "Bad identity, unable to connect to server"
@@ -92,7 +92,7 @@ class Candlepin(object):
         # Most of the above are subclasses of ConnectionException that
         # get handled first
         except (rhsm.connection.ConnectionException,
-                socket.error), ex:
+                socket.error) as ex:
 
             log.error(ex)
             self.last_error = ex
