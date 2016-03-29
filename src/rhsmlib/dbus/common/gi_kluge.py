@@ -7,5 +7,8 @@ def kluge_it():
     for gmodule in gmodules:
         del sys.modules[gmodule]
 
-    import slip._wrappers
-    slip._wrappers._gobject = None
+    try:
+        import slip._wrappers
+        slip._wrappers._gobject = None
+    except ImportError:
+	print 'fix me, workaround for rhel6'

@@ -18,6 +18,7 @@ import os
 
 # FIXME: We can likely dump this now
 from rhsmlib.dbus.common import exceptions
+from rhsmlib.dbus.services.facts import expiration
 
 log = logging.getLogger(__name__)
 
@@ -31,9 +32,13 @@ class CacheReadError(CacheError):
 
 
 class Cache(object):
-    def __init__(self, store=None):
+    default_duration_seconds = None
+
+    def __init__(self, store=None, expiration_obj=None):
         self.log = logging.getLogger(__name__ + '.' + self.__class__.__name__)
         self.store = store or Store()
+        self.expiration = expiration_obj or expiration.Expiration(start_datetime=self.timestamp,
+                                                                 duration_seconds=self.default_duration_seconds)
 
     @property
     def timestamp(self):
@@ -45,7 +50,7 @@ class Cache(object):
 
     @property
     def valid(self):
-        if self.exists and self.timestamp:
+        if self.exists and not self.expiration.expired():
             return True
         return False
 

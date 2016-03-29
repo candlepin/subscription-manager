@@ -12,15 +12,12 @@
 #
 
 import collections
-import datetime
-import functools
 import logging
 
 log = logging.getLogger(__name__)
 
 
 # TODO: Likely a bit much for this case
-@functools.total_ordering
 class FactsDict(collections.MutableMapping):
     """A dict for facts that ignores items in 'graylist' on compares."""
 
@@ -73,13 +70,20 @@ def compare_with_graylist(dict_a, dict_b, graylist):
     return ka == kb and all(dict_a[k] == dict_b[k] for k in ka)
 
 
-@functools.total_ordering
 class FactsCollection(object):
-    def __init__(self, facts_dict=None, collection_datetime=None, cache_lifetime=None):
+    def __init__(self, facts_dict=None, expiration=None):
+        """expiration needs to be a FactsCollectionExpiration like instance.
+
+        Not providing one means the FactsCollection has an infinite expiration
+        and will never expire."""
+
         self.data = facts_dict or FactsDict()
-        self.collection_datetime = collection_datetime or datetime.datetime.utcnow()
-        # Or just assume we'll get a datetime.timedelta
-        self.cache_lifetime = cache_lifetime or 0
+        self.expiration = expiration
+
+        # If the cache has been persisted, or doesn't need to be persisted
+        # then dirty = False
+        self.dirty = False
+
         log.debug("init %s", repr(self.collection_datetime))
         log.debug(self)
 
@@ -95,97 +99,57 @@ class FactsCollection(object):
         ie, a copy(), more or less."""
         fc = cls()
         fc.data.update(facts_collection.data)
+        # The FactsCollector subclass needs to set dirty in it's init.
+        # Here, we don't need to be persisted, so dirty is by default False.
         log.debug("FC.from_facts_collection fc=%s", fc)
         return fc
 
     @classmethod
-    def from_cache(cls, cache, cache_lifetime=None):
+    def from_cache(cls, cache):
         """Create a FactsCollection from a Cache object.
 
         Any errors reading the Cache can raise CacheError exceptions."""
         log.debug("FC.from_cache")
-        return cls(cache.read(), cache.timestamp, cache_lifetime)
+        fc = cls(cache.read(), cache.expiration)
+        fc.dirty = False
+        return fc
 
-    @property
-    def expiry_datetime(self):
-        #log.debug("expiry_datetime")
-        return self.collection_datetime + datetime.timedelta(seconds=self.cache_lifetime)
+    def cache_save_start(self, facts_collection):
+        # Create a new FactsCollection with new timestamp
+        log.debug("save_to_cache facts_collection=%s", facts_collection)
+        # We are not persisted, nothing to do.
+        self.cache_save_finished(facts_collection)
 
-    def __eq__(self, other):
-        log.debug("FactsCollection.__eq__ comparing %s == %s", self, other)
+    def cache_save_finished(self, facts_collection):
+        # Set dirty flag to False, though non-persistent classes are always False
+        self.dirty = False
+
+    def merge(self, other):
+        """Combine a cached collection and a fresh collection according to caching rules."""
         if other is None:
-            return False
+            return self
 
         if not hasattr(other, 'data'):
-            return False
+            return self
 
         # If current time isn't within either collections valid lifetime, they are
         # not equals
-        if any([self.expired(), other.expired()]):
+        if self.expired() and other.expired():
             log.debug("FactsCollection cache expire for %s and %s", self, other)
-            return False
+            raise Exception("Both facts collections are expired and invalid: %s and %s", self, other)
 
-        return True
+        if self.expired():
+            other.dirty = True
+            return other
+
+        # We are not expired and that is all that matters.
+        return self
 
     def __iter__(self):
         return self.data
-        #return iter(self.data)
 
-    # cached_valid_facts_set_b = ()
-    # cached_valid_facts_set_a
-    # cached_expired_facts =
-    # just_born_facts_set_a = b
-    # just_born_facts_set_c
-    # just_born_expired_facts == ...?
-    #
-    # cached_valid_facts_set_a == just_born_facts_set_a        True
-    # cached_valid_facts_set_a != just_born_facts_set_a        False
-    # cached_valid_facts_set_a == cached_valid_facts_set_b     True
-    # cached_valid_facts_set_a > cached_valid_facts_set_b      False
-    # cached_valid_facts_set_a >= cached_valid_facts_set_b     True
-    # cached_valid_facts_set_a < cached_valid_facts_set_b      False
-    # cached_valid_facts_set_a <= cached_valid_facts_set_b     True
-    # cached_valid_facts_set_a != cached_valid_facts_set_b     True
-    # cached_valid_facts_set_a > just_born_facts_set_a         False
-    # just_born_facts_set_a > cached_valid_facts_set_a         True
-    # cached_valid_facts_set_a >= just_born_facts_set_a        True
-    # just_born_facts_set_a >= cached_valid_facts_set_a        True
-
-    def __ne__(self, other):
-        log.debug("__ne__ %s != %s", self, other)
-        if other is None:
-            return True
-
-        # If current time isn't within either collections valid lifetime, they are
-        # not equals
-        if any(self.expired(), other.expired()):
-            log.debug("Not ne, expired...")
-            return False
-
-        return self.data != other.data
-
-    def expired(self, at_time=None):
-        at_time = at_time or datetime.datetime.utcnow()
-        log.debug("Self=%s", self)
-        log.debug("FC    expire check expdt=%s at_time=%s", repr(self.expiry_datetime), repr(at_time))
-        log.debug("FC    expire check expdt=%s at_time=%s", self.expiry_datetime, at_time)
-        log.debug("FC    expire check exp < at_time = %s", self.expiry_datetime < at_time)
-        return self.expiry_datetime < at_time
-
-    def __gt__(self, other):
-        # type check?
-        # expiring/expired at later date then other is greater
-        log.debug("_gt_ %s > %s", self, other)
-        if self == other:
-            return False
-        ret = self.expiry_datetime > other.expiry_datetime
-        log.debug("_gt_ %s > %s == %s", self.expiry_datetime, other.expiry_datetime)
-        return ret
-
-    def __gte__(self, other):
-        log.debug("_gte_ %s >= %s", self, other)
-        if self == other:
-            return True
-        ret = self.expiry_datetime >= other.expiry_datetime
-        log.debug("_gte_ %s >= %s == %s", self.expiry_datetime, other.expiry_datetime)
-        return ret
+    def expired(self):
+        """Check expiration for expired, no expiration means expired() is never True."""
+        if self.expiration:
+            return self.expiration.expired()
+        return False
