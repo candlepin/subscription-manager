@@ -1320,6 +1320,7 @@ class SelectSLAScreen(Screen):
                 #        did we do that when we created GoneException?
                 msg = _("Consumer has been deleted.")
                 self.emit('register-error', msg, None)
+                self.emit('attach-finished')
                 self.pre_done()
                 return
             elif isinstance(error[1], RestlibException) and error[1].code == "401":
