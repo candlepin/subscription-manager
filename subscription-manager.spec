@@ -65,7 +65,7 @@
 %define rhsm_debug_install_dir %{_datadir}/rhsm/rhsm_debug
 
 Name: subscription-manager
-Version: 1.17.3
+Version: 1.17.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -635,6 +635,12 @@ fi
 %endif
 
 %changelog
+* Thu Mar 31 2016 Alex Wood <awood@redhat.com> 1.17.4-1
+- 1315859: Only show one proxy dialog (csnyder@redhat.com)
+- 1309553: Stylish fixes for consumer fixes (csnyder@redhat.com)
+- 1313631: Registration with one environment proceeds as normal
+  (csnyder@redhat.com)
+
 * Thu Mar 10 2016 Alex Wood <awood@redhat.com> 1.17.3-1
 - 1304427: Fixes system path to properly import from module
   subscription_manager (csnyder@redhat.com)
