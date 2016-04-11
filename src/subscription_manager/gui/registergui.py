@@ -1819,7 +1819,7 @@ class ChooseServerScreen(Screen):
         # TODO: test the values before saving, then update
         #       self.info and cfg if it works
         try:
-            (hostname, port, prefix) = parse_server_info(server)
+            (hostname, port, prefix) = parse_server_info(server, CFG)
             CFG.set('server', 'hostname', hostname)
             CFG.set('server', 'port', port)
             CFG.set('server', 'prefix', prefix)

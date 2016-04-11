@@ -14,7 +14,6 @@
 
 import os
 import re
-import rhsm.config
 import StringIO
 import stubs
 import sys
@@ -238,14 +237,14 @@ class TestMigration(SubManFixture):
         (options, args) = parser.parse_args(["--activation-key", "bar", "--destination-password", "y"])
         self.assertRaises(SystemExit, migrate.validate_options, (options))
 
-    @patch.object(rhsm.config.RhsmConfigParser, "get", autospec=True)
+    @patch.object(stubs.StubConfig, "get", autospec=True)
     def test_is_hosted(self, mock_get):
         mock_get.return_value = "subscription.rhsm.redhat.com"
         self.assertTrue(migrate.is_hosted())
         mock_get.return_value = "subscription.rhn.redhat.com"
         self.assertTrue(migrate.is_hosted())
 
-    @patch.object(rhsm.config.RhsmConfigParser, "get", autospec=True)
+    @patch.object(stubs.StubConfig, "get", autospec=True)
     def test_is_not_hosted(self, mock_get):
         mock_get.return_value = "subscription.example.com"
         self.assertFalse(migrate.is_hosted())

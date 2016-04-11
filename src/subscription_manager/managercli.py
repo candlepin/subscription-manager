@@ -407,7 +407,7 @@ class CliCommand(AbstractCLICommand):
             try:
                 (self.server_hostname,
                  self.server_port,
-                 self.server_prefix) = parse_server_info(self.options.server_url)
+                 self.server_prefix) = parse_server_info(self.options.server_url, cfg)
             except ServerUrlParseError, e:
                 print _("Error parsing serverurl:")
                 handle_exception("Error parsing serverurl:", e)
