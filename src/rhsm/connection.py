@@ -1251,8 +1251,8 @@ class UEPConnection:
             method = "%s?consumer=%s" % (method, self.sanitize(consumerId))
         return self.conn.request_get(method)
 
-    def getProduct(self, product_id):
-        method = "/products/%s" % self.sanitize(product_id)
+    def getProduct(self, product_uuid):
+        method = "/products/%s" % self.sanitize(product_uuid)
         return self.conn.request_get(method)
 
     def getRelease(self, consumerId):
