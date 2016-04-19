@@ -63,7 +63,7 @@ class StatCertCommandTests(SubManFixture):
 
     def test_entitlement_cert_output_includes_content_sets(self):
         with Capture() as cap:
-            command = StatCertCommandStub(certdata.ENTITLEMENT_CERT_V3_0)
+            command = StatCertCommandStub(certdata.ENTITLEMENT_CERT_V3_2)
             command.main(['will_use_stub'])
         cert_output = cap.out
-        self.assert_string_equals(certdata.ENTITLEMENT_CERT_V3_0_STAT_OUTPUT, cert_output)
+        self.assert_string_equals(certdata.ENTITLEMENT_CERT_V3_2_STAT_OUTPUT, cert_output)

@@ -96,6 +96,7 @@ AVAILABLE_SUBS_LIST = [
     _("Provides:"),
     _("SKU:"),
     _("Contract:"),
+    _("Subscription Number:"),
     _("Pool ID:"),
     _("Provides Management:"),
     _("Available:"),
@@ -143,6 +144,7 @@ CONSUMED_LIST = [
     _("SKU:"),
     _("Contract:"),
     _("Account:"),
+    _("Subscription:"),
     _("Serial:"),
     _("Pool ID:"),
     _("Provides Management:"),
@@ -2320,6 +2322,7 @@ class ListCommand(CliCommand):
                                 data['providedProducts'],
                                 data['productId'],
                                 data['contractNumber'] or "",
+                                data['subscriptionNumber'] or "",
                                 data['id'],
                                 data['management_enabled'],
                                 data['quantity'],
@@ -2396,6 +2399,7 @@ class ListCommand(CliCommand):
                         sku = ""
                         contract = ""
                         account = ""
+                        subscription = ""
                         quantity_used = ""
                         service_level = ""
                         service_type = ""
@@ -2411,6 +2415,7 @@ class ListCommand(CliCommand):
                             sku = order.sku
                             contract = order.contract or ""
                             account = order.account or ""
+                            subscription = order.subscription or ""
                             quantity_used = order.quantity_used
                             if order.virt_only:
                                 system_type = _("Virtual")
@@ -2458,6 +2463,7 @@ class ListCommand(CliCommand):
                             sku,
                             contract,
                             account,
+                            subscription,
                             cert.serial,
                             pool_id,
                             provides_management,

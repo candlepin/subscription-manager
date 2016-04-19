@@ -75,6 +75,7 @@ class OrderPrinter(object):
         s.append("\t%s: %s" % (_("SKU"), xstr(order.sku)))
         s.append("\t%s: %s" % (_("Contract"), xstr(order.contract)))
         s.append("\t%s: %s" % (_("Account"), xstr(order.account)))
+        s.append("\t%s: %s" % (_("Subscription"), xstr(order.subscription)))
         s.append("\t%s: %s" % (_("Service Level"), xstr(order.service_level)))
         s.append("\t%s: %s" % (_("Service Type"), xstr(order.service_type)))
         quantity = xstr(order.quantity)

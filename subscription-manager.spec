@@ -79,7 +79,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:  python-ethtool
 Requires:  python-iniparse
 Requires:  virt-what
-Requires:  python-rhsm >= 1.17.0
+Requires:  python-rhsm >= 1.17.2
 Requires:  dbus-python
 Requires:  yum >= 3.2.29-73
 Requires:  usermode

@@ -57,6 +57,7 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
     def get_type_map(self):
         return {
                 'contract_number': str,
+                'subscription_number': str,
                 'consumed_fraction': str,
                 'start_date': ga_GObject.TYPE_PYOBJECT,
                 'end_date': ga_GObject.TYPE_PYOBJECT,
@@ -84,6 +85,15 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
         column.set_expand(True)
         column.set_sort_column_id(self.model['contract_number'])
         self.model.set_sort_func(self.model['contract_number'],
+                                 self._sort_text, None)
+        self.contract_selection_treeview.append_column(column)
+
+        renderer.set_property("xalign", 0.5)
+        column = ga_Gtk.TreeViewColumn(_("Subscription"),
+                                       renderer,
+                                       text=self.model['subscription_number'])
+        column.set_sort_column_id(self.model['subscription_number'])
+        self.model.set_sort_func(self.model['subscription_number'],
                                  self._sort_text, None)
         self.contract_selection_treeview.append_column(column)
 
@@ -156,6 +166,7 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
 
         self.model.add_map({
             'contract_number': pool['contractNumber'],
+            'subscription_number': pool['subscriptionNumber'],
             'consumed_fraction': "%s / %s" % (pool['consumed'], quantity),
             'start_date': isodate.parse_date(pool['startDate']),
             'end_date': isodate.parse_date(pool['endDate']),
@@ -165,7 +176,7 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
             'is_virt_only': PoolWrapper(pool).is_virt_only(),
             'multi_entitlement': allows_multi_entitlement(pool),
             'quantity_available': quantity_available,
-            'quantity_increment': quantity_increment,
+            'quantity_increment': quantity_increment
             })
 
     def set_parent_window(self, window):

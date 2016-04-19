@@ -140,46 +140,50 @@ Z9DOOKAxJ8/KPAjBmSA=
 """
 
 
-ENTITLEMENT_CERT_V3_0 = """
+ENTITLEMENT_CERT_V3_2 = """
 -----BEGIN CERTIFICATE-----
-MIIDjzCCAvigAwIBAgIIEiB+vHfSYuwwDQYJKoZIhvcNAQEFBQAwMDEPMA0GA1UE
-AwwGcGlwYm95MQswCQYDVQQGEwJVUzEQMA4GA1UEBwwHUmFsZWlnaDAeFw0xMjA5
-MTgwMDAwMDBaFw0xMzA5MTgwMDAwMDBaMCsxKTAnBgNVBAMTIGZmODA4MDgxMzlk
-OWUyNmMwMTM5ZGEyMzQ4OWEwMDY2MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB
-CgKCAQEAgDfkG4OZAfxAGKPjNrhrqBJbGbB0r7CmFRnFPcnwdQQVxx6gxyH5ia5/
-VoNmQRsFlWJJsl2W64IJq8xe2PeF8nhqOh3bg8Q5lPkSqHHb/9G370quRj0Ig+FX
-up3eDUfiF+BpKkTHlelpPOhG6aeZzvwuLcF9+5SSqJTtuyMv759Kneybijm/Gv7x
-t8EZkaUydoZhjgkN7fQAhAEW9L6y0+fudL4nBXnm7CW7k3/JSA7V73Ae1u6L/3+k
-W+FDGGqKa0NR+sYOroCarMsqVd29uRabSO4rxzmYZ5W0RE0f1cUfYFM0aDwaU1+l
-bVnNelesXnhjJ219BWcVdZhS+X84VwIDAQABo4IBMTCCAS0wEQYJYIZIAYb4QgEB
-BAQDAgWgMAsGA1UdDwQEAwIEsDBgBgNVHSMEWTBXgBThiP6NmxGeYgJ5XWPC2dy0
-EoDcVKE0pDIwMDEPMA0GA1UEAwwGcGlwYm95MQswCQYDVQQGEwJVUzEQMA4GA1UE
-BwwHUmFsZWlnaIIJAN6RU5TAoOZ5MB0GA1UdDgQWBBTqqQFQLeZGIrYGXQSYxfw8
-zNaXqzATBgNVHSUEDDAKBggrBgEFBQcDAjASBgkrBgEEAZIICQYEBQwDMy4wMGEG
-CSsGAQQBkggJBwRUBFJ42hXKwQmAMBAEwC0mJUiwG1llJY/ohbtgtHv1O8w95yVP
-6IZTlxy7GVgHn0BaGaJvBY29ILmqPvkXh8IOWeAFpiEVtwrrTkxmoYKDgtHpgfcA
-MA0GCSqGSIb3DQEBBQUAA4GBAF0jikJbd1C0PqhpRkmRGaNnAPO4kCSH+nTee1UF
-xSYERpmDHnimDWYjcs35gb1wWwSOLVsTn4X+3TQqMQ1rdnEX5mn7iutqCjj5Rjzk
-icfe5PF7mmnMv6FeKlFEg3WGkIkatI1tF13spHowM8GFZvAcMGVzFkvL6QtzyNKa
-t6+/
+MIIDvzCCAyigAwIBAgIIRc0LPzgyLGkwDQYJKoZIhvcNAQEFBQAwTDErMCkGA1UE
+Awwid3BvdGVhdC1kZXNrdG9wLnVzZXJzeXMucmVkaGF0LmNvbTELMAkGA1UEBhMC
+VVMxEDAOBgNVBAcMB1JhbGVpZ2gwHhcNMTYwMjI0MDAwMDAwWhcNMTYwMjI1MTQ1
+NTM3WjArMSkwJwYDVQQDEyA4YThkMDkwMTUzMTNjNWM3MDE1MzEzYzc2NGI1MTNm
+OTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKjdIp/Pa0pqdV+y60GE
+PqiGt3BtHFSYjftwNZ6UtSgjih8/iqyZWp2l1xdr+4fJTADqUnKQ6JvyzCoseFaM
+R8TNecb8R06E2qKaiEZVY4hOSQ08h950n0TOgSVABzvGd3tVGTEzYXhhvNAaARPZ
+5jtCOGThELi90y3AUINjO/8mFWOJj5t238hkL3/ZR9puRSznJTKUre1r+Ba5plp9
+T9Z9GWBdk7brjGoGZwCSPxmMPqQ1CHvd/cuPK2gLLw5oGo7Sk/dhT8towJZsTiBt
+TmCyUyPJfbwwkXg6jP0nt7FjZgwUJfPC8zzd6bUyH0giphH9tnPtgtUZgEINpqDi
+KvkCAwEAAaOCAUUwggFBMBEGCWCGSAGG+EIBAQQEAwIFoDALBgNVHQ8EBAMCBLAw
+fAYDVR0jBHUwc4AUP/y+GXDcoUN2KX68Eo3YOhNPzYmhUKROMEwxKzApBgNVBAMM
+Indwb3RlYXQtZGVza3RvcC51c2Vyc3lzLnJlZGhhdC5jb20xCzAJBgNVBAYTAlVT
+MRAwDgYDVQQHDAdSYWxlaWdoggkAvDi6Ws2GP54wHQYDVR0OBBYEFIcL5Tayc/Lc
+1coZTCFEbWrtFnU+MBMGA1UdJQQMMAoGCCsGAQUFBwMCMBIGCSsGAQQBkggJBgQF
+DAMzLjIwWQYJKwYBBAGSCAkHBEwESnjaDcrBDYAwDANALwQDsE0ErlqpwRGpKGwP
+9z7r097EyZsX6hixoUjgYx6d6y6HTaacysV1tNL+GDYqPoLhFUUGj4dpmZNT7/qA
+MA0GCSqGSIb3DQEBBQUAA4GBAAD6nUzJgSIcx03cxLN0hbjK0PSMOl3ITH45ckgs
+YI1RWMRs3Vd019DM+H85wIZ8clkCiU7GFt6GuNy/aYj3pLb1Y8Baewz5Z9lkp7JQ
+nU8TVNndsbZ82tnQF6wnHnHu4Y8EwiA4w0hI0Ez3RW3BhfXKI0+cbO3MILr8o5QJ
+QzGj
 -----END CERTIFICATE-----
 -----BEGIN ENTITLEMENT DATA-----
-eJydUl1vmzAU/SvI6iMMG1NCeNue9jZp29OmKvIXKQrYzDZNo6j/fdeQ0kT5aFU+
-hM25595z7vUeCaPd0CmLKsSZpJLldUJzLpOcLklS3tc8KReiXt4XC8o5RTH6NzDt
-G79DVRYjN3AnbNP7xmhU7ZHbDJCJbZUznTIueS6LVZEDS7NOAfJ1QqIfv6La2GiG
-t8zqRq9RRTEkNWKjvEMVgbVnYgPIqpFAJ+glRsbKoHeP9NDxUXldlxhuQpdymfMc
-42klMCnhHQu8qSZ4zGo9EDNMsgQvE1L+xrganz8QrLScQHoBhI55y0SgFwvYMyHM
-oMOWZJQSQuEz6uytkYMIPv7u0SQfH1/ZO22JvjVAjtGTsm5sL6JfCAkVrXhsvBJ+
-sCpkR4c2PkziVBAzl4R4v+tDkd3QvVVk7ZbtXKI0462SySsvRi3jqr0V8ATdMaHr
-XjmfHHbglvlH+JnWxqRhnU4J0jurWsWcAhcQte7Xq8G2lwIBgoBOeSaZZyv13DcW
-lGYYv8SvZgjJ8muGzs/cbOUcmk38VDL6zvyRgVGTN+nMSmfWoRmoqlnr1ImbcxaA
-6SVDtDhyhK+40aFfN6ZzDf/ocPRhHjccncZeG09xOh5C3xvPpbl8bCB3HI5ROPvH
-Zyo9TvL5eTzA/R9AE5nG
+eJzFVV1vmzAU/SuRnzYpLjYkQPLWadpeOu2hfVpVRY65SVANpv5IG0X577sG0qht
+0nadpklIxveee+85BwNbInVtfQWGTEmWF5BKHtMilSkdCTahYg6MCgFykuX5aJJm
+ZEjuvKhd6TZkyofE+rmVpmxcqWsy3RJ767GTuAerK9CWWjBrMHQubCnpupBYX4sK
+EHPeYQY/LweXLWjwJYAGnwoElsZ9RqjV8hacJdN4SIyo2lVqAxgZYRbLSglhrII1
+KGz6zStFL/v4kLhNE0Z9NeUa6NXKaL9ckd2QhP4zXSvU4IwHjGhTBA+2pPbVvHWj
+jdA8zcYJmzyRTYNuJ4xDVMx4SllM49EVY9P2+oVgqIsumbXJ5EkSLXdGyFDOcCuk
+1L4OOx4nCecJLpw8t5ZwxuPAvTG68DKYcr0lZRiTZCxnR439oYtyUQZrSyxA3WBs
+1y09CyOEkavSgXS+9fSanF9ckJuOIQRK+xGc4/BHPze+Oow7POuqn4Y5hQdHnUqu
+0R0dLHZgHe13KEy4FQZXzjXTKIIHUTUKzqSuoqNdoBZzBUhuIZSFTssTEctmOfNG
+vbdlhHiyu9kND66mx13dH9e/95Sf8HSPPRjZR2i3f8vDaKF11N7/kU+PZcGLCGsr
+cKIQTszgoSkNMmOP9sTJ+HXyFKrGbYKpJ1R0ANoh/ometxSM3lBQ69fo1/o/cj/B
+3InlEgr68vy8SLyTdCTUvdjYj56jrjrqfDJw51FHMUMybeHV+ffwBuASk8OLx05o
+qyH8SXoaRySeyr9XaVv/UaFtca/zxXNLGcMPC1Y2Wqvwk2l15iIv2ITxccITOZZZ
+f5fm80XBxhkju91v8ZVy9g==
 -----END ENTITLEMENT DATA-----
 -----BEGIN RSA SIGNATURE-----
-FWYaGqnaDRpuaKLEXu9RtxNLbp3q7BM651s1P1jwlE/Ff1GMZrzsreBfRa4FE6ST
-jdWIkOEVpZPEHtdnHlpQaphYDOQBfdSGrOb2ksKqfp0qKrqT4dvzau5IzqtVmkTJ
-SgW0kgf/C5sFxdgD6s9NKmP/u6OgI/qqE+KfnCex/ko=
+LvIgKpAzQavNym0DkA2UxoQqA8LQdEwb+x+6BGOs0meZuVuebIw5BjWAiUADmyxO
+nID3SAuNrg5IPmRr4a4/Y24EC/shObFkkVh+3EUPjGAx4yL/R/ePrSlD0LZGct7j
+x5Vyo49z4GS7ww3ByciI2cUnaVA2axVBmscgZ7nAlKE=
 -----END RSA SIGNATURE-----
 """
 
@@ -296,6 +300,7 @@ Order:
 \tSKU: awesomeos-server
 \tContract: 359
 \tAccount: 12331131231
+\tSubscription: 
 \tService Level: Premium
 \tService Type: Level 3
 \tQuantity: 10
@@ -381,89 +386,111 @@ Content:
 \tArches:%(space)s
 """ % ({'space': ' '})
 
-ENTITLEMENT_CERT_V3_0_OUTPUT = """
+ENTITLEMENT_CERT_V3_2_OUTPUT = """
 +-------------------------------------------+
 \tEntitlement Certificate
 +-------------------------------------------+
 
 Certificate:
 \tPath:%(space)s
-\tVersion: 3.0
-\tSerial: 1306183239866671852
-\tStart Date: 2012-09-18 00:00:00+00:00
-\tEnd Date: 2013-09-18 00:00:00+00:00
-\tPool ID: Not Available
+\tVersion: 3.2
+\tSerial: 5029688724996369513
+\tStart Date: 2016-02-24 00:00:00+00:00
+\tEnd Date: 2016-02-25 14:55:37+00:00
+\tPool ID: 8a8d09015313c5c7015313c68bfd0570
 
 Subject:
-\tCN: ff80808139d9e26c0139da23489a0066
+\tCN: 8a8d09015313c5c7015313c764b513f9
 
 Issuer:
 \tC: US
-\tCN: pipboy
+\tCN: wpoteat-desktop.usersys.redhat.com
 \tL: Raleigh
 
 Product:
-\tID: 100000000000002
-\tName: Awesome OS for x86_64 Bits
-\tVersion: 3.11
-\tArch: x86_64
+\tID: 37060
+\tName: Awesome OS Server Bits
+\tVersion: 6.1
+\tArch: ALL
+\tTags:%(space)s
+\tBrand Type:%(space)s
+\tBrand Name:%(space)s
+
+Product:
+\tID: 37080
+\tName: Awesome OS Modifier Bits
+\tVersion: 6.1
+\tArch: ALL
 \tTags:%(space)s
 \tBrand Type:%(space)s
 \tBrand Name:%(space)s
 
 Order:
-\tName: Awesome OS for x86_64
-\tNumber: ff80808139d94b400139d94c018c0164
-\tSKU: awesomeos-x86_64
-\tContract: 67
+\tName: Awesome OS Server Basic (dc-virt)
+\tNumber: order-8675309
+\tSKU: awesomeos-server-basic-vdc
+\tContract: 0
 \tAccount: 12331131231
-\tService Level:%(space)s
-\tService Type:%(space)s
-\tQuantity: 10
-\tQuantity Used: 2
-\tSocket Limit: 1
-\tRAM Limit:%(space)s
-\tCore Limit:%(space)s
-\tVirt Only: False
-\tStacking ID: 1
-\tWarning Period: 30
+\tSubscription: 1012
+\tService Level: Full-Service
+\tService Type: Drive-Through
+\tQuantity: Unlimited
+\tQuantity Used: 1
+\tSocket Limit: 2
+\tRAM Limit: 2
+\tCore Limit: 4
+\tVirt Only: True
+\tStacking ID:%(space)s
+\tWarning Period: 0
 \tProvides Management: False
 
 Content:
 \tType: yum
-\tName: always-enabled-content
-\tLabel: always-enabled-content
+\tName: awesomeos-modifier
+\tLabel: awesomeos-modifier
 \tVendor: test-vendor
-\tURL: /foo/path/always/$releasever
-\tGPG: /foo/path/always/gpg
-\tEnabled: True
-\tExpires: 200
-\tRequired Tags:%(space)s
-\tArches:%(space)s
-
-Content:
-\tType: yum
-\tName: awesomeos
-\tLabel: awesomeos
-\tVendor: Red Hat
-\tURL: /path/to/$basearch/$releasever/awesomeos
-\tGPG: /path/to/awesomeos/gpg/
-\tEnabled: True
-\tExpires: 3600
-\tRequired Tags:%(space)s
-\tArches:%(space)s
-
-Content:
-\tType: yum
-\tName: awesomeos-x86_64
-\tLabel: awesomeos-x86_64
-\tVendor: Red Hat
-\tURL: /path/to/awesomeos/x86_64
-\tGPG: /path/to/awesomeos/gpg/
+\tURL: http://example.com/awesomeos-modifier
+\tGPG: http://example.com/awesomeos-modifier/gpg
 \tEnabled: False
-\tExpires: 3600
+\tExpires:%(space)s
 \tRequired Tags:%(space)s
-\tArches:%(space)s
+\tArches: ALL
+
+Content:
+\tType: yum
+\tName: content
+\tLabel: content-label
+\tVendor: test-vendor
+\tURL: /foo/path
+\tGPG: /foo/path/gpg/
+\tEnabled: False
+\tExpires: 0
+\tRequired Tags:%(space)s
+\tArches: ALL
+
+Content:
+\tType: yum
+\tName: content-emptygpg
+\tLabel: content-label-empty-gpg
+\tVendor: test-vendor
+\tURL: /foo/path
+\tGPG:%(space)s
+\tEnabled: False
+\tExpires: 0
+\tRequired Tags:%(space)s
+\tArches: ALL
+
+Content:
+\tType: yum
+\tName: content-nogpg
+\tLabel: content-label-no-gpg
+\tVendor: test-vendor
+\tURL: /foo/path
+\tGPG:%(space)s
+\tEnabled: False
+\tExpires: 0
+\tRequired Tags:%(space)s
+\tArches: ALL
 
 Content:
 \tType: yum
@@ -475,8 +502,21 @@ Content:
 \tEnabled: False
 \tExpires: 600
 \tRequired Tags:%(space)s
-\tArches:%(space)s
+\tArches: ALL
+
+Content:
+\tType: yum
+\tName: tagged-content
+\tLabel: tagged-content
+\tVendor: test-vendor
+\tURL: /foo/path/always
+\tGPG: /foo/path/always/gpg
+\tEnabled: False
+\tExpires:%(space)s
+\tRequired Tags: TAG1, TAG2
+\tArches: ALL
 """ % ({'space': ' '})
+
 
 PRODUCT_CERT_V1_0_OUTPUT = """
 +-------------------------------------------+
@@ -578,10 +618,10 @@ DER size: 894b
 Subject Key ID size: 20b
 """
 
-ENTITLEMENT_CERT_V3_0_STAT_OUTPUT = \
+ENTITLEMENT_CERT_V3_2_STAT_OUTPUT = \
 """Type: Entitlement Certificate
-Version: 3.0
-DER size: 915b
+Version: 3.2
+DER size: 963b
 Subject Key ID size: 20b
-Content sets: 4
+Content sets: 6
 """

@@ -77,10 +77,10 @@ class CatCertCommandTests(SubManFixture):
 
     def test_cert_v3_cat(self):
         with Capture() as cap:
-            command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V3_0)
+            command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V3_2)
             command.main(['will_use_stub'])
         cert_output = cap.out
-        self.assert_string_equals(certdata.ENTITLEMENT_CERT_V3_0_OUTPUT, cert_output)
+        self.assert_string_equals(certdata.ENTITLEMENT_CERT_V3_2_OUTPUT, cert_output)
 
     def test_product_cert_output(self):
         with Capture() as cap:

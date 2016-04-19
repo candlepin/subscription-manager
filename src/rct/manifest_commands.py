@@ -237,6 +237,7 @@ class CatManifestCommand(RCTManifestCommand):
             to_print.append((_("Contract"), get_value(data, "pool.contractNumber")))
             to_print.append((_("Order"), get_value(data, "pool.orderNumber")))
             to_print.append((_("Account"), get_value(data, "pool.accountNumber")))
+            to_print.append((_("Subscription"), get_value(data, "pool.subscriptionNumber")))
 
             entitlement_file = os.path.join("export", "entitlements", "%s.json" % data["id"])
             to_print.append((_("Entitlement File"), entitlement_file))
