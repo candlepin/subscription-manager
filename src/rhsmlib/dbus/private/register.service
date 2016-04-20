@@ -1,0 +1,4 @@
+# Fixed section header (do not change):
+[D-BUS Service]
+Name=com.redhat.Subscriptions1.RegisterService
+Exec=/usr/bin/env PYTHONPATH=/home/awood/devel/subscription-manager/src/ /home/awood/devel/subscription-manager/src/rhsmlib/dbus/private/register_service.py
