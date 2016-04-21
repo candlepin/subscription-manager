@@ -1,4 +1,5 @@
 import fixture
+import stubs
 
 from mock import Mock, patch
 from rhsm.utils import ServerUrlParseErrorEmpty, \
@@ -10,12 +11,16 @@ from subscription_manager.utils import parse_server_info, \
     get_server_versions, friendly_join, is_true_value, url_base_join,\
     ProductCertificateFilter, EntitlementCertificateFilter
 from stubs import StubProductCertificate, StubProduct, StubEntitlementCertificate
+from fixture import SubManFixture
 
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
 
 
-class TestParseServerInfo(fixture.SubManFixture):
+class TestParseServerInfo(SubManFixture):
+    def setUp(self):
+        SubManFixture.setUp(self)
+        self.stubConfig = stubs.StubConfig()
 
     def test_fully_specified(self):
         local_url = "myhost.example.com:900/myapp"
@@ -44,6 +49,34 @@ class TestParseServerInfo(fixture.SubManFixture):
         self.assertEquals("myhost.example.com", hostname)
         self.assertEquals("443", port)
         self.assertEquals("/myapp", prefix)
+
+    def test_hostname_only_config(self):
+        self.stubConfig.set("server", "port", "344")
+        self.stubConfig.set("server", "prefix", "/test-prefix")
+
+        local_url = "myhost.example.com"
+        (hostname, port, prefix) = parse_server_info(local_url, self.stubConfig)
+        self.assertEquals("myhost.example.com", hostname)
+        self.assertEquals("344", port)
+        self.assertEquals("/test-prefix", prefix)
+
+    def test_hostname_port_config(self):
+        self.stubConfig.set("server", "port", "600")
+
+        local_url = "myhost.example.com/myapp"
+        (hostname, port, prefix) = parse_server_info(local_url, self.stubConfig)
+        self.assertEquals("myhost.example.com", hostname)
+        self.assertEquals("600", port)
+        self.assertEquals("/myapp", prefix)
+
+    def test_hostname_prefix_config(self):
+        self.stubConfig.set("server", "prefix", "/test-prefix")
+
+        local_url = "myhost.example.com:500"
+        (hostname, port, prefix) = parse_server_info(local_url, self.stubConfig)
+        self.assertEquals("myhost.example.com", hostname)
+        self.assertEquals("500", port)
+        self.assertEquals("/test-prefix", prefix)
 
     def test_hostname_slash_no_prefix(self):
         local_url = "http://myhost.example.com/"
