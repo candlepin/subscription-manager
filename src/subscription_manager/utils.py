@@ -61,11 +61,18 @@ class DefaultDict(collections.defaultdict):
         return pprint.pformat(self.as_dict())
 
 
-def parse_server_info(local_server_entry):
+def parse_server_info(local_server_entry, config=None):
+    hostname = ''
+    port = ''
+    prefix = ''
+    if config is not None:
+        hostname = config.get("server", "hostname")
+        port = config.get("server", "port")
+        prefix = config.get("server", "prefix")
     return parse_url(local_server_entry,
-                     DEFAULT_HOSTNAME,
-                     DEFAULT_PORT,
-                     DEFAULT_PREFIX)[2:]
+                      hostname or DEFAULT_HOSTNAME,
+                      port or DEFAULT_PORT,
+                      prefix or DEFAULT_PREFIX)[2:]
 
 
 def parse_baseurl_info(local_server_entry):

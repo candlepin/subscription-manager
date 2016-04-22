@@ -80,6 +80,21 @@ class StubConfig(config.RhsmConfigParser):
     def read(self, filename):
         self.readfp(test_config, "foo.conf")
 
+    # this way our test can put some values in and have them used during the run
+    def get(self, section, key):
+        # print self.sections()
+        value = super(StubConfig, self).get(section, key)
+        test_value = None
+        try:
+            test_value = self.store['%s.%s' % (section, key)]
+        except KeyError:
+            test_value = None
+
+        if test_value:
+            return test_value
+        else:
+            return value
+
     def set(self, section, key, value):
         # print self.sections()
         self.store['%s.%s' % (section, key)] = value
