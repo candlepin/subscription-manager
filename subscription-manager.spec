@@ -61,7 +61,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.17.4
+Version: 1.17.5
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -577,6 +577,14 @@ fi
 %endif
 
 %changelog
+* Fri Apr 22 2016 Vritant Jain <vrjain@redhat.com> 1.17.5-1
+- Added RHEL 7.3 release target (vrjain@redhat.com)
+- 1320507: Use config entry before default for port and prefix
+  (wpoteat@redhat.com)
+- 1317613: Typo in selectsla.ui (wpoteat@redhat.com)
+- 1321831: Clear auto-attach dialog when consumer has been deleted
+  (wpoteat@redhat.com)
+
 * Thu Mar 31 2016 Alex Wood <awood@redhat.com> 1.17.4-1
 - 1315859: Only show one proxy dialog (csnyder@redhat.com)
 - 1309553: Stylish fixes for consumer fixes (csnyder@redhat.com)
