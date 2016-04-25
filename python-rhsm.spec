@@ -12,7 +12,7 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.17.1
+Version: 1.17.2
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -74,6 +74,11 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Mon Apr 25 2016 Vritant Jain <vrjain@redhat.com> 1.17.2-1
+- Added 7.3 releaser (vrjain@redhat.com)
+- Updated UEPConnection.getProduct to explicitly reference product UUID
+  (crog@redhat.com)
+
 * Mon Feb 01 2016 Christopher Snyder <csnyder@redhat.com> 1.17.1-1
 - Bump version to 1.17.0 (csnyder@redhat.com)
 
