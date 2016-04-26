@@ -325,6 +325,29 @@ run_sm "64" register --activationkey "${ACTIVATION_KEY}" --org "${ORG}" --force 
 run_sm "1" unregister
 
 run_sm "0" clean
+
+# check proxy good and bad
+run_sm "0" repos --list --proxy auto-services.usersys.redhat.com:3129
+run_sm "0" repos --list --proxy auto-services.usersys.redhat.com:3128 --proxyuser redhat --proxypassword redhat
+# this is not a proxy for CP
+run_sm "69" repos --list --proxy www.redhat.com
+# this requires auth. proxy is there but auth fails
+run_sm "70" repos --list --proxy auto-services.usersys.redhat.com:3128
+# same tests with config settings
+run_sm "0" config --server.proxy_hostname=auto-services.usersys.redhat.com --server.proxy_port=3129
+run_sm "0" repos --list
+run_sm "0" config --server.proxy_hostname=auto-services.usersys.redhat.com --server.proxy_port=3128 --server.proxy_user=redhat --server.proxy_password=redhat
+run_sm "0" repos --list
+# reset config
+restore_conf
+run_sm "0" config --server.proxy_hostname=www.redhat.com
+# it will run the config settings with no test. returns cached results
+run_sm "0" repos --list
+restore_conf
+run_sm "0" config --server.proxy_hostname=auto-services.usersys.redhat.com --server.proxy_port=3128
+run_sm "70" repos --list
+
+
 # restore configs, etc
 post
 

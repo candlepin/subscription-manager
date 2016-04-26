@@ -309,6 +309,23 @@ class CliCommand(AbstractCLICommand):
     def _get_logger(self):
         return logging.getLogger('rhsm-app.%s.%s' % (self.__module__, self.__class__.__name__))
 
+    def test_proxy_connection(self):
+        result = None
+        if not self.proxy_hostname or cfg.get("server", "proxy_hostname"):
+            return True
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.settimeout(10)
+            result = s.connect_ex((self.proxy_hostname or cfg.get("server", "proxy_hostname"), int(self.proxy_port or rhsm.config.DEFAULT_PROXY_PORT)))
+        except Exception as e:
+            log.info("Attempted bad proxy: %s" % e)
+        finally:
+            s.close()
+        if result:
+            return False
+        else:
+            return True
+
     def _request_validity_check(self):
         # Make sure the sorter is fresh (low footprint if it is)
         inj.require(inj.CERT_SORTER).force_cert_check()
@@ -453,6 +470,7 @@ class CliCommand(AbstractCLICommand):
             else:
                 # if no port specified, use the one from the config, or fallback to the default
                 self.proxy_port = cfg.get_int('server', 'proxy_port') or rhsm.config.DEFAULT_PROXY_PORT
+            config_changed = True
 
         if hasattr(self.options, "proxy_user") and self.options.proxy_user:
             self.proxy_user = self.options.proxy_user
@@ -495,11 +513,16 @@ class CliCommand(AbstractCLICommand):
 
             self.entcertlib = EntCertActionInvoker()
 
+            if config_changed:
+                if not self.test_proxy_connection():
+                    system_exit(os.EX_UNAVAILABLE, _("Proxy connnection failed, please check your settings."))
+
         else:
             self.cp = None
 
         # do the work, catch most common errors here:
         try:
+
             return_code = self._do_command()
 
             # Only persist the config changes if there was no exception
