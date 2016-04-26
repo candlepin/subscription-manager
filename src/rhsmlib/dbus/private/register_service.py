@@ -15,9 +15,9 @@ DBUS_PATH = "/com/redhat/Subscriptions1/RegisterService"
 
 
 class RegisterService(dbus.service.Object):
-    def __init__(self, bus, object_path=DBUS_PATH):
+    def __init__(self, conn, object_path=DBUS_PATH):
         print "Created RegisterService"
-        bus_name = dbus.service.BusName(DBUS_NAME, bus=bus)
+        bus_name = dbus.service.BusName(DBUS_NAME, bus=conn)
         super(RegisterService, self).__init__(object_path=object_path, bus_name=bus_name)
 
     @decorators.dbus_service_method(dbus_interface=DBUS_INTERFACE, out_signature='s', in_signature='s')
@@ -25,7 +25,6 @@ class RegisterService(dbus.service.Object):
         text = list(text)
         text.reverse()
         return ''.join(text)
-
 
 if __name__ == '__main__':
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
