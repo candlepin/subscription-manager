@@ -16,7 +16,7 @@ htmlcov/
 *.egginfo
 *.egg-info
 po/build
-po/POTFILES.in
+po/POTFILES.*
 po/.zanata-cache
 etc-conf/*.desktop
 src/subscription_manager/version.py
@@ -24,3 +24,4 @@ src/rct/version.py
 bin/rhsmcertd
 bin/rhsm-icon
 .idea
+build/
