@@ -2,7 +2,7 @@ SHELL := /bin/bash
 PREFIX ?=
 SYSCONF ?= etc
 PYTHON ?= python
-PYTHON_VER ?= python2.7
+PYTHON_VER ?= python2.6
 PYTHON_SITELIB ?= usr/lib/$(PYTHON_VER)/site-packages
 PYTHON_SITELIB64 ?= usr/lib64/$(PYTHON_VER)/site-packages
 
