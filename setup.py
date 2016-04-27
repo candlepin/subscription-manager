@@ -27,7 +27,7 @@ from distutils.command.clean import clean as _clean
 from distutils.command.build_py import build_py as _build_py
 from distutils.dir_util import remove_tree
 
-from build_ext import i18n
+from build_ext import i18n, lint
 
 
 # subclass build_py so we can generate
@@ -151,6 +151,8 @@ cmdclass = {
     'update_trans': i18n.UpdateTrans,
     'uniq_trans': i18n.UniqTrans,
     'gettext': i18n.Gettext,
+    'lint': lint.Lint,
+    'lint_glade': lint.GladeLint,
 }
 
 transforms = [
