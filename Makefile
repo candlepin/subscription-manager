@@ -51,6 +51,7 @@ DBUS_SRC_DIR := $(RHSM_SERVICES_SRC_DIR)/dbus
 DBUS_SERVICES_SRC_DIR = $(DBUS_SRC_DIR)/services
 DBUS_COMMON_SRC_DIR = $(DBUS_SRC_DIR)/common
 DBUS_CLIENTS_SRC_DIR = $(DBUS_SRC_DIR)/clients
+DBUS_PRIVATE_SRC_DIR = $(DBUS_SRC_DIR)/private
 FACTS_SRC_DIR := $(RHSMLIB_SRC_DIR)/facts
 COMPAT_SRC_DIR := $(RHSMLIB_SRC_DIR)/compat
 CANDLEPIN_SRC_DIR := $(RHSMLIB_SRC_DIR)/candlepin
@@ -72,6 +73,8 @@ DBUS_INST_DIR := $(RHSM_SERVICES_INST_DIR)/dbus
 DBUS_SERVICES_INST_DIR := $(DBUS_INST_DIR)/services
 DBUS_CLIENTS_INST_DIR := $(DBUS_INST_DIR)/clients
 DBUS_COMMON_INST_DIR := $(DBUS_INST_DIR)/common
+DBUS_PRIVATE_INST_DIR := $(DBUS_INST_DIR)/private
+DBUS_PRIVATE_SERVICES_INST_DIR := /etc/dbus-1/subman.d
 DBUS_SERVICES_CONF_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
 
 POLKIT_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/polkit-1
@@ -188,7 +191,7 @@ facts-install: install-rhsmlib
 	install -d $(FACTS_INST_DIR)
 	install -m 644 -p $(FACTS_SRC_DIR)/*.py $(FACTS_INST_DIR)
 
-compat-install: 
+compat-install:
 	install -d $(COMPAT_INST_DIR)
 	install -m 644 -p $(COMPAT_SRC_DIR)/*.py $(COMPAT_INST_DIR)
 
@@ -207,14 +210,22 @@ dbus-common-install:
 	install -d $(DBUS_SERVICES_INST_DIR)
 	install -d $(DBUS_CLIENTS_INST_DIR)
 	install -d $(DBUS_COMMON_INST_DIR)
+	install -d $(DBUS_PRIVATE_INST_DIR)
 	install -d $(SYSTEMD_INST_DIR)
+	install -d $(DBUS_PRIVATE_SERVICES_INST_DIR)
 	install -m 644 -p $(DBUS_SRC_DIR)/__init__.py $(DBUS_INST_DIR)
 	install -m 644 -p $(DBUS_COMMON_SRC_DIR)/__init__.py $(DBUS_COMMON_INST_DIR)
+	install -m 644 -p $(DBUS_PRIVATE_SRC_DIR)/__init__.py $(DBUS_PRIVATE_INST_DIR)
 	install -m 644 -p $(DBUS_CLIENTS_SRC_DIR)/__init__.py $(DBUS_CLIENTS_INST_DIR)
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/__init__.py $(DBUS_SERVICES_INST_DIR)
 	install -m 644 -p $(DBUS_COMMON_SRC_DIR)/*.py $(DBUS_COMMON_INST_DIR)
+	install -m 644 -p $(DBUS_PRIVATE_SRC_DIR)/*.py $(DBUS_PRIVATE_INST_DIR)
 	install -m 644 -p $(DBUS_CLIENTS_SRC_DIR)/*.py $(DBUS_CLIENTS_INST_DIR)
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/*.py $(DBUS_SERVICES_INST_DIR)
+	install -m 755 -p $(DBUS_PRIVATE_SRC_DIR)/register_service.py \
+		$(DBUS_PRIVATE_SERVICES_INST_DIR)
+	install -m 644 -p $(DBUS_PRIVATE_SRC_DIR)/register.service \
+		$(DBUS_PRIVATE_SERVICES_INST_DIR)
 
 dbus-rhsmd-service-install: dbus-common-install
 	install -m 644 etc-conf/com.redhat.SubscriptionManager.conf \
@@ -238,7 +249,7 @@ dbus-facts-service-install: dbus-common-install dbus-support-install
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/*.py $(DBUS_SERVICES_INST_DIR)/facts
 
 # TODO: move src/dbus to setup.py? it's own makefile? autoconf?
-dbus-subscriptions-service-install: dbus-common-install 
+dbus-subscriptions-service-install: dbus-common-install
 	install -d $(DBUS_SERVICES_INST_DIR)/subscriptions
 	install -m 644 $(SUBSCRIPTIONS_SRC_DBUS_SERVICE_FILE) \
 		$(SUBSCRIPTIONS_INST_DBUS_SERVICE_FILE)
@@ -255,7 +266,7 @@ dbus-subscriptions-service-install: dbus-common-install
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/subscriptions/root.py $(DBUS_SERVICES_INST_DIR)/subscriptions
 
 # TODO: move src/dbus to setup.py? it's own makefile? autoconf?
-dbus-examples-service-install: dbus-common-install 
+dbus-examples-service-install: dbus-common-install
 	install -d $(DBUS_SERVICES_INST_DIR)/examples
 	install -m 644 $(EXAMPLES_SRC_DBUS_SERVICE_FILE) \
 		$(EXAMPLES_INST_DBUS_SERVICE_FILE)
