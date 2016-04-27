@@ -12,31 +12,16 @@
 # in this software or its documentation.
 import os
 import shutil
-import subprocess
 
-from distutils import cmd, log
+from distutils import log
 from distutils.command.build_py import build_py as _build_py
+from distutils.spawn import spawn
 
-from build_ext.utils import Utils
-
-
-class TransBase(cmd.Command):
-    user_options = []
-
-    def initialize_options(self):
-        pass
-
-    def finalize_options(self):
-        pass
-
-    def _run(self, cmd):
-        rc = subprocess.call(cmd)
-        if rc != 0:
-            raise RuntimeError("Failed: '%s'" % ' '.join(cmd))
+from build_ext.utils import Utils, BaseCommand
 
 
 # Courtesy http://wiki.maemo.org/Internationalize_a_Python_application
-class BuildTrans(TransBase):
+class BuildTrans(BaseCommand):
     description = 'Compile .po files into .mo files'
     user_options = _build_py.user_options + [
         ('lint', 'l', 'check po files only'),
@@ -57,7 +42,7 @@ class BuildTrans(TransBase):
             dest = '/dev/null'
 
         cmd = ['msgfmt', '--check', '--statistics', '-o', dest, src]
-        self._run(cmd)
+        spawn(cmd)
 
     def run(self):
         for po_file in Utils.find_files_of_type('po', '*.po'):
@@ -67,33 +52,39 @@ class BuildTrans(TransBase):
             Utils.run_if_new(po_file, dest, self.compile)
 
 
-class UpdateTrans(TransBase):
+class UpdateTrans(BaseCommand):
     description = 'Update .po files with msgmerge'
+    user_options = _build_py.user_options + [
+        ('key-file=', 'k', 'file to update'),
+    ]
 
-    def merge(self, po_file, keys_file):
+    def initialize_options(self):
+        self.key_file = os.path.join(os.curdir, 'po', 'keys.pot')
+
+    def merge(self, po_file, key_file):
         log.info("Updating %s" % po_file)
-        cmd = ['msgmerge', '-N', '--backup=none', '-U', po_file, keys_file]
-        self._run(cmd)
+        cmd = ['msgmerge', '-N', '--backup=none', '-U', po_file, self.key_file]
+        spawn(cmd)
 
     def run(self):
-        keys_file = os.path.join(os.curdir, 'po', 'keys.pot')
         for po_file in Utils.find_files_of_type('po', '*.po'):
-            self.merge(po_file, keys_file)
+            self.merge(po_file, self.key_file)
 
 
-class UniqTrans(TransBase):
+class UniqTrans(BaseCommand):
     description = 'Unify duplicate translations with msguniq'
 
     def run(self):
         for po_file in Utils.find_files_of_type('po', '*.po'):
             cmd = ['msguniq', po_file, '-o', po_file]
-            self._run(cmd)
+            spawn(cmd)
 
 
-class Gettext(TransBase):
+class Gettext(BaseCommand):
     description = 'Extract strings to po files.'
     user_options = _build_py.user_options + [
         ('lint', 'l', 'check po files only'),
+        ('key-file=', 'k', 'file to write to'),
     ]
 
     boolean_options = ['lint']
@@ -101,6 +92,11 @@ class Gettext(TransBase):
     def initialize_options(self):
         self.build_base = None
         self.lint = None
+        self.key_file = os.path.join(os.curdir, 'po', 'keys.pot')
+
+    def finalize_options(self):
+        if self.lint:
+            self.key_file = '/dev/null'
 
     def find_py(self):
         files = []
@@ -118,15 +114,13 @@ class Gettext(TransBase):
 
     def find_c(self):
         files = []
-        files.extend(list(Utils.find_files_of_type('src', '*.c')))
-        files.extend(list(Utils.find_files_of_type('src', '*.h')))
+        files.extend(list(Utils.find_files_of_type('src', ['*.c', '*.h'])))
         files.extend(list(Utils.find_files_of_type('tmp', '*.h')))
         return files
 
     def find_glade(self):
         files = []
-        files.extend(list(Utils.find_files_of_type('src', '*.ui')))
-        files.extend(list(Utils.find_files_of_type('src', '*.glade')))
+        files.extend(list(Utils.find_files_of_type('src', ['*.ui', '*.glade'])))
         return files
 
     def find_desktop(self):
@@ -141,17 +135,14 @@ class Gettext(TransBase):
 
     def run(self):
         manifest_prefix = os.path.join(os.curdir, 'po', 'POTFILES')
-        keys_file = os.path.join(os.curdir, 'po', 'keys.pot')
-        if self.lint:
-            keys_file = '/dev/null'
 
         # Create xgettext friendly header files from the desktop files.
         # See http://stackoverflow.com/a/23643848/6124862
         cmd = ['intltool-extract', '-l', '--type=gettext/ini']
         for desktop_file in Utils.find_files_of_type('etc-conf', '*.desktop.in'):
-            self._run(cmd + [desktop_file])
+            spawn(cmd + [desktop_file])
 
-        cmd = ['xgettext', '--from-code=utf-8', '--sort-by-file', '-o', keys_file]
+        cmd = ['xgettext', '--from-code=utf-8', '--sort-by-file', '-o', self.key_file]
 
         # These tuples contain a template for the file name that will contain a list of
         # all source files of a given type to translate, a function that finds all the
@@ -171,10 +162,10 @@ class Gettext(TransBase):
 
             specific_opts = ['-f', manifest, '--language', language]
             specific_opts.extend(other_options)
-            if os.path.exists(keys_file):
+            if os.path.exists(self.key_file):
                 specific_opts.append('--join-existing')
             log.debug("Running %s" % ' '.join(cmd + specific_opts))
-            self._run(cmd + specific_opts)
+            spawn(cmd + specific_opts)
 
         # Delete the directory holding the temporary files created by intltool-extract
         shutil.rmtree('tmp')

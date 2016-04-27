@@ -14,6 +14,22 @@
 import os
 import fnmatch
 
+from distutils import cmd
+
+
+class BaseCommand(cmd.Command):
+    """Command is an abstract class that requires initialize_options, finalize_options,
+    and user_options to be defined.  This class provides stub definitions and other
+    utility methods.
+    """
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
 
 class Utils(object):
     @staticmethod
@@ -33,10 +49,14 @@ class Utils(object):
             callback(src, dest)
 
     @staticmethod
-    def find_files_of_type(directory, glob):
+    def find_files_of_type(directory, globs):
+        if not hasattr(globs, '__iter__'):
+            globs = [globs]
+
         if not os.path.isabs(directory):
             directory = os.path.join(os.curdir, directory)
         for path, dirnames, filenames in os.walk(directory):
             for f in filenames:
-                if fnmatch.fnmatch(f, glob):
-                    yield os.path.normpath(os.path.join(path, f))
+                for g in globs:
+                    if fnmatch.fnmatch(f, g):
+                        yield os.path.normpath(os.path.join(path, f))
