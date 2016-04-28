@@ -153,6 +153,8 @@ cmdclass = {
     'gettext': i18n.Gettext,
     'lint': lint.Lint,
     'lint_glade': lint.GladeLint,
+    'lint_rpm': lint.RpmLint,
+    'flake8': lint.PluginLoadingFlake8Command
 }
 
 transforms = [
