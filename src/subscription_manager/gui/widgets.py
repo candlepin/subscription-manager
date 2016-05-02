@@ -333,7 +333,11 @@ class SelectionWrapper(object):
         return self.tree_iter is not None
 
     def __getitem__(self, key):
-        return self.model.get_value(self.tree_iter, self.store[key])
+        try:
+            return self.model.get_value(self.tree_iter, self.store[key])
+        except TypeError, te:
+            log.warning('Invalid item request: %s', te)
+        return None
 
 
 class OverridesTable(object):
