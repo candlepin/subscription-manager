@@ -22,11 +22,25 @@ class RegisterService(dbus.service.Object):
             bus_name = dbus.service.BusName(DBUS_NAME, bus)
         super(RegisterService, self).__init__(object_path=object_path, conn=conn, bus_name=bus_name)
 
-    @decorators.dbus_service_method(dbus_interface=DBUS_INTERFACE, out_signature='s', in_signature='s')
+    @decorators.dbus_service_method(dbus_interface=DBUS_INTERFACE,
+                                    out_signature='s',
+                                    in_signature='s')
     def reverse(self, text, sender=None):
         text = list(text)
         text.reverse()
         return ''.join(text)
+
+    @decorators.dbus_service_method(dbus_interface=DBUS_INTERFACE,
+                                    in_signature='a{ss}',
+                                    out_signature='s')
+    def register(self, options, sender=None):
+        return "REGISTER 1"
+
+    @decorators.dbus_service_method(dbus_interface=DBUS_INTERFACE,
+                                    in_signature='s',
+                                    out_signature='s')
+    def register(self, options, sender=None):
+        return "REGISTER 2"
 
 if __name__ == '__main__':
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
