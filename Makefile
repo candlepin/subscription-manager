@@ -188,7 +188,7 @@ facts-install: install-rhsmlib
 	install -d $(FACTS_INST_DIR)
 	install -m 644 -p $(FACTS_SRC_DIR)/*.py $(FACTS_INST_DIR)
 
-compat-install: 
+compat-install:
 	install -d $(COMPAT_INST_DIR)
 	install -m 644 -p $(COMPAT_SRC_DIR)/*.py $(COMPAT_INST_DIR)
 
@@ -238,7 +238,7 @@ dbus-facts-service-install: dbus-common-install dbus-support-install
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/facts/*.py $(DBUS_SERVICES_INST_DIR)/facts
 
 # TODO: move src/dbus to setup.py? it's own makefile? autoconf?
-dbus-subscriptions-service-install: dbus-common-install 
+dbus-subscriptions-service-install: dbus-common-install
 	install -d $(DBUS_SERVICES_INST_DIR)/subscriptions
 	install -m 644 $(SUBSCRIPTIONS_SRC_DBUS_SERVICE_FILE) \
 		$(SUBSCRIPTIONS_INST_DBUS_SERVICE_FILE)
@@ -255,7 +255,7 @@ dbus-subscriptions-service-install: dbus-common-install
 	install -m 644 -p $(DBUS_SERVICES_SRC_DIR)/subscriptions/root.py $(DBUS_SERVICES_INST_DIR)/subscriptions
 
 # TODO: move src/dbus to setup.py? it's own makefile? autoconf?
-dbus-examples-service-install: dbus-common-install 
+dbus-examples-service-install: dbus-common-install
 	install -d $(DBUS_SERVICES_INST_DIR)/examples
 	install -m 644 $(EXAMPLES_SRC_DBUS_SERVICE_FILE) \
 		$(EXAMPLES_INST_DBUS_SERVICE_FILE)
