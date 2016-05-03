@@ -20,8 +20,6 @@ from collections import deque
 from distutils.spawn import spawn
 from distutils.text_file import TextFile
 
-from flake8.util import iter_child_nodes
-
 from xml.etree import ElementTree
 
 from build_ext.utils import Utils, BaseCommand, LineNumberingParser
@@ -106,66 +104,81 @@ class GladeLint(FileLint):
             self.scan_xml(f, ["//property[@name='orientation']", "//*[@swapped='no']"])
 
 
-class AstChecker(pep8.Checker):
-    _error_tmpl = "Error found"
+class AstVisitor(object):
+    """Visitor pattern for looking at specific nodes in an AST.  Basically a copy of
+    ast.NodeVisitor, but with the additional feature of appending errors onto a result
+    list that is ultimately returned."""
 
+    def __init__(self):
+        self.results = []
+
+    def visit(self, node):
+        method = 'visit_' + node.__class__.__name__
+        visitor = getattr(self, method, self.generic_visit)
+        r = visitor(node)
+        if r is not None:
+            self.results.append(r)
+        return self.results
+
+    def generic_visit(self, node):
+        for field, value in ast.iter_fields(node):
+            if isinstance(value, list):
+                for item in value:
+                    if isinstance(item, ast.AST):
+                        self.visit(item)
+            elif isinstance(value, ast.AST):
+                self.visit(value)
+
+
+class GettextVisitor(AstVisitor):
+    """Looks for Python string formats that are known to break xgettext.
+    Specifically, constructs of the forms:
+        _("a" + "b")
+        _("a" + \
+        "b")
+    Also look for _(a) usages
+    """
+
+    def visit_Call(self, node):
+        # Descend first
+        self.generic_visit(node)
+
+        func = node.func
+        if not isinstance(func, ast.Name):
+            return
+
+        if func.id != '_':
+            return
+
+        for arg in node.args:
+            # TODO is a BinOp of type Mod acceptable? e.g. _("%s is great" % some_variable)
+            # Those constructs exist but may be wrong
+
+            # ProTip: use print(ast.dump(node)) to figure out what the node looks like
+
+            # Things like _("a" + "b") (including such constructs across line continuations
+            if isinstance(arg, ast.BinOp) and isinstance(arg.op, ast.Add):
+                return (node, "G100 string concatenation that will break xgettext")
+
+            # Things like _(some_variable)
+            if isinstance(arg, ast.Name):
+                return (node, "G101 variable reference that will break xgettext")
+
+
+class AstChecker(pep8.Checker):
     def __init__(self, tree, filename):
         self.tree = tree
         self.filename = filename
         self.parents = deque()
-
-    # Thanks to https://bitbucket.org/takluyver/greentreesnakes/src/default/astpp.py
-    def dump(self, node, annotate_fields=True, include_attributes=False, indent='  '):
-        """
-        Return a formatted dump of the tree in *node*.  This is mainly useful for
-        debugging purposes.  The returned string will show the names and the values
-        for fields.  This makes the code impossible to evaluate, so if evaluation is
-        wanted *annotate_fields* must be set to False.  Attributes such as line
-        numbers and column offsets are not dumped by default.  If this is wanted,
-        *include_attributes* can be set to True.
-        """
-        def _format(node, level=0):
-            if isinstance(node, ast.AST):
-                fields = [(a, _format(b, level)) for a, b in ast.iter_fields(node)]
-                if include_attributes and node._attributes:
-                    fields.extend([(a, _format(getattr(node, a), level))
-                                   for a in node._attributes])
-                return ''.join([
-                    node.__class__.__name__,
-                    '(',
-                    ', '.join(('%s=%s' % field for field in fields)
-                               if annotate_fields else
-                               (b for a, b in fields)),
-                    ')'])
-            elif isinstance(node, list):
-                lines = ['[']
-                lines.extend((indent * (level + 2) + _format(x, level + 2) + ','
-                             for x in node))
-                if len(lines) > 1:
-                    lines.append(indent * (level + 1) + ']')
-                else:
-                    lines[-1] += ']'
-                return '\n'.join(lines)
-            return repr(node)
-
-        if not isinstance(node, ast.AST):
-            raise TypeError('expected AST, got %r' % node.__class__.__name__)
-        return _format(node)
+        self.visitors = [GettextVisitor]
 
     def run(self):
-        return self.visit_tree(self.tree) if self.tree else ()
-
-    def visit_tree(self, node):
-        for error in self.visit_node(node):
-            yield error
-        self.parents.append(node)
-        for child in iter_child_nodes(node):
-            for error in self.visit_tree(child):
-                yield error
-        self.parents.pop()
-
-    def visit_node(self, node):
-        return
+        if self.tree:
+            for visitor in self.visitors:
+                result = visitor().visit(self.tree)
+                if result:
+                    for node, msg in result:
+                        yield self.err(node, msg)
 
     def err(self, node, msg=None):
         if not msg:
@@ -186,40 +199,6 @@ class AstChecker(pep8.Checker):
         return ret
 
 
-class GettextChecker(AstChecker):
-    """Looks for Python string formats that are known to break xgettext.
-    Specifically, constructs of the forms:
-        _("a" + "b")
-        _("a" + \
-        "b")
-    Also look for _(a) usages
-    """
-    _error_tmpl = 'G100 string concatenation that will break xgettext'
-
-    def visit_node(self, node):
-        if not isinstance(node, ast.Call):
-            return
-
-        func = node.func
-        if not isinstance(func, ast.Name):
-            return
-
-        if func.id != '_':
-            return
-
-        for arg in node.args:
-            # TODO is a BinOp of type Mod acceptable? e.g. _("%s is great" % some_variable)
-            # Those constructs exist but may be wrong
-
-            # Things like _("a" + "b") (including such constructs across line continuations
-            if isinstance(arg, ast.BinOp) and isinstance(arg.op, ast.Add):
-                yield self.err(node, "G100 string concatenation that will break xgettext")
-
-            # Things like _(some_variable)
-            if isinstance(arg, ast.Name):
-                yield self.err(node, "G101 variable reference that will break xgettext")
-
-
 class PluginLoadingFlake8Command(flake8.main.Flake8Command):
     """A Flake8 runner that will load our custom plugins.  It's important to note
     that this has to be invoked via `./setup.py flake8`.  Just running `flake8` won't
@@ -230,5 +209,5 @@ class PluginLoadingFlake8Command(flake8.main.Flake8Command):
     """
 
     def run(self):
-        pep8.register_check(GettextChecker, codes='G100')
+        pep8.register_check(AstChecker, codes=['G100', 'G101'])
         flake8.main.Flake8Command.run(self)
