@@ -130,6 +130,29 @@ class AstVisitor(object):
                 self.visit(value)
 
 
+class DebugImportVisitor(AstVisitor):
+    """Look for imports of various debug modules"""
+
+    DEBUG_MODULES = ['pdb', 'pudb', 'ipdb', 'pydevd']
+    codes = ['D100']
+
+    def visit_Import(self, node):
+        # Likely not necessary but prudent
+        self.generic_visit(node)
+
+        for alias in node.names:
+            module_name = alias.name
+            if module_name in self.DEBUG_MODULES:
+                return(node, "D100 imports of debug module '%s' should be removed" % module_name)
+
+    def visit_ImportFrom(self, node):
+        # Likely not necessary but prudent
+        self.generic_visit(node)
+        module_name = node.module
+        if module_name in self.DEBUG_MODULES:
+            return(node, "D100 imports of debug module '%s' should be removed" % module_name)
+
+
 class GettextVisitor(AstVisitor):
     """Looks for Python string formats that are known to break xgettext.
     Specifically, constructs of the forms:
@@ -138,6 +161,7 @@ class GettextVisitor(AstVisitor):
         "b")
     Also look for _(a) usages
     """
+    codes = ['G100', 'G101']
 
     def visit_Call(self, node):
         # Descend first
@@ -170,7 +194,7 @@ class AstChecker(pep8.Checker):
         self.tree = tree
         self.filename = filename
         self.parents = deque()
-        self.visitors = [GettextVisitor]
+        self.visitors = [GettextVisitor, DebugImportVisitor]
 
     def run(self):
         if self.tree:
@@ -209,5 +233,6 @@ class PluginLoadingFlake8Command(flake8.main.Flake8Command):
     """
 
     def run(self):
-        pep8.register_check(AstChecker, codes=['G100', 'G101'])
+        codes = DebugImportVisitor.codes + GettextVisitor.codes
+        pep8.register_check(AstChecker, codes=codes)
         flake8.main.Flake8Command.run(self)
