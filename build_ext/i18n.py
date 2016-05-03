@@ -148,12 +148,14 @@ class Gettext(BaseCommand):
         # all source files of a given type to translate, a function that finds all the
         # source files of a given type, the source language to send to xgettext, and a
         # list of any additional arguments.
+        #
+        # ProTip: Use extensions that won't be confused with source files.
         trans_types = [
             # The C source files require that we inform xgettext to extract strings from the
             # _() and N_() functions.
-            ('%s.c', self.find_c, 'C', ['-k_', '-kN_']),
-            ('%s.py', self.find_py, 'Python', []),
-            ('%s.glade', self.find_glade, 'Glade', []),
+            ('%s.c_files', self.find_c, 'C', ['-k_', '-kN_']),
+            ('%s.py_files', self.find_py, 'Python', []),
+            ('%s.glade_files', self.find_glade, 'Glade', []),
         ]
 
         for manifest_template, search_func, language, other_options in trans_types:
