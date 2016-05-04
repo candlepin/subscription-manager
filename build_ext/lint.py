@@ -15,14 +15,12 @@ import flake8.main
 import pep8
 import re
 
-from collections import deque
-
 from distutils.spawn import spawn
 from distutils.text_file import TextFile
 
 from xml.etree import ElementTree
 
-from build_ext.utils import Utils, BaseCommand, LineNumberingParser
+from build_ext.utils import Utils, BaseCommand, LineNumberingParser, memoize
 
 
 class Lint(BaseCommand):
@@ -106,7 +104,7 @@ class GladeLint(FileLint):
 
 class AstVisitor(object):
     """Visitor pattern for looking at specific nodes in an AST.  Basically a copy of
-    ast.NodeVisitor, but with the additional feature of appending errors onto a result
+    ast.NodeVisitor, but with the additional feature of appending return values onto a result
     list that is ultimately returned."""
 
     def __init__(self):
@@ -128,6 +126,39 @@ class AstVisitor(object):
                         self.visit(item)
             elif isinstance(value, ast.AST):
                 self.visit(value)
+
+
+class WidgetVisitor(AstVisitor):
+    """Look for widgets that are used in code but not declared in the Glade files."""
+    codes = ['T100']  # W is reserved already for warnings
+
+    class StrVisitor(AstVisitor):
+        def visit_Str(self, node):
+            return node.s
+
+    class NameVisitor(AstVisitor):
+        def visit_Name(self, node):
+            return node.id
+
+    def __init__(self, defined_widgets=None):
+        super(WidgetVisitor, self).__init__()
+        if not defined_widgets:
+            defined_widgets = []
+
+        self.defined_widgets = set(defined_widgets)
+
+    def visit_Assign(self, node):
+        # Likely not necessary but prudent
+        self.generic_visit(node)
+
+        for target in node.targets:
+            names = self.NameVisitor().visit(target)
+            for name in names:
+                if name in ['widget', 'widget_names']:
+                    widgets = set(self.StrVisitor().visit(node.value))
+                    widgets.difference_update(self.defined_widgets)
+                    if widgets:
+                        return (node, "T100 widgets %s are not defined in the Glade files" % list(widgets))
 
 
 class DebugImportVisitor(AstVisitor):
@@ -193,13 +224,38 @@ class AstChecker(pep8.Checker):
     def __init__(self, tree, filename):
         self.tree = tree
         self.filename = filename
-        self.parents = deque()
-        self.visitors = [GettextVisitor, DebugImportVisitor]
+
+        widgets = []
+        for f in Utils.find_files_of_type('src', '*.glade', '*.ui'):
+            widgets.extend(self.scan_widgets(f))
+
+        self.visitors = [
+            (GettextVisitor, {}),
+            (DebugImportVisitor, {}),
+            (WidgetVisitor, {'defined_widgets': widgets})
+        ]
+
+    @staticmethod
+    @memoize
+    def scan_widgets(f):
+        """Scan a file for object elements with a class and id attribute.  Return
+        the value of the id attribute."""
+
+        # We cache all the results because this class gets instantiated for every
+        # source file and this method scans every Glade file.  That would be a lot
+        # of redundant XML parsing (N source files * M Glade files) if we didn't memoize it.
+        widgets = []
+        with open(f, 'r') as f:
+            tree = ElementTree.parse(f)
+            elements = tree.findall(".//object[@class][@id]")
+            for e in elements:
+                widgets.append(e.attrib['id'])
+        return widgets
 
     def run(self):
         if self.tree:
-            for visitor in self.visitors:
-                result = visitor().visit(self.tree)
+            for visitor, kwargs in self.visitors:
+                result = visitor(**kwargs).visit(self.tree)
                 if result:
                     for node, msg in result:
                         yield self.err(node, msg)
@@ -233,6 +289,6 @@ class PluginLoadingFlake8Command(flake8.main.Flake8Command):
     """
 
     def run(self):
-        codes = DebugImportVisitor.codes + GettextVisitor.codes
+        codes = DebugImportVisitor.codes + GettextVisitor.codes + WidgetVisitor.codes
         pep8.register_check(AstChecker, codes=codes)
         flake8.main.Flake8Command.run(self)

@@ -22,6 +22,23 @@ sys.modules['_elementtree'] = None
 import xml.etree.ElementTree as ET  # noqa
 
 
+def memoize(f):
+    """ Memoization decorator for functions taking one or more arguments. """
+    # Thanks to http://code.activestate.com/recipes/578231-probably-the-fastest-memoization-decorator-in-the-/
+    class memodict(dict):
+        def __init__(self, f):
+            self.f = f
+
+        def __call__(self, *args):
+            return self[args]
+
+        def __missing__(self, key):
+            ret = self[key] = self.f(*key)
+            return ret
+
+    return memodict(f)
+
+
 class LineNumberingParser(ET.XMLParser):
     """XML parser that tracks line numbers.  From the very helpful
     http://stackoverflow.com/a/36430270/6124862"""
