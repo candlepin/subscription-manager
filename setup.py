@@ -101,8 +101,8 @@ class build(_build):
 
 
 class install_data(_install_data):
-    """Used to install data files that must be generated such as .mo files or desktop files
-    with merged translations.
+    """Used to intelligently install data files.  For example, files that must be generated (such as .mo files
+    or desktop files with merged translations) or an entire tree of data files.
     """
 
     def initialize_options(self):
@@ -118,8 +118,12 @@ class install_data(_install_data):
     def run(self):
         self.add_messages()
         self.add_desktop_files()
+        self.add_icons()
         _install_data.run(self)
         self.transform_files()
+
+    def join(self, *args):
+        return os.path.normpath(os.path.join(*args))
 
     def transform_files(self):
         for file_glob, new_extension in self.transforms:
@@ -127,22 +131,31 @@ class install_data(_install_data):
             for f in matches:
                 out_dir = os.path.dirname(f)
                 out_name = os.path.basename(f).split('.')[0] + new_extension
-                self.move_file(f, os.path.join(out_dir, out_name))
+                self.move_file(f, self.join(out_dir, out_name))
 
     def add_messages(self):
-        for lang in os.listdir('build/locale/'):
-            lang_dir = os.path.join('share', 'locale', lang, 'LC_MESSAGES')
-            lang_file = os.path.join('build', 'locale', lang, 'LC_MESSAGES', 'rhsm.mo')
+        for lang in os.listdir(self.join('build', 'locale')):
+            lang_dir = self.join('share', 'locale', lang, 'LC_MESSAGES')
+            lang_file = self.join('build', 'locale', lang, 'LC_MESSAGES', 'rhsm.mo')
             self.data_files.append((lang_dir, [lang_file]))
 
     def add_desktop_files(self):
-        desktop_dir = os.path.join('share', 'applications')
-        desktop_file = os.path.join('build', 'applications', 'subscription-manager-gui.desktop')
+        desktop_dir = self.join('share', 'applications')
+        desktop_file = self.join('build', 'applications', 'subscription-manager-gui.desktop')
         self.data_files.append((desktop_dir, [desktop_file]))
 
-        autostart_dir = os.path.join('/etc', 'xdg', 'autostart')
-        autostart_file = os.path.join('build', 'autostart', 'rhsm-icon.desktop')
+        autostart_dir = self.join('/etc', 'xdg', 'autostart')
+        autostart_file = self.join('build', 'autostart', 'rhsm-icon.desktop')
         self.data_files.append((autostart_dir, [autostart_file]))
+
+    def add_icons(self):
+        icon_source_root = self.join('src', 'subscription_manager', 'gui', 'data', 'icons', 'hicolor')
+        for d in os.listdir(icon_source_root):
+            icon_dir = self.join('share', 'icons', 'hicolor', d, 'apps')
+            icon_source_files = glob(self.join(icon_source_root, d, 'apps', 'subscription-manager.*'))
+
+            self.data_files.append((icon_dir, icon_source_files))
+
 
 setup_requires = ['flake8']
 
@@ -172,7 +185,7 @@ cmdclass = {
 }
 
 transforms = [
-    ('*.completion.sh', '.sh'),
+    ('*.completion.sh', ''),
     ('*.pam', ''),
     ('*.console', ''),
 ]
@@ -188,6 +201,7 @@ setup(
     cmdclass=cmdclass,
     packages=find_packages('src', exclude=['subscription_manager.gui.firstboot']),
     package_dir={'': 'src'},
+    package_data={'subscription_manager.gui': ['data/glade/*.glade', 'data/ui/*.ui', 'data/icons/*.svg']},
     data_files=[
         ('sbin', ['bin/subscription-manager', 'bin/subscription-manager-gui', 'bin/rhn-migrate-classic-to-rhsm']),
         ('bin', ['bin/rct', 'bin/rhsm-debug']),
