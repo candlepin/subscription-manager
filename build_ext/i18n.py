@@ -114,13 +114,13 @@ class Gettext(BaseCommand):
 
     def find_c(self):
         files = []
-        files.extend(list(Utils.find_files_of_type('src', ['*.c', '*.h'])))
+        files.extend(list(Utils.find_files_of_type('src', '*.c', '*.h')))
         files.extend(list(Utils.find_files_of_type('tmp', '*.h')))
         return files
 
     def find_glade(self):
         files = []
-        files.extend(list(Utils.find_files_of_type('src', ['*.ui', '*.glade'])))
+        files.extend(list(Utils.find_files_of_type('src', '*.ui', '*.glade')))
         return files
 
     def find_desktop(self):

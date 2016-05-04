@@ -74,10 +74,7 @@ class Utils(object):
             callback(src, dest)
 
     @staticmethod
-    def find_files_of_type(directory, globs):
-        if not hasattr(globs, '__iter__'):
-            globs = [globs]
-
+    def find_files_of_type(directory, *globs):
         if not os.path.isabs(directory):
             directory = os.path.join(os.curdir, directory)
         for path, dirnames, filenames in os.walk(directory):
