@@ -100,7 +100,7 @@ class GladeLint(FileLint):
     description = "check Glade files for common errors"
 
     def run(self):
-        for f in Utils.find_files_of_type('src', '*.ui'):
+        for f in Utils.find_files_of_type('src', '*.glade'):
             self.scan_xml(f, ["//property[@name='orientation']", "//*[@swapped='no']"])
 
 
