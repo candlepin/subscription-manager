@@ -105,7 +105,11 @@ class GladeLint(FileLint):
 class AstVisitor(object):
     """Visitor pattern for looking at specific nodes in an AST.  Basically a copy of
     ast.NodeVisitor, but with the additional feature of appending return values onto a result
-    list that is ultimately returned."""
+    list that is ultimately returned.
+
+    I recommend reading http://greentreesnakes.readthedocs.io/en/latest/index.html for a good
+    overview of the various Python AST node types.
+    """
 
     def __init__(self):
         self.results = []
@@ -130,7 +134,7 @@ class AstVisitor(object):
 
 class WidgetVisitor(AstVisitor):
     """Look for widgets that are used in code but not declared in the Glade files."""
-    codes = ['T100']  # W is reserved already for warnings
+    codes = ['U100']
 
     class StrVisitor(AstVisitor):
         def visit_Str(self, node):
@@ -158,7 +162,41 @@ class WidgetVisitor(AstVisitor):
                     widgets = set(self.StrVisitor().visit(node.value))
                     widgets.difference_update(self.defined_widgets)
                     if widgets:
-                        return (node, "T100 widgets %s are not defined in the Glade files" % list(widgets))
+                        return (node, "U100 widgets %s are not defined in the Glade files" % list(widgets))
+
+
+class SignalVisitor(AstVisitor):
+    """Look for signals that are used in code but not declared in the Glade files."""
+    codes = ['U101']
+
+    class DictVisitor(AstVisitor):
+        def visit_Dict(self, node):
+            # Note this will break if someone uses a Name for a key instead of an Str
+            # Hopefully no one will do that because we wouldn't be able to get at the value
+            # the Name holds
+            return [k.s for k in node.keys]
+
+    def __init__(self, defined_handlers=None):
+        super(SignalVisitor, self).__init__()
+        if not defined_handlers:
+            defined_handlers = []
+
+        self.defined_handlers = set(defined_handlers)
+
+    def visit_Call(self, node):
+        self.generic_visit(node)
+
+        func = node.func
+        if not isinstance(func, ast.Attribute):
+            return
+
+        if func.attr == 'connect_signals':
+            keys = self.DictVisitor().visit(node.args[0])
+            # Flatten the list of lists
+            handlers = set([item for sublist in keys for item in sublist])
+            handlers.difference_update(self.defined_handlers)
+            if handlers:
+                return (node, "U101 handlers %s are not defined in the Glade files" % list(handlers))
 
 
 class DebugImportVisitor(AstVisitor):
@@ -226,13 +264,19 @@ class AstChecker(pep8.Checker):
         self.filename = filename
 
         widgets = []
+        handlers = []
         for f in Utils.find_files_of_type('src', '*.glade', '*.ui'):
+            # Note that we are sending in the file name rather than a file handle.  By using
+            # the file name, we can take advantage of memoizing on the name instead of on an
+            # instance of a file handle
             widgets.extend(self.scan_widgets(f))
+            handlers.extend(self.scan_handlers(f))
 
         self.visitors = [
             (GettextVisitor, {}),
             (DebugImportVisitor, {}),
-            (WidgetVisitor, {'defined_widgets': widgets})
+            (WidgetVisitor, {'defined_widgets': widgets}),
+            (SignalVisitor, {'defined_handlers': handlers}),
         ]
 
     @staticmethod
@@ -247,10 +291,21 @@ class AstChecker(pep8.Checker):
         widgets = []
         with open(f, 'r') as f:
             tree = ElementTree.parse(f)
-            elements = tree.findall(".//object[@class][@id]")
-            for e in elements:
-                widgets.append(e.attrib['id'])
+        elements = tree.findall(".//object[@class][@id]")
+        for e in elements:
+            widgets.append(e.attrib['id'])
         return widgets
+
+    @staticmethod
+    @memoize
+    def scan_handlers(f):
+        handlers = []
+        with open(f, 'r') as f:
+            tree = ElementTree.parse(f)
+        elements = tree.findall(".//signal[@name][@handler]")
+        for e in elements:
+            handlers.append(e.attrib['handler'])
+        return handlers
 
     def run(self):
         if self.tree:
@@ -289,6 +344,7 @@ class PluginLoadingFlake8Command(flake8.main.Flake8Command):
     """
 
     def run(self):
-        codes = DebugImportVisitor.codes + GettextVisitor.codes + WidgetVisitor.codes
+        codes = DebugImportVisitor.codes + GettextVisitor.codes + WidgetVisitor.codes + SignalVisitor.codes
+
         pep8.register_check(AstChecker, codes=codes)
         flake8.main.Flake8Command.run(self)
