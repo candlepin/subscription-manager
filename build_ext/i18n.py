@@ -60,8 +60,11 @@ class BuildTrans(BaseCommand):
             Utils.run_if_new(po_file, dest, self.compile)
 
         for desktop_file in Utils.find_files_of_type('etc-conf', '*.desktop.in'):
-            dest_path = os.path.join(self.build_base, 'applications')
             output_file = os.path.basename("%s" % os.path.splitext(desktop_file)[0])
+
+            dest_path = os.path.join(self.build_base, 'applications')
+            if output_file == 'rhsm-icon.desktop':
+                dest_path = os.path.join(self.build_base, 'autostart')
             dest = os.path.join(dest_path, output_file)
             Utils.run_if_new(desktop_file, dest, self.merge_desktop)
 

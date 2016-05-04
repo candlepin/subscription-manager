@@ -101,6 +101,10 @@ class build(_build):
 
 
 class install_data(_install_data):
+    """Used to install data files that must be generated such as .mo files or desktop files
+    with merged translations.
+    """
+
     def initialize_options(self):
         self.transforms = None
         # Can't use super() because Command isn't a new-style class.
@@ -113,6 +117,7 @@ class install_data(_install_data):
 
     def run(self):
         self.add_messages()
+        self.add_desktop_files()
         _install_data.run(self)
         self.transform_files()
 
@@ -129,6 +134,15 @@ class install_data(_install_data):
             lang_dir = os.path.join('share', 'locale', lang, 'LC_MESSAGES')
             lang_file = os.path.join('build', 'locale', lang, 'LC_MESSAGES', 'rhsm.mo')
             self.data_files.append((lang_dir, [lang_file]))
+
+    def add_desktop_files(self):
+        desktop_dir = os.path.join('share', 'applications')
+        desktop_file = os.path.join('build', 'applications', 'subscription-manager-gui.desktop')
+        self.data_files.append((desktop_dir, [desktop_file]))
+
+        autostart_dir = os.path.join('/etc', 'xdg', 'autostart')
+        autostart_file = os.path.join('build', 'autostart', 'rhsm-icon.desktop')
+        self.data_files.append((autostart_dir, [autostart_file]))
 
 setup_requires = ['flake8']
 
@@ -187,7 +201,6 @@ setup(
         ('/etc/yum/pluginconf.d', glob('etc-conf/plugin/*.conf')),
         ('/etc/bash_completion.d', glob('etc-conf/*.completion.sh')),
         ('/etc/security/console.apps', glob('etc-conf/*.console')),
-
     ],
     command_options={
         'install_data': {

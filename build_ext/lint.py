@@ -283,7 +283,8 @@ class AstChecker(pep8.Checker):
     @memoize
     def scan_widgets(f):
         """Scan a file for object elements with a class and id attribute.  Return
-        the value of the id attribute."""
+        the value of the id attribute.
+        """
 
         # We cache all the results because this class gets instantiated for every
         # source file and this method scans every Glade file.  That would be a lot
