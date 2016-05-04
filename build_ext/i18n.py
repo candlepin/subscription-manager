@@ -44,12 +44,26 @@ class BuildTrans(BaseCommand):
         cmd = ['msgfmt', '--check', '--statistics', '-o', dest, src]
         spawn(cmd)
 
+    def merge_desktop(self, src, dest):
+        log.info("Merging desktop file %s" % src)
+        if self.lint:
+            dest = '/dev/null'
+
+        cmd = ['intltool-merge', '-d', 'po', src, dest]
+        spawn(cmd)
+
     def run(self):
         for po_file in Utils.find_files_of_type('po', '*.po'):
             lang = os.path.basename(po_file)[:-3]
             dest_path = os.path.join(self.build_base, 'locale', lang, 'LC_MESSAGES')
             dest = os.path.join(dest_path, 'rhsm.mo')
             Utils.run_if_new(po_file, dest, self.compile)
+
+        for desktop_file in Utils.find_files_of_type('etc-conf', '*.desktop.in'):
+            dest_path = os.path.join(self.build_base, 'applications')
+            output_file = os.path.basename("%s" % os.path.splitext(desktop_file)[0])
+            dest = os.path.join(dest_path, output_file)
+            Utils.run_if_new(desktop_file, dest, self.merge_desktop)
 
 
 class UpdateTrans(BaseCommand):
