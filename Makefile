@@ -1,7 +1,6 @@
 SHELL := /bin/bash
 PREFIX ?=
 SYSCONF ?= etc
-PYTHON ?= python
 PYTHON_SITELIB ?= usr/lib/python2.7/site-packages
 
 INSTALL_DIR = usr/share
@@ -12,16 +11,15 @@ ANACONDA_ADDON_NAME = com_redhat_subscription_manager
 # where most of our python modules live. Note this is not on
 # the default python system path. If you are importing modules from here, and
 # you can't commit to this repo, you should feel bad and stop doing that.
-PYTHON_INST_DIR = $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/$(PKGNAME)
+PYTHON_INST_DIR = $(PREFIX)/$(PYTHON_SITELIB)/$(PKGNAME)
 
 OS = $(shell lsb_release -i | awk '{ print $$3 }' | awk -F. '{ print $$1}')
 OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
 OS_DIST ?= $(shell rpm --eval='%dist')
-BIN_DIR := bin/
-BIN_FILES := $(BIN_DIR)/subscription-manager $(BIN_DIR)/subscription-manager-gui \
-			 $(BIN_DIR)/rhn-migrate-classic-to-rhsm \
-			 $(BIN_DIR)/rct \
-			 $(BIN_DIR)/rhsm-debug
+BIN_FILES := bin/subscription-manager bin/subscription-manager-gui \
+			 bin/rhn-migrate-classic-to-rhsm \
+			 bin/rct \
+			 bin/rhsm-debug
 
 # Where various bits of code live in the git repo
 BASE_SRC_DIR := src
@@ -36,19 +34,11 @@ ANACONDA_ADDON_SRC_DIR := $(BASE_SRC_DIR)/initial-setup
 ANACONDA_ADDON_MODULE_SRC_DIR := $(ANACONDA_ADDON_SRC_DIR)/$(ANACONDA_ADDON_NAME)
 
 # dirs we install to
-SUBMAN_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/$(PKGNAME)
 SYSTEMD_INST_DIR := $(PREFIX)/usr/lib/systemd/system
 RHSM_PLUGIN_DIR := $(PREFIX)/usr/share/rhsm-plugins/
 RHSM_PLUGIN_CONF_DIR := $(PREFIX)/etc/rhsm/pluginconf.d/
 ANACONDA_ADDON_INST_DIR := $(PREFIX)/usr/share/anaconda/addons
 INITIAL_SETUP_INST_DIR := $(ANACONDA_ADDON_INST_DIR)/$(ANACONDA_ADDON_NAME)
-RCT_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rct
-RD_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/$(INSTALL_MODULE)/rhsm_debug
-RHSM_LOCALE_DIR := $(PREFIX)/$(INSTALL_DIR)/locale
-
-# ui builder data files
-GLADE_INST_DIR := $(SUBMAN_INST_DIR)/gui/data/glade
-UI_INST_DIR := $(SUBMAN_INST_DIR)/gui/data/ui
 
 # If we skip install ostree plugin, unset by default
 # override from spec file for rhel6
@@ -67,7 +57,6 @@ else
    INSTALL_INITIAL_SETUP?=true
 endif
 
-
 # always true until fedora is just dnf
 INSTALL_YUM_PLUGINS ?= true
 YUM_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/plugins
@@ -85,11 +74,8 @@ VERSION ?= $(shell git describe | awk ' { sub(/subscription-manager-/,"")};1' )
 CFLAGS ?= -g -Wall
 LDFLAGS ?=
 
-
-%.pyc: %.py
-	python -c "import py_compile; py_compile.compile('$<')"
-
 build: set-versions rhsmcertd rhsm-icon
+	./setup.py build
 
 # we never "remake" this makefile, so add a target so
 # we stop searching for implicit rules on how to remake it
@@ -99,7 +85,7 @@ clean: clean-versions
 	rm -f *.pyc *.pyo *~ *.bak *.tar.gz
 	rm -f bin/rhsmcertd
 	rm -f bin/rhsm-icon
-	python setup.py clean
+	./setup.py clean --all
 
 bin:
 	mkdir bin
@@ -109,13 +95,10 @@ RHSMCERTD_FLAGS = `pkg-config --cflags --libs glib-2.0`
 ICON_FLAGS=`pkg-config --cflags --libs "gtk+-$(GTK_VERSION).0 libnotify gconf-2.0 dbus-glib-1"`
 
 PYFILES := `find $(ALL_SRC_DIRS) -name "*.py"`
-EXAMPLE_PLUGINS_PYFILES := `find "$(EXAMPLE_PLUGINS_SRC_DIR)/*.py"`
 # Ignore certdata.py from style checks as tabs and trailing
 # whitespace are required for testing.
 TESTFILES=`find  test/ \( ! -name certdata.py ! -name manifestdata.py \) -name "*.py"`
 STYLEFILES=$(PYFILES) $(BIN_FILES) $(TESTFILES)
-GLADEFILES=`find src/subscription_manager/gui/data/glade -name "*.glade"`
-UIFILES=`find src/subscription_manager/gui/data/ui -name "*.ui"`
 
 rhsmcertd: $(DAEMONS_SRC_DIR)/rhsmcertd.c bin
 	$(CC) $(CFLAGS) $(LDFLAGS) $(RHSMCERTD_FLAGS) $(DAEMONS_SRC_DIR)/rhsmcertd.c -o bin/rhsmcertd
@@ -124,7 +107,7 @@ check-syntax:
 	$(CC) $(CFLAGS) $(LDFLAGS) $(ICON_FLAGS) -o nul -S $(CHK_SOURCES)
 
 rhsm-icon: $(RHSM_ICON_SRC_DIR)/rhsm_icon.c bin
-	$(CC) $(CFLAGS) $(LDFLAGS) $(ICON_FLAGS) -o bin/rhsm-icon $(RHSM_ICON_SRC_DIR)/rhsm_icon.c
+	$(CC) $(CFLAGS) $(LDFLAGS) $(ICON_FLAGS) $(RHSM_ICON_SRC_DIR)/rhsm_icon.c -o bin/rhsm-icon
 
 dbus-service-install:
 	install -d $(PREFIX)/etc/dbus-1/system.d
@@ -185,7 +168,6 @@ install-content-plugins-conf: install-content-plugins-conf-dir install-content-p
 
 install-content-plugins: install-content-plugins-dir install-content-plugin-ostree install-content-plugin-container
 
-
 install-plugins-conf-dir:
 	install -d $(RHSM_PLUGIN_CONF_DIR)
 
@@ -221,13 +203,9 @@ else
 endif
 
 .PHONY: install-example-plugins
-install-example-plugins: install-example-plugins-files install-example-plugins-conf
-
-install-example-plugins-files:
+install-example-plugins:
 	install -d $(RHSM_PLUGIN_DIR)
 	install -m 644 -p $(EXAMPLE_PLUGINS_SRC_DIR)/*.py $(RHSM_PLUGIN_DIR)
-
-install-example-plugins-conf:
 	install -d $(RHSM_PLUGIN_CONF_DIR)
 	install -m 644 -p $(EXAMPLE_PLUGINS_SRC_DIR)/*.conf $(RHSM_PLUGIN_CONF_DIR)
 
@@ -272,6 +250,7 @@ endif
 .PHONY: install-post-boot
 install-post-boot: install-firstboot install-initial-setup
 
+.PHONY: install-via-setup
 install-via-setup:
 	./setup.py install --root $(PREFIX)
 
@@ -286,41 +265,27 @@ clean-versions:
 	rm -rf $(SRC_DIR)/version.py
 	rm -rf $(RCT_SRC_DIR)/version.py
 
-install-files: set-versions dbus-service-install desktop-files install-plugins install-post-boot install-ga
-	install -d $(PYTHON_INST_DIR)/migrate
-	install -d $(PYTHON_INST_DIR)/plugin
+install-files: set-versions dbus-service-install install-plugins install-post-boot install-ga
 	install -d $(PYTHON_INST_DIR)/plugin/ostree
-	install -d $(PYTHON_INST_DIR)/plugin
-	install -d $(PYTHON_INST_DIR)/plugin/ostree
-	install -d $(PREFIX)/etc/rhsm
+	install -d $(PYTHON_INST_DIR)/firstboot
+	install -d $(PREFIX)/etc/rc.d/init.d
 	install -d $(PREFIX)/etc/rhsm/facts
-	install -d $(PREFIX)/etc/xdg/autostart
 	install -d $(PREFIX)/etc/cron.daily
 	install -d $(PREFIX)/etc/pam.d
 	install -d $(PREFIX)/etc/logrotate.d
 	install -d $(PREFIX)/etc/security/console.apps
-	install -d $(PREFIX)/$(INSTALL_DIR)/man/man5/
-	install -d $(PREFIX)/$(INSTALL_DIR)/man/man8/
-	install -d $(PREFIX)/$(INSTALL_DIR)/applications
 	install -d $(PREFIX)/var/log/rhsm
 	install -d $(PREFIX)/var/spool/rhsm/debug
 	install -d $(PREFIX)/var/run/rhsm
 	install -d $(PREFIX)/var/lib/rhsm/facts
 	install -d $(PREFIX)/var/lib/rhsm/packages
 	install -d $(PREFIX)/var/lib/rhsm/cache
-	install -d $(PREFIX)/etc/rc.d/init.d
-	install -d $(PREFIX)/usr/share/rhsm/subscription_manager/gui/firstboot
 	install -d $(PREFIX)/usr/share/appdata
 
-	install -d $(PREFIX)/usr/libexec
-	install -m 755 $(DAEMONS_SRC_DIR)/rhsmcertd-worker.py \
-		$(PREFIX)/usr/libexec/rhsmcertd-worker
-
-	install -m 644 -p $(SRC_DIR)/plugin/*.py $(PYTHON_INST_DIR)/plugin
 	install -m 644 etc-conf/subscription-manager-gui.completion.sh $(PREFIX)/etc/bash_completion.d/subscription-manager-gui
 
 	if [ "$(INSTALL_OSTREE_PLUGIN)" = "true" ] ; then \
-		install -m 644 -p $(SRC_DIR)/plugin/ostree/*.py $(SUBMAN_INST_DIR)/plugin/ostree ; \
+		install -m 644 -p $(SRC_DIR)/plugin/ostree/*.py $(PYTHON_INST_DIR)/plugin/ostree ; \
 	fi
 	if [ "$(INSTALL_YUM_PLUGINS)" = "true" ] ; then \
 		echo "YUM" ; \
@@ -334,19 +299,14 @@ install-files: set-versions dbus-service-install desktop-files install-plugins i
 		install -m 644 -p src/dnf-plugins/*.py $(PREFIX)/$(PYTHON_SITELIB)/dnf-plugins/ ; \
 	fi ; \
 
-	# Set up rhsmcertd daemon. If installing on Fedora 17+ or RHEL 7+
+	# Set up rhsmcertd daemon. If installing on Fedora or RHEL 7+
 	# we prefer systemd over sysv as this is the new trend.
 	if [ $(OS) = Fedora ] ; then \
-		if [ $(OS_VERSION) -lt 17 ]; then \
-			install etc-conf/rhsmcertd.init.d \
-				$(PREFIX)/etc/rc.d/init.d/rhsmcertd; \
-		else \
-			install -d $(SYSTEMD_INST_DIR); \
-			install -d $(PREFIX)/usr/lib/tmpfiles.d; \
-			install etc-conf/rhsmcertd.service $(SYSTEMD_INST_DIR); \
-			install etc-conf/subscription-manager.conf.tmpfiles \
-				$(PREFIX)/usr/lib/tmpfiles.d/subscription-manager.conf; \
-		fi; \
+		install -d $(SYSTEMD_INST_DIR); \
+		install -d $(PREFIX)/usr/lib/tmpfiles.d; \
+		install etc-conf/rhsmcertd.service $(SYSTEMD_INST_DIR); \
+		install etc-conf/subscription-manager.conf.tmpfiles \
+			$(PREFIX)/usr/lib/tmpfiles.d/subscription-manager.conf; \
 	else \
 		if [ $(OS_VERSION) -lt 7 ]; then \
 			install etc-conf/rhsmcertd.init.d \
@@ -360,14 +320,7 @@ install-files: set-versions dbus-service-install desktop-files install-plugins i
 		fi; \
 	fi; \
 
-	install -m 644 etc-conf/rhsm-icon.desktop \
-		$(PREFIX)/etc/xdg/autostart;\
-	install bin/rhsm-icon $(PREFIX)/usr/bin;\
-
-	install -m 700 etc-conf/rhsmd.cron \
-		$(PREFIX)/etc/cron.daily/rhsmd
-	install -m 644 etc-conf/subscription-manager-gui.desktop \
-		$(PREFIX)/$(INSTALL_DIR)/applications
+	install -m 700 etc-conf/rhsmd.cron $(PREFIX)/etc/cron.daily/rhsmd
 
 	ln -sf /usr/bin/consolehelper $(PREFIX)/usr/bin/subscription-manager-gui
 	ln -sf /usr/bin/consolehelper $(PREFIX)/usr/bin/subscription-manager
@@ -382,11 +335,8 @@ install-files: set-versions dbus-service-install desktop-files install-plugins i
 	install -m 644 etc-conf/subscription-manager.console \
 		$(PREFIX)/etc/security/console.apps/subscription-manager
 
-desktop-files: etc-conf/rhsm-icon.desktop \
-				etc-conf/subscription-manager-gui.desktop
-
-%.desktop: %.desktop.in po
-	intltool-merge -d po $< $@
+	install -m 755 bin/rhsm-icon $(PREFIX)/usr/bin/rhsm-icon
+	install -m 755 bin/rhsmcertd $(PREFIX)/usr/bin/rhsmcertd
 
 check:
 	python setup.py -q nosetests -c playpen/noserc.dev
@@ -472,6 +422,3 @@ install-pip-requirements:
 
 .PHONY: jenkins
 jenkins: install-pip-requirements build stylish coverage-jenkins
-
-stylefiles:
-	@echo $(STYLEFILES)

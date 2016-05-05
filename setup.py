@@ -144,6 +144,10 @@ class install_data(_install_data):
         desktop_file = self.join('build', 'applications', 'subscription-manager-gui.desktop')
         self.data_files.append((desktop_dir, [desktop_file]))
 
+        # Installing files outside of the "prefix" with setuptools looks to be flakey:
+        # See https://github.com/pypa/setuptools/issues/460.  However, this seems to work
+        # so I'm making an exception to the "everything outside the prefix should be handled
+        # by make" policy.
         autostart_dir = self.join('/etc', 'xdg', 'autostart')
         autostart_file = self.join('build', 'autostart', 'rhsm-icon.desktop')
         self.data_files.append((autostart_dir, [autostart_file]))
@@ -185,7 +189,7 @@ cmdclass = {
 }
 
 transforms = [
-    ('rhsmcertd-worker.py', ''),
+    ('*/rhsmcertd-worker.py', ''),
 ]
 
 setup(
@@ -202,7 +206,8 @@ setup(
     package_data={'subscription_manager.gui': ['data/glade/*.glade', 'data/ui/*.ui', 'data/icons/*.svg']},
     data_files=[
         ('sbin', ['bin/subscription-manager', 'bin/subscription-manager-gui', 'bin/rhn-migrate-classic-to-rhsm']),
-        ('bin', ['bin/rct', 'bin/rhsm-debug', 'bin/rhsmcertd']),
+        ('bin', ['bin/rct', 'bin/rhsm-debug']),
+        ('libexec', ['src/daemons/rhsmcertd-worker.py']),
         # sat5to6 is packaged separately
         ('share/man/man8', set(glob('man/*.8')) - set(['man/sat5to6.8'])),
         ('share/man/man5', glob('man/*.5')),
