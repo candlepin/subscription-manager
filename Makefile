@@ -151,21 +151,6 @@ install-conf:
 	install -m 644 etc-conf/rhsmcertd.completion.sh $(PREFIX)/etc/bash_completion.d/rhsmcertd
 	install -m 644 etc-conf/subscription-manager-gui.appdata.xml $(PREFIX)/$(INSTALL_DIR)/appdata/subscription-manager-gui.appdata.xml
 
-install-help-files:
-	install -d $(PREFIX)/$(INSTALL_DIR)/gnome/help/subscription-manager
-	install -d $(PREFIX)/$(INSTALL_DIR)/gnome/help/subscription-manager/C
-	install -d \
-		$(PREFIX)/$(INSTALL_DIR)/gnome/help/subscription-manager/C/figures
-	install -d $(PREFIX)/$(INSTALL_DIR)/omf/subscription-manager
-	install -m 644 docs/subscription-manager.xml \
-		$(PREFIX)/$(INSTALL_DIR)/gnome/help/subscription-manager/C
-	install -m 644 docs/legal.xml \
-		$(PREFIX)/$(INSTALL_DIR)/gnome/help/subscription-manager/C
-	install docs/figures/*.png \
-		$(PREFIX)/$(INSTALL_DIR)/gnome/help/subscription-manager/C/figures
-	install -m 644 docs/subscription-manager-C.omf \
-		$(PREFIX)/$(INSTALL_DIR)/omf/subscription-manager
-
 install-content-plugin-ostree:
 	if [ "$(INSTALL_OSTREE_PLUGIN)" = "true" ] ; then \
 		install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/ostree_content.py $(RHSM_PLUGIN_DIR) ; \
@@ -270,7 +255,6 @@ install-firstboot-real:
 	install -d $(FIRSTBOOT_MODULES_DIR); \
 	install -m644 $(SRC_DIR)/gui/firstboot/*.py* $(FIRSTBOOT_MODULES_DIR)/;\
 
-
 .PHONY: install-firstboot
 ifeq ($(INSTALL_FIRSTBOOT),true)
 install-firstboot: install-firstboot-real
@@ -288,45 +272,26 @@ endif
 .PHONY: install-post-boot
 install-post-boot: install-firstboot install-initial-setup
 
+install-via-setup:
+	./setup.py install --root $(PREFIX)
+
 .PHONY: install
-install: install-files install-po install-conf install-help-files install-plugins-conf
+install: install-via-setup install-files install-conf install-plugins-conf
 
 set-versions:
 	sed -e 's/RPM_VERSION/$(VERSION)/g' -e 's/GTK_VERSION/$(GTK_VERSION)/g' $(SRC_DIR)/version.py.in > $(SRC_DIR)/version.py
 	sed -e 's/RPM_VERSION/$(VERSION)/g' $(RCT_SRC_DIR)/version.py.in > $(RCT_SRC_DIR)/version.py
 
-install-po: compile-po
-	install -d $(RHSM_LOCALE_DIR)
-	cp -R po/build/* $(RHSM_LOCALE_DIR)/
-
 clean-versions:
 	rm -rf $(SRC_DIR)/version.py
 	rm -rf $(RCT_SRC_DIR)/version.py
 
-install-glade:
-	install -d $(GLADE_INST_DIR)
-	install -m 644 $(SRC_DIR)/gui/data/glade/*.glade $(SUBMAN_INST_DIR)/gui/data/glade/
-
-install-ui:
-	install -d $(UI_INST_DIR)
-	install -m 644 $(SRC_DIR)/gui/data/ui/*.ui $(SUBMAN_INST_DIR)/gui/data/ui/
-
-# We could choose here, but it doesn't matter.
-install-gui: install-glade install-ui
-
-install-files: set-versions dbus-service-install desktop-files install-plugins install-post-boot install-ga install-gui
-	install -d $(PYTHON_INST_DIR)/api
-	install -d $(PYTHON_INST_DIR)/gui
-	install -d $(PYTHON_INST_DIR)/gui/data/icons
-	install -d $(PYTHON_INST_DIR)/branding
-	install -d $(PYTHON_INST_DIR)/model
+install-files: set-versions dbus-service-install desktop-files install-plugins install-post-boot install-ga
 	install -d $(PYTHON_INST_DIR)/migrate
 	install -d $(PYTHON_INST_DIR)/plugin
 	install -d $(PYTHON_INST_DIR)/plugin/ostree
 	install -d $(PYTHON_INST_DIR)/plugin
 	install -d $(PYTHON_INST_DIR)/plugin/ostree
-	install -d $(PREFIX)/$(INSTALL_DIR)/locale/
-	install -d $(PREFIX)/usr/sbin
 	install -d $(PREFIX)/etc/rhsm
 	install -d $(PREFIX)/etc/rhsm/facts
 	install -d $(PREFIX)/etc/xdg/autostart
@@ -343,30 +308,14 @@ install-files: set-versions dbus-service-install desktop-files install-plugins i
 	install -d $(PREFIX)/var/lib/rhsm/facts
 	install -d $(PREFIX)/var/lib/rhsm/packages
 	install -d $(PREFIX)/var/lib/rhsm/cache
-	install -d $(PREFIX)/usr/bin
 	install -d $(PREFIX)/etc/rc.d/init.d
-	install -d $(PREFIX)/usr/share/icons/hicolor/16x16/apps
-	install -d $(PREFIX)/usr/share/icons/hicolor/22x22/apps
-	install -d $(PREFIX)/usr/share/icons/hicolor/24x24/apps
-	install -d $(PREFIX)/usr/share/icons/hicolor/32x32/apps
-	install -d $(PREFIX)/usr/share/icons/hicolor/48x48/apps
-	install -d $(PREFIX)/usr/share/icons/hicolor/96x96/apps
-	install -d $(PREFIX)/usr/share/icons/hicolor/256x256/apps
-	install -d $(PREFIX)/usr/share/icons/hicolor/scalable/apps
 	install -d $(PREFIX)/usr/share/rhsm/subscription_manager/gui/firstboot
 	install -d $(PREFIX)/usr/share/appdata
-
 
 	install -d $(PREFIX)/usr/libexec
 	install -m 755 $(DAEMONS_SRC_DIR)/rhsmcertd-worker.py \
 		$(PREFIX)/usr/libexec/rhsmcertd-worker
 
-	install -m 644 -p $(SRC_DIR)/*.py $(PYTHON_INST_DIR)/
-	install -m 644 -p $(SRC_DIR)/api/*.py $(PYTHON_INST_DIR)/api
-	install -m 644 -p $(SRC_DIR)/gui/*.py $(PYTHON_INST_DIR)/gui
-	install -m 644 -p $(SRC_DIR)/migrate/*.py $(PYTHON_INST_DIR)/migrate
-	install -m 644 -p $(SRC_DIR)/branding/*.py $(PYTHON_INST_DIR)/branding
-	install -m 644 -p $(SRC_DIR)/model/*.py $(PYTHON_INST_DIR)/model
 	install -m 644 -p $(SRC_DIR)/plugin/*.py $(PYTHON_INST_DIR)/plugin
 	install -m 644 etc-conf/subscription-manager-gui.completion.sh $(PREFIX)/etc/bash_completion.d/subscription-manager-gui
 
@@ -384,31 +333,6 @@ install-files: set-versions dbus-service-install desktop-files install-plugins i
 		install -d $(PREFIX)/$(PYTHON_SITELIB)/dnf-plugins/ ; \
 		install -m 644 -p src/dnf-plugins/*.py $(PREFIX)/$(PYTHON_SITELIB)/dnf-plugins/ ; \
 	fi ; \
-
-	#icons
-	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/16x16/apps/*.png \
-		$(PREFIX)/usr/share/icons/hicolor/16x16/apps
-	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/22x22/apps/*.png \
-		$(PREFIX)/usr/share/icons/hicolor/22x22/apps
-	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/24x24/apps/*.png \
-		$(PREFIX)/usr/share/icons/hicolor/24x24/apps
-	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/32x32/apps/*.png \
-		$(PREFIX)/usr/share/icons/hicolor/32x32/apps
-	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/48x48/apps/*.png \
-		$(PREFIX)/usr/share/icons/hicolor/48x48/apps
-	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/96x96/apps/*.png \
-		$(PREFIX)/usr/share/icons/hicolor/96x96/apps
-	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/256x256/apps/*.png \
-		$(PREFIX)/usr/share/icons/hicolor/256x256/apps
-	install -m 644 $(SRC_DIR)/gui/data/icons/hicolor/scalable/apps/*.svg \
-		$(PREFIX)/usr/share/icons/hicolor/scalable/apps
-	install -m 644 $(SRC_DIR)/gui/data/icons/*.svg \
-		$(SUBMAN_INST_DIR)/gui/data/icons
-
-	install bin/subscription-manager $(PREFIX)/usr/sbin
-	install bin/rhn-migrate-classic-to-rhsm  $(PREFIX)/usr/sbin
-	install bin/subscription-manager-gui $(PREFIX)/usr/sbin
-	install bin/rhsmcertd $(PREFIX)/usr/bin
 
 	# Set up rhsmcertd daemon. If installing on Fedora 17+ or RHEL 7+
 	# we prefer systemd over sysv as this is the new trend.
@@ -436,16 +360,6 @@ install-files: set-versions dbus-service-install desktop-files install-plugins i
 		fi; \
 	fi; \
 
-
-	install -m 644 man/rhn-migrate-classic-to-rhsm.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
-	install -m 644 man/rhsmcertd.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
-	install -m 644 man/rhsm-icon.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
-	install -m 644 man/subscription-manager.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
-	install -m 644 man/subscription-manager-gui.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
-	install -m 644 man/rct.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
-	install -m 644 man/rhsm-debug.8 $(PREFIX)/$(INSTALL_DIR)/man/man8/
-	install -m 644 man/rhsm.conf.5 $(PREFIX)/$(INSTALL_DIR)/man/man5/
-
 	install -m 644 etc-conf/rhsm-icon.desktop \
 		$(PREFIX)/etc/xdg/autostart;\
 	install bin/rhsm-icon $(PREFIX)/usr/bin;\
@@ -468,15 +382,6 @@ install-files: set-versions dbus-service-install desktop-files install-plugins i
 	install -m 644 etc-conf/subscription-manager.console \
 		$(PREFIX)/etc/security/console.apps/subscription-manager
 
-	install -d $(RCT_INST_DIR)
-	install -m 644 -p $(RCT_SRC_DIR)/*.py $(RCT_INST_DIR)
-	install bin/rct $(PREFIX)/usr/bin
-
-	install -d $(RD_INST_DIR)
-	install -m 644 -p $(RD_SRC_DIR)/*.py $(RD_INST_DIR)
-	install bin/rhsm-debug $(PREFIX)/usr/bin
-
-
 desktop-files: etc-conf/rhsm-icon.desktop \
 				etc-conf/subscription-manager-gui.desktop
 
@@ -495,69 +400,23 @@ coverage-html: coverage-jenkins
 
 .PHONY: coverage-jenkins
 coverage-jenkins:
-	python setup.py -q nosetests -c playpen/noserc.ci
+	./setup.py -q nosetests -c playpen/noserc.ci
 
-#
-# gettext, po files, etc
-#
-po/POTFILES.in:
-	# generate the POTFILES.in file expected by intltool. it wants one
-	# file per line, but we're lazy.
-	find $(SRC_DIR)/ $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR) -name "*.py" > po/POTFILES.in
-	find $(SRC_DIR)/gui/data/glade/ -name "*.glade" >> po/POTFILES.in
-	# intltool-update doesn't recognize .ui as glade files, so
-	# build a dir of .glade symlinks to the .ui files and add to POTFILES.in
-	mkdir -p po/tmp_ui_links
-	for ui_file in ./$(SRC_DIR)/gui/data/ui/*.ui ; do \
-		ui_base=$$(basename "$$ui_file") ; \
-		ln -f -s "../../$$ui_file" "po/tmp_ui_links/$$ui_base.glade" ; \
-	done ;
-	find po/tmp_ui_links/ -name "*.glade"  >> po/POTFILES.in
-	find $(BIN_DIR) -name "*-to-rhsm" >> po/POTFILES.in
-	find $(BIN_DIR) -name "subscription-manager*" >> po/POTFILES.in
-	find $(BIN_DIR) -name "rct" >> po/POTFILES.in
-	find $(BIN_DIR) -name "rhsm-debug" >> po/POTFILES.in
-	find src/ -name "*.c" >> po/POTFILES.in
-	find etc-conf/ -name "*.desktop.in" >> po/POTFILES.in
-	find $(RCT_SRC_DIR)/ -name "*.py" >> po/POTFILES.in
-	find $(RD_SRC_DIR)/ -name "*.py" >> po/POTFILES.in
-	echo $$(echo `pwd`|rev | sed -r 's|[^/]+|..|g') | sed 's|$$|$(shell find /usr/lib*/python2* -name "optparse.py")|' >> po/POTFILES.in
-
-.PHONY: po/POTFILES.in %.desktop
-
-gettext: po/POTFILES.in
+gettext:
 	# Extract strings from our source files. any comments on the line above
 	# the string marked for translation beginning with "translators" will be
 	# included in the pot file.
-	cd po && \
-	intltool-update --pot -g keys
+	./setup.py gettext
 
 update-po:
-	for f in $(shell find po/ -name "*.po") ; do \
-		msgmerge -N --backup=none -U $$f po/keys.pot ; \
-	done
+	./setup.py update_trans
 
 uniq-po:
-	for f in $(shell find po/ -name "*.po") ; do \
-		msguniq $$f -o $$f ; \
-	done
-
-# Compile translations
-compile-po:
-	@ echo -n "Compiling po files for: " ; \
-	for lang in $(basename $(notdir $(wildcard po/*.po))) ; do \
-		echo -n "$$lang " ; \
-		mkdir -p po/build/$$lang/LC_MESSAGES/ ; \
-		msgfmt --check-format --check-domain -o po/build/$$lang/LC_MESSAGES/rhsm.mo po/$$lang.po ; \
-	done ; \
-	echo ;
+	./setup.py uniq_trans
 
 # just run a check to make sure these compile
 polint:
-	# This is just informational, most zanata po files dont pass
-	for lang in $(basename $(notdir $(wildcard po/*.po))) ; do \
-		msgfmt -c -o /dev/null po/$$lang.po ; \
-	done ;
+	./setup.py gettext --lint
 
 just-strings:
 	-@ scripts/just_strings.py po/keys.pot
@@ -583,94 +442,17 @@ zanata: gettext zanata-push zanata-pull update-po
 gen-test-long-po:
 	-@ scripts/gen_test_en_po.py --long po/en_US.po
 
-#
-# checkers, linters, etc
-#
-
-.PHONY: pylint
-pylint:
-	@PYTHONPATH="src/:/usr/share/rhn:../python-rhsm/src/:/usr/share/rhsm" python setup.py lint
-
-.PHONY: tablint
-tablint:
-	@! GREP_COLOR='7;31' grep --color -nP "^\W*\t" $(STYLEFILES)
-
-.PHONY: trailinglint
-trailinglint:
-	@! GREP_COLOR='7;31'  grep --color -nP "[ \t]$$" $(STYLEFILES)
-
-.PHONY: whitespacelint
-whitespacelint: tablint trailinglint
-
-# look for things that are likely debugging code left in by accident
-.PHONY: debuglint
-debuglint:
-	@! GREP_COLOR='7;31' grep --color -nP "pdb.set_trace|pydevd.settrace|import ipdb|import pdb|import pydevd" $(STYLEFILES)
-
-# find widgets used via get_widget
-# find widgets used as passed to init of SubscriptionManagerTab,
-# find the widgets we actually find in the glade files
-# see if any used ones are not defined
-.PHONY: find-missing-signals
-find-missing-widgets:
-	@TMPFILE=`mktemp` || exit 1; \
-	USED_WIDGETS=`mktemp` ||exit 1; \
-	DEFINED_WIDGETS=`mktemp` ||exit 1; \
-	perl -n -e "if (/get_widget\([\'|\"](.*?)[\'|\"]\)/) { print(\"\$$1\n\")}" $(STYLEFILES) > $$USED_WIDGETS; \
-	pcregrep -h -o  -M  "(?:widgets|widget_names) = \[.*\s*.*?\s*.*\]" $(STYLEFILES) | perl -0 -n -e "my @matches = /[\'|\"](.*?)[\'|\"]/sg ; $$,=\"\n\"; print(@matches);" >> $$USED_WIDGETS; \
-	perl -n -e "if (/<object class=\".*?\" id=\"(.*?)\">/) { print(\"\$$1\n\")}" $(GLADEFILES) $(UIFILES) > $$DEFINED_WIDGETS; \
-	while read line; do grep -F "$$line" $$DEFINED_WIDGETS > /dev/null ; STAT="$$?"; if [ "$$STAT" -ne "0" ] ; then echo "$$line"; fi;  done < $$USED_WIDGETS | tee $$TMPFILE; \
-	! test -s $$TMPFILE
-
-# find any signals defined in glade and make sure we use them somewhere
-# this would be better if we could statically extract the used signals from
-# the code.
-.PHONY: find-missing-signals
-find-missing-signals:
-	@TMPFILE=`mktemp` || exit 1; \
-	DEFINED_SIGNALS=`mktemp` ||exit 1; \
-	perl -n -e "if (/<signal name=\"(.*?)\" handler=\"(.*?)\"/) { print(\"\$$2\n\")}" $(GLADEFILES) $(UIFILES) > $$DEFINED_SIGNALS; \
-	while read line; do grep -F  "$$line" $(PYFILES) > /dev/null; STAT="$$?"; if [ "$$STAT" -ne "0" ] ; then echo "$$line"; fi;  done < $$DEFINED_SIGNALS | tee $$TMPFILE; \
-	! test -s $$TMPFILE
-# try to clean up the "swapped=no" signal thing in
-# glade files, since rhel6 hates it
-# also remove unneeded 'orientation' property for vbox's
-# since it causes warnings on RHEL5
-fix-glade:
-	perl -pi -e 's/(swapped=\".*?\")//' $(GLADEFILES)
-	perl -pi -e 's/^.*property\s*name=\"orientation\">vertical.*$$//' $(GLADEFILES)
-
-
-# look for python string formats that are known to break xgettext
-# namely constructs of the forms: _("a" + "b")
-#                                 _("a" + \
-#                                   "b")
-#  also look for _(a) usages
-.PHONY: gettext_lint
-gettext_lint:
-	@TMPFILE=`mktemp` || exit 1; \
-	pcregrep -n --color=auto -M "_\(.*[\'|\"].*?[\'|\"]\s*\+.*?(?s)\s*[\"|\'].*?(?-s)[\"|\'].*?\)"  $(STYLEFILES) | tee $$TMPFILE; \
-	pcregrep -n --color=auto -M "[^_]_\([^ru\'\"].*?[\'\"]?\)" $(STYLEFILES) | tee $$TMPFILE; \
-	! test -s $$TMPFILE
-
-#see bz #826874, causes issues on older libglade
-.PHONY: gladelint
-gladelint:
-	@TMPFILE=`mktemp` || exit 1; \
-	grep -nP  "swapped=\"no\"" $(GLADEFILES) | tee $$TMPFILE; \
-    grep -nP "property name=\"orientation\"" $(GLADEFILES) | tee $$TMPFILE; \
-	! test -s $$TMPFILE
+.PHONY: lint
+lint:
+	./setup.py lint
 
 .PHONY: flake8
 flake8:
-	@python setup.py -q flake8 -q
-
+	./setup.py flake8
 
 .PHONY: rpmlint
 rpmlint:
-	@TMPFILE=`mktemp` || exit 1; \
-	rpmlint -f rpmlint.config subscription-manager.spec | grep -v "^.*packages and .* specfiles checked\;" | tee $$TMPFILE; \
-	! test -s $$TMPFILE
+	./setup.py lint_rpm
 
 # We target python 2.6, hence -m 2.7 is the earliest python features to warn about use of.
 # See https://github.com/alikins/pyqver for pyqver.
@@ -682,20 +464,14 @@ versionlint:
 	! test -s $$TMPFILE
 
 .PHONY: stylish
-stylish: whitespacelint flake8 versionlint rpmlint debuglint gettext_lint
-
-# uncommon, so move to just letting jenkins run these by default
-.PHONY: stylish-harder
-stylish-harder: gladelint find-missing-widgets find-missing-signals
+stylish: lint versionlint
 
 .PHONY: install-pip-requirements
 install-pip-requirements:
 	@pip install -r test-requirements.txt
 
 .PHONY: jenkins
-jenkins: install-pip-requirements build stylish stylish-harder coverage-jenkins
-
-
+jenkins: install-pip-requirements build stylish coverage-jenkins
 
 stylefiles:
 	@echo $(STYLEFILES)

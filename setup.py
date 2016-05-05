@@ -185,15 +185,13 @@ cmdclass = {
 }
 
 transforms = [
-    ('*.completion.sh', ''),
-    ('*.pam', ''),
-    ('*.console', ''),
+    ('rhsmcertd-worker.py', ''),
 ]
 
 setup(
     name="subscription-manager",
     version='1.17.6',
-    url="http://candlepinproject.org",
+    url="http://www.candlepinproject.org",
     description="Manage subscriptions for Red Hat products.",
     license="GPLv2",
     author="Adrian Likins",
@@ -204,17 +202,13 @@ setup(
     package_data={'subscription_manager.gui': ['data/glade/*.glade', 'data/ui/*.ui', 'data/icons/*.svg']},
     data_files=[
         ('sbin', ['bin/subscription-manager', 'bin/subscription-manager-gui', 'bin/rhn-migrate-classic-to-rhsm']),
-        ('bin', ['bin/rct', 'bin/rhsm-debug']),
-        ('share/man/man8', glob('man/*.8')),
+        ('bin', ['bin/rct', 'bin/rhsm-debug', 'bin/rhsmcertd']),
+        # sat5to6 is packaged separately
+        ('share/man/man8', set(glob('man/*.8')) - set(['man/sat5to6.8'])),
+        ('share/man/man5', glob('man/*.5')),
         ('share/gnome/help/subscription-manager/C', glob('docs/*.xml')),
         ('share/gnome/help/subscription-manager/C/figures', glob('docs/figures/*.png')),
         ('share/omf/subscription-manager', glob('docs/*.omf')),
-        ('/etc/rhsm', ['etc-conf/rhsm.conf']),
-        ('/etc/pam.d', glob('etc-conf/*.pam')),
-        ('/etc/logrotate.d/subscription-manager', ['etc-conf/logrotate.conf']),
-        ('/etc/yum/pluginconf.d', glob('etc-conf/plugin/*.conf')),
-        ('/etc/bash_completion.d', glob('etc-conf/*.completion.sh')),
-        ('/etc/security/console.apps', glob('etc-conf/*.console')),
     ],
     command_options={
         'install_data': {
