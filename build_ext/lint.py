@@ -50,7 +50,6 @@ class Lint(BaseCommand):
     # Defined at the end since it references unbound methods
     sub_commands = [
         ('lint_glade', has_glade_files),
-        ('lint_gettext', has_pure_modules),
         ('lint_rpm', has_spec_file),
         ('flake8', has_pure_modules),
     ]
@@ -99,7 +98,7 @@ class GladeLint(FileLint):
 
     def run(self):
         for f in Utils.find_files_of_type('src', '*.glade'):
-            self.scan_xml(f, ["//property[@name='orientation']", "//*[@swapped='no']"])
+            self.scan_xml(f, [".//property[@name='orientation']", ".//*[@swapped='no']"])
 
 
 class AstVisitor(object):
