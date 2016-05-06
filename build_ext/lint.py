@@ -11,13 +11,13 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 import ast
-import flake8.main
 import pep8
 import re
 
 from distutils.spawn import spawn
 from distutils.text_file import TextFile
 
+from flake8.main import Flake8Command
 from xml.etree import ElementTree
 
 from build_ext.utils import Utils, BaseCommand, LineNumberingParser, memoize
@@ -334,7 +334,7 @@ class AstChecker(pep8.Checker):
         return ret
 
 
-class PluginLoadingFlake8Command(flake8.main.Flake8Command):
+class PluginLoadingFlake8Command(Flake8Command):
     """A Flake8 runner that will load our custom plugins.  It's important to note
     that this has to be invoked via `./setup.py flake8`.  Just running `flake8` won't
     cut it.
@@ -342,9 +342,19 @@ class PluginLoadingFlake8Command(flake8.main.Flake8Command):
     Flake8 normally wants to load plugins via entry_points, but as far as I can tell
     that would require packaging our checkers separately.
     """
+    def distribution_files(self):
+        # By default Flake8Command only runs on packages registered with
+        # setuptools.  We want it to look at tests and other things as well
+        #
+        # Additionally https://gitlab.com/pycqa/flake8/issues/134 causes Flake8
+        # to check files in sub-packages multiple times.  Telling it to check
+        # only the top level directories fixes the issue.
+        for d in ['src', 'test', 'build_ext', 'example-plugins', 'setup.py']:
+            yield d
 
     def run(self):
         codes = DebugImportVisitor.codes + GettextVisitor.codes + WidgetVisitor.codes + SignalVisitor.codes
-
         pep8.register_check(AstChecker, codes=codes)
-        flake8.main.Flake8Command.run(self)
+        # To see what Flake8 is actually checking use
+        # self.options_dict['verbose'] = 1
+        Flake8Command.run(self)
