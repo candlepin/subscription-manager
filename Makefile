@@ -1,37 +1,25 @@
 SHELL := /bin/bash
 PREFIX ?=
 SYSCONF ?= etc
-PYTHON_SITELIB ?= usr/lib/python2.7/site-packages
-
 INSTALL_DIR = usr/share
-INSTALL_MODULE = rhsm
-PKGNAME = subscription_manager
-ANACONDA_ADDON_NAME = com_redhat_subscription_manager
 
-# where most of our python modules live. Note this is not on
-# the default python system path. If you are importing modules from here, and
-# you can't commit to this repo, you should feel bad and stop doing that.
-PYTHON_INST_DIR = $(PREFIX)/$(PYTHON_SITELIB)/$(PKGNAME)
+PYTHON_SITELIB ?= usr/lib/python2.7/site-packages
+PYTHON_INST_DIR = $(PREFIX)/$(PYTHON_SITELIB)/subscription-manager
 
 OS = $(shell lsb_release -i | awk '{ print $$3 }' | awk -F. '{ print $$1}')
 OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
 OS_DIST ?= $(shell rpm --eval='%dist')
-BIN_FILES := bin/subscription-manager bin/subscription-manager-gui \
-			 bin/rhn-migrate-classic-to-rhsm \
-			 bin/rct \
-			 bin/rhsm-debug
 
 # Where various bits of code live in the git repo
-BASE_SRC_DIR := src
-SRC_DIR := $(BASE_SRC_DIR)/subscription_manager
-RCT_SRC_DIR := $(BASE_SRC_DIR)/rct
-RD_SRC_DIR := $(BASE_SRC_DIR)/rhsm_debug
-RHSM_ICON_SRC_DIR := $(BASE_SRC_DIR)/rhsm_icon
-DAEMONS_SRC_DIR := $(BASE_SRC_DIR)/daemons
+SRC_DIR := src/subscription_manager
+RCT_SRC_DIR := src/rct
+RHSM_ICON_SRC_DIR := src/rhsm_icon
+DAEMONS_SRC_DIR := src/daemons
 EXAMPLE_PLUGINS_SRC_DIR := example-plugins/
-CONTENT_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/content_plugins/
-ANACONDA_ADDON_SRC_DIR := $(BASE_SRC_DIR)/initial-setup
-ANACONDA_ADDON_MODULE_SRC_DIR := $(ANACONDA_ADDON_SRC_DIR)/$(ANACONDA_ADDON_NAME)
+CONTENT_PLUGINS_SRC_DIR := src/content_plugins/
+
+ANACONDA_ADDON_NAME = com_redhat_subscription_manager
+ANACONDA_ADDON_MODULE_SRC_DIR := src/initial-setup/$(ANACONDA_ADDON_NAME)
 
 # dirs we install to
 SYSTEMD_INST_DIR := $(PREFIX)/usr/lib/systemd/system
@@ -59,13 +47,11 @@ endif
 
 # always true until fedora is just dnf
 INSTALL_YUM_PLUGINS ?= true
-YUM_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/plugins
+YUM_PLUGINS_SRC_DIR := src/plugins
 
 # for fc22 or newer
 INSTALL_DNF_PLUGINS ?= false
-DNF_PLUGINS_SRC_DIR := $(BASE_SRC_DIR)/plugins
-
-ALL_SRC_DIRS := $(SRC_DIR) $(RCT_SRC_DIR) $(RD_SRC_DIR) $(DAEMONS_SRC_DIR) $(CONTENT_PLUGINS_SRC_DIR) $(EXAMPLE_PLUGINS_SRC_DIR) $(YUM_PLUGINS_SRC_DIR) $(DNF_PLUGINS_SRC_DIR)
+DNF_PLUGINS_SRC_DIR := src/plugins
 
 # sets a version that is more or less latest tag plus commit sha
 VERSION ?= $(shell git describe | awk ' { sub(/subscription-manager-/,"")};1' )
@@ -87,27 +73,27 @@ clean: clean-versions
 	rm -f bin/rhsm-icon
 	./setup.py clean --all
 
-bin:
-	mkdir bin
-
 RHSMCERTD_FLAGS = `pkg-config --cflags --libs glib-2.0`
 
 ICON_FLAGS=`pkg-config --cflags --libs "gtk+-$(GTK_VERSION).0 libnotify gconf-2.0 dbus-glib-1"`
 
-PYFILES := `find $(ALL_SRC_DIRS) -name "*.py"`
-# Ignore certdata.py from style checks as tabs and trailing
-# whitespace are required for testing.
-TESTFILES=`find  test/ \( ! -name certdata.py ! -name manifestdata.py \) -name "*.py"`
-STYLEFILES=$(PYFILES) $(BIN_FILES) $(TESTFILES)
+PYFILES := `find src/ test/ -name "*.py"`
+BIN_FILES := bin/subscription-manager bin/subscription-manager-gui \
+			 bin/rhn-migrate-classic-to-rhsm \
+			 bin/rct \
+			 bin/rhsm-debug
+STYLEFILES=$(PYFILES) $(BIN_FILES)
 
-rhsmcertd: $(DAEMONS_SRC_DIR)/rhsmcertd.c bin
+rhsmcertd: $(DAEMONS_SRC_DIR)/rhsmcertd.c
+	mkdir bin
 	$(CC) $(CFLAGS) $(LDFLAGS) $(RHSMCERTD_FLAGS) $(DAEMONS_SRC_DIR)/rhsmcertd.c -o bin/rhsmcertd
 
-check-syntax:
-	$(CC) $(CFLAGS) $(LDFLAGS) $(ICON_FLAGS) -o nul -S $(CHK_SOURCES)
-
-rhsm-icon: $(RHSM_ICON_SRC_DIR)/rhsm_icon.c bin
+rhsm-icon: $(RHSM_ICON_SRC_DIR)/rhsm_icon.c
+	mkdir bin
 	$(CC) $(CFLAGS) $(LDFLAGS) $(ICON_FLAGS) $(RHSM_ICON_SRC_DIR)/rhsm_icon.c -o bin/rhsm-icon
+
+check-syntax:
+	$(CC) -fsyntax-only $(CFLAGS) $(LDFLAGS) $(ICON_FLAGS) `find -name '*.c'`
 
 dbus-service-install:
 	install -d $(PREFIX)/etc/dbus-1/system.d
@@ -344,12 +330,8 @@ check:
 smoke:
 	test/smoke.sh
 
-coverage: coverage-jenkins
-
-coverage-html: coverage-jenkins
-
-.PHONY: coverage-jenkins
-coverage-jenkins:
+.PHONY: coverage
+coverage:
 	./setup.py -q nosetests -c playpen/noserc.ci
 
 gettext:
@@ -421,4 +403,4 @@ install-pip-requirements:
 	@pip install -r test-requirements.txt
 
 .PHONY: jenkins
-jenkins: install-pip-requirements build stylish coverage-jenkins
+jenkins: install-pip-requirements build stylish coverage
