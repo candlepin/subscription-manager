@@ -4,7 +4,8 @@ SYSCONF ?= etc
 INSTALL_DIR = usr/share
 
 PYTHON_SITELIB ?= usr/lib/python2.7/site-packages
-PYTHON_INST_DIR = $(PREFIX)/$(PYTHON_SITELIB)/subscription-manager
+# Note the underscore used instead of a hyphen
+PYTHON_INST_DIR = $(PREFIX)/$(PYTHON_SITELIB)/subscription_manager
 
 OS = $(shell lsb_release -i | awk '{ print $$3 }' | awk -F. '{ print $$1}')
 OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
@@ -74,6 +75,9 @@ STYLEFILES=$(PYFILES) $(BIN_FILES)
 Makefile: ;
 
 build: set-versions rhsmcertd rhsm-icon
+	# Install doesn't perform a build if it doesn't have too.  Best to clean out
+	# any cruft so developers don't end up install old builds.
+	./setup.py clean --all
 	./setup.py build
 
 .PHONY: clean-versions
@@ -136,13 +140,30 @@ install-plugins:
 	install -d $(PREFIX)/etc/rhsm/ca
 	install -m 644 -p etc-conf/redhat-entitlement-authority.pem $(PREFIX)/etc/rhsm/ca/redhat-entitlement-authority.pem
 
+	if [ "$(INSTALL_YUM_PLUGINS)" = "true" ] ; then \
+		echo "Installing Yum plugins" ; \
+		install -d $(PREFIX)/etc/yum/pluginconf.d/ ; \
+		install -d $(PREFIX)/usr/lib/yum-plugins/ ; \
+		install -m 644 -p src/plugins/*.py $(PREFIX)/usr/lib/yum-plugins/ ; \
+		install -m 644 etc-conf/plugin/*.conf $(PREFIX)/etc/yum/pluginconf.d/ ; \
+	fi;
+
+	if [ "$(INSTALL_DNF_PLUGINS)" = "true" ] ; then \
+		echo "Installing DNF plugins" ; \
+		install -d $(PREFIX)/$(PYTHON_SITELIB)/dnf-plugins/ ; \
+		install -m 644 -p src/dnf-plugins/*.py $(PREFIX)/$(PYTHON_SITELIB)/dnf-plugins/ ; \
+	fi;
+
 	# ostree stuff
 	if [ "$(INSTALL_OSTREE_PLUGIN)" = "true" ] ; then \
+		echo "Installing ostree plugins" ; \
 		install -m 644 -p \
 		$(CONTENT_PLUGINS_SRC_DIR)/ostree_content.OstreeContentPlugin.conf \
 		$(RHSM_PLUGIN_CONF_DIR) ; \
-		install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/ostree_content.py $(RHSM_PLUGIN_DIR) ; \
+		install -d $(PYTHON_INST_DIR)/plugin/ostree ; \
+		install -m 644 -p $(SRC_DIR)/plugin/ostree/*.py $(PYTHON_INST_DIR)/plugin/ostree ; \
 	fi;
+
 	# container stuff
 	install -m 644 -p \
 		$(CONTENT_PLUGINS_SRC_DIR)/container_content.ContainerContentPlugin.conf \
@@ -152,13 +173,13 @@ install-plugins:
 .PHONY: install-ga
 ifeq ($(GTK_VERSION),2)
 install-ga:
-	@echo "USING $(GTK_VERSION)"
+	$(info Using GTK $(GTK_VERSION))
 	install -d $(PYTHON_INST_DIR)/ga_impls/ga_gtk2
 	install -m 644 -p $(SRC_DIR)/ga_impls/__init__.py* $(PYTHON_INST_DIR)/ga_impls
 	install -m 644 -p $(SRC_DIR)/ga_impls/ga_gtk2/*.py $(PYTHON_INST_DIR)/ga_impls/ga_gtk2
 else
 install-ga:
-	@echo "USING $(GTK_VERSION)"
+	$(info Using GTK $(GTK_VERSION))
 	install -d $(PYTHON_INST_DIR)/ga_impls
 	install -m 644 -p $(SRC_DIR)/ga_impls/__init__.py* $(PYTHON_INST_DIR)/ga_impls
 	install -m 644 -p $(SRC_DIR)/ga_impls/ga_gtk3.py* $(PYTHON_INST_DIR)/ga_impls
@@ -172,20 +193,20 @@ install-example-plugins: install-plugins
 .PHONY: install-firstboot
 ifeq ($(INSTALL_FIRSTBOOT),true)
 install-firstboot:
-	@echo "Installing firstboot to $(FIRSTBOOT_MODULES_DIR)"
+	$(info Installing firstboot to $(FIRSTBOOT_MODULES_DIR))
 	install -d $(FIRSTBOOT_MODULES_DIR)
-	install -m644 $(SRC_DIR)/gui/firstboot/*.py* $(FIRSTBOOT_MODULES_DIR)
+	install -m 644 $(SRC_DIR)/gui/firstboot/*.py* $(FIRSTBOOT_MODULES_DIR)
 else
 install-firstboot:
 	# Override INSTALL_FIRSTBOOT variable on command line if needed
-	@echo "firstboot is not configured to be install"
+	$(info firstboot is not configured to be install)
 endif
 
 # initial-setup, as in the 'initial-setup' rpm that runs at first boot.
 .PHONY: install-initial-setup
 ifeq ($(INSTALL_INITIAL_SETUP),true)
 install-initial-setup:
-	@echo "Installing initial-setup to $(INITIAL_SETUP_INST_DIR)"
+	$(info Installing initial-setup to $(INITIAL_SETUP_INST_DIR))
 	install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/ostree_content.py $(RHSM_PLUGIN_DIR)
 	install -d $(ANACONDA_ADDON_INST_DIR)
 	install -d $(INITIAL_SETUP_INST_DIR)/gui/spokes
@@ -198,7 +219,7 @@ install-initial-setup:
 else
 install-initial-setup:
 	# Set INSTALL_INITIAL_SETUP variable on command line if needed.
-	@echo "initial-setup is not configured to be installed."
+	$(info initial-setup is not configured to be installed)
 endif
 
 .PHONY: install-post-boot
@@ -218,28 +239,10 @@ set-versions:
 
 .PHONY: install-files
 install-files: set-versions dbus-service-install install-conf install-plugins install-post-boot install-ga
-	install -d $(PYTHON_INST_DIR)/plugin/ostree
-	install -d $(PYTHON_INST_DIR)/firstboot
 	install -d $(PREFIX)/var/log/rhsm
 	install -d $(PREFIX)/var/spool/rhsm/debug
 	install -d $(PREFIX)/var/run/rhsm
 	install -d $(PREFIX)/var/lib/rhsm/{cache,facts,packages}
-
-	if [ "$(INSTALL_OSTREE_PLUGIN)" = "true" ] ; then \
-		install -m 644 -p $(SRC_DIR)/plugin/ostree/*.py $(PYTHON_INST_DIR)/plugin/ostree ; \
-	fi
-	if [ "$(INSTALL_YUM_PLUGINS)" = "true" ] ; then \
-		@echo "Installing Yum plugins" ; \
-		install -d $(PREFIX)/etc/yum/pluginconf.d/ ; \
-		install -d $(PREFIX)/usr/lib/yum-plugins/ ; \
-		install -m 644 -p src/plugins/*.py $(PREFIX)/usr/lib/yum-plugins/ ; \
-		install -m 644 etc-conf/plugin/*.conf $(PREFIX)/etc/yum/pluginconf.d/ ; \
-	fi ; \
-	if [ "$(INSTALL_DNF_PLUGINS)" = "true" ] ; then \
-		@echo "Installing DNF plugins" ; \
-		install -d $(PREFIX)/$(PYTHON_SITELIB)/dnf-plugins/ ; \
-		install -m 644 -p src/dnf-plugins/*.py $(PREFIX)/$(PYTHON_SITELIB)/dnf-plugins/ ; \
-	fi ; \
 
 	# Set up rhsmcertd daemon. If installing on Fedora or RHEL 7+
 	# we prefer systemd over sysv as this is the new trend.
