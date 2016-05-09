@@ -22,7 +22,9 @@ DBUS_INTERFACE = SERVICE_NAME
 # Note: No trailing '/'
 #
 # /com/redhat/Subscriptions1
-ROOT_DBUS_PATH = '/' + TOP_LEVEL_DOMAIN + '/' + DOMAIN_NAME + '/' + SERVICE_SUB_DOMAIN_NAME_VER
+ROOT_DBUS_PATH = '/' + "/".join([TOP_LEVEL_DOMAIN, DOMAIN_NAME, SERVICE_SUB_DOMAIN_NAME_VER])
+
+SUBMAND_PATH = ROOT_DBUS_PATH + '/' + "SubmanDaemon1"
 
 SERVICE_VAR_PATH = '/var/lib/rhsm/cache'
 
@@ -35,3 +37,10 @@ PK_ACTION_PREFIX = SERVICE_NAME
 
 # com.redhat.Subscriptions1.default
 PK_ACTION_DEFAULT = PK_ACTION_PREFIX + '.' + 'default'
+
+# Interface names
+CONFIG_SERVICE_NAME = "ConfigService"
+CONFIG_INTERFACE = '.'.join([SERVICE_NAME, CONFIG_SERVICE_NAME])
+
+REGISTER_SERVICE_NAME = "RegisterService"
+REGISTER_INTERFACE = '.'.join([SERVICE_NAME, REGISTER_SERVICE_NAME])
