@@ -61,7 +61,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.17.5
+Version: 1.17.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -577,6 +577,14 @@ fi
 %endif
 
 %changelog
+* Mon May 09 2016 Vritant Jain <vrjain@redhat.com> 1.17.6-1
+- 1268094: Avoid traceback on unreg with >1 sub (alikins@redhat.com)
+- 1329397:  github issue #1409 (stas-fomin@yandex.ru)
+- 1301215: Test proxy connection before making call 1176219: Stop before cache
+  is returned when using bad proxy options (wpoteat@redhat.com)
+- 1315591: Catches exception and allows process to continue
+  (wpoteat@redhat.com)
+
 * Fri Apr 22 2016 Vritant Jain <vrjain@redhat.com> 1.17.5-1
 - Added RHEL 7.3 release target (vrjain@redhat.com)
 - 1320507: Use config entry before default for port and prefix

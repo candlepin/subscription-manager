@@ -16,7 +16,7 @@
 from setuptools import setup
 
 setup(name="subscription-manager",
-      version='1.17.5',
+      version='1.17.6',
       url="http://candlepinproject.org",
       description="Manage subscriptions for Red Hat products.",
       license="GPLv2",
