@@ -3,6 +3,7 @@ from rhsmlib.dbus.common import gi_kluge
 gi_kluge.kluge_it()
 
 from rhsmlib.dbus.common import dbus_utils, constants
+from rhsmlib.dbus.services.submand.subman_daemon import SubmanDaemon
 
 from gi.repository import GLib
 
@@ -25,98 +26,40 @@ logger.addHandler(ch)
 
 _ = gettext.gettext
 
+class BaseService(dbus.service.Object):
+    default_dbus_path = ""
 
-class SubmanDaemon(dbus.service.Object):
-    """ Subscription-managerD main class """
-    DBUS_NAME = "com.redhat.Subscriptions1.SubmanDaemon1"
-    DBUS_INTERFACE = "com.redhat.Subscriptions1.SubmanDaemon1"
-    DBUS_PATH = "/com/redhat/Subscriptions1/SubmanDaemon1"
-    _default_service_classes = []
-
-    def __init__(self, conn=None, bus=None, object_path=DBUS_PATH, service_classes=None):
+    def __init__(self, conn=None, bus=None, object_path=default_dbus_path):
         print "Created SubmanDaemon"
         bus_name = None
         if bus is not None:
-            bus_name = dbus.service.BusName(DBUS_NAME, bus)
-        self.bus = bus
-        self.conn = conn
-        self.object_path = object_path
+            bus_name = dbus.service.BusName(self.__class__.DBUS_NAME, bus)
 
-        self.service_classes = service_classes or self.__class__._default_service_classes
-        self.services = {}
-        super(SubmanDaemon, self).__init__(object_path=object_path, conn=conn, bus_name=bus_name)
-
-    @decorators.dbus_service_method(dbus_interface=DBUS_INTERFACE,
-                                    in_signature="s",
-                                    out_signature="o")
-    def get_service_by_name(self, service_name, sender=None):
-        """ Returns the object path to a given service """
-        service_name = dbus_utils.dbus_to_python(service_name, str)
-        service_instance = self._get_service_by_name(service_name, create=True)
-        return service_instance
-
-    def _get_service_by_name(self, service_name, create=False):
-        """ Returns an instance of an object """
-        service = self.services.get(service_name)
-        if service is None:
-            # We don't have an object created for this name
-            logger.debug('No instance of service name "%s" available', service_name)
-            if create:
-                self.services[service_name] = self._create_service_instance(service_name)
-                return self.services[service_name]
-            else:
-                raise decorators.Subscriptions1DBusException("No instance available")
-        return service
-
-    def _find_service_class_for_name(self, service_name):
-        logger.debug('Finding class that matches service name "%s"', service_name)
-        for service in self.service_classes:
-            logger.debug(service_name)
-            if service.DBUS_NAME == service_name:
-                logger.debug("Made it")
-                return service
-        raise decorators.Subscriptions1DBusException('No class found that matches "%s"', service_name)
-
-    def _create_service_instance(self, service_name):
-        logger.debug('Attempting to create instance of service_name: "%s"', service_name)
-        clazz = self._find_service_class_for_name(service_name)
-        return clazz(conn=self.conn, bus=self.bus)
+        super(BaseService, self).__init__(object_path=object_path, conn=conn, bus_name=bus_name)
 
 
-class ConfigService(dbus.service.Object):
+
+class ConfigServiceMixin(dbus.service.Object):
     DBUS_NAME = "com.redhat.Subscriptions1.ConfigService"
-    DBUS_INTERFACE = "com.redhat.Subscriptions1.ConfigService"
     DBUS_PATH = "/com/redhat/Subscriptions1/ConfigService"
 
-    def __init__(self, conn=None, bus=None, object_path=DBUS_PATH):
-        print "Created ConfigService"
-        self.name = self.__class__.DBUS_NAME
-        bus_name = None
-        if bus is not None:
-            bus_name = dbus.service.BusName(DBUS_NAME, bus)
-        super(ConfigService, self).__init__(object_path=object_path, conn=conn, bus_name=bus_name)
 
-    @decorators.dbus_service_method(dbus_interface=DBUS_INTERFACE,
+    @decorators.dbus_service_method(dbus_interface=constants.CONFIG_INTERFACE,
                                     in_signature='',
                                     out_signature='s')
     def getConfig(self, sender=None):
         return "My Cool config"
 
 
-class RegisterService(dbus.service.Object):
+class ConfigService(BaseService, ConfigServiceMixin):
+    pass
+
+
+class RegisterServiceMixin(dbus.service.Object):
     DBUS_NAME = "com.redhat.Subscriptions1.RegisterService"
-    DBUS_INTERFACE = "com.redhat.Subscriptions1.RegisterService"
     DBUS_PATH = "/com/redhat/Subscriptions1/RegisterService"
 
-    def __init__(self, conn=None, bus=None, object_path=DBUS_PATH):
-        print "Created RegisterService"
-        self.name = self.__class__.DBUS_NAME
-        bus_name = None
-        if bus is not None:
-            bus_name = dbus.service.BusName(DBUS_NAME, bus)
-        super(RegisterService, self).__init__(object_path=object_path, conn=conn, bus_name=bus_name)
-
-    @decorators.dbus_service_method(dbus_interface=DBUS_INTERFACE,
+    @decorators.dbus_service_method(dbus_interface=constants.REGISTER_INTERFACE,
                                     out_signature='s',
                                     in_signature='s')
     def reverse(self, text, sender=None):
@@ -124,25 +67,25 @@ class RegisterService(dbus.service.Object):
         text.reverse()
         return ''.join(text)
 
-    @decorators.dbus_service_method(dbus_interface=DBUS_INTERFACE,
+    @decorators.dbus_service_method(dbus_interface=constants.REGISTER_INTERFACE,
                                     out_signature='o')
     def get_self(self, sender=None):
         return self
 
-    @decorators.dbus_service_method(dbus_interface=DBUS_INTERFACE,
+    @decorators.dbus_service_method(dbus_interface=constants.REGISTER_INTERFACE,
                                     in_signature="",
                                     out_signature="")
     def throw_exception(self, sender=None):
         raise Exception('throw_exception')
 
-    @decorators.dbus_service_method(dbus_interface=DBUS_INTERFACE,
+    @decorators.dbus_service_method(dbus_interface=constants.REGISTER_INTERFACE,
                                     in_signature="",
                                     out_signature="")
     @decorators.dbus_handle_exceptions
     def throw_exception_2(self, sender=None):
         raise Exception('throw_exception_2')
 
-    @decorators.dbus_service_method(dbus_interface=DBUS_INTERFACE,
+    @decorators.dbus_service_method(dbus_interface=constants.REGISTER_INTERFACE,
                                     in_signature='sssa{ss}',
                                     out_signature='s')
     def register(self, username, password, org, options, sender=None):
@@ -172,7 +115,7 @@ class RegisterService(dbus.service.Object):
         logger.info(cp.registerConsumer(name=options['name'],
                                    owner=org))
         return "haha"
-    @decorators.dbus_service_method(dbus_interface=DBUS_INTERFACE,
+    @decorators.dbus_service_method(dbus_interface=constants.REGISTER_INTERFACE,
                                     in_signature='sa(s)a{ss}',
                                     out_signature='s')
     def register_with_activation_keys(self,
@@ -218,23 +161,32 @@ class RegisterService(dbus.service.Object):
         return None
 
 
+class RegisterService(BaseService, RegisterServiceMixin):
+    pass
+
+
 class PrivateRegisterService(SubmanDaemon):
     _default_service_classes = [ConfigService, RegisterService]
 
 
+class CompositePrivateRegisterService(BaseService, RegisterServiceMixin, ConfigServiceMixin):
+    pass
+
+
+class SuperSubmanService(SubmanDaemon,
+                         RegisterServiceMixin,
+                         ConfigServiceMixin):
+    pass
+
+
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Start the registration service")
-    parser.add_argument('--private', action="store_true", default=False,
-                        help="Start the service on private socket",
-                        dest="private")
-    args = parser.parse_args()
 
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
     dbus.mainloop.glib.threads_init()
 
     mainloop = GLib.MainLoop()
-    bus = dbus.SessionBus(private=args.private)
-    service = RegisterService(bus) if args.private else RegisterService(bus, bus)
+    bus = dbus.SessionBus()
+    service = SuperSubmanService(bus, bus)
 
     try:
         mainloop.run()
