@@ -62,8 +62,7 @@ class rpm_version_release_build_py(_build_py):
             version_file = os.path.join(version_dir, 'version.py')
             version_release = "unknown"
             if self.rpm_version and self.rpm_release:
-                version_release = "%s-%s" % (self.rpm_version,
-                                               self.rpm_release)
+                version_release = "%s-%s" % (self.rpm_version, self.rpm_release)
             else:
                 version_release = self.get_git_describe()
             try:
@@ -177,7 +176,7 @@ cmdclass = {
     'clean': clean,
     'install_data': install_data,
     'build': build,
-    'build_py': rpm_version_release_build_py,
+    # 'build_py': rpm_version_release_build_py,
     'build_trans': i18n.BuildTrans,
     'update_trans': i18n.UpdateTrans,
     'uniq_trans': i18n.UniqTrans,
