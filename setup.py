@@ -179,6 +179,7 @@ test_require = [
       'polib',
       'freezegun',
       'flake8',
+      'lxml',
     ] + install_requires + setup_requires
 
 cmdclass = {

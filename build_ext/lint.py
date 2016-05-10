@@ -16,22 +16,27 @@ import re
 from distutils.spawn import spawn
 from distutils.text_file import TextFile
 
-from xml.etree import ElementTree
-
-from build_ext.utils import Utils, BaseCommand, LineNumberingParser, memoize
+from build_ext.utils import Utils, BaseCommand, memoize
 
 try:
-    # pep8 isn't available in build environments.  We won't need any of these
-    # linting classes there, so just create a dummy class so we can proceed.
+    # These dependencies aren't available in build environments.  We won't need any
+    # linting functionality there though, so just create a dummy class so we can proceed.
     from pep8 import Checker, register_check
 
     from flake8.main import Flake8Command
+
+    from lxml import etree as ElementTree
 except ImportError:
     class Checker(object):
         pass
 
     class Flake8Command(object):
         pass
+
+    class ElementTree(object):
+        @staticmethod
+        def parse(*args, **kwargs):
+            raise NotImplementedError("lxml could not be imported")
 
 
 class Lint(BaseCommand):
@@ -94,7 +99,7 @@ class FileLint(BaseCommand):
             namespaces = {}
 
         text_file = TextFile(f)
-        tree = ElementTree.parse(f, parser=LineNumberingParser())
+        tree = ElementTree.parse(f)
 
         for x in xpath_expressions:
             # Python 2.6's element tree doesn't support findall with namespaces
@@ -107,7 +112,7 @@ class FileLint(BaseCommand):
                 elements = tree.findall(x)
 
             for e in elements:
-                text_file.warn("Found '%s' match" % x, e._start_line_number)
+                text_file.warn("Found '%s' match" % x, e.sourceline)
         text_file.close()
 
 
