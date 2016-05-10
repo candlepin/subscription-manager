@@ -31,6 +31,8 @@ class BaseService(dbus.service.Object):
 
     def __init__(self, conn=None, bus=None, object_path=default_dbus_path):
         print "Created SubmanDaemon"
+        if object_path is None or object_path == "":
+            object_path = constants.SUBMAND_PATH
         bus_name = None
         if bus is not None:
             bus_name = dbus.service.BusName(self.__class__.DBUS_NAME, bus)
@@ -165,11 +167,7 @@ class RegisterService(BaseService, RegisterServiceMixin):
     pass
 
 
-class PrivateRegisterService(SubmanDaemon):
-    _default_service_classes = [ConfigService, RegisterService]
-
-
-class CompositePrivateRegisterService(BaseService, RegisterServiceMixin, ConfigServiceMixin):
+class PrivateRegisterService(BaseService, RegisterServiceMixin, ConfigServiceMixin):
     pass
 
 
