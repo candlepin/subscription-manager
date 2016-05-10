@@ -22,6 +22,7 @@ import sys
 sys.setdefaultencoding('utf-8')
 import site
 
+# Likely needs to be removed after relocation to site-packages
 # Ensure that the RHSM libs are on the path.
 _LIBPATH = "/usr/share/rhsm"
 if _LIBPATH not in sys.path:

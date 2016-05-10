@@ -118,7 +118,6 @@ class SubscriptionManager(dnf.Plugin):
             msg = expired_warning % '\n'.join(sorted(products))
             logger.info(msg)
 
-
     def _warnOrGiveUsageMessage(self):
         """ either output a warning, or a usage message """
         msg = ""

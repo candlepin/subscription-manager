@@ -251,7 +251,7 @@ class RegisterWidget(widgets.SubmanBaseWidget):
 
     screen_ready = ga_GObject.property(type=bool, default=True)
     register_button_label = ga_GObject.property(type=str, default=_('Register'))
-    # TODO: a prop equilivent to initial-setups 'completed' and 'status' props
+    # TODO: a prop equivalent to initial-setups 'completed' and 'status' props
 
     def __init__(self, backend, facts, reg_info=None,
                  parent_window=None):
@@ -268,7 +268,7 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         #       widget
         self.parent_window = parent_window
 
-        #self.info = reg_info or RegisterInfo()
+        # self.info = reg_info or RegisterInfo()
         self.info = reg_info
 
         self.progress_timer = None
@@ -688,8 +688,7 @@ class RegisterDialog(widgets.SubmanBaseWidget):
     widget_names = ['register_dialog', 'register_dialog_main_vbox',
                     'register_details_label',
                     'back_button', 'register_button',
-                    'close_button', 'progress_label',
-                    'dialog_vbox6']
+                    'close_button', 'progress_label']
 
     gui_file = "register_dialog"
     __gtype_name__ = 'RegisterDialog'

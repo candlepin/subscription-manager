@@ -20,6 +20,7 @@ import sys
 import yum
 from yum.plugins import TYPE_CORE
 
+# Likely needs to be removed after relocation to site-packages
 sys.path.append('/usr/share/rhsm')
 
 
@@ -32,6 +33,7 @@ requires_api_version = '2.6'
 plugin_type = (TYPE_CORE,)
 
 log = logging.getLogger('rhsm-app.' + __name__)
+
 
 def posttrans_hook(conduit):
     """

@@ -39,9 +39,7 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
     widget_names = widgets.SubscriptionManagerTab.widget_names + \
-                       ['details_box', 'date_picker_hbox',
-                        'month_entry', 'day_entry', 'year_entry',
-                        'active_on_checkbutton', 'subscribe_button',
+                       ['details_box', 'date_picker_hbox', 'subscribe_button',
                         'edit_quantity_label', 'scrolledwindow',
                         'filter_options_button', 'applied_filters_label']
     gui_file = "allsubs"

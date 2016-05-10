@@ -17,10 +17,10 @@
 # Red Hat, Inc.
 
 import logging
-import os
 import fnmatch
 import sys
 
+# Likely needs to be removed after relocation to site-packages
 sys.path.append('/usr/share/rhsm')
 from subscription_manager import api
 
@@ -104,7 +104,7 @@ yum can be configured to try to resolve such errors by temporarily enabling
 disabled repos and searching for missing dependencies.
 To enable this functionality please set 'notify_only=0' in %s
 **********************************************************************\n""" % PLUGIN_CONF_PATH
-    conduit.info(1, msg) # yum's debuglevel 1
+    conduit.info(1, msg)  # yum's debuglevel 1
 
 
 def prompt_temporarily_enable_repos(conduit):
@@ -126,4 +126,3 @@ Dependency resolving was successful thanks to enabling these repositories:
 *******************************************************************\n""" % repos_str
     prompt = "Would you like to permanently enable these repositories? [y/N]: "
     return conduit.promptYN(msg, prompt=prompt)
-

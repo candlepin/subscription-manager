@@ -21,15 +21,12 @@ import logging
 import sys
 
 from pyanaconda.addons import AddonData
-from pyanaconda.iutil import getSysroot
 
 log = logging.getLogger(__name__)
 
+# Likely needs to be removed after relocation to site-packages
 RHSM_PATH = "/usr/share/rhsm"
 sys.path.append(RHSM_PATH)
-
-# For now, until we move all the logic out of managercli
-from subscription_manager import managercli
 
 # export RHSMAddonData class to prevent Anaconda's collect method from taking
 # AddonData class instead of the RHSMAddonData class
