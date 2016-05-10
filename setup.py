@@ -168,7 +168,7 @@ class install_data(_install_data):
             self.data_files.append((icon_dir, icon_source_files))
 
 
-setup_requires = ['flake8']
+setup_requires = []
 
 install_requires = []
 
@@ -178,6 +178,7 @@ test_require = [
       'coverage',
       'polib',
       'freezegun',
+      'flake8',
     ] + install_requires + setup_requires
 
 cmdclass = {

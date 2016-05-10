@@ -11,16 +11,27 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 import ast
-import pep8
 import re
 
 from distutils.spawn import spawn
 from distutils.text_file import TextFile
 
-from flake8.main import Flake8Command
 from xml.etree import ElementTree
 
 from build_ext.utils import Utils, BaseCommand, LineNumberingParser, memoize
+
+try:
+    # pep8 isn't available in build environments.  We won't need any of these
+    # linting classes there, so just create a dummy class so we can proceed.
+    from pep8 import Checker, register_check
+
+    from flake8.main import Flake8Command
+except ImportError:
+    class Checker(object):
+        pass
+
+    class Flake8Command(object):
+        pass
 
 
 class Lint(BaseCommand):
@@ -265,8 +276,8 @@ class GettextVisitor(AstVisitor):
                 return (node, "G101 variable reference that will break xgettext")
 
 
-class AstChecker(pep8.Checker):
-    def __init__(self, tree, filename):
+class AstChecker(Checker):
+    def __init__(self, tree, filename, *args, **kwargs):
         self.tree = tree
         self.filename = filename
 
@@ -285,6 +296,7 @@ class AstChecker(pep8.Checker):
             (WidgetVisitor, {'defined_widgets': widgets}),
             (SignalVisitor, {'defined_handlers': handlers}),
         ]
+        super(AstChecker, self).__init__(filename, *args, **kwargs)
 
     @staticmethod
     @memoize
@@ -362,7 +374,7 @@ class PluginLoadingFlake8Command(Flake8Command):
 
     def run(self):
         codes = DebugImportVisitor.codes + GettextVisitor.codes + WidgetVisitor.codes + SignalVisitor.codes
-        pep8.register_check(AstChecker, codes=codes)
+        register_check(AstChecker, codes=codes)
         # To see what Flake8 is actually checking use
         # self.options_dict['verbose'] = 1
         Flake8Command.run(self)
