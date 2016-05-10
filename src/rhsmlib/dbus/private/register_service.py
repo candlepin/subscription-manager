@@ -15,6 +15,7 @@ from rhsmlib.dbus.common import decorators
 
 import socket
 import argparse
+import json
 
 import logging
 # For testing purposes
@@ -114,9 +115,10 @@ class RegisterServiceMixin(dbus.service.Object):
                                       host=options['host'],
                                       ssl_port=connection.safe_int(options['port']),
                                       handler=options['handler'])
-        logger.info(cp.registerConsumer(name=options['name'],
-                                   owner=org))
-        return "haha"
+        registration_output = cp.registerConsumer(name=options['name'],
+                                                  owner=org)
+        print registration_output
+        return json.dumps(registration_output)
     @decorators.dbus_service_method(dbus_interface=constants.REGISTER_INTERFACE,
                                     in_signature='sa(s)a{ss}',
                                     out_signature='s')
@@ -168,6 +170,7 @@ class RegisterService(BaseService, RegisterServiceMixin):
 
 
 class PrivateRegisterService(BaseService, RegisterServiceMixin, ConfigServiceMixin):
+    DBUS_NAME = "com.redhat.Subscriptions1.SubmanDaemon1"
     pass
 
 
@@ -184,7 +187,7 @@ if __name__ == '__main__':
 
     mainloop = GLib.MainLoop()
     bus = dbus.SessionBus()
-    service = SuperSubmanService(bus, bus)
+    service = PrivateRegisterService(bus, bus)
 
     try:
         mainloop.run()
