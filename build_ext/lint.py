@@ -86,7 +86,15 @@ class FileLint(BaseCommand):
         tree = ElementTree.parse(f, parser=LineNumberingParser())
 
         for x in xpath_expressions:
-            elements = tree.findall(x, namespaces)
+            # Python 2.6's element tree doesn't support findall with namespaces
+            # we aren't currently using namespaces so put in a shim to be compatible
+            # If we ever need to specify namespaces, we are not going to be able
+            # to run this code on 2.6
+            if namespaces:
+                elements = tree.findall(x, namespaces)
+            else:
+                elements = tree.findall(x)
+
             for e in elements:
                 text_file.warn("Found '%s' match" % x, e._start_line_number)
         text_file.close()

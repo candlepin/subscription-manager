@@ -46,16 +46,16 @@ class LineNumberingParser(ET.XMLParser):
         # Here we assume the default XML parser which is expat
         # and copy its element position attributes into output Elements
         element = ET.XMLParser._start_list(self, *args, **kwargs)
-        element._start_line_number = self.parser.CurrentLineNumber
-        element._start_column_number = self.parser.CurrentColumnNumber
-        element._start_byte_index = self.parser.CurrentByteIndex
+        element._start_line_number = self._parser.CurrentLineNumber
+        element._start_column_number = self._parser.CurrentColumnNumber
+        element._start_byte_index = self._parser.CurrentByteIndex
         return element
 
     def _end(self, *args, **kwargs):
         element = ET.XMLParser._end(self, *args, **kwargs)
-        element._end_line_number = self.parser.CurrentLineNumber
-        element._end_column_number = self.parser.CurrentColumnNumber
-        element._end_byte_index = self.parser.CurrentByteIndex
+        element._end_line_number = self._parser.CurrentLineNumber
+        element._end_column_number = self._parser.CurrentColumnNumber
+        element._end_byte_index = self._parser.CurrentByteIndex
         return element
 
 
