@@ -1,3 +1,17 @@
+# Because our project includes some C artifacts like rhsmd and rhsm_icon, the standard
+# Python setup.py doesn't cover all our bases.  Additionally, setuptools does not like
+# to install files outside of /usr (see http://stackoverflow.com/a/13476594/6124862).
+#
+# Therefore the Makefile performs the master build, but please keep the following guidelines
+# in mind when updating it:
+#
+# * If the file goes under /usr, put it in setup.py
+# * Linting checks, etc. should be implemented in Python and invoked via setup.py
+# * If functionality cannot be added to setup.py without extensive effort, place the
+#   functionality in the Makefile.  Otherwise, add it to setup.py.
+# * The ultimate goal is to have a clean build process so do things the best way, not
+#   just the fastest or easiest way.
+
 SHELL := /bin/bash
 PREFIX ?=
 SYSCONF ?= etc
