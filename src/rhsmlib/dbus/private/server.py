@@ -1,7 +1,7 @@
 #! /usr/bin/env python
-from rhsmlib.dbus.common import gi_kluge
+#from rhsmlib.dbus.common import gi_kluge
 from rhsmlib.dbus.private.register_service import PrivateRegisterService, SuperSubmanService
-gi_kluge.kluge_it()
+#gi_kluge.kluge_it()
 
 from gi.repository import GLib
 
@@ -26,7 +26,7 @@ if __name__ == '__main__':
     dbus.mainloop.glib.threads_init()
 
     server = dbus.server.Server("unix:path=/tmp/subman.sock")
-    server.on_connection_added.append(partial(connection_added, SuperSubmanService))
+    server.on_connection_added.append(partial(connection_added, PrivateRegisterService))
     server.on_connection_removed.append(connection_removed)
 
     mainloop = GLib.MainLoop()
