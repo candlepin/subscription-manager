@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 #from rhsmlib.dbus.common import gi_kluge
-from rhsmlib.dbus.private.register_service import PrivateRegisterService, SuperSubmanService
+from rhsmlib.dbus.private.register_service import PrivateRegisterService
 #gi_kluge.kluge_it()
 
 from gi.repository import GLib
@@ -21,7 +21,7 @@ def connection_added(service_class, conn):
 def connection_removed(conn):
     print("Connection closed")
 
-if __name__ == '__main__':
+def start_server():
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
     dbus.mainloop.glib.threads_init()
 
@@ -41,3 +41,6 @@ if __name__ == '__main__':
         print(e)
     finally:
         mainloop.quit()
+
+if __name__ == "__main__":
+    start_server()
