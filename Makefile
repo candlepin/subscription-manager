@@ -84,23 +84,20 @@ BIN_FILES := bin/subscription-manager bin/subscription-manager-gui \
 			 bin/rhsm-debug
 STYLEFILES=$(PYFILES) $(BIN_FILES)
 
+.DEFAULT_GOAL := build
+
 # we never "remake" this makefile, so add a target so
 # we stop searching for implicit rules on how to remake it
 Makefile: ;
 
-build: set-versions rhsmcertd rhsm-icon
-	# Install doesn't perform a build if it doesn't have too.  Best to clean out
-	# any cruft so developers don't end up install old builds.
+build: rhsmcertd rhsm-icon
+# Install doesn't perform a build if it doesn't have too.  Best to clean out
+# any cruft so developers don't end up install old builds.
 	./setup.py clean --all
-	./setup.py build
-
-.PHONY: clean-versions
-clean-versions:
-	rm -rf $(SRC_DIR)/version.py
-	rm -rf $(RCT_SRC_DIR)/version.py
+	./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
 
 .PHONY: clean
-clean: clean-versions
+clean:
 	rm -f *.pyc *.pyo *~ *.bak *.tar.gz
 	rm -f bin/rhsmcertd
 	rm -f bin/rhsm-icon
@@ -241,18 +238,13 @@ install-post-boot: install-firstboot install-initial-setup
 
 .PHONY: install-via-setup
 install-via-setup:
-	./setup.py install --root $(PREFIX)
+	./setup.py install --root $(PREFIX) --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
 
 .PHONY: install
 install: install-via-setup rhsmcertd rhsm-icon install-files
 
-.PHONY: set-versions
-set-versions:
-	sed -e 's/RPM_VERSION/$(VERSION)/g' -e 's/GTK_VERSION/$(GTK_VERSION)/g' $(SRC_DIR)/version.py.in > $(SRC_DIR)/version.py
-	sed -e 's/RPM_VERSION/$(VERSION)/g' $(RCT_SRC_DIR)/version.py.in > $(RCT_SRC_DIR)/version.py
-
 .PHONY: install-files
-install-files: set-versions dbus-service-install install-conf install-plugins install-post-boot install-ga
+install-files: dbus-service-install install-conf install-plugins install-post-boot install-ga
 	install -d $(PREFIX)/var/log/rhsm
 	install -d $(PREFIX)/var/spool/rhsm/debug
 	install -d $(PREFIX)/var/run/rhsm
