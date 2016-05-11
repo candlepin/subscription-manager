@@ -23,12 +23,6 @@ sys.setdefaultencoding('utf-8')
 import site
 import os
 
-# Likely needs to be removed after relocation to site-packages
-# Ensure that the RHSM libs are on the path.
-_LIBPATH = "/usr/share/rhsm"
-if _LIBPATH not in sys.path:
-    sys.path.append(_LIBPATH)
-
 from subscription_manager.i18n import configure_i18n
 configure_i18n()
 

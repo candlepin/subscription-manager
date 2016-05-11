@@ -41,8 +41,6 @@ import dbus.glib
 import logging
 import traceback
 
-sys.path.append("/usr/share/rhsm")
-
 from subscription_manager import ga_loader
 ga_loader.init_ga()
 

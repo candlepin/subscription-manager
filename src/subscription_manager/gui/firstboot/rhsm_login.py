@@ -5,8 +5,6 @@ import logging
 
 _ = lambda x: gettext.ldgettext("rhsm", x)
 
-sys.path.append("/usr/share/rhsm")
-
 from subscription_manager import ga_loader
 ga_loader.init_ga()
 

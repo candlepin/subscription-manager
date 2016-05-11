@@ -16,8 +16,6 @@
 import logging
 import sys
 
-sys.path.append('/usr/share/rhsm')
-
 from subscription_manager import logutil
 from subscription_manager.productid import ProductManager
 from subscription_manager.utils import chroot

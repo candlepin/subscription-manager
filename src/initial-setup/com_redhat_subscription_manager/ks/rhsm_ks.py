@@ -18,15 +18,10 @@
 """Module with the RHSM initial-setup class."""
 
 import logging
-import sys
 
 from pyanaconda.addons import AddonData
 
 log = logging.getLogger(__name__)
-
-# Likely needs to be removed after relocation to site-packages
-RHSM_PATH = "/usr/share/rhsm"
-sys.path.append(RHSM_PATH)
 
 # export RHSMAddonData class to prevent Anaconda's collect method from taking
 # AddonData class instead of the RHSMAddonData class

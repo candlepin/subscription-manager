@@ -18,10 +18,7 @@
 
 import logging
 import fnmatch
-import sys
 
-# Likely needs to be removed after relocation to site-packages
-sys.path.append('/usr/share/rhsm')
 from subscription_manager import api
 
 from yum.plugins import TYPE_CORE, TYPE_INTERACTIVE

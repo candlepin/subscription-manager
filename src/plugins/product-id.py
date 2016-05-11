@@ -20,10 +20,6 @@ import sys
 import yum
 from yum.plugins import TYPE_CORE
 
-# Likely needs to be removed after relocation to site-packages
-sys.path.append('/usr/share/rhsm')
-
-
 from subscription_manager import logutil
 from subscription_manager.productid import ProductManager, RpmVersion
 from subscription_manager.utils import chroot
