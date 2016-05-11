@@ -15,10 +15,12 @@ DBUS_PATH = "/com/redhat/Subscriptions1/RegisterService"
 
 
 class RegisterService(dbus.service.Object):
-    def __init__(self, conn, object_path=DBUS_PATH):
+    def __init__(self, conn, bus=None, object_path=DBUS_PATH):
         print "Created RegisterService"
-        bus_name = dbus.service.BusName(DBUS_NAME, bus=conn)
-        super(RegisterService, self).__init__(object_path=object_path, bus_name=bus_name)
+        bus_name = None
+        if bus is not None:
+            bus_name = dbus.service.BusName(DBUS_NAME, bus)
+        super(RegisterService, self).__init__(object_path=object_path, conn=conn, bus_name=bus_name)
 
     @decorators.dbus_service_method(dbus_interface=DBUS_INTERFACE, out_signature='s', in_signature='s')
     def reverse(self, text, sender=None):
@@ -31,8 +33,8 @@ if __name__ == '__main__':
     dbus.mainloop.glib.threads_init()
 
     mainloop = GLib.MainLoop()
-    bus = dbus.StarterBus()
-    RegisterService(bus)
+    bus = dbus.SystemBus()
+    service = RegisterService(bus, bus)
 
     try:
         mainloop.run()
