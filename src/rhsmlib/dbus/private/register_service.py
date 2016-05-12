@@ -67,24 +67,6 @@ class RegisterServiceMixin(dbus.service.Object):
         return ''.join(text)
 
     @decorators.dbus_service_method(dbus_interface=constants.REGISTER_INTERFACE,
-                                    out_signature='o')
-    def get_self(self, sender=None):
-        return self
-
-    @decorators.dbus_service_method(dbus_interface=constants.REGISTER_INTERFACE,
-                                    in_signature="",
-                                    out_signature="")
-    def throw_exception(self, sender=None):
-        raise Exception('throw_exception')
-
-    @decorators.dbus_service_method(dbus_interface=constants.REGISTER_INTERFACE,
-                                    in_signature="",
-                                    out_signature="")
-    @decorators.dbus_handle_exceptions
-    def throw_exception_2(self, sender=None):
-        raise Exception('throw_exception_2')
-
-    @decorators.dbus_service_method(dbus_interface=constants.REGISTER_INTERFACE,
                                     in_signature='sssa{ss}',
                                     out_signature='s')
     def register(self, username, password, org, options, sender=None):
@@ -113,7 +95,6 @@ class RegisterServiceMixin(dbus.service.Object):
                                       handler=options['handler'])
         registration_output = cp.registerConsumer(name=options['name'],
                                                   owner=org)
-        print registration_output
         return json.dumps(registration_output)
     @decorators.dbus_service_method(dbus_interface=constants.REGISTER_INTERFACE,
                                     in_signature='sa(s)a{ss}',
@@ -125,6 +106,7 @@ class RegisterServiceMixin(dbus.service.Object):
         """ This method registers a system with the given options, using
         an activation key.
         """
+        # TODO: Implement
         return "WITH ACTIVATION KEYS"
 
 
