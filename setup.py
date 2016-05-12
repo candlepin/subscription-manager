@@ -54,6 +54,7 @@ class rpm_version_release_build_py(_build_py):
         self.set_undefined_options('build', ('rpm_version', 'rpm_version'), ('gtk_version', 'gtk_version'))
 
     def run(self):
+        log.info("Building with GTK_VERSION=%s and RPM_VERSION=%s" % (self.gtk_version, self.rpm_version))
         _build_py.run(self)
         # create a "version.py" that includes the rpm version
         # info passed to our new build_py args
@@ -65,8 +66,8 @@ class rpm_version_release_build_py(_build_py):
                     lines = []
                     with open(version_file, 'r') as f:
                         for l in f.readlines():
-                            l = l.replace("RPM_VERSION", self.rpm_version)
-                            l = l.replace("GTK_VERSION", self.gtk_version)
+                            l = l.replace("RPM_VERSION", str(self.rpm_version))
+                            l = l.replace("GTK_VERSION", str(self.gtk_version))
                             lines.append(l)
 
                     with open(version_file, 'w') as f:
