@@ -12,8 +12,8 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.17.2
-Release: 1%{?dist}
+Version: 1.17.3
+Release: 0%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
 Group: Development/Libraries
@@ -27,7 +27,11 @@ Source0: %{name}-%{version}.tar.gz
 URL: http://www.candlepinproject.org
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+%if 0%{?sles_version}
+Requires: python-m2crypto
+%else
 Requires: m2crypto
+%endif
 Requires: python-iniparse
 Requires: rpm-python
 Requires: python-dateutil
@@ -35,7 +39,11 @@ Requires: python-dateutil
 Requires: python-simplejson
 %endif
 
+%if 0%{?sles_version}
+BuildRequires: python-devel >= 2.6
+%else
 BuildRequires: python2-devel
+%endif
 BuildRequires: python-setuptools
 BuildRequires: openssl-devel
 
@@ -74,6 +82,9 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu May 12 2016 Darin Lively <darinlively@gmail.com> 1.17.3-0
+- Added basic SLES build compatibilty
+
 * Mon Apr 25 2016 Vritant Jain <vrjain@redhat.com> 1.17.2-1
 - Added 7.3 releaser (vrjain@redhat.com)
 - Updated UEPConnection.getProduct to explicitly reference product UUID
