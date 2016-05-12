@@ -42,7 +42,7 @@ class BaseService(dbus.service.Object):
 
 
 
-class ConfigServiceMixin(dbus.service.Object):
+class Config(dbus.service.Object):
     DBUS_NAME = "com.redhat.Subscriptions1.ConfigService"
     DBUS_PATH = "/com/redhat/Subscriptions1/ConfigService"
 
@@ -52,10 +52,6 @@ class ConfigServiceMixin(dbus.service.Object):
                                     out_signature='s')
     def getConfig(self, sender=None):
         return "My Cool config"
-
-
-class ConfigService(BaseService, ConfigServiceMixin):
-    pass
 
 
 class RegisterServiceMixin(dbus.service.Object):
@@ -169,7 +165,7 @@ class RegisterService(BaseService, RegisterServiceMixin):
     pass
 
 
-class PrivateRegisterService(BaseService, RegisterServiceMixin, ConfigServiceMixin):
+class PrivateRegisterService(BaseService, RegisterServiceMixin):
     DBUS_NAME = "com.redhat.Subscriptions1.SubmanDaemon1"
     pass
 
