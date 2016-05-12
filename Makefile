@@ -371,3 +371,7 @@ install-pip-requirements:
 
 .PHONY: jenkins
 jenkins: install-pip-requirements build stylish coverage
+
+.PHONY: set-versions
+# Empty task retained for legacy compatibility with CI environment
+set-versions: ;
