@@ -21,6 +21,7 @@ import subprocess
 from glob import glob
 from setuptools import setup, find_packages
 
+
 from distutils import log
 from distutils.command.install_data import install_data as _install_data
 from distutils.command.install import install as _install
@@ -93,7 +94,7 @@ class clean(_clean):
 
 
 class install(_install):
-    user_options = _build_py.user_options + [
+    user_options = _install.user_options + [
         ('gtk-version=', None, 'GTK version this is built for'),
         ('rpm-version=', None, 'version and release of the RPM this is built for')]
 
