@@ -1,70 +1,25 @@
 #! /usr/bin/env python
-from rhsmlib.dbus.common import gi_kluge
-gi_kluge.kluge_it()
 
 from rhsmlib.dbus.common import dbus_utils, constants
-from rhsmlib.dbus.services.submand.subman_daemon import SubmanDaemon
-
-from gi.repository import GLib
 
 import dbus.service
-import dbus.mainloop.glib
 import gettext
+
 from rhsm import connection
+
 from rhsmlib.dbus.common import decorators
+
+from rhsmlib.dbus.private.private_service import PrivateService
 
 import socket
 import argparse
 import json
 
-import logging
-# For testing purposes
-logger = logging.getLogger('')
-logger.setLevel(logging.DEBUG)
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-logger.addHandler(ch)
-
 _ = gettext.gettext
 
-class BaseService(dbus.service.Object):
-    default_dbus_path = ""
 
-    def __init__(self, conn=None, bus=None, object_path=default_dbus_path):
-        print "Created SubmanDaemon"
-        if object_path is None or object_path == "":
-            object_path = constants.SUBMAND_PATH
-        bus_name = None
-        if bus is not None:
-            bus_name = dbus.service.BusName(self.__class__.DBUS_NAME, bus)
-
-        super(BaseService, self).__init__(object_path=object_path, conn=conn, bus_name=bus_name)
-
-
-
-class Config(dbus.service.Object):
-    DBUS_NAME = "com.redhat.Subscriptions1.ConfigService"
-    DBUS_PATH = "/com/redhat/Subscriptions1/ConfigService"
-
-
-    @decorators.dbus_service_method(dbus_interface=constants.CONFIG_INTERFACE,
-                                    in_signature='',
-                                    out_signature='s')
-    def getConfig(self, sender=None):
-        return "My Cool config"
-
-
-class RegisterServiceMixin(dbus.service.Object):
-    DBUS_NAME = "com.redhat.Subscriptions1.RegisterService"
-    DBUS_PATH = "/com/redhat/Subscriptions1/RegisterService"
-
-    @decorators.dbus_service_method(dbus_interface=constants.REGISTER_INTERFACE,
-                                    out_signature='s',
-                                    in_signature='s')
-    def reverse(self, text, sender=None):
-        text = list(text)
-        text.reverse()
-        return ''.join(text)
+class RegisterService(PrivateService):
+    _interface_name = constants.REGISTER_SERVICE_NAME
 
     @decorators.dbus_service_method(dbus_interface=constants.REGISTER_INTERFACE,
                                     in_signature='sssa{ss}',
@@ -78,6 +33,7 @@ class RegisterServiceMixin(dbus.service.Object):
 
         Options is a dict of strings that modify the outcome of this method.
         """
+        # TODO: Read from config if needed
         validation_result = RegisterService._validate_register_options(options)
         if validation_result:
             return validation_result
@@ -95,7 +51,13 @@ class RegisterServiceMixin(dbus.service.Object):
                                       handler=options['handler'])
         registration_output = cp.registerConsumer(name=options['name'],
                                                   owner=org)
+
+        # For now return the json from the server as a string
+        # TODO: Create standard return signature
+        # NOTE: dbus python does not know what to do with the python NoneType
+        # Otherwise we could just have our return signature be a dict of strings to variant
         return json.dumps(registration_output)
+
     @decorators.dbus_service_method(dbus_interface=constants.REGISTER_INTERFACE,
                                     in_signature='sa(s)a{ss}',
                                     out_signature='s')
@@ -107,16 +69,21 @@ class RegisterServiceMixin(dbus.service.Object):
         an activation key.
         """
         # TODO: Implement
+        # NOTE: We could probably manage doing this in one method with the use
+        #       of variants in the in_signature (but I'd imagine that might be
+        #       slightly more difficult to unit test)
         return "WITH ACTIVATION KEYS"
 
 
     @staticmethod
     def is_registered():
-        #TODO: Implement this
+        # TODO: Implement this
+        # NOTE: Likely needs some form of injection as in managercli
         return False
 
     @staticmethod
     def _validate_register_options(options):
+        # TODO: Rewrite the error messages to be more dbus specific
         # From managercli.RegisterCommand._validate_options
         autoattach = options.get('autosubscribe') or options.get('autoattach')
         if RegisterService.is_registered() and not options.get('force'):
@@ -142,22 +109,6 @@ class RegisterServiceMixin(dbus.service.Object):
             return _("Error: Can not force registration while attempting to recover registration with consumerid. Please use --force without --consumerid to re-register or use the clean command and try again without --force.")
         return None
 
-
-class RegisterService(BaseService, RegisterServiceMixin):
-    pass
-
-
-class PrivateRegisterService(BaseService, RegisterServiceMixin):
-    DBUS_NAME = "com.redhat.Subscriptions1.SubmanDaemon1"
-    pass
-
-
-class SuperSubmanService(SubmanDaemon,
-                         RegisterServiceMixin,
-                         ConfigServiceMixin):
-    pass
-
-
 if __name__ == '__main__':
 
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
@@ -165,7 +116,7 @@ if __name__ == '__main__':
 
     mainloop = GLib.MainLoop()
     bus = dbus.SessionBus()
-    service = PrivateRegisterService(bus, bus)
+    service = RegisterService(bus, bus)
 
     try:
         mainloop.run()
