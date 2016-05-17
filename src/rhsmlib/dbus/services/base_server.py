@@ -37,8 +37,8 @@ def run_services(bus_class=None, bus_name=None, service_classes=None):
         connection_name = dbus.service.BusName(bus_name, bus)
         log.debug("service_class=%s", service_class)
         log.debug("service_class.default_dbus_path=%s", service_class.default_dbus_path)
-        service = service_class(conn=connection_name,
-                                object_path=service_class.default_dbus_path)
+        service = service_class(object_path=service_class.default_dbus_path,
+                                bus_name=connection_name)
 
     mainloop = GLib.MainLoop()
     slip.dbus.service.set_mainloop(mainloop)

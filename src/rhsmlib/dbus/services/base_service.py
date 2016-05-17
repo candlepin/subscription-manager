@@ -14,26 +14,30 @@ import slip.dbus.introspection
 
 from rhsmlib.dbus.common import decorators
 from rhsmlib.dbus.common import constants
+from rhsmlib.dbus.common import log_init
 from rhsmlib.dbus.services import base_properties
 #from rhsmlib.dbus.common import dbus_utils
 
+log_init.init_root_logger()
 
 class BaseService(slip.dbus.service.Object):
 
     persistent = True
     # Name of the DBus interface provided by this object
     _interface_name = constants.DBUS_INTERFACE
-    default_polkit_auth_required = constants.PK_ACTION_DEFAULT
+    #default_polkit_auth_required = constants.PK_ACTION_DEFAULT
     default_dbus_path = constants.ROOT_DBUS_PATH
     default_polkit_auth_required = None
 
     def __init__(self, conn=None, object_path=None, bus_name=None):
         self.log = logging.getLogger(__name__ + '.' + self.__class__.__name__)
+        self.log.setLevel(logging.DEBUG)
         self.log.debug("conn=%s", conn)
         self.log.debug("object_path=%s", object_path)
         self.log.debug("bus_name=%s", bus_name)
         self.log.debug("self._interface_name=%s", self._interface_name)
         self.log.debug("self.default_dbus_path=%s", self.default_dbus_path)
+        self.log.debug("self.default_polkit_auth_required=%s", self.default_polkit_auth_required)
 
         super(BaseService, self).__init__(conn=conn,
                                           object_path=self.default_dbus_path,
@@ -65,13 +69,13 @@ class BaseService(slip.dbus.service.Object):
         """If there were shutdown tasks to do, do it here."""
         self.log.debug("shutting down")
 
-    @dbus.service.method(dbus.INTROSPECTABLE_IFACE, in_signature='', out_signature='s',
-                        path_keyword='object_path', connection_keyword='connection')
-    def Introspect(self, object_path, connection):
-        ret = super(BaseService, self).Introspect(object_path, connection)
-        #self.log.debug("super.Introspect ret=%s", ret)
-        bloop = self.props.add_introspection_xml(ret)
-        return bloop
+    # @dbus.service.method(dbus.INTROSPECTABLE_IFACE, in_signature='', out_signature='s',
+    #                     path_keyword='object_path', connection_keyword='connection')
+    # def Introspect(self, object_path, connection):
+    #     ret = super(BaseService, self).Introspect(object_path, connection)
+    #     self.log.debug("super.Introspect ret=%s", ret)
+    #     bloop = self.props.add_introspection_xml(ret)
+    #     return ret
 
     #
     # org.freedesktop.DBus.Properties interface
