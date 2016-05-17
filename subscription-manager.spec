@@ -7,7 +7,6 @@
 %global use_initial_setup 1
 %global rhsm_plugins_dir  /usr/share/rhsm-plugins
 %global use_gtk3 %use_systemd
-%global rhel7_minor %(%{__grep} -o "7.[0-9]*" /etc/redhat-release |%{__sed} -s 's/7.//')
 
 %if 0%{?rhel} == 7
 %global use_initial_setup 1
@@ -22,14 +21,8 @@
 
 %global use_dnf (0%{?fedora} && 0%{?fedora} >= 22)
 
-
 %global _hardened_build 1
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
-
-# A couple files are for RHEL 5 only:
-%if 0%{?rhel} == 5
-%global el5 1
-%endif
 
 %if %{has_ostree}
 %define install_ostree INSTALL_OSTREE_PLUGIN=true
@@ -66,6 +59,7 @@ Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
+URL:     http://www.candlepinproject.org/
 
 # How to create the source tarball:
 #
@@ -73,7 +67,6 @@ License: GPLv2
 # yum install tito
 # tito build --tag subscription-manager-$VERSION-$RELEASE --tgz
 Source0: %{name}-%{version}.tar.gz
-URL:     http://www.candlepinproject.org/
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Requires:  python-ethtool
@@ -107,6 +100,7 @@ Requires(preun): initscripts
 %endif
 
 BuildRequires: python-devel
+BuildRequires: python-setuptools
 BuildRequires: gettext
 BuildRequires: intltool
 BuildRequires: libnotify-devel
@@ -124,34 +118,11 @@ BuildRequires: gtk2-devel
 BuildRequires: systemd
 %endif
 
-
 %description
 The Subscription Manager package provides programs and libraries to allow users
 to manage subscriptions and yum repositories from the Red Hat entitlement
 platform.
 
-
-%if %has_ostree
-%package -n subscription-manager-plugin-ostree
-Summary: A plugin for handling OSTree content.
-Group: System Environment/Base
-
-Requires: pygobject3-base
-# plugin needs a slightly newer version of python-iniparse for 'tidy'
-Requires:  python-iniparse >= 0.4
-Requires: %{name} = %{version}-%{release}
-
-%description -n subscription-manager-plugin-ostree
-Enables handling of content of type 'ostree' in any certificates
-from the server. Populates /ostree/repo/config as well as updates
-the remote in the currently deployed .origin file.
-
-%files -n subscription-manager-plugin-ostree
-%defattr(-,root,root,-)
-%{_sysconfdir}/rhsm/pluginconf.d/ostree_content.OstreeContentPlugin.conf
-%{rhsm_plugins_dir}/ostree_content.py*
-%{_datadir}/rhsm/subscription_manager/plugin/ostree/*.py*
-%endif
 
 %package -n subscription-manager-plugin-container
 Summary: A plugin for handling container content.
@@ -162,15 +133,6 @@ Requires: %{name} = %{version}-%{release}
 Enables handling of content of type 'containerImage' in any certificates
 from the server. Populates /etc/docker/certs.d appropriately.
 
-%files -n subscription-manager-plugin-container
-%defattr(-,root,root,-)
-%{_sysconfdir}/rhsm/pluginconf.d/container_content.ContainerContentPlugin.conf
-%{rhsm_plugins_dir}/container_content.py*
-%{_datadir}/rhsm/subscription_manager/plugin/container.py*
-# Copying Red Hat CA cert into each directory:
-%attr(755,root,root) %dir %{_sysconfdir}/docker/certs.d/cdn.redhat.com
-%attr(644,root,root) %{_sysconfdir}/rhsm/ca/redhat-entitlement-authority.pem
-%attr(644,root,root) %{_sysconfdir}/docker/certs.d/cdn.redhat.com/redhat-entitlement-authority.crt
 
 %package -n subscription-manager-gui
 Summary: A GUI interface to manage Red Hat product subscriptions
@@ -203,31 +165,6 @@ This package contains a GTK+ graphical interface for configuring and
 registering a system with a Red Hat Entitlement platform and manage
 subscriptions.
 
-%if %use_firstboot
-%package -n subscription-manager-firstboot
-Summary: Firstboot screens for subscription manager
-Group: System Environment/Base
-Requires: %{name}-gui = %{version}-%{release}
-Requires: rhn-setup-gnome
-
-# Fedora can figure this out automatically, but RHEL cannot:
-Requires: librsvg2
-
-%description -n subscription-manager-firstboot
-This package contains the firstboot screens for subscription-manager.
-%endif
-
-%if %use_initial_setup
-%package -n subscription-manager-initial-setup-addon
-Summary: initial-setup screens for subscription-manager
-Group: System Environment/Base
-Requires: %{name}-gui = %{version}-%{release}
-Requires: initial-setup-gui >= 0.3.9.24-1
-Obsoletes: subscription-manager-firstboot < 1.15.3-1
-
-%description -n subscription-manager-initial-setup-addon
-This package contains the initial-setup screens for subscription-manager.
-%endif
 
 %package -n subscription-manager-migration
 Summary: Migration scripts for moving to certificate based subscriptions
@@ -245,6 +182,7 @@ Requires: subscription-manager-migration-data
 This package contains scripts that aid in moving to certificate based
 subscriptions
 
+
 %if %use_dnf
 %package -n dnf-plugin-subscription-manager
 Summary: Subscription Manager plugins for DNF
@@ -256,6 +194,52 @@ Requires: dnf >= 1.0.0
 Subscription Manager plugins for DNF, contains subscription-manager and product-id plugins.
 %endif
 
+
+%if %use_firstboot
+%package -n subscription-manager-firstboot
+Summary: Firstboot screens for subscription manager
+Group: System Environment/Base
+Requires: %{name}-gui = %{version}-%{release}
+Requires: rhn-setup-gnome
+
+# Fedora can figure this out automatically, but RHEL cannot:
+Requires: librsvg2
+
+%description -n subscription-manager-firstboot
+This package contains the firstboot screens for subscription-manager.
+%endif
+
+
+%if %use_initial_setup
+%package -n subscription-manager-initial-setup-addon
+Summary: initial-setup screens for subscription-manager
+Group: System Environment/Base
+Requires: %{name}-gui = %{version}-%{release}
+Requires: initial-setup-gui >= 0.3.9.24-1
+Obsoletes: subscription-manager-firstboot < 1.15.3-1
+
+%description -n subscription-manager-initial-setup-addon
+This package contains the initial-setup screens for subscription-manager.
+%endif
+
+
+%if %has_ostree
+%package -n subscription-manager-plugin-ostree
+Summary: A plugin for handling OSTree content.
+Group: System Environment/Base
+
+Requires: pygobject3-base
+# plugin needs a slightly newer version of python-iniparse for 'tidy'
+Requires:  python-iniparse >= 0.4
+Requires: %{name} = %{version}-%{release}
+
+%description -n subscription-manager-plugin-ostree
+Enables handling of content of type 'ostree' in any certificates
+from the server. Populates /ostree/repo/config as well as updates
+the remote in the currently deployed .origin file.
+%endif
+
+
 %prep
 %setup -q
 
@@ -266,64 +250,44 @@ make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
 %install
 rm -rf %{buildroot}
 make -f Makefile install VERSION=%{version}-%{release} \
-    PREFIX=%{buildroot} MANPATH=%{_mandir} PYTHON_SITELIB=%{python_sitelib} \
+    PREFIX=%{buildroot} PYTHON_SITELIB=%{python_sitelib} \
     OS_VERSION=%{?fedora}%{?rhel} OS_DIST=%{dist} \
     %{?install_ostree} %{?post_boot_tool} %{?gtk_version} \
     %{?install_yum_plugins} %{?install_dnf_plugins}
 
-desktop-file-validate \
-        %{buildroot}/etc/xdg/autostart/rhsm-icon.desktop
-
-desktop-file-validate \
-        %{buildroot}/usr/share/applications/subscription-manager-gui.desktop
+desktop-file-validate %{buildroot}/etc/xdg/autostart/rhsm-icon.desktop
+desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-gui.desktop
 
 %find_lang rhsm
 %find_lang %{name} --with-gnome
 
-# fix timestamps on our byte compiled files so them match across arches
+# fix timestamps on our byte compiled files so they match across arches
 find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 
 # fake out the redhat.repo file
-mkdir %{buildroot}%{_sysconfdir}/yum.repos.d
+%{__mkdir} %{buildroot}%{_sysconfdir}/yum.repos.d
 touch %{buildroot}%{_sysconfdir}/yum.repos.d/redhat.repo
 
 # fake out the certificate directories
-mkdir -p %{buildroot}%{_sysconfdir}/pki/consumer
-mkdir -p %{buildroot}%{_sysconfdir}/pki/entitlement
+%{__mkdir_p} %{buildroot}%{_sysconfdir}/pki/consumer
+%{__mkdir_p} %{buildroot}%{_sysconfdir}/pki/entitlement
 
 # Setup cert directories for the container plugin:
-mkdir -p %{buildroot}%{_sysconfdir}/docker/certs.d/
-mkdir %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com
+%{__mkdir_p} %{buildroot}%{_sysconfdir}/docker/certs.d/
+%{__mkdir} %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com
 install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-entitlement-authority.pem %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com/redhat-entitlement-authority.crt
 
-# The normal redhat-uep.pem is actually a bundle of three CAs.  Docker does not handle bundles well
-# and only reads the first CA in the bundle.  We need to put the right CA a file by itself.
-mkdir -p %{buildroot}%{_sysconfdir}/etc/rhsm/ca
+%{__mkdir_p} %{buildroot}%{_sysconfdir}/etc/rhsm/ca
 install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-entitlement-authority.pem %{buildroot}/%{_sysconfdir}/rhsm/ca/redhat-entitlement-authority.pem
-
-%post -n subscription-manager-gui
-touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
-scrollkeeper-update -q -o %{_datadir}/omf/%{name} || :
-
-%postun -n subscription-manager-gui
-if [ $1 -eq 0 ] ; then
-    touch --no-create %{_datadir}/icons/hicolor &>/dev/null
-    gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
-    scrollkeeper-update -q || :
-fi
-
-%posttrans -n subscription-manager-gui
-gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %clean
 rm -rf %{buildroot}
+
 
 # base/cli tools use the gettext domain 'rhsm', while the
 # gnome-help tools use domain 'subscription-manager'
 %files -f rhsm.lang
 %defattr(-,root,root,-)
-
-# executables
 %attr(755,root,root) %{_sbindir}/subscription-manager
 
 # symlink to console-helper
@@ -342,14 +306,12 @@ rm -rf %{buildroot}
 %endif
 
 # our config dirs and files
-%attr(755,root,root) %dir %{_sysconfdir}/rhsm
-%attr(644,root,root) %config(noreplace) %{_sysconfdir}/rhsm/rhsm.conf
-%config(noreplace) %attr(644,root,root) %{_sysconfdir}/rhsm/logging.conf
-
-%attr(755,root,root) %dir %{_sysconfdir}/rhsm/facts
-
 %attr(755,root,root) %dir %{_sysconfdir}/pki/consumer
 %attr(755,root,root) %dir %{_sysconfdir}/pki/entitlement
+%attr(755,root,root) %dir %{_sysconfdir}/rhsm
+%attr(755,root,root) %dir %{_sysconfdir}/rhsm/facts
+%attr(644,root,root) %config(noreplace) %{_sysconfdir}/rhsm/rhsm.conf
+%config(noreplace) %attr(644,root,root) %{_sysconfdir}/rhsm/logging.conf
 
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.SubscriptionManager.conf
 
@@ -370,8 +332,6 @@ rm -rf %{buildroot}
 %attr(700,root,root) %{_sysconfdir}/cron.daily/rhsmd
 %{_datadir}/dbus-1/system-services/com.redhat.SubscriptionManager.service
 
-
-# /var
 %attr(755,root,root) %dir %{_var}/log/rhsm
 %attr(755,root,root) %dir %{_var}/spool/rhsm/debug
 %attr(755,root,root) %dir %{_var}/run/rhsm
@@ -380,7 +340,6 @@ rm -rf %{buildroot}
 %attr(755,root,root) %dir %{_var}/lib/rhsm/packages
 %attr(755,root,root) %dir %{_var}/lib/rhsm/cache
 
-# bash completion scripts
 %{_sysconfdir}/bash_completion.d/subscription-manager
 %{_sysconfdir}/bash_completion.d/rct
 %{_sysconfdir}/bash_completion.d/rhsm-debug
@@ -388,36 +347,31 @@ rm -rf %{buildroot}
 %{_sysconfdir}/bash_completion.d/rhsm-icon
 %{_sysconfdir}/bash_completion.d/rhsmcertd
 
-
-# code
-# python package dirs
-%dir %{_datadir}/rhsm
-%dir %{_datadir}/rhsm/subscription_manager
-%dir %{_datadir}/rhsm/subscription_manager/api
-%dir %{_datadir}/rhsm/subscription_manager/branding
-%dir %{_datadir}/rhsm/subscription_manager/model
-%dir %{_datadir}/rhsm/subscription_manager/plugin
+%dir %{python_sitelib}/
+%dir %{python_sitelib}/subscription_manager
+%dir %{python_sitelib}/subscription_manager/api
+%dir %{python_sitelib}/subscription_manager/branding
+%dir %{python_sitelib}/subscription_manager/model
+%dir %{python_sitelib}/subscription_manager/plugin
 
 # code, python modules and packages
-%{_datadir}/rhsm/subscription_manager/*.py*
-
-%{_datadir}/rhsm/subscription_manager/api/*.py*
-%{_datadir}/rhsm/subscription_manager/branding/*.py*
+%{python_sitelib}/subscription_manager-*.egg-info/*
+%{python_sitelib}/subscription_manager/*.py*
+%{python_sitelib}/subscription_manager/api/*.py*
+%{python_sitelib}/subscription_manager/branding/*.py*
+%{python_sitelib}/subscription_manager/model/*.py*
+%{python_sitelib}/subscription_manager/plugin/*.py*
 
 # our gtk2/gtk3 compat modules
-%dir %{_datadir}/rhsm/subscription_manager/ga_impls
-%{_datadir}/rhsm/subscription_manager/ga_impls/__init__.py*
+%dir %{python_sitelib}/subscription_manager/ga_impls
+%{python_sitelib}/subscription_manager/ga_impls/__init__.py*
 
 %if %use_gtk3
-%{_datadir}/rhsm/subscription_manager/ga_impls/ga_gtk3.py*
+%{python_sitelib}/subscription_manager/ga_impls/ga_gtk3.py*
 %else
-%dir %{_datadir}/rhsm/subscription_manager/ga_impls/ga_gtk2
-%{_datadir}/rhsm/subscription_manager/ga_impls/ga_gtk2/*.py*
+%dir %{python_sitelib}/subscription_manager/ga_impls/ga_gtk2
+%{python_sitelib}/subscription_manager/ga_impls/ga_gtk2/*.py*
 %endif
-
-%{_datadir}/rhsm/subscription_manager/model/*.py*
-
-%{_datadir}/rhsm/subscription_manager/plugin/*.py*
 
 # subscription-manager plugins
 %dir %{rhsm_plugins_dir}
@@ -430,21 +384,14 @@ rm -rf %{buildroot}
 %{_prefix}/lib/yum-plugins/product-id.py*
 %{_prefix}/lib/yum-plugins/search-disabled-repos.py*
 
-
 # Incude rt CLI tool
-%dir %{_datadir}/rhsm/rct
-%{_datadir}/rhsm/rct/__init__.py*
-%{_datadir}/rhsm/rct/cli.py*
-%{_datadir}/rhsm/rct/*commands.py*
-%{_datadir}/rhsm/rct/printing.py*
-%{_datadir}/rhsm/rct/version.py*
+%dir %{python_sitelib}/rct
+%{python_sitelib}/rct/*.py*
 %attr(755,root,root) %{_bindir}/rct
 
 # Include consumer debug CLI tool
-%dir %{_datadir}/rhsm/rhsm_debug
-%{_datadir}/rhsm/rhsm_debug/__init__.py*
-%{_datadir}/rhsm/rhsm_debug/cli.py*
-%{_datadir}/rhsm/rhsm_debug/*commands.py*
+%dir %{python_sitelib}/rhsm_debug
+%{python_sitelib}/rhsm_debug/*.py*
 %attr(755,root,root) %{_bindir}/rhsm-debug
 
 %doc
@@ -462,14 +409,18 @@ rm -rf %{buildroot}
 # symlink to console-helper
 %{_bindir}/subscription-manager-gui
 %{_bindir}/rhsm-icon
-%dir %{_datadir}/rhsm/subscription_manager/gui
-%dir %{_datadir}/rhsm/subscription_manager/gui/data
-%dir %{_datadir}/rhsm/subscription_manager/gui/data/ui
-%dir %{_datadir}/rhsm/subscription_manager/gui/data/glade
-%dir %{_datadir}/rhsm/subscription_manager/gui/data/icons
-%{_datadir}/rhsm/subscription_manager/gui/data/ui/*.ui
-%{_datadir}/rhsm/subscription_manager/gui/data/glade/*.glade
-%{_datadir}/rhsm/subscription_manager/gui/data/icons/*.svg
+
+%dir %{python_sitelib}/subscription_manager/gui
+%dir %{python_sitelib}/subscription_manager/gui/data
+%dir %{python_sitelib}/subscription_manager/gui/data/ui
+%dir %{python_sitelib}/subscription_manager/gui/data/glade
+%dir %{python_sitelib}/subscription_manager/gui/data/icons
+
+%{python_sitelib}/subscription_manager/gui/*.py*
+%{python_sitelib}/subscription_manager/gui/data/ui/*.ui
+%{python_sitelib}/subscription_manager/gui/data/glade/*.glade
+%{python_sitelib}/subscription_manager/gui/data/icons/*.svg
+
 %{_datadir}/applications/subscription-manager-gui.desktop
 %{_datadir}/icons/hicolor/16x16/apps/*.png
 %{_datadir}/icons/hicolor/22x22/apps/*.png
@@ -481,9 +432,6 @@ rm -rf %{buildroot}
 %{_datadir}/icons/hicolor/scalable/apps/*.svg
 %{_datadir}/appdata/subscription-manager-gui.appdata.xml
 
-# code and modules
-%{_datadir}/rhsm/subscription_manager/gui/*.py*
-
 # gui system config files
 %{_sysconfdir}/xdg/autostart/rhsm-icon.desktop
 %{_sysconfdir}/pam.d/subscription-manager-gui
@@ -494,6 +442,40 @@ rm -rf %{buildroot}
 %{_mandir}/man8/subscription-manager-gui.8*
 %{_mandir}/man8/rhsm-icon.8*
 %doc LICENSE
+
+
+%files -n subscription-manager-migration
+%defattr(-,root,root,-)
+%dir %{python_sitelib}/subscription_manager/migrate
+%{python_sitelib}/subscription_manager/migrate/*.py*
+%attr(755,root,root) %{_sbindir}/rhn-migrate-classic-to-rhsm
+
+%doc
+%{_mandir}/man8/rhn-migrate-classic-to-rhsm.8*
+%doc LICENSE
+%if 0%{?fedora} > 14
+%doc README.Fedora
+%endif
+
+
+%files -n subscription-manager-plugin-container
+%defattr(-,root,root,-)
+%{_sysconfdir}/rhsm/pluginconf.d/container_content.ContainerContentPlugin.conf
+%{rhsm_plugins_dir}/container_content.py*
+%{python_sitelib}/subscription_manager/plugin/container.py*
+# Copying Red Hat CA cert into each directory:
+%attr(755,root,root) %dir %{_sysconfdir}/docker/certs.d/cdn.redhat.com
+%attr(644,root,root) %{_sysconfdir}/rhsm/ca/redhat-entitlement-authority.pem
+%attr(644,root,root) %{_sysconfdir}/docker/certs.d/cdn.redhat.com/redhat-entitlement-authority.crt
+
+
+%if %has_ostree
+%files -n subscription-manager-plugin-ostree
+%defattr(-,root,root,-)
+%{_sysconfdir}/rhsm/pluginconf.d/ostree_content.OstreeContentPlugin.conf
+%{rhsm_plugins_dir}/ostree_content.py*
+%{python_sitelib}/subscription_manager/plugin/ostree/*.py*
+%endif
 
 
 %if %use_initial_setup
@@ -512,31 +494,20 @@ rm -rf %{buildroot}
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/ks/*.py*
 %endif
 
+
 %if %use_firstboot
 %files -n subscription-manager-firstboot
 %defattr(-,root,root,-)
 %{_datadir}/rhn/up2date_client/firstboot/rhsm_login.py*
 %endif
 
-%files -n subscription-manager-migration
-%defattr(-,root,root,-)
-%dir %{_datadir}/rhsm/subscription_manager/migrate
-%{_datadir}/rhsm/subscription_manager/migrate/*.py*
-%attr(755,root,root) %{_sbindir}/rhn-migrate-classic-to-rhsm
-
-%doc
-%{_mandir}/man8/rhn-migrate-classic-to-rhsm.8*
-%doc LICENSE
-#only install this file on Fedora
-%if 0%{?fedora} > 14
-%doc README.Fedora
-%endif
 
 %if %use_dnf
 %files -n dnf-plugin-subscription-manager
 %defattr(-,root,root,-)
 %{python_sitelib}/dnf-plugins/*
 %endif
+
 
 %post
 %if %use_systemd
@@ -548,14 +519,18 @@ rm -rf %{buildroot}
 %endif
 
 if [ -x /bin/dbus-send ] ; then
-  dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig > /dev/null 2>&1 || :
+    dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig > /dev/null 2>&1 || :
 fi
 
 %if !%use_systemd
-    if [ "$1" -eq "2" ] ; then
-        /sbin/service rhsmcertd condrestart >/dev/null 2>&1 || :
-    fi
+if [ "$1" -eq "2" ] ; then
+    /sbin/service rhsmcertd condrestart >/dev/null 2>&1 || :
+fi
 %endif
+
+%post -n subscription-manager-gui
+touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
+scrollkeeper-update -q -o %{_datadir}/omf/%{name} || :
 
 %preun
 if [ $1 -eq 0 ] ; then
@@ -575,6 +550,16 @@ fi
 %if %use_systemd
     %systemd_postun_with_restart rhsmcertd.service
 %endif
+
+%postun -n subscription-manager-gui
+if [ $1 -eq 0 ] ; then
+    touch --no-create %{_datadir}/icons/hicolor &>/dev/null
+    gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+    scrollkeeper-update -q || :
+fi
+
+%posttrans -n subscription-manager-gui
+gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
 * Mon May 09 2016 Vritant Jain <vrjain@redhat.com> 1.17.6-1

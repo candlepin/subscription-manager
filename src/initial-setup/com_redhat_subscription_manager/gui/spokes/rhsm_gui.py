@@ -17,7 +17,6 @@
 #
 
 import logging
-import sys
 
 from pyanaconda.ui.gui.spokes import NormalSpoke
 from pyanaconda.ui.common import FirstbootOnlySpokeMixIn
@@ -25,9 +24,6 @@ from pyanaconda.ui.categories.system import SystemCategory
 from pyanaconda.ui.gui.utils import really_hide
 
 log = logging.getLogger(__name__)
-
-RHSM_PATH = "/usr/share/rhsm"
-sys.path.append(RHSM_PATH)
 
 from subscription_manager import ga_loader
 

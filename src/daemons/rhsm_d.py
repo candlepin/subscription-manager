@@ -41,12 +41,10 @@ import dbus.glib
 import logging
 import traceback
 
-sys.path.append("/usr/share/rhsm")
-
 from subscription_manager import ga_loader
 ga_loader.init_ga()
 
-#from gi.repository import GObject
+# from gi.repository import GObject
 log = logging.getLogger("rhsm-app.rhsmd")
 
 from subscription_manager import logutil
@@ -71,7 +69,6 @@ init_dep_injection()
 
 from subscription_manager.branding import get_branding
 from subscription_manager.injection import require, IDENTITY, CERT_SORTER, RHSM_ICON_CACHE
-from subscription_manager.cache import RhsmIconCache
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager.i18n_optparse import OptionParser, \
     WrappedIndentedHelpFormatter, USAGE
@@ -142,7 +139,7 @@ class StatusChecker(dbus.service.Object):
         name = dbus.service.BusName("com.redhat.SubscriptionManager", bus)
         dbus.service.Object.__init__(self, name, "/EntitlementStatus")
         self.has_run = False
-        #this will get set after first invocation
+        # this will get set after first invocation
         self.rhsm_icon_cache = require(RHSM_ICON_CACHE)
         self.keep_alive = keep_alive
         self.force_signal = force_signal
@@ -155,8 +152,8 @@ class StatusChecker(dbus.service.Object):
         log.debug("D-Bus signal com.redhat.SubscriptionManager.EntitlementStatus.entitlement_status_changed emitted")
         debug("signal fired! code is " + str(status_code))
 
-    #this is so we can guarantee exit after the dbus stuff is done, since
-    #certain parts of that are async
+    # this is so we can guarantee exit after the dbus stuff is done, since
+    # certain parts of that are async
     def watchdog(self):
         if not self.keep_alive:
             ga_GObject.idle_add(check_if_ran_once, self, self.loop)

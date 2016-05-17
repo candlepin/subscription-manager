@@ -14,9 +14,6 @@
 #
 
 import os
-import sys
-
-sys.path.append('/usr/share/rhsm')
 
 from subscription_manager import injection as inj
 from subscription_manager.repolib import RepoActionInvoker
@@ -92,7 +89,7 @@ class SubscriptionManager(dnf.Plugin):
         if identity.is_valid():
             try:
                 connection.UEPConnection(cert_file=cert_file, key_file=key_file)
-            #FIXME: catchall exception
+            # FIXME: catchall exception
             except Exception:
                 # log
                 logger.info(_("Unable to connect to Subscription Management Service"))
@@ -117,7 +114,6 @@ class SubscriptionManager(dnf.Plugin):
         if products:
             msg = expired_warning % '\n'.join(sorted(products))
             logger.info(msg)
-
 
     def _warnOrGiveUsageMessage(self):
         """ either output a warning, or a usage message """

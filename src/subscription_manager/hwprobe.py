@@ -911,11 +911,6 @@ class Hardware:
 
 
 if __name__ == '__main__':
-    _LIBPATH = "/usr/share/rhsm"
-    # add to the path if need be
-    if _LIBPATH not in sys.path:
-        sys.path.append(_LIBPATH)
-
     from subscription_manager import logutil
     logutil.init_logger()
 

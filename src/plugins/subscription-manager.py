@@ -19,8 +19,6 @@ import os
 import sys
 from yum.plugins import TYPE_CORE, TYPE_INTERACTIVE
 
-sys.path.append('/usr/share/rhsm')
-
 from subscription_manager import injection as inj
 from subscription_manager.repolib import RepoActionInvoker
 from subscription_manager.hwprobe import ClassicCheck

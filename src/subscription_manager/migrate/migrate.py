@@ -36,10 +36,6 @@ from rhsm.utils import ServerUrlParseError
 
 _ = gettext.gettext
 
-_LIBPATH = "/usr/share/rhsm"
-if _LIBPATH not in sys.path:
-    sys.path.append(_LIBPATH)
-
 from subscription_manager import injection as inj
 from subscription_manager.cli import system_exit
 from subscription_manager.i18n_optparse import OptionParser, \

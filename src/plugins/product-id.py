@@ -20,9 +20,6 @@ import sys
 import yum
 from yum.plugins import TYPE_CORE
 
-sys.path.append('/usr/share/rhsm')
-
-
 from subscription_manager import logutil
 from subscription_manager.productid import ProductManager, RpmVersion
 from subscription_manager.utils import chroot
@@ -32,6 +29,7 @@ requires_api_version = '2.6'
 plugin_type = (TYPE_CORE,)
 
 log = logging.getLogger('rhsm-app.' + __name__)
+
 
 def posttrans_hook(conduit):
     """
