@@ -27,6 +27,8 @@ Subscription:
 \tContract:%(space)s
 \tOrder:%(space)s
 \tAccount: 5206743
+\tVirt Limit:%(space)s
+\tRequires Virt-who: False
 \tEntitlement File: export/entitlements/8a99f9833cf86efc013cfd613be066cb.json
 \tCertificate File: export/entitlement_certificates/2414805806930829936.pem
 \tCertificate Version: 1.0
