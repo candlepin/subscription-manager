@@ -27,6 +27,7 @@ class Expiration(object):
             seconds = duration_seconds
 
         self.duration = datetime.timedelta(seconds=seconds)
+        self.duration_seconds = duration_seconds
 
     def expired(self, at_time=None):
         at_time = at_time or datetime.datetime.utcnow()

@@ -8,10 +8,6 @@ import dbus
 import dbus.service
 import dbus.mainloop.glib
 
-import slip.dbus
-import slip.dbus.service
-import slip.dbus.introspection
-
 from rhsmlib.dbus.common import decorators
 from rhsmlib.dbus.common import constants
 from rhsmlib.dbus.common import log_init

@@ -10,7 +10,7 @@
 # have received a copy of GPLv2 along with this software; if not, see
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
-
+from datetime import datetime
 import collections
 import logging
 
@@ -83,6 +83,7 @@ class FactsCollection(object):
         # If the cache has been persisted, or doesn't need to be persisted
         # then dirty = False
         self.dirty = False
+        self.collection_datetime = datetime.now()
 
         log.debug("init %s", repr(self.collection_datetime))
         log.debug(self)
@@ -91,6 +92,10 @@ class FactsCollection(object):
         buf = "%s(facts_dict=%s, collection_datetime=%s, cache_lifetime=%s)" % \
             (self.__class__.__name__, self.data, self.collection_datetime, self.cache_lifetime)
         return buf
+
+    @property
+    def cache_lifetime(self):
+        return (datetime.now() - self.collection_datetime).total_seconds()
 
     @classmethod
     def from_facts_collection(cls, facts_collection):

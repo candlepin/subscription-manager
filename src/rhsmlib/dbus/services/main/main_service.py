@@ -3,6 +3,7 @@ from rhsmlib.dbus.services import base_server
 from rhsmlib.dbus.common import constants, log_init, decorators
 from rhsmlib.dbus.services.base_service import BaseService
 from rhsmlib.dbus.services.config.config_service import ConfigService
+from rhsmlib.dbus.services.facts.host import FactsHost
 
 import dbus
 import dbus.service
@@ -36,7 +37,6 @@ class MainService(BaseService):
         super(MainService, self).__init__(conn=conn,
                                           object_path=object_path,
                                           bus_name=bus_name)
-        print self.object_path
 
         self._init_service_classes()
 
@@ -45,9 +45,6 @@ class MainService(BaseService):
         self.log.debug('Initializing service classes: %s',
                        self.service_classes)
         for service_class in self.service_classes:
-            # All services provided by this object must be dervived
-            # from BaseService
-            assert issubclass(service_class, BaseService)
             service_instance = service_class(bus_name=self.bus_name,
                                              base_object_path=self.object_path)
             self.interface_to_service[service_instance._interface_name] = \
@@ -60,8 +57,11 @@ class MainService(BaseService):
         return self.interface_to_service.get(interface, None)
 
 
+
+
+
 if __name__ == "__main__":
-    service_classes = [ConfigService]
+    service_classes = [ConfigService, FactsHost]
     # bus_name = constants.SERVICE_NAME
     # bus_class = dbus.SessionBus
     #
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     dbus.mainloop.glib.threads_init()
 
     mainloop = GLib.MainLoop()
-    bus = dbus.SessionBus()
+    bus = dbus.SystemBus()#SessionBus()
     service = MainService(bus=bus, service_classes=service_classes)
 
     try:

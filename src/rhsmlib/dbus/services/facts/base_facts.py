@@ -2,7 +2,6 @@ import logging
 import time
 
 import dbus
-import slip.dbus
 
 from rhsmlib.facts import collector
 from rhsmlib.dbus.common import decorators
@@ -17,8 +16,11 @@ class BaseFacts(base_service.BaseService):
     _interface_name = constants.FACTS_DBUS_INTERFACE
     _default_facts_collector_class = collector.FactsCollector
 
-    def __init__(self, conn=None, object_path=None, bus_name=None):
-        super(BaseFacts, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
+    def __init__(self, conn=None, object_path=None, bus_name=None,
+                 base_object_path=None):
+        super(BaseFacts, self).__init__(conn=conn, object_path=object_path,
+                                        bus_name=bus_name,
+                                        base_object_path=base_object_path)
 
         # Default is an empty FactsCollector
         self.facts_collector = self._default_facts_collector_class()
@@ -41,7 +43,6 @@ class BaseFacts(base_service.BaseService):
                                                                         access='read')
         return properties
 
-    @slip.dbus.polkit.require_auth(constants.PK_ACTION_FACTS_COLLECT)
     @decorators.dbus_service_method(dbus_interface=constants.FACTS_DBUS_INTERFACE,
                                    out_signature='a{ss}')
     @decorators.dbus_handle_exceptions
@@ -77,7 +78,7 @@ class BaseFacts(base_service.BaseService):
 
         props_iterable = [('facts', facts_dbus_dict),
                           ('lastUpdatedTime', time.mktime(collection.collection_datetime.timetuple())),
-                          ('cacheExpiryTime', time.mktime(collection.expiry_datetime.timetuple()))]
+                          ('cacheExpiryTime', time.mktime(collection.expiration.expiry_datetime.timetuple()))]
 
         self.props._set_props(interface_name=constants.FACTS_DBUS_INTERFACE,
                               properties_iterable=props_iterable)
