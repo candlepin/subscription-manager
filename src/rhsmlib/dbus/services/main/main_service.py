@@ -4,6 +4,9 @@ from rhsmlib.dbus.common import constants, log_init, decorators
 from rhsmlib.dbus.services.base_service import BaseService
 from rhsmlib.dbus.services.config.config_service import ConfigService
 from rhsmlib.dbus.services.facts.host import FactsHost
+from rhsmlib.dbus.private import server as private_server
+
+from functools import partial
 
 import dbus
 import dbus.service
@@ -56,6 +59,30 @@ class MainService(BaseService):
     def get_object_for_interface(self, interface):
         return self.interface_to_service.get(interface, None)
 
+
+    @dbus.service.method(dbus_interface=constants.MAIN_SERVICE_INTERFACE,
+                         out_signature='s')
+    def start_registration(self):
+        self.log.debug('start_registration called')
+        server = self._create_registration_server()
+        return server.address
+
+    def _disconnect_on_last_connection(self, server, conn):
+        self.log.debug('Checking if server "%s" has any remaining connections', server)
+        if server._Server__connections:
+            self.log.debug('Server still has connections')
+            return
+
+        self.log.debug('No connections remain, disconnecting')
+        server.disconnect()
+        del server
+
+    def _create_registration_server(self):
+        self.log.debug('Attempting to create new server')
+        server = private_server.create_server()
+        server.on_connection_removed.append(partial(self._disconnect_on_last_connection, server))
+        self.log.debug('Server created and listening on "%s"', server.address)
+        return server
 
 
 
