@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+
 def kluge_it():
     import sys
 
@@ -12,4 +13,4 @@ def kluge_it():
         import slip._wrappers
         slip._wrappers._gobject = None
     except ImportError:
-	print('fix me, workaround for rhel6')
+        print('fix me, workaround for rhel6')

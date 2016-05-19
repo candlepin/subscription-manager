@@ -14,7 +14,6 @@
 #
 
 import logging
-import sys
 
 from subscription_manager import logutil
 from subscription_manager.productid import ProductManager
@@ -96,7 +95,7 @@ class DnfProductManager(ProductManager):
                     # We have to look in all repos for productids, not just
                     # the ones we create, or anaconda doesn't install it.
                     self.meta_data_errors.append(repo.id)
-            except Exception, e:
+            except Exception as e:
                 log.warn("Error loading productid metadata for %s." % repo)
                 log.exception(e)
                 self.meta_data_errors.append(repo.id)

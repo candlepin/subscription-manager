@@ -2,6 +2,7 @@ import dbus.service
 
 from rhsmlib.dbus.common import constants
 
+
 class PrivateService(dbus.service.Object):
     """ The base class for service objects to be exposed on either a private connection
         or a bus."""

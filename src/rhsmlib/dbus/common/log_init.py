@@ -2,6 +2,7 @@ import logging
 
 logger_initialized = False
 
+
 def init_root_logger():
     global logger_initialized
     if logger_initialized:

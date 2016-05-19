@@ -12,7 +12,6 @@ from rhsmlib.dbus.common import decorators
 from rhsmlib.dbus.private.private_service import PrivateService
 
 import socket
-import argparse
 import json
 
 _ = gettext.gettext
@@ -73,7 +72,6 @@ class RegisterService(PrivateService):
         #       of variants in the in_signature (but I'd imagine that might be
         #       slightly more difficult to unit test)
         return "WITH ACTIVATION KEYS"
-
 
     @staticmethod
     def is_registered():

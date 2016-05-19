@@ -1,8 +1,6 @@
-#!/usr/bin/python
+#! /usr/bin/env python
 
 import logging
-
-log = logging.getLogger(__name__)
 
 import dbus
 import dbus.service
@@ -12,18 +10,16 @@ from rhsmlib.dbus.common import decorators
 from rhsmlib.dbus.common import constants
 from rhsmlib.dbus.common import log_init
 from rhsmlib.dbus.services import base_properties
-#from rhsmlib.dbus.common import dbus_utils
 
+log = logging.getLogger(__name__)
 log_init.init_root_logger()
 
 
 class BaseService(dbus.service.Object):
 
     # Name of the DBus interface provided by this object
-    _interface_name = constants.DBUS_INTERFACE
-    _service_name = constants.SERVICE_SUB_DOMAIN_NAME_VER
-    #default_polkit_auth_required = constants.PK_ACTION_DEFAULT
-
+    interface_name = constants.DBUS_INTERFACE
+    service_name = constants.SERVICE_SUB_DOMAIN_NAME_VER
     default_dbus_path = constants.ROOT_DBUS_PATH
     default_polkit_auth_required = None
 

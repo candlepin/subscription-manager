@@ -10,6 +10,7 @@ ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
 logger.addHandler(ch)
 
+
 class SubmanDaemon(dbus.service.Object):
     """ Subscription-managerD main class """
     DBUS_NAME = "com.redhat.Subscriptions1.SubmanDaemon1"
@@ -18,7 +19,7 @@ class SubmanDaemon(dbus.service.Object):
     _default_service_classes = []
 
     def __init__(self, conn=None, bus=None, object_path=DBUS_PATH, service_classes=None):
-        print "Created SubmanDaemon"
+        print("Created SubmanDaemon")
         bus_name = None
         if bus is not None:
             bus_name = dbus.service.BusName(self.__class__.DBUS_NAME, bus)
