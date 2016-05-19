@@ -24,7 +24,7 @@ class BaseService(dbus.service.Object):
 
     # Name of the DBus interface provided by this object
     _interface_name = constants.DBUS_INTERFACE
-    _service_name = constants.SERVICE_NAME
+    _service_name = constants.SERVICE_SUB_DOMAIN_NAME_VER
     #default_polkit_auth_required = constants.PK_ACTION_DEFAULT
 
     default_dbus_path = constants.ROOT_DBUS_PATH
