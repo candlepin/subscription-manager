@@ -1,5 +1,3 @@
-
-
 import logging
 
 from rhsmlib.facts import virt

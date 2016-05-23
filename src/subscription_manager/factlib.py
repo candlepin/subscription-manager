@@ -21,7 +21,7 @@ import logging
 from certlib import Locker, ActionReport
 from subscription_manager import injection as inj
 
-from rhsmlib.dbus.clients.facts import client as facts_client
+from rhsmlib.dbus.services.facts import client as facts_client
 from rhsmlib.candlepin import api as candlepin_api
 
 _ = gettext.gettext

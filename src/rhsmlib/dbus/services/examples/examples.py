@@ -1,9 +1,8 @@
-import dbus
 import dbus.service
 import slip.dbus
 
-from rhsmlib.dbus.common import decorators
-from rhsmlib.dbus.common import constants
+import rhsmlib.dbus.common as common
+
 from rhsmlib.dbus.services import base_service
 from rhsmlib.dbus.services import base_properties
 
@@ -16,7 +15,7 @@ EXAMPLES_NAME = "Example service."
 
 class Examples(base_service.BaseService):
     _interface_name = DBUS_INTERFACE
-    default_polkit_auth_required = constants.PK_ACTION_DEFAULT
+    default_polkit_auth_required = common.PK_ACTION_DEFAULT
     default_dbus_path = DBUS_PATH
     default_props_data = {'version': EXAMPLES_VERSION,
                           'name': EXAMPLES_NAME}
@@ -30,10 +29,10 @@ class Examples(base_service.BaseService):
                                                                                self.PropertiesChanged)
         return properties
 
-    @slip.dbus.polkit.require_auth(constants.PK_ACTION_DEFAULT)
-    @decorators.dbus_service_method(dbus_interface=DBUS_INTERFACE,
+    @slip.dbus.polkit.require_auth(common.PK_ACTION_DEFAULT)
+    @common.dbus_service_method(dbus_interface=DBUS_INTERFACE,
                                    out_signature='i')
-    @decorators.dbus_handle_exceptions
+    @common.dbus_handle_exceptions
     def Return42(self, sender=None):
         self.log.debug("Return42")
 
@@ -42,11 +41,11 @@ class Examples(base_service.BaseService):
         self.IntReturnSignal(the_answer)
         return 42
 
-    @slip.dbus.polkit.require_auth(constants.PK_ACTION_DEFAULT)
-    @decorators.dbus_service_method(dbus_interface=DBUS_INTERFACE,
+    @slip.dbus.polkit.require_auth(common.PK_ACTION_DEFAULT)
+    @common.dbus_service_method(dbus_interface=DBUS_INTERFACE,
                                     in_signature='ii',
                                     out_signature='i')
-    @decorators.dbus_handle_exceptions
+    @common.dbus_handle_exceptions
     def AddInts(self, int_a, int_b, sender=None):
         self.log.debug("AddInts %s %s", int_a, int_b)
         total = int_a + int_b
@@ -54,12 +53,12 @@ class Examples(base_service.BaseService):
 
     @dbus.service.signal(dbus_interface=DBUS_INTERFACE,
                          signature='')
-    @decorators.dbus_handle_exceptions
+    @common.dbus_handle_exceptions
     def ExampleSignal(self):
         self.log.debug("ExampleSignal emitted")
 
     @dbus.service.signal(dbus_interface=DBUS_INTERFACE,
                          signature='i')
-    @decorators.dbus_handle_exceptions
+    @common.dbus_handle_exceptions
     def IntReturnSignal(self, the_int_returned):
         self.log.debug("IntReturnSignal the_int_returned=%s", the_int_returned)

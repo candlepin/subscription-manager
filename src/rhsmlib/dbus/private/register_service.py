@@ -1,26 +1,44 @@
 #! /usr/bin/env python
 
-from rhsmlib.dbus.common import dbus_utils, constants
-
 import dbus.service
 import gettext
-
-from rhsm import connection
-
-from rhsmlib.dbus.common import decorators
-
-from rhsmlib.dbus.private.private_service import PrivateService
-
+import rhsmlib.dbus.common as common
 import socket
 import json
+
+from rhsm import connection
+from rhsmlib.dbus.common import dbus_utils
 
 _ = gettext.gettext
 
 
-class RegisterService(PrivateService):
-    _interface_name = constants.REGISTER_SERVICE_NAME
+class PrivateService(dbus.service.Object):
+    """ The base class for service objects to be exposed on either a private connection
+        or a bus."""
+    _interface_name = None
+    _default_dbus_path = common.ROOT_DBUS_PATH
+    _default_dbus_path += ("/" + _interface_name) if _interface_name else ""
+    _default_bus_name = common.SERVICE_NAME
 
-    @decorators.dbus_service_method(dbus_interface=constants.REGISTER_INTERFACE,
+    def __init__(self, conn=None, bus=None, object_path=None):
+        if object_path is None or object_path == "":
+            # If not given a path to be exposed on, use class defaults
+            _interface_name = self.__class__._interface_name
+            object_path = self.__class__._default_dbus_path + \
+                ("/" + _interface_name) if _interface_name else ""
+
+        bus_name = None
+        if bus is not None:
+            # If we are passed in a bus, try to claim an appropriate bus name
+            bus_name = dbus.service.BusName(self.__class__._default_bus_name, bus)
+
+        super(PrivateService, self).__init__(object_path=object_path, conn=conn, bus_name=bus_name)
+
+
+class RegisterService(PrivateService):
+    _interface_name = common.REGISTER_SERVICE_NAME
+
+    @common.dbus_service_method(dbus_interface=common.REGISTER_INTERFACE,
                                     in_signature='sssa{ss}',
                                     out_signature='s')
     def register(self, username, password, org, options, sender=None):
@@ -57,7 +75,7 @@ class RegisterService(PrivateService):
         # Otherwise we could just have our return signature be a dict of strings to variant
         return json.dumps(registration_output)
 
-    @decorators.dbus_service_method(dbus_interface=constants.REGISTER_INTERFACE,
+    @common.dbus_service_method(dbus_interface=common.REGISTER_INTERFACE,
                                     in_signature='sa(s)a{ss}',
                                     out_signature='s')
     def register_with_activation_keys(self,

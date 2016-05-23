@@ -22,7 +22,7 @@ from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import handle_gui_exception, linkify
 from subscription_manager import injection as inj
 
-from rhsmlib.dbus.clients.facts import client as facts_client
+from rhsmlib.dbus.services.facts import client as facts_client
 
 _ = gettext.gettext
 

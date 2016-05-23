@@ -17,13 +17,14 @@ import json
 import os
 
 # FIXME: We can likely dump this now
-from rhsmlib.dbus.common import exceptions
+import rhsmlib.dbus.common as common
+
 from rhsmlib.dbus.services.facts import expiration
 
 log = logging.getLogger(__name__)
 
 
-class CacheError(exceptions.Error):
+class CacheError(common.Error):
     pass
 
 

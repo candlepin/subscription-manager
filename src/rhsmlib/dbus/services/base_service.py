@@ -1,26 +1,21 @@
 #! /usr/bin/env python
 
 import logging
-
-import dbus
 import dbus.service
-import dbus.mainloop.glib
+import rhsmlib.dbus.common as common
 
-from rhsmlib.dbus.common import decorators
-from rhsmlib.dbus.common import constants
-from rhsmlib.dbus.common import log_init
 from rhsmlib.dbus.services import base_properties
 
 log = logging.getLogger(__name__)
-log_init.init_root_logger()
+common.init_root_logger()
 
 
 class BaseService(dbus.service.Object):
 
     # Name of the DBus interface provided by this object
-    interface_name = constants.DBUS_INTERFACE
-    service_name = constants.SERVICE_SUB_DOMAIN_NAME_VER
-    default_dbus_path = constants.ROOT_DBUS_PATH
+    interface_name = common.DBUS_INTERFACE
+    service_name = common.SERVICE_SUB_DOMAIN_NAME_VER
+    default_dbus_path = common.ROOT_DBUS_PATH
     default_polkit_auth_required = None
 
     def __init__(self, conn=None, object_path=None, bus_name=None,
@@ -62,9 +57,9 @@ class BaseService(dbus.service.Object):
         # self.log.debug("accessing props @property")
         return self._props
 
-    @dbus.service.signal(dbus_interface=constants.DBUS_INTERFACE,
+    @dbus.service.signal(dbus_interface=common.DBUS_INTERFACE,
                          signature='')
-    @decorators.dbus_handle_exceptions
+    @common.dbus_handle_exceptions
     def ServiceStarted(self):
         self.log.debug("serviceStarted emit")
 
@@ -89,10 +84,10 @@ class BaseService(dbus.service.Object):
                           invalidated_properties):
         self.log.debug("Properties Changed emitted.")
 
-    @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
+    @common.dbus_service_method(dbus.PROPERTIES_IFACE,
                                     in_signature='s',
                                     out_signature='a{sv}')
-    @decorators.dbus_handle_exceptions
+    @common.dbus_handle_exceptions
     def GetAll(self, interface_name, sender=None):
         self.log.debug("GetAll() interface_name=%s", interface_name)
         self.log.debug("sender=%s", sender)
@@ -101,19 +96,19 @@ class BaseService(dbus.service.Object):
         self.log.debug('dr=%s', dr)
         return dr
 
-    @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
+    @common.dbus_service_method(dbus.PROPERTIES_IFACE,
                                     in_signature='ss',
                                     out_signature='v')
-    @decorators.dbus_handle_exceptions
+    @common.dbus_handle_exceptions
     def Get(self, interface_name, property_name, sender=None):
         self.log.debug("Get() interface_name=%s property_name=%s", interface_name, property_name)
         self.log.debug("Get Property iface=%s property_name=%s", interface_name, property_name)
         return self.props.get(interface_name=interface_name,
                               property_name=property_name)
 
-    @decorators.dbus_service_method(dbus.PROPERTIES_IFACE,
+    @common.dbus_service_method(dbus.PROPERTIES_IFACE,
                                     in_signature='ssv')
-    @decorators.dbus_handle_exceptions
+    @common.dbus_handle_exceptions
     def Set(self, interface_name, property_name, new_value, sender=None):
         """Set a DBus property on this object.
 

@@ -61,7 +61,7 @@ from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, \
         none_wrap_columnize_callback, echo_columnize_callback, highlight_by_filter_string_columnize_callback
 
-from rhsmlib.dbus.clients.facts import client as facts_client
+from rhsmlib.dbus.services.facts import client as facts_client
 
 _ = gettext.gettext
 

@@ -3,8 +3,9 @@ import time
 
 import dbus
 
+import rhsmlib.dbus.common as common
+
 from rhsmlib.facts import collector
-from rhsmlib.dbus.common import decorators
 from rhsmlib.dbus.services import base_properties
 from rhsmlib.dbus.services import base_service
 from rhsmlib.dbus.services.facts import constants
@@ -43,9 +44,8 @@ class BaseFacts(base_service.BaseService):
                                                                         access='read')
         return properties
 
-    @decorators.dbus_service_method(dbus_interface=constants.FACTS_DBUS_INTERFACE,
-                                   out_signature='a{ss}')
-    @decorators.dbus_handle_exceptions
+    @common.dbus_service_method(dbus_interface=constants.FACTS_DBUS_INTERFACE, out_signature='a{ss}')
+    @common.dbus_handle_exceptions
     def GetFacts(self, sender=None):
         self.log.debug("GetFacts")
 

@@ -42,8 +42,8 @@ except ImportError as e:
     log.warn("Unable to import the 'ethtool' module.")
 
 # For python2.6 that doesn't have subprocess.check_output
-from rhsmlib.compat.subprocess_check_output import check_output as compat_check_output
-from rhsmlib.compat.subprocess_check_output import CalledProcessError
+from rhsmlib.compat import check_output as compat_check_output
+from rhsmlib.compat import CalledProcessError
 
 
 class ClassicCheck:

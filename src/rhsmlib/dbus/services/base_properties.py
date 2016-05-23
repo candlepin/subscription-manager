@@ -4,7 +4,6 @@ import dbus
 
 from rhsmlib.dbus.common import dbus_utils
 
-
 log = logging.getLogger(__name__)
 
 

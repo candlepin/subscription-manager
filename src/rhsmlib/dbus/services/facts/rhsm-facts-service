@@ -1,18 +1,36 @@
-#!/usr/bin/python
-
+#!/usr/bin/env python
+import dbus
+import optparse
 import sys
 
-sys.path.append("/usr/share/rhsm")
+from rhsmlib import import_class
+from rhsmlib.dbus.services import base_server
+from rhsmlib.dbus.services.facts import constants
+from rhsmlib.dbus.services.facts import root
 
 from subscription_manager import logutil
-logutil.init_logger()
 
-from rhsmlib.dbus.services.facts import server
+logutil.init_logger()
 
 
 def main(args):
-    server.run()
+    bus_class = dbus.SystemBus
+    bus_name = constants.FACTS_DBUS_INTERFACE
+
+    if len(args) > 0:
+        bus_class = import_class(args[0])
+
+    if len(args) > 1:
+        bus_name = args[1]
+
+    service_classes = [root.FactsRoot]
+
+    base_server.run_services(bus_class=bus_class,
+        bus_name=bus_name,
+        service_classes=service_classes)
     return 0
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv))
+    parser = optparse.OptionParser()
+    (options, args) = parser.parse_args()
+    sys.exit(main(args))

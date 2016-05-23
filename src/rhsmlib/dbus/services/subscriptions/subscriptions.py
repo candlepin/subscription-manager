@@ -3,7 +3,8 @@ import logging
 import dbus
 import slip.dbus
 
-from rhsmlib.dbus.common import decorators
+import rhsmlib.dbus.common as common
+
 from rhsmlib.dbus.services import base_properties
 from rhsmlib.dbus.services import base_service
 from rhsmlib.dbus.services.subscriptions import constants
@@ -23,9 +24,9 @@ class BaseSubscriptions(base_service.BaseService):
                                               properties_changed_callback=self.PropertiesChanged)
 
     @slip.dbus.polkit.require_auth(constants.PK_SUBSCRIPTIONS_LIST)
-    @decorators.dbus_service_method(dbus_interface=constants.SUBSCRIPTIONS_DBUS_INTERFACE,
+    @common.dbus_service_method(dbus_interface=constants.SUBSCRIPTIONS_DBUS_INTERFACE,
                                    out_signature='a{ss}')
-    @decorators.dbus_handle_exceptions
+    @common.dbus_handle_exceptions
     def GetSubscriptions(self, sender=None):
         cleaned = {'Not A Real Subscription': 'Not any useful info about a readl subscription.'}
         dbus_dict = dbus.Dictionary(cleaned, signature="ss")

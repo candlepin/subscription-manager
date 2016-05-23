@@ -1,4 +1,5 @@
-from rhsmlib.dbus.common import decorators, dbus_utils
+import rhsmlib.dbus.common as common
+import rhsmlib.dbus.common.dbus_utils as dbus_utils
 
 import dbus.service
 
@@ -31,7 +32,7 @@ class SubmanDaemon(dbus.service.Object):
         self.services = {}
         super(SubmanDaemon, self).__init__(object_path=object_path, conn=conn, bus_name=bus_name)
 
-    @decorators.dbus_service_method(dbus_interface=DBUS_INTERFACE,
+    @common.dbus_service_method(dbus_interface=DBUS_INTERFACE,
                                     in_signature="s",
                                     out_signature="o")
     def get_service_by_name(self, service_name, sender=None):
@@ -50,7 +51,7 @@ class SubmanDaemon(dbus.service.Object):
                 self.services[service_name] = self._create_service_instance(service_name)
                 service = self.services[service_name]
             else:
-                raise decorators.Subscriptions1DBusException("No instance available")
+                raise common.Subscriptions1DBusException("No instance available")
         return service
 
     def _find_service_class_for_name(self, service_name):
@@ -61,7 +62,7 @@ class SubmanDaemon(dbus.service.Object):
             logger.debug(service_name)
             if service.DBUS_NAME == service_name:
                 return service
-        raise decorators.Subscriptions1DBusException('No class found that matches "%s"', service_name)
+        raise common.Subscriptions1DBusException('No class found that matches "%s"', service_name)
 
     def _create_service_instance(self, service_name):
         """ Creates an instance of the service_name if one can be found"""

@@ -1,5 +1,5 @@
 
-from rhsmlib.dbus.common import constants as common_constants
+import rhsmlib.dbus.common as common_constants
 
 SUB_SERVICE_NAME = "Facts"
 

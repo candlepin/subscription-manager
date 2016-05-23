@@ -11,7 +11,7 @@ import dbus.mainloop.glib
 
 import slip.dbus.service
 
-from rhsmlib.dbus.common import constants
+import rhsmlib.dbus.common as common
 
 log = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ def run_services(bus_class=None, bus_name=None, service_classes=None):
     service_class is the the class implementing a DBus Object/service."""
 
     service_classes = service_classes or None
-    bus_name = bus_name or constants.SERVICE_NAME
+    bus_name = bus_name or common.SERVICE_NAME
 
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
     dbus.mainloop.glib.threads_init()
