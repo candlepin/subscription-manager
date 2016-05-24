@@ -28,7 +28,7 @@ class CachedFactsCollector(collector.FactsCollector):
         # cached
         log.debug("save_to_cache facts_collection=%s", facts_collection)
 
-        #self.cache.write(dict(cached_facts.data))
+        self.cache.write(dict(facts_collection.data))
 
     def cache_save_finished(self, facts_collection):
         log.debug("cache_save_finished facts_collection=%s", facts_collection)

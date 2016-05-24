@@ -13,6 +13,7 @@
 from datetime import datetime
 import collections
 import logging
+from rhsmlib.dbus.services.facts.expiration import Expiration
 
 log = logging.getLogger(__name__)
 
@@ -115,8 +116,17 @@ class FactsCollection(object):
 
         Any errors reading the Cache can raise CacheError exceptions."""
         log.debug("FC.from_cache")
-        fc = cls(cache.read(), cache.expiration)
-        fc.dirty = False
+        if not cache.exists:
+            log.debug('Cache does not exist, creating expired Facts collection')
+            # Create an expired Facts Collection so that we create the cache
+            # immediately from newly gathered facts
+            fc = cls(None, Expiration(duration_seconds=0))
+            fc.dirty = True
+        else:
+            # Cache exists, we'll read from it for this collection
+            log.debug('Cache exists, reading from it')
+            fc = cls(cache.read(), cache.expiration)
+            fc.dirty = False
         return fc
 
     def cache_save_start(self, facts_collection):
