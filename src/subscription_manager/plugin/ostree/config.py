@@ -18,6 +18,7 @@ import os
 import re
 
 from rhsm import config
+from rhsm.config import NoSectionError  # NOQA: Imported so we can catch elsewhere
 from subscription_manager import utils
 
 # iniparse.utils isn't in old versions

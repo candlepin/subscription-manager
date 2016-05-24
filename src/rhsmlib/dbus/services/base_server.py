@@ -6,11 +6,9 @@ gi_kluge.kluge_it()
 
 from gi.repository import GLib
 
-import dbus
 import dbus.service
 import dbus.mainloop.glib
 
-import slip.dbus
 import slip.dbus.service
 
 from rhsmlib.dbus.common import constants
