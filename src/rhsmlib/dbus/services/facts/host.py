@@ -24,7 +24,7 @@ class FactsHost(base_facts.BaseFacts):
                           'polkit_auth_action': constants.PK_ACTION_FACTS_COLLECT,
                           'last_update': 'before now, probably'}
     default_dbus_path = constants.FACTS_HOST_DBUS_PATH
-    service_name = constants.SUB_SERVICE_NAME
+    _service_name = constants.SUB_SERVICE_NAME
 
     def __init__(self, conn=None, object_path=None, bus_name=None,
                  base_object_path=None):
