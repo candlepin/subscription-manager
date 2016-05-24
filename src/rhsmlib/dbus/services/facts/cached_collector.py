@@ -34,10 +34,12 @@ class CachedFactsCollector(collector.FactsCollector):
         log.debug("cache_save_finished facts_collection=%s", facts_collection)
 
     def collect(self):
-        log.debug("duration=%s", cache.expiration.duration_seconds)
+        #log.debug("duration=%s", cache.expiration.duration_seconds)
         # A new expiration, of the same duration, but starting now.
         host_facts_expiration = expiration.Expiration(duration_seconds=self.cache.expiration.duration_seconds)
-        fresh_collection = collection.FactsCollection(expiration=host_facts_expiration)
+        facts_dict = collection.FactsDict()
+        facts_dict.update(self.get_all())
+        fresh_collection = collection.FactsCollection(facts_dict=facts_dict, expiration=host_facts_expiration)
 
         try:
             cached_collection = collection.FactsCollection.from_cache(self.cache)
@@ -53,5 +55,5 @@ class CachedFactsCollector(collector.FactsCollector):
         # FIXME: This could wait until we get the facts property change signal?
         self.cache_save_start(new_enough_collection)
 
-        return fresh_collection
+        return new_enough_collection
         #return self.collection

@@ -38,7 +38,7 @@ class Cache(object):
         self.log = logging.getLogger(__name__ + '.' + self.__class__.__name__)
         self.store = store or Store()
         self.expiration = expiration_obj or expiration.Expiration(start_datetime=self.timestamp,
-                                                                 duration_seconds=self.default_duration_seconds)
+                                                                  duration_seconds=self.default_duration_seconds)
 
     @property
     def timestamp(self):
@@ -140,8 +140,10 @@ class FileStore(Store):
 class FileCache(Cache):
     CACHE_FILE = None
 
-    def __init__(self, file_store=None):
+    def __init__(self, file_store=None, expiration_obj=None):
         self.store = file_store or FileStore(path=self.CACHE_FILE)
+        super(FileCache, self).__init__(store=self.store,
+                                        expiration_obj=expiration_obj)
 
 
 class JsonFileCache(FileCache):

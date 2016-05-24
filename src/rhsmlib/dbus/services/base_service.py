@@ -8,10 +8,6 @@ import dbus
 import dbus.service
 import dbus.mainloop.glib
 
-import slip.dbus
-import slip.dbus.service
-import slip.dbus.introspection
-
 from rhsmlib.dbus.common import decorators
 from rhsmlib.dbus.common import constants
 from rhsmlib.dbus.common import log_init
@@ -20,28 +16,40 @@ from rhsmlib.dbus.services import base_properties
 
 log_init.init_root_logger()
 
-class BaseService(slip.dbus.service.Object):
 
-    persistent = True
+class BaseService(dbus.service.Object):
+
     # Name of the DBus interface provided by this object
     _interface_name = constants.DBUS_INTERFACE
+    _service_name = constants.SERVICE_SUB_DOMAIN_NAME_VER
     #default_polkit_auth_required = constants.PK_ACTION_DEFAULT
+
     default_dbus_path = constants.ROOT_DBUS_PATH
     default_polkit_auth_required = None
 
-    def __init__(self, conn=None, object_path=None, bus_name=None):
+    def __init__(self, conn=None, object_path=None, bus_name=None,
+                 base_object_path=None, service_name=None):
         self.log = logging.getLogger(__name__ + '.' + self.__class__.__name__)
         self.log.setLevel(logging.DEBUG)
+        if object_path is None or object_path == "":
+            self.log.debug("object_path not set, creating default")
+            base_object_path = base_object_path or self.__class__.default_dbus_path
+            service_name = service_name or self.__class__._service_name
+            object_path = base_object_path + \
+                ("/" + service_name) if service_name else ""
+            self.log.debug("Generated default object_path of"
+                           " '%s' based on class attributes", object_path)
         self.log.debug("conn=%s", conn)
         self.log.debug("object_path=%s", object_path)
         self.log.debug("bus_name=%s", bus_name)
         self.log.debug("self._interface_name=%s", self._interface_name)
         self.log.debug("self.default_dbus_path=%s", self.default_dbus_path)
-        self.log.debug("self.default_polkit_auth_required=%s", self.default_polkit_auth_required)
+        self.log.debug("self._service_name=%s", self._service_name)
 
         super(BaseService, self).__init__(conn=conn,
-                                          object_path=self.default_dbus_path,
+                                          object_path=object_path,
                                           bus_name=bus_name)
+        self.object_path = object_path
 
         self._props = self._create_props()
         self.persistent = True

@@ -22,13 +22,17 @@ def connection_added(service_class, conn):
 def connection_removed(conn):
     print("Connection closed")
 
+def create_server():
+    server = dbus.server.Server("unix:tmpdir=/var/run")
+    server.on_connection_added.append(partial(connection_added, RegisterService))
+    server.on_connection_removed.append(connection_removed)
+    return server
+
 def start_server():
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
     dbus.mainloop.glib.threads_init()
 
-    server = dbus.server.Server("unix:path=/tmp/subman.sock")
-    server.on_connection_added.append(partial(connection_added, RegisterService))
-    server.on_connection_removed.append(connection_removed)
+    server = create_server()
 
     mainloop = GLib.MainLoop()
 
