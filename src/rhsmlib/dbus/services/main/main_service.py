@@ -1,6 +1,6 @@
 #!/bin/python
 from rhsmlib.dbus.services import base_server
-from rhsmlib.dbus.common import constants, log_init, decorators
+from rhsmlib.dbus import common
 from rhsmlib.dbus.services.base_service import BaseService
 from rhsmlib.dbus.services.config.config_service import ConfigService
 from rhsmlib.dbus.services.facts.host import FactsHost
@@ -12,12 +12,12 @@ import dbus
 import dbus.service
 from gi.repository import GLib
 
-log_init.init_root_logger()
+common.init_root_logger()
 
 class MainService(BaseService):
-    _well_known_bus_name = constants.SERVICE_NAME
-    _service_name = constants.MAIN_SERVICE_NAME
-    _interface_name = constants.MAIN_SERVICE_INTERFACE
+    _well_known_bus_name = common.SERVICE_NAME
+    _service_name = common.MAIN_SERVICE_NAME
+    _interface_name = common.MAIN_SERVICE_INTERFACE
 
 
     def __init__(self, conn=None, object_path=None, bus_name=None, bus=None,
@@ -53,14 +53,14 @@ class MainService(BaseService):
             self.interface_to_service[service_instance._interface_name] = \
                 service_instance
 
-    @dbus.service.method(dbus_interface=constants.MAIN_SERVICE_INTERFACE,
+    @dbus.service.method(dbus_interface=common.MAIN_SERVICE_INTERFACE,
                          in_signature='s',
                          out_signature='o')
     def get_object_for_interface(self, interface):
         return self.interface_to_service.get(interface, None)
 
 
-    @dbus.service.method(dbus_interface=constants.MAIN_SERVICE_INTERFACE,
+    @dbus.service.method(dbus_interface=common.MAIN_SERVICE_INTERFACE,
                          out_signature='s')
     def start_registration(self):
         self.log.debug('start_registration called')
@@ -89,7 +89,7 @@ class MainService(BaseService):
 
 if __name__ == "__main__":
     service_classes = [ConfigService, FactsHost]
-    # bus_name = constants.SERVICE_NAME
+    # bus_name = common.SERVICE_NAME
     # bus_class = dbus.SessionBus
     #
     # base_server.run_services(bus_class=bus_class,
