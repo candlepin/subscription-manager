@@ -335,10 +335,10 @@ rm -rf %{buildroot}
 %attr(755,root,root) %dir %{_var}/log/rhsm
 %attr(755,root,root) %dir %{_var}/spool/rhsm/debug
 %attr(755,root,root) %dir %{_var}/run/rhsm
-%attr(755,root,root) %dir %{_var}/lib/rhsm
-%attr(755,root,root) %dir %{_var}/lib/rhsm/facts
-%attr(755,root,root) %dir %{_var}/lib/rhsm/packages
-%attr(755,root,root) %dir %{_var}/lib/rhsm/cache
+%attr(750,root,root) %dir %{_var}/lib/rhsm
+%attr(750,root,root) %dir %{_var}/lib/rhsm/facts
+%attr(750,root,root) %dir %{_var}/lib/rhsm/packages
+%attr(750,root,root) %dir %{_var}/lib/rhsm/cache
 
 %{_sysconfdir}/bash_completion.d/subscription-manager
 %{_sysconfdir}/bash_completion.d/rct
