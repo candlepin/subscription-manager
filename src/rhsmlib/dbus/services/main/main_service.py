@@ -5,7 +5,7 @@ from rhsmlib.dbus.services import base_server
 from rhsmlib.dbus.services.base_service import BaseService
 from rhsmlib.dbus.services.config.config_service import ConfigService
 from rhsmlib.dbus.services.facts.host import FactsHost
-from rhsmlib.dbus.private import server as private_server
+from rhsmlib.dbus.services import private_server as private_server
 
 from functools import partial
 
