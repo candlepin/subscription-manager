@@ -2,7 +2,7 @@
 
 import logging
 import dbus.service
-import rhsmlib.dbus.common as common
+import rhsmlib.dbus as common
 
 from rhsmlib.dbus.services import base_properties
 

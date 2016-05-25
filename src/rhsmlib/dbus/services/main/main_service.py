@@ -1,6 +1,7 @@
 #!/bin/python
+import rhsmlib.dbus as common
+
 from rhsmlib.dbus.services import base_server
-from rhsmlib.dbus import common
 from rhsmlib.dbus.services.base_service import BaseService
 from rhsmlib.dbus.services.config.config_service import ConfigService
 from rhsmlib.dbus.services.facts.host import FactsHost

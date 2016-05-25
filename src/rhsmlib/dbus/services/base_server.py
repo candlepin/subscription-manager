@@ -1,7 +1,7 @@
 
 import logging
 
-from rhsmlib.dbus.common import gi_kluge
+from rhsmlib.dbus import gi_kluge
 gi_kluge.kluge_it()
 
 from gi.repository import GLib
@@ -11,7 +11,7 @@ import dbus.mainloop.glib
 
 import slip.dbus.service
 
-import rhsmlib.dbus.common as common
+import rhsmlib.dbus as common
 
 log = logging.getLogger(__name__)
 

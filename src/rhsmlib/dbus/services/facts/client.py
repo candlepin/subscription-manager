@@ -21,7 +21,7 @@ import sys
 
 import dbus
 
-from rhsmlib.dbus.common import gi_kluge
+from rhsmlib.dbus import gi_kluge
 gi_kluge.kluge_it()
 
 import slip.dbus.polkit

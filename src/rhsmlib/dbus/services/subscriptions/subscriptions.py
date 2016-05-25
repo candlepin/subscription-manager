@@ -3,7 +3,7 @@ import logging
 import dbus
 import slip.dbus
 
-import rhsmlib.dbus.common as common
+import rhsmlib.dbus as common
 
 from rhsmlib.dbus.services import base_properties
 from rhsmlib.dbus.services import base_service

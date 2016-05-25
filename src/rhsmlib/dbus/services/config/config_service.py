@@ -1,15 +1,15 @@
 from rhsmlib.dbus.services.base_service import BaseService
-from rhsmlib.dbus.common import constants, decorators
+import rhsmlib.dbus as common
 
 
 class ConfigService(BaseService):
     """ Represents the system config """
-    _service_name = constants.CONFIG_NAME
-    _interface_name = constants.CONFIG_INTERFACE
+    _service_name = common.CONFIG_NAME
+    _interface_name = common.CONFIG_INTERFACE
     # TODO: Implement this
 
 
-    @decorators.dbus_service_method(dbus_interface=constants.CONFIG_INTERFACE,
+    @common.dbus_service_method(dbus_interface=common.CONFIG_INTERFACE,
                                     in_signature='',
                                     out_signature='s')
     def getConfig(self, sender=None):

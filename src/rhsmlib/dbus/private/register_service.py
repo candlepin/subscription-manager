@@ -2,12 +2,12 @@
 
 import dbus.service
 import gettext
-import rhsmlib.dbus.common as common
+import rhsmlib.dbus as common
 import socket
 import json
 
 from rhsm import connection
-from rhsmlib.dbus.common import dbus_utils
+from rhsmlib.dbus import dbus_utils
 
 _ = gettext.gettext
 

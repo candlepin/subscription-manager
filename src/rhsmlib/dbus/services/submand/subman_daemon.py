@@ -1,5 +1,5 @@
-import rhsmlib.dbus.common as common
-import rhsmlib.dbus.common.dbus_utils as dbus_utils
+import rhsmlib.dbus as common
+import rhsmlib.dbus.dbus_utils as dbus_utils
 
 import dbus.service
 

@@ -3,7 +3,7 @@ import time
 
 import dbus
 
-import rhsmlib.dbus.common as common
+import rhsmlib.dbus as common
 
 from rhsmlib.facts import collector
 from rhsmlib.dbus.services import base_properties

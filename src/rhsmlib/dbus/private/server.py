@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-from rhsmlib.dbus.common import gi_kluge
+from rhsmlib.dbus import gi_kluge
 gi_kluge.kluge_it()
 
 from rhsmlib.dbus.private.register_service import RegisterService

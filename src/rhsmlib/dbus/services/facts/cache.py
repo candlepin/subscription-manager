@@ -17,7 +17,7 @@ import json
 import os
 
 # FIXME: We can likely dump this now
-import rhsmlib.dbus.common as common
+import rhsmlib.dbus as common
 
 from rhsmlib.dbus.services.facts import expiration
 
