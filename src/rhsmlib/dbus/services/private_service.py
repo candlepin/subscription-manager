@@ -11,7 +11,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-import dbus
+import dbus.service
 import rhsmlib.dbus as common
 
 

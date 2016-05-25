@@ -1,7 +1,7 @@
 import logging
 import decorator
 
-import dbus
+import dbus.service
 import dbus.exceptions
 
 log = logging.getLogger(__name__)

@@ -11,15 +11,17 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-import dbus.service
 import gettext
 import rhsmlib.dbus as common
 import socket
 import json
+import dbus
 
 from rhsm import connection
 from rhsmlib.dbus import dbus_utils
 from rhsmlib.dbus.services import PrivateService
+
+from gi.repository import GLib
 
 _ = gettext.gettext
 
@@ -115,7 +117,6 @@ class RegisterService(PrivateService):
         return None
 
 if __name__ == '__main__':
-
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
     dbus.mainloop.glib.threads_init()
 

@@ -1,1 +1,1 @@
-from rhsmlib.dbus.services.main.main_service import MainService
+from rhsmlib.dbus.services.main.main_service import MainService  # NOQA

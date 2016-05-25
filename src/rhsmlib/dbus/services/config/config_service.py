@@ -8,7 +8,6 @@ class ConfigService(BaseService):
     _interface_name = common.CONFIG_INTERFACE
     # TODO: Implement this
 
-
     @common.dbus_service_method(dbus_interface=common.CONFIG_INTERFACE,
                                     in_signature='',
                                     out_signature='s')

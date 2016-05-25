@@ -16,12 +16,11 @@
 from rhsmlib.dbus import gi_kluge
 gi_kluge.kluge_it()
 
-from rhsmlib.dbus.private.register_service import RegisterService
+from rhsmlib.dbus.services.register import RegisterService
 
 from gi.repository import GLib
 
 import dbus.server
-import dbus.service
 import dbus.mainloop.glib
 
 from functools import partial

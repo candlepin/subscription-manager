@@ -1,7 +1,6 @@
 #!/bin/python
 import rhsmlib.dbus as common
 
-from rhsmlib.dbus.services import base_server
 from rhsmlib.dbus.services.base_service import BaseService
 from rhsmlib.dbus.services.config.config_service import ConfigService
 from rhsmlib.dbus.services.facts.host import FactsHost
@@ -9,17 +8,16 @@ from rhsmlib.dbus.services import private_server as private_server
 
 from functools import partial
 
-import dbus
 import dbus.service
 from gi.repository import GLib
 
 common.init_root_logger()
 
+
 class MainService(BaseService):
     _well_known_bus_name = common.SERVICE_NAME
     _service_name = common.MAIN_SERVICE_NAME
     _interface_name = common.MAIN_SERVICE_INTERFACE
-
 
     def __init__(self, conn=None, object_path=None, bus_name=None, bus=None,
                  service_classes=None):
@@ -44,7 +42,6 @@ class MainService(BaseService):
 
         self._init_service_classes()
 
-
     def _init_service_classes(self):
         self.log.debug('Initializing service classes: %s',
                        self.service_classes)
@@ -59,7 +56,6 @@ class MainService(BaseService):
                          out_signature='o')
     def get_object_for_interface(self, interface):
         return self.interface_to_service.get(interface, None)
-
 
     @dbus.service.method(dbus_interface=common.MAIN_SERVICE_INTERFACE,
                          out_signature='s')
@@ -86,8 +82,6 @@ class MainService(BaseService):
         return server
 
 
-
-
 if __name__ == "__main__":
     service_classes = [ConfigService, FactsHost]
     # bus_name = common.SERVICE_NAME
@@ -100,7 +94,7 @@ if __name__ == "__main__":
     dbus.mainloop.glib.threads_init()
 
     mainloop = GLib.MainLoop()
-    bus = dbus.SystemBus()#SessionBus()
+    bus = dbus.SystemBus()
     service = MainService(bus=bus, service_classes=service_classes)
 
     try:
