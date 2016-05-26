@@ -44,7 +44,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                         'filter_options_button', 'applied_filters_label']
     gui_file = "allsubs"
 
-    def __init__(self, backend, facts, parent_win):
+    def __init__(self, backend, parent_win):
 
         super(AllSubscriptionsTab, self).__init__()
 
@@ -59,13 +59,12 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         self.parent_win = parent_win
         self.backend = backend
         self.identity = require(IDENTITY)
-        self.facts = facts
 
         # Progress bar
         self.pb = None
         self.timer = 0
 
-        self.pool_stash = managerlib.PoolStash(self.facts)
+        self.pool_stash = managerlib.PoolStash()
 
         self.async_bind = async.AsyncBind(self.backend.certlib)
 

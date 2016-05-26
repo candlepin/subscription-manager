@@ -27,6 +27,8 @@ from subscription_manager.plugin.ostree import action_invoker
 
 from rhsm import certificate2
 
+from rhsmlib.compat.subprocess_check_output import CalledProcessError
+
 
 class StubPluginManager(object):
         pass
@@ -694,8 +696,8 @@ refspec=origremote:awesome-ostree/awesomeos8/x86_64/controller/docker
 
         self.origin_cfg_path = self.write_tempfile(origin_cfg)
 
-        sub_mock = mock.Mock(side_effect=subprocess.CalledProcessError(1, 'gi_wrapper.py'))
-        with mock.patch('subscription_manager.plugin.ostree.model.subprocess.check_output', sub_mock):
+        sub_mock = mock.Mock(side_effect=CalledProcessError(1, 'gi_wrapper.py'))
+        with mock.patch('subscription_manager.plugin.ostree.model.compat_check_output', sub_mock):
             self.assertRaises(model.OstreeGIWrapperError, self.updater._get_deployed_origin)
 
 

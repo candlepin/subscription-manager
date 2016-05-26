@@ -297,14 +297,6 @@ rm -rf %{buildroot}
 %attr(755,root,root) %{_libexecdir}/rhsmcertd-worker
 %attr(755,root,root) %{_libexecdir}/rhsmd
 
-# init scripts and systemd services
-%if %use_systemd
-    %attr(644,root,root) %{_unitdir}/rhsmcertd.service
-    %attr(644,root,root) %{_tmpfilesdir}/%{name}.conf
-%else
-    %attr(755,root,root) %{_initrddir}/rhsmcertd
-%endif
-
 # our config dirs and files
 %attr(755,root,root) %dir %{_sysconfdir}/pki/consumer
 %attr(755,root,root) %dir %{_sysconfdir}/pki/entitlement
@@ -312,8 +304,6 @@ rm -rf %{buildroot}
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm/facts
 %attr(644,root,root) %config(noreplace) %{_sysconfdir}/rhsm/rhsm.conf
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/rhsm/logging.conf
-
-%config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.SubscriptionManager.conf
 
 # PAM config
 %{_sysconfdir}/pam.d/subscription-manager
@@ -330,7 +320,6 @@ rm -rf %{buildroot}
 # misc system config
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/logrotate.d/subscription-manager
 %attr(700,root,root) %{_sysconfdir}/cron.daily/rhsmd
-%{_datadir}/dbus-1/system-services/com.redhat.SubscriptionManager.service
 
 %attr(755,root,root) %dir %{_var}/log/rhsm
 %attr(755,root,root) %dir %{_var}/spool/rhsm/debug
@@ -383,6 +372,47 @@ rm -rf %{buildroot}
 %{_prefix}/lib/yum-plugins/subscription-manager.py*
 %{_prefix}/lib/yum-plugins/product-id.py*
 %{_prefix}/lib/yum-plugins/search-disabled-repos.py*
+
+# rhsmlib
+%dir %{python_sitelib}/rhsmlib
+%dir %{python_sitelib}/rhsmlib/facts
+%dir %{python_sitelib}/rhsmlib/compat
+%dir %{python_sitelib}/rhsmlib/candlepin
+%dir %{python_sitelib}/rhsmlib/dbus
+%dir %{python_sitelib}/rhsmlib/dbus/clients
+%dir %{python_sitelib}/rhsmlib/dbus/clients/facts
+%dir %{python_sitelib}/rhsmlib/dbus/common
+%dir %{python_sitelib}/rhsmlib/dbus/private
+%dir %{python_sitelib}/rhsmlib/dbus/services
+%dir %{python_sitelib}/rhsmlib/dbus/services/facts
+%dir %{python_sitelib}/rhsmlib/dbus/services/submand
+%dir %{python_sitelib}/rhsmlib/dbus/services/subscriptions
+
+%{python_sitelib}/rhsmlib/*.py*
+%{python_sitelib}/rhsmlib/facts/*.py*
+%{python_sitelib}/rhsmlib/compat/*.py*
+%{python_sitelib}/rhsmlib/candlepin/*.py*
+%{python_sitelib}/rhsmlib/dbus/*.py*
+%{python_sitelib}/rhsmlib/dbus/clients/*.py*
+%{python_sitelib}/rhsmlib/dbus/clients/facts/*.py*
+%{python_sitelib}/rhsmlib/dbus/common/*.py*
+%{python_sitelib}/rhsmlib/dbus/private/*.py*
+%{python_sitelib}/rhsmlib/dbus/services/*.py*
+%{python_sitelib}/rhsmlib/dbus/services/facts/*.py*
+%{python_sitelib}/rhsmlib/dbus/services/submand/*.py*
+%{python_sitelib}/rhsmlib/dbus/services/subscriptions/*.py*
+
+%{_datadir}/polkit-1/actions/com.redhat.*.policy
+%{_datadir}/dbus-1/system-services/com.redhat.*.service
+%attr(755,root,root) %{_libexecdir}/rhsm-*-service
+
+%if %use_systemd
+    %attr(644,root,root) %{_unitdir}/*.service
+    %attr(644,root,root) %{_tmpfilesdir}/%{name}.conf
+    %config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.*.conf
+%else
+    %attr(755,root,root) %{_initrddir}/rhsmcertd
+%endif
 
 # Incude rt CLI tool
 %dir %{python_sitelib}/rct
