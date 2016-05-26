@@ -9,44 +9,34 @@ import dbus.exceptions
 log = logging.getLogger(__name__)
 logger_initialized = False
 
-SERVICE_DOMAIN = "com.redhat"
-SERVICE_BASE = "RHSM"
-SERVICE_VERSION = "1"
+NAME_BASE = "com.redhat.RHSM"
+VERSION = "1"
 
 # The base of the 'well known name' used for bus and service names, as well
 # as interface names and object paths.
 #
 # "com.redhat.RHSM1"
-SERVICE_NAME = SERVICE_DOMAIN + '.' + SERVICE_BASE + SERVICE_VERSION
+BUS_NAME = NAME_BASE + VERSION
 
 # The default interface name for objects we share on this service.
-INTERFACE_BASE = SERVICE_NAME
+INTERFACE_BASE = BUS_NAME
 
 # The root of the objectpath tree for our services.
 # Note: No trailing '/'
 #
 # /com/redhat/RHSM1
-ROOT_DBUS_PATH = '/' + string.replace(SERVICE_NAME, '.', '/')
+ROOT_DBUS_PATH = '/' + string.replace(BUS_NAME, '.', '/')
 
 SERVICE_VAR_PATH = os.path.join('var', 'lib', 'rhsm', 'cache')
 DBUS_SERVICE_CACHE_PATH = os.path.join(SERVICE_VAR_PATH, 'dbus')
 
-# Default base of policy kit action ids
-PK_ACTION_PREFIX = SERVICE_NAME
-PK_ACTION_DEFAULT = PK_ACTION_PREFIX + '.' + 'default'
+MAIN_INTERFACE = INTERFACE_BASE
+MAIN_DBUS_PATH = ROOT_DBUS_PATH
 
+REGISTER_INTERFACE = '%s.%s' % (INTERFACE_BASE, 'Register')
 
-def build_interface_constants(prefix, name, version):
-    return (version, '.'.join([INTERFACE_BASE, name + version]), '%s/%s' % (ROOT_DBUS_PATH, name + version))
-
-CONFIG_INTERFACE_VERSION, CONFIG_INTERFACE, CONFIG_DBUS_PATH = build_interface_constants(
-    'CONFIG', 'Config', '1')
-
-MAIN_INTERFACE_VERSION, MAIN_INTERFACE, MAIN_DBUS_PATH = build_interface_constants(
-    'MAIN', 'Main', '1')
-
-REGISTER_INTERFACE_VERSION, REGISTER_INTERFACE, REGISTER_DBUS_PATH = build_interface_constants(
-    'REGISTER', 'Register', '1')
+CONFIG_INTERFACE = '%s.%s' % (INTERFACE_BASE, 'Config')
+CONFIG_DBUS_PATH = '%s/%s' % (ROOT_DBUS_PATH, 'Config')
 
 
 def init_root_logger():
