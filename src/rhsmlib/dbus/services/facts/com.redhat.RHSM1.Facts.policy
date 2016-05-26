@@ -6,19 +6,19 @@
 
   <vendor>Red Hat Subscription Management Facts</vendor>
   <vendor_url>http://redhat.com</vendor_url>
-  
-  <action id="com.redhat.Subscriptions1.Facts.default">
+
+  <action id="com.redhat.RHSM1.Facts.default">
     <description>RHSM default</description>
-    <message>System policy prevents access to com.redhat.Subscriptions1.Facts</message>
+    <message>System policy prevents access to com.redhat.RHSM1.Facts</message>
     <defaults>
         <allow_any>yes</allow_any>
         <allow_inactive>yes</allow_inactive>
         <allow_active>yes</allow_active>
-     
+
     </defaults>
   </action>
 
-   <action id="com.redhat.Subscriptions1.Facts.collect">
+   <action id="com.redhat.RHSM1.Facts.collect">
     <description>RHSM Facts collection</description>
     <message>System policy prevents colllect action to admin Facts service</message>
     <defaults>
@@ -27,8 +27,8 @@
         <allow_active>yes</allow_active>
     </defaults>
   </action>
-  
-  <action id="com.redhat.Subscriptions1.Facts.Root.collect">
+
+  <action id="com.redhat.RHSM1.Facts.Root.collect">
     <description>RHSM Facts collection</description>
     <message>System policy prevents colllect action to admin Facts service</message>
     <defaults>
@@ -37,8 +37,8 @@
         <allow_active>yes</allow_active>
     </defaults>
   </action>
-  
-  <action id="com.redhat.Subscriptions1.Facts.User.collect">
+
+  <action id="com.redhat.RHSM1.Facts.User.collect">
     <description>RHSM Facts collection</description>
     <message>System policy prevents colllect action to admin Facts service</message>
     <defaults>

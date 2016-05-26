@@ -1,4 +1,5 @@
 [D-BUS Service]
-Name=com.redhat.Subscriptions1.Facts
+Name=com.redhat.RHSM1.Facts
 Exec=/usr/libexec/rhsm-facts-service
 User=root
+SystemdService=rhsm-facts.service
