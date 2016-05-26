@@ -1,5 +1,7 @@
+import os
 import logging
 import decorator
+import string
 
 import dbus.service
 import dbus.exceptions
@@ -7,63 +9,44 @@ import dbus.exceptions
 log = logging.getLogger(__name__)
 logger_initialized = False
 
-TOP_LEVEL_DOMAIN = "com"
-DOMAIN_NAME = "redhat"
-SERVICE_DOMAIN = TOP_LEVEL_DOMAIN + '.' + DOMAIN_NAME
-SERVICE_SUB_DOMAIN_BASE = "Subscriptions"
+SERVICE_DOMAIN = "com.redhat"
+SERVICE_BASE = "RHSM"
 SERVICE_VERSION = "1"
-
-# "Subscriptions1"
-SERVICE_SUB_DOMAIN_NAME_VER = SERVICE_SUB_DOMAIN_BASE + SERVICE_VERSION
 
 # The base of the 'well known name' used for bus and service names, as well
 # as interface names and object paths.
 #
-# "com.redhat.Subscriptions1"
-SERVICE_NAME = SERVICE_DOMAIN + '.' + SERVICE_SUB_DOMAIN_NAME_VER
+# "com.redhat.RHSM1"
+SERVICE_NAME = SERVICE_DOMAIN + '.' + SERVICE_BASE + SERVICE_VERSION
 
 # The default interface name for objects we share on this service.
-# Also "com.redhat.Subscriptions1"
-DBUS_INTERFACE = SERVICE_NAME
+INTERFACE_BASE = SERVICE_NAME
 
 # The root of the objectpath tree for our services.
 # Note: No trailing '/'
 #
-# /com/redhat/Subscriptions1
-ROOT_DBUS_PATH = '/' + "/".join([TOP_LEVEL_DOMAIN, DOMAIN_NAME, SERVICE_SUB_DOMAIN_NAME_VER])
+# /com/redhat/RHSM1
+ROOT_DBUS_PATH = '/' + string.replace(SERVICE_NAME, '.', '/')
 
-SUBMAND_PATH = ROOT_DBUS_PATH + '/' + "SubmanDaemon1"
-
-SERVICE_VAR_PATH = '/var/lib/rhsm/cache'
-
-DBUS_SERVICE_CACHE_PATH = SERVICE_VAR_PATH + '/' + 'dbus'
+SERVICE_VAR_PATH = os.path.join('var', 'lib', 'rhsm', 'cache')
+DBUS_SERVICE_CACHE_PATH = os.path.join(SERVICE_VAR_PATH, 'dbus')
 
 # Default base of policy kit action ids
-
-# com.redhat.Subscriptions1
 PK_ACTION_PREFIX = SERVICE_NAME
-
-# com.redhat.Subscriptions1.default
 PK_ACTION_DEFAULT = PK_ACTION_PREFIX + '.' + 'default'
 
-# CONFIG
-CONFIG_INTERFACE_VERSION = '1'
-CONFIG_NAME = "Config" + CONFIG_INTERFACE_VERSION
-CONFIG_INTERFACE = '.'.join([SERVICE_NAME,
-                             CONFIG_NAME])
-CONFIG_DBUS_PATH = ROOT_DBUS_PATH + '/' + CONFIG_NAME
 
-# REGISTER SERVICE
-REGISTER_INTERFACE_VERSION = '1'
-REGISTER_SERVICE_NAME = "RegisterService" + REGISTER_INTERFACE_VERSION
+def build_interface_constants(prefix, name, version):
+    return (version, '.'.join([INTERFACE_BASE, name + version]), '%s/%s' % (ROOT_DBUS_PATH, name + version))
 
-REGISTER_INTERFACE = '.'.join([SERVICE_NAME,
-                               REGISTER_SERVICE_NAME])
-REGISTER_DBUS_PATH = ROOT_DBUS_PATH + '/' + REGISTER_SERVICE_NAME
+CONFIG_INTERFACE_VERSION, CONFIG_INTERFACE, CONFIG_DBUS_PATH = build_interface_constants(
+    'CONFIG', 'Config', '1')
 
-# MAIN SERVICE
-MAIN_SERVICE_NAME = "SubmanD"
-MAIN_SERVICE_INTERFACE = '.'.join([SERVICE_NAME, MAIN_SERVICE_NAME])
+MAIN_INTERFACE_VERSION, MAIN_INTERFACE, MAIN_DBUS_PATH = build_interface_constants(
+    'MAIN', 'Main', '1')
+
+REGISTER_INTERFACE_VERSION, REGISTER_INTERFACE, REGISTER_DBUS_PATH = build_interface_constants(
+    'REGISTER', 'Register', '1')
 
 
 def init_root_logger():
@@ -86,8 +69,8 @@ class Error(Exception):
 
 # From system-config-firewall
 class Subscriptions1DBusException(dbus.DBusException):
-    """Base exceptions. com.redhat.Subscriptions1.Exception"""
-    _dbus_error_name = "%s.Exception" % DBUS_INTERFACE
+    """Base exceptions."""
+    _dbus_error_name = "%s.Exception" % INTERFACE_BASE
 
 
 @decorator.decorator

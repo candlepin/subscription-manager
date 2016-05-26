@@ -11,10 +11,9 @@ common.init_root_logger()
 
 
 class BaseService(dbus.service.Object):
-
     # Name of the DBus interface provided by this object
-    interface_name = common.DBUS_INTERFACE
-    service_name = common.SERVICE_SUB_DOMAIN_NAME_VER
+    interface_name = common.INTERFACE_BASE
+    service_name = common.SERVICE_NAME
     default_dbus_path = common.ROOT_DBUS_PATH
     default_polkit_auth_required = None
 
@@ -57,8 +56,9 @@ class BaseService(dbus.service.Object):
         # self.log.debug("accessing props @property")
         return self._props
 
-    @dbus.service.signal(dbus_interface=common.DBUS_INTERFACE,
-                         signature='')
+    @dbus.service.signal(
+        dbus_interface=common.INTERFACE_BASE,
+        signature='')
     @common.dbus_handle_exceptions
     def ServiceStarted(self):
         self.log.debug("serviceStarted emit")
@@ -80,34 +80,32 @@ class BaseService(dbus.service.Object):
     # org.freedesktop.DBus.Properties interface
     #
     @dbus.service.signal(dbus.PROPERTIES_IFACE, signature='sa{sv}as')
-    def PropertiesChanged(self, interface_name, changed_properties,
-                          invalidated_properties):
+    def PropertiesChanged(self, interface_name, changed_properties, invalidated_properties):
         self.log.debug("Properties Changed emitted.")
 
-    @common.dbus_service_method(dbus.PROPERTIES_IFACE,
-                                    in_signature='s',
-                                    out_signature='a{sv}')
+    @common.dbus_service_method(
+        dbus.PROPERTIES_IFACE,
+        in_signature='s',
+        out_signature='a{sv}')
     @common.dbus_handle_exceptions
     def GetAll(self, interface_name, sender=None):
         self.log.debug("GetAll() interface_name=%s", interface_name)
         self.log.debug("sender=%s", sender)
-        dr = dbus.Dictionary(self.props.get_all(interface_name=interface_name),
-                             signature='sv')
+        dr = dbus.Dictionary(self.props.get_all(interface_name=interface_name), signature='sv')
         self.log.debug('dr=%s', dr)
         return dr
 
-    @common.dbus_service_method(dbus.PROPERTIES_IFACE,
-                                    in_signature='ss',
-                                    out_signature='v')
+    @common.dbus_service_method(
+        dbus.PROPERTIES_IFACE,
+        in_signature='ss',
+        out_signature='v')
     @common.dbus_handle_exceptions
     def Get(self, interface_name, property_name, sender=None):
         self.log.debug("Get() interface_name=%s property_name=%s", interface_name, property_name)
         self.log.debug("Get Property iface=%s property_name=%s", interface_name, property_name)
-        return self.props.get(interface_name=interface_name,
-                              property_name=property_name)
+        return self.props.get(interface_name=interface_name, property_name=property_name)
 
-    @common.dbus_service_method(dbus.PROPERTIES_IFACE,
-                                    in_signature='ssv')
+    @common.dbus_service_method(dbus.PROPERTIES_IFACE, in_signature='ssv')
     @common.dbus_handle_exceptions
     def Set(self, interface_name, property_name, new_value, sender=None):
         """Set a DBus property on this object.
@@ -121,9 +119,7 @@ class BaseService(dbus.service.Object):
         log.debug("Set() interface_name=%s property_name=%s", interface_name, property_name)
         log.debug("Set() PPPPPPPPPPPPP self.props=%s %s", self.props, type(self.props))
 
-        self.props.set(interface_name=interface_name,
-                       property_name=property_name,
-                       new_value=new_value)
+        self.props.set(interface_name=interface_name, property_name=property_name, new_value=new_value)
 
     # Kluges
 

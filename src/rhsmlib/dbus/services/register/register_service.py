@@ -27,7 +27,7 @@ _ = gettext.gettext
 
 
 class RegisterService(PrivateService):
-    _interface_name = common.REGISTER_SERVICE_NAME
+    _interface_name = common.REGISTER_INTERFACE
 
     @common.dbus_service_method(dbus_interface=common.REGISTER_INTERFACE,
                                     in_signature='sssa{ss}',

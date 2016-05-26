@@ -1,0 +1,5 @@
+[D-BUS Service]
+Name=com.redhat.RHSM1
+Exec=/usr/libexec/rhsm-main-service
+User=root
+SystemdService=rhsm-main.service

@@ -1,33 +1,42 @@
-#!/bin/python
+#
+# Copyright (c) 2016 Red Hat, Inc.
+#
+# This software is licensed to you under the GNU General Public License,
+# version 2 (GPLv2). There is NO WARRANTY for this software, express or
+# implied, including the implied warranties of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2
+# along with this software; if not, see
+# http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
+#
+# Red Hat trademarks are not licensed under GPLv2. No permission is
+# granted to use or replicate Red Hat trademarks that are incorporated
+# in this software or its documentation.
+#
 import rhsmlib.dbus as common
+import dbus.service
 
-from rhsmlib.dbus.services.base_service import BaseService
-from rhsmlib.dbus.services.config.config_service import ConfigService
-from rhsmlib.dbus.services.facts.host import FactsHost
-from rhsmlib.dbus.services import private_server as private_server
+from rhsmlib.dbus.services import BaseService, private_server
+from rhsmlib.dbus.services.config import ConfigService
+from rhsmlib.dbus.services.facts import FactsHost
 
 from functools import partial
-
-import dbus.service
-from gi.repository import GLib
 
 common.init_root_logger()
 
 
 class MainService(BaseService):
     _well_known_bus_name = common.SERVICE_NAME
-    _service_name = common.MAIN_SERVICE_NAME
-    _interface_name = common.MAIN_SERVICE_INTERFACE
+    _interface_name = common.MAIN_INTERFACE
+    _service_name = common.SERVICE_NAME
 
     def __init__(self, conn=None, object_path=None, bus_name=None, bus=None,
                  service_classes=None):
-
-        self.service_classes = service_classes or []
+        # self.service_classes = service_classes or [ConfigService, FactsHost]
+        self.service_classes = []
         self.interface_to_service = {}
 
         # Create bus name
         if bus_name is None:
-
             # We cannot proceed without a bus
             assert bus is not None
             well_known_bus_name = self.__class__._well_known_bus_name
@@ -35,30 +44,25 @@ class MainService(BaseService):
 
         assert bus_name is not None
         self.bus_name = bus_name
-
-        super(MainService, self).__init__(conn=conn,
-                                          object_path=object_path,
-                                          bus_name=bus_name)
-
+        super(MainService, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
         self._init_service_classes()
 
     def _init_service_classes(self):
-        self.log.debug('Initializing service classes: %s',
-                       self.service_classes)
+        self.log.debug('Initializing service classes: %s', self.service_classes)
         for service_class in self.service_classes:
-            service_instance = service_class(bus_name=self.bus_name,
-                                             base_object_path=self.object_path)
-            self.interface_to_service[service_instance._interface_name] = \
-                service_instance
+            service_instance = service_class(bus_name=self.bus_name, base_object_path=self.object_path)
+            self.interface_to_service[service_instance._interface_name] = service_instance
 
-    @dbus.service.method(dbus_interface=common.MAIN_SERVICE_INTERFACE,
-                         in_signature='s',
-                         out_signature='o')
+    @dbus.service.method(
+        dbus_interface=common.MAIN_INTERFACE,
+        in_signature='s',
+        out_signature='o')
     def get_object_for_interface(self, interface):
         return self.interface_to_service.get(interface, None)
 
-    @dbus.service.method(dbus_interface=common.MAIN_SERVICE_INTERFACE,
-                         out_signature='s')
+    @dbus.service.method(
+        dbus_interface=common.MAIN_INTERFACE,
+        out_signature='s')
     def start_registration(self):
         self.log.debug('start_registration called')
         server = self._create_registration_server()
@@ -80,30 +84,3 @@ class MainService(BaseService):
         server.on_connection_removed.append(partial(self._disconnect_on_last_connection, server))
         self.log.debug('Server created and listening on "%s"', server.address)
         return server
-
-
-if __name__ == "__main__":
-    service_classes = [ConfigService, FactsHost]
-    # bus_name = common.SERVICE_NAME
-    # bus_class = dbus.SessionBus
-    #
-    # base_server.run_services(bus_class=bus_class,
-    #                          bus_name=bus_name,
-    #                          service_classes=service_classes)
-    dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-    dbus.mainloop.glib.threads_init()
-
-    mainloop = GLib.MainLoop()
-    bus = dbus.SystemBus()
-    service = MainService(bus=bus, service_classes=service_classes)
-
-    try:
-        mainloop.run()
-    except KeyboardInterrupt as e:
-        print(e)
-    except SystemExit as e:
-        print(e)
-    except Exception as e:
-        print(e)
-    finally:
-        mainloop.quit()
