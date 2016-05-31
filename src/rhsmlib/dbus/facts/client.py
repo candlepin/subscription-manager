@@ -24,8 +24,6 @@ import dbus
 from rhsmlib.dbus import gi_kluge
 gi_kluge.kluge_it()
 
-import slip.dbus.polkit
-
 # TODO: This is very glib2/dbus-python based. That is likely a requirement
 #       for the services, but it may be worthwhile to use something more
 #       modern for the client (ie, GIO based dbus support).
@@ -34,7 +32,7 @@ import slip.dbus.polkit
 
 # FIXME: This makes client code depend on the services code being installed
 #        (which it will be, but...)
-from rhsmlib.dbus.services.facts import constants as facts_constants
+from rhsmlib.dbus.facts import constants as facts_constants
 
 log = logging.getLogger(__name__)
 
@@ -93,13 +91,11 @@ class FactsClient(object):
                                          interface_keyword='interface', member_keyword='member',
                                          path_keyword='path')
 
-    @slip.dbus.polkit.enable_proxy(authfail_exception=FactsClientAuthenticationError)
     def GetFacts(self, *args, **kwargs):
         self.log.debug("GetFacts pre")
         ret = self.interface.GetFacts(*args, **kwargs)
         return ret
 
-    @slip.dbus.polkit.enable_proxy(authfail_exception=FactsClientAuthenticationError)
     def GetAll(self, *args, **kwargs):
         self.log.debug("GetAll")
         ret = self.props_interface.GetAll(facts_constants.FACTS_DBUS_INTERFACE,
@@ -107,7 +103,6 @@ class FactsClient(object):
         self.log.debug("GetAll res=%s", ret)
         return ret
 
-    @slip.dbus.polkit.enable_proxy(authfail_exception=FactsClientAuthenticationError)
     def Get(self, property_name):
         self.log.debug("Get %s", property_name)
         ret = self.props_interface.Get(facts_constants.FACTS_DBUS_INTERFACE,

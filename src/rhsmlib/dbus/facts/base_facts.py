@@ -6,14 +6,14 @@ import dbus
 import rhsmlib.dbus as common
 
 from rhsmlib.facts import collector
-from rhsmlib.dbus.services import base_properties
-from rhsmlib.dbus.services import base_service
-from rhsmlib.dbus.services.facts import constants
+from rhsmlib.dbus import base_properties
+from rhsmlib.dbus import base_object
+from rhsmlib.dbus.facts import constants
 
 log = logging.getLogger(__name__)
 
 
-class BaseFacts(base_service.BaseService):
+class BaseFacts(base_object.BaseObject):
     _interface_name = constants.FACTS_DBUS_INTERFACE
     _default_facts_collector_class = collector.FactsCollector
 

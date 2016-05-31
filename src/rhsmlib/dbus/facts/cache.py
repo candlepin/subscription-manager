@@ -19,7 +19,7 @@ import os
 # FIXME: We can likely dump this now
 import rhsmlib.dbus as common
 
-from rhsmlib.dbus.services.facts import expiration
+from rhsmlib.dbus.facts import expiration
 
 log = logging.getLogger(__name__)
 

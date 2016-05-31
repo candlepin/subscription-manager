@@ -4,8 +4,8 @@ from rhsmlib.facts import collection
 from rhsmlib.facts import collector
 
 # TODO: mv to common or services/?
-from rhsmlib.dbus.services.facts import cache
-from rhsmlib.dbus.services.facts import expiration
+from rhsmlib.dbus.facts import cache
+from rhsmlib.dbus.facts import expiration
 
 log = logging.getLogger(__name__)
 

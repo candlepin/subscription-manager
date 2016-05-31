@@ -4,10 +4,10 @@ import rhsmlib.dbus as common_constants
 SUB_SERVICE_NAME = "Facts"
 
 # com.redhat.Subscriptions1.Facts
-FACTS_BUS_NAME = common_constants.SERVICE_NAME + '.' + SUB_SERVICE_NAME
+FACTS_BUS_NAME = common_constants.BUS_NAME + '.' + SUB_SERVICE_NAME
 
 # also, com.redhat.Subscriptions1.Facts
-FACTS_DBUS_INTERFACE = common_constants.SERVICE_NAME + '.' + SUB_SERVICE_NAME
+FACTS_DBUS_INTERFACE = common_constants.BUS_NAME + '.' + SUB_SERVICE_NAME
 
 FACTS_SUB_DBUS_PATH = SUB_SERVICE_NAME
 # /com/redhat/Subscriptions1/Facts
@@ -40,4 +40,4 @@ FACTS_EXAMPLE_VERSION = "10.plus_one_more"
 FACTS_EXAMPLE_NAME = "Red Hat Subscription Manager example facts."
 
 # policy kit
-PK_ACTION_FACTS_COLLECT = common_constants.PK_ACTION_PREFIX + '.' + SUB_SERVICE_NAME + '.' + 'collect'
+# PK_ACTION_FACTS_COLLECT = common_constants.PK_ACTION_PREFIX + '.' + SUB_SERVICE_NAME + '.' + 'collect'
