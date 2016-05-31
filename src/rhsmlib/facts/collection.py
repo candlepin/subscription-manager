@@ -13,7 +13,7 @@
 from datetime import datetime
 import collections
 import logging
-from rhsmlib.dbus.services.facts.expiration import Expiration
+from rhsmlib.dbus.facts.expiration import Expiration
 
 log = logging.getLogger(__name__)
 

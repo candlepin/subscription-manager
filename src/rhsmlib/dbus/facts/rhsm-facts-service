@@ -1,16 +1,30 @@
-#!/usr/bin/env python
+#! /usr/bin/env python
+#
+# Copyright (c) 2016 Red Hat, Inc.
+#
+# This software is licensed to you under the GNU General Public License,
+# version 2 (GPLv2). There is NO WARRANTY for this software, express or
+# implied, including the implied warranties of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2
+# along with this software; if not, see
+# http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
+#
+# Red Hat trademarks are not licensed under GPLv2. No permission is
+# granted to use or replicate Red Hat trademarks that are incorporated
+# in this software or its documentation.
+#
 import dbus
-import optparse
 import sys
+import optparse
+import logging
+import rhsmlib.dbus as common
+import rhsmlib.dbus.facts.constants as constants
+import rhsmlib.dbus.facts.root as root
 
 from rhsmlib import import_class
-from rhsmlib.dbus.services import base_server
-from rhsmlib.dbus.services.facts import constants
-from rhsmlib.dbus.services.facts import root
+from rhsmlib.dbus.server import Server
 
-from subscription_manager import logutil
-
-logutil.init_logger()
+common.init_root_logger()
 
 
 def main(args):
@@ -23,14 +37,24 @@ def main(args):
     if len(args) > 1:
         bus_name = args[1]
 
-    service_classes = [root.FactsRoot]
+    object_classes = [
+        root.FactsRoot,
+    ]
 
-    base_server.run_services(bus_class=bus_class,
+    Server().run(
+        bus_class=bus_class,
         bus_name=bus_name,
-        service_classes=service_classes)
+        object_classes=object_classes)
     return 0
+
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()
+    parser.add_option("-v", "--verbose", action="store_true")
     (options, args) = parser.parse_args()
+
+    if options.verbose:
+        logger = logging.getLogger('')
+        logger.setLevel(logging.DEBUG)
+
     sys.exit(main(args))

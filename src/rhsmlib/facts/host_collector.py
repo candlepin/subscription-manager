@@ -10,7 +10,7 @@ from rhsmlib.facts import virt
 from rhsmlib.facts import firmware_info
 
 
-from rhsmlib.dbus.services.facts import cached_collector
+from rhsmlib.dbus.facts import cached_collector
 
 
 class HostCollector(cached_collector.CachedFactsCollector):

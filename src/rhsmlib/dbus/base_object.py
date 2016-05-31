@@ -35,7 +35,7 @@ class BaseObject(dbus.service.Object):
         if object_path is None or object_path == "":
             self.log.debug("object_path not set, creating default")
             base_object_path = base_object_path or self.__class__.default_dbus_path
-            service_name = service_name or self.__class__._service_name
+            service_name = service_name or self.__class__.service_name
             object_path = base_object_path + \
                 ("/" + service_name) if service_name else ""
             self.log.debug("Generated default object_path of"
@@ -45,7 +45,6 @@ class BaseObject(dbus.service.Object):
         self.log.debug("bus_name=%s", bus_name)
         self.log.debug("self._interface_name=%s", self._interface_name)
         self.log.debug("self.default_dbus_path=%s", self.default_dbus_path)
-        self.log.debug("self._service_name=%s", self._service_name)
 
         super(BaseObject, self).__init__(conn=conn,
                                           object_path=object_path,
