@@ -45,7 +45,7 @@ def init_root_logger():
         return
     # Set up root logger for debug purposes
     logger = logging.getLogger('')
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.INFO)
     ch = logging.StreamHandler()
     ch.setLevel(logging.DEBUG)
     logger.addHandler(ch)

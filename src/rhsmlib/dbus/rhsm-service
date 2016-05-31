@@ -16,6 +16,7 @@
 import dbus
 import sys
 import optparse
+import logging
 
 from subscription_manager import logutil
 logutil.init_logger()
@@ -52,5 +53,11 @@ def main(args):
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()
+    parser.add_option("-v", "--verbose", action="store_true")
     (options, args) = parser.parse_args()
+
+    if options.verbose:
+        logger = logging.getLogger('')
+        logger.setLevel(logging.DEBUG)
+
     sys.exit(main(args))
