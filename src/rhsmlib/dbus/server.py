@@ -67,9 +67,14 @@ class PrivateServer(object):
     def connection_removed(conn):
         print("Connection closed")
 
-    def create_server(self):
+    def create_server(self, object_classes=None):
+        object_classes = object_classes or []
         server = dbus.server.Server("unix:tmpdir=/var/run")
         server.on_connection_removed.append(PrivateServer.connection_removed)
+        log.debug("object_classes=%s", object_classes)
+
+        for clazz in object_classes:
+            server.on_connection_added.append(partial(PrivateServer.connection_added, clazz))
         return server
 
     def run(self, object_classes=None):
@@ -80,12 +85,8 @@ class PrivateServer(object):
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
         dbus.mainloop.glib.threads_init()
 
-        server = self.create_server()
+        server = self.create_server(object_classes=object_classes)
         log.info("Server created: %s" % server.get_address())
-
-        log.debug("object_classes=%s", object_classes)
-        for clazz in object_classes:
-            server.on_connection_added.append(partial(PrivateServer.connection_added, clazz))
 
         mainloop = GLib.MainLoop()
 

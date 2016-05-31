@@ -36,9 +36,11 @@ class PrivateService(dbus.service.Object):
     def __init__(self, conn=None, bus=None, object_path=None):
         if object_path is None or object_path == "":
             # If not given a path to be exposed on, use class defaults
-            _interface_name = self.__class__._interface_name
-            object_path = self.__class__._default_dbus_path + \
-                ("/" + _interface_name) if _interface_name else ""
+            _interface_name = self.__class__._interface_name or ""
+            if _interface_name:
+                object_path = "/" + _interface_name.replace('.', '/')
+            else:
+                object_path = self.__class__._default_dbus_path
 
         bus_name = None
         if bus is not None:

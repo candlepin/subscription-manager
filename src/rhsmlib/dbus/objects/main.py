@@ -53,7 +53,7 @@ class Main(dbus.service.Object):
 
     def _create_registration_server(self):
         log.debug('Attempting to create new server')
-        server = PrivateServer().run([RegisterService])
+        server = PrivateServer().create_server([RegisterService])
         server.on_connection_removed.append(partial(self._disconnect_on_last_connection, server))
         log.debug('Server created and listening on "%s"', server.address)
         return server
