@@ -54,7 +54,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.17.6
+Version: 1.17.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -562,6 +562,59 @@ fi
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Fri Jun 03 2016 Vritant Jain <vrjain@redhat.com> 1.17.7-1
+- 1297493, 1297485: Restrict visibility of subscription-manager caches.
+  (awood@redhat.com)
+- pull translations from zanata 1.17.X, after pushing 1.16.X translations to
+  1.17.X and pushing keys file (vrjain@redhat.com)
+- update keys using make gettext (vrjain@redhat.com)
+- pull translations from zanata 1.16.X (vrjain@redhat.com)
+- 1328729: add registry.redhat.io to default registry_hostnames
+  (vrjain@redhat.com)
+- Add lxml requirement to test-requirements. (awood@redhat.com)
+- Add noop implementation for deprecated Makefile target. (awood@redhat.com)
+- Force version to be converted to a string. (awood@redhat.com)
+- Correct incorrectly defined options for custom install command.
+  (awood@redhat.com)
+- Let setup.py handle populating version.py (awood@redhat.com)
+- Eliminate loading modules from /usr/share/rhsm. (awood@redhat.com)
+- Switch to using lxml for linting. (awood@redhat.com)
+- Handle pep8/flake8 not being available in build environments.
+  (awood@redhat.com)
+- Exclude OSTree packages from installation by default. (awood@redhat.com)
+- Make XPath searching 2.6 compatible. (awood@redhat.com)
+- Fix errors found by new linters (awood@redhat.com)
+- Don't use super() with ElementTree.XMLParser. (awood@redhat.com)
+- Add some comments on build philosophy. (awood@redhat.com)
+- Disable version.py generation via setup.py. (awood@redhat.com)
+- Reorganize spec file. (awood@redhat.com)
+- Address issue where Flake8 checked the same file multiple times.
+  (awood@redhat.com)
+- Makefile changes. (awood@redhat.com)
+- Consolidate targets in Makefile. (awood@redhat.com)
+- Pare down the Makefile. (awood@redhat.com)
+- Remove items from Makefile now handled by setuptools. (awood@redhat.com)
+- Align Makefile with changes made in setup.py. (awood@redhat.com)
+- Remove docs for long deprecated program. (awood@redhat.com)
+- Fix deprecated XPath expression.  Remove call to missing command.
+  (awood@redhat.com)
+- Add icon and Glade files files into setup.py (awood@redhat.com)
+- Add desktop files to setuptools build. (awood@redhat.com)
+- Merge translations back into desktop file. (awood@redhat.com)
+- Add linter to search for undefined Glade handlers. (awood@redhat.com)
+- Check for use of undefined widgets (awood@redhat.com)
+- Use *args for multiple glob searches. (awood@redhat.com)
+- Scan .glade files not .ui files for problematic constructs.
+  (awood@redhat.com)
+- Detect debug imports and flag them. (awood@redhat.com)
+- Use extensions that won't be confused for source files. (awood@redhat.com)
+- Simplify AST checking and make it more flexible. (awood@redhat.com)
+- Use AST parsing to find constructs that confuse xgettext. (awood@redhat.com)
+- Add linting commands. (awood@redhat.com)
+- Use some distutils provided utilities.  Refactor. (awood@redhat.com)
+- Begin process of moving to distutils for building. (awood@redhat.com)
+- 1283749: Change some registration dialogs to error (wpoteat@redhat.com)
+
 * Mon May 09 2016 Vritant Jain <vrjain@redhat.com> 1.17.6-1
 - 1268094: Avoid traceback on unreg with >1 sub (alikins@redhat.com)
 - 1329397:  github issue #1409 (stas-fomin@yandex.ru)
