@@ -10,9 +10,19 @@
 # description:  Enable periodic update of entitlement certificates.
 # processname:  rhsmsertd
 #
+### BEGIN INIT INFO
+# Provides:       rhsmcertd
+# Required-Start: $local_fs $network $remote_fs $named $time
+# Required-Stop:  $local_fs $network $remote_fs $named
+# Default-Start:  3 5
+# Default-Stop:   0 1 6
+### END INIT INFO
+
+VENDOR=$( rpm --eval %_vendor )
 
 # source function library
-. /etc/rc.d/init.d/functions
+[ -f /etc/rc.d/init.d/functions ] && . /etc/rc.d/init.d/functions
+[ -f /etc/rc.status ] && . /etc/rc.status
 
 BINDIR=/usr/bin
 PROG=rhsmcertd
@@ -23,7 +33,12 @@ RETVAL=0
 start() {
   if [ ! -f $LOCK ]; then
     echo -n "Starting rhsmcertd..."
-    daemon $BINDIR/$PROG
+    if [[ "$VENDOR" == "suse" ]] ;then
+      startproc $BINDIR/$PROG
+      rc_status -v
+    else
+      daemon $BINDIR/$PROG
+    fi
     RETVAL=$?
     [ $RETVAL -eq 0 ] && touch $LOCK
     [ -x /sbin/restorecon ] && /sbin/restorecon $LOCK

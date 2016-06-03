@@ -253,6 +253,13 @@ transforms = [
     ('*/rhsmcertd-worker.py', ''),
 ]
 
+try:
+    cmd = ['rpm', '--eval=%_libexecdir']
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    libexecdir = process.communicate()[0].strip()
+except OSError:
+    libexecdir = 'libexec'
+
 setup(
     name="subscription-manager",
     version='1.17.7',
@@ -270,7 +277,7 @@ setup(
     data_files=[
         ('sbin', ['bin/subscription-manager', 'bin/subscription-manager-gui', 'bin/rhn-migrate-classic-to-rhsm']),
         ('bin', ['bin/rct', 'bin/rhsm-debug']),
-        ('libexec', ['src/daemons/rhsmcertd-worker.py']),
+        (libexecdir, ['src/daemons/rhsmcertd-worker.py']),
         # sat5to6 is packaged separately
         ('share/man/man8', set(glob('man/*.8')) - set(['man/sat5to6.8'])),
         ('share/man/man5', glob('man/*.5')),

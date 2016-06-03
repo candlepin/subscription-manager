@@ -41,6 +41,7 @@ RHSM_PLUGIN_DIR := $(PREFIX)/usr/share/rhsm-plugins/
 RHSM_PLUGIN_CONF_DIR := $(PREFIX)/etc/rhsm/pluginconf.d/
 ANACONDA_ADDON_INST_DIR := $(PREFIX)/usr/share/anaconda/addons
 INITIAL_SETUP_INST_DIR := $(ANACONDA_ADDON_INST_DIR)/$(ANACONDA_ADDON_NAME)
+LIBEXEC_DIR ?= $(shell rpm --eval='%_libexecdir')
 
 # If we skip install ostree plugin, unset by default
 # override from spec file for rhel6
@@ -48,6 +49,11 @@ INSTALL_OSTREE_PLUGIN ?= true
 
 # Default differences between el6 and el7
 ifeq ($(OS_DIST),.el6)
+   GTK_VERSION?=2
+   FIRSTBOOT_MODULES_DIR?=$(PREFIX)/usr/share/rhn/up2date_client/firstboot
+   INSTALL_FIRSTBOOT?=true
+   INSTALL_INITIAL_SETUP?=false
+else ifeq ($(OS),SUSE)
    GTK_VERSION?=2
    FIRSTBOOT_MODULES_DIR?=$(PREFIX)/usr/share/rhn/up2date_client/firstboot
    INSTALL_FIRSTBOOT?=true
@@ -117,18 +123,19 @@ check-syntax:
 dbus-service-install:
 	install -d $(PREFIX)/etc/dbus-1/system.d
 	install -d $(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
-	install -d $(PREFIX)/usr/libexec
+	install -d $(PREFIX)/$(LIBEXEC_DIR)
 	install -m 644 etc-conf/com.redhat.SubscriptionManager.conf \
 		$(PREFIX)/etc/dbus-1/system.d
 	install -m 644 etc-conf/com.redhat.SubscriptionManager.service \
 		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
 	install -m 744 $(DAEMONS_SRC_DIR)/rhsm_d.py \
-		$(PREFIX)/usr/libexec/rhsmd
+		$(PREFIX)/$(LIBEXEC_DIR)/rhsmd
 
 .PHONY: install-conf
 install-conf:
 	install -d $(PREFIX)/etc/{cron.daily,logrotate.d,pam.d,bash_completion.d,rhsm}
 	install -d $(PREFIX)/etc/rc.d/init.d
+	install -d $(PREFIX)/etc/init.d
 	install -d $(PREFIX)/etc/rhsm/facts
 	install -d $(PREFIX)/etc/security/console.apps
 	install -m 644 etc-conf/rhsm.conf $(PREFIX)/etc/rhsm/
@@ -258,6 +265,17 @@ install-files: dbus-service-install install-conf install-plugins install-post-bo
 		install etc-conf/rhsmcertd.service $(SYSTEMD_INST_DIR); \
 		install etc-conf/subscription-manager.conf.tmpfiles \
 			$(PREFIX)/usr/lib/tmpfiles.d/subscription-manager.conf; \
+	elif [ $(OS) = SUSE ] ;then \
+		if [ $(OS_VERSION) -lt 12 ]; then \
+			install etc-conf/rhsmcertd.init.d \
+				$(PREFIX)/etc/init.d/rhsmcertd; \
+		else \
+			install -d $(SYSTEMD_INST_DIR); \
+			install -d $(PREFIX)/usr/lib/tmpfiles.d; \
+			install etc-conf/rhsmcertd.service $(SYSTEMD_INST_DIR); \
+			install etc-conf/subscription-manager.conf.tmpfiles \
+			$(PREFIX)/usr/lib/tmpfiles.d/subscription-manager.conf; \
+		fi; \
 	else \
 		if [ $(OS_VERSION) -lt 7 ]; then \
 			install etc-conf/rhsmcertd.init.d \
@@ -273,14 +291,17 @@ install-files: dbus-service-install install-conf install-plugins install-post-bo
 
 	install -m 700 etc-conf/rhsmd.cron $(PREFIX)/etc/cron.daily/rhsmd
 
-	ln -sf /usr/bin/consolehelper $(PREFIX)/usr/bin/subscription-manager-gui
-	ln -sf /usr/bin/consolehelper $(PREFIX)/usr/bin/subscription-manager
-
-	install -m 644 etc-conf/subscription-manager-gui.pam $(PREFIX)/etc/pam.d/subscription-manager-gui
-	install -m 644 etc-conf/subscription-manager.pam $(PREFIX)/etc/pam.d/subscription-manager
-
-	install -m 644 etc-conf/subscription-manager-gui.console $(PREFIX)/etc/security/console.apps/subscription-manager-gui
-	install -m 644 etc-conf/subscription-manager.console $(PREFIX)/etc/security/console.apps/subscription-manager
+	# SUSE Linux does not make use of consolehelper
+	if [ $(OS) != SUSE ] ;then \
+		ln -sf /usr/bin/consolehelper $(PREFIX)/usr/bin/subscription-manager-gui; \
+		ln -sf /usr/bin/consolehelper $(PREFIX)/usr/bin/subscription-manager; \
+		\
+		install -m 644 etc-conf/subscription-manager-gui.pam $(PREFIX)/etc/pam.d/subscription-manager-gui; \
+		install -m 644 etc-conf/subscription-manager.pam $(PREFIX)/etc/pam.d/subscription-manager; \
+		\
+		install -m 644 etc-conf/subscription-manager-gui.console $(PREFIX)/etc/security/console.apps/subscription-manager-gui; \
+		install -m 644 etc-conf/subscription-manager.console $(PREFIX)/etc/security/console.apps/subscription-manager; \
+	fi; \
 
 	install -m 755 bin/rhsm-icon $(PREFIX)/usr/bin/rhsm-icon
 	install -m 755 bin/rhsmcertd $(PREFIX)/usr/bin/rhsmcertd

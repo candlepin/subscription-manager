@@ -19,6 +19,12 @@
 %global use_firstboot 1
 %endif
 
+# SLES
+%if 0%{?sles_version}
+%global use_initial_setup 0
+%global use_firstboot 1
+%endif
+
 %global use_dnf (0%{?fedora} && 0%{?fedora} >= 22)
 
 %global _hardened_build 1
@@ -55,7 +61,7 @@
 
 Name: subscription-manager
 Version: 1.17.7
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -73,15 +79,25 @@ Requires:  python-ethtool
 Requires:  python-iniparse
 Requires:  virt-what
 Requires:  python-rhsm >= 1.17.0
+%if 0%{?sles_version}
+Requires:  dbus-1-python
+%else
 Requires:  dbus-python
+%endif
 Requires:  yum >= 3.2.29-73
+%if !0%{?sles_version}
 Requires:  usermode
+%endif
 Requires:  python-dateutil
 %if %use_gtk3
 Requires: gobject-introspection
 Requires: pygobject3-base
 %else
+%if 0%{?sles_version}
+Requires:  python-gobject2
+%else
 Requires:  pygobject2
+%endif
 %endif
 
 # There's no dmi to read on these arches, so don't pull in this dep.
@@ -94,9 +110,14 @@ Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
 %else
+%if 0%{?sles_version}
+Requires(post): aaa_base
+Requires(preun): aaa_base
+%else
 Requires(post): chkconfig
 Requires(preun): chkconfig
 Requires(preun): initscripts
+%endif
 %endif
 
 BuildRequires: python-devel
@@ -105,9 +126,15 @@ BuildRequires: gettext
 BuildRequires: intltool
 BuildRequires: libnotify-devel
 BuildRequires: desktop-file-utils
+%if 0%{?fedora} || 0%{?rhel}
 BuildRequires: redhat-lsb
+%endif
 BuildRequires: scrollkeeper
+%if 0%{?sles_version}
+BuildRequires: gconf2-devel
+%else
 BuildRequires: GConf2-devel
+%endif
 %if %use_gtk3
 BuildRequires: gtk3-devel
 %else
@@ -251,7 +278,7 @@ make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
 rm -rf %{buildroot}
 make -f Makefile install VERSION=%{version}-%{release} \
     PREFIX=%{buildroot} PYTHON_SITELIB=%{python_sitelib} \
-    OS_VERSION=%{?fedora}%{?rhel} OS_DIST=%{dist} \
+    OS_VERSION=%{?fedora}%{?rhel}%{?sles_version} OS_DIST=%{dist} \
     %{?install_ostree} %{?post_boot_tool} %{?gtk_version} \
     %{?install_yum_plugins} %{?install_dnf_plugins}
 
@@ -291,7 +318,9 @@ rm -rf %{buildroot}
 %attr(755,root,root) %{_sbindir}/subscription-manager
 
 # symlink to console-helper
+%if !0%{?sles_version}
 %{_bindir}/subscription-manager
+%endif
 %attr(755,root,root) %{_bindir}/rhsmcertd
 
 %attr(755,root,root) %{_libexecdir}/rhsmcertd-worker
@@ -316,8 +345,10 @@ rm -rf %{buildroot}
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.SubscriptionManager.conf
 
 # PAM config
+%if !0%{?sles_version}
 %{_sysconfdir}/pam.d/subscription-manager
 %{_sysconfdir}/security/console.apps/subscription-manager
+%endif
 
 # remove the repo file when we are deleted
 %ghost %{_sysconfdir}/yum.repos.d/redhat.repo
@@ -407,7 +438,9 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
 # symlink to console-helper
+%if !0%{?sles_version}
 %{_bindir}/subscription-manager-gui
+%endif
 %{_bindir}/rhsm-icon
 
 %dir %{python_sitelib}/subscription_manager/gui
@@ -434,8 +467,10 @@ rm -rf %{buildroot}
 
 # gui system config files
 %{_sysconfdir}/xdg/autostart/rhsm-icon.desktop
+%if !0%{?sles_version}
 %{_sysconfdir}/pam.d/subscription-manager-gui
 %{_sysconfdir}/security/console.apps/subscription-manager-gui
+%endif
 %{_sysconfdir}/bash_completion.d/subscription-manager-gui
 
 %doc
