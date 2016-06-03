@@ -101,7 +101,7 @@ class PathTree(object):
             # Look fo an exact match
             if words[0] in tree:
                 words_to_try.append(words[0])
-            if words[0] == LISTING  and len(words) == 1:
+            if words[0] == LISTING and len(words) == 1:
                 return True
 
             # we allow any word to match against entitlement variables

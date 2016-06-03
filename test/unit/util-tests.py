@@ -1,14 +1,12 @@
-import os
 import unittest
 
-from mock import Mock, patch
+from mock import patch
 from rhsm.utils import remove_scheme, get_env_proxy_info, \
     ServerUrlParseErrorEmpty, ServerUrlParseErrorNone, \
     ServerUrlParseErrorPort, ServerUrlParseErrorScheme, \
     ServerUrlParseErrorJustScheme, has_bad_scheme, has_good_scheme, \
     parse_url, cmd_name
-from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
-    DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
+from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME
 
 
 class TestParseServerInfo(unittest.TestCase):
@@ -316,8 +314,8 @@ class TestProxyInfo(unittest.TestCase):
         Return an environment with everything empty except
         those passed in variables.
         """
-        proxy_env = {'HTTPS_PROXY':'', 'https_proxy':'',
-                     'HTTP_PROXY':'', 'http_proxy':''}
+        proxy_env = {'HTTPS_PROXY': '', 'https_proxy': '',
+                     'HTTP_PROXY': '', 'http_proxy': ''}
         if variables:
             for (key, value) in variables.items():
                 proxy_env[key] = value

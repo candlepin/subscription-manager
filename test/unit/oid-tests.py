@@ -1,10 +1,6 @@
 import unittest
-import os
 
-import certdata
 from rhsm.certificate import OID
-
-from mock import patch
 
 
 class OIDTests(unittest.TestCase):
@@ -34,5 +30,3 @@ class OIDTests(unittest.TestCase):
 
         # Not an OID
         self.assertFalse(self.oid.match("1.2.3.4.5.6.7"))
-
-
