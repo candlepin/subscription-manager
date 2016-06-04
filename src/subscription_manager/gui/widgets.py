@@ -551,6 +551,10 @@ class ContractSubDetailsWidget(SubDetailsWidget):
 
         self._set(self.details_view, '\n'.join(reasons))
 
+        # set background for GTK2
+        self.start_end_date_text.modify_base(ga_Gtk.StateType.NORMAL,
+                self._get_date_bg(end, expiring))
+        # set background for GTK3
         self.start_end_date_text.modify_bg(ga_Gtk.StateType.NORMAL,
                 self._get_date_bg(end, expiring))
 
