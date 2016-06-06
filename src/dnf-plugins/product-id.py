@@ -14,7 +14,6 @@
 #
 
 import logging
-import sys
 
 from subscription_manager import logutil
 from subscription_manager.productid import ProductManager

@@ -16,7 +16,6 @@
 #
 
 import logging
-import sys
 import yum
 from yum.plugins import TYPE_CORE
 
