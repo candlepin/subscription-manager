@@ -16,14 +16,12 @@
 import os
 import random
 import string
-import time
 import unittest
 
 from nose.plugins.attrib import attr
 
-from rhsm.connection import ContentConnection, UEPConnection, drift_check, Restlib,\
-    UnauthorizedException, ForbiddenException, AuthenticationException, RestlibException, \
-    RemoteServerException
+from rhsm.connection import ContentConnection, UEPConnection, Restlib,\
+    UnauthorizedException, ForbiddenException, RestlibException
 from mock import patch
 
 
@@ -133,7 +131,7 @@ class ConnectionTests(unittest.TestCase):
     def test_get_owner_hypervisors(self):
         testing_hypervisor_id = random_string("testHypervisor")
         self.cp.updateConsumer(self.consumer_uuid, hypervisor_id=testing_hypervisor_id)
-        hypervisor_id = self.cp.getConsumer(self.consumer_uuid)['hypervisorId']
+        self.cp.getConsumer(self.consumer_uuid)['hypervisorId']
 
         hypervisors = self.cp.getOwnerHypervisors("admin", [testing_hypervisor_id])
 
@@ -153,7 +151,8 @@ class BindRequestTests(unittest.TestCase):
         consumerInfo = self.cp.registerConsumer("test-consumer", "system", owner="admin")
         self.consumer_uuid = consumerInfo['uuid']
 
-    @patch.object(Restlib,'validateResponse')
+    @patch.object(Restlib, 'validateResponse')
+    @patch.object(Restlib, 'validateResponse')
     @patch('rhsm.connection.drift_check', return_value=False)
     @patch('M2Crypto.httpslib.HTTPSConnection', auto_spec=True)
     def test_bind_no_args(self, mock_conn, mock_drift, mock_validate):
@@ -168,7 +167,7 @@ class BindRequestTests(unittest.TestCase):
             if name == '().request':
                 self.assertEquals(None, kwargs['body'])
 
-    @patch.object(Restlib,'validateResponse')
+    @patch.object(Restlib, 'validateResponse')
     @patch('rhsm.connection.drift_check', return_value=False)
     @patch('M2Crypto.httpslib.HTTPSConnection', auto_spec=True)
     def test_bind_by_pool(self, mock_conn, mock_drift, mock_validate):
@@ -182,9 +181,6 @@ class BindRequestTests(unittest.TestCase):
 
 @attr('functional')
 class ContentConnectionTests(unittest.TestCase):
-
-#    def setUp(self):
-#        self.cc = ContentConnection(insecure=True)
 
     def testInsecure(self):
         ContentConnection(host="127.0.0.1", insecure=True)

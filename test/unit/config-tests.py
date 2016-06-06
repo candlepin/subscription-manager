@@ -176,6 +176,7 @@ def write_temp_file(data):
     fid.seek(0)
     return fid
 
+
 class BaseConfigTests(unittest.TestCase):
 
     def setUp(self):
@@ -337,6 +338,7 @@ class SomeOptionConfigTest(BaseConfigTests):
         value = self.cfgParser.get("rhsm", "some_option")
         self.assertEquals("/etc/rhsm/ca-test/redhat-uep-non-default.pemtest", value)
 
+
 class BlankWithDefaultConfigTest(BaseConfigTests):
     cfgfile_data = TEST_CONFIG
 
@@ -346,6 +348,7 @@ class BlankWithDefaultConfigTest(BaseConfigTests):
             if name == "manage_repos":
                 default_returned = (value == "1")
         self.assertTrue(default_returned)
+
 
 class OldConfigTests(ConfigTests):
     cfgfile_data = OLD_CONFIG
@@ -383,6 +386,7 @@ class BrokenConfigTests(ConfigTests):
     def test_not_a_section(self):
         self.assertRaises(NoSectionError,
                 self.cfgParser.get, "not_a_section", "not_an_option")
+
 
 class InterpErrorTests(BaseConfigTests):
     cfgfile_data = INTERPOLATION_ERROR_CONFIG

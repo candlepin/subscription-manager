@@ -40,9 +40,9 @@ class ConnectionTests(unittest.TestCase):
 
     def test_load_manager_capabilities(self):
         expected_capabilities = ['hypervisors_async', 'cores']
-        proper_status = {'version':'1',
-                         'result':True,
-                         'managerCapabilities':expected_capabilities}
+        proper_status = {'version': '1',
+                         'result': True,
+                         'managerCapabilities': expected_capabilities}
         improper_status = dict.copy(proper_status)
         # Remove the managerCapabilities key from the dict
         del improper_status['managerCapabilities']
