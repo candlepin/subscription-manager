@@ -18,8 +18,7 @@ import unittest
 from rhsm.connection import UEPConnection, Restlib, ConnectionException, ConnectionSetupException, \
         BadCertificateException, RestlibException, GoneException, NetworkException, \
         RemoteServerException, drift_check, ExpiredIdentityCertException, UnauthorizedException, \
-        ForbiddenException, AuthenticationException, set_default_socket_timeout_if_python_2_3, \
-        RateLimitExceededException
+        ForbiddenException, AuthenticationException, RateLimitExceededException
 
 from mock import Mock, patch
 from datetime import date
@@ -34,6 +33,10 @@ class ConnectionTests(unittest.TestCase):
         # UEPConnection:
         self.cp = UEPConnection(username="dummy", password="dummy",
                 handler="/Test/", insecure=True)
+
+    def test_accepts_a_timeout(self):
+        self.cp = UEPConnection(username="dummy", password="dummy",
+                handler="/Test/", insecure=True, timeout=3)
 
     def test_load_manager_capabilities(self):
         expected_capabilities = ['hypervisors_async', 'cores']
@@ -515,33 +518,6 @@ class DriftTest(unittest.TestCase):
     def test_no_drift(self):
         header = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime())
         self.assertFalse(drift_check(header))
-
-
-class SetDefaultSocketTimeoutIfPython2_3_Test(unittest.TestCase):
-    @patch.object(sys, 'version_info', (2, 7, 5, 'final', 0))
-    @patch('socket.setdefaulttimeout', return_value=None)
-    def test_newer_than_2_3_should_not_be_altered(self, mock_setdefaulttimeout):
-
-        set_default_socket_timeout_if_python_2_3()
-        # we should only ever set default timeout on python 2.3 or earlier
-        # Elsewhere we should leave it alone, and be set to the default of None
-        # See https://bugzilla.redhat.com/show_bug.cgi?id=1195446
-
-        if sys.version_info[0] != 2:
-            self.fail("This test only passes on python 2, not python3.")
-        if sys.version_info[1] < 3:
-            self.fail("Don't expect this or any other tests to work on python 2.2 or earlier.")
-
-        self.assertFalse(mock_setdefaulttimeout.called)
-
-    @patch.object(sys, 'version_info', (2, 3, 0, 'final', 0))
-    @patch('socket.setdefaulttimeout', return_value=None)
-    def test_2_3_should_be_altered_once(self, mock_setdefaulttimeout):
-
-        set_default_socket_timeout_if_python_2_3()
-        set_default_socket_timeout_if_python_2_3()
-
-        mock_setdefaulttimeout.assert_called_once_with(60)
 
 
 class GoneExceptionTest(ExceptionTest):

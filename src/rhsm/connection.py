@@ -45,38 +45,7 @@ except ImportError:
 from rhsm import ourjson as json
 from rhsm import utils
 
-global_socket_timeout = 60
-timeout_altered = None
-
-
-def set_default_socket_timeout_if_python_2_3():
-    """If using python 2.3 set a global socket default timeout.
-
-    On EL5/python2.3, there is a really long socket timeout. The
-    best thing we can do is set a process wide default socket timeout.
-    Limit this to affected python versions only, just to minimize any
-    problems the default timeout might cause.
-
-    Return True if we change it.
-    """
-
-    global timeout_altered
-
-    # once per module instance should be plenty
-    if timeout_altered:
-        return timeout_altered
-
-    if sys.version_info[0] == 2 and sys.version_info[1] < 4:
-        socket.setdefaulttimeout(global_socket_timeout)
-        timeout_altered = True
-        return
-
-    timeout_altered = False
-
-
-class NullHandler(logging.Handler):
-    def emit(self, record):
-        pass
+config = initConfig()
 
 
 def safe_int(value, safe_value=None):
@@ -84,14 +53,6 @@ def safe_int(value, safe_value=None):
         return int(value)
     except Exception:
         return safe_value
-
-
-h = NullHandler()
-logging.getLogger("rhsm").addHandler(h)
-
-log = logging.getLogger(__name__)
-
-config = initConfig()
 
 
 def drift_check(utc_time_string, hours=1):
@@ -113,6 +74,16 @@ def drift_check(utc_time_string, hours=1):
             log.error(e)
 
     return drift
+
+
+class NullHandler(logging.Handler):
+    def emit(self, record):
+        pass
+
+h = NullHandler()
+logging.getLogger("rhsm").addHandler(h)
+
+log = logging.getLogger(__name__)
 
 
 class ConnectionException(Exception):
@@ -257,7 +228,55 @@ class NoOpChecker:
         return True
 
 
+class HTTPSConnection(httpslib.HTTPSConnection):
+    """M2Crypto doesn't allow us to set the timeout on the SSL connection in HTTPSConnection.
+    Therefore, we subclass."""
+    def __init__(self, host, *args, **kwargs):
+        self.rhsm_timeout = float(kwargs.pop('timeout', -1.0))
+        httpslib.HTTPSConnection.__init__(self, host, *args, **kwargs)
+
+    def connect(self):
+        """Copied verbatim except for adding the timeout"""
+        error = None
+        # We ignore the returned sockaddr because SSL.Connection.connect needs
+        # a host name.
+        for (family, _, _, _, _) in socket.getaddrinfo(self.host, self.port, 0, socket.SOCK_STREAM):
+            sock = None
+            try:
+                sock = SSL.Connection(self.ssl_ctx, family=family)
+                sock.settimeout(self.rhsm_timeout)
+                if self.session is not None:
+                    sock.set_session(self.session)
+                sock.connect((self.host, self.port))
+
+                self.sock = sock
+                sock = None
+                return
+            except socket.error as e:
+                # Other exception are probably SSL-related, in that case we
+                # abort and the exception is forwarded to the caller.
+                error = e
+            finally:
+                if sock is not None:
+                    sock.close()
+
+        if error is None:
+            raise AssertionError("Empty list returned by getaddrinfo")
+        raise error
+
+
 class RhsmProxyHTTPSConnection(httpslib.ProxyHTTPSConnection):
+    def __init__(self, host, *args, **kwargs):
+        self.rhsm_timeout = float(kwargs.pop('timeout', -1.0))
+        httpslib.ProxyHTTPSConnection.__init__(self, host, *args, **kwargs)
+
+    def _start_ssl(self):
+        self.sock = SSL.Connection(self.ssl_ctx, self.sock)
+        self.sock.settimeout(self.rhsm_timeout)
+        self.sock.setup_ssl()
+        self.sock.set_connect_state()
+        self.sock.connect_ssl()
+
     # 2.7 httplib expects to be able to pass a body argument to
     # endheaders, which the m2crypto.httpslib.ProxyHTTPSConnect does
     # not support
@@ -266,9 +285,9 @@ class RhsmProxyHTTPSConnection(httpslib.ProxyHTTPSConnection):
             self._proxy_auth = self._encode_auth()
 
         if body:
-            httpslib.HTTPSConnection.endheaders(self, body)
+            HTTPSConnection.endheaders(self, body)
         else:
-            httpslib.HTTPSConnection.endheaders(self)
+            HTTPSConnection.endheaders(self)
 
     def _get_connect_msg(self):
         """ Return an HTTP CONNECT request to send to the proxy. """
@@ -291,7 +310,7 @@ class ContentConnection(object):
                  proxy_hostname=None, proxy_port=None,
                  proxy_user=None, proxy_password=None,
                  ca_dir=None, insecure=False,
-                 ssl_verify_depth=1):
+                 ssl_verify_depth=1, timeout=None):
 
         log.debug("ContentConnection")
         # FIXME
@@ -301,12 +320,12 @@ class ContentConnection(object):
 
         self.host = host or config.get('server', 'hostname')
         self.ssl_port = ssl_port or safe_int(config.get('server', 'port'))
+        self.timeout = timeout or safe_int(config.get('server', 'server_timeout'))
         self.ca_dir = ca_dir
         self.insecure = insecure
         self.username = username
         self.password = password
         self.ssl_verify_depth = ssl_verify_depth
-        self.timeout_altered = False
 
         # get the proxy information from the environment variable
         # if available and host is not in no_proxy
@@ -341,13 +360,11 @@ class ContentConnection(object):
             conn = RhsmProxyHTTPSConnection(self.proxy_hostname, self.proxy_port,
                                             username=self.proxy_user,
                                             password=self.proxy_password,
-                                            ssl_context=context)
+                                            ssl_context=context, timeout=self.timeout)
             # this connection class wants the full url
             handler = "https://%s:%s%s" % (self.host, self.ssl_port, handler)
         else:
-            conn = httpslib.HTTPSConnection(self.host, safe_int(self.ssl_port), ssl_context=context)
-
-        set_default_socket_timeout_if_python_2_3()
+            conn = HTTPSConnection(self.host, safe_int(self.ssl_port), ssl_context=context, timeout=self.timeout)
 
         conn.request("GET", handler,
                      body="",
@@ -429,7 +446,7 @@ class Restlib(object):
             proxy_hostname=None, proxy_port=None,
             proxy_user=None, proxy_password=None,
             cert_file=None, key_file=None,
-            ca_dir=None, insecure=False, ssl_verify_depth=1):
+            ca_dir=None, insecure=False, ssl_verify_depth=1, timeout=None):
         self.host = host
         self.ssl_port = ssl_port
         self.apihandler = apihandler
@@ -452,6 +469,7 @@ class Restlib(object):
         self.insecure = insecure
         self.username = username
         self.password = password
+        self.timeout = timeout
         self.ssl_verify_depth = ssl_verify_depth
         self.proxy_hostname = proxy_hostname
         self.proxy_port = proxy_port
@@ -541,11 +559,11 @@ class Restlib(object):
             conn = RhsmProxyHTTPSConnection(self.proxy_hostname, self.proxy_port,
                                             username=self.proxy_user,
                                             password=self.proxy_password,
-                                            ssl_context=context)
+                                            ssl_context=context, timeout=self.timeout)
             # this connection class wants the full url
             handler = "https://%s:%s%s" % (self.host, self.ssl_port, handler)
         else:
-            conn = httpslib.HTTPSConnection(self.host, self.ssl_port, ssl_context=context)
+            conn = HTTPSConnection(self.host, self.ssl_port, ssl_context=context, timeout=self.timeout)
 
         if info is not None:
             body = json.dumps(info, default=json.encode)
@@ -561,9 +579,6 @@ class Restlib(object):
         if body is None:
             headers = dict(self.headers.items() +
                            {"Content-Length": "0"}.items())
-
-        # NOTE: alters global timeout_altered (and socket timeout)
-        set_default_socket_timeout_if_python_2_3()
 
         try:
             conn.request(request_type, handler, body=body, headers=headers)
@@ -710,7 +725,8 @@ class UEPConnection:
             proxy_password=None,
             username=None, password=None,
             cert_file=None, key_file=None,
-            insecure=None):
+            insecure=None,
+            timeout=None):
         """
         Two ways to authenticate:
             - username/password for HTTP basic authentication. (owner admin role)
@@ -722,6 +738,7 @@ class UEPConnection:
         self.host = host or config.get('server', 'hostname')
         self.ssl_port = ssl_port or safe_int(config.get('server', 'port'))
         self.handler = handler or config.get('server', 'prefix')
+        self.timeout = timeout or safe_int(config.get('server', 'server_timeout'))
 
         # remove trailing "/" from the prefix if it is there
         # BZ848836
@@ -783,7 +800,7 @@ class UEPConnection:
                     proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
                     proxy_user=self.proxy_user, proxy_password=self.proxy_password,
                     ca_dir=self.ca_cert_dir, insecure=self.insecure,
-                    ssl_verify_depth=self.ssl_verify_depth)
+                    ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout)
             auth_description = "auth=basic username=%s" % username
         elif using_id_cert_auth:
             self.conn = Restlib(self.host, self.ssl_port, self.handler,
@@ -791,14 +808,14 @@ class UEPConnection:
                                 proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
                                 proxy_user=self.proxy_user, proxy_password=self.proxy_password,
                                 ca_dir=self.ca_cert_dir, insecure=self.insecure,
-                                ssl_verify_depth=self.ssl_verify_depth)
+                                ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout)
             auth_description = "auth=identity_cert ca_dir=%s verify=%s" % (self.ca_cert_dir, self.insecure)
         else:
             self.conn = Restlib(self.host, self.ssl_port, self.handler,
                     proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
                     proxy_user=self.proxy_user, proxy_password=self.proxy_password,
                     ca_dir=self.ca_cert_dir, insecure=self.insecure,
-                    ssl_verify_depth=self.ssl_verify_depth)
+                    ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout)
             auth_description = "auth=none"
 
         self.conn.user_agent = "RHSM/1.0 (cmd=%s)" % utils.cmd_name(sys.argv)

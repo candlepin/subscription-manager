@@ -28,6 +28,7 @@ DEFAULT_CONFIG_DIR = "/etc/rhsm/"
 HOST_CONFIG_DIR = "/etc/rhsm-host/"  # symlink inside docker containers
 DEFAULT_CONFIG_PATH = "%srhsm.conf" % DEFAULT_CONFIG_DIR
 DEFAULT_PROXY_PORT = "3128"
+DEFAULT_SERVER_TIMEOUT = "180"
 
 # Defaults for connecting to RHSM, used to "reset" the configuration file
 # if requested by the user:
@@ -48,12 +49,13 @@ SERVER_DEFAULTS = {
         'hostname': DEFAULT_HOSTNAME,
         'prefix': DEFAULT_PREFIX,
         'port': DEFAULT_PORT,
+        'server_timeout': DEFAULT_SERVER_TIMEOUT,
         'insecure': '0',
         'ssl_verify_depth': '3',
         'proxy_hostname': '',
         'proxy_user': '',
         'proxy_port': '',
-        'proxy_password': ''
+        'proxy_password': '',
         }
 RHSM_DEFAULTS = {
         'baseurl': 'https://' + DEFAULT_CDN_HOSTNAME,
