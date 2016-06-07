@@ -96,7 +96,7 @@ config = initConfig()
 
 def drift_check(utc_time_string, hours=1):
     """
-    Takes in a RFC 1123 date and returns True if the currnet time
+    Takes in a RFC 1123 date and returns True if the current time
     is greater then the supplied number of hours
     """
     drift = False
@@ -109,7 +109,7 @@ def drift_check(utc_time_string, hours=1):
             local_datetime = datetime.datetime.utcnow().replace(tzinfo=utc_datetime.tzinfo)
             delta = datetime.timedelta(hours=hours)
             drift = abs((utc_datetime - local_datetime)) > delta
-        except Exception, e:
+        except Exception as e:
             log.error(e)
 
     return drift
@@ -244,12 +244,10 @@ class ForbiddenException(AuthenticationException):
 
 
 class ExpiredIdentityCertException(ConnectionException):
-
     pass
 
 
 class NoOpChecker:
-
     def __init__(self, host=None, peerCertHash=None, peerCertDigest='sha1'):
         self.host = host
         self.fingerprint = peerCertHash
@@ -295,7 +293,7 @@ class ContentConnection(object):
                  ca_dir=None, insecure=False,
                  ssl_verify_depth=1):
 
-        log.debug("ContectConnection")
+        log.debug("ContentConnection")
         # FIXME
         self.ent_dir = "/etc/pki/entitlement"
         self.handler = "/"
@@ -372,12 +370,12 @@ class ContentConnection(object):
                     key_path = os.path.join(self.ent_dir, "%s-key.pem" % cert_file.split('.', 1)[0])
                     log.debug("Loading CA certificate: '%s'" % cert_path)
 
-                    #FIXME: reenable res =
+                    # FIXME: reenable res =
                     context.load_verify_info(cert_path)
                     context.load_cert(cert_path, key_path)
-                    #if res == 0:
-                    #    raise BadCertificateException(cert_path)
-        except OSError, e:
+                    # if res == 0:
+                    #     raise BadCertificateException(cert_path)
+        except OSError as e:
             raise ConnectionSetupException(e.strerror)
 
     def test(self):
@@ -508,7 +506,7 @@ class Restlib(object):
         if loaded_ca_certs:
             log.debug("Loaded CA certificates from %s: %s" % (self.ca_dir, ', '.join(loaded_ca_certs)))
 
-    # FIXME: can method be emtpty?
+    # FIXME: can method be empty?
     def _request(self, request_type, method, info=None):
         handler = self.apihandler + method
 
@@ -770,9 +768,9 @@ class UEPConnection:
         if using_basic_auth and using_id_cert_auth:
             raise Exception("Cannot specify both username/password and "
                     "cert_file/key_file")
-        #if not (using_basic_auth or using_id_cert_auth):
-        #    raise Exception("Must specify either username/password or "
-        #            "cert_file/key_file")
+        # if not (using_basic_auth or using_id_cert_auth):
+        #     raise Exception("Must specify either username/password or "
+        #         "cert_file/key_file")
 
         proxy_description = None
         if self.proxy_hostname and self.proxy_port:
@@ -1399,8 +1397,8 @@ class UEPConnection:
         return results
 
     def sanitize(self, url_param, plus=False):
-        #This is a wrapper around urllib.quote to avoid issues like the one
-        #discussed in http://bugs.python.org/issue9301
+        # This is a wrapper around urllib.quote to avoid issues like the one
+        # discussed in http://bugs.python.org/issue9301
         if plus:
             sane_string = urllib.quote_plus(str(url_param))
         else:

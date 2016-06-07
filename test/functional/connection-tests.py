@@ -285,7 +285,7 @@ class RestlibTests(unittest.TestCase):
         try:
             self._validate_response(mock_response)
             self.fail("An exception should have been thrown.")
-        except Exception, ex:
+        except Exception as ex:
             self.assertTrue(isinstance(ex, RestlibException))
             self.assertEquals(expected_error, ex.code)
             self.assertEqual(expected_error, str(ex))
@@ -295,7 +295,7 @@ class RestlibTests(unittest.TestCase):
         try:
             self._validate_response(mock_response)
             self.fail("An %s exception should have been thrown." % expected_exception)
-        except Exception, ex:
+        except Exception as ex:
             self.assertTrue(isinstance(ex, expected_exception))
             self.assertEquals(expected_error_code, ex.code)
 
