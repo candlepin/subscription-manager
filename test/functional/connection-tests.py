@@ -152,9 +152,8 @@ class BindRequestTests(unittest.TestCase):
         self.consumer_uuid = consumerInfo['uuid']
 
     @patch.object(Restlib, 'validateResponse')
-    @patch.object(Restlib, 'validateResponse')
     @patch('rhsm.connection.drift_check', return_value=False)
-    @patch('M2Crypto.httpslib.HTTPSConnection', auto_spec=True)
+    @patch('rhsm.connection.HTTPSConnection', auto_spec=True)
     def test_bind_no_args(self, mock_conn, mock_drift, mock_validate):
 
         self.cp.bind(self.consumer_uuid)
@@ -169,7 +168,7 @@ class BindRequestTests(unittest.TestCase):
 
     @patch.object(Restlib, 'validateResponse')
     @patch('rhsm.connection.drift_check', return_value=False)
-    @patch('M2Crypto.httpslib.HTTPSConnection', auto_spec=True)
+    @patch('rhsm.connection.HTTPSConnection', auto_spec=True)
     def test_bind_by_pool(self, mock_conn, mock_drift, mock_validate):
         # this test is just to verify we make the httplib connection with
         # right args, we don't validate the bind here
@@ -285,7 +284,7 @@ class RestlibTests(unittest.TestCase):
         try:
             self._validate_response(mock_response)
             self.fail("An exception should have been thrown.")
-        except Exception, ex:
+        except Exception as ex:
             self.assertTrue(isinstance(ex, RestlibException))
             self.assertEquals(expected_error, ex.code)
             self.assertEqual(expected_error, str(ex))
@@ -295,7 +294,7 @@ class RestlibTests(unittest.TestCase):
         try:
             self._validate_response(mock_response)
             self.fail("An %s exception should have been thrown." % expected_exception)
-        except Exception, ex:
+        except Exception as ex:
             self.assertTrue(isinstance(ex, expected_exception))
             self.assertEquals(expected_error_code, ex.code)
 
