@@ -285,9 +285,9 @@ class RhsmProxyHTTPSConnection(httpslib.ProxyHTTPSConnection):
             self._proxy_auth = self._encode_auth()
 
         if body:
-            HTTPSConnection.endheaders(self, body)
+            httpslib.HTTPSConnection.endheaders(self, body)
         else:
-            HTTPSConnection.endheaders(self)
+            httpslib.HTTPSConnection.endheaders(self)
 
     def _get_connect_msg(self):
         """ Return an HTTP CONNECT request to send to the proxy. """
