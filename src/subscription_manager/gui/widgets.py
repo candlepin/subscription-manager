@@ -21,6 +21,7 @@ import time
 import warnings
 
 from rhsm.certificate import GMT
+from rhsm.connection import safe_int
 from dateutil.tz import tzlocal
 
 from subscription_manager.ga import GObject as ga_GObject
@@ -183,7 +184,23 @@ class HasSortableWidget(object):
         # column indexes.  The column name is passed in through 'key'.
         str1 = model.get_value(row1, model[key])
         str2 = model.get_value(row2, model[key])
-        return cmp(str1, str2)
+        return HasSortableWidget.compare_text(str1, str2)
+
+    @staticmethod
+    def compare_text(str1, str2):
+        # Ensure our text fields are compared properly
+        # 'Unlimited' is greater than all except 'Unlimited'
+        # All other strings will be converted to an int or None
+
+        if str1 == 'Unlimited':
+            if str2 == 'Unlimited':
+                return 0
+            return 1
+        elif str2 == 'Unlimited':
+            return -1
+        int1 = safe_int(str1)
+        int2 = safe_int(str2)
+        return cmp(int1, int2)
 
     def sort_date(self, model, row1, row2, key):
         date1 = model.get_value(row1, model[key]) \
