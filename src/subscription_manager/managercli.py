@@ -1687,11 +1687,21 @@ class RemoveCommand(CliCommand):
 
     def _print_unbind_ids_result(self, success, failure, id_name):
         if success:
-            print _("%s successfully removed at the server:" % id_name)
+            if id_name == "pools":
+                print _("The entitlement server successfully removed these pools:")
+            elif id_name == "serial numbers":
+                print _("The entitlement server successfully removed these serial numbers:")
+            else:
+                print _("The entitlement server successfully removed these IDs:")
             for id_ in success:
                 print "   %s" % id_
         if failure:
-            print _("%s unsuccessfully removed at the server:" % id_name)
+            if id_name == "pools":
+                print _("The entitlement server failed to remove these pools:")
+            elif id_name == "serial numbers":
+                print _("The entitlement server failed to remove these serial numbers:")
+            else:
+                print _("The entitlement server failed to remove these IDs:")
             for id_ in failure:
                 print "   %s" % id_
 
@@ -1721,7 +1731,7 @@ class RemoveCommand(CliCommand):
                         pool_ids = unique_list_items(self.options.pool_ids)  # Don't allow duplicates
                         pool_id_to_serials = self.entitlement_dir.list_serials_for_pool_ids(pool_ids)
                         success, failure = self._unbind_ids(self.cp.unbindByPoolId, identity.uuid, pool_ids)
-                        self._print_unbind_ids_result(success, failure, "Pools")
+                        self._print_unbind_ids_result(success, failure, "pools")
                         if not success:
                             return_code = 1
                         else:
@@ -1736,7 +1746,7 @@ class RemoveCommand(CliCommand):
                         removed_serials.extend(success)
                         if not success:
                             return_code = 1
-                    self._print_unbind_ids_result(removed_serials, failure, "Serial numbers")
+                    self._print_unbind_ids_result(removed_serials, failure, "serial numbers")
                 self.entcertlib.update()
             except connection.RestlibException, re:
                 log.error(re)
