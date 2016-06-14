@@ -202,3 +202,11 @@ class ChooseServerScreenTests(SubManFixture):
         self.screen.server_entry.set_text("subscription.rhsm.redhat.com:443/baz")
         self.assertTrue(self.screen.activation_key_checkbox.get_property('sensitive'))
         self.assertTrue(self.screen.activation_key_checkbox.get_property('active'))
+
+    def test__on_default_button_clicked(self):
+        non_default = "foo.bar:8443/baz"
+        expected = "subscription.rhsm.redhat.com:443/subscription"
+        self.screen.server_entry.set_text(non_default)
+        self.screen._on_default_button_clicked(None)  # The widget param is not used
+        result = self.screen.server_entry.get_text()
+        self.assertEqual(expected, result)
