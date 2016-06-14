@@ -415,11 +415,8 @@ class HardwareProbeTests(fixture.SubManFixture):
 
         net_int = hw.get_network_interfaces()
 
-        # FIXME/TODO/NOTE: We currently expect to get just the last interface
-        # listed in this scenario. But... that is wrong. We should really
-        # be supporting multiple addresses per interface in some yet
-        # undetermined fashion
         self.assertEquals(net_int['net.interface.eth0.ipv4_address'], '10.0.0.2')
+        self.assertEquals(net_int['net.interface.eth0.ipv4_address_list'], '10.0.0.1, 10.0.0.2')
 
     @patch("ethtool.get_devices")
     @patch("ethtool.get_interfaces_info")
