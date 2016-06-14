@@ -1780,7 +1780,9 @@ class ChooseServerScreen(Screen):
     def _on_default_button_clicked(self, widget):
         # Default port and prefix are fine, so we can be concise and just
         # put the hostname for RHN:
-        self.server_entry.set_text(config.DEFAULT_HOSTNAME)
+        self.server_entry.set_text("%s:%s%s" % (config.DEFAULT_HOSTNAME,
+            config.DEFAULT_PORT,
+            config.DEFAULT_PREFIX))
 
     def _on_proxy_button_clicked(self, widget):
         # proxy dialog may attempt to resolve proxy and server names, so
