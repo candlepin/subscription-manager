@@ -13,13 +13,8 @@
 # in this software or its documentation.
 import fnmatch
 import os
-import sys
 
 from distutils import cmd
-
-# Force python parser since we can't hook into the C implementation
-sys.modules['_elementtree'] = None
-import xml.etree.ElementTree as ET  # noqa
 
 
 def memoize(f):
