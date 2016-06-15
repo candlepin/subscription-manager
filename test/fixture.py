@@ -47,8 +47,9 @@ def temp_file(content, *args, **kwargs):
 
 @contextmanager
 def locale_context(new_locale, category=None):
+    old_category = category or locale.LC_CTYPE
+    old_locale = locale.getlocale(old_category)
     category = category or locale.LC_ALL
-    old_locale = locale.getlocale(category)
     locale.setlocale(category, new_locale)
     try:
         yield
