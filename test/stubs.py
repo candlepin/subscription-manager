@@ -571,9 +571,7 @@ class StubCertSorter(CertSorter):
 class StubCPProvider(object):
 
     def __init__(self):
-        self.consumer_auth_cp = StubUEP()
-        self.basic_auth_cp = StubUEP()
-        self.no_auth_cp = StubUEP()
+        self.set_connection_info()
         self.content_connection = StubContentConnection()
 
     def set_connection_info(self,
@@ -586,6 +584,9 @@ class StubCPProvider(object):
                 proxy_port_arg=None,
                 proxy_user_arg=None,
                 proxy_password_arg=None):
+
+        self.cert_file = StubConsumerIdentity.certpath()
+        self.key_file = StubConsumerIdentity.keypath()
         self.consumer_auth_cp = StubUEP()
         self.basic_auth_cp = StubUEP()
         self.no_auth_cp = StubUEP()

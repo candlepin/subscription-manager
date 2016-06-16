@@ -1,5 +1,5 @@
 
-from mock import Mock
+from mock import Mock, patch
 
 from fixture import SubManFixture
 
@@ -203,9 +203,16 @@ class ChooseServerScreenTests(SubManFixture):
         self.assertTrue(self.screen.activation_key_checkbox.get_property('sensitive'))
         self.assertTrue(self.screen.activation_key_checkbox.get_property('active'))
 
-    def test__on_default_button_clicked(self):
+    @patch('subscription_manager.gui.registergui.config')
+    def test__on_default_button_clicked(self, config):
+        config.DEFAULT_HOSTNAME = "subscription.rhsm.redhat.com"
+        config.DEFAULT_PORT = '443'
+        config.DEFAULT_PREFIX = "/subscription"
+
         non_default = "foo.bar:8443/baz"
-        expected = "subscription.rhsm.redhat.com:443/subscription"
+        expected = "%s:%s%s" % (config.DEFAULT_HOSTNAME,
+            config.DEFAULT_PORT,
+            config.DEFAULT_PREFIX)
         self.screen.server_entry.set_text(non_default)
         self.screen._on_default_button_clicked(None)  # The widget param is not used
         result = self.screen.server_entry.get_text()
