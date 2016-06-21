@@ -12,8 +12,8 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.17.3
-Release: 0%{?dist}
+Version: 1.17.4
+Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
 Group: Development/Libraries
@@ -82,6 +82,13 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Tue Jun 21 2016 Vritant Jain <vrjain@redhat.com> 1.17.4-1
+- 1346417: Allow users to set socket timeout. (awood@redhat.com)
+- Fix Flake8 Errors (bcourt@redhat.com)
+- Add Fedora 24 to the branch list. (awood@redhat.com)
+- Added basic SLES compatibilty. Tested against SLES 11 SP3
+  (darinlively@gmail.com)
+
 * Thu May 12 2016 Darin Lively <darinlively@gmail.com> 1.17.3-0
 - Added basic SLES build compatibilty
 
