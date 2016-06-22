@@ -155,7 +155,10 @@ class Gettext(BaseCommand):
 
         # Begin with a fresh key file
         dir_util.mkpath('tmp')
-        tmp_key_file = os.path.join('tmp', os.path.basename(self.key_file))
+        if self.lint:
+            tmp_key_file = self.key_file
+        else:
+            tmp_key_file = os.path.join('tmp', os.path.basename(self.key_file))
 
         # Create xgettext friendly header files from the desktop files.
         # See http://stackoverflow.com/a/23643848/6124862
@@ -190,7 +193,8 @@ class Gettext(BaseCommand):
             log.debug("Running %s" % ' '.join(cmd + specific_opts))
             spawn(cmd + specific_opts)
 
-        shutil.copy2(tmp_key_file, self.key_file)
+        if not self.lint:
+            shutil.copy2(tmp_key_file, self.key_file)
 
         # Delete the directory holding the temporary files created by intltool-extract
         # and the temporary keys.pot
