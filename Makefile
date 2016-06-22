@@ -92,15 +92,15 @@ STYLEFILES=$(PYFILES) $(BIN_FILES)
 
 .DEFAULT_GOAL := build
 
-# we never "remake" this makefile, so add a target so
-# we stop searching for implicit rules on how to remake it
-Makefile: ;
-
 build: rhsmcertd rhsm-icon
 # Install doesn't perform a build if it doesn't have too.  Best to clean out
 # any cruft so developers don't end up install old builds.
 	./setup.py clean --all
 	./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
+
+# we never "remake" this makefile, so add a target so
+# we stop searching for implicit rules on how to remake it
+Makefile: ;
 
 .PHONY: clean
 clean:
@@ -248,7 +248,7 @@ install-via-setup:
 	./setup.py install --root $(PREFIX) --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
 
 .PHONY: install
-install: install-via-setup rhsmcertd rhsm-icon install-files
+install: install-via-setup install-files
 
 .PHONY: install-files
 install-files: dbus-service-install install-conf install-plugins install-post-boot install-ga
