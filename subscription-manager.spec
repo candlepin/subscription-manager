@@ -60,8 +60,8 @@
 %endif
 
 Name: subscription-manager
-Version: 1.17.7
-Release: 2%{?dist}
+Version: 1.17.8
+Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -597,6 +597,24 @@ fi
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Wed Jun 22 2016 Vritant Jain <vrjain@redhat.com> 1.17.8-1
+- 1335537: Fix typo in proxy message (wpoteat@redhat.com)
+- Remove sys.path shenanigans that break yum imports. (awood@redhat.com)
+- 1330054: Set hostname, port and prefix on default button clicked
+  (csnyder@redhat.com)
+- 1325083: Fix available sort order (csnyder@redhat.com)
+- 874735: Support fact collection of multiple ips per interface
+  (csnyder@redhat.com)
+- Added basic SLES compatibility Tested against SLES 11 SP3
+  (darinlively@gmail.com)
+- drop xtraceback nose plugin usage as it is not available as an PRM
+  (bcourt@redhat.com)
+- Fix Flake8 Errors (bcourt@redhat.com)
+- 1337817:  The 'Start-End Date' of expired subscription is not in red status
+  when the subscription expired. (vrjain@redhat.com)
+- 1319678: Alter the return message for removing entitlements at server
+  (wpoteat@redhat.com)
+
 * Fri Jun 03 2016 Vritant Jain <vrjain@redhat.com> 1.17.7-1
 - 1297493, 1297485: Restrict visibility of subscription-manager caches.
   (awood@redhat.com)
