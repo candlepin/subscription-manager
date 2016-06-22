@@ -253,7 +253,7 @@ class GettextVisitor(AstVisitor):
         "b")
     Also look for _(a) usages
     """
-    codes = ['G100', 'G101']
+    codes = ['G100', 'G101', 'G102']
 
     def visit_Call(self, node):
         # Descend first
@@ -267,9 +267,6 @@ class GettextVisitor(AstVisitor):
             return
 
         for arg in node.args:
-            # TODO is a BinOp of type Mod acceptable? e.g. _("%s is great" % some_variable)
-            # Those constructs exist but may be wrong
-
             # ProTip: use print(ast.dump(node)) to figure out what the node looks like
 
             # Things like _("a" + "b") (including such constructs across line continuations
@@ -279,6 +276,10 @@ class GettextVisitor(AstVisitor):
             # Things like _(some_variable)
             if isinstance(arg, ast.Name):
                 return (node, "G101 variable reference that will break xgettext")
+
+            # _("%s is great" % some_variable) should be _("%s is great") % some_variable
+            if isinstance(arg, ast.BinOp) and isinstance(arg.op, ast.Mod):
+                return (node, "G102 string formatting within gettext function: _('%s' % foo) should be _('%s') % foo")
 
 
 class AstChecker(Checker):
