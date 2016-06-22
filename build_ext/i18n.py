@@ -13,7 +13,7 @@
 import os
 import shutil
 
-from distutils import log
+from distutils import log, dir_util
 from distutils.command.build_py import build_py as _build_py
 from distutils.spawn import spawn
 
@@ -153,13 +153,17 @@ class Gettext(BaseCommand):
     def run(self):
         manifest_prefix = os.path.join(os.curdir, 'po', 'POTFILES')
 
+        # Begin with a fresh key file
+        dir_util.mkpath('tmp')
+        tmp_key_file = os.path.join('tmp', os.path.basename(self.key_file))
+
         # Create xgettext friendly header files from the desktop files.
         # See http://stackoverflow.com/a/23643848/6124862
         cmd = ['intltool-extract', '-l', '--type=gettext/ini']
         for desktop_file in Utils.find_files_of_type('etc-conf', '*.desktop.in'):
             spawn(cmd + [desktop_file])
 
-        cmd = ['xgettext', '--from-code=utf-8', '--sort-by-file', '-o', self.key_file]
+        cmd = ['xgettext', '--from-code=utf-8', '--sort-by-file', '-o', tmp_key_file]
 
         # These tuples contain a template for the file name that will contain a list of
         # all source files of a given type to translate, a function that finds all the
@@ -181,10 +185,13 @@ class Gettext(BaseCommand):
 
             specific_opts = ['-f', manifest, '--language', language]
             specific_opts.extend(other_options)
-            if os.path.exists(self.key_file):
+            if os.path.exists(tmp_key_file):
                 specific_opts.append('--join-existing')
             log.debug("Running %s" % ' '.join(cmd + specific_opts))
             spawn(cmd + specific_opts)
 
+        shutil.copy2(tmp_key_file, self.key_file)
+
         # Delete the directory holding the temporary files created by intltool-extract
+        # and the temporary keys.pot
         shutil.rmtree('tmp')
