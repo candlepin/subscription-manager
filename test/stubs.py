@@ -448,7 +448,7 @@ class StubUEP(object):
     def setConsumer(self, consumer):
         self.consumer = consumer
 
-    def getConsumer(self, consumerId):
+    def getConsumer(self, consumerId, username=None, password=None):
         if hasattr(self, 'consumer') and self.consumer:
             return self.consumer
         return self.registered_consumer_info
@@ -571,35 +571,32 @@ class StubCertSorter(CertSorter):
 class StubCPProvider(object):
 
     def __init__(self):
-        self.set_connection_info()
-        self.content_connection = StubContentConnection()
-
-    def set_connection_info(self,
-                host=None,
-                ssl_port=None,
-                handler=None,
-                cert_file=None,
-                key_file=None,
-                proxy_hostname_arg=None,
-                proxy_port_arg=None,
-                proxy_user_arg=None,
-                proxy_password_arg=None):
-
         self.cert_file = StubConsumerIdentity.certpath()
         self.key_file = StubConsumerIdentity.keypath()
         self.consumer_auth_cp = StubUEP()
         self.basic_auth_cp = StubUEP()
         self.no_auth_cp = StubUEP()
+        self.content_connection = StubContentConnection()
 
-    def set_content_connection_info(self,
-                                    cdn_hostname=None,
-                                    cdn_port=None):
+    def set_connection_info(self,
+        host=None,
+        ssl_port=None,
+        handler=None,
+        cert_file=None,
+        key_file=None,
+        proxy_hostname_arg=None,
+        proxy_port_arg=None,
+        proxy_user_arg=None,
+        proxy_password_arg=None):
+        pass
+
+    def set_content_connection_info(self, cdn_hostname=None, cdn_port=None):
         pass
 
     def set_user_pass(self, username=None, password=None):
         pass
 
-# tries to write to /var/lib and it reads the rpm db
+    # tries to write to /var/lib and it reads the rpm db
     def clean(self):
         pass
 
