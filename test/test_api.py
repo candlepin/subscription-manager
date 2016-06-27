@@ -10,13 +10,13 @@
 # have received a copy of GPLv2 along with this software; if not, see
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
-from mock import patch, call
+from mock import patch, call, Mock
 
 from subscription_manager import api
 from subscription_manager.repolib import Repo
 
-from test.fixture import SubManFixture
-from test.stubs import StubUEP
+from fixture import SubManFixture
+from stubs import StubUEP
 
 
 class ApiVersionTest(SubManFixture):
@@ -94,31 +94,32 @@ class RepoApiTest(SubManFixture):
         self.assertFalse(call.write() in self.repo_file.mock_calls)
         self.assertEquals(0, result)
 
-    @patch.object(StubUEP, 'supports_resource')
-    @patch.object(StubUEP, 'setContentOverrides', create=True)
-    def test_update_overrides_cache(self, mock_set, mock_supports):
-        mock_supports.return_value = True
+    def test_update_overrides_cache(self):
+        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+            self.stub_cp_provider.consumer_auth_cp = mock_uep
+            mock_uep.supports_resource = Mock(return_value=True)
+            mock_uep.setContentOverrides = Mock()
 
-        repo_settings = {
-            'enabled': '0',
-        }
-        self.invoker.get_repos.return_value = [
-            Repo('hello', repo_settings.items()),
-        ]
-        self.repo_file.items.return_value = repo_settings.items()
+            repo_settings = {
+                'enabled': '0',
+            }
+            self.invoker.get_repos.return_value = [
+                Repo('hello', repo_settings.items()),
+            ]
+            self.repo_file.items.return_value = repo_settings.items()
 
-        @api.request_injection
-        def munge_injection():
-            self._inject_mock_valid_consumer("123")
-            return api.enable_yum_repositories('hello')
+            @api.request_injection
+            def munge_injection():
+                self._inject_mock_valid_consumer("123")
+                return api.enable_yum_repositories('hello')
 
-        result = munge_injection()
+            result = munge_injection()
 
-        expected_overrides = [{
-            'contentLabel': 'hello',
-            'name': 'enabled',
-            'value': '1',
-        }]
-        self.assertTrue(call("123", expected_overrides) in mock_set.mock_calls)
-        self.assertTrue(call.update() in self.invoker.mock_calls)
-        self.assertEquals(1, result)
+            expected_overrides = [{
+                'contentLabel': 'hello',
+                'name': 'enabled',
+                'value': '1',
+            }]
+            self.assertTrue(call("123", expected_overrides) in mock_uep.setContentOverrides.mock_calls)
+            self.assertTrue(call.update() in self.invoker.mock_calls)
+            self.assertEquals(1, result)
