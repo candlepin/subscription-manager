@@ -34,16 +34,17 @@ class CliRemoveTests(fixture.SubManFixture):
         managercli.EntCertActionInvoker = StubEntActionInvoker
 
         cmd.main(['remove', '--all'])
-        self.assertEquals(cmd.cp.called_unbind_uuid,
-                          mock_identity.uuid)
+        self.assertEquals(cmd.cp.called_unbind_uuid, mock_identity.uuid)
 
         serial1 = '123456'
         cmd.main(['remove', '--serial=%s' % serial1])
         self.assertEquals(cmd.cp.called_unbind_serial, [serial1])
+        cmd.cp.reset()
 
         serial2 = '789012'
         cmd.main(['remove', '--serial=%s' % serial1, '--serial=%s' % serial2])
         self.assertEquals(cmd.cp.called_unbind_serial, [serial1, serial2])
+        cmd.cp.reset()
 
         pool_id1 = '39993922b'
         cmd.main(['remove', '--serial=%s' % serial1, '--serial=%s' % serial2, '--pool=%s' % pool_id1, '--pool=%s' % pool_id1])
@@ -54,10 +55,8 @@ class CliRemoveTests(fixture.SubManFixture):
         prod = StubProduct('stub_product')
         ent = StubEntitlementCertificate(prod)
 
-        inj.provide(inj.ENT_DIR,
-                StubEntitlementDirectory([ent]))
-        inj.provide(inj.PROD_DIR,
-                StubProductDirectory([]))
+        inj.provide(inj.ENT_DIR, StubEntitlementDirectory([ent]))
+        inj.provide(inj.PROD_DIR, StubProductDirectory([]))
         cmd = managercli.RemoveCommand()
 
         self._inject_mock_invalid_consumer()
@@ -73,10 +72,8 @@ class CliRemoveTests(fixture.SubManFixture):
         ent3 = StubEntitlementCertificate(prod)
         ent4 = StubEntitlementCertificate(prod, pool=pool)
 
-        inj.provide(inj.ENT_DIR,
-                StubEntitlementDirectory([ent1, ent2, ent3, ent4]))
-        inj.provide(inj.PROD_DIR,
-                StubProductDirectory([]))
+        inj.provide(inj.ENT_DIR, StubEntitlementDirectory([ent1, ent2, ent3, ent4]))
+        inj.provide(inj.PROD_DIR, StubProductDirectory([]))
         cmd = managercli.RemoveCommand()
 
         cmd.main(['remove', '--serial=%s' % ent1.serial, '--serial=%s' % ent3.serial, '--pool=%s' % ent4.pool.id])

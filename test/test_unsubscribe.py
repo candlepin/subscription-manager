@@ -35,29 +35,28 @@ class CliUnSubscribeTests(SubManFixture):
         ent2 = StubEntitlementCertificate(prod)
         ent3 = StubEntitlementCertificate(prod)
 
-        inj.provide(inj.ENT_DIR,
-                StubEntitlementDirectory([ent1, ent2, ent3]))
-        inj.provide(inj.PROD_DIR,
-                StubProductDirectory([]))
+        inj.provide(inj.ENT_DIR, StubEntitlementDirectory([ent1, ent2, ent3]))
+        inj.provide(inj.PROD_DIR, StubProductDirectory([]))
         cmd = managercli.UnSubscribeCommand()
 
         mock_identity = self._inject_mock_valid_consumer()
         managercli.EntCertActionInvoker = StubEntActionInvoker
 
         cmd.main(['unsubscribe', '--all'])
-        self.assertEquals(cmd.cp.called_unbind_uuid,
-                          mock_identity.uuid)
+        self.assertEquals(cmd.cp.called_unbind_uuid, mock_identity.uuid)
+        cmd.cp.reset()
 
         cmd.main(['unsubscribe', '--serial=%s' % ent1.serial])
         self.assertEquals(cmd.cp.called_unbind_serial, ['%s' % ent1.serial])
+        cmd.cp.reset()
 
         code = cmd.main(['unsubscribe', '--serial=%s' % ent2.serial, '--serial=%s' % ent3.serial])
         self.assertEquals(cmd.cp.called_unbind_serial, ['%s' % ent2.serial, '%s' % ent3.serial])
         self.assertEquals(code, 0)
 
-        self.stub_cp_provider.get_consumer_auth_cp().unbindBySerial = mock.Mock(
-            side_effect=connection.RestlibException("Entitlement Certificate with serial number "
-                                                    "2300922701043065601 could not be found."))
+        expected_exception = connection.RestlibException("Entitlement Certificate with serial number "
+            "2300922701043065601 could not be found.")
+        self.stub_cp_provider.get_consumer_auth_cp().unbindBySerial = mock.Mock(side_effect=expected_exception)
         code = cmd.main(['unsubscribe', '--serial=%s' % '2300922701043065601'])
 
         # FIXME: this causes something to freak out deep in nosetests...
@@ -67,10 +66,8 @@ class CliUnSubscribeTests(SubManFixture):
         prod = StubProduct('stub_product')
         ent = StubEntitlementCertificate(prod)
 
-        inj.provide(inj.ENT_DIR,
-                StubEntitlementDirectory([ent]))
-        inj.provide(inj.PROD_DIR,
-                StubProductDirectory([]))
+        inj.provide(inj.ENT_DIR, StubEntitlementDirectory([ent]))
+        inj.provide(inj.PROD_DIR, StubProductDirectory([]))
         cmd = managercli.UnSubscribeCommand()
 
         self._inject_mock_invalid_consumer()
@@ -84,10 +81,8 @@ class CliUnSubscribeTests(SubManFixture):
         ent2 = StubEntitlementCertificate(prod)
         ent3 = StubEntitlementCertificate(prod)
 
-        inj.provide(inj.ENT_DIR,
-                StubEntitlementDirectory([ent1, ent2, ent3]))
-        inj.provide(inj.PROD_DIR,
-                StubProductDirectory([]))
+        inj.provide(inj.ENT_DIR, StubEntitlementDirectory([ent1, ent2, ent3]))
+        inj.provide(inj.PROD_DIR, StubProductDirectory([]))
         cmd = managercli.UnSubscribeCommand()
 
         code = cmd.main(['unsubscribe', '--serial=%s' % ent1.serial, '--serial=%s' % ent3.serial])
