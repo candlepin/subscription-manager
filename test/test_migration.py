@@ -42,10 +42,6 @@ class TestMenu(unittest.TestCase):
             ("displayed-hello", "Hello"),
             ("displayed-world", "World"),
             ], "")
-        sys.stderr = stubs.MockStderr()
-
-    def tearDown(self):
-        sys.stderr = sys.__stderr__
 
     def test_enter_negative(self):
         self.assertRaises(migrate.InvalidChoiceError, self.menu._get_item, -1)
@@ -132,10 +128,6 @@ class TestMigration(SubManFixture):
                 self.engine.cp = stubs.StubUEP()
                 self.system_id_file = temp_id_file
 
-        # These tests print a lot to stdout and stderr
-        # so quiet them.
-        sys.stderr = stubs.MockStderr()
-
         self.double_mapped_channels = (
             "rhel-i386-client-dts-5-beta",
             "rhel-i386-client-dts-5-beta-debuginfo",
@@ -159,7 +151,6 @@ class TestMigration(SubManFixture):
 
     def tearDown(self):
         patch.stopall()
-        sys.stderr = sys.__stderr__
 
     def test_5to6_options(self):
         five_to_six = True

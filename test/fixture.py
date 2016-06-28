@@ -115,6 +115,8 @@ class SubManFixture(unittest.TestCase):
         id_mock.uuid = 'fixture_identity_mock_uuid'
         id_mock.name = 'fixture_identity_mock_name'
         id_mock.cert_dir_path = "/not/a/real/path/to/pki/consumer/"
+        id_mock.keypath.return_value = "/not/a/real/key/path"
+        id_mock.certpath.return_value = "/not/a/real/cert/path"
 
         # Don't really care about date ranges here:
         self.mock_calc = NonCallableMock()

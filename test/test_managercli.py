@@ -19,7 +19,7 @@ from subscription_manager.managercli import get_installed_product_status, AVAILA
 from subscription_manager.printing_utils import format_name, columnize, \
         echo_columnize_callback, none_wrap_columnize_callback, highlight_by_filter_string_columnize_callback, FONT_BOLD, FONT_RED, FONT_NORMAL
 from subscription_manager.repolib import Repo
-from stubs import MockStderr, StubProductCertificate, StubEntitlementCertificate, \
+from stubs import StubProductCertificate, StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP, StubProductDirectory, StubCertSorter, StubPool
 from fixture import FakeException, FakeLogger, SubManFixture, \
         Capture, Matcher
@@ -162,14 +162,6 @@ class InstalledProductStatusTests(SubManFixture):
 
 
 class TestCli(SubManFixture):
-    # shut up stdout spew
-    def setUp(self):
-        SubManFixture.setUp(self)
-        sys.stderr = stubs.MockStderr()
-
-    def tearDown(self):
-        sys.stderr = sys.__stderr__
-
     def test_cli(self):
         cli = managercli.ManagerCLI()
         self.assertTrue('register' in cli.cli_commands)
@@ -208,13 +200,6 @@ class TestCliCommand(SubManFixture):
         if hide_do:
             self._orig_do_command = self.cc._do_command
             self.cc._do_command = self._do_command
-
-        self.mock_stdout = MockStderr()
-        self.mock_stderr = MockStderr()
-        sys.stderr = self.mock_stderr
-
-    def tearDown(self):
-        sys.stderr = sys.__stderr__
 
     def _do_command(self):
         pass
@@ -263,11 +248,12 @@ class TestCliCommand(SubManFixture):
         mock_in_container.return_value = True
         err_msg = 'subscription-manager is disabled when running inside a container.'\
                   ' Please refer to your host system for subscription management.\n\n'
-        try:
-            self.cc.main()
-        except SystemExit, e:
-            self.assertEquals(os.EX_CONFIG, e.code)
-        self.assertEquals(err_msg, sys.stderr.buffer)
+        with Capture() as cap:
+            try:
+                self.cc.main()
+            except SystemExit, e:
+                self.assertEquals(os.EX_CONFIG, e.code)
+        self.assertEquals(err_msg, cap.err)
 
 
 # for command classes that expect proxy related cli args
@@ -683,12 +669,10 @@ class TestReposCommand(TestCliCommand):
         repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
         mock_invoker.return_value.get_repos.return_value = repos
 
-        # Execute command with our mock stdout capturing the output
-        sys.stdout = self.mock_stdout
-        self.cc._do_command()
-        sys.stdout = sys.__stdout__
+        with Capture() as cap:
+            self.cc._do_command()
 
-        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((True, True, True), result)
 
     @mock.patch("subscription_manager.managercli.RepoActionInvoker")
@@ -699,12 +683,10 @@ class TestReposCommand(TestCliCommand):
         repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
         mock_invoker.return_value.get_repos.return_value = repos
 
-        # Execute command with our mock stdout capturing the output
-        sys.stdout = self.mock_stdout
-        self.cc._do_command()
-        sys.stdout = sys.__stdout__
+        with Capture() as cap:
+            self.cc._do_command()
 
-        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((True, True, True), result)
 
     @mock.patch("subscription_manager.managercli.RepoActionInvoker")
@@ -715,12 +697,10 @@ class TestReposCommand(TestCliCommand):
         repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
         mock_invoker.return_value.get_repos.return_value = repos
 
-        # Execute command with our mock stdout capturing the output
-        sys.stdout = self.mock_stdout
-        self.cc._do_command()
-        sys.stdout = sys.__stdout__
+        with Capture() as cap:
+            self.cc._do_command()
 
-        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((True, True, True), result)
 
     @mock.patch("subscription_manager.managercli.RepoActionInvoker")
@@ -731,12 +711,10 @@ class TestReposCommand(TestCliCommand):
         repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
         mock_invoker.return_value.get_repos.return_value = repos
 
-        # Execute command with our mock stdout capturing the output
-        sys.stdout = self.mock_stdout
-        self.cc._do_command()
-        sys.stdout = sys.__stdout__
+        with Capture() as cap:
+            self.cc._do_command()
 
-        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((True, True, True), result)
 
     @mock.patch("subscription_manager.managercli.RepoActionInvoker")
@@ -747,12 +725,10 @@ class TestReposCommand(TestCliCommand):
         repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
         mock_invoker.return_value.get_repos.return_value = repos
 
-        # Execute command with our mock stdout capturing the output
-        sys.stdout = self.mock_stdout
-        self.cc._do_command()
-        sys.stdout = sys.__stdout__
+        with Capture() as cap:
+            self.cc._do_command()
 
-        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((True, True, True), result)
 
     @mock.patch("subscription_manager.managercli.RepoActionInvoker")
@@ -763,12 +739,10 @@ class TestReposCommand(TestCliCommand):
         repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
         mock_invoker.return_value.get_repos.return_value = repos
 
-        # Execute command with our mock stdout capturing the output
-        sys.stdout = self.mock_stdout
-        self.cc._do_command()
-        sys.stdout = sys.__stdout__
+        with Capture() as cap:
+            self.cc._do_command()
 
-        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((True, False, False), result)
 
     @mock.patch("subscription_manager.managercli.RepoActionInvoker")
@@ -779,12 +753,10 @@ class TestReposCommand(TestCliCommand):
         repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
         mock_invoker.return_value.get_repos.return_value = repos
 
-        # Execute command with our mock stdout capturing the output
-        sys.stdout = self.mock_stdout
-        self.cc._do_command()
-        sys.stdout = sys.__stdout__
+        with Capture() as cap:
+            self.cc._do_command()
 
-        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((False, True, True), result)
 
     @mock.patch("subscription_manager.managercli.RepoActionInvoker")
@@ -795,12 +767,10 @@ class TestReposCommand(TestCliCommand):
         repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
         mock_invoker.return_value.get_repos.return_value = repos
 
-        # Execute command with our mock stdout capturing the output
-        sys.stdout = self.mock_stdout
-        self.cc._do_command()
-        sys.stdout = sys.__stdout__
+        with Capture() as cap:
+            self.cc._do_command()
 
-        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((True, True, True), result)
 
     def test_enable(self):
@@ -1404,9 +1374,6 @@ class TestOverrideCommand(TestCliProxyCommand):
 
 
 class TestSystemExit(unittest.TestCase):
-    def setUp(self):
-        sys.stderr = MockStderr()
-
     def test_a_msg(self):
         msg = "some message"
         with Capture() as cap:
@@ -1465,18 +1432,18 @@ class TestSystemExit(unittest.TestCase):
 
         msg = "bar"
         msgs = ["a", StrException(msg)]
-        try:
-            managercli.system_exit(1, msgs)
-        except SystemExit:
-            pass
-        self.assertEquals("%s\n%s\n" % ("a", msg), sys.stderr.buffer)
+        with Capture() as cap:
+            try:
+                managercli.system_exit(1, msgs)
+            except SystemExit:
+                pass
+        self.assertEquals("%s\n%s\n" % ("a", msg), cap.err)
 
 
 class HandleExceptionTests(unittest.TestCase):
     def setUp(self):
         self.msg = "some thing to log home about"
         self.formatted_msg = "some thing else like: %s"
-        sys.stderr = MockStderr()
         managercli.log = FakeLogger()
 
     def test_he(self):
