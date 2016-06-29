@@ -1110,7 +1110,7 @@ class RegisterCommand(UserPassCommand):
 
                 if consumer.get('type', {}).get('manifest', {}):
                     log.error("registration attempted with consumerid = Subscription Management Application's uuid: %s" % self.options.consumerid)
-                    system_exit(os.EX_USAGE, _("Error: Cannot register with an ID of a Subscription Management Application: %s" % self.options.consumerid))
+                    system_exit(os.EX_USAGE, _("Error: Cannot register with an ID of a Subscription Management Application: %s") % self.options.consumerid)
 
             else:
                 owner_key = self._determine_owner_key(admin_cp)

@@ -362,7 +362,7 @@ class MigrationEngine(object):
             rpc_session.system.getDetails(session_key, self.system_id)
         except Exception, e:
             log.exception(e)
-            system_exit(1, _("You do not have access to system %s.  " % self.system_id) + SEE_LOG_FILE)
+            system_exit(1, _("You do not have access to system %s.  ") % self.system_id + SEE_LOG_FILE)
 
     def resolve_base_channel(self, label, rpc_session, session_key):
         try:

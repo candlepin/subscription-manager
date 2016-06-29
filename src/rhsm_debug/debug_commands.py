@@ -91,7 +91,7 @@ class SystemCommand(CliCommand):
             if not self._dirs_on_same_device(self.assemble_path, self.options.destination):
                 msg = _("To use the no-archive option, the destination directory '%s' "
                         "must exist on the same file system as the "
-                        "data assembly directory '%s'." % (self.options.destination, self.assemble_path))
+                        "data assembly directory '%s'.") % (self.options.destination, self.assemble_path)
                 raise InvalidCLIOptionError(msg)
         # In case folks are using this in a script
         if self.options.placeholder_for_subscriptions_option:
