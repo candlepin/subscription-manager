@@ -224,14 +224,15 @@ class TestComparableProductCert(TestComparableProduct):
 
 class TestProductDatabase(unittest.TestCase):
     def setUp(self):
-        self.patcher = patch('subscription_manager.productid.DatabaseDirectory')
-        self.mock_dir = self.patcher.start()
+        patcher = patch('subscription_manager.productid.DatabaseDirectory')
+        self.mock_dir = patcher.start()
         self.temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
         self.mock_dir.return_value = StubDirectory(path=self.temp_dir)
         self.pdb = productid.ProductDatabase()
 
+        self.addCleanup(patcher.stop)
+
     def tearDown(self):
-        self.patcher.stop()
         shutil.rmtree(self.temp_dir)
 
     # mock this so we can verify we call write to create a new one
@@ -240,13 +241,11 @@ class TestProductDatabase(unittest.TestCase):
         # tiny tmp file race here...
         no_dir = "%s/doesnt_exist" % self.temp_dir
         os.mkdir(no_dir)
-        patcher = patch('subscription_manager.productid.DatabaseDirectory')
-        mock_dir = patcher.start()
-        mock_dir.return_value = StubDirectory(path=no_dir)
-
-        mock_dir.write = Mock()
-        productid.ProductDatabase()
-        self.assertTrue(mock_write.called)
+        with patch('subscription_manager.productid.DatabaseDirectory') as mock_dir:
+            mock_dir.return_value = StubDirectory(path=no_dir)
+            mock_dir.write = Mock()
+            productid.ProductDatabase()
+            self.assertTrue(mock_write.called)
 
     def test_add(self):
         self.pdb.add("product", "repo")
