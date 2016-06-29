@@ -38,6 +38,7 @@ Requires: python-dateutil
 %if %use_simplejson
 Requires: python-simplejson
 %endif
+Requires: python-rhsm-certificates = %{version}-%{release}
 
 %if 0%{?sles_version}
 BuildRequires: python-devel >= 2.6
@@ -52,6 +53,17 @@ BuildRequires: openssl-devel
 A small library for communicating with the REST interface of a Red Hat Unified
 Entitlement Platform. This interface is used for the management of system
 entitlements, certificates, and access to content.
+
+
+%package certificates
+Summary: Certificates required to communicate with a Red Hat Unified Entitlement Platform
+Group: Development/Libraries
+
+%description certificates
+This package contains certificates required for communicating with the REST interface
+of a Red Hat Unified Entitlement Platform, used for the management of system entitlements
+and to receive access to content. Please note this package does not have a dependency on
+Python. The name instead reflects its relationship to python-rhsm.
 
 %prep
 %setup -q -n python-rhsm-%{version}
@@ -74,11 +86,14 @@ rm -rf %{buildroot}
 %doc README
 
 %dir %{python_sitearch}/rhsm
-%attr(755,root,root) %dir %{_sysconfdir}/rhsm
-%attr(755,root,root) %dir %{_sysconfdir}/rhsm/ca
 
 %{python_sitearch}/rhsm/*
 %{python_sitearch}/rhsm-*.egg-info
+
+%files certificates
+%attr(755,root,root) %dir %{_sysconfdir}/rhsm
+%attr(755,root,root) %dir %{_sysconfdir}/rhsm/ca
+
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
