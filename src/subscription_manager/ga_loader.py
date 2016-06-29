@@ -223,6 +223,19 @@ def init_ga(gtk_version=None):
     # ignore version.py info if it hasn't been set.
     if version.gtk_version != "GTK_VERSION":
         gtk_version_from_build = version.gtk_version
+    else:
+        # We should only be hitting this code in development when the version.py
+        # hasn't been through the setup.py rendering process.
+        import rpm
+        import warnings
+        # 0 if %rhel is undefined, rhel version if not
+        rhel = rpm.expandMacro('%rhel', True)
+
+        if rhel and rhel == 6:
+            gtk_version_from_build = "2"
+        else:
+            gtk_version_from_build = "3"
+        warnings.warn("GTK_VERSION is unset in version.py.  Using GTK %s" % gtk_version_from_build)
 
     GTK_VERSION = gtk_version or gtk_version_from_build or DEFAULT_GTK_VERSION
 
