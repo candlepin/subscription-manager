@@ -127,6 +127,8 @@ class PreferencesDialog(widgets.SubmanBaseWidget):
                 self.sla_model.append((sla, sla))
             if sla.lower() == current_sla.lower():
                 self.sla_combobox.set_active(index)
+                accessible = self.sla_combobox.get_accessible()
+                accessible.set_name(accessible.get_name().partition('|')[0] + '|' + sla)
 
     def load_releases(self, consumer_json):
         if "releaseVer" not in consumer_json:
@@ -154,6 +156,8 @@ class PreferencesDialog(widgets.SubmanBaseWidget):
                 self.release_model.append((available_release, available_release))
             if available_release == current_release:
                 self.release_combobox.set_active(index)
+                accessible = self.release_combobox.get_accessible()
+                accessible.set_name(accessible.get_name().partition('|')[0] + '|' + available_release)
 
     def load_autoheal(self, consumer_json):
         if 'autoheal' not in consumer_json:
@@ -174,11 +178,13 @@ class PreferencesDialog(widgets.SubmanBaseWidget):
         if self.allow_callbacks:
             model = combobox.get_model()
             active = combobox.get_active()
+            accessible = combobox.get_accessible()
             if active < 0:
                 log.info("SLA changed but nothing selected? Ignoring.")
                 return
 
             new_sla = model[active][1]
+            accessible.set_name(accessible.get_name().partition('|')[0] + '|' + new_sla)
             log.info("SLA changed to: %s" % new_sla)
             update = utils.WidgetUpdate(combobox)
             method = self.backend.cp_provider.get_consumer_auth_cp().updateConsumer
@@ -188,10 +194,13 @@ class PreferencesDialog(widgets.SubmanBaseWidget):
         if self.allow_callbacks:
             model = combobox.get_model()
             active = combobox.get_active()
+            accessible = combobox.get_accessible()
             if active < 0:
                 log.info("release changed but nothing selected? Ignoring.")
                 return
+
             new_release = model[active][1]
+            accessible.set_name(accessible.get_name().partition('|')[0] + '|' + new_release)
             log.info("release changed to: %s" % new_release)
             update = utils.WidgetUpdate(combobox)
             method = self.backend.cp_provider.get_consumer_auth_cp().updateConsumer
