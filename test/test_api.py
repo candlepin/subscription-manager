@@ -16,7 +16,6 @@ from subscription_manager import api
 from subscription_manager.repolib import Repo
 
 from fixture import SubManFixture
-from stubs import StubUEP
 
 
 class ApiVersionTest(SubManFixture):
@@ -29,37 +28,37 @@ class RepoApiTest(SubManFixture):
     def setUp(self):
         super(RepoApiTest, self).setUp()
         invoker_patcher = patch("subscription_manager.api.repos.RepoActionInvoker", autospec=True)
-        self.invoker = invoker_patcher.start().return_value
+        self.invoker = invoker_patcher.start()
         self.addCleanup(invoker_patcher.stop)
 
         repo_file_patcher = patch("subscription_manager.api.repos.RepoFile", autospec=True)
-        self.repo_file = repo_file_patcher.start().return_value
+        self.repo_file = repo_file_patcher.start()
         self.addCleanup(repo_file_patcher.stop)
 
     def test_disable_repo(self):
         repo_settings = {
             'enabled': '1',
         }
-        self.invoker.get_repos.return_value = [
+        self.invoker.return_value.get_repos.return_value = [
             Repo('hello', repo_settings.items()),
         ]
         self.repo_file.items.return_value = repo_settings.items()
         result = api.disable_yum_repositories('hello')
 
-        self.assertTrue(call.write() in self.repo_file.mock_calls)
+        self.repo_file.return_value.write.assert_called_with()
         self.assertEquals(1, result)
 
     def test_enable_repo(self):
         repo_settings = {
             'enabled': '0',
         }
-        self.invoker.get_repos.return_value = [
+        self.invoker.return_value.get_repos.return_value = [
             Repo('hello', repo_settings.items()),
         ]
         self.repo_file.items.return_value = repo_settings.items()
         result = api.enable_yum_repositories('hello')
 
-        self.assertTrue(call.write() in self.repo_file.mock_calls)
+        self.repo_file.return_value.write.assert_called_with()
         self.assertEquals(1, result)
 
     def test_enable_repo_wildcard(self):
@@ -67,32 +66,31 @@ class RepoApiTest(SubManFixture):
             'enabled': '0',
         }
 
-        self.invoker.get_repos.return_value = [
+        self.invoker.return_value.get_repos.return_value = [
             Repo('hello', repo_settings.copy().items()),
             Repo('helium', repo_settings.copy().items()),
         ]
         self.repo_file.items.return_value = repo_settings.copy().items()
 
         result = api.enable_yum_repositories('he*')
-
-        self.assertTrue(call.write() in self.repo_file.mock_calls)
+        self.repo_file.return_value.write.assert_called_with()
         self.assertEquals(2, result)
 
     def test_does_not_enable_nonmatching_repos(self):
         repo_settings = {
             'enabled': '0',
         }
-        self.invoker.get_repos.return_value = [
+        self.invoker.return_value.get_repos.return_value = [
             Repo('x', repo_settings.items()),
         ]
         self.repo_file.items.return_value = repo_settings.items()
         result = api.enable_yum_repositories('hello')
 
-        self.assertFalse(call.write() in self.repo_file.mock_calls)
+        self.assertEquals(0, len(self.repo_file.return_value.write.mock_calls))
         self.assertEquals(0, result)
 
     def test_update_overrides_cache(self):
-        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+        with patch('rhsm.connection.UEPConnection') as mock_uep:
             self.stub_cp_provider.consumer_auth_cp = mock_uep
             mock_uep.supports_resource = Mock(return_value=True)
             mock_uep.setContentOverrides = Mock()
@@ -100,23 +98,26 @@ class RepoApiTest(SubManFixture):
             repo_settings = {
                 'enabled': '0',
             }
-            self.invoker.get_repos.return_value = [
+            self.invoker.return_value.get_repos.return_value = [
                 Repo('hello', repo_settings.items()),
             ]
             self.repo_file.items.return_value = repo_settings.items()
 
-            @api.request_injection
-            def munge_injection():
-                self._inject_mock_valid_consumer("123")
-                return api.enable_yum_repositories('hello')
+            self._inject_mock_valid_consumer("123")
 
-            result = munge_injection()
+            # The API methods try to bootstrap injection themselves so we want
+            # to avoid that here.
+            with patch('subscription_manager.api.injected') as injected:
+                injected.return_value = True
 
-            expected_overrides = [{
-                'contentLabel': 'hello',
-                'name': 'enabled',
-                'value': '1',
-            }]
-            self.assertTrue(call("123", expected_overrides) in mock_uep.setContentOverrides.mock_calls)
-            self.assertTrue(call.update() in self.invoker.mock_calls)
-            self.assertEquals(1, result)
+                result = api.enable_yum_repositories('hello')
+
+                expected_overrides = [{
+                    'contentLabel': 'hello',
+                    'name': 'enabled',
+                    'value': '1',
+                }]
+                self.assertTrue(call("123", expected_overrides) in mock_uep.setContentOverrides.mock_calls)
+
+                self.invoker.return_value.update.assert_called_with()
+                self.assertEquals(1, result)
