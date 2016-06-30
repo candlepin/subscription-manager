@@ -12,7 +12,7 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.17.4
+Version: 1.17.5
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -97,6 +97,9 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Jun 30 2016 Vritant Jain <vrjain@redhat.com> 1.17.5-1
+- 1104332: Separate out the rhsm certs into a separate RPM (vrjain@redhat.com)
+
 * Tue Jun 21 2016 Vritant Jain <vrjain@redhat.com> 1.17.4-1
 - 1346417: Allow users to set socket timeout. (awood@redhat.com)
 - Fix Flake8 Errors (bcourt@redhat.com)
