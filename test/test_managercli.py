@@ -15,6 +15,8 @@ from subscription_manager.managercli import get_installed_product_status, AVAILA
 from subscription_manager.printing_utils import format_name, columnize, \
         echo_columnize_callback, none_wrap_columnize_callback, highlight_by_filter_string_columnize_callback, FONT_BOLD, FONT_RED, FONT_NORMAL
 from subscription_manager.repolib import Repo
+from subscription_manager.overrides import Override
+
 from stubs import StubProductCertificate, StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP, StubProductDirectory, \
         StubCertSorter, StubPool
@@ -26,7 +28,6 @@ from mock import patch, Mock, call
 # for some exceptions
 from rhsm import connection
 from M2Crypto import SSL
-from subscription_manager.overrides import Override
 
 
 class InstalledProductStatusTests(SubManFixture):
@@ -375,22 +376,22 @@ class TestRegisterCommand(TestCliProxyCommand):
     def test_no_commands(self):
         self._test_no_exception([])
 
-    @patch.object(managercli.cfg, "save")
-    def test_main_server_url(self, mock_save):
-        server_url = "https://subscription.rhsm.redhat.com/subscription"
-        self._test_no_exception(["--serverurl", server_url])
-        mock_save.assert_called_with()
+    def test_main_server_url(self):
+        with patch.object(self.mock_cfg, "save") as mock_save:
+            server_url = "https://subscription.rhsm.redhat.com/subscription"
+            self._test_no_exception(["--serverurl", server_url])
+            mock_save.assert_called_with()
 
-    @patch.object(managercli.cfg, "save")
-    def test_main_base_url(self, mock_save):
-        base_url = "https://cdn.redhat.com"
-        self._test_no_exception(["--baseurl", base_url])
-        mock_save.assert_called_with()
+    def test_main_base_url(self):
+        with patch.object(self.mock_cfg, "save") as mock_save:
+            base_url = "https://cdn.redhat.com"
+            self._test_no_exception(["--baseurl", base_url])
+            mock_save.assert_called_with()
 
-    @patch.object(managercli.cfg, "save")
-    def test_insecure(self, mock_save):
-        self._test_no_exception(["--insecure"])
-        mock_save.assert_called_with()
+    def test_insecure(self):
+        with patch.object(self.mock_cfg, "save") as mock_save:
+            self._test_no_exception(["--insecure"])
+            mock_save.assert_called_with()
 
 
 class TestListCommand(TestCliProxyCommand):

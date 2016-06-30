@@ -114,7 +114,7 @@ class SubManFixture(unittest.TestCase):
         # Never attempt to use the actual managercli.cfg which points to a
         # real file in etc.
         cfg_patcher = patch.object(subscription_manager.managercli, 'cfg', new=stubs.config.CFG)
-        cfg_patcher.start()
+        self.mock_cfg = cfg_patcher.start()
 
         # By default mock that we are registered. Individual test cases
         # can override if they are testing disconnected scenario.
