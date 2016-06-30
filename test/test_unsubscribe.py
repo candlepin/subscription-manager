@@ -13,22 +13,18 @@
 # in this software or its documentation.
 #
 import mock
-
-from stubs import StubEntitlementDirectory, StubProductDirectory
-from stubs import StubEntActionInvoker, StubEntitlementCertificate
-from stubs import StubProduct
-from fixture import SubManFixture
 import rhsm.connection as connection
+
+from stubs import StubEntitlementDirectory, StubProductDirectory, \
+    StubEntActionInvoker, StubEntitlementCertificate, StubProduct
+from fixture import SubManFixture
+
 from subscription_manager import managercli
 from subscription_manager import injection as inj
 
 
 # This is a dupe of test_remove
 class CliUnSubscribeTests(SubManFixture):
-
-    def setUp(self):
-        super(CliUnSubscribeTests, self).setUp()
-
     def test_unsubscribe_registered(self):
         prod = StubProduct('stub_product')
         ent1 = StubEntitlementCertificate(prod)

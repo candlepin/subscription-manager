@@ -20,6 +20,7 @@ from contextlib import contextmanager
 
 import stubs
 import subscription_manager.injection as inj
+import subscription_manager.managercli
 
 # use instead of the normal pid file based ActionLock
 from threading import RLock
@@ -108,6 +109,13 @@ class SubManFixture(unittest.TestCase):
     mocks/stubs are in place.
     """
     def setUp(self):
+        self.addCleanup(patch.stopall)
+
+        # Never attempt to use the actual managercli.cfg which points to a
+        # real file in etc.
+        cfg_patcher = patch.object(subscription_manager.managercli, 'cfg', new=stubs.config.CFG)
+        cfg_patcher.start()
+
         # By default mock that we are registered. Individual test cases
         # can override if they are testing disconnected scenario.
         id_mock = NonCallableMock(name='FixtureIdentityMock')
@@ -169,12 +177,14 @@ class SubManFixture(unittest.TestCase):
 
         self.dbus_patcher = patch('subscription_manager.managercli.CliCommand._request_validity_check')
         self.dbus_patcher.start()
+
         # No tests should be trying to connect to any configure or test server
         # so really, everything needs this mock. May need to be in __init__, or
         # better, all test classes need to use SubManFixture
         self.is_valid_server_patcher = patch("subscription_manager.managercli.is_valid_server_info")
         is_valid_server_mock = self.is_valid_server_patcher.start()
         is_valid_server_mock.return_value = True
+
         # No tests should be trying to test the proxy connection
         # so really, everything needs this mock. May need to be in __init__, or
         # better, all test classes need to use SubManFixture
@@ -185,11 +195,6 @@ class SubManFixture(unittest.TestCase):
         self.files_to_cleanup = []
 
     def tearDown(self):
-        self.dbus_patcher.stop()
-        self.mock_repofile_path_exists_patcher.stop()
-        self.is_valid_server_patcher.stop()
-        self.test_proxy_connection_patcher.stop()
-
         for f in self.files_to_cleanup:
             # Assuming these are tempfile.NamedTemporaryFile, created with
             # the write_tempfile() method in this class.

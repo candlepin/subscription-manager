@@ -42,6 +42,7 @@ from rhsm import ourjson as json
 cfg_buf = """
 [foo]
 bar =
+
 [server]
 hostname = server.example.conf
 prefix = /candlepin

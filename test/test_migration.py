@@ -16,7 +16,6 @@ import os
 import re
 import StringIO
 import stubs
-import sys
 import unittest
 
 from mock import patch, NonCallableMock, MagicMock, Mock, call

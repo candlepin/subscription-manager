@@ -28,16 +28,13 @@ class ApiVersionTest(SubManFixture):
 class RepoApiTest(SubManFixture):
     def setUp(self):
         super(RepoApiTest, self).setUp()
-        self.invoker_patcher = patch("subscription_manager.api.repos.RepoActionInvoker", autospec=True)
-        self.invoker = self.invoker_patcher.start().return_value
+        invoker_patcher = patch("subscription_manager.api.repos.RepoActionInvoker", autospec=True)
+        self.invoker = invoker_patcher.start().return_value
+        self.addCleanup(invoker_patcher.stop)
 
-        self.repo_file_patcher = patch("subscription_manager.api.repos.RepoFile", autospec=True)
-        self.repo_file = self.repo_file_patcher.start().return_value
-
-    def tearDown(self):
-        super(RepoApiTest, self).tearDown()
-        self.invoker_patcher.stop()
-        self.repo_file_patcher.stop()
+        repo_file_patcher = patch("subscription_manager.api.repos.RepoFile", autospec=True)
+        self.repo_file = repo_file_patcher.start().return_value
+        self.addCleanup(repo_file_patcher.stop)
 
     def test_disable_repo(self):
         repo_settings = {

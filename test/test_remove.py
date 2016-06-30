@@ -23,10 +23,6 @@ import fixture
 
 # This is a copy of CliUnSubscribeTests for the new name.
 class CliRemoveTests(fixture.SubManFixture):
-
-    def setUp(self):
-        super(CliRemoveTests, self).setUp()
-
     def test_unsubscribe_registered(self):
         cmd = managercli.RemoveCommand()
 

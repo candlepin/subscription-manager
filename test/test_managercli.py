@@ -8,10 +8,6 @@ import os
 import tempfile
 import contextlib
 
-
-# for monkey patching config
-import stubs
-
 from subscription_manager import managercli, managerlib
 from subscription_manager.injection import provide, \
         CERT_SORTER, PROD_DIR
@@ -20,14 +16,13 @@ from subscription_manager.printing_utils import format_name, columnize, \
         echo_columnize_callback, none_wrap_columnize_callback, highlight_by_filter_string_columnize_callback, FONT_BOLD, FONT_RED, FONT_NORMAL
 from subscription_manager.repolib import Repo
 from stubs import StubProductCertificate, StubEntitlementCertificate, \
-        StubConsumerIdentity, StubProduct, StubUEP, StubProductDirectory, StubCertSorter, StubPool
+        StubConsumerIdentity, StubProduct, StubUEP, StubProductDirectory, \
+        StubCertSorter, StubPool
 from fixture import FakeException, FakeLogger, SubManFixture, \
         Capture, Matcher
 
+from mock import patch, Mock, call
 
-import mock
-from mock import patch
-from mock import Mock
 # for some exceptions
 from rhsm import connection
 from M2Crypto import SSL
@@ -408,7 +403,7 @@ class TestListCommand(TestCliProxyCommand):
             StubProduct("test-product"), service_level="Premium")
         TestCliProxyCommand.setUp(self)
 
-    @mock.patch('subscription_manager.managerlib.get_available_entitlements')
+    @patch('subscription_manager.managerlib.get_available_entitlements')
     def test_none_wrap_available_pool_id(self, mget_ents):
         list_command = managercli.ListCommand()
 
@@ -661,7 +656,7 @@ class TestReposCommand(TestCliCommand):
 
         return tuple(searches)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_default(self, mock_invoker):
         self.cc.main()
         self.cc._validate_options()
@@ -675,7 +670,7 @@ class TestReposCommand(TestCliCommand):
         result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((True, True, True), result)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_list(self, mock_invoker):
         self.cc.main(["--list"])
         self.cc._validate_options()
@@ -689,7 +684,7 @@ class TestReposCommand(TestCliCommand):
         result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((True, True, True), result)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_list_with_enabled(self, mock_invoker):
         self.cc.main(["--list", "--list-enabled"])
         self.cc._validate_options()
@@ -703,7 +698,7 @@ class TestReposCommand(TestCliCommand):
         result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((True, True, True), result)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_list_with_disabled(self, mock_invoker):
         self.cc.main(["--list", "--list-disabled"])
         self.cc._validate_options()
@@ -717,7 +712,7 @@ class TestReposCommand(TestCliCommand):
         result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((True, True, True), result)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_list_with_enabled_and_disabled(self, mock_invoker):
         self.cc.main(["--list", "--list-disabled", "--list-disabled"])
         self.cc._validate_options()
@@ -731,7 +726,7 @@ class TestReposCommand(TestCliCommand):
         result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((True, True, True), result)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_list_enabled(self, mock_invoker):
         self.cc.main(["--list-enabled"])
         self.cc._validate_options()
@@ -745,7 +740,7 @@ class TestReposCommand(TestCliCommand):
         result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((True, False, False), result)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_list_disabled(self, mock_invoker):
         self.cc.main(["--list-disabled"])
         self.cc._validate_options()
@@ -759,7 +754,7 @@ class TestReposCommand(TestCliCommand):
         result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((False, True, True), result)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_list_enabled_and_disabled(self, mock_invoker):
         self.cc.main(["--list-enabled", "--list-disabled"])
         self.cc._validate_options()
@@ -781,7 +776,7 @@ class TestReposCommand(TestCliCommand):
         self.cc.main(["--disable", "one", "--disable", "two"])
         self.cc._validate_options()
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_set_repo_status(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
         self._inject_mock_valid_consumer('fake_id')
@@ -792,7 +787,7 @@ class TestReposCommand(TestCliCommand):
         self.cc._set_repo_status(repos, repolib_instance, items)
 
         expected_overrides = [{'contentLabel': i, 'name': 'enabled', 'value':
-            '0'} for (action, i) in items]
+            '0'} for (_action, i) in items]
 
         # The list of overrides sent to setContentOverrides is really a set of
         # dictionaries (since we don't know the order of the overrides).
@@ -804,7 +799,7 @@ class TestReposCommand(TestCliCommand):
                 match_dict_list)
         self.assertTrue(repolib_instance.update.called)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_set_repo_status_with_wildcards(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
         self._inject_mock_valid_consumer('fake_id')
@@ -821,7 +816,7 @@ class TestReposCommand(TestCliCommand):
                 match_dict_list)
         self.assertTrue(repolib_instance.update.called)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_set_repo_status_disable_all_enable_some(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
         self._inject_mock_valid_consumer('fake_id')
@@ -842,7 +837,7 @@ class TestReposCommand(TestCliCommand):
                 match_dict_list)
         self.assertTrue(repolib_instance.update.called)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_set_repo_status_enable_all_disable_some(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
         self._inject_mock_valid_consumer('fake_id')
@@ -863,7 +858,7 @@ class TestReposCommand(TestCliCommand):
                 match_dict_list)
         self.assertTrue(repolib_instance.update.called)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_set_repo_status_enable_all_disable_all(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
         self._inject_mock_valid_consumer('fake_id')
@@ -883,7 +878,7 @@ class TestReposCommand(TestCliCommand):
                 match_dict_list)
         self.assertTrue(repolib_instance.update.called)
 
-    @mock.patch("subscription_manager.managercli.RepoFile")
+    @patch("subscription_manager.managercli.RepoFile")
     def test_set_repo_status_when_disconnected(self, mock_repofile):
         self._inject_mock_invalid_consumer()
         mock_repofile_inst = mock_repofile.return_value
@@ -899,7 +894,7 @@ class TestReposCommand(TestCliCommand):
         items = [('0', 'z*')]
 
         self.cc._set_repo_status(repos, None, items)
-        calls = [mock.call(r) for r in repos if r['enabled'] == 1]
+        calls = [call(r) for r in repos if r['enabled'] == 1]
         mock_repofile_inst.update.assert_has_calls(calls)
         for r in repos:
             self.assertEquals('0', r['enabled'])
@@ -917,7 +912,6 @@ class TestConfigCommand(TestCliCommand):
         self.cc.main(["--remove", "server.hostname", "--remove", "server.port"])
         self.cc._validate_options()
 
-    # unneuter these guys, since config doesn't required much mocking
     def test_config_list(self):
         self.cc._do_command = self._orig_do_command
         self.cc.main(["--list"])
@@ -928,8 +922,6 @@ class TestConfigCommand(TestCliCommand):
         sys.argv = ["subscription-manager", "config"]
         self.cc.main([])
 
-    # testing this is a bit weird, since we are using a stub config
-    # already, we kind of need to mock the stub config to validate
     def test_set_config(self):
         self.cc._do_command = self._orig_do_command
 
@@ -981,8 +973,8 @@ class TestAttachCommand(TestCliProxyCommand):
     @classmethod
     def tearDownClass(cls):
         # Unlink temp files
-        for file in cls.tempfiles:
-            os.unlink(file[1])
+        for f in cls.tempfiles:
+            os.unlink(f[1])
 
     def _test_quantity_exception(self, arg):
         try:
@@ -1031,8 +1023,8 @@ class TestAttachCommand(TestCliProxyCommand):
     def test_positive_quantity_as_float(self):
         self._test_quantity_exception("2.0")
 
-    def _test_pool_file_processing(self, file, expected):
-        self.cc.main(["--file", file])
+    def _test_pool_file_processing(self, f, expected):
+        self.cc.main(["--file", f])
         self.cc._validate_options()
 
         self.assertEquals(expected, self.cc.options.pool)
