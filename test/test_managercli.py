@@ -191,30 +191,29 @@ class TestCliCommand(SubManFixture):
     def setUp(self, hide_do=True):
         super(TestCliCommand, self).setUp()
         self.cc = self.command_class()
-        # neuter the _do_command, since this is mostly
-        # for testing arg parsing
-        if hide_do:
-            self._orig_do_command = self.cc._do_command
-            self.cc._do_command = self._do_command
 
-    def _do_command(self):
-        pass
+        if hide_do:
+            # patch the _do_command with a mock
+            self._orig_do_command = self.cc._do_command
+            do_command_patcher = patch.object(self.command_class, '_do_command')
+            self.mock_do_command = do_command_patcher.start()
+            self.addCleanup(do_command_patcher.stop)
 
     def test_main_no_args(self):
         try:
             # we fall back to sys.argv if there
             # is no args passed in, so stub out
             # sys.argv for test
-            sys.argv = ["subscription-manager"]
-            self.cc.main()
+            with patch.object(sys, 'argv', ['subscription-manager']):
+                self.cc.main()
         except SystemExit, e:
             # 2 == no args given
             self.assertEquals(e.code, 2)
 
     def test_main_empty_args(self):
         try:
-            sys.argv = ["subscription-manager"]
-            self.cc.main([])
+            with patch.object(sys, 'argv', ['subscription-manager']):
+                self.cc.main([])
         except SystemExit, e:
             # 2 == no args given
             self.assertEquals(e.code, 2)
@@ -240,16 +239,16 @@ class TestCliCommand(SubManFixture):
     # docker error message should output to stderr
     @patch('subscription_manager.managercli.rhsm.config.in_container')
     def test_cli_in_container_error_message(self, mock_in_container):
-        sys.argv = ["subscription-manager", "version"]
-        mock_in_container.return_value = True
-        err_msg = 'subscription-manager is disabled when running inside a container.'\
-                  ' Please refer to your host system for subscription management.\n\n'
-        with Capture() as cap:
-            try:
-                self.cc.main()
-            except SystemExit, e:
-                self.assertEquals(os.EX_CONFIG, e.code)
-        self.assertEquals(err_msg, cap.err)
+        with patch.object(sys, 'argv', ['subscription-manager', 'version']):
+            mock_in_container.return_value = True
+            err_msg = 'subscription-manager is disabled when running inside a container.'\
+                      ' Please refer to your host system for subscription management.\n\n'
+            with Capture() as cap:
+                try:
+                    self.cc.main()
+                except SystemExit, e:
+                    self.assertEquals(os.EX_CONFIG, e.code)
+            self.assertEquals(err_msg, cap.err)
 
 
 # for command classes that expect proxy related cli args
@@ -331,7 +330,9 @@ class TestRegisterCommand(TestCliProxyCommand):
     def setUp(self):
         super(TestRegisterCommand, self).setUp()
         self._inject_mock_invalid_consumer()
-        # TODO: two versions of this, one registered, one not registered
+        argv_patcher = patch.object(sys, 'argv', ['subscription-manager', 'register'])
+        argv_patcher.start()
+        self.addCleanup(argv_patcher.stop)
 
     def _test_exception(self, args):
         try:
@@ -398,11 +399,14 @@ class TestListCommand(TestCliProxyCommand):
     command_class = managercli.ListCommand
 
     def setUp(self):
+        super(TestListCommand, self).setUp(False)
         self.indent = 1
         self.max_length = 40
         self.cert_with_service_level = StubEntitlementCertificate(
             StubProduct("test-product"), service_level="Premium")
-        TestCliProxyCommand.setUp(self)
+        argv_patcher = patch.object(sys, 'argv', ['subscription-manager', 'list'])
+        argv_patcher.start()
+        self.addCleanup(argv_patcher.stop)
 
     @patch('subscription_manager.managerlib.get_available_entitlements')
     def test_none_wrap_available_pool_id(self, mget_ents):
@@ -427,7 +431,7 @@ class TestListCommand(TestCliProxyCommand):
         mget_ents.return_value = create_pool_list()
 
         with Capture() as cap:
-            list_command.main(['list', '--available'])
+            list_command.main(['--available'])
         self.assertTrue('888888888888' in cap.out)
 
     def test_print_consumed_no_ents(self):
@@ -471,7 +475,7 @@ class TestListCommand(TestCliProxyCommand):
         for (test_num, data) in enumerate(test_data):
             with Capture() as captured:
                 list_command = managercli.ListCommand()
-                list_command.main(["list", "--installed", "--matches", data[0]])
+                list_command.main(["--installed", "--matches", data[0]])
 
             for (index, expected) in enumerate(data[1]):
                 if expected:
@@ -522,7 +526,7 @@ class TestListCommand(TestCliProxyCommand):
         for (test_num, data) in enumerate(test_data):
             with Capture() as captured:
                 list_command = managercli.ListCommand()
-                list_command.main(["list", "--consumed", "--matches", data[0]])
+                list_command.main(["--consumed", "--matches", data[0]])
 
             for (index, expected) in enumerate(data[1]):
                 if expected:
@@ -592,7 +596,7 @@ class TestListCommand(TestCliProxyCommand):
         try:
             with Capture() as captured:
                 list_command = managercli.ListCommand()
-                list_command.main(["list", "--installed", "--pool-only"])
+                list_command.main(["--installed", "--pool-only"])
 
             self.fail("Expected error did not occur")
         except SystemExit:
@@ -621,7 +625,7 @@ class TestListCommand(TestCliProxyCommand):
 
         with Capture() as captured:
             list_command = managercli.ListCommand()
-            list_command.main(["list", "--consumed", "--pool-only"])
+            list_command.main(["--consumed", "--pool-only"])
 
         for cert in consumed:
             self.assertFalse(cert.order.name in captured.out)
@@ -641,6 +645,9 @@ class TestReposCommand(TestCliCommand):
 
     def setUp(self):
         super(TestReposCommand, self).setUp(False)
+        argv_patcher = patch.object(sys, 'argv', ['subscription-manager', 'repos'])
+        argv_patcher.start()
+        self.addCleanup(argv_patcher.stop)
         self.cc.cp = Mock()
 
     def check_output_for_repos(self, output, repos):
@@ -920,8 +927,8 @@ class TestConfigCommand(TestCliCommand):
     def test_config(self):
         self.cc._do_command = self._orig_do_command
         # if args is empty we default to sys.argv, so stub it
-        sys.argv = ["subscription-manager", "config"]
-        self.cc.main([])
+        with patch.object(sys, 'argv', ['subscription-manager', 'config']):
+            self.cc.main([])
 
     def test_set_config(self):
         self.cc._do_command = self._orig_do_command
@@ -976,6 +983,12 @@ class TestAttachCommand(TestCliProxyCommand):
         # Unlink temp files
         for f in cls.tempfiles:
             os.unlink(f[1])
+
+    def setUp(self):
+        super(TestAttachCommand, self).setUp()
+        argv_patcher = patch.object(sys, 'argv', ['subscription-manager', 'attach'])
+        argv_patcher.start()
+        self.addCleanup(argv_patcher.stop)
 
     def _test_quantity_exception(self, arg):
         try:
@@ -1222,30 +1235,22 @@ class TestServiceLevelCommand(TestCliProxyCommand):
 class TestReleaseCommand(TestCliProxyCommand):
     command_class = managercli.ReleaseCommand
 
-    def _stub_connection(self):
-        # er, first cc is command_class, second is ContentConnection
-
-        def _get_consumer_release():
-            pass
-
-        self.cc._get_consumer_release = _get_consumer_release
-
     def test_main_proxy_url_release(self):
         proxy_host = "example.com"
         proxy_port = "3128"
         proxy_url = "%s:%s" % (proxy_host, proxy_port)
-        self.cc.main(["--proxy", proxy_url])
-        self._stub_connection()
 
-        self._orig_do_command()
+        with patch.object(managercli.ReleaseCommand, '_get_consumer_release'):
+            self.cc.main(["--proxy", proxy_url])
+            self._orig_do_command()
 
-        # FIXME: too many stubs atm to make this meaningful
-        #self.assertEquals(proxy_host, self.cc.cp_provider.content_connection.proxy_hostname)
+            # FIXME: too many stubs atm to make this meaningful
+            #self.assertEquals(proxy_host, self.cc.cp_provider.content_connection.proxy_hostname)
 
-        self.assertEquals(proxy_url, self.cc.options.proxy_url)
-        self.assertEquals(type(proxy_url), type(self.cc.options.proxy_url))
-        self.assertEquals(proxy_host, self.cc.proxy_hostname)
-        self.assertEquals(int(proxy_port), self.cc.proxy_port)
+            self.assertEquals(proxy_url, self.cc.options.proxy_url)
+            self.assertEquals(type(proxy_url), type(self.cc.options.proxy_url))
+            self.assertEquals(proxy_host, self.cc.proxy_hostname)
+            self.assertEquals(int(proxy_port), self.cc.proxy_port)
 
 
 class TestVersionCommand(TestCliCommand):
@@ -1258,9 +1263,6 @@ class TestPluginsCommand(TestCliCommand):
 
 class TestOverrideCommand(TestCliProxyCommand):
     command_class = managercli.OverrideCommand
-
-    def setUp(self):
-        TestCliProxyCommand.setUp(self)
 
     def _test_exception(self, args):
         self.cc.main(args)
@@ -1289,9 +1291,10 @@ class TestOverrideCommand(TestCliProxyCommand):
         self._test_exception(["--repo", "x"])
 
     def test_list_by_default(self):
-        self.cc.main([])
-        self.cc._validate_options()
-        self.assertTrue(self.cc.options.list)
+        with patch.object(sys, 'argv', ['subscription-manager', 'repo-override']):
+            self.cc.main([])
+            self.cc._validate_options()
+            self.assertTrue(self.cc.options.list)
 
     def test_list_by_default_with_options_from_super_class(self):
         self.cc.main(["--proxy", "http://www.example.com", "--proxyuser", "foo", "--proxypassword", "bar"])
