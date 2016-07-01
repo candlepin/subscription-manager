@@ -9,14 +9,26 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 
-import ConfigParser
 import logging
 import logging.handlers
 import logging.config
 import os
 import sys
+from rhsm import ourjson as json
+
+# Python 2.6 does not have dict config available
+# Attempt to import dictConfig
+try:
+    from logging.config import dictConfig
+    dict_config = dictConfig
+except ImportError as e:
+    # fall back to our version stolen from python 2.7
+    from compat.logging_config import dictConfig
+    dict_config = dictConfig
+
 
 LOGGING_CONFIG = "/etc/rhsm/logging.conf"
+PLUGIN_LOGGING_CONFIG = "/etc/rhsm/plugin_logging.conf"
 LOGFILE_PATH = "/var/log/rhsm/rhsm.log"
 
 
@@ -105,39 +117,37 @@ class PyWarningsLogger(logging.getLoggerClass()):
         self.addFilter(PyWarningsLoggingFilter(name="py.warnings"))
 
 
-def file_config(logging_config):
-    """Load logging config from the file logging_config and setup logging."""
-
-    # NOTE: without disable_existing_loggers, this would have to
-    # be close to the first thing ran. Any loggers created after
-    # that are disabled. This likely includes module level loggers
-    # like all of ours.
-    try:
-        logging.config.fileConfig(logging_config,
-                                  defaults={'logfilepath': LOGFILE_PATH},
-                                  disable_existing_loggers=False)
-    except ConfigParser.Error, e:
-        # If the log config file doesn't exist, or is empty, we end up
-        # with ConfigParser errors.
-
-        # TODO: fallback default logger?
-        print e
-
-
-def init_logger():
+def init_logger(path_to_config=LOGGING_CONFIG):
     """Load logging config file and setup logging.
 
     Only needs to be called once per process."""
-
-    file_config(logging_config=LOGGING_CONFIG)
+    config_dict = apply_defaults(
+        json.loads(file(path_to_config).read()),
+        {'logfilepath': LOGFILE_PATH})
+    dict_config(config_dict)
 
 
 def init_logger_for_yum():
-    init_logger()
-
-    # TODO: switch this to reference /etc/rhsm/yum_logging.conf
+    init_logger(path_to_config=PLUGIN_LOGGING_CONFIG)
 
     # Don't send log records up to yum/yum plugin conduit loggers
     logging.getLogger("subscription_manager").propagate = False
     logging.getLogger("rhsm").propagate = False
     logging.getLogger("rhsm-app").propagate = False
+
+
+def apply_defaults(obj, defaults):
+    # attempt to apply defaults to each item in the given input
+    if isinstance(obj, dict):
+        for key, value in obj.iteritems():
+            obj[key] = apply_defaults(value, defaults)
+        return obj
+    elif isinstance(obj, list):
+        return [apply_defaults(item, defaults) for item in obj]
+    elif isinstance(obj, basestring):
+        try:
+            return obj % defaults
+        except KeyError:
+            # Potentially missing a default
+            return obj
+    return obj

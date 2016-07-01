@@ -332,15 +332,14 @@ rm -rf %{buildroot}
     %attr(644,root,root) %{_tmpfilesdir}/%{name}.conf
 %else
     %attr(755,root,root) %{_initrddir}/rhsmcertd
-%endif
-
-# our config dirs and files
+%endif%package
 %attr(755,root,root) %dir %{_sysconfdir}/pki/consumer
 %attr(755,root,root) %dir %{_sysconfdir}/pki/entitlement
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm/facts
 %attr(644,root,root) %config(noreplace) %{_sysconfdir}/rhsm/rhsm.conf
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/rhsm/logging.conf
+%config(noreplace) %attr(644,root,root) %{_sysconfdir}/rhsm/plugin_logging.conf
 
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.SubscriptionManager.conf
 
@@ -384,6 +383,7 @@ rm -rf %{buildroot}
 %dir %{python_sitelib}/subscription_manager/branding
 %dir %{python_sitelib}/subscription_manager/model
 %dir %{python_sitelib}/subscription_manager/plugin
+%dir %{python_sitelib}/subscription_manager/compat
 
 # code, python modules and packages
 %{python_sitelib}/subscription_manager-*.egg-info/*
@@ -392,6 +392,7 @@ rm -rf %{buildroot}
 %{python_sitelib}/subscription_manager/branding/*.py*
 %{python_sitelib}/subscription_manager/model/*.py*
 %{python_sitelib}/subscription_manager/plugin/*.py*
+%{python_sitelib}/subscription_manager/compat/*.py*
 
 # our gtk2/gtk3 compat modules
 %dir %{python_sitelib}/subscription_manager/ga_impls

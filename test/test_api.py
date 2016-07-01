@@ -25,6 +25,7 @@ class ApiVersionTest(SubManFixture):
         self.assertEquals(version.rpm_version, api.version)
 
 
+@patch('subscription_manager.logutil.init_logger')
 class RepoApiTest(SubManFixture):
     def setUp(self):
         super(RepoApiTest, self).setUp()
@@ -39,7 +40,7 @@ class RepoApiTest(SubManFixture):
         self.invoker_patcher.stop()
         self.repo_file_patcher.stop()
 
-    def test_disable_repo(self):
+    def test_disable_repo(self, mock_init_logger):
         repo_settings = {
             'enabled': '1',
         }
@@ -52,7 +53,7 @@ class RepoApiTest(SubManFixture):
         self.assertTrue(call.write() in self.repo_file.mock_calls)
         self.assertEquals(1, result)
 
-    def test_enable_repo(self):
+    def test_enable_repo(self, mock_init_logger):
         repo_settings = {
             'enabled': '0',
         }
@@ -65,7 +66,7 @@ class RepoApiTest(SubManFixture):
         self.assertTrue(call.write() in self.repo_file.mock_calls)
         self.assertEquals(1, result)
 
-    def test_enable_repo_wildcard(self):
+    def test_enable_repo_wildcard(self, mock_init_logger):
         repo_settings = {
             'enabled': '0',
         }
@@ -81,7 +82,7 @@ class RepoApiTest(SubManFixture):
         self.assertTrue(call.write() in self.repo_file.mock_calls)
         self.assertEquals(2, result)
 
-    def test_does_not_enable_nonmatching_repos(self):
+    def test_does_not_enable_nonmatching_repos(self, mock_init_logger):
         repo_settings = {
             'enabled': '0',
         }
@@ -96,7 +97,7 @@ class RepoApiTest(SubManFixture):
 
     @patch.object(StubUEP, 'supports_resource')
     @patch.object(StubUEP, 'setContentOverrides', create=True)
-    def test_update_overrides_cache(self, mock_set, mock_supports):
+    def test_update_overrides_cache(self, mock_set, mock_supports, mock_init_logger):
         mock_supports.return_value = True
 
         repo_settings = {
