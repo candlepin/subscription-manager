@@ -374,17 +374,8 @@ flake8:
 rpmlint:
 	./setup.py lint_rpm
 
-# We target python 2.6, hence -m 2.7 is the earliest python features to warn about use of.
-# See https://github.com/alikins/pyqver for pyqver.
-# Since plugin/ostree is for python 2.7+ systems only, we can ignore the warning there.
-.PHONY: versionlint
-versionlint:
-	@TMPFILE=`mktemp` || exit 1; \
-	pyqver2.py -m 2.7 -l $(STYLEFILES) | grep -v hashlib | grep -v plugin/ostree.*check_output | tee $$TMPFILE; \
-	! test -s $$TMPFILE
-
 .PHONY: stylish
-stylish: lint versionlint
+stylish: lint
 
 .PHONY: install-pip-requirements
 install-pip-requirements:

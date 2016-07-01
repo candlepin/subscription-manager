@@ -369,8 +369,9 @@ class OstreeOriginUpdater(object):
         cmd_args = ['python', gi_wrapper_path, gi_wrapper_arg]
 
         try:
-            output = subprocess.check_output(cmd_args,
-                                             stderr=subprocess.STDOUT)
+            # Ignore warning that this code is only valid in Python 2.7 and up.  That's
+            # fine for ostree stuff.
+            output = subprocess.check_output(cmd_args, stderr=subprocess.STDOUT)  # noqa: V270
             return output.strip()
         except subprocess.CalledProcessError, e:
             # Is this an OSTree system? Does it have pygobject3?
