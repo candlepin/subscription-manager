@@ -226,6 +226,7 @@ install_requires = []
 test_require = [
       'mock',
       'nose',
+      'nose-capturestderr',
       'coverage',
       'polib',
       'freezegun',
