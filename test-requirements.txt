@@ -1,6 +1,7 @@
 lxml
 nose
 nose-capturestderr
+nose-randomly
 coverage
 polib
 pep8==1.5.7
@@ -12,6 +13,3 @@ mock
 Sphinx
 git+https://github.com/alikins/pyqver.git#egg=pyqver
 git+https://github.com/awood/nose-xvfb.git#egg=nose-xvfb
-
-# Until https://github.com/adamchainz/nose-randomly/pull/12 is merged
-git+https://github.com/awood/nose-randomly.git#egg=nose-randomly
