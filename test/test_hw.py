@@ -222,10 +222,10 @@ class HardwareProbeTests(fixture.SubManFixture):
         reload(hwprobe)
         hw = hwprobe.Hardware()
         MockExists.side_effect = [False, True]
-        hwprobe.platform = None
-        MockOpen.return_value.readline.return_value = "this is not really a release file of any sort"
-        self.assertEquals(hw.get_release_info(), {'distribution.version': 'Unknown',
-            'distribution.name': 'Unknown', 'distribution.id': 'Unknown'})
+        with patch('subscription_manager.hwprobe.platform'):
+            MockOpen.return_value.readline.return_value = "this is not really a release file of any sort"
+            self.assertEquals(hw.get_release_info(), {'distribution.version': 'Unknown',
+                'distribution.name': 'Unknown', 'distribution.id': 'Unknown'})
 
     @patch("os.path.exists")
     @patch("__builtin__.open")
@@ -252,11 +252,11 @@ class HardwareProbeTests(fixture.SubManFixture):
     def test_manual_distro_bogus_content_os_release(self, MockOpen, MockExists):
         reload(hwprobe)
         hw = hwprobe.Hardware()
-        hwprobe.platform = None
-        MockExists.return_value = True
-        MockOpen.return_value.readlines.return_value = ["This is not really a release file of any sort"]
-        self.assertEquals(hw.get_release_info(), {'distribution.version': 'Unknown',
-            'distribution.name': 'Unknown', 'distribution.id': 'Unknown'})
+        with patch('subscription_manager.hwprobe.platform'):
+            MockExists.return_value = True
+            MockOpen.return_value.readlines.return_value = ["This is not really a release file of any sort"]
+            self.assertEquals(hw.get_release_info(), {'distribution.version': 'Unknown',
+                'distribution.name': 'Unknown', 'distribution.id': 'Unknown'})
 
     @patch("os.path.exists")
     @patch("__builtin__.open")
@@ -275,10 +275,10 @@ class HardwareProbeTests(fixture.SubManFixture):
         reload(hwprobe)
         MockExists.side_effect = [False, True]
         hw = hwprobe.Hardware()
-        hwprobe.platform = None
-        MockOpen.return_value.readline.return_value = "Awesome OS release 42 Mega (Go4It)"
-        self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS',
-            'distribution.id': 'Go4It', 'distribution.version.modifier': 'mega'})
+        with patch('subscription_manager.hwprobe.platform'):
+            MockOpen.return_value.readline.return_value = "Awesome OS release 42 Mega (Go4It)"
+            self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS',
+                'distribution.id': 'Go4It', 'distribution.version.modifier': 'mega'})
 
     @patch("os.path.exists")
     @patch("__builtin__.open")
@@ -286,10 +286,10 @@ class HardwareProbeTests(fixture.SubManFixture):
         reload(hwprobe)
         MockExists.return_value = True
         hw = hwprobe.Hardware()
-        hwprobe.platform = None
-        MockOpen.return_value.readlines.return_value = OS_RELEASE.split('\n')
-        self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS',
-            'distribution.id': 'Go4It', 'distribution.version.modifier': 'beta'})
+        with patch('subscription_manager.hwprobe.platform'):
+            MockOpen.return_value.readlines.return_value = OS_RELEASE.split('\n')
+            self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS',
+                'distribution.id': 'Go4It', 'distribution.version.modifier': 'beta'})
 
     @patch("os.path.exists")
     @patch("__builtin__.open")
@@ -297,10 +297,10 @@ class HardwareProbeTests(fixture.SubManFixture):
         reload(hwprobe)
         MockExists.return_value = True
         hw = hwprobe.Hardware()
-        hwprobe.platform = None
-        MockOpen.return_value.readlines.return_value = OS_RELEASE_COLON.split('\n')
-        self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS',
-            'distribution.id': 'Go4It', 'distribution.version.modifier': 'be:ta'})
+        with patch('subscription_manager.hwprobe.platform'):
+            MockOpen.return_value.readlines.return_value = OS_RELEASE_COLON.split('\n')
+            self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS',
+                'distribution.id': 'Go4It', 'distribution.version.modifier': 'be:ta'})
 
     def test_default_virt_uuid_physical(self):
         """Check that physical systems dont set an 'Unknown' virt.uuid."""

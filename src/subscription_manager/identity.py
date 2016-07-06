@@ -35,13 +35,13 @@ class ConsumerIdentity:
     KEY = 'key.pem'
     CERT = 'cert.pem'
 
-    @classmethod
-    def keypath(cls):
-        return str(Path.join(cls.PATH, cls.KEY))
+    @staticmethod
+    def keypath():
+        return str(Path.join(ConsumerIdentity.PATH, ConsumerIdentity.KEY))
 
-    @classmethod
-    def certpath(cls):
-        return str(Path.join(cls.PATH, cls.CERT))
+    @staticmethod
+    def certpath():
+        return str(Path.join(ConsumerIdentity.PATH, ConsumerIdentity.CERT))
 
     @classmethod
     def read(cls):

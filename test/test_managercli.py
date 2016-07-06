@@ -8,10 +8,6 @@ import os
 import tempfile
 import contextlib
 
-
-# for monkey patching config
-import stubs
-
 from subscription_manager import managercli, managerlib
 from subscription_manager.injection import provide, \
         CERT_SORTER, PROD_DIR
@@ -19,19 +15,19 @@ from subscription_manager.managercli import get_installed_product_status, AVAILA
 from subscription_manager.printing_utils import format_name, columnize, \
         echo_columnize_callback, none_wrap_columnize_callback, highlight_by_filter_string_columnize_callback, FONT_BOLD, FONT_RED, FONT_NORMAL
 from subscription_manager.repolib import Repo
-from stubs import MockStderr, StubProductCertificate, StubEntitlementCertificate, \
-        StubConsumerIdentity, StubProduct, StubUEP, StubProductDirectory, StubCertSorter, StubPool
+from subscription_manager.overrides import Override
+
+from stubs import StubProductCertificate, StubEntitlementCertificate, \
+        StubConsumerIdentity, StubProduct, StubUEP, StubProductDirectory, \
+        StubCertSorter, StubPool
 from fixture import FakeException, FakeLogger, SubManFixture, \
         Capture, Matcher
 
+from mock import patch, Mock, call
 
-import mock
-from mock import patch
-from mock import Mock
 # for some exceptions
 from rhsm import connection
 from M2Crypto import SSL
-from subscription_manager.overrides import Override
 
 
 class InstalledProductStatusTests(SubManFixture):
@@ -162,14 +158,6 @@ class InstalledProductStatusTests(SubManFixture):
 
 
 class TestCli(SubManFixture):
-    # shut up stdout spew
-    def setUp(self):
-        SubManFixture.setUp(self)
-        sys.stderr = stubs.MockStderr()
-
-    def tearDown(self):
-        sys.stderr = sys.__stderr__
-
     def test_cli(self):
         cli = managercli.ManagerCLI()
         self.assertTrue('register' in cli.cli_commands)
@@ -203,37 +191,29 @@ class TestCliCommand(SubManFixture):
     def setUp(self, hide_do=True):
         super(TestCliCommand, self).setUp()
         self.cc = self.command_class()
-        # neuter the _do_command, since this is mostly
-        # for testing arg parsing
+
         if hide_do:
+            # patch the _do_command with a mock
             self._orig_do_command = self.cc._do_command
-            self.cc._do_command = self._do_command
-
-        self.mock_stdout = MockStderr()
-        self.mock_stderr = MockStderr()
-        sys.stderr = self.mock_stderr
-
-    def tearDown(self):
-        sys.stderr = sys.__stderr__
-
-    def _do_command(self):
-        pass
+            do_command_patcher = patch.object(self.command_class, '_do_command')
+            self.mock_do_command = do_command_patcher.start()
+            self.addCleanup(do_command_patcher.stop)
 
     def test_main_no_args(self):
         try:
             # we fall back to sys.argv if there
             # is no args passed in, so stub out
             # sys.argv for test
-            sys.argv = ["subscription-manager"]
-            self.cc.main()
+            with patch.object(sys, 'argv', ['subscription-manager']):
+                self.cc.main()
         except SystemExit, e:
             # 2 == no args given
             self.assertEquals(e.code, 2)
 
     def test_main_empty_args(self):
         try:
-            sys.argv = ["subscription-manager"]
-            self.cc.main([])
+            with patch.object(sys, 'argv', ['subscription-manager']):
+                self.cc.main([])
         except SystemExit, e:
             # 2 == no args given
             self.assertEquals(e.code, 2)
@@ -259,15 +239,16 @@ class TestCliCommand(SubManFixture):
     # docker error message should output to stderr
     @patch('subscription_manager.managercli.rhsm.config.in_container')
     def test_cli_in_container_error_message(self, mock_in_container):
-        sys.argv = ["subscription-manager", "version"]
-        mock_in_container.return_value = True
-        err_msg = 'subscription-manager is disabled when running inside a container.'\
-                  ' Please refer to your host system for subscription management.\n\n'
-        try:
-            self.cc.main()
-        except SystemExit, e:
-            self.assertEquals(os.EX_CONFIG, e.code)
-        self.assertEquals(err_msg, sys.stderr.buffer)
+        with patch.object(sys, 'argv', ['subscription-manager', 'version']):
+            mock_in_container.return_value = True
+            err_msg = 'subscription-manager is disabled when running inside a container.'\
+                      ' Please refer to your host system for subscription management.\n\n'
+            with Capture() as cap:
+                try:
+                    self.cc.main()
+                except SystemExit, e:
+                    self.assertEquals(os.EX_CONFIG, e.code)
+            self.assertEquals(err_msg, cap.err)
 
 
 # for command classes that expect proxy related cli args
@@ -349,7 +330,9 @@ class TestRegisterCommand(TestCliProxyCommand):
     def setUp(self):
         super(TestRegisterCommand, self).setUp()
         self._inject_mock_invalid_consumer()
-        # TODO: two versions of this, one registered, one not registered
+        argv_patcher = patch.object(sys, 'argv', ['subscription-manager', 'register'])
+        argv_patcher.start()
+        self.addCleanup(argv_patcher.stop)
 
     def _test_exception(self, args):
         try:
@@ -394,35 +377,38 @@ class TestRegisterCommand(TestCliProxyCommand):
     def test_no_commands(self):
         self._test_no_exception([])
 
-    @patch.object(managercli.cfg, "save")
-    def test_main_server_url(self, mock_save):
-        server_url = "https://subscription.rhsm.redhat.com/subscription"
-        self._test_no_exception(["--serverurl", server_url])
-        mock_save.assert_called_with()
+    def test_main_server_url(self):
+        with patch.object(self.mock_cfg, "save") as mock_save:
+            server_url = "https://subscription.rhsm.redhat.com/subscription"
+            self._test_no_exception(["--serverurl", server_url])
+            mock_save.assert_called_with()
 
-    @patch.object(managercli.cfg, "save")
-    def test_main_base_url(self, mock_save):
-        base_url = "https://cdn.redhat.com"
-        self._test_no_exception(["--baseurl", base_url])
-        mock_save.assert_called_with()
+    def test_main_base_url(self):
+        with patch.object(self.mock_cfg, "save") as mock_save:
+            base_url = "https://cdn.redhat.com"
+            self._test_no_exception(["--baseurl", base_url])
+            mock_save.assert_called_with()
 
-    @patch.object(managercli.cfg, "save")
-    def test_insecure(self, mock_save):
-        self._test_no_exception(["--insecure"])
-        mock_save.assert_called_with()
+    def test_insecure(self):
+        with patch.object(self.mock_cfg, "save") as mock_save:
+            self._test_no_exception(["--insecure"])
+            mock_save.assert_called_with()
 
 
 class TestListCommand(TestCliProxyCommand):
     command_class = managercli.ListCommand
 
     def setUp(self):
+        super(TestListCommand, self).setUp(False)
         self.indent = 1
         self.max_length = 40
         self.cert_with_service_level = StubEntitlementCertificate(
             StubProduct("test-product"), service_level="Premium")
-        TestCliProxyCommand.setUp(self)
+        argv_patcher = patch.object(sys, 'argv', ['subscription-manager', 'list'])
+        argv_patcher.start()
+        self.addCleanup(argv_patcher.stop)
 
-    @mock.patch('subscription_manager.managerlib.get_available_entitlements')
+    @patch('subscription_manager.managerlib.get_available_entitlements')
     def test_none_wrap_available_pool_id(self, mget_ents):
         list_command = managercli.ListCommand()
 
@@ -445,7 +431,7 @@ class TestListCommand(TestCliProxyCommand):
         mget_ents.return_value = create_pool_list()
 
         with Capture() as cap:
-            list_command.main(['list', '--available'])
+            list_command.main(['--available'])
         self.assertTrue('888888888888' in cap.out)
 
     def test_print_consumed_no_ents(self):
@@ -489,7 +475,7 @@ class TestListCommand(TestCliProxyCommand):
         for (test_num, data) in enumerate(test_data):
             with Capture() as captured:
                 list_command = managercli.ListCommand()
-                list_command.main(["list", "--installed", "--matches", data[0]])
+                list_command.main(["--installed", "--matches", data[0]])
 
             for (index, expected) in enumerate(data[1]):
                 if expected:
@@ -540,7 +526,7 @@ class TestListCommand(TestCliProxyCommand):
         for (test_num, data) in enumerate(test_data):
             with Capture() as captured:
                 list_command = managercli.ListCommand()
-                list_command.main(["list", "--consumed", "--matches", data[0]])
+                list_command.main(["--consumed", "--matches", data[0]])
 
             for (index, expected) in enumerate(data[1]):
                 if expected:
@@ -610,7 +596,7 @@ class TestListCommand(TestCliProxyCommand):
         try:
             with Capture() as captured:
                 list_command = managercli.ListCommand()
-                list_command.main(["list", "--installed", "--pool-only"])
+                list_command.main(["--installed", "--pool-only"])
 
             self.fail("Expected error did not occur")
         except SystemExit:
@@ -639,7 +625,7 @@ class TestListCommand(TestCliProxyCommand):
 
         with Capture() as captured:
             list_command = managercli.ListCommand()
-            list_command.main(["list", "--consumed", "--pool-only"])
+            list_command.main(["--consumed", "--pool-only"])
 
         for cert in consumed:
             self.assertFalse(cert.order.name in captured.out)
@@ -659,6 +645,9 @@ class TestReposCommand(TestCliCommand):
 
     def setUp(self):
         super(TestReposCommand, self).setUp(False)
+        argv_patcher = patch.object(sys, 'argv', ['subscription-manager', 'repos'])
+        argv_patcher.start()
+        self.addCleanup(argv_patcher.stop)
         self.cc.cp = Mock()
 
     def check_output_for_repos(self, output, repos):
@@ -675,7 +664,7 @@ class TestReposCommand(TestCliCommand):
 
         return tuple(searches)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_default(self, mock_invoker):
         self.cc.main()
         self.cc._validate_options()
@@ -683,15 +672,13 @@ class TestReposCommand(TestCliCommand):
         repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
         mock_invoker.return_value.get_repos.return_value = repos
 
-        # Execute command with our mock stdout capturing the output
-        sys.stdout = self.mock_stdout
-        self.cc._do_command()
-        sys.stdout = sys.__stdout__
+        with Capture() as cap:
+            self.cc._do_command()
 
-        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((True, True, True), result)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_list(self, mock_invoker):
         self.cc.main(["--list"])
         self.cc._validate_options()
@@ -699,15 +686,13 @@ class TestReposCommand(TestCliCommand):
         repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
         mock_invoker.return_value.get_repos.return_value = repos
 
-        # Execute command with our mock stdout capturing the output
-        sys.stdout = self.mock_stdout
-        self.cc._do_command()
-        sys.stdout = sys.__stdout__
+        with Capture() as cap:
+            self.cc._do_command()
 
-        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((True, True, True), result)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_list_with_enabled(self, mock_invoker):
         self.cc.main(["--list", "--list-enabled"])
         self.cc._validate_options()
@@ -715,15 +700,13 @@ class TestReposCommand(TestCliCommand):
         repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
         mock_invoker.return_value.get_repos.return_value = repos
 
-        # Execute command with our mock stdout capturing the output
-        sys.stdout = self.mock_stdout
-        self.cc._do_command()
-        sys.stdout = sys.__stdout__
+        with Capture() as cap:
+            self.cc._do_command()
 
-        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((True, True, True), result)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_list_with_disabled(self, mock_invoker):
         self.cc.main(["--list", "--list-disabled"])
         self.cc._validate_options()
@@ -731,15 +714,13 @@ class TestReposCommand(TestCliCommand):
         repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
         mock_invoker.return_value.get_repos.return_value = repos
 
-        # Execute command with our mock stdout capturing the output
-        sys.stdout = self.mock_stdout
-        self.cc._do_command()
-        sys.stdout = sys.__stdout__
+        with Capture() as cap:
+            self.cc._do_command()
 
-        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((True, True, True), result)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_list_with_enabled_and_disabled(self, mock_invoker):
         self.cc.main(["--list", "--list-disabled", "--list-disabled"])
         self.cc._validate_options()
@@ -747,15 +728,13 @@ class TestReposCommand(TestCliCommand):
         repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
         mock_invoker.return_value.get_repos.return_value = repos
 
-        # Execute command with our mock stdout capturing the output
-        sys.stdout = self.mock_stdout
-        self.cc._do_command()
-        sys.stdout = sys.__stdout__
+        with Capture() as cap:
+            self.cc._do_command()
 
-        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((True, True, True), result)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_list_enabled(self, mock_invoker):
         self.cc.main(["--list-enabled"])
         self.cc._validate_options()
@@ -763,15 +742,13 @@ class TestReposCommand(TestCliCommand):
         repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
         mock_invoker.return_value.get_repos.return_value = repos
 
-        # Execute command with our mock stdout capturing the output
-        sys.stdout = self.mock_stdout
-        self.cc._do_command()
-        sys.stdout = sys.__stdout__
+        with Capture() as cap:
+            self.cc._do_command()
 
-        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((True, False, False), result)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_list_disabled(self, mock_invoker):
         self.cc.main(["--list-disabled"])
         self.cc._validate_options()
@@ -779,15 +756,13 @@ class TestReposCommand(TestCliCommand):
         repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
         mock_invoker.return_value.get_repos.return_value = repos
 
-        # Execute command with our mock stdout capturing the output
-        sys.stdout = self.mock_stdout
-        self.cc._do_command()
-        sys.stdout = sys.__stdout__
+        with Capture() as cap:
+            self.cc._do_command()
 
-        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((False, True, True), result)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_list_enabled_and_disabled(self, mock_invoker):
         self.cc.main(["--list-enabled", "--list-disabled"])
         self.cc._validate_options()
@@ -795,12 +770,10 @@ class TestReposCommand(TestCliCommand):
         repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
         mock_invoker.return_value.get_repos.return_value = repos
 
-        # Execute command with our mock stdout capturing the output
-        sys.stdout = self.mock_stdout
-        self.cc._do_command()
-        sys.stdout = sys.__stdout__
+        with Capture() as cap:
+            self.cc._do_command()
 
-        result = self.check_output_for_repos(self.mock_stdout.buffer, repos)
+        result = self.check_output_for_repos(cap.out, repos)
         self.assertEquals((True, True, True), result)
 
     def test_enable(self):
@@ -811,7 +784,7 @@ class TestReposCommand(TestCliCommand):
         self.cc.main(["--disable", "one", "--disable", "two"])
         self.cc._validate_options()
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_set_repo_status(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
         self._inject_mock_valid_consumer('fake_id')
@@ -822,7 +795,7 @@ class TestReposCommand(TestCliCommand):
         self.cc._set_repo_status(repos, repolib_instance, items)
 
         expected_overrides = [{'contentLabel': i, 'name': 'enabled', 'value':
-            '0'} for (action, i) in items]
+            '0'} for (_action, i) in items]
 
         # The list of overrides sent to setContentOverrides is really a set of
         # dictionaries (since we don't know the order of the overrides).
@@ -834,7 +807,7 @@ class TestReposCommand(TestCliCommand):
                 match_dict_list)
         self.assertTrue(repolib_instance.update.called)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_set_repo_status_with_wildcards(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
         self._inject_mock_valid_consumer('fake_id')
@@ -851,7 +824,7 @@ class TestReposCommand(TestCliCommand):
                 match_dict_list)
         self.assertTrue(repolib_instance.update.called)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_set_repo_status_disable_all_enable_some(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
         self._inject_mock_valid_consumer('fake_id')
@@ -872,7 +845,7 @@ class TestReposCommand(TestCliCommand):
                 match_dict_list)
         self.assertTrue(repolib_instance.update.called)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_set_repo_status_enable_all_disable_some(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
         self._inject_mock_valid_consumer('fake_id')
@@ -893,7 +866,7 @@ class TestReposCommand(TestCliCommand):
                 match_dict_list)
         self.assertTrue(repolib_instance.update.called)
 
-    @mock.patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_set_repo_status_enable_all_disable_all(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
         self._inject_mock_valid_consumer('fake_id')
@@ -913,7 +886,7 @@ class TestReposCommand(TestCliCommand):
                 match_dict_list)
         self.assertTrue(repolib_instance.update.called)
 
-    @mock.patch("subscription_manager.managercli.RepoFile")
+    @patch("subscription_manager.managercli.RepoFile")
     def test_set_repo_status_when_disconnected(self, mock_repofile):
         self._inject_mock_invalid_consumer()
         mock_repofile_inst = mock_repofile.return_value
@@ -929,7 +902,7 @@ class TestReposCommand(TestCliCommand):
         items = [('0', 'z*')]
 
         self.cc._set_repo_status(repos, None, items)
-        calls = [mock.call(r) for r in repos if r['enabled'] == 1]
+        calls = [call(r) for r in repos if r['enabled'] == 1]
         mock_repofile_inst.update.assert_has_calls(calls)
         for r in repos:
             self.assertEquals('0', r['enabled'])
@@ -947,7 +920,6 @@ class TestConfigCommand(TestCliCommand):
         self.cc.main(["--remove", "server.hostname", "--remove", "server.port"])
         self.cc._validate_options()
 
-    # unneuter these guys, since config doesn't required much mocking
     def test_config_list(self):
         self.cc._do_command = self._orig_do_command
         self.cc.main(["--list"])
@@ -955,11 +927,9 @@ class TestConfigCommand(TestCliCommand):
     def test_config(self):
         self.cc._do_command = self._orig_do_command
         # if args is empty we default to sys.argv, so stub it
-        sys.argv = ["subscription-manager", "config"]
-        self.cc.main([])
+        with patch.object(sys, 'argv', ['subscription-manager', 'config']):
+            self.cc.main([])
 
-    # testing this is a bit weird, since we are using a stub config
-    # already, we kind of need to mock the stub config to validate
     def test_set_config(self):
         self.cc._do_command = self._orig_do_command
 
@@ -1011,8 +981,14 @@ class TestAttachCommand(TestCliProxyCommand):
     @classmethod
     def tearDownClass(cls):
         # Unlink temp files
-        for file in cls.tempfiles:
-            os.unlink(file[1])
+        for f in cls.tempfiles:
+            os.unlink(f[1])
+
+    def setUp(self):
+        super(TestAttachCommand, self).setUp()
+        argv_patcher = patch.object(sys, 'argv', ['subscription-manager', 'attach'])
+        argv_patcher.start()
+        self.addCleanup(argv_patcher.stop)
 
     def _test_quantity_exception(self, arg):
         try:
@@ -1061,8 +1037,8 @@ class TestAttachCommand(TestCliProxyCommand):
     def test_positive_quantity_as_float(self):
         self._test_quantity_exception("2.0")
 
-    def _test_pool_file_processing(self, file, expected):
-        self.cc.main(["--file", file])
+    def _test_pool_file_processing(self, f, expected):
+        self.cc.main(["--file", f])
         self.cc._validate_options()
 
         self.assertEquals(expected, self.cc.options.pool)
@@ -1259,30 +1235,22 @@ class TestServiceLevelCommand(TestCliProxyCommand):
 class TestReleaseCommand(TestCliProxyCommand):
     command_class = managercli.ReleaseCommand
 
-    def _stub_connection(self):
-        # er, first cc is command_class, second is ContentConnection
-
-        def _get_consumer_release():
-            pass
-
-        self.cc._get_consumer_release = _get_consumer_release
-
     def test_main_proxy_url_release(self):
         proxy_host = "example.com"
         proxy_port = "3128"
         proxy_url = "%s:%s" % (proxy_host, proxy_port)
-        self.cc.main(["--proxy", proxy_url])
-        self._stub_connection()
 
-        self._orig_do_command()
+        with patch.object(managercli.ReleaseCommand, '_get_consumer_release'):
+            self.cc.main(["--proxy", proxy_url])
+            self._orig_do_command()
 
-        # FIXME: too many stubs atm to make this meaningful
-        #self.assertEquals(proxy_host, self.cc.cp_provider.content_connection.proxy_hostname)
+            # FIXME: too many stubs atm to make this meaningful
+            #self.assertEquals(proxy_host, self.cc.cp_provider.content_connection.proxy_hostname)
 
-        self.assertEquals(proxy_url, self.cc.options.proxy_url)
-        self.assertEquals(type(proxy_url), type(self.cc.options.proxy_url))
-        self.assertEquals(proxy_host, self.cc.proxy_hostname)
-        self.assertEquals(int(proxy_port), self.cc.proxy_port)
+            self.assertEquals(proxy_url, self.cc.options.proxy_url)
+            self.assertEquals(type(proxy_url), type(self.cc.options.proxy_url))
+            self.assertEquals(proxy_host, self.cc.proxy_hostname)
+            self.assertEquals(int(proxy_port), self.cc.proxy_port)
 
 
 class TestVersionCommand(TestCliCommand):
@@ -1295,9 +1263,6 @@ class TestPluginsCommand(TestCliCommand):
 
 class TestOverrideCommand(TestCliProxyCommand):
     command_class = managercli.OverrideCommand
-
-    def setUp(self):
-        TestCliProxyCommand.setUp(self)
 
     def _test_exception(self, args):
         self.cc.main(args)
@@ -1326,9 +1291,10 @@ class TestOverrideCommand(TestCliProxyCommand):
         self._test_exception(["--repo", "x"])
 
     def test_list_by_default(self):
-        self.cc.main([])
-        self.cc._validate_options()
-        self.assertTrue(self.cc.options.list)
+        with patch.object(sys, 'argv', ['subscription-manager', 'repo-override']):
+            self.cc.main([])
+            self.cc._validate_options()
+            self.assertTrue(self.cc.options.list)
 
     def test_list_by_default_with_options_from_super_class(self):
         self.cc.main(["--proxy", "http://www.example.com", "--proxyuser", "foo", "--proxypassword", "bar"])
@@ -1404,9 +1370,6 @@ class TestOverrideCommand(TestCliProxyCommand):
 
 
 class TestSystemExit(unittest.TestCase):
-    def setUp(self):
-        sys.stderr = MockStderr()
-
     def test_a_msg(self):
         msg = "some message"
         with Capture() as cap:
@@ -1465,18 +1428,18 @@ class TestSystemExit(unittest.TestCase):
 
         msg = "bar"
         msgs = ["a", StrException(msg)]
-        try:
-            managercli.system_exit(1, msgs)
-        except SystemExit:
-            pass
-        self.assertEquals("%s\n%s\n" % ("a", msg), sys.stderr.buffer)
+        with Capture() as cap:
+            try:
+                managercli.system_exit(1, msgs)
+            except SystemExit:
+                pass
+        self.assertEquals("%s\n%s\n" % ("a", msg), cap.err)
 
 
 class HandleExceptionTests(unittest.TestCase):
     def setUp(self):
         self.msg = "some thing to log home about"
         self.formatted_msg = "some thing else like: %s"
-        sys.stderr = MockStderr()
         managercli.log = FakeLogger()
 
     def test_he(self):

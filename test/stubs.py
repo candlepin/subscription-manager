@@ -42,6 +42,7 @@ from rhsm import ourjson as json
 cfg_buf = """
 [foo]
 bar =
+
 [server]
 hostname = server.example.conf
 prefix = /candlepin
@@ -121,20 +122,6 @@ config.CFG.read("test/rhsm.conf")
 
 class MockActionLock(ActionLock):
     PATH = tempfile.mkstemp()[1]
-
-
-class MockStdout(object):
-    def __init__(self):
-        self.buffer = ""
-
-    def write(self, buf):
-        self.buffer = self.buffer + buf
-
-    @staticmethod
-    def isatty(buf=None):
-        return False
-
-MockStderr = MockStdout
 
 
 class StubProduct(Product):
@@ -403,6 +390,12 @@ class StubUEP(object):
         self.password = password
         self._capabilities = []
 
+    def reset(self):
+        self.called_unregister_uuid = None
+        self.called_unbind_uuid = None
+        self.called_unbind_serial = []
+        self.called_unbind_pool_id = []
+
     def has_capability(self, capability):
         return capability in self._capabilities
 
@@ -448,7 +441,7 @@ class StubUEP(object):
     def setConsumer(self, consumer):
         self.consumer = consumer
 
-    def getConsumer(self, consumerId):
+    def getConsumer(self, consumerId, username=None, password=None):
         if hasattr(self, 'consumer') and self.consumer:
             return self.consumer
         return self.registered_consumer_info
@@ -571,35 +564,32 @@ class StubCertSorter(CertSorter):
 class StubCPProvider(object):
 
     def __init__(self):
-        self.set_connection_info()
-        self.content_connection = StubContentConnection()
-
-    def set_connection_info(self,
-                host=None,
-                ssl_port=None,
-                handler=None,
-                cert_file=None,
-                key_file=None,
-                proxy_hostname_arg=None,
-                proxy_port_arg=None,
-                proxy_user_arg=None,
-                proxy_password_arg=None):
-
         self.cert_file = StubConsumerIdentity.certpath()
         self.key_file = StubConsumerIdentity.keypath()
         self.consumer_auth_cp = StubUEP()
         self.basic_auth_cp = StubUEP()
         self.no_auth_cp = StubUEP()
+        self.content_connection = StubContentConnection()
 
-    def set_content_connection_info(self,
-                                    cdn_hostname=None,
-                                    cdn_port=None):
+    def set_connection_info(self,
+        host=None,
+        ssl_port=None,
+        handler=None,
+        cert_file=None,
+        key_file=None,
+        proxy_hostname_arg=None,
+        proxy_port_arg=None,
+        proxy_user_arg=None,
+        proxy_password_arg=None):
+        pass
+
+    def set_content_connection_info(self, cdn_hostname=None, cdn_port=None):
         pass
 
     def set_user_pass(self, username=None, password=None):
         pass
 
-# tries to write to /var/lib and it reads the rpm db
+    # tries to write to /var/lib and it reads the rpm db
     def clean(self):
         pass
 
