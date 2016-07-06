@@ -312,7 +312,13 @@ check:
 
 .PHONY: coverage
 coverage:
+ifdef ghprbPullId
+	# Pull the PR id from the Jenkins environment and use it as a seed so that each PR
+	# uses a consistant test ordering.
+	./setup.py -q nosetests --randomly-seed=$(ghprbPullId) -c playpen/noserc.ci
+else
 	./setup.py -q nosetests -c playpen/noserc.ci
+endif
 
 .PHONY: gettext
 gettext:
