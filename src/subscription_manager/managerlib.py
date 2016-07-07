@@ -807,8 +807,7 @@ def check_identity_cert_perms():
     Ensure the identity certs on this system have the correct permissions, and
     fix them if not.
     """
-    ident = require(IDENTITY)
-    certs = [ident.keypath(), ident.certpath()]
+    certs = [identity.ConsumerIdentity.keypath(), identity.ConsumerIdentity.certpath()]
     for cert in certs:
         if not os.path.exists(cert):
             # Only relevant if these files exist.
