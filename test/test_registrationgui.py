@@ -117,6 +117,14 @@ class RegisterWidgetTests(SubManFixture):
 
         ga_Gtk.main_quit()
 
+    def test_screen_history_empty(self):
+        self.rs.initialize()
+        self.assertTrue(self.rs.applied_screen_history.is_empty())
+        self.rs.apply_current_screen()
+        self.assertFalse(self.rs.applied_screen_history.is_empty())
+        self.rs._pop_last_screen()
+        self.assertTrue(self.rs.applied_screen_history.is_empty())
+
 
 def mock_parent():
     parent = Mock()

@@ -101,6 +101,7 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
 
         self.register_box.show_all()
         self.register_widget.initialize()
+        self.back_button.set_sensitive(False)
 
     @property
     def ready(self):
@@ -205,6 +206,8 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
         Clear out any user set values and return to the start screen."""
 
         self.register_widget.emit('back')
+        self.back_button.set_sensitive(not self.register_widget.applied_screen_history.is_empty())
+
         # TODO: clear out settings and restart?
         # TODO: attempt to undo the REST api calls we've made?
         #self.register_widget.set_initial_screen()
@@ -279,7 +282,7 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
     def _on_register_screen_ready_change(self, obj, value):
         ready = self.register_widget.current_screen.get_property('ready')
         self.proceed_button.set_sensitive(ready)
-        self.back_button.set_sensitive(ready)
+        self.back_button.set_sensitive(ready and not self.register_widget.applied_screen_history.is_empty())
 
     def _on_register_button_label_change(self, obj, value):
         """Handler for registergui.RegisterWidgets's 'register-button-label' property notifications.
