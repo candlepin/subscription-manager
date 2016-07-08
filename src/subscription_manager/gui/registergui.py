@@ -2071,7 +2071,7 @@ class AsyncBackend(object):
             raise NoProductsException()
 
         if len(self.backend.cs.valid_products) == len(self.backend.cs.installed_products) and \
-                len(self.backend.cs.partial_stacks) == 0:
+                len(self.backend.cs.partial_stacks) == 0 and self.backend.cs.system_status != 'partial':
             raise AllProductsCoveredException()
 
         if current_sla:

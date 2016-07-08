@@ -5,8 +5,9 @@ from fixture import SubManFixture
 
 from stubs import StubBackend, StubFacts
 from subscription_manager.gui.registergui import RegisterWidget, RegisterInfo,  \
-    CredentialsScreen, ActivationKeyScreen, ChooseServerScreen, \
+    CredentialsScreen, ActivationKeyScreen, ChooseServerScreen, AsyncBackend, \
     CREDENTIALS_PAGE, CHOOSE_SERVER_PAGE
+from subscription_manager.gui.autobind import AllProductsCoveredException
 
 from subscription_manager.ga import GObject as ga_GObject
 from subscription_manager.ga import Gtk as ga_Gtk
@@ -217,3 +218,30 @@ class ChooseServerScreenTests(SubManFixture):
         self.screen._on_default_button_clicked(None)  # The widget param is not used
         result = self.screen.server_entry.get_text()
         self.assertEqual(expected, result)
+
+
+class AsyncBackendTests(SubManFixture):
+    def setUp(self):
+        self.backend = StubBackend()
+        self.asyncBackend = AsyncBackend(self.backend)
+        super(AsyncBackendTests, self).setUp()
+
+    def test_auto_system_complete(self):
+        self.backend.cp_provider.get_consumer_auth_cp().getConsumer = \
+           Mock(return_value={"serviceLevel": "", "owner": {"key": "admin"}})
+        self.backend.cs.valid_products = ['RH001', 'RH002']
+        self.backend.cs.installed_products = ['RH001', 'RH002']
+        self.backend.cs.partial_stacks = []
+        self.backend.cs.system_status = 'valid'
+        self.backend.cp_provider.get_consumer_auth_cp().getServiceLevelList = Mock(return_value=[])
+        self.assertRaises(AllProductsCoveredException, self.asyncBackend._find_suitable_service_levels, '12345', {})
+
+    def test_auto_system_partial(self):
+        self.backend.cp_provider.get_consumer_auth_cp().getConsumer = \
+           Mock(return_value={"serviceLevel": "", "owner": {"key": "admin"}})
+        self.backend.cs.valid_products = ['RH001', 'RH002']
+        self.backend.cs.installed_products = ['RH001', 'RH002']
+        self.backend.cs.partial_stacks = []
+        self.backend.cs.system_status = 'partial'
+        self.backend.cp_provider.get_consumer_auth_cp().getServiceLevelList = Mock(return_value=[])
+        self.asyncBackend._find_suitable_service_levels('12345', {})
