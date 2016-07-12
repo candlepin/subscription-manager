@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.17.9
+Version: 1.18.0
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -78,7 +78,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:  python-ethtool
 Requires:  python-iniparse
 Requires:  virt-what
-Requires:  python-rhsm >= 1.17.0
+Requires:  python-rhsm >= 1.18.0
 %if 0%{?sles_version}
 Requires:  dbus-1-python
 %else
