@@ -189,7 +189,10 @@ class install_data(_install_data):
             for f in matches:
                 out_dir = os.path.dirname(f)
                 out_name = os.path.basename(f).split('.')[0] + new_extension
-                self.move_file(f, self.join(out_dir, out_name))
+                dest = self.join(out_dir, out_name)
+                if os.path.exists(dest):
+                    os.remove(dest)
+                self.move_file(f, dest)
 
     def add_messages(self):
         for lang in os.listdir(self.join('build', 'locale')):
