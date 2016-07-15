@@ -12,7 +12,7 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.18.0
+Version: 1.18.1
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -97,6 +97,9 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Fri Jul 15 2016 Alex Wood <awood@redhat.com> 1.18.1-1
+- Bump version to 1.18 (vrjain@redhat.com)
+
 * Thu Jun 30 2016 Vritant Jain <vrjain@redhat.com> 1.17.5-1
 - 1104332: Separate out the rhsm certs into a separate RPM (vrjain@redhat.com)
 
