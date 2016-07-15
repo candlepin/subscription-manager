@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
-import unittest
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
+
 import optparse
 
 from subscription_manager import i18n_optparse

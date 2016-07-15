@@ -1,6 +1,9 @@
-import gettext
-import unittest
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
 
+import gettext
 import fixture
 
 from subscription_manager import managercli

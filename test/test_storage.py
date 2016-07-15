@@ -11,8 +11,10 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
-import unittest
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
 
 from subscription_manager.gui.storage import MappedTreeStore, MappedListStore
 

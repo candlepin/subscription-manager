@@ -11,8 +11,11 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
 
-import unittest
 from modelhelpers import create_pool, create_attribute_list
 from subscription_manager.jsonwrapper import PoolWrapper
 
