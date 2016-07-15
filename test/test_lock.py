@@ -1,10 +1,14 @@
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
+
 import os
 import subprocess
 import sys
 import tempfile
 import threading
 import time
-import unittest
 
 from nose import SkipTest
 

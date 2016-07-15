@@ -12,6 +12,10 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
 
 from cStringIO import StringIO
 import errno
@@ -19,7 +23,6 @@ import mock
 import os
 import shutil
 import tempfile
-import unittest
 import zipfile
 from zipfile import ZipFile
 
