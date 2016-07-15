@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.18.0
+Version: 1.18.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -597,6 +597,9 @@ fi
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Fri Jul 15 2016 Alex Wood <awood@redhat.com> 1.18.1-1
+- Bump version to 1.18 (vrjain@redhat.com)
+
 * Tue Jul 12 2016 Vritant Jain <vrjain@redhat.com> 1.17.9-1
 - 1353662: Explicitly use ConsumerIdentity keypath and certpath methods
   (csnyder@redhat.com)
