@@ -219,6 +219,7 @@ def init_ga(gtk_version=None):
 
     DEFAULT_GTK_VERSION = "2"
     gtk_version_from_build = None
+    gtk_version_from_environ = os.environ.get('SUBMAN_GTK_VERSION')
 
     # ignore version.py info if it hasn't been set.
     if version.gtk_version != "GTK_VERSION":
@@ -235,12 +236,12 @@ def init_ga(gtk_version=None):
             gtk_version_from_build = "2"
         else:
             gtk_version_from_build = "3"
-        warnings.warn("GTK_VERSION is unset in version.py.  Using GTK %s" % gtk_version_from_build)
+        if gtk_version_from_environ is None:
+            warnings.warn("GTK_VERSION is unset in version.py.  Using GTK %s"  \
+                          % gtk_version_from_build)
 
-    GTK_VERSION = gtk_version or gtk_version_from_build or DEFAULT_GTK_VERSION
-
-    if 'SUBMAN_GTK_VERSION' in os.environ:
-        GTK_VERSION = os.environ.get('SUBMAN_GTK_VERSION')
+    GTK_VERSION = gtk_version_from_environ or gtk_version or gtk_version_from_build \
+        or DEFAULT_GTK_VERSION
 
     if GTK_VERSION == "3":
         sys.meta_path.append(GaImporterGtk3())
