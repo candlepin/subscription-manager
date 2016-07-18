@@ -16,6 +16,7 @@ from subscription_manager import api
 from subscription_manager.repolib import Repo
 
 from fixture import SubManFixture
+from stubs import StubUEP
 
 
 class ApiVersionTest(SubManFixture):
@@ -34,6 +35,10 @@ class RepoApiTest(SubManFixture):
         repo_file_patcher = patch("subscription_manager.api.repos.RepoFile", autospec=True)
         self.repo_file = repo_file_patcher.start()
         self.addCleanup(repo_file_patcher.stop)
+
+        uep_patcher = patch("rhsm.connection.UEPConnection", new=StubUEP)
+        self.stub_uep = uep_patcher.start()
+        self.addCleanup(uep_patcher.stop)
 
     def test_disable_repo(self):
         repo_settings = {
