@@ -27,6 +27,7 @@ import subprocess
 import urllib2
 import webbrowser
 import os
+import socket
 
 
 import rhsm.config as config
@@ -57,6 +58,7 @@ from subscription_manager.gui.preferences import PreferencesDialog
 from subscription_manager.gui.utils import handle_gui_exception, linkify
 from subscription_manager.gui.reposgui import RepositoriesDialog
 from subscription_manager.overrides import Overrides
+from subscription_manager.cli import system_exit
 
 
 _ = gettext.gettext
@@ -150,6 +152,8 @@ class MainWindow(widgets.SubmanBaseWidget):
                  auto_launch_registration=False):
         super(MainWindow, self).__init__()
 
+        if not self.test_proxy_connection():
+            system_exit(os.EX_UNAVAILABLE, _("Proxy connnection failed, please check your settings."))
         self.backend = backend or Backend()
         self.identity = require(IDENTITY)
 
@@ -508,3 +512,21 @@ class MainWindow(widgets.SubmanBaseWidget):
             # Use the default if there is no translation.
             url = ONLINE_DOC_FALLBACK_URL
         return url
+
+    def test_proxy_connection(self):
+        result = None
+        if not cfg.get("server", "proxy_hostname"):
+            return True
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.settimeout(10)
+            result = s.connect_ex((cfg.get("server", "proxy_hostname"), int(cfg.get("server", "proxy_port") or config.DEFAULT_PROXY_PORT)))
+        except Exception as e:
+            log.info("Attempted bad proxy: %s" % e)
+        finally:
+            s.close()
+        if result:
+            log.error("proxy connetion error: %s" % result)
+            return False
+        else:
+            return True
