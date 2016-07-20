@@ -1171,8 +1171,16 @@ class TestImportCertCommand(TestCliCommand):
     command_class = managercli.ImportCertCommand
 
     def test_certificates(self):
+        self.cc.is_registered = Mock(return_value=False)
         self.cc.main(["--certificate", "one", "--certificate", "two"])
         self.cc._validate_options()
+
+    def test_registered(self):
+        self.cc.is_registered = Mock(return_value=True)
+        self.cc.main(["--certificate", "one", "--certificate", "two"])
+        with self.assertRaises(SystemExit) as e:
+            self.cc._validate_options()
+        self.assertEquals(os.EX_USAGE, e.exception.code)
 
     def test_no_certificates(self):
         try:

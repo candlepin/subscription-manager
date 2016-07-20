@@ -1860,6 +1860,8 @@ class ImportCertCommand(CliCommand):
                                help=_("certificate file to import (can be specified more than once)"))
 
     def _validate_options(self):
+        if self.is_registered():
+            system_exit(os.EX_USAGE, _("Error: You may not import certificates into a system that is registered to a subscription management service."))
         if not self.options.certificate_file:
             system_exit(os.EX_USAGE, _("Error: This command requires that you specify a certificate with --certificate."))
 

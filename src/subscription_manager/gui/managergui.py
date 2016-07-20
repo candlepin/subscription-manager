@@ -138,7 +138,8 @@ class MainWindow(widgets.SubmanBaseWidget):
     """
     widget_names = ['main_window', 'notebook', 'system_name_label',
                     'register_menu_item', 'unregister_menu_item',
-                    'redeem_menu_item', 'settings_menu_item', 'repos_menu_item']
+                    'redeem_menu_item', 'settings_menu_item', 'repos_menu_item',
+                    'import_cert_menu_item']
     gui_file = "mainwindow"
 
     def log_server_version(self, uep):
@@ -334,10 +335,12 @@ class MainWindow(widgets.SubmanBaseWidget):
             self.register_menu_item.set_sensitive(False)
             self.unregister_menu_item.set_sensitive(True)
             self.settings_menu_item.set_sensitive(True)  # preferences
+            self.import_cert_menu_item.set_sensitive(False)
         else:
             self.register_menu_item.set_sensitive(True)
             self.unregister_menu_item.set_sensitive(False)
             self.settings_menu_item.set_sensitive(False)
+            self.import_cert_menu_item.set_sensitive(True)
 
         show_overrides = False
         try:
