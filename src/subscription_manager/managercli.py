@@ -14,7 +14,6 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
-#
 
 import datetime
 import fileinput
@@ -347,7 +346,7 @@ class CliCommand(AbstractCLICommand):
         self.parser.add_option("--proxypassword", dest="proxy_password",
                                 default=None, help=_("password for HTTP proxy with basic authentication"))
 
-    def _do_command(self):
+    def _do_command(self, no_updates=False):
         pass
 
     def assert_should_be_registered(self):
@@ -394,7 +393,7 @@ class CliCommand(AbstractCLICommand):
         self.server_versions = get_server_versions(self.no_auth_cp, exception_on_timeout=True)
         log.info("Server Versions: %s" % self.server_versions)
 
-    def main(self, args=None):
+    def main(self, args=None, no_updates=False):
 
         # TODO: For now, we disable the CLI entirely. We may want to allow some commands in the future.
         if rhsm.config.in_container():
@@ -522,8 +521,10 @@ class CliCommand(AbstractCLICommand):
 
         # do the work, catch most common errors here:
         try:
-
-            return_code = self._do_command()
+            if no_updates:
+                return_code = self._do_command(no_updates=True)
+            else:
+                return_code = self._do_command()
 
             # Only persist the config changes if there was no exception
             if config_changed and self.persist_server_options():
@@ -2568,7 +2569,7 @@ class OverrideCommand(CliCommand):
                 self.options.removals or self.options.remove_all or self.options.list):
             self.options.list = True
 
-    def _do_command(self):
+    def _do_command(self, no_updates=False):
         self._validate_options()
         # Abort if not registered
         self.assert_should_be_registered()
@@ -2597,7 +2598,14 @@ class OverrideCommand(CliCommand):
 
         if self.options.additions:
             repo_ids = [repo.id for repo in overrides.repo_lib.get_repos(apply_overrides=False)]
-            to_add = [Override(repo, name, value) for repo in self.options.repos for name, value in self.options.additions.items()]
+            to_add = []
+            for name, value in self.options.additions.iteritems():
+                # check for empty names
+                if name == "" or value == "":
+                    print _("name: may not be null ")
+                    continue
+                for repo in self.options.repos:
+                    to_add.append(Override(repo, name, value))
             try:
                 results = overrides.add_overrides(self.identity.uuid, to_add)
             except connection.RestlibException, ex:
@@ -2614,12 +2622,22 @@ class OverrideCommand(CliCommand):
                     print _("Repository '%s' does not currently exist, but the override has been added.") % repo
 
         if self.options.removals:
-            to_remove = [Override(repo, item) for repo in self.options.repos for item in self.options.removals]
+            to_remove = []
+            for item in self.options.removals:
+                # check if empty string is passed as name
+                if item == "":
+                    print _("name: may not be null ")
+                    continue
+                for repo in self.options.repos:
+                    to_remove.append(Override(repo, item))
+
             results = overrides.remove_overrides(self.identity.uuid, to_remove)
         if self.options.remove_all:
             results = overrides.remove_all_overrides(self.identity.uuid, self.options.repos)
 
         # Update the cache and refresh the repo file.
+        if no_updates:
+            return
         overrides.update(results)
 
     def _list(self, all_overrides, specific_repos):
@@ -2730,7 +2748,6 @@ class ManagerCLI(CLI):
     def main(self):
         managerlib.check_identity_cert_perms()
         return CLI.main(self)
-
 
 if __name__ == "__main__":
     ManagerCLI().main()
