@@ -21,7 +21,7 @@ from subscription_manager.gui import widgets
 
 _ = gettext.gettext
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 
 class Filters(object):

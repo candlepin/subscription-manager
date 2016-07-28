@@ -34,7 +34,7 @@ from subscription_manager.managerlib import allows_multi_entitlement, valid_quan
 
 _ = gettext.gettext
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 
 class AllSubscriptionsTab(widgets.SubscriptionManagerTab):

@@ -28,7 +28,7 @@ from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.ga import GdkPixbuf as ga_GdkPixbuf
 import os
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 _ = gettext.gettext
 

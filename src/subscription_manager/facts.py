@@ -26,7 +26,7 @@ from rhsm import ourjson as json
 
 _ = gettext.gettext
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 # Hardcoded value for the version of certificates this version of the client
 # prefers:

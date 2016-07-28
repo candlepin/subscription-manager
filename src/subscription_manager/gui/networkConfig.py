@@ -38,7 +38,7 @@ _ = gettext.gettext
 
 DIR = os.path.dirname(__file__)
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 
 class NetworkConfigDialog(widgets.SubmanBaseWidget):

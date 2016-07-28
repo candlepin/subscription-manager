@@ -37,7 +37,7 @@ import subscription_manager.injection as inj
 from rhsm import ourjson as json
 
 _ = gettext.gettext
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 
 class DatabaseDirectory(Directory):

@@ -68,7 +68,7 @@ gettext.textdomain("rhsm")
 #Gtk.glade.bindtextdomain("rhsm")
 #Gtk.Window.set_default_icon_name("subscription-manager")
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 cfg = config.initConfig()
 

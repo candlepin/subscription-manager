@@ -37,7 +37,7 @@ from rhsm.config import initConfig
 from subscription_manager.certlib import ActionReport, BaseActionInvoker
 from subscription_manager.certdirectory import Path
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 CFG = initConfig()
 

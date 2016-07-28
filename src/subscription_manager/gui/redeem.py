@@ -22,7 +22,7 @@ from subscription_manager.injection import IDENTITY, require
 
 _ = gettext.gettext
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 
 class RedeemDialog(widgets.SubmanBaseWidget):

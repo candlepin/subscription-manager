@@ -21,7 +21,7 @@ import logging
 from yum.i18n import utf8_width
 from subscription_manager.utils import get_terminal_width
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 _ = gettext.gettext
 

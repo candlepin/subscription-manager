@@ -13,6 +13,7 @@
 # in this software or its documentation.
 #
 
+from collections import defaultdict
 import StringIO
 from datetime import datetime, timedelta
 import mock
@@ -64,9 +65,10 @@ consumerCertDir = /etc/pki/consumer
 
 [rhsmcertd]
 certCheckInterval = 240
-"""
 
-test_config = StringIO.StringIO(cfg_buf)
+[logging]
+default_log_level = DEBUG
+"""
 
 
 class StubConfig(config.RhsmConfigParser):
@@ -75,11 +77,11 @@ class StubConfig(config.RhsmConfigParser):
         config.RhsmConfigParser.__init__(self, config_file=config_file, defaults=defaults)
         self.raise_io = None
         self.fileName = config_file
-        self.store = {}
+        self.store = defaultdict(dict)
 
-    # isntead of reading a file, let's use the stringio
+    # instead of reading a file, let's use the stringio
     def read(self, filename):
-        self.readfp(test_config, "foo.conf")
+        self.readfp(StringIO.StringIO(cfg_buf), "foo.conf")
 
     # this way our test can put some values in and have them used during the run
     def get(self, section, key):
@@ -87,7 +89,7 @@ class StubConfig(config.RhsmConfigParser):
         value = super(StubConfig, self).get(section, key)
         test_value = None
         try:
-            test_value = self.store['%s.%s' % (section, key)]
+            test_value = self.store[section][key]
         except KeyError:
             test_value = None
 
@@ -98,7 +100,16 @@ class StubConfig(config.RhsmConfigParser):
 
     def set(self, section, key, value):
         # print self.sections()
-        self.store['%s.%s' % (section, key)] = value
+        self.store[section][key] = value
+
+    def items(self, section):
+        # Attempt to return the items from the store for the given section.
+        # This allows tests using this stub to set arbitrary keys in a given
+        # section and iterate over them with their values.
+        items_from_store = self.store[section]
+        if len(items_from_store) > 0:
+            return items_from_store.items()
+        return config.RhsmConfigParser.items(self, section)
 
     def save(self, config_file=None):
         if self.raise_io:

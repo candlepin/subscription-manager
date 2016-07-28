@@ -29,7 +29,7 @@ from subscription_manager import rhelentbranding
 import subscription_manager.injection as inj
 
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 _ = gettext.gettext
 

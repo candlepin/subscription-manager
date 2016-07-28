@@ -24,7 +24,7 @@ from subscription_manager import release
 
 _ = gettext.gettext
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 
 class PreferencesDialog(widgets.SubmanBaseWidget):
