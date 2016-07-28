@@ -935,7 +935,7 @@ class TestConfigCommand(TestCliCommand):
 
         baseurl = 'https://someserver.example.com/foo'
         self.cc.main(['--rhsm.baseurl', baseurl])
-        self.assertEquals(managercli.cfg.store['rhsm.baseurl'], baseurl)
+        self.assertEquals(managercli.cfg.store['rhsm']['baseurl'], baseurl)
 
     def test_remove_config_default(self):
         with Capture() as cap:

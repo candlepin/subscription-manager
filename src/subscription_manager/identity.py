@@ -22,7 +22,7 @@ from subscription_manager.certdirectory import Path
 
 CFG = initConfig()
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 
 class ConsumerIdentity:

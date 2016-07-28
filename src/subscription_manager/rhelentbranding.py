@@ -21,7 +21,7 @@ import logging
 from subscription_manager import injection as inj
 from subscription_manager import entbranding
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 
 class RHELBrandsInstaller(entbranding.BrandsInstaller):

@@ -20,7 +20,7 @@ import dmidecode
 
 _ = gettext.gettext
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 
 class DmiFirmwareInfoProvider(object):

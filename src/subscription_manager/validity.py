@@ -19,7 +19,7 @@ from rhsm.certificate import DateRange
 import subscription_manager.injection as inj
 from subscription_manager.isodate import parse_date
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 
 class ValidProductDateRangeCalculator(object):

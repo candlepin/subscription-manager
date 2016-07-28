@@ -30,7 +30,7 @@ from subscription_manager.installedproductslib import InstalledProductsActionInv
 from subscription_manager.content_action_client import ContentActionClient
 
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 _ = gettext.gettext
 

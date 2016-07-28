@@ -27,7 +27,7 @@ from subscription_manager.exceptions import ExceptionMapper
 import rhsm.connection as connection
 from subscription_manager.gui import messageWindow
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 # we need gtk 2.18+ to do the right markup in linkify
 MIN_GTK_MAJOR = 2

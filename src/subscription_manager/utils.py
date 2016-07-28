@@ -44,7 +44,7 @@ from rhsm.connection import UEPConnection, RestlibException, GoneException
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 _ = lambda x: gettext.ldgettext("rhsm", x)
 

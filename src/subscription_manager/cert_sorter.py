@@ -27,7 +27,7 @@ from subscription_manager import utils
 
 _ = gettext.gettext
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 FUTURE_SUBSCRIBED = "future_subscribed"
 SUBSCRIBED = "subscribed"

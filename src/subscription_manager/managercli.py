@@ -62,7 +62,7 @@ from subscription_manager.printing_utils import columnize, format_name, \
 
 _ = gettext.gettext
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 cfg = rhsm.config.initConfig()
 

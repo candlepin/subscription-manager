@@ -32,7 +32,7 @@ OSTREE_REPORT_TEMPLATE = """remote \"{self.name}\"
 \ttls-client-key-path: {self.tls_client_key_path}
 \ttls-ca-path: {self.tls_ca_path}"""
 
-log = logging.getLogger("rhsm-app." + __name__)
+log = logging.getLogger(__name__)
 
 
 class OstreeContentError(Exception):

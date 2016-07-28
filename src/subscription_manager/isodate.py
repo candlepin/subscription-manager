@@ -19,7 +19,7 @@
 import dateutil.parser
 import logging
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 
 def _parse_date_dateutil(date):

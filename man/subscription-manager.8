@@ -1137,7 +1137,7 @@ command in the format
 .I --section.parameter=value
 , where
 .I section
-is the configuration section in the file: server, rhsm, or rhsmcertd.
+is the configuration section in the file: server, rhsm, rhsmcertd or logging.
 
 .PP
 For example, to change the hostname of the subscription management service host:
@@ -1147,6 +1147,40 @@ For example, to change the hostname of the subscription management service host:
 subscription-manager config --server.hostname=myserver.example.com
 .fi
 .RE
+
+.PP
+The entries in the
+.B logging
+section are somewhat special.
+The keys in this section are a name of a logger.
+The values are the logging level.
+.PP
+Valid levels are one of:
+.B DEBUG
+,
+.B INFO
+,
+.B WARNING
+,
+.B ERROR
+, or
+.B CRITICAL
+.
+.PP
+Valid logger names are the full module path of any Subscription Manager module.
+For example:
+.B subscription_manager
+or
+subscription_manager.managercli
+
+.PP
+There are three main top-level loggers: subscription_manager, rhsm, and rhsm-app.
+All logger names begin with one of the above.
+
+.PP
+To set the default log level for all loggers (that are not otherwise set in the logging section), edit the
+.B default_log_level
+key in /etc/rhsm/rhsm.conf
 
 
 .SS UPDATING FACTS

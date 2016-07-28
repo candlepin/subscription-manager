@@ -19,7 +19,7 @@ import rhsm
 from subscription_manager import logutil
 logutil.init_logger()
 
-log = logging.getLogger("rhsm-app." + __name__)
+log = logging.getLogger(__name__)
 
 # neuter linkify in firstboot
 from subscription_manager.gui.utils import running_as_firstboot

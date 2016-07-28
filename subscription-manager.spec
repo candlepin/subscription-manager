@@ -340,7 +340,6 @@ rm -rf %{buildroot}
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm/facts
 %attr(644,root,root) %config(noreplace) %{_sysconfdir}/rhsm/rhsm.conf
-%config(noreplace) %attr(644,root,root) %{_sysconfdir}/rhsm/logging.conf
 
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.SubscriptionManager.conf
 

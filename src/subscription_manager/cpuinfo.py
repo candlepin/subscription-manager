@@ -104,7 +104,7 @@ import os
 # stepping    : 7
 # microcode   : 0x710
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 
 class DefaultCpuFields(object):

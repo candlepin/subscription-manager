@@ -50,7 +50,7 @@ _ = lambda x: gettext.ldgettext("rhsm", x)
 
 gettext.textdomain("rhsm")
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 CFG = config.initConfig()
 

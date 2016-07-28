@@ -18,7 +18,7 @@ from subscription_manager.repolib import RepoActionInvoker
 
 import logging
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 # Module for manipulating content overrides
 

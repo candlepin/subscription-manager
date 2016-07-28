@@ -9,15 +9,22 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 
-import ConfigParser
 import logging
 import logging.handlers
 import logging.config
 import os
 import sys
+import rhsm.config
 
-LOGGING_CONFIG = "/etc/rhsm/logging.conf"
 LOGFILE_PATH = "/var/log/rhsm/rhsm.log"
+
+LOG_FORMAT = u'%(asctime)s [%(levelname)s] %(cmd_name)s:%(process)d:' \
+             u'%(threadName)s @%(filename)s:%(lineno)d - %(message)s'
+
+_rhsm_log_handler = None
+_subman_debug_handler = None
+log = None
+ROOT_NAMESPACES = ['subscription_manager', 'rhsm', 'rhsm-app']
 
 
 # Don't need this for syslog
@@ -105,23 +112,20 @@ class PyWarningsLogger(logging.getLoggerClass()):
         self.addFilter(PyWarningsLoggingFilter(name="py.warnings"))
 
 
-def file_config(logging_config):
-    """Load logging config from the file logging_config and setup logging."""
+def _get_default_rhsm_log_handler():
+    global _rhsm_log_handler
+    if not _rhsm_log_handler:
+        _rhsm_log_handler = RHSMLogHandler(LOGFILE_PATH)
+        _rhsm_log_handler.setFormatter(logging.Formatter(LOG_FORMAT))
+    return _rhsm_log_handler
 
-    # NOTE: without disable_existing_loggers, this would have to
-    # be close to the first thing ran. Any loggers created after
-    # that are disabled. This likely includes module level loggers
-    # like all of ours.
-    try:
-        logging.config.fileConfig(logging_config,
-                                  defaults={'logfilepath': LOGFILE_PATH},
-                                  disable_existing_loggers=False)
-    except ConfigParser.Error, e:
-        # If the log config file doesn't exist, or is empty, we end up
-        # with ConfigParser errors.
 
-        # TODO: fallback default logger?
-        print e
+def _get_default_subman_debug_handler():
+    global _subman_debug_handler
+    if not _subman_debug_handler:
+        _subman_debug_handler = SubmanDebugHandler()
+        _subman_debug_handler.setFormatter(logging.Formatter(LOG_FORMAT))
+    return _subman_debug_handler
 
 
 def init_logger():
@@ -129,15 +133,38 @@ def init_logger():
 
     Only needs to be called once per process."""
 
-    file_config(logging_config=LOGGING_CONFIG)
+    global log
+    if log:
+        log.warning("logging already initialized")
+
+    config = rhsm.config.initConfig()
+
+    default_log_level = config.get('logging', 'default_log_level')
+
+    for root_namespace in ROOT_NAMESPACES:
+        logger = logging.getLogger(root_namespace)
+        logger.addHandler(_get_default_rhsm_log_handler())
+        logger.addHandler(_get_default_subman_debug_handler())
+        logger.setLevel(default_log_level)
+
+    for logger_name, logging_level in config.items('logging'):
+        logger_name = logger_name.strip()
+        if logger_name.split('.')[0] not in ROOT_NAMESPACES:
+            # Don't allow our logging configuration to mess with loggers
+            # outside the namespaces we claim as ours
+            # Also ignore other more general configuration options like
+            # default_log_level
+            continue
+        logger = logging.getLogger(logger_name)
+        logger.setLevel(logging_level)
+
+    if not log:
+        log = logging.getLogger(__name__)
 
 
 def init_logger_for_yum():
     init_logger()
 
-    # TODO: switch this to reference /etc/rhsm/yum_logging.conf
-
     # Don't send log records up to yum/yum plugin conduit loggers
-    logging.getLogger("subscription_manager").propagate = False
-    logging.getLogger("rhsm").propagate = False
-    logging.getLogger("rhsm-app").propagate = False
+    for logger_name in ROOT_NAMESPACES:
+        logging.getLogger(logger_name).propagate = False

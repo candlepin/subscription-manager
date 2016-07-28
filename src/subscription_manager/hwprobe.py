@@ -32,7 +32,7 @@ from subscription_manager import cpuinfo
 
 _ = gettext.gettext
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 
 # Exception classes used by this module.

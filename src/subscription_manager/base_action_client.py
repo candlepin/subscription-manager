@@ -19,7 +19,7 @@ from subscription_manager import injection as inj
 
 from rhsm.connection import GoneException, ExpiredIdentityCertException
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 
 class BaseActionClient(object):
