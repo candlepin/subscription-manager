@@ -2084,8 +2084,8 @@ class ReposCommand(CliCommand):
             matches = set([repo for repo in repos if fnmatch.fnmatch(repo.id, repoid)])
             if not matches:
                 rc = 1
-                print _("Error: %s is not a valid repository ID. "
-                        "Use --list option to see valid repositories.") % repoid
+                print _("Error: '%s' does not match a valid repository ID. "
+                        "Use \"subscription-manager repos --list\" to see valid repositories.") % repoid
 
             # Overwrite repo if it's already in the dict, we want the last
             # match to be the one sent to server.
