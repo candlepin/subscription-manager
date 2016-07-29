@@ -36,8 +36,7 @@ def random_string(name, target_length=32):
 class ConnectionTests(unittest.TestCase):
 
     def setUp(self):
-        self.cp = UEPConnection(username="admin", password="admin",
-                insecure=True)
+        self.cp = UEPConnection(username="admin", password="admin", insecure=True)
 
         self.consumer = self.cp.registerConsumer("test-consumer", "system", owner="admin")
         self.consumer_uuid = self.consumer['uuid']
@@ -143,10 +142,60 @@ class ConnectionTests(unittest.TestCase):
 
 
 @attr('functional')
+class EntitlementRegenerationTests(unittest.TestCase):
+    def setUp(self):
+        self.cp = UEPConnection(username="admin", password="admin", insecure=True)
+
+        self.consumer = self.cp.registerConsumer("test-consumer", "system", owner="admin")
+        self.consumer_uuid = self.consumer['uuid']
+
+        # This product is present in the Candlepin test data
+        self.cp.bindByProduct(self.consumer_uuid, ["awesomeos-instancebased"])
+
+        entitlements = self.cp.getEntitlementList(self.consumer_uuid)
+        self.assertTrue(len(entitlements) > 0)
+
+        self.entitlement = entitlements[0]
+        self.entitlement_id = self.entitlement['id']
+
+    def test_regenerate_entitlements_default(self):
+        self.cp.regenEntitlementCertificates(self.consumer_uuid)
+
+    def test_regenerate_entitlements_lazy(self):
+        self.cp.regenEntitlementCertificates(self.consumer_uuid, True)
+
+    def test_regenerate_entitlements_eager(self):
+        self.cp.regenEntitlementCertificates(self.consumer_uuid, False)
+
+    def test_regenerate_entitlements_bad_uuid(self):
+        with self.assertRaises(RestlibException):
+            self.cp.regenEntitlementCertificates("bad_consumer_uuid")
+
+    def test_regenerate_entitlement_default(self):
+        self.cp.regenEntitlementCertificate(self.consumer_uuid, self.entitlement_id)
+
+    def test_regenerate_entitlement_lazy(self):
+        self.cp.regenEntitlementCertificate(self.consumer_uuid, self.entitlement_id, True)
+
+    def test_regenerate_entitlement_eager(self):
+        self.cp.regenEntitlementCertificate(self.consumer_uuid, self.entitlement_id, False)
+
+    def test_regenerate_entitlement_bad_consumer_uuid(self):
+        with self.assertRaises(RestlibException):
+            self.cp.regenEntitlementCertificate("bad_consumer_uuid", self.entitlement_id)
+
+    def test_regenerate_entitlement_bad_entitlement_id(self):
+        with self.assertRaises(RestlibException):
+            self.cp.regenEntitlementCertificate(self.consumer_uuid, "bad_entitlement_id")
+
+    def tearDown(self):
+        self.cp.unregisterConsumer(self.consumer_uuid)
+
+
+@attr('functional')
 class BindRequestTests(unittest.TestCase):
     def setUp(self):
-        self.cp = UEPConnection(username="admin", password="admin",
-                insecure=True)
+        self.cp = UEPConnection(username="admin", password="admin", insecure=True)
 
         consumerInfo = self.cp.registerConsumer("test-consumer", "system", owner="admin")
         self.consumer_uuid = consumerInfo['uuid']

@@ -1174,8 +1174,7 @@ class UEPConnection:
         This will cause the UEP to look for one or more pools which provide
         access to the given product.
         """
-        args = "&".join(["product=" + product.replace(" ", "%20")
-                        for product in products])
+        args = "&".join(["product=" + product.replace(" ", "%20") for product in products])
         method = "/consumers/%s/entitlements?%s" % (str(consumerId), args)
         return self.conn.request_post(method)
 
@@ -1344,6 +1343,22 @@ class UEPConnection:
     def regenIdCertificate(self, consumerId):
         method = "/consumers/%s" % self.sanitize(consumerId)
         return self.conn.request_post(method)
+
+    def regenEntitlementCertificates(self, consumer_id, lazy_regen=True):
+        method = "/consumers/%s/certificates" % self.sanitize(consumer_id)
+
+        if lazy_regen:
+            method += "?lazy_regen=true"
+
+        return self.conn.request_put(method)
+
+    def regenEntitlementCertificate(self, consumer_id, entitlement_id, lazy_regen=True):
+        method = "/consumers/%s/certificates?entitlement=%s" % (self.sanitize(consumer_id), self.sanitize(entitlement_id))
+
+        if lazy_regen:
+            method += "&lazy_regen=true"
+
+        return self.conn.request_put(method)
 
     def getStatus(self):
         method = "/status"
