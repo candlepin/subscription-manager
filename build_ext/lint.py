@@ -18,21 +18,23 @@ from distutils.text_file import TextFile
 
 from build_ext.utils import Utils, BaseCommand, memoize
 
+# These dependencies aren't available in build environments.  We won't need any
+# linting functionality there though, so just create a dummy class so we can proceed.
 try:
-    # These dependencies aren't available in build environments.  We won't need any
-    # linting functionality there though, so just create a dummy class so we can proceed.
-    from pep8 import Checker, register_check
+    import pkg_resources
+except ImportError:
+    pass
 
-    from flake8.main import Flake8Command
+try:
+    from flake8.main.setuptools_command import Flake8
+except ImportError:
+    class Flake8(object):
+        def __init__(self, *args, **kwargs):
+            raise NotImplementedError("flake8 could not be imported")
 
+try:
     from lxml import etree as ElementTree
 except ImportError:
-    class Checker(object):
-        pass
-
-    class Flake8Command(object):
-        pass
-
     class ElementTree(object):
         @staticmethod
         def parse(*args, **kwargs):
@@ -157,7 +159,7 @@ class AstVisitor(object):
 
 class WidgetVisitor(AstVisitor):
     """Look for widgets that are used in code but not declared in the Glade files."""
-    codes = ['U100']
+    codes = ['X100']
 
     class StrVisitor(AstVisitor):
         def visit_Str(self, node):
@@ -185,12 +187,12 @@ class WidgetVisitor(AstVisitor):
                     widgets = set(self.StrVisitor().visit(node.value))
                     widgets.difference_update(self.defined_widgets)
                     if widgets:
-                        return (node, "U100 widgets %s are not defined in the Glade files" % list(widgets))
+                        return (node, "X100 widgets %s are not defined in the Glade files" % list(widgets))
 
 
 class SignalVisitor(AstVisitor):
     """Look for signals that are used in code but not declared in the Glade files."""
-    codes = ['U101']
+    codes = ['X101']
 
     class DictVisitor(AstVisitor):
         def visit_Dict(self, node):
@@ -219,14 +221,14 @@ class SignalVisitor(AstVisitor):
             handlers = set([item for sublist in keys for item in sublist])
             handlers.difference_update(self.defined_handlers)
             if handlers:
-                return (node, "U101 handlers %s are not defined in the Glade files" % list(handlers))
+                return (node, "X101 handlers %s are not defined in the Glade files" % list(handlers))
 
 
 class DebugImportVisitor(AstVisitor):
     """Look for imports of various debug modules"""
 
     DEBUG_MODULES = ['pdb', 'pudb', 'ipdb', 'pydevd']
-    codes = ['D100']
+    codes = ['X200']
 
     def visit_Import(self, node):
         # Likely not necessary but prudent
@@ -235,14 +237,14 @@ class DebugImportVisitor(AstVisitor):
         for alias in node.names:
             module_name = alias.name
             if module_name in self.DEBUG_MODULES:
-                return(node, "D100 imports of debug module '%s' should be removed" % module_name)
+                return(node, "X200 imports of debug module '%s' should be removed" % module_name)
 
     def visit_ImportFrom(self, node):
         # Likely not necessary but prudent
         self.generic_visit(node)
         module_name = node.module
         if module_name in self.DEBUG_MODULES:
-            return(node, "D100 imports of debug module '%s' should be removed" % module_name)
+            return(node, "X200 imports of debug module '%s' should be removed" % module_name)
 
 
 class GettextVisitor(AstVisitor):
@@ -253,7 +255,7 @@ class GettextVisitor(AstVisitor):
         "b")
     Also look for _(a) usages
     """
-    codes = ['G100', 'G101', 'G102']
+    codes = ['X300', 'X301', 'X302']
 
     def visit_Call(self, node):
         # Descend first
@@ -271,19 +273,22 @@ class GettextVisitor(AstVisitor):
 
             # Things like _("a" + "b") (including such constructs across line continuations
             if isinstance(arg, ast.BinOp) and isinstance(arg.op, ast.Add):
-                return (node, "G100 string concatenation that will break xgettext")
+                return (node, "X300 string concatenation that will break xgettext")
 
             # Things like _(some_variable)
             if isinstance(arg, ast.Name):
-                return (node, "G101 variable reference that will break xgettext")
+                return (node, "X301 variable reference that will break xgettext")
 
             # _("%s is great" % some_variable) should be _("%s is great") % some_variable
             if isinstance(arg, ast.BinOp) and isinstance(arg.op, ast.Mod):
-                return (node, "G102 string formatting within gettext function: _('%s' % foo) should be _('%s') % foo")
+                return (node, "X302 string formatting within gettext function: _('%s' % foo) should be _('%s') % foo")
 
 
-class AstChecker(Checker):
-    def __init__(self, tree, filename, *args, **kwargs):
+class AstChecker(object):
+    name = "SubscriptionManagerAstChecker"
+    version = "1.0"
+
+    def __init__(self, tree, filename):
         self.tree = tree
         self.filename = filename
 
@@ -302,7 +307,6 @@ class AstChecker(Checker):
             (WidgetVisitor, {'defined_widgets': widgets}),
             (SignalVisitor, {'defined_handlers': handlers}),
         ]
-        super(AstChecker, self).__init__(filename, *args, **kwargs)
 
     @staticmethod
     @memoize
@@ -360,27 +364,42 @@ class AstChecker(Checker):
         return ret
 
 
-class PluginLoadingFlake8Command(Flake8Command):
+class PluginLoadingFlake8(Flake8):
     """A Flake8 runner that will load our custom plugins.  It's important to note
     that this has to be invoked via `./setup.py flake8`.  Just running `flake8` won't
     cut it.
 
     Flake8 normally wants to load plugins via entry_points, but as far as I can tell
-    that would require packaging our checkers separately.
+    that would require packaging our checkers separately.  Instead, we create a phony
+    pkg_resources Distribution that loads up the build_ext directory.  That directory
+    has some metadata files that associate the AstChecker class with the flake8.extension
+    entry point.
+
+    See http://peak.telecommunity.com/DevCenter/PkgResources
     """
+    def __init__(self, *args, **kwargs):
+        ext_dir = pkg_resources.normalize_path('build_ext')
+        dist = pkg_resources.Distribution(
+            ext_dir,
+            project_name='build_ext',
+            metadata=pkg_resources.PathMetadata(ext_dir, ext_dir)
+        )
+        pkg_resources.working_set.add(dist)
+        Flake8.__init__(self, *args, **kwargs)
+
     def distribution_files(self):
-        # By default Flake8Command only runs on packages registered with
+        # By default Flake8 only runs on packages registered with
         # setuptools.  We want it to look at tests and other things as well
-        #
-        # Additionally https://gitlab.com/pycqa/flake8/issues/134 causes Flake8
-        # to check files in sub-packages multiple times.  Telling it to check
-        # only the top level directories fixes the issue.
         for d in ['src', 'test', 'build_ext', 'example-plugins', 'setup.py']:
             yield d
 
     def run(self):
-        codes = DebugImportVisitor.codes + GettextVisitor.codes + WidgetVisitor.codes + SignalVisitor.codes
-        register_check(AstChecker, codes=codes)
-        # To see what Flake8 is actually checking use
-        # self.options_dict['verbose'] = 1
-        Flake8Command.run(self)
+        # Flake8.run(self)  - use when issue 199 is fixed
+        # Required until https://gitlab.com/pycqa/flake8/issues/199 is fixed
+        self.flake8.run_checks(list(self.distribution_files()))
+        self.flake8.formatter.start()
+        self.flake8.report_errors()
+        self.flake8.report_statistics()
+        self.flake8.report_benchmarks()
+        self.flake8.formatter.stop()
+        self.flake8.exit()
