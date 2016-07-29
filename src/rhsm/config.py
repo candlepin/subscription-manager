@@ -18,8 +18,7 @@
 
 import os
 from iniparse import SafeConfigParser
-from iniparse.compat import NoOptionError, InterpolationMissingOptionError, \
-        NoSectionError
+from iniparse.compat import NoOptionError, InterpolationMissingOptionError, NoSectionError
 import re
 
 CONFIG_ENV_VAR = "RHSM_CONFIG"
