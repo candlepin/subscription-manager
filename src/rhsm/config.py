@@ -75,11 +75,16 @@ RHSMCERTD_DEFAULTS = {
         'autoattachinterval': '1440'
         }
 
+LOGGING_DEFAULTS = {
+        'default_log_level': 'WARNING'
+        }
+
 # Defaults are applied to each section in the config file.
 DEFAULTS = {
         'server': SERVER_DEFAULTS,
         'rhsm': RHSM_DEFAULTS,
-        'rhsmcertd': RHSMCERTD_DEFAULTS
+        'rhsmcertd': RHSMCERTD_DEFAULTS,
+        'logging': LOGGING_DEFAULTS
         }
 
 
