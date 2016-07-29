@@ -237,7 +237,7 @@ def init_ga(gtk_version=None):
         else:
             gtk_version_from_build = "3"
         if gtk_version_from_environ is None:
-            warnings.warn("GTK_VERSION is unset in version.py.  Using GTK %s"  \
+            warnings.warn("GTK_VERSION is unset in version.py.  Using GTK %s"
                           % gtk_version_from_build)
 
     GTK_VERSION = gtk_version_from_environ or gtk_version or gtk_version_from_build \
