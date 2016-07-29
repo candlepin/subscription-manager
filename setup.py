@@ -251,7 +251,7 @@ cmdclass = {
     'lint': lint.Lint,
     'lint_glade': lint.GladeLint,
     'lint_rpm': lint.RpmLint,
-    'flake8': lint.PluginLoadingFlake8Command
+    'flake8': lint.PluginLoadingFlake8
 }
 
 transforms = [
