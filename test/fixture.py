@@ -2,10 +2,15 @@ import difflib
 import locale
 import os
 import pprint
-import unittest
 import sys
 import StringIO
 import tempfile
+
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
+
 
 # just log py.warnings (and pygtk warnings in particular)
 import logging

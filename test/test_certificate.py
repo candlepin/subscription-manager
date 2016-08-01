@@ -12,10 +12,12 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
 
 from datetime import datetime, timedelta
-import unittest
-
 
 # TODO: move to python-rhsm test suite?
 

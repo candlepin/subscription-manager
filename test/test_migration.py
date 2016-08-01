@@ -11,12 +11,15 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
 
 import os
 import re
 import StringIO
 import stubs
-import unittest
 
 from mock import patch, NonCallableMock, MagicMock, Mock, call
 from M2Crypto import SSL

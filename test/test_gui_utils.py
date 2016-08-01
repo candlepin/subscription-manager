@@ -1,5 +1,7 @@
-import unittest
-
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
 
 from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.gui import utils

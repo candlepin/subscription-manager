@@ -11,10 +11,13 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
 
 from stubs import StubEntitlementCertificate, StubProduct
 from mock import Mock
-import unittest
 from subscription_manager.reasons import Reasons
 
 INST_PID_1 = "100000000000002"  # awesomeos 64
