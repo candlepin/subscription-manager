@@ -48,7 +48,7 @@ GLADE_SUFFIX = "glade"
 WARNING_COLOR = '#FFFB82'
 EXPIRED_COLOR = '#FFAF99'
 
-log = logging.getLogger("rhsm-app." + __name__)
+log = logging.getLogger(__name__)
 # Some versions of gtk has incorrect translations for the calendar widget
 # and gtk itself complains about this with errors like:
 #
@@ -114,8 +114,7 @@ class BuilderFileBasedWidget(FileBasedGui):
         The initial_widget_names is a list of widgets to pull in as instance
         variables.
         """
-        self.log = logging.getLogger('rhsm-app.' + __name__ +
-                                     '.' + self.__class__.__name__)
+        self.log = logging.getLogger(__name__ + '.' + self.__class__.__name__)
 
         self.builder = ga_Gtk.Builder()
 
@@ -135,8 +134,7 @@ class SubmanBaseWidget(ga_GObject.GObject):
         ga_GObject.GObject.__init__(self)
         self.gui = self._gui_factory()
         self.pull_widgets(self.gui, self.widget_names)
-        self.log = logging.getLogger('rhsm-app.' + __name__ +
-                                     '.' + self.__class__.__name__)
+        self.log = logging.getLogger(__name__ + '.' + self.__class__.__name__)
 
     def _gui_factory(self):
         gui = BuilderFileBasedWidget.from_file(self.gui_file)

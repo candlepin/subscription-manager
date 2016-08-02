@@ -19,7 +19,7 @@
 
 import logging
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 
 class BrandsInstaller(object):

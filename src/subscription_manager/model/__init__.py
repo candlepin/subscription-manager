@@ -15,7 +15,7 @@
 
 import logging
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 # These containerish iterables could share a
 # base class, though, it should probably just

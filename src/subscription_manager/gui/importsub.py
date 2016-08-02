@@ -23,7 +23,7 @@ from subscription_manager.gui import messageWindow
 from subscription_manager.gui.utils import show_error_window
 from subscription_manager.managerlib import ImportFileExtractor
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 _ = gettext.gettext
 

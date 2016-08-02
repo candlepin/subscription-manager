@@ -47,7 +47,7 @@ DEFAULT_CONF_PATH = "/etc/rhsm/pluginconf.d/"
 
 cfg = initConfig()
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 _ = gettext.gettext
 
@@ -158,7 +158,7 @@ class BaseConduit(object):
             self._conf = clazz.conf
 
         # maybe useful to have a per conduit/per plugin logger space
-        self.log = logging.getLogger("rhsm-app." + clazz.__name__)
+        self.log = logging.getLogger(clazz.__name__)
 
     def conf_string(self, section, option, default=None):
         """get string from plugin config

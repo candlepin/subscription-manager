@@ -21,8 +21,7 @@ from subscription_manager.ga import Gtk as ga_Gtk
 class MappedStore(object):
     def __init__(self, type_map):
         self.type_index = {}
-        self.log = logging.getLogger('rhsm-app.' + __name__ +
-                                     self.__class__.__name__)
+        self.log = logging.getLogger(__name__ + self.__class__.__name__)
 
         # Enumerate the keys and store the int index
         for i, type_key in enumerate(type_map.iterkeys()):
@@ -87,8 +86,7 @@ class MappedListStore(MappedStore, ga_Gtk.ListStore):
 
 class MappedTreeStore(MappedStore, ga_Gtk.TreeStore):
     def __init__(self, type_map):
-        self.log = logging.getLogger('rhsm-app.' + __name__ +
-                                     self.__class__.__name__)
+        self.log = logging.getLogger(__name__ + self.__class__.__name__)
         # FIXME: How does this work? .values() is not sorted, so could change?
         MappedStore.__init__(self, type_map)
         ga_Gtk.TreeStore.__init__(self, *type_map.values())

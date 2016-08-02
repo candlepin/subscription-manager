@@ -3,7 +3,7 @@ import logging
 
 from subscription_manager import injection as inj
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 
 class Locker(object):

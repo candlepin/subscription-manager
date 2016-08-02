@@ -62,7 +62,7 @@ except ImportError:
     def getChannels():
         raise NotImplementedError(_("Could not find up2date_client.rhnChannel module!"))
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 SEE_LOG_FILE = _(u"See /var/log/rhsm/rhsm.log for more details.")
 

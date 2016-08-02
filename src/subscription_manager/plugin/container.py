@@ -24,7 +24,7 @@ import shutil
 from subscription_manager import certlib
 from subscription_manager.model import find_content
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 _ = gettext.gettext
 

@@ -34,7 +34,7 @@ from subscription_manager.jsonwrapper import PoolWrapper
 from rhsm import ourjson as json
 
 _ = gettext.gettext
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 PACKAGES_RESOURCE = "packages"
 

@@ -31,7 +31,7 @@ from subscription_manager import rhelproduct
 
 _ = gettext.gettext
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 cfg = rhsm.config.initConfig()
 

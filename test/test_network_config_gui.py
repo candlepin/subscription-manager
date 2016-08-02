@@ -67,7 +67,7 @@ class TestNetworkConfigDialog(SubManFixture):
         self.assertEquals(expected, actual)
 
     def test_network_cfg_set_initial_values(self):
-        self.stubConfig = stubs.StubConfig(config_file=stubs.test_config)
+        self.stubConfig = stubs.StubConfig()
         self.nc.set_initial_values()
 
     def test_network_cfg_write_values(self):
@@ -97,8 +97,8 @@ class TestNetworkConfigDialog(SubManFixture):
         self.nc.proxyPasswordEntry.set_text("redhatPass")
         self.nc.write_values()
 
-        actual_user = self.nc.cfg.store['server.proxy_user']
-        actual_password = self.nc.cfg.store['server.proxy_password']
+        actual_user = self.nc.cfg.store['server']['proxy_user']
+        actual_password = self.nc.cfg.store['server']['proxy_password']
         self.assertTrue(actual_user == "redhatUser")
         self.assertTrue(actual_password == "redhatPass")
 

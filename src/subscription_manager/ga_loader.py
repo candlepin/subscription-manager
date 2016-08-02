@@ -18,7 +18,7 @@ import os
 import sys
 
 import logging
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 from subscription_manager import version
 

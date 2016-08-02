@@ -45,7 +45,7 @@ from subscription_manager import utils
 from subscription_manager.identity import ConsumerIdentity
 from dateutil.tz import tzlocal
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 _ = gettext.gettext
 

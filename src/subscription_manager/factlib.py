@@ -23,7 +23,7 @@ from subscription_manager import injection as inj
 
 _ = gettext.gettext
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger(__name__)
 
 
 # FactsActionInvoker has a Facts
