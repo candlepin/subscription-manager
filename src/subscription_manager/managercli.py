@@ -642,6 +642,12 @@ class RefreshCommand(CliCommand):
     def _do_command(self):
         self.assert_should_be_registered()
         try:
+            # get current consumer identity
+            identity = inj.require(inj.IDENTITY)
+
+            # Force a regen of the entitlement certs for this consumer
+            self.cp.regenEntitlementCertificates(identity.uuid, True)
+
             self.entcertlib.update()
             log.info("Refreshed local data")
             print (_("All local data refreshed"))
