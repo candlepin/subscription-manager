@@ -78,7 +78,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:  python-ethtool
 Requires:  python-iniparse
 Requires:  virt-what
-Requires:  python-rhsm >= 1.18.0
+Requires:  python-rhsm >= 1.18.1
 %if 0%{?sles_version}
 Requires:  dbus-1-python
 %else
