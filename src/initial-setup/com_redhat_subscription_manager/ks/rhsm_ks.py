@@ -146,15 +146,15 @@ class RHSMAddonData(AddonData):
     def __str__(self):
         return "%%addon %s %s\n%s%%end\n" % (self.name, self.header_args, self.content)
 
-    def setup(self, storage, ksdata, instclass):
+    def setup(self, storage, ksdata, instclass, payload):
         """Make the changes to the install system.
 
            This method is called before the installation
            is started and directly from spokes. It must be possible
            to call it multiple times without breaking the environment."""
-        AddonData.setup(self, storage, ksdata, instclass)
+        pass
 
-    def execute(self, storage, ksdata, instClass, users):
+    def execute(self, storage, ksdata, instClass, users, payload):
 
         """Make the changes to the underlying system.
 
