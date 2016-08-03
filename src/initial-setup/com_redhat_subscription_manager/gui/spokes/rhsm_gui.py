@@ -204,7 +204,7 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
         """Handler for self.back_buttons 'clicked' signal.
 
         Clear out any user set values and return to the start screen."""
-
+        self.clear_info()
         self.register_widget.emit('back')
         self.back_button.set_sensitive(not self.register_widget.applied_screen_history.is_empty())
 
