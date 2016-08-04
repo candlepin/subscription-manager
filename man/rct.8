@@ -5,7 +5,7 @@ rct \- Displays information (headers) about or size and statistics of a entitlem
 .SH SYNOPSIS
 rct cat-cert [--no-content] [--no-products] /path/to/certificate.pem
 rct stat-cert /path/to/certificate.pem
-rct cat-manifest /path/to/consumer_export.zip
+rct cat-manifest [--no-content] /path/to/consumer_export.zip
 rct dump-manifest  [--destination /path] [--force] /path/to/consumer_export.zip
 
 .SH DESCRIPTION
@@ -24,7 +24,7 @@ Prints the information that is contained in the certificate itself, such as the 
 
 .TP
 .B cat-manifest
-Prints the information that is contained in the subscription service manifest. The manifest is an archive of JSON files which contain all of the subscription information for subscriptions allocated to the on-premise service.
+Prints the information that is contained in the subscription service manifest. The manifest is an archive of JSON files which contain all of the subscription information for subscriptions allocated to the on-premise service. The \fB--no-content\fP option can be used to reduce the detail shown in the output.
 
 .TP
 .B dump-manifest

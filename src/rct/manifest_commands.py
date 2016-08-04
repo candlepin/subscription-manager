@@ -171,6 +171,9 @@ class CatManifestCommand(RCTManifestCommand):
         RCTManifestCommand.__init__(self, name="cat-manifest", aliases=['cm'],
                                shortdesc=_("Print manifest information"),
                                primary=True)
+        self.parser.add_option("--no-content", action="store_true",
+                               default=False,
+                               help=_("skip printing Content Sets"))
 
     def _print_section(self, title, items, indent=1, whitespace=True):
         # Allow a bit of customization of the tabbing
@@ -262,8 +265,9 @@ class CatManifestCommand(RCTManifestCommand):
             self._print_section(_("Provided Products:"), sorted(to_print), 2, False)
 
             # Get the Content Sets
-            to_print = [[item.url] for item in cert.content]
-            self._print_section(_("Content Sets:"), sorted(to_print), 2, True)
+            if not self.options.no_content:
+                to_print = [[item.url] for item in cert.content]
+                self._print_section(_("Content Sets:"), sorted(to_print), 2, True)
 
     def _do_command(self):
         """
