@@ -374,6 +374,7 @@ class MainWindow(widgets.SubmanBaseWidget):
         registration_dialog.register_dialog.connect('destroy',
                                                     self._on_dialog_destroy,
                                                     widget)
+        registration_dialog.window.set_transient_for(self._get_window())
 
         if registration_dialog and widget:
             widget.set_sensitive(False)
@@ -453,6 +454,7 @@ class MainWindow(widgets.SubmanBaseWidget):
         autobind_wizard.register_dialog.connect('destroy',
                                                 self._on_dialog_destroy,
                                                 widget)
+        autobind_wizard.window.set_transient_for(self._get_window())
 
         if autobind_wizard and widget:
             widget.set_sensitive(False)
