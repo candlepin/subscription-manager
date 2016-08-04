@@ -240,6 +240,15 @@ class CatManifestCommand(RCTManifestCommand):
             to_print.append((_("Contract"), get_value(data, "pool.contractNumber")))
             to_print.append((_("Order"), get_value(data, "pool.orderNumber")))
             to_print.append((_("Account"), get_value(data, "pool.accountNumber")))
+            virt_limit = self._get_product_attribute("virt_limit", data)
+            to_print.append((_("Virt Limit"), virt_limit))
+            if virt_limit == 0:
+                require_virt_who = False
+            elif virt_limit is None:
+                require_virt_who = False
+            else:
+                require_virt_who = True
+            to_print.append((_("Requires Virt-who"), require_virt_who))
 
             entitlement_file = os.path.join("export", "entitlements", "%s.json" % data["id"])
             to_print.append((_("Entitlement File"), entitlement_file))
