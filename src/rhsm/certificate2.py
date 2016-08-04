@@ -62,7 +62,11 @@ class _CertFactory(object):
         """
         Create appropriate certificate object from a PEM file on disk.
         """
-        pem = open(path, 'r').read()
+        try:
+            pem = open(path, 'r').read()
+        except IOError, e:
+            print(os.strerror(e.errno))
+            exit(1)
         return self._read_x509(_certificate.load(path), path, pem)
 
     def create_from_pem(self, pem, path=None):
