@@ -12,7 +12,7 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.17.5
+Version: 1.17.6
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -97,6 +97,12 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Tue Aug 09 2016 Vritant Jain <vrjain@redhat.com> 1.17.6-1
+- 1315901: Exception handling for PEM cert read (wpoteat@redhat.com)
+- 1334916: Add rhsm.conf logging section defaults (csnyder@redhat.com)
+- 1360909: Added functionality for regenerating entitlement certificates
+  (crog@redhat.com)
+
 * Thu Jun 30 2016 Vritant Jain <vrjain@redhat.com> 1.17.5-1
 - 1104332: Separate out the rhsm certs into a separate RPM (vrjain@redhat.com)
 
