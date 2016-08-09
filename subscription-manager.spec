@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.17.9
+Version: 1.17.10
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -596,6 +596,24 @@ fi
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Tue Aug 09 2016 Vritant Jain <vrjain@redhat.com> 1.17.10-1
+- 1362138: Change method signature for Anaconda addon (jkonecny@redhat.com)
+- 1251516: Disable import when registered (wpoteat@redhat.com)
+- 1336880: Print virt_limit attributes with rct cat-manifest.
+  (rjerrido@outsidaz.org)
+- 1351370: Ensure rhsmd exits on exceptions (csnyder@redhat.com)
+- 1336883: Add --no-content switch to cat-manifest to reduce output.
+  (rjerrido@outsidaz.org)
+- 1264108: Clear error message on back action (wpoteat@redhat.com)
+- 1334916: Move logging configuration to rhsm.conf (csnyder@redhat.com)
+- 1360909: The refresh command now requests entitlement cert regeneration
+  (crog@redhat.com)
+- 1333904: 1333906: Append accessible name to contain selected value
+  (wpoteat@redhat.com)
+- 1351009: Modify message to cover more scenarios (wpoteat@redhat.com)
+- 1323276: Don't display or store 'None' in proxy values (wpoteat@redhat.com)
+- 1327179: Check proxy configuration at GUI startup (wpoteat@redhat.com)
+
 * Tue Jul 12 2016 Vritant Jain <vrjain@redhat.com> 1.17.9-1
 - 1353662: Explicitly use ConsumerIdentity keypath and certpath methods
   (csnyder@redhat.com)
