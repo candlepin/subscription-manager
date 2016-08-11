@@ -146,8 +146,11 @@ static void
 hide_icon (Context * context)
 {
 	gtk_status_icon_set_visible (context->icon, false);
-	notify_notification_close (context->notification, NULL);
-	g_object_unref (context->notification);
+        /* In the scenario where the system is complete, notification will be NULL */
+	if (context->notification) {
+		notify_notification_close (context->notification, NULL);
+		g_object_unref (context->notification);
+        }
 	context->notification = NULL;
 }
 
