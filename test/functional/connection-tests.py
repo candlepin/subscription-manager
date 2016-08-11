@@ -159,26 +159,32 @@ class EntitlementRegenerationTests(unittest.TestCase):
         self.entitlement_id = self.entitlement['id']
 
     def test_regenerate_entitlements_default(self):
-        self.cp.regenEntitlementCertificates(self.consumer_uuid)
+        result = self.cp.regenEntitlementCertificates(self.consumer_uuid)
+        self.assertTrue(result)
 
     def test_regenerate_entitlements_lazy(self):
-        self.cp.regenEntitlementCertificates(self.consumer_uuid, True)
+        result = self.cp.regenEntitlementCertificates(self.consumer_uuid, True)
+        self.assertTrue(result)
 
     def test_regenerate_entitlements_eager(self):
-        self.cp.regenEntitlementCertificates(self.consumer_uuid, False)
+        result = self.cp.regenEntitlementCertificates(self.consumer_uuid, False)
+        self.assertTrue(result)
 
     def test_regenerate_entitlements_bad_uuid(self):
         with self.assertRaises(RestlibException):
             self.cp.regenEntitlementCertificates("bad_consumer_uuid")
 
     def test_regenerate_entitlement_default(self):
-        self.cp.regenEntitlementCertificate(self.consumer_uuid, self.entitlement_id)
+        result = self.cp.regenEntitlementCertificate(self.consumer_uuid, self.entitlement_id)
+        self.assertTrue(result)
 
     def test_regenerate_entitlement_lazy(self):
-        self.cp.regenEntitlementCertificate(self.consumer_uuid, self.entitlement_id, True)
+        result = self.cp.regenEntitlementCertificate(self.consumer_uuid, self.entitlement_id, True)
+        self.assertTrue(result)
 
     def test_regenerate_entitlement_eager(self):
-        self.cp.regenEntitlementCertificate(self.consumer_uuid, self.entitlement_id, False)
+        result = self.cp.regenEntitlementCertificate(self.consumer_uuid, self.entitlement_id, False)
+        self.assertTrue(result)
 
     def test_regenerate_entitlement_bad_consumer_uuid(self):
         with self.assertRaises(RestlibException):

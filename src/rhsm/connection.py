@@ -1345,20 +1345,56 @@ class UEPConnection:
         return self.conn.request_post(method)
 
     def regenEntitlementCertificates(self, consumer_id, lazy_regen=True):
+        """
+        Regenerates all entitlements for the given consumer
+        """
+
         method = "/consumers/%s/certificates" % self.sanitize(consumer_id)
 
         if lazy_regen:
             method += "?lazy_regen=true"
 
-        return self.conn.request_put(method)
+        result = False
+
+        try:
+            self.conn.request_put(method)
+            result = True
+        except RemoteServerException as e:
+            # 404s indicate that the service is unsupported (Candlepin too old, or SAM)
+            if e.code == 404:
+                log.debug("Unable to refresh entitlement certificates: Service currently unsupported.")
+                log.debug(e)
+            else:
+                # Something else happened that we should probabaly raise
+                raise e
+
+        return result
 
     def regenEntitlementCertificate(self, consumer_id, entitlement_id, lazy_regen=True):
+        """
+        Regenerates the specified entitlement for the given consumer
+        """
+
         method = "/consumers/%s/certificates?entitlement=%s" % (self.sanitize(consumer_id), self.sanitize(entitlement_id))
 
         if lazy_regen:
             method += "&lazy_regen=true"
 
-        return self.conn.request_put(method)
+        result = False
+
+        try:
+            self.conn.request_put(method)
+            result = True
+        except RemoteServerException as e:
+            # 404s indicate that the service is unsupported (Candlepin too old, or SAM)
+            if e.code == 404:
+                log.debug("Unable to refresh entitlement certificates: Service currently unsupported.")
+                log.debug(e)
+            else:
+                # Something else happened that we should probabaly raise
+                raise e
+
+        return result
 
     def getStatus(self):
         method = "/status"
