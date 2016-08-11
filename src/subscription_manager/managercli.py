@@ -646,9 +646,13 @@ class RefreshCommand(CliCommand):
             identity = inj.require(inj.IDENTITY)
 
             # Force a regen of the entitlement certs for this consumer
-            self.cp.regenEntitlementCertificates(identity.uuid, True)
+            # TODO: Eventually migrate this to capability recognition. Currently it will silently return
+            #   false if an error occurs
+            if not self.cp.regenEntitlementCertificates(identity.uuid, True):
+                log.debug("Warning: Unable to refresh entitlement certificates; service likely unavailable")
 
             self.entcertlib.update()
+
             log.info("Refreshed local data")
             print (_("All local data refreshed"))
         except connection.RestlibException, re:
