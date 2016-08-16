@@ -9,12 +9,12 @@ msgstr ""
 "PO-Revision-Date: 2015-09-25 02:52-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Oriya\n"
-"Language: or\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: or\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Zanata 3.8.4\n"
+"X-Generator: Zanata 3.9.3\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -252,10 +252,7 @@ msgid ""
 "*** WARNING ***\n"
 "The subscription for following product(s) has expired:\n"
 "%s\n"
-"You no longer have access to the repositories that provide these products.  "
-"It is important that you apply an active subscription in order to resume "
-"access to security and other critical updates. If you don't have other "
-"active subscriptions, you can renew the expired subscription.  "
+"You no longer have access to the repositories that provide these products.  It is important that you apply an active subscription in order to resume access to security and other critical updates. If you don't have other active subscriptions, you can renew the expired subscription.  "
 msgstr ""
 
 #: src/dnf-plugins/subscription-manager.py:38
@@ -655,7 +652,8 @@ msgstr "ଫାଇଲଗୁଡ଼ିକୁ ନବଲିଖନ କରନ୍ତୁ 
 #, python-format
 msgid "File \"%s\" exists. Use -f to force overwriting the file."
 msgstr ""
-"ଫାଇଲ \"%s\" ଅବସ୍ଥିତ ଅଛି। ଫାଇଲକୁ ନବଲିଖନ କରିବା ପାଇଁ ବାଧ୍ଯ କରିବାକୁ -f କ ବ୍ୟବହାର କରନ୍ତୁ।"
+"ଫାଇଲ \"%s\" ଅବସ୍ଥିତ ଅଛି। ଫାଇଲକୁ ନବଲିଖନ କରିବା ପାଇଁ ବାଧ୍ଯ କରିବାକୁ -f କ ବ୍ୟବହାର"
+" କରନ୍ତୁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -913,11 +911,11 @@ msgstr "ଅଜଣା ପ୍ରମାଣପତ୍ର ପ୍ରକାର"
 #: src/rhsm_debug/debug_commands.py:40
 #: src/subscription_manager/managercli.py:70
 msgid ""
-"This system is not yet registered. Try 'subscription-manager register --"
-"help' for more information."
+"This system is not yet registered. Try 'subscription-manager register "
+"--help' for more information."
 msgstr ""
-"ତନ୍ତ୍ରଟି ଏପର୍ଯ୍ୟନ୍ତ ପଞ୍ଜୀକୃତ ହୋଇନାହିଁ। ଅଧିକ ସୂଚନା ପାଇଁ 'subscription-manager register --"
-"help' କୁ ବ୍ଯବହାର କରନ୍ତୁ"
+"ତନ୍ତ୍ରଟି ଏପର୍ଯ୍ୟନ୍ତ ପଞ୍ଜୀକୃତ ହୋଇନାହିଁ। ଅଧିକ ସୂଚନା ପାଇଁ 'subscription-manager"
+" register --help' କୁ ବ୍ଯବହାର କରନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1005,9 +1003,9 @@ msgid ""
 "system must be registered with the Customer Portal. Please enter your Red "
 "Hat login to ensure your system is up-to-date."
 msgstr ""
-"ଆପଣଙ୍କ ତନ୍ତ୍ରକୁ ଅଦ୍ୟତନଗୁଡ଼ିକ ସହିତ ସଦସ୍ୟତା ପରିଚାଳକ ପାଇଁ, ଆପଣଙ୍କ ତନ୍ତ୍ର ନିଶ୍ଚିତ ଭାବରେ ଗ୍ରାହକ "
-"ପୃଷ୍ଠାରେ ପଞ୍ଜିକରଣ କରିବା ଉଚିତ। ଆପଣଙ୍କର ତନ୍ତ୍ର ଅଦ୍ୟତିତ ଅଛି କି ନାହିଁ ନିଶ୍ଚିତ କରିବାକୁ ଦୟାକରି ଆପଣଙ୍କର "
-"Red Hat ଲଗଇନ ଭରଣ କରନ୍ତୁ।"
+"ଆପଣଙ୍କ ତନ୍ତ୍ରକୁ ଅଦ୍ୟତନଗୁଡ଼ିକ ସହିତ ସଦସ୍ୟତା ପରିଚାଳକ ପାଇଁ, ଆପଣଙ୍କ ତନ୍ତ୍ର "
+"ନିଶ୍ଚିତ ଭାବରେ ଗ୍ରାହକ ପୃଷ୍ଠାରେ ପଞ୍ଜିକରଣ କରିବା ଉଚିତ। ଆପଣଙ୍କର ତନ୍ତ୍ର ଅଦ୍ୟତିତ "
+"ଅଛି କି ନାହିଁ ନିଶ୍ଚିତ କରିବାକୁ ଦୟାକରି ଆପଣଙ୍କର Red Hat ଲଗଇନ ଭରଣ କରନ୍ତୁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1031,9 +1029,11 @@ msgstr "ଆଂଶିକ ଭାବେ ଅଧିକାରପ୍ରାପ୍ତ ସ
 # document keys
 #: src/rhsm_icon/rhsm_icon.c:222
 msgid ""
-"This system is missing one or more subscriptions to fully cover its products."
+"This system is missing one or more subscriptions to fully cover its "
+"products."
 msgstr ""
-"ଏହି ତନ୍ତ୍ରଟି ଗୋଟିଏ କିମ୍ବା ଅଧିକ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଏହାର ଉତ୍ପାଦନଗୁଡ଼ିକୁ ସମ୍ପୂର୍ଣ୍ଣ ଭାବରେ ଧାରଣ କରିଥାଏ।"
+"ଏହି ତନ୍ତ୍ରଟି ଗୋଟିଏ କିମ୍ବା ଅଧିକ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଏହାର ଉତ୍ପାଦନଗୁଡ଼ିକୁ ସମ୍ପୂର୍ଣ୍ଣ"
+" ଭାବରେ ଧାରଣ କରିଥାଏ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1130,8 +1130,8 @@ msgid ""
 "Contact your system administrator if you have forgotten your login or "
 "password"
 msgstr ""
-"ଯଦି ଆପଣ ନିଜର ଲଗଇନ କିମ୍ବା ପ୍ରବେଶ ସଂକେତକୁ ଭୁଲି ଯାଇଛନ୍ତି, ତେବେ ତନ୍ତ୍ର ପ୍ରଶାସକଙ୍କ ସହିତ ଯୋଗାଯୋଗ "
-"କରନ୍ତୁ"
+"ଯଦି ଆପଣ ନିଜର ଲଗଇନ କିମ୍ବା ପ୍ରବେଶ ସଂକେତକୁ ଭୁଲି ଯାଇଛନ୍ତି, ତେବେ ତନ୍ତ୍ର "
+"ପ୍ରଶାସକଙ୍କ ସହିତ ଯୋଗାଯୋଗ କରନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1139,7 +1139,8 @@ msgstr ""
 msgid ""
 "Register this system to the Customer Portal or another subscription "
 "management service"
-msgstr "ତନ୍ତ୍ରକୁ ଗ୍ରାହକ ପୃଷ୍ଠା ଅଥବା ଅନ୍ୟ ସଦସ୍ୟତା ପରିଚାଳନା ସର୍ଭିସରେ ପଞ୍ଜିକରଣ କରନ୍ତୁ।"
+msgstr ""
+"ତନ୍ତ୍ରକୁ ଗ୍ରାହକ ପୃଷ୍ଠା ଅଥବା ଅନ୍ୟ ସଦସ୍ୟତା ପରିଚାଳନା ସର୍ଭିସରେ ପଞ୍ଜିକରଣ କରନ୍ତୁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1147,7 +1148,9 @@ msgstr "ତନ୍ତ୍ରକୁ ଗ୍ରାହକ ପୃଷ୍ଠା ଅଥବ
 msgid ""
 "Unregister this system from the Customer Portal or another subscription "
 "management service"
-msgstr "ତନ୍ତ୍ରକୁ ଗ୍ରାହକ ପୃଷ୍ଠା ଅଥବା ଅନ୍ୟ ସଦସ୍ୟତା ପରିଚାଳନା ସର୍ଭିସରେ ପଞ୍ଜିକରଣ ଖାରଜ କରନ୍ତୁ।"
+msgstr ""
+"ତନ୍ତ୍ରକୁ ଗ୍ରାହକ ପୃଷ୍ଠା ଅଥବା ଅନ୍ୟ ସଦସ୍ୟତା ପରିଚାଳନା ସର୍ଭିସରେ ପଞ୍ଜିକରଣ ଖାରଜ "
+"କରନ୍ତୁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1158,28 +1161,31 @@ msgstr "ଏହି ତନ୍ତ୍ରଟି RHN Classic ରୁ ସହିତ ପ�
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/branding/redhat_branding.py:13
-msgid "This system has already been registered with Red Hat using RHN Classic."
-msgstr "ଏହି ତନ୍ତ୍ରଟି ପୂର୍ବରୁ RHN Classic ବ୍ୟବହାର କରି Red Hat ରେ ପଞ୍ଜିକୃତ ହୋଇଛି।"
+msgid ""
+"This system has already been registered with Red Hat using RHN Classic."
+msgstr ""
+"ଏହି ତନ୍ତ୍ରଟି ପୂର୍ବରୁ RHN Classic ବ୍ୟବହାର କରି Red Hat ରେ ପଞ୍ଜିକୃତ ହୋଇଛି।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/branding/redhat_branding.py:15
 msgid ""
-"Your system is being registered again using Red Hat Subscription Management. "
-"Red Hat recommends that customers only register once."
+"Your system is being registered again using Red Hat Subscription Management."
+" Red Hat recommends that customers only register once."
 msgstr ""
-"Red Hat ସଦସ୍ୟତା ପରିଚାଳନା ବ୍ୟବହାର କରି ଆପଣଙ୍କ ତନ୍ତ୍ର ପୁଣିଥରେ ପଞ୍ଜିକୃତ ହୋଇଛିି। Red Hat ପରାମର୍ଶ "
-"ଦେଇଥାଏ ଯେ ଗ୍ରାହକମାନେ କେବଳ ଥରେ ମାତ୍ର ପଞ୍ଜିକରଣ କରିପାରିବେ।"
+"Red Hat ସଦସ୍ୟତା ପରିଚାଳନା ବ୍ୟବହାର କରି ଆପଣଙ୍କ ତନ୍ତ୍ର ପୁଣିଥରେ ପଞ୍ଜିକୃତ ହୋଇଛିି। "
+"Red Hat ପରାମର୍ଶ ଦେଇଥାଏ ଯେ ଗ୍ରାହକମାନେ କେବଳ ଥରେ ମାତ୍ର ପଞ୍ଜିକରଣ କରିପାରିବେ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/branding/redhat_branding.py:17
 msgid ""
-"To learn how to unregister from either service please consult this Knowledge "
-"Base Article: https://access.redhat.com/kb/docs/DOC-45563"
+"To learn how to unregister from either service please consult this Knowledge"
+" Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
-"ଉଭୟ ସର୍ଭିସରୁ କିପରି ବିସ୍ଥାପନ କରିବେ ତାହା ବିଷୟରେ ଅଧିକ ତଥ୍ୟ ଜାଣିବା ପାଇଁ ଦୟାକରି ଏହି ଜ୍ଞାନ ଆଧାର "
-"ପତ୍ରିକା: https://access.redhat.com/kb/docs/DOC-45563 କୁ ଅନୁସରଣ  କରନ୍ତୁ"
+"ଉଭୟ ସର୍ଭିସରୁ କିପରି ବିସ୍ଥାପନ କରିବେ ତାହା ବିଷୟରେ ଅଧିକ ତଥ୍ୟ ଜାଣିବା ପାଇଁ ଦୟାକରି "
+"ଏହି ଜ୍ଞାନ ଆଧାର ପତ୍ରିକା: https://access.redhat.com/kb/docs/DOC-45563 କୁ "
+"ଅନୁସରଣ  କରନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1206,13 +1212,15 @@ msgid ""
 "This system is registered using both RHN Classic and Red Hat Subscription "
 "Management."
 msgstr ""
-"ଏହି ତନ୍ତ୍ରଟି ଉଭୟ RHN Classic ଏବଂ Red Hat ସଦସ୍ୟତା ପରିଚାଳନା ବ୍ୟବହାର କରି ପଞ୍ଜିକୃତ ହୋଇଛି।"
+"ଏହି ତନ୍ତ୍ରଟି ଉଭୟ RHN Classic ଏବଂ Red Hat ସଦସ୍ୟତା ପରିଚାଳନା ବ୍ୟବହାର କରି "
+"ପଞ୍ଜିକୃତ ହୋଇଛି।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/branding/redhat_branding.py:25
 msgid "Red Hat recommends that customers only register with one service."
-msgstr "ଗ୍ରାହକମାନ କେବଳ ଗୋଟିଏ ସର୍ଭିସରେ ପଞ୍ଜିକରଣ କରିବା ପାଇଁ Red Hat ପରାମର୍ଶ ଦେଇଥାଏ।"
+msgstr ""
+"ଗ୍ରାହକମାନ କେବଳ ଗୋଟିଏ ସର୍ଭିସରେ ପଞ୍ଜିକରଣ କରିବା ପାଇଁ Red Hat ପରାମର୍ଶ ଦେଇଥାଏ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1221,8 +1229,9 @@ msgid ""
 "To learn more about RHN registration and technologies please consult this "
 "Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
-"RHN ପଞ୍ଜିକରଣ ଏବଂ ପ୍ରଯୁକ୍ତିଜ୍ଞାନ ବିଷୟରେ ଅଧିକ ତଥ୍ୟ ଜାଣିବା ପାଇଁ ଦୟାକରି ଏହି ଜ୍ଞାନ ଆଧାର ପତ୍ରିକା: "
-"https://access.redhat.com/kb/docs/DOC-45563 କୁ ଅନୁସରଣ  କରନ୍ତୁ"
+"RHN ପଞ୍ଜିକରଣ ଏବଂ ପ୍ରଯୁକ୍ତିଜ୍ଞାନ ବିଷୟରେ ଅଧିକ ତଥ୍ୟ ଜାଣିବା ପାଇଁ ଦୟାକରି ଏହି "
+"ଜ୍ଞାନ ଆଧାର ପତ୍ରିକା: https://access.redhat.com/kb/docs/DOC-45563 କୁ ଅନୁସରଣ  "
+"କରନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1234,11 +1243,11 @@ msgstr "RHN Classic ଏବଂ Red Hat ସଦସ୍ୟତା ପରିଚାଳ�
 # document keys
 #: src/subscription_manager/branding/redhat_branding.py:30
 msgid ""
-"Tip: Forgot your login or password? Look it up at http://redhat.com/"
-"forgot_password"
+"Tip: Forgot your login or password? Look it up at "
+"http://redhat.com/forgot_password"
 msgstr ""
-"ସୂଚନା: ଆପଣଙ୍କର ଲଗଇନ କିମ୍ବା ପ୍ରବେଶ ସଂକେତ ଭୁଲିଯାଇଛନ୍ତି କି? http://redhat.com/"
-"forgot_password ରେ ଦେଖନ୍ତୁ"
+"ସୂଚନା: ଆପଣଙ୍କର ଲଗଇନ କିମ୍ବା ପ୍ରବେଶ ସଂକେତ ଭୁଲିଯାଇଛନ୍ତି କି? "
+"http://redhat.com/forgot_password ରେ ଦେଖନ୍ତୁ"
 
 #: src/subscription_manager/cache.py:143
 #, python-format
@@ -1254,8 +1263,8 @@ msgid ""
 "Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
 "more details."
 msgstr ""
-"ତନ୍ତ୍ରର ତଥ୍ୟକୁ ସର୍ଭରରେ ଅଦ୍ୟତନ କରିବାରେ ତ୍ରୁଟି, ଅଧିକ ବିବରଣୀ ପାଇଁ /var/log/rhsm/rhsm.log କୁ "
-"ଦେଖନ୍ତୁ।"
+"ତନ୍ତ୍ରର ତଥ୍ୟକୁ ସର୍ଭରରେ ଅଦ୍ୟତନ କରିବାରେ ତ୍ରୁଟି, ଅଧିକ ବିବରଣୀ ପାଇଁ "
+"/var/log/rhsm/rhsm.log କୁ ଦେଖନ୍ତୁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1385,21 +1394,21 @@ msgstr "ଅପସାରଣ କରାଯାଇଛି (ଅଜ୍ଞାନୀ):"
 # document keys
 #: src/subscription_manager/exceptions.py:28
 msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
+"Network error, unable to connect to server. Please see "
+"/var/log/rhsm/rhsm.log for more information."
 msgstr ""
-"ନେଟୱର୍କ ତ୍ରୁଟି, ସର୍ଭର ସହିତ ସଂଯୋଗ କରିବାରେ ଅସମର୍ଥ। ଅଧିକ ସୂଚନା ପାଇବା ପାଇଁ ଦୟାକରି /var/log/"
-"rhsm/rhsm.log କୁ ଦେଖନ୍ତୁ।"
+"ନେଟୱର୍କ ତ୍ରୁଟି, ସର୍ଭର ସହିତ ସଂଯୋଗ କରିବାରେ ଅସମର୍ଥ। ଅଧିକ ସୂଚନା ପାଇବା ପାଇଁ "
+"ଦୟାକରି /var/log/rhsm/rhsm.log କୁ ଦେଖନ୍ତୁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/exceptions.py:29
 msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
+"Network error. Please check the connection details, or see "
+"/var/log/rhsm/rhsm.log for more information."
 msgstr ""
-"ନେଟୱର୍କ ତ୍ରୁଟି। ଦୟାକରି ସଂଯୋଗ ବିବରଣୀଗୁଡ଼ିକୁ ଯାଞ୍ଚ କରନ୍ତୁ, ଅଥବା ଅଧିକ ସୂଚନା ପାଇଁ /var/log/rhsm/"
-"rhsm.log କୁ ଦେଖନ୍ତୁ।"
+"ନେଟୱର୍କ ତ୍ରୁଟି। ଦୟାକରି ସଂଯୋଗ ବିବରଣୀଗୁଡ଼ିକୁ ଯାଞ୍ଚ କରନ୍ତୁ, ଅଥବା ଅଧିକ ସୂଚନା "
+"ପାଇଁ /var/log/rhsm/rhsm.log କୁ ଦେଖନ୍ତୁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1417,11 +1426,11 @@ msgstr "ବାରଣ: ଅନୁରୋଧ ପାଇଁ ଅବୈଧ ଅଧିକ�
 # document keys
 #: src/subscription_manager/exceptions.py:32
 msgid ""
-"Remote server error. Please check the connection details, or see /var/log/"
-"rhsm/rhsm.log for more information."
+"Remote server error. Please check the connection details, or see "
+"/var/log/rhsm/rhsm.log for more information."
 msgstr ""
-"ସୂଦୁର ସର୍ଭର ତ୍ରୁଟି। ଦୟାକରି ସଂଯୋଗ ବିବରଣୀଗୁଡ଼ିକୁ ଯାଞ୍ଚ କରନ୍ତୁ, ଅଥବା ଅଧିକ ସୂଚନା ପାଇଁ /var/log/"
-"rhsm/rhsm.log କୁ ଦେଖନ୍ତୁ।"
+"ସୂଦୁର ସର୍ଭର ତ୍ରୁଟି। ଦୟାକରି ସଂଯୋଗ ବିବରଣୀଗୁଡ଼ିକୁ ଯାଞ୍ଚ କରନ୍ତୁ, ଅଥବା ଅଧିକ ସୂଚନା"
+" ପାଇଁ /var/log/rhsm/rhsm.log କୁ ଦେଖନ୍ତୁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1449,7 +1458,8 @@ msgstr "ସର୍ଭର URL କୁ ଖାଲି ରଖି ହେବ ନାହି
 msgid ""
 "Server URL is just a schema. Should include hostname, and/or port and path"
 msgstr ""
-"ସର୍ଭର URL ଟି କେବଳ ଏକ ଯୋଜନା। ହୋଷ୍ଟ ନାମ, ଏବଂ/ଅଥବା ପୋର୍ଟ ଏବଂ ପଥକୁ ଅନ୍ତର୍ଭୁକ୍ତ କରିବା ଉଚିତ"
+"ସର୍ଭର URL ଟି କେବଳ ଏକ ଯୋଜନା। ହୋଷ୍ଟ ନାମ, ଏବଂ/ଅଥବା ପୋର୍ଟ ଏବଂ ପଥକୁ ଅନ୍ତର୍ଭୁକ୍ତ "
+"କରିବା ଉଚିତ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1467,37 +1477,26 @@ msgstr "ସର୍ଭର URL ପୋର୍ଟଟି ଗଣନ ସଂଖ୍ୟା �
 # document keys
 #: src/subscription_manager/exceptions.py:40
 msgid "Server URL has an invalid scheme. http:// and https:// are supported"
-msgstr "ସର୍ଭର URL ରେ ଅବୈଧ ଯୋଜନା ଅଛି। http:// ଏବଂ https:// ଗୁଡ଼ିକ ସହାୟତା ପ୍ରାପ୍ତ"
+msgstr ""
+"ସର୍ଭର URL ରେ ଅବୈଧ ଯୋଜନା ଅଛି। http:// ଏବଂ https:// ଗୁଡ଼ିକ ସହାୟତା ପ୍ରାପ୍ତ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/gui/about.py:28
 msgid ""
 "\n"
-"This software is licensed to you under the GNU General Public License, "
-"version 2 (GPLv2). There is NO WARRANTY for this software, express or "
-"implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR "
-"A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with "
-"this software; if not, see:\n"
+"This software is licensed to you under the GNU General Public License, version 2 (GPLv2). There is NO WARRANTY for this software, express or implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with this software; if not, see:\n"
 "\n"
 "http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
 "\n"
-"Red Hat trademarks are not licensed under GPLv2. No permission is granted to "
-"use or replicate Red Hat trademarks that are incorporated in this software "
-"or its documentation.\n"
+"Red Hat trademarks are not licensed under GPLv2. No permission is granted to use or replicate Red Hat trademarks that are incorporated in this software or its documentation.\n"
 msgstr ""
 "\n"
-"This software is licensed to you under the GNU General Public License, "
-"version 2 (GPLv2). There is NO WARRANTY for this software, express or "
-"implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR "
-"A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with "
-"this software; if not, see:\n"
+"This software is licensed to you under the GNU General Public License, version 2 (GPLv2). There is NO WARRANTY for this software, express or implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with this software; if not, see:\n"
 "\n"
 "http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
 "\n"
-"Red Hat trademarks are not licensed under GPLv2. No permission is granted to "
-"use or replicate Red Hat trademarks that are incorporated in this software "
-"or its documentation.\n"
+"Red Hat trademarks are not licensed under GPLv2. No permission is granted to use or replicate Red Hat trademarks that are incorporated in this software or its documentation.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1689,9 +1688,11 @@ msgstr "organization_entry"
 #: src/subscription_manager/gui/data/glade/activation_key.glade:89
 #: src/subscription_manager/gui/data/ui/activation_key.ui:107
 msgid ""
-"Multiple Activation Keys can be entered by separating them with a comma or a "
-"space."
-msgstr "ଏକାଧିକ ସକ୍ରିୟଣ କିଗୁଡ଼ିକୁ କୋମା କିମ୍ବା ଖାଲି ସ୍ଥାନ ଦ୍ୱାରା ପୃଥକ କରି ଭରଣ କରିପାରିବେ।"
+"Multiple Activation Keys can be entered by separating them with a comma or a"
+" space."
+msgstr ""
+"ଏକାଧିକ ସକ୍ରିୟଣ କିଗୁଡ଼ିକୁ କୋମା କିମ୍ବା ଖାଲି ସ୍ଥାନ ଦ୍ୱାରା ପୃଥକ କରି ଭରଣ "
+"କରିପାରିବେ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1773,8 +1774,8 @@ msgid ""
 "The subscription management service you register with will provide your "
 "system with updates and allow additional management."
 msgstr ""
-"ଆପଣ ପଞ୍ଜିକରଣ କରିଥିବା ସଦସ୍ୟତା ପରିଚାଳନା ସର୍ଭିସ ଆପଣଙ୍କ ତନ୍ତ୍ରକୁ ଅଦ୍ୟତନ ଏବଂ ଅତିରିକ୍ତ ପରିଚାଳନା "
-"ପ୍ରଦାନ କରିବ।"
+"ଆପଣ ପଞ୍ଜିକରଣ କରିଥିବା ସଦସ୍ୟତା ପରିଚାଳନା ସର୍ଭିସ ଆପଣଙ୍କ ତନ୍ତ୍ରକୁ ଅଦ୍ୟତନ ଏବଂ "
+"ଅତିରିକ୍ତ ପରିଚାଳନା ପ୍ରଦାନ କରିବ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1794,9 +1795,9 @@ msgid ""
 "Candlepin servers can be used to provide your system with updates and allow "
 "management through the selected server's interface."
 msgstr ""
-"ଗ୍ରାହକ ପୃଷ୍ଠା, ସଦସ୍ୟତା ପୁଞ୍ଜି ପରିଚାଳକ, ସାଟେଲାଇଟ ଅଥବା କ୍ୟାଣ୍ଡଲପିନ ସର୍ଭରକୁ ଆପଣଙ୍କ ତନ୍ତ୍ରକୁ "
-"ଅଦ୍ୟତନ କରିବା ପାଇଁ ବ୍ୟବହାର କରିପାରିବେ ଏବଂ ବଚ୍ଛିତ ସର୍ଭରର ଅନ୍ତରାପୃଷ୍ଠ ମାଧ୍ଯମରେ ପରିଚାଳନାକୁ ଅନୁମତି "
-"ଦେଇପାରିବେ।"
+"ଗ୍ରାହକ ପୃଷ୍ଠା, ସଦସ୍ୟତା ପୁଞ୍ଜି ପରିଚାଳକ, ସାଟେଲାଇଟ ଅଥବା କ୍ୟାଣ୍ଡଲପିନ ସର୍ଭରକୁ "
+"ଆପଣଙ୍କ ତନ୍ତ୍ରକୁ ଅଦ୍ୟତନ କରିବା ପାଇଁ ବ୍ୟବହାର କରିପାରିବେ ଏବଂ ବଚ୍ଛିତ ସର୍ଭରର "
+"ଅନ୍ତରାପୃଷ୍ଠ ମାଧ୍ଯମରେ ପରିଚାଳନାକୁ ଅନୁମତି ଦେଇପାରିବେ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1867,7 +1868,8 @@ msgstr "ମୁଁ ଏକ ସକ୍ରିୟଣ କି ବ୍ୟବହାର କ�
 # document keys
 #: src/subscription_manager/gui/data/glade/choose_server.glade:256
 msgid "If required, please configure your proxy before moving forward."
-msgstr "ଯଦି ଆବଶ୍ୟକ ହୁଏ, ତେବେ ଦୟାକରି ଆଗକୁ ବଢ଼ିବା ପୂର୍ବରୁ ପ୍ରକ୍ସି ବିନ୍ୟାସ କରନ୍ତୁ।"
+msgstr ""
+"ଯଦି ଆବଶ୍ୟକ ହୁଏ, ତେବେ ଦୟାକରି ଆଗକୁ ବଢ଼ିବା ପୂର୍ବରୁ ପ୍ରକ୍ସି ବିନ୍ୟାସ କରନ୍ତୁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2159,7 +2161,9 @@ msgstr "ମୋର ତନ୍ତ୍ରକୁ ମେଳାନ୍ତୁ"
 msgid ""
 "Only show subscriptions which can be attached to this machine and "
 "architecture"
-msgstr "କେବଳ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଦର୍ଶାଇଥାଏ ଯାହାକୁ ଏହି ତନ୍ତ୍ର  ଏବଂ ସଂରଚନା ସହିତ ସଂଯୋଗ କରିପାରିବେ"
+msgstr ""
+"କେବଳ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଦର୍ଶାଇଥାଏ ଯାହାକୁ ଏହି ତନ୍ତ୍ର  ଏବଂ ସଂରଚନା ସହିତ ସଂଯୋଗ "
+"କରିପାରିବେ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2183,7 +2187,8 @@ msgid ""
 "Only show subscriptions which can be applied to products installed on this "
 "machine"
 msgstr ""
-"କେବଳ ସେହି ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଦର୍ଶାନ୍ତୁ ଯାହାକୁ ଏହି ତନ୍ତ୍ରରେ ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକରେ ପ୍ରୟୋଗ କରିପାରେବେ"
+"କେବଳ ସେହି ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଦର୍ଶାନ୍ତୁ ଯାହାକୁ ଏହି ତନ୍ତ୍ରରେ ସ୍ଥାପିତ "
+"ଉତ୍ପାଦନଗୁଡ଼ିକରେ ପ୍ରୟୋଗ କରିପାରେବେ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2196,12 +2201,16 @@ msgstr "ମେଳକକୁ ସ୍ଥାପନ କରାଯାଇଛି"
 #: src/subscription_manager/gui/data/ui/filters.ui:75
 msgid ""
 "Only show subscriptions that: provide products that are not already covered"
-msgstr "କେବଳ ସେହି ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଦର୍ଶାନ୍ତୁ: ପୂର୍ବରୁ କରାହୋଇନଥିବା ଉତ୍ପାଦନଗୁଡ଼ିକୁ ପ୍ରଦାନ କରନ୍ତୁ"
+msgstr ""
+"କେବଳ ସେହି ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଦର୍ଶାନ୍ତୁ: ପୂର୍ବରୁ କରାହୋଇନଥିବା ଉତ୍ପାଦନଗୁଡ଼ିକୁ "
+"ପ୍ରଦାନ କରନ୍ତୁ"
 
 #: src/subscription_manager/gui/data/glade/filters.glade:77
 #: src/subscription_manager/gui/data/ui/filters.ui:76
 msgid "Hide subscriptions whose provided products have a Subscribed status"
-msgstr "ଯେଉଁ ପ୍ରଦତ୍ତ ଉତ୍ପାଦନଗୁଡ଼ିକର ସଦସ୍ୟତାଗୁଡ଼ିକ ସଦସ୍ୟତା ପ୍ରାପ୍ତ ସ୍ଥିତିରେ ଅଛି ତାହାକୁ ଲୁଚାନ୍ତୁ"
+msgstr ""
+"ଯେଉଁ ପ୍ରଦତ୍ତ ଉତ୍ପାଦନଗୁଡ଼ିକର ସଦସ୍ୟତାଗୁଡ଼ିକ ସଦସ୍ୟତା ପ୍ରାପ୍ତ ସ୍ଥିତିରେ ଅଛି "
+"ତାହାକୁ ଲୁଚାନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2411,8 +2420,8 @@ msgid ""
 "You will need to use Red Hat Subscription Manager to manually attach "
 "subscriptions to this system after completing firstboot."
 msgstr ""
-"ହସ୍ତକୃତ ଭାବରେ ଏହି ତନ୍ତ୍ର ପାଇଁ ସଦସ୍ୟତା ଯୋଗ କରିବା ପାଇଁ ଆପଣଙ୍କୁ Red Hat ସଦସ୍ୟତା ପରିଚାଳକକୁ "
-"firstboot କରିସାରିବା ପରେ ବ୍ୟବହାର କରିବାକୁ ହେବ।"
+"ହସ୍ତକୃତ ଭାବରେ ଏହି ତନ୍ତ୍ର ପାଇଁ ସଦସ୍ୟତା ଯୋଗ କରିବା ପାଇଁ ଆପଣଙ୍କୁ Red Hat ସଦସ୍ୟତା"
+" ପରିଚାଳକକୁ firstboot କରିସାରିବା ପରେ ବ୍ୟବହାର କରିବାକୁ ହେବ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2422,8 +2431,8 @@ msgid ""
 "After opening Red Hat Subscription Manager, manually attach subscriptions "
 "via the <b>All Available Subscriptions</b> tab."
 msgstr ""
-"Red Hat ସଦସ୍ୟତା ପରିଚାଳନାକୁ ଖୋଲିବା ପରେ, <b>ସମସ୍ତ ଉପଲବ୍ଧ ସଦସ୍ୟତା</b> ଟ୍ୟାବ ମାଧ୍ଯମରେ "
-"ହସ୍ତକୃତ ଭାବରେ ସଦସ୍ୟତା ଯୋଗ କରନ୍ତୁ।"
+"Red Hat ସଦସ୍ୟତା ପରିଚାଳନାକୁ ଖୋଲିବା ପରେ, <b>ସମସ୍ତ ଉପଲବ୍ଧ ସଦସ୍ୟତା</b> ଟ୍ୟାବ "
+"ମାଧ୍ଯମରେ ହସ୍ତକୃତ ଭାବରେ ସଦସ୍ୟତା ଯୋଗ କରନ୍ତୁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2637,8 +2646,8 @@ msgid ""
 "<small>If enabled, subscriptions are attached for any uncovered products on "
 "a schedule (default of daily).</small>"
 msgstr ""
-"<small>ସକ୍ରିୟ ଥିଲେ, ସଦସ୍ୟତାଗୁଡ଼ିକ ଯେକୈଣସି ଉତ୍ପାଦନଗୁଡ଼ିକ ପାଇଁ ଏକ ଯୋଜନା ଉପରେ ସଂଲଗ୍ନ ହୋଇଥାଏ "
-"(ପ୍ରତିଦିନର ପୂର୍ବନିର୍ଦ୍ଧାରିତ)।</small>"
+"<small>ସକ୍ରିୟ ଥିଲେ, ସଦସ୍ୟତାଗୁଡ଼ିକ ଯେକୈଣସି ଉତ୍ପାଦନଗୁଡ଼ିକ ପାଇଁ ଏକ ଯୋଜନା ଉପରେ "
+"ସଂଲଗ୍ନ ହୋଇଥାଏ (ପ୍ରତିଦିନର ପୂର୍ବନିର୍ଦ୍ଧାରିତ)।</small>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2662,8 +2671,8 @@ msgid ""
 "<small>Your system's release preference is followed when installing and "
 "updating packages.</small>"
 msgstr ""
-"<small>ଆପଣଙ୍କର ତନ୍ତ୍ରର ପ୍ରକାଶନ ପସନ୍ଦକୁ ଅନୁସରଣ କରାଯାଇଥାଏ ଯେତେବେଳେ ପ୍ୟାକେଜଗୁଡ଼ିକୁ ସ୍ଥାପନ "
-"କିମ୍ବା ଅଦ୍ୟତନ କରାଯାଇଥାଏ।</small>"
+"<small>ଆପଣଙ୍କର ତନ୍ତ୍ରର ପ୍ରକାଶନ ପସନ୍ଦକୁ ଅନୁସରଣ କରାଯାଇଥାଏ ଯେତେବେଳେ "
+"ପ୍ୟାକେଜଗୁଡ଼ିକୁ ସ୍ଥାପନ କିମ୍ବା ଅଦ୍ୟତନ କରାଯାଇଥାଏ।</small>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2687,8 +2696,8 @@ msgid ""
 "<small>Your system's service level preference is followed when subscribing "
 "automatically.</small>"
 msgstr ""
-"<small>ସ୍ୱୟଂଚାଳିତ ଭାବରେ ସଦସ୍ୟତା ଗ୍ରହଣ କରିବା ସମୟରେ ଆପଣଙ୍କ ତନ୍ତ୍ରର ସର୍ଭିସ ସ୍ତର ପସନ୍ଦକୁ "
-"ଅନୁସରଣ କରାଯାଇଥାଏ</small>"
+"<small>ସ୍ୱୟଂଚାଳିତ ଭାବରେ ସଦସ୍ୟତା ଗ୍ରହଣ କରିବା ସମୟରେ ଆପଣଙ୍କ ତନ୍ତ୍ରର ସର୍ଭିସ ସ୍ତର"
+" ପସନ୍ଦକୁ ଅନୁସରଣ କରାଯାଇଥାଏ</small>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2816,12 +2825,13 @@ msgstr ""
 #: src/subscription_manager/gui/data/ui/registration_info.ui:33
 #: src/subscription_manager/gui/data/ui/registration_info.ui:73
 msgid ""
-"This assistant will guide you through the process of registering your system "
-"with Red Hat to receive software updates and other benefits. You will need "
+"This assistant will guide you through the process of registering your system"
+" with Red Hat to receive software updates and other benefits. You will need "
 "the following to register:"
 msgstr ""
-"ଏହି ସହାୟତା ଆପଣଙ୍କୁ Red Hat ସହିତ ଆପଣଙ୍କ ତନ୍ତ୍ର ପଞ୍ଜିକରଣ କାର୍ଯ୍ୟରେ ସଫ୍ଟୱେର ଅଦ୍ୟତନ ଏବଂ "
-"ଅନ୍ୟାନ୍ୟ ଲାଭ ପାଇବାରେ ସହାୟତା କରିବ। ଆପଣ ପଞ୍ଜିକରଣ ପାଇଁ ନିମ୍ନଲିଖିତଗୁଡ଼ିକୁ ଆବଶ୍ୟକ କରିବେ:"
+"ଏହି ସହାୟତା ଆପଣଙ୍କୁ Red Hat ସହିତ ଆପଣଙ୍କ ତନ୍ତ୍ର ପଞ୍ଜିକରଣ କାର୍ଯ୍ୟରେ ସଫ୍ଟୱେର "
+"ଅଦ୍ୟତନ ଏବଂ ଅନ୍ୟାନ୍ୟ ଲାଭ ପାଇବାରେ ସହାୟତା କରିବ। ଆପଣ ପଞ୍ଜିକରଣ ପାଇଁ "
+"ନିମ୍ନଲିଖିତଗୁଡ଼ିକୁ ଆବଶ୍ୟକ କରିବେ:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2873,7 +2883,8 @@ msgid ""
 "Would you like to register your system at this time? <b>(Strongly "
 "recommended.)</b>"
 msgstr ""
-"ଆପଣ ବର୍ତ୍ତମାନ ଆପଣଙ୍କ ତନ୍ତ୍ରକୁ ପଞ୍ଜିକରଣ କରିବାକୁ ଚାହୁଁଛନ୍ତି କି? <b>(ବିଶେଷ ଭାବରେପରାମର୍ଶିତ।)</b>"
+"ଆପଣ ବର୍ତ୍ତମାନ ଆପଣଙ୍କ ତନ୍ତ୍ରକୁ ପଞ୍ଜିକରଣ କରିବାକୁ ଚାହୁଁଛନ୍ତି କି? <b>(ବିଶେଷ "
+"ଭାବରେପରାମର୍ଶିତ।)</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2906,8 +2917,8 @@ msgid ""
 "Registering your system with Red Hat allows you to take full advantage of "
 "the benefits of a paid subscription, including:"
 msgstr ""
-"ଆପଣଙ୍କ ତନ୍ତ୍ରକୁ Red Hat ସହିତ ପଞ୍ଜିକରଣ କରିବା ଫଳରେ ତାହା ଆପଣଙ୍କୁ ପେୟ ସଦସ୍ୟତାର ସମ୍ପୂର୍ଣ୍ଣ ଲାଭ "
-"ପ୍ରଦାନ କରିବା ପାଇଁ ଅନୁମତି ଦେଇଥାଏ, ଏହାକୁ ଅନ୍ତର୍ଭୁକ୍ତ କରି:"
+"ଆପଣଙ୍କ ତନ୍ତ୍ରକୁ Red Hat ସହିତ ପଞ୍ଜିକରଣ କରିବା ଫଳରେ ତାହା ଆପଣଙ୍କୁ ପେୟ ସଦସ୍ୟତାର "
+"ସମ୍ପୂର୍ଣ୍ଣ ଲାଭ ପ୍ରଦାନ କରିବା ପାଇଁ ଅନୁମତି ଦେଇଥାଏ, ଏହାକୁ ଅନ୍ତର୍ଭୁକ୍ତ କରି:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2931,8 +2942,9 @@ msgid ""
 "Receive the latest software updates, including security updates, keeping "
 "this Red Hat Enterprise Linux system <b>updated</b> and <b>secure</b>."
 msgstr ""
-"ନୂତନ ସଫ୍ଟୱେର ଅଦ୍ୟତନଗୁଡ଼ିକୁ ଗ୍ରହଣ କରିଥାଏ, ସୁରକ୍ଷା ଅଦ୍ୟତନଗୁଡ଼ିକୁ ଅନ୍ତର୍ଭୁକ୍ତ କରି, ଏହି Red Hat "
-"Enterprise Linux ତନ୍ତ୍ରକୁ <b>ଅଦ୍ୟତିତ</b> ଏବଂ <b>ସୁରକ୍ଷିତ</b> ରଖି।"
+"ନୂତନ ସଫ୍ଟୱେର ଅଦ୍ୟତନଗୁଡ଼ିକୁ ଗ୍ରହଣ କରିଥାଏ, ସୁରକ୍ଷା ଅଦ୍ୟତନଗୁଡ଼ିକୁ ଅନ୍ତର୍ଭୁକ୍ତ "
+"କରି, ଏହି Red Hat Enterprise Linux ତନ୍ତ୍ରକୁ <b>ଅଦ୍ୟତିତ</b> ଏବଂ "
+"<b>ସୁରକ୍ଷିତ</b> ରଖି।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2949,8 +2961,8 @@ msgid ""
 "Download installation images for Red Hat Enterprise Linux releases, "
 "including new releases."
 msgstr ""
-"ସ୍ଥାପନ ପ୍ରତିଛବିଗୁଡ଼ିକୁ Red Hat Enterprise Linux ପ୍ରକାଶନ ପାଇଁ ଆହରଣ କରନ୍ତୁ, ନୂତନ ପ୍ରକାଶନକୁ "
-"ଅନ୍ତର୍ଭୁକ୍ତ କରି।"
+"ସ୍ଥାପନ ପ୍ରତିଛବିଗୁଡ଼ିକୁ Red Hat Enterprise Linux ପ୍ରକାଶନ ପାଇଁ ଆହରଣ କରନ୍ତୁ, "
+"ନୂତନ ପ୍ରକାଶନକୁ ଅନ୍ତର୍ଭୁକ୍ତ କରି।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2964,11 +2976,11 @@ msgstr "<b>ସହାୟତା:</b>"
 #: src/subscription_manager/gui/data/glade/registration_info.glade:457
 #: src/subscription_manager/gui/data/ui/registration_info.ui:552
 msgid ""
-"Access to the technical support experts at Red Hat or Red Hat's partners for "
-"help with any issues you might encounter with this system."
+"Access to the technical support experts at Red Hat or Red Hat's partners for"
+" help with any issues you might encounter with this system."
 msgstr ""
-"Red Hat କିମ୍ବା Red Hat ର ସହଯୋଗୀ ଯାନ୍ତ୍ରିକ ସହାୟତା ବିଶେଷଜ୍ଞ ପାଖରୁ ଯେକୌଣସି ସମସ୍ୟାର ସହାୟତା "
-"ପାଇବା ପାଇଁ ଆପଣଙ୍କୁ ଏହି ତନ୍ତ୍ରର ସମ୍ମୁଖିନ ହୋଇପାରିବେ।"
+"Red Hat କିମ୍ବା Red Hat ର ସହଯୋଗୀ ଯାନ୍ତ୍ରିକ ସହାୟତା ବିଶେଷଜ୍ଞ ପାଖରୁ ଯେକୌଣସି "
+"ସମସ୍ୟାର ସହାୟତା ପାଇବା ପାଇଁ ଆପଣଙ୍କୁ ଏହି ତନ୍ତ୍ରର ସମ୍ମୁଖିନ ହୋଇପାରିବେ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2991,22 +3003,24 @@ msgstr "ପରିଚାଳନା"
 #: src/subscription_manager/gui/data/ui/registration_info.ui:619
 #: src/subscription_manager/gui/data/ui/registration_info.ui:625
 msgid ""
-"Manage subscriptions and systems registered to Customer Portal via access."
-"redhat.com or through one of our other subscription management services."
+"Manage subscriptions and systems registered to Customer Portal via "
+"access.redhat.com or through one of our other subscription management "
+"services."
 msgstr ""
-"ସଦସ୍ୟତା ଏବଂ ତନ୍ତ୍ର ପଞ୍ଜିକରଣକୁ ଗ୍ରାହକ ପୃଷ୍ଠାରେ  access.redhat.com ମାଧ୍ଯମରେ ପରିଚାଳନା "
-"କରିପାରିବେ କିମ୍ବା ଆମର ଅନ୍ୟାନ୍ୟ ସଦସ୍ୟତା ପରିଚାଳନା ସର୍ଭିସ ମାଧ୍ଯମରେ ସମ୍ପର୍କ କରିପାରିବେ।"
+"ସଦସ୍ୟତା ଏବଂ ତନ୍ତ୍ର ପଞ୍ଜିକରଣକୁ ଗ୍ରାହକ ପୃଷ୍ଠାରେ  access.redhat.com ମାଧ୍ଯମରେ "
+"ପରିଚାଳନା କରିପାରିବେ କିମ୍ବା ଆମର ଅନ୍ୟାନ୍ୟ ସଦସ୍ୟତା ପରିଚାଳନା ସର୍ଭିସ ମାଧ୍ଯମରେ "
+"ସମ୍ପର୍କ କରିପାରିବେ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys, author mgiri
 #: src/subscription_manager/gui/data/glade/registration_info.glade:580
 #: src/subscription_manager/gui/data/ui/registration_info.ui:674
 msgid ""
-"<small><b>Tip:</b> Red Hat values your privacy: http://www.redhat.com/legal/"
-"privacy_statement.html</small>"
+"<small><b>Tip:</b> Red Hat values your privacy: "
+"http://www.redhat.com/legal/privacy_statement.html</small>"
 msgstr ""
-"<small><b>ସୂଚନା:</b> Red Hat ଆପଣଙ୍କର ଗୋପନିୟତାର ମୂଲ୍ୟ ପ୍ରଦାନ କରିଥାଏ: http://www."
-"redhat.com/legal/privacy_statement.html</small>"
+"<small><b>ସୂଚନା:</b> Red Hat ଆପଣଙ୍କର ଗୋପନିୟତାର ମୂଲ୍ୟ ପ୍ରଦାନ କରିଥାଏ: "
+"http://www.redhat.com/legal/privacy_statement.html</small>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3030,8 +3044,8 @@ msgid ""
 "Manage the repositories your subscriptions grant you access to by enabling, "
 "disabling and overriding certain fields."
 msgstr ""
-"କିଛି ସ୍ଥାନକୁ ସକ୍ରିୟ, ନିଷ୍କ୍ରିୟ ଏବଂ ନବଲିଖନ କରି ଆପଣଙ୍କର ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଅନୁମତି ଦେଇଥିବା ରେପୋଜିଟୋରୀଗୁଡ଼ିକୁ "
-"ପରିଚଳନା କରନ୍ତୁ।"
+"କିଛି ସ୍ଥାନକୁ ସକ୍ରିୟ, ନିଷ୍କ୍ରିୟ ଏବଂ ନବଲିଖନ କରି ଆପଣଙ୍କର ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଅନୁମତି "
+"ଦେଇଥିବା ରେପୋଜିଟୋରୀଗୁଡ଼ିକୁ ପରିଚଳନା କରନ୍ତୁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3102,7 +3116,8 @@ msgstr "<b>ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକ:</b>"
 #: src/subscription_manager/gui/data/glade/selectsla.glade:73
 msgid "prod 1, prod2, prod 3, prod 4, prod 5, prod 6, prod 7, prod 8"
 msgstr ""
-"ଉତ୍ପାଦନ 1, ଉତ୍ପାଦନ2, ଉତ୍ପାଦନ 3, ଉତ୍ପାଦନ 4, ଉତ୍ପାଦନ 5, ଉତ୍ପାଦନ 6, ଉତ୍ପାଦନ 7, ଉତ୍ପାଦନ 8"
+"ଉତ୍ପାଦନ 1, ଉତ୍ପାଦନ2, ଉତ୍ପାଦନ 3, ଉତ୍ପାଦନ 4, ଉତ୍ପାଦନ 5, ଉତ୍ପାଦନ 6, ଉତ୍ପାଦନ 7, "
+"ଉତ୍ପାଦନ 8"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3295,8 +3310,8 @@ msgstr ""
 
 #: src/subscription_manager/gui/data/ui/credentials.ui:162
 msgid ""
-"<small>Tip: Forgot your login or password? Look it up at http://redhat.com/"
-"forgot_password</small>"
+"<small>Tip: Forgot your login or password? Look it up at "
+"http://redhat.com/forgot_password</small>"
 msgstr ""
 
 #: src/subscription_manager/gui/data/ui/credentials.ui:195
@@ -3329,8 +3344,8 @@ msgstr ""
 
 #: src/subscription_manager/gui/data/ui/registration_info.ui:24
 msgid ""
-"This assistant will guide you through the process of registering your system "
-"with Red Hat to receive software updates and other benefits. "
+"This assistant will guide you through the process of registering your system"
+" with Red Hat to receive software updates and other benefits. "
 msgstr ""
 
 #: src/subscription_manager/gui/data/ui/registration_info.ui:64
@@ -3348,7 +3363,8 @@ msgid ""
 "Your installed products could be covered using one of multiple service "
 "levels."
 msgstr ""
-"ଏକାଧିକ ସର୍ଭିସ ସ୍ତରଗୁଡ଼ିକ ମଧ୍ଯରୁ ଗୋଟିକୁ ବ୍ୟବହାର କରି ଆପଣଙ୍କର ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକୁ ସମ୍ପୂର୍ଣ୍ଣ କରିହେବ।"
+"ଏକାଧିକ ସର୍ଭିସ ସ୍ତରଗୁଡ଼ିକ ମଧ୍ଯରୁ ଗୋଟିକୁ ବ୍ୟବହାର କରି ଆପଣଙ୍କର ସ୍ଥାପିତ "
+"ଉତ୍ପାଦନଗୁଡ଼ିକୁ ସମ୍ପୂର୍ଣ୍ଣ କରିହେବ।"
 
 #: src/subscription_manager/gui/data/ui/selectsla.ui:87
 msgid ""
@@ -3431,7 +3447,8 @@ msgstr "ନିମ୍ନଲିଖିତ ପ୍ରମାଣପତ୍ର ଫାଇ�
 # document keys
 #: src/subscription_manager/gui/importsub.py:125
 msgid "The following files are not valid certificates and were not imported:"
-msgstr "ନିମ୍ନଲିଖିତ ଫାଇଲଗୁଡ଼ିକ ବୈଧ ପ୍ରମାଣପତ୍ର ନୁହଁ ଏବଂ ତାହାକୁ ଆମଦାନୀ କରାଯାଇ ନାହିଁ:"
+msgstr ""
+"ନିମ୍ନଲିଖିତ ଫାଇଲଗୁଡ଼ିକ ବୈଧ ପ୍ରମାଣପତ୍ର ନୁହଁ ଏବଂ ତାହାକୁ ଆମଦାନୀ କରାଯାଇ ନାହିଁ:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3440,8 +3457,8 @@ msgid ""
 "An error occurred while importing the following certificates. Please check "
 "the log file for more information."
 msgstr ""
-"ନିମ୍ନଲିଖିତ ପ୍ରମାଣପତ୍ରଗୁଡ଼ିକୁ ଆମଦାନୀ କରିବା ସମୟରେ ଗୋଟିଏ ତ୍ରୁଟି ଘଟିଛି। ଅଧିକ ସୂଚନା ପାଇଁ ଦୟାକରି ଲଗ "
-"ଫାଇଲ ଦେଖନ୍ତୁ।"
+"ନିମ୍ନଲିଖିତ ପ୍ରମାଣପତ୍ରଗୁଡ଼ିକୁ ଆମଦାନୀ କରିବା ସମୟରେ ଗୋଟିଏ ତ୍ରୁଟି ଘଟିଛି। ଅଧିକ "
+"ସୂଚନା ପାଇଁ ଦୟାକରି ଲଗ ଫାଇଲ ଦେଖନ୍ତୁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3587,7 +3604,8 @@ msgid ""
 "Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
 "information."
 msgstr ""
-"ପସନ୍ଦ ସଂଳାପରେ ତ୍ରୁଟି। ଅଧିକ ସୂଚନା ପାଇବା ପାଇଁ ଦୟାକରି /var/log/rhsm/rhsm.logକୁ ଦେଖନ୍ତୁ।"
+"ପସନ୍ଦ ସଂଳାପରେ ତ୍ରୁଟି। ଅଧିକ ସୂଚନା ପାଇବା ପାଇଁ ଦୟାକରି /var/log/rhsm/rhsm.logକୁ "
+"ଦେଖନ୍ତୁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3595,7 +3613,9 @@ msgstr ""
 msgid ""
 "Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
 "information."
-msgstr "repos ସଂଳାପରେ ତୃଟି। ଅଧିକ ସୂଚନା ପାଇଁ ଦୟାକରି /var/log/rhsm/rhsm.log କୁ ଦେଖନ୍ତୁ।"
+msgstr ""
+"repos ସଂଳାପରେ ତୃଟି। ଅଧିକ ସୂଚନା ପାଇଁ ଦୟାକରି /var/log/rhsm/rhsm.log କୁ "
+"ଦେଖନ୍ତୁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3634,7 +3654,8 @@ msgstr "ସ୍ଥାପିତ ବସ୍ତୁଗୁଡ଼ିକ"
 #: src/subscription_manager/gui/mysubstab.py:133
 #, python-format
 msgid "There was an error removing %s with serial number %s"
-msgstr "%s ରୁ ସଦସ୍ୟତା ଖାରଜ କରିବା ସମୟରେ କ୍ରମ ସଂଖ୍ୟା %s ସହିତ ଗୋଟିଏ ତ୍ରୁଟି ଘଟିଥିଲା"
+msgstr ""
+"%s ରୁ ସଦସ୍ୟତା ଖାରଜ କରିବା ସମୟରେ କ୍ରମ ସଂଖ୍ୟା %s ସହିତ ଗୋଟିଏ ତ୍ରୁଟି ଘଟିଥିଲା"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3880,7 +3901,8 @@ msgstr "ପରବର୍ତ୍ତୀ"
 # document keys
 #: src/subscription_manager/gui/registergui.py:1301
 msgid "Unable to auto-attach, server does not support service levels."
-msgstr "ସ୍ୱୟଂ ସଂଲଗ୍ନ କରିବାରେ ଅସମର୍ଥ, ସର୍ଭର ସର୍ଭିସ ସ୍ତରଗୁଡ଼ିକୁ ସହାୟତା ପ୍ରଦାନ କରିନଥାଏ।"
+msgstr ""
+"ସ୍ୱୟଂ ସଂଲଗ୍ନ କରିବାରେ ଅସମର୍ଥ, ସର୍ଭର ସର୍ଭିସ ସ୍ତରଗୁଡ଼ିକୁ ସହାୟତା ପ୍ରଦାନ କରିନଥାଏ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3889,7 +3911,8 @@ msgid ""
 "No installed products on system. No need to attach subscriptions at this "
 "time."
 msgstr ""
-"ତନ୍ତ୍ରରେ କୌଣସି ସ୍ଥାପିତ ଉତ୍ପାଦନ ନାହିଁ। ବର୍ତ୍ତମାନ କୌଣସି ସଦସ୍ୟତାକୁ ସଂଲଗ୍ନ କରିବା ଆବଶ୍ୟକ ନାହିଁ।"
+"ତନ୍ତ୍ରରେ କୌଣସି ସ୍ଥାପିତ ଉତ୍ପାଦନ ନାହିଁ। ବର୍ତ୍ତମାନ କୌଣସି ସଦସ୍ୟତାକୁ ସଂଲଗ୍ନ କରିବା"
+" ଆବଶ୍ୟକ ନାହିଁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3898,8 +3921,8 @@ msgid ""
 "All installed products are covered by valid entitlements. No need to attach "
 "subscriptions at this time."
 msgstr ""
-"ସମସ୍ତ ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକ ବୈଧ ଅଧିକାର ପ୍ରାପ୍ତ ହୋଇଛି। ବର୍ତ୍ତମାନ କୌଣସି ସଦସ୍ୟତାକୁ ସଂଲଗ୍ନ କରିବା "
-"ଆବଶ୍ୟକ ନାହିଁ।"
+"ସମସ୍ତ ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକ ବୈଧ ଅଧିକାର ପ୍ରାପ୍ତ ହୋଇଛି। ବର୍ତ୍ତମାନ କୌଣସି "
+"ସଦସ୍ୟତାକୁ ସଂଲଗ୍ନ କରିବା ଆବଶ୍ୟକ ନାହିଁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3915,14 +3938,15 @@ msgid ""
 "No available subscriptions at the current service level: %s. Please use the "
 "\"All Available Subscriptions\" tab to manually attach subscriptions."
 msgstr ""
-"କୌଣସି ଉପଲବ୍ଧ ସଦସ୍ୟତା ପ୍ରଚଳିତ ସର୍ଭିସ ସ୍ତରରେ ନାହିଁ:%s. \"ସମସ୍ତ ଉପଲବ୍ଧ ସଦସ୍ୟତା\" ଟ୍ୟାବଗୁଡ଼ିକୁ ଏହି "
-"ତନ୍ତ୍ରକୁ ହସ୍ତକୃତ ଭାବରେ ସଦସ୍ୟତା ଯୋଗ କରିବା ପାଇଁ ବ୍ୟବହାର କରନ୍ତୁ।"
+"କୌଣସି ଉପଲବ୍ଧ ସଦସ୍ୟତା ପ୍ରଚଳିତ ସର୍ଭିସ ସ୍ତରରେ ନାହିଁ:%s. \"ସମସ୍ତ ଉପଲବ୍ଧ "
+"ସଦସ୍ୟତା\" ଟ୍ୟାବଗୁଡ଼ିକୁ ଏହି ତନ୍ତ୍ରକୁ ହସ୍ତକୃତ ଭାବରେ ସଦସ୍ୟତା ଯୋଗ କରିବା ପାଇଁ "
+"ବ୍ୟବହାର କରନ୍ତୁ।"
 
 #: src/subscription_manager/gui/registergui.py:1387
 msgid ""
 "No service level will cover all installed products. Please manually "
-"subscribe using multiple service levels via the \"All Available Subscriptions"
-"\" tab or purchase additional subscriptions."
+"subscribe using multiple service levels via the \"All Available "
+"Subscriptions\" tab or purchase additional subscriptions."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
@@ -3999,10 +4023,11 @@ msgstr "ସଦସ୍ଯତା ସର୍ଭିସ ପାଇଁ CA ପ୍ରମା
 # document keys
 #: src/subscription_manager/gui/registergui.py:1846
 msgid ""
-"Please provide a hostname with optional port and/or prefix: hostname[:port][/"
-"prefix]"
+"Please provide a hostname with optional port and/or prefix: "
+"hostname[:port][/prefix]"
 msgstr ""
-"ବୈକଳ୍ପିକ ପୋର୍ଟ ସହିତ ହୋଷ୍ଟନାମ ପ୍ରଦାନ କରନ୍ତୁ ଏବଂ/ଅଥବା ଉପସର୍ଗ: hostname[:port][/prefix]"
+"ବୈକଳ୍ପିକ ପୋର୍ଟ ସହିତ ହୋଷ୍ଟନାମ ପ୍ରଦାନ କରନ୍ତୁ ଏବଂ/ଅଥବା ଉପସର୍ଗ: "
+"hostname[:port][/prefix]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -4063,7 +4088,8 @@ msgstr ""
 #: src/subscription_manager/gui/reposgui.py:312
 #, python-format
 msgid "Are you sure you want to remove all overrides for <b>%s</b>?"
-msgstr "<b>%s</b> ପାଇଁ ସମସ୍ତ ନବଲିଖନକୁ ବାହାର କରିବାକୁ ଚାହୁଁଛନ୍ତି ବୋଲି ଆପଣ ନିଶ୍ଚିତ କି?"
+msgstr ""
+"<b>%s</b> ପାଇଁ ସମସ୍ତ ନବଲିଖନକୁ ବାହାର କରିବାକୁ ଚାହୁଁଛନ୍ତି ବୋଲି ଆପଣ ନିଶ୍ଚିତ କି?"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -4421,7 +4447,8 @@ msgstr "ସ୍ଥାପିତ ଉତ୍ପାଦନର ବର୍ତ୍ତମା�
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys, author mgiri
 #: src/subscription_manager/managercli.py:227
-msgid "Unable to find available subscriptions for all your installed products."
+msgid ""
+"Unable to find available subscriptions for all your installed products."
 msgstr "ସମସ୍ତ ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକ ପାଇଁ ଉପଲବ୍ଧ ସଦସ୍ୟତା ଖୋଜିବାରେ ଅସମର୍ଥ।"
 
 #: src/subscription_manager/managercli.py:337
@@ -4457,8 +4484,9 @@ msgid ""
 "subscription-manager is disabled when running inside a container. Please "
 "refer to your host system for subscription management.\n"
 msgstr ""
-"ଧାରଣ ପାତ୍ର ମଧ୍ଯରେ ଚାଲୁଥିବା ସମୟରେ subscription-manager କୁ ନିଷ୍କ୍ରିୟ କରାଯାଇଥାଏ। ସଜସ୍ୟତା "
-"ପରିଚାଳନା ପାଇଁ ଦୟାକରି ଆପଣଙ୍କର ହୋଷ୍ଟ ତନ୍ତ୍ରକୁ ଅନୁସରଣ କରନ୍ତୁ।\n"
+"ଧାରଣ ପାତ୍ର ମଧ୍ଯରେ ଚାଲୁଥିବା ସମୟରେ subscription-manager କୁ ନିଷ୍କ୍ରିୟ "
+"କରାଯାଇଥାଏ। ସଜସ୍ୟତା ପରିଚାଳନା ପାଇଁ ଦୟାକରି ଆପଣଙ୍କର ହୋଷ୍ଟ ତନ୍ତ୍ରକୁ ଅନୁସରଣ "
+"କରନ୍ତୁ।\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -4544,7 +4572,9 @@ msgstr "ଅନୁଷ୍ଠାନ: "
 #: src/subscription_manager/managercli.py:619
 msgid ""
 "Remove all local system and subscription data without affecting the server"
-msgstr "ସର୍ଭର ଉପରେ ପ୍ରଭାବ ନପକାଇ ସମସ୍ତ ସ୍ଥାନୀୟ ତନ୍ତ୍ର ଏବଂ ସଦସ୍ୟତା ତଥ୍ୟକୁ କାଢ଼ି ଦିଅନ୍ତୁ"
+msgstr ""
+"ସର୍ଭର ଉପରେ ପ୍ରଭାବ ନପକାଇ ସମସ୍ତ ସ୍ଥାନୀୟ ତନ୍ତ୍ର ଏବଂ ସଦସ୍ୟତା ତଥ୍ୟକୁ କାଢ଼ି "
+"ଦିଅନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -4575,7 +4605,9 @@ msgstr "ନିମ୍ନଲିଖିତ ବ୍ୟତୀକ୍ରମ ହେତୁ 
 # document keys
 #: src/subscription_manager/managercli.py:659
 msgid "Display the identity certificate for this system or request a new one"
-msgstr "ଏହି ତନ୍ତ୍ର ପାଇଁ ପରିଚୟ ପ୍ରମାଣପତ୍ରକୁ ଦର୍ଶାନ୍ତୁ କିମ୍ବା ଗୋଟିଏ ନୂତନ ପରିଚୟ ପାଇଁ ଅନୁରୋଧ କରନ୍ତୁ"
+msgstr ""
+"ଏହି ତନ୍ତ୍ର ପାଇଁ ପରିଚୟ ପ୍ରମାଣପତ୍ରକୁ ଦର୍ଶାନ୍ତୁ କିମ୍ବା ଗୋଟିଏ ନୂତନ ପରିଚୟ ପାଇଁ "
+"ଅନୁରୋଧ କରନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -4588,8 +4620,8 @@ msgid ""
 "force certificate regeneration (requires username and password); Only used "
 "with --regenerate"
 msgstr ""
-"ପ୍ରମାଣପତ୍ର ପୁନଃନିର୍ମାଣ ପାଇଁ ବାଧ୍ଯ କରନ୍ତୁ (ଚାଳକନାମ ଏବଂ ପ୍ରବେଶ ସଂକେତ ଆବଶ୍ୟକ); କେବଳ  --"
-"regenerate ସହିତ ବ୍ୟବହାର ହୋଇଥାଏ"
+"ପ୍ରମାଣପତ୍ର ପୁନଃନିର୍ମାଣ ପାଇଁ ବାଧ୍ଯ କରନ୍ତୁ (ଚାଳକନାମ ଏବଂ ପ୍ରବେଶ ସଂକେତ ଆବଶ୍ୟକ); "
+"କେବଳ  --regenerate ସହିତ ବ୍ୟବହାର ହୋଇଥାଏ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -4727,19 +4759,23 @@ msgstr "ତ୍ରୁଟି: ସର୍ଭରରୁ ପରିବେଶ ତାଲ�
 # document keys
 #: src/subscription_manager/managercli.py:817
 msgid "Set if subscriptions are attached on a schedule (default of daily)"
-msgstr "ସଦସ୍ୟତାଗୁଡ଼ିକ ଗୋଟିଏ ଯୋଜନା ଉପରେ ସଂଲଗ୍ନ ହୋଇଥିଲେ ସେଟ କରନ୍ତୁ (ଦିନର ପୂର୍ବନିର୍ଦ୍ଧାରିତ)"
+msgstr ""
+"ସଦସ୍ୟତାଗୁଡ଼ିକ ଗୋଟିଏ ଯୋଜନା ଉପରେ ସଂଲଗ୍ନ ହୋଇଥିଲେ ସେଟ କରନ୍ତୁ (ଦିନର "
+"ପୂର୍ବନିର୍ଦ୍ଧାରିତ)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/managercli.py:818
 msgid "specify whether to enable or disable auto-attaching of subscriptions"
-msgstr "ସଦସ୍ୟତାଗୁଡ଼ିକର ସ୍ୱୟଂ ସଂଲଗ୍ନକୁ ସକ୍ରିୟ କିମ୍ବା ନିଷ୍କ୍ରିୟ କରିବା ଉଚିତ କି ନୁହଁ"
+msgstr ""
+"ସଦସ୍ୟତାଗୁଡ଼ିକର ସ୍ୱୟଂ ସଂଲଗ୍ନକୁ ସକ୍ରିୟ କିମ୍ବା ନିଷ୍କ୍ରିୟ କରିବା ଉଚିତ କି ନୁହଁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/managercli.py:823
 msgid "try to attach subscriptions for uncovered products each check-in"
-msgstr "ପ୍ରତ୍ୟେକ ପ୍ରବେଶରେ ଅନାବୃତ ଉତ୍ପାଦନଗୁଡ଼ିକ ପାଇଁ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ସଂଲଗ୍ନ କରନ୍ତୁ"
+msgstr ""
+"ପ୍ରତ୍ୟେକ ପ୍ରବେଶରେ ଅନାବୃତ ଉତ୍ପାଦନଗୁଡ଼ିକ ପାଇଁ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ସଂଲଗ୍ନ କରନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -4778,8 +4814,8 @@ msgid ""
 "specify an organization when listing available service levels using the "
 "organization key, only used with --list"
 msgstr ""
-"ଅନୁଷ୍ଠାନ ଚାବି ବ୍ୟବହାର କରି ଉପଲବ୍ଧ ସର୍ଭିସ ସ୍ତରଗୁଡ଼ିକୁ ତାଲିକାଭୁକ୍ତ କରିବା ସମୟରେ ଏକ ଅନୁଷ୍ଠାନକୁ ଉଲ୍ଲେଖ "
-"କରନ୍ତୁ, ଯାହାକି କେବଳ --list ସହିତ ବ୍ୟବହାର ହୋଇଥାଏ"
+"ଅନୁଷ୍ଠାନ ଚାବି ବ୍ୟବହାର କରି ଉପଲବ୍ଧ ସର୍ଭିସ ସ୍ତରଗୁଡ଼ିକୁ ତାଲିକାଭୁକ୍ତ କରିବା ସମୟରେ "
+"ଏକ ଅନୁଷ୍ଠାନକୁ ଉଲ୍ଲେଖ କରନ୍ତୁ, ଯାହାକି କେବଳ --list ସହିତ ବ୍ୟବହାର ହୋଇଥାଏ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -4828,7 +4864,8 @@ msgid ""
 "Error: you must register or specify --username and --password to list "
 "service levels"
 msgstr ""
-"ତ୍ରୁଟି: ଆପଣଙ୍କୁ --username ଏବଂ --password କୁ ତାଲିକା ସର୍ଭିସ ସ୍ତରଗୁଡ଼ିକରେ ଉଲ୍ଲେଖ କରିବା ଉଚିତ"
+"ତ୍ରୁଟି: ଆପଣଙ୍କୁ --username ଏବଂ --password କୁ ତାଲିକା ସର୍ଭିସ ସ୍ତରଗୁଡ଼ିକରେ "
+"ଉଲ୍ଲେଖ କରିବା ଉଚିତ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -4893,9 +4930,11 @@ msgstr "ସ୍ଥିତବାନ ତନ୍ତ୍ର ତଥ୍ୟକୁ ସର୍
 # document keys
 #: src/subscription_manager/managercli.py:999
 msgid ""
-"register with one of multiple organizations for the user, using organization "
-"key"
-msgstr "ଅନୁଷ୍ଠାନ ଚାବି ବ୍ୟବହାର କରି ଚାଳକ ପାଇଁ ଏକାଧିକ ଅନୁଷ୍ଠାନ ମଧ୍ଯରୁ ଗୋଟିଏରେ ପଞ୍ଜିକରଣ କରନ୍ତୁ"
+"register with one of multiple organizations for the user, using organization"
+" key"
+msgstr ""
+"ଅନୁଷ୍ଠାନ ଚାବି ବ୍ୟବହାର କରି ଚାଳକ ପାଇଁ ଏକାଧିକ ଅନୁଷ୍ଠାନ ମଧ୍ଯରୁ ଗୋଟିଏରେ ପଞ୍ଜିକରଣ "
+"କରନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -4933,22 +4972,26 @@ msgstr "ତନ୍ତ୍ରକୁ ପଞ୍ଜୀକୃତ କରନ୍ତୁ ଯ
 #: src/subscription_manager/migrate/migrate.py:846
 msgid ""
 "activation key to use for registration (can be specified more than once)"
-msgstr "ପଞ୍ଜିକରଣ ପାଇଁ ବ୍ୟବହାର ହେବାକୁ ଥିବା ସକ୍ରିୟଣ କି (ଥରେରୁ ଅଧିକ ଉଲ୍ଲେଖ କରିପାରିବେ)"
+msgstr ""
+"ପଞ୍ଜିକରଣ ପାଇଁ ବ୍ୟବହାର ହେବାକୁ ଥିବା ସକ୍ରିୟଣ କି (ଥରେରୁ ଅଧିକ ଉଲ୍ଲେଖ କରିପାରିବେ)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/managercli.py:1013
 msgid ""
-"system preference used when subscribing automatically, requires --auto-attach"
+"system preference used when subscribing automatically, requires --auto-"
+"attach"
 msgstr ""
-"ସ୍ୱୟଂଚାଳିତ ଭାବରେ ସଦସ୍ୟତା ଗ୍ରହଣ କରିବା ସମୟରେ ତନ୍ତ୍ର ପସନ୍ଦକୁ ବ୍ଯବହାର କରାଯାଇଥାଏ, ଯାହାକି --"
-"auto-attach ଆବଶ୍ୟକ କରିଥାଏ"
+"ସ୍ୱୟଂଚାଳିତ ଭାବରେ ସଦସ୍ୟତା ଗ୍ରହଣ କରିବା ସମୟରେ ତନ୍ତ୍ର ପସନ୍ଦକୁ ବ୍ଯବହାର କରାଯାଇଥାଏ,"
+" ଯାହାକି --auto-attach ଆବଶ୍ୟକ କରିଥାଏ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/managercli.py:1018
 msgid "This system is already registered. Use --force to override"
-msgstr "ତନ୍ତ୍ରଟି ପୂର୍ବରୁ ପଞ୍ଜୀକୃତ ଅଟେ। ଏହାକୁ ବ୍ଯର୍ଥ କରିବା ପାଇଁ --force କୁ ବ୍ଯବହାର କରନ୍ତୁ"
+msgstr ""
+"ତନ୍ତ୍ରଟି ପୂର୍ବରୁ ପଞ୍ଜୀକୃତ ଅଟେ। ଏହାକୁ ବ୍ଯର୍ଥ କରିବା ପାଇଁ --force କୁ ବ୍ଯବହାର "
+"କରନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -4966,13 +5009,15 @@ msgstr "ତ୍ରୁଟି: ସକ୍ରିୟଣ କି ଚାଳକ ଅଧି�
 # document keys
 #: src/subscription_manager/managercli.py:1024
 msgid "Error: Activation keys can not be used with previously registered IDs."
-msgstr "ତ୍ରୁଟି: ସକ୍ରିୟଣ କି କୁ ପୂର୍ବରୁ ପଞ୍ଜିକୃତ ID ଗୁଡ଼ିକ ସହିତ ବ୍ୟବହାର କରିହେବ ନାହିଁ।"
+msgstr ""
+"ତ୍ରୁଟି: ସକ୍ରିୟଣ କି କୁ ପୂର୍ବରୁ ପଞ୍ଜିକୃତ ID ଗୁଡ଼ିକ ସହିତ ବ୍ୟବହାର କରିହେବ ନାହିଁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/managercli.py:1026
 msgid "Error: Activation keys do not allow environments to be specified."
-msgstr "ତ୍ରୁଟି: ସକ୍ରିୟଣ କିଗୁଡ଼ିକ ପରିବେଶମାନଙ୍କୁ ଉଲ୍ଲେଖ କରିବା ପାଇଁ ଅନୁମତି ଦେଇନଥାଏ।"
+msgstr ""
+"ତ୍ରୁଟି: ସକ୍ରିୟଣ କିଗୁଡ଼ିକ ପରିବେଶମାନଙ୍କୁ ଉଲ୍ଲେଖ କରିବା ପାଇଁ ଅନୁମତି ଦେଇନଥାଏ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -4990,13 +5035,15 @@ msgstr "ତ୍ରୁଟି: ଗୋଟିଏ ସକ୍ରିୟଣ କି ଉଲ�
 # document keys
 #: src/subscription_manager/managercli.py:1033
 msgid "Error: Must use --auto-attach with --servicelevel."
-msgstr "ତ୍ରୁଟି: ନିଶ୍ଚିତ ଭାବରେ --auto-attach କୁ --servicelevel ସହିତ ବ୍ୟବହାର କରନ୍ତୁ।"
+msgstr ""
+"ତ୍ରୁଟି: ନିଶ୍ଚିତ ଭାବରେ --auto-attach କୁ --servicelevel ସହିତ ବ୍ୟବହାର କରନ୍ତୁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/managercli.py:1035
 msgid "Error: Must provide --org with activation keys."
-msgstr "ତ୍ରୁଟି: ସକ୍ରିୟଣ କିଗୁଡ଼ିକ ସହିତ ନିଶ୍ଚିତ ଭାବରେ --org କୁ ଉଲ୍ଲେଖ କରିବା ଉଚିତ।"
+msgstr ""
+"ତ୍ରୁଟି: ସକ୍ରିୟଣ କିଗୁଡ଼ିକ ସହିତ ନିଶ୍ଚିତ ଭାବରେ --org କୁ ଉଲ୍ଲେଖ କରିବା ଉଚିତ।"
 
 #: src/subscription_manager/managercli.py:1037
 msgid ""
@@ -5046,8 +5093,8 @@ msgid ""
 "Error: The --servicelevel option is not supported by the server. Did not "
 "complete your request."
 msgstr ""
-"ତ୍ରୁଟି: --servicelevel ବିକଳ୍ପ ସର୍ଭର ଦ୍ୱାରା ସହାୟତା ପ୍ରାପ୍ତ ନୁହଁ। ଆପଣଙ୍କ ଅନୁରୋଧ ସମ୍ପୂର୍ଣ୍ଣ "
-"ହୋଇନାହିଁ।"
+"ତ୍ରୁଟି: --servicelevel ବିକଳ୍ପ ସର୍ଭର ଦ୍ୱାରା ସହାୟତା ପ୍ରାପ୍ତ ନୁହଁ। ଆପଣଙ୍କ "
+"ଅନୁରୋଧ ସମ୍ପୂର୍ଣ୍ଣ ହୋଇନାହିଁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5074,7 +5121,8 @@ msgstr "ତନ୍ତ୍ରର ପଞ୍ଜିକରଣକୁ ଖାରଜ କର
 # document keys
 #: src/subscription_manager/managercli.py:1320
 msgid "Attempt to redeem a subscription for a preconfigured system"
-msgstr "ପୂର୍ବରୁ ବିନ୍ୟାସିତ ତନ୍ତ୍ର ପାଇଁ ସଦସ୍ୟତାକୁ ହ୍ରାସ କରିବା ପାଇଁ ପ୍ରୟାସ କରୁଅଛି"
+msgstr ""
+"ପୂର୍ବରୁ ବିନ୍ୟାସିତ ତନ୍ତ୍ର ପାଇଁ ସଦସ୍ୟତାକୁ ହ୍ରାସ କରିବା ପାଇଁ ପ୍ରୟାସ କରୁଅଛି"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5086,11 +5134,11 @@ msgstr "କେତେବେଳେ ସଦସ୍ୟତା ସମ୍ପୂର୍ଣ�
 # document keys
 #: src/subscription_manager/managercli.py:1327
 msgid ""
-"optional language to use for email notification when subscription redemption "
-"is complete (Examples: en-us, de-de)"
+"optional language to use for email notification when subscription redemption"
+" is complete (Examples: en-us, de-de)"
 msgstr ""
-"ଇମେଲ ବିଜ୍ଞପ୍ତି ପାଇଁ ବ୍ୟବହାର କରିବାକୁ ଥିବା ଇଚ୍ଛାମୁତାବକ ଭାଷା ଯେତେବେଳେ ସଦସ୍ୟତା ହ୍ରାସ ସମ୍ପୂର୍ଣ୍ଣ "
-"ହୋଇଥାଏ (ଉଦାହରଣ: en-us, de-de)"
+"ଇମେଲ ବିଜ୍ଞପ୍ତି ପାଇଁ ବ୍ୟବହାର କରିବାକୁ ଥିବା ଇଚ୍ଛାମୁତାବକ ଭାଷା ଯେତେବେଳେ ସଦସ୍ୟତା "
+"ହ୍ରାସ ସମ୍ପୂର୍ଣ୍ଣ ହୋଇଥାଏ (ଉଦାହରଣ: en-us, de-de)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5098,7 +5146,8 @@ msgstr ""
 msgid ""
 "Error: This command requires that you specify an email address with --email."
 msgstr ""
-"ତ୍ରୁଟି: ଏହି ନିର୍ଦ୍ଦେଶଟି ଆବଶ୍ୟକ କରିଥାଏ ଯେ ଆପଣ --email ସହିତ ଗୋଟିଏ ଇମେଲ ଠିକଣାକୁ ଉଲ୍ଲେଖ କରନ୍ତୁ।"
+"ତ୍ରୁଟି: ଏହି ନିର୍ଦ୍ଦେଶଟି ଆବଶ୍ୟକ କରିଥାଏ ଯେ ଆପଣ --email ସହିତ ଗୋଟିଏ ଇମେଲ ଠିକଣାକୁ"
+" ଉଲ୍ଲେଖ କରନ୍ତୁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5161,8 +5210,8 @@ msgstr "ପ୍ରକାଶନ ପସନ୍ଦକୁ ସେଟ କରାଯାଇ
 #, python-format
 msgid "No releases match '%s'.  Consult 'release --list' for a full listing."
 msgstr ""
-"'%s' ସହିତ କୌଣସି ପ୍ରକାଶନ ମେଳ ଖାଉ ନାହିଁ। ସମ୍ପୂର୍ଣ୍ଣ ତାଲିକା ପାଇଁ 'release --list' କୁ "
-"ଯୋଗାଯୋଗ କରନ୍ତୁ।"
+"'%s' ସହିତ କୌଣସି ପ୍ରକାଶନ ମେଳ ଖାଉ ନାହିଁ। ସମ୍ପୂର୍ଣ୍ଣ ତାଲିକା ପାଇଁ 'release "
+"--list' କୁ ଯୋଗାଯୋଗ କରନ୍ତୁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5175,7 +5224,8 @@ msgstr "ପ୍ରକାଶନକୁ ଏହି ପରି ସେଟ କରାଯ�
 # document keys
 #: src/subscription_manager/managercli.py:1434
 msgid "No release versions available, please check subscriptions."
-msgstr "କୌଣସି ପ୍ରକାଶନ ସଂସ୍କରଣ ଉପଲବ୍ଧ ନାହିଁ, ଦୟାକରି ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଯାଞ୍ଚ କରନ୍ତୁ।"
+msgstr ""
+"କୌଣସି ପ୍ରକାଶନ ସଂସ୍କରଣ ଉପଲବ୍ଧ ନାହିଁ, ଦୟାକରି ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଯାଞ୍ଚ କରନ୍ତୁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5188,7 +5238,8 @@ msgid "The ID of the pool to attach (can be specified more than once)"
 msgstr ""
 
 #: src/subscription_manager/managercli.py:1460
-msgid "Number of subscriptions to attach. May not be used with an auto-attach."
+msgid ""
+"Number of subscriptions to attach. May not be used with an auto-attach."
 msgstr ""
 
 #: src/subscription_manager/managercli.py:1462
@@ -5208,8 +5259,8 @@ msgid ""
 "A file from which to read pool IDs. If a hyphen is provided, pool IDs will "
 "be read from stdin."
 msgstr ""
-"ପୁଲ ID ଗୁଡ଼ିକୁ ଯେଉଁ ଫାଇଲରୁ ପଢ଼ାଯାଇ ପାରିବ। ଯଦି ଏକ ହାଇଫେନ୍‌ ଦିଆଯାଇଥାଏ, ତେବେ ପୁଲ ID ଗୁଡ଼ିକୁ stdin "
-"ରୁ ପଢ଼ାଯାଇପାରିବ।"
+"ପୁଲ ID ଗୁଡ଼ିକୁ ଯେଉଁ ଫାଇଲରୁ ପଢ଼ାଯାଇ ପାରିବ। ଯଦି ଏକ ହାଇଫେନ୍‌ ଦିଆଯାଇଥାଏ, ତେବେ "
+"ପୁଲ ID ଗୁଡ଼ିକୁ stdin ରୁ ପଢ଼ାଯାଇପାରିବ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5231,7 +5282,9 @@ msgstr "ପଞ୍ଜିକୃତ ତନ୍ତ୍ରରେ ଉଲ୍ଲିଖି�
 
 #: src/subscription_manager/managercli.py:1492
 msgid "Error: --auto may not be used when specifying pools."
-msgstr "ତୃଟି: --auto କୁ ହୁଏତଃ ପୁଲଗୁଡ଼ିକୁ ଉଲ୍ଲେଖ କରିବା ପାଇଁ ବ୍ୟବହାର କରାଯାଇପାରିବ ନାହିଁ।"
+msgstr ""
+"ତୃଟି: --auto କୁ ହୁଏତଃ ପୁଲଗୁଡ଼ିକୁ ଉଲ୍ଲେଖ କରିବା ପାଇଁ ବ୍ୟବହାର କରାଯାଇପାରିବ "
+"ନାହିଁ।"
 
 #: src/subscription_manager/managercli.py:1494
 msgid "Error: The --servicelevel option cannot be used when specifying pools."
@@ -5278,7 +5331,9 @@ msgstr "ଏହା ପାଇଁ ଏକ ସଦସ୍ୟତାକୁ ସଫଳତ�
 # document keys
 #: src/subscription_manager/managercli.py:1578
 msgid "No Installed products on system. No need to attach subscriptions."
-msgstr "ତନ୍ତ୍ରରେ କୌଣସି ସ୍ଥାପିତ ଉତ୍ପାଦନ ନାହିଁ। କୌଣସି ସଦସ୍ୟତାକୁ ସଂଲଗ୍ନ କରିବା ଆବଶ୍ୟକ ନାହିଁ।"
+msgstr ""
+"ତନ୍ତ୍ରରେ କୌଣସି ସ୍ଥାପିତ ଉତ୍ପାଦନ ନାହିଁ। କୌଣସି ସଦସ୍ୟତାକୁ ସଂଲଗ୍ନ କରିବା ଆବଶ୍ୟକ "
+"ନାହିଁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5287,12 +5342,13 @@ msgid ""
 "All installed products are covered by valid entitlements. No need to update "
 "subscriptions at this time."
 msgstr ""
-"ସମସ୍ତ ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକ ବୈଧ ଅଧିକାର ପ୍ରାପ୍ତ ହୋଇଛି। ବର୍ତ୍ତମାନ କୌଣସି ସଦସ୍ୟତାକୁ ଅଦ୍ୟତନ କରିବା "
-"ଆବଶ୍ୟକ ନାହିଁ।"
+"ସମସ୍ତ ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକ ବୈଧ ଅଧିକାର ପ୍ରାପ୍ତ ହୋଇଛି। ବର୍ତ୍ତମାନ କୌଣସି "
+"ସଦସ୍ୟତାକୁ ଅଦ୍ୟତନ କରିବା ଆବଶ୍ୟକ ନାହିଁ।"
 
 #: src/subscription_manager/managercli.py:1600
 msgid "Entitlement Certificate(s) update failed due to the following reasons:"
-msgstr "ନିମ୍ନଲିଖିତ କାରଣଗୁଡ଼ିକ ହେତୁ ସଦସ୍ୟତା ପ୍ରମାଣପତ୍ର(ଗୁଡ଼ିକ) ଅଦ୍ୟତନ କରିବାରେ ବିଫଳ:"
+msgstr ""
+"ନିମ୍ନଲିଖିତ କାରଣଗୁଡ଼ିକ ହେତୁ ସଦସ୍ୟତା ପ୍ରମାଣପତ୍ର(ଗୁଡ଼ିକ) ଅଦ୍ୟତନ କରିବାରେ ବିଫଳ:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5337,8 +5393,8 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:1672
 msgid ""
-"Error: This command requires that you specify one of --serial, --pool or --"
-"all."
+"Error: This command requires that you specify one of --serial, --pool or "
+"--all."
 msgstr ""
 
 #: src/subscription_manager/managercli.py:1691
@@ -5448,11 +5504,11 @@ msgstr "ଆମଦାନୀ କରିବା ପାଇଁ ଥିବା ପ୍ର�
 # document keys
 #: src/subscription_manager/managercli.py:1858
 msgid ""
-"Error: This command requires that you specify a certificate with --"
-"certificate."
+"Error: This command requires that you specify a certificate with "
+"--certificate."
 msgstr ""
-"ତ୍ରୁଟି: ଏହି ନିର୍ଦ୍ଦେଶଟି ଆବଶ୍ୟକ କରିଥାଏ ଯେ ଆପଣ --certificate ସହିତ ଗୋଟିଏ ପ୍ରମାଣପତ୍ର ଉଲ୍ଲେଖ "
-"କରନ୍ତୁ।"
+"ତ୍ରୁଟି: ଏହି ନିର୍ଦ୍ଦେଶଟି ଆବଶ୍ୟକ କରିଥାଏ ଯେ ଆପଣ --certificate ସହିତ ଗୋଟିଏ "
+"ପ୍ରମାଣପତ୍ର ଉଲ୍ଲେଖ କରନ୍ତୁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5467,16 +5523,19 @@ msgstr "ପ୍ରମାଣପତ୍ର %s କୁ ସଫଳତାର ସହିତ
 #: src/subscription_manager/managercli.py:1888
 #, python-format
 msgid "%s is not a valid certificate file. Please use a valid certificate."
-msgstr "%s ଟି ଗୋଟିଏ ବୈଧ ପ୍ରମାଣପତ୍ର ଫାଇଲ ନୁହଁ। ଦୟାକରି ଗୋଟିଏ ବୈଧ ପ୍ରମାଣପତ୍ର ବ୍ୟବହାର କରନ୍ତୁ।"
+msgstr ""
+"%s ଟି ଗୋଟିଏ ବୈଧ ପ୍ରମାଣପତ୍ର ଫାଇଲ ନୁହଁ। ଦୟାକରି ଗୋଟିଏ ବୈଧ ପ୍ରମାଣପତ୍ର ବ୍ୟବହାର "
+"କରନ୍ତୁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/managercli.py:1884
 msgid ""
-"An error occurred while importing the certificate. Please check log file for "
-"more information."
+"An error occurred while importing the certificate. Please check log file for"
+" more information."
 msgstr ""
-"ପ୍ରମାଣପତ୍ରଗୁଡ଼ିକୁ ଆମଦାନୀ କରିବା ସମୟରେ ଗୋଟିଏ ତ୍ରୁଟି ଘଟିଛି। ଅଧିକ ସୂଚନା ପାଇଁ ଦୟାକରି ଲଗ ଫାଇଲ ଦେଖନ୍ତୁ।"
+"ପ୍ରମାଣପତ୍ରଗୁଡ଼ିକୁ ଆମଦାନୀ କରିବା ସମୟରେ ଗୋଟିଏ ତ୍ରୁଟି ଘଟିଛି। ଅଧିକ ସୂଚନା ପାଇଁ "
+"ଦୟାକରି ଲଗ ଫାଇଲ ଦେଖନ୍ତୁ।"
 
 #: src/subscription_manager/managercli.py:1911
 msgid "View and configure with 'subscription-manager plugins'"
@@ -5525,7 +5584,8 @@ msgstr "ସକ୍ରିୟ"
 # document keys
 #: src/subscription_manager/managercli.py:1964
 msgid "List the repositories which this system is entitled to use"
-msgstr "ଏହି ତନ୍ତ୍ରରେ ବ୍ୟବହାର କରିବା ପାଇଁ ନିଯୁକ୍ତ ରେପୋଗୁଡ଼ିକୁ ତାଲିକାଭୁକ୍ତ କରନ୍ତୁ"
+msgstr ""
+"ଏହି ତନ୍ତ୍ରରେ ବ୍ୟବହାର କରିବା ପାଇଁ ନିଯୁକ୍ତ ରେପୋଗୁଡ଼ିକୁ ତାଲିକାଭୁକ୍ତ କରନ୍ତୁ"
 
 #: src/subscription_manager/managercli.py:1998
 msgid "list all known repositories for this system"
@@ -5537,23 +5597,24 @@ msgstr "ଏହି ତନ୍ତ୍ର ପାଇଁ ଜଣାଥିବା ସକ�
 
 #: src/subscription_manager/managercli.py:2004
 msgid "list known, disabled repositories for this system"
-msgstr "ଏହି ତନ୍ତ୍ର ପାଇଁ ଜଣାଥିବା ନିଷ୍କ୍ରିୟ ରେପୋଜିଟୋରୀଗୁଡ଼ିକୁ ତାଲିକାଭୁକ୍ତ କରନ୍ତୁ"
+msgstr ""
+"ଏହି ତନ୍ତ୍ର ପାଇଁ ଜଣାଥିବା ନିଷ୍କ୍ରିୟ ରେପୋଜିଟୋରୀଗୁଡ଼ିକୁ ତାଲିକାଭୁକ୍ତ କରନ୍ତୁ"
 
 #: src/subscription_manager/managercli.py:2007
 msgid ""
 "repository to enable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
 msgstr ""
-"ସକ୍ରିୟ କରିବାକୁ ଥିବା ରେପୋଜିଟୋରୀ (ଥରେରୁ ଅଧିକ ଉଲ୍ଲେଖ କରିପାରିବେ)। ୱାଇଲ୍ଡ କାର୍ଡ (* ଏବଂ ?) ଗୁଡ଼ିକ "
-"ସହାୟତାପ୍ରାପ୍ତ।"
+"ସକ୍ରିୟ କରିବାକୁ ଥିବା ରେପୋଜିଟୋରୀ (ଥରେରୁ ଅଧିକ ଉଲ୍ଲେଖ କରିପାରିବେ)। ୱାଇଲ୍ଡ କାର୍ଡ "
+"(* ଏବଂ ?) ଗୁଡ଼ିକ ସହାୟତାପ୍ରାପ୍ତ।"
 
 #: src/subscription_manager/managercli.py:2010
 msgid ""
-"repository to disable (can be specified more than once). Wildcards (* and ?) "
-"are supported."
+"repository to disable (can be specified more than once). Wildcards (* and ?)"
+" are supported."
 msgstr ""
-"ନିଷ୍କ୍ରିୟ କରିବାକୁ ଥିବା ରେପୋଜିଟୋରୀ (ଥରେରୁ ଅଧିକ ଉଲ୍ଲେଖ କରିପାରିବେ)। ୱାଇଲ୍ଡ କାର୍ଡ (* ଏବଂ ?) ଗୁଡ଼ିକ "
-"ସହାୟତାପ୍ରାପ୍ତ।"
+"ନିଷ୍କ୍ରିୟ କରିବାକୁ ଥିବା ରେପୋଜିଟୋରୀ (ଥରେରୁ ଅଧିକ ଉଲ୍ଲେଖ କରିପାରିବେ)। ୱାଇଲ୍ଡ "
+"କାର୍ଡ (* ଏବଂ ?) ଗୁଡ଼ିକ ସହାୟତାପ୍ରାପ୍ତ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5578,8 +5639,8 @@ msgid ""
 "Error: %s is not a valid repository ID. Use --list option to see valid "
 "repositories."
 msgstr ""
-"ତ୍ରୁଟି: %s ଏକ ବୈଧ ରେପୋଜିଟୋରୀ ID ଆବଶ୍ୟକ। ବୈଧ ରେପୋଜିଟୋରୀଗୁଡ଼ିକୁ ଦେଖିବା ପାଇଁ --list ବ୍ୟବହାର "
-"କରନ୍ତୁ।"
+"ତ୍ରୁଟି: %s ଏକ ବୈଧ ରେପୋଜିଟୋରୀ ID ଆବଶ୍ୟକ। ବୈଧ ରେପୋଜିଟୋରୀଗୁଡ଼ିକୁ ଦେଖିବା ପାଇଁ "
+"--list ବ୍ୟବହାର କରନ୍ତୁ।"
 
 #: src/subscription_manager/managercli.py:2126
 #, python-format
@@ -5594,10 +5655,11 @@ msgstr "ରେପୋଜିଟୋରୀ '%s' କୁ ଏହି ତନ୍ତ୍ର 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/managercli.py:2135
-msgid "List, set, or remove the configuration parameters in use by this system"
+msgid ""
+"List, set, or remove the configuration parameters in use by this system"
 msgstr ""
-"ଏହି ତନ୍ତ୍ର ଦ୍ୱାରା ବ୍ୟବହାର ହେଉଥିବା ବିନ୍ୟାସ ପ୍ରାଚଳଗୁଡ଼ିକୁ ତାଲିକାଭୁକ୍ତ କରନ୍ତୁ, ସେଟ କରନ୍ତୁ, କିମ୍ବା କାଢ଼ି "
-"ଦିଅନ୍ତୁ।"
+"ଏହି ତନ୍ତ୍ର ଦ୍ୱାରା ବ୍ୟବହାର ହେଉଥିବା ବିନ୍ୟାସ ପ୍ରାଚଳଗୁଡ଼ିକୁ ତାଲିକାଭୁକ୍ତ କରନ୍ତୁ, "
+"ସେଟ କରନ୍ତୁ, କିମ୍ବା କାଢ଼ି ଦିଅନ୍ତୁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5625,8 +5687,8 @@ msgid ""
 "Error: --list should not be used with any other options for setting or "
 "removing configurations."
 msgstr ""
-"ତ୍ରୁଟି: ବିନ୍ୟାସଗୁଡ଼ିକୁ ସେଟ କରିବା କିମ୍ବା କାଢ଼ିବା ପାଇଁ --list କୁ ଅନ୍ୟ କୌଣସି ବିକଳ୍ପ ସହିତ ବ୍ୟବହାର କରିବା "
-"ଉଚିତ ନୁହଁ।"
+"ତ୍ରୁଟି: ବିନ୍ୟାସଗୁଡ଼ିକୁ ସେଟ କରିବା କିମ୍ବା କାଢ଼ିବା ପାଇଁ --list କୁ ଅନ୍ୟ କୌଣସି "
+"ବିକଳ୍ପ ସହିତ ବ୍ୟବହାର କରିବା ଉଚିତ ନୁହଁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5635,7 +5697,8 @@ msgid ""
 "Error: configuration entry designation for removal must be of format "
 "[section.name]"
 msgstr ""
-"ତ୍ରୁଟି: କାଢ଼ିବା ପାଇଁ ବିନ୍ୟାସ ଭରଣ ପଦବିକୁ ନିଶ୍ଚତ ଭାବରେ ଏହି ଶୈଳୀରେ ଥିବା ଉଚିତ [section.name]"
+"ତ୍ରୁଟି: କାଢ଼ିବା ପାଇଁ ବିନ୍ୟାସ ଭରଣ ପଦବିକୁ ନିଶ୍ଚତ ଭାବରେ ଏହି ଶୈଳୀରେ ଥିବା ଉଚିତ "
+"[section.name]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5682,7 +5745,8 @@ msgstr "ଏହି ତନ୍ତ୍ର ପାଇଁ ସଦସ୍ୟତା ଏବ�
 # document keys
 #: src/subscription_manager/managercli.py:2238
 msgid "list shows those products which are installed (default)"
-msgstr "ତାଲିକା ସେହି ଉତ୍ପାଦନଗୁଡ଼ିକୁ ଦର୍ଶାଇଥାଏ ଯାହାକି ସ୍ଥାପିତ ହୋଇଛି (ପୂର୍ବନିର୍ଦ୍ଧାରିତ)"
+msgstr ""
+"ତାଲିକା ସେହି ଉତ୍ପାଦନଗୁଡ଼ିକୁ ଦର୍ଶାଇଥାଏ ଯାହାକି ସ୍ଥାପିତ ହୋଇଛି (ପୂର୍ବନିର୍ଦ୍ଧାରିତ)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5695,7 +5759,8 @@ msgstr "ତାଲିକା ଉପଲବ୍ଧ ଥିବା ସଦସ୍ୟତା
 #: src/subscription_manager/managercli.py:2242
 msgid "used with --available to ensure all subscriptions are returned"
 msgstr ""
-"ସମସ୍ତ ସଦସ୍ୟତାକୁ ଫେରାଇ ଦିଆଯାଇଛି କି ନାହିଁ ନିଶ୍ଚିତ କରିବା ପାଇଁ --available ସହିତ ପ୍ରଦାନ କରାଯାଇଛି"
+"ସମସ୍ତ ସଦସ୍ୟତାକୁ ଫେରାଇ ଦିଆଯାଇଛି କି ନାହିଁ ନିଶ୍ଚିତ କରିବା ପାଇଁ --available ସହିତ "
+"ପ୍ରଦାନ କରାଯାଇଛି"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5705,8 +5770,8 @@ msgid ""
 "date to search on, defaults to today's date, only used with --available "
 "(example: %s)"
 msgstr ""
-"ସନ୍ଧାନ କରିବା ପାଇଁ ତାରିଖ, ଆଜିର ତାରିଖକୁ ପୂର୍ବନିର୍ଦ୍ଧାରିତ କରି, କେବଳ --available ସହିତ ବ୍ୟବହାର "
-"କରାଯାଇଥାଏ (ଉଦାହରଣ: %s)"
+"ସନ୍ଧାନ କରିବା ପାଇଁ ତାରିଖ, ଆଜିର ତାରିଖକୁ ପୂର୍ବନିର୍ଦ୍ଧାରିତ କରି, କେବଳ --available"
+" ସହିତ ବ୍ୟବହାର କରାଯାଇଥାଏ (ଉଦାହରଣ: %s)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5721,8 +5786,8 @@ msgid ""
 "shows only subscriptions matching the specified service level; only used "
 "with --available and --consumed"
 msgstr ""
-"କେବଳ ନିର୍ଦ୍ଦିଷ୍ଟ ସର୍ଭିସ ସ୍ତର ସହିତ ମେଳକ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଦର୍ଶାନ୍ତୁ; କେବଳ --available ଏବଂ --"
-"consumed ସହିତ ବ୍ୟବହୃତ"
+"କେବଳ ନିର୍ଦ୍ଦିଷ୍ଟ ସର୍ଭିସ ସ୍ତର ସହିତ ମେଳକ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଦର୍ଶାନ୍ତୁ; କେବଳ "
+"--available ଏବଂ --consumed ସହିତ ବ୍ୟବହୃତ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5730,7 +5795,9 @@ msgstr ""
 msgid ""
 "shows pools which provide products that are not already covered; only used "
 "with --available"
-msgstr "ପୂର୍ବରୁ ଧାରଣ ହୋଇନଥିବା ପୁଲଗୁଡ଼ିକୁ ଦର୍ଶାଇଥାଏ; କେବଳ --available ସହିତ ବ୍ୟବହାର ହୋଇଥାଏ"
+msgstr ""
+"ପୂର୍ବରୁ ଧାରଣ ହୋଇନଥିବା ପୁଲଗୁଡ଼ିକୁ ଦର୍ଶାଇଥାଏ; କେବଳ --available ସହିତ ବ୍ୟବହାର "
+"ହୋଇଥାଏ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5739,25 +5806,26 @@ msgid ""
 "shows only subscriptions matching products that are currently installed; "
 "only used with --available"
 msgstr ""
-"ବର୍ତ୍ତମାନ ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକ ମଧ୍ଯରୁ କେବଳ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଦର୍ଶାଇଥାଏ; କେବଳ --available ସହିତ "
-"ବ୍ୟବହାର କରାଯାଇଥାଏ"
+"ବର୍ତ୍ତମାନ ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକ ମଧ୍ଯରୁ କେବଳ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଦର୍ଶାଇଥାଏ; କେବଳ "
+"--available ସହିତ ବ୍ୟବହାର କରାଯାଇଥାଏ"
 
 #: src/subscription_manager/managercli.py:2255
 msgid ""
 "lists only subscriptions or products containing the specified expression in "
-"the subscription or product information, varying with the list requested and "
-"the server version (case-insensitive)."
+"the subscription or product information, varying with the list requested and"
+" the server version (case-insensitive)."
 msgstr ""
-"କେବଳ ସଦସ୍ୟତା କିମ୍ବା ଉତ୍ପାଦନ ସୂଚନାରେ ଉଲ୍ଲିଖିତ ଅଭିବ୍ୟକ୍ତି ସଦସ୍ଯତା ଅଥବା ଉତ୍ପାଦନଗୁଡ଼ିକୁ ତାଲିକାଭୁକ୍ତ "
-"କରନ୍ତୁ, ଅନୁରୋଧ କରାଯାଇଥିବା ତାଲିକା ଠାରୁ ଭିନ୍ନ ଏବଂ ସର୍ଭର ସଂସ୍କରଣ (ଅକ୍ଷର ନିର୍ଦ୍ଦିଷ୍ଟ)।"
+"କେବଳ ସଦସ୍ୟତା କିମ୍ବା ଉତ୍ପାଦନ ସୂଚନାରେ ଉଲ୍ଲିଖିତ ଅଭିବ୍ୟକ୍ତି ସଦସ୍ଯତା ଅଥବା "
+"ଉତ୍ପାଦନଗୁଡ଼ିକୁ ତାଲିକାଭୁକ୍ତ କରନ୍ତୁ, ଅନୁରୋଧ କରାଯାଇଥିବା ତାଲିକା ଠାରୁ ଭିନ୍ନ ଏବଂ "
+"ସର୍ଭର ସଂସ୍କରଣ (ଅକ୍ଷର ନିର୍ଦ୍ଦିଷ୍ଟ)।"
 
 #: src/subscription_manager/managercli.py:2257
 msgid ""
 "lists only the pool IDs for applicable available or consumed subscriptions; "
 "only used with --available and --consumed"
 msgstr ""
-"ପ୍ରଯୁଜ୍ୟ ଉପଲବ୍ଧ ଅଥବା ବ୍ୟବହୃତ ସଦସ୍ୟତାଗୁଡ଼ିକ ପାଇଁ କେବଳ ପୁଲ ID ଗୁଡ଼ିକୁ ତାଲିକାଭୁକ୍ତ କରନ୍ତୁ; କେବଳ --"
-"available ଏବଂ --consumed ସହିତ ବ୍ୟବହାର କରନ୍ତୁ"
+"ପ୍ରଯୁଜ୍ୟ ଉପଲବ୍ଧ ଅଥବା ବ୍ୟବହୃତ ସଦସ୍ୟତାଗୁଡ଼ିକ ପାଇଁ କେବଳ ପୁଲ ID ଗୁଡ଼ିକୁ "
+"ତାଲିକାଭୁକ୍ତ କରନ୍ତୁ; କେବଳ --available ଏବଂ --consumed ସହିତ ବ୍ୟବହାର କରନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5774,8 +5842,10 @@ msgstr "ତ୍ରୁଟି: --ondate ଟି କେବଳ --available ସହି�
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/managercli.py:2265
-msgid "Error: --servicelevel is only applicable with --available or --consumed"
-msgstr "ତ୍ରୁଟି: --servicelevel ଟି କେବଳ --available କିମ୍ବା --consumed ସହିତ ପ୍ରଯୁଜ୍ୟ"
+msgid ""
+"Error: --servicelevel is only applicable with --available or --consumed"
+msgstr ""
+"ତ୍ରୁଟି: --servicelevel ଟି କେବଳ --available କିମ୍ବା --consumed ସହିତ ପ୍ରଯୁଜ୍ୟ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5817,8 +5887,8 @@ msgid ""
 "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 "{dateexample})"
 msgstr ""
-"ଭରଣ କରାଯାଇଥିବା ତାରିଖଟି ଅବୈଧ ଅଟେ। ତାରିଖଟି YYYY-MM-DD ଶୈଳୀରେ ରହିବା ଉଚିତ (ଉଦାହରଣ:  "
-"{dateexample})"
+"ଭରଣ କରାଯାଇଥିବା ତାରିଖଟି ଅବୈଧ ଅଟେ। ତାରିଖଟି YYYY-MM-DD ଶୈଳୀରେ ରହିବା ଉଚିତ "
+"(ଉଦାହରଣ:  {dateexample})"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5832,18 +5902,19 @@ msgid ""
 "No available subscription pools were found matching the expression \"%s\" "
 "and the service level \"%s\"."
 msgstr ""
-"ଅଭିବ୍ୟକ୍ତି \"%s\" ଏବଂ ସର୍ଭିସ ସ୍ତର \"%s\"  ସହିତ ମେଳଖାଉଥିବା କୌଣସି ଉପଲବ୍ଧ ପୁଲଗୁଡ଼ିକ ମିଳିଲା ନାହିଁ।"
+"ଅଭିବ୍ୟକ୍ତି \"%s\" ଏବଂ ସର୍ଭିସ ସ୍ତର \"%s\"  ସହିତ ମେଳଖାଉଥିବା କୌଣସି ଉପଲବ୍ଧ "
+"ପୁଲଗୁଡ଼ିକ ମିଳିଲା ନାହିଁ।"
 
 #: src/subscription_manager/managercli.py:2373
 #, python-format
-msgid ""
-"No available subscription pools were found matching the expression \"%s\"."
+msgid "No available subscription pools were found matching the expression \"%s\"."
 msgstr "ଅଭିବ୍ୟକ୍ତି \"%s\" ସହିତ ମେଳଖାଉଥିବା କୌଣସି ଉପଲବ୍ଧ ପୁଲ ମିଳିଲା ନାହିଁ।"
 
 #: src/subscription_manager/managercli.py:2378
 #, python-format
 msgid ""
-"No available subscription pools were found matching the service level \"%s\"."
+"No available subscription pools were found matching the service level "
+"\"%s\"."
 msgstr "ସର୍ଭିସ ସ୍ତର \"%s\"  ସହିତ ମେଳଖାଉଥିବା କୌଣସି ଉପଲବ୍ଧ ପୁଲଗୁଡ଼ିକ ମିଳିଲା ନାହିଁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
@@ -5873,15 +5944,15 @@ msgstr ""
 #: src/subscription_manager/managercli.py:2510
 #, python-format
 msgid ""
-"No consumed subscription pools were found matching the expression \"%s\" and "
-"the service level \"%s\"."
+"No consumed subscription pools were found matching the expression \"%s\" and"
+" the service level \"%s\"."
 msgstr ""
-"ଅଭିବ୍ୟକ୍ତି \"%s\" ଏବଂ ସର୍ଭିସ ସ୍ତର \"%s\"  ସହିତ ମେଳଖାଉଥିବା କୌଣସି ବ୍ୟବହୃତ ପୁଲଗୁଡ଼ିକ ମିଳିଲା ନାହିଁ।"
+"ଅଭିବ୍ୟକ୍ତି \"%s\" ଏବଂ ସର୍ଭିସ ସ୍ତର \"%s\"  ସହିତ ମେଳଖାଉଥିବା କୌଣସି ବ୍ୟବହୃତ "
+"ପୁଲଗୁଡ଼ିକ ମିଳିଲା ନାହିଁ।"
 
 #: src/subscription_manager/managercli.py:2515
 #, python-format
-msgid ""
-"No consumed subscription pools were found matching the expression \"%s\"."
+msgid "No consumed subscription pools were found matching the expression \"%s\"."
 msgstr "ଅଭିବ୍ୟକ୍ତି \"%s\" ସହିତ ମେଳଖାଉଥିବା କୌଣସି ବ୍ୟବହୃତ ପୁଲ ମିଳିଲା ନାହିଁ।"
 
 #: src/subscription_manager/managercli.py:2520
@@ -5920,8 +5991,8 @@ msgid ""
 "name of the override to remove (can be specified more than once); used with "
 "--repo option."
 msgstr ""
-"ବାହାର କରିବାକୁ ଥିବା ନବଲିଖନର ନାମ (ଥରେରୁ ଅଧିକ ଉଲ୍ଲେଖ ହୋଇପାରିବ);  --repo ବିକଳ୍ପ ସହିତ ବ୍ୟବହାର "
-"ହୋଇଥାଏ।"
+"ବାହାର କରିବାକୁ ଥିବା ନବଲିଖନର ନାମ (ଥରେରୁ ଅଧିକ ଉଲ୍ଲେଖ ହୋଇପାରିବ);  --repo ବିକଳ୍ପ "
+"ସହିତ ବ୍ୟବହାର ହୋଇଥାଏ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5930,23 +6001,25 @@ msgid ""
 "name and value of the option to override separated by a colon (can be "
 "specified more than once); used with --repo option."
 msgstr ""
-"ବିରାମ ଚିହ୍ନ ଦ୍ୱାରା ପୃଥକ ନବଲିଖନ କରିବାକୁ ଥିବା ବିକଳ୍ପର ନାମ ଏବଂ ମୂଲ୍ୟ (ଥରେରୁ ଅଧିକ ଉଲ୍ଲେଖ "
-"ହୋଇପାରିବ); --repo ବିକଳ୍ପ ସହିତ ବ୍ୟବହାର ହୋଇଥାଏ।"
+"ବିରାମ ଚିହ୍ନ ଦ୍ୱାରା ପୃଥକ ନବଲିଖନ କରିବାକୁ ଥିବା ବିକଳ୍ପର ନାମ ଏବଂ ମୂଲ୍ୟ (ଥରେରୁ "
+"ଅଧିକ ଉଲ୍ଲେଖ ହୋଇପାରିବ); --repo ବିକଳ୍ପ ସହିତ ବ୍ୟବହାର ହୋଇଥାଏ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/managercli.py:2541
 msgid ""
 "remove all overrides; can be specific to a repository by providing --repo"
-msgstr "ସମସ୍ତ ନବଲିଖନକୁ ବାହାର କରିଥାଏ; --repo ପ୍ରଦାନ କରିବା ଦ୍ୱାରା ଉଲ୍ଲେଖ କରାଯାଇପାରିବ"
+msgstr ""
+"ସମସ୍ତ ନବଲିଖନକୁ ବାହାର କରିଥାଏ; --repo ପ୍ରଦାନ କରିବା ଦ୍ୱାରା ଉଲ୍ଲେଖ କରାଯାଇପାରିବ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/managercli.py:2543
-msgid "list all overrides; can be specific to a repository by providing --repo"
+msgid ""
+"list all overrides; can be specific to a repository by providing --repo"
 msgstr ""
-"ସମସ୍ତ ନବଲିଖନକୁ ତାଲିକାଭୁକ୍ତ କରିଥାଏ; --repo ପ୍ରଦାନ କରିବା ଦ୍ୱାରା ଏକ ରେପୋଜିଟୋରୀରେ ଉଲ୍ଲେଖ "
-"କରାଯାଇପାରିବ"
+"ସମସ୍ତ ନବଲିଖନକୁ ତାଲିକାଭୁକ୍ତ କରିଥାଏ; --repo ପ୍ରଦାନ କରିବା ଦ୍ୱାରା ଏକ "
+"ରେପୋଜିଟୋରୀରେ ଉଲ୍ଲେଖ କରାଯାଇପାରିବ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5965,7 +6038,8 @@ msgstr "ତୃଟି: ପରିବର୍ତ୍ତନ କରିବା ପାଇ�
 #: src/subscription_manager/managercli.py:2560
 msgid "Error: You may not use --add or --remove with --remove-all and --list"
 msgstr ""
-"ତୃଟି: ଆପଣ ହୁଏତ --add କିମ୍ବା --remove କୁ --remove-all ଏବଂ --list ସହିତ ବ୍ୟବହାର କରିନପାରନ୍ତି"
+"ତୃଟି: ଆପଣ ହୁଏତ --add କିମ୍ବା --remove କୁ --remove-all ଏବଂ --list ସହିତ ବ୍ୟବହାର"
+" କରିନପାରନ୍ତି"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5976,10 +6050,11 @@ msgstr "ତୃଟି: ଆପଣ ହୁଏତ --list କୁ --remove-all ସହ�
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/managercli.py:2565
-msgid "Error: The --repo option must be used with --list or --add or --remove."
+msgid ""
+"Error: The --repo option must be used with --list or --add or --remove."
 msgstr ""
-"ତୃଟି: --repo ବିକଳ୍ପ ନିଶ୍ଚିତ ଭାବରେ --list କିମ୍ବା --add କିମ୍ବା --remove ସହିତ ବ୍ୟବହାର ହେବା "
-"ଉଚିତ।"
+"ତୃଟି: --repo ବିକଳ୍ପ ନିଶ୍ଚିତ ଭାବରେ --list କିମ୍ବା --add କିମ୍ବା --remove ସହିତ "
+"ବ୍ୟବହାର ହେବା ଉଚିତ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -6044,7 +6119,9 @@ msgstr "ଏହି ତନ୍ତ୍ରର ସଦସ୍ୟତା ଏବଂ ଉତ�
 #: src/subscription_manager/managercli.py:2673
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
-msgstr "ସ୍ଥିତି ଯାଞ୍ଚ କରିବା ପାଇଁ ଭବିଷ୍ୟତ ତାରିଖ, ପୂର୍ବନିର୍ଦ୍ଧାରିତ ହେଉଛି ଆଜିର ତାରିଖ (ଉଦାହରଣ: %s)"
+msgstr ""
+"ସ୍ଥିତି ଯାଞ୍ଚ କରିବା ପାଇଁ ଭବିଷ୍ୟତ ତାରିଖ, ପୂର୍ବନିର୍ଦ୍ଧାରିତ ହେଉଛି ଆଜିର ତାରିଖ "
+"(ଉଦାହରଣ: %s)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -6055,9 +6132,11 @@ msgstr "ବିଗତ ତାରିଖଗୁଡ଼ିକ ଅନୁମୋଦିତ 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/managercli.py:2687
-msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+msgid ""
+"Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr ""
-"ଭରଣ କରାଯାଇଥିବା ତାରିଖଟି ଅବୈଧ ଅଟେ। ତାରିଖଟି YYYY-MM-DD ଶୈଳୀରେ ରହିବା ଉଚିତ (ଉଦାହରଣ: "
+"ଭରଣ କରାଯାଇଥିବା ତାରିଖଟି ଅବୈଧ ଅଟେ। ତାରିଖଟି YYYY-MM-DD ଶୈଳୀରେ ରହିବା ଉଚିତ "
+"(ଉଦାହରଣ: "
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -6097,7 +6176,8 @@ msgstr "ପ୍ରମାଣପତ୍ର ସର୍ଭର ସହିତ ସଂଯୁ
 #: src/subscription_manager/migrate/migrate.py:107
 msgid ""
 "You have entered an invalid choice.  Enter a choice from the menu above."
-msgstr "ଆପଣ ଏକ ଅବୈଧ ପସନ୍ଦକୁ ଭରଣ କରିଛନ୍ତି। ଉପରେ ଥିବା ତାଲିକାରୁ ଏକ ପସନ୍ଦକୁ ଦିଅନ୍ତୁ।"
+msgstr ""
+"ଆପଣ ଏକ ଅବୈଧ ପସନ୍ଦକୁ ଭରଣ କରିଛନ୍ତି। ଉପରେ ଥିବା ତାଲିକାରୁ ଏକ ପସନ୍ଦକୁ ଦିଅନ୍ତୁ।"
 
 #: src/subscription_manager/migrate/migrate.py:143
 #, python-format
@@ -6139,7 +6219,8 @@ msgstr "ଏହି ତନ୍ତ୍ରଟି ସାଟେଲାଇଟ 6 ରେ ପ
 msgid ""
 "This system appears to already be registered to Red Hat Subscription "
 "Management."
-msgstr "ଏହି ତନ୍ତ୍ର ପୂର୍ବରୁ Red Hat ସଦସ୍ୟତା ପରିଚାଳନାରେ ପଞ୍ଜିକୃତ ହେବାପରି ଲାଗୁଛି।"
+msgstr ""
+"ଏହି ତନ୍ତ୍ର ପୂର୍ବରୁ Red Hat ସଦସ୍ୟତା ପରିଚାଳନାରେ ପଞ୍ଜିକୃତ ହେବାପରି ଲାଗୁଛି।"
 
 #: src/subscription_manager/migrate/migrate.py:256
 #, python-format
@@ -6147,8 +6228,8 @@ msgid ""
 "Please visit https://access.redhat.com/management/consumers/%s to view the "
 "profile details."
 msgstr ""
-"ରୂପରେଖା ବିବରଣୀକୁ ଦେଖିବା ପାଇଁ ଦୟାକରି https://access.redhat.com/management/consumers/"
-"%s କୁ ପରିଦର୍ଶନ କରନ୍ତୁ।"
+"ରୂପରେଖା ବିବରଣୀକୁ ଦେଖିବା ପାଇଁ ଦୟାକରି "
+"https://access.redhat.com/management/consumers/%s କୁ ପରିଦର୍ଶନ କରନ୍ତୁ।"
 
 #: src/subscription_manager/migrate/migrate.py:262
 msgid "The CA certificate for the destination server has not been installed."
@@ -6192,11 +6273,11 @@ msgstr "ସଦସ୍ୟତା ପ୍ରାପ୍ତ ଚ୍ୟାନେଲଗୁ�
 
 #: src/subscription_manager/migrate/migrate.py:397
 msgid ""
-"You are subscribed to more than one jbappplatform channel.  This script does "
-"not support that configuration."
+"You are subscribed to more than one jbappplatform channel.  This script does"
+" not support that configuration."
 msgstr ""
-"ଆପଣ ଗୋଟିଏ ରୁ ଅଧିକ jbappplatform ଚ୍ୟାନେଲରେ ସଦସ୍ୟତା ପାଇଛନ୍ତି।  ଏହି ସ୍କ୍ରିପ୍ଟ ସେହି ବିନ୍ୟାସକୁ "
-"ସହାୟତା କରିନଥାଏ।"
+"ଆପଣ ଗୋଟିଏ ରୁ ଅଧିକ jbappplatform ଚ୍ୟାନେଲରେ ସଦସ୍ୟତା ପାଇଛନ୍ତି।  ଏହି ସ୍କ୍ରିପ୍ଟ "
+"ସେହି ବିନ୍ୟାସକୁ ସହାୟତା କରିନଥାଏ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -6209,7 +6290,9 @@ msgstr "ସ୍ଥାନାନ୍ତରଣ କରିବାରେ ଅସମର୍�
 #: src/subscription_manager/migrate/migrate.py:430
 msgid ""
 "You are subscribed to channels that have conflicting product certificates."
-msgstr "ଉତ୍ପାଦନ ପ୍ରମାଣପତ୍ରଗୁଡ଼ିକ ସହିତ ଦ୍ୱନ୍ଦ ସୃଷ୍ଟିକରୁଛିବା ଚ୍ୟାନେଲଗୁଡ଼ିକର ସଦସ୍ୟତା ଗ୍ରହଣ କରିଛନ୍ତି।"
+msgstr ""
+"ଉତ୍ପାଦନ ପ୍ରମାଣପତ୍ରଗୁଡ଼ିକ ସହିତ ଦ୍ୱନ୍ଦ ସୃଷ୍ଟିକରୁଛିବା ଚ୍ୟାନେଲଗୁଡ଼ିକର ସଦସ୍ୟତା "
+"ଗ୍ରହଣ କରିଛନ୍ତି।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -6224,17 +6307,18 @@ msgstr "ନିମ୍ନଲିଖିତ ଚ୍ୟାନେଲଗୁଡ଼ିକ �
 msgid ""
 "Reduce the number of channels per product ID to 1 and run migration again."
 msgstr ""
-"ପ୍ରତ୍ୟେକ ଉତ୍ପାଦନ ID ରେ ଚ୍ୟାନେଲ ସଂଖ୍ୟାକୁ 1 କୁ କମ କରନ୍ତୁ ଏବଂ ସ୍ଥାନାନ୍ତରଣକୁ ପୁଣିଥରେ ଚଲାନ୍ତୁ।"
+"ପ୍ରତ୍ୟେକ ଉତ୍ପାଦନ ID ରେ ଚ୍ୟାନେଲ ସଂଖ୍ୟାକୁ 1 କୁ କମ କରନ୍ତୁ ଏବଂ ସ୍ଥାନାନ୍ତରଣକୁ "
+"ପୁଣିଥରେ ଚଲାନ୍ତୁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/migrate/migrate.py:438
 msgid ""
-"To remove a channel, use 'rhn-channel --remove --"
-"channel=<conflicting_channel>'."
+"To remove a channel, use 'rhn-channel --remove "
+"--channel=<conflicting_channel>'."
 msgstr ""
-"ଏକ ଚ୍ୟାନେଲକୁ ବାହାର କରିବା ପାଇଁ, 'rhn-channel --remove --"
-"channel=<conflicting_channel>' କୁ ବ୍ୟବହାର କରନ୍ତୁ।"
+"ଏକ ଚ୍ୟାନେଲକୁ ବାହାର କରିବା ପାଇଁ, 'rhn-channel --remove "
+"--channel=<conflicting_channel>' କୁ ବ୍ୟବହାର କରନ୍ତୁ।"
 
 #: src/subscription_manager/migrate/migrate.py:450
 #, python-format
@@ -6262,8 +6346,7 @@ msgid ""
 "Use --force to ignore these channels and continue the migration.\n"
 msgstr ""
 "\n"
-"ଏହି ଚ୍ୟାନେଲଗୁଡ଼ିକୁ ଅଗ୍ରାହ୍ୟ କରିବା ପାଇଁ --force ବ୍ୟବହାର କରନ୍ତୁ ଏବଂ ସ୍ଥାନାନ୍ତରଣ କାର୍ଯ୍ୟକୁ "
-"ଚାଲୁରଖନ୍ତୁ।\n"
+"ଏହି ଚ୍ୟାନେଲଗୁଡ଼ିକୁ ଅଗ୍ରାହ୍ୟ କରିବା ପାଇଁ --force ବ୍ୟବହାର କରନ୍ତୁ ଏବଂ ସ୍ଥାନାନ୍ତରଣ କାର୍ଯ୍ୟକୁ ଚାଲୁରଖନ୍ତୁ।\n"
 
 #: src/subscription_manager/migrate/migrate.py:500
 msgid "Installing product certificates for these legacy channels:"
@@ -6289,10 +6372,13 @@ msgstr ""
 msgid ""
 "Did not receive a completed unregistration message from legacy server for "
 "system %s."
-msgstr "ତନ୍ତ୍ର %s ପାଇଁ ସମ୍ପୂର୍ଣ୍ଣ ପଞ୍ଜିକୃତ ହୋଇନଥିବା ସନ୍ଦେଶକୁ ପୁରୁଣା ସର୍ଭରରୁ ଗ୍ରହଣ କରିନାହିଁ।"
+msgstr ""
+"ତନ୍ତ୍ର %s ପାଇଁ ସମ୍ପୂର୍ଣ୍ଣ ପଞ୍ଜିକୃତ ହୋଇନଥିବା ସନ୍ଦେଶକୁ ପୁରୁଣା ସର୍ଭରରୁ ଗ୍ରହଣ "
+"କରିନାହିଁ।"
 
 #: src/subscription_manager/migrate/migrate.py:619
-msgid "Please investigate on the Customer Portal at https://access.redhat.com."
+msgid ""
+"Please investigate on the Customer Portal at https://access.redhat.com."
 msgstr "ଦୟାକରି https://access.redhat.com ରେ ଗ୍ରାହକ ପୃଷ୍ଠାକୁ ଦେଖନ୍ତୁ।"
 
 #: src/subscription_manager/migrate/migrate.py:629
@@ -6367,8 +6453,8 @@ msgid ""
 "Please ensure system has subscriptions attached, and see '%s' to enable "
 "additional repositories"
 msgstr ""
-"ଦୟାକରି ନିଶ୍ଚିତ କରନ୍ତୁ ଯେ ତନ୍ତ୍ରଟି ସଦସ୍ୟତାପ୍ରାପ୍ତ, ଏବଂ ଅତିରିକ୍ତ ରେପୋଜିଟୋରୀଗୁଡ଼ିକୁ ସକ୍ରିୟ କରିବା ପାଇଁ "
-"'%s' କୁ ଦେଖନ୍ତୁ"
+"ଦୟାକରି ନିଶ୍ଚିତ କରନ୍ତୁ ଯେ ତନ୍ତ୍ରଟି ସଦସ୍ୟତାପ୍ରାପ୍ତ, ଏବଂ ଅତିରିକ୍ତ "
+"ରେପୋଜିଟୋରୀଗୁଡ଼ିକୁ ସକ୍ରିୟ କରିବା ପାଇଁ '%s' କୁ ଦେଖନ୍ତୁ"
 
 #: src/subscription_manager/migrate/migrate.py:789
 msgid "Retrieving existing legacy subscription information..."
@@ -6397,8 +6483,8 @@ msgid ""
 "service level to follow when attaching subscriptions, for no service level "
 "use --servicelevel=\"\""
 msgstr ""
-"ସଦସ୍ୟତାଗୁଡ଼ିକୁ ସଂଲଗ୍ନ କରିବା ସମୟରେ ଅନୁସରଣ କରିବାକୁ ଥିବା ସର୍ଭିସ ସ୍ତର, ବିନା ସର୍ଭିସ ସ୍ତର ପାଇଁ --"
-"servicelevel=\"\" ବ୍ୟବହାର କରନ୍ତୁ"
+"ସଦସ୍ୟତାଗୁଡ଼ିକୁ ସଂଲଗ୍ନ କରିବା ସମୟରେ ଅନୁସରଣ କରିବାକୁ ଥିବା ସର୍ଭିସ ସ୍ତର, ବିନା "
+"ସର୍ଭିସ ସ୍ତର ପାଇଁ --servicelevel=\"\" ବ୍ୟବହାର କରନ୍ତୁ"
 
 #: src/subscription_manager/migrate/migrate.py:825
 msgid "don't use legacy proxy settings with destination server"
@@ -6452,13 +6538,14 @@ msgid "specify the password on the destination server"
 msgstr "ଲକ୍ଷ୍ଯସ୍ଥଳ ସର୍ଭର ଉପରେ ପ୍ରବେଶ ସଂକେତକୁ ଉଲ୍ଲେଖ କରନ୍ତୁ"
 
 #: src/subscription_manager/migrate/migrate.py:869
-msgid "The --activation-key and --environment options cannot be used together."
+msgid ""
+"The --activation-key and --environment options cannot be used together."
 msgstr ""
 
 #: src/subscription_manager/migrate/migrate.py:871
 msgid ""
-"The --activation-key option precludes the use of --destination-user and --"
-"destination-password"
+"The --activation-key option precludes the use of --destination-user and "
+"--destination-password"
 msgstr ""
 
 #: src/subscription_manager/migrate/migrate.py:873
@@ -6469,7 +6556,8 @@ msgstr ""
 # document keys
 #: src/subscription_manager/migrate/migrate.py:877
 msgid "The --servicelevel and --no-auto options cannot be used together."
-msgstr "--servicelevel ଏବଂ --no-auto ବିକଳ୍ପଗୁଡ଼ିକୁ ଏକା ସହିତ ବ୍ୟବହାର କରିପାରିବେ ନାହିଁ।"
+msgstr ""
+"--servicelevel ଏବଂ --no-auto ବିକଳ୍ପଗୁଡ଼ିକୁ ଏକା ସହିତ ବ୍ୟବହାର କରିପାରିବେ ନାହିଁ।"
 
 #: src/subscription_manager/plugin/container.py:234
 #: src/subscription_manager/plugin/ostree/action_invoker.py:156

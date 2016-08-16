@@ -9,12 +9,12 @@ msgstr ""
 "PO-Revision-Date: 2015-09-25 02:53-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Chinese (Simplified, China)\n"
-"Language: zh-Hans-CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: zh-Hans-CN\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: Zanata 3.8.4\n"
+"X-Generator: Zanata 3.9.3\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -252,10 +252,7 @@ msgid ""
 "*** WARNING ***\n"
 "The subscription for following product(s) has expired:\n"
 "%s\n"
-"You no longer have access to the repositories that provide these products.  "
-"It is important that you apply an active subscription in order to resume "
-"access to security and other critical updates. If you don't have other "
-"active subscriptions, you can renew the expired subscription.  "
+"You no longer have access to the repositories that provide these products.  It is important that you apply an active subscription in order to resume access to security and other critical updates. If you don't have other active subscriptions, you can renew the expired subscription.  "
 msgstr ""
 
 #: src/dnf-plugins/subscription-manager.py:38
@@ -912,8 +909,8 @@ msgstr "未知证书类型"
 #: src/rhsm_debug/debug_commands.py:40
 #: src/subscription_manager/managercli.py:70
 msgid ""
-"This system is not yet registered. Try 'subscription-manager register --"
-"help' for more information."
+"This system is not yet registered. Try 'subscription-manager register "
+"--help' for more information."
 msgstr "这个系统尚未注册。详情请查看 'subscription-manager register --help'。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
@@ -958,9 +955,7 @@ msgstr "必须已有归档的目的地目录。"
 msgid ""
 "To use the no-archive option, the destination directory '%s' must exist on "
 "the same file system as the data assembly directory '%s'."
-msgstr ""
-"要使用 no-archive 选项，则必须在同一文件系统中有目的目录 '%s' 作为数据组合目"
-"录 '%s'。"
+msgstr "要使用 no-archive 选项，则必须在同一文件系统中有目的目录 '%s' 作为数据组合目录 '%s'。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1004,8 +999,8 @@ msgid ""
 "system must be registered with the Customer Portal. Please enter your Red "
 "Hat login to ensure your system is up-to-date."
 msgstr ""
-"要让 Subscription Manager 为您的系统提供更新，您就必须在客户门户网站中注册该"
-"系统。请输入您的 Red Hat 登录以便确定系统处于最新状态。"
+"要让 Subscription Manager 为您的系统提供更新，您就必须在客户门户网站中注册该系统。请输入您的 Red Hat "
+"登录以便确定系统处于最新状态。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1029,7 +1024,8 @@ msgstr "有部分权利的订阅"
 # document keys
 #: src/rhsm_icon/rhsm_icon.c:222
 msgid ""
-"This system is missing one or more subscriptions to fully cover its products."
+"This system is missing one or more subscriptions to fully cover its "
+"products."
 msgstr "要覆盖这个系统的所有产品还缺少一个或多个订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
@@ -1153,28 +1149,27 @@ msgstr "这个系统是使用 RHN 传统方法注册。"
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/branding/redhat_branding.py:13
-msgid "This system has already been registered with Red Hat using RHN Classic."
+msgid ""
+"This system has already been registered with Red Hat using RHN Classic."
 msgstr "已经使用 RHN 传统订阅在 Red Hat 注册这个系统。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/branding/redhat_branding.py:15
 msgid ""
-"Your system is being registered again using Red Hat Subscription Management. "
-"Red Hat recommends that customers only register once."
+"Your system is being registered again using Red Hat Subscription Management."
+" Red Hat recommends that customers only register once."
 msgstr ""
-"您正在使用红帽订阅管理（Red Hat Subscription Management）再次注册您的系统。"
-"Red Hat 建议客户只注册一次。"
+"您正在使用红帽订阅管理（Red Hat Subscription Management）再次注册您的系统。Red Hat 建议客户只注册一次。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/branding/redhat_branding.py:17
 msgid ""
-"To learn how to unregister from either service please consult this Knowledge "
-"Base Article: https://access.redhat.com/kb/docs/DOC-45563"
+"To learn how to unregister from either service please consult this Knowledge"
+" Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
-"要了解有关从以上任意服务中取消注册的信息，请查询知识库文章：https://access."
-"redhat.com/kb/docs/DOC-45563"
+"要了解有关从以上任意服务中取消注册的信息，请查询知识库文章：https://access.redhat.com/kb/docs/DOC-45563"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1200,9 +1195,7 @@ msgstr "请输入您的 Red Hat 帐户信息："
 msgid ""
 "This system is registered using both RHN Classic and Red Hat Subscription "
 "Management."
-msgstr ""
-"这个系统同时使用 RHN 传统技术和红帽订阅管理（Red Hat Subscription "
-"Management）注册。"
+msgstr "这个系统同时使用 RHN 传统技术和红帽订阅管理（Red Hat Subscription Management）注册。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1217,8 +1210,7 @@ msgid ""
 "To learn more about RHN registration and technologies please consult this "
 "Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
-"要了解更多有关 RHN 注册和技术的信息，请查询知识库文章：https://access.redhat."
-"com/kb/docs/DOC-45563"
+"要了解更多有关 RHN 注册和技术的信息，请查询知识库文章：https://access.redhat.com/kb/docs/DOC-45563"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1230,8 +1222,8 @@ msgstr "RHN 传统订阅和 Red Hat 订阅管理注册"
 # document keys
 #: src/subscription_manager/branding/redhat_branding.py:30
 msgid ""
-"Tip: Forgot your login or password? Look it up at http://redhat.com/"
-"forgot_password"
+"Tip: Forgot your login or password? Look it up at "
+"http://redhat.com/forgot_password"
 msgstr "提示：忘记您的登录或者密码？请查看 http://redhat.com/forgot_password"
 
 #: src/subscription_manager/cache.py:143
@@ -1376,16 +1368,16 @@ msgstr "删除的（rogue）："
 # document keys
 #: src/subscription_manager/exceptions.py:28
 msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
+"Network error, unable to connect to server. Please see "
+"/var/log/rhsm/rhsm.log for more information."
 msgstr "网络出错，无法连接到服务器。详情请查看 /var/log/rhsm/rhsm.log。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/exceptions.py:29
 msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
+"Network error. Please check the connection details, or see "
+"/var/log/rhsm/rhsm.log for more information."
 msgstr "网络出错。请查看连接详情，或者 /var/log/rhsm/rhsm.log。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
@@ -1404,8 +1396,8 @@ msgstr "禁止：请求的无效证书。"
 # document keys
 #: src/subscription_manager/exceptions.py:32
 msgid ""
-"Remote server error. Please check the connection details, or see /var/log/"
-"rhsm/rhsm.log for more information."
+"Remote server error. Please check the connection details, or see "
+"/var/log/rhsm/rhsm.log for more information."
 msgstr "远程服务器出错。详情请查看连接情况或者 /var/log/rhsm/rhsm.log。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
@@ -1458,30 +1450,18 @@ msgstr "服务器 URL 包含无效方案。支持 http:// 和 https://。"
 #: src/subscription_manager/gui/about.py:28
 msgid ""
 "\n"
-"This software is licensed to you under the GNU General Public License, "
-"version 2 (GPLv2). There is NO WARRANTY for this software, express or "
-"implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR "
-"A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with "
-"this software; if not, see:\n"
+"This software is licensed to you under the GNU General Public License, version 2 (GPLv2). There is NO WARRANTY for this software, express or implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with this software; if not, see:\n"
 "\n"
 "http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
 "\n"
-"Red Hat trademarks are not licensed under GPLv2. No permission is granted to "
-"use or replicate Red Hat trademarks that are incorporated in this software "
-"or its documentation.\n"
+"Red Hat trademarks are not licensed under GPLv2. No permission is granted to use or replicate Red Hat trademarks that are incorporated in this software or its documentation.\n"
 msgstr ""
 "\n"
-"This software is licensed to you under the GNU General Public License, "
-"version 2 (GPLv2). There is NO WARRANTY for this software, express or "
-"implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR "
-"A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with "
-"this software; if not, see:\n"
+"This software is licensed to you under the GNU General Public License, version 2 (GPLv2). There is NO WARRANTY for this software, express or implied, including the implied warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2 along with this software; if not, see:\n"
 "\n"
 "http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
 "\n"
-"Red Hat trademarks are not licensed under GPLv2. No permission is granted to "
-"use or replicate Red Hat trademarks that are incorporated in this software "
-"or its documentation.\n"
+"Red Hat trademarks are not licensed under GPLv2. No permission is granted to use or replicate Red Hat trademarks that are incorporated in this software or its documentation.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1673,8 +1653,8 @@ msgstr "organization_entry"
 #: src/subscription_manager/gui/data/glade/activation_key.glade:89
 #: src/subscription_manager/gui/data/ui/activation_key.ui:107
 msgid ""
-"Multiple Activation Keys can be entered by separating them with a comma or a "
-"space."
+"Multiple Activation Keys can be entered by separating them with a comma or a"
+" space."
 msgstr "可输入使用逗号或者空格分开的多个激活码。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
@@ -1835,9 +1815,7 @@ msgid ""
 "Activation Keys are alphanumeric strings that are preconfigured by your "
 "system administrators to automatically register your system and attach all "
 "necessary subscriptions."
-msgstr ""
-"激活码是由数字字母组成的字符串，由您的系统管理员预先配置，以便自动注册您的系"
-"统，并附加所有需要的订阅。"
+msgstr "激活码是由数字字母组成的字符串，由您的系统管理员预先配置，以便自动注册您的系统，并附加所有需要的订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2392,9 +2370,7 @@ msgstr "在线文档（_O）"
 msgid ""
 "You will need to use Red Hat Subscription Manager to manually attach "
 "subscriptions to this system after completing firstboot."
-msgstr ""
-"完成 firstboot 后，您需要使用 Red Hat Subscription Manager 手动在这个系统中添"
-"加订阅。"
+msgstr "完成 firstboot 后，您需要使用 Red Hat Subscription Manager 手动在这个系统中添加订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2403,9 +2379,7 @@ msgstr ""
 msgid ""
 "After opening Red Hat Subscription Manager, manually attach subscriptions "
 "via the <b>All Available Subscriptions</b> tab."
-msgstr ""
-"打开 Red Hat Subscription Manager 后，使用<b>所有可用订阅</b>标签手动附加订"
-"阅。"
+msgstr "打开 Red Hat Subscription Manager 后，使用<b>所有可用订阅</b>标签手动附加订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2618,8 +2592,7 @@ msgstr "启用 auto-attach 属性"
 msgid ""
 "<small>If enabled, subscriptions are attached for any uncovered products on "
 "a schedule (default of daily).</small>"
-msgstr ""
-"<small>如果启用，则会为所有调度中未覆盖的产品附加订阅（默认为每日）。</small>"
+msgstr "<small>如果启用，则会为所有调度中未覆盖的产品附加订阅（默认为每日）。</small>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2793,12 +2766,10 @@ msgstr "进度页面"
 #: src/subscription_manager/gui/data/ui/registration_info.ui:33
 #: src/subscription_manager/gui/data/ui/registration_info.ui:73
 msgid ""
-"This assistant will guide you through the process of registering your system "
-"with Red Hat to receive software updates and other benefits. You will need "
+"This assistant will guide you through the process of registering your system"
+" with Red Hat to receive software updates and other benefits. You will need "
 "the following to register:"
-msgstr ""
-"这个助手将为您演示在 Red Hat 注册系统以便接收软件更新和其他优惠的步骤。您需要"
-"以下信息方可注册："
+msgstr "这个助手将为您演示在 Red Hat 注册系统以便接收软件更新和其他优惠的步骤。您需要以下信息方可注册："
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2904,9 +2875,7 @@ msgstr "<b>安全性 &amp; 更新：</b>"
 msgid ""
 "Receive the latest software updates, including security updates, keeping "
 "this Red Hat Enterprise Linux system <b>updated</b> and <b>secure</b>."
-msgstr ""
-"接收最新软件更新，其中包括安全性更新，保证 Red Hat Enterprise Linux 系统<b>更"
-"新</b>且<b>安全</b>。"
+msgstr "接收最新软件更新，其中包括安全性更新，保证 Red Hat Enterprise Linux 系统<b>更新</b>且<b>安全</b>。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2936,11 +2905,9 @@ msgstr "<b>支持：</b>"
 #: src/subscription_manager/gui/data/glade/registration_info.glade:457
 #: src/subscription_manager/gui/data/ui/registration_info.ui:552
 msgid ""
-"Access to the technical support experts at Red Hat or Red Hat's partners for "
-"help with any issues you might encounter with this system."
-msgstr ""
-"访问 Red Hat 或者 Red Hat 合作伙伴的技术支持专家以便帮助您解决这个系统遇到的"
-"问题。"
+"Access to the technical support experts at Red Hat or Red Hat's partners for"
+" help with any issues you might encounter with this system."
+msgstr "访问 Red Hat 或者 Red Hat 合作伙伴的技术支持专家以便帮助您解决这个系统遇到的问题。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2963,22 +2930,21 @@ msgstr "管理"
 #: src/subscription_manager/gui/data/ui/registration_info.ui:619
 #: src/subscription_manager/gui/data/ui/registration_info.ui:625
 msgid ""
-"Manage subscriptions and systems registered to Customer Portal via access."
-"redhat.com or through one of our other subscription management services."
-msgstr ""
-"使用 access.redhat.com 或者我们的其他订阅管理服务之一管理在客户门户网站中的订"
-"阅和系统。"
+"Manage subscriptions and systems registered to Customer Portal via "
+"access.redhat.com or through one of our other subscription management "
+"services."
+msgstr "使用 access.redhat.com 或者我们的其他订阅管理服务之一管理在客户门户网站中的订阅和系统。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys, author leahliu
 #: src/subscription_manager/gui/data/glade/registration_info.glade:580
 #: src/subscription_manager/gui/data/ui/registration_info.ui:674
 msgid ""
-"<small><b>Tip:</b> Red Hat values your privacy: http://www.redhat.com/legal/"
-"privacy_statement.html</small>"
+"<small><b>Tip:</b> Red Hat values your privacy: "
+"http://www.redhat.com/legal/privacy_statement.html</small>"
 msgstr ""
-"<small><b>T提示：</b> Red Hat 重视您的隐私：http://www.redhat.com/legal/"
-"privacy_statement.html</small>"
+"<small><b>T提示：</b> Red Hat "
+"重视您的隐私：http://www.redhat.com/legal/privacy_statement.html</small>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3264,8 +3230,8 @@ msgstr ""
 
 #: src/subscription_manager/gui/data/ui/credentials.ui:162
 msgid ""
-"<small>Tip: Forgot your login or password? Look it up at http://redhat.com/"
-"forgot_password</small>"
+"<small>Tip: Forgot your login or password? Look it up at "
+"http://redhat.com/forgot_password</small>"
 msgstr ""
 
 #: src/subscription_manager/gui/data/ui/credentials.ui:195
@@ -3298,8 +3264,8 @@ msgstr "register_notebook"
 
 #: src/subscription_manager/gui/data/ui/registration_info.ui:24
 msgid ""
-"This assistant will guide you through the process of registering your system "
-"with Red Hat to receive software updates and other benefits. "
+"This assistant will guide you through the process of registering your system"
+" with Red Hat to receive software updates and other benefits. "
 msgstr ""
 
 #: src/subscription_manager/gui/data/ui/registration_info.ui:64
@@ -3875,17 +3841,14 @@ msgstr "已删除用户。"
 msgid ""
 "No available subscriptions at the current service level: %s. Please use the "
 "\"All Available Subscriptions\" tab to manually attach subscriptions."
-msgstr ""
-"在当前的服务等级中没有可用订阅：%s。请使用“所有可用订阅”标签手动附加订阅。"
+msgstr "在当前的服务等级中没有可用订阅：%s。请使用“所有可用订阅”标签手动附加订阅。"
 
 #: src/subscription_manager/gui/registergui.py:1387
 msgid ""
 "No service level will cover all installed products. Please manually "
-"subscribe using multiple service levels via the \"All Available Subscriptions"
-"\" tab or purchase additional subscriptions."
-msgstr ""
-"没有任何服务等级可覆盖所有安装的产品。请通过“所有可用订阅”标签使用多服务等级"
-"手动订阅，或者购买附加订阅。"
+"subscribe using multiple service levels via the \"All Available "
+"Subscriptions\" tab or purchase additional subscriptions."
+msgstr "没有任何服务等级可覆盖所有安装的产品。请通过“所有可用订阅”标签使用多服务等级手动订阅，或者购买附加订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3961,8 +3924,8 @@ msgstr "没有安装订阅服务的 CA 证书。"
 # document keys
 #: src/subscription_manager/gui/registergui.py:1846
 msgid ""
-"Please provide a hostname with optional port and/or prefix: hostname[:port][/"
-"prefix]"
+"Please provide a hostname with optional port and/or prefix: "
+"hostname[:port][/prefix]"
 msgstr "请使用可选端口和（/或者）前缀提供主机名：主机名[:端口][/前缀]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
@@ -4382,7 +4345,8 @@ msgstr "已安装的产品的当前状态"
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys, author leahliu
 #: src/subscription_manager/managercli.py:227
-msgid "Unable to find available subscriptions for all your installed products."
+msgid ""
+"Unable to find available subscriptions for all your installed products."
 msgstr "无法为所有安装的产品找到可用订阅。"
 
 #: src/subscription_manager/managercli.py:337
@@ -4417,8 +4381,7 @@ msgstr "使用基本验证的 HTTP proxy 密码"
 msgid ""
 "subscription-manager is disabled when running inside a container. Please "
 "refer to your host system for subscription management.\n"
-msgstr ""
-"在容器内运行时禁用 subscription-manager。请参考主机系统进行订阅管理。\n"
+msgstr "在容器内运行时禁用 subscription-manager。请参考主机系统进行订阅管理。\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -4848,8 +4811,8 @@ msgstr "已从该服务器中提取现有系统数据"
 # document keys
 #: src/subscription_manager/managercli.py:999
 msgid ""
-"register with one of multiple organizations for the user, using organization "
-"key"
+"register with one of multiple organizations for the user, using organization"
+" key"
 msgstr "为该用户在多个机构中的一个注册，使用机构密钥"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
@@ -4894,7 +4857,8 @@ msgstr "注册时时有的激活码（可指定一次以上）"
 # document keys
 #: src/subscription_manager/managercli.py:1013
 msgid ""
-"system preference used when subscribing automatically, requires --auto-attach"
+"system preference used when subscribing automatically, requires --auto-"
+"attach"
 msgstr "自动订阅时使用的系统属性，需要 --auto-attach"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
@@ -5037,8 +5001,8 @@ msgstr "订阅兑换完成时接收通知的电子邮件。"
 # document keys
 #: src/subscription_manager/managercli.py:1327
 msgid ""
-"optional language to use for email notification when subscription redemption "
-"is complete (Examples: en-us, de-de)"
+"optional language to use for email notification when subscription redemption"
+" is complete (Examples: en-us, de-de)"
 msgstr "当订阅兑换完成时接收电子邮件通知的语言。（例如：en-us、de-de）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
@@ -5134,7 +5098,8 @@ msgid "The ID of the pool to attach (can be specified more than once)"
 msgstr ""
 
 #: src/subscription_manager/managercli.py:1460
-msgid "Number of subscriptions to attach. May not be used with an auto-attach."
+msgid ""
+"Number of subscriptions to attach. May not be used with an auto-attach."
 msgstr ""
 
 #: src/subscription_manager/managercli.py:1462
@@ -5279,8 +5244,8 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:1672
 msgid ""
-"Error: This command requires that you specify one of --serial, --pool or --"
-"all."
+"Error: This command requires that you specify one of --serial, --pool or "
+"--all."
 msgstr ""
 
 #: src/subscription_manager/managercli.py:1691
@@ -5389,8 +5354,8 @@ msgstr "要导入的证书文件（可指定一个以上）"
 # document keys
 #: src/subscription_manager/managercli.py:1858
 msgid ""
-"Error: This command requires that you specify a certificate with --"
-"certificate."
+"Error: This command requires that you specify a certificate with "
+"--certificate."
 msgstr "错误：这个命令要求您使用 --certificate 指定一个证书。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
@@ -5412,8 +5377,8 @@ msgstr "%s 不是有效的证书文件。请使用有效的证书。"
 # document keys
 #: src/subscription_manager/managercli.py:1884
 msgid ""
-"An error occurred while importing the certificate. Please check log file for "
-"more information."
+"An error occurred while importing the certificate. Please check log file for"
+" more information."
 msgstr "导入该证书时出错。详情请检查日志文件。"
 
 #: src/subscription_manager/managercli.py:1911
@@ -5485,8 +5450,8 @@ msgstr "要启用的存储库（一次可指定多个）。支持通配符（* �
 
 #: src/subscription_manager/managercli.py:2010
 msgid ""
-"repository to disable (can be specified more than once). Wildcards (* and ?) "
-"are supported."
+"repository to disable (can be specified more than once). Wildcards (* and ?)"
+" are supported."
 msgstr "要禁用的存储库（一次可指定多个）。支持通配符（* 和 ?）。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
@@ -5526,7 +5491,8 @@ msgstr "为这个系统禁用存储库 '%s'。"
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/managercli.py:2135
-msgid "List, set, or remove the configuration parameters in use by this system"
+msgid ""
+"List, set, or remove the configuration parameters in use by this system"
 msgstr "列出、设置或删除这个系统使用的配置参数。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
@@ -5644,9 +5610,7 @@ msgstr "显示这个系统消耗的订阅。"
 msgid ""
 "shows only subscriptions matching the specified service level; only used "
 "with --available and --consumed"
-msgstr ""
-"如果提供，则列表只显示与指定服务等级映射的订阅。只能与 --available 和 --"
-"consumed 合用。"
+msgstr "如果提供，则列表只显示与指定服务等级映射的订阅。只能与 --available 和 --consumed 合用。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5667,18 +5631,15 @@ msgstr "只显示与目前安装产品映射的订阅，只能与 --available �
 #: src/subscription_manager/managercli.py:2255
 msgid ""
 "lists only subscriptions or products containing the specified expression in "
-"the subscription or product information, varying with the list requested and "
-"the server version (case-insensitive)."
-msgstr ""
-"只列出在订阅或者产品信息中包含指定表达式的订阅或者产品，以区别于所要求的以及"
-"服务器版本列表（区分大小写）。"
+"the subscription or product information, varying with the list requested and"
+" the server version (case-insensitive)."
+msgstr "只列出在订阅或者产品信息中包含指定表达式的订阅或者产品，以区别于所要求的以及服务器版本列表（区分大小写）。"
 
 #: src/subscription_manager/managercli.py:2257
 msgid ""
 "lists only the pool IDs for applicable available or consumed subscriptions; "
 "only used with --available and --consumed"
-msgstr ""
-"只列出可用或者已消耗订阅的池 ID，只能与 --available 及 --consumed 合用。"
+msgstr "只列出可用或者已消耗订阅的池 ID，只能与 --available 及 --consumed 合用。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5695,7 +5656,8 @@ msgstr "错误：--ondate 只能与 --available 合用"
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/managercli.py:2265
-msgid "Error: --servicelevel is only applicable with --available or --consumed"
+msgid ""
+"Error: --servicelevel is only applicable with --available or --consumed"
 msgstr "错误：--servicelevel 只能与 --available 或者 --consumed 合用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
@@ -5754,14 +5716,14 @@ msgstr "未找到符合表达式 \"%s\" 以及服务等级 \"%s\" 的可用订�
 
 #: src/subscription_manager/managercli.py:2373
 #, python-format
-msgid ""
-"No available subscription pools were found matching the expression \"%s\"."
+msgid "No available subscription pools were found matching the expression \"%s\"."
 msgstr "未找到符合表达式 \"%s\" 的可用订阅池。"
 
 #: src/subscription_manager/managercli.py:2378
 #, python-format
 msgid ""
-"No available subscription pools were found matching the service level \"%s\"."
+"No available subscription pools were found matching the service level "
+"\"%s\"."
 msgstr "未找到符合服务等级 \"%s\" 的可用订阅池。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
@@ -5791,14 +5753,13 @@ msgstr "订阅还未开始"
 #: src/subscription_manager/managercli.py:2510
 #, python-format
 msgid ""
-"No consumed subscription pools were found matching the expression \"%s\" and "
-"the service level \"%s\"."
+"No consumed subscription pools were found matching the expression \"%s\" and"
+" the service level \"%s\"."
 msgstr "未找到符合表达式 \"%s\" 以及服务等级 \"%s\" 的已消耗订阅池。"
 
 #: src/subscription_manager/managercli.py:2515
 #, python-format
-msgid ""
-"No consumed subscription pools were found matching the expression \"%s\"."
+msgid "No consumed subscription pools were found matching the expression \"%s\"."
 msgstr "未找到符合表达式 \"%s\" 的已消耗订阅池。"
 
 #: src/subscription_manager/managercli.py:2520
@@ -5856,7 +5817,8 @@ msgstr "删除所有覆盖；可使用 --repo 指定具体存储库"
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/managercli.py:2543
-msgid "list all overrides; can be specific to a repository by providing --repo"
+msgid ""
+"list all overrides; can be specific to a repository by providing --repo"
 msgstr "列出所有覆盖；可通过提供 --repo 指定具体存储库"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
@@ -5886,7 +5848,8 @@ msgstr "错误：您不能将 --list 与 --remove-all 合用"
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/managercli.py:2565
-msgid "Error: The --repo option must be used with --list or --add or --remove."
+msgid ""
+"Error: The --repo option must be used with --list or --add or --remove."
 msgstr "错误：--repo 选项必须与 --list 或者 --add 或者 --remove 合用。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
@@ -5963,7 +5926,8 @@ msgstr "不允许使用过去的日期"
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/managercli.py:2687
-msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+msgid ""
+"Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr "输入的日期无效。日期格式应为 YYYY-MM-DD（例如： "
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
@@ -6053,8 +6017,7 @@ msgstr "这个系统已在 Red Hat Subscription Management 中注册。"
 msgid ""
 "Please visit https://access.redhat.com/management/consumers/%s to view the "
 "profile details."
-msgstr ""
-"请访问 https://access.redhat.com/management/consumers/%s 查看配置文件详情。"
+msgstr "请访问 https://access.redhat.com/management/consumers/%s 查看配置文件详情。"
 
 #: src/subscription_manager/migrate/migrate.py:262
 msgid "The CA certificate for the destination server has not been installed."
@@ -6098,8 +6061,8 @@ msgstr "获取订阅频道列表时出错。  "
 
 #: src/subscription_manager/migrate/migrate.py:397
 msgid ""
-"You are subscribed to more than one jbappplatform channel.  This script does "
-"not support that configuration."
+"You are subscribed to more than one jbappplatform channel.  This script does"
+" not support that configuration."
 msgstr "您订阅了多个 jbapplatform 频道。这个脚本不支持这样的配置。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
@@ -6133,10 +6096,9 @@ msgstr "将每个产品 ID 的频道数减为 1 并再次运行迁移。"
 # document keys
 #: src/subscription_manager/migrate/migrate.py:438
 msgid ""
-"To remove a channel, use 'rhn-channel --remove --"
-"channel=<conflicting_channel>'."
-msgstr ""
-"要删除频道，请使用 'rhn-channel --remove --channel=<conflicting_channel>'。"
+"To remove a channel, use 'rhn-channel --remove "
+"--channel=<conflicting_channel>'."
+msgstr "要删除频道，请使用 'rhn-channel --remove --channel=<conflicting_channel>'。"
 
 #: src/subscription_manager/migrate/migrate.py:450
 #, python-format
@@ -6193,7 +6155,8 @@ msgid ""
 msgstr "未从原有服务器中收到系统 %s 的取消注册完成信息。"
 
 #: src/subscription_manager/migrate/migrate.py:619
-msgid "Please investigate on the Customer Portal at https://access.redhat.com."
+msgid ""
+"Please investigate on the Customer Portal at https://access.redhat.com."
 msgstr "请在客户门户网站 https://access.redhat.com 中查看。"
 
 #: src/subscription_manager/migrate/migrate.py:629
@@ -6295,8 +6258,7 @@ msgstr "使用 Subscription Manager 注册时请不要执行 auto-attach 选项�
 msgid ""
 "service level to follow when attaching subscriptions, for no service level "
 "use --servicelevel=\"\""
-msgstr ""
-"附加订阅时遵守的服务等级。如果没有服务等级，请使用 --service-level=\"\"。"
+msgstr "附加订阅时遵守的服务等级。如果没有服务等级，请使用 --service-level=\"\"。"
 
 #: src/subscription_manager/migrate/migrate.py:825
 msgid "don't use legacy proxy settings with destination server"
@@ -6350,15 +6312,15 @@ msgid "specify the password on the destination server"
 msgstr "指定目的服务器中的密码"
 
 #: src/subscription_manager/migrate/migrate.py:869
-msgid "The --activation-key and --environment options cannot be used together."
+msgid ""
+"The --activation-key and --environment options cannot be used together."
 msgstr "--activation-key 和 --environment 选项不能在一起使用。"
 
 #: src/subscription_manager/migrate/migrate.py:871
 msgid ""
-"The --activation-key option precludes the use of --destination-user and --"
-"destination-password"
-msgstr ""
-"--activation-key 选项排除 --destination-user 和 --destination-password 的使用"
+"The --activation-key option precludes the use of --destination-user and "
+"--destination-password"
+msgstr "--activation-key 选项排除 --destination-user 和 --destination-password 的使用"
 
 #: src/subscription_manager/migrate/migrate.py:873
 msgid "The --activation-key option requires that a --org be given."
