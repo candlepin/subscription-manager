@@ -76,7 +76,7 @@ RHSMCERTD_DEFAULTS = {
         }
 
 LOGGING_DEFAULTS = {
-        'default_log_level': 'WARNING'
+        'default_log_level': 'INFO'
         }
 
 # Defaults are applied to each section in the config file.
