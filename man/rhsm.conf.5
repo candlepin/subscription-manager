@@ -166,6 +166,28 @@ autoAttachInterval
 .RS 4
 The number of minutes between attempts to run auto\-attach on this consumer\&.
 .RE
+.SH "[LOGGING] OPTIONS"
+.PP
+default_log_level
+.RS 4
+The default log level for all loggers in subscription-manager, python-rhsm, rhsmd, and rhsmcertd.
+Note: Other keys in this section will override this value for the specified logger.
+.RE
+.PP
+MODULE_NAME[.SUBMODULE ...] = [log_level]
+.RS 4
+Logging can be configured on a module-level basis via entries of the format above where:
+.RS 4
+.B module_name
+is subscription_manager, rhsm, or rhsm-app.
+.PP
+.B submodule
+can be optionally specified to further override the logging level down to a specific file.
+.PP
+.B log_level
+is the log level to set the specified logger (one of: DEBUG, INFO, WARNING, ERROR, or CRITICAL).
+.RE
+.RE
 .SH "AUTHOR"
 .sp
 Bryan Kearney <bkearney@redhat\&.com>
