@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.17.10
+Version: 1.17.11
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -596,6 +596,15 @@ fi
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Fri Aug 26 2016 Vritant Jain <vrjain@redhat.com> 1.17.11-1
+- 1366301: Entitlement regeneration failure no longer aborts refresh
+  (crog@redhat.com)
+- 1366055: Add docs for the LOGGING section to rhsm.conf man page
+  (csnyder@redhat.com)
+- 1365280: Change default log level back to INFO (csnyder@redhat.com)
+- 1336428: Check notification object before use (wpoteat@redhat.com)
+- Zanata pull from 1.17.X (vrjain@redhat.com)
+
 * Tue Aug 09 2016 Vritant Jain <vrjain@redhat.com> 1.17.10-1
 - 1362138: Change method signature for Anaconda addon (jkonecny@redhat.com)
 - 1251516: Disable import when registered (wpoteat@redhat.com)
