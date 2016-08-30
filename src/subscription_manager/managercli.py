@@ -2575,6 +2575,10 @@ class OverrideCommand(CliCommand):
         if self.options.repos and not (self.options.list or self.options.additions or
                                        self.options.removals or self.options.remove_all):
             system_exit(os.EX_USAGE, _("Error: The --repo option must be used with --list or --add or --remove."))
+        if self.options.removals:
+            stripped_removals = [removal.strip() for removal in self.options.removals]
+            if '' in stripped_removals:
+                system_exit(os.EX_USAGE, _("Error: You must specify an override name with --remove."))
         # If no relevant options were given, just show a list
         if not (self.options.repos or self.options.additions or
                 self.options.removals or self.options.remove_all or self.options.list):
