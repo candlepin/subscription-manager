@@ -139,6 +139,7 @@ install-conf:
 	install -d $(PREFIX)/etc/rhsm/facts
 	install -d $(PREFIX)/etc/security/console.apps
 	install -m 644 etc-conf/rhsm.conf $(PREFIX)/etc/rhsm/
+	install -T etc-conf/logging.conf $(PREFIX)/etc/rhsm/logging.conf
 	install -m 644 etc-conf/logrotate.conf $(PREFIX)/etc/logrotate.d/subscription-manager
 	install -m 644 etc-conf/subscription-manager.completion.sh $(PREFIX)/etc/bash_completion.d/subscription-manager
 	install -m 644 etc-conf/rct.completion.sh $(PREFIX)/etc/bash_completion.d/rct
