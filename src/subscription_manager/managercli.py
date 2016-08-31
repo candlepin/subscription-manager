@@ -2557,6 +2557,8 @@ class OverrideCommand(CliCommand):
     def _colon_split(self, option, opt_str, value, parser):
         if parser.values.additions is None:
             parser.values.additions = {}
+        if value.strip() == '':
+            raise OptionValueError(_("You must specify an override in the form of \"name:value\" with --add."))
 
         k, colon, v = value.partition(':')
         if not v:
