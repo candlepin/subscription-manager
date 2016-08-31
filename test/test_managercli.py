@@ -1334,6 +1334,9 @@ class TestOverrideCommand(TestCliProxyCommand):
     def test_add_empty_arg(self):
         self.assertRaises(SystemExit, self.cc.main, ["--repo", "x", "--add", ""])
 
+    def test_add_empty_name(self):
+        self.assertRaises(SystemExit, self.cc.main, ["--repo", "x", "--add", ":foo"])
+
     def test_add_multiple_args_empty_arg(self):
         self.assertRaises(SystemExit, self.cc.main, ["--repo", "x", "--add", "foo:bar", "--add", ""])
 

@@ -2561,7 +2561,7 @@ class OverrideCommand(CliCommand):
             raise OptionValueError(_("You must specify an override in the form of \"name:value\" with --add."))
 
         k, colon, v = value.partition(':')
-        if not v:
+        if not v or not k:
             raise OptionValueError(_("--add arguments should be in the form of \"name:value\""))
 
         parser.values.additions[k] = v
