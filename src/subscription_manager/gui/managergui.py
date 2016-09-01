@@ -183,7 +183,7 @@ class MainWindow(widgets.SubmanBaseWidget):
         self.product_dir = prod_dir or self.backend.product_dir
         self.entitlement_dir = ent_dir or self.backend.entitlement_dir
 
-        self.system_facts_dialog = factsgui.SystemFactsDialog(self.facts)
+        self.system_facts_dialog = factsgui.SystemFactsDialog(self.facts, update_callback=self._handle_facts_updated)
 
         self.preferences_dialog = PreferencesDialog(self.backend,
                                                     self._get_window())
@@ -517,6 +517,11 @@ class MainWindow(widgets.SubmanBaseWidget):
             # Use the default if there is no translation.
             url = ONLINE_DOC_FALLBACK_URL
         return url
+
+    def _handle_facts_updated(self):
+        # see bz 1323271 - update compliance on update of facts
+        self.backend.cs.load()
+        self.backend.cs.notify()
 
     def test_proxy_connection(self):
         result = None
