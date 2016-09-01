@@ -2557,9 +2557,11 @@ class OverrideCommand(CliCommand):
     def _colon_split(self, option, opt_str, value, parser):
         if parser.values.additions is None:
             parser.values.additions = {}
+        if value.strip() == '':
+            raise OptionValueError(_("You must specify an override in the form of \"name:value\" with --add."))
 
         k, colon, v = value.partition(':')
-        if not v:
+        if not v or not k:
             raise OptionValueError(_("--add arguments should be in the form of \"name:value\""))
 
         parser.values.additions[k] = v
@@ -2575,6 +2577,10 @@ class OverrideCommand(CliCommand):
         if self.options.repos and not (self.options.list or self.options.additions or
                                        self.options.removals or self.options.remove_all):
             system_exit(os.EX_USAGE, _("Error: The --repo option must be used with --list or --add or --remove."))
+        if self.options.removals:
+            stripped_removals = [removal.strip() for removal in self.options.removals]
+            if '' in stripped_removals:
+                system_exit(os.EX_USAGE, _("Error: You must specify an override name with --remove."))
         # If no relevant options were given, just show a list
         if not (self.options.repos or self.options.additions or
                 self.options.removals or self.options.remove_all or self.options.list):

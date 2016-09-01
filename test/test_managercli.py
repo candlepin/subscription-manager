@@ -1325,6 +1325,21 @@ class TestOverrideCommand(TestCliProxyCommand):
         self.assertEquals(self.cc.options.additions, {'a': 'b'})
         self.assertEquals(self.cc.options.removals, ['a'])
 
+    def test_remove_empty_arg(self):
+        self._test_exception(["--repo", "x", "--remove", ""])
+
+    def test_remove_multiple_args_empty_arg(self):
+        self._test_exception(["--repo", "x", "--remove", "foo", "--remove", ""])
+
+    def test_add_empty_arg(self):
+        self.assertRaises(SystemExit, self.cc.main, ["--repo", "x", "--add", ""])
+
+    def test_add_empty_name(self):
+        self.assertRaises(SystemExit, self.cc.main, ["--repo", "x", "--add", ":foo"])
+
+    def test_add_multiple_args_empty_arg(self):
+        self.assertRaises(SystemExit, self.cc.main, ["--repo", "x", "--add", "foo:bar", "--add", ""])
+
     def test_list_and_remove_all_work_with_repos(self):
         self.cc.main(["--repo", "x", "--list"])
         self.cc._validate_options()
