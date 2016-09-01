@@ -38,11 +38,12 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
                     'system_id_label', 'system_id_title']
     gui_file = "factsdialog"
 
-    def __init__(self, facts):
+    def __init__(self, facts, update_callback=None):
 
         super(SystemFactsDialog, self).__init__()
 
         #self.consumer = consumer
+        self.update_callback = update_callback
         self.identity = inj.require(inj.IDENTITY)
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.facts = facts
@@ -165,6 +166,8 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
 
         try:
             self.facts.update_check(self.cp_provider.get_consumer_auth_cp(), identity.uuid, force=True)
+            if self.update_callback:
+                self.update_callback()
         except Exception, e:
             log.error("Could not update system facts \nError: %s" % e)
             handle_gui_exception(e, linkify(str(e)), self.system_facts_dialog)
