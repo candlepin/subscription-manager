@@ -35,6 +35,7 @@ from gtk import main
 from gtk import main_iteration
 from gtk import main_quit
 from gtk import check_version
+from gtk import window_set_default_icon_name
 
 # gtk2 (or more specifically, pygtk2) provided all of it's enums and
 # constants in the top level 'gtk' module. Gtk3 (or more specifically, gobject
@@ -114,6 +115,15 @@ class GaImage(Image):
 #       gtk.Image. However, aside from the added constructor, the rest of
 #       the Gtk.Image is not provided here.
 Image = GaImage
+
+
+class GaWindow(Window):
+    """Subclass of Gtk.Window to alias window_set_default_icon_name function to mimic Gtk3."""
+    @classmethod
+    def set_default_icon_name(cls, icon_name):
+        window_set_default_icon_name(icon_name)
+
+Window = GaWindow
 
 
 # Attempt to keep the list of faux Gtk 3 names we are
