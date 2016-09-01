@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.17.11
+Version: 1.17.12
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -596,6 +596,9 @@ fi
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Thu Sep 01 2016 Christopher Snyder <csnyder@redhat.com> 1.17.12-1
+- 1340135: Update translations (csnyder@redhat.com)
+
 * Fri Aug 26 2016 Vritant Jain <vrjain@redhat.com> 1.17.11-1
 - 1366301: Entitlement regeneration failure no longer aborts refresh
   (crog@redhat.com)
