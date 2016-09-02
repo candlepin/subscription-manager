@@ -29,7 +29,6 @@ import webbrowser
 import os
 import socket
 
-
 import rhsm.config as config
 
 from subscription_manager.ga import Gtk as ga_Gtk
