@@ -39,7 +39,11 @@ import dbus.glib
 import dbus.exceptions
 import logging
 import gettext
+import signal
+
 _ = gettext.gettext
+
+signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 # Capture python (and pygtk) warnings that normally print to
 # stderr and log them.
