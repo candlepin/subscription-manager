@@ -26,7 +26,7 @@ _rct()
     cat-manifest)
         case "${cur}" in
             -*)
-                COMPREPLY=( $( compgen -W "-h --help" -- "$cur" ) )
+                COMPREPLY=( $( compgen -W "-h --help --no-content" -- "$cur" ) )
                 return 0
                 ;;
         esac
