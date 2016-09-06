@@ -2,13 +2,14 @@
 # John Sefler <jsefler@redhat.com>, 2015. #zanata
 # gcintra <gcintra@fedoraproject.org>, 2015. #zanata
 # Andrea Dallape <adallape@redhat.com>, 2016. #zanata
+# John Sefler <jsefler@redhat.com>, 2016. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-08-16 17:08-0400\n"
-"PO-Revision-Date: 2016-08-25 02:01-0400\n"
-"Last-Translator: Andrea Dallape <adallape@redhat.com>\n"
+"PO-Revision-Date: 2016-09-02 05:05-0400\n"
+"Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Portuguese (Brazil)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -214,7 +215,7 @@ msgstr "Argumento especificado inválido: %s\n"
 
 #: src/dnf-plugins/product-id.py:55
 msgid "Installed products updated."
-msgstr "Produtos instalados atualizados.  "
+msgstr "Produtos instalados atualizados."
 
 #: src/dnf-plugins/subscription-manager.py:30
 #, python-format
@@ -235,7 +236,7 @@ msgstr ""
 "Você não possui mais o acesso aos repositórios que fornecem estes produtos. "
 "É importante que você use uma subscrição ativa para retomar o acesso às "
 "atualizações de segurança e outras questões críticas. Caso você não tenha "
-"outras subscrições ativas, você pode renovar a subscrição vencida. "
+"outras subscrições ativas, você pode renovar a subscrição vencida.  "
 
 #: src/dnf-plugins/subscription-manager.py:38
 msgid ""
@@ -243,7 +244,7 @@ msgid ""
 "use subscription-manager to register."
 msgstr ""
 "Este sistema não está registrado no Red Hat Subscription Management. Você "
-"pode usar o gerenciador de subscrições para registrar.   "
+"pode usar o subscription-manager para registrar."
 
 #: src/dnf-plugins/subscription-manager.py:42
 msgid ""
@@ -251,8 +252,8 @@ msgid ""
 "receiving updates. You can use subscription-manager to assign subscriptions."
 msgstr ""
 "Este sistema está registrado no Red Hat Subscription Management, porém não "
-"está recebendo atualizações. Você pode usar o gerenciador de subscrições "
-"para designar subscrições."
+"está recebendo atualizações. Você pode usar o subscription-manager para "
+"designar subscrições."
 
 #: src/dnf-plugins/subscription-manager.py:70
 msgid "Not root, Subscription Management repositories not updated"
@@ -262,7 +263,7 @@ msgstr ""
 
 #: src/dnf-plugins/subscription-manager.py:77
 msgid "Updating Subscription Management repositories."
-msgstr "Atualizando repositórios do Subscription Management. "
+msgstr "Atualizando repositórios do Subscription Management."
 
 #: src/dnf-plugins/subscription-manager.py:95
 msgid "Unable to connect to Subscription Management Service"
@@ -274,7 +275,7 @@ msgstr "Não foi possível ler a identidade do consumidor"
 
 #: src/dnf-plugins/subscription-manager.py:101
 msgid "Subscription Manager is operating in container mode."
-msgstr "O Subscription Manager está operando em modo contêiner. "
+msgstr "O Subscription Manager está operando em modo contêiner."
 
 #: src/initial-setup/com_redhat_subscription_manager/gui/spokes/rhsm_gui.ui:8
 msgid "RHEL"
@@ -1143,7 +1144,7 @@ msgid ""
 "cache with server."
 msgstr ""
 "consumer_uuid=%s não é um consumer_uuid válido. Não há tentativa de "
-"sincronizar cachê %s com servidor.  "
+"sincronizar cachê %s com servidor."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cache.py:168
@@ -3007,7 +3008,7 @@ msgstr ""
 
 #: src/subscription_manager/gui/data/ui/registration_info.ui:64
 msgid " You will need the following to register:"
-msgstr "Você irá precisar do seguinte para registrar:"
+msgstr " Você irá precisar do seguinte para registrar:"
 
 #: src/subscription_manager/gui/data/ui/repositories.ui:61
 msgid "apply_button"
@@ -3223,7 +3224,7 @@ msgstr "Mantenha seu sistema atualizado registrando-se."
 
 #: src/subscription_manager/gui/managergui.py:157
 msgid "Proxy connnection failed, please check your settings."
-msgstr "Conexão de proxy falhou, por favor, verifique suas configurações. "
+msgstr "Conexão de proxy falhou, por favor, verifique suas configurações."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/managergui.py:397
@@ -4034,7 +4035,7 @@ msgstr "Erro ao analisar o baseurl:"
 
 #: src/subscription_manager/managercli.py:518
 msgid "Proxy connection failed, please check your settings."
-msgstr "Conexão de proxy falhou, por favor, verifique sua configurações. "
+msgstr "Conexão de proxy falhou, por favor, verifique sua configurações."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:536
@@ -4669,7 +4670,7 @@ msgid ""
 "Number of subscriptions to attach. May not be used with an auto-attach."
 msgstr ""
 "Número de subscrições para anexar. Pode não ser utilizado com um auto anexar."
-" "
+""
 
 #: src/subscription_manager/managercli.py:1468
 msgid ""
@@ -4728,7 +4729,7 @@ msgstr "Erro: Quantidade deve ser um inteiro positivo."
 
 #: src/subscription_manager/managercli.py:1509
 msgid "Error: --quantity may not be used with an auto-attach"
-msgstr "Erro: --quantidade pode não ser usada com o auto anexar "
+msgstr "Erro: --quantity pode não ser usada com o auto anexar"
 
 #: src/subscription_manager/managercli.py:1520
 msgid "Error: Received data does not contain any pool IDs."
@@ -4922,7 +4923,7 @@ msgid ""
 "subscription management service."
 msgstr ""
 "Erro: você não pode importar certificados para um sistema que está "
-"registrado a um serviço de gerenciamento de subscrição.  "
+"registrado a um serviço de gerenciamento de subscrição."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1866
