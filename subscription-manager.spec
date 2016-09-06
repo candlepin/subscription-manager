@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.17.12
+Version: 1.17.13
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -596,6 +596,10 @@ fi
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Tue Sep 06 2016 Christopher Snyder <csnyder@redhat.com> 1.17.13-1
+- 1340135: Updates translations, removes unnecessary whitespace
+  (csnyder@redhat.com)
+
 * Thu Sep 01 2016 Christopher Snyder <csnyder@redhat.com> 1.17.12-1
 - 1340135: Update translations (csnyder@redhat.com)
 
