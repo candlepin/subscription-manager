@@ -1030,7 +1030,13 @@ class PerformRegisterScreen(NoGuiScreen):
         # screen before it.
         self.async.backend.cs.force_cert_check()
 
+        # NOTE: Assume we want to try to upload package profile even with
+        # activation keys
+        self.emit('move-to-screen', UPLOAD_PACKAGE_PROFILE_PAGE)
         # Done with the registration stuff, now on to attach
+        # NOTE: the signal register-finished should come after any
+        # move-to-screen signals to ensure we end up at the done screen if we
+        # end up skipping the attach step. See bz 1372673
         self.emit('register-finished')
         # TODO: After register-finished, there is still a whole
         # series of steps before we start attaching, most of which
@@ -1040,10 +1046,6 @@ class PerformRegisterScreen(NoGuiScreen):
         #  - uploading package profile
         #  - potentially getting/setting SLA
         #  - reset'ing cert sorter and friends
-
-        # NOTE: Assume we want to try to upload package profile even with
-        # activation keys
-        self.emit('move-to-screen', UPLOAD_PACKAGE_PROFILE_PAGE)
         self.pre_done()
         return
 
