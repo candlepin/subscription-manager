@@ -1359,7 +1359,7 @@ class UEPConnection:
         try:
             self.conn.request_put(method)
             result = True
-        except (RemoteServerException, httpslib.BadStatusLine) as e:
+        except (RemoteServerException, httpslib.BadStatusLine, RestlibException) as e:
             # 404s indicate that the service is unsupported (Candlepin too old, or SAM)
             if isinstance(e, httpslib.BadStatusLine) or str(e.code) == "404":
                 log.debug("Unable to refresh entitlement certificates: Service currently unsupported.")
@@ -1385,7 +1385,7 @@ class UEPConnection:
         try:
             self.conn.request_put(method)
             result = True
-        except (RemoteServerException, httpslib.BadStatusLine) as e:
+        except (RemoteServerException, httpslib.BadStatusLine, RestlibException) as e:
             # 404s indicate that the service is unsupported (Candlepin too old, or SAM)
             if isinstance(e, httpslib.BadStatusLine) or str(e.code) == "404":
                 log.debug("Unable to refresh entitlement certificates: Service currently unsupported.")
