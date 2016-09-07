@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.17.13
+Version: 1.17.14
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -597,6 +597,14 @@ fi
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Wed Sep 07 2016 Christopher Snyder <csnyder@redhat.com> 1.17.14-1
+- 1372673: Ensure user is able to skip auto attach during initial-setup
+  (csnyder@redhat.com)
+- 1330515: Account for keyboard interrupt (wpoteat@redhat.com)
+- 1369522: Add cat-manifest --no-content to bash completion
+  (khowell@redhat.com)
+- 1368362: Do not display logging config error on upgrade (csnyder@redhat.com)
+
 * Tue Sep 06 2016 Christopher Snyder <csnyder@redhat.com> 1.17.13-1
 - 1340135: Updates translations, removes unnecessary whitespace
   (csnyder@redhat.com)
