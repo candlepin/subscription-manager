@@ -1361,7 +1361,7 @@ class UEPConnection:
             result = True
         except (RemoteServerException, httpslib.BadStatusLine) as e:
             # 404s indicate that the service is unsupported (Candlepin too old, or SAM)
-            if isinstance(e, httpslib.BadStatusLine) or e.code == "404":
+            if isinstance(e, httpslib.BadStatusLine) or e.code == 404:
                 log.debug("Unable to refresh entitlement certificates: Service currently unsupported.")
                 log.debug(e)
             else:
@@ -1387,7 +1387,7 @@ class UEPConnection:
             result = True
         except (RemoteServerException, httpslib.BadStatusLine) as e:
             # 404s indicate that the service is unsupported (Candlepin too old, or SAM)
-            if isinstance(e, httpslib.BadStatusLine) or e.code == "404":
+            if isinstance(e, httpslib.BadStatusLine) or e.code == 404:
                 log.debug("Unable to refresh entitlement certificates: Service currently unsupported.")
                 log.debug(e)
             else:
