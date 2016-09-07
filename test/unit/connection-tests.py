@@ -18,7 +18,7 @@ import unittest
 from rhsm.connection import UEPConnection, Restlib, ConnectionException, ConnectionSetupException, \
         BadCertificateException, RestlibException, GoneException, NetworkException, \
         RemoteServerException, drift_check, ExpiredIdentityCertException, UnauthorizedException, \
-        ForbiddenException, AuthenticationException, RateLimitExceededException
+        ForbiddenException, AuthenticationException, RateLimitExceededException, ContentConnection
 
 from mock import Mock, patch
 from datetime import date
@@ -151,6 +151,24 @@ class ConnectionTests(unittest.TestCase):
         expected_guestIds = [guestId['guestId'] for guestId in guestIds]
         self.assertEquals(expected_guestIds, resultGuestIds)
 
+    def test_uep_connection_honors_no_proxy_setting(self):
+        with patch.dict('os.environ', {'no_proxy': 'foobar'}):
+            uep = UEPConnection(host="foobar", username="dummy", password="dummy", handler="/Test/", insecure=True,
+                                proxy_hostname="proxyfoo", proxy_password="proxypass", proxy_port=42, proxy_user="foo")
+            self.assertIs(None, uep.proxy_user)
+            self.assertIs(None, uep.proxy_password)
+            self.assertIs(None, uep.proxy_hostname)
+            self.assertIs(None, uep.proxy_port)
+
+    def test_content_connection_honors_no_proxy_setting(self):
+        with patch.dict('os.environ', {'no_proxy': 'foobar'}):
+            connection = ContentConnection(host="foobar", username="dummy", password="dummy", insecure=True,
+                                           proxy_hostname="proxyfoo", proxy_password="proxypass", proxy_port=42,
+                                           proxy_user="foo")
+            self.assertIs(None, connection.proxy_user)
+            self.assertIs(None, connection.proxy_password)
+            self.assertIs(None, connection.proxy_hostname)
+            self.assertIs(None, connection.proxy_port)
 
 class RestlibValidateResponseTests(unittest.TestCase):
     def setUp(self):
