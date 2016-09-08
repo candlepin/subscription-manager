@@ -181,6 +181,16 @@ class TestHasSortableWidget(unittest.TestCase):
 
         self._run_cases(cases, expected)
 
+    def test_compare_alphabetic_text(self):
+        cases = [
+            ('a', 'b'),
+            ('b', 'a'),
+            ('a', 'a')
+        ]
+        expected = [cmp(*case) for case in cases]
+
+        self._run_cases(cases, expected)
+
 
 class TestMachineTypeColumn(BaseColumnTest):
 
