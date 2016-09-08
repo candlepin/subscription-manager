@@ -179,6 +179,8 @@ class MainWindow(widgets.SubmanBaseWidget):
         settings.set_long_property('gtk-recent-files-max-age', 0,
                                    "%s:%s" % (__name__, type(self).__name__))
 
+        ga_Gtk.Window.set_default_icon_name("subscription-manager")
+
         self.product_dir = prod_dir or self.backend.product_dir
         self.entitlement_dir = ent_dir or self.backend.entitlement_dir
 
