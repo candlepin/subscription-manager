@@ -3,6 +3,7 @@ try:
 except ImportError:
     import unittest
 
+from rhsm.connection import RestlibException
 from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.gui import utils
 from subscription_manager.gui import storage
@@ -94,3 +95,13 @@ class TestGatherGroup(unittest.TestCase):
             m = r.get_model()
             names.add(m.get_value(m.get_iter(r.get_path()), 0))
         self.assertEqual(names, set(['root', 'child-1', 'child-2', 'grandchild-1']))
+
+
+class TestGuiExceptionMapper(unittest.TestCase):
+    def test_restlib_exception_with_markup(self):
+        exception_mapper = utils.GuiExceptionMapper()
+        unescaped_input = '<a=3>&'
+        bad_restlib_exception = RestlibException(404, unescaped_input)
+        expected_output = '&lt;a=3&gt;&amp;'
+        actual_output = exception_mapper.get_message(bad_restlib_exception)
+        self.assertEqual(expected_output, actual_output)
