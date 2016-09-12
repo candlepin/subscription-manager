@@ -49,18 +49,23 @@ _RHNLIBPATH = "/usr/share/rhn"
 if _RHNLIBPATH not in sys.path:
     sys.path.append(_RHNLIBPATH)
 
+_UP2DATE_CLIENT_CONFIG_ERROR = _("Could not find up2date_client.config module! "
+                                 "Perhaps this script was already executed with --remove-rhn-packages?")
+_UP2DATE_CLIENT_RHNCHANNEL_ERROR = _("Could not find up2date_client.config module! "
+                                     "Perhaps this script was already executed with --remove-rhn-packages?")
+
 # Don't raise ImportErrors so we can run the unit tests on Fedora.
 try:
     from up2date_client.config import initUp2dateConfig
 except ImportError:
     def initUp2dateConfig():
-        raise NotImplementedError(_("Could not find up2date_client.config module!"))
+        raise NotImplementedError(_UP2DATE_CLIENT_CONFIG_ERROR)
 
 try:
     from up2date_client.rhnChannel import getChannels
 except ImportError:
     def getChannels():
-        raise NotImplementedError(_("Could not find up2date_client.rhnChannel module!"))
+        raise NotImplementedError(_UP2DATE_CLIENT_RHNCHANNEL_ERROR)
 
 log = logging.getLogger(__name__)
 
@@ -76,6 +81,24 @@ DOUBLE_MAPPED = "rhel-.*?-(client|server)-dts-(5|6)-beta(-debuginfo)?"
 # The (?!-beta) bit is a negative lookahead assertion.  So we won't match
 # if the 5 or 6 is followed by the word "-beta"
 SINGLE_MAPPED = "rhel-.*?-(client|server)-dts-(5|6)(?!-beta)(-debuginfo)?"
+
+LEGACY_DAEMONS = ["osad", "rhnsd"]
+
+LEGACY_PACKAGES = [
+    "osad",
+    "rhn-check",
+    "rhn-client-tools",  # provides up2date_client which means this script won't work after uninstalled
+    "rhncfg",
+    "rhncfg-actions",
+    "rhncfg-client",
+    "rhncfg-management",
+    "rhn-setup",
+    "rhnpush",
+    "rhnsd",
+    "spacewalk-abrt",
+    "spacewalk-oscap",
+    "yum-rhn-plugin"
+]
 
 
 class InvalidChoiceError(Exception):
@@ -763,6 +786,34 @@ class MigrationEngine(object):
             command = "subscription-manager repos --help"
             print _("Please ensure system has subscriptions attached, and see '%s' to enable additional repositories") % command
 
+    def is_using_systemd(self):
+        release_number = int(self.get_release().partition('-')[-1])
+        return release_number > 6
+
+    def handle_legacy_daemons(self, using_systemd):
+        print _("Stopping and disabling legacy services...")
+        log.info("Attempting to stop and disable legacy services: %s" % " ".join(LEGACY_DAEMONS))
+        for daemon in LEGACY_DAEMONS:
+            self.stop_daemon(daemon, using_systemd)
+            self.disable_daemon(daemon, using_systemd)
+
+    def stop_daemon(self, daemon, using_systemd):
+        if using_systemd:
+            subprocess.call(["systemctl", "stop", daemon])
+        else:
+            subprocess.call(["service", daemon, "stop"])
+
+    def disable_daemon(self, daemon, using_systemd):
+        if using_systemd:
+            subprocess.call(["systemctl", "disable", daemon])
+        else:
+            subprocess.call(["service", daemon, "disable"])
+
+    def remove_legacy_packages(self):
+        print _("Removing legacy packages...")
+        log.info("Attempting to remove legacy packages: %s" % " ".join(LEGACY_PACKAGES))
+        subprocess.call(["yum", "remove", "-q", "-y"] + LEGACY_PACKAGES)
+
     def main(self, args=None):
         self.get_auth()
         self.transfer_http_proxy_settings()
@@ -808,6 +859,11 @@ class MigrationEngine(object):
             # For the "keep" case, we just leave everything alone.
             pass
 
+        using_systemd = self.is_using_systemd()
+        self.handle_legacy_daemons(using_systemd)
+        if self.options.remove_legacy_packages:
+            self.remove_legacy_packages()
+
         identity = self.register(self.destination_creds, org, environment)
         if identity:
             self.enable_extra_channels(subscribed_channels)
@@ -820,6 +876,8 @@ def add_parser_options(parser, five_to_six_script=False):
     parser.add_option("-s", "--servicelevel", dest="service_level",
         help=_("service level to follow when attaching subscriptions, for no service "
             "level use --servicelevel=\"\""))
+    parser.add_option("--remove-rhn-packages", action="store_true", default=False, dest="remove_legacy_packages",
+                      help=_("remove legacy packages"))
     # See BZ 915847 - some users want to connect to RHN with a proxy but to RHSM without a proxy
     parser.add_option("--no-proxy", action="store_true", dest='noproxy',
         help=_("don't use legacy proxy settings with destination server"))

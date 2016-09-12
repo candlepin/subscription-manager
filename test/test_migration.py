@@ -163,6 +163,7 @@ class TestMigration(SubManFixture):
         self.assertFalse(parser.has_option("--environment"))
         self.assertFalse(parser.has_option("--force"))
         self.assertFalse(parser.has_option("--activation-key"))
+        self.assertTrue(parser.has_option("--remove-rhn-packages"))
         (opts, args) = parser.parse_args([])
         migrate.set_defaults(opts, five_to_six)
         self.assertTrue(opts.five_to_six)
@@ -178,6 +179,7 @@ class TestMigration(SubManFixture):
         self.assertTrue(parser.has_option("--environment"))
         self.assertTrue(parser.has_option("--force"))
         self.assertTrue(parser.has_option("--activation-key"))
+        self.assertTrue(parser.has_option("--remove-rhn-packages"))
         (opts, args) = parser.parse_args([])
         migrate.set_defaults(opts, five_to_six_script=False)
         self.assertFalse(opts.five_to_six)
@@ -1234,3 +1236,41 @@ class TestMigration(SubManFixture):
         """
         system_id = self.engine.get_system_id(mock_id)
         self.assertEquals(123, system_id)
+
+    def test_remove_rhn_packages_option_default(self):
+        parser = OptionParser()
+        migrate.add_parser_options(parser)
+        (opts, args) = parser.parse_args([])
+        self.assertFalse(opts.remove_legacy_packages)
+
+    def test_remove_rhn_packages_option(self):
+        parser = OptionParser()
+        migrate.add_parser_options(parser)
+        (opts, args) = parser.parse_args(["--remove-rhn-packages"])
+        self.assertTrue(opts.remove_legacy_packages)
+
+    @patch("__builtin__.open", autospec=True)
+    def test_is_using_systemd_false_on_rhel6(self, mock_open):
+        mock_open.return_value = StringIO.StringIO("Red Hat Enterprise Linux Server release 6.3 (Santiago)")
+        self.assertFalse(self.engine.is_using_systemd())
+
+    @patch("__builtin__.open", autospec=True)
+    def test_is_using_systemd_true_on_rhel7(self, mock_open):
+        mock_open.return_value = StringIO.StringIO("Red Hat Enterprise Linux Server release 7.2 (Maipo)")
+        self.assertTrue(self.engine.is_using_systemd())
+
+    @patch("subprocess.call", autospec=True)
+    def test_handle_legacy_daemons_systemd(self, mock_subprocess):
+        self.engine.handle_legacy_daemons(using_systemd=True)
+        self.assertIn('systemctl', mock_subprocess.call_args[0][0])
+
+    @patch("subprocess.call", autospec=True)
+    def test_handle_legacy_daemons_systemv(self, mock_subprocess):
+        self.engine.handle_legacy_daemons(using_systemd=False)
+        self.assertIn('service', mock_subprocess.call_args[0][0])
+
+    @patch("subprocess.call", autospec=True)
+    def test_remove_rhn_packages(self, mock_subprocess):
+        self.engine.remove_legacy_packages()
+
+        self.assertIn('yum', mock_subprocess.call_args[0][0])
