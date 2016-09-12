@@ -30,7 +30,7 @@ from subscription_manager import utils
 from subscription_manager import model
 from subscription_manager.model import ent_cert
 
-from rhsm.config import initConfig
+from rhsm.config import initConfig, in_container
 
 # FIXME: local imports
 
@@ -163,9 +163,15 @@ class YumReleaseverSource(object):
         # mem cache
         if self._expansion:
             return self._expansion
-
-        result = self.release_status_cache.read_status(self.uep,
-                                                       self.identity.uuid)
+        # See BZ 1366799.
+        # Do not check for any release version set for the host consumer
+        # if we are in a container (containers are not considered to be the
+        # same consumer as the host they run on. They only have the same
+        # access to content as the host they run on.)
+        result = None
+        if not in_container():
+            result = self.release_status_cache.read_status(self.uep,
+                                                           self.identity.uuid)
 
         # status cache returned None, which points to a failure.
         # Since we only have one value, use the default there and cache it
