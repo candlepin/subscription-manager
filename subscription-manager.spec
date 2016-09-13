@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.17.14
+Version: 1.17.15
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -597,6 +597,11 @@ fi
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Tue Sep 13 2016 Christopher Snyder <csnyder@redhat.com> 1.17.15-1
+- 1366799: Do not check for a releaseVer override when in container
+  (csnyder@redhat.com)
+- 1367657: Escape RestlibExceptions for gui display (csnyder@redhat.com)
+
 * Wed Sep 07 2016 Christopher Snyder <csnyder@redhat.com> 1.17.14-1
 - 1372673: Ensure user is able to skip auto attach during initial-setup
   (csnyder@redhat.com)
