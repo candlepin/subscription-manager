@@ -1516,6 +1516,7 @@ class AttachCommand(CliCommand):
 
         # If a pools file was specified, process its contents and append it to options.pool
         if self.options.file:
+            self.options.file = os.path.expanduser(self.options.file)
             if self.options.file == '-' or os.path.isfile(self.options.file):
                 self._read_pool_ids(self.options.file)
 
@@ -1874,6 +1875,7 @@ class ImportCertCommand(CliCommand):
         # Return code
         imported_certs = []
         for src_cert_file in self.options.certificate_file:
+            src_cert_file = os.path.expanduser(src_cert_file)
             if os.path.exists(src_cert_file):
                 try:
                     extractor = managerlib.ImportFileExtractor(src_cert_file)
@@ -1897,7 +1899,7 @@ class ImportCertCommand(CliCommand):
                             "Please check log file for more information."))
             else:
                 log.error("Supplied certificate file does not exist: %s" % src_cert_file)
-                print(_("%s is not a valid certificate file. Please use a valid certificate.") %
+                print(_("%s: file not found.") %
                     os.path.basename(src_cert_file))
 
         # update branding info for the imported certs, if needed

@@ -101,6 +101,7 @@ class SystemCommand(CliCommand):
         return os.stat(dir1).st_dev == os.stat(dir2).st_dev
 
     def _do_command(self):
+        self.options.destination = os.path.expanduser(self.options.destination)
         self._validate_options()
         consumer = inj.require(inj.IDENTITY)
         if not consumer.is_valid():
