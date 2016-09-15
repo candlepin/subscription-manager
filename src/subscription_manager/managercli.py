@@ -33,6 +33,7 @@ from M2Crypto import X509
 
 import rhsm.config
 import rhsm.connection as connection
+from rhsm.connection import ProxyException
 from rhsm.utils import remove_scheme, ServerUrlParseError
 from rhsm.certificate import GMT
 
@@ -319,6 +320,7 @@ class CliCommand(AbstractCLICommand):
             result = s.connect_ex((self.proxy_hostname or cfg.get("server", "proxy_hostname"), int(self.proxy_port or rhsm.config.DEFAULT_PROXY_PORT)))
         except Exception as e:
             log.info("Attempted bad proxy: %s" % e)
+            return False
         finally:
             s.close()
         if result:
@@ -428,16 +430,6 @@ class CliCommand(AbstractCLICommand):
             except ServerUrlParseError, e:
                 print _("Error parsing serverurl:")
                 handle_exception("Error parsing serverurl:", e)
-            # this trys to actually connect to the server and ping it
-            try:
-                if not is_valid_server_info(self.server_hostname, self.server_port, self.server_prefix):
-                    system_exit(os.EX_UNAVAILABLE, _("Unable to reach the server at %s:%s%s") % (
-                        self.server_hostname,
-                        self.server_port,
-                        self.server_prefix
-                    ))
-            except MissingCaCertException:
-                system_exit(os.EX_CONFIG, _("Error: CA certificate for subscription service has not been installed."))
 
             cfg.set("server", "hostname", self.server_hostname)
             cfg.set("server", "port", self.server_port)
@@ -514,7 +506,23 @@ class CliCommand(AbstractCLICommand):
             self.entcertlib = EntCertActionInvoker()
 
             if config_changed:
-                if not self.test_proxy_connection():
+                try:
+                    # catch host/port issues; does not catch auth issues
+                    if not self.test_proxy_connection():
+                        system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
+
+                    # this tries to actually connect to the server and ping it
+                    if not is_valid_server_info(self.no_auth_cp):
+                        system_exit(os.EX_UNAVAILABLE, _("Unable to reach the server at %s:%s%s") % (
+                            self.no_auth_cp.host,
+                            self.no_auth_cp.ssl_port,
+                            self.no_auth_cp.handler
+                        ))
+
+                except MissingCaCertException:
+                    system_exit(os.EX_CONFIG,
+                                _("Error: CA certificate for subscription service has not been installed."))
+                except ProxyException:
                     system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
 
         else:

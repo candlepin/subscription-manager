@@ -37,10 +37,11 @@ from subscription_manager import injection as inj
 # we may want to import some of the other items for
 # compatibility.
 from rhsm.utils import parse_url
+from rhsm.connection import ProxyException
 
 import subscription_manager.version
 import rhsm.version
-from rhsm.connection import UEPConnection, RestlibException, GoneException
+from rhsm.connection import RestlibException, GoneException
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
 
@@ -127,8 +128,7 @@ class MissingCaCertException(Exception):
     pass
 
 
-# TODO: make sure this works with --proxy cli options
-def is_valid_server_info(hostname, port, prefix):
+def is_valid_server_info(conn):
     """
     Check if we can communicate with a subscription service at the given
     location.
@@ -138,9 +138,7 @@ def is_valid_server_info(hostname, port, prefix):
     May throw a MissingCaCertException if the CA certificate has not been
     imported yet, which may be relevant to the caller.
     """
-    # Proxy info should already be in config file and used by default:
     try:
-        conn = UEPConnection(host=hostname, ssl_port=int(port), handler=prefix)
         conn.ping()
         return True
     except RestlibException, e:
@@ -155,6 +153,8 @@ def is_valid_server_info(hostname, port, prefix):
         # Indicates a missing CA certificate, which callers may need to
         # notify the user of:
         raise MissingCaCertException(e)
+    except ProxyException:
+        raise
     except Exception, e:
         log.exception(e)
         return False
