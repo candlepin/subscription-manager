@@ -18,6 +18,7 @@ import base64
 import certificate
 import datetime
 import dateutil.parser
+import httplib
 import locale
 import logging
 import os
@@ -87,6 +88,10 @@ log = logging.getLogger(__name__)
 
 
 class ConnectionException(Exception):
+    pass
+
+
+class ProxyException(Exception):
     pass
 
 
@@ -588,6 +593,10 @@ class Restlib(object):
                 if not id_cert.is_valid():
                     raise ExpiredIdentityCertException()
             raise
+        except socket.error, e:
+            if str(e)[-3:] == str(httplib.PROXY_AUTHENTICATION_REQUIRED):
+                raise ProxyException(e)
+            raise
         response = conn.getresponse()
         result = {
             "content": response.read(),
@@ -646,6 +655,9 @@ class Restlib(object):
                                         parsed['displayMessage'],
                                         parsed['deletedId'])
 
+                elif str(response['status']) == str(httplib.PROXY_AUTHENTICATION_REQUIRED):
+                    raise ProxyException
+
                 # I guess this is where we would have an exception mapper if we
                 # had more meaningful exceptions. We've gotten a response from
                 # the server that means something.
@@ -675,6 +687,9 @@ class Restlib(object):
                                              handler=handler)
                 elif str(response['status']) in ['429']:
                     raise RateLimitExceededException(response['status'])
+
+                elif str(response['status']) == str(httplib.PROXY_AUTHENTICATION_REQUIRED):
+                    raise ProxyException
 
                 else:
                     # unexpected with no valid content
