@@ -1870,6 +1870,7 @@ class ChooseServerScreen(Screen):
 
         else:
             self.emit('move-to-screen', CREDENTIALS_PAGE)
+            self.info.set_property('activation-keys', None)
             return True
 
     def set_server_entry(self, hostname, port, prefix):
