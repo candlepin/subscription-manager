@@ -12,7 +12,7 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.18.1
+Version: 1.18.2
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -97,6 +97,25 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Fri Sep 16 2016 Alex Wood <awood@redhat.com> 1.18.2-1
+- 1176219: Raise ProxyException in Restlib (khowell@redhat.com)
+- 1367243: Handle RestlibException 404 in refresh (khowell@redhat.com)
+- 1367243: Fix 404 check in regen entitlement funcs (khowell@redhat.com)
+- Revert "1367243: Fix 404 check in regen entitlement funcs"
+  (khowell@redhat.com)
+- 1367243: Fix 404 check in regen entitlement funcs (khowell@redhat.com)
+- Ensure both cert regen methods succeed despite BadStatusLine from server
+  (csnyder@redhat.com)
+- Update fix to include BadStatusLine responses from the server
+  (csnyder@redhat.com)
+- 1366301: Entitlement regeneration no longer propagates server errors
+  (crog@redhat.com)
+- 1365280: Update default_log_level to INFO (csnyder@redhat.com)
+- 1334916: Add rhsm.conf logging section defaults (csnyder@redhat.com)
+- 1360909: Added functionality for regenerating entitlement certificates
+  (crog@redhat.com)
+- 1315901: Exception handling for PEM cert read (wpoteat@redhat.com)
+
 * Fri Jul 15 2016 Alex Wood <awood@redhat.com> 1.18.1-1
 - Bump version to 1.18 (vrjain@redhat.com)
 
