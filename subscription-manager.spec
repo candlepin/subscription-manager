@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.18.1
+Version: 1.18.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -597,6 +597,59 @@ fi
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Fri Sep 16 2016 Alex Wood <awood@redhat.com> 1.18.2-1
+- 1176219: Error out if bad proxy settings detected (khowell@redhat.com)
+- 1376014: Clear activation key list when checkbox unchecked
+  (wpoteat@redhat.com)
+- 1367509: fix cert not found message, expand tilde (khowell@redhat.com)
+- 1373922: Add cat-manifest --no-content desc to man (khowell@redhat.com)
+- 1346368: Add server_timeout to rhsm.conf manpage (khowell@redhat.com)
+- 1374389: rm --no-content from stat-cert completion (khowell@redhat.com)
+- 1366799: Do not check for a releaseVer override when in container
+  (csnyder@redhat.com)
+- 1185914: migrate - handle legacy services/packages (khowell@redhat.com)
+- 1367657: Escape RestlibExceptions for gui display (csnyder@redhat.com)
+- 1371632: Disallow connection test w/ missing info (khowell@redhat.com)
+- 1372673: Ensure user is able to skip auto attach during initial-setup
+  (csnyder@redhat.com)
+- 1330515: Account for keyboard interrupt (wpoteat@redhat.com)
+- 1371202: Make sub attach view expand in GTK3 (khowell@redhat.com)
+- 1370623: Fix text sorting for treeview columns (khowell@redhat.com)
+- 1369522: Add cat-manifest --no-content to bash completion
+  (khowell@redhat.com)
+- 1298140: Set default window icon (khowell@redhat.com)
+- 1331739: Validate repo-override --remove non-empty [squashed]
+  (khowell@redhat.com)
+- 1323271: Update compliance when facts update (khowell@redhat.com)
+- Disallow empty name for --add (khowell@redhat.com)
+- Make repo-override --add emit error same as remove (khowell@redhat.com)
+- 1368362: Do not display logging config error on upgrade (csnyder@redhat.com)
+- 1366055: Add docs for the LOGGING section to rhsm.conf man page
+  (csnyder@redhat.com)
+- 1366301: Entitlement regeneration failure no longer aborts refresh
+  (crog@redhat.com)
+- 1336428: Check notification object before use (wpoteat@redhat.com)
+- 1365280: Change default log level back to INFO (csnyder@redhat.com)
+- 1362138: Change method signature for Anaconda addon (jkonecny@redhat.com)
+- 1251516: Disable import when registered (wpoteat@redhat.com)
+- 1336880: Print virt_limit attributes with rct cat-manifest.
+  (rjerrido@outsidaz.org)
+- 1336883: Add --no-content switch to cat-manifest to reduce output.
+  (rjerrido@outsidaz.org)
+- Updated required python-rhsm version (crog@redhat.com)
+- 1334916: Move logging configuration to rhsm.conf (csnyder@redhat.com)
+- 1264108: Clear error message on back action (wpoteat@redhat.com)
+- Kill transient parent warnings from Register dialog (wpoteat@redhat.com)
+- 1333904: 1333906: Append accessible name to contain selected value
+  (wpoteat@redhat.com)
+- 1360909: The refresh command now requests entitlement cert regeneration
+  (crog@redhat.com)
+- 1351009: Modify message to cover more scenarios (wpoteat@redhat.com)
+- 1351370: Ensure rhsmd exits on exceptions (csnyder@redhat.com)
+- Don't warn about GTK_VERSION if SUBMAN_GTK_VERSION is set (vrjain@redhat.com)
+- 1323276: Don't display or store 'None' in proxy values (wpoteat@redhat.com)
+- 1327179: Check proxy configuration at GUI startup (wpoteat@redhat.com)
+
 * Fri Jul 15 2016 Alex Wood <awood@redhat.com> 1.18.1-1
 - Bump version to 1.18 (vrjain@redhat.com)
 
