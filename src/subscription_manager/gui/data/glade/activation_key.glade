@@ -27,7 +27,9 @@
         <child>
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
-            <property name="label" translatable="yes">Organization:</property>
+            <property name="label" translatable="yes">_Organization:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">organization_entry</property>
           </object>
           <packing>
             <property name="x_options">GTK_FILL</property>
@@ -39,7 +41,9 @@
         <child>
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
-            <property name="label" translatable="yes">Activation Key:</property>
+            <property name="label" translatable="yes">Activation _Key:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">activation_key_entry</property>
           </object>
           <packing>
             <property name="top_attach">1</property>
@@ -53,7 +57,9 @@
         <child>
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
-            <property name="label" translatable="yes">System Name:</property>
+            <property name="label" translatable="yes">System _Name:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">consumer_entry</property>
           </object>
           <packing>
             <property name="top_attach">2</property>

@@ -899,7 +899,7 @@ class Screen(widgets.SubmanBaseWidget):
         super(Screen, self).__init__()
 
         self.pre_message = ""
-        self.button_label = _("Register")
+        self.button_label = _("_Register")
         self.needs_gui = True
         self.index = -1
         # REMOVE self._error_screen = self.index
@@ -1185,7 +1185,7 @@ class ConfirmSubscriptionsScreen(Screen):
 
     def __init__(self, reg_info, async_backend, facts, parent_window):
         super(ConfirmSubscriptionsScreen, self).__init__(reg_info, async_backend, facts, parent_window)
-        self.button_label = _("Attach")
+        self.button_label = _("_Attach")
 
         self.store = ga_Gtk.ListStore(str, bool, str)
         self.subs_treeview.set_model(self.store)
@@ -1251,7 +1251,7 @@ class SelectSLAScreen(Screen):
         super(SelectSLAScreen, self).__init__(reg_info, async_backend, facts, parent_window)
 
         self.pre_message = _("Finding suitable service levels")
-        self.button_label = _("Next")
+        self.button_label = _("_Next")
 
         self.list_store = ga_Gtk.ListStore(str, ga_GObject.TYPE_PYOBJECT)
         self.sla_combobox.set_model(self.list_store)
@@ -1773,7 +1773,7 @@ class ChooseServerScreen(Screen):
     def __init__(self, reg_info, async_backend, facts, parent_window):
         super(ChooseServerScreen, self).__init__(reg_info, async_backend, facts, parent_window)
 
-        self.button_label = _("Next")
+        self.button_label = _("_Next")
 
         callbacks = {
                 "on_default_button_clicked": self._on_default_button_clicked,
@@ -2241,7 +2241,7 @@ class InfoScreen(Screen):
 
     def __init__(self, reg_info, async_backend, facts, parent_window):
         super(InfoScreen, self).__init__(reg_info, async_backend, facts, parent_window)
-        self.button_label = _("Next")
+        self.button_label = _("_Next")
         callbacks = {"on_why_register_button_clicked":
                      self._on_why_register_button_clicked,
                      "on_back_to_reg_button_clicked":

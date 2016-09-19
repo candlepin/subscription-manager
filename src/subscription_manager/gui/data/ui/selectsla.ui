@@ -125,9 +125,11 @@
             <property name="halign">start</property>
             <property name="valign">start</property>
             <property name="xpad">10</property>
-            <property name="label" translatable="yes">&lt;b&gt;Select a common service level for this system's subscriptions:&lt;/b&gt;</property>
+            <property name="label" translatable="yes">&lt;b&gt;_Select a common service level for this system's subscriptions:&lt;/b&gt;</property>
             <property name="use_markup">True</property>
+            <property name="use_underline">True</property>
             <property name="wrap">True</property>
+            <property name="mnemonic_widget">sla_combobox</property>
             <property name="max_width_chars">32</property>
             <property name="xalign">0</property>
             <property name="yalign">0</property>
