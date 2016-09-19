@@ -1836,7 +1836,7 @@ class ChooseServerScreen(Screen):
             self.reset_resolver()
 
             try:
-                conn = UEPConnection(hostname, port, prefix)
+                conn = UEPConnection(hostname, int(port), prefix)
                 if not is_valid_server_info(conn):
                     self.emit('register-error',
                               _("Unable to reach the server at %s:%s%s") %
