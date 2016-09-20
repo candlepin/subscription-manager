@@ -1893,6 +1893,16 @@ class AsyncBackend(object):
         self.backend = backend
         self.plugin_manager = require(PLUGIN_MANAGER)
         self.queue = Queue.Queue()
+        self._threads = []
+
+    def block_until_complete(self):
+        """Complete outstanding requests."""
+        for thread in self._threads:
+            thread.join()
+
+    def _start_thread(self, thread):
+        thread.start()
+        self._threads.append(thread)
 
     def update(self):
         self.backend.update()
@@ -2156,58 +2166,58 @@ class AsyncBackend(object):
 
     def get_owner_list(self, username, callback):
         ga_GObject.idle_add(self._watch_thread)
-        threading.Thread(target=self._get_owner_list,
-                         name="GetOwnerListThread",
-                         args=(username, callback)).start()
+        self._start_thread(threading.Thread(target=self._get_owner_list,
+                                            name="GetOwnerListThread",
+                                            args=(username, callback)))
 
     def get_environment_list(self, owner_key, callback):
         ga_GObject.idle_add(self._watch_thread)
-        threading.Thread(target=self._get_environment_list,
-                         name="GetEnvironmentListThread",
-                         args=(owner_key, callback)).start()
+        self._start_thread(threading.Thread(target=self._get_environment_list,
+                                            name="GetEnvironmentListThread",
+                                            args=(owner_key, callback)))
 
     def register_consumer(self, name, facts, owner, env, activation_keys, callback):
         """
         Run consumer registration asyncronously
         """
         ga_GObject.idle_add(self._watch_thread)
-        threading.Thread(target=self._register_consumer,
-                         name="RegisterConsumerThread",
-                         args=(name, facts, owner,
-                               env, activation_keys, callback)).start()
+        self._start_thread(threading.Thread(target=self._register_consumer,
+                                            name="RegisterConsumerThread",
+                                            args=(name, facts, owner,
+                                                  env, activation_keys, callback)))
 
     def update_package_profile(self, uuid, callback):
         ga_GObject.idle_add(self._watch_thread)
-        threading.Thread(target=self._update_package_profile,
-                         name="UpdatePackageProfileThread",
-                         args=(uuid, callback)).start()
+        self._start_thread(threading.Thread(target=self._update_package_profile,
+                                            name="UpdatePackageProfileThread",
+                                            args=(uuid, callback)))
 
     def subscribe(self, uuid, current_sla, dry_run_result, callback):
         ga_GObject.idle_add(self._watch_thread)
-        threading.Thread(target=self._subscribe,
-                         name="SubscribeThread",
-                         args=(uuid, current_sla,
-                               dry_run_result, callback)).start()
+        self._start_thread(threading.Thread(target=self._subscribe,
+                                            name="SubscribeThread",
+                                            args=(uuid, current_sla,
+                                                  dry_run_result, callback)))
 
     def find_service_levels(self, consumer_uuid, facts, callback):
         ga_GObject.idle_add(self._watch_thread)
-        threading.Thread(target=self._find_service_levels,
-                         name="FindServiceLevelsThread",
-                         args=(consumer_uuid, facts, callback)).start()
+        self._start_thread(threading.Thread(target=self._find_service_levels,
+                                            name="FindServiceLevelsThread",
+                                            args=(consumer_uuid, facts, callback)))
 
     def refresh(self, callback):
         ga_GObject.idle_add(self._watch_thread)
-        threading.Thread(target=self._refresh,
-                         name="RefreshThread",
-                         args=(callback,)).start()
+        self._start_thread(threading.Thread(target=self._refresh,
+                                            name="RefreshThread",
+                                            args=(callback,)))
 
     def unregister_consumer(self, consumer_uuid, server_info, callback):
         ga_GObject.idle_add(self._watch_thread)
-        threading.Thread(target=self._unregister_consumer,
-                         name="UnregisterThread",
-                         args=(consumer_uuid,
-                               server_info,
-                               callback)).start()
+        self._start_thread(threading.Thread(target=self._unregister_consumer,
+                                            name="UnregisterThread",
+                                            args=(consumer_uuid,
+                                                  server_info,
+                                                  callback)))
 
 
 # TODO: make this a more informative 'summary' page.

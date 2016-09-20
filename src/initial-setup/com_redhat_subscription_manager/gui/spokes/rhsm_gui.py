@@ -18,6 +18,7 @@
 
 import logging
 
+from pyanaconda.ui.communication import hubQ
 from pyanaconda.ui.gui.spokes import NormalSpoke
 from pyanaconda.ui.common import FirstbootOnlySpokeMixIn
 from pyanaconda.ui.categories.system import SystemCategory
@@ -68,6 +69,8 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
 
         backend = managergui.Backend()
         self.info = registergui.RegisterInfo()
+        self.info.connect('notify::register-status', self._on_register_status_change)
+        self._status = self.info.get_property('register-status')
 
         self.register_widget = registergui.RegisterWidget(backend, facts,
                                                           reg_info=self.info,
@@ -130,7 +133,7 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
         This is displayed under the spokes name on it's hub."""
 
         # The status property is only used read/only, so no setter required.
-        return self.info.get_property('register-status')
+        return self._status
 
     def refresh(self):
         """Update gui widgets to reflect state of self.data.
@@ -194,11 +197,13 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
     def execute(self):
         """When the spoke is left, this can run anything that needs to happen.
 
-        For RHSMSpoke, the spoke has already done everything it needs to do,
-        so this is empty. Typically a module would gather enough info to
-        perform all the actions in the execute(), but RHSMSpoke is not typical."""
+        Wait for any async processing to complete."""
+        self.register_widget.async.block_until_complete()
 
-        pass
+    def _on_register_status_change(self, obj, params):
+        status = obj.get_property('register-status')
+        self._status = status
+        hubQ.send_message(self.__class__.__name__, self._status)
 
     def _on_back_button_clicked(self, button):
         """Handler for self.back_buttons 'clicked' signal.
