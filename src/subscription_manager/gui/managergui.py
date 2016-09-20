@@ -153,7 +153,7 @@ class MainWindow(widgets.SubmanBaseWidget):
         super(MainWindow, self).__init__()
 
         if not self.test_proxy_connection():
-            system_exit(os.EX_UNAVAILABLE, _("Proxy connnection failed, please check your settings."))
+            system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
         self.backend = backend or Backend()
         self.identity = require(IDENTITY)
 
