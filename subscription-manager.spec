@@ -546,9 +546,7 @@ rm -rf %{buildroot}
 
 %post
 %if %use_systemd
-    /bin/systemctl enable rhsmcertd.service >/dev/null 2>&1 || :
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
-    /bin/systemctl try-restart rhsmcertd.service >/dev/null 2>&1 || :
+    %systemd_post rhsmcertd.service
 %else
     chkconfig --add rhsmcertd
 %endif
