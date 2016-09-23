@@ -537,12 +537,6 @@ class ContractSubDetailsWidget(SubDetailsWidget):
 
     def __init__(self, product_dir):
         super(ContractSubDetailsWidget, self).__init__(product_dir)
-        # Save the original background color for the
-        # start_end_date_text widget so we can restore it in the
-        # clear() function.
-        # FIXME
-        #self.original_bg = self.start_end_date_text.rc_get_style().base[ga_Gtk.StateType.NORMAL]
-        # FIXME
 
     def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
                            management=None, support_level="", support_type="",
@@ -564,12 +558,6 @@ class ContractSubDetailsWidget(SubDetailsWidget):
         self._set(self.virt_only_text, virt_only)
 
     def _clear_other_details(self):
-        #Clear row highlighting
-
-        # FIXME
-        #self.start_end_date_text.modify_base(ga_Gtk.StateType.NORMAL, self.original_bg)
-        # FIXME
-
         self._set(self.contract_number_text, "")
         self._set(self.start_end_date_text, "")
         self._set(self.account_text, "")
@@ -590,10 +578,7 @@ class ContractSubDetailsWidget(SubDetailsWidget):
         if expiring:
             return self.warning_color
 
-        # FIXME, try to return the orig color, or remove this?
-        #return self.original_bg
-        return self.expired_color
-        # FIXME
+        return None
 
 
 class CellRendererDate(ga_Gtk.CellRendererText):
