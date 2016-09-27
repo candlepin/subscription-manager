@@ -421,6 +421,7 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         try:
             last = self.applied_screen_history.pop()
             self._set_screen(last)
+            self._screens[last].back_handler()
         except IndexError:
             pass
 
@@ -917,6 +918,9 @@ class Screen(widgets.SubmanBaseWidget):
         self.pre_done()
         return False
 
+    def back_handler(self):
+        return
+
     def pre_done(self):
         self.set_property('ready', True)
 
@@ -977,6 +981,9 @@ class NoGuiScreen(ga_GObject.GObject):
     def pre(self):
         self.pre_done()
         return True
+
+    def back_handler(self):
+        self.info.set_property('register-state', RegisterState.REGISTERING)
 
     def pre_done(self):
         self.set_property('ready', True)
@@ -1064,6 +1071,9 @@ class PerformRegisterScreen(NoGuiScreen):
 
         return True
 
+    def back_handler(self):
+        self.info.set_property('register-state', RegisterState.REGISTERING)
+
 
 class PerformUnregisterScreen(NoGuiScreen):
 
@@ -1099,6 +1109,9 @@ class PerformUnregisterScreen(NoGuiScreen):
         self.emit('move-to-screen', OWNER_SELECT_PAGE)
         self.pre_done()
         return False
+
+    def back_handler(self):
+        self.info.set_property('register-state', RegisterState.REGISTERING)
 
 
 # After registering, we can upload package profiles.
@@ -1167,6 +1180,7 @@ class PerformSubscribeScreen(NoGuiScreen):
 
     def pre(self):
         self.info.set_property('details-label-txt', self.pre_message)
+        self.info.set_property('register-state', RegisterState.SUBSCRIBING)
         self.async.subscribe(self.info.identity.uuid,
                              self.info.get_property('current-sla'),
                              self.info.get_property('dry-run-result'),
@@ -1468,6 +1482,9 @@ class EnvironmentScreen(Screen):
                                         self._on_get_environment_list_cb)
         return True
 
+    def back_handler(self):
+        self.info.set_property('register-state', RegisterState.REGISTERING)
+
     def apply(self):
         model, tree_iter = self.environment_treeview.get_selection().get_selected()
         self.set_environment(model.get_value(tree_iter, 0))
@@ -1538,6 +1555,9 @@ class OrganizationScreen(Screen):
         self.async.get_owner_list(self.info.get_property('username'),
                                   self._on_get_owner_list_cb)
         return True
+
+    def back_handler(self):
+        self.info.set_property('register-state', RegisterState.REGISTERING)
 
     def apply(self):
         # check for selection exists
@@ -1658,6 +1678,9 @@ class CredentialsScreen(Screen):
         self._initialize_consumer_name()
         self.skip_auto_bind.set_active(False)
 
+    def back_handler(self):
+        self.info.set_property('register-state', RegisterState.REGISTERING)
+
 
 class ActivationKeyScreen(Screen):
     screen_enum = ACTIVATION_KEY_PAGE
@@ -1739,6 +1762,9 @@ class ActivationKeyScreen(Screen):
         self.pre_done()
         return False
 
+    def back_handler(self):
+        self.info.set_property('register-state', RegisterState.REGISTERING)
+
 
 class RefreshSubscriptionsScreen(NoGuiScreen):
 
@@ -1760,6 +1786,7 @@ class RefreshSubscriptionsScreen(NoGuiScreen):
 
     def pre(self):
         self.info.set_property('details-label-txt', self.pre_message)
+        self.info.set_property('register-state', RegisterState.SUBSCRIBING)
         self.async.refresh(self._on_refresh_cb)
         return True
 
