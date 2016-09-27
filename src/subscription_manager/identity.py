@@ -72,7 +72,7 @@ class ConsumerIdentity:
     def __init__(self, keystring, certstring):
         self.key = keystring
         # TODO: bad variables, cert should be the certificate object, x509 is
-        # used elsewhere for the m2crypto object of the same name.
+        # used elsewhere for the rhsm._certificate object of the same name.
         self.cert = certstring
         self.x509 = create_from_pem(certstring)
 

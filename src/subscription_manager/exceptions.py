@@ -16,7 +16,7 @@
 
 import inspect
 from socket import error as socket_error
-from M2Crypto.SSL import SSLError
+from rhsm.https import ssl
 import gettext
 
 from rhsm import connection, utils
@@ -57,7 +57,7 @@ class ExceptionMapper(object):
             utils.ServerUrlParseErrorNone: (PERROR_NONE_MESSAGE, self.format_default),
             utils.ServerUrlParseErrorPort: (PERROR_PORT_MESSAGE, self.format_default),
             utils.ServerUrlParseErrorScheme: (PERROR_SCHEME_MESSAGE, self.format_default),
-            SSLError: (SSL_MESSAGE, self.format_ssl_error),
+            ssl.SSLError: (SSL_MESSAGE, self.format_ssl_error),
             # The message template will always be none since the RestlibException's
             # message is already translated server-side.
             connection.RestlibException: (None, self.format_restlib_exception),

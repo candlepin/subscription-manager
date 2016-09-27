@@ -27,7 +27,7 @@ import sys
 import rhsm.config
 
 from datetime import datetime
-from M2Crypto.SSL import SSLError
+from rhsm.https import ssl
 
 from rhn import rpclib
 
@@ -281,7 +281,7 @@ class MigrationEngine(object):
 
         try:
             self.cp.getStatus()
-        except SSLError, e:
+        except ssl.SSLError as e:
             print _("The CA certificate for the destination server has not been installed.")
             system_exit(os.EX_SOFTWARE, CONNECTION_FAILURE % e)
         except Exception, e:

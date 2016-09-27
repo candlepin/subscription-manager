@@ -15,7 +15,7 @@
 import mock
 import httplib
 import socket
-from M2Crypto.SSL import SSLError
+from rhsm.https import ssl
 
 import stubs
 import fixture
@@ -175,7 +175,7 @@ class TestCdnReleaseVerionProvider(fixture.SubManFixture):
             self.assertEquals([], releases)
 
             mock_cc.get_versions.side_effect = \
-                    SSLError()
+                    ssl.SSLError()
             releases = cdn_rv_provider.get_releases()
             self.assertEquals([], releases)
 
