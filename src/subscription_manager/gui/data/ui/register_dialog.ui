@@ -73,12 +73,13 @@
             </child>
             <child>
               <object class="GtkButton" id="register_button">
-                <property name="label" translatable="yes">Register</property>
+                <property name="label" translatable="yes">_Register</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="register_button-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes">register_button</property>
