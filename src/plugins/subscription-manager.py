@@ -46,6 +46,9 @@ not_registered_warning = \
 no_subs_warning = \
 "This system is registered to Red Hat Subscription Management, but is not receiving updates. You can use subscription-manager to assign subscriptions."
 
+no_subs_container_warning = \
+"This system is not receiving updates. You can use subscription-manager on the host to register and assign subscriptions."
+
 
 # If running from the yum plugin, we want to avoid blocking
 # yum forever on locks created by other rhsm processes. We try
@@ -141,6 +144,8 @@ def warnOrGiveUsageMessage(conduit):
             msg = not_registered_warning
         elif len(ent_dir.list_valid()) == 0:
             msg = no_subs_warning
+        if config.in_container() and len(ent_dir.list_valid()) == 0:
+            msg = no_subs_container_warning
 
     finally:
         if msg:
