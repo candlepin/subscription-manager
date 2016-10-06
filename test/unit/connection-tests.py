@@ -359,7 +359,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
 
     def test_429_body(self):
         content = u'{"errors": ["TooFast"]}'
-        headers = {'Retry-After': 20}
+        headers = {'retry-after': 20}
         try:
             self.vr("429", content, headers)
         except RateLimitExceededException as e:

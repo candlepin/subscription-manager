@@ -202,7 +202,7 @@ class RateLimitExceededException(RestlibException):
                                                          msg)
         self.headers = headers or {}
         self.msg = msg or ""
-        self.retry_after = safe_int(self.headers.get('Retry-After'))
+        self.retry_after = safe_int(self.headers.get('retry-after'))
 
 
 class UnauthorizedException(AuthenticationException):
