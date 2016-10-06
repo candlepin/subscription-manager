@@ -38,6 +38,8 @@ PERROR_JUST_SCHEME_MESSAGE = _("Server URL is just a schema. Should include host
 PERROR_NONE_MESSAGE = _("Server URL can not be None")
 PERROR_PORT_MESSAGE = _("Server URL port should be numeric")
 PERROR_SCHEME_MESSAGE = _("Server URL has an invalid scheme. http:// and https:// are supported")
+RATE_LIMIT_MESSAGE = _("The server rate limit has been exceeded, please try again later.")
+RATE_LIMIT_EXPIRATION = _("The server rate limit has been exceeded, please try again later. (Expires in %s seconds)")
 
 
 class ExceptionMapper(object):
@@ -61,6 +63,7 @@ class ExceptionMapper(object):
             # The message template will always be none since the RestlibException's
             # message is already translated server-side.
             connection.RestlibException: (None, self.format_restlib_exception),
+            connection.RateLimitExceededException: (None, self.format_rate_limit_exception),
         }
 
     def format_default(self, e, message):
@@ -74,6 +77,12 @@ class ExceptionMapper(object):
 
     def format_restlib_exception(self, restlib_exception, message_template):
         return restlib_exception.msg
+
+    def format_rate_limit_exception(self, rate_limit_exception, _):
+        if rate_limit_exception.retry_after is not None:
+            return RATE_LIMIT_EXPIRATION % str(rate_limit_exception.retry_after)
+        else:
+            return RATE_LIMIT_MESSAGE
 
     def get_message(self, ex):
         # Lookup by __class__ instead of type to support old style classes
