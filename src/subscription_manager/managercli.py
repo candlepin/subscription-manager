@@ -201,6 +201,7 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
     except Exception, e:
         log.warning("Error during auto-attach.")
         log.exception(e)
+        raise
 
 
 def show_autosubscribe_output(uep):
