@@ -274,6 +274,8 @@ class CatManifestCommand(RCTManifestCommand):
             if not self.options.no_content:
                 to_print = [[item.url] for item in cert.content]
                 self._print_section(_("Content Sets:"), sorted(to_print), 2, True)
+            else:  # bz#1369577: print a blank line to separate subscriptions when --no-content in use
+                print ""
 
     def _do_command(self):
         """
