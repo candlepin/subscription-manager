@@ -218,7 +218,9 @@ Requires: %{name} = %{version}-%{release}
 Requires: dnf >= 1.0.0
 
 %description -n dnf-plugin-subscription-manager
-Subscription Manager plugins for DNF, contains subscription-manager and product-id plugins.
+This package provides plugins to interact with repositories and subscriptions
+from the Red Hat entitlement platform; contains subscription-manager and
+product-id plugins.
 %endif
 
 
