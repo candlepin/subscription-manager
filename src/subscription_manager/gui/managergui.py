@@ -387,7 +387,8 @@ class MainWindow(widgets.SubmanBaseWidget):
         registration_dialog.show()
 
     def _on_dialog_destroy(self, obj, widget):
-        if widget:
+        # bz#1382897 make sure register menu item is left in appropriate state
+        if (widget is not self.register_menu_item or not self.registered()) and widget:
             widget.set_sensitive(True)
         return False
 
