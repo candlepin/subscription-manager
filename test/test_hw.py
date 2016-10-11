@@ -378,9 +378,8 @@ class HardwareProbeTests(fixture.SubManFixture):
         reload(hwprobe)
         hw = hwprobe.Hardware()
         net = hw.get_network_info()
-        self.assertEquals(len(net), 3)
-        for key in net:
-            assert key in ['network.hostname', 'network.ipv4_address', 'network.ipv6_address']
+        expected = set(['network.fqdn', 'network.hostname', 'network.ipv4_address', 'network.ipv6_address'])
+        self.assertEqual(expected, set(net.keys()))
 
     def test_network_interfaces(self):
         reload(hwprobe)
