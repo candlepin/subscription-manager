@@ -332,20 +332,19 @@ class ContentConnection(object):
         self.password = password
         self.ssl_verify_depth = ssl_verify_depth
 
-        # get the proxy information from the environment variable
-        # if available and host is not in no_proxy
+        # honor no_proxy environment variable
         if urllib.proxy_bypass_environment(self.host):
-            info = {'proxy_username': '',
-                   'proxy_hostname': '',
-                   'proxy_port': '',
-                   'proxy_password': ''}
+            self.proxy_hostname = None
+            self.proxy_port = None
+            self.proxy_user = None
+            self.proxy_password = None
         else:
             info = utils.get_env_proxy_info()
 
-        self.proxy_hostname = proxy_hostname or config.get('server', 'proxy_hostname') or info['proxy_hostname']
-        self.proxy_port = proxy_port or config.get('server', 'proxy_port') or info['proxy_port']
-        self.proxy_user = proxy_user or config.get('server', 'proxy_user') or info['proxy_username']
-        self.proxy_password = proxy_password or config.get('server', 'proxy_password') or info['proxy_password']
+            self.proxy_hostname = proxy_hostname or config.get('server', 'proxy_hostname') or info['proxy_hostname']
+            self.proxy_port = proxy_port or config.get('server', 'proxy_port') or info['proxy_port']
+            self.proxy_user = proxy_user or config.get('server', 'proxy_user') or info['proxy_username']
+            self.proxy_password = proxy_password or config.get('server', 'proxy_password') or info['proxy_password']
 
     @property
     def user_agent(self):
@@ -759,20 +758,19 @@ class UEPConnection:
         # BZ848836
         self.handler = self.handler.rstrip("/")
 
-        # get the proxy information from the environment variable
-        # if available and host is not in no_proxy
+        # honor no_proxy environment variable
         if urllib.proxy_bypass_environment(self.host):
-            info = {'proxy_username': '',
-                   'proxy_hostname': '',
-                   'proxy_port': '',
-                   'proxy_password': ''}
+            self.proxy_hostname = None
+            self.proxy_port = None
+            self.proxy_user = None
+            self.proxy_password = None
         else:
             info = utils.get_env_proxy_info()
 
-        self.proxy_hostname = proxy_hostname or config.get('server', 'proxy_hostname') or info['proxy_hostname']
-        self.proxy_port = proxy_port or config.get('server', 'proxy_port') or info['proxy_port']
-        self.proxy_user = proxy_user or config.get('server', 'proxy_user') or info['proxy_username']
-        self.proxy_password = proxy_password or config.get('server', 'proxy_password') or info['proxy_password']
+            self.proxy_hostname = proxy_hostname or config.get('server', 'proxy_hostname') or info['proxy_hostname']
+            self.proxy_port = proxy_port or config.get('server', 'proxy_port') or info['proxy_port']
+            self.proxy_user = proxy_user or config.get('server', 'proxy_user') or info['proxy_username']
+            self.proxy_password = proxy_password or config.get('server', 'proxy_password') or info['proxy_password']
 
         self.cert_file = cert_file
         self.key_file = key_file
