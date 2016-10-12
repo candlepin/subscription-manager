@@ -617,6 +617,8 @@ class Hardware:
         try:
             host = socket.gethostname()
             self.netinfo['network.hostname'] = host
+            fqdn = socket.getfqdn()
+            self.netinfo['network.fqdn'] = fqdn
 
             try:
                 info = socket.getaddrinfo(host, None, socket.AF_INET, socket.SOCK_STREAM)
