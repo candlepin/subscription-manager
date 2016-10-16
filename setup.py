@@ -99,7 +99,7 @@ cmdclass = {
 setup(
     cmdclass={'build_py': rpm_version_release_build_py},
     name="rhsm",
-    version='1.18.3',
+    version='1.18.4',
     description='A Python library to communicate with a Red Hat Unified Entitlement Platform',
     author='Devan Goodwin',
     author_email='dgoodwin@redhat.com',

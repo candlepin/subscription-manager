@@ -12,7 +12,7 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.18.3
+Version: 1.18.4
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -97,6 +97,9 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Sun Oct 16 2016 Vritant Jain <adarshvritant@gmail.com> 1.18.4-1
+- Added 6.9 releaser (adarshvritant@gmail.com)
+
 * Sun Oct 16 2016 Vritant Jain <adarshvritant@gmail.com> 1.18.3-1
 - 1320371: Fix case of retry-after header handling (khowell@redhat.com)
 - Fedora 22 is end-of-life. (awood@redhat.com)
