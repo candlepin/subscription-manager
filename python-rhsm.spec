@@ -12,7 +12,7 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.18.2
+Version: 1.18.3
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -97,6 +97,11 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Sun Oct 16 2016 Vritant Jain <adarshvritant@gmail.com> 1.18.3-1
+- 1320371: Fix case of retry-after header handling (khowell@redhat.com)
+- Fedora 22 is end-of-life. (awood@redhat.com)
+- 1311429: Honor no_proxy environment variable (khowell@redhat.com)
+
 * Fri Sep 16 2016 Alex Wood <awood@redhat.com> 1.18.2-1
 - 1176219: Raise ProxyException in Restlib (khowell@redhat.com)
 - 1367243: Handle RestlibException 404 in refresh (khowell@redhat.com)
