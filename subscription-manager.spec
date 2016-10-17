@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.18.2
+Version: 1.18.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -597,6 +597,24 @@ fi
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Mon Oct 17 2016 Vritant Jain <adarshvritant@gmail.com> 1.18.3-1
+- 1367128, 1367126: Add network.fqdn fact (khowell@redhat.com)
+- 1305729: Improve dnf-plugin package metadata (khowell@redhat.com)
+- 1382897: Don't always reenable register menu item (khowell@redhat.com)
+- 1382355: Don't swallow CLI autoattach exceptions (khowell@redhat.com)
+- 1245473: Add container-specific no-certs warning (khowell@redhat.com)
+- 1369577: Fix rct cat-manifest --no-content format (khowell@redhat.com)
+- 1379258: Fix alignment of GTK3 choose_server screen (khowell@redhat.com)
+- 1320371: Display user-friendly rate limit messages (khowell@redhat.com)
+- 1362731: Change titles when moving to subscription attachment
+  (wpoteat@redhat.com)
+- 1163968: Use macro for service restart (wpoteat@redhat.com)
+- 1372779: Fix typo in "connection" (khowell@redhat.com)
+- 1259768: initial-setup: notify and block for async (khowell@redhat.com)
+- 1365472: Add keyboard mnemonics for initial-setup (khowell@redhat.com)
+- 1176219: Treat port as integer for GUI conn test (khowell@redhat.com)
+- 1366523: Ensure that each quantity spinner has proper settings
+  (wpoteat@redhat.com)
 * Fri Sep 16 2016 Alex Wood <awood@redhat.com> 1.18.2-1
 - 1176219: Error out if bad proxy settings detected (khowell@redhat.com)
 - 1376014: Clear activation key list when checkbox unchecked
