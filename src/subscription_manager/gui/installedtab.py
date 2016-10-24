@@ -108,6 +108,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
             "on_register_button_clicked": parent._register_item_clicked,
         })
 
+        self._entries = []
+
     def _calc_subs_providing(self, product_id, compliant_range):
         """
         Calculates the relevant contract IDs and subscription names which are
@@ -138,8 +140,8 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         return contract_ids, sub_names
 
-    def update_products(self):
-        self.store.clear()
+    def update(self):
+        entries = []
         range_calculator = inj.require(inj.PRODUCT_DATE_RANGE_CALCULATOR,
                 self.backend.cp_provider.get_consumer_auth_cp())
         for product_cert in self.product_dir.list():
@@ -218,14 +220,20 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                     entry['image'] = self._render_icon('red')
                     entry['status'] = _('Not Subscribed')
                     entry['validity_note'] = _("Not Subscribed")
+                entries.append(entry)
+        self._entries = entries
 
-                # FIXME
-                # TODO: fix mapped stores
-                self.store.add_map(entry)
+    def refresh(self):
+        self.store.clear()
+        for entry in self._entries:
+            # FIXME
+            # TODO: fix mapped stores
+            self.store.add_map(entry)
         # 811340: Select the first product in My Installed Products
         # table by default.
         selection = self.top_view.get_selection()
         selection.select_path(0)
+        self._set_validity_status()
 
     def _render_icon(self, icon_id):
         try:
@@ -286,7 +294,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def _set_validity_status(self):
         """ Updates the entitlement validity status portion of the UI. """
-
         if ClassicCheck().is_registered_with_classic():
             self._set_status_icons(VALID_STATUS)
             self.subscription_status_label.set_text(
@@ -339,9 +346,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
     def set_registered(self, is_registered):
         self.update_certificates_button.set_property('visible', is_registered)
         self.register_button.set_property('visible', not is_registered)
-
-    def refresh(self):
-        self._set_validity_status()
 
     def rreplace(self, s, old, new, occurrence):
         li = s.rsplit(old, occurrence)

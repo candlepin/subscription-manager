@@ -28,6 +28,8 @@ import urllib2
 import webbrowser
 import os
 import socket
+import threading
+import time
 
 import rhsm.config as config
 
@@ -241,22 +243,11 @@ class MainWindow(widgets.SubmanBaseWidget):
             "on_quit_menu_item_activate": ga_Gtk.main_quit,
         })
 
-        # TODO: why is this defined in the init scope?
-        # When something causes cert_sorter to upate it's state, refresh the gui
-        # The cert directories being updated will cause this (either noticed
-        # from a timer, or via cert_sort.force_cert_check).
-        def on_cert_sorter_cert_change():
-            # Update installed products
-            self.installed_tab.update_products()
-            self.installed_tab._set_validity_status()
-            # Update attached subs
-            self.my_subs_tab.update_subscriptions()
-            # Update main window
-            self.refresh()
-            # Reset repos dialog, see bz 1132919
-            self.repos_dialog = RepositoriesDialog(self.backend, self._get_window())
+        # various state tracking for async operations
+        self._show_overrides = False
+        self._can_redeem = False
 
-        self.backend.cs.add_callback(on_cert_sorter_cert_change)
+        self.backend.cs.add_callback(self.on_cert_sorter_cert_change)
 
         self.main_window.show_all()
 
@@ -270,7 +261,9 @@ class MainWindow(widgets.SubmanBaseWidget):
         # managergui needs cert_sort.cert_monitor.run_check() to run
         # on a timer to detect cert changes from outside the gui
         # (via rhsmdd for example, or manually provisioned).
-        ga_GLib.timeout_add(2000, self._on_cert_check_timer)
+        cert_monitor_thread = threading.Thread(target=self._cert_check_timer, name="CertMonitorThread")
+        cert_monitor_thread.daemon = True
+        cert_monitor_thread.start()
 
         if auto_launch_registration and not self.registered():
             self._register_item_clicked(None)
@@ -278,9 +271,33 @@ class MainWindow(widgets.SubmanBaseWidget):
     def registered(self):
         return self.identity.is_valid()
 
-    def _on_cert_check_timer(self):
-        self.backend.on_cert_check_timer()
-        return True
+    def _cert_check_timer(self):
+        while True:
+            self.backend.on_cert_check_timer()
+            time.sleep(2.0)
+
+    def _cert_change_update(self):
+        # Update installed products
+        self.installed_tab.refresh()
+        # Update attached subs
+        self.my_subs_tab.refresh()
+        # Update main window
+        self.refresh()
+        # Reset repos dialog, see bz 1132919
+        self.repos_dialog = RepositoriesDialog(self.backend, self._get_window())
+
+    # When something causes cert_sorter to update it's state, refresh the gui
+    # The cert directories being updated will cause this (either noticed
+    # from a timer, or via cert_sort.force_cert_check).
+    def on_cert_sorter_cert_change(self):
+        # gather data used in GUI refresh
+        self._show_overrides = self._should_show_overrides()
+        self._can_redeem = self._should_show_redeem()
+        self.installed_tab.update()
+        self.my_subs_tab.update_subscriptions(update_gui=False)  # don't update GUI since we're in a different thread
+
+        # queue up in the main thread since the cert check may be done by another thread.
+        ga_GLib.idle_add(self._cert_change_update)
 
     def _on_sla_back_button_press(self):
         self._perform_unregister()
@@ -342,6 +359,13 @@ class MainWindow(widgets.SubmanBaseWidget):
             self.unregister_menu_item.set_sensitive(False)
             self.settings_menu_item.set_sensitive(False)
             self.import_cert_menu_item.set_sensitive(True)
+        if self._show_overrides:
+            self.repos_menu_item.set_sensitive(True)
+        else:
+            self.repos_menu_item.set_sensitive(False)
+
+    def _should_show_overrides(self):
+        is_registered = self.registered()
 
         show_overrides = False
         try:
@@ -352,12 +376,15 @@ class MainWindow(widgets.SubmanBaseWidget):
             log.debug("Failed to check if the server supports resource content_overrides")
             log.debug(e)
 
-        if show_overrides:
-            self.repos_menu_item.set_sensitive(True)
-        else:
-            self.repos_menu_item.set_sensitive(False)
+        return show_overrides
 
     def _show_redemption_buttons(self):
+        if self._can_redeem:
+            self.redeem_menu_item.set_sensitive(True)
+        else:
+            self.redeem_menu_item.set_sensitive(False)
+
+    def _should_show_redeem(self):
         # Check if consumer can redeem a subscription - if an identity cert exists
         can_redeem = False
 
@@ -368,10 +395,7 @@ class MainWindow(widgets.SubmanBaseWidget):
             except Exception:
                 can_redeem = False
 
-        if can_redeem:
-            self.redeem_menu_item.set_sensitive(True)
-        else:
-            self.redeem_menu_item.set_sensitive(False)
+        return can_redeem
 
     def _register_item_clicked(self, widget):
         registration_dialog = registergui.RegisterDialog(self.backend, self.facts)

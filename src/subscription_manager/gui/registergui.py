@@ -1019,23 +1019,8 @@ class PerformRegisterScreen(NoGuiScreen):
             self.pre_done()
             return
 
-        try:
-            managerlib.persist_consumer_cert(new_account)
-        except Exception, e:
-            # hint: register error, back to creds?
-            self.emit('register-error', REGISTER_ERROR, e)
-            self.pre_done()
-            return
-
         # trigger a id cert reload
         self.emit('identity-updated')
-
-        # Force all the cert dir backends to update, but mostly
-        # force the identity cert monitor to run, which will
-        # also update Backend. It also blocks until the new
-        # identity is reloaded, so we don't start the selectSLA
-        # screen before it.
-        self.async.backend.cs.force_cert_check()
 
         # NOTE: Assume we want to try to upload package profile even with
         # activation keys
@@ -2024,6 +2009,13 @@ class AsyncBackend(object):
             # We have new credentials, restart virt-who
             restart_virt_who()
 
+            # Force all the cert dir backends to update, but mostly
+            # force the identity cert monitor to run, which will
+            # also update Backend. It also blocks until the new
+            # identity is reloaded, so we don't start the selectSLA
+            # screen before it.
+            self.backend.cs.force_cert_check()
+
             self.queue.put((callback, retval, None))
         except Exception:
             self.queue.put((callback, None, sys.exc_info()))
@@ -2071,6 +2063,9 @@ class AsyncBackend(object):
 
             # FIXME: this should be a different asyncBackend task
             managerlib.fetch_certificates(self.backend.certlib)
+
+            # make GUI aware of updated certs (instead of waiting for periodic task to detect it)
+            self.backend.cs.force_cert_check()
 
         except Exception:
             # Going to try to update certificates just in case we errored out

@@ -1,8 +1,3 @@
-try:
-    import unittest2 as unittest
-except ImportError:
-    import unittest
-
 from fixture import SubManFixture
 import mock
 
@@ -23,7 +18,7 @@ class TestManagerGuiMainWindow(SubManFixture):
                               prod_dir=stubs.StubProductDirectory([]))
 
 
-class TestRegisterScreen(unittest.TestCase):
+class TestRegisterScreen(SubManFixture):
     def test_register_screen(self):
         registergui.RegisterDialog(stubs.StubBackend())
 
