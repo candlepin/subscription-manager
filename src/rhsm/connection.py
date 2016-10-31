@@ -22,13 +22,10 @@ import httplib
 import locale
 import logging
 import os
-import socket
 import sys
 import urllib
 
-from M2Crypto import SSL, httpslib
-from M2Crypto.SSL import SSLError
-from M2Crypto import m2
+from rhsm.https import httplib, ssl
 
 from urllib import urlencode
 
@@ -223,88 +220,9 @@ class ExpiredIdentityCertException(ConnectionException):
     pass
 
 
-class NoOpChecker:
-    def __init__(self, host=None, peerCertHash=None, peerCertDigest='sha1'):
-        self.host = host
-        self.fingerprint = peerCertHash
-        self.digest = peerCertDigest
-
-    def __call__(self, peerCert, host=None):
-        return True
-
-
-class HTTPSConnection(httpslib.HTTPSConnection):
-    """M2Crypto doesn't allow us to set the timeout on the SSL connection in HTTPSConnection.
-    Therefore, we subclass."""
-    def __init__(self, host, *args, **kwargs):
-        self.rhsm_timeout = float(kwargs.pop('timeout', -1.0))
-        httpslib.HTTPSConnection.__init__(self, host, *args, **kwargs)
-
-    def connect(self):
-        """Copied verbatim except for adding the timeout"""
-        error = None
-        # We ignore the returned sockaddr because SSL.Connection.connect needs
-        # a host name.
-        for (family, _, _, _, _) in socket.getaddrinfo(self.host, self.port, 0, socket.SOCK_STREAM):
-            sock = None
-            try:
-                sock = SSL.Connection(self.ssl_ctx, family=family)
-                sock.settimeout(self.rhsm_timeout)
-                if self.session is not None:
-                    sock.set_session(self.session)
-                sock.connect((self.host, self.port))
-
-                self.sock = sock
-                sock = None
-                return
-            except socket.error as e:
-                # Other exception are probably SSL-related, in that case we
-                # abort and the exception is forwarded to the caller.
-                error = e
-            finally:
-                if sock is not None:
-                    sock.close()
-
-        if error is None:
-            raise AssertionError("Empty list returned by getaddrinfo")
-        raise error
-
-
-class RhsmProxyHTTPSConnection(httpslib.ProxyHTTPSConnection):
-    def __init__(self, host, *args, **kwargs):
-        self.rhsm_timeout = float(kwargs.pop('timeout', -1.0))
-        httpslib.ProxyHTTPSConnection.__init__(self, host, *args, **kwargs)
-
-    def _start_ssl(self):
-        self.sock = SSL.Connection(self.ssl_ctx, self.sock)
-        self.sock.settimeout(self.rhsm_timeout)
-        self.sock.setup_ssl()
-        self.sock.set_connect_state()
-        self.sock.connect_ssl()
-
-    # 2.7 httplib expects to be able to pass a body argument to
-    # endheaders, which the m2crypto.httpslib.ProxyHTTPSConnect does
-    # not support
-    def endheaders(self, body=None):
-        if not self._proxy_auth:
-            self._proxy_auth = self._encode_auth()
-
-        if body:
-            httpslib.HTTPSConnection.endheaders(self, body)
-        else:
-            httpslib.HTTPSConnection.endheaders(self)
-
-    def _get_connect_msg(self):
-        """ Return an HTTP CONNECT request to send to the proxy. """
-        port = safe_int(self._real_port)
-        msg = "CONNECT %s:%d HTTP/1.1\r\n" % (self._real_host, port)
-        msg = msg + "Host: %s:%d\r\n" % (self._real_host, port)
-        if self._proxy_UA:
-            msg = msg + "%s: %s\r\n" % (self._UA_HEADER, self._proxy_UA)
-        if self._proxy_auth:
-            msg = msg + "%s: %s\r\n" % (self._AUTH_HEADER, self._proxy_auth)
-        msg = msg + "\r\n"
-        return msg
+def _encode_auth(username, password):
+    encoded = base64.b64encode(':'.join((username, password)))
+    return 'Basic %s' % encoded
 
 
 # FIXME: this is terrible, we need to refactor
@@ -352,23 +270,22 @@ class ContentConnection(object):
 
     def _request(self, request_type, handler, body=None):
         # See note in Restlib._request
-        context = SSL.Context("sslv23")
+        context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
 
         # Disable SSLv2 and SSLv3 support to avoid poodles.
-        context.set_options(m2.SSL_OP_NO_SSLv2 | m2.SSL_OP_NO_SSLv3)
+        context.options = ssl.OP_NO_SSLv2 | ssl.OP_NO_SSLv3
 
         self._load_ca_certificates(context)
 
         if self.proxy_hostname and self.proxy_port:
             log.debug("Using proxy: %s:%s" % (self.proxy_hostname, self.proxy_port))
-            conn = RhsmProxyHTTPSConnection(self.proxy_hostname, self.proxy_port,
-                                            username=self.proxy_user,
-                                            password=self.proxy_password,
-                                            ssl_context=context, timeout=self.timeout)
-            # this connection class wants the full url
-            handler = "https://%s:%s%s" % (self.host, self.ssl_port, handler)
+            proxy_headers = {'User-Agent': self.user_agent}
+            if self.proxy_user and self.proxy_password:
+                proxy_headers['Proxy-Authorization'] = _encode_auth(self.proxy_user, self.proxy_password)
+            conn = httplib.HTTPSConnection(self.proxy_host, self.proxy_port, context=context, timeout=self.timeout)
+            conn.set_tunnel(self.host, safe_int(self.ssl_port), proxy_headers)
         else:
-            conn = HTTPSConnection(self.host, safe_int(self.ssl_port), ssl_context=context, timeout=self.timeout)
+            conn = httplib.HTTPSConnection(self.host, self.ssl_port, context=context, timeout=self.timeout)
 
         conn.request("GET", handler,
                      body="",
@@ -392,8 +309,8 @@ class ContentConnection(object):
                     log.debug("Loading CA certificate: '%s'" % cert_path)
 
                     # FIXME: reenable res =
-                    context.load_verify_info(cert_path)
-                    context.load_cert(cert_path, key_path)
+                    context.load_verify_locations(cert_path)
+                    context.load_cert_chain(cert_path, key_path)
                     # if res == 0:
                     #     raise BadCertificateException(cert_path)
         except OSError as e:
@@ -482,9 +399,7 @@ class Restlib(object):
 
         # Setup basic authentication if specified:
         if username and password:
-            encoded = base64.b64encode(':'.join((username, password)))
-            basic = 'Basic %s' % encoded
-            self.headers['Authorization'] = basic
+            self.headers['Authorization'] = _encode_auth(username, password)
 
     def _decode_list(self, data):
         rv = []
@@ -518,7 +433,7 @@ class Restlib(object):
             for cert_file in os.listdir(self.ca_dir):
                 if cert_file.endswith(".pem"):
                     cert_path = os.path.join(self.ca_dir, cert_file)
-                    res = context.load_verify_info(cert_path)
+                    res = context.load_verify_locations(cert_path)
                     loaded_ca_certs.append(cert_file)
                     if res == 0:
                         raise BadCertificateException(cert_path)
@@ -541,33 +456,29 @@ class Restlib(object):
         # intends to not offer sslv3, it's workable.
         #
         # So this supports tls1.2, 1.1, 1.0, and/or sslv3 if supported.
-        context = SSL.Context("sslv23")
+        context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
 
         # Disable SSLv2 and SSLv3 support to avoid poodles.
-        context.set_options(m2.SSL_OP_NO_SSLv2 | m2.SSL_OP_NO_SSLv3)
+        context.options = ssl.OP_NO_SSLv2 | ssl.OP_NO_SSLv3
 
         if self.insecure:  # allow clients to work insecure mode if required..
-            context.post_connection_check = NoOpChecker()
+            context.verify_mode = ssl.CERT_NONE
         else:
-            # Proper peer verification is essential to prevent MITM attacks.
-            context.set_verify(
-                    SSL.verify_peer | SSL.verify_fail_if_no_peer_cert,
-                    self.ssl_verify_depth)
+            context.verify_mode = ssl.CERT_REQUIRED
             if self.ca_dir is not None:
                 self._load_ca_certificates(context)
         if self.cert_file and os.path.exists(self.cert_file):
-            context.load_cert(self.cert_file, keyfile=self.key_file)
+            context.load_cert_chain(self.cert_file, keyfile=self.key_file)
 
         if self.proxy_hostname and self.proxy_port:
             log.debug("Using proxy: %s:%s" % (self.proxy_hostname, self.proxy_port))
-            conn = RhsmProxyHTTPSConnection(self.proxy_hostname, self.proxy_port,
-                                            username=self.proxy_user,
-                                            password=self.proxy_password,
-                                            ssl_context=context, timeout=self.timeout)
-            # this connection class wants the full url
-            handler = "https://%s:%s%s" % (self.host, self.ssl_port, handler)
+            proxy_headers = {'User-Agent': self.user_agent}
+            if self.proxy_user and self.proxy_password:
+                proxy_headers['Proxy-Authorization'] = _encode_auth(self.proxy_user, self.proxy_password)
+            conn = httplib.HTTPSConnection(self.proxy_hostname, self.proxy_port, context=context, timeout=self.timeout)
+            conn.set_tunnel(self.host, safe_int(self.ssl_port), proxy_headers)
         else:
-            conn = HTTPSConnection(self.host, self.ssl_port, ssl_context=context, timeout=self.timeout)
+            conn = httplib.HTTPSConnection(self.host, self.ssl_port, context=context, timeout=self.timeout)
 
         if info is not None:
             body = json.dumps(info, default=json.encode)
@@ -586,7 +497,7 @@ class Restlib(object):
 
         try:
             conn.request(request_type, handler, body=body, headers=headers)
-        except SSLError:
+        except ssl.SSLError:
             if self.cert_file:
                 id_cert = certificate.create_from_file(self.cert_file)
                 if not id_cert.is_valid():
@@ -1372,9 +1283,9 @@ class UEPConnection:
         try:
             self.conn.request_put(method)
             result = True
-        except (RemoteServerException, httpslib.BadStatusLine, RestlibException) as e:
+        except (RemoteServerException, httplib.BadStatusLine, RestlibException) as e:
             # 404s indicate that the service is unsupported (Candlepin too old, or SAM)
-            if isinstance(e, httpslib.BadStatusLine) or str(e.code) == "404":
+            if isinstance(e, httplib.BadStatusLine) or str(e.code) == "404":
                 log.debug("Unable to refresh entitlement certificates: Service currently unsupported.")
                 log.debug(e)
             else:
@@ -1398,9 +1309,9 @@ class UEPConnection:
         try:
             self.conn.request_put(method)
             result = True
-        except (RemoteServerException, httpslib.BadStatusLine, RestlibException) as e:
+        except (RemoteServerException, httplib.BadStatusLine, RestlibException) as e:
             # 404s indicate that the service is unsupported (Candlepin too old, or SAM)
-            if isinstance(e, httpslib.BadStatusLine) or str(e.code) == "404":
+            if isinstance(e, httplib.BadStatusLine) or str(e.code) == "404":
                 log.debug("Unable to refresh entitlement certificates: Service currently unsupported.")
                 log.debug(e)
             else:

@@ -58,10 +58,22 @@ typedef struct {
 	X509 *x509;
 } certificate_x509;
 
+typedef struct {
+	PyObject_HEAD;
+	EVP_PKEY *key;
+} private_key;
+
 static void
 certificate_x509_dealloc (certificate_x509 *self)
 {
 	X509_free (self->x509);
+	self->ob_type->tp_free ((PyObject *) self);
+}
+
+static void
+private_key_dealloc (private_key *self)
+{
+	EVP_PKEY_free (self->key);
 	self->ob_type->tp_free ((PyObject *) self);
 }
 
@@ -74,6 +86,7 @@ static PyObject *get_extension (certificate_x509 *self, PyObject *varargs,
 				PyObject *keywords);
 static PyObject *get_all_extensions (certificate_x509 *self, PyObject *varargs);
 static PyObject *as_pem (certificate_x509 *self, PyObject *varargs);
+static PyObject *as_text (certificate_x509 *self, PyObject *varargs);
 
 static PyMethodDef x509_methods[] = {
 	{"get_not_before", (PyCFunction) get_not_before, METH_VARARGS,
@@ -93,6 +106,8 @@ static PyMethodDef x509_methods[] = {
 	 "get a dict of oid: value"},
 	{"as_pem", (PyCFunction) as_pem, METH_VARARGS,
 	 "return the pem representation of this certificate"},
+	{"as_text", (PyCFunction) as_text, METH_VARARGS,
+	 "return the text representation of this certificate (such as printed by openssl x509 -noout -text)"},
 	{NULL}
 };
 
@@ -126,6 +141,48 @@ static PyTypeObject certificate_x509_type = {
 	0,			/* tp_iter */
 	0,			/* tp_iternext */
 	x509_methods,		/* tp_methods */
+	0,			/* tp_members */
+	0,			/* tp_getset */
+	0,			/* tp_base */
+	0,			/* tp_dict */
+	0,			/* tp_descr_get */
+	0,			/* tp_descr_set */
+	0,			/* tp_dictoffset */
+	0,			/* tp_init */
+	0,			/* tp_alloc */
+	0,			/* tp_new */
+};
+
+static PyTypeObject private_key_type = {
+	PyObject_HEAD_INIT (NULL)
+	0,
+	"_certificate.PrivateKey",
+	sizeof (private_key),
+	0,			/*tp_itemsize */
+	(destructor) private_key_dealloc,
+	0,			/*tp_print */
+	0,			/*tp_getattr */
+	0,			/*tp_setattr */
+	0,			/*tp_compare */
+	0,			/*tp_repr */
+	0,			/*tp_as_number */
+	0,			/*tp_as_sequence */
+	0,			/*tp_as_mapping */
+	0,			/*tp_hash */
+	0,			/*tp_call */
+	0,			/*tp_str */
+	0,			/*tp_getattro */
+	0,			/*tp_setattro */
+	0,			/*tp_as_buffer */
+	Py_TPFLAGS_DEFAULT,	/*tp_flags */
+	"Private Key",	    /* tp_doc */
+	0,			/* tp_traverse */
+	0,			/* tp_clear */
+	0,			/* tp_richcompare */
+	0,			/* tp_weaklistoffset */
+	0,			/* tp_iter */
+	0,			/* tp_iternext */
+	0,			/* tp_methods */
 	0,			/* tp_members */
 	0,			/* tp_getset */
 	0,			/* tp_base */
@@ -244,6 +301,40 @@ load_cert (PyObject *self, PyObject *args, PyObject *keywords)
 }
 
 static PyObject *
+load_private_key (PyObject *self, PyObject *args, PyObject *keywords)
+{
+	const char *file_name = NULL;
+	const char *pem = NULL;
+
+	static char *keywordlist[] = { "file", "pem", NULL };
+
+	if (!PyArg_ParseTupleAndKeywords (args, keywords, "|ss", keywordlist,
+					  &file_name, &pem)) {
+		return NULL;
+	}
+
+	BIO *bio;
+	if (pem != NULL) {
+		bio = BIO_new_mem_buf ((void *) pem, strlen (pem));
+	} else {
+		bio = BIO_new_file (file_name, "r");
+	}
+
+	EVP_PKEY* key = PEM_read_bio_PrivateKey (bio, NULL, NULL, NULL);
+	BIO_free (bio);
+
+	if (key == NULL) {
+		Py_INCREF (Py_None);
+		return Py_None;
+	}
+
+	private_key *py_key =
+		(private_key *) _PyObject_New (&private_key_type);
+	py_key->key = key;
+	return (PyObject *) py_key;
+}
+
+static PyObject *
 get_extension (certificate_x509 *self, PyObject *args, PyObject *keywords)
 {
 	const char *oid = NULL;
@@ -327,6 +418,26 @@ as_pem (certificate_x509 *self, PyObject *args)
 
 	BIO *bio = BIO_new (BIO_s_mem ());
 	PEM_write_bio_X509 (bio, self->x509);
+
+	size_t size = BIO_ctrl_pending (bio);
+	char *buf = malloc (sizeof (char) * size);
+	BIO_read (bio, buf, size);
+	BIO_free (bio);
+
+	PyObject *pem = PyString_FromStringAndSize (buf, size);
+	free (buf);
+	return pem;
+}
+
+static PyObject *
+as_text (certificate_x509 *self, PyObject *args)
+{
+	if (!PyArg_ParseTuple (args, "")) {
+		return NULL;
+	}
+
+	BIO *bio = BIO_new (BIO_s_mem ());
+	X509_print (bio, self->x509);
 
 	size_t size = BIO_ctrl_pending (bio);
 	char *buf = malloc (sizeof (char) * size);
@@ -451,6 +562,8 @@ get_not_after (certificate_x509 *self, PyObject *args)
 static PyMethodDef cert_methods[] = {
 	{"load", (PyCFunction) load_cert, METH_VARARGS | METH_KEYWORDS,
 	 "load a certificate from a file"},
+	{"load_private_key", (PyCFunction) load_private_key, METH_VARARGS | METH_KEYWORDS,
+	 "load a private key from a file"},
 	{NULL}
 };
 
@@ -468,4 +581,13 @@ init_certificate (void)
 	Py_INCREF (&certificate_x509_type);
 	PyModule_AddObject (module, "X509",
 			    (PyObject *) & certificate_x509_type);
+
+    private_key_type.tp_new = PyType_GenericNew;
+	if (PyType_Ready (&private_key_type) < 0) {
+		return;
+	}
+
+	Py_INCREF (&private_key_type);
+	PyModule_AddObject (module, "PrivateKey",
+			    (PyObject *) & private_key_type);
 }
