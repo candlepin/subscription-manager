@@ -41,10 +41,10 @@ The subscription for following product(s) has expired:
 You no longer have access to the repositories that provide these products.  It is important that you apply an active subscription in order to resume access to security and other critical updates. If you don't have other active subscriptions, you can renew the expired subscription.  """
 
 not_registered_warning = \
-"This system is not registered to Red Hat Subscription Management. You can use subscription-manager to register."
+"This system is not registered with an entitlement server. You can use subscription-manager to register."
 
 no_subs_warning = \
-"This system is registered to Red Hat Subscription Management, but is not receiving updates. You can use subscription-manager to assign subscriptions."
+"This system is registered with an entitlement server, but is not receiving updates. You can use subscription-manager to assign subscriptions."
 
 no_subs_container_warning = \
 "This system is not receiving updates. You can use subscription-manager on the host to register and assign subscriptions."
