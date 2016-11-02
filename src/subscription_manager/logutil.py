@@ -145,7 +145,7 @@ def init_logger():
         logger = logging.getLogger(root_namespace)
         logger.addHandler(_get_default_rhsm_log_handler())
         logger.addHandler(_get_default_subman_debug_handler())
-        logger.setLevel(default_log_level)
+        logger.setLevel(getattr(logging, default_log_level.strip()))
 
     for logger_name, logging_level in config.items('logging'):
         logger_name = logger_name.strip()
@@ -156,7 +156,7 @@ def init_logger():
             # default_log_level
             continue
         logger = logging.getLogger(logger_name)
-        logger.setLevel(logging_level)
+        logger.setLevel(getattr(logging, logging_level.strip()))
 
     if not log:
         log = logging.getLogger(__name__)
