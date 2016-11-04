@@ -64,9 +64,9 @@ class TestLogutil(fixture.SubManFixture):
 
     def test_set_valid_logger_level(self):
         logging_conf = [
-            ('subscription_manager.managercli', logging.ERROR),
-            ('rhsm', logging.WARNING),
-            ('rhsm-app', logging.CRITICAL),
+            ('subscription_manager.managercli', "ERROR"),
+            ('rhsm', "WARNING"),
+            ('rhsm-app', "CRITICAL"),
             ('rhsm-app.rhsmd', "DEBUG")
         ]
 
