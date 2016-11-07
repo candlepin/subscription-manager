@@ -83,10 +83,6 @@ class OstreeContentUpdateActionCommand(object):
         # reload the new config, so we have fresh remotes, etc
         self.load_config(ostree_repo_config)
 
-        # Now that we've updated the ostree repo config, we need to
-        # update the currently deployed osname tree .origin file:
-        self.update_origin_file(ostree_repo_config)
-
         log.debug("Ostree update report: %s" % report)
         return report
 
@@ -121,10 +117,6 @@ class OstreeContentUpdateActionCommand(object):
         except ConfigParser.Error:
             log.info("No ostree content config file found at: %s. Not loading ostree config.",
                      ostree_config.repo_file_path)
-
-    def update_origin_file(self, ostree_config):
-        updater = model.OstreeOriginUpdater(ostree_config)
-        updater.run()
 
 
 class OstreeContentUpdateActionReport(certlib.ActionReport):

@@ -15,7 +15,6 @@
 
 import logging
 import os
-import re
 
 from rhsm import config
 from subscription_manager import utils
@@ -40,19 +39,19 @@ One config file is the "repo" config, that defines some
 core config options, and the ostree "remotes".
 
 The other is an "origin" file that includes a refspec
-for a given ostree sha.
+for a given ostree sha. We no longer check this origin
+file. We leave it to the rpm-ostree and ostree tools to deal with.
 
 We base the config parser on rhsm.config.RhsmConfigParser,
 except with "defaults" support removed.
 
-We has a KeyFileConfigParser, and two subclasses of it
-for RepoFileConfigParser and OriginFileConfigParser.
+We have a KeyFileConfigParser, and one subclass of it
+for RepoFileConfigParser.
 
-There is also a OstreeConfigFile, and two subsclasses of
-it for RepoFile, and OriginFile. These add some file type
+There is also an OstreeConfigFile, and one subclass of
+it for RepoFile. These add some file type
 specific helper functions.
 
-OriginFile has a OriginFileConfigParser.
 RepoFile has a RepoFileConfigParser, but adds methods for
 dealing with all of the remote sections.
 """
@@ -116,17 +115,6 @@ class KeyFileConfigParser(config.RhsmConfigParser):
             return
 
         super(KeyFileConfigParser, self).save()
-
-
-def replace_refspec_remote(refspec, new_remote):
-    """
-    Replaces the 'remote' portion of an ostree origin file refspec.
-    """
-    refspec_regex = "(.*):(.*)"
-    m = re.search(refspec_regex, refspec)
-    if not m:
-        raise RefspecFormatException("Unable to parse refspec: %s" % refspec)
-    return "%s:%s" % (new_remote, m.group(2))
 
 
 class BaseOstreeConfigFile(object):
@@ -252,7 +240,3 @@ class RepoFile(BaseOstreeConfigFile):
 
     def get_core(self):
         return self.config_parser.items('core')
-
-
-class OriginFile(object):
-    config_parser_class = KeyFileConfigParser
