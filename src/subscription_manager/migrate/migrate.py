@@ -20,6 +20,7 @@ import libxml2
 import logging
 import os
 import re
+import readline
 import shutil
 import subprocess
 import sys
@@ -116,6 +117,7 @@ class Menu(object):
         while True:
             self.display()
             selection = raw_input("? ").strip()
+            readline.clear_history()
             try:
                 return self._get_item(selection)
             except InvalidChoiceError:
@@ -183,6 +185,7 @@ class MigrationEngine(object):
     def authenticate(self, username, password, user_prompt, pw_prompt):
         if not username:
             username = raw_input(user_prompt).strip()
+            readline.clear_history()
 
         if not password:
             password = getpass.getpass(prompt=pw_prompt)
@@ -304,6 +307,7 @@ class MigrationEngine(object):
                 org_input = owner_list[0]['key']
             else:
                 org_input = raw_input(_("Org: ")).strip()
+                readline.clear_history()
 
             org = None
             for owner_data in owner_list:
@@ -333,6 +337,7 @@ class MigrationEngine(object):
                 env_input = environment_list[0]['name']
             else:
                 env_input = raw_input(_("Environment: ")).strip()
+                readline.clear_history()
 
             for env_data in environment_list:
                 # See BZ #978001
