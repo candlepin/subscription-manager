@@ -795,12 +795,26 @@ class MigrationEngine(object):
         release_number = int(self.get_release().partition('-')[-1])
         return release_number > 6
 
+    def is_daemon_installed(self, daemon, using_systemd):
+        if using_systemd:
+            return subprocess.call("systemctl list-unit-files %s.service | grep %s > /dev/null 2>&1" % (daemon, daemon), shell=True) == 0
+        else:
+            return os.path.exists("/etc/init.d/%s" % daemon)
+
+    def is_daemon_running(self, daemon, using_systemd):
+        if using_systemd:
+            return subprocess.call("systemctl is-active --quiet %s" % daemon, shell=True) == 0
+        else:
+            return subprocess.call("service %s status > /dev/null 2>&1" % daemon, shell=True) == 0
+
     def handle_legacy_daemons(self, using_systemd):
         print _("Stopping and disabling legacy services...")
         log.info("Attempting to stop and disable legacy services: %s" % " ".join(LEGACY_DAEMONS))
         for daemon in LEGACY_DAEMONS:
-            self.stop_daemon(daemon, using_systemd)
-            self.disable_daemon(daemon, using_systemd)
+            if self.is_daemon_installed(daemon, using_systemd):
+                self.disable_daemon(daemon, using_systemd)
+                if self.is_daemon_running(daemon, using_systemd):
+                    self.stop_daemon(daemon, using_systemd)
 
     def stop_daemon(self, daemon, using_systemd):
         if using_systemd:
@@ -812,7 +826,7 @@ class MigrationEngine(object):
         if using_systemd:
             subprocess.call(["systemctl", "disable", daemon])
         else:
-            subprocess.call(["service", daemon, "disable"])
+            subprocess.call(["chkconfig", daemon, "off"])
 
     def remove_legacy_packages(self):
         print _("Removing legacy packages...")
