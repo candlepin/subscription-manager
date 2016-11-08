@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.18.3
+Version: 1.18.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -597,6 +597,13 @@ fi
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Tue Nov 08 2016 Vritant Jain <adarshvritant@gmail.com> 1.18.4-1
+- Rev zanata version to 1.18.X (adarshvritant@gmail.com)
+- 1389559: Parse log levels properly from config (khowell@redhat.com)
+- 1390549: Force input prompts to use stdout (khowell@redhat.com)
+- debrand so my Katello server errors don't point to real RHSM
+  (riehecky@fnal.gov)
+
 * Mon Oct 17 2016 Vritant Jain <adarshvritant@gmail.com> 1.18.3-1
 - 1367128, 1367126: Add network.fqdn fact (khowell@redhat.com)
 - 1305729: Improve dnf-plugin package metadata (khowell@redhat.com)
