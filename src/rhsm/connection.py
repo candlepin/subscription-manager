@@ -22,6 +22,7 @@ import httplib
 import locale
 import logging
 import os
+import socket
 import sys
 import urllib
 
