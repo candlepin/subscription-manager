@@ -18,7 +18,6 @@ import base64
 import certificate
 import datetime
 import dateutil.parser
-import httplib
 import locale
 import logging
 import os
