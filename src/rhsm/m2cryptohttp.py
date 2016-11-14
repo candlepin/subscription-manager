@@ -153,12 +153,13 @@ class HTTPSConnection(object):
         self.ssl_port = ssl_port
         context = kwargs.pop('context', None)
         kwargs['ssl_context'] = context.m2context
-        self._connection = _RhsmHTTPSConnection(host, *args, **kwargs)
+        self._connection = _RhsmHTTPSConnection(host, ssl_port, *args, **kwargs)
         self.args = args
         self.kwargs = kwargs
 
     def request(self, method, handler, *args, **kwargs):
-        handler = "https://%s:%s%s" % (self.host, self.ssl_port, handler)
+        if isinstance(self._connection, _RhsmProxyHTTPSConnection):
+            handler = "https://%s:%s%s" % (self.host, self.ssl_port, handler)
         return self._connection.request(method, handler, *args, **kwargs)
 
     def getresponse(self, *args, **kwargs):

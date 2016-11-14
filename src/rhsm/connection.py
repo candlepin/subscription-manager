@@ -463,8 +463,10 @@ class Restlib(object):
 
         if self.insecure:  # allow clients to work insecure mode if required..
             context.verify_mode = ssl.CERT_NONE
+            context.check_hostname = False
         else:
             context.verify_mode = ssl.CERT_REQUIRED
+            context.check_hostname = True
             if self.ca_dir is not None:
                 self._load_ca_certificates(context)
         if self.cert_file and os.path.exists(self.cert_file):
@@ -733,7 +735,7 @@ class UEPConnection:
                                 proxy_user=self.proxy_user, proxy_password=self.proxy_password,
                                 ca_dir=self.ca_cert_dir, insecure=self.insecure,
                                 ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout)
-            auth_description = "auth=identity_cert ca_dir=%s verify=%s" % (self.ca_cert_dir, self.insecure)
+            auth_description = "auth=identity_cert ca_dir=%s insecure=%s" % (self.ca_cert_dir, self.insecure)
         else:
             self.conn = Restlib(self.host, self.ssl_port, self.handler,
                     proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
