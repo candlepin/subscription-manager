@@ -25,6 +25,16 @@ OP_NO_SSLv2 = _m2.SSL_OP_NO_SSLv2
 OP_NO_SSLv3 = _m2.SSL_OP_NO_SSLv3
 
 
+class NoOpChecker:
+    def __init__(self, host=None, peerCertHash=None, peerCertDigest='sha1'):
+        self.host = host
+        self.fingerprint = peerCertHash
+        self.digest = peerCertDigest
+
+    def __call__(self, peerCert, host=None):
+        return True
+
+
 class SSLContext(object):
 
     def __init__(self, version):
@@ -33,6 +43,19 @@ class SSLContext(object):
         self._default_verify_depth = self.m2context.get_verify_depth()
         self.options = OP_ALL
         self.verify_mode = CERT_NONE
+        self.check_hostname = False
+
+    @property
+    def check_hostname(self):
+        return self._check_hostname
+
+    @check_hostname.setter
+    def check_hostname(self, check_hostname):
+        self._check_hostname = check_hostname
+        if not check_hostname:
+            self.m2context.post_connection_check = NoOpChecker()
+        else:
+            self.m2context.post_connection_check = None
 
     @property
     def options(self):
