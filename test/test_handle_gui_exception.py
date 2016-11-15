@@ -4,7 +4,7 @@ except ImportError:
     import unittest
 
 import socket
-from M2Crypto import SSL
+from rhsm.https import ssl
 
 from subscription_manager.gui import utils
 from fixture import FakeException, FakeLogger
@@ -50,7 +50,7 @@ class HandleGuiExceptionTests(unittest.TestCase):
 
     def test_hge_ssl_error(self):
         utils.log.set_expected_msg(self.msg)
-        utils.handle_gui_exception(SSL.SSLError(), self.msg, None)
+        utils.handle_gui_exception(ssl.SSLError(), self.msg, None)
         self.assertEqual(utils.log.expected_msg, self.msg)
 
     def test_hge_network_exception(self):

@@ -30,7 +30,8 @@ import socket
 import sys
 from time import localtime, strftime, strptime
 
-from M2Crypto import X509
+from rhsm.certificate import CertificateException
+from rhsm.https import ssl
 
 import rhsm.config
 import rhsm.connection as connection
@@ -541,7 +542,7 @@ class CliCommand(AbstractCLICommand):
 
             if return_code is not None:
                 return return_code
-        except X509.X509Error, e:
+        except (CertificateException, ssl.SSLError) as e:
             log.error(e)
             system_exit(os.EX_SOFTWARE, _('System certificates corrupted. Please reregister.'))
         except connection.GoneException, ge:

@@ -22,7 +22,7 @@ import StringIO
 import stubs
 
 from mock import patch, NonCallableMock, MagicMock, Mock, call
-from M2Crypto import SSL
+from rhsm.https import ssl
 from fixture import Capture, SubManFixture, temp_file
 from optparse import OptionParser
 from textwrap import dedent
@@ -580,7 +580,7 @@ class TestMigration(SubManFixture):
 
     def test_ssl_error(self):
         self._inject_mock_invalid_consumer()
-        self.engine.cp.getStatus = MagicMock(side_effect=SSL.SSLError)
+        self.engine.cp.getStatus = MagicMock(side_effect=ssl.SSLError)
         try:
             self.engine.check_ok_to_proceed()
         except SystemExit, e:

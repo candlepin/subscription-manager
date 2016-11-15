@@ -21,7 +21,7 @@ import httplib
 import logging
 import socket
 
-from M2Crypto.SSL import SSLError
+from rhsm.https import ssl
 
 import rhsm.config
 
@@ -125,7 +125,7 @@ class CdnReleaseVersionProvider(object):
                 data = self.content_connection.get_versions(listing_path)
             except (socket.error,
                     httplib.HTTPException,
-                    SSLError) as e:
+                    ssl.SSLError) as e:
                 # content connection doesn't handle any exceptions
                 # and the code that invokes this doesn't either, so
                 # swallow them here.

@@ -178,7 +178,7 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
     def _has_complete_proxy_info(self):
         return self.enableProxyButton.get_active() and self.proxyEntry.get_text().strip() and (
             not self.enableProxyAuthButton.get_active() or (
-                # m2crypto doesn't use auth unless both are provided as non-empty
+                # https connection doesn't use auth unless both are provided as non-empty
                 # FIXME we should account for the above in other places, such as write_values and documentation
                 self.proxyUserEntry.get_text() and self.proxyPasswordEntry.get_text()
             )

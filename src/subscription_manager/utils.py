@@ -26,7 +26,7 @@ import socket
 import syslog
 import urllib
 
-from M2Crypto.SSL import SSLError
+from rhsm.https import ssl
 
 from subscription_manager.branding import get_branding
 from subscription_manager.certdirectory import Path
@@ -149,7 +149,7 @@ def is_valid_server_info(conn):
         else:
             log.exception(e)
             return False
-    except SSLError, e:
+    except ssl.SSLError as e:
         # Indicates a missing CA certificate, which callers may need to
         # notify the user of:
         raise MissingCaCertException(e)
