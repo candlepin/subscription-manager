@@ -939,6 +939,12 @@ def validate_options(options):
         # TODO Need to explain why this restriction exists.
         system_exit(os.EX_USAGE, _("The --servicelevel and --no-auto options cannot be used together."))
 
+    if options.remove_legacy_packages and options.registration_state == 'keep' and not options.five_to_six:
+        system_exit(os.EX_USAGE, _("The --remove-rhn-packages and --keep options cannot be used together."))
+
+    if options.remove_legacy_packages and options.registration_state in ['keep', 'unentitle'] and options.five_to_six:
+        system_exit(os.EX_USAGE, _("The --remove-rhn-packages option must be used with --registration-state=purge."))
+
 
 def is_hosted():
     rhsmcfg = rhsm.config.initConfig()
