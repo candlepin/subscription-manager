@@ -520,7 +520,9 @@ class Restlib(object):
         if response.getheader('x-candlepin-request-uuid'):
             response_log = "%s, requestUuid=%s" % (response_log,
                     response.getheader('x-candlepin-request-uuid'))
-        log.debug(response_log)
+        response_log = "%s, request=\"%s %s\"" % (response_log,
+            request_type, handler)
+        log.info(response_log)
 
         # Look for server drift, and log a warning
         if drift_check(response.getheader('date')):
