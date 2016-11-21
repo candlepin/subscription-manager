@@ -237,7 +237,12 @@ class moduleClass(module.Module, object):
         self.error_dialog(msg)
 
     def handle_register_exception(self, obj, msg, exc_info):
-        if isinstance(exc_info[1], registergui.RemoteUnregisterException):
+        # We are checking to see if exc_info seems to have come from
+        # a call to sys.exc_info()
+        # (likely somewhere in registergui.AsyncBackend)
+        # See bz 1395662 for more info
+        if isinstance(exc_info, tuple) and \
+           isinstance(exc_info[1], registergui.RemoteUnregisterException):
             # Don't show a message box when we cannot unregister from the server
             # Instead log the exception
             log.exception(exc_info[1])
