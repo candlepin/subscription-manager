@@ -28,7 +28,8 @@ from subscription_manager.ga import GObject as ga_GObject
 
 import rhsm.config as config
 from rhsm.utils import ServerUrlParseError
-from rhsm.connection import GoneException, RestlibException, UEPConnection
+from rhsm.connection import GoneException, RestlibException, UEPConnection, \
+        ProxyException
 
 from subscription_manager.branding import get_branding
 from subscription_manager.action_client import ActionClient
@@ -1888,9 +1889,19 @@ class ValidateServerScreen(NoGuiScreen):
         if info:
             hostname, port, prefix, is_valid = info
         if error is not None:
-            self.emit('register-error',
+            if isinstance(error, tuple):
+                if isinstance(error[1], MissingCaCertException):
+                    self.emit('register-error',
                       _("CA certificate for subscription service has not been installed."),
                       None)
+                if isinstance(error[1], ProxyException):
+                    self.emit('register-error',
+                      _("Proxy authentication failed, please check your settings."),
+                      None)
+            else:
+                self.emit('register-error',
+                          _("Error validating server: %s"),
+                          error)
             self.pre_done()
             return
         elif not is_valid:
@@ -2216,7 +2227,7 @@ class AsyncBackend(object):
             conn = UEPConnection(hostname, int(port), prefix)
             is_valid = is_valid_server_info(conn)
             self.queue.put((callback, (hostname, port, prefix, is_valid), None))
-        except MissingCaCertException:
+        except (MissingCaCertException, ProxyException):
             self.queue.put((callback, None, sys.exc_info()))
 
     def get_owner_list(self, username, callback):
