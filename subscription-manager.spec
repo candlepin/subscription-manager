@@ -79,6 +79,7 @@ Requires:  python-ethtool
 Requires:  python-iniparse
 Requires:  virt-what
 Requires:  python-rhsm >= 1.18.1
+Requires:  python-decorator
 %if 0%{?sles_version}
 Requires:  dbus-1-python
 %else
