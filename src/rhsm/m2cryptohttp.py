@@ -150,10 +150,10 @@ class _RhsmHTTPSConnection(httpslib.HTTPSConnection):
 class HTTPSConnection(object):
     def __init__(self, host, ssl_port, *args, **kwargs):
         self.host = host
-        self.ssl_port = ssl_port
+        self.ssl_port = int(ssl_port) if ssl_port else None
         context = kwargs.pop('context', None)
         kwargs['ssl_context'] = context.m2context
-        self._connection = _RhsmHTTPSConnection(host, ssl_port, *args, **kwargs)
+        self._connection = _RhsmHTTPSConnection(host, self.ssl_port, *args, **kwargs)
         self.args = args
         self.kwargs = kwargs
 
@@ -173,7 +173,7 @@ class HTTPSConnection(object):
         proxy_host = self.host
         proxy_port = self.ssl_port
         self.host = host
-        self.ssl_port = port
+        self.ssl_port = int(port) if port else None
         self._connection = _RhsmProxyHTTPSConnection(proxy_host, proxy_port, *self.args, proxy_headers=headers,
                                                     **self.kwargs)
 
