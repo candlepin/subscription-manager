@@ -15,7 +15,7 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.18.4
+Version: 1.18.5
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -102,6 +102,16 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Fri Nov 25 2016 Vritant Jain <adarshvritant@gmail.com> 1.18.5-1
+- 1396405: Use an int for port on connections (csnyder@redhat.com)
+- 1393010: Correlate request ID, method and handler in logs
+  (csnyder@redhat.com)
+- 1394776: Fix port, insecure, and handler options on M2Crypto wrapper
+  (csnyder@redhat.com)
+- 1394351: Add httplib constants to m2cryptohttp (khowell@redhat.com)
+- 1390688: Add missing socket import (khowell@redhat.com)
+- Reduce usage of m2crypto (#184) (kevin@kahowell.net)
+
 * Sun Oct 16 2016 Vritant Jain <adarshvritant@gmail.com> 1.18.4-1
 - Added 6.9 releaser (adarshvritant@gmail.com)
 
