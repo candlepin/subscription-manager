@@ -1896,7 +1896,7 @@ class ValidateServerScreen(NoGuiScreen):
                       None)
                 if isinstance(error[1], ProxyException):
                     self.emit('register-error',
-                      _("Proxy authentication failed, please check your settings."),
+                      _("Proxy connection failed, please check your settings."),
                       None)
             else:
                 self.emit('register-error',
