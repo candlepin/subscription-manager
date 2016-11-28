@@ -1266,7 +1266,9 @@ class TestMigration(SubManFixture):
 
     @patch("subprocess.call", autospec=True)
     def test_handle_legacy_daemons_systemv(self, mock_subprocess):
-        self.engine.handle_legacy_daemons(using_systemd=False)
+        with patch("os.path.exists") as mock_exists:
+            mock_exists.return_value = True
+            self.engine.handle_legacy_daemons(using_systemd=False)
         self.assertIn('service', mock_subprocess.call_args[0][0])
 
     @patch("subprocess.call", autospec=True)
