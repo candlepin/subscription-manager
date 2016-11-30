@@ -16,7 +16,7 @@
 import logging
 import os
 
-from rhsm.certificate import create_from_pem
+from rhsm.certificate import create_from_pem, CertificateException
 from rhsm.config import initConfig
 from subscription_manager.certdirectory import Path
 
@@ -64,6 +64,17 @@ class ConsumerIdentity:
             try:
                 cls.read()
                 return True
+            except CertificateException as e:
+                log.warn('possible certificate corruption')
+                log.error(e)
+                # Leave it to the caller to handle the exception
+                # so that they have to opportunity to display it nicely
+                # to the user (if appropriate)
+                raise
+            except IOError as e:
+                log.warn('One of the consumer certificates could not be read')
+                log.error(e)
+            # XXX: I do not like catch-all excepts
             except Exception, e:
                 log.warn('possible certificate corruption')
                 log.error(e)
@@ -124,6 +135,7 @@ class ConsumerIdentity:
 class Identity(object):
     """Wrapper for sharing consumer identity without constant reloading."""
     def __init__(self):
+        self._reset()
         self.reload()
 
     def reload(self):
@@ -139,18 +151,27 @@ class Identity(object):
             # the cert dir on the active id instead of the global config
             self.cert_dir_path = self.consumer.PATH
 
+        except CertificateException as e:
+            self._reset()
+            raise
+
         # XXX shouldn't catch the global exception here, but that's what
         # existsAndValid did, so this is better.
         except Exception, e:
             log.debug("Reload of consumer identity cert %s raised an exception with msg: %s",
                       ConsumerIdentity.certpath(), e)
-            self.consumer = None
-            self.name = None
-            self.uuid = None
-            self.cert_dir_path = CFG.get('rhsm', 'consumerCertDir')
+            self._reset()
+
+    def _reset(self):
+        self.consumer = None
+        self.name = None
+        self.uuid = None
+        self.cert_dir_path = CFG.get('rhsm', 'consumerCertDir')
 
     def _get_consumer_identity(self):
         # FIXME: wrap in exceptions, catch IOErrors etc, raise anything else
+        if not ConsumerIdentity.existsAndValid():
+            raise CertificateException("Possible Certificate Corruption")
         return ConsumerIdentity.read()
 
     # this name is weird, since Certificate.is_valid actually checks the data
