@@ -74,6 +74,7 @@ class ConsumerIdentity:
             except IOError as e:
                 log.warn('One of the consumer certificates could not be read')
                 log.error(e)
+                raise
             # XXX: I do not like catch-all excepts
             except Exception, e:
                 log.warn('possible certificate corruption')
@@ -144,6 +145,9 @@ class Identity(object):
         try:
             # uh, weird
             # FIXME: seems weird to wrap this stuff
+            if not ConsumerIdentity.existsAndValid():
+                self._reset()
+                return
             self.consumer = self._get_consumer_identity()
             self.name = self.consumer.getConsumerName()
             self.uuid = self.consumer.getConsumerId()
@@ -169,9 +173,6 @@ class Identity(object):
         self.cert_dir_path = CFG.get('rhsm', 'consumerCertDir')
 
     def _get_consumer_identity(self):
-        # FIXME: wrap in exceptions, catch IOErrors etc, raise anything else
-        if not ConsumerIdentity.existsAndValid():
-            raise CertificateException("Possible Certificate Corruption")
         return ConsumerIdentity.read()
 
     # this name is weird, since Certificate.is_valid actually checks the data
