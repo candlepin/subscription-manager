@@ -74,6 +74,22 @@ NOT_EXTENDED = httplib.NOT_EXTENDED
 
 responses = httplib.responses
 
+HTTPConnection = httplib.HTTPConnection
+HTTPResponse = httplib.HTTPResponse
+HTTPMessage = httplib.HTTPMessage
+HTTPException = httplib.HTTPException
+NotConnected = httplib.NotConnected
+InvalidURL = httplib.InvalidURL
+UnknownProtocol = httplib.UnknownProtocol
+UnknownTransferEncoding = httplib.UnknownTransferEncoding
+UnimplementedFileMode = httplib.UnimplementedFileMode
+IncompleteRead = httplib.IncompleteRead
+ImproperConnectionState = httplib.ImproperConnectionState
+CannotSendRequest = httplib.CannotSendRequest
+CannotSendHeader = httplib.CannotSendHeader
+ResponseNotReady = httplib.ResponseNotReady
+BadStatusLine = httplib.BadStatusLine
+
 
 class _RhsmProxyHTTPSConnection(httpslib.ProxyHTTPSConnection):
     def __init__(self, host, *args, **kwargs):
