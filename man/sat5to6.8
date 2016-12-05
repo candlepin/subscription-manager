@@ -21,7 +21,7 @@
 sat5to6 \- Migrates a system profile from Red Hat Satellite v.5 to Red Hat Satellite v.6 as part of the Satellite Transition process.
 
 .SH SYNOPSIS
-sat5to6 [--destination-user=DESTINATION_USER] | [--destination-password=DESTINATION_PASSWORD] | [--destination-url=URL] | [--legacy-user=LEGACY_USER] | [--legacy-password=LEGACY_PASSWORD] | [--no-auto] | [--no-proxy] | [--registration-state=STATE] | [--servicelevel=SERVICE_LEVEL] | [--help]
+sat5to6 [--destination-user=DESTINATION_USER] | [--destination-password=DESTINATION_PASSWORD] | [--destination-url=URL] | [--legacy-user=LEGACY_USER] | [--legacy-password=LEGACY_PASSWORD] | [--no-auto] | [--no-proxy] | [--registration-state=STATE] | [--servicelevel=SERVICE_LEVEL] | [--remove-rhn-packages] | [--help]
 
 .SH DESCRIPTION
 \fBsat5to6\fP migrates a system profile which is registered to a Red Hat Satellite v.5 instance to a Red Hat Satellite v.6 instance.
@@ -64,6 +64,27 @@ Do not attempt to automatically attach subscriptions to the associated content-h
 .B -s SERVICE_LEVEL, --servicelevel=SERVICE_LEVEL
 Set a preferred service level for the system, such as premium or standard.
 This service level preference is then used as one of the criteria for autoattaching subscriptions to the system.
+
+.TP
+.B --remove-rhn-packages
+After unregistering from Satellite v.5, remove legacy packages:
+\fBosad\fP,
+\fBrhn-check\fP,
+\fBrhn-client-tools\fP,
+\fBrhncfg\fP,
+\fBrhncfg-actions\fP,
+\fBrhncfg-client\fP,
+\fBrhncfg-management\fP,
+\fBrhn-setup\fP,
+\fBrhnpush\fP,
+\fBrhnsd\fP,
+\fBspacewalk-abrt\fP,
+\fBspacewalk-oscap\fP,
+\fByum-rhn-plugin\fP.
+Once unregistered from Satellite v.5, they are no longer needed.
+Once packages are removed, subsequent attempts to migrate will be blocked with a message indicating
+"Perhaps this script was already executed with --remove-rhn-packages?".
+\fB--remove-rhn-packages\fP can only be used with \fB--registration-state=purge\fP, since it does not make sense to keep a system registered without the tooling.
 
 .TP
 .B --no-proxy
@@ -115,7 +136,10 @@ The script runs through these steps:
 5. Unregister (unless \fB--registration-state=keep\fP specified) from Satellite v.5
 
 .IP
-6. Register to Satellite v.6, connecting to the content-host UUID created as part of the transition process.
+6. Stop and disable legacy services: \fBosad\fP, \fBrhnsd\fP.
+
+.IP
+7. Register to Satellite v.6, connecting to the content-host UUID created as part of the transition process.
 Unless \fB--no-auto\fP is specified, autoattach the best-matched subscriptions.
 
 .PP

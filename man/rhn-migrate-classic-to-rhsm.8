@@ -21,7 +21,7 @@
 rhn-migrate-classic-to-rhsm \- Migrates a system profile from Red Hat Network Classic Hosted to Customer Portal Subscription Management (hosted) or Subscription Asset Manager (on-premise).
 
 .SH SYNOPSIS
-rhn-migrate-classic-to-rhsm [--force] | [--no-auto] [--keep] | [--servicelevel=SERVICE_LEVEL] | [--destination-url=URL] | [--legacy-user=LEGACY_USER] | [--legacy-password=LEGACY_PASSWORD] | [--destination-user=DESTINATION_USER] | [--destination-password=DESTINATION_PASSWORD] | [--org=ORG] | [--environment=ENVIRONMENT] | [--no-proxy] [--activation-key=ACTIVATION_KEY] | [--help]
+rhn-migrate-classic-to-rhsm [--force] | [--no-auto] [--keep] | [--servicelevel=SERVICE_LEVEL] | [--remove-rhn-packages] | [--destination-url=URL] | [--legacy-user=LEGACY_USER] | [--legacy-password=LEGACY_PASSWORD] | [--destination-user=DESTINATION_USER] | [--destination-password=DESTINATION_PASSWORD] | [--org=ORG] | [--environment=ENVIRONMENT] | [--no-proxy] [--activation-key=ACTIVATION_KEY] | [--help]
 
 .SH DESCRIPTION
 \fBrhn-migrate-classic-to-rhsm\fP migrates a system profile which is registered with Red Hat Network Classic to Customer Portal Subscription Management. This is intended for migrating from the host service, not for migrating from a Satellite system.
@@ -62,6 +62,27 @@ Deletes the system from Red Hat Network Classic and registers it to Customer Por
 .TP
 .B -s SERVICE_LEVEL, --servicelevel=SERVICE_LEVEL
 Sets a preferred service level for the system, such as premium or standard. This service-level preference is then used as one of the criteria for auto-attaching subscriptions to the system.
+
+.TP
+.B --remove-rhn-packages
+After unregistering from Red Hat Network Classic, remove legacy packages:
+\fBosad\fP,
+\fBrhn-check\fP,
+\fBrhn-client-tools\fP,
+\fBrhncfg\fP,
+\fBrhncfg-actions\fP,
+\fBrhncfg-client\fP,
+\fBrhncfg-management\fP,
+\fBrhn-setup\fP,
+\fBrhnpush\fP,
+\fBrhnsd\fP,
+\fBspacewalk-abrt\fP,
+\fBspacewalk-oscap\fP,
+\fByum-rhn-plugin\fP.
+Once unregistered from Red Hat Network Classic, they are no longer needed.
+Once packages are removed, subsequent attempts to migrate will be blocked with a message indicating
+"Perhaps this script was already executed with --remove-rhn-packages?".
+\fB--remove-rhn-packages\fP cannot be used with \fB--keep\fP, since it does not make sense to keep a system registered without the tooling.
 
 .TP
 .B --org=ORG
@@ -122,7 +143,10 @@ The migration process moves the system from the inventory in one subscription ma
 5. Unregister from Red Hat Network Classic.
 
 .IP
-6. Register with Customer Portal Subscription Management and auto-attach the best-matched subscriptions.
+6. Stop and disable legacy services: \fBosad\fP, \fBrhnsd\fP.
+
+.IP
+7. Register with Customer Portal Subscription Management and auto-attach the best-matched subscriptions.
 
 .PP
 After migration, the system facts maintained by Subscription Manager display what script was used for migration and what the previous system ID was.
