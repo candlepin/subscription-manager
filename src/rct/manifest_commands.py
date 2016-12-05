@@ -270,6 +270,11 @@ class CatManifestCommand(RCTManifestCommand):
 
             self._print_section(_("Provided Products:"), sorted(to_print), 2, False)
 
+            # Get the derived provided Products (if available)
+            if "derivedProvidedProducts" in data["pool"]:
+                to_print = [(int(pp["productId"]), pp["productName"]) for pp in data["pool"]["derivedProvidedProducts"]]
+                self._print_section(_("Derived Products:"), sorted(to_print), 2, False)
+
             # Get the Content Sets
             if not self.options.no_content:
                 to_print = [[item.url] for item in cert.content]
