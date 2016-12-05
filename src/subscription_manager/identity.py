@@ -25,6 +25,11 @@ CFG = initConfig()
 log = logging.getLogger(__name__)
 
 
+class IdentityCertCorruptionException(CertificateException):
+    """ This exception is meant to be used when there is suspected corruption
+        of the ConsumerIdentity. """
+
+
 class ConsumerIdentity:
     """Consumer info and certificate information.
 
