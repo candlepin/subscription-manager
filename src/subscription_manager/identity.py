@@ -65,25 +65,37 @@ class ConsumerIdentity:
 
     @classmethod
     def existsAndValid(cls):
-        if cls.exists():
-            try:
-                cls.read()
-                return True
-            except CertificateException as e:
-                log.warn('possible certificate corruption')
-                log.error(e)
-                # Leave it to the caller to handle the exception
-                # so that they have to opportunity to display it nicely
-                # to the user (if appropriate)
-                raise
-            except IOError as e:
-                log.warn('One of the consumer certificates could not be read')
-                log.error(e)
-                raise
-            # XXX: I do not like catch-all excepts
-            except Exception, e:
-                log.warn('possible certificate corruption')
-                log.error(e)
+        return cls.exists() and cls.valid()
+
+    @classmethod
+    def accessible(cls):
+        if not os.access(cls.certpath(), os.R_OK):
+            log.warn('Insufficient permissions to access cert file: %s' % cls.certpath)
+            return False
+        if not os.access(cls.keypath(), os.R_OK):
+            log.warn('Insufficient permissions to access key file: %s' % cls.keypath)
+            return False
+        return True
+
+    @classmethod
+    def valid(cls):
+        try:
+            cls.read()
+            return True
+        except CertificateException as e:
+            log.warn('possible certificate corruption')
+            log.error(e)
+            # Leave it to the caller to handle the exception
+            # so that they have to opportunity to display it nicely
+            # to the user (if appropriate)
+        except IOError as e:
+            log.warn('One of the consumer certificates could not be read')
+            log.error(e)
+            raise
+        # XXX: I do not like catch-all excepts
+        except Exception as e:
+            log.warn('possible certificate corruption')
+            log.error(e)
         return False
 
     def __init__(self, keystring, certstring):
@@ -150,26 +162,26 @@ class Identity(object):
         try:
             # uh, weird
             # FIXME: seems weird to wrap this stuff
-            if not ConsumerIdentity.existsAndValid():
-                self._reset()
+            if ConsumerIdentity.exists() and ConsumerIdentity.accessible():
+                if not ConsumerIdentity.valid():
+                    raise IdentityCertCorruptionException()
+                self.consumer = self._get_consumer_identity()
+                self.name = self.consumer.getConsumerName()
+                self.uuid = self.consumer.getConsumerId()
+                # since Identity gets dep injected, lets look up
+                # the cert dir on the active id instead of the global config
+                self.cert_dir_path = self.consumer.PATH
                 return
-            self.consumer = self._get_consumer_identity()
-            self.name = self.consumer.getConsumerName()
-            self.uuid = self.consumer.getConsumerId()
-            # since Identity gets dep injected, lets look up
-            # the cert dir on the active id instead of the global config
-            self.cert_dir_path = self.consumer.PATH
-
-        except CertificateException as e:
-            self._reset()
-            raise
-
         # XXX shouldn't catch the global exception here, but that's what
         # existsAndValid did, so this is better.
+        except IdentityCertCorruptionException as e:
+            log.warn('Reload of identity indicates possible cert corruption with msg: %s' % e)
+            self._reset()
+            raise
         except Exception, e:
             log.debug("Reload of consumer identity cert %s raised an exception with msg: %s",
                       ConsumerIdentity.certpath(), e)
-            self._reset()
+        self._reset()
 
     def _reset(self):
         self.consumer = None

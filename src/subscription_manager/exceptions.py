@@ -22,6 +22,7 @@ import gettext
 from rhsm import connection, utils
 
 from subscription_manager.entcertlib import Disconnected
+from subscription_manager.identity import IdentityCertCorruptionException
 
 _ = gettext.gettext
 
@@ -40,6 +41,7 @@ PERROR_PORT_MESSAGE = _("Server URL port should be numeric")
 PERROR_SCHEME_MESSAGE = _("Server URL has an invalid scheme. http:// and https:// are supported")
 RATE_LIMIT_MESSAGE = _("The server rate limit has been exceeded, please try again later.")
 RATE_LIMIT_EXPIRATION = _("The server rate limit has been exceeded, please try again later. (Expires in %s seconds)")
+IDENTITY_CERT_CORRUPTION_MESSAGE = _('System certificates corrupted. Please reregister.')
 
 
 class ExceptionMapper(object):
@@ -48,6 +50,7 @@ class ExceptionMapper(object):
         self.message_map = {
             socket_error: (SOCKET_MESSAGE, self.format_default),
             Disconnected: (SOCKET_MESSAGE, self.format_default),
+            IdentityCertCorruptionException: (IDENTITY_CERT_CORRUPTION_MESSAGE, self.format_default),
             connection.NetworkException: (NETWORK_MESSAGE, self.format_default),
             connection.UnauthorizedException: (UNAUTHORIZED_MESSAGE, self.format_default),
             connection.ForbiddenException: (FORBIDDEN_MESSAGE, self.format_default),

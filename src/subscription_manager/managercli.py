@@ -47,6 +47,7 @@ from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBE
 from subscription_manager.cli import AbstractCLICommand, CLI, system_exit
 from subscription_manager import rhelentbranding
 from subscription_manager.hwprobe import ClassicCheck
+from subscription_manager.identity import IdentityCertCorruptionException
 import subscription_manager.injection as inj
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
@@ -307,8 +308,12 @@ class CliCommand(AbstractCLICommand):
         self.server_versions = self._default_server_version()
 
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
-
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = None
+        try:
+            self.identity = inj.require(inj.IDENTITY)
+        except IdentityCertCorruptionException as e:
+            print _("Error loading identity cert:")
+            handle_exception("Error loading identity cert:", e)
 
     def _get_logger(self):
         return logging.getLogger('rhsm-app.%s.%s' % (self.__module__, self.__class__.__name__))
