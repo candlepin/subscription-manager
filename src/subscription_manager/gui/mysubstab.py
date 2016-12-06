@@ -169,11 +169,14 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                 self.content.get_toplevel())
         prompt.connect('response', self._on_unsubscribe_prompt_response, selection)
 
-    def update_subscriptions(self, update_dbus=True):
-        """
-        Pulls the entitlement certificates and updates the subscription model.
-        """
+    def update_subscriptions(self, update_dbus=True, update_gui=True):
         self.pooltype_cache.update()
+        if update_gui:
+            self.refresh()
+        if update_dbus:
+            inj.require(inj.DBUS_IFACE).update()
+
+    def refresh(self):
         sorter = EntitlementCertStackingGroupSorter(self.entitlement_dir.list())
         self.store.clear()
 
@@ -183,8 +186,6 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.top_view.expand_all()
         self._stripe_rows(None, self.store)
-        if update_dbus:
-            inj.require(inj.DBUS_IFACE).update()
         self.unsubscribe_button.set_property('sensitive', False)
         # 841396: Select first item in My Subscriptions table by default
         selection = self.top_view.get_selection()
