@@ -153,8 +153,53 @@ class ConsumerIdentity:
 class Identity(object):
     """Wrapper for sharing consumer identity without constant reloading."""
     def __init__(self):
+        # This attribute will be raised on access to any attribute that relies
+        # on the underlying ConsumerIdentity to exist and be valid and
+        # accessible OR to be nonexistent
+        self.reload_exception = None
         self._reset()
         self.reload()
+
+    @property
+    def consumer(self):
+        if self.reload_exception:
+            raise self.reload_exception
+        return self._consumer
+
+    @consumer.setter
+    def consumer(self, value):
+        self._consumer = value
+
+    @property
+    def name(self):
+        if self.reload_exception:
+            raise self.reload_exception
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        self._name = value
+
+
+    @property
+    def uuid(self):
+        if self.reload_exception:
+            raise self.reload_exception
+        return self._uuid
+
+    @uuid.setter
+    def uuid(self, value):
+        self._uuid = value
+
+    @property
+    def cert_dir_path(self):
+        if self.reload_exception:
+            raise self.reload_exception
+        return self._cert_dir_path
+
+    @cert_dir_path.setter
+    def cert_dir_path(self, value):
+        self._cert_dir_path = value
 
     def reload(self):
         """Check for consumer certificate on disk and update our info accordingly."""
@@ -174,13 +219,10 @@ class Identity(object):
                 return
         # XXX shouldn't catch the global exception here, but that's what
         # existsAndValid did, so this is better.
-        except IdentityCertCorruptionException as e:
-            log.warn('Reload of identity indicates possible cert corruption with msg: %s' % e)
-            self._reset()
-            raise
         except Exception, e:
             log.debug("Reload of consumer identity cert %s raised an exception with msg: %s",
                       ConsumerIdentity.certpath(), e)
+        self.reload_exception = e
         self._reset()
 
     def _reset(self):
@@ -188,6 +230,11 @@ class Identity(object):
         self.name = None
         self.uuid = None
         self.cert_dir_path = CFG.get('rhsm', 'consumerCertDir')
+
+    def _clear_reload_exception(self):
+        if self.reload_exception:
+            log.debug('Clearing stored reload exception: %s', e)
+            self.reload_exception = None
 
     def _get_consumer_identity(self):
         return ConsumerIdentity.read()
