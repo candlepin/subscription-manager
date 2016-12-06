@@ -840,8 +840,6 @@ class EnvironmentsCommand(OrgCommand):
 class AutohealCommand(CliCommand):
 
     def __init__(self):
-        self.uuid = inj.require(inj.IDENTITY).uuid
-
         shortdesc = _("Set if subscriptions are attached on a schedule (default of daily)")
         self._org_help_text = _("specify whether to enable or disable auto-attaching of subscriptions")
         super(AutohealCommand, self).__init__("auto-attach", shortdesc,
@@ -855,11 +853,11 @@ class AutohealCommand(CliCommand):
                 help=_("show the current auto-attach preference"))
 
     def _toggle(self, autoheal):
-        self.cp.updateConsumer(self.uuid, autoheal=autoheal)
+        self.cp.updateConsumer(self.identity.uuid, autoheal=autoheal)
         self._show(autoheal)
 
     def _validate_options(self):
-        if not self.uuid:
+        if not self.identity.uuid:
             self.assert_should_be_registered()
 
     def _show(self, autoheal):
@@ -872,7 +870,7 @@ class AutohealCommand(CliCommand):
         self._validate_options()
 
         if not self.options.enable and not self.options.disable:
-            self._show(self.cp.getConsumer(self.uuid)['autoheal'])
+            self._show(self.cp.getConsumer(self.identity.uuid)['autoheal'])
         else:
             self._toggle(self.options.enable or False)
 
