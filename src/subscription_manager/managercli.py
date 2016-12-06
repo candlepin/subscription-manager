@@ -1040,7 +1040,8 @@ class RegisterCommand(UserPassCommand):
 
     def _validate_options(self):
         self.autoattach = self.options.autosubscribe or self.options.autoattach
-        if self.is_registered() and not self.options.force:
+        if self.identity.reload_exception is None and self.is_registered() and \
+           not self.options.force:
             system_exit(os.EX_USAGE, _("This system is already registered. Use --force to override"))
         elif (self.options.consumername == ''):
             system_exit(os.EX_USAGE, _("Error: system name can not be empty."))
@@ -1090,7 +1091,8 @@ class RegisterCommand(UserPassCommand):
         if consumername is None:
             consumername = socket.gethostname()
 
-        if self.is_registered() and self.options.force:
+        if self.identity.reload_exception is None and self.is_registered() and \
+           self.options.force:
             # First let's try to un-register previous consumer. This may fail
             # if consumer has already been deleted so we will continue even if
             # errors are encountered.

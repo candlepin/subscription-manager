@@ -70,10 +70,10 @@ class ConsumerIdentity:
     @classmethod
     def accessible(cls):
         if not os.access(cls.certpath(), os.R_OK):
-            log.warn('Insufficient permissions to access cert file: %s' % cls.certpath)
+            log.warn('Insufficient permissions to access cert file: %s' % cls.certpath())
             return False
         if not os.access(cls.keypath(), os.R_OK):
-            log.warn('Insufficient permissions to access key file: %s' % cls.keypath)
+            log.warn('Insufficient permissions to access key file: %s' % cls.keypath())
             return False
         return True
 
@@ -180,7 +180,6 @@ class Identity(object):
     def name(self, value):
         self._name = value
 
-
     @property
     def uuid(self):
         if self.reload_exception:
@@ -204,6 +203,7 @@ class Identity(object):
     def reload(self):
         """Check for consumer certificate on disk and update our info accordingly."""
         log.debug("Loading consumer info from identity certificates.")
+        self._clear_reload_exception()
         try:
             # uh, weird
             # FIXME: seems weird to wrap this stuff
@@ -216,14 +216,19 @@ class Identity(object):
                 # since Identity gets dep injected, lets look up
                 # the cert dir on the active id instead of the global config
                 self.cert_dir_path = self.consumer.PATH
-                return
         # XXX shouldn't catch the global exception here, but that's what
         # existsAndValid did, so this is better.
         except Exception, e:
             log.debug("Reload of consumer identity cert %s raised an exception with msg: %s",
                       ConsumerIdentity.certpath(), e)
-        self.reload_exception = e
-        self._reset()
+            # Save whatever exception got thrown to raise later when we use
+            # one of the attributes of this object that are populated by this
+            # method.
+            # This is being done to allow exceptions relating to access to the
+            # identity certs and such to bubble up and be handled gracefully by
+            # users of this object.
+            self.reload_exception = e
+            self._reset()
 
     def _reset(self):
         self.consumer = None
