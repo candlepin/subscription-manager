@@ -48,6 +48,7 @@ from subscription_manager.gui import messageWindow
 from subscription_manager.gui import networkConfig
 from subscription_manager.gui import redeem
 from subscription_manager.gui import registergui
+from subscription_manager.gui import utils
 from subscription_manager.gui import widgets
 
 from subscription_manager.gui.about import AboutDialog
@@ -75,6 +76,22 @@ cfg = config.initConfig()
 
 ONLINE_DOC_URL_TEMPLATE = "https://access.redhat.com/knowledge/docs/Red_Hat_Subscription_Management/?locale=%s"
 ONLINE_DOC_FALLBACK_URL = "https://access.redhat.com/knowledge/docs/Red_Hat_Subscription_Management/"
+
+# every GUI browser from https://docs.python.org/2/library/webbrowser.html with updates within last 2 years of writing
+PREFERRED_BROWSERS = [
+    "mozilla",
+    "firefox",
+    "epiphany",
+    "konqueror",
+    "opera",
+    "google-chrome",
+    "chrome",
+    "chromium",
+    "chromium-browser",
+]
+
+# inform user of the URL in case our detection is outdated
+NO_BROWSER_MESSAGE = _("Browser not detected. Documentation URL is %s.")
 
 
 class Backend(object):
@@ -511,7 +528,17 @@ class MainWindow(widgets.SubmanBaseWidget):
         about.show()
 
     def _online_docs_item_clicked(self, widget):
-        webbrowser.open_new(self._get_online_doc_url())
+        browser = None
+        for possible_browser in PREFERRED_BROWSERS:
+            try:
+                browser = webbrowser.get(possible_browser)
+                break
+            except webbrowser.Error:
+                pass
+        if browser is None:
+            utils.show_error_window(NO_BROWSER_MESSAGE % (self._get_online_doc_url()))
+        else:
+            webbrowser.open_new(self._get_online_doc_url())
 
     def _quit_item_clicked(self):
         self.hide()
