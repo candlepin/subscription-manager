@@ -16,7 +16,7 @@
 
 import inspect
 from socket import error as socket_error
-from rhsm.https import ssl
+from rhsm.https import ssl, httplib
 import gettext
 
 from rhsm import connection, utils
@@ -64,6 +64,7 @@ class ExceptionMapper(object):
             # message is already translated server-side.
             connection.RestlibException: (None, self.format_restlib_exception),
             connection.RateLimitExceededException: (None, self.format_rate_limit_exception),
+            httplib.BadStatusLine: (REMOTE_SERVER_MESSAGE, self.format_default),
         }
 
     def format_default(self, e, message):
