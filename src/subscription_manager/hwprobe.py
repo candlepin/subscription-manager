@@ -617,7 +617,7 @@ class Hardware:
         try:
             host = socket.gethostname()
             self.netinfo['network.hostname'] = host
-            fqdn = socket.getfqdn()
+            fqdn = self._get_output('hostname', '-f')
             self.netinfo['network.fqdn'] = fqdn
 
             try:
@@ -804,13 +804,13 @@ class Hardware:
         self.allhw.update(virt_dict)
         return virt_dict
 
-    def _get_output(self, cmd):
-        log.debug("Running '%s'" % cmd)
-        process = Popen([cmd], stdout=PIPE, stderr=PIPE)
+    def _get_output(self, cmd, *args):
+        log.debug("Running '%s'" % " ".join([cmd] + list(args)))
+        process = Popen([cmd] + list(args), stdout=PIPE, stderr=PIPE)
         (std_output, std_error) = process.communicate()
 
-        log.debug("%s stdout: %s" % (cmd, std_output))
-        log.debug("%s stderr: %s" % (cmd, std_error))
+        log.debug("%s stdout: %s" % (" ".join([cmd] + list(args)), std_output))
+        log.debug("%s stderr: %s" % (" ".join([cmd] + list(args)), std_error))
 
         output = std_output.strip()
 
