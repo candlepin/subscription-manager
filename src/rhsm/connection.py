@@ -282,7 +282,7 @@ class ContentConnection(object):
             proxy_headers = {'User-Agent': self.user_agent}
             if self.proxy_user and self.proxy_password:
                 proxy_headers['Proxy-Authorization'] = _encode_auth(self.proxy_user, self.proxy_password)
-            conn = httplib.HTTPSConnection(self.proxy_host, self.proxy_port, context=context, timeout=self.timeout)
+            conn = httplib.HTTPSConnection(self.proxy_hostname, self.proxy_port, context=context, timeout=self.timeout)
             conn.set_tunnel(self.host, safe_int(self.ssl_port), proxy_headers)
         else:
             conn = httplib.HTTPSConnection(self.host, self.ssl_port, context=context, timeout=self.timeout)
