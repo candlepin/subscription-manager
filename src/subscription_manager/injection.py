@@ -13,6 +13,11 @@
 #
 
 import types
+import logging
+import logutil
+logutil.init_logger()
+
+log = logging.getLogger(__name__)
 
 # Supported Features:
 IDENTITY = "IDENTITY"
@@ -56,6 +61,7 @@ class FeatureBroker:
         Can also pass an actual instance which will be returned on every
         invocation. (i.e. pass an actual instance if you want a "singleton".
         """
+        log.debug("provide >>>>>>>>>>>>> %s : %s" % (feature, provider))
         self.providers[feature] = provider
 
     def require(self, feature, *args, **kwargs):
@@ -71,7 +77,7 @@ class FeatureBroker:
             provider = self.providers[feature]
         except KeyError:
             raise KeyError("Unknown feature: %r" % feature)
-
+        log.debug('require >>>>>>>>>>>>>> %s : %s' % (feature, provider))
         if isinstance(provider, (type, types.ClassType)):
             # Args should never be used with singletons, they are ignored
             self.providers[feature] = provider()

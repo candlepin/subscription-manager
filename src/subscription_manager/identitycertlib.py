@@ -49,7 +49,7 @@ class IdentityUpdateAction(object):
 
     def perform(self):
         identity = inj.require(inj.IDENTITY)
-
+        log.debug(type(identity))
         if not identity.is_valid():
             # we could in theory try to update the id in the
             # case of it being bogus/corrupted, ala #844069,

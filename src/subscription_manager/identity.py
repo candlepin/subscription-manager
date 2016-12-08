@@ -216,6 +216,8 @@ class Identity(object):
                 # since Identity gets dep injected, lets look up
                 # the cert dir on the active id instead of the global config
                 self.cert_dir_path = self.consumer.PATH
+            else:
+                self._reset()
         # XXX shouldn't catch the global exception here, but that's what
         # existsAndValid did, so this is better.
         except Exception, e:
