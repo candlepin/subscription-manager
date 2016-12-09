@@ -15,7 +15,7 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.18.5
+Version: 1.18.6
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -102,6 +102,10 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Fri Dec 09 2016 Vritant Jain <adarshvritant@gmail.com> 1.18.6-1
+- 1400719: Proxy host not available for release command (wpoteat@redhat.com)
+- 1397201: Expose classes in m2crypto wrapper (khowell@redhat.com)
+
 * Fri Nov 25 2016 Vritant Jain <adarshvritant@gmail.com> 1.18.5-1
 - 1396405: Use an int for port on connections (csnyder@redhat.com)
 - 1393010: Correlate request ID, method and handler in logs
