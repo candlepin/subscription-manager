@@ -26,6 +26,10 @@ sys.setdefaultencoding('utf-8')
 import site
 import os
 
+# work around for https://bugzilla.redhat.com/show_bug.cgi?id=1402009
+if 'TERM' in os.environ:
+    del os.environ['TERM']
+
 
 def system_exit(code, msgs=None):
     "Exit with a code and optional message(s). Saved a few lines of code."
