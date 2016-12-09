@@ -315,7 +315,7 @@ class CliCommand(AbstractCLICommand):
 
     def test_proxy_connection(self):
         result = None
-        if not self.proxy_hostname or cfg.get("server", "proxy_hostname"):
+        if not self.proxy_hostname and not cfg.get("server", "proxy_hostname"):
             return True
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
