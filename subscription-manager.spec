@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.18.5
+Version: 1.18.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -599,6 +599,17 @@ fi
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Fri Dec 09 2016 Vritant Jain <adarshvritant@gmail.com> 1.18.6-1
+- 1401078: "Remote server error" on BadStatusLine (khowell@redhat.com)
+- 1390712: Add --remove-rhn-packages to man pages (khowell@redhat.com)
+- fix keyerror when showing subs that doesnt have derivedProvidedProducts
+  (rjerrido@outsidaz.org)
+- Fix test failure when no legacy services installed (khowell@redhat.com)
+- show Derived Provided Products for products that have them
+  (rjerrido@outsidaz.org)
+- 1261215: Fix frozen progress bars (khowell@redhat.com)
+- 1360427: Show error if browser is not detected (khowell@redhat.com)
+
 * Fri Nov 25 2016 Vritant Jain <adarshvritant@gmail.com> 1.18.5-1
 - 1395659: Handle ProxyExceptions that occur during GUI operation
   (csnyder@redhat.com)
