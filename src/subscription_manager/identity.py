@@ -240,7 +240,7 @@ class Identity(object):
 
     def _clear_reload_exception(self):
         if self.reload_exception:
-            log.debug('Clearing stored reload exception: %s', e)
+            log.debug('Clearing stored reload exception: %s', self.reload_exception)
             self.reload_exception = None
 
     def _get_consumer_identity(self):
