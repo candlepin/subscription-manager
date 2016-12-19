@@ -42,6 +42,7 @@ from subscription_manager.facts import Facts
 from subscription_manager.hwprobe import ClassicCheck
 from subscription_manager import managerlib
 from subscription_manager.utils import get_client_versions, get_server_versions, parse_baseurl_info, restart_virt_who
+from subscription_manager.utils import print_error
 
 from subscription_manager.gui import factsgui
 from subscription_manager.gui import messageWindow
@@ -166,13 +167,29 @@ class MainWindow(widgets.SubmanBaseWidget):
         # Remove this from the GTK main loop
         return False
 
+    def _on_proxy_error_dialog_response(self, window, response):
+        if response:
+            self.network_config_dialog.show()
+        else:
+            system_exit(os.EX_UNAVAILABLE)
+
+    def _exit(self, *args):
+        system_exit(0)
+
     def __init__(self, backend=None, facts=None,
                  ent_dir=None, prod_dir=None,
                  auto_launch_registration=False):
         super(MainWindow, self).__init__()
 
         if not self.test_proxy_connection():
-            system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
+            print_error(_("Proxy connection failed, please check your settings."))
+            error_dialog = messageWindow.ContinueDialog(_("Proxy connection failed, please check your settings."),
+                                                        self._get_window())
+            error_dialog.connect("response", self._on_proxy_error_dialog_response)
+            self.network_config_dialog = networkConfig.NetworkConfigDialog()
+            self.network_config_dialog.saveButton.connect("clicked", self._exit)
+            self.network_config_dialog.cancelButton.connect("clicked", self._exit)
+            return
         self.backend = backend or Backend()
         self.identity = require(IDENTITY)
 
