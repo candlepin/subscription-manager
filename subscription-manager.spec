@@ -94,6 +94,7 @@ Requires:  python-dateutil
 %if %use_gtk3
 Requires: gobject-introspection
 Requires: pygobject3-base
+Requires: dbus-glib
 %else
 %if 0%{?sles_version}
 Requires:  python-gobject2
@@ -142,6 +143,7 @@ BuildRequires: gtk3-devel
 %else
 BuildRequires: gtk2-devel
 %endif
+BuildRequires: dbus-glib-devel
 %if %use_systemd
 # We need the systemd RPM macros
 BuildRequires: systemd
