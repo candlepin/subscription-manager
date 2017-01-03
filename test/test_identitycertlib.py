@@ -33,10 +33,19 @@ mock_consumer_identity.getConsumerId.return_value = "11111-00000-11111-0000"
 
 # Identities to inject for testing
 class StubIdentity(identity.Identity):
-    _consumer = None
+    _test_consumer = None
 
     def _get_consumer_identity(self):
-        return self._consumer
+        return self._test_consumer
+
+    def reload(self):
+        self.consumer = self._get_consumer_identity()
+        if self.consumer:
+            self.name = self.consumer.getConsumerName()
+            self.uuid = self.consumer.getConsumerId()
+        else:
+            self.name = None
+            self.uuid = None
 
 
 class InvalidIdentity(StubIdentity):
@@ -44,7 +53,7 @@ class InvalidIdentity(StubIdentity):
 
 
 class ValidIdentity(StubIdentity):
-    _consumer = mock_consumer_identity
+    _test_consumer = mock_consumer_identity
 
 
 different_mock_consumer_identity = mock.Mock(spec=identity.ConsumerIdentity)
@@ -54,7 +63,7 @@ different_mock_consumer_identity.getConsumerId.return_value = "AAAAAA-BBBBB-CCCC
 
 
 class DifferentValidConsumerIdentity(StubIdentity):
-    _consumer = different_mock_consumer_identity
+    _test_consumer = different_mock_consumer_identity
 
 
 class TestIdentityUpdateAction(fixture.SubManFixture):

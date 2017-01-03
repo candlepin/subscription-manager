@@ -47,6 +47,7 @@ from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBE
 from subscription_manager.cli import AbstractCLICommand, CLI, system_exit
 from subscription_manager import rhelentbranding
 from subscription_manager.hwprobe import ClassicCheck
+from subscription_manager.identity import IdentityCertCorruptionException
 import subscription_manager.injection as inj
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
@@ -307,8 +308,12 @@ class CliCommand(AbstractCLICommand):
         self.server_versions = self._default_server_version()
 
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
-
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = None
+        try:
+            self.identity = inj.require(inj.IDENTITY)
+        except IdentityCertCorruptionException as e:
+            print _("Error loading identity cert:")
+            handle_exception("Error loading identity cert:", e)
 
     def _get_logger(self):
         return logging.getLogger('rhsm-app.%s.%s' % (self.__module__, self.__class__.__name__))
@@ -835,8 +840,6 @@ class EnvironmentsCommand(OrgCommand):
 class AutohealCommand(CliCommand):
 
     def __init__(self):
-        self.uuid = inj.require(inj.IDENTITY).uuid
-
         shortdesc = _("Set if subscriptions are attached on a schedule (default of daily)")
         self._org_help_text = _("specify whether to enable or disable auto-attaching of subscriptions")
         super(AutohealCommand, self).__init__("auto-attach", shortdesc,
@@ -850,11 +853,11 @@ class AutohealCommand(CliCommand):
                 help=_("show the current auto-attach preference"))
 
     def _toggle(self, autoheal):
-        self.cp.updateConsumer(self.uuid, autoheal=autoheal)
+        self.cp.updateConsumer(self.identity.uuid, autoheal=autoheal)
         self._show(autoheal)
 
     def _validate_options(self):
-        if not self.uuid:
+        if not self.identity.uuid:
             self.assert_should_be_registered()
 
     def _show(self, autoheal):
@@ -867,7 +870,7 @@ class AutohealCommand(CliCommand):
         self._validate_options()
 
         if not self.options.enable and not self.options.disable:
-            self._show(self.cp.getConsumer(self.uuid)['autoheal'])
+            self._show(self.cp.getConsumer(self.identity.uuid)['autoheal'])
         else:
             self._toggle(self.options.enable or False)
 
@@ -1037,7 +1040,8 @@ class RegisterCommand(UserPassCommand):
 
     def _validate_options(self):
         self.autoattach = self.options.autosubscribe or self.options.autoattach
-        if self.is_registered() and not self.options.force:
+        if self.identity.reload_exception is None and self.is_registered() and \
+           not self.options.force:
             system_exit(os.EX_USAGE, _("This system is already registered. Use --force to override"))
         elif (self.options.consumername == ''):
             system_exit(os.EX_USAGE, _("Error: system name can not be empty."))
@@ -1087,7 +1091,8 @@ class RegisterCommand(UserPassCommand):
         if consumername is None:
             consumername = socket.gethostname()
 
-        if self.is_registered() and self.options.force:
+        if self.identity.reload_exception is None and self.is_registered() and \
+           self.options.force:
             # First let's try to un-register previous consumer. This may fail
             # if consumer has already been deleted so we will continue even if
             # errors are encountered.

@@ -16,13 +16,18 @@
 import logging
 import os
 
-from rhsm.certificate import create_from_pem
+from rhsm.certificate import create_from_pem, CertificateException
 from rhsm.config import initConfig
 from subscription_manager.certdirectory import Path
 
 CFG = initConfig()
 
 log = logging.getLogger(__name__)
+
+
+class IdentityCertCorruptionException(CertificateException):
+    """ This exception is meant to be used when there is suspected corruption
+        of the ConsumerIdentity. """
 
 
 class ConsumerIdentity:
@@ -60,13 +65,37 @@ class ConsumerIdentity:
 
     @classmethod
     def existsAndValid(cls):
-        if cls.exists():
-            try:
-                cls.read()
-                return True
-            except Exception, e:
-                log.warn('possible certificate corruption')
-                log.error(e)
+        return cls.exists() and cls.valid()
+
+    @classmethod
+    def accessible(cls):
+        if not os.access(cls.certpath(), os.R_OK):
+            log.warn('Insufficient permissions to access cert file: %s' % cls.certpath())
+            return False
+        if not os.access(cls.keypath(), os.R_OK):
+            log.warn('Insufficient permissions to access key file: %s' % cls.keypath())
+            return False
+        return True
+
+    @classmethod
+    def valid(cls):
+        try:
+            cls.read()
+            return True
+        except CertificateException as e:
+            log.warn('possible certificate corruption')
+            log.error(e)
+            # Leave it to the caller to handle the exception
+            # so that they have to opportunity to display it nicely
+            # to the user (if appropriate)
+        except IOError as e:
+            log.warn('One of the consumer certificates could not be read')
+            log.error(e)
+            raise
+        # XXX: I do not like catch-all excepts
+        except Exception as e:
+            log.warn('possible certificate corruption')
+            log.error(e)
         return False
 
     def __init__(self, keystring, certstring):
@@ -124,33 +153,97 @@ class ConsumerIdentity:
 class Identity(object):
     """Wrapper for sharing consumer identity without constant reloading."""
     def __init__(self):
+        # This attribute will be raised on access to any attribute that relies
+        # on the underlying ConsumerIdentity to exist and be valid and
+        # accessible OR to be nonexistent
+        self.reload_exception = None
+        self._reset()
         self.reload()
+
+    @property
+    def consumer(self):
+        if self.reload_exception:
+            raise self.reload_exception
+        return self._consumer
+
+    @consumer.setter
+    def consumer(self, value):
+        self._consumer = value
+
+    @property
+    def name(self):
+        if self.reload_exception:
+            raise self.reload_exception
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        self._name = value
+
+    @property
+    def uuid(self):
+        if self.reload_exception:
+            raise self.reload_exception
+        return self._uuid
+
+    @uuid.setter
+    def uuid(self, value):
+        self._uuid = value
+
+    @property
+    def cert_dir_path(self):
+        if self.reload_exception:
+            raise self.reload_exception
+        return self._cert_dir_path
+
+    @cert_dir_path.setter
+    def cert_dir_path(self, value):
+        self._cert_dir_path = value
 
     def reload(self):
         """Check for consumer certificate on disk and update our info accordingly."""
         log.debug("Loading consumer info from identity certificates.")
+        self._clear_reload_exception()
         try:
             # uh, weird
             # FIXME: seems weird to wrap this stuff
-            self.consumer = self._get_consumer_identity()
-            self.name = self.consumer.getConsumerName()
-            self.uuid = self.consumer.getConsumerId()
-            # since Identity gets dep injected, lets look up
-            # the cert dir on the active id instead of the global config
-            self.cert_dir_path = self.consumer.PATH
-
+            if ConsumerIdentity.exists() and ConsumerIdentity.accessible():
+                if not ConsumerIdentity.valid():
+                    raise IdentityCertCorruptionException()
+                self.consumer = self._get_consumer_identity()
+                self.name = self.consumer.getConsumerName()
+                self.uuid = self.consumer.getConsumerId()
+                # since Identity gets dep injected, lets look up
+                # the cert dir on the active id instead of the global config
+                self.cert_dir_path = self.consumer.PATH
+            else:
+                self._reset()
         # XXX shouldn't catch the global exception here, but that's what
         # existsAndValid did, so this is better.
         except Exception, e:
             log.debug("Reload of consumer identity cert %s raised an exception with msg: %s",
                       ConsumerIdentity.certpath(), e)
-            self.consumer = None
-            self.name = None
-            self.uuid = None
-            self.cert_dir_path = CFG.get('rhsm', 'consumerCertDir')
+            # Save whatever exception got thrown to raise later when we use
+            # one of the attributes of this object that are populated by this
+            # method.
+            # This is being done to allow exceptions relating to access to the
+            # identity certs and such to bubble up and be handled gracefully by
+            # users of this object.
+            self.reload_exception = e
+            self._reset()
+
+    def _reset(self):
+        self.consumer = None
+        self.name = None
+        self.uuid = None
+        self.cert_dir_path = CFG.get('rhsm', 'consumerCertDir')
+
+    def _clear_reload_exception(self):
+        if self.reload_exception:
+            log.debug('Clearing stored reload exception: %s', self.reload_exception)
+            self.reload_exception = None
 
     def _get_consumer_identity(self):
-        # FIXME: wrap in exceptions, catch IOErrors etc, raise anything else
         return ConsumerIdentity.read()
 
     # this name is weird, since Certificate.is_valid actually checks the data
