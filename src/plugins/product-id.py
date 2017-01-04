@@ -41,7 +41,7 @@ def posttrans_hook(conduit):
 
     try:
         init_dep_injection()
-    except ImportError, e:
+    except ImportError as e:
         conduit.error(3, str(e))
         return
 
@@ -53,7 +53,7 @@ def posttrans_hook(conduit):
         pm = YumProductManager(conduit._base)
         pm.update_all()
         conduit.info(3, 'Installed products updated.')
-    except Exception, e:
+    except Exception as e:
         conduit.error(3, str(e))
 
 
@@ -80,11 +80,11 @@ class YumProductManager(ProductManager):
                 if cert is None:
                     continue
                 lst.append((cert, repo.id))
-            except yum.Errors.RepoMDError, e:
+            except yum.Errors.RepoMDError as e:
                 # We have to look in all repos for productids, not just
                 # the ones we create, or anaconda doesn't install it.
                 self.meta_data_errors.append(repo.id)
-            except Exception, e:
+            except Exception as e:
                 log.warn("Error loading productid metadata for %s." % repo)
                 log.exception(e)
                 self.meta_data_errors.append(repo.id)

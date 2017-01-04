@@ -16,6 +16,8 @@ from fixture import SubManFixture
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
 
+from rhsmlib.services import config
+
 
 class TestParseServerInfo(SubManFixture):
     def setUp(self):
@@ -55,7 +57,7 @@ class TestParseServerInfo(SubManFixture):
         self.stubConfig.set("server", "prefix", "/test-prefix")
 
         local_url = "myhost.example.com"
-        (hostname, port, prefix) = parse_server_info(local_url, self.stubConfig)
+        (hostname, port, prefix) = parse_server_info(local_url, config.Config(self.stubConfig))
         self.assertEquals("myhost.example.com", hostname)
         self.assertEquals("344", port)
         self.assertEquals("/test-prefix", prefix)
@@ -64,7 +66,7 @@ class TestParseServerInfo(SubManFixture):
         self.stubConfig.set("server", "port", "600")
 
         local_url = "myhost.example.com/myapp"
-        (hostname, port, prefix) = parse_server_info(local_url, self.stubConfig)
+        (hostname, port, prefix) = parse_server_info(local_url, config.Config(self.stubConfig))
         self.assertEquals("myhost.example.com", hostname)
         self.assertEquals("600", port)
         self.assertEquals("/myapp", prefix)
@@ -73,7 +75,7 @@ class TestParseServerInfo(SubManFixture):
         self.stubConfig.set("server", "prefix", "/test-prefix")
 
         local_url = "myhost.example.com:500"
-        (hostname, port, prefix) = parse_server_info(local_url, self.stubConfig)
+        (hostname, port, prefix) = parse_server_info(local_url, config.Config(self.stubConfig))
         self.assertEquals("myhost.example.com", hostname)
         self.assertEquals("500", port)
         self.assertEquals("/test-prefix", prefix)

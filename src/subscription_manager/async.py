@@ -18,6 +18,7 @@
 import Queue
 import threading
 import gettext
+import sys
 
 from subscription_manager.ga import GObject as ga_GObject
 from subscription_manager.entcertlib import Disconnected
@@ -41,8 +42,8 @@ class AsyncPool(object):
         try:
             self.pool.refresh(active_on)
             self.queue.put((callback, data, None))
-        except Exception, e:
-            self.queue.put((callback, data, e))
+        except Exception:
+            self.queue.put((callback, data, sys.exc_info()))
 
     def _watch_thread(self):
         """
@@ -84,8 +85,8 @@ class AsyncBind(object):
             fetch_certificates(self.certlib)
             if cert_callback:
                 ga_GObject.idle_add(cert_callback)
-        except Exception, e:
-            ga_GObject.idle_add(except_callback, e)
+        except Exception:
+            ga_GObject.idle_add(except_callback, sys.exc_info())
 
     def _run_unbind(self, serial, selection, callback, except_callback):
         """
@@ -96,13 +97,13 @@ class AsyncBind(object):
             self.cp_provider.get_consumer_auth_cp().unbindBySerial(self.identity.uuid, serial)
             try:
                 self.certlib.update()
-            except Disconnected, e:
+            except Disconnected:
                 pass
 
             if callback:
                 ga_GObject.idle_add(callback)
-        except Exception, e:
-            ga_GObject.idle_add(except_callback, e, selection)
+        except Exception:
+            ga_GObject.idle_add(except_callback, sys.exc_info(), selection)
 
     def bind(self, pool, quantity, except_callback, bind_callback=None, cert_callback=None):
         threading.Thread(target=self._run_bind, name="AsyncBindBindThread",
@@ -130,8 +131,8 @@ class AsyncRepoOverridesUpdate(object):
             current_repos = self.overrides_api.repo_lib.get_repos(apply_overrides=False)
 
             self._process_callback(success_callback, current_overrides, current_repos)
-        except Exception, e:
-            self._process_callback(except_callback, e)
+        except Exception:
+            self._process_callback(except_callback, sys.exc_info())
 
     def _update(self, to_add, to_remove, success_callback, except_callback):
         '''
@@ -156,8 +157,8 @@ class AsyncRepoOverridesUpdate(object):
             current_repos = self.overrides_api.repo_lib.get_repos(apply_overrides=False)
 
             self._process_callback(success_callback, current_overrides, current_repos)
-        except Exception, e:
-            self._process_callback(except_callback, e)
+        except Exception:
+            self._process_callback(except_callback, sys.exc_info())
 
     def _remove_all(self, repo_ids, success_callback, except_callback):
         try:
@@ -170,8 +171,8 @@ class AsyncRepoOverridesUpdate(object):
             current_repos = self.overrides_api.repo_lib.get_repos(apply_overrides=False)
 
             self._process_callback(success_callback, current_overrides, current_repos)
-        except Exception, e:
-            self._process_callback(except_callback, e)
+        except Exception:
+            self._process_callback(except_callback, sys.exc_info())
 
     def _process_callback(self, callback, *args):
         ga_GObject.idle_add(callback, *args)

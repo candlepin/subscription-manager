@@ -133,6 +133,10 @@ try:
     from subscription_manager.injectioninit import init_dep_injection
     init_dep_injection()
 
+    import subscription_manager.injection as inj
+    # Set up DBus mainloop via DBUS_IFACE
+    inj.require(inj.DBUS_IFACE)
+
     from subscription_manager.gui import managergui
     from subscription_manager.i18n_optparse import OptionParser, \
         WrappedIndentedHelpFormatter, USAGE

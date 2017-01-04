@@ -274,7 +274,7 @@ setup(
     author="Adrian Likins",
     author_email="alikins@redhat.com",
     cmdclass=cmdclass,
-    packages=find_packages('src', exclude=['subscription_manager.gui.firstboot.*', '*.ga_impls', '*.ga_impls.*', '*.plugin.ostree']),
+    packages=find_packages('src', exclude=['subscription_manager.gui.firstboot.*', '*.ga_impls', '*.ga_impls.*', '*.plugin.ostree', '*.services.examples']),
     package_dir={'': 'src'},
     package_data={
         'subscription_manager.gui': ['data/glade/*.glade', 'data/ui/*.ui', 'data/icons/*.svg'],
@@ -282,7 +282,7 @@ setup(
     data_files=[
         ('sbin', ['bin/subscription-manager', 'bin/subscription-manager-gui', 'bin/rhn-migrate-classic-to-rhsm']),
         ('bin', ['bin/rct', 'bin/rhsm-debug']),
-        (libexecdir, ['src/daemons/rhsmcertd-worker.py']),
+        (libexecdir, ['src/daemons/rhsmcertd-worker.py', 'bin/rhsm-facts-service', 'bin/rhsm-service']),
         # sat5to6 is packaged separately
         ('share/man/man8', set(glob('man/*.8')) - set(['man/sat5to6.8'])),
         ('share/man/man5', glob('man/*.5')),

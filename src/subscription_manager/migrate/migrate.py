@@ -25,8 +25,6 @@ import shutil
 import subprocess
 import sys
 
-import rhsm.config
-
 from datetime import datetime
 from rhsm.https import ssl
 
@@ -45,6 +43,9 @@ from subscription_manager.productid import ProductDatabase
 from subscription_manager import repolib
 from rhsm.utils import parse_url
 from rhsm import ourjson as json
+
+from rhsm.config import initConfig
+from rhsmlib.services import config
 
 _RHNLIBPATH = "/usr/share/rhn"
 if _RHNLIBPATH not in sys.path:
@@ -157,7 +158,7 @@ class UserCredentials(object):
 class MigrationEngine(object):
     def __init__(self, options):
         self.rhncfg = initUp2dateConfig()
-        self.rhsmcfg = rhsm.config.initConfig()
+        self.rhsmcfg = config.Config(initConfig())
 
         # Sometimes we need to send up the entire contents of the system id file
         # which is referred to in Satellite 5 nomenclature as a "certificate"
@@ -226,25 +227,25 @@ class MigrationEngine(object):
             if self.options.noproxy:
                 # If the user doesn't want to use a proxy to connect to their subscription
                 # management server, then remove any proxy information that may have crept in.
-                self.rhsmcfg.set('server', 'proxy_hostname', '')
-                self.rhsmcfg.set('server', 'proxy_port', '')
-                self.rhsmcfg.set('server', 'proxy_user', '')
-                self.rhsmcfg.set('server', 'proxy_password', '')
+                self.rhsmcfg['server']['proxy_hostname'] = ''
+                self.rhsmcfg['server']['proxy_port'] = ''
+                self.rhsmcfg['server']['proxy_user'] = ''
+                self.rhsmcfg['server']['proxy_password'] = ''
             else:
-                self.rhsmcfg.set('server', 'proxy_hostname', self.proxy_host)
-                self.rhsmcfg.set('server', 'proxy_port', self.proxy_port)
-                self.rhsmcfg.set('server', 'proxy_user', self.proxy_user or '')
-                self.rhsmcfg.set('server', 'proxy_password', self.proxy_pass or '')
-            self.rhsmcfg.save()
+                self.rhsmcfg['server']['proxy_hostname'] = self.proxy_host
+                self.rhsmcfg['server']['proxy_port'] = self.proxy_port
+                self.rhsmcfg['server']['proxy_user'] = self.proxy_user or ''
+                self.rhsmcfg['server']['proxy_password'] = self.proxy_pass or ''
+            self.rhsmcfg.persist()
 
     def _get_connection_info(self):
         url_parse_error = os.EX_USAGE
         try:
             if self.options.destination_url is None:
                 url_parse_error = os.EX_CONFIG
-                hostname = self.rhsmcfg.get('server', 'hostname')
-                port = self.rhsmcfg.get_int('server', 'port')
-                prefix = self.rhsmcfg.get('server', 'prefix')
+                hostname = self.rhsmcfg['server']['hostname']
+                port = self.rhsmcfg['server'].get_int('port')
+                prefix = self.rhsmcfg['server']['prefix']
             else:
                 (_user, _password, hostname, port, prefix) = parse_url(self.options.destination_url, default_port=443)
         except ServerUrlParseError, e:
@@ -961,8 +962,8 @@ def validate_options(options):
 
 
 def is_hosted():
-    rhsmcfg = rhsm.config.initConfig()
-    hostname = rhsmcfg.get('server', 'hostname')
+    rhsmcfg = config.Config(initConfig())
+    hostname = rhsmcfg['server']['hostname']
     return bool(re.search('subscription\.rhn\.(.*\.)*redhat\.com', hostname) or
                 re.search('subscription\.rhsm\.(.*\.)*redhat\.com', hostname))
 

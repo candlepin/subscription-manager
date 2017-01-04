@@ -63,7 +63,7 @@ class TestAsyncPool(fixture.SubManFixture):
         inj.provide(inj.CERT_SORTER, stubs.StubCertSorter())
 
         self.pool_stash = \
-                managerlib.PoolStash(facts=self.stub_facts)
+                managerlib.PoolStash()
 
         self.ap = async.AsyncPool(self.pool_stash)
 
@@ -88,5 +88,6 @@ class TestAsyncPool(fixture.SubManFixture):
 
         self.mainloop.run()
         self.assertTrue(len(self.callbacks) > 3)
-        # we should have an exception in the error from the callback
-        self.assertTrue(isinstance(self.callbacks[0][1], IOError))
+        # we should have an sys.exc_info tuple in the error from the callback
+        self.assertTrue(isinstance(self.callbacks[0][1], tuple))
+        self.assertTrue(isinstance(self.callbacks[0][1][1], IOError))

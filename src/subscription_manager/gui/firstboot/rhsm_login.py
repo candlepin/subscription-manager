@@ -2,6 +2,7 @@
 import gettext
 import sys
 import logging
+import dbus.mainloop.glib
 
 _ = lambda x: gettext.ldgettext("rhsm", x)
 
@@ -9,7 +10,7 @@ from subscription_manager import ga_loader
 ga_loader.init_ga()
 
 from subscription_manager.ga import Gtk as ga_Gtk
-from subscription_manager.ga import gtk_compat
+from subscription_manager.ga import gtk_compat, GLib
 
 gtk_compat.threads_init()
 
@@ -30,7 +31,6 @@ init_dep_injection()
 
 from subscription_manager import injection as inj
 
-from subscription_manager.facts import Facts
 from subscription_manager.hwprobe import Hardware
 from subscription_manager.gui import managergui
 from subscription_manager.gui import registergui
@@ -61,6 +61,10 @@ class moduleClass(module.Module, object):
         """
         super(moduleClass, self).__init__()
 
+        dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+        GLib.threads_init()
+        dbus.mainloop.glib.threads_init()
+
         self.mode = constants.MODE_REGULAR
         self.title = _("Subscription Management Registration")
         self.sidebarTitle = _("Subscription Registration")
@@ -74,7 +78,7 @@ class moduleClass(module.Module, object):
         reg_info = registergui.RegisterInfo()
         self.backend = managergui.Backend()
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
-        self.register_widget = registergui.FirstbootWidget(self.backend, Facts(), reg_info)
+        self.register_widget = registergui.FirstbootWidget(self.backend, reg_info)
         self.register_widget.connect("notify::screen-ready", self._on_screen_ready_change)
 
         # Will be False if we are on an older RHEL version where

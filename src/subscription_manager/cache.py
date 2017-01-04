@@ -33,12 +33,14 @@ import subscription_manager.injection as inj
 from subscription_manager.jsonwrapper import PoolWrapper
 from rhsm import ourjson as json
 
+from rhsmlib.services import config
+
 _ = gettext.gettext
 log = logging.getLogger(__name__)
 
 PACKAGES_RESOURCE = "packages"
 
-cfg = initConfig()
+conf = config.Config(initConfig())
 
 
 class CacheManager(object):
@@ -362,7 +364,7 @@ class ProfileManager(CacheManager):
         # Could be None, we'll read the system's current profile later once
         # we're sure we actually need the data.
         self._current_profile = current_profile
-        self._report_package_profile = cfg.get_int('rhsm', 'report_package_profile')
+        self._report_package_profile = conf['rhsm'].get_int('report_package_profile')
 
     # give tests a chance to use something other than RPMProfile
     def _get_profile(self, profile_type):

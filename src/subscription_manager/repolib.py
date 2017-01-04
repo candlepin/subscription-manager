@@ -36,10 +36,11 @@ from rhsm.config import initConfig, in_container
 
 from subscription_manager.certlib import ActionReport, BaseActionInvoker
 from subscription_manager.certdirectory import Path
+from rhsmlib.services import config
 
 log = logging.getLogger(__name__)
 
-CFG = initConfig()
+conf = config.Config(initConfig())
 
 ALLOWED_CONTENT_TYPES = ["yum"]
 
@@ -49,7 +50,7 @@ _ = gettext.gettext
 def manage_repos_enabled():
     manage_repos = True
     try:
-        manage_repos = CFG.get_int('rhsm', 'manage_repos')
+        manage_repos = conf['rhsm'].get_int('manage_repos')
     except ValueError, e:
         log.exception(e)
         return True
@@ -316,8 +317,8 @@ class RepoUpdateActionCommand(object):
 
         # baseurl and ca_cert could be "CDNInfo" or
         # bundle with "ConnectionInfo" etc
-        baseurl = CFG.get('rhsm', 'baseurl')
-        ca_cert = CFG.get('rhsm', 'repo_ca_cert')
+        baseurl = conf['rhsm']['baseurl']
+        ca_cert = conf['rhsm']['repo_ca_cert']
 
         content_list = self.get_all_content(baseurl, ca_cert)
 
@@ -325,7 +326,7 @@ class RepoUpdateActionCommand(object):
         return set(content_list)
 
     # Expose as public API for RepoActionInvoker.is_managed, since that
-    # is used by openshift tooling.
+    # is used by Openshift tooling.
     # See https://bugzilla.redhat.com/show_bug.cgi?id=1223038
     def matching_content(self):
         return model.find_content(self.ent_source,
@@ -390,7 +391,7 @@ class RepoUpdateActionCommand(object):
         """
         changes_made = 0
 
-        for key, (mutable, default) in self._build_props(old_repo, new_repo).items():
+        for key, (mutable, _default) in self._build_props(old_repo, new_repo).items():
             new_val = new_repo.get(key)
 
             # Mutable properties should be added if not currently defined,
@@ -522,7 +523,7 @@ class Repo(dict):
         # NOTE: This sets the above properties to the default values even if
         # they are not defined on disk. i.e. these properties will always
         # appear in this dict, but their values may be None.
-        for k, (m, d) in self.PROPERTIES.items():
+        for k, (_m, d) in self.PROPERTIES.items():
             if k not in self.keys():
                 self[k] = d
 
@@ -575,9 +576,9 @@ class Repo(dict):
 
         # Worth passing in proxy config info to from_ent_cert_content()?
         # That would decouple Repo some
-        proxy_host = CFG.get('server', 'proxy_hostname')
+        proxy_host = conf['server']['proxy_hostname']
         # proxy_port as string is fine here
-        proxy_port = CFG.get('server', 'proxy_port')
+        proxy_port = conf['server']['proxy_port']
         if proxy_host != "":
             proxy = "https://%s" % proxy_host
             if proxy_port != "":
@@ -586,8 +587,8 @@ class Repo(dict):
         # These could be empty string, in which case they will not be
         # set in the yum repo file:
         repo['proxy'] = proxy
-        repo['proxy_username'] = CFG.get('server', 'proxy_user')
-        repo['proxy_password'] = CFG.get('server', 'proxy_password')
+        repo['proxy_username'] = conf['server']['proxy_user']
+        repo['proxy_password'] = conf['server']['proxy_password']
 
         return repo
 

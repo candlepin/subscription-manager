@@ -59,7 +59,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                  'update_certificates_button', 'register_button']
     gui_file = "installed"
 
-    def __init__(self, backend, facts, tab_icon,
+    def __init__(self, backend, tab_icon,
                  parent, ent_dir, prod_dir):
         # The row striping in this TreeView is handled automatically
         # because we have the rules_hint set to True in the Glade file.
@@ -71,7 +71,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.product_dir = prod_dir
         self.entitlement_dir = ent_dir
 
-        self.facts = facts
         self.backend = backend
 
         # Product column

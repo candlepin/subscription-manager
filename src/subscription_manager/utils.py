@@ -67,9 +67,9 @@ def parse_server_info(local_server_entry, config=None):
     port = ''
     prefix = ''
     if config is not None:
-        hostname = config.get("server", "hostname")
-        port = config.get("server", "port")
-        prefix = config.get("server", "prefix")
+        hostname = config["server"]["hostname"]
+        port = config["server"]["port"]
+        prefix = config["server"]["prefix"]
     return parse_url(local_server_entry,
                       hostname or DEFAULT_HOSTNAME,
                       port or DEFAULT_PORT,
@@ -501,7 +501,7 @@ def print_error(message):
     sys.stderr.write("\n")
 
 
-def unique_list_items(list, hash_function=lambda x: x):
+def unique_list_items(l, hash_function=lambda x: x):
     """
     Accepts a list of items.
     Returns a list of the unique items in the input.
@@ -509,7 +509,7 @@ def unique_list_items(list, hash_function=lambda x: x):
     """
     observed = set()
     unique_items = []
-    for item in list:
+    for item in l:
         item_key = hash_function(item)
         if item_key in observed:
             continue

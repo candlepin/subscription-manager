@@ -63,6 +63,9 @@ def handle_gui_exception(e, msg, parent, format_msg=True, log_msg=None):
     format_msg = if true, string sub the exception error in the msg
     """
     if isinstance(e, tuple):
+        if not log_msg:
+            log_msg = str(e[1])
+
         log.error(log_msg, exc_info=e)
         # Get the class instance of the exception
         e = e[1]
