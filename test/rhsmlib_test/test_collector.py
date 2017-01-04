@@ -19,7 +19,7 @@ except ImportError:
 import mock
 from test.fixture import open_mock
 
-from rhsmlib.facts import collector
+from rhsmlib.facts import collector, virt
 
 
 class GetArchTest(unittest.TestCase):
@@ -33,3 +33,11 @@ class GetArchTest(unittest.TestCase):
         with open_mock(content="hello_arch"):
             arch = collector.get_arch(prefix="/does/not/exist")
             self.assertEqual("hello_arch", arch)
+
+
+class VirtUuidCollectorTest(unittest.TestCase):
+    def test_strips_null_byte_on_uuid(self):
+        with open_mock(content="123\0"):
+            collector = virt.VirtUuidCollector(arch='ppc64')
+            fact = collector._get_devicetree_vm_uuid()
+            self.assertEqual('123', fact['virt.uuid'])

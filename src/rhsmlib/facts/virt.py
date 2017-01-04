@@ -17,6 +17,7 @@
 
 import gettext
 import logging
+import string
 
 from rhsmlib.facts import collector
 
@@ -128,7 +129,9 @@ class VirtUuidCollector(collector.FactsCollector):
         try:
             with open(vm_uuid_path) as fo:
                 contents = fo.read()
-                vm_uuid = contents.strip()
+                # Apparently ppc64 can report a virt uuid with a null byte at the end.
+                # See BZ 1405125.
+                vm_uuid = contents.strip(string.whitespace + "\0")
                 virt_dict['virt.uuid'] = vm_uuid
         except IOError as e:
             log.warn("Tried to read %s but there was an error: %s", vm_uuid_path, e)
