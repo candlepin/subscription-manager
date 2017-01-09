@@ -354,13 +354,11 @@ def _get_locale():
     return None
 
 
-# FIXME: it would be nice if the ssl server connection stuff
-# was decomposed from the api handling parts
-class Restlib(object):
+class BaseRestLib(object):
     """
-     A wrapper around httplib to make rest calls easier
-     See validateResponse() to learn when exceptions are raised as a result
-     of communication with the server.
+    A low-level wrapper around httplib
+    to make rest calls easy and expose the details of
+    responses
     """
     def __init__(self, host, ssl_port, apihandler,
             username=None, password=None,
@@ -533,11 +531,7 @@ class Restlib(object):
 
         self.validateResponse(result, request_type, handler)
 
-        # handle empty, but succesful responses, ala 204
-        if not len(result['content']):
-            return None
-
-        return json.loads(result['content'], object_hook=self._decode_dict)
+        return result
 
     def validateResponse(self, response, request_type=None, handler=None):
 
@@ -635,6 +629,25 @@ class Restlib(object):
         return self._request("DELETE", method, params)
 
 
+# FIXME: it would be nice if the ssl server connection stuff
+# was decomposed from the api handling parts
+class Restlib(BaseRestLib):
+    """
+     A wrapper around httplib to make rest calls easier
+     See validateResponse() to learn when exceptions are raised as a result
+     of communication with the server.
+    """
+
+    def _request(self, request_type, method, info=None):
+        result = super(Restlib, self)._request(request_type, method,
+            info=info)
+
+        # Handle 204s
+        if not len(result['content']):
+            return None
+        return json.loads(result['content'], object_hook=self._decode_dict)
+
+
 # FIXME: there should probably be a class here for just
 # the connection bits, then a sub class for the api
 # stuff
@@ -655,7 +668,8 @@ class UEPConnection:
             username=None, password=None,
             cert_file=None, key_file=None,
             insecure=None,
-            timeout=None):
+            timeout=None,
+            restlib_class=None):
         """
         Two ways to authenticate:
             - username/password for HTTP basic authentication. (owner admin role)
@@ -664,6 +678,7 @@ class UEPConnection:
 
         Must specify one method of authentication or the other, not both.
         """
+        restlib_class = restlib_class or Restlib
         self.host = host or config.get('server', 'hostname')
         self.ssl_port = ssl_port or safe_int(config.get('server', 'port'))
         self.handler = handler or config.get('server', 'prefix')
@@ -723,7 +738,7 @@ class UEPConnection:
         auth_description = None
         # initialize connection
         if using_basic_auth:
-            self.conn = Restlib(self.host, self.ssl_port, self.handler,
+            self.conn = restlib_class(self.host, self.ssl_port, self.handler,
                     username=self.username, password=self.password,
                     proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
                     proxy_user=self.proxy_user, proxy_password=self.proxy_password,
@@ -731,7 +746,7 @@ class UEPConnection:
                     ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout)
             auth_description = "auth=basic username=%s" % username
         elif using_id_cert_auth:
-            self.conn = Restlib(self.host, self.ssl_port, self.handler,
+            self.conn = restlib_class(self.host, self.ssl_port, self.handler,
                                 cert_file=self.cert_file, key_file=self.key_file,
                                 proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
                                 proxy_user=self.proxy_user, proxy_password=self.proxy_password,
@@ -739,7 +754,7 @@ class UEPConnection:
                                 ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout)
             auth_description = "auth=identity_cert ca_dir=%s insecure=%s" % (self.ca_cert_dir, self.insecure)
         else:
-            self.conn = Restlib(self.host, self.ssl_port, self.handler,
+            self.conn = restlib_class(self.host, self.ssl_port, self.handler,
                     proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
                     proxy_user=self.proxy_user, proxy_password=self.proxy_password,
                     ca_dir=self.ca_cert_dir, insecure=self.insecure,

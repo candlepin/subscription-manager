@@ -19,9 +19,9 @@
 # We can decide if the package should require it via the spec
 # file.
 try:
-    from simplejson import *
+    from simplejson import *  # NOQA
 except ImportError:
-    from json import *
+    from json import *  # NOQA
 
 
 def encode(obj):
