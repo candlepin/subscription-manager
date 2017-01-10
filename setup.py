@@ -179,7 +179,6 @@ class install_data(_install_data):
         self.add_icons()
         _install_data.run(self)
         self.transform_files()
-        self.update_desktop_database()
 
     def join(self, *args):
         return os.path.normpath(os.path.join(*args))
@@ -221,11 +220,6 @@ class install_data(_install_data):
             icon_source_files = glob(self.join(icon_source_root, d, 'apps', 'subscription-manager.*'))
 
             self.data_files.append((icon_dir, icon_source_files))
-
-    def update_desktop_database(self):
-        """
-        After copying icon files to /us/share/icons/ it is recommended to run
-        """
 
 
 setup_requires = []
