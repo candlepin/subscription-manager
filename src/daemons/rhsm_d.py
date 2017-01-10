@@ -78,8 +78,10 @@ from subscription_manager.cert_sorter import RHSM_VALID, \
         RHN_CLASSIC, RHSM_REGISTRATION_REQUIRED
 from subscription_manager.utils import print_error
 
-import rhsm.config
-CFG = rhsm.config.initConfig()
+from rhsm.config import initConfig
+from rhsmlib.services import config
+
+conf = config.Config(initConfig())
 
 enable_debug = False
 

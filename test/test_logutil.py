@@ -38,8 +38,15 @@ class TestLogutil(fixture.SubManFixture):
         logutil.init_logger()
         sm_logger = logging.getLogger("subscription_manager")
         rhsm_logger = logging.getLogger("rhsm-app")
-        self.assertEqual(sm_logger.getEffectiveLevel(), logging.DEBUG)
-        self.assertEqual(rhsm_logger.getEffectiveLevel(), logging.DEBUG)
+        sm_effective = sm_logger.getEffectiveLevel()
+        rhsm_effective = rhsm_logger.getEffectiveLevel()
+        # Fun hack for 2.6/2.7 interoperability
+        self.assertTrue(
+            logging.DEBUG == sm_effective or
+            logging._levelNames[sm_effective] == logging.DEBUG)
+        self.assertTrue(
+            logging.DEBUG == rhsm_effective or
+            logging._levelNames[rhsm_effective] == logging.DEBUG)
 
     def test_log_init_default_log_level(self):
         self.rhsm_config.set("logging", "default_log_level", "WARNING")
@@ -47,8 +54,15 @@ class TestLogutil(fixture.SubManFixture):
         logutil.init_logger()
         sm_logger = logging.getLogger("subscription_manager")
         rhsm_logger = logging.getLogger("rhsm-app")
-        self.assertEqual(sm_logger.getEffectiveLevel(), logging.WARNING)
-        self.assertEqual(rhsm_logger.getEffectiveLevel(), logging.WARNING)
+        sm_effective = sm_logger.getEffectiveLevel()
+        rhsm_effective = rhsm_logger.getEffectiveLevel()
+        # Fun hack for 2.6/2.7 interoperability
+        self.assertTrue(
+            logging.WARNING == sm_effective or
+            logging._levelNames[sm_effective] == logging.WARNING)
+        self.assertTrue(
+            logging.WARNING == rhsm_effective or
+            logging._levelNames[rhsm_effective] == logging.WARNING)
 
     def test_init_logger_for_yum(self):
         logutil.init_logger_for_yum()
@@ -77,7 +91,9 @@ class TestLogutil(fixture.SubManFixture):
 
         for logger_name, log_level in logging_conf:
             real_log_level = logging.getLogger(logger_name).getEffectiveLevel()
-            self.assertEqual(real_log_level, logging._checkLevel(log_level))
+            self.assertTrue(
+                logging._levelNames[log_level] == real_log_level or
+                log_level == real_log_level)
 
     def test_set_invalid_logger_level(self):
         test_logger_name = 'foobar'

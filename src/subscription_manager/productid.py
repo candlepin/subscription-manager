@@ -604,7 +604,7 @@ class ProductManager:
         """determine if product cert list has desktop and workstation certs"""
         has_workstation = False
         has_desktop = False
-        for product, product_cert in product_cert_list:
+        for product, _product_cert in product_cert_list:
             if self._is_workstation(product):
                 has_workstation = True
             if self._is_desktop(product):

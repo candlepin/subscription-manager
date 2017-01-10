@@ -631,7 +631,7 @@ class BasePluginManager(object):
         # find all the plugin classes with valid configs first
         # then add them, so we skip the module if a class has a bad config
         found_plugin_classes = []
-        for name, clazz in sorted(plugin_classes):
+        for _name, clazz in sorted(plugin_classes):
 
             # We could have the module conf here, and check in that
             # instead of a per class config. We would not be able to

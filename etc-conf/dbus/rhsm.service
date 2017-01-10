@@ -1,0 +1,11 @@
+[Unit]
+Description=RHSM dbus service
+After=syslog.target network.target
+
+[Service]
+Type=dbus
+BusName=com.redhat.RHSM1
+ExecStart=/usr/libexec/rhsm-service
+
+[Install]
+WantedBy=basic.target

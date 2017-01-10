@@ -77,8 +77,10 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Requires:  python-ethtool
 Requires:  python-iniparse
+Requires:  python-decorator
+Requires:  dbus-x11
 Requires:  virt-what
-Requires:  python-rhsm >= 1.18.1
+Requires:  python-rhsm > 1.18.4
 Requires:  python-decorator
 
 %if 0%{?sles_version}
@@ -218,6 +220,7 @@ Summary: Subscription Manager plugins for DNF
 Group: System Environment/Base
 Requires: %{name} = %{version}-%{release}
 Requires: dnf >= 1.0.0
+Requires: python2-dnf-plugins-core
 
 %description -n dnf-plugin-subscription-manager
 This package provides plugins to interact with repositories and subscriptions
@@ -330,14 +333,6 @@ rm -rf %{buildroot}
 %attr(755,root,root) %{_libexecdir}/rhsmcertd-worker
 %attr(755,root,root) %{_libexecdir}/rhsmd
 
-# init scripts and systemd services
-%if %use_systemd
-    %attr(644,root,root) %{_unitdir}/rhsmcertd.service
-    %attr(644,root,root) %{_tmpfilesdir}/%{name}.conf
-%else
-    %attr(755,root,root) %{_initrddir}/rhsmcertd
-%endif
-
 # our config dirs and files
 %attr(755,root,root) %dir %{_sysconfdir}/pki/consumer
 %attr(755,root,root) %dir %{_sysconfdir}/pki/entitlement
@@ -345,8 +340,6 @@ rm -rf %{buildroot}
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm/facts
 %attr(644,root,root) %config(noreplace) %{_sysconfdir}/rhsm/rhsm.conf
 %config %attr(644,root,root) %{_sysconfdir}/rhsm/logging.conf
-
-%config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.SubscriptionManager.conf
 
 # PAM config
 %if !0%{?sles_version}
@@ -365,7 +358,6 @@ rm -rf %{buildroot}
 # misc system config
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/logrotate.d/subscription-manager
 %attr(700,root,root) %{_sysconfdir}/cron.daily/rhsmd
-%{_datadir}/dbus-1/system-services/com.redhat.SubscriptionManager.service
 
 %attr(755,root,root) %dir %{_var}/log/rhsm
 %attr(755,root,root) %dir %{_var}/spool/rhsm/debug
@@ -382,12 +374,7 @@ rm -rf %{buildroot}
 %{_sysconfdir}/bash_completion.d/rhsm-icon
 %{_sysconfdir}/bash_completion.d/rhsmcertd
 
-%dir %{python_sitelib}/
 %dir %{python_sitelib}/subscription_manager
-%dir %{python_sitelib}/subscription_manager/api
-%dir %{python_sitelib}/subscription_manager/branding
-%dir %{python_sitelib}/subscription_manager/model
-%dir %{python_sitelib}/subscription_manager/plugin
 
 # code, python modules and packages
 %{python_sitelib}/subscription_manager-*.egg-info/*
@@ -419,6 +406,30 @@ rm -rf %{buildroot}
 %{_prefix}/lib/yum-plugins/product-id.py*
 %{_prefix}/lib/yum-plugins/search-disabled-repos.py*
 
+# rhsmlib
+%dir %{python_sitelib}/rhsmlib
+%{python_sitelib}/rhsmlib/*.py*
+%{python_sitelib}/rhsmlib/candlepin/*.py*
+%{python_sitelib}/rhsmlib/compat/*.py*
+%{python_sitelib}/rhsmlib/facts/*.py*
+%{python_sitelib}/rhsmlib/services/*.py*
+%{python_sitelib}/rhsmlib/dbus/*.py*
+%{python_sitelib}/rhsmlib/dbus/facts/*.py*
+%{python_sitelib}/rhsmlib/dbus/objects/*.py*
+
+%{_datadir}/polkit-1/actions/com.redhat.*.policy
+%{_datadir}/dbus-1/system-services/com.redhat.*.service
+%attr(755,root,root) %{_libexecdir}/rhsm*-service
+
+# Despite the name similarity dbus-1/system.d has nothing to do with systemd
+%config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.*.conf
+%if %use_systemd
+    %attr(644,root,root) %{_unitdir}/*.service
+    %attr(644,root,root) %{_tmpfilesdir}/%{name}.conf
+%else
+    %attr(755,root,root) %{_initrddir}/rhsmcertd
+%endif
+
 # Incude rt CLI tool
 %dir %{python_sitelib}/rct
 %{python_sitelib}/rct/*.py*
@@ -448,11 +459,6 @@ rm -rf %{buildroot}
 %{_bindir}/rhsm-icon
 
 %dir %{python_sitelib}/subscription_manager/gui
-%dir %{python_sitelib}/subscription_manager/gui/data
-%dir %{python_sitelib}/subscription_manager/gui/data/ui
-%dir %{python_sitelib}/subscription_manager/gui/data/glade
-%dir %{python_sitelib}/subscription_manager/gui/data/icons
-
 %{python_sitelib}/subscription_manager/gui/*.py*
 %{python_sitelib}/subscription_manager/gui/data/ui/*.ui
 %{python_sitelib}/subscription_manager/gui/data/glade/*.glade
@@ -521,10 +527,6 @@ rm -rf %{buildroot}
 %files -n subscription-manager-initial-setup-addon
 %defattr(-,root,root,-)
 %dir %{_datadir}/anaconda/addons/com_redhat_subscription_manager/
-%dir %{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/
-%dir %{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/
-%dir %{_datadir}/anaconda/addons/com_redhat_subscription_manager/categories/
-%dir %{_datadir}/anaconda/addons/com_redhat_subscription_manager/ks/
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/*.py*
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/*.py*
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/*.ui

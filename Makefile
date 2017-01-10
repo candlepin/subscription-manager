@@ -13,17 +13,19 @@
 #   just the fastest or easiest way.
 
 SHELL := /bin/bash
-PREFIX ?=
+PREFIX ?= /
 SYSCONF ?= etc
 INSTALL_DIR = usr/share
-
-PYTHON_SITELIB ?= usr/lib/python2.7/site-packages
-# Note the underscore used instead of a hyphen
-PYTHON_INST_DIR = $(PREFIX)/$(PYTHON_SITELIB)/subscription_manager
 
 OS = $(shell lsb_release -i | awk '{ print $$3 }' | awk -F. '{ print $$1}')
 OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
 OS_DIST ?= $(shell rpm --eval='%dist')
+
+PYTHON_VER ?= $(python -c 'import sys; print("python%s.%s" % sys.version_info[:2])')
+
+PYTHON_SITELIB ?= usr/lib/$(PYTHON_VER)/site-packages
+# Note the underscore used instead of a hyphen
+PYTHON_INST_DIR = $(PREFIX)/$(PYTHON_SITELIB)/subscription_manager
 
 # Where various bits of code live in the git repo
 SRC_DIR := src/subscription_manager
@@ -41,6 +43,7 @@ RHSM_PLUGIN_DIR := $(PREFIX)/usr/share/rhsm-plugins/
 RHSM_PLUGIN_CONF_DIR := $(PREFIX)/etc/rhsm/pluginconf.d/
 ANACONDA_ADDON_INST_DIR := $(PREFIX)/usr/share/anaconda/addons
 INITIAL_SETUP_INST_DIR := $(ANACONDA_ADDON_INST_DIR)/$(ANACONDA_ADDON_NAME)
+POLKIT_ACTIONS_INST_DIR := $(PREFIX)/$(INSTALL_DIR)/polkit-1/actions
 LIBEXEC_DIR ?= $(shell rpm --eval='%_libexecdir')
 
 # If we skip install ostree plugin, unset by default
@@ -53,6 +56,7 @@ ifeq ($(OS_DIST),.el6)
    FIRSTBOOT_MODULES_DIR?=$(PREFIX)/usr/share/rhn/up2date_client/firstboot
    INSTALL_FIRSTBOOT?=true
    INSTALL_INITIAL_SETUP?=false
+   DBUS_SERVICE_FILE_TYPE?=dbus
 else ifeq ($(OS),SUSE)
    GTK_VERSION?=2
    FIRSTBOOT_MODULES_DIR?=$(PREFIX)/usr/share/rhn/up2date_client/firstboot
@@ -63,6 +67,21 @@ else
    FIRSTBOOT_MODULES_DIR?=$(PREFIX)/usr/share/firstboot/modules
    INSTALL_FIRSTBOOT?=true
    INSTALL_INITIAL_SETUP?=true
+   DBUS_SERVICE_FILE_TYPE?=systemd
+endif
+
+DBUS_SERVICES_CONF_INST_DIR := $(PREFIX)/usr/share/dbus-1/system-services
+FACTS_INST_DBUS_SERVICE_FILE = $(DBUS_SERVICES_CONF_INST_DIR)/com.redhat.RHSM1.Facts.service
+MAIN_INST_DBUS_SERVICE_FILE = $(DBUS_SERVICES_CONF_INST_DIR)/com.redhat.RHSM1.service
+# TODO Ideally these service files would be installed by distutils, but the file we actually
+# install depends on the distro we are using.  Add a --without-systemd or similar flag to the
+# custom install_data class we have in setup.py
+ifeq ($(DBUS_SERVICE_FILE_TYPE),dbus)
+FACTS_SRC_DBUS_SERVICE_FILE = etc-conf/dbus/com.redhat.RHSM1.Facts.service-dbus
+MAIN_SRC_DBUS_SERVICE_FILE = etc-conf/dbus/com.redhat.RHSM1.service-dbus
+else
+FACTS_SRC_DBUS_SERVICE_FILE = etc-conf/dbus/com.redhat.RHSM1.Facts.service
+MAIN_SRC_DBUS_SERVICE_FILE = etc-conf/dbus/com.redhat.RHSM1.service
 endif
 
 # always true until fedora is just dnf
@@ -119,17 +138,36 @@ rhsm-icon: $(RHSM_ICON_SRC_DIR)/rhsm_icon.c
 check-syntax:
 	$(CC) -fsyntax-only $(CFLAGS) $(LDFLAGS) $(ICON_FLAGS) `find -name '*.c'`
 
-.PHONY: dbus-service-install
-dbus-service-install:
+dbus-common-install:
 	install -d $(PREFIX)/etc/dbus-1/system.d
+	if [ "$(DBUS_SERVICE_FILE_TYPE)" == "systemd" ]; then \
+		install -d $(SYSTEMD_INST_DIR) ; \
+	fi
 	install -d $(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
 	install -d $(PREFIX)/$(LIBEXEC_DIR)
-	install -m 644 etc-conf/com.redhat.SubscriptionManager.conf \
-		$(PREFIX)/etc/dbus-1/system.d
-	install -m 644 etc-conf/com.redhat.SubscriptionManager.service \
-		$(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
-	install -m 744 $(DAEMONS_SRC_DIR)/rhsm_d.py \
-		$(PREFIX)/$(LIBEXEC_DIR)/rhsmd
+	install -d $(PREFIX)/etc/bash_completion.d
+
+dbus-rhsmd-service-install: dbus-common-install
+	install -m 644 etc-conf/dbus/com.redhat.SubscriptionManager.conf $(PREFIX)/etc/dbus-1/system.d
+	install -m 644 etc-conf/dbus/com.redhat.SubscriptionManager.service $(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
+	install -m 744 $(DAEMONS_SRC_DIR)/rhsm_d.py $(PREFIX)/$(LIBEXEC_DIR)/rhsmd
+
+dbus-facts-service-install: dbus-common-install
+	install -m 644 etc-conf/dbus/com.redhat.RHSM1.Facts.conf $(PREFIX)/etc/dbus-1/system.d
+	if [ "$(DBUS_SERVICE_FILE_TYPE)" == "systemd" ]; then \
+		install -m 644 etc-conf/dbus/rhsm-facts.service $(SYSTEMD_INST_DIR) ; \
+	fi
+	install -m 644 $(FACTS_SRC_DBUS_SERVICE_FILE) $(FACTS_INST_DBUS_SERVICE_FILE)
+
+dbus-main-service-install: dbus-common-install
+	install -m 644 etc-conf/dbus/com.redhat.RHSM1.conf $(PREFIX)/etc/dbus-1/system.d
+	if [ "$(DBUS_SERVICE_FILE_TYPE)" == "systemd" ]; then \
+		install -m 644 etc-conf/dbus/rhsm.service $(SYSTEMD_INST_DIR) ; \
+	fi
+	install -m 644 $(MAIN_SRC_DBUS_SERVICE_FILE) $(MAIN_INST_DBUS_SERVICE_FILE)
+
+.PHONY: dbus-install
+dbus-install: dbus-facts-service-install dbus-rhsmd-service-install dbus-main-service-install
 
 .PHONY: install-conf
 install-conf:
@@ -150,6 +188,9 @@ install-conf:
 	install -m 644 etc-conf/rhsmcertd.completion.sh $(PREFIX)/etc/bash_completion.d/rhsmcertd
 	install -d $(PREFIX)/usr/share/appdata
 	install -m 644 etc-conf/subscription-manager-gui.appdata.xml $(PREFIX)/$(INSTALL_DIR)/appdata/subscription-manager-gui.appdata.xml
+	install -d $(POLKIT_ACTIONS_INST_DIR)
+	install -m 644 etc-conf/dbus/com.redhat.RHSM1.policy $(POLKIT_ACTIONS_INST_DIR)
+	install -m 644 etc-conf/dbus/com.redhat.RHSM1.Facts.policy $(POLKIT_ACTIONS_INST_DIR)
 
 .PHONY: install-plugins
 install-plugins:
@@ -251,7 +292,7 @@ install-via-setup:
 install: install-via-setup install-files
 
 .PHONY: install-files
-install-files: dbus-service-install install-conf install-plugins install-post-boot install-ga
+install-files: dbus-install install-conf install-plugins install-post-boot install-ga
 	install -d $(PREFIX)/var/log/rhsm
 	install -d $(PREFIX)/var/spool/rhsm/debug
 	install -d $(PREFIX)/var/run/rhsm
@@ -260,7 +301,6 @@ install-files: dbus-service-install install-conf install-plugins install-post-bo
 	# Set up rhsmcertd daemon. If installing on Fedora or RHEL 7+
 	# we prefer systemd over sysv as this is the new trend.
 	if [ $(OS) = Fedora ] ; then \
-		install -d $(SYSTEMD_INST_DIR); \
 		install -d $(PREFIX)/usr/lib/tmpfiles.d; \
 		install etc-conf/rhsmcertd.service $(SYSTEMD_INST_DIR); \
 		install etc-conf/subscription-manager.conf.tmpfiles \
@@ -281,7 +321,6 @@ install-files: dbus-service-install install-conf install-plugins install-post-bo
 			install etc-conf/rhsmcertd.init.d \
 				$(PREFIX)/etc/rc.d/init.d/rhsmcertd; \
 		else \
-			install -d $(SYSTEMD_INST_DIR); \
 			install -d $(PREFIX)/usr/lib/tmpfiles.d; \
 			install etc-conf/rhsmcertd.service $(SYSTEMD_INST_DIR); \
 			install etc-conf/subscription-manager.conf.tmpfiles \

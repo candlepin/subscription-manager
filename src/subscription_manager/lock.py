@@ -101,7 +101,7 @@ class Lock(object):
         self.lockdir = None
         self.blocking = None
 
-        lock_dir, fn = os.path.split(self.path)
+        lock_dir, _fn = os.path.split(self.path)
         try:
             if not os.path.exists(lock_dir):
                 os.makedirs(lock_dir)

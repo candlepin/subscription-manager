@@ -97,7 +97,7 @@ def update(conduit, cache_only):
     if identity.is_valid():
         try:
             connection.UEPConnection(cert_file=cert_file, key_file=key_file)
-        #FIXME: catchall exception
+        # FIXME: catchall exception
         except Exception:
             # log
             conduit.info(2, "Unable to connect to Subscription Management Service")
@@ -174,5 +174,5 @@ def postconfig_hook(conduit):
         update(conduit, cache_only)
         warnOrGiveUsageMessage(conduit)
         warnExpired(conduit)
-    except Exception, e:
+    except Exception as e:
         conduit.error(2, str(e))

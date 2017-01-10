@@ -20,8 +20,9 @@ from rhsm.certificate import create_from_pem
 from rhsm.config import initConfig
 from subscription_manager.certdirectory import Path
 
-CFG = initConfig()
+from rhsmlib.services import config
 
+conf = config.Config(initConfig())
 log = logging.getLogger(__name__)
 
 
@@ -31,7 +32,7 @@ class ConsumerIdentity:
     Includes helpers for reading/writing consumer identity certificates
     from disk."""
 
-    PATH = CFG.get('rhsm', 'consumerCertDir')
+    PATH = conf['rhsm']['consumerCertDir']
     KEY = 'key.pem'
     CERT = 'cert.pem'
 
@@ -147,7 +148,7 @@ class Identity(object):
             self.consumer = None
             self.name = None
             self.uuid = None
-            self.cert_dir_path = CFG.get('rhsm', 'consumerCertDir')
+            self.cert_dir_path = conf['rhsm']['consumerCertDir']
 
     def _get_consumer_identity(self):
         # FIXME: wrap in exceptions, catch IOErrors etc, raise anything else

@@ -17,7 +17,6 @@ import gettext
 import logging
 import socket
 
-from rhsm.config import initConfig
 from rhsm.certificate import Key, create_from_pem
 
 from subscription_manager.certdirectory import Writer
@@ -28,12 +27,8 @@ from subscription_manager.injection import IDENTITY, require
 from subscription_manager import rhelentbranding
 import subscription_manager.injection as inj
 
-
 log = logging.getLogger(__name__)
-
 _ = gettext.gettext
-
-cfg = initConfig()
 
 
 class EntCertActionInvoker(certlib.BaseActionInvoker):

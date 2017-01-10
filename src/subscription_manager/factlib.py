@@ -21,6 +21,9 @@ import logging
 from certlib import Locker, ActionReport
 from subscription_manager import injection as inj
 
+import rhsmlib.dbus.facts as facts
+import rhsmlib.candlepin.api as candlepin_api
+
 _ = gettext.gettext
 
 log = logging.getLogger(__name__)
@@ -78,31 +81,32 @@ class FactsActionCommand(object):
     Returns a FactsActionReport.
     """
     def __init__(self):
-        self.cp_provider = inj.require(inj.CP_PROVIDER)
-        self.uep = self.cp_provider.get_consumer_auth_cp()
         self.report = FactsActionReport()
-        self.facts = inj.require(inj.FACTS)
+        self.facts_client = facts.FactsClient()
+
+    def collect_facts(self):
+        return self.facts_client.GetFacts()
+
+    def sync_facts_to_server(self, fact_updates):
+        consumer_identity = inj.require(inj.IDENTITY)
+        if not consumer_identity.is_valid():
+            return self.report
+
+        cp_provider = inj.require(inj.CP_PROVIDER)
+        uep = cp_provider.get_consumer_auth_cp()
+
+        consumer_api = candlepin_api.CandlepinConsumer(uep, consumer_identity.uuid)
+        res = consumer_api.call(uep.updateConsumer, fact_updates)
+        log.debug("sync_facts_to_server candlepin api res=%s", res)
 
     def perform(self):
-
         # figure out the diff between latest facts and
         # report that as updates
-
-        if self.facts.has_changed():
-            fact_updates = self.facts.get_facts()
-            self.report.fact_updates = fact_updates
-
-            consumer_identity = inj.require(inj.IDENTITY)
-            if not consumer_identity.is_valid():
-                # FIXME: more info
-                return self.report
-
-            # CacheManager.update_check calls self.has_changed,
-            # is the self.facts.has_changed above redundant?
-            self.facts.update_check(self.uep, consumer_identity.uuid)
-            log.info("Facts have been updated.")
-        else:
-            log.debug("Facts have not changed, skipping upload.")
-
-        # FIXME: can populate this with more info later
+        self.update()
         return self.report
+
+    def update(self):
+        """This will collect the facts from the dbus service and push them to the server."""
+        collected_facts = self.collect_facts()
+        self.report.fact_updates = collected_facts
+        self.sync_facts_to_server(collected_facts)

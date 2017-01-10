@@ -23,10 +23,13 @@ import socket
 import sys
 import threading
 
+from subscription_manager import ga_loader
+ga_loader.init_ga()
+
 from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.ga import GObject as ga_GObject
 
-import rhsm.config as config
+import rhsm.config as base_config
 from rhsm.utils import ServerUrlParseError
 from rhsm.connection import GoneException, RestlibException, UEPConnection, \
         ProxyException
@@ -47,13 +50,15 @@ from subscription_manager.gui.autobind import DryRunResult, \
         NoProductsException
 from subscription_manager.jsonwrapper import PoolWrapper
 
+import rhsmlib.dbus.facts as facts
+
 _ = lambda x: gettext.ldgettext("rhsm", x)
 
 gettext.textdomain("rhsm")
-
 log = logging.getLogger(__name__)
 
-CFG = config.initConfig()
+from rhsmlib.services import config
+conf = config.Config(base_config.initConfig())
 
 
 class RegisterState(object):
@@ -122,13 +127,13 @@ def reset_resolver():
 
 def server_info_from_config(config):
     return {
-            "host": config.get('server', 'hostname'),
-            "ssl_port": config.get_int('server', 'port'),
-            "handler": config.get('server', 'prefix'),
-            "proxy_hostname": config.get('server', 'proxy_hostname'),
-            "proxy_port": config.get_int('server', 'proxy_port'),
-            "proxy_user": config.get('server', 'proxy_user'),
-            "proxy_password": config.get('server', 'proxy_password')
+            "host": conf['server']['hostname'],
+            "ssl_port": conf['server'].get_int('port'),
+            "handler": conf['server']['prefix'],
+            "proxy_hostname": conf['server']['proxy_hostname'],
+            "proxy_port": conf['server'].get_int('proxy_port'),
+            "proxy_user": conf['server']['proxy_user'],
+            "proxy_password": conf['server']['proxy_password']
            }
 
 
@@ -219,9 +224,9 @@ class RegisterInfo(ga_GObject.GObject):
 
     def _defaults_from_config(self):
         """Load the current server values from configuration (rhsm.conf)."""
-        self.set_property('hostname', CFG.get('server', 'hostname'))
-        self.set_property('port', CFG.get('server', 'port'))
-        self.set_property('prefix', CFG.get('server', 'prefix'))
+        self.set_property('hostname', conf['server']['hostname'])
+        self.set_property('port', conf['server']['port'])
+        self.set_property('prefix', conf['server']['prefix'])
 
     def _initial_registration_status(self):
         msg = _("This system is currently not registered.")
@@ -259,12 +264,10 @@ class RegisterWidget(widgets.SubmanBaseWidget):
     register_button_label = ga_GObject.property(type=str, default=_('Register'))
     # TODO: a prop equivalent to initial-setups 'completed' and 'status' props
 
-    def __init__(self, backend, facts, reg_info=None,
-                 parent_window=None):
+    def __init__(self, backend, reg_info=None, parent_window=None):
         super(RegisterWidget, self).__init__()
 
         self.backend = backend
-        self.facts = facts
 
         self.async = AsyncBackend(self.backend)
 
@@ -340,7 +343,6 @@ class RegisterWidget(widgets.SubmanBaseWidget):
     def add_screen(self, idx, screen_class):
         screen = screen_class(reg_info=self.info,
                               async_backend=self.async,
-                              facts=self.facts,
                               parent_window=self.parent_window)
 
         # add the index of the screen in self._screens to the class itself
@@ -402,8 +404,8 @@ class RegisterWidget(widgets.SubmanBaseWidget):
     def do_register_finished(self):
         msg = _("System '%s' successfully registered.\n") % self.info.identity.name
         self.info.set_property('register-status', msg)
-        CFG.save()
-        last_server_info = server_info_from_config(CFG)
+        conf.persist()
+        last_server_info = server_info_from_config(conf)
         last_server_info['cert_file'] = self.backend.cp_provider.cert_file
         last_server_info['key_file'] = self.backend.cp_provider.key_file
         self.info.set_property('server-info', last_server_info)
@@ -700,7 +702,7 @@ class RegisterDialog(widgets.SubmanBaseWidget):
     gui_file = "register_dialog"
     __gtype_name__ = 'RegisterDialog'
 
-    def __init__(self, backend, facts=None, callbacks=None):
+    def __init__(self, backend, callbacks=None):
         """
         Callbacks will be executed when registration status changes.
         """
@@ -711,7 +713,7 @@ class RegisterDialog(widgets.SubmanBaseWidget):
         self.reg_info = RegisterInfo()
 
         # RegisterWidget is a oect, but not a Gtk.Widget
-        self.register_widget = self.create_wizard_widget(backend, facts, self.reg_info,
+        self.register_widget = self.create_wizard_widget(backend, self.reg_info,
                                                          self.register_dialog)
 
         # But RegisterWidget.register_widget is a Gtk.Widget, so add it to
@@ -746,15 +748,14 @@ class RegisterDialog(widgets.SubmanBaseWidget):
         self.window = self.register_dialog
         self.back_button.set_sensitive(False)
 
-    def create_wizard_widget(self, backend, facts, reg_info, parent_window):
+    def create_wizard_widget(self, backend, reg_info, parent_window):
         """Create a RegisterWidget or subclass and use it for our content."""
 
         # FIXME: Need better error handling in general, but it's kind of
         # annoying to have to pass the top level widget all over the place
         register_widget = RegisterWidget(backend=backend,
-                                       facts=facts,
-                                       reg_info=reg_info,
-                                       parent_window=parent_window)
+                                         reg_info=reg_info,
+                                         parent_window=parent_window)
 
         return register_widget
 
@@ -827,9 +828,9 @@ class AutoBindWidget(RegisterWidget):
 
     initial_screen = SELECT_SLA_PAGE
 
-    def __init__(self, backend, facts, reg_info=None,
+    def __init__(self, backend, reg_info=None,
                  parent_window=None):
-        super(AutoBindWidget, self).__init__(backend, facts, reg_info,
+        super(AutoBindWidget, self).__init__(backend, reg_info,
                                              parent_window)
 
     def choose_initial_screen(self):
@@ -855,15 +856,14 @@ class FirstbootWidget(RegisterWidget):
 class AutobindWizardDialog(RegisterDialog):
     __gtype_name__ = "AutobindWizardDialog"
 
-    def __init__(self, backend, facts):
-        super(AutobindWizardDialog, self).__init__(backend, facts)
+    def __init__(self, backend):
+        super(AutobindWizardDialog, self).__init__(backend)
 
-    def create_wizard_widget(self, backend, facts, reg_info, parent_window):
+    def create_wizard_widget(self, backend, reg_info, parent_window):
 
         # FIXME: Need better error handling in general, but it's kind of
         # annoying to have to pass the top level widget all over the place
         autobind_widget = AutoBindWidget(backend=backend,
-                                         facts=facts,
                                          reg_info=reg_info,
                                          parent_window=parent_window)
 
@@ -899,7 +899,7 @@ class Screen(widgets.SubmanBaseWidget):
 
     ready = ga_GObject.property(type=bool, default=True)
 
-    def __init__(self, reg_info, async_backend, facts, parent_window):
+    def __init__(self, reg_info, async_backend, parent_window):
         super(Screen, self).__init__()
 
         self.pre_message = ""
@@ -911,7 +911,6 @@ class Screen(widgets.SubmanBaseWidget):
         self.parent_window = parent_window
         self.info = reg_info
         self.async = async_backend
-        self.facts = facts
 
     def stay(self):
         self.emit('stay-on-screen')
@@ -966,13 +965,12 @@ class NoGuiScreen(ga_GObject.GObject):
 
     ready = ga_GObject.property(type=bool, default=True)
 
-    def __init__(self, reg_info, async_backend, facts, parent_window):
+    def __init__(self, reg_info, async_backend, parent_window):
         ga_GObject.GObject.__init__(self)
 
         self.parent_window = parent_window
         self.info = reg_info
         self.async = async_backend
-        self.facts = facts
 
         self.button_label = None
         self.needs_gui = False
@@ -1012,8 +1010,8 @@ class NoGuiScreen(ga_GObject.GObject):
 class PerformRegisterScreen(NoGuiScreen):
     screen_enum = PERFORM_REGISTER_PAGE
 
-    def __init__(self, reg_info, async_backend, facts, parent_window):
-        super(PerformRegisterScreen, self).__init__(reg_info, async_backend, facts, parent_window)
+    def __init__(self, reg_info, async_backend, parent_window):
+        super(PerformRegisterScreen, self).__init__(reg_info, async_backend, parent_window)
 
     def _on_registration_finished_cb(self, new_account, error=None):
         if error is not None:
@@ -1051,7 +1049,6 @@ class PerformRegisterScreen(NoGuiScreen):
         self.info.set_property('register-status', msg)
 
         self.async.register_consumer(self.info.get_property('consumername'),
-                                     self.facts,
                                      self.info.get_property('owner-key'),
                                      self.info.get_property('environment'),
                                      self.info.get_property('activation-keys'),
@@ -1110,8 +1107,8 @@ class PerformUnregisterScreen(NoGuiScreen):
 class PerformPackageProfileSyncScreen(NoGuiScreen):
     screen_enum = UPLOAD_PACKAGE_PROFILE_PAGE
 
-    def __init__(self, reg_info, async_backend, facts, parent_window):
-        super(PerformPackageProfileSyncScreen, self).__init__(reg_info, async_backend, facts, parent_window)
+    def __init__(self, reg_info, async_backend, parent_window):
+        super(PerformPackageProfileSyncScreen, self).__init__(reg_info, async_backend, parent_window)
         self.pre_message = _("Uploading package profile")
 
     def _on_update_package_profile_finished_cb(self, result, error=None):
@@ -1151,8 +1148,8 @@ class PerformPackageProfileSyncScreen(NoGuiScreen):
 class PerformSubscribeScreen(NoGuiScreen):
     screen_enum = PERFORM_SUBSCRIBE_PAGE
 
-    def __init__(self, reg_info, async_backend, facts, parent_window):
-        super(PerformSubscribeScreen, self).__init__(reg_info, async_backend, facts, parent_window)
+    def __init__(self, reg_info, async_backend, parent_window):
+        super(PerformSubscribeScreen, self).__init__(reg_info, async_backend, parent_window)
         self.pre_message = _("Attaching subscriptions")
 
     def _on_subscribing_finished_cb(self, unused, error=None):
@@ -1185,8 +1182,8 @@ class ConfirmSubscriptionsScreen(Screen):
 
     gui_file = "confirmsubs"
 
-    def __init__(self, reg_info, async_backend, facts, parent_window):
-        super(ConfirmSubscriptionsScreen, self).__init__(reg_info, async_backend, facts, parent_window)
+    def __init__(self, reg_info, async_backend, parent_window):
+        super(ConfirmSubscriptionsScreen, self).__init__(reg_info, async_backend, parent_window)
         self.button_label = _("_Attach")
 
         self.store = ga_Gtk.ListStore(str, bool, str)
@@ -1249,8 +1246,8 @@ class SelectSLAScreen(Screen):
                                           'owner_treeview']
     gui_file = "selectsla"
 
-    def __init__(self, reg_info, async_backend, facts, parent_window):
-        super(SelectSLAScreen, self).__init__(reg_info, async_backend, facts, parent_window)
+    def __init__(self, reg_info, async_backend, parent_window):
+        super(SelectSLAScreen, self).__init__(reg_info, async_backend, parent_window)
 
         self.pre_message = _("Finding suitable service levels")
         self.button_label = _("_Next")
@@ -1409,7 +1406,6 @@ class SelectSLAScreen(Screen):
         self.info.identity.reload()
 
         self.async.find_service_levels(self.info.identity.uuid,
-                                       self.facts,
                                        self._on_get_service_levels_cb)
         return True
 
@@ -1428,8 +1424,8 @@ class EnvironmentScreen(Screen):
     widget_names = Screen.widget_names + ['environment_treeview']
     gui_file = "environment"
 
-    def __init__(self, reg_info, async_backend, facts, parent_window):
-        super(EnvironmentScreen, self).__init__(reg_info, async_backend, facts, parent_window)
+    def __init__(self, reg_info, async_backend, parent_window):
+        super(EnvironmentScreen, self).__init__(reg_info, async_backend, parent_window)
 
         self.pre_message = _("Fetching list of possible environments")
         renderer = ga_Gtk.CellRendererText()
@@ -1497,8 +1493,8 @@ class OrganizationScreen(Screen):
     widget_names = Screen.widget_names + ['owner_treeview']
     gui_file = "organization"
 
-    def __init__(self, reg_info, async_backend, facts, parent_window):
-        super(OrganizationScreen, self).__init__(reg_info, async_backend, facts, parent_window)
+    def __init__(self, reg_info, async_backend, parent_window):
+        super(OrganizationScreen, self).__init__(reg_info, async_backend, parent_window)
 
         self.pre_message = _("Fetching list of possible organizations")
 
@@ -1575,8 +1571,8 @@ class CredentialsScreen(Screen):
     gui_file = "credentials"
     screen_enum = CREDENTIALS_PAGE
 
-    def __init__(self, reg_info, async_backend, facts, parent_window):
-        super(CredentialsScreen, self).__init__(reg_info, async_backend, facts, parent_window)
+    def __init__(self, reg_info, async_backend, parent_window):
+        super(CredentialsScreen, self).__init__(reg_info, async_backend, parent_window)
 
         self._initialize_consumer_name()
         self.registration_tip_label.set_label("<small>%s</small>" %
@@ -1673,14 +1669,14 @@ class CredentialsScreen(Screen):
 class ActivationKeyScreen(Screen):
     screen_enum = ACTIVATION_KEY_PAGE
     widget_names = Screen.widget_names + [
-                'activation_key_entry',
-                'organization_entry',
-                'consumer_entry',
-        ]
+        'activation_key_entry',
+        'organization_entry',
+        'consumer_entry',
+    ]
     gui_file = "activation_key"
 
-    def __init__(self, reg_info, async_backend, facts, parent_window):
-        super(ActivationKeyScreen, self).__init__(reg_info, async_backend, facts, parent_window)
+    def __init__(self, reg_info, async_backend, parent_window):
+        super(ActivationKeyScreen, self).__init__(reg_info, async_backend, parent_window)
         self._initialize_consumer_name()
 
     def _initialize_consumer_name(self):
@@ -1756,8 +1752,8 @@ class ActivationKeyScreen(Screen):
 
 class RefreshSubscriptionsScreen(NoGuiScreen):
 
-    def __init__(self, reg_info, async_backend, facts, parent_window):
-        super(RefreshSubscriptionsScreen, self).__init__(reg_info, async_backend, facts, parent_window)
+    def __init__(self, reg_info, async_backend, parent_window):
+        super(RefreshSubscriptionsScreen, self).__init__(reg_info, async_backend, parent_window)
         self.pre_message = _("Attaching subscriptions")
 
     def _on_refresh_cb(self, msg, error=None):
@@ -1785,15 +1781,15 @@ class ChooseServerScreen(Screen):
                                           'activation_key_checkbox']
     gui_file = "choose_server"
 
-    def __init__(self, reg_info, async_backend, facts, parent_window):
-        super(ChooseServerScreen, self).__init__(reg_info, async_backend, facts, parent_window)
+    def __init__(self, reg_info, async_backend, parent_window):
+        super(ChooseServerScreen, self).__init__(reg_info, async_backend, parent_window)
 
         self.button_label = _("_Next")
 
         callbacks = {
-                "on_default_button_clicked": self._on_default_button_clicked,
-                "on_proxy_button_clicked": self._on_proxy_button_clicked,
-            }
+            "on_default_button_clicked": self._on_default_button_clicked,
+            "on_proxy_button_clicked": self._on_proxy_button_clicked,
+        }
 
         self.connect_signals(callbacks)
 
@@ -1802,9 +1798,9 @@ class ChooseServerScreen(Screen):
     def _on_default_button_clicked(self, widget):
         # Default port and prefix are fine, so we can be concise and just
         # put the hostname for RHN:
-        self.server_entry.set_text("%s:%s%s" % (config.DEFAULT_HOSTNAME,
-            config.DEFAULT_PORT,
-            config.DEFAULT_PREFIX))
+        self.server_entry.set_text("%s:%s%s" % (base_config.DEFAULT_HOSTNAME,
+            base_config.DEFAULT_PORT,
+            base_config.DEFAULT_PREFIX))
 
     def _on_proxy_button_clicked(self, widget):
         # proxy dialog may attempt to resolve proxy and server names, so
@@ -1840,7 +1836,7 @@ class ChooseServerScreen(Screen):
         self.stay()
         server = self.server_entry.get_text()
         try:
-            (hostname, port, prefix) = parse_server_info(server, CFG)
+            (hostname, port, prefix) = parse_server_info(server, conf)
             self.info.set_property('hostname', hostname)
             self.info.set_property('port', port)
             self.info.set_property('prefix', prefix)
@@ -1856,8 +1852,8 @@ class ChooseServerScreen(Screen):
 
     def set_server_entry(self, hostname, port, prefix):
         # No need to show port and prefix for hosted:
-        if hostname == config.DEFAULT_HOSTNAME:
-            self.server_entry.set_text(config.DEFAULT_HOSTNAME)
+        if hostname == base_config.DEFAULT_HOSTNAME:
+            self.server_entry.set_text(base_config.DEFAULT_HOSTNAME)
         else:
             self.server_entry.set_text("%s:%s%s" % (hostname,
                                        port, prefix))
@@ -1896,9 +1892,9 @@ class ValidateServerScreen(NoGuiScreen):
                       None)
             self.pre_done()
             return
-        CFG.set('server', 'hostname', hostname)
-        CFG.set('server', 'port', port)
-        CFG.set('server', 'prefix', prefix)
+        conf['server']['hostname'] = hostname
+        conf['server']['port'] = port
+        conf['server']['prefix'] = prefix
 
         self.pre_done()
         if self.info.get_property('use_activation_keys'):
@@ -1996,36 +1992,70 @@ class AsyncBackend(object):
         except Exception:
             self.queue.put((callback, None, sys.exc_info()))
 
-    def _register_consumer(self, name, facts, owner, env, activation_keys, callback):
+    def _register_consumer(self, name, owner, env, activation_keys, callback):
         """
         method run in the worker thread.
         """
         try:
+            # We've got several steps here that all happen in this thread
+            #
+            # Behing a 'gather system info' screen?
+            #  get installed prods
+            #  get facts (local collection or facts dbus service)
+            #
+            # run pre_register plugin (in main?)
+            # ACTUALLY REGISTER (the network call)
+            # run post_register plugin (in main?)
+            #
+            # persist identity
+            #  # These could move to call back
+            # reload identity
+            # persist new installed products info ?
+            # persist facts cache (for now)
+            # persist new consumer cert
+            # # already branch to make this a seperate page/thread
+            # update package profile (ie, read rpmdb, slow...)
+            #   which can make a package profile upload request
+            # restart virt-who   (wat?)
+            #
+            # We should probably split that up some.
+            #
             installed_mgr = require(INSTALLED_PRODUCTS_MANAGER)
 
-            # TODO: not sure why we pass in a facts.Facts, and call it's
-            #       get_facts() three times. The two bracketing plugin calls
-            #       are meant to be able to enhance/tweak facts
-            #
-            # TODO: plugin hooks could run in the main thread
-            #       Really anything that doesn't use retval.
+            # A proxy to the dbus service
+            facts_dbus_client = facts.FactsClient()
+
+            # Note: for now, this is blocking. Maybe we should do it
+            #       in the gui mainthread async and pass it in?
+
+            log.debug("about to dbus GetFacts")
+            facts_dict = facts_dbus_client.GetFacts()
+            log.debug("finished doing dbus GetFacts")
+
+            # TODO: We end up calling plugins from threads, which is a little weird.
+            #       Seems like a reasonable place to go back to main thread, run the
+            #       plugin, run the network request in a thread, come back to main, run post
+            #       plugin, etc.
+
             self.plugin_manager.run("pre_register_consumer", name=name,
-                                    facts=facts.get_facts())
+                                    facts=facts_dict)
 
             cp = self.backend.cp_provider.get_basic_auth_cp()
-            retval = cp.registerConsumer(name=name, facts=facts.get_facts(),
+            retval = cp.registerConsumer(name=name, facts=facts_dict,
                                          owner=owner, environment=env,
                                          keys=activation_keys,
                                          installed_products=installed_mgr.format_for_server())
 
             self.plugin_manager.run("post_register_consumer", consumer=retval,
-                                    facts=facts.get_facts())
+                                    facts=facts_dict)
 
             # TODO: split persisting info into it's own thread
             require(IDENTITY).reload()
+
+            # TODO: This will be rhsm-facts.services problem now
             # Facts and installed products went out with the registration
             # request, manually write caches to disk:
-            facts.write_cache()
+            # facts.write_cache()
             installed_mgr.write_cache()
 
             # Write the identity cert to disk
@@ -2119,7 +2149,7 @@ class AsyncBackend(object):
     #    update_other_action_client_stuff
     # for sla in available_slas:
     #   get_dry_run_bind for sla
-    def _find_suitable_service_levels(self, consumer_uuid, facts):
+    def _find_suitable_service_levels(self, consumer_uuid):
 
         # FIXME:
         self.backend.update()
@@ -2155,7 +2185,7 @@ class AsyncBackend(object):
         suitable_slas = {}
 
         # eek, in a thread
-        action_client = ActionClient(facts=facts)
+        action_client = ActionClient()
         action_client.update()
 
         for sla in available_slas:
@@ -2178,12 +2208,12 @@ class AsyncBackend(object):
         # why do we call cert_sorter stuff in the return?
         return (current_sla, self.backend.cs.unentitled_products.values(), suitable_slas)
 
-    def _find_service_levels(self, consumer_uuid, facts, callback):
+    def _find_service_levels(self, consumer_uuid, callback):
         """
         method run in the worker thread.
         """
         try:
-            suitable_slas = self._find_suitable_service_levels(consumer_uuid, facts)
+            suitable_slas = self._find_suitable_service_levels(consumer_uuid)
             self.queue.put((callback, suitable_slas, None))
         except Exception:
             self.queue.put((callback, None, sys.exc_info()))
@@ -2237,34 +2267,36 @@ class AsyncBackend(object):
                                             name="GetEnvironmentListThread",
                                             args=(owner_key, callback)))
 
-    def register_consumer(self, name, facts, owner, env, activation_keys, callback):
+    def register_consumer(self, name, owner, env, activation_keys, callback):
         """
         Run consumer registration asyncronously
         """
         ga_GObject.idle_add(self._watch_thread)
-        self._start_thread(threading.Thread(target=self._register_consumer,
-                                            name="RegisterConsumerThread",
-                                            args=(name, facts, owner,
-                                                  env, activation_keys, callback)))
+        self._start_thread(threading.Thread(
+            target=self._register_consumer,
+            name="RegisterConsumerThread",
+            args=(name, owner, env, activation_keys, callback)))
 
     def update_package_profile(self, uuid, callback):
         ga_GObject.idle_add(self._watch_thread)
-        self._start_thread(threading.Thread(target=self._update_package_profile,
-                                            name="UpdatePackageProfileThread",
-                                            args=(uuid, callback)))
+        self._start_thread(threading.Thread(
+            target=self._update_package_profile,
+            name="UpdatePackageProfileThread",
+            args=(uuid, callback)))
 
     def subscribe(self, uuid, current_sla, dry_run_result, callback):
         ga_GObject.idle_add(self._watch_thread)
-        self._start_thread(threading.Thread(target=self._subscribe,
-                                            name="SubscribeThread",
-                                            args=(uuid, current_sla,
-                                                  dry_run_result, callback)))
+        self._start_thread(threading.Thread(
+            target=self._subscribe,
+            name="SubscribeThread",
+            args=(uuid, current_sla, dry_run_result, callback)))
 
-    def find_service_levels(self, consumer_uuid, facts, callback):
+    def find_service_levels(self, consumer_uuid, callback):
         ga_GObject.idle_add(self._watch_thread)
-        self._start_thread(threading.Thread(target=self._find_service_levels,
-                                            name="FindServiceLevelsThread",
-                                            args=(consumer_uuid, facts, callback)))
+        self._start_thread(threading.Thread(
+            target=self._find_service_levels,
+            name="FindServiceLevelsThread",
+            args=(consumer_uuid, callback)))
 
     def refresh(self, callback):
         ga_GObject.idle_add(self._watch_thread)
@@ -2291,8 +2323,8 @@ class AsyncBackend(object):
 class DoneScreen(Screen):
     gui_file = "done_box"
 
-    def __init__(self, reg_info, async_backend, facts, parent_window):
-        super(DoneScreen, self).__init__(reg_info, async_backend, facts, parent_window)
+    def __init__(self, reg_info, async_backend, parent_window):
+        super(DoneScreen, self).__init__(reg_info, async_backend, parent_window)
         self.pre_message = "We are done."
 
     def pre(self):
@@ -2310,14 +2342,14 @@ class InfoScreen(Screen):
     Also allows the user to skip registration if they wish.
     """
     widget_names = Screen.widget_names + [
-                'register_radio',
-                'skip_radio',
-                'why_register_dialog'
-        ]
+        'register_radio',
+        'skip_radio',
+        'why_register_dialog'
+    ]
     gui_file = "registration_info"
 
-    def __init__(self, reg_info, async_backend, facts, parent_window):
-        super(InfoScreen, self).__init__(reg_info, async_backend, facts, parent_window)
+    def __init__(self, reg_info, async_backend, parent_window):
+        super(InfoScreen, self).__init__(reg_info, async_backend, parent_window)
         self.button_label = _("_Next")
         callbacks = {"on_why_register_button_clicked":
                      self._on_why_register_button_clicked,

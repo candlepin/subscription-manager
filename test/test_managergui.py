@@ -13,7 +13,7 @@ class TestManagerGuiMainWindow(SubManFixture):
         provide(PROD_DIR, stubs.StubProductDirectory([]))
         provide(PRODUCT_DATE_RANGE_CALCULATOR, mock.Mock())
 
-        managergui.MainWindow(backend=stubs.StubBackend(), facts=stubs.StubFacts(),
+        managergui.MainWindow(backend=stubs.StubBackend(),
                               ent_dir=stubs.StubCertificateDirectory([]),
                               prod_dir=stubs.StubProductDirectory([]))
 

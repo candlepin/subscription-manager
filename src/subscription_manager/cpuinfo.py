@@ -483,7 +483,5 @@ class SystemCpuInfoFactory(object):
         proc_cpuinfo_path = cls.proc_cpuinfo_path
         if prefix:
             proc_cpuinfo_path = os.path.join(prefix, cls.proc_cpuinfo_path[1:])
-        proc_cpuinfo_buf = ''
         with open(proc_cpuinfo_path, 'r') as proc_cpuinfo_f:
-            proc_cpuinfo_buf = proc_cpuinfo_f.read()
-        return proc_cpuinfo_buf
+            return proc_cpuinfo_f.read()

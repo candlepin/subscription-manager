@@ -10,7 +10,7 @@ from nose.plugins.skip import SkipTest
 try:
     import dnf
     import librepo
-except ImportError, e:
+except ImportError as e:
     raise SkipTest(e)
 
 
@@ -33,6 +33,8 @@ module_name = module_name.split(".py")[0]
 fp, pathname, description = imp.find_module(module_name, [dir_path])
 try:
     dnf_product_id = imp.load_module('dnf_product_id', fp, pathname, description)
+except ImportError as e:
+    raise SkipTest(e)
 finally:
     fp.close()
 

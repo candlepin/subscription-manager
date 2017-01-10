@@ -6,6 +6,7 @@ except ImportError:
 import os
 import subprocess
 import sys
+import shutil
 import tempfile
 import threading
 import time
@@ -19,15 +20,11 @@ class TestLock(unittest.TestCase):
     lf_name = "lock.file"
 
     def setUp(self):
-        self.tmp_dir = self._tmp_dir()
         self.other_process = None
 
-    def _tmp_dir(self):
-        tmp_dir = tempfile.mkdtemp(suffix="lock", prefix="subman-unit-tests-")
-        return tmp_dir
-
     def _lock_path(self):
-        tmp_dir = self._tmp_dir()
+        tmp_dir = tempfile.mkdtemp(suffix="-lock", prefix="subman-unit-tests-")
+        self.addCleanup(shutil.rmtree, tmp_dir, ignore_errors=True)
         return os.path.join(tmp_dir, self.lf_name)
 
     # For thread.Timer()

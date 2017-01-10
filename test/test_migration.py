@@ -391,17 +391,23 @@ class TestMigration(SubManFixture):
             "enableProxyAuth": False,
             }
         self.engine.rhncfg = rhn_config
+        section = MagicMock()
+        self.engine.rhsmcfg.__getitem__.return_value = section
+
         self.engine.transfer_http_proxy_settings()
-        expected = [call("server", "proxy_hostname", "proxy.example.com"),
-            call("server", "proxy_port", "123"),
-            call("server", "proxy_user", ""),
-            call("server", "proxy_password", ""),
-            ]
-        self.assertTrue(self.engine.rhsmcfg.set.call_args_list == expected)
-        self.engine.rhsmcfg.save.assert_called_once_with()
+        expected = [call("proxy_hostname", "proxy.example.com"),
+            call("proxy_port", "123"),
+            call("proxy_user", ""),
+            call("proxy_password", ""),
+        ]
+        self.assertTrue(section.__setitem__.call_args_list == expected)
+        self.engine.rhsmcfg.persist.assert_called_once_with()
 
     def test_setting_authenticated_proxy(self):
         self.engine.rhsmcfg = MagicMock()
+        section = MagicMock()
+        self.engine.rhsmcfg.__getitem__.return_value = section
+
         self.engine.options = self.create_options(noproxy=False)
 
         rhn_config = {
@@ -410,16 +416,16 @@ class TestMigration(SubManFixture):
             "enableProxyAuth": True,
             "proxyUser": "foo",
             "proxyPassword": "bar",
-            }
+        }
         self.engine.rhncfg = rhn_config
         self.engine.transfer_http_proxy_settings()
-        expected = [call("server", "proxy_hostname", "proxy.example.com"),
-            call("server", "proxy_port", "123"),
-            call("server", "proxy_user", "foo"),
-            call("server", "proxy_password", "bar"),
-            ]
-        self.assertTrue(self.engine.rhsmcfg.set.call_args_list == expected)
-        self.engine.rhsmcfg.save.assert_called_once_with()
+        expected = [call("proxy_hostname", "proxy.example.com"),
+            call("proxy_port", "123"),
+            call("proxy_user", "foo"),
+            call("proxy_password", "bar"),
+        ]
+        self.assertTrue(section.__setitem__.call_args_list == expected)
+        self.engine.rhsmcfg.persist.assert_called_once_with()
 
     def test_setting_prefixed_proxy(self):
         self.engine.rhsmcfg = MagicMock()
@@ -431,14 +437,17 @@ class TestMigration(SubManFixture):
             "enableProxyAuth": False,
             }
         self.engine.rhncfg = rhn_config
+        section = MagicMock()
+        self.engine.rhsmcfg.__getitem__.return_value = section
         self.engine.transfer_http_proxy_settings()
-        expected = [call("server", "proxy_hostname", "proxy.example.com"),
-            call("server", "proxy_port", "123"),
-            call("server", "proxy_user", ""),
-            call("server", "proxy_password", ""),
-            ]
-        self.assertTrue(self.engine.rhsmcfg.set.call_args_list == expected)
-        self.engine.rhsmcfg.save.assert_called_once_with()
+        expected = [
+            call("proxy_hostname", "proxy.example.com"),
+            call("proxy_port", "123"),
+            call("proxy_user", ""),
+            call("proxy_password", ""),
+        ]
+        self.assertTrue(section.__setitem__.call_args_list == expected)
+        self.engine.rhsmcfg.persist.assert_called_once_with()
 
     def test_noproxy_option(self):
         self.engine.rhsmcfg = MagicMock()
@@ -450,35 +459,19 @@ class TestMigration(SubManFixture):
             "enableProxyAuth": False,
             }
         self.engine.rhncfg = rhn_config
+        section = MagicMock()
+        self.engine.rhsmcfg.__getitem__.return_value = section
         self.engine.transfer_http_proxy_settings()
-        expected = [call("server", "proxy_hostname", ""),
-            call("server", "proxy_port", ""),
-            call("server", "proxy_user", ""),
-            call("server", "proxy_password", ""),
+        expected = [call("proxy_hostname", ""),
+            call("proxy_port", ""),
+            call("proxy_user", ""),
+            call("proxy_password", ""),
             ]
-        self.assertTrue(self.engine.rhsmcfg.set.call_args_list == expected)
+        self.assertTrue(section.__setitem__.call_args_list == expected)
         self.assertEquals("proxy.example.com", self.engine.proxy_host)
         self.assertEquals("123", self.engine.proxy_port)
         self.assertEquals(None, self.engine.proxy_user)
         self.assertEquals(None, self.engine.proxy_pass)
-
-    def _setup_rhsmcfg_mocks(self):
-        self.engine.options = self.create_options()
-
-        self.engine.rhsmcfg = MagicMock()
-        self.engine.rhsmcfg.get = MagicMock(side_effect=[
-            "candlepin.example.com",
-            "/candlepin",
-            ])
-        self.engine.rhsmcfg.get_int = MagicMock(side_effect=[443])
-
-        expected = [call("server", "hostname"),
-            call("server", "prefix"),
-            ]
-
-        get_int_expected = [call("server", "port")]
-
-        return expected, get_int_expected
 
     @patch("rhn.rpclib.Server")
     def test_load_transition_data(self, mock_server):
@@ -541,10 +534,27 @@ class TestMigration(SubManFixture):
         self.engine.cp.getConsumer.assert_called_once_with("123")
 
     def test_no_server_url_provided_basic_auth(self):
-        expected, get_int_expected = self._setup_rhsmcfg_mocks()
+        self.engine.options = self.create_options()
+
+        self.engine.rhsmcfg = MagicMock()
+        section = MagicMock()
+        self.engine.rhsmcfg.__getitem__.return_value = section
+
+        section.__getitem__.return_value = MagicMock(side_effect=[
+            "candlepin.example.com",
+            "/candlepin",
+        ])
+        section.get_int = MagicMock(side_effect=[443])
+
+        expected = [call("hostname"),
+            call("prefix"),
+        ]
+
+        int_expected = [call("port")]
+
         self.engine.get_candlepin_connection("some_username", "some_password")
-        self.assertTrue(self.engine.rhsmcfg.get.call_args_list == expected)
-        self.assertTrue(self.engine.rhsmcfg.get_int.call_args_list == get_int_expected)
+        self.assertTrue(section.__getitem__.call_args_list == expected)
+        self.assertTrue(section.get_int.call_args_list == int_expected)
 
     def test_bad_server_url_basic_auth(self):
         self.engine.options = self.create_options(destination_url='http://')

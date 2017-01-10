@@ -35,8 +35,6 @@ from rhsm.certificate import parse_tags
 from rhsm.certificate2 import EntitlementCertificate, ProductCertificate, \
         Product, Content, Order
 from rhsm import profile
-
-
 from rhsm import ourjson as json
 
 # config file is root only, so just fill in a stringbuffer
@@ -62,6 +60,7 @@ repo_ca_cert = %(ca_cert_dir)sredhat-uep.pem
 productCertDir = /etc/pki/product
 entitlementCertDir = /etc/pki/entitlement
 consumerCertDir = /etc/pki/consumer
+ca_cert_dir = /etc/rhsm/ca/
 
 [rhsmcertd]
 certCheckInterval = 240
@@ -115,8 +114,6 @@ class StubConfig(config.RhsmConfigParser):
         if self.raise_io:
             raise IOError
         return None
-
-    # replace read with readfp on stringio
 
 
 def stubInitConfig():
@@ -390,7 +387,7 @@ class StubUEP(object):
                  username=None, password=None,
                  proxy_hostname=None, proxy_port=None,
                  proxy_user=None, proxy_password=None,
-                 cert_file=None, key_file=None):
+                 cert_file=None, key_file=None, restlib_class=None):
         self.registered_consumer_info = {"uuid": 'dummy-consumer-uuid'}
         self.environment_list = []
         self.called_unregister_uuid = None
@@ -455,6 +452,8 @@ class StubUEP(object):
     def getConsumer(self, consumerId, username=None, password=None):
         if hasattr(self, 'consumer') and self.consumer:
             return self.consumer
+        if callable(self.registered_consumer_info):
+            return self.registered_consumer_info()
         return self.registered_consumer_info
 
     def unbindAll(self, consumer):

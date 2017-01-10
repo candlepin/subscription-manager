@@ -383,19 +383,19 @@ class TestRegisterCommand(TestCliProxyCommand):
         self._test_no_exception([])
 
     def test_main_server_url(self):
-        with patch.object(self.mock_cfg, "save") as mock_save:
+        with patch.object(self.mock_cfg_parser, "save") as mock_save:
             server_url = "https://subscription.rhsm.redhat.com/subscription"
             self._test_no_exception(["--serverurl", server_url])
             mock_save.assert_called_with()
 
     def test_main_base_url(self):
-        with patch.object(self.mock_cfg, "save") as mock_save:
+        with patch.object(self.mock_cfg_parser, "save") as mock_save:
             base_url = "https://cdn.redhat.com"
             self._test_no_exception(["--baseurl", base_url])
             mock_save.assert_called_with()
 
     def test_insecure(self):
-        with patch.object(self.mock_cfg, "save") as mock_save:
+        with patch.object(self.mock_cfg_parser, "save") as mock_save:
             self._test_no_exception(["--insecure"])
             mock_save.assert_called_with()
 
@@ -940,7 +940,7 @@ class TestConfigCommand(TestCliCommand):
 
         baseurl = 'https://someserver.example.com/foo'
         self.cc.main(['--rhsm.baseurl', baseurl])
-        self.assertEquals(managercli.cfg.store['rhsm']['baseurl'], baseurl)
+        self.assertEquals(managercli.conf['rhsm']['baseurl'], baseurl)
 
     def test_remove_config_default(self):
         with Capture() as cap:
@@ -1171,6 +1171,12 @@ class TestFactsCommand(TestCliProxyCommand):
 class TestImportCertCommand(TestCliCommand):
     command_class = managercli.ImportCertCommand
 
+    def setUp(self):
+        super(TestImportCertCommand, self).setUp()
+        argv_patcher = patch.object(sys, 'argv', ['subscription-manager', 'import'])
+        argv_patcher.start()
+        self.addCleanup(argv_patcher.stop)
+
     def test_certificates(self):
         self.cc.is_registered = Mock(return_value=False)
         self.cc.main(["--certificate", "one", "--certificate", "two"])
@@ -1239,10 +1245,7 @@ class TestServiceLevelCommand(TestCliProxyCommand):
 
     def test_service_level_supported(self):
         self.cc.cp.setConsumer({'serviceLevel': 'Jarjar'})
-        try:
-            self.cc.set_service_level('JRJAR')
-        except SystemExit:
-            self.fail("Exception Raised")
+        self.cc.set_service_level('JRJAR')
 
 
 class TestReleaseCommand(TestCliProxyCommand):
