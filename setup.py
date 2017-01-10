@@ -179,6 +179,7 @@ class install_data(_install_data):
         self.add_icons()
         _install_data.run(self)
         self.transform_files()
+        self.update_desktop_database()
 
     def join(self, *args):
         return os.path.normpath(os.path.join(*args))
@@ -220,6 +221,11 @@ class install_data(_install_data):
             icon_source_files = glob(self.join(icon_source_root, d, 'apps', 'subscription-manager.*'))
 
             self.data_files.append((icon_dir, icon_source_files))
+
+    def update_desktop_database(self):
+        """
+        After copying icon files to /us/share/icons/ it is recommended to run
+        """
 
 
 setup_requires = []
@@ -274,7 +280,7 @@ setup(
     author="Adrian Likins",
     author_email="alikins@redhat.com",
     cmdclass=cmdclass,
-    packages=find_packages('src', exclude=['subscription_manager.gui.firstboot.*', '*.ga_impls', '*.ga_impls.*', '*.plugin.ostree']),
+    packages=find_packages('src', exclude=['subscription_manager.gui.firstboot.*', '*.ga_impls.*', '*.plugin.ostree']),
     package_dir={'': 'src'},
     package_data={
         'subscription_manager.gui': ['data/glade/*.glade', 'data/ui/*.ui', 'data/icons/*.svg'],
