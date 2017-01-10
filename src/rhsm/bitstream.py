@@ -31,13 +31,13 @@ class GhettoBitStream(object):
         :param data:    binary data in a string
         :type  data:    str
         """
-        self.bytes = deque(ord(x) for x in data)
+        self.bytes = deque(bytearray(data))
         self._bit_buffer = deque()
 
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         """
         converts one byte at a time into a bit representation, waiting until
         those bits have been consumed before converting another byte
@@ -53,6 +53,9 @@ class GhettoBitStream(object):
             bits = self._byte_to_bits(byte)
             self._bit_buffer.extend(bits)
         return self._bit_buffer.popleft()
+
+    def next(self):
+        return self.__next__()
 
     def pop_byte(self):
         """

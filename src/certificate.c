@@ -53,6 +53,14 @@
 
 #define MAX_BUF 256
 
+/* Python 2/3 compatiblity defines */
+#if PY_MAJOR_VERSION >= 3
+#define PyString_FromStringAndSize(value, length) \
+	PyUnicode_FromStringAndSize(value, length);
+#define PyString_FromString(value) \
+	PyUnicode_FromString(value);
+#endif
+
 typedef struct {
 	PyObject_HEAD;
 	X509 *x509;
@@ -67,14 +75,14 @@ static void
 certificate_x509_dealloc (certificate_x509 *self)
 {
 	X509_free (self->x509);
-	self->ob_type->tp_free ((PyObject *) self);
+	Py_TYPE(self)->tp_free ((PyObject *) self);
 }
 
 static void
 private_key_dealloc (private_key *self)
 {
 	EVP_PKEY_free (self->key);
-	self->ob_type->tp_free ((PyObject *) self);
+	Py_TYPE(self)->tp_free ((PyObject *) self);
 }
 
 static PyObject *get_not_before (certificate_x509 *self, PyObject *varargs);
@@ -112,8 +120,7 @@ static PyMethodDef x509_methods[] = {
 };
 
 static PyTypeObject certificate_x509_type = {
-	PyObject_HEAD_INIT (NULL)
-	0,
+	PyVarObject_HEAD_INIT (NULL, 0)
 	"_certificate.X509",
 	sizeof (certificate_x509),
 	0,			/*tp_itemsize */
@@ -154,8 +161,7 @@ static PyTypeObject certificate_x509_type = {
 };
 
 static PyTypeObject private_key_type = {
-	PyObject_HEAD_INIT (NULL)
-	0,
+	PyVarObject_HEAD_INIT (NULL, 0)
 	"_certificate.PrivateKey",
 	sizeof (private_key),
 	0,			/*tp_itemsize */
@@ -364,7 +370,7 @@ get_extension (certificate_x509 *self, PyObject *args, PyObject *keywords)
 	length = get_extension_by_object (self->x509, obj, &value);
 	ASN1_OBJECT_free (obj);
 	if (value != NULL) {
-		PyObject *extension = PyString_FromStringAndSize (value,
+		PyObject *extension = PyBytes_FromStringAndSize (value,
 								  length);
 		free (value);
 		return extension;
@@ -397,7 +403,7 @@ get_all_extensions (certificate_x509 *self, PyObject *args)
 			get_extension_by_object (self->x509, ext->object,
 						 &value);
 
-		PyObject *dict_value = PyString_FromStringAndSize (value,
+		PyObject *dict_value = PyBytes_FromStringAndSize (value,
 								   length);
 		free (value);
 		PyDict_SetItem (dict, key, dict_value);
@@ -567,11 +573,32 @@ static PyMethodDef cert_methods[] = {
 	{NULL}
 };
 
+#if PY_MAJOR_VERSION >= 3
+static struct PyModuleDef moduledef = {
+	PyModuleDef_HEAD_INIT,
+	"_certificate",
+	NULL,
+	0,
+	cert_methods,
+	NULL,
+	NULL,
+	NULL,
+	NULL
+};
+
+PyMODINIT_FUNC
+PyInit__certificate (void)
+#else
 PyMODINIT_FUNC
 init_certificate (void)
+#endif
 {
 	PyObject *module;
+	#if PY_MAJOR_VERSION >= 3
+	module = PyModule_Create (&moduledef);
+	#else
 	module = Py_InitModule ("_certificate", cert_methods);
+	#endif
 
 	certificate_x509_type.tp_new = PyType_GenericNew;
 	if (PyType_Ready (&certificate_x509_type) < 0) {
@@ -590,4 +617,7 @@ init_certificate (void)
 	Py_INCREF (&private_key_type);
 	PyModule_AddObject (module, "PrivateKey",
 			    (PyObject *) & private_key_type);
+	#if PY_MAJOR_VERSION >= 3
+	return module;
+	#endif
 }

@@ -144,7 +144,7 @@ class RhsmConfigParser(SafeConfigParser):
                 return self.get(section, prop)
             # If nothing has been changed (we couldn't fix it) re-raise the exception
             raise
-        except (NoOptionError, NoSectionError), er:
+        except (NoOptionError, NoSectionError) as er:
             try:
                 return DEFAULTS[section][prop.lower()]
             except KeyError:

@@ -54,7 +54,7 @@ class TestPathTree(unittest.TestCase):
         self.assertEqual(ret, 273)
 
     def test_unpack_data(self):
-        data = open(DATA).read()
+        data = open(DATA, 'rb').read()
         nodes, bits = PathTree._unpack_data(data)
         self.assertEqual(len(nodes), 6)
         # first node always gets weight of 1
@@ -65,7 +65,7 @@ class TestPathTree(unittest.TestCase):
         self.assertEqual(len(bits), 6)
 
     def test_generate_path_leaves(self):
-        data = open(DATA).read()
+        data = open(DATA, 'rb').read()
         nodes, bits = PathTree._unpack_data(data)
         ret = PathTree._generate_path_leaves(GhettoBitStream(bits))
 
@@ -74,13 +74,13 @@ class TestPathTree(unittest.TestCase):
             self.assertTrue(isinstance(node, HuffmanNode))
 
     def test_generate_path_tree(self):
-        data = open(DATA).read()
+        data = open(DATA, 'rb').read()
         pt = PathTree(data).path_tree
         self.assertTrue('foo' in pt)
         self.assertEqual(len(pt.keys()), 1)
 
     def test_match_path(self):
-        data = open(DATA).read()
+        data = open(DATA, 'rb').read()
         pt = PathTree(data)
         self.assertTrue(pt.match_path('/foo/path'))
         self.assertTrue(pt.match_path('/foo/path/'))
@@ -93,7 +93,7 @@ class TestPathTree(unittest.TestCase):
 
     def test_match_path_listing(self):
         tree = {'foo': [{'path': [{'bar': [{PATH_END: None}]}]}]}
-        data = open(DATA).read()
+        data = open(DATA, 'rb').read()
         pt = PathTree(data)
         pt.path_tree = tree
         self.assertTrue(pt.match_path('/foo/path/bar/listing'))
@@ -104,7 +104,7 @@ class TestPathTree(unittest.TestCase):
 
     def test_match_variable(self):
         tree = {'foo': [{'$releasever': [{'bar': [{PATH_END: None}]}]}]}
-        data = open(DATA).read()
+        data = open(DATA, 'rb').read()
         pt = PathTree(data)
         # just swap out the pre-cooked data with out with
         pt.path_tree = tree
@@ -113,7 +113,7 @@ class TestPathTree(unittest.TestCase):
 
     def test_match_first_variable(self):
         tree = {'$anything': [{'$releasever': [{'bar': [{PATH_END: None}]}]}]}
-        data = open(DATA).read()
+        data = open(DATA, 'rb').read()
         pt = PathTree(data)
         # just swap out the pre-cooked data with out with
         pt.path_tree = tree
@@ -122,7 +122,7 @@ class TestPathTree(unittest.TestCase):
 
     def test_match_last_variable(self):
         tree = {'foo': [{'$releasever': [{'$bar': [{PATH_END: None}]}]}]}
-        data = open(DATA).read()
+        data = open(DATA, 'rb').read()
         pt = PathTree(data)
         # just swap out the pre-cooked data with out with
         pt.path_tree = tree
@@ -140,7 +140,7 @@ class TestPathTree(unittest.TestCase):
         tree4 = {'foo': [{'jarjar': [{'binks': [{PATH_END: None}]}]},
                          {'$releasever': [{'bar': [{PATH_END: None}]}]}]}
         trees = [tree1, tree2, tree3, tree4]
-        data = open(DATA).read()
+        data = open(DATA, 'rb').read()
         pt = PathTree(data)
         #just swap out the pre-cooked data with out with
         for tree in trees:

@@ -418,10 +418,10 @@ class RestlibTests(unittest.TestCase):
             }
         """
         restlib = Restlib("somehost", "123", "somehandler")
-        data = json.loads(test_json, object_hook=restlib._decode_dict)
-        self.assertTrue(isinstance(data["message"], str))
+        data = json.loads(test_json)
+        self.assertTrue(isinstance(data["message"], type(u"")))
         # Access a value deep in the structure to make sure we recursed down.
-        self.assertTrue(isinstance(data["phoneNumbers"][0][0]["type"], str))
+        self.assertTrue(isinstance(data["phoneNumbers"][0][0]["type"], type(u"")))
 
 
 # see #830767 and #842885 for examples of why this is
@@ -435,9 +435,9 @@ class ExceptionTest(unittest.TestCase):
         # FIXME: validate results are strings, unicode, etc
         # but just looking for exceptions atm
         # - no assertIsInstance on 2.4/2.6
-        self.assertTrue(isinstance("%s" % e, basestring))
-        self.assertTrue(isinstance("%s" % str(e), basestring))
-        self.assertTrue(isinstance("%s" % repr(e), basestring))
+        self.assertTrue(isinstance("%s" % e, str) or isinstance("%s" % e, type(u"")))
+        self.assertTrue(isinstance("%s" % str(e), str) or isinstance("%s" % str(e), type(u"")))
+        self.assertTrue(isinstance("%s" % repr(e), str) or isinstance("%s" % repr(e), type(u"")))
 
     def _create_exception(self, *args, **kwargs):
         return self.exception(args, kwargs)

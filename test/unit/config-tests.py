@@ -171,7 +171,7 @@ repo_ca_cert = %(ca_cert_dir)snon_default.pem
 def write_temp_file(data):
     # create a temp file for use as a config file. This should get cleaned
     # up magically at the end of the run.
-    fid = NamedTemporaryFile(mode='w+b', suffix='.tmp')
+    fid = NamedTemporaryFile(mode='w+', suffix='.tmp')
     fid.write(data)
     fid.seek(0)
     return fid
@@ -295,7 +295,7 @@ class ConfigTests(BaseConfigTests):
 
     def test_get_int(self):
         value = self.cfgParser.get_int("server", "port")
-        self.assertTrue(isinstance(value, types.IntType))
+        self.assertTrue(isinstance(value, int))
         self.assertEquals(8443, value)
 
     def test_interpolation(self):

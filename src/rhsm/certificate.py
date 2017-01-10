@@ -51,12 +51,12 @@ VALUE_PATTERN = re.compile('.*prim:\s(\w*)\s*:*(.*)')
 # we're using two modules for the time being. Eventually the certificate2 code
 # should be moved here.
 def create_from_file(path):
-    from certificate2 import _CertFactory  # prevent circular deps
+    from rhsm.certificate2 import _CertFactory  # prevent circular deps
     return _CertFactory().create_from_file(path)
 
 
 def create_from_pem(pem):
-    from certificate2 import _CertFactory  # prevent circular deps
+    from rhsm.certificate2 import _CertFactory  # prevent circular deps
     return _CertFactory().create_from_pem(pem)
 
 
@@ -562,7 +562,7 @@ class Key(object):
         f.write(self.content)
         self.path = pem_path
         f.close()
-        os.chmod(pem_path, 0600)
+        os.chmod(pem_path, 0o600)
         return self
 
     def delete(self):
@@ -933,6 +933,9 @@ class OID(object):
 
     def __eq__(self, other):
         return (str(self) == str(other))
+
+    def __lt__(self, other):
+        return str(self) < str(other)
 
     def __str__(self):
         if not self._str:

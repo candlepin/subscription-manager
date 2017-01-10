@@ -64,7 +64,7 @@ class _CertFactory(object):
         """
         try:
             pem = open(path, 'r').read()
-        except IOError, e:
+        except IOError as e:
             print(os.strerror(e.errno))
             exit(1)
         return self._read_x509(_certificate.load(path), path, pem)
@@ -89,7 +89,7 @@ class _CertFactory(object):
             # Check the certificate version, absence of the extension implies v1.0:
             cert_version_str = "1.0"
             if EXT_CERT_VERSION in extensions:
-                cert_version_str = extensions[EXT_CERT_VERSION]
+                cert_version_str = extensions[EXT_CERT_VERSION].decode('utf-8')
 
             version = Version(cert_version_str)
             if version.major == 1:
@@ -97,9 +97,9 @@ class _CertFactory(object):
             if version.major == 3:
                 return self._create_v3_cert(version, extensions, x509, path, pem)
 
-        except CertificateException, e:
+        except CertificateException as e:
             raise e
-        except Exception, e:
+        except Exception as e:
             log.exception(e)
             raise CertificateException(str(e))
 
@@ -115,7 +115,7 @@ class _CertFactory(object):
             return self._create_v1_prod_cert(version, extensions, x509, path)
 
     def _read_alt_name(self, x509):
-        return x509.get_extension(name='subjectAltName')
+        return x509.get_extension(name='subjectAltName').decode('utf-8')
 
     def _read_issuer(self, x509):
         return x509.get_issuer()
@@ -184,39 +184,47 @@ class _CertFactory(object):
             root = oid.rtrim(1)
             product_id = oid[1]
             ext = extensions.branch(root)
-            products.append(Product(
-                id=product_id,
-                name=ext.get('1'),
-                version=ext.get('2'),
-                architectures=ext.get('3'),
-                provided_tags=parse_tags(ext.get('4')),
+            product_data = {
+                'name': ext.get('1'),
+                'version': ext.get('2'),
+                'architectures': ext.get('3'),
+                'provided_tags': ext.get('4'),
                 # not populated, only added for parity with
                 # v3 product objects
-                brand_type=ext.get('5'),
-                brand_name=ext.get('6')
-                ))
+                'brand_type': ext.get('5'),
+                'brand_name': ext.get('6'),
+            }
+            for key, value in product_data.items():
+                if value is not None:
+                    product_data[key] = value.decode('utf-8')
+            product_data['provided_tags'] = parse_tags(product_data['provided_tags'])
+            products.append(Product(id=product_id, **product_data))
         return products
 
     def _parse_v1_order(self, extensions):
         order_extensions = extensions.branch(ORDER_NAMESPACE)
-        order = Order(
-                name=order_extensions.get('1'),
-                number=order_extensions.get('2'),
-                sku=order_extensions.get('3'),
-                subscription=order_extensions.get('4'),
-                quantity=order_extensions.get('5'),
-                virt_limit=order_extensions.get('8'),
-                socket_limit=order_extensions.get('9'),
-                contract=order_extensions.get('10'),
-                quantity_used=order_extensions.get('11'),
-                warning_period=order_extensions.get('12'),
-                account=order_extensions.get('13'),
-                provides_management=order_extensions.get('14'),
-                service_level=order_extensions.get('15'),
-                service_type=order_extensions.get('16'),
-                stacking_id=order_extensions.get('17'),
-                virt_only=order_extensions.get('18')
-            )
+        order_data = {
+            'name': order_extensions.get('1'),
+            'number': order_extensions.get('2'),
+            'sku': order_extensions.get('3'),
+            'subscription': order_extensions.get('4'),
+            'quantity': order_extensions.get('5'),
+            'virt_limit': order_extensions.get('8'),
+            'socket_limit': order_extensions.get('9'),
+            'contract': order_extensions.get('10'),
+            'quantity_used': order_extensions.get('11'),
+            'warning_period': order_extensions.get('12'),
+            'account': order_extensions.get('13'),
+            'provides_management': order_extensions.get('14'),
+            'service_level': order_extensions.get('15'),
+            'service_type': order_extensions.get('16'),
+            'stacking_id': order_extensions.get('17'),
+            'virt_only': order_extensions.get('18'),
+        }
+        for key, value in order_data.items():
+            if value is not None:
+                order_data[key] = value.decode('utf-8')
+        order = Order(**order_data)
         return order
 
     def _parse_v1_content(self, extensions):
@@ -225,17 +233,22 @@ class _CertFactory(object):
         for ent in ents:
             oid = ent[0].rtrim(1)
             content_ext = extensions.branch(oid)
-            content.append(Content(
-                content_type=extensions.get(oid),
-                name=content_ext.get('1'),
-                label=content_ext.get('2'),
-                vendor=content_ext.get('5'),
-                url=content_ext.get('6'),
-                gpg=content_ext.get('7'),
-                enabled=content_ext.get('8'),
-                metadata_expire=content_ext.get('9'),
-                required_tags=parse_tags(content_ext.get('10')),
-            ))
+            content_data = {
+                'content_type': extensions.get(oid),
+                'name': content_ext.get('1'),
+                'label': content_ext.get('2'),
+                'vendor': content_ext.get('5'),
+                'url': content_ext.get('6'),
+                'gpg': content_ext.get('7'),
+                'enabled': content_ext.get('8'),
+                'metadata_expire': content_ext.get('9'),
+                'required_tags': content_ext.get('10'),
+            }
+            for key, value in content_data.items():
+                if value is not None:
+                    content_data[key] = value.decode('utf-8')
+            content_data['required_tags'] = parse_tags(content_data['required_tags'])
+            content.append(Content(**content_data))
         return content
 
     def _get_v1_cert_type(self, extensions):
@@ -371,9 +384,9 @@ class _CertFactory(object):
         resulting dict.
         """
         try:
-            decompressed = zlib.decompress(payload)
+            decompressed = zlib.decompress(payload).decode('utf-8')
             return json.loads(decompressed)
-        except Exception, e:
+        except Exception as e:
             log.exception(e)
             raise CertificateException("Error decompressing/parsing "
                     "certificate payload.")
@@ -572,7 +585,8 @@ class EntitlementCertificate(ProductCertificate):
         """
         path = path.strip('/')
         valid = False
-        for ext_oid, oid_url in self.extensions.iteritems():
+        for ext_oid, oid_url in self.extensions.items():
+            oid_url = oid_url.decode('utf-8')
             # if this is a download URL
             if ext_oid.match(OID('2.')) and ext_oid.match(OID('.1.6')):
                 if self._validate_v1_url(oid_url, path):
@@ -624,7 +638,7 @@ class EntitlementCertificate(ProductCertificate):
         dir_path, cert_filename = os.path.split(self.path)
         try:
             key_filename = "%s-key.%s" % tuple(cert_filename.rsplit(".", 1))
-        except TypeError, e:
+        except TypeError as e:
             log.exception(e)
             raise CertificateException("Entitlement certificate path \"%s\" is not in "
                                        "in the expected format so the key file path "
