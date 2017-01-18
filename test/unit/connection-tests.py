@@ -13,6 +13,8 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+import datetime
+import locale
 import unittest
 
 from rhsm.connection import UEPConnection, Restlib, ConnectionException, ConnectionSetupException, \
@@ -568,3 +570,25 @@ class ExpiredIdentityCertTest(ExceptionTest):
 
     def _create_exception(self, *args, **kwargs):
         return self.exception(*args, **kwargs)
+
+
+class DatetimeFormattingTests(unittest.TestCase):
+    def setUp(self):
+        # NOTE: this won't actually work, idea for this suite of unit tests
+        # is to mock the actual server responses and just test logic in the
+        # UEPConnection:
+        self.cp = UEPConnection(username="dummy", password="dummy",
+                handler="/Test/", insecure=True)
+
+    def tearDown(self):
+        locale.resetlocale()
+
+    def test_date_formatted_properly_with_japanese_locale(self):
+        locale.setlocale(locale.LC_ALL, 'ja_JP.UTF8')
+        expected_headers = {
+            'If-Modified-Since': 'Fri, 13 Feb 2009 23:31:30 GMT'
+        }
+        timestamp = 1234567890
+        self.cp.conn = Mock()
+        self.cp.getAccessibleContent(consumerId='bob', if_modified_since=datetime.datetime.fromtimestamp(timestamp))
+        self.cp.conn.request_get.assert_called_with('/consumers/bob/accessible_content', headers=expected_headers)

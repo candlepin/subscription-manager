@@ -38,6 +38,7 @@ ORDER_NAMESPACE = "4"
 EXT_ORDER_NAME = "4.1"
 EXT_CERT_VERSION = "6"
 EXT_ENT_PAYLOAD = "7"
+EXT_ENT_TYPE = "8"
 
 # Constants representing the type of certificates:
 PRODUCT_CERT = 1
@@ -524,6 +525,10 @@ class EntitlementCertificate(ProductCertificate):
         self.pool = pool
         self.extensions = extensions
         self._path_tree_object = None
+
+    @property
+    def entitlement_type(self):
+        return self.extensions.get(EXT_ENT_TYPE) or 'Basic'
 
     @property
     def _path_tree(self):
