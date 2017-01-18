@@ -30,6 +30,9 @@ import subscription_manager.injection as inj
 log = logging.getLogger(__name__)
 _ = gettext.gettext
 
+CONTENT_ACCESS_CERT_CAPABILITY = "org_level_content_access"
+CONTENT_ACCESS_CERT_TYPE = "OrgLevel"
+
 
 class EntCertActionInvoker(certlib.BaseActionInvoker):
     """Invoker for entitlement certificate updating actions."""
@@ -105,6 +108,7 @@ class EntCertUpdateAction(object):
         self.ent_dir = inj.require(inj.ENT_DIR)
         self.identity = require(IDENTITY)
         self.report = EntCertUpdateReport()
+        self.content_access_cache = inj.require(inj.CONTENT_ACCESS_CACHE)
 
     # NOTE: this is slightly at odds with the manual cert import
     #       path, manual import certs wont get a 'report', etc
@@ -133,6 +137,7 @@ class EntCertUpdateAction(object):
             # we need to refresh the ent_dir object before calling
             # content updating actions.
             self.ent_dir.refresh()
+            self.content_access_hook()
             self.repo_hook()
 
             # NOTE: Since we have the yum repos defined here now
@@ -142,6 +147,17 @@ class EntCertUpdateAction(object):
 
             # reload certs and update branding
             self.branding_hook()
+
+        elif self.uep.has_capability(CONTENT_ACCESS_CERT_CAPABILITY):
+            content_access_certs = self._find_content_access_certs()
+            update_data = None
+            if len(content_access_certs) > 0:
+                update_data = self.content_access_cache.check_for_update()
+            for content_access_cert in content_access_certs:
+                self.content_access_cache.update_cert(content_access_cert, update_data)
+            if update_data is not None:
+                self.ent_dir.refresh()
+                self.repo_hook()
 
         # if we want the full report, we can get it, but
         # this makes CertLib.update() have same sig as reset
@@ -155,6 +171,24 @@ class EntCertUpdateAction(object):
 
         ent_cert_bundles_installer = EntitlementCertBundlesInstaller(self.report)
         ent_cert_bundles_installer.install(cert_bundles)
+
+    def _find_content_access_certs(self):
+        certs = self.ent_dir.list()
+        return [cert for cert in certs if cert.entitlement_type == CONTENT_ACCESS_CERT_TYPE]
+
+    def content_access_hook(self):
+        if not self.uep.has_capability(CONTENT_ACCESS_CERT_CAPABILITY):
+            return  # do nothing if we cannot check for content access cert updates
+        content_access_certs = self._find_content_access_certs()
+        update_data = None
+        if len(content_access_certs) > 0:
+            update_data = self.content_access_cache.check_for_update()
+        for content_access_cert in content_access_certs:
+            self.content_access_cache.update_cert(content_access_cert, update_data)
+        if len(content_access_certs) == 0 and self.content_access_cache.exists():
+            self.content_access_cache.remove()
+        if update_data is not None:
+            self.ent_dir.refresh()
 
     def branding_hook(self):
         """Update branding info based on entitlement cert changes."""

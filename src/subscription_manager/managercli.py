@@ -40,7 +40,7 @@ from rhsm.utils import remove_scheme, ServerUrlParseError
 from rhsm.certificate import GMT
 
 from subscription_manager.branding import get_branding
-from subscription_manager.entcertlib import EntCertActionInvoker
+from subscription_manager.entcertlib import EntCertActionInvoker, CONTENT_ACCESS_CERT_CAPABILITY
 from subscription_manager.factlib import FactsActionCommand
 from subscription_manager.action_client import ActionClient, UnregisterActionClient
 from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBED, \
@@ -663,6 +663,11 @@ class RefreshCommand(CliCommand):
             # get current consumer identity
             identity = inj.require(inj.IDENTITY)
 
+            # remove content_access cache, ensuring we get it fresh
+            content_access = inj.require(inj.CONTENT_ACCESS_CACHE)
+            if content_access.exists():
+                content_access.remove()
+
             # Force a regen of the entitlement certs for this consumer
             # TODO: Eventually migrate this to capability recognition. Currently it will silently return
             #   false if an error occurs
@@ -1216,7 +1221,7 @@ class RegisterCommand(UserPassCommand):
             except connection.RestlibException, re:
                 print_error(re.msg)
 
-        if (self.options.consumerid or self.options.activation_keys or self.autoattach):
+        if (self.options.consumerid or self.options.activation_keys or self.autoattach or self.cp.has_capability(CONTENT_ACCESS_CERT_CAPABILITY)):
             log.info("System registered, updating entitlements if needed")
             # update certs, repos, and caches.
             # FIXME: aside from the overhead, should this be cert_action_client.update?

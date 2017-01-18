@@ -207,6 +207,9 @@ class SubManFixture(unittest.TestCase):
         self.stub_facts = stubs.StubFacts()
         inj.provide(inj.FACTS, self.stub_facts)
 
+        content_access_cache_mock = MagicMock(name='ContentAccessCacheMock')
+        inj.provide(inj.CONTENT_ACCESS_CACHE, content_access_cache_mock)
+
         self.dbus_patcher = patch('subscription_manager.managercli.CliCommand._request_validity_check')
         self.dbus_patcher.start()
 
