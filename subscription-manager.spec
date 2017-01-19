@@ -601,6 +601,17 @@ fi
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Thu Jan 19 2017 Alex Wood <awood@redhat.com> 1.19.0-1
+- Bump version to 1.19 (adarshvritant@gmail.com)
+- 1405125: Strip null byte from end of virt uuid. (awood@redhat.com)
+- Provide DBus objects for configuration, facts, and registration.
+  (awood@redhat.com)
+- Use repo location for python-rhsm dependency. (awood@redhat.com)
+- 1402009: Unset TERM inside subscription-manager (khowell@redhat.com)
+- 1404930: Provide GUI flow to fix proxy settings (khowell@redhat.com)
+- 1403387: Fix proxy conn test short-circuit (csnyder@redhat.com)
+- 1401394: Collect fqdn via `hostname -f` (khowell@redhat.com)
+
 * Fri Dec 09 2016 Vritant Jain <adarshvritant@gmail.com> 1.18.6-1
 - 1401078: "Remote server error" on BadStatusLine (khowell@redhat.com)
 - 1390712: Add --remove-rhn-packages to man pages (khowell@redhat.com)
