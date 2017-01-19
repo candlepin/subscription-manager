@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.18.6
+Version: 1.19.0
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -80,7 +80,7 @@ Requires:  python-iniparse
 Requires:  python-decorator
 Requires:  dbus-x11
 Requires:  virt-what
-Requires:  python-rhsm > 1.18.4
+Requires:  python-rhsm > 1.19.0
 Requires:  python-decorator
 
 %if 0%{?sles_version}
