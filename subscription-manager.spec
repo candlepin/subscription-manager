@@ -80,7 +80,7 @@ Requires:  python-iniparse
 Requires:  python-decorator
 Requires:  dbus-x11
 Requires:  virt-what
-Requires:  python-rhsm > 1.19.0
+Requires:  python-rhsm >= 1.19.0
 Requires:  python-decorator
 
 %if 0%{?sles_version}
