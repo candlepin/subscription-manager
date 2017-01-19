@@ -102,6 +102,11 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Jan 19 2017 Alex Wood <awood@redhat.com> 1.19.0-1
+- Bump version to 1.19 (adarshvritant@gmail.com)
+- Adds new super class BaseRhsmLib that exposes request results.
+  (awood@redhat.com)
+
 * Fri Dec 09 2016 Vritant Jain <adarshvritant@gmail.com> 1.18.6-1
 - 1400719: Proxy host not available for release command (wpoteat@redhat.com)
 - 1397201: Expose classes in m2crypto wrapper (khowell@redhat.com)
