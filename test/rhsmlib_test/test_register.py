@@ -148,6 +148,7 @@ class DomainSocketRegisterDBusObjectFunctionalTest(DBusObjectTest):
         return [RegisterDBusObject]
 
     def setUp(self):
+        inj.provide(inj.PROD_DIR, stubs.StubProductDirectory())
         inj.provide(inj.INSTALLED_PRODUCTS_MANAGER, stubs.StubInstalledProductsManager())
         facts_host_patcher = mock.patch('rhsmlib.dbus.facts.FactsClient', auto_spec=True)
         self.addCleanup(facts_host_patcher.stop)

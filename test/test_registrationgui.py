@@ -224,9 +224,9 @@ class ChooseServerScreenTests(SubManFixture):
 
 class AsyncBackendTests(SubManFixture):
     def setUp(self):
+        super(AsyncBackendTests, self).setUp()
         self.backend = StubBackend()
         self.asyncBackend = AsyncBackend(self.backend)
-        super(AsyncBackendTests, self).setUp()
 
     def test_auto_system_complete(self):
         self.backend.cp_provider.get_consumer_auth_cp().getConsumer = \
