@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.19.0
+Version: 1.19.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -602,6 +602,12 @@ fi
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Fri Jan 20 2017 Alex Wood <awood@redhat.com> 1.19.1-1
+- Add missing BuildRequires. (awood@redhat.com)
+- Zanata translations for 1.19 (adarshvritant@gmail.com)
+- Drop unsupported languages from zanata.xml (adarshvritant@gmail.com)
+- Fix initialization of a couple of tests (khowell@redhat.com)
+
 * Thu Jan 19 2017 Alex Wood <awood@redhat.com> 1.19.0-1
 - Bump version to 1.19 (adarshvritant@gmail.com)
 - 1405125: Strip null byte from end of virt uuid. (awood@redhat.com)
