@@ -1,3 +1,5 @@
+# from __future__ import unicode_literals FIXME see if necessary
+
 # Copyright (c) 2012 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -14,8 +16,8 @@
 import itertools
 import zlib
 
-from bitstream import GhettoBitStream
-from huffman import HuffmanNode
+from rhsm.bitstream import GhettoBitStream
+from rhsm.huffman import HuffmanNode
 
 # this is the "sentinel" value used for the path node that indicates the end
 # of a path
@@ -133,7 +135,8 @@ class PathTree(object):
         decompress = zlib.decompressobj()
         decompressed_data = decompress.decompress(data)
         # ordered list of words that will be composed into a huffman tree
-        words = decompressed_data.split('\0')
+        words = decompressed_data.split(b'\0')
+        words = [word.decode('utf-8') for word in words]
 
         # enumerate() would be better here, but lacks a 'start' arg in 2.4
         weighted_words = zip(itertools.count(1), words)

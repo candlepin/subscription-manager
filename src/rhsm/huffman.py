@@ -110,7 +110,7 @@ class HuffmanNode(object):
         # the one most recently added gets chosen
         counter = itertools.count()
         # We use the heapq module to make a min priority queue
-        queue = [(node, counter.next()) for node in nodes]
+        queue = [(node, next(counter)) for node in nodes]
         heapq.heapify(queue)
         while True:
             left, count = heapq.heappop(queue)
@@ -119,10 +119,18 @@ class HuffmanNode(object):
             except IndexError:
                 # no more nodes to compare, so a is the root node of the tree
                 return left
-            heapq.heappush(queue, (cls.combine(left, right), counter.next()))
+            heapq.heappush(queue, (cls.combine(left, right), next(counter)))
 
     def __cmp__(self, other):
         return cmp(self.weight, other.weight)
+
+    def __lt__(self, other):
+        return self.weight < other.weight
+
+    def __eq__(self, other):
+        if not hasattr(other, 'weight'):
+            return False
+        return self.weight == other.weight
 
     def __repr__(self):
         return 'HuffmanNode(%d, "%s")' % (self.weight, self.value)

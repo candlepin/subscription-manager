@@ -17,7 +17,7 @@ from datetime import datetime
 import types
 import unittest
 
-import certdata
+from test.unit import certdata
 from rhsm.certificate import create_from_pem, CertificateException
 from rhsm.certificate2 import *
 
@@ -290,7 +290,7 @@ class V3_2ContentArchCertTests(unittest.TestCase):
 
     def test_read_content_arches(self):
         for content in self.ent_cert.content:
-            self.assertTrue(isinstance(content.arches, types.ListType))
+            self.assertTrue(isinstance(content.arches, list))
             if content.label == 'always-enabled-content':
                 self.assertEquals(['ALL'], content.arches)
             if content.label == 'awesomeos-x86_64-i386-content':
@@ -338,23 +338,23 @@ class ContentTests(unittest.TestCase):
 
     def test_arches_not_set(self):
         c = Content(content_type="yum", name="mycontent", label="mycontent", enabled=1)
-        self.assertTrue(isinstance(c.arches, types.ListType))
-        self.assertEquals([], c.arches)
+        self.assertTrue(isinstance(c.arches, list))
+        self.assertEqual([], c.arches)
 
     def test_arches_empty(self):
         c = Content(content_type="yum", name="mycontent", label="mycontent", enabled=1, arches=[])
-        self.assertTrue(isinstance(c.arches, types.ListType))
-        self.assertEquals([], c.arches)
+        self.assertTrue(isinstance(c.arches, list))
+        self.assertEqual([], c.arches)
 
     def test_arches(self):
         c = Content(content_type="yum", name="mycontent", label="mycontent", enabled=1, arches=['i386', 's390'])
-        self.assertTrue(isinstance(c.arches, types.ListType))
+        self.assertTrue(isinstance(c.arches, list))
         self.assertTrue('i386' in c.arches)
         self.assertTrue('s390' in c.arches)
 
     def test_arches_all(self):
         c = Content(content_type="yum", name="mycontent", label="mycontent", enabled=1, arches=['ALL'])
-        self.assertTrue(isinstance(c.arches, types.ListType))
+        self.assertTrue(isinstance(c.arches, list))
         self.assertTrue('ALL' in c.arches)
 
     def test_compare(self):

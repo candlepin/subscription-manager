@@ -19,7 +19,7 @@ from rhsm.bitstream import GhettoBitStream
 
 DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                     'entitlement_data.bin')
-entitlement_data = open(DATA).read()
+entitlement_data = open(DATA, 'rb').read()
 decompresser = zlib.decompressobj()
 decompresser.decompress(entitlement_data)
 tree_data = decompresser.unused_data
@@ -36,7 +36,7 @@ class TestGhettoBitStream(unittest.TestCase):
         self.assertEqual(len(self.bs.bytes), length - 1)
 
     def test_as_iterator(self):
-        self.bs.next()
+        next(self.bs)
         self.assertTrue(list(self.bs))
 
     def test_bit_buffer(self):
@@ -44,13 +44,13 @@ class TestGhettoBitStream(unittest.TestCase):
         # empty buffer
         self.assertEqual(len(self.bs._bit_buffer), 0)
 
-        self.bs.next()
+        next(self.bs)
         # one byte decoded, then one bit consumed
         self.assertEqual(len(self.bs._bit_buffer), 7)
         # one byte removed
         self.assertEqual(len(self.bs.bytes), byte_count - 1)
 
-        self.bs.next()
+        next(self.bs)
         # another bit consumed
         self.assertEqual(len(self.bs._bit_buffer), 6)
         # remaining bytes still stand

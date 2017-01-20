@@ -44,7 +44,7 @@ class rpm_version_release_build_py(build_py):
     def get_git_describe(self):
         cmd = ["git", "describe"]
         process = Popen(cmd, stdout=PIPE)
-        output = process.communicate()[0].strip()
+        output = process.communicate()[0].strip().decode('utf-8')
         if output.startswith('python-rhsm-'):
             return output[len('python-rhsm-'):]
         return 'unknown'
