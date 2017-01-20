@@ -130,6 +130,7 @@ BuildRequires: gettext
 BuildRequires: intltool
 BuildRequires: libnotify-devel
 BuildRequires: desktop-file-utils
+BuildRequires: dbus-glib-devel
 %if 0%{?fedora} || 0%{?rhel}
 BuildRequires: redhat-lsb
 %endif
