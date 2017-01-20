@@ -666,7 +666,7 @@ class Product(object):
         self.architectures = architectures
         # If this is sent in as a string split it, as the field
         # can technically be multi-valued:
-        if isinstance(self.architectures, str):
+        if isinstance(self.architectures, str) or isinstance(self.architectures, type(u"")):
             self.architectures = parse_tags(self.architectures)
         if self.architectures is None:
             self.architectures = []
