@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-03 03:13-0500\n"
+"POT-Creation-Date: 2017-01-20 04:05-0500\n"
 "PO-Revision-Date: 2015-09-25 02:52-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Punjabi\n"
@@ -3556,12 +3556,13 @@ msgstr "1 ਇੰਸਟਾਲ ਕੀਤੇ ਉਤਪਾਦ ਦੀ ਮੈਂਬਰ
 msgid "Keep your system up to date by registering."
 msgstr "ਆਪਣੇ ਸਿਸਟਮ ਨੂੰ ਦਰਜ ਕਰਕੇ ਅੱਪ ਟੂ ਡੇਟ ਰੱਖੋ।"
 
-#: src/subscription_manager/gui/managergui.py:94
+#: src/subscription_manager/gui/managergui.py:95
 #, python-format
 msgid "Browser not detected. Documentation URL is %s."
 msgstr ""
 
-#: src/subscription_manager/gui/managergui.py:175
+#: src/subscription_manager/gui/managergui.py:185
+#: src/subscription_manager/gui/managergui.py:186
 #: src/subscription_manager/gui/registergui.py:1884
 #: src/subscription_manager/managercli.py:515
 #: src/subscription_manager/managercli.py:529
@@ -3570,7 +3571,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/gui/managergui.py:440
+#: src/subscription_manager/gui/managergui.py:457
 msgid ""
 "Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
 "information."
@@ -3579,7 +3580,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/gui/managergui.py:448
+#: src/subscription_manager/gui/managergui.py:465
 msgid ""
 "Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
 "information."
@@ -3588,26 +3589,26 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/gui/managergui.py:464
+#: src/subscription_manager/gui/managergui.py:481
 msgid "<b>Errors were encountered during unregister.</b>"
 msgstr "<b>ਅਨ-ਰਜਿਸਟਰ ਕਰਨ ਵੇਲੇ ਗਲਤੀਆਂ ਆਈਆਂ ਹਨ।</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/gui/managergui.py:466
+#: src/subscription_manager/gui/managergui.py:483
 #: src/subscription_manager/gui/registergui.py:86
 msgid "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr "ਵਧੇਰੇ ਜਾਣਕਾਰੀ ਲਈ /var/log/rhsm/rhsm.log ਵੇਖੋ ਜੀ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/gui/managergui.py:482
+#: src/subscription_manager/gui/managergui.py:499
 msgid "<b>Are you sure you want to unregister?</b>"
 msgstr "<b>ਕੀ ਤੁਸੀਂ ਯਕੀਨਨ ਅਨ-ਰਜਿਸਟਰ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/gui/managergui.py:557
+#: src/subscription_manager/gui/managergui.py:574
 #: src/subscription_manager/gui/registergui.py:229
 msgid "System Already Registered"
 msgstr "ਸਿਸਟਮ ਪਹਿਲਾਂ ਹੀ ਦਰਜ ਕੀਤਾ ਹੈ"

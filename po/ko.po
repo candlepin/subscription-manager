@@ -4,12 +4,13 @@
 # eukim <eukim@fedoraproject.org>, 2015. #zanata
 # John Sefler <jsefler@redhat.com>, 2016. #zanata
 # eukim <eukim@fedoraproject.org>, 2016. #zanata
+# eukim <eukim@fedoraproject.org>, 2017. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-03 03:13-0500\n"
-"PO-Revision-Date: 2016-08-23 09:25-0400\n"
+"POT-Creation-Date: 2017-01-20 04:05-0500\n"
+"PO-Revision-Date: 2017-01-08 08:35-0500\n"
 "Last-Translator: eukim <eukim@fedoraproject.org>\n"
 "Language-Team: Korean\n"
 "Language: ko\n"
@@ -645,7 +646,7 @@ msgstr "제공되는 제품:"
 
 #: src/rct/manifest_commands.py:276
 msgid "Derived Products:"
-msgstr ""
+msgstr "파생 제품: "
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1497,7 +1498,7 @@ msgstr "서버 URL에 잘못된 구성이 있습니다. http:// 및 https://가 
 
 #: src/subscription_manager/exceptions.py:41
 msgid "The server rate limit has been exceeded, please try again later."
-msgstr ""
+msgstr "서버 속도 제한을 초과했습니다. 나중에 다시 시도하십시오."
 
 #: src/subscription_manager/exceptions.py:42
 #, python-format
@@ -1505,6 +1506,8 @@ msgid ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "%s seconds)"
 msgstr ""
+"서버 속도 제한을 초과했습니다. 나중에 다시 시도하십시오. (%s 초 후에 만료됩니"
+"다)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1685,19 +1688,19 @@ msgstr "<b>시스템에 다음과 같은 사항을 입력해 주십시오:</b>"
 #: src/subscription_manager/gui/data/glade/activation_key.glade:30
 #: src/subscription_manager/gui/data/ui/activation_key.ui:47
 msgid "_Organization:"
-msgstr ""
+msgstr "조직 (_O):"
 
 #: src/subscription_manager/gui/data/glade/activation_key.glade:44
 #: src/subscription_manager/gui/data/ui/activation_key.ui:63
 msgid "Activation _Key:"
-msgstr ""
+msgstr "활성키(_K):"
 
 #: src/subscription_manager/gui/data/glade/activation_key.glade:60
 #: src/subscription_manager/gui/data/glade/credentials.glade:234
 #: src/subscription_manager/gui/data/ui/activation_key.ui:78
 #: src/subscription_manager/gui/data/ui/credentials.ui:253
 msgid "System _Name:"
-msgstr ""
+msgstr "시스템 이름(_N):"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1829,7 +1832,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/choose_server.glade:93
 #: src/subscription_manager/gui/data/ui/choose_server.ui:93
 msgid "I will register _with:"
-msgstr ""
+msgstr "다음을 사용하여 등록합니다(_w):"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1855,7 +1858,7 @@ msgstr "server_entry"
 #: src/subscription_manager/gui/data/glade/choose_server.glade:132
 #: src/subscription_manager/gui/data/ui/choose_server.ui:132
 msgid "_Default"
-msgstr ""
+msgstr "기본값(_D)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1885,7 +1888,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/choose_server.glade:177
 #: src/subscription_manager/gui/data/ui/choose_server.ui:162
 msgid "I will use an Activation _Key"
-msgstr ""
+msgstr "활성키를 사용합니다(_K)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2000,12 +2003,12 @@ msgstr "SLA 선택 표"
 #: src/subscription_manager/gui/data/glade/credentials.glade:140
 #: src/subscription_manager/gui/data/ui/credentials.ui:91
 msgid "_Password:"
-msgstr ""
+msgstr "암호(_P):"
 
 #: src/subscription_manager/gui/data/glade/credentials.glade:162
 #: src/subscription_manager/gui/data/ui/credentials.ui:48
 msgid "_Login:"
-msgstr ""
+msgstr "로그인(_L):"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2031,7 +2034,7 @@ msgstr "시스템의 고유한 레이블"
 #: src/subscription_manager/gui/data/glade/credentials.glade:268
 #: src/subscription_manager/gui/data/ui/credentials.ui:290
 msgid "_Manually attach subscriptions after registration"
-msgstr ""
+msgstr "등록 후 서브스크립션에 수동으로 연결(_M)"
 
 #: src/subscription_manager/gui/data/glade/done_box.glade:14
 msgid "Done!"
@@ -3128,7 +3131,7 @@ msgstr "prod 1, prod2, prod 3, prod 4, prod 5, prod 6, prod 7, prod 8"
 #: src/subscription_manager/gui/data/glade/selectsla.glade:100
 #: src/subscription_manager/gui/data/ui/selectsla.ui:128
 msgid "<b>_Select a common service level for this system's subscriptions:</b>"
-msgstr ""
+msgstr "<b>시스템의 서브스크립션의 일반적인 서비스 레벨을 선택합니다(_S):</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3603,12 +3606,13 @@ msgstr "설치된 제품 중 하나에 유효한 서브스크립션이 없습니
 msgid "Keep your system up to date by registering."
 msgstr "등록하여 시스템을 최신 상태로 유지합니다."
 
-#: src/subscription_manager/gui/managergui.py:94
+#: src/subscription_manager/gui/managergui.py:95
 #, python-format
 msgid "Browser not detected. Documentation URL is %s."
-msgstr ""
+msgstr "브라우저가 발견되지 않았습니다. 문서 URL은 %s입니다."
 
-#: src/subscription_manager/gui/managergui.py:175
+#: src/subscription_manager/gui/managergui.py:185
+#: src/subscription_manager/gui/managergui.py:186
 #: src/subscription_manager/gui/registergui.py:1884
 #: src/subscription_manager/managercli.py:515
 #: src/subscription_manager/managercli.py:529
@@ -3617,7 +3621,7 @@ msgstr "프록시 연결에 실패했습니다. 설정을 확인하십시오."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/gui/managergui.py:440
+#: src/subscription_manager/gui/managergui.py:457
 msgid ""
 "Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
 "information."
@@ -3627,7 +3631,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/gui/managergui.py:448
+#: src/subscription_manager/gui/managergui.py:465
 msgid ""
 "Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
 "information."
@@ -3637,26 +3641,26 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/gui/managergui.py:464
+#: src/subscription_manager/gui/managergui.py:481
 msgid "<b>Errors were encountered during unregister.</b>"
 msgstr "<b>등록 해제 도중 오류가 발생했습니다.</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/gui/managergui.py:466
+#: src/subscription_manager/gui/managergui.py:483
 #: src/subscription_manager/gui/registergui.py:86
 msgid "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr "보다 자세한 내용은 /var/log/rhsm/rhsm.log에서 참조하십시오."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/gui/managergui.py:482
+#: src/subscription_manager/gui/managergui.py:499
 msgid "<b>Are you sure you want to unregister?</b>"
 msgstr "<b>정말로 등록 취소하시겠습니까?</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/gui/managergui.py:557
+#: src/subscription_manager/gui/managergui.py:574
 #: src/subscription_manager/gui/registergui.py:229
 msgid "System Already Registered"
 msgstr "이미 등록된 시스템"
@@ -3902,7 +3906,7 @@ msgstr "등록 도중 오류 발생: %s"
 
 #: src/subscription_manager/gui/registergui.py:1190
 msgid "_Attach"
-msgstr ""
+msgstr "연결(_A)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3914,7 +3918,7 @@ msgstr "적합한 서비스 레벨 검색 중"
 #: src/subscription_manager/gui/registergui.py:1791
 #: src/subscription_manager/gui/registergui.py:2321
 msgid "_Next"
-msgstr ""
+msgstr "다음(_N)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -4043,7 +4047,7 @@ msgstr "서브스크립션 서비스의 CA 인증서가 설치되지 않았습�
 #: src/subscription_manager/gui/registergui.py:1888
 #, python-format
 msgid "Error validating server: %s"
-msgstr ""
+msgstr "서버 확인 중 오류 발생: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -4055,7 +4059,7 @@ msgstr "%s에 있는 서버에 연결할 수 없습니다:%s%s"
 
 #: src/subscription_manager/gui/registergui.py:1914
 msgid "Validating connection"
-msgstr ""
+msgstr "연결 확인 중 "
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5547,7 +5551,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:1918
 #, python-format
 msgid "%s: file not found."
-msgstr ""
+msgstr "%s: 파일을 찾을 수 없습니다. "
 
 #: src/subscription_manager/managercli.py:1941
 msgid "View and configure with 'subscription-manager plugins'"
@@ -6024,7 +6028,7 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:2579
 msgid "You must specify an override in the form of \"name:value\" with --add."
-msgstr ""
+msgstr "--add 인수는 \"name:value\" 형식으로 덮어쓰기를 지정해야 합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -6059,7 +6063,7 @@ msgstr "오류: --repo 옵션은 --list, --add, --remove와 함께 사용해야 
 
 #: src/subscription_manager/managercli.py:2601
 msgid "Error: You must specify an override name with --remove."
-msgstr ""
+msgstr "오류: -remove로 덮어쓰기 이름을 지정해야 합니다. "
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -6160,6 +6164,8 @@ msgid ""
 "Could not find up2date_client.config module! Perhaps this script was already "
 "executed with --remove-rhn-packages?"
 msgstr ""
+"up2date_client.config 모듈을 찾을 수 없습니다! 이 스크립트는 --remove-rhn-"
+"packages로 이미 실행되고 있을 수 있습니다."
 
 #: src/subscription_manager/migrate/migrate.py:73
 msgid "See /var/log/rhsm/rhsm.log for more details."
@@ -6448,11 +6454,11 @@ msgstr ""
 
 #: src/subscription_manager/migrate/migrate.py:811
 msgid "Stopping and disabling legacy services..."
-msgstr ""
+msgstr "기존 서비스를 중지 및 비활성화하고 있습니다..."
 
 #: src/subscription_manager/migrate/migrate.py:832
 msgid "Removing legacy packages..."
-msgstr ""
+msgstr "기존 패키지 삭제 중..."
 
 #: src/subscription_manager/migrate/migrate.py:859
 msgid "Retrieving existing legacy subscription information..."
@@ -6488,7 +6494,7 @@ msgstr ""
 
 #: src/subscription_manager/migrate/migrate.py:899
 msgid "remove legacy packages"
-msgstr ""
+msgstr "기존 패키지 삭제 "
 
 #: src/subscription_manager/migrate/migrate.py:902
 msgid "don't use legacy proxy settings with destination server"
@@ -6565,13 +6571,14 @@ msgstr "--servicelevel 및 --no-auto 옵션은 함께 사용할 수 없습니다
 
 #: src/subscription_manager/migrate/migrate.py:957
 msgid "The --remove-rhn-packages and --keep options cannot be used together."
-msgstr ""
+msgstr " --remove-rhn-packages 및 --keep 옵션은 동시에 사용할 수 없습니다. "
 
 #: src/subscription_manager/migrate/migrate.py:960
 msgid ""
 "The --remove-rhn-packages option must be used with --registration-"
 "state=purge."
 msgstr ""
+"--remove-rhn-packages 옵션은 --registration-state=purge로 사용해야 합니다. "
 
 #: src/subscription_manager/plugin/container.py:234
 #: src/subscription_manager/plugin/ostree/action_invoker.py:148

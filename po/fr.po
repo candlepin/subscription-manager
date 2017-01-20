@@ -4,13 +4,14 @@
 # samfreemanz <sfriedma@redhat.com>, 2015. #zanata
 # John Sefler <jsefler@redhat.com>, 2016. #zanata
 # croe <croe@redhat.com>, 2016. #zanata
+# croe <croe@redhat.com>, 2017. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-03 03:13-0500\n"
-"PO-Revision-Date: 2016-09-02 03:36-0400\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"POT-Creation-Date: 2017-01-20 04:05-0500\n"
+"PO-Revision-Date: 2017-01-15 09:32-0500\n"
+"Last-Translator: croe <croe@redhat.com>\n"
 "Language-Team: French\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -656,7 +657,7 @@ msgstr "Produits fournis :"
 
 #: src/rct/manifest_commands.py:276
 msgid "Derived Products:"
-msgstr ""
+msgstr "Produits dérivés :"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author samfreemanz
@@ -1518,6 +1519,8 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:41
 msgid "The server rate limit has been exceeded, please try again later."
 msgstr ""
+"La limite de taux de serveur a été dépassée, veuillez essayer à nouveau un "
+"peu plus tard."
 
 #: src/subscription_manager/exceptions.py:42
 #, python-format
@@ -1525,6 +1528,8 @@ msgid ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "%s seconds)"
 msgstr ""
+"La limite de taux de serveur a été dépassée, veuillez essayer à nouveau un "
+"peu plus tard. (Expire dans %s secondes)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author samfreemanz
@@ -1714,19 +1719,19 @@ msgstr "<b>Veuillez saisir ce qui suit pour ce système :</b>"
 #: src/subscription_manager/gui/data/glade/activation_key.glade:30
 #: src/subscription_manager/gui/data/ui/activation_key.ui:47
 msgid "_Organization:"
-msgstr ""
+msgstr "_Organisation :"
 
 #: src/subscription_manager/gui/data/glade/activation_key.glade:44
 #: src/subscription_manager/gui/data/ui/activation_key.ui:63
 msgid "Activation _Key:"
-msgstr ""
+msgstr "Clé d'activation :"
 
 #: src/subscription_manager/gui/data/glade/activation_key.glade:60
 #: src/subscription_manager/gui/data/glade/credentials.glade:234
 #: src/subscription_manager/gui/data/ui/activation_key.ui:78
 #: src/subscription_manager/gui/data/ui/credentials.ui:253
 msgid "System _Name:"
-msgstr ""
+msgstr "Nom du système :"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -1860,7 +1865,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/choose_server.glade:93
 #: src/subscription_manager/gui/data/ui/choose_server.ui:93
 msgid "I will register _with:"
-msgstr ""
+msgstr "Je souhaite m'enregistrer sur :"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author samfreemanz
@@ -1886,7 +1891,7 @@ msgstr "server_entry"
 #: src/subscription_manager/gui/data/glade/choose_server.glade:132
 #: src/subscription_manager/gui/data/ui/choose_server.ui:132
 msgid "_Default"
-msgstr ""
+msgstr "_Default"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author samfreemanz
@@ -1917,7 +1922,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/choose_server.glade:177
 #: src/subscription_manager/gui/data/ui/choose_server.ui:162
 msgid "I will use an Activation _Key"
-msgstr ""
+msgstr "J'utilise une clé d'activation"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author samfreemanz
@@ -2028,12 +2033,12 @@ msgstr "Tableau de sélection SLA"
 #: src/subscription_manager/gui/data/glade/credentials.glade:140
 #: src/subscription_manager/gui/data/ui/credentials.ui:91
 msgid "_Password:"
-msgstr ""
+msgstr "Mot de passe :"
 
 #: src/subscription_manager/gui/data/glade/credentials.glade:162
 #: src/subscription_manager/gui/data/ui/credentials.ui:48
 msgid "_Login:"
-msgstr ""
+msgstr "_Login:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author samfreemanz
@@ -2059,7 +2064,7 @@ msgstr "Une étiquette unique pour ce système"
 #: src/subscription_manager/gui/data/glade/credentials.glade:268
 #: src/subscription_manager/gui/data/ui/credentials.ui:290
 msgid "_Manually attach subscriptions after registration"
-msgstr ""
+msgstr "Attachez les abonnements manuellement après l'enregistrement"
 
 #: src/subscription_manager/gui/data/glade/done_box.glade:14
 msgid "Done!"
@@ -3099,6 +3104,8 @@ msgstr "prod 1, prod2, prod 3, prod 4, prod 5, prod 6, prod 7, prod 8"
 #: src/subscription_manager/gui/data/ui/selectsla.ui:128
 msgid "<b>_Select a common service level for this system's subscriptions:</b>"
 msgstr ""
+"<b>Veuillez sélectionner un niveau de service commun pour les abonnements de "
+"ce système :</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -3575,12 +3582,13 @@ msgstr "1 produit installé ne possède pas d'abonnement valide."
 msgid "Keep your system up to date by registering."
 msgstr "Gardez votre système à jour en vous enregistrant."
 
-#: src/subscription_manager/gui/managergui.py:94
+#: src/subscription_manager/gui/managergui.py:95
 #, python-format
 msgid "Browser not detected. Documentation URL is %s."
-msgstr ""
+msgstr "Navigateur non détecté. L'URL de la documentation est %s."
 
-#: src/subscription_manager/gui/managergui.py:175
+#: src/subscription_manager/gui/managergui.py:185
+#: src/subscription_manager/gui/managergui.py:186
 #: src/subscription_manager/gui/registergui.py:1884
 #: src/subscription_manager/managercli.py:515
 #: src/subscription_manager/managercli.py:529
@@ -3591,7 +3599,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author samfreemanz
-#: src/subscription_manager/gui/managergui.py:440
+#: src/subscription_manager/gui/managergui.py:457
 msgid ""
 "Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
 "information."
@@ -3599,7 +3607,7 @@ msgstr ""
 "Erreur dans la boîte de dialogue des préférences. Veuillez voir /var/log/"
 "rhsm/rhsm.log pour obtenir plus d'informations."
 
-#: src/subscription_manager/gui/managergui.py:448
+#: src/subscription_manager/gui/managergui.py:465
 msgid ""
 "Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
 "information."
@@ -3609,26 +3617,26 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/gui/managergui.py:464
+#: src/subscription_manager/gui/managergui.py:481
 msgid "<b>Errors were encountered during unregister.</b>"
 msgstr "<b>Des erreurs se sont produites pendant le dés-enregistrement.</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/gui/managergui.py:466
+#: src/subscription_manager/gui/managergui.py:483
 #: src/subscription_manager/gui/registergui.py:86
 msgid "Please see /var/log/rhsm/rhsm.log for more information."
 msgstr "Merci de voir /var/log/rhsm/rhsm.log pour obtenir plus d'informations."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/gui/managergui.py:482
+#: src/subscription_manager/gui/managergui.py:499
 msgid "<b>Are you sure you want to unregister?</b>"
 msgstr "<b>Êtes-vous certain de vouloir vous dés-enregistrer ?</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/gui/managergui.py:557
+#: src/subscription_manager/gui/managergui.py:574
 #: src/subscription_manager/gui/registergui.py:229
 msgid "System Already Registered"
 msgstr "Système déjà enregistré"
@@ -3871,7 +3879,7 @@ msgstr "Erreur lors de l'abonnement : %s"
 
 #: src/subscription_manager/gui/registergui.py:1190
 msgid "_Attach"
-msgstr ""
+msgstr "_Attach"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -3883,7 +3891,7 @@ msgstr "Recherche des niveaux de service appropriés"
 #: src/subscription_manager/gui/registergui.py:1791
 #: src/subscription_manager/gui/registergui.py:2321
 msgid "_Next"
-msgstr ""
+msgstr "_Next"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -4017,7 +4025,7 @@ msgstr "Le certificat CA pour le service des abonnements n'a pas été installé
 #: src/subscription_manager/gui/registergui.py:1888
 #, python-format
 msgid "Error validating server: %s"
-msgstr ""
+msgstr "Erreur de validation du serveur : %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author samfreemanz
@@ -4029,7 +4037,7 @@ msgstr "Incapable de joindre le serveur sur %s :%s%s"
 
 #: src/subscription_manager/gui/registergui.py:1914
 msgid "Validating connection"
-msgstr ""
+msgstr "Validation de la connnexion"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author samfreemanz
@@ -5570,7 +5578,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:1918
 #, python-format
 msgid "%s: file not found."
-msgstr ""
+msgstr "%s : fichier non trouvé."
 
 #: src/subscription_manager/managercli.py:1941
 msgid "View and configure with 'subscription-manager plugins'"
@@ -5916,8 +5924,8 @@ msgid ""
 "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 "{dateexample})"
 msgstr ""
-"La date saisie n'est pas valide. La date doit être sous le format AAAA-MM-JJ "
-"(Par exemple : {dateexample})"
+"La date saisie n'est pas valide. La date doit être sous le format YYYY-MM-DD "
+"(exemple: {dateexample})"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -6052,6 +6060,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:2579
 msgid "You must specify an override in the form of \"name:value\" with --add."
 msgstr ""
+"Vous devez spécifier un remplacement sous la forme \"name:value\" avec --add."
 
 #: src/subscription_manager/managercli.py:2583
 msgid "--add arguments should be in the form of \"name:value\""
@@ -6078,7 +6087,7 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:2601
 msgid "Error: You must specify an override name with --remove."
-msgstr ""
+msgstr "Erreur : vous devez choisir un nom à remplacer avec --remove"
 
 #: src/subscription_manager/managercli.py:2613
 msgid "Error: The 'repo-override' command is not supported by the server."
@@ -6175,6 +6184,8 @@ msgid ""
 "Could not find up2date_client.config module! Perhaps this script was already "
 "executed with --remove-rhn-packages?"
 msgstr ""
+"Nous n'avons pas trouvé le module up2date_client.config. Il est possible que "
+"ce script a déjà été exécuté avec les packages --remove-rhn-packages ?"
 
 #: src/subscription_manager/migrate/migrate.py:73
 msgid "See /var/log/rhsm/rhsm.log for more details."
@@ -6464,11 +6475,11 @@ msgstr ""
 
 #: src/subscription_manager/migrate/migrate.py:811
 msgid "Stopping and disabling legacy services..."
-msgstr ""
+msgstr "Arrêter et désactiver les anciens services ..."
 
 #: src/subscription_manager/migrate/migrate.py:832
 msgid "Removing legacy packages..."
-msgstr ""
+msgstr "Supprimer les anciens packages ..."
 
 #: src/subscription_manager/migrate/migrate.py:859
 msgid "Retrieving existing legacy subscription information..."
@@ -6506,7 +6517,7 @@ msgstr ""
 
 #: src/subscription_manager/migrate/migrate.py:899
 msgid "remove legacy packages"
-msgstr ""
+msgstr "supprimer les anciens packages"
 
 #: src/subscription_manager/migrate/migrate.py:902
 msgid "don't use legacy proxy settings with destination server"
@@ -6592,12 +6603,16 @@ msgstr ""
 #: src/subscription_manager/migrate/migrate.py:957
 msgid "The --remove-rhn-packages and --keep options cannot be used together."
 msgstr ""
+"Les options --remove-rhn-packages et --keep ne peuvent pas être utilisées "
+"ensemble."
 
 #: src/subscription_manager/migrate/migrate.py:960
 msgid ""
 "The --remove-rhn-packages option must be used with --registration-"
 "state=purge."
 msgstr ""
+"L'option --remove-rhn-packages doit être utilisée en conjonction avec--"
+"registration-state=purge."
 
 #: src/subscription_manager/plugin/container.py:234
 #: src/subscription_manager/plugin/ostree/action_invoker.py:148
