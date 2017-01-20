@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.18.7
+Version: 1.18.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -599,6 +599,12 @@ fi
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Fri Jan 20 2017 Vritant Jain <adarshvritant@gmail.com> 1.18.8-1
+- 1391681: Zanata translations for subscription-manager 1.18
+  (adarshvritant@gmail.com)
+- Drop unsupported languages from zanata.xml (adarshvritant@gmail.com)
+- 1402009: Unset TERM inside subscription-manager (khowell@redhat.com)
+
 * Wed Jan 11 2017 Vritant Jain <adarshvritant@gmail.com> 1.18.7-1
 - 1404930: Provide GUI flow to fix proxy settings (khowell@redhat.com)
 - 1403387: Fix proxy conn test short-circuit (csnyder@redhat.com)
