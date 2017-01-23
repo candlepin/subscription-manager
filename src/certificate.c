@@ -45,6 +45,7 @@
 
 #include <openssl/asn1.h>
 #include <openssl/asn1t.h>
+#include <openssl/opensslv.h>
 #include <openssl/pem.h>
 #include <openssl/x509.h>
 #include <openssl/x509v3.h>
@@ -59,6 +60,13 @@
 	PyUnicode_FromStringAndSize(value, length);
 #define PyString_FromString(value) \
 	PyUnicode_FromString(value);
+#endif
+
+/* OpenSSL pre version 1.1 compatibility defines */
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+	#define X509_EXTENSION_get_data(o) ((o)->value)
+	#define X509_EXTENSION_get_object(o) ((o)->object)
+	#define ASN1_STRING_get0_data(o) ASN1_STRING_data(o)
 #endif
 
 typedef struct {
@@ -213,20 +221,20 @@ get_extension_by_object (X509 *x509, ASN1_OBJECT *obj, char **output)
 	int tag;
 	long len;
 	int tc;
-	const unsigned char *p = ext->value->data;
+	const unsigned char *p = X509_EXTENSION_get_data(ext)->data;
 
-	ASN1_get_object (&p, &len, &tag, &tc, ext->value->length);
+	ASN1_get_object (&p, &len, &tag, &tc, X509_EXTENSION_get_data(ext)->length);
 
 	size_t size;
 	switch (tag) {
 		case V_ASN1_UTF8STRING:
 			{
 				ASN1_UTF8STRING *str =
-					ASN1_item_unpack (ext->value,
+					ASN1_item_unpack (X509_EXTENSION_get_data(ext),
 							  ASN1_ITEM_rptr
 							  (ASN1_UTF8STRING));
 				*output = strndup ((const char *)
-						   ASN1_STRING_data (str),
+						   ASN1_STRING_get0_data (str),
 						   str->length);
 				size = str->length;
 				ASN1_UTF8STRING_free (str);
@@ -235,7 +243,7 @@ get_extension_by_object (X509 *x509, ASN1_OBJECT *obj, char **output)
 		case V_ASN1_OCTET_STRING:
 			{
 				ASN1_OCTET_STRING *octstr =
-					ASN1_item_unpack (ext->value,
+					ASN1_item_unpack (X509_EXTENSION_get_data(ext),
 							  ASN1_ITEM_rptr
 							  (ASN1_OCTET_STRING));
 				*output = malloc (octstr->length);
@@ -395,12 +403,12 @@ get_all_extensions (certificate_x509 *self, PyObject *args)
 	for (i = 0; i < ext_count; i++) {
 		X509_EXTENSION *ext = X509_get_ext (self->x509, i);
 
-		OBJ_obj2txt (oid, MAX_BUF, ext->object, 1);
+		OBJ_obj2txt (oid, MAX_BUF, X509_EXTENSION_get_object(ext), 1);
 		PyObject *key = PyString_FromString (oid);
 
 		char *value = NULL;
 		size_t length =
-			get_extension_by_object (self->x509, ext->object,
+			get_extension_by_object (self->x509, X509_EXTENSION_get_object(ext),
 						 &value);
 
 		PyObject *dict_value = PyBytes_FromStringAndSize (value,
@@ -495,7 +503,7 @@ get_subject (certificate_x509 *self, PyObject *args)
 		PyObject *key =
 			PyString_FromString (OBJ_nid2sn (OBJ_obj2nid (obj)));
 		PyObject *value = PyString_FromString ((const char *)
-						       ASN1_STRING_data (data));
+						       ASN1_STRING_get0_data (data));
 		PyDict_SetItem (dict, key, value);
 
 		Py_DECREF (key);
@@ -525,7 +533,7 @@ get_issuer (certificate_x509 *self, PyObject *args)
 		PyObject *key =
 			PyString_FromString (OBJ_nid2sn (OBJ_obj2nid (obj)));
 		PyObject *value = PyString_FromString ((const char *)
-						       ASN1_STRING_data (data));
+						       ASN1_STRING_get0_data (data));
 		PyDict_SetItem (dict, key, value);
 
 		Py_DECREF (key);
