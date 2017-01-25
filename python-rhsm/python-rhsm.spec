@@ -31,7 +31,7 @@ URL: http://www.candlepinproject.org
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %if %use_m2crypto
-%if 0%{?sles_version}
+%if 0%{?suse_version}
 Requires: python-m2crypto
 %else
 Requires: m2crypto
@@ -45,7 +45,7 @@ Requires: python-simplejson
 %endif
 Requires: python-rhsm-certificates = %{version}-%{release}
 
-%if 0%{?sles_version}
+%if 0%{?suse_version}
 BuildRequires: python-devel >= 2.6
 %else
 BuildRequires: python2-devel
@@ -79,7 +79,7 @@ PYTHON_RHSM_VERSION=%{version} PYTHON_RHSM_RELEASE=%{release} CFLAGS="%{optflags
 
 %install
 rm -rf %{buildroot}
-%{__python} setup.py install -O1 --skip-build --root %{buildroot}
+%{__python} setup.py install -O1 --skip-build --root %{buildroot} --prefix=%{_prefix}
 mkdir -p %{buildroot}%{_sysconfdir}/rhsm/ca
 install etc-conf/ca/*.pem %{buildroot}%{_sysconfdir}/rhsm/ca
 

@@ -29,6 +29,8 @@ from subscription_manager.cache import OverrideStatusCache, WrittenOverrideCache
 from subscription_manager import utils
 from subscription_manager import model
 from subscription_manager.model import ent_cert
+from urllib import urlencode
+from urlparse import parse_qs, urlparse, urlunparse
 
 from rhsm.config import initConfig, in_container
 
@@ -43,6 +45,8 @@ log = logging.getLogger(__name__)
 conf = config.Config(initConfig())
 
 ALLOWED_CONTENT_TYPES = ["yum"]
+
+ZYPPER_REPO_DIR = '/etc/rhsm/zypper.repos.d'
 
 _ = gettext.gettext
 
@@ -108,6 +112,13 @@ class RepoActionInvoker(BaseActionInvoker):
         repo_file = RepoFile()
         if os.path.exists(repo_file.path):
             os.unlink(repo_file.path)
+
+        # if we have zypper repo, remove it too.
+        if os.path.exists(ZYPPER_REPO_DIR):
+            zypper_repo_file = ZypperRepoFile()
+            if os.path.exists(zypper_repo_file.path):
+                os.unlink(zypper_repo_file.path)
+
         # When the repo is removed, also remove the override tracker
         WrittenOverrideCache.delete_cache()
 
@@ -201,6 +212,9 @@ class RepoUpdateActionCommand(object):
         - yum config
         - manual changes made to "redhat.repo".
 
+    If the system in question has a zypper repo directory, will also generate
+    zypper repo config.
+
     Returns an RepoActionReport.
     """
     def __init__(self, cache_only=False, apply_overrides=True):
@@ -267,6 +281,9 @@ class RepoUpdateActionCommand(object):
     def perform(self):
         # Load the RepoFile from disk, this contains all our managed yum repo sections:
         repo_file = RepoFile()
+        zypper_repo_file = None
+        if os.path.exists(ZYPPER_REPO_DIR):
+            zypper_repo_file = ZypperRepoFile()
 
         # the [rhsm] manage_repos can be overridden to disable generation of the
         # redhat.repo file:
@@ -280,6 +297,8 @@ class RepoUpdateActionCommand(object):
             return 0
 
         repo_file.read()
+        if zypper_repo_file:
+            zypper_repo_file.read()
         valid = set()
 
         # Iterate content from entitlement certs, and create/delete each section
@@ -296,19 +315,78 @@ class RepoUpdateActionCommand(object):
                 repo_file.update(existing)
                 self.report_update(existing)
 
+            if zypper_repo_file:  # no reporting for zypper, already reported for yum
+                zypper_cont = self._zypper_content(cont)
+                existing = zypper_repo_file.section(zypper_cont.id)
+                if existing is None:
+                    zypper_repo_file.add(zypper_cont)
+                else:
+                    zypper_repo_file.update(zypper_cont)
+
         for section in repo_file.sections():
             if section not in valid:
                 self.report_delete(section)
                 repo_file.delete(section)
+                if zypper_repo_file:
+                    zypper_repo_file.delete(section)
 
         # Write new RepoFile to disk:
         repo_file.write()
+        if zypper_repo_file:
+            zypper_repo_file.write()
         if self.override_supported:
             # Update with the values we just wrote
             self.written_overrides.overrides = self.overrides
             self.written_overrides.write_cache()
         log.info("repos updated: %s" % self.report)
         return self.report
+
+    def _zypper_content(self, content):
+        zypper_cont = content.copy()
+        sslverify = zypper_cont['sslverify']
+        sslcacert = zypper_cont['sslcacert']
+        sslclientkey = zypper_cont['sslclientkey']
+        sslclientcert = zypper_cont['sslclientcert']
+        proxy = zypper_cont['proxy']
+        proxy_username = zypper_cont['proxy_username']
+        proxy_password = zypper_cont['proxy_password']
+
+        del zypper_cont['sslverify']
+        del zypper_cont['sslcacert']
+        del zypper_cont['sslclientkey']
+        del zypper_cont['sslclientcert']
+        del zypper_cont['proxy']
+        del zypper_cont['proxy_username']
+        del zypper_cont['proxy_password']
+        # NOTE looks like metadata_expire and ui_repoid_vars are ignored by zypper
+
+        # clean up data for zypper
+        if zypper_cont['gpgkey'] in ['https://', 'http://']:
+            del zypper_cont['gpgkey']
+
+        baseurl = zypper_cont['baseurl']
+        parsed = urlparse(baseurl)
+        zypper_query_args = parse_qs(parsed.query)
+        if sslverify and sslverify in ['1']:
+            zypper_query_args['ssl_verify'] = 'host'
+        if sslcacert:
+            zypper_query_args['ssl_capath'] = os.path.dirname(sslcacert)
+        if sslclientkey:
+            zypper_query_args['ssl_clientkey'] = sslclientkey
+        if sslclientcert:
+            zypper_query_args['ssl_clientcert'] = sslclientcert
+        if proxy:
+            zypper_query_args['proxy'] = proxy
+        if proxy_username:
+            zypper_query_args['proxyuser'] = proxy_username
+        if proxy_password:
+            zypper_query_args['proxypass'] = proxy_password
+        zypper_query = urlencode(zypper_query_args)
+
+        new_url = urlunparse((parsed.scheme, parsed.netloc, parsed.path, parsed.params, zypper_query, parsed.fragment))
+        zypper_cont['baseurl'] = new_url
+
+        return zypper_cont
 
     def get_unique_content(self):
         # FIXME Shouldn't this skip all of the repo updating?
@@ -526,6 +604,12 @@ class Repo(dict):
         for k, (_m, d) in self.PROPERTIES.items():
             if k not in self.keys():
                 self[k] = d
+
+    def copy(self):
+        new_repo = Repo(self.id)
+        for key, value in self.items():
+            new_repo[key] = value
+        return new_repo
 
     @classmethod
     def from_ent_cert_content(cls, content, baseurl, ca_cert, release_source):
@@ -804,4 +888,26 @@ class RepoFile(ConfigParser):
         s.append('# a "yum repolist" to refresh available repos')
         s.append('#')
         f.write('\n'.join(s))
+        f.close()
+
+
+class ZypperRepoFile(RepoFile):
+
+    PATH = 'etc/rhsm/zypper.repos.d'
+
+    def create(self):
+        if self.path_exists(self.path) or not self.manage_repos:
+            return
+        f = open(self.path, 'w')
+        f.write("""#
+# Certificate-Based Repositories
+# Managed by (rhsm) subscription-manager
+#
+# *** This file is auto-generated.  Changes made here will be over-written. ***
+# *** Use "subscription-manager repo-override --help" if you wish to make changes. ***
+#
+# If this file is empty and this system is subscribed consider
+# a "zypper lr" to refresh available repos
+#
+""")
         f.close()
