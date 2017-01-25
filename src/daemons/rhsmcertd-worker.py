@@ -18,6 +18,7 @@
 
 import sys
 import logging
+import dbus.mainloop.glib
 
 from subscription_manager import logutil
 
@@ -40,6 +41,9 @@ _ = gettext.gettext
 
 
 def main(options, log):
+    # Set default mainloop
+    dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+
     if not ConsumerIdentity.existsAndValid():
         log.error('Either the consumer is not registered or the certificates' +
                   ' are corrupted. Certificate update using daemon failed.')
