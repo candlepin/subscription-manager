@@ -41,7 +41,6 @@ from rhsm.certificate import GMT
 
 from subscription_manager.branding import get_branding
 from subscription_manager.entcertlib import EntCertActionInvoker, CONTENT_ACCESS_CERT_CAPABILITY
-from subscription_manager.factlib import FactsActionCommand
 from subscription_manager.action_client import ActionClient, UnregisterActionClient
 from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBED, \
         SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
@@ -63,8 +62,6 @@ from subscription_manager.overrides import Overrides, Override
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, \
         none_wrap_columnize_callback, echo_columnize_callback, highlight_by_filter_string_columnize_callback
-
-import rhsmlib.dbus.facts as facts
 
 _ = gettext.gettext
 
@@ -1115,7 +1112,7 @@ class RegisterCommand(UserPassCommand):
         self.cp_provider.clean()
 
         # A proxy to the dbus service
-        facts_dbus_client = facts.FactsClient()
+        facts = inj.require(inj.FACTS)
 
         # Proceed with new registration:
         try:
@@ -1131,7 +1128,7 @@ class RegisterCommand(UserPassCommand):
             #             AsyncBackend to run this as a series of states triggered by events
             # This is blocking and not async, which aside from blocking here, also
             # means things like following name owner changes gets weird.
-            facts_dict = facts_dbus_client.GetFacts()
+            facts_dict = facts.get_facts()
 
             self.plugin_manager.run("pre_register_consumer", name=consumername,
                                     facts=facts_dict)
@@ -1196,7 +1193,7 @@ class RegisterCommand(UserPassCommand):
             # FIXME: Need a ConsumerFacts.sync or update or something
             # TODO: We register, with facts, then update facts again...?
             #       Are we trying to sync potential new or dynamic facts?
-            #facts.update_check(self.cp, consumer['uuid'], force=True)
+            facts.update_check(self.cp, consumer['uuid'], force=True)
 
         profile_mgr = inj.require(inj.PROFILE_MANAGER)
         # 767265: always force an upload of the packages when registering
@@ -1205,7 +1202,7 @@ class RegisterCommand(UserPassCommand):
         # Facts and installed products went out with the registration request,
         # manually write caches to disk:
         # facts service job now(soon)
-        #facts.write_cache()
+        facts.write_cache()
         self.installed_mgr.update_check(self.cp, consumer['uuid'])
 
         if self.options.release:
@@ -1321,9 +1318,7 @@ class UnRegisterCommand(CliCommand):
 
     def __init__(self):
         shortdesc = get_branding().CLI_UNREGISTER
-
-        super(UnRegisterCommand, self).__init__("unregister", shortdesc,
-                                                True)
+        super(UnRegisterCommand, self).__init__("unregister", shortdesc, True)
 
     def _validate_options(self):
         pass
@@ -1383,20 +1378,14 @@ class RedeemCommand(CliCommand):
         Executes the command.
         """
         self.assert_should_be_registered()
-
         self._validate_options()
 
         try:
             # FIXME: why just facts and package profile update here?
             # update facts first, if we need to
+            facts = inj.require(inj.FACTS)
+            facts.update_check(self.cp, self.identity.uuid)
 
-            # FIXME: either do above, or add a ConsumerFacts model and populate
-            #        it from dbus call, and update_check() to send to candlepin
-            #facts = inj.require(inj.FACTS)
-            #facts.update_check(self.cp, self.identity.uuid)
-
-            # ie, don't forget to fix me
-            raise Exception('facts syncing not implemented yet, so this should fail tests.')
             profile_mgr = inj.require(inj.PROFILE_MANAGER)
             profile_mgr.update_check(self.cp, self.identity.uuid)
 
@@ -1872,12 +1861,10 @@ class FactsCommand(CliCommand):
 
     def _do_command(self):
         self._validate_options()
+        facts = inj.require(inj.FACTS)
 
         if self.options.list:
-            # A proxy to the dbus service
-            facts_dbus_client = facts.FactsClient()
-
-            facts_dict = facts_dbus_client.GetFacts()
+            facts_dict = facts.get_facts()
             facts_keys = facts_dict.keys()
             facts_keys.sort()
 
@@ -1888,8 +1875,14 @@ class FactsCommand(CliCommand):
                 print "%s: %s" % (key, value)
 
         if self.options.update:
-            facts_action_command = FactsActionCommand()
-            facts_action_command.update()
+            identity = inj.require(inj.IDENTITY)
+            try:
+                facts.update_check(self.cp, identity.uuid, force=True)
+            except connection.RestlibException, re:
+                log.exception(re)
+                system_exit(os.EX_SOFTWARE, re.msg)
+            log.info("Succesfully updated the system facts.")
+            print _("Successfully updated the system facts.")
 
 
 class ImportCertCommand(CliCommand):

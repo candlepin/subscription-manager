@@ -39,7 +39,7 @@ from subscription_manager.action_client import ActionClient
 from subscription_manager.gui import networkConfig
 from subscription_manager.gui import widgets
 from subscription_manager.injection import IDENTITY, PLUGIN_MANAGER, require, \
-        INSTALLED_PRODUCTS_MANAGER, PROFILE_MANAGER
+        INSTALLED_PRODUCTS_MANAGER, PROFILE_MANAGER, FACTS
 from subscription_manager import managerlib
 from subscription_manager.utils import is_valid_server_info, MissingCaCertException, \
         parse_server_info, restart_virt_who
@@ -49,8 +49,6 @@ from subscription_manager.gui.autobind import DryRunResult, \
         ServiceLevelNotSupportedException, AllProductsCoveredException, \
         NoProductsException
 from subscription_manager.jsonwrapper import PoolWrapper
-
-import rhsmlib.dbus.facts as facts
 
 _ = lambda x: gettext.ldgettext("rhsm", x)
 
@@ -2022,14 +2020,13 @@ class AsyncBackend(object):
             #
             installed_mgr = require(INSTALLED_PRODUCTS_MANAGER)
 
-            # A proxy to the dbus service
-            facts_dbus_client = facts.FactsClient()
+            facts = require(FACTS)
 
             # Note: for now, this is blocking. Maybe we should do it
             #       in the gui mainthread async and pass it in?
 
             log.debug("about to dbus GetFacts")
-            facts_dict = facts_dbus_client.GetFacts()
+            facts_dict = facts.get_facts()
             log.debug("finished doing dbus GetFacts")
 
             # TODO: We end up calling plugins from threads, which is a little weird.
@@ -2052,10 +2049,9 @@ class AsyncBackend(object):
             # TODO: split persisting info into it's own thread
             require(IDENTITY).reload()
 
-            # TODO: This will be rhsm-facts.services problem now
             # Facts and installed products went out with the registration
             # request, manually write caches to disk:
-            # facts.write_cache()
+            facts.write_cache()
             installed_mgr.write_cache()
 
             # Write the identity cert to disk
