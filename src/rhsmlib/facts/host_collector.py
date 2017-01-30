@@ -52,27 +52,22 @@ class HostCollector(collector.FactsCollector):
         host_facts = {}
         hardware_collector = hwprobe.HardwareCollector(
             prefix=self.prefix,
-            testing=self.testing,
-            collected_hw_info=self._collected_hw_info
+            testing=self.testing
         )
         hardware_info = hardware_collector.get_all()
-
-        virt_collector = virt.VirtCollector(
-            prefix=self.prefix,
-            testing=self.testing,
-            collected_hw_info=self._collected_hw_info
-        )
-
-        virt_collector_info = virt_collector.get_all()
 
         firmware_collector = firmware_info.FirmwareCollector(
             prefix=self.prefix,
             testing=self.testing,
-            collected_hw_info=virt_collector_info
         )
-
-        # rename firmware.py
         firmware_info_dict = firmware_collector.get_all()
+
+        virt_collector = virt.VirtCollector(
+            prefix=self.prefix,
+            testing=self.testing,
+            collected_hw_info=firmware_info_dict
+        )
+        virt_collector_info = virt_collector.get_all()
 
         host_facts.update(hardware_info)
         host_facts.update(virt_collector_info)
@@ -85,7 +80,6 @@ class HostCollector(collector.FactsCollector):
         custom_facts = custom.CustomFactsCollector(
             prefix=self.prefix,
             testing=self.testing,
-            collected_hw_info=self._collected_hw_info,
             path_and_globs=path_and_globs
         )
         custom_facts_dict = custom_facts.get_all()

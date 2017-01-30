@@ -94,6 +94,9 @@ class VirtUuidCollector(collector.FactsCollector):
 
         virt_uuid_dict = {}
 
+        if 'dmi.system.uuid' in self._collected_hw_info:
+            virt_uuid_dict['virt.uuid'] = self._collected_hw_info['dmi.system.uuid']
+
         # For ppc64, virt uuid is in /proc/device-tree/vm,uuid
         # just the uuid in txt, one line
 
@@ -141,19 +144,18 @@ class VirtUuidCollector(collector.FactsCollector):
 
 class VirtCollector(collector.FactsCollector):
     def get_all(self):
-        virt_what_collector = VirtWhatCollector(prefix=self.prefix, testing=self.testing)
-
-        virt_what_info = virt_what_collector.get_all()
-
-        # Pass virt_what_info to the uuid collector since it needs to know
-        # what hypervisor the host is.
-        virt_uuid_collector = VirtUuidCollector(
-            prefix=self.prefix,
-            testing=self.testing,
-            collected_hw_info=virt_what_info
-        )
-        virt_uuid_info = virt_uuid_collector.get_all()
         virt_info = {}
+
+        virt_what_collector = VirtWhatCollector(prefix=self.prefix, testing=self.testing)
+        virt_what_info = virt_what_collector.get_all()
         virt_info.update(virt_what_info)
-        virt_info.update(virt_uuid_info)
+
+        if virt_what_info['virt.is_guest']:
+            virt_uuid_collector = VirtUuidCollector(
+                prefix=self.prefix,
+                testing=self.testing,
+                collected_hw_info=self._collected_hw_info
+            )
+            virt_uuid_info = virt_uuid_collector.get_all()
+            virt_info.update(virt_uuid_info)
         return virt_info
