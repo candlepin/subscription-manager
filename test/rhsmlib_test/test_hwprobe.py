@@ -21,8 +21,8 @@ import cStringIO
 from mock import patch
 from mock import Mock
 
-import fixture
-from subscription_manager import hwprobe
+import test.fixture
+from rhsmlib.facts import hwprobe
 
 PROC_BONDING_RR = """Ethernet Channel Bonding Driver: v3.6.0 (September 26, 2009)
 
@@ -145,7 +145,7 @@ class TestGatherEntries(unittest.TestCase):
         self.assertEquals(2, len(ent_list))
 
 
-class GenericPlatformSpecificInfoProviderTests(fixture.SubManFixture):
+class GenericPlatformSpecificInfoProviderTests(test.fixture.SubManFixture):
     def test(self):
         hw_info = {}
         platform_info = hwprobe.GenericPlatformSpecificInfoProvider(hw_info)
@@ -158,62 +158,11 @@ class GenericPlatformSpecificInfoProviderTests(fixture.SubManFixture):
         self.assertFalse('foo' in platform_info.info)
 
 
-class HardwareProbeTests(fixture.SubManFixture):
-
-    @patch('subprocess.Popen')
-    def test_command_error(self, MockPopen):
-        MockPopen.return_value.communicate.return_value = ['', None]
-        MockPopen.return_value.poll.return_value = 2
-
-        # Pick up the mocked class
-        reload(hwprobe)
-        hw = hwprobe.Hardware()
-        self.assertRaises(hwprobe.CalledProcessError, hw._get_output, 'test')
-
-    @patch('subprocess.Popen')
-    def test_command_valid(self, MockPopen):
-        MockPopen.return_value.communicate.return_value = ['this is valid', None]
-        MockPopen.return_value.poll.return_value = 0
-
-        # Pick up the mocked class
-        reload(hwprobe)
-        hw = hwprobe.Hardware()
-        self.assertEquals('this is valid', hw._get_output('testing'))
-
-    @patch('subprocess.Popen')
-    def test_virt_guest(self, MockPopen):
-        MockPopen.return_value.communicate.return_value = ['kvm', None]
-        MockPopen.return_value.poll.return_value = 0
-
-        reload(hwprobe)
-        hw = hwprobe.Hardware()
-        expected = {'virt.is_guest': True, 'virt.host_type': 'kvm'}
-        self.assertEquals(expected, hw.get_virt_info())
-
-    @patch('subprocess.Popen')
-    def test_virt_bare_metal(self, MockPopen):
-        MockPopen.return_value.communicate.return_value = ['', None]
-        MockPopen.return_value.poll.return_value = 0
-
-        reload(hwprobe)
-        hw = hwprobe.Hardware()
-        expected = {'virt.is_guest': False, 'virt.host_type': 'Not Applicable'}
-        self.assertEquals(expected, hw.get_virt_info())
-
-    @patch('subprocess.Popen')
-    def test_virt_error(self, MockPopen):
-        MockPopen.return_value.communicate.return_value = ['', None]
-        MockPopen.return_value.poll.return_value = 255
-
-        reload(hwprobe)
-        hw = hwprobe.Hardware()
-        expected = {'virt.is_guest': 'Unknown'}
-        self.assertEquals(expected, hw.get_virt_info())
-
+class HardwareProbeTests(test.fixture.SubManFixture):
     @patch("__builtin__.open")
     def test_distro_no_release(self, MockOpen):
         reload(hwprobe)
-        hw = hwprobe.Hardware()
+        hw = hwprobe.HardwareCollector()
         MockOpen.side_effect = IOError()
         self.assertRaises(IOError, hw.get_release_info)
 
@@ -221,7 +170,7 @@ class HardwareProbeTests(fixture.SubManFixture):
     @patch("__builtin__.open")
     def test_distro_bogus_content_no_platform_module(self, MockOpen, MockExists):
         reload(hwprobe)
-        hw = hwprobe.Hardware()
+        hw = hwprobe.HardwareCollector()
         MockExists.side_effect = [False, True]
         with patch('subscription_manager.hwprobe.platform'):
             MockOpen.return_value.readline.return_value = "this is not really a release file of any sort"
@@ -233,7 +182,7 @@ class HardwareProbeTests(fixture.SubManFixture):
     def test_distro(self, MockOpen, MockExists):
         reload(hwprobe)
         MockExists.side_effect = [False, True]
-        hw = hwprobe.Hardware()
+        hw = hwprobe.HardwareCollector()
         MockOpen.return_value.readline.return_value = "Awesome OS release 42 (Go4It)"
         self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS',
             'distribution.id': 'Go4It'})
@@ -242,7 +191,7 @@ class HardwareProbeTests(fixture.SubManFixture):
     @patch("__builtin__.open")
     def test_distro_newline_in_release(self, MockOpen, MockExists):
         reload(hwprobe)
-        hw = hwprobe.Hardware()
+        hw = hwprobe.HardwareCollector()
         MockExists.side_effect = [False, True]
         MockOpen.return_value.readline.return_value = "Awesome OS release 42 (Go4It)\n\n"
         self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS',
@@ -252,7 +201,7 @@ class HardwareProbeTests(fixture.SubManFixture):
     @patch("__builtin__.open")
     def test_manual_distro_bogus_content_os_release(self, MockOpen, MockExists):
         reload(hwprobe)
-        hw = hwprobe.Hardware()
+        hw = hwprobe.HardwareCollector()
         with patch('subscription_manager.hwprobe.platform'):
             MockExists.return_value = True
             MockOpen.return_value.readlines.return_value = ["This is not really a release file of any sort"]
@@ -264,7 +213,7 @@ class HardwareProbeTests(fixture.SubManFixture):
     def test_distro_with_platform(self, MockOpen, MockExists):
         reload(hwprobe)
         MockExists.return_value = False
-        hw = hwprobe.Hardware()
+        hw = hwprobe.HardwareCollector()
         MockOpen.return_value.readline.return_value = "Awesome OS release 42 (Go4It)"
         MockOpen.return_value.read.return_value = "Awesome OS release 42 (Go4It)"
         self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS',
@@ -275,7 +224,7 @@ class HardwareProbeTests(fixture.SubManFixture):
     def test_manual_distro_with_modifier(self, MockOpen, MockExists):
         reload(hwprobe)
         MockExists.side_effect = [False, True]
-        hw = hwprobe.Hardware()
+        hw = hwprobe.HardwareCollector()
         with patch('subscription_manager.hwprobe.platform'):
             MockOpen.return_value.readline.return_value = "Awesome OS release 42 Mega (Go4It)"
             self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS',
@@ -286,7 +235,7 @@ class HardwareProbeTests(fixture.SubManFixture):
     def test_distro_os_release(self, MockOpen, MockExists):
         reload(hwprobe)
         MockExists.return_value = True
-        hw = hwprobe.Hardware()
+        hw = hwprobe.HardwareCollector()
         with patch('subscription_manager.hwprobe.platform'):
             MockOpen.return_value.readlines.return_value = OS_RELEASE.split('\n')
             self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS',
@@ -297,75 +246,15 @@ class HardwareProbeTests(fixture.SubManFixture):
     def test_distro_os_release_colon(self, MockOpen, MockExists):
         reload(hwprobe)
         MockExists.return_value = True
-        hw = hwprobe.Hardware()
+        hw = hwprobe.HardwareCollector()
         with patch('subscription_manager.hwprobe.platform'):
             MockOpen.return_value.readlines.return_value = OS_RELEASE_COLON.split('\n')
             self.assertEquals(hw.get_release_info(), {'distribution.version': '42', 'distribution.name': 'Awesome OS',
                 'distribution.id': 'Go4It', 'distribution.version.modifier': 'be:ta'})
 
-    def test_default_virt_uuid_physical(self):
-        """Check that physical systems dont set an 'Unknown' virt.uuid."""
-        reload(hwprobe)
-        hw = hwprobe.Hardware()
-        hw.allhw['virt.host_type'] = 'Not Applicable'
-        hw.allhw['virt.is_guest'] = False
-        hw.get_virt_uuid()
-        self.assertFalse('virt.uuid' in hw.allhw)
-
-    def test_default_virt_uuid_guest_no_uuid(self):
-        """Check that virt guest systems dont set an 'Unknown' virt.uuid if not found."""
-        reload(hwprobe)
-        hw = hwprobe.Hardware()
-        hw.allhw['virt.host_type'] = 'kvm'
-        hw.allhw['virt.is_guest'] = True
-        hw.get_virt_uuid()
-        self.assertFalse('virt.uuid' in hw.allhw)
-
-    def test_default_virt_uuid_guest_with_uuid(self):
-        """Check that virt guest systems dont set an 'Unknown' virt.uuid if virt.uuid is found."""
-        reload(hwprobe)
-        hw = hwprobe.Hardware()
-        hw.allhw['virt.host_type'] = 'kvm'
-        hw.allhw['virt.is_guest'] = True
-        fake_virt_uuid = 'this-is-a-weird-uuid'
-        hw.allhw['dmi.system.uuid'] = fake_virt_uuid
-        hw.get_virt_uuid()
-        self.assertTrue('virt.uuid' in hw.allhw)
-        self.assertEquals(fake_virt_uuid, hw.allhw['virt.uuid'])
-
-    def test_get_arch(self):
-        reload(hwprobe)
-        hw = hwprobe.Hardware()
-        arch = hw.get_arch()
-        import platform
-        self.assertEquals(platform.machine(), arch)
-
-    def test_get_platform_specific_info_provider(self):
-        reload(hwprobe)
-        hw = hwprobe.Hardware()
-        info_provider = hw.get_platform_specific_info_provider()
-        self.assertTrue(info_provider is not None)
-
-    @patch("subscription_manager.hwprobe.Hardware.get_arch")
-    def test_get_platform_specific_info_provider_not_dmi(self, mock_get_arch):
-        mock_get_arch.return_value = "s390x"
-        hw = hwprobe.Hardware()
-        info_provider = hw.get_platform_specific_info_provider()
-        self.assertEquals(hwprobe.GenericPlatformSpecificInfoProvider, info_provider)
-
-    @patch("subscription_manager.hwprobe.Hardware.get_arch")
-    def test_get_platform_specific_info_not_dmi(self, mock_get_arch):
-        mock_get_arch.return_value = "s390x"
-        hw = hwprobe.Hardware()
-        hw_info = {"foo": "bar"}
-        hw.allhw = hw_info
-        hw.get_platform_specific_info()
-        # we dont gather any additional info with the default
-        self.assertEquals(hw.allhw, hw_info)
-
     def test_meminfo(self):
         reload(hwprobe)
-        hw = hwprobe.Hardware()
+        hw = hwprobe.HardwareCollector()
         mem = hw.get_mem_info()
         # not great tests, but alas
         self.assertEquals(len(mem), 2)
@@ -376,14 +265,14 @@ class HardwareProbeTests(fixture.SubManFixture):
     # no network.
     def test_networkinfo(self):
         reload(hwprobe)
-        hw = hwprobe.Hardware()
+        hw = hwprobe.HardwareCollector()
         net = hw.get_network_info()
         expected = set(['network.fqdn', 'network.hostname', 'network.ipv4_address', 'network.ipv6_address'])
         self.assertEqual(expected, set(net.keys()))
 
     def test_network_interfaces(self):
         reload(hwprobe)
-        hw = hwprobe.Hardware()
+        hw = hwprobe.HardwareCollector()
         net_int = hw.get_network_interfaces()
         self.assertEquals(net_int['net.interface.lo.ipv4_address'], '127.0.0.1')
         self.assertFalse('net.interface.lo.mac_address' in net_int)
@@ -394,7 +283,7 @@ class HardwareProbeTests(fixture.SubManFixture):
     @patch("ethtool.get_interfaces_info")
     def test_network_interfaces_none(self, MockGetInterfacesInfo, MockGetDevices):
         reload(hwprobe)
-        hw = hwprobe.Hardware()
+        hw = hwprobe.HardwareCollector()
         net_int = hw.get_network_interfaces()
         self.assertEquals(net_int, {})
 
@@ -402,7 +291,7 @@ class HardwareProbeTests(fixture.SubManFixture):
     @patch("ethtool.get_interfaces_info")
     def test_network_interfaces_multiple_ipv4(self, MockGetInterfacesInfo, MockGetDevices):
         reload(hwprobe)
-        hw = hwprobe.Hardware()
+        hw = hwprobe.HardwareCollector()
 
         MockGetDevices.return_value = ['eth0']
         mock_info = Mock(mac_address="00:00:00:00:00:00",
@@ -422,7 +311,7 @@ class HardwareProbeTests(fixture.SubManFixture):
     @patch("ethtool.get_interfaces_info")
     def test_network_interfaces_just_lo(self, MockGetInterfacesInfo, MockGetDevices):
         reload(hwprobe)
-        hw = hwprobe.Hardware()
+        hw = hwprobe.HardwareCollector()
         MockGetDevices.return_value = ['lo']
         mock_info = Mock(mac_address="00:00:00:00:00:00",
                          device="lo")
@@ -441,7 +330,7 @@ class HardwareProbeTests(fixture.SubManFixture):
     @patch("ethtool.get_interfaces_info")
     def test_network_interfaces_sit(self, MockGetInterfacesInfo, MockGetDevices):
         reload(hwprobe)
-        hw = hwprobe.Hardware()
+        hw = hwprobe.HardwareCollector()
         MockGetDevices.return_value = ['sit0']
         mock_ipv6 = Mock(address="::1",
                          netmask="/128",
@@ -463,7 +352,7 @@ class HardwareProbeTests(fixture.SubManFixture):
                                                                       MockGetInterfacesInfo,
                                                                       MockGetDevices):
         reload(hwprobe)
-        hw = hwprobe.Hardware()
+        hw = hwprobe.HardwareCollector()
         MockGetDevices.return_value = ['lo']
         mock_info = Mock(mac_address="00:00:00:00:00:00",
                          device="lo",
@@ -490,7 +379,7 @@ class HardwareProbeTests(fixture.SubManFixture):
     @patch("ethtool.get_interfaces_info")
     def test_network_interfaces_just_lo_ipv6(self, MockGetInterfacesInfo, MockGetDevices):
         reload(hwprobe)
-        hw = hwprobe.Hardware()
+        hw = hwprobe.HardwareCollector()
         MockGetDevices.return_value = ['lo']
 
         mock_ipv6 = Mock(address="::1",
@@ -511,7 +400,7 @@ class HardwareProbeTests(fixture.SubManFixture):
     def test_get_slave_hwaddr_rr(self, MockOpen):
         reload(hwprobe)
         MockOpen.return_value = cStringIO.StringIO(PROC_BONDING_RR)
-        hw = hwprobe.Hardware()
+        hw = hwprobe.HardwareCollector()
         slave_hw = hw._get_slave_hwaddr("bond0", "eth0")
         # note we .upper the result
         self.assertEquals("52:54:00:07:03:BA", slave_hw)
@@ -520,7 +409,7 @@ class HardwareProbeTests(fixture.SubManFixture):
     def test_get_slave_hwaddr_alb(self, MockOpen):
         reload(hwprobe)
         MockOpen.return_value = cStringIO.StringIO(PROC_BONDING_ALB)
-        hw = hwprobe.Hardware()
+        hw = hwprobe.HardwareCollector()
         slave_hw = hw._get_slave_hwaddr("bond0", "eth0")
         # note we .upper the result
         self.assertEquals("52:54:00:07:03:BA", slave_hw)
@@ -528,7 +417,7 @@ class HardwareProbeTests(fixture.SubManFixture):
 # FIXME: not real useful as non-root, plus noisy
 #    def test_platform_specific_info(self):
 #        reload(hwprobe)
-#        hw = hwprobe.Hardware()
+#        hw = hwprobe.HardwareCollector()
 #        platform_info = hw.get_platform_specific_info()
 #        # this is going to be empty as non root
 #        print platform_info
@@ -538,7 +427,7 @@ class HardwareProbeTests(fixture.SubManFixture):
 
     def reload(self):
         reload(hwprobe)
-        hw = hwprobe.Hardware()
+        hw = hwprobe.HardwareCollector()
         hw.check_for_cpu_topo = self._cpu_topo_check
         return hw
 
@@ -590,12 +479,11 @@ class HardwareProbeTests(fixture.SubManFixture):
                                 'cpu.cpu_socket(s)': 3,
                                 'cpu.book(s)': 3,
                                 'cpu.book(s)_per_cpu': 1,
-                                'cpu.cpu_socket(s)': 3,
                                 'cpu.topology_source': 's390 book_siblings_list'},
                                hw.get_cpu_info())
 
-    @patch("subscription_manager.hwprobe.Hardware.has_s390x_sysinfo")
-    @patch("subscription_manager.hwprobe.Hardware.read_s390x_sysinfo")
+    @patch("rhsmlib.facts.hwprobe.HardwareCollector.has_s390x_sysinfo")
+    @patch("rhsmlib.facts.hwprobe.HardwareCollector.read_s390x_sysinfo")
     @patch("os.listdir")
     def test_cpu_info_s390_sysinfo(self, mock_list_dir,
                                    mock_read_sysinfo, mock_has_sysinfo):
@@ -604,7 +492,7 @@ class HardwareProbeTests(fixture.SubManFixture):
         mock_has_sysinfo.return_value = True
         mock_read_sysinfo.return_value = ["CPU Topology SW:      0 0 0 4 6 4"]
 
-        hw = hwprobe.Hardware()
+        hw = hwprobe.HardwareCollector()
         hw.arch = "s390x"
         hw.check_for_cpu_topo = Mock(return_value=True)
 
@@ -642,7 +530,7 @@ class HardwareProbeTests(fixture.SubManFixture):
                                     's390x sysinfo'},
                                hw.get_cpu_info())
 
-    @patch('subscription_manager.hwprobe.Hardware.count_cpumask_entries')
+    @patch('rhsmlib.facts.Hardware.count_cpumask_entries')
     @patch("os.listdir")
     def test_cpu_info(self, mock_list_dir, mock_count):
         hw = self.reload()
@@ -686,7 +574,7 @@ class HardwareProbeTests(fixture.SubManFixture):
                                 'cpu.topology_source': "fallback one socket"},
                                hw.get_cpu_info())
 
-    @patch("subscription_manager.hwprobe.Hardware.read_physical_id")
+    @patch("rhsmlib.facts.Hardware.read_physical_id")
     @patch("os.listdir")
     def test_cpu_info_no_topo_ppc64_physical_id(self, mock_list_dir,
                                                 mock_read_physical):

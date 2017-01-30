@@ -90,11 +90,9 @@ class VirtUuidCollector(collector.FactsCollector):
         """
 
         # For 99% of uses, virt.uuid will actually be from dmi info
-        # See dmiinfo.py and cleanup.py
-
         virt_uuid_dict = {}
 
-        if 'dmi.system.uuid' in self._collected_hw_info:
+        if self._collected_hw_info and 'dmi.system.uuid' in self._collected_hw_info:
             virt_uuid_dict['virt.uuid'] = self._collected_hw_info['dmi.system.uuid']
 
         # For ppc64, virt uuid is in /proc/device-tree/vm,uuid

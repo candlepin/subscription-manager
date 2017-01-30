@@ -46,7 +46,7 @@ from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBE
         SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from subscription_manager.cli import AbstractCLICommand, CLI, system_exit
 from subscription_manager import rhelentbranding
-from subscription_manager.hwprobe import ClassicCheck
+from rhsmlib.facts.hwprobe import ClassicCheck
 import subscription_manager.injection as inj
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib

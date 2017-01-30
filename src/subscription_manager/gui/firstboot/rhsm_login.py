@@ -31,7 +31,7 @@ init_dep_injection()
 
 from subscription_manager import injection as inj
 
-from subscription_manager.hwprobe import Hardware
+from rhsmlib.facts.hwprobe import HardwareCollector
 from subscription_manager.gui import managergui
 from subscription_manager.gui import registergui
 from subscription_manager.gui.utils import format_exception
@@ -84,7 +84,7 @@ class moduleClass(module.Module, object):
         # Will be False if we are on an older RHEL version where
         # rhn-client-tools already does some things so we don't have to.
         self.standalone = True
-        distribution = Hardware().get_distribution()
+        distribution = HardwareCollector().get_distribution()
         log.debug("Distribution: %s" % str(distribution))
 
         try:

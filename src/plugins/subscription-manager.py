@@ -20,7 +20,7 @@ from yum.plugins import TYPE_CORE, TYPE_INTERACTIVE
 
 from subscription_manager import injection as inj
 from subscription_manager.repolib import RepoActionInvoker
-from subscription_manager.hwprobe import ClassicCheck
+from rhsmlib.facts.hwprobe import ClassicCheck
 from subscription_manager.certlib import Locker
 from subscription_manager.utils import chroot
 from subscription_manager.injectioninit import init_dep_injection
