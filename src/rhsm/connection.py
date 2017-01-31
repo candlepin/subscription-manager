@@ -23,6 +23,8 @@ import logging
 import os
 import socket
 import sys
+import time
+from email.utils import formatdate
 
 from rhsm.https import httplib, ssl
 
@@ -271,7 +273,7 @@ class ContentConnection(object):
     def user_agent(self):
         return "RHSM-content/1.0 (cmd=%s)" % utils.cmd_name(sys.argv)
 
-    def _request(self, request_type, handler, body=None):
+    def _request(self, request_type, handler, body=None, headers=None):
         # See note in Restlib._request
         context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
 
@@ -290,11 +292,15 @@ class ContentConnection(object):
         else:
             conn = httplib.HTTPSConnection(self.host, self.ssl_port, context=context, timeout=self.timeout)
 
+        final_headers = {"Host": "%s:%s" % (self.host, self.ssl_port),
+                         "Content-Length": "0",
+                         "User-Agent": self.user_agent}
+        if headers:
+            final_headers.update(headers)
+
         conn.request("GET", handler,
                      body="",
-                     headers={"Host": "%s:%s" % (self.host, self.ssl_port),
-                              "Content-Length": "0",
-                              "User-Agent": self.user_agent})
+                     headers=final_headers)
         response = conn.getresponse()
         result = {
             "content": response.read().decode('utf-8'),
@@ -419,7 +425,7 @@ class BaseRestLib(object):
             log.debug("Loaded CA certificates from %s: %s" % (self.ca_dir, ', '.join(loaded_ca_certs)))
 
     # FIXME: can method be empty?
-    def _request(self, request_type, method, info=None):
+    def _request(self, request_type, method, info=None, headers=None):
         handler = self.apihandler + method
 
         # See M2Crypto/SSL/Context.py in m2crypto source and
@@ -465,13 +471,14 @@ class BaseRestLib(object):
         if self.user_agent:
             self.headers['User-Agent'] = self.user_agent
 
-        headers = self.headers
+        final_headers = self.headers.copy()
         if body is None:
-            headers = dict(self.headers.items() +
-                           {"Content-Length": "0"}.items())
+            final_headers["Content-Length"] = "0"
+        if headers:
+            final_headers.update(headers)
 
         try:
-            conn.request(request_type, handler, body=body, headers=headers)
+            conn.request(request_type, handler, body=body, headers=final_headers)
         except ssl.SSLError:
             if self.cert_file:
                 id_cert = certificate.create_from_file(self.cert_file)
@@ -511,7 +518,7 @@ class BaseRestLib(object):
     def validateResponse(self, response, request_type=None, handler=None):
 
         # FIXME: what are we supposed to do with a 204?
-        if str(response['status']) not in ["200", "202", "204"]:
+        if str(response['status']) not in ["200", "202", "204", "304"]:
             parsed = {}
             if not response.get('content'):
                 parsed = {}
@@ -588,20 +595,20 @@ class BaseRestLib(object):
         if 'errors' in body:
             return " ".join("%s" % errmsg for errmsg in body['errors'])
 
-    def request_get(self, method):
-        return self._request("GET", method)
+    def request_get(self, method, headers=None):
+        return self._request("GET", method, headers=headers)
 
-    def request_post(self, method, params=None):
-        return self._request("POST", method, params)
+    def request_post(self, method, params=None, headers=None):
+        return self._request("POST", method, params, headers=headers)
 
-    def request_head(self, method):
-        return self._request("HEAD", method)
+    def request_head(self, method, headers=None):
+        return self._request("HEAD", method, headers=headers)
 
-    def request_put(self, method, params=None):
-        return self._request("PUT", method, params)
+    def request_put(self, method, params=None, headers=None):
+        return self._request("PUT", method, params, headers=headers)
 
-    def request_delete(self, method, params=None):
-        return self._request("DELETE", method, params)
+    def request_delete(self, method, params=None, headers=None):
+        return self._request("DELETE", method, params, headers=headers)
 
 
 # FIXME: it would be nice if the ssl server connection stuff
@@ -613,9 +620,9 @@ class Restlib(BaseRestLib):
      of communication with the server.
     """
 
-    def _request(self, request_type, method, info=None):
+    def _request(self, request_type, method, info=None, headers=None):
         result = super(Restlib, self)._request(request_type, method,
-            info=info)
+            info=info, headers=headers)
 
         # Handle 204s
         if not len(result['content']):
@@ -1076,6 +1083,21 @@ class UEPConnection:
         """
         method = '/consumers/%s/certificates/serials' % self.sanitize(consumerId)
         return self.conn.request_get(method)
+
+    def getAccessibleContent(self, consumerId, if_modified_since=None):
+        """
+        Get the content of the accessible content cert for a given consumer.
+
+        :param consumerId: consumer id
+        :param if_modified_since: if present, only return the content if it was altered since the given date
+        :return: json with the last modified date and the content
+        """
+        method = "/consumers/%s/accessible_content" % consumerId
+        headers = {}
+        if if_modified_since:
+            timestamp = formatdate(time.mktime(if_modified_since.timetuple()), usegmt=True)
+            headers["If-Modified-Since"] = timestamp
+        return self.conn.request_get(method, headers=headers)
 
     def bindByEntitlementPool(self, consumerId, poolId, quantity=None):
         """
