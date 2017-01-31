@@ -22,23 +22,25 @@ import shutil
 import socket
 import tempfile
 import time
-from mock import Mock
+from mock import Mock, patch, mock_open
 
 # used to get a user readable cfg class for test cases
 from stubs import StubProduct, StubProductCertificate, StubCertificateDirectory, \
-        StubEntitlementCertificate, StubPool, StubEntitlementDirectory
+    StubEntitlementCertificate, StubPool, StubEntitlementDirectory
 from fixture import SubManFixture
 
 from rhsm import ourjson as json
 from subscription_manager.cache import ProfileManager, \
-        InstalledProductsManager, EntitlementStatusCache, \
-        PoolTypeCache, ReleaseStatusCache
+    InstalledProductsManager, EntitlementStatusCache, \
+    PoolTypeCache, ReleaseStatusCache, ContentAccessCache
 
 from rhsm.profile import Package, RPMProfile
 
 from rhsm.connection import RestlibException, UnauthorizedException
 
 from subscription_manager import injection as inj
+
+from subscription_manager import isodate
 
 log = logging.getLogger(__name__)
 
@@ -52,7 +54,6 @@ FACT_MATCHER = _FACT_MATCHER()
 
 
 class TestProfileManager(unittest.TestCase):
-
     def setUp(self):
         current_pkgs = [
                 Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
@@ -183,7 +184,6 @@ class TestProfileManager(unittest.TestCase):
 
 
 class TestInstalledProductsCache(SubManFixture):
-
     def setUp(self):
         super(TestInstalledProductsCache, self).setUp()
         self.prod_dir = StubCertificateDirectory([
@@ -386,7 +386,6 @@ class TestReleaseStatusCache(SubManFixture):
 
 
 class TestEntitlementStatusCache(SubManFixture):
-
     def setUp(self):
         super(TestEntitlementStatusCache, self).setUp()
         self.status_cache = EntitlementStatusCache()
@@ -462,7 +461,6 @@ class TestEntitlementStatusCache(SubManFixture):
 
 
 class TestPoolTypeCache(SubManFixture):
-
     def setUp(self):
         super(TestPoolTypeCache, self).setUp()
         self.cp_provider = inj.require(inj.CP_PROVIDER)
@@ -544,3 +542,82 @@ class TestPoolTypeCache(SubManFixture):
 
     def _build_pool_json(self, pool_id, pool_type):
         return {'id': pool_id, 'calculatedAttributes': {'compliance_type': pool_type}}
+
+
+class TestContentAccessCache(SubManFixture):
+    MOCK_CONTENT = {
+        "lastUpdate": "2016-12-01T21:56:35+0000",
+        "contentListing": {"42": ["cert-part1", "cert-part2"]}
+    }
+
+    MOCK_CONTENT_EMPTY_CONTENT_LISTING = {
+        "lastUpdate": "2016-12-01T21:56:35+0000",
+        "contentListing": None
+    }
+
+    MOCK_CERT = """
+before
+-----BEGIN ENTITLEMENT DATA-----
+entitlement data goes here
+-----END ENTITLEMENT DATA-----
+after
+    """
+
+    MOCK_OPEN_EMPTY = mock_open()
+
+    MOCK_OPEN_CACHE = mock_open(read_data=json.dumps(MOCK_CONTENT))
+
+    def setUp(self):
+        super(TestContentAccessCache, self).setUp()
+        self.cache = ContentAccessCache()
+        self.cache.cp_provider = Mock()
+        self.mock_uep = Mock()
+        self.mock_uep.getAccessibleContent = Mock(return_value=self.MOCK_CONTENT)
+        self.cache.cp_provider.get_consumer_auth_cp = Mock(return_value=self.mock_uep)
+        self.cache.identity = Mock()
+        self.cert = Mock()
+
+    @patch('subscription_manager.cache.open', MOCK_OPEN_EMPTY)
+    def test_empty_cache(self):
+        self.assertFalse(self.cache.exists())
+
+    @patch('subscription_manager.cache.open', MOCK_OPEN_EMPTY)
+    def test_writes_to_cache_after_read(self):
+        self.cache.check_for_update()
+        self.MOCK_OPEN_EMPTY.assert_any_call(ContentAccessCache.CACHE_FILE, 'w')
+        self.MOCK_OPEN_EMPTY().write.assert_any_call(json.dumps(self.MOCK_CONTENT))
+
+    @patch('subscription_manager.cache.open', MOCK_OPEN_EMPTY)
+    def test_cert_updated_after_read(self):
+        self.cert.serial = 42
+        update_data = self.cache.check_for_update()
+        self.cache.update_cert(self.cert, update_data)
+        self.MOCK_OPEN_EMPTY.assert_any_call(self.cert.path, 'w')
+        self.MOCK_OPEN_EMPTY().write.assert_any_call(''.join(self.MOCK_CONTENT['contentListing']['42']))
+
+    @patch('subscription_manager.cache.open', MOCK_OPEN_CACHE)
+    def test_check_for_update_provides_date(self):
+        mock_exists = Mock(return_value=True)
+        with patch('os.path.exists', mock_exists):
+            self.cache.check_for_update()
+            date = isodate.parse_date("2016-12-01T21:56:35+0000")
+            self.mock_uep.getAccessibleContent.assert_called_once_with(self.cache.identity.uuid, if_modified_since=date)
+
+    @patch('os.path.exists', Mock(return_value=True))
+    def test_cache_remove_deletes_file(self):
+        mock_remove = Mock()
+        with patch('os.remove', mock_remove):
+            self.cache.remove()
+            mock_remove.assert_called_once_with(ContentAccessCache.CACHE_FILE)
+
+    @patch('subscription_manager.cache.open', MOCK_OPEN_EMPTY)
+    def test_cache_handles_empty_content_listing(self):
+        self.mock_uep.getAccessibleContent = Mock(return_value=self.MOCK_CONTENT_EMPTY_CONTENT_LISTING)
+        self.cache.check_for_update()
+        # getting this far means we did not raise an exception :-)
+
+    @patch('subscription_manager.cache.open', MOCK_OPEN_EMPTY)
+    def test_cache_fails_server_issues_gracefully(self):
+        self.mock_uep.getAccessibleContent = Mock(side_effect=RestlibException(404))
+        self.cache.check_for_update()
+        # getting this far means we did not raise an exception :-)

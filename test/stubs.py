@@ -271,6 +271,7 @@ class StubEntitlementCertificate(EntitlementCertificate):
                                                          end=end_date, serial=self.serial)
         if ent_id:
             self.subject = {'CN': ent_id}
+        self.entitlement_type = 'Basic'
 
     def delete(self):
         self.is_deleted = True
