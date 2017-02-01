@@ -52,6 +52,12 @@
 # makefile defaults to INSTALL_YUM_PLUGIN=true
 %define install_yum_plugins INSTALL_YUM_PLUGINS=true
 
+%if 0%{?suse_version}
+%define install_zypper_plugins INSTALL_ZYPPER_PLUGINS=true
+%else
+%define install_zypper_plugins INSTALL_ZYPPER_PLUGINS=false
+%endif
+
 # makefile defaults to INSTALL_DNF_PLUGIN=false
 %if %{use_dnf}
 %define install_dnf_plugins INSTALL_DNF_PLUGINS=true
@@ -120,6 +126,7 @@ Requires: pygobject3-base
 %else
 %if 0%{?suse_version}
 Requires:  python-gobject2
+Requires:  libzypp
 %else
 Requires:  pygobject2
 %endif
@@ -167,6 +174,7 @@ BuildRequires: scrollkeeper
 BuildRequires: gconf2-devel
 BuildRequires: dbus-1-glib-devel
 BuildRequires: update-desktop-files
+BuildRequires: libzypp
 %else
 BuildRequires: GConf2-devel
 BuildRequires: dbus-glib-devel
@@ -325,6 +333,7 @@ make -f Makefile install VERSION=%{version}-%{release} \
     OS_VERSION=%{?fedora}%{?rhel}%{?suse_version} OS_DIST=%{dist} \
     %{?install_ostree} %{?post_boot_tool} %{?gtk_version} \
     %{?install_yum_plugins} %{?install_dnf_plugins} \
+    %{?install_zypper_plugins} \
     %{?with_systemd}
 
 %if 0%{?suse_version}
@@ -406,6 +415,9 @@ rm -rf %{buildroot}
 %attr(755,root,root) %dir %{_sysconfdir}/pki/entitlement
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm/facts
+%if 0%{?suse_version}
+%attr(755,root,root) %dir %{_sysconfdir}/rhsm/zypper.repos.d
+%endif
 %attr(644,root,root) %config(noreplace) %{_sysconfdir}/rhsm/rhsm.conf
 %config %attr(644,root,root) %{_sysconfdir}/rhsm/logging.conf
 
@@ -473,6 +485,11 @@ rm -rf %{buildroot}
 %{_prefix}/lib/yum-plugins/subscription-manager.py*
 %{_prefix}/lib/yum-plugins/product-id.py*
 %{_prefix}/lib/yum-plugins/search-disabled-repos.py*
+
+# zypper plugins
+%if 0%{?suse_version}
+%{_prefix}/lib/zypp/plugins/services/subscription-manager
+%endif
 
 # rhsmlib
 %dir %{python_sitelib}/rhsmlib
