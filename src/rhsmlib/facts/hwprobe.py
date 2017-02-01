@@ -87,7 +87,6 @@ def gather_entries(entries_string):
 
 class GenericPlatformSpecificInfoProvider(object):
     """Default provider for platform without a specific platform info provider.
-
     ie, all platforms except those with DMI (ie, intel platforms)"""
     def __init__(self, hardware_info, dump_file=None):
         self.info = {}
@@ -98,12 +97,13 @@ class GenericPlatformSpecificInfoProvider(object):
 
 
 class HardwareCollector(collector.FactsCollector):
-
-    def __init__(self, arch=None, prefix=None, testing=None,
-                 collected_hw_info=None):
-        super(HardwareCollector, self).__init__(arch=arch, prefix=prefix,
-                                       testing=testing,
-                                       collected_hw_info=None)
+    def __init__(self, arch=None, prefix=None, testing=None, collected_hw_info=None):
+        super(HardwareCollector, self).__init__(
+            arch=arch,
+            prefix=prefix,
+            testing=testing,
+            collected_hw_info=None
+        )
 
         self.hardware_methods = [
             self.get_uname_info,
@@ -577,6 +577,12 @@ class HardwareCollector(collector.FactsCollector):
             netinfo['network.hostname'] = host
 
             try:
+                netinfo['network.fqdn'] = compat_check_output(['/usr/bin/hostname', '-f']).strip()
+            except CalledProcessError as e:
+                log.exception(e)
+                raise
+
+            try:
                 info = socket.getaddrinfo(host, None, socket.AF_INET, socket.SOCK_STREAM)
                 ip_list = set([x[4][0] for x in info])
                 netinfo['network.ipv4_address'] = ', '.join(ip_list)
@@ -625,15 +631,17 @@ class HardwareCollector(collector.FactsCollector):
                     if scope == 'universe':
                         scope = 'global'
 
-                    # FIXME: this doesn't support multiple addresses per interface
-                    # (it finds them, but collides on the key name and loses all
-                    # but the last write). See bz #874735
                     for mkey in ipv6_metakeys:
                         key = '.'.join(['net.interface', info.device, 'ipv6_%s' % (mkey), scope])
+                        list_key = "%s_list" % key
                         # we could specify a default here... that could hide
                         # api breakage though and unit testing hw detect is... meh
                         attr = getattr(addr, mkey) or 'Unknown'
                         netinfdict[key] = attr
+                        if not netinfdict.get(list_key, None):
+                            netinfdict[list_key] = str(attr)
+                        else:
+                            netinfdict[list_key] += ', %s' % str(attr)
 
                 # However, old version of python-ethtool do not support
                 # get_ipv4_address
@@ -650,17 +658,19 @@ class HardwareCollector(collector.FactsCollector):
                 # That api change as to address bz #759150. The bug there was that
                 # python-ethtool only showed one ip address per interface. To
                 # accomdate the finer grained info, the api changed...
-                #
-                # FIXME: see FIXME for get_ipv6_address, we don't record multiple
-                # addresses per interface
                 if hasattr(info, 'get_ipv4_addresses'):
                     for addr in info.get_ipv4_addresses():
                         for mkey in ipv4_metakeys:
                             # append 'ipv4_' to match the older interface and keeps facts
                             # consistent
                             key = '.'.join(['net.interface', info.device, 'ipv4_%s' % (mkey)])
+                            list_key = "%s_list" % key
                             attr = getattr(addr, mkey) or 'Unknown'
                             netinfdict[key] = attr
+                            if not netinfdict.get(list_key, None):
+                                netinfdict[list_key] = str(attr)
+                            else:
+                                netinfdict[list_key] += ', %s' % str(attr)
                 # check to see if we are actually an ipv4 interface
                 elif hasattr(info, 'ipv4_address'):
                     for mkey in old_ipv4_metakeys:

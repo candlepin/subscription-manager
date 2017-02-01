@@ -230,6 +230,8 @@ class SubManFixture(unittest.TestCase):
         self.files_to_cleanup = []
 
     def tearDown(self):
+        if not hasattr(self, 'files_to_cleanup'):
+            return
         for f in self.files_to_cleanup:
             # Assuming these are tempfile.NamedTemporaryFile, created with
             # the write_tempfile() method in this class.

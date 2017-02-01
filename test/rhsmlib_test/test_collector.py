@@ -16,10 +16,11 @@ try:
 except ImportError:
     import unittest
 
+import platform
 import mock
 from test.fixture import open_mock
 
-from rhsmlib.facts import collector, virt
+from rhsmlib.facts import collector, firmware_info
 
 
 class GetArchTest(unittest.TestCase):
@@ -34,10 +35,9 @@ class GetArchTest(unittest.TestCase):
             arch = collector.get_arch(prefix="/does/not/exist")
             self.assertEqual("hello_arch", arch)
 
+    def test_get_arch(self):
+        self.assertEquals(platform.machine(), collector.get_arch())
 
-class VirtUuidCollectorTest(unittest.TestCase):
-    def test_strips_null_byte_on_uuid(self):
-        with open_mock(content="123\0"):
-            collector = virt.VirtUuidCollector(arch='ppc64')
-            fact = collector._get_devicetree_vm_uuid()
-            self.assertEqual('123', fact['virt.uuid'])
+    def test_get_platform_specific_info_provider(self):
+        info_provider = firmware_info.get_firmware_collector(arch=platform.machine())
+        self.assertTrue(info_provider is not None)
