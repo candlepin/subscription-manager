@@ -4,14 +4,16 @@
 # noriko <noriko@fedoraproject.org>, 2015. #zanata
 # John Sefler <jsefler@redhat.com>, 2016. #zanata
 # asasaki <asasaki@redhat.com>, 2016. #zanata
+# John Sefler <jsefler@redhat.com>, 2017. #zanata
 # kmoriguc <kmoriguc@redhat.com>, 2017. #zanata
+# tnagamot <tnagamot@redhat.com>, 2017. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-20 04:05-0500\n"
-"PO-Revision-Date: 2017-01-04 05:22-0500\n"
-"Last-Translator: kmoriguc <kmoriguc@redhat.com>\n"
+"POT-Creation-Date: 2017-02-01 04:31-0500\n"
+"PO-Revision-Date: 2017-01-31 07:55-0500\n"
+"Last-Translator: tnagamot <tnagamot@redhat.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -1687,19 +1689,19 @@ msgstr "<b>このシステムに関して以下を記入してください:</b>"
 #: src/subscription_manager/gui/data/glade/activation_key.glade:30
 #: src/subscription_manager/gui/data/ui/activation_key.ui:47
 msgid "_Organization:"
-msgstr "_Organization:"
+msgstr "組織 (_O):"
 
 #: src/subscription_manager/gui/data/glade/activation_key.glade:44
 #: src/subscription_manager/gui/data/ui/activation_key.ui:63
 msgid "Activation _Key:"
-msgstr "Activation _Key:"
+msgstr "アクティベーションキー (_K):"
 
 #: src/subscription_manager/gui/data/glade/activation_key.glade:60
 #: src/subscription_manager/gui/data/glade/credentials.glade:234
 #: src/subscription_manager/gui/data/ui/activation_key.ui:78
 #: src/subscription_manager/gui/data/ui/credentials.ui:253
 msgid "System _Name:"
-msgstr "System _Name:"
+msgstr "システム名 (_N):"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -1831,7 +1833,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/choose_server.glade:93
 #: src/subscription_manager/gui/data/ui/choose_server.ui:93
 msgid "I will register _with:"
-msgstr "次を使用して登録します:"
+msgstr "次を使用して登録します (_W):"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author khasida
@@ -1857,7 +1859,7 @@ msgstr "server_entry"
 #: src/subscription_manager/gui/data/glade/choose_server.glade:132
 #: src/subscription_manager/gui/data/ui/choose_server.ui:132
 msgid "_Default"
-msgstr "_Default"
+msgstr "デフォルト (_D)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author khasida
@@ -1888,7 +1890,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/choose_server.glade:177
 #: src/subscription_manager/gui/data/ui/choose_server.ui:162
 msgid "I will use an Activation _Key"
-msgstr "Activation _Key を使用します"
+msgstr "アクティベーションキー (_K) を使用します"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author khasida
@@ -1999,12 +2001,12 @@ msgstr "SLA 選択表"
 #: src/subscription_manager/gui/data/glade/credentials.glade:140
 #: src/subscription_manager/gui/data/ui/credentials.ui:91
 msgid "_Password:"
-msgstr "_Password:"
+msgstr "パスワード (_P):"
 
 #: src/subscription_manager/gui/data/glade/credentials.glade:162
 #: src/subscription_manager/gui/data/ui/credentials.ui:48
 msgid "_Login:"
-msgstr "_Login:"
+msgstr "ログイン (_L):"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author khasida
@@ -2030,7 +2032,7 @@ msgstr "このシステム用の独自のラベル"
 #: src/subscription_manager/gui/data/glade/credentials.glade:268
 #: src/subscription_manager/gui/data/ui/credentials.ui:290
 msgid "_Manually attach subscriptions after registration"
-msgstr "登録後に手作業でサブスクリプションを割り当てる"
+msgstr "登録後に手作業でサブスクリプションを割り当てる (_M)"
 
 #: src/subscription_manager/gui/data/glade/done_box.glade:14
 msgid "Done!"
@@ -3061,8 +3063,8 @@ msgstr "製品 1、 製品 2、 製品 3、 製品 4、 製品 5、 製品 6、 
 #: src/subscription_manager/gui/data/ui/selectsla.ui:128
 msgid "<b>_Select a common service level for this system's subscriptions:</b>"
 msgstr ""
-"<b>このシステムのサブスクリプションの共通サービスレベルを選択してください:</"
-"b>"
+"<b>このシステムのサブスクリプションの共通サービスレベルを選択してください "
+"(_S):</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -3826,7 +3828,7 @@ msgstr "サブスクライブ工程でエラー: %s"
 
 #: src/subscription_manager/gui/registergui.py:1190
 msgid "_Attach"
-msgstr "_Attach"
+msgstr "割り当て (_A)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -3838,7 +3840,7 @@ msgstr "適切なサービスレベルを検索中"
 #: src/subscription_manager/gui/registergui.py:1791
 #: src/subscription_manager/gui/registergui.py:2321
 msgid "_Next"
-msgstr "_Next"
+msgstr "次へ (_N)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys

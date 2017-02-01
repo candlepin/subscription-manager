@@ -4,14 +4,15 @@
 # eukim <eukim@fedoraproject.org>, 2015. #zanata
 # John Sefler <jsefler@redhat.com>, 2016. #zanata
 # eukim <eukim@fedoraproject.org>, 2016. #zanata
+# John Sefler <jsefler@redhat.com>, 2017. #zanata
 # eukim <eukim@fedoraproject.org>, 2017. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-20 04:05-0500\n"
-"PO-Revision-Date: 2017-01-08 08:35-0500\n"
-"Last-Translator: eukim <eukim@fedoraproject.org>\n"
+"POT-Creation-Date: 2017-02-01 04:31-0500\n"
+"PO-Revision-Date: 2017-01-30 03:19-0500\n"
+"Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Korean\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -646,7 +647,7 @@ msgstr "제공되는 제품:"
 
 #: src/rct/manifest_commands.py:276
 msgid "Derived Products:"
-msgstr "파생 제품: "
+msgstr "파생 제품:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -4059,7 +4060,7 @@ msgstr "%s에 있는 서버에 연결할 수 없습니다:%s%s"
 
 #: src/subscription_manager/gui/registergui.py:1914
 msgid "Validating connection"
-msgstr "연결 확인 중 "
+msgstr "연결 확인 중"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -5551,7 +5552,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:1918
 #, python-format
 msgid "%s: file not found."
-msgstr "%s: 파일을 찾을 수 없습니다. "
+msgstr "%s: 파일을 찾을 수 없습니다."
 
 #: src/subscription_manager/managercli.py:1941
 msgid "View and configure with 'subscription-manager plugins'"
@@ -6063,7 +6064,7 @@ msgstr "오류: --repo 옵션은 --list, --add, --remove와 함께 사용해야 
 
 #: src/subscription_manager/managercli.py:2601
 msgid "Error: You must specify an override name with --remove."
-msgstr "오류: -remove로 덮어쓰기 이름을 지정해야 합니다. "
+msgstr "오류: --remove로 덮어쓰기 이름을 지정해야 합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -6494,7 +6495,7 @@ msgstr ""
 
 #: src/subscription_manager/migrate/migrate.py:899
 msgid "remove legacy packages"
-msgstr "기존 패키지 삭제 "
+msgstr "기존 패키지 삭제"
 
 #: src/subscription_manager/migrate/migrate.py:902
 msgid "don't use legacy proxy settings with destination server"
@@ -6571,14 +6572,14 @@ msgstr "--servicelevel 및 --no-auto 옵션은 함께 사용할 수 없습니다
 
 #: src/subscription_manager/migrate/migrate.py:957
 msgid "The --remove-rhn-packages and --keep options cannot be used together."
-msgstr " --remove-rhn-packages 및 --keep 옵션은 동시에 사용할 수 없습니다. "
+msgstr "--remove-rhn-packages 및 --keep 옵션은 동시에 사용할 수 없습니다."
 
 #: src/subscription_manager/migrate/migrate.py:960
 msgid ""
 "The --remove-rhn-packages option must be used with --registration-"
 "state=purge."
 msgstr ""
-"--remove-rhn-packages 옵션은 --registration-state=purge로 사용해야 합니다. "
+"--remove-rhn-packages 옵션은 --registration-state=purge로 사용해야 합니다."
 
 #: src/subscription_manager/plugin/container.py:234
 #: src/subscription_manager/plugin/ostree/action_invoker.py:148

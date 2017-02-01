@@ -4,13 +4,15 @@
 # samfreemanz <sfriedma@redhat.com>, 2015. #zanata
 # John Sefler <jsefler@redhat.com>, 2016. #zanata
 # croe <croe@redhat.com>, 2016. #zanata
+# John Sefler <jsefler@redhat.com>, 2017. #zanata
+# Vritant Jain <vrjain@redhat.com>, 2017. #zanata
 # croe <croe@redhat.com>, 2017. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-20 04:05-0500\n"
-"PO-Revision-Date: 2017-01-15 09:32-0500\n"
+"POT-Creation-Date: 2017-02-01 04:31-0500\n"
+"PO-Revision-Date: 2017-02-01 05:00-0500\n"
 "Last-Translator: croe <croe@redhat.com>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -1724,14 +1726,14 @@ msgstr "_Organisation :"
 #: src/subscription_manager/gui/data/glade/activation_key.glade:44
 #: src/subscription_manager/gui/data/ui/activation_key.ui:63
 msgid "Activation _Key:"
-msgstr "Clé d'activation :"
+msgstr "_Clé d'activation :"
 
 #: src/subscription_manager/gui/data/glade/activation_key.glade:60
 #: src/subscription_manager/gui/data/glade/credentials.glade:234
 #: src/subscription_manager/gui/data/ui/activation_key.ui:78
 #: src/subscription_manager/gui/data/ui/credentials.ui:253
 msgid "System _Name:"
-msgstr "Nom du système :"
+msgstr "_Nom du système :"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -1865,7 +1867,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/choose_server.glade:93
 #: src/subscription_manager/gui/data/ui/choose_server.ui:93
 msgid "I will register _with:"
-msgstr "Je souhaite m'enregistrer sur :"
+msgstr "Je souhaite m'enregistrer _sur :"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author samfreemanz
@@ -1922,7 +1924,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/choose_server.glade:177
 #: src/subscription_manager/gui/data/ui/choose_server.ui:162
 msgid "I will use an Activation _Key"
-msgstr "J'utilise une clé d'activation"
+msgstr "J'utilise une _clé d'activation"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author samfreemanz
@@ -2033,7 +2035,7 @@ msgstr "Tableau de sélection SLA"
 #: src/subscription_manager/gui/data/glade/credentials.glade:140
 #: src/subscription_manager/gui/data/ui/credentials.ui:91
 msgid "_Password:"
-msgstr "Mot de passe :"
+msgstr "Mot de _passe :"
 
 #: src/subscription_manager/gui/data/glade/credentials.glade:162
 #: src/subscription_manager/gui/data/ui/credentials.ui:48
@@ -2064,7 +2066,7 @@ msgstr "Une étiquette unique pour ce système"
 #: src/subscription_manager/gui/data/glade/credentials.glade:268
 #: src/subscription_manager/gui/data/ui/credentials.ui:290
 msgid "_Manually attach subscriptions after registration"
-msgstr "Attachez les abonnements manuellement après l'enregistrement"
+msgstr "Attachez les abonnements _manuellement après l'enregistrement"
 
 #: src/subscription_manager/gui/data/glade/done_box.glade:14
 msgid "Done!"
@@ -3104,8 +3106,8 @@ msgstr "prod 1, prod2, prod 3, prod 4, prod 5, prod 6, prod 7, prod 8"
 #: src/subscription_manager/gui/data/ui/selectsla.ui:128
 msgid "<b>_Select a common service level for this system's subscriptions:</b>"
 msgstr ""
-"<b>Veuillez sélectionner un niveau de service commun pour les abonnements de "
-"ce système :</b>"
+"<b>Veuillez _sélectionner un niveau de service commun pour les abonnements "
+"de ce système :</b>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -3879,7 +3881,7 @@ msgstr "Erreur lors de l'abonnement : %s"
 
 #: src/subscription_manager/gui/registergui.py:1190
 msgid "_Attach"
-msgstr "_Attach"
+msgstr "_Attacher"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
