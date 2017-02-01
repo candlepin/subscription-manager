@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.18.8
+Version: 1.18.9
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -599,6 +599,10 @@ fi
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Wed Feb 01 2017 Vritant Jain <adarshvritant@gmail.com> 1.18.9-1
+- 1417746, 1417740, 1417736, 1417731: Fixed Translations for 6.9 post testing
+  (adarshvritant@gmail.com)
+
 * Fri Jan 20 2017 Vritant Jain <adarshvritant@gmail.com> 1.18.8-1
 - 1391681: Zanata translations for subscription-manager 1.18
   (adarshvritant@gmail.com)
