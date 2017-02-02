@@ -38,7 +38,7 @@ from subscription_manager.ga import GLib as ga_GLib
 
 from subscription_manager.branding import get_branding
 from subscription_manager.entcertlib import EntCertActionInvoker
-from subscription_manager.hwprobe import ClassicCheck
+from rhsmlib.facts.hwprobe import ClassicCheck
 from subscription_manager import managerlib
 from subscription_manager.utils import get_client_versions, get_server_versions, parse_baseurl_info, restart_virt_who
 from subscription_manager.utils import print_error

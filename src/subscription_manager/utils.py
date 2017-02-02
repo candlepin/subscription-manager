@@ -30,7 +30,7 @@ from rhsm.https import ssl
 
 from subscription_manager.branding import get_branding
 from subscription_manager.certdirectory import Path
-from subscription_manager.hwprobe import ClassicCheck
+from rhsmlib.facts.hwprobe import ClassicCheck
 from subscription_manager import injection as inj
 
 # we moved quite a bit of code from this module to rhsm.

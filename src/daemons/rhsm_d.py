@@ -70,7 +70,7 @@ init_dep_injection()
 
 from subscription_manager.branding import get_branding
 from subscription_manager.injection import require, IDENTITY, CERT_SORTER, RHSM_ICON_CACHE
-from subscription_manager.hwprobe import ClassicCheck
+from rhsmlib.facts.hwprobe import ClassicCheck
 from subscription_manager.i18n_optparse import OptionParser, \
     WrappedIndentedHelpFormatter, USAGE
 from subscription_manager.cert_sorter import RHSM_VALID, \

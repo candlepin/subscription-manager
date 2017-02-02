@@ -22,8 +22,6 @@ from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import handle_gui_exception, linkify
 from subscription_manager import injection as inj
 
-import rhsmlib.dbus.facts as facts
-
 _ = gettext.gettext
 
 log = logging.getLogger(__name__)
@@ -48,7 +46,7 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
         self.identity = inj.require(inj.IDENTITY)
         self.cp_provider = inj.require(inj.CP_PROVIDER)
 
-        self.facts = facts.FactsClient()
+        self.facts = inj.require(inj.FACTS)
 
         self.connect_signals({
                 "on_system_facts_dialog_delete_event": self._hide_callback,
@@ -96,16 +94,18 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
             self.system_id_title.hide()
             self.system_id_label.hide()
 
-    def _on_get_facts_error_handler(self, exception):
-        log.debug(exception)
-        raise exception
-
-    def _on_get_facts_reply_handler(self, facts_dict):
-        self.update_facts_store(facts_dict)
-
-    def update_facts_store(self, facts_dict):
+    def display_facts(self):
         self.facts_store.clear()
-        system_facts = facts_dict.items()
+
+        last_update = self.facts.get_last_update()
+        if last_update:
+            self.last_update_label.set_text(last_update.strftime("%c"))
+        else:
+            self.last_update_label.set_text(_('No previous update'))
+
+        # make sure we get fresh facts, since entitlement validity status could change
+        system_facts_dict = self.facts.get_facts()
+        system_facts = system_facts_dict.items()
 
         system_facts.sort()
         group = None
@@ -118,20 +118,6 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
             if str(value).strip() == "":
                 value = _("Unknown")
             self.facts_store.append(parent, [str(fact), str(value)])
-
-    def display_facts(self):
-        """Updates the list store with the current system facts."""
-        # make sure we get fresh facts, since entitlement validity status could
-        self.facts.GetFacts(reply_handler=self._on_get_facts_reply_handler,
-                            error_handler=self._on_get_facts_error_handler)
-
-        # make last_update a Facts dbus property?
-        #last_update = self.facts.get_last_update()
-        last_update = None
-        if last_update:
-            self.last_update_label.set_text(last_update.strftime("%c"))
-        else:
-            self.last_update_label.set_text(_('No previous update'))
 
         identity = inj.require(inj.IDENTITY)
         self._display_system_id(identity)

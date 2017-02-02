@@ -24,9 +24,10 @@ from subscription_manager import content_action_client
 from subscription_manager import entcertlib
 from subscription_manager import identitycertlib
 from subscription_manager import repolib
-from subscription_manager import hwprobe
 from subscription_manager import injection
 import subscription_manager.injection as inj
+
+from rhsmlib.facts import hwprobe
 
 from rhsm.profile import RPMProfile
 from rhsm.connection import GoneException
@@ -76,7 +77,7 @@ class ActionClientTestBase(SubManFixture):
         self.managerlib_persist_consumer_cert = self.patcher6.start()
 
         # mock out all hardware fetching... we may need to fake socket counts
-        self.hwprobe_getall_patcher = mock.patch.object(hwprobe.Hardware, 'get_all')
+        self.hwprobe_getall_patcher = mock.patch.object(hwprobe.HardwareCollector, 'get_all')
         self.hwprobe_getall_mock = self.hwprobe_getall_patcher.start()
         self.hwprobe_getall_mock.return_value = {}
 

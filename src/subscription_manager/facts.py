@@ -46,7 +46,7 @@ class Facts(CacheManager):
         # that we need to update
         self.graylist = ['cpu.cpu_mhz', 'lscpu.cpu_mhz']
 
-        # plugin manager so we can add custom facst via plugin
+        # plugin manager so we can add custom facts via plugin
         self.plugin_manager = require(PLUGIN_MANAGER)
 
     def get_last_update(self):
@@ -66,17 +66,19 @@ class Facts(CacheManager):
 
         cached_facts = self._read_cache() or {}
         # In order to accurately check for changes, we must refresh local data
-        self.facts = self.get_facts()
+        self.facts = self.get_facts(True)
 
         for key in (set(self.facts) | set(cached_facts)) - set(self.graylist):
             if self.facts.get(key) != cached_facts.get(key):
                 return True
         return False
 
-    def get_facts(self):
-        facts_dbus_client = FactsClient()
-        self.facts = facts_dbus_client.GetFacts()
-        self.plugin_manager.run('post_facts_collection', facts=self.facts)
+    def get_facts(self, refresh=False):
+        if ((len(self.facts) == 0) or refresh):
+            facts_dbus_client = FactsClient()
+            facts = facts_dbus_client.GetFacts()
+            self.plugin_manager.run('post_facts_collection', facts=facts)
+            self.facts = facts
         return self.facts
 
     def to_dict(self):

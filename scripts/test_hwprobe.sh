@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Runs hwprobe.py against a set of collection hardware
+# Runs against a set of collection hardware
 # inventories, and validates that the cpu.* facts
 # match those of lscpu.*.
 #
@@ -20,6 +20,6 @@ SYS_DUMPS=$(find "${SYS_DUMPS_PATH}" -mindepth 1 -maxdepth 1 -type d)
 for sys_dump in ${SYS_DUMPS}
 do
     echo "sys_dump: ${sys_dump}"
-    sudo PYTHONPATH=src/ python src/subscription_manager/hwprobe.py "${sys_dump}"
+    sudo PYTHONPATH=src/ python src/rhmslib/facts/hwprobe.py "${sys_dump}"
     echo
 done
