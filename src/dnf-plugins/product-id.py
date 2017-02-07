@@ -111,7 +111,13 @@ class DnfProductManager(ProductManager):
         """find yum repos that have packages installed"""
 
         # installed packages
-        installed_na = self.base.sack.query().installed()._na_dict()
+        q_installed = self.base.sack.query().installed()
+        if hasattr(q_installed, "_na_dict"):
+            # dnf 2.0
+            installed_na = q_installed._na_dict()
+        else:
+            # dnf 1.0
+            installed_na = q_installed.na_dict()
 
         # available version of installed
         avail_pkgs = self.base.sack.query().available().filter(name=[
