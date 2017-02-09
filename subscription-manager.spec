@@ -1,8 +1,8 @@
 # Prefer systemd over sysv on Fedora 17+ and RHEL 7+
-%global use_systemd (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 7)
+%global use_systemd (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 7) || (0%{?suse_version} && 0%{?suse_version} >= 1315)
 # For optional building of ostree-plugin sub package. Unrelated to systemd
 # but the same versions apply at the moment.
-%global has_ostree %use_systemd
+%global has_ostree %use_systemd && 0%{?suse_version} == 0
 %global use_firstboot 0
 %global use_initial_setup 1
 %global rhsm_plugins_dir  /usr/share/rhsm-plugins
@@ -20,7 +20,7 @@
 %endif
 
 # SLES
-%if 0%{?sles_version}
+%if 0%{?suse_version}
 %global use_initial_setup 0
 %global use_firstboot 1
 %endif
@@ -59,6 +59,12 @@
 %define install_dnf_plugins INSTALL_DNF_PLUGINS=false
 %endif
 
+%if %{use_systemd}
+%define with_systemd WITH_SYSTEMD=true
+%else
+%define with_systemd WITH_SYSTEMD=false
+%endif
+
 Name: subscription-manager
 Version: 1.19.1
 Release: 1%{?dist}
@@ -73,32 +79,46 @@ URL:     http://www.candlepinproject.org/
 # yum install tito
 # tito build --tag subscription-manager-$VERSION-$RELEASE --tgz
 Source0: %{name}-%{version}.tar.gz
+%if 0%{?suse_version}
+Source1: subscription-manager-rpmlintrc
+%endif
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Requires:  python-ethtool
 Requires:  python-iniparse
 Requires:  python-decorator
+%if 0%{?suse_version}
+Requires:  dbus-1-x11
+%else
 Requires:  dbus-x11
+%endif
 Requires:  virt-what
 Requires:  python-rhsm >= 1.19.0
 Requires:  python-decorator
 
-%if 0%{?sles_version}
+%if 0%{?suse_version}
 Requires:  dbus-1-python
 %else
 Requires:  dbus-python
 %endif
+%if 0%{?suse_version} && 0%{?suse_version} < 1315
+Requires:  yum
+%else
 Requires:  yum >= 3.2.29-73
-%if !0%{?sles_version}
+%endif
+%if !0%{?suse_version}
 Requires:  usermode
 %endif
 Requires:  python-dateutil
 %if %use_gtk3
+%if 0%{?suse_version}
+Requires: python-gobject
+%else
 Requires: gobject-introspection
 Requires: pygobject3-base
-Requires: dbus-glib
+%endif
 %else
-%if 0%{?sles_version}
+%if 0%{?suse_version}
 Requires:  python-gobject2
 %else
 Requires:  pygobject2
@@ -107,7 +127,10 @@ Requires:  pygobject2
 
 # There's no dmi to read on these arches, so don't pull in this dep.
 %ifnarch ppc ppc64 s390 s390x
+# Do not pull in for suse machines - not packaged for suse
+%if 0%{?suse_version} == 0
 Requires:  python-dmidecode
+%endif
 %endif
 
 %if %use_systemd
@@ -115,7 +138,7 @@ Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
 %else
-%if 0%{?sles_version}
+%if 0%{?suse_version}
 Requires(post): aaa_base
 Requires(preun): aaa_base
 %else
@@ -131,25 +154,34 @@ BuildRequires: gettext
 BuildRequires: intltool
 BuildRequires: libnotify-devel
 BuildRequires: desktop-file-utils
-BuildRequires: dbus-glib-devel
 %if 0%{?fedora} || 0%{?rhel}
 BuildRequires: redhat-lsb
+%else
+BuildRequires: lsb-release
+BuildRequires: distribution-release
 %endif
+%if 0%{?suse_version} == 0
 BuildRequires: scrollkeeper
-%if 0%{?sles_version}
+%endif
+%if 0%{?suse_version}
 BuildRequires: gconf2-devel
+BuildRequires: dbus-1-glib-devel
+BuildRequires: update-desktop-files
 %else
 BuildRequires: GConf2-devel
+BuildRequires: dbus-glib-devel
 %endif
 %if %use_gtk3
 BuildRequires: gtk3-devel
 %else
 BuildRequires: gtk2-devel
 %endif
-BuildRequires: dbus-glib-devel
 %if %use_systemd
 # We need the systemd RPM macros
 BuildRequires: systemd
+%endif
+%if 0%{?suse_version} >= 1210
+BuildRequires: systemd-rpm-macros
 %endif
 
 %description
@@ -159,7 +191,7 @@ platform.
 
 
 %package -n subscription-manager-plugin-container
-Summary: A plugin for handling container content.
+Summary: A plugin for handling container content
 Group: System Environment/Base
 Requires: %{name} = %{version}-%{release}
 
@@ -183,8 +215,10 @@ Requires: pygtk2 pygtk2-libglade
 Requires: usermode-gtk
 Requires: dbus-x11
 Requires: gnome-icon-theme
+%if 0%{?suse_version} == 0
 Requires(post): scrollkeeper
 Requires(postun): scrollkeeper
+%endif
 
 # Renamed from -gnome, so obsolete it properly
 Obsoletes: %{name}-gnome < 1.0.3-1
@@ -288,9 +322,14 @@ make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
 rm -rf %{buildroot}
 make -f Makefile install VERSION=%{version}-%{release} \
     PREFIX=%{buildroot} PYTHON_SITELIB=%{python_sitelib} \
-    OS_VERSION=%{?fedora}%{?rhel}%{?sles_version} OS_DIST=%{dist} \
+    OS_VERSION=%{?fedora}%{?rhel}%{?suse_version} OS_DIST=%{dist} \
     %{?install_ostree} %{?post_boot_tool} %{?gtk_version} \
-    %{?install_yum_plugins} %{?install_dnf_plugins}
+    %{?install_yum_plugins} %{?install_dnf_plugins} \
+    %{?with_systemd}
+
+%if 0%{?suse_version}
+%suse_update_desktop_file -n -r subscription-manager-gui Settings PackageManager
+%endif
 
 desktop-file-validate %{buildroot}/etc/xdg/autostart/rhsm-icon.desktop
 desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-gui.desktop
@@ -325,10 +364,36 @@ rm -rf %{buildroot}
 # gnome-help tools use domain 'subscription-manager'
 %files -f rhsm.lang
 %defattr(-,root,root,-)
+%if 0%{?suse_version}
+%dir %{_sysconfdir}/pki
+%dir %{_sysconfdir}/yum
+%dir %{_sysconfdir}/yum/pluginconf.d
+%dir %{_sysconfdir}/yum.repos.d
+%dir %{python_sitelib}/rhsmlib/candlepin
+%dir %{python_sitelib}/rhsmlib/compat
+%dir %{python_sitelib}/rhsmlib/dbus
+%dir %{python_sitelib}/rhsmlib/dbus/facts
+%dir %{python_sitelib}/rhsmlib/dbus/objects
+%dir %{python_sitelib}/rhsmlib/facts
+%dir %{python_sitelib}/rhsmlib/services
+%dir %{python_sitelib}/subscription_manager-%{version}-*.egg-info
+%dir %{python_sitelib}/subscription_manager/api
+%dir %{python_sitelib}/subscription_manager/branding
+%dir %{python_sitelib}/subscription_manager/model
+%dir %{python_sitelib}/subscription_manager/plugin
+%dir %{_prefix}/lib/yum-plugins/
+%dir %{_var}/spool/rhsm
+%dir %{_prefix}/share/polkit-1
+%dir %{_prefix}/share/polkit-1/actions
+%endif
+%if 0%{?suse_version} && 0%{?suse_version} < 1315
+%dir %{_prefix}/share/locale/ta_IN
+%dir %{_prefix}/share/locale/ta_IN/LC_MESSAGES
+%endif
 %attr(755,root,root) %{_sbindir}/subscription-manager
 
 # symlink to console-helper
-%if !0%{?sles_version}
+%if !0%{?suse_version}
 %{_bindir}/subscription-manager
 %endif
 %attr(755,root,root) %{_bindir}/rhsmcertd
@@ -345,7 +410,7 @@ rm -rf %{buildroot}
 %config %attr(644,root,root) %{_sysconfdir}/rhsm/logging.conf
 
 # PAM config
-%if !0%{?sles_version}
+%if !0%{?suse_version}
 %{_sysconfdir}/pam.d/subscription-manager
 %{_sysconfdir}/security/console.apps/subscription-manager
 %endif
@@ -385,7 +450,7 @@ rm -rf %{buildroot}
 %{python_sitelib}/subscription_manager/api/*.py*
 %{python_sitelib}/subscription_manager/branding/*.py*
 %{python_sitelib}/subscription_manager/model/*.py*
-%{python_sitelib}/subscription_manager/plugin/*.py*
+%{python_sitelib}/subscription_manager/plugin/__init__.py*
 
 # our gtk2/gtk3 compat modules
 %dir %{python_sitelib}/subscription_manager/ga_impls
@@ -455,8 +520,17 @@ rm -rf %{buildroot}
 %files -n subscription-manager-gui -f subscription-manager.lang
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
+%if 0%{?suse_version}
+%dir %{python_sitelib}/subscription_manager/gui/data
+%dir %{python_sitelib}/subscription_manager/gui/data/glade
+%dir %{python_sitelib}/subscription_manager/gui/data/icons
+%dir %{python_sitelib}/subscription_manager/gui/data/ui
+%dir %{_datadir}/appdata
+%dir %{_datadir}/gnome
+%dir %{_datadir}/gnome/help
+%dir %{_datadir}/omf
+%else
 # symlink to console-helper
-%if !0%{?sles_version}
 %{_bindir}/subscription-manager-gui
 %endif
 %{_bindir}/rhsm-icon
@@ -480,7 +554,7 @@ rm -rf %{buildroot}
 
 # gui system config files
 %{_sysconfdir}/xdg/autostart/rhsm-icon.desktop
-%if !0%{?sles_version}
+%if !0%{?suse_version}
 %{_sysconfdir}/pam.d/subscription-manager-gui
 %{_sysconfdir}/security/console.apps/subscription-manager-gui
 %endif
@@ -508,6 +582,12 @@ rm -rf %{buildroot}
 
 %files -n subscription-manager-plugin-container
 %defattr(-,root,root,-)
+%if 0%{?suse_version}
+%dir %{_sysconfdir}/docker
+%dir %{_sysconfdir}/docker/certs.d
+%dir %{_sysconfdir}/rhsm/ca
+%dir %{python_sitelib}/subscription_manager/plugin
+%endif
 %{_sysconfdir}/rhsm/pluginconf.d/container_content.ContainerContentPlugin.conf
 %{rhsm_plugins_dir}/container_content.py*
 %{python_sitelib}/subscription_manager/plugin/container.py*
@@ -542,6 +622,11 @@ rm -rf %{buildroot}
 %if %use_firstboot
 %files -n subscription-manager-firstboot
 %defattr(-,root,root,-)
+%if 0%{?suse_version}
+%dir %{_datadir}/rhn
+%dir %{_datadir}/rhn/up2date_client
+%dir %{_datadir}/rhn/up2date_client/firstboot
+%endif
 %{_datadir}/rhn/up2date_client/firstboot/rhsm_login.py*
 %endif
 
@@ -555,9 +640,17 @@ rm -rf %{buildroot}
 
 %post
 %if %use_systemd
-    %systemd_post rhsmcertd.service
+    %if 0%{?suse_version}
+        %service_add_post rhsmcertd.service
+    %else
+        %systemd_post rhsmcertd.service
+    %endif
 %else
-    chkconfig --add rhsmcertd
+    %if 0%{?suse_version}
+        %fillup_and_insserv -f rhsmcertd
+    %else
+        chkconfig --add rhsmcertd
+    %endif
 %endif
 
 if [ -x /bin/dbus-send ] ; then
@@ -572,7 +665,9 @@ fi
 
 %post -n subscription-manager-gui
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
+%if 0%{?suse_version} == 0
 scrollkeeper-update -q -o %{_datadir}/omf/%{name} || :
+%endif
 
 %preun
 if [ $1 -eq 0 ] ; then
@@ -590,14 +685,20 @@ fi
 
 %postun
 %if %use_systemd
-    %systemd_postun_with_restart rhsmcertd.service
+    %if 0%{?suse_version}
+        %service_del_postun rhsmcertd.service
+    %else
+        %systemd_postun_with_restart rhsmcertd.service
+    %endif
 %endif
 
 %postun -n subscription-manager-gui
 if [ $1 -eq 0 ] ; then
     touch --no-create %{_datadir}/icons/hicolor &>/dev/null
     gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+    %if 0%{?suse_version} == 0
     scrollkeeper-update -q || :
+    %endif
 fi
 
 %posttrans -n subscription-manager-gui

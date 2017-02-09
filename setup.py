@@ -30,7 +30,7 @@ from distutils.command.clean import clean as _clean
 from distutils.command.build_py import build_py as _build_py
 from distutils.dir_util import remove_tree
 
-from build_ext import i18n, lint
+from build_ext import i18n, lint, template
 from build_ext.utils import Utils
 
 
@@ -97,12 +97,14 @@ class clean(_clean):
 class install(_install):
     user_options = _install.user_options + [
         ('gtk-version=', None, 'GTK version this is built for'),
-        ('rpm-version=', None, 'version and release of the RPM this is built for')]
+        ('rpm-version=', None, 'version and release of the RPM this is built for'),
+        ('with-systemd=', None, 'whether to install w/ systemd support or not')]
 
     def initialize_options(self):
         _install.initialize_options(self)
         self.rpm_version = None
         self.gtk_version = None
+        self.with_systemd = None
 
     def finalize_options(self):
         _install.finalize_options(self)
@@ -155,28 +157,38 @@ class build(_build):
         except StopIteration:
             return False
 
-    sub_commands = _build.sub_commands + [('build_trans', has_po_files)]
+    sub_commands = _build.sub_commands + [('build_trans', has_po_files), ('build_template', lambda arg: True)]
 
 
 class install_data(_install_data):
     """Used to intelligently install data files.  For example, files that must be generated (such as .mo files
     or desktop files with merged translations) or an entire tree of data files.
     """
+    user_options = _install_data.user_options + [
+        ('with-systemd=', None, 'whether to install w/ systemd support or not')]
 
     def initialize_options(self):
-        self.transforms = None
-        # Can't use super() because Command isn't a new-style class.
         _install_data.initialize_options(self)
+        self.transforms = None
+        self.with_systemd = None
+        # Can't use super() because Command isn't a new-style class.
 
     def finalize_options(self):
+        _install_data.finalize_options(self)
         if self.transforms is None:
             self.transforms = []
-        _install_data.finalize_options(self)
+        self.set_undefined_options('install', ('with_systemd', 'with_systemd'))
+        if self.with_systemd is None:
+            self.with_systemd = True  # default to True
+        else:
+            self.with_systemd = self.with_systemd == 'true'
 
     def run(self):
         self.add_messages()
         self.add_desktop_files()
         self.add_icons()
+        self.add_dbus_service_files()
+        self.add_systemd_services()
         _install_data.run(self)
         self.transform_files()
 
@@ -213,6 +225,23 @@ class install_data(_install_data):
         autostart_file = self.join('build', 'autostart', 'rhsm-icon.desktop')
         self.data_files.append((autostart_dir, [autostart_file]))
 
+    def add_dbus_service_files(self):
+        dbus_service_directory = self.join('share', 'dbus-1', 'system-services')
+        if self.with_systemd:
+            source_dir = self.join('build', 'dbus', 'system-services-systemd')
+        else:
+            source_dir = self.join('build', 'dbus', 'system-services')
+        for file in os.listdir(source_dir):
+            self.data_files.append((dbus_service_directory, [self.join(source_dir, file)]))
+
+    def add_systemd_services(self):
+        if not self.with_systemd:
+            return  # if we're not installing for systemd, stop!
+        systemd_install_directory = self.join('lib', 'systemd', 'system')
+        source_dir = self.join('build', 'dbus', 'systemd')
+        for file in os.listdir(self.join('build', 'dbus', 'systemd')):
+            self.data_files.append((systemd_install_directory, [self.join(source_dir, file)]))
+
     def add_icons(self):
         icon_source_root = self.join('src', 'subscription_manager', 'gui', 'data', 'icons', 'hicolor')
         for d in os.listdir(icon_source_root):
@@ -245,6 +274,7 @@ cmdclass = {
     'build': build,
     'build_py': rpm_version_release_build_py,
     'build_trans': i18n.BuildTrans,
+    'build_template': template.BuildTemplate,
     'update_trans': i18n.UpdateTrans,
     'uniq_trans': i18n.UniqTrans,
     'gettext': i18n.Gettext,

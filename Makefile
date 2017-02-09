@@ -50,14 +50,15 @@ LIBEXEC_DIR ?= $(shell rpm --eval='%_libexecdir')
 # override from spec file for rhel6
 INSTALL_OSTREE_PLUGIN ?= true
 
+WITH_SYSTEMD ?= true
+
 # Default differences between el6 and el7
 ifeq ($(OS_DIST),.el6)
    GTK_VERSION?=2
    FIRSTBOOT_MODULES_DIR?=$(PREFIX)/usr/share/rhn/up2date_client/firstboot
    INSTALL_FIRSTBOOT?=true
    INSTALL_INITIAL_SETUP?=false
-   DBUS_SERVICE_FILE_TYPE?=dbus
-else ifeq ($(OS),SUSE)
+else ifeq ($(findstring SUSE,$(OS)),SUSE)
    GTK_VERSION?=2
    FIRSTBOOT_MODULES_DIR?=$(PREFIX)/usr/share/rhn/up2date_client/firstboot
    INSTALL_FIRSTBOOT?=true
@@ -67,21 +68,6 @@ else
    FIRSTBOOT_MODULES_DIR?=$(PREFIX)/usr/share/firstboot/modules
    INSTALL_FIRSTBOOT?=true
    INSTALL_INITIAL_SETUP?=true
-   DBUS_SERVICE_FILE_TYPE?=systemd
-endif
-
-DBUS_SERVICES_CONF_INST_DIR := $(PREFIX)/usr/share/dbus-1/system-services
-FACTS_INST_DBUS_SERVICE_FILE = $(DBUS_SERVICES_CONF_INST_DIR)/com.redhat.RHSM1.Facts.service
-MAIN_INST_DBUS_SERVICE_FILE = $(DBUS_SERVICES_CONF_INST_DIR)/com.redhat.RHSM1.service
-# TODO Ideally these service files would be installed by distutils, but the file we actually
-# install depends on the distro we are using.  Add a --without-systemd or similar flag to the
-# custom install_data class we have in setup.py
-ifeq ($(DBUS_SERVICE_FILE_TYPE),dbus)
-FACTS_SRC_DBUS_SERVICE_FILE = etc-conf/dbus/com.redhat.RHSM1.Facts.service-dbus
-MAIN_SRC_DBUS_SERVICE_FILE = etc-conf/dbus/com.redhat.RHSM1.service-dbus
-else
-FACTS_SRC_DBUS_SERVICE_FILE = etc-conf/dbus/com.redhat.RHSM1.Facts.service
-MAIN_SRC_DBUS_SERVICE_FILE = etc-conf/dbus/com.redhat.RHSM1.service
 endif
 
 # always true until fedora is just dnf
@@ -99,8 +85,10 @@ VERSION ?= $(shell git describe | awk ' { sub(/subscription-manager-/,"")};1' )
 CFLAGS ?= -g -Wall
 LDFLAGS ?=
 
-RHSMCERTD_FLAGS = `pkg-config --cflags --libs glib-2.0`
-ICON_FLAGS=`pkg-config --cflags --libs "gtk+-$(GTK_VERSION).0 libnotify gconf-2.0 dbus-glib-1"`
+RHSMCERTD_CFLAGS = `pkg-config --cflags glib-2.0`
+RHSMCERTD_LDFLAGS = `pkg-config --libs glib-2.0`
+ICON_CFLAGS=`pkg-config --cflags "gtk+-$(GTK_VERSION).0 libnotify gconf-2.0 dbus-glib-1"`
+ICON_LDFLAGS=`pkg-config --libs "gtk+-$(GTK_VERSION).0 libnotify gconf-2.0 dbus-glib-1"`
 
 PYFILES := `find src/ test/ -name "*.py"`
 BIN_FILES := bin/subscription-manager bin/subscription-manager-gui \
@@ -129,10 +117,10 @@ clean:
 	./setup.py clean --all
 
 rhsmcertd: $(DAEMONS_SRC_DIR)/rhsmcertd.c
-	$(CC) $(CFLAGS) $(LDFLAGS) $(RHSMCERTD_FLAGS) $(DAEMONS_SRC_DIR)/rhsmcertd.c -o bin/rhsmcertd
+	$(CC) $(CFLAGS) $(RHSMCERTD_CFLAGS) -DLIBEXECDIR='"$(LIBEXEC_DIR)"' $(DAEMONS_SRC_DIR)/rhsmcertd.c -o bin/rhsmcertd $(LDFLAGS) $(RHSMCERTD_LDFLAGS)
 
 rhsm-icon: $(RHSM_ICON_SRC_DIR)/rhsm_icon.c
-	$(CC) $(CFLAGS) $(LDFLAGS) $(ICON_FLAGS) $(RHSM_ICON_SRC_DIR)/rhsm_icon.c -o bin/rhsm-icon
+	$(CC) $(CFLAGS) $(ICON_CFLAGS) $(RHSM_ICON_SRC_DIR)/rhsm_icon.c -o bin/rhsm-icon $(LDFLAGS) $(ICON_LDFLAGS)
 
 .PHONY: check-syntax
 check-syntax:
@@ -140,31 +128,19 @@ check-syntax:
 
 dbus-common-install:
 	install -d $(PREFIX)/etc/dbus-1/system.d
-	if [ "$(DBUS_SERVICE_FILE_TYPE)" == "systemd" ]; then \
-		install -d $(SYSTEMD_INST_DIR) ; \
-	fi
 	install -d $(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
 	install -d $(PREFIX)/$(LIBEXEC_DIR)
 	install -d $(PREFIX)/etc/bash_completion.d
 
 dbus-rhsmd-service-install: dbus-common-install
-	install -m 644 etc-conf/dbus/com.redhat.SubscriptionManager.conf $(PREFIX)/etc/dbus-1/system.d
-	install -m 644 etc-conf/dbus/com.redhat.SubscriptionManager.service $(PREFIX)/$(INSTALL_DIR)/dbus-1/system-services
+	install -m 644 etc-conf/dbus/system.d/com.redhat.SubscriptionManager.conf $(PREFIX)/etc/dbus-1/system.d
 	install -m 744 $(DAEMONS_SRC_DIR)/rhsm_d.py $(PREFIX)/$(LIBEXEC_DIR)/rhsmd
 
 dbus-facts-service-install: dbus-common-install
-	install -m 644 etc-conf/dbus/com.redhat.RHSM1.Facts.conf $(PREFIX)/etc/dbus-1/system.d
-	if [ "$(DBUS_SERVICE_FILE_TYPE)" == "systemd" ]; then \
-		install -m 644 etc-conf/dbus/rhsm-facts.service $(SYSTEMD_INST_DIR) ; \
-	fi
-	install -m 644 $(FACTS_SRC_DBUS_SERVICE_FILE) $(FACTS_INST_DBUS_SERVICE_FILE)
+	install -m 644 etc-conf/dbus/system.d/com.redhat.RHSM1.Facts.conf $(PREFIX)/etc/dbus-1/system.d
 
 dbus-main-service-install: dbus-common-install
-	install -m 644 etc-conf/dbus/com.redhat.RHSM1.conf $(PREFIX)/etc/dbus-1/system.d
-	if [ "$(DBUS_SERVICE_FILE_TYPE)" == "systemd" ]; then \
-		install -m 644 etc-conf/dbus/rhsm.service $(SYSTEMD_INST_DIR) ; \
-	fi
-	install -m 644 $(MAIN_SRC_DBUS_SERVICE_FILE) $(MAIN_INST_DBUS_SERVICE_FILE)
+	install -m 644 etc-conf/dbus/system.d/com.redhat.RHSM1.conf $(PREFIX)/etc/dbus-1/system.d
 
 .PHONY: dbus-install
 dbus-install: dbus-facts-service-install dbus-rhsmd-service-install dbus-main-service-install
@@ -189,8 +165,8 @@ install-conf:
 	install -d $(PREFIX)/usr/share/appdata
 	install -m 644 etc-conf/subscription-manager-gui.appdata.xml $(PREFIX)/$(INSTALL_DIR)/appdata/subscription-manager-gui.appdata.xml
 	install -d $(POLKIT_ACTIONS_INST_DIR)
-	install -m 644 etc-conf/dbus/com.redhat.RHSM1.policy $(POLKIT_ACTIONS_INST_DIR)
-	install -m 644 etc-conf/dbus/com.redhat.RHSM1.Facts.policy $(POLKIT_ACTIONS_INST_DIR)
+	install -m 644 etc-conf/dbus/polkit/com.redhat.RHSM1.policy $(POLKIT_ACTIONS_INST_DIR)
+	install -m 644 etc-conf/dbus/polkit/com.redhat.RHSM1.Facts.policy $(POLKIT_ACTIONS_INST_DIR)
 
 .PHONY: install-plugins
 install-plugins:
@@ -286,7 +262,7 @@ install-post-boot: install-firstboot install-initial-setup
 
 .PHONY: install-via-setup
 install-via-setup:
-	./setup.py install --root $(PREFIX) --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
+	./setup.py install --root $(PREFIX) --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION) --with-systemd=$(WITH_SYSTEMD) --prefix=/usr
 
 .PHONY: install
 install: install-via-setup install-files
@@ -305,8 +281,8 @@ install-files: dbus-install install-conf install-plugins install-post-boot insta
 		install etc-conf/rhsmcertd.service $(SYSTEMD_INST_DIR); \
 		install etc-conf/subscription-manager.conf.tmpfiles \
 			$(PREFIX)/usr/lib/tmpfiles.d/subscription-manager.conf; \
-	elif [ $(OS) = SUSE ] ;then \
-		if [ $(OS_VERSION) -lt 12 ]; then \
+	elif [[ $(OS) == *"SUSE" ]]; then \
+		if [ $(OS_VERSION) -lt 1315 ]; then \
 			install etc-conf/rhsmcertd.init.d \
 				$(PREFIX)/etc/init.d/rhsmcertd; \
 		else \
@@ -331,7 +307,7 @@ install-files: dbus-install install-conf install-plugins install-post-boot insta
 	install -m 700 etc-conf/rhsmd.cron $(PREFIX)/etc/cron.daily/rhsmd
 
 	# SUSE Linux does not make use of consolehelper
-	if [ $(OS) != SUSE ] ;then \
+	if [[ ! $(OS) == *"SUSE" ]]; then \
 		ln -sf /usr/bin/consolehelper $(PREFIX)/usr/bin/subscription-manager-gui; \
 		ln -sf /usr/bin/consolehelper $(PREFIX)/usr/bin/subscription-manager; \
 		\
