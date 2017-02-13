@@ -78,6 +78,8 @@ YUM_PLUGINS_SRC_DIR := src/plugins
 INSTALL_DNF_PLUGINS ?= false
 DNF_PLUGINS_SRC_DIR := src/plugins
 
+INSTALL_ZYPPER_PLUGINS ?= false
+
 # sets a version that is more or less latest tag plus commit sha
 VERSION ?= $(shell git describe | awk ' { sub(/subscription-manager-/,"")};1' )
 
@@ -181,6 +183,13 @@ install-plugins:
 		install -d $(PREFIX)/usr/lib/yum-plugins/ ; \
 		install -m 644 -p src/plugins/*.py $(PREFIX)/usr/lib/yum-plugins/ ; \
 		install -m 644 etc-conf/plugin/*.conf $(PREFIX)/etc/yum/pluginconf.d/ ; \
+	fi;
+
+	if [ "$(INSTALL_ZYPPER_PLUGINS)" = "true" ] ; then \
+	  echo "Installing zypper plugins" ; \
+		install -d $(PREFIX)/etc/rhsm/zypper.repos.d ; \
+		install -d $(PREFIX)/usr/lib/zypp/plugins/services ; \
+		install -m 755 -p src/zypper/services/* $(PREFIX)/usr/lib/zypp/plugins/services ; \
 	fi;
 
 	if [ "$(INSTALL_DNF_PLUGINS)" = "true" ] ; then \
