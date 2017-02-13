@@ -131,7 +131,8 @@ class ZypperService(object):
 
         finally:
             if msg:
-                conduit.stderr(msg)
+                sys.stderr.write(msg)
+                sys.stderr.write("\n")
 
     def print_zypper_repos(self):
         filenames = []
