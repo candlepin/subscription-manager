@@ -112,6 +112,13 @@ class RepoActionInvoker(BaseActionInvoker):
         repo_file = RepoFile()
         if os.path.exists(repo_file.path):
             os.unlink(repo_file.path)
+
+        # if we have zypper repo, remove it too.
+        if os.path.exists(ZYPPER_REPO_DIR):
+            zypper_repo_file = ZypperRepoFile()
+            if os.path.exists(zypper_repo_file.path):
+                os.unlink(zypper_repo_file.path)
+
         # When the repo is removed, also remove the override tracker
         WrittenOverrideCache.delete_cache()
 
