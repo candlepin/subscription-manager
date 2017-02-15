@@ -189,7 +189,9 @@ install-plugins:
 	  echo "Installing zypper plugins" ; \
 		install -d $(PREFIX)/etc/rhsm/zypper.repos.d ; \
 		install -d $(PREFIX)/usr/lib/zypp/plugins/services ; \
+		install -d $(PREFIX)/usr/lib/zypp/plugins/commit ; \
 		install -m 755 -p src/zypper/services/* $(PREFIX)/usr/lib/zypp/plugins/services ; \
+		install -m 755 -p src/zypper/commit/* $(PREFIX)/usr/lib/zypp/plugins/commit ; \
 	fi;
 
 	if [ "$(INSTALL_DNF_PLUGINS)" = "true" ] ; then \

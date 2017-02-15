@@ -127,6 +127,8 @@ Requires: pygobject3-base
 %if 0%{?suse_version}
 Requires:  python-gobject2
 Requires:  libzypp
+Requires:  zypp-plugin-python
+Requires:  python-zypp
 %else
 Requires:  pygobject2
 %endif
@@ -489,6 +491,7 @@ rm -rf %{buildroot}
 # zypper plugins
 %if 0%{?suse_version}
 %{_prefix}/lib/zypp/plugins/services/subscription-manager
+%{_prefix}/lib/zypp/plugins/commit/product-id
 %endif
 
 # rhsmlib
