@@ -1,7 +1,10 @@
 *.patch
 *.py?
 *.sw?
+*.so
+.idea*
 *.coverage
+.ropeproject
 *.cov2emacs.log
 .noseids
 nosetests.xml
@@ -24,3 +27,4 @@ bin/rhsmcertd
 bin/rhsm-icon
 .idea
 build/
+dist
