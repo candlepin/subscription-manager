@@ -21,7 +21,7 @@ OS = $(shell lsb_release -i | awk '{ print $$3 }' | awk -F. '{ print $$1}')
 OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
 OS_DIST ?= $(shell rpm --eval='%dist')
 
-PYTHON_VER ?= $(python -c 'import sys; print("python%s.%s" % sys.version_info[:2])')
+PYTHON_VER ?= $(shell python -c 'import sys; print("python%s.%s" % sys.version_info[:2])')
 
 PYTHON_SITELIB ?= usr/lib/$(PYTHON_VER)/site-packages
 # Note the underscore used instead of a hyphen
