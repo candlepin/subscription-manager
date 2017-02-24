@@ -900,14 +900,14 @@ class ZypperRepoFile(RepoFile):
             return
         f = open(self.path, 'w')
         f.write("""#
-# Certificate-Based Repositories')
-# Managed by (rhsm) subscription-manager')
-#')
-# *** This file is auto-generated.  Changes made here will be over-written. ***')
-# *** Use "subscription-manager repo-override --help" if you wish to make changes. ***')
-#')
-# If this file is empty and this system is subscribed consider ')
-# a "zypper lr" to refresh available repos')
+# Certificate-Based Repositories
+# Managed by (rhsm) subscription-manager
+#
+# *** This file is auto-generated.  Changes made here will be over-written. ***
+# *** Use "subscription-manager repo-override --help" if you wish to make changes. ***
+#
+# If this file is empty and this system is subscribed consider
+# a "zypper lr" to refresh available repos
 #
 """)
         f.close()
