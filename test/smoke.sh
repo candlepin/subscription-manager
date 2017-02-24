@@ -12,7 +12,7 @@ WRAPPER=""
 #SM="subscription-manager"
 # To unset the default path and use the installed version (or system paths, etc)
 # pass in PYPATH=, aka 'PYPATH= test/smoke.sh'
-PYPATH=${PYPATH-PYTHONPATH=../python-rhsm/src:src/}
+PYPATH=${PYPATH-PYTHONPATH=./python-rhsm/src:src/}
 SM="${PYPATH} bin/subscription-manager"
 WORKER="${PYPATH} python src/daemons/rhsmcertd-worker.py"
 RHSMD="${PYPATH} src/daemons/rhsm_d.py"
