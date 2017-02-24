@@ -76,6 +76,7 @@ class ZypperService(object):
         self.is_root = os.getuid() == 0
         # Read subscription-manager config
         cfg = config.initConfig()
+        self.full_refresh_on_yum = bool(cfg.get_int('rhsm', 'full_refresh_on_yum'))
         self.ca_cert_dir = cfg.get('rhsm', 'ca_cert_dir')
 
     def main(self):
@@ -102,7 +103,7 @@ class ZypperService(object):
 
         connection.UEPConnection(cert_file=cert_file, key_file=key_file)
 
-        rl = RepoActionInvoker(cache_only=False, locker=RepoLocker())
+        rl = RepoActionInvoker(cache_only=not self.full_refresh_on_yum, locker=RepoLocker())
         rl.update()
 
         # Rehash CA-certificates since zypper accepts only capath
