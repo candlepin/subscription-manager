@@ -26,6 +26,8 @@ from subscription_manager import logutil
 from rhsm import connection
 from rhsm import config
 
+c_rehash = '/usr/bin/c_rehash'
+
 expired_warning = \
 """
 *** WARNING ***
@@ -72,6 +74,9 @@ class ZypperService(object):
         logutil.init_logger()
         init_dep_injection()
         self.is_root = os.getuid() == 0
+        # Read subscription-manager config
+        cfg = config.initConfig()
+        self.ca_cert_dir = cfg.get('rhsm', 'ca_cert_dir')
 
     def main(self):
         self.update()
@@ -99,6 +104,12 @@ class ZypperService(object):
 
         rl = RepoActionInvoker(cache_only=False, locker=RepoLocker())
         rl.update()
+
+        # Rehash CA-certificates since zypper accepts only capath
+        if os.path.isfile(c_rehash):
+            os.system(c_rehash + ' ' + self.ca_cert_dir + ' >/dev/null 2>&1')
+        else:
+            sys.stderr.write("WARNING: c_rehash could not be found!\n")
 
     def warn_expired(self):
         """ display warning for expired entitlements """
