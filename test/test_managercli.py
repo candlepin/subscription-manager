@@ -13,6 +13,7 @@ import tempfile
 import contextlib
 
 from subscription_manager import managercli, managerlib
+from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_TYPE
 from subscription_manager.injection import provide, \
         CERT_SORTER, PROD_DIR
 from subscription_manager.managercli import get_installed_product_status, AVAILABLE_SUBS_MATCH_COLUMNS
@@ -409,6 +410,8 @@ class TestListCommand(TestCliProxyCommand):
         self.max_length = 40
         self.cert_with_service_level = StubEntitlementCertificate(
             StubProduct("test-product"), service_level="Premium")
+        self.cert_with_content_access = StubEntitlementCertificate(
+            StubProduct("test-product"), entitlement_type=CONTENT_ACCESS_CERT_TYPE)
         argv_patcher = patch.object(sys, 'argv', ['subscription-manager', 'list'])
         argv_patcher.start()
         self.addCleanup(argv_patcher.stop)
@@ -570,6 +573,14 @@ class TestListCommand(TestCliProxyCommand):
         self.cc.sorter.get_subscription_reasons_map = Mock()
         self.cc.sorter.get_subscription_reasons_map.return_value = {}
         self.cc.print_consumed(service_level="Premium")
+
+    def test_print_consumed_ignores_content_access_cert(self):
+        self.ent_dir.certs.append(self.cert_with_content_access)
+        with Capture() as captured:
+            self.cc.print_consumed(service_level="NotFound")
+
+        lines = captured.out.split("\n")
+        self.assertEquals(len(lines) - 1, 1, "Error output consists of more than one line.")
 
     def test_filter_only_specified_service_level(self):
         pools = [{'service_level': 'Level1'},

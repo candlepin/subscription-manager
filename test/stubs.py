@@ -221,7 +221,7 @@ class StubEntitlementCertificate(EntitlementCertificate):
 
     def __init__(self, product, provided_products=None, start_date=None, end_date=None,
             content=None, quantity=1, stacking_id=None, sockets=2, service_level=None,
-            ram=None, pool=None, ent_id=None):
+            ram=None, pool=None, ent_id=None, entitlement_type=None):
 
         # If we're given strings, create stub products for them:
         if isinstance(product, str):
@@ -272,9 +272,11 @@ class StubEntitlementCertificate(EntitlementCertificate):
         if ent_id:
             self.subject = {'CN': ent_id}
 
+        self._entitlement_type = entitlement_type or 'Basic'
+
     @property
     def entitlement_type(self):
-        return 'Basic'
+        return self._entitlement_type
 
     def delete(self):
         self.is_deleted = True
