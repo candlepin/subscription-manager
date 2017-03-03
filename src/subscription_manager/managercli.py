@@ -62,6 +62,7 @@ from subscription_manager.overrides import Overrides, Override
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, \
         none_wrap_columnize_callback, echo_columnize_callback, highlight_by_filter_string_columnize_callback
+from subscription_manager.utils import generate_correlation_id
 
 _ = gettext.gettext
 
@@ -311,6 +312,9 @@ class CliCommand(AbstractCLICommand):
 
         self.identity = inj.require(inj.IDENTITY)
 
+        self.correlation_id = generate_correlation_id()
+        self.log.info("X-Correlation-ID: %s", self.correlation_id)
+
     def _get_logger(self):
         return logging.getLogger('rhsm-app.%s.%s' % (self.__module__, self.__class__.__name__))
 
@@ -494,6 +498,7 @@ class CliCommand(AbstractCLICommand):
 
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.cp_provider.set_connection_info(**connection_info)
+        self.cp_provider.set_correlation_id(self.correlation_id)
 
         self.log_client_version()
 

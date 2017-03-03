@@ -21,6 +21,7 @@ import logging
 import dbus.mainloop.glib
 
 from subscription_manager import logutil
+import subscription_manager.injection as inj
 
 from rhsm import connection
 
@@ -35,6 +36,7 @@ from subscription_manager import managerlib
 from subscription_manager.identity import ConsumerIdentity
 from subscription_manager.i18n_optparse import OptionParser, \
     WrappedIndentedHelpFormatter, USAGE
+from subscription_manager.utils import generate_correlation_id
 
 import gettext
 _ = gettext.gettext
@@ -43,6 +45,11 @@ _ = gettext.gettext
 def main(options, log):
     # Set default mainloop
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+
+    cp_provider = inj.require(inj.CP_PROVIDER)
+    correlation_id = generate_correlation_id()
+    log.info('X-Correlation-ID: %s', correlation_id)
+    cp_provider.set_correlation_id(correlation_id)
 
     if not ConsumerIdentity.existsAndValid():
         log.error('Either the consumer is not registered or the certificates' +

@@ -38,6 +38,7 @@ class CPProvider(object):
     # Initialize with default connection info from the config file
     def __init__(self):
         self.set_connection_info()
+        self.correlation_id = None
 
     # Reread the config file and prefer arguments over config values
     # then recreate connections
@@ -79,6 +80,9 @@ class CPProvider(object):
         self.cdn_port = cdn_port
         self.content_connection = None
 
+    def set_correlation_id(self, correlation_id):
+        self.correlation_id = correlation_id
+
     # Force connections to be re-initialized
     def clean(self):
         self.consumer_auth_cp = None
@@ -95,7 +99,8 @@ class CPProvider(object):
                     proxy_port=self.proxy_port,
                     proxy_user=self.proxy_user,
                     proxy_password=self.proxy_password,
-                    cert_file=self.cert_file, key_file=self.key_file)
+                    cert_file=self.cert_file, key_file=self.key_file,
+                    correlation_id=self.correlation_id)
         return self.consumer_auth_cp
 
     def get_basic_auth_cp(self):
@@ -109,7 +114,8 @@ class CPProvider(object):
                     proxy_user=self.proxy_user,
                     proxy_password=self.proxy_password,
                     username=self.username,
-                    password=self.password)
+                    password=self.password,
+                    correlation_id=self.correlation_id)
         return self.basic_auth_cp
 
     def get_no_auth_cp(self):
@@ -121,7 +127,8 @@ class CPProvider(object):
                     proxy_hostname=self.proxy_hostname,
                     proxy_port=self.proxy_port,
                     proxy_user=self.proxy_user,
-                    proxy_password=self.proxy_password)
+                    proxy_password=self.proxy_password,
+                    correlation_id=self.correlation_id)
         return self.no_auth_cp
 
     def get_content_connection(self):

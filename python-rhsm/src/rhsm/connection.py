@@ -374,7 +374,8 @@ class BaseRestLib(object):
             proxy_hostname=None, proxy_port=None,
             proxy_user=None, proxy_password=None,
             cert_file=None, key_file=None,
-            ca_dir=None, insecure=False, ssl_verify_depth=1, timeout=None):
+            ca_dir=None, insecure=False, ssl_verify_depth=1, timeout=None,
+            correlation_id=None):
         self.host = host
         self.ssl_port = ssl_port
         self.apihandler = apihandler
@@ -390,6 +391,9 @@ class BaseRestLib(object):
 
         if lc:
             self.headers["Accept-Language"] = lc.lower().replace('_', '-')
+
+        if correlation_id:
+            self.headers["X-Correlation-ID"] = correlation_id
 
         self.cert_file = cert_file
         self.key_file = key_file
@@ -651,7 +655,8 @@ class UEPConnection:
             cert_file=None, key_file=None,
             insecure=None,
             timeout=None,
-            restlib_class=None):
+            restlib_class=None,
+            correlation_id=None):
         """
         Two ways to authenticate:
             - username/password for HTTP basic authentication. (owner admin role)
@@ -725,7 +730,8 @@ class UEPConnection:
                     proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
                     proxy_user=self.proxy_user, proxy_password=self.proxy_password,
                     ca_dir=self.ca_cert_dir, insecure=self.insecure,
-                    ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout)
+                    ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
+                    correlation_id=correlation_id)
             auth_description = "auth=basic username=%s" % username
         elif using_id_cert_auth:
             self.conn = restlib_class(self.host, self.ssl_port, self.handler,
@@ -733,14 +739,16 @@ class UEPConnection:
                                 proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
                                 proxy_user=self.proxy_user, proxy_password=self.proxy_password,
                                 ca_dir=self.ca_cert_dir, insecure=self.insecure,
-                                ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout)
+                                ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
+                                correlation_id=correlation_id)
             auth_description = "auth=identity_cert ca_dir=%s insecure=%s" % (self.ca_cert_dir, self.insecure)
         else:
             self.conn = restlib_class(self.host, self.ssl_port, self.handler,
                     proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
                     proxy_user=self.proxy_user, proxy_password=self.proxy_password,
                     ca_dir=self.ca_cert_dir, insecure=self.insecure,
-                    ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout)
+                    ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
+                    correlation_id=correlation_id)
             auth_description = "auth=none"
 
         self.conn.user_agent = "RHSM/1.0 (cmd=%s)" % utils.cmd_name(sys.argv)

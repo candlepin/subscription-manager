@@ -223,6 +223,9 @@ class TestCliCommand(SubManFixture):
             # 2 == no args given
             self.assertEquals(e.code, 2)
 
+    def test_command_has_correlation_id(self):
+        self.assertIsNotNone(self.cc.correlation_id)
+
     def _main_help(self, args):
         with Capture() as cap:
             try:

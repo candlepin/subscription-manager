@@ -603,6 +603,9 @@ class StubCPProvider(object):
     def set_user_pass(self, username=None, password=None):
         pass
 
+    def set_correlation_id(self, correlation_id):
+        pass
+
     # tries to write to /var/lib and it reads the rpm db
     def clean(self):
         pass
