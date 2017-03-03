@@ -15,7 +15,10 @@
 #
 import datetime
 import locale
+import socket
 import unittest
+
+from nose.plugins.skip import SkipTest
 
 from rhsm.connection import UEPConnection, Restlib, ConnectionException, ConnectionSetupException, \
         BadCertificateException, RestlibException, GoneException, NetworkException, \
@@ -592,3 +595,18 @@ class DatetimeFormattingTests(unittest.TestCase):
         self.cp.conn = Mock()
         self.cp.getAccessibleContent(consumerId='bob', if_modified_since=datetime.datetime.fromtimestamp(timestamp))
         self.cp.conn.request_get.assert_called_with('/consumers/bob/accessible_content', headers=expected_headers)
+
+
+class M2CryptoHttpTests(unittest.TestCase):
+    def test_index_error_handled(self):
+        try:
+            from rhsm import m2cryptohttp
+
+            conn = m2cryptohttp.HTTPSConnection('example.com', 443)
+            mock_connection = Mock()
+            mock_connection.request.side_effect=IndexError
+            with patch.object(conn, '_connection', mock_connection):
+                self.assertRaises(socket.error, conn.request, '/foo', '/bar')
+
+        except ImportError:
+            raise SkipTest('m2crypto not supported on python3')
