@@ -601,7 +601,8 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %posttrans -n subscription-manager-gui
-gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+touch --no-create %{_datadir}/icons/hicolor &>/dev/null
+gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
 * Fri Jan 20 2017 Alex Wood <awood@redhat.com> 1.19.1-1
