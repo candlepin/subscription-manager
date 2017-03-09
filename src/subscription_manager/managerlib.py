@@ -705,7 +705,7 @@ class ImportFileExtractor(object):
         return key_content
 
     def get_cert_content(self):
-        cert_content = None
+        cert_content = ''
         if self._CERT_DICT_TAG in self.parts:
             cert_content = self.parts[self._CERT_DICT_TAG]
         if self._ENT_DICT_TAG in self.parts:
