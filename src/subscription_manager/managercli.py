@@ -1095,19 +1095,16 @@ class RegisterCommand(UserPassCommand):
             consumername = socket.gethostname()
 
         if self.is_registered() and self.options.force:
-            # First let's try to un-register previous consumer. This may fail
-            # if consumer has already been deleted so we will continue even if
-            # errors are encountered.
+            # First let's try to un-register previous consumer; if this fails
+            # we'll let the error bubble up, so that we don't blindly re-register.
+            # managerlib.unregister handles the special case that the consumer has already been removed.
             old_uuid = self.identity.uuid
-            try:
-                managerlib.unregister(self.cp, old_uuid)
-                self.entitlement_dir.__init__()
-                self.product_dir.__init__()
-                log.info("--force specified, unregistered old consumer: %s" % old_uuid)
-                print(_("The system with UUID %s has been unregistered") % old_uuid)
-            except Exception, e:
-                log.error("Unable to unregister consumer: %s" % old_uuid)
-                log.exception(e)
+
+            managerlib.unregister(self.cp, old_uuid)
+            self.entitlement_dir.__init__()
+            self.product_dir.__init__()
+            log.info("--force specified, unregistered old consumer: %s" % old_uuid)
+            print(_("The system with UUID %s has been unregistered") % old_uuid)
 
         self.cp_provider.clean()
 
