@@ -168,7 +168,8 @@ class HTTPSConnection(object):
         self.host = host
         self.ssl_port = int(ssl_port) if ssl_port else None
         context = kwargs.pop('context', None)
-        kwargs['ssl_context'] = context.m2context
+        if context:
+            kwargs['ssl_context'] = context.m2context
         self._connection = _RhsmHTTPSConnection(host, self.ssl_port, *args, **kwargs)
         self.args = args
         self.kwargs = kwargs
@@ -176,7 +177,10 @@ class HTTPSConnection(object):
     def request(self, method, handler, *args, **kwargs):
         if isinstance(self._connection, _RhsmProxyHTTPSConnection):
             handler = "https://%s:%s%s" % (self.host, self.ssl_port, handler)
-        return self._connection.request(method, handler, *args, **kwargs)
+        try:
+            return self._connection.request(method, handler, *args, **kwargs)
+        except IndexError:  # bz#1423443
+            raise socket.error("socket error during request")  # unfortunately details are lost by this point
 
     def getresponse(self, *args, **kwargs):
         return self._connection.getresponse(*args, **kwargs)
