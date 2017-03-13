@@ -25,6 +25,7 @@ import signal
 import socket
 import syslog
 import urllib
+import uuid
 
 from rhsm.https import ssl
 
@@ -517,3 +518,7 @@ def unique_list_items(l, hash_function=lambda x: x):
             unique_items.append(item)
             observed.add(item_key)
     return unique_items
+
+
+def generate_correlation_id():
+    return str(uuid.uuid4()).replace('-', '')  # FIXME cp should accept -
