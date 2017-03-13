@@ -15,7 +15,7 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.19.1
+Version: 1.19.2
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -102,6 +102,10 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Mon Mar 13 2017 Kevin Howell <khowell@redhat.com> 1.19.2-1
+- 1423443: Handle IndexError during m2crypto request (khowell@redhat.com)
+- Move python-rhsm into subdirectory (khowell@redhat.com)
+
 * Wed Jan 25 2017 Alex Wood <awood@redhat.com> 1.19.1-1
 - Adjust our C bindings for OpenSSL v1.1 API. (awood@redhat.com)
 - Make python-rhsm Python-3 compatible (khowell@redhat.com)
