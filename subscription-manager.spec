@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.19.1
+Version: 1.19.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -605,6 +605,20 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Mon Mar 13 2017 Kevin Howell <khowell@redhat.com> 1.19.2-1
+- Query.na_dict() has been renamed in dnf 2.0 (#1544)
+  (MichaelMraka@users.noreply.github.com)
+- Add correlation ID to each cmd & rhsmcertd run (khowell@redhat.com)
+- 1425438: Hide content access certs from list cmd (khowell@redhat.com)
+- 1421930: Force update of icon cache on install of subman gui
+  (csnyder@redhat.com)
+- Bug fix: make install works as expected, when PYTHON_VER is not set using
+  system variable. (jiri.hnidek@tul.cz)
+- 1415708: Fix issues with facts gathering. (awood@redhat.com)
+- Add content access cert functionality to subman (khowell@redhat.com)
+- Bootstrap DBus mainloop when rhsmcertd runs. (awood@redhat.com)
+- Fix string comparison missed in python3 PR (khowell@redhat.com)
+- Add missing Requires and BuildRequires needed by F25. (awood@redhat.com)
 * Fri Jan 20 2017 Alex Wood <awood@redhat.com> 1.19.1-1
 - Add missing BuildRequires. (awood@redhat.com)
 - Zanata translations for 1.19 (adarshvritant@gmail.com)
