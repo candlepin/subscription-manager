@@ -48,7 +48,7 @@ class EntitlementCertEntitlement(Entitlement):
 
         # create a :EntitlementCertEntitlement with a EntitledContents
         # as the content Iterables
-        ent_cert_ent = cls(content_set)
+        ent_cert_ent = cls(content_set, ent_cert.entitlement_type)
 
         # could populate more info here, but
         # we don't actually seem to use it anywhere
