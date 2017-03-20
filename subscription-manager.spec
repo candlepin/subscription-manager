@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.19.3
+Version: 1.19.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -605,6 +605,10 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Mon Mar 20 2017 Kevin Howell <khowell@redhat.com> 1.19.4-1
+- Bump required python-rhsm version to 1.19.2 (khowell@redhat.com)
+- 1434094: Deny D-BUS Config.Set from non-root (khowell@redhat.com)
+
 * Mon Mar 20 2017 Kevin Howell <khowell@redhat.com> 1.19.3-1
 - Lock down Facts object to be accessible to root only. (awood@redhat.com)
 - 1423013: Allow DBus calls to the com.redhat.RHSM1 interfaces
