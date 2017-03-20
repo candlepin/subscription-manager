@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.19.2
+Version: 1.19.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -605,6 +605,12 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Mon Mar 20 2017 Kevin Howell <khowell@redhat.com> 1.19.3-1
+- Lock down Facts object to be accessible to root only. (awood@redhat.com)
+- 1423013: Allow DBus calls to the com.redhat.RHSM1 interfaces
+  (awood@redhat.com)
+- Address code paths with Coverity FORWARD_NULL (khowell@redhat.com)
+
 * Mon Mar 13 2017 Kevin Howell <khowell@redhat.com> 1.19.2-1
 - Query.na_dict() has been renamed in dnf 2.0 (#1544)
   (MichaelMraka@users.noreply.github.com)
