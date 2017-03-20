@@ -53,6 +53,7 @@ proxy_hostname = notaproxy.grimlock.usersys.redhat.com
 proxy_port = 3128
 proxy_user = proxy_user
 proxy_password = proxy_password
+no_proxy =
 
 [rhsm]
 baseurl= https://content.example.com
@@ -119,7 +120,7 @@ class StubConfig(config.RhsmConfigParser):
 def stubInitConfig():
     return StubConfig()
 
-# create a global CFG object,then replace it with out own that candlepin
+# create a global CFG object,then replace it with our own that candlepin
 # read from a stringio
 config.initConfig(config_file="test/rhsm.conf")
 config.CFG = StubConfig()
@@ -596,7 +597,10 @@ class StubCPProvider(object):
         proxy_hostname_arg=None,
         proxy_port_arg=None,
         proxy_user_arg=None,
-        proxy_password_arg=None):
+        proxy_password_arg=None,
+        no_proxy_arg=None,
+        correlation_id=None,
+        restlib_class=None):
         pass
 
     def set_content_connection_info(self, cdn_hostname=None, cdn_port=None):

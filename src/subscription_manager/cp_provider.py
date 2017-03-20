@@ -52,8 +52,8 @@ class CPProvider(object):
                 proxy_port_arg=None,
                 proxy_user_arg=None,
                 proxy_password_arg=None,
-                no_proxy_arg=None):
-
+                no_proxy_arg=None,
+                restlib_class=connection.Restlib):
         self.cert_file = ConsumerIdentity.certpath()
         self.key_file = ConsumerIdentity.keypath()
 
@@ -67,6 +67,7 @@ class CPProvider(object):
         self.proxy_user = proxy_user_arg
         self.proxy_password = proxy_password_arg
         self.no_proxy = no_proxy_arg
+        self.restlib_class = restlib_class
         self.clean()
 
     # Set username and password used for basic_auth without
@@ -103,7 +104,8 @@ class CPProvider(object):
                     proxy_password=self.proxy_password,
                     cert_file=self.cert_file, key_file=self.key_file,
                     correlation_id=self.correlation_id,
-                    no_proxy=self.no_proxy)
+                    no_proxy=self.no_proxy,
+                    restlib_class=self.restlib_class)
         return self.consumer_auth_cp
 
     def get_basic_auth_cp(self):
@@ -119,7 +121,8 @@ class CPProvider(object):
                     username=self.username,
                     password=self.password,
                     correlation_id=self.correlation_id,
-                    no_proxy=self.no_proxy)
+                    no_proxy=self.no_proxy,
+                    restlib_class=self.restlib_class)
         return self.basic_auth_cp
 
     def get_no_auth_cp(self):
@@ -133,7 +136,8 @@ class CPProvider(object):
                     proxy_user=self.proxy_user,
                     proxy_password=self.proxy_password,
                     correlation_id=self.correlation_id,
-                    no_proxy=self.no_proxy)
+                    no_proxy=self.no_proxy,
+                    restlib_class=self.restlib_class)
         return self.no_auth_cp
 
     def get_content_connection(self):

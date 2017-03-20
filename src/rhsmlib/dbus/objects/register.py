@@ -18,11 +18,12 @@ import logging
 import dbus.service
 import threading
 
-from rhsmlib.dbus import constants, exceptions, dbus_utils, base_object, server, util, facts
+import rhsm.config
+import rhsm.connection
 
-from subscription_manager import managerlib
-from rhsm import connection
+from rhsmlib.dbus import constants, exceptions, dbus_utils, base_object, server, util
 
+from subscription_manager import managerlib, utils
 from subscription_manager import injection as inj
 from subscription_manager.injectioninit import init_dep_injection
 
@@ -30,6 +31,9 @@ init_dep_injection()
 
 _ = gettext.gettext
 log = logging.getLogger(__name__)
+
+from rhsmlib.services import config
+conf = config.Config(rhsm.config.initConfig())
 
 
 class RegisterDBusObject(base_object.BaseObject):
@@ -90,6 +94,9 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
             bus_name=bus_name
         )
         self.installed_mgr = inj.require(inj.INSTALLED_PRODUCTS_MANAGER)
+        self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
+        self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.facts = inj.require(inj.FACTS)
 
     @dbus.service.method(
         dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
@@ -107,40 +114,51 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
 
         Note this method is registration ONLY.  Auto-attach is a separate process.
         """
-        options['username'] = username
-        options['password'] = password
+        options = dbus_utils.dbus_to_python(options)
+        options['username'] = dbus_utils.dbus_to_python(username)
+        options['password'] = dbus_utils.dbus_to_python(password)
+        org = dbus_utils.dbus_to_python(org)
 
-        result = self._register(org, None, options)
+        result = self._register(org, options)
         return dbus_utils.dict_to_variant_dict(result)
 
     @dbus.service.method(dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
-        in_signature='sa(s)a{ss}',
+        in_signature='sasa{sv}',
         out_signature='a{sv}')
     def RegisterWithActivationKeys(self, org, activation_keys, options):
         """
         Note this method is registration ONLY.  Auto-attach is a separate process.
         """
-        result = self._register(org, activation_keys, options)
+        options = dbus_utils.dbus_to_python(options)
+        options['activation_keys'] = dbus_utils.dbus_to_python(activation_keys)
+        org = dbus_utils.dbus_to_python(org)
+
+        result = self._register(org, options)
         return dbus_utils.dict_to_variant_dict(result)
 
-    def _register(self, org, activation_keys, options):
+    def _register(self, org, options):
         options = dbus_utils.dbus_to_python(options)
         options = self.validate_options(options)
 
         environment = options.get('environment')
-        facts_client = facts.FactsClient()
+        facts_dict = self.facts.get_facts()
+        consumer_name = options['name']
+
+        self.plugin_manager.run("pre_register_consumer", name=consumer_name, facts=facts_dict)
 
         cp = self.build_uep(options)
         registration_output = cp.registerConsumer(
-            name=options['name'],
-            facts=facts_client.GetFacts(),
+            name=consumer_name,
+            facts=facts_dict,
             owner=org,
             environment=environment,
-            keys=activation_keys,
+            keys=options.get('activation_keys', None),
             installed_products=self.installed_mgr.format_for_server(),
             content_tags=self.installed_mgr.tags
         )
         self.installed_mgr.write_cache()
+        self.plugin_manager.run("post_register_consumer", consumer=registration_output['content'],
+            facts=facts_dict)
 
         consumer = json.loads(registration_output['content'], object_hook=dbus_utils._decode_dict)
         managerlib.persist_consumer_cert(consumer)
@@ -152,19 +170,27 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         return registration_output
 
     def build_uep(self, options):
-        return connection.UEPConnection(
-            username=options.get('username', None),
-            password=options.get('password', None),
-            host=options.get('host', None),
-            ssl_port=connection.safe_int(options.get('port', None)),
-            handler=options.get('handler', None),
-            insecure=options.get('insecure', None),
-            proxy_hostname=options.get('proxy_hostname', None),
-            proxy_port=options.get('proxy_port', None),
-            proxy_user=options.get('proxy_user', None),
-            proxy_password=options.get('proxy_password', None),
-            restlib_class=connection.BaseRestLib
-        )
+        connection_info = {}
+        server_sec = conf['server']
+        connection_info['host'] = options.get('host', server_sec['hostname'])
+        connection_info['ssl_port'] = options.get('port', server_sec.get_int('port'))
+        connection_info['handler'] = options.get('handler', server_sec['prefix'])
+        connection_info['proxy_hostname_arg'] = options.get('proxy_hostname', server_sec['proxy_hostname'])
+        connection_info['proxy_port_arg'] = options.get('proxy_port', server_sec.get_int('proxy_port'))
+        connection_info['proxy_user_arg'] = options.get('proxy_user', server_sec['proxy_user'])
+        connection_info['proxy_password_arg'] = options.get('proxy_password', server_sec['proxy_password'])
+        connection_info['no_proxy_arg'] = options.get('no_proxy', server_sec['no_proxy'])
+        # So we get the headers and raw JSON
+        connection_info['restlib_class'] = rhsm.connection.BaseRestLib
+
+        self.cp_provider.set_connection_info(**connection_info)
+        self.cp_provider.set_correlation_id(utils.generate_correlation_id())
+
+        if 'username' in options and 'password' in options:
+            self.cp_provider.set_user_pass(options['username'], options['password'])
+            return self.cp_provider.get_basic_auth_cp()
+        else:
+            return self.cp_provider.get_no_auth_cp()
 
     def is_registered(self):
         return inj.require(inj.IDENTITY).is_valid()
@@ -179,7 +205,8 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         elif 'consumerid' in options and 'force' in options:
             error_msg = _("Error: Can not force registration while attempting to recover registration with consumerid. Please use --force without --consumerid to re-register or use the clean command and try again without --force.")
 
-        if 'activation_keys' in options:
+        # If 'activation_keys' already exists in the dictionary, leave it.  Otherwise, set to None.
+        if options.get('activation_keys', None):
             # 746259: Don't allow the user to pass in an empty string as an activation key
             if '' == options['activation_keys']:
                 error_msg = _("Error: Must specify an activation key")
@@ -189,8 +216,9 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
                 error_msg = _("Error: Activation keys can not be used with previously registered IDs.")
             elif 'environment' in options:
                 error_msg = _("Error: Activation keys do not allow environments to be specified.")
-            elif 'org' not in options:
-                error_msg = _("Error: Must provide --org with activation keys.")
+        else:
+            if 'username' not in options or 'password' not in options:
+                error_msg = _("Error: Missing username or password.")
 
         if error_msg:
             raise exceptions.Failed(msg=error_msg)
