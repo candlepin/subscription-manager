@@ -35,21 +35,30 @@ from rhsm.config import RhsmConfigParser
 from rhsmlib.services import config
 
 from subscription_manager import repolib
+from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_TYPE
 
 
 class TestRepoActionInvoker(fixture.SubManFixture):
-    def _stub_content(self):
+    def _stub_content(self, include_content_access=False):
         stub_prod = StubProduct('stub_product',
                                 provided_tags="stub-product")
 
         stub_content = StubContent("a_test_repo",
                                    required_tags="stub-product")
 
+        stub_content2 = StubContent("test_repo_2", required_tags="stub-product")
+
         stub_ent_cert = StubEntitlementCertificate(stub_prod,
                                                    content=[stub_content])
         stub_prod_cert = StubProductCertificate(stub_prod)
 
-        stub_ent_dir = StubEntitlementDirectory([stub_ent_cert])
+        certs = [stub_ent_cert]
+        if include_content_access:
+            self.stub_content_access_cert = StubEntitlementCertificate(stub_prod, content=[stub_content, stub_content2],
+                                                                       entitlement_type=CONTENT_ACCESS_CERT_TYPE)
+            # content access cert is first and last, so naively wrong implementations will prioritize it.
+            certs = [self.stub_content_access_cert, stub_ent_cert, self.stub_content_access_cert]
+        stub_ent_dir = StubEntitlementDirectory(certs)
         stub_prod_dir = StubProductDirectory([stub_prod_cert])
 
         inj.provide(inj.ENT_DIR, stub_ent_dir)
@@ -77,11 +86,15 @@ class TestRepoActionInvoker(fixture.SubManFixture):
             self.fail("get_repos() should have returned an empty set but did not.")
 
     def test_get_repos(self):
-        self._stub_content()
+        self._stub_content(include_content_access=True)
         repo_action_invoker = RepoActionInvoker()
         repos = repo_action_invoker.get_repos()
-        if len(repos) == 0:
-            self.fail("get_repos() should have a set of Repo's, but the set is empty.")
+        self.assertEqual(2, len(repos), 'Should produce two repos')
+        matching_repos = [repo for repo in repos if repo.id == 'a_test_repo']
+        self.assertEquals(1, len(matching_repos), 'Should only produce one repo for "a_test_repo"')
+        repo = matching_repos[0]
+        certpath = repo.get('sslclientcert')
+        self.assertNotEqual(certpath, self.stub_content_access_cert.path)
 
 
 class RepoTests(unittest.TestCase):

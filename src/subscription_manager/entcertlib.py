@@ -18,6 +18,7 @@ import logging
 import socket
 
 from rhsm.certificate import Key, create_from_pem
+from rhsm.certificate2 import CONTENT_ACCESS_CERT_TYPE
 
 from subscription_manager.certdirectory import Writer
 from subscription_manager import certlib
@@ -31,7 +32,6 @@ log = logging.getLogger(__name__)
 _ = gettext.gettext
 
 CONTENT_ACCESS_CERT_CAPABILITY = "org_level_content_access"
-CONTENT_ACCESS_CERT_TYPE = "OrgLevel"
 
 
 class EntCertActionInvoker(certlib.BaseActionInvoker):

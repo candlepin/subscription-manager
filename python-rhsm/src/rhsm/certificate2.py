@@ -45,6 +45,8 @@ PRODUCT_CERT = 1
 ENTITLEMENT_CERT = 2
 IDENTITY_CERT = 3
 
+CONTENT_ACCESS_CERT_TYPE = "OrgLevel"
+
 
 class _CertFactory(object):
     """
