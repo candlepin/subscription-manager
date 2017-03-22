@@ -206,6 +206,11 @@ class CatManifestCommand(RCTManifestCommand):
         to_print = []
         to_print.append((_("Name"), get_value(data, "name")))
         to_print.append((_("UUID"), get_value(data, "uuid")))
+        # contentAccessMode is entitlement if null, blank or non-present
+        contentAccessMode = 'entitlement'
+        if "contentAccessMode" in data and data["contentAccessMode"] == 'org_environment':
+            contentAccessMode = 'org_environment'
+        to_print.append((_("Content Access Mode"), contentAccessMode))
         to_print.append((_("Type"), get_value(data, "type.label")))
         self._print_section(_("Consumer:"), to_print)
 
