@@ -17,6 +17,7 @@
 import httplib
 from M2Crypto import httpslib, SSL
 import socket
+import inspect
 
 # constants from actual httplib
 HTTP_PORT = httplib.HTTP_PORT
@@ -140,8 +141,16 @@ class _RhsmHTTPSConnection(httpslib.HTTPSConnection):
         # a host name.
         for (family, _, _, _, _) in socket.getaddrinfo(self.host, self.port, 0, socket.SOCK_STREAM):
             sock = None
+
+            # 1435475: Older versions of M2Crypto do not support specifying the connection family, but if
+            # we are on a version that does, we can to send it in to support IPv6.
+            m2_args, _vargs, _kwords, _defaults = inspect.getargspec(SSL.Connection.__init__)
+            connection_kwargs = {}
+            if m2_args and 'family' in m2_args:
+                connection_kwargs['family'] = family
+
             try:
-                sock = SSL.Connection(self.ssl_ctx, family=family)
+                sock = SSL.Connection(self.ssl_ctx, **connection_kwargs)
                 sock.settimeout(self.rhsm_timeout)
                 if self.session is not None:
                     sock.set_session(self.session)
