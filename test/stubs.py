@@ -404,6 +404,7 @@ class StubUEP(object):
         self.password = password
         self._capabilities = []
 
+
     def reset(self):
         self.called_unregister_uuid = None
         self.called_unbind_uuid = None

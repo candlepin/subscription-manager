@@ -11,6 +11,8 @@ import socket
 import os
 import tempfile
 import contextlib
+import json
+from StringIO import StringIO
 
 from subscription_manager import managercli, managerlib
 from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_TYPE
@@ -1294,9 +1296,68 @@ class TestPluginsCommand(TestCliCommand):
 class TestOverrideCommand(TestCliProxyCommand):
     command_class = managercli.OverrideCommand
 
+    # def setUp(self, hide_do=False):
+    #     super(TestOverrideCommand, self).setUp(hide_do=hide_do)
+
     def _test_exception(self, args):
         self.cc.main(args)
         self.assertRaises(SystemExit, self.cc._validate_options)
+
+    def test_empty_key_add(self):
+        self.cc._do_command = self._orig_do_command
+        stub_uep = self.get_consumer_cp()
+        stub_uep.supports_resource = Mock()
+        stub_uep.return_value = True
+        stub_uep.setContentOverrides = Mock()
+        dummy_json_data = [{'contentLabel':
+                            'dummy_label',
+                            'name':
+                            'dummy_name',
+                            'value':
+                            'dummy_value'}]
+        stub_uep.setContentOverrides.return_value = \
+            dummy_json_data
+        args = ["--repo", "foo", "--add", ":test_val"]
+        saved_stdout = sys.stdout
+        try:
+            out = StringIO()
+            sys.stdout = out
+            self.cc.main(args, no_updates=True)
+            output = out.getvalue().strip()
+            assert "may not be null" in output
+        finally:
+            self.cc._do_command = self.mock_do_command
+            sys.stdout = saved_stdout
+
+
+    def test_empty_key_remove(self):
+        self.cc._do_command = self._orig_do_command
+        stub_uep = self.get_consumer_cp()
+        stub_uep.supports_resource = Mock()
+        stub_uep.return_value = True
+        stub_uep.setContentOverrides = Mock()
+        dummy_json_data = [{'contentLabel':
+                            'dummy_label',
+                            'name':
+                            'dummy_name',
+                            'value':
+                            'dummy_value'}]
+        stub_uep.setContentOverrides.return_value = \
+            dummy_json_data
+        stub_uep.deleteContentOverrides = Mock()
+        stub_uep.deleteContentOverrides.return_value = \
+            dummy_json_data
+        args = ["--repo", "foo", "--remove", ""]
+        saved_stdout = sys.stdout
+        try:
+            out = StringIO()
+            sys.stdout = out
+            self.cc.main(args, no_updates=True)
+            output = out.getvalue().strip()
+            assert "may not be null" in output
+        finally:
+            self.cc._do_command = self.mock_do_command
+            sys.stdout = saved_stdout
 
     def test_bad_add_format(self):
         self.assertRaises(SystemExit, self.cc.main, ["--add", "hello"])
