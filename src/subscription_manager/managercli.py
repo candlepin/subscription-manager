@@ -40,7 +40,7 @@ from rhsm.utils import remove_scheme, ServerUrlParseError
 from rhsm.certificate import GMT
 
 from subscription_manager.branding import get_branding
-from subscription_manager.entcertlib import EntCertActionInvoker, CONTENT_ACCESS_CERT_CAPABILITY, CONTENT_ACCESS_CERT_TYPE
+from subscription_manager.entcertlib import EntCertActionInvoker, CONTENT_ACCESS_CERT_CAPABILITY
 from subscription_manager.action_client import ActionClient, UnregisterActionClient
 from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBED, \
         SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
@@ -2447,9 +2447,6 @@ class ListCommand(CliCommand):
         # list all certificates that have not yet expired, even those
         # that are not yet active.
         certs = self.entitlement_dir.list()
-
-        # filter out content access certs
-        certs = [cert for cert in certs if cert.entitlement_type != CONTENT_ACCESS_CERT_TYPE]
 
         cert_filter = EntitlementCertificateFilter(filter_string=filter_string, service_level=service_level)
 

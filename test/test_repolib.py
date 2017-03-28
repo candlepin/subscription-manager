@@ -25,7 +25,7 @@ from iniparse import RawConfigParser, SafeConfigParser
 from mock import Mock, patch
 from StringIO import StringIO
 
-from stubs import StubCertificateDirectory, StubProductCertificate, \
+from stubs import StubProductCertificate, \
         StubProduct, StubEntitlementCertificate, StubContent, \
         StubProductDirectory, StubConsumerIdentity, StubEntitlementDirectory
 from subscription_manager.repolib import Repo, RepoActionInvoker, \
@@ -203,7 +203,7 @@ class RepoUpdateActionTests(fixture.SubManFixture):
                 StubContent("c6", content_type="file", required_tags="", gpg=None),
         ]
         self.stub_ent_cert = StubEntitlementCertificate(stub_prod, content=stub_content)
-        ent_dir = StubCertificateDirectory([self.stub_ent_cert])
+        ent_dir = StubEntitlementDirectory([self.stub_ent_cert])
         inj.provide(inj.ENT_DIR, ent_dir)
 
         repolib.ConsumerIdentity = StubConsumerIdentity

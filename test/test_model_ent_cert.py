@@ -121,6 +121,7 @@ class TestEntitlementDirEntitlementSource(test_model.TestEntitlementSource):
 
         mock_ent_dir = mock.NonCallableMock(name='MockEntDir')
         mock_ent_dir.list_valid.return_value = [mock_ent_cert]
+        mock_ent_dir.list_valid_with_content_access.return_value = [mock_ent_cert]
 
         inj.provide(inj.PROD_DIR, mock_prod_dir)
         inj.provide(inj.ENT_DIR, mock_ent_dir)
