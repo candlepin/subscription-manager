@@ -57,6 +57,9 @@ def main(options, log):
         sys.exit(-1)
     print _('Updating entitlement certificates & repositories')
 
+    cp = cp_provider.get_consumer_auth_cp()
+    cp.supports_resource(None)  # pre-load supported resources; serves as a way of failing before locking the repos
+
     try:
         if options.autoheal:
             actionclient = action_client.HealingActionClient()
