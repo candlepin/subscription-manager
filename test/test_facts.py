@@ -107,6 +107,7 @@ facts_buf = """
     "memory.swaptotal": "12419068",
     "nxxxw.tddng3": "10d0",
     "system.certificate_version": "3.2",
+    "system.default_locale": "en_US",
     "test.attr": "blippy2",
     "uname.machine": "x86_64",
     "uname.release": "2.6.35.11-83.fc14.x86_64",

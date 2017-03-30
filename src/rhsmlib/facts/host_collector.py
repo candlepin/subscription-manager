@@ -12,6 +12,7 @@
 # in this software or its documentation.
 #
 import os
+import locale
 
 import rhsm.config
 
@@ -84,6 +85,10 @@ class HostCollector(collector.FactsCollector):
         )
         custom_facts_dict = custom_facts.get_all()
         host_facts.update(custom_facts_dict)
+
+        locale_info = {}
+        locale_info['system.default_locale'] = ".".join(locale.getdefaultlocale())
+        host_facts.update(locale_info)
 
         # Now, munging, kluges, special cases, etc
         # NOTE: we are passing the facts we've already collected into
