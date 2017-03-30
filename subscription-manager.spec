@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.19.4
+Version: 1.19.5
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -605,6 +605,12 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Thu Mar 30 2017 Kevin Howell <khowell@redhat.com> 1.19.5-1
+- Zanata translations for 1.19.X (khowell@redhat.com)
+- 1433479: rhsmcertd - check connection before lock (khowell@redhat.com)
+- 1427069: Prioritize content from Basic entitlements (khowell@redhat.com)
+- 1429657: Remove catch-all on register --force (khowell@redhat.com)
+
 * Mon Mar 20 2017 Kevin Howell <khowell@redhat.com> 1.19.4-1
 - Bump required python-rhsm version to 1.19.2 (khowell@redhat.com)
 - 1434094: Deny D-BUS Config.Set from non-root (khowell@redhat.com)
