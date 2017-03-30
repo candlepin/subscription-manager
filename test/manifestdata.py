@@ -12,6 +12,7 @@ General:
 Consumer:
 \tName: sam_org
 \tUUID: ba5ac769-207e-421c-bfd2-a23c767114af
+\tContent Access Mode: entitlement
 \tType: sam
 
 Subscription:
