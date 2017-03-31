@@ -52,7 +52,7 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
     widget_names = ["networkConfigDialog", "enableProxyButton", "enableProxyAuthButton",
                     "proxyEntry", "proxyUserEntry", "proxyPasswordEntry",
                     "cancelButton", "saveButton", "testConnectionButton",
-                    "connectionStatusLabel"]
+                    "connectionStatusLabel", "enableProxyBypassButton", "noProxyEntry"]
     gui_file = "networkConfig"
 
     def __init__(self):
@@ -71,20 +71,25 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
         self.set_initial_values()
         self.enableProxyButton.connect("toggled", self.enable_action)
         self.enableProxyAuthButton.connect("toggled", self.enable_action)
+        self.enableProxyBypassButton.connect("toggled", self.enable_action)
 
         self.enableProxyButton.connect("toggled", self.clear_connection_label)
         self.enableProxyAuthButton.connect("toggled", self.clear_connection_label)
+        self.enableProxyBypassButton.connect("toggled", self.clear_connection_label)
 
         self.enableProxyButton.connect("toggled", self.enable_or_disable_test_button)
         self.enableProxyAuthButton.connect("toggled", self.enable_or_disable_test_button)
+        self.enableProxyBypassButton.connect("toggled", self.enable_or_disable_test_button)
 
         self.proxyEntry.connect("changed", self.clear_connection_label)
         self.proxyUserEntry.connect("changed", self.clear_connection_label)
         self.proxyPasswordEntry.connect("changed", self.clear_connection_label)
+        self.noProxyEntry.connect("changed", self.clear_connection_label)
 
         self.proxyEntry.connect("changed", self.enable_or_disable_test_button)
         self.proxyUserEntry.connect("changed", self.enable_or_disable_test_button)
         self.proxyPasswordEntry.connect("changed", self.enable_or_disable_test_button)
+        self.noProxyEntry.connect("changed", self.enable_or_disable_test_button)
 
         self.proxyEntry.connect("focus-out-event", self.clean_proxy_entry)
 
@@ -108,9 +113,14 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
             self.enableProxyButton.set_active(True)
         if self.cfg.get("server", "proxy_hostname") and self.cfg.get("server", "proxy_user"):
             self.enableProxyAuthButton.set_active(True)
+        if self.cfg.get("server", "no_proxy"):
+            no_proxy = self.cfg.get("server", "no_proxy")
+            self.noProxyEntry.set_text(no_proxy)
+            self.enableProxyBypassButton.set_active(True)
 
         self.enable_action(self.enableProxyAuthButton)
         self.enable_action(self.enableProxyButton)
+        self.enable_action(self.enableProxyBypassButton)
 
         # the extra or "" are to make sure we don't str None
         self.proxyUserEntry.set_text(str(self.cfg.get("server", "proxy_user") or ""))
@@ -121,6 +131,7 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
         self.enable_or_disable_test_button()
         if not self.enableProxyButton.get_active():
             self.enableProxyAuthButton.set_sensitive(False)
+            self.enableProxyBypassButton.set_sensitive(False)
 
     def write_values(self, widget=None, dummy=None):
         proxy = self.proxyEntry.get_text() or ""
@@ -204,16 +215,17 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
     def _reset_socket_timeout(self):
         socket.setdefaulttimeout(self.org_timeout)
 
-    def test_connection_wrapper(self, proxy_host, proxy_port, proxy_user, proxy_password):
-        connection_status = self.test_connection(proxy_host, proxy_port, proxy_user, proxy_password)
+    def test_connection_wrapper(self, proxy_host, proxy_port, proxy_user, proxy_password, no_proxy):
+        connection_status = self.test_connection(proxy_host, proxy_port, proxy_user, proxy_password, no_proxy)
         ga_GObject.idle_add(self.on_test_connection_finish, connection_status)
 
-    def test_connection(self, proxy_host, proxy_port, proxy_user, proxy_password):
+    def test_connection(self, proxy_host, proxy_port, proxy_user, proxy_password, no_proxy):
         cp = connection.UEPConnection(
                     proxy_hostname=proxy_host,
                     proxy_port=proxy_port,
                     proxy_user=proxy_user,
-                    proxy_password=proxy_password)
+                    proxy_password=proxy_password,
+                    no_proxy=no_proxy)
         try:
             socket.setdefaulttimeout(10)
             cp.getStatus()
@@ -281,9 +293,13 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
             proxy_user = None
             proxy_password = None
 
+        no_proxy = None
+        if self.enableProxyBypassButton.get_active():
+            no_proxy = self.noProxyEntry.get_text()
+
         self._display_progress_bar()
         threading.Thread(target=self.test_connection_wrapper,
-                         args=(proxy_host, proxy_port, proxy_user, proxy_password),
+                         args=(proxy_host, proxy_port, proxy_user, proxy_password, no_proxy),
                          name='TestNetworkConnectionThread').start()
 
     def deleted(self, event, data):
@@ -315,6 +331,7 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
             self.proxyEntry.set_sensitive(button.get_active())
             self.proxyEntry.grab_focus()
             self.enableProxyAuthButton.set_sensitive(button.get_active())
+            self.enableProxyBypassButton.set_sensitive(button.get_active())
             # Proxy authentication should only be active if proxy is also enabled
             self.proxyUserEntry.set_sensitive(button.get_active() and
                     self.enableProxyAuthButton.get_active())
@@ -325,6 +342,9 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
             self.proxyPasswordEntry.set_sensitive(button.get_active())
             self.get_object("usernameLabel").set_sensitive(button.get_active())
             self.get_object("passwordLabel").set_sensitive(button.get_active())
+        elif button.get_name() == "enableProxyBypassButton":
+            self.noProxyEntry.set_sensitive(button.get_active())
+            self.noProxyEntry.grab_focus()
 
     def set_parent_window(self, window):
         self.networkConfigDialog.set_transient_for(window)

@@ -238,7 +238,7 @@ class ContentConnection(object):
                  proxy_hostname=None, proxy_port=None,
                  proxy_user=None, proxy_password=None,
                  ca_dir=None, insecure=False,
-                 ssl_verify_depth=1, timeout=None):
+                 ssl_verify_depth=1, timeout=None, no_proxy=None):
 
         log.debug("ContentConnection")
         # FIXME
@@ -254,6 +254,11 @@ class ContentConnection(object):
         self.username = username
         self.password = password
         self.ssl_verify_depth = ssl_verify_depth
+
+        # allow specifying no_proxy via api or config
+        no_proxy_override = no_proxy or config.get('server', 'no_proxy')
+        if no_proxy_override:
+            os.environ['no_proxy'] = no_proxy_override
 
         # honor no_proxy environment variable
         if proxy_bypass_environment(self.host):
@@ -656,7 +661,8 @@ class UEPConnection:
             insecure=None,
             timeout=None,
             restlib_class=None,
-            correlation_id=None):
+            correlation_id=None,
+            no_proxy=None):
         """
         Two ways to authenticate:
             - username/password for HTTP basic authentication. (owner admin role)
@@ -674,6 +680,11 @@ class UEPConnection:
         # remove trailing "/" from the prefix if it is there
         # BZ848836
         self.handler = self.handler.rstrip("/")
+
+        # allow specifying no_proxy via api or config
+        no_proxy_override = no_proxy or config.get('server', 'no_proxy')
+        if no_proxy_override:
+            os.environ['no_proxy'] = no_proxy_override
 
         # honor no_proxy environment variable
         if proxy_bypass_environment(self.host):

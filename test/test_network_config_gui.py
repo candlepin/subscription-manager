@@ -138,7 +138,8 @@ class TestNetworkConfigDialog(SubManFixture):
         proxy_port = '10000'
         proxy_user = ''
         proxy_password = ''
-        self.nc.test_connection(proxy_host, proxy_port, proxy_user, proxy_password)
+        no_proxy = ''
+        self.nc.test_connection(proxy_host, proxy_port, proxy_user, proxy_password, no_proxy)
         expected = [mock.call(10), mock.call(self.nc.org_timeout)]
         actual = mock_setdefaulttimeout.call_args_list
         self.assertEquals(expected, actual)
@@ -154,7 +155,8 @@ class TestNetworkConfigDialog(SubManFixture):
         proxy_port = '10000'
         proxy_user = ''
         proxy_password = ''
-        actual = self.nc.test_connection(proxy_host, proxy_port, proxy_user, proxy_password)
+        no_proxy = ''
+        actual = self.nc.test_connection(proxy_host, proxy_port, proxy_user, proxy_password, no_proxy)
         expected = True
         self.assertEquals(expected, actual)
 
@@ -171,7 +173,8 @@ class TestNetworkConfigDialog(SubManFixture):
         proxy_port = '10000'
         proxy_user = ''
         proxy_password = ''
-        actual = self.nc.test_connection(proxy_host, proxy_port, proxy_user, proxy_password)
+        no_proxy = ''
+        actual = self.nc.test_connection(proxy_host, proxy_port, proxy_user, proxy_password, no_proxy)
 
         expected = True
         self.assertEquals(expected, actual)
@@ -188,7 +191,8 @@ class TestNetworkConfigDialog(SubManFixture):
         proxy_port = '10000'
         proxy_user = ''
         proxy_password = ''
-        actual = self.nc.test_connection(proxy_host, proxy_port, proxy_user, proxy_password)
+        no_proxy = ''
+        actual = self.nc.test_connection(proxy_host, proxy_port, proxy_user, proxy_password, no_proxy)
 
         expected = True
         self.assertEquals(expected, actual)
@@ -206,7 +210,8 @@ class TestNetworkConfigDialog(SubManFixture):
         proxy_port = '10000'
         proxy_user = ''
         proxy_password = ''
-        actual = self.nc.test_connection(proxy_host, proxy_port, proxy_user, proxy_password)
+        no_proxy = ''
+        actual = self.nc.test_connection(proxy_host, proxy_port, proxy_user, proxy_password, no_proxy)
 
         expected = False
         self.assertEquals(expected, actual)
@@ -223,7 +228,8 @@ class TestNetworkConfigDialog(SubManFixture):
         proxy_port = '10000'
         proxy_user = ''
         proxy_password = ''
-        actual = self.nc.test_connection(proxy_host, proxy_port, proxy_user, proxy_password)
+        no_proxy = ''
+        actual = self.nc.test_connection(proxy_host, proxy_port, proxy_user, proxy_password, no_proxy)
 
         expected = False
         self.assertEquals(expected, actual)
@@ -239,7 +245,8 @@ class TestNetworkConfigDialog(SubManFixture):
         proxy_port = '10000'
         proxy_user = ''
         proxy_password = ''
-        actual = self.nc.test_connection(proxy_host, proxy_port, proxy_user, proxy_password)
+        no_proxy = ''
+        actual = self.nc.test_connection(proxy_host, proxy_port, proxy_user, proxy_password, no_proxy)
 
         expected = False
         self.assertEquals(expected, actual)
@@ -273,7 +280,7 @@ class TestNetworkConfigDialog(SubManFixture):
         proxy_password_entry.set_text("redhatPass")
         test_connection_button = self.nc.testConnectionButton
         self.nc.on_test_connection_clicked(test_connection_button)
-        expected = mock.call(args=('example.com', '10000', 'redhatUser', 'redhatPass'),
+        expected = mock.call(args=('example.com', '10000', 'redhatUser', 'redhatPass', None),
                              name=mock.ANY, target=mock.ANY)
         actual = mock_thread.call_args_list
 
@@ -291,6 +298,6 @@ class TestNetworkConfigDialog(SubManFixture):
         proxy_password_entry.set_text("redhatPass")
         test_connection_button = self.nc.testConnectionButton
         self.nc.on_test_connection_clicked(test_connection_button)
-        expected = mock.call(args=('example.com', '10000', None, None), name=mock.ANY, target=mock.ANY)
+        expected = mock.call(args=('example.com', '10000', None, None, None), name=mock.ANY, target=mock.ANY)
         actual = mock_thread.call_args_list
         self.assertTrue(expected in actual)
