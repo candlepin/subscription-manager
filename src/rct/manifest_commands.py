@@ -336,9 +336,12 @@ class DumpManifestCommand(RCTManifestCommand):
         """
         Does the work that this command intends.
         """
-        if self.options.destination:
-            if self._extract(self.options.destination, self.options.overwrite_files):
-                print _("The manifest has been dumped to the %s directory") % self.options.destination
-        else:
-            if self._extract(os.getcwd(), self.options.overwrite_files):
-                print _("The manifest has been dumped to the current directory")
+        dest = self.options.destination
+
+        if not dest:
+            # default to the name of the manifest instead of the current
+            # working directory
+            dest = os.path.join(os.getcwd(), os.path.splitext(self._get_file_from_args())[0])
+
+        if self._extract(dest, self.options.overwrite_files):
+            print _("The manifest has been dumped to the %s directory") % dest
