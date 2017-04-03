@@ -16,6 +16,7 @@
 # in this software or its documentation.
 #
 
+import signal
 import sys
 import logging
 import dbus.mainloop.glib
@@ -42,9 +43,18 @@ import gettext
 _ = gettext.gettext
 
 
+def exit_on_signal(_signumber, _stackframe):
+    sys.exit(0)
+
+
 def main(options, log):
     # Set default mainloop
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+
+    # exit on SIGTERM, otherwise finally statements don't run (one explanation: http://stackoverflow.com/a/41840796)
+    # SIGTERM happens for example when systemd wants the service to stop
+    # without finally statements, we get confusing behavior (ex. see bz#1431659)
+    signal.signal(signal.SIGTERM, exit_on_signal)
 
     cp_provider = inj.require(inj.CP_PROVIDER)
     correlation_id = generate_correlation_id()
