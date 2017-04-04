@@ -301,6 +301,7 @@ class CliCommand(AbstractCLICommand):
         self.proxy_url = None
         self.proxy_hostname = None
         self.proxy_port = None
+        self.no_proxy = None
 
         self.entitlement_dir = inj.require(inj.ENT_DIR)
         self.product_dir = inj.require(inj.PROD_DIR)
@@ -355,6 +356,8 @@ class CliCommand(AbstractCLICommand):
                                 default=None, help=_("user for HTTP proxy with basic authentication"))
         self.parser.add_option("--proxypassword", dest="proxy_password",
                                 default=None, help=_("password for HTTP proxy with basic authentication"))
+        self.parser.add_option('--noproxy', dest='no_proxy',
+                               default=None, help=_("host suffixes that should bypass HTTP proxy"))
 
     def _do_command(self):
         pass
@@ -476,6 +479,8 @@ class CliCommand(AbstractCLICommand):
             self.proxy_user = self.options.proxy_user
         if hasattr(self.options, "proxy_password") and self.options.proxy_password:
             self.proxy_password = self.options.proxy_password
+        if hasattr(self.options, "no_proxy") and self.options.no_proxy:
+            self.no_proxy = self.options.no_proxy
 
         # Proxy information isn't written to the config, so we have to make sure
         # the sorter gets it
@@ -494,6 +499,8 @@ class CliCommand(AbstractCLICommand):
             connection_info['ssl_port'] = self.server_port
         if self.server_prefix:
             connection_info['handler'] = self.server_prefix
+        if self.no_proxy:
+            connection_info['no_proxy_arg'] = self.no_proxy
 
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.cp_provider.set_connection_info(**connection_info)

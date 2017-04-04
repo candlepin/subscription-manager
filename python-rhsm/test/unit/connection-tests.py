@@ -20,6 +20,7 @@ import unittest
 
 from nose.plugins.skip import SkipTest
 
+from rhsm import connection
 from rhsm.connection import UEPConnection, Restlib, ConnectionException, ConnectionSetupException, \
         BadCertificateException, RestlibException, GoneException, NetworkException, \
         RemoteServerException, drift_check, ExpiredIdentityCertException, UnauthorizedException, \
@@ -125,6 +126,51 @@ class ConnectionTests(unittest.TestCase):
             self.assertEquals(None, uep.proxy_password)
             self.assertEquals("host", uep.proxy_hostname)
             self.assertEquals(int("1111"), uep.proxy_port)
+
+    def test_no_proxy_via_api(self):
+        """Test that API trumps env var and config."""
+        host = self.cp.host
+        port = self.cp.ssl_port
+
+        def mock_config(section, name):
+            if (section, name) == ('server', 'no_proxy'):
+                return 'foo.example.com'
+            if (section, name) == ('server', 'hostname'):
+                return host
+            if (section, name) == ('server', 'port'):
+                return port
+            return None
+
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': 'foo.example.com'}):
+            with patch.object(connection.config, 'get', mock_config):
+                uep = UEPConnection(username='dummy', password='dummy', handler='/test', insecure=True, no_proxy=host)
+                self.assertEqual(None, uep.proxy_hostname)
+
+    def test_no_proxy_via_environment_variable(self):
+        """Test that env var no_proxy works."""
+        host = self.cp.host
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': host}):
+            uep = UEPConnection(username='dummy', password='dummy', handler='/test', insecure=True)
+            self.assertEqual(None, uep.proxy_hostname)
+
+    def test_no_proxy_via_config(self):
+        """Test that config trumps env var."""
+        host = self.cp.host
+        port = self.cp.ssl_port
+
+        def mock_config(section, name):
+            if (section, name) == ('server', 'no_proxy'):
+                return host
+            if (section, name) == ('server', 'hostname'):
+                return host
+            if (section, name) == ('server', 'port'):
+                return port
+            return None
+
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': 'foo.example.com'}):
+            with patch.object(connection.config, 'get', mock_config):
+                uep = UEPConnection(username='dummy', password='dummy', handler='/test', insecure=True)
+                self.assertEqual(None, uep.proxy_hostname)
 
     def test_sanitizeGuestIds_supports_strs(self):
         self.cp.supports_resource = Mock(return_value=True)

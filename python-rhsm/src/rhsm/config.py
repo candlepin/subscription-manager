@@ -55,6 +55,7 @@ SERVER_DEFAULTS = {
         'proxy_user': '',
         'proxy_port': '',
         'proxy_password': '',
+        'no_proxy': '',
         }
 RHSM_DEFAULTS = {
         'baseurl': 'https://' + DEFAULT_CDN_HOSTNAME,

@@ -253,6 +253,113 @@
                         <property name="position">3</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkCheckButton" id="enableProxyBypassButton">
+                        <property name="label" translatable="yes">_Bypass the HTTP proxy for specific hosts/domains.</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="draw_indicator">True</property>
+                        <accessibility/>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="a11y-enableProxyBypassButton1">
+                            <property name="AtkObject::accessible-name" translatable="yes">Bypass Proxy Checkbox</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkAlignment" id="alignment12">
+                        <property name="visible">True</property>
+                        <property name="left_padding">22</property>
+                        <child>
+                          <object class="GtkTable" id="table8">
+                            <property name="visible">True</property>
+                            <property name="n_rows">2</property>
+                            <property name="n_columns">2</property>
+                            <property name="column_spacing">6</property>
+                            <property name="row_spacing">6</property>
+                            <child>
+                              <object class="GtkHBox" id="hbox7">
+                                <property name="visible">True</property>
+                                <property name="spacing">5</property>
+                                <child>
+                                  <object class="GtkImage" id="image17">
+                                    <property name="visible">True</property>
+                                    <property name="stock">gtk-info</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label21">
+                                    <property name="visible">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="label" translatable="yes">&lt;small&gt;&lt;b&gt;Example:&lt;/b&gt; host.example.com,.example.com&lt;/small&gt;</property>
+                                    <property name="use_markup">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">1</property>
+                                <property name="bottom_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label22">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">_Hostname/Domain Bypass List:</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">noProxyEntry</property>
+                              </object>
+                              <packing>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="noProxyEntry">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip-text" translatable="yes">comma-separated list of hostnames/domains</property>
+                                <accessibility/>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="a11y-noProxyEntry1">
+                                    <property name="AtkObject::accessible-name" translatable="yes">Hostname/Domain Bypass Text</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">5</property>
+                      </packing>
+                    </child>
                   </object>
                 </child>
               </object>

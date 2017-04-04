@@ -59,6 +59,12 @@ proxy_password::
   authenticated reverse proxy to access the subscription service. This
   sets the password for the reverse proxy.
 
+no_proxy::
+  Set this to a non-blank value if *subscription-manager* should not use
+  a proxy for specific hosts. Format is a comma-separated list of
+  hostname suffixes, optionally with port. '*' is a special value that
+  means don't use a proxy for any host.
+
 [rhsm] OPTIONS
 --------------
 baseurl::

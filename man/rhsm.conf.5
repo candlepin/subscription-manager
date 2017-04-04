@@ -92,6 +92,14 @@ Set this to a non\-blank value if
 \fBsubscription\-manager\fR
 should use an authenticated reverse proxy to access the subscription service\&. This sets the password for the reverse proxy\&.
 .RE
+.PP
+no_proxy
+.RS 4
+Set this to a non\-blank value if
+\fBsubscription-manager\fR
+should not use a proxy for specific hosts\&. Format is a comma-separated list of hostname suffixes,
+optionally with port\&. '*' is a special value that means do not use a proxy for any host\&.
+.RE
 .SH "[RHSM] OPTIONS"
 .PP
 baseurl
