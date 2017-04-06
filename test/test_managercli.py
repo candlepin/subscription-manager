@@ -1282,6 +1282,25 @@ class TestReleaseCommand(TestCliProxyCommand):
             self.assertEquals(proxy_host, self.cc.proxy_hostname)
             self.assertEquals(int(proxy_port), self.cc.proxy_port)
 
+    def test_release_set_updates_repos(self):
+        mock_repo_invoker = Mock()
+        with patch.object(managercli, 'RepoActionInvoker', Mock(return_value=mock_repo_invoker)):
+            with patch.object(managercli.ReleaseBackend, 'get_releases', Mock(return_value=['7.2'])):
+                with patch.object(managercli.ReleaseCommand, '_get_consumer_release'):
+                    self.cc.main(['--set=7.2'])
+                    self._orig_do_command()
+
+                    mock_repo_invoker.update.assert_called_with()
+
+    def test_release_unset_updates_repos(self):
+        mock_repo_invoker = Mock()
+        with patch.object(managercli, 'RepoActionInvoker', Mock(return_value=mock_repo_invoker)):
+            with patch.object(managercli.ReleaseCommand, '_get_consumer_release'):
+                self.cc.main(['--unset'])
+                self._orig_do_command()
+
+                mock_repo_invoker.update.assert_called_with()
+
 
 class TestVersionCommand(TestCliCommand):
     command_class = managercli.VersionCommand
