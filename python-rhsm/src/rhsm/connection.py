@@ -315,6 +315,7 @@ class ContentConnection(object):
         return result
 
     def _load_ca_certificates(self, context):
+        cert_path = ''
         try:
             for cert_file in os.listdir(self.ent_dir):
                 if cert_file.endswith(".pem") and not cert_file.endswith("-key.pem"):
@@ -327,6 +328,8 @@ class ContentConnection(object):
                     context.load_cert_chain(cert_path, key_path)
                     # if res == 0:
                     #     raise BadCertificateException(cert_path)
+        except ssl.SSLError as e:
+            raise BadCertificateException(cert_path)
         except OSError as e:
             raise ConnectionSetupException(e.strerror)
 
@@ -419,6 +422,7 @@ class BaseRestLib(object):
 
     def _load_ca_certificates(self, context):
         loaded_ca_certs = []
+        cert_path = ''
         try:
             for cert_file in os.listdir(self.ca_dir):
                 if cert_file.endswith(".pem"):
@@ -427,6 +431,8 @@ class BaseRestLib(object):
                     loaded_ca_certs.append(cert_file)
                     if res == 0:
                         raise BadCertificateException(cert_path)
+        except ssl.SSLError as e:
+            raise BadCertificateException(cert_path)
         except OSError as e:
             raise ConnectionSetupException(e.strerror)
 
