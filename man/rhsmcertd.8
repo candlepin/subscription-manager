@@ -3,7 +3,7 @@
 rhsmcertd \- Periodically scans and updates the entitlement certificates on a registered system.
 
 .SH SYNOPSIS
-rhsmcertd [--cert-check-interval=MINUTES] [--auto-attach-interval=MINUTES] [--now] [--debug] [--help]
+rhsmcertd [--cert-check-interval=MINUTES] [--auto-attach-interval=MINUTES] [--max-splay-minutes=MINUTES] [--now] [--debug] [--help]
 
 .PP
 .I Deprecated usage
@@ -21,7 +21,7 @@ When subscriptions are applied to a system or when new subscriptions are availab
 process runs periodically to check for changes in the subscriptions available to a machine by updating the entitlement certificates installed on the machine and by installing new entitlement certificates as they're available.
 
 .PP
-At a defined interval, the process checks with the subscription management service to see if any new subscriptions are available to the system. If there are, it pulls in the associated subscription certificates. If any subscriptions have expired and new subscriptions are available, then the \fBrhsmcertd\fP process will automatically request those subscriptions.
+At a defined interval, the process checks with the subscription management service to see if any new subscriptions are available to the system. If there are, it pulls in the associated subscription certificates. If any subscriptions have expired and new subscriptions are available, then the \fBrhsmcertd\fP process will automatically request those subscriptions. By default, the initial checks run are delayed by a random amount of minutes in the range [0,10]. The upper limit of this random delay is configurable with the \fBmax-splay-minutes\fP on the command line or by setting the \fBmaxSplayMinutes\fP option in \fB/etc/rhsm/rhsm.conf\fP
 
 .PP
 This \fBrhsmcertd\fP process invokes the
@@ -58,6 +58,12 @@ file are used (unless the argument is passed again).
 .TP
 .B -i, --auto-attach-interval=MINUTES
 Resets the interval for checking for and replacing expired subscriptions. This value is in minutes. The default is 1440, or 24 hours. This interval is in effect until the daemon restarts, and then the values in the
+.B /etc/rhsm/rhsm.conf
+file are used (unless the argument is passed again).
+
+.TP
+.B -m, --max-splay-minutes=MINUTES
+Sets the maximum time to offset the checks done by this tool. This value is in minutes. The default value is 10. It may be useful in large deployments to increase this value to reduce peak load on the entitlement server these systems are registered to. Setting this value to 0 effectively turns off this feature. This interval is in effect until the daemon restarts, and then the values in the
 .B /etc/rhsm/rhsm.conf
 file are used (unless the argument is passed again).
 
