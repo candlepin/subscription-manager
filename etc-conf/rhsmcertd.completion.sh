@@ -11,9 +11,9 @@ _rhsmcertd()
 	first="${COMP_WORDS[1]}"
 	cur="${COMP_WORDS[COMP_CWORD]}"
 	prev="${COMP_WORDS[COMP_CWORD-1]}"
-	opts="-h --help -c --cert-check-interval --cert-interval -d --debug --heal-interval -i --auto-attach-interval -n --now"
+	opts="-h --help -c --cert-check-interval --cert-interval -d --debug --heal-interval -i --auto-attach-interval -n --now -m --max-splay-minutes"
 
-	case "${cur}" in	
+	case "${cur}" in
 		-*)
 			COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
 			return 0
