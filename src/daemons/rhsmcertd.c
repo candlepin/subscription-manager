@@ -344,7 +344,7 @@ key_file_init_config (Config * config, GKeyFile * key_file)
 
     int max_splay_minutes = get_int_from_config_file (key_file, "rhsmcertd",
                             "maxSplayMinutes");
-    if (max_splay_minutes > 0) {
+    if (max_splay_minutes >= 0) {
         if (max_splay_minutes > RAND_MAX_MINUTES) {
             warn("Max splay minutes was set higher than the max supported by this system");
             warn("Using the max allowed by the system: %d", RAND_MAX_MINUTES);
@@ -380,7 +380,7 @@ opt_parse_init_config (Config * config)
         config->heal_interval_seconds = arg_heal_interval_minutes * 60;
     }
 
-    if (arg_max_splay_minutes > 0) {
+    if (arg_max_splay_minutes >= 0) {
         if (arg_max_splay_minutes > RAND_MAX_MINUTES) {
             warn("Max splay minutes was set higher than the max supported by this system");
             warn("Using the max allowed by the system: %d", RAND_MAX_MINUTES);
@@ -394,7 +394,7 @@ opt_parse_init_config (Config * config)
     // for the intervals.
     return arg_cert_interval_minutes != -1
         || arg_heal_interval_minutes != -1
-        || arg_max_splay_minutes > -1;
+        || arg_max_splay_minutes != -1;
 }
 
 Config *
@@ -519,15 +519,19 @@ main (int argc, char *argv[])
     if (run_now) {
         info ("Initial checks will be run now!");
     } else {
-        // Grab a seed using the getrandom syscall
-        unsigned long int seed;
-        int getrandom_num_bytes = 0;
-        do {
-            getrandom_num_bytes = syscall(SYS_getrandom, &seed, sizeof(unsigned long int), 0);
-        } while (getrandom_num_bytes < sizeof(unsigned long int));
-        srand(seed);
+        int offset = 0;
+        if (max_splay_seconds > 0) {
+            // Grab a seed using the getrandom syscall
+            unsigned long int seed;
+            int getrandom_num_bytes = 0;
+            do {
+                getrandom_num_bytes = syscall(SYS_getrandom, &seed, sizeof(unsigned long int), 0);
+            } while (getrandom_num_bytes < sizeof(unsigned long int));
+            srand((unsigned int) seed);
 
-        initial_delay = INITIAL_DELAY_SECONDS + gen_random(max_splay_seconds);
+            offset = gen_random(max_splay_seconds);
+        }
+        initial_delay = INITIAL_DELAY_SECONDS + offset;
         info ("Waiting %d second(s) [%.1f minute(s)] before running updates.",
                 initial_delay, initial_delay / 60.0);
     }
