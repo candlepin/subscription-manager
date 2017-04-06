@@ -445,13 +445,6 @@ parse_cli_args (int *argc, char *argv[])
 int
 main (int argc, char *argv[])
 {
-    // Grab a seed using the getrandom syscall
-    unsigned long int seed;
-    int getrandom_num_bytes = 0;
-    do {
-        getrandom_num_bytes = syscall(SYS_getrandom, &seed, sizeof(unsigned long int), 0);
-    } while (getrandom_num_bytes < sizeof(unsigned long int));
-    srand(seed);
 
     if (signal(SIGTERM, signal_handler) == SIG_ERR) {
         warn ("Unable to catch SIGTERM\n");
@@ -490,11 +483,19 @@ main (int argc, char *argv[])
     // NOTE: We put the initial checks on a timer so that in the case of systemd,
     // we can ensure that the network interfaces are all up before the initial
     // checks are done.
-    int initial_delay = gen_random(INITIAL_DELAY_OFFSET_MAX);
+    int initial_delay = 0;
     if (run_now) {
-        info ("Initial checks will be run in %d seconds!", initial_delay);
+        info ("Initial checks will be run now!");
     } else {
-        initial_delay = initial_delay + INITIAL_DELAY_SECONDS;
+        // Grab a seed using the getrandom syscall
+        unsigned long int seed;
+        int getrandom_num_bytes = 0;
+        do {
+            getrandom_num_bytes = syscall(SYS_getrandom, &seed, sizeof(unsigned long int), 0);
+        } while (getrandom_num_bytes < sizeof(unsigned long int));
+        srand(seed);
+
+        initial_delay = INITIAL_DELAY_SECONDS + gen_random(INITIAL_DELAY_OFFSET_MAX);
         info ("Waiting %d second(s) [%.1f minute(s)] before running updates.",
                 initial_delay, initial_delay / 60.0);
     }
