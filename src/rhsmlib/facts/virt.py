@@ -148,6 +148,13 @@ class VirtCollector(collector.FactsCollector):
         virt_what_info = virt_what_collector.get_all()
         virt_info.update(virt_what_info)
 
+        # Ensure we do not gather the virt.uuid fact for host_types we cannot
+        # See BZ#1438085
+        for no_uuid_host_type in VirtUuidCollector.no_uuid_platforms:
+            if virt_what_info.get('virt.host_type', None) is None or \
+               virt_what_info['virt.host_type'].find(no_uuid_host_type) > -1:
+                return virt_info
+
         if virt_what_info['virt.is_guest']:
             virt_uuid_collector = VirtUuidCollector(
                 prefix=self.prefix,
