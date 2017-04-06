@@ -18,6 +18,11 @@ import rhsmlib
 import logging
 
 from rhsmlib.dbus import server
+from subscription_manager import logutil
+
+# FIXME: Should this be logging to the same file from a different process?
+# rhsmd already does this but I'm unsure that is right. This has been added to satisfy BZ#1435771.
+logutil.init_logger()
 
 log = logging.getLogger(__name__)
 
