@@ -52,6 +52,7 @@ static gboolean show_debug = FALSE;
 static gboolean run_now = FALSE;
 static gint arg_cert_interval_minutes = -1;
 static gint arg_heal_interval_minutes = -1;
+static gint arg_max_splay_minutes = -1;
 
 static GOptionEntry entries[] = {
     /* marked deprecated as of 02-19-2013, needs to be removed...? */
@@ -73,12 +74,16 @@ static GOptionEntry entries[] = {
      NULL},
     {"debug", 'd', 0, G_OPTION_ARG_NONE, &show_debug,
      N_("show debug messages"), NULL},
+    {"max-splay-minutes", 'm', 0, G_OPTION_ARG_INT, &arg_max_splay_minutes,
+     N_("Offset the initial run, at most, by the specified amount (in minutes)"),
+     "MINUTES"},
     {NULL}
 };
 
 typedef struct _Config {
     int heal_interval_seconds;
     int cert_interval_seconds;
+    int max_splay_seconds;
 } Config;
 
 const char *
@@ -335,6 +340,18 @@ key_file_init_config (Config * config, GKeyFile * key_file)
     else if (heal_frequency > 0) {
         config->heal_interval_seconds = heal_frequency * 60;
     }
+
+    int max_splay_minutes = get_int_from_config_file (key_file, "rhsmcertd",
+                            "maxSplayMinutes");
+    if (max_splay_minutes > 0) {
+        int max_splay_seconds = max_splay_minutes * 60;
+        if (max_splay_seconds > RAND_MAX) {
+            warn("Max splay seconds was set higher than the max supported by this system");
+            warn("Using the max allowed by the system: %d", RAND_MAX);
+            max_splay_seconds = RAND_MAX;
+        }
+        config->max_splay_seconds = max_splay_seconds;
+    }
 }
 
 void
@@ -362,10 +379,21 @@ opt_parse_init_config (Config * config)
     if (arg_heal_interval_minutes != -1) {
         config->heal_interval_seconds = arg_heal_interval_minutes * 60;
     }
+
+    if (arg_max_splay_minutes > 0) {
+        int max_splay_seconds = arg_max_splay_minutes * 60;
+        if (max_splay_seconds > RAND_MAX) {
+            warn("Max splay seconds was set higher than the max supported by this system");
+            warn("Using the max allowed by the system: %d", RAND_MAX);
+            max_splay_seconds = RAND_MAX;
+        }
+        config->max_splay_seconds = max_splay_seconds;
+    }
     // Let the caller know if opt parser found arg values
     // for the intervals.
     return arg_cert_interval_minutes != -1
-        || arg_heal_interval_minutes != -1;
+        || arg_heal_interval_minutes != -1
+        || arg_max_splay_minutes > -1;
 }
 
 Config *
@@ -377,6 +405,7 @@ get_config (int argc, char *argv[])
     // Set the default values
     config->cert_interval_seconds = DEFAULT_CERT_INTERVAL_SECONDS;
     config->heal_interval_seconds = DEFAULT_HEAL_INTERVAL_SECONDS;
+    config->max_splay_seconds = INITIAL_DELAY_OFFSET_MAX;
 
     // Load configuration values from the configuration file
     // which, if defined, will overwrite the current defaults.
@@ -460,6 +489,7 @@ main (int argc, char *argv[])
     // up its resources more reliably in case of error.
     int cert_interval_seconds = config->cert_interval_seconds;
     int heal_interval_seconds = config->heal_interval_seconds;
+    int max_splay_seconds = config->max_splay_seconds;
     free (config);
 
     if (daemon (0, 0) == -1)
@@ -475,6 +505,7 @@ main (int argc, char *argv[])
           heal_interval_seconds / 60.0, heal_interval_seconds);
     info ("Cert check interval: %.1f minute(s) [%d second(s)]",
           cert_interval_seconds / 60.0, cert_interval_seconds);
+    debug("Max splay seconds: %d", max_splay_seconds);
 
     // note that we call the function directly first, before assigning a timer
     // to it. Otherwise, it would only get executed when the timer went off, and
@@ -495,7 +526,7 @@ main (int argc, char *argv[])
         } while (getrandom_num_bytes < sizeof(unsigned long int));
         srand(seed);
 
-        initial_delay = INITIAL_DELAY_SECONDS + gen_random(INITIAL_DELAY_OFFSET_MAX);
+        initial_delay = INITIAL_DELAY_SECONDS + gen_random(max_splay_seconds);
         info ("Waiting %d second(s) [%.1f minute(s)] before running updates.",
                 initial_delay, initial_delay / 60.0);
     }
