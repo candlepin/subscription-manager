@@ -41,6 +41,7 @@
 #define INITIAL_DELAY_OFFSET_MAX 600
 #define DEFAULT_CERT_INTERVAL_SECONDS 14400    /* 4 hours */
 #define DEFAULT_HEAL_INTERVAL_SECONDS 86400    /* 24 hours */
+#define RAND_MAX_MINUTES RAND_MAX / 60
 #define BUF_MAX 256
 #define RHSM_CONFIG_FILE "/etc/rhsm/rhsm.conf"
 
@@ -344,13 +345,12 @@ key_file_init_config (Config * config, GKeyFile * key_file)
     int max_splay_minutes = get_int_from_config_file (key_file, "rhsmcertd",
                             "maxSplayMinutes");
     if (max_splay_minutes > 0) {
-        int max_splay_seconds = max_splay_minutes * 60;
-        if (max_splay_seconds > RAND_MAX) {
-            warn("Max splay seconds was set higher than the max supported by this system");
-            warn("Using the max allowed by the system: %d", RAND_MAX);
-            max_splay_seconds = RAND_MAX;
+        if (max_splay_minutes > RAND_MAX_MINUTES) {
+            warn("Max splay minutes was set higher than the max supported by this system");
+            warn("Using the max allowed by the system: %d", RAND_MAX_MINUTES);
+            max_splay_minutes = RAND_MAX_MINUTES;
         }
-        config->max_splay_seconds = max_splay_seconds;
+        config->max_splay_seconds = max_splay_minutes * 60;
     }
 }
 
@@ -381,13 +381,14 @@ opt_parse_init_config (Config * config)
     }
 
     if (arg_max_splay_minutes > 0) {
-        int max_splay_seconds = arg_max_splay_minutes * 60;
-        if (max_splay_seconds > RAND_MAX) {
-            warn("Max splay seconds was set higher than the max supported by this system");
-            warn("Using the max allowed by the system: %d", RAND_MAX);
-            max_splay_seconds = RAND_MAX;
+        if (arg_max_splay_minutes > RAND_MAX_MINUTES) {
+            warn("Max splay minutes was set higher than the max supported by this system");
+            warn("Using the max allowed by the system: %d", RAND_MAX_MINUTES);
+            config->max_splay_seconds = RAND_MAX_MINUTES * 60;
         }
-        config->max_splay_seconds = max_splay_seconds;
+        else {
+            config->max_splay_seconds = arg_max_splay_minutes * 60;
+        }
     }
     // Let the caller know if opt parser found arg values
     // for the intervals.
