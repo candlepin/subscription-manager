@@ -160,6 +160,7 @@ int gen_random(long int max) {
     // Find the nearest number to RAND_MAX that is divisible by the given max
     // The rand function will generate a random number in the range [0, RAND_MAX]
     // This function will constrain the output of rand to the range [0, max] while ensuring the output has no bias.
+    // See http://www.azillionmonkeys.com/qed/random.html for an explanation of why this is necessary
     long int true_max = max + (long int) 1;
     // 1 must be type cast to a long int to avoid integer overflow on certain systems
     long int range_max = ((RAND_MAX + (long int) 1) / true_max) * true_max;
