@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.19.5
+Version: 1.19.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -605,6 +605,19 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Mon Apr 10 2017 Kevin Howell <khowell@redhat.com> 1.19.6-1
+- Bump required python-rhsm version to 1.19.4-1 (khowell@redhat.com)
+- 1435013: Add splay to all checks done by rhsmcertd (csnyder@redhat.com)
+- 1431659: Let rhsmcertd-worker clean up on SIGTERM (khowell@redhat.com)
+- 1428435: Make release set/unset regenerate repos (khowell@redhat.com)
+- 1425922: System locale in facts (wpoteat@redhat.com)
+- 1420533: Add no_proxy option to API, config, UI (khowell@redhat.com)
+- 1424614: Add support to rct to print contentAccessMode attribute
+  (rjerrido@outsidaz.org)
+- Automatic commit of package [python-rhsm] release [1.19.3-1].
+  (khowell@redhat.com)
+- 1434860: Only log correlation ID for specified cmd (khowell@redhat.com)
+
 * Thu Mar 30 2017 Kevin Howell <khowell@redhat.com> 1.19.5-1
 - Zanata translations for 1.19.X (khowell@redhat.com)
 - 1433479: rhsmcertd - check connection before lock (khowell@redhat.com)
