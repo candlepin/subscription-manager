@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.19.6
+Version: 1.19.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -605,6 +605,13 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Tue Apr 11 2017 Kevin Howell <khowell@redhat.com> 1.19.7-1
+- Sync zanata translations (khowell@redhat.com)
+- 1440934: Ensure rhsmcertd performs both types of checks (csnyder@redhat.com)
+- 1440251: Bug fixing building of rhsmcertd at RHEL (jhnidek@redhat.com)
+- 1440922: Add a description of maxSplayMinutes to the rhsm.conf man page
+  (csnyder@redhat.com)
+
 * Mon Apr 10 2017 Kevin Howell <khowell@redhat.com> 1.19.6-1
 - Bump required python-rhsm version to 1.19.4-1 (khowell@redhat.com)
 - 1435013: Add splay to all checks done by rhsmcertd (csnyder@redhat.com)
