@@ -16,6 +16,7 @@
 */
 #define _GNU_SOURCE
 
+#include <linux/version.h>
 #include <sys/file.h>
 #include <sys/syscall.h>
 #include <stdlib.h>
@@ -37,8 +38,8 @@
 #define UPDATEFILE "/var/run/rhsm/update"
 #define WORKER "/usr/libexec/rhsmcertd-worker"
 #define WORKER_NAME WORKER
-#define INITIAL_DELAY_SECONDS 120;
-#define INITIAL_DELAY_OFFSET_MAX 600;
+#define INITIAL_DELAY_SECONDS 120
+#define INITIAL_DELAY_OFFSET_MAX 600
 #define DEFAULT_CERT_INTERVAL_SECONDS 14400    /* 4 hours */
 #define DEFAULT_HEAL_INTERVAL_SECONDS 86400    /* 24 hours */
 #define RAND_MAX_MINUTES RAND_MAX / 60
@@ -48,6 +49,21 @@
 #define _(STRING) gettext(STRING)
 #define N_(x) x
 #define CONFIG_KEY_NOT_FOUND (0)
+
+#if defined(__linux)
+# if LINUX_VERSION_CODE >= KERNEL_VERSION(3,17,0)
+#  ifdef HAVE_LINUX_GETRANDOM
+#   include <linux/random.h>
+#  else
+#   include <sys/syscall.h>
+#   undef getrandom
+#   define getrandom(dst,s,flags) syscall(SYS_getrandom, (void*)dst, (size_t)s, (unsigned int)flags)
+#  endif
+# else
+#  include <sys/time.h>
+#  define FAKE_RANDOM
+# endif
+#endif
 
 static gboolean show_debug = FALSE;
 static gboolean run_now = FALSE;
@@ -521,16 +537,45 @@ main (int argc, char *argv[])
     } else {
         int offset = 0;
         if (max_splay_seconds > 0) {
-            // Grab a seed using the getrandom syscall
             unsigned long int seed;
+#ifndef FAKE_RANDOM
+            // Grab a seed using the getrandom syscall
             int getrandom_num_bytes = 0;
             do {
-                getrandom_num_bytes = syscall(SYS_getrandom, &seed, sizeof(unsigned long int), 0);
+                getrandom_num_bytes = getrandom(&seed, sizeof(unsigned long int), 0);
             } while (getrandom_num_bytes < sizeof(unsigned long int));
+#else
+            // When SYS_getrandom nor getrandom() are not defined, then try to set
+            // initial seed using directly from /dev/urandom
+            int num_of_items_read = 0;
+            bool urandom_opened = false;
+            FILE *urandom = fopen("/dev/urandom", "r");
+            if (urandom != NULL) {
+                urandom_opened = true;
+                num_of_items_read = fread (&seed, sizeof(unsigned long int), 1, urandom);
+                if (num_of_items_read != 1) {
+                    warn ("Unable to read random data from /dev/urandom, using fake random seed");
+                }
+                fclose (urandom);
+                urandom = NULL;
+            } else {
+                warn ("Unable to open /dev/urandom: %s, using fake random seed.",
+                      strerror (errno));
+            }
+            if (!urandom_opened || num_of_items_read != 1) {
+                // When /dev/urandom does not exists or it is not possible data from
+                // this file, then try to generate something at least a little bit random.
+                // No need to be concerned, because we do not use it for cryptography.
+                struct timeval tv;
+                gettimeofday (&tv, NULL);
+                seed = tv.tv_sec % tv.tv_usec;
+            }
+#endif
             srand((unsigned int) seed);
 
             offset = gen_random(max_splay_seconds);
         }
+
         initial_delay = INITIAL_DELAY_SECONDS + offset;
         info ("Waiting %d second(s) [%.1f minute(s)] before running updates.",
                 initial_delay, initial_delay / 60.0);
