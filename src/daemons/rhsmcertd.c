@@ -256,24 +256,22 @@ cert_check (gboolean heal)
 struct CertCheckData {
     int cert_interval_seconds;
     int heal_interval_seconds;
-    bool heal;
 };
 
 static gboolean
 initial_cert_check (gpointer data)
 {
     struct CertCheckData *cert_data = data;
-    cert_check (cert_data->heal);
+    cert_check (true);  // Do the initial auto attach
+    cert_check (false);  // Do the initial cert check (different than above)
+    bool heal = true;
     // Add the timeout to begin waiting on interval but offset by the initial
     // delay.
-    if (cert_data->heal) {
-        g_timeout_add (cert_data->heal_interval_seconds * 1000,
-            (GSourceFunc) cert_check, (gpointer) cert_data->heal);
-    }
-    else {
-        g_timeout_add (cert_data->cert_interval_seconds * 1000,
-            (GSourceFunc) cert_check, (gpointer) cert_data->heal);
-    };
+    g_timeout_add (cert_data->heal_interval_seconds * 1000,
+        (GSourceFunc) cert_check, (gpointer) heal);
+    heal = false;
+    g_timeout_add (cert_data->cert_interval_seconds * 1000,
+        (GSourceFunc) cert_check, (gpointer) heal);
     // Return false so that the timer does
     // not run this again.
     return false;
@@ -581,12 +579,8 @@ main (int argc, char *argv[])
                 initial_delay, initial_delay / 60.0);
     }
     struct CertCheckData data;
-    data.heal = true;
     data.cert_interval_seconds = cert_interval_seconds;
     data.heal_interval_seconds = heal_interval_seconds;
-    g_timeout_add (initial_delay * 1000,
-               (GSourceFunc) initial_cert_check, (gpointer) &data);
-    data.heal = false;
     g_timeout_add (initial_delay * 1000,
                (GSourceFunc) initial_cert_check, (gpointer) &data);
 
