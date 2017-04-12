@@ -24,6 +24,7 @@ from rhsm.config import initConfig
 from subscription_manager.injection import require, ENT_DIR
 
 from rhsmlib.services import config
+from rhsm.certificate2 import CONTENT_ACCESS_CERT_TYPE
 
 log = logging.getLogger(__name__)
 _ = gettext.gettext
@@ -290,18 +291,17 @@ class EntitlementDirectory(CertificateDirectory):
         return True
 
     def list_valid(self):
-        valid = []
-        for c in self.list():
+        return [x for x in self.list() if self._check_key(x) and x.is_valid()]
 
-            # If something is amiss with the key for this certificate, consider
-            # it invalid:
-            if not self._check_key(c):
-                continue
+    def list_valid_with_content_access(self):
+        return [x for x in self.list_with_content_access() if self._check_key(x) and x.is_valid()]
 
-            if c.is_valid():
-                valid.append(c)
+    def list(self):
+        certs = super(EntitlementDirectory, self).list()
+        return [cert for cert in certs if cert.entitlement_type != CONTENT_ACCESS_CERT_TYPE]
 
-        return valid
+    def list_with_content_access(self):
+        return super(EntitlementDirectory, self).list()
 
     def list_for_product(self, product_id):
         """

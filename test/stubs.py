@@ -36,6 +36,7 @@ from rhsm.certificate2 import EntitlementCertificate, ProductCertificate, \
         Product, Content, Order
 from rhsm import profile
 from rhsm import ourjson as json
+from rhsm.certificate2 import CONTENT_ACCESS_CERT_TYPE
 
 # config file is root only, so just fill in a stringbuffer
 cfg_buf = """
@@ -322,6 +323,16 @@ class StubCertificateDirectory(EntitlementDirectory):
 # so we can use a less confusing name when we use this stub
 class StubEntitlementDirectory(StubCertificateDirectory):
     path = "this/is/a/stub/ent/cert/dir"
+
+    def list_valid_with_content_access(self):
+        return [x for x in self.list_with_content_access() if self._check_key(x) and x.is_valid()]
+
+    def list(self):
+        certs = super(StubEntitlementDirectory, self).list()
+        return [cert for cert in certs if cert.entitlement_type != CONTENT_ACCESS_CERT_TYPE]
+
+    def list_with_content_access(self):
+        return super(StubEntitlementDirectory, self).list()
 
 
 class StubProductDirectory(StubCertificateDirectory, ProductDirectory):

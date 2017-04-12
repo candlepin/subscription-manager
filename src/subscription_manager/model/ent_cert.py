@@ -67,6 +67,6 @@ class EntitlementDirEntitlementSource(EntitlementSource):
 
         # populate from ent certs
         self._entitlements = []
-        for ent_cert in ent_dir.list_valid():
+        for ent_cert in ent_dir.list_valid_with_content_access():
             self._entitlements.append(
                 EntitlementCertEntitlement.from_ent_cert(ent_cert))

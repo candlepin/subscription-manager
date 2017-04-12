@@ -173,7 +173,7 @@ class EntCertUpdateAction(object):
         ent_cert_bundles_installer.install(cert_bundles)
 
     def _find_content_access_certs(self):
-        certs = self.ent_dir.list()
+        certs = self.ent_dir.list_with_content_access()
         return [cert for cert in certs if cert.entitlement_type == CONTENT_ACCESS_CERT_TYPE]
 
     def content_access_hook(self):
