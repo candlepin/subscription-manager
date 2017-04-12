@@ -575,8 +575,8 @@ main (int argc, char *argv[])
         }
 
         initial_delay = INITIAL_DELAY_SECONDS + offset;
-        info ("Waiting %d second(s) [%.1f minute(s)] before running updates.",
-                initial_delay, initial_delay / 60.0);
+        info ("Waiting %.1f minute(s) plus %d splay second(s) [%d seconds(s) total] before running updates.",
+                INITIAL_DELAY_SECONDS / 60.0, offset, initial_delay);
     }
     struct CertCheckData data;
     data.cert_interval_seconds = cert_interval_seconds;
