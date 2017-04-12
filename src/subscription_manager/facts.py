@@ -20,7 +20,7 @@ from subscription_manager.injection import PLUGIN_MANAGER, require
 from subscription_manager.cache import CacheManager
 from rhsm import ourjson as json
 
-from rhsmlib.dbus.facts import FactsClient
+from rhsmlib.facts.all import AllFactsCollector
 
 _ = gettext.gettext
 log = logging.getLogger(__name__)
@@ -75,8 +75,8 @@ class Facts(CacheManager):
 
     def get_facts(self, refresh=False):
         if ((len(self.facts) == 0) or refresh):
-            facts_dbus_client = FactsClient()
-            facts = facts_dbus_client.GetFacts()
+            collector = AllFactsCollector()
+            facts = collector.get_all()
             self.plugin_manager.run('post_facts_collection', facts=facts)
             self.facts = facts
         return self.facts

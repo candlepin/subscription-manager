@@ -1120,7 +1120,6 @@ class RegisterCommand(UserPassCommand):
 
         self.cp_provider.clean()
 
-        # A proxy to the dbus service
         facts = inj.require(inj.FACTS)
 
         # Proceed with new registration:
