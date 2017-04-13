@@ -177,8 +177,10 @@ Requires: %{name} = %{version}-%{release}
 %if %use_gtk3
 Requires: pygobject3
 Requires: gtk3
+Requires: abattis-cantarell-fonts
 %else
 Requires: pygtk2 pygtk2-libglade
+Requires: dejavu-sans-fonts
 %endif
 Requires: usermode-gtk
 Requires: dbus-x11
