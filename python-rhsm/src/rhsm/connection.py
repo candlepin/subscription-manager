@@ -1405,6 +1405,20 @@ class UEPConnection:
         results = self.conn.request_get(method)
         return results
 
+    def updateSubscriptionList(self, owner_key, auto_create_owner=None, lazy_regen=None):
+        """
+        Update subscriptions for a particular owner.
+        """
+        method = "/owners/%s/subscriptions?" % self.sanitize(owner_key)
+
+        if auto_create_owner is not None:
+            method += "&auto_create_owner=%s" % bool(auto_create_owner).lower()
+        if lazy_regen is not None:
+            method += "&lazy_regen=%s" % bool(lazy_regen).lower()
+
+        results = self.conn.request_put(method)
+        return results
+
     def getJob(self, job_id):
         """
         Returns the status of a candlepin job.
