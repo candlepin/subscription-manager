@@ -36,6 +36,10 @@ _ = gettext.gettext
 FIRMWARE_DUMP_FILENAME = "dmi.dump"
 
 
+def clear_warnings():
+    dmidecode.clear_warnings()
+
+
 class DmiFirmwareInfoCollector(collector.FactsCollector):
     def __init__(self, prefix=None, testing=None, collected_hw_info=None):
         super(DmiFirmwareInfoCollector, self).__init__(
@@ -85,6 +89,8 @@ class DmiFirmwareInfoCollector(collector.FactsCollector):
         except Exception as e:
             log.warn(_("Error reading system DMI information: %s"), e)
 
+        self.log_warnings()
+
         return dmiinfo
 
     def _read_dmi(self, func):
@@ -117,3 +123,9 @@ class DmiFirmwareInfoCollector(collector.FactsCollector):
             ddict['dmi.meta.cpu_socket_count'] = str(len(self._socket_designation))
 
         return ddict
+
+    def log_warnings(self):
+        dmiwarnings = dmidecode.get_warnings()
+        if dmiwarnings:
+            log.warn(_("Error reading system DMI information: %s"), dmiwarnings)
+            dmidecode.clear_warnings()
