@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.19.7
+Version: 1.19.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -605,6 +605,19 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Mon Apr 17 2017 Kevin Howell <khowell@redhat.com> 1.19.8-1
+- Sync zanata translations (khowell@redhat.com)
+- Bump python-rhsm requirement to 1.19.5 (khowell@redhat.com)
+- 1435013: Add splay option to rhsmcertd, randomize over interval
+  (csnyder@redhat.com)
+- 1438139: Make subscription details view expand (khowell@redhat.com)
+- 1438869: Clear dmidecode warnings (khowell@redhat.com)
+- Update log message to be more clear about the splay time being used
+  (csnyder@redhat.com)
+- 1438561: Do not use D-Bus for facts collection (khowell@redhat.com)
+- 1433368: 1432947: Filter content access certs at entitlement list level
+  (wpoteat@redhat.com)
+
 * Tue Apr 11 2017 Kevin Howell <khowell@redhat.com> 1.19.7-1
 - Sync zanata translations (khowell@redhat.com)
 - 1440934: Ensure rhsmcertd performs both types of checks (csnyder@redhat.com)
