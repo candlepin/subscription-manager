@@ -36,6 +36,8 @@
 #define LOGFILE "/var/log/rhsm/rhsmcertd.log"
 #define LOCKFILE "/var/lock/subsys/rhsmcertd"
 #define UPDATEFILE "/var/run/rhsm/update"
+#define NEXT_CERT_UPDATE_FILE "/var/run/rhsm/next_cert_check_update"
+#define NEXT_AUTO_ATTACH_UPDATE_FILE "/var/run/rhsm/next_auto_attach_update"
 #define WORKER "/usr/libexec/rhsmcertd-worker"
 #define WORKER_NAME WORKER
 #define INITIAL_DELAY_SECONDS 120
@@ -43,6 +45,7 @@
 #define DEFAULT_CERT_INTERVAL_SECONDS 14400    /* 4 hours */
 #define DEFAULT_HEAL_INTERVAL_SECONDS 86400    /* 24 hours */
 #define RAND_MAX_MINUTES RAND_MAX / 60
+#define DEFAULT_SPLAY_ENABLED true
 #define BUF_MAX 256
 #define RHSM_CONFIG_FILE "/etc/rhsm/rhsm.conf"
 
@@ -69,7 +72,13 @@ static gboolean show_debug = FALSE;
 static gboolean run_now = FALSE;
 static gint arg_cert_interval_minutes = -1;
 static gint arg_heal_interval_minutes = -1;
-static gint arg_max_splay_minutes = -1;
+static gboolean arg_no_splay = FALSE;
+
+struct CertCheckData {
+    int interval_seconds;
+    bool heal;
+    char *next_update_file;
+};
 
 static GOptionEntry entries[] = {
     /* marked deprecated as of 02-19-2013, needs to be removed...? */
@@ -91,16 +100,16 @@ static GOptionEntry entries[] = {
      NULL},
     {"debug", 'd', 0, G_OPTION_ARG_NONE, &show_debug,
      N_("show debug messages"), NULL},
-    {"max-splay-minutes", 'm', 0, G_OPTION_ARG_INT, &arg_max_splay_minutes,
-     N_("Offset the initial run, at most, by the specified amount (in minutes)"),
-     "MINUTES"},
+    {"no-splay", 's', 0, G_OPTION_ARG_NONE, &arg_no_splay,
+     N_("do not add an offset to the initial checks."),
+     NULL},
     {NULL}
 };
 
 typedef struct _Config {
     int heal_interval_seconds;
     int cert_interval_seconds;
-    int max_splay_seconds;
+    bool splay;
 } Config;
 
 const char *
@@ -157,7 +166,7 @@ r_log (const char *level, const char *message, ...)
 #define debug(msg, ...) if (show_debug) r_log ("DEBUG", msg, ##__VA_ARGS__)
 
 static gboolean
-log_update (int delay)
+log_update (int delay, char *path_to_file)
 {
     time_t update = time (NULL);
     struct tm update_tm = *localtime (&update);
@@ -166,15 +175,22 @@ log_update (int delay)
     update_tm.tm_sec += delay;
     strftime (buf, BUF_MAX, "%s", &update_tm);
 
-    FILE *updatefile = fopen (UPDATEFILE, "w");
+    FILE *updatefile = fopen (path_to_file, "w");
     if (updatefile == NULL) {
         warn ("unable to open %s to write timestamp: %s",
-              UPDATEFILE, strerror (errno));
+              path_to_file, strerror (errno));
     } else {
         fprintf (updatefile, "%s", buf);
         fclose (updatefile);
     }
     return TRUE;
+}
+
+static gboolean
+log_update_from_cert_data(gpointer data)
+{
+    struct CertCheckData *cert_data = data;
+    return log_update(cert_data->interval_seconds, cert_data->next_update_file);
 }
 
 int gen_random(long int max) {
@@ -253,25 +269,18 @@ cert_check (gboolean heal)
     return TRUE;
 }
 
-struct CertCheckData {
-    int cert_interval_seconds;
-    int heal_interval_seconds;
-};
-
 static gboolean
 initial_cert_check (gpointer data)
 {
     struct CertCheckData *cert_data = data;
-    cert_check (true);  // Do the initial auto attach
-    cert_check (false);  // Do the initial cert check (different than above)
-    bool heal = true;
+    cert_check (cert_data->heal);
     // Add the timeout to begin waiting on interval but offset by the initial
     // delay.
-    g_timeout_add (cert_data->heal_interval_seconds * 1000,
-        (GSourceFunc) cert_check, (gpointer) heal);
-    heal = false;
-    g_timeout_add (cert_data->cert_interval_seconds * 1000,
-        (GSourceFunc) cert_check, (gpointer) heal);
+    g_timeout_add (cert_data->interval_seconds * 1000,
+        (GSourceFunc) cert_check, (gpointer) cert_data->heal);
+    g_timeout_add (cert_data->interval_seconds * 1000,
+           (GSourceFunc) log_update_from_cert_data,
+           (gpointer) cert_data);
     // Return false so that the timer does
     // not run this again.
     return false;
@@ -300,6 +309,19 @@ get_int_from_config_file (GKeyFile * key_file, const char *group, const char *ke
             g_key_file_get_string (key_file, group, key, NULL);
         g_strchomp (str_value);
         value = atoi (str_value);
+    }
+    return value;
+}
+
+// Similar to the above,
+bool
+get_bool_from_config_file (GKeyFile * key_file, const char *group, const char *key, bool default_value)
+{
+    GError *error = NULL;
+    bool value = g_key_file_get_boolean (key_file, group, key, &error);
+        // If key does not exist in config file, return the default_value given
+    if (error != NULL && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND || error->code == G_KEY_FILE_ERROR_INVALID_VALUE)) {
+        value = default_value;
     }
     return value;
 }
@@ -356,16 +378,9 @@ key_file_init_config (Config * config, GKeyFile * key_file)
         config->heal_interval_seconds = heal_frequency * 60;
     }
 
-    int max_splay_minutes = get_int_from_config_file (key_file, "rhsmcertd",
-                            "maxSplayMinutes");
-    if (max_splay_minutes >= 0) {
-        if (max_splay_minutes > RAND_MAX_MINUTES) {
-            warn("Max splay minutes was set higher than the max supported by this system");
-            warn("Using the max allowed by the system: %d", RAND_MAX_MINUTES);
-            max_splay_minutes = RAND_MAX_MINUTES;
-        }
-        config->max_splay_seconds = max_splay_minutes * 60;
-    }
+    bool splay_enabled = get_bool_from_config_file (key_file, "rhsmcertd",
+                            "splay", DEFAULT_SPLAY_ENABLED);
+    config->splay = splay_enabled;
 }
 
 void
@@ -394,21 +409,14 @@ opt_parse_init_config (Config * config)
         config->heal_interval_seconds = arg_heal_interval_minutes * 60;
     }
 
-    if (arg_max_splay_minutes >= 0) {
-        if (arg_max_splay_minutes > RAND_MAX_MINUTES) {
-            warn("Max splay minutes was set higher than the max supported by this system");
-            warn("Using the max allowed by the system: %d", RAND_MAX_MINUTES);
-            config->max_splay_seconds = RAND_MAX_MINUTES * 60;
-        }
-        else {
-            config->max_splay_seconds = arg_max_splay_minutes * 60;
-        }
+    if (arg_no_splay) {
+        config->splay = FALSE;
     }
     // Let the caller know if opt parser found arg values
     // for the intervals.
     return arg_cert_interval_minutes != -1
         || arg_heal_interval_minutes != -1
-        || arg_max_splay_minutes != -1;
+        || arg_no_splay != FALSE;
 }
 
 Config *
@@ -420,7 +428,7 @@ get_config (int argc, char *argv[])
     // Set the default values
     config->cert_interval_seconds = DEFAULT_CERT_INTERVAL_SECONDS;
     config->heal_interval_seconds = DEFAULT_HEAL_INTERVAL_SECONDS;
-    config->max_splay_seconds = INITIAL_DELAY_OFFSET_MAX;
+    config->splay = DEFAULT_SPLAY_ENABLED;
 
     // Load configuration values from the configuration file
     // which, if defined, will overwrite the current defaults.
@@ -504,7 +512,7 @@ main (int argc, char *argv[])
     // up its resources more reliably in case of error.
     int cert_interval_seconds = config->cert_interval_seconds;
     int heal_interval_seconds = config->heal_interval_seconds;
-    int max_splay_seconds = config->max_splay_seconds;
+    bool splay_enabled = config->splay;
     free (config);
 
     if (daemon (0, 0) == -1)
@@ -520,7 +528,6 @@ main (int argc, char *argv[])
           heal_interval_seconds / 60.0, heal_interval_seconds);
     info ("Cert check interval: %.1f minute(s) [%d second(s)]",
           cert_interval_seconds / 60.0, cert_interval_seconds);
-    debug("Max splay seconds: %d", max_splay_seconds);
 
     // note that we call the function directly first, before assigning a timer
     // to it. Otherwise, it would only get executed when the timer went off, and
@@ -529,12 +536,14 @@ main (int argc, char *argv[])
     // NOTE: We put the initial checks on a timer so that in the case of systemd,
     // we can ensure that the network interfaces are all up before the initial
     // checks are done.
-    int initial_delay = 0;
+    int auto_attach_initial_delay = 0;
+    int cert_check_initial_delay = 0;
     if (run_now) {
         info ("Initial checks will be run now!");
     } else {
-        int offset = 0;
-        if (max_splay_seconds > 0) {
+        int auto_attach_offset = 0;
+        int cert_check_offset = 0;
+        if (splay_enabled == true) {
             unsigned long int seed;
 #ifndef FAKE_RANDOM
             // Grab a seed using the getrandom syscall
@@ -570,24 +579,38 @@ main (int argc, char *argv[])
             }
 #endif
             srand((unsigned int) seed);
-
-            offset = gen_random(max_splay_seconds);
+            auto_attach_offset = gen_random(heal_interval_seconds);
+            cert_check_offset = gen_random(cert_interval_seconds);
         }
 
-        initial_delay = INITIAL_DELAY_SECONDS + offset;
-        info ("Waiting %.1f minute(s) plus %d splay second(s) [%d seconds(s) total] before running updates.",
-                INITIAL_DELAY_SECONDS / 60.0, offset, initial_delay);
+        auto_attach_initial_delay = INITIAL_DELAY_SECONDS + auto_attach_offset;
+        info ("Waiting %.1f minute(s) plus %d splay second(s) [%d seconds(s) totals] before performing first auto-attach.",
+                INITIAL_DELAY_SECONDS / 60.0, auto_attach_offset, auto_attach_initial_delay);
+        cert_check_initial_delay = INITIAL_DELAY_SECONDS + cert_check_offset;
+        info ("Waiting %.1f minute(s) plus %d splay second(s) [%d seconds(s) totals] before performing first cert check.",
+                INITIAL_DELAY_SECONDS / 60.0, cert_check_offset, cert_check_initial_delay);
     }
-    struct CertCheckData data;
-    data.cert_interval_seconds = cert_interval_seconds;
-    data.heal_interval_seconds = heal_interval_seconds;
-    g_timeout_add (initial_delay * 1000,
-               (GSourceFunc) initial_cert_check, (gpointer) &data);
+
+    struct CertCheckData cert_check_data;
+    cert_check_data.interval_seconds = cert_interval_seconds;
+    cert_check_data.heal = false;
+    cert_check_data.next_update_file = NEXT_CERT_UPDATE_FILE;
+
+    struct CertCheckData auto_attach_data;
+    auto_attach_data.interval_seconds = heal_interval_seconds;
+    auto_attach_data.heal = true;
+    auto_attach_data.next_update_file = NEXT_AUTO_ATTACH_UPDATE_FILE;
+
+    g_timeout_add (cert_check_initial_delay * 1000,
+               (GSourceFunc) initial_cert_check, (gpointer) &cert_check_data);
+    g_timeout_add (auto_attach_initial_delay * 1000,
+               (GSourceFunc) initial_cert_check, (gpointer) &auto_attach_data);
 
     // NB: we only use cert_interval_seconds when calculating the next update
     // time. This works for most users, since the cert_interval aligns with
     // runs of heal_interval (i.e., heal_interval % cert_interval = 0)
-    log_update (cert_interval_seconds);
+    log_update (cert_check_initial_delay, NEXT_CERT_UPDATE_FILE);
+    log_update (auto_attach_initial_delay, NEXT_AUTO_ATTACH_UPDATE_FILE);
     g_timeout_add (cert_interval_seconds * 1000,
                (GSourceFunc) log_update,
                GINT_TO_POINTER (cert_interval_seconds));

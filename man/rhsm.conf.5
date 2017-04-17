@@ -180,9 +180,11 @@ autoAttachInterval
 The number of minutes between attempts to run auto\-attach on this consumer\&.
 .RE
 .PP
-maxSplayMinutes
+splay
 .RS 4
-The maximum number of minutes to offset the initial checks by. The initial checks are run 2 minutes plus a random number of seconds in the range [0, maxSplayMinutes * 60]. This is useful to reduce peak load on the Satellite or entitlement service used by a large number of machines. Increase this value on a number of systems to further decrease the peak load on the server.
+1 to enable splay. 0 to disable splay. If enabled, this feature delays the initial auto attach and cert check by an amount between 0 seconds and the interval given for the action being delayed. For example if the
+.B certCheckInterval
+were set to 3 minutes, the initial cert check would begin somewhere between 2 minutes after start up (minimum delay) and 5 minutes after start up. This is useful to reduce peak load on the Satellite or entitlement service used by a large number of machines.
 .SH "[LOGGING] OPTIONS"
 .PP
 default_log_level
