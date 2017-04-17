@@ -17,6 +17,10 @@ import datetime
 import locale
 import socket
 import unittest
+import shutil
+import os
+import ssl
+from tempfile import mkdtemp
 
 from nose.plugins.skip import SkipTest
 
@@ -39,6 +43,10 @@ class ConnectionTests(unittest.TestCase):
         # UEPConnection:
         self.cp = UEPConnection(username="dummy", password="dummy",
                 handler="/Test/", insecure=True)
+        self.temp_ent_dir = mkdtemp()
+
+    def tearDown(self):
+        shutil.rmtree(self.temp_ent_dir)
 
     def test_accepts_a_timeout(self):
         self.cp = UEPConnection(username="dummy", password="dummy",
@@ -220,6 +228,19 @@ class ConnectionTests(unittest.TestCase):
             self.assertIs(None, connection.proxy_password)
             self.assertIs(None, connection.proxy_hostname)
             self.assertIs(None, connection.proxy_port)
+
+    def test_bad_ca_cert(self):
+        f = open(os.path.join(self.temp_ent_dir, "foo.pem"), 'w+')
+        f.write('xxxxxx\n')
+        f.close()
+        connection = ContentConnection(host="foobar", username="dummy", password="dummy", insecure=True)
+        connection.ent_dir = self.temp_ent_dir
+        with self.assertRaises(BadCertificateException) as e:
+            connection._load_ca_certificates(ssl.SSLContext(ssl.PROTOCOL_SSLv23))
+        restlib = Restlib("somehost", "123", "somehandler")
+        restlib.ca_dir = self.temp_ent_dir
+        with self.assertRaises(BadCertificateException) as e:
+            restlib._load_ca_certificates(ssl.SSLContext(ssl.PROTOCOL_SSLv23))
 
 class RestlibValidateResponseTests(unittest.TestCase):
     def setUp(self):
