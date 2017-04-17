@@ -1999,7 +1999,7 @@ class AsyncBackend(object):
             #
             # Behing a 'gather system info' screen?
             #  get installed prods
-            #  get facts (local collection or facts dbus service)
+            #  get facts (local collection or facts service)
             #
             # run pre_register plugin (in main?)
             # ACTUALLY REGISTER (the network call)
@@ -2025,9 +2025,7 @@ class AsyncBackend(object):
             # Note: for now, this is blocking. Maybe we should do it
             #       in the gui mainthread async and pass it in?
 
-            log.debug("about to dbus GetFacts")
             facts_dict = facts.get_facts()
-            log.debug("finished doing dbus GetFacts")
 
             # TODO: We end up calling plugins from threads, which is a little weird.
             #       Seems like a reasonable place to go back to main thread, run the

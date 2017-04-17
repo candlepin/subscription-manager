@@ -102,9 +102,12 @@ class FactsCollector(object):
 
 
 class StaticFactsCollector(FactsCollector):
-    def __init__(self, static_facts, **kwargs):
+    def __init__(self, static_facts=None, **kwargs):
         super(FactsCollector, self).__init__(**kwargs)
+        if static_facts is None:
+            static_facts = {}
         self.static_facts = static_facts
+        self.static_facts.setdefault("system.certificate_version", "3.2")
 
     def get_all(self):
         return self.static_facts

@@ -15,6 +15,8 @@ import os
 import glob
 import logging
 
+import rhsm.config
+
 from rhsm import ourjson
 from rhsmlib.facts.collector import FactsCollector
 
@@ -103,6 +105,10 @@ class CustomFactsCollector(FactsCollector):
             collected_hw_info=collected_hw_info
         )
         self.path_and_globs = path_and_globs
+        if path_and_globs is None:
+            self.path_and_globs = [
+                (os.path.join(rhsm.config.DEFAULT_CONFIG_DIR, 'facts'), '*.facts')
+            ]
         self.facts_directories = CustomFactsDirectories(self.path_and_globs)
 
     def get_all(self):

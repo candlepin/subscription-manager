@@ -34,5 +34,3 @@ FACTS_DBUS_PATH = constants.ROOT_DBUS_PATH + '/' + SUB_SERVICE_NAME
 
 FACTS_VERSION = "1.1e1"
 FACTS_NAME = "Red Hat Subscription Manager facts."
-
-CERT_VERSION = "3.2"
