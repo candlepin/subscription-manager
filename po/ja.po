@@ -5,7 +5,7 @@
 # John Sefler <jsefler@redhat.com>, 2016. #zanata
 # asasaki <asasaki@redhat.com>, 2016. #zanata
 # John Sefler <jsefler@redhat.com>, 2017. #zanata
-# Vritant Jain <vrjain@redhat.com>, 2017. #zanata
+# Kevin Howell <kevin@kahowell.net>, 2017. #zanata
 # kmoriguc <kmoriguc@redhat.com>, 2017. #zanata
 # tnagamot <tnagamot@redhat.com>, 2017. #zanata
 msgid ""
@@ -16,8 +16,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-03-28 04:45-0400\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2017-04-17 10:01-0400\n"
+"Last-Translator: Kevin Howell <kevin@kahowell.net>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0\n"
@@ -1485,19 +1485,19 @@ msgstr "<b>このシステムに関して以下を記入してください:</b>"
 #: src/subscription_manager/gui/data/glade/activation_key.glade:30
 #: src/subscription_manager/gui/data/ui/activation_key.ui:47
 msgid "_Organization:"
-msgstr "組織:"
+msgstr "組織 (_O):"
 
 #: src/subscription_manager/gui/data/glade/activation_key.glade:44
 #: src/subscription_manager/gui/data/ui/activation_key.ui:63
 msgid "Activation _Key:"
-msgstr "アクティベーションキー:"
+msgstr "アクティベーションキー (_K):"
 
 #: src/subscription_manager/gui/data/glade/activation_key.glade:60
 #: src/subscription_manager/gui/data/glade/credentials.glade:234
 #: src/subscription_manager/gui/data/ui/activation_key.ui:78
 #: src/subscription_manager/gui/data/ui/credentials.ui:253
 msgid "System _Name:"
-msgstr "システム名:"
+msgstr "システム名 (_N):"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/data/glade/activation_key.glade:77
@@ -1633,7 +1633,7 @@ msgstr "server_entry"
 #: src/subscription_manager/gui/data/glade/choose_server.glade:132
 #: src/subscription_manager/gui/data/ui/choose_server.ui:132
 msgid "_Default"
-msgstr "デフォルト"
+msgstr "デフォルト (_D)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/gui/data/glade/choose_server.glade:136
@@ -1758,12 +1758,12 @@ msgstr "SLA 選択表"
 #: src/subscription_manager/gui/data/glade/credentials.glade:140
 #: src/subscription_manager/gui/data/ui/credentials.ui:91
 msgid "_Password:"
-msgstr "パスワード:"
+msgstr "パスワード (_P):"
 
 #: src/subscription_manager/gui/data/glade/credentials.glade:162
 #: src/subscription_manager/gui/data/ui/credentials.ui:48
 msgid "_Login:"
-msgstr "ログイン:"
+msgstr "ログイン (_L):"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/gui/data/glade/credentials.glade:210
@@ -3367,7 +3367,7 @@ msgstr "サブスクライブ工程でエラー: %s"
 
 #: src/subscription_manager/gui/registergui.py:1185
 msgid "_Attach"
-msgstr "割り当て"
+msgstr "割り当て (_A)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/registergui.py:1250
@@ -3378,7 +3378,7 @@ msgstr "適切なサービスレベルを検索中"
 #: src/subscription_manager/gui/registergui.py:1785
 #: src/subscription_manager/gui/registergui.py:2349
 msgid "_Next"
-msgstr "次へ"
+msgstr "次へ (_N)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/registergui.py:1305
