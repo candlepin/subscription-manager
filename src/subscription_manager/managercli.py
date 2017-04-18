@@ -2142,6 +2142,7 @@ class ReposCommand(CliCommand):
                 rc = 1
                 print _("Error: '%s' does not match a valid repository ID. "
                         "Use \"subscription-manager repos --list\" to see valid repositories.") % repoid
+                log.warning("'%s' does not match a valid repository ID." % repoid)
 
             # Overwrite repo if it's already in the dict, we want the last
             # match to be the one sent to server.
