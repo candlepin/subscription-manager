@@ -108,6 +108,11 @@ _LIBPATH = "/usr/share/rhsm"
 if _LIBPATH not in sys.path:
     sys.path.append(_LIBPATH)
 
+# quick check to see if you are a super-user.
+if os.getuid() != 0:
+    sys.stderr.write('Error: must be root to execute\n')
+    sys.exit(8)
+
 try:
     from subscription_manager import ga_loader
     ga_loader.init_ga()
@@ -116,11 +121,6 @@ try:
     gtk_compat.threads_init()
 except RuntimeError, e:
     system_exit(2, "Unable to start.  Error: %s" % e)
-
-# quick check to see if you are a super-user.
-if os.getuid() != 0:
-    sys.stderr.write('Error: must be root to execute\n')
-    sys.exit(8)
 
 try:
     # this has to be done first thing due to module level translated vars.
