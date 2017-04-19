@@ -91,6 +91,9 @@ class FakeLogger:
     def info(self, buf, *args, **kwargs):
         self.msg = buf
 
+    def warning(self, buf, *args, **kwargs):
+        self.msg = buf
+
 
 class FakeException(Exception):
     def __init__(self, msg=None):

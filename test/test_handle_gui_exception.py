@@ -2,6 +2,7 @@ try:
     import unittest2 as unittest
 except ImportError:
     import unittest
+from mock import patch
 
 import socket
 from rhsm.https import ssl
@@ -17,6 +18,8 @@ class FakeErrorWindow:
         self.msg = msg
 
 
+@patch('subscription_manager.gui.utils.log', FakeLogger())
+@patch('subscription_manager.gui.utils.show_error_window', FakeErrorWindow)
 class HandleGuiExceptionTests(unittest.TestCase):
 
     # we are going with "hge" for handle_gui_exception
@@ -27,9 +30,6 @@ class HandleGuiExceptionTests(unittest.TestCase):
         self.msg_with_url = "https://www.example.com"
         self.msg_with_url_and_formatting = "https://www.example.com %s"
         self.msg_with_markup = """<span foreground="blue" size="100">Blue text</span> is <i>cool</i>!"""
-        utils.log = FakeLogger()
-        utils.show_error_window = FakeErrorWindow
-        # set a mock logger
 
     def test_hge(self):
         e = FakeException()
