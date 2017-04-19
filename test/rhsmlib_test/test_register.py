@@ -21,6 +21,7 @@ import socket
 
 import rhsm.connection
 import subscription_manager.injection as inj
+import subscription_manager.cp_provider
 
 from test import stubs
 from test.fixture import SubManFixture
@@ -65,17 +66,21 @@ SUCCESSFUL_REGISTRATION = {
 class DomainSocketRegisterDBusObjectUnitTest(SubManFixture):
     def setUp(self):
         self.dbus_connection = mock.Mock(spec=dbus.connection.Connection)
+        self.stub_cp_provider = stubs.StubCPProvider()
+        inj.provide(inj.CP_PROVIDER, self.stub_cp_provider)
+
         super(DomainSocketRegisterDBusObjectUnitTest, self).setUp()
 
     @mock.patch("subscription_manager.managerlib.persist_consumer_cert")
     @mock.patch("rhsm.connection.UEPConnection")
-    def test_register(self, stub_uep, mock_persist_consumer):
+    def test_register(self, patched_uep, mock_persist_consumer):
         self._inject_mock_invalid_consumer()
 
         expected_consumer = json.loads(CONTENT_JSON, object_hook=dbus_utils._decode_dict)
         del expected_consumer['idCert']
 
-        stub_uep.return_value.registerConsumer = mock.Mock(return_value=SUCCESSFUL_REGISTRATION)
+        patched_uep.return_value.registerConsumer = mock.Mock(return_value=SUCCESSFUL_REGISTRATION)
+        self.stub_cp_provider.basic_auth_cp = patched_uep.return_value
         register_service = DomainSocketRegisterDBusObject(conn=self.dbus_connection)
 
         output = register_service.Register('admin', 'admin', 'admin', {
@@ -90,15 +95,14 @@ class DomainSocketRegisterDBusObjectUnitTest(SubManFixture):
         self.assertEquals(output, SUCCESSFUL_REGISTRATION)
 
     @mock.patch("rhsm.connection.UEPConnection")
-    def test_get_uep_from_options(self, stub_uep):
-        stub_uep.return_value = mock.Mock(spec=rhsm.connection.UEPConnection)
+    def test_get_uep_from_options(self, patched_uep):
+        inj.provide(inj.CP_PROVIDER, subscription_manager.cp_provider.CPProvider)
         options = {
             'username': 'test',
             'password': 'test_password',
             'host': 'localhost',
-            'port': '8443',
-            'handler': '/candlepin',
-            'insecure': True
+            'port': 8443,
+            'handler': '/candlepin'
         }
 
         self._inject_mock_invalid_consumer()
@@ -106,29 +110,34 @@ class DomainSocketRegisterDBusObjectUnitTest(SubManFixture):
         register_service = DomainSocketRegisterDBusObject(conn=self.dbus_connection)
         register_service.build_uep(options)
 
-        stub_uep.assert_called_once_with(
-            username=options.get('username', None),
-            password=options.get('password', None),
-            host=options.get('host', None),
-            ssl_port=rhsm.connection.safe_int(options.get('port', None)),
-            handler=options.get('handler', None),
-            insecure=options.get('insecure', None),
-            proxy_hostname=options.get('proxy_hostname', None),
-            proxy_port=options.get('proxy_port', None),
-            proxy_user=options.get('proxy_user', None),
-            proxy_password=options.get('proxy_password', None),
+        from rhsmlib.dbus.objects.register import conf as register_conf
+
+        conf = register_conf['server']
+        patched_uep.assert_called_once_with(
+            username=options['username'],
+            password=options['password'],
+            host=options['host'],
+            ssl_port=options['port'],
+            handler=options['handler'],
+            proxy_hostname=conf['proxy_hostname'],
+            proxy_port=conf.get_int('proxy_port'),
+            proxy_user=conf['proxy_user'],
+            proxy_password=conf['proxy_password'],
+            no_proxy=conf['no_proxy'],
+            correlation_id=mock.ANY,
             restlib_class=rhsm.connection.BaseRestLib
         )
 
     @mock.patch("subscription_manager.managerlib.persist_consumer_cert")
     @mock.patch("rhsm.connection.UEPConnection")
-    def test_register_with_activation_keys(self, stub_uep, mock_persist_consumer):
+    def test_register_with_activation_keys(self, patched_uep, mock_persist_consumer):
         self._inject_mock_invalid_consumer()
 
-        expected_consumer = json.loads(CONTENT_JSON,
-            object_hook=dbus_utils._decode_dict)
+        expected_consumer = json.loads(CONTENT_JSON, object_hook=dbus_utils._decode_dict)
         del expected_consumer['idCert']
-        stub_uep.return_value.registerConsumer = mock.Mock(return_value=SUCCESSFUL_REGISTRATION)
+        patched_uep.return_value.registerConsumer = mock.Mock(return_value=SUCCESSFUL_REGISTRATION)
+        # Note it's no_auth_cp since activation key registration uses no authentication
+        self.stub_cp_provider.no_auth_cp = patched_uep.return_value
         register_service = DomainSocketRegisterDBusObject(self.dbus_connection)
 
         output = register_service.RegisterWithActivationKeys('admin', ['default_key'], {
@@ -150,6 +159,10 @@ class DomainSocketRegisterDBusObjectFunctionalTest(DBusObjectTest):
     def setUp(self):
         inj.provide(inj.PROD_DIR, stubs.StubProductDirectory())
         inj.provide(inj.INSTALLED_PRODUCTS_MANAGER, stubs.StubInstalledProductsManager())
+
+        self.stub_cp_provider = stubs.StubCPProvider()
+        inj.provide(inj.CP_PROVIDER, self.stub_cp_provider)
+
         facts_host_patcher = mock.patch('rhsmlib.dbus.facts.FactsClient', auto_spec=True)
         self.addCleanup(facts_host_patcher.stop)
         self.mock_facts_host = facts_host_patcher.start()
@@ -232,7 +245,7 @@ class DomainSocketRegisterDBusObjectFunctionalTest(DBusObjectTest):
 
     @mock.patch("subscription_manager.managerlib.persist_consumer_cert")
     @mock.patch("rhsm.connection.UEPConnection")
-    def test_can_register_over_domain_socket(self, stub_uep, mock_persist_consumer):
+    def test_can_register_over_domain_socket(self, patched_uep, mock_persist_consumer):
         def get_address(*args):
             get_address.address = args[0]
 
@@ -252,7 +265,10 @@ class DomainSocketRegisterDBusObjectFunctionalTest(DBusObjectTest):
             self.assertEquals(args[0], SUCCESSFUL_REGISTRATION)
 
         self._inject_mock_invalid_consumer()
-        stub_uep.return_value.registerConsumer = mock.Mock(return_value=SUCCESSFUL_REGISTRATION)
+
+        patched_uep.return_value.registerConsumer = mock.Mock(return_value=SUCCESSFUL_REGISTRATION)
+        # We patch the real UEP class in the tests in this class because we don't want a StubUEP
+        self.stub_cp_provider.basic_auth_cp = patched_uep.return_value
 
         register_opts = ['admin', 'admin', 'admin', {
             'host': 'localhost',
