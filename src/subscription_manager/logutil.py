@@ -24,7 +24,11 @@ LOG_FORMAT = u'%(asctime)s [%(levelname)s] %(cmd_name)s:%(process)d:' \
 _rhsm_log_handler = None
 _subman_debug_handler = None
 log = None
-ROOT_NAMESPACES = ['subscription_manager', 'rhsm', 'rhsm-app']
+ROOT_NAMESPACES = ['subscription_manager',
+                   'rhsm',
+                   'rhsm-app',
+                   'rhsmlib',
+                   ]
 
 
 # Don't need this for syslog
