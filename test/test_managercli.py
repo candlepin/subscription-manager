@@ -1504,7 +1504,6 @@ class HandleExceptionTests(unittest.TestCase):
     def setUp(self):
         self.msg = "some thing to log home about"
         self.formatted_msg = "some thing else like: %s"
-        managercli.log = FakeLogger()
 
     def test_he(self):
         e = FakeException()
@@ -1521,6 +1520,7 @@ class HandleExceptionTests(unittest.TestCase):
         except SystemExit, e:
             self.assertEquals(e.code, os.EX_SOFTWARE)
 
+    @patch('subscription_manager.managercli.log', FakeLogger())
     def test_he_socket_error(self):
         # these error messages are bare strings, so we need to update the tests
         # if those messages change
