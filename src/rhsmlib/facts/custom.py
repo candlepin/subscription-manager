@@ -31,6 +31,9 @@ class CustomFacts(object):
     def from_json(cls, json_blob):
         custom_facts = cls
 
+        # Default to no facts collected
+        # See BZ#1435771
+        data = {}
         try:
             data = ourjson.loads(json_blob)
         except ValueError:
