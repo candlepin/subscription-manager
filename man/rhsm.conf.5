@@ -69,28 +69,28 @@ proxy_hostname
 .RS 4
 Set this to a non\-blank value if
 \fBsubscription\-manager\fR
-should use a reverse proxy to access the subscription service\&. This sets the host for the reverse proxy\&.
+should use a reverse proxy to access the subscription service\&. This sets the host for the reverse proxy\&. Overrides hostname from \fBHTTP_PROXY\fR and \fBHTTPS_PROXY\fR environment variables\&.
 .RE
 .PP
 proxy_port
 .RS 4
 Set this to a non\-blank value if
 \fBsubscription\-manager\fR
-should use a reverse proxy to access the subscription service\&. This sets the port for the reverse proxy\&.
+should use a reverse proxy to access the subscription service\&. This sets the port for the reverse proxy\&. Overrides port from \fBHTTP_PROXY\fR and \fBHTTPS_PROXY\fR environment variables\&.
 .RE
 .PP
 proxy_username
 .RS 4
 Set this to a non\-blank value if
 \fBsubscription\-manager\fR
-should use an authenticated reverse proxy to access the subscription service\&. This sets the username for the reverse proxy\&.
+should use an authenticated reverse proxy to access the subscription service\&. This sets the username for the reverse proxy\&. Overrides username from \fBHTTP_PROXY\fR and \fBHTTPS_PROXY\fR environment variables\&.
 .RE
 .PP
 proxy_password
 .RS 4
 Set this to a non\-blank value if
 \fBsubscription\-manager\fR
-should use an authenticated reverse proxy to access the subscription service\&. This sets the password for the reverse proxy\&.
+should use an authenticated reverse proxy to access the subscription service\&. This sets the password for the reverse proxy\&. Overrides password from \fBHTTP_PROXY\fR and \fBHTTPS_PROXY\fR environment variables\&.
 .RE
 .PP
 no_proxy
@@ -98,7 +98,7 @@ no_proxy
 Set this to a non\-blank value if
 \fBsubscription-manager\fR
 should not use a proxy for specific hosts\&. Format is a comma-separated list of hostname suffixes,
-optionally with port\&. '*' is a special value that means do not use a proxy for any host\&.
+optionally with port\&. '*' is a special value that means do not use a proxy for any host\&. Overrides the \fBNO_PROXY\fR environment variable\&.
 .RE
 .SH "[RHSM] OPTIONS"
 .PP
