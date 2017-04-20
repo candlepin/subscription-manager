@@ -23,21 +23,11 @@ import os
 
 log = logging.getLogger(__name__)
 
-try:
-    import dmidecode
-except ImportError:
-    log.warn("Unable to load dmidecode module. No DMI info will be collected")
-    raise
-
 from rhsmlib.facts import collector
 
 _ = gettext.gettext
 
 FIRMWARE_DUMP_FILENAME = "dmi.dump"
-
-
-def clear_warnings():
-    dmidecode.clear_warnings()
 
 
 class DmiFirmwareInfoCollector(collector.FactsCollector):
@@ -54,9 +44,8 @@ class DmiFirmwareInfoCollector(collector.FactsCollector):
         self.dump_file = None
         if testing and prefix:
             self.dump_file = os.path.join(prefix, FIRMWARE_DUMP_FILENAME)
-            self.use_dump_file()
 
-    def use_dump_file(self):
+    def use_dump_file(self, dmidecode):
         """Set this instances to use a dmidecode dump file.
 
         WARNING: This involves settings a module global
@@ -71,26 +60,32 @@ class DmiFirmwareInfoCollector(collector.FactsCollector):
     # This needs all of the previously collected hwinfo, so it can decide
     # what is bogus enough that the DMI info is better.
     def get_all(self):
-        dmiinfo = {}
-        dmi_data = {
-            "dmi.bios.": self._read_dmi(dmidecode.bios),
-            "dmi.processor.": self._read_dmi(dmidecode.processor),
-            "dmi.baseboard.": self._read_dmi(dmidecode.baseboard),
-            "dmi.chassis.": self._read_dmi(dmidecode.chassis),
-            "dmi.slot.": self._read_dmi(dmidecode.slot),
-            "dmi.system.": self._read_dmi(dmidecode.system),
-            "dmi.memory.": self._read_dmi(dmidecode.memory),
-            "dmi.connector.": self._read_dmi(dmidecode.connector),
-        }
-
         try:
+            import dmidecode
+        except ImportError:
+            log.warn("Unable to load dmidecode module. No DMI info will be collected")
+            raise
+
+        dmiinfo = {}
+        try:
+            self.use_dump_file(dmidecode)
+            dmi_data = {
+                "dmi.bios.": self._read_dmi(dmidecode.bios),
+                "dmi.processor.": self._read_dmi(dmidecode.processor),
+                "dmi.baseboard.": self._read_dmi(dmidecode.baseboard),
+                "dmi.chassis.": self._read_dmi(dmidecode.chassis),
+                "dmi.slot.": self._read_dmi(dmidecode.slot),
+                "dmi.system.": self._read_dmi(dmidecode.system),
+                "dmi.memory.": self._read_dmi(dmidecode.memory),
+                "dmi.connector.": self._read_dmi(dmidecode.connector),
+            }
+
             for tag, func in dmi_data.items():
                 dmiinfo = self._get_dmi_data(func, tag, dmiinfo)
         except Exception as e:
             log.warn(_("Error reading system DMI information: %s"), e)
-
-        self.log_warnings()
-
+        finally:
+            self.log_warnings(dmidecode)
         return dmiinfo
 
     def _read_dmi(self, func):
@@ -124,7 +119,7 @@ class DmiFirmwareInfoCollector(collector.FactsCollector):
 
         return ddict
 
-    def log_warnings(self):
+    def log_warnings(self, dmidecode):
         dmiwarnings = dmidecode.get_warnings()
         if dmiwarnings:
             log.warn(_("Error reading system DMI information: %s"), dmiwarnings)
