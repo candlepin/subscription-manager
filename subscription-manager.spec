@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.19.8
+Version: 1.19.9
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -607,6 +607,21 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Thu Apr 20 2017 Kevin Howell <khowell@redhat.com> 1.19.9-1
+- Sync zanata translations (khowell@redhat.com)
+- 1438869: Capture dmidecode errors at fact gathering (khowell@redhat.com)
+- 1443205: Simplify rhsmcertd log message plurality (csnyder@redhat.com)
+- 1435771: Fix UnboundLocalError during custom facts collection
+  (csnyder@redhat.com)
+- 1426357: Fix DBus register service configuration issue. (awood@redhat.com)
+- 1405314: Better output message, when subman gui is launched with non-root
+  user. (jhnidek@redhat.com)
+- 1426685: Bug fix: subman doesn't log errors when repository enabling failed
+  (jhnidek@redhat.com)
+- 1441698: Install missing rpm package with fonts. (jhnidek@redhat.com)
+- 1438085: Do not include virt.uuid for platforms where it is not known
+  (csnyder@redhat.com)
+
 * Mon Apr 17 2017 Kevin Howell <khowell@redhat.com> 1.19.8-1
 - Sync zanata translations (khowell@redhat.com)
 - Bump python-rhsm requirement to 1.19.5 (khowell@redhat.com)
