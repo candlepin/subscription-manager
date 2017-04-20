@@ -95,8 +95,6 @@ def get_firmware_collector(arch, prefix=None, testing=None,
 
     if arch in ARCHES_WITHOUT_DMI:
         log.debug("Not looking for DMI info since it is not available on '%s'" % arch)
-        if dmiinfo:
-            dmiinfo.clear_warnings()
         firmware_provider_class = NullFirmwareInfoCollector
     else:
         if dmiinfo:
