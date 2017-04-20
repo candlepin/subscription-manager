@@ -524,9 +524,9 @@ main (int argc, char *argv[])
     }
 
     info ("Starting rhsmcertd...");
-    info ("Auto-attach interval: %.1f minute(s) [%d second(s)]",
+    info ("Auto-attach interval: %.1f minutes [%d seconds]",
           heal_interval_seconds / 60.0, heal_interval_seconds);
-    info ("Cert check interval: %.1f minute(s) [%d second(s)]",
+    info ("Cert check interval: %.1f minutes [%d seconds]",
           cert_interval_seconds / 60.0, cert_interval_seconds);
 
     // note that we call the function directly first, before assigning a timer
@@ -584,10 +584,10 @@ main (int argc, char *argv[])
         }
 
         auto_attach_initial_delay = INITIAL_DELAY_SECONDS + auto_attach_offset;
-        info ("Waiting %.1f minute(s) plus %d splay second(s) [%d seconds(s) totals] before performing first auto-attach.",
+        info ("Waiting %.1f minutes plus %d splay seconds [%d seconds total] before performing first auto-attach.",
                 INITIAL_DELAY_SECONDS / 60.0, auto_attach_offset, auto_attach_initial_delay);
         cert_check_initial_delay = INITIAL_DELAY_SECONDS + cert_check_offset;
-        info ("Waiting %.1f minute(s) plus %d splay second(s) [%d seconds(s) totals] before performing first cert check.",
+        info ("Waiting %.1f minutes plus %d splay seconds [%d seconds total] before performing first cert check.",
                 INITIAL_DELAY_SECONDS / 60.0, cert_check_offset, cert_check_initial_delay);
     }
 
