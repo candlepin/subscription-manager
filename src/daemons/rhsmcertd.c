@@ -611,9 +611,6 @@ main (int argc, char *argv[])
     // runs of heal_interval (i.e., heal_interval % cert_interval = 0)
     log_update (cert_check_initial_delay, NEXT_CERT_UPDATE_FILE);
     log_update (auto_attach_initial_delay, NEXT_AUTO_ATTACH_UPDATE_FILE);
-    g_timeout_add (cert_interval_seconds * 1000,
-               (GSourceFunc) log_update,
-               GINT_TO_POINTER (cert_interval_seconds));
 
     GMainLoop *main_loop = g_main_loop_new (NULL, FALSE);
     g_main_loop_run (main_loop);
