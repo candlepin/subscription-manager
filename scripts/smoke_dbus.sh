@@ -1,15 +1,15 @@
 #!/bin/bash
 
-FACTS="com.redhat.Subscriptions1.Facts"
-FACTS_PATH="/com/redhat/Subscriptions1/Facts/Host"
-FACTS_INTF="com.redhat.Subscriptions1.Facts"
+FACTS="com.redhat.RHSM1.Facts"
+FACTS_PATH="/com/redhat/RHSM1/Facts/Host"
+FACTS_INTF="com.redhat.RHSM1.Facts"
 PROPS_INTF="org.freedesktop.DBus.Properties"
 INTRO_INTF="org.freedesktop.DBus.Introspectable"
 
 busctl | grep 'rhsm'
 busctl status "${FACTS}"
 
-pkaction | grep 'Subscriptions1'
+pkaction | grep 'RHSM1'
 
 busctl tree "${FACTS}"
 SERVICE="${FACTS}"
