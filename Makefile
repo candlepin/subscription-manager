@@ -191,6 +191,7 @@ install-conf:
 	install -d $(POLKIT_ACTIONS_INST_DIR)
 	install -m 644 etc-conf/dbus/com.redhat.RHSM1.policy $(POLKIT_ACTIONS_INST_DIR)
 	install -m 644 etc-conf/dbus/com.redhat.RHSM1.Facts.policy $(POLKIT_ACTIONS_INST_DIR)
+	install -m 644 etc-conf/dbus/com.redhat.SubscriptionManager.policy $(POLKIT_ACTIONS_INST_DIR)
 
 .PHONY: install-plugins
 install-plugins:
