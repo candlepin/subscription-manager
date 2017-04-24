@@ -13,7 +13,7 @@
 #
 import logging
 import socket
-from M2Crypto import SSL
+from rhsm.https import ssl
 
 import rhsm.connection
 
@@ -74,7 +74,7 @@ class Candlepin(object):
         except AttributeError as e:
             log.exception(e)
             raise
-        except SSL.SSLError as ex:
+        except ssl.SSLError as ex:
             log.exception(ex)
             self.last_error = ex
             log.error("Consumer certificate is invalid")
