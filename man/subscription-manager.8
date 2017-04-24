@@ -1246,6 +1246,53 @@ and the
 .B subscription-manager yum plugin
 use see https://access.redhat.com/site/articles/414963
 
+.SH PROXY CONFIGURATION
+.B subscription-manager
+can be configured to use a proxy in several ways:
+.IP
+* via standard
+.B HTTP_PROXY
+,
+.B HTTPS_PROXY
+,
+.B NO_PROXY
+environment variables (environment-level settings)
+.IP
+* via options in
+.B /etc/rhsm/rhsm.conf
+(application-level settings)
+.IP
+* via command-line arguments (command-level overrides)
+
+.PP
+Although
+.B subscription-manager
+respects environment variables for proxy configuration, this should be avoided in favor of the configuration file, because the daemons (ex.
+.B rhsmcertd
+and
+.B rhsmd
+) do not provide ways to modify their environments.
+
+Each option of the proxy configuration (hostname, port, host/domain pattern blacklist, username, password) is read independently, with precedence being command-line over configuration over environment, and then the resulting set of options is used to configure the proxy configuration.
+
+For example,
+if the
+.B HTTP_PROXY
+environment variable is set and
+.B no_proxy
+is set in
+.B /etc/rhsm/rhsm.conf
+then both are present in the effective proxy configuration.
+
+If two equivalent options are set in different places, then the precedence determines which value is effective.
+
+For example,
+the
+.B NO_PROXY
+environment variable is set and the
+.B no_proxy
+configuration file option is set, then the value from the configuration file is the effective value.
+
 .SH FILES
 .IP
 * /etc/pki/consumer/*.pem

@@ -42,28 +42,33 @@ ssl_verify_depth::
 proxy_hostname::
   Set this to a non-blank value if *subscription-manager* should use a
   reverse proxy to access the subscription service. This sets the host
-  for the reverse proxy.
+  for the reverse proxy. Overrides hostname from *HTTP_PROXY* and
+  *HTTPS_PROXY* environment variables.
 
 proxy_port::
   Set this to a non-blank value if *subscription-manager* should use a
   reverse proxy to access the subscription service. This sets the port
-  for the reverse proxy.
+  for the reverse proxy. Overrides port from *HTTP_PROXY* and
+  *HTTPS_PROXY* environment variables.
 
 proxy_username::
   Set this to a non-blank value if *subscription-manager* should use an
   authenticated reverse proxy to access the subscription service. This
-  sets the username for the reverse proxy.
+  sets the username for the reverse proxy. Overrides username from
+  *HTTP_PROXY* and *HTTPS_PROXY* environment variables.
 
 proxy_password::
   Set this to a non-blank value if *subscription-manager* should use an
   authenticated reverse proxy to access the subscription service. This
-  sets the password for the reverse proxy.
+  sets the username for the reverse proxy. Overrides password from
+  *HTTP_PROXY* and *HTTPS_PROXY* environment variables.
 
 no_proxy::
   Set this to a non-blank value if *subscription-manager* should not use
   a proxy for specific hosts. Format is a comma-separated list of
   hostname suffixes, optionally with port. '*' is a special value that
-  means don't use a proxy for any host.
+  means don't use a proxy for any host. Overrides the *NO_PROXY*
+  environment variable.
 
 [rhsm] OPTIONS
 --------------
