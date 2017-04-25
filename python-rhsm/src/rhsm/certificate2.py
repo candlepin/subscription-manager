@@ -118,7 +118,11 @@ class _CertFactory(object):
             return self._create_v1_prod_cert(version, extensions, x509, path)
 
     def _read_alt_name(self, x509):
-        return x509.get_extension(name='subjectAltName').decode('utf-8')
+        alt_name = x509.get_extension(name='subjectAltName')
+        if alt_name is None:
+            return None
+        else:
+            return alt_name.decode('utf-8')
 
     def _read_issuer(self, x509):
         return x509.get_issuer()
