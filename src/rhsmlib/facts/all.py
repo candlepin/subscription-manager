@@ -19,10 +19,10 @@ from rhsmlib.facts import hwprobe
 class AllFactsCollector(collector.FactsCollector):
     def __init__(self):
         self.collectors = [
+            collector.StaticFactsCollector(),
             host_collector.HostCollector(),
             hwprobe.HardwareCollector(),
             custom.CustomFactsCollector(),
-            collector.StaticFactsCollector(),
         ]
 
     def get_all(self):
