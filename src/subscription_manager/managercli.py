@@ -240,8 +240,19 @@ def get_installed_product_status(product_directory, entitlement_directory, uep, 
     """
     product_status = []
 
-    calculator = inj.require(inj.PRODUCT_DATE_RANGE_CALCULATOR, uep)
+    # It is important to gather data from certificates of installed
+    # products at the first time: sorter = inj.require(inj.CERT_SORTER)
+    # Data are stored in cache (json file:
+    # /var/lib/rhsm/cache/installed_products.json)
+    # Calculator use this cache (json file) for assembling request
+    # sent to server. When following two lines of code are called in
+    # reverse order, then request can be incomplete and result
+    # needn't contain all data (especially startDate and endDate).
+
+    # FIXME: make following functions independent on order of calling
     sorter = inj.require(inj.CERT_SORTER)
+    calculator = inj.require(inj.PRODUCT_DATE_RANGE_CALCULATOR, uep)
+
     cert_filter = None
 
     if filter_string is not None:
