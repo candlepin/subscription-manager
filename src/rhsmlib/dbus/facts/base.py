@@ -42,32 +42,18 @@ class BaseFacts(base_object.BaseObject):
         return dbus.Dictionary(cleaned, signature="ss")
 
 
-class AllFacts(BaseFacts):
+def class_factory(name, facts_collector=None):
+    """Function used for creating subclasses of class BaseFact"""
     def __init__(self, conn=None, object_path=None, bus_name=None):
-        super(AllFacts, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
-        self.facts_collector = all.AllFactsCollector()
+        super(self.__class__, self).__init__(conn=conn,
+                                             object_path=object_path,
+                                             bus_name=bus_name)
+        self.facts_collector = facts_collector
+    return type(name, (BaseFacts,), {"__init__": __init__})
 
 
-class HostFacts(BaseFacts):
-    def __init__(self, conn=None, object_path=None, bus_name=None):
-        super(HostFacts, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
-        self.facts_collector = host_collector.HostCollector()
-
-
-class HardwareFacts(BaseFacts):
-    def __init__(self, conn=None, object_path=None, bus_name=None):
-        super(HardwareFacts, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
-        self.facts_collector = hwprobe.HardwareCollector()
-
-
-class CustomFacts(BaseFacts):
-    def __init__(self, conn=None, object_path=None, bus_name=None):
-        super(CustomFacts, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
-
-        self.facts_collector = custom.CustomFactsCollector()
-
-
-class StaticFacts(BaseFacts):
-    def __init__(self, conn=None, object_path=None, bus_name=None):
-        super(StaticFacts, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
-        self.facts_collector = collector.StaticFactsCollector()
+AllFacts = class_factory('AllFacts', all.AllFactsCollector())
+HostFacts = class_factory('HostFacts', host_collector.HostCollector())
+HardwareFacts = class_factory('HardwareFacts', hwprobe.HardwareCollector())
+CustomFacts = class_factory('CustomFacts', custom.CustomFactsCollector())
+StaticFacts = class_factory('StaticFacts', collector.StaticFactsCollector())

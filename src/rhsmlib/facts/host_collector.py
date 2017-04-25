@@ -11,18 +11,13 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-import os
-import locale
 
-import rhsm.config
+import locale
 
 from rhsmlib.facts import hwprobe
 from rhsmlib.facts import cleanup
-from rhsmlib.facts import custom
 from rhsmlib.facts import virt
 from rhsmlib.facts import firmware_info
-
-
 from rhsmlib.facts import collector
 
 
@@ -45,9 +40,6 @@ class HostCollector(collector.FactsCollector):
 
 
     Facts collected include DMI info and virt status and virt.uuid."""
-
-    facts_sub_dir = 'facts'
-    facts_glob = '*.facts'
 
     def get_all(self):
         host_facts = {}
@@ -73,18 +65,6 @@ class HostCollector(collector.FactsCollector):
         host_facts.update(hardware_info)
         host_facts.update(virt_collector_info)
         host_facts.update(firmware_info_dict)
-
-        default_rhsm_dir = rhsm.config.DEFAULT_CONFIG_DIR.rstrip('/')
-        custom_facts_dir = os.path.join(default_rhsm_dir, self.facts_sub_dir)
-        path_and_globs = [(custom_facts_dir, self.facts_glob)]
-
-        custom_facts = custom.CustomFactsCollector(
-            prefix=self.prefix,
-            testing=self.testing,
-            path_and_globs=path_and_globs
-        )
-        custom_facts_dict = custom_facts.get_all()
-        host_facts.update(custom_facts_dict)
 
         locale_info = {}
         locale_info['system.default_locale'] = ".".join(locale.getdefaultlocale())
