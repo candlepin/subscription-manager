@@ -369,6 +369,7 @@ rm -rf %{buildroot}
 %attr(750,root,root) %dir %{_var}/lib/rhsm/facts
 %attr(750,root,root) %dir %{_var}/lib/rhsm/packages
 %attr(750,root,root) %dir %{_var}/lib/rhsm/cache
+%attr(750,root,root) %dir %{_var}/lib/rhsm/repo_server_val
 
 %{_sysconfdir}/bash_completion.d/subscription-manager
 %{_sysconfdir}/bash_completion.d/rct

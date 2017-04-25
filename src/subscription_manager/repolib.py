@@ -89,12 +89,21 @@ class RepoActionInvoker(BaseActionInvoker):
         # Add the current repo data
         repo_file = RepoFile()
         repo_file.read()
+        server_value_repo_file = RepoFile('var/lib/rhsm/repo_server_val/')
+        server_value_repo_file.read()
         for repo in repos:
             existing = repo_file.section(repo.id)
+            server_value_repo = server_value_repo_file.section(repo.id)
+            # we need a repo in the server val file to match any in
+            # the main repo definition file
+            if server_value_repo is None:
+                server_value_repo = Repo(repo.id)
+                server_value_repo['name'] = repo['name']
+                server_value_repo_file.add(server_value_repo)
             if existing is None:
                 current.add(repo)
             else:
-                action.update_repo(existing, repo)
+                action.update_repo(existing, repo, server_value_repo)
                 current.add(existing)
 
         return current
@@ -267,6 +276,7 @@ class RepoUpdateActionCommand(object):
     def perform(self):
         # Load the RepoFile from disk, this contains all our managed yum repo sections:
         repo_file = RepoFile()
+        server_value_repo_file = RepoFile('var/lib/rhsm/repo_server_val/')
 
         # the [rhsm] manage_repos can be overridden to disable generation of the
         # redhat.repo file:
@@ -280,6 +290,7 @@ class RepoUpdateActionCommand(object):
             return 0
 
         repo_file.read()
+        server_value_repo_file.read()
         valid = set()
 
         # Iterate content from entitlement certs, and create/delete each section
@@ -287,22 +298,30 @@ class RepoUpdateActionCommand(object):
         for cont in self.get_unique_content():
             valid.add(cont.id)
             existing = repo_file.section(cont.id)
+            server_value_repo = server_value_repo_file.section(cont.id)
+            if server_value_repo is None:
+                server_value_repo = Repo(cont.id)
+                server_value_repo['name'] = cont['name']
+                server_value_repo_file.add(server_value_repo)
             if existing is None:
                 repo_file.add(cont)
                 self.report_add(cont)
             else:
                 # Updates the existing repo with new content
-                self.update_repo(existing, cont)
+                self.update_repo(existing, cont, server_value_repo)
                 repo_file.update(existing)
+                server_value_repo_file.update(server_value_repo)
                 self.report_update(existing)
 
         for section in repo_file.sections():
             if section not in valid:
                 self.report_delete(section)
                 repo_file.delete(section)
+                server_value_repo_file.delete(section)
 
         # Write new RepoFile to disk:
         repo_file.write()
+        server_value_repo_file.write()
         if self.override_supported:
             # Update with the values we just wrote
             self.written_overrides.overrides = self.overrides
@@ -382,7 +401,7 @@ class RepoUpdateActionCommand(object):
             result[key] = Repo.PROPERTIES.get(key, (1, None))
         return result
 
-    def update_repo(self, old_repo, new_repo):
+    def update_repo(self, old_repo, new_repo, server_value_repo={}):
         """
         Checks an existing repo definition against a potentially updated
         version created from most recent entitlement certificates and
@@ -390,6 +409,8 @@ class RepoUpdateActionCommand(object):
         appropriate and returns the number of changes made. (if any)
         """
         changes_made = 0
+        if server_value_repo is None:
+            server_value_repo = {}
 
         for key, (mutable, _default) in self._build_props(old_repo, new_repo).items():
             new_val = new_repo.get(key)
@@ -400,7 +421,8 @@ class RepoUpdateActionCommand(object):
             # value.
             if mutable and not self._is_overridden(old_repo, key) \
                     and not self._was_overridden(old_repo, key, old_repo.get(key)):
-                if (new_val is not None) and (not old_repo.get(key)):
+                if (new_val is not None) and (not old_repo.get(key) or
+                        old_repo.get(key) == server_value_repo.get(key)):
                     if old_repo.get(key) == new_val:
                         continue
                     old_repo[key] = new_val
@@ -422,6 +444,9 @@ class RepoUpdateActionCommand(object):
 
                 old_repo[key] = new_val
                 changes_made += 1
+
+            if (mutable and new_val is not None):
+                server_value_repo[key] = new_val
 
         return changes_made
 
@@ -526,6 +551,12 @@ class Repo(dict):
         for k, (_m, d) in self.PROPERTIES.items():
             if k not in self.keys():
                 self[k] = d
+
+    def copy(self):
+        new_repo = Repo(self.id)
+        for key, value in self.items():
+            new_repo[key] = value
+        return new_repo
 
     @classmethod
     def from_ent_cert_content(cls, content, baseurl, ca_cert, release_source):
@@ -707,13 +738,11 @@ class TidyWriter:
 
 class RepoFile(ConfigParser):
 
-    PATH = 'etc/yum.repos.d/'
-
-    def __init__(self, name='redhat.repo'):
+    def __init__(self, path='etc/yum.repos.d/', name='redhat.repo'):
         ConfigParser.__init__(self)
         # note PATH get's expanded with chroot info, etc
-        self.path = Path.join(self.PATH, name)
-        self.repos_dir = Path.abs(self.PATH)
+        self.path = Path.join(path, name)
+        self.repos_dir = Path.abs(path)
         self.manage_repos = manage_repos_enabled()
         # Simulate manage repos turned off if no yum.repos.d directory exists.
         # This indicates yum is not installed so clearly no need for us to
