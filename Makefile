@@ -284,7 +284,7 @@ install-files: dbus-install install-conf install-plugins install-post-boot insta
 	install -d $(PREFIX)/var/log/rhsm
 	install -d $(PREFIX)/var/spool/rhsm/debug
 	install -d $(PREFIX)/var/run/rhsm
-	install -d -m 750 $(PREFIX)/var/lib/rhsm/{cache,facts,packages}
+	install -d -m 750 $(PREFIX)/var/lib/rhsm/{cache,facts,packages,repo_server_val}
 
 	# Set up rhsmcertd daemon. If installing on Fedora or RHEL 7+
 	# we prefer systemd over sysv as this is the new trend.
