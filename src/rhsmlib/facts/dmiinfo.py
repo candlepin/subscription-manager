@@ -68,7 +68,11 @@ class DmiFirmwareInfoCollector(collector.FactsCollector):
 
         dmiinfo = {}
         try:
-            self.use_dump_file(dmidecode)
+            # When alternative memory device file was specified for this class, then
+            # try to use it. Otherwise current device file will be used.
+            if self.dump_file is not None:
+                self.use_dump_file(dmidecode)
+            log.info("Using dmidecode dump file: %s" % dmidecode.get_dev())
             dmi_data = {
                 "dmi.bios.": self._read_dmi(dmidecode.bios),
                 "dmi.processor.": self._read_dmi(dmidecode.processor),
