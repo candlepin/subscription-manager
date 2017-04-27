@@ -20,7 +20,6 @@ if __name__ != '__main__':
 
 import sys
 sys.setdefaultencoding('utf-8')
-import site
 
 from subscription_manager.i18n import configure_i18n
 configure_i18n()
@@ -42,8 +41,8 @@ if __name__ == '__main__':
     try:
         sys.exit(abs(main() or 0))
     except SystemExit, e:
-        #this is a non-exceptional exception thrown by Python 2.4, just
-        #re-raise, bypassing handle_exception
+        # This is a non-exceptional exception thrown by Python 2.4, just
+        # re-raise, bypassing handle_exception
         try:
             sys.stdout.flush()
         except IOError:
