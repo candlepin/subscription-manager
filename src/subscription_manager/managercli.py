@@ -1115,7 +1115,7 @@ class RegisterCommand(UserPassCommand):
         # Set consumer's name to hostname by default:
         consumername = self.options.consumername
         if consumername is None:
-            consumername = socket.gethostname()
+            consumername = socket.getfqdn()
 
         if self.is_registered() and self.options.force:
             # First let's try to un-register previous consumer; if this fails

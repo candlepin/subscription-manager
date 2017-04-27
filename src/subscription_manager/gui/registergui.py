@@ -1581,7 +1581,7 @@ class CredentialsScreen(Screen):
 
     def _initialize_consumer_name(self):
         if not self.consumer_name.get_text():
-            self.consumer_name.set_text(socket.gethostname())
+            self.consumer_name.set_text(socket.getfqdn())
 
     def _validate_consumername(self, consumername):
         if not consumername:
@@ -1679,7 +1679,7 @@ class ActivationKeyScreen(Screen):
 
     def _initialize_consumer_name(self):
         if not self.consumer_entry.get_text():
-            self.consumer_entry.set_text(socket.gethostname())
+            self.consumer_entry.set_text(socket.getfqdn())
 
     def apply(self):
         self.stay()
