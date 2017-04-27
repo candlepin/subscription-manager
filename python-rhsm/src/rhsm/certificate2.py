@@ -118,7 +118,14 @@ class _CertFactory(object):
             return self._create_v1_prod_cert(version, extensions, x509, path)
 
     def _read_alt_name(self, x509):
-        return x509.get_extension(name='subjectAltName').decode('utf-8')
+        """Try to read subjectAltName from certificate"""
+        alt_name = x509.get_extension(name='subjectAltName')
+        # When certificate does not include subjectAltName, then
+        # return emtpy string
+        if alt_name is None:
+            return ''
+        else:
+            return alt_name.decode('utf-8')
 
     def _read_issuer(self, x509):
         return x509.get_issuer()
