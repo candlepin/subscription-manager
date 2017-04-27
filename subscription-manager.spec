@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.19.9
+Version: 1.19.10
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -607,6 +607,23 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Thu Apr 27 2017 Kevin Howell <khowell@redhat.com> 1.19.10-1
+- Sync zanata translations (khowell@redhat.com)
+- 1444714: Error reading system DMI information (jhnidek@redhat.com)
+- 1357152: Print right dates on subscription-manager list --installed
+  (jhnidek@redhat.com)
+- 1445387: Set locale fact to Unknown if value cannot be determined
+  (khowell@redhat.com)
+- 1443693: Enable to overwrite system.certificate_version with custom fact.
+  (jhnidek@redhat.com)
+- 1444800: Added mising policy file. (jhnidek@redhat.com)
+- 1429505: Facts dbus service does not start properly due to timeout.
+  (jhnidek@redhat.com)
+- 1443215: bug fix of writing time stamps. (jhnidek@redhat.com)
+- 1443554: Clicking at Help->Getting Started opens yelp. (jhnidek@redhat.com)
+- 1428002: Add proxy configuration info to man page (khowell@redhat.com)
+- 1443598: Remove M2Crypto reference from rhsmlib (khowell@redhat.com)
+
 * Thu Apr 20 2017 Kevin Howell <khowell@redhat.com> 1.19.9-1
 - Sync zanata translations (khowell@redhat.com)
 - 1438869: Capture dmidecode errors at fact gathering (khowell@redhat.com)
