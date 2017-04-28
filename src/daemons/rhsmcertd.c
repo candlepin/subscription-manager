@@ -281,6 +281,8 @@ initial_cert_check (gpointer data)
     g_timeout_add (cert_data->interval_seconds * 1000,
            (GSourceFunc) log_update_from_cert_data,
            (gpointer) cert_data);
+    // Update timestamp
+    log_update(cert_data->interval_seconds, cert_data->next_update_file);
     // Return false so that the timer does
     // not run this again.
     return false;
