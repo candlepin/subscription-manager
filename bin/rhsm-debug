@@ -1,4 +1,4 @@
-#!/usr/bin/python -S
+#!/usr/bin/python
 
 #
 # Copyright (c) 2010 - 2012 Red Hat, Inc.
@@ -19,8 +19,8 @@ if __name__ != '__main__':
     raise ImportError("This module can not be imported.")
 
 import sys
+reload(sys)
 sys.setdefaultencoding('utf-8')
-import site
 import os
 
 from subscription_manager.i18n import configure_i18n

@@ -1,4 +1,4 @@
-#!/usr/bin/python -S
+#!/usr/bin/python
 #
 # wrapper for subscription Manager commandline tool.
 #
@@ -22,8 +22,8 @@ if __name__ != '__main__':
     raise ImportError("module cannot be imported")
 
 import sys
+reload(sys)
 sys.setdefaultencoding('utf-8')
-import site
 import os
 
 # work around for https://bugzilla.redhat.com/show_bug.cgi?id=1402009
