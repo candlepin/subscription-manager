@@ -163,7 +163,7 @@ CONSUMED_LIST = [
 ]
 
 
-def handle_exception(msg, ex):
+def handle_exception(msg, ex, map_message=True):
 
     # On Python 2.4 and earlier, sys.exit triggers a SystemExit exception,
     # which can land us into this block of code. We do not want to handle
@@ -180,7 +180,11 @@ def handle_exception(msg, ex):
     log.exception(ex)
 
     exception_mapper = ExceptionMapper()
-    mapped_message = exception_mapper.get_message(ex)
+    mapped_message = None
+    if map_message:
+        mapped_message = exception_mapper.get_message(ex)
+    else:
+        mapped_message = msg % ex
     if mapped_message:
         system_exit(os.EX_SOFTWARE, mapped_message)
     else:
@@ -1117,19 +1121,34 @@ class RegisterCommand(UserPassCommand):
         if consumername is None:
             consumername = socket.gethostname()
 
+        previously_registered = False
         if self.is_registered() and self.options.force:
+            previously_registered = True
             # First let's try to un-register previous consumer; if this fails
             # we'll let the error bubble up, so that we don't blindly re-register.
             # managerlib.unregister handles the special case that the consumer has already been removed.
             old_uuid = self.identity.uuid
 
-            managerlib.unregister(self.cp, old_uuid)
-            self.entitlement_dir.__init__()
-            self.product_dir.__init__()
-            log.info("--force specified, unregistered old consumer: %s" % old_uuid)
-            print(_("The system with UUID %s has been unregistered") % old_uuid)
+            print _("Unregistering from: %s:%s%s") % \
+                (conf["server"]["hostname"], conf["server"]["port"], conf["server"]["prefix"])
+            try:
+                managerlib.unregister(self.cp, old_uuid)
+                self.entitlement_dir.__init__()
+                self.product_dir.__init__()
+                log.info("--force specified, unregistered old consumer: %s" % old_uuid)
+                print(_("The system with UUID %s has been unregistered") % old_uuid)
+            except ssl.SSLError as e:
+                # since the user can override serverurl for register, a common use case is to try to switch servers
+                # using register --force... However, this normally cannot successfully unregister since the servers
+                # are different... So, do not map the message as SSLError is more useful than its mapped message in
+                # debugging this use case (mapped message is misleading in this use case)
+                handle_exception("Unregister failed: %s", e, map_message=False)
+            except Exception as e:
+                handle_exception("Unregister failed", e)
 
         self.cp_provider.clean()
+        if previously_registered:
+            print (_("All local data removed"))
 
         facts = inj.require(inj.FACTS)
 
@@ -1347,6 +1366,8 @@ class UnRegisterCommand(CliCommand):
             # TODO: Should this use the standard NOT_REGISTERED message?
             system_exit(ERR_NOT_REGISTERED_CODE, _("This system is currently not registered."))
 
+        print _("Unregistering from: %s:%s%s") % \
+            (conf["server"]["hostname"], conf["server"]["port"], conf["server"]["prefix"])
         try:
             managerlib.unregister(self.cp, self.identity.uuid)
         except Exception, e:
