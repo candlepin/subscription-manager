@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.19.11
+Version: 1.19.12
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -605,6 +605,9 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Tue May 02 2017 Kevin Howell <khowell@redhat.com> 1.19.12-1
+- Bump python-rhsm requirement to 1.19.6 (khowell@redhat.com)
+
 * Tue May 02 2017 Kevin Howell <khowell@redhat.com> 1.19.11-1
 - 1446638: Remove dbus-x11 dependency (khowell@redhat.com)
 - 1443101: Provide feedback for force register (khowell@redhat.com)

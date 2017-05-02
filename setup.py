@@ -267,7 +267,7 @@ except OSError:
 
 setup(
     name="subscription-manager",
-    version='1.19.11',
+    version='1.19.12',
     url="http://www.candlepinproject.org",
     description="Manage subscriptions for Red Hat products.",
     license="GPLv2",
