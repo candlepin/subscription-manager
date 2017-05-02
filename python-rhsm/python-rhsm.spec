@@ -15,7 +15,7 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.19.5
+Version: 1.19.6
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -102,6 +102,12 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Tue May 02 2017 Kevin Howell <khowell@redhat.com> 1.19.6-1
+- 1426343: fixed rct to display cert without subjectAltName.
+  (jhnidek@redhat.com)
+- Add Update subscriptions pools (tcoufal@redhat.com)
+- Add support to list future subscription pools (tcoufal@redhat.com)
+
 * Mon Apr 17 2017 Kevin Howell <khowell@redhat.com> 1.19.5-1
 - 1432990: Better message for bad CA cert (wpoteat@redhat.com)
 
