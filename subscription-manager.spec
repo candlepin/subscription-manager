@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.19.10
+Version: 1.19.11
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -605,6 +605,15 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Tue May 02 2017 Kevin Howell <khowell@redhat.com> 1.19.11-1
+- 1446638: Remove dbus-x11 dependency (khowell@redhat.com)
+- 1443101: Provide feedback for force register (khowell@redhat.com)
+- 1446469: Use sys.setdefaultencoding('utf-8') in better way.
+  (jhnidek@redhat.com)
+- 1440319: fixed wrong spelling. (jhnidek@redhat.com)
+- 1426343: fixed rct to display cert without subjectAltName.
+  (jhnidek@redhat.com)
+
 * Thu Apr 27 2017 Kevin Howell <khowell@redhat.com> 1.19.10-1
 - Sync zanata translations (khowell@redhat.com)
 - 1444714: Error reading system DMI information (jhnidek@redhat.com)
