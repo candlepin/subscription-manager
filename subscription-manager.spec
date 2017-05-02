@@ -78,7 +78,6 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:  python-ethtool
 Requires:  python-iniparse
 Requires:  python-decorator
-Requires:  dbus-x11
 Requires:  virt-what
 Requires:  python-rhsm >= 1.19.5
 Requires:  python-decorator
@@ -183,7 +182,6 @@ Requires: pygtk2 pygtk2-libglade
 Requires: dejavu-sans-fonts
 %endif
 Requires: usermode-gtk
-Requires: dbus-x11
 Requires: gnome-icon-theme
 Requires(post): scrollkeeper
 Requires(postun): scrollkeeper
