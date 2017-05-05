@@ -21,6 +21,7 @@ from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import handle_gui_exception, linkify
 from subscription_manager import injection as inj
+from rhsm.connection import GoneException
 
 _ = gettext.gettext
 
@@ -135,6 +136,11 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
         # very broad exception
         except Exception, e:
             log.error("Could not get owner name: %s" % e)
+            if isinstance(e, GoneException) and identity.uuid:
+                if e.deleted_id == identity.uuid:
+                    self.system_id_label.set_text(_('Error: Deleted uuid: %s') % identity.uuid)
+                else:
+                    self.system_id_label.set_text(_('Error: Wrong uuid: %s') % identity.uuid)
             self.owner_label.hide()
             self.owner_title.hide()
 
