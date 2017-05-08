@@ -15,7 +15,7 @@ Vagrant.configure("2") do |config|
   extra_boxes_loaded = false
 
   # allows us to share base boxes with Katello/forklift
-  base_boxes = Dir.glob "#{VAGRANTFILE_DIR}/plugins/*/base_boxes.yaml"
+  base_boxes = Dir.glob "#{VAGRANTFILE_DIR}/vagrant/plugins/*/base_boxes.yaml"
   base_boxes.each do |file|
     boxes = YAML.load_file(file)
     boxes.each do |name, config|
