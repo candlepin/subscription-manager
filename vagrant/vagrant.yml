@@ -1,0 +1,23 @@
+---
+- hosts: "*fedora*"
+  gather_facts: no
+  tasks:
+    - name: install libs so we can use ansible (fedora only)
+      raw: sudo yum install -y python python2-dnf
+
+- hosts: all
+  roles:
+    - subman-devel
+
+- hosts: all
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: link vagrant's Xauthority to root user
+      file:
+        src: /home/vagrant/.Xauthority
+        dest: /root/.Xauthority
+        owner: root
+        group: root
+        state: link
+        force: yes
