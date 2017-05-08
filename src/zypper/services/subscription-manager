@@ -1,0 +1,169 @@
+#!/usr/bin/env python
+
+#
+# Copyright (c) 2017 Red Hat, Inc.
+#
+# This software is licensed to you under the GNU General Public License,
+# version 2 (GPLv2). There is NO WARRANTY for this software, express or
+# implied, including the implied warranties of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2
+# along with this software; if not, see
+# http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
+#
+# Red Hat trademarks are not licensed under GPLv2. No permission is
+# granted to use or replicate Red Hat trademarks that are incorporated
+# in this software or its documentation.
+#
+
+import os
+import sys
+
+from subscription_manager import injection as inj
+from subscription_manager.repolib import RepoActionInvoker, ZYPPER_REPO_DIR
+from subscription_manager.certlib import Locker
+from subscription_manager.injectioninit import init_dep_injection
+from subscription_manager import logutil
+from rhsm import connection
+from rhsm import config
+
+c_rehash = '/usr/bin/c_rehash'
+
+expired_warning = \
+"""
+*** WARNING ***
+The subscription for following product(s) has expired:
+%s
+You no longer have access to the repositories that provide these products.  It is important that you apply an active subscription in order to resume access to security and other critical updates. If you don't have other active subscriptions, you can renew the expired subscription.  """
+
+not_registered_warning = \
+"This system is not registered with an entitlement server. You can use subscription-manager to register."
+
+no_subs_warning = \
+"This system is registered with an entitlement server, but is not receiving updates. You can use subscription-manager to assign subscriptions."
+
+no_subs_container_warning = \
+"This system is not receiving updates. You can use subscription-manager on the host to register and assign subscriptions."
+
+
+# If running from the zypper plugin, we want to avoid blocking
+# zypper forever on locks created by other rhsm processes. We try
+# to acquire the lock before potentially updating redhat.repo, but
+# if we can't, the plugin will fail back to not updating it.
+# So this class provides a Locker uses the default ACTION_LOCK,
+# but if it would have to wait for it, it decides to do nothing
+# instead.
+class RepoLocker(Locker):
+    def run(self, action):
+        # lock.acquire will return False if it would block
+        # NOTE: acquire can return None, True, or False
+        #       with different meanings.
+        nonblocking = self.lock.acquire(blocking=False)
+        if nonblocking is False:
+            # Could try to grab the pid for the log message, but it's a bit of a race.
+            sys.stderr.write("Another process has the cert lock. We will not attempt to update certs or repos.")
+            sys.stderr.write("\n")
+            return 0
+        try:
+            return action()
+        finally:
+            self.lock.release()
+
+
+class ZypperService(object):
+    def __init__(self):
+        logutil.init_logger()
+        init_dep_injection()
+        self.is_root = os.getuid() == 0
+        # Read subscription-manager config
+        cfg = config.initConfig()
+        self.full_refresh_on_yum = bool(cfg.get_int('rhsm', 'full_refresh_on_yum'))
+        self.ca_cert_dir = cfg.get('rhsm', 'ca_cert_dir')
+
+    def main(self):
+        self.update()
+        self.warn_or_give_usage_message()
+        self.warn_expired()
+        self.print_zypper_repos()
+
+    def update(self):
+        """ update entitlement certificates """
+        if not self.is_root:
+            sys.stderr.write('Not root, Subscription Management repositories not updated')
+            sys.stderr.write("\n")
+            return
+        sys.stderr.write('Updating Subscription Management repositories.')
+        sys.stderr.write("\n")
+
+        # XXX: Importing inline as you must be root to read the config file
+
+        from subscription_manager.identity import ConsumerIdentity
+
+        cert_file = ConsumerIdentity.certpath()
+        key_file = ConsumerIdentity.keypath()
+
+        connection.UEPConnection(cert_file=cert_file, key_file=key_file)
+
+        rl = RepoActionInvoker(cache_only=not self.full_refresh_on_yum, locker=RepoLocker())
+        rl.update()
+
+        # Rehash CA-certificates since zypper accepts only capath
+        if os.path.isfile(c_rehash):
+            os.system(c_rehash + ' ' + self.ca_cert_dir + ' >/dev/null 2>&1')
+        else:
+            sys.stderr.write("WARNING: c_rehash could not be found!\n")
+
+    def warn_expired(self):
+        """ display warning for expired entitlements """
+        ent_dir = inj.require(inj.ENT_DIR)
+        products = set()
+        for cert in ent_dir.list_expired():
+            for p in cert.products:
+                m = '  - %s' % p.name
+                products.add(m)
+        if products:
+            msg = expired_warning % '\n'.join(sorted(products))
+            sys.stderr.write(msg)
+            sys.stderr.write("\n")
+
+    def warn_or_give_usage_message(self):
+        """ either output a warning, or a usage message """
+        msg = ""
+        if not self.is_root:
+            return
+        try:
+            identity = inj.require(inj.IDENTITY)
+            ent_dir = inj.require(inj.ENT_DIR)
+            # Don't warn people to register if we see entitelements, but no identity:
+            if not identity.is_valid() and len(ent_dir.list_valid()) == 0:
+                msg = not_registered_warning
+            elif len(ent_dir.list_valid()) == 0:
+                msg = no_subs_warning
+            if config.in_container() and len(ent_dir.list_valid()) == 0:
+                msg = no_subs_container_warning
+
+        finally:
+            if msg:
+                sys.stderr.write(msg)
+                sys.stderr.write("\n")
+
+    def print_zypper_repos(self):
+        filenames = []
+        try:
+            filenames = os.listdir(ZYPPER_REPO_DIR)
+        except OSError:
+            pass
+        for filename in filenames:
+            with open(os.path.join(ZYPPER_REPO_DIR, filename)) as repo:
+                print(repo.read())
+
+if __name__ == '__main__':
+    service = ZypperService()
+    service.main()
+
+    # suppress python-dmidecode warnings
+    # TODO do this elsewhere?
+    try:
+        import dmidecode
+        dmidecode.clear_warnings()
+    except ImportError:
+        pass

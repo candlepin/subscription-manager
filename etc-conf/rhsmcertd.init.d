@@ -24,6 +24,13 @@ VENDOR=$( rpm --eval %_vendor )
 [ -f /etc/rc.d/init.d/functions ] && . /etc/rc.d/init.d/functions
 [ -f /etc/rc.status ] && . /etc/rc.status
 
+if [ ! -f /etc/rc.d/init.d/functions ]; then
+  status() {
+    /sbin/checkproc $PROG
+    rc_status -v
+  }
+fi
+
 BINDIR=/usr/bin
 PROG=rhsmcertd
 LOCK=/var/lock/subsys/$PROG
