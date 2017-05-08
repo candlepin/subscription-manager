@@ -15,7 +15,7 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.19.6
+Version: 1.20.0
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -102,6 +102,9 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Mon May 08 2017 Kevin Howell <khowell@redhat.com> 1.20.0-1
+- Bump version to 1.20.0 
+
 * Tue May 02 2017 Kevin Howell <khowell@redhat.com> 1.19.6-1
 - 1426343: fixed rct to display cert without subjectAltName.
   (jhnidek@redhat.com)
