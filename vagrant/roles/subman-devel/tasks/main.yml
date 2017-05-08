@@ -1,0 +1,143 @@
+---
+# workaround for https://github.com/ansible/ansible/pull/24179
+# FIXME remove when possible
+- name: configure rhsm hostname (rhel only)
+  command: "subscription-manager config --server.hostname {{ subman_rhsm_hostname }}"
+  become: yes
+  when: subman_rhsm_username is defined and ansible_distribution == 'RedHat'
+
+- name: register and attach using installed subscription-manager (rhel only)
+  redhat_subscription:
+    username: "{{ subman_rhsm_username }}"
+    password: "{{ subman_rhsm_password }}"
+    server_hostname: "{{ subman_rhsm_hostname }}"
+    autosubscribe: yes
+  become: yes
+  when: subman_rhsm_username is defined and ansible_distribution == 'RedHat'
+
+- name: install epel (centos)
+  yum:
+    name: epel-release
+    state: present
+  become: yes
+  when: ansible_distribution == 'CentOS'
+
+- name: install epel (rhel)
+  yum:
+    name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
+    state: present
+  become: yes
+  when: ansible_distribution == 'RedHat'
+
+- name: enable optional repos (rhel only)
+  command: "subscription-manager repos --enable rhel-{{ ansible_distribution_major_version }}-server-optional-rpms"
+  become: yes
+  when: ansible_distribution == 'RedHat'
+
+- name: install non-pip/spec deps
+  package:
+    name: "{{ item }}"
+    state: present
+  become: yes
+  with_items:
+    - tito
+    - git
+    - gcc
+    - make
+    - python-pip
+    - m2crypto
+    - python-ethtool
+    - librsvg2
+    - libxslt-devel
+    - dbus-x11
+    - python-dmidecode
+    - libselinux-python
+    - xorg-x11-server-Xvfb
+    - yum-utils
+
+- name: install deps for subscription-manager-gui (el6 only)
+  yum:
+    name: "{{ item }}"
+    state: present
+  become: yes
+  with_items:
+    - pygtk2-libglade
+    - gnome-icon-theme
+    - usermode-gtk
+  when: ansible_distribution_major_version == "6"
+
+- name: install subscription-manager build deps
+  command: yum-builddep -y {{ subman_checkout_dir }}/subscription-manager.spec
+  become: yes
+
+- name: install python-rhsm build deps
+  command: yum-builddep -y {{ subman_checkout_dir }}/python-rhsm/python-rhsm.spec
+  become: yes
+
+- name: install python test deps
+  pip:
+    requirements: test-requirements.txt
+    chdir: "{{ subman_checkout_dir }}"
+  become: yes
+
+- name: build python-rhsm
+  command: python setup.py build_ext --inplace
+  args:
+    chdir: "{{ subman_checkout_dir }}/python-rhsm"
+  when: subman_setup_hacking_environment
+
+- name: tito build & install python-rhsm (initial)
+  command: tito build --test --rpm --install
+  args:
+    chdir: "{{ subman_checkout_dir }}/python-rhsm"
+    creates: /usr/lib*/python*/site-packages/subscription_manager
+  when: subman_setup_hacking_environment
+
+- name: tito build subscription-manager (initial)
+  command: tito build --test --rpm
+  args:
+    chdir: "{{ subman_checkout_dir }}"
+    creates: /usr/lib*/python*/site-packages/subscription_manager
+  when: subman_setup_hacking_environment
+
+- name: install subscription-manager (initial)
+  shell: yum install -y /tmp/tito/*/subscription-manager-[0-9]*
+  args:
+    chdir: "{{ subman_checkout_dir }}"
+    creates: /usr/lib*/python*/site-packages/subscription_manager
+  become: yes
+  when: subman_setup_hacking_environment
+
+- name: alter PATH
+  template:
+    src: subman_devel.sh.j2
+    dest: /etc/profile.d/subman_devel.sh
+  become: yes
+
+- name: alter PYTHONPATH
+  lineinfile:
+    name: /etc/environment
+    line: "PYTHONPATH={{ subman_checkout_dir }}/src:{{ subman_checkout_dir }}/python-rhsm/src"
+  become: yes
+
+- name: set GTK version
+  lineinfile:
+    name: /etc/environment
+    line: "SUBMAN_GTK_VERSION={% if ansible_distribution_major_version == '6' %}2{% else %}3{% endif %}"
+  become: yes
+
+- name: configure sudo to allow sudo subscription-manager to work as expected
+  lineinfile:
+    name: /etc/sudoers
+    line: "Defaults    secure_path = {{ subman_checkout_dir }}/bin:/sbin:/bin:/usr/sbin:/usr/bin"
+    regexp: '^Defaults\s+secure_path.*'
+  become: yes
+
+- name: add candlepin.example.com to hosts (using this host as reference)
+  lineinfile:
+    name: /etc/hosts
+    line: "{{ lookup('pipe', 'resolveip -s candlepin.example.com') }} candlepin.example.com"
+    regexp: 'candlepin.example.com'
+  become: yes
+  ignore_errors: yes
+  when: subman_add_vagrant_candlepin_to_hosts
