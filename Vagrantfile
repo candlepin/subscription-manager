@@ -56,7 +56,7 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  ['SUBMAN_RHSM_USERNAME', 'SUBMAN_RHSM_PASSWORD', 'SUBMAN_RHSM_HOSTNAME'].each do |var|
+  ['SUBMAN_RHSM_USERNAME', 'SUBMAN_RHSM_PASSWORD'].each do |var|
     if extra_boxes_loaded and not ENV.include? var
       puts "#{var} not defined. Expect failures. Please set up environment accordingly, and run `vagrant provision`. to correct"
     end
