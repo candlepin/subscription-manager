@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.19.12
+Version: 1.20.0
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -605,6 +605,10 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Mon May 08 2017 Kevin Howell <khowell@redhat.com> 1.20.0-1
+- Bump python-rhsm requirement to 1.20.0 (khowell@redhat.com)
+- 1444512: Display deleted uuid in facts dialog correctly. (jhnidek@redhat.com)
+
 * Tue May 02 2017 Kevin Howell <khowell@redhat.com> 1.19.12-1
 - Bump python-rhsm requirement to 1.19.6 (khowell@redhat.com)
 
