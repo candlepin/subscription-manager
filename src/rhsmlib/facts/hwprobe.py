@@ -573,7 +573,7 @@ class HardwareCollector(collector.FactsCollector):
     def get_network_info(self):
         netinfo = {}
         try:
-            host = socket.gethostname()
+            host = socket.getfqdn()
             netinfo['network.hostname'] = host
 
             try:

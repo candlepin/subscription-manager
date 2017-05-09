@@ -224,6 +224,6 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
             raise exceptions.Failed(msg=error_msg)
 
         if 'name' not in options:
-            options['name'] = socket.gethostname()
+            options['name'] = socket.getfqdn()
 
         return options
