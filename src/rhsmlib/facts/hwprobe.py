@@ -571,35 +571,57 @@ class HardwareCollector(collector.FactsCollector):
         return lscpu_info
 
     def get_network_info(self):
-        netinfo = {}
+        """
+        Try to get information about network: hostname, FQDN, IPv4, IPv6 addresses
+        """
+        net_info = {}
         try:
-            host = socket.gethostname()
-            netinfo['network.hostname'] = host
+            hostname = socket.gethostname()
+            net_info['network.hostname'] = hostname
 
             try:
-                netinfo['network.fqdn'] = compat_check_output(['/usr/bin/hostname', '-f']).strip()
-            except CalledProcessError as e:
-                log.exception(e)
-                raise
-
-            try:
-                info = socket.getaddrinfo(host, None, socket.AF_INET, socket.SOCK_STREAM)
-                ip_list = set([x[4][0] for x in info])
-                netinfo['network.ipv4_address'] = ', '.join(ip_list)
+                # We do not use socket.getfqdn(), because we need
+                # to mimic behaviour of 'hostname -f' command and be
+                # compatible with puppet and katello
+                infolist = socket.getaddrinfo(
+                    hostname,  # (host) hostname
+                    None,  # (port) no need to specify port
+                    socket.AF_UNSPEC,  # (family) IPv4/IPv6
+                    socket.SOCK_DGRAM,  # (type) hostname uses SOCK_DGRAM
+                    0,  # (proto) no need to specify transport protocol
+                    socket.AI_CANONNAME  # (flags) we DO NEED to get canonical name
+                )
             except Exception:
-                netinfo['network.ipv4_address'] = "127.0.0.1"
+                net_info['network.fqdn'] = hostname
+            else:
+                # getaddrinfo has to return at least one item
+                # and canonical name can't be empty string.
+                # Note: when hostname is for some reason equal to
+                # one of CNAME in DNS record, then canonical name
+                # (FQDN) will be different from hostname
+                if len(infolist) > 0 and infolist[0][3] != '':
+                    net_info['network.fqdn'] = infolist[0][3]
+                else:
+                    net_info['network.fqdn'] = hostname
 
             try:
-                info = socket.getaddrinfo(host, None, socket.AF_INET6, socket.SOCK_STREAM)
+                info = socket.getaddrinfo(hostname, None, socket.AF_INET, socket.SOCK_STREAM)
                 ip_list = set([x[4][0] for x in info])
-                netinfo['network.ipv6_address'] = ', '.join(ip_list)
+                net_info['network.ipv4_address'] = ', '.join(ip_list)
             except Exception:
-                netinfo['network.ipv6_address'] = "::1"
+                net_info['network.ipv4_address'] = "127.0.0.1"
 
-        except Exception as e:
-            log.warn('Error reading networking information: %s', e)
+            try:
+                info = socket.getaddrinfo(hostname, None, socket.AF_INET6, socket.SOCK_STREAM)
+                ip_list = set([x[4][0] for x in info])
+                net_info['network.ipv6_address'] = ', '.join(ip_list)
+            except Exception:
+                net_info['network.ipv6_address'] = "::1"
 
-        return netinfo
+        except Exception as err:
+            log.warn('Error reading networking information: %s', err)
+
+        return net_info
 
     def _should_get_mac_address(self, device):
         return not (device.startswith('sit') or device.startswith('lo'))
