@@ -513,12 +513,26 @@ class InstalledProductsManager(CacheManager):
                 content_tags=self.tags)
 
 
+class PoolStatusCache(StatusCache):
+    """
+    Manages the system cache of pools
+    """
+    CACHE_FILE = "/var/lib/rhsm/cache/pool_status.json"
+
+    def _sync_with_server(self, uep, uuid):
+        self.server_status = uep.getEntitlementList(uuid)
+
+
 class PoolTypeCache(object):
+    """
+    Cache type of pool
+    """
 
     def __init__(self):
         self.identity = inj.require(inj.IDENTITY)
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.ent_dir = inj.require(inj.ENT_DIR)
+        self.pool_cache = inj.require(inj.POOL_STATUS_CACHE)
         self.pooltype_map = {}
         self.update()
 
@@ -538,14 +552,9 @@ class PoolTypeCache(object):
     def _do_update(self):
         result = {}
         if self.identity.is_valid():
-            cp = self.cp_provider.get_consumer_auth_cp()
-            entitlement_list = []
-            try:
-                entitlement_list = cp.getEntitlementList(self.identity.uuid)
-            except Exception, e:
-                # In this case, return an empty map.  We just won't populate the field
-                log.debug('Problem attmepting to get entitlements from the server')
-                log.debug(e)
+            self.pool_cache.load_status(self.cp_provider.get_consumer_auth_cp(),
+                                        self.identity.uuid)
+            entitlement_list = self.pool_cache.server_status
 
             for ent in entitlement_list:
                 pool = PoolWrapper(ent.get('pool', {}))

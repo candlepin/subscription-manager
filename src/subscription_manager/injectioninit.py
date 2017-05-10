@@ -18,7 +18,7 @@ import subscription_manager.injection as inj
 from subscription_manager.cache import ProductStatusCache, \
     EntitlementStatusCache, OverrideStatusCache, ProfileManager, \
     InstalledProductsManager, PoolTypeCache, ReleaseStatusCache, \
-    RhsmIconCache, ContentAccessCache
+    RhsmIconCache, ContentAccessCache, PoolStatusCache
 
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.certdirectory import EntitlementDirectory
@@ -71,6 +71,7 @@ def init_dep_injection():
     # create a PluginManager we should probably raise an exception all the way up
     inj.provide(inj.PLUGIN_MANAGER, PluginManager, singleton=True)
 
+    inj.provide(inj.POOL_STATUS_CACHE, PoolStatusCache, singleton=True)
     inj.provide(inj.POOLTYPE_CACHE, PoolTypeCache, singleton=True)
     inj.provide(inj.ACTION_LOCK, ActionLock)
 
