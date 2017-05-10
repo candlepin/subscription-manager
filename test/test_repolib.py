@@ -22,7 +22,7 @@ import re
 import fixture
 
 from iniparse import RawConfigParser, SafeConfigParser
-from mock import Mock, patch
+from mock import Mock, patch, MagicMock
 from StringIO import StringIO
 
 from stubs import StubProductCertificate, \
@@ -273,21 +273,50 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         self.assertEquals(1, update_report.updates())
 
     @patch("subscription_manager.repolib.RepoFile")
-    def test_update_when_not_registered_and_existing_repo(self, mock_file):
+    def test_update_when_repo_not_modified_on_mutable(self, mock_file):
         self._inject_mock_invalid_consumer()
         mock_file = mock_file.return_value
-        mock_file.section.return_value = Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
+        modified_repo = Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
+        server_repo = Repo('x', [('gpgcheck', 'original')])
+        mock_file.section = MagicMock(side_effect=[modified_repo, server_repo])
 
         def stub_content():
             return [Repo('x', [('gpgcheck', 'new'), ('gpgkey', 'new_key'), ('name', 'test')])]
 
         update_action = RepoUpdateActionCommand()
         update_action.get_unique_content = stub_content
-        update_action.perform()
+        current = update_action.perform()
+        # confirming that the assessed value does change when repo file
+        # is the same as the server value file.
+        self.assertEquals('new', current.repo_updates[0]['gpgcheck'])
 
+        # this is the ending server value file.
         written_repo = mock_file.update.call_args[0][0]
-        self.assertEquals('original', written_repo['gpgcheck'])
-        self.assertEquals('new_key', written_repo['gpgkey'])
+        self.assertEquals('new', written_repo['gpgcheck'])
+        self.assertEquals(None, written_repo['gpgkey'])
+
+    @patch("subscription_manager.repolib.RepoFile")
+    def test_update_when_repo_modified_on_mutable(self, mock_file):
+        self._inject_mock_invalid_consumer()
+        mock_file = mock_file.return_value
+        modified_repo = Repo('x', [('gpgcheck', 'unoriginal'), ('gpgkey', 'some_key')])
+        server_repo = Repo('x', [('gpgcheck', 'original')])
+        mock_file.section = MagicMock(side_effect=[modified_repo, server_repo])
+
+        def stub_content():
+            return [Repo('x', [('gpgcheck', 'new'), ('gpgkey', 'new_key'), ('name', 'test')])]
+
+        update_action = RepoUpdateActionCommand()
+        update_action.get_unique_content = stub_content
+        current = update_action.perform()
+        # confirming that the assessed value does not change when repo file
+        # is different from the server value file.
+        self.assertEquals('unoriginal', current.repo_updates[0]['gpgcheck'])
+
+        # this is the ending server value file
+        written_repo = mock_file.update.call_args[0][0]
+        self.assertEquals('new', written_repo['gpgcheck'])
+        self.assertEquals(None, written_repo['gpgkey'])
 
     def test_no_gpg_key(self):
 
@@ -341,6 +370,17 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         incoming_repo = {'metadata_expire': 2000}
         update_action.update_repo(existing_repo, incoming_repo)
         self.assertEqual(1000, existing_repo['metadata_expire'])
+
+    def test_mutable_property_is_server(self):
+        update_action = RepoUpdateActionCommand()
+        self._inject_mock_invalid_consumer()
+        existing_repo = Repo('testrepo')
+        server_val_repo = Repo('servertestrepo')
+        existing_repo['metadata_expire'] = 1000
+        server_val_repo['metadata_expire'] = 1000
+        incoming_repo = {'metadata_expire': 2000}
+        update_action.update_repo(existing_repo, incoming_repo, server_val_repo)
+        self.assertEqual(2000, existing_repo['metadata_expire'])
 
     def test_gpgcheck_is_mutable(self):
         update_action = RepoUpdateActionCommand()

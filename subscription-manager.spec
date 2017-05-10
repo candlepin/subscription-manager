@@ -420,6 +420,7 @@ rm -rf %{buildroot}
 %if 0%{?suse_version}
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm/zypper.repos.d
 %endif
+
 %attr(644,root,root) %config(noreplace) %{_sysconfdir}/rhsm/rhsm.conf
 %config %attr(644,root,root) %{_sysconfdir}/rhsm/logging.conf
 
@@ -448,6 +449,7 @@ rm -rf %{buildroot}
 %attr(750,root,root) %dir %{_var}/lib/rhsm/facts
 %attr(750,root,root) %dir %{_var}/lib/rhsm/packages
 %attr(750,root,root) %dir %{_var}/lib/rhsm/cache
+%attr(750,root,root) %dir %{_var}/lib/rhsm/repo_server_val
 
 %{_sysconfdir}/bash_completion.d/subscription-manager
 %{_sysconfdir}/bash_completion.d/rct
