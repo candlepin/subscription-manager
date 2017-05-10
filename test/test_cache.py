@@ -32,7 +32,8 @@ from fixture import SubManFixture
 from rhsm import ourjson as json
 from subscription_manager.cache import ProfileManager, \
     InstalledProductsManager, EntitlementStatusCache, \
-    PoolTypeCache, ReleaseStatusCache, ContentAccessCache
+    PoolTypeCache, ReleaseStatusCache, ContentAccessCache, \
+    PoolStatusCache
 
 from rhsm.profile import Package, RPMProfile
 
@@ -460,7 +461,51 @@ class TestEntitlementStatusCache(SubManFixture):
         self.assertEquals(None, self.status_cache.load_status(uep, "aaa"))
 
 
+class TestPoolStatusCache(SubManFixture):
+    """
+    Class for testing PoolStatusCache
+    """
+
+    def setUp(self):
+        super(TestPoolStatusCache, self).setUp()
+        self.pool_status_cache = PoolStatusCache()
+        self.pool_status_cache.write_cache = Mock()
+
+    def test_load_data(self):
+        cached = {
+                'pools': {
+                    'pool1': 'Pool 1',
+                    'pool2': 'Pool 2'
+                },
+                'tags': ['p1', 'p2']
+        }
+        mock_file = Mock()
+        mock_file.read = Mock(return_value=json.dumps(cached))
+
+        data = self.pool_status_cache._load_data(mock_file)
+        self.assertEquals(data, cached)
+
+    def test_load_from_server(self):
+        uep = Mock()
+        dummy_pools = {
+                'pools': {
+                    'pool1': 'Pool 1',
+                    'pool2': 'Pool 2'
+                },
+                'tags': ['p1', 'p2']
+        }
+        uep.getEntitlementList = Mock(return_value=dummy_pools)
+
+        self.pool_status_cache.read_status(uep, "THISISAUUID")
+
+        self.assertEquals(dummy_pools, self.pool_status_cache.server_status)
+
+
 class TestPoolTypeCache(SubManFixture):
+    """
+    Class for testing PoolTypeCache
+    """
+
     def setUp(self):
         super(TestPoolTypeCache, self).setUp()
         self.cp_provider = inj.require(inj.CP_PROVIDER)
@@ -468,6 +513,8 @@ class TestPoolTypeCache(SubManFixture):
         self.cp = self.cp_provider.consumer_auth_cp
         certs = [StubEntitlementCertificate(StubProduct('pid1'), pool=StubPool('someid'))]
         self.ent_dir = StubEntitlementDirectory(certificates=certs)
+        self.pool_cache = inj.require(inj.POOL_STATUS_CACHE)
+        self.pool_cache.write_cache = Mock()
 
     def test_empty_cache(self):
         pooltype_cache = PoolTypeCache()
@@ -533,6 +580,15 @@ class TestPoolTypeCache(SubManFixture):
 
         # No ents have pools so there is nothing we can update
         self.assertFalse(pooltype_cache.requires_update())
+
+    def test_reading_pool_type_from_json_cache(self):
+        pool_status = [self._build_ent_json('poolid', 'some type')]
+        self.pool_cache.load_status = Mock()
+        self.pool_cache.server_status = pool_status
+        pooltype_cache = PoolTypeCache()
+        pooltype_cache._do_update()
+        result = pooltype_cache.get("poolid")
+        self.assertEquals('some type', result)
 
     def _build_ent_json(self, pool_id, pool_type):
         result = {}

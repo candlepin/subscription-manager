@@ -34,7 +34,7 @@ from subscription_manager import identity
 from subscription_manager.injection import require, CERT_SORTER, \
         IDENTITY, ENTITLEMENT_STATUS_CACHE, \
         PROD_STATUS_CACHE, ENT_DIR, PROD_DIR, CP_PROVIDER, OVERRIDE_STATUS_CACHE, \
-        POOLTYPE_CACHE, RELEASE_STATUS_CACHE, FACTS
+        POOLTYPE_CACHE, RELEASE_STATUS_CACHE, FACTS, POOL_STATUS_CACHE
 from subscription_manager import isodate
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.repolib import RepoActionInvoker
@@ -884,6 +884,7 @@ def clean_all_data(backup=True):
     # the delete_cache on the instances created in injectioninit.
     require(ENTITLEMENT_STATUS_CACHE).delete_cache()
     require(PROD_STATUS_CACHE).delete_cache()
+    require(POOL_STATUS_CACHE).delete_cache()
     require(OVERRIDE_STATUS_CACHE).delete_cache()
     require(RELEASE_STATUS_CACHE).delete_cache()
 

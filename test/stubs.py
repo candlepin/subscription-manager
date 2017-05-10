@@ -23,7 +23,8 @@ import tempfile
 from rhsm import config
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.cache import EntitlementStatusCache, ProductStatusCache, \
-        OverrideStatusCache, ProfileManager, InstalledProductsManager, ReleaseStatusCache
+        OverrideStatusCache, ProfileManager, InstalledProductsManager, ReleaseStatusCache, \
+        PoolStatusCache
 from subscription_manager.facts import Facts
 from subscription_manager.lock import ActionLock
 from rhsm.certificate import GMT
@@ -641,6 +642,15 @@ class StubCPProvider(object):
 
 
 class StubEntitlementStatusCache(EntitlementStatusCache):
+
+    def write_cache(self):
+        pass
+
+    def delete_cache(self):
+        self.server_status = None
+
+
+class StubPoolStatusCache(PoolStatusCache):
 
     def write_cache(self):
         pass
