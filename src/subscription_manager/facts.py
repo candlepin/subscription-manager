@@ -64,7 +64,7 @@ class Facts(CacheManager):
             log.debug("Cache %s does not exit" % self.CACHE_FILE)
             return True
 
-        cached_facts = self._read_cache() or {}
+        cached_facts = self.read_cache_only() or {}
         # In order to accurately check for changes, we must refresh local data
         self.facts = self.get_facts(True)
 
@@ -74,7 +74,7 @@ class Facts(CacheManager):
         return False
 
     def get_facts(self, refresh=False):
-        if ((len(self.facts) == 0) or refresh):
+        if len(self.facts) == 0 or refresh:
             collector = AllFactsCollector()
             facts = collector.get_all()
             self.plugin_manager.run('post_facts_collection', facts=facts)
