@@ -583,8 +583,8 @@ class ContentAccessCache(object):
         uep = self.cp_provider.get_consumer_auth_cp()
         try:
             response = uep.getAccessibleContent(self.identity.uuid, if_modified_since=if_modified_since)
-        except connection.RestlibException as e:
-            log.warning("Unable to query for content access updates", exc_info=e)
+        except connection.RestlibException as err:
+            log.warning("Unable to query for content access updates: %s", err)
             return None
         if response is None or "contentListing" not in response:
             return None
