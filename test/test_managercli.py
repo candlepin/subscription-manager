@@ -910,8 +910,8 @@ class TestReposCommand(TestCliCommand):
         self._inject_mock_invalid_consumer()
         mock_repofile_inst = mock_repofile.return_value
 
-        enabled = {'enabled': '1'}.items()
-        disabled = {'enabled': '0'}.items()
+        enabled = list({'enabled': '1'}.items())
+        disabled = list({'enabled': '0'}.items())
 
         zoo = Repo('zoo', enabled)
         zebra = Repo('zebra', disabled)

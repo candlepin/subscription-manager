@@ -374,7 +374,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
             self.name_text.set_text(selection['name'])
             self.baseurl_text.set_text(selection['baseurl'])
 
-            for key, value in (selection['override_data'] or {}).items():
+            for key, value in list((selection['override_data'] or {}).items()):
                 if key not in ['gpgcheck', 'enabled']:
                     self.other_overrides.add_override(key, value)
 
@@ -483,7 +483,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
         self.apply_button.set_sensitive(activate_apply_button)
 
     def _has_extra_overrides(self, override_data):
-        for key, value in (override_data or {}).items():
+        for key, value in list((override_data or {}).items()):
             if key not in ['gpgcheck', 'enabled']:
                 return True
         return False

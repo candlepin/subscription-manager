@@ -450,16 +450,16 @@ class MigrationEngine(object):
 
     def handle_collisions(self, applicable_certs):
         # if we have the same product IDs mapping to multiple certificates, we must abort.
-        collisions = dict((prod_id, mappings) for prod_id, mappings in applicable_certs.items() if len(mappings) > 1)
+        collisions = dict((prod_id, mappings) for prod_id, mappings in list(applicable_certs.items()) if len(mappings) > 1)
         if not collisions:
             return
 
         log.error("Aborting. Detected the following product ID collisions: %s", collisions)
         self.print_banner(_("Unable to continue migration!"))
         print _("You are subscribed to channels that have conflicting product certificates.")
-        for prod_id, mappings in collisions.items():
+        for prod_id, mappings in list(collisions.items()):
             # Flatten the list of lists
-            colliding_channels = [item for sublist in mappings.values() for item in sublist]
+            colliding_channels = [item for sublist in list(mappings.values()) for item in sublist]
             print _("The following channels map to product ID %s:") % prod_id
             for c in sorted(colliding_channels):
                 print "\t%s" % c
@@ -535,9 +535,9 @@ class MigrationEngine(object):
         # creates the product directory if it doesn't already exist
         product_dir = inj.require(inj.PROD_DIR)
         db_modified = False
-        for cert_to_channels in applicable_certs.values():
+        for cert_to_channels in list(applicable_certs.values()):
             # At this point handle_collisions should have verified that len(cert_to_channels) == 1
-            cert, channels = cert_to_channels.items()[0]
+            cert, channels = list(cert_to_channels.items())[0]
             source_path = os.path.join("/usr/share/rhsm/product", release, cert)
             truncated_cert_name = cert.split('-')[-1]
             destination_path = os.path.join(product_dir.path, truncated_cert_name)
@@ -767,7 +767,7 @@ class MigrationEngine(object):
             elif 'productivity' in subscribedChannel:
                 extra_channels['productivity'] = True
 
-        if True not in extra_channels.values():
+        if True not in list(extra_channels.values()):
             return
 
         # create and populate the redhat.repo file

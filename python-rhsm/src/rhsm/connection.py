@@ -988,7 +988,7 @@ class UEPConnection:
     def sanitizeGuestId(self, guestId):
         if isinstance(guestId, str) or isinstance(guestId, type(u"")):
             return guestId
-        elif isinstance(guestId, dict) and "guestId" in guestId.keys():
+        elif isinstance(guestId, dict) and "guestId" in list(guestId.keys()):
             if self.supports_resource('guestids'):
                 # Upload full json
                 return guestId

@@ -480,7 +480,7 @@ class InstalledProductsManager(CacheManager):
 
         self._setup_installed()
 
-        if len(products.keys()) != len(self.installed.keys()):
+        if len(list(products.keys())) != len(list(self.installed.keys())):
             return True
 
         if products != self.installed:
@@ -514,7 +514,7 @@ class InstalledProductsManager(CacheManager):
         consumer.
         """
         self._setup_installed()
-        final = [val for (key, val) in self.installed.items()]
+        final = [val for (key, val) in list(self.installed.items())]
         return final
 
     def _sync_with_server(self, uep, consumer_uuid):

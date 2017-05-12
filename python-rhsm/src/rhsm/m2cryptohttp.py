@@ -123,7 +123,7 @@ class _RhsmProxyHTTPSConnection(httpslib.ProxyHTTPSConnection):
         msg = "CONNECT %s:%d HTTP/1.1\r\n" % (self._real_host, port)
         msg += "Host: %s:%d\r\n" % (self._real_host, port)
         if self.proxy_headers:
-            for key, value in self.proxy_headers.items():
+            for key, value in list(self.proxy_headers.items()):
                 msg += "%s: %s\r\n" % (key, value)
         msg += "\r\n"
         return msg

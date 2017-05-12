@@ -197,7 +197,7 @@ class TestInstalledProductsCache(SubManFixture):
         self.mgr = InstalledProductsManager()
 
     def test_cert_parsing(self):
-        self.assertEqual(3, len(self.mgr.installed.keys()))
+        self.assertEqual(3, len(list(self.mgr.installed.keys())))
         self.assertTrue('a-product' in self.mgr.installed)
         self.assertTrue('b-product' in self.mgr.installed)
         self.assertTrue('c-product' in self.mgr.installed)

@@ -96,7 +96,7 @@ class KeyFileConfigParser(RhsmConfigParser):
             super_result = super(KeyFileConfigParser, self).options(section)
             for key in super_result:
                 result[key] = self.get(section, key)
-        return result.items()
+        return list(result.items())
 
     def has_default(self, section, prop):
         return False

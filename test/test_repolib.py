@@ -127,17 +127,17 @@ class RepoTests(unittest.TestCase):
         config = (('key 1', 'value 1'), ('key b', 'value b'),
                 ('key 3', 'value 3'))
         repo = Repo('testrepo', config)
-        self.assertEquals(config, repo.items()[:3])
+        self.assertEquals(config, list(repo.items())[:3])
 
     def test_empty_strings_not_set_in_file(self):
         r = Repo('testrepo', (('proxy', ""),))
         r['proxy'] = ""
-        self.assertFalse(("proxy", "") in r.items())
+        self.assertFalse(("proxy", "") in list(r.items()))
 
     def test_unknown_property_is_preserved(self):
         existing_repo = Repo('testrepo')
         existing_repo['fake_prop'] = 'fake'
-        self.assertTrue(('fake_prop', 'fake') in existing_repo.items())
+        self.assertTrue(('fake_prop', 'fake') in list(existing_repo.items()))
 
 
 class RepoActionReportTests(fixture.SubManFixture):
@@ -437,7 +437,7 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         existing_repo['proxy_username'] = "blah"
         incoming_repo = {}
         update_action.update_repo(existing_repo, incoming_repo)
-        self.assertFalse("proxy_username" in existing_repo.keys())
+        self.assertFalse("proxy_username" in list(existing_repo.keys()))
 
     def test_set_mutable_property_now_empty_value(self):
         self._inject_mock_invalid_consumer()
@@ -449,7 +449,7 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         # re comments in repolib
         # Mutable properties should be added if not currently defined,
         # otherwise left alone.
-        self.assertTrue("metadata_expire" in existing_repo.keys())
+        self.assertTrue("metadata_expire" in list(existing_repo.keys()))
 
     def test_set_immutable_property_now_empty_value(self):
         self._inject_mock_invalid_consumer()
@@ -460,7 +460,7 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         update_action.update_repo(existing_repo, incoming_repo)
         # Immutable properties should be always be added/updated,
         # and removed if undefined in the new repo definition.
-        self.assertFalse("proxy_username" in existing_repo.keys())
+        self.assertFalse("proxy_username" in list(existing_repo.keys()))
 
     def test_set_mutable_property_now_none(self):
         self._inject_mock_invalid_consumer()
@@ -472,7 +472,7 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         # re comments in repolib
         # Mutable properties should be added if not currently defined,
         # otherwise left alone.
-        self.assertTrue("metadata_expire" in existing_repo.keys())
+        self.assertTrue("metadata_expire" in list(existing_repo.keys()))
 
     def test_set_mutable_property_now_not_in_cert(self):
         self._inject_mock_invalid_consumer()
@@ -484,7 +484,7 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         # re comments in repolib
         # Mutable properties should be added if not currently defined,
         # otherwise left alone.
-        self.assertTrue("metadata_expire" in existing_repo.keys())
+        self.assertTrue("metadata_expire" in list(existing_repo.keys()))
 
     def test_set_immutable_property_now_none(self):
         self._inject_mock_invalid_consumer()
@@ -495,7 +495,7 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         update_action.update_repo(existing_repo, incoming_repo)
         # Immutable properties should be always be added/updated,
         # and removed if undefined in the new repo definition.
-        self.assertFalse("proxy_username" in existing_repo.keys())
+        self.assertFalse("proxy_username" in list(existing_repo.keys()))
 
     def test_set_immutable_property_now_not_in_cert(self):
         self._inject_mock_invalid_consumer()
@@ -506,7 +506,7 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         update_action.update_repo(existing_repo, incoming_repo)
         # Immutable properties should be always be added/updated,
         # and removed if undefined in the new repo definition.
-        self.assertFalse("proxy_username" in existing_repo.keys())
+        self.assertFalse("proxy_username" in list(existing_repo.keys()))
 
     def test_overrides_removed_revert_to_default(self):
         update_action = RepoUpdateActionCommand()

@@ -33,7 +33,7 @@ class Filters(object):
         self.contains_text = contains_text
 
     def get_applied_count(self):
-        return len([_f for _f in self.__dict__.values() if _f])
+        return len([_f for _f in list(self.__dict__.values()) if _f])
 
 
 class FilterOptionsWindow(widgets.SubmanBaseWidget):

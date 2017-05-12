@@ -426,7 +426,7 @@ class X86_64CpuInfo(BaseCpuInfo):
             proc_dict = self.processor_stanza_to_processor_data(processor_stanza)
             processors.append(proc_dict)
             # keep track of fields as we see them
-            all_fields = accumulate_fields(all_fields, proc_dict.keys())
+            all_fields = accumulate_fields(all_fields, list(proc_dict.keys()))
 
         self.cpu_info.common = find_shared_key_value_pairs(all_fields, processors)
         self.cpu_info.processors = processors

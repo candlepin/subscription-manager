@@ -41,7 +41,7 @@ def postresolve_hook(conduit):
 
     repo_storage = conduit.getRepos()
     ignored_repos = conduit.confList('main', 'ignored_repos', default=DEFAULT_IGNORED_REPOS)
-    disabled_repos = set((repo for repo in repo_storage.repos.values()
+    disabled_repos = set((repo for repo in list(repo_storage.repos.values())
                                         if not repo.enabled and is_repo_important(repo, ignored_repos)))
     if not disabled_repos:
         return

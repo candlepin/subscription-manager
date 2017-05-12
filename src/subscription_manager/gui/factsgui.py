@@ -106,7 +106,7 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
 
         # make sure we get fresh facts, since entitlement validity status could change
         system_facts_dict = self.facts.get_facts()
-        system_facts = system_facts_dict.items()
+        system_facts = list(system_facts_dict.items())
 
         system_facts.sort()
         group = None

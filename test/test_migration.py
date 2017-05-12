@@ -94,7 +94,7 @@ class TestMigration(SubManFixture):
         if not kwargs:
             kwargs = {}
 
-        for k, v in kwargs.items():
+        for k, v in list(kwargs.items()):
             setattr(mock_opts, k, v)
 
         # The five_to_six option is set after argument parsing in the module so we set it

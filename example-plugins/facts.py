@@ -71,5 +71,5 @@ class FactsPlugin(SubManPlugin):
         # terrible list comprehension, dont do this in real code
         # len(str(x[1])) is terrible if x[1] is say, a float with long string repr, then
         # again, we don't support that, so...
-        new_facter_facts = dict([('facter.' + x[0], x[1]) for x in facter_dict.items() if len(str(x[1])) < 256])
+        new_facter_facts = dict([('facter.' + x[0], x[1]) for x in list(facter_dict.items()) if len(str(x[1])) < 256])
         facts.update(new_facter_facts)

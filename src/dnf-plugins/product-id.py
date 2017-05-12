@@ -121,7 +121,7 @@ class DnfProductManager(ProductManager):
 
         # available version of installed
         avail_pkgs = self.base.sack.query().available().filter(name=[
-            k[0] for k in installed_na.keys()])
+            k[0] for k in list(installed_na.keys())])
 
         active = set()
         for p in avail_pkgs:

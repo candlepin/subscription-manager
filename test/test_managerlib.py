@@ -266,8 +266,8 @@ class MergePoolsTests(SubManFixture):
                 create_pool(product, product, quantity=10, consumed=5)
         ]
         results = merge_pools(pools)
-        self.assertEquals(1, len(results.values()))
-        result = results.values()[0]
+        self.assertEquals(1, len(list(results.values())))
+        result = list(results.values())[0]
         self.assertEquals(product, result.product_id)
 
     def test_multiple_pools(self):
@@ -279,7 +279,7 @@ class MergePoolsTests(SubManFixture):
                 create_pool(product2, product2, quantity=10, consumed=5),
         ]
         results = merge_pools(pools)
-        self.assertEquals(2, len(results.values()))
+        self.assertEquals(2, len(list(results.values())))
         self.assertTrue(product1 in results)
         self.assertTrue(product2 in results)
 
@@ -887,7 +887,7 @@ class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
     def test_sorter_adds_group_for_non_stackable_entitlement(self):
         pool = self._create_pool("test-prod-1", "Test Prod 1")
         merged = merge_pools([pool])
-        pools = merged.values()
+        pools = list(merged.values())
         sorter = MergedPoolsStackingGroupSorter(pools)
 
         self.assertEquals(1, len(sorter.groups))
@@ -900,7 +900,7 @@ class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
         expected_stacking_id = 1234
         pool = self._create_pool("test-prod-1", "Test Prod 1", expected_stacking_id)
         merged = merge_pools([pool])
-        pools = merged.values()
+        pools = list(merged.values())
         sorter = MergedPoolsStackingGroupSorter(pools)
 
         self.assertEquals(1, len(sorter.groups))
@@ -916,7 +916,7 @@ class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
 
         merged = merge_pools([pool1, pool2])
 
-        pools = merged.values()
+        pools = list(merged.values())
         sorter = MergedPoolsStackingGroupSorter(pools)
 
         self.assertEquals(1, len(sorter.groups))
@@ -933,7 +933,7 @@ class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
         pool2 = self._create_pool("test-prod-2", "Test Prod 2")
 
         merged = merge_pools([pool1, pool2])
-        pools = merged.values()
+        pools = list(merged.values())
         sorter = MergedPoolsStackingGroupSorter(pools)
 
         self.assertEquals(2, len(sorter.groups))
@@ -955,7 +955,7 @@ class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
         pool2 = self._create_pool("test-prod-2", "Test Prod 2", expected_stacking_id)
 
         merged = merge_pools([pool1, pool2])
-        pools = merged.values()
+        pools = list(merged.values())
         sorter = MergedPoolsStackingGroupSorter(pools)
 
         self.assertEquals(2, len(sorter.groups))

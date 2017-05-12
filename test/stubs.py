@@ -110,7 +110,7 @@ class StubConfig(config.RhsmConfigParser):
         # section and iterate over them with their values.
         items_from_store = self.store[section]
         if len(items_from_store) > 0:
-            return items_from_store.items()
+            return list(items_from_store.items())
         return config.RhsmConfigParser.items(self, section)
 
     def save(self, config_file=None):

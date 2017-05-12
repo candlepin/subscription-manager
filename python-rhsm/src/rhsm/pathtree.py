@@ -108,7 +108,7 @@ class PathTree(object):
 
             # we allow any word to match against entitlement variables
             # such as "$releasever".
-            for word in tree.keys():
+            for word in list(tree.keys()):
                 if word.startswith('$'):
                     words_to_try.append(word)
 

@@ -77,7 +77,7 @@ class TestPathTree(unittest.TestCase):
         data = open(DATA, 'rb').read()
         pt = PathTree(data).path_tree
         self.assertTrue('foo' in pt)
-        self.assertEqual(len(pt.keys()), 1)
+        self.assertEqual(len(list(pt.keys())), 1)
 
     def test_match_path(self):
         data = open(DATA, 'rb').read()

@@ -60,7 +60,7 @@ class FactsDict(collections.MutableMapping):
         return len(self) < len(other)
 
     def __repr__(self):
-        return '%s(%r)' % (self.__class__.__name__, self.items())
+        return '%s(%r)' % (self.__class__.__name__, list(self.items()))
 
 
 def compare_with_graylist(dict_a, dict_b, graylist):

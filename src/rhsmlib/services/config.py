@@ -86,7 +86,7 @@ class Config(collections.MutableMapping):
 
     def __repr__(self):
         result = {}
-        for name, s in self._sections.items():
+        for name, s in list(self._sections.items()):
             result[name] = repr(s)
         return "%s" % result
 

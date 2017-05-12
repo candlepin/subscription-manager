@@ -306,7 +306,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         if self.backend.cs.system_status == 'valid':
             self._set_status_icons(VALID_STATUS)
-            if len(self.backend.cs.installed_products.keys()) == 0:
+            if len(list(self.backend.cs.installed_products.keys())) == 0:
                 # No product certs installed, thus no compliant until date:
                 self.subscription_status_label.set_text(
                         # I18N: Please add newlines if translation is longer:

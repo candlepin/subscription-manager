@@ -43,7 +43,7 @@ class CustomFacts(object):
         return custom_facts
 
     def __iter__(self):
-        return iter(self.data.items())
+        return iter(list(self.data.items()))
 
 
 class CustomFactsFileError(Exception):

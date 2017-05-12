@@ -84,7 +84,7 @@ class DmiFirmwareInfoCollector(collector.FactsCollector):
                 "dmi.connector.": self._read_dmi(dmidecode.connector),
             }
 
-            for tag, func in dmi_data.items():
+            for tag, func in list(dmi_data.items()):
                 dmiinfo = self._get_dmi_data(func, tag, dmiinfo)
         except Exception as e:
             log.warn(_("Error reading system DMI information: %s"), e)
@@ -100,8 +100,8 @@ class DmiFirmwareInfoCollector(collector.FactsCollector):
             return None
 
     def _get_dmi_data(self, func, tag, ddict):
-        for key, value in func.items():
-            for key1, value1 in value['data'].items():
+        for key, value in list(func.items()):
+            for key1, value1 in list(value['data'].items()):
                 # FIXME: this loses useful data...
                 if not isinstance(value1, str):
                     # we are skipping things like int and bool values, as

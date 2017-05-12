@@ -215,7 +215,7 @@ class ProductCertificateDirectory(CertificateDirectory):
         for product_cert in prod_certs:
             product = product_cert.products[0]
             installed_products[product.id] = product_cert
-        log.debug("Installed product IDs: %s" % installed_products.keys())
+        log.debug("Installed product IDs: %s" % list(installed_products.keys()))
         return installed_products
 
 

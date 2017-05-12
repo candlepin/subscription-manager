@@ -231,8 +231,8 @@ class CertSorterTests(SubManFixture):
 
         sorter._scan_entitlement_certs()
 
-        self.assertEquals(["d"], sorter.expired_products.keys())
-        self.assertEquals(["e"], sorter.future_products.keys())
+        self.assertEquals(["d"], list(sorter.expired_products.keys()))
+        self.assertEquals(["e"], list(sorter.future_products.keys()))
 
         self.assertEquals(3, len(sorter.valid_entitlement_certs))
 

@@ -82,10 +82,10 @@ class TestConfig(BaseConfigTest):
         self.assertEquals(len(self.expected_sections), len(self.config))
 
     def test_keys(self):
-        self.assert_items_equals(self.expected_sections, self.config.keys())
+        self.assert_items_equals(self.expected_sections, list(self.config.keys()))
 
     def test_values(self):
-        values = self.config.values()
+        values = list(self.config.values())
         for v in values:
             self.assertIsInstance(v, ConfigSection)
 

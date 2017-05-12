@@ -1909,7 +1909,7 @@ class FactsCommand(CliCommand):
 
         if self.options.list:
             facts_dict = facts.get_facts()
-            facts_keys = facts_dict.keys()
+            facts_keys = list(facts_dict.keys())
             facts_keys.sort()
 
             for key in facts_keys:
@@ -2019,7 +2019,7 @@ class PluginsCommand(CliCommand):
         return False
 
     def _list_plugins(self):
-        for plugin_class in self.plugin_manager.get_plugins().values():
+        for plugin_class in list(self.plugin_manager.get_plugins().values()):
             enabled = _("disabled")
             if plugin_class.conf.is_plugin_enabled():
                 enabled = _("enabled")
@@ -2227,9 +2227,9 @@ class ConfigCommand(CliCommand):
                                help=_("list the configuration for this system"))
         self.parser.add_option("--remove", dest="remove", action="append",
                                help=_("remove configuration entry by section.name"))
-        for s in conf.keys():
+        for s in list(conf.keys()):
             section = conf[s]
-            for name, _value in section.items():
+            for name, _value in list(section.items()):
                 self.parser.add_option("--" + s + "." + name, dest=(s + "." + name),
                     help=_("Section: %s, Name: %s") % (s, name))
 
@@ -2239,9 +2239,9 @@ class ConfigCommand(CliCommand):
             if self.options.remove:
                 too_many = True
             else:
-                for s in conf.keys():
+                for s in list(conf.keys()):
                     section = conf[s]
-                    for name, _value in section.items():
+                    for name, _value in list(section.items()):
                         if getattr(self.options, s + "." + name):
                             too_many = True
                             break
@@ -2250,9 +2250,9 @@ class ConfigCommand(CliCommand):
 
         if not (self.options.list or self.options.remove):
             has = False
-            for s in conf.keys():
+            for s in list(conf.keys()):
                 section = conf[s]
-                for name, _value in section.items():
+                for name, _value in list(section.items()):
                     test = "%s" % getattr(self.options, s + "." + name)
                     has = has or (test != 'None')
             if not has:
@@ -2267,8 +2267,8 @@ class ConfigCommand(CliCommand):
                 section = r.split('.')[0]
                 name = r.split('.')[1]
                 found = False
-                if section in conf.keys():
-                    for key, _value in conf[section].items():
+                if section in list(conf.keys()):
+                    for key, _value in list(conf[section].items()):
                         if name == key:
                             found = True
                 if not found:
@@ -2278,10 +2278,10 @@ class ConfigCommand(CliCommand):
         self._validate_options()
 
         if self.options.list:
-            for s in conf.keys():
+            for s in list(conf.keys()):
                 section = conf[s]
                 print '[%s]' % s
-                source_list = section.items()
+                source_list = list(section.items())
                 source_list.sort()
                 for (name, value) in source_list:
                     indicator1 = ''
@@ -2309,9 +2309,9 @@ class ConfigCommand(CliCommand):
                     print _("Section %s and name %s cannot be removed.") % (section, name)
             conf.persist()
         else:
-            for s in conf.keys():
+            for s in list(conf.keys()):
                 section = conf[s]
-                for name, value in section.items():
+                for name, value in list(section.items()):
                     value = "%s" % getattr(self.options, s + "." + name)
                     if not value == 'None':
                         section[name] = value
@@ -2694,7 +2694,7 @@ class OverrideCommand(CliCommand):
 
         if self.options.additions:
             repo_ids = [repo.id for repo in overrides.repo_lib.get_repos(apply_overrides=False)]
-            to_add = [Override(repo, name, value) for repo in self.options.repos for name, value in self.options.additions.items()]
+            to_add = [Override(repo, name, value) for repo in self.options.repos for name, value in list(self.options.additions.items())]
             try:
                 results = overrides.add_overrides(self.identity.uuid, to_add)
             except connection.RestlibException as ex:
@@ -2738,7 +2738,7 @@ class OverrideCommand(CliCommand):
 
         for repo in sorted(to_show):
             print _("Repository: %s") % repo
-            repo_data = sorted(overrides[repo].items(), key=lambda x: x[0])
+            repo_data = sorted(list(overrides[repo].items()), key=lambda x: x[0])
             # Split the list of 2-tuples into a list of names and a list of keys
             names, values = list(zip(*repo_data))
             names = ["%s:" % x for x in names]

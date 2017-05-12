@@ -688,7 +688,7 @@ class Extensions(dict):
         :rtype: :class:`Extensions`
         """
         d = {}
-        for oid, v in self.items():
+        for oid, v in list(self.items()):
             d[oid.ltrim(n)] = v
         return Extensions(d)
 
@@ -732,7 +732,7 @@ class Extensions(dict):
 
         # Only order the keys if we want more than a singel return avalue
         if ignoreOrder:
-            keyset = self.keys()
+            keyset = list(self.keys())
         else:
             keyset = sorted(self.keys())
 
@@ -769,13 +769,13 @@ class Extensions(dict):
         """
         Parse the extensions. Expects an :module:`rhsm._certificate` :class:`X509` object.
         """
-        for oid, value in x509.get_all_extensions().items():
+        for oid, value in list(x509.get_all_extensions().items()):
             oid = OID(oid)
             self[oid] = value
 
     def __str__(self):
         s = []
-        for item in self.items():
+        for item in list(self.items()):
             s.append('%s = "%s"' % item)
         return '\n'.join(s)
 

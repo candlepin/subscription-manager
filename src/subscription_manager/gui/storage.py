@@ -62,7 +62,7 @@ class MappedListStore(MappedStore, ga_Gtk.ListStore):
 
         # FIXME: this is fragile, since the .values() ordering is not reliable
         MappedStore.__init__(self, type_map)
-        ga_Gtk.ListStore.__init__(self, *type_map.values())
+        ga_Gtk.ListStore.__init__(self, *list(type_map.values()))
         # Use the types from the map to call the parent constructor
 
     def __getitem__(self, key):
@@ -89,7 +89,7 @@ class MappedTreeStore(MappedStore, ga_Gtk.TreeStore):
         self.log = logging.getLogger(__name__ + self.__class__.__name__)
         # FIXME: How does this work? .values() is not sorted, so could change?
         MappedStore.__init__(self, type_map)
-        ga_Gtk.TreeStore.__init__(self, *type_map.values())
+        ga_Gtk.TreeStore.__init__(self, *list(type_map.values()))
 
     def __getitem__(self, key):
         return self.type_index[key]

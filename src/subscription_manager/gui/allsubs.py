@@ -219,7 +219,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         # Hide the no subscriptions label and show the pools list:
         self.widget_switcher.set_active(1)
 
-        sorter = managerlib.MergedPoolsStackingGroupSorter(merged_pools.values())
+        sorter = managerlib.MergedPoolsStackingGroupSorter(list(merged_pools.values()))
         for group in sorter.groups:
             tree_iter = None
             if group.name and len(group.entitlements) > 1:

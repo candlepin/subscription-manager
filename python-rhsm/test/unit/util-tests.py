@@ -317,7 +317,7 @@ class TestProxyInfo(unittest.TestCase):
         proxy_env = {'HTTPS_PROXY': '', 'https_proxy': '',
                      'HTTP_PROXY': '', 'http_proxy': ''}
         if variables:
-            for (key, value) in variables.items():
+            for (key, value) in list(variables.items()):
                 proxy_env[key] = value
         return proxy_env
 

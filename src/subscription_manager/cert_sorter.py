@@ -171,7 +171,7 @@ class ComplianceManager(object):
         # Add in any installed products not in the server response. This
         # could happen if something changes before the certd runs. Log
         # a warning if it does, and treat it like an unentitled product.
-        for pid in self.installed_products.keys():
+        for pid in list(self.installed_products.keys()):
             if pid not in self.valid_products and pid not in \
                     self.partially_valid_products and pid not in \
                     unentitled_pids:
@@ -197,14 +197,14 @@ class ComplianceManager(object):
 
         log.info("Product status: valid_products=%s partial_products=%s expired_products=%s"
                  " unentitled_producs=%s future_products=%s valid_until=%s",
-                 fj(self.valid_products.keys()),
-                 fj(self.partially_valid_products.keys()),
-                 fj(self.expired_products.keys()),
-                 fj(self.unentitled_products.keys()),
-                 fj(self.future_products.keys()),
+                 fj(list(self.valid_products.keys())),
+                 fj(list(self.partially_valid_products.keys())),
+                 fj(list(self.expired_products.keys())),
+                 fj(list(self.unentitled_products.keys())),
+                 fj(list(self.future_products.keys())),
                  self.compliant_until)
 
-        log.debug("partial stacks: %s" % self.partial_stacks.keys())
+        log.debug("partial stacks: %s" % list(self.partial_stacks.keys()))
 
     def _scan_entitlement_certs(self):
         """
@@ -216,9 +216,9 @@ class ComplianceManager(object):
         """
         # Subtract out the valid and partially valid items from the
         # list of installed products
-        unknown_products = dict((k, v) for (k, v) in self.installed_products.items() if
-                                k not in self.valid_products.keys() and
-                                k not in self.partially_valid_products.keys())
+        unknown_products = dict((k, v) for (k, v) in list(self.installed_products.items()) if
+                                k not in list(self.valid_products.keys()) and
+                                k not in list(self.partially_valid_products.keys()))
         ent_certs = self.entitlement_dir.list()
 
         on_date = datetime.now(GMT())
@@ -229,7 +229,7 @@ class ComplianceManager(object):
                 self.valid_entitlement_certs.append(ent_cert)
 
             for product in ent_cert.products:
-                if product.id in unknown_products.keys():
+                if product.id in list(unknown_products.keys()):
                     # If the entitlement starts after the date we're checking, we
                     # consider this a future entitlement. Technically it could be
                     # partially stacked on that date, but we cannot determine that

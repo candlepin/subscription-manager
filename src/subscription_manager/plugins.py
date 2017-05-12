@@ -705,7 +705,7 @@ class BasePluginManager(object):
         # only look for func's that match slot's we have in our conduits
         class_is_used = False
 
-        for slot in self._slot_to_funcs.keys():
+        for slot in list(self._slot_to_funcs.keys()):
             func_name = slot + "_hook"
             if instance.all_slots or hasattr(instance, func_name):
                 # FIXME: document that all_hooks could result in calls to
@@ -824,7 +824,7 @@ class BasePluginManager(object):
         # first, which is weird. So this just sorts the slots by conduit name,
         # then by slot name
         conduit_to_slots = {}
-        for slot, conduit in self._slot_to_conduit.items():
+        for slot, conduit in list(self._slot_to_conduit.items()):
             # sigh, no defaultdict on 2.4
             if conduit not in conduit_to_slots:
                 conduit_to_slots[conduit] = []

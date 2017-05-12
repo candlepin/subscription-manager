@@ -45,9 +45,9 @@ class RepoApiTest(SubManFixture):
             'enabled': '1',
         }
         self.invoker.return_value.get_repos.return_value = [
-            Repo('hello', repo_settings.items()),
+            Repo('hello', list(repo_settings.items())),
         ]
-        self.repo_file.items.return_value = repo_settings.items()
+        self.repo_file.items.return_value = list(repo_settings.items())
         result = api.disable_yum_repositories('hello')
 
         self.repo_file.return_value.write.assert_called_with()
@@ -58,9 +58,9 @@ class RepoApiTest(SubManFixture):
             'enabled': '0',
         }
         self.invoker.return_value.get_repos.return_value = [
-            Repo('hello', repo_settings.items()),
+            Repo('hello', list(repo_settings.items())),
         ]
-        self.repo_file.items.return_value = repo_settings.items()
+        self.repo_file.items.return_value = list(repo_settings.items())
         result = api.enable_yum_repositories('hello')
 
         self.repo_file.return_value.write.assert_called_with()
@@ -72,10 +72,10 @@ class RepoApiTest(SubManFixture):
         }
 
         self.invoker.return_value.get_repos.return_value = [
-            Repo('hello', repo_settings.copy().items()),
-            Repo('helium', repo_settings.copy().items()),
+            Repo('hello', list(repo_settings.copy().items())),
+            Repo('helium', list(repo_settings.copy().items())),
         ]
-        self.repo_file.items.return_value = repo_settings.copy().items()
+        self.repo_file.items.return_value = list(repo_settings.copy().items())
 
         result = api.enable_yum_repositories('he*')
         self.repo_file.return_value.write.assert_called_with()
@@ -86,9 +86,9 @@ class RepoApiTest(SubManFixture):
             'enabled': '0',
         }
         self.invoker.return_value.get_repos.return_value = [
-            Repo('x', repo_settings.items()),
+            Repo('x', list(repo_settings.items())),
         ]
-        self.repo_file.items.return_value = repo_settings.items()
+        self.repo_file.items.return_value = list(repo_settings.items())
         result = api.enable_yum_repositories('hello')
 
         self.assertEquals(0, len(self.repo_file.return_value.write.mock_calls))
@@ -104,9 +104,9 @@ class RepoApiTest(SubManFixture):
                 'enabled': '0',
             }
             self.invoker.return_value.get_repos.return_value = [
-                Repo('hello', repo_settings.items()),
+                Repo('hello', list(repo_settings.items())),
             ]
-            self.repo_file.items.return_value = repo_settings.items()
+            self.repo_file.items.return_value = list(repo_settings.items())
 
             self._inject_mock_valid_consumer("123")
 

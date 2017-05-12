@@ -147,7 +147,7 @@ class PoolFilter(object):
                         str(productid) == d['productId']:
                     matched_data_dict[d['id']] = d
 
-        return matched_data_dict.values()
+        return list(matched_data_dict.values())
 
     def filter_out_installed(self, pools):
         """
@@ -167,7 +167,7 @@ class PoolFilter(object):
                     del matched_data_dict[d['id']]
                     break
 
-        return matched_data_dict.values()
+        return list(matched_data_dict.values())
 
     def filter_product_name(self, pools, contains_text):
         """
@@ -223,7 +223,7 @@ class PoolFilter(object):
             if wrapped_pool.get_product_attributes('type')['type'] == 'SVC':
                 provided_ids.add(pool['productId'])
             overlap = 0
-            possible_overlap_pids = provided_ids.intersection(entitled_product_ids_to_certs.keys())
+            possible_overlap_pids = provided_ids.intersection(list(entitled_product_ids_to_certs.keys()))
             for productid in possible_overlap_pids:
                 if self._dates_overlap(pool, entitled_product_ids_to_certs[productid]) \
                         and productid not in self.sorter.partially_valid_products:
@@ -247,7 +247,7 @@ class PoolFilter(object):
         (ie has multi-entitle).
         """
         resubscribeable_pool_ids = [pool['id'] for pool in
-                                    compatible_pools.values()]
+                                    list(compatible_pools.values())]
 
         filtered_pools = []
         for pool in pools:
@@ -549,9 +549,9 @@ class PoolStash(object):
 
         log.debug("Filtering %d total pools" % len(self.all_pools))
         if not incompatible:
-            pools = self.all_pools.values()
+            pools = list(self.all_pools.values())
         else:
-            pools = self.compatible_pools.values()
+            pools = list(self.compatible_pools.values())
             log.debug("\tRemoved %d incompatible pools" %
                        len(self.incompatible_pools))
 

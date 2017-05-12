@@ -95,7 +95,7 @@ class ProductDatabase:
         Note this needs to support the old form of
         a {"productid": "repoid"} as well as the
         new form of {"productid: ["repoid1",...]}"""
-        for productid, repo_data in db_dict.items():
+        for productid, repo_data in list(db_dict.items()):
             if isinstance(repo_data, types.StringType):
                 self.content[productid].append(repo_data)
             else:

@@ -343,7 +343,7 @@ class HardwareCollector(collector.FactsCollector):
             prefix=self.prefix
         )
 
-        for key, value in proc_cpuinfo_source.cpu_info.common.items():
+        for key, value in list(proc_cpuinfo_source.cpu_info.common.items()):
             proc_cpuinfo['%s.common.%s' % (fact_namespace, key)] = value
 
         # NOTE: cpu_info.other is a potentially ordered non-uniq list, so may

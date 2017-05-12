@@ -1273,7 +1273,7 @@ class SelectSLAScreen(Screen):
                 self._format_prods(unentitled_prod_certs))
 
         self.list_store.clear()
-        for sla in reversed(sla_data_map.keys()):
+        for sla in reversed(list(sla_data_map.keys())):
             self.list_store.append([sla, sla_data_map])
 
         self.sla_combobox.set_model(self.list_store)
@@ -1377,7 +1377,7 @@ class SelectSLAScreen(Screen):
                 return
 
             self.info.set_property('dry-run-result',
-                                   sla_data_map.values()[0])
+                                   list(sla_data_map.values())[0])
             self.emit('move-to-screen', CONFIRM_SUBS_PAGE)
             self.pre_done()
             return
@@ -2200,7 +2200,7 @@ class AsyncBackend(object):
                 suitable_slas[sla] = dry_run
 
         # why do we call cert_sorter stuff in the return?
-        return (current_sla, self.backend.cs.unentitled_products.values(), suitable_slas)
+        return (current_sla, list(self.backend.cs.unentitled_products.values()), suitable_slas)
 
     def _find_service_levels(self, consumer_uuid, callback):
         """

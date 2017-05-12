@@ -38,7 +38,7 @@ class BaseFacts(base_object.BaseObject):
     @util.dbus_handle_exceptions
     def GetFacts(self, sender=None):
         collection = self.facts_collector.collect()
-        cleaned = dict([(str(key), str(value)) for key, value in collection.data.items()])
+        cleaned = dict([(str(key), str(value)) for key, value in list(collection.data.items())])
         return dbus.Dictionary(cleaned, signature="ss")
 
 
