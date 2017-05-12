@@ -76,7 +76,7 @@ class TestMigration(SubManFixture):
         migrate.add_parser_options(p)
 
         # Set the list of acceptable attributes for this Mock.
-        valid_options = filter(lambda x: x.dest is not None, p.option_list)
+        valid_options = [x for x in p.option_list if x.dest is not None]
         mock_opts = Mock(spec=[o.dest for o in valid_options])
 
         # Set everything to the default
@@ -88,11 +88,14 @@ class TestMigration(SubManFixture):
                 val = None
             setattr(mock_opts, opt.dest, val)
 
-        map(lambda x: set_default(x), valid_options)
+        for x in valid_options:
+            set_default(x)
 
         if not kwargs:
             kwargs = {}
-        map(lambda (k, v): setattr(mock_opts, k, v), kwargs.items())
+
+        for k, v in kwargs.items():
+            setattr(mock_opts, k, v)
 
         # The five_to_six option is set after argument parsing in the module so we set it
         # for convenience.

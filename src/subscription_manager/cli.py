@@ -108,7 +108,7 @@ class CLI:
         self._do_columnize(all_items)
 
     def _do_columnize(self, items_list):
-        modules, descriptions = zip(*items_list)
+        modules, descriptions = list(zip(*items_list))
         print columnize(modules, echo_columnize_callback, *descriptions) + '\n'
 
     def _find_best_match(self, args):

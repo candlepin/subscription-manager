@@ -639,7 +639,7 @@ class TestPluginManagerReporting(unittest.TestCase):
 
     def setUp(self):
         #plugin_class_names = ['Plugin1', 'Plugin2', 'Plugin3']
-        plugin_class_names = [str(x) for x in xrange(0, 10)]
+        plugin_class_names = [str(x) for x in range(0, 10)]
         self.plugin_classes = []
 
         def test_hook(self):

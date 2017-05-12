@@ -64,7 +64,7 @@ def parse_range(range_str):
     start = int(range_list[0])
     end = int(range_list[-1])
 
-    return range(start, end + 1)
+    return list(range(start, end + 1))
 
 
 # util to total up the values represented by a cpu siblings list
@@ -126,7 +126,7 @@ class HardwareCollector(collector.FactsCollector):
             'uname.version',
             'uname.machine',
         )
-        uname_info = dict(zip(uname_keys, uname_data))
+        uname_info = dict(list(zip(uname_keys, uname_data)))
         return uname_info
 
     def get_release_info(self):
@@ -163,7 +163,7 @@ class HardwareCollector(collector.FactsCollector):
                 'CPE_NAME': 'Unknown',
             }
             for line in os_release:
-                split = map(lambda piece: piece.strip('"\n '), line.split('='))
+                split = [piece.strip('"\n ') for piece in line.split('=')]
                 if len(split) != 2:
                     continue
                 data[split[0]] = split[1]

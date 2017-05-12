@@ -2133,7 +2133,7 @@ class ReposCommand(CliCommand):
 
                     return show_enabled or show_disabled
 
-                repos = filter(filter_repos, repos)
+                repos = list(filter(filter_repos, repos))
 
                 if len(repos):
                     print("+----------------------------------------------------------+")
@@ -2484,7 +2484,7 @@ class ListCommand(CliCommand):
 
             return service_level.lower() == pool_level.lower()
 
-        return filter(filter_pool_data_by_service_level, pools)
+        return list(filter(filter_pool_data_by_service_level, pools))
 
     def print_consumed(self, service_level=None, filter_string=None, pid_only=False):
         # list all certificates that have not yet expired, even those
@@ -2496,7 +2496,7 @@ class ListCommand(CliCommand):
         if len(certs):
             # Check if we need to apply our cert filter
             if service_level is not None or filter_string is not None:
-                certs = filter(cert_filter.match, certs)
+                certs = list(filter(cert_filter.match, certs))
 
             # Process and display our (filtered) certs:
             if len(certs):
@@ -2740,7 +2740,7 @@ class OverrideCommand(CliCommand):
             print _("Repository: %s") % repo
             repo_data = sorted(overrides[repo].items(), key=lambda x: x[0])
             # Split the list of 2-tuples into a list of names and a list of keys
-            names, values = zip(*repo_data)
+            names, values = list(zip(*repo_data))
             names = ["%s:" % x for x in names]
             print columnize(names, echo_columnize_callback, *values, indent=2) + "\n"
 

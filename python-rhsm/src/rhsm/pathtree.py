@@ -139,7 +139,7 @@ class PathTree(object):
         words = [word.decode('utf-8') for word in words]
 
         # enumerate() would be better here, but lacks a 'start' arg in 2.4
-        weighted_words = zip(itertools.count(1), words)
+        weighted_words = list(zip(itertools.count(1), words))
         # huffman nodes, without having put them in a tree. These will all be
         # leaves in the tree.
         nodes = [

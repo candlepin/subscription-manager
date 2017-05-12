@@ -237,7 +237,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                 pool = entry.pools[0]
                 # Use the maximum suggested quantity, not the first one.  BZ 1022198
                 # This is still incorrect when quantities from multiple merged pools are required
-                suggested_quantity = max(map(lambda p: self.calculate_default_quantity(p), entry.pools))
+                suggested_quantity = max([self.calculate_default_quantity(p) for p in entry.pools])
 
                 pool_type = PoolWrapper(pool).get_pool_type()
 

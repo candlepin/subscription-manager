@@ -233,7 +233,7 @@ class ProductDirectory(ProductCertificateDirectory):
         # Product IDs in installed_prod dir.
         pids = set([cert.products[0].id for cert in installed_prod_list])
         # Everything from /etc/pki/product, only use product-default for pids that don't already exist
-        return installed_prod_list + filter(lambda l: l.products[0].id not in pids, default_prod_list)
+        return installed_prod_list + [l for l in default_prod_list if l.products[0].id not in pids]
 
     def refresh(self):
         self.installed_prod_dir.refresh()
