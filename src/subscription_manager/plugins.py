@@ -440,7 +440,7 @@ class PluginConfig(object):
 
         try:
             self.parser.read(self.conf_files)
-        except Exception, e:
+        except Exception as e:
             raise PluginConfigException(self.plugin_key, e)
 
     def _get_config_file_path(self):
@@ -455,7 +455,7 @@ class PluginConfig(object):
         """returns True if the plugin is enabled in it's config."""
         try:
             enabled = self.parser.getboolean('main', 'enabled')
-        except Exception, e:
+        except Exception as e:
             raise PluginConfigException(self.plugin_key, e)
 
         if not enabled:
@@ -485,7 +485,7 @@ class PluginHookRunner(object):
     def run(self):
         try:
             self.func(self.conduit)
-        except Exception, e:
+        except Exception as e:
             log.exception(e)
             raise
 
@@ -592,7 +592,7 @@ class BasePluginManager(object):
             try:
                 self.add_plugins_from_module(module,
                                             plugin_to_config_map=plugin_to_config_map)
-            except PluginException, e:
+            except PluginException as e:
                 log.exception(e)
                 log.error(e)
 
@@ -781,7 +781,7 @@ class BasePluginManager(object):
             # if we get an Exception above, should we exit early, or
             # continue onto other hooks. A conduit could fail for
             # something specific to func.im_class, but unlikely
-            except Exception, e:
+            except Exception as e:
                 log.exception(e)
                 raise
 
@@ -910,7 +910,7 @@ class PluginManager(BasePluginManager):
         for module_file in module_files:
             try:
                 modules.append(self._load_plugin_module_file(module_file))
-            except PluginException, e:
+            except PluginException as e:
                 log.error(e)
 
         return modules
@@ -935,7 +935,7 @@ class PluginManager(BasePluginManager):
             finally:
                 fp.close()
         # we could catch BaseException too for system exit
-        except Exception, e:
+        except Exception as e:
             log.exception(e)
             raise PluginModuleImportException(module_file, module_name)
 

@@ -395,7 +395,7 @@ class MainWindow(widgets.SubmanBaseWidget):
             cp = self.backend.cp_provider.get_consumer_auth_cp()
             # This can throw an exception if we cannot connect to the server, bz 1058374
             show_overrides = is_registered and cp.supports_resource('content_overrides')
-        except Exception, e:
+        except Exception as e:
             log.debug("Failed to check if the server supports resource content_overrides")
             log.debug(e)
 
@@ -442,7 +442,7 @@ class MainWindow(widgets.SubmanBaseWidget):
     def _preferences_item_clicked(self, widget):
         try:
             self.preferences_dialog.show()
-        except Exception, e:
+        except Exception as e:
             handle_gui_exception(e, _("Error in preferences dialog."
                                       "Please see /var/log/rhsm/rhsm.log for more information."),
                                  self._get_window())
@@ -450,7 +450,7 @@ class MainWindow(widgets.SubmanBaseWidget):
     def _repos_item_clicked(self, widget):
         try:
             self.repos_dialog.show()
-        except Exception, e:
+        except Exception as e:
             handle_gui_exception(e, _("Error in repos dialog. "
                                       "Please see /var/log/rhsm/rhsm.log for more information."),
                                  self._get_window())
@@ -465,7 +465,7 @@ class MainWindow(widgets.SubmanBaseWidget):
     def _perform_unregister(self):
         try:
             managerlib.unregister(self.backend.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
-        except Exception, e:
+        except Exception as e:
             log.error("Error unregistering system with entitlement platform.")
             handle_gui_exception(e, _("<b>Errors were encountered during unregister.</b>") +
                                       "\n%s\n" +
@@ -522,7 +522,7 @@ class MainWindow(widgets.SubmanBaseWidget):
         try:
             # try to open documentation in yelp
             ga_Gtk.show_uri(None, 'ghelp:subscription-manager', time.time())
-        except Exception, e:
+        except Exception as e:
             # if we can't open it, it's probably because the user didn't
             # install the docs, or yelp. no need to bother them.
             log.warn("Unable to open help documentation: %s", e)

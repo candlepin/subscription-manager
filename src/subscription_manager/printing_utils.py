@@ -154,7 +154,7 @@ def highlight_by_filter_string_columnize_callback(template_str, *args, **kwargs)
     if is_atty and filter_string and caption in match_columns:
         try:
             p = re.compile(fnmatch.translate(filter_string), re.IGNORECASE)
-        except Exception, e:
+        except Exception as e:
             log.error("Cannot compile search regex '%s'. %s", filter_string, e)
 
     arglist = []

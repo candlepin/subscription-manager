@@ -52,7 +52,7 @@ class FactsPlugin(SubManPlugin):
                                        stderr=subprocess.PIPE)
             facter_out, facter_err = process.communicate()
             return_code = process.returncode
-        except EnvironmentError, e:
+        except EnvironmentError as e:
             conduit.log.error(e)
             conduit.log.error("Could not run command:  \"%s\"" % " ".join(facter_cli))
             return

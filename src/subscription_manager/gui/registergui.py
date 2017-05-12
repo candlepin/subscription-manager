@@ -118,7 +118,7 @@ def reset_resolver():
         # If ctypes isn't supported (older versions of python for example)
         # Then just don't do anything
         pass
-    except Exception, e:
+    except Exception as e:
         log.warning("reset_resolver failed: %s", e)
         pass
 
@@ -441,7 +441,7 @@ class RegisterWidget(widgets.SubmanBaseWidget):
     def choose_initial_screen(self):
         try:
             self.info.identity.reload()
-        except Exception, e:
+        except Exception as e:
             log.exception(e)
             self.emit('register-error',
                       'Error detecting if we were registered:',
@@ -1131,7 +1131,7 @@ class PerformPackageProfileSyncScreen(NoGuiScreen):
             # so we got a result of 0 and no error
             else:
                 self.emit('move-to-screen', SELECT_SLA_PAGE)
-        except Exception, e:
+        except Exception as e:
             self.emit('register-error', REGISTER_ERROR, e)
 
         self.pre_done()
@@ -1810,7 +1810,7 @@ class ChooseServerScreen(Screen):
     def reset_resolver(self):
         try:
             reset_resolver()
-        except Exception, e:
+        except Exception as e:
             log.warn("Error from reset_resolver: %s", e)
 
     def populate(self):
@@ -2124,7 +2124,7 @@ class AsyncBackend(object):
             # FIXME: emit update-ent-certs signal
             try:
                 managerlib.fetch_certificates(self.backend.certlib)
-            except Exception, cert_update_ex:
+            except Exception as cert_update_ex:
                 log.info("Error updating certificates after error:")
                 log.exception(cert_update_ex)
             self.queue.put((callback, None, sys.exc_info()))
@@ -2224,7 +2224,7 @@ class AsyncBackend(object):
         try:
             old_cp = UEPConnection(**server_info)
             old_cp.unregisterConsumer(consumer_uuid)
-        except Exception, e:
+        except Exception as e:
             log.exception(e)
             # Reraise any exception as a RemoteUnregisterException
             # This will be passed all the way back to the parent window
@@ -2240,7 +2240,7 @@ class AsyncBackend(object):
     def _validate_server(self, hostname, port, prefix, callback):
         try:
             reset_resolver()
-        except Exception, e:
+        except Exception as e:
             log.warn("Error from reset_resolver: %s", e)
         try:
             conn = UEPConnection(hostname, int(port), prefix)

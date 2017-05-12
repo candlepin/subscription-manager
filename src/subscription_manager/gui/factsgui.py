@@ -134,7 +134,7 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
             self.owner_label.show()
             self.owner_title.show()
         # very broad exception
-        except Exception, e:
+        except Exception as e:
             log.error("Could not get owner name: %s" % e)
             if isinstance(e, GoneException) and identity.uuid:
                 if e.deleted_id == identity.uuid:
@@ -160,7 +160,7 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
             else:
                 self.environment_label.hide()
                 self.environment_title.hide()
-        except Exception, e:
+        except Exception as e:
             log.error("Could not get environment \nError: %s" % e)
             self.environment_label.hide()
             self.environment_title.hide()
@@ -174,7 +174,7 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
             self.facts.update_check(self.cp_provider.get_consumer_auth_cp(), identity.uuid, force=True)
             if self.update_callback:
                 self.update_callback()
-        except Exception, e:
+        except Exception as e:
             log.error("Could not update system facts \nError: %s" % e)
             handle_gui_exception(e, linkify(str(e)), self.system_facts_dialog)
 

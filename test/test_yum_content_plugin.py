@@ -11,7 +11,7 @@ from nose.plugins.skip import SkipTest
 
 try:
     import yum
-except ImportError, e:
+except ImportError as e:
     raise SkipTest(e)
 
 

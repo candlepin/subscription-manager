@@ -446,7 +446,7 @@ class TestEntitlementStatusCache(SubManFixture):
                 new_status_buf = open(cache_file).read()
                 new_status = json.loads(new_status_buf)
                 break
-            except Exception, e:
+            except Exception as e:
                 log.exception(e)
                 tries += 1
                 time.sleep(.1)

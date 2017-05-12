@@ -65,7 +65,7 @@ class ConsumerIdentity:
             try:
                 cls.read()
                 return True
-            except Exception, e:
+            except Exception as e:
                 log.warn('possible certificate corruption')
                 log.error(e)
         return False
@@ -142,7 +142,7 @@ class Identity(object):
 
         # XXX shouldn't catch the global exception here, but that's what
         # existsAndValid did, so this is better.
-        except Exception, e:
+        except Exception as e:
             log.debug("Reload of consumer identity cert %s raised an exception with msg: %s",
                       ConsumerIdentity.certpath(), e)
             self.consumer = None

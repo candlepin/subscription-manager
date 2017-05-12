@@ -350,7 +350,7 @@ class SelectionWrapper(object):
     def __getitem__(self, key):
         try:
             return self.model.get_value(self.tree_iter, self.store[key])
-        except TypeError, te:
+        except TypeError as te:
             log.warning('Invalid item request: %s', te)
         return None
 

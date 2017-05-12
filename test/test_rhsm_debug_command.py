@@ -94,7 +94,7 @@ class TestCompileCommand(TestCliCommand):
         log.debug("unlinking %s", path)
         try:
             os.unlink(path)
-        except OSError, e:
+        except OSError as e:
             log.debug("error %s likely because we deleted it's parent already",
                       e)
 
@@ -191,7 +191,7 @@ class TestCompileCommand(TestCliCommand):
         try:
             os.makedirs(path1)
             os.makedirs(path2)
-        except os.error, e:
+        except os.error as e:
             # dir exists (or possibly can't be created) either of
             # which will fail shortly.
             pass
@@ -208,7 +208,7 @@ class TestCompileCommand(TestCliCommand):
             self.assertTrue(os.path.exists(path_join(path2, path_join(path1, "12346.pem"))))
             self.assertTrue(os.path.exists(path_join(path2, path_join(path1, "7890.pem"))))
             self.assertFalse(os.path.exists(path_join(path2, path_join(path1, "22222-key.pem"))))
-        except Exception, e:
+        except Exception as e:
             print e
             raise
         finally:
@@ -225,7 +225,7 @@ class TestCompileCommand(TestCliCommand):
         try:
             self.cc.main(["--destination", self.path])
             self.cc._validate_options()
-        except InvalidCLIOptionError, e:
+        except InvalidCLIOptionError as e:
             self.assertEquals(e.message, "The destination directory for the archive must already exist.")
         else:
             self.fail("No Exception Raised")

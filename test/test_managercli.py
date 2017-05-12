@@ -212,7 +212,7 @@ class TestCliCommand(SubManFixture):
             # sys.argv for test
             with patch.object(sys, 'argv', ['subscription-manager']):
                 self.cc.main()
-        except SystemExit, e:
+        except SystemExit as e:
             # 2 == no args given
             self.assertEquals(e.code, 2)
 
@@ -220,7 +220,7 @@ class TestCliCommand(SubManFixture):
         try:
             with patch.object(sys, 'argv', ['subscription-manager']):
                 self.cc.main([])
-        except SystemExit, e:
+        except SystemExit as e:
             # 2 == no args given
             self.assertEquals(e.code, 2)
 
@@ -231,7 +231,7 @@ class TestCliCommand(SubManFixture):
         with Capture() as cap:
             try:
                 self.cc.main(args)
-            except SystemExit, e:
+            except SystemExit as e:
                 # --help/-h returns 0
                 self.assertEquals(e.code, 0)
         output = cap.out.strip()
@@ -255,7 +255,7 @@ class TestCliCommand(SubManFixture):
             with Capture() as cap:
                 try:
                     self.cc.main()
-                except SystemExit, e:
+                except SystemExit as e:
                     self.assertEquals(os.EX_CONFIG, e.code)
             self.assertEquals(err_msg, cap.err)
 
@@ -347,7 +347,7 @@ class TestRegisterCommand(TestCliProxyCommand):
         try:
             self.cc.main(args)
             self.cc._validate_options()
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_USAGE)
         else:
             self.fail("No Exception Raised")
@@ -1013,7 +1013,7 @@ class TestAttachCommand(TestCliProxyCommand):
         try:
             self.cc.main(["--pool", "test-pool-id", "--quantity", arg])
             self.cc._validate_options()
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_USAGE)
         else:
             self.fail("No Exception Raised")
@@ -1022,7 +1022,7 @@ class TestAttachCommand(TestCliProxyCommand):
         try:
             self.cc.main(["--auto", "--quantity", "6"])
             self.cc._validate_options()
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_USAGE)
         else:
             self.fail("No Exception Raised")
@@ -1031,7 +1031,7 @@ class TestAttachCommand(TestCliProxyCommand):
         try:
             self.cc.main(["--quantity", "3"])
             self.cc._validate_options()
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_USAGE)
         else:
             self.fail("No Exception Raised")
@@ -1108,7 +1108,7 @@ class TestAttachCommand(TestCliProxyCommand):
                 self.cc.main(["--file", "-"])
                 self.cc._validate_options()
 
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_DATAERR)
         else:
             self.fail("No Exception Raised")
@@ -1121,7 +1121,7 @@ class TestAttachCommand(TestCliProxyCommand):
             self.cc.main(["--file", self.tempfiles[2][1]])
             self.cc._validate_options()
 
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_DATAERR)
         else:
             self.fail("No Exception Raised")
@@ -1130,7 +1130,7 @@ class TestAttachCommand(TestCliProxyCommand):
         try:
             self.cc.main(["--file", "nonexistant_file.nope"])
             self.cc._validate_options()
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_DATAERR)
         else:
             self.fail("No Exception Raised")
@@ -1152,13 +1152,13 @@ class TestRemoveCommand(TestCliProxyCommand):
         self.cc.main(["--serial", "this is not a number"])
         try:
             self.cc._validate_options()
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_USAGE)
 
     def test_serial_no_value(self):
         try:
             self.cc.main(["--serial"])
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, 2)
 
     def test_validate_access_to_remove_by_pool(self):
@@ -1170,7 +1170,7 @@ class TestRemoveCommand(TestCliProxyCommand):
         self.cc.main(["--pool", "a2ee88488bbd32ed8edfa2"])
         try:
             self.cc._validate_options()
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, 69)
 
 
@@ -1206,15 +1206,15 @@ class TestImportCertCommand(TestCliCommand):
     def test_no_certificates(self):
         try:
             self.cc.main([])
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, 2)
 
         try:
             self.cc._validate_options()
             self.fail("No exception raised")
-        except Exception, e:
+        except Exception as e:
             pass
-        except SystemExit, e:
+        except SystemExit as e:
             # there seems to be an optparse issue
             # here that depends on version, on f14
             # we get sysexit with return code 2  from main, on f15, we
@@ -1242,7 +1242,7 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         try:
             self.cc.main(["--org", "one"])
             self.cc._validate_options()
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_USAGE)
 
     def test_org_requires_list_good(self):
@@ -1252,7 +1252,7 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         self.cc.cp.setConsumer({})
         try:
             self.cc.set_service_level('JARJAR')
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_UNAVAILABLE)
         else:
             self.fail("No Exception Raised")
@@ -1509,7 +1509,7 @@ class HandleExceptionTests(unittest.TestCase):
         e = FakeException()
         try:
             managercli.handle_exception(self.msg, e)
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_SOFTWARE)
 
     def test_he_unicode(self):
@@ -1517,7 +1517,7 @@ class HandleExceptionTests(unittest.TestCase):
     #    e = FakeException(msg="Ошибка при обновлении системных данных (см. /var/log/rhsm/rhsm.log")
         try:
             managercli.handle_exception("a: %s" % e, e)
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_SOFTWARE)
 
     @patch('subscription_manager.managercli.log', FakeLogger())
@@ -1528,7 +1528,7 @@ class HandleExceptionTests(unittest.TestCase):
         managercli.log.set_expected_msg(expected_msg)
         try:
             managercli.handle_exception(self.msg, socket.error())
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_SOFTWARE)
         self.assertEqual(managercli.log.expected_msg, expected_msg)
 
@@ -1536,7 +1536,7 @@ class HandleExceptionTests(unittest.TestCase):
         e = connection.RestlibException(404, "this is a msg")
         try:
             managercli.handle_exception("huh", e)
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_SOFTWARE)
 
     def test_he_restlib_exception_unicode(self):
@@ -1544,35 +1544,35 @@ class HandleExceptionTests(unittest.TestCase):
             "Ошибка при обновлении системных данных (см. /var/log/rhsm/rhsm.log")
         try:
             managercli.handle_exception("обновлении", e)
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_SOFTWARE)
 
     def test_he_bad_certificate(self):
         e = connection.BadCertificateException("/road/to/nowhwere")
         try:
             managercli.handle_exception("huh", e)
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_SOFTWARE)
 
     def test_he_remote_server_exception(self):
         e = connection.RemoteServerException(1984)
         try:
             managercli.handle_exception("huh", e)
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_SOFTWARE)
 
     def test_he_network_exception(self):
         e = connection.NetworkException(1337)
         try:
             managercli.handle_exception("huh", e)
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_SOFTWARE)
 
     def test_he_ssl_error(self):
         e = ssl.SSLError()
         try:
             managercli.handle_exception("huh", e)
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_SOFTWARE)
 
     def test_he_ssl_wrong_host(self):
@@ -1581,7 +1581,7 @@ class HandleExceptionTests(unittest.TestCase):
                                    "subjectAltName")
         try:
             managercli.handle_exception("huh", e)
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_SOFTWARE)
 
 

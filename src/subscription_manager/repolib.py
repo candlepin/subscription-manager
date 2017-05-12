@@ -55,10 +55,10 @@ def manage_repos_enabled():
     manage_repos = True
     try:
         manage_repos = conf['rhsm'].get_int('manage_repos')
-    except ValueError, e:
+    except ValueError as e:
         log.exception(e)
         return True
-    except ConfigParserError, e:
+    except ConfigParserError as e:
         log.exception(e)
         return True
 

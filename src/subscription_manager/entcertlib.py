@@ -116,7 +116,7 @@ class EntCertUpdateAction(object):
         local = self._get_local_serials()
         try:
             expected = self._get_expected_serials()
-        except socket.error, ex:
+        except socket.error as ex:
             log.exception(ex)
             log.error('Cannot modify subscriptions while disconnected')
             raise Disconnected()
@@ -212,7 +212,7 @@ class EntCertUpdateAction(object):
             # NOTE: this may need a lock
             content_action = content_action_client.ContentActionClient()
             content_action.update()
-        except Exception, e:
+        except Exception as e:
             log.debug(e)
             log.debug("Failed to update repos")
 
@@ -297,7 +297,7 @@ class EntCertUpdateAction(object):
             try:
                 cert.delete()
                 self.report.rogue.append(cert)
-            except OSError, er:
+            except OSError as er:
                 log.exception(er)
                 log.warn("Failed to delete cert")
 
@@ -377,7 +377,7 @@ class EntitlementCertBundleInstaller(object):
             cert_bundle_writer.write(key, cert)
 
             self.report.added.append(cert)
-        except Exception, e:
+        except Exception as e:
             self.install_exception(bundle, e)
 
         self.post_install(bundle)

@@ -173,9 +173,9 @@ class CacheManager(object):
                 # Return the number of 'updates' we did, assuming updating all
                 # packages at once is one update.
                 return 1
-            except connection.RestlibException, re:
+            except connection.RestlibException as re:
                 raise re
-            except Exception, e:
+            except Exception as e:
                 log.error("Error updating system data on the server")
                 log.exception(e)
                 raise Exception(_("Error updating system data on the server, see /var/log/rhsm/rhsm.log "
@@ -216,18 +216,18 @@ class StatusCache(CacheManager):
             self.last_error = ex
             log.error("Consumer certificate is invalid")
             return None
-        except connection.RestlibException, ex:
+        except connection.RestlibException as ex:
             # Indicates we may be talking to a very old candlepin server
             # which does not have the necessary API call.
             log.exception(ex)
             self.last_error = ex
             return None
-        except connection.AuthenticationException, ex:
+        except connection.AuthenticationException as ex:
             log.error("Could not authenticate with server, check registration status.")
             log.exception(ex)
             self.last_error = ex
             return None
-        except connection.ExpiredIdentityCertException, ex:
+        except connection.ExpiredIdentityCertException as ex:
             log.exception(ex)
             self.last_error = ex
             log.error("Bad identity, unable to connect to server")
@@ -237,7 +237,7 @@ class StatusCache(CacheManager):
         # all of the abover are subclasses of ConnectionException that
         # get handled first
         except (connection.ConnectionException,
-                socket.error), ex:
+                socket.error) as ex:
 
             log.error(ex)
             self.last_error = ex

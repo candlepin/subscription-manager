@@ -376,7 +376,7 @@ class TestMigration(SubManFixture):
         self.engine.rhncfg = rhn_config
         try:
             self.engine.transfer_http_proxy_settings()
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_CONFIG)
         else:
             self.fail("No exception raised")
@@ -593,7 +593,7 @@ class TestMigration(SubManFixture):
         self.engine.cp.getStatus = MagicMock(side_effect=ssl.SSLError)
         try:
             self.engine.check_ok_to_proceed()
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_SOFTWARE)
         else:
             self.fail("No exception raised")
@@ -603,7 +603,7 @@ class TestMigration(SubManFixture):
         self.engine.cp.getOwnerList.return_value = []
         try:
             self.engine.get_org("some_username")
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, 1)
         else:
             self.fail("No exception raised")
@@ -650,7 +650,7 @@ class TestMigration(SubManFixture):
         mock_input.return_value = "Some other org"
         try:
             self.engine.get_org("some_username")
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_DATAERR)
         else:
             self.fail("No exception raised")
@@ -674,7 +674,7 @@ class TestMigration(SubManFixture):
             ]
         try:
             self.engine.get_org("some_username")
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_DATAERR)
         else:
             self.fail("No exception raised")
@@ -683,7 +683,7 @@ class TestMigration(SubManFixture):
         self.engine.cp.supports_resource = MagicMock(side_effect=Exception)
         try:
             self.engine.get_environment("some_org")
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_SOFTWARE)
         else:
             self.fail("No exception raised")
@@ -770,7 +770,7 @@ class TestMigration(SubManFixture):
         mock_input.return_value = "something else"
         try:
             self.engine.get_environment("some_org")
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_DATAERR)
         else:
             self.fail("No exception raised")
@@ -799,7 +799,7 @@ class TestMigration(SubManFixture):
             ]
         try:
             self.engine.get_environment("some_org")
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_DATAERR)
         else:
             self.fail("No exception raised")
@@ -810,7 +810,7 @@ class TestMigration(SubManFixture):
         self.engine.cp.supports_resource.return_value = False
         try:
             self.engine.get_environment("some_org")
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, os.EX_UNAVAILABLE)
         else:
             self.fail("No exception raised")
@@ -858,7 +858,7 @@ class TestMigration(SubManFixture):
             ]
         try:
             self.engine.check_for_conflicting_channels(channels)
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, 1)
         else:
             self.fail("No exception raised")
@@ -906,7 +906,7 @@ class TestMigration(SubManFixture):
         with Capture() as cap:
             try:
                 self.engine.handle_collisions(cmap)
-            except SystemExit, e:
+            except SystemExit as e:
                 self.assertEquals(e.code, 1)
             else:
                 self.fail("No exception raised")
@@ -937,7 +937,7 @@ class TestMigration(SubManFixture):
 
         try:
             self.engine.deploy_prod_certificates(subscribed_channels)
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, 1)
         else:
             self.fail("No exception raised")
@@ -956,7 +956,7 @@ class TestMigration(SubManFixture):
 
         try:
             self.engine.deploy_prod_certificates(subscribed_channels)
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, 1)
         else:
             self.fail("No exception raised")
@@ -1085,7 +1085,7 @@ class TestMigration(SubManFixture):
         self._inject_mock_invalid_consumer()
         try:
             self.engine.register(credentials, "", "")
-        except SystemExit, e:
+        except SystemExit as e:
             self.assertEquals(e.code, 2)
         else:
             self.fail("No exception raised")

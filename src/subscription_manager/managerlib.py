@@ -803,7 +803,7 @@ def unregister(uep, consumer_uuid):
         log.info("Successfully un-registered.")
         system_log("Unregistered machine with identity: %s" % consumer_uuid)
         clean_all_data(backup=False)
-    except connection.GoneException, ge:
+    except connection.GoneException as ge:
         if ge.deleted_id == consumer_uuid:
             log.info("This consumer's profile has been deleted from the server. Local certificates and cache will be cleaned now.")
             clean_all_data(backup=False)

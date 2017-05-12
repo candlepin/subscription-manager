@@ -1048,14 +1048,14 @@ class TestPluginImportException(BasePluginException):
     def test(self):
         try:
             self.raise_exception()
-        except self.e, exp:
+        except self.e as exp:
             self.assertEquals("module_file", exp.module_file)
             self.assertEquals("module_name", exp.module_name)
 
     def test_str(self):
         try:
             self.raise_exception()
-        except self.e, exp:
+        except self.e as exp:
             buf = str(exp)
             lines = buf.splitlines()
             # last line is Message:...
@@ -1091,7 +1091,7 @@ class TestPluginConfigException(BasePluginException):
     def test_str(self):
         try:
             self.raise_exception()
-        except self.e, exp:
+        except self.e as exp:
             buf = str(exp)
             lines = buf.splitlines()
             # last line is Message:...
@@ -1107,6 +1107,6 @@ class TestSlotNameException(BasePluginException):
     def test(self):
         try:
             self.raise_exception()
-        except self.e, exp:
+        except self.e as exp:
             self.assertEquals("slot_name", exp.slot_name)
             self.assertTrue("slot_name" in str(exp))

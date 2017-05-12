@@ -162,14 +162,14 @@ class SystemCommand(CliCommand):
             try:
                 if defaults['ca_cert_dir'] != conf['rhsm']['ca_cert_dir'] or not sos:
                     self._copy_cert_directory(conf['rhsm']['ca_cert_dir'], content_path)
-            except EnvironmentError, e:
+            except EnvironmentError as e:
                 if e.errno != errno.EEXIST:
                     raise
 
             try:
                 if defaults['pluginconfdir'] != conf['rhsm']['pluginconfdir'] or not sos:
                     self._copy_directory(conf['rhsm']['pluginconfdir'], content_path)
-            except EnvironmentError, e:
+            except EnvironmentError as e:
                 if e.errno != errno.EEXIST:
                     raise
 
@@ -203,7 +203,7 @@ class SystemCommand(CliCommand):
 
                 print _("Wrote: %s") % dest_dir_name
 
-        except Exception, e:
+        except Exception as e:
             managercli.handle_exception(_("Unable to create zip file of system information: %s") % e, e)
             sys.exit(os.EX_SOFTWARE)
         finally:

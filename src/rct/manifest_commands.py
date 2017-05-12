@@ -262,7 +262,7 @@ class CatManifestCommand(RCTManifestCommand):
 
             try:
                 cert = certificate.create_from_pem(zip_archive._read_file(cert_file))
-            except certificate.CertificateException, ce:
+            except certificate.CertificateException as ce:
                 raise certificate.CertificateException(
                         _("Unable to read certificate file '%s': %s") % (cert_file,
                         ce))
@@ -318,7 +318,7 @@ class DumpManifestCommand(RCTManifestCommand):
     def _extract(self, destination, overwrite):
         try:
             self._extract_manifest(destination, overwrite)
-        except EnvironmentError, e:
+        except EnvironmentError as e:
             # IOError/OSError base class
             if e.errno == errno.EEXIST:
                 # useful error for file already exists

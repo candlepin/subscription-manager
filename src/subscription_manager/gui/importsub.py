@@ -104,7 +104,7 @@ class ImportSubDialog(object):
                         extractor.write_to_disk()
                         good_certs.append(cert_file)
                         imported_certs.append(extractor.get_cert())
-                except Exception, e:
+                except Exception as e:
                     # Should not get here unless something really bad happened.
                     log.exception(e)
                     error_certs.append(cert_file)

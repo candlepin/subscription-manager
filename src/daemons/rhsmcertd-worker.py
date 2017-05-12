@@ -83,10 +83,10 @@ def main(options, log):
             if update_report:
                 print update_report
 
-    except connection.ExpiredIdentityCertException, e:
+    except connection.ExpiredIdentityCertException as e:
         log.critical(_("Your identity certificate has expired"))
         raise e
-    except connection.GoneException, ge:
+    except connection.GoneException as ge:
         uuid = ConsumerIdentity.read().getConsumerId()
 
         # This code is to prevent an errant 410 response causing consumer cert deletion.
@@ -129,14 +129,14 @@ if __name__ == '__main__':
     (options, args) = parser.parse_args()
     try:
         main(options, log)
-    except SystemExit, se:
+    except SystemExit as se:
         # sys.exit triggers an exception in older Python versions, which
         # in this case  we can safely ignore as we do not want to log the
         # stack trace. We need to check the code, since we want to signal
         # exit with failure to the caller. Otherwise, we will exit with 0
         if se.code:
             sys.exit(-1)
-    except Exception, e:
+    except Exception as e:
         log.error("Error while updating certificates using daemon")
         print _('Unable to update entitlement certificates and repositories')
         log.exception(e)

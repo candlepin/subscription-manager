@@ -72,7 +72,7 @@ class TestLock(unittest.TestCase):
     def close_lock_holder(self):
         try:
             self.other_process.communicate("whatever")
-        except Exception, e:
+        except Exception as e:
             print e
             # whatever, we closed it in the other thread
 

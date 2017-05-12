@@ -215,7 +215,7 @@ class MigrationEngine(object):
                 http_proxy = http_proxy[7:]
             try:
                 self.proxy_host, self.proxy_port = http_proxy.split(':')
-            except ValueError, e:
+            except ValueError as e:
                 log.exception(e)
                 system_exit(os.EX_CONFIG, _("Could not read legacy proxy settings.  ") + SEE_LOG_FILE)
 
@@ -248,7 +248,7 @@ class MigrationEngine(object):
                 prefix = self.rhsmcfg['server']['prefix']
             else:
                 (_user, _password, hostname, port, prefix) = parse_url(self.options.destination_url, default_port=443)
-        except ServerUrlParseError, e:
+        except ServerUrlParseError as e:
             system_exit(url_parse_error, _("Error parsing server URL: %s") % e.msg)
 
         connection_info = {'host': hostname, 'ssl_port': int(port), 'handler': prefix}
@@ -288,14 +288,14 @@ class MigrationEngine(object):
         except ssl.SSLError as e:
             print _("The CA certificate for the destination server has not been installed.")
             system_exit(os.EX_SOFTWARE, CONNECTION_FAILURE % e)
-        except Exception, e:
+        except Exception as e:
             log.exception(e)
             system_exit(os.EX_SOFTWARE, CONNECTION_FAILURE % e)
 
     def get_org(self, username):
         try:
             owner_list = self.cp.getOwnerList(username)
-        except Exception, e:
+        except Exception as e:
             log.exception(e)
             system_exit(os.EX_SOFTWARE, CONNECTION_FAILURE % e)
 
@@ -326,7 +326,7 @@ class MigrationEngine(object):
                 environment_list = self.cp.getEnvironmentList(owner_key)
             elif self.options.environment:
                 system_exit(os.EX_UNAVAILABLE, _("Environments are not supported by this server."))
-        except Exception, e:
+        except Exception as e:
             log.exception(e)
             system_exit(os.EX_SOFTWARE, CONNECTION_FAILURE % e)
 
@@ -376,7 +376,7 @@ class MigrationEngine(object):
                 session_key = None
 
             return (rpc_session, session_key)
-        except Exception, e:
+        except Exception as e:
             log.exception(e)
             system_exit(1, _("Unable to authenticate to legacy server.  ") + SEE_LOG_FILE)
 
@@ -389,14 +389,14 @@ class MigrationEngine(object):
                 raise Exception("No session key available.  Check that XMLRPC connection is being made with credentials.")
 
             rpc_session.system.getDetails(session_key, self.system_id)
-        except Exception, e:
+        except Exception as e:
             log.exception(e)
             system_exit(1, _("You do not have access to system %s.  ") % self.system_id + SEE_LOG_FILE)
 
     def resolve_base_channel(self, label, rpc_session, session_key):
         try:
             details = rpc_session.channel.software.getDetails(session_key, label)
-        except Exception, e:
+        except Exception as e:
             log.exception(e)
             system_exit(os.EX_SOFTWARE, _("Problem encountered getting the list of subscribed channels.  ") + SEE_LOG_FILE)
         if details['clone_original']:
@@ -406,7 +406,7 @@ class MigrationEngine(object):
     def get_subscribed_channels_list(self, rpc_session, session_key):
         try:
             channels = getChannels().channels()
-        except Exception, e:
+        except Exception as e:
             log.exception(e)
             system_exit(os.EX_SOFTWARE, _("Problem encountered getting the list of subscribed channels.  ") + SEE_LOG_FILE)
         if self.options.five_to_six:
@@ -474,7 +474,7 @@ class MigrationEngine(object):
 
         try:
             dic_data = self.read_channel_cert_mapping(mappingfile)
-        except IOError, e:
+        except IOError as e:
             log.exception(e)
             system_exit(os.EX_CONFIG, _("Unable to read mapping file: %(mappingfile)s.\n"
                 "Please check that you have the %(package)s package installed.") % {
@@ -566,7 +566,7 @@ class MigrationEngine(object):
                 self.db.delete("68")
                 self.db.write()
                 log.info("Removed 68.pem due to existence of 71.pem")
-            except OSError, e:
+            except OSError as e:
                 log.info(e)
 
         # Hack to address double mapping for 180.pem and 17{6|8}.pem
@@ -579,7 +579,7 @@ class MigrationEngine(object):
                 self.db.delete("180")
                 self.db.write()
                 log.info("Removed 180.pem")
-            except OSError, e:
+            except OSError as e:
                 log.info(e)
 
     def get_system_id(self, content):
@@ -624,7 +624,7 @@ class MigrationEngine(object):
     def legacy_unentitle(self, rpc_session):
         try:
             rpc_session.system.unentitle(self.system_id_contents)
-        except Exception, e:
+        except Exception as e:
             log.exception("Could not remove system entitlement on Satellite 5.", e)
             system_exit(os.EX_SOFTWARE, _("Could not remove system entitlement on legacy server.  ") + SEE_LOG_FILE)
         try:
@@ -664,7 +664,7 @@ class MigrationEngine(object):
         try:
             transition_data = rpc_session.system.transitionDataForSystem(self.system_id_contents)
             self.consumer_id = transition_data['uuid']
-        except Exception, e:
+        except Exception as e:
             log.exception(e)
             system_exit(1, _("Could not retrieve system migration data from legacy server.  ") + SEE_LOG_FILE)
 
@@ -672,7 +672,7 @@ class MigrationEngine(object):
         try:
             self.cp.getConsumer(consumer_id)
             return True
-        except Exception, e:
+        except Exception as e:
             log.exception(e)
             print _("Consumer %s doesn't exist.  Creating new consumer.") % consumer_id
             return False
@@ -728,9 +728,9 @@ class MigrationEngine(object):
         not_supported = _("Error: The service-level command is not supported by the server.")
         try:
             levels = self.cp.getServiceLevelList(org)
-        except RemoteServerException, e:
+        except RemoteServerException as e:
             system_exit(-1, not_supported)
-        except RestlibException, e:
+        except RestlibException as e:
             if e.code == 404:
                 # no need to die, just skip it
                 print not_supported

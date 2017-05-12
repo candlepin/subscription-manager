@@ -147,7 +147,7 @@ class Lock(object):
                         break
                 self.P()
                 f.setpid()
-            except OSError, e:
+            except OSError as e:
                 log.exception(e)
                 print "could not create lock"
         finally:

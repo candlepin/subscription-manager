@@ -158,7 +158,7 @@ class CLI:
 
         try:
             return cmd.main()
-        except InvalidCLIOptionError, error:
+        except InvalidCLIOptionError as error:
             print error
 
 

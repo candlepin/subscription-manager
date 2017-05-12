@@ -312,7 +312,7 @@ class AsyncWidgetUpdater(object):
             result = backend_method(*args, **kwargs)
             if callback:
                 ga_GObject.idle_add(callback, result)
-        except Exception, e:
+        except Exception as e:
             message = exception_msg or str(e)
             ga_GObject.idle_add(handle_gui_exception, e, message, self.parent_window)
         finally:

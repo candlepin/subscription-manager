@@ -130,7 +130,7 @@ class HealingUpdateAction(object):
                     msg += " and tomorrow %s" % tomorrow
             log.info(msg)
 
-        except Exception, e:
+        except Exception as e:
             log.error("Error attempting to auto-heal:")
             log.exception(e)
             self.report._exceptions.append(e)

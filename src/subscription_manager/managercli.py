@@ -206,7 +206,7 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
         ents = cp.bind(consumer_uuid)  # new style
         plugin_manager.run("post_auto_attach", consumer_uuid=consumer_uuid, entitlement_data=ents)
 
-    except Exception, e:
+    except Exception as e:
         log.warning("Error during auto-attach.")
         log.exception(e)
         raise
@@ -452,7 +452,7 @@ class CliCommand(AbstractCLICommand):
                 (self.server_hostname,
                  self.server_port,
                  self.server_prefix) = parse_server_info(self.options.server_url, conf)
-            except ServerUrlParseError, e:
+            except ServerUrlParseError as e:
                 print _("Error parsing serverurl:")
                 handle_exception("Error parsing serverurl:", e)
 
@@ -468,7 +468,7 @@ class CliCommand(AbstractCLICommand):
                 (baseurl_server_hostname,
                  baseurl_server_port,
                  baseurl_server_prefix) = parse_baseurl_info(self.options.base_url)
-            except ServerUrlParseError, e:
+            except ServerUrlParseError as e:
                 print _("Error parsing baseurl:")
                 handle_exception("Error parsing baseurl:", e)
 
@@ -574,7 +574,7 @@ class CliCommand(AbstractCLICommand):
         except (CertificateException, ssl.SSLError) as e:
             log.error(e)
             system_exit(os.EX_SOFTWARE, _('System certificates corrupted. Please reregister.'))
-        except connection.GoneException, ge:
+        except connection.GoneException as ge:
             if ge.deleted_id == self.identity.uuid:
                 log.critical("Consumer profile \"%s\" has been deleted from the server.", self.identity.uuid)
                 system_exit(os.EX_UNAVAILABLE, _("Consumer profile \"%s\" has been deleted from the server. You can use command clean or unregister to remove local profile.") % self.identity.uuid)
@@ -702,10 +702,10 @@ class RefreshCommand(CliCommand):
 
             log.info("Refreshed local data")
             print (_("All local data refreshed"))
-        except connection.RestlibException, re:
+        except connection.RestlibException as re:
             log.error(re)
             system_exit(os.EX_SOFTWARE, re.msg)
-        except Exception, e:
+        except Exception as e:
             handle_exception(_("Unable to perform refresh due to the following exception: %s") % e, e)
 
         self._request_validity_check()
@@ -780,11 +780,11 @@ class IdentityCommand(UserPassCommand):
                 print _("Identity certificate has been regenerated.")
 
                 log.info("Successfully generated a new identity from server.")
-        except connection.RestlibException, re:
+        except connection.RestlibException as re:
             log.exception(re)
             log.error(u"Error: Unable to generate a new identity for the system: %s" % re)
             system_exit(os.EX_SOFTWARE, re.msg)
-        except Exception, e:
+        except Exception as e:
             handle_exception(_("Error: Unable to generate a new identity for the system"), e)
 
 
@@ -816,11 +816,11 @@ class OwnersCommand(UserPassCommand):
             else:
                 print(_("%s cannot register with any organizations.") % self.username)
 
-        except connection.RestlibException, re:
+        except connection.RestlibException as re:
             log.exception(re)
             log.error(u"Error: Unable to retrieve org list from server: %s" % re)
             system_exit(os.EX_SOFTWARE, re.msg)
-        except Exception, e:
+        except Exception as e:
             handle_exception(_("Error: Unable to retrieve org list from server"), e)
 
 
@@ -858,11 +858,11 @@ class EnvironmentsCommand(OrgCommand):
                 system_exit(os.EX_UNAVAILABLE, _("Error: Server does not support environments."))
 
             log.info("Successfully retrieved environment list from server.")
-        except connection.RestlibException, re:
+        except connection.RestlibException as re:
             log.exception(re)
             log.error(u"Error: Unable to retrieve environment list from server: %s" % re)
             system_exit(os.EX_SOFTWARE, re.msg)
-        except Exception, e:
+        except Exception as e:
             handle_exception(_("Error: Unable to retrieve environment list from server"), e)
 
 
@@ -982,11 +982,11 @@ class ServiceLevelCommand(OrgCommand):
             if self.options.list:
                 self.list_service_levels()
 
-        except connection.RestlibException, re:
+        except connection.RestlibException as re:
             log.exception(re)
             log.error(u"Error: Unable to retrieve service levels: %s" % re)
             system_exit(os.EX_SOFTWARE, re.msg)
-        except Exception, e:
+        except Exception as e:
             handle_exception(_("Error: Unable to retrieve service levels."), e)
 
     def set_service_level(self, service_level):
@@ -1028,9 +1028,9 @@ class ServiceLevelCommand(OrgCommand):
                     print sla
             else:
                 print _("This org does not have any subscriptions with service levels.")
-        except connection.RemoteServerException, e:
+        except connection.RemoteServerException as e:
             system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
-        except connection.RestlibException, e:
+        except connection.RestlibException as e:
             if e.code == 404 and e.msg.find('/servicelevels') > 0:
                 system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
             else:
@@ -1200,10 +1200,10 @@ class RegisterCommand(UserPassCommand):
                 self.installed_mgr.write_cache()
             self.plugin_manager.run("post_register_consumer", consumer=consumer,
                                     facts=facts_dict)
-        except connection.RestlibException, re:
+        except connection.RestlibException as re:
             log.exception(re)
             system_exit(os.EX_SOFTWARE, re.msg)
-        except Exception, e:
+        except Exception as e:
             handle_exception(_("Error during registration: %s") % e, e)
 
         consumer_info = self._persist_identity_cert(consumer)
@@ -1253,7 +1253,7 @@ class RegisterCommand(UserPassCommand):
                                  "by the server. Did not complete your request."))
             try:
                 autosubscribe(self.cp, consumer['uuid'], service_level=self.options.service_level)
-            except connection.RestlibException, re:
+            except connection.RestlibException as re:
                 print_error(re.msg)
 
         if (self.options.consumerid or self.options.activation_keys or self.autoattach or self.cp.has_capability(CONTENT_ACCESS_CERT_CAPABILITY)):
@@ -1370,7 +1370,7 @@ class UnRegisterCommand(CliCommand):
             (conf["server"]["hostname"], conf["server"]["port"], conf["server"]["prefix"])
         try:
             managerlib.unregister(self.cp, self.identity.uuid)
-        except Exception, e:
+        except Exception as e:
             handle_exception("Unregister failed", e)
 
         # managerlib.unregister reloads the now None provided identity
@@ -1384,7 +1384,7 @@ class UnRegisterCommand(CliCommand):
             # is not useful
             cleanup_certmgr = UnregisterActionClient()
             cleanup_certmgr.update()
-        except Exception, e:
+        except Exception as e:
             pass
 
         self._request_validity_check()
@@ -1434,7 +1434,7 @@ class RedeemCommand(CliCommand):
             if response and response.get('displayMessage'):
                 system_exit(0, response.get('displayMessage'))
 
-        except connection.RestlibException, e:
+        except connection.RestlibException as e:
             #candlepin throws an exception during activateMachine, even for
             #200's. We need to look at the code in the RestlibException and proceed
             #accordingly
@@ -1442,7 +1442,7 @@ class RedeemCommand(CliCommand):
                 system_exit(0, e)
             else:
                 handle_exception(u"Unable to redeem: %s" % e, e)
-        except Exception, e:
+        except Exception as e:
             handle_exception(u"Unable to redeem: %s" % e, e)
 
         self._request_validity_check()
@@ -1641,7 +1641,7 @@ class AttachCommand(CliCommand):
                             log.info("Successfully attached a subscription for: %s (%s)" %
                                     (pool_json['productName'], pool))
                             subscribed = True
-                    except connection.RestlibException, re:
+                    except connection.RestlibException as re:
                         log.exception(re)
                         if re.code == 403:
                             print re.msg  # already subscribed.
@@ -1693,7 +1693,7 @@ class AttachCommand(CliCommand):
                     # run this after entcertlib update, so we have the new entitlements
                     return_code = show_autosubscribe_output(self.cp)
 
-        except Exception, e:
+        except Exception as e:
             handle_exception("Unable to attach: %s" % e, e)
 
         # it is okay to call this no matter what happens above,
@@ -1763,7 +1763,7 @@ class RemoveCommand(CliCommand):
             try:
                 unbind_method(consumer_uuid, id_)
                 success.append(id_)
-            except connection.RestlibException, re:
+            except connection.RestlibException as re:
                 if re.code == 410:
                     system_exit(os.EX_SOFTWARE, re.msg)
                 failure.append(id_)
@@ -1833,10 +1833,10 @@ class RemoveCommand(CliCommand):
                             return_code = 1
                     self._print_unbind_ids_result(removed_serials, failure, "serial numbers")
                 self.entcertlib.update()
-            except connection.RestlibException, re:
+            except connection.RestlibException as re:
                 log.error(re)
                 system_exit(os.EX_SOFTWARE, re.msg)
-            except Exception, e:
+            except Exception as e:
                 handle_exception(_("Unable to perform remove due to the following exception: %s") % e, e)
         else:
             # We never got registered, just remove the cert
@@ -1860,7 +1860,7 @@ class RemoveCommand(CliCommand):
                                 count = count + 1
                         if count == 0:
                             return_code = 1
-            except Exception, e:
+            except Exception as e:
                 handle_exception(_("Unable to perform remove due to the following exception: %s") % e, e)
 
         # it is okay to call this no matter what happens above,
@@ -1922,7 +1922,7 @@ class FactsCommand(CliCommand):
             identity = inj.require(inj.IDENTITY)
             try:
                 facts.update_check(self.cp, identity.uuid, force=True)
-            except connection.RestlibException, re:
+            except connection.RestlibException as re:
                 log.exception(re)
                 system_exit(os.EX_SOFTWARE, re.msg)
             log.info("Succesfully updated the system facts.")
@@ -1965,7 +1965,7 @@ class ImportCertCommand(CliCommand):
                         print(_("%s is not a valid certificate file. Please use a valid certificate.") %
                                     os.path.basename(src_cert_file))
 
-                except Exception, e:
+                except Exception as e:
                     # Should not get here unless something really bad happened.
                     log.exception(e)
                     print(_("An error occurred while importing the certificate. "
@@ -2697,7 +2697,7 @@ class OverrideCommand(CliCommand):
             to_add = [Override(repo, name, value) for repo in self.options.repos for name, value in self.options.additions.items()]
             try:
                 results = overrides.add_overrides(self.identity.uuid, to_add)
-            except connection.RestlibException, ex:
+            except connection.RestlibException as ex:
                 if ex.code == 400:
                     # black listed overrides specified.
                     # Print message and return a less severe code.

@@ -41,7 +41,7 @@ class RCTCertCommand(RCTCliCommand):
         cert_file = self._get_file_from_args()
         try:
             return certificate.create_from_file(cert_file)
-        except certificate.CertificateException, ce:
+        except certificate.CertificateException as ce:
             raise InvalidCLIOptionError(
                     _("Unable to read certificate file '%s': %s") % (cert_file,
                         ce))

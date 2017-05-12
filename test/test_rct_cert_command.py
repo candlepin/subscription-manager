@@ -30,7 +30,7 @@ class RCTCertCommandTests(unittest.TestCase):
         try:
             command.main([])
             self.fail("Expected InvalidCLIOptionError since no file arg.")
-        except InvalidCLIOptionError, e:
+        except InvalidCLIOptionError as e:
             self.assertEqual("You must specify a certificate file.",
                              str(e))
 
@@ -39,7 +39,7 @@ class RCTCertCommandTests(unittest.TestCase):
         try:
             command.main(["this_file_does_not_exist.crt"])
             self.fail("Expected InvalidCLIOptionError since no file does not exist.")
-        except InvalidCLIOptionError, e:
+        except InvalidCLIOptionError as e:
             self.assertEqual("The specified certificate file does not exist.", str(e))
 
     @patch("os.path.isfile")
@@ -53,7 +53,7 @@ class RCTCertCommandTests(unittest.TestCase):
         try:
             command.main(['dummy-file.pem'])
             self.fail("Expected InvalidCLIOptionError since bad x509 file.")
-        except InvalidCLIOptionError, e:
+        except InvalidCLIOptionError as e:
             self.assertEqual(
                     "Unable to read certificate file 'dummy-file.pem': error!",
                     str(e))

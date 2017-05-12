@@ -114,7 +114,7 @@ class ComplianceManager(object):
         # Defaults to now
         try:
             return self.cp_provider.get_consumer_auth_cp().getCompliance(self.identity.uuid, self.on_date)
-        except Exception, e:
+        except Exception as e:
             log.warn("Failed to get compliance data from the server")
             log.exception(e)
             return None

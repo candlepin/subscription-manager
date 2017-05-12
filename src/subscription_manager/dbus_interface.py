@@ -45,7 +45,7 @@ class DbusIface(object):
             # Activate methods now that we're connected
             # Avoids some messy exception handling if dbus isn't installed
             self.update = self._update
-        except dbus.DBusException, e:
+        except dbus.DBusException as e:
             # we can't connect to dbus. it's not running, likely from a minimal
             # install. we can't do anything here, so just ignore it.
             log.debug("Unable to connect to dbus")
@@ -59,7 +59,7 @@ class DbusIface(object):
             self.validity_iface.update_status(
                     inj.require(inj.CERT_SORTER).get_status_for_icon(),
                     ignore_reply=self.has_main_loop)
-        except dbus.DBusException, e:
+        except dbus.DBusException as e:
             # Should be unreachable in the gui
             log.debug("Failed to update rhsmd")
             log.exception(e)

@@ -365,7 +365,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             # fire off async refresh
             async_stash = async.AsyncPool(self.pool_stash)
             async_stash.refresh(self.date_picker.date, self._update_display)
-        except Exception, e:
+        except Exception as e:
             handle_gui_exception(e, _("Error fetching subscriptions from server:  %s"),
                     self.parent_win)
 

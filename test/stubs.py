@@ -699,7 +699,7 @@ class StubAsyncUpdater(AsyncWidgetUpdater):
             result = backend_method(*args, **kwargs)
             if callback:
                 callback(result)
-        except Exception, e:
+        except Exception as e:
             message = exception_msg or str(e)
             handle_gui_exception(e, message, self.parent_window)
         finally:
