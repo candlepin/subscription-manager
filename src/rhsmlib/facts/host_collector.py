@@ -13,12 +13,15 @@
 #
 
 import locale
+import logging
 
 from rhsmlib.facts import hwprobe
 from rhsmlib.facts import cleanup
 from rhsmlib.facts import virt
 from rhsmlib.facts import firmware_info
 from rhsmlib.facts import collector
+
+log = logging.getLogger(__name__)
 
 
 class HostCollector(collector.FactsCollector):
@@ -68,8 +71,16 @@ class HostCollector(collector.FactsCollector):
 
         locale_info = {}
         effective_locale = 'Unknown'
-        if locale.getdefaultlocale()[0] is not None:
-            effective_locale = ".".join(filter(None, locale.getdefaultlocale()))
+        # When there is no locale set (system variable LANG is unset),
+        # then this is value returned by locale.getdefaultlocale()
+        # Tuple contains: (language[_territory], encoding identifier)
+        default_locale = (None, None)
+        try:
+            default_locale = locale.getdefaultlocale()
+        except ValueError as err:
+            log.warning("Unable to get default locale (bad environment variable?): %s" % err)
+        if default_locale[0] is not None:
+            effective_locale = ".".join(filter(None, default_locale))
         locale_info['system.default_locale'] = effective_locale
         host_facts.update(locale_info)
 
