@@ -124,10 +124,9 @@ class RepoTests(unittest.TestCase):
         self.assertEquals('label-with-spaces', repo.id)
 
     def test_existing_order_is_preserved(self):
-        config = (('key 1', 'value 1'), ('key b', 'value b'),
-                ('key 3', 'value 3'))
+        config = (('key 1', 'value 1'), ('key b', 'value b'), ('key 3', 'value 3'))
         repo = Repo('testrepo', config)
-        self.assertEquals(config, list(repo.items())[:3])
+        self.assertEquals(config, tuple(repo.items())[:3])
 
     def test_empty_strings_not_set_in_file(self):
         r = Repo('testrepo', (('proxy', ""),))
