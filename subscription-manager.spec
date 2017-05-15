@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.19.12
+Version: 1.19.13
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -606,6 +606,15 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Mon May 15 2017 Kevin Howell <khowell@redhat.com> 1.19.13-1
+- 1447722: use socket.getaddrinfo() to mimic hostname -f cmd
+  (jhnidek@redhat.com)
+- 1427069: Add secondary file to determine external repo file changes
+  (wpoteat@redhat.com)
+- 1444453: set bin scripts file encoding to utf-8 (khowell@redhat.com)
+- 1445204: Update timestamp during intitial cert check. (jhnidek@redhat.com)
+- 1444453: Set default encoding for gui to UTF-8 (khowell@redhat.com)
+
 * Tue May 02 2017 Kevin Howell <khowell@redhat.com> 1.19.12-1
 - Bump python-rhsm requirement to 1.19.6 (khowell@redhat.com)
 
