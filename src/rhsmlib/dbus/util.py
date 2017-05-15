@@ -12,6 +12,7 @@
 # in this software or its documentation.
 import logging
 import sys
+import six
 import decorator
 import dbus.service
 
@@ -37,7 +38,7 @@ def dbus_handle_exceptions(func, *args, **kwargs):
     except Exception as e:
         log.exception(e)
         trace = sys.exc_info()[2]
-        raise exceptions.RHSM1DBusException("%s: %s" % (type(e).__name__, str(e))), None, trace
+        six.reraise(exceptions.RHSM1DBusException, "%s: %s" % (type(e).__name__, str(e)), trace)
 
 
 def dbus_service_method(*args, **kwargs):

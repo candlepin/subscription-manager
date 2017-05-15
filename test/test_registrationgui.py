@@ -13,6 +13,7 @@ from subscription_manager.ga import GObject as ga_GObject
 from subscription_manager.ga import Gtk as ga_Gtk
 
 import sys
+import six
 
 
 class RegisterWidgetTests(SubManFixture):
@@ -96,7 +97,7 @@ class RegisterWidgetTests(SubManFixture):
 
         # If we saw any exceptions, raise them now so we fail nosetests
         for exc_info in self.exc_infos:
-            raise exc_info[1], None, exc_info[2]
+            six.reraise(*exc_info)
 
         self.assertTrue(self.correct_page)
 

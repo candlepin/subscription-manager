@@ -27,6 +27,7 @@ import dbus.mainloop.glib
 import functools
 import logging
 import threading
+import six
 import Queue
 
 from rhsmlib.dbus import constants, server
@@ -117,7 +118,7 @@ class DBusObjectTest(unittest.TestCase):
         # the DBusRequestThread
         if not self.result_queue.empty():
             result = self.result_queue.get()
-            raise result[0], result[1], result[2]
+            six.reraise(*result)
 
     def dbus_objects(self):
         '''This method should return a list of DBus service classes that need to be instantiated in the
