@@ -278,7 +278,7 @@ class SaferFileMove(object):
                                  self.default_perms), 'w+')
 
     def _copyfileobj(self, src_fo, dest_fo):
-        while 1:
+        while True:
             buf = src_fo.read(self.buf_size)
             if not buf:
                 break

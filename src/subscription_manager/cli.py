@@ -92,8 +92,7 @@ class CLI:
     def _usage(self):
         print _("Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]") % os.path.basename(sys.argv[0])
         print "\r"
-        items = list(self.cli_commands.items())
-        items.sort()
+        items = sorted(self.cli_commands.items())
         items_primary = []
         items_other = []
         for (name, cmd) in items:

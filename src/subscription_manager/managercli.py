@@ -1909,8 +1909,7 @@ class FactsCommand(CliCommand):
 
         if self.options.list:
             facts_dict = facts.get_facts()
-            facts_keys = list(facts_dict.keys())
-            facts_keys.sort()
+            facts_keys = sorted(facts_dict.keys())
 
             for key in facts_keys:
                 value = facts_dict[key]
@@ -2281,8 +2280,7 @@ class ConfigCommand(CliCommand):
             for s in list(conf.keys()):
                 section = conf[s]
                 print '[%s]' % s
-                source_list = list(section.items())
-                source_list.sort()
+                source_list = sorted(section.items())
                 for (name, value) in source_list:
                     indicator1 = ''
                     indicator2 = ''
