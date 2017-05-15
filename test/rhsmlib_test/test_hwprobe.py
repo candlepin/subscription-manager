@@ -674,3 +674,19 @@ class HardwareProbeTest(test.fixture.SubManFixture):
                 'cpu.topology_source': 'kernel /sys cpu sibling lists'
             }
             self.assert_equal_dict(expected, self.hw_check_topo.get_cpu_info())
+
+
+class TestLscpu(unittest.TestCase):
+    @patch('os.environ', {
+        'LANGUAGE': 'ja_JP.eucJP',
+        'LC_ALL': 'ja_JP.eucJP',
+        'LC_CTYPE': 'ja_JP.eucJP',
+        'LANG': 'ja_JP.eucJP',
+    })
+    def test_lscpu_ignores_locale(self):
+        hw_check_topo = hwprobe.HardwareCollector()
+        facts = hw_check_topo.get_ls_cpu_info()
+        # if all values can be decoded as ascii, then lscpu is not using JP locale
+        for key, value in facts.items():
+            key.decode('ascii')
+            value.decode('ascii')
