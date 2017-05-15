@@ -269,7 +269,7 @@ class RepoUpdateActionCommand(object):
         # Only attempt to update the overrides if they are supported
         # by the server.
         if self.override_supported:
-            self.written_overrides._read_cache()
+            self.written_overrides.read_cache_only()
 
             try:
                 override_cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
@@ -277,7 +277,7 @@ class RepoUpdateActionCommand(object):
                 override_cache = OverrideStatusCache()
 
             if cache_only:
-                status = override_cache._read_cache()
+                status = override_cache.read_cache_only()
             else:
                 status = override_cache.load_status(self.uep, self.identity.uuid)
 

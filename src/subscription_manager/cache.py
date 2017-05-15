@@ -111,11 +111,9 @@ class CacheManager(object):
             f.close()
             if debug:
                 log.debug("Wrote cache: %s" % self.CACHE_FILE)
-        except IOError, e:
-            if debug:
-                log.error("Unable to write cache: %s" %
-                        self.CACHE_FILE)
-                log.exception(e)
+        except IOError as err:
+            log.error("Unable to write cache: %s" % self.CACHE_FILE)
+            log.exception(err)
 
     def _read_cache(self):
         """
@@ -127,12 +125,24 @@ class CacheManager(object):
             data = self._load_data(f)
             f.close()
             return data
-        except IOError:
+        except IOError as err:
             log.error("Unable to read cache: %s" % self.CACHE_FILE)
+            log.exception(err)
         except ValueError:
             # ignore json file parse errors, we are going to generate
             # a new as if it didn't exist
             pass
+
+    def read_cache_only(self):
+        """
+        Try to read only cached data. When cache does not exist,
+        then None is returned.
+        """
+        if self._cache_exists():
+            return self._read_cache()
+        else:
+            log.debug("Cache file %s does not exist" % self.CACHE_FILE)
+            return None
 
     def update_check(self, uep, consumer_uuid, force=False):
         """
@@ -629,11 +639,11 @@ class ContentAccessCache(object):
 
 
 class RhsmIconCache(CacheManager):
-    '''
+    """
     Cache to keep track of last status returned by the StatusCache.
     This cache is specifically used to ensure RHSM icon pops up only
     when the status changes.
-    '''
+    """
 
     CACHE_FILE = "/var/lib/rhsm/cache/rhsm_icon.json"
 
@@ -647,8 +657,9 @@ class RhsmIconCache(CacheManager):
         try:
             self.data = json.loads(open_file.read()) or {}
             return self.data
-        except IOError:
+        except IOError as err:
             log.error("Unable to read cache: %s" % self.CACHE_FILE)
+            log.exception(err)
         except ValueError:
             # ignore json file parse errors, we are going to generate
             # a new as if it didn't exist
@@ -656,11 +667,11 @@ class RhsmIconCache(CacheManager):
 
 
 class WrittenOverrideCache(CacheManager):
-    '''
+    """
     Cache to keep track of the overrides used last time the a redhat.repo
     was written.  Doesn't track server status, we've got another cache for
     that.
-    '''
+    """
 
     CACHE_FILE = "/var/lib/rhsm/cache/written_overrides.json"
 
@@ -674,8 +685,9 @@ class WrittenOverrideCache(CacheManager):
         try:
             self.overrides = json.loads(open_file.read()) or {}
             return self.overrides
-        except IOError:
+        except IOError as err:
             log.error("Unable to read cache: %s" % self.CACHE_FILE)
+            log.exception(err)
         except ValueError:
             # ignore json file parse errors, we are going to generate
             # a new as if it didn't exist
