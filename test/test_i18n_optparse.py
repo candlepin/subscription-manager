@@ -29,7 +29,7 @@ class TestWrappedIndentedHelpFormatter(unittest.TestCase):
         # usage on 2.4, upper case on 2.6. We include our
         # own for consistency
         fu = self.hf.format_usage("%%prog [OPTIONS]")
-        self.assertEquals(fu[:6], "Usage:")
+        self.assertEqual(fu[:6], "Usage:")
 
     # just to verify the old broken way continues
     # to be broken and the way we detect that still works

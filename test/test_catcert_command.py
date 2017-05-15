@@ -28,9 +28,9 @@ from rhsm.certificate import create_from_pem
 class PrintingTests(unittest.TestCase):
 
     def test_xstr(self):
-        self.assertEquals("", xstr(None))
-        self.assertEquals("1", xstr(1))
-        self.assertEquals("JarJar", xstr("JarJar"))
+        self.assertEqual("", xstr(None))
+        self.assertEqual("1", xstr(1))
+        self.assertEqual("JarJar", xstr("JarJar"))
 
 
 class CatCertCommandStub(CatCertCommand):

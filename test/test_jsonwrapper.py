@@ -66,23 +66,23 @@ class TestPoolWrapper(unittest.TestCase):
 
     def test_get_stacking_id_when_attribute_is_set(self):
         wrapper = self._create_wrapper(add_stacking_id=True, stacking_id="1234")
-        self.assertEquals("1234", wrapper.get_stacking_id())
+        self.assertEqual("1234", wrapper.get_stacking_id())
 
     def test_get_stacking_id_when_attribute_not_set(self):
         wrapper = self._create_wrapper(add_stacking_id=True)
-        self.assertEquals(None, wrapper.get_stacking_id())
+        self.assertEqual(None, wrapper.get_stacking_id())
 
     def test_none_when_stacking_id_empty(self):
         wrapper = self._create_wrapper(add_stacking_id=True, stacking_id="")
-        self.assertEquals(None, wrapper.get_stacking_id())
+        self.assertEqual(None, wrapper.get_stacking_id())
 
     def test_compliance_type(self):
         wrapper = self._create_wrapper(pool_type='double stackable')
-        self.assertEquals('double stackable', wrapper.get_pool_type())
+        self.assertEqual('double stackable', wrapper.get_pool_type())
 
     def test_no_compliance_type(self):
         wrapper = self._create_wrapper()
-        self.assertEquals('', wrapper.get_pool_type())
+        self.assertEqual('', wrapper.get_pool_type())
 
     def test_management_enabled_when_attribute_is_false(self):
         wrapper = self._create_wrapper(add_management_enabled=True, management_enabled_value="false")

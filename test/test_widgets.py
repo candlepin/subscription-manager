@@ -53,7 +53,7 @@ class TestSubDetailsWidget(unittest.TestCase):
         details = self.widget(None)
         self.show(details)
         sub_text = details.subscription_text.get_accessible().get_name()
-        self.assertEquals(self.expected_sub_text, sub_text)
+        self.assertEqual(self.expected_sub_text, sub_text)
 
 
 class TestContractSubDetailsWidget(TestSubDetailsWidget):
@@ -82,7 +82,7 @@ class TestContractSubDetailsWidget(TestSubDetailsWidget):
         result_list = buff.get_text(buff.get_bounds()[0],
                                     buff.get_bounds()[1],
                                     include_hidden_chars=False).split("\n")
-        self.assertEquals(reasons, result_list)
+        self.assertEqual(reasons, result_list)
 
     def testVirtOnly(self):
         details = self.widget(None)
@@ -95,7 +95,7 @@ class TestContractSubDetailsWidget(TestSubDetailsWidget):
                      support_type='s_t', virt_only='v_o')
         s_iter = details.virt_only_text.get_buffer().get_start_iter()
         e_iter = details.virt_only_text.get_buffer().get_end_iter()
-        self.assertEquals(details.virt_only_text.get_buffer().get_text(s_iter, e_iter, False), 'v_o')
+        self.assertEqual(details.virt_only_text.get_buffer().get_text(s_iter, e_iter, False), 'v_o')
 
 
 class TestDatePicker(unittest.TestCase):
@@ -126,7 +126,7 @@ class TestDatePicker(unittest.TestCase):
         date_picker = DatePicker(d)
         valid = date_picker.date_entry_validate()
         self.assertTrue(valid)
-        self.assertEquals(date_picker._date_entry.get_text(), d.date().isoformat())
+        self.assertEqual(date_picker._date_entry.get_text(), d.date().isoformat())
 
 
 class BaseColumnTest(unittest.TestCase):
@@ -137,7 +137,7 @@ class BaseColumnTest(unittest.TestCase):
 
         column = column_class(0)
         column._render_cell(None, column.renderer, model, model.get_iter_first())
-        self.assertEquals(expected_text, column.renderer.get_property("text"))
+        self.assertEqual(expected_text, column.renderer.get_property("text"))
 
 
 class TestHasSortableWidget(unittest.TestCase):
@@ -212,7 +212,7 @@ class TestQuantitySelectionColumnTests(unittest.TestCase):
         column.quantity_renderer.set_property("text", "22")
         column._update_cell_based_on_data(None, column.quantity_renderer, tree_model, tree_iter)
 
-        self.assertEquals("", column.quantity_renderer.get_property("text"))
+        self.assertEqual("", column.quantity_renderer.get_property("text"))
 
     def test_update_cell_based_on_data_does_not_clear_cell_when_row_has_no_children(self):
         column, tree_model, tree_iter = self._setup_column(1, False)
@@ -221,33 +221,33 @@ class TestQuantitySelectionColumnTests(unittest.TestCase):
         column.quantity_renderer.set_property("text", "12")
         column._update_cell_based_on_data(None, column.quantity_renderer, tree_model, tree_iter)
 
-        self.assertNotEquals("", column.quantity_renderer.get_property("text"))
+        self.assertNotEqual("", column.quantity_renderer.get_property("text"))
 
     def test_editor_is_disabled_when_not_multi_entitlement(self):
         is_multi_entitled = False
         column, tree_model, tree_iter = self._setup_column(1, is_multi_entitled)
         column._update_cell_based_on_data(None, column.quantity_renderer, tree_model, tree_iter)
-        self.assertEquals(is_multi_entitled, column.quantity_renderer.get_property("editable"))
+        self.assertEqual(is_multi_entitled, column.quantity_renderer.get_property("editable"))
 
     def test_editor_is_enabled_when_multi_entitlement(self):
         is_multi_entitled = True
         column, tree_model, tree_iter = self._setup_column(1, is_multi_entitled)
         column._update_cell_based_on_data(None, column.quantity_renderer, tree_model, tree_iter)
-        self.assertEquals(is_multi_entitled, column.quantity_renderer.get_property("editable"))
+        self.assertEqual(is_multi_entitled, column.quantity_renderer.get_property("editable"))
 
     def test_value_not_changed_when_editor_has_invalid_text(self):
         expected_initial_value = 12
         column, tree_model, tree_iter = self._setup_column(expected_initial_value, False)
         column._on_edit(column.quantity_renderer, tree_model.get_path(tree_iter), "aaa",
                         tree_model)
-        self.assertEquals(expected_initial_value,
+        self.assertEqual(expected_initial_value,
                           tree_model.get_value(tree_iter, column.quantity_store_idx))
 
     def test_value_changed_when_editor_has_valid_text(self):
         column, tree_model, tree_iter = self._setup_column(1, False)
         column._on_edit(column.quantity_renderer, tree_model.get_path(tree_iter), "20",
                         tree_model)
-        self.assertEquals(20, tree_model.get_value(tree_iter, column.quantity_store_idx))
+        self.assertEqual(20, tree_model.get_value(tree_iter, column.quantity_store_idx))
 
     def test_filter_spinner_value_only_allows_digits(self):
         self._run_filter_value_test("4", True)
@@ -288,7 +288,7 @@ class TestQuantitySelectionColumnTests(unittest.TestCase):
 
         column._filter_spinner_value("test-event", editable, test_input_value)
 
-        self.assertEquals(not is_allowed, self.stopped)
+        self.assertEqual(not is_allowed, self.stopped)
 
     def _create_store_map(self, quantity, multi_entitlement, available, increment):
         return {"quantity": quantity, "multi-entitlement": multi_entitlement, "available_store": available,
@@ -309,20 +309,20 @@ class TestQuantitySelectionColumnTests(unittest.TestCase):
         (column, tree_model, tree_iter) = self._setup_column(15, True, 15, 2)
         column._update_cell_based_on_data(column, column.quantity_renderer, tree_model, tree_iter)
         adj = column.quantity_renderer.get_property("adjustment")
-        self.assertEquals(2, int(adj.get_property("step-increment")))
-        self.assertEquals(2, int(adj.get_property("lower")))
+        self.assertEqual(2, int(adj.get_property("step-increment")))
+        self.assertEqual(2, int(adj.get_property("lower")))
 
     def test_on_edit_refuses_non_multiples_of_increment(self):
         (column, tree_model, tree_iter) = self._setup_column(10, True, 15, 2)
         column._on_edit(None, 0, 7, tree_model)
-        self.assertEquals(10, int(tree_model.get_value(tree_iter, tree_model['quantity'])))
+        self.assertEqual(10, int(tree_model.get_value(tree_iter, tree_model['quantity'])))
 
     def test_on_edit_allows_multiples_of_increment(self):
         (column, tree_model, tree_iter) = self._setup_column(10, True, 15, 2)
         column._on_edit(None, 0, 8, tree_model)
-        self.assertEquals(8, tree_model.get_value(tree_iter, tree_model['quantity']))
+        self.assertEqual(8, tree_model.get_value(tree_iter, tree_model['quantity']))
 
     def test_on_edit_refuses_value_lower_than_increment(self):
         (column, tree_model, tree_iter) = self._setup_column(10, True, 15, 4)
         column._on_edit(None, 0, 2, tree_model)
-        self.assertEquals(10, tree_model.get_value(tree_iter, tree_model['quantity']))
+        self.assertEqual(10, tree_model.get_value(tree_iter, tree_model['quantity']))

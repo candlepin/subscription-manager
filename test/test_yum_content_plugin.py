@@ -103,8 +103,8 @@ class TestYumProductManager(fixture.SubManFixture):
 
         self.mock_yb.repos.listEnabled.return_value = [mock_repo]
         res = pm.get_enabled()
-        self.assertEquals(res[0][0], cert)
-        self.assertEquals(res[0][1], repo_id)
+        self.assertEqual(res[0][0], cert)
+        self.assertEqual(res[0][1], repo_id)
 
     @mock.patch('yum_product_id.log')
     def test_get_enabled_exception(self, mock_log):
@@ -120,7 +120,7 @@ class TestYumProductManager(fixture.SubManFixture):
         enabled = pm.get_enabled()
 
         self.assertTrue(mock_log.warn.called)
-        self.assertEquals([], enabled)
+        self.assertEqual([], enabled)
 
     @mock.patch('yum_product_id.log')
     def test_get_enabled_metadata_error(self, mock_log):
@@ -148,7 +148,7 @@ class TestYumProductManager(fixture.SubManFixture):
         pm = yum_product_id.YumProductManager(self.mock_yb)
 
         active = pm.get_active()
-        self.assertEquals(set([]), active)
+        self.assertEqual(set([]), active)
 
     def test_get_active_with_active_packages(self):
         mock_package = mock.Mock(spec=yum.rpmsack.RPMInstalledPackage)
@@ -160,7 +160,7 @@ class TestYumProductManager(fixture.SubManFixture):
 
         pm = yum_product_id.YumProductManager(self.mock_yb)
         active = pm.get_active()
-        self.assertEquals(set([mock_package.repoid]), active)
+        self.assertEqual(set([mock_package.repoid]), active)
 
     def test_get_active_without_active_packages(self):
         mock_package = mock.Mock(spec=yum.rpmsack.RPMInstalledPackage)
@@ -175,7 +175,7 @@ class TestYumProductManager(fixture.SubManFixture):
 
         pm = yum_product_id.YumProductManager(self.mock_yb)
         active = pm.get_active()
-        self.assertEquals(set([]), active)
+        self.assertEqual(set([]), active)
 
     def test_get_active_with_active_packages_rhel57_installed_repo(self):
         """rhel5.7 says every package is in 'installed' repo"""
@@ -188,7 +188,7 @@ class TestYumProductManager(fixture.SubManFixture):
 
         pm = yum_product_id.YumProductManager(self.mock_yb)
         active = pm.get_active()
-        self.assertEquals(set([]), active)
+        self.assertEqual(set([]), active)
 
     def _create_cert(self, product_id, label, version, provided_tags):
         cert = stubs.StubProductCertificate(

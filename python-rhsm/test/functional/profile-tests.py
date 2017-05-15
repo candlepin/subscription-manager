@@ -27,7 +27,7 @@ class ProfileTests(unittest.TestCase):
         # This will fail if you're running tests on non-rpm based distros:
         profile = get_profile("rpm")
         pkg_dicts = profile.collect()
-        self.assertEquals(len(profile.packages), len(pkg_dicts))
+        self.assertEqual(len(profile.packages), len(pkg_dicts))
 
         # Everybody's gotta have at least 10 packages right?
         self.assertTrue(len(pkg_dicts) > 10)
@@ -54,7 +54,7 @@ class ProfileTests(unittest.TestCase):
                 Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
                 Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
         profile = self._mock_pkg_profile(dummy_pkgs)
-        self.assertEquals(2, len(profile.packages))
+        self.assertEqual(2, len(profile.packages))
 
     def _mock_pkg_profile(self, packages):
         """

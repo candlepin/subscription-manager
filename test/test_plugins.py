@@ -130,8 +130,8 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
         self.base_manager.add_plugins_from_module(mock_module)
         # that was not a module, nor a plugin module, nor had any plugin classes
         # so we better not have any plugins found
-        self.assertEquals({}, self.base_manager._slot_to_funcs)
-        self.assertEquals({}, self.base_manager._plugin_classes)
+        self.assertEqual({}, self.base_manager._slot_to_funcs)
+        self.assertEqual({}, self.base_manager._plugin_classes)
 
     def test_no_classes(self):
         mock_module = mock.Mock()
@@ -140,8 +140,8 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
         self.base_manager.add_plugins_from_module(mock_module)
         # that was not a module, nor a plugin module, nor had any plugin classes
         # so we better not have any plugins found
-        self.assertEquals({}, self.base_manager._slot_to_funcs)
-        self.assertEquals({}, self.base_manager._plugin_classes)
+        self.assertEqual({}, self.base_manager._slot_to_funcs)
+        self.assertEqual({}, self.base_manager._plugin_classes)
 
     def test_unrelated_classes(self):
         mock_module = mock.Mock()
@@ -152,8 +152,8 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
 
         mock_module.NotAPluginClass = NotAPluginClass
         self.base_manager.add_plugins_from_module(mock_module)
-        self.assertEquals({}, self.base_manager._slot_to_funcs)
-        self.assertEquals({}, self.base_manager._plugin_classes)
+        self.assertEqual({}, self.base_manager._slot_to_funcs)
+        self.assertEqual({}, self.base_manager._plugin_classes)
 
     def test_plugin_class_no_conf(self):
         mock_module = mock.Mock()
@@ -177,8 +177,8 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
         self.assertTrue(mock_module in self.base_manager._modules)
 
         # these shouldn't get populated for this cases
-        self.assertEquals({}, self.base_manager._slot_to_funcs)
-        self.assertEquals({}, self.base_manager._plugin_classes)
+        self.assertEqual({}, self.base_manager._slot_to_funcs)
+        self.assertEqual({}, self.base_manager._plugin_classes)
 
     def test_plugin_config_fail(self):
         mock_module = mock.Mock()
@@ -201,8 +201,8 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
         # be in the list of tracked modules
         self.assertTrue(mock_module in self.base_manager._modules)
         # these shouldn't get populated for this cases
-        self.assertEquals({}, self.base_manager._slot_to_funcs)
-        self.assertEquals({}, self.base_manager._plugin_classes)
+        self.assertEqual({}, self.base_manager._slot_to_funcs)
+        self.assertEqual({}, self.base_manager._plugin_classes)
 
     @mock.patch('subscription_manager.plugins.PluginConfig')
     def test_plugin_config_disabled(self, mock_plugin_conf):
@@ -229,7 +229,7 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
         # be in the list of tracked modules
         self.assertTrue(mock_module in self.base_manager._modules)
         # these shouldn't get populated for this cases
-        self.assertEquals({}, self.base_manager._slot_to_funcs)
+        self.assertEqual({}, self.base_manager._slot_to_funcs)
 
         # we shouldn't be in _plugins, since this was disabled
         self.assertFalse(PluginClass.get_plugin_key() in self.base_manager._plugins)
@@ -266,7 +266,7 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
         self.assertTrue(mock_module in self.base_manager._modules)
 
         # these shouldn't get populated for this cases, mp slots
-        self.assertEquals({}, self.base_manager._slot_to_funcs)
+        self.assertEqual({}, self.base_manager._slot_to_funcs)
 
         # we should be in _plugins, since this plugin was enabled
         self.assertTrue(PluginClass.get_plugin_key() in self.base_manager._plugins)
@@ -310,7 +310,7 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
         self.assertTrue(mock_module in self.base_manager._modules)
 
         # these shouldn't get populated for this cases, mp slots
-        self.assertEquals({}, self.base_manager._slot_to_funcs)
+        self.assertEqual({}, self.base_manager._slot_to_funcs)
 
         # we should be in _plugins, since this plugin was enabled
         self.assertTrue(PluginClass.get_plugin_key() in self.base_manager._plugins)
@@ -363,7 +363,7 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
         # we provide conduits with slots, so we should have known slots now
         self.assertTrue('post_facts_collection' in self.base_manager._slot_to_funcs)
         self.assertTrue('post_facts_collection' in self.base_manager._slot_to_conduit)
-        self.assertEquals(plugins.FactsConduit,
+        self.assertEqual(plugins.FactsConduit,
                           self.base_manager._slot_to_conduit['post_facts_collection'])
 
         # we should be in _plugins, since this plugin was enabled
@@ -417,7 +417,7 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
         # we provide conduits with slots, so we should have known slots now
         self.assertTrue('post_facts_collection' in self.base_manager._slot_to_funcs)
         self.assertTrue('post_facts_collection' in self.base_manager._slot_to_conduit)
-        self.assertEquals(plugins.FactsConduit,
+        self.assertEqual(plugins.FactsConduit,
                           self.base_manager._slot_to_conduit['post_facts_collection'])
 
         # we should be in _plugins, since this plugin was enabled
@@ -467,7 +467,7 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
         # we provide conduits with slots, so we should have known slots now
         self.assertTrue('post_facts_collection' in self.base_manager._slot_to_funcs)
         self.assertTrue('post_facts_collection' in self.base_manager._slot_to_conduit)
-        self.assertEquals(plugins.FactsConduit,
+        self.assertEqual(plugins.FactsConduit,
                           self.base_manager._slot_to_conduit['post_facts_collection'])
 
         # we should be in _plugins, since this plugin was enabled
@@ -506,7 +506,7 @@ class TestPluginManager(unittest.TestCase):
     def test_load_plugin(self):
         module = os.path.join(self.module_dir, "dummy_plugin.py")
         plugin_module = self.manager._load_plugin_module_file(module)
-        self.assertEquals("dummy_plugin", plugin_module.__name__)
+        self.assertEqual("dummy_plugin", plugin_module.__name__)
 
     def test_no_config_plugin(self):
         self.assertRaises(plugins.PluginConfigException,
@@ -536,10 +536,10 @@ class TestPluginManagerLoadPluginsFromModule(unittest.TestCase):
     def test_load_plugin(self):
         module = os.path.join(self.module_dir, "dummy_plugin.py")
         plugin_module = self.manager._load_plugin_module_file(module)
-        self.assertEquals("dummy_plugin", plugin_module.__name__)
+        self.assertEqual("dummy_plugin", plugin_module.__name__)
         self.manager.add_plugins_from_module(plugin_module)
-        self.assertEquals(1, len(self.manager._slot_to_funcs['post_product_id_install']))
-        self.assertEquals(0, len(self.manager._slot_to_funcs['pre_product_id_install']))
+        self.assertEqual(1, len(self.manager._slot_to_funcs['post_product_id_install']))
+        self.assertEqual(0, len(self.manager._slot_to_funcs['pre_product_id_install']))
 
     def test_load_plugins_with_same_class_name(self):
         module = os.path.join(self.module_dir, "dummy_plugin.py")
@@ -548,7 +548,7 @@ class TestPluginManagerLoadPluginsFromModule(unittest.TestCase):
         plugin_modules.append(self.manager._load_plugin_module_file(module))
         plugin_modules.append(self.manager._load_plugin_module_file(module2))
         self.manager.add_plugins_from_modules(plugin_modules)
-        self.assertEquals(2, len(self.manager._slot_to_funcs['post_product_id_install']))
+        self.assertEqual(2, len(self.manager._slot_to_funcs['post_product_id_install']))
 
     def test_load_plugin_from_module_bad_config(self):
         module_file = os.path.join(self.module_dir, "config_plugin.py")
@@ -561,7 +561,7 @@ class TestPluginManagerLoadPluginsFromModule(unittest.TestCase):
         module_file = os.path.join(self.module_dir, "disabled_plugin.py")
         module = self.manager._load_plugin_module_file(module_file)
         self.manager.add_plugins_from_module(module)
-        self.assertEquals(0, len(self.manager._plugins))
+        self.assertEqual(0, len(self.manager._plugins))
 
     def test_run_no_such_slot(self):
         module_file = os.path.join(self.module_dir, "dummy_plugin.py")
@@ -674,8 +674,8 @@ class TestPluginManagerReporting(unittest.TestCase):
             self.manager.add_plugin_class(plugin_class,
                                           plugin_to_config_map=plugin_to_config_map)
 
-        self.assertEquals(10, len(self.manager.get_plugins()))
-        self.assertEquals(10, len(self.manager.get_slots()))
+        self.assertEqual(10, len(self.manager.get_plugins()))
+        self.assertEqual(10, len(self.manager.get_slots()))
 
 
 #functional
@@ -791,11 +791,11 @@ class BaseConduitTest(unittest.TestCase):
 class TestBaseConduitEmptyUsesDefaults(BaseConduitTest):
     def test_default_boolean_false(self):
         val = self.conduit.conf_bool("main", "enabled", False)
-        self.assertEquals(False, val)
+        self.assertEqual(False, val)
 
     def test_default_boolean_true(self):
         val = self.conduit.conf_bool("main", "enabled", True)
-        self.assertEquals(True, val)
+        self.assertEqual(True, val)
 
     def test_bad_default_boolean(self):
         self.assertRaises(ValueError,
@@ -809,7 +809,7 @@ class TestBaseConduitEmptyUsesDefaults(BaseConduitTest):
 
     def test_default_int(self):
         val = self.conduit.conf_int("main", "enabled", 1)
-        self.assertEquals(1, val)
+        self.assertEqual(1, val)
 
     def test_bad_default_int(self):
         self.assertRaises(ValueError,
@@ -818,7 +818,7 @@ class TestBaseConduitEmptyUsesDefaults(BaseConduitTest):
 
     def test_default_float(self):
         val = self.conduit.conf_float("main", "enabled", 1.0)
-        self.assertEquals(1.0, val)
+        self.assertEqual(1.0, val)
 
     def test_bad_default_float(self):
         self.assertRaises(ValueError,
@@ -827,7 +827,7 @@ class TestBaseConduitEmptyUsesDefaults(BaseConduitTest):
 
     def test_default_string(self):
         val = self.conduit.conf_string("main", "enabled", "a string")
-        self.assertEquals("a string", val)
+        self.assertEqual("a string", val)
 
     def test_string_no_section(self):
         val = self.conduit.conf_string('this_section_is_not_real', 'enabled')
@@ -881,11 +881,11 @@ bool_value=True
 
     def test_int(self):
         val = self.conduit.conf_int("section1", "int_value")
-        self.assertEquals(37, val)
+        self.assertEqual(37, val)
 
     def test_int_default(self):
         val = self.conduit.conf_int("section1", "int_value", 37)
-        self.assertEquals(37, val)
+        self.assertEqual(37, val)
 
     def test_bad_default_int(self):
         self.assertRaises(ValueError,
@@ -894,7 +894,7 @@ bool_value=True
 
     def test_default_float(self):
         val = self.conduit.conf_float("section1", "float_value", 1.0)
-        self.assertEquals(1.0, val)
+        self.assertEqual(1.0, val)
 
     def test_bad_default_float(self):
         self.assertRaises(ValueError,
@@ -903,11 +903,11 @@ bool_value=True
 
     def test_string(self):
         val = self.conduit.conf_string("section1", "string_value")
-        self.assertEquals("Foo", val)
+        self.assertEqual("Foo", val)
 
     def test_default_string(self):
         val = self.conduit.conf_string("section1", "string_value", "bar")
-        self.assertEquals("Foo", val)
+        self.assertEqual("Foo", val)
 
     def test_string_no_section(self):
         val = self.conduit.conf_string('this_section_is_not_real', 'enabled')
@@ -917,8 +917,8 @@ bool_value=True
 class TestVersionChecks(unittest.TestCase):
     def test_parse_version(self):
         maj_ver, min_ver = plugins.parse_version("1.0")
-        self.assertEquals(1, maj_ver)
-        self.assertEquals(0, min_ver)
+        self.assertEqual(1, maj_ver)
+        self.assertEqual(0, min_ver)
 
     def test_api_versions_equal(self):
         self.assertTrue(plugins.api_version_ok("1.0", "1.0"))
@@ -940,19 +940,19 @@ class StubPluginClass(base_plugin.SubManPlugin):
 class TestProductConduit(unittest.TestCase):
     def test_product_conduit(self):
         conduit = plugins.ProductConduit(StubPluginClass, product_list=[])
-        self.assertEquals([], conduit.product_list)
+        self.assertEqual([], conduit.product_list)
 
 
 class TestProductUpdateConduit(unittest.TestCase):
     def test_product_update_conduit(self):
         conduit = plugins.ProductUpdateConduit(StubPluginClass, product_list=[])
-        self.assertEquals([], conduit.product_list)
+        self.assertEqual([], conduit.product_list)
 
 
 class TestFactsConduit(unittest.TestCase):
     def test_facts_conduit(self):
         conduit = plugins.FactsConduit(StubPluginClass, facts={})
-        self.assertEquals({}, conduit.facts)
+        self.assertEqual({}, conduit.facts)
 
 
 class TestUpdateContentConduit(unittest.TestCase):
@@ -964,7 +964,7 @@ class TestUpdateContentConduit(unittest.TestCase):
         conduit = plugins.UpdateContentConduit(StubPluginClass,
                                                reports=mock_reports,
                                                ent_source=mock_ent_source)
-        self.assertEquals(mock_reports, conduit.reports)
+        self.assertEqual(mock_reports, conduit.reports)
 
 
 class TestRegistrationConduit(unittest.TestCase):
@@ -972,8 +972,8 @@ class TestRegistrationConduit(unittest.TestCase):
         conduit = plugins.RegistrationConduit(StubPluginClass,
                                               name="name",
                                               facts={})
-        self.assertEquals("name", conduit.name)
-        self.assertEquals({}, conduit.facts)
+        self.assertEqual("name", conduit.name)
+        self.assertEqual({}, conduit.facts)
 
 
 class TestPostRegistrationConduit(unittest.TestCase):
@@ -981,8 +981,8 @@ class TestPostRegistrationConduit(unittest.TestCase):
         conduit = plugins.PostRegistrationConduit(StubPluginClass,
                                                   consumer={'uuid': 'some_uuid'},
                                                   facts={})
-        self.assertEquals("some_uuid", conduit.consumer['uuid'])
-        self.assertEquals({}, conduit.facts)
+        self.assertEqual("some_uuid", conduit.consumer['uuid'])
+        self.assertEqual({}, conduit.facts)
 
 
 class TestSubscriptionConduit(unittest.TestCase):
@@ -991,9 +991,9 @@ class TestSubscriptionConduit(unittest.TestCase):
                                               consumer_uuid="123456789",
                                               pool_id="4444",
                                               quantity=4)
-        self.assertEquals("123456789", conduit.consumer_uuid)
-        self.assertEquals(4, conduit.quantity)
-        self.assertEquals("4444", conduit.pool_id)
+        self.assertEqual("123456789", conduit.consumer_uuid)
+        self.assertEqual(4, conduit.quantity)
+        self.assertEqual("4444", conduit.pool_id)
 
 
 class TestPostSubscriptionConduit(unittest.TestCase):
@@ -1001,14 +1001,14 @@ class TestPostSubscriptionConduit(unittest.TestCase):
         conduit = plugins.PostSubscriptionConduit(StubPluginClass,
                                                   consumer_uuid="123456789",
                                                   entitlement_data={})
-        self.assertEquals("123456789", conduit.consumer_uuid)
-        self.assertEquals({}, conduit.entitlement_data)
+        self.assertEqual("123456789", conduit.consumer_uuid)
+        self.assertEqual({}, conduit.entitlement_data)
 
 
 class TestAutoAttachConduit(unittest.TestCase):
     def test_auto_attach_conduit(self):
         conduit = plugins.AutoAttachConduit(StubPluginClass, "a-consumer-uuid")
-        self.assertEquals("a-consumer-uuid", conduit.consumer_uuid)
+        self.assertEqual("a-consumer-uuid", conduit.consumer_uuid)
 
 
 class TestPostAutoAttachConduit(unittest.TestCase):
@@ -1016,8 +1016,8 @@ class TestPostAutoAttachConduit(unittest.TestCase):
         conduit = plugins.PostAutoAttachConduit(StubPluginClass,
                                                 "a-consumer-uuid",
                                                 {})
-        self.assertEquals("a-consumer-uuid", conduit.consumer_uuid)
-        self.assertEquals({}, conduit.entitlement_data)
+        self.assertEqual("a-consumer-uuid", conduit.consumer_uuid)
+        self.assertEqual({}, conduit.entitlement_data)
 
 
 class BasePluginException(unittest.TestCase):
@@ -1049,8 +1049,8 @@ class TestPluginImportException(BasePluginException):
         try:
             self.raise_exception()
         except self.e as exp:
-            self.assertEquals("module_file", exp.module_file)
-            self.assertEquals("module_name", exp.module_name)
+            self.assertEqual("module_file", exp.module_file)
+            self.assertEqual("module_name", exp.module_name)
 
     def test_str(self):
         try:
@@ -1059,7 +1059,7 @@ class TestPluginImportException(BasePluginException):
             buf = str(exp)
             lines = buf.splitlines()
             # last line is Message:...
-            self.assertEquals("Message: import failed", lines[-1])
+            self.assertEqual("Message: import failed", lines[-1])
 
 
 class TestPluginModuleImportException(TestPluginImportException):
@@ -1095,7 +1095,7 @@ class TestPluginConfigException(BasePluginException):
             buf = str(exp)
             lines = buf.splitlines()
             # last line is Message:...
-            self.assertEquals("Message: msg", lines[-1])
+            self.assertEqual("Message: msg", lines[-1])
 
 
 class TestSlotNameException(BasePluginException):
@@ -1108,5 +1108,5 @@ class TestSlotNameException(BasePluginException):
         try:
             self.raise_exception()
         except self.e as exp:
-            self.assertEquals("slot_name", exp.slot_name)
+            self.assertEqual("slot_name", exp.slot_name)
             self.assertTrue("slot_name" in str(exp))

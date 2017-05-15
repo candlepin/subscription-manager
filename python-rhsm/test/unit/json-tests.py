@@ -23,4 +23,4 @@ class JsonTests(unittest.TestCase):
         # Python prints lists with single quotes, JSON with double quotes
         # so we need to convert to do a string comparison.
         expected = "[%s]" % ", ".join(['"%s"' % x for x in s])
-        self.assertEquals(expected, result)
+        self.assertEqual(expected, result)

@@ -122,7 +122,7 @@ class TestRHELBrandInstaller(BaseBrandFixture):
         brand_arg = call_args[0][0]
         self.assertTrue(isinstance(brand_arg, entbranding.ProductBrand))
         self.assertTrue(isinstance(brand_arg, rhelentbranding.RHELProductBrand))
-        self.assertEquals('Awesome OS super', brand_arg.name)
+        self.assertEqual('Awesome OS super', brand_arg.name)
 
     def test_no_need_to_update_branding(self):
         stub_product = StubProduct(id=123, brand_type='OS',
@@ -375,7 +375,7 @@ class TestRhelAndMockBrandsInstaller(TestRHELBrandInstaller):
         brand_arg = call_args[0][0]
         self.assertTrue(isinstance(brand_arg, entbranding.ProductBrand))
         self.assertTrue(isinstance(brand_arg, rhelentbranding.RHELProductBrand))
-        self.assertEquals("Awesome OS super", brand_arg.name)
+        self.assertEqual("Awesome OS super", brand_arg.name)
 
         # verify the install on all the installers got called
         count = 0
@@ -383,7 +383,7 @@ class TestRhelAndMockBrandsInstaller(TestRHELBrandInstaller):
             if isinstance(bi, mock.Mock):
                 self.assertTrue(bi.install.called)
                 count = count + 1
-        self.assertEquals(2, count)
+        self.assertEqual(2, count)
 
 
 class TestBrand(fixture.SubManFixture):
@@ -438,7 +438,7 @@ class TestRHELBrandPicker(BaseBrandFixture):
     def test_more_than_one_ent_cert_with_branding(self, mock_branded_certs):
         brand_picker = rhelentbranding.RHELBrandPicker([])
         brand = brand_picker.get_brand()
-        self.assertEquals("Awesome OS super", brand.name)
+        self.assertEqual("Awesome OS super", brand.name)
 
     @mock.patch("subscription_manager.rhelentbranding.RHELBrandPicker._get_branded_cert_products",
                 return_value=[])
@@ -447,7 +447,7 @@ class TestRHELBrandPicker(BaseBrandFixture):
         brand_picker = rhelentbranding.RHELBrandPicker([])
         brand = brand_picker.get_brand()
 
-        self.assertEquals(None, brand)
+        self.assertEqual(None, brand)
 
     def test_get_brand(self):
         # inj a prod dir with some installed products
@@ -642,7 +642,7 @@ class TestProductBrand(BaseBrandFixture):
 
     def test_brand(self):
         brand = self.brand_class("Awesome OS")
-        self.assertEquals("Awesome OS", brand.name)
+        self.assertEqual("Awesome OS", brand.name)
 
     def test_brand_save(self):
         brand = self.brand_class("Foo")
@@ -657,12 +657,12 @@ class TestProductBrand(BaseBrandFixture):
     def test_from_product(self):
         stub_product = DefaultStubProduct()
         brand = self.brand_class.from_product(stub_product)
-        self.assertEquals(stub_product.brand_name, brand.name)
+        self.assertEqual(stub_product.brand_name, brand.name)
 
     def test_from_product_brand_name_none(self):
         stub_product = DefaultStubProduct(brand_name=None)
         brand = self.brand_class.from_product(stub_product)
-        self.assertEquals(stub_product.brand_name, brand.name)
+        self.assertEqual(stub_product.brand_name, brand.name)
         self.assertTrue(brand.name is None)
 
     # ProductBrand shouldn't care about the Product.brand_type,
@@ -670,7 +670,7 @@ class TestProductBrand(BaseBrandFixture):
     def test_from_product_brand_type_none(self):
         stub_product = DefaultStubProduct(brand_type=None)
         brand = self.brand_class.from_product(stub_product)
-        self.assertEquals(stub_product.brand_name, brand.name)
+        self.assertEqual(stub_product.brand_name, brand.name)
 
     # An empty string is just a name, a poor name
     # ie, no casting to None, etc.
@@ -680,14 +680,14 @@ class TestProductBrand(BaseBrandFixture):
     def test_from_product_brand_name_empty_string(self):
         stub_product = DefaultStubProduct(brand_name="")
         brand = self.brand_class.from_product(stub_product)
-        self.assertEquals(stub_product.brand_name, brand.name)
-        self.assertEquals("", brand.name)
+        self.assertEqual(stub_product.brand_name, brand.name)
+        self.assertEqual("", brand.name)
 
     # see comment about test_from_product_brand_type_none
     def test_from_product_brand_type_empty_string(self):
         stub_product = DefaultStubProduct(brand_type="")
         brand = self.brand_class.from_product(stub_product)
-        self.assertEquals(stub_product.brand_name, brand.name)
+        self.assertEqual(stub_product.brand_name, brand.name)
 
     def test_format_brand(self):
         fb = self.brand_class.format_brand('Blip')
@@ -712,11 +712,11 @@ class TestCurrentBrand(BaseBrandFixture):
 
     def test_load(self):
         cb = self.brand_class()
-        self.assertEquals(self.current_brand, cb.name)
+        self.assertEqual(self.current_brand, cb.name)
 
     def test_unformat_brand(self):
-        self.assertEquals("foo", self.brand_class.unformat_brand("foo"))
-        self.assertEquals("foo", self.brand_class.unformat_brand("foo\n"))
+        self.assertEqual("foo", self.brand_class.unformat_brand("foo"))
+        self.assertEqual("foo", self.brand_class.unformat_brand("foo\n"))
 
     def test_unformat_brand_none(self):
         self.assertTrue(self.brand_class.unformat_brand(None) is None)
@@ -740,7 +740,7 @@ class TestBrandFile(fixture.SubManFixture):
 
     def test_init(self):
         self.brandfile_class()
-        self.assertEquals("/var/lib/rhsm/branded_name", self.brandfile_class.path)
+        self.assertEqual("/var/lib/rhsm/branded_name", self.brandfile_class.path)
 
     def test_write(self):
         brand_file = self.brandfile_class()

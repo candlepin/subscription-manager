@@ -129,15 +129,15 @@ class TestLock(unittest.TestCase):
     def test_lock(self):
         lock_path = self._lock_path()
         lf = lock.Lock(lock_path)
-        self.assertEquals(lf.path, lock_path)
-        self.assertEquals(lf.depth, 0)
+        self.assertEqual(lf.path, lock_path)
+        self.assertEqual(lf.depth, 0)
 
     def test_lock_acquire(self):
         lock_path = self._lock_path()
         lf = lock.Lock(lock_path)
         res = lf.acquire()
         # given no args, acquire() blocks or returns None
-        self.assertEquals(res, None)
+        self.assertEqual(res, None)
 
     def test_lock_acquire_blocking_true(self):
         lock_path = self._lock_path()

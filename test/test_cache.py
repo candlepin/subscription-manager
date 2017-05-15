@@ -71,8 +71,8 @@ class TestProfileManager(unittest.TestCase):
         self.profile_mgr.write_cache = Mock()
         self.profile_mgr.update_check(uep, uuid)
 
-        self.assertEquals(0, uep.updatePackageProfile.call_count)
-        self.assertEquals(0, self.profile_mgr.write_cache.call_count)
+        self.assertEqual(0, uep.updatePackageProfile.call_count)
+        self.assertEqual(0, self.profile_mgr.write_cache.call_count)
 
     def test_update_check_has_changed(self):
         uuid = 'FAKEUUID'
@@ -85,7 +85,7 @@ class TestProfileManager(unittest.TestCase):
 
         uep.updatePackageProfile.assert_called_with(uuid,
                 FACT_MATCHER)
-        self.assertEquals(1, self.profile_mgr.write_cache.call_count)
+        self.assertEqual(1, self.profile_mgr.write_cache.call_count)
 
     def test_update_check_packages_not_supported(self):
         uuid = 'FAKEUUID'
@@ -97,9 +97,9 @@ class TestProfileManager(unittest.TestCase):
 
         self.profile_mgr.update_check(uep, uuid)
 
-        self.assertEquals(0, uep.updatePackageProfile.call_count)
+        self.assertEqual(0, uep.updatePackageProfile.call_count)
         uep.supports_resource.assert_called_with('packages')
-        self.assertEquals(0, self.profile_mgr.write_cache.call_count)
+        self.assertEqual(0, self.profile_mgr.write_cache.call_count)
 
     def test_update_check_packages_disabled(self):
         uuid = 'FAKEUUID'
@@ -111,9 +111,9 @@ class TestProfileManager(unittest.TestCase):
 
         self.profile_mgr.update_check(uep, uuid)
 
-        self.assertEquals(0, uep.updatePackageProfile.call_count)
+        self.assertEqual(0, uep.updatePackageProfile.call_count)
         uep.supports_resource.assert_called_with('packages')
-        self.assertEquals(0, self.profile_mgr.write_cache.call_count)
+        self.assertEqual(0, self.profile_mgr.write_cache.call_count)
 
     def test_update_check_error_uploading(self):
         uuid = 'FAKEUUID'
@@ -127,7 +127,7 @@ class TestProfileManager(unittest.TestCase):
         self.assertRaises(Exception, self.profile_mgr.update_check, uep, uuid)
         uep.updatePackageProfile.assert_called_with(uuid,
                 FACT_MATCHER)
-        self.assertEquals(0, self.profile_mgr.write_cache.call_count)
+        self.assertEqual(0, self.profile_mgr.write_cache.call_count)
 
     def test_has_changed_no_cache(self):
         self.profile_mgr._cache_exists = Mock(return_value=False)
@@ -165,7 +165,7 @@ class TestProfileManager(unittest.TestCase):
         self.profile_mgr.write_cache = Mock()
 
         res = self.profile_mgr.update_check(uep, uuid)
-        self.assertEquals(0, res)
+        self.assertEqual(0, res)
 
     @staticmethod
     def _mock_pkg_profile(packages):
@@ -201,8 +201,8 @@ class TestInstalledProductsCache(SubManFixture):
         self.assertTrue('a-product' in self.mgr.installed)
         self.assertTrue('b-product' in self.mgr.installed)
         self.assertTrue('c-product' in self.mgr.installed)
-        self.assertEquals("Product A", self.mgr.installed['a-product']['productName'])
-        self.assertEquals(set(["product", "product-a", "product-b", "product-c"]), set(self.mgr.tags))
+        self.assertEqual("Product A", self.mgr.installed['a-product']['productName'])
+        self.assertEqual(set(["product", "product-a", "product-b", "product-c"]), set(self.mgr.tags))
 
     def test_load_data(self):
         cached = {
@@ -216,7 +216,7 @@ class TestInstalledProductsCache(SubManFixture):
         mock_file.read = Mock(return_value=json.dumps(cached))
 
         data = self.mgr._load_data(mock_file)
-        self.assertEquals(data, cached)
+        self.assertEqual(data, cached)
 
     def test_has_changed(self):
         cached = {
@@ -283,8 +283,8 @@ class TestInstalledProductsCache(SubManFixture):
         self.mgr.write_cache = Mock()
         self.mgr.update_check(uep, uuid)
 
-        self.assertEquals(0, uep.updateConsumer.call_count)
-        self.assertEquals(0, self.mgr.write_cache.call_count)
+        self.assertEqual(0, uep.updateConsumer.call_count)
+        self.assertEqual(0, self.mgr.write_cache.call_count)
 
     def test_update_check_has_changed(self):
         uuid = 'FAKEUUID'
@@ -299,7 +299,7 @@ class TestInstalledProductsCache(SubManFixture):
         uep.updateConsumer.assert_called_with(uuid,
                 content_tags=set(expected),
                 installed_products=self.mgr.format_for_server())
-        self.assertEquals(1, self.mgr.write_cache.call_count)
+        self.assertEqual(1, self.mgr.write_cache.call_count)
 
     def test_update_check_error_uploading(self):
         uuid = 'FAKEUUID'
@@ -315,7 +315,7 @@ class TestInstalledProductsCache(SubManFixture):
         uep.updateConsumer.assert_called_with(uuid,
                 content_tags=set(expected),
                 installed_products=self.mgr.format_for_server())
-        self.assertEquals(0, self.mgr.write_cache.call_count)
+        self.assertEqual(0, self.mgr.write_cache.call_count)
 
 
 class TestReleaseStatusCache(SubManFixture):
@@ -331,20 +331,20 @@ class TestReleaseStatusCache(SubManFixture):
 
         self.release_cache.read_status(uep, "THISISAUUID")
 
-        self.assertEquals(dummy_release, self.release_cache.server_status)
+        self.assertEqual(dummy_release, self.release_cache.server_status)
 
     def test_server_no_release_call(self):
         uep = Mock()
         uep.getRelease = Mock(side_effect=RestlibException("boom"))
 
         status = self.release_cache.read_status(uep, "SOMEUUID")
-        self.assertEquals(None, status)
+        self.assertEqual(None, status)
 
     def test_server_network_error_no_cache(self):
         uep = Mock()
         uep.getRelease = Mock(side_effect=socket.error("boom"))
         self.release_cache._cache_exists = Mock(return_value=False)
-        self.assertEquals(None, self.release_cache.read_status(uep, "SOMEUUID"))
+        self.assertEqual(None, self.release_cache.read_status(uep, "SOMEUUID"))
 
     def test_server_network_error_with_cache(self):
         uep = Mock()
@@ -352,7 +352,7 @@ class TestReleaseStatusCache(SubManFixture):
         dummy_release = {'releaseVer': 'MockServer'}
         self.release_cache._read_cache = Mock(return_value=dummy_release)
         self.release_cache._cache_exists = Mock(return_value=True)
-        self.assertEquals(dummy_release, self.release_cache.read_status(uep, "SOMEUUID"))
+        self.assertEqual(dummy_release, self.release_cache.read_status(uep, "SOMEUUID"))
 
     def test_server_network_works_with_cache(self):
         uep = Mock()
@@ -361,12 +361,12 @@ class TestReleaseStatusCache(SubManFixture):
 
         self.release_cache._cache_exists = Mock(return_value=True)
         self.release_cache._read_cache = Mock(return_value=dummy_release)
-        self.assertEquals(dummy_release, self.release_cache.read_status(uep, "SOMEUUID"))
-        self.assertEquals(1, self.release_cache.write_cache.call_count)
-        self.assertEquals(0, self.release_cache._read_cache.call_count)
+        self.assertEqual(dummy_release, self.release_cache.read_status(uep, "SOMEUUID"))
+        self.assertEqual(1, self.release_cache.write_cache.call_count)
+        self.assertEqual(0, self.release_cache._read_cache.call_count)
 
-        self.assertEquals(dummy_release, self.release_cache.read_status(uep, "SOMEUUID"))
-        self.assertEquals(1, uep.getRelease.call_count)
+        self.assertEqual(dummy_release, self.release_cache.read_status(uep, "SOMEUUID"))
+        self.assertEqual(1, uep.getRelease.call_count)
 
     def test_server_network_works_cache_caches(self):
         uep = Mock()
@@ -376,14 +376,14 @@ class TestReleaseStatusCache(SubManFixture):
         self.release_cache._cache_exists = Mock(return_value=False)
         self.release_cache.server_status = None
         self.release_cache._read_cache = Mock(return_value=dummy_release)
-        self.assertEquals(dummy_release, self.release_cache.read_status(uep, "SOMEUUID"))
-        self.assertEquals(1, self.release_cache.write_cache.call_count)
-        self.assertEquals(0, self.release_cache._read_cache.call_count)
+        self.assertEqual(dummy_release, self.release_cache.read_status(uep, "SOMEUUID"))
+        self.assertEqual(1, self.release_cache.write_cache.call_count)
+        self.assertEqual(0, self.release_cache._read_cache.call_count)
 
         self.release_cache._cache_exists = Mock(return_value=True)
-        self.assertEquals(dummy_release, self.release_cache.read_status(uep, "SOMEUUID"))
-        self.assertEquals(1, self.release_cache.write_cache.call_count)
-        self.assertEquals(1, uep.getRelease.call_count)
+        self.assertEqual(dummy_release, self.release_cache.read_status(uep, "SOMEUUID"))
+        self.assertEqual(1, self.release_cache.write_cache.call_count)
+        self.assertEqual(1, uep.getRelease.call_count)
 
 
 class TestEntitlementStatusCache(SubManFixture):
@@ -399,14 +399,14 @@ class TestEntitlementStatusCache(SubManFixture):
 
         self.status_cache.load_status(uep, "SOMEUUID")
 
-        self.assertEquals(dummy_status, self.status_cache.server_status)
-        self.assertEquals(1, self.status_cache.write_cache.call_count)
+        self.assertEqual(dummy_status, self.status_cache.server_status)
+        self.assertEqual(1, self.status_cache.write_cache.call_count)
 
     def test_server_no_compliance_call(self):
         uep = Mock()
         uep.getCompliance = Mock(side_effect=RestlibException("boom"))
         status = self.status_cache.load_status(uep, "SOMEUUID")
-        self.assertEquals(None, status)
+        self.assertEqual(None, status)
 
     def test_server_network_error(self):
         dummy_status = {"a": "1"}
@@ -415,15 +415,15 @@ class TestEntitlementStatusCache(SubManFixture):
         self.status_cache._cache_exists = Mock(return_value=True)
         self.status_cache._read_cache = Mock(return_value=dummy_status)
         status = self.status_cache.load_status(uep, "SOMEUUID")
-        self.assertEquals(dummy_status, status)
-        self.assertEquals(1, self.status_cache._read_cache.call_count)
+        self.assertEqual(dummy_status, status)
+        self.assertEqual(1, self.status_cache._read_cache.call_count)
 
     # Extremely unlikely but just in case:
     def test_server_network_error_no_cache(self):
         uep = Mock()
         uep.getCompliance = Mock(side_effect=socket.error("boom"))
         self.status_cache._cache_exists = Mock(return_value=False)
-        self.assertEquals(None, self.status_cache.load_status(uep, "SOMEUUID"))
+        self.assertEqual(None, self.status_cache.load_status(uep, "SOMEUUID"))
 
     def test_write_cache(self):
         mock_server_status = {'fake server status': random.uniform(1, 2 ** 32)}
@@ -453,12 +453,12 @@ class TestEntitlementStatusCache(SubManFixture):
                 continue
 
         shutil.rmtree(cache_dir)
-        self.assertEquals(new_status, mock_server_status)
+        self.assertEqual(new_status, mock_server_status)
 
     def test_unauthorized_exception_handled(self):
         uep = Mock()
         uep.getCompliance = Mock(side_effect=UnauthorizedException(401, "GET"))
-        self.assertEquals(None, self.status_cache.load_status(uep, "aaa"))
+        self.assertEqual(None, self.status_cache.load_status(uep, "aaa"))
 
 
 class TestPoolStatusCache(SubManFixture):
@@ -483,7 +483,7 @@ class TestPoolStatusCache(SubManFixture):
         mock_file.read = Mock(return_value=json.dumps(cached))
 
         data = self.pool_status_cache._load_data(mock_file)
-        self.assertEquals(data, cached)
+        self.assertEqual(data, cached)
 
     def test_load_from_server(self):
         uep = Mock()
@@ -498,7 +498,7 @@ class TestPoolStatusCache(SubManFixture):
 
         self.pool_status_cache.read_status(uep, "THISISAUUID")
 
-        self.assertEquals(dummy_pools, self.pool_status_cache.server_status)
+        self.assertEqual(dummy_pools, self.pool_status_cache.server_status)
 
 
 class TestPoolTypeCache(SubManFixture):
@@ -519,14 +519,14 @@ class TestPoolTypeCache(SubManFixture):
     def test_empty_cache(self):
         pooltype_cache = PoolTypeCache()
         result = pooltype_cache.get("some id")
-        self.assertEquals('', result)
+        self.assertEqual('', result)
 
     def test_get_pooltype(self):
         self.cp.getEntitlementList.return_value = [self._build_ent_json('poolid', 'some type')]
         pooltype_cache = PoolTypeCache()
         pooltype_cache._do_update()
         result = pooltype_cache.get("poolid")
-        self.assertEquals('some type', result)
+        self.assertEqual('some type', result)
 
     def test_requires_update(self):
         pooltype_cache = PoolTypeCache()
@@ -551,9 +551,9 @@ class TestPoolTypeCache(SubManFixture):
         # to generate a correct mapping
         pooltype_cache.update()
 
-        self.assertEquals(2, len(pooltype_cache.pooltype_map))
-        self.assertEquals('some type', pooltype_cache.get('poolid'))
-        self.assertEquals('some other type', pooltype_cache.get('poolid2'))
+        self.assertEqual(2, len(pooltype_cache.pooltype_map))
+        self.assertEqual('some type', pooltype_cache.get('poolid'))
+        self.assertEqual('some other type', pooltype_cache.get('poolid2'))
 
     # This is populated when available subs are refreshed
     def test_update_from_pools(self):
@@ -567,10 +567,10 @@ class TestPoolTypeCache(SubManFixture):
         pooltype_cache = PoolTypeCache()
         pooltype_cache.update_from_pools(pools_map)
 
-        self.assertEquals(5, len(pooltype_cache.pooltype_map))
+        self.assertEqual(5, len(pooltype_cache.pooltype_map))
         for i in range(5):
             expected_id = 'poolid' + str(i)
-            self.assertEquals('some type', pooltype_cache.get(expected_id))
+            self.assertEqual('some type', pooltype_cache.get(expected_id))
 
     def test_requires_update_ents_with_no_pool(self):
         pooltype_cache = PoolTypeCache()
@@ -588,7 +588,7 @@ class TestPoolTypeCache(SubManFixture):
         pooltype_cache = PoolTypeCache()
         pooltype_cache._do_update()
         result = pooltype_cache.get("poolid")
-        self.assertEquals('some type', result)
+        self.assertEqual('some type', result)
 
     def _build_ent_json(self, pool_id, pool_type):
         result = {}

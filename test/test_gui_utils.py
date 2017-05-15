@@ -39,35 +39,35 @@ class TestLinkify(unittest.TestCase):
 
     def test_no_url(self):
         ret = utils.linkify(self.no_url)
-        self.assertEquals(ret, self.no_url)
+        self.assertEqual(ret, self.no_url)
 
     def test_https_url(self):
         ret = utils.linkify(self.https_url)
-        self.assertEquals(ret, self.expected_https_url)
+        self.assertEqual(ret, self.expected_https_url)
 
     def test_http_url(self):
         ret = utils.linkify(self.http_url)
-        self.assertEquals(ret, self.expected_http_url)
+        self.assertEqual(ret, self.expected_http_url)
 
     def test_http_nested_space(self):
         ret = utils.linkify(self.nested_space)
-        self.assertEquals(ret, self.expected_nested_space)
+        self.assertEqual(ret, self.expected_nested_space)
 
     def test_nested(self):
         ret = utils.linkify(self.nested)
-        self.assertEquals(ret, self.expected_nested)
+        self.assertEqual(ret, self.expected_nested)
 
     def test_dash(self):
         ret = utils.linkify(self.http_url_dash)
-        self.assertEquals(ret, self.expected_http_url_dash)
+        self.assertEqual(ret, self.expected_http_url_dash)
 
     def test_example_1(self):
         ret = utils.linkify(self.example_1)
-        self.assertEquals(ret, self.expected_example_1)
+        self.assertEqual(ret, self.expected_example_1)
 
     def test_example_2(self):
         ret = utils.linkify(self.example_2)
-        self.assertEquals(ret, self.expected_example_2)
+        self.assertEqual(ret, self.expected_example_2)
 
 
 class TestGatherGroup(unittest.TestCase):

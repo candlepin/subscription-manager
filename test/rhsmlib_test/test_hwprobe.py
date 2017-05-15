@@ -105,56 +105,56 @@ class TestParseRange(unittest.TestCase):
     def test_single(self):
         r = '1'
         r_list = hwprobe.parse_range(r)
-        self.assertEquals([1], r_list)
+        self.assertEqual([1], r_list)
 
     def test_range_1_4(self):
         r = '1-4'
         r_list = hwprobe.parse_range(r)
-        self.assertEquals([1, 2, 3, 4], r_list)
+        self.assertEqual([1, 2, 3, 4], r_list)
 
 
 class TestGatherEntries(unittest.TestCase):
     def test_single(self):
         ent = "1"
         ent_list = hwprobe.gather_entries(ent)
-        self.assertEquals(1, len(ent_list))
+        self.assertEqual(1, len(ent_list))
 
     def test_multiple(self):
         ent = "1,2,3,4"
         ent_list = hwprobe.gather_entries(ent)
-        self.assertEquals(4, len(ent_list))
+        self.assertEqual(4, len(ent_list))
 
     def test_range_1_2(self):
         ent = "1-2"
         ent_list = hwprobe.gather_entries(ent)
-        self.assertEquals(2, len(ent_list))
+        self.assertEqual(2, len(ent_list))
 
     def test_range_2_ranges(self):
         ent = "1-4,9-12"
         ent_list = hwprobe.gather_entries(ent)
-        self.assertEquals(8, len(ent_list))
+        self.assertEqual(8, len(ent_list))
 
     def test_range_64cpu_example(self):
         ent = "0,4,8,12,16,20,24,28,32,36,40,44,48,52,56,60"
         ent_list = hwprobe.gather_entries(ent)
-        self.assertEquals(16, len(ent_list))
+        self.assertEqual(16, len(ent_list))
 
     def test_range_0_2(self):
         ent = "0,2"
         ent_list = hwprobe.gather_entries(ent)
-        self.assertEquals(2, len(ent_list))
+        self.assertEqual(2, len(ent_list))
 
 
 class GenericPlatformSpecificInfoProviderTest(test.fixture.SubManFixture):
     def test(self):
         hw_info = {}
         platform_info = hwprobe.GenericPlatformSpecificInfoProvider(hw_info)
-        self.assertEquals(0, len(platform_info.info))
+        self.assertEqual(0, len(platform_info.info))
 
     def test_does_nothing(self):
         hw_info = {'foo': '1'}
         platform_info = hwprobe.GenericPlatformSpecificInfoProvider(hw_info)
-        self.assertEquals(0, len(platform_info.info))
+        self.assertEqual(0, len(platform_info.info))
         self.assertFalse('foo' in platform_info.info)
 
 
@@ -193,7 +193,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
                 'distribution.id': 'Unknown',
                 'distribution.version.modifier': ''
             }
-            self.assertEquals(hw.get_release_info(), expected)
+            self.assertEqual(hw.get_release_info(), expected)
 
     @patch("os.path.exists")
     @patch("__builtin__.open")
@@ -207,7 +207,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
             'distribution.id': 'Go4It',
             'distribution.version.modifier': ''
         }
-        self.assertEquals(hw.get_release_info(), expected)
+        self.assertEqual(hw.get_release_info(), expected)
 
     @patch("os.path.exists")
     @patch("__builtin__.open")
@@ -221,7 +221,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
             'distribution.id': 'Go4It',
             'distribution.version.modifier': ''
         }
-        self.assertEquals(hw.get_release_info(), expected)
+        self.assertEqual(hw.get_release_info(), expected)
 
     @patch("os.path.exists")
     @patch("__builtin__.open")
@@ -236,7 +236,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
                 'distribution.id': 'Unknown',
                 'distribution.version.modifier': ''
             }
-            self.assertEquals(hw.get_release_info(), expected)
+            self.assertEqual(hw.get_release_info(), expected)
 
     @patch("os.path.exists")
     @patch("__builtin__.open")
@@ -251,7 +251,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
             'distribution.id': 'Go4It',
             'distribution.version.modifier': 'Unknown'
         }
-        self.assertEquals(hw.get_release_info(), expected)
+        self.assertEqual(hw.get_release_info(), expected)
 
     @patch("os.path.exists")
     @patch("__builtin__.open")
@@ -266,7 +266,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
                 'distribution.id': 'Go4It',
                 'distribution.version.modifier': 'mega'
             }
-            self.assertEquals(hw.get_release_info(), expected)
+            self.assertEqual(hw.get_release_info(), expected)
 
     @patch("os.path.exists")
     @patch("__builtin__.open")
@@ -281,7 +281,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
                 'distribution.id': 'Go4It',
                 'distribution.version.modifier': 'beta'
             }
-            self.assertEquals(hw.get_release_info(), expected)
+            self.assertEqual(hw.get_release_info(), expected)
 
     @patch("os.path.exists")
     @patch("__builtin__.open")
@@ -296,13 +296,13 @@ class HardwareProbeTest(test.fixture.SubManFixture):
                 'distribution.id': 'Go4It',
                 'distribution.version.modifier': 'be:ta'
             }
-            self.assertEquals(hw.get_release_info(), expected)
+            self.assertEqual(hw.get_release_info(), expected)
 
     def test_meminfo(self):
         hw = hwprobe.HardwareCollector()
         mem = hw.get_mem_info()
         # not great tests, but alas
-        self.assertEquals(len(mem), 2)
+        self.assertEqual(len(mem), 2)
         for key in mem:
             assert key in ['memory.memtotal', 'memory.swaptotal']
 
@@ -317,7 +317,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
     def test_network_interfaces(self):
         hw = hwprobe.HardwareCollector()
         net_int = hw.get_network_interfaces()
-        self.assertEquals(net_int['net.interface.lo.ipv4_address'], '127.0.0.1')
+        self.assertEqual(net_int['net.interface.lo.ipv4_address'], '127.0.0.1')
         self.assertFalse('net.interface.lo.mac_address' in net_int)
         self.assertFalse('net.interface.sit0.mac_address' in net_int)
 
@@ -327,7 +327,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
     def test_network_interfaces_none(self, MockGetInterfacesInfo, MockGetDevices):
         hw = hwprobe.HardwareCollector()
         net_int = hw.get_network_interfaces()
-        self.assertEquals(net_int, {})
+        self.assertEqual(net_int, {})
 
     @patch("ethtool.get_devices")
     @patch("ethtool.get_interfaces_info")
@@ -344,8 +344,8 @@ class HardwareProbeTest(test.fixture.SubManFixture):
 
         net_int = hw.get_network_interfaces()
 
-        self.assertEquals(net_int['net.interface.eth0.ipv4_address'], '10.0.0.2')
-        self.assertEquals(net_int['net.interface.eth0.ipv4_address_list'], '10.0.0.1, 10.0.0.2')
+        self.assertEqual(net_int['net.interface.eth0.ipv4_address'], '10.0.0.2')
+        self.assertEqual(net_int['net.interface.eth0.ipv4_address_list'], '10.0.0.1, 10.0.0.2')
 
     @patch("ethtool.get_devices")
     @patch("ethtool.get_interfaces_info")
@@ -362,7 +362,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
         mock_info.get_ipv4_addresses = Mock(return_value=[mock_ipv4])
         MockGetInterfacesInfo.return_value = [mock_info]
         net_int = hw.get_network_interfaces()
-        self.assertEquals(net_int['net.interface.lo.ipv4_address'], '127.0.0.1')
+        self.assertEqual(net_int['net.interface.lo.ipv4_address'], '127.0.0.1')
         self.assertFalse('net.interface.lo.mac_address' in net_int)
 
     @patch("ethtool.get_devices")
@@ -409,7 +409,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
         MockGetInterfacesInfo.return_value = [mock_info]
 
         net_int = hw.get_network_interfaces()
-        self.assertEquals(net_int['net.interface.lo.ipv4_address'], '127.0.0.1')
+        self.assertEqual(net_int['net.interface.lo.ipv4_address'], '127.0.0.1')
         self.assertFalse('net.interface.lo.mac_address' in net_int)
 
     @patch("ethtool.get_devices")
@@ -429,7 +429,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
         MockGetInterfacesInfo.return_value = [mock_info]
 
         net_int = hw.get_network_interfaces()
-        self.assertEquals(net_int['net.interface.lo.ipv6_address.global'], '::1')
+        self.assertEqual(net_int['net.interface.lo.ipv6_address.global'], '::1')
         self.assertFalse('net.interface.lo.mac_address' in net_int)
 
     @patch("__builtin__.open")
@@ -438,7 +438,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
         hw = hwprobe.HardwareCollector()
         slave_hw = hw._get_slave_hwaddr("bond0", "eth0")
         # note we .upper the result
-        self.assertEquals("52:54:00:07:03:BA", slave_hw)
+        self.assertEqual("52:54:00:07:03:BA", slave_hw)
 
     @patch("__builtin__.open")
     def test_get_slave_hwaddr_alb(self, MockOpen):
@@ -446,7 +446,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
         hw = hwprobe.HardwareCollector()
         slave_hw = hw._get_slave_hwaddr("bond0", "eth0")
         # note we .upper the result
-        self.assertEquals("52:54:00:07:03:BA", slave_hw)
+        self.assertEqual("52:54:00:07:03:BA", slave_hw)
 
     def test_parse_s390_sysinfo_empty(self):
         cpu_count = 0
@@ -461,10 +461,10 @@ class HardwareProbeTest(test.fixture.SubManFixture):
 
         ret = self.hw_check_topo._parse_s390x_sysinfo_topology(cpu_count, sysinfo_lines)
 
-        self.assertEquals(24, ret['socket_count'])
-        self.assertEquals(4, ret['book_count'])
-        self.assertEquals(6, ret['sockets_per_book'])
-        self.assertEquals(4, ret['cores_per_socket'])
+        self.assertEqual(24, ret['socket_count'])
+        self.assertEqual(4, ret['book_count'])
+        self.assertEqual(6, ret['sockets_per_book'])
+        self.assertEqual(4, ret['cores_per_socket'])
 
     @patch.object(hwprobe.HardwareCollector, 'count_cpumask_entries')
     @patch("os.listdir")

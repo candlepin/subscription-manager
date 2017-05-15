@@ -30,22 +30,22 @@ class CliRemoveTests(fixture.SubManFixture):
         managercli.EntCertActionInvoker = StubEntActionInvoker
 
         cmd.main(['remove', '--all'])
-        self.assertEquals(cmd.cp.called_unbind_uuid, mock_identity.uuid)
+        self.assertEqual(cmd.cp.called_unbind_uuid, mock_identity.uuid)
 
         serial1 = '123456'
         cmd.main(['remove', '--serial=%s' % serial1])
-        self.assertEquals(cmd.cp.called_unbind_serial, [serial1])
+        self.assertEqual(cmd.cp.called_unbind_serial, [serial1])
         cmd.cp.reset()
 
         serial2 = '789012'
         cmd.main(['remove', '--serial=%s' % serial1, '--serial=%s' % serial2])
-        self.assertEquals(cmd.cp.called_unbind_serial, [serial1, serial2])
+        self.assertEqual(cmd.cp.called_unbind_serial, [serial1, serial2])
         cmd.cp.reset()
 
         pool_id1 = '39993922b'
         cmd.main(['remove', '--serial=%s' % serial1, '--serial=%s' % serial2, '--pool=%s' % pool_id1, '--pool=%s' % pool_id1])
-        self.assertEquals(cmd.cp.called_unbind_serial, [serial1, serial2])
-        self.assertEquals(cmd.cp.called_unbind_pool_id, [pool_id1])
+        self.assertEqual(cmd.cp.called_unbind_serial, [serial1, serial2])
+        self.assertEqual(cmd.cp.called_unbind_pool_id, [pool_id1])
 
     def test_unsubscribe_unregistered(self):
         prod = StubProduct('stub_product')

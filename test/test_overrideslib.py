@@ -47,4 +47,4 @@ class OverrideTests(SubManFixture):
     def test_remove_all_with_no_repos_given(self):
         repos = []
         result = self.overrides._remove_all(repos)
-        self.assertEquals(None, result)
+        self.assertEqual(None, result)

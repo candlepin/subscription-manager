@@ -253,12 +253,12 @@ class TestProductDatabase(unittest.TestCase):
 
     def test_add(self):
         self.pdb.add("product", "repo")
-        self.assertEquals(self.pdb.content['product'], ["repo"])
+        self.assertEqual(self.pdb.content['product'], ["repo"])
 
     def test_add_multiple(self):
         self.pdb.add("product", "repo1")
         self.pdb.add("product", "repo2")
-        self.assertEquals(set(self.pdb.content['product']), set(['repo1', 'repo2']))
+        self.assertEqual(set(self.pdb.content['product']), set(['repo1', 'repo2']))
 
     def test_write(self):
         self.pdb.add("product", "repo")
@@ -273,7 +273,7 @@ class TestProductDatabase(unittest.TestCase):
         # but reset in memoty version first
         self.pdb.content = {}
         self.pdb.read()
-        self.assertEquals(0, len(self.pdb.content))
+        self.assertEqual(0, len(self.pdb.content))
 
     def test_read(self):
         f = open(self.pdb.dir.abspath('productid.js'), 'w')
@@ -337,25 +337,25 @@ class TestProductDatabase(unittest.TestCase):
         self.assertTrue(isinstance(product1_repos, types.ListType))
         self.assertTrue(isinstance(product2_repos, types.ListType))
         self.assertTrue(isinstance(product3_repos, types.ListType))
-        self.assertEquals(["product1-repo1", "product1-repo2"],
+        self.assertEqual(["product1-repo1", "product1-repo2"],
                           product1_repos)
-        self.assertEquals(["product2-repo1", "product2-repo2"],
+        self.assertEqual(["product2-repo1", "product2-repo2"],
                           product2_repos)
-        self.assertEquals(['product3-repo1'],
+        self.assertEqual(['product3-repo1'],
                           product3_repos)
 
     def test_delete(self):
         self.pdb.add("product", "repo")
         self.pdb.delete("product")
         no_repo = self.pdb.find_repos("product")
-        self.assertEquals(None, no_repo)
+        self.assertEqual(None, no_repo)
 
     def test_delete_non_existing(self):
         self.pdb.add("product", "repo")
         len_content = len(self.pdb.content)
         self.pdb.delete("some-other-product")
         len_content2 = len(self.pdb.content)
-        self.assertEquals(len_content, len_content2)
+        self.assertEqual(len_content, len_content2)
 
 
 class TestProductManager(SubManFixture):
@@ -381,7 +381,7 @@ class TestProductManager(SubManFixture):
         # plugin should get called with empty list
         self.prod_mgr.plugin_manager.run.assert_any_call('pre_product_id_install', product_list=[])
         self.prod_mgr.plugin_manager.run.assert_any_call('post_product_id_install', product_list=[])
-        self.assertEquals(4, self.prod_mgr.plugin_manager.run.call_count)
+        self.assertEqual(4, self.prod_mgr.plugin_manager.run.call_count)
 
     def test_update_installed_no_packages_no_repos_no_active_no_enabled(self):
         cert = self._create_server_cert()
@@ -393,7 +393,7 @@ class TestProductManager(SubManFixture):
 
         self.prod_mgr.plugin_manager.run.assert_any_call('pre_product_id_install', product_list=[])
         self.prod_mgr.plugin_manager.run.assert_any_call('post_product_id_install', product_list=[])
-        self.assertEquals(4, self.prod_mgr.plugin_manager.run.call_count)
+        self.assertEqual(4, self.prod_mgr.plugin_manager.run.call_count)
 
     def test_update_installed_no_packages_no_repos_no_active_with_enabled(self):
         """if repos are enabled but not active, basically nothing should happen"""
@@ -407,7 +407,7 @@ class TestProductManager(SubManFixture):
 
         self.prod_mgr.plugin_manager.run.assert_any_call('pre_product_id_install', product_list=[])
         self.prod_mgr.plugin_manager.run.assert_any_call('post_product_id_install', product_list=[])
-        self.assertEquals(4, self.prod_mgr.plugin_manager.run.call_count)
+        self.assertEqual(4, self.prod_mgr.plugin_manager.run.call_count)
 
     def test_update_installed_no_packages_no_repos_with_active_with_enabled(self):
         """rhel-6-server enabled and active, with product cert already installed should do nothing"""
@@ -436,7 +436,7 @@ class TestProductManager(SubManFixture):
         self.prod_dir.find_by_product.assert_called_with('69')
         self.prod_mgr.plugin_manager.run.assert_any_call('pre_product_id_install', product_list=[])
         self.prod_mgr.plugin_manager.run.assert_any_call('post_product_id_install', product_list=[])
-        self.assertEquals(4, self.prod_mgr.plugin_manager.run.call_count)
+        self.assertEqual(4, self.prod_mgr.plugin_manager.run.call_count)
 
     def test_update_installed_no_product_certs_with_active_with_enabled(self):
         """no product cert, repo enabled and active, cert should be installed.
@@ -471,7 +471,7 @@ class TestProductManager(SubManFixture):
         self.prod_db_mock.add.assert_called_with('69', 'rhel-6-server')
         self.prod_mgr.plugin_manager.run.assert_any_call('pre_product_id_install', product_list=[(cert.product, cert)])
         self.prod_mgr.plugin_manager.run.assert_any_call('post_product_id_install', product_list=[cert])
-        self.assertEquals(4, self.prod_mgr.plugin_manager.run.call_count)
+        self.assertEqual(4, self.prod_mgr.plugin_manager.run.call_count)
 
     def test_update_installed_no_active_with_product_certs_installed_anaconda(self):
         """simulate no active packages (since they are installed via anaconda) repos
@@ -1115,27 +1115,27 @@ class TestProductManager(SubManFixture):
 
         filtered = self.prod_mgr._desktop_workstation_cleanup(all_cert_list)
         filtered_certs = set([cert for (product, cert) in filtered])
-        self.assertEquals(filtered_certs, set([workstation_cert, server_cert]))
+        self.assertEqual(filtered_certs, set([workstation_cert, server_cert]))
 
         filtered = self.prod_mgr._desktop_workstation_cleanup(just_desktop_cert_list)
         filtered_certs = set([cert for (product, cert) in filtered])
-        self.assertEquals(filtered_certs, set([desktop_cert]))
+        self.assertEqual(filtered_certs, set([desktop_cert]))
 
         filtered = self.prod_mgr._desktop_workstation_cleanup(just_workstation_cert_list)
         filtered_certs = set([cert for (product, cert) in filtered])
-        self.assertEquals(filtered_certs, set([workstation_cert]))
+        self.assertEqual(filtered_certs, set([workstation_cert]))
 
         filtered = self.prod_mgr._desktop_workstation_cleanup(no_workstation_cert_list)
         filtered_certs = set([cert for (product, cert) in filtered])
-        self.assertEquals(filtered_certs, set([server_cert, desktop_cert]))
+        self.assertEqual(filtered_certs, set([server_cert, desktop_cert]))
 
         filtered = self.prod_mgr._desktop_workstation_cleanup(neither_cert_list)
         filtered_certs = set([cert for (product, cert) in filtered])
-        self.assertEquals(filtered_certs, set([server_cert]))
+        self.assertEqual(filtered_certs, set([server_cert]))
 
         filtered = self.prod_mgr._desktop_workstation_cleanup(just_both_cert_list)
         filtered_certs = set([cert for (product, cert) in filtered])
-        self.assertEquals(filtered_certs, set([workstation_cert]))
+        self.assertEqual(filtered_certs, set([workstation_cert]))
 
     def find_repos_side_effect(self, product_hash):
         return self.prod_repo_map.get(product_hash)

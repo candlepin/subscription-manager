@@ -42,7 +42,7 @@ class TestExceptionMapper(unittest.TestCase):
         mapper.message_map[RuntimeError] = (expected_message, mapper.format_default)
 
         err = RuntimeError("Testing")
-        self.assertEquals(expected_message, mapper.get_message(err))
+        self.assertEqual(expected_message, mapper.get_message(err))
 
     def test_subclass_mapped_by_base_class(self):
         expected_message = "Single Exception Message"
@@ -50,7 +50,7 @@ class TestExceptionMapper(unittest.TestCase):
         mapper.message_map[RuntimeError] = (expected_message, mapper.format_default)
 
         err = MyRuntimeError("Testing base class")
-        self.assertEquals(expected_message, mapper.get_message(err))
+        self.assertEqual(expected_message, mapper.get_message(err))
 
     def test_subclass_preferred_over_base_class(self):
         expected_message = "Subclass Exception Message"
@@ -60,7 +60,7 @@ class TestExceptionMapper(unittest.TestCase):
         mapper.message_map[MyRuntimeError] = (expected_message, mapper.format_default)
 
         err = MyRuntimeError("Logged Only")
-        self.assertEquals(expected_message, mapper.get_message(err))
+        self.assertEqual(expected_message, mapper.get_message(err))
 
     def test_can_map_middle_sub_class(self):
         expected_message = "MyRuntimeErrorBase message"
@@ -70,7 +70,7 @@ class TestExceptionMapper(unittest.TestCase):
         mapper.message_map[MyRuntimeError] = ("MyRuntimeError message", mapper.format_default)
 
         err = MyRuntimeErrorBase("Logged Only")
-        self.assertEquals(expected_message, mapper.get_message(err))
+        self.assertEqual(expected_message, mapper.get_message(err))
 
     def test_search_for_base_class_with_gaps(self):
         mapper = ExceptionMapper()
@@ -78,18 +78,18 @@ class TestExceptionMapper(unittest.TestCase):
 
         mapper.message_map[RuntimeError] = (expected_message, mapper.format_default)
         err = MyRuntimeError("Logged Only")
-        self.assertEquals(expected_message, mapper.get_message(err))
+        self.assertEqual(expected_message, mapper.get_message(err))
 
     def test_restlib_exception_uses_custom_message(self):
         expected_message = "Expected MESSAGE"
         mapper = ExceptionMapper()
 
         err = RestlibException(404, expected_message)
-        self.assertEquals(expected_message, mapper.get_message(err))
+        self.assertEqual(expected_message, mapper.get_message(err))
 
     def test_returns_none_when_no_mapped_exception_present(self):
         mapper = ExceptionMapper()
-        self.assertEquals(None, mapper.get_message(RuntimeError()))
+        self.assertEqual(None, mapper.get_message(RuntimeError()))
 
     def test_can_support_old_style_classes(self):
         expected_message = "Old style class"
@@ -97,4 +97,4 @@ class TestExceptionMapper(unittest.TestCase):
         mapper.message_map[OldStyleClass] = (expected_message, mapper.format_default)
 
         err = OldStyleClass()
-        self.assertEquals(expected_message, mapper.get_message(err))
+        self.assertEqual(expected_message, mapper.get_message(err))

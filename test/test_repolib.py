@@ -91,7 +91,7 @@ class TestRepoActionInvoker(fixture.SubManFixture):
         repos = repo_action_invoker.get_repos()
         self.assertEqual(2, len(repos), 'Should produce two repos')
         matching_repos = [repo for repo in repos if repo.id == 'a_test_repo']
-        self.assertEquals(1, len(matching_repos), 'Should only produce one repo for "a_test_repo"')
+        self.assertEqual(1, len(matching_repos), 'Should only produce one repo for "a_test_repo"')
         repo = matching_repos[0]
         certpath = repo.get('sslclientcert')
         self.assertNotEqual(certpath, self.stub_content_access_cert.path)
@@ -105,28 +105,28 @@ class RepoTests(unittest.TestCase):
     def test_valid_label_for_id(self):
         repo_id = 'valid-label'
         repo = Repo(repo_id)
-        self.assertEquals(repo_id, repo.id)
+        self.assertEqual(repo_id, repo.id)
 
     def test_valid_unicode_just_ascii_label_for_id(self):
         repo_id = u'valid-label'
         repo = Repo(repo_id)
-        self.assertEquals(repo_id, repo.id)
+        self.assertEqual(repo_id, repo.id)
 
     def test_invalid_unicode_label_for_id(self):
         repo_id = u'valid-不明-label'
         repo = Repo(repo_id)
         expected = 'valid----label'
-        self.assertEquals(expected, repo.id)
+        self.assertEqual(expected, repo.id)
 
     def test_invalid_label_with_spaces(self):
         repo_id = 'label with spaces'
         repo = Repo(repo_id)
-        self.assertEquals('label-with-spaces', repo.id)
+        self.assertEqual('label-with-spaces', repo.id)
 
     def test_existing_order_is_preserved(self):
         config = (('key 1', 'value 1'), ('key b', 'value b'), ('key 3', 'value 3'))
         repo = Repo('testrepo', config)
-        self.assertEquals(config, tuple(repo.items())[:3])
+        self.assertEqual(config, tuple(repo.items())[:3])
 
     def test_empty_strings_not_set_in_file(self):
         r = Repo('testrepo', (('proxy', ""),))
@@ -162,7 +162,7 @@ class RepoActionReportTests(fixture.SubManFixture):
 
     def test_empty(self):
         report = repolib.RepoActionReport()
-        self.assertEquals(report.updates(), 0)
+        self.assertEqual(report.updates(), 0)
         '%s' % report
         str(report)
 
@@ -238,10 +238,10 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         update_action = RepoUpdateActionCommand()
         update_action.overrides = {'x': {'gpgcheck': 'blah'}}
         r = Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
-        self.assertEquals('original', r['gpgcheck'])
+        self.assertEqual('original', r['gpgcheck'])
         update_action._set_override_info(r)
-        self.assertEquals('blah', r['gpgcheck'])
-        self.assertEquals('some_key', r['gpgkey'])
+        self.assertEqual('blah', r['gpgcheck'])
+        self.assertEqual('some_key', r['gpgkey'])
 
     def test_overrides_trump_existing(self):
         update_action = RepoUpdateActionCommand()
@@ -250,10 +250,10 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         old_repo = Repo('x', values)
         new_repo = Repo(old_repo.id, values)
         update_action._set_override_info(new_repo)
-        self.assertEquals('original', old_repo['gpgcheck'])
+        self.assertEqual('original', old_repo['gpgcheck'])
         update_action.update_repo(old_repo, new_repo)
-        self.assertEquals('blah', old_repo['gpgcheck'])
-        self.assertEquals('some_key', old_repo['gpgkey'])
+        self.assertEqual('blah', old_repo['gpgcheck'])
+        self.assertEqual('some_key', old_repo['gpgkey'])
 
     @patch("subscription_manager.repolib.RepoFile")
     def test_update_when_new_repo(self, mock_file):
@@ -267,9 +267,9 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         update_action.get_unique_content = stub_content
         update_report = update_action.perform()
         written_repo = mock_file.add.call_args[0][0]
-        self.assertEquals('original', written_repo['gpgcheck'])
-        self.assertEquals('some_key', written_repo['gpgkey'])
-        self.assertEquals(1, update_report.updates())
+        self.assertEqual('original', written_repo['gpgcheck'])
+        self.assertEqual('some_key', written_repo['gpgkey'])
+        self.assertEqual(1, update_report.updates())
 
     @patch("subscription_manager.repolib.RepoFile")
     def test_update_when_repo_not_modified_on_mutable(self, mock_file):
@@ -287,12 +287,12 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         current = update_action.perform()
         # confirming that the assessed value does change when repo file
         # is the same as the server value file.
-        self.assertEquals('new', current.repo_updates[0]['gpgcheck'])
+        self.assertEqual('new', current.repo_updates[0]['gpgcheck'])
 
         # this is the ending server value file.
         written_repo = mock_file.update.call_args[0][0]
-        self.assertEquals('new', written_repo['gpgcheck'])
-        self.assertEquals(None, written_repo['gpgkey'])
+        self.assertEqual('new', written_repo['gpgcheck'])
+        self.assertEqual(None, written_repo['gpgkey'])
 
     @patch("subscription_manager.repolib.RepoFile")
     def test_update_when_repo_modified_on_mutable(self, mock_file):
@@ -310,12 +310,12 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         current = update_action.perform()
         # confirming that the assessed value does not change when repo file
         # is different from the server value file.
-        self.assertEquals('unoriginal', current.repo_updates[0]['gpgcheck'])
+        self.assertEqual('unoriginal', current.repo_updates[0]['gpgcheck'])
 
         # this is the ending server value file
         written_repo = mock_file.update.call_args[0][0]
-        self.assertEquals('new', written_repo['gpgcheck'])
-        self.assertEquals(None, written_repo['gpgkey'])
+        self.assertEqual('new', written_repo['gpgcheck'])
+        self.assertEqual(None, written_repo['gpgkey'])
 
     def test_no_gpg_key(self):
 
@@ -323,12 +323,12 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         content = update_action.get_all_content(baseurl="http://example.com",
                                                 ca_cert=None)
         c1 = self._find_content(content, 'c1')
-        self.assertEquals('', c1['gpgkey'])
-        self.assertEquals('0', c1['gpgcheck'])
+        self.assertEqual('', c1['gpgkey'])
+        self.assertEqual('0', c1['gpgcheck'])
 
         c2 = self._find_content(content, 'c2')
-        self.assertEquals('', c2['gpgkey'])
-        self.assertEquals('0', c2['gpgcheck'])
+        self.assertEqual('', c2['gpgkey'])
+        self.assertEqual('0', c2['gpgcheck'])
 
     def test_gpg_key(self):
 
@@ -336,22 +336,22 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         content = update_action.get_all_content(baseurl="http://example.com",
                                                 ca_cert=None)
         c4 = self._find_content(content, 'c4')
-        self.assertEquals('http://example.com/gpg.key', c4['gpgkey'])
-        self.assertEquals('1', c4['gpgcheck'])
+        self.assertEqual('http://example.com/gpg.key', c4['gpgkey'])
+        self.assertEqual('1', c4['gpgcheck'])
 
     def test_ui_repoid_vars(self):
         update_action = RepoUpdateActionCommand()
         content = update_action.get_all_content(baseurl="http://example.com",
                                             ca_cert=None)
         c4 = self._find_content(content, 'c4')
-        self.assertEquals('some path', c4['ui_repoid_vars'])
+        self.assertEqual('some path', c4['ui_repoid_vars'])
         c2 = self._find_content(content, 'c2')
-        self.assertEquals(None, c2['ui_repoid_vars'])
+        self.assertEqual(None, c2['ui_repoid_vars'])
 
     def test_tags_found(self):
         update_action = RepoUpdateActionCommand()
         content = update_action.get_unique_content()
-        self.assertEquals(3, len(content))
+        self.assertEqual(3, len(content))
 
     def test_only_allow_content_of_type_yum(self):
         update_action = RepoUpdateActionCommand()
@@ -515,11 +515,11 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         new_repo = Repo(old_repo.id, [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
         update_action._set_override_info(new_repo)
         # The value from the current repo file (with the old override) should exist pre-update
-        self.assertEquals('blah', old_repo['gpgcheck'])
+        self.assertEqual('blah', old_repo['gpgcheck'])
         update_action.update_repo(old_repo, new_repo)
         # Because the override has been removed, the value is reset to the default
-        self.assertEquals('original', old_repo['gpgcheck'])
-        self.assertEquals('some_key', old_repo['gpgkey'])
+        self.assertEqual('original', old_repo['gpgcheck'])
+        self.assertEqual('some_key', old_repo['gpgkey'])
 
     def test_overrides_removed_and_edited(self):
         update_action = RepoUpdateActionCommand()
@@ -529,11 +529,11 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         new_repo = Repo(old_repo.id, [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
         update_action._set_override_info(new_repo)
         # The value from the current repo file (with the old hand edit) should exist pre-update
-        self.assertEquals('hand_edit', old_repo['gpgcheck'])
+        self.assertEqual('hand_edit', old_repo['gpgcheck'])
         update_action.update_repo(old_repo, new_repo)
         # Because the current value doesn't match the override, we don't modify it
-        self.assertEquals('hand_edit', old_repo['gpgcheck'])
-        self.assertEquals('some_key', old_repo['gpgkey'])
+        self.assertEqual('hand_edit', old_repo['gpgcheck'])
+        self.assertEqual('some_key', old_repo['gpgkey'])
 
     def test_non_default_overrides_added_to_existing(self):
         '''
@@ -547,7 +547,7 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         new_repo = Repo(old_repo.id, [])
         update_action._set_override_info(new_repo)
         update_action.update_repo(old_repo, new_repo)
-        self.assertEquals('someval', old_repo['somekey'])
+        self.assertEqual('someval', old_repo['somekey'])
 
     def test_non_default_override_removed_deleted(self):
         '''
@@ -573,7 +573,7 @@ class TidyWriterTests(unittest.TestCase):
         tidy_writer.write("\n\n\n\n")
         tidy_writer.close()
 
-        self.assertEquals("\n", output.getvalue())
+        self.assertEqual("\n", output.getvalue())
 
     def test_newline_added_to_eof(self):
         output = StringIO()
@@ -583,7 +583,7 @@ class TidyWriterTests(unittest.TestCase):
         tidy_writer.write("another line")
         tidy_writer.close()
 
-        self.assertEquals("a line\nanother line\n", output.getvalue())
+        self.assertEqual("a line\nanother line\n", output.getvalue())
 
     def test_newline_preserved_on_eof(self):
         output = StringIO()
@@ -593,7 +593,7 @@ class TidyWriterTests(unittest.TestCase):
         tidy_writer.write("another line\n")
         tidy_writer.close()
 
-        self.assertEquals("a line\nanother line\n", output.getvalue())
+        self.assertEqual("a line\nanother line\n", output.getvalue())
 
     def test_compression_preserves_a_single_blank_line(self):
         output = StringIO()
@@ -602,7 +602,7 @@ class TidyWriterTests(unittest.TestCase):
         tidy_writer.write("test stuff\n\ntest\n")
         tidy_writer.close()
 
-        self.assertEquals("test stuff\n\ntest\n", output.getvalue())
+        self.assertEqual("test stuff\n\ntest\n", output.getvalue())
 
     def test_newlines_compressed_in_single_write(self):
         output = StringIO()
@@ -611,7 +611,7 @@ class TidyWriterTests(unittest.TestCase):
         tidy_writer.write("test stuff\n\n\ntest\n")
         tidy_writer.close()
 
-        self.assertEquals("test stuff\n\ntest\n", output.getvalue())
+        self.assertEqual("test stuff\n\ntest\n", output.getvalue())
 
     def test_newlines_compressed_across_writes(self):
         output = StringIO()
@@ -621,7 +621,7 @@ class TidyWriterTests(unittest.TestCase):
         tidy_writer.write("\ntest\n")
         tidy_writer.close()
 
-        self.assertEquals("test stuff\n\ntest\n", output.getvalue())
+        self.assertEqual("test stuff\n\ntest\n", output.getvalue())
 
         # now try the other split
         output = StringIO()
@@ -631,7 +631,7 @@ class TidyWriterTests(unittest.TestCase):
         tidy_writer.write("\n\ntest\n")
         tidy_writer.close()
 
-        self.assertEquals("test stuff\n\ntest\n", output.getvalue())
+        self.assertEqual("test stuff\n\ntest\n", output.getvalue())
 
 
 class YumReleaseverSourceTest(fixture.SubManFixture):
@@ -640,15 +640,15 @@ class YumReleaseverSourceTest(fixture.SubManFixture):
         #override_cache_mock = inj.require(inj.OVERRIDE_STATUS_CACHE)
 
         release_source = YumReleaseverSource()
-        self.assertEquals(release_source._expansion, None)
-        self.assertEquals(release_source.marker, "$releasever")
-        self.assertEquals(release_source.marker, release_source.default)
+        self.assertEqual(release_source._expansion, None)
+        self.assertEqual(release_source.marker, "$releasever")
+        self.assertEqual(release_source.marker, release_source.default)
 
     def test_default(self):
         release_source = YumReleaseverSource()
 
         exp = release_source.get_expansion()
-        self.assertEquals(exp, "$releasever")
+        self.assertEqual(exp, "$releasever")
 
     def test_mem_cache_works(self):
         inj.provide(inj.RELEASE_STATUS_CACHE, Mock())
@@ -660,11 +660,11 @@ class YumReleaseverSourceTest(fixture.SubManFixture):
         release_source = YumReleaseverSource()
 
         exp = release_source.get_expansion()
-        self.assertEquals(exp, release)
-        self.assertEquals(release_source._expansion, release)
+        self.assertEqual(exp, release)
+        self.assertEqual(release_source._expansion, release)
 
         exp = release_source.get_expansion()
-        self.assertEquals(exp, release)
+        self.assertEqual(exp, release)
 
     def test_mem_cache_pre_cached(self):
         inj.provide(inj.RELEASE_STATUS_CACHE, Mock())
@@ -678,8 +678,8 @@ class YumReleaseverSourceTest(fixture.SubManFixture):
         cached_release = "CachedMockServer"
         release_source._expansion = cached_release
         exp = release_source.get_expansion()
-        self.assertEquals(exp, cached_release)
-        self.assertEquals(release_source._expansion, cached_release)
+        self.assertEqual(exp, cached_release)
+        self.assertEqual(release_source._expansion, cached_release)
 
     def test_read_status_not_set(self):
         inj.provide(inj.RELEASE_STATUS_CACHE, Mock())
@@ -693,9 +693,9 @@ class YumReleaseverSourceTest(fixture.SubManFixture):
         exp = release_source.get_expansion()
 
         # we were unset, should return the default
-        self.assertEquals(exp, YumReleaseverSource.default)
+        self.assertEqual(exp, YumReleaseverSource.default)
         # and cache it
-        self.assertEquals(release_source._expansion, YumReleaseverSource.default)
+        self.assertEqual(release_source._expansion, YumReleaseverSource.default)
 
 
 class YumReleaseverSourceIsNotEmptyTest(fixture.SubManFixture):
@@ -849,32 +849,32 @@ class TestManageReposEnabled(fixture.SubManFixture):
     def test(self):
         # default stub config, no manage_repo defined, uses default
         manage_repos_enabled = repolib.manage_repos_enabled()
-        self.assertEquals(manage_repos_enabled, True)
+        self.assertEqual(manage_repos_enabled, True)
 
     @patch.object(repolib, 'conf', ConfigFromString(config_string=unset_manage_repos_cfg_buf))
     def test_empty_manage_repos(self):
         manage_repos_enabled = repolib.manage_repos_enabled()
-        self.assertEquals(manage_repos_enabled, True)
+        self.assertEqual(manage_repos_enabled, True)
 
     @patch.object(repolib, 'conf', ConfigFromString(config_string=manage_repos_zero_config))
     def test_empty_manage_repos_zero(self):
         manage_repos_enabled = repolib.manage_repos_enabled()
-        self.assertEquals(manage_repos_enabled, False)
+        self.assertEqual(manage_repos_enabled, False)
 
     @patch.object(repolib, 'config', ConfigFromString(config_string=manage_repos_bool_config))
     def test_empty_manage_repos_bool(self):
         manage_repos_enabled = repolib.manage_repos_enabled()
         # Should fail, and return default of 1
-        self.assertEquals(manage_repos_enabled, True)
+        self.assertEqual(manage_repos_enabled, True)
 
     @patch.object(repolib, 'config', ConfigFromString(config_string=manage_repos_not_an_int))
     def test_empty_manage_repos_not_an_int(self):
         manage_repos_enabled = repolib.manage_repos_enabled()
         # Should fail, and return default of 1
-        self.assertEquals(manage_repos_enabled, True)
+        self.assertEqual(manage_repos_enabled, True)
 
     @patch.object(repolib, 'conf', ConfigFromString(config_string=manage_repos_int_37))
     def test_empty_manage_repos_int_37(self):
         manage_repos_enabled = repolib.manage_repos_enabled()
         # Should fail, and return default of 1
-        self.assertEquals(manage_repos_enabled, True)
+        self.assertEqual(manage_repos_enabled, True)

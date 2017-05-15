@@ -60,13 +60,13 @@ class RCTManifestCommandTests(SubManFixture):
 
     def test_get_value(self):
         data = {"test": "value", "test2": {"key2": "value2", "key3": []}}
-        self.assertEquals("", get_value(data, "some.test"))
-        self.assertEquals("", get_value(data, ""))
-        self.assertEquals("", get_value(data, "test2.key4"))
-        self.assertEquals("", get_value(data, "test2.key2.fred"))
-        self.assertEquals("value", get_value(data, "test"))
-        self.assertEquals("value2", get_value(data, "test2.key2"))
-        self.assertEquals([], get_value(data, "test2.key3"))
+        self.assertEqual("", get_value(data, "some.test"))
+        self.assertEqual("", get_value(data, ""))
+        self.assertEqual("", get_value(data, "test2.key4"))
+        self.assertEqual("", get_value(data, "test2.key2.fred"))
+        self.assertEqual("value", get_value(data, "test"))
+        self.assertEqual("value2", get_value(data, "test2.key2"))
+        self.assertEqual([], get_value(data, "test2.key3"))
 
     def test_cat_manifest(self):
         catman = CatManifestCommand()
@@ -79,7 +79,7 @@ class RCTManifestCommandTests(SubManFixture):
         with Capture() as cap:
             catman._do_command()
 
-        self.assertEquals("", cap.err)
+        self.assertEqual("", cap.err)
         self.assert_string_equals(manifestdata.correct_manifest_output, cap.out)
 
     def test_extract_manifest(self):

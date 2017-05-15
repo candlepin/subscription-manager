@@ -192,11 +192,11 @@ class HostConfigTests(unittest.TestCase):
         exists_mock.return_value = True
         temp_file = write_temp_file(HOST_CONFIG)
         config = RhsmHostConfigParser(temp_file.name)
-        self.assertEquals('/etc/rhsm-host/ca',
+        self.assertEqual('/etc/rhsm-host/ca',
             config.get('rhsm', 'ca_cert_dir'))
-        self.assertEquals('/etc/rhsm-host/redhat-uep-non-default.pem',
+        self.assertEqual('/etc/rhsm-host/redhat-uep-non-default.pem',
             config.get('rhsm', 'repo_ca_cert'))
-        self.assertEquals('/etc/pki/entitlement-host',
+        self.assertEqual('/etc/pki/entitlement-host',
             config.get('rhsm', 'entitlementCertDir'))
 
     @patch('os.path.exists')
@@ -206,11 +206,11 @@ class HostConfigTests(unittest.TestCase):
         exists_mock.return_value = False
         temp_file = write_temp_file(HOST_CONFIG)
         config = RhsmHostConfigParser(temp_file.name)
-        self.assertEquals('/etc/rhsm-host/ca',
+        self.assertEqual('/etc/rhsm-host/ca',
             config.get('rhsm', 'ca_cert_dir'))
-        self.assertEquals('/etc/rhsm-host/redhat-uep-non-default.pem',
+        self.assertEqual('/etc/rhsm-host/redhat-uep-non-default.pem',
             config.get('rhsm', 'repo_ca_cert'))
-        self.assertEquals('/etc/pki/entitlement',
+        self.assertEqual('/etc/pki/entitlement',
             config.get('rhsm', 'entitlementCertDir'))
 
     @patch('os.path.exists')
@@ -219,9 +219,9 @@ class HostConfigTests(unittest.TestCase):
         exists_mock.return_value = True
         temp_file = write_temp_file(HOST_CONFIG_MACRO)
         config = RhsmHostConfigParser(temp_file.name)
-        self.assertEquals('/etc/rhsm-host/ca/',
+        self.assertEqual('/etc/rhsm-host/ca/',
             config.get('rhsm', 'ca_cert_dir'))
-        self.assertEquals('/etc/rhsm-host/ca/redhat-uep.pem',
+        self.assertEqual('/etc/rhsm-host/ca/redhat-uep.pem',
             config.get('rhsm', 'repo_ca_cert'))
 
     @patch('os.path.exists')
@@ -230,11 +230,11 @@ class HostConfigTests(unittest.TestCase):
         exists_mock.return_value = True
         temp_file = write_temp_file(HOST_CONFIG_NOREPLACE)
         config = RhsmHostConfigParser(temp_file.name)
-        self.assertEquals('/etc/rhsm-other/ca',
+        self.assertEqual('/etc/rhsm-other/ca',
             config.get('rhsm', 'ca_cert_dir'))
-        self.assertEquals('/etc/pki/ca/redhat-uep.pem',
+        self.assertEqual('/etc/pki/ca/redhat-uep.pem',
             config.get('rhsm', 'repo_ca_cert'))
-        self.assertEquals('/etc/pki/entitlement-other',
+        self.assertEqual('/etc/pki/entitlement-other',
             config.get('rhsm', 'entitlementCertDir'))
 
     @patch('os.path.exists')
@@ -243,7 +243,7 @@ class HostConfigTests(unittest.TestCase):
         exists_mock.return_value = True
         temp_file = write_temp_file(HOST_CONFIG_ENTDIR_TRAILING_SLASH)
         config = RhsmHostConfigParser(temp_file.name)
-        self.assertEquals('/etc/pki/entitlement-host',
+        self.assertEqual('/etc/pki/entitlement-host',
             config.get('rhsm', 'entitlementCertDir'))
 
 
@@ -251,23 +251,23 @@ class ConfigTests(BaseConfigTests):
     cfgfile_data = TEST_CONFIG
 
     def testRead(self):
-        self.assertEquals(self.cfgParser.get('server', 'hostname'), 'server.example.conf')
+        self.assertEqual(self.cfgParser.get('server', 'hostname'), 'server.example.conf')
 
     def testSet(self):
         self.cfgParser.set('rhsm', 'baseurl', 'cod')
-        self.assertEquals(self.cfgParser.get('rhsm', 'baseurl'), 'cod')
+        self.assertEqual(self.cfgParser.get('rhsm', 'baseurl'), 'cod')
 
     def test_get(self):
         value = self.cfgParser.get("rhsm", "baseurl")
-        self.assertEquals("https://content.example.com", value)
+        self.assertEqual("https://content.example.com", value)
 
     def test_get_empty(self):
         value = self.cfgParser.get("foo", "bar")
-        self.assertEquals("", value)
+        self.assertEqual("", value)
 
     def test_get_repo_ca_cert(self):
         value = self.cfgParser.get("rhsm", "repo_ca_cert")
-        self.assertEquals("/etc/rhsm/ca-test/redhat-uep-non-default.pem", value)
+        self.assertEqual("/etc/rhsm/ca-test/redhat-uep-non-default.pem", value)
 
     def test_has_default_true(self):
         value = self.cfgParser.has_default('server', 'hostname')
@@ -287,20 +287,20 @@ class ConfigTests(BaseConfigTests):
 
     def test_get_default_camel_case(self):
         value = self.cfgParser.get_default('rhsmcertd', 'certCheckInterval')
-        self.assertEquals('240', value)
+        self.assertEqual('240', value)
 
     def test_get_default(self):
         value = self.cfgParser.get_default('rhsmcertd', 'certcheckinterval')
-        self.assertEquals('240', value)
+        self.assertEqual('240', value)
 
     def test_get_int(self):
         value = self.cfgParser.get_int("server", "port")
         self.assertTrue(isinstance(value, int))
-        self.assertEquals(8443, value)
+        self.assertEqual(8443, value)
 
     def test_interpolation(self):
         value = self.cfgParser.get("rhsm", "repo_ca_cert")
-        self.assertEquals("/etc/rhsm/ca-test/redhat-uep-non-default.pem", value)
+        self.assertEqual("/etc/rhsm/ca-test/redhat-uep-non-default.pem", value)
 
     def test_get_item_does_not_exist(self):
         self.assertRaises(NoOptionError,
@@ -310,7 +310,7 @@ class ConfigTests(BaseConfigTests):
 
     def test_get_int_un_set(self):
         value = self.cfgParser.get_int("server", "proxy_port")
-        self.assertEquals(None, value)
+        self.assertEqual(None, value)
 
     def test_get_int_does_not_exist(self):
         self.assertRaises(NoOptionError,
@@ -326,9 +326,9 @@ class ConfigTests(BaseConfigTests):
 
     def test_get_int_big_int(self):
         value = self.cfgParser.get_int("foo", "bigger_than_32_bit")
-        self.assertEquals(21474836470, value)
+        self.assertEqual(21474836470, value)
         value = self.cfgParser.get_int("foo", "bigger_than_64_bit")
-        self.assertEquals(123456789009876543211234567890, value)
+        self.assertEqual(123456789009876543211234567890, value)
 
 
 class SomeOptionConfigTest(BaseConfigTests):
@@ -336,7 +336,7 @@ class SomeOptionConfigTest(BaseConfigTests):
 
     def test_interpolation_nested(self):
         value = self.cfgParser.get("rhsm", "some_option")
-        self.assertEquals("/etc/rhsm/ca-test/redhat-uep-non-default.pemtest", value)
+        self.assertEqual("/etc/rhsm/ca-test/redhat-uep-non-default.pemtest", value)
 
 
 class BlankWithDefaultConfigTest(BaseConfigTests):
@@ -358,11 +358,11 @@ class OldConfigTests(ConfigTests):
         # for old style configs, with ca_cert_dir in 'server', we
         #  expect to ignore that (as we did by accident before), and
         # get the default of '/etc/rhsm/ca'
-        self.assertEquals("/etc/rhsm/ca/redhat-uep.pem", value)
+        self.assertEqual("/etc/rhsm/ca/redhat-uep.pem", value)
 
     def test_interpolation(self):
         value = self.cfgParser.get("rhsm", "repo_ca_cert")
-        self.assertEquals("/etc/rhsm/ca/redhat-uep.pem", value)
+        self.assertEqual("/etc/rhsm/ca/redhat-uep.pem", value)
 
 
 # this config has an invalid value for repo_ca_cert
@@ -398,11 +398,11 @@ class InterpErrorTests(BaseConfigTests):
 
     def test_deeper(self):
         value = self.cfgParser.get("deeper", "deeper")
-        self.assertEquals("level_one_1", value)
+        self.assertEqual("level_one_1", value)
 
     def test_deepest(self):
         value = self.cfgParser.get("deeper", "deepest")
-        self.assertEquals("level_one_1_2", value)
+        self.assertEqual("level_one_1_2", value)
 
     def test_one_more(self):
         self.assertRaises(InterpolationDepthError,
@@ -415,7 +415,7 @@ class CaCertDirTests(BaseConfigTests):
 
     def test_get_repo_ca_cert(self):
         value = self.cfgParser.get("rhsm", "repo_ca_cert")
-        self.assertEquals("/etc/not-default/non_default.pem", value)
+        self.assertEqual("/etc/not-default/non_default.pem", value)
 
 
 class NoCaCertDirTests(BaseConfigTests):
@@ -423,4 +423,4 @@ class NoCaCertDirTests(BaseConfigTests):
 
     def test_get_repo_ca_cert(self):
         value = self.cfgParser.get("rhsm", "repo_ca_cert")
-        self.assertEquals("/etc/rhsm/ca/non_default.pem", value)
+        self.assertEqual("/etc/rhsm/ca/non_default.pem", value)

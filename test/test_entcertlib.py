@@ -31,7 +31,7 @@ class TestDisconnected(fixture.SubManFixture):
         # no err_msg, so empty repr
         discon = entcertlib.Disconnected()
         err_msg = "%s" % discon
-        self.assertEquals("", err_msg)
+        self.assertEqual("", err_msg)
 
 
 class TestingUpdateAction(entcertlib.EntCertUpdateAction):
@@ -121,7 +121,7 @@ class UpdateActionTests(fixture.SubManFixture):
             update_report = update_action.perform()
         except OSError:
             self.fail("operation failed when certificate wasn't deleted")
-        self.assertEquals(0, update_report.updates())
+        self.assertEqual(0, update_report.updates())
 
         exceptions = update_action.report.exceptions()
-        self.assertEquals([], exceptions)
+        self.assertEqual([], exceptions)

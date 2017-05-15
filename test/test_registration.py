@@ -112,7 +112,7 @@ class CliRegistrationTests(SubManFixture):
 
             with nested(Capture(silent=True), self.assertRaises(SystemExit)) as e:
                 cmd.main(['register', '--consumerid=TaylorSwift', '--username=testuser1', '--password=password', '--org=test_org'])
-                self.assertEquals(e.code, os.EX_USAGE)
+                self.assertEqual(e.code, os.EX_USAGE)
 
     def test_strip_username_and_password(self):
         username, password = RegisterCommand._get_username_and_password(" ", " ")
@@ -138,7 +138,7 @@ class CliRegistrationTests(SubManFixture):
             env_id = rc._get_environment_id(mock_uep, 'owner', None)
 
             expected = None
-            self.assertEquals(expected, env_id)
+            self.assertEqual(expected, env_id)
 
     def test_get_environment_id_one_available(self):
         def env_list(*args, **kwargs):
@@ -155,7 +155,7 @@ class CliRegistrationTests(SubManFixture):
             env_id = rc._get_environment_id(mock_uep, 'owner', None)
 
             expected = "1234"
-            self.assertEquals(expected, env_id)
+            self.assertEqual(expected, env_id)
 
     def test_get_environment_id_multi_available(self):
         def env_list(*args, **kwargs):
@@ -174,7 +174,7 @@ class CliRegistrationTests(SubManFixture):
             env_id = rc._get_environment_id(mock_uep, 'owner', None)
 
             expected = "5678"
-            self.assertEquals(expected, env_id)
+            self.assertEqual(expected, env_id)
 
     def test_get_environment_id_multi_available_bad_name(self):
         def env_list(*args, **kwargs):

@@ -73,7 +73,7 @@ class TestMonitorDirectories(fixture.SubManFixture):
 
         fm = file_monitor.MonitorDirectories(changed_callback=changed_callback)
         fm.update()
-        self.assertEquals(callback_result, [])
+        self.assertEqual(callback_result, [])
 
     def test_from_path_list(self):
         self.temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp-file_monitor')

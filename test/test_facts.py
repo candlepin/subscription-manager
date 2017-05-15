@@ -142,7 +142,7 @@ class TestFacts(fixture.SubManFixture):
 
     def test_facts_read(self):
         cached_facts = self.f._read_cache()
-        self.assertEquals(cached_facts["test.attr"], "blippy2")
+        self.assertEqual(cached_facts["test.attr"], "blippy2")
 
     def test_facts_last_update(self):
         #FIXME: verify the date is correct
@@ -169,7 +169,7 @@ class TestFacts(fixture.SubManFixture):
         mock_collect.return_value = test_facts
 
         changed = self.f.has_changed()
-        self.assertEquals(self.f.facts['cpu.cpu_socket(s)'], '16')
+        self.assertEqual(self.f.facts['cpu.cpu_socket(s)'], '16')
         self.assertTrue(changed)
 
     @patch('subscription_manager.facts.Facts._read_cache',
@@ -201,4 +201,4 @@ class TestFacts(fixture.SubManFixture):
         f = self.f.get_facts()
 
         self.assertTrue(isinstance(f, dict))
-        self.assertEquals(f['net.interface.lo.ipv4_address'], '127.0.0.1')
+        self.assertEqual(f['net.interface.lo.ipv4_address'], '127.0.0.1')

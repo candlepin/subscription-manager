@@ -32,7 +32,7 @@ class CliUnRegistrationTests(SubManFixture):
         # CacheManager.delete_cache = classmethod(lambda cls: None)
 
         cmd.main(['unregister'])
-        self.assertEquals(mock_injected_identity.uuid, cmd.cp.called_unregister_uuid)
+        self.assertEqual(mock_injected_identity.uuid, cmd.cp.called_unregister_uuid)
 
     @patch('subscription_manager.managerlib.clean_all_data')
     def test_unregister_removes_consumer_cert_with_gone_correct_id(self, clean_data_mock):

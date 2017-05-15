@@ -72,7 +72,7 @@ listing_multiple_non_int = """
 class EmptyListingTests(unittest.TestCase):
     def test(self):
         listing_file = listing.ListingFile()
-        self.assertEquals(listing_file.get_releases(), [])
+        self.assertEqual(listing_file.get_releases(), [])
 
 
 class ListingTests(unittest.TestCase):
@@ -85,7 +85,7 @@ class TestEmptyListing(ListingTests):
     data = listing_empty
 
     def testEmpty(self):
-        self.assertEquals([], self.listing.get_releases())
+        self.assertEqual([], self.listing.get_releases())
 
 
 class TestJustCommentListing(TestEmptyListing):
@@ -104,7 +104,7 @@ class TestOneRelease(ListingTests):
     data = listing_one_release
 
     def testOneRelease(self):
-        self.assertEquals(['6'],
+        self.assertEqual(['6'],
                 self.listing.get_releases())
 
 
@@ -116,7 +116,7 @@ class TestMultipleReleases(ListingTests):
     data = listing_multiple_releases
 
     def testMultipleReleases(self):
-        self.assertEquals(['6', '7', '8'],
+        self.assertEqual(['6', '7', '8'],
                 self.listing.get_releases())
 
 
@@ -132,5 +132,5 @@ class TestMultipleNonInt(ListingTests):
     data = listing_multiple_non_int
 
     def testMultipleReleasesNonInt(self):
-        self.assertEquals(['6', '6Awesome', '7Amazing', '8'],
+        self.assertEqual(['6', '6Awesome', '7Amazing', '8'],
                           self.listing.get_releases())

@@ -49,21 +49,21 @@ class PathTests(unittest.TestCase):
     def test_normal_root(self):
         # this is the default, but have to set it as other tests can modify
         # it if they run first.
-        self.assertEquals('/etc/pki/consumer/', Path.abs('/etc/pki/consumer/'))
-        self.assertEquals('/etc/pki/consumer/', Path.abs('etc/pki/consumer/'))
+        self.assertEqual('/etc/pki/consumer/', Path.abs('/etc/pki/consumer/'))
+        self.assertEqual('/etc/pki/consumer/', Path.abs('etc/pki/consumer/'))
 
     def test_modified_root(self):
         Path.ROOT = '/mnt/sysimage/'
-        self.assertEquals('/mnt/sysimage/etc/pki/consumer/',
+        self.assertEqual('/mnt/sysimage/etc/pki/consumer/',
                 Path.abs('/etc/pki/consumer/'))
-        self.assertEquals('/mnt/sysimage/etc/pki/consumer/',
+        self.assertEqual('/mnt/sysimage/etc/pki/consumer/',
                 Path.abs('etc/pki/consumer/'))
 
     def test_modified_root_no_trailing_slash(self):
         Path.ROOT = '/mnt/sysimage'
-        self.assertEquals('/mnt/sysimage/etc/pki/consumer/',
+        self.assertEqual('/mnt/sysimage/etc/pki/consumer/',
                 Path.abs('/etc/pki/consumer/'))
-        self.assertEquals('/mnt/sysimage/etc/pki/consumer/',
+        self.assertEqual('/mnt/sysimage/etc/pki/consumer/',
                 Path.abs('etc/pki/consumer/'))
 
     def test_repo_file(self):
@@ -71,23 +71,23 @@ class PathTests(unittest.TestCase):
 
         Path.ROOT = '/mnt/sysimage'
         rf = RepoFile()
-        self.assertEquals("/mnt/sysimage/etc/yum.repos.d/redhat.repo", rf.path)
+        self.assertEqual("/mnt/sysimage/etc/yum.repos.d/redhat.repo", rf.path)
 
     def test_product_database(self):
         Path.ROOT = '/mnt/sysimage'
         prod_db = ProductDatabase()
-        self.assertEquals('/mnt/sysimage/var/lib/rhsm/productid.js',
+        self.assertEqual('/mnt/sysimage/var/lib/rhsm/productid.js',
                 prod_db.dir.abspath('productid.js'))
 
     def test_sysimage_pathjoin(self):
         Path.ROOT = '/mnt/sysimage'
         ed = EntitlementDirectory()
-        self.assertEquals('/mnt/sysimage/etc/pki/entitlement/1-key.pem',
+        self.assertEqual('/mnt/sysimage/etc/pki/entitlement/1-key.pem',
                 Path.join(ed.productpath(), '1-key.pem'))
 
     def test_normal_pathjoin(self):
         ed = EntitlementDirectory()
-        self.assertEquals('/etc/pki/entitlement/1-key.pem',
+        self.assertEqual('/etc/pki/entitlement/1-key.pem',
                 Path.join(ed.productpath(), "1-key.pem"))
 
 
@@ -159,7 +159,7 @@ class DirectoryTest(unittest.TestCase):
         return self.klass(path=os.path.join(temp_dir, '/doesnt/exist/'))
 
     def test(self, mockPath):
-        self.assertEquals(len(self.d.list()), self.list_len)
+        self.assertEqual(len(self.d.list()), self.list_len)
 
     def test_listall(self, mockPath):
         self.d.list_all()
@@ -249,7 +249,7 @@ class EntitlementDirectoryWithCertsTest(DirectoryWithCertsTest):
 
     def test_list_valid(self):
         res = self.d.list_valid()
-        self.assertEquals(len(res), self.list_len)
+        self.assertEqual(len(res), self.list_len)
 
     def test_list_for_product(self):
         res = self.d.list_for_product('123')
@@ -292,7 +292,7 @@ class ProductCertificateDirectoryWithCertsTest(DirectoryWithCertsTest):
 
     def test_list_valid(self):
         res = self.d.list_valid()
-        self.assertEquals(len(res), self.list_len)
+        self.assertEqual(len(res), self.list_len)
 
     def test_list_expired_no_expired(self):
         res = self.d.list_expired()
@@ -302,43 +302,43 @@ class ProductCertificateDirectoryWithCertsTest(DirectoryWithCertsTest):
         self.mock_cert.is_expired.return_value = True
         res = self.d.list_expired()
         self.assertTrue(isinstance(res, list))
-        self.assertEquals(len(res), self.list_len)
+        self.assertEqual(len(res), self.list_len)
 
     def test_find(self):
         res = self.d.find('1')
-        self.assertEquals(res, None)
+        self.assertEqual(res, None)
 
     def test_find_matches(self):
         res = self.d.find('37')
-        self.assertEquals(res.serial, '37')
+        self.assertEqual(res.serial, '37')
 
     def test_find_by_product(self):
         res = self.d.find_by_product('123')
-        self.assertEquals(res, None)
+        self.assertEqual(res, None)
 
     def test_find_by_product_match(self):
         res = self.d.find_by_product('123456789')
-        self.assertEquals(res, self.mock_cert)
+        self.assertEqual(res, self.mock_cert)
 
     def test_find_all_by_product_no_match(self):
         res = self.d.find_all_by_product('123')
         self.assertTrue(isinstance(res, list))
-        self.assertEquals(len(res), 0)
+        self.assertEqual(len(res), 0)
 
     def test_find_all_by_product_match(self):
         res = self.d.find_all_by_product('123456789')
         self.assertTrue(isinstance(res, list))
-        self.assertEquals(len(res), 1)
+        self.assertEqual(len(res), 1)
 
     def test_get_provided_tags(self):
         res = self.d.get_provided_tags()
         self.assertTrue(isinstance(res, set))
-        self.assertEquals(set(['mock-tag-1']), res)
+        self.assertEqual(set(['mock-tag-1']), res)
 
     def test_get_installed_products(self):
         res = self.d.get_installed_products()
         self.assertTrue(isinstance(res, dict))
-        self.assertEquals(len(res), 1)
+        self.assertEqual(len(res), 1)
 
     def test_refresh(self):
         # load, and "cache", load again to hit cache,
@@ -356,7 +356,7 @@ class ProductCertificateDirectoryWithCertsTest(DirectoryWithCertsTest):
 
     def test_str(self):
         res = "%s" % self.d
-        self.assertEquals(res, self.d.path)
+        self.assertEqual(res, self.d.path)
 
 
 class ProductDirectoryTest(ProductCertificateDirectoryWithCertsTest):
@@ -392,7 +392,7 @@ class AlsoProductDirectoryTest(unittest.TestCase):
         pd.installed_prod_dir.list = lambda: [StubProductCertificate(top_product, [])]
         pd.default_prod_dir.list = lambda: [StubProductCertificate(default_product, [])]
         results = pd.list()
-        self.assertEquals(2, len(results))
+        self.assertEqual(2, len(results))
         resulting_ids = [cert.products[0].id for cert in results]
         self.assertTrue("top" in resulting_ids)
         self.assertTrue("default" in resulting_ids)
@@ -406,6 +406,6 @@ class AlsoProductDirectoryTest(unittest.TestCase):
         pd.installed_prod_dir.list = lambda: [StubProductCertificate(top_product, [])]
         pd.default_prod_dir.list = lambda: [StubProductCertificate(default_product, [])]
         results = pd.list()
-        self.assertEquals(1, len(results))
+        self.assertEqual(1, len(results))
         resulting_ids = [cert.products[0].id for cert in results]
         self.assertTrue("top" in resulting_ids)

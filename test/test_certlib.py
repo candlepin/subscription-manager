@@ -37,7 +37,7 @@ class TestLocker(fixture.SubManFixture):
 
         l = certlib.Locker()
         res = l.run(return_four)
-        self.assertEquals(4, res)
+        self.assertEqual(4, res)
 
 
 class TestBaseActionInvoker(fixture.SubManFixture):
@@ -64,10 +64,10 @@ class TestBaseActionInvoker(fixture.SubManFixture):
 class TestActionReport(fixture.SubManFixture):
     def test(self):
         ar = certlib.ActionReport()
-        self.assertEquals(None, ar._status)
-        self.assertEquals([], ar._exceptions)
-        self.assertEquals([], ar._updates)
-        self.assertEquals("Report", ar.name)
+        self.assertEqual(None, ar._status)
+        self.assertEqual([], ar._exceptions)
+        self.assertEqual([], ar._updates)
+        self.assertEqual("Report", ar.name)
 
     def test_format_exceptions(self):
         ar = certlib.ActionReport()

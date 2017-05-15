@@ -44,7 +44,7 @@ class RegisterWidgetTests(SubManFixture):
         # NOTE: these exceptions are not in the nost test context,
         #       so they don't actually fail nose
         try:
-            self.assertEquals(page_after, 0)
+            self.assertEqual(page_after, 0)
         except Exception:
             self.exc_infos.append(sys.exc_info())
             return
@@ -59,7 +59,7 @@ class RegisterWidgetTests(SubManFixture):
         # NOTE: these exceptions are not in the nost test context,
         #       so they don't actually fail nose
         try:
-            self.assertEquals(page_after, 0)
+            self.assertEqual(page_after, 0)
         except Exception:
             self.exc_infos.append(sys.exc_info())
             return
@@ -161,10 +161,10 @@ class CredentialsScreenTests(SubManFixture):
         self.screen.skip_auto_bind.set_active(True)
         self.screen.consumer_name.set_text("CONSUMER")
         self.screen.clear()
-        self.assertEquals("", self.screen.account_login.get_text())
-        self.assertEquals("", self.screen.account_password.get_text())
+        self.assertEqual("", self.screen.account_login.get_text())
+        self.assertEqual("", self.screen.account_password.get_text())
         self.assertFalse(self.screen.skip_auto_bind.get_active())
-        self.assertEquals(default_consumer_name_value,
+        self.assertEqual(default_consumer_name_value,
                           self.screen.consumer_name.get_text())
 
 
@@ -180,7 +180,7 @@ class ActivationKeyScreenTests(SubManFixture):
         expected = ['hello', 'world', 'how', 'are', 'you']
         key_input = "hello, world,how  are , you"
         result = self.screen._split_activation_keys(key_input)
-        self.assertEquals(expected, result)
+        self.assertEqual(expected, result)
 
 
 class ChooseServerScreenTests(SubManFixture):

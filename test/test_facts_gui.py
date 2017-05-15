@@ -23,24 +23,24 @@ class FactDialogTests(SubManFixture):
     def test_hides_environment_when_not_supported(self):
         dialog = factsgui.SystemFactsDialog()
         dialog.display_facts()
-        self.assertEquals(False, dialog.environment_title.get_property("visible"))
-        self.assertEquals(False, dialog.environment_label.get_property("visible"))
+        self.assertEqual(False, dialog.environment_title.get_property("visible"))
+        self.assertEqual(False, dialog.environment_label.get_property("visible"))
 
     def test_shows_unknown_for_no_org(self):
         dialog = factsgui.SystemFactsDialog()
         dialog.display_facts()
         #No owner id should show if we have no owner
-        self.assertEquals(False, dialog.owner_label.get_property("visible"))
-        self.assertEquals(False, dialog.owner_title.get_property("visible"))
+        self.assertEqual(False, dialog.owner_label.get_property("visible"))
+        self.assertEqual(False, dialog.owner_title.get_property("visible"))
 
     @patch.object(StubUEP, 'getOwner')
     def test_shows_org_id(self, mock_getOwner):
         mock_getOwner.return_value = {'displayName': 'foo', 'key': 'bar'}
         dialog = factsgui.SystemFactsDialog()
         dialog.display_facts()
-        self.assertEquals(True, dialog.owner_label.get_property("visible"))
-        self.assertEquals(True, dialog.owner_title.get_property("visible"))
-        self.assertEquals('foo (bar)', dialog.owner_label.get_label())
+        self.assertEqual(True, dialog.owner_label.get_property("visible"))
+        self.assertEqual(True, dialog.owner_title.get_property("visible"))
+        self.assertEqual('foo (bar)', dialog.owner_label.get_label())
 
     @patch.object(StubUEP, 'supports_resource')
     @patch.object(StubUEP, 'getConsumer')
@@ -49,9 +49,9 @@ class FactDialogTests(SubManFixture):
         mock_getConsumer.return_value = {'environment': {'name': 'foobar'}}
         dialog = factsgui.SystemFactsDialog()
         dialog.display_facts()
-        self.assertEquals(True, dialog.environment_title.get_property("visible"))
-        self.assertEquals(True, dialog.environment_label.get_property("visible"))
-        self.assertEquals("foobar", dialog.environment_label.get_text())
+        self.assertEqual(True, dialog.environment_title.get_property("visible"))
+        self.assertEqual(True, dialog.environment_label.get_property("visible"))
+        self.assertEqual("foobar", dialog.environment_label.get_text())
 
     @patch.object(StubUEP, 'supports_resource')
     @patch.object(StubUEP, 'getConsumer')
@@ -60,9 +60,9 @@ class FactDialogTests(SubManFixture):
         mock_getConsumer.return_value = {'environment': None}
         dialog = factsgui.SystemFactsDialog()
         dialog.display_facts()
-        self.assertEquals(True, dialog.environment_title.get_property("visible"))
-        self.assertEquals(True, dialog.environment_label.get_property("visible"))
-        self.assertEquals("None", dialog.environment_label.get_text())
+        self.assertEqual(True, dialog.environment_title.get_property("visible"))
+        self.assertEqual(True, dialog.environment_label.get_property("visible"))
+        self.assertEqual("None", dialog.environment_label.get_text())
 
     def test_update_button_disabled(self):
         # Need an unregistered consumer object:

@@ -79,7 +79,7 @@ class TestConfig(BaseConfigTest):
         self.assertFalse('not_here' in self.config)
 
     def test_config_len(self):
-        self.assertEquals(len(self.expected_sections), len(self.config))
+        self.assertEqual(len(self.expected_sections), len(self.config))
 
     def test_keys(self):
         self.assert_items_equals(self.expected_sections, list(self.config.keys()))
@@ -91,13 +91,13 @@ class TestConfig(BaseConfigTest):
 
     def test_set_new_section(self):
         self.config['new_section'] = {'hello': 'world'}
-        self.assertEquals(['hello'], self.config._parser.options('new_section'))
-        self.assertEquals('world', self.config._parser.get('new_section', 'hello'))
+        self.assertEqual(['hello'], self.config._parser.options('new_section'))
+        self.assertEqual('world', self.config._parser.get('new_section', 'hello'))
 
     def test_set_old_section(self):
         self.config['foo'] = {'hello': 'world'}
-        self.assertEquals(['hello'], self.config._parser.options('foo'))
-        self.assertEquals('world', self.config._parser.get('foo', 'hello'))
+        self.assertEqual(['hello'], self.config._parser.options('foo'))
+        self.assertEqual('world', self.config._parser.get('foo', 'hello'))
         self.assertRaises(NoOptionError, self.config._parser.get, 'foo', 'quux')
 
     def test_get_item(self):
@@ -107,21 +107,21 @@ class TestConfig(BaseConfigTest):
         self.config['foo'] = {'hello': 'world'}
         self.config.persist()
         reparsed = RhsmConfigParser(self.fid.name)
-        self.assertEquals('world', reparsed.get('foo', 'hello'))
+        self.assertEqual('world', reparsed.get('foo', 'hello'))
         self.assertRaises(NoOptionError, reparsed.get, 'foo', 'quux')
 
     def test_auto_persists(self):
         config = Config(self.parser, auto_persist=True)
         config['foo'] = {'hello': 'world'}
         reparsed = RhsmConfigParser(self.fid.name)
-        self.assertEquals('world', reparsed.get('foo', 'hello'))
+        self.assertEqual('world', reparsed.get('foo', 'hello'))
         self.assertRaises(NoOptionError, reparsed.get, 'foo', 'quux')
 
     def test_does_not_auto_persist_by_default(self):
         config = Config(self.parser, auto_persist=False)
         config['foo'] = {'hello': 'world'}
         reparsed = RhsmConfigParser(self.fid.name)
-        self.assertEquals('baz', reparsed.get('foo', 'quux'))
+        self.assertEqual('baz', reparsed.get('foo', 'quux'))
         self.assertRaises(NoOptionError, reparsed.get, 'foo', 'hello')
 
     def test_del_item(self):
@@ -135,35 +135,35 @@ class TestConfig(BaseConfigTest):
 
 class TestConfigSection(BaseConfigTest):
     def test_get_value(self):
-        self.assertEquals('1', self.config['server']['insecure'])
+        self.assertEqual('1', self.config['server']['insecure'])
 
     def test_get_missing_value(self):
         with self.assertRaises(KeyError):
             self.config['server']['missing']
 
     def test_set_item(self):
-        self.assertEquals('baz', self.config['foo']['quux'])
+        self.assertEqual('baz', self.config['foo']['quux'])
         self.config['foo']['quux'] = 'fizz'
-        self.assertEquals('fizz', self.config['foo']['quux'])
+        self.assertEqual('fizz', self.config['foo']['quux'])
 
     def test_auto_persist(self):
         config = Config(self.parser, auto_persist=True)
-        self.assertEquals('baz', config['foo']['quux'])
+        self.assertEqual('baz', config['foo']['quux'])
         config['foo']['quux'] = 'fizz'
-        self.assertEquals('fizz', config['foo']['quux'])
+        self.assertEqual('fizz', config['foo']['quux'])
 
         reparsed = RhsmConfigParser(self.fid.name)
-        self.assertEquals('fizz', reparsed.get('foo', 'quux'))
+        self.assertEqual('fizz', reparsed.get('foo', 'quux'))
 
     def test_persist_cascades(self):
         config = Config(self.parser, auto_persist=False)
-        self.assertEquals('baz', config['foo']['quux'])
+        self.assertEqual('baz', config['foo']['quux'])
         config['foo']['quux'] = 'fizz'
         config.persist()
-        self.assertEquals('fizz', config['foo']['quux'])
+        self.assertEqual('fizz', config['foo']['quux'])
 
         reparsed = RhsmConfigParser(self.fid.name)
-        self.assertEquals('fizz', reparsed.get('foo', 'quux'))
+        self.assertEqual('fizz', reparsed.get('foo', 'quux'))
 
     def test_del_item(self):
         del self.config['foo']['quux']
@@ -173,7 +173,7 @@ class TestConfigSection(BaseConfigTest):
             del self.config['foo']['missing_key']
 
     def test_len(self):
-        self.assertEquals(4, len(self.config['foo']))
+        self.assertEqual(4, len(self.config['foo']))
 
     def test_in(self):
         self.assertIn("quux", self.config['foo'])

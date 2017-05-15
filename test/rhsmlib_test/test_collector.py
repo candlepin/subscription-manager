@@ -36,7 +36,7 @@ class GetArchTest(unittest.TestCase):
             self.assertEqual("hello_arch", arch)
 
     def test_get_arch(self):
-        self.assertEquals(platform.machine(), collector.get_arch())
+        self.assertEqual(platform.machine(), collector.get_arch())
 
     def test_get_platform_specific_info_provider(self):
         info_provider = firmware_info.get_firmware_collector(arch=platform.machine())

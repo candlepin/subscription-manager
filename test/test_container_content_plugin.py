@@ -88,7 +88,7 @@ class TestContainerContentUpdateActionCommand(fixture.SubManFixture):
         cmd = ContainerContentUpdateActionCommand(None, ['cdn.example.org'],
             self.host_cert_dir)
         cert_paths = cmd._get_unique_paths(contents)
-        self.assertEquals(3, len(cert_paths))
+        self.assertEqual(3, len(cert_paths))
         self.assertTrue(KeyPair(cert1.path, cert1.key_path()) in cert_paths)
         self.assertTrue(KeyPair(cert2.path, cert2.key_path()) in cert_paths)
         self.assertTrue(KeyPair(cert3.path, cert3.key_path()) in cert_paths)
@@ -117,20 +117,20 @@ class TestKeyPair(fixture.SubManFixture):
     def test_expected_filenames(self):
         kp = KeyPair("/etc/pki/entitlement/9000.pem",
             "/etc/pki/entitlement/9000-key.pem")
-        self.assertEquals("9000.cert", kp.dest_cert_filename)
-        self.assertEquals("9000.key", kp.dest_key_filename)
+        self.assertEqual("9000.cert", kp.dest_cert_filename)
+        self.assertEqual("9000.key", kp.dest_key_filename)
 
     def test_expected_filenames_weird_extensions(self):
         kp = KeyPair("/etc/pki/entitlement/9000.crt",
             "/etc/pki/entitlement/9000-key.crt")
-        self.assertEquals("9000.cert", kp.dest_cert_filename)
-        self.assertEquals("9000.key", kp.dest_key_filename)
+        self.assertEqual("9000.cert", kp.dest_cert_filename)
+        self.assertEqual("9000.key", kp.dest_key_filename)
 
     def test_expected_filenames_weird_filenames(self):
         kp = KeyPair("/etc/pki/entitlement/9000.1.2014-a.pem",
             "/etc/pki/entitlement/9000.1.2014-a-key.pem")
-        self.assertEquals("9000.1.2014-a.cert", kp.dest_cert_filename)
-        self.assertEquals("9000.1.2014-a.key", kp.dest_key_filename)
+        self.assertEqual("9000.1.2014-a.cert", kp.dest_cert_filename)
+        self.assertEqual("9000.1.2014-a.key", kp.dest_key_filename)
 
     def test_equality(self):
         kp = KeyPair("/etc/pki/entitlement/9000.pem",
@@ -150,8 +150,8 @@ class TestKeyPair(fixture.SubManFixture):
     def test_mixmatched_base_filenames(self):
         kp = KeyPair("/etc/pki/entitlement/9000.1.2014-a.pem",
             "/etc/pki/entitlement/9000.1.2014-a-key.pem")
-        self.assertEquals("9000.1.2014-a.cert", kp.dest_cert_filename)
-        self.assertEquals("9000.1.2014-a.key", kp.dest_key_filename)
+        self.assertEqual("9000.1.2014-a.cert", kp.dest_cert_filename)
+        self.assertEqual("9000.1.2014-a.key", kp.dest_key_filename)
 
 
 class TestContainerCertDir(fixture.SubManFixture):
@@ -194,7 +194,7 @@ class TestContainerCertDir(fixture.SubManFixture):
         self.container_dir.sync([kp])
         self.assertTrue(exists(join(self.dest_dir, '1234.cert')))
         self.assertTrue(exists(join(self.dest_dir, '1234.key')))
-        self.assertEquals(2, len(self.report.added))
+        self.assertEqual(2, len(self.report.added))
 
     def test_old_certs_cleaned_out(self):
         cert1 = '1234.cert'
@@ -210,7 +210,7 @@ class TestContainerCertDir(fixture.SubManFixture):
         self.assertFalse(exists(join(self.dest_dir, '1234.cert')))
         self.assertFalse(exists(join(self.dest_dir, '1234.key')))
         self.assertTrue(exists(join(self.dest_dir, ca)))
-        self.assertEquals(2, len(self.report.removed))
+        self.assertEqual(2, len(self.report.removed))
 
     def test_all_together_now(self):
         cert1 = '1234.pem'
@@ -239,8 +239,8 @@ class TestContainerCertDir(fixture.SubManFixture):
 
         self.assertFalse(exists(join(self.dest_dir, '444.cert')))
         self.assertFalse(exists(join(self.dest_dir, '444.key')))
-        self.assertEquals(4, len(self.report.added))
-        self.assertEquals(3, len(self.report.removed))
+        self.assertEqual(4, len(self.report.added))
+        self.assertEqual(3, len(self.report.removed))
 
     @mock.patch("os.symlink")
     def test_cdn_ca_symlink(self, mock_link):

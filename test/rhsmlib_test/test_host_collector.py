@@ -30,7 +30,7 @@ class HostCollectorTest(unittest.TestCase):
         facts = collector.get_all()
 
         self.assertTrue(isinstance(facts, dict))
-        self.assertEquals(facts['system.default_locale'], 'Unknown')
+        self.assertEqual(facts['system.default_locale'], 'Unknown')
 
     @mock.patch('locale.getdefaultlocale')
     def test_en_us_utf8_locale(self, mock_locale):
@@ -39,7 +39,7 @@ class HostCollectorTest(unittest.TestCase):
         facts = collector.get_all()
 
         self.assertTrue(isinstance(facts, dict))
-        self.assertEquals(facts['system.default_locale'], 'en_US.UTF-8')
+        self.assertEqual(facts['system.default_locale'], 'en_US.UTF-8')
 
     @mock.patch('locale.getdefaultlocale')
     def test_en_us_no_encoding_locale(self, mock_locale):
@@ -48,4 +48,4 @@ class HostCollectorTest(unittest.TestCase):
         facts = collector.get_all()
 
         self.assertTrue(isinstance(facts, dict))
-        self.assertEquals(facts['system.default_locale'], 'en_US')
+        self.assertEqual(facts['system.default_locale'], 'en_US')

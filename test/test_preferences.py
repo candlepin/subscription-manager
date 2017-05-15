@@ -118,23 +118,23 @@ class TestPreferencesDialog(SubManFixture):
         self.preferences_dialog.sla_combobox.set_active(0)
         tree_iter = self.preferences_dialog.sla_combobox.get_active_iter()
         display_text = self.preferences_dialog.sla_model.get_value(tree_iter, 0)
-        self.assertEquals("Not Set", display_text)
+        self.assertEqual("Not Set", display_text)
 
     def testSlaAccessName(self):
         self._getPrefDialog()
         self.preferences_dialog.show()
         self.preferences_dialog.sla_combobox.set_active(1)
-        self.assertEquals("sla_selection_combobox|Pro", self.preferences_dialog.sla_combobox.get_accessible().get_name())
+        self.assertEqual("sla_selection_combobox|Pro", self.preferences_dialog.sla_combobox.get_accessible().get_name())
         self.preferences_dialog.sla_combobox.set_active(0)
-        self.assertEquals("sla_selection_combobox|", self.preferences_dialog.sla_combobox.get_accessible().get_name())
+        self.assertEqual("sla_selection_combobox|", self.preferences_dialog.sla_combobox.get_accessible().get_name())
 
     def testReleaseAccessName(self):
         self._getPrefDialog()
         self.preferences_dialog.show()
         self.preferences_dialog.release_combobox.set_active(1)
-        self.assertEquals("release_selection_combobox|123123", self.preferences_dialog.release_combobox.get_accessible().get_name())
+        self.assertEqual("release_selection_combobox|123123", self.preferences_dialog.release_combobox.get_accessible().get_name())
         self.preferences_dialog.release_combobox.set_active(0)
-        self.assertEquals("release_selection_combobox|", self.preferences_dialog.release_combobox.get_accessible().get_name())
+        self.assertEqual("release_selection_combobox|", self.preferences_dialog.release_combobox.get_accessible().get_name())
 
     @mock.patch.object(stubs.StubUEP, 'updateConsumer')
     def testReleaseChanged(self, MockUep):
@@ -154,4 +154,4 @@ class TestPreferencesDialog(SubManFixture):
         self.preferences_dialog.release_combobox.set_active(0)
         tree_iter = self.preferences_dialog.release_combobox.get_active_iter()
         display_text = self.preferences_dialog.release_model.get_value(tree_iter, 0)
-        self.assertEquals("Not Set", display_text)
+        self.assertEqual("Not Set", display_text)

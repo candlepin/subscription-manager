@@ -98,8 +98,8 @@ class ValidProductDateRangeCalculatorTests(SubManFixture):
         #"startDate" : "2013-02-26T00:00:00.000+0000",
         #"endDate" : "2014-02-26T00:00:00.000+0000"
         date_range = self.calculator.calculate(INST_PID_1)
-        self.assertEquals(datetime(2013, 02, 26, 0, 0, 0, 0, GMT()), date_range.begin())
-        self.assertEquals(datetime(2014, 02, 26, 0, 0, 0, 0, GMT()), date_range.end())
+        self.assertEqual(datetime(2013, 02, 26, 0, 0, 0, 0, GMT()), date_range.begin())
+        self.assertEqual(datetime(2014, 02, 26, 0, 0, 0, 0, GMT()), date_range.end())
 
     def test_product_without_status(self):
         self.assertTrue(self.calculator.calculate(INST_PID_3) is None)

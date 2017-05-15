@@ -32,7 +32,7 @@ class TestFactlib(fixture.SubManFixture):
         self._inject_mock_invalid_consumer()
         update_report = self.fl.update()
         count = update_report.updates()
-        self.assertEquals(len(self.expected_facts), count)
+        self.assertEqual(len(self.expected_facts), count)
 
     def test_factlib_updates_when_identity_exists(self):
         invalid_consumer = self._inject_mock_valid_consumer()
@@ -49,6 +49,6 @@ class TestFactlib(fixture.SubManFixture):
 
         update_report = self.fl.update()
         count = update_report.updates()
-        self.assertEquals(len(self.expected_facts), count)
-        self.assertEquals(self.expected_facts, self.facts_passed_to_server)
-        self.assertEquals(invalid_consumer.uuid, self.consumer_uuid_passed_to_server)
+        self.assertEqual(len(self.expected_facts), count)
+        self.assertEqual(self.expected_facts, self.facts_passed_to_server)
+        self.assertEqual(invalid_consumer.uuid, self.consumer_uuid_passed_to_server)
