@@ -797,10 +797,10 @@ class MigrationEngine(object):
         return release_number > 6
 
     def is_daemon_installed(self, daemon, using_systemd):
+        has_systemd_daemon = False
         if using_systemd:
-            return subprocess.call("systemctl list-unit-files %s.service | grep %s > /dev/null 2>&1" % (daemon, daemon), shell=True) == 0
-        else:
-            return os.path.exists("/etc/init.d/%s" % daemon)
+            has_systemd_daemon = subprocess.call("systemctl list-units %s.service | grep %s > /dev/null 2>&1" % (daemon, daemon), shell=True) == 0
+        return has_systemd_daemon or os.path.exists("/etc/init.d/%s" % daemon)
 
     def is_daemon_running(self, daemon, using_systemd):
         if using_systemd:
