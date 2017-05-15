@@ -13,6 +13,7 @@
 #
 import rhsm.config
 import collections
+import six
 
 
 class Config(collections.MutableMapping):
@@ -42,7 +43,7 @@ class Config(collections.MutableMapping):
 
     def __setitem__(self, key, value):
         try:
-            value.iteritems()
+            six.iteritems(value)
         except Exception:
             raise
 
@@ -57,7 +58,7 @@ class Config(collections.MutableMapping):
         self._parser.add_section(key)
         self._sections[key] = ConfigSection(self, self._parser, key, self.auto_persist)
 
-        for k, v in value.iteritems():
+        for k, v in six.iteritems(value):
             self._sections[key][k] = v
 
         if self.auto_persist:

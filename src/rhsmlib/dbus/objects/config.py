@@ -13,6 +13,7 @@
 #
 import dbus
 import logging
+import six
 
 from rhsmlib.dbus import constants, base_object, util, dbus_utils
 from rhsmlib.services.config import Config
@@ -51,9 +52,9 @@ class ConfigDBusObject(base_object.BaseObject):
     @util.dbus_handle_exceptions
     def GetAll(self, sender=None):
         d = dbus.Dictionary({}, signature='sv')
-        for k, v in self.config.iteritems():
+        for k, v in six.iteritems(self.config):
             d[k] = dbus.Dictionary({}, signature='ss')
-            for kk, vv in v.iteritems():
+            for kk, vv in six.iteritems(v):
                 d[k][kk] = vv
 
         return d

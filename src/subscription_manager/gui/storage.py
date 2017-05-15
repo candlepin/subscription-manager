@@ -14,6 +14,7 @@
 #
 
 import logging
+import six
 
 from subscription_manager.ga import Gtk as ga_Gtk
 
@@ -24,7 +25,7 @@ class MappedStore(object):
         self.log = logging.getLogger(__name__ + self.__class__.__name__)
 
         # Enumerate the keys and store the int index
-        for i, type_key in enumerate(type_map.iterkeys()):
+        for i, type_key in enumerate(six.iterkeys(type_map)):
             self.type_index[type_key] = i
 
     def _create_initial_entry(self, item_map):
@@ -38,7 +39,7 @@ class MappedStore(object):
         # init'ed first, since no column info is known
         entry = [None] * self.get_n_columns()
 
-        for key, value in item_map.iteritems():
+        for key, value in six.iteritems(item_map):
             entry[self[key]] = value
         return entry
 
@@ -80,7 +81,7 @@ class MappedListStore(MappedStore, ga_Gtk.ListStore):
         self.append(self._create_initial_entry(item_map))
 
     def update_map(self, iter, item_map):
-        for key, value in item_map.iteritems():
+        for key, value in six.iteritems(item_map):
             self.set_value(iter, self[key], value)
 
 

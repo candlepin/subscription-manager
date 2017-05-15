@@ -25,6 +25,7 @@ import sys
 import xml.etree.ElementTree as Et
 
 import dbus
+import six
 
 PY2 = sys.version < '3'
 
@@ -211,7 +212,7 @@ def add_properties(xml, interface, props):
 
 def dict_to_variant_dict(in_dict):
     # Handle creating dbus.Dictionaries with signatures of 'sv'
-    for key, value in in_dict.iteritems():
+    for key, value in six.iteritems(in_dict):
         if isinstance(value, dict):
             in_dict[key] = dict_to_variant_dict(value)
     return dbus.Dictionary(in_dict, signature="sv")
@@ -219,7 +220,7 @@ def dict_to_variant_dict(in_dict):
 
 def _decode_dict(data):
     rv = {}
-    for key, value in data.iteritems():
+    for key, value in six.iteritems(data):
         if isinstance(key, unicode):
             key = key.encode('utf-8')
         if isinstance(value, unicode):
