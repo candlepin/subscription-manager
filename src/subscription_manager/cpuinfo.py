@@ -318,6 +318,7 @@ def split_kv_list_by_field(kv_list, field):
     if current_stanza:
         yield current_stanza
 
+
 """
 Processor   : AArch64 Processor rev 0 (aarch64)
 processor   : 0

@@ -17,4 +17,5 @@ GTK_COMPAT_VERSION = "3"
 def tree_row_reference(model, path):
     return Gtk.TreeRowReference.new(model, path)
 
+
 threads_init = GObject.threads_init

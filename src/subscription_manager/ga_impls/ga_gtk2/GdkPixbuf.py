@@ -10,4 +10,5 @@ class Pixbuf(_Pixbuf):
         "Return a gtk.gdk.Pixbuf (note, not a ga.gtk.GdkPixbuf)"
         return pixbuf_new_from_file_at_size(path, height, width)
 
+
 __all__ = [Pixbuf]

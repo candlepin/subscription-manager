@@ -730,6 +730,7 @@ class ProductManager:
         finally:
             f.close()
 
+
 if __name__ == '__main__':
     pm = ProductManager()
     pm.update(yb=None)

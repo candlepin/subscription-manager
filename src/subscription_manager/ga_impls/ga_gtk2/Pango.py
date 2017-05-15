@@ -8,4 +8,5 @@ class WrapMode(object):
 class Weight(object):
     BOLD = WEIGHT_BOLD
 
+
 __all__ = [Weight, WrapMode]

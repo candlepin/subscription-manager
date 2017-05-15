@@ -361,6 +361,7 @@ class TestUrlBaseJoinHostname(TestUrlBaseJoin):
 class TestUrlBaseJoinDefaultCdn(TestUrlBaseJoin):
     base = "https://cdn.redhat.com"
 
+
 NOT_COLLECTED = "non-collected-package"
 
 

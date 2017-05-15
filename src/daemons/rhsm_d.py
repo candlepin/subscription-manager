@@ -32,6 +32,7 @@ def excepthook_base(exc_type, exc_value, exc_traceback):
     # something fundamental failed... how quiet should we be?
     sys.exit(0)
 
+
 sys.excepthook = excepthook_base
 
 import syslog
@@ -61,6 +62,7 @@ def excepthook_logging(exc_type, exc_value, exc_traceback):
               "".join(framelist))
 
     return excepthook_base(exc_type, exc_value, exc_traceback)
+
 
 sys.excepthook = excepthook_logging
 

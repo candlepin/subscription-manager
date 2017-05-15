@@ -153,6 +153,7 @@ def dbus_to_python(obj, expected_type=None):
 
     return python_obj
 
+
 # From lvm-dubstep/lvmdbus/utils.py  (GPLv2, copyright Red Hat)
 # https://github.com/tasleson/lvm-dubstep
 _type_map = dict(

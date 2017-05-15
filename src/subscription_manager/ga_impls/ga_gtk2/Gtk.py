@@ -112,6 +112,7 @@ class GaImage(Image):
     def new_from_icon_name(cls, icon_name, size):
         return image_new_from_icon_name(icon_name, size)
 
+
 # NOTE: ga.Gtk.Image will be the GaImage subclass above, and not the gtk2
 #       gtk.Image. However, aside from the added constructor, the rest of
 #       the Gtk.Image is not provided here.
@@ -123,6 +124,7 @@ class GaWindow(Window):
     @classmethod
     def set_default_icon_name(cls, icon_name):
         window_set_default_icon_name(icon_name)
+
 
 Window = GaWindow
 

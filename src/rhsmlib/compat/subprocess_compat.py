@@ -37,6 +37,7 @@ def check_output_2_6(*args, **kwargs):
 
     return output
 
+
 check_output = check_output_2_6
 
 if hasattr(subprocess, 'check_output'):

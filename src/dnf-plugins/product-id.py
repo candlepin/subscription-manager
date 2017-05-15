@@ -56,6 +56,7 @@ class ProductId(dnf.Plugin):
         except Exception as e:
             logger.error(str(e))
 
+
 log = logging.getLogger('rhsm-app.' + __name__)
 
 

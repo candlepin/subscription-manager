@@ -243,6 +243,7 @@ class CertSorterTests(SubManFixture):
         self.sorter.system_status = 'partial'
         self.assertEqual('Insufficient', self.sorter.get_system_status())
 
+
 SAMPLE_COMPLIANCE_JSON = json.loads("""
 {
   "date" : "2013-04-26T13:43:12.436+0000",

@@ -676,6 +676,7 @@ class MockLog:
 def MockSystemLog(self, message, priority):
     pass
 
+
 EXPECTED_CONTENT = EXPECTED_CERT_CONTENT + os.linesep + EXPECTED_KEY_CONTENT
 EXPECTED_CERT_CONTENT_V3 = EXPECTED_CERT_CONTENT_V3 + os.linesep + \
                       EXPECTED_CERT_ENTITLEMENT_V3 + os.linesep + \
