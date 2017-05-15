@@ -96,6 +96,7 @@ Requires:  python-decorator
 Requires:  virt-what
 Requires:  python-rhsm >= 1.20.0
 Requires:  python-decorator
+Requires:  python-six
 
 %if 0%{?suse_version}
 Requires:  dbus-1-python
@@ -158,6 +159,7 @@ BuildRequires: gettext
 BuildRequires: intltool
 BuildRequires: libnotify-devel
 BuildRequires: desktop-file-utils
+BuildRequires: python-six
 %if 0%{?fedora} || 0%{?rhel}
 BuildRequires: redhat-lsb
 %else

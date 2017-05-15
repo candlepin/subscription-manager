@@ -253,7 +253,9 @@ class install_data(_install_data):
 
 setup_requires = []
 
-install_requires = []
+install_requires = [
+        'six',
+    ]
 
 test_require = [
       'mock',
