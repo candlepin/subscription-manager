@@ -18,6 +18,7 @@ import mock
 import json
 import dbus.connection
 import socket
+import six
 
 import rhsm.connection
 import subscription_manager.injection as inj
@@ -177,7 +178,7 @@ class DomainSocketRegisterDBusObjectFunctionalTest(DBusObjectTest):
 
         def assertions(*args):
             result = args[0]
-            self.assertRegexpMatches(result, r'/var/run/dbus.*')
+            six.assertRegex(self, result, r'/var/run/dbus.*')
 
         self.dbus_request(assertions, self.interface.Start, dbus_method_args)
 
@@ -188,7 +189,7 @@ class DomainSocketRegisterDBusObjectFunctionalTest(DBusObjectTest):
             # Assign the result as an attribute to this function.
             # See http://stackoverflow.com/a/27910553/6124862
             assertions.result = args[0]
-            self.assertRegexpMatches(assertions.result, r'/var/run/dbus.*')
+            six.assertRegex(self, assertions.result, r'/var/run/dbus.*')
 
         self.dbus_request(assertions, self.interface.Start, dbus_method_args)
 

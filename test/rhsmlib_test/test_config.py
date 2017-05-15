@@ -17,6 +17,7 @@ except ImportError:
     import unittest
 
 import dbus
+import six
 
 from rhsm.config import RhsmConfigParser, NoOptionError
 from rhsmlib.dbus import constants
@@ -226,5 +227,5 @@ class TestConfigDBusObject(DBusObjectTest, TestUtilsMixin):
     def test_set_section_fails(self):
         dbus_method_args = ['server', 'new']
 
-        with self.assertRaisesRegexp(dbus.DBusException, r'Setting an entire section is not.*'):
+        with six.assertRaisesRegex(self, dbus.DBusException, r'Setting an entire section is not.*'):
             self.dbus_request(None, self.interface.Set, dbus_method_args)
