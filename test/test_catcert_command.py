@@ -17,8 +17,8 @@ try:
 except ImportError:
     import unittest
 
-import certdata
-from fixture import Capture, SubManFixture
+from . import certdata
+from .fixture import Capture, SubManFixture
 
 from rct.cert_commands import CatCertCommand
 from rct.printing import xstr

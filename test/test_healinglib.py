@@ -14,7 +14,7 @@
 
 import mock
 
-import fixture
+from . import fixture
 
 from subscription_manager import healinglib
 

@@ -13,12 +13,12 @@
 # in this software or its documentation.
 #
 
-import certdata
+from . import certdata
 
 from rct.cert_commands import StatCertCommand
 from rhsm.certificate import create_from_pem
 
-from fixture import Capture, SubManFixture
+from .fixture import Capture, SubManFixture
 
 
 class StatCertCommandStub(StatCertCommand):

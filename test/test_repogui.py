@@ -13,12 +13,12 @@
 #
 
 from mock import Mock
-from fixture import SubManFixture
+from .fixture import SubManFixture
 from subscription_manager.async import AsyncRepoOverridesUpdate
 from subscription_manager.gui.reposgui import RepositoriesDialog
 from subscription_manager.repolib import Repo
 from subscription_manager.overrides import Override
-from stubs import StubEntitlementCertificate, StubProduct
+from .stubs import StubEntitlementCertificate, StubProduct
 
 
 class TestReposGui(SubManFixture):

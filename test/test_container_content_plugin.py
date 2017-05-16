@@ -13,7 +13,7 @@
 
 import mock
 
-import fixture
+from . import fixture
 import tempfile
 import shutil
 import os.path

@@ -16,7 +16,7 @@ try:
 except ImportError:
     import unittest
 
-from modelhelpers import create_pool, create_attribute_list
+from .modelhelpers import create_pool, create_attribute_list
 from subscription_manager.jsonwrapper import PoolWrapper
 
 

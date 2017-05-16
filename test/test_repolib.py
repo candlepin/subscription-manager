@@ -19,13 +19,13 @@ except ImportError:
     import unittest
 
 import re
-import fixture
+from . import fixture
 
 from iniparse import RawConfigParser, SafeConfigParser
 from mock import Mock, patch, MagicMock
 from StringIO import StringIO
 
-from stubs import StubProductCertificate, \
+from .stubs import StubProductCertificate, \
         StubProduct, StubEntitlementCertificate, StubContent, \
         StubProductDirectory, StubConsumerIdentity, StubEntitlementDirectory
 from subscription_manager.repolib import Repo, RepoActionInvoker, \

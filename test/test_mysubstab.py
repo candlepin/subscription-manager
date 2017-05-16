@@ -14,8 +14,8 @@
 
 import datetime
 
-from fixture import SubManFixture
-from stubs import StubUEP, StubEntitlementCertificate, \
+from .fixture import SubManFixture
+from .stubs import StubUEP, StubEntitlementCertificate, \
         StubCertificateDirectory, StubProduct, StubBackend, \
         StubProductDirectory
 from subscription_manager.gui.mysubstab import MySubscriptionsTab, \

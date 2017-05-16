@@ -1,5 +1,5 @@
-import fixture
-import stubs
+from . import fixture
+from . import stubs
 
 from mock import Mock, patch
 from rhsm.utils import ServerUrlParseErrorEmpty, \
@@ -10,8 +10,8 @@ from subscription_manager.utils import parse_server_info, \
     get_version, get_client_versions, unique_list_items, \
     get_server_versions, friendly_join, is_true_value, url_base_join,\
     ProductCertificateFilter, EntitlementCertificateFilter
-from stubs import StubProductCertificate, StubProduct, StubEntitlementCertificate
-from fixture import SubManFixture
+from .stubs import StubProductCertificate, StubProduct, StubEntitlementCertificate
+from .fixture import SubManFixture
 
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX

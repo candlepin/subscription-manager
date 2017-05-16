@@ -17,9 +17,9 @@
 from mock import Mock, patch
 from datetime import timedelta, datetime
 
-from stubs import StubEntitlementCertificate, StubProduct, StubEntitlementDirectory
+from .stubs import StubEntitlementCertificate, StubProduct, StubEntitlementDirectory
 
-import fixture
+from . import fixture
 
 from subscription_manager.certdirectory import Writer
 from subscription_manager import entcertlib

@@ -15,8 +15,8 @@ from mock import patch, call, Mock
 from subscription_manager import api
 from subscription_manager.repolib import Repo
 
-from fixture import SubManFixture
-from stubs import StubUEP
+from .fixture import SubManFixture
+from .stubs import StubUEP
 
 
 class ApiVersionTest(SubManFixture):

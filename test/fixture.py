@@ -23,7 +23,7 @@ except AttributeError:
 from mock import Mock, MagicMock, NonCallableMock, patch, mock_open
 from contextlib import contextmanager
 
-import stubs
+from . import stubs
 import subscription_manager.injection as inj
 import subscription_manager.managercli
 from rhsmlib.services import config

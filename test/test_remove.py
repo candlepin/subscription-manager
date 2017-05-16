@@ -16,9 +16,9 @@
 from subscription_manager import managercli
 from subscription_manager import injection as inj
 
-from stubs import StubEntitlementDirectory, StubProductDirectory, StubEntActionInvoker, \
+from .stubs import StubEntitlementDirectory, StubProductDirectory, StubEntActionInvoker, \
         StubEntitlementCertificate, StubProduct, StubPool
-import fixture
+from . import fixture
 
 
 # This is a copy of CliUnSubscribeTests for the new name.

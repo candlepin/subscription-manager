@@ -16,7 +16,7 @@ import threading
 
 from mock import patch
 
-import fixture
+from . import fixture
 
 
 from subscription_manager import certlib

@@ -25,9 +25,9 @@ import time
 from mock import Mock, patch, mock_open
 
 # used to get a user readable cfg class for test cases
-from stubs import StubProduct, StubProductCertificate, StubCertificateDirectory, \
+from .stubs import StubProduct, StubProductCertificate, StubCertificateDirectory, \
     StubEntitlementCertificate, StubPool, StubEntitlementDirectory
-from fixture import SubManFixture
+from .fixture import SubManFixture
 
 from rhsm import ourjson as json
 from subscription_manager.cache import ProfileManager, \

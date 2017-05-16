@@ -16,9 +16,9 @@
 import mock
 
 
-import stubs
+from . import stubs
 
-from fixture import SubManFixture
+from .fixture import SubManFixture
 from subscription_manager.ga import Gdk as ga_Gdk
 
 from subscription_manager.injection import require, IDENTITY

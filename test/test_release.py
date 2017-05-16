@@ -17,8 +17,8 @@ import httplib
 import socket
 from rhsm.https import ssl
 
-import stubs
-import fixture
+from . import stubs
+from . import fixture
 
 from subscription_manager import injection as inj
 from subscription_manager import release

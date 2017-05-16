@@ -20,15 +20,15 @@ except ImportError:
 from datetime import datetime, timedelta
 import os
 
-from stubs import StubCertificateDirectory, StubProductCertificate, \
+from .stubs import StubCertificateDirectory, StubProductCertificate, \
         StubProduct, StubProductDirectory, StubCertSorter
-from fixture import SubManFixture
+from .fixture import SubManFixture
 from subscription_manager.managerlib import merge_pools, PoolFilter, \
         MergedPoolsStackingGroupSorter, MergedPools, \
         PoolStash, allows_multi_entitlement, valid_quantity
 from subscription_manager.injection import provide, \
         PROD_DIR
-from modelhelpers import create_pool
+from .modelhelpers import create_pool
 from subscription_manager import managerlib
 import rhsm
 from rhsm.certificate import create_from_pem, DateRange, GMT

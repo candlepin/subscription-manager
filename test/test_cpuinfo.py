@@ -5,7 +5,7 @@ log = logging.getLogger("rhsm-app.unittests." + __name__)
 
 from subscription_manager import cpuinfo
 
-import fixture
+from . import fixture
 
 test_path = os.path.dirname(__file__)
 CPUINFOS = "data/cpuinfo"

@@ -8,7 +8,7 @@ import socket
 from rhsm.https import ssl
 
 from subscription_manager.gui import utils
-from fixture import FakeException, FakeLogger
+from .fixture import FakeException, FakeLogger
 
 import rhsm.connection as connection
 

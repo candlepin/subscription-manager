@@ -12,8 +12,8 @@
 #
 
 
-import stubs
-import fixture
+from . import stubs
+from . import fixture
 
 from subscription_manager import factlib
 from subscription_manager import injection as inj

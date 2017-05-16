@@ -23,7 +23,7 @@ import os
 from mock import patch, MagicMock
 from shutil import rmtree
 
-from stubs import StubProduct, StubEntitlementCertificate, \
+from .stubs import StubProduct, StubEntitlementCertificate, \
     StubProductCertificate
 from subscription_manager.certdirectory import Path, EntitlementDirectory, \
     ProductDirectory, ProductCertificateDirectory, Directory

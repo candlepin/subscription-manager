@@ -1,9 +1,9 @@
 
 from mock import Mock, patch
 
-from fixture import SubManFixture
+from .fixture import SubManFixture
 
-from stubs import StubBackend, StubFacts
+from .stubs import StubBackend, StubFacts
 from subscription_manager.gui.registergui import RegisterWidget, RegisterInfo,  \
     CredentialsScreen, ActivationKeyScreen, ChooseServerScreen, AsyncBackend, \
     CREDENTIALS_PAGE, CHOOSE_SERVER_PAGE

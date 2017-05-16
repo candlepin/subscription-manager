@@ -18,7 +18,7 @@
 import gettext
 import logging
 
-from certlib import Locker, ActionReport
+from .certlib import Locker, ActionReport
 from subscription_manager import injection as inj
 
 _ = gettext.gettext

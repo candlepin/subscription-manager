@@ -16,7 +16,7 @@ from __future__ import print_function
 import ConfigParser
 
 import mock
-import fixture
+from . import fixture
 
 from subscription_manager.model import EntitlementSource, Entitlement, \
     find_content

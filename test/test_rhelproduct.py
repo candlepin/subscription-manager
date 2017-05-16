@@ -1,9 +1,9 @@
 
-import stubs
+from . import stubs
 
 from subscription_manager import rhelproduct
 
-from fixture import SubManFixture
+from .fixture import SubManFixture
 
 
 # matches:

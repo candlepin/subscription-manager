@@ -1,7 +1,7 @@
-from fixture import SubManFixture
+from .fixture import SubManFixture
 
 from subscription_manager.injection import provide, IDENTITY
-from stubs import StubUEP, StubFacts
+from .stubs import StubUEP, StubFacts
 from subscription_manager.gui import factsgui
 from mock import NonCallableMock, patch
 

@@ -15,8 +15,8 @@ except ImportError as e:
     raise SkipTest(e)
 
 
-import fixture
-import stubs
+from . import fixture
+from . import stubs
 
 import subscription_manager.injection as inj
 from subscription_manager import productid

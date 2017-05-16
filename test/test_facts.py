@@ -2,7 +2,7 @@ import tempfile
 import shutil
 from mock import patch
 
-import fixture
+from . import fixture
 from subscription_manager import facts
 from rhsm import ourjson as json
 

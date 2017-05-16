@@ -16,8 +16,8 @@ import copy
 
 import subscription_manager.injection as inj
 
-from fixture import SubManFixture
-from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
+from .fixture import SubManFixture
+from .stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
     StubEntitlementDirectory, StubProductDirectory, \
     StubUEP, StubCertSorter
 import subscription_manager.cert_sorter

@@ -16,7 +16,7 @@
 from datetime import datetime, timedelta
 
 import mock
-import stubs
+from . import stubs
 
 from rhsm import ourjson as json
 from subscription_manager import action_client
@@ -33,7 +33,7 @@ from rhsm.profile import RPMProfile
 from rhsm.connection import GoneException
 from rhsm.certificate import GMT
 
-from fixture import SubManFixture
+from .fixture import SubManFixture
 
 
 CONSUMER_DATA = {'releaseVer': {'id': 1, 'releaseVer': '123123'},

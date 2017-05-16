@@ -10,14 +10,14 @@ import types
 
 import yum
 
-import stubs
+from . import stubs
 from subscription_manager import productid
 from subscription_manager import certdirectory
 
 from rhsm.certificate2 import Product
 
 from mock import Mock, patch
-from fixture import SubManFixture
+from .fixture import SubManFixture
 
 
 class StubDirectory(certdirectory.Directory):

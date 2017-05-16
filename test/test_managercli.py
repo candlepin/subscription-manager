@@ -22,10 +22,10 @@ from subscription_manager.printing_utils import format_name, columnize, \
 from subscription_manager.repolib import Repo
 from subscription_manager.overrides import Override
 
-from stubs import StubProductCertificate, StubEntitlementCertificate, \
+from .stubs import StubProductCertificate, StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP, StubProductDirectory, \
         StubCertSorter, StubPool
-from fixture import FakeException, FakeLogger, SubManFixture, \
+from .fixture import FakeException, FakeLogger, SubManFixture, \
         Capture, Matcher
 
 from mock import patch, Mock, call

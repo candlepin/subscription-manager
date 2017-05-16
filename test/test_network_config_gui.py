@@ -1,13 +1,13 @@
 
 
-from fixture import SubManFixture
+from .fixture import SubManFixture
 from subscription_manager.gui import networkConfig
 import mock
 import rhsm.connection as connection
 import rhsm.config
 import rhsm.utils
 import socket
-import stubs
+from . import stubs
 
 
 class TestNetworkConfigDialog(SubManFixture):

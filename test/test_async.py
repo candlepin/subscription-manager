@@ -15,7 +15,7 @@
 
 
 import datetime
-import fixture
+from . import fixture
 
 import mock
 
@@ -25,7 +25,7 @@ from subscription_manager.injection import provide
 from subscription_manager import async
 from subscription_manager import managerlib
 
-import stubs
+from . import stubs
 
 
 # some bits we end up calling from list pools

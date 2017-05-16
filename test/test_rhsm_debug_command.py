@@ -21,8 +21,8 @@ import tarfile
 import tempfile
 from datetime import datetime
 
-import fixture
-from test_managercli import TestCliCommand
+from . import fixture
+from .test_managercli import TestCliCommand
 
 from rhsm_debug import debug_commands
 from rhsm_debug import cli

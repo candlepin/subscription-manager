@@ -28,14 +28,14 @@ from zipfile import ZipFile
 
 from subscription_manager.i18n_optparse import OptionParser
 
-import manifestdata
+from . import manifestdata
 from rct.manifest_commands import CatManifestCommand
 from rct.manifest_commands import DumpManifestCommand
 from rct.manifest_commands import get_value
 from rct.manifest_commands import RCTManifestCommand
 from rct.manifest_commands import ZipExtractAll
 
-from fixture import Capture, SubManFixture
+from .fixture import Capture, SubManFixture
 
 
 def _build_valid_manifest():

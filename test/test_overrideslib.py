@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from fixture import SubManFixture
+from .fixture import SubManFixture
 from subscription_manager.overrides import Overrides, Override
 
 

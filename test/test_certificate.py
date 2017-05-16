@@ -21,7 +21,7 @@ from datetime import datetime, timedelta
 
 # TODO: move to python-rhsm test suite?
 
-from stubs import StubProduct, StubEntitlementCertificate
+from .stubs import StubProduct, StubEntitlementCertificate
 
 
 def yesterday():

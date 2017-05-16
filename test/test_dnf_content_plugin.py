@@ -14,7 +14,7 @@ except ImportError as e:
     raise SkipTest(e)
 
 
-import fixture
+from . import fixture
 
 
 # Yeah, this is weird. The yum plugins aren't on sys.path, nor are they in the

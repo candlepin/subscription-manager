@@ -16,7 +16,7 @@ try:
 except ImportError:
     import unittest
 
-from stubs import StubEntitlementCertificate, StubProduct
+from .stubs import StubEntitlementCertificate, StubProduct
 from mock import Mock
 from subscription_manager.reasons import Reasons
 

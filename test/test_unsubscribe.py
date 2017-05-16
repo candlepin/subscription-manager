@@ -15,9 +15,9 @@
 import mock
 import rhsm.connection as connection
 
-from stubs import StubEntitlementDirectory, StubProductDirectory, \
+from .stubs import StubEntitlementDirectory, StubProductDirectory, \
     StubEntActionInvoker, StubEntitlementCertificate, StubProduct
-from fixture import SubManFixture
+from .fixture import SubManFixture
 
 from subscription_manager import managercli
 from subscription_manager import injection as inj

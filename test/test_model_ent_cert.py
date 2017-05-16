@@ -1,9 +1,9 @@
 
 import mock
 
-import fixture
+from . import fixture
 
-import test_model
+from . import test_model
 
 from rhsm import certificate2
 from subscription_manager import model

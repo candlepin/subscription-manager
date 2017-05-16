@@ -1,8 +1,8 @@
 
 import mock
 
-import fixture
-import stubs
+from . import fixture
+from . import stubs
 
 from rhsm import certificate2
 from subscription_manager import entbranding

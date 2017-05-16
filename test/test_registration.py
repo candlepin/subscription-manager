@@ -17,13 +17,13 @@ import os
 from contextlib import nested
 from mock import Mock, NonCallableMock, patch
 
-from stubs import StubUEP
+from .stubs import StubUEP
 
 from subscription_manager.managercli import RegisterCommand
 from subscription_manager import injection as inj
 from subscription_manager import cache
 
-from fixture import SubManFixture, Capture
+from .fixture import SubManFixture, Capture
 
 
 class CliRegistrationTests(SubManFixture):

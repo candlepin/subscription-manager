@@ -19,11 +19,11 @@ except ImportError:
 import os
 import re
 import StringIO
-import stubs
+from . import stubs
 
 from mock import patch, NonCallableMock, MagicMock, Mock, call
 from rhsm.https import ssl
-from fixture import Capture, SubManFixture, temp_file
+from .fixture import Capture, SubManFixture, temp_file
 from optparse import OptionParser
 from textwrap import dedent
 
