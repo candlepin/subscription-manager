@@ -12,6 +12,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+from __future__ import print_function
 
 import gettext
 import logging
@@ -305,9 +306,9 @@ class EntCertUpdateAction(object):
         # entitlement directory before we go to delete expired certs.
         rogue_count = len(self.report.rogue)
         if rogue_count > 0:
-            print gettext.ngettext("%s local certificate has been deleted.",
+            print(gettext.ngettext("%s local certificate has been deleted.",
                                    "%s local certificates have been deleted.",
-                                   rogue_count) % rogue_count
+                                   rogue_count) % rogue_count)
             self.ent_dir.refresh()
 
 

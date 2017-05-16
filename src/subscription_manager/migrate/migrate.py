@@ -13,6 +13,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+from __future__ import print_function
 
 import getpass
 import gettext
@@ -125,12 +126,12 @@ class Menu(object):
                 self.display_invalid()
 
     def display(self):
-        print self.header
+        print(self.header)
         for index, entry in enumerate(self.choices):
-            print "%s. %s" % (index + 1, entry[0])
+            print("%s. %s" % (index + 1, entry[0]))
 
     def display_invalid(self):
-        print _("You have entered an invalid choice.  Enter a choice from the menu above.")
+        print(_("You have entered an invalid choice.  Enter a choice from the menu above."))
 
     def _get_item(self, selection):
         try:
@@ -286,7 +287,7 @@ class MigrationEngine(object):
         try:
             self.cp.getStatus()
         except ssl.SSLError as e:
-            print _("The CA certificate for the destination server has not been installed.")
+            print(_("The CA certificate for the destination server has not been installed."))
             system_exit(os.EX_SOFTWARE, CONNECTION_FAILURE % e)
         except Exception as e:
             log.exception(e)
@@ -414,9 +415,9 @@ class MigrationEngine(object):
         return [x['label'] for x in channels]
 
     def print_banner(self, msg):
-        print "\n+-----------------------------------------------------+"
-        print msg
-        print "+-----------------------------------------------------+"
+        print("\n+-----------------------------------------------------+")
+        print(msg)
+        print("+-----------------------------------------------------+")
 
     def check_for_conflicting_channels(self, subscribed_channels):
         jboss_channel = False
@@ -456,15 +457,15 @@ class MigrationEngine(object):
 
         log.error("Aborting. Detected the following product ID collisions: %s", collisions)
         self.print_banner(_("Unable to continue migration!"))
-        print _("You are subscribed to channels that have conflicting product certificates.")
+        print(_("You are subscribed to channels that have conflicting product certificates."))
         for prod_id, mappings in list(collisions.items()):
             # Flatten the list of lists
             colliding_channels = [item for sublist in list(mappings.values()) for item in sublist]
-            print _("The following channels map to product ID %s:") % prod_id
+            print(_("The following channels map to product ID %s:") % prod_id)
             for c in sorted(colliding_channels):
-                print "\t%s" % c
-        print _("Reduce the number of channels per product ID to 1 and run migration again.")
-        print _("To remove a channel, use 'rhn-channel --remove --channel=<conflicting_channel>'.")
+                print("\t%s" % c)
+        print(_("Reduce the number of channels per product ID to 1 and run migration again."))
+        print(_("To remove a channel, use 'rhn-channel --remove --channel=<conflicting_channel>'."))
         sys.exit(1)
 
     def deploy_prod_certificates(self, subscribed_channels):
@@ -504,12 +505,12 @@ class MigrationEngine(object):
         if invalid_rhsm_channels:
             self.print_banner(_("Channels not available on %s:") % self.options.destination_url)
             for i in invalid_rhsm_channels:
-                print i
+                print(i)
 
         if unrecognized_channels:
             self.print_banner(_("No product certificates are mapped to these legacy channels:"))
             for i in unrecognized_channels:
-                print i
+                print(i)
 
         if unrecognized_channels or invalid_rhsm_channels:
             if not self.options.force:
@@ -528,7 +529,7 @@ class MigrationEngine(object):
 
         self.print_banner(_("Installing product certificates for these legacy channels:"))
         for i in valid_rhsm_channels:
-            print i
+            print(i)
 
         release = self.get_release()
 
@@ -554,7 +555,7 @@ class MigrationEngine(object):
 
         if db_modified:
             self.db.write()
-        print _("\nProduct certificates installed successfully to %s.") % product_dir.path
+        print(_("\nProduct certificates installed successfully to %s.") % product_dir.path)
 
     def clean_up(self, subscribed_channels):
         # Hack to address BZ 853233
@@ -642,10 +643,10 @@ class MigrationEngine(object):
             log.exception("Could not delete system %s from legacy server" % self.system_id)
             # If we time out or get a network error, log it and keep going.
             shutil.move(system_id_path, system_id_path + ".save")
-            print _("Did not receive a completed unregistration message from legacy server for system %s.") % self.system_id
+            print(_("Did not receive a completed unregistration message from legacy server for system %s.") % self.system_id)
 
             if self.is_hosted:
-                print _("Please investigate on the Customer Portal at https://access.redhat.com.")
+                print(_("Please investigate on the Customer Portal at https://access.redhat.com."))
             return
 
         if result:
@@ -655,7 +656,7 @@ class MigrationEngine(object):
                 self.disable_yum_rhn_plugin()
             except Exception:
                 pass
-            print _("System successfully unregistered from legacy server.")
+            print(_("System successfully unregistered from legacy server."))
         else:
             # If the legacy server reports that deletion just failed, then quit.
             system_exit(1, _("Unable to unregister system from legacy server.  ") + SEE_LOG_FILE)
@@ -674,14 +675,14 @@ class MigrationEngine(object):
             return True
         except Exception as e:
             log.exception(e)
-            print _("Consumer %s doesn't exist.  Creating new consumer.") % consumer_id
+            print(_("Consumer %s doesn't exist.  Creating new consumer.") % consumer_id)
             return False
 
     def register(self, credentials, org, environment):
         # For registering the machine, use the CLI tool to reuse the username/password (because the GUI will prompt for them again)
         # Prepended a \n so translation can proceed without hitch
         print ("")
-        print _("Attempting to register system to destination server...")
+        print(_("Attempting to register system to destination server..."))
         cmd = ['subscription-manager', 'register']
 
         # Candlepin doesn't want user credentials with activation keys
@@ -721,7 +722,7 @@ class MigrationEngine(object):
         if not identity.is_valid():
             system_exit(2, _("\nUnable to register.\nFor further assistance, please contact Red Hat Global Support Services."))
 
-        print _("System '%s' successfully registered.\n") % identity.name
+        print(_("System '%s' successfully registered.\n") % identity.name)
         return identity
 
     def select_service_level(self, org, servicelevel):
@@ -733,7 +734,7 @@ class MigrationEngine(object):
         except RestlibException as e:
             if e.code == 404:
                 # no need to die, just skip it
-                print not_supported
+                print(not_supported)
                 return None
             else:
                 # server supports it but something went wrong, die.
@@ -750,7 +751,7 @@ class MigrationEngine(object):
         if servicelevel is None or \
             servicelevel.upper() not in (level.upper() for level in levels):
             if servicelevel is not None:
-                print _("\nService level \"%s\" is not available.") % servicelevel
+                print(_("\nService level \"%s\" is not available.") % servicelevel)
             menu = Menu(slas, _("Please select a service level agreement for this system."))
             servicelevel = menu.choose()
         return servicelevel
@@ -788,9 +789,9 @@ class MigrationEngine(object):
                     repofile.set(rhsmChannel, 'enabled', '1')
             repofile.write()
         except Exception:
-            print _("\nCouldn't enable extra repositories.")
+            print(_("\nCouldn't enable extra repositories."))
             command = "subscription-manager repos --help"
-            print _("Please ensure system has subscriptions attached, and see '%s' to enable additional repositories") % command
+            print(_("Please ensure system has subscriptions attached, and see '%s' to enable additional repositories") % command)
 
     def is_using_systemd(self):
         release_number = int(self.get_release().partition('-')[-1])
@@ -809,7 +810,7 @@ class MigrationEngine(object):
             return subprocess.call("service %s status > /dev/null 2>&1" % daemon, shell=True) == 0
 
     def handle_legacy_daemons(self, using_systemd):
-        print _("Stopping and disabling legacy services...")
+        print(_("Stopping and disabling legacy services..."))
         log.info("Attempting to stop and disable legacy services: %s" % " ".join(LEGACY_DAEMONS))
         for daemon in LEGACY_DAEMONS:
             if self.is_daemon_installed(daemon, using_systemd):
@@ -830,7 +831,7 @@ class MigrationEngine(object):
             subprocess.call(["chkconfig", daemon, "off"])
 
     def remove_legacy_packages(self):
-        print _("Removing legacy packages...")
+        print(_("Removing legacy packages..."))
         log.info("Attempting to remove legacy packages: %s" % " ".join(LEGACY_PACKAGES))
         subprocess.call(["yum", "remove", "-q", "-y"] + LEGACY_PACKAGES)
 
@@ -856,12 +857,12 @@ class MigrationEngine(object):
         if self.options.registration_state != "keep":
             self.check_has_access(rpc_session, session_key)
 
-        print
-        print _("Retrieving existing legacy subscription information...")
+        print()
+        print(_("Retrieving existing legacy subscription information..."))
         subscribed_channels = self.get_subscribed_channels_list(rpc_session, session_key)
         self.print_banner(_("System is currently subscribed to these legacy channels:"))
         for channel in subscribed_channels:
-            print channel
+            print(channel)
 
         self.check_for_conflicting_channels(subscribed_channels)
         self.deploy_prod_certificates(subscribed_channels)
@@ -870,8 +871,8 @@ class MigrationEngine(object):
         self.write_migration_facts()
 
         if self.options.registration_state == "purge":
-            print
-            print _("Preparing to unregister system from legacy server...")
+            print()
+            print(_("Preparing to unregister system from legacy server..."))
             self.legacy_purge(rpc_session, session_key)
         elif self.options.registration_state == "unentitle":
             self.legacy_unentitle(rpc_session)

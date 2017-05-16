@@ -1,3 +1,4 @@
+from __future__ import print_function
 
 import logging
 
@@ -60,7 +61,7 @@ class ActionReport(object):
 
     def print_exceptions(self):
         if self._exceptions:
-            print self.format_exceptions()
+            print(self.format_exceptions())
 
     def __str__(self):
         template = """%(report_name)s

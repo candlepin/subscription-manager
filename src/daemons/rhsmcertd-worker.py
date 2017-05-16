@@ -15,6 +15,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+from __future__ import print_function
 
 import signal
 import sys
@@ -65,7 +66,7 @@ def main(options, log):
         log.error('Either the consumer is not registered or the certificates' +
                   ' are corrupted. Certificate update using daemon failed.')
         sys.exit(-1)
-    print _('Updating entitlement certificates & repositories')
+    print(_('Updating entitlement certificates & repositories'))
 
     cp = cp_provider.get_consumer_auth_cp()
     cp.supports_resource(None)  # pre-load supported resources; serves as a way of failing before locking the repos
@@ -81,7 +82,7 @@ def main(options, log):
         for update_report in actionclient.update_reports:
             # FIXME: make sure we don't get None reports
             if update_report:
-                print update_report
+                print(update_report)
 
     except connection.ExpiredIdentityCertException as e:
         log.critical(_("Your identity certificate has expired"))
@@ -138,6 +139,6 @@ if __name__ == '__main__':
             sys.exit(-1)
     except Exception as e:
         log.error("Error while updating certificates using daemon")
-        print _('Unable to update entitlement certificates and repositories')
+        print(_('Unable to update entitlement certificates and repositories'))
         log.exception(e)
         sys.exit(-1)

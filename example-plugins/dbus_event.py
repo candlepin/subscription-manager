@@ -12,6 +12,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+from __future__ import print_function
 
 import dbus
 import dbus.service
@@ -50,7 +51,7 @@ class SubManEventDbus(dbus.service.Object):
         # The signal is emitted when this method exits
         # You can have code here if you wish, but the
         # decorator does the usful bits
-        print "sending dbus signal with message: %s" % message
+        print("sending dbus signal with message: %s" % message)
 
 
 class DbusEventPlugin(SubManPlugin):

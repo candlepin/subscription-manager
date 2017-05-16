@@ -12,6 +12,8 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+from __future__ import print_function
+
 import subscription_manager.injection as inj
 from subscription_manager import managerlib
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, \
@@ -238,7 +240,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         try:
             return ICONSET[icon_id]
         except KeyError:
-            print("Iconset does not contain icon for string '%s'" % icon_id)
+            print("Icon set does not contain icon for string '%s'" % icon_id)
             raise
 
     def on_selection(self, selection):

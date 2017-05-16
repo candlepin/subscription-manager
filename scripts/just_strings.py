@@ -7,6 +7,7 @@
 #   python-polib rpm or "easy_install polib"
 #
 #  usage: just_strings.py po/keys.pot
+from __future__ import print_function
 
 import polib
 import sys
@@ -15,5 +16,5 @@ pot_file1 = sys.argv[1]
 msgs = polib.pofile(pot_file1)
 
 for msg in msgs:
-    print msg.msgid
-    print
+    print(msg.msgid)
+    print()

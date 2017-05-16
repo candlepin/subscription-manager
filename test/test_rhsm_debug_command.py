@@ -12,6 +12,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+from __future__ import print_function
 
 import os
 import logging
@@ -209,7 +210,7 @@ class TestCompileCommand(TestCliCommand):
             self.assertTrue(os.path.exists(path_join(path2, path_join(path1, "7890.pem"))))
             self.assertFalse(os.path.exists(path_join(path2, path_join(path1, "22222-key.pem"))))
         except Exception as e:
-            print e
+            print(e)
             raise
         finally:
             self._rmtree(path1)

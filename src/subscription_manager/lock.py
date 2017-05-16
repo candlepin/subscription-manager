@@ -14,6 +14,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+from __future__ import print_function
 
 import fcntl
 import os
@@ -149,7 +150,7 @@ class Lock(object):
                 f.setpid()
             except OSError as e:
                 log.exception(e)
-                print "could not create lock"
+                print("could not create lock")
         finally:
             f.close()
 

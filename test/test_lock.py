@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 try:
     import unittest2 as unittest
 except ImportError:
@@ -73,7 +75,7 @@ class TestLock(unittest.TestCase):
         try:
             self.other_process.communicate("whatever")
         except Exception as e:
-            print e
+            print(e)
             # whatever, we closed it in the other thread
 
     def timeout_fail(self):

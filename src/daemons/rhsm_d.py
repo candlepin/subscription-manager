@@ -15,6 +15,8 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+from __future__ import print_function
+
 import sys
 
 enable_debug = False
@@ -91,7 +93,7 @@ enable_debug = False
 def debug(msg):
     if enable_debug:
         log.debug(msg)
-        print msg
+        print(msg)
 
 
 def in_warning_period(sorter):
@@ -257,7 +259,7 @@ def log_syslog(level, msg):
     syslog.syslog(level, msg)
     log.info("rhsmd: %s" % msg)
     if enable_debug:
-        print msg
+        print(msg)
 
 
 def main():

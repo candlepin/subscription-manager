@@ -23,6 +23,7 @@ Just use this instead of optparse, the interface should be the same.
 For some backgorund, see:
 http://bugs.python.org/issue4319
 """
+from __future__ import print_function
 
 import gettext
 import optparse
@@ -142,5 +143,5 @@ class OptionParser(_OptionParser):
         """
         self.print_usage(sys.stderr)
         #translators: arg 1 is the program name, arg 2 is the error message
-        print _("%s: error: %s") % (self.get_prog_name(), msg)
+        print(_("%s: error: %s") % (self.get_prog_name(), msg))
         self.exit(2)

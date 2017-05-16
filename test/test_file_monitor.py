@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import tempfile
 import shutil
 import os
@@ -91,12 +93,12 @@ class TestMonitorDirectories(fixture.SubManFixture):
         mock_dir_false._check_mtime = mock.MagicMock(return_value=(452345345, True))
 
         def changed_callback():
-            print "foo"
+            print("foo")
 
         fm = file_monitor.MonitorDirectories(dir_monitors=[mock_dir_false, mock_dir],
                                              changed_callback=changed_callback)
         fm.update()
-        print "changed", mock_dir._changed_callback.called
+        print("changed", mock_dir._changed_callback.called)
 
     def tearDown(self):
         if self.temp_dir:

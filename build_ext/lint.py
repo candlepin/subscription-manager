@@ -10,6 +10,8 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
+from __future__ import print_function
+
 import ast
 import re
 import tokenize

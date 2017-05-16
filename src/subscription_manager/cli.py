@@ -12,6 +12,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+from __future__ import print_function
 
 import gettext
 import os
@@ -90,13 +91,13 @@ class CLI:
         self._usage()
 
     def _usage(self):
-        print _("Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]") % os.path.basename(sys.argv[0])
-        print "\r"
+        print(_("Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]") % os.path.basename(sys.argv[0]))
+        print("\r")
         items = sorted(self.cli_commands.items())
         items_primary = []
         items_other = []
         for (name, cmd) in items:
-            if (cmd.primary):
+            if cmd.primary:
                 items_primary.append(("  " + name, cmd.shortdesc))
             else:
                 items_other.append(("  " + name, cmd.shortdesc))
@@ -108,7 +109,7 @@ class CLI:
 
     def _do_columnize(self, items_list):
         modules, descriptions = list(zip(*items_list))
-        print columnize(modules, echo_columnize_callback, *descriptions) + '\n'
+        print(columnize(modules, echo_columnize_callback, *descriptions) + '\n')
 
     def _find_best_match(self, args):
         """
@@ -158,7 +159,7 @@ class CLI:
         try:
             return cmd.main()
         except InvalidCLIOptionError as error:
-            print error
+            print(error)
 
 
 def system_exit(code, msgs=None):

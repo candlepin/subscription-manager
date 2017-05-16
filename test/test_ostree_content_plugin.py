@@ -11,6 +11,8 @@
 
 # test constructing from Content models
 # ignores wrong content type
+from __future__ import print_function
+
 import ConfigParser
 
 import mock
@@ -765,7 +767,7 @@ class TestOsTreeContents(fixture.SubManFixture):
 
         contents = find_content(ent_src,
             content_type=action_invoker.OSTREE_CONTENT_TYPE)
-        print "contents", contents
+        print("contents", contents)
         self.assertEqual(len(contents), 1)
 
         for content in contents:

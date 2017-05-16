@@ -12,6 +12,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+from __future__ import print_function
 
 import errno
 import gettext
@@ -187,7 +188,7 @@ class SystemCommand(CliCommand):
 
                 sfm = SaferFileMove()
                 sfm.move(tar_file_path, final_path)
-                print _("Wrote: %s") % final_path
+                print(_("Wrote: %s") % final_path)
             else:
                 # NOTE: this will fail across filesystems. We could add a force
                 # flag to for creation of a specific name with approriate
@@ -201,7 +202,7 @@ class SystemCommand(CliCommand):
                 # rename only works on the same filesystem, but it is atomic.
                 os.rename(content_path, dest_dir_name)
 
-                print _("Wrote: %s") % dest_dir_name
+                print(_("Wrote: %s") % dest_dir_name)
 
         except Exception as e:
             managercli.handle_exception(_("Unable to create zip file of system information: %s") % e, e)
