@@ -141,7 +141,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         if not response:
             return
 
-        serial = long(selection['serial'])
+        serial = int(selection['serial'])
 
         if self.identity.is_valid():
             self.pb = progress.Progress(_("Removing"),
@@ -269,7 +269,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         if not serial:
             return
 
-        cert = self.entitlement_dir.find(long(serial))
+        cert = self.entitlement_dir.find(int(serial))
         if not cert:
             return
 

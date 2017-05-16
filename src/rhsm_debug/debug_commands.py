@@ -43,7 +43,7 @@ ERR_NOT_REGISTERED_MSG = _("This system is not yet registered. Try 'subscription
 ERR_NOT_REGISTERED_CODE = 1
 
 ASSEMBLE_DIR = '/var/spool/rhsm/debug'
-ROOT_READ_ONLY = 0600
+ROOT_READ_ONLY = 0o600
 KEY_IGNORE_PATS = ['*key.pem']
 
 
