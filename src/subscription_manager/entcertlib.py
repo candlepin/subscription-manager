@@ -152,9 +152,13 @@ class EntCertUpdateAction(object):
             content_access_certs = self._find_content_access_certs()
             update_data = None
             if len(content_access_certs) > 0:
-                update_data = self.content_access_cache.check_for_update()
-            for content_access_cert in content_access_certs:
-                self.content_access_cache.update_cert(content_access_cert, update_data)
+                if len(expected) > 0:
+                    update_data = self.content_access_cache.check_for_update()
+                    for content_access_cert in content_access_certs:
+                        self.content_access_cache.update_cert(content_access_cert, update_data)
+                else:
+                    # This address BZ: 1448855
+                    self.delete(content_access_certs)
             if update_data is not None:
                 self.ent_dir.refresh()
                 self.repo_hook()
@@ -215,7 +219,7 @@ class EntCertUpdateAction(object):
 
     def _find_rogue_serials(self, local, expected):
         """Find serials we have locally but are not on the server."""
-        rogue = [local[sn] for sn in local if not sn in expected]
+        rogue = [local[sn] for sn in local if sn not in expected]
         return rogue
 
     def syslog_results(self):
@@ -235,9 +239,9 @@ class EntCertUpdateAction(object):
 
     def _get_local_serials(self):
         local = {}
-        #certificates in grace period were being renamed everytime.
-        #this makes sure we don't try to re-write certificates in
-        #grace period
+        # certificates in grace period were being renamed everytime.
+        # this makes sure we don't try to re-write certificates in
+        # grace period
         # XXX since we don't use grace period, this might not be needed
         self.ent_dir.refresh()
         for valid in self.ent_dir.list():
