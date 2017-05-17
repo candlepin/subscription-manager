@@ -24,9 +24,9 @@ import sys
 import signal
 import socket
 import syslog
-import urllib
 import uuid
 
+from six.moves import urllib
 from rhsm.https import ssl
 
 from subscription_manager.branding import get_branding
@@ -122,7 +122,7 @@ def url_base_join(base, url):
             base = base + '/'
         if (url and (url.startswith('/'))):
             url = url.lstrip('/')
-        return urllib.basejoin(base, url)
+        return urllib.parse.urljoin(base, url)
 
 
 class MissingCaCertException(Exception):

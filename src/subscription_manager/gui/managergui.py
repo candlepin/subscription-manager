@@ -23,7 +23,6 @@ import subscription_manager.injection as inj
 import gettext
 import locale
 import logging
-import urllib2
 import webbrowser
 import os
 import socket
@@ -31,6 +30,8 @@ import threading
 import time
 
 import rhsm.config as config
+
+from six.moves import urllib
 
 from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.ga import GLib as ga_GLib
@@ -569,8 +570,8 @@ class MainWindow(widgets.SubmanBaseWidget):
         lang, encoding = locale.getdefaultlocale()
         url = ONLINE_DOC_URL_TEMPLATE % (lang.replace("_", "-"))
         try:
-            urllib2.urlopen(url)
-        except urllib2.URLError:
+            urllib.request.urlopen(url)
+        except urllib.error.URLError:
             # Use the default if there is no translation.
             url = ONLINE_DOC_FALLBACK_URL
         return url

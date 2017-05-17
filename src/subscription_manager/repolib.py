@@ -16,8 +16,6 @@
 # in this software or its documentation.
 #
 
-# TODO: cleanup config parser imports
-from ConfigParser import Error as ConfigParserError
 import gettext
 from iniparse import RawConfigParser as ConfigParser
 import logging
@@ -29,8 +27,8 @@ from subscription_manager.cache import OverrideStatusCache, WrittenOverrideCache
 from subscription_manager import utils
 from subscription_manager import model
 from subscription_manager.model import ent_cert
-from urllib import urlencode
-from urlparse import parse_qs, urlparse, urlunparse
+from six.moves.urllib.parse import parse_qs, urlparse, urlunparse, urlencode
+from six.moves import configparser
 
 from rhsm.config import initConfig, in_container
 
@@ -58,7 +56,7 @@ def manage_repos_enabled():
     except ValueError as e:
         log.exception(e)
         return True
-    except ConfigParserError as e:
+    except configparser.Error as e:
         log.exception(e)
         return True
 

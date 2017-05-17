@@ -52,12 +52,9 @@ if 'RHSM_USE_M2CRYPTO' in os.environ:
 
 if using_stdlibs:
     log.debug('Using standard libs to provide httplib and ssl')
-    try:
-        import http.client as _httplib
-    except ImportError:
-        import httplib as _httplib
+    import six.moves.http_client as _httplib
     ssl = _ssl
-    httplib = _httplib  # FIXME would be nice to use http.client for Python 3 consistency
+    httplib = _httplib
 else:
     log.debug('Using m2crypto wrappers to provide httplib and ssl')
     import rhsm.m2cryptossl

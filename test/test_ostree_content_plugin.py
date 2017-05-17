@@ -13,7 +13,7 @@
 # ignores wrong content type
 from __future__ import print_function
 
-import ConfigParser
+from six.moves import configparser
 
 import mock
 from . import fixture
@@ -468,8 +468,8 @@ id=inrozxa width=100% height=100%>
     def test_init(self):
         # just expect any config parser ish error atm,
         # rhsm.config can raise a variety of exceptions all
-        # subclasses from ConfigParser.Error
-        self.assertRaises(ConfigParser.Error, self._rf_cfg)
+        # subclasses from configparser.Error
+        self.assertRaises(configparser.Error, self._rf_cfg)
 
 
 class TestOstreeRepoFileOneRemote(BaseOstreeRepoFileTest):

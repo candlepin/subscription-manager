@@ -28,11 +28,8 @@ from email.utils import formatdate
 
 from rhsm.https import httplib, ssl
 
-try:
-    from urllib.parse import urlencode, quote, quote_plus
-    from urllib.request import proxy_bypass_environment
-except ImportError:
-    from urllib import urlencode, quote, quote_plus, proxy_bypass_environment
+from six.moves.urllib.request import proxy_bypass
+from six.moves.urllib.parse import urlencode, quote, quote_plus
 
 from rhsm.config import initConfig
 
@@ -261,7 +258,7 @@ class ContentConnection(object):
             os.environ['no_proxy'] = no_proxy_override
 
         # honor no_proxy environment variable
-        if proxy_bypass_environment(self.host):
+        if proxy_bypass(self.host):
             self.proxy_hostname = None
             self.proxy_port = None
             self.proxy_user = None
@@ -694,7 +691,7 @@ class UEPConnection:
             os.environ['no_proxy'] = no_proxy_override
 
         # honor no_proxy environment variable
-        if proxy_bypass_environment(self.host):
+        if proxy_bypass(self.host):
             self.proxy_hostname = None
             self.proxy_port = None
             self.proxy_user = None

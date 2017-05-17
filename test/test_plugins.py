@@ -19,9 +19,7 @@ except ImportError:
 
 import os
 import mock
-
-from StringIO import StringIO
-
+import six
 
 from subscription_manager import plugins
 from subscription_manager import base_plugin
@@ -767,7 +765,7 @@ class BaseConduitTest(unittest.TestCase):
     conf_buf = ""
 
     def setUp(self):
-        self.conf_io = StringIO(self.conf_buf)
+        self.conf_io = six.StringIO(self.conf_buf)
         self.conduit = self._conduit()
 
     def _conduit(self):

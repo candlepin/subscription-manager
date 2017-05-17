@@ -14,82 +14,82 @@
 # in this software or its documentation.
 #
 
-import httplib
+import six.moves.http_client
 from M2Crypto import httpslib, SSL
 import socket
 import inspect
 
 # constants from actual httplib
-HTTP_PORT = httplib.HTTP_PORT
-HTTPS_PORT = httplib.HTTPS_PORT
+HTTP_PORT = six.moves.http_client.HTTP_PORT
+HTTPS_PORT = six.moves.http_client.HTTPS_PORT
 
-CONTINUE = httplib.CONTINUE
-SWITCHING_PROTOCOLS = httplib.SWITCHING_PROTOCOLS
-PROCESSING = httplib.PROCESSING
-OK = httplib.OK
-CREATED = httplib.CREATED
-ACCEPTED = httplib.ACCEPTED
-NON_AUTHORITATIVE_INFORMATION = httplib.NON_AUTHORITATIVE_INFORMATION
-NO_CONTENT = httplib.NO_CONTENT
-RESET_CONTENT = httplib.RESET_CONTENT
-PARTIAL_CONTENT = httplib.PARTIAL_CONTENT
-MULTI_STATUS = httplib.MULTI_STATUS
-IM_USED = httplib.IM_USED
-MULTIPLE_CHOICES = httplib.MULTIPLE_CHOICES
-MOVED_PERMANENTLY = httplib.MOVED_PERMANENTLY
-FOUND = httplib.FOUND
-SEE_OTHER = httplib.SEE_OTHER
-NOT_MODIFIED = httplib.NOT_MODIFIED
-USE_PROXY = httplib.USE_PROXY
-TEMPORARY_REDIRECT = httplib.TEMPORARY_REDIRECT
-BAD_REQUEST = httplib.BAD_REQUEST
-UNAUTHORIZED = httplib.UNAUTHORIZED
-PAYMENT_REQUIRED = httplib.PAYMENT_REQUIRED
-FORBIDDEN = httplib.FORBIDDEN
-NOT_FOUND = httplib.NOT_FOUND
-METHOD_NOT_ALLOWED = httplib.METHOD_NOT_ALLOWED
-NOT_ACCEPTABLE = httplib.NOT_ACCEPTABLE
-PROXY_AUTHENTICATION_REQUIRED = httplib.PROXY_AUTHENTICATION_REQUIRED
-REQUEST_TIMEOUT = httplib.REQUEST_TIMEOUT
-CONFLICT = httplib.CONFLICT
-GONE = httplib.GONE
-LENGTH_REQUIRED = httplib.LENGTH_REQUIRED
-PRECONDITION_FAILED = httplib.PRECONDITION_FAILED
-REQUEST_ENTITY_TOO_LARGE = httplib.REQUEST_ENTITY_TOO_LARGE
-REQUEST_URI_TOO_LONG = httplib.REQUEST_URI_TOO_LONG
-UNSUPPORTED_MEDIA_TYPE = httplib.UNSUPPORTED_MEDIA_TYPE
-REQUESTED_RANGE_NOT_SATISFIABLE = httplib.REQUESTED_RANGE_NOT_SATISFIABLE
-EXPECTATION_FAILED = httplib.EXPECTATION_FAILED
-UNPROCESSABLE_ENTITY = httplib.UNPROCESSABLE_ENTITY
-LOCKED = httplib.LOCKED
-FAILED_DEPENDENCY = httplib.FAILED_DEPENDENCY
-UPGRADE_REQUIRED = httplib.UPGRADE_REQUIRED
-INTERNAL_SERVER_ERROR = httplib.INTERNAL_SERVER_ERROR
-NOT_IMPLEMENTED = httplib.NOT_IMPLEMENTED
-BAD_GATEWAY = httplib.BAD_GATEWAY
-SERVICE_UNAVAILABLE = httplib.SERVICE_UNAVAILABLE
-GATEWAY_TIMEOUT = httplib.GATEWAY_TIMEOUT
-HTTP_VERSION_NOT_SUPPORTED = httplib.HTTP_VERSION_NOT_SUPPORTED
-INSUFFICIENT_STORAGE = httplib.INSUFFICIENT_STORAGE
-NOT_EXTENDED = httplib.NOT_EXTENDED
+CONTINUE = six.moves.http_client.CONTINUE
+SWITCHING_PROTOCOLS = six.moves.http_client.SWITCHING_PROTOCOLS
+PROCESSING = six.moves.http_client.PROCESSING
+OK = six.moves.http_client.OK
+CREATED = six.moves.http_client.CREATED
+ACCEPTED = six.moves.http_client.ACCEPTED
+NON_AUTHORITATIVE_INFORMATION = six.moves.http_client.NON_AUTHORITATIVE_INFORMATION
+NO_CONTENT = six.moves.http_client.NO_CONTENT
+RESET_CONTENT = six.moves.http_client.RESET_CONTENT
+PARTIAL_CONTENT = six.moves.http_client.PARTIAL_CONTENT
+MULTI_STATUS = six.moves.http_client.MULTI_STATUS
+IM_USED = six.moves.http_client.IM_USED
+MULTIPLE_CHOICES = six.moves.http_client.MULTIPLE_CHOICES
+MOVED_PERMANENTLY = six.moves.http_client.MOVED_PERMANENTLY
+FOUND = six.moves.http_client.FOUND
+SEE_OTHER = six.moves.http_client.SEE_OTHER
+NOT_MODIFIED = six.moves.http_client.NOT_MODIFIED
+USE_PROXY = six.moves.http_client.USE_PROXY
+TEMPORARY_REDIRECT = six.moves.http_client.TEMPORARY_REDIRECT
+BAD_REQUEST = six.moves.http_client.BAD_REQUEST
+UNAUTHORIZED = six.moves.http_client.UNAUTHORIZED
+PAYMENT_REQUIRED = six.moves.http_client.PAYMENT_REQUIRED
+FORBIDDEN = six.moves.http_client.FORBIDDEN
+NOT_FOUND = six.moves.http_client.NOT_FOUND
+METHOD_NOT_ALLOWED = six.moves.http_client.METHOD_NOT_ALLOWED
+NOT_ACCEPTABLE = six.moves.http_client.NOT_ACCEPTABLE
+PROXY_AUTHENTICATION_REQUIRED = six.moves.http_client.PROXY_AUTHENTICATION_REQUIRED
+REQUEST_TIMEOUT = six.moves.http_client.REQUEST_TIMEOUT
+CONFLICT = six.moves.http_client.CONFLICT
+GONE = six.moves.http_client.GONE
+LENGTH_REQUIRED = six.moves.http_client.LENGTH_REQUIRED
+PRECONDITION_FAILED = six.moves.http_client.PRECONDITION_FAILED
+REQUEST_ENTITY_TOO_LARGE = six.moves.http_client.REQUEST_ENTITY_TOO_LARGE
+REQUEST_URI_TOO_LONG = six.moves.http_client.REQUEST_URI_TOO_LONG
+UNSUPPORTED_MEDIA_TYPE = six.moves.http_client.UNSUPPORTED_MEDIA_TYPE
+REQUESTED_RANGE_NOT_SATISFIABLE = six.moves.http_client.REQUESTED_RANGE_NOT_SATISFIABLE
+EXPECTATION_FAILED = six.moves.http_client.EXPECTATION_FAILED
+UNPROCESSABLE_ENTITY = six.moves.http_client.UNPROCESSABLE_ENTITY
+LOCKED = six.moves.http_client.LOCKED
+FAILED_DEPENDENCY = six.moves.http_client.FAILED_DEPENDENCY
+UPGRADE_REQUIRED = six.moves.http_client.UPGRADE_REQUIRED
+INTERNAL_SERVER_ERROR = six.moves.http_client.INTERNAL_SERVER_ERROR
+NOT_IMPLEMENTED = six.moves.http_client.NOT_IMPLEMENTED
+BAD_GATEWAY = six.moves.http_client.BAD_GATEWAY
+SERVICE_UNAVAILABLE = six.moves.http_client.SERVICE_UNAVAILABLE
+GATEWAY_TIMEOUT = six.moves.http_client.GATEWAY_TIMEOUT
+HTTP_VERSION_NOT_SUPPORTED = six.moves.http_client.HTTP_VERSION_NOT_SUPPORTED
+INSUFFICIENT_STORAGE = six.moves.http_client.INSUFFICIENT_STORAGE
+NOT_EXTENDED = six.moves.http_client.NOT_EXTENDED
 
-responses = httplib.responses
+responses = six.moves.http_client.responses
 
-HTTPConnection = httplib.HTTPConnection
-HTTPResponse = httplib.HTTPResponse
-HTTPMessage = httplib.HTTPMessage
-HTTPException = httplib.HTTPException
-NotConnected = httplib.NotConnected
-InvalidURL = httplib.InvalidURL
-UnknownProtocol = httplib.UnknownProtocol
-UnknownTransferEncoding = httplib.UnknownTransferEncoding
-UnimplementedFileMode = httplib.UnimplementedFileMode
-IncompleteRead = httplib.IncompleteRead
-ImproperConnectionState = httplib.ImproperConnectionState
-CannotSendRequest = httplib.CannotSendRequest
-CannotSendHeader = httplib.CannotSendHeader
-ResponseNotReady = httplib.ResponseNotReady
-BadStatusLine = httplib.BadStatusLine
+HTTPConnection = six.moves.http_client.HTTPConnection
+HTTPResponse = six.moves.http_client.HTTPResponse
+HTTPMessage = six.moves.http_client.HTTPMessage
+HTTPException = six.moves.http_client.HTTPException
+NotConnected = six.moves.http_client.NotConnected
+InvalidURL = six.moves.http_client.InvalidURL
+UnknownProtocol = six.moves.http_client.UnknownProtocol
+UnknownTransferEncoding = six.moves.http_client.UnknownTransferEncoding
+UnimplementedFileMode = six.moves.http_client.UnimplementedFileMode
+IncompleteRead = six.moves.http_client.IncompleteRead
+ImproperConnectionState = six.moves.http_client.ImproperConnectionState
+CannotSendRequest = six.moves.http_client.CannotSendRequest
+CannotSendHeader = six.moves.http_client.CannotSendHeader
+ResponseNotReady = six.moves.http_client.ResponseNotReady
+BadStatusLine = six.moves.http_client.BadStatusLine
 
 
 class _RhsmProxyHTTPSConnection(httpslib.ProxyHTTPSConnection):

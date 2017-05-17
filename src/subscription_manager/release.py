@@ -17,10 +17,10 @@
 #
 
 import gettext
-import httplib
 import logging
 import socket
 
+import six.moves.http_client
 from rhsm.https import ssl
 
 import rhsm.config
@@ -124,7 +124,7 @@ class CdnReleaseVersionProvider(object):
             try:
                 data = self.content_connection.get_versions(listing_path)
             except (socket.error,
-                    httplib.HTTPException,
+                    six.moves.http_client.HTTPException,
                     ssl.SSLError) as e:
                 # content connection doesn't handle any exceptions
                 # and the code that invokes this doesn't either, so

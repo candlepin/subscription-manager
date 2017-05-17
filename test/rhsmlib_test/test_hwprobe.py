@@ -16,7 +16,7 @@ try:
 except ImportError:
     import unittest
 
-import cStringIO
+import six
 
 from mock import patch
 from mock import Mock
@@ -434,7 +434,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
 
     @patch("__builtin__.open")
     def test_get_slave_hwaddr_rr(self, MockOpen):
-        MockOpen.return_value = cStringIO.StringIO(PROC_BONDING_RR)
+        MockOpen.return_value = six.StringIO(PROC_BONDING_RR)
         hw = hwprobe.HardwareCollector()
         slave_hw = hw._get_slave_hwaddr("bond0", "eth0")
         # note we .upper the result
@@ -442,7 +442,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
 
     @patch("__builtin__.open")
     def test_get_slave_hwaddr_alb(self, MockOpen):
-        MockOpen.return_value = cStringIO.StringIO(PROC_BONDING_ALB)
+        MockOpen.return_value = six.StringIO(PROC_BONDING_ALB)
         hw = hwprobe.HardwareCollector()
         slave_hw = hw._get_slave_hwaddr("bond0", "eth0")
         # note we .upper the result

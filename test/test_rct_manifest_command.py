@@ -17,11 +17,11 @@ try:
 except ImportError:
     import unittest
 
-from cStringIO import StringIO
 import errno
 import mock
 import os
 import shutil
+import six
 import tempfile
 import zipfile
 from zipfile import ZipFile
@@ -39,10 +39,10 @@ from .fixture import Capture, SubManFixture
 
 
 def _build_valid_manifest():
-    manifest_zip = StringIO()
+    manifest_zip = six.StringIO()
     manifest_object = ZipFile(manifest_zip, "w", compression=zipfile.ZIP_STORED)
     manifest_object.writestr("signature", "dummy")
-    consumer_export_zip = StringIO()
+    consumer_export_zip = six.StringIO()
     consumer_export_object = ZipFile(consumer_export_zip, "w", compression=zipfile.ZIP_STORED)
     consumer_export_object.writestr("export/consumer.json", manifestdata.consumer_json)
     consumer_export_object.writestr("export/meta.json", manifestdata.meta_json)
@@ -175,7 +175,7 @@ class RCTManifestCommandTests(SubManFixture):
 class RCTManifestExtractTests(unittest.TestCase):
 
     def test_extractall_outside_base(self):
-        zip_file_object = StringIO()
+        zip_file_object = six.StringIO()
         archive = ZipExtractAll(zip_file_object, "w", compression=zipfile.ZIP_STORED)
         archive.writestr("../../../../wat", "this is weird")
 
@@ -185,7 +185,7 @@ class RCTManifestExtractTests(unittest.TestCase):
         shutil.rmtree(tmp_dir)
 
     def test_extractall_net_path(self):
-        zip_file_object = StringIO()
+        zip_file_object = six.StringIO()
         archive = ZipExtractAll(zip_file_object, "w", compression=zipfile.ZIP_STORED)
         archive.writestr(r"\\nethost\share\whatever", "this is weird")
 
@@ -201,7 +201,7 @@ class RCTManifestExtractTests(unittest.TestCase):
         shutil.rmtree(tmp_dir)
 
     def test_extractall_local(self):
-        zip_file_object = StringIO()
+        zip_file_object = six.StringIO()
         archive = ZipExtractAll(zip_file_object, "w", compression=zipfile.ZIP_STORED)
         archive.writestr("./some/path", "this is okay I think, though odd")
 
@@ -216,6 +216,6 @@ class RCTManifestExtractTests(unittest.TestCase):
 
     @mock.patch("sys.exit")
     def test_extractall_nonzip(self, mock_exit):
-        not_zip_file_object = StringIO()
+        not_zip_file_object = six.StringIO()
         ZipExtractAll(not_zip_file_object, "r")
         mock_exit.assert_called_with(1)

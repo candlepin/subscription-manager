@@ -17,11 +17,12 @@
 
 import gettext
 import logging
-import Queue
 import re
 import socket
 import sys
 import threading
+
+from six.moves import queue
 
 from subscription_manager import ga_loader
 ga_loader.init_ga()
@@ -1925,7 +1926,7 @@ class AsyncBackend(object):
     def __init__(self, backend):
         self.backend = backend
         self.plugin_manager = require(PLUGIN_MANAGER)
-        self.queue = Queue.Queue()
+        self.queue = queue.Queue()
         self._threads = []
 
     def block_until_complete(self):
@@ -1956,7 +1957,7 @@ class AsyncBackend(object):
             else:
                 callback(retval)
             return False
-        except Queue.Empty:
+        except queue.Empty:
             return True
 
     def _get_owner_list(self, username, callback):

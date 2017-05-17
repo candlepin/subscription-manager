@@ -13,7 +13,7 @@
 #
 
 import mock
-import httplib
+import six.moves.http_client
 import socket
 from rhsm.https import ssl
 
@@ -165,7 +165,7 @@ class TestCdnReleaseVerionProvider(fixture.SubManFixture):
         # mock content_connection so we can verify it's calls
         with mock.patch.object(cdn_rv_provider, 'content_connection') as mock_cc:
             mock_cc.get_versions.side_effect = \
-                    httplib.BadStatusLine("some bogus status")
+                    six.moves.http_client.BadStatusLine("some bogus status")
             releases = cdn_rv_provider.get_releases()
             self.assertEqual([], releases)
 

@@ -28,8 +28,8 @@ import functools
 import logging
 import threading
 import six
-import Queue
 
+from six.moves import queue
 from rhsmlib.dbus import constants, server
 
 # Set DBus mainloop early in test run (test import time!)
@@ -81,7 +81,7 @@ class DBusObjectTest(unittest.TestCase):
             'stopped_event': self.stopped_event,
         })
         self.started_event.wait()
-        self.result_queue = Queue.Queue(maxsize=1)
+        self.result_queue = queue.Queue(maxsize=1)
         self.addCleanup(self.stop_server)
 
     def stop_server(self):

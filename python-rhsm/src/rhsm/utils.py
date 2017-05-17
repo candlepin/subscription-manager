@@ -16,10 +16,8 @@
 import gettext
 import os
 import re
-try:
-    from urllib.parse import urlparse
-except ImportError:
-    from urlparse import urlparse
+
+import six.moves.urllib.parse
 
 from rhsm.config import DEFAULT_PROXY_PORT
 
@@ -146,7 +144,7 @@ def parse_url(local_server_entry,
 
     #FIXME: need a try except here? docs
     # don't seem to indicate any expected exceptions
-    result = urlparse(good_url)
+    result = six.moves.urllib.parse.urlparse(good_url)
     username = default_username
     password = default_password
     #netloc = result[1].split(":")

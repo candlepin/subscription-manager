@@ -14,11 +14,12 @@
 #
 from __future__ import print_function
 
-from cStringIO import StringIO
 import errno
 import gettext
 import os
 import sys
+
+from six.moves import cStringIO
 from zipfile import ZipFile, BadZipfile
 
 from rhsm import certificate
@@ -67,13 +68,13 @@ class ZipExtractAll(ZipFile):
 
     def _get_inner_zip(self):
         if self.inner_zip is None:
-            output = StringIO(self.read(RCTManifestCommand.INNER_FILE))
+            output = cStringIO(self.read(RCTManifestCommand.INNER_FILE))
             self.inner_zip = ZipExtractAll(output, 'r')
         return self.inner_zip
 
     def _read_file(self, file_path, is_inner=False):
         try:
-            output = StringIO(self.read(file_path))
+            output = cStringIO(self.read(file_path))
             result = output.getvalue()
             output.close()
         except KeyError:

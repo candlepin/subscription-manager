@@ -18,7 +18,7 @@ except ImportError:
 
 import os
 import re
-import StringIO
+import six
 from . import stubs
 
 from mock import patch, NonCallableMock, MagicMock, Mock, call
@@ -886,7 +886,7 @@ class TestMigration(SubManFixture):
 
     @patch("__builtin__.open", autospec=True)
     def test_get_release(self, mock_open):
-        mock_open.return_value = StringIO.StringIO("Red Hat Enterprise Linux Server release 6.3 (Santiago)")
+        mock_open.return_value = six.StringIO("Red Hat Enterprise Linux Server release 6.3 (Santiago)")
         release = self.engine.get_release()
         self.assertEqual(release, "RHEL-6")
 
@@ -1264,12 +1264,12 @@ class TestMigration(SubManFixture):
 
     @patch("__builtin__.open", autospec=True)
     def test_is_using_systemd_false_on_rhel6(self, mock_open):
-        mock_open.return_value = StringIO.StringIO("Red Hat Enterprise Linux Server release 6.3 (Santiago)")
+        mock_open.return_value = six.StringIO("Red Hat Enterprise Linux Server release 6.3 (Santiago)")
         self.assertFalse(self.engine.is_using_systemd())
 
     @patch("__builtin__.open", autospec=True)
     def test_is_using_systemd_true_on_rhel7(self, mock_open):
-        mock_open.return_value = StringIO.StringIO("Red Hat Enterprise Linux Server release 7.2 (Maipo)")
+        mock_open.return_value = six.StringIO("Red Hat Enterprise Linux Server release 7.2 (Maipo)")
         self.assertTrue(self.engine.is_using_systemd())
 
     @patch("subprocess.call", autospec=True)
