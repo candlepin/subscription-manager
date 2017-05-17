@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.19.13
+Version: 1.19.14
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -606,6 +606,11 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Wed May 17 2017 Kevin Howell <khowell@redhat.com> 1.19.14-1
+- 1449824: facts collection aborts with unknown locale (jhnidek@redhat.com)
+- 1448855: golden ticket entitlement was not removed. (jhnidek@redhat.com)
+- 1447211: Don't read non-existing json cache file. (jhnidek@redhat.com)
+
 * Mon May 15 2017 Kevin Howell <khowell@redhat.com> 1.19.13-1
 - 1447722: use socket.getaddrinfo() to mimic hostname -f cmd
   (jhnidek@redhat.com)
