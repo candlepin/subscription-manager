@@ -19,7 +19,7 @@ import gettext
 from gzip import GzipFile
 import logging
 import os
-import types
+import six
 # for labelCompare
 import rpm
 
@@ -96,7 +96,7 @@ class ProductDatabase:
         a {"productid": "repoid"} as well as the
         new form of {"productid: ["repoid1",...]}"""
         for productid, repo_data in list(db_dict.items()):
-            if isinstance(repo_data, types.StringType):
+            if isinstance(repo_data, six.string_types):
                 self.content[productid].append(repo_data)
             else:
                 self.content[productid] = repo_data

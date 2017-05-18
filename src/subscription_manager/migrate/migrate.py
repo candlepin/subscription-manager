@@ -23,6 +23,7 @@ import os
 import re
 import readline
 import shutil
+import six.moves
 import subprocess
 import sys
 
@@ -118,7 +119,7 @@ class Menu(object):
     def choose(self):
         while True:
             self.display()
-            selection = raw_input("? ").strip()
+            selection = six.moves.input("? ").strip()
             readline.clear_history()
             try:
                 return self._get_item(selection)
@@ -186,7 +187,7 @@ class MigrationEngine(object):
 
     def authenticate(self, username, password, user_prompt, pw_prompt):
         if not username:
-            username = raw_input(user_prompt).strip()
+            username = six.moves.input(user_prompt).strip()
             readline.clear_history()
 
         if not password:
@@ -308,7 +309,7 @@ class MigrationEngine(object):
             elif len(owner_list) == 1:
                 org_input = owner_list[0]['key']
             else:
-                org_input = raw_input(_("Org: ")).strip()
+                org_input = six.moves.input(_("Org: ")).strip()
                 readline.clear_history()
 
             org = None
@@ -338,7 +339,7 @@ class MigrationEngine(object):
             elif len(environment_list) == 1:
                 env_input = environment_list[0]['name']
             else:
-                env_input = raw_input(_("Environment: ")).strip()
+                env_input = six.moves.input(_("Environment: ")).strip()
                 readline.clear_history()
 
             for env_data in environment_list:

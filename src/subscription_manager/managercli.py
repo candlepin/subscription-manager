@@ -28,6 +28,7 @@ import os
 import re
 import readline
 import socket
+import six.moves
 import sys
 from time import localtime, strftime, strptime
 
@@ -607,7 +608,7 @@ class UserPassCommand(CliCommand):
         not be prompted for.
         """
         while not username:
-            username = raw_input(_("Username: "))
+            username = six.moves.input(_("Username: "))
             readline.clear_history()
         while not password:
             password = getpass.getpass(_("Password: "))
@@ -646,7 +647,7 @@ class OrgCommand(UserPassCommand):
     @staticmethod
     def _get_org(org):
         while not org:
-            org = raw_input(_("Organization: "))
+            org = six.moves.input(_("Organization: "))
             readline.clear_history()
         return org
 
@@ -1284,7 +1285,7 @@ class RegisterCommand(UserPassCommand):
         """
         By breaking this code out, we can write cleaner tests
         """
-        environment = raw_input(_("Environment: ")).strip()
+        environment = six.moves.input(_("Environment: ")).strip()
         readline.clear_history()
         return environment or self._prompt_for_environment()
 
@@ -1348,7 +1349,7 @@ class RegisterCommand(UserPassCommand):
 
         owner_key = None
         while not owner_key:
-            owner_key = raw_input(_("Organization: "))
+            owner_key = six.moves.input(_("Organization: "))
             readline.clear_history()
         return owner_key
 

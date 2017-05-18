@@ -3,11 +3,10 @@ try:
 except ImportError:
     import unittest
 
+import collections
 import os
 import shutil
 import tempfile
-import types
-
 import yum
 
 from . import stubs
@@ -305,7 +304,7 @@ class TestProductDatabase(unittest.TestCase):
     def test_find_repos_old_format(self):
         self.pdb.populate_content({'product': 'repo'})
         repo = self.pdb.find_repos("product")
-        self.assertTrue(isinstance(repo, types.ListType))
+        self.assertTrue(isinstance(repo, collections.Iterable))
         self.assertTrue("repo" in repo)
 
     def test_add_old_format(self):
@@ -319,10 +318,10 @@ class TestProductDatabase(unittest.TestCase):
         self.pdb.populate_content({'product1': 'repo1',
                                    'product2': ['repo2']})
         repo1 = self.pdb.find_repos("product1")
-        self.assertTrue(isinstance(repo1, types.ListType))
+        self.assertTrue(isinstance(repo1, collections.Iterable))
         self.assertTrue("repo1" in repo1)
         repo2 = self.pdb.find_repos("product2")
-        self.assertTrue(isinstance(repo2, types.ListType))
+        self.assertTrue(isinstance(repo2, collections.Iterable))
         self.assertTrue("repo2" in repo2)
 
     def test_add_mixed_old_and_new_format(self):
@@ -334,9 +333,9 @@ class TestProductDatabase(unittest.TestCase):
         product1_repos = self.pdb.find_repos('product1')
         product2_repos = self.pdb.find_repos('product2')
         product3_repos = self.pdb.find_repos('product3')
-        self.assertTrue(isinstance(product1_repos, types.ListType))
-        self.assertTrue(isinstance(product2_repos, types.ListType))
-        self.assertTrue(isinstance(product3_repos, types.ListType))
+        self.assertTrue(isinstance(product1_repos, collections.Iterable))
+        self.assertTrue(isinstance(product2_repos, collections.Iterable))
+        self.assertTrue(isinstance(product3_repos, collections.Iterable))
         self.assertEqual(["product1-repo1", "product1-repo2"],
                           product1_repos)
         self.assertEqual(["product2-repo1", "product2-repo2"],

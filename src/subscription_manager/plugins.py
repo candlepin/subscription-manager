@@ -19,6 +19,7 @@ import imp
 import inspect
 import logging
 import os
+import six
 
 from iniparse import SafeConfigParser
 from iniparse.compat import NoSectionError, NoOptionError
@@ -713,7 +714,7 @@ class BasePluginManager(object):
                 # not have known about. aka, all_hooks is complicated
 
                 # verify the hook is a callable
-                if callable(getattr(instance, func_name)):
+                if six.callable(getattr(instance, func_name)):
                     self._slot_to_funcs[slot].append(getattr(instance, func_name))
                     class_is_used = True
                 else:

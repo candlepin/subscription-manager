@@ -17,6 +17,7 @@ import gettext
 import fnmatch
 import re
 import logging
+import six
 
 from yum.i18n import utf8_width
 from subscription_manager.utils import get_terminal_width
@@ -87,7 +88,7 @@ def format_name(name, indent, max_length):
     it a columned effect.  Assumes the first line is already
     properly indented.
     """
-    if not name or not max_length or (max_length - indent) <= 2 or not isinstance(name, basestring):
+    if not name or not max_length or (max_length - indent) <= 2 or not isinstance(name, six.string_types):
         return name
     if not isinstance(name, unicode):
         name = name.decode("utf-8")
@@ -195,7 +196,7 @@ def echo_columnize_callback(template_str, *args, **kwargs):
 
 # from http://farmdev.com/talks/unicode/
 def to_unicode_or_bust(obj, encoding='utf-8'):
-    if isinstance(obj, basestring):
+    if isinstance(obj, six.string_types):
         if not isinstance(obj, unicode):
             obj = unicode(obj, encoding)
     return obj
