@@ -765,9 +765,10 @@ class BasePluginManager(object):
             raise SlotNameException(slot_name)
 
         for func in self._slot_to_funcs[slot_name]:
-            # can this use plugin_class.plugin_key?
-            plugin_key = ".".join([func.im_class.__module__, func.im_class.__name__])
-            log.debug("Running %s in %s" % (func.im_func.func_name, plugin_key))
+            func_module = inspect.getmodule(func).__name__
+            func_class = six.get_method_self(func).__class__.__name__
+            plugin_key = ".".join([func_module, func_class])
+            log.debug("Running %s in %s" % (six.get_method_function(func).__name__, plugin_key))
             # resolve slot_name to conduit
             # FIXME: handle cases where we don't have a conduit for a slot_name
             #   (should be able to handle this since we map those at the same time)
@@ -776,12 +777,12 @@ class BasePluginManager(object):
             try:
                 # create a Conduit
                 # FIXME: handle cases where we can't create a Conduit()
-                conduit_instance = conduit(func.im_class, **kwargs)
+                conduit_instance = conduit(six.get_method_self(func).__class__, **kwargs)
             # TypeError tends to mean we provided the wrong kwargs for this
             # conduit
             # if we get an Exception above, should we exit early, or
             # continue onto other hooks. A conduit could fail for
-            # something specific to func.im_class, but unlikely
+            # something specific to func.__class__, but unlikely
             except Exception as e:
                 log.exception(e)
                 raise

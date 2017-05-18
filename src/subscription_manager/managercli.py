@@ -2043,7 +2043,8 @@ class PluginsCommand(CliCommand):
             for slot in self.plugin_manager.get_slots():
                 print(slot)
                 for hook in sorted(self.plugin_manager._slot_to_funcs[slot]):
-                    print("\t%s.%s" % (hook.im_class.get_plugin_key(), hook.__name__))
+                    hook_key = six.get_method_self(hook).__class__.get_plugin_key()
+                    print("\t%s.%s" % (hook_key, hook.__name__))
 
 
 class ReposCommand(CliCommand):
