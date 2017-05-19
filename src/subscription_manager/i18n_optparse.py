@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Make optparse friendlier to i18n/l10n
 #
@@ -23,8 +25,6 @@ Just use this instead of optparse, the interface should be the same.
 For some backgorund, see:
 http://bugs.python.org/issue4319
 """
-from __future__ import print_function
-
 import gettext
 import optparse
 from optparse import IndentedHelpFormatter as _IndentedHelpFormatter

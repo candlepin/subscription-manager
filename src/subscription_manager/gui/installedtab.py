@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2010 Red Hat, Inc.
 #
@@ -12,8 +14,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-from __future__ import print_function
-
 import subscription_manager.injection as inj
 from subscription_manager import managerlib
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, \

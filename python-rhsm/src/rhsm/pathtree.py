@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # from __future__ import unicode_literals FIXME see if necessary
 
 # Copyright (c) 2012 Red Hat, Inc.

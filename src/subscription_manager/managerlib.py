@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # common calls to get product and entitlemnt info for gui/tui
 #

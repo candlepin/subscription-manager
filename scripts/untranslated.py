@@ -1,4 +1,5 @@
 #!/usr/bin/python
+from __future__ import print_function, division, absolute_import
 
 # sort of kind of a translation lint
 #
@@ -8,12 +9,9 @@
 #    check_translations.py /path/to/source/file
 #
 #  Should output any untranslated or fuzzy lines from the file in a "lint" style
-#!/usr/bin/python
 
 # NEEDS polib from http://pypi.python.org/pypi/polib
 # or easy_install polib
-from __future__ import print_function
-
 import glob
 import polib
 

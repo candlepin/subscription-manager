@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 import tempfile
 import shutil
 from mock import patch

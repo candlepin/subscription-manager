@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # A compatibility wrapper that adapts m2crypto to the subset of standard lib httplib used in python-rhsm.
 #
 # Copyright (c) 2016 Red Hat, Inc.

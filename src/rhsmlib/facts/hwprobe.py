@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Module to probe Hardware info from the system
 #
@@ -16,8 +18,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-from __future__ import print_function
-
 import gettext
 import logging
 import os

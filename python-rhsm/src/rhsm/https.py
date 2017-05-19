@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # A compatibility wrapper that provides httplib and ssl using either standard libs or m2crypto.
 #
 # Copyright (c) 2016 Red Hat, Inc.

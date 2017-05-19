@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Async wrapper module for managerlib methods, with glib integration
 #

@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # branding - default localizable strings that can be overridden for app branding
 #
@@ -22,7 +24,6 @@ directory. The module should contains a Branding class, whose instances have
 attributes matching the names of those on DefaultBranding for any values you
 want to override.
 """
-
 import gettext
 import glob
 import os

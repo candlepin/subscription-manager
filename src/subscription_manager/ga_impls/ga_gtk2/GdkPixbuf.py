@@ -1,3 +1,4 @@
+from __future__ import print_function, division, absolute_import
 
 from gtk.gdk import Pixbuf as _Pixbuf
 from gtk.gdk import pixbuf_new_from_file_at_size

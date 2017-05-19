@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2010 - 2012 Red Hat, Inc.
 #
@@ -12,7 +14,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
 from subscription_manager.cli import CLI
 from rct.cert_commands import CatCertCommand, StatCertCommand
 from rct.manifest_commands import CatManifestCommand, DumpManifestCommand

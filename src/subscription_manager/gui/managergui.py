@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # GUI Module for standalone subscription-manager cli
 #

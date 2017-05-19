@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Question: So, why not just 'from gtk import *' ?
 # Answer: Because there are name collisions and semantic changes. So this

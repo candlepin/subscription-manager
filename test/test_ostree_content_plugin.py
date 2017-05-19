@@ -1,5 +1,7 @@
-#
 # -*- coding: utf-8 -*-
+
+from __future__ import print_function, division, absolute_import
+
 # import subman fixture
 # override plugin manager with one that provides
 #  the ostree content plugin
@@ -11,8 +13,6 @@
 
 # test constructing from Content models
 # ignores wrong content type
-from __future__ import print_function
-
 from six.moves import configparser
 
 import six

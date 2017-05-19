@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function, division, absolute_import
+
 #
 # Subscription manager command line utility.
 #
@@ -15,8 +17,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-from __future__ import print_function
-
 import datetime
 import fileinput
 import fnmatch

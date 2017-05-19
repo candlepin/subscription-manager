@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # A proxy interface to initiate and interact with candlepin.
 #
 # Copyright (c) 2010 - 2012 Red Hat, Inc.

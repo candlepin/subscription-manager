@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (C) 2015  Red Hat, Inc.
 #
@@ -16,7 +18,6 @@
 # Red Hat, Inc.
 #
 """Module with the RHSM initial-setup class."""
-
 import logging
 
 from pyanaconda.addons import AddonData

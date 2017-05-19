@@ -1,6 +1,8 @@
 #!/usr/bin/python -Es
 # ^ is to prevent selinux denials trying to load modules from unintended
 #   paths. See https://bugzilla.redhat.com/show_bug.cgi?id=1136163
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2012 Red Hat, Inc.
 #
@@ -15,8 +17,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-from __future__ import print_function
-
 import signal
 import sys
 import logging

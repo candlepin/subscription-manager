@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # Copyright (c) 2010-2013 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -16,7 +18,6 @@
 Note: This module will fail to import if dmidecode fails to import.
       firmware_info.py expects that and handles it, and any other
       module that imports it should handle an import error as well."""
-
 import gettext
 import logging
 import os

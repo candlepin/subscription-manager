@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # This module has been originally modified and enhanced from Red Hat Update
 # Agent's config module.

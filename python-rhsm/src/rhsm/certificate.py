@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2010 - 2012 Red Hat, Inc.
 #
@@ -24,7 +26,6 @@ automatically create the correct object for any given certificate.
 Eventually the deprecated classes below will be removed, and the new classes
 will be relocated into this module.
 """
-
 import dateutil
 import os
 import re
