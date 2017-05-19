@@ -473,6 +473,7 @@ class BaseRestLib(object):
                 proxy_headers['Proxy-Authorization'] = _encode_auth(self.proxy_user, self.proxy_password)
             conn = httplib.HTTPSConnection(self.proxy_hostname, self.proxy_port, context=context, timeout=self.timeout)
             conn.set_tunnel(self.host, safe_int(self.ssl_port), proxy_headers)
+            self.headers['Host'] = '%s:%s' % (self.host, safe_int(self.ssl_port))
         else:
             conn = httplib.HTTPSConnection(self.host, self.ssl_port, context=context, timeout=self.timeout)
 
