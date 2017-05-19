@@ -528,12 +528,10 @@ class HardwareCollector(collector.FactsCollector):
             return lscpu_info
 
         # copy of parent process environment
-        parent_env = dict(os.environ)
+        lscpu_env = dict(os.environ)
 
-        # let us specify a test dir of /sys info for testing
-        # If the user env sets LC_ALL, it overrides a LANG here, so
-        # use LC_ALL here. See rhbz#1225435
-        lscpu_env = parent_env.update({'LC_ALL': 'en_US.UTF-8'})
+        # # LANGUAGE trumps LC_ALL, LC_CTYPE, LANG. See rhbz#1225435, rhbz#1450210
+        lscpu_env.update({'LANGUAGE': 'en_US.UTF-8'})
         lscpu_cmd = [LSCPU_CMD]
 
         if self.testing:
