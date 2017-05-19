@@ -26,7 +26,7 @@ conf = config.Config(initConfig())
 log = logging.getLogger(__name__)
 
 
-class ConsumerIdentity:
+class ConsumerIdentity(object):
     """Consumer info and certificate information.
 
     Includes helpers for reading/writing consumer identity certificates

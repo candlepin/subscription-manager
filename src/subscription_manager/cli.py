@@ -70,7 +70,7 @@ class AbstractCLICommand(object):
 
 
 # taken wholseale from rho...
-class CLI:
+class CLI(object):
 
     def __init__(self, command_classes=None):
         command_classes = command_classes or []

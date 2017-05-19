@@ -45,7 +45,7 @@ from rhsmlib.compat import check_output as compat_check_output
 from subprocess import CalledProcessError
 
 
-class ClassicCheck:
+class ClassicCheck(object):
     def is_registered_with_classic(self):
         try:
             sys.path.append('/usr/share/rhn')

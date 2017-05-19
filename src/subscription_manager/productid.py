@@ -55,7 +55,7 @@ class ProductIdRepoMap(utils.DefaultDict):
         self.default_factory = list
 
 
-class ProductDatabase:
+class ProductDatabase(object):
 
     def __init__(self):
         self.dir = DatabaseDirectory()
@@ -290,7 +290,7 @@ class ProductId(object):
     # def compare(self, other):   # version check?
 
 
-class ProductManager:
+class ProductManager(object):
     """Manager product certs, detecting when they need to be installed, or deleted.
 
     Note that this class has no knowledge of when it runs, and no nothing of the

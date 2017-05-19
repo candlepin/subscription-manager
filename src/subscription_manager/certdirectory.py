@@ -333,7 +333,7 @@ class EntitlementDirectory(CertificateDirectory):
         return pool_id_to_serials
 
 
-class Path:
+class Path(object):
 
     # Used during Anaconda install by the yum pidplugin to ensure we operate
     # beneath /mnt/sysimage/ instead of /.
@@ -357,7 +357,7 @@ class Path:
         return os.path.isdir(path)
 
 
-class Writer:
+class Writer(object):
 
     def __init__(self):
         self.ent_dir = require(ENT_DIR)

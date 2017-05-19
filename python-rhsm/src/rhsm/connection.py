@@ -646,7 +646,7 @@ class Restlib(BaseRestLib):
 # FIXME: there should probably be a class here for just
 # the connection bits, then a sub class for the api
 # stuff
-class UEPConnection:
+class UEPConnection(object):
     """
     Class for communicating with the REST interface of a Red Hat Unified
     Entitlement Platform.

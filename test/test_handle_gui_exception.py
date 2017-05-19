@@ -13,7 +13,7 @@ from .fixture import FakeException, FakeLogger
 import rhsm.connection as connection
 
 
-class FakeErrorWindow:
+class FakeErrorWindow(object):
     def __init__(self, msg, parent=None):
         self.msg = msg
 

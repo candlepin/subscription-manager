@@ -37,7 +37,7 @@ RELEASE_STATUS_CACHE = "RELEASE_STATUS_CACHE"
 CONTENT_ACCESS_CACHE = "CONTENT_ACCESS_CACHE"
 
 
-class FeatureBroker:
+class FeatureBroker(object):
     """
     Tracks all configured features.
 

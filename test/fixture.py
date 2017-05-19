@@ -70,7 +70,7 @@ def locale_context(new_locale, category=None):
         locale.setlocale(category, old_locale)
 
 
-class FakeLogger:
+class FakeLogger(object):
     def __init__(self):
         self.expected_msg = ""
         self.msg = None

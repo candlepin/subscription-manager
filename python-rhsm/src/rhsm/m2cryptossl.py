@@ -25,7 +25,7 @@ OP_NO_SSLv2 = _m2.SSL_OP_NO_SSLv2
 OP_NO_SSLv3 = _m2.SSL_OP_NO_SSLv3
 
 
-class NoOpChecker:
+class NoOpChecker(object):
     def __init__(self, host=None, peerCertHash=None, peerCertDigest='sha1'):
         self.host = host
         self.fingerprint = peerCertHash

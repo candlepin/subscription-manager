@@ -768,7 +768,7 @@ class Repo(dict):
         return hash(self.id)
 
 
-class TidyWriter:
+class TidyWriter(object):
 
     """
     ini file reader that removes successive newlines,

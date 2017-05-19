@@ -578,7 +578,7 @@ class Key(object):
         return self.content
 
 
-class DateRange:
+class DateRange(object):
     """
     Date range object.
 
@@ -944,7 +944,7 @@ class OID(object):
         return self._str
 
 
-class Order:
+class Order(object):
 
     @deprecated
     def __init__(self, ext):
@@ -1035,7 +1035,7 @@ class Order:
         return '\n'.join(s)
 
 
-class Product:
+class Product(object):
 
     @deprecated
     def __init__(self, p_hash, ext):
@@ -1089,7 +1089,7 @@ class Product:
         return str(self)
 
 
-class Entitlement:
+class Entitlement(object):
 
     def __init__(self, ext):
         self.ext = ext
