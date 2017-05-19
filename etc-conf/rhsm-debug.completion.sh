@@ -6,7 +6,7 @@
 _rhsm_debug_common_opts="-h --help --proxy --proxyuser --proxypassword"
 
 # main complete function
-_rhsm-debug()
+_rhsm_debug()
 {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   local first="${COMP_WORDS[1]}"
@@ -32,4 +32,4 @@ _rhsm-debug()
   return 0
 }
 
-complete -F _rhsm-debug -o default rhsm-debug
+complete -F _rhsm_debug -o default rhsm-debug

@@ -4,7 +4,7 @@
 #
 
 # main completion function
-_rhsm-icon()
+_rhsm_icon()
 {
 	local first cur prev opts base
 	COMPREPLY=()
@@ -25,4 +25,4 @@ _rhsm-icon()
 	return 0
 }
 
-complete -F _rhsm-icon rhsm-icon
+complete -F _rhsm_icon rhsm-icon
