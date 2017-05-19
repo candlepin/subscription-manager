@@ -4,7 +4,7 @@
 #
 
 # main completion function
-_rhn-migrate-classic-to-rhsm()
+_rhn_migrate_classic_to_rhsm()
 {
 	local first cur prev opts base
 	COMPREPLY=()
@@ -24,4 +24,4 @@ _rhn-migrate-classic-to-rhsm()
 	return 0
 }
 
-complete -F _rhn-migrate-classic-to-rhsm rhn-migrate-classic-to-rhsm
+complete -F _rhn_migrate_classic_to_rhsm rhn-migrate-classic-to-rhsm
