@@ -410,7 +410,7 @@ class HardwareCollector(collector.FactsCollector):
         # if we find valid values in cpu/cpuN/topology/*siblings_list
         # sometimes it's not there, particularly on rhel5
         if threads_per_core and cores_per_cpu:
-            cores_per_socket = cores_per_cpu / threads_per_core
+            cores_per_socket = cores_per_cpu // threads_per_core
             cpu_info["cpu.topology_source"] = "kernel /sys cpu sibling lists"
 
             # rhel6 s390x can have /sys cpu topo, but we can't make assumption
@@ -470,14 +470,14 @@ class HardwareCollector(collector.FactsCollector):
 
             # for some odd cases where there are offline ppc64 cpu's,
             # this can end up not being a whole number...
-            cores_per_socket = cpu_count / socket_count
+            cores_per_socket = cpu_count // socket_count
 
         if cores_per_socket and threads_per_core:
             # for s390x with sysinfo topo, we use the sysinfo numbers except
             # for cpu_count, which takes offline cpus into account. This is
             # mostly just to match lscpu behaviour here
             if cpu_info["cpu.topology_source"] != "s390x sysinfo":
-                socket_count = cpu_count / cores_per_socket / threads_per_core
+                socket_count = cpu_count // cores_per_socket // threads_per_core
 
         # s390 etc
         # for s390, socket calculations are per book, and we can have multiple
@@ -492,8 +492,8 @@ class HardwareCollector(collector.FactsCollector):
         if not books:
             book_siblings_per_cpu = self.count_cpumask_entries(cpu_files[0], 'book_siblings_list')
             if book_siblings_per_cpu:
-                book_count = cpu_count / book_siblings_per_cpu
-                sockets_per_book = book_count / socket_count
+                book_count = cpu_count // book_siblings_per_cpu
+                sockets_per_book = book_count // socket_count
                 cpu_info["cpu.topology_source"] = "s390 book_siblings_list"
                 books = True
 

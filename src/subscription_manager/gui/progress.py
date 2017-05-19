@@ -12,6 +12,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+from __future__ import division
 
 #from gi.repository import Gdk
 
@@ -61,7 +62,7 @@ class Progress(widgets.SubmanBaseWidget):
 
     def set_progress(self, amount, total):
         if total:
-            i = min(1, float(amount) / total)
+            i = min(1, amount / total)
         else:
             i = 1
 

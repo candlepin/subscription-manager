@@ -63,7 +63,7 @@ class CleanupCollector(collector.FactsCollector):
             return cleanup_info
 
         # And the cores per socket count as well
-        dmi_cpu_cores_per_cpu = int(self._collected_hw_info['cpu.cpu(s)']) / socket_count
+        dmi_cpu_cores_per_cpu = int(self._collected_hw_info['cpu.cpu(s)']) // socket_count
         cleanup_info['cpu.core(s)_per_socket'] = dmi_cpu_cores_per_cpu
 
         return cleanup_info

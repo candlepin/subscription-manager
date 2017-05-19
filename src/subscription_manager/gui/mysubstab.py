@@ -12,6 +12,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+from __future__ import division
 
 import gettext
 import os
@@ -380,7 +381,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         if (len(full_set) == 0):
             return 100
         else:
-            return (float(len(subset)) / len(full_set)) * 100
+            return (len(subset) / len(full_set)) * 100
 
     def _get_installed(self, products):
         installed_dir = self.product_dir
