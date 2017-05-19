@@ -291,6 +291,29 @@ class GettextVisitor(AstVisitor):
                 return (node, "X302 string formatting within gettext function: _('%s' % foo) should be _('%s') % foo")
 
 
+class FutureVisitor(AstVisitor):
+    """Looks for files missing 'from __future__ import print_function, division, absolute_import`."""
+    codes = ['X400']
+
+    class ImportsVisitor(AstVisitor):
+        def visit_ImportFrom(self, node):
+            self.generic_visit(node)
+            if node.module != '__future__':
+                return False
+
+            expected = ['print_function', 'division', 'absolute_import']
+            found = [alias.name for alias in node.names]
+            self.results.append(expected == found)
+
+    def visit_Module(self, node):
+        self.generic_visit(node)
+        import_visitor = self.ImportsVisitor()
+        import_visitor.visit(node)
+        # Skip empty __init__ modules
+        if node.body and not any(import_visitor.results):
+            return (node, "X400 module does not contain the correct __futures__ import (tip: order matters)")
+
+
 class AstChecker(object):
     name = "SubscriptionManagerAstChecker"
     version = "1.0"
@@ -311,6 +334,7 @@ class AstChecker(object):
         self.visitors = [
             (GettextVisitor, {}),
             (DebugImportVisitor, {}),
+            (FutureVisitor, {}),
             (WidgetVisitor, {'defined_widgets': widgets}),
             (SignalVisitor, {'defined_handlers': handlers}),
         ]
@@ -356,8 +380,8 @@ class AstChecker(object):
         if not msg:
             msg = self._error_tmpl
 
-        lineno = node.lineno
-        col_offset = node.col_offset
+        lineno = getattr(node, "lineno", 1)
+        col_offset = getattr(node, "col_offset", 0)
 
         # Adjust line number and offset if a decorator is applied
         if isinstance(node, ast.ClassDef):
