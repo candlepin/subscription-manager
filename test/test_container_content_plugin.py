@@ -22,10 +22,12 @@ import os.path
 
 from os.path import exists, join
 
+import imp
 from subscription_manager.model import Content
 from subscription_manager.plugin.container import \
     ContainerContentUpdateActionCommand, KeyPair, ContainerCertDir, \
     ContainerUpdateReport, RH_CDN_REGEX, RH_CDN_CA
+from subscription_manager.plugins import PluginManager
 
 DUMMY_CERT_LOCATION = "dummy/certs"
 
@@ -112,6 +114,35 @@ class TestContainerContentUpdateActionCommand(fixture.SubManFixture):
         self.assertTrue(exists(join(self.host_cert_dir, host1)))
         self.assertTrue(exists(join(self.host_cert_dir, host2)))
         self.assertTrue(exists(join(self.host_cert_dir, host3)))
+
+    def test_post_install_main(self):
+        plugin_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src', 'content_plugins'))
+        fp, pathname, description = imp.find_module('container_content', [plugin_path])
+        try:
+            container_content = imp.load_module('container_content', fp, pathname, description)
+        finally:
+            fp.close()
+        plugin_manager = PluginManager(search_path=plugin_path, plugin_conf_path=plugin_path)
+        plugin_class = plugin_manager.get_plugins()['container_content.ContainerContentPlugin']
+        with mock.patch.object(plugin_class, 'HOSTNAME_CERT_DIR', self.host_cert_dir):
+            with mock.patch('subscription_manager.model.ent_cert.EntitlementDirEntitlementSource', autospec=True):
+                with mock.patch('subscription_manager.plugins.PluginManager') as mock_plugin_manager:
+                    mock_plugin_manager.side_effect = lambda: plugin_manager
+
+                    registry_hostnames = [
+                        'registry.access.redhat.com',
+                        'cdn.redhat.com',
+                        'access.redhat.com',
+                        'registry.redhat.io',
+                    ]
+
+                    for hostname in registry_hostnames:
+                        self.assertFalse(exists(join(self.host_cert_dir, hostname)), "%s cert dir should not exist" % hostname)
+
+                    container_content.main()
+
+                    for hostname in registry_hostnames:
+                        self.assertTrue(exists(join(self.host_cert_dir, hostname)), "%s cert dir should exist" % hostname)
 
 
 class TestKeyPair(fixture.SubManFixture):
