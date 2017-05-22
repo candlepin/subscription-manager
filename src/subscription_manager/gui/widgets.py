@@ -200,7 +200,12 @@ class HasSortableWidget(object):
             return -1
         value1 = safe_int(str1, str1)
         value2 = safe_int(str2, str2)
-        return cmp(value1, value2)
+        if value1 < value2:
+            return -1
+        elif value1 == value2:
+            return 0
+        else:
+            return 1
 
     def sort_date(self, model, row1, row2, key):
         date1 = model.get_value(row1, model[key]) \
@@ -209,7 +214,15 @@ class HasSortableWidget(object):
             or datetime.date(datetime.MINYEAR, 1, 1)
         epoch1 = time.mktime(date1.timetuple())
         epoch2 = time.mktime(date2.timetuple())
-        return cmp(epoch1, epoch2)
+        return self._cmp(epoch1, epoch2)
+
+    def _cmp(self, val1, val2):
+        if val1 < val2:
+            return -1
+        elif val1 == val2:
+            return 0
+        else:
+            return -1
 
     def _stripe_rows(self, column, store):
         """

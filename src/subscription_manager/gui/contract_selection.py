@@ -216,7 +216,7 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
             else:
                 text = col._get_false_text()
             results.append(text)
-        return cmp(results[0], results[1])
+        return self._cmp(results[0], results[1])
 
     def _sort_date(self, model, row1, row2, data):
         """
@@ -229,4 +229,12 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
             or datetime.date(datetime.MINYEAR, 1, 1)
         epoch1 = time.mktime(date1.timetuple())
         epoch2 = time.mktime(date2.timetuple())
-        return cmp(epoch1, epoch2)
+        return self._cmp(epoch1, epoch2)
+
+    def _cmp(self, val1, val2):
+        if val1 < val2:
+            return -1
+        elif val1 == val2:
+            return 0
+        else:
+            return -1

@@ -189,7 +189,16 @@ class TestHasSortableWidget(unittest.TestCase):
             ('b', 'a'),
             ('a', 'a')
         ]
-        expected = [cmp(*case) for case in cases]
+
+        def _cmp(x1, x2):
+            if x1 < x2:
+                return -1
+            elif x1 == x2:
+                return 0
+            else:
+                return 1
+
+        expected = [_cmp(*case) for case in cases]
 
         self._run_cases(cases, expected)
 
