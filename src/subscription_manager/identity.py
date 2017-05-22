@@ -84,7 +84,7 @@ class ConsumerIdentity:
     def getConsumerName(self):
         altName = self.x509.alt_name
         # must account for old format and new
-        return altName.replace("DirName:/CN=", "").replace("URI:CN=", "")
+        return altName.replace("DirName:/CN=", "").replace("URI:CN=", "").split(", ")[-1]
 
     def getSerialNumber(self):
         return self.x509.serial
