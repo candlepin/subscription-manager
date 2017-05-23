@@ -38,6 +38,13 @@ from rhsm import ourjson as json
 
 class ConnectionTests(unittest.TestCase):
     def setUp(self):
+        # Try to remove all environment variables to not influence unit test
+        try:
+            os.environ.pop('no_proxy')
+            os.environ.pop('NO_PROXY')
+            os.environ.pop('HTTPS_PROXY')
+        except KeyError:
+            pass
         # NOTE: this won't actually work, idea for this suite of unit tests
         # is to mock the actual server responses and just test logic in the
         # UEPConnection:
@@ -149,16 +156,49 @@ class ConnectionTests(unittest.TestCase):
                 return port
             return None
 
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': 'foo.example.com'}):
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
+                                       'NO_PROXY': 'foo.example.com'}):
             with patch.object(connection.config, 'get', mock_config):
-                uep = UEPConnection(username='dummy', password='dummy', handler='/test', insecure=True, no_proxy=host)
+                uep = UEPConnection(username='dummy', password='dummy',
+                                    handler='/test', insecure=True, no_proxy=host)
+                self.assertEqual(None, uep.proxy_hostname)
+
+    def test_no_proxy_with_asterisk_via_api(self):
+        """Test that API trumps env var and config."""
+        host = self.cp.host
+        port = self.cp.ssl_port
+
+        def mock_config(section, name):
+            if (section, name) == ('server', 'no_proxy'):
+                return 'foo.example.com'
+            if (section, name) == ('server', 'hostname'):
+                return host
+            if (section, name) == ('server', 'port'):
+                return port
+            return None
+
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
+                                       'NO_PROXY': '*.example.com'}):
+            with patch.object(connection.config, 'get', mock_config):
+                uep = UEPConnection(username='dummy', password='dummy',
+                                    handler='/test', insecure=True, no_proxy=host)
                 self.assertEqual(None, uep.proxy_hostname)
 
     def test_no_proxy_via_environment_variable(self):
         """Test that env var no_proxy works."""
         host = self.cp.host
         with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': host}):
-            uep = UEPConnection(username='dummy', password='dummy', handler='/test', insecure=True)
+            uep = UEPConnection(username='dummy', password='dummy',
+                                handler='/test', insecure=True)
+            self.assertEqual(None, uep.proxy_hostname)
+
+    def test_no_proxy_with_asterisk_via_environment_variable(self):
+        """Test that env var no_proxy works."""
+        host = '*' + self.cp.host
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
+                                       'NO_PROXY': host}):
+            uep = UEPConnection(username='dummy', password='dummy',
+                                handler='/test', insecure=True)
             self.assertEqual(None, uep.proxy_hostname)
 
     def test_no_proxy_via_config(self):
@@ -175,10 +215,52 @@ class ConnectionTests(unittest.TestCase):
                 return port
             return None
 
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': 'foo.example.com'}):
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
+                                       'NO_PROXY': 'foo.example.com'}):
             with patch.object(connection.config, 'get', mock_config):
-                uep = UEPConnection(username='dummy', password='dummy', handler='/test', insecure=True)
+                uep = UEPConnection(username='dummy', password='dummy',
+                                    handler='/test', insecure=True)
                 self.assertEqual(None, uep.proxy_hostname)
+
+    def test_no_proxy_with_asterisk_via_config(self):
+        """Test that config trumps env var."""
+        host = self.cp.host
+        port = self.cp.ssl_port
+
+        def mock_config(section, name):
+            if (section, name) == ('server', 'no_proxy'):
+                return host
+            if (section, name) == ('server', 'hostname'):
+                return host
+            if (section, name) == ('server', 'port'):
+                return port
+            return None
+
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
+                                       'NO_PROXY': '*.example.com'}):
+            with patch.object(connection.config, 'get', mock_config):
+                uep = UEPConnection(username='dummy', password='dummy',
+                                    handler='/test', insecure=True)
+                self.assertEqual(None, uep.proxy_hostname)
+
+    def test_uep_connection_honors_no_proxy_setting(self):
+        with patch.dict('os.environ', {'no_proxy': 'foobar'}):
+            uep = UEPConnection(host="foobar", username="dummy", password="dummy", handler="/Test/", insecure=True,
+                                proxy_hostname="proxyfoo", proxy_password="proxypass", proxy_port=42, proxy_user="foo")
+            self.assertIs(None, uep.proxy_user)
+            self.assertIs(None, uep.proxy_password)
+            self.assertIs(None, uep.proxy_hostname)
+            self.assertIs(None, uep.proxy_port)
+
+    def test_content_connection_honors_no_proxy_setting(self):
+        with patch.dict('os.environ', {'no_proxy': 'foobar'}):
+            cont_conn = ContentConnection(host="foobar", username="dummy", password="dummy", insecure=True,
+                                          proxy_hostname="proxyfoo", proxy_password="proxypass", proxy_port=42,
+                                          proxy_user="foo")
+            self.assertIs(None, cont_conn.proxy_user)
+            self.assertIs(None, cont_conn.proxy_password)
+            self.assertIs(None, cont_conn.proxy_hostname)
+            self.assertIs(None, cont_conn.proxy_port)
 
     def test_sanitizeGuestIds_supports_strs(self):
         self.cp.supports_resource = Mock(return_value=True)
@@ -210,37 +292,19 @@ class ConnectionTests(unittest.TestCase):
         expected_guestIds = [guestId['guestId'] for guestId in guestIds]
         self.assertEquals(expected_guestIds, resultGuestIds)
 
-    def test_uep_connection_honors_no_proxy_setting(self):
-        with patch.dict('os.environ', {'no_proxy': 'foobar'}):
-            uep = UEPConnection(host="foobar", username="dummy", password="dummy", handler="/Test/", insecure=True,
-                                proxy_hostname="proxyfoo", proxy_password="proxypass", proxy_port=42, proxy_user="foo")
-            self.assertIs(None, uep.proxy_user)
-            self.assertIs(None, uep.proxy_password)
-            self.assertIs(None, uep.proxy_hostname)
-            self.assertIs(None, uep.proxy_port)
-
-    def test_content_connection_honors_no_proxy_setting(self):
-        with patch.dict('os.environ', {'no_proxy': 'foobar'}):
-            connection = ContentConnection(host="foobar", username="dummy", password="dummy", insecure=True,
-                                           proxy_hostname="proxyfoo", proxy_password="proxypass", proxy_port=42,
-                                           proxy_user="foo")
-            self.assertIs(None, connection.proxy_user)
-            self.assertIs(None, connection.proxy_password)
-            self.assertIs(None, connection.proxy_hostname)
-            self.assertIs(None, connection.proxy_port)
-
     def test_bad_ca_cert(self):
         f = open(os.path.join(self.temp_ent_dir, "foo.pem"), 'w+')
         f.write('xxxxxx\n')
         f.close()
-        connection = ContentConnection(host="foobar", username="dummy", password="dummy", insecure=True)
-        connection.ent_dir = self.temp_ent_dir
+        cont_conn = ContentConnection(host="foobar", username="dummy", password="dummy", insecure=True)
+        cont_conn.ent_dir = self.temp_ent_dir
         with self.assertRaises(BadCertificateException) as e:
-            connection._load_ca_certificates(ssl.SSLContext(ssl.PROTOCOL_SSLv23))
+            cont_conn._load_ca_certificates(ssl.SSLContext(ssl.PROTOCOL_SSLv23))
         restlib = Restlib("somehost", "123", "somehandler")
         restlib.ca_dir = self.temp_ent_dir
         with self.assertRaises(BadCertificateException) as e:
             restlib._load_ca_certificates(ssl.SSLContext(ssl.PROTOCOL_SSLv23))
+
 
 class RestlibValidateResponseTests(unittest.TestCase):
     def setUp(self):
