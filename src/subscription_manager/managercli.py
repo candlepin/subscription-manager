@@ -21,7 +21,6 @@ import datetime
 import fileinput
 import fnmatch
 import getpass
-import gettext
 import logging
 from optparse import OptionValueError
 import os
@@ -66,7 +65,7 @@ from subscription_manager.printing_utils import columnize, format_name, \
         none_wrap_columnize_callback, echo_columnize_callback, highlight_by_filter_string_columnize_callback
 from subscription_manager.utils import generate_correlation_id
 
-_ = gettext.gettext
+from subscription_manager.i18n import ungettext, ugettext as _
 
 log = logging.getLogger(__name__)
 
@@ -1809,9 +1808,9 @@ class RemoveCommand(CliCommand):
                         print(_("All subscriptions have been removed at the server."))
                     else:
                         count = total['deletedRecords']
-                        print(gettext.ngettext("%s subscription removed at the server.",
-                                               "%s subscriptions removed at the server.",
-                                                count) % count)
+                        print(ungettext("%s subscription removed at the server.",
+                                        "%s subscriptions removed at the server.",
+                                        count) % count)
                 else:
                     removed_serials = []
                     if self.options.pool_ids:

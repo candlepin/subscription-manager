@@ -18,7 +18,6 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 #
 
-import gettext
 import logging
 import socket
 import six
@@ -31,8 +30,6 @@ import rhsm.config
 from subscription_manager import injection as inj
 from subscription_manager import listing
 from subscription_manager import rhelproduct
-
-_ = gettext.gettext
 
 log = logging.getLogger(__name__)
 

@@ -18,7 +18,6 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-import gettext
 import logging
 
 from subscription_manager import base_action_client
@@ -33,8 +32,6 @@ from subscription_manager.content_action_client import ContentActionClient
 
 
 log = logging.getLogger(__name__)
-
-_ = gettext.gettext
 
 
 class ActionClient(base_action_client.BaseActionClient):

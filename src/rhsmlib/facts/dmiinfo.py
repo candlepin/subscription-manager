@@ -18,15 +18,14 @@ from __future__ import print_function, division, absolute_import
 Note: This module will fail to import if dmidecode fails to import.
       firmware_info.py expects that and handles it, and any other
       module that imports it should handle an import error as well."""
-import gettext
 import logging
 import os
+
+from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
 
 from rhsmlib.facts import collector
-
-_ = gettext.gettext
 
 FIRMWARE_DUMP_FILENAME = "dmi.dump"
 

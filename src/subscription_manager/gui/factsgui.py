@@ -14,8 +14,6 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
-import gettext
 import logging
 
 from subscription_manager.ga import Gtk as ga_Gtk
@@ -25,7 +23,7 @@ from subscription_manager.gui.utils import handle_gui_exception, linkify
 from subscription_manager import injection as inj
 from rhsm.connection import GoneException
 
-_ = gettext.gettext
+from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
 

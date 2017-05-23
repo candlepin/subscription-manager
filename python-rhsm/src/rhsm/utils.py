@@ -15,15 +15,12 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 #
 
-import gettext
 import os
 import re
 
 import six.moves.urllib.parse
 
 from rhsm.config import DEFAULT_PROXY_PORT
-
-_ = lambda x: gettext.ldgettext("rhsm", x)
 
 
 def remove_scheme(uri):

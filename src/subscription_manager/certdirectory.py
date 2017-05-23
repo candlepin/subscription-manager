@@ -16,8 +16,6 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
-import gettext
 import logging
 import os
 
@@ -29,7 +27,6 @@ from rhsmlib.services import config
 from rhsm.certificate2 import CONTENT_ACCESS_CERT_TYPE
 
 log = logging.getLogger(__name__)
-_ = gettext.gettext
 
 conf = config.Config(initConfig())
 

@@ -17,9 +17,7 @@ from __future__ import print_function, division, absolute_import
 
 import sys
 
-import gettext
 from subscription_manager.cli import AbstractCLICommand
-_ = gettext.gettext
 
 
 class RCTCliCommand(AbstractCLICommand):

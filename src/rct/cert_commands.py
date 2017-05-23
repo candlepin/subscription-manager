@@ -15,7 +15,6 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 #
 import base64
-import gettext
 import os
 
 from rhsm import certificate, _certificate
@@ -26,7 +25,7 @@ from rct.printing import printc, type_to_string
 
 from subscription_manager.cli import InvalidCLIOptionError
 
-_ = gettext.gettext
+from subscription_manager.i18n import ugettext as _
 
 
 class RCTCertCommand(RCTCliCommand):

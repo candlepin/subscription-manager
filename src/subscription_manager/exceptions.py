@@ -15,17 +15,15 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
 import inspect
 from socket import error as socket_error
 from rhsm.https import ssl, httplib
-import gettext
 
 from rhsm import connection, utils
 
 from subscription_manager.entcertlib import Disconnected
 
-_ = gettext.gettext
+from subscription_manager.i18n import ugettext as _
 
 SOCKET_MESSAGE = _('Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.')
 NETWORK_MESSAGE = _('Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.')

@@ -16,8 +16,6 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
-import gettext
 import logging
 import re
 import socket
@@ -53,9 +51,8 @@ from subscription_manager.gui.autobind import DryRunResult, \
         NoProductsException
 from subscription_manager.jsonwrapper import PoolWrapper
 
-_ = lambda x: gettext.ldgettext("rhsm", x)
+from subscription_manager.i18n import ugettext as _
 
-gettext.textdomain("rhsm")
 log = logging.getLogger(__name__)
 
 from rhsmlib.services import config
@@ -262,11 +259,14 @@ class RegisterWidget(widgets.SubmanBaseWidget):
     initial_screen = CHOOSE_SERVER_PAGE
 
     screen_ready = ga_GObject.property(type=bool, default=True)
-    register_button_label = ga_GObject.property(type=str, default=_('Register'))
+    register_button_label = ga_GObject.property(type=str)
     # TODO: a prop equivalent to initial-setups 'completed' and 'status' props
 
     def __init__(self, backend, reg_info=None, parent_window=None):
         super(RegisterWidget, self).__init__()
+
+        self.set_property('register-button-label',
+                          _('Register'))
 
         self.backend = backend
 

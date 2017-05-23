@@ -15,7 +15,6 @@ from __future__ import print_function, division, absolute_import
 #
 from copy import copy
 from datetime import datetime
-import gettext
 import logging
 
 from rhsm.certificate import GMT
@@ -26,7 +25,7 @@ from subscription_manager.reasons import Reasons
 from subscription_manager import file_monitor
 from subscription_manager import utils
 
-_ = gettext.gettext
+from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
 
