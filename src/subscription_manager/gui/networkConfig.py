@@ -108,7 +108,7 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
         self.proxyEntry.set_text("%s" % proxy_url)
 
         # show proxy/proxy auth sections as being enabled if we have values set
-        # rhn actualy has a seperate for config flag for enabling, which seems overkill
+        # rhn actually has a separate for config flag for enabling, which seems overkill
         if self.cfg.get("server", "proxy_hostname"):
             self.enableProxyButton.set_active(True)
         if self.cfg.get("server", "proxy_hostname") and self.cfg.get("server", "proxy_user"):
@@ -137,6 +137,8 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
         proxy = self.proxyEntry.get_text() or ""
 
         # don't save these values if they are disabled in the gui
+
+        # settings of HTTP Proxy
         if proxy and self.enableProxyButton.get_active():
             # Remove any URI scheme provided
             proxy = remove_scheme(proxy)
@@ -155,6 +157,7 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
             self.cfg.set("server", "proxy_hostname", "")
             self.cfg.set("server", "proxy_port", "")
 
+        # settings of HTTP proxy authentication
         if self.enableProxyAuthButton.get_active():
             if self.proxyUserEntry.get_text() is not None:
                 self.cfg.set("server", "proxy_user",
@@ -166,6 +169,14 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
         else:
             self.cfg.set("server", "proxy_user", "")
             self.cfg.set("server", "proxy_password", "")
+
+        # settings of bypass the HTTP proxy for specific host/domain
+        if self.enableProxyBypassButton.get_active():
+            if self.noProxyEntry.get_text() is not None:
+                self.cfg.set("server", "no_proxy",
+                         str(self.noProxyEntry.get_text()))
+        else:
+            self.cfg.set("server", "no_proxy", "")
 
         try:
             self.cfg.save()
