@@ -17,7 +17,6 @@
 
 import Queue
 import threading
-import gettext
 import sys
 
 from subscription_manager.ga import GObject as ga_GObject
@@ -25,8 +24,6 @@ from subscription_manager.entcertlib import Disconnected
 from subscription_manager.managerlib import fetch_certificates
 from subscription_manager.injection import IDENTITY, \
         PLUGIN_MANAGER, CP_PROVIDER, require
-
-_ = gettext.gettext
 
 
 class AsyncPool(object):

@@ -14,7 +14,6 @@
 #
 
 import errno
-import gettext
 import optparse
 import os
 import sys
@@ -32,11 +31,11 @@ from rhsm import ourjson as json
 from rhsm.config import initConfig
 from rhsmlib.services import config
 
-_ = gettext.gettext
-
-conf = config.Config(initConfig())
+from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger('rhsm-app.' + __name__)
+
+conf = config.Config(initConfig())
 
 ERR_NOT_REGISTERED_MSG = _("This system is not yet registered. Try 'subscription-manager register --help' for more information.")
 ERR_NOT_REGISTERED_CODE = 1

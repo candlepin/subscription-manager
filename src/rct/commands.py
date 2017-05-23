@@ -15,9 +15,7 @@
 
 import sys
 
-import gettext
 from subscription_manager.cli import AbstractCLICommand
-_ = gettext.gettext
 
 
 class RCTCliCommand(AbstractCLICommand):

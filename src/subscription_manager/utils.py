@@ -14,7 +14,6 @@
 #
 
 import collections
-import gettext
 import logging
 import os
 import pprint
@@ -46,11 +45,9 @@ from rhsm.connection import RestlibException, GoneException
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
     DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
 
+from subscription_manager.i18n import ugettext as _
+
 log = logging.getLogger(__name__)
-
-_ = lambda x: gettext.ldgettext("rhsm", x)
-
-gettext.textdomain("rhsm")
 
 
 class DefaultDict(collections.defaultdict):

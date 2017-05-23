@@ -13,7 +13,6 @@
 # in this software or its documentation.
 #
 
-import gettext
 import os
 import re
 try:
@@ -22,8 +21,6 @@ except ImportError:
     from urlparse import urlparse
 
 from rhsm.config import DEFAULT_PROXY_PORT
-
-_ = lambda x: gettext.ldgettext("rhsm", x)
 
 
 def remove_scheme(uri):

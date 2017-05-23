@@ -1,5 +1,4 @@
-import gettext
-_ = gettext.gettext
+from subscription_manager.i18n import ugettext as _
 
 
 class Branding(object):

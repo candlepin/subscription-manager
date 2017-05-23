@@ -14,8 +14,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
-import gettext
 import logging
 import string
 
@@ -25,8 +23,6 @@ from rhsmlib.facts import collector
 from rhsmlib.compat import check_output as compat_check_output
 
 log = logging.getLogger(__name__)
-
-_ = gettext.gettext
 
 
 class VirtWhatCollector(collector.FactsCollector):

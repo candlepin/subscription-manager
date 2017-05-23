@@ -15,7 +15,6 @@
 
 from cStringIO import StringIO
 import errno
-import gettext
 import os
 import sys
 from zipfile import ZipFile, BadZipfile
@@ -27,7 +26,7 @@ from rct.printing import xstr
 from subscription_manager.cli import InvalidCLIOptionError
 from rhsm import ourjson as json
 
-_ = gettext.gettext
+from subscription_manager.i18n import ugettext as _
 
 
 def get_value(json_dict, path):

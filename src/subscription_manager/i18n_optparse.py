@@ -23,17 +23,16 @@ Just use this instead of optparse, the interface should be the same.
 For some backgorund, see:
 http://bugs.python.org/issue4319
 """
-
-import gettext
 import optparse
 from optparse import IndentedHelpFormatter as _IndentedHelpFormatter
 from optparse import OptionParser as _OptionParser
 import sys
 import textwrap
 
+from subscription_manager.i18n import ugettext as _
 
-_ = gettext.gettext
-optparse._ = gettext.gettext
+
+optparse._ = _
 
 # note default is lower caps
 USAGE = _("%prog [OPTIONS]")

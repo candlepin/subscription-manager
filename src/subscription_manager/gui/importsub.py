@@ -12,8 +12,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
-import gettext
 import logging
 import os
 
@@ -23,9 +21,9 @@ from subscription_manager.gui import messageWindow
 from subscription_manager.gui.utils import show_error_window
 from subscription_manager.managerlib import ImportFileExtractor
 
-log = logging.getLogger(__name__)
+from subscription_manager.i18n import ugettext as _
 
-_ = gettext.gettext
+log = logging.getLogger(__name__)
 
 
 class ImportSubDialog(object):

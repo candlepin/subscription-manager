@@ -16,7 +16,6 @@
 # in this software or its documentation.
 #
 
-import gettext
 import httplib
 import logging
 import socket
@@ -28,8 +27,6 @@ import rhsm.config
 from subscription_manager import injection as inj
 from subscription_manager import listing
 from subscription_manager import rhelproduct
-
-_ = gettext.gettext
 
 log = logging.getLogger(__name__)
 

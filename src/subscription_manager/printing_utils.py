@@ -12,8 +12,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
-import gettext
 import fnmatch
 import re
 import logging
@@ -21,9 +19,9 @@ import logging
 from yum.i18n import utf8_width
 from subscription_manager.utils import get_terminal_width
 
-log = logging.getLogger(__name__)
+from subscription_manager.i18n import ugettext as _
 
-_ = gettext.gettext
+log = logging.getLogger(__name__)
 
 FONT_BOLD = '\033[1m'
 FONT_RED = '\033[31m'

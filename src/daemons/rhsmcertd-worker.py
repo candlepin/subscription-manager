@@ -39,8 +39,7 @@ from subscription_manager.i18n_optparse import OptionParser, \
     WrappedIndentedHelpFormatter, USAGE
 from subscription_manager.utils import generate_correlation_id
 
-import gettext
-_ = gettext.gettext
+from subscription_manager.i18n import ugettext as _
 
 
 def exit_on_signal(_signumber, _stackframe):

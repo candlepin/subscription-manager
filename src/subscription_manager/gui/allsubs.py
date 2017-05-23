@@ -12,9 +12,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
 import datetime
-import gettext
 import logging
 
 from subscription_manager.ga import Gtk as ga_Gtk
@@ -32,7 +30,7 @@ from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
 from subscription_manager.managerlib import allows_multi_entitlement, valid_quantity
 
-_ = gettext.gettext
+from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
 

@@ -12,7 +12,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-import gettext
 import logging
 
 # rhsm.conf->iniparse->configParser can raise ConfigParser exceptions
@@ -23,11 +22,9 @@ from subscription_manager.model import find_content
 
 from subscription_manager.plugin.ostree import model
 
-# plugins get
+from subscription_manager.i18n import ugettext as _
+
 log = logging.getLogger(__name__)
-
-_ = gettext.gettext
-
 
 OSTREE_CONTENT_TYPE = "ostree"
 

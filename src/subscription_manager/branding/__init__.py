@@ -22,13 +22,11 @@ directory. The module should contains a Branding class, whose instances have
 attributes matching the names of those on DefaultBranding for any values you
 want to override.
 """
-
-import gettext
 import glob
 import os
 import sys
 
-_ = gettext.gettext
+from subscription_manager.i18n import ugettext as _
 
 __all__ = ["get_branding"]
 

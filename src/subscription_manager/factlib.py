@@ -14,14 +14,10 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
-import gettext
 import logging
 
 from certlib import Locker, ActionReport
 from subscription_manager import injection as inj
-
-_ = gettext.gettext
 
 log = logging.getLogger(__name__)
 

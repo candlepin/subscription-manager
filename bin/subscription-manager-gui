@@ -46,10 +46,9 @@ import dbus.service
 import dbus.glib
 import dbus.exceptions
 import logging
-import gettext
 import signal
 
-_ = gettext.gettext
+from subscription_manager.i18n import ugettext as _
 
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
@@ -133,7 +132,7 @@ except RuntimeError, e:
 try:
     # this has to be done first thing due to module level translated vars.
     from subscription_manager.i18n import configure_i18n
-    configure_i18n(with_glade=True)
+    configure_i18n()
 
     from subscription_manager import logutil
     logutil.init_logger()

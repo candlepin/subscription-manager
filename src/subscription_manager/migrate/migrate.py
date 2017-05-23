@@ -15,7 +15,6 @@
 #
 
 import getpass
-import gettext
 import libxml2
 import logging
 import os
@@ -33,7 +32,7 @@ from rhn import rpclib
 from rhsm.connection import RemoteServerException, RestlibException
 from rhsm.utils import ServerUrlParseError
 
-_ = gettext.gettext
+from subscription_manager.i18n import ugettext as _
 
 from subscription_manager import injection as inj
 from subscription_manager.cli import system_exit

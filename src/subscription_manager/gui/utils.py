@@ -14,7 +14,6 @@
 #
 
 import datetime
-import gettext
 import logging
 import re
 import threading
@@ -38,8 +37,6 @@ EVEN_ROW_COLOR = '#eeeeee'
 
 # set if we are in firstboot, to disable linkify, see bz#814378
 FIRSTBOOT = False
-
-_ = lambda x: gettext.ldgettext("rhsm", x)
 
 
 def running_as_firstboot():

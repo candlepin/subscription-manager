@@ -12,9 +12,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
 import datetime
-import gettext
 import os
 import subprocess
 
@@ -23,7 +21,7 @@ from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.gui.utils import get_running_as_firstboot
 from subscription_manager.utils import get_client_versions, get_server_versions
 
-_ = gettext.gettext
+from subscription_manager.i18n import ugettext as _
 
 LICENSE = _("\nThis software is licensed to you under the GNU General Public License, "
             "version 2 (GPLv2). There is NO WARRANTY for this software, express or "

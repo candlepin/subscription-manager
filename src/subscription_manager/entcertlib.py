@@ -12,8 +12,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
-import gettext
 import logging
 import socket
 
@@ -28,8 +26,9 @@ from subscription_manager.injection import IDENTITY, require
 from subscription_manager import rhelentbranding
 import subscription_manager.injection as inj
 
+from subscription_manager.i18n import ungettext, ugettext as _
+
 log = logging.getLogger(__name__)
-_ = gettext.gettext
 
 CONTENT_ACCESS_CERT_CAPABILITY = "org_level_content_access"
 
@@ -305,9 +304,9 @@ class EntCertUpdateAction(object):
         # entitlement directory before we go to delete expired certs.
         rogue_count = len(self.report.rogue)
         if rogue_count > 0:
-            print gettext.ngettext("%s local certificate has been deleted.",
-                                   "%s local certificates have been deleted.",
-                                   rogue_count) % rogue_count
+            print ungettext("%s local certificate has been deleted.",
+                            "%s local certificates have been deleted.",
+                            rogue_count) % rogue_count
             self.ent_dir.refresh()
 
 

@@ -11,7 +11,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-import gettext
 import socket
 import json
 import logging
@@ -29,7 +28,8 @@ from subscription_manager.injectioninit import init_dep_injection
 
 init_dep_injection()
 
-_ = gettext.gettext
+from subscription_manager.i18n import ugettext as _
+
 log = logging.getLogger(__name__)
 
 from rhsmlib.services import config

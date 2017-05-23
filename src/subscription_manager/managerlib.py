@@ -14,7 +14,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-import gettext
 import glob
 import logging
 import os
@@ -26,7 +25,6 @@ import syslog
 from rhsm import connection
 from rhsm.config import initConfig
 from rhsm.certificate import Key, CertificateException, create_from_pem
-
 
 import subscription_manager.cache as cache
 from subscription_manager.cert_sorter import StackingGroupSorter, ComplianceManager
@@ -44,9 +42,9 @@ from subscription_manager import utils
 from subscription_manager.identity import ConsumerIdentity
 from dateutil.tz import tzlocal
 
-log = logging.getLogger(__name__)
+from subscription_manager.i18n import ugettext as _
 
-_ = gettext.gettext
+log = logging.getLogger(__name__)
 
 cfg = initConfig()
 ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')

@@ -18,7 +18,6 @@
 #
 from __future__ import print_function
 
-import gettext
 import logging
 import os
 import platform
@@ -28,8 +27,6 @@ import sys
 
 from rhsmlib.facts import cpuinfo
 from rhsmlib.facts import collector
-
-_ = gettext.gettext
 
 log = logging.getLogger(__name__)
 

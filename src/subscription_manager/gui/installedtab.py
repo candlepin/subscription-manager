@@ -22,15 +22,14 @@ from rhsmlib.facts.hwprobe import ClassicCheck
 from subscription_manager.utils import friendly_join
 
 import logging
-import gettext
 from subscription_manager.ga import GObject as ga_GObject
 from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.ga import GdkPixbuf as ga_GdkPixbuf
 import os
 
-log = logging.getLogger(__name__)
+from subscription_manager.i18n import ungettext, ugettext as _
 
-_ = gettext.gettext
+log = logging.getLogger(__name__)
 
 prefix = os.path.dirname(__file__)
 VALID_IMG = os.path.join(prefix, "data/icons/valid.svg")
@@ -210,9 +209,9 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                         entry['image'] = self._render_icon('green')
                         entry['status'] = _('Subscribed')
                         entry['validity_note'] = \
-                            gettext.ngettext("Covered by contract %s through %s",
-                                             'Covered by contracts %s through %s',
-                                             num_of_contracts) % \
+                            ungettext("Covered by contract %s through %s",
+                                      'Covered by contracts %s through %s',
+                                      num_of_contracts) % \
                             (contract,
                              managerlib.format_date(entry['expiration_date']))
                 else:

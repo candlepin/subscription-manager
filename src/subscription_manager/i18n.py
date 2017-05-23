@@ -11,6 +11,8 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+import gettext
+import locale
 
 # Localization domain:
 APP = 'rhsm'
@@ -18,21 +20,37 @@ APP = 'rhsm'
 DIR = '/usr/share/locale/'
 
 
-def configure_i18n(with_glade=False):
+def configure_i18n():
     """
     Configure internationalization for the application. Should only be
     called once per invocation. (once for CLI, once for GUI)
     """
-    import gettext
     import locale
     try:
         locale.setlocale(locale.LC_ALL, '')
     except locale.Error:
         locale.setlocale(locale.LC_ALL, 'C')
+    configure_gettext()
+
+
+def configure_gettext():
+    """Configure gettext for all RHSM-related code.
+
+    Since Glade internally uses gettext, we need to use the C-level bindings in locale to adjust the encoding.
+
+    See https://docs.python.org/2/library/locale.html#access-to-message-catalogs
+
+    Exposed as its own function so that it can be called safely in the initial-setup case.
+    """
     gettext.bindtextdomain(APP, DIR)
     gettext.textdomain(APP)
+    gettext.bind_textdomain_codeset(APP, 'UTF-8')
+    locale.bind_textdomain_codeset(APP, 'UTF-8')
 
-#    if (with_glade):
-#        import gtk.glade
-#        gtk.glade.bindtextdomain(APP, DIR)
-#        gtk.glade.textdomain(APP)
+translation = gettext.translation(APP, fallback=True)
+try:
+    ugettext = translation.ugettext
+    ungettext = translation.ungettext
+except AttributeError:  # gettext returns unicode in Python 3
+    ugettext = translation.gettext
+    ungettext = translation.ngettext

@@ -12,9 +12,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
 import datetime
-import gettext
 import logging
 import os
 import time
@@ -37,18 +35,18 @@ from subscription_manager.gui import storage
 from subscription_manager.gui import utils
 from subscription_manager import managerlib
 
-_ = gettext.gettext
+from subscription_manager.i18n import ugettext as _
+
+log = logging.getLogger(__name__)
 
 GLADE_DIR = os.path.join(os.path.dirname(__file__), "data/glade")
 UI_DIR = os.path.join(os.path.dirname(__file__), "data/ui")
 UI_SUFFIX = "ui"
 GLADE_SUFFIX = "glade"
 
-
 WARNING_COLOR = '#FFFB82'
 EXPIRED_COLOR = '#FFAF99'
 
-log = logging.getLogger(__name__)
 # Some versions of gtk has incorrect translations for the calendar widget
 # and gtk itself complains about this with errors like:
 #

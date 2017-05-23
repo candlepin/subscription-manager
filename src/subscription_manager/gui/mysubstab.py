@@ -12,8 +12,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
-import gettext
 import os
 from datetime import datetime
 
@@ -34,8 +32,8 @@ from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import handle_gui_exception
 from subscription_manager.utils import is_true_value
 
+from subscription_manager.i18n import ugettext as _
 
-_ = gettext.gettext
 
 prefix = os.path.dirname(__file__)
 WARNING_IMG = os.path.join(prefix, "data/icons/partial.svg")

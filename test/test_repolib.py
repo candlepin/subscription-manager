@@ -150,7 +150,6 @@ class RepoActionReportTests(fixture.SubManFixture):
         deleted_section_2 = u'一些回購名稱'
         report.repo_deleted = [deleted_section, deleted_section_2]
 
-        # okay as long as no UnicodeErrors
         str(report)
 
         with fixture.locale_context('de_DE.utf8'):

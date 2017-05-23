@@ -13,8 +13,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
-import gettext
 import logging
 import os
 import threading
@@ -34,11 +32,11 @@ import subscription_manager.injection as inj
 from subscription_manager.gui import progress
 from subscription_manager.gui import widgets
 
-_ = gettext.gettext
-
-DIR = os.path.dirname(__file__)
+from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
+
+DIR = os.path.dirname(__file__)
 
 
 class NetworkConfigDialog(widgets.SubmanBaseWidget):

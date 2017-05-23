@@ -12,8 +12,7 @@
 # in this software or its documentation.
 #
 
-import gettext
-_ = gettext.gettext
+from subscription_manager.i18n import ugettext as _
 
 
 class Reasons(object):
