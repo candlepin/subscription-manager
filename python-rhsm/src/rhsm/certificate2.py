@@ -19,6 +19,7 @@ import logging
 import os
 import posixpath
 import re
+import six
 import zlib
 
 log = logging.getLogger(__name__)
@@ -681,7 +682,7 @@ class Product(object):
         self.architectures = architectures
         # If this is sent in as a string split it, as the field
         # can technically be multi-valued:
-        if isinstance(self.architectures, str) or isinstance(self.architectures, type(u"")):
+        if isinstance(self.architectures, six.string_types):
             self.architectures = parse_tags(self.architectures)
         if self.architectures is None:
             self.architectures = []
