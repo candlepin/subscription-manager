@@ -15,7 +15,7 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.19.6
+Version: 1.19.7
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -102,6 +102,10 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Wed May 24 2017 Kevin Howell <khowell@redhat.com> 1.19.7-1
+- 1443159: Added default value for splay configuration (jhnidek@redhat.com)
+- 1451166: Fix Host header when using proxy (khowell@redhat.com)
+
 * Tue May 02 2017 Kevin Howell <khowell@redhat.com> 1.19.6-1
 - 1426343: fixed rct to display cert without subjectAltName.
   (jhnidek@redhat.com)
