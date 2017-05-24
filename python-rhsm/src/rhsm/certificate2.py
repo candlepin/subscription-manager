@@ -82,7 +82,12 @@ class _CertFactory(object):
 
     def _read_x509(self, x509, path, pem):
         if not x509:
-            raise CertificateException("Error loading certificate")
+            if path is not None:
+                raise CertificateException("Error loading certificate: %s" % path)
+            elif pem is not None:
+                raise CertificateException("Error loading certificate from string: %s" % pem)
+            else:
+                raise CertificateException("Error: none certificate data offered")
         # Load the X509 extensions so we can determine what we're dealing with:
         try:
             extensions = _Extensions2(x509)
