@@ -6,7 +6,7 @@
 
 # options common to all subcommands (+ 3rd level opts for simplicity)
 _subscription_manager_help_opts="-h --help"
-_subscription_manager_common_opts="--proxy --proxyuser --proxypassword ${_subscription_manager_help_opts}"
+_subscription_manager_common_opts="--proxy --proxyuser --proxypassword --noproxy ${_subscription_manager_help_opts}"
 _subscription_manager_common_url_opts="--insecure --serverurl"
 # complete functions for subcommands ($1 - current opt, $2 - previous opt)
 
