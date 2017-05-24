@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-02 16:32-0400\n"
+"POT-Creation-Date: 2017-05-24 16:38-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -95,16 +95,16 @@ msgstr ""
 msgid "Options"
 msgstr ""
 
-#: bin/rct:53 bin/rhsm-debug:71
+#: bin/rct:57 bin/rhsm-debug:75
 msgid "User interrupted process."
 msgstr ""
 
-#: bin/subscription-manager-gui:169
+#: bin/subscription-manager-gui:177
 #, python-format
 msgid "%s is already running"
 msgstr ""
 
-#: bin/subscription-manager-gui:177
+#: bin/subscription-manager-gui:185
 msgid "launches the registration dialog on startup"
 msgstr ""
 
@@ -148,30 +148,30 @@ msgstr ""
 msgid "do not add an offset to the initial checks."
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:348
+#: src/daemons/rhsmcertd.c:350
 #, c-format
 msgid "For more information run: rhsmcertd --help\n"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:391
+#: src/daemons/rhsmcertd.c:393
 msgid "Wrong number of arguments specified.\n"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:455
+#: src/daemons/rhsmcertd.c:457
 msgid "Invalid argument specified.\n"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:461
+#: src/daemons/rhsmcertd.c:463
 #, c-format
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:476
+#: src/daemons/rhsmcertd.c:478
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:490
+#: src/daemons/rhsmcertd.c:492
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr ""
@@ -945,14 +945,14 @@ msgid ""
 "forgot_password"
 msgstr ""
 
-#: src/subscription_manager/cache.py:146
+#: src/subscription_manager/cache.py:156
 #, python-format
 msgid ""
 "consumer_uuid=%s is not a valid consumer_uuid. Not attempting to sync %s "
 "cache with server."
 msgstr ""
 
-#: src/subscription_manager/cache.py:171
+#: src/subscription_manager/cache.py:181
 msgid ""
 "Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
 "more details."
@@ -1008,34 +1008,34 @@ msgstr ""
 msgid "Other Modules:"
 msgstr ""
 
-#: src/subscription_manager/entcertlib.py:300
+#: src/subscription_manager/entcertlib.py:308
 #, python-format
 msgid "%s local certificate has been deleted."
 msgid_plural "%s local certificates have been deleted."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/subscription_manager/entcertlib.py:454
+#: src/subscription_manager/entcertlib.py:462
 #, python-format
 msgid "Total updates: %d"
 msgstr ""
 
-#: src/subscription_manager/entcertlib.py:455
+#: src/subscription_manager/entcertlib.py:463
 #, python-format
 msgid "Found (local) serial# %s"
 msgstr ""
 
-#: src/subscription_manager/entcertlib.py:456
+#: src/subscription_manager/entcertlib.py:464
 #, python-format
 msgid "Expected (UEP) serial# %s"
 msgstr ""
 
-#: src/subscription_manager/entcertlib.py:457
-#: src/subscription_manager/repolib.py:482
+#: src/subscription_manager/entcertlib.py:465
+#: src/subscription_manager/repolib.py:507
 msgid "Added (new)"
 msgstr ""
 
-#: src/subscription_manager/entcertlib.py:458
+#: src/subscription_manager/entcertlib.py:466
 msgid "Deleted (rogue):"
 msgstr ""
 
@@ -2803,30 +2803,30 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: src/subscription_manager/gui/networkConfig.py:174
+#: src/subscription_manager/gui/networkConfig.py:185
 msgid "There was an error saving your configuration."
 msgstr ""
 
-#: src/subscription_manager/gui/networkConfig.py:175
+#: src/subscription_manager/gui/networkConfig.py:186
 #, python-format
 msgid "Make sure that you own %s."
 msgstr ""
 
-#: src/subscription_manager/gui/networkConfig.py:210
+#: src/subscription_manager/gui/networkConfig.py:221
 msgid "Proxy connection succeeded"
 msgstr ""
 
-#: src/subscription_manager/gui/networkConfig.py:212
+#: src/subscription_manager/gui/networkConfig.py:223
 msgid "Proxy connection failed"
 msgstr ""
 
-#: src/subscription_manager/gui/networkConfig.py:313
-#: src/subscription_manager/gui/networkConfig.py:316
+#: src/subscription_manager/gui/networkConfig.py:324
+#: src/subscription_manager/gui/networkConfig.py:327
 msgid "Testing Connection"
 msgstr ""
 
-#: src/subscription_manager/gui/networkConfig.py:314
-#: src/subscription_manager/gui/networkConfig.py:316
+#: src/subscription_manager/gui/networkConfig.py:325
+#: src/subscription_manager/gui/networkConfig.py:327
 msgid "Please wait"
 msgstr ""
 
@@ -4857,20 +4857,20 @@ msgstr ""
 msgid "Stack "
 msgstr ""
 
-#: src/subscription_manager/repolib.py:478
+#: src/subscription_manager/repolib.py:503
 msgid "Repo updates"
 msgstr ""
 
-#: src/subscription_manager/repolib.py:479
+#: src/subscription_manager/repolib.py:504
 #, python-format
 msgid "Total repo updates: %d"
 msgstr ""
 
-#: src/subscription_manager/repolib.py:480
+#: src/subscription_manager/repolib.py:505
 msgid "Updated"
 msgstr ""
 
-#: src/subscription_manager/repolib.py:484
+#: src/subscription_manager/repolib.py:509
 msgid "Deleted"
 msgstr ""
 
