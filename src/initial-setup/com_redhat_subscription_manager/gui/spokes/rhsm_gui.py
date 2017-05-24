@@ -51,7 +51,7 @@ class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
     helpFile = "SubscriptionManagerSpoke.xml"
     category = SystemCategory
     icon = "subscription-manager"
-    title = "Subscription Manager"
+    title = "_Subscription Manager"
 
     def __init__(self, data, storage, payload, instclass):
         NormalSpoke.__init__(self, data, storage, payload, instclass)
