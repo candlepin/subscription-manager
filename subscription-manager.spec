@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.19.14
+Version: 1.19.15
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -606,6 +606,17 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Wed May 24 2017 Kevin Howell <khowell@redhat.com> 1.19.15-1
+- Sync zanata translations (khowell@redhat.com)
+- 1452737: Enable saving no_proxy settings from GUI (jhnidek@redhat.com)
+- 1451003: identity reports right info in name field (jhnidek@redhat.com)
+- 1432231: Support /etc/init.d daemon even on EL7 (khowell@redhat.com)
+- 1450818: Bug fix of com.redhat.Subscriptionmanager D-Bus policy
+  (jhnidek@redhat.com)
+- 1450862: remove obsolete certificates of golden ticket (jhnidek@redhat.com)
+- 1450049: Replace `-` with `_` in completion functions (khowell@redhat.com)
+- 1450210: Make lscpu ignore locale again (khowell@redhat.com)
+
 * Wed May 17 2017 Kevin Howell <khowell@redhat.com> 1.19.14-1
 - 1449824: facts collection aborts with unknown locale (jhnidek@redhat.com)
 - 1448855: golden ticket entitlement was not removed. (jhnidek@redhat.com)
