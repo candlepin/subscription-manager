@@ -32,7 +32,31 @@ Additionally, the `Vagrantfile` is set up for sharing base VMs with
 forklift plugins can be added to a subscription-manager checkout beneath
 `vagrant/plugins`in order to provide additional base images.
 
-If RHEL-based images are added, then the Vagrantfile uses the values of
-`SUBMAN_RHSM_USERNAME`, `SUBMAN_RHSM_PASSWORD`, and `SUBMAN_RHSM_HOSTNAME`
-to register and auto-attach during provisioning (best done in `.bashrc` or
-similar).
+If RHEL-based images are added, then the `Vagrantfile` uses the values of
+`SUBMAN_RHSM_USERNAME`, `SUBMAN_RHSM_PASSWORD`, `SUBMAN_RHSM_HOSTNAME`,
+`SUBMAN_RHSM_PORT`, and `SUBMAN_RHSM_INSECURE` to register and auto-attach
+during provisioning (best done in `.bashrc` or similar). If unspecified,
+hostname and port are left alone (i.e. whatever is in the VM's `rhsm.conf` will
+be untouched).
+
+To register against subscription.rhsm.redhat.com, `.bashrc` might contain:
+```bash
+export SUBMAN_RHSM_USERNAME=foobar
+export SUBMAN_RHSM_PASSWORD=password
+```
+(Replace username and password with actual values).
+
+To register against a local candlepin instance, `.bashrc` might contain:
+```bash
+export SUBMAN_RHSM_HOSTNAME=candlepin.example.com
+export SUBMAN_RHSM_PORT=443
+export SUBMAN_RHSM_INSECURE=1
+export SUBMAN_RHSM_USERNAME=foobar
+export SUBMAN_RHSM_PASSWORD=password
+```
+
+(Replace username and password with actual values).
+
+Note, however, since the registration is necessary to download RPMs to set up
+the VM for development, registering against a local candlepin might not be
+particularly useful (at least not for initial provisioning).

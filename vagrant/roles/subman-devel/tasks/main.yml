@@ -4,7 +4,17 @@
 - name: configure rhsm hostname (rhel only)
   command: "subscription-manager config --server.hostname {{ subman_rhsm_hostname }}"
   become: yes
-  when: subman_rhsm_username is defined and ansible_distribution == 'RedHat'
+  when: subman_rhsm_hostname is defined and ansible_distribution == 'RedHat'
+
+- name: configure rhsm port (rhel only)
+  command: "subscription-manager config --server.port {{ subman_rhsm_port }}"
+  become: yes
+  when: subman_rhsm_port is defined and ansible_distribution == 'RedHat'
+
+- name: configure rhsm insecure (rhel only)
+  command: "subscription-manager config --server.insecure {{ subman_rhsm_insecure }}"
+  become: yes
+  when: subman_rhsm_insecure is defined and ansible_distribution == 'RedHat'
 
 - name: register and attach using installed subscription-manager (rhel only)
   redhat_subscription:
