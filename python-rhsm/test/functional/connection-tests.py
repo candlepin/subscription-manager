@@ -171,8 +171,8 @@ class EntitlementRegenerationTests(unittest.TestCase):
         self.assertTrue(result)
 
     def test_regenerate_entitlements_bad_uuid(self):
-        with self.assertRaises(RestlibException):
-            self.cp.regenEntitlementCertificates("bad_consumer_uuid")
+        result = self.cp.regenEntitlementCertificates("bad_consumer_uuid")
+        self.assertFalse(result)
 
     def test_regenerate_entitlement_default(self):
         result = self.cp.regenEntitlementCertificate(self.consumer_uuid, self.entitlement_id)
@@ -187,12 +187,12 @@ class EntitlementRegenerationTests(unittest.TestCase):
         self.assertTrue(result)
 
     def test_regenerate_entitlement_bad_consumer_uuid(self):
-        with self.assertRaises(RestlibException):
-            self.cp.regenEntitlementCertificate("bad_consumer_uuid", self.entitlement_id)
+        result = self.cp.regenEntitlementCertificate("bad_consumer_uuid", self.entitlement_id)
+        self.assertFalse(result)
 
     def test_regenerate_entitlement_bad_entitlement_id(self):
-        with self.assertRaises(RestlibException):
-            self.cp.regenEntitlementCertificate(self.consumer_uuid, "bad_entitlement_id")
+        result = self.cp.regenEntitlementCertificate(self.consumer_uuid, "bad_entitlement_id")
+        self.assertFalse(result)
 
     def tearDown(self):
         self.cp.unregisterConsumer(self.consumer_uuid)
@@ -208,7 +208,7 @@ class BindRequestTests(unittest.TestCase):
 
     @patch.object(Restlib, 'validateResponse')
     @patch('rhsm.connection.drift_check', return_value=False)
-    @patch('rhsm.connection.HTTPSConnection', auto_spec=True)
+    @patch('httplib.HTTPSConnection', auto_spec=True)
     def test_bind_no_args(self, mock_conn, mock_drift, mock_validate):
 
         self.cp.bind(self.consumer_uuid)
@@ -223,7 +223,7 @@ class BindRequestTests(unittest.TestCase):
 
     @patch.object(Restlib, 'validateResponse')
     @patch('rhsm.connection.drift_check', return_value=False)
-    @patch('rhsm.connection.HTTPSConnection', auto_spec=True)
+    @patch('httplib.HTTPSConnection', auto_spec=True)
     def test_bind_by_pool(self, mock_conn, mock_drift, mock_validate):
         # this test is just to verify we make the httplib connection with
         # right args, we don't validate the bind here
@@ -267,6 +267,25 @@ class ContentConnectionTests(unittest.TestCase):
             self.assertEquals(3128, cc.proxy_port)
         assert 'https_proxy' not in os.environ
 
+    def testEnvNoProxy(self):
+        with patch.dict('os.environ', {'no_proxy': '.localdomain',
+                                       'https_proxy': 'https://example.com'}):
+            cc = ContentConnection(host="localhost.localdomain")
+            self.assertEquals(None, cc.proxy_user)
+            self.assertEquals(None, cc.proxy_password)
+            self.assertEquals(None, cc.proxy_hostname)
+            self.assertEquals(None, cc.proxy_port)
+        assert 'no_proxy' not in os.environ and 'https_proxy' not in os.environ
+
+    def testEnvNoProxyWithAsterisk(self):
+        with patch.dict('os.environ', {'no_proxy': '*.localdomain',
+                                       'https_proxy': 'https://example.com'}):
+            cc = ContentConnection(host="localhost.localdomain")
+            self.assertEquals(None, cc.proxy_user)
+            self.assertEquals(None, cc.proxy_password)
+            self.assertEquals(None, cc.proxy_hostname)
+            self.assertEquals(None, cc.proxy_port)
+        assert 'no_proxy' not in os.environ and 'https_proxy' not in os.environ
 
 @attr('functional')
 class HypervisorCheckinTests(unittest.TestCase):

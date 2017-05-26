@@ -230,6 +230,24 @@ def _encode_auth(username, password):
     return 'Basic %s' % encoded
 
 
+def _fix_no_proxy():
+    """
+    This fixes no_proxy/NO_PROXY environment to not include leading
+    asterisk, because there is some imperfection in proxy_bypass_environment.
+    """
+
+    # This fixes BZ: 1443164, because proxy_bypass_environment() from urllib does
+    # not support no_proxy with items containing asterisk (e.g.: *.redhat.com)
+
+    no_proxy = os.environ.get('no_proxy') or os.environ.get('NO_PROXY')
+    if no_proxy is not None:
+        # Remove all leading white spaces and asterisks from items of no_proxy
+        no_proxy = ','.join([item.lstrip(' *') for item in no_proxy.split(',')])
+        # Save no_proxy back to 'no_proxy', because proxy_bypass_environment()
+        # tries to read 'no_proxy' first
+        os.environ['no_proxy'] = no_proxy
+
+
 # FIXME: this is terrible, we need to refactor
 # Restlib to be Restlib based on a https client class
 class ContentConnection(object):
@@ -260,6 +278,8 @@ class ContentConnection(object):
         if no_proxy_override:
             os.environ['no_proxy'] = no_proxy_override
 
+        _fix_no_proxy()
+
         # honor no_proxy environment variable
         if proxy_bypass_environment(self.host):
             self.proxy_hostname = None
@@ -269,10 +289,18 @@ class ContentConnection(object):
         else:
             info = utils.get_env_proxy_info()
 
-            self.proxy_hostname = proxy_hostname or config.get('server', 'proxy_hostname') or info['proxy_hostname']
-            self.proxy_port = proxy_port or config.get('server', 'proxy_port') or info['proxy_port']
-            self.proxy_user = proxy_user or config.get('server', 'proxy_user') or info['proxy_username']
-            self.proxy_password = proxy_password or config.get('server', 'proxy_password') or info['proxy_password']
+            self.proxy_hostname = proxy_hostname or \
+                config.get('server', 'proxy_hostname') or \
+                info['proxy_hostname']
+            self.proxy_port = proxy_port or \
+                config.get('server', 'proxy_port') or \
+                info['proxy_port']
+            self.proxy_user = proxy_user or \
+                config.get('server', 'proxy_user') or \
+                info['proxy_username']
+            self.proxy_password = proxy_password or \
+                config.get('server', 'proxy_password') or \
+                info['proxy_password']
 
     @property
     def user_agent(self):
@@ -693,6 +721,8 @@ class UEPConnection:
         if no_proxy_override:
             os.environ['no_proxy'] = no_proxy_override
 
+        _fix_no_proxy()
+
         # honor no_proxy environment variable
         if proxy_bypass_environment(self.host):
             self.proxy_hostname = None
@@ -702,10 +732,18 @@ class UEPConnection:
         else:
             info = utils.get_env_proxy_info()
 
-            self.proxy_hostname = proxy_hostname or config.get('server', 'proxy_hostname') or info['proxy_hostname']
-            self.proxy_port = proxy_port or config.get('server', 'proxy_port') or info['proxy_port']
-            self.proxy_user = proxy_user or config.get('server', 'proxy_user') or info['proxy_username']
-            self.proxy_password = proxy_password or config.get('server', 'proxy_password') or info['proxy_password']
+            self.proxy_hostname = proxy_hostname or \
+                config.get('server', 'proxy_hostname') or \
+                info['proxy_hostname']
+            self.proxy_port = proxy_port or \
+                config.get('server', 'proxy_port') or \
+                info['proxy_port']
+            self.proxy_user = proxy_user or \
+                config.get('server', 'proxy_user') or \
+                info['proxy_username']
+            self.proxy_password = proxy_password or \
+                config.get('server', 'proxy_password') or \
+                info['proxy_password']
 
         self.cert_file = cert_file
         self.key_file = key_file
