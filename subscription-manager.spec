@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.19.16
+Version: 1.19.17
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -606,6 +606,11 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Tue May 30 2017 Kevin Howell <khowell@redhat.com> 1.19.17-1
+- Bump python-rhsm requirement to 1.19.8 (khowell@redhat.com)
+- 1441397: Sync zanata translations (khowell@redhat.com)
+- 1441397: Added --noproxy to bash completion script (jhnidek@redhat.com)
+
 * Wed May 24 2017 Kevin Howell <khowell@redhat.com> 1.19.16-1
 - Bump python-rhsm requirement to 1.19.7 (khowell@redhat.com)
 
