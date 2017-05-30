@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2010 Red Hat, Inc.
 #
@@ -14,8 +16,8 @@
 #
 
 from collections import defaultdict
-import StringIO
 from datetime import datetime, timedelta
+import six
 import mock
 import random
 import tempfile
@@ -83,7 +85,7 @@ class StubConfig(config.RhsmConfigParser):
 
     # instead of reading a file, let's use the stringio
     def read(self, filename):
-        self.readfp(StringIO.StringIO(cfg_buf), "foo.conf")
+        self.readfp(six.StringIO(cfg_buf), "foo.conf")
 
     # this way our test can put some values in and have them used during the run
     def get(self, section, key):
@@ -110,7 +112,7 @@ class StubConfig(config.RhsmConfigParser):
         # section and iterate over them with their values.
         items_from_store = self.store[section]
         if len(items_from_store) > 0:
-            return items_from_store.items()
+            return list(items_from_store.items())
         return config.RhsmConfigParser.items(self, section)
 
     def save(self, config_file=None):
@@ -121,6 +123,7 @@ class StubConfig(config.RhsmConfigParser):
 
 def stubInitConfig():
     return StubConfig()
+
 
 # create a global CFG object,then replace it with our own that candlepin
 # read from a stringio
@@ -471,7 +474,7 @@ class StubUEP(object):
     def getConsumer(self, consumerId, username=None, password=None):
         if hasattr(self, 'consumer') and self.consumer:
             return self.consumer
-        if callable(self.registered_consumer_info):
+        if six.callable(self.registered_consumer_info):
             return self.registered_consumer_info()
         return self.registered_consumer_info
 
@@ -699,7 +702,7 @@ class StubAsyncUpdater(AsyncWidgetUpdater):
             result = backend_method(*args, **kwargs)
             if callback:
                 callback(result)
-        except Exception, e:
+        except Exception as e:
             message = exception_msg or str(e)
             handle_gui_exception(e, message, self.parent_window)
         finally:

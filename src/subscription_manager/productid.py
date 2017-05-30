@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2010 Red Hat, Inc.
 #
@@ -19,7 +21,7 @@ import gettext
 from gzip import GzipFile
 import logging
 import os
-import types
+import six
 # for labelCompare
 import rpm
 
@@ -55,7 +57,7 @@ class ProductIdRepoMap(utils.DefaultDict):
         self.default_factory = list
 
 
-class ProductDatabase:
+class ProductDatabase(object):
 
     def __init__(self):
         self.dir = DatabaseDirectory()
@@ -95,8 +97,8 @@ class ProductDatabase:
         Note this needs to support the old form of
         a {"productid": "repoid"} as well as the
         new form of {"productid: ["repoid1",...]}"""
-        for productid, repo_data in db_dict.items():
-            if isinstance(repo_data, types.StringType):
+        for productid, repo_data in list(db_dict.items()):
+            if isinstance(repo_data, six.string_types):
                 self.content[productid].append(repo_data)
             else:
                 self.content[productid] = repo_data
@@ -290,7 +292,7 @@ class ProductId(object):
     # def compare(self, other):   # version check?
 
 
-class ProductManager:
+class ProductManager(object):
     """Manager product certs, detecting when they need to be installed, or deleted.
 
     Note that this class has no knowledge of when it runs, and no nothing of the
@@ -729,6 +731,7 @@ class ProductManager:
             return create_from_pem(pem)
         finally:
             f.close()
+
 
 if __name__ == '__main__':
     pm = ProductManager()

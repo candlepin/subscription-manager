@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2010 Red Hat, Inc.
 #
@@ -12,7 +14,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
 #from gi.repository import Gdk
 
 from subscription_manager.ga import Gdk as ga_Gdk
@@ -61,7 +62,7 @@ class Progress(widgets.SubmanBaseWidget):
 
     def set_progress(self, amount, total):
         if total:
-            i = min(1, float(amount) / total)
+            i = min(1, amount / total)
         else:
             i = 1
 

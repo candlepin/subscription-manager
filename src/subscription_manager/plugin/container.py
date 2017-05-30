@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2014 Red Hat, Inc.
 #
@@ -14,7 +16,6 @@
 #
 
 """ Core code for the container content plugin. """
-
 import gettext
 import logging
 import os

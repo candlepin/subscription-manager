@@ -1,5 +1,6 @@
-#
 # -*- coding: utf-8 -*-
+
+from __future__ import print_function, division, absolute_import
 
 import imp
 import os
@@ -14,7 +15,7 @@ except ImportError as e:
     raise SkipTest(e)
 
 
-import fixture
+from . import fixture
 
 
 # Yeah, this is weird. The yum plugins aren't on sys.path, nor are they in the

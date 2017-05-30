@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # Copyright (c) 2012 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -10,11 +12,12 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
+import six
 
 from collections import deque
 
 
-class GhettoBitStream(object):
+class GhettoBitStream(six.Iterator):
     """
     Accepts binary data and makes it available as a stream of bits or one byte
     at a time. Python does not provide a built-in way to read a stream of bits,
@@ -53,9 +56,6 @@ class GhettoBitStream(object):
             bits = self._byte_to_bits(byte)
             self._bit_buffer.extend(bits)
         return self._bit_buffer.popleft()
-
-    def next(self):
-        return self.__next__()
 
     def pop_byte(self):
         """

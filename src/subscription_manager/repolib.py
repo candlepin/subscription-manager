@@ -1,5 +1,6 @@
-#
 # -*- coding: utf-8 -*-#
+from __future__ import print_function, division, absolute_import
+
 # Copyright (c) 2010 Red Hat, Inc.
 #
 # Authors: Jeff Ortel <jortel@redhat.com>
@@ -16,8 +17,6 @@
 # in this software or its documentation.
 #
 
-# TODO: cleanup config parser imports
-from ConfigParser import Error as ConfigParserError
 import gettext
 from iniparse import RawConfigParser as ConfigParser
 import logging
@@ -29,8 +28,8 @@ from subscription_manager.cache import OverrideStatusCache, WrittenOverrideCache
 from subscription_manager import utils
 from subscription_manager import model
 from subscription_manager.model import ent_cert
-from urllib import urlencode
-from urlparse import parse_qs, urlparse, urlunparse
+from six.moves.urllib.parse import parse_qs, urlparse, urlunparse, urlencode
+from six.moves import configparser
 
 from rhsm.config import initConfig, in_container
 
@@ -55,10 +54,10 @@ def manage_repos_enabled():
     manage_repos = True
     try:
         manage_repos = conf['rhsm'].get_int('manage_repos')
-    except ValueError, e:
+    except ValueError as e:
         log.exception(e)
         return True
-    except ConfigParserError, e:
+    except configparser.Error as e:
         log.exception(e)
         return True
 
@@ -459,7 +458,7 @@ class RepoUpdateActionCommand(object):
     def _set_override_info(self, repo):
         # In the disconnected case, self.overrides will be an empty list
 
-        for name, value in self.overrides.get(repo.id, {}).items():
+        for name, value in list(self.overrides.get(repo.id, {}).items()):
             repo[name] = value
 
         return repo
@@ -474,7 +473,7 @@ class RepoUpdateActionCommand(object):
 
     def _build_props(self, old_repo, new_repo):
         result = {}
-        all_keys = old_repo.keys() + new_repo.keys()
+        all_keys = list(old_repo.keys()) + list(new_repo.keys())
         for key in all_keys:
             result[key] = Repo.PROPERTIES.get(key, (1, None))
         return result
@@ -490,7 +489,7 @@ class RepoUpdateActionCommand(object):
         if server_value_repo is None:
             server_value_repo = {}
 
-        for key, (mutable, _default) in self._build_props(old_repo, new_repo).items():
+        for key, (mutable, _default) in list(self._build_props(old_repo, new_repo).items()):
             new_val = new_repo.get(key)
 
             # Mutable properties should be added if not currently defined,
@@ -511,7 +510,7 @@ class RepoUpdateActionCommand(object):
             else:
                 if new_val is None or (str(new_val).strip() == ""):
                     # Immutable property should be removed:
-                    if key in old_repo.keys():
+                    if key in list(old_repo.keys()):
                         del old_repo[key]
                         changes_made += 1
                     continue
@@ -626,13 +625,13 @@ class Repo(dict):
         # NOTE: This sets the above properties to the default values even if
         # they are not defined on disk. i.e. these properties will always
         # appear in this dict, but their values may be None.
-        for k, (_m, d) in self.PROPERTIES.items():
-            if k not in self.keys():
+        for k, (_m, d) in list(self.PROPERTIES.items()):
+            if k not in list(self.keys()):
                 self[k] = d
 
     def copy(self):
         new_repo = Repo(self.id)
-        for key, value in self.items():
+        for key, value in list(self.items()):
             new_repo[key] = value
         return new_repo
 
@@ -770,7 +769,7 @@ class Repo(dict):
         return hash(self.id)
 
 
-class TidyWriter:
+class TidyWriter(object):
 
     """
     ini file reader that removes successive newlines,
@@ -888,7 +887,7 @@ class RepoFile(ConfigParser):
         for (k, v) in self.items(repo.id):
             self.remove_option(repo.id, k)
 
-        for k, v in repo.items():
+        for k, v in list(repo.items()):
             ConfigParser.set(self, repo.id, k, v)
 
     def section(self, section):

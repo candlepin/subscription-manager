@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2010 Red Hat, Inc.
 #
@@ -51,7 +53,7 @@ class RedeemDialog(widgets.SubmanBaseWidget):
         try:
             self.backend.cp_provider.get_consumer_auth_cp().activateMachine(self.identity.uuid, email)
             self.hide()
-        except Exception, e:
+        except Exception as e:
             handle_gui_exception(e,
                 _("Error redeeming subscription: %s"),
                 self.redeem_dialog)

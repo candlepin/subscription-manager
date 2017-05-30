@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # GUI Module for standalone subscription-manager cli
 #
@@ -23,7 +25,6 @@ import subscription_manager.injection as inj
 import gettext
 import locale
 import logging
-import urllib2
 import webbrowser
 import os
 import socket
@@ -31,6 +32,8 @@ import threading
 import time
 
 import rhsm.config as config
+
+from six.moves import urllib
 
 from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.ga import GLib as ga_GLib
@@ -395,7 +398,7 @@ class MainWindow(widgets.SubmanBaseWidget):
             cp = self.backend.cp_provider.get_consumer_auth_cp()
             # This can throw an exception if we cannot connect to the server, bz 1058374
             show_overrides = is_registered and cp.supports_resource('content_overrides')
-        except Exception, e:
+        except Exception as e:
             log.debug("Failed to check if the server supports resource content_overrides")
             log.debug(e)
 
@@ -442,7 +445,7 @@ class MainWindow(widgets.SubmanBaseWidget):
     def _preferences_item_clicked(self, widget):
         try:
             self.preferences_dialog.show()
-        except Exception, e:
+        except Exception as e:
             handle_gui_exception(e, _("Error in preferences dialog."
                                       "Please see /var/log/rhsm/rhsm.log for more information."),
                                  self._get_window())
@@ -450,7 +453,7 @@ class MainWindow(widgets.SubmanBaseWidget):
     def _repos_item_clicked(self, widget):
         try:
             self.repos_dialog.show()
-        except Exception, e:
+        except Exception as e:
             handle_gui_exception(e, _("Error in repos dialog. "
                                       "Please see /var/log/rhsm/rhsm.log for more information."),
                                  self._get_window())
@@ -465,7 +468,7 @@ class MainWindow(widgets.SubmanBaseWidget):
     def _perform_unregister(self):
         try:
             managerlib.unregister(self.backend.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
-        except Exception, e:
+        except Exception as e:
             log.error("Error unregistering system with entitlement platform.")
             handle_gui_exception(e, _("<b>Errors were encountered during unregister.</b>") +
                                       "\n%s\n" +
@@ -522,7 +525,7 @@ class MainWindow(widgets.SubmanBaseWidget):
         try:
             # try to open documentation in yelp
             ga_Gtk.show_uri(None, 'ghelp:subscription-manager', time.time())
-        except Exception, e:
+        except Exception as e:
             # if we can't open it, it's probably because the user didn't
             # install the docs, or yelp. no need to bother them.
             log.warn("Unable to open help documentation: %s", e)
@@ -569,8 +572,8 @@ class MainWindow(widgets.SubmanBaseWidget):
         lang, encoding = locale.getdefaultlocale()
         url = ONLINE_DOC_URL_TEMPLATE % (lang.replace("_", "-"))
         try:
-            urllib2.urlopen(url)
-        except urllib2.URLError:
+            urllib.request.urlopen(url)
+        except urllib.error.URLError:
             # Use the default if there is no translation.
             url = ONLINE_DOC_FALLBACK_URL
         return url

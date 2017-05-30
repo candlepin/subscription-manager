@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2015 Red Hat, Inc.
 #
@@ -55,6 +57,7 @@ class ProductId(dnf.Plugin):
             logger.info(_('Installed products updated.'))
         except Exception as e:
             logger.error(str(e))
+
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -121,7 +124,7 @@ class DnfProductManager(ProductManager):
 
         # available version of installed
         avail_pkgs = self.base.sack.query().available().filter(name=[
-            k[0] for k in installed_na.keys()])
+            k[0] for k in list(installed_na.keys())])
 
         active = set()
         for p in avail_pkgs:

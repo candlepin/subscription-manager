@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2012 Red Hat, Inc.
 #
@@ -24,9 +26,9 @@ import sys
 import signal
 import socket
 import syslog
-import urllib
 import uuid
 
+from six.moves import urllib
 from rhsm.https import ssl
 
 from subscription_manager.branding import get_branding
@@ -122,7 +124,7 @@ def url_base_join(base, url):
             base = base + '/'
         if (url and (url.startswith('/'))):
             url = url.lstrip('/')
-        return urllib.basejoin(base, url)
+        return urllib.parse.urljoin(base, url)
 
 
 class MissingCaCertException(Exception):
@@ -142,7 +144,7 @@ def is_valid_server_info(conn):
     try:
         conn.ping()
         return True
-    except RestlibException, e:
+    except RestlibException as e:
         # If we're getting Unauthorized that's a good indication this is a
         # valid subscription service:
         if e.code == 401:
@@ -156,7 +158,7 @@ def is_valid_server_info(conn):
         raise MissingCaCertException(e)
     except ProxyException:
         raise
-    except Exception, e:
+    except Exception as e:
         log.exception(e)
         return False
 
@@ -224,7 +226,7 @@ def get_client_versions():
     try:
         pr_version = rhsm.version.rpm_version
         sm_version = subscription_manager.version.rpm_version
-    except Exception, e:
+    except Exception as e:
         log.debug("Client Versions: Unable to check client versions")
         log.exception(e)
 
@@ -256,7 +258,7 @@ def get_server_versions(cp, exception_on_timeout=False):
                 cp_version = '-'.join([status.get('version', _("Unknown")),
                                        status.get('release', _("Unknown"))])
                 rules_version = status.get('rulesVersion', _("Unknown"))
-        except socket.timeout, e:
+        except socket.timeout as e:
             log.error("Timeout error while checking server version")
             log.exception(e)
             # for cli, we can assume if we get a timeout here, the rest
@@ -266,7 +268,7 @@ def get_server_versions(cp, exception_on_timeout=False):
                 log.error("Timeout error while checking server version")
                 raise
             # otherwise, ignore the timeout exception
-        except Exception, e:
+        except Exception as e:
             if isinstance(e, GoneException):
                 log.info("Server Versions: Error: consumer has been deleted, unable to check server version")
             else:

@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2012 Red Hat, Inc.
 #
@@ -29,12 +31,12 @@ class V1ProductCertTests(unittest.TestCase):
         self.prod_cert = create_from_pem(certdata.PRODUCT_CERT_V1_0)
 
     def test_factory_method_on_product_cert(self):
-        self.assertEquals("1.0", str(self.prod_cert.version))
+        self.assertEqual("1.0", str(self.prod_cert.version))
         self.assertTrue(isinstance(self.prod_cert, ProductCertificate))
-        self.assertEquals(1, len(self.prod_cert.products))
-        self.assertEquals('Awesome OS for x86_64 Bits',
+        self.assertEqual(1, len(self.prod_cert.products))
+        self.assertEqual('Awesome OS for x86_64 Bits',
                 self.prod_cert.products[0].name)
-        self.assertEquals('100000000000002', self.prod_cert.subject['CN'])
+        self.assertEqual('100000000000002', self.prod_cert.subject['CN'])
 
     def test_os_old_cert(self):
         self.assertTrue(self.prod_cert.products[0].brand_type is None)
@@ -43,13 +45,13 @@ class V1ProductCertTests(unittest.TestCase):
         brand_type = "OS"
 
         self.prod_cert.products[0].brand_type = brand_type
-        self.assertEquals(brand_type, self.prod_cert.products[0].brand_type)
+        self.assertEqual(brand_type, self.prod_cert.products[0].brand_type)
 
     def test_set_brand_name(self):
         brand_name = "Awesome OS Super"
 
         self.prod_cert.products[0].brand_name = brand_name
-        self.assertEquals(brand_name, self.prod_cert.products[0].brand_name)
+        self.assertEqual(brand_name, self.prod_cert.products[0].brand_name)
 
 
 class V1EntCertTests(unittest.TestCase):
@@ -65,22 +67,22 @@ class V1EntCertTests(unittest.TestCase):
                 "DOESTHISLOOKLIKEACERTTOYOU?")
 
     def test_factory_method_on_ent_cert(self):
-        self.assertEquals("1.0", str(self.ent_cert.version))
+        self.assertEqual("1.0", str(self.ent_cert.version))
         self.assertTrue(isinstance(self.ent_cert, EntitlementCertificate))
-        self.assertEquals(2012, self.ent_cert.start.year)
-        self.assertEquals(2013, self.ent_cert.end.year)
-        self.assertEquals("Awesome OS for x86_64", self.ent_cert.order.name)
-        self.assertEquals(1, len(self.ent_cert.products))
-        self.assertEquals('Awesome OS for x86_64 Bits',
+        self.assertEqual(2012, self.ent_cert.start.year)
+        self.assertEqual(2013, self.ent_cert.end.year)
+        self.assertEqual("Awesome OS for x86_64", self.ent_cert.order.name)
+        self.assertEqual(1, len(self.ent_cert.products))
+        self.assertEqual('Awesome OS for x86_64 Bits',
                 self.ent_cert.products[0].name)
-        self.assertEquals('ff80808138574bd20138574d85a50b2f', self.ent_cert.subject['CN'])
+        self.assertEqual('ff80808138574bd20138574d85a50b2f', self.ent_cert.subject['CN'])
 
     def test_is_valid(self):
         self.assertTrue(self.ent_cert.is_valid(on_date=datetime(2012, 12, 1)))
         self.assertFalse(self.ent_cert.is_valid(on_date=datetime(2014, 12, 1)))
 
     def test_order(self):
-        self.assertEquals("Awesome OS for x86_64", self.ent_cert.order.name)
+        self.assertEqual("Awesome OS for x86_64", self.ent_cert.order.name)
 
     def _find_content_by_label(self, content, label):
         """ Just pulls out content from a list if label matches. """
@@ -89,13 +91,13 @@ class V1EntCertTests(unittest.TestCase):
                 return c
 
     def test_content(self):
-        self.assertEquals(4, len(self.ent_cert.content))
+        self.assertEqual(4, len(self.ent_cert.content))
         content = self._find_content_by_label(self.ent_cert.content,
                 "always-enabled-content")
-        self.assertEquals("always-enabled-content", content.name)
-        self.assertEquals(True, content.enabled)
-        self.assertEquals("/foo/path/always/$releasever", content.url)
-        self.assertEquals("/foo/path/always/gpg", content.gpg)
+        self.assertEqual("always-enabled-content", content.name)
+        self.assertEqual(True, content.enabled)
+        self.assertEqual("/foo/path/always/$releasever", content.url)
+        self.assertEqual("/foo/path/always/gpg", content.gpg)
 
     def test_access_path_tree_fails(self):
         # not supported for v3 certs
@@ -138,17 +140,17 @@ class V3CertTests(unittest.TestCase):
         self.ent_cert = create_from_pem(certdata.ENTITLEMENT_CERT_V3_0)
 
     def test_factory_method_on_ent_cert(self):
-        self.assertEquals("3.0", str(self.ent_cert.version))
+        self.assertEqual("3.0", str(self.ent_cert.version))
         self.assertTrue(isinstance(self.ent_cert, EntitlementCertificate))
-        self.assertEquals(2012, self.ent_cert.start.year)
-        self.assertEquals(2013, self.ent_cert.end.year)
+        self.assertEqual(2012, self.ent_cert.start.year)
+        self.assertEqual(2013, self.ent_cert.end.year)
 
-        self.assertEquals("Awesome OS for x86_64", self.ent_cert.order.name)
+        self.assertEqual("Awesome OS for x86_64", self.ent_cert.order.name)
 
-        self.assertEquals(1, len(self.ent_cert.products))
-        self.assertEquals('Awesome OS for x86_64 Bits',
+        self.assertEqual(1, len(self.ent_cert.products))
+        self.assertEqual('Awesome OS for x86_64 Bits',
                 self.ent_cert.products[0].name)
-        self.assertEquals('ff80808139d9e26c0139da23489a0066',
+        self.assertEqual('ff80808139d9e26c0139da23489a0066',
                 self.ent_cert.subject['CN'])
 
     def test_factory_method_without_ent_data(self):
@@ -169,26 +171,26 @@ class V3CertTests(unittest.TestCase):
                 return c
 
     def test_order(self):
-        self.assertEquals(2, self.ent_cert.order.quantity_used)
-        self.assertEquals("1", self.ent_cert.order.stacking_id)
-        self.assertEquals("awesomeos-x86_64", self.ent_cert.order.sku)
+        self.assertEqual(2, self.ent_cert.order.quantity_used)
+        self.assertEqual("1", self.ent_cert.order.stacking_id)
+        self.assertEqual("awesomeos-x86_64", self.ent_cert.order.sku)
 
     def test_content_enabled(self):
-        self.assertEquals(4, len(self.ent_cert.content))
+        self.assertEqual(4, len(self.ent_cert.content))
         content = self._find_content_by_label(self.ent_cert.content,
                 "always-enabled-content")
-        self.assertEquals("always-enabled-content", content.name)
-        self.assertEquals(True, content.enabled)
-        self.assertEquals(200, content.metadata_expire)
-        self.assertEquals("/foo/path/always/$releasever", content.url)
-        self.assertEquals("/foo/path/always/gpg", content.gpg)
+        self.assertEqual("always-enabled-content", content.name)
+        self.assertEqual(True, content.enabled)
+        self.assertEqual(200, content.metadata_expire)
+        self.assertEqual("/foo/path/always/$releasever", content.url)
+        self.assertEqual("/foo/path/always/gpg", content.gpg)
 
     def test_content_disabled(self):
-        self.assertEquals(4, len(self.ent_cert.content))
+        self.assertEqual(4, len(self.ent_cert.content))
         content = self._find_content_by_label(self.ent_cert.content,
                 "never-enabled-content")
-        self.assertEquals("never-enabled-content", content.name)
-        self.assertEquals(False, content.enabled)
+        self.assertEqual("never-enabled-content", content.name)
+        self.assertEqual(False, content.enabled)
 
     def test_content_no_arches(self):
         """Handle entitlement certs with no arch info on content"""
@@ -196,7 +198,7 @@ class V3CertTests(unittest.TestCase):
                                               "always-enabled-content")
         # we should get the default empty list if there are no arches
         # specified, ala the test entitlement cert
-        self.assertEquals([], content.arches)
+        self.assertEqual([], content.arches)
 
     @patch('os.unlink')
     def test_delete(self, unlink_mock):
@@ -207,9 +209,9 @@ class V3CertTests(unittest.TestCase):
         self.unlinked = []
         self.ent_cert.delete()
 
-        self.assertEquals(2, unlink_mock.call_count)
-        self.assertEquals(cert_path, unlink_mock.call_args_list[0][0][0])
-        self.assertEquals(key_path, unlink_mock.call_args_list[1][0][0])
+        self.assertEqual(2, unlink_mock.call_count)
+        self.assertEqual(cert_path, unlink_mock.call_args_list[0][0][0])
+        self.assertEqual(key_path, unlink_mock.call_args_list[1][0][0])
 
     def test_cert_with_carriage_returns(self):
         # make sure it can parse a cert where the "-----" etc. lines end with
@@ -228,7 +230,7 @@ class V3CertTests(unittest.TestCase):
         self.assertTrue(self.ent_cert.check_path('/path/to/awesomeos/x86_64/foo/bar'))
 
     def test_missing_pool(self):
-        self.assertEquals(None, self.ent_cert.pool)
+        self.assertEqual(None, self.ent_cert.pool)
 
 
 class V3_2CertTests(unittest.TestCase):
@@ -237,9 +239,9 @@ class V3_2CertTests(unittest.TestCase):
         self.ent_cert = create_from_pem(certdata.ENTITLEMENT_CERT_V3_2)
 
     def test_read_pool(self):
-        self.assertEquals("3.2", str(self.ent_cert.version))
+        self.assertEqual("3.2", str(self.ent_cert.version))
         self.assertTrue(isinstance(self.ent_cert, EntitlementCertificate))
-        self.assertEquals('8a8d01f53cda9dd0013cda9ed5100475',
+        self.assertEqual('8a8d01f53cda9dd0013cda9ed5100475',
                 self.ent_cert.pool.id)
 
 
@@ -254,14 +256,14 @@ class TestEntCertV1KeyPath(unittest.TestCase):
         expected_key_path = "/etc/pki/entitlement/12345-key.pem"
 
         actual_key_path = self.ent_cert.key_path()
-        self.assertEquals(actual_key_path, expected_key_path)
+        self.assertEqual(actual_key_path, expected_key_path)
 
     def test_key_path_extra_pem(self):
         self.ent_cert.path = "/etc/pki/entitlement/12345-with-a.pem-in-the-name.pem"
         expected_key_path = "/etc/pki/entitlement/12345-with-a.pem-in-the-name-key.pem"
 
         actual_key_path = self.ent_cert.key_path()
-        self.assertEquals(actual_key_path, expected_key_path)
+        self.assertEqual(actual_key_path, expected_key_path)
 
     def test_key_path_no_pem(self):
         self.ent_cert.path = "/etc/pki/entitlement/12345"
@@ -272,7 +274,7 @@ class TestEntCertV1KeyPath(unittest.TestCase):
         expected_key_path = "12345-key.pem"
 
         actual_key_path = self.ent_cert.key_path()
-        self.assertEquals(actual_key_path, expected_key_path)
+        self.assertEqual(actual_key_path, expected_key_path)
 
 
 class TestEntCertV3_0KeyPath(TestEntCertV1KeyPath):
@@ -292,7 +294,7 @@ class V3_2ContentArchCertTests(unittest.TestCase):
         for content in self.ent_cert.content:
             self.assertTrue(isinstance(content.arches, list))
             if content.label == 'always-enabled-content':
-                self.assertEquals(['ALL'], content.arches)
+                self.assertEqual(['ALL'], content.arches)
             if content.label == 'awesomeos-x86_64-i386-content':
                 self.assertTrue('i386' in content.arches)
                 self.assertTrue('x86_64' in content.arches)
@@ -304,14 +306,14 @@ class IdentityCertTests(unittest.TestCase):
     def test_creation(self):
         id_cert = create_from_pem(certdata.IDENTITY_CERT)
         self.assertTrue(isinstance(id_cert, IdentityCertificate))
-        self.assertEquals("URI:CN=redhat.local.rm-rf.ca", id_cert.alt_name)
-        self.assertEquals("0f5d4617-d913-4a0f-be61-d8a9c88e1476", id_cert.subject['CN'])
+        self.assertEqual("URI:CN=redhat.local.rm-rf.ca", id_cert.alt_name)
+        self.assertEqual("0f5d4617-d913-4a0f-be61-d8a9c88e1476", id_cert.subject['CN'])
         self.assertFalse(hasattr(id_cert, 'products'))
 
     def test_default_version(self):
         id_cert = create_from_pem(certdata.IDENTITY_CERT)
         self.assertTrue(isinstance(id_cert, IdentityCertificate))
-        self.assertEquals('1.0', str(id_cert.version))
+        self.assertEqual('1.0', str(id_cert.version))
 
 
 class ContentTests(unittest.TestCase):
@@ -365,7 +367,7 @@ class ContentTests(unittest.TestCase):
 
         self.assertEqual(c, c)
         self.assertNotEqual(c, None)
-        self.assertNotEquals(c, "not a content")
+        self.assertNotEqual(c, "not a content")
         self.assertEqual(c, d)
         self.assertEqual(c, e)
         self.assertNotEqual(c, f)
@@ -375,9 +377,9 @@ class ProductTests(unittest.TestCase):
 
     def test_arch_multi_valued(self):
         p = Product(id="pid", name="pname", architectures="i386,x86_64")
-        self.assertEquals(2, len(p.architectures))
-        self.assertEquals("i386", p.architectures[0])
-        self.assertEquals("x86_64", p.architectures[1])
+        self.assertEqual(2, len(p.architectures))
+        self.assertEqual("i386", p.architectures[0])
+        self.assertEqual("x86_64", p.architectures[1])
 
     def test_none_arch(self):
         p = Product(id="pid", name="pname")
@@ -401,7 +403,7 @@ class ProductTests(unittest.TestCase):
     def test_brand_type_empty_string(self):
         p = Product(id='pid', name='pname',
                     brand_type="")
-        self.assertEquals(p.brand_type, "")
+        self.assertEqual(p.brand_type, "")
 
     def test_no_brand_name(self):
         p = Product(id="pid", name="pname")
@@ -420,4 +422,4 @@ class ProductTests(unittest.TestCase):
     def test_brand_name_empty_string(self):
         p = Product(id="pid", name="pname",
                     brand_name="")
-        self.assertEquals(p.brand_name, "")
+        self.assertEqual(p.brand_name, "")

@@ -1,3 +1,4 @@
+from __future__ import print_function, division, absolute_import
 
 import gettext
 import sys
@@ -93,7 +94,7 @@ class moduleClass(module.Module, object):
             # is if this is prior to RHEL 7, so this comparison should be safe.
             if dist_version < 7:
                 self.standalone = False
-        except Exception, e:
+        except Exception as e:
             log.error("Unable to parse a distribution version.")
             log.exception(e)
         log.debug("Running standalone firstboot: %s" % self.standalone)

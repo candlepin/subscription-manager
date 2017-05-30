@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2014 Red Hat, Inc.
 #
@@ -60,12 +62,12 @@ class BaseActionClient(object):
             update_report = lib.update()
         # see bz#852706, reraise GoneException so that
         # consumer cert deletion works
-        except GoneException, e:
+        except GoneException as e:
             raise
         # raise this so it can be exposed clearly
-        except ExpiredIdentityCertException, e:
+        except ExpiredIdentityCertException as e:
             raise
-        except Exception, e:
+        except Exception as e:
             log.warning("Exception caught while running %s update" % lib)
             log.exception(e)
 

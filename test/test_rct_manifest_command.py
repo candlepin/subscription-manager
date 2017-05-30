@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2012 Red Hat, Inc.
 #
@@ -17,32 +19,32 @@ try:
 except ImportError:
     import unittest
 
-from cStringIO import StringIO
 import errno
 import mock
 import os
 import shutil
+import six
 import tempfile
 import zipfile
 from zipfile import ZipFile
 
 from subscription_manager.i18n_optparse import OptionParser
 
-import manifestdata
+from . import manifestdata
 from rct.manifest_commands import CatManifestCommand
 from rct.manifest_commands import DumpManifestCommand
 from rct.manifest_commands import get_value
 from rct.manifest_commands import RCTManifestCommand
 from rct.manifest_commands import ZipExtractAll
 
-from fixture import Capture, SubManFixture
+from .fixture import Capture, SubManFixture
 
 
 def _build_valid_manifest():
-    manifest_zip = StringIO()
+    manifest_zip = six.StringIO()
     manifest_object = ZipFile(manifest_zip, "w", compression=zipfile.ZIP_STORED)
     manifest_object.writestr("signature", "dummy")
-    consumer_export_zip = StringIO()
+    consumer_export_zip = six.StringIO()
     consumer_export_object = ZipFile(consumer_export_zip, "w", compression=zipfile.ZIP_STORED)
     consumer_export_object.writestr("export/consumer.json", manifestdata.consumer_json)
     consumer_export_object.writestr("export/meta.json", manifestdata.meta_json)
@@ -60,13 +62,13 @@ class RCTManifestCommandTests(SubManFixture):
 
     def test_get_value(self):
         data = {"test": "value", "test2": {"key2": "value2", "key3": []}}
-        self.assertEquals("", get_value(data, "some.test"))
-        self.assertEquals("", get_value(data, ""))
-        self.assertEquals("", get_value(data, "test2.key4"))
-        self.assertEquals("", get_value(data, "test2.key2.fred"))
-        self.assertEquals("value", get_value(data, "test"))
-        self.assertEquals("value2", get_value(data, "test2.key2"))
-        self.assertEquals([], get_value(data, "test2.key3"))
+        self.assertEqual("", get_value(data, "some.test"))
+        self.assertEqual("", get_value(data, ""))
+        self.assertEqual("", get_value(data, "test2.key4"))
+        self.assertEqual("", get_value(data, "test2.key2.fred"))
+        self.assertEqual("value", get_value(data, "test"))
+        self.assertEqual("value2", get_value(data, "test2.key2"))
+        self.assertEqual([], get_value(data, "test2.key3"))
 
     def test_cat_manifest(self):
         catman = CatManifestCommand()
@@ -79,7 +81,7 @@ class RCTManifestCommandTests(SubManFixture):
         with Capture() as cap:
             catman._do_command()
 
-        self.assertEquals("", cap.err)
+        self.assertEqual("", cap.err)
         self.assert_string_equals(manifestdata.correct_manifest_output, cap.out)
 
     def test_extract_manifest(self):
@@ -175,7 +177,7 @@ class RCTManifestCommandTests(SubManFixture):
 class RCTManifestExtractTests(unittest.TestCase):
 
     def test_extractall_outside_base(self):
-        zip_file_object = StringIO()
+        zip_file_object = six.StringIO()
         archive = ZipExtractAll(zip_file_object, "w", compression=zipfile.ZIP_STORED)
         archive.writestr("../../../../wat", "this is weird")
 
@@ -185,7 +187,7 @@ class RCTManifestExtractTests(unittest.TestCase):
         shutil.rmtree(tmp_dir)
 
     def test_extractall_net_path(self):
-        zip_file_object = StringIO()
+        zip_file_object = six.StringIO()
         archive = ZipExtractAll(zip_file_object, "w", compression=zipfile.ZIP_STORED)
         archive.writestr(r"\\nethost\share\whatever", "this is weird")
 
@@ -201,7 +203,7 @@ class RCTManifestExtractTests(unittest.TestCase):
         shutil.rmtree(tmp_dir)
 
     def test_extractall_local(self):
-        zip_file_object = StringIO()
+        zip_file_object = six.StringIO()
         archive = ZipExtractAll(zip_file_object, "w", compression=zipfile.ZIP_STORED)
         archive.writestr("./some/path", "this is okay I think, though odd")
 
@@ -216,6 +218,6 @@ class RCTManifestExtractTests(unittest.TestCase):
 
     @mock.patch("sys.exit")
     def test_extractall_nonzip(self, mock_exit):
-        not_zip_file_object = StringIO()
+        not_zip_file_object = six.StringIO()
         ZipExtractAll(not_zip_file_object, "r")
         mock_exit.assert_called_with(1)

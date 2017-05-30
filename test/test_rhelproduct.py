@@ -1,9 +1,10 @@
+from __future__ import print_function, division, absolute_import
 
-import stubs
+from . import stubs
 
 from subscription_manager import rhelproduct
 
-from fixture import SubManFixture
+from .fixture import SubManFixture
 
 
 # matches:

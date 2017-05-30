@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2011 - 2012 Red Hat, Inc.
 #
@@ -80,7 +82,7 @@ class ContentTests(unittest.TestCase):
 
         self.assertEqual(c, c)
         self.assertNotEqual(c, None)
-        self.assertNotEquals(c, "not a content")
+        self.assertNotEqual(c, "not a content")
         self.assertEqual(c, d)
         self.assertEqual(c, e)
         self.assertNotEqual(c, f)

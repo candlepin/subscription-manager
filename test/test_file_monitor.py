@@ -1,10 +1,12 @@
+from __future__ import print_function, division, absolute_import
+
 import tempfile
 import shutil
 import os
 
 import mock
 
-import fixture
+from . import fixture
 
 from subscription_manager import file_monitor
 
@@ -73,7 +75,7 @@ class TestMonitorDirectories(fixture.SubManFixture):
 
         fm = file_monitor.MonitorDirectories(changed_callback=changed_callback)
         fm.update()
-        self.assertEquals(callback_result, [])
+        self.assertEqual(callback_result, [])
 
     def test_from_path_list(self):
         self.temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp-file_monitor')
@@ -91,12 +93,12 @@ class TestMonitorDirectories(fixture.SubManFixture):
         mock_dir_false._check_mtime = mock.MagicMock(return_value=(452345345, True))
 
         def changed_callback():
-            print "foo"
+            print("foo")
 
         fm = file_monitor.MonitorDirectories(dir_monitors=[mock_dir_false, mock_dir],
                                              changed_callback=changed_callback)
         fm.update()
-        print "changed", mock_dir._changed_callback.called
+        print("changed", mock_dir._changed_callback.called)
 
     def tearDown(self):
         if self.temp_dir:

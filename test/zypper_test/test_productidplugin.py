@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 from unittest import TestCase
 import glob
 import os

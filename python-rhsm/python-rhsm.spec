@@ -44,6 +44,7 @@ Requires: python-dateutil
 Requires: python-simplejson
 %endif
 Requires: python-rhsm-certificates = %{version}-%{release}
+Requires: python-six
 
 %if 0%{?suse_version}
 BuildRequires: python-devel >= 2.6
@@ -52,6 +53,7 @@ BuildRequires: python2-devel
 %endif
 BuildRequires: python-setuptools
 BuildRequires: openssl-devel
+BuildRequires: python-six
 
 
 %description

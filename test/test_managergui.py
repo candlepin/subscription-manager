@@ -1,7 +1,9 @@
-from fixture import SubManFixture
+from __future__ import print_function, division, absolute_import
+
+from .fixture import SubManFixture
 import mock
 
-import stubs
+from . import stubs
 from subscription_manager.gui import managergui, registergui
 from subscription_manager.injection import provide, \
         PRODUCT_DATE_RANGE_CALCULATOR, PROD_DIR

@@ -1,9 +1,11 @@
+from __future__ import print_function, division, absolute_import
+
 import difflib
 import locale
 import os
 import pprint
+import six
 import sys
-import StringIO
 import tempfile
 
 try:
@@ -23,7 +25,7 @@ except AttributeError:
 from mock import Mock, MagicMock, NonCallableMock, patch, mock_open
 from contextlib import contextmanager
 
-import stubs
+from . import stubs
 import subscription_manager.injection as inj
 import subscription_manager.managercli
 from rhsmlib.services import config
@@ -34,10 +36,10 @@ from threading import RLock
 
 @contextmanager
 def open_mock(content=None, **kwargs):
-    content_out = StringIO.StringIO()
+    content_out = six.StringIO()
     m = mock_open(read_data=content)
     with patch('__builtin__.open', m, create=True, **kwargs) as mo:
-        stream = StringIO.StringIO(content)
+        stream = six.StringIO(content)
         rv = mo.return_value
         rv.write = lambda x: content_out.write(x)
         rv.content_out = lambda: content_out.getvalue()
@@ -70,7 +72,7 @@ def locale_context(new_locale, category=None):
         locale.setlocale(category, old_locale)
 
 
-class FakeLogger:
+class FakeLogger(object):
     def __init__(self):
         self.expected_msg = ""
         self.msg = None
@@ -358,7 +360,7 @@ class SubManFixture(unittest.TestCase):
 class Capture(object):
     class Tee(object):
         def __init__(self, stream, silent):
-            self.buf = StringIO.StringIO()
+            self.buf = six.StringIO()
             self.stream = stream
             self.silent = silent
 

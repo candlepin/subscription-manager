@@ -1,3 +1,4 @@
+from __future__ import print_function, division, absolute_import
 
 import os
 import logging
@@ -5,7 +6,7 @@ log = logging.getLogger("rhsm-app.unittests." + __name__)
 
 from subscription_manager import cpuinfo
 
-import fixture
+from . import fixture
 
 test_path = os.path.dirname(__file__)
 CPUINFOS = "data/cpuinfo"
@@ -24,11 +25,11 @@ class BaseCpuInfo(fixture.SubManFixture):
         x = self.cpuinfo_class.from_proc_cpuinfo_string(cpud)
 
         if 'cpu_count' in exp:
-            self.assertEquals(exp['cpu_count'], len(x.cpu_info.processors))
+            self.assertEqual(exp['cpu_count'], len(x.cpu_info.processors))
         if 'model' in exp:
-            self.assertEquals(exp['model'], x.cpu_info.model)
+            self.assertEqual(exp['model'], x.cpu_info.model)
         if 'machine' in exp:
-            self.assertEquals(exp['machine'], x.cpu_info.common['machine'])
+            self.assertEqual(exp['machine'], x.cpu_info.common['machine'])
 
     def _load_cpuinfo(self, name):
         f = open(os.path.join(cpu_data_dir, name), 'r')

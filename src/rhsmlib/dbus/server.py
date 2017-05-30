@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # Copyright (c) 2016 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -104,7 +106,9 @@ class Server(object):
         # here.  This will create a problem if you attempt to reacquire the BusName since python-dbus will
         # give you a stale reference.  Use dbus.Connection.BusConnection to avoid this problem.
         # See http://stackoverflow.com/questions/17446414/dbus-object-lifecycle
-        map(lambda x: x.remove_from_connection(), self.objects)
+        for o in self.objects:
+            o.remove_from_connection()
+
         self.bus.release_name(self.bus_name)
 
 
@@ -154,7 +158,8 @@ class DomainSocketServer(object):
             self.connection_count = 0
 
     def shutdown(self):
-        map(lambda x: x.remove_from_connection(), self.objects)
+        for o in self.objects:
+            o.remove_from_connection()
         self._server.disconnect()
 
         # Allow self.objects and self._server to get GCed

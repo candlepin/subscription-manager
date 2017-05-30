@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # Copyright (c) 2011 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -36,9 +38,9 @@ class StorageTests(unittest.TestCase):
         add_data_to_map_funct(data, store)
 
         tree_iter = store.get_iter_first()
-        self.assertEquals(expected_c1, store.get_value(tree_iter, store['c1']))
-        self.assertEquals(expected_c2, store.get_value(tree_iter, store['c2']))
-        self.assertEquals(expected_c3, store.get_value(tree_iter, store['c3']))
+        self.assertEqual(expected_c1, store.get_value(tree_iter, store['c1']))
+        self.assertEqual(expected_c2, store.get_value(tree_iter, store['c2']))
+        self.assertEqual(expected_c3, store.get_value(tree_iter, store['c3']))
 
     def create_store(self, store_class):
         type_map = {

@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Make optparse friendlier to i18n/l10n
 #
@@ -23,7 +25,6 @@ Just use this instead of optparse, the interface should be the same.
 For some backgorund, see:
 http://bugs.python.org/issue4319
 """
-
 import gettext
 import optparse
 from optparse import IndentedHelpFormatter as _IndentedHelpFormatter
@@ -142,5 +143,5 @@ class OptionParser(_OptionParser):
         """
         self.print_usage(sys.stderr)
         #translators: arg 1 is the program name, arg 2 is the error message
-        print _("%s: error: %s") % (self.get_prog_name(), msg)
+        print(_("%s: error: %s") % (self.get_prog_name(), msg))
         self.exit(2)

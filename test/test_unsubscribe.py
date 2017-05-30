@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2012 Red Hat, Inc.
 #
@@ -15,9 +17,9 @@
 import mock
 import rhsm.connection as connection
 
-from stubs import StubEntitlementDirectory, StubProductDirectory, \
+from .stubs import StubEntitlementDirectory, StubProductDirectory, \
     StubEntActionInvoker, StubEntitlementCertificate, StubProduct
-from fixture import SubManFixture
+from .fixture import SubManFixture
 
 from subscription_manager import managercli
 from subscription_manager import injection as inj
@@ -39,16 +41,16 @@ class CliUnSubscribeTests(SubManFixture):
         managercli.EntCertActionInvoker = StubEntActionInvoker
 
         cmd.main(['unsubscribe', '--all'])
-        self.assertEquals(cmd.cp.called_unbind_uuid, mock_identity.uuid)
+        self.assertEqual(cmd.cp.called_unbind_uuid, mock_identity.uuid)
         cmd.cp.reset()
 
         cmd.main(['unsubscribe', '--serial=%s' % ent1.serial])
-        self.assertEquals(cmd.cp.called_unbind_serial, ['%s' % ent1.serial])
+        self.assertEqual(cmd.cp.called_unbind_serial, ['%s' % ent1.serial])
         cmd.cp.reset()
 
         code = cmd.main(['unsubscribe', '--serial=%s' % ent2.serial, '--serial=%s' % ent3.serial])
-        self.assertEquals(cmd.cp.called_unbind_serial, ['%s' % ent2.serial, '%s' % ent3.serial])
-        self.assertEquals(code, 0)
+        self.assertEqual(cmd.cp.called_unbind_serial, ['%s' % ent2.serial, '%s' % ent3.serial])
+        self.assertEqual(code, 0)
 
         expected_exception = connection.RestlibException("Entitlement Certificate with serial number "
             "2300922701043065601 could not be found.")
@@ -86,7 +88,7 @@ class CliUnSubscribeTests(SubManFixture):
         self.assertTrue(ent1.is_deleted)
         self.assertFalse(ent2.is_deleted)
         self.assertTrue(ent3.is_deleted)
-        self.assertEquals(code, 0)
+        self.assertEqual(code, 0)
 
         code = cmd.main(['unsubscribe', '--serial=%s' % '33333333'])
-        self.assertEquals(code, 1)
+        self.assertEqual(code, 1)

@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Module to probe Hardware info from the system
 #
@@ -16,8 +18,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-from __future__ import print_function
-
 import gettext
 import logging
 import os
@@ -45,7 +45,7 @@ from rhsmlib.compat import check_output as compat_check_output
 from subprocess import CalledProcessError
 
 
-class ClassicCheck:
+class ClassicCheck(object):
     def is_registered_with_classic(self):
         try:
             sys.path.append('/usr/share/rhn')
@@ -64,7 +64,7 @@ def parse_range(range_str):
     start = int(range_list[0])
     end = int(range_list[-1])
 
-    return range(start, end + 1)
+    return list(range(start, end + 1))
 
 
 # util to total up the values represented by a cpu siblings list
@@ -126,7 +126,7 @@ class HardwareCollector(collector.FactsCollector):
             'uname.version',
             'uname.machine',
         )
-        uname_info = dict(zip(uname_keys, uname_data))
+        uname_info = dict(list(zip(uname_keys, uname_data)))
         return uname_info
 
     def get_release_info(self):
@@ -163,7 +163,7 @@ class HardwareCollector(collector.FactsCollector):
                 'CPE_NAME': 'Unknown',
             }
             for line in os_release:
-                split = map(lambda piece: piece.strip('"\n '), line.split('='))
+                split = [piece.strip('"\n ') for piece in line.split('=')]
                 if len(split) != 2:
                     continue
                 data[split[0]] = split[1]
@@ -343,7 +343,7 @@ class HardwareCollector(collector.FactsCollector):
             prefix=self.prefix
         )
 
-        for key, value in proc_cpuinfo_source.cpu_info.common.items():
+        for key, value in list(proc_cpuinfo_source.cpu_info.common.items()):
             proc_cpuinfo['%s.common.%s' % (fact_namespace, key)] = value
 
         # NOTE: cpu_info.other is a potentially ordered non-uniq list, so may
@@ -410,7 +410,7 @@ class HardwareCollector(collector.FactsCollector):
         # if we find valid values in cpu/cpuN/topology/*siblings_list
         # sometimes it's not there, particularly on rhel5
         if threads_per_core and cores_per_cpu:
-            cores_per_socket = cores_per_cpu / threads_per_core
+            cores_per_socket = cores_per_cpu // threads_per_core
             cpu_info["cpu.topology_source"] = "kernel /sys cpu sibling lists"
 
             # rhel6 s390x can have /sys cpu topo, but we can't make assumption
@@ -470,14 +470,14 @@ class HardwareCollector(collector.FactsCollector):
 
             # for some odd cases where there are offline ppc64 cpu's,
             # this can end up not being a whole number...
-            cores_per_socket = cpu_count / socket_count
+            cores_per_socket = cpu_count // socket_count
 
         if cores_per_socket and threads_per_core:
             # for s390x with sysinfo topo, we use the sysinfo numbers except
             # for cpu_count, which takes offline cpus into account. This is
             # mostly just to match lscpu behaviour here
             if cpu_info["cpu.topology_source"] != "s390x sysinfo":
-                socket_count = cpu_count / cores_per_socket / threads_per_core
+                socket_count = cpu_count // cores_per_socket // threads_per_core
 
         # s390 etc
         # for s390, socket calculations are per book, and we can have multiple
@@ -492,8 +492,8 @@ class HardwareCollector(collector.FactsCollector):
         if not books:
             book_siblings_per_cpu = self.count_cpumask_entries(cpu_files[0], 'book_siblings_list')
             if book_siblings_per_cpu:
-                book_count = cpu_count / book_siblings_per_cpu
-                sockets_per_book = book_count / socket_count
+                book_count = cpu_count // book_siblings_per_cpu
+                sockets_per_book = book_count // socket_count
                 cpu_info["cpu.topology_source"] = "s390 book_siblings_list"
                 books = True
 

@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # Copyright (c) 2016 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -38,7 +40,7 @@ class BaseFacts(base_object.BaseObject):
     @util.dbus_handle_exceptions
     def GetFacts(self, sender=None):
         collection = self.facts_collector.collect()
-        cleaned = dict([(str(key), str(value)) for key, value in collection.data.items()])
+        cleaned = dict([(str(key), str(value)) for key, value in list(collection.data.items())])
         return dbus.Dictionary(cleaned, signature="ss")
 
 

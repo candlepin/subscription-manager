@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2012 Red Hat, Inc.
 #
@@ -18,12 +20,12 @@ except ImportError:
 
 import os
 import re
-import StringIO
-import stubs
+import six
+from . import stubs
 
 from mock import patch, NonCallableMock, MagicMock, Mock, call
 from rhsm.https import ssl
-from fixture import Capture, SubManFixture, temp_file
+from .fixture import Capture, SubManFixture, temp_file
 from optparse import OptionParser
 from textwrap import dedent
 
@@ -76,7 +78,7 @@ class TestMigration(SubManFixture):
         migrate.add_parser_options(p)
 
         # Set the list of acceptable attributes for this Mock.
-        valid_options = filter(lambda x: x.dest is not None, p.option_list)
+        valid_options = [x for x in p.option_list if x.dest is not None]
         mock_opts = Mock(spec=[o.dest for o in valid_options])
 
         # Set everything to the default
@@ -88,11 +90,14 @@ class TestMigration(SubManFixture):
                 val = None
             setattr(mock_opts, opt.dest, val)
 
-        map(lambda x: set_default(x), valid_options)
+        for x in valid_options:
+            set_default(x)
 
         if not kwargs:
             kwargs = {}
-        map(lambda (k, v): setattr(mock_opts, k, v), kwargs.items())
+
+        for k, v in list(kwargs.items()):
+            setattr(mock_opts, k, v)
 
         # The five_to_six option is set after argument parsing in the module so we set it
         # for convenience.
@@ -167,8 +172,8 @@ class TestMigration(SubManFixture):
         (opts, args) = parser.parse_args([])
         migrate.set_defaults(opts, five_to_six)
         self.assertTrue(opts.five_to_six)
-        self.assertEquals(None, opts.org)
-        self.assertEquals(None, opts.environment)
+        self.assertEqual(None, opts.org)
+        self.assertEqual(None, opts.environment)
         self.assertTrue(opts.force)
 
     def test_classic_migration_options(self):
@@ -183,7 +188,7 @@ class TestMigration(SubManFixture):
         (opts, args) = parser.parse_args([])
         migrate.set_defaults(opts, five_to_six_script=False)
         self.assertFalse(opts.five_to_six)
-        self.assertEquals("purge", opts.registration_state)
+        self.assertEqual("purge", opts.registration_state)
 
     def test_choices_for_registration_state(self):
         parser = OptionParser()
@@ -195,16 +200,16 @@ class TestMigration(SubManFixture):
         parser = OptionParser()
         migrate.add_parser_options(parser, five_to_six_script=False)
         (options, args) = parser.parse_args(["--keep"])
-        self.assertEquals("keep", options.registration_state)
+        self.assertEqual("keep", options.registration_state)
 
         (options, args) = parser.parse_args([""])
-        self.assertEquals("purge", options.registration_state)
+        self.assertEqual("purge", options.registration_state)
 
     def test_registration_state_default(self):
         parser = OptionParser()
         migrate.add_parser_options(parser, five_to_six_script=True)
         (options, args) = parser.parse_args([])
-        self.assertEquals("unentitle", options.registration_state)
+        self.assertEqual("unentitle", options.registration_state)
 
     def test_mutually_exclusive_auto_service_level_options(self):
         parser = OptionParser()
@@ -250,13 +255,13 @@ class TestMigration(SubManFixture):
         mock_input.return_value = "username"
         mock_getpass.return_value = "password"
         creds = self.engine.authenticate(None, None, "Some prompt", "Some other prompt")
-        self.assertEquals(creds.username, "username")
-        self.assertEquals(creds.password, "password")
+        self.assertEqual(creds.username, "username")
+        self.assertEqual(creds.password, "password")
 
     def test_authenticate_when_values_given(self):
         creds = self.engine.authenticate("username", "password", "Some prompt", "Some other prompt")
-        self.assertEquals(creds.username, "username")
-        self.assertEquals(creds.password, "password")
+        self.assertEqual(creds.username, "username")
+        self.assertEqual(creds.password, "password")
 
     @patch("__builtin__.raw_input", autospec=True)
     @patch("getpass.getpass", autospec=True)
@@ -267,10 +272,10 @@ class TestMigration(SubManFixture):
         mock_getpass.side_effect = iter(["legacy_password", "destination_password"])
 
         self.engine.get_auth()
-        self.assertEquals(self.engine.legacy_creds.username, "legacy_username")
-        self.assertEquals(self.engine.legacy_creds.password, "legacy_password")
-        self.assertEquals(self.engine.destination_creds.username, "destination_username")
-        self.assertEquals(self.engine.destination_creds.password, "destination_password")
+        self.assertEqual(self.engine.legacy_creds.username, "legacy_username")
+        self.assertEqual(self.engine.legacy_creds.password, "legacy_password")
+        self.assertEqual(self.engine.destination_creds.username, "destination_username")
+        self.assertEqual(self.engine.destination_creds.password, "destination_password")
 
     @patch("__builtin__.raw_input", autospec=True)
     @patch("getpass.getpass", autospec=True)
@@ -282,10 +287,10 @@ class TestMigration(SubManFixture):
 
         self.engine.is_hosted = False
         self.engine.get_auth()
-        self.assertEquals(self.engine.legacy_creds.username, "legacy_username")
-        self.assertEquals(self.engine.legacy_creds.password, "legacy_password")
-        self.assertEquals(self.engine.destination_creds.username, "destination_username")
-        self.assertEquals(self.engine.destination_creds.password, "destination_password")
+        self.assertEqual(self.engine.legacy_creds.username, "legacy_username")
+        self.assertEqual(self.engine.legacy_creds.password, "legacy_password")
+        self.assertEqual(self.engine.destination_creds.username, "destination_username")
+        self.assertEqual(self.engine.destination_creds.password, "destination_password")
 
     @patch("__builtin__.raw_input", autospec=True)
     @patch("getpass.getpass", autospec=True)
@@ -297,19 +302,19 @@ class TestMigration(SubManFixture):
 
         self.engine.is_hosted = True
         self.engine.get_auth()
-        self.assertEquals(self.engine.legacy_creds.username, "legacy_username")
-        self.assertEquals(self.engine.legacy_creds.password, "legacy_password")
-        self.assertEquals(self.engine.destination_creds.username, "legacy_username")
-        self.assertEquals(self.engine.destination_creds.password, "legacy_password")
+        self.assertEqual(self.engine.legacy_creds.username, "legacy_username")
+        self.assertEqual(self.engine.legacy_creds.password, "legacy_password")
+        self.assertEqual(self.engine.destination_creds.username, "legacy_username")
+        self.assertEqual(self.engine.destination_creds.password, "legacy_password")
 
     def test_get_auth_with_provided_rhn_creds(self):
         self.engine.options = self.create_options(legacy_user='legacy_username', legacy_password='legacy_password')
         self.engine.is_hosted = True
         self.engine.get_auth()
-        self.assertEquals(self.engine.legacy_creds.username, "legacy_username")
-        self.assertEquals(self.engine.legacy_creds.password, "legacy_password")
-        self.assertEquals(self.engine.destination_creds.username, "legacy_username")
-        self.assertEquals(self.engine.destination_creds.password, "legacy_password")
+        self.assertEqual(self.engine.legacy_creds.username, "legacy_username")
+        self.assertEqual(self.engine.legacy_creds.password, "legacy_password")
+        self.assertEqual(self.engine.destination_creds.username, "legacy_username")
+        self.assertEqual(self.engine.destination_creds.password, "legacy_password")
 
     @patch("getpass.getpass", autospec=True)
     def test_gets_password_when_only_username_give(self, mock_getpass):
@@ -318,10 +323,10 @@ class TestMigration(SubManFixture):
         mock_getpass.return_value = "legacy_password"
         self.engine.is_hosted = True
         self.engine.get_auth()
-        self.assertEquals(self.engine.legacy_creds.username, "legacy_username")
-        self.assertEquals(self.engine.legacy_creds.password, "legacy_password")
-        self.assertEquals(self.engine.destination_creds.username, "legacy_username")
-        self.assertEquals(self.engine.destination_creds.password, "legacy_password")
+        self.assertEqual(self.engine.legacy_creds.username, "legacy_username")
+        self.assertEqual(self.engine.legacy_creds.password, "legacy_password")
+        self.assertEqual(self.engine.destination_creds.username, "legacy_username")
+        self.assertEqual(self.engine.destination_creds.password, "legacy_password")
 
     @patch("getpass.getpass", autospec=True)
     def test_gets_destination_password_when_only_destination_username_given(self, mock_getpass):
@@ -333,10 +338,10 @@ class TestMigration(SubManFixture):
         mock_getpass.return_value = "destination_password"
         self.engine.is_hosted = False
         self.engine.get_auth()
-        self.assertEquals(self.engine.legacy_creds.username, "legacy_username")
-        self.assertEquals(self.engine.legacy_creds.password, "legacy_password")
-        self.assertEquals(self.engine.destination_creds.username, "destination_username")
-        self.assertEquals(self.engine.destination_creds.password, "destination_password")
+        self.assertEqual(self.engine.legacy_creds.username, "legacy_username")
+        self.assertEqual(self.engine.legacy_creds.password, "legacy_password")
+        self.assertEqual(self.engine.destination_creds.username, "destination_username")
+        self.assertEqual(self.engine.destination_creds.password, "destination_password")
 
     @patch("__builtin__.raw_input", autospec=True)
     @patch("getpass.getpass", autospec=True)
@@ -349,10 +354,10 @@ class TestMigration(SubManFixture):
 
         self.engine.is_hosted = False
         self.engine.get_auth()
-        self.assertEquals(self.engine.legacy_creds.username, None)
-        self.assertEquals(self.engine.legacy_creds.password, None)
-        self.assertEquals(self.engine.destination_creds.username, "destination_username")
-        self.assertEquals(self.engine.destination_creds.password, "destination_password")
+        self.assertEqual(self.engine.legacy_creds.username, None)
+        self.assertEqual(self.engine.legacy_creds.password, None)
+        self.assertEqual(self.engine.destination_creds.username, "destination_username")
+        self.assertEqual(self.engine.destination_creds.password, "destination_password")
 
     def test_all_auth_provided(self):
         self.engine.options = self.create_options(
@@ -363,10 +368,10 @@ class TestMigration(SubManFixture):
 
         self.engine.is_hosted = False
         self.engine.get_auth()
-        self.assertEquals(self.engine.legacy_creds.username, "legacy_username")
-        self.assertEquals(self.engine.legacy_creds.password, "legacy_password")
-        self.assertEquals(self.engine.destination_creds.username, "destination_username")
-        self.assertEquals(self.engine.destination_creds.password, "destination_password")
+        self.assertEqual(self.engine.legacy_creds.username, "legacy_username")
+        self.assertEqual(self.engine.legacy_creds.password, "legacy_password")
+        self.assertEqual(self.engine.destination_creds.username, "destination_username")
+        self.assertEqual(self.engine.destination_creds.password, "destination_password")
 
     def test_broken_proxy(self):
         rhn_config = {
@@ -376,8 +381,8 @@ class TestMigration(SubManFixture):
         self.engine.rhncfg = rhn_config
         try:
             self.engine.transfer_http_proxy_settings()
-        except SystemExit, e:
-            self.assertEquals(e.code, os.EX_CONFIG)
+        except SystemExit as e:
+            self.assertEqual(e.code, os.EX_CONFIG)
         else:
             self.fail("No exception raised")
 
@@ -468,17 +473,17 @@ class TestMigration(SubManFixture):
             call("proxy_password", ""),
             ]
         self.assertTrue(section.__setitem__.call_args_list == expected)
-        self.assertEquals("proxy.example.com", self.engine.proxy_host)
-        self.assertEquals("123", self.engine.proxy_port)
-        self.assertEquals(None, self.engine.proxy_user)
-        self.assertEquals(None, self.engine.proxy_pass)
+        self.assertEqual("proxy.example.com", self.engine.proxy_host)
+        self.assertEqual("123", self.engine.proxy_port)
+        self.assertEqual(None, self.engine.proxy_user)
+        self.assertEqual(None, self.engine.proxy_pass)
 
     @patch("rhn.rpclib.Server")
     def test_load_transition_data(self, mock_server):
         mock_server.system.transitionDataForSystem.return_value = {"uuid": "1"}
         self.engine.load_transition_data(mock_server)
         mock_server.system.transitionDataForSystem.assert_called_once_with(self.system_id)
-        self.assertEquals("1", self.engine.consumer_id)
+        self.assertEqual("1", self.engine.consumer_id)
 
     @patch("rhn.rpclib.Server")
     def test_legacy_unentitle(self, mock_server):
@@ -502,7 +507,7 @@ class TestMigration(SubManFixture):
             {"label": "bar"},
             ]
         results = self.engine.get_subscribed_channels_list(mock_server, key)
-        self.assertEquals(["foo", "bar"], results)
+        self.assertEqual(["foo", "bar"], results)
 
     @patch("subscription_manager.migrate.migrate.getChannels")
     def test_get_subscribed_channels_list_5to6(self, mock_channels):
@@ -517,7 +522,7 @@ class TestMigration(SubManFixture):
         self.engine.resolve_base_channel = Mock(side_effect=channel_list)
 
         results = self.engine.get_subscribed_channels_list(server, key)
-        self.assertEquals(["foo", "bar"], results)
+        self.assertEqual(["foo", "bar"], results)
         calls = [call.resolve_base_channel("foo", server, key), call.resolve_base_channel("bar", server, key)]
         self.engine.resolve_base_channel.assert_has_calls(calls, any_order=True)
 
@@ -565,8 +570,8 @@ class TestMigration(SubManFixture):
 
     def test_no_auth_connection_returned(self):
         conn = self.engine.get_candlepin_connection(None, None)
-        self.assertEquals(None, conn.username)
-        self.assertEquals(None, conn.password)
+        self.assertEqual(None, conn.username)
+        self.assertEqual(None, conn.password)
 
     # default injected identity is "valid"
     def test_already_registered_to_rhsm(self):
@@ -593,8 +598,8 @@ class TestMigration(SubManFixture):
         self.engine.cp.getStatus = MagicMock(side_effect=ssl.SSLError)
         try:
             self.engine.check_ok_to_proceed()
-        except SystemExit, e:
-            self.assertEquals(e.code, os.EX_SOFTWARE)
+        except SystemExit as e:
+            self.assertEqual(e.code, os.EX_SOFTWARE)
         else:
             self.fail("No exception raised")
 
@@ -603,8 +608,8 @@ class TestMigration(SubManFixture):
         self.engine.cp.getOwnerList.return_value = []
         try:
             self.engine.get_org("some_username")
-        except SystemExit, e:
-            self.assertEquals(e.code, 1)
+        except SystemExit as e:
+            self.assertEqual(e.code, 1)
         else:
             self.fail("No exception raised")
 
@@ -613,7 +618,7 @@ class TestMigration(SubManFixture):
         self.engine.cp.getOwnerList = MagicMock()
         self.engine.cp.getOwnerList.return_value = [{"key": "my_org", "displayName": "My Org"}]
         org = self.engine.get_org("some_username")
-        self.assertEquals(org, "my_org")
+        self.assertEqual(org, "my_org")
 
     @patch("__builtin__.raw_input", autospec=True)
     def test_enter_org_key(self, mock_input):
@@ -625,7 +630,7 @@ class TestMigration(SubManFixture):
             ]
         mock_input.return_value = "my_org"
         org = self.engine.get_org("some_username")
-        self.assertEquals(org, "my_org")
+        self.assertEqual(org, "my_org")
 
     @patch("__builtin__.raw_input", autospec=True)
     def test_enter_org_name(self, mock_input):
@@ -637,7 +642,7 @@ class TestMigration(SubManFixture):
             ]
         mock_input.return_value = "My Org"
         org = self.engine.get_org("some_username")
-        self.assertEquals(org, "my_org")
+        self.assertEqual(org, "my_org")
 
     @patch("__builtin__.raw_input", autospec=True)
     def test_enter_bad_org(self, mock_input):
@@ -650,8 +655,8 @@ class TestMigration(SubManFixture):
         mock_input.return_value = "Some other org"
         try:
             self.engine.get_org("some_username")
-        except SystemExit, e:
-            self.assertEquals(e.code, os.EX_DATAERR)
+        except SystemExit as e:
+            self.assertEqual(e.code, os.EX_DATAERR)
         else:
             self.fail("No exception raised")
 
@@ -663,7 +668,7 @@ class TestMigration(SubManFixture):
             {"key": "second_org", "displayName": "Second Org"},
             ]
         org = self.engine.get_org("some_username")
-        self.assertEquals(org, "my_org")
+        self.assertEqual(org, "my_org")
 
     def test_bad_org_option(self):
         self.engine.options = self.create_options(org='nonsense')
@@ -674,8 +679,8 @@ class TestMigration(SubManFixture):
             ]
         try:
             self.engine.get_org("some_username")
-        except SystemExit, e:
-            self.assertEquals(e.code, os.EX_DATAERR)
+        except SystemExit as e:
+            self.assertEqual(e.code, os.EX_DATAERR)
         else:
             self.fail("No exception raised")
 
@@ -683,8 +688,8 @@ class TestMigration(SubManFixture):
         self.engine.cp.supports_resource = MagicMock(side_effect=Exception)
         try:
             self.engine.get_environment("some_org")
-        except SystemExit, e:
-            self.assertEquals(e.code, os.EX_SOFTWARE)
+        except SystemExit as e:
+            self.assertEqual(e.code, os.EX_SOFTWARE)
         else:
             self.fail("No exception raised")
 
@@ -693,7 +698,7 @@ class TestMigration(SubManFixture):
         self.engine.cp.supports_resource = MagicMock()
         self.engine.cp.supports_resource.return_value = False
         env = self.engine.get_environment("some_org")
-        self.assertEquals(env, None)
+        self.assertEqual(env, None)
 
     def test_single_environment_requires_no_input(self):
         self.engine.options = self.create_options()
@@ -706,7 +711,7 @@ class TestMigration(SubManFixture):
             ]
 
         env = self.engine.get_environment("some_org")
-        self.assertEquals(env, "My Environment")
+        self.assertEqual(env, "My Environment")
 
     @patch("__builtin__.raw_input", autospec=True)
     def test_enter_environment_name(self, mock_input):
@@ -722,7 +727,7 @@ class TestMigration(SubManFixture):
 
         mock_input.return_value = "My Environment"
         env = self.engine.get_environment("some_org")
-        self.assertEquals(env, "My Environment")
+        self.assertEqual(env, "My Environment")
 
     @patch("__builtin__.raw_input", autospec=True)
     def test_enter_environment_label(self, mock_input):
@@ -738,7 +743,7 @@ class TestMigration(SubManFixture):
 
         mock_input.return_value = "my_environment"
         env = self.engine.get_environment("some_org")
-        self.assertEquals(env, "My Environment")
+        self.assertEqual(env, "My Environment")
 
     @patch("__builtin__.raw_input", autospec=True)
     def test_enter_environment_displayName(self, mock_input):
@@ -754,7 +759,7 @@ class TestMigration(SubManFixture):
 
         mock_input.return_value = "my_environment"
         env = self.engine.get_environment("some_org")
-        self.assertEquals(env, "My Environment")
+        self.assertEqual(env, "My Environment")
 
     @patch("__builtin__.raw_input", autospec=True)
     def test_enter_bad_environment(self, mock_input):
@@ -770,8 +775,8 @@ class TestMigration(SubManFixture):
         mock_input.return_value = "something else"
         try:
             self.engine.get_environment("some_org")
-        except SystemExit, e:
-            self.assertEquals(e.code, os.EX_DATAERR)
+        except SystemExit as e:
+            self.assertEqual(e.code, os.EX_DATAERR)
         else:
             self.fail("No exception raised")
 
@@ -786,7 +791,7 @@ class TestMigration(SubManFixture):
             ]
 
         env = self.engine.get_environment("some_org")
-        self.assertEquals(env, "My Environment")
+        self.assertEqual(env, "My Environment")
 
     def test_bad_environment_option(self):
         self.engine.options = self.create_options(environment='nonsense')
@@ -799,8 +804,8 @@ class TestMigration(SubManFixture):
             ]
         try:
             self.engine.get_environment("some_org")
-        except SystemExit, e:
-            self.assertEquals(e.code, os.EX_DATAERR)
+        except SystemExit as e:
+            self.assertEqual(e.code, os.EX_DATAERR)
         else:
             self.fail("No exception raised")
 
@@ -810,8 +815,8 @@ class TestMigration(SubManFixture):
         self.engine.cp.supports_resource.return_value = False
         try:
             self.engine.get_environment("some_org")
-        except SystemExit, e:
-            self.assertEquals(e.code, os.EX_UNAVAILABLE)
+        except SystemExit as e:
+            self.assertEqual(e.code, os.EX_UNAVAILABLE)
         else:
             self.fail("No exception raised")
 
@@ -847,7 +852,7 @@ class TestMigration(SubManFixture):
         sc = MagicMock()
         sc.system.getDetails.side_effect = NameError
         self.assertRaises(SystemExit, self.engine.check_has_access, sc, Mock(name="fake key"))
-        self.assertEquals(1, len(sc.system.getDetails.mock_calls))
+        self.assertEqual(1, len(sc.system.getDetails.mock_calls))
 
     def test_check_has_access_fails_with_no_key(self):
         self.assertRaises(SystemExit, self.engine.check_has_access, Mock(name="fake session"), None)
@@ -858,8 +863,8 @@ class TestMigration(SubManFixture):
             ]
         try:
             self.engine.check_for_conflicting_channels(channels)
-        except SystemExit, e:
-            self.assertEquals(e.code, 1)
+        except SystemExit as e:
+            self.assertEqual(e.code, 1)
         else:
             self.fail("No exception raised")
 
@@ -873,7 +878,7 @@ class TestMigration(SubManFixture):
         mock_sc = Mock()
         mock_sc.channel.software.getDetails.side_effect = channel_chain
         chan = self.engine.resolve_base_channel('d', mock_sc, 'sk')
-        self.assertEquals('a', chan['label'])
+        self.assertEqual('a', chan['label'])
 
     def test_no_conflicting_channels(self):
         channels = ["some-other-channel-i386-server-5-rpm",
@@ -883,9 +888,9 @@ class TestMigration(SubManFixture):
 
     @patch("__builtin__.open", autospec=True)
     def test_get_release(self, mock_open):
-        mock_open.return_value = StringIO.StringIO("Red Hat Enterprise Linux Server release 6.3 (Santiago)")
+        mock_open.return_value = six.StringIO("Red Hat Enterprise Linux Server release 6.3 (Santiago)")
         release = self.engine.get_release()
-        self.assertEquals(release, "RHEL-6")
+        self.assertEqual(release, "RHEL-6")
 
     @patch("__builtin__.open", autospec=True)
     def test_read_channel_cert_mapping(self, mock_open):
@@ -894,7 +899,7 @@ class TestMigration(SubManFixture):
             "#some comment\n",
             ]
         data_dict = self.engine.read_channel_cert_mapping(None)
-        self.assertEquals(data_dict, {"xyz": "abc"})
+        self.assertEqual(data_dict, {"xyz": "abc"})
 
     def test_handle_collisions(self):
         cmap = {
@@ -906,8 +911,8 @@ class TestMigration(SubManFixture):
         with Capture() as cap:
             try:
                 self.engine.handle_collisions(cmap)
-            except SystemExit, e:
-                self.assertEquals(e.code, 1)
+            except SystemExit as e:
+                self.assertEqual(e.code, 1)
             else:
                 self.fail("No exception raised")
             output = cap.out.strip()
@@ -937,8 +942,8 @@ class TestMigration(SubManFixture):
 
         try:
             self.engine.deploy_prod_certificates(subscribed_channels)
-        except SystemExit, e:
-            self.assertEquals(e.code, 1)
+        except SystemExit as e:
+            self.assertEqual(e.code, 1)
         else:
             self.fail("No exception raised")
 
@@ -956,8 +961,8 @@ class TestMigration(SubManFixture):
 
         try:
             self.engine.deploy_prod_certificates(subscribed_channels)
-        except SystemExit, e:
-            self.assertEquals(e.code, 1)
+        except SystemExit as e:
+            self.assertEqual(e.code, 1)
         else:
             self.fail("No exception raised")
 
@@ -1085,8 +1090,8 @@ class TestMigration(SubManFixture):
         self._inject_mock_invalid_consumer()
         try:
             self.engine.register(credentials, "", "")
-        except SystemExit, e:
-            self.assertEquals(e.code, 2)
+        except SystemExit as e:
+            self.assertEqual(e.code, 2)
         else:
             self.fail("No exception raised")
 
@@ -1196,7 +1201,7 @@ class TestMigration(SubManFixture):
         self.engine.cp.getServiceLevelList = MagicMock()
         self.engine.cp.getServiceLevelList.return_value = ["Premium", "Standard"]
         service_level = self.engine.select_service_level("my_org", "Premium")
-        self.assertEquals(service_level, "Premium")
+        self.assertEqual(service_level, "Premium")
 
     @patch("subscription_manager.migrate.migrate.Menu")
     def test_select_service_level_with_menu(self, mock_menu):
@@ -1204,7 +1209,7 @@ class TestMigration(SubManFixture):
         self.engine.cp.getServiceLevelList.return_value = ["Premium", "Standard"]
         mock_menu.return_value.choose.return_value = "Premium"
         service_level = self.engine.select_service_level("my_org", "Something Else")
-        self.assertEquals(service_level, "Premium")
+        self.assertEqual(service_level, "Premium")
 
     @patch("subscription_manager.repolib.RepoActionInvoker")
     @patch("subscription_manager.repolib.RepoFile")
@@ -1245,7 +1250,7 @@ class TestMigration(SubManFixture):
         </params>
         """
         system_id = self.engine.get_system_id(mock_id)
-        self.assertEquals(123, system_id)
+        self.assertEqual(123, system_id)
 
     def test_remove_rhn_packages_option_default(self):
         parser = OptionParser()
@@ -1261,12 +1266,12 @@ class TestMigration(SubManFixture):
 
     @patch("__builtin__.open", autospec=True)
     def test_is_using_systemd_false_on_rhel6(self, mock_open):
-        mock_open.return_value = StringIO.StringIO("Red Hat Enterprise Linux Server release 6.3 (Santiago)")
+        mock_open.return_value = six.StringIO("Red Hat Enterprise Linux Server release 6.3 (Santiago)")
         self.assertFalse(self.engine.is_using_systemd())
 
     @patch("__builtin__.open", autospec=True)
     def test_is_using_systemd_true_on_rhel7(self, mock_open):
-        mock_open.return_value = StringIO.StringIO("Red Hat Enterprise Linux Server release 7.2 (Maipo)")
+        mock_open.return_value = six.StringIO("Red Hat Enterprise Linux Server release 7.2 (Maipo)")
         self.assertTrue(self.engine.is_using_systemd())
 
     @patch("subprocess.call", autospec=True)

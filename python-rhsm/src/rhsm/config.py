@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # This module has been originally modified and enhanced from Red Hat Update
 # Agent's config module.
@@ -195,7 +197,7 @@ class RhsmConfigParser(SafeConfigParser):
     def defaults(self):
         result = []
         for section in DEFAULTS:
-            result += [(key, value) for (key, value) in DEFAULTS[section].items()]
+            result += [(key, value) for (key, value) in list(DEFAULTS[section].items())]
         return dict(result)
 
     def sections(self):
@@ -221,7 +223,7 @@ class RhsmConfigParser(SafeConfigParser):
             for key in super_result:
                 if self.get(section, key) and len(self.get(section, key).strip()) > 0:
                     result[key] = self.get(section, key)
-        return result.items()
+        return list(result.items())
 
     def options(self, section):
         # This is necessary because with the way we handle defaults, parser.has_section('xyz')

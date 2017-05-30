@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2012 Red Hat, Inc.
 #
@@ -33,7 +35,7 @@ class Filters(object):
         self.contains_text = contains_text
 
     def get_applied_count(self):
-        return len(filter(None, self.__dict__.values()))
+        return len([_f for _f in list(self.__dict__.values()) if _f])
 
 
 class FilterOptionsWindow(widgets.SubmanBaseWidget):

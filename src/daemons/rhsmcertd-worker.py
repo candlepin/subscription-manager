@@ -1,6 +1,8 @@
 #!/usr/bin/python -Es
 # ^ is to prevent selinux denials trying to load modules from unintended
 #   paths. See https://bugzilla.redhat.com/show_bug.cgi?id=1136163
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2012 Red Hat, Inc.
 #
@@ -15,7 +17,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
 import signal
 import sys
 import logging
@@ -65,7 +66,7 @@ def main(options, log):
         log.error('Either the consumer is not registered or the certificates' +
                   ' are corrupted. Certificate update using daemon failed.')
         sys.exit(-1)
-    print _('Updating entitlement certificates & repositories')
+    print(_('Updating entitlement certificates & repositories'))
 
     cp = cp_provider.get_consumer_auth_cp()
     cp.supports_resource(None)  # pre-load supported resources; serves as a way of failing before locking the repos
@@ -81,12 +82,12 @@ def main(options, log):
         for update_report in actionclient.update_reports:
             # FIXME: make sure we don't get None reports
             if update_report:
-                print update_report
+                print(update_report)
 
-    except connection.ExpiredIdentityCertException, e:
+    except connection.ExpiredIdentityCertException as e:
         log.critical(_("Your identity certificate has expired"))
         raise e
-    except connection.GoneException, ge:
+    except connection.GoneException as ge:
         uuid = ConsumerIdentity.read().getConsumerId()
 
         # This code is to prevent an errant 410 response causing consumer cert deletion.
@@ -129,15 +130,15 @@ if __name__ == '__main__':
     (options, args) = parser.parse_args()
     try:
         main(options, log)
-    except SystemExit, se:
+    except SystemExit as se:
         # sys.exit triggers an exception in older Python versions, which
         # in this case  we can safely ignore as we do not want to log the
         # stack trace. We need to check the code, since we want to signal
         # exit with failure to the caller. Otherwise, we will exit with 0
         if se.code:
             sys.exit(-1)
-    except Exception, e:
+    except Exception as e:
         log.error("Error while updating certificates using daemon")
-        print _('Unable to update entitlement certificates and repositories')
+        print(_('Unable to update entitlement certificates and repositories'))
         log.exception(e)
         sys.exit(-1)

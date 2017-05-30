@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # Copyright (c) 2013 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -13,12 +15,12 @@
 #
 
 from mock import Mock
-from fixture import SubManFixture
+from .fixture import SubManFixture
 from subscription_manager.async import AsyncRepoOverridesUpdate
 from subscription_manager.gui.reposgui import RepositoriesDialog
 from subscription_manager.repolib import Repo
 from subscription_manager.overrides import Override
-from stubs import StubEntitlementCertificate, StubProduct
+from .stubs import StubEntitlementCertificate, StubProduct
 
 
 class TestReposGui(SubManFixture):
@@ -51,13 +53,13 @@ class TestReposGui(SubManFixture):
         self.assertTrue(tree_iter is not None)
         self.assertTrue(store.iter_next(tree_iter) is None)
 
-        self.assertEquals("my_repo", store.get_value(tree_iter, store['repo_id']))
+        self.assertEqual("my_repo", store.get_value(tree_iter, store['repo_id']))
         self.assertFalse(store.get_value(tree_iter, store['enabled']))
         self.assertFalse(store.get_value(tree_iter, store['gpgcheck']))
         # has no overrides so make sure that we are not modified
         self.assertFalse(store.get_value(tree_iter, store['modified']))
-        self.assertEquals("MY_REPO", store.get_value(tree_iter, store['name']))
-        self.assertEquals('http://foo.bar', store.get_value(tree_iter, store['baseurl']))
+        self.assertEqual("MY_REPO", store.get_value(tree_iter, store['name']))
+        self.assertEqual('http://foo.bar', store.get_value(tree_iter, store['baseurl']))
         self.assertFalse(store.get_value(tree_iter, store['gpgcheck']))
         # This will be False if there is an override that modifies the gpgcheck value
         self.assertFalse(store.get_value(tree_iter, store['gpgcheck_modified']))
@@ -67,14 +69,14 @@ class TestReposGui(SubManFixture):
         self.assertTrue(override_data is None)
 
         # Check that the correct repo was stored in the model
-        self.assertEquals(repo, store.get_value(tree_iter, store['repo_data']))
+        self.assertEqual(repo, store.get_value(tree_iter, store['repo_data']))
 
         # Check that the details view is populated correctly
         name = self.dialog.name_text.get_text()
-        self.assertEquals("MY_REPO", name)
+        self.assertEqual("MY_REPO", name)
 
         baseurl = self.dialog.baseurl_text.get_text()
-        self.assertEquals("http://foo.bar", baseurl)
+        self.assertEqual("http://foo.bar", baseurl)
 
     def test_show_dialog_with_overrides(self):
         repo = self._create_repo("my_repo", [('enabled', '0')])
@@ -91,36 +93,36 @@ class TestReposGui(SubManFixture):
         self.assertTrue(tree_iter is not None)
         self.assertTrue(store.iter_next(tree_iter) is None)
 
-        self.assertEquals("my_repo", store.get_value(tree_iter, store['repo_id']))
+        self.assertEqual("my_repo", store.get_value(tree_iter, store['repo_id']))
         self.assertTrue(store.get_value(tree_iter, store['enabled']))
         self.assertFalse(store.get_value(tree_iter, store['gpgcheck']))
         # has overrides so make sure that we are modified
         self.assertTrue(store.get_value(tree_iter, store['modified']))
         # make sure that there is an icon since we are modified
         self.assertTrue(store.get_value(tree_iter, store['modified-icon']) is not None)
-        self.assertEquals("MY_REPO", store.get_value(tree_iter, store['name']))
-        self.assertEquals('http://foo.bar', store.get_value(tree_iter, store['baseurl']))
+        self.assertEqual("MY_REPO", store.get_value(tree_iter, store['name']))
+        self.assertEqual('http://foo.bar', store.get_value(tree_iter, store['baseurl']))
         self.assertFalse(store.get_value(tree_iter, store['gpgcheck']))
         # This will be True if there is an override that modifies the gpgcheck value
         self.assertTrue(store.get_value(tree_iter, store['gpgcheck_modified']))
 
         # verify that the model stores the correct override info for this repo
         override_data = store.get_value(tree_iter, store['override_data'])
-        self.assertEquals(2, len(override_data))
+        self.assertEqual(2, len(override_data))
         self.assertTrue('enabled' in override_data)
-        self.assertEquals('1', override_data['enabled'])
+        self.assertEqual('1', override_data['enabled'])
         self.assertTrue('gpgcheck' in override_data)
-        self.assertEquals('0', override_data['gpgcheck'])
+        self.assertEqual('0', override_data['gpgcheck'])
 
         # Check that the correct repo was stored in the model
-        self.assertEquals(repo, store.get_value(tree_iter, store['repo_data']))
+        self.assertEqual(repo, store.get_value(tree_iter, store['repo_data']))
 
         # Check that the details view is populated correctly
         name = self.dialog.name_text.get_text()
-        self.assertEquals("MY_REPO", name)
+        self.assertEqual("MY_REPO", name)
 
         baseurl = self.dialog.baseurl_text.get_text()
-        self.assertEquals("http://foo.bar", baseurl)
+        self.assertEqual("http://foo.bar", baseurl)
 
     def test_remove_all_button_disabled_when_repo_has_no_modifications(self):
         self.repo_lib.get_repos.return_value = [self._create_repo("my_repo", [('enabled', '0')])]

@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2010 Red Hat, Inc.
 #
@@ -18,7 +20,7 @@
 import gettext
 import logging
 
-from certlib import Locker, ActionReport
+from .certlib import Locker, ActionReport
 from subscription_manager import injection as inj
 
 _ = gettext.gettext

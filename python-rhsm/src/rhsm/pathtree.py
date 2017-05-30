@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # from __future__ import unicode_literals FIXME see if necessary
 
 # Copyright (c) 2012 Red Hat, Inc.
@@ -108,7 +110,7 @@ class PathTree(object):
 
             # we allow any word to match against entitlement variables
             # such as "$releasever".
-            for word in tree.keys():
+            for word in list(tree.keys()):
                 if word.startswith('$'):
                     words_to_try.append(word)
 
@@ -139,7 +141,7 @@ class PathTree(object):
         words = [word.decode('utf-8') for word in words]
 
         # enumerate() would be better here, but lacks a 'start' arg in 2.4
-        weighted_words = zip(itertools.count(1), words)
+        weighted_words = list(zip(itertools.count(1), words))
         # huffman nodes, without having put them in a tree. These will all be
         # leaves in the tree.
         nodes = [

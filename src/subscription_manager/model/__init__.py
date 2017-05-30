@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2014 Red Hat, Inc.
 #
@@ -100,7 +102,7 @@ def find_content(ent_source, content_type=None):
                     content_labels.add(content.label)
 
     # now add content that wasn't covered by basic entitlement certs
-    for label, content in content_access_entitlement_content.items():
+    for label, content in list(content_access_entitlement_content.items()):
         if label not in content_labels:
             entitled_content.append(content)
     return entitled_content

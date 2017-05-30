@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # A proxy interface to initiate and interact with candlepin.
 #
 # Copyright (c) 2010 - 2012 Red Hat, Inc.
@@ -21,6 +23,7 @@ import dateutil.parser
 import locale
 import logging
 import os
+import six
 import socket
 import sys
 import time
@@ -28,11 +31,8 @@ from email.utils import formatdate
 
 from rhsm.https import httplib, ssl
 
-try:
-    from urllib.parse import urlencode, quote, quote_plus
-    from urllib.request import proxy_bypass_environment
-except ImportError:
-    from urllib import urlencode, quote, quote_plus, proxy_bypass_environment
+from six.moves.urllib.request import proxy_bypass
+from six.moves.urllib.parse import urlencode, quote, quote_plus
 
 from rhsm.config import initConfig
 
@@ -281,7 +281,7 @@ class ContentConnection(object):
         _fix_no_proxy()
 
         # honor no_proxy environment variable
-        if proxy_bypass_environment(self.host):
+        if proxy_bypass(self.host):
             self.proxy_hostname = None
             self.proxy_port = None
             self.proxy_user = None
@@ -677,7 +677,7 @@ class Restlib(BaseRestLib):
 # FIXME: there should probably be a class here for just
 # the connection bits, then a sub class for the api
 # stuff
-class UEPConnection:
+class UEPConnection(object):
     """
     Class for communicating with the REST interface of a Red Hat Unified
     Entitlement Platform.
@@ -724,7 +724,7 @@ class UEPConnection:
         _fix_no_proxy()
 
         # honor no_proxy environment variable
-        if proxy_bypass_environment(self.host):
+        if proxy_bypass(self.host):
             self.proxy_hostname = None
             self.proxy_port = None
             self.proxy_user = None
@@ -1000,7 +1000,7 @@ class UEPConnection:
         return ret
 
     def addOrUpdateGuestId(self, uuid, guestId):
-        if isinstance(guestId, str) or isinstance(guestId, type(u"")):
+        if isinstance(guestId, six.string_types):
             guest_uuid = guestId
             guestId = {}
         else:
@@ -1024,9 +1024,9 @@ class UEPConnection:
         return [self.sanitizeGuestId(guestId) for guestId in guestIds or []]
 
     def sanitizeGuestId(self, guestId):
-        if isinstance(guestId, str) or isinstance(guestId, type(u"")):
+        if isinstance(guestId, six.string_types):
             return guestId
-        elif isinstance(guestId, dict) and "guestId" in guestId.keys():
+        elif isinstance(guestId, dict) and "guestId" in list(guestId.keys()):
             if self.supports_resource('guestids'):
                 # Upload full json
                 return guestId

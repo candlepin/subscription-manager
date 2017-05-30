@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function, division, absolute_import
+
 #
 # wrapper for subscription Manager commandline tool.
 #
@@ -174,7 +176,7 @@ def already_running(bus):
 
     if bus and ((request_name_res != REQUEST_NAME_REPLY_PRIMARY_OWNER) and
        (request_name_res != REQUEST_NAME_REPLY_ALREADY_OWNER)):
-        print _("%s is already running") % "subscription-manager-gui"
+        print(_("%s is already running") % "subscription-manager-gui")
         return True
     return False
 

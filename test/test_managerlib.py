@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2010 Red Hat, Inc.
 #
@@ -20,15 +22,15 @@ except ImportError:
 from datetime import datetime, timedelta
 import os
 
-from stubs import StubCertificateDirectory, StubProductCertificate, \
+from .stubs import StubCertificateDirectory, StubProductCertificate, \
         StubProduct, StubProductDirectory, StubCertSorter
-from fixture import SubManFixture
+from .fixture import SubManFixture
 from subscription_manager.managerlib import merge_pools, PoolFilter, \
         MergedPoolsStackingGroupSorter, MergedPools, \
         PoolStash, allows_multi_entitlement, valid_quantity
 from subscription_manager.injection import provide, \
         PROD_DIR
-from modelhelpers import create_pool
+from .modelhelpers import create_pool
 from subscription_manager import managerlib
 import rhsm
 from rhsm.certificate import create_from_pem, DateRange, GMT
@@ -266,9 +268,9 @@ class MergePoolsTests(SubManFixture):
                 create_pool(product, product, quantity=10, consumed=5)
         ]
         results = merge_pools(pools)
-        self.assertEquals(1, len(results.values()))
-        result = results.values()[0]
-        self.assertEquals(product, result.product_id)
+        self.assertEqual(1, len(list(results.values())))
+        result = list(results.values())[0]
+        self.assertEqual(product, result.product_id)
 
     def test_multiple_pools(self):
         product1 = 'product1'
@@ -279,21 +281,21 @@ class MergePoolsTests(SubManFixture):
                 create_pool(product2, product2, quantity=10, consumed=5),
         ]
         results = merge_pools(pools)
-        self.assertEquals(2, len(results.values()))
+        self.assertEqual(2, len(list(results.values())))
         self.assertTrue(product1 in results)
         self.assertTrue(product2 in results)
 
         # Check product1:
         merged_pools = results[product1]
-        self.assertEquals(product1, merged_pools.product_id)
-        self.assertEquals(65, merged_pools.quantity)
-        self.assertEquals(25, merged_pools.consumed)
+        self.assertEqual(product1, merged_pools.product_id)
+        self.assertEqual(65, merged_pools.quantity)
+        self.assertEqual(25, merged_pools.consumed)
 
         # Check product2:
         merged_pools = results[product2]
-        self.assertEquals(product2, merged_pools.product_id)
-        self.assertEquals(10, merged_pools.quantity)
-        self.assertEquals(5, merged_pools.consumed)
+        self.assertEqual(product2, merged_pools.product_id)
+        self.assertEqual(10, merged_pools.quantity)
+        self.assertEqual(5, merged_pools.consumed)
 
 
 class PoolFilterTests(SubManFixture):
@@ -313,8 +315,8 @@ class PoolFilterTests(SubManFixture):
                 create_pool(product2, product2),
         ]
         result = pool_filter.filter_out_uninstalled(pools)
-        self.assertEquals(1, len(result))
-        self.assertEquals(product2, result[0]['productId'])
+        self.assertEqual(1, len(result))
+        self.assertEqual(product2, result[0]['productId'])
 
     def test_uninstalled_filter_provided_match(self):
         product1 = 'product1'
@@ -330,8 +332,8 @@ class PoolFilterTests(SubManFixture):
                 create_pool(product2, product2, provided_products=[provided]),
         ]
         result = pool_filter.filter_out_uninstalled(pools)
-        self.assertEquals(1, len(result))
-        self.assertEquals(product2, result[0]['productId'])
+        self.assertEqual(1, len(result))
+        self.assertEqual(product2, result[0]['productId'])
 
     def test_installed_filter_direct_match(self):
         product1 = 'product1'
@@ -347,8 +349,8 @@ class PoolFilterTests(SubManFixture):
                 create_pool(product2, product2),
         ]
         result = pool_filter.filter_out_installed(pools)
-        self.assertEquals(1, len(result))
-        self.assertEquals(product1, result[0]['productId'])
+        self.assertEqual(1, len(result))
+        self.assertEqual(product1, result[0]['productId'])
 
     def test_installed_filter_provided_match(self):
         product1 = 'product1'
@@ -364,8 +366,8 @@ class PoolFilterTests(SubManFixture):
                 create_pool(product2, product2, provided_products=[provided]),
         ]
         result = pool_filter.filter_out_installed(pools)
-        self.assertEquals(1, len(result))
-        self.assertEquals(product1, result[0]['productId'])
+        self.assertEqual(1, len(result))
+        self.assertEqual(product1, result[0]['productId'])
 
     def test_installed_filter_multi_match(self):
         product1 = 'product1'
@@ -382,8 +384,8 @@ class PoolFilterTests(SubManFixture):
                 create_pool(product2, product2, provided_products=[provided]),
         ]
         result = pool_filter.filter_out_installed(pools)
-        self.assertEquals(1, len(result))
-        self.assertEquals(product1, result[0]['productId'])
+        self.assertEqual(1, len(result))
+        self.assertEqual(product1, result[0]['productId'])
 
     def test_filter_product_name(self):
         product1 = 'Foo Product'
@@ -397,8 +399,8 @@ class PoolFilterTests(SubManFixture):
                 create_pool(product2, product2),
         ]
         result = pool_filter.filter_product_name(pools, "Foo")
-        self.assertEquals(1, len(result))
-        self.assertEquals(product1, result[0]['productId'])
+        self.assertEqual(1, len(result))
+        self.assertEqual(product1, result[0]['productId'])
 
     def test_filter_product_name_matches_provided(self):
         product1 = 'Foo Product'
@@ -411,8 +413,8 @@ class PoolFilterTests(SubManFixture):
                 create_pool(product1, product1, provided_products=[product2]),
         ]
         result = pool_filter.filter_product_name(pools, "Bar")
-        self.assertEquals(1, len(result))
-        self.assertEquals(product1, result[0]['productId'])
+        self.assertEqual(1, len(result))
+        self.assertEqual(product1, result[0]['productId'])
 
     def test_filter_no_overlap(self):
         product1 = "Test Product 1"
@@ -430,10 +432,10 @@ class PoolFilterTests(SubManFixture):
                             start_end_range=DateRange(begin_date, end_date)),
         ]
         result = pool_filter.filter_out_overlapping(pools)
-        self.assertEquals(1, len(result))
+        self.assertEqual(1, len(result))
 
         result = pool_filter.filter_out_non_overlapping(pools)
-        self.assertEquals(0, len(result))
+        self.assertEqual(0, len(result))
 
     def test_filter_overlap(self):
         product1 = "Test Product 1"
@@ -459,10 +461,10 @@ class PoolFilterTests(SubManFixture):
                             start_end_range=DateRange(cert_start, cert_end)),
         ]
         result = pool_filter.filter_out_overlapping(pools)
-        self.assertEquals([pools[1]], result)
+        self.assertEqual([pools[1]], result)
 
         result = pool_filter.filter_out_non_overlapping(pools)
-        self.assertEquals([pools[0]], result)
+        self.assertEqual([pools[0]], result)
 
     def test_filter_overlap_sorter_without_partially_valid(self):
         product1 = "Test Product 1"
@@ -486,10 +488,10 @@ class PoolFilterTests(SubManFixture):
                             start_end_range=DateRange(cert_start, cert_end)),
         ]
         result = pool_filter.filter_out_overlapping(pools)
-        self.assertEquals(0, len(result))
+        self.assertEqual(0, len(result))
 
         result = pool_filter.filter_out_non_overlapping(pools)
-        self.assertEquals([pools[0]], result)
+        self.assertEqual([pools[0]], result)
 
     def test_filter_overlap_sorter_with_partially_valid(self):
         product1 = "Test Product 1"
@@ -523,10 +525,10 @@ class PoolFilterTests(SubManFixture):
                             start_end_range=DateRange(cert_start, cert_end)),
         ]
         result = pool_filter.filter_out_overlapping(pools)
-        self.assertEquals([pools[0], pools[1]], result)
+        self.assertEqual([pools[0], pools[1]], result)
 
         result = pool_filter.filter_out_non_overlapping(pools)
-        self.assertEquals([pools[2]], result)
+        self.assertEqual([pools[2]], result)
 
     def test_filter_no_overlap_with_future_entitlement(self):
         product1 = "Test Product 1"
@@ -551,10 +553,10 @@ class PoolFilterTests(SubManFixture):
                             start_end_range=DateRange(begin_date, end_date)),
         ]
         result = pool_filter.filter_out_overlapping(pools)
-        self.assertEquals(1, len(result))
+        self.assertEqual(1, len(result))
 
         result = pool_filter.filter_out_non_overlapping(pools)
-        self.assertEquals(0, len(result))
+        self.assertEqual(0, len(result))
 
     def test_filter_no_overlap_with_partial_stack(self):
         product1 = "Test Product 1"
@@ -575,7 +577,7 @@ class PoolFilterTests(SubManFixture):
                             stacking_id=stacking_id1),
         ]
         result = pool_filter.filter_out_overlapping(pools)
-        self.assertEquals([pools[0]], result)
+        self.assertEqual([pools[0]], result)
 
     def test_filter_overlap_with_partial_stack(self):
         product1 = "Test Product 1"
@@ -604,7 +606,7 @@ class PoolFilterTests(SubManFixture):
                             stacking_id=stacking_id1),
         ]
         result = pool_filter.filter_out_overlapping(pools)
-        self.assertEquals(2, len(result))
+        self.assertEqual(2, len(result))
 
     def test_filter_no_overlap_with_product_id(self):
         product1 = "Test Product 1"
@@ -634,10 +636,10 @@ class PoolFilterTests(SubManFixture):
                             type=product2_type)
         ]
         result = pool_filter.filter_out_overlapping(pools)
-        self.assertEquals([pools[1]], result)
+        self.assertEqual([pools[1]], result)
 
         result = pool_filter.filter_out_non_overlapping(pools)
-        self.assertEquals([pools[0]], result)
+        self.assertEqual([pools[0]], result)
 
         # Adds in a stacking_id to be used in testing the partial stacks
         # Assume default type attribute of 'MKT'
@@ -668,13 +670,14 @@ class PoolFilterTests(SubManFixture):
         return pool
 
 
-class MockLog:
+class MockLog(object):
     def info(self):
         pass
 
 
 def MockSystemLog(self, message, priority):
     pass
+
 
 EXPECTED_CONTENT = EXPECTED_CERT_CONTENT + os.linesep + EXPECTED_KEY_CONTENT
 EXPECTED_CERT_CONTENT_V3 = EXPECTED_CERT_CONTENT_V3 + os.linesep + \
@@ -724,12 +727,12 @@ class TestImportFileExtractor(unittest.TestCase):
     def test_get_key_content_when_key_exists(self):
         extractor = ExtractorStub(EXPECTED_CONTENT, file_path="12345.pem")
         self.assertTrue(extractor.contains_key_content())
-        self.assertEquals(EXPECTED_KEY_CONTENT, extractor.get_key_content())
+        self.assertEqual(EXPECTED_KEY_CONTENT, extractor.get_key_content())
 
     def test_get_key_content_when_key_exists_v3(self):
         extractor = ExtractorStub(EXPECTED_CONTENT_V3, file_path="12345.pem")
         self.assertTrue(extractor.contains_key_content())
-        self.assertEquals(EXPECTED_KEY_CONTENT_V3, extractor.get_key_content())
+        self.assertEqual(EXPECTED_KEY_CONTENT_V3, extractor.get_key_content())
 
     def test_get_key_content_returns_None_when_key_does_not_exist(self):
         extractor = ExtractorStub(EXPECTED_CERT_CONTENT, file_path="12345.pem")
@@ -742,12 +745,12 @@ class TestImportFileExtractor(unittest.TestCase):
     def test_get_cert_content(self):
         extractor = ExtractorStub(EXPECTED_CONTENT, file_path="12345.pem")
         self.assertTrue(extractor.contains_key_content())
-        self.assertEquals(EXPECTED_CERT_CONTENT, extractor.get_cert_content())
+        self.assertEqual(EXPECTED_CERT_CONTENT, extractor.get_cert_content())
 
     def test_get_cert_content_v3(self):
         extractor = ExtractorStub(EXPECTED_CONTENT_V3, file_path="12345.pem")
         self.assertTrue(extractor.contains_key_content())
-        self.assertEquals(EXPECTED_CERT_CONTENT_V3, extractor.get_cert_content())
+        self.assertEqual(EXPECTED_CERT_CONTENT_V3, extractor.get_cert_content())
 
     def test_get_cert_content_returns_None_when_cert_does_not_exist(self):
         extractor = ExtractorStub(EXPECTED_KEY_CONTENT, file_path="12345.pem")
@@ -788,22 +791,22 @@ class TestImportFileExtractor(unittest.TestCase):
         extractor = ExtractorStub(EXPECTED_CERT_CONTENT, file_path=expected_cert_file)
         extractor.write_to_disk()
 
-        self.assertEquals(1, len(extractor.writes))
+        self.assertEqual(1, len(extractor.writes))
 
         write_one = extractor.writes[0]
-        self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_cert_file), write_one[0])
-        self.assertEquals(EXPECTED_CERT_CONTENT, write_one[1])
+        self.assertEqual(os.path.join(ENT_CONFIG_DIR, expected_cert_file), write_one[0])
+        self.assertEqual(EXPECTED_CERT_CONTENT, write_one[1])
 
     def test_write_cert_only_v3(self):
         expected_cert_file = "%d.pem" % (EXPECTED_CERT_V3.serial)
         extractor = ExtractorStub(EXPECTED_CERT_CONTENT_V3, file_path=expected_cert_file)
         extractor.write_to_disk()
 
-        self.assertEquals(1, len(extractor.writes))
+        self.assertEqual(1, len(extractor.writes))
 
         write_one = extractor.writes[0]
-        self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_cert_file), write_one[0])
-        self.assertEquals(EXPECTED_CERT_CONTENT_V3, write_one[1])
+        self.assertEqual(os.path.join(ENT_CONFIG_DIR, expected_cert_file), write_one[0])
+        self.assertEqual(EXPECTED_CERT_CONTENT_V3, write_one[1])
 
     def test_write_key_and_cert(self):
         filename = "%d.pem" % (EXPECTED_CERT.serial)
@@ -853,15 +856,15 @@ class TestImportFileExtractor(unittest.TestCase):
         extractor = ExtractorStub(EXPECTED_CONTENT, file_path=filename)
         extractor.write_to_disk()
 
-        self.assertEquals(2, len(extractor.writes))
+        self.assertEqual(2, len(extractor.writes))
 
         write_one = extractor.writes[0]
-        self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_cert_file), write_one[0])
-        self.assertEquals(EXPECTED_CERT_CONTENT, write_one[1])
+        self.assertEqual(os.path.join(ENT_CONFIG_DIR, expected_cert_file), write_one[0])
+        self.assertEqual(EXPECTED_CERT_CONTENT, write_one[1])
 
         write_two = extractor.writes[1]
-        self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_key_file), write_two[0])
-        self.assertEquals(EXPECTED_KEY_CONTENT, write_two[1])
+        self.assertEqual(os.path.join(ENT_CONFIG_DIR, expected_key_file), write_two[0])
+        self.assertEqual(EXPECTED_KEY_CONTENT, write_two[1])
 
     def _assert_correct_cert_and_key_files_generated_with_filename_v3(self, filename):
         expected_file_prefix = "%d" % (EXPECTED_CERT_V3.serial)
@@ -871,15 +874,15 @@ class TestImportFileExtractor(unittest.TestCase):
         extractor = ExtractorStub(EXPECTED_CONTENT_V3, file_path=filename)
         extractor.write_to_disk()
 
-        self.assertEquals(2, len(extractor.writes))
+        self.assertEqual(2, len(extractor.writes))
 
         write_one = extractor.writes[0]
-        self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_cert_file), write_one[0])
-        self.assertEquals(EXPECTED_CERT_CONTENT_V3, write_one[1])
+        self.assertEqual(os.path.join(ENT_CONFIG_DIR, expected_cert_file), write_one[0])
+        self.assertEqual(EXPECTED_CERT_CONTENT_V3, write_one[1])
 
         write_two = extractor.writes[1]
-        self.assertEquals(os.path.join(ENT_CONFIG_DIR, expected_key_file), write_two[0])
-        self.assertEquals(EXPECTED_KEY_CONTENT_V3, write_two[1])
+        self.assertEqual(os.path.join(ENT_CONFIG_DIR, expected_key_file), write_two[0])
+        self.assertEqual(EXPECTED_KEY_CONTENT_V3, write_two[1])
 
 
 class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
@@ -887,27 +890,27 @@ class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
     def test_sorter_adds_group_for_non_stackable_entitlement(self):
         pool = self._create_pool("test-prod-1", "Test Prod 1")
         merged = merge_pools([pool])
-        pools = merged.values()
+        pools = list(merged.values())
         sorter = MergedPoolsStackingGroupSorter(pools)
 
-        self.assertEquals(1, len(sorter.groups))
+        self.assertEqual(1, len(sorter.groups))
         group = sorter.groups[0]
-        self.assertEquals("", group.name)
-        self.assertEquals(1, len(group.entitlements))
-        self.assertEquals(pools[0], group.entitlements[0])
+        self.assertEqual("", group.name)
+        self.assertEqual(1, len(group.entitlements))
+        self.assertEqual(pools[0], group.entitlements[0])
 
     def test_sorter_adds_group_for_stackable_entitlement(self):
         expected_stacking_id = 1234
         pool = self._create_pool("test-prod-1", "Test Prod 1", expected_stacking_id)
         merged = merge_pools([pool])
-        pools = merged.values()
+        pools = list(merged.values())
         sorter = MergedPoolsStackingGroupSorter(pools)
 
-        self.assertEquals(1, len(sorter.groups))
+        self.assertEqual(1, len(sorter.groups))
         group = sorter.groups[0]
-        self.assertEquals("Test Prod 1", group.name)
-        self.assertEquals(1, len(group.entitlements))
-        self.assertEquals(pools[0], group.entitlements[0])
+        self.assertEqual("Test Prod 1", group.name)
+        self.assertEqual(1, len(group.entitlements))
+        self.assertEqual(pools[0], group.entitlements[0])
 
     def test_sorter_adds_multiple_entitlements_to_group_when_same_stacking_id(self):
         expected_stacking_id = 1234
@@ -916,37 +919,37 @@ class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
 
         merged = merge_pools([pool1, pool2])
 
-        pools = merged.values()
+        pools = list(merged.values())
         sorter = MergedPoolsStackingGroupSorter(pools)
 
-        self.assertEquals(1, len(sorter.groups))
+        self.assertEqual(1, len(sorter.groups))
         group = sorter.groups[0]
 
-        self.assertEquals("Test Prod 2", group.name)
-        self.assertEquals(2, len(group.entitlements))
+        self.assertEqual("Test Prod 2", group.name)
+        self.assertEqual(2, len(group.entitlements))
 
-        self.assertEquals(pools[0], group.entitlements[0])
-        self.assertEquals(pools[1], group.entitlements[1])
+        self.assertEqual(pools[0], group.entitlements[0])
+        self.assertEqual(pools[1], group.entitlements[1])
 
     def test_sorter_adds_multiple_groups_for_non_stacking_entitlements(self):
         pool1 = self._create_pool("test-prod-1", "Test Prod 1")
         pool2 = self._create_pool("test-prod-2", "Test Prod 2")
 
         merged = merge_pools([pool1, pool2])
-        pools = merged.values()
+        pools = list(merged.values())
         sorter = MergedPoolsStackingGroupSorter(pools)
 
-        self.assertEquals(2, len(sorter.groups))
+        self.assertEqual(2, len(sorter.groups))
         group1 = sorter.groups[0]
         group2 = sorter.groups[1]
 
-        self.assertEquals("", group1.name)
-        self.assertEquals(1, len(group1.entitlements))
-        self.assertEquals(pools[0], group1.entitlements[0])
+        self.assertEqual("", group1.name)
+        self.assertEqual(1, len(group1.entitlements))
+        self.assertEqual(pools[0], group1.entitlements[0])
 
-        self.assertEquals("", group2.name)
-        self.assertEquals(1, len(group2.entitlements))
-        self.assertEquals(pools[1], group2.entitlements[0])
+        self.assertEqual("", group2.name)
+        self.assertEqual(1, len(group2.entitlements))
+        self.assertEqual(pools[1], group2.entitlements[0])
 
     def test_stacking_and_non_stacking_groups_created(self):
         pool1 = self._create_pool("test-prod-1", "Test Prod 1")
@@ -955,20 +958,20 @@ class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
         pool2 = self._create_pool("test-prod-2", "Test Prod 2", expected_stacking_id)
 
         merged = merge_pools([pool1, pool2])
-        pools = merged.values()
+        pools = list(merged.values())
         sorter = MergedPoolsStackingGroupSorter(pools)
 
-        self.assertEquals(2, len(sorter.groups))
+        self.assertEqual(2, len(sorter.groups))
         group1 = sorter.groups[0]
         group2 = sorter.groups[1]
 
-        self.assertEquals("Test Prod 2", group1.name)
-        self.assertEquals(1, len(group1.entitlements))
-        self.assertEquals(pools[0], group1.entitlements[0])
+        self.assertEqual("Test Prod 2", group1.name)
+        self.assertEqual(1, len(group1.entitlements))
+        self.assertEqual(pools[0], group1.entitlements[0])
 
-        self.assertEquals("", group2.name)
-        self.assertEquals(1, len(group2.entitlements))
-        self.assertEquals(pools[1], group2.entitlements[0])
+        self.assertEqual("", group2.name)
+        self.assertEqual(1, len(group2.entitlements))
+        self.assertEqual(pools[1], group2.entitlements[0])
 
     def _create_pool(self, product_id, product_name, stacking_id=None):
         prod_attrs = []
@@ -1021,9 +1024,9 @@ class MergedPoolsTests(unittest.TestCase):
 
         merged_pools.sort_virt_to_top()
         # If we sort, the virt pools should become the first two in the list:
-        self.assertEquals(merged_pools.pools[0]['attributes'][0]['value'],
+        self.assertEqual(merged_pools.pools[0]['attributes'][0]['value'],
                 "true")
-        self.assertEquals(merged_pools.pools[1]['attributes'][0]['value'],
+        self.assertEqual(merged_pools.pools[1]['attributes'][0]['value'],
                 "true")
         self.assertFalse('virt_only' in merged_pools.pools[2]['attributes'])
         self.assertFalse('virt_only' in merged_pools.pools[3]['attributes'])
@@ -1107,7 +1110,7 @@ class TestGetAvailableEntitlements(SubManFixture):
         cp = self.get_consumer_cp()
         cp.getPoolsList = Mock(return_value=[])
         res = managerlib.get_available_entitlements()
-        self.assertEquals(0, len(res))
+        self.assertEqual(0, len(res))
 
     def test_incompatible(self):
         cp = self.get_consumer_cp()
@@ -1123,10 +1126,10 @@ class TestGetAvailableEntitlements(SubManFixture):
         cp.getPoolsList = Mock(side_effect=get_pools_list)
 
         res = managerlib.get_available_entitlements(get_all=True)
-        self.assertEquals(2, len(res))
+        self.assertEqual(2, len(res))
 
         res = managerlib.get_available_entitlements(get_all=False)
-        self.assertEquals(1, len(res))
+        self.assertEqual(1, len(res))
 
     def test_installed(self):
         cp = self.get_consumer_cp()
@@ -1145,10 +1148,10 @@ class TestGetAvailableEntitlements(SubManFixture):
         provide(PROD_DIR, product_directory)
 
         res = managerlib.get_available_entitlements(get_all=True, uninstalled=True)
-        self.assertEquals(2, len(res))
+        self.assertEqual(2, len(res))
 
         res = managerlib.get_available_entitlements(uninstalled=True)
-        self.assertEquals(1, len(res))
+        self.assertEqual(1, len(res))
 
     def build_pool_dict(self, pool_id, provided_products=[]):
         return {'id': str(pool_id),

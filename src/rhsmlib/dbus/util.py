@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # Copyright (c) 2016 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -12,6 +14,7 @@
 # in this software or its documentation.
 import logging
 import sys
+import six
 import decorator
 import dbus.service
 
@@ -37,7 +40,7 @@ def dbus_handle_exceptions(func, *args, **kwargs):
     except Exception as e:
         log.exception(e)
         trace = sys.exc_info()[2]
-        raise exceptions.RHSM1DBusException("%s: %s" % (type(e).__name__, str(e))), None, trace
+        six.reraise(exceptions.RHSM1DBusException, "%s: %s" % (type(e).__name__, str(e)), trace)
 
 
 def dbus_service_method(*args, **kwargs):

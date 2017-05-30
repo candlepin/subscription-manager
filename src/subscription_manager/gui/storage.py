@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2010 Red Hat, Inc.
 #
@@ -14,6 +16,7 @@
 #
 
 import logging
+import six
 
 from subscription_manager.ga import Gtk as ga_Gtk
 
@@ -24,7 +27,7 @@ class MappedStore(object):
         self.log = logging.getLogger(__name__ + self.__class__.__name__)
 
         # Enumerate the keys and store the int index
-        for i, type_key in enumerate(type_map.iterkeys()):
+        for i, type_key in enumerate(six.iterkeys(type_map)):
             self.type_index[type_key] = i
 
     def _create_initial_entry(self, item_map):
@@ -38,7 +41,7 @@ class MappedStore(object):
         # init'ed first, since no column info is known
         entry = [None] * self.get_n_columns()
 
-        for key, value in item_map.iteritems():
+        for key, value in six.iteritems(item_map):
             entry[self[key]] = value
         return entry
 
@@ -62,7 +65,7 @@ class MappedListStore(MappedStore, ga_Gtk.ListStore):
 
         # FIXME: this is fragile, since the .values() ordering is not reliable
         MappedStore.__init__(self, type_map)
-        ga_Gtk.ListStore.__init__(self, *type_map.values())
+        ga_Gtk.ListStore.__init__(self, *list(type_map.values()))
         # Use the types from the map to call the parent constructor
 
     def __getitem__(self, key):
@@ -80,7 +83,7 @@ class MappedListStore(MappedStore, ga_Gtk.ListStore):
         self.append(self._create_initial_entry(item_map))
 
     def update_map(self, iter, item_map):
-        for key, value in item_map.iteritems():
+        for key, value in six.iteritems(item_map):
             self.set_value(iter, self[key], value)
 
 
@@ -89,7 +92,7 @@ class MappedTreeStore(MappedStore, ga_Gtk.TreeStore):
         self.log = logging.getLogger(__name__ + self.__class__.__name__)
         # FIXME: How does this work? .values() is not sorted, so could change?
         MappedStore.__init__(self, type_map)
-        ga_Gtk.TreeStore.__init__(self, *type_map.values())
+        ga_Gtk.TreeStore.__init__(self, *list(type_map.values()))
 
     def __getitem__(self, key):
         return self.type_index[key]

@@ -1,4 +1,6 @@
 #!/usr/bin/python
+from __future__ import print_function, division, absolute_import
+
 
 # if we are going to use a display, check to
 # see if we set RHSM_DISPLAY and set DISPLAY
@@ -8,7 +10,6 @@
 # a headless VNC server or x server etc
 # and the test cases will display there
 # instead of cluttering your window
-
 import os
 
 

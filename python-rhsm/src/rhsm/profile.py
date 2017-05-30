@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2011 - 2012 Red Hat, Inc.
 #
@@ -54,7 +56,7 @@ class Package(object):
         """
         Compare one profile to another to determine if anything has changed.
         """
-        if type(self) != type(other):
+        if not isinstance(self, type(other)):
             return False
 
         if self.name == other.name and \
@@ -144,7 +146,7 @@ class RPMProfile(object):
         """
         Compare one profile to another to determine if anything has changed.
         """
-        if type(self) != type(other):
+        if not isinstance(self, type(other)):
             return False
 
         # Quickly check if we have a different number of packages for an

@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # Copyright (c) 2012 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -13,12 +15,12 @@
 #
 
 import mock
-import httplib
+import six.moves.http_client
 import socket
 from rhsm.https import ssl
 
-import stubs
-import fixture
+from . import stubs
+from . import fixture
 
 from subscription_manager import injection as inj
 from subscription_manager import release
@@ -115,7 +117,7 @@ class TestCdnReleaseVerionProvider(fixture.SubManFixture):
 
         cdn_rv_provider = self._get_cdn_rv_provider()
         releases = cdn_rv_provider.get_releases()
-        self.assertNotEquals([], releases)
+        self.assertNotEqual([], releases)
 
     def test_get_releases_no_rhel(self):
         self.prod_dir = stubs.StubProductDirectory(
@@ -125,7 +127,7 @@ class TestCdnReleaseVerionProvider(fixture.SubManFixture):
 
         cdn_rv_provider = self._get_cdn_rv_provider()
         releases = cdn_rv_provider.get_releases()
-        self.assertEquals([], releases)
+        self.assertEqual([], releases)
 
     def test_get_releases_rhel_no_content(self):
 
@@ -141,7 +143,7 @@ class TestCdnReleaseVerionProvider(fixture.SubManFixture):
         cdn_rv_provider = self._get_cdn_rv_provider()
 
         releases = cdn_rv_provider.get_releases()
-        self.assertEquals([], releases)
+        self.assertEqual([], releases)
 
     def test_get_releases_rhel_no_enabled_content(self):
 
@@ -157,7 +159,7 @@ class TestCdnReleaseVerionProvider(fixture.SubManFixture):
         cdn_rv_provider = self._get_cdn_rv_provider()
 
         releases = cdn_rv_provider.get_releases()
-        self.assertEquals([], releases)
+        self.assertEqual([], releases)
 
     def test_get_releases_throws_exception(self):
         cdn_rv_provider = self._get_cdn_rv_provider()
@@ -165,19 +167,19 @@ class TestCdnReleaseVerionProvider(fixture.SubManFixture):
         # mock content_connection so we can verify it's calls
         with mock.patch.object(cdn_rv_provider, 'content_connection') as mock_cc:
             mock_cc.get_versions.side_effect = \
-                    httplib.BadStatusLine("some bogus status")
+                    six.moves.http_client.BadStatusLine("some bogus status")
             releases = cdn_rv_provider.get_releases()
-            self.assertEquals([], releases)
+            self.assertEqual([], releases)
 
             mock_cc.get_versions.side_effect = \
                     socket.error()
             releases = cdn_rv_provider.get_releases()
-            self.assertEquals([], releases)
+            self.assertEqual([], releases)
 
             mock_cc.get_versions.side_effect = \
                     ssl.SSLError()
             releases = cdn_rv_provider.get_releases()
-            self.assertEquals([], releases)
+            self.assertEqual([], releases)
 
 
 class TestReleaseIsCorrectRhel(fixture.SubManFixture):
@@ -279,10 +281,10 @@ class TestReleaseIsCorrectRhel(fixture.SubManFixture):
         content_url = \
                 "/content/dist/rhel/server/6/$releasever/$basearch/os/"
         listing_path = self.cdn_rv_provider._build_listing_path(content_url)
-        self.assertEquals(listing_path, "/content/dist/rhel/server/6//listing")
+        self.assertEqual(listing_path, "/content/dist/rhel/server/6//listing")
 
         # /content/beta/rhel/server/6/$releasever/$basearch/optional/os
         content_url = \
                 "/content/beta/rhel/server/6/$releasever/$basearch/optional/os"
         listing_path = self.cdn_rv_provider._build_listing_path(content_url)
-        self.assertEquals(listing_path, "/content/beta/rhel/server/6//listing")
+        self.assertEqual(listing_path, "/content/beta/rhel/server/6//listing")

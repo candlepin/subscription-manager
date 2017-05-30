@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2014 Red Hat, Inc.
 #
@@ -12,7 +14,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
 import gettext
 import logging
 import socket
@@ -116,7 +117,7 @@ class EntCertUpdateAction(object):
         local = self._get_local_serials()
         try:
             expected = self._get_expected_serials()
-        except socket.error, ex:
+        except socket.error as ex:
             log.exception(ex)
             log.error('Cannot modify subscriptions while disconnected')
             raise Disconnected()
@@ -212,7 +213,7 @@ class EntCertUpdateAction(object):
             # NOTE: this may need a lock
             content_action = content_action_client.ContentActionClient()
             content_action.update()
-        except Exception, e:
+        except Exception as e:
             log.debug(e)
             log.debug("Failed to update repos")
 
@@ -297,7 +298,7 @@ class EntCertUpdateAction(object):
             try:
                 cert.delete()
                 self.report.rogue.append(cert)
-            except OSError, er:
+            except OSError as er:
                 log.exception(er)
                 log.warn("Failed to delete cert")
 
@@ -305,9 +306,9 @@ class EntCertUpdateAction(object):
         # entitlement directory before we go to delete expired certs.
         rogue_count = len(self.report.rogue)
         if rogue_count > 0:
-            print gettext.ngettext("%s local certificate has been deleted.",
+            print(gettext.ngettext("%s local certificate has been deleted.",
                                    "%s local certificates have been deleted.",
-                                   rogue_count) % rogue_count
+                                   rogue_count) % rogue_count)
             self.ent_dir.refresh()
 
 
@@ -377,7 +378,7 @@ class EntitlementCertBundleInstaller(object):
             cert_bundle_writer.write(key, cert)
 
             self.report.added.append(cert)
-        except Exception, e:
+        except Exception as e:
             self.install_exception(bundle, e)
 
         self.post_install(bundle)

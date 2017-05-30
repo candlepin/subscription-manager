@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2010 Red Hat, Inc.
 #
@@ -14,7 +16,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
 import fcntl
 import os
 from threading import RLock as Mutex
@@ -147,9 +148,9 @@ class Lock(object):
                         break
                 self.P()
                 f.setpid()
-            except OSError, e:
+            except OSError as e:
                 log.exception(e)
-                print "could not create lock"
+                print("could not create lock")
         finally:
             f.close()
 

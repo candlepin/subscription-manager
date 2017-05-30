@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # Copyright (c) 2016 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -25,7 +27,7 @@ OP_NO_SSLv2 = _m2.SSL_OP_NO_SSLv2
 OP_NO_SSLv3 = _m2.SSL_OP_NO_SSLv3
 
 
-class NoOpChecker:
+class NoOpChecker(object):
     def __init__(self, host=None, peerCertHash=None, peerCertDigest='sha1'):
         self.host = host
         self.fingerprint = peerCertHash

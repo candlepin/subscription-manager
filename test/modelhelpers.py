@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2010 Red Hat, Inc.
 #
@@ -16,6 +18,7 @@
 """
 Helper methods for mocking up JSON model objects, certificates, etc.
 """
+import six
 
 from datetime import timedelta, datetime
 
@@ -96,7 +99,7 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
 
 def create_attribute_list(attribute_map):
     attribute_list = []
-    for name, value in attribute_map.iteritems():
+    for name, value in six.iteritems(attribute_map):
         attribute_props = {}
         attribute_props['name'] = name
         attribute_props['value'] = value

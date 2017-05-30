@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2010 - 2012 Red Hat, Inc.
 #
@@ -12,7 +14,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
 import gettext
 import signal
 
@@ -132,7 +133,7 @@ class CertificatePrinter(object):
         return "%s" % '\n'.join(s)
 
     def printc(self, cert):
-        print self.cert_to_str(cert)
+        print(self.cert_to_str(cert))
 
     def _get_subject(self, cert):
         s = []

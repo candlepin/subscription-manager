@@ -1,4 +1,6 @@
-from ConfigParser import ConfigParser
+from __future__ import print_function, division, absolute_import
+
+from six.moves import configparser
 from unittest import TestCase
 import os
 import subprocess
@@ -21,7 +23,7 @@ class TestServicePlugin(TestCase):
         subprocess.call('subscription-manager unregister', shell=True)
 
     def has_subman_repos(self):
-        repos = ConfigParser()
+        repos = configparser.ConfigParser()
         with tempfile.NamedTemporaryFile(suffix='.repo') as repofile:
             subprocess.call('zypper lr -e {0}'.format(repofile.name), shell=True)
             repos.read(repofile.name)

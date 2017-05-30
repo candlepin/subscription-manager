@@ -1,4 +1,6 @@
 #!/usr/bin/python
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2010 Red Hat, Inc.
 #
@@ -32,6 +34,7 @@ def excepthook_base(exc_type, exc_value, exc_traceback):
     # something fundamental failed... how quiet should we be?
     sys.exit(0)
 
+
 sys.excepthook = excepthook_base
 
 import syslog
@@ -62,6 +65,7 @@ def excepthook_logging(exc_type, exc_value, exc_traceback):
 
     return excepthook_base(exc_type, exc_value, exc_traceback)
 
+
 sys.excepthook = excepthook_logging
 
 from subscription_manager.ga import GObject as ga_GObject
@@ -89,7 +93,7 @@ enable_debug = False
 def debug(msg):
     if enable_debug:
         log.debug(msg)
-        print msg
+        print(msg)
 
 
 def in_warning_period(sorter):
@@ -255,7 +259,7 @@ def log_syslog(level, msg):
     syslog.syslog(level, msg)
     log.info("rhsmd: %s" % msg)
     if enable_debug:
-        print msg
+        print(msg)
 
 
 def main():

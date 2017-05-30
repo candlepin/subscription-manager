@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2015 Red Hat, Inc.
 #
@@ -15,14 +17,14 @@ from mock import patch, call, Mock
 from subscription_manager import api
 from subscription_manager.repolib import Repo
 
-from fixture import SubManFixture
-from stubs import StubUEP
+from .fixture import SubManFixture
+from .stubs import StubUEP
 
 
 class ApiVersionTest(SubManFixture):
     def test_version_is_available(self):
         from subscription_manager import version
-        self.assertEquals(version.rpm_version, api.version)
+        self.assertEqual(version.rpm_version, api.version)
 
 
 class RepoApiTest(SubManFixture):
@@ -45,26 +47,26 @@ class RepoApiTest(SubManFixture):
             'enabled': '1',
         }
         self.invoker.return_value.get_repos.return_value = [
-            Repo('hello', repo_settings.items()),
+            Repo('hello', list(repo_settings.items())),
         ]
-        self.repo_file.items.return_value = repo_settings.items()
+        self.repo_file.items.return_value = list(repo_settings.items())
         result = api.disable_yum_repositories('hello')
 
         self.repo_file.return_value.write.assert_called_with()
-        self.assertEquals(1, result)
+        self.assertEqual(1, result)
 
     def test_enable_repo(self):
         repo_settings = {
             'enabled': '0',
         }
         self.invoker.return_value.get_repos.return_value = [
-            Repo('hello', repo_settings.items()),
+            Repo('hello', list(repo_settings.items())),
         ]
-        self.repo_file.items.return_value = repo_settings.items()
+        self.repo_file.items.return_value = list(repo_settings.items())
         result = api.enable_yum_repositories('hello')
 
         self.repo_file.return_value.write.assert_called_with()
-        self.assertEquals(1, result)
+        self.assertEqual(1, result)
 
     def test_enable_repo_wildcard(self):
         repo_settings = {
@@ -72,27 +74,27 @@ class RepoApiTest(SubManFixture):
         }
 
         self.invoker.return_value.get_repos.return_value = [
-            Repo('hello', repo_settings.copy().items()),
-            Repo('helium', repo_settings.copy().items()),
+            Repo('hello', list(repo_settings.copy().items())),
+            Repo('helium', list(repo_settings.copy().items())),
         ]
-        self.repo_file.items.return_value = repo_settings.copy().items()
+        self.repo_file.items.return_value = list(repo_settings.copy().items())
 
         result = api.enable_yum_repositories('he*')
         self.repo_file.return_value.write.assert_called_with()
-        self.assertEquals(2, result)
+        self.assertEqual(2, result)
 
     def test_does_not_enable_nonmatching_repos(self):
         repo_settings = {
             'enabled': '0',
         }
         self.invoker.return_value.get_repos.return_value = [
-            Repo('x', repo_settings.items()),
+            Repo('x', list(repo_settings.items())),
         ]
-        self.repo_file.items.return_value = repo_settings.items()
+        self.repo_file.items.return_value = list(repo_settings.items())
         result = api.enable_yum_repositories('hello')
 
-        self.assertEquals(0, len(self.repo_file.return_value.write.mock_calls))
-        self.assertEquals(0, result)
+        self.assertEqual(0, len(self.repo_file.return_value.write.mock_calls))
+        self.assertEqual(0, result)
 
     def test_update_overrides_cache(self):
         with patch('rhsm.connection.UEPConnection') as mock_uep:
@@ -104,9 +106,9 @@ class RepoApiTest(SubManFixture):
                 'enabled': '0',
             }
             self.invoker.return_value.get_repos.return_value = [
-                Repo('hello', repo_settings.items()),
+                Repo('hello', list(repo_settings.items())),
             ]
-            self.repo_file.items.return_value = repo_settings.items()
+            self.repo_file.items.return_value = list(repo_settings.items())
 
             self._inject_mock_valid_consumer("123")
 
@@ -125,4 +127,4 @@ class RepoApiTest(SubManFixture):
                 self.assertTrue(call("123", expected_overrides) in mock_uep.setContentOverrides.mock_calls)
 
                 self.invoker.return_value.update.assert_called_with()
-                self.assertEquals(1, result)
+                self.assertEqual(1, result)

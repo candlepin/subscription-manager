@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Subscription manager command line utility. This script is a modified version of
 # cp_client.py from candlepin scripts
@@ -17,10 +19,11 @@
 #
 
 import gettext
-import httplib
 import logging
 import socket
+import six
 
+import six.moves.http_client
 from rhsm.https import ssl
 
 import rhsm.config
@@ -124,7 +127,7 @@ class CdnReleaseVersionProvider(object):
             try:
                 data = self.content_connection.get_versions(listing_path)
             except (socket.error,
-                    httplib.HTTPException,
+                    six.moves.http_client.HTTPException,
                     ssl.SSLError) as e:
                 # content connection doesn't handle any exceptions
                 # and the code that invokes this doesn't either, so
@@ -159,8 +162,8 @@ class CdnReleaseVersionProvider(object):
 
     def _is_correct_rhel(self, product_tags, content_tags):
         # easy to pass a string instead of a list
-        assert not isinstance(product_tags, basestring)
-        assert not isinstance(content_tags, basestring)
+        assert not isinstance(product_tags, six.string_types)
+        assert not isinstance(content_tags, six.string_types)
 
         for product_tag in product_tags:
             # we are comparing the lists to see if they

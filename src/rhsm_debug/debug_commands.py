@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2010 - 2012 Red Hat, Inc.
 #
@@ -12,7 +14,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
 import errno
 import gettext
 import optparse
@@ -42,7 +43,7 @@ ERR_NOT_REGISTERED_MSG = _("This system is not yet registered. Try 'subscription
 ERR_NOT_REGISTERED_CODE = 1
 
 ASSEMBLE_DIR = '/var/spool/rhsm/debug'
-ROOT_READ_ONLY = 0600
+ROOT_READ_ONLY = 0o600
 KEY_IGNORE_PATS = ['*key.pem']
 
 
@@ -162,14 +163,14 @@ class SystemCommand(CliCommand):
             try:
                 if defaults['ca_cert_dir'] != conf['rhsm']['ca_cert_dir'] or not sos:
                     self._copy_cert_directory(conf['rhsm']['ca_cert_dir'], content_path)
-            except EnvironmentError, e:
+            except EnvironmentError as e:
                 if e.errno != errno.EEXIST:
                     raise
 
             try:
                 if defaults['pluginconfdir'] != conf['rhsm']['pluginconfdir'] or not sos:
                     self._copy_directory(conf['rhsm']['pluginconfdir'], content_path)
-            except EnvironmentError, e:
+            except EnvironmentError as e:
                 if e.errno != errno.EEXIST:
                     raise
 
@@ -187,7 +188,7 @@ class SystemCommand(CliCommand):
 
                 sfm = SaferFileMove()
                 sfm.move(tar_file_path, final_path)
-                print _("Wrote: %s") % final_path
+                print(_("Wrote: %s") % final_path)
             else:
                 # NOTE: this will fail across filesystems. We could add a force
                 # flag to for creation of a specific name with approriate
@@ -201,9 +202,9 @@ class SystemCommand(CliCommand):
                 # rename only works on the same filesystem, but it is atomic.
                 os.rename(content_path, dest_dir_name)
 
-                print _("Wrote: %s") % dest_dir_name
+                print(_("Wrote: %s") % dest_dir_name)
 
-        except Exception, e:
+        except Exception as e:
             managercli.handle_exception(_("Unable to create zip file of system information: %s") % e, e)
             sys.exit(os.EX_SOFTWARE)
         finally:
@@ -278,7 +279,7 @@ class SaferFileMove(object):
                                  self.default_perms), 'w+')
 
     def _copyfileobj(self, src_fo, dest_fo):
-        while 1:
+        while True:
             buf = src_fo.read(self.buf_size)
             if not buf:
                 break

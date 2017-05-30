@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 import unittest
 
 from rhsm.certificate import OID
@@ -9,7 +11,7 @@ class OIDTests(unittest.TestCase):
         self.oid = OID("1.2.3.4.5.6.7")
 
     def test_length(self):
-        self.assertEquals(7, len(self.oid))
+        self.assertEqual(7, len(self.oid))
 
     def test_match_positive(self):
         self.assertTrue(self.oid.match(OID("1.2.3.4.5.6.7")))

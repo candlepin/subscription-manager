@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Async wrapper module for managerlib methods, with glib integration
 #
@@ -15,10 +17,11 @@
 # in this software or its documentation.
 #
 
-import Queue
 import threading
 import gettext
 import sys
+
+from six.moves import queue
 
 from subscription_manager.ga import GObject as ga_GObject
 from subscription_manager.entcertlib import Disconnected
@@ -33,7 +36,7 @@ class AsyncPool(object):
 
     def __init__(self, pool):
         self.pool = pool
-        self.queue = Queue.Queue()
+        self.queue = queue.Queue()
 
     def _run_refresh(self, active_on, callback, data):
         """
@@ -54,7 +57,7 @@ class AsyncPool(object):
             (callback, data, error) = self.queue.get(block=False)
             callback(data, error)
             return False
-        except Queue.Empty:
+        except queue.Empty:
             return True
 
     def refresh(self, active_on, callback, data=None):

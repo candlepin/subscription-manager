@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # Copyright (c) 2017 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -28,7 +30,7 @@ class VirtCollectorTest(test.fixture.SubManFixture):
         MockPopen.return_value.poll.return_value = 0
         hw = virt.VirtCollector()
         expected = {'virt.is_guest': False, 'virt.host_type': 'Not Applicable'}
-        self.assertEquals(expected, hw.get_all())
+        self.assertEqual(expected, hw.get_all())
 
     @patch('subprocess.Popen')
     def test_virt_error(self, MockPopen):
@@ -37,7 +39,7 @@ class VirtCollectorTest(test.fixture.SubManFixture):
 
         hw = virt.VirtWhatCollector()
         expected = {'virt.is_guest': 'Unknown'}
-        self.assertEquals(expected, hw.get_virt_info())
+        self.assertEqual(expected, hw.get_virt_info())
 
     @patch('subprocess.Popen')
     def test_command_valid(self, MockPopen):
@@ -46,7 +48,7 @@ class VirtCollectorTest(test.fixture.SubManFixture):
 
         # Pick up the mocked class
         hw = virt.VirtCollector(testing='testing')
-        self.assertEquals('this is valid', hw.get_all()['virt.host_type'])
+        self.assertEqual('this is valid', hw.get_all()['virt.host_type'])
 
     @patch('subprocess.Popen')
     def test_virt_guest(self, MockPopen):
@@ -55,7 +57,7 @@ class VirtCollectorTest(test.fixture.SubManFixture):
 
         hw = virt.VirtCollector()
         expected = {'virt.is_guest': True, 'virt.host_type': 'kvm'}
-        self.assertEquals(expected, hw.get_all())
+        self.assertEqual(expected, hw.get_all())
 
     @patch("rhsmlib.facts.collector.get_arch")
     def test_get_platform_specific_info_provider_not_dmi(self, mock_get_arch):
@@ -97,4 +99,4 @@ class VirtUuidCollectorTest(unittest.TestCase):
         }
         result = virt.VirtUuidCollector(collected_hw_info=collected).get_all()
         self.assertTrue('virt.uuid' in result)
-        self.assertEquals(collected['dmi.system.uuid'], result['virt.uuid'])
+        self.assertEqual(collected['dmi.system.uuid'], result['virt.uuid'])

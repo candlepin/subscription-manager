@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2016 Red Hat, Inc.
 #
@@ -18,6 +20,7 @@ import mock
 import json
 import dbus.connection
 import socket
+import six
 
 import rhsm.connection
 import subscription_manager.injection as inj
@@ -92,7 +95,7 @@ class DomainSocketRegisterDBusObjectUnitTest(SubManFixture):
         # Be sure we are persisting the consumer cert
         mock_persist_consumer.assert_called_once_with(expected_consumer)
         # Be sure we get the right output
-        self.assertEquals(output, SUCCESSFUL_REGISTRATION)
+        self.assertEqual(output, SUCCESSFUL_REGISTRATION)
 
     @mock.patch("rhsm.connection.UEPConnection")
     def test_get_uep_from_options(self, patched_uep):
@@ -149,7 +152,7 @@ class DomainSocketRegisterDBusObjectUnitTest(SubManFixture):
         # Be sure we are persisting the consumer cert
         mock_persist_consumer.assert_called_once_with(expected_consumer)
         # Be sure we get the right output
-        self.assertEquals(output, SUCCESSFUL_REGISTRATION)
+        self.assertEqual(output, SUCCESSFUL_REGISTRATION)
 
 
 class DomainSocketRegisterDBusObjectFunctionalTest(DBusObjectTest):
@@ -177,7 +180,7 @@ class DomainSocketRegisterDBusObjectFunctionalTest(DBusObjectTest):
 
         def assertions(*args):
             result = args[0]
-            self.assertRegexpMatches(result, r'/var/run/dbus.*')
+            six.assertRegex(self, result, r'/var/run/dbus.*')
 
         self.dbus_request(assertions, self.interface.Start, dbus_method_args)
 
@@ -188,7 +191,7 @@ class DomainSocketRegisterDBusObjectFunctionalTest(DBusObjectTest):
             # Assign the result as an attribute to this function.
             # See http://stackoverflow.com/a/27910553/6124862
             assertions.result = args[0]
-            self.assertRegexpMatches(assertions.result, r'/var/run/dbus.*')
+            six.assertRegex(self, assertions.result, r'/var/run/dbus.*')
 
         self.dbus_request(assertions, self.interface.Start, dbus_method_args)
 
@@ -262,7 +265,7 @@ class DomainSocketRegisterDBusObjectFunctionalTest(DBusObjectTest):
         def assertions(*args):
             # Be sure we are persisting the consumer cert
             mock_persist_consumer.assert_called_once_with(expected_consumer)
-            self.assertEquals(args[0], SUCCESSFUL_REGISTRATION)
+            self.assertEqual(args[0], SUCCESSFUL_REGISTRATION)
 
         self._inject_mock_invalid_consumer()
 

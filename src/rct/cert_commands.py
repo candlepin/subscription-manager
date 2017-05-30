@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2010 - 2012 Red Hat, Inc.
 #
@@ -12,7 +14,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
 import base64
 import gettext
 import os
@@ -41,7 +42,7 @@ class RCTCertCommand(RCTCliCommand):
         cert_file = self._get_file_from_args()
         try:
             return certificate.create_from_file(cert_file)
-        except certificate.CertificateException, ce:
+        except certificate.CertificateException as ce:
             raise InvalidCLIOptionError(
                     _("Unable to read certificate file '%s': %s") % (cert_file,
                         ce))
@@ -86,19 +87,19 @@ class StatCertCommand(RCTCertCommand):
     def _do_command(self):
         cert = self._create_cert()
         pem = self._get_pem(self._get_file_from_args())
-        print _("Type: %s") % type_to_string(cert)
-        print _("Version: %s") % cert.version
-        print _("DER size: %db") % self._get_der_size(pem)
+        print(_("Type: %s") % type_to_string(cert))
+        print(_("Version: %s") % cert.version)
+        print(_("DER size: %db") % self._get_der_size(pem))
 
         subject_key_id = self._get_subject_key_id(pem)
         if subject_key_id is not None:
-            print _("Subject Key ID size: %db") % len(subject_key_id)
+            print(_("Subject Key ID size: %db") % len(subject_key_id))
 
         if isinstance(cert, EntitlementCertificate):
             content_len = 0
             if cert.content:
                 content_len = len(cert.content)
-            print _("Content sets: %s") % content_len
+            print(_("Content sets: %s") % content_len)
 
     def _get_pem(self, filename):
         return open(filename, 'r',).read()

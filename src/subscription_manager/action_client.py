@@ -1,4 +1,7 @@
 #!/usr/bin/python
+
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2010 Red Hat, Inc.
 #
@@ -15,7 +18,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
 import gettext
 import logging
 

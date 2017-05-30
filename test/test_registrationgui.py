@@ -1,9 +1,10 @@
+from __future__ import print_function, division, absolute_import
 
 from mock import Mock, patch
 
-from fixture import SubManFixture
+from .fixture import SubManFixture
 
-from stubs import StubBackend, StubFacts
+from .stubs import StubBackend, StubFacts
 from subscription_manager.gui.registergui import RegisterWidget, RegisterInfo,  \
     CredentialsScreen, ActivationKeyScreen, ChooseServerScreen, AsyncBackend, \
     CREDENTIALS_PAGE, CHOOSE_SERVER_PAGE
@@ -13,6 +14,7 @@ from subscription_manager.ga import GObject as ga_GObject
 from subscription_manager.ga import Gtk as ga_Gtk
 
 import sys
+import six
 
 
 class RegisterWidgetTests(SubManFixture):
@@ -44,7 +46,7 @@ class RegisterWidgetTests(SubManFixture):
         # NOTE: these exceptions are not in the nost test context,
         #       so they don't actually fail nose
         try:
-            self.assertEquals(page_after, 0)
+            self.assertEqual(page_after, 0)
         except Exception:
             self.exc_infos.append(sys.exc_info())
             return
@@ -59,7 +61,7 @@ class RegisterWidgetTests(SubManFixture):
         # NOTE: these exceptions are not in the nost test context,
         #       so they don't actually fail nose
         try:
-            self.assertEquals(page_after, 0)
+            self.assertEqual(page_after, 0)
         except Exception:
             self.exc_infos.append(sys.exc_info())
             return
@@ -96,7 +98,7 @@ class RegisterWidgetTests(SubManFixture):
 
         # If we saw any exceptions, raise them now so we fail nosetests
         for exc_info in self.exc_infos:
-            raise exc_info[1], None, exc_info[2]
+            six.reraise(*exc_info)
 
         self.assertTrue(self.correct_page)
 
@@ -161,10 +163,10 @@ class CredentialsScreenTests(SubManFixture):
         self.screen.skip_auto_bind.set_active(True)
         self.screen.consumer_name.set_text("CONSUMER")
         self.screen.clear()
-        self.assertEquals("", self.screen.account_login.get_text())
-        self.assertEquals("", self.screen.account_password.get_text())
+        self.assertEqual("", self.screen.account_login.get_text())
+        self.assertEqual("", self.screen.account_password.get_text())
         self.assertFalse(self.screen.skip_auto_bind.get_active())
-        self.assertEquals(default_consumer_name_value,
+        self.assertEqual(default_consumer_name_value,
                           self.screen.consumer_name.get_text())
 
 
@@ -180,7 +182,7 @@ class ActivationKeyScreenTests(SubManFixture):
         expected = ['hello', 'world', 'how', 'are', 'you']
         key_input = "hello, world,how  are , you"
         result = self.screen._split_activation_keys(key_input)
-        self.assertEquals(expected, result)
+        self.assertEqual(expected, result)
 
 
 class ChooseServerScreenTests(SubManFixture):

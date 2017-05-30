@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2011 Red Hat, Inc.
 #
@@ -18,7 +20,6 @@ Classes here track various information last sent to the server, compare
 this with the current state, and perform an update on the server if
 necessary.
 """
-
 import gettext
 import logging
 import os
@@ -173,9 +174,9 @@ class CacheManager(object):
                 # Return the number of 'updates' we did, assuming updating all
                 # packages at once is one update.
                 return 1
-            except connection.RestlibException, re:
+            except connection.RestlibException as re:
                 raise re
-            except Exception, e:
+            except Exception as e:
                 log.error("Error updating system data on the server")
                 log.exception(e)
                 raise Exception(_("Error updating system data on the server, see /var/log/rhsm/rhsm.log "
@@ -216,18 +217,18 @@ class StatusCache(CacheManager):
             self.last_error = ex
             log.error("Consumer certificate is invalid")
             return None
-        except connection.RestlibException, ex:
+        except connection.RestlibException as ex:
             # Indicates we may be talking to a very old candlepin server
             # which does not have the necessary API call.
             log.exception(ex)
             self.last_error = ex
             return None
-        except connection.AuthenticationException, ex:
+        except connection.AuthenticationException as ex:
             log.error("Could not authenticate with server, check registration status.")
             log.exception(ex)
             self.last_error = ex
             return None
-        except connection.ExpiredIdentityCertException, ex:
+        except connection.ExpiredIdentityCertException as ex:
             log.exception(ex)
             self.last_error = ex
             log.error("Bad identity, unable to connect to server")
@@ -237,7 +238,7 @@ class StatusCache(CacheManager):
         # all of the abover are subclasses of ConnectionException that
         # get handled first
         except (connection.ConnectionException,
-                socket.error), ex:
+                socket.error) as ex:
 
             log.error(ex)
             self.last_error = ex
@@ -480,7 +481,7 @@ class InstalledProductsManager(CacheManager):
 
         self._setup_installed()
 
-        if len(products.keys()) != len(self.installed.keys()):
+        if len(list(products.keys())) != len(list(self.installed.keys())):
             return True
 
         if products != self.installed:
@@ -514,7 +515,7 @@ class InstalledProductsManager(CacheManager):
         consumer.
         """
         self._setup_installed()
-        final = [val for (key, val) in self.installed.items()]
+        final = [val for (key, val) in list(self.installed.items())]
         return final
 
     def _sync_with_server(self, uep, consumer_uuid):

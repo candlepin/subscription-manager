@@ -1,9 +1,10 @@
+from __future__ import print_function, division, absolute_import
 
 import mock
 
-import fixture
+from . import fixture
 
-import test_model
+from . import test_model
 
 from rhsm import certificate2
 from subscription_manager import model
@@ -19,13 +20,13 @@ class TestEntitlement(fixture.SubManFixture):
     def test_init_empty_contents(self):
         e = model.Entitlement(contents=[])
         self.assertTrue(hasattr(e, 'contents'))
-        self.assertEquals(e.contents, [])
+        self.assertEqual(e.contents, [])
 
     def test_contents(self):
         contents = [mock.Mock(), mock.Mock()]
         e = model.Entitlement(contents=contents)
         self.assertTrue(hasattr(e, 'contents'))
-        self.assertEquals(len(e.contents), 2)
+        self.assertEqual(len(e.contents), 2)
 
         for a_content in e.contents:
             self.assertTrue(isinstance(a_content, mock.Mock))
@@ -75,15 +76,15 @@ class TestEntitlementCertEntitlement(TestEntitlement):
 
         ece = model.ent_cert.EntitlementCertEntitlement.from_ent_cert(mock_ent_cert)
 
-        self.assertEquals(ece.contents[0].name, contents[0].name)
-        self.assertEquals(ece.contents[0].label, contents[0].label)
-        self.assertEquals(ece.contents[0].gpg, contents[0].gpg)
-        self.assertEquals(ece.contents[0].content_type,
+        self.assertEqual(ece.contents[0].name, contents[0].name)
+        self.assertEqual(ece.contents[0].label, contents[0].label)
+        self.assertEqual(ece.contents[0].gpg, contents[0].gpg)
+        self.assertEqual(ece.contents[0].content_type,
             contents[0].content_type)
-        self.assertEquals(len(ece.contents), 1)
+        self.assertEqual(len(ece.contents), 1)
 
         # for ostree content, gpg is likely to change
-        self.assertEquals(ece.contents[0].gpg, mock_content.gpg)
+        self.assertEqual(ece.contents[0].gpg, mock_content.gpg)
 
 
 # FIXME: move to stubs/fixture, copied from ent_branding
@@ -133,5 +134,5 @@ class TestEntitlementDirEntitlementSource(test_model.TestEntitlementSource):
         # add a product that will not match product tags
         self._inj_mock_dirs(stub_product=DefaultStubInstalledProduct(provided_tags=[]))
         ecc = ent_cert.EntitlementDirEntitlementSource()
-        self.assertEquals(len(ecc), 1)
-        self.assertEquals(len(ecc.product_tags), 1)
+        self.assertEqual(len(ecc), 1)
+        self.assertEqual(len(ecc.product_tags), 1)

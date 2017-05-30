@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # Copyright (c) 2011 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -16,7 +18,7 @@ try:
 except ImportError:
     import unittest
 
-from stubs import StubEntitlementCertificate, StubProduct
+from .stubs import StubEntitlementCertificate, StubProduct
 from mock import Mock
 from subscription_manager.reasons import Reasons
 
@@ -91,17 +93,17 @@ class ReasonsTests(unittest.TestCase):
 
     def test_get_stack_subscriptions(self):
         subs = self.sorter.reasons.get_stack_subscriptions(PARTIAL_STACK_ID)
-        self.assertEquals(1, len(subs))
-        self.assertEquals(ENT_ID_4, subs[0])
+        self.assertEqual(1, len(subs))
+        self.assertEqual(ENT_ID_4, subs[0])
 
     def test_get_product_subscriptions(self):
         subs = self.sorter.reasons.get_product_subscriptions(PROD_4)
-        self.assertEquals(1, len(subs))
-        self.assertEquals(ENT_ID_4, subs[0].subject['CN'])
+        self.assertEqual(1, len(subs))
+        self.assertEqual(ENT_ID_4, subs[0].subject['CN'])
 
     def test_get_product_reasons(self):
         messages = self.sorter.reasons.get_product_reasons(PROD_4)
-        self.assertEquals(4, len(messages))
+        self.assertEqual(4, len(messages))
         expectations = []
         expectations.append("Only covers 16 of 32 cores.")
         expectations.append("Only covers 8GB of 31GB of RAM.")
@@ -110,35 +112,35 @@ class ReasonsTests(unittest.TestCase):
             self.assertTrue(expected in messages)
 
         messages = self.sorter.reasons.get_product_reasons(PROD_2)
-        self.assertEquals(1, len(messages))
+        self.assertEqual(1, len(messages))
         expected = "Covers architecture ppc64 but the system is x86_64."
-        self.assertEquals(expected, messages[0])
+        self.assertEqual(expected, messages[0])
 
         reason = self.build_ent_reason_with_attrs('SOCKETS', 'some message', '8', '6',
                 prod=INST_PID_1, name="Awesome OS for x86_64")
         self.sorter.reasons.reasons.append(reason)
         messages = self.sorter.reasons.get_product_reasons(PROD_1)
-        self.assertEquals(0, len(messages))
+        self.assertEqual(0, len(messages))
         self.sorter.reasons.reasons.remove(reason)
 
     def test_get_subscription_reasons(self):
         sub_reasons = self.sorter.reasons.get_subscription_reasons(ENT_ID_1)
-        self.assertEquals(0, len(sub_reasons))
+        self.assertEqual(0, len(sub_reasons))
 
         sub_reasons = self.sorter.reasons.get_subscription_reasons(ENT_ID_2)
-        self.assertEquals(1, len(sub_reasons))
+        self.assertEqual(1, len(sub_reasons))
         expected = "Covers architecture ppc64 but the system is x86_64."
         actual = sub_reasons[0]
-        self.assertEquals(expected, actual)
+        self.assertEqual(expected, actual)
 
     def test_get_subscription_reasons_map(self):
         sub_reason_map = self.sorter.reasons.get_subscription_reasons_map()
-        self.assertEquals(4, len(sub_reason_map[ENT_ID_4]))
-        self.assertEquals(0, len(sub_reason_map[ENT_ID_1]))
-        self.assertEquals(1, len(sub_reason_map[ENT_ID_2]))
+        self.assertEqual(4, len(sub_reason_map[ENT_ID_4]))
+        self.assertEqual(0, len(sub_reason_map[ENT_ID_1]))
+        self.assertEqual(1, len(sub_reason_map[ENT_ID_2]))
         expected = "Covers architecture ppc64 but the system is x86_64."
         actual = sub_reason_map[ENT_ID_2][0]
-        self.assertEquals(expected, actual)
+        self.assertEqual(expected, actual)
 
     def test_get_subscription_reasons_map_ent_id_not_in_valid_ent_certs(self):
         reason_expired_entid = \
@@ -187,19 +189,19 @@ class ReasonsTests(unittest.TestCase):
         reason = self.build_ent_reason_with_attrs(
                 'SOCKETS', 'some message', '8', '6', ent='1234')
         reason_id = self.sorter.reasons.get_reason_id(reason)
-        self.assertEquals("Subscription 1234", reason_id)
+        self.assertEqual("Subscription 1234", reason_id)
         reason = self.build_ent_reason_with_attrs(
                 'SOCKETS', 'some message', '8', '6', stack='1234')
         reason_id = self.sorter.reasons.get_reason_id(reason)
-        self.assertEquals("Stack 1234", reason_id)
+        self.assertEqual("Stack 1234", reason_id)
         reason = self.build_ent_reason_with_attrs(
                 'SOCKETS', 'some message', '8', '6', prod='1234')
         reason_id = self.sorter.reasons.get_reason_id(reason)
-        self.assertEquals("Product 1234", reason_id)
+        self.assertEqual("Product 1234", reason_id)
 
     def test_get_name_message_map(self):
         name_message_map = self.sorter.reasons.get_name_message_map()
-        self.assertEquals(3, len(name_message_map))
+        self.assertEqual(3, len(name_message_map))
         expected = ['A different way to say Only covers 8GB of 31GB of RAM.',
                     'Only covers 16 of 32 cores.',
                     'Only covers 4 of 8 sockets.',
@@ -237,4 +239,4 @@ class ReasonsTests(unittest.TestCase):
 
     def assortEquals(self, list_a, list_b):
         self.assertTrue(isinstance(list_a, list) and isinstance(list_b, list))
-        self.assertEquals(sorted(list_a), sorted(list_b))
+        self.assertEqual(sorted(list_a), sorted(list_b))

@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2012 Red Hat, Inc.
 #
@@ -15,8 +17,8 @@
 
 import rhsm.connection as connection
 
-from stubs import StubUEP
-from fixture import SubManFixture
+from .stubs import StubUEP
+from .fixture import SubManFixture
 from subscription_manager import managercli
 from mock import patch, Mock
 
@@ -32,7 +34,7 @@ class CliUnRegistrationTests(SubManFixture):
         # CacheManager.delete_cache = classmethod(lambda cls: None)
 
         cmd.main(['unregister'])
-        self.assertEquals(mock_injected_identity.uuid, cmd.cp.called_unregister_uuid)
+        self.assertEqual(mock_injected_identity.uuid, cmd.cp.called_unregister_uuid)
 
     @patch('subscription_manager.managerlib.clean_all_data')
     def test_unregister_removes_consumer_cert_with_gone_correct_id(self, clean_data_mock):

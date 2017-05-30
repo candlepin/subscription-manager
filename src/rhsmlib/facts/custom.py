@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # Copyright (c) 2016 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -43,7 +45,7 @@ class CustomFacts(object):
         return custom_facts
 
     def __iter__(self):
-        return iter(self.data.items())
+        return iter(list(self.data.items()))
 
 
 class CustomFactsFileError(Exception):

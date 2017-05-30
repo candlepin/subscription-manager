@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function, division, absolute_import
 
 #
 # Copyright (c) 2014 Red Hat, Inc.
@@ -253,7 +254,9 @@ class install_data(_install_data):
 
 setup_requires = []
 
-install_requires = []
+install_requires = [
+        'six',
+    ]
 
 test_require = [
       'mock',

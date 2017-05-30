@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # Copyright (c) 2010-2016 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -36,6 +38,7 @@ def check_output_2_6(*args, **kwargs):
         raise subprocess.CalledProcessError(returncode, cmd_args)
 
     return output
+
 
 check_output = check_output_2_6
 

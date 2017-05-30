@@ -1,10 +1,12 @@
+from __future__ import print_function, division, absolute_import
+
 try:
     import unittest2 as unittest
 except ImportError:
     import unittest
 
 import gettext
-import fixture
+from . import fixture
 
 from subscription_manager import managercli
 from subscription_manager.printing_utils import to_unicode_or_bust

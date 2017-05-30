@@ -1,4 +1,6 @@
 #! /usr/bin/env python
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2011 Red Hat, Inc.
 #
@@ -27,8 +29,9 @@ import dbus.mainloop.glib
 import functools
 import logging
 import threading
-import Queue
+import six
 
+from six.moves import queue
 from rhsmlib.dbus import constants, server
 
 # Set DBus mainloop early in test run (test import time!)
@@ -80,7 +83,7 @@ class DBusObjectTest(unittest.TestCase):
             'stopped_event': self.stopped_event,
         })
         self.started_event.wait()
-        self.result_queue = Queue.Queue(maxsize=1)
+        self.result_queue = queue.Queue(maxsize=1)
         self.addCleanup(self.stop_server)
 
     def stop_server(self):
@@ -117,7 +120,7 @@ class DBusObjectTest(unittest.TestCase):
         # the DBusRequestThread
         if not self.result_queue.empty():
             result = self.result_queue.get()
-            raise result[0], result[1], result[2]
+            six.reraise(*result)
 
     def dbus_objects(self):
         '''This method should return a list of DBus service classes that need to be instantiated in the

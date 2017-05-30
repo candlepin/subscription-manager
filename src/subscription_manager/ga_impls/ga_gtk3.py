@@ -1,3 +1,4 @@
+from __future__ import print_function, division, absolute_import
 
 import os
 from gi.repository import Gtk
@@ -16,5 +17,6 @@ GTK_COMPAT_VERSION = "3"
 # gtk2 does not have a .new()
 def tree_row_reference(model, path):
     return Gtk.TreeRowReference.new(model, path)
+
 
 threads_init = GObject.threads_init

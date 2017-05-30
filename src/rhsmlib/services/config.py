@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # Copyright (c) 2016 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -13,6 +15,7 @@
 #
 import rhsm.config
 import collections
+import six
 
 
 class Config(collections.MutableMapping):
@@ -42,7 +45,7 @@ class Config(collections.MutableMapping):
 
     def __setitem__(self, key, value):
         try:
-            value.iteritems()
+            six.iteritems(value)
         except Exception:
             raise
 
@@ -57,7 +60,7 @@ class Config(collections.MutableMapping):
         self._parser.add_section(key)
         self._sections[key] = ConfigSection(self, self._parser, key, self.auto_persist)
 
-        for k, v in value.iteritems():
+        for k, v in six.iteritems(value):
             self._sections[key][k] = v
 
         if self.auto_persist:
@@ -86,7 +89,7 @@ class Config(collections.MutableMapping):
 
     def __repr__(self):
         result = {}
-        for name, s in self._sections.items():
+        for name, s in list(self._sections.items()):
             result[name] = repr(s)
         return "%s" % result
 

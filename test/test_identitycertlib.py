@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2011 Red Hat, Inc.
 #
@@ -13,7 +15,7 @@
 
 import mock
 
-import fixture
+from . import fixture
 
 from subscription_manager import identity
 from subscription_manager import identitycertlib
@@ -90,7 +92,7 @@ class TestIdentityUpdateAction(fixture.SubManFixture):
         inj.provide(inj.IDENTITY, InvalidIdentity())
         id_update_action = identitycertlib.IdentityUpdateAction()
         report = id_update_action.perform()
-        self.assertEquals(report._status, 0)
+        self.assertEqual(report._status, 0)
 
 
 class TestIdentityCertActionInvoker(fixture.SubManFixture):
@@ -106,5 +108,5 @@ class TestIdentityCertActionInvoker(fixture.SubManFixture):
     def test(self, mock_persist):
         id_cert_lib = identitycertlib.IdentityCertActionInvoker()
         report = id_cert_lib.update()
-        self.assertEquals(report._status, 1)
+        self.assertEqual(report._status, 1)
         self.assertTrue(mock_persist.called)

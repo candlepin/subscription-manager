@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # Copyright (c) 2016 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -80,7 +82,7 @@ class HostCollector(collector.FactsCollector):
         except ValueError as err:
             log.warning("Unable to get default locale (bad environment variable?): %s" % err)
         if default_locale[0] is not None:
-            effective_locale = ".".join(filter(None, default_locale))
+            effective_locale = ".".join([_f for _f in default_locale if _f])
         locale_info['system.default_locale'] = effective_locale
         host_facts.update(locale_info)
 

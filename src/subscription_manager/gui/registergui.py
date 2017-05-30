@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Registration dialog/wizard
 #
@@ -17,11 +19,12 @@
 
 import gettext
 import logging
-import Queue
 import re
 import socket
 import sys
 import threading
+
+from six.moves import queue
 
 from subscription_manager import ga_loader
 ga_loader.init_ga()
@@ -118,7 +121,7 @@ def reset_resolver():
         # If ctypes isn't supported (older versions of python for example)
         # Then just don't do anything
         pass
-    except Exception, e:
+    except Exception as e:
         log.warning("reset_resolver failed: %s", e)
         pass
 
@@ -441,7 +444,7 @@ class RegisterWidget(widgets.SubmanBaseWidget):
     def choose_initial_screen(self):
         try:
             self.info.identity.reload()
-        except Exception, e:
+        except Exception as e:
             log.exception(e)
             self.emit('register-error',
                       'Error detecting if we were registered:',
@@ -1131,7 +1134,7 @@ class PerformPackageProfileSyncScreen(NoGuiScreen):
             # so we got a result of 0 and no error
             else:
                 self.emit('move-to-screen', SELECT_SLA_PAGE)
-        except Exception, e:
+        except Exception as e:
             self.emit('register-error', REGISTER_ERROR, e)
 
         self.pre_done()
@@ -1273,7 +1276,7 @@ class SelectSLAScreen(Screen):
                 self._format_prods(unentitled_prod_certs))
 
         self.list_store.clear()
-        for sla in reversed(sla_data_map.keys()):
+        for sla in reversed(list(sla_data_map.keys())):
             self.list_store.append([sla, sla_data_map])
 
         self.sla_combobox.set_model(self.list_store)
@@ -1377,7 +1380,7 @@ class SelectSLAScreen(Screen):
                 return
 
             self.info.set_property('dry-run-result',
-                                   sla_data_map.values()[0])
+                                   list(sla_data_map.values())[0])
             self.emit('move-to-screen', CONFIRM_SUBS_PAGE)
             self.pre_done()
             return
@@ -1810,7 +1813,7 @@ class ChooseServerScreen(Screen):
     def reset_resolver(self):
         try:
             reset_resolver()
-        except Exception, e:
+        except Exception as e:
             log.warn("Error from reset_resolver: %s", e)
 
     def populate(self):
@@ -1925,7 +1928,7 @@ class AsyncBackend(object):
     def __init__(self, backend):
         self.backend = backend
         self.plugin_manager = require(PLUGIN_MANAGER)
-        self.queue = Queue.Queue()
+        self.queue = queue.Queue()
         self._threads = []
 
     def block_until_complete(self):
@@ -1956,7 +1959,7 @@ class AsyncBackend(object):
             else:
                 callback(retval)
             return False
-        except Queue.Empty:
+        except queue.Empty:
             return True
 
     def _get_owner_list(self, username, callback):
@@ -2124,7 +2127,7 @@ class AsyncBackend(object):
             # FIXME: emit update-ent-certs signal
             try:
                 managerlib.fetch_certificates(self.backend.certlib)
-            except Exception, cert_update_ex:
+            except Exception as cert_update_ex:
                 log.info("Error updating certificates after error:")
                 log.exception(cert_update_ex)
             self.queue.put((callback, None, sys.exc_info()))
@@ -2200,7 +2203,7 @@ class AsyncBackend(object):
                 suitable_slas[sla] = dry_run
 
         # why do we call cert_sorter stuff in the return?
-        return (current_sla, self.backend.cs.unentitled_products.values(), suitable_slas)
+        return (current_sla, list(self.backend.cs.unentitled_products.values()), suitable_slas)
 
     def _find_service_levels(self, consumer_uuid, callback):
         """
@@ -2224,7 +2227,7 @@ class AsyncBackend(object):
         try:
             old_cp = UEPConnection(**server_info)
             old_cp.unregisterConsumer(consumer_uuid)
-        except Exception, e:
+        except Exception as e:
             log.exception(e)
             # Reraise any exception as a RemoteUnregisterException
             # This will be passed all the way back to the parent window
@@ -2240,7 +2243,7 @@ class AsyncBackend(object):
     def _validate_server(self, hostname, port, prefix, callback):
         try:
             reset_resolver()
-        except Exception, e:
+        except Exception as e:
             log.warn("Error from reset_resolver: %s", e)
         try:
             conn = UEPConnection(hostname, int(port), prefix)

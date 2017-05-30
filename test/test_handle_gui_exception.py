@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 try:
     import unittest2 as unittest
 except ImportError:
@@ -8,12 +10,12 @@ import socket
 from rhsm.https import ssl
 
 from subscription_manager.gui import utils
-from fixture import FakeException, FakeLogger
+from .fixture import FakeException, FakeLogger
 
 import rhsm.connection as connection
 
 
-class FakeErrorWindow:
+class FakeErrorWindow(object):
     def __init__(self, msg, parent=None):
         self.msg = msg
 

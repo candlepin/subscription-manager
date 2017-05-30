@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2012 Red Hat, Inc.
 #
@@ -95,8 +97,8 @@ class AboutDialog(object):
     def _set_next_update(self, next_update_label, next_auto_attach_label):
         try:
             if self._rhsmcertd_on():
-                next_update = long(file(CERT_CHECK_UPDATE_FILE).read())
-                next_auto_attach = long(file(AUTO_ATTACH_UPDATE_FILE).read())
+                next_update = int(file(CERT_CHECK_UPDATE_FILE).read())
+                next_auto_attach = int(file(AUTO_ATTACH_UPDATE_FILE).read())
             else:
                 next_update = None
                 next_auto_attach = None

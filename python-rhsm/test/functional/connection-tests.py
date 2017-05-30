@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2011 - 2012 Red Hat, Inc.
 #
@@ -66,7 +68,7 @@ class ConnectionTests(unittest.TestCase):
         hypervisor_id = self.cp.getConsumer(self.consumer_uuid)['hypervisorId']
         # Hypervisor ID should be set and lower case
         expected = testing_hypervisor_id.lower()
-        self.assertEquals(expected, hypervisor_id['hypervisorId'])
+        self.assertEqual(expected, hypervisor_id['hypervisorId'])
 
     def test_create_consumer_sets_hypervisor_id(self):
         testing_hypervisor_id = random_string("someId")
@@ -76,13 +78,13 @@ class ConnectionTests(unittest.TestCase):
         self.cp.unregisterConsumer(consumerInfo['uuid'])
         # Hypervisor ID should be set and lower case
         expected = testing_hypervisor_id.lower()
-        self.assertEquals(expected, consumerInfo['hypervisorId']['hypervisorId'])
+        self.assertEqual(expected, consumerInfo['hypervisorId']['hypervisorId'])
 
     def test_add_single_guest_id_string(self):
         testing_guest_id = random_string("guestid")
         self.cp.addOrUpdateGuestId(self.consumer_uuid, testing_guest_id)
         guestIds = self.cp.getGuestIds(self.consumer_uuid)
-        self.assertEquals(1, len(guestIds))
+        self.assertEqual(1, len(guestIds))
 
     def test_add_single_guest_id(self):
         testing_guest_id = random_string("guestid")
@@ -92,21 +94,21 @@ class ConnectionTests(unittest.TestCase):
         guestId = self.cp.getGuestId(self.consumer_uuid, testing_guest_id)
 
         # This check seems silly...
-        self.assertEquals(testing_guest_id, guestId['guestId'])
-        self.assertEquals('some value', guestId['attributes']['some attr'])
+        self.assertEqual(testing_guest_id, guestId['guestId'])
+        self.assertEqual('some value', guestId['attributes']['some attr'])
 
     def test_remove_single_guest_id(self):
         testing_guest_id = random_string("guestid")
         self.cp.addOrUpdateGuestId(self.consumer_uuid, testing_guest_id)
         guestIds = self.cp.getGuestIds(self.consumer_uuid)
-        self.assertEquals(1, len(guestIds))
+        self.assertEqual(1, len(guestIds))
 
         # Delete the guestId
         self.cp.removeGuestId(self.consumer_uuid, testing_guest_id)
 
         # Check that no guestIds exist anymore
         guestIds = self.cp.getGuestIds(self.consumer_uuid)
-        self.assertEquals(0, len(guestIds))
+        self.assertEqual(0, len(guestIds))
 
     def test_update_single_guest_id(self):
         testing_guest_id = random_string("guestid")
@@ -114,7 +116,7 @@ class ConnectionTests(unittest.TestCase):
         self.cp.addOrUpdateGuestId(self.consumer_uuid, guest_id_object)
         guestId = self.cp.getGuestId(self.consumer_uuid, testing_guest_id)
         # check the guestId was created and has the expected attribute
-        self.assertEquals('some value', guestId['attributes']['some attr'])
+        self.assertEqual('some value', guestId['attributes']['some attr'])
 
         guest_id_object['attributes']['some attr'] = 'crazy new value'
         self.cp.addOrUpdateGuestId(self.consumer_uuid, guest_id_object)
@@ -122,10 +124,10 @@ class ConnectionTests(unittest.TestCase):
 
         # Verify there's still only one guestId
         guestIds = self.cp.getGuestIds(self.consumer_uuid)
-        self.assertEquals(1, len(guestIds))
+        self.assertEqual(1, len(guestIds))
 
         # Check that the attribute has changed
-        self.assertEquals('crazy new value', guestId['attributes']['some attr'])
+        self.assertEqual('crazy new value', guestId['attributes']['some attr'])
 
     def test_get_owner_hypervisors(self):
         testing_hypervisor_id = random_string("testHypervisor")
@@ -134,8 +136,8 @@ class ConnectionTests(unittest.TestCase):
 
         hypervisors = self.cp.getOwnerHypervisors("admin", [testing_hypervisor_id])
 
-        self.assertEquals(1, len(hypervisors))
-        self.assertEquals(self.consumer_uuid, hypervisors[0]['uuid'])
+        self.assertEqual(1, len(hypervisors))
+        self.assertEqual(self.consumer_uuid, hypervisors[0]['uuid'])
 
     def tearDown(self):
         self.cp.unregisterConsumer(self.consumer_uuid)
@@ -219,7 +221,7 @@ class BindRequestTests(unittest.TestCase):
         # so we use the default, "". See  bz #907536
         for (name, args, kwargs) in mock_conn.mock_calls:
             if name == '().request':
-                self.assertEquals(None, kwargs['body'])
+                self.assertEqual(None, kwargs['body'])
 
     @patch.object(Restlib, 'validateResponse')
     @patch('rhsm.connection.drift_check', return_value=False)
@@ -230,7 +232,7 @@ class BindRequestTests(unittest.TestCase):
         self.cp.bindByEntitlementPool(self.consumer_uuid, '123121111', '1')
         for (name, args, kwargs) in mock_conn.mock_calls:
             if name == '().request':
-                self.assertEquals(None, kwargs['body'])
+                self.assertEqual(None, kwargs['body'])
 
 
 @attr('functional')
@@ -243,28 +245,28 @@ class ContentConnectionTests(unittest.TestCase):
     def testEnvProxyUrl(self):
         with patch.dict('os.environ', {'https_proxy': 'https://user:pass@example.com:1111'}):
             cc = ContentConnection(host="127.0.0.1")
-            self.assertEquals("user", cc.proxy_user)
-            self.assertEquals("pass", cc.proxy_password)
-            self.assertEquals("example.com", cc.proxy_hostname)
-            self.assertEquals(1111, cc.proxy_port)
+            self.assertEqual("user", cc.proxy_user)
+            self.assertEqual("pass", cc.proxy_password)
+            self.assertEqual("example.com", cc.proxy_hostname)
+            self.assertEqual(1111, cc.proxy_port)
         assert 'https_proxy' not in os.environ
 
     def testEnvProxyUrlNoPort(self):
         with patch.dict('os.environ', {'https_proxy': 'https://user:pass@example.com'}):
             cc = ContentConnection(host="127.0.0.1")
-            self.assertEquals("user", cc.proxy_user)
-            self.assertEquals("pass", cc.proxy_password)
-            self.assertEquals("example.com", cc.proxy_hostname)
-            self.assertEquals(3128, cc.proxy_port)
+            self.assertEqual("user", cc.proxy_user)
+            self.assertEqual("pass", cc.proxy_password)
+            self.assertEqual("example.com", cc.proxy_hostname)
+            self.assertEqual(3128, cc.proxy_port)
         assert 'https_proxy' not in os.environ
 
     def testEnvProxyUrlNouserOrPass(self):
         with patch.dict('os.environ', {'https_proxy': 'https://example.com'}):
             cc = ContentConnection(host="127.0.0.1")
-            self.assertEquals(None, cc.proxy_user)
-            self.assertEquals(None, cc.proxy_password)
-            self.assertEquals("example.com", cc.proxy_hostname)
-            self.assertEquals(3128, cc.proxy_port)
+            self.assertEqual(None, cc.proxy_user)
+            self.assertEqual(None, cc.proxy_password)
+            self.assertEqual("example.com", cc.proxy_hostname)
+            self.assertEqual(3128, cc.proxy_port)
         assert 'https_proxy' not in os.environ
 
     def testEnvNoProxy(self):
@@ -360,7 +362,7 @@ class RestlibTests(unittest.TestCase):
             self.fail("An exception should have been thrown.")
         except Exception as ex:
             self.assertTrue(isinstance(ex, RestlibException))
-            self.assertEquals(expected_error, ex.code)
+            self.assertEqual(expected_error, ex.code)
             self.assertEqual(expected_error, str(ex))
 
     def _check_for_remote_server_exception(self, expected_error_code,
@@ -370,7 +372,7 @@ class RestlibTests(unittest.TestCase):
             self.fail("An %s exception should have been thrown." % expected_exception)
         except Exception as ex:
             self.assertTrue(isinstance(ex, expected_exception))
-            self.assertEquals(expected_error_code, ex.code)
+            self.assertEqual(expected_error_code, ex.code)
 
 
 @attr('functional')

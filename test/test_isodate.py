@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2010-2013 Red Hat, Inc.
 #
@@ -45,15 +47,15 @@ class TestParseDate(unittest.TestCase):
         if now_dt_tt[8] == 1 and dt_no_tz_tt == -1:
             # we are applying DST to now time, but not no_tz time, so
             # they will be off by an hour. This is kind of weird
-            self.assertEquals(now_dt_tt[:2], dt_no_tz_tt[:2])
-            self.assertEquals(now_dt_tt[4:7], dt_no_tz_tt[4:7])
+            self.assertEqual(now_dt_tt[:2], dt_no_tz_tt[:2])
+            self.assertEqual(now_dt_tt[4:7], dt_no_tz_tt[4:7])
 
             # add an hour for comparisons
             dt_no_tz_dst = dt_no_tz
             dt_no_tz_dst = dt_no_tz + datetime.timedelta(hours=1)
-            self.assertEquals(now_dt_tt[3], dt_no_tz_dst.timetuple()[3])
+            self.assertEqual(now_dt_tt[3], dt_no_tz_dst.timetuple()[3])
         else:
-            self.assertEquals(now_dt_tt[:7], dt_no_tz_tt[:7])
+            self.assertEqual(now_dt_tt[:7], dt_no_tz_tt[:7])
 
     def test_local_tz_now(self):
         self._test_local_tz()
@@ -71,23 +73,23 @@ class TestParseDate(unittest.TestCase):
         server_date = "2012-04-10T00:00:00.000+0000"
         dt = isodate.parse_date(server_date)
         # no dst
-        self.assertEquals(datetime.timedelta(seconds=0), dt.tzinfo.dst(dt))
+        self.assertEqual(datetime.timedelta(seconds=0), dt.tzinfo.dst(dt))
         # it's a utc date, no offset
-        self.assertEquals(datetime.timedelta(seconds=0), dt.tzinfo.utcoffset(dt))
+        self.assertEqual(datetime.timedelta(seconds=0), dt.tzinfo.utcoffset(dt))
 
     def test_server_date_est_timezone(self):
         est_date = "2012-04-10T00:00:00.000-04:00"
         dt = isodate.parse_date(est_date)
-        self.assertEquals(abs(datetime.timedelta(hours=-4)), abs(dt.tzinfo.utcoffset(dt)))
+        self.assertEqual(abs(datetime.timedelta(hours=-4)), abs(dt.tzinfo.utcoffset(dt)))
 
     # just past the 32bit unix epoch
     def test_2038_bug(self):
         parsed = isodate.parse_date("2038-11-24T00:00:00.000+0000")
         # this should be okay with either time parser, even on
         # 32bit platforms. maybe
-        self.assertEquals(2038, parsed.year)
-        self.assertEquals(11, parsed.month)
-        self.assertEquals(24, parsed.day)
+        self.assertEqual(2038, parsed.year)
+        self.assertEqual(11, parsed.month)
+        self.assertEqual(24, parsed.day)
 
     def test_9999_bug(self):
         parsed = isodate.parse_date("9999-09-06T00:00:00.000+0000")
@@ -109,7 +111,7 @@ class TestParseDate(unittest.TestCase):
             self._pyxml_overflow(parsed)
 
     def _dateutil_overflow(self, parsed):
-        self.assertEquals(9999, parsed.year)
+        self.assertEqual(9999, parsed.year)
 
     # Simulated a 32-bit date overflow, date should have been
     # replaced by one that does not overflow:

@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2010 - 2012 Red Hat, Inc.
 #
@@ -12,12 +14,12 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
-from cStringIO import StringIO
 import errno
 import gettext
 import os
 import sys
+
+from six.moves import cStringIO
 from zipfile import ZipFile, BadZipfile
 
 from rhsm import certificate
@@ -61,18 +63,18 @@ class ZipExtractAll(ZipFile):
         try:
             ZipFile.__init__(self, *args, **kwargs)
         except BadZipfile:
-            print _("Manifest zip is invalid.")
+            print(_("Manifest zip is invalid."))
             sys.exit(1)
 
     def _get_inner_zip(self):
         if self.inner_zip is None:
-            output = StringIO(self.read(RCTManifestCommand.INNER_FILE))
+            output = cStringIO(self.read(RCTManifestCommand.INNER_FILE))
             self.inner_zip = ZipExtractAll(output, 'r')
         return self.inner_zip
 
     def _read_file(self, file_path, is_inner=False):
         try:
-            output = StringIO(self.read(file_path))
+            output = cStringIO(self.read(file_path))
             result = output.getvalue()
             output.close()
         except KeyError:
@@ -186,7 +188,7 @@ class CatManifestCommand(RCTManifestCommand):
             else:
                 print("%s%s" % (pad, item[0]))
         if whitespace:
-            print ""
+            print("")
 
     def _print_general(self, zip_archive):
         # Print out general data
@@ -262,7 +264,7 @@ class CatManifestCommand(RCTManifestCommand):
 
             try:
                 cert = certificate.create_from_pem(zip_archive._read_file(cert_file))
-            except certificate.CertificateException, ce:
+            except certificate.CertificateException as ce:
                 raise certificate.CertificateException(
                         _("Unable to read certificate file '%s': %s") % (cert_file,
                         ce))
@@ -285,7 +287,7 @@ class CatManifestCommand(RCTManifestCommand):
                 to_print = [[item.url] for item in cert.content]
                 self._print_section(_("Content Sets:"), sorted(to_print), 2, True)
             else:  # bz#1369577: print a blank line to separate subscriptions when --no-content in use
-                print ""
+                print("")
 
     def _do_command(self):
         """
@@ -318,17 +320,17 @@ class DumpManifestCommand(RCTManifestCommand):
     def _extract(self, destination, overwrite):
         try:
             self._extract_manifest(destination, overwrite)
-        except EnvironmentError, e:
+        except EnvironmentError as e:
             # IOError/OSError base class
             if e.errno == errno.EEXIST:
                 # useful error for file already exists
-                print _('File "%s" exists. Use -f to force overwriting the file.') % e.filename
+                print(_('File "%s" exists. Use -f to force overwriting the file.') % e.filename)
             else:
                 # generic error for everything else
-                print _("Manifest could not be written:")
-                print e.strerror
+                print(_("Manifest could not be written:"))
+                print(e.strerror)
                 if e.filename:
-                    print e.filename
+                    print(e.filename)
             return False
         return True
 
@@ -338,7 +340,7 @@ class DumpManifestCommand(RCTManifestCommand):
         """
         if self.options.destination:
             if self._extract(self.options.destination, self.options.overwrite_files):
-                print _("The manifest has been dumped to the %s directory") % self.options.destination
+                print(_("The manifest has been dumped to the %s directory") % self.options.destination)
         else:
             if self._extract(os.getcwd(), self.options.overwrite_files):
-                print _("The manifest has been dumped to the current directory")
+                print(_("The manifest has been dumped to the current directory"))

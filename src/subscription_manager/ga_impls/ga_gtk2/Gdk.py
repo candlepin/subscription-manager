@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 from gtk.gdk import color_parse
 from gtk.gdk import Cursor, Event
 from gtk.gdk import BUTTON_PRESS, WATCH, WINDOW_TYPE_HINT_DIALOG

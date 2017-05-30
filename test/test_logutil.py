@@ -1,10 +1,12 @@
+from __future__ import print_function, division, absolute_import
+
 import logging
 
 import mock
 
-import fixture
+from . import fixture
 
-import stubs
+from . import stubs
 
 from subscription_manager import logutil
 

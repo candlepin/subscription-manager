@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2012 Red Hat, Inc.
 #
@@ -12,12 +14,12 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
 import base64
 import logging
 import os
 import posixpath
 import re
+import six
 import zlib
 
 log = logging.getLogger(__name__)
@@ -209,7 +211,7 @@ class _CertFactory(object):
                 'brand_type': ext.get('5'),
                 'brand_name': ext.get('6'),
             }
-            for key, value in product_data.items():
+            for key, value in list(product_data.items()):
                 if value is not None:
                     product_data[key] = value.decode('utf-8')
             product_data['provided_tags'] = parse_tags(product_data['provided_tags'])
@@ -236,7 +238,7 @@ class _CertFactory(object):
             'stacking_id': order_extensions.get('17'),
             'virt_only': order_extensions.get('18'),
         }
-        for key, value in order_data.items():
+        for key, value in list(order_data.items()):
             if value is not None:
                 order_data[key] = value.decode('utf-8')
         order = Order(**order_data)
@@ -259,7 +261,7 @@ class _CertFactory(object):
                 'metadata_expire': content_ext.get('9'),
                 'required_tags': content_ext.get('10'),
             }
-            for key, value in content_data.items():
+            for key, value in list(content_data.items()):
                 if value is not None:
                     content_data[key] = value.decode('utf-8')
             content_data['required_tags'] = parse_tags(content_data['required_tags'])
@@ -432,7 +434,7 @@ class _Extensions2(Extensions):
         Override parent method for an X509 object from the new C wrapper.
         """
         extensions = x509.get_all_extensions()
-        for (key, value) in extensions.items():
+        for (key, value) in list(extensions.items()):
             oid = OID(key)
             self[oid] = value
 
@@ -604,7 +606,7 @@ class EntitlementCertificate(ProductCertificate):
         """
         path = path.strip('/')
         valid = False
-        for ext_oid, oid_url in self.extensions.items():
+        for ext_oid, oid_url in list(self.extensions.items()):
             oid_url = oid_url.decode('utf-8')
             # if this is a download URL
             if ext_oid.match(OID('2.')) and ext_oid.match(OID('.1.6')):
@@ -685,7 +687,7 @@ class Product(object):
         self.architectures = architectures
         # If this is sent in as a string split it, as the field
         # can technically be multi-valued:
-        if isinstance(self.architectures, str) or isinstance(self.architectures, type(u"")):
+        if isinstance(self.architectures, six.string_types):
             self.architectures = parse_tags(self.architectures)
         if self.architectures is None:
             self.architectures = []

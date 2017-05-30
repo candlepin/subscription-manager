@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2010 Red Hat, Inc.
 #
@@ -238,7 +240,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         try:
             return ICONSET[icon_id]
         except KeyError:
-            print("Iconset does not contain icon for string '%s'" % icon_id)
+            print("Icon set does not contain icon for string '%s'" % icon_id)
             raise
 
     def on_selection(self, selection):
@@ -306,7 +308,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         if self.backend.cs.system_status == 'valid':
             self._set_status_icons(VALID_STATUS)
-            if len(self.backend.cs.installed_products.keys()) == 0:
+            if len(list(self.backend.cs.installed_products.keys())) == 0:
                 # No product certs installed, thus no compliant until date:
                 self.subscription_status_label.set_text(
                         # I18N: Please add newlines if translation is longer:

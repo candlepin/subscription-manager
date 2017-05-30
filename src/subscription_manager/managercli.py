@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function, division, absolute_import
+
 #
 # Subscription manager command line utility.
 #
@@ -15,7 +17,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
 import datetime
 import fileinput
 import fnmatch
@@ -27,6 +28,7 @@ import os
 import re
 import readline
 import socket
+import six.moves
 import sys
 from time import localtime, strftime, strptime
 
@@ -206,7 +208,7 @@ def autosubscribe(cp, consumer_uuid, service_level=None):
         ents = cp.bind(consumer_uuid)  # new style
         plugin_manager.run("post_auto_attach", consumer_uuid=consumer_uuid, entitlement_data=ents)
 
-    except Exception, e:
+    except Exception as e:
         log.warning("Error during auto-attach.")
         log.exception(e)
         raise
@@ -219,11 +221,11 @@ def show_autosubscribe_output(uep):
     if not installed_status:
         # Returning an error code here breaks registering when no products are installed, and the
         # AttachCommand already performs this check before calling.
-        print _("No products installed.")
+        print(_("No products installed."))
         return 0
 
     log.info("Attempted to auto-attach/heal the system.")
-    print _("Installed Product Current Status:")
+    print(_("Installed Product Current Status:"))
     subscribed = 1
     all_subscribed = True
     for prod_status in installed_status:
@@ -232,9 +234,9 @@ def show_autosubscribe_output(uep):
         status = STATUS_MAP[prod_status[4]]
         if prod_status[4] == NOT_SUBSCRIBED:
             all_subscribed = False
-        print columnize(PRODUCT_STATUS, echo_columnize_callback, prod_status[0], status) + "\n"
+        print(columnize(PRODUCT_STATUS, echo_columnize_callback, prod_status[0], status) + "\n")
     if not all_subscribed:
-        print _("Unable to find available subscriptions for all your installed products.")
+        print(_("Unable to find available subscriptions for all your installed products."))
     return subscribed
 
 
@@ -262,7 +264,7 @@ def get_installed_product_status(product_directory, entitlement_directory, uep, 
     if filter_string is not None:
         cert_filter = ProductCertificateFilter(filter_string)
 
-    print
+    print()
 
     for installed_product in sorter.installed_products:
         product_cert = sorter.installed_products[installed_product]
@@ -440,7 +442,7 @@ class CliCommand(AbstractCLICommand):
         # check for unparsed arguments
         if self.args:
             for arg in self.args:
-                print _("cannot parse argument: %s") % arg
+                print(_("cannot parse argument: %s") % arg)
             system_exit(os.EX_USAGE)
 
         if hasattr(self.options, "insecure") and self.options.insecure:
@@ -452,8 +454,8 @@ class CliCommand(AbstractCLICommand):
                 (self.server_hostname,
                  self.server_port,
                  self.server_prefix) = parse_server_info(self.options.server_url, conf)
-            except ServerUrlParseError, e:
-                print _("Error parsing serverurl:")
+            except ServerUrlParseError as e:
+                print(_("Error parsing serverurl:"))
                 handle_exception("Error parsing serverurl:", e)
 
             conf["server"]["hostname"] = self.server_hostname
@@ -468,8 +470,8 @@ class CliCommand(AbstractCLICommand):
                 (baseurl_server_hostname,
                  baseurl_server_port,
                  baseurl_server_prefix) = parse_baseurl_info(self.options.base_url)
-            except ServerUrlParseError, e:
-                print _("Error parsing baseurl:")
+            except ServerUrlParseError as e:
+                print(_("Error parsing baseurl:"))
                 handle_exception("Error parsing baseurl:", e)
 
             conf["rhsm"]["baseurl"] = format_baseurl(
@@ -574,7 +576,7 @@ class CliCommand(AbstractCLICommand):
         except (CertificateException, ssl.SSLError) as e:
             log.error(e)
             system_exit(os.EX_SOFTWARE, _('System certificates corrupted. Please reregister.'))
-        except connection.GoneException, ge:
+        except connection.GoneException as ge:
             if ge.deleted_id == self.identity.uuid:
                 log.critical("Consumer profile \"%s\" has been deleted from the server.", self.identity.uuid)
                 system_exit(os.EX_UNAVAILABLE, _("Consumer profile \"%s\" has been deleted from the server. You can use command clean or unregister to remove local profile.") % self.identity.uuid)
@@ -606,7 +608,7 @@ class UserPassCommand(CliCommand):
         not be prompted for.
         """
         while not username:
-            username = raw_input(_("Username: "))
+            username = six.moves.input(_("Username: "))
             readline.clear_history()
         while not password:
             password = getpass.getpass(_("Password: "))
@@ -645,7 +647,7 @@ class OrgCommand(UserPassCommand):
     @staticmethod
     def _get_org(org):
         while not org:
-            org = raw_input(_("Organization: "))
+            org = six.moves.input(_("Organization: "))
             readline.clear_history()
         return org
 
@@ -664,7 +666,7 @@ class CleanCommand(CliCommand):
 
     def _do_command(self):
         managerlib.clean_all_data(False)
-        print (_("All local data removed"))
+        print(_("All local data removed"))
 
         self._request_validity_check()
 
@@ -701,11 +703,11 @@ class RefreshCommand(CliCommand):
             self.entcertlib.update()
 
             log.info("Refreshed local data")
-            print (_("All local data refreshed"))
-        except connection.RestlibException, re:
+            print(_("All local data refreshed"))
+        except connection.RestlibException as re:
             log.error(re)
             system_exit(os.EX_SOFTWARE, re.msg)
-        except Exception, e:
+        except Exception as e:
             handle_exception(_("Unable to perform refresh due to the following exception: %s") % e, e)
 
         self._request_validity_check()
@@ -737,10 +739,10 @@ class IdentityCommand(UserPassCommand):
         # check for Classic before doing anything else
         if ClassicCheck().is_registered_with_classic():
             if identity.is_valid():
-                print _("server type: %s") % get_branding().REGISTERED_TO_BOTH_SUMMARY
+                print(_("server type: %s") % get_branding().REGISTERED_TO_BOTH_SUMMARY)
             else:
                 # no need to continue if user is only registered to Classic
-                print _("server type: %s") % get_branding().REGISTERED_TO_OTHER_SUMMARY
+                print(_("server type: %s") % get_branding().REGISTERED_TO_OTHER_SUMMARY)
                 return
 
         try:
@@ -752,10 +754,10 @@ class IdentityCommand(UserPassCommand):
                 ownername = owner['displayName']
                 ownerid = owner['key']
 
-                print _('system identity: %s') % consumerid
-                print _('name: %s') % consumer_name
-                print _('org name: %s') % ownername
-                print _('org ID: %s') % ownerid
+                print(_('system identity: %s') % consumerid)
+                print(_('name: %s') % consumer_name)
+                print(_('org name: %s') % ownername)
+                print(_('org ID: %s') % ownerid)
 
                 if self.cp.supports_resource('environments'):
                     consumer = self.cp.getConsumer(consumerid)
@@ -764,7 +766,7 @@ class IdentityCommand(UserPassCommand):
                         environment_name = environment['name']
                     else:
                         environment_name = _("None")
-                    print _('environment name: %s') % environment_name
+                    print(_('environment name: %s') % environment_name)
             else:
                 if self.options.force:
                     # get an UEP with basic auth
@@ -777,14 +779,14 @@ class IdentityCommand(UserPassCommand):
                 # high level, "I just registered" thing
                 self.identity.reload()
 
-                print _("Identity certificate has been regenerated.")
+                print(_("Identity certificate has been regenerated."))
 
                 log.info("Successfully generated a new identity from server.")
-        except connection.RestlibException, re:
+        except connection.RestlibException as re:
             log.exception(re)
             log.error(u"Error: Unable to generate a new identity for the system: %s" % re)
             system_exit(os.EX_SOFTWARE, re.msg)
-        except Exception, e:
+        except Exception as e:
             handle_exception(_("Error: Unable to generate a new identity for the system"), e)
 
 
@@ -811,16 +813,16 @@ class OwnersCommand(UserPassCommand):
                 print("+-------------------------------------------+")
                 print("")
                 for owner in owners:
-                    print columnize(ORG_LIST, echo_columnize_callback,
-                            owner['displayName'], owner['key']) + "\n"
+                    print(columnize(ORG_LIST, echo_columnize_callback,
+                            owner['displayName'], owner['key']) + "\n")
             else:
                 print(_("%s cannot register with any organizations.") % self.username)
 
-        except connection.RestlibException, re:
+        except connection.RestlibException as re:
             log.exception(re)
             log.error(u"Error: Unable to retrieve org list from server: %s" % re)
             system_exit(os.EX_SOFTWARE, re.msg)
-        except Exception, e:
+        except Exception as e:
             handle_exception(_("Error: Unable to retrieve org list from server"), e)
 
 
@@ -850,19 +852,19 @@ class EnvironmentsCommand(OrgCommand):
                     print("          %s" % (_("Environments")))
                     print("+-------------------------------------------+")
                     for env in environments:
-                        print columnize(ENVIRONMENT_LIST, echo_columnize_callback, env['name'],
-                                env['description'] or "") + "\n"
+                        print(columnize(ENVIRONMENT_LIST, echo_columnize_callback, env['name'],
+                                env['description'] or "") + "\n")
                 else:
-                    print _("This org does not have any environments.")
+                    print(_("This org does not have any environments."))
             else:
                 system_exit(os.EX_UNAVAILABLE, _("Error: Server does not support environments."))
 
             log.info("Successfully retrieved environment list from server.")
-        except connection.RestlibException, re:
+        except connection.RestlibException as re:
             log.exception(re)
             log.error(u"Error: Unable to retrieve environment list from server: %s" % re)
             system_exit(os.EX_SOFTWARE, re.msg)
-        except Exception, e:
+        except Exception as e:
             handle_exception(_("Error: Unable to retrieve environment list from server"), e)
 
 
@@ -893,9 +895,9 @@ class AutohealCommand(CliCommand):
 
     def _show(self, autoheal):
         if autoheal:
-            print _("Auto-attach preference: enabled")
+            print(_("Auto-attach preference: enabled"))
         else:
-            print _("Auto-attach preference: disabled")
+            print(_("Auto-attach preference: disabled"))
 
     def _do_command(self):
         self._validate_options()
@@ -982,11 +984,11 @@ class ServiceLevelCommand(OrgCommand):
             if self.options.list:
                 self.list_service_levels()
 
-        except connection.RestlibException, re:
+        except connection.RestlibException as re:
             log.exception(re)
             log.error(u"Error: Unable to retrieve service levels: %s" % re)
             system_exit(os.EX_SOFTWARE, re.msg)
-        except Exception, e:
+        except Exception as e:
             handle_exception(_("Error: Unable to retrieve service levels."), e)
 
     def set_service_level(self, service_level):
@@ -998,7 +1000,7 @@ class ServiceLevelCommand(OrgCommand):
 
     def unset_service_level(self):
         self._set_service_level("")
-        print _("Service level preference has been unset")
+        print(_("Service level preference has been unset"))
 
     def show_service_level(self):
         consumer = self.cp.getConsumer(self.identity.uuid)
@@ -1008,7 +1010,7 @@ class ServiceLevelCommand(OrgCommand):
         if service_level:
             print(_("Current service level: %s") % service_level)
         else:
-            print _("Service level preference not set")
+            print(_("Service level preference not set"))
 
     def list_service_levels(self):
         org_key = self.options.org
@@ -1025,12 +1027,12 @@ class ServiceLevelCommand(OrgCommand):
                 print("               %s" % (_("Available Service Levels")))
                 print("+-------------------------------------------+")
                 for sla in slas:
-                    print sla
+                    print(sla)
             else:
-                print _("This org does not have any subscriptions with service levels.")
-        except connection.RemoteServerException, e:
+                print(_("This org does not have any subscriptions with service levels."))
+        except connection.RemoteServerException as e:
             system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
-        except connection.RestlibException, e:
+        except connection.RestlibException as e:
             if e.code == 404 and e.msg.find('/servicelevels') > 0:
                 system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
             else:
@@ -1129,8 +1131,8 @@ class RegisterCommand(UserPassCommand):
             # managerlib.unregister handles the special case that the consumer has already been removed.
             old_uuid = self.identity.uuid
 
-            print _("Unregistering from: %s:%s%s") % \
-                (conf["server"]["hostname"], conf["server"]["port"], conf["server"]["prefix"])
+            print(_("Unregistering from: %s:%s%s") %
+                (conf["server"]["hostname"], conf["server"]["port"], conf["server"]["prefix"]))
             try:
                 managerlib.unregister(self.cp, old_uuid)
                 self.entitlement_dir.__init__()
@@ -1148,15 +1150,15 @@ class RegisterCommand(UserPassCommand):
 
         self.cp_provider.clean()
         if previously_registered:
-            print (_("All local data removed"))
+            print(_("All local data removed"))
 
         facts = inj.require(inj.FACTS)
 
         # Proceed with new registration:
         try:
             if not self.options.activation_keys:
-                print _("Registering to: %s:%s%s") % \
-                    (conf["server"]["hostname"], conf["server"]["port"], conf["server"]["prefix"])
+                print(_("Registering to: %s:%s%s") %
+                    (conf["server"]["hostname"], conf["server"]["port"], conf["server"]["prefix"]))
                 self.cp_provider.set_user_pass(self.username, self.password)
                 admin_cp = self.cp_provider.get_basic_auth_cp()
             else:
@@ -1200,10 +1202,10 @@ class RegisterCommand(UserPassCommand):
                 self.installed_mgr.write_cache()
             self.plugin_manager.run("post_register_consumer", consumer=consumer,
                                     facts=facts_dict)
-        except connection.RestlibException, re:
+        except connection.RestlibException as re:
             log.exception(re)
             system_exit(os.EX_SOFTWARE, re.msg)
-        except Exception, e:
+        except Exception as e:
             handle_exception(_("Error during registration: %s") % e, e)
 
         consumer_info = self._persist_identity_cert(consumer)
@@ -1211,7 +1213,7 @@ class RegisterCommand(UserPassCommand):
         # We have new credentials, restart virt-who
         restart_virt_who()
 
-        print (_("The system has been registered with ID: %s ")) % (consumer_info["uuid"])
+        print((_("The system has been registered with ID: %s ")) % (consumer_info["uuid"]))
 
         # get a new UEP as the consumer
         self.cp = self.cp_provider.get_consumer_auth_cp()
@@ -1253,7 +1255,7 @@ class RegisterCommand(UserPassCommand):
                                  "by the server. Did not complete your request."))
             try:
                 autosubscribe(self.cp, consumer['uuid'], service_level=self.options.service_level)
-            except connection.RestlibException, re:
+            except connection.RestlibException as re:
                 print_error(re.msg)
 
         if (self.options.consumerid or self.options.activation_keys or self.autoattach or self.cp.has_capability(CONTENT_ACCESS_CERT_CAPABILITY)):
@@ -1283,7 +1285,7 @@ class RegisterCommand(UserPassCommand):
         """
         By breaking this code out, we can write cleaner tests
         """
-        environment = raw_input(_("Environment: ")).strip()
+        environment = six.moves.input(_("Environment: ")).strip()
         readline.clear_history()
         return environment or self._prompt_for_environment()
 
@@ -1347,7 +1349,7 @@ class RegisterCommand(UserPassCommand):
 
         owner_key = None
         while not owner_key:
-            owner_key = raw_input(_("Organization: "))
+            owner_key = six.moves.input(_("Organization: "))
             readline.clear_history()
         return owner_key
 
@@ -1366,11 +1368,11 @@ class UnRegisterCommand(CliCommand):
             # TODO: Should this use the standard NOT_REGISTERED message?
             system_exit(ERR_NOT_REGISTERED_CODE, _("This system is currently not registered."))
 
-        print _("Unregistering from: %s:%s%s") % \
-            (conf["server"]["hostname"], conf["server"]["port"], conf["server"]["prefix"])
+        print(_("Unregistering from: %s:%s%s") %
+            (conf["server"]["hostname"], conf["server"]["port"], conf["server"]["prefix"]))
         try:
             managerlib.unregister(self.cp, self.identity.uuid)
-        except Exception, e:
+        except Exception as e:
             handle_exception("Unregister failed", e)
 
         # managerlib.unregister reloads the now None provided identity
@@ -1384,7 +1386,7 @@ class UnRegisterCommand(CliCommand):
             # is not useful
             cleanup_certmgr = UnregisterActionClient()
             cleanup_certmgr.update()
-        except Exception, e:
+        except Exception as e:
             pass
 
         self._request_validity_check()
@@ -1434,7 +1436,7 @@ class RedeemCommand(CliCommand):
             if response and response.get('displayMessage'):
                 system_exit(0, response.get('displayMessage'))
 
-        except connection.RestlibException, e:
+        except connection.RestlibException as e:
             #candlepin throws an exception during activateMachine, even for
             #200's. We need to look at the code in the RestlibException and proceed
             #accordingly
@@ -1442,7 +1444,7 @@ class RedeemCommand(CliCommand):
                 system_exit(0, e)
             else:
                 handle_exception(u"Unable to redeem: %s" % e, e)
-        except Exception, e:
+        except Exception as e:
             handle_exception(u"Unable to redeem: %s" % e, e)
 
         self._request_validity_check()
@@ -1474,9 +1476,9 @@ class ReleaseCommand(CliCommand):
     def show_current_release(self):
         release = self._get_consumer_release()
         if release:
-            print _("Release: %s") % release
+            print(_("Release: %s") % release)
         else:
-            print _("Release not set")
+            print(_("Release not set"))
 
     def _do_command(self):
 
@@ -1497,7 +1499,7 @@ class ReleaseCommand(CliCommand):
             self.cp.updateConsumer(self.identity.uuid,
                         release="")
             repo_action_invoker.update()
-            print _("Release preference has been unset")
+            print(_("Release preference has been unset"))
         elif self.options.release is not None:
             # check first if the server supports releases
             self._get_consumer_release()
@@ -1510,7 +1512,7 @@ class ReleaseCommand(CliCommand):
                                  "Consult 'release --list' for a full listing.")
                                  % self.options.release)
             repo_action_invoker.update()
-            print _("Release set to: %s") % self.options.release
+            print(_("Release set to: %s") % self.options.release)
         elif self.options.list:
             self._get_consumer_release()
             releases = self.release_backend.get_releases()
@@ -1521,7 +1523,7 @@ class ReleaseCommand(CliCommand):
             print("          %s" % (_("Available Releases")))
             print("+-------------------------------------------+")
             for release in releases:
-                print release
+                print(release)
 
         else:
             self.show_current_release()
@@ -1637,16 +1639,16 @@ class AttachCommand(CliCommand):
                         # Usually just one, but may as well be safe:
                         for ent in ents:
                             pool_json = ent['pool']
-                            print _("Successfully attached a subscription for: %s") % pool_json['productName']
+                            print(_("Successfully attached a subscription for: %s") % pool_json['productName'])
                             log.info("Successfully attached a subscription for: %s (%s)" %
                                     (pool_json['productName'], pool))
                             subscribed = True
-                    except connection.RestlibException, re:
+                    except connection.RestlibException as re:
                         log.exception(re)
                         if re.code == 403:
-                            print re.msg  # already subscribed.
+                            print(re.msg)  # already subscribed.
                         elif re.code == 400 or re.code == 404:
-                            print re.msg  # no such pool.
+                            print(re.msg)  # no such pool.
                         else:
                             system_exit(os.EX_SOFTWARE, re.msg)  # some other error.. don't try again
                 if not subscribed:
@@ -1660,11 +1662,11 @@ class AttachCommand(CliCommand):
 
                 if self.sorter.is_valid():
                     if not products_installed:
-                        print _("No Installed products on system. "
-                                "No need to attach subscriptions.")
+                        print(_("No Installed products on system. "
+                                "No need to attach subscriptions."))
                     else:
-                        print _("All installed products are covered by valid entitlements. "
-                                "No need to update subscriptions at this time.")
+                        print(_("All installed products are covered by valid entitlements. "
+                                "No need to update subscriptions at this time."))
                     cert_update = False
                 else:
                     # If service level specified, make an additional request to
@@ -1682,9 +1684,9 @@ class AttachCommand(CliCommand):
                 report = self.entcertlib.update()
 
             if report and report.exceptions():
-                print _('Entitlement Certificate(s) update failed due to the following reasons:')
+                print(_('Entitlement Certificate(s) update failed due to the following reasons:'))
                 for e in report.exceptions():
-                    print '\t-', str(e)
+                    print('\t-', str(e))
             elif self.auto_attach:
                 if not products_installed:
                     return_code = 1
@@ -1693,7 +1695,7 @@ class AttachCommand(CliCommand):
                     # run this after entcertlib update, so we have the new entitlements
                     return_code = show_autosubscribe_output(self.cp)
 
-        except Exception, e:
+        except Exception as e:
             handle_exception("Unable to attach: %s" % e, e)
 
         # it is okay to call this no matter what happens above,
@@ -1745,7 +1747,7 @@ class RemoveCommand(CliCommand):
             bad = False
             for serial in self.options.serials:
                 if not serial.isdigit():
-                    print _("Error: '%s' is not a valid serial number") % serial
+                    print(_("Error: '%s' is not a valid serial number") % serial)
                     bad = True
             if bad:
                 system_exit(os.EX_USAGE)
@@ -1763,7 +1765,7 @@ class RemoveCommand(CliCommand):
             try:
                 unbind_method(consumer_uuid, id_)
                 success.append(id_)
-            except connection.RestlibException, re:
+            except connection.RestlibException as re:
                 if re.code == 410:
                     system_exit(os.EX_SOFTWARE, re.msg)
                 failure.append(id_)
@@ -1773,22 +1775,22 @@ class RemoveCommand(CliCommand):
     def _print_unbind_ids_result(self, success, failure, id_name):
         if success:
             if id_name == "pools":
-                print _("The entitlement server successfully removed these pools:")
+                print(_("The entitlement server successfully removed these pools:"))
             elif id_name == "serial numbers":
-                print _("The entitlement server successfully removed these serial numbers:")
+                print(_("The entitlement server successfully removed these serial numbers:"))
             else:
-                print _("The entitlement server successfully removed these IDs:")
+                print(_("The entitlement server successfully removed these IDs:"))
             for id_ in success:
-                print "   %s" % id_
+                print("   %s" % id_)
         if failure:
             if id_name == "pools":
-                print _("The entitlement server failed to remove these pools:")
+                print(_("The entitlement server failed to remove these pools:"))
             elif id_name == "serial numbers":
-                print _("The entitlement server failed to remove these serial numbers:")
+                print(_("The entitlement server failed to remove these serial numbers:"))
             else:
-                print _("The entitlement server failed to remove these IDs:")
+                print(_("The entitlement server failed to remove these IDs:"))
             for id_ in failure:
-                print "   %s" % id_
+                print("   %s" % id_)
 
     def _do_command(self):
         """
@@ -1804,12 +1806,12 @@ class RemoveCommand(CliCommand):
                     # total will be None on older Candlepins that don't
                     # support returning the number of subscriptions unsubscribed from
                     if total is None:
-                        print _("All subscriptions have been removed at the server.")
+                        print(_("All subscriptions have been removed at the server."))
                     else:
                         count = total['deletedRecords']
-                        print gettext.ngettext("%s subscription removed at the server.",
+                        print(gettext.ngettext("%s subscription removed at the server.",
                                                "%s subscriptions removed at the server.",
-                                                count) % count
+                                                count) % count)
                 else:
                     removed_serials = []
                     if self.options.pool_ids:
@@ -1833,10 +1835,10 @@ class RemoveCommand(CliCommand):
                             return_code = 1
                     self._print_unbind_ids_result(removed_serials, failure, "serial numbers")
                 self.entcertlib.update()
-            except connection.RestlibException, re:
+            except connection.RestlibException as re:
                 log.error(re)
                 system_exit(os.EX_SOFTWARE, re.msg)
-            except Exception, e:
+            except Exception as e:
                 handle_exception(_("Unable to perform remove due to the following exception: %s") % e, e)
         else:
             # We never got registered, just remove the cert
@@ -1846,7 +1848,7 @@ class RemoveCommand(CliCommand):
                     for ent in self.entitlement_dir.list():
                         ent.delete()
                         total = total + 1
-                    print (_("%s subscriptions removed from this system.") % total)
+                    print(_("%s subscriptions removed from this system.") % total)
                 else:
                     if self.options.serials or self.options.pool_ids:
                         serials = self.options.serials or []
@@ -1856,11 +1858,11 @@ class RemoveCommand(CliCommand):
                             ent_pool_id = str(getattr(ent.pool, 'id', None) or "")
                             if str(ent.serial) in serials or ent_pool_id in pool_ids:
                                 ent.delete()
-                                print _("Subscription with serial number %s removed from this system") % str(ent.serial)
+                                print(_("Subscription with serial number %s removed from this system") % str(ent.serial))
                                 count = count + 1
                         if count == 0:
                             return_code = 1
-            except Exception, e:
+            except Exception as e:
                 handle_exception(_("Unable to perform remove due to the following exception: %s") % e, e)
 
         # it is okay to call this no matter what happens above,
@@ -1909,24 +1911,23 @@ class FactsCommand(CliCommand):
 
         if self.options.list:
             facts_dict = facts.get_facts()
-            facts_keys = facts_dict.keys()
-            facts_keys.sort()
+            facts_keys = sorted(facts_dict.keys())
 
             for key in facts_keys:
                 value = facts_dict[key]
                 if str(value).strip() == "":
                     value = _("Unknown")
-                print "%s: %s" % (key, value)
+                print("%s: %s" % (key, value))
 
         if self.options.update:
             identity = inj.require(inj.IDENTITY)
             try:
                 facts.update_check(self.cp, identity.uuid, force=True)
-            except connection.RestlibException, re:
+            except connection.RestlibException as re:
                 log.exception(re)
                 system_exit(os.EX_SOFTWARE, re.msg)
             log.info("Succesfully updated the system facts.")
-            print _("Successfully updated the system facts.")
+            print(_("Successfully updated the system facts."))
 
 
 class ImportCertCommand(CliCommand):
@@ -1965,7 +1966,7 @@ class ImportCertCommand(CliCommand):
                         print(_("%s is not a valid certificate file. Please use a valid certificate.") %
                                     os.path.basename(src_cert_file))
 
-                except Exception, e:
+                except Exception as e:
                     # Should not get here unless something really bad happened.
                     log.exception(e)
                     print(_("An error occurred while importing the certificate. "
@@ -2019,13 +2020,13 @@ class PluginsCommand(CliCommand):
         return False
 
     def _list_plugins(self):
-        for plugin_class in self.plugin_manager.get_plugins().values():
+        for plugin_class in list(self.plugin_manager.get_plugins().values()):
             enabled = _("disabled")
             if plugin_class.conf.is_plugin_enabled():
                 enabled = _("enabled")
-            print "%s: %s" % (plugin_class.get_plugin_key(), enabled)
+            print("%s: %s" % (plugin_class.get_plugin_key(), enabled))
             if self.options.verbose:
-                print plugin_class.conf
+                print(plugin_class.conf)
 
     def _do_command(self):
         self._validate_options()
@@ -2035,14 +2036,15 @@ class PluginsCommand(CliCommand):
 
         if self.options.listslots:
             for slot in self.plugin_manager.get_slots():
-                print slot
+                print(slot)
 
         if self.options.listhooks:
             # get_slots is nicely sorted for presentation
             for slot in self.plugin_manager.get_slots():
-                print slot
+                print(slot)
                 for hook in sorted(self.plugin_manager._slot_to_funcs[slot]):
-                    print "\t%s.%s" % (hook.im_class.get_plugin_key(), hook.__name__)
+                    hook_key = six.get_method_self(hook).__class__.get_plugin_key()
+                    print("\t%s.%s" % (hook_key, hook.__name__))
 
 
 class ReposCommand(CliCommand):
@@ -2106,7 +2108,7 @@ class ReposCommand(CliCommand):
         self._validate_options()
         rc = 0
         if not manage_repos_enabled():
-            print _("Repositories disabled by configuration.")
+            print(_("Repositories disabled by configuration."))
             return rc
 
         # Pull down any new entitlements and refresh the entitlements directory
@@ -2133,23 +2135,23 @@ class ReposCommand(CliCommand):
 
                     return show_enabled or show_disabled
 
-                repos = filter(filter_repos, repos)
+                repos = list(filter(filter_repos, repos))
 
                 if len(repos):
                     print("+----------------------------------------------------------+")
-                    print _("    Available Repositories in %s") % rl.get_repo_file()
+                    print(_("    Available Repositories in %s") % rl.get_repo_file())
                     print("+----------------------------------------------------------+")
 
                     for repo in repos:
-                        print columnize(REPOS_LIST, echo_columnize_callback,
+                        print(columnize(REPOS_LIST, echo_columnize_callback,
                             repo.id,
                             repo["name"],
                             repo["baseurl"],
-                            repo["enabled"]) + "\n"
+                            repo["enabled"]) + "\n")
                 else:
-                    print _("There were no available repositories matching the specified criteria.")
+                    print(_("There were no available repositories matching the specified criteria."))
             else:
-                print _("This system has no repositories available through subscriptions.")
+                print(_("This system has no repositories available through subscriptions."))
 
         return rc
 
@@ -2171,8 +2173,8 @@ class ReposCommand(CliCommand):
             matches = set([repo for repo in repos if fnmatch.fnmatch(repo.id, repoid)])
             if not matches:
                 rc = 1
-                print _("Error: '%s' does not match a valid repository ID. "
-                        "Use \"subscription-manager repos --list\" to see valid repositories.") % repoid
+                print(_("Error: '%s' does not match a valid repository ID. "
+                        "Use \"subscription-manager repos --list\" to see valid repositories.") % repoid)
                 log.warning("'%s' does not match a valid repository ID." % repoid)
 
             # Overwrite repo if it's already in the dict, we want the last
@@ -2211,9 +2213,9 @@ class ReposCommand(CliCommand):
         for repo in repos_to_modify:
             # Watchout for string comparison here:
             if repos_to_modify[repo] == "1":
-                print _("Repository '%s' is enabled for this system.") % repo.id
+                print(_("Repository '%s' is enabled for this system.") % repo.id)
             else:
-                print _("Repository '%s' is disabled for this system.") % repo.id
+                print(_("Repository '%s' is disabled for this system.") % repo.id)
         return rc
 
 
@@ -2227,9 +2229,9 @@ class ConfigCommand(CliCommand):
                                help=_("list the configuration for this system"))
         self.parser.add_option("--remove", dest="remove", action="append",
                                help=_("remove configuration entry by section.name"))
-        for s in conf.keys():
+        for s in list(conf.keys()):
             section = conf[s]
-            for name, _value in section.items():
+            for name, _value in list(section.items()):
                 self.parser.add_option("--" + s + "." + name, dest=(s + "." + name),
                     help=_("Section: %s, Name: %s") % (s, name))
 
@@ -2239,9 +2241,9 @@ class ConfigCommand(CliCommand):
             if self.options.remove:
                 too_many = True
             else:
-                for s in conf.keys():
+                for s in list(conf.keys()):
                     section = conf[s]
-                    for name, _value in section.items():
+                    for name, _value in list(section.items()):
                         if getattr(self.options, s + "." + name):
                             too_many = True
                             break
@@ -2250,9 +2252,9 @@ class ConfigCommand(CliCommand):
 
         if not (self.options.list or self.options.remove):
             has = False
-            for s in conf.keys():
+            for s in list(conf.keys()):
                 section = conf[s]
-                for name, _value in section.items():
+                for name, _value in list(section.items()):
                     test = "%s" % getattr(self.options, s + "." + name)
                     has = has or (test != 'None')
             if not has:
@@ -2267,8 +2269,8 @@ class ConfigCommand(CliCommand):
                 section = r.split('.')[0]
                 name = r.split('.')[1]
                 found = False
-                if section in conf.keys():
-                    for key, _value in conf[section].items():
+                if section in list(conf.keys()):
+                    for key, _value in list(conf[section].items()):
                         if name == key:
                             found = True
                 if not found:
@@ -2278,20 +2280,19 @@ class ConfigCommand(CliCommand):
         self._validate_options()
 
         if self.options.list:
-            for s in conf.keys():
+            for s in list(conf.keys()):
                 section = conf[s]
-                print '[%s]' % s
-                source_list = section.items()
-                source_list.sort()
+                print('[%s]' % s)
+                source_list = sorted(section.items())
                 for (name, value) in source_list:
                     indicator1 = ''
                     indicator2 = ''
                     if value == section.get_default(name):
                         indicator1 = '['
                         indicator2 = ']'
-                    print '   %s = %s%s%s' % (name, indicator1, value, indicator2)
-                print
-            print _("[] - Default value in use")
+                    print('   %s = %s%s%s' % (name, indicator1, value, indicator2))
+                print()
+            print(_("[] - Default value in use"))
             print ("\n")
         elif self.options.remove:
             for r in self.options.remove:
@@ -2300,18 +2301,18 @@ class ConfigCommand(CliCommand):
                 try:
                     if not conf[section].has_default(name):
                         conf[section][name] = ''
-                        print _("You have removed the value for section %s and name %s.") % (section, name)
+                        print(_("You have removed the value for section %s and name %s.") % (section, name))
                     else:
                         conf[section][name] = conf[section].get_default(name)
-                        print _("You have removed the value for section %s and name %s.") % (section, name)
-                        print _("The default value for %s will now be used.") % (name)
+                        print(_("You have removed the value for section %s and name %s.") % (section, name))
+                        print(_("The default value for %s will now be used.") % (name))
                 except Exception:
-                    print _("Section %s and name %s cannot be removed.") % (section, name)
+                    print(_("Section %s and name %s cannot be removed.") % (section, name))
             conf.persist()
         else:
-            for s in conf.keys():
+            for s in list(conf.keys()):
                 section = conf[s]
-                for name, value in section.items():
+                for name, value in list(section.items()):
                     value = "%s" % getattr(self.options, s + "." + name)
                     if not value == 'None':
                         section[name] = value
@@ -2375,15 +2376,15 @@ class ListCommand(CliCommand):
             iproducts = get_installed_product_status(self.product_dir, self.entitlement_dir, self.cp, self.options.filter_string)
 
             if len(iproducts):
-                print "+-------------------------------------------+"
-                print _("    Installed Product Status")
-                print "+-------------------------------------------+"
+                print("+-------------------------------------------+")
+                print(_("    Installed Product Status"))
+                print("+-------------------------------------------+")
 
                 for product in iproducts:
                     status = STATUS_MAP[product[4]]
-                    print columnize(INSTALLED_PRODUCT_STATUS, none_wrap_columnize_callback,
+                    print(columnize(INSTALLED_PRODUCT_STATUS, none_wrap_columnize_callback,
                                 product[0], product[1], product[2], product[3],
-                                status, product[5], product[6], product[7]) + "\n"
+                                status, product[5], product[6], product[7]) + "\n")
             else:
                 if self.options.filter_string:
                     print(_("No installed products were found matching the expression \"%s\".") % self.options.filter_string)
@@ -2419,7 +2420,7 @@ class ListCommand(CliCommand):
             if len(epools):
                 if self.options.pid_only:
                     for data in epools:
-                        print data['id']
+                        print(data['id'])
                 else:
                     print("+-------------------------------------------+")
                     print("    " + _("Available Subscriptions"))
@@ -2439,7 +2440,7 @@ class ListCommand(CliCommand):
                         kwargs = {"filter_string": self.options.filter_string,
                                   "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
                                   "is_atty": sys.stdout.isatty()}
-                        print columnize(AVAILABLE_SUBS_LIST, highlight_by_filter_string_columnize_callback,
+                        print(columnize(AVAILABLE_SUBS_LIST, highlight_by_filter_string_columnize_callback,
                                 data['productName'],
                                 data['providedProducts'],
                                 data['productId'],
@@ -2452,7 +2453,7 @@ class ListCommand(CliCommand):
                                 data['service_type'] or "",
                                 data['pool_type'],
                                 data['endDate'],
-                                machine_type, **kwargs) + "\n"
+                                machine_type, **kwargs) + "\n")
             elif not self.options.pid_only:
                 if self.options.filter_string and self.options.service_level:
                     print(
@@ -2484,7 +2485,7 @@ class ListCommand(CliCommand):
 
             return service_level.lower() == pool_level.lower()
 
-        return filter(filter_pool_data_by_service_level, pools)
+        return list(filter(filter_pool_data_by_service_level, pools))
 
     def print_consumed(self, service_level=None, filter_string=None, pid_only=False):
         # list all certificates that have not yet expired, even those
@@ -2496,14 +2497,14 @@ class ListCommand(CliCommand):
         if len(certs):
             # Check if we need to apply our cert filter
             if service_level is not None or filter_string is not None:
-                certs = filter(cert_filter.match, certs)
+                certs = list(filter(cert_filter.match, certs))
 
             # Process and display our (filtered) certs:
             if len(certs):
                 if pid_only:
                     for cert in certs:
                         if hasattr(cert.pool, "id"):
-                            print cert.pool.id
+                            print(cert.pool.id)
                 else:
                     print("+-------------------------------------------+")
                     print("   " + _("Consumed Subscriptions"))
@@ -2577,7 +2578,7 @@ class ListCommand(CliCommand):
                         kwargs = {"filter_string": filter_string,
                                   "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
                                   "is_atty": sys.stdout.isatty()}
-                        print columnize(CONSUMED_LIST, highlight_by_filter_string_columnize_callback,
+                        print(columnize(CONSUMED_LIST, highlight_by_filter_string_columnize_callback,
                             name,
                             product_names,
                             sku,
@@ -2594,7 +2595,7 @@ class ListCommand(CliCommand):
                             pool_type,
                             managerlib.format_date(cert.valid_range.begin()),
                             managerlib.format_date(cert.valid_range.end()),
-                            system_type, **kwargs) + "\n"
+                            system_type, **kwargs) + "\n")
             elif not pid_only:
                 if filter_string and service_level:
                     print(
@@ -2682,22 +2683,22 @@ class OverrideCommand(CliCommand):
         overrides = Overrides()
 
         if not manage_repos_enabled():
-            print _("Repositories disabled by configuration.")
+            print(_("Repositories disabled by configuration."))
 
         if self.options.list:
             results = overrides.get_overrides(self.identity.uuid)
             if results:
                 self._list(results, self.options.repos)
             else:
-                print _("This system does not have any content overrides applied to it.")
+                print(_("This system does not have any content overrides applied to it."))
             return
 
         if self.options.additions:
             repo_ids = [repo.id for repo in overrides.repo_lib.get_repos(apply_overrides=False)]
-            to_add = [Override(repo, name, value) for repo in self.options.repos for name, value in self.options.additions.items()]
+            to_add = [Override(repo, name, value) for repo in self.options.repos for name, value in list(self.options.additions.items())]
             try:
                 results = overrides.add_overrides(self.identity.uuid, to_add)
-            except connection.RestlibException, ex:
+            except connection.RestlibException as ex:
                 if ex.code == 400:
                     # black listed overrides specified.
                     # Print message and return a less severe code.
@@ -2708,7 +2709,7 @@ class OverrideCommand(CliCommand):
             # Print out warning messages if the specified repo does not exist in the repo file.
             for repo in self.options.repos:
                 if repo not in repo_ids:
-                    print _("Repository '%s' does not currently exist, but the override has been added.") % repo
+                    print(_("Repository '%s' does not currently exist, but the override has been added.") % repo)
 
         if self.options.removals:
             to_remove = [Override(repo, item) for repo in self.options.repos for item in self.options.removals]
@@ -2732,17 +2733,17 @@ class OverrideCommand(CliCommand):
         if specific_repos:
             specific_repos = set(specific_repos)
             for r in specific_repos.difference(to_show):
-                print _("Nothing is known about '%s'") % r
+                print(_("Nothing is known about '%s'") % r)
             # Take the intersection of the sets
             to_show &= specific_repos
 
         for repo in sorted(to_show):
-            print _("Repository: %s") % repo
-            repo_data = sorted(overrides[repo].items(), key=lambda x: x[0])
+            print(_("Repository: %s") % repo)
+            repo_data = sorted(list(overrides[repo].items()), key=lambda x: x[0])
             # Split the list of 2-tuples into a list of names and a list of keys
-            names, values = zip(*repo_data)
+            names, values = list(zip(*repo_data))
             names = ["%s:" % x for x in names]
-            print columnize(names, echo_columnize_callback, *values, indent=2) + "\n"
+            print(columnize(names, echo_columnize_callback, *values, indent=2) + "\n")
 
 
 class VersionCommand(CliCommand):
@@ -2754,11 +2755,11 @@ class VersionCommand(CliCommand):
 
     def _do_command(self):
         self.log_server_version()
-        print (_("server type: %s") % self.server_versions["server-type"])
-        print (_("subscription management server: %s") % self.server_versions["candlepin"])
-        print (_("subscription management rules: %s") % self.server_versions["rules-version"])
-        print ("subscription-manager: %s" % self.client_versions["subscription-manager"])
-        print ("python-rhsm: %s" % self.client_versions["python-rhsm"])
+        print(_("server type: %s") % self.server_versions["server-type"])
+        print(_("subscription management server: %s") % self.server_versions["candlepin"])
+        print(_("subscription management rules: %s") % self.server_versions["rules-version"])
+        print("subscription-manager: %s" % self.client_versions["subscription-manager"])
+        print("python-rhsm: %s" % self.client_versions["python-rhsm"])
 
 
 class StatusCommand(CliCommand):
@@ -2802,10 +2803,10 @@ class StatusCommand(CliCommand):
 
             columns = get_terminal_width()
             for name in reasons:
-                print format_name(name + ':', 0, columns)
+                print(format_name(name + ':', 0, columns))
                 for message in reasons[name]:
-                    print '- %s' % format_name(message, 2, columns)
-                print ''
+                    print('- %s' % format_name(message, 2, columns))
+                print('')
         else:
             print(_("Overall Status: %s\n") % _("Unknown"))
 

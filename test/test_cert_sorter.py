@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 # Copyright (c) 2011 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -16,8 +18,8 @@ import copy
 
 import subscription_manager.injection as inj
 
-from fixture import SubManFixture
-from stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
+from .fixture import SubManFixture
+from .stubs import StubEntitlementCertificate, StubProduct, StubProductCertificate, \
     StubEntitlementDirectory, StubProductDirectory, \
     StubUEP, StubCertSorter
 import subscription_manager.cert_sorter
@@ -97,7 +99,7 @@ class CertSorterTests(SubManFixture):
     def test_unregistered_status(self, mock_update):
         sorter = CertSorter()
         sorter.is_registered = Mock(return_value=False)
-        self.assertEquals(UNKNOWN, sorter.get_status(INST_PID_1))
+        self.assertEqual(UNKNOWN, sorter.get_status(INST_PID_1))
 
     # Server doesn't support compliance API, or server is unreachable and
     # we cannot use the cache for some reason.
@@ -107,7 +109,7 @@ class CertSorterTests(SubManFixture):
                 return_value=None)
         sorter = CertSorter()
         sorter.is_registered = Mock(return_value=True)
-        self.assertEquals(UNKNOWN, sorter.get_status(INST_PID_1))
+        self.assertEqual(UNKNOWN, sorter.get_status(INST_PID_1))
 
     # Consumer has been deleted, overall status should be unknown
     @patch('subscription_manager.cache.InstalledProductsManager.update_check')
@@ -117,7 +119,7 @@ class CertSorterTests(SubManFixture):
         sorter = CertSorter()
         sorter.is_registered = Mock(return_value=True)
         expected = subscription_manager.cert_sorter.STATUS_MAP['unknown']
-        self.assertEquals(expected, sorter.get_system_status())
+        self.assertEqual(expected, sorter.get_system_status())
 
     @patch('subscription_manager.cache.InstalledProductsManager.update_check')
     def test_unregistered_system_status(self, mock_update):
@@ -126,39 +128,39 @@ class CertSorterTests(SubManFixture):
         sorter = CertSorter()
         sorter.is_registered = Mock(return_value=False)
         expected = subscription_manager.cert_sorter.STATUS_MAP['unknown']
-        self.assertEquals(expected, sorter.get_system_status())
+        self.assertEqual(expected, sorter.get_system_status())
 
     def test_unentitled_products(self):
-        self.assertEquals(1, len(self.sorter.unentitled_products))
+        self.assertEqual(1, len(self.sorter.unentitled_products))
         self.assertTrue(INST_PID_3 in self.sorter.unentitled_products)
 
     def test_valid_products(self):
-        self.assertEquals(1, len(self.sorter.valid_products))
+        self.assertEqual(1, len(self.sorter.valid_products))
         self.assertTrue(INST_PID_1 in self.sorter.valid_products)
 
     def test_partially_valid_products(self):
-        self.assertEquals(2, len(self.sorter.partially_valid_products))
+        self.assertEqual(2, len(self.sorter.partially_valid_products))
         self.assertTrue(INST_PID_2 in
                 self.sorter.partially_valid_products)
         self.assertTrue(INST_PID_4 in
                 self.sorter.partially_valid_products)
 
     def test_installed_products(self):
-        self.assertEquals(4, len(self.sorter.installed_products))
+        self.assertEqual(4, len(self.sorter.installed_products))
         self.assertTrue(INST_PID_1 in self.sorter.installed_products)
         self.assertTrue(INST_PID_2 in self.sorter.installed_products)
         self.assertTrue(INST_PID_3 in self.sorter.installed_products)
         self.assertTrue(INST_PID_3 in self.sorter.installed_products)
 
     def test_partial_stack(self):
-        self.assertEquals(1, len(self.sorter.partial_stacks))
+        self.assertEqual(1, len(self.sorter.partial_stacks))
         self.assertTrue(PARTIAL_STACK_ID in self.sorter.partial_stacks)
 
     def test_reasons(self):
-        self.assertEquals(5, len(self.sorter.reasons.reasons))
+        self.assertEqual(5, len(self.sorter.reasons.reasons))
         expected_keys = ['NOTCOVERED', 'CORES', 'SOCKETS', 'RAM', 'ARCH']
         result_keys = [reason['key'] for reason in self.sorter.reasons.reasons]
-        self.assertEquals(sorted(expected_keys), sorted(result_keys))
+        self.assertEqual(sorted(expected_keys), sorted(result_keys))
 
     @patch('subscription_manager.cache.InstalledProductsManager.update_check')
     def test_installed_mismatch_unentitled(self, mock_update):
@@ -201,12 +203,12 @@ class CertSorterTests(SubManFixture):
 
     def test_compliant_until(self):
         compliant_until = self.sorter.compliant_until
-        self.assertEquals(2013, compliant_until.year)
-        self.assertEquals(4, compliant_until.month)
-        self.assertEquals(26, compliant_until.day)
-        self.assertEquals(13, compliant_until.hour)
-        self.assertEquals(43, compliant_until.minute)
-        self.assertEquals(12, compliant_until.second)
+        self.assertEqual(2013, compliant_until.year)
+        self.assertEqual(4, compliant_until.month)
+        self.assertEqual(26, compliant_until.day)
+        self.assertEqual(13, compliant_until.hour)
+        self.assertEqual(43, compliant_until.minute)
+        self.assertEqual(12, compliant_until.second)
 
     def test_scan_for_expired_or_future_products(self):
         prod_dir = StubProductDirectory(pids=["a", "b", "c", "d", "e"])
@@ -231,17 +233,18 @@ class CertSorterTests(SubManFixture):
 
         sorter._scan_entitlement_certs()
 
-        self.assertEquals(["d"], sorter.expired_products.keys())
-        self.assertEquals(["e"], sorter.future_products.keys())
+        self.assertEqual(["d"], list(sorter.expired_products.keys()))
+        self.assertEqual(["e"], list(sorter.future_products.keys()))
 
-        self.assertEquals(3, len(sorter.valid_entitlement_certs))
+        self.assertEqual(3, len(sorter.valid_entitlement_certs))
 
     def test_get_system_status(self):
-        self.assertEquals('Invalid', self.sorter.get_system_status())
+        self.assertEqual('Invalid', self.sorter.get_system_status())
         self.sorter.system_status = 'valid'
-        self.assertEquals('Current', self.sorter.get_system_status())
+        self.assertEqual('Current', self.sorter.get_system_status())
         self.sorter.system_status = 'partial'
-        self.assertEquals('Insufficient', self.sorter.get_system_status())
+        self.assertEqual('Insufficient', self.sorter.get_system_status())
+
 
 SAMPLE_COMPLIANCE_JSON = json.loads("""
 {

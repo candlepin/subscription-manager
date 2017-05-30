@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2010 - 2012 Red Hat, Inc.
 #
@@ -12,7 +14,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
 import gettext
 import os
 import sys
@@ -69,7 +70,7 @@ class AbstractCLICommand(object):
 
 
 # taken wholseale from rho...
-class CLI:
+class CLI(object):
 
     def __init__(self, command_classes=None):
         command_classes = command_classes or []
@@ -90,14 +91,13 @@ class CLI:
         self._usage()
 
     def _usage(self):
-        print _("Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]") % os.path.basename(sys.argv[0])
-        print "\r"
-        items = self.cli_commands.items()
-        items.sort()
+        print(_("Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]") % os.path.basename(sys.argv[0]))
+        print("\r")
+        items = sorted(self.cli_commands.items())
         items_primary = []
         items_other = []
         for (name, cmd) in items:
-            if (cmd.primary):
+            if cmd.primary:
                 items_primary.append(("  " + name, cmd.shortdesc))
             else:
                 items_other.append(("  " + name, cmd.shortdesc))
@@ -108,8 +108,8 @@ class CLI:
         self._do_columnize(all_items)
 
     def _do_columnize(self, items_list):
-        modules, descriptions = zip(*items_list)
-        print columnize(modules, echo_columnize_callback, *descriptions) + '\n'
+        modules, descriptions = list(zip(*items_list))
+        print(columnize(modules, echo_columnize_callback, *descriptions) + '\n')
 
     def _find_best_match(self, args):
         """
@@ -158,8 +158,8 @@ class CLI:
 
         try:
             return cmd.main()
-        except InvalidCLIOptionError, error:
-            print error
+        except InvalidCLIOptionError as error:
+            print(error)
 
 
 def system_exit(code, msgs=None):

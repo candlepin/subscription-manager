@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from fixture import SubManFixture
+from __future__ import print_function, division, absolute_import
+
+from .fixture import SubManFixture
 from subscription_manager.overrides import Overrides, Override
 
 
@@ -12,7 +14,7 @@ class OverrideTests(SubManFixture):
     def test_add_function(self):
         repos = ['x', 'y']
         override_props = {'a': 'b', 'c': 'd'}
-        overrides = [Override(repo, name, value) for repo in repos for name, value in override_props.items()]
+        overrides = [Override(repo, name, value) for repo in repos for name, value in list(override_props.items())]
         expected = [
             {'contentLabel': 'x', 'name': 'a', 'value': 'b'},
             {'contentLabel': 'x', 'name': 'c', 'value': 'd'},
@@ -47,4 +49,4 @@ class OverrideTests(SubManFixture):
     def test_remove_all_with_no_repos_given(self):
         repos = []
         result = self.overrides._remove_all(repos)
-        self.assertEquals(None, result)
+        self.assertEqual(None, result)

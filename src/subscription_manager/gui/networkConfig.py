@@ -1,3 +1,4 @@
+from __future__ import print_function, division, absolute_import
 
 #
 # Copyright (c) 2010 Red Hat, Inc.
@@ -249,11 +250,11 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
             log.warn("Reporting proxy connection as good despite %s" %
              e)
             return True
-        except connection.NetworkException, e:
+        except connection.NetworkException as e:
             log.warn("%s when attempting to connect through %s:%s" %
              (e.code, proxy_host, proxy_port))
             return False
-        except Exception, e:
+        except Exception as e:
             log.exception("'%s' when attempting to connect through %s:%s" %
                       (e, proxy_host, proxy_port))
             return False
@@ -283,10 +284,10 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
             proxy_host = proxy_info[2]
             proxy_port = proxy_info[3]
 
-        except rhsm.utils.ServerUrlParseErrorPort, e:
+        except rhsm.utils.ServerUrlParseErrorPort as e:
             proxy_host = proxy_url.split(':')[0]
             proxy_port = rhsm.config.DEFAULT_PROXY_PORT
-        except rhsm.utils.ServerUrlParseError, e:
+        except rhsm.utils.ServerUrlParseError as e:
             log.error(e)
         return (proxy_host, proxy_port)
 

@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2013 Red Hat, Inc.
 #
@@ -12,7 +14,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
 from subscription_manager.base_plugin import SubManPlugin
 requires_api_version = "1.0"
 
@@ -32,7 +33,7 @@ class ProductInstallPlugin(SubManPlugin):
         # we need to know what product/product cert
         products = conduit.product_list
         for product in products:
-            print "product ", product
+            print("product ", product)
 
     def pre_product_id_install_hook(self, conduit):
         """pre_product_id_install hook

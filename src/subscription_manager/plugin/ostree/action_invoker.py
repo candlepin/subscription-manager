@@ -1,3 +1,5 @@
+from __future__ import print_function, division, absolute_import
+
 #
 # Copyright (c) 2014 Red Hat, Inc.
 #
@@ -16,7 +18,7 @@ import gettext
 import logging
 
 # rhsm.conf->iniparse->configParser can raise ConfigParser exceptions
-import ConfigParser
+from six.moves import configparser
 
 from subscription_manager import certlib
 from subscription_manager.model import find_content
@@ -114,7 +116,7 @@ class OstreeContentUpdateActionCommand(object):
     def load_config(self, ostree_config):
         try:
             ostree_config.load()
-        except ConfigParser.Error:
+        except configparser.Error:
             log.info("No ostree content config file found at: %s. Not loading ostree config.",
                      ostree_config.repo_file_path)
 
