@@ -6,6 +6,7 @@
 # asasaki <asasaki@redhat.com>, 2016. #zanata
 # John Sefler <jsefler@redhat.com>, 2017. #zanata
 # Kevin Howell <kevin@kahowell.net>, 2017. #zanata
+# Ludek Janda <ljanda@redhat.com>, 2017. #zanata
 # kmoriguc <kmoriguc@redhat.com>, 2017. #zanata
 # tnagamot <tnagamot@redhat.com>, 2017. #zanata
 msgid ""
@@ -16,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-05-24 12:16-0400\n"
+"PO-Revision-Date: 2017-05-26 06:08-0400\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -180,7 +181,7 @@ msgstr "デバッグメッセージの表示"
 
 #: src/daemons/rhsmcertd.c:104
 msgid "do not add an offset to the initial checks."
-msgstr ""
+msgstr "オフセットを初回チェックに追加しないでください。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/daemons/rhsmcertd.c:350
@@ -453,7 +454,7 @@ msgstr "UUID"
 
 #: src/rct/manifest_commands.py:213
 msgid "Content Access Mode"
-msgstr ""
+msgstr "コンテンツアクセスモード"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author nnakakit
 #: src/rct/manifest_commands.py:214 src/rct/printing.py:102
@@ -1006,7 +1007,7 @@ msgstr "エラー: アクティベーションキーでは環境の指定は許�
 
 #: src/rhsmlib/dbus/objects/register.py:221
 msgid "Error: Missing username or password."
-msgstr ""
+msgstr "エラー: ユーザー名またはパスワードがありません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsmlib/facts/dmiinfo.py:90 src/rhsmlib/facts/dmiinfo.py:129
@@ -1387,12 +1388,12 @@ msgstr "<b>サブスクリプション管理サービスバージョン:</b> %s"
 #: src/subscription_manager/gui/about.py:109
 #, python-format
 msgid "<b>Next System Certificate Check:</b> %s"
-msgstr ""
+msgstr "<b>次回のシステム証明書チェック:</b> %s"
 
 #: src/subscription_manager/gui/about.py:116
 #, python-format
 msgid "<b>Next System Auto Attach:</b> %s"
-msgstr ""
+msgstr "<b>次回のシステム自動アタッチ:</b> %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/allsubs.py:54
@@ -2252,32 +2253,32 @@ msgstr "パスワードテキスト"
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:258
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:323
 msgid "_Bypass the HTTP proxy for specific hosts/domains."
-msgstr ""
+msgstr "特定ホスト/ドメインの HTTP プロキシーを迂回する (_B)"
 
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:267
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:332
 msgid "Bypass Proxy Checkbox"
-msgstr ""
+msgstr "プロキシーのチェックボックスを迂回する"
 
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:305
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:401
 msgid "<small><b>Example:</b> host.example.com,.example.com</small>"
-msgstr ""
+msgstr "<small><b>例:</b> host.example.com,.example.com</small>"
 
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:324
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:352
 msgid "_Hostname/Domain Bypass List:"
-msgstr ""
+msgstr "ホスト名/ドメイン迂回リスト(_H):"
 
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:338
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:367
 msgid "comma-separated list of hostnames/domains"
-msgstr ""
+msgstr "ホスト名/ドメインのコンマ区切り一覧"
 
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:342
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:371
 msgid "Hostname/Domain Bypass Text"
-msgstr ""
+msgstr "ホスト名/ドメイン迂回テキスト"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:382
@@ -3892,7 +3893,7 @@ msgstr "ベーシック認証による HTTP プロキシーのパスワード"
 
 #: src/subscription_manager/managercli.py:375
 msgid "host suffixes that should bypass HTTP proxy"
-msgstr ""
+msgstr "HTTP プロキシーを迂回するホストのサフィックス"
 
 #: src/subscription_manager/managercli.py:428
 msgid ""
@@ -4326,7 +4327,7 @@ msgstr "エラー:  アクティベーションキーと供に --org を適用�
 #: src/subscription_manager/managercli.py:1369
 #, python-format
 msgid "Unregistering from: %s:%s%s"
-msgstr ""
+msgstr "登録の解除中: %s:%s%s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1139
