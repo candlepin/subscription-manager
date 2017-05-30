@@ -60,6 +60,7 @@ from subscription_manager.gui.mysubstab import MySubscriptionsTab
 from subscription_manager.gui.preferences import PreferencesDialog
 from subscription_manager.gui.utils import handle_gui_exception, linkify
 from subscription_manager.gui.reposgui import RepositoriesDialog
+from subscription_manager.gui.networkConfig import reset_resolver
 from subscription_manager.overrides import Overrides
 from subscription_manager.cli import system_exit
 
@@ -472,6 +473,7 @@ class MainWindow(widgets.SubmanBaseWidget):
 
     def _perform_unregister(self):
         try:
+            reset_resolver()
             managerlib.unregister(self.backend.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
         except Exception as e:
             log.error("Error unregistering system with entitlement platform.")

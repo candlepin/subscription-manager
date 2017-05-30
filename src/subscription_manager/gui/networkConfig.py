@@ -42,6 +42,33 @@ DIR = os.path.dirname(__file__)
 log = logging.getLogger(__name__)
 
 
+# From old smolt code... Force glibc to call res_init()
+# to rest the resolv configuration, including reloading
+# resolv.conf. This attempt to handle the case where we
+# start up with no networking, fail name resolution calls,
+# and cache them for the life of the process, even after
+# the network starts up, and for dhcp, updates resolv.conf
+def reset_resolver():
+    """Attempt to reset the system hostname resolver.
+    returns 0 on success, or -1 if an error occurs."""
+    try:
+        import ctypes
+        try:
+            resolv = ctypes.CDLL("libc.so.6")
+            r = resolv.__res_init()
+        except (OSError, AttributeError):
+            log.warn("could not find __res_init in libc.so.6")
+            r = -1
+        return r
+    except ImportError:
+        # If ctypes isn't supported (older versions of python for example)
+        # Then just don't do anything
+        pass
+    except Exception as e:
+        log.warning("reset_resolver failed: %s", e)
+        pass
+
+
 class NetworkConfigDialog(widgets.SubmanBaseWidget):
     """This is the dialog that allows setting http proxy settings.
 
