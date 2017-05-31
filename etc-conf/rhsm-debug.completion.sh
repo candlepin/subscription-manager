@@ -3,7 +3,7 @@
 # vim:ts=2:sw=2:et:
 
 # common options
-_rhsm_debug_common_opts="-h --help --proxy --proxyuser --proxypassword"
+_rhsm_debug_common_opts="-h --help --proxy --proxyuser --proxypassword --noproxy"
 
 # main complete function
 _rhsm_debug()
