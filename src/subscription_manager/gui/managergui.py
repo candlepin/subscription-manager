@@ -27,7 +27,6 @@ import locale
 import logging
 import webbrowser
 import os
-import socket
 import threading
 import time
 
@@ -182,15 +181,21 @@ class MainWindow(widgets.SubmanBaseWidget):
                  auto_launch_registration=False):
         super(MainWindow, self).__init__()
 
-        if not self.test_proxy_connection():
+        # When proxy server is set in configuration and it is not
+        # possible to connect to proxy server, then open dialog
+        # for setting proxy server.
+        if not utils.test_proxy_reachability():
             print_error(_("Proxy connection failed, please check your settings."))
             error_dialog = messageWindow.ContinueDialog(_("Proxy connection failed, please check your settings."),
                                                         self._get_window())
             error_dialog.connect("response", self._on_proxy_error_dialog_response)
             self.network_config_dialog = networkConfig.NetworkConfigDialog()
+            # Sub-man gui will be terminated after saving settings and it is
+            # necessary to start it once again.
             self.network_config_dialog.saveButton.connect("clicked", self._exit)
             self.network_config_dialog.cancelButton.connect("clicked", self._exit)
             return
+
         self.backend = backend or Backend()
         self.identity = require(IDENTITY)
 
@@ -582,21 +587,3 @@ class MainWindow(widgets.SubmanBaseWidget):
         # see bz 1323271 - update compliance on update of facts
         self.backend.cs.load()
         self.backend.cs.notify()
-
-    def test_proxy_connection(self):
-        result = None
-        if not cfg.get("server", "proxy_hostname"):
-            return True
-        try:
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.settimeout(10)
-            result = s.connect_ex((cfg.get("server", "proxy_hostname"), int(cfg.get("server", "proxy_port") or config.DEFAULT_PROXY_PORT)))
-        except Exception as e:
-            log.info("Attempted bad proxy: %s" % e)
-        finally:
-            s.close()
-        if result:
-            log.error("proxy connetion error: %s" % result)
-            return False
-        else:
-            return True

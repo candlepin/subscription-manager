@@ -20,6 +20,9 @@ import gettext
 import logging
 import re
 import threading
+import socket
+
+import rhsm.config as config
 
 from subscription_manager.ga import GObject as ga_GObject
 from subscription_manager.ga import Gtk as ga_Gtk
@@ -43,6 +46,8 @@ FIRSTBOOT = False
 
 _ = lambda x: gettext.ldgettext("rhsm", x)
 
+cfg = config.initConfig()
+
 
 def running_as_firstboot():
     global FIRSTBOOT
@@ -51,6 +56,33 @@ def running_as_firstboot():
 
 def get_running_as_firstboot():
     return FIRSTBOOT
+
+
+def test_proxy_reachability():
+    """
+    Function used for testing reachability of proxy server. Note: this
+    function does not test functionality of proxy server.
+    :return: True, when proxy is reachable. Otherwise it returns False.
+    """
+
+    result = None
+    if not cfg.get("server", "proxy_hostname"):
+        return True
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(10)
+        result = s.connect_ex((cfg.get("server", "proxy_hostname"),
+                               int(cfg.get("server", "proxy_port") or config.DEFAULT_PROXY_PORT)))
+    except Exception as e:
+        log.info("Attempted bad proxy: %s" % e)
+    finally:
+        s.close()
+
+    if not result:
+        log.error("Proxy connection error: %s" % result)
+        return False
+    else:
+        return True
 
 
 def handle_gui_exception(e, msg, parent, format_msg=True, log_msg=None):
