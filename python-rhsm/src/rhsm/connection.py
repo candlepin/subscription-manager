@@ -529,9 +529,14 @@ class BaseRestLib(object):
                 if not id_cert.is_valid():
                     raise ExpiredIdentityCertException()
             raise
-        except socket.error as e:
-            if str(e)[-3:] == str(httplib.PROXY_AUTHENTICATION_REQUIRED):
-                raise ProxyException(e)
+        except socket.gaierror as err:
+            if self.proxy_hostname and self.proxy_port:
+                raise ProxyException("Unable to connect to: %s:%s %s "
+                                     % (self.proxy_hostname, self.proxy_port, err))
+            raise
+        except socket.error as err:
+            if str(err)[-3:] == str(httplib.PROXY_AUTHENTICATION_REQUIRED):
+                raise ProxyException(err)
             raise
         response = conn.getresponse()
         result = {

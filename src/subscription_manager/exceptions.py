@@ -29,6 +29,7 @@ _ = gettext.gettext
 
 SOCKET_MESSAGE = _('Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.')
 NETWORK_MESSAGE = _('Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.')
+PROXY_MESSAGE = _("Proxy error, unable to connect to proxy server.")
 UNAUTHORIZED_MESSAGE = _("Unauthorized: Invalid credentials for request.")
 FORBIDDEN_MESSAGE = _("Forbidden: Invalid credentials for request.")
 REMOTE_SERVER_MESSAGE = _("Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.")
@@ -50,6 +51,7 @@ class ExceptionMapper(object):
         self.message_map = {
             socket_error: (SOCKET_MESSAGE, self.format_default),
             Disconnected: (SOCKET_MESSAGE, self.format_default),
+            connection.ProxyException: (PROXY_MESSAGE, self.format_default),
             connection.NetworkException: (NETWORK_MESSAGE, self.format_default),
             connection.UnauthorizedException: (UNAUTHORIZED_MESSAGE, self.format_default),
             connection.ForbiddenException: (FORBIDDEN_MESSAGE, self.format_default),
