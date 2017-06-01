@@ -693,6 +693,9 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 scrollkeeper-update -q -o %{_datadir}/omf/%{name} || :
 %endif
 
+%post -n subscription-manager-plugin-container
+%{__python} %{rhsm_plugins_dir}/container_content.py || :
+
 %preun
 if [ $1 -eq 0 ] ; then
     %if %use_systemd
