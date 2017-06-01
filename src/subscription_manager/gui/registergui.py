@@ -52,6 +52,7 @@ from subscription_manager.gui.autobind import DryRunResult, \
         ServiceLevelNotSupportedException, AllProductsCoveredException, \
         NoProductsException
 from subscription_manager.jsonwrapper import PoolWrapper
+from subscription_manager.gui.networkConfig import reset_resolver
 
 _ = lambda x: gettext.ldgettext("rhsm", x)
 
@@ -97,33 +98,6 @@ class RemoteUnregisterException(Exception):
     This exception is to be used when we are unable to unregister from the server.
     """
     pass
-
-
-# from old smolt code.. Force glibc to call res_init()
-# to rest the resolv configuration, including reloading
-# resolv.conf. This attempt to handle the case where we
-# start up with no networking, fail name resolution calls,
-# and cache them for the life of the process, even after
-# the network starts up, and for dhcp, updates resolv.conf
-def reset_resolver():
-    """Attempt to reset the system hostname resolver.
-    returns 0 on success, or -1 if an error occurs."""
-    try:
-        import ctypes
-        try:
-            resolv = ctypes.CDLL("libc.so.6")
-            r = resolv.__res_init()
-        except (OSError, AttributeError):
-            log.warn("could not find __res_init in libc.so.6")
-            r = -1
-        return r
-    except ImportError:
-        # If ctypes isn't supported (older versions of python for example)
-        # Then just don't do anything
-        pass
-    except Exception as e:
-        log.warning("reset_resolver failed: %s", e)
-        pass
 
 
 def server_info_from_config(config):
