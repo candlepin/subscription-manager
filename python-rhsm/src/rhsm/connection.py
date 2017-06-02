@@ -241,11 +241,14 @@ def _fix_no_proxy():
 
     no_proxy = os.environ.get('no_proxy') or os.environ.get('NO_PROXY')
     if no_proxy is not None:
-        # Remove all leading white spaces and asterisks from items of no_proxy
-        no_proxy = ','.join([item.lstrip(' *') for item in no_proxy.split(',')])
-        # Save no_proxy back to 'no_proxy', because proxy_bypass_environment()
-        # tries to read 'no_proxy' first
-        os.environ['no_proxy'] = no_proxy
+        if no_proxy != '*':
+            # Remove all leading white spaces and asterisks from items of no_proxy
+            # except item containing only "*" (urllib supports alone asterisk).
+            no_proxy = ','.join([item.lstrip(' *') for item in no_proxy.split(',')])
+            # Save no_proxy back to 'no_proxy' and 'NO_PROXY'
+            os.environ['no_proxy'] = no_proxy
+            os.environ['NO_PROXY'] = no_proxy
+        log.debug('Environment variable NO_PROXY=%s will be used' % no_proxy)
 
 
 # FIXME: this is terrible, we need to refactor

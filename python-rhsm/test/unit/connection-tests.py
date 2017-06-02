@@ -116,7 +116,8 @@ class ConnectionTests(unittest.TestCase):
 
     def test_order(self):
         # should follow the order: HTTPS, https, HTTP, http
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host:4444', 'http_proxy': 'http://notme:orme@host:2222'}):
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host:4444',
+                                       'http_proxy': 'http://notme:orme@host:2222'}):
             uep = UEPConnection(username="dummy", password="dummy",
                  handler="/Test/", insecure=True)
             self.assertEquals("u", uep.proxy_user)
@@ -163,8 +164,29 @@ class ConnectionTests(unittest.TestCase):
                                     handler='/test', insecure=True, no_proxy=host)
                 self.assertEqual(None, uep.proxy_hostname)
 
+    def test_no_proxy_with_one_asterisk_via_api(self):
+        """Test that API trumps env var with one asterisk and config."""
+        host = self.cp.host
+        port = self.cp.ssl_port
+
+        def mock_config(section, name):
+            if (section, name) == ('server', 'no_proxy'):
+                return 'foo.example.com'
+            if (section, name) == ('server', 'hostname'):
+                return host
+            if (section, name) == ('server', 'port'):
+                return port
+            return None
+
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
+                                       'NO_PROXY': '*'}):
+            with patch.object(connection.config, 'get', mock_config):
+                uep = UEPConnection(username='dummy', password='dummy',
+                                    handler='/test', insecure=True, no_proxy=host)
+                self.assertEqual(None, uep.proxy_hostname)
+
     def test_no_proxy_with_asterisk_via_api(self):
-        """Test that API trumps env var and config."""
+        """Test that API trumps env var with asterisk and config."""
         host = self.cp.host
         port = self.cp.ssl_port
 
@@ -192,11 +214,36 @@ class ConnectionTests(unittest.TestCase):
                                 handler='/test', insecure=True)
             self.assertEqual(None, uep.proxy_hostname)
 
-    def test_no_proxy_with_asterisk_via_environment_variable(self):
-        """Test that env var no_proxy works."""
+    def test_NO_PROXY_with_one_asterisk_via_environment_variable(self):
+        """Test that env var NO_PROXY with only one asterisk works."""
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
+                                       'NO_PROXY': '*'}):
+            uep = UEPConnection(username='dummy', password='dummy',
+                                handler='/test', insecure=True)
+            self.assertEqual(None, uep.proxy_hostname)
+
+    def test_no_proxy_with_one_asterisk_via_environment_variable(self):
+        """Test that env var no_proxy with only one asterisk works."""
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
+                                       'no_proxy': '*'}):
+            uep = UEPConnection(username='dummy', password='dummy',
+                                handler='/test', insecure=True)
+            self.assertEqual(None, uep.proxy_hostname)
+
+    def test_NO_PROXY_with_asterisk_via_environment_variable(self):
+        """Test that env var NO_PROXY with asterisk works."""
         host = '*' + self.cp.host
         with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
                                        'NO_PROXY': host}):
+            uep = UEPConnection(username='dummy', password='dummy',
+                                handler='/test', insecure=True)
+            self.assertEqual(None, uep.proxy_hostname)
+
+    def test_no_proxy_with_asterisk_via_environment_variable(self):
+        """Test that env var no_proxy with asterisk works."""
+        host = '*' + self.cp.host
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
+                                       'no_proxy': host}):
             uep = UEPConnection(username='dummy', password='dummy',
                                 handler='/test', insecure=True)
             self.assertEqual(None, uep.proxy_hostname)
