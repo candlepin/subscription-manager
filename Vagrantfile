@@ -10,6 +10,7 @@ Vagrant.configure("2") do |config|
     "centos7" => "centos/7",
     "centos6" => "centos/6",
     "fedora25" => "fedora/25-cloud-base",
+    "opensuse42.2" => "opensuse/openSUSE-42.2-x86_64",
   }
 
   extra_boxes_loaded = false
@@ -34,7 +35,8 @@ Vagrant.configure("2") do |config|
   config.ssh.forward_x11 = true
 
   # setup shared folder
-  config.vm.synced_folder ".", "/vagrant", type: "rsync"
+  config.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude:
+    "subscription-manager.egg-info, build, build_ext, python-rhsm/{build{,_ext}}"
 
   # Set up the hostmanager plugin to automatically configure host & guest hostnames
   if Vagrant.has_plugin?("vagrant-hostmanager")
@@ -52,6 +54,7 @@ Vagrant.configure("2") do |config|
       host.vm.provider :libvirt do |domain|
         domain.graphics_type = "spice"
         domain.video_type = "qxl"
+        domain.memory = 1024
       end
     end
   end

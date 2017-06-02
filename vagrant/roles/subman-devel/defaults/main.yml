@@ -2,3 +2,19 @@
 subman_checkout_dir: .
 subman_setup_hacking_environment: false
 subman_add_vagrant_candlepin_to_hosts: false
+distro_package_command: yum
+distro_specific_deps:
+    - tito
+    - git
+    - gcc
+    - make
+    - python-pip
+    - m2crypto
+    - python-ethtool
+    - librsvg2
+    - libxslt-devel
+    - dbus-x11
+    - python-dmidecode
+    - libselinux-python
+    - xorg-x11-server-Xvfb
+    - yum-utils
