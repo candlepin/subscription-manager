@@ -29,4 +29,4 @@ class Branding(object):
                 _("To learn more about RHN registration and technologies please consult this Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563")
         self.REGISTERED_TO_BOTH_SUMMARY = _("RHN Classic and Red Hat Subscription Management")
         self.GUI_FORGOT_LOGIN_TIP = \
-                _("Tip: Forgot your login or password? Look it up at http://redhat.com/forgot_password")
+                _("Tip: Forgot your login or password? Look it up at https://redhat.com/forgot_password")
