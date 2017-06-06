@@ -164,7 +164,7 @@ CONSUMED_LIST = [
 ]
 
 
-def handle_exception(msg, ex, map_message=True):
+def handle_exception(msg, ex):
 
     # On Python 2.4 and earlier, sys.exit triggers a SystemExit exception,
     # which can land us into this block of code. We do not want to handle
@@ -181,11 +181,9 @@ def handle_exception(msg, ex, map_message=True):
     log.exception(ex)
 
     exception_mapper = ExceptionMapper()
-    mapped_message = None
-    if map_message:
-        mapped_message = exception_mapper.get_message(ex)
-    else:
-        mapped_message = msg % ex
+
+    mapped_message = exception_mapper.get_message(ex)
+
     if mapped_message:
         system_exit(os.EX_SOFTWARE, mapped_message)
     else:
@@ -1141,9 +1139,8 @@ class RegisterCommand(UserPassCommand):
             except ssl.SSLError as e:
                 # since the user can override serverurl for register, a common use case is to try to switch servers
                 # using register --force... However, this normally cannot successfully unregister since the servers
-                # are different... So, do not map the message as SSLError is more useful than its mapped message in
-                # debugging this use case (mapped message is misleading in this use case)
-                handle_exception("Unregister failed: %s", e, map_message=False)
+                # are different.
+                handle_exception("Unregister failed: %s", e)
             except Exception as e:
                 handle_exception("Unregister failed", e)
 

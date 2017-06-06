@@ -76,7 +76,7 @@ class ExceptionMapper(object):
         return message_template % bad_ca_cert_error.cert_path
 
     def format_ssl_error(self, ssl_error, message_template):
-        return message_template % str(ssl_error)
+        return message_template % ssl_error
 
     def format_restlib_exception(self, restlib_exception, message_template):
         return restlib_exception.msg
