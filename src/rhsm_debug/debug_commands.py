@@ -43,7 +43,8 @@ ERR_NOT_REGISTERED_MSG = _("This system is not yet registered. Try 'subscription
 ERR_NOT_REGISTERED_CODE = 1
 
 ASSEMBLE_DIR = '/var/spool/rhsm/debug'
-ROOT_READ_ONLY = 0o600
+ROOT_READ_ONLY_DIR = 0o700
+ROOT_READ_ONLY_FILE = 0o600
 KEY_IGNORE_PATS = ['*key.pem']
 
 
@@ -241,7 +242,7 @@ class SystemCommand(CliCommand):
                              KEY_IGNORE_PATS)
 
     def _makedir(self, dest_dir_name):
-        os.makedirs(dest_dir_name, ROOT_READ_ONLY)
+        os.makedirs(dest_dir_name, ROOT_READ_ONLY_DIR)
 
 
 class SaferFileMove(object):
@@ -258,7 +259,7 @@ class SaferFileMove(object):
         # based on shutils copyfileob
         self.buf_size = 16 * 1024
         # only root can read
-        self.default_perms = ROOT_READ_ONLY
+        self.default_perms = ROOT_READ_ONLY_FILE
 
     def move(self, src, dest):
         """Move a file to a dest dir, potentially /tmp more safely.
