@@ -105,6 +105,21 @@ optionally with port\&. '*' is a special value that means do not use a proxy for
 baseurl
 .RS 4
 This setting is the prefix for all content which is managed by the subscription service\&. This should be the hostname for the Red Hat CDN, the local Satellite or Capsule depending on your deployment\&.
+Prefix depends on the service type.
+For the Red Hat CDN, the full
+.B baseurl
+is
+.B https://cdn.redhat.com
+\&.
+For Satellite 6, the baseurl is
+.B https://HOSTNAME/pulp/repos
+, so for a hostname of
+.B sat6.example.com
+the full
+.B baseurl
+would be for example:
+.B https://sat6.example.com/pulp/repos
+\&.
 .RE
 .PP
 ca_cert_dir

@@ -179,8 +179,23 @@ parameter is for the on-premise Subscription Asset Manager server.
 .B --baseurl=https://CONTENT_SERVICE:PORT/PREFIX
 Passes the name of the content delivery service to configure the yum service to use to pull down packages. If there is an on-premise subscription service such as Subscription Asset Manager or CloudForms System Engine, this parameter can be used to submit the URL of the content repository, in the form
 .I https://server_name:port/prefix.
+.B PREFIX
+in particular depends on the service type.
 For example,
-.B https://sam.example.com:8088/sam.
+.B https://sam.example.com:8088/sam
+is the
+.B baseurl
+for a SAM service.
+.B https://sat6.example.com/pulp/repos
+is the
+.B baseurl
+for a Satellite 6 service with the hostname
+.B sat6.example.com
+\&.
+.B https://cdn.redhat.com
+is the
+.B baseurl
+for the Red Hat CDN.
 
 
 .TP

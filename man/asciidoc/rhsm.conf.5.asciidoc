@@ -76,6 +76,11 @@ baseurl::
   This setting is the prefix for all content which is managed by the
   subscription service. This should be the hostname for the Red Hat CDN,
   the local Satellite or Capsule depending on your deployment.
+  Prefix depends on the service type. For the Red Hat CDN, the full
+  *baseurl* is *https://cdn.redhat.com* . For Satellite 6, the baseurl is
+  *https://HOSTNAME/pulp/repos* , so for a hostname of *sat6.example.com*
+  the full *baseurl* would be for example:
+  *https://sat6.example.com/pulp/repos* .
 
 ca_cert_dir::
   The location for the certificates which are used to communicate with the
