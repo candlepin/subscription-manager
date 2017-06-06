@@ -356,6 +356,7 @@ class MainWindow(widgets.SubmanBaseWidget):
 
         self._show_buttons()
         self._show_redemption_buttons()
+        self.facts.get_facts(True)
 
     def refresh(self):
         """ Refresh the UI. """
