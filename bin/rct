@@ -28,14 +28,11 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-from subscription_manager.i18n import configure_i18n
+from subscription_manager.i18n import configure_i18n, ugettext as _
 configure_i18n()
 
 from subscription_manager import logutil
 logutil.init_logger()
-
-import gettext
-_ = gettext.gettext
 
 from rct.cli import RctCLI
 

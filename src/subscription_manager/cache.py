@@ -20,7 +20,6 @@ Classes here track various information last sent to the server, compare
 this with the current state, and perform an update on the server if
 necessary.
 """
-import gettext
 import logging
 import os
 import socket
@@ -37,7 +36,8 @@ from subscription_manager.isodate import parse_date
 
 from rhsmlib.services import config
 
-_ = gettext.gettext
+from subscription_manager.i18n import ugettext as _
+
 log = logging.getLogger(__name__)
 
 PACKAGES_RESOURCE = "packages"

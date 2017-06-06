@@ -14,7 +14,6 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-import gettext
 import os
 import sys
 
@@ -22,7 +21,7 @@ from subscription_manager.printing_utils import columnize, echo_columnize_callba
 from subscription_manager.i18n_optparse import OptionParser, WrappedIndentedHelpFormatter
 from subscription_manager.utils import print_error
 
-_ = gettext.gettext
+from subscription_manager.i18n import ugettext as _
 
 
 class InvalidCLIOptionError(Exception):

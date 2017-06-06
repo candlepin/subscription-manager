@@ -14,8 +14,6 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
-import gettext
 import logging
 
 from subscription_manager.ga import Gtk as ga_Gtk
@@ -36,7 +34,7 @@ from subscription_manager.gui.widgets import TextTreeViewColumn, CheckBoxColumn,
 from subscription_manager.gui.messageWindow import YesNoDialog
 from subscription_manager.overrides import Override
 
-_ = gettext.gettext
+from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
 

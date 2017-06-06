@@ -12,9 +12,7 @@ from __future__ import print_function, division, absolute_import
 # have received a copy of GPLv2 along with this software; if not, see
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
-
 from datetime import datetime
-import gettext
 import logging
 import os
 
@@ -24,7 +22,6 @@ from rhsm import ourjson as json
 
 from rhsmlib.facts.all import AllFactsCollector
 
-_ = gettext.gettext
 log = logging.getLogger(__name__)
 
 

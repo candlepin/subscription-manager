@@ -16,7 +16,6 @@ from __future__ import print_function, division, absolute_import
 #
 
 """ Core code for the container content plugin. """
-import gettext
 import logging
 import os
 import re
@@ -25,9 +24,9 @@ import shutil
 from subscription_manager import certlib
 from subscription_manager.model import find_content
 
-log = logging.getLogger(__name__)
+from subscription_manager.i18n import ugettext as _
 
-_ = gettext.gettext
+log = logging.getLogger(__name__)
 
 CONTAINER_CONTENT_TYPE = "containerimage"
 

@@ -14,14 +14,10 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
-import gettext
 import logging
 
 from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.gui import widgets
-
-_ = gettext.gettext
 
 log = logging.getLogger(__name__)
 

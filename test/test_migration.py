@@ -56,7 +56,7 @@ class TestMenu(unittest.TestCase):
     def test_get_item(self):
         self.assertEqual("Hello", self.menu._get_item(1))
 
-    @patch("__builtin__.raw_input", autospec=True)
+    @patch("six.moves.input")
     @patch.object(migrate.Menu, "display_invalid")
     def test_choose(self, mock_display_invalid, mock_input):
         mock_input.side_effect = ["9000", "1"]
@@ -249,7 +249,7 @@ class TestMigration(SubManFixture):
         mock_get.return_value = "subscription.example.com"
         self.assertFalse(migrate.is_hosted())
 
-    @patch("__builtin__.raw_input", autospec=True)
+    @patch("six.moves.input")
     @patch("getpass.getpass", autospec=True)
     def test_authenticate(self, mock_getpass, mock_input):
         mock_input.return_value = "username"
@@ -263,7 +263,7 @@ class TestMigration(SubManFixture):
         self.assertEqual(creds.username, "username")
         self.assertEqual(creds.password, "password")
 
-    @patch("__builtin__.raw_input", autospec=True)
+    @patch("six.moves.input")
     @patch("getpass.getpass", autospec=True)
     def test_get_auth_with_serverurl(self, mock_getpass, mock_input):
         self.engine.options = self.create_options(destination_url='foobar')
@@ -277,7 +277,7 @@ class TestMigration(SubManFixture):
         self.assertEqual(self.engine.destination_creds.username, "destination_username")
         self.assertEqual(self.engine.destination_creds.password, "destination_password")
 
-    @patch("__builtin__.raw_input", autospec=True)
+    @patch("six.moves.input")
     @patch("getpass.getpass", autospec=True)
     def test_get_auth_without_serverurl_and_not_hosted(self, mock_getpass, mock_input):
         self.engine.options = self.create_options()
@@ -292,7 +292,7 @@ class TestMigration(SubManFixture):
         self.assertEqual(self.engine.destination_creds.username, "destination_username")
         self.assertEqual(self.engine.destination_creds.password, "destination_password")
 
-    @patch("__builtin__.raw_input", autospec=True)
+    @patch("six.moves.input")
     @patch("getpass.getpass", autospec=True)
     def test_get_auth_without_serverurl_and_is_hosted(self, mock_getpass, mock_input):
         self.engine.options = self.create_options()
@@ -343,7 +343,7 @@ class TestMigration(SubManFixture):
         self.assertEqual(self.engine.destination_creds.username, "destination_username")
         self.assertEqual(self.engine.destination_creds.password, "destination_password")
 
-    @patch("__builtin__.raw_input", autospec=True)
+    @patch("six.moves.input")
     @patch("getpass.getpass", autospec=True)
     def test_gets_destination_auth_in_keep_state(self, mock_getpass, mock_input):
         self.engine.options = self.create_options(
@@ -620,7 +620,7 @@ class TestMigration(SubManFixture):
         org = self.engine.get_org("some_username")
         self.assertEqual(org, "my_org")
 
-    @patch("__builtin__.raw_input", autospec=True)
+    @patch("six.moves.input")
     def test_enter_org_key(self, mock_input):
         self.engine.options = self.create_options()
         self.engine.cp.getOwnerList = MagicMock()
@@ -632,7 +632,7 @@ class TestMigration(SubManFixture):
         org = self.engine.get_org("some_username")
         self.assertEqual(org, "my_org")
 
-    @patch("__builtin__.raw_input", autospec=True)
+    @patch("six.moves.input")
     def test_enter_org_name(self, mock_input):
         self.engine.options = self.create_options()
         self.engine.cp.getOwnerList = MagicMock()
@@ -644,7 +644,7 @@ class TestMigration(SubManFixture):
         org = self.engine.get_org("some_username")
         self.assertEqual(org, "my_org")
 
-    @patch("__builtin__.raw_input", autospec=True)
+    @patch("six.moves.input")
     def test_enter_bad_org(self, mock_input):
         self.engine.options = self.create_options()
         self.engine.cp.getOwnerList = MagicMock()
@@ -713,7 +713,7 @@ class TestMigration(SubManFixture):
         env = self.engine.get_environment("some_org")
         self.assertEqual(env, "My Environment")
 
-    @patch("__builtin__.raw_input", autospec=True)
+    @patch("six.moves.input")
     def test_enter_environment_name(self, mock_input):
         self.engine.options = self.create_options()
         self.engine.cp.supports_resource = MagicMock()
@@ -729,7 +729,7 @@ class TestMigration(SubManFixture):
         env = self.engine.get_environment("some_org")
         self.assertEqual(env, "My Environment")
 
-    @patch("__builtin__.raw_input", autospec=True)
+    @patch("six.moves.input")
     def test_enter_environment_label(self, mock_input):
         self.engine.options = self.create_options()
         self.engine.cp.supports_resource = MagicMock()
@@ -745,7 +745,7 @@ class TestMigration(SubManFixture):
         env = self.engine.get_environment("some_org")
         self.assertEqual(env, "My Environment")
 
-    @patch("__builtin__.raw_input", autospec=True)
+    @patch("six.moves.input")
     def test_enter_environment_displayName(self, mock_input):
         self.engine.options = self.create_options()
         self.engine.cp.supports_resource = MagicMock()
@@ -761,7 +761,7 @@ class TestMigration(SubManFixture):
         env = self.engine.get_environment("some_org")
         self.assertEqual(env, "My Environment")
 
-    @patch("__builtin__.raw_input", autospec=True)
+    @patch("six.moves.input")
     def test_enter_bad_environment(self, mock_input):
         self.engine.options = self.create_options()
         self.engine.cp.supports_resource = MagicMock()

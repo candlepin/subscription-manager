@@ -15,11 +15,7 @@ from __future__ import print_function, division, absolute_import
 #
 
 # This module contains wrappers for JSON returned from the CP server.
-
-import gettext
 from subscription_manager.utils import is_true_value
-
-_ = gettext.gettext
 
 
 class PoolWrapper(object):

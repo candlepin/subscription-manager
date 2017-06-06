@@ -1,3 +1,4 @@
+#
 # -*- coding: utf-8 -*-#
 from __future__ import print_function, division, absolute_import
 
@@ -17,7 +18,6 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 #
 
-import gettext
 from iniparse import RawConfigParser as ConfigParser
 import logging
 import os
@@ -39,6 +39,8 @@ from subscription_manager.certlib import ActionReport, BaseActionInvoker
 from subscription_manager.certdirectory import Path
 from rhsmlib.services import config
 
+from subscription_manager.i18n import ugettext as _
+
 log = logging.getLogger(__name__)
 
 conf = config.Config(initConfig())
@@ -46,8 +48,6 @@ conf = config.Config(initConfig())
 ALLOWED_CONTENT_TYPES = ["yum"]
 
 ZYPPER_REPO_DIR = '/etc/rhsm/zypper.repos.d'
-
-_ = gettext.gettext
 
 
 def manage_repos_enabled():
@@ -539,7 +539,7 @@ class RepoUpdateActionCommand(object):
 
 class RepoActionReport(ActionReport):
     """Report class for reporting yum repo updates."""
-    name = "Repo Updates"
+    name = u"Repo Updates"
 
     def __init__(self):
         super(RepoActionReport, self).__init__()
@@ -554,21 +554,20 @@ class RepoActionReport(ActionReport):
     def format_repos_info(self, repos, formatter):
         indent = '    '
         if not repos:
-            return '%s<NONE>' % indent
+            return u'%s<NONE>' % indent
 
         r = []
         for repo in repos:
-            r.append("%s%s" % (indent, formatter(repo)))
-        return '\n'.join(r)
+            r.append(u"%s%s" % (indent, formatter(repo)))
+        return u'\n'.join(r)
 
     def repo_format(self, repo):
-        msg = "[id:%s %s]" % (repo.id,
+        msg = u"[id:%s %s]" % (repo.id,
                                repo['name'])
         return msg.encode('utf8')
 
     def section_format(self, section):
-        msg = "[%s]" % section
-        return msg.encode('utf8')
+        return u"[%s]" % section
 
     def format_repos(self, repos):
         return self.format_repos_info(repos, self.repo_format)
@@ -576,7 +575,7 @@ class RepoActionReport(ActionReport):
     def format_sections(self, sections):
         return self.format_repos_info(sections, self.section_format)
 
-    def __str__(self):
+    def __unicode__(self):
         s = [_('Repo updates') + '\n']
         s.append(_('Total repo updates: %d') % self.updates())
         s.append(_('Updated'))
@@ -586,7 +585,10 @@ class RepoActionReport(ActionReport):
         s.append(_('Deleted'))
         # deleted are former repo sections, but they are the same type
         s.append(self.format_sections(self.repo_deleted))
-        return '\n'.join(s)
+        return u'\n'.join(s)
+
+    def __str__(self):  # TODO use six.python_2_unicode_compatible instead
+        return self.__unicode__().encode('utf-8')
 
 
 class Repo(dict):

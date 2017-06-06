@@ -16,7 +16,6 @@ from __future__ import print_function, division, absolute_import
 #
 
 import datetime
-import gettext
 import logging
 import re
 import threading
@@ -43,8 +42,6 @@ EVEN_ROW_COLOR = '#eeeeee'
 
 # set if we are in firstboot, to disable linkify, see bz#814378
 FIRSTBOOT = False
-
-_ = lambda x: gettext.ldgettext("rhsm", x)
 
 cfg = config.initConfig()
 

@@ -36,6 +36,7 @@ ga_loader.init_ga(gtk_version="3")
 from subscription_manager.ga import GObject as ga_GObject
 from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.gui import managergui
+from subscription_manager.i18n import configure_gettext
 from subscription_manager.injectioninit import init_dep_injection
 from subscription_manager.gui import registergui
 from subscription_manager import utils
@@ -44,6 +45,8 @@ from subscription_manager.gui import utils as gui_utils
 ga_GObject.threads_init()
 
 __all__ = ["RHSMSpoke"]
+
+configure_gettext()
 
 
 class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
