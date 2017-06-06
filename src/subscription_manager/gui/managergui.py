@@ -569,7 +569,10 @@ class MainWindow(widgets.SubmanBaseWidget):
 
     def _get_online_doc_url(self):
         lang, encoding = locale.getdefaultlocale()
-        url = ONLINE_DOC_URL_TEMPLATE % (lang.replace("_", "-"))
+        if lang is not None:
+            url = ONLINE_DOC_URL_TEMPLATE % (lang.replace("_", "-"))
+        else:
+            url = ONLINE_DOC_FALLBACK_URL
         try:
             urllib.request.urlopen(url)
         except urllib.error.URLError:
