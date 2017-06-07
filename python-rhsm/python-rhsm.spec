@@ -15,7 +15,7 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.19.8
+Version: 1.19.9
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -102,6 +102,10 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Wed Jun 07 2017 Kevin Howell <khowell@redhat.com> 1.19.9-1
+- 1444453: Have gettext return unicode instead of bytes. (awood@redhat.com)
+- 1457197: Env. variable no_proxy=* is not ignored (jhnidek@redhat.com)
+
 * Tue May 30 2017 Kevin Howell <khowell@redhat.com> 1.19.8-1
 - 1443164: no_proxy match the host name when *.redhat.com is used
   (jhnidek@redhat.com)
