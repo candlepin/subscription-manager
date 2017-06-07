@@ -567,10 +567,11 @@ class PoolTypeCache(object):
                                         self.identity.uuid)
             entitlement_list = self.pool_cache.server_status
 
-            for ent in entitlement_list:
-                pool = PoolWrapper(ent.get('pool', {}))
-                pool_type = pool.get_pool_type()
-                result[pool.get_id()] = pool_type
+            if entitlement_list is not None:
+                for ent in entitlement_list:
+                    pool = PoolWrapper(ent.get('pool', {}))
+                    pool_type = pool.get_pool_type()
+                    result[pool.get_id()] = pool_type
 
         self.pooltype_map.update(result)
 
