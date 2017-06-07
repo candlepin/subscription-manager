@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.19.17
+Version: 1.19.18
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -606,6 +606,15 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Wed Jun 07 2017 Kevin Howell <khowell@redhat.com> 1.19.18-1
+- Bump python-rhsm requirement to 1.19.9 (khowell@redhat.com)
+- 1452075: print only readable part of SSL error to console
+  (jhnidek@redhat.com)
+- 1444453: Have gettext return unicode instead of bytes. (awood@redhat.com)
+- 1457197: Env. variable no_proxy=* is not ignored (jhnidek@redhat.com)
+- 1441397: added --noproxy for rhsm-debug auto-completion (jhnidek@redhat.com)
+- 1365472: Add mnemonic for subscription-manager spoke (khowell@redhat.com)
+
 * Tue May 30 2017 Kevin Howell <khowell@redhat.com> 1.19.17-1
 - Bump python-rhsm requirement to 1.19.8 (khowell@redhat.com)
 - 1441397: Sync zanata translations (khowell@redhat.com)
