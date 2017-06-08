@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.19.18
+Version: 1.19.19
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -606,6 +606,9 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Thu Jun 08 2017 Kevin Howell <khowell@redhat.com> 1.19.19-1
+- 1441739: Sync zanata translations (khowell@redhat.com)
+
 * Wed Jun 07 2017 Kevin Howell <khowell@redhat.com> 1.19.18-1
 - Bump python-rhsm requirement to 1.19.9 (khowell@redhat.com)
 - 1452075: print only readable part of SSL error to console
