@@ -919,6 +919,9 @@ class ZypperRepoFile(RepoFile):
 
     PATH = 'etc/rhsm/zypper.repos.d'
 
+    def __init__(self):
+        super(ZypperRepoFile, self).__init__(self.PATH)
+
     def create(self):
         if self.path_exists(self.path) or not self.manage_repos:
             return
