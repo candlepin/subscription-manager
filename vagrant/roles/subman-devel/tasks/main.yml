@@ -1,4 +1,12 @@
 ---
+- name: load distribution-specific vars
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+        - "{{ ansible_distribution }}.yml"
+      paths: vars
+      skip: yes
+
 # workaround for https://github.com/ansible/ansible/pull/24179
 # FIXME remove when possible
 - name: configure rhsm hostname (rhel only)
@@ -44,26 +52,39 @@
   become: yes
   when: ansible_distribution == 'RedHat'
 
+- name: install spacewalk repo (openSUSE Leap)
+  get_url:
+    url: http://download.opensuse.org/repositories/systemsmanagement:/spacewalk/openSUSE_Leap_42.2/systemsmanagement:spacewalk.repo
+    dest: /etc/zypp/repos.d/
+  become: yes
+  when: ansible_distribution == 'openSUSE Leap'
+
+- name: Update vagrant env_keep to include DISPLAY (openSUSE Leap)
+  lineinfile:
+    dest: /etc/sudoers.d/vagrant
+    line: 'Defaults:vagrant  env_keep += "DISPLAY"'
+    state: present
+  become: yes
+  when: ansible_distribution == 'openSUSE Leap'
+
 - name: install non-pip/spec deps
   package:
     name: "{{ item }}"
     state: present
   become: yes
-  with_items:
-    - tito
-    - git
-    - gcc
-    - make
-    - python-pip
-    - m2crypto
-    - python-ethtool
-    - librsvg2
-    - libxslt-devel
-    - dbus-x11
-    - python-dmidecode
-    - libselinux-python
-    - xorg-x11-server-Xvfb
-    - yum-utils
+  with_items: "{{ distro_specific_deps }}"
+  when: distro_specific_deps is defined
+
+- name: install tito deps (openSUSE Leap)
+  pip:
+    name: blessings
+  become: yes
+  when: ansible_distribution == 'openSUSE Leap'
+
+- name: install tito (openSUSE Leap)
+  pip: name=git+https://github.com/kahowell/tito@suse#egg=tito state=present editable=false
+  become: yes
+  when: ansible_distribution == 'openSUSE Leap'
 
 - name: install deps for subscription-manager-gui (el6 only)
   yum:
@@ -79,16 +100,40 @@
 - name: install subscription-manager build deps
   command: yum-builddep -y {{ subman_checkout_dir }}/subscription-manager.spec
   become: yes
+  when: distro_specific_subman_build_deps is not defined
+
+- name: install distro specific subscription-manager build deps
+  package:
+    name: "{{ item }}"
+    state: present
+  become: yes
+  with_items: "{{ distro_specific_subman_build_deps}}"
+  when: distro_specific_subman_build_deps is defined
 
 - name: install python-rhsm build deps
   command: yum-builddep -y {{ subman_checkout_dir }}/python-rhsm/python-rhsm.spec
   become: yes
+  when: distro_specific_python_rhsm_build_deps is not defined
+
+- name: install distro specific python-rhsm build deps
+  package:
+    name: "{{ item }}"
+    state: present
+  become: yes
+  with_items: "{{ distro_specific_python_rhsm_build_deps }}"
+  when: distro_specific_python_rhsm_build_deps is defined
 
 - name: install python test deps
   pip:
     requirements: test-requirements.txt
     chdir: "{{ subman_checkout_dir }}"
   become: yes
+
+- name: clean python-rhsm build artifacts
+  command: make clean
+  args:
+    chdir: "{{ subman_checkout_dir }}/python-rhsm"
+  when: subman_setup_hacking_environment
 
 - name: build python-rhsm
   command: python setup.py build_ext --inplace
@@ -111,7 +156,7 @@
   when: subman_setup_hacking_environment
 
 - name: install subscription-manager (initial)
-  shell: yum install -y /tmp/tito/*/subscription-manager-[0-9]*
+  shell: "{{ distro_package_command }} install -y /tmp/tito/*/subscription-manager-[0-9]*"
   args:
     chdir: "{{ subman_checkout_dir }}"
     creates: /usr/lib*/python*/site-packages/subscription_manager

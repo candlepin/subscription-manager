@@ -1,0 +1,44 @@
+---
+distro_package_command: zypper
+distro_specific_deps:
+    - git
+    - python-dateutil
+    - python-iniparse
+    - python-bugzilla
+    - python-nose
+    - python-pip
+    - rpm-build
+    - gcc
+    - make
+    - python-m2crypto
+    - python-ethtool
+    - librsvg2
+    - libxslt-devel
+    - python-curses
+    - openssl-devel
+    - python-dmidecode
+    - gdk-pixbuf-loader-rsvg
+
+distro_specific_subman_build_deps:
+  - rpm-python
+  - python-devel
+  - python-setuptools
+  - gettext
+  - intltool
+  - libnotify-devel
+  - desktop-file-utils
+  - python-six
+  - lsb-release
+  - distribution-release
+  - scrollkeeper
+  - gconf2-devel
+  - dbus-1-glib-devel
+  - update-desktop-files
+  - libzypp
+  - gtk3-devel
+
+distro_specific_python_rhsm_build_deps:
+ - python-devel
+ - python-setuptools
+ - openssl-devel
+ - python-six

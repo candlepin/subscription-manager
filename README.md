@@ -60,3 +60,17 @@ export SUBMAN_RHSM_PASSWORD=password
 Note, however, since the registration is necessary to download RPMs to set up
 the VM for development, registering against a local candlepin might not be
 particularly useful (at least not for initial provisioning).
+
+Troubleshooting
+---------------
+
+If you are working inside one of the vagrant boxes and you find subscription-manager and/or
+subscription-manager-gui will not work with output that looks like the following:
+"Unable to find Subscription Manager module.
+Error: libssl.so.10: cannot open shared object file: No such file or directory"
+
+You should be able to run `vagrant provision [vm-name]` from the host machine to fix the issue.
+
+This issue can happen if the python-rhsm/build or python-rhsm/build_ext directories are copied to
+the virtual machine and the virtual machine provides different libraries than those available on
+the build host.
