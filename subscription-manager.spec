@@ -1,5 +1,5 @@
-# Prefer systemd over sysv on Fedora 17+ and RHEL 7+
-%global use_systemd (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 7) || (0%{?suse_version} && 0%{?suse_version} >= 1315)
+# Prefer systemd over sysv on Fedora and RHEL 7+
+%global use_systemd 0%{?fedora} || (0%{?rhel} && 0%{?rhel} >= 7) || (0%{?suse_version} && 0%{?suse_version} >= 1315)
 # For optional building of ostree-plugin sub package. Unrelated to systemd
 # but the same versions apply at the moment.
 %global has_ostree %use_systemd && 0%{?suse_version} == 0
@@ -19,7 +19,8 @@
 %global use_kitchen 0
 %endif
 
-%global use_dnf (0%{?fedora} && 0%{?fedora} >= 22)
+%global use_dnf 0%{?fedora}
+%global use_yum (0%{?rhel} && 0%{?rhel} <= 7)
 
 %global _hardened_build 1
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
@@ -43,9 +44,6 @@
 %define post_boot_tool INSTALL_INITIAL_SETUP=false INSTALL_FIRSTBOOT=true
 %endif
 
-# makefile defaults to INSTALL_YUM_PLUGIN=true
-%define install_yum_plugins INSTALL_YUM_PLUGINS=true
-
 %if 0%{?suse_version}
 %define install_zypper_plugins INSTALL_ZYPPER_PLUGINS=true
 %else
@@ -57,6 +55,13 @@
 %define install_dnf_plugins INSTALL_DNF_PLUGINS=true
 %else
 %define install_dnf_plugins INSTALL_DNF_PLUGINS=false
+%endif
+
+# makefile defaults to INSTALL_DNF_PLUGIN=true
+%if %{use_yum}
+%define install_yum_plugins INSTALL_YUM_PLUGINS=true
+%else
+%define install_yum_plugins INSTALL_YUM_PLUGINS=false
 %endif
 
 %if %{use_systemd}
@@ -316,8 +321,10 @@ desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-g
 find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 
 # fake out the redhat.repo file
-%{__mkdir} %{buildroot}%{_sysconfdir}/yum.repos.d
-touch %{buildroot}%{_sysconfdir}/yum.repos.d/redhat.repo
+%if %{use_yum} || %{use_dnf}
+    %{__mkdir} %{buildroot}%{_sysconfdir}/yum.repos.d
+    touch %{buildroot}%{_sysconfdir}/yum.repos.d/redhat.repo
+%endif
 
 # fake out the certificate directories
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/pki/consumer
@@ -341,9 +348,17 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %if 0%{?suse_version}
 %dir %{_sysconfdir}/pki
-%dir %{_sysconfdir}/yum
-%dir %{_sysconfdir}/yum/pluginconf.d
-%dir %{_sysconfdir}/yum.repos.d
+
+%if %{use_yum}
+    %dir %{_sysconfdir}/yum
+    %dir %{_sysconfdir}/yum/pluginconf.d
+    %dir %{_prefix}/lib/yum-plugins/
+%endif
+
+%if %{use_yum} || %{use_dnf}
+    %dir %{_sysconfdir}/yum.repos.d
+%endif
+
 %dir %{python_sitelib}/rhsmlib/candlepin
 %dir %{python_sitelib}/rhsmlib/compat
 %dir %{python_sitelib}/rhsmlib/dbus
@@ -356,7 +371,6 @@ rm -rf %{buildroot}
 %dir %{python_sitelib}/subscription_manager/branding
 %dir %{python_sitelib}/subscription_manager/model
 %dir %{python_sitelib}/subscription_manager/plugin
-%dir %{_prefix}/lib/yum-plugins/
 %dir %{_var}/spool/rhsm
 %dir %{_prefix}/share/polkit-1
 %dir %{_prefix}/share/polkit-1/actions
@@ -394,13 +408,17 @@ rm -rf %{buildroot}
 %{_sysconfdir}/security/console.apps/subscription-manager
 %endif
 
-# remove the repo file when we are deleted
-%ghost %{_sysconfdir}/yum.repos.d/redhat.repo
+%if %{use_yum} || %{use_dnf}
+    %ghost %{_sysconfdir}/yum.repos.d/redhat.repo
+%endif
 
 # yum plugin config
-%config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/subscription-manager.conf
-%config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/product-id.conf
-%config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/search-disabled-repos.conf
+%if %{use_yum}
+    # remove the repo file when we are deleted
+    %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/subscription-manager.conf
+    %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/product-id.conf
+    %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/search-disabled-repos.conf
+%endif
 
 # misc system config
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/logrotate.d/subscription-manager
@@ -450,9 +468,11 @@ rm -rf %{buildroot}
 # yum plugins
 # Using _prefix + lib here instead of libdir as that evaluates to /usr/lib64 on x86_64,
 # but yum plugins seem to normally be sent to /usr/lib/:
-%{_prefix}/lib/yum-plugins/subscription-manager.py*
-%{_prefix}/lib/yum-plugins/product-id.py*
-%{_prefix}/lib/yum-plugins/search-disabled-repos.py*
+%if %{use_yum}
+    %{_prefix}/lib/yum-plugins/subscription-manager.py*
+    %{_prefix}/lib/yum-plugins/product-id.py*
+    %{_prefix}/lib/yum-plugins/search-disabled-repos.py*
+%endif
 
 # zypper plugins
 %if 0%{?suse_version}
@@ -561,7 +581,7 @@ rm -rf %{buildroot}
 %doc
 %{_mandir}/man8/rhn-migrate-classic-to-rhsm.8*
 %doc LICENSE
-%if 0%{?fedora} > 14
+%if 0%{?fedora}
 %doc README.Fedora
 %endif
 
