@@ -18,13 +18,7 @@ from __future__ import print_function, division, absolute_import
 #
 import logging
 
-# The dmiinfo module will raise a ImportError if the 'dmidecode' module
-# fails to import. So expect that.
-try:
-    from rhsmlib.facts import dmiinfo
-except ImportError as e:
-    dmiinfo = None
-
+from rhsmlib.facts import dmiinfo
 from rhsmlib.facts import collector
 
 ARCHES_WITHOUT_DMI = ["ppc64", "ppc64le", "s390x"]
@@ -99,9 +93,10 @@ def get_firmware_collector(arch, prefix=None, testing=None,
         log.debug("Not looking for DMI info since it is not available on '%s'" % arch)
         firmware_provider_class = NullFirmwareInfoCollector
     else:
-        if dmiinfo:
+        try:
+            import dmidecode  # noqa
             firmware_provider_class = dmiinfo.DmiFirmwareInfoCollector
-        else:
+        except:
             firmware_provider_class = NullFirmwareInfoCollector
 
     firmware_provider = firmware_provider_class(
