@@ -20,7 +20,7 @@
 %endif
 
 %global use_dnf 0%{?fedora}
-%global use_yum (0%{?rhel} && 0%{?rhel} <= 7)
+%global use_yum (0%{?rhel} && 0%{?rhel} <= 7) || (0%{?suse_version})
 
 %global _hardened_build 1
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
