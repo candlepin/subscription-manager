@@ -3,6 +3,7 @@
 # leahliu <lliu@redhat.com>, 2015. #zanata
 # John Sefler <jsefler@redhat.com>, 2016. #zanata
 # leahliu <lliu@redhat.com>, 2016. #zanata
+# John Sefler <jsefler@redhat.com>, 2017. #zanata
 # Ludek Janda <ljanda@redhat.com>, 2017. #zanata
 # leahliu <lliu@redhat.com>, 2017. #zanata
 msgid ""
@@ -13,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-06-08 10:40-0400\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
+"PO-Revision-Date: 2017-06-21 04:22-0400\n"
+"Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Chinese (Simplified, China)\n"
 "Language: zh-Hans-CN\n"
 "Plural-Forms: nplurals=1; plural=0\n"
@@ -3556,7 +3557,7 @@ msgstr "验证服务器时出错：%s"
 #: src/subscription_manager/managercli.py:544
 #, python-format
 msgid "Unable to reach the server at %s:%s%s"
-msgstr "无法在 %s 连接该服务器：%s%s"
+msgstr "无法在 %s:%s%s 连接该服务器"
 
 #: src/subscription_manager/gui/registergui.py:1908
 msgid "Validating connection"

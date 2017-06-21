@@ -5,6 +5,7 @@
 # John Sefler <jsefler@redhat.com>, 2016. #zanata
 # eukim <eukim@fedoraproject.org>, 2016. #zanata
 # John Sefler <jsefler@redhat.com>, 2017. #zanata
+# Kevin Howell <kevin@kahowell.net>, 2017. #zanata
 # Ludek Janda <ljanda@redhat.com>, 2017. #zanata
 # eukim <eukim@fedoraproject.org>, 2017. #zanata
 msgid ""
@@ -15,8 +16,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-06-08 10:40-0400\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
+"PO-Revision-Date: 2017-06-21 04:12-0400\n"
+"Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Korean\n"
 "Language: ko\n"
 "Plural-Forms: nplurals=1; plural=0\n"
@@ -453,7 +454,7 @@ msgstr "UUID"
 
 #: src/rct/manifest_commands.py:212
 msgid "Content Access Mode"
-msgstr "컨텐츠 액세스 모드 "
+msgstr "컨텐츠 액세스 모드"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:213 src/rct/printing.py:100
@@ -2274,7 +2275,7 @@ msgstr "특정 호스트/도메인의 HTTP 프록시를 사용하지 않습니�
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:267
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:332
 msgid "Bypass Proxy Checkbox"
-msgstr "프록시 사용 안 함 확인란 "
+msgstr "프록시 사용 안 함 확인란"
 
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:305
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:401
@@ -2289,12 +2290,12 @@ msgstr "호스트 이름/도메인 무시 목록 (_H):"
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:338
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:367
 msgid "comma-separated list of hostnames/domains"
-msgstr "콤마로 구분된 호스트이름/도메인 목록 "
+msgstr "콤마로 구분된 호스트이름/도메인 목록"
 
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:342
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:371
 msgid "Hostname/Domain Bypass Text"
-msgstr "호스트이름/도메인 무시 텍스트 "
+msgstr "호스트이름/도메인 무시 텍스트"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:382
@@ -3583,7 +3584,7 @@ msgstr "서버 확인 중 오류 발생: %s"
 #: src/subscription_manager/managercli.py:544
 #, python-format
 msgid "Unable to reach the server at %s:%s%s"
-msgstr "%s에 있는 서버에 연결할 수 없습니다:%s%s"
+msgstr "%s:%s%s에 있는 서버에 연결할 수 없습니다"
 
 #: src/subscription_manager/gui/registergui.py:1908
 msgid "Validating connection"
@@ -3949,7 +3950,7 @@ msgstr "기본 인증을 갖는 HTTP 프록시 암호"
 
 #: src/subscription_manager/managercli.py:371
 msgid "host suffixes that should bypass HTTP proxy"
-msgstr "HTTP 프록시를 사용하지 않는 호스트 접미사 "
+msgstr "HTTP 프록시를 사용하지 않는 호스트 접미사"
 
 #: src/subscription_manager/managercli.py:424
 msgid ""
