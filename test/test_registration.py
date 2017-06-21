@@ -32,6 +32,7 @@ class CliRegistrationTests(SubManFixture):
 
     def stub_persist(self, consumer):
         self.persisted_consumer = consumer
+        self.persisted_consumer['consumer_name'] = 'foobar'
         return self.persisted_consumer
 
     def test_register_persists_consumer_cert(self):
