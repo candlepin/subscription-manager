@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.19.20
+Version: 1.19.21
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -606,6 +606,10 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Wed Jun 21 2017 Kevin Howell <khowell@redhat.com> 1.19.21-1
+- 1463765: Sync zanata translations (khowell@redhat.com)
+- 1463765: Fix wrong Indic-language translations (khowell@redhat.com)
+
 * Mon Jun 12 2017 Kevin Howell <khowell@redhat.com> 1.19.20-1
 - 1441739: Sync zanata translations (khowell@redhat.com)
 
