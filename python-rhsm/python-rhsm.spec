@@ -27,7 +27,6 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 # The %{?something:foo} expands to foo only when something is **defined**.  Likewise the
 # %{!?something:foo} expands only when something is **not defined**.
 BuildRequires: %{?suse_version:python-devel >= 2.6} %{!?suse_version:python2-devel}
-%{?suse_version:BuildRequires: python-rpm-macros}
 BuildRequires: python-setuptools
 BuildRequires: python-six
 BuildRequires: openssl-devel
@@ -56,7 +55,6 @@ entitlements, certificates, and access to content.
 %package -n python3-%{name}
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
 BuildRequires: python3-devel
-%{?suse_version:BuildRequires: python-rpm-macros}
 BuildRequires: python3-setuptools
 BuildRequires: python3-six
 BuildRequires: openssl-devel
