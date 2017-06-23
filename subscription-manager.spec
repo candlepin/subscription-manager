@@ -1,31 +1,26 @@
-# Prefer systemd over sysv on Fedora 17+ and RHEL 7+
-%global use_systemd (0%{?fedora} && 0%{?fedora} >= 17) || (0%{?rhel} && 0%{?rhel} >= 7) || (0%{?suse_version} && 0%{?suse_version} >= 1315)
+# Prefer systemd over sysv on Fedora and RHEL 7+
+%global use_systemd 0%{?fedora} || (0%{?rhel} && 0%{?rhel} >= 7) || (0%{?suse_version} && 0%{?suse_version} >= 1315)
 # For optional building of ostree-plugin sub package. Unrelated to systemd
 # but the same versions apply at the moment.
 %global has_ostree %use_systemd && 0%{?suse_version} == 0
-%global use_firstboot 0
 %global use_initial_setup 1
+%global use_firstboot 0
+%global use_kitchen 1
 %global rhsm_plugins_dir  /usr/share/rhsm-plugins
-%global use_gtk3 %use_systemd
 
-%if 0%{?rhel} == 7
-%global use_initial_setup 1
-%global use_firstboot 0
+%if %{use_systemd}
+# Note that %gtk3 will be undefined if it's not used
+%global gtk3 1
 %endif
 
-# 6 < rhel < 7
-%if 0%{?rhel} == 6
+%if 0%{?rhel} == 6 || 0%{?suse_version}
 %global use_initial_setup 0
 %global use_firstboot 1
+%global use_kitchen 0
 %endif
 
-# SLES
-%if 0%{?suse_version}
-%global use_initial_setup 0
-%global use_firstboot 1
-%endif
-
-%global use_dnf (0%{?fedora} && 0%{?fedora} >= 22)
+%global use_dnf 0%{?fedora}
+%global use_yum (0%{?rhel} && 0%{?rhel} <= 7) || (0%{?suse_version})
 
 %global _hardened_build 1
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
@@ -37,7 +32,7 @@
 %endif
 
 # makefile will guess, but be specific.
-%if %{use_gtk3}
+%if 0%{?gtk3}
 %define gtk_version GTK_VERSION=3
 %else
 %define gtk_version GTK_VERSION=2
@@ -48,9 +43,6 @@
 %else
 %define post_boot_tool INSTALL_INITIAL_SETUP=false INSTALL_FIRSTBOOT=true
 %endif
-
-# makefile defaults to INSTALL_YUM_PLUGIN=true
-%define install_yum_plugins INSTALL_YUM_PLUGINS=true
 
 %if 0%{?suse_version}
 %define install_zypper_plugins INSTALL_ZYPPER_PLUGINS=true
@@ -63,6 +55,13 @@
 %define install_dnf_plugins INSTALL_DNF_PLUGINS=true
 %else
 %define install_dnf_plugins INSTALL_DNF_PLUGINS=false
+%endif
+
+# makefile defaults to INSTALL_DNF_PLUGIN=true
+%if %{use_yum}
+%define install_yum_plugins INSTALL_YUM_PLUGINS=true
+%else
+%define install_yum_plugins INSTALL_YUM_PLUGINS=false
 %endif
 
 %if %{use_systemd}
@@ -88,7 +87,17 @@ Source0: %{name}-%{version}.tar.gz
 %if 0%{?suse_version}
 Source1: subscription-manager-rpmlintrc
 %endif
+
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
+# A note about the %{?foo:bar} %{!?foo:quux} convention.  The %{?foo:bar}
+# syntax evaluates foo and if it is **defined**, it expands to "bar" otherwise it
+# expands to nothing.  The %{!?foo:quux} syntax similarily only the expansion
+# occurs when foo is **undefined**.  Since one and only one of the expressions will
+# expand we can more concisely handle when a dependency has different names in
+# SUSE versus RHEL.  The traditional if syntax gets extremely confusing when
+# nesting is required since RPM requires the various preamble directives to be
+# at the start of a line making meaningful indentation impossible.
 
 Requires:  python-ethtool
 Requires:  python-iniparse
@@ -97,43 +106,21 @@ Requires:  virt-what
 Requires:  python-rhsm >= 1.20.0
 Requires:  python-decorator
 Requires:  python-six
-
-%if 0%{?suse_version}
-Requires:  dbus-1-python
-%else
-Requires:  dbus-python
-%endif
-%if 0%{?suse_version} && 0%{?suse_version} < 1315
-Requires:  yum
-%else
-Requires:  yum >= 3.2.29-73
-%endif
-%if !0%{?suse_version}
-Requires:  usermode
-%endif
 Requires:  python-dateutil
-%if %use_gtk3
-%if 0%{?suse_version}
-Requires: python-gobject
-%else
-Requires: gobject-introspection
-Requires: pygobject3-base
-%endif
-%else
-%if 0%{?suse_version}
-Requires:  python-gobject2
-Requires:  libzypp
-Requires:  zypp-plugin-python
-Requires:  python-zypp
-%else
-Requires:  pygobject2
-%endif
-%endif
 
+Requires: %{?suse_version:dbus-1-python} %{!?suse_version:dbus-python}
+Requires: %{?suse_version:aaa_base} %{!?suse_version:chkconfig}
+Requires: %{?suse_version:yum} %{!?suse_version:yum >= 3.2.29-73}
+
+# Support GTK2 and GTK3 on both SUSE and RHEL...
+%if 0%{?suse_version}
+Requires: %{?gtk3:python-gobject} %{!?gtk3:python-gobject2, libzypp, zypp-plugin-python, python-zypp}
+%else
+Requires:  usermode
+Requires:  %{?gtk3:gobject-introspection, pygobject3-base} %{!?gtk3:pygobject2}
 # There's no dmi to read on these arches, so don't pull in this dep.
+# Additionally, dmidecode isn't packaged at all on SUSE
 %ifnarch ppc ppc64 s390 s390x
-# Do not pull in for suse machines - not packaged for suse
-%if 0%{?suse_version} == 0
 Requires:  python-dmidecode
 %endif
 %endif
@@ -143,14 +130,8 @@ Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
 %else
-%if 0%{?suse_version}
-Requires(post): aaa_base
-Requires(preun): aaa_base
-%else
-Requires(post): chkconfig
-Requires(preun): chkconfig
-Requires(preun): initscripts
-%endif
+Requires(post): %{?suse_version:aaa_base} %{!?suse_version:chkconfig}
+Requires(preun): %{?suse_version:aaa_base} %{!?suse_version:chkconfig, initscripts}
 %endif
 
 BuildRequires: python-devel
@@ -160,35 +141,25 @@ BuildRequires: intltool
 BuildRequires: libnotify-devel
 BuildRequires: desktop-file-utils
 BuildRequires: python-six
-%if 0%{?fedora} || 0%{?rhel}
-BuildRequires: redhat-lsb
-%else
-BuildRequires: lsb-release
-BuildRequires: distribution-release
-%endif
-%if 0%{?suse_version} == 0
-BuildRequires: scrollkeeper
-%endif
+
+BuildRequires: %{?suse_version:dbus-1-glib-devel} %{!?suse_version:dbus-glib-devel}
+BuildRequires: %{?suse_version:lsb-release, distribution-release} %{!?suse_version:redhat-lsb}
+BuildRequires: %{?suse_version:gconf2-devel} %{!?suse_version:GConf2-devel}
+BuildRequires: %{?suse_version:update-desktop-files} %{!?suse_version:scrollkeeper}
+
+BuildRequires: %{?gtk3:gtk3-devel} %{!?gtk3:gtk2-devel}
+
 %if 0%{?suse_version}
-BuildRequires: gconf2-devel
-BuildRequires: dbus-1-glib-devel
-BuildRequires: update-desktop-files
 BuildRequires: libzypp
-%else
-BuildRequires: GConf2-devel
-BuildRequires: dbus-glib-devel
 %endif
-%if %use_gtk3
-BuildRequires: gtk3-devel
-%else
-BuildRequires: gtk2-devel
+
+%if 0%{?suse_version} >= 1210
+BuildRequires: systemd-rpm-macros
 %endif
+
 %if %use_systemd
 # We need the systemd RPM macros
 BuildRequires: systemd
-%endif
-%if 0%{?suse_version} >= 1210
-BuildRequires: systemd-rpm-macros
 %endif
 
 %description
@@ -213,21 +184,17 @@ Group: System Environment/Base
 Requires: %{name} = %{version}-%{release}
 
 # We need pygtk3 and gtk2 until rhsm-icon is ported to gtk3
-%if %use_gtk3
-Requires: pygobject3
-Requires: gtk3
-Requires: font(cantarell)
-%else
-Requires: pygtk2 pygtk2-libglade
-%if 0%{?suse_version}
-Requires: dejavu
-%else
-Requires: dejavu-sans-fonts
-%endif
-%endif
+Requires: %{?gtk3:pygobject3, gtk3} %{!?gtk3:pygtk2, pygtk2-libglade}
 Requires: usermode-gtk
 Requires: gnome-icon-theme
-%if 0%{?suse_version} == 0
+
+%if 0%{?gtk3}
+Requires: font(cantarell)
+%else
+Requires: %{?suse_version:dejavu} %{!?suse_version:dejavu-sans-fonts}
+%endif
+
+%if !0%{?suse_version}
 Requires(post): scrollkeeper
 Requires(postun): scrollkeeper
 %endif
@@ -354,8 +321,10 @@ desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-g
 find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 
 # fake out the redhat.repo file
-%{__mkdir} %{buildroot}%{_sysconfdir}/yum.repos.d
-touch %{buildroot}%{_sysconfdir}/yum.repos.d/redhat.repo
+%if %{use_yum} || %{use_dnf}
+    %{__mkdir} %{buildroot}%{_sysconfdir}/yum.repos.d
+    touch %{buildroot}%{_sysconfdir}/yum.repos.d/redhat.repo
+%endif
 
 # fake out the certificate directories
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/pki/consumer
@@ -379,9 +348,17 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %if 0%{?suse_version}
 %dir %{_sysconfdir}/pki
-%dir %{_sysconfdir}/yum
-%dir %{_sysconfdir}/yum/pluginconf.d
-%dir %{_sysconfdir}/yum.repos.d
+
+%if %{use_yum}
+    %dir %{_sysconfdir}/yum
+    %dir %{_sysconfdir}/yum/pluginconf.d
+    %dir %{_prefix}/lib/yum-plugins/
+%endif
+
+%if %{use_yum} || %{use_dnf}
+    %dir %{_sysconfdir}/yum.repos.d
+%endif
+
 %dir %{python_sitelib}/rhsmlib/candlepin
 %dir %{python_sitelib}/rhsmlib/compat
 %dir %{python_sitelib}/rhsmlib/dbus
@@ -394,7 +371,6 @@ rm -rf %{buildroot}
 %dir %{python_sitelib}/subscription_manager/branding
 %dir %{python_sitelib}/subscription_manager/model
 %dir %{python_sitelib}/subscription_manager/plugin
-%dir %{_prefix}/lib/yum-plugins/
 %dir %{_var}/spool/rhsm
 %dir %{_prefix}/share/polkit-1
 %dir %{_prefix}/share/polkit-1/actions
@@ -432,13 +408,17 @@ rm -rf %{buildroot}
 %{_sysconfdir}/security/console.apps/subscription-manager
 %endif
 
-# remove the repo file when we are deleted
-%ghost %{_sysconfdir}/yum.repos.d/redhat.repo
+%if %{use_yum} || %{use_dnf}
+    %ghost %{_sysconfdir}/yum.repos.d/redhat.repo
+%endif
 
 # yum plugin config
-%config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/subscription-manager.conf
-%config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/product-id.conf
-%config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/search-disabled-repos.conf
+%if %{use_yum}
+    # remove the repo file when we are deleted
+    %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/subscription-manager.conf
+    %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/product-id.conf
+    %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/search-disabled-repos.conf
+%endif
 
 # misc system config
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/logrotate.d/subscription-manager
@@ -474,7 +454,7 @@ rm -rf %{buildroot}
 %dir %{python_sitelib}/subscription_manager/ga_impls
 %{python_sitelib}/subscription_manager/ga_impls/__init__.py*
 
-%if %use_gtk3
+%if 0%{?gtk3}
 %{python_sitelib}/subscription_manager/ga_impls/ga_gtk3.py*
 %else
 %dir %{python_sitelib}/subscription_manager/ga_impls/ga_gtk2
@@ -488,9 +468,11 @@ rm -rf %{buildroot}
 # yum plugins
 # Using _prefix + lib here instead of libdir as that evaluates to /usr/lib64 on x86_64,
 # but yum plugins seem to normally be sent to /usr/lib/:
-%{_prefix}/lib/yum-plugins/subscription-manager.py*
-%{_prefix}/lib/yum-plugins/product-id.py*
-%{_prefix}/lib/yum-plugins/search-disabled-repos.py*
+%if %{use_yum}
+    %{_prefix}/lib/yum-plugins/subscription-manager.py*
+    %{_prefix}/lib/yum-plugins/product-id.py*
+    %{_prefix}/lib/yum-plugins/search-disabled-repos.py*
+%endif
 
 # zypper plugins
 %if 0%{?suse_version}
@@ -599,7 +581,7 @@ rm -rf %{buildroot}
 %doc
 %{_mandir}/man8/rhn-migrate-classic-to-rhsm.8*
 %doc LICENSE
-%if 0%{?fedora} > 14
+%if 0%{?fedora}
 %doc README.Fedora
 %endif
 
@@ -689,7 +671,7 @@ fi
 
 %post -n subscription-manager-gui
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
-%if 0%{?suse_version} == 0
+%if !0%{?suse_version}
 scrollkeeper-update -q -o %{_datadir}/omf/%{name} || :
 %endif
 
@@ -723,7 +705,7 @@ fi
 if [ $1 -eq 0 ] ; then
     touch --no-create %{_datadir}/icons/hicolor &>/dev/null
     gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
-    %if 0%{?suse_version} == 0
+    %if !0%{?suse_version}
     scrollkeeper-update -q || :
     %endif
 fi

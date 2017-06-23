@@ -256,6 +256,7 @@ setup_requires = []
 
 install_requires = [
         'six',
+        'kitchen',
     ]
 
 test_require = [
