@@ -26,9 +26,13 @@ import rhsm.connection
 import subscription_manager.injection as inj
 import subscription_manager.cp_provider
 
+from subscription_manager.identity import Identity
+from subscription_manager.facts import Facts
+from subscription_manager.plugins import PluginManager
+
 from test import stubs
 from test.fixture import SubManFixture
-from test.rhsmlib_test.base import DBusObjectTest
+from test.rhsmlib_test.base import DBusObjectTest, InjectionMockingTest
 
 from rhsmlib.dbus import dbus_utils, constants
 from rhsmlib.dbus.objects import DomainSocketRegisterDBusObject, RegisterDBusObject
@@ -155,16 +159,12 @@ class DomainSocketRegisterDBusObjectUnitTest(SubManFixture):
         self.assertEqual(output, SUCCESSFUL_REGISTRATION)
 
 
-class DomainSocketRegisterDBusObjectFunctionalTest(DBusObjectTest):
+class DomainSocketRegisterDBusObjectFunctionalTest(DBusObjectTest, InjectionMockingTest):
     def dbus_objects(self):
         return [RegisterDBusObject]
 
     def setUp(self):
-        inj.provide(inj.PROD_DIR, stubs.StubProductDirectory())
-        inj.provide(inj.INSTALLED_PRODUCTS_MANAGER, stubs.StubInstalledProductsManager())
-
         self.stub_cp_provider = stubs.StubCPProvider()
-        inj.provide(inj.CP_PROVIDER, self.stub_cp_provider)
 
         facts_host_patcher = mock.patch('rhsmlib.dbus.facts.FactsClient', auto_spec=True)
         self.addCleanup(facts_host_patcher.stop)
@@ -174,6 +174,25 @@ class DomainSocketRegisterDBusObjectFunctionalTest(DBusObjectTest):
         super(DomainSocketRegisterDBusObjectFunctionalTest, self).setUp()
         self.proxy = self.proxy_for(RegisterDBusObject.default_dbus_path)
         self.interface = dbus.Interface(self.proxy, constants.REGISTER_INTERFACE)
+
+        self.mock_identity = mock.Mock(spec=Identity, name="Identity")
+        self.mock_identity.is_valid.return_value = True
+
+    def injection_definitions(self, *args, **kwargs):
+        if args[0] == inj.IDENTITY:
+            return self.mock_identity
+        elif args[0] == inj.PROD_DIR:
+            return stubs.StubProductDirectory()
+        elif args[0] == inj.INSTALLED_PRODUCTS_MANAGER:
+            return stubs.StubInstalledProductsManager()
+        elif args[0] == inj.CP_PROVIDER:
+            return self.stub_cp_provider
+        elif args[0] == inj.PLUGIN_MANAGER:
+            return mock.Mock(spec=PluginManager, name="PluginManager")
+        elif args[0] == inj.FACTS:
+            return Facts()
+        else:
+            return None
 
     def test_open_domain_socket(self):
         dbus_method_args = []
@@ -238,14 +257,6 @@ class DomainSocketRegisterDBusObjectFunctionalTest(DBusObjectTest):
                 sock.close()
             self.assertEqual(serr.errno, errno.ECONNREFUSED)
 
-    def _inject_mock_invalid_consumer(self, uuid=None):
-        invalid_identity = mock.NonCallableMock(name='InvalidIdentityMock')
-        invalid_identity.is_valid = mock.Mock(return_value=False)
-        invalid_identity.uuid = uuid or "INVALIDCONSUMERUUID"
-        invalid_identity.cert_dir_path = "/not/a/real/path/to/pki/consumer/"
-        inj.provide(inj.IDENTITY, invalid_identity)
-        return invalid_identity
-
     @mock.patch("subscription_manager.managerlib.persist_consumer_cert")
     @mock.patch("rhsm.connection.UEPConnection")
     def test_can_register_over_domain_socket(self, patched_uep, mock_persist_consumer):
@@ -267,7 +278,8 @@ class DomainSocketRegisterDBusObjectFunctionalTest(DBusObjectTest):
             mock_persist_consumer.assert_called_once_with(expected_consumer)
             self.assertEqual(args[0], SUCCESSFUL_REGISTRATION)
 
-        self._inject_mock_invalid_consumer()
+        self.mock_identity.is_valid.return_value = False
+        self.mock_identity.uuid = 'INVALIDCONSUMERUUID'
 
         patched_uep.return_value.registerConsumer = mock.Mock(return_value=SUCCESSFUL_REGISTRATION)
         # We patch the real UEP class in the tests in this class because we don't want a StubUEP
