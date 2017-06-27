@@ -26,6 +26,8 @@ __all__ = [
     'REGISTER_DBUS_PATH',
     'CONFIG_INTERFACE',
     'CONFIG_DBUS_PATH',
+    'ENTITLEMENT_INTERFACE',
+    'ENTITLEMENT_DBUS_PATH',
 ]
 
 # The base of the 'well known name' used for bus and service names, as well
@@ -56,3 +58,6 @@ PRIVATE_REGISTER_DBUS_PATH = '%s/%s' % (ROOT_DBUS_PATH, 'Register')
 
 CONFIG_INTERFACE = '%s.%s' % (INTERFACE_BASE, 'Config')
 CONFIG_DBUS_PATH = '%s/%s' % (ROOT_DBUS_PATH, 'Config')
+
+ENTITLEMENT_INTERFACE = '%s.%s' % (INTERFACE_BASE, 'Entitlement')
+ENTITLEMENT_DBUS_PATH = '%s/%s' % (ROOT_DBUS_PATH, 'Entitlement')
