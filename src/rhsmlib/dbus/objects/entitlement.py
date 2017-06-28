@@ -1,6 +1,6 @@
 from __future__ import print_function, division, absolute_import
 
-# Copyright (c) 2016 Red Hat, Inc.
+# Copyright (c) 2017 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
 # version 2 (GPLv2). There is NO WARRANTY for this software, express or
@@ -13,11 +13,10 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-import dbus
 import logging
-import six
 
 from rhsmlib.dbus import constants, base_object, util, dbus_utils
+from rhsmlib.services.entitlement import EntitlementService
 
 from dbus import DBusException
 log = logging.getLogger(__name__)
@@ -27,67 +26,30 @@ class EntitlementDBusObject(base_object.BaseObject):
     interface_name = constants.ENTITLEMENT_INTERFACE
 
     def __init__(self, conn=None, object_path=None, bus_name=None, parser=None):
-        super(EntitlementDBusObject, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
+        self.service = EntitlementService()
+        super(EntitlementDBusObject, self).__init__(conn=conn, 
+                                                    object_path=object_path, 
+                                                    bus_name=bus_name)
 
     @util.dbus_service_method(
         constants.ENTITLEMENT_INTERFACE,
         in_signature="",
-        out_signature="s")
+        out_signature="a{sv}")
     @util.dbus_handle_exceptions
     def GetStatus(self, sender=None):
-        return "hello world world"
+        return dbus_utils.dict_to_variant_dict(self.service.get_status())
 
     @util.dbus_service_method(
-        constants.CONFIG_INTERFACE,
+        constants.ENTITLEMENT_INTERFACE,
         in_signature='a{sv}',
         out_signature='a{sv}')
     @util.dbus_handle_exceptions
-    def GetPools(self, options={}, sender=None):
-        d = dbus.Dictionary({}, signature='sv')
-        for k, v in six.iteritems(self.config):
-            d[k] = dbus.Dictionary({}, signature='ss')
-            for kk, vv in six.iteritems(v):
-                d[k][kk] = vv
-        return d
-
-    # @util.dbus_service_method(
-    #     constants.CONFIG_INTERFACE,
-    #     in_signature='sv')
-    # @util.dbus_handle_exceptions
-    # def Set(self, property_name, new_value, sender=None):
-    #     property_name = dbus_utils.dbus_to_python(property_name, str)
-    #     new_value = dbus_utils.dbus_to_python(new_value, str)
-    #     section, _dot, property_name = property_name.partition('.')
-
-    #     if not property_name:
-    #         raise DBusException("Setting an entire section is not supported.  Use 'section.property' format.")
-
-    #     self.config[section][property_name] = new_value
-    #     self.config.persist()
-
-    # @util.dbus_service_method(
-    #     constants.CONFIG_INTERFACE,
-    #     in_signature='',
-    #     out_signature='a{sv}')
-    # @util.dbus_handle_exceptions
-    # def GetAll(self, sender=None):
-    #     d = dbus.Dictionary({}, signature='sv')
-    #     for k, v in six.iteritems(self.config):
-    #         d[k] = dbus.Dictionary({}, signature='ss')
-    #         for kk, vv in six.iteritems(v):
-    #             d[k][kk] = vv
-
-    #     return d
-
-    # @util.dbus_service_method(
-    #     constants.CONFIG_INTERFACE,
-    #     in_signature='s',
-    #     out_signature='v')
-    # @util.dbus_handle_exceptions
-    # def Get(self, property_name, sender=None):
-    #     section, _dot, property_name = property_name.partition('.')
-
-    #     if property_name:
-    #         return self.config[section][property_name]
-    #     else:
-    #         return dbus.Dictionary(self.config[section], signature='sv')
+    def GetPools(self,dbus_options={}, sender=None):
+        options = dbus_utils.dbus_to_python(dbus_options,dict)
+        try:
+            result = self.service.get_pools(**options)
+        except connection.RestlibException as re:
+            log.exception(re)
+            raise dbus.DBusException(re.msg)
+        
+        return map(dbus_utils.dict_to_variant_dict, result)
