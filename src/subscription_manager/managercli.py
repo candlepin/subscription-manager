@@ -1210,6 +1210,7 @@ class RegisterCommand(UserPassCommand):
         restart_virt_who()
 
         print((_("The system has been registered with ID: %s ")) % (consumer_info["uuid"]))
+        print(_("The registered system name is: %s") % consumer_info["consumer_name"])
 
         # get a new UEP as the consumer
         self.cp = self.cp_provider.get_consumer_auth_cp()
