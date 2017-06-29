@@ -45,9 +45,9 @@ try:
 
 except KeyboardInterrupt:
     system_exit(0, "\nUser interrupted process.")
-except ImportError, e:
+except ImportError as err:
     system_exit(2, "Unable to find Subscription Manager module.\n"
-                  "Error: %s" % e)
+                   "Error: %s" % err)
 
 # quick check to see if you are a super-user.
 if os.getuid() != 0:
@@ -62,20 +62,21 @@ def main():
 if __name__ == '__main__':
     try:
         sys.exit(abs(main() or 0))
-    except SystemExit, e:
-        #this is a non-exceptional exception thrown by Python 2.4, just
-        #re-raise, bypassing handle_exception
+    except SystemExit as sys_err:
+        # This is a non-exceptional exception thrown by Python 2.4, just
+        # re-raise, bypassing handle_exception
         try:
             sys.stdout.flush()
+            sys.stderr.flush()
         except IOError:
             pass
-        raise e
+        raise sys_err
     except KeyboardInterrupt:
         sys.stderr.write("\n" + _("User interrupted process."))
         sys.exit(0)
-    except Exception, e:
+    except Exception as err:
         # rhsm-debug can be invoked from sosreport/libreport/abrt, so
         # letting exceptions all the up to the system excepthook
         # can cause chaos (abrt handler gets called, invokes sosreport, etc)
-        sys.stderr.write("Error collecting rhsm-debug information: %s\n" % e)
+        sys.stderr.write("Error collecting rhsm-debug information: %s\n" % err)
         sys.exit(-1)
