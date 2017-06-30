@@ -993,6 +993,11 @@ def main(args=None, five_to_six_script=False):
     set_defaults(options, five_to_six_script)
     validate_options(options)
     MigrationEngine(options).main()
+    try:
+        sys.stdout.flush()
+        sys.stderr.flush()
+    except IOError as io_err:
+        log.error("Error: Unable to print data to stdout/stderr output during exit process: %s" % io_err)
 
 
 if __name__ == '__main__':

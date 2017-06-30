@@ -65,9 +65,9 @@ try:
     from subscription_manager.managercli import handle_exception
 except KeyboardInterrupt:
     system_exit(0, "\nUser interrupted process.")
-except ImportError, e:
+except ImportError as err:
     system_exit(2, "Unable to find Subscription Manager module.\n"
-                  "Error: %s" % e)
+                   "Error: %s" % err)
 
 
 def main():
@@ -83,11 +83,11 @@ def main():
 if __name__ == '__main__':
     try:
         sys.exit(abs(main() or 0))
-    except SystemExit, e:
+    except SystemExit as sys_err:
         # this is a non-exceptional exception thrown by Python 2.4, just
         # re-raise, bypassing handle_exception
-        raise e
+        raise sys_err
     except KeyboardInterrupt:
         system_exit(0, "\nUser interrupted process.")
-    except Exception, e:
-        handle_exception("Exception caught in rhm-migrate-classic-to-rhsm", e)
+    except Exception as err:
+        handle_exception("Exception caught in rhm-migrate-classic-to-rhsm", err)
