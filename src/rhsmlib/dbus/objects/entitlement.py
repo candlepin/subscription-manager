@@ -16,7 +16,7 @@ from __future__ import print_function, division, absolute_import
 import logging
 
 from rhsmlib.dbus import constants, base_object, util, dbus_utils
-from rhsmlib.services.entitlement import EntitlementService
+from rhsmlib.services import EntitlementService
 
 from dbus import DBusException
 log = logging.getLogger(__name__)
