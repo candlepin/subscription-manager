@@ -45,8 +45,7 @@ from subscription_manager import repolib
 from rhsm.utils import parse_url
 from rhsm import ourjson as json
 
-from rhsm.config import initConfig
-from rhsmlib.services import config
+from rhsm.config import initConfig, Config
 
 _RHNLIBPATH = "/usr/share/rhn"
 if _RHNLIBPATH not in sys.path:
@@ -159,7 +158,7 @@ class UserCredentials(object):
 class MigrationEngine(object):
     def __init__(self, options):
         self.rhncfg = initUp2dateConfig()
-        self.rhsmcfg = config.Config(initConfig())
+        self.rhsmcfg = Config(initConfig())
 
         # Sometimes we need to send up the entire contents of the system id file
         # which is referred to in Satellite 5 nomenclature as a "certificate"
@@ -963,7 +962,7 @@ def validate_options(options):
 
 
 def is_hosted():
-    rhsmcfg = config.Config(initConfig())
+    rhsmcfg = Config(initConfig())
     hostname = rhsmcfg['server']['hostname']
     return bool(re.search('subscription\.rhn\.(.*\.)*redhat\.com', hostname) or
                 re.search('subscription\.rhsm\.(.*\.)*redhat\.com', hostname))

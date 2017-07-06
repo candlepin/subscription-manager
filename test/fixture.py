@@ -28,7 +28,7 @@ from contextlib import contextmanager
 from . import stubs
 import subscription_manager.injection as inj
 import subscription_manager.managercli
-from rhsmlib.services import config
+from rhsm.config import Config
 
 # use instead of the normal pid file based ActionLock
 from threading import RLock
@@ -146,7 +146,7 @@ class SubManFixture(unittest.TestCase):
         # Mock makes it damn near impossible to mock a module attribute (which we shouldn't be using
         # in the first place because it's terrible) so we monkey-patch it ourselves.
         # TODO Fix this idiocy by not reading the damn config on module import
-        subscription_manager.managercli.conf = config.Config(self.mock_cfg_parser)
+        subscription_manager.managercli.conf = Config(self.mock_cfg_parser)
         self.addCleanup(unstub_conf)
 
         facts_host_patcher = patch('rhsmlib.dbus.facts.FactsClient', auto_spec=True)

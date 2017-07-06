@@ -26,7 +26,7 @@ import socket
 import threading
 from rhsm.https import ssl
 
-from rhsm.config import initConfig
+from rhsm.config import initConfig, Config
 import rhsm.connection as connection
 from rhsm.profile import get_profile, RPMProfile
 import subscription_manager.injection as inj
@@ -34,15 +34,13 @@ from subscription_manager.jsonwrapper import PoolWrapper
 from rhsm import ourjson as json
 from subscription_manager.isodate import parse_date
 
-from rhsmlib.services import config
-
 from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
 
 PACKAGES_RESOURCE = "packages"
 
-conf = config.Config(initConfig())
+conf = Config(initConfig())
 
 
 class CacheManager(object):

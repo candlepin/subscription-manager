@@ -208,7 +208,7 @@ class ChooseServerScreenTests(SubManFixture):
         self.assertTrue(self.screen.activation_key_checkbox.get_property('sensitive'))
         self.assertTrue(self.screen.activation_key_checkbox.get_property('active'))
 
-    @patch('subscription_manager.gui.registergui.config')
+    @patch('subscription_manager.gui.registergui.base_config')
     def test__on_default_button_clicked(self, config):
         config.DEFAULT_HOSTNAME = "subscription.rhsm.redhat.com"
         config.DEFAULT_PORT = '443'

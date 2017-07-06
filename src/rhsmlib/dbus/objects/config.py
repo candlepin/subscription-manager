@@ -18,7 +18,7 @@ import logging
 import six
 
 from rhsmlib.dbus import constants, base_object, util, dbus_utils
-from rhsmlib.services.config import Config
+from rhsm.config import Config
 
 from dbus import DBusException
 log = logging.getLogger(__name__)

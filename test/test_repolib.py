@@ -34,8 +34,7 @@ from .stubs import StubProductCertificate, \
 from subscription_manager.repolib import Repo, RepoActionInvoker, \
         RepoUpdateActionCommand, TidyWriter, RepoFile, YumReleaseverSource
 from subscription_manager import injection as inj
-from rhsm.config import RhsmConfigParser
-from rhsmlib.services import config
+from rhsm.config import RhsmConfigParser, Config
 
 from subscription_manager import repolib
 from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_TYPE
@@ -812,7 +811,7 @@ certCheckInterval = 240
 """
 
 
-class ConfigFromString(config.Config):
+class ConfigFromString(Config):
     def __init__(self, config_string):
         parser = RhsmConfigParserFromString(config_string)
         super(ConfigFromString, self).__init__(parser)
@@ -863,13 +862,13 @@ class TestManageReposEnabled(fixture.SubManFixture):
         manage_repos_enabled = repolib.manage_repos_enabled()
         self.assertEqual(manage_repos_enabled, False)
 
-    @patch.object(repolib, 'config', ConfigFromString(config_string=manage_repos_bool_config))
+    @patch.object(repolib, 'conf', ConfigFromString(config_string=manage_repos_bool_config))
     def test_empty_manage_repos_bool(self):
         manage_repos_enabled = repolib.manage_repos_enabled()
         # Should fail, and return default of 1
         self.assertEqual(manage_repos_enabled, True)
 
-    @patch.object(repolib, 'config', ConfigFromString(config_string=manage_repos_not_an_int))
+    @patch.object(repolib, 'conf', ConfigFromString(config_string=manage_repos_not_an_int))
     def test_empty_manage_repos_not_an_int(self):
         manage_repos_enabled = repolib.manage_repos_enabled()
         # Should fail, and return default of 1

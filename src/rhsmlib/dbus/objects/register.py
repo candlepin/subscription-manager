@@ -34,8 +34,8 @@ from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
 
-from rhsmlib.services import config
-conf = config.Config(rhsm.config.initConfig())
+from rhsm.config import Config, initConfig
+conf = Config(initConfig())
 
 
 class RegisterDBusObject(base_object.BaseObject):
