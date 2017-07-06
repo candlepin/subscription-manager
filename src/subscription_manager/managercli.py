@@ -69,8 +69,7 @@ from subscription_manager.i18n import ungettext, ugettext as _
 
 log = logging.getLogger(__name__)
 
-from rhsmlib.services import config
-conf = config.Config(rhsm.config.initConfig())
+conf = rhsm.config.Config(rhsm.config.initConfig())
 
 SM = "subscription-manager"
 ERR_NOT_REGISTERED_MSG = _("This system is not yet registered. Try 'subscription-manager register --help' for more information.")

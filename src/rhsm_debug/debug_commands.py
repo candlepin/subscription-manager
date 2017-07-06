@@ -29,14 +29,13 @@ import subscription_manager.managercli as managercli
 from subscription_manager.managercli import CliCommand
 from subscription_manager.cli import InvalidCLIOptionError, system_exit
 from rhsm import ourjson as json
-from rhsm.config import initConfig
-from rhsmlib.services import config
+from rhsm.config import initConfig, Config
 
 from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
-conf = config.Config(initConfig())
+conf = Config(initConfig())
 
 ERR_NOT_REGISTERED_MSG = _("This system is not yet registered. Try 'subscription-manager register --help' for more information.")
 ERR_NOT_REGISTERED_CODE = 1

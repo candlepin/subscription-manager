@@ -19,12 +19,10 @@ import logging
 import os
 
 from rhsm.certificate import create_from_pem
-from rhsm.config import initConfig
+from rhsm.config import initConfig, Config
 from subscription_manager.certdirectory import Path
 
-from rhsmlib.services import config
-
-conf = config.Config(initConfig())
+conf = Config(initConfig())
 log = logging.getLogger(__name__)
 
 

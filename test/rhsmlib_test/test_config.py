@@ -24,7 +24,7 @@ import six
 from rhsm.config import RhsmConfigParser, NoOptionError
 from rhsmlib.dbus import constants
 from rhsmlib.dbus.objects.config import ConfigDBusObject
-from rhsmlib.services.config import Config, ConfigSection
+from rhsm.config import Config, ConfigSection
 from test.rhsmlib_test.base import DBusObjectTest, TestUtilsMixin
 
 TEST_CONFIG = """

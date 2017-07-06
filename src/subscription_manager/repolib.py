@@ -31,19 +31,18 @@ from subscription_manager.model import ent_cert
 from six.moves.urllib.parse import parse_qs, urlparse, urlunparse, urlencode
 from six.moves import configparser
 
-from rhsm.config import initConfig, in_container
+from rhsm.config import initConfig, in_container, Config
 
 # FIXME: local imports
 
 from subscription_manager.certlib import ActionReport, BaseActionInvoker
 from subscription_manager.certdirectory import Path
-from rhsmlib.services import config
 
 from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
 
-conf = config.Config(initConfig())
+conf = Config(initConfig())
 
 ALLOWED_CONTENT_TYPES = ["yum"]
 

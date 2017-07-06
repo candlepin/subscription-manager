@@ -56,8 +56,7 @@ from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
 
-from rhsmlib.services import config
-conf = config.Config(base_config.initConfig())
+conf = base_config.Config(base_config.initConfig())
 
 
 class RegisterState(object):
