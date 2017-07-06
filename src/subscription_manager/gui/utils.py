@@ -75,7 +75,7 @@ def test_proxy_reachability():
     finally:
         s.close()
 
-    if not result:
+    if result != 0:
         log.error("Proxy connection error: %s" % result)
         return False
     else:
