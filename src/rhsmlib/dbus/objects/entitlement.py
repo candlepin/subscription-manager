@@ -17,6 +17,7 @@ import logging
 
 from rhsmlib.dbus import constants, base_object, util, dbus_utils
 from rhsmlib.services import EntitlementService
+import rhsm.connection as connection
 
 from dbus import DBusException
 log = logging.getLogger(__name__)
@@ -42,7 +43,7 @@ class EntitlementDBusObject(base_object.BaseObject):
     @util.dbus_service_method(
         constants.ENTITLEMENT_INTERFACE,
         in_signature='a{sv}',
-        out_signature='a{sv}')
+        out_signature='aa{sv}')
     @util.dbus_handle_exceptions
     def GetPools(self,dbus_options={}, sender=None):
         options = dbus_utils.dbus_to_python(dbus_options,dict)
