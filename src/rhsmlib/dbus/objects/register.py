@@ -91,7 +91,7 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
     @dbus.service.method(
         dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
         in_signature='sssa{sv}',
-        out_signature='a{sv}'
+        out_signature='s'
     )
     def Register(self, org, username, password, options):
         """
@@ -110,15 +110,13 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         org = dbus_utils.dbus_to_python(org)
 
         resp = self._register(org, options)
-        consumer = json.loads(resp['content'], object_hook=dbus_utils._decode_dict)
+        consumer = json.loads(resp, object_hook=dbus_utils._decode_dict)
         managerlib.persist_consumer_cert(consumer)
-        resp['content'] = json.dumps(self._remove_key(consumer))
-
-        return dbus_utils.dict_to_variant_dict(resp)
+        return resp
 
     @dbus.service.method(dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
         in_signature='sasa{sv}',
-        out_signature='a{sv}')
+        out_signature='s')
     def RegisterWithActivationKeys(self, org, activation_keys, options):
         """
         Note this method is registration ONLY.  Auto-attach is a separate process.
@@ -128,11 +126,9 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         org = dbus_utils.dbus_to_python(org)
 
         resp = self._register(org, options)
-        consumer = json.loads(resp['content'], object_hook=dbus_utils._decode_dict)
+        consumer = json.loads(resp, object_hook=dbus_utils._decode_dict)
         managerlib.persist_consumer_cert(consumer)
-        resp['content'] = json.dumps(self._remove_key(consumer))
-
-        return dbus_utils.dict_to_variant_dict(resp)
+        return resp
 
     def _register(self, org, options):
         options = dbus_utils.dbus_to_python(options)
@@ -144,8 +140,8 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
 
         self.plugin_manager.run("pre_register_consumer", name=consumer_name, facts=facts_dict)
 
-        cp = self.build_uep(options, full_response=True)
-        resp = cp.registerConsumer(
+        cp = self.build_uep(options)
+        consumer = cp.registerConsumer(
             name=consumer_name,
             facts=facts_dict,
             owner=org,
@@ -155,13 +151,7 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
             content_tags=self.installed_mgr.tags
         )
         self.installed_mgr.write_cache()
-        self.plugin_manager.run("post_register_consumer", consumer=resp['content'], facts=facts_dict)
-        return resp
-
-    def _remove_key(self, consumer):
-        if 'idCert' in consumer:
-            del consumer['idCert']
-
+        self.plugin_manager.run("post_register_consumer", consumer=consumer, facts=facts_dict)
         return consumer
 
     def validate_options(self, options):

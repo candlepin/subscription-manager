@@ -40,7 +40,22 @@ from rhsmlib.dbus.objects import DomainSocketRegisterDBusObject, RegisterDBusObj
 CONTENT_JSON = '''{"hypervisorId": null,
         "serviceLevel": "",
         "autoheal": true,
-        "idCert": "FAKE_KEY",
+        "idCert": {
+          "key": "FAKE_KEY",
+          "cert": "FAKE_CERT",
+          "serial" : {
+            "id" : 5196045143213189102,
+            "revoked" : false,
+            "collected" : false,
+            "expiration" : "2033-04-25T18:03:06+0000",
+            "serial" : 5196045143213189102,
+            "created" : "2017-04-25T18:03:06+0000",
+            "updated" : "2017-04-25T18:03:06+0000"
+          },
+          "id" : "8a8d011e5ba64700015ba647fbd20b88",
+          "created" : "2017-04-25T18:03:07+0000",
+          "updated" : "2017-04-25T18:03:07+0000"
+        },
         "owner": {"href": "/owners/admin", "displayName": "Admin Owner",
         "id": "ff808081550d997c01550d9adaf40003", "key": "admin"},
         "href": "/consumers/c1b8648c-6f0a-4aa5-b34e-b9e62c0e4364",
@@ -55,19 +70,6 @@ CONTENT_JSON = '''{"hypervisorId": null,
         {"releaseVer": null}, "entitlementStatus": "valid", "name":
         "test.example.com", "created": "2016-06-02T15:16:51+0000",
         "contentTags": null, "dev": false}'''
-
-SUCCESSFUL_REGISTRATION = {
-    "headers": {
-        'content-type': 'application/json',
-        'date': 'Thu, 02 Jun 2016 15:16:51 GMT',
-        'server': 'Apache-Coyote/1.1',
-        'transfer-encoding': 'chunked',
-        'x-candlepin-request-uuid': '01566658-137b-478c-84c0-38540daa8602',
-        'x-version': '2.0.13-1'
-    },
-    "content": CONTENT_JSON,
-    "status": "200"
-}
 
 
 class DomainSocketRegisterDBusObjectUnitTest(SubManFixture):
@@ -84,9 +86,8 @@ class DomainSocketRegisterDBusObjectUnitTest(SubManFixture):
         self._inject_mock_invalid_consumer()
 
         expected_consumer = json.loads(CONTENT_JSON, object_hook=dbus_utils._decode_dict)
-        del expected_consumer['idCert']
 
-        patched_uep.return_value.registerConsumer = mock.Mock(return_value=SUCCESSFUL_REGISTRATION)
+        patched_uep.return_value.registerConsumer = mock.Mock(return_value=CONTENT_JSON)
         self.stub_cp_provider.basic_auth_cp = patched_uep.return_value
         register_service = DomainSocketRegisterDBusObject(conn=self.dbus_connection)
 
@@ -99,7 +100,7 @@ class DomainSocketRegisterDBusObjectUnitTest(SubManFixture):
         # Be sure we are persisting the consumer cert
         mock_persist_consumer.assert_called_once_with(expected_consumer)
         # Be sure we get the right output
-        self.assertEqual(output, SUCCESSFUL_REGISTRATION)
+        self.assertEqual(output, CONTENT_JSON)
 
     @mock.patch("rhsm.connection.UEPConnection")
     def test_get_uep_from_options(self, patched_uep):
@@ -115,7 +116,7 @@ class DomainSocketRegisterDBusObjectUnitTest(SubManFixture):
         self._inject_mock_invalid_consumer()
 
         register_service = DomainSocketRegisterDBusObject(conn=self.dbus_connection)
-        register_service.build_uep(options, full_response=True)
+        register_service.build_uep(options)
 
         from rhsmlib.dbus.base_object import conf as register_conf
 
@@ -132,7 +133,7 @@ class DomainSocketRegisterDBusObjectUnitTest(SubManFixture):
             proxy_password=conf['proxy_password'],
             no_proxy=conf['no_proxy'],
             correlation_id=mock.ANY,
-            restlib_class=rhsm.connection.BaseRestLib
+            restlib_class=rhsm.connection.Restlib
         )
 
     @mock.patch("subscription_manager.managerlib.persist_consumer_cert")
@@ -141,8 +142,7 @@ class DomainSocketRegisterDBusObjectUnitTest(SubManFixture):
         self._inject_mock_invalid_consumer()
 
         expected_consumer = json.loads(CONTENT_JSON, object_hook=dbus_utils._decode_dict)
-        del expected_consumer['idCert']
-        patched_uep.return_value.registerConsumer = mock.Mock(return_value=SUCCESSFUL_REGISTRATION)
+        patched_uep.return_value.registerConsumer = mock.Mock(return_value=CONTENT_JSON)
         # Note it's no_auth_cp since activation key registration uses no authentication
         self.stub_cp_provider.no_auth_cp = patched_uep.return_value
         register_service = DomainSocketRegisterDBusObject(self.dbus_connection)
@@ -156,7 +156,7 @@ class DomainSocketRegisterDBusObjectUnitTest(SubManFixture):
         # Be sure we are persisting the consumer cert
         mock_persist_consumer.assert_called_once_with(expected_consumer)
         # Be sure we get the right output
-        self.assertEqual(output, SUCCESSFUL_REGISTRATION)
+        self.assertEqual(output, CONTENT_JSON)
 
 
 class DomainSocketRegisterDBusObjectFunctionalTest(DBusObjectTest, InjectionMockingTest):
@@ -271,17 +271,16 @@ class DomainSocketRegisterDBusObjectFunctionalTest(DBusObjectTest, InjectionMock
         socket_interface = dbus.Interface(socket_proxy, constants.PRIVATE_REGISTER_INTERFACE)
 
         expected_consumer = json.loads(CONTENT_JSON, object_hook=dbus_utils._decode_dict)
-        del expected_consumer['idCert']
 
         def assertions(*args):
             # Be sure we are persisting the consumer cert
             mock_persist_consumer.assert_called_once_with(expected_consumer)
-            self.assertEqual(args[0], SUCCESSFUL_REGISTRATION)
+            self.assertEqual(args[0], CONTENT_JSON)
 
         self.mock_identity.is_valid.return_value = False
         self.mock_identity.uuid = 'INVALIDCONSUMERUUID'
 
-        patched_uep.return_value.registerConsumer = mock.Mock(return_value=SUCCESSFUL_REGISTRATION)
+        patched_uep.return_value.registerConsumer = mock.Mock(return_value=CONTENT_JSON)
         # We patch the real UEP class in the tests in this class because we don't want a StubUEP
         self.stub_cp_provider.basic_auth_cp = patched_uep.return_value
 
