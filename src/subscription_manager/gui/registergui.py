@@ -40,7 +40,7 @@ from subscription_manager.action_client import ActionClient
 from subscription_manager.gui import networkConfig
 from subscription_manager.gui import widgets
 from subscription_manager.injection import IDENTITY, PLUGIN_MANAGER, require, \
-        INSTALLED_PRODUCTS_MANAGER, PROFILE_MANAGER, FACTS
+        INSTALLED_PRODUCTS_MANAGER, PROFILE_MANAGER, FACTS, ENT_DIR
 from subscription_manager import managerlib
 from subscription_manager.utils import is_valid_server_info, MissingCaCertException, \
         parse_server_info, restart_virt_who
@@ -1902,6 +1902,7 @@ class AsyncBackend(object):
     def __init__(self, backend):
         self.backend = backend
         self.plugin_manager = require(PLUGIN_MANAGER)
+        self.ent_dir = require(ENT_DIR)
         self.queue = queue.Queue()
         self._threads = []
 
@@ -2074,8 +2075,10 @@ class AsyncBackend(object):
 
             log.info("Binding to subscriptions at service level: %s" %
                     dry_run_result.service_level)
+            expected_pool_ids = set()
             for pool_quantity in dry_run_result.json:
                 pool_id = pool_quantity['pool']['id']
+                expected_pool_ids.add(pool_id)
                 quantity = pool_quantity['quantity']
 
                 log.debug("  pool %s quantity %s" % (pool_id, quantity))
@@ -2084,13 +2087,21 @@ class AsyncBackend(object):
                                         pool_id=pool_id, quantity=quantity)
 
                 cp = self.backend.cp_provider.get_consumer_auth_cp()
-                ents = cp.bindByEntitlementPool(uuid, pool_id, quantity)
-
-                self.plugin_manager.run("post_subscribe",
-                                        consumer_uuid=uuid, entitlement_data=ents)
+                try:
+                    ents = cp.bindByEntitlementPool(uuid, pool_id, quantity)
+                    self.plugin_manager.run("post_subscribe",
+                                            consumer_uuid=uuid, entitlement_data=ents)
+                except RestlibException as e:
+                    # TODO when candlepin emits error codes, only continue for "already subscribed"
+                    log.warn("Error while attaching subscription: %s", e)
 
             # FIXME: this should be a different asyncBackend task
             managerlib.fetch_certificates(self.backend.certlib)
+
+            attached_pool_ids = [ent.pool.id for ent in self.ent_dir.list_with_content_access()]
+            for pool_id in expected_pool_ids:
+                if pool_id not in attached_pool_ids:
+                    raise Exception(_("Not all expected subscriptions were attached, see /var/log/rhsm/rhsm.log for more details."))
 
             # make GUI aware of updated certs (instead of waiting for periodic task to detect it)
             self.backend.cs.force_cert_check()
