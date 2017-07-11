@@ -17,10 +17,15 @@ import logging
 import six
 import dbus.service
 
-from rhsmlib.dbus import constants, exceptions, dbus_utils
+import rhsm.connection
+from rhsmlib.dbus import constants, exceptions
 
-from subscription_manager import injection as inj
+from subscription_manager import injection as inj, utils
 from subscription_manager.injectioninit import init_dep_injection
+
+from rhsmlib.services import config
+import rhsm.config
+conf = config.Config(rhsm.config.initConfig())
 
 init_dep_injection()
 
@@ -41,7 +46,7 @@ class BaseObject(dbus.service.Object):
         if interface_name != self.interface_name:
             raise exceptions.UnknownInterface(interface_name)
 
-    def validate_proxy_options(self, proxy_options):
+    def validate_only_proxy_options(self, proxy_options):
         error_msg = None
         for k in six.iterkeys(proxy_options):
             if k not in ['proxy_hostname', 'proxy_port', 'proxy_user', 'proxy_password', 'no_proxy']:
@@ -54,8 +59,7 @@ class BaseObject(dbus.service.Object):
         return proxy_options
 
     def is_registered(self):
-        identity = inj.require(inj.IDENTITY)
-        return identity.is_valid()
+        return inj.require(inj.IDENTITY).is_valid()
 
     def ensure_registered(self):
         if not self.is_registered():
@@ -63,15 +67,33 @@ class BaseObject(dbus.service.Object):
                 "This object requires the consumer to be registered before it can be used."
             )
 
-    def build_proxy_information(self, proxy_options):
-        proxy_options = dbus_utils.dbus_to_python(proxy_options, dict)
-        proxy_options = self.validate_proxy_options(proxy_options)
+    def build_uep(self, options, proxy_only=False):
+        # Some commands/services only allow manipulation of the proxy information for a connection
+        cp_provider = inj.require(inj.CP_PROVIDER)
+        if proxy_only:
+            self.validate_only_proxy_options(options)
 
-        connection_info = {}
-        for arg in ['proxy_hostname', 'proxy_port', 'proxy_user', 'proxy_password', 'no_proxy']:
-            # Not sure why CPProvider takes all the proxy stuff as `whatever_arg` instead of just
-            # `whatever`.
-            if arg in proxy_options:
-                connection_info['%s_arg' % arg] = proxy_options[arg]
+        # So we get the headers and raw JSON
+        connection_info = {'restlib_class': rhsm.connection.BaseRestLib}
 
-        return connection_info
+        server_sec = conf['server']
+        connection_info['host'] = options.get('host', server_sec['hostname'])
+        connection_info['ssl_port'] = options.get('port', server_sec.get_int('port'))
+        connection_info['handler'] = options.get('handler', server_sec['prefix'])
+
+        connection_info['proxy_hostname_arg'] = options.get('proxy_hostname', server_sec['proxy_hostname'])
+        connection_info['proxy_port_arg'] = options.get('proxy_port', server_sec.get_int('proxy_port'))
+        connection_info['proxy_user_arg'] = options.get('proxy_user', server_sec['proxy_user'])
+        connection_info['proxy_password_arg'] = options.get('proxy_password', server_sec['proxy_password'])
+        connection_info['no_proxy_arg'] = options.get('no_proxy', server_sec['no_proxy'])
+
+        cp_provider.set_connection_info(**connection_info)
+        cp_provider.set_correlation_id(utils.generate_correlation_id())
+
+        if self.is_registered():
+            return cp_provider.get_consumer_auth_cp()
+        elif 'username' in options and 'password' in options:
+            cp_provider.set_user_pass(options['username'], options['password'])
+            return cp_provider.get_basic_auth_cp()
+        else:
+            return cp_provider.get_no_auth_cp()

@@ -117,7 +117,7 @@ class DomainSocketRegisterDBusObjectUnitTest(SubManFixture):
         register_service = DomainSocketRegisterDBusObject(conn=self.dbus_connection)
         register_service.build_uep(options)
 
-        from rhsmlib.dbus.objects.register import conf as register_conf
+        from rhsmlib.dbus.base_object import conf as register_conf
 
         conf = register_conf['server']
         patched_uep.assert_called_once_with(
