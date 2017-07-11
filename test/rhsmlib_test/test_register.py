@@ -40,7 +40,22 @@ from rhsmlib.dbus.objects import DomainSocketRegisterDBusObject, RegisterDBusObj
 CONTENT_JSON = '''{"hypervisorId": null,
         "serviceLevel": "",
         "autoheal": true,
-        "idCert": "FAKE_KEY",
+        "idCert": {
+          "key": "FAKE_KEY",
+          "cert": "FAKE_CERT",
+          "serial" : {
+            "id" : 5196045143213189102,
+            "revoked" : false,
+            "collected" : false,
+            "expiration" : "2033-04-25T18:03:06+0000",
+            "serial" : 5196045143213189102,
+            "created" : "2017-04-25T18:03:06+0000",
+            "updated" : "2017-04-25T18:03:06+0000"
+          },
+          "id" : "8a8d011e5ba64700015ba647fbd20b88",
+          "created" : "2017-04-25T18:03:07+0000",
+          "updated" : "2017-04-25T18:03:07+0000"
+        },
         "owner": {"href": "/owners/admin", "displayName": "Admin Owner",
         "id": "ff808081550d997c01550d9adaf40003", "key": "admin"},
         "href": "/consumers/c1b8648c-6f0a-4aa5-b34e-b9e62c0e4364",
@@ -84,7 +99,6 @@ class DomainSocketRegisterDBusObjectUnitTest(SubManFixture):
         self._inject_mock_invalid_consumer()
 
         expected_consumer = json.loads(CONTENT_JSON, object_hook=dbus_utils._decode_dict)
-        del expected_consumer['idCert']
 
         patched_uep.return_value.registerConsumer = mock.Mock(return_value=SUCCESSFUL_REGISTRATION)
         self.stub_cp_provider.basic_auth_cp = patched_uep.return_value
@@ -141,7 +155,6 @@ class DomainSocketRegisterDBusObjectUnitTest(SubManFixture):
         self._inject_mock_invalid_consumer()
 
         expected_consumer = json.loads(CONTENT_JSON, object_hook=dbus_utils._decode_dict)
-        del expected_consumer['idCert']
         patched_uep.return_value.registerConsumer = mock.Mock(return_value=SUCCESSFUL_REGISTRATION)
         # Note it's no_auth_cp since activation key registration uses no authentication
         self.stub_cp_provider.no_auth_cp = patched_uep.return_value
@@ -271,7 +284,6 @@ class DomainSocketRegisterDBusObjectFunctionalTest(DBusObjectTest, InjectionMock
         socket_interface = dbus.Interface(socket_proxy, constants.PRIVATE_REGISTER_INTERFACE)
 
         expected_consumer = json.loads(CONTENT_JSON, object_hook=dbus_utils._decode_dict)
-        del expected_consumer['idCert']
 
         def assertions(*args):
             # Be sure we are persisting the consumer cert

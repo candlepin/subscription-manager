@@ -112,8 +112,6 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         resp = self._register(org, options)
         consumer = json.loads(resp['content'], object_hook=dbus_utils._decode_dict)
         managerlib.persist_consumer_cert(consumer)
-        resp['content'] = json.dumps(self._remove_key(consumer))
-
         return dbus_utils.dict_to_variant_dict(resp)
 
     @dbus.service.method(dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
@@ -130,8 +128,6 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         resp = self._register(org, options)
         consumer = json.loads(resp['content'], object_hook=dbus_utils._decode_dict)
         managerlib.persist_consumer_cert(consumer)
-        resp['content'] = json.dumps(self._remove_key(consumer))
-
         return dbus_utils.dict_to_variant_dict(resp)
 
     def _register(self, org, options):
@@ -157,12 +153,6 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         self.installed_mgr.write_cache()
         self.plugin_manager.run("post_register_consumer", consumer=resp['content'], facts=facts_dict)
         return resp
-
-    def _remove_key(self, consumer):
-        if 'idCert' in consumer:
-            del consumer['idCert']
-
-        return consumer
 
     def validate_options(self, options):
         # TODO: Rewrite the error messages to be more dbus specific
