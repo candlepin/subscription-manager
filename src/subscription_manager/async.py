@@ -28,6 +28,8 @@ from subscription_manager.managerlib import fetch_certificates
 from subscription_manager.injection import IDENTITY, \
         PLUGIN_MANAGER, CP_PROVIDER, require
 
+from rhsmlib.services import attach
+
 
 class AsyncPool(object):
 
@@ -76,10 +78,7 @@ class AsyncBind(object):
 
     def _run_bind(self, pool, quantity, bind_callback, cert_callback, except_callback):
         try:
-            self.plugin_manager.run("pre_subscribe", consumer_uuid=self.identity.uuid,
-                    pool_id=pool['id'], quantity=quantity)
-            ents = self.cp_provider.get_consumer_auth_cp().bindByEntitlementPool(self.identity.uuid, pool['id'], quantity)
-            self.plugin_manager.run("post_subscribe", consumer_uuid=self.identity.uuid, entitlement_data=ents)
+            attach.AttachService(self.cp_provider).attach_pool(pool['id'], quantity)
             if bind_callback:
                 ga_GObject.idle_add(bind_callback)
             fetch_certificates(self.certlib)
