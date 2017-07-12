@@ -26,9 +26,6 @@ from rhsmlib.dbus import constants, exceptions, dbus_utils, base_object, server,
 
 from subscription_manager import managerlib, utils
 from subscription_manager import injection as inj
-from subscription_manager.injectioninit import init_dep_injection
-
-init_dep_injection()
 
 from subscription_manager.i18n import ugettext as _
 
