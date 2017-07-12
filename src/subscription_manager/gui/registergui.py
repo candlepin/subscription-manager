@@ -2084,7 +2084,8 @@ class AsyncBackend(object):
                 log.debug("  pool %s quantity %s" % (pool_id, quantity))
 
                 try:
-                    attach.AttachService(self.backend.cp_provider).attach_pool(pool_id, quantity)
+                    attach_service = attach.AttachService(self.backend.cp_provider.get_consumer_auth_cp())
+                    attach_service.attach_pool(pool_id, quantity)
                 except RestlibException as e:
                     # TODO when candlepin emits error codes, only continue for "already subscribed"
                     log.warn("Error while attaching subscription: %s", e)

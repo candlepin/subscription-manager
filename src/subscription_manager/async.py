@@ -78,7 +78,7 @@ class AsyncBind(object):
 
     def _run_bind(self, pool, quantity, bind_callback, cert_callback, except_callback):
         try:
-            attach.AttachService(self.cp_provider).attach_pool(pool['id'], quantity)
+            attach.AttachService(self.cp_provider.get_consumer_auth_cp()).attach_pool(pool['id'], quantity)
             if bind_callback:
                 ga_GObject.idle_add(bind_callback)
             fetch_certificates(self.certlib)

@@ -115,7 +115,7 @@ class DomainSocketRegisterDBusObjectUnitTest(SubManFixture):
         self._inject_mock_invalid_consumer()
 
         register_service = DomainSocketRegisterDBusObject(conn=self.dbus_connection)
-        register_service.build_uep(options)
+        register_service.build_uep(options, full_response=True)
 
         from rhsmlib.dbus.base_object import conf as register_conf
 
