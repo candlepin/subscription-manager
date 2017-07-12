@@ -67,14 +67,16 @@ class BaseObject(dbus.service.Object):
                 "This object requires the consumer to be registered before it can be used."
             )
 
-    def build_uep(self, options, proxy_only=False):
+    def build_uep(self, options, proxy_only=False, full_response=False):
         # Some commands/services only allow manipulation of the proxy information for a connection
         cp_provider = inj.require(inj.CP_PROVIDER)
         if proxy_only:
             self.validate_only_proxy_options(options)
 
-        # So we get the headers and raw JSON
-        connection_info = {'restlib_class': rhsm.connection.BaseRestLib}
+        connection_info = {}
+        if full_response:
+            # So we get the headers and raw JSON
+            connection_info['restlib_class'] = rhsm.connection.BaseRestLib
 
         server_sec = conf['server']
         connection_info['host'] = options.get('host', server_sec['hostname'])

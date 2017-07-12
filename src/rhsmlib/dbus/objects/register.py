@@ -140,7 +140,7 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
 
         self.plugin_manager.run("pre_register_consumer", name=consumer_name, facts=facts_dict)
 
-        cp = self.build_uep(options)
+        cp = self.build_uep(options, full_response=True)
         resp = cp.registerConsumer(
             name=consumer_name,
             facts=facts_dict,
