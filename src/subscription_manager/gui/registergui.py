@@ -56,7 +56,7 @@ from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
 
-from rhsmlib.services import config
+from rhsmlib.services import config, attach
 conf = config.Config(base_config.initConfig())
 
 
@@ -2083,14 +2083,8 @@ class AsyncBackend(object):
 
                 log.debug("  pool %s quantity %s" % (pool_id, quantity))
 
-                self.plugin_manager.run("pre_subscribe", consumer_uuid=uuid,
-                                        pool_id=pool_id, quantity=quantity)
-
-                cp = self.backend.cp_provider.get_consumer_auth_cp()
                 try:
-                    ents = cp.bindByEntitlementPool(uuid, pool_id, quantity)
-                    self.plugin_manager.run("post_subscribe",
-                                            consumer_uuid=uuid, entitlement_data=ents)
+                    attach.AttachService(self.backend.cp_provider).attach_pool(pool_id, quantity)
                 except RestlibException as e:
                     # TODO when candlepin emits error codes, only continue for "already subscribed"
                     log.warn("Error while attaching subscription: %s", e)

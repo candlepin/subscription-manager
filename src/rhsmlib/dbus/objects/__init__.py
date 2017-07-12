@@ -16,3 +16,4 @@ from __future__ import print_function, division, absolute_import
 from rhsmlib.dbus.objects.config import ConfigDBusObject  # NOQA
 from rhsmlib.dbus.objects.main import Main  # NOQA
 from rhsmlib.dbus.objects.register import RegisterDBusObject, DomainSocketRegisterDBusObject  # NOQA
+from rhsmlib.dbus.objects.attach import AttachDBusObject  # NOQA

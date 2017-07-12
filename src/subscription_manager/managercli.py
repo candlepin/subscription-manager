@@ -69,7 +69,7 @@ from subscription_manager.i18n import ungettext, ugettext as _
 
 log = logging.getLogger(__name__)
 
-from rhsmlib.services import config
+from rhsmlib.services import config, attach
 conf = config.Config(rhsm.config.initConfig())
 
 SM = "subscription-manager"
@@ -188,27 +188,6 @@ def handle_exception(msg, ex):
         system_exit(os.EX_SOFTWARE, mapped_message)
     else:
         system_exit(os.EX_SOFTWARE, ex)
-
-
-def autosubscribe(cp, consumer_uuid, service_level=None):
-    """
-    This is a wrapper for bind/bindByProduct. Eventually, we will exclusively
-    use bind, but for now, we support both.
-    """
-    if service_level is not None:
-        cp.updateConsumer(consumer_uuid, service_level=service_level)
-        print(_("Service level set to: %s") % service_level)
-
-    plugin_manager = inj.require(inj.PLUGIN_MANAGER)
-    try:
-        plugin_manager.run("pre_auto_attach", consumer_uuid=consumer_uuid)
-        ents = cp.bind(consumer_uuid)  # new style
-        plugin_manager.run("post_auto_attach", consumer_uuid=consumer_uuid, entitlement_data=ents)
-
-    except Exception as e:
-        log.warning("Error during auto-attach.")
-        log.exception(e)
-        raise
 
 
 def show_autosubscribe_output(uep):
@@ -1251,9 +1230,14 @@ class RegisterCommand(UserPassCommand):
                 system_exit(os.EX_UNAVAILABLE, _("Error: The --servicelevel option is not supported "
                                  "by the server. Did not complete your request."))
             try:
-                autosubscribe(self.cp, consumer['uuid'], service_level=self.options.service_level)
+                attach.AttachService(self.cp).attach_auto(self.options.service_level)
+                if self.options.service_level is not None:
+                    print(_("Service level set to: %s") % self.options.service_level)
             except connection.RestlibException as re:
                 print_error(re.msg)
+            except Exception:
+                log.exception("Auto-attach failed")
+                raise
 
         if (self.options.consumerid or self.options.activation_keys or self.autoattach or self.cp.has_capability(CONTENT_ACCESS_CERT_CAPABILITY)):
             log.info("System registered, updating entitlements if needed")
@@ -1618,27 +1602,23 @@ class AttachCommand(CliCommand):
             cert_action_client.update()
             return_code = 0
             cert_update = True
+
+            attach_service = attach.AttachService(self.cp)
             if self.options.pool:
                 subscribed = False
+
                 for pool in self.options.pool:
+                    # odd html strings will cause issues, reject them here.
+                    if pool.find("#") >= 0:
+                        system_exit(os.EX_USAGE, _("Please enter a valid numeric pool ID."))
+
                     try:
-                        # odd html strings will cause issues, reject them here.
-                        if (pool.find("#") >= 0):
-                            system_exit(os.EX_USAGE, _("Please enter a valid numeric pool ID."))
-                        # If quantity is None, server will assume 1. pre_subscribe will
-                        # report the same.
-                        self.plugin_manager.run("pre_subscribe",
-                                                consumer_uuid=self.identity.uuid,
-                                                pool_id=pool,
-                                                quantity=self.options.quantity)
-                        ents = self.cp.bindByEntitlementPool(self.identity.uuid, pool, self.options.quantity)
-                        self.plugin_manager.run("post_subscribe", consumer_uuid=self.identity.uuid, entitlement_data=ents)
+                        ents = attach_service.attach_pool(pool, self.options.quantity)
                         # Usually just one, but may as well be safe:
                         for ent in ents:
                             pool_json = ent['pool']
                             print(_("Successfully attached a subscription for: %s") % pool_json['productName'])
-                            log.info("Successfully attached a subscription for: %s (%s)" %
-                                    (pool_json['productName'], pool))
+                            log.info("Attached a subscription for %s (%s)" % (pool_json['productName'], pool))
                             subscribed = True
                     except connection.RestlibException as re:
                         log.exception(re)
@@ -1674,8 +1654,11 @@ class AttachCommand(CliCommand):
                             system_exit(os.EX_UNAVAILABLE, _("Error: The --servicelevel option is not "
                                              "supported by the server. Did not "
                                              "complete your request."))
-                    autosubscribe(self.cp, self.identity.uuid,
-                                  service_level=self.options.service_level)
+
+                    attach_service.attach_auto(self.options.service_level)
+                    if self.options.service_level is not None:
+                        print(_("Service level set to: %s") % self.options.service_level)
+
             report = None
             if cert_update:
                 report = self.entcertlib.update()
