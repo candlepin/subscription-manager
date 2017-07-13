@@ -18,6 +18,8 @@ import logging
 from subscription_manager import injection as inj
 from .certificate_filter import EntitlementCertificateFilter
 from dateutil.tz import tzlocal
+from .methods import get_available_entitlements
+from subscription_manager.jsonwrapper import PoolWrapper
 
 log = logging.getLogger(__name__)
 
@@ -57,10 +59,59 @@ class EntitlementService(object):
                 "overall_status": overall_status}
 
     def get_pools(self,**kwargs):
-        return self.get_consumed_pools()
+        #return self.get_consumed_pools()
+        return self.get_available_pools(**kwargs)
 
-    def get_available_pools(self, matches=None, service_level=None):
-        pass
+    def get_available_pools(self, matches=None, service_level=None, no_overlap=False, on_date=None):
+        system_is_registered = self.identity.is_valid()
+        if not system_is_registered:
+            return []
+
+        if on_date:
+            try:
+                # doing it this ugly way for pre python 2.5
+                on_date = datetime.datetime(
+                    *(strptime(on_date, '%Y-%m-%d')[0:6]))
+            except Exception:
+                # Translators: dateexample is current date in format like 2014-11-31
+                msg = _("Date entered is invalid. Date should be in YYYY-MM-DD format (example: {dateexample})")
+                dateexample = strftime("%Y-%m-%d", localtime())
+                raise Exception(msg.format(dateexample=dateexample))
+
+        epools = get_available_entitlements(get_all=True,
+                                            active_on=on_date,
+                                            overlapping=no_overlap,
+                                            uninstalled=False,
+                                            filter_string=matches)
+        # Filter certs by service level, if specified.
+        # Allowing "" here.
+        if service_level is not None:
+            epools = self._filter_pool_json_by_service_level(epools, service_level)
+
+        def wrapp_pool(pool):
+            #print(pool.keys())
+            machine_type = PoolWrapper(pool).is_virt_only() and "Virtual" \
+                           or "Physical"
+            result = { "subscription_name": pool['productName'] or "",
+                       "provides": pool['providedProducts'] or [],
+                       "sku":"",
+                       "contract": pool['contractNumber'] or "",
+                       "account": "",
+                       "serial": "",
+                       "pool_id": pool['id'],
+                       "provides_management": pool.get('management_enabled',False),
+                       "active": True,
+                       "quantity_used": pool['quantity'] or 0,
+                       "service_level": pool['service_level'] or "",
+                       "service_type": pool['service_type'] or "",
+                       "subscription_type": self.pooltype_cache.get(pool['id']) or "",
+                       "starts":"", # format_date(pool['endDate']),
+                       "ends": "", #format_date(pool['endDate']),
+                       "system_type": machine_type}
+            return result
+
+        pools_data = map(wrapp_pool,epools)
+        return pools_data
 
     def get_consumed_pools(self, matches=None, service_level=None):
         def no_filter(x):
