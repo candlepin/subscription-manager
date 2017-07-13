@@ -19,7 +19,7 @@ from rhsmlib.dbus import constants, base_object, util, dbus_utils
 from rhsmlib.services import EntitlementService
 import rhsm.connection as connection
 
-from dbus import DBusException
+from dbus import DBusException, Dictionary
 log = logging.getLogger(__name__)
 
 class EntitlementDBusObject(base_object.BaseObject):
@@ -51,6 +51,7 @@ class EntitlementDBusObject(base_object.BaseObject):
             result = self.service.get_pools(**options)
         except connection.RestlibException as re:
             log.exception(re)
-            raise dbus.DBusException(re.msg)
-        
+            raise DBusException(re.msg)
+
         return map(dbus_utils.dict_to_variant_dict, result)
+
