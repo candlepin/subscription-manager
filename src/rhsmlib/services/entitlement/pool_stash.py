@@ -14,13 +14,15 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+import logging
+log = logging.getLogger(__name__)
+from .pool_filter import PoolFilter
 
 from subscription_manager.injection import require, CERT_SORTER, \
     COMPLIANCE_MANAGER_FACTORY, IDENTITY, ENTITLEMENT_STATUS_CACHE, \
     PROD_STATUS_CACHE, ENT_DIR, PROD_DIR, CP_PROVIDER, OVERRIDE_STATUS_CACHE, \
-    POOLTYPE_CACHE, RELEASE_STATUS_CACHE, FACTS, POOL_STATUS_CACHE
-
-from .methods import list_pools
+    POOLTYPE_CACHE, RELEASE_STATUS_CACHE, FACTS, POOL_STATUS_CACHE, \
+    PROFILE_MANAGER
 
 class PoolStash(object):
     """
@@ -96,11 +98,11 @@ class PoolStash(object):
             self.sorter = require(CERT_SORTER)
 
         if incompatible:
-            for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
+            for pool in self.list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
                     self.identity.uuid, active_on=active_on, filter_string=filter_string):
                 self.compatible_pools[pool['id']] = pool
         else:  # --all has been used
-            for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
+            for pool in self.list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
                     self.identity.uuid, list_all=True, active_on=active_on, filter_string=filter_string):
                 self.all_pools[pool['id']] = pool
 
@@ -160,6 +162,38 @@ class PoolStash(object):
             len(self.all_pools) - len(pools)))
 
         return pools
+
+    def list_pools(self,uep, consumer_uuid, list_all=False, active_on=None, filter_string=None):
+        """
+        Wrapper around the UEP call to fetch pools, which forces a facts update
+        if anything has changed before making the request. This ensures the
+        rule checks server side will have the most up to date info about the
+        consumer possible.
+        """
+
+        # client tells service 'look for facts again'
+        # if service finds new facts:
+        #     -emit a signal?
+        #     - or just update properties
+        #       - and set a 'been_synced' property to False
+        # client waits for facts check to finish
+        # if no changes or been_synced=True, continue
+        # if changes or unsynced:
+        #    subman updates candlepin with the latest version of services GetFacts() [blocking]
+        #    when finished, subman emit's 'factsSyncFinished'
+        #        - then service flops 'been_synced' property
+        #    -or- subman calls 'here_are_the_latest_facts_to_the_server()' on service
+        #         then service flops 'been_synced' property
+        # subman gets signal that props changed, and that been_synced is now true
+        # since it's been synced, then subman continues
+        require(FACTS).update_check(uep, consumer_uuid)
+        require(PROFILE_MANAGER).update_check(uep, consumer_uuid)
+
+        owner = uep.getOwner(consumer_uuid)
+        ownerid = owner['key']
+
+        return uep.getPoolsList(consumer=consumer_uuid, listAll=list_all,
+                                active_on=active_on, owner=ownerid, filter_string=filter_string)
 
     def merge_pools(self, incompatible=False, overlapping=False,
             uninstalled=False, subscribed=False, text=None):
