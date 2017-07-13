@@ -217,6 +217,9 @@ def dict_to_variant_dict(in_dict):
     for key, value in six.iteritems(in_dict):
         if isinstance(value, dict):
             in_dict[key] = dict_to_variant_dict(value)
+        if isinstance(value,list) and len(value)==0:
+            in_dict[key] = dbus.Dictionary([], signature="sv")
+
     return dbus.Dictionary(in_dict, signature="sv")
 
 
