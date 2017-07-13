@@ -20,6 +20,36 @@ from subscription_manager.injection import require, CERT_SORTER, \
 
 from .pool_stash import PoolStash
 from subscription_manager.jsonwrapper import PoolWrapper
+from subscription_manager import isodate
+from dateutil.tz import tzlocal
+
+def format_date(dt):
+    if not dt:
+        return ""
+    try:
+        return dt.astimezone(tzlocal()).strftime("%x")
+    except ValueError:
+        log.warn("Datetime does not contain timezone information")
+        return dt.strftime("%x")
+
+def _sub_dict(datadict, subkeys, default=None):
+    """Return a dict that is a subset of datadict matching only the keys in subkeys"""
+    return dict([(k, datadict.get(k, default)) for k in subkeys])
+
+def is_true_value(test_string):
+    val = str(test_string).lower()
+    return val == "1" or val == "true" or val == "yes"
+
+def allows_multi_entitlement(pool):
+    """
+    Determine if this pool allows multi-entitlement based on the pool's
+    top-level product's multi-entitlement attribute.
+    """
+    for attribute in pool['productAttributes']:
+        if attribute['name'] == "multi-entitlement" and \
+            is_true_value(attribute['value']):
+            return True
+    return False
 
 # This method is morphing the actual pool json and returning a new
 # dict which does not contain all the pool info. Not sure if this is really
@@ -77,7 +107,7 @@ def get_available_entitlements(get_all=False, active_on=None, overlapping=False,
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
         if int(d['quantity']) < 0:
-            d['quantity'] = _('Unlimited')
+            d['quantity'] = 'Unlimited'
         else:
             d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
 
