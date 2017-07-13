@@ -16,12 +16,16 @@ from __future__ import print_function, division, absolute_import
 #
 import os
 import sys
+import logging
 
 from subscription_manager.printing_utils import columnize, echo_columnize_callback
 from subscription_manager.i18n_optparse import OptionParser, WrappedIndentedHelpFormatter
 from subscription_manager.utils import print_error
 
 from subscription_manager.i18n import ugettext as _
+
+
+log = logging.getLogger(__name__)
 
 
 class InvalidCLIOptionError(Exception):
@@ -49,16 +53,18 @@ class AbstractCLICommand(object):
         raise NotImplementedError("Commands must implement: main(self, args=None)")
 
     def _validate_options(self):
-        '''
+        """
         Validates the command's arguments.
         @raise InvalidCLIOptionError: Raised when arg validation fails.
-        '''
+        """
         # No argument validation by default.
         pass
 
     def _get_usage(self):
-        # usage format strips any leading 'usage' so
-        # do not iclude it
+        """
+        Usage format strips any leading 'usage' so
+        do not include it
+        """
         return _("%%prog %s [OPTIONS]") % self.name
 
     def _do_command(self):
@@ -162,7 +168,9 @@ class CLI(object):
 
 
 def system_exit(code, msgs=None):
-    "Exit with a code and optional message(s). Saved a few lines of code."
+    """
+    Exit with a code and optional message(s). Saved a few lines of code.
+    """
 
     if msgs:
         if type(msgs) not in [type([]), type(())]:
@@ -184,5 +192,12 @@ def system_exit(code, msgs=None):
                 print_error(msg.encode("utf8"))
             else:
                 print_error(msg)
+
+    # Try to flush all outputs, see BZ: 1350402
+    try:
+        sys.stdout.flush()
+        sys.stderr.flush()
+    except IOError as io_err:
+        log.error("Error: Unable to print data to stdout/stderr output during exit process: %s" % io_err)
 
     sys.exit(code)

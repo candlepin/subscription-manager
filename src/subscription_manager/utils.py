@@ -495,8 +495,9 @@ class EntitlementCertificateFilter(ProductCertificateFilter):
 
 
 def print_error(message):
-    " Prints the specified message to stderr "
-
+    """
+    Prints the specified message to stderr
+    """
     sys.stderr.write(message)
     sys.stderr.write("\n")
 
