@@ -14,3 +14,5 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 
 from rhsmlib.services.entitlement.service import EntitlementService
+
+from .methods import get_available_entitlements
