@@ -18,7 +18,7 @@ from __future__ import print_function, division, absolute_import
 #
 
 import os
-from yum.plugins import TYPE_CORE, TYPE_INTERACTIVE
+from yum.plugins import TYPE_CORE
 
 from subscription_manager import injection as inj
 from subscription_manager.repolib import RepoActionInvoker
@@ -31,7 +31,7 @@ from rhsm import connection
 from rhsm import config
 
 requires_api_version = '2.5'
-plugin_type = (TYPE_CORE, TYPE_INTERACTIVE)
+plugin_type = (TYPE_CORE,)
 
 # TODO: translate strings
 
