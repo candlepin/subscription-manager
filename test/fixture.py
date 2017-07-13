@@ -369,6 +369,9 @@ class Capture(object):
             if not self.silent:
                 self.stream.write(data)
 
+        def flush(self):
+            pass
+
         def getvalue(self):
             return self.buf.getvalue()
 
