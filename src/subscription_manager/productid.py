@@ -474,12 +474,10 @@ class ProductManager(object):
                     log.info("skipping obsolete desktop cert")
                     continue
 
-            # See if the product cert already exists, if so no need to write it
+            # See if the product cert already exists
             #
-            # FIXME: this is where we would check to see if a product cert
-            # needs to be updated
-            #
-            # if we dont find this product cert, install it
+            # if we don't find this product cert, install it
+            # otherwise, update it if necessary
             #
             # ProductCert.is_installed() -> search pdir for ProductCert
             # ProductCert.install() -> add to install list
