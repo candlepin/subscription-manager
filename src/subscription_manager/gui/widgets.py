@@ -220,7 +220,7 @@ class HasSortableWidget(object):
         elif val1 == val2:
             return 0
         else:
-            return -1
+            return 1
 
     def _stripe_rows(self, column, store):
         """
