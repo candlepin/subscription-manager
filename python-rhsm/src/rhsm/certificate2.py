@@ -69,9 +69,8 @@ class _CertFactory(object):
         """
         try:
             pem = open(path, 'r').read()
-        except IOError as e:
-            print(os.strerror(e.errno))
-            exit(1)
+        except IOError as err:
+            raise CertificateException("Error loading certificate: %s" % err)
         return self._read_x509(_certificate.load(path), path, pem)
 
     def create_from_pem(self, pem, path=None):

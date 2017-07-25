@@ -17,7 +17,14 @@ from __future__ import print_function, division, absolute_import
 
 import unittest
 
-from rhsm.certificate import Key, Content
+from rhsm.certificate import Key, Content, create_from_file, CertificateException
+
+
+class CertTest(unittest.TestCase):
+
+    def test_non_existent_file(self):
+        with self.assertRaises(CertificateException):
+            create_from_file("/foo/non_existent_cert.pem")
 
 
 class KeyTests(unittest.TestCase):
