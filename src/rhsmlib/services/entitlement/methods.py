@@ -79,6 +79,13 @@ def get_available_entitlements(get_all=False, active_on=None, overlapping=False,
         'contractNumber',
         'management_enabled'
     ]
+    
+    #
+    # FIXME 
+    # Since Register using DBus is not implemented yet, 
+    # it is necessary to reload identity before candlepin call.
+    #
+    require(IDENTITY).reload()
 
     pool_stash = PoolStash()
     dlist = pool_stash.get_filtered_pools_list(active_on, not get_all,
