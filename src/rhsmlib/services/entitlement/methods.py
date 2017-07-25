@@ -19,7 +19,7 @@ from subscription_manager.injection import require, CERT_SORTER, \
         POOLTYPE_CACHE, RELEASE_STATUS_CACHE, FACTS, POOL_STATUS_CACHE
 
 from .pool_stash import PoolStash
-from subscription_manager.jsonwrapper import PoolWrapper
+from .pool_wrapper import PoolWrapper
 from subscription_manager import isodate
 from dateutil.tz import tzlocal
 
