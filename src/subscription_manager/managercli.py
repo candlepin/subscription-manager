@@ -29,6 +29,8 @@ import readline
 import socket
 import six.moves
 import sys
+import libvirt
+import xml
 from time import localtime, strftime, strptime
 
 from rhsm.certificate import CertificateException
@@ -1099,6 +1101,29 @@ class RegisterCommand(UserPassCommand):
         """
         return True
 
+    def _hypervisor_id(self, id_type='uuid'):
+        """
+        Try to get text representation of hypervisor id
+        :param id_type: Type of ID (UUID or hostname)
+        :return: Text representation of hypervisor id
+        """
+
+        try:
+            conn = libvirt.openReadOnly(None)
+        except libvirt.libvirtError as err:
+            log.error("Cannot connect to libvirtd: %s" % err)
+            return None
+
+        if id_type == 'uuid':
+            host_xml = xml.etree.ElementTree.fromstring(conn.getCapabilities())
+            hypervisor_id = host_xml.find('host/uuid').text
+        elif id_type == 'hostname':
+            hypervisor_id = conn.getHostname()
+        else:
+            hypervisor_id = None
+
+        return hypervisor_id
+
     def _do_command(self):
         """
         Executes the command.
@@ -1189,12 +1214,15 @@ class RegisterCommand(UserPassCommand):
                 environment_id = self._get_environment_id(admin_cp, owner_key,
                         self.options.environment)
 
-                consumer = admin_cp.registerConsumer(name=consumername,
-                     type=self.options.consumertype, facts=facts_dict,
-                     owner=owner_key, environment=environment_id,
-                     keys=self.options.activation_keys,
-                     installed_products=self.installed_mgr.format_for_server(),
-                     content_tags=self.installed_mgr.tags)
+                consumer = admin_cp.registerConsumer(
+                    name=consumername,
+                    type=self.options.consumertype, facts=facts_dict,
+                    owner=owner_key, environment=environment_id,
+                    keys=self.options.activation_keys,
+                    installed_products=self.installed_mgr.format_for_server(),
+                    hypervisor_id=self._hypervisor_id('uuid'),
+                    content_tags=self.installed_mgr.tags
+                )
                 self.installed_mgr.write_cache()
             self.plugin_manager.run("post_register_consumer", consumer=consumer,
                                     facts=facts_dict)
