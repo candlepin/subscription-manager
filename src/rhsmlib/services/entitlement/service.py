@@ -19,7 +19,7 @@ from subscription_manager import injection as inj
 from .certificate_filter import EntitlementCertificateFilter
 from dateutil.tz import tzlocal
 from .methods import get_available_entitlements
-from subscription_manager.jsonwrapper import PoolWrapper
+from .pool_wrapper import PoolWrapper
 
 log = logging.getLogger(__name__)
 
@@ -38,7 +38,6 @@ class EntitlementService(object):
         self.sorter = inj.require(inj.CERT_SORTER)
         self.pooltype_cache = inj.require(inj.POOLTYPE_CACHE)
         self.entitlement_dir = inj.require(inj.ENT_DIR)
-        #self.product_dir = inj.require(inj.PROD_DIR)
 
     def get_status(self):
         system_is_registered = self.identity.is_valid()
