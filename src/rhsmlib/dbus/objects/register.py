@@ -13,29 +13,18 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-import socket
 import json
 import logging
-import dbus.service
+import socket
 import threading
-
-import rhsm.config
-import rhsm.connection
+import dbus.service
 
 from rhsmlib.dbus import constants, exceptions, dbus_utils, base_object, server, util
-
-from subscription_manager import managerlib, utils
+from subscription_manager import managerlib
 from subscription_manager import injection as inj
-from subscription_manager.injectioninit import init_dep_injection
-
-init_dep_injection()
-
 from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
-
-from rhsmlib.services import config
-conf = config.Config(rhsm.config.initConfig())
 
 
 class RegisterDBusObject(base_object.BaseObject):
@@ -97,13 +86,12 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         )
         self.installed_mgr = inj.require(inj.INSTALLED_PRODUCTS_MANAGER)
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
-        self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.facts = inj.require(inj.FACTS)
 
     @dbus.service.method(
         dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
         in_signature='sssa{sv}',
-        out_signature='a{sv}'
+        out_signature='s'
     )
     def Register(self, org, username, password, options):
         """
@@ -121,12 +109,14 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         options['password'] = dbus_utils.dbus_to_python(password)
         org = dbus_utils.dbus_to_python(org)
 
-        result = self._register(org, options)
-        return dbus_utils.dict_to_variant_dict(result)
+        resp = self._register(org, options)
+        consumer = json.loads(resp, object_hook=dbus_utils._decode_dict)
+        managerlib.persist_consumer_cert(consumer)
+        return resp
 
     @dbus.service.method(dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
         in_signature='sasa{sv}',
-        out_signature='a{sv}')
+        out_signature='s')
     def RegisterWithActivationKeys(self, org, activation_keys, options):
         """
         Note this method is registration ONLY.  Auto-attach is a separate process.
@@ -135,8 +125,10 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         options['activation_keys'] = dbus_utils.dbus_to_python(activation_keys)
         org = dbus_utils.dbus_to_python(org)
 
-        result = self._register(org, options)
-        return dbus_utils.dict_to_variant_dict(result)
+        resp = self._register(org, options)
+        consumer = json.loads(resp, object_hook=dbus_utils._decode_dict)
+        managerlib.persist_consumer_cert(consumer)
+        return resp
 
     def _register(self, org, options):
         options = dbus_utils.dbus_to_python(options)
@@ -149,7 +141,7 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         self.plugin_manager.run("pre_register_consumer", name=consumer_name, facts=facts_dict)
 
         cp = self.build_uep(options)
-        registration_output = cp.registerConsumer(
+        consumer = cp.registerConsumer(
             name=consumer_name,
             facts=facts_dict,
             owner=org,
@@ -159,43 +151,8 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
             content_tags=self.installed_mgr.tags
         )
         self.installed_mgr.write_cache()
-        self.plugin_manager.run("post_register_consumer", consumer=registration_output['content'],
-            facts=facts_dict)
-
-        consumer = json.loads(registration_output['content'], object_hook=dbus_utils._decode_dict)
-        managerlib.persist_consumer_cert(consumer)
-
-        if 'idCert' in consumer:
-            del consumer['idCert']
-
-        registration_output['content'] = json.dumps(consumer)
-        return registration_output
-
-    def build_uep(self, options):
-        connection_info = {}
-        server_sec = conf['server']
-        connection_info['host'] = options.get('host', server_sec['hostname'])
-        connection_info['ssl_port'] = options.get('port', server_sec.get_int('port'))
-        connection_info['handler'] = options.get('handler', server_sec['prefix'])
-        connection_info['proxy_hostname_arg'] = options.get('proxy_hostname', server_sec['proxy_hostname'])
-        connection_info['proxy_port_arg'] = options.get('proxy_port', server_sec.get_int('proxy_port'))
-        connection_info['proxy_user_arg'] = options.get('proxy_user', server_sec['proxy_user'])
-        connection_info['proxy_password_arg'] = options.get('proxy_password', server_sec['proxy_password'])
-        connection_info['no_proxy_arg'] = options.get('no_proxy', server_sec['no_proxy'])
-        # So we get the headers and raw JSON
-        connection_info['restlib_class'] = rhsm.connection.BaseRestLib
-
-        self.cp_provider.set_connection_info(**connection_info)
-        self.cp_provider.set_correlation_id(utils.generate_correlation_id())
-
-        if 'username' in options and 'password' in options:
-            self.cp_provider.set_user_pass(options['username'], options['password'])
-            return self.cp_provider.get_basic_auth_cp()
-        else:
-            return self.cp_provider.get_no_auth_cp()
-
-    def is_registered(self):
-        return inj.require(inj.IDENTITY).is_valid()
+        self.plugin_manager.run("post_register_consumer", consumer=consumer, facts=facts_dict)
+        return consumer
 
     def validate_options(self, options):
         # TODO: Rewrite the error messages to be more dbus specific
