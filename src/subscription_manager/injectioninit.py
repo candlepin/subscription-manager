@@ -22,7 +22,7 @@ from subscription_manager.cache import ProductStatusCache, \
     InstalledProductsManager, PoolTypeCache, ReleaseStatusCache, \
     RhsmIconCache, ContentAccessCache, PoolStatusCache
 
-from subscription_manager.cert_sorter import CertSorter
+from subscription_manager.cert_sorter import CertSorter, ComplianceManagerFactory
 from subscription_manager.certdirectory import EntitlementDirectory
 from subscription_manager.certdirectory import ProductDirectory
 from subscription_manager.facts import Facts
@@ -67,6 +67,7 @@ def init_dep_injection():
     inj.provide(inj.CP_PROVIDER, CPProvider, singleton=True)
 
     inj.provide(inj.CERT_SORTER, CertSorter, singleton=True)
+    inj.provide(inj.COMPLIANCE_MANAGER_FACTORY, ComplianceManagerFactory, singleton=True)
 
     # Set up plugin manager as a singleton.
     # FIXME: should we aggressively catch exceptions here? If we can't
