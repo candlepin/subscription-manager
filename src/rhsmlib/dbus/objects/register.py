@@ -15,14 +15,12 @@ from __future__ import print_function, division, absolute_import
 #
 import json
 import logging
-import socket
 import threading
 import dbus.service
 
 from rhsmlib.dbus import constants, exceptions, dbus_utils, base_object, server, util
+from rhsmlib.services.register import RegisterService
 from subscription_manager import managerlib
-from subscription_manager import injection as inj
-from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
 
@@ -84,16 +82,14 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
             object_path=object_path,
             bus_name=bus_name
         )
-        self.installed_mgr = inj.require(inj.INSTALLED_PRODUCTS_MANAGER)
-        self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
-        self.facts = inj.require(inj.FACTS)
 
     @dbus.service.method(
         dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
-        in_signature='sssa{sv}',
+        in_signature='sssa{sv}a{sv}',
         out_signature='s'
     )
-    def Register(self, org, username, password, options):
+    @util.dbus_handle_exceptions
+    def Register(self, org, username, password, options, connection_options):
         """
         This method registers the system using basic auth
         (username and password for a given org).
@@ -104,85 +100,35 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
 
         Note this method is registration ONLY.  Auto-attach is a separate process.
         """
+        connection_options = dbus_utils.dbus_to_python(connection_options)
+        connection_options['username'] = dbus_utils.dbus_to_python(username)
+        connection_options['password'] = dbus_utils.dbus_to_python(password)
+        cp = self.build_uep(connection_options)
+
         options = dbus_utils.dbus_to_python(options)
-        options['username'] = dbus_utils.dbus_to_python(username)
-        options['password'] = dbus_utils.dbus_to_python(password)
         org = dbus_utils.dbus_to_python(org)
 
-        resp = self._register(org, options)
-        consumer = json.loads(resp, object_hook=dbus_utils._decode_dict)
+        register_service = RegisterService(cp)
+        consumer = register_service.register(org, **options)
         managerlib.persist_consumer_cert(consumer)
-        return resp
+        return json.dumps(consumer)
 
     @dbus.service.method(dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
-        in_signature='sasa{sv}',
+        in_signature='sasa{sv}a{sv}',
         out_signature='s')
-    def RegisterWithActivationKeys(self, org, activation_keys, options):
+    @util.dbus_handle_exceptions
+    def RegisterWithActivationKeys(self, org, activation_keys, options, connection_options):
         """
         Note this method is registration ONLY.  Auto-attach is a separate process.
         """
+        connection_options = dbus_utils.dbus_to_python(connection_options)
+        cp = self.build_uep(connection_options)
+
         options = dbus_utils.dbus_to_python(options)
         options['activation_keys'] = dbus_utils.dbus_to_python(activation_keys)
         org = dbus_utils.dbus_to_python(org)
 
-        resp = self._register(org, options)
-        consumer = json.loads(resp, object_hook=dbus_utils._decode_dict)
+        register_service = RegisterService(cp)
+        consumer = register_service.register(org, **options)
         managerlib.persist_consumer_cert(consumer)
-        return resp
-
-    def _register(self, org, options):
-        options = dbus_utils.dbus_to_python(options)
-        options = self.validate_options(options)
-
-        environment = options.get('environment')
-        facts_dict = self.facts.get_facts()
-        consumer_name = options['name']
-
-        self.plugin_manager.run("pre_register_consumer", name=consumer_name, facts=facts_dict)
-
-        cp = self.build_uep(options)
-        consumer = cp.registerConsumer(
-            name=consumer_name,
-            facts=facts_dict,
-            owner=org,
-            environment=environment,
-            keys=options.get('activation_keys', None),
-            installed_products=self.installed_mgr.format_for_server(),
-            content_tags=self.installed_mgr.tags
-        )
-        self.installed_mgr.write_cache()
-        self.plugin_manager.run("post_register_consumer", consumer=consumer, facts=facts_dict)
-        return consumer
-
-    def validate_options(self, options):
-        # TODO: Rewrite the error messages to be more dbus specific
-        error_msg = None
-        if self.is_registered() and not options.get('force', False):
-            error_msg = _("This system is already registered. Add force to options to override.")
-        elif options.get('name') == '':
-            error_msg = _("Error: system name can not be empty.")
-        elif 'consumerid' in options and 'force' in options:
-            error_msg = _("Error: Can not force registration while attempting to recover registration with consumerid. Please use --force without --consumerid to re-register or use the clean command and try again without --force.")
-
-        # If 'activation_keys' already exists in the dictionary, leave it.  Otherwise, set to None.
-        if options.get('activation_keys', None):
-            # 746259: Don't allow the user to pass in an empty string as an activation key
-            if '' == options['activation_keys']:
-                error_msg = _("Error: Must specify an activation key")
-            elif 'username' in options:
-                error_msg = _("Error: Activation keys do not require user credentials.")
-            elif 'consumerid' in options:
-                error_msg = _("Error: Activation keys can not be used with previously registered IDs.")
-            elif 'environment' in options:
-                error_msg = _("Error: Activation keys do not allow environments to be specified.")
-        else:
-            if 'username' not in options or 'password' not in options:
-                error_msg = _("Error: Missing username or password.")
-
-        if error_msg:
-            raise exceptions.Failed(msg=error_msg)
-
-        if 'name' not in options:
-            options['name'] = socket.gethostname()
-
-        return options
+        return json.dumps(consumer)
