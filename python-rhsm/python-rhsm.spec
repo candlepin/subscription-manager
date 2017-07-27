@@ -9,7 +9,7 @@
 %{!?python2_sitearch:%global python2_sitearch %python_sitearch}
 
 Name: python-rhsm
-Version: 1.20.0
+Version: 1.20.1
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -128,6 +128,17 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Thu Jul 27 2017 Alex Wood <awood@redhat.com> 1.20.1-1
+- 1472715: Python module rhsm should never call exit() (jhnidek@redhat.com)
+- 1444453: Have gettext return unicode instead of bytes. (awood@redhat.com)
+- 1457197: Env. variable no_proxy=* is not ignored (jhnidek@redhat.com)
+- 1392709: Display better error msg., when wrong proxy is set up
+  (jhnidek@redhat.com)
+- Python 3 compatability changes (awood@redhat.com)
+- 1443159: Added default value for splay configuration (jhnidek@redhat.com)
+- 1451166: Fix Host header when using proxy (khowell@redhat.com)
+- Add preliminary zypper support (khowell@redhat.com)
+
 * Mon May 08 2017 Kevin Howell <khowell@redhat.com> 1.20.0-1
 - Bump version to 1.20.0 
 
