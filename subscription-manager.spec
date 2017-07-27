@@ -71,7 +71,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.20.0
+Version: 1.20.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -715,6 +715,79 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Thu Jul 27 2017 Alex Wood <awood@redhat.com> 1.20.1-1
+- Only return JSON body from Register service. (awood@redhat.com)
+- Add a DBus object and service to attach subscriptions. (awood@redhat.com)
+- 1472746: Correct sorting of dates in subman gui (jhnidek@redhat.com)
+- 1472715: Python module rhsm should never call exit() (jhnidek@redhat.com)
+- 1462456: added flush() method to Tee class in fixtures. (jhnidek@redhat.com)
+- 1462456: flushing of stdout and stderr once again (jhnidek@redhat.com)
+- 1329349: Add subscription-manager plugin to yum-config-manager
+  (khowell@redhat.com)
+- 1468297: Fix gui proxy check (khowell@redhat.com)
+- 1367672: Ignore "already attached" in register GUI (khowell@redhat.com)
+- 1350402: fix broken pipe error in other bin scripts (jhnidek@redhat.com)
+- 1463325: Output consumer name on registration (tony@anthonyjames.org)
+- Tell SUSE to use yum since python-kitchen is unavailable. (awood@redhat.com)
+- Do not package the yum plugins if they are not needed. (awood@redhat.com)
+- Use python-kitchen instead of yum for util method. (awood@redhat.com)
+- 1380341: Better dialog in GUI, when consumer is deleted at CP.
+  (jhnidek@redhat.com)
+- 1459194: open Online Documentation, when env. var. LANG is unset
+  (jhnidek@redhat.com)
+- 1455681: rhsm-debug created report dir with wrong perms (jhnidek@redhat.com)
+- 1452075: print only readable part of SSL error to console
+  (jhnidek@redhat.com)
+- 1413161: Add baseurl examples, explanation (khowell@redhat.com)
+- 1386914: Add hypervisor consumer type to manpages (khowell@redhat.com)
+- 1444453: Have gettext return unicode instead of bytes. (awood@redhat.com)
+- 1443570: Update retired article reference (redhatrises@gmail.com)
+- 1457348: Use https for the redhat.com/forgot_password label.
+  (jhnidek@redhat.com)
+- 1457197: Env. variable no_proxy=* is not ignored (jhnidek@redhat.com)
+- 1392709: Display better error msg., when wrong proxy is set up
+  (jhnidek@redhat.com)
+- 1448501: subman gui can unregister, when network is up again
+  (jhnidek@redhat.com)
+- 1422196: Update container certs after plugin install (khowell@redhat.com)
+- 1441397: added --noproxy for rhsm-debug auto-completion (jhnidek@redhat.com)
+- 1421010: GUI opens network dialog due to bad proxy during startup
+  (jhnidek@redhat.com)
+- 1414529: Raise exception with path/string of wrong certificate.
+  (jhnidek@redhat.com)
+- 1443164: no_proxy match the host name when *.redhat.com is used
+  (jhnidek@redhat.com)
+- 1441397: Added --noproxy to bash completion script (jhnidek@redhat.com)
+- Python 3 compatability fixes. (awood@redhat.com)
+- 1365472: Add mnemonic for subscription-manager spoke (khowell@redhat.com)
+- 1443159: Added default value for splay configuration (jhnidek@redhat.com)
+- 1452737: Enable saving no_proxy settings from GUI (jhnidek@redhat.com)
+- 1451003: identity reports right info in name field (jhnidek@redhat.com)
+- 1450818: Bug fix of com.redhat.Subscriptionmanager D-Bus policy
+  (jhnidek@redhat.com)
+- 1451166: Fix Host header when using proxy (khowell@redhat.com)
+- 1450049: Replace `-` with `_` in completion functions (khowell@redhat.com)
+- 1450862: remove obsolete certiciates of golden ticket (jhnidek@redhat.com)
+- 1448855: golden ticket entitlement was not removed. (jhnidek@redhat.com)
+- 1449824: facts collection aborts with unknown locale (jhnidek@redhat.com)
+- 1432231: Support /etc/init.d daemon even on EL7 (khowell@redhat.com)
+- 1450210: Make lscpu ignore locale again (khowell@redhat.com)
+- 1447211: Don't read non-existing json cache file. (jhnidek@redhat.com)
+- 1401787: Use json file for caching pool type. (jhnidek@redhat.com)
+- 1447722: use socket.getaddrinfo() to mimic hostname -f cmd
+  (jhnidek@redhat.com)
+- 1427069: Add secondary file to determine external repo file changes
+  (wpoteat@redhat.com)
+- 1444453: set bin scripts file encoding to utf-8 (khowell@redhat.com)
+- 1444453: Set default encoding for gui to UTF-8 (khowell@redhat.com)
+- include 'full_refresh_on_yum' logic in zypper service plugin
+  (dellweg@atix.de)
+- rehash ca-path in zypper service plugin (dellweg@atix.de)
+- Add preliminary zypper support (khowell@redhat.com)
+- Define libexec directory at compile time (kkaempf@suse.de)
+- Separate CFLAGS and LDFLAGS (kkaempf@suse.de)
+- 1445204: Update timestamp during intitial cert check. (jhnidek@redhat.com)
+
 * Mon May 08 2017 Kevin Howell <khowell@redhat.com> 1.20.0-1
 - Bump python-rhsm requirement to 1.20.0 (khowell@redhat.com)
 - 1444512: Display deleted uuid in facts dialog correctly. (jhnidek@redhat.com)
