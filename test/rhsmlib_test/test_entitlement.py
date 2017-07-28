@@ -103,9 +103,9 @@ CONTENT_JSON = [{
 }]
 
 
-class TestAttachService(InjectionMockingTest):
+class TestEntitlementService(InjectionMockingTest):
     def setUp(self):
-        super(TestAttachService, self).setUp()
+        super(TestEntitlementService, self).setUp()
         self.mock_identity = mock.Mock(spec=Identity, name="Identity")
         self.mock_cp_provider = mock.Mock(spec=CPProvider,name="CPProvider")
         self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection")
