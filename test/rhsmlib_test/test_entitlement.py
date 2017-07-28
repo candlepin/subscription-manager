@@ -23,7 +23,7 @@ from subscription_manager import injection as inj
 from subscription_manager.identity import Identity
 from subscription_manager.plugins import PluginManager
 from subscription_manager.cp_provider import CPProvider
-from subscription_manager.cert_sorter import CertSorter #, ComplianceManagerFactory
+from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.reasons import Reasons
 
 from rhsm import connection
@@ -111,6 +111,9 @@ class TestEntitlementService(InjectionMockingTest):
         self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection")
         self.mock_pm = mock.Mock(spec=PluginManager, name="PluginManager")
         self.mock_cert_sorter = mock.Mock(spec=CertSorter, name="CertSorter")
+        self.mock_cert_sorter.reasons =  mock.Mock(spec=Reasons, name="Reasons")
+        self.mock_cert_sorter.reasons.get_name_message_map.return_value = {}
+        self.mock_cert_sorter.get_system_status.return_value="System Status"
 
     def injection_definitions(self, *args, **kwargs):
         return {
@@ -123,47 +126,25 @@ class TestEntitlementService(InjectionMockingTest):
     def test_get_status(self):
         self.mock_identity.is_valid.return_value = True
         self.mock_identity.uuid = "id"
-        reasons = mock.Mock(spec=Reasons, name="Reasons")
-        self.mock_cp.bindByEntitlementPool.return_value = CONTENT_JSON
         result = entitlement.EntitlementService().get_status()
-        self.assertEqual(CONTENT_JSON, result)
+        self.assertEqual(
+            {'status': 0,
+             'reasons': {},
+             'overall_status': "System Status"},
+            result)
 
-        # expected_bind_calls = [
-        #     mock.call('id', 'x', 1),
-        # ]
-        # self.assertEqual(expected_bind_calls, self.mock_cp.bindByEntitlementPool.call_args_list)
-
-        # expected_plugin_calls = [
-        #     mock.call('pre_subscribe', consumer_uuid='id', pool_id='x', quantity=1),
-        #     mock.call('post_subscribe', consumer_uuid='id', entitlement_data=CONTENT_JSON)
-        # ]
-        # self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
-
-    # def test_auto_attach(self):
-    #     self.mock_identity.is_valid.return_value = True
-    #     self.mock_identity.uuid = "id"
-
-    #     self.mock_cp.bind.return_value = CONTENT_JSON
-
-    #     result = attach.AttachService(self.mock_cp).attach_auto('service_level')
-    #     self.assertEqual(CONTENT_JSON, result)
-
-    #     expected_update_calls = [
-    #         mock.call('id', service_level='service_level')
-    #     ]
-    #     self.assertEqual(expected_update_calls, self.mock_cp.updateConsumer.call_args_list)
-
-    #     expected_bind_calls = [
-    #         mock.call('id'),
-    #     ]
-    #     self.assertEqual(expected_bind_calls, self.mock_cp.bind.call_args_list)
-
-    #     expected_plugin_calls = [
-    #         mock.call('pre_auto_attach', consumer_uuid='id'),
-    #         mock.call('post_auto_attach', consumer_uuid='id', entitlement_data=CONTENT_JSON)
-    #     ]
-    #     self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
-
+    def test_get_status_for_invalid_system(self):
+        self.mock_identity.is_valid.return_value = True
+        self.mock_identity.uuid = "id"
+        reasons = json.load(open("test/rhsmlib_test/data/reasons.json"))
+        self.mock_cert_sorter.reasons.get_name_message_map.return_value = reasons
+        self.mock_cert_sorter.is_valid.return_value=False
+        result = entitlement.EntitlementService().get_status()
+        self.assertEqual(
+            {'status': 1,
+             'reasons': reasons,
+             'overall_status': "System Status"},
+            result)
 
 # class TestAttachDBusObject(DBusObjectTest, InjectionMockingTest):
 #     def setUp(self):
