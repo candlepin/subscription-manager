@@ -22,7 +22,7 @@ import fileinput
 import fnmatch
 import getpass
 import logging
-from optparse import OptionValueError
+from optparse import OptionValueError, SUPPRESS_HELP
 import os
 import re
 import readline
@@ -1025,7 +1025,7 @@ class RegisterCommand(UserPassCommand):
         self.parser.add_option("--baseurl", dest="base_url",
                               default=None, help=_("base URL for content in form of https://hostname:port/prefix"))
         self.parser.add_option("--type", dest="consumertype", default="system", metavar="UNITTYPE",
-                               help=_("the type of unit to register, defaults to system"))
+                               help=SUPPRESS_HELP)
         self.parser.add_option("--name", dest="consumername", metavar="SYSTEMNAME",
                                help=_("name of the system to register, defaults to the hostname"))
         self.parser.add_option("--consumerid", dest="consumerid", metavar="SYSTEMID",
@@ -1070,6 +1070,8 @@ class RegisterCommand(UserPassCommand):
             system_exit(os.EX_USAGE, _("Error: Must provide --org with activation keys."))
         elif (self.options.force and self.options.consumerid):
             system_exit(os.EX_USAGE, _("Error: Can not force registration while attempting to recover registration with consumerid. Please use --force without --consumerid to re-register or use the clean command and try again without --force."))
+        elif (self.options.consumertype and not (self.options.consumertype == 'rhui' or self.options.consumertype == 'system')):
+            system_exit(os.EX_USAGE, _("Error: The --type option has been deprecated and may not be used."))
 
     def persist_server_options(self):
         """

@@ -156,7 +156,7 @@ _subscription_manager_register()
 {
   local opts="--activationkey --auto-attach --autosubscribe --baseurl --consumerid
               --environment --force --name --org --password --release
-              --servicelevel --type --username
+              --servicelevel --username
               ${_subscription_manager_common_url_opts}
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))

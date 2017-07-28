@@ -255,21 +255,6 @@ Registers the system to an environment within an organization.
 .B --release=VERSION
 Shortcut for "release --set=VERSION"
 
-.TP
-.B --type=CONSUMERTYPE
-Sets the type of unit to register. Most units in the inventory will use the default value of
-.B system.
-For development or test units, this can be
-.B person
-, which indicates a personal (rather than organizational) unit. Another type of unit can be
-.B candlepin
-for a local content service or
-.B domain
-for an IP domain.
-.B hypervisor
-indicates a host which will provide subscriptions to guest virtual machines.
-
-
 .SS UNREGISTER OPTIONS
 The
 .B unregister
@@ -878,17 +863,6 @@ provided with the registration request, registration fails with a remote server 
 .B rhsm.log,
 there will be errors about being unable to load the owners interface.
 
-
-.PP
-Some information is assigned automatically. Subscription Manager automatically generates a unique ID for the system which is used by the subscription management service and it assigns a unit type, which indicates what kinds of software are available for the system. The name for the entry can be manually assigned (for use within an on-premise subscription service, for instance). A handful of subscriptions (such as specialized servers for content or identity management) have their own specific unit type. For example:
-
-.RS
-.nf
-subscription-manager register --username=admin
---password=secret --type=system --name=server1
---org="IT Dept"
-.fi
-.RE
 
 .PP
 If a system is registered and then somehow its subscription information is lost -- a drive crashes or the certificates are deleted or corrupted -- the system can be re-registered, with all of its subscriptions restored, by registering with the existing ID.

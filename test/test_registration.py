@@ -196,3 +196,15 @@ class CliRegistrationTests(SubManFixture):
 
             with nested(Capture(silent=True), self.assertRaises(SystemExit)):
                 rc._get_environment_id(mock_uep, 'owner', None)
+
+    def test_deprecate_consumer_type(self):
+        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+            self.stub_cp_provider.basic_auth_cp = mock_uep
+
+            cmd = RegisterCommand()
+            self._inject_mock_invalid_consumer()
+            cmd._persist_identity_cert = self.stub_persist
+
+            with nested(Capture(silent=True), self.assertRaises(SystemExit)) as e:
+                cmd.main(['register', '--type=candlepin'])
+                self.assertEqual(e.code, os.EX_USAGE)
