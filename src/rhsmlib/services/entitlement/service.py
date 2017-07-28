@@ -45,15 +45,15 @@ class EntitlementService(object):
                          and self.sorter.get_system_status() \
                          or "Unknown"
 
-        result = 1
+        status = 1
         if system_is_registered and self.sorter.is_valid():
-            result = 0
+            status = 0
 
         reasons = system_is_registered \
                   and self.sorter.reasons.get_name_message_map() \
                   or {}
 
-        return {"status": result,
+        return {"status": status,
                 "reasons": reasons,
                 "overall_status": overall_status}
 
