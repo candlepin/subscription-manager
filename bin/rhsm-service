@@ -23,17 +23,26 @@ logging.basicConfig(level=logging.DEBUG, format="%(levelname)5s [%(name)s:%(line
 log = logging.getLogger('')
 log.setLevel(logging.INFO)
 
+
 import sys
+import os.path
+
+# composition of functions. Oh FP I miss you!
+src_path = reduce(lambda x,f: f(x), [os.path.dirname, os.path.dirname, lambda x: os.path.join(x,"src")], __file__)
+sys.path = [src_path] + sys.path + [src_path]
+
 from rhsmlib.dbus import service_wrapper
 from rhsmlib.dbus import objects
+
 
 if __name__ == "__main__":
     try:
         object_classes = [
             objects.ConfigDBusObject,
             objects.RegisterDBusObject,
-            objects.AttachDBusObject,
-            objects.Main
+            objects.Main,
+            objects.EntitlementDBusObject,
+            objects.AttachDBusObject
         ]
         sys.exit(service_wrapper.main(sys.argv, object_classes=object_classes))
     except Exception:
