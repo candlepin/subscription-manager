@@ -40,6 +40,7 @@ class EntitlementService(object):
         self.entitlement_dir = inj.require(inj.ENT_DIR)
 
     def get_status(self):
+        self.identity.reload()
         system_is_registered = self.identity.is_valid()
         overall_status = system_is_registered \
                          and self.sorter.get_system_status() \
@@ -52,14 +53,14 @@ class EntitlementService(object):
         reasons = system_is_registered \
                   and self.sorter.reasons.get_name_message_map() \
                   or {}
-
         return {"status": result,
                 "reasons": reasons,
                 "overall_status": overall_status}
 
     def get_pools(self,**kwargs):
-        #return self.get_consumed_pools()
-        return self.get_available_pools(**kwargs)
+        fn = self.get_available_pools
+        result = fn(**kwargs)
+        return result
 
     def get_available_pools(self, matches=None, service_level=None, no_overlap=False, on_date=None):
         system_is_registered = self.identity.is_valid()
