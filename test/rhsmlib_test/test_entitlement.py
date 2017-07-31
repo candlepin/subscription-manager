@@ -32,77 +32,6 @@ from rhsmlib.dbus.objects import EntitlementDBusObject
 from rhsmlib.dbus import constants
 from rhsmlib.services import entitlement
 
-CONTENT_JSON = [{
-    "id": "19ec0d4f93ae47e18233b2590b3e71f3",
-    "consumer": {
-        "id": "8a8d01865d2cb201015d331b0078006a",
-        "uuid": "47680d96-cfa4-4326-b545-5a6e02a4e95a",
-        "name": "orgBConsumer-tZTbHviW",
-        "href": "/consumers/47680d96-cfa4-4326-b545-5a6e02a4e95a"
-    },
-    "pool": {
-        "id": "8a8d01865d2cb201015d331b01b6006f",
-        "type": "NORMAL",
-        "owner": {
-            "id": "8a8d01865d2cb201015d331afec50059",
-            "key": "orgB-txDmAJWq",
-            "displayName": "orgB-txDmAJWq",
-            "href": "/owners/orgB-txDmAJWq"
-        },
-        "activeSubscription": True,
-        "quantity": 1,
-        "startDate": "2017-07-11T19:23:14+0000",
-        "endDate": "2018-07-11T19:23:14+0000",
-        "attributes": [],
-        "consumed": 1,
-        "exported": 0,
-        "shared": 0,
-        "branding": [],
-        "calculatedAttributes": {
-            "compliance_type": "Standard"
-        },
-        "productId": "prod-25G4r19T",
-        "productAttributes": [{
-            "name": "type",
-            "value": "SVC"
-        }],
-        "derivedProductAttributes": [],
-        "productName": "prod-Fz0IBfN6",
-        "stacked": False,
-        "developmentPool": False,
-        "href": "/pools/8a8d01865d2cb201015d331b01b6006f",
-        "created": "2017-07-11T19:23:14+0000",
-        "updated": "2017-07-11T19:23:14+0000",
-        "providedProducts": [],
-        "derivedProvidedProducts": [],
-        "subscriptionId": "source_sub_-LO4l9YKv",
-        "subscriptionSubKey": "master"
-    },
-    "certificates": [{
-        "key": "FAKE KEY",
-        "cert": "FAKE_CERT",
-        "serial": {
-            "id": 7020569423934353740,
-            "revoked": False,
-            "collected": False,
-            "expiration": "2018-07-11T19:23:14+0000",
-            "serial": 7020569423934353740,
-            "created": "2017-07-11T19:23:14+0000",
-            "updated": "2017-07-11T19:23:14+0000"
-        },
-        "id": "8a8d01865d2cb201015d331b02870072",
-        "created": "2017-07-11T19:23:14+0000",
-        "updated": "2017-07-11T19:23:14+0000"
-    }],
-    "quantity": 1,
-    "startDate": "2017-07-11T19:23:14+0000",
-    "endDate": "2018-07-11T19:23:14+0000",
-    "href": "/entitlements/19ec0d4f93ae47e18233b2590b3e71f3",
-    "created": "2017-07-11T19:23:14+0000",
-    "updated": "2017-07-11T19:23:14+0000"
-}]
-
-
 class TestEntitlementService(InjectionMockingTest):
     def setUp(self):
         super(TestEntitlementService, self).setUp()
@@ -146,47 +75,47 @@ class TestEntitlementService(InjectionMockingTest):
              'overall_status': "System Status"},
             result)
 
-# class TestAttachDBusObject(DBusObjectTest, InjectionMockingTest):
-#     def setUp(self):
-#         super(TestAttachDBusObject, self).setUp()
-#         self.proxy = self.proxy_for(AttachDBusObject.default_dbus_path)
-#         self.interface = dbus.Interface(self.proxy, constants.ATTACH_INTERFACE)
+class TestEntitlementDBusObject(DBusObjectTest, InjectionMockingTest):
+    def setUp(self):
+        open("output.txt","wt").write("setUp for TestEntitlementDBusObject\n")
+        super(TestEntitlementDBusObject, self).setUp()
+        open("output.txt","at").write("after super setUp\n")
+        self.proxy = self.proxy_for(EntitlementDBusObject.default_dbus_path)
+        open("output.txt","at").write("after proxy_for\n")
+        self.interface = dbus.Interface(self.proxy, EntitlementDBusObject.interface_name)
+        entitlement_patcher = mock.patch('rhsmlib.dbus.objects.entitlement.EntitlementService', autospec=True)
+        self.mock_entitlement = entitlement_patcher.start().return_value
+        open("output.txt","at").write("before addCleanup\n")
+        self.addCleanup(entitlement_patcher.stop)
+        open("output.txt","at").write("after addCleanup\n")
+        self.mock_identity = mock.Mock(spec=Identity, name="Identity")
+        self.mock_identity.is_valid.return_value = True
+        self.mock_identity.uuid = "id"
+        open("output.txt","at").write("we are here\n")
 
-#         attach_patcher = mock.patch('rhsmlib.dbus.objects.attach.AttachService', autospec=True)
-#         self.mock_attach = attach_patcher.start().return_value
-#         self.addCleanup(attach_patcher.stop)
+    def injection_definitions(self, *args, **kwargs):
+        cp_provider =  mock.Mock(spec=CPProvider, name="CPProvider")
+        cp_provider.get_consumer_auth_cp.return_value = mock.Mock(name="MockCP")
+        print("injection_definitions:",*args)
+        return {
+            inj.IDENTITY:  self.mock_identity,
+            inj.CP_PROVIDER: cp_provider
+        }.get(args[0])
 
-#         entcertlib_patcher = mock.patch('rhsmlib.dbus.objects.attach.entcertlib.EntCertActionInvoker')
-#         self.mock_action_invoker = entcertlib_patcher.start().return_value
-#         self.addCleanup(entcertlib_patcher.stop)
+    def dbus_objects(self):
+        return [EntitlementDBusObject]
 
-#         self.mock_identity = mock.Mock(spec=Identity, name="Identity")
-#         self.mock_identity.is_valid.return_value = True
-#         self.mock_identity.uuid = "id"
+    def test_get_status(self):
+        def assertions(*args):
+            expected_content = ""
+            result = args[0]
+            print ("assertions:",*args)
+            self.assertEqual(result, expected_content)
 
-#     def injection_definitions(self, *args, **kwargs):
-#         if args[0] == inj.IDENTITY:
-#             return self.mock_identity
-#         elif args[0] == inj.CP_PROVIDER:
-#             provider = mock.Mock(spec=CPProvider, name="CPProvider")
-#             provider.get_consumer_auth_cp.return_value = mock.Mock(name="MockCP")
-#             return provider
-#         else:
-#             return None
+        self.mock_entitlement.get_status.return_value = ""
 
-#     def dbus_objects(self):
-#         return [AttachDBusObject]
-
-#     def test_pool_attach(self):
-#         def assertions(*args):
-#             expected_content = [json.dumps(CONTENT_JSON), json.dumps(CONTENT_JSON)]
-#             result = args[0]
-#             self.assertEqual(result, expected_content)
-
-#         self.mock_attach.attach_pool.return_value = CONTENT_JSON
-
-#         dbus_method_args = [['x', 'y'], 1, {}]
-#         self.dbus_request(assertions, self.interface.PoolAttach, dbus_method_args)
+        dbus_method_args = [['x', 'y'], 1, {}]
+        self.dbus_request(assertions, self.interface.Entitlement, dbus_method_args)
 
 #     def test_must_be_registered_pool(self):
 #         self.mock_identity.is_valid.return_value = False
