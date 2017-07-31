@@ -83,6 +83,7 @@ PERFORM_SUBSCRIBE_PAGE = 11
 REFRESH_SUBSCRIPTIONS_PAGE = 12
 INFO_PAGE = 13
 DONE_PAGE = 14
+REGISTERED_UNATTACHED = 15
 FINISH = 100
 
 REGISTER_ERROR = _("<b>Unable to register the system.</b>") + \
@@ -356,7 +357,6 @@ class RegisterWidget(widgets.SubmanBaseWidget):
 
     # Class closure signal handlers that are invoked first if this GObject
     # emits a signal they are connected to.
-
     def do_register_error(self, msg, exc_info):
         """Class closure signal handler for 'register-error'.
 
@@ -366,19 +366,25 @@ class RegisterWidget(widgets.SubmanBaseWidget):
 
         # return to the last gui screen we showed.
         self._pop_last_screen()
-        # FIXME: we have more info here, but we need a good 'blurb'
-        #        for the status message.
-        msg = _("Error during registration.")
-        self.info.set_property('register-status', msg)
+        # We have more info here, but we need a good 'blurb'
+        # for the status message of initial-setup.
+        if exc_info == REGISTERED_UNATTACHED:
+            self.show_success_message()
+        else:
+            msg = _("Error during registration.")
+            self.info.set_property('register-status', msg)
 
     def do_register_message(self, msg, msg_type=None):
         # NOTE: we ignore msg_type here
         self._pop_last_screen()
         self.info.set_property('register-status', msg)
 
-    def do_register_finished(self):
+    def show_success_message(self):
         msg = _("System '%s' successfully registered.\n") % self.info.identity.name
         self.info.set_property('register-status', msg)
+
+    def do_register_finished(self):
+        self.show_success_message()
         conf.persist()
         last_server_info = server_info_from_config(conf)
         last_server_info['cert_file'] = self.backend.cp_provider.cert_file
@@ -1342,13 +1348,20 @@ class SelectSLAScreen(Screen):
             # when we cannot fix any unentitled products:
             if current_sla is not None and \
                     not self._can_add_more_subs(current_sla, sla_data_map):
-                msg = _("No available subscriptions at "
-                        "the current service level: %s. "
-                        "Please use the \"All Available "
-                        "Subscriptions\" tab to manually "
-                        "attach subscriptions.") % current_sla
+                # Provide different messages for initial-setup and
+                # subscription-managaer-gui
+                if self.parent_window.__class__.__name__ == 'SpokeWindow':
+                    msg = _("You will need to use Red Hat Subscription "
+                            "Manager to manually attach subscriptions to this "
+                            "system after completing setup.")
+                else:
+                    msg = _("No available subscriptions at "
+                            "the current service level: %s. "
+                            "Please use the \"All Available "
+                            "Subscriptions\" tab to manually "
+                            "attach subscriptions.") % current_sla
                 # TODO: add 'attach' state
-                self.emit('register-error', msg, None)
+                self.emit('register-error', msg, REGISTERED_UNATTACHED)
                 self.emit('attach-finished')
                 self.pre_done()
                 return
@@ -1365,13 +1378,18 @@ class SelectSLAScreen(Screen):
             return
         else:
             log.info("No suitable service levels found.")
-            msg = _("No service level will cover all "
-                    "installed products. Please manually "
-                    "subscribe using multiple service levels "
-                    "via the \"All Available Subscriptions\" "
-                    "tab or purchase additional subscriptions.")
+            if self.parent_window.__class__.__name__ == 'SpokeWindow':
+                msg = _("You will need to use Red Hat Subscription "
+                        "Manager to manually attach subscriptions to this "
+                        "system after completing setup.")
+            else:
+                msg = _("No service level will cover all "
+                        "installed products. Please manually "
+                        "subscribe using multiple service levels "
+                        "via the \"All Available Subscriptions\" "
+                        "tab or purchase additional subscriptions.")
             # TODO: add 'registering/attaching' state info
-            self.emit('register-error', msg, None)
+            self.emit('register-error', msg, REGISTERED_UNATTACHED)
             self.emit('attach-finished')
             self.pre_done()
 
