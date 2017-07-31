@@ -140,7 +140,7 @@ def format_name(name, indent, max_length):
     return '\n'.join(lines)
 
 
-def highlight_by_filter_string_columnize_callback(template_str, *args, **kwargs):
+def highlight_by_filter_string_columnize_cb(template_str, *args, **kwargs):
     """
     Takes a template string and arguments and highlights word matches
     when the value contains a match to the filter_string.This occurs

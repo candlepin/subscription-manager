@@ -21,7 +21,7 @@ from subscription_manager.injection import provide, \
 from rhsmlib.services.products import InstalledProducts
 from subscription_manager.managercli import AVAILABLE_SUBS_MATCH_COLUMNS
 from subscription_manager.printing_utils import format_name, columnize, \
-        echo_columnize_callback, none_wrap_columnize_callback, highlight_by_filter_string_columnize_callback, FONT_BOLD, FONT_RED, FONT_NORMAL
+        echo_columnize_callback, none_wrap_columnize_callback, highlight_by_filter_string_columnize_cb, FONT_BOLD, FONT_RED, FONT_NORMAL
 from subscription_manager.repolib import Repo
 from subscription_manager.overrides import Override
 
@@ -581,19 +581,6 @@ class TestListCommand(TestCliProxyCommand):
 
         lines = captured.out.split("\n")
         self.assertEqual(len(lines) - 1, 1, "Error output consists of more than one line.")
-
-    def test_filter_only_specified_service_level(self):
-        pools = [{'service_level': 'Level1'},
-                 {'service_level': 'Level2'},
-                 {'service_level': 'Level3'}]
-        filtered = self.cc._filter_pool_json_by_service_level(pools, "Level2")
-        self.assertEqual(1, len(filtered))
-        self.assertEqual("Level2", filtered[0]['service_level'])
-
-    def test_no_pool_with_specified_filter(self):
-        pools = [{'service_level': 'Level1'}]
-        filtered = self.cc._filter_pool_json_by_service_level(pools, "NotFound")
-        self.assertEqual(0, len(filtered))
 
     def test_list_installed_with_pidonly(self):
         installed_product_certs = [
@@ -1628,7 +1615,7 @@ class TestHighlightByFilter(unittest.TestCase):
                   "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
                   "caption": "Subscription Name:",
                   "is_atty": True}
-        result = highlight_by_filter_string_columnize_callback("Subscription Name:    %s", *args, **kwargs)
+        result = highlight_by_filter_string_columnize_cb("Subscription Name:    %s", *args, **kwargs)
         self.assertEqual(result, 'Subscription Name:    ' + FONT_BOLD + FONT_RED + 'Super Test Subscription' + FONT_NORMAL)
 
     def test_highlight_by_filter_string_single(self):
@@ -1637,7 +1624,7 @@ class TestHighlightByFilter(unittest.TestCase):
                   "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
                   "caption": "Subscription Name:",
                   "is_atty": True}
-        result = highlight_by_filter_string_columnize_callback("Subscription Name:    %s", *args, **kwargs)
+        result = highlight_by_filter_string_columnize_cb("Subscription Name:    %s", *args, **kwargs)
         self.assertEqual(result, 'Subscription Name:    ' + FONT_BOLD + FONT_RED + 'Super Test Subscription' + FONT_NORMAL)
 
     def test_highlight_by_filter_string_all(self):
@@ -1646,7 +1633,7 @@ class TestHighlightByFilter(unittest.TestCase):
                   "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
                   "caption": "Subscription Name:",
                   "is_atty": True}
-        result = highlight_by_filter_string_columnize_callback("Subscription Name:    %s", *args, **kwargs)
+        result = highlight_by_filter_string_columnize_cb("Subscription Name:    %s", *args, **kwargs)
         self.assertEqual(result, 'Subscription Name:    Super Test Subscription')
 
     def test_highlight_by_filter_string_exact(self):
@@ -1655,7 +1642,7 @@ class TestHighlightByFilter(unittest.TestCase):
                   "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
                   "caption": "Service Level:",
                   "is_atty": True}
-        result = highlight_by_filter_string_columnize_callback("Service Level:    %s", *args, **kwargs)
+        result = highlight_by_filter_string_columnize_cb("Service Level:    %s", *args, **kwargs)
         self.assertEqual(result, 'Service Level:    ' + FONT_BOLD + FONT_RED + 'Premium' + FONT_NORMAL)
 
     def test_highlight_by_filter_string_list_row(self):
@@ -1664,7 +1651,7 @@ class TestHighlightByFilter(unittest.TestCase):
                   "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
                   "caption": "Subscription Name:",
                   "is_atty": True}
-        result = highlight_by_filter_string_columnize_callback("    %s", *args, **kwargs)
+        result = highlight_by_filter_string_columnize_cb("    %s", *args, **kwargs)
         self.assertEqual(result, '    ' + FONT_BOLD + FONT_RED + 'Awesome-os-stacked' + FONT_NORMAL)
 
 

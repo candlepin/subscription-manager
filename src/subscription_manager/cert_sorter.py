@@ -313,7 +313,7 @@ class CertSorter(ComplianceManager):
     re-use this cached data for a period of time, before falling back to
     reporting unknown.
     """
-    def __init__(self):
+    def __init__(self, on_date=None):
         # Sync installed product info with server.
         # This will be done on register if we aren't registered.
         # ComplianceManager.__init__ needs the installed product info
@@ -322,7 +322,7 @@ class CertSorter(ComplianceManager):
         self.installed_mgr = inj.require(inj.INSTALLED_PRODUCTS_MANAGER)
         self.update_product_manager()
 
-        super(CertSorter, self).__init__()
+        super(CertSorter, self).__init__(on_date)
         self.callbacks = set()
 
         cert_dir_monitors = [file_monitor.MonitorDirectory(inj.require(inj.PROD_DIR).path,
