@@ -57,12 +57,23 @@ class EntitlementService(object):
                 "reasons": reasons,
                 "overall_status": overall_status}
 
+    #
+    # The method provides a list of pools accessible by this system
+    #
+    # @args:
+    #        matches="Some string to match"
+    #        service_level=None
+    #        no_overlap=False
+    #        on_date=None
+    #        consumed=True
+    #
     def get_pools(self,**kwargs):
-        fn = self.get_available_pools
+        fn = kwargs.get('consumed',False) and self.get_consumed_pools\
+             or self.get_available_pools
         result = fn(**kwargs)
         return result
 
-    def get_available_pools(self, matches=None, service_level=None, no_overlap=False, on_date=None):
+    def get_available_pools(self, matches=None, service_level=None, no_overlap=False, on_date=None, **kwargs):
         system_is_registered = self.identity.is_valid()
         if not system_is_registered:
             return []
@@ -112,7 +123,7 @@ class EntitlementService(object):
         pools_data = map(wrapp_pool,epools)
         return pools_data
 
-    def get_consumed_pools(self, matches=None, service_level=None):
+    def get_consumed_pools(self, matches=None, service_level=None, **kwargs):
         def no_filter(x):
             return True
 
@@ -132,7 +143,6 @@ class EntitlementService(object):
                       or (cert in self.sorter.valid_entitlement_certs) and ["Subscription is current",] \
                       or (cert.valid_rande.ent() < datatime.datetime.now(GMT())) and ["Subscription is expired",] \
                       or ["Subscription has not begun",]
-            
             return reasons
 
         def get_cert_data(cert):
