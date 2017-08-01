@@ -18,11 +18,7 @@ import logging
 log = logging.getLogger(__name__)
 from .pool_filter import PoolFilter
 
-from subscription_manager.injection import require, CERT_SORTER, \
-    COMPLIANCE_MANAGER_FACTORY, IDENTITY, ENTITLEMENT_STATUS_CACHE, \
-    PROD_STATUS_CACHE, ENT_DIR, PROD_DIR, CP_PROVIDER, OVERRIDE_STATUS_CACHE, \
-    POOLTYPE_CACHE, RELEASE_STATUS_CACHE, FACTS, POOL_STATUS_CACHE, \
-    PROFILE_MANAGER
+import subscription_manager.injection as inj
 
 class PoolStash(object):
     """
@@ -30,7 +26,7 @@ class PoolStash(object):
     incompatible, and installed lists. Also does filtering based on name.
     """
     def __init__(self):
-        self.identity = require(IDENTITY)
+        self.identity = inj.require(inj.IDENTITY)
         self.sorter = None
 
         # Pools which passed rules server side for this consumer:
@@ -53,13 +49,13 @@ class PoolStash(object):
         Refresh the list of pools from the server, active on the given date.
         """
 
-        self.sorter = active_on and require(COMPLIANCE_MANAGER_FACTORY)(on_date=active_on) \
-                      or require(CERT_SORTER)
+        self.sorter = active_on and inj.require(inj.COMPLIANCE_MANAGER_FACTORY)(on_date=active_on) \
+                      or inj.require(inj.CERT_SORTER)
 
         self.all_pools = {}
         self.compatible_pools = {}
         log.debug("Refreshing pools from server...")
-        for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
+        for pool in list_pools(inj.require(inj.CP_PROVIDER).get_consumer_auth_cp(),
                 self.identity.uuid, active_on=active_on):
             self.compatible_pools[pool['id']] = pool
             self.all_pools[pool['id']] = pool
@@ -67,7 +63,7 @@ class PoolStash(object):
         # Filter the list of all pools, removing those we know are compatible.
         # Sadly this currently requires a second query to the server.
         self.incompatible_pools = {}
-        for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
+        for pool in list_pools(inj.require(inj.CP_PROVIDER).get_consumer_auth_cp(),
                 self.identity.uuid, list_all=True, active_on=active_on):
             if not pool['id'] in self.compatible_pools:
                 self.incompatible_pools[pool['id']] = pool
@@ -77,7 +73,7 @@ class PoolStash(object):
 
         # In the gui, cache all pool types so when we attach new ones
         # we can avoid more api calls
-        require(POOLTYPE_CACHE).update_from_pools(self.all_pools)
+        inj.require(inj.POOLTYPE_CACHE).update_from_pools(self.all_pools)
 
         log.debug("found %s pools:" % len(self.all_pools))
         log.debug("   %s compatible" % len(self.compatible_pools))
@@ -95,21 +91,21 @@ class PoolStash(object):
         if active_on and overlapping:
             self.sorter = ComplianceManager(active_on)
         elif not active_on and overlapping:
-            self.sorter = require(CERT_SORTER)
+            self.sorter = inj.require(inj.CERT_SORTER)
 
         if incompatible:
-            for pool in self.list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
+            for pool in self.list_pools(inj.require(inj.CP_PROVIDER).get_consumer_auth_cp(),
                     self.identity.uuid, active_on=active_on, filter_string=filter_string):
                 self.compatible_pools[pool['id']] = pool
         else:  # --all has been used
-            for pool in self.list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
+            for pool in self.list_pools(inj.require(inj.CP_PROVIDER).get_consumer_auth_cp(),
                     self.identity.uuid, list_all=True, active_on=active_on, filter_string=filter_string):
                 self.all_pools[pool['id']] = pool
 
         return self._filter_pools(incompatible, overlapping, uninstalled, False, text)
 
     def _get_subscribed_pool_ids(self):
-        return [ent.pool.id for ent in require(ENT_DIR).list()]
+        return [ent.pool.id for ent in inj.require(inj.ENT_DIR).list()]
 
     def _filter_pools(self, incompatible, overlapping, uninstalled, subscribed,
             text):
@@ -128,8 +124,8 @@ class PoolStash(object):
             log.debug("\tRemoved %d incompatible pools" %
                        len(self.incompatible_pools))
 
-        pool_filter = PoolFilter(require(PROD_DIR),
-                require(ENT_DIR), self.sorter)
+        pool_filter = PoolFilter(inj.require(inj.PROD_DIR),
+                inj.require(inj.ENT_DIR), self.sorter)
 
         # Filter out products that are not installed if necessary:
         if uninstalled:
@@ -186,8 +182,8 @@ class PoolStash(object):
         #         then service flops 'been_synced' property
         # subman gets signal that props changed, and that been_synced is now true
         # since it's been synced, then subman continues
-        require(FACTS).update_check(uep, consumer_uuid)
-        require(PROFILE_MANAGER).update_check(uep, consumer_uuid)
+        inj.require(inj.FACTS).update_check(uep, consumer_uuid)
+        inj.require(inj.PROFILE_MANAGER).update_check(uep, consumer_uuid)
 
         owner = uep.getOwner(consumer_uuid)
         ownerid = owner['key']
