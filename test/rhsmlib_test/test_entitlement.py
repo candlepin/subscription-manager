@@ -25,36 +25,57 @@ from subscription_manager.plugins import PluginManager
 from subscription_manager.cp_provider import CPProvider
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.reasons import Reasons
+from subscription_manager.certdirectory import EntitlementDirectory
+from subscription_manager.facts import Facts
 
 from rhsm import connection
 
 from rhsmlib.dbus.objects import EntitlementDBusObject
 from rhsmlib.dbus import constants
 from rhsmlib.services import entitlement
+from subscription_manager.cache import PoolTypeCache, ProfileManager
+from rhsmlib.services.entitlement.pool_stash import PoolStash
 
 class TestEntitlementService(InjectionMockingTest):
     def setUp(self):
         super(TestEntitlementService, self).setUp()
         self.mock_identity = mock.Mock(spec=Identity, name="Identity")
+
         self.mock_cp_provider = mock.Mock(spec=CPProvider,name="CPProvider")
         self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection")
+
         self.mock_pm = mock.Mock(spec=PluginManager, name="PluginManager")
+
         self.mock_cert_sorter = mock.Mock(spec=CertSorter, name="CertSorter")
         self.mock_cert_sorter.reasons =  mock.Mock(spec=Reasons, name="Reasons")
         self.mock_cert_sorter.reasons.get_name_message_map.return_value = {}
         self.mock_cert_sorter.get_system_status.return_value="System Status"
 
+        self.pooltype_cache = mock.Mock(spec=PoolTypeCache, name="PoolTypeCache")
+        self.pooltype_cache.get.return_value="some subscription type"
+        self.ent_dir = mock.Mock(spec=EntitlementDirectory, name="EntitlementDirectory")
+        self.facts = mock.Mock(spec=Facts, name="Facts")
+        self.profile_manager = mock.Mock(spec=ProfileManager, name="ProfileManager")
+        self.pool_stash = mock.Mock(spec=PoolStash, name="PoolStash")
+
     def injection_definitions(self, *args, **kwargs):
-        return {
+        result = {
             inj.IDENTITY: self.mock_identity,
             inj.PLUGIN_MANAGER: self.mock_pm,
             inj.CERT_SORTER: self.mock_cert_sorter,
             inj.CP_PROVIDER: self.mock_cp_provider,
+            inj.POOLTYPE_CACHE: self.pooltype_cache,
+            inj.ENT_DIR: self.ent_dir,
+            inj.FACTS: self.facts,
+            inj.PROFILE_MANAGER: self.profile_manager,
+            inj.POOL_STASH: self.pool_stash,
         }.get(args[0]) # None when a key does not exist
+        #print("injection_definition:", args, " result: ", result)
+        return result
 
     def test_get_status(self):
         self.mock_identity.is_valid.return_value = True
-        self.mock_identity.uuid = "id"
+        self.mock_identity.uuid = "some-uuid"
         result = entitlement.EntitlementService().get_status()
         self.assertEqual(
             {'status': 0,
@@ -64,7 +85,7 @@ class TestEntitlementService(InjectionMockingTest):
 
     def test_get_status_for_invalid_system(self):
         self.mock_identity.is_valid.return_value = True
-        self.mock_identity.uuid = "id"
+        self.mock_identity.uuid = "some-uuid"
         reasons = json.load(open("test/rhsmlib_test/data/reasons.json"))
         self.mock_cert_sorter.reasons.get_name_message_map.return_value = reasons
         self.mock_cert_sorter.is_valid.return_value=False
@@ -75,66 +96,11 @@ class TestEntitlementService(InjectionMockingTest):
              'overall_status': "System Status"},
             result)
 
-class TestEntitlementDBusObject(DBusObjectTest, InjectionMockingTest):
-    def setUp(self):
-        open("output.txt","wt").write("setUp for TestEntitlementDBusObject\n")
-        super(TestEntitlementDBusObject, self).setUp()
-        open("output.txt","at").write("after super setUp\n")
-        self.proxy = self.proxy_for(EntitlementDBusObject.default_dbus_path)
-        open("output.txt","at").write("after proxy_for\n")
-        self.interface = dbus.Interface(self.proxy, EntitlementDBusObject.interface_name)
-        entitlement_patcher = mock.patch('rhsmlib.dbus.objects.entitlement.EntitlementService', autospec=True)
-        self.mock_entitlement = entitlement_patcher.start().return_value
-        open("output.txt","at").write("before addCleanup\n")
-        self.addCleanup(entitlement_patcher.stop)
-        open("output.txt","at").write("after addCleanup\n")
-        self.mock_identity = mock.Mock(spec=Identity, name="Identity")
+    def test_get_pools_available(self):
         self.mock_identity.is_valid.return_value = True
-        self.mock_identity.uuid = "id"
-        open("output.txt","at").write("we are here\n")
-
-    def injection_definitions(self, *args, **kwargs):
-        cp_provider =  mock.Mock(spec=CPProvider, name="CPProvider")
-        cp_provider.get_consumer_auth_cp.return_value = mock.Mock(name="MockCP")
-        print("injection_definitions:",*args)
-        return {
-            inj.IDENTITY:  self.mock_identity,
-            inj.CP_PROVIDER: cp_provider
-        }.get(args[0])
-
-    def dbus_objects(self):
-        return [EntitlementDBusObject]
-
-    def test_get_status(self):
-        def assertions(*args):
-            expected_content = ""
-            result = args[0]
-            print ("assertions:",*args)
-            self.assertEqual(result, expected_content)
-
-        self.mock_entitlement.get_status.return_value = ""
-
-        dbus_method_args = [['x', 'y'], 1, {}]
-        self.dbus_request(assertions, self.interface.Entitlement, dbus_method_args)
-
-#     def test_must_be_registered_pool(self):
-#         self.mock_identity.is_valid.return_value = False
-#         pool_method_args = [['x', 'y'], 1, {}]
-#         with six.assertRaisesRegex(self, dbus.DBusException, r'requires the consumer to be registered.*'):
-#             self.dbus_request(None, self.interface.PoolAttach, pool_method_args)
-
-#     def test_must_be_registered_auto(self):
-#         self.mock_identity.is_valid.return_value = False
-#         auto_method_args = ['service_level', {}]
-#         with six.assertRaisesRegex(self, dbus.DBusException, r'requires the consumer to be registered.*'):
-#             self.dbus_request(None, self.interface.AutoAttach, auto_method_args)
-
-#     def test_auto_attach(self):
-#         def assertions(*args):
-#             result = args[0]
-#             self.assertEqual(result, json.dumps(CONTENT_JSON))
-
-#         self.mock_attach.attach_auto.return_value = CONTENT_JSON
-
-#         dbus_method_args = ['service_level', {}]
-#         self.dbus_request(assertions, self.interface.AutoAttach, dbus_method_args)
+        self.mock_identity.uuid = "some-uuid"
+        self.pool_stash.get_filtered_pools_list.return_value=\
+            json.load(open("test/rhsmlib_test/data/filtered-pools.json"))
+        result=entitlement.EntitlementService().get_pools()
+        self.assertEqual(json.load(open("test/rhsmlib_test/data/entitlement-get-pools-available.json")),
+                         result)
