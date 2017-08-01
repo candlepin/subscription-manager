@@ -16,6 +16,7 @@ import dbus
 import json
 import mock
 import six
+import os.path
 
 from test.rhsmlib_test.base import DBusObjectTest, InjectionMockingTest
 
@@ -37,9 +38,14 @@ from subscription_manager.cache import PoolTypeCache, ProfileManager
 from rhsmlib.services.entitlement.pool_stash import PoolStash
 
 class TestEntitlementService(InjectionMockingTest):
+    class TestEntitlementDir(EntitlementDirectory):
+        testDir = os.path.dirname(os.path.abspath(__file__))
+        PATH=os.path.join(testDir,"data","etc/pki/entitlement")
+
     def setUp(self):
         super(TestEntitlementService, self).setUp()
         self.mock_identity = mock.Mock(spec=Identity, name="Identity")
+        self.ent_dir = TestEntitlementService.TestEntitlementDir()
 
         self.mock_cp_provider = mock.Mock(spec=CPProvider,name="CPProvider")
         self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection")
@@ -49,11 +55,16 @@ class TestEntitlementService(InjectionMockingTest):
         self.mock_cert_sorter = mock.Mock(spec=CertSorter, name="CertSorter")
         self.mock_cert_sorter.reasons =  mock.Mock(spec=Reasons, name="Reasons")
         self.mock_cert_sorter.reasons.get_name_message_map.return_value = {}
+
+        self.mock_cert_sorter.reasons.get_subscription_reasons_map.return_value = \
+            json.load(open("test/rhsmlib_test/data/reasons-get-subscription-reasons-map.json"))
+
         self.mock_cert_sorter.get_system_status.return_value="System Status"
+        self.mock_cert_sorter.valid_entitlement_certs = self.ent_dir.list()
 
         self.pooltype_cache = mock.Mock(spec=PoolTypeCache, name="PoolTypeCache")
         self.pooltype_cache.get.return_value="some subscription type"
-        self.ent_dir = mock.Mock(spec=EntitlementDirectory, name="EntitlementDirectory")
+
         self.facts = mock.Mock(spec=Facts, name="Facts")
         self.profile_manager = mock.Mock(spec=ProfileManager, name="ProfileManager")
         self.pool_stash = mock.Mock(spec=PoolStash, name="PoolStash")
@@ -104,3 +115,13 @@ class TestEntitlementService(InjectionMockingTest):
         result=entitlement.EntitlementService().get_pools()
         self.assertEqual(json.load(open("test/rhsmlib_test/data/entitlement-get-pools-available.json")),
                          result)
+
+    def test_get_pools_consumed(self):
+        self.mock_identity.is_valid.return_value = True
+        self.mock_identity.uuid = "some-uuid"
+        self.pool_stash.get_filtered_pools_list.return_value=\
+            json.load(open("test/rhsmlib_test/data/filtered-pools.json"))
+        result=entitlement.EntitlementService().get_pools(consumed=True)
+        the_right_result = json.load(open("test/rhsmlib_test/data/entitlement-get-pools-consumed.json"))
+        self.assertEqual(sorted([c['sku'] for c in result]),
+                         sorted([c['sku'] for c in the_right_result]))
