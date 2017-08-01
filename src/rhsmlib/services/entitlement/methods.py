@@ -13,12 +13,8 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
-from subscription_manager.injection import require, CERT_SORTER, \
-        IDENTITY, ENTITLEMENT_STATUS_CACHE, \
-        PROD_STATUS_CACHE, ENT_DIR, PROD_DIR, CP_PROVIDER, OVERRIDE_STATUS_CACHE, \
-        POOLTYPE_CACHE, RELEASE_STATUS_CACHE, FACTS, POOL_STATUS_CACHE
+from subscription_manager import injection as inj
 
-from .pool_stash import PoolStash
 from .pool_wrapper import PoolWrapper
 from subscription_manager import isodate
 from dateutil.tz import tzlocal
@@ -79,17 +75,16 @@ def get_available_entitlements(get_all=False, active_on=None, overlapping=False,
         'contractNumber',
         'management_enabled'
     ]
-    
+
     #
-    # FIXME 
-    # Since Register using DBus is not implemented yet, 
+    # FIXME
+    # Since Register using DBus is not implemented yet,
     # it is necessary to reload identity before candlepin call.
     #
-    require(IDENTITY).reload()
+    inj.require(inj.IDENTITY).reload()
 
-    pool_stash = PoolStash()
-    dlist = pool_stash.get_filtered_pools_list(active_on, not get_all,
-           overlapping, uninstalled, text, filter_string)
+    dlist = inj.require(inj.POOL_STASH).get_filtered_pools_list(
+        active_on, not get_all, overlapping, uninstalled, text, filter_string)
 
     for pool in dlist:
         pool_wrapper = PoolWrapper(pool)
