@@ -27,10 +27,6 @@ log.setLevel(logging.INFO)
 import sys
 import os.path
 
-# composition of functions. Oh FP I miss you!
-src_path = reduce(lambda x,f: f(x), [os.path.dirname, os.path.dirname, lambda x: os.path.join(x,"src")], __file__)
-sys.path = [src_path] + sys.path + [src_path]
-
 from rhsmlib.dbus import service_wrapper
 from rhsmlib.dbus import objects
 
