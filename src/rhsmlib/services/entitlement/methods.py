@@ -52,7 +52,7 @@ def allows_multi_entitlement(pool):
 # necessary. Also some "view" specific things going on in here.
 
 def get_available_entitlements(get_all=False, active_on=None, overlapping=False,
-                               uninstalled=False, text=None, filter_string=None):
+                               uninstalled=False, text=None, filter_string=None, **kwargs):
     """
     Returns a list of entitlement pools from the server.
 
