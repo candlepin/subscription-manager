@@ -89,7 +89,6 @@ class EntitlementService(object):
             epools = self._filter_pool_json_by_service_level(epools, service_level)
 
         def wrapp_pool(pool):
-            #print(pool.keys())
             machine_type = PoolWrapper(pool).is_virt_only() and "Virtual" \
                            or "Physical"
             result = { "subscription_name": pool['productName'] or "",
