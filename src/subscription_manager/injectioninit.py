@@ -31,7 +31,7 @@ from subscription_manager.validity import ValidProductDateRangeCalculator
 from subscription_manager.cp_provider import CPProvider
 from subscription_manager.plugins import PluginManager
 from subscription_manager.lock import ActionLock
-
+from rhsmlib.services.entitlement.pool_stash import PoolStash
 
 def init_dep_injection():
     """
@@ -75,6 +75,7 @@ def init_dep_injection():
     inj.provide(inj.PLUGIN_MANAGER, PluginManager, singleton=True)
 
     inj.provide(inj.POOL_STATUS_CACHE, PoolStatusCache, singleton=True)
+    inj.provide(inj.POOL_STASH, PoolStash, singleton=True)
     inj.provide(inj.POOLTYPE_CACHE, PoolTypeCache, singleton=True)
     inj.provide(inj.ACTION_LOCK, ActionLock)
 
