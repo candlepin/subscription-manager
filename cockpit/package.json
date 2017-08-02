@@ -7,7 +7,8 @@
   "author": "",
   "license": "LGPL-2.1",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "watch": "webpack --watch & vagrant rsync-auto"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",

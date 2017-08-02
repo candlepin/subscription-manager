@@ -38,6 +38,7 @@ Vagrant.configure("2") do |config|
   # setup shared folder
   config.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude:
     "subscription-manager.egg-info, build, build_ext"
+  config.vm.synced_folder "cockpit/dist", "/usr/local/share/cockpit/subscription-manager", create: true
 
   # Set up the hostmanager plugin to automatically configure host & guest hostnames
   if Vagrant.has_plugin?("vagrant-hostmanager")

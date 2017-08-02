@@ -16,8 +16,7 @@ dist-gzip: clean all
 	cp -r dist/ _install/usr/share/cockpit/subscription-manager
 	mkdir -p _install/usr/share/metainfo/
 	cp *.metainfo.xml _install/usr/share/metainfo/
-	cp subscription-manager-cockpit.spec _install/
-	tar -C _install/ -czf subscription-manager-cockpit.tar.gz .
+	tar -I 'gzip -nc' -C _install/ --mtime @`stat -c '%Y' package.json` --owner root --group root --sort name -cf subscription-manager-cockpit.tar.gz .
 	rm -rf _install
 
 srpm: dist-gzip
