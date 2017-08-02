@@ -21,6 +21,7 @@
 
 %global use_dnf 0%{?fedora}
 %global use_yum (0%{?rhel} && 0%{?rhel} <= 7) || (0%{?suse_version})
+%global use_cockpit 0%{?fedora} || 0%{?rhel} >= 7
 
 %global _hardened_build 1
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
@@ -84,8 +85,11 @@ URL:     http://www.candlepinproject.org/
 # yum install tito
 # tito build --tag subscription-manager-$VERSION-$RELEASE --tgz
 Source0: %{name}-%{version}.tar.gz
+# this is a little different from the Source0, because of limitations in tito,
+# namely that tito expects only one source tarball
+Source1: %{name}-cockpit-%{version}-%{release}.tar.gz
 %if 0%{?suse_version}
-Source1: subscription-manager-rpmlintrc
+Source2: subscription-manager-rpmlintrc
 %endif
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -289,6 +293,17 @@ from the server. Populates /ostree/repo/config as well as updates
 the remote in the currently deployed .origin file.
 %endif
 
+%if %use_cockpit
+%package -n subscription-manager-cockpit
+Summary: Subscription Manager Cockpit UI
+License: LGPLv2.1+
+BuildArch: noarch
+
+Requires: subscription-manager
+
+%description -n subscription-manager-cockpit
+Subscription Manager Cockpit UI
+%endif
 
 %prep
 %setup -q
@@ -337,6 +352,11 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-entitlement-authority
 
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/etc/rhsm/ca
 install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-entitlement-authority.pem %{buildroot}/%{_sysconfdir}/rhsm/ca/redhat-entitlement-authority.pem
+
+%if %use_cockpit
+    # install cockpit dist targz
+    tar --strip-components=1 -xzf %{SOURCE1} -C %{buildroot}
+%endif
 
 %clean
 rm -rf %{buildroot}
@@ -643,6 +663,15 @@ rm -rf %{buildroot}
 %{python_sitelib}/dnf-plugins/*
 %endif
 
+%if %use_cockpit
+%files -n subscription-manager-cockpit
+%defattr(-,root,root,-)
+%dir %{_datadir}/cockpit/subscription-manager
+%{_datadir}/cockpit/subscription-manager/index.html
+%{_datadir}/cockpit/subscription-manager/index.min.js.gz
+%{_datadir}/cockpit/subscription-manager/manifest.json
+%{_datadir}/metainfo/org.cockpit-project.subscription-manager.metainfo.xml
+%endif
 
 %post
 %if %use_systemd

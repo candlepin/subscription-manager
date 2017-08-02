@@ -9,6 +9,18 @@ from the  Candlepin.
  - https://fedorahosted.org/subscription-manager/
  - https://github.com/candlepin/subscription-Manager
 
+Cockpit
+-------
+Cockpit development requires [yarn](https://yarnpkg.com/) to be installed.
+The easiest way to set this up on Fedora is:
+
+```bash
+sudo dnf install -y npm
+sudo npm install -g yarn
+```
+
+See `cockpit/README.md` for more information.
+
 Vagrant
 -------
 

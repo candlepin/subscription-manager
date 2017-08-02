@@ -6,6 +6,7 @@ require 'yaml'
 VAGRANTFILE_DIR = File.dirname(__FILE__)
 
 Vagrant.configure("2") do |config|
+
   vm_boxes = {
     "centos7" => "centos/7",
     "centos6" => "centos/6",
@@ -37,6 +38,7 @@ Vagrant.configure("2") do |config|
   # setup shared folder
   config.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude:
     "subscription-manager.egg-info, build, build_ext, python-rhsm/{build{,_ext}}"
+  config.vm.synced_folder "cockpit/dist", "/usr/local/share/cockpit/subscription-manager", create: true
 
   # Set up the hostmanager plugin to automatically configure host & guest hostnames
   if Vagrant.has_plugin?("vagrant-hostmanager")
