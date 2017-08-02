@@ -408,6 +408,36 @@ class PostAutoAttachConduit(PostSubscriptionConduit):
         super(PostAutoAttachConduit, self).__init__(clazz, consumer_uuid, entitlement_data)
 
 
+class PreListInstalledProductsConduit(BaseConduit):
+    slots = ['pre_list_installed_products']
+
+    def __init__(self, clazz, filter_string):
+        """
+        init for PreListInstalledProductsConduit
+
+        Args:
+            filter_string: filter string used for listening installed products
+        """
+        super(PreListInstalledProductsConduit, self).__init__(clazz)
+        self.filter_string = filter_string
+
+
+class PostListInstalledProductsConduit(BaseConduit):
+    slots = ['post_list_installed_products']
+
+    def __init__(self, clazz, filter_string, installed_products):
+        """
+        init for PostListInstalledProductsConduit
+
+        Args:
+            filter_string: filter string used for listening installed products
+            installed_products: list of installed products
+        """
+        super(PostListInstalledProductsConduit, self).__init__(clazz)
+        self.filter_string = filter_string
+        self.installed_products = installed_products
+
+
 class PluginConfig(object):
     """Represents configuation for each rhsm plugin.
 
@@ -878,7 +908,8 @@ class PluginManager(BasePluginManager):
                 FactsConduit, SubscriptionConduit,
                 UpdateContentConduit,
                 PostSubscriptionConduit,
-                AutoAttachConduit, PostAutoAttachConduit]
+                AutoAttachConduit, PostAutoAttachConduit,
+                PreListInstalledProductsConduit, PostListInstalledProductsConduit,]
 
     def _get_modules(self):
         module_files = self._find_plugin_module_files(self.search_path)

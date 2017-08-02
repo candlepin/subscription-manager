@@ -18,7 +18,8 @@ from subscription_manager import managercli, managerlib
 from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_TYPE
 from subscription_manager.injection import provide, \
         CERT_SORTER, PROD_DIR
-from subscription_manager.managercli import get_installed_product_status, AVAILABLE_SUBS_MATCH_COLUMNS
+from subscription_manager.productid import get_installed_product_status
+from subscription_manager.managercli import AVAILABLE_SUBS_MATCH_COLUMNS
 from subscription_manager.printing_utils import format_name, columnize, \
         echo_columnize_callback, none_wrap_columnize_callback, highlight_by_filter_string_columnize_callback, FONT_BOLD, FONT_RED, FONT_NORMAL
 from subscription_manager.repolib import Repo
@@ -44,8 +45,7 @@ class InstalledProductStatusTests(SubManFixture):
         product_directory = StubProductDirectory([])
         provide(PROD_DIR, product_directory)
 
-        product_status = get_installed_product_status(product_directory,
-                None, StubUEP())
+        product_status = get_installed_product_status(StubUEP())
 
         # no product certs installed...
         self.assertEqual(0, len(product_status))
@@ -59,8 +59,7 @@ class InstalledProductStatusTests(SubManFixture):
         stub_sorter.valid_products['product1'] = [ent_cert]
         provide(CERT_SORTER, stub_sorter)
 
-        product_status = get_installed_product_status(product_directory,
-                None, StubUEP())
+        product_status = get_installed_product_status(StubUEP())
 
         self.assertEqual(1, len(product_status))
         self.assertEqual("subscribed", product_status[0][4])
@@ -75,8 +74,7 @@ class InstalledProductStatusTests(SubManFixture):
         stub_sorter.expired_products['product1'] = [ent_cert]
         provide(CERT_SORTER, stub_sorter)
 
-        product_status = get_installed_product_status(product_directory,
-                None, StubUEP())
+        product_status = get_installed_product_status(StubUEP())
 
         self.assertEqual(1, len(product_status))
         self.assertEqual("expired", product_status[0][4])
@@ -88,8 +86,7 @@ class InstalledProductStatusTests(SubManFixture):
         stub_sorter.unentitled_products['product1'] = None  # prod cert unused here
         provide(CERT_SORTER, stub_sorter)
 
-        product_status = get_installed_product_status(product_directory,
-                None, StubUEP())
+        product_status = get_installed_product_status(StubUEP())
 
         self.assertEqual(1, len(product_status))
         self.assertEqual("not_subscribed", product_status[0][4])
@@ -103,8 +100,7 @@ class InstalledProductStatusTests(SubManFixture):
         stub_sorter.future_products['product1'] = [ent_cert]
         provide(CERT_SORTER, stub_sorter)
 
-        product_status = get_installed_product_status(product_directory,
-                None, StubUEP())
+        product_status = get_installed_product_status(StubUEP())
         self.assertEqual(1, len(product_status))
         self.assertEqual("future_subscribed", product_status[0][4])
 
@@ -117,8 +113,7 @@ class InstalledProductStatusTests(SubManFixture):
         stub_sorter.valid_products['product1'] = [ent_cert, ent_cert]
         provide(CERT_SORTER, stub_sorter)
 
-        product_status = get_installed_product_status(product_directory,
-                None, StubUEP())
+        product_status = get_installed_product_status(StubUEP())
 
         # only "product" is installed
         self.assertEqual(1, len(product_status))
@@ -134,8 +129,7 @@ class InstalledProductStatusTests(SubManFixture):
         stub_sorter.valid_products['product3'] = [ent_cert]
         provide(CERT_SORTER, stub_sorter)
 
-        product_status = get_installed_product_status(product_directory,
-                None, StubUEP())
+        product_status = get_installed_product_status(StubUEP())
 
         # neither product3 or product 2 are installed
         self.assertEqual(1, len(product_status))
@@ -154,8 +148,7 @@ class InstalledProductStatusTests(SubManFixture):
 
         provide(CERT_SORTER, stub_sorter)
 
-        product_status = get_installed_product_status(prod_dir,
-                None, StubUEP())
+        product_status = get_installed_product_status(StubUEP())
 
         # product3 isn't installed
         self.assertEqual(2, len(product_status))

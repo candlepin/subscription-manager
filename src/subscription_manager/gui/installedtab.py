@@ -30,6 +30,7 @@ from subscription_manager.ga import GdkPixbuf as ga_GdkPixbuf
 import os
 
 from subscription_manager.i18n import ungettext, ugettext as _
+from rhsmlib.services import products
 
 log = logging.getLogger(__name__)
 
@@ -69,7 +70,6 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
         self.tab_icon = tab_icon
 
         self.identity = inj.require(inj.IDENTITY)
-        self.product_dir = prod_dir
         self.entitlement_dir = ent_dir
 
         self.backend = backend
@@ -142,85 +142,92 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
     def update(self):
         entries = []
-        range_calculator = inj.require(inj.PRODUCT_DATE_RANGE_CALCULATOR,
-                self.backend.cp_provider.get_consumer_auth_cp())
-        for product_cert in self.product_dir.list():
-            for product in product_cert.products:
-                product_id = product.id
-                status = self.backend.cs.get_status(product_id)
+        range_calculator = inj.require(
+            inj.PRODUCT_DATE_RANGE_CALCULATOR,
+            self.backend.cp_provider.get_consumer_auth_cp()
+        )
 
-                entry = {}
-                entry['product'] = product.name
-                entry['version'] = product.version
-                entry['product_id'] = product_id
-                entry['arch'] = ",".join(product.architectures)
-                # Common properties
-                entry['align'] = 0.5
+        installed_products = products.InstalledProducts(self.backend.cp_provider.get_consumer_auth_cp()).list()
 
-                # TODO:  Pull this date logic out into a separate lib!
-                #        This is also used in mysubstab...
-                if status != NOT_SUBSCRIBED:
+        for product in installed_products:
+            entry = {}
+            entry['product'] = product[0]
+            entry['product_id'] = product_id = product[1]
+            entry['version'] = product[2]
+            entry['arch'] = product[3]  # TODO: need to test, when more more architectures is supported
+            status = product[4]
 
-                    compliant_range = range_calculator.calculate(product.id)
-                    start = ''
-                    end = ''
-                    if compliant_range:
-                        start = compliant_range.begin()
-                        end = compliant_range.end()
+            # NOTE: following code cannot be used, because start_date and expiration_date
+            # are stored in textual form in product and GUI requires datetime format.
+            # entry['start_date'] = product[6]
+            # entry['expiration_date'] = product[7]
 
-                    contract_ids, sub_names = self._calc_subs_providing(
-                            product_id, compliant_range)
-                    contract = friendly_join(contract_ids)
-                    num_of_contracts = len(contract_ids)
+            # Common properties
+            entry['align'] = 0.5
 
-                    entry['subscription'] = list(sub_names)
+            # TODO:  Pull this date logic out into a separate lib!
+            #        This is also used in mysubstab...
+            if status != NOT_SUBSCRIBED:
 
-                    entry['start_date'] = start
-                    entry['expiration_date'] = end
+                compliant_range = range_calculator.calculate(product_id)
+                start = ''
+                end = ''
+                if compliant_range:
+                    start = compliant_range.begin()
+                    end = compliant_range.end()
+                entry['start_date'] = start
+                entry['expiration_date'] = end
 
-                    if status == FUTURE_SUBSCRIBED:
-                        entry['image'] = self._render_icon('red')
-                        entry['status'] = _('Future Subscription')
-                        entry['validity_note'] = _("Future Subscribed")
-                    elif status == EXPIRED:
-                        entry['image'] = self._render_icon('red')
-                        entry['status'] = _('Expired')
-                        sub_numbers = set([])
-                        for ent_cert in self.entitlement_dir.list_for_product(product_id):
-                            order = ent_cert.order
-                            # FIXME:  getSubscription() seems to always be None...?
-                            if order.subscription:
-                                sub_numbers.add(order.subscription)
-                        subs_str = ', '.join(sub_numbers)
+                contract_ids, sub_names = self._calc_subs_providing(
+                        product_id, compliant_range)
+                contract = friendly_join(contract_ids)
+                num_of_contracts = len(contract_ids)
 
-                        entry['validity_note'] = \
-                             _('Subscription %s is expired') % subs_str
-                    elif status == PARTIALLY_SUBSCRIBED:
-                        entry['image'] = self._render_icon('yellow')
-                        entry['status'] = _('Partially Subscribed')
-                        entry['validity_note'] = _("Partially Subscribed")
-                    elif status == UNKNOWN:
-                        entry['image'] = self._render_icon('unknown')
-                        entry['status'] = _('Unknown')
-                        if not self.backend.cs.is_registered():
-                            entry['validity_note'] = _("System is not registered.")
-                        else:
-                            # System must be registered but unable to reach server:
-                            entry['validity_note'] = _("Entitlement server is unreachable.")
-                    else:
-                        entry['image'] = self._render_icon('green')
-                        entry['status'] = _('Subscribed')
-                        entry['validity_note'] = \
-                            ungettext("Covered by contract %s through %s",
-                                      'Covered by contracts %s through %s',
-                                      num_of_contracts) % \
-                            (contract,
-                             managerlib.format_date(entry['expiration_date']))
-                else:
+                entry['subscription'] = list(sub_names)
+
+                if status == FUTURE_SUBSCRIBED:
                     entry['image'] = self._render_icon('red')
-                    entry['status'] = _('Not Subscribed')
-                    entry['validity_note'] = _("Not Subscribed")
-                entries.append(entry)
+                    entry['status'] = _('Future Subscription')
+                    entry['validity_note'] = _("Future Subscribed")
+                elif status == EXPIRED:
+                    entry['image'] = self._render_icon('red')
+                    entry['status'] = _('Expired')
+                    sub_numbers = set([])
+                    for ent_cert in self.entitlement_dir.list_for_product(product_id):
+                        order = ent_cert.order
+                        # FIXME:  getSubscription() seems to always be None...?
+                        if order.subscription:
+                            sub_numbers.add(order.subscription)
+                    subs_str = ', '.join(sub_numbers)
+
+                    entry['validity_note'] = \
+                         _('Subscription %s is expired') % subs_str
+                elif status == PARTIALLY_SUBSCRIBED:
+                    entry['image'] = self._render_icon('yellow')
+                    entry['status'] = _('Partially Subscribed')
+                    entry['validity_note'] = _("Partially Subscribed")
+                elif status == UNKNOWN:
+                    entry['image'] = self._render_icon('unknown')
+                    entry['status'] = _('Unknown')
+                    if not self.backend.cs.is_registered():
+                        entry['validity_note'] = _("System is not registered.")
+                    else:
+                        # System must be registered but unable to reach server:
+                        entry['validity_note'] = _("Entitlement server is unreachable.")
+                else:
+                    entry['image'] = self._render_icon('green')
+                    entry['status'] = _('Subscribed')
+                    entry['validity_note'] = \
+                        ungettext("Covered by contract %s through %s",
+                                  'Covered by contracts %s through %s',
+                                  num_of_contracts) % \
+                        (contract,
+                         managerlib.format_date(entry['expiration_date']))
+            else:
+                entry['image'] = self._render_icon('red')
+                entry['status'] = _('Not Subscribed')
+                entry['validity_note'] = _("Not Subscribed")
+            entries.append(entry)
         self._entries = entries
 
     def refresh(self):
