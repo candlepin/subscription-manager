@@ -33,6 +33,7 @@ from subscription_manager.plugins import PluginManager
 from subscription_manager.lock import ActionLock
 from rhsmlib.services.entitlement.pool_stash import PoolStash
 
+
 def init_dep_injection():
     """
     Initializes the default behaviour for all supported features.

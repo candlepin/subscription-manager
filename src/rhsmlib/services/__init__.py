@@ -13,4 +13,4 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
-from .entitlement.service import EntitlementService
+from .entitlement.service import EntitlementService # NOQA

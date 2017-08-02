@@ -15,19 +15,13 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 #
 
-import collections
-import logging
-import os
-import pprint
-import re
-import sys
+from subscription_manager import isodate
+from .pool_wrapper import PoolWrapper
 
-import signal
-import socket
-import syslog
-import uuid
+import logging
 
 log = logging.getLogger(__name__)
+
 
 class PoolFilter(object):
     """

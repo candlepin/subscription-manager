@@ -395,14 +395,16 @@ class CertSorter(ComplianceManager):
 
 #
 # A class used in injection machinery.
-# ComplianceManager wants 'on_date' variable on startup. 
+# ComplianceManager wants 'on_date' variable on startup.
 # So you can do this:
 #       compliance_manager = require(COMPLIANCE_MANAGER_FACTORY)(on_date=datetime.now())
 #
 
+
 class ComplianceManagerFactory(object):
     def __call__(self, on_date=None):
         return ComplianceManager(on_date=on_date)
+
 
 class StackingGroupSorter(object):
     def __init__(self, entitlements):

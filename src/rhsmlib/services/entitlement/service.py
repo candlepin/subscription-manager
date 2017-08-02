@@ -20,8 +20,13 @@ from .certificate_filter import EntitlementCertificateFilter
 from dateutil.tz import tzlocal
 from .methods import get_available_entitlements
 from .pool_wrapper import PoolWrapper
+import datetime
+from time import localtime, strftime, strptime
+from subscription_manager.i18n import ugettext as _
+from rhsm.certificate import GMT
 
 log = logging.getLogger(__name__)
+
 
 def format_date(dt):
     if not dt:
@@ -31,6 +36,7 @@ def format_date(dt):
     except ValueError:
         log.warn("Datetime does not contain timezone information")
         return dt.strftime("%x")
+
 
 class EntitlementService(object):
     def __init__(self):
@@ -67,8 +73,8 @@ class EntitlementService(object):
     #        on_date=None
     #        consumed=True
     #
-    def get_pools(self,**kwargs):
-        fn = kwargs.get('consumed',False) and self.get_consumed_pools\
+    def get_pools(self, **kwargs):
+        fn = kwargs.get('consumed', False) and self.get_consumed_pools\
              or self.get_available_pools
         result = fn(**kwargs)
         return result
@@ -102,25 +108,27 @@ class EntitlementService(object):
         def wrapp_pool(pool):
             machine_type = PoolWrapper(pool).is_virt_only() and "Virtual" \
                            or "Physical"
-            result = { "subscription_name": pool['productName'] or "",
-                       "provides": pool['providedProducts'] or [],
-                       "sku":"",
-                       "contract": pool['contractNumber'] or "",
-                       "account": "",
-                       "serial": "",
-                       "pool_id": pool['id'],
-                       "provides_management": pool.get('management_enabled',False),
-                       "active": True,
-                       "quantity_used": pool['quantity'] or 0,
-                       "service_level": pool['service_level'] or "",
-                       "service_type": pool['service_type'] or "",
-                       "subscription_type": self.pooltype_cache.get(pool['id']) or "",
-                       "starts":"", # format_date(pool['endDate']),
-                       "ends": "", #format_date(pool['endDate']),
-                       "system_type": machine_type}
+            result = {"subscription_name": pool['productName'] or "",
+                      "provides": pool['providedProducts'] or [],
+                      "sku": "",
+                      "contract": pool['contractNumber'] or "",
+                      "account": "",
+                      "serial": "",
+                      "pool_id": pool['id'],
+                      "provides_management": pool.get('management_enabled', False),
+                      "active": True,
+                      "quantity_used": pool['quantity'] or 0,
+                      "service_level": pool['service_level'] or "",
+                      "service_type": pool['service_type'] or "",
+                      "subscription_type": self.pooltype_cache.get(pool['id']) or "",
+                      # TODO: the input is a string, not datetime
+                      "starts": "",  # format_date(pool.get('endDate')),
+                      # TODO: the input is a string, not datetime
+                      "ends": "",  # format_date(pool.get('endDate')),
+                      "system_type": machine_type}
             return result
 
-        pools_data = map(wrapp_pool,epools)
+        pools_data = map(wrapp_pool, epools)
         return pools_data
 
     def get_consumed_pools(self, matches=None, service_level=None, **kwargs):
@@ -137,38 +145,36 @@ class EntitlementService(object):
 
         def get_cert_reasons(cert):
             if not self.sorter.are_reasons_supported():
-                return ["Subscription management service doesn't support Status Details",]
-            cert_subject = getattr(cert,"subject",{})
+                return ["Subscription management service doesn't support Status Details", ]
+            cert_subject = getattr(cert, "subject", {})
             reasons = ('CN' in cert_subject) and cert_reasons_map[cert_subject['CN']] \
-                      or (cert in self.sorter.valid_entitlement_certs) and ["Subscription is current",] \
-                      or (cert.valid_rande.ent() < datatime.datetime.now(GMT())) and ["Subscription is expired",] \
-                      or ["Subscription has not begun",]
+                      or (cert in self.sorter.valid_entitlement_certs) and ["Subscription is current", ] \
+                      or (cert.valid_rande.ent() < datetime.datetime.now(GMT())) and ["Subscription is expired", ] \
+                      or ["Subscription has not begun", ]
             return reasons
 
         def get_cert_data(cert):
-            order = cert.order or Object()
-            cert_subject = getattr(cert,"subject",{}) or {}
-            pool_id = getattr(order,"pool_id","") or ""
-            result= {"subscription_name": getattr(order,"name","") or "",
-                     "provides": [p.name for p in cert.products],
-                     "sku": getattr(order,"sku","") or "",
-                     "contract": getattr(order,"contract","") or "",
-                     "account": getattr(order,"account","") or "",
-                     "serial": getattr(order,"serial","") or "",
-                     "pool_id":  pool_id,
-                     "provides_management": getattr(order,"provides_management",False),
-                     "active": cert.is_valid(),
-                     "quantity_used": getattr(order,"quantity_used",0) or 0,
-                     "service_level": getattr(order,"service_level","") or "",
-                     "service_type":  getattr(order,"service_type","") or "",
-                     "status_detail": get_cert_reasons(cert),
-                     "subscription_type": ('CN' in cert_subject) \
-                                           and self.pooltype_cache.get(pool_id) \
-                                           or "",
-                     "starts": format_date(cert.valid_range.begin()),
-                     "ends":  format_date(cert.valid_range.end()),
-                     "system_type": getattr(order,"virt_only",False) and "Virtual" or "Physical"}
+            order = cert.order or dict()
+            cert_subject = getattr(cert, "subject", {}) or {}
+            pool_id = getattr(order, "pool_id", "") or ""
+            result = {"subscription_name": getattr(order, "name", "") or "",
+                      "provides": [p.name for p in cert.products],
+                      "sku": getattr(order, "sku", "") or "",
+                      "contract": getattr(order, "contract", "") or "",
+                      "account": getattr(order, "account", "") or "",
+                      "serial": getattr(order, "serial", "") or "",
+                      "pool_id": pool_id,
+                      "provides_management": getattr(order, "provides_management", False),
+                      "active": cert.is_valid(),
+                      "quantity_used": getattr(order, "quantity_used", 0) or 0,
+                      "service_level": getattr(order, "service_level", "") or "",
+                      "service_type": getattr(order, "service_type", "") or "",
+                      "status_detail": get_cert_reasons(cert),
+                      "subscription_type": ('CN' in cert_subject) and self.pooltype_cache.get(pool_id) or "",
+                      "starts": format_date(cert.valid_range.begin()),
+                      "ends": format_date(cert.valid_range.end()),
+                      "system_type": getattr(order, "virt_only", False) and "Virtual" or "Physical"}
             return result
 
-        cert_data = map(get_cert_data,certs)
+        cert_data = map(get_cert_data, certs)
         return cert_data

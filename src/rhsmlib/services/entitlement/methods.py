@@ -19,6 +19,10 @@ from .pool_wrapper import PoolWrapper
 from subscription_manager import isodate
 from dateutil.tz import tzlocal
 
+import logging
+log = logging.getLogger(__name__)
+
+
 def format_date(dt):
     if not dt:
         return ""
@@ -28,13 +32,16 @@ def format_date(dt):
         log.warn("Datetime does not contain timezone information")
         return dt.strftime("%x")
 
+
 def _sub_dict(datadict, subkeys, default=None):
     """Return a dict that is a subset of datadict matching only the keys in subkeys"""
     return dict([(k, datadict.get(k, default)) for k in subkeys])
 
+
 def is_true_value(test_string):
     val = str(test_string).lower()
     return val == "1" or val == "true" or val == "yes"
+
 
 def allows_multi_entitlement(pool):
     """
@@ -47,9 +54,11 @@ def allows_multi_entitlement(pool):
             return True
     return False
 
+
 # This method is morphing the actual pool json and returning a new
 # dict which does not contain all the pool info. Not sure if this is really
 # necessary. Also some "view" specific things going on in here.
+
 
 def get_available_entitlements(get_all=False, active_on=None, overlapping=False,
                                uninstalled=False, text=None, filter_string=None, **kwargs):
@@ -117,5 +126,3 @@ def get_available_entitlements(get_all=False, active_on=None, overlapping=False,
         del d['consumed']
 
     return data
-
-

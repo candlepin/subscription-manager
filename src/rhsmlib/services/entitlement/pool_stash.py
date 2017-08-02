@@ -17,8 +17,10 @@ from __future__ import print_function, division, absolute_import
 import logging
 log = logging.getLogger(__name__)
 from .pool_filter import PoolFilter
+from .merged_pools import merge_pools
 
 import subscription_manager.injection as inj
+
 
 class PoolStash(object):
     """
@@ -55,7 +57,7 @@ class PoolStash(object):
         self.all_pools = {}
         self.compatible_pools = {}
         log.debug("Refreshing pools from server...")
-        for pool in list_pools(inj.require(inj.CP_PROVIDER).get_consumer_auth_cp(),
+        for pool in self.list_pools(inj.require(inj.CP_PROVIDER).get_consumer_auth_cp(),
                 self.identity.uuid, active_on=active_on):
             self.compatible_pools[pool['id']] = pool
             self.all_pools[pool['id']] = pool
@@ -63,7 +65,7 @@ class PoolStash(object):
         # Filter the list of all pools, removing those we know are compatible.
         # Sadly this currently requires a second query to the server.
         self.incompatible_pools = {}
-        for pool in list_pools(inj.require(inj.CP_PROVIDER).get_consumer_auth_cp(),
+        for pool in self.list_pools(inj.require(inj.CP_PROVIDER).get_consumer_auth_cp(),
                 self.identity.uuid, list_all=True, active_on=active_on):
             if not pool['id'] in self.compatible_pools:
                 self.incompatible_pools[pool['id']] = pool
@@ -88,10 +90,8 @@ class PoolStash(object):
         """
         self.all_pools = {}
         self.compatible_pools = {}
-        if active_on and overlapping:
-            self.sorter = ComplianceManager(active_on)
-        elif not active_on and overlapping:
-            self.sorter = inj.require(inj.CERT_SORTER)
+        self.sorter = (active_on and overlapping) and inj.require(inj.COMPLIANCE_MANAGER_FACTORY)(on_date=active_on) \
+            or inj.require(inj.CERT_SORTER)
 
         if incompatible:
             for pool in self.list_pools(inj.require(inj.CP_PROVIDER).get_consumer_auth_cp(),
@@ -159,7 +159,7 @@ class PoolStash(object):
 
         return pools
 
-    def list_pools(self,uep, consumer_uuid, list_all=False, active_on=None, filter_string=None):
+    def list_pools(self, uep, consumer_uuid, list_all=False, active_on=None, filter_string=None):
         """
         Wrapper around the UEP call to fetch pools, which forces a facts update
         if anything has changed before making the request. This ensures the

@@ -16,6 +16,7 @@ from __future__ import print_function, division, absolute_import
 
 # This module contains wrappers for JSON returned from the CP server.
 
+
 def is_true_value(test_string):
     val = str(test_string).lower()
     return val == "1" or val == "true" or val == "yes"

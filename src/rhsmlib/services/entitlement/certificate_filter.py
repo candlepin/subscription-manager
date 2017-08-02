@@ -15,17 +15,8 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 #
 
-import collections
-import logging
-import os
-import pprint
 import re
-import sys
 
-import signal
-import socket
-import syslog
-import uuid
 
 class CertificateFilter(object):
     def match(self, cert):
@@ -35,6 +26,7 @@ class CertificateFilter(object):
         otherwise.
         """
         raise NotImplementedError
+
 
 class ProductCertificateFilter(CertificateFilter):
     def __init__(self, filter_string=None):

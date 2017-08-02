@@ -19,8 +19,9 @@ from rhsmlib.dbus import constants, base_object, util, dbus_utils
 from rhsmlib.services import EntitlementService
 import rhsm.connection as connection
 
-from dbus import DBusException, Dictionary
+from dbus import DBusException
 log = logging.getLogger(__name__)
+
 
 class EntitlementDBusObject(base_object.BaseObject):
     default_dbus_path = constants.ENTITLEMENT_DBUS_PATH
@@ -28,8 +29,8 @@ class EntitlementDBusObject(base_object.BaseObject):
 
     def __init__(self, conn=None, object_path=None, bus_name=None, parser=None):
         self.service = EntitlementService()
-        super(EntitlementDBusObject, self).__init__(conn=conn, 
-                                                    object_path=object_path, 
+        super(EntitlementDBusObject, self).__init__(conn=conn,
+                                                    object_path=object_path,
                                                     bus_name=bus_name)
 
     @util.dbus_service_method(
@@ -45,8 +46,8 @@ class EntitlementDBusObject(base_object.BaseObject):
         in_signature='a{sv}',
         out_signature='aa{sv}')
     @util.dbus_handle_exceptions
-    def GetPools(self,dbus_options={}, sender=None):
-        options = dbus_utils.dbus_to_python(dbus_options,dict)
+    def GetPools(self, dbus_options={}, sender=None):
+        options = dbus_utils.dbus_to_python(dbus_options, dict)
         try:
             result = self.service.get_pools(**options)
         except connection.RestlibException as re:
@@ -54,4 +55,3 @@ class EntitlementDBusObject(base_object.BaseObject):
             raise DBusException(re.msg)
 
         return map(dbus_utils.dict_to_variant_dict, result)
-
