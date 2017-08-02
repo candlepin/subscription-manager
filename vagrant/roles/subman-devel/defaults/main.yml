@@ -4,10 +4,12 @@ subman_setup_hacking_environment: false
 subman_add_vagrant_candlepin_to_hosts: false
 distro_package_command: yum
 distro_specific_deps:
+    - koji
     - tito
     - git
     - gcc
     - make
+    - npm
     - python-pip
     - m2crypto
     - python-ethtool
