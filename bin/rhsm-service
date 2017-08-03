@@ -37,8 +37,8 @@ if __name__ == "__main__":
             objects.Main
         ]
         sys.exit(service_wrapper.main(sys.argv, object_classes=object_classes))
-    except Exception as err:
-        log.exception("DBus service startup failed: %s" % err)
+    except Exception:
+        log.exception("DBus service startup failed")
 else:
     # Importing this module would screw up the importer's logging configuration since
     # we're setting up logging very early in module scope to catch any log messages that

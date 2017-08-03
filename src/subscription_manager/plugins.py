@@ -909,7 +909,7 @@ class PluginManager(BasePluginManager):
                 UpdateContentConduit,
                 PostSubscriptionConduit,
                 AutoAttachConduit, PostAutoAttachConduit,
-                PreListInstalledProductsConduit, PostListInstalledProductsConduit,]
+                PreListInstalledProductsConduit, PostListInstalledProductsConduit]
 
     def _get_modules(self):
         module_files = self._find_plugin_module_files(self.search_path)
