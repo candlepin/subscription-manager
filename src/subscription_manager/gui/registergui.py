@@ -1622,6 +1622,8 @@ class CredentialsScreen(Screen):
             self.skip_auto_bind.set_active(self.info.get_property('skip-auto-bind'))
 
     def pre(self):
+        msg = _("This system is currently not registered.")
+        self.info.set_property('register-status', msg)
         self.info.set_property('details-label-txt', self.pre_message)
         self.account_login.grab_focus()
         self.pre_done()
