@@ -44,11 +44,11 @@ class ProductsDBusObject(base_object.BaseObject):
     @util.dbus_handle_exceptions
     def ListInstalledProducts(self, filter_string, proxy_options, sender=None):
 
-        # FIXME: it is probably not necessary to reinitialize whole deep injection here.
-        # We reinitialize CertSorter here for following reason. When new product certificate
-        # is installed (or existing is removed), then this change is not propagated to
-        # CertSorter and calling installed_products.list(filter_string) without reinitialization
-        # of dependency injection would return old (cached) list of installed products.
+        # We reinitialize dependency injection here for following reason. When new product
+        # certificate is installed (or existing is removed), then this change is not propagated to
+        # CertSorter and other caches. Calling installed_products.list(filter_string) without
+        # reinitialization of dependency injection would return old (cached) list of installed
+        # products.
         init_dep_injection()
 
         self.ensure_registered()

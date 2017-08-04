@@ -32,66 +32,11 @@ from subscription_manager import rhelproduct
 
 from subscription_manager import utils
 from subscription_manager import repolib
-from subscription_manager import managerlib
 
 import subscription_manager.injection as inj
 from rhsm import ourjson as json
 
 log = logging.getLogger(__name__)
-
-
-def get_installed_product_status(uep, filter_string=None):
-    """
-    Returns installed products and their subscription states
-    """
-    product_status = []
-
-    # It is important to gather data from certificates of installed
-    # products at the first time: sorter = inj.require(inj.CERT_SORTER)
-    # Data are stored in cache (json file:
-    # /var/lib/rhsm/cache/installed_products.json)
-    # Calculator use this cache (json file) for assembling request
-    # sent to server. When following two lines of code are called in
-    # reverse order, then request can be incomplete and result
-    # needn't contain all data (especially startDate and endDate).
-    # See BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1357152
-
-    # FIXME: make following functions independent on order of calling
-    sorter = inj.require(inj.CERT_SORTER)
-    calculator = inj.require(inj.PRODUCT_DATE_RANGE_CALCULATOR, uep)
-
-    cert_filter = None
-
-    if filter_string is not None:
-        cert_filter = utils.ProductCertificateFilter(filter_string)
-
-    for installed_product in sorter.installed_products:
-        product_cert = sorter.installed_products[installed_product]
-
-        if cert_filter is None or cert_filter.match(product_cert):
-            for product in product_cert.products:
-                begin = ""
-                end = ""
-                prod_status_range = calculator.calculate(product.id)
-
-                if prod_status_range:
-                    # Format the date in user's local time as the date
-                    # range is returned in GMT.
-                    begin = managerlib.format_date(prod_status_range.begin())
-                    end = managerlib.format_date(prod_status_range.end())
-
-                product_status.append((
-                    product.name,
-                    installed_product,
-                    product.version,
-                    ",".join(product.architectures),
-                    sorter.get_status(product.id),
-                    sorter.reasons.get_product_reasons(product),
-                    begin,
-                    end
-                ))
-
-    return product_status
 
 
 class DatabaseDirectory(Directory):
