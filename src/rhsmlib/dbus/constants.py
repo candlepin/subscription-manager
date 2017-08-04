@@ -28,6 +28,8 @@ __all__ = [
     'CONFIG_DBUS_PATH',
     'ATTACH_INTERFACE',
     'ATTACH_DBUS_PATH',
+    'PRODUCTS_INTERFACE',
+    'PRODUCTS_DBUS_PATH',
 ]
 
 # The base of the 'well known name' used for bus and service names, as well
@@ -61,3 +63,6 @@ CONFIG_DBUS_PATH = '%s/%s' % (ROOT_DBUS_PATH, 'Config')
 
 ATTACH_INTERFACE = '%s.%s' % (INTERFACE_BASE, 'Attach')
 ATTACH_DBUS_PATH = '%s/%s' % (ROOT_DBUS_PATH, 'Attach')
+
+PRODUCTS_INTERFACE = '%s.%s' % (INTERFACE_BASE, 'Products')
+PRODUCTS_DBUS_PATH = '%s/%s' % (ROOT_DBUS_PATH, 'Products')

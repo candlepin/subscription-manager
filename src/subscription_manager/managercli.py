@@ -51,14 +51,14 @@ from rhsmlib.facts.hwprobe import ClassicCheck
 import subscription_manager.injection as inj
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
-from subscription_manager.managerlib import valid_quantity, format_date
+from subscription_manager.managerlib import valid_quantity
 from subscription_manager.release import ReleaseBackend
 from subscription_manager.repolib import RepoActionInvoker, RepoFile, manage_repos_enabled
 from subscription_manager.utils import parse_server_info, \
         parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
         restart_virt_who, get_terminal_width, print_error, unique_list_items, \
-        ProductCertificateFilter, EntitlementCertificateFilter
+        EntitlementCertificateFilter
 from subscription_manager.overrides import Overrides, Override
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, \
@@ -69,7 +69,7 @@ from subscription_manager.i18n import ungettext, ugettext as _
 
 log = logging.getLogger(__name__)
 
-from rhsmlib.services import config, attach
+from rhsmlib.services import config, attach, products
 conf = config.Config(rhsm.config.initConfig())
 
 SM = "subscription-manager"
@@ -191,10 +191,9 @@ def handle_exception(msg, ex):
 
 
 def show_autosubscribe_output(uep):
-    installed_status = get_installed_product_status(inj.require(inj.PROD_DIR),
-            inj.require(inj.ENT_DIR), uep)
+    installed_products = products.InstalledProducts(uep).list()
 
-    if not installed_status:
+    if not installed_products:
         # Returning an error code here breaks registering when no products are installed, and the
         # AttachCommand already performs this check before calling.
         print(_("No products installed."))
@@ -204,71 +203,16 @@ def show_autosubscribe_output(uep):
     print(_("Installed Product Current Status:"))
     subscribed = 1
     all_subscribed = True
-    for prod_status in installed_status:
-        if prod_status[4] == SUBSCRIBED:
+    for product in installed_products:
+        if product[4] == SUBSCRIBED:
             subscribed = 0
-        status = STATUS_MAP[prod_status[4]]
-        if prod_status[4] == NOT_SUBSCRIBED:
+        status = STATUS_MAP[product[4]]
+        if product[4] == NOT_SUBSCRIBED:
             all_subscribed = False
-        print(columnize(PRODUCT_STATUS, echo_columnize_callback, prod_status[0], status) + "\n")
+        print(columnize(PRODUCT_STATUS, echo_columnize_callback, product[0], status) + "\n")
     if not all_subscribed:
         print(_("Unable to find available subscriptions for all your installed products."))
     return subscribed
-
-
-def get_installed_product_status(product_directory, entitlement_directory, uep, filter_string=None):
-    """
-     Returns the Installed products and their subscription states
-    """
-    product_status = []
-
-    # It is important to gather data from certificates of installed
-    # products at the first time: sorter = inj.require(inj.CERT_SORTER)
-    # Data are stored in cache (json file:
-    # /var/lib/rhsm/cache/installed_products.json)
-    # Calculator use this cache (json file) for assembling request
-    # sent to server. When following two lines of code are called in
-    # reverse order, then request can be incomplete and result
-    # needn't contain all data (especially startDate and endDate).
-
-    # FIXME: make following functions independent on order of calling
-    sorter = inj.require(inj.CERT_SORTER)
-    calculator = inj.require(inj.PRODUCT_DATE_RANGE_CALCULATOR, uep)
-
-    cert_filter = None
-
-    if filter_string is not None:
-        cert_filter = ProductCertificateFilter(filter_string)
-
-    print()
-
-    for installed_product in sorter.installed_products:
-        product_cert = sorter.installed_products[installed_product]
-
-        if cert_filter is None or cert_filter.match(product_cert):
-            for product in product_cert.products:
-                begin = ""
-                end = ""
-                prod_status_range = calculator.calculate(product.id)
-
-                if prod_status_range:
-                    # Format the date in user's local time as the date
-                    # range is returned in GMT.
-                    begin = format_date(prod_status_range.begin())
-                    end = format_date(prod_status_range.end())
-
-                product_status.append((
-                    product.name,
-                    installed_product,
-                    product.version,
-                    ",".join(product.architectures),
-                    sorter.get_status(product.id),
-                    sorter.reasons.get_product_reasons(product),
-                    begin,
-                    end
-                ))
-
-    return product_status
 
 
 class CliCommand(AbstractCLICommand):
@@ -1634,13 +1578,12 @@ class AttachCommand(CliCommand):
                     return_code = 1
             # must be auto
             else:
-                products_installed = len(get_installed_product_status(self.product_dir,
-                                 self.entitlement_dir, self.cp))
+                installed_products_num = len(products.InstalledProducts(self.cp).list())
                 # if we are green, we don't need to go to the server
                 self.sorter = inj.require(inj.CERT_SORTER)
 
                 if self.sorter.is_valid():
-                    if not products_installed:
+                    if not installed_products_num:
                         print(_("No Installed products on system. "
                                 "No need to attach subscriptions."))
                     else:
@@ -1670,7 +1613,7 @@ class AttachCommand(CliCommand):
                 for e in report.exceptions():
                     print('\t-', str(e))
             elif self.auto_attach:
-                if not products_installed:
+                if not installed_products_num:
                     return_code = 1
                 else:
                     self.sorter.force_cert_check()
@@ -2333,9 +2276,9 @@ class ListCommand(CliCommand):
                                help=_("lists only the pool IDs for applicable available or consumed subscriptions; only used with --available and --consumed"))
 
     def _validate_options(self):
-        if (self.options.all and not self.options.available):
+        if self.options.all and not self.options.available:
             system_exit(os.EX_USAGE, _("Error: --all is only applicable with --available"))
-        if (self.options.on_date and not self.options.available):
+        if self.options.on_date and not self.options.available:
             system_exit(os.EX_USAGE, _("Error: --ondate is only applicable with --available"))
         if self.options.service_level is not None and not (self.options.consumed or self.options.available):
             system_exit(os.EX_USAGE, _("Error: --servicelevel is only applicable with --available or --consumed"))
@@ -2355,18 +2298,18 @@ class ListCommand(CliCommand):
         self._validate_options()
 
         if self.options.installed and not self.options.pid_only:
-            iproducts = get_installed_product_status(self.product_dir, self.entitlement_dir, self.cp, self.options.filter_string)
+            installed_products = products.InstalledProducts(self.cp).list(self.options.filter_string)
 
-            if len(iproducts):
+            if len(installed_products):
                 print("+-------------------------------------------+")
                 print(_("    Installed Product Status"))
                 print("+-------------------------------------------+")
 
-                for product in iproducts:
+                for product in installed_products:
                     status = STATUS_MAP[product[4]]
                     print(columnize(INSTALLED_PRODUCT_STATUS, none_wrap_columnize_callback,
-                                product[0], product[1], product[2], product[3],
-                                status, product[5], product[6], product[7]) + "\n")
+                                    product[0], product[1], product[2], product[3],
+                                    status, product[5], product[6], product[7]) + "\n")
             else:
                 if self.options.filter_string:
                     print(_("No installed products were found matching the expression \"%s\".") % self.options.filter_string)
@@ -2410,7 +2353,7 @@ class ListCommand(CliCommand):
 
                     for data in epools:
                         if PoolWrapper(data).is_virt_only():
-                            machine_type = machine_type = _("Virtual")
+                            machine_type = _("Virtual")
                         else:
                             machine_type = _("Physical")
 

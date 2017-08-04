@@ -116,7 +116,7 @@ class TestAttachService(InjectionMockingTest):
         else:
             return None
 
-    def test_pool_attacm(self):
+    def test_pool_attach(self):
         self.mock_identity.is_valid.return_value = True
         self.mock_identity.uuid = "id"
 

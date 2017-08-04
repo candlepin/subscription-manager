@@ -33,6 +33,7 @@ if __name__ == "__main__":
             objects.ConfigDBusObject,
             objects.RegisterDBusObject,
             objects.AttachDBusObject,
+            objects.ProductsDBusObject,
             objects.Main
         ]
         sys.exit(service_wrapper.main(sys.argv, object_classes=object_classes))
