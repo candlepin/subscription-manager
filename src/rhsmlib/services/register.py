@@ -70,31 +70,34 @@ class RegisterService(object):
             )
         self.installed_mgr.write_cache()
         self.plugin_manager.run("post_register_consumer", consumer=consumer, facts=facts_dict)
+
+        # Now that we are registered, load the new identity
+        self.identity.reload()
         return consumer
 
     def validate_options(self, options):
-        error_msg = None
-
         if self.identity.is_valid() and options['force'] is not True:
-            error_msg = _("This system is already registered. Add force to options to override.")
+            raise exceptions.ValidationError(_("This system is already registered. Add force to options to "
+                "override."))
         elif options.get('name') == '':
-            error_msg = _("Error: system name can not be empty.")
+            raise exceptions.ValidationError(_("Error: system name can not be empty."))
         elif options['consumerid'] and options['force'] is True:
-            error_msg = _("Error: Can not force registration while attempting to recover registration with consumerid. Please use --force without --consumerid to re-register or use the clean command and try again without --force.")
+            raise exceptions.ValidationError(_("Error: Can not force registration while attempting to "
+                "recover registration with consumerid. Please use --force without --consumerid to re-register"
+                " or use the clean command and try again without --force."))
 
         # If 'activation_keys' already exists in the dictionary, leave it.  Otherwise, set to None.
         if options['activation_keys']:
             # 746259: Don't allow the user to pass in an empty string as an activation key
             if '' == options['activation_keys']:
-                error_msg = _("Error: Must specify an activation key")
+                raise exceptions.ValidationError(_("Error: Must specify an activation key"))
             elif getattr(self.cp, 'username', None) or getattr(self.cp, 'password', None):
-                error_msg = _("Error: Activation keys do not require user credentials.")
+                raise exceptions.ValidationError(_("Error: Activation keys do not require user credentials."))
             elif options['consumerid']:
-                error_msg = _("Error: Activation keys can not be used with previously registered IDs.")
+                raise exceptions.ValidationError(_("Error: Activation keys can not be used with previously"
+                    " registered IDs."))
             elif options['environment']:
-                error_msg = _("Error: Activation keys do not allow environments to be specified.")
+                raise exceptions.ValidationError(_("Error: Activation keys do not allow environments to be"
+                    " specified."))
         elif not getattr(self.cp, 'username', None) or not getattr(self.cp, 'password', None):
-            error_msg = _("Error: Missing username or password.")
-
-        if error_msg:
-            raise exceptions.ValidationError(error_msg)
+            raise exceptions.ValidationError(_("Error: Missing username or password."))
