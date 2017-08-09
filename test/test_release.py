@@ -129,6 +129,19 @@ class TestCdnReleaseVerionProvider(fixture.SubManFixture):
         releases = cdn_rv_provider.get_releases()
         self.assertEqual([], releases)
 
+    def test_get_releases_more_rhels(self):
+        self.prod_dir = stubs.StubProductDirectory(
+            [stubs.StubProductCertificate(
+                    stubs.StubProduct("rhel-6",
+                                      provided_tags="rhel-6,rhel-6-stub"),),
+                stubs.StubProductCertificate(
+                    stubs.StubProduct("rhel-7",
+                                      provided_tags="rhel-7,rhel-7-stub"), )
+            ])
+
+        cdn_rv_provider = self._get_cdn_rv_provider()
+        self.assertRaises(ValueError, cdn_rv_provider.get_releases)
+
     def test_get_releases_rhel_no_content(self):
 
         stub_content_5 = stubs.StubContent("c5", required_tags="AwesomeOS",

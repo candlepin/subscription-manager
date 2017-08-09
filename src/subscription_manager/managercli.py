@@ -52,7 +52,7 @@ import subscription_manager.injection as inj
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
 from subscription_manager.managerlib import valid_quantity
-from subscription_manager.release import ReleaseBackend
+from subscription_manager.release import ReleaseBackend, MultipleReleaseProductsError
 from subscription_manager.repolib import RepoActionInvoker, RepoFile, manage_repos_enabled
 from subscription_manager.utils import parse_server_info, \
         parse_baseurl_info, format_baseurl, is_valid_server_info, \
@@ -1378,6 +1378,7 @@ class RedeemCommand(CliCommand):
 
 
 class ReleaseCommand(CliCommand):
+
     def __init__(self):
         shortdesc = _("Configure which operating system release to use")
         super(ReleaseCommand, self).__init__("release", shortdesc, True)
@@ -1408,6 +1409,9 @@ class ReleaseCommand(CliCommand):
             print(_("Release not set"))
 
     def _do_command(self):
+        more_product_cert_err_msg = _(
+            "Error: More than one release product certificate installed."
+        )
 
         cdn_url = conf['rhsm']['baseurl']
         # note: parse_baseurl_info will populate with defaults if not found
@@ -1428,23 +1432,35 @@ class ReleaseCommand(CliCommand):
             repo_action_invoker.update()
             print(_("Release preference has been unset"))
         elif self.options.release is not None:
-            # check first if the server supports releases
-            self._get_consumer_release()
-            releases = self.release_backend.get_releases()
+            # get first list of available releases from the server
+            try:
+                releases = self.release_backend.get_releases()
+            except MultipleReleaseProductsError as err:
+                log.error("Getting releases failed: %s" % err)
+                system_exit(os.EX_CONFIG, more_product_cert_err_msg)
+
             if self.options.release in releases:
-                self.cp.updateConsumer(self.identity.uuid,
-                        release=self.options.release)
+                self.cp.updateConsumer(
+                    self.identity.uuid,
+                    release=self.options.release
+                )
             else:
-                system_exit(os.EX_DATAERR, _("No releases match '%s'.  "
-                                 "Consult 'release --list' for a full listing.")
-                                 % self.options.release)
+                system_exit(os.EX_DATAERR, _(
+                    "No releases match '%s'.  "
+                    "Consult 'release --list' for a full listing.")
+                    % self.options.release)
             repo_action_invoker.update()
             print(_("Release set to: %s") % self.options.release)
         elif self.options.list:
-            self._get_consumer_release()
-            releases = self.release_backend.get_releases()
-            if not releases:
-                system_exit(os.EX_CONFIG, _("No release versions available, please check subscriptions."))
+            try:
+                releases = self.release_backend.get_releases()
+            except MultipleReleaseProductsError as err:
+                log.error("Getting releases failed: %s" % err)
+                system_exit(os.EX_CONFIG, more_product_cert_err_msg)
+
+            if len(releases) == 0:
+                system_exit(os.EX_CONFIG, _(
+                    "No release versions available, please check subscriptions."))
 
             print("+-------------------------------------------+")
             print("          %s" % (_("Available Releases")))
