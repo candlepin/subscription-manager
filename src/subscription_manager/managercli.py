@@ -300,8 +300,16 @@ class CliCommand(AbstractCLICommand):
         pass
 
     def assert_should_be_registered(self):
-        if not self.is_registered():
+        if not self.is_consumer_cert_present():
             system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
+        elif not self.is_registered():
+            system_exit(os.EX_DATAERR, _(
+                "Consumer identity either does not exist or is corrupted. Try register --help"
+            ))
+
+    def is_consumer_cert_present(self):
+        self.identity = inj.require(inj.IDENTITY)
+        return self.identity.is_present()
 
     def is_registered(self):
         self.identity = inj.require(inj.IDENTITY)

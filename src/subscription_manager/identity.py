@@ -23,6 +23,7 @@ from rhsm.config import initConfig
 from subscription_manager.certdirectory import Path
 
 from rhsmlib.services import config
+from rhsm.certificate import CertificateException
 
 conf = config.Config(initConfig())
 log = logging.getLogger(__name__)
@@ -48,12 +49,10 @@ class ConsumerIdentity(object):
 
     @classmethod
     def read(cls):
-        f = open(cls.keypath())
-        key = f.read()
-        f.close()
-        f = open(cls.certpath())
-        cert = f.read()
-        f.close()
+        with open(cls.keypath()) as key_file:
+            key = key_file.read()
+        with open(cls.certpath()) as cert_file:
+            cert = cert_file.read()
         return ConsumerIdentity(key, cert)
 
     @classmethod
@@ -96,13 +95,11 @@ class ConsumerIdentity(object):
     def write(self):
         from subscription_manager import managerlib
         self.__mkdir()
-        f = open(self.keypath(), 'w')
-        f.write(self.key)
-        f.close()
+        with open(self.keypath(), 'w') as key_file:
+            key_file.write(self.key)
         os.chmod(self.keypath(), managerlib.ID_CERT_PERMS)
-        f = open(self.certpath(), 'w')
-        f.write(self.cert)
-        f.close()
+        with open(self.certpath(), 'w') as cert_file:
+            cert_file.write(self.cert)
         os.chmod(self.certpath(), managerlib.ID_CERT_PERMS)
 
     def delete(self):
@@ -127,39 +124,45 @@ class ConsumerIdentity(object):
 class Identity(object):
     """Wrapper for sharing consumer identity without constant reloading."""
     def __init__(self):
+        self.consumer = None
+        self.name = None
+        self.uuid = None
+        self.cert_dir_path = conf['rhsm']['consumerCertDir']
         self.reload()
 
     def reload(self):
         """Check for consumer certificate on disk and update our info accordingly."""
         log.debug("Loading consumer info from identity certificates.")
         try:
-            # uh, weird
-            # FIXME: seems weird to wrap this stuff
             self.consumer = self._get_consumer_identity()
+        # XXX shouldn't catch the global exception here, but that's what
+        # existsAndValid did, so this is better.
+        except (CertificateException, IOError) as err:
+            log.error("Reload of consumer identity cert %s raised an exception with msg: %s",
+                      ConsumerIdentity.certpath(), err)
+            self.consumer = None
+        if self.consumer is not None:
             self.name = self.consumer.getConsumerName()
             self.uuid = self.consumer.getConsumerId()
             # since Identity gets dep injected, lets look up
             # the cert dir on the active id instead of the global config
             self.cert_dir_path = self.consumer.PATH
-
-        # XXX shouldn't catch the global exception here, but that's what
-        # existsAndValid did, so this is better.
-        except Exception as e:
-            log.debug("Reload of consumer identity cert %s raised an exception with msg: %s",
-                      ConsumerIdentity.certpath(), e)
-            self.consumer = None
+        else:
             self.name = None
             self.uuid = None
             self.cert_dir_path = conf['rhsm']['consumerCertDir']
 
     def _get_consumer_identity(self):
-        # FIXME: wrap in exceptions, catch IOErrors etc, raise anything else
         return ConsumerIdentity.read()
 
     # this name is weird, since Certificate.is_valid actually checks the data
     # and this is a thin wrapper
     def is_valid(self):
         return self.uuid is not None
+
+    @staticmethod
+    def is_present():
+        return ConsumerIdentity.exists()
 
     def getConsumerName(self):
         return self.name
