@@ -1,4 +1,6 @@
 {
-    "presets": ["env"],
-    "plugins": ["transform-react-jsx"]
+    "presets": ["env", "flow"],
+    "plugins": ["transform-react-jsx"],
+    "sourceMaps": true,
+    "retainLines": true
 }

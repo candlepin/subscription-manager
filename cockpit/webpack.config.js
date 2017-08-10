@@ -23,7 +23,8 @@ var info = {
         "index": [
             "./index.js",
             "./subscriptions.css",
-        ]
+        ],
+        "testing": ["./jasmine/spec/dbus.test.js"]
     },
     files: [
         "index.html",
@@ -110,7 +111,7 @@ module.exports = {
     entry: info.entries,
     externals: externals,
     output: output,
-    devtool: "source-map",
+    //devtool: "source-map",
     resolve: {
         alias: {
             "react$": path.resolve(nodedir, "react-lite/dist/react-lite.js")
@@ -119,37 +120,25 @@ module.exports = {
     module: {
         rules: [
             {
-                enforce: 'pre',
                 exclude: /node_modules/,
-                loader: 'jshint-loader',
+                loader: 'babel-loader',
                 test: /\.js$/
+            },
+            {
+                exclude: /node_modules/,
+                loader: 'babel-loader',
+                test: /\.jsx$/
+            },
+            {
+                exclude: /node_modules/,
+                loader: 'babel-loader',
+                test: /\.es6$/
             },
             {
                 enforce: 'pre',
                 exclude: /node_modules/,
                 loader: 'eslint-loader',
                 test: /\.jsx$/
-            },
-            {
-                enforce: 'pre',
-                exclude: /node_modules/,
-                loader: 'jshint-loader?esversion=6',
-                test: /\.es6$/
-            },
-            {
-                exclude: /node_modules/,
-                loader: 'babel-loader',
-                test: /\.js$/
-            },
-            {
-                exclude: /node_modules/,
-                loader: 'babel-loader',
-                test: /\.jsx$/
-            },
-            {
-                exclude: /node_modules/,
-                loader: 'babel-loader',
-                test: /\.es6$/
             }
         ]
     },
