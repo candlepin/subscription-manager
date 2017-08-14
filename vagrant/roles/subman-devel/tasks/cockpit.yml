@@ -11,3 +11,9 @@
     enabled: yes
     state: started
   become: yes
+
+- name: alter node_env
+  lineinfile:
+    name: /etc/environment
+    line: "NODE_ENV=vagrant"
+  become: yes
