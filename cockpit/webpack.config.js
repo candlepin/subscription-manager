@@ -11,7 +11,7 @@ var externals = {
 /* These can be overridden, typically from the Makefile.am */
 const srcdir = (process.env.SRCDIR || __dirname) + path.sep + "src";
 const builddir = (process.env.SRCDIR || __dirname);
-const distdir = builddir + path.sep + "dist";
+const distdir = process.env.NODE_ENV === 'vagrant' ? '/usr/local/share/cockpit/subscription-manager' : (builddir + path.sep + "dist");
 const section = process.env.ONLYDIR || null;
 const nodedir = path.resolve((process.env.SRCDIR || __dirname), "node_modules");
 
