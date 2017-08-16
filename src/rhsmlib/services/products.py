@@ -27,9 +27,11 @@ class InstalledProducts(object):
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
         self.cp = cp
 
-    def _get_installed_product_status(self, filter_string=None):
+    def list(self, filter_string=None):
         """
-        Returns installed products and their subscription states
+        Method for listening installed products in the system.
+        :param filter_string: String for filtering out products.
+        :return: List of installed products.
         """
         product_status = []
 
@@ -78,24 +80,3 @@ class InstalledProducts(object):
                     ))
 
         return product_status
-
-    def list(self, filter_string=None):
-        """
-        Method for listening installed products in the system.
-        :param filter_string: String for filtering out products.
-        :return: List of installed products.
-        """
-        self.plugin_manager.run(
-            "pre_list_installed_products",
-            filter_string=filter_string
-        )
-
-        response = self._get_installed_product_status(filter_string)
-
-        self.plugin_manager.run(
-            "post_list_installed_products",
-            filter_string=filter_string,
-            installed_products=response
-        )
-
-        return response
