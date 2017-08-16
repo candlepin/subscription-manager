@@ -18,6 +18,7 @@ import socket
 from rhsmlib.services import exceptions
 
 from subscription_manager import injection as inj
+from subscription_manager import managerlib
 from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
@@ -70,6 +71,7 @@ class RegisterService(object):
             )
         self.installed_mgr.write_cache()
         self.plugin_manager.run("post_register_consumer", consumer=consumer, facts=facts_dict)
+        managerlib.persist_consumer_cert(consumer)
 
         # Now that we are registered, load the new identity
         self.identity.reload()

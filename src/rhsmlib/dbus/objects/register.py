@@ -20,7 +20,6 @@ import dbus.service
 
 from rhsmlib.dbus import constants, exceptions, dbus_utils, base_object, server, util
 from rhsmlib.services.register import RegisterService
-from subscription_manager import managerlib
 
 log = logging.getLogger(__name__)
 
@@ -110,7 +109,6 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
 
         register_service = RegisterService(cp)
         consumer = register_service.register(org, **options)
-        managerlib.persist_consumer_cert(consumer)
         return json.dumps(consumer)
 
     @dbus.service.method(dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
@@ -130,5 +128,4 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
 
         register_service = RegisterService(cp)
         consumer = register_service.register(org, **options)
-        managerlib.persist_consumer_cert(consumer)
         return json.dumps(consumer)

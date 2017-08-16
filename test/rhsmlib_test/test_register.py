@@ -102,11 +102,13 @@ class RegisterServiceTest(InjectionMockingTest):
         else:
             return None
 
-    def test_register_normally(self):
+    @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
+    def test_register_normally(self, mock_persist_consumer):
         self.mock_identity.is_valid.return_value = False
         self.mock_installed_products.format_for_server.return_value = []
         self.mock_installed_products.tags = []
-        self.mock_cp.registerConsumer.return_value = CONTENT_JSON
+        expected_consumer = json.loads(CONTENT_JSON)
+        self.mock_cp.registerConsumer.return_value = expected_consumer
 
         register_service = register.RegisterService(self.mock_cp)
         register_service.register("org", name="name", environment="environment")
@@ -121,19 +123,23 @@ class RegisterServiceTest(InjectionMockingTest):
             content_tags=[])
         self.mock_installed_products.write_cache.assert_called()
 
+        mock_persist_consumer.assert_called_once_with(expected_consumer)
         expected_plugin_calls = [
             mock.call('pre_register_consumer', name='name', facts={}),
-            mock.call('post_register_consumer', consumer=CONTENT_JSON, facts={})
+            mock.call('post_register_consumer', consumer=expected_consumer, facts={})
         ]
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
 
-    def test_register_with_activation_keys(self):
+    @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
+    def test_register_with_activation_keys(self, mock_persist_consumer):
         self.mock_cp.username = None
         self.mock_cp.password = None
         self.mock_identity.is_valid.return_value = False
         self.mock_installed_products.format_for_server.return_value = []
         self.mock_installed_products.tags = []
-        self.mock_cp.registerConsumer.return_value = CONTENT_JSON
+
+        expected_consumer = json.loads(CONTENT_JSON)
+        self.mock_cp.registerConsumer.return_value = expected_consumer
 
         register_service = register.RegisterService(self.mock_cp)
         register_service.register("org", name="name", activation_keys=[1])
@@ -148,16 +154,20 @@ class RegisterServiceTest(InjectionMockingTest):
             content_tags=[])
         self.mock_installed_products.write_cache.assert_called()
 
+        mock_persist_consumer.assert_called_once_with(expected_consumer)
         expected_plugin_calls = [
             mock.call('pre_register_consumer', name='name', facts={}),
-            mock.call('post_register_consumer', consumer=CONTENT_JSON, facts={})
+            mock.call('post_register_consumer', consumer=expected_consumer, facts={})
         ]
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
 
-    def test_register_with_consumerid(self):
+    @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
+    def test_register_with_consumerid(self, mock_persist_consumer):
         self.mock_identity.is_valid.return_value = False
         self.mock_installed_products.format_for_server.return_value = []
         self.mock_installed_products.tags = []
+
+        expected_consumer = json.loads(CONTENT_JSON)
         self.mock_cp.getConsumer.return_value = json.loads(CONTENT_JSON)
 
         register_service = register.RegisterService(self.mock_cp)
@@ -166,9 +176,10 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_cp.getConsumer.assert_called_once_with("consumerid")
         self.mock_installed_products.write_cache.assert_called()
 
+        mock_persist_consumer.assert_called_once_with(expected_consumer)
         expected_plugin_calls = [
             mock.call('pre_register_consumer', name='name', facts={}),
-            mock.call('post_register_consumer', consumer=json.loads(CONTENT_JSON), facts={})
+            mock.call('post_register_consumer', consumer=expected_consumer, facts={})
         ]
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
 
@@ -334,13 +345,11 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
         socket_proxy = socket_conn.get_object(constants.BUS_NAME, constants.PRIVATE_REGISTER_DBUS_PATH)
         return dbus.Interface(socket_proxy, constants.PRIVATE_REGISTER_INTERFACE)
 
-    @mock.patch("subscription_manager.managerlib.persist_consumer_cert")
-    def test_can_register_over_domain_socket(self, mock_persist_consumer):
+    def test_can_register_over_domain_socket(self):
         expected_consumer = json.loads(CONTENT_JSON, object_hook=dbus_utils._decode_dict)
 
         def assertions(*args):
             # Be sure we are persisting the consumer cert
-            mock_persist_consumer.assert_called_once_with(expected_consumer)
             self.assertEqual(json.loads(args[0], object_hook=dbus_utils._decode_dict), expected_consumer)
 
         self.mock_identity.is_valid.return_value = False
@@ -351,13 +360,11 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
         register_opts = ['admin', 'admin', 'admin', {}, {}]
         self.dbus_request(assertions, self._build_interface().Register, register_opts)
 
-    @mock.patch("subscription_manager.managerlib.persist_consumer_cert")
-    def test_can_register_over_domain_socket_with_activation_keys(self, mock_persist_consumer):
+    def test_can_register_over_domain_socket_with_activation_keys(self):
         expected_consumer = json.loads(CONTENT_JSON, object_hook=dbus_utils._decode_dict)
 
         def assertions(*args):
             # Be sure we are persisting the consumer cert
-            mock_persist_consumer.assert_called_once_with(expected_consumer)
             self.assertEqual(json.loads(args[0], object_hook=dbus_utils._decode_dict), expected_consumer)
 
         self.mock_identity.is_valid.return_value = False
