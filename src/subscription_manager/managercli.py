@@ -39,6 +39,7 @@ import rhsm.connection as connection
 from rhsm.connection import ProxyException
 from rhsm.utils import remove_scheme, ServerUrlParseError
 
+from subscription_manager import identity
 from subscription_manager.branding import get_branding
 from subscription_manager.entcertlib import EntCertActionInvoker, CONTENT_ACCESS_CERT_CAPABILITY
 from subscription_manager.action_client import ActionClient, UnregisterActionClient
@@ -67,7 +68,8 @@ from subscription_manager.i18n import ungettext, ugettext as _
 
 log = logging.getLogger(__name__)
 
-from rhsmlib.services import config, attach, products, unregister, entitlement
+from rhsmlib.services import config, attach, products, unregister, entitlement, register
+from rhsmlib.services import exceptions
 
 conf = config.Config(rhsm.config.initConfig())
 
@@ -1002,26 +1004,26 @@ class RegisterCommand(UserPassCommand):
         self.autoattach = self.options.autosubscribe or self.options.autoattach
         if self.is_registered() and not self.options.force:
             system_exit(os.EX_USAGE, _("This system is already registered. Use --force to override"))
-        elif (self.options.consumername == ''):
+        elif self.options.consumername == '':
             system_exit(os.EX_USAGE, _("Error: system name can not be empty."))
-        elif (self.options.username and self.options.activation_keys):
+        elif self.options.username and self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Activation keys do not require user credentials."))
-        elif (self.options.consumerid and self.options.activation_keys):
+        elif self.options.consumerid and self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Activation keys can not be used with previously registered IDs."))
-        elif (self.options.environment and self.options.activation_keys):
+        elif self.options.environment and self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Activation keys do not allow environments to be specified."))
-        elif (self.autoattach and self.options.activation_keys):
+        elif self.autoattach and self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Activation keys cannot be used with --auto-attach."))
         # 746259: Don't allow the user to pass in an empty string as an activation key
-        elif (self.options.activation_keys and '' in self.options.activation_keys):
+        elif self.options.activation_keys and '' in self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Must specify an activation key"))
-        elif (self.options.service_level and not self.autoattach):
+        elif self.options.service_level and not self.autoattach:
             system_exit(os.EX_USAGE, _("Error: Must use --auto-attach with --servicelevel."))
-        elif (self.options.activation_keys and not self.options.org):
+        elif self.options.activation_keys and not self.options.org:
             system_exit(os.EX_USAGE, _("Error: Must provide --org with activation keys."))
-        elif (self.options.force and self.options.consumerid):
+        elif self.options.force and self.options.consumerid:
             system_exit(os.EX_USAGE, _("Error: Can not force registration while attempting to recover registration with consumerid. Please use --force without --consumerid to re-register or use the clean command and try again without --force."))
-        elif (self.options.consumertype and not (self.options.consumertype == 'rhui' or self.options.consumertype == 'system')):
+        elif self.options.consumertype and not (self.options.consumertype == 'rhui' or self.options.consumertype == 'system'):
             system_exit(os.EX_USAGE, _("Error: The --type option has been deprecated and may not be used."))
 
     def persist_server_options(self):
@@ -1046,11 +1048,6 @@ class RegisterCommand(UserPassCommand):
 
         # gather installed products info
         self.installed_mgr = inj.require(inj.INSTALLED_PRODUCTS_MANAGER)
-
-        # Set consumer's name to hostname by default:
-        consumername = self.options.consumername
-        if consumername is None:
-            consumername = socket.gethostname()
 
         previously_registered = False
         if self.is_registered() and self.options.force:
@@ -1080,8 +1077,6 @@ class RegisterCommand(UserPassCommand):
         if previously_registered:
             print(_("All local data removed"))
 
-        facts = inj.require(inj.FACTS)
-
         # Proceed with new registration:
         try:
             if not self.options.activation_keys:
@@ -1092,66 +1087,44 @@ class RegisterCommand(UserPassCommand):
             else:
                 admin_cp = self.cp_provider.get_no_auth_cp()
 
-            # TODO/FIXME: revisit register cli refactor branch and combine it and
-            #             AsyncBackend to run this as a series of states triggered by events
             # This is blocking and not async, which aside from blocking here, also
             # means things like following name owner changes gets weird.
-            facts_dict = facts.get_facts()
-
-            self.plugin_manager.run("pre_register_consumer", name=consumername,
-                                    facts=facts_dict)
+            service = register.RegisterService(admin_cp)
 
             if self.options.consumerid:
-                # TODO remove the username/password
-                log.info("Registering as existing consumer: %s" %
-                        self.options.consumerid)
-                consumer = admin_cp.getConsumer(self.options.consumerid,
-                        self.username, self.password)
-
-                if 'type' not in consumer:
-                    log.warn('Unable to determine consumer type, proceeding with registration.')
-
-                if consumer.get('type', {}).get('manifest', {}):
-                    log.error("registration attempted with consumerid = Subscription Management Application's uuid: %s" % self.options.consumerid)
-                    system_exit(os.EX_USAGE, _("Error: Cannot register with an ID of a Subscription Management Application: %s") % self.options.consumerid)
-
+                log.info("Registering as existing consumer: %s" % self.options.consumerid)
+                consumer = service.register(None, self.options.consumerid)
             else:
                 owner_key = self._determine_owner_key(admin_cp)
+                environment_id = self._get_environment_id(admin_cp, owner_key, self.options.environment)
 
-                environment_id = self._get_environment_id(admin_cp, owner_key,
-                        self.options.environment)
+                consumer = service.register(
+                    owner_key,
+                    activation_keys=self.options.activation_keys,
+                    environment=environment_id,
+                    force=self.options.force,
+                    name=self.options.consumername
+                )
 
-                consumer = admin_cp.registerConsumer(name=consumername,
-                     type=self.options.consumertype, facts=facts_dict,
-                     owner=owner_key, environment=environment_id,
-                     keys=self.options.activation_keys,
-                     installed_products=self.installed_mgr.format_for_server(),
-                     content_tags=self.installed_mgr.tags)
-                self.installed_mgr.write_cache()
-            self.plugin_manager.run("post_register_consumer", consumer=consumer,
-                                    facts=facts_dict)
-        except connection.RestlibException as re:
+            consumer_info = identity.ConsumerIdentity(consumer['idCert']['key'], consumer['idCert']['cert'])
+            print(_("The system has been registered with ID: %s") % consumer_info.getConsumerId())
+            print(_("The registered system name is: %s") % consumer_info.getConsumerName())
+        except (connection.RestlibException, exceptions.ServiceError) as re:
             log.exception(re)
-            system_exit(os.EX_SOFTWARE, re.msg)
+            system_exit(os.EX_SOFTWARE, re)
         except Exception as e:
             handle_exception(_("Error during registration: %s") % e, e)
-
-        consumer_info = self._persist_identity_cert(consumer)
 
         # We have new credentials, restart virt-who
         restart_virt_who()
 
-        print((_("The system has been registered with ID: %s ")) % (consumer_info["uuid"]))
-        print(_("The registered system name is: %s") % consumer_info["consumer_name"])
-
         # get a new UEP as the consumer
         self.cp = self.cp_provider.get_consumer_auth_cp()
 
-        # Reload the consumer identity:
-        self.identity.reload()
-
         # log the version of the server we registered to
         self.log_server_version()
+
+        facts = inj.require(inj.FACTS)
 
         # FIXME: can these cases be replaced with invoking
         # FactsLib (or a FactsManager?)
@@ -1192,14 +1165,14 @@ class RegisterCommand(UserPassCommand):
                 log.exception("Auto-attach failed")
                 raise
 
-        if (self.options.consumerid or self.options.activation_keys or self.autoattach or self.cp.has_capability(CONTENT_ACCESS_CERT_CAPABILITY)):
+        if self.options.consumerid or self.options.activation_keys or self.autoattach or self.cp.has_capability(CONTENT_ACCESS_CERT_CAPABILITY):
             log.info("System registered, updating entitlements if needed")
             # update certs, repos, and caches.
             # FIXME: aside from the overhead, should this be cert_action_client.update?
             self.entcertlib.update()
 
         subscribed = 0
-        if (self.options.activation_keys or self.autoattach):
+        if self.options.activation_keys or self.autoattach:
             # update with latest cert info
             self.sorter = inj.require(inj.CERT_SORTER)
             self.sorter.force_cert_check()
@@ -1207,13 +1180,6 @@ class RegisterCommand(UserPassCommand):
 
         self._request_validity_check()
         return subscribed
-
-    def _persist_identity_cert(self, consumer):
-        """
-        Parses the consumer dict returned from the cert, pulls out the identity
-        certificate, and writes to disk.
-        """
-        return managerlib.persist_consumer_cert(consumer)
 
     def _prompt_for_environment(self):
         """
