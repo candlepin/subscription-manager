@@ -8,18 +8,17 @@ from tito.common import info_out
 
 class ScriptBuilder(Builder):
     """Builder that also runs a script to produce one or more additional tarballs.
-    
+
     This Builder looks for lines ending in '.tar.gz' in the output of the script, and treats
     those as artifacts of the script.
     """
     def __init__(self, config=None, *args, **kwargs):
         super(ScriptBuilder, self).__init__(config=config, *args, **kwargs)
-        build_config = config['buildconfig']
-        if 'script_builder_script' not in build_config:
+        if not config.has_option('buildconfig', 'script_builder_script'):
             raise ValueError('Must specify "script_builder_script" property in tito.props')
-        self.script = build_config.get('script_builder_script')
+        self.script = config.get('buildconfig', 'script_builder_script')
         self.tarballs_from_script = []
-    
+
     def normalize_tarball(self, path):
         destination_file = os.path.join(self.rpmbuild_sourcedir, path)
         if not path.endswith('%s.tar.gz' % self.display_version):
@@ -31,7 +30,7 @@ class ScriptBuilder(Builder):
         info_out('Wrote: %s/%s' % (self.rpmbuild_basedir, os.path.basename(destination_file)))
         self.tarballs_from_script.append(destination_file)
         return os.path.join(os.getcwd(), destination_file)
-    
+
     def tgz(self):
         retval = Builder.tgz(self)
         os.chdir(self.rpmbuild_gitcopy)
