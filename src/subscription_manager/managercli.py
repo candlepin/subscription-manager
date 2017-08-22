@@ -1093,7 +1093,7 @@ class RegisterCommand(UserPassCommand):
 
             if self.options.consumerid:
                 log.info("Registering as existing consumer: %s" % self.options.consumerid)
-                consumer = service.register(None, self.options.consumerid)
+                consumer = service.register(None, consumerid=self.options.consumerid)
             else:
                 owner_key = self._determine_owner_key(admin_cp)
                 environment_id = self._get_environment_id(admin_cp, owner_key, self.options.environment)
@@ -1105,15 +1105,15 @@ class RegisterCommand(UserPassCommand):
                     force=self.options.force,
                     name=self.options.consumername
                 )
-
-            consumer_info = identity.ConsumerIdentity(consumer['idCert']['key'], consumer['idCert']['cert'])
-            print(_("The system has been registered with ID: %s") % consumer_info.getConsumerId())
-            print(_("The registered system name is: %s") % consumer_info.getConsumerName())
         except (connection.RestlibException, exceptions.ServiceError) as re:
             log.exception(re)
             system_exit(os.EX_SOFTWARE, re)
         except Exception as e:
             handle_exception(_("Error during registration: %s") % e, e)
+        else:
+            consumer_info = identity.ConsumerIdentity(consumer['idCert']['key'], consumer['idCert']['cert'])
+            print(_("The system has been registered with ID: %s") % consumer_info.getConsumerId())
+            print(_("The registered system name is: %s") % consumer_info.getConsumerName())
 
         # We have new credentials, restart virt-who
         restart_virt_who()

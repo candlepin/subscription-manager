@@ -99,6 +99,9 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
 
         Note this method is registration ONLY.  Auto-attach is a separate process.
         """
+        if self.is_registered():
+            raise dbus.DBusException("This system is already registered")
+
         connection_options = dbus_utils.dbus_to_python(connection_options)
         connection_options['username'] = dbus_utils.dbus_to_python(username)
         connection_options['password'] = dbus_utils.dbus_to_python(password)
