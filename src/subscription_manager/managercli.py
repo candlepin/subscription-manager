@@ -67,7 +67,8 @@ from subscription_manager.i18n import ungettext, ugettext as _
 
 log = logging.getLogger(__name__)
 
-from rhsmlib.services import config, attach, products, entitlement
+from rhsmlib.services import config, attach, products, unregister, entitlement
+
 conf = config.Config(rhsm.config.initConfig())
 
 SM = "subscription-manager"
@@ -1060,9 +1061,9 @@ class RegisterCommand(UserPassCommand):
             old_uuid = self.identity.uuid
 
             print(_("Unregistering from: %s:%s%s") %
-                (conf["server"]["hostname"], conf["server"]["port"], conf["server"]["prefix"]))
+                 (conf["server"]["hostname"], conf["server"]["port"], conf["server"]["prefix"]))
             try:
-                managerlib.unregister(self.cp, old_uuid)
+                unregister.UnregisterService(self.cp).unregister()
                 self.entitlement_dir.__init__()
                 self.product_dir.__init__()
                 log.info("--force specified, unregistered old consumer: %s" % old_uuid)
@@ -1302,18 +1303,18 @@ class UnRegisterCommand(CliCommand):
             system_exit(ERR_NOT_REGISTERED_CODE, _("This system is currently not registered."))
 
         print(_("Unregistering from: %s:%s%s") %
-            (conf["server"]["hostname"], conf["server"]["port"], conf["server"]["prefix"]))
+             (conf["server"]["hostname"], conf["server"]["port"], conf["server"]["prefix"]))
         try:
-            managerlib.unregister(self.cp, self.identity.uuid)
+            unregister.UnregisterService(self.cp).unregister()
         except Exception as e:
             handle_exception("Unregister failed", e)
 
         # managerlib.unregister reloads the now None provided identity
         # so cp_provider provided auth_cp's should fail, like the below
 
-        #this block is simply to ensure that the yum repos got updated. If it fails,
-        #there is no issue since it will most likely be cleaned up elsewhere (most
-        #likely by the yum plugin)
+        # This block is simply to ensure that the yum repos got updated. If it fails,
+        # there is no issue since it will most likely be cleaned up elsewhere (most
+        # likely by the yum plugin)
         try:
             # there is no consumer cert at this point, a uep object
             # is not useful

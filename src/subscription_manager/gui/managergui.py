@@ -38,7 +38,7 @@ from subscription_manager.ga import GLib as ga_GLib
 from subscription_manager.branding import get_branding
 from subscription_manager.entcertlib import EntCertActionInvoker
 from rhsmlib.facts.hwprobe import ClassicCheck
-from subscription_manager import managerlib
+from rhsmlib.services import unregister
 from subscription_manager.utils import get_client_versions, get_server_versions, parse_baseurl_info, restart_virt_who
 from subscription_manager.utils import print_error
 
@@ -466,7 +466,7 @@ class MainWindow(widgets.SubmanBaseWidget):
     def _perform_unregister(self):
         try:
             reset_resolver()
-            managerlib.unregister(self.backend.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
+            unregister.UnregisterService(self.backend.cp_provider.get_consumer_auth_cp()).unregister()
         except Exception as e:
             log.error("Error unregistering system with entitlement platform.")
             handle_gui_exception(e, _("<b>Errors were encountered during unregister.</b>") +

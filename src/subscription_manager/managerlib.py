@@ -24,7 +24,6 @@ import shutil
 import stat
 import syslog
 
-from rhsm import connection
 from rhsm.config import initConfig
 from rhsm.certificate import Key, CertificateException, create_from_pem
 
@@ -792,23 +791,6 @@ def format_date(dt):
             return dt.strftime("%x")
     else:
         return ""
-
-
-def unregister(uep, consumer_uuid):
-    """
-    Shared logic for un-registration.
-    """
-    try:
-        uep.unregisterConsumer(consumer_uuid)
-        log.info("Successfully un-registered.")
-        system_log("Unregistered machine with identity: %s" % consumer_uuid)
-        clean_all_data(backup=False)
-    except connection.GoneException as ge:
-        if ge.deleted_id == consumer_uuid:
-            log.info("This consumer's profile has been deleted from the server. Local certificates and cache will be cleaned now.")
-            clean_all_data(backup=False)
-        else:
-            raise ge
 
 
 # FIXME: move me to identity.py
