@@ -104,9 +104,9 @@ CONTENT_JSON = [{
 class TestAttachService(InjectionMockingTest):
     def setUp(self):
         super(TestAttachService, self).setUp()
-        self.mock_identity = mock.Mock(spec=Identity, name="Identity")
-        self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection")
-        self.mock_pm = mock.Mock(spec=PluginManager, name="PluginManager")
+        self.mock_identity = mock.Mock(spec=Identity, name="Identity").return_value
+        self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection").return_value
+        self.mock_pm = mock.Mock(spec=PluginManager, name="PluginManager").return_value
 
     def injection_definitions(self, *args, **kwargs):
         if args[0] == inj.IDENTITY:
@@ -177,7 +177,7 @@ class TestAttachDBusObject(DBusObjectTest, InjectionMockingTest):
         self.mock_action_invoker = entcertlib_patcher.start().return_value
         self.addCleanup(entcertlib_patcher.stop)
 
-        self.mock_identity = mock.Mock(spec=Identity, name="Identity")
+        self.mock_identity = mock.Mock(spec=Identity, name="Identity").return_value
         self.mock_identity.is_valid.return_value = True
         self.mock_identity.uuid = "id"
 
@@ -185,7 +185,7 @@ class TestAttachDBusObject(DBusObjectTest, InjectionMockingTest):
         if args[0] == inj.IDENTITY:
             return self.mock_identity
         elif args[0] == inj.CP_PROVIDER:
-            provider = mock.Mock(spec=CPProvider, name="CPProvider")
+            provider = mock.Mock(spec=CPProvider, name="CPProvider").return_value
             provider.get_consumer_auth_cp.return_value = mock.Mock(name="MockCP")
             return provider
         else:

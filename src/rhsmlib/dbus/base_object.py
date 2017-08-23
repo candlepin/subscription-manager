@@ -17,10 +17,10 @@ import logging
 import six
 import dbus.service
 
-import rhsm.connection
 from rhsmlib.dbus import constants, exceptions
 
-from subscription_manager import injection as inj, utils
+from subscription_manager import utils
+from subscription_manager import injection as inj
 from subscription_manager.injectioninit import init_dep_injection
 
 from rhsmlib.services import config
