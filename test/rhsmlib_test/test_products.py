@@ -22,7 +22,6 @@ from test.rhsmlib_test.base import DBusObjectTest, InjectionMockingTest
 
 from subscription_manager import injection as inj
 from subscription_manager.identity import Identity
-from subscription_manager.plugins import PluginManager
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.validity import ValidProductDateRangeCalculator
 from subscription_manager.cp_provider import CPProvider
@@ -184,7 +183,6 @@ class TestProductService(InjectionMockingTest):
         super(TestProductService, self).setUp()
         self.mock_cert_sorter = mock.Mock(spec=CertSorter, name="CertSorter")
         self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection")
-        self.mock_pm = mock.Mock(spec=PluginManager, name="PluginManager")
         self.mock_calculator = mock.Mock(spec=ValidProductDateRangeCalculator, name="ValidProductDateRangeCalculator")
 
     def injection_definitions(self, *args, **kwargs):
@@ -192,8 +190,6 @@ class TestProductService(InjectionMockingTest):
             return self.mock_cert_sorter
         elif args[0] == inj.PRODUCT_DATE_RANGE_CALCULATOR:
             return self.mock_calculator
-        elif args[0] == inj.PLUGIN_MANAGER:
-            return self.mock_pm
         else:
             return None
 
@@ -227,12 +223,6 @@ class TestProductService(InjectionMockingTest):
 
         result = products.InstalledProducts(self.mock_cp).list()
         self.assertEqual([], result)
-
-        expected_plugin_calls = [
-            mock.call('pre_list_installed_products', filter_string=None),
-            mock.call('post_list_installed_products', filter_string=None, installed_products=[])
-        ]
-        self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
 
     def test_list_installed_products_without_filter(self):
         self.mock_cp.getConsumer.return_value = CONTENT_JSON
@@ -285,13 +275,6 @@ class TestProductService(InjectionMockingTest):
 
         self.assertEqual(expected_result, result)
 
-        expected_plugin_calls = [
-            mock.call('pre_list_installed_products', filter_string=None),
-            mock.call('post_list_installed_products', filter_string=None,
-                      installed_products=expected_result)
-        ]
-        self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
-
     def test_list_installed_products_with_filter(self):
         self.mock_cp.getConsumer.return_value = CONTENT_JSON
         self.mock_cert_sorter.reasons = mock.Mock()
@@ -332,13 +315,6 @@ class TestProductService(InjectionMockingTest):
         result = products.InstalledProducts(self.mock_cp).list("*Extended*")
 
         self.assertEqual(expected_result, result)
-
-        expected_plugin_calls = [
-            mock.call('pre_list_installed_products', filter_string="*Extended*"),
-            mock.call('post_list_installed_products', filter_string="*Extended*",
-                      installed_products=expected_result)
-        ]
-        self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
 
 
 class TestProductsDBusObject(DBusObjectTest, InjectionMockingTest):

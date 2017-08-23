@@ -12,6 +12,7 @@ from __future__ import print_function, division, absolute_import
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
+import collections
 
 from subscription_manager import injection as inj
 from subscription_manager import utils
@@ -27,9 +28,11 @@ class InstalledProducts(object):
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
         self.cp = cp
 
-    def _get_installed_product_status(self, filter_string=None):
+    def list(self, filter_string=None):
         """
-        Returns installed products and their subscription states
+        Method for listening installed products in the system.
+        :param filter_string: String for filtering out products.
+        :return: List of installed products.
         """
         product_status = []
 
@@ -44,21 +47,26 @@ class InstalledProducts(object):
         # See BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1357152
 
         # FIXME: make following functions independent on order of calling
-        self.sorter = inj.require(inj.CERT_SORTER)
-        self.calculator = inj.require(inj.PRODUCT_DATE_RANGE_CALCULATOR, self.cp)
+        sorter = inj.require(inj.CERT_SORTER)
+        calculator = inj.require(inj.PRODUCT_DATE_RANGE_CALCULATOR, self.cp)
 
         cert_filter = None
         if filter_string:
             cert_filter = utils.ProductCertificateFilter(filter_string)
 
-        for installed_product in self.sorter.installed_products:
-            product_cert = self.sorter.installed_products[installed_product]
+        # Instead of a dictionary because some legacy methods unpack this as a list
+        ProductStatus = collections.namedtuple('ProductStatus',
+            ['product_name', 'product_id', 'version', 'arch', 'status', 'status_details', 'starts', 'ends']
+        )
+
+        for installed_product in sorter.installed_products:
+            product_cert = sorter.installed_products[installed_product]
 
             if cert_filter is None or cert_filter.match(product_cert):
                 for product in product_cert.products:
                     begin = ""
                     end = ""
-                    prod_status_range = self.calculator.calculate(product.id)
+                    prod_status_range = calculator.calculate(product.id)
 
                     if prod_status_range:
                         # Format the date in user's local time as the date
@@ -66,36 +74,15 @@ class InstalledProducts(object):
                         begin = managerlib.format_date(prod_status_range.begin())
                         end = managerlib.format_date(prod_status_range.end())
 
-                    product_status.append((
+                    product_status.append(ProductStatus(
                         product.name,
                         installed_product,
                         product.version,
                         ",".join(product.architectures),
-                        self.sorter.get_status(product.id),
-                        self.sorter.reasons.get_product_reasons(product),
+                        sorter.get_status(product.id),
+                        sorter.reasons.get_product_reasons(product),
                         begin,
                         end
                     ))
 
         return product_status
-
-    def list(self, filter_string=None):
-        """
-        Method for listening installed products in the system.
-        :param filter_string: String for filtering out products.
-        :return: List of installed products.
-        """
-        self.plugin_manager.run(
-            "pre_list_installed_products",
-            filter_string=filter_string
-        )
-
-        response = self._get_installed_product_status(filter_string)
-
-        self.plugin_manager.run(
-            "post_list_installed_products",
-            filter_string=filter_string,
-            installed_products=response
-        )
-
-        return response

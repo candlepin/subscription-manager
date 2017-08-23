@@ -36,6 +36,10 @@ log = logging.getLogger(__name__)
 cfg = rhsm.config.initConfig()
 
 
+class MultipleReleaseProductsError(ValueError):
+    pass
+
+
 class ContentConnectionProvider(object):
     def __init__(self):
         pass
@@ -81,8 +85,8 @@ class CdnReleaseVersionProvider(object):
     def get_releases(self):
         # cdn base url
 
-        # find the rhel product
-        release_product = None
+        # Find the rhel products
+        release_products = []
         installed_products = self.product_dir.get_installed_products()
         for product_hash in installed_products:
             product_cert = installed_products[product_hash]
@@ -90,13 +94,18 @@ class CdnReleaseVersionProvider(object):
             for product in products:
                 rhel_matcher = rhelproduct.RHELProductMatcher(product)
                 if rhel_matcher.is_rhel():
-                    release_product = product
+                    release_products.append(product)
 
-        if release_product is None:
-            log.debug("No products with RHEL product tags found")
+        if len(release_products) == 0:
+            log.info("No products with RHEL product tags found")
             return []
+        elif len(release_products) > 1:
+            raise MultipleReleaseProductsError("More than one product with RHEL product tags found.")
 
+        # Note: only release_products with one item can pass previous if-elif
+        release_product = release_products[0]
         entitlements = self.entitlement_dir.list_for_product(release_product.id)
+
         listings = []
         for entitlement in entitlements:
             contents = entitlement.content

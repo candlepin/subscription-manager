@@ -12,11 +12,13 @@ from __future__ import print_function, division, absolute_import
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
-#
-from rhsmlib.dbus.objects.config import ConfigDBusObject  # NOQA
-from rhsmlib.dbus.objects.main import Main  # NOQA
-from rhsmlib.dbus.objects.register import RegisterDBusObject, DomainSocketRegisterDBusObject  # NOQA
-from rhsmlib.dbus.objects.attach import AttachDBusObject  # NOQA
-from rhsmlib.dbus.objects.products import ProductsDBusObject  # NOQA
-from rhsmlib.dbus.objects.unregister import UnregisterDBusObject  # NOQA
-from rhsmlib.dbus.objects.entitlement import EntitlementDBusObject  # NOQA
+
+
+class ServiceError(Exception):
+    """Top level exception for errors occuring in the service"""
+    pass
+
+
+class ValidationError(ServiceError):
+    """Thrown when options sent to the service are determined to be invalid"""
+    pass

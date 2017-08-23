@@ -38,12 +38,11 @@ import rhsm.config
 import rhsm.connection as connection
 from rhsm.connection import ProxyException
 from rhsm.utils import remove_scheme, ServerUrlParseError
-from rhsm.certificate import GMT
 
 from subscription_manager.branding import get_branding
 from subscription_manager.entcertlib import EntCertActionInvoker, CONTENT_ACCESS_CERT_CAPABILITY
 from subscription_manager.action_client import ActionClient, UnregisterActionClient
-from subscription_manager.cert_sorter import ComplianceManager, FUTURE_SUBSCRIBED, \
+from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, \
         SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from subscription_manager.cli import AbstractCLICommand, CLI, system_exit
 from subscription_manager import rhelentbranding
@@ -52,24 +51,24 @@ import subscription_manager.injection as inj
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
 from subscription_manager.managerlib import valid_quantity
-from subscription_manager.release import ReleaseBackend
+from subscription_manager.release import ReleaseBackend, MultipleReleaseProductsError
 from subscription_manager.repolib import RepoActionInvoker, RepoFile, manage_repos_enabled
 from subscription_manager.utils import parse_server_info, \
         parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
-        restart_virt_who, get_terminal_width, print_error, unique_list_items, \
-        EntitlementCertificateFilter
+        restart_virt_who, get_terminal_width, print_error, unique_list_items
 from subscription_manager.overrides import Overrides, Override
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, \
-        none_wrap_columnize_callback, echo_columnize_callback, highlight_by_filter_string_columnize_callback
+        none_wrap_columnize_callback, echo_columnize_callback, highlight_by_filter_string_columnize_cb
 from subscription_manager.utils import generate_correlation_id
 
 from subscription_manager.i18n import ungettext, ugettext as _
 
 log = logging.getLogger(__name__)
 
-from rhsmlib.services import config, attach, products, unregister
+from rhsmlib.services import config, attach, products, unregister, entitlement
+
 conf = config.Config(rhsm.config.initConfig())
 
 SM = "subscription-manager"
@@ -300,8 +299,16 @@ class CliCommand(AbstractCLICommand):
         pass
 
     def assert_should_be_registered(self):
-        if not self.is_registered():
+        if not self.is_consumer_cert_present():
             system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
+        elif not self.is_registered():
+            system_exit(os.EX_DATAERR, _(
+                "Consumer identity either does not exist or is corrupted. Try register --help"
+            ))
+
+    def is_consumer_cert_present(self):
+        self.identity = inj.require(inj.IDENTITY)
+        return self.identity.is_present()
 
     def is_registered(self):
         self.identity = inj.require(inj.IDENTITY)
@@ -1378,6 +1385,7 @@ class RedeemCommand(CliCommand):
 
 
 class ReleaseCommand(CliCommand):
+
     def __init__(self):
         shortdesc = _("Configure which operating system release to use")
         super(ReleaseCommand, self).__init__("release", shortdesc, True)
@@ -1408,6 +1416,9 @@ class ReleaseCommand(CliCommand):
             print(_("Release not set"))
 
     def _do_command(self):
+        more_product_cert_err_msg = _(
+            "Error: More than one release product certificate installed."
+        )
 
         cdn_url = conf['rhsm']['baseurl']
         # note: parse_baseurl_info will populate with defaults if not found
@@ -1428,23 +1439,35 @@ class ReleaseCommand(CliCommand):
             repo_action_invoker.update()
             print(_("Release preference has been unset"))
         elif self.options.release is not None:
-            # check first if the server supports releases
-            self._get_consumer_release()
-            releases = self.release_backend.get_releases()
+            # get first list of available releases from the server
+            try:
+                releases = self.release_backend.get_releases()
+            except MultipleReleaseProductsError as err:
+                log.error("Getting releases failed: %s" % err)
+                system_exit(os.EX_CONFIG, more_product_cert_err_msg)
+
             if self.options.release in releases:
-                self.cp.updateConsumer(self.identity.uuid,
-                        release=self.options.release)
+                self.cp.updateConsumer(
+                    self.identity.uuid,
+                    release=self.options.release
+                )
             else:
-                system_exit(os.EX_DATAERR, _("No releases match '%s'.  "
-                                 "Consult 'release --list' for a full listing.")
-                                 % self.options.release)
+                system_exit(os.EX_DATAERR, _(
+                    "No releases match '%s'.  "
+                    "Consult 'release --list' for a full listing.")
+                    % self.options.release)
             repo_action_invoker.update()
             print(_("Release set to: %s") % self.options.release)
         elif self.options.list:
-            self._get_consumer_release()
-            releases = self.release_backend.get_releases()
-            if not releases:
-                system_exit(os.EX_CONFIG, _("No release versions available, please check subscriptions."))
+            try:
+                releases = self.release_backend.get_releases()
+            except MultipleReleaseProductsError as err:
+                log.error("Getting releases failed: %s" % err)
+                system_exit(os.EX_CONFIG, more_product_cert_err_msg)
+
+            if len(releases) == 0:
+                system_exit(os.EX_CONFIG, _(
+                    "No release versions available, please check subscriptions."))
 
             print("+-------------------------------------------+")
             print("          %s" % (_("Available Releases")))
@@ -2331,16 +2354,14 @@ class ListCommand(CliCommand):
                     system_exit(os.EX_DATAERR,
                                 msg.format(dateexample=dateexample))
 
-            epools = managerlib.get_available_entitlements(get_all=self.options.all,
-                                                           active_on=on_date,
-                                                           overlapping=self.options.no_overlap,
-                                                           uninstalled=self.options.match_installed,
-                                                           filter_string=self.options.filter_string)
-
-            # Filter certs by service level, if specified.
-            # Allowing "" here.
-            if self.options.service_level is not None:
-                epools = self._filter_pool_json_by_service_level(epools, self.options.service_level)
+            epools = entitlement.EntitlementService().get_available_pools(
+                get_all=self.options.all,
+                active_on=on_date,
+                overlapping=self.options.no_overlap,
+                uninstalled=self.options.match_installed,
+                filter_string=self.options.filter_string,
+                service_level=self.options.service_level
+            )
 
             if len(epools):
                 if self.options.pid_only:
@@ -2365,7 +2386,7 @@ class ListCommand(CliCommand):
                         kwargs = {"filter_string": self.options.filter_string,
                                   "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
                                   "is_atty": sys.stdout.isatty()}
-                        print(columnize(AVAILABLE_SUBS_LIST, highlight_by_filter_string_columnize_callback,
+                        print(columnize(AVAILABLE_SUBS_LIST, highlight_by_filter_string_columnize_cb,
                                 data['productName'],
                                 data['providedProducts'],
                                 data['productId'],
@@ -2401,146 +2422,49 @@ class ListCommand(CliCommand):
         if self.options.consumed:
             self.print_consumed(service_level=self.options.service_level, filter_string=self.options.filter_string, pid_only=self.options.pid_only)
 
-    def _filter_pool_json_by_service_level(self, pools, service_level):
-
-        def filter_pool_data_by_service_level(pool_data):
-            pool_level = ""
-            if pool_data['service_level']:
-                pool_level = pool_data['service_level']
-
-            return service_level.lower() == pool_level.lower()
-
-        return list(filter(filter_pool_data_by_service_level, pools))
-
     def print_consumed(self, service_level=None, filter_string=None, pid_only=False):
         # list all certificates that have not yet expired, even those
         # that are not yet active.
-        certs = self.entitlement_dir.list()
+        service = entitlement.EntitlementService()
+        certs = service.get_consumed_product_pools(
+            service_level=service_level,
+            matches=filter_string,
+            pool_only=pid_only)
 
-        cert_filter = EntitlementCertificateFilter(filter_string=filter_string, service_level=service_level)
-
+        # Process and display our (filtered) certs:
         if len(certs):
-            # Check if we need to apply our cert filter
-            if service_level is not None or filter_string is not None:
-                certs = list(filter(cert_filter.match, certs))
+            if pid_only:
+                for cert in certs:
+                    print(cert.pool_id)
+            else:
+                print("+-------------------------------------------+")
+                print("   " + _("Consumed Subscriptions"))
+                print("+-------------------------------------------+")
 
-            # Process and display our (filtered) certs:
-            if len(certs):
-                if pid_only:
-                    for cert in certs:
-                        if hasattr(cert.pool, "id"):
-                            print(cert.pool.id)
-                else:
-                    print("+-------------------------------------------+")
-                    print("   " + _("Consumed Subscriptions"))
-                    print("+-------------------------------------------+")
-
-                    sorter = inj.require(inj.CERT_SORTER)
-                    cert_reasons_map = sorter.reasons.get_subscription_reasons_map()
-                    pooltype_cache = inj.require(inj.POOLTYPE_CACHE)
-
-                    for cert in certs:
-                        # for some certs, order can be empty
-                        # so we default the values and populate them if
-                        # they exist. BZ974587
-                        name = ""
-                        sku = ""
-                        contract = ""
-                        account = ""
-                        quantity_used = ""
-                        service_level = ""
-                        service_type = ""
-                        system_type = ""
-                        provides_management = "No"
-
-                        order = cert.order
-
-                        if order:
-                            service_level = order.service_level or ""
-                            service_type = order.service_type or ""
-                            name = order.name
-                            sku = order.sku
-                            contract = order.contract or ""
-                            account = order.account or ""
-                            quantity_used = order.quantity_used
-                            if order.virt_only:
-                                system_type = _("Virtual")
-                            else:
-                                system_type = _("Physical")
-
-                            if order.provides_management:
-                                provides_management = _("Yes")
-                            else:
-                                provides_management = _("No")
-
-                        pool_id = _("Not Available")
-                        if hasattr(cert.pool, "id"):
-                            pool_id = cert.pool.id
-
-                        product_names = [p.name for p in cert.products]
-
-                        reasons = []
-                        pool_type = ''
-
-                        if inj.require(inj.CERT_SORTER).are_reasons_supported():
-                            if cert.subject and 'CN' in cert.subject:
-                                if cert.subject['CN'] in cert_reasons_map:
-                                    reasons = cert_reasons_map[cert.subject['CN']]
-                                pool_type = pooltype_cache.get(pool_id)
-
-                            # 1180400: Status details is empty when GUI is not
-                            if not reasons:
-                                if cert in sorter.valid_entitlement_certs:
-                                    reasons.append(_("Subscription is current"))
-                                else:
-                                    if cert.valid_range.end() < datetime.datetime.now(GMT()):
-                                        reasons.append(_("Subscription is expired"))
-                                    else:
-                                        reasons.append(_("Subscription has not begun"))
-                        else:
-                            reasons.append(_("Subscription management service doesn't support Status Details."))
-
-                        kwargs = {"filter_string": filter_string,
-                                  "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
-                                  "is_atty": sys.stdout.isatty()}
-                        print(columnize(CONSUMED_LIST, highlight_by_filter_string_columnize_callback,
-                            name,
-                            product_names,
-                            sku,
-                            contract,
-                            account,
-                            cert.serial,
-                            pool_id,
-                            provides_management,
-                            cert.is_valid(),
-                            quantity_used,
-                            service_level,
-                            service_type,
-                            reasons,
-                            pool_type,
-                            managerlib.format_date(cert.valid_range.begin()),
-                            managerlib.format_date(cert.valid_range.end()),
-                            system_type, **kwargs) + "\n")
-            elif not pid_only:
-                if filter_string and service_level:
-                    print(
-                        _("No consumed subscription pools were found matching the expression \"%s\" and the service level \"%s\".")
-                        % (filter_string, service_level)
-                    )
-                elif filter_string:
-                    print(
-                        _("No consumed subscription pools were found matching the expression \"%s\".")
-                        % (filter_string)
-                    )
-                elif service_level:
-                    print(
-                        _("No consumed subscription pools were found matching the service level \"%s\".")
-                        % (service_level)
-                    )
-                else:
-                    print(_("No consumed subscription pools were found matching the specified criteria."))
+                for cert in certs:
+                    kwargs = {"filter_string": filter_string,
+                              "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
+                              "is_atty": sys.stdout.isatty()}
+                    print(columnize(CONSUMED_LIST, highlight_by_filter_string_columnize_cb, *cert, **kwargs) +
+                        "\n")
         elif not pid_only:
-            print(_("No consumed subscription pools to list"))
+            if filter_string and service_level:
+                print(
+                    _("No consumed subscription pools were found matching the expression \"%s\" and the service level \"%s\".")
+                    % (filter_string, service_level)
+                )
+            elif filter_string:
+                print(
+                    _("No consumed subscription pools were found matching the expression \"%s\".")
+                    % (filter_string)
+                )
+            elif service_level:
+                print(
+                    _("No consumed subscription pools were found matching the service level \"%s\".")
+                    % (service_level)
+                )
+            else:
+                print(_("No consumed subscription pools were found."))
 
 
 class OverrideCommand(CliCommand):
@@ -2698,42 +2622,35 @@ class StatusCommand(CliCommand):
 
     def _do_command(self):
         # list status and all reasons it is not valid
+        on_date = None
         if self.options.on_date:
             try:
-                # doing it this ugly way for pre python 2.5
-                on_date = datetime.datetime(
-                        *(strptime(self.options.on_date, '%Y-%m-%d')[0:6]))
+                on_date = datetime.datetime.strptime(self.options.on_date, '%Y-%m-%d')
                 if on_date.date() < datetime.datetime.now().date():
                     system_exit(os.EX_USAGE, _("Past dates are not allowed"))
-                self.sorter = ComplianceManager(on_date)
             except Exception:
                 system_exit(os.EX_DATAERR, _("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ") + strftime("%Y-%m-%d", localtime()) + " )")
-        else:
-            self.sorter = inj.require(inj.CERT_SORTER)
-
-        result = 1
 
         print("+-------------------------------------------+")
         print("   " + _("System Status Details"))
         print("+-------------------------------------------+")
 
-        if self.is_registered():
-            overall_status = self.sorter.get_system_status()
-            reasons = self.sorter.reasons.get_name_message_map()
+        service_status = entitlement.EntitlementService(None).get_status(on_date)
+        reasons = service_status['reasons']
 
-            if self.sorter.is_valid():
-                result = 0
-
-            print(_("Overall Status: %s\n") % overall_status)
-
-            columns = get_terminal_width()
-            for name in reasons:
-                print(format_name(name + ':', 0, columns))
-                for message in reasons[name]:
-                    print('- %s' % format_name(message, 2, columns))
-                print('')
+        if service_status['valid']:
+            result = 0
         else:
-            print(_("Overall Status: %s\n") % _("Unknown"))
+            result = 1
+
+        print(_("Overall Status: %s\n") % service_status['status'])
+
+        columns = get_terminal_width()
+        for name in reasons:
+            print(format_name(name + ':', 0, columns))
+            for message in reasons[name]:
+                print('- %s' % format_name(message, 2, columns))
+            print('')
 
         return result
 
