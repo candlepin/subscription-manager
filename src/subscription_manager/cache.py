@@ -215,12 +215,6 @@ class StatusCache(CacheManager):
             self.last_error = ex
             log.error("Consumer certificate is invalid")
             return None
-        except connection.RestlibException, ex:
-            # Indicates we may be talking to a very old candlepin server
-            # which does not have the necessary API call.
-            log.exception(ex)
-            self.last_error = ex
-            return None
         except connection.AuthenticationException, ex:
             log.error("Could not authenticate with server, check registration status.")
             log.exception(ex)
@@ -235,8 +229,8 @@ class StatusCache(CacheManager):
             raise
         # all of the abover are subclasses of ConnectionException that
         # get handled first
-        except (connection.ConnectionException,
-                socket.error), ex:
+        except (connection.ConnectionException, connection.RateLimitExceededException,
+                socket.error) as ex:
 
             log.error(ex)
             self.last_error = ex
@@ -246,6 +240,12 @@ class StatusCache(CacheManager):
 
             log.warn("Unable to reach server, using cached status.")
             return self._read_cache()
+        except connection.RestlibException as ex:
+            # Indicates we may be talking to a very old candlepin server
+            # which does not have the necessary API call.
+            log.exception(ex)
+            self.last_error = ex
+            return None
 
     def to_dict(self):
         return self.server_status
@@ -352,9 +352,9 @@ class ReleaseStatusCache(StatusCache):
     def _sync_with_server(self, uep, consumer_uuid):
         def get_release(uuid):
 
-            #raise connection.RemoteServerException(500, "GET", "/release")
+            # To mimic connection problems you can raise required exception:
+            # raise connection.RemoteServerException(500, "GET", "/release")
             return uep.getRelease(consumer_uuid)
-            #raise connection.RestlibException(500, "something broke")
 
         self.server_status = get_release(consumer_uuid)
 
