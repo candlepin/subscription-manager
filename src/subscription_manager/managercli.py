@@ -1063,7 +1063,7 @@ class RegisterCommand(UserPassCommand):
             print(_("Unregistering from: %s:%s%s") %
                  (conf["server"]["hostname"], conf["server"]["port"], conf["server"]["prefix"]))
             try:
-                unregister.Unregister(self.cp).unregister()
+                unregister.UnregisterService(self.cp).unregister()
                 self.entitlement_dir.__init__()
                 self.product_dir.__init__()
                 log.info("--force specified, unregistered old consumer: %s" % old_uuid)
@@ -1305,7 +1305,7 @@ class UnRegisterCommand(CliCommand):
         print(_("Unregistering from: %s:%s%s") %
              (conf["server"]["hostname"], conf["server"]["port"], conf["server"]["prefix"]))
         try:
-            unregister.Unregister(self.cp).unregister()
+            unregister.UnregisterService(self.cp).unregister()
         except Exception as e:
             handle_exception("Unregister failed", e)
 

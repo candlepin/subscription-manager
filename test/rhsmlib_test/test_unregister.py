@@ -32,9 +32,9 @@ from rhsmlib.services import unregister
 from rhsm import connection
 
 
-class TestUnRegisterService(InjectionMockingTest):
+class TestUnregisterService(InjectionMockingTest):
     def setUp(self):
-        super(TestUnRegisterService, self).setUp()
+        super(TestUnregisterService, self).setUp()
         self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection")
         self.mock_identity = mock.Mock(spec=Identity, name="Identity").return_value
         self.mock_identity.uuid = mock.Mock(return_value='7a002098-c167-41f2-91b3-d0c71e808142')
@@ -54,17 +54,17 @@ class TestUnRegisterService(InjectionMockingTest):
         """
         Testing normal unregistration process
         """
-        result = unregister.Unregister(self.mock_cp).unregister()
+        result = unregister.UnregisterService(self.mock_cp).unregister()
         self.assertIsNone(result)
 
 
-class TestUnRegisterDBusObject(DBusObjectTest, InjectionMockingTest):
+class TestUnregisterDBusObject(DBusObjectTest, InjectionMockingTest):
     def setUp(self):
-        super(TestUnRegisterDBusObject, self).setUp()
+        super(TestUnregisterDBusObject, self).setUp()
         self.proxy = self.proxy_for(UnregisterDBusObject.default_dbus_path)
         self.interface = dbus.Interface(self.proxy, constants.UNREGISTER_INTERFACE)
 
-        unregister_patcher = mock.patch('rhsmlib.dbus.objects.unregister.Unregister')
+        unregister_patcher = mock.patch('rhsmlib.dbus.objects.unregister.UnregisterService')
         self.unregister = unregister_patcher.start().return_value
         self.addCleanup(unregister_patcher.stop)
 

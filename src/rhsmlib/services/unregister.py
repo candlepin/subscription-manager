@@ -30,7 +30,7 @@ from rhsm import connection
 log = logging.getLogger(__name__)
 
 
-class Unregister(object):
+class UnregisterService(object):
     """
     Class providing functionality of unregistering the system from
     Candlepin server.
@@ -38,7 +38,7 @@ class Unregister(object):
 
     def __init__(self, uep):
         """
-        Initialization of UnRegister instance
+        Initialization of Unregister instance
         """
         self.identity = inj.require(inj.IDENTITY)
         self.cp_provider = inj.require(inj.CP_PROVIDER)

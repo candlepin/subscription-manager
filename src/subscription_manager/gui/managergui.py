@@ -466,7 +466,7 @@ class MainWindow(widgets.SubmanBaseWidget):
     def _perform_unregister(self):
         try:
             reset_resolver()
-            unregister.Unregister(self.backend.cp_provider.get_consumer_auth_cp()).unregister()
+            unregister.UnregisterService(self.backend.cp_provider.get_consumer_auth_cp()).unregister()
         except Exception as e:
             log.error("Error unregistering system with entitlement platform.")
             handle_gui_exception(e, _("<b>Errors were encountered during unregister.</b>") +

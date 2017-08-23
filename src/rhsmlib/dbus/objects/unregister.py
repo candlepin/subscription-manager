@@ -24,7 +24,7 @@ import dbus
 import logging
 
 from rhsmlib.dbus import constants, base_object, util
-from rhsmlib.services.unregister import Unregister
+from rhsmlib.services.unregister import UnregisterService
 
 from subscription_manager.injectioninit import init_dep_injection
 from subscription_manager.utils import restart_virt_who
@@ -62,7 +62,7 @@ class UnregisterDBusObject(base_object.BaseObject):
         uep = self.build_uep(proxy_options, proxy_only=True)
 
         try:
-            Unregister(uep).unregister()
+            UnregisterService(uep).unregister()
         except Exception as err:
             raise dbus.DBusException(str(err))
 
