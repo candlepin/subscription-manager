@@ -38,10 +38,14 @@ class TestUnRegisterService(InjectionMockingTest):
         self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection")
         self.mock_identity = mock.Mock(spec=Identity, name="Identity").return_value
         self.mock_identity.uuid = mock.Mock(return_value='7a002098-c167-41f2-91b3-d0c71e808142')
+        self.mock_provider = mock.Mock(spec=CPProvider, name="CPProvider")
+        self.mock_provider.get_consumer_auth_cp.return_value = mock.Mock(name="MockCP")
 
     def injection_definitions(self, *args, **kwargs):
         if args[0] == inj.IDENTITY:
             return self.mock_identity
+        elif args[0] == inj.CP_PROVIDER:
+            return self.mock_provider
         else:
             return None
 
@@ -68,13 +72,14 @@ class TestUnRegisterDBusObject(DBusObjectTest, InjectionMockingTest):
         self.mock_identity.is_valid.return_value = True
         self.mock_identity.uuid = "7a002098-c167-41f2-91b3-d0c71e808142"
 
+        self.mock_provider = mock.Mock(spec=CPProvider, name="CPProvider")
+        self.mock_provider.get_consumer_auth_cp.return_value = mock.Mock(name="MockCP")
+
     def injection_definitions(self, *args, **kwargs):
         if args[0] == inj.IDENTITY:
             return self.mock_identity
         elif args[0] == inj.CP_PROVIDER:
-            provider = mock.Mock(spec=CPProvider, name="CPProvider")
-            provider.get_consumer_auth_cp.return_value = mock.Mock(name="MockCP")
-            return provider
+            return self.mock_provider
         else:
             return None
 
