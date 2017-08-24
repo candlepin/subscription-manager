@@ -96,9 +96,8 @@ class RepoActionInvoker(BaseActionInvoker):
             # we need a repo in the server val file to match any in
             # the main repo definition file
             if server_value_repo is None:
-                server_value_repo = Repo(repo.id)
-                server_value_repo['name'] = repo['name']
-                server_value_repo_file.add(server_value_repo)
+                server_value_repo = repo
+                server_value_repo_file.add(repo)
             if existing is None:
                 current.add(repo)
             else:
@@ -299,9 +298,8 @@ class RepoUpdateActionCommand(object):
             existing = repo_file.section(cont.id)
             server_value_repo = server_value_repo_file.section(cont.id)
             if server_value_repo is None:
-                server_value_repo = Repo(cont.id)
-                server_value_repo['name'] = cont['name']
-                server_value_repo_file.add(server_value_repo)
+                server_value_repo = cont
+                server_value_repo_file.add(cont)
             if existing is None:
                 repo_file.add(cont)
                 self.report_add(cont)
@@ -400,7 +398,7 @@ class RepoUpdateActionCommand(object):
             result[key] = Repo.PROPERTIES.get(key, (1, None))
         return result
 
-    def update_repo(self, old_repo, new_repo, server_value_repo={}):
+    def update_repo(self, old_repo, new_repo, server_value_repo=None):
         """
         Checks an existing repo definition against a potentially updated
         version created from most recent entitlement certificates and
