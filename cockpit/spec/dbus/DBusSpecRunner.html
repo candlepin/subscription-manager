@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Jasmine Spec Runner v2.7.0</title>
+
+  <link rel="stylesheet" href="jasmine/jasmine.css">
+
+  <!-- NOTE: These scripts need to be loaded here and not as imports in the spec files.
+       The load order has to be as follows.  If you try to import these, the load order
+       can be messed up.  I suspect that in webpack in the browser, it uses asynchronous
+       loading, but since we don't specify defer or async in the script tag, these files
+       load synchronously -->
+  <script src="jasmine/jasmine.js"></script>
+  <script src="jasmine/jasmine-html.js"></script>
+  <script src="jasmine/boot.js"></script>
+
+  <script src="../base1/cockpit.js"></script>
+</head>
+
+<body>
+  <!-- include bundled spec files here...
+       Note that webpack.config.js now has two entry points.  One for the main app, and
+       another for testing.  -->
+  <script src="dbus-testing.js"></script>
+  Running integration tests
+</body>
+</html>
