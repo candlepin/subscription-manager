@@ -23,13 +23,19 @@ var info = {
         "index": [
             "./index.js",
             "./subscriptions.css",
-        ]
+        ],
     },
     files: [
         "index.html",
         "manifest.json",
     ],
 };
+
+if (!production) {
+    info.entries["dbus-testing"] = [
+      "spec/dbus/dbus.test.js"
+    ]
+}
 
 var output = {
     path: distdir,
@@ -85,6 +91,36 @@ var plugins = [
     }),
     new copy(info.files)
 ];
+
+if (!production) {
+    /* copy jasmine files over */
+    plugins.unshift(new copy([
+        {
+            from: './spec/dbus/override.json',
+            to: 'override.json'
+        },
+        {
+            from: './spec/dbus/DBusSpecRunner.html',
+            to: 'DBusSpecRunner.html'
+        },
+        {
+            from: './node_modules/jasmine-core/lib/jasmine-core/jasmine.css',
+            to: 'jasmine/jasmine.css'
+        },
+        {
+            from: './node_modules/jasmine-core/lib/jasmine-core/jasmine.js',
+            to: 'jasmine/jasmine.js',
+        },
+        {
+            from: './node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js',
+            to: 'jasmine/jasmine-html.js'
+        },
+        {
+            from: './node_modules/jasmine-core/lib/jasmine-core/boot.js',
+            to: 'jasmine/boot.js'
+        }
+    ]));
+}
 
 /* Only minimize when in production mode */
 if (production) {

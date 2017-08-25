@@ -8,6 +8,7 @@
   "license": "LGPL-2.1",
   "scripts": {
     "build": "webpack",
+    "jasmine": "jasmine",
     "vagrant-watch": "webpack --watch & vagrant rsync-auto",
     "watch": "webpack --watch"
   },
@@ -22,6 +23,7 @@
     "eslint": "^3.0.0",
     "eslint-loader": "~1.6.1",
     "eslint-plugin-react": "~6.9.0",
+    "jasmine": "^2.7.0",
     "jshint": "~2.9.1",
     "jshint-loader": "~0.8.3",
     "patternfly-react": "https://github.com/candlepin/patternfly-react",
