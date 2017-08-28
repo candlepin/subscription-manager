@@ -28,7 +28,7 @@ from subscription_manager.managerlib import fetch_certificates
 from subscription_manager.injection import IDENTITY, \
         PLUGIN_MANAGER, CP_PROVIDER, require
 
-from rhsmlib.services import attach
+from rhsmlib.services import attach, entitlement
 
 
 class AsyncPool(object):
@@ -93,7 +93,8 @@ class AsyncBind(object):
         can be removed, because it doesn't really give us any more information
         """
         try:
-            self.cp_provider.get_consumer_auth_cp().unbindBySerial(self.identity.uuid, serial)
+            ent_service = entitlement.EntitlementService(self.cp_provider.get_consumer_auth_cp())
+            ent_service.remove_pools_by_serials([serial])
             try:
                 self.certlib.update()
             except Disconnected:

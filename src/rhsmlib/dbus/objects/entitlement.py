@@ -30,6 +30,10 @@ log = logging.getLogger(__name__)
 
 
 class EntitlementDBusObject(base_object.BaseObject):
+    """
+    A D-Bus object interacting with subscription-manager to list, get status
+    and remove pools.
+    """
     default_dbus_path = constants.ENTITLEMENT_DBUS_PATH
     interface_name = constants.ENTITLEMENT_INTERFACE
 
@@ -43,6 +47,12 @@ class EntitlementDBusObject(base_object.BaseObject):
     )
     @util.dbus_handle_exceptions
     def GetStatus(self, on_date, sender=None):
+        """
+        Get status of entitlements
+        :param on_date: Date
+        :param sender: Not used argument
+        :return: String with JSON dump
+        """
         try:
             on_date = dbus_utils.dbus_to_python(on_date)
             if on_date == "":
@@ -65,6 +75,13 @@ class EntitlementDBusObject(base_object.BaseObject):
     )
     @util.dbus_handle_exceptions
     def GetPools(self, options, proxy_options, sender=None):
+        """
+        Try to get pools installed/available/consumed at this system
+        :param options: D-Bus object storing options of query
+        :param proxy_options: D-Bus object with proxy configuration
+        :param sender: Not used argument
+        :return: String with JSON dump
+        """
         options = dbus_utils.dbus_to_python(options, expected_type=dict)
         proxy_options = dbus_utils.dbus_to_python(proxy_options, expected_type=dict)
 
@@ -81,3 +98,68 @@ class EntitlementDBusObject(base_object.BaseObject):
         on_date = datetime.strptime(on_date, '%Y-%m-%d')
         if on_date.date() < datetime.now().date():
             raise dbus.DBusException("Past dates are not allowed")
+
+    @util.dbus_service_method(
+        constants.ENTITLEMENT_INTERFACE,
+        in_signature='a{sv}',
+        out_signature='s'
+    )
+    @util.dbus_handle_exceptions
+    def RemoveAllPools(self, proxy_options, sender=None):
+        """
+        Try to remove all subscriptions from the system
+        :param proxy_options: Settings of proxy
+        :param sender: Not used argument
+        :return: Json string containing response
+        """
+        proxy_options = dbus_utils.dbus_to_python(proxy_options, expected_type=dict)
+        cp = self.build_uep(proxy_options, proxy_only=True)
+        entitlement_service = EntitlementService(cp)
+        result = entitlement_service.remove_all_pools()
+        return json.dumps(result)
+
+    @util.dbus_service_method(
+        constants.ENTITLEMENT_INTERFACE,
+        in_signature='asa{sv}',
+        out_signature='s'
+    )
+    @util.dbus_handle_exceptions
+    def RemovePoolsByIds(self, pool_ids, proxy_options, sender=None):
+        """
+        Try to remove subscription by pool_id
+        :param pool_ids: List of pool IDs
+        :param proxy_options: Settings of proxy
+        :param sender: Not used argument
+        :return: List of removed pools represented by serial numbers
+        """
+        pool_ids = dbus_utils.dbus_to_python(pool_ids)
+        proxy_options = dbus_utils.dbus_to_python(proxy_options, expected_type=dict)
+
+        cp = self.build_uep(proxy_options, proxy_only=True)
+        entitlement_service = EntitlementService(cp)
+        removed_pools, unremoved_pools, removed_serials = entitlement_service.remove_pools_by_ids(pool_ids)
+
+        return json.dumps(removed_serials)
+
+    @util.dbus_service_method(
+        constants.ENTITLEMENT_INTERFACE,
+        in_signature='asa{sv}',
+        out_signature='s'
+    )
+    @util.dbus_handle_exceptions
+    def RemovePoolsBySerials(self, serials, proxy_options, sender=None):
+        """
+        Try to remove subscription by pool_id
+        :param serials: List of serial numbers of subscriptions
+        :param proxy_options: Settings of proxy
+        :param sender: Not used argument
+        :return: List of removed pools represented by serial numbers
+        """
+        serials = dbus_utils.dbus_to_python(serials)
+        proxy_options = dbus_utils.dbus_to_python(proxy_options, expected_type=dict)
+
+        cp = self.build_uep(proxy_options, proxy_only=True)
+        entitlement_service = EntitlementService(cp)
+        removed_serials, unremoved_serials = entitlement_service.remove_pools_by_serials(serials)
+
+        return json.dumps(removed_serials)
