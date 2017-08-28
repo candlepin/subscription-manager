@@ -156,11 +156,11 @@ class CertificateDirectory(Directory):
                 if p.id == p_hash:
                     certs.add(c)
                     # Keep track of stacks that provide our product
-                    if (c.order and c.order.stacking_id):
+                    if c.order and c.order.stacking_id:
                         providing_stack_ids.add(c.order.stacking_id)
 
             # Keep track of stack ids in case we need them later.  avoids another loop
-            if (c.order and c.order.stacking_id):
+            if c.order and c.order.stacking_id:
                 if c.order.stacking_id not in stack_id_map:
                     stack_id_map[c.order.stacking_id] = set()
                 stack_id_map[c.order.stacking_id].add(c)
@@ -178,7 +178,7 @@ class CertificateDirectory(Directory):
                     return c
         return None
 
-    #Set up an alias for backwards compatibility
+    # Set up an alias for backwards compatibility
     findByProduct = find_by_product
 
 
