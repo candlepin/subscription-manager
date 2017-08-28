@@ -34,6 +34,7 @@ if __name__ == "__main__":
             objects.RegisterDBusObject,
             objects.AttachDBusObject,
             objects.ProductsDBusObject,
+            objects.UnregisterDBusObject,
             objects.EntitlementDBusObject,
             objects.Main
         ]

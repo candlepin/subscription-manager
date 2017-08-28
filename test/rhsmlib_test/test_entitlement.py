@@ -23,6 +23,7 @@ from subscription_manager import injection as inj
 from subscription_manager.identity import Identity
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.reasons import Reasons
+from subscription_manager.certdirectory import EntitlementDirectory
 
 from rhsm import connection
 
@@ -39,6 +40,7 @@ class TestEntitlementService(InjectionMockingTest):
         self.mock_identity = mock.Mock(spec=Identity, name="Identity").return_value
         self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection").return_value
         self.mock_sorter_class = mock.Mock(spec=CertSorter, name="CertSorter")
+        self.mock_ent_dir = mock.Mock(spec=EntitlementDirectory, name="EntitlementDirectory").return_value
 
     def injection_definitions(self, *args, **kwargs):
         if args[0] == inj.IDENTITY:
@@ -49,6 +51,8 @@ class TestEntitlementService(InjectionMockingTest):
             instance = self.mock_sorter_class(*args[1:])
             self.mock_sorter_class.return_value = instance
             return instance
+        elif args[0] == inj.ENT_DIR:
+            return self.mock_ent_dir
         else:
             return None
 
@@ -207,6 +211,180 @@ class TestEntitlementService(InjectionMockingTest):
 
         filtered = service.get_available_pools(service_level="NotFound")
         self.assertEqual(0, len(filtered))
+
+    def test_remove_all_pools(self):
+        """
+        Test of removing all pools
+        """
+        ent_service = EntitlementService(self.mock_cp)
+        ent_service.entcertlib = mock.Mock().return_value
+        ent_service.entcertlib.update = mock.Mock()
+        ent_service.cp.unbindAll = mock.Mock(return_value='[]')
+
+        response = ent_service.remove_all_pools()
+        self.assertEqual(response, '[]')
+
+    def test_remove_all_pools_by_id(self):
+        """
+        Test of removing all pools by IDs of pool
+        """
+        ent_service = EntitlementService(self.mock_cp)
+        ent_service.cp.unbindByPoolId = mock.Mock()
+        ent_service.entitlement_dir.list_serials_for_pool_ids = mock.Mock(return_value={
+            '4028fa7a5dea087d015dea0b025003f6': ['6219625278114868779'],
+            '4028fa7a5dea087d015dea0adf560152': ['3573249574655121394']
+        })
+        ent_service.entcertlib = mock.Mock().return_value
+        ent_service.entcertlib.update = mock.Mock()
+
+        removed_pools, unremoved_pools, removed_serials = ent_service.remove_pools_by_ids(
+            ['4028fa7a5dea087d015dea0b025003f6',
+             '4028fa7a5dea087d015dea0adf560152']
+        )
+
+        expected_removed_serials = [
+            '6219625278114868779',
+            '3573249574655121394'
+        ]
+        expected_removed_pools = [
+            '4028fa7a5dea087d015dea0b025003f6',
+            '4028fa7a5dea087d015dea0adf560152'
+        ]
+
+        self.assertEqual(expected_removed_serials, removed_serials)
+        self.assertEqual(expected_removed_pools, removed_pools)
+        self.assertEqual([], unremoved_pools)
+
+    def test_remove_dupli_pools_by_id(self):
+        """
+        Test of removing pools specified with duplicities
+        (one pool id is set twice)
+        """
+        ent_service = EntitlementService(self.mock_cp)
+        ent_service.cp.unbindByPoolId = mock.Mock()
+        ent_service.entitlement_dir.list_serials_for_pool_ids = mock.Mock(return_value={
+            '4028fa7a5dea087d015dea0b025003f6': ['6219625278114868779'],
+            '4028fa7a5dea087d015dea0adf560152': ['3573249574655121394']
+        })
+        ent_service.entcertlib = mock.Mock().return_value
+        ent_service.entcertlib.update = mock.Mock()
+
+        removed_pools, unremoved_pools, removed_serials = ent_service.remove_pools_by_ids(
+            ['4028fa7a5dea087d015dea0b025003f6',
+             '4028fa7a5dea087d015dea0b025003f6',
+             '4028fa7a5dea087d015dea0adf560152']
+        )
+
+        expected_removed_serials = [
+            '6219625278114868779',
+            '3573249574655121394'
+        ]
+        expected_removed_pools = [
+            '4028fa7a5dea087d015dea0b025003f6',
+            '4028fa7a5dea087d015dea0adf560152'
+        ]
+
+        self.assertEqual(expected_removed_serials, removed_serials)
+        self.assertEqual(expected_removed_pools, removed_pools)
+        self.assertEqual([], unremoved_pools)
+
+    def test_remove_some_pools_by_id(self):
+        """
+        Test of removing only some pools, because one pool ID is not valid
+        """
+        ent_service = EntitlementService(self.mock_cp)
+
+        def stub_unbind(uuid, pool_id):
+            if pool_id == 'does_not_exist_d015dea0adf560152':
+                raise connection.RestlibException(400, 'Error')
+
+        ent_service.cp.unbindByPoolId = mock.Mock(side_effect=stub_unbind)
+        ent_service.entitlement_dir.list_serials_for_pool_ids = mock.Mock(return_value={
+            '4028fa7a5dea087d015dea0b025003f6': ['6219625278114868779'],
+            '4028fa7a5dea087d015dea0adf560152': ['3573249574655121394']
+        })
+        ent_service.entcertlib = mock.Mock().return_value
+        ent_service.entcertlib.update = mock.Mock()
+
+        removed_pools, unremoved_pools, removed_serials = ent_service.remove_pools_by_ids(
+            ['4028fa7a5dea087d015dea0b025003f6', 'does_not_exist_d015dea0adf560152']
+        )
+
+        expected_removed_serials = ['6219625278114868779']
+        expected_removed_pools = ['4028fa7a5dea087d015dea0b025003f6']
+        expected_unremoved_pools = ['does_not_exist_d015dea0adf560152']
+
+        self.assertEqual(expected_removed_serials, removed_serials)
+        self.assertEqual(expected_removed_pools, removed_pools)
+        self.assertEqual(expected_unremoved_pools, unremoved_pools)
+
+    def test_remove_all_pools_by_serial(self):
+        """
+        Test of removing all pools by serial numbers
+        """
+        ent_service = EntitlementService(self.mock_cp)
+        ent_service.cp.unbindBySerial = mock.Mock()
+
+        ent_service.entcertlib = mock.Mock().return_value
+        ent_service.entcertlib.update = mock.Mock()
+
+        removed_serial, unremoved_serials = ent_service.remove_pools_by_serials(
+            ['6219625278114868779', '3573249574655121394']
+        )
+
+        expected_removed_serials = ['6219625278114868779', '3573249574655121394']
+
+        self.assertEqual(expected_removed_serials, removed_serial)
+        self.assertEqual([], unremoved_serials)
+
+    def test_remove_dupli_pools_by_serial(self):
+        """
+        Test of removing pools specified with duplicities
+        (one serial number is set twice)
+        """
+        ent_service = EntitlementService(self.mock_cp)
+        ent_service.cp.unbindBySerial = mock.Mock()
+
+        ent_service.entcertlib = mock.Mock().return_value
+        ent_service.entcertlib.update = mock.Mock()
+
+        removed_serial, unremoved_serials = ent_service.remove_pools_by_serials(
+            ['6219625278114868779',
+             '6219625278114868779',
+             '3573249574655121394']
+        )
+
+        expected_removed_serials = ['6219625278114868779', '3573249574655121394']
+
+        self.assertEqual(expected_removed_serials, removed_serial)
+        self.assertEqual([], unremoved_serials)
+
+    def test_remove_some_pools_by_serial(self):
+        """
+        Test of removing some of pools by serial numbers, because one serial
+        number is not valid.
+        """
+        ent_service = EntitlementService(self.mock_cp)
+
+        def stub_unbind(uuid, serial):
+            if serial == 'does_not_exist_1394':
+                raise connection.RestlibException(400, 'Error')
+
+        ent_service.cp.unbindBySerial = mock.Mock(side_effect=stub_unbind)
+
+        ent_service.entcertlib = mock.Mock().return_value
+        ent_service.entcertlib.update = mock.Mock()
+
+        removed_serial, unremoved_serials = ent_service.remove_pools_by_serials(
+            ['6219625278114868779',
+             'does_not_exist_1394']
+        )
+
+        expected_removed_serials = ['6219625278114868779']
+        expected_unremoved_serials = ['does_not_exist_1394']
+
+        self.assertEqual(expected_removed_serials, removed_serial)
+        self.assertEqual(expected_unremoved_serials, unremoved_serials)
 
 
 class TestEntitlementDBusObject(DBusObjectTest, InjectionMockingTest):
