@@ -39,7 +39,8 @@ from subscription_manager.cache import ProfileManager, \
 
 from rhsm.profile import Package, RPMProfile
 
-from rhsm.connection import RestlibException, UnauthorizedException
+from rhsm.connection import RestlibException, UnauthorizedException, \
+    RateLimitExceededException
 
 from subscription_manager import injection as inj
 
@@ -351,6 +352,14 @@ class TestReleaseStatusCache(SubManFixture):
     def test_server_network_error_with_cache(self):
         uep = Mock()
         uep.getRelease = Mock(side_effect=socket.error("boom"))
+        dummy_release = {'releaseVer': 'MockServer'}
+        self.release_cache._read_cache = Mock(return_value=dummy_release)
+        self.release_cache._cache_exists = Mock(return_value=True)
+        self.assertEqual(dummy_release, self.release_cache.read_status(uep, "SOMEUUID"))
+
+    def test_rate_limit_exceed_with_cache(self):
+        uep = Mock()
+        uep.getRelease = Mock(side_effect=RateLimitExceededException(429))
         dummy_release = {'releaseVer': 'MockServer'}
         self.release_cache._read_cache = Mock(return_value=dummy_release)
         self.release_cache._cache_exists = Mock(return_value=True)
