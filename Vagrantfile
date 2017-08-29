@@ -9,6 +9,7 @@ Vagrant.configure("2") do |config|
   vm_boxes = {
     "centos7" => "centos/7",
     "centos6" => "centos/6",
+    "debian9" => "debian/stretch64",
     "fedora25" => "fedora/25-cloud-base",
     "opensuse42.2" => "opensuse/openSUSE-42.2-x86_64",
   }
