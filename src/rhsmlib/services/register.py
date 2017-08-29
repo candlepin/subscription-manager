@@ -34,6 +34,12 @@ class RegisterService(object):
 
     def register(self, org, activation_keys=None, environment=None, force=None, name=None, consumerid=None,
             **kwargs):
+        # We accept a kwargs argument so that the DBus object can pass the options dictionary it
+        # receives transparently to the service via dictionary unpacking.  This strategy allows the
+        # DBus object to be more independent of the service implementation.
+
+        # If there are any values in kwargs that don't map to keyword arguments defined in the message
+        # signature we want to consider that an error.
         if kwargs:
             raise exceptions.ValidationError(_("Unknown arguments: %s") % kwargs.keys())
 

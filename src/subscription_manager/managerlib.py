@@ -66,15 +66,10 @@ def persist_consumer_cert(consumerinfo):
     cert_dir = cfg.get('rhsm', 'consumerCertDir')
     if not os.path.isdir(cert_dir):
         os.mkdir(cert_dir)
-    # unsure if this could be injected?
-    consumer = identity.ConsumerIdentity(consumerinfo['idCert']['key'],
-                                         consumerinfo['idCert']['cert'])
+    consumer = identity.ConsumerIdentity(consumerinfo['idCert']['key'], consumerinfo['idCert']['cert'])
     consumer.write()
-    consumer_info = {"consumer_name": consumer.getConsumerName(),
-                     "uuid": consumer.getConsumerId()}
-    log.info("Consumer created: %s" % consumer_info)
+    log.info("Consumer created: %s (%s)" % (consumer.getConsumerName(), consumer.getConsumerId()))
     system_log("Registered system with identity: %s" % consumer.getConsumerId())
-    return consumer_info
 
 
 class CertificateFetchError(Exception):
