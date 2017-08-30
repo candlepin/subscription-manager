@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.19.21
+Version: 1.19.22
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -606,6 +606,14 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Wed Aug 30 2017 Kevin Howell <khowell@redhat.com> 1.19.22-1
+- 1486549: Do not update redhat.repo at RateLimitExceededException
+  (jhnidek@redhat.com)
+- 1486326: Add subscription-manager plugin to yum-config-manager
+  (khowell@redhat.com)
+- 1486338: Properly initialize clean repo copy (khowell@redhat.com)
+- 1484265: Force UTF-8 encoding in daemons (khowell@redhat.com)
+
 * Wed Jun 21 2017 Kevin Howell <khowell@redhat.com> 1.19.21-1
 - 1463765: Sync zanata translations (khowell@redhat.com)
 - 1463765: Fix wrong Indic-language translations (khowell@redhat.com)
