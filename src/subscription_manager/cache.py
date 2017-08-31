@@ -354,7 +354,7 @@ class ReleaseStatusCache(StatusCache):
 
             # To mimic connection problems you can raise required exception:
             # raise connection.RemoteServerException(500, "GET", "/release")
-            return uep.getRelease(consumer_uuid)
+            return uep.getRelease(uuid)
 
         self.server_status = get_release(consumer_uuid)
 

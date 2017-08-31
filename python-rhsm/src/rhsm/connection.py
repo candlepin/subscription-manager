@@ -197,14 +197,13 @@ class RateLimitExceededException(RestlibException):
     The retry_after attribute is an int of seconds to retry the request after.
     The retry_after attribute may not be included in the response.
     """
-    def __init__(self, code,
-                 msg=None,
-                 headers=None):
-        super(RateLimitExceededException, self).__init__(code,
-                                                         msg)
+    def __init__(self, code, msg=None, headers=None):
+        super(RateLimitExceededException, self).__init__(code, msg)
         self.headers = headers or {}
-        self.msg = msg or ""
         self.retry_after = safe_int(self.headers.get('retry-after'))
+        self.msg = msg or "Access rate limit exceeded"
+        if self.retry_after is not None:
+            self.msg += ", retry access after: %s seconds." % self.retry_after
 
 
 class UnauthorizedException(AuthenticationException):

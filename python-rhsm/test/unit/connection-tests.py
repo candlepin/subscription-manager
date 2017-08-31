@@ -565,7 +565,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
             self.vr("429", content, headers)
         except RateLimitExceededException as e:
             self.assertEquals(20, e.retry_after)
-            self.assertEquals("TooFast", e.msg)
+            self.assertEquals("TooFast, retry access after: 20 seconds.", e.msg)
             self.assertEquals("429", e.code)
         else:
             self.fail("Should have raised a RateLimitExceededException")
