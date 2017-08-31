@@ -95,7 +95,8 @@
     - pygtk2-libglade
     - gnome-icon-theme
     - usermode-gtk
-  when: ansible_distribution_major_version == "6"
+  when: (ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS') and
+        ansible_distribution_major_version == "6"
 
 - name: install subscription-manager build deps
   command: yum-builddep -y {{ subman_checkout_dir }}/subscription-manager.spec
@@ -146,14 +147,14 @@
   args:
     chdir: "{{ subman_checkout_dir }}/python-rhsm"
     creates: /usr/lib*/python*/site-packages/subscription_manager
-  when: subman_setup_hacking_environment
+  when: subman_setup_hacking_environment and not (ansible_distribution == 'Debian')
 
 - name: tito build subscription-manager (initial)
   command: tito build --test --rpm
   args:
     chdir: "{{ subman_checkout_dir }}"
     creates: /usr/lib*/python*/site-packages/subscription_manager
-  when: subman_setup_hacking_environment
+  when: subman_setup_hacking_environment and not (ansible_distribution == 'Debian')
 
 - name: install subscription-manager (initial)
   shell: "{{ distro_package_command }} install -y /tmp/tito/*/subscription-manager-[0-9]*"
@@ -161,7 +162,7 @@
     chdir: "{{ subman_checkout_dir }}"
     creates: /usr/lib*/python*/site-packages/subscription_manager
   become: yes
-  when: subman_setup_hacking_environment
+  when: subman_setup_hacking_environment and not (ansible_distribution == 'Debian')
 
 - name: alter PATH
   template:
