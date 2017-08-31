@@ -70,7 +70,8 @@ RHSM_DEFAULTS = {
         'full_refresh_on_yum': '0',
         'report_package_profile': '1',
         'plugindir': '/usr/share/rhsm-plugins',
-        'pluginconfdir': '/etc/rhsm/pluginconf.d'
+        'pluginconfdir': '/etc/rhsm/pluginconf.d',
+        'auto_enable_yum_plugins': '1',
         }
 
 RHSMCERTD_DEFAULTS = {

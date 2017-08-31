@@ -27,12 +27,16 @@ from . import fixture
 
 from iniparse import RawConfigParser, SafeConfigParser
 from mock import Mock, patch, MagicMock
+import tempfile
+import os
+from iniparse import ConfigParser
 
 from .stubs import StubProductCertificate, \
         StubProduct, StubEntitlementCertificate, StubContent, \
         StubProductDirectory, StubConsumerIdentity, StubEntitlementDirectory
 from subscription_manager.repolib import Repo, RepoActionInvoker, \
-        RepoUpdateActionCommand, TidyWriter, RepoFile, YumReleaseverSource
+        RepoUpdateActionCommand, TidyWriter, RepoFile, YumReleaseverSource, \
+        YumPluginManager
 from subscription_manager import injection as inj
 from rhsm.config import RhsmConfigParser
 from rhsmlib.services import config
@@ -880,3 +884,147 @@ class TestManageReposEnabled(fixture.SubManFixture):
         manage_repos_enabled = repolib.manage_repos_enabled()
         # Should fail, and return default of 1
         self.assertEqual(manage_repos_enabled, True)
+
+
+AUTO_ENABLE_YUM_PLUGINS_ENABLED = """
+[rhsm]
+auto_enable_yum_plugins = 1
+"""
+
+AUTO_ENABLE_YUM_PLUGINS_DISABLED = """
+[rhsm]
+auto_enable_yum_plugins = 0
+"""
+
+YUM_PLUGIN_CONF_FILE_ENABLED = """
+[main]
+enabled = 1
+"""
+
+YUM_PLUGIN_CONF_FILE_DISABLED = """
+[main]
+enabled = 0
+"""
+
+YUM_PLUGIN_CONF_FILE_WRONG_VALUE = """
+[main]
+enabled = 4
+"""
+
+YUM_PLUGIN_CONF_FILE_CORRUPTED = """
+[main
+enable =
+"""
+
+
+class TestYumPluginManager(unittest.TestCase):
+    """
+    This class is intended for testing YumPluginManager
+    """
+
+    ORIGINAL_YUM_PLUGIN_DIR = YumPluginManager.YUM_PLUGIN_DIR
+    ORIGINAL_YUM_PLUGINS = YumPluginManager.YUM_PLUGINS
+
+    def init_plugin_conf_files(self, conf_string):
+        """
+        Mock configuration files of plugins
+        """
+        tmp_dir = tempfile.mkdtemp()
+        f, plug_file_name_01 = tempfile.mkstemp(prefix='', suffix='.conf', dir=tmp_dir, text=True)
+        f, plug_file_name_02 = tempfile.mkstemp(prefix='', suffix='.conf', dir=tmp_dir, text=True)
+        with open(plug_file_name_01, "w") as plug_file_01:
+            plug_file_01.write(conf_string)
+        with open(plug_file_name_02, "w") as plug_file_02:
+            plug_file_02.write(conf_string)
+        self.plug_file_name_01 = plug_file_name_01
+        self.plug_file_name_02 = plug_file_name_02
+        self.tmp_dir = tmp_dir
+        YumPluginManager.YUM_PLUGIN_DIR = tmp_dir
+        YumPluginManager.YUM_PLUGINS = [
+            plug_file_name_01.replace(tmp_dir, '').replace('.conf', ''),
+            plug_file_name_02.replace(tmp_dir, '').replace('.conf', '')
+        ]
+
+    def restore_plugin_conf_files(self):
+        """
+        Restore original constants in YumPluginManager
+        """
+        YumPluginManager.YUM_PLUGIN_DIR = self.ORIGINAL_YUM_PLUGIN_DIR
+        YumPluginManager.YUM_PLUGINS = self.ORIGINAL_YUM_PLUGINS
+        os.unlink(self.plug_file_name_01)
+        os.unlink(self.plug_file_name_02)
+        os.rmdir(self.tmp_dir)
+
+    @patch.object(repolib, 'conf', ConfigFromString(config_string=AUTO_ENABLE_YUM_PLUGINS_ENABLED))
+    def test_enabling_disabled_yum_plugin(self):
+        """
+        Test automatic enabling of configuration files of disabled plugins
+        """
+        self.init_plugin_conf_files(conf_string=YUM_PLUGIN_CONF_FILE_DISABLED)
+        plugin_list = YumPluginManager.enable_yum_plugins()
+        self.assertEqual(len(plugin_list), 2)
+        for plugin_conf_file_name in YumPluginManager.YUM_PLUGINS:
+            yum_plugin_config = ConfigParser()
+            result = yum_plugin_config.read(YumPluginManager.YUM_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf')
+            self.assertGreater(len(result), 0)
+            is_plugin_enabled = yum_plugin_config.getint('main', 'enabled')
+            self.assertEqual(is_plugin_enabled, 1)
+        self.restore_plugin_conf_files()
+
+    @patch.object(repolib, 'conf', ConfigFromString(config_string=AUTO_ENABLE_YUM_PLUGINS_DISABLED))
+    def test_not_enabling_disabled_yum_plugin(self):
+        """
+        Test not enabling (disabled in rhsm.conf) of configuration files of disabled plugins
+        """
+        self.init_plugin_conf_files(conf_string=YUM_PLUGIN_CONF_FILE_DISABLED)
+        plugin_list = YumPluginManager.enable_yum_plugins()
+        self.assertEqual(len(plugin_list), 0)
+        for plugin_conf_file_name in YumPluginManager.YUM_PLUGINS:
+            yum_plugin_config = ConfigParser()
+            result = yum_plugin_config.read(YumPluginManager.YUM_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf')
+            self.assertGreater(len(result), 0)
+            is_plugin_enabled = yum_plugin_config.getint('main', 'enabled')
+            self.assertEqual(is_plugin_enabled, 0)
+        self.restore_plugin_conf_files()
+
+    @patch.object(repolib, 'conf', ConfigFromString(config_string=AUTO_ENABLE_YUM_PLUGINS_ENABLED))
+    def test_enabling_enabled_yum_plugin(self):
+        """
+        Test automatic enabling of configuration files of already enabled plugins
+        """
+        self.init_plugin_conf_files(conf_string=YUM_PLUGIN_CONF_FILE_ENABLED)
+        plugin_list = YumPluginManager.enable_yum_plugins()
+        self.assertEqual(len(plugin_list), 0)
+        for plugin_conf_file_name in YumPluginManager.YUM_PLUGINS:
+            yum_plugin_config = ConfigParser()
+            result = yum_plugin_config.read(YumPluginManager.YUM_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf')
+            self.assertGreater(len(result), 0)
+            is_plugin_enabled = yum_plugin_config.getint('main', 'enabled')
+            self.assertEqual(is_plugin_enabled, 1)
+        self.restore_plugin_conf_files()
+
+    @patch.object(repolib, 'conf', ConfigFromString(config_string=AUTO_ENABLE_YUM_PLUGINS_ENABLED))
+    def test_enabling_yum_plugin_with_wrong_conf(self):
+        """
+        Test automatic enabling of configuration files of already plugins with wrong values in conf file.
+        """
+        self.init_plugin_conf_files(conf_string=YUM_PLUGIN_CONF_FILE_WRONG_VALUE)
+        plugin_list = YumPluginManager.enable_yum_plugins()
+        self.assertEqual(len(plugin_list), 0)
+        for plugin_conf_file_name in YumPluginManager.YUM_PLUGINS:
+            yum_plugin_config = ConfigParser()
+            result = yum_plugin_config.read(YumPluginManager.YUM_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf')
+            self.assertGreater(len(result), 0)
+            is_plugin_enabled = yum_plugin_config.getint('main', 'enabled')
+            self.assertEqual(is_plugin_enabled, 4)
+        self.restore_plugin_conf_files()
+
+    @patch.object(repolib, 'conf', ConfigFromString(config_string=AUTO_ENABLE_YUM_PLUGINS_ENABLED))
+    def test_enabling_yum_plugin_with_corrupted_conf_file(self):
+        """
+        This test only test YumPluginManager.enable_yum_plugins() can survive reading of corrupted
+        yum plugin configuration file
+        """
+        self.init_plugin_conf_files(conf_string=YUM_PLUGIN_CONF_FILE_CORRUPTED)
+        plugin_list = YumPluginManager.enable_yum_plugins()
+        self.assertEqual(len(plugin_list), 0)
