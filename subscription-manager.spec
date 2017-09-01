@@ -60,7 +60,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.19.22
+Version: 1.19.23
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -606,6 +606,11 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Fri Sep 01 2017 Kevin Howell <khowell@redhat.com> 1.19.23-1
+- Bump python-rhsm requirement to 1.19.10 (khowell@redhat.com)
+- 1481384: Improve error message for RateLimitExceededException
+  (jhnidek@redhat.com)
+
 * Wed Aug 30 2017 Kevin Howell <khowell@redhat.com> 1.19.22-1
 - 1486549: Do not update redhat.repo at RateLimitExceededException
   (jhnidek@redhat.com)
