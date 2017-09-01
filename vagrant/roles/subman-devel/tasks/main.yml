@@ -176,6 +176,43 @@
     line: "PYTHONPATH={{ subman_checkout_dir }}/src:{{ subman_checkout_dir }}/python-rhsm/src"
   become: yes
 
+- name: compile c artifacts
+  make:
+    chdir: "{{ subman_checkout_dir }}"
+  when: subman_setup_hacking_environment and ansible_distribution == 'Debian'
+
+- name: install c artifacts
+  make:
+    chdir: "{{ subman_checkout_dir }}"
+    target: install
+  become: yes
+  when: subman_setup_hacking_environment and ansible_distribution == 'Debian'
+
+- name: configure python sys.path
+  blockinfile:
+    path: /etc/python2.7/sitecustomize.py
+    block: |
+      # append rhsm to python path
+      import sys
+      sys.path.append('{{ subman_checkout_dir }}/src')
+      sys.path.append('{{ subman_checkout_dir }}/python-rhsm/src')
+  become: yes
+  when: subman_setup_hacking_environment and ansible_distribution == 'Debian'
+
+- name: install python-rshm
+  pip:
+    name: "{{ subman_checkout_dir }}/python-rhsm"
+    extra_args: "-e"
+  become: yes
+  when: subman_setup_hacking_environment and ansible_distribution == 'Debian'
+
+- name: install subscription-manager
+  pip:
+    name: "{{ subman_checkout_dir }}"
+    extra_args: "-e"
+  become: yes
+  when: subman_setup_hacking_environment and ansible_distribution == 'Debian'
+
 - name: set GTK version
   lineinfile:
     name: /etc/environment
