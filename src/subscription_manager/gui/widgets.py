@@ -553,7 +553,7 @@ class ContractSubDetailsWidget(SubDetailsWidget):
 
         self._set(self.details_view, '\n'.join(reasons))
 
-        self.start_end_date_text.modify_base(ga_Gtk.StateType.NORMAL,
+        self.start_end_date_text.modify_bg(ga_Gtk.StateType.NORMAL,
                 self._get_date_bg(end, expiring))
 
         self._set(self.contract_number_text, contract)
