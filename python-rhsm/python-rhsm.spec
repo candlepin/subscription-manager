@@ -15,7 +15,7 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 Name: python-rhsm
-Version: 1.19.9
+Version: 1.19.10
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -102,6 +102,10 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Fri Sep 01 2017 Kevin Howell <khowell@redhat.com> 1.19.10-1
+- 1481384: Do not update redhat.repo at RateLimitExceededException
+  (jhnidek@redhat.com)
+
 * Wed Jun 07 2017 Kevin Howell <khowell@redhat.com> 1.19.9-1
 - 1444453: Have gettext return unicode instead of bytes. (awood@redhat.com)
 - 1457197: Env. variable no_proxy=* is not ignored (jhnidek@redhat.com)
