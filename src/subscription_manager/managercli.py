@@ -1023,7 +1023,9 @@ class RegisterCommand(UserPassCommand):
             system_exit(os.EX_USAGE, _("Error: Must provide --org with activation keys."))
         elif self.options.force and self.options.consumerid:
             system_exit(os.EX_USAGE, _("Error: Can not force registration while attempting to recover registration with consumerid. Please use --force without --consumerid to re-register or use the clean command and try again without --force."))
-        elif self.options.consumertype and not (self.options.consumertype == 'rhui' or self.options.consumertype == 'system'):
+        # 1485008: allow registration, when --type=RHUI (many of KBase articles describe using RHUI not rhui)
+        elif self.options.consumertype and not \
+                (self.options.consumertype.lower() == 'rhui' or self.options.consumertype == 'system'):
             system_exit(os.EX_USAGE, _("Error: The --type option has been deprecated and may not be used."))
 
     def persist_server_options(self):
