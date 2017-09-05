@@ -37,6 +37,7 @@ from subscription_manager.ga import GLib as ga_GLib
 
 from subscription_manager.branding import get_branding
 from subscription_manager.entcertlib import EntCertActionInvoker
+from subscription_manager.repolib import YumPluginManager
 from rhsmlib.facts.hwprobe import ClassicCheck
 from rhsmlib.services import unregister
 from subscription_manager.utils import get_client_versions, get_server_versions, parse_baseurl_info, restart_virt_who
@@ -291,6 +292,14 @@ class MainWindow(widgets.SubmanBaseWidget):
 
         if auto_launch_registration and not self.registered():
             self._register_item_clicked(None)
+
+        enabled_yum_plugins = YumPluginManager.enable_yum_plugins()
+        if len(enabled_yum_plugins) > 0:
+            messageWindow.InfoDialog(
+                YumPluginManager.warning_message(enabled_yum_plugins),
+                self._get_window(),
+                _("Warning - subscribtion-manager plugins were automatically enabled")
+            )
 
     def registered(self):
         return self.identity.is_valid()

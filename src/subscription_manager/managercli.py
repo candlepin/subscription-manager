@@ -53,7 +53,7 @@ from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
 from subscription_manager.managerlib import valid_quantity
 from subscription_manager.release import ReleaseBackend, MultipleReleaseProductsError
-from subscription_manager.repolib import RepoActionInvoker, RepoFile, manage_repos_enabled
+from subscription_manager.repolib import RepoActionInvoker, RepoFile, YumPluginManager, manage_repos_enabled
 from subscription_manager.utils import parse_server_info, \
         parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
@@ -2637,6 +2637,9 @@ class ManagerCLI(CLI):
 
     def main(self):
         managerlib.check_identity_cert_perms()
+        enabled_yum_plugins = YumPluginManager.enable_yum_plugins()
+        if len(enabled_yum_plugins) > 0:
+            print(_('WARNING') + '\n\n' + YumPluginManager.warning_message(enabled_yum_plugins))
         ret = CLI.main(self)
         # Try to flush all outputs, see BZ: 1350402
         try:

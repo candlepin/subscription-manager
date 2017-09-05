@@ -51,7 +51,7 @@ ZYPPER_REPO_DIR = '/etc/rhsm/zypper.repos.d'
 
 
 def manage_repos_enabled():
-    manage_repos = True
+
     try:
         manage_repos = conf['rhsm'].get_int('manage_repos')
     except ValueError as e:
@@ -60,11 +60,108 @@ def manage_repos_enabled():
     except configparser.Error as e:
         log.exception(e)
         return True
-
-    if manage_repos is None:
-        return True
+    else:
+        if manage_repos is None:
+            return True
 
     return bool(manage_repos)
+
+
+class YumPluginManager(object):
+    """
+    Instance of this class is used for automatic enabling of yum plugins.
+    """
+
+    YUM_PLUGIN_DIR = '/etc/yum/pluginconf.d'
+
+    # List of yum plugins in YUM_PLUGIN_DIR which are automatically enabled
+    # during sub-man CLI/GUI start
+    YUM_PLUGINS = ['subscription-manager', 'product-id']
+
+    YUM_PLUGIN_ENABLED = 1
+    YUM_PLUGIN_DISABLED = 0
+
+    @staticmethod
+    def is_auto_enable_enabled():
+        """
+        Automatic enabling of yum plugins can be explicitly disabled in /etc/rhsm/rhsm.conf
+        Try to get this configuration.
+        :return: True, when auto_enable_yum_plugins is enabled. Otherwise False is returned.
+        """
+        try:
+            auto_enable_yum_plugins = conf['rhsm'].get_int('auto_enable_yum_plugins')
+        except ValueError as err:
+            log.exception(err)
+            auto_enable_yum_plugins = True
+        except configparser.Error as err:
+            log.exception(err)
+            auto_enable_yum_plugins = True
+        else:
+            if auto_enable_yum_plugins is None:
+                auto_enable_yum_plugins = True
+        return bool(auto_enable_yum_plugins)
+
+    @staticmethod
+    def warning_message(enabled_yum_plugins):
+        message = _('The yum plugins: %s were automatically enabled for the benefit of '
+                    'Red Hat Subscription Management. If not desired, use '
+                    '"subscription-manager config --rhsm.auto_enable_yum_plugins=0" to '
+                    'block this behavior.\n') % str(tuple(enabled_yum_plugins))
+        return message
+
+    @classmethod
+    def enable_yum_plugins(cls):
+        """
+        This function tries to enable yum plugins: subscription-manager and product-id.
+        It takes no action, when automatic enabling of yum plugins is disabled in rhsm.conf.
+        :return: It returns list of enabled plugins
+        """
+
+        # When user doesn't want to automatically enable yum plugins, then return empty list
+        if cls.is_auto_enable_enabled() is False:
+            log.info('The rhsm.auto_enable_yum_plugins is disabled. Skipping the enablement of yum plugins.')
+            return []
+
+        log.debug('The rhsm.auto_enable_yum_plugins is enabled')
+
+        # List of successfully enabled plugins
+        enabled_yum_plugins = []
+
+        # Go through the list of yum plugins and try to find configuration
+        # file of these plugins.
+        for yum_plugin_name in cls.YUM_PLUGINS:
+            yum_plugin_file_name = cls.YUM_PLUGIN_DIR + '/' + yum_plugin_name + '.conf'
+            yum_plugin_config = ConfigParser()
+            try:
+                result = yum_plugin_config.read(yum_plugin_file_name)
+            except Exception as err:
+                # Capture all errors during reading yum plugin conf file
+                # report them and skip this conf file
+                log.error(
+                    "Error during reading yum plugin config file '%s': %s. Skipping this file." %
+                    (yum_plugin_file_name, err)
+                )
+                continue
+            if len(result) == 0:
+                log.info('Configuration file of yum plugin: "%s" cannot be read' % yum_plugin_file_name)
+                continue
+            is_plugin_enabled = yum_plugin_config.getint('main', 'enabled')
+            if is_plugin_enabled == cls.YUM_PLUGIN_ENABLED:
+                log.debug('Yum plugin: "%s" already enabled. Nothing to do.' % yum_plugin_file_name)
+            elif is_plugin_enabled == cls.YUM_PLUGIN_DISABLED:
+                log.warn('Enabling yum plugin: "%s".' % yum_plugin_file_name)
+                # Change content of plugin configuration file and enable this plugin.
+                with open(yum_plugin_file_name, 'w') as cfg_file:
+                    yum_plugin_config.set('main', 'enabled', cls.YUM_PLUGIN_ENABLED)
+                    yum_plugin_config.write(cfg_file)
+                enabled_yum_plugins.append(yum_plugin_file_name)
+            else:
+                log.warn(
+                    "Invalid value ('%s') found in yum plugin configuration file '%s'. Skipping this file."
+                    % (is_plugin_enabled, yum_plugin_file_name)
+                )
+
+        return enabled_yum_plugins
 
 
 class RepoActionInvoker(BaseActionInvoker):
