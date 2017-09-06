@@ -912,6 +912,18 @@ class TidyWriter(object):
 
 class RepoFile(ConfigParser):
 
+    REPOFILE_HEADER = """#
+# Certificate-Based Repositories
+# Managed by (rhsm) subscription-manager
+#
+# *** This file is auto-generated.  Changes made here will be over-written. ***
+# *** Use "subscription-manager repo-override --help" if you wish to make changes. ***
+#
+# If this file is empty and this system is subscribed consider
+# a "yum repolist" to refresh available repos
+#
+"""
+
     def __init__(self, path='etc/yum.repos.d/', name='redhat.repo'):
         ConfigParser.__init__(self)
         # note PATH get's expanded with chroot info, etc
@@ -995,33 +1007,14 @@ class RepoFile(ConfigParser):
         if self.path_exists(self.path) or not self.manage_repos:
             return
         f = open(self.path, 'w')
-        s = []
-        s.append('#')
-        s.append('# Certificate-Based Repositories')
-        s.append('# Managed by (rhsm) subscription-manager')
-        s.append('#')
-        s.append('# *** This file is auto-generated.  Changes made here will be over-written. ***')
-        s.append('# *** Use "subscription-manager repo-override --help" if you wish to make changes. ***')
-        s.append('#')
-        s.append('# If this file is empty and this system is subscribed consider ')
-        s.append('# a "yum repolist" to refresh available repos')
-        s.append('#')
-        f.write('\n'.join(s))
+        f.write(self.REPOFILE_HEADER)
         f.close()
 
 
 class ZypperRepoFile(RepoFile):
 
     PATH = 'etc/rhsm/zypper.repos.d'
-
-    def __init__(self):
-        super(ZypperRepoFile, self).__init__(self.PATH)
-
-    def create(self):
-        if self.path_exists(self.path) or not self.manage_repos:
-            return
-        f = open(self.path, 'w')
-        f.write("""#
+    REPOFILE_HEADER = """#
 # Certificate-Based Repositories
 # Managed by (rhsm) subscription-manager
 #
@@ -1031,5 +1024,7 @@ class ZypperRepoFile(RepoFile):
 # If this file is empty and this system is subscribed consider
 # a "zypper lr" to refresh available repos
 #
-""")
-        f.close()
+"""
+
+    def __init__(self):
+        super(ZypperRepoFile, self).__init__(self.PATH)
