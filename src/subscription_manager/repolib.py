@@ -910,8 +910,44 @@ class TidyWriter(object):
             self.backing_file.write("\n")
 
 
-class RepoFile(ConfigParser):
+class RepoFileBase(object):
 
+    def __init__(self, path=None, name=None):
+        # note PATH get's expanded with chroot info, etc
+        path = path or self.PATH
+        name = name or self.NAME
+        self.path = Path.join(path, name)
+        self.repos_dir = Path.abs(path)
+        self.manage_repos = manage_repos_enabled()
+        # Simulate manage repos turned off if no yum.repos.d directory exists.
+        # This indicates the corresponding package manager is not installed so
+        # clearly no need for us to manage repos.
+        if not self.path_exists(self.repos_dir):
+            log.warn("%s does not exist, turning manage_repos off." %
+                    self.repos_dir)
+            self.manage_repos = False
+        else:
+            self.create()
+
+    # Easier than trying to mock/patch os.path.exists
+    def path_exists(self, path):
+        "wrapper around os.path.exists"
+        return os.path.exists(path)
+
+    def exists(self):
+        return self.path_exists(self.path)
+
+    def create(self):
+        if self.path_exists(self.path) or not self.manage_repos:
+            return
+        with open(self.path, 'w') as f:
+            f.write(self.REPOFILE_HEADER)
+
+
+class RepoFile(RepoFileBase, ConfigParser):
+
+    PATH = 'etc/yum.repos.d/'
+    NAME = 'redhat.repo'
     REPOFILE_HEADER = """#
 # Certificate-Based Repositories
 # Managed by (rhsm) subscription-manager
@@ -924,28 +960,9 @@ class RepoFile(ConfigParser):
 #
 """
 
-    def __init__(self, path='etc/yum.repos.d/', name='redhat.repo'):
+    def __init__(self, path=None, name=None):
         ConfigParser.__init__(self)
-        # note PATH get's expanded with chroot info, etc
-        self.path = Path.join(path, name)
-        self.repos_dir = Path.abs(path)
-        self.manage_repos = manage_repos_enabled()
-        # Simulate manage repos turned off if no yum.repos.d directory exists.
-        # This indicates yum is not installed so clearly no need for us to
-        # manage repos.
-        if not self.path_exists(self.repos_dir):
-            log.warn("%s does not exist, turning manage_repos off." %
-                    self.repos_dir)
-            self.manage_repos = False
-        self.create()
-
-    # Easier than trying to mock/patch os.path.exists
-    def path_exists(self, path):
-        "wrapper around os.path.exists"
-        return os.path.exists(path)
-
-    def exists(self):
-        return self.path_exists(self.path)
+        RepoFileBase.__init__(self, path, name)
 
     def read(self):
         ConfigParser.read(self, self.path)
@@ -1003,17 +1020,11 @@ class RepoFile(ConfigParser):
         if self.has_section(section):
             return Repo(section, self.items(section))
 
-    def create(self):
-        if self.path_exists(self.path) or not self.manage_repos:
-            return
-        f = open(self.path, 'w')
-        f.write(self.REPOFILE_HEADER)
-        f.close()
-
 
 class ZypperRepoFile(RepoFile):
 
     PATH = 'etc/rhsm/zypper.repos.d'
+    NAME = 'redhat.repo'
     REPOFILE_HEADER = """#
 # Certificate-Based Repositories
 # Managed by (rhsm) subscription-manager
@@ -1026,5 +1037,5 @@ class ZypperRepoFile(RepoFile):
 #
 """
 
-    def __init__(self):
-        super(ZypperRepoFile, self).__init__(self.PATH)
+    def __init__(self, path=None, name=None):
+        super(ZypperRepoFile, self).__init__(path, name)
