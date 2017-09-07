@@ -21,8 +21,10 @@ from __future__ import print_function, division, absolute_import
 from iniparse import RawConfigParser as ConfigParser
 import logging
 import os
+import re
 import string
 import socket
+from debian.deb822 import Deb822
 import subscription_manager.injection as inj
 from subscription_manager.cache import OverrideStatusCache, WrittenOverrideCache
 from subscription_manager import utils
@@ -47,8 +49,10 @@ log = logging.getLogger(__name__)
 
 conf = config.Config(initConfig())
 
-ALLOWED_CONTENT_TYPES = ["yum"]
+ALLOWED_CONTENT_TYPES = ["yum", "deb"]
 
+APT_REPO_DIR = '/etc/apt/sources.list.d'
+YUM_REPO_DIR = '/etc/yum.repos.d'
 ZYPPER_REPO_DIR = '/etc/rhsm/zypper.repos.d'
 
 
@@ -256,6 +260,11 @@ class RepoActionInvoker(BaseActionInvoker):
         if os.path.exists(yum_repo_file.path):
             os.unlink(yum_repo_file.path)
 
+        if os.path.exists(APT_REPO_DIR):
+            apt_repo_file = AptRepoFile()
+            if os.path.exists(apt_repo_file.path):
+                os.unlink(apt_repo_file.path)
+
         # if we have zypper repo, remove it too.
         if os.path.exists(ZYPPER_REPO_DIR):
             zypper_repo_file = ZypperRepoFile()
@@ -426,6 +435,9 @@ class RepoUpdateActionCommand(object):
         # Load the RepoFile from disk, this contains all our managed yum repo sections:
         yum_repo_file = YumRepoFile()
         server_value_repo_file = YumRepoFile('var/lib/rhsm/repo_server_val/')
+        apt_repo_file = None
+        if os.path.exists(APT_REPO_DIR):
+            apt_repo_file = AptRepoFile()
         zypper_repo_file = None
         if os.path.exists(ZYPPER_REPO_DIR):
             zypper_repo_file = ZypperRepoFile()
@@ -443,6 +455,8 @@ class RepoUpdateActionCommand(object):
 
         yum_repo_file.read()
         server_value_repo_file.read()
+        if apt_repo_file:
+            apt_repo_file.read()
         if zypper_repo_file:
             zypper_repo_file.read()
         valid = set()
@@ -466,6 +480,14 @@ class RepoUpdateActionCommand(object):
                 server_value_repo_file.update(server_value_repo)
                 self.report_update(existing)
 
+            if cont.content_type == 'deb' and apt_repo_file:
+                apt_cont = self._apt_content(cont)
+                existing = apt_repo_file.section(apt_cont.id)
+                if existing is None:
+                    apt_repo_file.add(apt_cont)
+                else:
+                    apt_repo_file.update(apt_cont)
+
             if zypper_repo_file:  # no reporting for zypper, already reported for yum
                 zypper_cont = self._zypper_content(cont)
                 existing = zypper_repo_file.section(zypper_cont.id)
@@ -479,12 +501,16 @@ class RepoUpdateActionCommand(object):
                 self.report_delete(section)
                 yum_repo_file.delete(section)
                 server_value_repo_file.delete(section)
+                if apt_repo_file:
+                    apt_repo_file.delete(section)
                 if zypper_repo_file:
                     zypper_repo_file.delete(section)
 
         # Write new RepoFile to disk:
         yum_repo_file.write()
         server_value_repo_file.write()
+        if apt_repo_file:
+            apt_repo_file.write()
         if zypper_repo_file:
             zypper_repo_file.write()
         if self.override_supported:
@@ -493,6 +519,25 @@ class RepoUpdateActionCommand(object):
             self.written_overrides.write_cache()
         log.info("repos updated: %s" % self.report)
         return self.report
+
+    def _apt_content(self, content):
+        # Luckily apt ignores all Fields it does not recognize
+        baseurl = content['baseurl']
+        url_res = re.match(r"^https?://(?P<location>.*)$", baseurl)
+        ent_res = re.match(r"^/etc/pki/entitlement/(?P<entitlement>.*).pem$", content['sslclientcert'])
+        if url_res and ent_res:
+            location = url_res.group('location')
+            entitlement = ent_res.group('entitlement')
+            baseurl = 'katello://{}@{}'.format(entitlement, location)
+
+        apt_cont = content.copy()
+        apt_cont['Types'] = 'deb'
+        apt_cont['URIs'] = baseurl
+        # TODO retrieve these informations from katello
+        apt_cont['Suites'] = 'default'
+        apt_cont['Components'] = 'all'
+        apt_cont['Trusted'] = 'yes'
+        return apt_cont
 
     def _zypper_content(self, content):
         zypper_cont = content.copy()
@@ -560,8 +605,11 @@ class RepoUpdateActionCommand(object):
     # is used by Openshift tooling.
     # See https://bugzilla.redhat.com/show_bug.cgi?id=1223038
     def matching_content(self):
-        return model.find_content(self.ent_source,
-                                  content_type="yum")
+        content = []
+        for content_type in ALLOWED_CONTENT_TYPES:
+            content += model.find_content(self.ent_source,
+                                          content_type=content_type)
+        return content
 
     def get_all_content(self, baseurl, ca_cert):
         matching_content = self.matching_content()
@@ -751,6 +799,8 @@ class Repo(dict):
         # we read them from the config.
         self._order = []
 
+        self.content_type = None
+
         for key, value in existing_values:
             # only set keys that have a non-empty value, to not clutter the
             # file.
@@ -778,6 +828,8 @@ class Repo(dict):
         the release version string.
         """
         repo = cls(content.label)
+
+        repo.content_type = content.content_type
 
         repo['name'] = content.name
 
@@ -1085,3 +1137,62 @@ class ZypperRepoFile(YumRepoFile):
 
     def __init__(self, path=None, name=None):
         super(ZypperRepoFile, self).__init__(path, name)
+
+
+class AptRepoFile(RepoFileBase):
+
+    PATH = 'etc/apt/sources.list.d'
+    NAME = 'rhsm.sources'
+    REPOFILE_HEADER = """#
+# Certificate-Based Repositories
+# Managed by (rhsm) subscription-manager
+#
+# *** This file is auto-generated.  Changes made here will be over-written. ***
+# *** Use "subscription-manager repo-override --help" if you wish to make changes. ***
+#
+# If this file is empty and this system is subscribed consider
+# a "apt-get update" to refresh available repos
+#
+# *** DO NOT EDIT THIS FILE ***
+#
+"""
+
+    def __init__(self, path=None, name=None):
+        super(AptRepoFile, self).__init__(path, name)
+        self.repos822 = []
+
+    def read(self):
+        with open(self.path, 'r') as f:
+            for repo822 in Deb822.iter_paragraphs(f, shared_storage=False):
+                self.repos822.append(repo822)
+
+    def write(self):
+        if not self.manage_repos:
+            log.debug("Skipping write due to manage_repos setting: %s" %
+                    self.path)
+            return
+        with open(self.path, 'w') as f:
+            f.write(self.REPOFILE_HEADER)
+            for repo822 in self.repos822:
+                f.write('\n')
+                repo822.dump(f)
+
+    def add(self, repo):
+        repo_dict = dict([(str(k), str(v)) for (k, v) in repo.items()])
+        repo_dict['id'] = repo.id
+        self.repos822.append(Deb822(repo_dict))
+
+    def delete(self, repo):
+        self.repos822[:] = [ repo822 for repo822 in self.repos822 if repo822['id'] != repo.id ]
+
+    def update(self, repo):
+        repo_dict = dict([(str(k), str(v)) for (k, v) in repo.items()])
+        repo_dict['id'] = repo.id
+        self.repos822[:] = [ repo822 if repo822['id'] != repo.id else Deb822(repo_dict) for repo822 in self.repos822 ]
+
+    def section(self, repo_id):
+        result = [ Repo(repo822) for repo822 in self.repos822 if repo822['id'] == repo_id ]
+        if len(result) > 0:
+            return result[0]
+        else:
+            return None
