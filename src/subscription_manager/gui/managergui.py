@@ -298,7 +298,7 @@ class MainWindow(widgets.SubmanBaseWidget):
             messageWindow.InfoDialog(
                 YumPluginManager.warning_message(enabled_yum_plugins),
                 self._get_window(),
-                _("Warning - subscribtion-manager plugins were automatically enabled")
+                _("Warning - subscription-manager plugins were automatically enabled")
             )
 
     def registered(self):
