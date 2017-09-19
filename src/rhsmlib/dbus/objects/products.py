@@ -52,7 +52,8 @@ class ProductsDBusObject(base_object.BaseObject):
         init_dep_injection()
 
         self.ensure_registered()
-        filter_string = dbus_utils.dbus_to_python(filter_string, str)
+        filter_string = dbus_utils.dbus_to_python(filter_string, expected_type=str)
+        proxy_options = dbus_utils.dbus_to_python(proxy_options, expected_type=dict)
 
         cp = self.build_uep(proxy_options, proxy_only=True)
 

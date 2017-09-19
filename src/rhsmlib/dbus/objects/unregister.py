@@ -23,7 +23,7 @@ system from Candlepin server.
 import dbus
 import logging
 
-from rhsmlib.dbus import constants, base_object, util
+from rhsmlib.dbus import constants, base_object, util, dbus_utils
 from rhsmlib.services.unregister import UnregisterService
 
 from subscription_manager.injectioninit import init_dep_injection
@@ -56,6 +56,7 @@ class UnregisterDBusObject(base_object.BaseObject):
         :param proxy_options: Definition of proxy settings
         :param sender: Not used argument
         """
+        proxy_options = dbus_utils.dbus_to_python(proxy_options, expected_type=dict)
 
         self.ensure_registered()
 

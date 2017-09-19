@@ -1674,20 +1674,6 @@ class RemoveCommand(CliCommand):
         elif not self.options.all and not self.options.pool_ids:
             system_exit(os.EX_USAGE, _("Error: This command requires that you specify one of --serial, --pool or --all."))
 
-    def _unbind_ids(self, unbind_method, consumer_uuid, ids):
-        success = []
-        failure = []
-        for id_ in ids:
-            try:
-                unbind_method(consumer_uuid, id_)
-                success.append(id_)
-            except connection.RestlibException as re:
-                if re.code == 410:
-                    system_exit(os.EX_SOFTWARE, re.msg)
-                failure.append(id_)
-                log.error(re)
-        return (success, failure)
-
     def _print_unbind_ids_result(self, success, failure, id_name):
         if success:
             if id_name == "pools":
@@ -1715,10 +1701,10 @@ class RemoveCommand(CliCommand):
         self._validate_options()
         return_code = 0
         if self.is_registered():
-            identity = inj.require(inj.IDENTITY)
+            ent_service = entitlement.EntitlementService(self.cp)
             try:
                 if self.options.all:
-                    total = self.cp.unbindAll(identity.uuid)
+                    total = ent_service.remove_all_entitlements()
                     # total will be None on older Candlepins that don't
                     # support returning the number of subscriptions unsubscribed from
                     if total is None:
@@ -1729,31 +1715,29 @@ class RemoveCommand(CliCommand):
                                         "%s subscriptions removed at the server.",
                                         count) % count)
                 else:
-                    removed_serials = []
+                    # Try to remove subscriptions defined by pool IDs first (remove --pool=...)
                     if self.options.pool_ids:
-                        pool_ids = unique_list_items(self.options.pool_ids)  # Don't allow duplicates
-                        pool_id_to_serials = self.entitlement_dir.list_serials_for_pool_ids(pool_ids)
-                        success, failure = self._unbind_ids(self.cp.unbindByPoolId, identity.uuid, pool_ids)
-                        self._print_unbind_ids_result(success, failure, "pools")
-                        if not success:
+                        removed_pools, unremoved_pools, removed_serials = ent_service.remove_entilements_by_pool_ids(self.options.pool_ids)
+                        if not removed_pools:
                             return_code = 1
-                        else:
-                            for pool_id in success:
-                                removed_serials.extend(pool_id_to_serials[pool_id])
-                    success = []
-                    failure = []  # Clear this list to make sure we don't display the pool ids as serial
+                        self._print_unbind_ids_result(removed_pools, unremoved_pools, "pools")
+                    else:
+                        removed_serials = []
+                    # Then try to remove subscriptions defined by serials (remove --serial=...)
+                    unremoved_serials = []
                     if self.options.serials:
                         serials = unique_list_items(self.options.serials)
-                        serials_to_remove = [serial for serial in serials if serial not in removed_serials]  # Don't remove serials already removed by a pool
-                        success, failure = self._unbind_ids(self.cp.unbindBySerial, identity.uuid, serials_to_remove)
-                        removed_serials.extend(success)
-                        if not success:
+                        # Don't remove serials already removed by a pool
+                        serials_to_remove = [serial for serial in serials if serial not in removed_serials]
+                        _removed_serials, unremoved_serials = ent_service.remove_entitlements_by_serials(serials_to_remove)
+                        removed_serials.extend(_removed_serials)
+                        if not _removed_serials:
                             return_code = 1
-                    self._print_unbind_ids_result(removed_serials, failure, "serial numbers")
-                self.entcertlib.update()
-            except connection.RestlibException as re:
-                log.error(re)
-                system_exit(os.EX_SOFTWARE, re.msg)
+                    # Print final result of removing pools
+                    self._print_unbind_ids_result(removed_serials, unremoved_serials, "serial numbers")
+            except connection.RestlibException as err:
+                log.error(err)
+                system_exit(os.EX_SOFTWARE, err.msg)
             except Exception as e:
                 handle_exception(_("Unable to perform remove due to the following exception: %s") % e, e)
         else:

@@ -12,6 +12,7 @@ from __future__ import print_function, division, absolute_import
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
+
 import collections
 import datetime
 import logging
@@ -20,9 +21,11 @@ import six
 from subscription_manager import injection as inj
 from subscription_manager.i18n import ugettext as _
 from subscription_manager import managerlib, utils
+from subscription_manager.entcertlib import EntCertActionInvoker
 
 from rhsm import certificate
 from rhsmlib.services import exceptions, products
+import rhsm.connection as connection
 
 log = logging.getLogger(__name__)
 
@@ -33,6 +36,7 @@ class EntitlementService(object):
         self.identity = inj.require(inj.IDENTITY)
         self.product_dir = inj.require(inj.PROD_DIR)
         self.entitlement_dir = inj.require(inj.ENT_DIR)
+        self.entcertlib = EntCertActionInvoker()
 
     def get_status(self, on_date=None):
         sorter = inj.require(inj.CERT_SORTER, on_date)
@@ -45,7 +49,7 @@ class EntitlementService(object):
             return {'status': 'Unknown', 'reasons': {}, 'valid': False}
 
     def get_pools(self, pool_subsets=None, matches=None, pool_only=None, match_installed=None,
-            no_overlap=None, service_level=None, show_all=None, on_date=None, **kwargs):
+                  no_overlap=None, service_level=None, show_all=None, on_date=None, **kwargs):
         # We accept a **kwargs argument so that the DBus object can pass whatever dictionary it receives
         # via keyword expansion.
         if kwargs:
@@ -107,6 +111,10 @@ class EntitlementService(object):
         pooltype_cache = inj.require(inj.POOLTYPE_CACHE)
 
         consumed_statuses = []
+        # FIXME: the cache of CertificateDirectory should be smart enough and refreshing
+        # should not be necessary. When new certificate is installed/deleted and rhsm-service
+        # is running, then list of certificate is not automatically refreshed ATM.
+        self.entitlement_dir.refresh()
         certs = self.entitlement_dir.list()
         cert_filter = utils.EntitlementCertificateFilter(filter_string=matches, service_level=service_level)
 
@@ -197,7 +205,7 @@ class EntitlementService(object):
         return consumed_statuses
 
     def get_available_pools(self, show_all=None, on_date=None, no_overlap=None,
-            match_installed=None, matches=None, service_level=None, **kwargs):
+                            match_installed=None, matches=None, service_level=None, **kwargs):
         available_pools = managerlib.get_available_entitlements(
             get_all=show_all,
             active_on=on_date,
@@ -219,24 +227,101 @@ class EntitlementService(object):
 
     def validate_options(self, options):
         if not set(['installed', 'consumed', 'available']).issuperset(options['pool_subsets']):
-            raise exceptions.ValidationError(_('Error: invalid listing type provided.  Only "installed", '
-                '"consumed", or "available" are allowed'))
+            raise exceptions.ValidationError(
+                _('Error: invalid listing type provided.  Only "installed", '
+                  '"consumed", or "available" are allowed')
+            )
         if options['show_all'] and 'available' not in options['pool_subsets']:
-            raise exceptions.ValidationError(_("Error: --all is only applicable with --available"))
+            raise exceptions.ValidationError(
+                _("Error: --all is only applicable with --available")
+            )
         elif options['on_date'] and 'available' not in options['pool_subsets']:
-            raise exceptions.ValidationError(_("Error: --ondate is only applicable with --available"))
+            raise exceptions.ValidationError(
+                _("Error: --ondate is only applicable with --available")
+            )
         elif options['service_level'] is not None \
                 and not set(['consumed', 'available']).intersection(options['pool_subsets']):
-            raise exceptions.ValidationError(_("Error: --servicelevel is only applicable with --available "
-                "or --consumed"))
+            raise exceptions.ValidationError(
+                _("Error: --servicelevel is only applicable with --available or --consumed")
+            )
         elif options['match_installed'] and 'available' not in options['pool_subsets']:
-            raise exceptions.ValidationError(_("Error: --match-installed is only applicable with "
-                "--available"))
+            raise exceptions.ValidationError(
+                _("Error: --match-installed is only applicable with --available")
+            )
         elif options['no_overlap'] and 'available' not in options['pool_subsets']:
-            raise exceptions.ValidationError(_("Error: --no-overlap is only applicable with --available"))
+            raise exceptions.ValidationError(
+                _("Error: --no-overlap is only applicable with --available")
+            )
         elif options['pool_only'] \
                 and not set(['consumed', 'available']).intersection(options['pool_subsets']):
-            raise exceptions.ValidationError(_("Error: --pool-only is only applicable with --available "
-                "and/or --consumed"))
+            raise exceptions.ValidationError(
+                _("Error: --pool-only is only applicable with --available and/or --consumed")
+            )
         elif not self.identity.is_valid() and 'available' in options['pool_subsets']:
             raise exceptions.ValidationError(_("Error: this system is not registered"))
+
+    def _unbind_ids(self, unbind_method, consumer_uuid, ids):
+        """
+        Method for unbinding entitlements
+        :param unbind_method: unbindByPoolId or unbindBySerial
+        :param consumer_uuid: UUID of consumer
+        :param ids: List of serials or pool_ids
+        :return: Tuple of two lists containing unbinded and not-unbinded subscriptions
+        """
+        success = []
+        failure = []
+        for id_ in ids:
+            try:
+                unbind_method(consumer_uuid, id_)
+                success.append(id_)
+            except connection.RestlibException as re:
+                if re.code == 410:
+                    raise
+                failure.append(id_)
+                log.error(re)
+        return success, failure
+
+    def remove_all_entitlements(self):
+        """
+        Try to remove all entilements
+        :return: Result of REST API call
+        """
+
+        response = self.cp.unbindAll(self.identity.uuid)
+        self.entcertlib.update()
+
+        return response
+
+    def remove_entilements_by_pool_ids(self, pool_ids):
+        """
+        Try to remove entitlements by pool IDs
+        :param pool_ids: List of pool IDs
+        :return: List of serial numbers of removed subscriptions
+        """
+
+        removed_serials = []
+        _pool_ids = utils.unique_list_items(pool_ids)  # Don't allow duplicates
+        # FIXME: the cache of CertificateDirectory should be smart enough and refreshing
+        # should not be necessary. I vote for i-notify to be used there somehow.
+        self.entitlement_dir.refresh()
+        pool_id_to_serials = self.entitlement_dir.list_serials_for_pool_ids(_pool_ids)
+        removed_pools, unremoved_pools = self._unbind_ids(self.cp.unbindByPoolId, self.identity.uuid, _pool_ids)
+        if removed_pools:
+            for pool_id in removed_pools:
+                removed_serials.extend(pool_id_to_serials[pool_id])
+        self.entcertlib.update()
+
+        return removed_pools, unremoved_pools, removed_serials
+
+    def remove_entitlements_by_serials(self, serials):
+        """
+        Try to remove pools by Serial numbers
+        :param serials: List of serial numbers
+        :return: List of serial numbers of already removed subscriptions
+        """
+
+        _serials = utils.unique_list_items(serials)  # Don't allow duplicates
+        removed_serials, unremoved_serials = self._unbind_ids(self.cp.unbindBySerial, self.identity.uuid, _serials)
+        self.entcertlib.update()
+
+        return removed_serials, unremoved_serials

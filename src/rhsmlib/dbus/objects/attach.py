@@ -68,8 +68,9 @@ class AttachDBusObject(base_object.BaseObject):
     @util.dbus_handle_exceptions
     def PoolAttach(self, pools, quantity, proxy_options, sender=None):
         self.ensure_registered()
-        pools = dbus_utils.dbus_to_python(pools, list)
-        quantity = dbus_utils.dbus_to_python(quantity, int)
+        pools = dbus_utils.dbus_to_python(pools, expected_type=list)
+        quantity = dbus_utils.dbus_to_python(quantity, expected_type=int)
+        proxy_options = dbus_utils.dbus_to_python(proxy_options, expected_type=dict)
 
         if quantity < 1:
             raise dbus.DBusException("Quantity must be a positive number.")
