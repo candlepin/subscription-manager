@@ -29,7 +29,7 @@ from .stubs import StubProduct, StubEntitlementCertificate, \
     StubProductCertificate
 from subscription_manager.certdirectory import Path, EntitlementDirectory, \
     ProductDirectory, ProductCertificateDirectory, Directory
-from subscription_manager.repolib import RepoFile
+from subscription_manager.repolib import YumRepoFile
 from subscription_manager.productid import ProductDatabase
 
 
@@ -72,7 +72,7 @@ class PathTests(unittest.TestCase):
         # Fake that the redhat.repo exists:
 
         Path.ROOT = '/mnt/sysimage'
-        rf = RepoFile()
+        rf = YumRepoFile()
         self.assertEqual("/mnt/sysimage/etc/yum.repos.d/redhat.repo", rf.path)
 
     def test_product_database(self):

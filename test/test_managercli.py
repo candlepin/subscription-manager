@@ -889,7 +889,7 @@ class TestReposCommand(TestCliCommand):
                 match_dict_list)
         self.assertTrue(repolib_instance.update.called)
 
-    @patch("subscription_manager.managercli.RepoFile")
+    @patch("subscription_manager.managercli.YumRepoFile")
     def test_set_repo_status_when_disconnected(self, mock_repofile):
         self._inject_mock_invalid_consumer()
         mock_repofile_inst = mock_repofile.return_value

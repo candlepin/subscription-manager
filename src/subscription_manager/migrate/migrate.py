@@ -776,7 +776,7 @@ class MigrationEngine(object):
         repolib.RepoActionInvoker().update()
 
         # read in the redhat.repo file
-        repofile = repolib.RepoFile()
+        repofile = repolib.YumRepoFile()
         repofile.read()
 
         # enable any extra channels we are using and write out redhat.repo
