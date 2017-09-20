@@ -334,7 +334,7 @@ class ProductManager(object):
 
         # Read the redhat.repo file so we can check if any of our
         # repos have been disabled by --disablerepo or another plugin.
-        repo_file = repolib.RepoFile()
+        repo_file = repolib.YumRepoFile()
         repo_file.read()
 
         enabled_in_redhat_repo = []

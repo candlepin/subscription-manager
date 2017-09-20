@@ -34,7 +34,7 @@ class RepoApiTest(SubManFixture):
         self.invoker = invoker_patcher.start()
         self.addCleanup(invoker_patcher.stop)
 
-        repo_file_patcher = patch("subscription_manager.api.repos.RepoFile", autospec=True)
+        repo_file_patcher = patch("subscription_manager.api.repos.YumRepoFile", autospec=True)
         self.repo_file = repo_file_patcher.start()
         self.addCleanup(repo_file_patcher.stop)
 

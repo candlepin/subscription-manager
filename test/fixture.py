@@ -168,7 +168,7 @@ class SubManFixture(unittest.TestCase):
         self.mock_calc.calculate.return_value = None
 
         # Avoid trying to read real /etc/yum.repos.d/redhat.repo
-        self.mock_repofile_path_exists_patcher = patch('subscription_manager.repolib.RepoFile.path_exists')
+        self.mock_repofile_path_exists_patcher = patch('subscription_manager.repolib.YumRepoFile.path_exists')
         mock_repofile_path_exists = self.mock_repofile_path_exists_patcher.start()
         mock_repofile_path_exists.return_value = True
 

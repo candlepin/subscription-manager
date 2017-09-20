@@ -187,12 +187,12 @@ class RepoActionInvoker(BaseActionInvoker):
 
         current = set()
         # Add the current repo data
-        repo_file = RepoFile()
-        repo_file.read()
-        server_value_repo_file = RepoFile('var/lib/rhsm/repo_server_val/')
+        yum_repo_file = YumRepoFile()
+        yum_repo_file.read()
+        server_value_repo_file = YumRepoFile('var/lib/rhsm/repo_server_val/')
         server_value_repo_file.read()
         for repo in repos:
-            existing = repo_file.section(repo.id)
+            existing = yum_repo_file.section(repo.id)
             server_value_repo = server_value_repo_file.section(repo.id)
             # we need a repo in the server val file to match any in
             # the main repo definition file
@@ -208,14 +208,14 @@ class RepoActionInvoker(BaseActionInvoker):
         return current
 
     def get_repo_file(self):
-        repo_file = RepoFile()
-        return repo_file.path
+        yum_repo_file = YumRepoFile()
+        return yum_repo_file.path
 
     @classmethod
     def delete_repo_file(cls):
-        repo_file = RepoFile()
-        if os.path.exists(repo_file.path):
-            os.unlink(repo_file.path)
+        yum_repo_file = YumRepoFile()
+        if os.path.exists(yum_repo_file.path):
+            os.unlink(yum_repo_file.path)
 
         # if we have zypper repo, remove it too.
         if os.path.exists(ZYPPER_REPO_DIR):
@@ -384,8 +384,8 @@ class RepoUpdateActionCommand(object):
 
     def perform(self):
         # Load the RepoFile from disk, this contains all our managed yum repo sections:
-        repo_file = RepoFile()
-        server_value_repo_file = RepoFile('var/lib/rhsm/repo_server_val/')
+        yum_repo_file = YumRepoFile()
+        server_value_repo_file = YumRepoFile('var/lib/rhsm/repo_server_val/')
         zypper_repo_file = None
         if os.path.exists(ZYPPER_REPO_DIR):
             zypper_repo_file = ZypperRepoFile()
@@ -394,14 +394,14 @@ class RepoUpdateActionCommand(object):
         # redhat.repo file:
         if not self.manage_repos:
             log.debug("manage_repos is 0, skipping generation of: %s" %
-                    repo_file.path)
-            if repo_file.exists():
+                    yum_repo_file.path)
+            if yum_repo_file.exists():
                 log.info("Removing %s due to manage_repos configuration." %
-                        repo_file.path)
+                        yum_repo_file.path)
                 RepoActionInvoker.delete_repo_file()
             return 0
 
-        repo_file.read()
+        yum_repo_file.read()
         server_value_repo_file.read()
         if zypper_repo_file:
             zypper_repo_file.read()
@@ -411,18 +411,18 @@ class RepoUpdateActionCommand(object):
         # in the RepoFile as appropriate:
         for cont in self.get_unique_content():
             valid.add(cont.id)
-            existing = repo_file.section(cont.id)
+            existing = yum_repo_file.section(cont.id)
             server_value_repo = server_value_repo_file.section(cont.id)
             if server_value_repo is None:
                 server_value_repo = cont
                 server_value_repo_file.add(cont)
             if existing is None:
-                repo_file.add(cont)
+                yum_repo_file.add(cont)
                 self.report_add(cont)
             else:
                 # Updates the existing repo with new content
                 self.update_repo(existing, cont, server_value_repo)
-                repo_file.update(existing)
+                yum_repo_file.update(existing)
                 server_value_repo_file.update(server_value_repo)
                 self.report_update(existing)
 
@@ -434,16 +434,16 @@ class RepoUpdateActionCommand(object):
                 else:
                     zypper_repo_file.update(zypper_cont)
 
-        for section in repo_file.sections():
+        for section in yum_repo_file.sections():
             if section not in valid:
                 self.report_delete(section)
-                repo_file.delete(section)
+                yum_repo_file.delete(section)
                 server_value_repo_file.delete(section)
                 if zypper_repo_file:
                     zypper_repo_file.delete(section)
 
         # Write new RepoFile to disk:
-        repo_file.write()
+        yum_repo_file.write()
         server_value_repo_file.write()
         if zypper_repo_file:
             zypper_repo_file.write()
@@ -910,8 +910,44 @@ class TidyWriter(object):
             self.backing_file.write("\n")
 
 
-class RepoFile(ConfigParser):
+class RepoFileBase(object):
 
+    def __init__(self, path=None, name=None):
+        # note PATH get's expanded with chroot info, etc
+        path = path or self.PATH
+        name = name or self.NAME
+        self.path = Path.join(path, name)
+        self.repos_dir = Path.abs(path)
+        self.manage_repos = manage_repos_enabled()
+        # Simulate manage repos turned off if no yum.repos.d directory exists.
+        # This indicates the corresponding package manager is not installed so
+        # clearly no need for us to manage repos.
+        if not self.path_exists(self.repos_dir):
+            log.warn("%s does not exist, turning manage_repos off." %
+                    self.repos_dir)
+            self.manage_repos = False
+        else:
+            self.create()
+
+    # Easier than trying to mock/patch os.path.exists
+    def path_exists(self, path):
+        "wrapper around os.path.exists"
+        return os.path.exists(path)
+
+    def exists(self):
+        return self.path_exists(self.path)
+
+    def create(self):
+        if self.path_exists(self.path) or not self.manage_repos:
+            return
+        with open(self.path, 'w') as f:
+            f.write(self.REPOFILE_HEADER)
+
+
+class YumRepoFile(RepoFileBase, ConfigParser):
+
+    PATH = 'etc/yum.repos.d/'
+    NAME = 'redhat.repo'
     REPOFILE_HEADER = """#
 # Certificate-Based Repositories
 # Managed by (rhsm) subscription-manager
@@ -924,28 +960,9 @@ class RepoFile(ConfigParser):
 #
 """
 
-    def __init__(self, path='etc/yum.repos.d/', name='redhat.repo'):
+    def __init__(self, path=None, name=None):
         ConfigParser.__init__(self)
-        # note PATH get's expanded with chroot info, etc
-        self.path = Path.join(path, name)
-        self.repos_dir = Path.abs(path)
-        self.manage_repos = manage_repos_enabled()
-        # Simulate manage repos turned off if no yum.repos.d directory exists.
-        # This indicates yum is not installed so clearly no need for us to
-        # manage repos.
-        if not self.path_exists(self.repos_dir):
-            log.warn("%s does not exist, turning manage_repos off." %
-                    self.repos_dir)
-            self.manage_repos = False
-        self.create()
-
-    # Easier than trying to mock/patch os.path.exists
-    def path_exists(self, path):
-        "wrapper around os.path.exists"
-        return os.path.exists(path)
-
-    def exists(self):
-        return self.path_exists(self.path)
+        RepoFileBase.__init__(self, path, name)
 
     def read(self):
         ConfigParser.read(self, self.path)
@@ -1003,17 +1020,11 @@ class RepoFile(ConfigParser):
         if self.has_section(section):
             return Repo(section, self.items(section))
 
-    def create(self):
-        if self.path_exists(self.path) or not self.manage_repos:
-            return
-        f = open(self.path, 'w')
-        f.write(self.REPOFILE_HEADER)
-        f.close()
 
-
-class ZypperRepoFile(RepoFile):
+class ZypperRepoFile(YumRepoFile):
 
     PATH = 'etc/rhsm/zypper.repos.d'
+    NAME = 'redhat.repo'
     REPOFILE_HEADER = """#
 # Certificate-Based Repositories
 # Managed by (rhsm) subscription-manager
@@ -1026,5 +1037,5 @@ class ZypperRepoFile(RepoFile):
 #
 """
 
-    def __init__(self):
-        super(ZypperRepoFile, self).__init__(self.PATH)
+    def __init__(self, path=None, name=None):
+        super(ZypperRepoFile, self).__init__(path, name)

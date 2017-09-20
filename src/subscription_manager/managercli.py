@@ -53,7 +53,7 @@ from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
 from subscription_manager.managerlib import valid_quantity
 from subscription_manager.release import ReleaseBackend, MultipleReleaseProductsError
-from subscription_manager.repolib import RepoActionInvoker, RepoFile, YumPluginManager, manage_repos_enabled
+from subscription_manager.repolib import RepoActionInvoker, YumRepoFile, YumPluginManager, manage_repos_enabled
 from subscription_manager.utils import parse_server_info, \
         parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
@@ -2104,7 +2104,7 @@ class ReposCommand(CliCommand):
                 for repo in changed_repos:
                     repo['enabled'] = status
                 if changed_repos:
-                    repo_file = RepoFile()
+                    repo_file = YumRepoFile()
                     repo_file.read()
                     for repo in changed_repos:
                         repo_file.update(repo)

@@ -17,7 +17,7 @@ import fnmatch
 import subscription_manager.injection as inj
 
 from subscription_manager.api import request_injection
-from subscription_manager.repolib import RepoActionInvoker, RepoFile
+from subscription_manager.repolib import RepoActionInvoker, YumRepoFile
 
 
 @request_injection
@@ -54,7 +54,7 @@ def _set_enable_for_yum_repositories(setting, *repo_ids):
         for repo in repos_to_change:
             repo['enabled'] = setting
 
-        repo_file = RepoFile()
+        repo_file = YumRepoFile()
         repo_file.read()
         for repo in repos_to_change:
             repo_file.update(repo)

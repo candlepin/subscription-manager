@@ -1212,7 +1212,7 @@ class TestMigration(SubManFixture):
         self.assertEqual(service_level, "Premium")
 
     @patch("subscription_manager.repolib.RepoActionInvoker")
-    @patch("subscription_manager.repolib.RepoFile")
+    @patch("subscription_manager.repolib.YumRepoFile")
     def test_enable_extra_channels(self, mock_repofile, mock_repolib):
         mrf = mock_repofile.return_value
         subscribed_channels = [
