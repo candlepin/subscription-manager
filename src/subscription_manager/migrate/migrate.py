@@ -993,6 +993,12 @@ def main(args=None, five_to_six_script=False):
     set_defaults(options, five_to_six_script)
     validate_options(options)
     MigrationEngine(options).main()
+
+    # Try to enable yum plugins: subscription-manager and product-id
+    enabled_yum_plugins = repolib.YumPluginManager.enable_yum_plugins()
+    if len(enabled_yum_plugins) > 0:
+        print(_('WARNING') + '\n\n' + repolib.YumPluginManager.warning_message(enabled_yum_plugins))
+
     try:
         sys.stdout.flush()
         sys.stderr.flush()
