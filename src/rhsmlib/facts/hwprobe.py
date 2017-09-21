@@ -565,6 +565,40 @@ class HardwareCollector(collector.FactsCollector):
 
         return lscpu_info
 
+    def _get_ipv4_addr_list(self):
+        """
+        When DNS record is not configured properly for the system, then try to
+        get list of all IPv4 addresses from all devices. Return 127.0.0.1 only
+        in situation when there is only loopback device.
+        :return: list of IPv4 addresses
+        """
+        addr_list = []
+        interface_info = ethtool.get_interfaces_info(ethtool.get_devices())
+        for info in interface_info:
+            for addr in info.get_ipv4_addresses():
+                if addr.address != '127.0.0.1':
+                    addr_list.append(addr.address)
+        if len(addr_list) == 0:
+            addr_list = ['127.0.0.1']
+        return addr_list
+
+    def _get_ipv6_addr_list(self):
+        """
+        When DNS record is not configured properly for the system, then try to
+        get list of all IPv6 addresses from all devices. Return ::1 only
+        in situation when there no device with valid global IPv6 address.
+        :return: list of IPv6 addresses
+        """
+        addr_list = []
+        interface_info = ethtool.get_interfaces_info(ethtool.get_devices())
+        for info in interface_info:
+            for addr in info.get_ipv6_addresses():
+                if addr.scope == 'universe':
+                    addr_list.append(addr.address)
+        if len(addr_list) == 0:
+            addr_list = ['::1']
+        return addr_list
+
     def get_network_info(self):
         """
         Try to get information about network: hostname, FQDN, IPv4, IPv6 addresses
@@ -603,15 +637,17 @@ class HardwareCollector(collector.FactsCollector):
                 info = socket.getaddrinfo(hostname, None, socket.AF_INET, socket.SOCK_STREAM)
                 ip_list = set([x[4][0] for x in info])
                 net_info['network.ipv4_address'] = ', '.join(ip_list)
-            except Exception:
-                net_info['network.ipv4_address'] = "127.0.0.1"
+            except Exception as err:
+                log.error("Error during resolving IPv4 address of hostname: %s, %s" % (hostname, err))
+                net_info['network.ipv4_address'] = ', '.join(self._get_ipv4_addr_list())
 
             try:
                 info = socket.getaddrinfo(hostname, None, socket.AF_INET6, socket.SOCK_STREAM)
                 ip_list = set([x[4][0] for x in info])
                 net_info['network.ipv6_address'] = ', '.join(ip_list)
-            except Exception:
-                net_info['network.ipv6_address'] = "::1"
+            except Exception as err:
+                log.error("Error during resolving IPv6 address of hostname: %s, %s" % (hostname, err))
+                net_info['network.ipv6_address'] = ', '.join(self._get_ipv6_addr_list())
 
         except Exception as err:
             log.warn('Error reading networking information: %s', err)
@@ -629,7 +665,6 @@ class HardwareCollector(collector.FactsCollector):
         try:
             interfaces_info = ethtool.get_interfaces_info(ethtool.get_devices())
             for info in interfaces_info:
-                master = None
                 mac_address = info.mac_address
                 device = info.device
                 # Omit mac addresses for sit and lo device types. See BZ838123
@@ -704,7 +739,7 @@ class HardwareCollector(collector.FactsCollector):
                 # "permanent" hw address are for this slave
                 try:
                     master = os.readlink('/sys/class/net/%s/master' % info.device)
-                #FIXME
+                # FIXME
                 except Exception:
                     master = None
 
