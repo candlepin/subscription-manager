@@ -19,6 +19,7 @@ external applications.
 All reasonable efforts will be made to maintain compatibility.
 """
 from functools import wraps
+from subscription_manager import logutil
 
 injected = False
 
@@ -31,7 +32,6 @@ def request_injection(func):
     def func_wrapper(*args, **kwargs):
         global injected
         if not injected:
-            from subscription_manager import logutil
             logutil.init_logger()
 
             from subscription_manager.injectioninit import init_dep_injection

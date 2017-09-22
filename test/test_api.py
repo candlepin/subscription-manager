@@ -42,6 +42,10 @@ class RepoApiTest(SubManFixture):
         self.stub_uep = uep_patcher.start()
         self.addCleanup(uep_patcher.stop)
 
+        logging_patcher = patch("subscription_manager.api.logutil")
+        logging_patcher.start()
+        self.addCleanup(logging_patcher.stop)
+
     def test_disable_repo(self):
         repo_settings = {
             'enabled': '1',
