@@ -89,7 +89,11 @@ var plugins = [
             'NODE_ENV': JSON.stringify(production ? 'production' : 'development')
         }
     }),
-    new copy(info.files)
+    new copy(info.files),
+    new webpack.ProvidePlugin({
+        '$': 'jquery',
+        'jQuery': 'jquery',
+    }),
 ];
 
 if (!production) {
@@ -147,11 +151,6 @@ module.exports = {
     externals: externals,
     output: output,
     devtool: "source-map",
-    resolve: {
-        alias: {
-            "react$": path.resolve(nodedir, "react-lite/dist/react-lite.js")
-        }
-    },
     module: {
         rules: [
             {

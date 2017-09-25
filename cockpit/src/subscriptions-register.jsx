@@ -21,22 +21,7 @@ var cockpit = require("cockpit");
 var _ = cockpit.gettext;
 
 var React = require("react");
-
-/* TODO port from cockpit or replace */
-var Select = React.createClass({
-    render: function() {
-        return (
-            <select>{this.props.children}</select>
-        );
-    }
-});
-var SelectEntry = React.createClass({
-    render: function() {
-        return (
-            <option>{this.props.children}</option>
-        );
-    }
-});
+import Select from "./Select/Select.jsx";
 
 function defaultRegisterDialogSettings() {
     return {
@@ -74,7 +59,7 @@ var PatternDialogBody = React.createClass({
                     <tbody>
                         <tr>
                             <td>
-                                <label className="control-label" for="subscription-proxy-server">
+                                <label className="control-label" htmlFor="subscription-proxy-server">
                                     {_("Server")}
                                 </label>
                             </td>
@@ -86,7 +71,7 @@ var PatternDialogBody = React.createClass({
 
                         <tr>
                             <td>
-                                <label className="control-label" for="subscription-proxy-user">
+                                <label className="control-label" htmlFor="subscription-proxy-user">
                                     {_("User")}
                                 </label>
                             </td>
@@ -98,7 +83,7 @@ var PatternDialogBody = React.createClass({
 
                         <tr>
                             <td>
-                                <label className="control-label" for="subscription-proxy-password">
+                                <label className="control-label" htmlFor="subscription-proxy-password">
                                     {_("Password")}
                                 </label>
                             </td>
@@ -118,84 +103,86 @@ var PatternDialogBody = React.createClass({
         return (
             <div className="modal-body">
                 <table className="form-table-ct">
-                    <tr>
-                        <td className="top">
-                            <label className="control-label" for="subscription-register-url">
-                                {_("URL")}
-                            </label>
-                        </td>
-                        <td>
-                            <Select key='urlSource' onChange={ this.props.onChange.bind(this, 'url') }
-                                    id="subscription-register-url" initial="default">
-                                <SelectEntry data='default' key='default'>{ urlEntries['default'] }</SelectEntry>
-                                <SelectEntry data='custom' key='custom'>{ urlEntries['custom'] }</SelectEntry>
-                            </Select>
-                            {customURL}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="top">
-                            <label className="control-label">
-                                {_("Proxy")}
-                            </label>
-                        </td>
-                        <td>
-                            <label>
-                                <input id="subscription-proxy-use" type="checkbox" checked={this.props.proxy}
-                                       onChange={ this.props.onChange.bind(this, 'proxy') }/>
-                                {_("Use proxy server")}
-                            </label>
-                            {proxy}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="top ">
-                            <label className="control-label" for="subscription-register-username">
-                                {_("Login")}
-                            </label>
-                        </td>
-                        <td>
-                            <input id="subscription-register-username" className="form-control" type="text"
-                                   value={this.props.user}
-                                   onChange={this.props.onChange.bind(this, 'user')}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="top">
-                            <label className="control-label" for="subscription-register-password">
-                                {_("Password")}
-                            </label>
-                        </td>
-                        <td>
-                            <input id="subscription-register-password" className="form-control" type="password"
-                                   value={this.props.password}
-                                   onChange={this.props.onChange.bind(this, 'password')}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="top">
-                            <label className="control-label" for="subscription-register-key">
-                                {_("Activation Key")}
-                            </label>
-                        </td>
-                        <td>
-                            <input id="subscription-register-key" className="form-control" type="text"
-                                   placeholder="key_one,key_two" value={this.props.activationKeys}
-                                   onChange={this.props.onChange.bind(this, 'activationKeys')}/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="top">
-                            <label className="control-label" for="subscription-register-org">
-                                {_("Organization")}
-                            </label>
-                        </td>
-                        <td>
-                            <input id="subscription-register-org" className="form-control" type="text"
-                                   value={this.props.org}
-                                   onChange={this.props.onChange.bind(this, 'org')}/>
-                        </td>
-                    </tr>
+                    <tbody>
+                        <tr>
+                            <td className="top">
+                                <label className="control-label" htmlFor="subscription-register-url">
+                                    {_("URL")}
+                                </label>
+                            </td>
+                            <td>
+                                <Select key='urlSource' onChange={ this.props.onChange.bind(this, 'url') }
+                                        id="subscription-register-url">
+                                    <option value="default">{ urlEntries['default'] }</option>
+                                    <option value="custom">{ urlEntries['custom'] }</option>
+                                </Select>
+                                {customURL}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="top">
+                                <label className="control-label">
+                                    {_("Proxy")}
+                                </label>
+                            </td>
+                            <td>
+                                <label>
+                                    <input id="subscription-proxy-use" type="checkbox" checked={this.props.proxy}
+                                           onChange={ this.props.onChange.bind(this, 'proxy') }/>
+                                    {_("Use proxy server")}
+                                </label>
+                                {proxy}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="top ">
+                                <label className="control-label" htmlFor="subscription-register-username">
+                                    {_("Login")}
+                                </label>
+                            </td>
+                            <td>
+                                <input id="subscription-register-username" className="form-control" type="text"
+                                       value={this.props.user}
+                                       onChange={this.props.onChange.bind(this, 'user')}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="top">
+                                <label className="control-label" htmlFor="subscription-register-password">
+                                    {_("Password")}
+                                </label>
+                            </td>
+                            <td>
+                                <input id="subscription-register-password" className="form-control" type="password"
+                                       value={this.props.password}
+                                       onChange={this.props.onChange.bind(this, 'password')}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="top">
+                                <label className="control-label" htmlFor="subscription-register-key">
+                                    {_("Activation Key")}
+                                </label>
+                            </td>
+                            <td>
+                                <input id="subscription-register-key" className="form-control" type="text"
+                                       placeholder="key_one,key_two" value={this.props.activationKeys}
+                                       onChange={this.props.onChange.bind(this, 'activationKeys')}/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="top">
+                                <label className="control-label" htmlFor="subscription-register-org">
+                                    {_("Organization")}
+                                </label>
+                            </td>
+                            <td>
+                                <input id="subscription-register-org" className="form-control" type="text"
+                                       value={this.props.org}
+                                       onChange={this.props.onChange.bind(this, 'org')}/>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         );
