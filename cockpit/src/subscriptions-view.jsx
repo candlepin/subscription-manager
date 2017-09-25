@@ -157,7 +157,7 @@ var SubscriptionStatus = React.createClass({
         var errorMessage;
         if (this.props.error) {
             errorMessage = (
-                <DismissableError dismissError={this.props.dismissError}>{this.props.error}</DismissableError>
+                <DismissableError dismissError={this.props.dismissError}>{String(this.props.error)}</DismissableError>
             );
         }
 
