@@ -19,7 +19,6 @@ from __future__ import print_function, division, absolute_import
 #
 
 from iniparse import RawConfigParser as ConfigParser
-import iniparse
 import logging
 import os
 import string
