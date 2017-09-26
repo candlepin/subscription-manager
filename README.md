@@ -9,30 +9,30 @@ from the  Candlepin.
  - https://fedorahosted.org/subscription-manager/
  - https://github.com/candlepin/subscription-Manager
 
-Cockpit
--------
-Cockpit development requires [yarn](https://yarnpkg.com/) to be installed.
-The easiest way to set this up on Fedora is:
-
-```bash
-sudo dnf install -y npm
-sudo npm install -g yarn
-```
-
-See `cockpit/README.md` for more information.
-
 Vagrant
 -------
 
 `vagrant up` can be used to spin up various VMs set up for development work.
 These VMs are all configured using the included ansible role "subman-devel".
-The `PYTHONPATH` and `PATH` inside these environments is modified so that
+The python paths and `PATH` inside these environments are modified so that
 running `subscription-manager` or `subscription-manager-gui` will use
 scripts and modules from the source code.
 
+Cockpit can be accessed at port 9090 on the VM, for example:
+https://centos7.subman.example.com:9090/
+
+**NOTE**: Use of hostnames per above requires the vagrant hostmanager plugin.
+Cockpit credentials are the same as user credientials;
+i.e. User name: `vagrant` password: `vagrant`
+
+There are two links added in the cockpit interface: one for the
+subscription-manager cockpit plugin itself, and then one which runs integration
+tests for the D-Bus interface.
+
 Currently, the source is set up as a vagrant shared folder using rsync. This
 means that it is necessary to use `vagrant rsync` to sync changes with the
-host if desired.
+host if desired. `vagrant rsync-auto` can be used to monitor the directory for
+changes and then sync when appropriate.
 
 The ansible role that provisions the VMs tries to find the IP address of
 candlepin.example.com, so if the candlepin vagrant image is started first,
@@ -72,6 +72,27 @@ export SUBMAN_RHSM_PASSWORD=password
 Note, however, since the registration is necessary to download RPMs to set up
 the VM for development, registering against a local candlepin might not be
 particularly useful (at least not for initial provisioning).
+
+D-Bus Development
+-----------------
+In a vagrant VM, the `com.redhat.RHSM1` service along with related files 
+(scripts, policy files, etc.) are linked to those from the source. However, it
+is necessary to restart the D-Bus service if edits are made while it is running
+with, for example, `sudo systemctl restart rhsm`.
+
+Cockpit
+-------
+
+The easiest way to get started with cockpit plugin development is Vagrant.
+Inside the VM, from the directory `/vagrant/cockpit`, the following commands
+can be used:
+
+ - `yarn install` - fetch dependencies, and update the lockfile if necessary.
+ - `npm run build` - do a build of the JavaScript source.
+ - `npm run watch` - monitor the source for changes and rebuild the cockpit
+  plugin when necessary.
+
+See `cockpit/README.md` for more detailed information on cockpit development.
 
 Troubleshooting
 ---------------
