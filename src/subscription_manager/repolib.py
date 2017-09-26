@@ -168,7 +168,7 @@ class YumPluginManager(object):
                             yum_plugin_file_name
                         )
 
-            if is_plugin_enabled == cls.YUM_PLUGIN_ENABLED or is_plugin_enabled is True:
+            if is_plugin_enabled == cls.YUM_PLUGIN_ENABLED:
                 log.debug('Yum plugin: "%s" already enabled. Nothing to do.' % yum_plugin_file_name)
             else:
                 log.warn('Enabling yum plugin: "%s".' % yum_plugin_file_name)
