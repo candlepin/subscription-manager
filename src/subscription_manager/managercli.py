@@ -2307,11 +2307,11 @@ class ListCommand(CliCommand):
                                 msg.format(dateexample=dateexample))
 
             epools = entitlement.EntitlementService().get_available_pools(
-                get_all=self.options.all,
-                active_on=on_date,
-                overlapping=self.options.no_overlap,
-                uninstalled=self.options.match_installed,
-                filter_string=self.options.filter_string,
+                show_all=self.options.all,
+                on_date=on_date,
+                no_overlap=self.options.no_overlap,
+                match_installed=self.options.match_installed,
+                matches=self.options.filter_string,
                 service_level=self.options.service_level
             )
 
@@ -2380,8 +2380,7 @@ class ListCommand(CliCommand):
         service = entitlement.EntitlementService()
         certs = service.get_consumed_product_pools(
             service_level=service_level,
-            matches=filter_string,
-            pool_only=pid_only)
+            matches=filter_string)
 
         # Process and display our (filtered) certs:
         if len(certs):

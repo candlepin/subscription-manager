@@ -75,17 +75,30 @@ class EntitlementService(object):
         self.validate_options(options)
         results = {}
         if 'installed' in pool_subsets:
-            installed = products.InstalledProducts(self.cp).list(options['matches'])
+            installed = products.InstalledProducts(self.cp).list(matches)
             results['installed'] = [x._asdict() for x in installed]
         if 'consumed' in pool_subsets:
-            consumed = self.get_consumed_product_pools(**options)
-            results['consumed'] = [x._asdict() for x in consumed]
+            consumed = self.get_consumed_product_pools(service_level=service_level, matches=matches)
+            if pool_only:
+                results['consumed'] = [x._asdict()['pool_id'] for x in consumed]
+            else:
+                results['consumed'] = [x._asdict() for x in consumed]
         if 'available' in pool_subsets:
-            results['available'] = self.get_available_pools(**options)
+            available = self.get_available_pools(
+                show_all=show_all,
+                on_date=on_date,
+                no_overlap=no_overlap,
+                match_installed=match_installed,
+                matches=matches,
+                service_level=service_level)
+            if pool_only:
+                results['available'] = [x['id'] for x in available]
+            else:
+                results['available'] = available
 
         return results
 
-    def get_consumed_product_pools(self, service_level=None, matches=None, **kwargs):
+    def get_consumed_product_pools(self, service_level=None, matches=None):
         # Use a named tuple so that the result can be unpacked into other functions
         ConsumedStatus = collections.namedtuple('ConsumedStatus', [
             'subscription_name',
@@ -205,7 +218,7 @@ class EntitlementService(object):
         return consumed_statuses
 
     def get_available_pools(self, show_all=None, on_date=None, no_overlap=None,
-                            match_installed=None, matches=None, service_level=None, **kwargs):
+                            match_installed=None, matches=None, service_level=None):
         available_pools = managerlib.get_available_entitlements(
             get_all=show_all,
             active_on=on_date,
