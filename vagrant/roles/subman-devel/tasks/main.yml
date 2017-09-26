@@ -111,11 +111,25 @@
   with_items: "{{ distro_specific_subman_build_deps}}"
   when: distro_specific_subman_build_deps is defined
 
+- name: install nvm
+  shell: 'curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.4/install.sh | bash'
+  args:
+    creates: /home/vagrant/.nvm
+    warn: no
+
+- name: use nvm to install nodejs
+  shell: >
+    /bin/bash -c
+    ". ~/.nvm/nvm.sh &&
+    nvm install {{ subman_nodejs_version }} &&
+    nvm alias default {{ subman_nodejs_version }}"
+  args:
+    creates: /home/vagrant/.nvm/versions/node/{{ subman_nodejs_version }}
+
 - name: install yarn (for cockpit package build)
   npm:
     name: yarn
     global: yes
-  become: yes
 
 - include: cockpit.yml
   when: ansible_distribution == 'Fedora' or (ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7')
@@ -160,9 +174,9 @@
   become: yes
 
 - name: alter PYTHONPATH
-  lineinfile:
-    name: /etc/environment
-    line: "PYTHONPATH={{ subman_checkout_dir }}/src"
+  copy:
+    src: sitecustomize.py
+    dest: /usr/lib/python{{ ansible_python_version[:-2] }}/site-packages/sitecustomize.py
   become: yes
 
 - name: compile c artifacts (Debian only)
@@ -206,6 +220,56 @@
     line: "Defaults    secure_path = {{ subman_checkout_dir }}/bin:/sbin:/bin:/usr/sbin:/usr/bin"
     regexp: '^Defaults\s+secure_path.*'
   become: yes
+
+- name: replace rhsm-service with symlink
+  file:
+    src: /vagrant/bin/rhsm-service
+    dest: "{{ libexec_path }}/rhsm-service"
+    state: link
+    force: yes
+  become: yes
+  when: subman_setup_hacking_environment
+
+# needed for dbus to read /vagrant/etc-conf/dbus/system.d
+- name: disable selinux
+  selinux:
+    state: permissive
+    policy: targeted
+  become: yes
+
+# the shim includes /vagrant/etc-conf/dbus/system.d/com.redhat.RHSM1.conf
+- name: replace RHSM1 dbus policy file with shim
+  copy:
+    src: com.redhat.RHSM1.conf
+    dest: /etc/dbus-1/system.d/com.redhat.RHSM1.conf
+  become: yes
+  when: subman_setup_hacking_environment
+
+- name: add cockpit local plugin dir
+  file:
+    path: /usr/local/share/cockpit
+    state: directory
+  become: yes
+  when: subman_setup_hacking_environment
+
+- name: yarn install (for convenience)
+  command: yarn install
+  args:
+    chdir: /vagrant/cockpit
+
+- name: webpack build (for convenience)
+  command: npm run build
+  args:
+    chdir: /vagrant/cockpit
+
+- name: add symlink to dist for cockpit plugin
+  file:
+    src: /vagrant/cockpit/dist
+    dest: /usr/local/share/cockpit/subscription-manager
+    state: link
+    force: yes
+  become: yes
+  when: subman_setup_hacking_environment
 
 - name: add candlepin.example.com to hosts (using this host as reference)
   lineinfile:

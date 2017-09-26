@@ -41,8 +41,8 @@ Vagrant.configure("2") do |config|
     "build_ext",
     "src/rhsm/_certificate.so",
     "subscription-manager.egg-info",
+    "cockpit/node_modules",
   ]
-  config.vm.synced_folder "cockpit/dist", "/usr/local/share/cockpit/subscription-manager", create: true
 
   # Set up the hostmanager plugin to automatically configure host & guest hostnames
   if Vagrant.has_plugin?("vagrant-hostmanager")
