@@ -142,24 +142,41 @@ class YumPluginManager(object):
                     (yum_plugin_file_name, err)
                 )
                 continue
+
             if len(result) == 0:
                 log.info('Configuration file of yum plugin: "%s" cannot be read' % yum_plugin_file_name)
                 continue
-            is_plugin_enabled = yum_plugin_config.getint('main', 'enabled')
+
+            is_plugin_enabled = False
+            if not yum_plugin_config.has_section('main'):
+                log.warn(
+                    'Configuration file of yum plugin: "%s" does not include main section. Adding main section.' %
+                    yum_plugin_file_name
+                )
+                yum_plugin_config.add_section('main')
+            elif yum_plugin_config.has_option('main', 'enabled'):
+                try:
+                    # Options 'enabled' can be 0 or 1
+                    is_plugin_enabled = yum_plugin_config.getint('main', 'enabled')
+                except ValueError:
+                    try:
+                        # Options 'enabled' can be also: true or false
+                        is_plugin_enabled = yum_plugin_config.getboolean('main', 'enabled')
+                    except ValueError:
+                        log.warn(
+                            "File %s has wrong value of options: 'enabled' in section: 'main' (not a int nor boolean)" %
+                            yum_plugin_file_name
+                        )
+
             if is_plugin_enabled == cls.YUM_PLUGIN_ENABLED:
                 log.debug('Yum plugin: "%s" already enabled. Nothing to do.' % yum_plugin_file_name)
-            elif is_plugin_enabled == cls.YUM_PLUGIN_DISABLED:
+            else:
                 log.warn('Enabling yum plugin: "%s".' % yum_plugin_file_name)
                 # Change content of plugin configuration file and enable this plugin.
                 with open(yum_plugin_file_name, 'w') as cfg_file:
                     yum_plugin_config.set('main', 'enabled', cls.YUM_PLUGIN_ENABLED)
                     yum_plugin_config.write(cfg_file)
                 enabled_yum_plugins.append(yum_plugin_file_name)
-            else:
-                log.warn(
-                    "Invalid value ('%s') found in yum plugin configuration file '%s'. Skipping this file."
-                    % (is_plugin_enabled, yum_plugin_file_name)
-                )
 
         return enabled_yum_plugins
 
