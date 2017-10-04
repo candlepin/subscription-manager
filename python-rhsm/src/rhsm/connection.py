@@ -608,6 +608,12 @@ class BaseRestLib(object):
                     raise RateLimitExceededException(response['status'],
                                                      error_msg,
                                                      headers=response.get('headers'))
+                # If the proxy is not configured correctly
+                # it connects to the server without the identity cert
+                if str(response['status']) in ["401"] and self.proxy_hostname:
+                        raise RestlibException(response['status'],
+                                               "Unable to make credentialed connection. Please review proxy configuration and connectivity.",
+                                               response.get('headers'))
 
                 # FIXME: we can get here with a valid json response that
                 # could be anything, we don't verify it anymore
