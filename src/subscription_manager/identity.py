@@ -17,6 +17,7 @@ from __future__ import print_function, division, absolute_import
 
 import logging
 import os
+import threading
 
 from rhsm.certificate import create_from_pem
 from rhsm.config import initConfig
@@ -125,32 +126,34 @@ class Identity(object):
     """Wrapper for sharing consumer identity without constant reloading."""
     def __init__(self):
         self.consumer = None
-        self.name = None
-        self.uuid = None
-        self.cert_dir_path = conf['rhsm']['consumerCertDir']
+        self._lock = threading.Lock()
+        self._name = None
+        self._uuid = None
+        self._cert_dir_path = conf['rhsm']['consumerCertDir']
         self.reload()
 
     def reload(self):
         """Check for consumer certificate on disk and update our info accordingly."""
         log.debug("Loading consumer info from identity certificates.")
-        try:
-            self.consumer = self._get_consumer_identity()
-        # XXX shouldn't catch the global exception here, but that's what
-        # existsAndValid did, so this is better.
-        except (CertificateException, IOError) as err:
-            log.error("Reload of consumer identity cert %s raised an exception with msg: %s",
-                      ConsumerIdentity.certpath(), err)
-            self.consumer = None
-        if self.consumer is not None:
-            self.name = self.consumer.getConsumerName()
-            self.uuid = self.consumer.getConsumerId()
-            # since Identity gets dep injected, lets look up
-            # the cert dir on the active id instead of the global config
-            self.cert_dir_path = self.consumer.PATH
-        else:
-            self.name = None
-            self.uuid = None
-            self.cert_dir_path = conf['rhsm']['consumerCertDir']
+        with self._lock:
+            try:
+                self.consumer = self._get_consumer_identity()
+            # XXX shouldn't catch the global exception here, but that's what
+            # existsAndValid did, so this is better.
+            except (CertificateException, IOError) as err:
+                log.error("Reload of consumer identity cert %s raised an exception with msg: %s",
+                          ConsumerIdentity.certpath(), err)
+                self.consumer = None
+            if self.consumer is not None:
+                self._name = self.consumer.getConsumerName()
+                self._uuid = self.consumer.getConsumerId()
+                # since Identity gets dep injected, lets look up
+                # the cert dir on the active id instead of the global config
+                self._cert_dir_path = self.consumer.PATH
+            else:
+                self._name = None
+                self._uuid = None
+                self._cert_dir_path = conf['rhsm']['consumerCertDir']
 
     def _get_consumer_identity(self):
         return ConsumerIdentity.read()
@@ -160,20 +163,27 @@ class Identity(object):
     def is_valid(self):
         return self.uuid is not None
 
+    @property
+    def name(self):
+        with self._lock:
+            _name = self._name
+        return _name
+
+    @property
+    def uuid(self):
+        with self._lock:
+            _uuid = self._uuid
+        return _uuid
+
+    @property
+    def cert_dir_path(self):
+        with self._lock:
+            _cert_dir_path = self._cert_dir_path
+        return _cert_dir_path
+
     @staticmethod
     def is_present():
         return ConsumerIdentity.exists()
-
-    def getConsumerName(self):
-        return self.name
-
-    def getConsumerId(self):
-        return self.uuid
-
-    # getConsumer is kind of vague, and this is just here to
-    # the cert object
-    def getConsumerCert(self):
-        return self.consumer
 
     def __str__(self):
         return "Consumer Identity name=%s uuid=%s" % (self.name, self.uuid)

@@ -282,7 +282,7 @@ class EntCertUpdateAction(object):
             sn_list = [str(sn) for sn in sn_list]
             # NOTE: use injected IDENTITY, need to validate this
             # handles disconnected errors properly
-            reply = self.uep.getCertificates(self.identity.getConsumerId(),
+            reply = self.uep.getCertificates(self.identity.uuid,
                                               serials=sn_list)
             for cert in reply:
                 result.append(cert)
