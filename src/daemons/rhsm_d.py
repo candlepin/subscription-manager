@@ -236,10 +236,9 @@ class StatusChecker(dbus.service.Object):
         # a persistent cache to ensure we fire a signal only when the status changes.
         if not self.rhsm_icon_cache._cache_exists():
             log.debug("Cache file: %s does not exist yet" % self.rhsm_icon_cache.CACHE_FILE)
-        else:
-            if status != self.rhsm_icon_cache._read_cache():
-                debug("Validity status changed, fire signal")
-                self.entitlement_status_changed(status)
+        elif status != self.rhsm_icon_cache._read_cache():
+            debug("Validity status changed, fire signal")
+            self.entitlement_status_changed(status)
         self.rhsm_icon_cache.data = status
         self.rhsm_icon_cache.write_cache()
 
