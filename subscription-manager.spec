@@ -71,7 +71,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.20.1
+Version: 1.20.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -715,6 +715,56 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Mon Oct 09 2017 Kevin Howell <khowell@redhat.com> 1.20.2-1
+- Sync zanata translations (khowell@redhat.com)
+- Bump python-rhsm requirement to 1.20.2 (khowell@redhat.com)
+- 1448313: Do not log error, when rhsm_icon.json does not exist
+  (jhnidek@redhat.com)
+- 1354667: Better message for proxy/identity cert issue (wpoteat@redhat.com)
+- 1489917: More robust reading of yum plugin file (jhnidek@redhat.com)
+- 1491842: Add man page doc for [rhsm] auto_enable_yum_plugins
+  (jhnidek@redhat.com)
+- 1493711: Fix --matches option for the list command. (awood@redhat.com)
+- 1476817: Set network.ipv4_address properly, when DNS misconfigured.
+  (jhnidek@redhat.com)
+- 1483746: Force UTF-8 encoding in rhsm-service (jhnidek@redhat.com)
+- rename RepoFile to YumRepoFile (dellweg@atix.de)
+- 1466453: [RFE] rhn-migrate-classic-to-rhsm auto-enable yum plugins
+  (jhnidek@redhat.com)
+- D-Bus service for removing entitlements (all/ID/serial num.)
+  (jhnidek@redhat.com)
+- 1489917: More robust reading of yum plugin file (jhnidek@redhat.com)
+- 1489877: minor typo in /etc/rhsm/rhsm.conf comment (jhnidek@redhat.com)
+- restructure RepoFile hierarchy (dellweg@atix.de)
+- 1319927: [RFE] sub-man automatically enables yum plugins (jhnidek@redhat.com)
+- Fix polymorphy for RHSMLogHandler (dellweg@atix.de)
+- 1481384: Do not update redhat.repo at RateLimitExceededException
+  (jhnidek@redhat.com)
+- 1485008: subman register --type="RHUI" should work (jhnidek@redhat.com)
+- 1481384: Do not update redhat.repo at RateLimitExceededException (#1685)
+  (jhnidek@redhat.com)
+- Do not attempt to register if already registered. (awood@redhat.com)
+- Integrate registration service into RegisterCommand. (awood@redhat.com)
+- 1480659: Properly initialize clean repo copy (khowell@redhat.com)
+- D-Bus service for unregistering system (#1680) (jhnidek@redhat.com)
+- Add an entitlement service and use it in the CLI and DBus. (awood@redhat.com)
+- Remove unneeded plugin conduit. (awood@redhat.com)
+- Clean up imports in dbus.base_object (awood@redhat.com)
+- Move certificate persistence into register service itself. (awood@redhat.com)
+- 1480395: Force UTF-8 encoding in daemons (khowell@redhat.com)
+- 1464571: 'sub-man release' prints error for more prod. certs.
+  (jhnidek@redhat.com)
+- 1400326: Better error print, when consumer cert is corrupted
+  (jhnidek@redhat.com)
+- Reload identity after registering. (awood@redhat.com)
+- Move registration code to a distinct service. (awood@redhat.com)
+- The get_installed_product_status() is now method of InstalledProducts, small
+  changes, refactoring. (jhnidek@redhat.com)
+- D-Bus service for listing installed products (jhnidek@redhat.com)
+- 1461003: Deprecate --type option on register command (wpoteat@redhat.com)
+- 1462928: Reset status after connection validation (khowell@redhat.com)
+- 1330036: Better status error message for initial-setup (jhnidek@redhat.com)
+
 * Thu Jul 27 2017 Alex Wood <awood@redhat.com> 1.20.1-1
 - Only return JSON body from Register service. (awood@redhat.com)
 - Add a DBus object and service to attach subscriptions. (awood@redhat.com)
