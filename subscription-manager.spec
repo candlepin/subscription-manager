@@ -103,7 +103,7 @@ Requires:  python-ethtool
 Requires:  python-iniparse
 Requires:  python-decorator
 Requires:  virt-what
-Requires:  python-rhsm >= 1.20.0
+Requires:  python-rhsm >= 1.20.2
 Requires:  python-decorator
 Requires:  python-six
 Requires:  python-dateutil
