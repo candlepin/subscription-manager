@@ -9,7 +9,7 @@
 %{!?python2_sitearch:%global python2_sitearch %python_sitearch}
 
 Name: python-rhsm
-Version: 1.20.1
+Version: 1.20.2
 Release: 1%{?dist}
 
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
@@ -128,6 +128,12 @@ rm -rf %{buildroot}
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
+* Mon Oct 09 2017 Kevin Howell <khowell@redhat.com> 1.20.2-1
+- 1354667: Better message for proxy/identity cert issue (wpoteat@redhat.com)
+- 1319927: [RFE] sub-man automatically enables yum plugins (jhnidek@redhat.com)
+- 1481384: Do not update redhat.repo at RateLimitExceededException
+  (jhnidek@redhat.com)
+
 * Thu Jul 27 2017 Alex Wood <awood@redhat.com> 1.20.1-1
 - 1472715: Python module rhsm should never call exit() (jhnidek@redhat.com)
 - 1444453: Have gettext return unicode instead of bytes. (awood@redhat.com)
