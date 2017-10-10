@@ -1,5 +1,5 @@
 [nosetests]
+with-id=True
 with-xvfb=True
 with-randomly=True
-with-yanc=True
-attr=!zypper
+attr=!zypper,!functional

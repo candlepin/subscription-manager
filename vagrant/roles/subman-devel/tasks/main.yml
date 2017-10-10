@@ -111,43 +111,23 @@
   with_items: "{{ distro_specific_subman_build_deps}}"
   when: distro_specific_subman_build_deps is defined
 
-- name: install python-rhsm build deps
-  command: yum-builddep -y {{ subman_checkout_dir }}/python-rhsm/python-rhsm.spec
-  become: yes
-  when: distro_specific_python_rhsm_build_deps is not defined
-
-- name: install distro specific python-rhsm build deps
-  package:
-    name: "{{ item }}"
-    state: present
-  become: yes
-  with_items: "{{ distro_specific_python_rhsm_build_deps }}"
-  when: distro_specific_python_rhsm_build_deps is defined
-
 - name: install python test deps
   pip:
     requirements: test-requirements.txt
     chdir: "{{ subman_checkout_dir }}"
   become: yes
 
-- name: clean python-rhsm build artifacts
+- name: clean build artifacts
   command: make clean
   args:
-    chdir: "{{ subman_checkout_dir }}/python-rhsm"
+    chdir: "{{ subman_checkout_dir }}"
   when: subman_setup_hacking_environment
 
-- name: build python-rhsm
+- name: build
   command: python setup.py build_ext --inplace
   args:
-    chdir: "{{ subman_checkout_dir }}/python-rhsm"
+    chdir: "{{ subman_checkout_dir }}"
   when: subman_setup_hacking_environment
-
-- name: tito build & install python-rhsm (initial)
-  command: tito build --test --rpm --install
-  args:
-    chdir: "{{ subman_checkout_dir }}/python-rhsm"
-    creates: /usr/lib*/python*/site-packages/subscription_manager
-  when: subman_setup_hacking_environment and not (ansible_distribution == 'Debian')
 
 - name: tito build subscription-manager (initial)
   command: tito build --test --rpm
@@ -173,7 +153,7 @@
 - name: alter PYTHONPATH
   lineinfile:
     name: /etc/environment
-    line: "PYTHONPATH={{ subman_checkout_dir }}/src:{{ subman_checkout_dir }}/python-rhsm/src"
+    line: "PYTHONPATH={{ subman_checkout_dir }}/src"
   become: yes
 
 - name: compile c artifacts (Debian only)
@@ -195,14 +175,6 @@
       # append rhsm to python path
       import sys
       sys.path.append('{{ subman_checkout_dir }}/src')
-      sys.path.append('{{ subman_checkout_dir }}/python-rhsm/src')
-  become: yes
-  when: subman_setup_hacking_environment and ansible_distribution == 'Debian'
-
-- name: install python-rshm (Debian only)
-  pip:
-    name: "{{ subman_checkout_dir }}/python-rhsm"
-    extra_args: "-e"
   become: yes
   when: subman_setup_hacking_environment and ansible_distribution == 'Debian'
 

@@ -347,11 +347,11 @@ class ConnectionTests(unittest.TestCase):
         f.close()
         cont_conn = ContentConnection(host="foobar", username="dummy", password="dummy", insecure=True)
         cont_conn.ent_dir = self.temp_ent_dir
-        with self.assertRaises(BadCertificateException) as e:
+        with self.assertRaises(BadCertificateException):
             cont_conn._load_ca_certificates(ssl.SSLContext(ssl.PROTOCOL_SSLv23))
         restlib = Restlib("somehost", "123", "somehandler")
         restlib.ca_dir = self.temp_ent_dir
-        with self.assertRaises(BadCertificateException) as e:
+        with self.assertRaises(BadCertificateException):
             restlib._load_ca_certificates(ssl.SSLContext(ssl.PROTOCOL_SSLv23))
 
 
@@ -602,7 +602,6 @@ class RestlibTests(unittest.TestCase):
                 ]
             }
         """
-        restlib = Restlib("somehost", "123", "somehandler")
         data = json.loads(test_json)
         self.assertTrue(isinstance(data["message"], type(u"")))
         # Access a value deep in the structure to make sure we recursed down.
@@ -784,7 +783,7 @@ class M2CryptoHttpTests(unittest.TestCase):
 
             conn = m2cryptohttp.HTTPSConnection('example.com', 443)
             mock_connection = Mock()
-            mock_connection.request.side_effect=IndexError
+            mock_connection.request.side_effect = IndexError
             with patch.object(conn, '_connection', mock_connection):
                 self.assertRaises(socket.error, conn.request, '/foo', '/bar')
 

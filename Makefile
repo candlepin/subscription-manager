@@ -13,6 +13,7 @@
 #   just the fastest or easiest way.
 
 SHELL := /bin/bash
+PYTHON := python
 PREFIX ?= /
 SYSCONF ?= etc
 INSTALL_DIR = usr/share
@@ -21,7 +22,7 @@ OS = $(shell lsb_release -i | awk '{ print $$3 }' | awk -F. '{ print $$1}')
 OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
 OS_DIST ?= $(shell rpm --eval='%dist')
 
-PYTHON_VER ?= $(shell python -c 'import sys; print("python%s.%s" % sys.version_info[:2])')
+PYTHON_VER ?= $(shell $(PYTHON) -c 'import sys; print("python%s.%s" % sys.version_info[:2])')
 
 PYTHON_SITELIB ?= usr/lib/$(PYTHON_VER)/site-packages
 # Note the underscore used instead of a hyphen
@@ -104,8 +105,8 @@ STYLEFILES=$(PYFILES) $(BIN_FILES)
 build: rhsmcertd rhsm-icon
 # Install doesn't perform a build if it doesn't have too.  Best to clean out
 # any cruft so developers don't end up install old builds.
-	./setup.py clean --all
-	./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
+	$(PYTHON) ./setup.py clean --all
+	$(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
 
 # we never "remake" this makefile, so add a target so
 # we stop searching for implicit rules on how to remake it
@@ -116,7 +117,8 @@ clean:
 	rm -f *.pyc *.pyo *~ *.bak *.tar.gz
 	rm -f bin/rhsmcertd
 	rm -f bin/rhsm-icon
-	./setup.py clean --all
+	$(PYTHON) ./setup.py clean --all
+	rm -rf cover/ htmlcov/ docs/sphinx/_build/ build/ dist/
 
 rhsmcertd: $(DAEMONS_SRC_DIR)/rhsmcertd.c
 	$(CC) $(CFLAGS) $(RHSMCERTD_CFLAGS) -DLIBEXECDIR='"$(LIBEXEC_DIR)"' $(DAEMONS_SRC_DIR)/rhsmcertd.c -o bin/rhsmcertd $(LDFLAGS) $(RHSMCERTD_LDFLAGS)
@@ -274,7 +276,7 @@ install-post-boot: install-firstboot install-initial-setup
 
 .PHONY: install-via-setup
 install-via-setup:
-	./setup.py install --root $(PREFIX) --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION) --with-systemd=$(WITH_SYSTEMD) --prefix=/usr
+	$(PYTHON) ./setup.py install --root $(PREFIX) --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION) --with-systemd=$(WITH_SYSTEMD) --prefix=/usr
 
 .PHONY: install
 install: install-via-setup install-files
@@ -335,37 +337,48 @@ install-files: dbus-install install-conf install-plugins install-post-boot insta
 
 .PHONY: check
 check:
-	python setup.py -q nosetests -c playpen/noserc.dev
+	$(PYTHON) setup.py -q nosetests -c playpen/noserc.dev
+
+.PHONY: version_check
+version_check:
+# needs https://github.com/alikins/pyqver
+	-@TMPFILE=`mktemp` || exit 1; \
+	pyqver2.py -v -m 2.5  $(STYLEFILES) | tee $$TMPFILE; \
+	! test -s $$TMPFILE
 
 .PHONY: coverage
 coverage:
 ifdef ghprbPullId
 	# Pull the PR id from the Jenkins environment and use it as a seed so that each PR
 	# uses a consistant test ordering.
-	./setup.py -q nosetests --randomly-seed=$(ghprbPullId) -c playpen/noserc.ci
+	$(PYTHON) ./setup.py -q nosetests --randomly-seed=$(ghprbPullId) -c playpen/noserc.ci
 else
-	./setup.py -q nosetests -c playpen/noserc.ci
+	$(PYTHON) ./setup.py -q nosetests -c playpen/noserc.ci
 endif
+
+.PHONY: docs
+docs:
+	$(PYTHON) setup.py build_sphinx
 
 .PHONY: gettext
 gettext:
 	# Extract strings from our source files. any comments on the line above
 	# the string marked for translation beginning with "translators" will be
 	# included in the pot file.
-	./setup.py gettext
+	$(PYTHON) ./setup.py gettext
 
 .PHONY: update-po
 update-po:
-	./setup.py update_trans
+	$(PYTHON) ./setup.py update_trans
 
 .PHONY: uniq-po
 uniq-po:
-	./setup.py uniq_trans
+	$(PYTHON) ./setup.py uniq_trans
 
 # just run a check to make sure these compile
 .PHONY: polint
 polint:
-	./setup.py gettext --lint
+	$(PYTHON) ./setup.py gettext --lint
 
 .PHONY: just-strings
 just-strings:
@@ -397,22 +410,22 @@ gen-test-long-po:
 
 .PHONY: lint
 lint:
-	./setup.py lint
+	$(PYTHON) ./setup.py lint
 
 .PHONY: flake8
 flake8:
-	./setup.py flake8
+	$(PYTHON) ./setup.py flake8
 
 .PHONY: rpmlint
 rpmlint:
-	./setup.py lint_rpm
+	$(PYTHON) ./setup.py lint_rpm
 
 .PHONY: stylish
 stylish: lint
 
 .PHONY: install-pip-requirements
 install-pip-requirements:
-	@pip install -r test-requirements.txt
+	@pip install -I -r test-requirements.txt
 
 .PHONY: jenkins
 jenkins: install-pip-requirements build stylish coverage

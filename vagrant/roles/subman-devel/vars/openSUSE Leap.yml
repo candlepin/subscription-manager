@@ -1,44 +1,39 @@
 ---
 distro_package_command: zypper
 distro_specific_deps:
-    - git
-    - python-dateutil
-    - python-iniparse
-    - python-bugzilla
-    - python-nose
-    - python-pip
-    - rpm-build
-    - gcc
-    - make
-    - python-m2crypto
-    - python-ethtool
-    - librsvg2
-    - libxslt-devel
-    - python-curses
-    - openssl-devel
-    - python-dmidecode
-    - gdk-pixbuf-loader-rsvg
+  - gcc
+  - gdk-pixbuf-loader-rsvg
+  - git
+  - librsvg2
+  - libxslt-devel
+  - make
+  - openssl-devel
+  - python-bugzilla
+  - python-curses
+  - python-dateutil
+  - python-dmidecode
+  - python-ethtool
+  - python-iniparse
+  - python-m2crypto
+  - python-nose
+  - python-pip
+  - rpm-build
 
 distro_specific_subman_build_deps:
-  - rpm-python
-  - python-devel
-  - python-setuptools
+  - dbus-1-glib-devel
+  - desktop-file-utils
+  - distribution-release
+  - gconf2-devel
   - gettext
+  - gtk3-devel
   - intltool
   - libnotify-devel
-  - desktop-file-utils
-  - python-six
-  - lsb-release
-  - distribution-release
-  - scrollkeeper
-  - gconf2-devel
-  - dbus-1-glib-devel
-  - update-desktop-files
   - libzypp
-  - gtk3-devel
-
-distro_specific_python_rhsm_build_deps:
- - python-devel
- - python-setuptools
- - openssl-devel
- - python-six
+  - lsb-release
+  - openssl-devel
+  - python-devel
+  - python-setuptools
+  - python-six
+  - rpm-python
+  - scrollkeeper
+  - update-desktop-files

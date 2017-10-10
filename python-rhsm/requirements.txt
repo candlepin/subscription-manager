@@ -1,6 +1,0 @@
-six
-# The version of iniparse in PyPi does not run under Python3.  Fedora has
-# patched it so we have to rely on the RPM.
-# iniparse
-python-dateutil==1.5;python_version<="2.7"
-python-dateutil>=2.0;python_version>="3.0"

@@ -609,7 +609,7 @@ class BaseRestLib(object):
                                                      error_msg,
                                                      headers=response.get('headers'))
                 # If the proxy is not configured correctly
-                # it connects to the server without the identity cert 
+                # it connects to the server without the identity cert
                 # even if the cert is valid
                 if str(response['status']) in ["401"] and self.proxy_hostname:
                     if self.cert_file:

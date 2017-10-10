@@ -377,12 +377,12 @@ class ProductCertificateFilter(CertificateFilter):
             '?': '.',
         }
 
-        expression = ur"""
+        expression = u"""
             ((?:                # A captured, non-capture group :)
-                [^*?\\]*        # Character literals and other uninteresting junk (greedy)
-                (?:\\.?)*       # Anything escaped with a backslash, or just a trailing backslash
+                [^*?\\\\]*        # Character literals and other uninteresting junk (greedy)
+                (?:\\\\.?)*       # Anything escaped with a backslash, or just a trailing backslash
             )*)                 # Repeat the above sequence 0+ times, greedily
-            ([*?]|\Z)           # Any of our wildcards (* or ?) not preceded by a backslash OR end of input
+            ([*?]|\\Z)           # Any of our wildcards (* or ?) not preceded by a backslash OR end of input
         """
 
         if filter_string is not None:

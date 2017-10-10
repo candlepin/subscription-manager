@@ -16,7 +16,6 @@ from __future__ import print_function, division, absolute_import
 #
 from iniparse.compat import NoOptionError, InterpolationMissingOptionError, InterpolationDepthError, NoSectionError
 from tempfile import NamedTemporaryFile
-import types
 import unittest
 
 from mock import patch
