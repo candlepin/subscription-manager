@@ -17,10 +17,17 @@
  * along with Cockpit; If not, see <http://www.gnu.org/licenses/>.
  */
 
-var cockpit = require("cockpit");
-var _ = cockpit.gettext;
+const cockpit = require("cockpit");
+const service = cockpit.dbus('com.redhat.RHSM1', {'superuser': 'require'});
+const registerServer = service.proxy('com.redhat.RHSM1.RegisterServer', '/com/redhat/RHSM1/RegisterServer');
+const attachService = service.proxy('com.redhat.RHSM1.Attach', '/com/redhat/RHSM1/Attach');
+const entitlementService = service.proxy('com.redhat.RHSM1.Entitlement', '/com/redhat/RHSM1/Entitlement');
+const unregisterService = service.proxy('com.redhat.RHSM1.Unregister', '/com/redhat/RHSM1/Unregister');
+const productsService = service.proxy('com.redhat.RHSM1.Products', '/com/redhat/RHSM1/Products');
+const legacyService = cockpit.dbus('com.redhat.SubscriptionManager');  // FIXME replace?
+const _ = cockpit.gettext;
 
-var client = { };
+const client = { };
 
 cockpit.event_target(client);
 
@@ -33,11 +40,8 @@ client.subscriptionStatus = {
 
 // we trigger an event called "dataChanged" when the data has changed
 
-// DBUS service
-var service;
-
 function needRender() {
-    var ev = document.createEvent("Event");
+    let ev = document.createEvent("Event");
     ev.initEvent("dataChanged", false, false);
     client.dispatchEvent(ev);
 }
@@ -45,245 +49,145 @@ function needRender() {
 /* we trigger status update via dbus
  * if we don't get a timely reply, consider subscription-manager failure
  */
-var updateTimeout;
+let updateTimeout;
 
-/*
- * Parses lines like:
- *
- * id:  text
- */
-function parseSingleSubscription(text) {
-    var ret = { };
-    text.split('\n').forEach(function(line, i) {
-        var pos = line.indexOf(':');
-        if (pos !== -1)
-            ret[line.substring(0, pos).trim()] = line.substring(pos + 1).trim();
+function parseProducts(text) {
+    const products = JSON.parse(text);
+    return products.map(function(product) {
+        return {
+            'productName': product[0],
+            'productId': product[1],
+            'version': product[2],
+            'arch': product[3],
+            'status': product[4],
+            /* TODO start date and end date */
+        };
     });
-    return ret;
 }
 
-function parseMultipleSubscriptions(text) {
-    var ret = [ ];
-    var segmentInfo, status;
-    text.split('\n\n').forEach(function(segment) {
-        if (segment.indexOf('Product Name:') === -1)
-            return;
-
-        segmentInfo = parseSingleSubscription(segment);
-
-        status = segmentInfo['Status'];
-
-        /* if we have status details, add those to the status */
-        if (segmentInfo['Status Details'] !== '')
-            status = status + ' (' + segmentInfo['Status Details'] + ')';
-
-        /* convert text output to mustache template variables */
-        ret.push({
-            'productName': segmentInfo['Product Name'],
-            'productId': segmentInfo['Product ID'],
-            'version': segmentInfo['Version'],
-            'arch': segmentInfo['Arch'],
-            'status': status,
-            'starts': segmentInfo['Starts'],
-            'ends': segmentInfo['Ends'],
-        });
-    });
-    return ret;
-}
-
-var gettingDetails = false;
-var getDetailsRequested = false;
+let gettingDetails = false;
+let getDetailsRequested = false;
 function getSubscriptionDetails() {
-    /* TODO DBus API doesn't deliver what we need, so we call subscription manager
-     * without translations and parse the output
-     * https://bugzilla.redhat.com/show_bug.cgi?id=1304056
-     */
     if (gettingDetails) {
         getDetailsRequested = true;
         return;
     }
     getDetailsRequested = false;
     gettingDetails = true;
-    cockpit.spawn(['subscription-manager', 'list'],
-                  { directory: '/', superuser: "try", environ: ['LC_ALL=C'] })
-        .done(function(output) {
-            client.subscriptionStatus.products = parseMultipleSubscriptions(output);
-        })
-        .fail(function(ex) {
-            client.subscriptionStatus.error = ex;
-            console.warn("Subscriptions [getSubscriptionDetails]: couldn't get details: " + ex);
-        })
-        .always(function(output) {
-            gettingDetails = false;
-            if (getDetailsRequested)
-                getSubscriptionDetails();
-            needRender();
-        });
+    productsService.wait(() => {
+        productsService.ListInstalledProducts('', {})
+            .then(result => {
+                client.subscriptionStatus.products = parseProducts(result);
+            })
+            .catch(ex => {
+                client.subscriptionStatus.error = ex;
+            })
+            .then(() => {
+                gettingDetails = false;
+                if (getDetailsRequested)
+                    getSubscriptionDetails();
+                needRender();
+            });
+    });
 }
 
-client.registerSystem = function(subscriptionDetails) {
-    var dfd = cockpit.defer();
+client.registerSystem = subscriptionDetails => {
+    const options = {};
 
-    var args = ['subscription-manager', 'register'];
-    if (subscriptionDetails.url != 'default')
-        args.push('--serverurl', subscriptionDetails.serverUrl);
-
-    // activation keys can't be used with auto-attach
-    if (subscriptionDetails.activationKeys)
-        args.push('--activationkey', subscriptionDetails.activationKeys);
-    else
-        args.push('--auto-attach');
-
-    if (subscriptionDetails.user || subscriptionDetails.password) {
-        if (!subscriptionDetails.user)
-            subscriptionDetails.user = '';
-        if (!subscriptionDetails.password)
-            subscriptionDetails.password = '';
-        args.push('--username', subscriptionDetails.user, '--password', subscriptionDetails.password);
+    if (subscriptionDetails.url != 'default') {
+        /*  parse url into host, port, handler; sorry about the ugly regex
+            (?:https?://)? strips off the protocol if it exists
+            ([$/:]+) matches the hostname
+            (?::(?=[0-9])([0-9]+))? matches the port if it exists
+            (?:(/.+)) matches the rest for the path
+        */
+        const pattern = new RegExp('^(?:https?://)?([^/:]+)(?::(?=[0-9])([0-9]+))?(?:(/.+))?$');
+        const match = pattern.exec(subscriptionDetails.url); // TODO handle failure
+        options.host = {
+            t: 's',
+            v: match[1],
+        };
+        options.port = {
+            t: 's',
+            v: match[2],
+        };
+        options.handler = {
+            t: 's',
+            v: match[3],
+        };
     }
 
+    const connection_options = {};
     // proxy is optional
     if (subscriptionDetails.proxy) {
-        if (!subscriptionDetails.proxyServer)
-            subscriptionDetails.proxyServer = '';
-        if (!subscriptionDetails.proxyUser)
-            subscriptionDetails.proxyUser = '';
-        if (!subscriptionDetails.proxyPass)
-            subscriptionDetails.proxyPass = '';
-        args.push('--proxy', subscriptionDetails.proxyServer,
-                  '--proxyuser', subscriptionDetails.proxyUser,
-                  '--proxypass', subscriptionDetails.proxyPass);
+        connection_options.proxy_hostname = {
+            t: 's',
+            v: subscriptionDetails.proxyServer,
+        };
+        connection_options.proxy_user = {
+            t: 's',
+            v: subscriptionDetails.proxyUser,
+        };
+        connection_options.proxy_password = {
+            t: 's',
+            v: subscriptionDetails.proxyPass,
+        };
     }
 
-    // only pass org info if user provided it
-    if (subscriptionDetails.org)
-        args.push('--org', subscriptionDetails.org);
-
-    /* TODO DBus API doesn't deliver what we need, so we call subscription manager
-     * without translations and parse the output
-     * https://bugzilla.redhat.com/show_bug.cgi?id=1304056
-     */
-    var process = cockpit.spawn(args, {
-        directory: '/',
-        superuser: "require",
-        environ: ['LC_ALL=C'],
-        err: "out"
+    registerServer.wait(() => {
+        registerServer.Start()
+            .then(socket => {
+                console.debug('Opening private bus interface at ' + socket);
+                const private_interface = cockpit.dbus(null, {bus: 'none', address: socket, superuser: 'require'});
+                const registerService = private_interface.proxy('com.redhat.RHSM1.Register', '/com/redhat/RHSM1/Register');
+                if (subscriptionDetails.activationKeys) {
+                    return registerService.call('RegisterWithActivationKeys', [subscriptionDetails.org, subscriptionDetails.activationKeys.split(','), options, connection_options]);
+                }
+                else {
+                    return registerService.call('Register', [subscriptionDetails.org, subscriptionDetails.user, subscriptionDetails.password, options, connection_options]);
+                }
+            })
+            .catch(error => {
+                console.error('error registering', error);
+                throw error;
+            })
+            .then(() => {
+                return registerServer.Stop();
+            })
+            .catch(error => {
+                console.error('error stopping registration bus', error);
+                throw error;
+            })
+            .then(() => {
+                return attachService.AutoAttach('', {});
+            })
+            .catch(error => {
+                console.error('error during autoattach', error);
+                throw error;
+            })
+            .then(() => {
+                console.log('requesting update');
+                requestUpdate();
+            });
     });
-
-    var promise;
-    var buffer = '';
-    process
-        .input('')
-        .stream(function(text) {
-            buffer += text;
-        })
-        .done(function(output) {
-            dfd.resolve();
-        })
-        .fail(function(ex) {
-            if (ex.problem === "cancelled") {
-                dfd.reject(ex);
-                return;
-            }
-
-            /* detect error types we recognize, fall back is generic error */
-            var invalidUsernameString = 'Invalid username or password.';
-            var invalidCredentialsString = 'Invalid Credentials';
-            var message = buffer.trim();
-            if (message.indexOf(invalidUsernameString) !== -1) {
-                message = cockpit.format("$0 ($1)", _("Invalid username or password"), message.substring(invalidUsernameString.length).trim());
-            } else if (message.indexOf(invalidCredentialsString) !== -1) {
-                message = cockpit.format("$0 ($1)", _("Invalid credentials"), message.substring(invalidCredentialsString.length).trim());
-            } else if ((message.indexOf('EOF') === 0) && (message.indexOf('Organization:') !== -1)) {
-                message = _("'Organization' required to register.");
-            } else if ((message.indexOf('EOF') === 0) && (message.indexOf('Username:') !== -1)) {
-                message = _("Login/password or activation key required to register.");
-            } else if (message.indexOf('Must provide --org with activation keys') !== -1) {
-                message = _("'Organization' required when using activation keys.");
-            } else if (message.indexOf('The system has been registered') !== -1) {
-                /*
-                 * Currently we don't separate registration & subscription.
-                 * Our auto-attach may have failed, so close the dialog and
-                 * update status.
-                 */
-                dfd.resolve();
-                return;
-            } else {
-                // unrecognized output
-                console.log("unrecognized subscription-manager failure output: ", ex, message);
-            }
-            var error = new Error(message);
-            dfd.reject(error);
-        });
-
-    promise = dfd.promise();
-    promise.cancel = function cancel() {
-        process.close("cancelled");
-        // we have no idea what the current state is
-        requestUpdate();
-    };
-
-    return promise;
 };
 
-client.unregisterSystem = function() {
-    var dfd = cockpit.defer();
-
-    var args = ['subscription-manager', 'unregister'];
-
-    /* TODO DBus API doesn't deliver what we need, so we call subscription manager
-     * without translations and parse the output
-     */
-    var process = cockpit.spawn(args, {
-        directory: '/',
-        superuser: "require",
-        environ: ['LC_ALL=C'],
-        err: "out"
+client.unregisterSystem = () => {
+    client.subscriptionStatus.status = "Unregistering";
+    needRender();
+    unregisterService.wait(() => {
+        unregisterService.Unregister({})
+            .always(() => {
+                requestUpdate();
+            });
     });
-
-    client.subscriptionStatus.status = "unregistering";
-    needRender();
-    var promise;
-    var buffer = '';
-    process
-        .input('')
-        .stream(function(text) {
-            buffer += text;
-        })
-        .done(function(output) {
-            dfd.resolve();
-        })
-        .fail(function(ex) {
-            if (ex.problem === "cancelled") {
-                dfd.reject(ex);
-                return;
-            }
-            var error = new Error(buffer.trim());
-            dfd.reject(error);
-            requestUpdate();
-        });
-
-    promise = dfd.promise();
-    promise.cancel = function cancel() {
-        process.close("cancelled");
-        // we have no idea what the current state is
-        requestUpdate();
-    };
-
-    return promise;
 };
-
-function statusUpdateFailed(reason) {
-    console.warn("Subscription status update failed:", reason);
-    client.subscriptionStatus.status = "not-found";
-    needRender();
-}
 
 /* request update via DBus
  * possible status values: https://github.com/candlepin/subscription-manager/blob/30c3b52320c3e73ebd7435b4fc8b0b6319985d19/src/rhsm_icon/rhsm_icon.c#L98
  * [ RHSM_VALID, RHSM_EXPIRED, RHSM_WARNING, RHN_CLASSIC, RHSM_PARTIALLY_VALID, RHSM_REGISTRATION_REQUIRED ]
  */
-var subscriptionStatusValues = [
+const subscriptionStatusValues = [
     'RHSM_VALID',
     'RHSM_EXPIRED',
     'RHSM_WARNING',
@@ -292,99 +196,63 @@ var subscriptionStatusValues = [
     'RHSM_REGISTRATION_REQUIRED'
 ];
 function requestUpdate() {
-    service.call(
-        '/EntitlementStatus',
-        'com.redhat.SubscriptionManager.EntitlementStatus',
-        'check_status',
-        [])
-        .always(function() {
-            window.clearTimeout(updateTimeout);
-        })
-        .done(function(result) {
-            client.subscriptionStatus.serviceStatus = subscriptionStatusValues[result[0]];
-            client.getSubscriptionStatus();
-        })
-        .catch(function(ex) {
-            statusUpdateFailed("EntitlementStatus.check_status() failed:", ex);
-        });
+    legacyService.wait(() => {
+        legacyService.call('/EntitlementStatus',
+            'com.redhat.SubscriptionManager.EntitlementStatus',
+            'check_status',
+            []
+        )
+            .always(() => {
+                window.clearTimeout(updateTimeout);
+            })
+            .done(result => {
+                client.subscriptionStatus.serviceStatus = subscriptionStatusValues[result[0]];
+                client.getSubscriptionStatus();
+            })
+            .catch(ex => {
+                statusUpdateFailed("EntitlementStatus.check_status() failed:", ex);
+            });
 
-    /* TODO: Don't use a timeout here. Needs better API */
-    updateTimeout = window.setTimeout(
-        function() {
+        /* TODO: Don't use a timeout here. Needs better API */
+        updateTimeout = window.setTimeout(() => {
             statusUpdateFailed("timeout");
         }, 60000);
+    });
 }
 
-function processStatusOutput(text, exitDetails) {
-    if (exitDetails && exitDetails.problem === 'access-denied') {
-        client.subscriptionStatus.status = "access-denied";
-        needRender();
-        return;
-    }
-    /* if output isn't as expected, maybe not properly installed? */
-    if (text.indexOf('Overall Status:') === -1) {
-        console.warn(text, exitDetails);
-        client.subscriptionStatus.status = "not-found";
-        return;
-    }
-
-    /* clear old subscription details */
-    client.subscriptionStatus.products = [];
-
-    var status = parseSingleSubscription(text);
-    client.subscriptionStatus.status = status['Overall Status'];
-
-    /* if refresh was requested, try again - otherwise get details */
-    if (client.subscriptionStatus !== 'Unknown')
-        getSubscriptionDetails();
-    else
-        needRender();
-}
-
-var gettingStatus = false;
-var getStatusRequested = false;
-/* get subscription summary using 'subscription-manager status'*/
-client.getSubscriptionStatus = function() {
+let gettingStatus = false;
+/* get subscription summary */
+client.getSubscriptionStatus = () => {
     if (gettingStatus) {
-        getStatusRequested = true;
         return;
     }
-    getStatusRequested = false;
     gettingStatus = true;
-    /* we need a buffer for 'subscription-manager status' output, since that can fail with a return code != 0
-     * even if we need its output (no valid subscription)
-     */
-    var status_buffer = '';
-    /* TODO DBus API doesn't deliver what we need, so we call subscription manager
-     * without translations and parse the output
-     *
-     * 'subscription-manager status' will only return with exit code 0 if all is well (and subscriptions current)
-     */
-    cockpit.spawn(['subscription-manager', 'status'],
-                  { directory: '/', superuser: "try", environ: ['LC_ALL=C'], err: "out" })
-        .stream(function(text) {
-            status_buffer += text;
-        }).done(function(text) {
-            processStatusOutput(status_buffer + text, undefined);
-        }).fail(function(ex) {
-            processStatusOutput(status_buffer, ex);
-        }).always(function() {
-            gettingStatus = false;
-            if (getStatusRequested)
-                client.getSubscriptionStatus();
-        });
+
+    entitlementService.wait(() => {
+        entitlementService.GetStatus('')
+            .then(result => {
+                const status = JSON.parse(result);
+                client.subscriptionStatus.status = status.status;
+            })
+            .catch(() => {
+                client.subscriptionStatus.status = 'Unknown';
+            })
+            .then(() => {
+                gettingStatus = false;
+                getSubscriptionDetails();
+                needRender();
+            });
+    });
 };
 
-client.init = function() {
-    service = cockpit.dbus('com.redhat.SubscriptionManager');
-
+client.init = () => {
     /* we want to get notified if subscription status of the system changes */
-    service.subscribe(
+    legacyService.subscribe(
         { path: '/EntitlementStatus',
           interface: 'com.redhat.SubscriptionManager.EntitlementStatus',
           member: 'entitlement_status_changed'
         },
-        function(path, dbus_interface, signal, args) {
+        () => {
             window.clearTimeout(updateTimeout);
             /*
              * status has changed, now get actual status via command line
@@ -399,12 +267,12 @@ client.init = function() {
     /* ideally we could get detailed subscription info via DBus, but we
      * can't rely on this being present on all systems we work on
      */
-    service.subscribe(
+    legacyService.subscribe(
         { path: "/EntitlementStatus",
           interface: "org.freedesktop.DBUS.Properties",
           member: "PropertiesChanged"
         },
-        function(path, iface, signal, args) {
+        () => {
             client.getSubscriptionStatus();
         }
     );
