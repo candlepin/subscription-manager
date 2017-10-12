@@ -6,6 +6,7 @@
 %global use_initial_setup 1
 %global use_firstboot 0
 %global use_kitchen 1
+%global use_inotify 1
 %global rhsm_plugins_dir  /usr/share/rhsm-plugins
 
 %if %{use_systemd}
@@ -17,6 +18,7 @@
 %global use_initial_setup 0
 %global use_firstboot 1
 %global use_kitchen 0
+%global use_inotify 0
 %endif
 
 %global use_dnf 0%{?fedora}
@@ -123,6 +125,10 @@ Requires:  %{?gtk3:gobject-introspection, pygobject3-base} %{!?gtk3:pygobject2}
 %ifnarch ppc ppc64 s390 s390x
 Requires:  python-dmidecode
 %endif
+%endif
+
+%if %use_inotify
+Requires:  python-inotify
 %endif
 
 %if %use_systemd

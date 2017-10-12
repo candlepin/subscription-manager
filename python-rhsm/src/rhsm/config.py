@@ -72,6 +72,7 @@ RHSM_DEFAULTS = {
         'plugindir': '/usr/share/rhsm-plugins',
         'pluginconfdir': '/etc/rhsm/pluginconf.d',
         'auto_enable_yum_plugins': '1',
+        'inotify': '1'
         }
 
 RHSMCERTD_DEFAULTS = {

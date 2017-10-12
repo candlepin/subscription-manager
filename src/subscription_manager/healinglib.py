@@ -73,7 +73,7 @@ class HealingUpdateAction(object):
     def perform(self):
         # inject
         identity = inj.require(inj.IDENTITY)
-        uuid = identity.getConsumerId()
+        uuid = identity.uuid
         consumer = self.uep.getConsumer(uuid)
 
         if 'autoheal' not in consumer or not consumer['autoheal']:

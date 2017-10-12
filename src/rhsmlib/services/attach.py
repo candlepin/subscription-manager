@@ -26,6 +26,7 @@ class AttachService(object):
         self.cp = cp
 
     def attach_auto(self, service_level):
+
         if service_level is not None:
             self.cp.updateConsumer(self.identity.uuid, service_level=service_level)
             log.info("Service level set to: %s" % service_level)
@@ -46,6 +47,7 @@ class AttachService(object):
         return resp
 
     def attach_pool(self, pool, quantity):
+
         # If quantity is None, server will assume 1. pre_subscribe will
         # report the same.
         self.plugin_manager.run(

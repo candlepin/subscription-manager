@@ -68,7 +68,7 @@ class IdentityUpdateAction(object):
         # FIXME: move persist stuff here
         from subscription_manager import managerlib
 
-        idcert = identity.getConsumerCert()
+        idcert = identity.consumer
 
         consumer = self._get_consumer(identity)
 
