@@ -39,7 +39,24 @@ function dismissStatusError() {
     dataStore.render();
 }
 
-var registerDialogDetails;
+/* FIXME temporary hack to work on register */
+var registerDialogDetails = subscriptionsRegister.defaultSettings();
+registerDialogDetails.onChange = function(prop, data) {
+    if (prop) {
+        if (data.target) {
+            if (data.target.type == "checkbox") {
+                registerDialogDetails[prop] = data.target.checked;
+            } else {
+                registerDialogDetails[prop] = data.target.value;
+                // input from the ui, so we don't need to re-render
+                return;
+            }
+        } else {
+            registerDialogDetails[prop] = data;
+        }
+    }
+}
+/* END FIXME */
 
 function registerSystem () {
     return subscriptionsClient.registerSystem(registerDialogDetails);
@@ -55,6 +72,11 @@ var footerProps = {
 };
 
 function openRegisterDialog() {
+    /* FIXME temporary hack to work on register */
+    registerSystem(registerDialogDetails);
+    return;
+    /* END FIXME */
+
     registerDialogDetails = subscriptionsRegister.defaultSettings();
 
     // show dialog to register
@@ -112,6 +134,7 @@ function initStore(rootElement) {
                 dismissError: dismissStatusError,
                 register: openRegisterDialog,
                 unregister: unregisterSystem,
+                registerDialogDetails: registerDialogDetails,  // FIXME temporary hack to work on register
             }),
             rootElement
         );

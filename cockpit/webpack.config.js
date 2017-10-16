@@ -169,7 +169,7 @@ module.exports = {
             {
                 enforce: 'pre',
                 exclude: /node_modules/,
-                loader: 'jshint-loader?esversion=6',
+                loader: 'jshint-loader',
                 test: /\.es6$/
             },
             {
