@@ -2620,10 +2620,11 @@ class ManagerCLI(CLI):
 
     def main(self):
         managerlib.check_identity_cert_perms()
+        ret = CLI.main(self)
+        # Try to enable all yum plugins (subscription-manager and plugin-id)
         enabled_yum_plugins = YumPluginManager.enable_yum_plugins()
         if len(enabled_yum_plugins) > 0:
-            print(_('WARNING') + '\n\n' + YumPluginManager.warning_message(enabled_yum_plugins))
-        ret = CLI.main(self)
+            print('\n' + _('WARNING') + '\n\n' + YumPluginManager.warning_message(enabled_yum_plugins))
         # Try to flush all outputs, see BZ: 1350402
         try:
             sys.stdout.flush()
