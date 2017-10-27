@@ -9,6 +9,7 @@
   "scripts": {
     "build": "webpack",
     "jasmine": "jasmine",
+    "po2json": "po2json",
     "vagrant-watch": "webpack --watch & vagrant rsync-auto",
     "watch": "webpack --watch"
   },
@@ -24,12 +25,14 @@
     "eslint-loader": "~1.6.1",
     "eslint-plugin-react": "~6.9.0",
     "extract-text-webpack-plugin": "2.1.2",
+    "glob": "^7.1.2",
     "jasmine": "^2.7.0",
     "jquery": "^3.2.1",
     "jshint": "~2.9.1",
     "jshint-loader": "~0.8.3",
     "patternfly": "^3.27.4",
     "patternfly-react": "https://github.com/candlepin/patternfly-react",
+    "po2json": "^0.4.5",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "style-loader": "^0.18.2",

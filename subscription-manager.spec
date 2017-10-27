@@ -801,6 +801,8 @@ rm -rf %{buildroot}
 %{_datadir}/cockpit/subscription-manager/index.min.js.gz
 %{_datadir}/cockpit/subscription-manager/subscriptions.css
 %{_datadir}/cockpit/subscription-manager/manifest.json
+%{_datadir}/cockpit/subscription-manager/po.*.js
+%{_datadir}/cockpit/subscription-manager/po.js
 %{_datadir}/metainfo/org.cockpit-project.subscription-manager.metainfo.xml
 %endif
 
