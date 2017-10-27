@@ -18,7 +18,6 @@
  */
 
 var cockpit = require("cockpit");
-var register = require("./subscriptions-register.jsx");  // FIXME temporary hack to work on register
 var _ = cockpit.gettext;
 
 var React = require("react");
@@ -245,7 +244,6 @@ var SubscriptionsPage = React.createClass({
 
         return (
             <div className="container-fluid">
-            <register.dialogBody {...this.props.registerDialogDetails}></register.dialogBody>
             <SubscriptionStatus {...this.props }/>
             <Listing
                     title={ _("Installed products") }

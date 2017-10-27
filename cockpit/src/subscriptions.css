@@ -17,9 +17,6 @@
  * along with Cockpit; If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import "/page.css";
-@import "/table.css";
-
 .subscription-status-ct label {
     font-size: 13px;
 }
@@ -84,5 +81,10 @@
 
 .form-group-ct tr:last-child td:last-child {
     padding-bottom: 6px;
-    padding-top:;
 }
+
+/* Make a dialog visible */
+.dialog-ct-visible {
+    display: block;
+}
+

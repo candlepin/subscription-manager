@@ -51,7 +51,6 @@ class ProductsDBusObject(base_object.BaseObject):
         # products.
         init_dep_injection()
 
-        self.ensure_registered()
         filter_string = dbus_utils.dbus_to_python(filter_string, expected_type=str)
         proxy_options = dbus_utils.dbus_to_python(proxy_options, expected_type=dict)
 
