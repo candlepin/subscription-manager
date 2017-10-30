@@ -82,7 +82,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.20.2
+Version: 1.20.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -875,6 +875,18 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Mon Oct 30 2017 Kevin Howell <khowell@redhat.com> 1.20.3-1
+- Cockpit: Implement modal dialog (khowell@redhat.com)
+- Implement bootstrap-select component (khowell@redhat.com)
+- Port cockpit subscriptions-client to dbus (khowell@redhat.com)
+- Move python-rhsm build into subscription-manager (khowell@redhat.com)
+- 1354667: Add identity cert detection to proxy error message generation
+  (wpoteat@redhat.com)
+- 1501889: Enable yum plugins after sub-man subcommand is executed
+  (jhnidek@redhat.com)
+- 1477958: Use inotify for checking changes of consumer certs
+  (jhnidek@redhat.com)
+
 * Mon Oct 09 2017 Kevin Howell <khowell@redhat.com> 1.20.2-1
 - Sync zanata translations (khowell@redhat.com)
 - Bump python-rhsm requirement to 1.20.2 (khowell@redhat.com)
