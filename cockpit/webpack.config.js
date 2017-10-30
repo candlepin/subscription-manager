@@ -190,6 +190,12 @@ module.exports = {
                 exclude: /node_modules/,
                 loader: 'style-loader!css-loader',
                 test: /\.css$/
+            },
+            {
+                enforce: 'pre',
+                exclude: /node_modules/,
+                loader: 'css-loader!less-loader',
+                test: /\.less$/
             }
         ]
     },

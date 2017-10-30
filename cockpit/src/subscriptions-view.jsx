@@ -23,18 +23,29 @@ var _ = cockpit.gettext;
 
 var React = require("react");
 
+import Listing from "./Listing/Listing.jsx";
+// import ListingRow from "./Listing/Listing.jsx"
+
 /* FIXME port from cockpit or replace */
-var Listing = React.createClass({
+var Title = React.createClass({
     render: function() {
-        return (
-            <div>
-                <div>Title: {this.props.title}</div>
-                <div>Empty Caption: {this.props.emptyCaption}</div>
-                {this.props.children}
-            </div>
-        );
+        if (this.props.children) {
+            return (
+                <div>
+                    <h2>{this.props.title}</h2>
+                    {this.props.children}
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    <h2>{this.props.emptyCaption}</h2>
+                </div>
+            )
+        }
     }
 });
+
 var ListingRow = React.createClass({
     render: function() {
         return (
@@ -57,6 +68,7 @@ var SubscriptionProductDetails = React.createClass({
     render: function() {
         return (
             <div key={this.props.productId}>
+                <table><tbody>
                 <tr><td className="form-tr-ct-title">{_("Product name")}</td><td><span>{this.props.productName}</span></td></tr>
                 <tr><td className="form-tr-ct-title">{_("Product ID")}</td><td><span>{this.props.productId}</span></td></tr>
                 <tr><td className="form-tr-ct-title">{_("Version")}</td><td><span>{this.props.version}</span></td></tr>
@@ -64,6 +76,7 @@ var SubscriptionProductDetails = React.createClass({
                 <tr><td className="form-tr-ct-title">{_("Status")}</td><td><span>{this.props.status}</span></td></tr>
                 <tr><td className="form-tr-ct-title">{_("Starts")}</td><td><span>{this.props.starts}</span></td></tr>
                 <tr><td className="form-tr-ct-title">{_("Ends")}</td><td><span>{this.props.ends}</span></td></tr>
+                </tbody></table>
             </div>
         );
     }
@@ -245,14 +258,15 @@ var SubscriptionsPage = React.createClass({
 
         return (
             <div className="container-fluid">
-            <register.dialogBody {...this.props.registerDialogDetails}></register.dialogBody>
-            <SubscriptionStatus {...this.props }/>
-            <Listing
-                    title={ _("Installed products") }
-                    emptyCaption={ _("No installed products on the system.") }
-                    >
-                {entries}
-            </Listing>
+                <register.dialogBody {...this.props.registerDialogDetails}></register.dialogBody>
+                <SubscriptionStatus {...this.props }/>
+                <Title
+                        title={ _("Installed products") }
+                        emptyCaption={ _("No installed products on the system.") }
+                        >
+                    {entries}
+                </Title>
+                <Listing title="Demo Empty Listing Pattern" emptyCaption="No Entries"/>
             </div>
         );
     },
