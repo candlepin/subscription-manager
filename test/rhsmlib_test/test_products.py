@@ -14,7 +14,6 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 import dbus
 import mock
-import six
 import json
 import datetime
 
@@ -343,12 +342,6 @@ class TestProductsDBusObject(DBusObjectTest, InjectionMockingTest):
 
     def dbus_objects(self):
         return [ProductsDBusObject]
-
-    def test_must_be_registered_list_installed_products(self):
-        self.mock_identity.is_valid.return_value = False
-        list_products_method_args = ['', {}]
-        with six.assertRaisesRegex(self, dbus.DBusException, r'requires the consumer to be registered.*'):
-            self.dbus_request(None, self.interface.ListInstalledProducts, list_products_method_args)
 
     def test_list_installed_products_without_filter(self):
         expected_result = [

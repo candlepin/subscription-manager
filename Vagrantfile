@@ -36,8 +36,13 @@ Vagrant.configure("2") do |config|
   config.ssh.forward_x11 = true
 
   # setup shared folder
-  config.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude:
-    "subscription-manager.egg-info, build, build_ext"
+  config.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: [
+    "build",
+    "build_ext",
+    "src/rhsm/_certificate.so",
+    "subscription-manager.egg-info",
+    "cockpit/node_modules",
+  ]
 
   # Set up the hostmanager plugin to automatically configure host & guest hostnames
   if Vagrant.has_plugin?("vagrant-hostmanager")

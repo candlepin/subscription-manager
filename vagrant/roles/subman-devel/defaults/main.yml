@@ -2,11 +2,13 @@
 subman_checkout_dir: .
 subman_setup_hacking_environment: false
 subman_add_vagrant_candlepin_to_hosts: false
+subman_nodejs_version: v6.11.3
 distro_package_command: yum
 distro_specific_deps:
   - dbus-x11
   - gcc
   - git
+  - koji
   - librsvg2
   - libselinux-python
   - libxslt-devel
@@ -18,3 +20,4 @@ distro_specific_deps:
   - tito
   - xorg-x11-server-Xvfb
   - yum-utils
+libexec_path: /usr/libexec
