@@ -82,7 +82,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.20.3
+Version: 1.20.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -875,6 +875,9 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Mon Oct 30 2017 Kevin Howell <khowell@redhat.com> 1.20.4-1
+- Fix cockpit tgz path in spec file (khowell@redhat.com)
+
 * Mon Oct 30 2017 Kevin Howell <khowell@redhat.com> 1.20.3-1
 - Cockpit: Implement modal dialog (khowell@redhat.com)
 - Implement bootstrap-select component (khowell@redhat.com)
