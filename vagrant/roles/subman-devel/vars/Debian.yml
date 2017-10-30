@@ -1,40 +1,35 @@
 ---
 distro_package_command: apt
 distro_specific_deps:
+  - alien
+  - gcc
   - git
-  - python-dateutil
-  - python-iniparse
+  - librsvg2-2
+  - libssl-dev
+  - libxslt1-dev
+  - make
   - python-bugzilla
+  - python-dateutil
+  - python-dmidecode
+  - python-ethtool
+  - python-iniparse
+  - python-m2crypto
   - python-nose
   - python-pip
-  - gcc
-  - make
-  - python-m2crypto
-  - python-ethtool
-  - librsvg2-2
-  - libxslt1-dev
-  - libssl-dev
-  - python-dmidecode
   - python-rpm
-  - alien
 
 distro_specific_subman_build_deps:
-  - python-dev
-  - python-setuptools
+  - desktop-file-utils
+  - distro-info
   - gettext
   - intltool
-  - libnotify-dev
-  - desktop-file-utils
-  - python-six
-  - lsb-release
-  - distro-info
-  - scrollkeeper
-  - libgconf2-dev
   - libdbus-glib-1-dev
+  - libgconf2-dev
   - libgtk-3-dev
-
-distro_specific_python_rhsm_build_deps:
+  - libnotify-dev
+  - libssl-dev
+  - lsb-release
   - python-dev
   - python-setuptools
-  - libssl-dev
   - python-six
+  - scrollkeeper

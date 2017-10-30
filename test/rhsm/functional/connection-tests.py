@@ -289,6 +289,7 @@ class ContentConnectionTests(unittest.TestCase):
             self.assertEquals(None, cc.proxy_port)
         assert 'no_proxy' not in os.environ and 'https_proxy' not in os.environ
 
+
 @attr('functional')
 class HypervisorCheckinTests(unittest.TestCase):
 

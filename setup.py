@@ -20,7 +20,7 @@ import re
 import subprocess
 
 from glob import glob
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, Extension
 
 
 from distutils import log
@@ -135,7 +135,7 @@ class build(_build):
         try:
             cmd = ["git", "describe"]
             process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-            output = process.communicate()[0].strip()
+            output = process.communicate()[0].decode('utf-8').strip()
             if output.startswith(self.git_tag_prefix):
                 return output[len(self.git_tag_prefix):]
         except OSError:
@@ -146,7 +146,7 @@ class build(_build):
     def get_gtk_version(self):
         cmd = ['rpm', '--eval=%dist']
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-        output = process.communicate()[0].strip()
+        output = process.communicate()[0].decode('utf-8').strip()
         if re.search('el6', output):
             return "2"
         return "3"
@@ -295,7 +295,7 @@ transforms = [
 try:
     cmd = ['rpm', '--eval=%_libexecdir']
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    libexecdir = process.communicate()[0].strip()
+    libexecdir = process.communicate()[0].decode('utf-8').strip()
 except OSError:
     libexecdir = 'libexec'
 
@@ -339,5 +339,7 @@ setup(
     setup_requires=setup_requires,
     install_requires=install_requires,
     tests_require=test_require,
+    ext_modules=[Extension('rhsm._certificate', ['src/certificate.c'],
+                           libraries=['ssl', 'crypto'])],
     test_suite='nose.collector',
 )

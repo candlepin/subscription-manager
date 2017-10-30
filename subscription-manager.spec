@@ -7,7 +7,15 @@
 %global use_firstboot 0
 %global use_kitchen 1
 %global use_inotify 1
+%global use_python3 0%{?fedora}
 %global rhsm_plugins_dir  /usr/share/rhsm-plugins
+# on recent Fedora and RHEL 7, let's not use m2crypto
+%global use_m2crypto (0%{?fedora} < 23 && 0%{?rhel} < 7)
+
+# SLES 11 and RHEL6 don't have macros defined for python2; just "python".  Alias them.
+%{!?__python2:%global __python2 %__python}
+%{!?python2_sitearch:%global python2_sitearch %python_sitearch}
+%{?python_provide:%python_provide python-rhsm}
 
 %if %{use_systemd}
 # Note that %gtk3 will be undefined if it's not used
@@ -105,7 +113,7 @@ Requires:  python-ethtool
 Requires:  python-iniparse
 Requires:  python-decorator
 Requires:  virt-what
-Requires:  python-rhsm >= 1.20.2
+Requires:  subscription-manager-rhsm >= %{version}
 Requires:  python-decorator
 Requires:  python-six
 Requires:  python-dateutil
@@ -167,6 +175,11 @@ BuildRequires: systemd-rpm-macros
 # We need the systemd RPM macros
 BuildRequires: systemd
 %endif
+
+# The %{?something:foo} expands to foo only when something is **defined**.  Likewise the
+# %{!?something:foo} expands only when something is **not defined**.
+BuildRequires: %{?suse_version:python-devel >= 2.6} %{!?suse_version:python2-devel}
+BuildRequires: openssl-devel
 
 %description
 The Subscription Manager package provides programs and libraries to allow users
@@ -296,6 +309,66 @@ the remote in the currently deployed .origin file.
 %endif
 
 
+%package -n subscription-manager-rhsm
+Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
+Group: Development/Libraries
+
+%if %use_m2crypto
+Requires: %{?suse_version:python-m2crypto} %{!?suse_version:m2crypto}
+%endif
+Requires: python-dateutil
+Requires: python-iniparse
+# rpm-python is an old name for python2-rpm but RHEL6 uses the old name
+Requires: rpm-python
+Requires: python-six
+Requires: subscription-manager-rhsm-certificates = %{version}-%{release}
+Provides: python-rhsm = %{version}-%{release}
+Obsoletes: python-rhsm <= 1.20.2-1
+
+%description -n subscription-manager-rhsm
+A small library for communicating with the REST interface of a Red Hat Unified
+Entitlement Platform. This interface is used for the management of system
+entitlements, certificates, and access to content.
+
+
+%if %{use_python3}
+%package -n python3-subscription-manager-rhsm
+Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
+BuildRequires: python3-devel
+BuildRequires: python3-setuptools
+BuildRequires: python3-six
+
+Requires: python3-dateutil
+Requires: python3-iniparse
+Requires: python3-rpm
+Requires: python3-six
+# M2Crypto isn't even used in new Fedoras and RHEL 8
+Requires: subscription-manager-rhsm-certificates = %{version}-%{release}
+Provides: python3-python-rhsm = %{version}-%{release}
+Obsoletes: python3-python-rhsm <= 1.20.2-1
+
+# Required by Fedora packaging guidelines
+%{?python_provide:%python_provide python3-python-rhsm}
+
+%description -n python3-subscription-manager-rhsm
+A small library for communicating with the REST interface of a Red Hat Unified
+Entitlement Platform. This interface is used for the management of system
+entitlements, certificates, and access to content.
+%endif
+
+
+%package -n subscription-manager-rhsm-certificates
+Summary: Certificates required to communicate with a Red Hat Unified Entitlement Platform
+Group: Development/Libraries
+Provides: python-rhsm-certificates = %{version}-%{release}
+Obsoletes: python-rhsm-certificates <= 1.20.2-1
+
+%description -n subscription-manager-rhsm-certificates
+This package contains certificates required for communicating with the REST interface
+of a Red Hat Unified Entitlement Platform, used for the management of system entitlements
+and to receive access to content.
+
+
 %prep
 %setup -q
 
@@ -306,12 +379,23 @@ make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
 %install
 rm -rf %{buildroot}
 make -f Makefile install VERSION=%{version}-%{release} \
-    PREFIX=%{buildroot} PYTHON_SITELIB=%{python_sitelib} \
+    PYTHON=/usr/bin/python2 \
+    PREFIX=%{buildroot} PYTHON_SITELIB=%{python_sitearch} \
     OS_VERSION=%{?fedora}%{?rhel}%{?suse_version} OS_DIST=%{dist} \
     %{?install_ostree} %{?post_boot_tool} %{?gtk_version} \
     %{?install_yum_plugins} %{?install_dnf_plugins} \
     %{?install_zypper_plugins} \
     %{?with_systemd}
+%if %{use_python3}
+make -f Makefile install VERSION=%{version}-%{release} \
+    PYTHON=/usr/bin/python3 \
+    PREFIX=%{buildroot} PYTHON_SITELIB=%{python3_sitearch} \
+    OS_VERSION=%{?fedora}%{?rhel}%{?suse_version} OS_DIST=%{dist} \
+    %{?install_ostree} %{?post_boot_tool} %{?gtk_version} \
+    %{?install_yum_plugins} %{?install_dnf_plugins} \
+    %{?install_zypper_plugins} \
+    %{?with_systemd}
+%endif
 
 %if 0%{?suse_version}
 %suse_update_desktop_file -n -r subscription-manager-gui Settings PackageManager
@@ -343,6 +427,7 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-entitlement-authority
 
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/etc/rhsm/ca
 install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-entitlement-authority.pem %{buildroot}/%{_sysconfdir}/rhsm/ca/redhat-entitlement-authority.pem
+install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/ca/redhat-uep.pem %{buildroot}/%{_sysconfdir}/rhsm/ca/redhat-uep.pem
 
 %clean
 rm -rf %{buildroot}
@@ -365,18 +450,21 @@ rm -rf %{buildroot}
     %dir %{_sysconfdir}/yum.repos.d
 %endif
 
-%dir %{python_sitelib}/rhsmlib/candlepin
-%dir %{python_sitelib}/rhsmlib/compat
-%dir %{python_sitelib}/rhsmlib/dbus
-%dir %{python_sitelib}/rhsmlib/dbus/facts
-%dir %{python_sitelib}/rhsmlib/dbus/objects
-%dir %{python_sitelib}/rhsmlib/facts
-%dir %{python_sitelib}/rhsmlib/services
-%dir %{python_sitelib}/subscription_manager-%{version}-*.egg-info
-%dir %{python_sitelib}/subscription_manager/api
-%dir %{python_sitelib}/subscription_manager/branding
-%dir %{python_sitelib}/subscription_manager/model
-%dir %{python_sitelib}/subscription_manager/plugin
+%dir %{python_sitearch}/rhsmlib/candlepin
+%dir %{python_sitearch}/rhsmlib/compat
+%dir %{python_sitearch}/rhsmlib/dbus
+%dir %{python_sitearch}/rhsmlib/dbus/facts
+%dir %{python_sitearch}/rhsmlib/dbus/objects
+%dir %{python_sitearch}/rhsmlib/facts
+%dir %{python_sitearch}/rhsmlib/services
+%dir %{python_sitearch}/subscription_manager-%{version}-*.egg-info
+%dir %{python_sitearch}/subscription_manager/api
+%dir %{python_sitearch}/subscription_manager/branding
+%dir %{python_sitearch}/subscription_manager/model
+%dir %{python_sitearch}/subscription_manager/plugin
+%if %{use_python3}
+%exclude %{python3_sitearch}/rhsmlib
+%endif
 %dir %{_var}/spool/rhsm
 %dir %{_prefix}/share/polkit-1
 %dir %{_prefix}/share/polkit-1/actions
@@ -446,25 +534,29 @@ rm -rf %{buildroot}
 %{_sysconfdir}/bash_completion.d/rhsm-icon
 %{_sysconfdir}/bash_completion.d/rhsmcertd
 
-%dir %{python_sitelib}/subscription_manager
+%dir %{python_sitearch}/subscription_manager
 
 # code, python modules and packages
-%{python_sitelib}/subscription_manager-*.egg-info/*
-%{python_sitelib}/subscription_manager/*.py*
-%{python_sitelib}/subscription_manager/api/*.py*
-%{python_sitelib}/subscription_manager/branding/*.py*
-%{python_sitelib}/subscription_manager/model/*.py*
-%{python_sitelib}/subscription_manager/plugin/__init__.py*
+%{python_sitearch}/subscription_manager-*.egg-info/*
+%{python_sitearch}/subscription_manager/*.py*
+%{python_sitearch}/subscription_manager/api/*.py*
+%{python_sitearch}/subscription_manager/branding/*.py*
+%{python_sitearch}/subscription_manager/model/*.py*
+%{python_sitearch}/subscription_manager/plugin/__init__.py*
+%if %{use_python3}
+%exclude %{python3_sitearch}/subscription_manager-*.egg-info/*
+%exclude %{python3_sitearch}/subscription_manager
+%endif
 
 # our gtk2/gtk3 compat modules
-%dir %{python_sitelib}/subscription_manager/ga_impls
-%{python_sitelib}/subscription_manager/ga_impls/__init__.py*
+%dir %{python_sitearch}/subscription_manager/ga_impls
+%{python_sitearch}/subscription_manager/ga_impls/__init__.py*
 
 %if 0%{?gtk3}
-%{python_sitelib}/subscription_manager/ga_impls/ga_gtk3.py*
+%{python_sitearch}/subscription_manager/ga_impls/ga_gtk3.py*
 %else
-%dir %{python_sitelib}/subscription_manager/ga_impls/ga_gtk2
-%{python_sitelib}/subscription_manager/ga_impls/ga_gtk2/*.py*
+%dir %{python_sitearch}/subscription_manager/ga_impls/ga_gtk2
+%{python_sitearch}/subscription_manager/ga_impls/ga_gtk2/*.py*
 %endif
 
 # subscription-manager plugins
@@ -487,15 +579,18 @@ rm -rf %{buildroot}
 %endif
 
 # rhsmlib
-%dir %{python_sitelib}/rhsmlib
-%{python_sitelib}/rhsmlib/*.py*
-%{python_sitelib}/rhsmlib/candlepin/*.py*
-%{python_sitelib}/rhsmlib/compat/*.py*
-%{python_sitelib}/rhsmlib/facts/*.py*
-%{python_sitelib}/rhsmlib/services/*.py*
-%{python_sitelib}/rhsmlib/dbus/*.py*
-%{python_sitelib}/rhsmlib/dbus/facts/*.py*
-%{python_sitelib}/rhsmlib/dbus/objects/*.py*
+%dir %{python_sitearch}/rhsmlib
+%{python_sitearch}/rhsmlib/*.py*
+%{python_sitearch}/rhsmlib/candlepin/*.py*
+%{python_sitearch}/rhsmlib/compat/*.py*
+%{python_sitearch}/rhsmlib/facts/*.py*
+%{python_sitearch}/rhsmlib/services/*.py*
+%{python_sitearch}/rhsmlib/dbus/*.py*
+%{python_sitearch}/rhsmlib/dbus/facts/*.py*
+%{python_sitearch}/rhsmlib/dbus/objects/*.py*
+%if %{use_python3}
+%exclude %{python3_sitearch}/rhsmlib
+%endif
 
 %{_datadir}/polkit-1/actions/com.redhat.*.policy
 %{_datadir}/dbus-1/system-services/com.redhat.*.service
@@ -511,13 +606,19 @@ rm -rf %{buildroot}
 %endif
 
 # Incude rt CLI tool
-%dir %{python_sitelib}/rct
-%{python_sitelib}/rct/*.py*
+%dir %{python_sitearch}/rct
+%{python_sitearch}/rct/*.py*
+%if %{use_python3}
+%exclude %{python3_sitearch}/rct
+%endif
 %attr(755,root,root) %{_bindir}/rct
 
 # Include consumer debug CLI tool
-%dir %{python_sitelib}/rhsm_debug
-%{python_sitelib}/rhsm_debug/*.py*
+%dir %{python_sitearch}/rhsm_debug
+%{python_sitearch}/rhsm_debug/*.py*
+%if %{use_python3}
+%exclude %{python3_sitearch}/rhsm_debug
+%endif
 %attr(755,root,root) %{_bindir}/rhsm-debug
 
 %doc
@@ -533,10 +634,10 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
 %if 0%{?suse_version}
-%dir %{python_sitelib}/subscription_manager/gui/data
-%dir %{python_sitelib}/subscription_manager/gui/data/glade
-%dir %{python_sitelib}/subscription_manager/gui/data/icons
-%dir %{python_sitelib}/subscription_manager/gui/data/ui
+%dir %{python_sitearch}/subscription_manager/gui/data
+%dir %{python_sitearch}/subscription_manager/gui/data/glade
+%dir %{python_sitearch}/subscription_manager/gui/data/icons
+%dir %{python_sitearch}/subscription_manager/gui/data/ui
 %dir %{_datadir}/appdata
 %dir %{_datadir}/gnome
 %dir %{_datadir}/gnome/help
@@ -547,11 +648,11 @@ rm -rf %{buildroot}
 %endif
 %{_bindir}/rhsm-icon
 
-%dir %{python_sitelib}/subscription_manager/gui
-%{python_sitelib}/subscription_manager/gui/*.py*
-%{python_sitelib}/subscription_manager/gui/data/ui/*.ui
-%{python_sitelib}/subscription_manager/gui/data/glade/*.glade
-%{python_sitelib}/subscription_manager/gui/data/icons/*.svg
+%dir %{python_sitearch}/subscription_manager/gui
+%{python_sitearch}/subscription_manager/gui/*.py*
+%{python_sitearch}/subscription_manager/gui/data/ui/*.ui
+%{python_sitearch}/subscription_manager/gui/data/glade/*.glade
+%{python_sitearch}/subscription_manager/gui/data/icons/*.svg
 
 %{_datadir}/applications/subscription-manager-gui.desktop
 %{_datadir}/icons/hicolor/16x16/apps/*.png
@@ -580,8 +681,8 @@ rm -rf %{buildroot}
 
 %files -n subscription-manager-migration
 %defattr(-,root,root,-)
-%dir %{python_sitelib}/subscription_manager/migrate
-%{python_sitelib}/subscription_manager/migrate/*.py*
+%dir %{python_sitearch}/subscription_manager/migrate
+%{python_sitearch}/subscription_manager/migrate/*.py*
 %attr(755,root,root) %{_sbindir}/rhn-migrate-classic-to-rhsm
 
 %doc
@@ -598,11 +699,12 @@ rm -rf %{buildroot}
 %dir %{_sysconfdir}/docker
 %dir %{_sysconfdir}/docker/certs.d
 %dir %{_sysconfdir}/rhsm/ca
-%dir %{python_sitelib}/subscription_manager/plugin
+%dir %{python_sitearch}/subscription_manager/plugin
 %endif
 %{_sysconfdir}/rhsm/pluginconf.d/container_content.ContainerContentPlugin.conf
 %{rhsm_plugins_dir}/container_content.py*
-%{python_sitelib}/subscription_manager/plugin/container.py*
+%{python_sitearch}/subscription_manager/plugin/container.py*
+
 # Copying Red Hat CA cert into each directory:
 %attr(755,root,root) %dir %{_sysconfdir}/docker/certs.d/cdn.redhat.com
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/redhat-entitlement-authority.pem
@@ -614,7 +716,7 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %{_sysconfdir}/rhsm/pluginconf.d/ostree_content.OstreeContentPlugin.conf
 %{rhsm_plugins_dir}/ostree_content.py*
-%{python_sitelib}/subscription_manager/plugin/ostree/*.py*
+%{python_sitearch}/subscription_manager/plugin/ostree/*.py*
 %endif
 
 
@@ -646,8 +748,30 @@ rm -rf %{buildroot}
 %if %use_dnf
 %files -n dnf-plugin-subscription-manager
 %defattr(-,root,root,-)
-%{python_sitelib}/dnf-plugins/*
+%{python_sitearch}/dnf-plugins/*
+%if %{use_python3}
+%exclude %{python3_sitearch}/dnf-plugins/*
 %endif
+%endif
+
+
+%files -n subscription-manager-rhsm
+%defattr(-,root,root,-)
+%dir %{python2_sitearch}/rhsm
+%{python2_sitearch}/rhsm/*
+
+%if %{use_python3}
+%files -n python3-subscription-manager-rhsm
+%defattr(-,root,root,-)
+%dir %{python3_sitearch}/rhsm
+%{python3_sitearch}/rhsm/*
+%endif
+
+%files -n subscription-manager-rhsm-certificates
+%attr(755,root,root) %dir %{_sysconfdir}/rhsm
+%attr(755,root,root) %dir %{_sysconfdir}/rhsm/ca
+
+%attr(644,root,root) %{_sysconfdir}/rhsm/ca/redhat-uep.pem
 
 
 %post
