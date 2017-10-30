@@ -28,7 +28,7 @@ __all__ = [
 
 class RHSM1DBusException(dbus.DBusException):
     """Base exceptions."""
-    include_traceback = True
+    include_traceback = False
     _dbus_error_name = "%s.Error" % constants.INTERFACE_BASE
 
 

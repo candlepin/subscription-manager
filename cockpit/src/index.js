@@ -23,41 +23,17 @@ var ReactDOM = require("react-dom");
 var subscriptionsClient = require("./subscriptions-client");
 var subscriptionsRegister = require("./subscriptions-register.jsx");
 var subscriptionsView = require("./subscriptions-view.jsx");
-
-/* FIXME port from cockpit or replace */
-var Dialog = {
-    show_modal_dialog: function() {
-        console.warn("FIXME show_modal_dialog not yet implemented.");
-    }
-};
+var Dialog = require("./cockpit-components-dialog.jsx");
 
 var _ = cockpit.gettext;
 
 var dataStore = { };
+var registerDialogDetails = subscriptionsRegister.defaultSettings();
 
 function dismissStatusError() {
     subscriptionsClient.subscriptionStatus.error = undefined;
     dataStore.render();
 }
-
-/* FIXME temporary hack to work on register */
-var registerDialogDetails = subscriptionsRegister.defaultSettings();
-registerDialogDetails.onChange = function(prop, data) {
-    if (prop) {
-        if (data.target) {
-            if (data.target.type == "checkbox") {
-                registerDialogDetails[prop] = data.target.checked;
-            } else {
-                registerDialogDetails[prop] = data.target.value;
-                // input from the ui, so we don't need to re-render
-                return;
-            }
-        } else {
-            registerDialogDetails[prop] = data;
-        }
-    }
-}
-/* END FIXME */
 
 function registerSystem () {
     return subscriptionsClient.registerSystem(registerDialogDetails);
@@ -73,13 +49,6 @@ var footerProps = {
 };
 
 function openRegisterDialog() {
-    /* FIXME temporary hack to work on register */
-    registerSystem(registerDialogDetails);
-    return;
-    /* END FIXME */
-
-    registerDialogDetails = subscriptionsRegister.defaultSettings();
-
     // show dialog to register
     var renderDialog;
     var updatedData = function(prop, data) {
@@ -89,8 +58,6 @@ function openRegisterDialog() {
                     registerDialogDetails[prop] = data.target.checked;
                 } else {
                     registerDialogDetails[prop] = data.target.value;
-                    // input from the ui, so we don't need to re-render
-                    return;
                 }
             } else {
                 registerDialogDetails[prop] = data;
@@ -135,7 +102,6 @@ function initStore(rootElement) {
                 dismissError: dismissStatusError,
                 register: openRegisterDialog,
                 unregister: unregisterSystem,
-                registerDialogDetails: registerDialogDetails,  // FIXME temporary hack to work on register
             }),
             rootElement
         );

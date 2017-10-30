@@ -3,6 +3,7 @@ const copy = require("copy-webpack-plugin");
 const fs = require("fs");
 const webpack = require("webpack");
 const CompressionPlugin = require("compression-webpack-plugin");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 var externals = {
     "cockpit": "cockpit",
@@ -94,6 +95,7 @@ var plugins = [
         '$': 'jquery',
         'jQuery': 'jquery',
     }),
+    new ExtractTextPlugin("subscriptions.css")
 ];
 
 if (!production) {
@@ -150,7 +152,7 @@ module.exports = {
     entry: info.entries,
     externals: externals,
     output: output,
-    devtool: "source-map",
+    devtool: production ? false : "source-map",
     module: {
         rules: [
             {
@@ -188,7 +190,13 @@ module.exports = {
             },
             {
                 exclude: /node_modules/,
-                loader: 'style-loader!css-loader',
+                use: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: {
+                        loader: "css-loader",
+                        options: { minimize: production },
+                    },
+                }),
                 test: /\.css$/
             }
         ]

@@ -799,6 +799,7 @@ rm -rf %{buildroot}
 %dir %{_datadir}/cockpit/subscription-manager
 %{_datadir}/cockpit/subscription-manager/index.html
 %{_datadir}/cockpit/subscription-manager/index.min.js.gz
+%{_datadir}/cockpit/subscription-manager/subscriptions.css
 %{_datadir}/cockpit/subscription-manager/manifest.json
 %{_datadir}/metainfo/org.cockpit-project.subscription-manager.metainfo.xml
 %endif

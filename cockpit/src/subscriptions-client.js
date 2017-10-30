@@ -92,7 +92,8 @@ function getSubscriptionDetails() {
 }
 
 client.registerSystem = subscriptionDetails => {
-    const options = {};
+    const dfd = cockpit.defer();
+    const connection_options = {};
 
     if (subscriptionDetails.url != 'default') {
         /*  parse url into host, port, handler; sorry about the ugly regex
@@ -102,37 +103,58 @@ client.registerSystem = subscriptionDetails => {
             (?:(/.+)) matches the rest for the path
         */
         const pattern = new RegExp('^(?:https?://)?([^/:]+)(?::(?=[0-9])([0-9]+))?(?:(/.+))?$');
-        const match = pattern.exec(subscriptionDetails.url); // TODO handle failure
-        options.host = {
+        const match = pattern.exec(subscriptionDetails.serverUrl); // TODO handle failure
+        connection_options.host = {
             t: 's',
             v: match[1],
         };
-        options.port = {
-            t: 's',
-            v: match[2],
-        };
-        options.handler = {
-            t: 's',
-            v: match[3],
-        };
+        if (match[2]) {
+            connection_options.port = {
+                t: 's',
+                v: match[2],
+            };
+        }
+        if (match[3]) {
+            connection_options.handler = {
+                t: 's',
+                v: match[3],
+            };
+        }
     }
 
-    const connection_options = {};
     // proxy is optional
     if (subscriptionDetails.proxy) {
-        connection_options.proxy_hostname = {
-            t: 's',
-            v: subscriptionDetails.proxyServer,
-        };
-        connection_options.proxy_user = {
-            t: 's',
-            v: subscriptionDetails.proxyUser,
-        };
-        connection_options.proxy_password = {
-            t: 's',
-            v: subscriptionDetails.proxyPass,
-        };
+        if (subscriptionDetails.proxyServer) {
+            const pattern = new RegExp('^([^:]*):?(.*)$');
+            const match = pattern.exec(subscriptionDetails.proxyServer);
+            if (match[1]) {
+                connection_options.proxy_hostname = {
+                    t: 's',
+                    v: match[1],
+                };
+            }
+            if (match[2]) {
+                connection_options.proxy_port = {
+                    t: 's',
+                    v: match[2],
+                }
+            }
+        }
+        if (subscriptionDetails.proxyUser) {
+            connection_options.proxy_user = {
+                t: 's',
+                v: subscriptionDetails.proxyUser,
+            };
+        }
+        if (subscriptionDetails.proxyPassword) {
+            connection_options.proxy_password = {
+                t: 's',
+                v: subscriptionDetails.proxyPassword,
+            };
+        }
     }
+
+    console.debug('connection_options:', connection_options);
 
     registerServer.wait(() => {
         registerServer.Start()
@@ -141,35 +163,41 @@ client.registerSystem = subscriptionDetails => {
                 const private_interface = cockpit.dbus(null, {bus: 'none', address: socket, superuser: 'require'});
                 const registerService = private_interface.proxy('com.redhat.RHSM1.Register', '/com/redhat/RHSM1/Register');
                 if (subscriptionDetails.activationKeys) {
-                    return registerService.call('RegisterWithActivationKeys', [subscriptionDetails.org, subscriptionDetails.activationKeys.split(','), options, connection_options]);
+                    return registerService.call('RegisterWithActivationKeys', [subscriptionDetails.org, subscriptionDetails.activationKeys.split(','), {}, connection_options]);
                 }
                 else {
-                    return registerService.call('Register', [subscriptionDetails.org, subscriptionDetails.user, subscriptionDetails.password, options, connection_options]);
+                    return registerService.call('Register', [subscriptionDetails.org, subscriptionDetails.user, subscriptionDetails.password, {}, connection_options]);
                 }
             })
             .catch(error => {
                 console.error('error registering', error);
-                throw error;
+                dfd.reject(error);
             })
             .then(() => {
+                console.debug('stopping registration server');
                 return registerServer.Stop();
             })
             .catch(error => {
                 console.error('error stopping registration bus', error);
-                throw error;
+                dfd.reject(error);
             })
             .then(() => {
+                console.debug('auto-attaching');
                 return attachService.AutoAttach('', {});
             })
             .catch(error => {
                 console.error('error during autoattach', error);
-                throw error;
+                dfd.reject(error);
             })
             .then(() => {
-                console.log('requesting update');
+                console.debug('requesting update');
                 requestUpdate();
+                dfd.resolve();
             });
     });
+
+    var promise = dfd.promise();
+    return promise;
 };
 
 client.unregisterSystem = () => {
