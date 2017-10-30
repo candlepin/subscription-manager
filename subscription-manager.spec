@@ -97,7 +97,7 @@ URL:     http://www.candlepinproject.org/
 Source0: %{name}-%{version}.tar.gz
 # this is a little different from the Source0, because of limitations in tito,
 # namely that tito expects only one source tarball
-Source1: %{name}-cockpit-%{version}-%{release}.tar.gz
+Source1: %{name}-cockpit-%{version}.tar.gz
 %if 0%{?suse_version}
 Source2: subscription-manager-rpmlintrc
 %endif
