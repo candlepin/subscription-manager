@@ -56,10 +56,10 @@ var SubscriptionProductDetails = React.createClass({
     render: function() {
         return (
             <div key={this.props.productId}>
-                <tr><td className="form-tr-ct-title">{_("Product name")}</td><td><span>{this.props.productName}</span></td></tr>
+                <tr><td className="form-tr-ct-title">{_("Product Name")}</td><td><span>{this.props.productName}</span></td></tr>
                 <tr><td className="form-tr-ct-title">{_("Product ID")}</td><td><span>{this.props.productId}</span></td></tr>
                 <tr><td className="form-tr-ct-title">{_("Version")}</td><td><span>{this.props.version}</span></td></tr>
-                <tr><td className="form-tr-ct-title">{_("Architecture")}</td><td><span>{this.props.arch}</span></td></tr>
+                <tr><td className="form-tr-ct-title">{_("Arch")}</td><td><span>{this.props.arch}</span></td></tr>
                 <tr><td className="form-tr-ct-title">{_("Status")}</td><td><span>{this.props.status}</span></td></tr>
                 <tr><td className="form-tr-ct-title">{_("Starts")}</td><td><span>{this.props.starts}</span></td></tr>
                 <tr><td className="form-tr-ct-title">{_("Ends")}</td><td><span>{this.props.ends}</span></td></tr>
@@ -165,7 +165,7 @@ var SubscriptionStatus = React.createClass({
         var note;
         var isUnregistering = (this.props.status == "unregistering");
         if (this.props.status == 'Unknown') {
-            label = <label>{ _("Status: System isn't registered") }</label>;
+            label = <label>{ cockpit.format(_("Status: $0"), _("This system is currently not registered.")) }</label>;
             action = (<button className="btn btn-primary"
                               onClick={this.handleRegisterSystem}>{_("Register")}</button>
             );
@@ -178,7 +178,7 @@ var SubscriptionStatus = React.createClass({
                 note = (
                     <div className="dialog-wait-ct">
                         <div className="spinner spinner-sm"></div>
-                        <span>{ _("Unregistering system...") }</span>
+                        <span>{ _("Unregistering") }</span>
                     </div>
                 );
             }
@@ -233,7 +233,7 @@ var SubscriptionsPage = React.createClass({
         var entries = this.props.products.map(function(itm) {
             var tabRenderers = [
                 {
-                    name: _("Details"),
+                    name: _("Product's Subscription Details"),
                     renderer: SubscriptionProductDetails,
                     data: itm,
                 },
@@ -247,7 +247,7 @@ var SubscriptionsPage = React.createClass({
             <SubscriptionStatus {...this.props }/>
             <Listing
                     title={ _("Installed products") }
-                    emptyCaption={ _("No installed products on the system.") }
+                    emptyCaption={ _("No installed products detected.") }
                     >
                 {entries}
             </Listing>
