@@ -223,8 +223,15 @@ module.exports = {
                     },
                 }),
                 test: /\.css$/
-            }
+            },
+            {
+                test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|eot|ttf|wav|mp3)$/,
+                options: {
+                    name: '[path][name].[ext]'
+                },
+                loader: 'file-loader',
+            },
         ]
     },
     plugins: plugins
-}
+};

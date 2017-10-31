@@ -1,5 +1,5 @@
 const cockpit = require("cockpit");
-const service = cockpit.dbus("com.redhat.RHSM1", {"superuser": "require"})
+const service = cockpit.dbus("com.redhat.RHSM1", {"superuser": "require"});
 
 describe("Check that we can Register with subscription-manager", function() {
 
