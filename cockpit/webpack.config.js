@@ -4,6 +4,8 @@ const fs = require("fs");
 const webpack = require("webpack");
 const CompressionPlugin = require("compression-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const glob = require("glob");
+const po2json = require("po2json");
 
 var externals = {
     "cockpit": "cockpit",
@@ -29,6 +31,7 @@ var info = {
     files: [
         "index.html",
         "manifest.json",
+        "po.js",
     ],
 };
 
@@ -59,6 +62,27 @@ function vpath(/* ... */) {
         return expanded;
     expanded = srcdir + path.sep + filename;
     return expanded;
+}
+
+class Po2JSONPlugin {
+    apply(compiler) {
+        compiler.plugin('emit', function(compilation, callback) {
+            const files = glob.sync('../po/*.po');
+            files.forEach(function(file) {
+                const dataFileName = `po.${/([^/]*).po$/.exec(file)[1]}.js`;
+                const data = `cockpit.locale(${JSON.stringify(po2json.parseFileSync(file))});`;
+                compilation.assets[dataFileName] = {
+                    source: function() {
+                        return data;
+                    },
+                    size: function() {
+                        return data.length;
+                    },
+                };
+            });
+            callback();
+        });
+    }
 }
 
 /* Qualify all the paths in entries */
@@ -95,7 +119,8 @@ var plugins = [
         '$': 'jquery',
         'jQuery': 'jquery',
     }),
-    new ExtractTextPlugin("subscriptions.css")
+    new ExtractTextPlugin("subscriptions.css"),
+    new Po2JSONPlugin(),
 ];
 
 if (!production) {

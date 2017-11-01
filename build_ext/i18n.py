@@ -142,6 +142,11 @@ class Gettext(BaseCommand):
         files.extend(list(Utils.find_files_of_type('src', '*.ui', '*.glade')))
         return files
 
+    def find_js(self):
+        files = []
+        files.extend(list(Utils.find_files_of_type('cockpit/src', '*.js', '*.jsx')))
+        return files
+
     def find_desktop(self):
         files = []
         files.extend(list(Utils.find_files_of_type('etc-conf', '*.desktop.in')))
@@ -182,6 +187,7 @@ class Gettext(BaseCommand):
             ('%s.c_files', self.find_c, 'C', ['-k_', '-kN_']),
             ('%s.py_files', self.find_py, 'Python', []),
             ('%s.glade_files', self.find_glade, 'Glade', []),
+            ('%s.js_files', self.find_js, 'JavaScript', []),
         ]
 
         for manifest_template, search_func, language, other_options in trans_types:

@@ -60,7 +60,7 @@ var PatternDialogBody = React.createClass({
                         <tr>
                             <td>
                                 <label className="control-label" htmlFor="subscription-proxy-server">
-                                    {_("Server")}
+                                    {_("Proxy Location")}
                                 </label>
                             </td>
                             <td><input className="form-control" id="subscription-proxy-server" type="text"
@@ -72,7 +72,7 @@ var PatternDialogBody = React.createClass({
                         <tr>
                             <td>
                                 <label className="control-label" htmlFor="subscription-proxy-user">
-                                    {_("User")}
+                                    {_("Proxy Username")}
                                 </label>
                             </td>
                             <td><input className="form-control" id="subscription-proxy-user" type="text"
@@ -84,7 +84,7 @@ var PatternDialogBody = React.createClass({
                         <tr>
                             <td>
                                 <label className="control-label" htmlFor="subscription-proxy-password">
-                                    {_("Password")}
+                                    {_("Proxy Password")}
                                 </label>
                             </td>
                             <td><input className="form-control" id="subscription-proxy-password" type="password"
@@ -129,7 +129,7 @@ var PatternDialogBody = React.createClass({
                                 <label>
                                     <input id="subscription-proxy-use" type="checkbox" checked={this.props.proxy}
                                            onChange={value => this.props.onChange('proxy', value)}/>
-                                    {_("Use proxy server")}
+                                    {_("I would like to connect via an HTTP proxy.")}
                                 </label>
                                 {proxy}
                             </td>
