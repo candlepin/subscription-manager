@@ -327,7 +327,7 @@ Requires: rpm-python
 Requires: python-six
 Requires: subscription-manager-rhsm-certificates = %{version}-%{release}
 Provides: python-rhsm = %{version}-%{release}
-Obsoletes: python-rhsm <= 1.20.2-1
+Obsoletes: python-rhsm <= 1.20.3-1
 
 %description -n subscription-manager-rhsm
 A small library for communicating with the REST interface of a Red Hat Unified
@@ -349,7 +349,7 @@ Requires: python3-six
 # M2Crypto isn't even used in new Fedoras and RHEL 8
 Requires: subscription-manager-rhsm-certificates = %{version}-%{release}
 Provides: python3-python-rhsm = %{version}-%{release}
-Obsoletes: python3-python-rhsm <= 1.20.2-1
+Obsoletes: python3-python-rhsm <= 1.20.3-1
 
 # Required by Fedora packaging guidelines
 %{?python_provide:%python_provide python3-python-rhsm}
@@ -365,7 +365,7 @@ entitlements, certificates, and access to content.
 Summary: Certificates required to communicate with a Red Hat Unified Entitlement Platform
 Group: Development/Libraries
 Provides: python-rhsm-certificates = %{version}-%{release}
-Obsoletes: python-rhsm-certificates <= 1.20.2-1
+Obsoletes: python-rhsm-certificates <= 1.20.3-1
 
 %description -n subscription-manager-rhsm-certificates
 This package contains certificates required for communicating with the REST interface
