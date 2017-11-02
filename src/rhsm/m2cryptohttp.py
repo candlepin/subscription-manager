@@ -18,6 +18,7 @@ from __future__ import print_function, division, absolute_import
 
 import six.moves.http_client
 from M2Crypto import httpslib, SSL
+from M2Crypto.SSL import timeout
 import socket
 import inspect
 
@@ -102,7 +103,11 @@ class _RhsmProxyHTTPSConnection(httpslib.ProxyHTTPSConnection):
 
     def _start_ssl(self):
         self.sock = SSL.Connection(self.ssl_ctx, self.sock)
-        self.sock.settimeout(self.rhsm_timeout)
+        try:
+            self.sock.settimeout(self.rhsm_timeout)
+        except AttributeError:
+            self.sock.set_socket_write_timeout(timeout(self.rhsm_timeout))
+            self.sock.set_socket_read_timeout(timeout(self.rhsm_timeout))
         self.sock.setup_ssl()
         self.sock.set_connect_state()
         self.sock.connect_ssl()
@@ -153,7 +158,11 @@ class _RhsmHTTPSConnection(httpslib.HTTPSConnection):
 
             try:
                 sock = SSL.Connection(self.ssl_ctx, **connection_kwargs)
-                sock.settimeout(self.rhsm_timeout)
+                try:
+                    sock.settimeout(self.rhsm_timeout)
+                except AttributeError:
+                    sock.set_socket_write_timeout(timeout(self.rhsm_timeout))
+                    sock.set_socket_read_timeout(timeout(self.rhsm_timeout))
                 if self.session is not None:
                     sock.set_session(self.session)
                 sock.connect((self.host, self.port))
