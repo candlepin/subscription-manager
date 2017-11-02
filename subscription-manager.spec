@@ -82,7 +82,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.20.4
+Version: 1.20.5
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -878,6 +878,15 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Thu Nov 02 2017 Kevin Howell <khowell@redhat.com> 1.20.5-1
+- Sync zanata translations (khowell@redhat.com)
+- Cockpit - listing of installed products using patternfly-react
+  (jhnidek@redhat.com)
+- 1508457: Bump versions in python-rhsm obsoletes (khowell@redhat.com)
+- Implement fallback for settimeout on old m2crypto (khowell@redhat.com)
+- Cockpit: reconcile translated strings (khowell@redhat.com)
+- Cockpit: use translations from root dir (khowell@redhat.com)
+
 * Mon Oct 30 2017 Kevin Howell <khowell@redhat.com> 1.20.4-1
 - Fix cockpit tgz path in spec file (khowell@redhat.com)
 
