@@ -5,6 +5,7 @@
 # John Sefler <jsefler@redhat.com>, 2016. #zanata
 # croe <croe@redhat.com>, 2016. #zanata
 # John Sefler <jsefler@redhat.com>, 2017. #zanata
+# Kevin Howell <kevin@kahowell.net>, 2017. #zanata
 # Ludek Janda <ljanda@redhat.com>, 2017. #zanata
 # Vritant Jain <vrjain@redhat.com>, 2017. #zanata
 # croe <croe@redhat.com>, 2017. #zanata
@@ -12,12 +13,12 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-09 11:22-0400\n"
+"POT-Creation-Date: 2017-11-02 13:51-0400\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-06-21 04:20-0400\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2017-10-31 11:07-0400\n"
+"Last-Translator: Kevin Howell <kevin@kahowell.net>\n"
 "Language-Team: French\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -132,6 +133,173 @@ msgstr "%s est déjà en cours d'exécution"
 #: bin/subscription-manager-gui:186
 msgid "launches the registration dialog on startup"
 msgstr "Lance la boîte de dialogue d'enregistrement lors du démarrage"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: cockpit/src/cockpit-components-dialog.jsx:137
+#: src/subscription_manager/gui/data/glade/redeem.glade:29
+#: src/subscription_manager/gui/data/ui/redeem.ui:29
+msgid "Cancel"
+msgstr "Annuler"
+
+#: cockpit/src/cockpit-components-dialog.jsx:162
+msgid "Ok"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: cockpit/src/index.js:45 cockpit/src/subscriptions-view.jsx:146
+#: src/subscription_manager/gui/data/glade/installed.glade:86
+#: src/subscription_manager/gui/data/ui/installed.ui:93
+#: src/subscription_manager/gui/registergui.py:244
+msgid "Register"
+msgstr "Enregistrer"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: cockpit/src/index.js:70
+#: src/subscription_manager/gui/data/glade/installed.glade:93
+#: src/subscription_manager/gui/data/ui/installed.ui:99
+msgid "Register System"
+msgstr "Enregistrer le système"
+
+#: cockpit/src/subscriptions-register.jsx:63
+msgid "Proxy Location"
+msgstr "Emplacement du proxy"
+
+#: cockpit/src/subscriptions-register.jsx:75
+msgid "Proxy Username"
+msgstr "Nom d'utilisateur proxy"
+
+#: cockpit/src/subscriptions-register.jsx:87
+msgid "Proxy Password"
+msgstr "Mot de passe Proxy"
+
+#: cockpit/src/subscriptions-register.jsx:100
+msgid "Default"
+msgstr "Par défaut"
+
+#: cockpit/src/subscriptions-register.jsx:101
+msgid "Custom URL"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: cockpit/src/subscriptions-register.jsx:110 src/rct/printing.py:106
+msgid "URL"
+msgstr "URL"
+
+#: cockpit/src/subscriptions-register.jsx:125
+msgid "Proxy"
+msgstr ""
+
+#: cockpit/src/subscriptions-register.jsx:132
+msgid "I would like to connect via an HTTP proxy."
+msgstr "Je voudrais me connecter via un proxy _HTTP"
+
+#: cockpit/src/subscriptions-register.jsx:140
+msgid "Login"
+msgstr "Nom d'utilisateur"
+
+#: cockpit/src/subscriptions-register.jsx:152
+msgid "Password"
+msgstr "Mot de passe"
+
+#: cockpit/src/subscriptions-register.jsx:164
+msgid "Activation Key"
+msgstr "Clé d'activation"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: cockpit/src/subscriptions-register.jsx:176
+#: src/subscription_manager/gui/registergui.py:1495
+msgid "Organization"
+msgstr "Organisation"
+
+#: cockpit/src/subscriptions-view.jsx:144
+#: cockpit/src/subscriptions-view.jsx:149
+msgid "Status: $0"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: cockpit/src/subscriptions-view.jsx:144
+#: src/subscription_manager/gui/registergui.py:205
+#: src/subscription_manager/gui/registergui.py:445
+#: src/subscription_manager/gui/registergui.py:1625
+#: src/subscription_manager/managercli.py:1271
+#: src/subscription_manager/utils.py:236
+msgid "This system is currently not registered."
+msgstr "Ce système n'est pas enregistré actuellement."
+
+#: cockpit/src/subscriptions-view.jsx:151
+msgid "Unregister"
+msgstr "Désenregistrer"
+
+#: cockpit/src/subscriptions-view.jsx:157
+#: src/subscription_manager/gui/registergui.py:1063
+msgid "Unregistering"
+msgstr "Désenregistrer"
+
+#: cockpit/src/subscriptions-view.jsx:164
+msgid "Subscriptions"
+msgstr "Abonnements"
+
+#: cockpit/src/subscriptions-view.jsx:194
+msgid "Access denied"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:195
+msgid "The current user isn't allowed to access system subscription status."
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: cockpit/src/subscriptions-view.jsx:220
+#: src/subscription_manager/gui/installedtab.py:219
+#: src/subscription_manager/managercli.py:83
+msgid "Subscribed"
+msgstr "Abonné"
+
+#: cockpit/src/subscriptions-view.jsx:222
+msgid "Not Subscribed (Not supported by a valid subscription.)"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:235
+msgid "Product Name"
+msgstr "Nom du produit"
+
+#: cockpit/src/subscriptions-view.jsx:237
+msgid "Product ID"
+msgstr "ID du produit"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: cockpit/src/subscriptions-view.jsx:239 src/rct/printing.py:46
+#: src/rct/printing.py:125 src/subscription_manager/gui/installedtab.py:91
+msgid "Version"
+msgstr "Version"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: cockpit/src/subscriptions-view.jsx:241 src/rct/printing.py:47
+msgid "Arch"
+msgstr "Arch"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: cockpit/src/subscriptions-view.jsx:243
+#: src/subscription_manager/gui/installedtab.py:94
+msgid "Status"
+msgstr "État"
+
+#: cockpit/src/subscriptions-view.jsx:245
+msgid "Starts"
+msgstr "Démarre"
+
+#: cockpit/src/subscriptions-view.jsx:247
+msgid "Ends"
+msgstr "Termine"
+
+#: cockpit/src/subscriptions-view.jsx:261
+msgid "Installed products"
+msgstr "Produits installés"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: cockpit/src/subscriptions-view.jsx:262
+#: src/subscription_manager/gui/installedtab.py:321
+msgid "No installed products detected."
+msgstr "Aucun produit installé détecté."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/daemons/rhsmcertd-worker.py:76
@@ -648,17 +816,6 @@ msgid "ID"
 msgstr "ID"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rct/printing.py:46 src/rct/printing.py:125
-#: src/subscription_manager/gui/installedtab.py:91
-msgid "Version"
-msgstr "Version"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/rct/printing.py:47
-msgid "Arch"
-msgstr "Arch"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/printing.py:48
 msgid "Tags"
 msgstr "Balises"
@@ -738,11 +895,6 @@ msgstr "Étiquette"
 #: src/rct/printing.py:105
 msgid "Vendor"
 msgstr "Fournisseur"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rct/printing.py:106
-msgid "URL"
-msgstr "URL"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/printing.py:107
@@ -1181,7 +1333,7 @@ msgstr "Ce système est enregistré sur spacewalk"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/branding/__init__.py:85
 #: src/subscription_manager/branding/redhat_branding.py:12
-#: src/subscription_manager/managercli.py:2625
+#: src/subscription_manager/managercli.py:2627
 #: src/subscription_manager/migrate/migrate.py:1000
 msgid "WARNING"
 msgstr "AVERTISSEMENT"
@@ -2204,19 +2356,6 @@ msgid "Overall Status"
 msgstr "Statut général"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/gui/data/glade/installed.glade:86
-#: src/subscription_manager/gui/data/ui/installed.ui:93
-#: src/subscription_manager/gui/registergui.py:244
-msgid "Register"
-msgstr "Enregistrer"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/gui/data/glade/installed.glade:93
-#: src/subscription_manager/gui/data/ui/installed.ui:99
-msgid "Register System"
-msgstr "Enregistrer le système"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/data/glade/installed.glade:105
 #: src/subscription_manager/gui/data/glade/installed.glade:112
 #: src/subscription_manager/gui/data/ui/installed.ui:111
@@ -2630,12 +2769,6 @@ msgstr "Boîte de dialogue de progression"
 #: src/subscription_manager/gui/data/ui/redeem.ui:8
 msgid "Subscription Redemption"
 msgstr "Échange d'abonnements"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/gui/data/glade/redeem.glade:29
-#: src/subscription_manager/gui/data/ui/redeem.ui:29
-msgid "Cancel"
-msgstr "Annuler"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/gui/data/glade/redeem.glade:43
@@ -3289,11 +3422,6 @@ msgid "Certificate import was successful."
 msgstr "L'importation du certificat a réussie."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/gui/installedtab.py:94
-msgid "Status"
-msgstr "État"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/installedtab.py:190
 #: src/subscription_manager/managercli.py:82
 msgid "Future Subscription"
@@ -3334,12 +3462,6 @@ msgid "Entitlement server is unreachable."
 msgstr "Le serveur des droits d'accès est injoignable."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/gui/installedtab.py:219
-#: src/subscription_manager/managercli.py:83
-msgid "Subscribed"
-msgstr "Abonné"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/installedtab.py:221
 #, python-format
 msgid "Covered by contract %s through %s"
@@ -3358,11 +3480,6 @@ msgstr "Non abonné"
 #: src/subscription_manager/gui/installedtab.py:288
 msgid "My Installed Products"
 msgstr "Mes produits installés"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/gui/installedtab.py:321
-msgid "No installed products detected."
-msgstr "Aucun produit installé détecté."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/installedtab.py:325
@@ -3569,15 +3686,6 @@ msgstr "Erreur lors de l'échange de l'abonnement : %s"
 msgid "<b>Unable to register the system.</b>"
 msgstr "<b>Incapable d'enregistrer le système.</b>"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/gui/registergui.py:205
-#: src/subscription_manager/gui/registergui.py:445
-#: src/subscription_manager/gui/registergui.py:1625
-#: src/subscription_manager/managercli.py:1271
-#: src/subscription_manager/utils.py:236
-msgid "This system is currently not registered."
-msgstr "Ce système n'est pas enregistré actuellement."
-
 #: src/subscription_manager/gui/registergui.py:374
 msgid "Error during registration."
 msgstr "Erreur pendant l'enregistrement."
@@ -3605,10 +3713,6 @@ msgstr "Enregistrement avec le propriétaire : %s environnement : %s"
 #: src/subscription_manager/gui/registergui.py:1051
 msgid "Unable to unregister"
 msgstr "Enregistrement impossible"
-
-#: src/subscription_manager/gui/registergui.py:1063
-msgid "Unregistering"
-msgstr "Désenregistrer"
 
 #: src/subscription_manager/gui/registergui.py:1093
 msgid "Uploading package profile"
@@ -3710,11 +3814,6 @@ msgstr "Récupération de la liste des environnements possibles"
 #: src/subscription_manager/gui/registergui.py:1492
 msgid "Fetching list of possible organizations"
 msgstr "Récupération de la liste des organisations possibles"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/gui/registergui.py:1495
-msgid "Organization"
-msgstr "Organisation"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/gui/registergui.py:1510

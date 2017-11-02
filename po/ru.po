@@ -5,18 +5,19 @@
 # tchuang <tchuang@redhat.com>, 2016. #zanata
 # ypoyarko <ypoyarko@redhat.com>, 2016. #zanata
 # John Sefler <jsefler@redhat.com>, 2017. #zanata
+# Kevin Howell <kevin@kahowell.net>, 2017. #zanata
 # Ludek Janda <ljanda@redhat.com>, 2017. #zanata
 # noriko <noriko@fedoraproject.org>, 2017. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-09 11:22-0400\n"
+"POT-Creation-Date: 2017-11-02 13:51-0400\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-06-21 01:26-0400\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2017-10-31 11:35-0400\n"
+"Last-Translator: Kevin Howell <kevin@kahowell.net>\n"
 "Language-Team: Russian\n"
 "Language: ru\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
@@ -132,6 +133,173 @@ msgstr "%s уже выполняется"
 #: bin/subscription-manager-gui:186
 msgid "launches the registration dialog on startup"
 msgstr "открывает диалог регистрации при запуске"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/cockpit-components-dialog.jsx:137
+#: src/subscription_manager/gui/data/glade/redeem.glade:29
+#: src/subscription_manager/gui/data/ui/redeem.ui:29
+msgid "Cancel"
+msgstr "Отмена"
+
+#: cockpit/src/cockpit-components-dialog.jsx:162
+msgid "Ok"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/index.js:45 cockpit/src/subscriptions-view.jsx:146
+#: src/subscription_manager/gui/data/glade/installed.glade:86
+#: src/subscription_manager/gui/data/ui/installed.ui:93
+#: src/subscription_manager/gui/registergui.py:244
+msgid "Register"
+msgstr "Регистрация"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/index.js:70
+#: src/subscription_manager/gui/data/glade/installed.glade:93
+#: src/subscription_manager/gui/data/ui/installed.ui:99
+msgid "Register System"
+msgstr "Регистрация"
+
+#: cockpit/src/subscriptions-register.jsx:63
+msgid "Proxy Location"
+msgstr "Адрес прокси"
+
+#: cockpit/src/subscriptions-register.jsx:75
+msgid "Proxy Username"
+msgstr "Пользователь"
+
+#: cockpit/src/subscriptions-register.jsx:87
+msgid "Proxy Password"
+msgstr "Пароль"
+
+#: cockpit/src/subscriptions-register.jsx:100
+msgid "Default"
+msgstr "По умолчанию"
+
+#: cockpit/src/subscriptions-register.jsx:101
+msgid "Custom URL"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/subscriptions-register.jsx:110 src/rct/printing.py:106
+msgid "URL"
+msgstr "URL-адрес"
+
+#: cockpit/src/subscriptions-register.jsx:125
+msgid "Proxy"
+msgstr ""
+
+#: cockpit/src/subscriptions-register.jsx:132
+msgid "I would like to connect via an HTTP proxy."
+msgstr "Подключиться через прокси"
+
+#: cockpit/src/subscriptions-register.jsx:140
+msgid "Login"
+msgstr "Имя пользователя"
+
+#: cockpit/src/subscriptions-register.jsx:152
+msgid "Password"
+msgstr "Пароль"
+
+#: cockpit/src/subscriptions-register.jsx:164
+msgid "Activation Key"
+msgstr "Ключ активации"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/subscriptions-register.jsx:176
+#: src/subscription_manager/gui/registergui.py:1495
+msgid "Organization"
+msgstr "Организация"
+
+#: cockpit/src/subscriptions-view.jsx:144
+#: cockpit/src/subscriptions-view.jsx:149
+msgid "Status: $0"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/subscriptions-view.jsx:144
+#: src/subscription_manager/gui/registergui.py:205
+#: src/subscription_manager/gui/registergui.py:445
+#: src/subscription_manager/gui/registergui.py:1625
+#: src/subscription_manager/managercli.py:1271
+#: src/subscription_manager/utils.py:236
+msgid "This system is currently not registered."
+msgstr "Система не зарегистрирована."
+
+#: cockpit/src/subscriptions-view.jsx:151
+msgid "Unregister"
+msgstr "Удалить регистрацию"
+
+#: cockpit/src/subscriptions-view.jsx:157
+#: src/subscription_manager/gui/registergui.py:1063
+msgid "Unregistering"
+msgstr "Отмена регистрации"
+
+#: cockpit/src/subscriptions-view.jsx:164
+msgid "Subscriptions"
+msgstr "Подписки"
+
+#: cockpit/src/subscriptions-view.jsx:194
+msgid "Access denied"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:195
+msgid "The current user isn't allowed to access system subscription status."
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/subscriptions-view.jsx:220
+#: src/subscription_manager/gui/installedtab.py:219
+#: src/subscription_manager/managercli.py:83
+msgid "Subscribed"
+msgstr "Подписано"
+
+#: cockpit/src/subscriptions-view.jsx:222
+msgid "Not Subscribed (Not supported by a valid subscription.)"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:235
+msgid "Product Name"
+msgstr "Имя"
+
+#: cockpit/src/subscriptions-view.jsx:237
+msgid "Product ID"
+msgstr "ID"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/subscriptions-view.jsx:239 src/rct/printing.py:46
+#: src/rct/printing.py:125 src/subscription_manager/gui/installedtab.py:91
+msgid "Version"
+msgstr "Версия"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/subscriptions-view.jsx:241 src/rct/printing.py:47
+msgid "Arch"
+msgstr "Арх."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/subscriptions-view.jsx:243
+#: src/subscription_manager/gui/installedtab.py:94
+msgid "Status"
+msgstr "Статус"
+
+#: cockpit/src/subscriptions-view.jsx:245
+msgid "Starts"
+msgstr "Начало"
+
+#: cockpit/src/subscriptions-view.jsx:247
+msgid "Ends"
+msgstr "Конец"
+
+#: cockpit/src/subscriptions-view.jsx:261
+msgid "Installed products"
+msgstr "Установленные продукты"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/subscriptions-view.jsx:262
+#: src/subscription_manager/gui/installedtab.py:321
+msgid "No installed products detected."
+msgstr "Нет установленных продуктов."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/daemons/rhsmcertd-worker.py:76
@@ -638,17 +806,6 @@ msgid "ID"
 msgstr "ID"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/printing.py:46 src/rct/printing.py:125
-#: src/subscription_manager/gui/installedtab.py:91
-msgid "Version"
-msgstr "Версия"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/printing.py:47
-msgid "Arch"
-msgstr "Арх."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/printing.py:48
 msgid "Tags"
 msgstr "Теги"
@@ -729,11 +886,6 @@ msgstr "Метка"
 #: src/rct/printing.py:105
 msgid "Vendor"
 msgstr "Производитель"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/printing.py:106
-msgid "URL"
-msgstr "URL-адрес"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/printing.py:107
@@ -1163,7 +1315,7 @@ msgstr "Система зарегистрирована в spacewalk."
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/__init__.py:85
 #: src/subscription_manager/branding/redhat_branding.py:12
-#: src/subscription_manager/managercli.py:2625
+#: src/subscription_manager/managercli.py:2627
 #: src/subscription_manager/migrate/migrate.py:1000
 msgid "WARNING"
 msgstr "ПРЕДУПРЕЖДЕНИЕ"
@@ -2154,19 +2306,6 @@ msgid "Overall Status"
 msgstr "Общий статус:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/gui/data/glade/installed.glade:86
-#: src/subscription_manager/gui/data/ui/installed.ui:93
-#: src/subscription_manager/gui/registergui.py:244
-msgid "Register"
-msgstr "Регистрация"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/gui/data/glade/installed.glade:93
-#: src/subscription_manager/gui/data/ui/installed.ui:99
-msgid "Register System"
-msgstr "Регистрация"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/installed.glade:105
 #: src/subscription_manager/gui/data/glade/installed.glade:112
 #: src/subscription_manager/gui/data/ui/installed.ui:111
@@ -2580,12 +2719,6 @@ msgstr "Диалог хода выполнения"
 #: src/subscription_manager/gui/data/ui/redeem.ui:8
 msgid "Subscription Redemption"
 msgstr "Получение подписок"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/gui/data/glade/redeem.glade:29
-#: src/subscription_manager/gui/data/ui/redeem.ui:29
-msgid "Cancel"
-msgstr "Отмена"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/redeem.glade:43
@@ -3256,11 +3389,6 @@ msgid "Certificate import was successful."
 msgstr "Сертификат успешно добавлен."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/gui/installedtab.py:94
-msgid "Status"
-msgstr "Статус"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/installedtab.py:190
 #: src/subscription_manager/managercli.py:82
 msgid "Future Subscription"
@@ -3301,12 +3429,6 @@ msgid "Entitlement server is unreachable."
 msgstr "Сервер полномочий недоступен."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/gui/installedtab.py:219
-#: src/subscription_manager/managercli.py:83
-msgid "Subscribed"
-msgstr "Подписано"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/installedtab.py:221
 #, python-format
 msgid "Covered by contract %s through %s"
@@ -3326,11 +3448,6 @@ msgstr "Не подписано"
 #: src/subscription_manager/gui/installedtab.py:288
 msgid "My Installed Products"
 msgstr "Установленные"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/gui/installedtab.py:321
-msgid "No installed products detected."
-msgstr "Нет установленных продуктов."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/installedtab.py:325
@@ -3530,15 +3647,6 @@ msgstr "Ошибка при получении подписки: %s"
 msgid "<b>Unable to register the system.</b>"
 msgstr "<b>Не удалось зарегистрировать систему.</b>"
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/gui/registergui.py:205
-#: src/subscription_manager/gui/registergui.py:445
-#: src/subscription_manager/gui/registergui.py:1625
-#: src/subscription_manager/managercli.py:1271
-#: src/subscription_manager/utils.py:236
-msgid "This system is currently not registered."
-msgstr "Система не зарегистрирована."
-
 #: src/subscription_manager/gui/registergui.py:374
 msgid "Error during registration."
 msgstr "Произошла ошибка во время регистрации."
@@ -3568,10 +3676,6 @@ msgstr "Регистрация для владельца %s, окружение 
 #: src/subscription_manager/gui/registergui.py:1051
 msgid "Unable to unregister"
 msgstr "Невозможно отменить регистрацию"
-
-#: src/subscription_manager/gui/registergui.py:1063
-msgid "Unregistering"
-msgstr "Отмена регистрации"
 
 #: src/subscription_manager/gui/registergui.py:1093
 msgid "Uploading package profile"
@@ -3670,11 +3774,6 @@ msgstr "Получение списка окружений"
 #: src/subscription_manager/gui/registergui.py:1492
 msgid "Fetching list of possible organizations"
 msgstr "Получение списка организаций"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/gui/registergui.py:1495
-msgid "Organization"
-msgstr "Организация"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/registergui.py:1510

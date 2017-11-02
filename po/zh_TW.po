@@ -12,12 +12,12 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-09 11:22-0400\n"
+"POT-Creation-Date: 2017-11-02 13:51-0400\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-06-21 04:21-0400\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2017-10-31 11:02-0400\n"
+"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Chinese (Traditional, Taiwan)\n"
 "Language: zh-Hant-TW\n"
 "Plural-Forms: nplurals=1; plural=0\n"
@@ -132,6 +132,173 @@ msgstr "%s 已在執行中"
 #: bin/subscription-manager-gui:186
 msgid "launches the registration dialog on startup"
 msgstr "在開機時啟動註冊對話方塊"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/cockpit-components-dialog.jsx:137
+#: src/subscription_manager/gui/data/glade/redeem.glade:29
+#: src/subscription_manager/gui/data/ui/redeem.ui:29
+msgid "Cancel"
+msgstr "取消"
+
+#: cockpit/src/cockpit-components-dialog.jsx:162
+msgid "Ok"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/index.js:45 cockpit/src/subscriptions-view.jsx:146
+#: src/subscription_manager/gui/data/glade/installed.glade:86
+#: src/subscription_manager/gui/data/ui/installed.ui:93
+#: src/subscription_manager/gui/registergui.py:244
+msgid "Register"
+msgstr "註冊"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/index.js:70
+#: src/subscription_manager/gui/data/glade/installed.glade:93
+#: src/subscription_manager/gui/data/ui/installed.ui:99
+msgid "Register System"
+msgstr "註冊系統"
+
+#: cockpit/src/subscriptions-register.jsx:63
+msgid "Proxy Location"
+msgstr "代理伺服器位置"
+
+#: cockpit/src/subscriptions-register.jsx:75
+msgid "Proxy Username"
+msgstr "代理伺服器使用者名稱"
+
+#: cockpit/src/subscriptions-register.jsx:87
+msgid "Proxy Password"
+msgstr "代理伺服器密碼"
+
+#: cockpit/src/subscriptions-register.jsx:100
+msgid "Default"
+msgstr "預設"
+
+#: cockpit/src/subscriptions-register.jsx:101
+msgid "Custom URL"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/subscriptions-register.jsx:110 src/rct/printing.py:106
+msgid "URL"
+msgstr "URL"
+
+#: cockpit/src/subscriptions-register.jsx:125
+msgid "Proxy"
+msgstr ""
+
+#: cockpit/src/subscriptions-register.jsx:132
+msgid "I would like to connect via an HTTP proxy."
+msgstr "我想透過 HTTP 代理伺服器連線。"
+
+#: cockpit/src/subscriptions-register.jsx:140
+msgid "Login"
+msgstr "登入"
+
+#: cockpit/src/subscriptions-register.jsx:152
+msgid "Password"
+msgstr "密碼"
+
+#: cockpit/src/subscriptions-register.jsx:164
+msgid "Activation Key"
+msgstr "啟動金鑰"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/subscriptions-register.jsx:176
+#: src/subscription_manager/gui/registergui.py:1495
+msgid "Organization"
+msgstr "組織"
+
+#: cockpit/src/subscriptions-view.jsx:144
+#: cockpit/src/subscriptions-view.jsx:149
+msgid "Status: $0"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/subscriptions-view.jsx:144
+#: src/subscription_manager/gui/registergui.py:205
+#: src/subscription_manager/gui/registergui.py:445
+#: src/subscription_manager/gui/registergui.py:1625
+#: src/subscription_manager/managercli.py:1271
+#: src/subscription_manager/utils.py:236
+msgid "This system is currently not registered."
+msgstr "這部系統目前尚未註冊。"
+
+#: cockpit/src/subscriptions-view.jsx:151
+msgid "Unregister"
+msgstr "取消註冊"
+
+#: cockpit/src/subscriptions-view.jsx:157
+#: src/subscription_manager/gui/registergui.py:1063
+msgid "Unregistering"
+msgstr "取消註冊"
+
+#: cockpit/src/subscriptions-view.jsx:164
+msgid "Subscriptions"
+msgstr "訂閱"
+
+#: cockpit/src/subscriptions-view.jsx:194
+msgid "Access denied"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:195
+msgid "The current user isn't allowed to access system subscription status."
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/subscriptions-view.jsx:220
+#: src/subscription_manager/gui/installedtab.py:219
+#: src/subscription_manager/managercli.py:83
+msgid "Subscribed"
+msgstr "已訂閱"
+
+#: cockpit/src/subscriptions-view.jsx:222
+msgid "Not Subscribed (Not supported by a valid subscription.)"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:235
+msgid "Product Name"
+msgstr "產品名稱"
+
+#: cockpit/src/subscriptions-view.jsx:237
+msgid "Product ID"
+msgstr "產品 ID"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/subscriptions-view.jsx:239 src/rct/printing.py:46
+#: src/rct/printing.py:125 src/subscription_manager/gui/installedtab.py:91
+msgid "Version"
+msgstr "版本"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/subscriptions-view.jsx:241 src/rct/printing.py:47
+msgid "Arch"
+msgstr "架構"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/subscriptions-view.jsx:243
+#: src/subscription_manager/gui/installedtab.py:94
+msgid "Status"
+msgstr "狀態"
+
+#: cockpit/src/subscriptions-view.jsx:245
+msgid "Starts"
+msgstr "起始"
+
+#: cockpit/src/subscriptions-view.jsx:247
+msgid "Ends"
+msgstr "結束"
+
+#: cockpit/src/subscriptions-view.jsx:261
+msgid "Installed products"
+msgstr "已安裝的產品"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/subscriptions-view.jsx:262
+#: src/subscription_manager/gui/installedtab.py:321
+msgid "No installed products detected."
+msgstr "未偵測到已安裝的產品。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/daemons/rhsmcertd-worker.py:76
@@ -628,17 +795,6 @@ msgid "ID"
 msgstr "ID"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/printing.py:46 src/rct/printing.py:125
-#: src/subscription_manager/gui/installedtab.py:91
-msgid "Version"
-msgstr "版本"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/printing.py:47
-msgid "Arch"
-msgstr "架構"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/printing.py:48
 msgid "Tags"
 msgstr "標籤"
@@ -719,11 +875,6 @@ msgstr "標籤"
 #: src/rct/printing.py:105
 msgid "Vendor"
 msgstr "供應商"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/printing.py:106
-msgid "URL"
-msgstr "URL"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/printing.py:107
@@ -1138,7 +1289,7 @@ msgstr "系統已經向 spacewalk 註冊"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/__init__.py:85
 #: src/subscription_manager/branding/redhat_branding.py:12
-#: src/subscription_manager/managercli.py:2625
+#: src/subscription_manager/managercli.py:2627
 #: src/subscription_manager/migrate/migrate.py:1000
 msgid "WARNING"
 msgstr "警告"
@@ -2099,19 +2250,6 @@ msgid "Overall Status"
 msgstr "整體狀態"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/gui/data/glade/installed.glade:86
-#: src/subscription_manager/gui/data/ui/installed.ui:93
-#: src/subscription_manager/gui/registergui.py:244
-msgid "Register"
-msgstr "註冊"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/gui/data/glade/installed.glade:93
-#: src/subscription_manager/gui/data/ui/installed.ui:99
-msgid "Register System"
-msgstr "註冊系統"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/installed.glade:105
 #: src/subscription_manager/gui/data/glade/installed.glade:112
 #: src/subscription_manager/gui/data/ui/installed.ui:111
@@ -2516,12 +2654,6 @@ msgstr "進度對話方塊"
 #: src/subscription_manager/gui/data/ui/redeem.ui:8
 msgid "Subscription Redemption"
 msgstr "兌換訂閱"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/gui/data/glade/redeem.glade:29
-#: src/subscription_manager/gui/data/ui/redeem.ui:29
-msgid "Cancel"
-msgstr "取消"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/redeem.glade:43
@@ -3175,11 +3307,6 @@ msgid "Certificate import was successful."
 msgstr "成功匯入憑證。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/gui/installedtab.py:94
-msgid "Status"
-msgstr "狀態"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/installedtab.py:190
 #: src/subscription_manager/managercli.py:82
 msgid "Future Subscription"
@@ -3220,12 +3347,6 @@ msgid "Entitlement server is unreachable."
 msgstr "無法連接至權利伺服器。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/gui/installedtab.py:219
-#: src/subscription_manager/managercli.py:83
-msgid "Subscribed"
-msgstr "已訂閱"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/installedtab.py:221
 #, python-format
 msgid "Covered by contract %s through %s"
@@ -3243,11 +3364,6 @@ msgstr "未訂閱"
 #: src/subscription_manager/gui/installedtab.py:288
 msgid "My Installed Products"
 msgstr "已安裝的產品"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/gui/installedtab.py:321
-msgid "No installed products detected."
-msgstr "未偵測到已安裝的產品。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/installedtab.py:325
@@ -3447,15 +3563,6 @@ msgstr "取得訂閱時發生錯誤：%s"
 msgid "<b>Unable to register the system.</b>"
 msgstr "<b>無法註冊系統。</b>"
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/gui/registergui.py:205
-#: src/subscription_manager/gui/registergui.py:445
-#: src/subscription_manager/gui/registergui.py:1625
-#: src/subscription_manager/managercli.py:1271
-#: src/subscription_manager/utils.py:236
-msgid "This system is currently not registered."
-msgstr "這部系統目前尚未註冊。"
-
 #: src/subscription_manager/gui/registergui.py:374
 msgid "Error during registration."
 msgstr "註冊期間發生錯誤。"
@@ -3485,10 +3592,6 @@ msgstr "註冊至擁有者：%s 環境：%s"
 #: src/subscription_manager/gui/registergui.py:1051
 msgid "Unable to unregister"
 msgstr "無法取消註冊"
-
-#: src/subscription_manager/gui/registergui.py:1063
-msgid "Unregistering"
-msgstr "取消註冊"
 
 #: src/subscription_manager/gui/registergui.py:1093
 msgid "Uploading package profile"
@@ -3578,11 +3681,6 @@ msgstr "取得可用環境的清單"
 #: src/subscription_manager/gui/registergui.py:1492
 msgid "Fetching list of possible organizations"
 msgstr "取得可用組織的清單"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/gui/registergui.py:1495
-msgid "Organization"
-msgstr "組織"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/registergui.py:1510
