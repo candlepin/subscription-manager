@@ -60,7 +60,8 @@ function parseProducts(text) {
             'version': product[2],
             'arch': product[3],
             'status': product[4],
-            /* TODO start date and end date */
+            'starts': product[6],
+            'ends': product[7]
         };
     });
 }
@@ -137,7 +138,7 @@ client.registerSystem = subscriptionDetails => {
                 connection_options.proxy_port = {
                     t: 's',
                     v: match[2],
-                }
+                };
             }
         }
         if (subscriptionDetails.proxyUser) {

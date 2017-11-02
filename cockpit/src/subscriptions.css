@@ -17,6 +17,12 @@
  * along with Cockpit; If not, see <http://www.gnu.org/licenses/>.
  */
 
+@import '~patternfly/dist/css/patternfly-additions.min.css';
+
+.installed-products .list-view-pf-left .fa.list-view-pf-icon-sm {
+    border: none;
+}
+
 .subscription-status-ct label {
     font-size: 13px;
 }

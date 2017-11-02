@@ -22,51 +22,27 @@ var _ = cockpit.gettext;
 
 var React = require("react");
 
-/* FIXME port from cockpit or replace */
-var Listing = React.createClass({
-    render: function() {
-        return (
-            <div>
-                <div>Title: {this.props.title}</div>
-                <div>Empty Caption: {this.props.emptyCaption}</div>
-                {this.props.children}
-            </div>
-        );
-    }
-});
-var ListingRow = React.createClass({
-    render: function() {
-        return (
-            <SubscriptionProductDetails
-                    productName={this.props.tabRenderers[0].data.productName}
-                    productId={this.props.tabRenderers[0].data.productId}
-                    version={this.props.tabRenderers[0].data.version}
-                    arch={this.props.tabRenderers[0].data.arch}
-                    status={this.props.tabRenderers[0].data.status}
-                    starts={this.props.tabRenderers[0].data.starts}
-                    ends={this.props.tabRenderers[0].data.ends}
-                    >
-            </SubscriptionProductDetails>
-        );
-    }
-});
+import { ListView, ListViewItem, ListViewIcon } from 'patternfly-react';
+import { Row, Col } from 'react-bootstrap';
 
-// Show details for an installed product
-var SubscriptionProductDetails = React.createClass({
-    render: function() {
-        return (
-            <div key={this.props.productId}>
-                <tr><td className="form-tr-ct-title">{_("Product Name")}</td><td><span>{this.props.productName}</span></td></tr>
-                <tr><td className="form-tr-ct-title">{_("Product ID")}</td><td><span>{this.props.productId}</span></td></tr>
-                <tr><td className="form-tr-ct-title">{_("Version")}</td><td><span>{this.props.version}</span></td></tr>
-                <tr><td className="form-tr-ct-title">{_("Arch")}</td><td><span>{this.props.arch}</span></td></tr>
-                <tr><td className="form-tr-ct-title">{_("Status")}</td><td><span>{this.props.status}</span></td></tr>
-                <tr><td className="form-tr-ct-title">{_("Starts")}</td><td><span>{this.props.starts}</span></td></tr>
-                <tr><td className="form-tr-ct-title">{_("Ends")}</td><td><span>{this.props.ends}</span></td></tr>
-            </div>
-        );
+class Listing extends React.Component {
+    render() {
+        if (this.props.children) {
+            return (
+                <div>
+                    <h2>{this.props.title}</h2>
+                    {this.props.children}
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    <h2>{this.props.emptyCaption}</h2>
+                </div>
+            );
+        }
     }
-});
+}
 
 /* 'Curtains' implements a subset of the PatternFly Empty State pattern
  * https://www.patternfly.org/patterns/empty-state/
@@ -87,9 +63,9 @@ var Curtains = React.createClass({
         var curtains = "curtains-ct";
 
         var icon = this.props.icon;
-        if (icon == 'waiting')
+        if (icon === 'waiting')
             icon = <div className="spinner spinner-lg"></div>;
-        else if (icon == 'error')
+        else if (icon === 'error')
             icon = <div className="pficon pficon-error-circle-o"></div>;
 
         return (
@@ -163,8 +139,8 @@ var SubscriptionStatus = React.createClass({
         var label;
         var action;
         var note;
-        var isUnregistering = (this.props.status == "unregistering");
-        if (this.props.status == 'Unknown') {
+        var isUnregistering = (this.props.status === "unregistering");
+        if (this.props.status === 'Unknown') {
             label = <label>{ cockpit.format(_("Status: $0"), _("This system is currently not registered.")) }</label>;
             action = (<button className="btn btn-primary"
                               onClick={this.handleRegisterSystem}>{_("Register")}</button>
@@ -213,7 +189,7 @@ var SubscriptionsPage = React.createClass({
             icon = <div className="spinner spinner-lg" />;
             message = _("Updating");
             description = _("Retrieving subscription status...");
-        } else if (this.props.status == 'access-denied') {
+        } else if (this.props.status === 'access-denied') {
             icon = <i className="fa fa-exclamation-circle" />;
             message = _("Access denied");
             description = _("The current user isn't allowed to access system subscription status.");
@@ -230,16 +206,52 @@ var SubscriptionsPage = React.createClass({
         );
     },
     renderSubscriptions: function() {
-        var entries = this.props.products.map(function(itm) {
-            var tabRenderers = [
-                {
-                    name: _("Product's Subscription Details"),
-                    renderer: SubscriptionProductDetails,
-                    data: itm,
-                },
-            ];
-            var columns = [ { name: itm.productName, 'header': true } ];
-            return <ListingRow columns={columns} tabRenderers={tabRenderers}/>;
+        var entries = this.props.products.map(function (itm) {
+            let icon_name;
+            let status_text;
+
+            if (itm.status === 'subscribed') {
+                icon_name = "fa pficon-ok";
+            } else {
+                icon_name = "fa pficon-error-circle-o";
+            }
+
+            if (itm.status === 'subscribed') {
+                status_text = _("Subscribed");
+            } else {
+                status_text = _("Not Subscribed (Not supported by a valid subscription.)");
+            }
+
+            return (
+                <ListViewItem
+                    leftContent={<ListViewIcon icon={ icon_name } />}
+                    heading={ itm.productName }
+                    key={itm.productId}
+                >
+                    <Row>
+                        <Col sm={11}>
+                            <div className="col-md-11">
+                                <dl className="dl-horizontal">
+                                    <dt>{ _("Product Name") }</dt>
+                                    <dd>{ itm.productName }</dd>
+                                    <dt>{ _("Product ID") }</dt>
+                                    <dd>{ itm.productId }</dd>
+                                    <dt>{ _("Version") }</dt>
+                                    <dd>{ itm.version }</dd>
+                                    <dt>{ _("Arch") }</dt>
+                                    <dd>{ itm.arch }</dd>
+                                    <dt>{ _("Status") }</dt>
+                                    <dd>{ status_text }</dd>
+                                    <dt>{ _("Starts") }</dt>
+                                    <dd>{ itm.starts }</dd>
+                                    <dt>{ _("Ends") }</dt>
+                                    <dd>{ itm.ends }</dd>
+                                </dl>
+                            </div>
+                        </Col>
+                    </Row>
+                </ListViewItem>
+            );
         });
 
         return (
@@ -249,15 +261,17 @@ var SubscriptionsPage = React.createClass({
                     title={ _("Installed products") }
                     emptyCaption={ _("No installed products detected.") }
                     >
+                <ListView className="installed-products">
                 {entries}
+                </ListView>
             </Listing>
             </div>
         );
     },
     render: function() {
         if (this.props.status === undefined ||
-            this.props.status == 'not-found' ||
-            this.props.status == 'access-denied') {
+            this.props.status === 'not-found' ||
+            this.props.status === 'access-denied') {
             return this.renderCurtains();
         } else {
             return this.renderSubscriptions();
