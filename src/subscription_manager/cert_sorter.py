@@ -146,7 +146,7 @@ class ComplianceManager(object):
 
         if 'status' in status and len(status['status']):
             self.system_status = status['status']
-        #Some old candlepin versions do not return 'status' with information
+        # Some old candlepin versions do not return 'status' with information
         elif status['nonCompliantProducts']:
             self.system_status = 'invalid'
         elif self.partially_valid_products or self.partial_stacks or \
@@ -176,7 +176,7 @@ class ComplianceManager(object):
                     self.partially_valid_products and pid not in \
                     unentitled_pids:
                 log.warn("Installed product %s not present in response from "
-                        "server." % pid)
+                         "server." % pid)
                 unentitled_pids.append(pid)
 
         for unentitled_pid in unentitled_pids:
@@ -184,7 +184,7 @@ class ComplianceManager(object):
             # Ignore anything server thinks we have but we don't.
             if prod_cert is None:
                 log.warn("Server reported installed product not on system: %s" %
-                        unentitled_pid)
+                         unentitled_pid)
                 continue
             self.unentitled_products[unentitled_pid] = prod_cert
 
@@ -340,7 +340,11 @@ class CertSorter(ComplianceManager):
 
     def get_compliance_status(self):
         status_cache = inj.require(inj.ENTITLEMENT_STATUS_CACHE)
-        return status_cache.load_status(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
+        return status_cache.load_status(
+            self.cp_provider.get_consumer_auth_cp(),
+            self.identity.uuid,
+            self.on_date
+        )
 
     def update_product_manager(self):
         if self.is_registered():

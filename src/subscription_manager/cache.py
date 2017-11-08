@@ -70,7 +70,7 @@ class CacheManager(object):
         """
         raise NotImplementedError
 
-    def _sync_with_server(self, uep, consumer_uuid):
+    def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
         """
         Sync the latest data to/from the server.
         """
@@ -195,7 +195,7 @@ class StatusCache(CacheManager):
         self.server_status = None
         self.last_error = None
 
-    def load_status(self, uep, uuid):
+    def load_status(self, uep, uuid, on_date=None):
         """
         Load status from wherever is appropriate.
 
@@ -208,7 +208,7 @@ class StatusCache(CacheManager):
         Returns None if we cannot reach the server, or use the cache.
         """
         try:
-            self._sync_with_server(uep, uuid)
+            self._sync_with_server(uep, uuid, on_date)
             self.write_cache()
             self.last_error = False
             return self.server_status
@@ -316,8 +316,13 @@ class EntitlementStatusCache(StatusCache):
     """
     CACHE_FILE = "/var/lib/rhsm/cache/entitlement_status.json"
 
-    def _sync_with_server(self, uep, uuid):
-        self.server_status = uep.getCompliance(uuid)
+    def _sync_with_server(self, uep, uuid, *args, **kwargs):
+        on_date = None
+        if len(args) > 0:
+            on_date = args[0]
+        elif 'on_date' in kwargs:
+            on_date = kwargs['on_date']
+        self.server_status = uep.getCompliance(uuid, on_date)
 
 
 class ProductStatusCache(StatusCache):
@@ -326,7 +331,7 @@ class ProductStatusCache(StatusCache):
     """
     CACHE_FILE = "/var/lib/rhsm/cache/product_status.json"
 
-    def _sync_with_server(self, uep, uuid):
+    def _sync_with_server(self, uep, uuid, *args, **kwargs):
         consumer_data = uep.getConsumer(uuid)
 
         if 'installedProducts' not in consumer_data:
@@ -341,7 +346,7 @@ class OverrideStatusCache(StatusCache):
     """
     CACHE_FILE = "/var/lib/rhsm/cache/content_overrides.json"
 
-    def _sync_with_server(self, uep, consumer_uuid):
+    def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
         self.server_status = uep.getContentOverrides(consumer_uuid)
 
 
@@ -351,7 +356,7 @@ class ReleaseStatusCache(StatusCache):
     """
     CACHE_FILE = "/var/lib/rhsm/cache/releasever.json"
 
-    def _sync_with_server(self, uep, consumer_uuid):
+    def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
         def get_release(uuid):
 
             # To mimic connection problems you can raise required exception:
@@ -426,7 +431,7 @@ class ProfileManager(CacheManager):
         cached_profile = self._read_cache()
         return not cached_profile == self.current_profile
 
-    def _sync_with_server(self, uep, consumer_uuid):
+    def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
         uep.updatePackageProfile(consumer_uuid,
                 self.current_profile.collect())
 
@@ -518,7 +523,7 @@ class InstalledProductsManager(CacheManager):
         final = [val for (key, val) in list(self.installed.items())]
         return final
 
-    def _sync_with_server(self, uep, consumer_uuid):
+    def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
         uep.updateConsumer(consumer_uuid,
                 installed_products=self.format_for_server(),
                 content_tags=self.tags)
@@ -530,7 +535,7 @@ class PoolStatusCache(StatusCache):
     """
     CACHE_FILE = "/var/lib/rhsm/cache/pool_status.json"
 
-    def _sync_with_server(self, uep, uuid):
+    def _sync_with_server(self, uep, uuid, *args, **kwargs):
         self.server_status = uep.getEntitlementList(uuid)
 
 
