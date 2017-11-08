@@ -26,7 +26,7 @@ import Select from "./Select/Select.jsx";
 function defaultRegisterDialogSettings() {
     return {
         url: 'default',
-        serverUrl: 'subscription.rhn.redhat.com',
+        serverUrl: 'subscription.rhsm.redhat.com',
         proxy: false,
         proxyServer: '',
         proxyUser: '',
