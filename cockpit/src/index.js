@@ -28,7 +28,14 @@ var Dialog = require("./cockpit-components-dialog.jsx");
 var _ = cockpit.gettext;
 
 var dataStore = { };
-var registerDialogDetails = subscriptionsRegister.defaultSettings();
+var registerDialogDetails = {
+    user: '',
+    password: '',
+    proxyUser: '',
+    proxyPassword: '',
+    activationKeys: '',
+    org: '',
+};
 
 function dismissStatusError() {
     subscriptionsClient.subscriptionStatus.error = undefined;
@@ -49,6 +56,7 @@ var footerProps = {
 };
 
 function openRegisterDialog() {
+    Object.assign(registerDialogDetails, subscriptionsClient.config); // set config to what was loaded
     // show dialog to register
     var renderDialog;
     var updatedData = function(prop, data) {

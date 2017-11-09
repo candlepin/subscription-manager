@@ -327,7 +327,12 @@ class ContentConnection(object):
         else:
             conn = httplib.HTTPSConnection(self.host, self.ssl_port, context=context, timeout=self.timeout)
 
-        final_headers = {"Host": "%s:%s" % (self.host, self.ssl_port),
+        if ':' in self.host:
+            host_normalized = '[%s]' % self.host
+        else:
+            host_normalized = self.host
+
+        final_headers = {"Host": "%s:%s" % (host_normalized, self.ssl_port),
                          "Content-Length": "0",
                          "User-Agent": self.user_agent}
         if headers:
@@ -503,7 +508,11 @@ class BaseRestLib(object):
                 proxy_headers['Proxy-Authorization'] = _encode_auth(self.proxy_user, self.proxy_password)
             conn = httplib.HTTPSConnection(self.proxy_hostname, self.proxy_port, context=context, timeout=self.timeout)
             conn.set_tunnel(self.host, safe_int(self.ssl_port), proxy_headers)
-            self.headers['Host'] = '%s:%s' % (self.host, safe_int(self.ssl_port))
+            if ':' in self.host:
+                host_normalized = '[%s]' % self.host
+            else:
+                host_normalized = self.host
+            self.headers['Host'] = '%s:%s' % (host_normalized, safe_int(self.ssl_port))
         else:
             conn = httplib.HTTPSConnection(self.host, self.ssl_port, context=context, timeout=self.timeout)
 
