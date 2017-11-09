@@ -21,8 +21,6 @@ import re
 import threading
 import socket
 
-import rhsm.config as config
-
 from subscription_manager.ga import GObject as ga_GObject
 from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.ga import gtk_compat as ga_gtk_compat
@@ -43,8 +41,6 @@ EVEN_ROW_COLOR = '#eeeeee'
 # set if we are in firstboot, to disable linkify, see bz#814378
 FIRSTBOOT = False
 
-cfg = config.initConfig()
-
 
 def running_as_firstboot():
     global FIRSTBOOT
@@ -55,7 +51,7 @@ def get_running_as_firstboot():
     return FIRSTBOOT
 
 
-def test_proxy_reachability():
+def test_proxy_reachability(proxy_server, proxy_port):
     """
     Function used for testing reachability of proxy server. Note: this
     function does not test functionality of proxy server.
@@ -63,17 +59,14 @@ def test_proxy_reachability():
     """
 
     result = None
-    if not cfg.get("server", "proxy_hostname"):
-        return True
     try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.settimeout(10)
-        result = s.connect_ex((cfg.get("server", "proxy_hostname"),
-                               int(cfg.get("server", "proxy_port") or config.DEFAULT_PROXY_PORT)))
-    except Exception as e:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(10)
+        result = sock.connect_ex((proxy_server, proxy_port))
+    except socket.error as e:
         log.info("Attempted bad proxy: %s" % e)
     finally:
-        s.close()
+        sock.close()
 
     if result != 0:
         log.error("Proxy connection error: %s" % result)

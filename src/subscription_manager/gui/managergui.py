@@ -27,6 +27,7 @@ import webbrowser
 import os
 import threading
 import time
+import socket
 
 import rhsm.config as config
 
@@ -175,27 +176,56 @@ class MainWindow(widgets.SubmanBaseWidget):
                  auto_launch_registration=False):
         super(MainWindow, self).__init__()
 
-        # When proxy server is set in configuration and it is not
-        # possible to connect to proxy server, then open dialog
-        # for setting proxy server.
-        if not utils.test_proxy_reachability():
-            print_error(_("Proxy connection failed, please check your settings."))
-            error_dialog = messageWindow.ContinueDialog(_("Proxy connection failed, please check your settings."),
-                                                        self._get_window())
+        rhsm_cfg = config.initConfig()
+        proxy_server = rhsm_cfg.get("server", "proxy_hostname")
+        proxy_port = int(rhsm_cfg.get("server", "proxy_port") or config.DEFAULT_PROXY_PORT)
+
+        def show_proxy_error_dialog(proxy_auth_required=False):
+            """
+            When proxy server is set in configuration and it is not
+            possible to connect to proxy server, then open dialog
+            for setting proxy server.
+            """
+            if proxy_auth_required:
+                proxy_user = rhsm_cfg.get("server", "proxy_user")
+                proxy_password = rhsm_cfg.get("server", "proxy_password")
+                if proxy_user or proxy_password:
+                    err_msg = _("Wrong proxy username or password, please check your settings.")
+                else:
+                    err_msg = _("Proxy authentication required, please check your settings.")
+            else:
+                err_msg = _("Proxy connection failed, please check your settings.")
+            print_error(err_msg)
+            error_dialog = messageWindow.ContinueDialog(err_msg, self._get_window())
             error_dialog.connect("response", self._on_proxy_error_dialog_response)
             self.network_config_dialog = networkConfig.NetworkConfigDialog()
             # Sub-man gui will be terminated after saving settings and it is
             # necessary to start it once again.
             self.network_config_dialog.saveButton.connect("clicked", self._exit)
             self.network_config_dialog.cancelButton.connect("clicked", self._exit)
-            return
 
         self.backend = backend or Backend()
-        self.identity = require(IDENTITY)
+        cp = self.backend.cp_provider.get_consumer_auth_cp()
 
+        if proxy_server:
+            if not utils.test_proxy_reachability(proxy_server, proxy_port):
+                show_proxy_error_dialog()
+                return
+
+            try:
+                # Try to send to the simplest Rest API call to Candlepin server.
+                # This result will be used for getting version of Candlepin server.
+                # See self.log_server_version.
+                cp.supports_resource("status")
+            except socket.error as err:
+                # See https://tools.ietf.org/html/rfc7235#section-4.3
+                if "407 Proxy Authentication Required" in err.message:
+                    show_proxy_error_dialog(proxy_auth_required=True)
+                    return
+
+        self.identity = require(IDENTITY)
         log.debug("Client Versions: %s " % get_client_versions())
-        # Log the server version asynchronously
-        ga_GLib.idle_add(self.log_server_version, self.backend.cp_provider.get_consumer_auth_cp())
+        ga_GLib.idle_add(self.log_server_version, cp)
 
         settings = self.main_window.get_settings()
 
