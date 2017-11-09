@@ -117,7 +117,7 @@ Requires:  python-ethtool
 Requires:  python-iniparse
 Requires:  python-decorator
 Requires:  virt-what
-Requires:  subscription-manager-rhsm >= %{version}
+Requires:  subscription-manager-rhsm = %{version}
 Requires:  python-decorator
 Requires:  python-six
 Requires:  python-dateutil

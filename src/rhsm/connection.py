@@ -36,9 +36,6 @@ from six.moves.urllib.parse import urlencode, quote, quote_plus
 
 from rhsm.config import initConfig
 
-from rhsm import version
-python_rhsm_version = version.rpm_version
-
 try:
     import subscription_manager.version
     subman_version = subscription_manager.version.rpm_version
@@ -424,7 +421,6 @@ class BaseRestLib(object):
 
         self.headers = {"Content-type": "application/json",
                         "Accept": "application/json",
-                        "x-python-rhsm-version": python_rhsm_version,
                         "x-subscription-manager-version": subman_version}
 
         if lc:
