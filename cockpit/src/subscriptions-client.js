@@ -30,6 +30,8 @@ const _ = cockpit.gettext;
 
 const client = { };
 
+const userLang = navigator.language || navigator.userLanguage;
+
 cockpit.event_target(client);
 
 client.subscriptionStatus = {
@@ -77,6 +79,22 @@ function parseProducts(text) {
     });
 }
 
+// Error message produced by D-Bus API should be string containing
+// regular JSON with following format:
+// {"exception": "NameOfException", "message": "Some error message"}
+// Only message should be reported to user.
+function parseErrorMessage(error) {
+    let err;
+    try {
+        err = JSON.parse(error).message;
+    } catch (parse_err) {
+        console.log('Error parsing D-Bus error message: ', parse_err.message);
+        console.log('Returning original error message: ', error);
+        err = error;
+    }
+    return err;
+}
+
 let gettingDetails = false;
 let getDetailsRequested = false;
 function getSubscriptionDetails() {
@@ -87,7 +105,7 @@ function getSubscriptionDetails() {
     getDetailsRequested = false;
     gettingDetails = true;
     productsService.wait(() => {
-        productsService.ListInstalledProducts('', {})
+        productsService.ListInstalledProducts('', {}, userLang) // FIXME: use proxy settings
             .then(result => {
                 client.subscriptionStatus.products = parseProducts(result);
             })
@@ -232,24 +250,32 @@ client.registerSystem = subscriptionDetails => {
 
     registerServer.wait(() => {
         let registered = false;
-        registerServer.Start()
+        registerServer.Start(userLang)
             .then(socket => {
                 console.debug('Opening private bus interface at ' + socket);
-                const private_interface = cockpit.dbus(null, {bus: 'none', address: socket, superuser: 'require'});
+                const private_interface = cockpit.dbus(
+                    null,
+                        {
+                            bus: 'none',
+                            address: socket,
+                            superuser: 'require'
+                        }
+                    );
                 const registerService = private_interface.proxy(
                     'com.redhat.RHSM1.Register',
                     '/com/redhat/RHSM1/Register'
                 );
-                registered = true;
-                if (subscriptionDetails.activation_keys) {
+                if (subscriptionDetails.activationKeys) {
                     return registerService.call(
                         'RegisterWithActivationKeys',
                         [
                             subscriptionDetails.org,
-                            subscriptionDetails.activation_keys.split(','),
+                            subscriptionDetails.activationKeys.split(','),
                             {},
-                            connection_options
-                        ]);
+                            connection_options,
+                            userLang
+                        ]
+                    );
                 }
                 else {
                     return registerService.call(
@@ -259,22 +285,24 @@ client.registerSystem = subscriptionDetails => {
                             subscriptionDetails.user,
                             subscriptionDetails.password,
                             {},
-                            connection_options
-                        ]);
+                            connection_options,
+                            userLang
+                        ]
+                    );
                 }
             })
             .catch(error => {
                 console.error('error registering', error);
                 registered = false;
-                dfd.reject(error);
+                dfd.reject(parseErrorMessage(error));
             })
             .then(() => {
                 console.debug('stopping registration server');
-                return registerServer.Stop();
+                return registerServer.Stop(userLang);
             })
             .catch(error => {
                 console.error('error stopping registration bus', error);
-                dfd.reject(error);
+                dfd.reject(parseErrorMessage(error));
             })
             .then(() => {
                 if (registered === true) {
@@ -299,7 +327,7 @@ client.registerSystem = subscriptionDetails => {
                                 // Is config option in dialog different from  rhsm.conf
                                 if (client.config[key] !== connection_options[dict[key]].v) {
                                     console.debug('saving: server.' + key, connection_options[dict[key]]);
-                                    configService.Set('server.' + key, connection_options[dict[key]])
+                                    configService.Set('server.' + key, connection_options[dict[key]], userLang)
                                         .catch(error => {
                                             console.error('unable to save server.' + key, error);
                                         });
@@ -312,7 +340,7 @@ client.registerSystem = subscriptionDetails => {
                                 // When config option was not specified in dialog, then it is
                                 // necessary to reset it in rhsm.conf (e.g. proxy options are optional)
                                 console.debug('resetting: server.' + key);
-                                configService.Set('server.' + key, {'t': 's', 'v': default_value})
+                                configService.Set('server.' + key, {'t': 's', 'v': default_value}, userLang)
                                     .catch(error => {
                                         console.error('unable to reset server.' + key, error);
                                     });
@@ -324,7 +352,7 @@ client.registerSystem = subscriptionDetails => {
                     // then we can try to auto-attach
                     console.debug('auto-attaching');
                     if (connection_options.proxy_hostname) {
-                        var proxy_options = {};
+                        let proxy_options = {};
                         proxy_options.proxy_hostname = connection_options.proxy_hostname;
                         if (connection_options.proxy_port) {
                             // FIXME: change D-Bus implementation to be able to use string too
@@ -339,21 +367,25 @@ client.registerSystem = subscriptionDetails => {
                         if (connection_options.proxy_password) {
                             proxy_options.proxy_password = connection_options.proxy_password;
                         }
-                        attachService.AutoAttach('', proxy_options)
+                        attachService.AutoAttach('', proxy_options, userLang)
                             .catch(error => {
                                 console.error('error during autoattach', error);
-                                dfd.reject(error);
+                                dfd.reject(parseErrorMessage(error));
                             });
                     } else {
-                        attachService.AutoAttach('', {})
+                        attachService.AutoAttach('', {}, userLang)
                             .catch(error => {
                                 console.error('error during autoattach', error);
-                                dfd.reject(error);
+                                dfd.reject(parseErrorMessage(error));
                             });
                     }
                 }
             })
-            .always(() => {
+            .catch(error => {
+                console.error('error during autoattach', error);
+                dfd.reject(parseErrorMessage(error));
+            })
+            .then(() => {
                 console.debug('requesting update');
                 requestUpdate();
                 dfd.resolve();
@@ -368,7 +400,7 @@ client.unregisterSystem = () => {
     client.subscriptionStatus.status = "Unregistering";
     needRender();
     unregisterService.wait(() => {
-        unregisterService.Unregister({})
+        unregisterService.Unregister({}, userLang) // FIXME: user proxy settings
             .always(() => {
                 requestUpdate();
             });
@@ -421,7 +453,7 @@ client.getSubscriptionStatus = () => {
     gettingStatus = true;
 
     entitlementService.wait(() => {
-        entitlementService.GetStatus('')
+        entitlementService.GetStatus('', userLang)
             .then(result => {
                 const status = JSON.parse(result);
                 client.subscriptionStatus.status = status.status;
@@ -438,7 +470,7 @@ client.getSubscriptionStatus = () => {
 };
 
 client.readConfig = () => {
-    return configService.wait(() => configService.GetAll().then(config => {
+    return configService.wait(() => configService.GetAll(userLang).then(config => {
         const hostname = config.server.v.hostname;
         const port = config.server.v.port;
         const prefix = config.server.v.prefix;

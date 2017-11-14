@@ -373,5 +373,5 @@ class TestProductsDBusObject(DBusObjectTest, InjectionMockingTest):
 
         self.mock_products.list.return_value = expected_result
 
-        dbus_method_args = ['', {}]
+        dbus_method_args = ['', {}, '']
         self.dbus_request(assertions, self.interface.ListInstalledProducts, dbus_method_args)

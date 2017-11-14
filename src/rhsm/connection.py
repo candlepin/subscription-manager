@@ -35,15 +35,14 @@ from six.moves.urllib.request import proxy_bypass
 from six.moves.urllib.parse import urlencode, quote, quote_plus
 
 from rhsm.config import initConfig
+from rhsm import ourjson as json
+from rhsm import utils
 
 try:
     import subscription_manager.version
     subman_version = subscription_manager.version.rpm_version
 except ImportError:
     subman_version = "unknown"
-
-from rhsm import ourjson as json
-from rhsm import utils
 
 config = initConfig()
 
@@ -401,14 +400,12 @@ def _get_locale():
     try:
         l = locale.getlocale()
     except locale.Error:
-        pass
-
-    try:
-        l = locale.getdefaultlocale()
-    except locale.Error:
-        pass
-    except ValueError:
-        pass
+        try:
+            l = locale.getdefaultlocale()
+        except locale.Error:
+            pass
+        except ValueError:
+            pass
 
     if l and l != (None, None):
         return l[0]
@@ -432,7 +429,21 @@ class BaseRestLib(object):
         self.host = host
         self.ssl_port = ssl_port
         self.apihandler = apihandler
-        lc = _get_locale()
+
+        # We try to import it here to get fresh value
+        try:
+            import subscription_manager.i18n
+            try:
+                language = subscription_manager.i18n.LOCALE.language
+            except AttributeError:
+                language = None
+        except ImportError:
+            language = None
+
+        if language is None:
+            lc = _get_locale()
+        else:
+            lc = language
 
         # Default, updated by UepConnection
         self.user_agent = "python-rhsm-user-agent"

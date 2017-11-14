@@ -273,7 +273,7 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
             return None
 
     def test_open_domain_socket(self):
-        dbus_method_args = []
+        dbus_method_args = ['']
 
         def assertions(*args):
             result = args[0]
@@ -282,7 +282,7 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
         self.dbus_request(assertions, self.interface.Start, dbus_method_args)
 
     def test_same_socket_on_subsequent_opens(self):
-        dbus_method_args = []
+        dbus_method_args = ['']
 
         def assertions(*args):
             # Assign the result as an attribute to this function.
@@ -303,16 +303,19 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
         self.dbus_request(assertions2, self.interface.Start, dbus_method_args)
 
     def test_cannot_close_what_is_not_opened(self):
+        dbus_method_args = ['']
         with self.assertRaises(dbus.exceptions.DBusException):
-            self.dbus_request(None, self.interface.Stop, [])
+            self.dbus_request(None, self.interface.Stop, dbus_method_args)
 
     def test_closes_domain_socket(self):
+        dbus_method_args = ['']
+
         def get_address(*args):
             address = args[0]
             _prefix, _equal, address = address.partition('=')
             get_address.address, _equal, _suffix = address.partition(',')
 
-        self.dbus_request(get_address, self.interface.Start, [])
+        self.dbus_request(get_address, self.interface.Start, dbus_method_args)
         self.handler_complete_event.clear()
 
         sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
@@ -324,7 +327,7 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
         finally:
             sock.close()
 
-        self.dbus_request(None, self.interface.Stop, [])
+        self.dbus_request(None, self.interface.Stop, dbus_method_args)
         self.handler_complete_event.wait()
 
         with self.assertRaises(socket.error) as serr:
@@ -336,10 +339,12 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
             self.assertEqual(serr.errno, errno.ECONNREFUSED)
 
     def _build_interface(self):
+        dbus_method_args = ['']
+
         def get_address(*args):
             get_address.address = args[0]
 
-        self.dbus_request(get_address, self.interface.Start, [])
+        self.dbus_request(get_address, self.interface.Start, dbus_method_args)
         self.handler_complete_event.clear()
         socket_conn = dbus.connection.Connection(get_address.address)
         socket_proxy = socket_conn.get_object(constants.BUS_NAME, constants.PRIVATE_REGISTER_DBUS_PATH)
@@ -357,8 +362,8 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
 
         self.mock_register.register.return_value = expected_consumer
 
-        register_opts = ['admin', 'admin', 'admin', {}, {}]
-        self.dbus_request(assertions, self._build_interface().Register, register_opts)
+        dbus_method_args = ['admin', 'admin', 'admin', {}, {}, '']
+        self.dbus_request(assertions, self._build_interface().Register, dbus_method_args)
 
     def test_can_register_over_domain_socket_with_activation_keys(self):
         expected_consumer = json.loads(CONTENT_JSON, object_hook=dbus_utils._decode_dict)
@@ -372,10 +377,16 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
 
         self.mock_register.register.return_value = expected_consumer
 
-        register_opts = ['admin', ['key1', 'key2'], {}, {
-            'host': 'localhost',
-            'port': '8443',
-            'handler': '/candlepin'
-        }]
+        dbus_method_args = [
+            'admin',
+            ['key1', 'key2'],
+            {},
+            {
+                'host': 'localhost',
+                'port': '8443',
+                'handler': '/candlepin'
+            },
+            ''
+        ]
 
-        self.dbus_request(assertions, self._build_interface().RegisterWithActivationKeys, register_opts)
+        self.dbus_request(assertions, self._build_interface().RegisterWithActivationKeys, dbus_method_args)

@@ -21,6 +21,8 @@ import dbus.service
 from rhsmlib.dbus import constants, exceptions, dbus_utils, base_object, server, util
 from rhsmlib.services.register import RegisterService
 
+from subscription_manager.i18n import Locale
+
 log = logging.getLogger(__name__)
 
 
@@ -37,10 +39,13 @@ class RegisterDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.REGISTER_INTERFACE,
-        in_signature='',
+        in_signature='s',
         out_signature='s')
     @util.dbus_handle_exceptions
-    def Start(self, sender=None):
+    def Start(self, locale, sender=None):
+        locale = dbus_utils.dbus_to_python(locale, expected_type=str)
+        Locale.set(locale)
+
         with self.lock:
             if self.server:
                 return self.server.address
@@ -55,10 +60,12 @@ class RegisterDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.REGISTER_INTERFACE,
-        in_signature='',
+        in_signature='s',
         out_signature='b')
     @util.dbus_handle_exceptions
-    def Stop(self, sender=None):
+    def Stop(self, locale, sender=None):
+        locale = dbus_utils.dbus_to_python(locale, expected_type=str)
+        Locale.set(locale)
         with self.lock:
             if self.server:
                 self.server.shutdown()
@@ -84,11 +91,11 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
 
     @dbus.service.method(
         dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
-        in_signature='sssa{sv}a{sv}',
+        in_signature='sssa{sv}a{sv}s',
         out_signature='s'
     )
     @util.dbus_handle_exceptions
-    def Register(self, org, username, password, options, connection_options):
+    def Register(self, org, username, password, options, connection_options, locale):
         """
         This method registers the system using basic auth
         (username and password for a given org).
@@ -102,32 +109,37 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         if self.is_registered():
             raise dbus.DBusException("This system is already registered")
 
-        connection_options = dbus_utils.dbus_to_python(connection_options)
-        connection_options['username'] = dbus_utils.dbus_to_python(username)
-        connection_options['password'] = dbus_utils.dbus_to_python(password)
-        cp = self.build_uep(connection_options)
+        org = dbus_utils.dbus_to_python(org, expected_type=str)
+        connection_options = dbus_utils.dbus_to_python(connection_options, expected_type=dict)
+        connection_options['username'] = dbus_utils.dbus_to_python(username, expected_type=str)
+        connection_options['password'] = dbus_utils.dbus_to_python(password, expected_type=str)
+        options = dbus_utils.dbus_to_python(options, expected_type=dict)
+        locale = dbus_utils.dbus_to_python(locale, expected_type=str)
 
-        options = dbus_utils.dbus_to_python(options)
-        org = dbus_utils.dbus_to_python(org)
+        Locale.set(locale)
+        cp = self.build_uep(connection_options)
 
         register_service = RegisterService(cp)
         consumer = register_service.register(org, **options)
         return json.dumps(consumer)
 
-    @dbus.service.method(dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
-        in_signature='sasa{sv}a{sv}',
+    @dbus.service.method(
+        dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
+        in_signature='sasa{sv}a{sv}s',
         out_signature='s')
     @util.dbus_handle_exceptions
-    def RegisterWithActivationKeys(self, org, activation_keys, options, connection_options):
+    def RegisterWithActivationKeys(self, org, activation_keys, options, connection_options, locale):
         """
         Note this method is registration ONLY.  Auto-attach is a separate process.
         """
-        connection_options = dbus_utils.dbus_to_python(connection_options)
-        cp = self.build_uep(connection_options)
+        connection_options = dbus_utils.dbus_to_python(connection_options, expected_type=dict)
+        options = dbus_utils.dbus_to_python(options, expected_type=dict)
+        options['activation_keys'] = dbus_utils.dbus_to_python(activation_keys, expected_type=list)
+        org = dbus_utils.dbus_to_python(org, expected_type=str)
+        locale = dbus_utils.dbus_to_python(locale, expected_type=str)
 
-        options = dbus_utils.dbus_to_python(options)
-        options['activation_keys'] = dbus_utils.dbus_to_python(activation_keys)
-        org = dbus_utils.dbus_to_python(org)
+        Locale.set(locale)
+        cp = self.build_uep(connection_options)
 
         register_service = RegisterService(cp)
         consumer = register_service.register(org, **options)
