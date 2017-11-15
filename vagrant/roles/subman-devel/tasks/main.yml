@@ -160,7 +160,7 @@
   when: subman_setup_hacking_environment and not (ansible_distribution == 'Debian')
 
 - name: install subscription-manager (initial)
-  shell: "{{ distro_package_command }} install -y /tmp/tito/*/subscription-manager-[0-9]*"
+  shell: "{{ distro_package_command }} install -y /tmp/tito/*/subscription-manager-{rhsm-{certificates-,},}[0-9]*"
   args:
     chdir: "{{ subman_checkout_dir }}"
     creates: /usr/lib*/python*/site-packages/subscription_manager
