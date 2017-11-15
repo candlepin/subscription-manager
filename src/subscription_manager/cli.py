@@ -33,6 +33,20 @@ class InvalidCLIOptionError(Exception):
         Exception.__init__(self, message)
 
 
+def flush_stdout_stderr():
+    """
+    Try to flush stdout and stderr, when it is not possible
+    due to blocking process, then print error message to log file.
+    :return: None
+    """
+    # Try to flush all outputs, see BZ: 1350402
+    try:
+        sys.stdout.flush()
+        sys.stderr.flush()
+    except IOError as io_err:
+        log.error("Error: Unable to print data to stdout/stderr output during exit process: %s" % io_err)
+
+
 class AbstractCLICommand(object):
     """
     Base class for rt commands. This class provides a templated run
@@ -152,6 +166,7 @@ class CLI(object):
         cmd = self._find_best_match(sys.argv)
         if len(sys.argv) < 2:
             self._default_command()
+            flush_stdout_stderr()
             sys.exit(0)
         if not cmd:
             self._usage()
@@ -159,6 +174,7 @@ class CLI(object):
             return_code = 1
             if (len(sys.argv) > 1) and (sys.argv[1] == "--help"):
                 return_code = 0
+            flush_stdout_stderr()
             sys.exit(return_code)
 
         try:
@@ -194,10 +210,6 @@ def system_exit(code, msgs=None):
                 print_error(msg)
 
     # Try to flush all outputs, see BZ: 1350402
-    try:
-        sys.stdout.flush()
-        sys.stderr.flush()
-    except IOError as io_err:
-        log.error("Error: Unable to print data to stdout/stderr output during exit process: %s" % io_err)
+    flush_stdout_stderr()
 
     sys.exit(code)
