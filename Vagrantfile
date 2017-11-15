@@ -38,7 +38,6 @@ Vagrant.configure("2") do |config|
   # setup shared folder
   config.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: [
     "build",
-    "build_ext",
     "src/rhsm/_certificate.so",
     "subscription-manager.egg-info",
     "cockpit/node_modules",
