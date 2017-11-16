@@ -316,12 +316,7 @@ class EntitlementStatusCache(StatusCache):
     """
     CACHE_FILE = "/var/lib/rhsm/cache/entitlement_status.json"
 
-    def _sync_with_server(self, uep, uuid, *args, **kwargs):
-        on_date = None
-        if len(args) > 0:
-            on_date = args[0]
-        elif 'on_date' in kwargs:
-            on_date = kwargs['on_date']
+    def _sync_with_server(self, uep, uuid, on_date=None, *args, **kwargs):
         self.server_status = uep.getCompliance(uuid, on_date)
 
 
