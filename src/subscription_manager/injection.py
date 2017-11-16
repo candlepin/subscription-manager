@@ -77,8 +77,7 @@ class FeatureBroker(object):
             raise KeyError("Unknown feature: %r" % feature)
 
         if isinstance(provider, (type, six.class_types)):
-            # Args should never be used with singletons, they are ignored
-            self.providers[feature] = provider()
+            self.providers[feature] = provider(*args, **kwargs)
         elif six.callable(provider):
             return provider(*args, **kwargs)
 

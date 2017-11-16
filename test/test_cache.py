@@ -413,6 +413,26 @@ class TestEntitlementStatusCache(SubManFixture):
         self.assertEqual(dummy_status, self.status_cache.server_status)
         self.assertEqual(1, self.status_cache.write_cache.call_count)
 
+    def test_load_from_server_on_date_args(self):
+        uep = Mock()
+        dummy_status = {"a": "1"}
+        uep.getCompliance = Mock(return_value=dummy_status)
+
+        self.status_cache.load_status(uep, "SOMEUUID", "2199-12-25")
+
+        self.assertEqual(dummy_status, self.status_cache.server_status)
+        self.assertEqual(1, self.status_cache.write_cache.call_count)
+
+    def test_load_from_server_on_date_kwargs(self):
+        uep = Mock()
+        dummy_status = {"a": "1"}
+        uep.getCompliance = Mock(return_value=dummy_status)
+
+        self.status_cache.load_status(uep, "SOMEUUID", on_date="2199-12-25")
+
+        self.assertEqual(dummy_status, self.status_cache.server_status)
+        self.assertEqual(1, self.status_cache.write_cache.call_count)
+
     def test_server_no_compliance_call(self):
         uep = Mock()
         uep.getCompliance = Mock(side_effect=RestlibException("boom"))
