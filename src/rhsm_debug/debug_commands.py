@@ -217,8 +217,7 @@ class SystemCommand(CliCommand):
     def _get_version_info(self):
         return {"server type": self.server_versions["server-type"],
                 "subscription management server": self.server_versions["candlepin"],
-                "subscription-manager": self.client_versions["subscription-manager"],
-                "python-rhsm": self.client_versions["python-rhsm"]}
+                "subscription-manager": self.client_versions["subscription-manager"]}
 
     def _write_flat_file(self, content_path, filename, content):
         path = os.path.join(content_path, filename)

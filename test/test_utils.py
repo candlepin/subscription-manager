@@ -501,43 +501,17 @@ class TestGetServerVersions(fixture.SubManFixture):
 
 class TestGetClientVersions(fixture.SubManFixture):
     @patch('subscription_manager.utils.subscription_manager.version')
-    @patch('subscription_manager.utils.rhsm.version')
-    def test_get_client_versions(self, mock_rhsm_version, mock_sub_version):
-        mock_rhsm_version.rpm_version = '1.2.3-4'
+    def test_get_client_versions(self, mock_sub_version):
         mock_sub_version.rpm_version = '9.8.7-6'
         cv = get_client_versions()
-
         self.assertEqual(cv['subscription-manager'], "9.8.7-6")
-        self.assertEqual(cv['python-rhsm'], '1.2.3-4')
-        self.assertTrue(isinstance(cv['python-rhsm'], str))
         self.assertTrue(isinstance(cv['subscription-manager'], str))
 
     @patch('subscription_manager.utils.subscription_manager.version')
-    @patch('subscription_manager.utils.rhsm.version')
-    def test_get_client_versions_strings(self, mock_rhsm_version, mock_sub_version):
-        mock_rhsm_version.rpm_version = 'ab-cd'
+    def test_get_client_versions_strings(self, mock_sub_version):
         mock_sub_version.rpm_version = 'ef-gh'
         cv = get_client_versions()
-
         self.assertEqual(cv['subscription-manager'], "ef-gh")
-        self.assertEqual(cv['python-rhsm'], 'ab-cd')
-
-    @patch('subscription_manager.utils.subscription_manager.version')
-    @patch('subscription_manager.utils.rhsm.version')
-    def test_get_client_versions_exception(self, mock_rhsm_version, mock_sub_version):
-        def raise_exception(arg):
-            raise Exception("boom" + arg)
-
-        mock_rhsm_version.rpm_version = '1.2.3-4'
-        mock_sub_version.rpm_version = '9.8.7-6'
-
-        # Not actually much that can raise exceptions, it's just a static
-        # attribute.
-        mock_rhsm_version.side_effect = raise_exception
-
-        cv = get_client_versions()
-        self.assertEqual(cv['subscription-manager'], "9.8.7-6")
-        self.assertEqual(cv['python-rhsm'], '1.2.3-4')
 
 
 class TestGetVersion(fixture.SubManFixture):

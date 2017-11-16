@@ -329,8 +329,7 @@ class CliCommand(AbstractCLICommand):
         return True
 
     def _default_client_version(self):
-        return {"subscription-manager": _("Unknown"),
-                "python-rhsm": _("Unknown")}
+        return {"subscription-manager": _("Unknown")}
 
     def _default_server_version(self):
         return {"candlepin": _("Unknown"),
@@ -2559,7 +2558,6 @@ class VersionCommand(CliCommand):
         print(_("subscription management server: %s") % self.server_versions["candlepin"])
         print(_("subscription management rules: %s") % self.server_versions["rules-version"])
         print("subscription-manager: %s" % self.client_versions["subscription-manager"])
-        print("python-rhsm: %s" % self.client_versions["python-rhsm"])
 
 
 class StatusCommand(CliCommand):
