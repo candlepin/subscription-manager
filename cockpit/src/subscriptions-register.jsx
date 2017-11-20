@@ -23,20 +23,6 @@ var _ = cockpit.gettext;
 var React = require("react");
 import Select from "./Select/Select.jsx";
 
-function defaultRegisterDialogSettings() {
-    return {
-        url: 'default',
-        serverUrl: 'subscription.rhsm.redhat.com',
-        proxy: false,
-        proxyServer: '',
-        proxyUser: '',
-        proxyPassword: '',
-        user: '',
-        password: '',
-        activationKeys: '',
-        org: '',
-    };
-}
 /* Subscriptions: registration dialog body
  * Expected props:
  *   - onChange  callback to signal when the data has changed
@@ -112,9 +98,9 @@ var PatternDialogBody = React.createClass({
                             </td>
                             <td>
                                 <Select key='urlSource' onChange={value => this.props.onChange('url', value)}
-                                        id="subscription-register-url">
+                                        id="subscription-register-url" value={this.props.url}>
                                     <option value="default">{ urlEntries['default'] }</option>
-                                    <option value="custom">{ urlEntries['custom'] }</option>
+                                    <option value="custom" >{ urlEntries['custom'] }</option>
                                 </Select>
                                 {customURL}
                             </td>
@@ -190,6 +176,5 @@ var PatternDialogBody = React.createClass({
 });
 
 module.exports = {
-    defaultSettings: defaultRegisterDialogSettings,
     dialogBody: PatternDialogBody,
 };

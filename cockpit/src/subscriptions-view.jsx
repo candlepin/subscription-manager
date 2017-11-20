@@ -22,6 +22,7 @@ var _ = cockpit.gettext;
 
 var React = require("react");
 
+import subscriptionsClient from './subscriptions-client';
 import { ListView, ListViewItem, ListViewIcon } from 'patternfly-react';
 import { Row, Col } from 'react-bootstrap';
 
@@ -185,7 +186,7 @@ var SubscriptionsPage = React.createClass({
         var icon;
         var description;
         var message;
-        if (this.props.status === undefined) {
+        if (this.props.status === undefined || !subscriptionsClient.config.loaded) {
             icon = <div className="spinner spinner-lg" />;
             message = _("Updating");
             description = _("Retrieving subscription status...");
@@ -271,7 +272,8 @@ var SubscriptionsPage = React.createClass({
     render: function() {
         if (this.props.status === undefined ||
             this.props.status === 'not-found' ||
-            this.props.status === 'access-denied') {
+            this.props.status === 'access-denied' ||
+            !subscriptionsClient.config.loaded) {
             return this.renderCurtains();
         } else {
             return this.renderSubscriptions();

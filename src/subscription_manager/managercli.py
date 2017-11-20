@@ -1081,8 +1081,13 @@ class RegisterCommand(UserPassCommand):
         # Proceed with new registration:
         try:
             if not self.options.activation_keys:
+                hostname = conf["server"]["hostname"]
+                if ":" in hostname:
+                    normalized_hostname = "[%s]" % hostname
+                else:
+                    normalized_hostname = hostname
                 print(_("Registering to: %s:%s%s") %
-                    (conf["server"]["hostname"], conf["server"]["port"], conf["server"]["prefix"]))
+                    (normalized_hostname, conf["server"]["port"], conf["server"]["prefix"]))
                 self.cp_provider.set_user_pass(self.username, self.password)
                 admin_cp = self.cp_provider.get_basic_auth_cp()
             else:

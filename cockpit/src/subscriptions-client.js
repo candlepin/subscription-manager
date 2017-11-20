@@ -19,6 +19,7 @@
 
 const cockpit = require("cockpit");
 const service = cockpit.dbus('com.redhat.RHSM1', {'superuser': 'require'});
+const configService = service.proxy('com.redhat.RHSM1.Config', '/com/redhat/RHSM1/Config');
 const registerServer = service.proxy('com.redhat.RHSM1.RegisterServer', '/com/redhat/RHSM1/RegisterServer');
 const attachService = service.proxy('com.redhat.RHSM1.Attach', '/com/redhat/RHSM1/Attach');
 const entitlementService = service.proxy('com.redhat.RHSM1.Entitlement', '/com/redhat/RHSM1/Entitlement');
@@ -36,6 +37,16 @@ client.subscriptionStatus = {
     status: undefined,
     products: [],
     error: undefined,
+};
+
+client.config = {
+    loaded: false,
+};
+
+const RHSM_DEFAULTS = { // TODO get these from a d-bus service instead
+    hostname: 'subscription.rhsm.redhat.com',
+    port: '443',
+    prefix: '/subscription'
 };
 
 // we trigger an event called "dataChanged" when the data has changed
@@ -96,48 +107,98 @@ client.registerSystem = subscriptionDetails => {
     const dfd = cockpit.defer();
     const connection_options = {};
 
-    if (subscriptionDetails.url != 'default') {
-        /*  parse url into host, port, handler; sorry about the ugly regex
-            (?:https?://)? strips off the protocol if it exists
-            ([$/:]+) matches the hostname
-            (?::(?=[0-9])([0-9]+))? matches the port if it exists
-            (?:(/.+)) matches the rest for the path
-        */
-        const pattern = new RegExp('^(?:https?://)?([^/:]+)(?::(?=[0-9])([0-9]+))?(?:(/.+))?$');
+    if (subscriptionDetails.url !== 'default') {
+        /*  parse url into host, port, handler; sorry about the ugly regex */
+        const pattern = new RegExp(
+            '^' +
+            '(?:https?://)?' +              // protocol (optional)
+            '(?:\\[([^\\]]+)\\])?' +        // ipv6 address (optional)
+            '(?:([^/:]+))?' +               // hostname/ipv4 address (optional)
+            '(?::(?=[0-9])([0-9]+))?' +     // port (optional)
+            '(?:(/.+))?' +                  // path (optional)
+            '$'
+        );
         const match = pattern.exec(subscriptionDetails.serverUrl); // TODO handle failure
-        connection_options.host = {
-            t: 's',
-            v: match[1],
-        };
-        if (match[2]) {
+        const ipv6Address = match[1];
+        const address = match[2];
+        const port = match[3];
+        const path = match[4];
+        if (ipv6Address && address) {
+            throw 'malformed server url; ipv6 address syntax and hostname are mutually exclusive';
+        }
+        if (ipv6Address) {
+            connection_options.host = {
+                t: 's',
+                v: ipv6Address,
+            };
+        }
+        if (address) {
+            connection_options.host = {
+                t: 's',
+                v: address,
+            };
+        }
+        if (port) {
             connection_options.port = {
                 t: 's',
-                v: match[2],
+                v: port,
             };
         }
-        if (match[3]) {
+        if (path) {
             connection_options.handler = {
                 t: 's',
-                v: match[3],
+                v: path,
             };
         }
+    }
+    else {
+        connection_options.host = {
+            t: 's',
+            v: RHSM_DEFAULTS.hostname,
+        };
+        connection_options.port = {
+            t: 's',
+            v: RHSM_DEFAULTS.port,
+        };
+        connection_options.handler = {
+            t: 's',
+            v: RHSM_DEFAULTS.prefix,
+        };
     }
 
     // proxy is optional
     if (subscriptionDetails.proxy) {
         if (subscriptionDetails.proxyServer) {
-            const pattern = new RegExp('^([^:]*):?(.*)$');
+            const pattern = new RegExp(
+                '^' +
+                '(?:\\[([^\\]]+)\\])?' +    // ipv6 address (optional)
+                '(?:([^/:]+))?' +           // hostname/ipv4 address (optional)
+                '(?::(?=[0-9])([0-9]+))?' + // port (optional)
+                '$'
+            );
             const match = pattern.exec(subscriptionDetails.proxyServer);
-            if (match[1]) {
+            const ipv6Address = match[1];
+            const address = match[2];
+            const port = match[3];
+            if (ipv6Address && address) {
+                throw 'malformed proxy url; ipv6 address syntax and hostname are mutually exclusive';
+            }
+            if (ipv6Address) {
                 connection_options.proxy_hostname = {
                     t: 's',
-                    v: match[1],
+                    v: ipv6Address,
                 };
             }
-            if (match[2]) {
+            if (address) {
+                connection_options.proxy_hostname = {
+                    t: 's',
+                    v: address,
+                };
+            }
+            if (port) {
                 connection_options.proxy_port = {
                     t: 's',
-                    v: match[2],
+                    v: port,
                 };
             }
         }
@@ -274,6 +335,43 @@ client.getSubscriptionStatus = () => {
     });
 };
 
+client.readConfig = () => {
+    return configService.wait(() => configService.GetAll().then(config => {
+        const hostname = config.server.v.hostname;
+        const port = config.server.v.port;
+        const prefix = config.server.v.prefix;
+        const proxyHostname = config.server.v.proxy_hostname;
+        const proxyUser = config.server.v.proxy_user;
+        const proxyPassword = config.server.v.proxy_password;
+
+        const usingDefaultUrl = (port === '443' &&
+            hostname === RHSM_DEFAULTS.hostname &&
+            port === RHSM_DEFAULTS.port &&
+            prefix === RHSM_DEFAULTS.prefix
+        );
+
+        const maybePort = port === '443' ? '' : `:${port}`;
+        const maybePrefix = prefix === '/subscription' ? '' : prefix;
+        const hostnamePart = hostname.includes(':') ? `[${hostname}]`: hostname;
+        const serverUrl = usingDefaultUrl ? '' : `${hostnamePart}${maybePort}${maybePrefix}`;
+        const proxyHostnamePart = proxyHostname.includes(':') ? `[${proxyHostname}]` : proxyHostname;
+        const usingProxy = proxyHostname !== '';
+        const maybeProxyPort = config.server.v.proxy_port ? `:${config.server.v.proxy_port}`: '';
+        const proxyServer = usingProxy ? `${proxyHostnamePart}${maybeProxyPort}`: '';
+
+        Object.assign(client.config, {
+            url: usingDefaultUrl ? 'default' : 'custom',
+            serverUrl: serverUrl,
+            proxy: usingProxy,
+            proxyServer: proxyServer,
+            proxyUser: proxyUser,
+            proxyPassword: proxyPassword,
+            loaded: true,
+        });
+        console.debug('loaded client config', client.config);
+    }));
+};
+
 client.init = () => {
     /* we want to get notified if subscription status of the system changes */
     legacyService.subscribe(
@@ -308,6 +406,8 @@ client.init = () => {
 
     // get initial status
     requestUpdate();
+    // read config (async)
+    client.readConfig().then(needRender);
 };
 
 module.exports = client;

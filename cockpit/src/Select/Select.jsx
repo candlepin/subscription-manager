@@ -19,7 +19,7 @@ class Select extends React.Component {
     render() {
         return (
             <div>
-                <select id={this.props.id} className="selectpicker" ref={el => this.el = el}>
+                <select className="selectpicker" ref={el => this.el = el} {...this.props}>
                     {this.props.children}
                 </select>
             </div>
