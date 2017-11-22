@@ -36,7 +36,7 @@ class VirtWhatCollector(collector.FactsCollector):
         virt_dict = {}
 
         try:
-            host_type = compat_check_output('virt-what')
+            host_type = compat_check_output('/usr/sbin/virt-what')
             # BZ1018807 xen can report xen and xen-hvm.
             # Force a single line
             host_type = ", ".join(host_type.splitlines())
