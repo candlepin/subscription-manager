@@ -219,11 +219,13 @@ client.registerSystem = subscriptionDetails => {
     console.debug('connection_options:', connection_options);
 
     registerServer.wait(() => {
+        var registered = false;
         registerServer.Start()
             .then(socket => {
                 console.debug('Opening private bus interface at ' + socket);
                 const private_interface = cockpit.dbus(null, {bus: 'none', address: socket, superuser: 'require'});
                 const registerService = private_interface.proxy('com.redhat.RHSM1.Register', '/com/redhat/RHSM1/Register');
+                registered = true;
                 if (subscriptionDetails.activationKeys) {
                     return registerService.call('RegisterWithActivationKeys', [subscriptionDetails.org, subscriptionDetails.activationKeys.split(','), {}, connection_options]);
                 }
@@ -233,6 +235,7 @@ client.registerSystem = subscriptionDetails => {
             })
             .catch(error => {
                 console.error('error registering', error);
+                registered = false;
                 dfd.reject(error);
             })
             .then(() => {
@@ -244,22 +247,77 @@ client.registerSystem = subscriptionDetails => {
                 dfd.reject(error);
             })
             .then(() => {
-                console.debug('auto-attaching');
-                return attachService.AutoAttach('', {});
+                if (registered === true) {
+                    // When system is registered, then we can try to auto-attach
+                    console.debug('auto-attaching');
+                    attachService.AutoAttach('', {}) // FIXME: use proxy settings!
+                        .catch(error => {
+                            console.error('error during autoattach', error);
+                            dfd.reject(error);
+                        });
+
+                    // TODO: do refactoring of saving configuration
+                    console.debug('trying to save some rhsm configuration');
+                    if (client.config.hostname !== connection_options.host.v) {
+                        console.debug('saving server.hostname', connection_options.host.v);
+                        configService.Set('server.hostname', connection_options.host)
+                            .catch(error => {
+                                console.error('Unable to save candlepin server hostname', error);
+                            });
+                    }
+                    if (client.config.port !== connection_options.port.v) {
+                        console.debug('saving server.port', connection_options.port.v);
+                        configService.Set('server.port', connection_options.port)
+                            .catch(error => {
+                                console.error('Unable to save candlepin server port', error);
+                            });
+                    }
+                    if (client.config.prefix !== connection_options.handler.v) {
+                        console.debug('saving server.prefix', connection_options.handler.v);
+                        configService.Set('server.prefix', connection_options.handler)
+                            .catch(error => {
+                                console.error('Unable to save candlepin server prefix', error);
+                            });
+                    }
+                    if (client.config.proxyHostname !== connection_options.proxy_hostname.v) {
+                        console.debug('saving server.proxy_hostname', connection_options.proxy_hostname.v, client.config.proxyHostname);
+                        configService.Set('server.proxy_hostname', connection_options.proxy_hostname)
+                            .catch(error => {
+                                console.error('Unable to save proxy server', error);
+                            });
+                    }
+                    if (client.config.proxyPort !== connection_options.proxy_port.v) {
+                        console.debug('saving server.proxy_port', connection_options.proxy_port.v, client.config.proxyPort);
+                        configService.Set('server.proxy_port', connection_options.proxy_port)
+                            .catch(error => {
+                                console.error('Unable to save proxy port', error);
+                            });
+                    }
+                    if (client.config.proxyUser !== connection_options.proxy_user.v) {
+                        console.debug('saving server.proxy_user', connection_options.proxy_user.v);
+                        configService.Set('server.proxy_user', connection_options.proxy_user)
+                            .catch(error => {
+                                console.error('Unable to save proxy user', error);
+                            });
+                    }
+                    if (client.config.proxyPassword !== connection_options.proxy_password.v) {
+                        console.debug('saving server.proxy_password', connection_options.proxy_password.v);
+                        configService.Set('server.proxy_password', connection_options.proxy_password)
+                            .catch(error => {
+                                console.error('Unable to save proxy password', error);
+                            });
+                    }
+                }
             })
-            .catch(error => {
-                console.error('error during autoattach', error);
-                dfd.reject(error);
-            })
-            .then(() => {
+            .always(() => {
                 console.debug('requesting update');
                 requestUpdate();
                 dfd.resolve();
             });
     });
 
-    var promise = dfd.promise();
-    return promise;
+    requestUpdate();
+    return dfd.promise();
 };
 
 client.unregisterSystem = () => {
@@ -341,6 +399,7 @@ client.readConfig = () => {
         const port = config.server.v.port;
         const prefix = config.server.v.prefix;
         const proxyHostname = config.server.v.proxy_hostname;
+        const proxyPort = config.server.v.proxy_port;
         const proxyUser = config.server.v.proxy_user;
         const proxyPassword = config.server.v.proxy_password;
 
@@ -356,14 +415,19 @@ client.readConfig = () => {
         const serverUrl = usingDefaultUrl ? '' : `${hostnamePart}${maybePort}${maybePrefix}`;
         const proxyHostnamePart = proxyHostname.includes(':') ? `[${proxyHostname}]` : proxyHostname;
         const usingProxy = proxyHostname !== '';
-        const maybeProxyPort = config.server.v.proxy_port ? `:${config.server.v.proxy_port}`: '';
+        const maybeProxyPort = proxyPort ? `:${proxyPort}`: '';
         const proxyServer = usingProxy ? `${proxyHostnamePart}${maybeProxyPort}`: '';
 
         Object.assign(client.config, {
             url: usingDefaultUrl ? 'default' : 'custom',
+            hostname: hostname,
+            port: port,
+            prefix: prefix,
             serverUrl: serverUrl,
             proxy: usingProxy,
             proxyServer: proxyServer,
+            proxyHostname: proxyHostname,
+            proxyPort: proxyPort,
             proxyUser: proxyUser,
             proxyPassword: proxyPassword,
             loaded: true,
