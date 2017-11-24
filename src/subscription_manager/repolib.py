@@ -256,14 +256,15 @@ class RepoActionInvoker(BaseActionInvoker):
 
     @classmethod
     def delete_repo_file(cls):
-        yum_repo_file = YumRepoFile()
-        if os.path.exists(yum_repo_file.path):
-            os.unlink(yum_repo_file.path)
-
         if os.path.exists(APT_REPO_DIR):
             apt_repo_file = AptRepoFile()
             if os.path.exists(apt_repo_file.path):
                 os.unlink(apt_repo_file.path)
+
+        if os.path.exists(YUM_REPO_DIR):
+            yum_repo_file = YumRepoFile()
+            if os.path.exists(yum_repo_file.path):
+                os.unlink(yum_repo_file.path)
 
         # if we have zypper repo, remove it too.
         if os.path.exists(ZYPPER_REPO_DIR):
@@ -433,11 +434,13 @@ class RepoUpdateActionCommand(object):
 
     def perform(self):
         # Load the RepoFile from disk, this contains all our managed yum repo sections:
-        yum_repo_file = YumRepoFile()
         server_value_repo_file = YumRepoFile('var/lib/rhsm/repo_server_val/')
         apt_repo_file = None
         if os.path.exists(APT_REPO_DIR):
             apt_repo_file = AptRepoFile()
+        yum_repo_file = None
+        if os.path.exists(YUM_REPO_DIR):
+            yum_repo_file = YumRepoFile()
         zypper_repo_file = None
         if os.path.exists(ZYPPER_REPO_DIR):
             zypper_repo_file = ZypperRepoFile()
@@ -445,18 +448,24 @@ class RepoUpdateActionCommand(object):
         # the [rhsm] manage_repos can be overridden to disable generation of the
         # redhat.repo file:
         if not self.manage_repos:
-            log.debug("manage_repos is 0, skipping generation of: %s" %
-                    yum_repo_file.path)
+            log.debug("manage_repos is 0, skipping generation of repo files")
+            if apt_repo_file.exists():
+                log.info("Removing %s due to manage_repos configuration." %
+                        apt_repo_file.path)
             if yum_repo_file.exists():
                 log.info("Removing %s due to manage_repos configuration." %
                         yum_repo_file.path)
-                RepoActionInvoker.delete_repo_file()
+            if zypper_repo_file.exists():
+                log.info("Removing %s due to manage_repos configuration." %
+                        zypper_repo_file.path)
+            RepoActionInvoker.delete_repo_file()
             return 0
 
-        yum_repo_file.read()
         server_value_repo_file.read()
         if apt_repo_file:
             apt_repo_file.read()
+        if yum_repo_file:
+            yum_repo_file.read()
         if zypper_repo_file:
             zypper_repo_file.read()
         valid = set()
@@ -465,20 +474,15 @@ class RepoUpdateActionCommand(object):
         # in the RepoFile as appropriate:
         for cont in self.get_unique_content():
             valid.add(cont.id)
-            existing = yum_repo_file.section(cont.id)
             server_value_repo = server_value_repo_file.section(cont.id)
             if server_value_repo is None:
-                server_value_repo = cont
                 server_value_repo_file.add(cont)
-            if existing is None:
-                yum_repo_file.add(cont)
                 self.report_add(cont)
             else:
                 # Updates the existing repo with new content
-                self.update_repo(existing, cont, server_value_repo)
-                yum_repo_file.update(existing)
+                self.update_repo(server_value_repo, cont)
                 server_value_repo_file.update(server_value_repo)
-                self.report_update(existing)
+                self.report_update(server_value_repo)
 
             if cont.content_type == 'deb' and apt_repo_file:
                 apt_cont = self._apt_content(cont)
@@ -488,7 +492,14 @@ class RepoUpdateActionCommand(object):
                 else:
                     apt_repo_file.update(apt_cont)
 
-            if zypper_repo_file:  # no reporting for zypper, already reported for yum
+            if cont.content_type == 'yum' and yum_repo_file:
+                existing = yum_repo_file.section(cont.id)
+                if existing is None:
+                    yum_repo_file.add(cont)
+                else:
+                    yum_repo_file.update(existing)
+
+            if cont.content_type == 'yum' and zypper_repo_file:
                 zypper_cont = self._zypper_content(cont)
                 existing = zypper_repo_file.section(zypper_cont.id)
                 if existing is None:
@@ -496,21 +507,23 @@ class RepoUpdateActionCommand(object):
                 else:
                     zypper_repo_file.update(zypper_cont)
 
-        for section in yum_repo_file.sections():
+        for section in server_value_repo_file.sections():
             if section not in valid:
                 self.report_delete(section)
-                yum_repo_file.delete(section)
                 server_value_repo_file.delete(section)
                 if apt_repo_file:
                     apt_repo_file.delete(section)
+                if yum_repo_file:
+                    yum_repo_file.delete(section)
                 if zypper_repo_file:
                     zypper_repo_file.delete(section)
 
-        # Write new RepoFile to disk:
-        yum_repo_file.write()
+        # Write new RepoFile(s) to disk:
         server_value_repo_file.write()
         if apt_repo_file:
             apt_repo_file.write()
+        if yum_repo_file:
+            yum_repo_file.write()
         if zypper_repo_file:
             zypper_repo_file.write()
         if self.override_supported:
