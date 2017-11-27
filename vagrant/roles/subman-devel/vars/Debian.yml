@@ -2,6 +2,7 @@
 distro_package_command: apt
 distro_specific_deps:
   - alien
+  - curl
   - gcc
   - git
   - librsvg2-2
@@ -10,6 +11,7 @@ distro_specific_deps:
   - make
   - python-bugzilla
   - python-dateutil
+  - python-debian
   - python-dmidecode
   - python-ethtool
   - python-iniparse
@@ -33,3 +35,9 @@ distro_specific_subman_build_deps:
   - python-setuptools
   - python-six
   - scrollkeeper
+
+libexec_path: /usr/lib
+
+install_cockpit: False
+
+sitecustomize_path: /etc/python{{ ansible_python_version|regex_replace('^([^\.]*\.[^\.]*)\..*$', '\1') }}/sitecustomize.py

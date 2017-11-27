@@ -21,3 +21,5 @@ distro_specific_deps:
   - xorg-x11-server-Xvfb
   - yum-utils
 libexec_path: /usr/libexec
+install_cockpit: True
+sitecustomize_path: /usr/lib/python{{ ansible_python_version|regex_replace('^([^\.]*\.[^\.]*)\..*$', '\1') }}/site-packages/sitecustomize.py

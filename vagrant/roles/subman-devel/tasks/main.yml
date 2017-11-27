@@ -116,6 +116,7 @@
   args:
     creates: /home/vagrant/.nvm
     warn: no
+  when: install_cockpit
 
 - name: use nvm to install nodejs
   shell: >
@@ -125,14 +126,16 @@
     nvm alias default {{ subman_nodejs_version }}"
   args:
     creates: /home/vagrant/.nvm/versions/node/{{ subman_nodejs_version }}
+  when: install_cockpit
 
 - name: install yarn (for cockpit package build)
   npm:
     name: yarn
     global: yes
+  when: install_cockpit
 
 - include: cockpit.yml
-  when: ansible_distribution == 'Fedora' or (ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7')
+  when: ansible_distribution == 'Fedora' or (ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7') and install_cockpit
 
 - name: install python test deps
   pip:
@@ -176,7 +179,7 @@
 - name: alter PYTHONPATH
   copy:
     src: sitecustomize.py
-    dest: /usr/lib/python{{ ansible_python_version[:-2] }}/site-packages/sitecustomize.py
+    dest: "{{ sitecustomize_path }}"
   become: yes
 
 - name: compile c artifacts (Debian only)
@@ -188,16 +191,6 @@
   make:
     chdir: "{{ subman_checkout_dir }}"
     target: install
-  become: yes
-  when: subman_setup_hacking_environment and ansible_distribution == 'Debian'
-
-- name: configure python sys.path (Debian only)
-  blockinfile:
-    path: /etc/python2.7/sitecustomize.py
-    block: |
-      # append rhsm to python path
-      import sys
-      sys.path.append('{{ subman_checkout_dir }}/src')
   become: yes
   when: subman_setup_hacking_environment and ansible_distribution == 'Debian'
 
@@ -236,6 +229,7 @@
     state: permissive
     policy: targeted
   become: yes
+  when: not (ansible_distribution == 'Debian')
 
 # the shim includes /vagrant/etc-conf/dbus/system.d/com.redhat.RHSM1.conf
 - name: replace RHSM1 dbus policy file with shim
@@ -250,17 +244,19 @@
     path: /usr/local/share/cockpit
     state: directory
   become: yes
-  when: subman_setup_hacking_environment
+  when: subman_setup_hacking_environment and install_cockpit
 
 - name: yarn install (for convenience)
   command: yarn install
   args:
     chdir: /vagrant/cockpit
+  when: not (ansible_distribution == 'Debian')
 
 - name: webpack build (for convenience)
   command: npm run build
   args:
     chdir: /vagrant/cockpit
+  when: not (ansible_distribution == 'Debian')
 
 - name: add symlink to dist for cockpit plugin
   file:
@@ -269,7 +265,7 @@
     state: link
     force: yes
   become: yes
-  when: subman_setup_hacking_environment
+  when: subman_setup_hacking_environment and install_cockpit
 
 - name: add candlepin.example.com to hosts (using this host as reference)
   lineinfile:
