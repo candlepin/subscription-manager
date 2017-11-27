@@ -379,6 +379,8 @@ License: LGPLv2.1+
 BuildArch: noarch
 
 Requires: subscription-manager
+Requires: cockpit-bridge
+Requires: cockpit-shell
 
 %description -n subscription-manager-cockpit
 Subscription Manager Cockpit UI
