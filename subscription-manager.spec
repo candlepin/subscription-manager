@@ -82,7 +82,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.20.6
+Version: 1.20.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -880,6 +880,9 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Tue Nov 28 2017 Kevin Howell <khowell@redhat.com> 1.20.7-1
+- Sync zanata translations (khowell@redhat.com)
+
 * Tue Nov 28 2017 Kevin Howell <khowell@redhat.com> 1.20.6-1
 - Sync zanata translations (khowell@redhat.com)
 - 1514067: Call virt-what using absolute path (jhnidek@redhat.com)
