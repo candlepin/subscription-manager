@@ -82,7 +82,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.20.5
+Version: 1.20.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -880,6 +880,21 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Tue Nov 28 2017 Kevin Howell <khowell@redhat.com> 1.20.6-1
+- Sync zanata translations (khowell@redhat.com)
+- 1514067: Call virt-what using absolute path (jhnidek@redhat.com)
+- 1487688: Load config settings for cockpit plugin (khowell@redhat.com)
+- Added dependencies to cockpit-bridge and cockpit-shell. (jhnidek@redhat.com)
+- 1462456: Flush stdout and stderr on more places (jhnidek@redhat.com)
+- 1491842: fixed typo in man page. (jhnidek@redhat.com)
+- 1508591: Removed python-rhsm from subscription-manager version
+  (jhnidek@redhat.com)
+- 1421010: Subman-GUI shows error dialog (wrong proxy settings)
+  (jhnidek@redhat.com)
+- 1500106: subscription-manager status --ondate do not ignore date
+  (jhnidek@redhat.com)
+- 1506970: Fixed default custom URL in cockpit plugin (jhnidek@redhat.com)
+
 * Thu Nov 02 2017 Kevin Howell <khowell@redhat.com> 1.20.5-1
 - Sync zanata translations (khowell@redhat.com)
 - Cockpit - listing of installed products using patternfly-react
