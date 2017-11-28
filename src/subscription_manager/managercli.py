@@ -1388,10 +1388,6 @@ class ReleaseCommand(CliCommand):
             print(_("Release not set"))
 
     def _do_command(self):
-        more_product_cert_err_msg = _(
-            "Error: More than one release product certificate installed."
-        )
-
         cdn_url = conf['rhsm']['baseurl']
         # note: parse_baseurl_info will populate with defaults if not found
         (cdn_hostname, cdn_port, _cdn_prefix) = parse_baseurl_info(cdn_url)
@@ -1416,7 +1412,7 @@ class ReleaseCommand(CliCommand):
                 releases = self.release_backend.get_releases()
             except MultipleReleaseProductsError as err:
                 log.error("Getting releases failed: %s" % err)
-                system_exit(os.EX_CONFIG, more_product_cert_err_msg)
+                system_exit(os.EX_CONFIG, err.translated_message())
 
             if self.options.release in releases:
                 self.cp.updateConsumer(
@@ -1435,7 +1431,7 @@ class ReleaseCommand(CliCommand):
                 releases = self.release_backend.get_releases()
             except MultipleReleaseProductsError as err:
                 log.error("Getting releases failed: %s" % err)
-                system_exit(os.EX_CONFIG, more_product_cert_err_msg)
+                system_exit(os.EX_CONFIG, err.translated_message())
 
             if len(releases) == 0:
                 system_exit(os.EX_CONFIG, _(

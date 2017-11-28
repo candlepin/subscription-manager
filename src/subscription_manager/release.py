@@ -30,6 +30,7 @@ import rhsm.config
 from subscription_manager import injection as inj
 from subscription_manager import listing
 from subscription_manager import rhelproduct
+from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
 
@@ -37,7 +38,15 @@ cfg = rhsm.config.initConfig()
 
 
 class MultipleReleaseProductsError(ValueError):
-    pass
+    def __init__(self, certificates):
+        self.certificates = certificates
+        self.certificate_paths = ", ".join([certificate.path for certificate in certificates])
+        super(ValueError, self).__init__(("More than one release product certificate installed. Certificate paths: %s"
+                                          % self.certificate_paths))
+
+    def translated_message(self):
+        return (_("Error: More than one release product certificate installed. Certificate paths: %s")
+                % ", ".join([certificate.path for certificate in self.certificates]))
 
 
 class ContentConnectionProvider(object):
@@ -87,6 +96,7 @@ class CdnReleaseVersionProvider(object):
 
         # Find the rhel products
         release_products = []
+        certificates = set()
         installed_products = self.product_dir.get_installed_products()
         for product_hash in installed_products:
             product_cert = installed_products[product_hash]
@@ -95,12 +105,13 @@ class CdnReleaseVersionProvider(object):
                 rhel_matcher = rhelproduct.RHELProductMatcher(product)
                 if rhel_matcher.is_rhel():
                     release_products.append(product)
+                    certificates.add(product_cert)
 
         if len(release_products) == 0:
             log.info("No products with RHEL product tags found")
             return []
         elif len(release_products) > 1:
-            raise MultipleReleaseProductsError("More than one product with RHEL product tags found.")
+            raise MultipleReleaseProductsError(certificates=certificates)
 
         # Note: only release_products with one item can pass previous if-elif
         release_product = release_products[0]

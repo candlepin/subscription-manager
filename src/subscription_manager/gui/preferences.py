@@ -17,6 +17,7 @@ from __future__ import print_function, division, absolute_import
 import logging
 
 from subscription_manager.ga import Gtk as ga_Gtk
+from subscription_manager.gui import messageWindow
 from subscription_manager.gui import widgets
 from subscription_manager.gui import utils
 from subscription_manager import injection as inj
@@ -141,7 +142,12 @@ class PreferencesDialog(widgets.SubmanBaseWidget):
         if consumer_json['releaseVer']:
             current_release = consumer_json['releaseVer']['releaseVer']
 
-        available_releases = self.release_backend.get_releases()
+        try:
+            available_releases = self.release_backend.get_releases()
+        except release.MultipleReleaseProductsError as err:
+            log.error("Getting releases failed: %s" % err)
+            messageWindow.ErrorDialog(err.translated_message())
+            available_releases = []
         # current release might not be in the release listing
         if current_release and current_release not in available_releases:
             available_releases.insert(0, current_release)

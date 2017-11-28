@@ -209,10 +209,12 @@ class StubProductCertificate(ProductCertificate):
         if not end_date:
             end_date = datetime.now() + timedelta(days=365)
 
+        path = "/path/to/fake_product.pem"
+
         super(StubProductCertificate, self).__init__(products=products,
                                                      serial=random.randint(1, 10000000),
                                                      start=start_date, end=end_date,
-                                                     version=version)
+                                                     version=version, path=path)
 
     def __str__(self):
         s = []
