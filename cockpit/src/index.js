@@ -31,9 +31,9 @@ var dataStore = { };
 var registerDialogDetails = {
     user: '',
     password: '',
-    proxyUser: '',
-    proxyPassword: '',
-    activationKeys: '',
+    proxy_user: '',
+    proxy_password: '',
+    activation_keys: '',
     org: '',
 };
 
@@ -62,7 +62,7 @@ function openRegisterDialog() {
     var updatedData = function(prop, data) {
         if (prop) {
             if (data.target) {
-                if (data.target.type == "checkbox") {
+                if (data.target.type === "checkbox") {
                     registerDialogDetails[prop] = data.target.checked;
                 } else {
                     registerDialogDetails[prop] = data.target.value;
