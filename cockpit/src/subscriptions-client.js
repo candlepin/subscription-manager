@@ -138,16 +138,28 @@ client.registerSystem = subscriptionDetails => {
                 v: address,
             };
         }
+        // Note: when port or handler options are not specified, then we force use default
+        // values. Otherwise old an obsolete values from rhsm.conf could be used.
         if (port) {
             connection_options.port = {
                 t: 's',
                 v: port,
             };
+        } else {
+            connection_options.port = {
+                t: 's',
+                v: RHSM_DEFAULTS.port
+            }
         }
         if (path) {
             connection_options.handler = {
                 t: 's',
                 v: path,
+            };
+        } else {
+            connection_options.handler = {
+                t: 's',
+                v: RHSM_DEFAULTS.prefix,
             };
         }
     }
@@ -292,13 +304,17 @@ client.registerSystem = subscriptionDetails => {
                                         });
                                 }
                             } else {
+                                let default_value = '';
+                                if (RHSM_DEFAULTS.hasOwnProperty(key)) {
+                                    default_value = RHSM_DEFAULTS[key];
+                                }
                                 // When config option was not specified in dialog, then it is
-                                // necessary to reset it in rhsm.conf (proxy options are optional)
+                                // necessary to reset it in rhsm.conf (e.g. proxy options are optional)
                                 console.debug('resetting: server.' + key);
-                                    configService.Set('server.' + key, {'t': 's', 'v': ''})
-                                        .catch(error => {
-                                            console.error('unable to reset server.' + key, error);
-                                        });
+                                configService.Set('server.' + key, {'t': 's', 'v': default_value})
+                                    .catch(error => {
+                                        console.error('unable to reset server.' + key, error);
+                                    });
                             }
                         }
                     }
@@ -445,7 +461,7 @@ client.readConfig = () => {
         const maybeProxyPort = proxyPort ? `:${proxyPort}`: '';
         const proxyServer = usingProxy ? `${proxyHostnamePart}${maybeProxyPort}`: '';
 
-        // Note: we don't use cameCase, because we keep naming convention of rhsm.conf
+        // Note: we don't use camelCase, because we keep naming convention of rhsm.conf
         // Thus we can do some simplification of code
         Object.assign(client.config, {
             url: usingDefaultUrl ? 'default' : 'custom',
