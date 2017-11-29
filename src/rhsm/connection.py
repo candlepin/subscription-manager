@@ -55,6 +55,20 @@ def safe_int(value, safe_value=None):
         return safe_value
 
 
+def normalized_host(host):
+    """
+    When you want to use IPv6 address and port in e.g. HTTP header, then you cannot use following
+    notation common for IPv4 (147.230.16.1:53). You have to use following notation for IPv6
+    [2001:718:1c01:16::aa]:53.
+    :param host: hostname or IPv4 or IPv6 address
+    :return: When host is IPv6 address, then it encapsulated in [] brackets
+    """
+    if ':' in host:
+        return '[%s]' % host
+    else:
+        return host
+
+
 def drift_check(utc_time_string, hours=1):
     """
     Takes in a RFC 1123 date and returns True if the current time
@@ -315,8 +329,12 @@ class ContentConnection(object):
         self._load_ca_certificates(context)
 
         if self.proxy_hostname and self.proxy_port:
-            log.debug("Using proxy: %s:%s" % (self.proxy_hostname, self.proxy_port))
-            proxy_headers = {'User-Agent': self.user_agent}
+            log.debug("Using proxy: %s:%s" %
+                      (normalized_host(self.proxy_hostname), safe_int(self.proxy_port)))
+            proxy_headers = {
+                'User-Agent': self.user_agent,
+                'Host': '%s:%s' % (normalized_host(self.host), safe_int(self.ssl_port))
+            }
             if self.proxy_user and self.proxy_password:
                 proxy_headers['Proxy-Authorization'] = _encode_auth(self.proxy_user, self.proxy_password)
             conn = httplib.HTTPSConnection(self.proxy_hostname, self.proxy_port, context=context, timeout=self.timeout)
@@ -324,12 +342,7 @@ class ContentConnection(object):
         else:
             conn = httplib.HTTPSConnection(self.host, self.ssl_port, context=context, timeout=self.timeout)
 
-        if ':' in self.host:
-            host_normalized = '[%s]' % self.host
-        else:
-            host_normalized = self.host
-
-        final_headers = {"Host": "%s:%s" % (host_normalized, self.ssl_port),
+        final_headers = {"Host": "%s:%s" % (normalized_host(self.host), self.ssl_port),
                          "Content-Length": "0",
                          "User-Agent": self.user_agent}
         if headers:
@@ -498,17 +511,16 @@ class BaseRestLib(object):
             context.load_cert_chain(self.cert_file, keyfile=self.key_file)
 
         if self.proxy_hostname and self.proxy_port:
-            log.debug("Using proxy: %s:%s" % (self.proxy_hostname, self.proxy_port))
-            proxy_headers = {'User-Agent': self.user_agent}
+            log.debug("Using proxy: %s:%s" % (normalized_host(self.proxy_hostname), safe_int(self.proxy_port)))
+            proxy_headers = {
+                'User-Agent': self.user_agent,
+                'Host': '%s:%s' % (normalized_host(self.host), safe_int(self.ssl_port))
+            }
             if self.proxy_user and self.proxy_password:
                 proxy_headers['Proxy-Authorization'] = _encode_auth(self.proxy_user, self.proxy_password)
             conn = httplib.HTTPSConnection(self.proxy_hostname, self.proxy_port, context=context, timeout=self.timeout)
             conn.set_tunnel(self.host, safe_int(self.ssl_port), proxy_headers)
-            if ':' in self.host:
-                host_normalized = '[%s]' % self.host
-            else:
-                host_normalized = self.host
-            self.headers['Host'] = '%s:%s' % (host_normalized, safe_int(self.ssl_port))
+            self.headers['Host'] = '%s:%s' % (normalized_host(self.host), safe_int(self.ssl_port))
         else:
             conn = httplib.HTTPSConnection(self.host, self.ssl_port, context=context, timeout=self.timeout)
 
@@ -539,7 +551,9 @@ class BaseRestLib(object):
         except socket.gaierror as err:
             if self.proxy_hostname and self.proxy_port:
                 raise ProxyException("Unable to connect to: %s:%s %s "
-                                     % (self.proxy_hostname, self.proxy_port, err))
+                                     % (normalized_host(self.proxy_hostname),
+                                        safe_int(self.proxy_port),
+                                        err))
             raise
         except socket.error as err:
             if str(err)[-3:] == str(httplib.PROXY_AUTHENTICATION_REQUIRED):
@@ -799,7 +813,9 @@ class UEPConnection(object):
 
         proxy_description = None
         if self.proxy_hostname and self.proxy_port:
-            proxy_description = "http_proxy=%s:%s " % (self.proxy_hostname, self.proxy_port)
+            proxy_description = "http_proxy=%s:%s " %\
+                                (normalized_host(self.proxy_hostname),
+                                 safe_int(self.proxy_port))
         auth_description = None
         # initialize connection
         if using_basic_auth:
@@ -837,7 +853,7 @@ class UEPConnection(object):
         if proxy_description:
             connection_description += proxy_description
         connection_description += "host=%s port=%s handler=%s %s" % (self.host, self.ssl_port,
-                                                                    self.handler, auth_description)
+                                                                     self.handler, auth_description)
         log.info("Connection built: %s", connection_description)
 
     def _load_supported_resources(self):
