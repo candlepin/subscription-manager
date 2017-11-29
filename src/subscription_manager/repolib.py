@@ -106,7 +106,7 @@ class YumPluginManager(object):
         message = _('The yum plugins: %s were automatically enabled for the benefit of '
                     'Red Hat Subscription Management. If not desired, use '
                     '"subscription-manager config --rhsm.auto_enable_yum_plugins=0" to '
-                    'block this behavior.\n') % ', '.join(enabled_yum_plugins)
+                    'block this behavior.') % ', '.join(enabled_yum_plugins)
         return message
 
     @classmethod
