@@ -149,7 +149,7 @@ client.registerSystem = subscriptionDetails => {
             connection_options.port = {
                 t: 's',
                 v: RHSM_DEFAULTS.port
-            }
+            };
         }
         if (path) {
             connection_options.handler = {
@@ -290,7 +290,8 @@ client.registerSystem = subscriptionDetails => {
                         'proxy_user': 'proxy_user',
                         'proxy_password': 'proxy_password',
                     };
-                    for (let key in dict) {
+                    // for (let key in dict) {
+                    Object.keys(dict).forEach(function (key) {
                         // To be sure that config option was loaded from rhsm.conf
                         if (client.config.hasOwnProperty(key)) {
                             // Was this config option specified in dialog?
@@ -317,7 +318,7 @@ client.registerSystem = subscriptionDetails => {
                                     });
                             }
                         }
-                    }
+                    });
 
                     // When system is registered and config options are saved,
                     // then we can try to auto-attach
