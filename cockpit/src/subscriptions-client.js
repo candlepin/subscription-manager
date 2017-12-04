@@ -118,7 +118,7 @@ client.registerSystem = subscriptionDetails => {
             '(?:(/.+))?' +                  // path (optional)
             '$'
         );
-        const match = pattern.exec(subscriptionDetails.serverUrl); // TODO handle failure
+        const match = pattern.exec(subscriptionDetails.server_url); // TODO handle failure
         const ipv6Address = match[1];
         const address = match[2];
         const port = match[3];
@@ -138,16 +138,28 @@ client.registerSystem = subscriptionDetails => {
                 v: address,
             };
         }
+        // Note: when port or handler options are not specified, then we force use default
+        // values. Otherwise old an obsolete values from rhsm.conf could be used.
         if (port) {
             connection_options.port = {
                 t: 's',
                 v: port,
+            };
+        } else {
+            connection_options.port = {
+                t: 's',
+                v: RHSM_DEFAULTS.port
             };
         }
         if (path) {
             connection_options.handler = {
                 t: 's',
                 v: path,
+            };
+        } else {
+            connection_options.handler = {
+                t: 's',
+                v: RHSM_DEFAULTS.prefix,
             };
         }
     }
@@ -168,7 +180,7 @@ client.registerSystem = subscriptionDetails => {
 
     // proxy is optional
     if (subscriptionDetails.proxy) {
-        if (subscriptionDetails.proxyServer) {
+        if (subscriptionDetails.proxy_server) {
             const pattern = new RegExp(
                 '^' +
                 '(?:\\[([^\\]]+)\\])?' +    // ipv6 address (optional)
@@ -176,7 +188,7 @@ client.registerSystem = subscriptionDetails => {
                 '(?::(?=[0-9])([0-9]+))?' + // port (optional)
                 '$'
             );
-            const match = pattern.exec(subscriptionDetails.proxyServer);
+            const match = pattern.exec(subscriptionDetails.proxy_server);
             const ipv6Address = match[1];
             const address = match[2];
             const port = match[3];
@@ -202,16 +214,16 @@ client.registerSystem = subscriptionDetails => {
                 };
             }
         }
-        if (subscriptionDetails.proxyUser) {
+        if (subscriptionDetails.proxy_user) {
             connection_options.proxy_user = {
                 t: 's',
-                v: subscriptionDetails.proxyUser,
+                v: subscriptionDetails.proxy_user,
             };
         }
-        if (subscriptionDetails.proxyPassword) {
+        if (subscriptionDetails.proxy_password) {
             connection_options.proxy_password = {
                 t: 's',
-                v: subscriptionDetails.proxyPassword,
+                v: subscriptionDetails.proxy_password,
             };
         }
     }
@@ -219,20 +231,41 @@ client.registerSystem = subscriptionDetails => {
     console.debug('connection_options:', connection_options);
 
     registerServer.wait(() => {
+        let registered = false;
         registerServer.Start()
             .then(socket => {
                 console.debug('Opening private bus interface at ' + socket);
                 const private_interface = cockpit.dbus(null, {bus: 'none', address: socket, superuser: 'require'});
-                const registerService = private_interface.proxy('com.redhat.RHSM1.Register', '/com/redhat/RHSM1/Register');
-                if (subscriptionDetails.activationKeys) {
-                    return registerService.call('RegisterWithActivationKeys', [subscriptionDetails.org, subscriptionDetails.activationKeys.split(','), {}, connection_options]);
+                const registerService = private_interface.proxy(
+                    'com.redhat.RHSM1.Register',
+                    '/com/redhat/RHSM1/Register'
+                );
+                registered = true;
+                if (subscriptionDetails.activation_keys) {
+                    return registerService.call(
+                        'RegisterWithActivationKeys',
+                        [
+                            subscriptionDetails.org,
+                            subscriptionDetails.activation_keys.split(','),
+                            {},
+                            connection_options
+                        ]);
                 }
                 else {
-                    return registerService.call('Register', [subscriptionDetails.org, subscriptionDetails.user, subscriptionDetails.password, {}, connection_options]);
+                    return registerService.call(
+                        'Register',
+                        [
+                            subscriptionDetails.org,
+                            subscriptionDetails.user,
+                            subscriptionDetails.password,
+                            {},
+                            connection_options
+                        ]);
                 }
             })
             .catch(error => {
                 console.error('error registering', error);
+                registered = false;
                 dfd.reject(error);
             })
             .then(() => {
@@ -244,22 +277,91 @@ client.registerSystem = subscriptionDetails => {
                 dfd.reject(error);
             })
             .then(() => {
-                console.debug('auto-attaching');
-                return attachService.AutoAttach('', {});
+                if (registered === true) {
+                    // Dictionary (key: client.config / rhsm.conf options, value are
+                    // attributes of connection_options) ... ('handler' and 'host' are different)
+                    // Note: only options from [server] section are supported
+                    let dict = {
+                        'hostname': 'host',
+                        'port': 'port',
+                        'prefix': 'handler',
+                        'proxy_hostname': 'proxy_hostname',
+                        'proxy_port': 'proxy_port',
+                        'proxy_user': 'proxy_user',
+                        'proxy_password': 'proxy_password',
+                    };
+                    // for (let key in dict) {
+                    Object.keys(dict).forEach(function (key) {
+                        // To be sure that config option was loaded from rhsm.conf
+                        if (client.config.hasOwnProperty(key)) {
+                            // Was this config option specified in dialog?
+                            if (connection_options.hasOwnProperty(dict[key])) {
+                                // Is config option in dialog different from  rhsm.conf
+                                if (client.config[key] !== connection_options[dict[key]].v) {
+                                    console.debug('saving: server.' + key, connection_options[dict[key]]);
+                                    configService.Set('server.' + key, connection_options[dict[key]])
+                                        .catch(error => {
+                                            console.error('unable to save server.' + key, error);
+                                        });
+                                }
+                            } else {
+                                let default_value = '';
+                                if (RHSM_DEFAULTS.hasOwnProperty(key)) {
+                                    default_value = RHSM_DEFAULTS[key];
+                                }
+                                // When config option was not specified in dialog, then it is
+                                // necessary to reset it in rhsm.conf (e.g. proxy options are optional)
+                                console.debug('resetting: server.' + key);
+                                configService.Set('server.' + key, {'t': 's', 'v': default_value})
+                                    .catch(error => {
+                                        console.error('unable to reset server.' + key, error);
+                                    });
+                            }
+                        }
+                    });
+
+                    // When system is registered and config options are saved,
+                    // then we can try to auto-attach
+                    console.debug('auto-attaching');
+                    if (connection_options.proxy_hostname) {
+                        var proxy_options = {};
+                        proxy_options.proxy_hostname = connection_options.proxy_hostname;
+                        if (connection_options.proxy_port) {
+                            // FIXME: change D-Bus implementation to be able to use string too
+                            proxy_options.proxy_port = {
+                                't': 'i',
+                                'v': Number(connection_options.proxy_port.v)
+                            };
+                        }
+                        if (connection_options.proxy_user) {
+                            proxy_options.proxy_user = connection_options.proxy_user;
+                        }
+                        if (connection_options.proxy_password) {
+                            proxy_options.proxy_password = connection_options.proxy_password;
+                        }
+                        attachService.AutoAttach('', proxy_options)
+                            .catch(error => {
+                                console.error('error during autoattach', error);
+                                dfd.reject(error);
+                            });
+                    } else {
+                        attachService.AutoAttach('', {})
+                            .catch(error => {
+                                console.error('error during autoattach', error);
+                                dfd.reject(error);
+                            });
+                    }
+                }
             })
-            .catch(error => {
-                console.error('error during autoattach', error);
-                dfd.reject(error);
-            })
-            .then(() => {
+            .always(() => {
                 console.debug('requesting update');
                 requestUpdate();
                 dfd.resolve();
             });
     });
 
-    var promise = dfd.promise();
-    return promise;
+    requestUpdate();
+    return dfd.promise();
 };
 
 client.unregisterSystem = () => {
@@ -341,6 +443,7 @@ client.readConfig = () => {
         const port = config.server.v.port;
         const prefix = config.server.v.prefix;
         const proxyHostname = config.server.v.proxy_hostname;
+        const proxyPort = config.server.v.proxy_port;
         const proxyUser = config.server.v.proxy_user;
         const proxyPassword = config.server.v.proxy_password;
 
@@ -356,16 +459,23 @@ client.readConfig = () => {
         const serverUrl = usingDefaultUrl ? '' : `${hostnamePart}${maybePort}${maybePrefix}`;
         const proxyHostnamePart = proxyHostname.includes(':') ? `[${proxyHostname}]` : proxyHostname;
         const usingProxy = proxyHostname !== '';
-        const maybeProxyPort = config.server.v.proxy_port ? `:${config.server.v.proxy_port}`: '';
+        const maybeProxyPort = proxyPort ? `:${proxyPort}`: '';
         const proxyServer = usingProxy ? `${proxyHostnamePart}${maybeProxyPort}`: '';
 
+        // Note: we don't use camelCase, because we keep naming convention of rhsm.conf
+        // Thus we can do some simplification of code
         Object.assign(client.config, {
             url: usingDefaultUrl ? 'default' : 'custom',
-            serverUrl: serverUrl,
+            hostname: hostname,
+            port: port,
+            prefix: prefix,
+            server_url: serverUrl,
             proxy: usingProxy,
-            proxyServer: proxyServer,
-            proxyUser: proxyUser,
-            proxyPassword: proxyPassword,
+            proxy_server: proxyServer,
+            proxy_hostname: proxyHostname,
+            proxy_port: proxyPort,
+            proxy_user: proxyUser,
+            proxy_password: proxyPassword,
             loaded: true,
         });
         console.debug('loaded client config', client.config);
