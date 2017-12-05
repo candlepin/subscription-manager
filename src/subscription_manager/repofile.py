@@ -23,14 +23,16 @@ from __future__ import print_function, division, absolute_import
 from iniparse import RawConfigParser as ConfigParser
 import logging
 import os
+import re
 import string
 from debian.deb822 import Deb822
 
 from subscription_manager import utils
 from subscription_manager.certdirectory import Path
 from six.moves import configparser
+from six.moves.urllib.parse import parse_qs, urlparse, urlunparse, urlencode
 
-from rhsm.config import initConfig, in_container
+from rhsm.config import initConfig
 
 from rhsmlib.services import config
 
@@ -335,6 +337,10 @@ class RepoFileBase(object):
     def installed(cls):
         return os.path.exists(Path.abs(cls.PATH))
 
+    @classmethod
+    def server_value_repo_file(cls):
+        return cls('var/lib/rhsm/repo_server_val/')
+
 
 class AptRepoFile(RepoFileBase):
 
@@ -381,19 +387,22 @@ class AptRepoFile(RepoFileBase):
         self.repos822.append(Deb822(repo_dict))
 
     def delete(self, repo):
-        self.repos822[:] = [ repo822 for repo822 in self.repos822 if repo822['id'] != repo.id ]
+        self.repos822[:] = [repo822 for repo822 in self.repos822 if repo822['id'] != repo.id]
 
     def update(self, repo):
         repo_dict = dict([(str(k), str(v)) for (k, v) in repo.items()])
         repo_dict['id'] = repo.id
-        self.repos822[:] = [ repo822 if repo822['id'] != repo.id else Deb822(repo_dict) for repo822 in self.repos822 ]
+        self.repos822[:] = [repo822 if repo822['id'] != repo.id else Deb822(repo_dict) for repo822 in self.repos822]
 
     def section(self, repo_id):
-        result = [ Repo(repo822) for repo822 in self.repos822 if repo822['id'] == repo_id ]
+        result = [Repo(repo822) for repo822 in self.repos822 if repo822['id'] == repo_id]
         if len(result) > 0:
             return result[0]
         else:
             return None
+
+    def sections(self):
+        return [Repo(repo822) for repo822 in self.repos822]
 
     def fix_content(self, content):
         # Luckily apt ignores all Fields it does not recognize
@@ -559,13 +568,22 @@ class ZypperRepoFile(YumRepoFile):
 
         return zypper_cont
 
+    # We need to overwrite this, to avoid name clashes with yum's server_val_repo_file
+    @classmethod
+    def server_value_repo_file(cls):
+        return cls('var/lib/rhsm/repo_server_val/', 'zypper_{}'.format(cls.NAME))
+
 
 def init_repo_files():
     repo_files = [
-        RepoFile()
+        (RepoFile(), RepoFile.server_value_repo_file())
         for RepoFile in [AptRepoFile, YumRepoFile, ZypperRepoFile]
         if RepoFile.installed()
     ]
     return repo_files
 
 repo_files = init_repo_files()
+
+
+def get_repo_files():
+    return repo_files
