@@ -21,18 +21,18 @@ from __future__ import print_function, division, absolute_import
 from iniparse import RawConfigParser as ConfigParser
 import logging
 import os
-import re
 import socket
 import subscription_manager.injection as inj
 from subscription_manager.cache import OverrideStatusCache, WrittenOverrideCache
 from subscription_manager import model
 from subscription_manager.model import ent_cert
-from subscription_manager.repofile import Repo, manage_repos_enabled, YumRepoFile, repo_files
-from six.moves.urllib.parse import parse_qs, urlparse, urlunparse, urlencode
+from subscription_manager.repofile import Repo, manage_repos_enabled, get_repo_files
+from subscription_manager.repofile import YumRepoFile
 
 from rhsm.config import initConfig, in_container
 from rhsm import connection
 import six
+from six.moves import configparser
 
 # FIXME: local imports
 
@@ -231,7 +231,7 @@ class RepoActionInvoker(BaseActionInvoker):
 
     @classmethod
     def delete_repo_file(cls):
-        for repo_file in repo_files:
+        for repo_file, _dummy in get_repo_files():
             if os.path.exists(repo_file.path):
                 os.unlink(repo_file.path)
         # When the repo is removed, also remove the override tracker
@@ -395,59 +395,57 @@ class RepoUpdateActionCommand(object):
                 self.overrides[item['contentLabel']][item['name']] = item['value']
 
     def perform(self):
-        # Load the RepoFile from disk, this contains all our managed yum repo sections:
-        server_value_repo_file = YumRepoFile('var/lib/rhsm/repo_server_val/')
-
         # the [rhsm] manage_repos can be overridden to disable generation of the
         # redhat.repo file:
         if not self.manage_repos:
             log.debug("manage_repos is 0, skipping generation of repo files")
-            for repo_file in repo_files:
+            for repo_file, _dummy in get_repo_files():
                 if repo_file.exists():
                     log.info("Removing %s due to manage_repos configuration." %
                             repo_file.path)
             RepoActionInvoker.delete_repo_file()
             return 0
 
-        server_value_repo_file.read()
-        for repo_file in repo_files:
+        for repo_file, server_val_repo_file in get_repo_files():
+            # Load the RepoFile from disk, this contains all our managed yum repo sections:
             repo_file.read()
+            server_val_repo_file.read()
         valid = set()
 
         # Iterate content from entitlement certs, and create/delete each section
         # in the RepoFile as appropriate:
         for cont in self.get_unique_content():
             valid.add(cont.id)
-            server_value_repo = server_value_repo_file.section(cont.id)
-            if server_value_repo is None:
-                server_value_repo_file.add(cont)
-                self.report_add(cont)
-            else:
-                # Updates the existing repo with new content
-                self.update_repo(server_value_repo, cont)
-                server_value_repo_file.update(server_value_repo)
-                self.report_update(server_value_repo)
 
-            for repo_file in repo_files:
+            for repo_file, server_value_repo_file in get_repo_files():
                 if cont.content_type in repo_file.CONTENT_TYPES:
-                    fixed_cont = repo_file._fix_content(cont)
+                    fixed_cont = repo_file.fix_content(cont)
                     existing = repo_file.section(fixed_cont.id)
+                    server_value_repo = server_value_repo_file.section(fixed_cont.id)
+                    if server_value_repo is None:
+                        server_value_repo = fixed_cont
+                        server_value_repo_file.add(fixed_cont)
                     if existing is None:
                         repo_file.add(fixed_cont)
+                        self.report_add(fixed_cont)
                     else:
-                        repo_file.update(fixed_cont)
+                        # Updates the existing repo with new content
+                        self.update_repo(existing, fixed_cont, server_value_repo)
+                        repo_file.update(existing)
+                        server_value_repo_file.update(server_value_repo)
+                        self.report_update(existing)
 
-        for section in server_value_repo_file.sections():
-            if section not in valid:
-                self.report_delete(section)
-                server_value_repo_file.delete(section)
-                for repo_file in repo_files:
+        for repo_file, server_value_repo_file in get_repo_files():
+            for section in server_value_repo_file.sections():
+                if section not in valid:
+                    self.report_delete(section)
+                    server_value_repo_file.delete(section)
                     repo_file.delete(section)
 
-        # Write new RepoFile(s) to disk:
-        server_value_repo_file.write()
-        for repo_file in repo_files:
+            # Write new RepoFile(s) to disk:
+            server_value_repo_file.write()
             repo_file.write()
+
         if self.override_supported:
             # Update with the values we just wrote
             self.written_overrides.overrides = self.overrides
