@@ -28,6 +28,7 @@ from rhsmlib.services.unregister import UnregisterService
 
 from subscription_manager.injectioninit import init_dep_injection
 from subscription_manager.utils import restart_virt_who
+from subscription_manager.i18n import Locale
 
 init_dep_injection()
 
@@ -47,16 +48,20 @@ class UnregisterDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.UNREGISTER_INTERFACE,
-        in_signature='a{sv}',
+        in_signature='a{sv}s',
         out_signature='')
     @util.dbus_handle_exceptions
-    def Unregister(self, proxy_options, sender=None):
+    def Unregister(self, proxy_options, locale, sender=None):
         """
         Definition and implementation of D-Bus method
         :param proxy_options: Definition of proxy settings
+        :param locale: String with locale (e.g. de_DE.UTF-8)
         :param sender: Not used argument
         """
         proxy_options = dbus_utils.dbus_to_python(proxy_options, expected_type=dict)
+        locale = dbus_utils.dbus_to_python(locale, expected_type=str)
+
+        Locale.set(locale)
 
         self.ensure_registered()
 

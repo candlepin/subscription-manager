@@ -17,6 +17,7 @@ import sys
 import six
 import decorator
 import dbus.service
+import json
 
 from rhsmlib.dbus import exceptions
 
@@ -37,10 +38,17 @@ def dbus_handle_exceptions(func, *args, **kwargs):
     except dbus.DBusException as e:
         log.exception(e)
         raise
-    except Exception as e:
-        log.exception(e)
+    except Exception as err:
+        log.exception(err)
         trace = sys.exc_info()[2]
-        six.reraise(exceptions.RHSM1DBusException, "%s: %s" % (type(e).__name__, str(e)), trace)
+        # Raise exception string as JSON string. Thus it can be parsed and printed properly.
+        error_msg = json.dumps(
+            {
+                "exception": type(err).__name__,
+                "message": str(err)
+            }
+        )
+        six.reraise(exceptions.RHSM1DBusException, error_msg, trace)
 
 
 def dbus_service_method(*args, **kwargs):

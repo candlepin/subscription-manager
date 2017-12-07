@@ -432,7 +432,8 @@ class TestEntitlementDBusObject(DBusObjectTest, InjectionMockingTest):
             self.assertEqual(expected_return, result)
 
         self.mock_entitlement.get_status.return_value = expected_status
-        self.dbus_request(assertions, self.interface.GetStatus, [""])
+        dbus_method_args = ["", ""]
+        self.dbus_request(assertions, self.interface.GetStatus, dbus_method_args)
 
     def test_remove_entitlement_by_serial(self):
         """
@@ -446,7 +447,7 @@ class TestEntitlementDBusObject(DBusObjectTest, InjectionMockingTest):
             result = args[0]
             self.assertEqual(expected_return, result)
 
-        dbus_method_args = [["6219625278114868779"], {}]
+        dbus_method_args = [["6219625278114868779"], {}, ""]
         self.dbus_request(assertation, self.interface.RemoveEntitlementsBySerials, dbus_method_args)
 
     def test_remove_more_entitlement_by_serials(self):
@@ -461,7 +462,7 @@ class TestEntitlementDBusObject(DBusObjectTest, InjectionMockingTest):
             result = args[0]
             self.assertEqual(expected_return, result)
 
-        dbus_method_args = [["6219625278114868779", "3573249574655121394"], {}]
+        dbus_method_args = [["6219625278114868779", "3573249574655121394"], {}, ""]
         self.dbus_request(assertation, self.interface.RemoveEntitlementsBySerials, dbus_method_args)
 
     def test_remove_entitlement_by_serial_with_wrong_serial(self):
@@ -477,7 +478,7 @@ class TestEntitlementDBusObject(DBusObjectTest, InjectionMockingTest):
             result = args[0]
             self.assertEqual(expected_return, result)
 
-        dbus_method_args = [["6219625278114868779", "3573249574655121394"], {}]
+        dbus_method_args = [["6219625278114868779", "3573249574655121394"], {}, ""]
         self.dbus_request(assertation, self.interface.RemoveEntitlementsBySerials, dbus_method_args)
 
     def test_remove_entitlement_by_pool_id(self):
@@ -493,7 +494,7 @@ class TestEntitlementDBusObject(DBusObjectTest, InjectionMockingTest):
             result = args[0]
             self.assertEqual(expected_result, result)
 
-        dbus_method_args = [["4028fa7a5dea087d015dea0b025003f6"], {}]
+        dbus_method_args = [["4028fa7a5dea087d015dea0b025003f6"], {}, ""]
         self.dbus_request(assertation, self.interface.RemoveEntitlementsByPoolIds, dbus_method_args)
 
     def test_remove_all_entitlements(self):
@@ -508,5 +509,5 @@ class TestEntitlementDBusObject(DBusObjectTest, InjectionMockingTest):
             result = args[0]
             self.assertEqual(expected_result, result)
 
-        dbus_method_args = [{}]
+        dbus_method_args = [{}, ""]
         self.dbus_request(assertation, self.interface.RemoveAllEntitlements, dbus_method_args)

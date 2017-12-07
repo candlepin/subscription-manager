@@ -20,6 +20,7 @@ from rhsmlib.dbus import constants, base_object, util, dbus_utils
 from rhsmlib.services.products import InstalledProducts
 
 from subscription_manager.injectioninit import init_dep_injection
+from subscription_manager.i18n import Locale
 
 init_dep_injection()
 
@@ -39,10 +40,10 @@ class ProductsDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.PRODUCTS_INTERFACE,
-        in_signature='sa{sv}',
+        in_signature='sa{sv}s',
         out_signature='s')
     @util.dbus_handle_exceptions
-    def ListInstalledProducts(self, filter_string, proxy_options, sender=None):
+    def ListInstalledProducts(self, filter_string, proxy_options, locale, sender=None):
 
         # We reinitialize dependency injection here for following reason. When new product
         # certificate is installed (or existing is removed), then this change is not propagated to
@@ -53,6 +54,9 @@ class ProductsDBusObject(base_object.BaseObject):
 
         filter_string = dbus_utils.dbus_to_python(filter_string, expected_type=str)
         proxy_options = dbus_utils.dbus_to_python(proxy_options, expected_type=dict)
+        locale = dbus_utils.dbus_to_python(locale, expected_type=str)
+
+        Locale.set(locale)
 
         cp = self.build_uep(proxy_options, proxy_only=True)
 

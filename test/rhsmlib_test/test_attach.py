@@ -202,18 +202,83 @@ class TestAttachDBusObject(DBusObjectTest, InjectionMockingTest):
 
         self.mock_attach.attach_pool.return_value = CONTENT_JSON
 
-        dbus_method_args = [['x', 'y'], 1, {}]
+        dbus_method_args = [['x', 'y'], 1, {}, '']
+        self.dbus_request(assertions, self.interface.PoolAttach, dbus_method_args)
+
+    def test_pool_attach_using_proxy(self):
+        def assertions(*args):
+            expected_content = [json.dumps(CONTENT_JSON), json.dumps(CONTENT_JSON)]
+            result = args[0]
+            self.assertEqual(result, expected_content)
+
+        self.mock_attach.attach_pool.return_value = CONTENT_JSON
+
+        dbus_method_args = [
+            ['x', 'y'],
+            1,
+            {
+                'proxy_hostname': 'proxy.company.com',
+                'proxy_port': '3128',
+                'proxy_user': 'user',
+                'proxy_password': 'secret'
+            },
+            ''
+        ]
+        self.dbus_request(assertions, self.interface.PoolAttach, dbus_method_args)
+
+    def test_pool_germany_attach(self):
+        def assertions(*args):
+            expected_content = [json.dumps(CONTENT_JSON), json.dumps(CONTENT_JSON)]
+            result = args[0]
+            self.assertEqual(result, expected_content)
+
+        self.mock_attach.attach_pool.return_value = CONTENT_JSON
+
+        dbus_method_args = [['x', 'y'], 1, {}, 'de']
+        self.dbus_request(assertions, self.interface.PoolAttach, dbus_method_args)
+
+    def test_pool_germany_GERMANY__attach(self):
+        def assertions(*args):
+            expected_content = [json.dumps(CONTENT_JSON), json.dumps(CONTENT_JSON)]
+            result = args[0]
+            self.assertEqual(result, expected_content)
+
+        self.mock_attach.attach_pool.return_value = CONTENT_JSON
+
+        dbus_method_args = [['x', 'y'], 1, {}, 'de_DE']
+        self.dbus_request(assertions, self.interface.PoolAttach, dbus_method_args)
+
+    def test_pool_germany_utf8_attach(self):
+        def assertions(*args):
+            expected_content = [json.dumps(CONTENT_JSON), json.dumps(CONTENT_JSON)]
+            result = args[0]
+            self.assertEqual(result, expected_content)
+
+        self.mock_attach.attach_pool.return_value = CONTENT_JSON
+
+        dbus_method_args = [['x', 'y'], 1, {}, 'de_DE.utf-8']
+        self.dbus_request(assertions, self.interface.PoolAttach, dbus_method_args)
+
+    def test_pool_germany_UTF8_attach(self):
+        def assertions(*args):
+            expected_content = [json.dumps(CONTENT_JSON), json.dumps(CONTENT_JSON)]
+            result = args[0]
+            self.assertEqual(result, expected_content)
+
+        self.mock_attach.attach_pool.return_value = CONTENT_JSON
+
+        dbus_method_args = [['x', 'y'], 1, {}, 'de_DE.UTF-8']
         self.dbus_request(assertions, self.interface.PoolAttach, dbus_method_args)
 
     def test_must_be_registered_pool(self):
         self.mock_identity.is_valid.return_value = False
-        pool_method_args = [['x', 'y'], 1, {}]
+        pool_method_args = [['x', 'y'], 1, {}, '']
         with six.assertRaisesRegex(self, dbus.DBusException, r'requires the consumer to be registered.*'):
             self.dbus_request(None, self.interface.PoolAttach, pool_method_args)
 
     def test_must_be_registered_auto(self):
         self.mock_identity.is_valid.return_value = False
-        auto_method_args = ['service_level', {}]
+        auto_method_args = ['service_level', {}, '']
         with six.assertRaisesRegex(self, dbus.DBusException, r'requires the consumer to be registered.*'):
             self.dbus_request(None, self.interface.AutoAttach, auto_method_args)
 
@@ -224,5 +289,5 @@ class TestAttachDBusObject(DBusObjectTest, InjectionMockingTest):
 
         self.mock_attach.attach_auto.return_value = CONTENT_JSON
 
-        dbus_method_args = ['service_level', {}]
+        dbus_method_args = ['service_level', {}, '']
         self.dbus_request(assertions, self.interface.AutoAttach, dbus_method_args)
