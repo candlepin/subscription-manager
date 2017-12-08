@@ -14,6 +14,8 @@ import os
 import tempfile
 import contextlib
 
+import six
+
 from subscription_manager import managercli, managerlib
 from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_TYPE
 from subscription_manager.injection import provide, \
@@ -32,11 +34,13 @@ from .fixture import FakeException, FakeLogger, SubManFixture, \
         Capture, Matcher
 
 from mock import patch, Mock, call
+from nose import SkipTest
 
 # for some exceptions
 from rhsm import connection
 from rhsm.https import ssl
-from M2Crypto import SSL
+if six.PY2:
+    from M2Crypto import SSL
 
 
 class InstalledProductStatusTests(SubManFixture):
@@ -152,9 +156,9 @@ class InstalledProductStatusTests(SubManFixture):
 
         # product3 isn't installed
         self.assertEqual(2, len(product_status))
-        self.assertEqual("product2", product_status[0][0])
+        self.assertEqual("product1", product_status[0][0])
         self.assertEqual("subscribed", product_status[0][4])
-        self.assertEqual("product1", product_status[1][0])
+        self.assertEqual("product2", product_status[1][0])
         self.assertEqual("subscribed", product_status[1][4])
 
 
@@ -972,10 +976,10 @@ class TestAttachCommand(TestCliProxyCommand):
             tempfile.mkstemp()
         ]
 
-        os.write(cls.tempfiles[0][0], "pool1 pool2   pool3 \npool4\npool5\r\npool6\t\tpool7\n  pool8\n\n\n")
+        os.write(cls.tempfiles[0][0], "pool1 pool2   pool3 \npool4\npool5\r\npool6\t\tpool7\n  pool8\n\n\n".encode('utf-8'))
         os.close(cls.tempfiles[0][0])
 
-        os.write(cls.tempfiles[1][0], "pool1 pool2   pool3 \npool4\npool5\r\npool6\t\tpool7\n  pool8\n\n\n")
+        os.write(cls.tempfiles[1][0], "pool1 pool2   pool3 \npool4\npool5\r\npool6\t\tpool7\n  pool8\n\n\n".encode('utf-8'))
         os.close(cls.tempfiles[1][0])
 
         # The third temp file intentionally left empty for testing empty sets of data.
@@ -1464,7 +1468,11 @@ class TestSystemExit(unittest.TestCase):
                 managercli.system_exit(1, msgs)
             except SystemExit:
                 pass
-        self.assertEqual("%s\n" % msgs[0].encode("utf8"), cap.err)
+        if six.PY2:
+            captured = cap.err.decode('utf-8')
+        else:
+            captured = cap.err
+        self.assertEqual(u"%s\n" % msgs[0], captured)
 
     def test_msg_and_exception_str(self):
         class StrException(Exception):
@@ -1560,6 +1568,8 @@ class HandleExceptionTests(unittest.TestCase):
             self.assertEqual(e.code, os.EX_SOFTWARE)
 
     def test_he_ssl_wrong_host(self):
+        if not six.PY2:
+            raise SkipTest("M2Crypto-specific interface. Not used with Python 3.")
         e = SSL.Checker.WrongHost("expectedHost.example.com",
                                    "actualHost.example.com",
                                    "subjectAltName")
@@ -1683,6 +1693,7 @@ class TestColumnize(unittest.TestCase):
 
     @patch('subscription_manager.printing_utils.get_terminal_width')
     def test_columnize_with_small_term(self, term_width_mock):
+        term_width_mock.return_value = None
         result = columnize(["Hello Hello Hello Hello:", "Foo Foo Foo Foo:"],
                 echo_columnize_callback, "This is a testing string", "This_is_another_testing_string")
         expected = 'Hello\nHello\nHello\nHello\n:     This\n      is a\n      ' \

@@ -6,7 +6,6 @@ try:
 except ImportError:
     import unittest
 
-import optparse
 import six
 
 from subscription_manager import i18n_optparse
@@ -31,23 +30,3 @@ class TestWrappedIndentedHelpFormatter(unittest.TestCase):
         # own for consistency
         fu = self.hf.format_usage("%%prog [OPTIONS]")
         self.assertEqual(fu[:6], "Usage:")
-
-    # just to verify the old broken way continues
-    # to be broken and the way we detect that still works
-    def test_old(self):
-        old_formatter = optparse.IndentedHelpFormatter(width=50)
-        parser = i18n_optparse.OptionParser(description="test",
-                                            formatter=old_formatter)
-        parser.add_option("-t", "--test", dest="test",
-                          default=None,
-                          help="このシステム用に権利があるレポジトリのがあるレポジトリの一覧表示")
-        # This case, width this formatter, this string, and this width,
-        # the old formatter would split in a multibyte char, creating
-        # a string that doesn't decode to utf8. So verify this still
-        # happens with the old string
-        try:
-            fh = parser.format_option_help()
-            fh.decode("utf8")
-            self.fail("Should raise an exception")
-        except UnicodeDecodeError:
-            pass

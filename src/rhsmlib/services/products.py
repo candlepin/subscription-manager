@@ -59,7 +59,7 @@ class InstalledProducts(object):
             ['product_name', 'product_id', 'version', 'arch', 'status', 'status_details', 'starts', 'ends']
         )
 
-        for installed_product in sorter.installed_products:
+        for installed_product in sorted(sorter.installed_products):
             product_cert = sorter.installed_products[installed_product]
 
             if cert_filter is None or cert_filter.match(product_cert):

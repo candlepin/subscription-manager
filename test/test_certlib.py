@@ -31,7 +31,7 @@ class TestLocker(fixture.SubManFixture):
         # we inject threading.RLock as the lock implementation in
         # the fixture init. RLock() is actually a factory method
         # that returns a _RLock
-        self.assertTrue(isinstance(l.lock, threading._RLock))
+        self.assertTrue(isinstance(l.lock, type(threading.RLock())))
 
     def test_run(self):
         def return_four():

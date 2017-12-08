@@ -25,7 +25,7 @@ from . import stubs
 
 from mock import patch, NonCallableMock, MagicMock, Mock, call
 from rhsm.https import ssl
-from .fixture import Capture, SubManFixture, temp_file
+from .fixture import Capture, SubManFixture, temp_file, OPEN_FUNCTION
 from optparse import OptionParser
 from textwrap import dedent
 
@@ -886,13 +886,13 @@ class TestMigration(SubManFixture):
             ]
         self.engine.check_for_conflicting_channels(channels)
 
-    @patch("__builtin__.open", autospec=True)
+    @patch(OPEN_FUNCTION, autospec=True)
     def test_get_release(self, mock_open):
         mock_open.return_value = six.StringIO("Red Hat Enterprise Linux Server release 6.3 (Santiago)")
         release = self.engine.get_release()
         self.assertEqual(release, "RHEL-6")
 
-    @patch("__builtin__.open", autospec=True)
+    @patch(OPEN_FUNCTION, autospec=True)
     def test_read_channel_cert_mapping(self, mock_open):
         mock_open.return_value.readlines.return_value = [
             "xyz: abc\n",
@@ -1048,7 +1048,7 @@ class TestMigration(SubManFixture):
         self.engine.legacy_purge(sc, None)
         mock_shutil.assert_called_with(self.system_id_file, "%s.save" % self.system_id_file)
 
-    @patch("__builtin__.open", autospec=True)
+    @patch(OPEN_FUNCTION, autospec=True)
     def test_disable_yum_rhn_plugin(self, mock_open):
         mo = mock_open.return_value
         mo.readlines.return_value = [
@@ -1264,12 +1264,12 @@ class TestMigration(SubManFixture):
         (opts, args) = parser.parse_args(["--remove-rhn-packages"])
         self.assertTrue(opts.remove_legacy_packages)
 
-    @patch("__builtin__.open", autospec=True)
+    @patch(OPEN_FUNCTION, autospec=True)
     def test_is_using_systemd_false_on_rhel6(self, mock_open):
         mock_open.return_value = six.StringIO("Red Hat Enterprise Linux Server release 6.3 (Santiago)")
         self.assertFalse(self.engine.is_using_systemd())
 
-    @patch("__builtin__.open", autospec=True)
+    @patch(OPEN_FUNCTION, autospec=True)
     def test_is_using_systemd_true_on_rhel7(self, mock_open):
         mock_open.return_value = six.StringIO("Red Hat Enterprise Linux Server release 7.2 (Maipo)")
         self.assertTrue(self.engine.is_using_systemd())

@@ -925,7 +925,7 @@ class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
         self.assertEqual(1, len(sorter.groups))
         group = sorter.groups[0]
 
-        self.assertEqual("Test Prod 2", group.name)
+        self.assertIn(group.name, ["Test Prod 1", "Test Prod 2"])
         self.assertEqual(2, len(group.entitlements))
 
         self.assertEqual(pools[0], group.entitlements[0])
@@ -965,11 +965,10 @@ class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
         group1 = sorter.groups[0]
         group2 = sorter.groups[1]
 
-        self.assertEqual("Test Prod 2", group1.name)
+        self.assertEqual(set([group1.name, group2.name]), set(["", "Test Prod 2"]))
         self.assertEqual(1, len(group1.entitlements))
         self.assertEqual(pools[0], group1.entitlements[0])
 
-        self.assertEqual("", group2.name)
         self.assertEqual(1, len(group2.entitlements))
         self.assertEqual(pools[1], group2.entitlements[0])
 
@@ -1032,7 +1031,7 @@ class MergedPoolsTests(unittest.TestCase):
         self.assertFalse('virt_only' in merged_pools.pools[3]['attributes'])
 
 
-class PoolStashTest(unittest.TestCase):
+class PoolStashTest(SubManFixture):
 
     def test_empty_stash_zero_length(self):
         my_stash = PoolStash()

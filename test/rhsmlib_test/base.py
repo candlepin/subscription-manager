@@ -51,7 +51,7 @@ class TestUtilsMixin(object):
     def write_temp_file(self, data):
         # create a temp file for use as a config file. This should get cleaned
         # up magically when it is closed so make sure to close it!
-        fid = NamedTemporaryFile(mode='w+b', suffix='.tmp')
+        fid = NamedTemporaryFile(mode='w+', suffix='.tmp')
         fid.write(data)
         fid.seek(0)
         return fid

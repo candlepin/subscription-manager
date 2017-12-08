@@ -18,7 +18,7 @@ except ImportError:
     import unittest
 
 import test.fixture
-from mock import patch
+from mock import patch, MagicMock
 
 from rhsmlib.facts import virt, firmware_info
 
@@ -26,16 +26,22 @@ from rhsmlib.facts import virt, firmware_info
 class VirtCollectorTest(test.fixture.SubManFixture):
     @patch('subprocess.Popen')
     def test_virt_bare_metal(self, MockPopen):
-        MockPopen.return_value.communicate.return_value = ['', None]
-        MockPopen.return_value.poll.return_value = 0
+        mock_process = MagicMock()
+        mock_process.communicate.return_value = ['', None]
+        mock_process.poll.return_value = 0
+        mock_process.__enter__.return_value = mock_process
+        MockPopen.return_value = mock_process
         hw = virt.VirtCollector()
         expected = {'virt.is_guest': False, 'virt.host_type': 'Not Applicable'}
         self.assertEqual(expected, hw.get_all())
 
     @patch('subprocess.Popen')
     def test_virt_error(self, MockPopen):
-        MockPopen.return_value.communicate.return_value = ['', None]
-        MockPopen.return_value.poll.return_value = 255
+        mock_process = MagicMock()
+        mock_process.communicate.return_value = ['', None]
+        mock_process.poll.return_value = 255
+        mock_process.__enter__.return_value = mock_process
+        MockPopen.return_value = mock_process
 
         hw = virt.VirtWhatCollector()
         expected = {'virt.is_guest': 'Unknown'}
@@ -43,8 +49,11 @@ class VirtCollectorTest(test.fixture.SubManFixture):
 
     @patch('subprocess.Popen')
     def test_command_valid(self, MockPopen):
-        MockPopen.return_value.communicate.return_value = ['this is valid', None]
-        MockPopen.return_value.poll.return_value = 0
+        mock_process = MagicMock()
+        mock_process.communicate.return_value = ['this is valid', None]
+        mock_process.poll.return_value = 0
+        mock_process.__enter__.return_value = mock_process
+        MockPopen.return_value = mock_process
 
         # Pick up the mocked class
         hw = virt.VirtCollector(testing='testing')
@@ -52,8 +61,11 @@ class VirtCollectorTest(test.fixture.SubManFixture):
 
     @patch('subprocess.Popen')
     def test_virt_guest(self, MockPopen):
-        MockPopen.return_value.communicate.return_value = ['kvm', None]
-        MockPopen.return_value.poll.return_value = 0
+        mock_process = MagicMock()
+        mock_process.communicate.return_value = ['kvm', None]
+        mock_process.poll.return_value = 0
+        mock_process.__enter__.return_value = mock_process
+        MockPopen.return_value = mock_process
 
         hw = virt.VirtCollector()
         expected = {'virt.is_guest': True, 'virt.host_type': 'kvm'}

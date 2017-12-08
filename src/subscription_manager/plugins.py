@@ -831,7 +831,7 @@ class BasePluginManager(object):
                 conduit_to_slots[conduit] = []
             conduit_to_slots[conduit].append(slot)
         sorted_slots = []
-        for conduit in sorted(conduit_to_slots.keys()):
+        for conduit in sorted(conduit_to_slots.keys(), key=lambda c: str(c)):
             for slot in sorted(conduit_to_slots[conduit]):
                 sorted_slots.append(slot)
         return sorted_slots

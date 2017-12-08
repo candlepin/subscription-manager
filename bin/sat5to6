@@ -24,9 +24,11 @@ if __name__ != '__main__':
 # hack to allow bytes/strings to be interpolated w/ unicode values (gettext gives us bytes)
 # Without this, for example, "Формат: %s\n" % u"foobar" will fail with UnicodeDecodeError
 # See http://stackoverflow.com/a/29832646/6124862 for more details
+import six
 import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if six.PY2:
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 import os
 
 
@@ -37,7 +39,7 @@ def system_exit(code, msgs=None):
         if type(msgs) not in [type([]), type(())]:
             msgs = (msgs, )
         for msg in msgs:
-            sys.stderr.write(unicode(msg).encode('utf-8') + '\n')
+            sys.stderr.write(six.text_type(msg) + '\n')
     sys.exit(code)
 
 # quick check to see if you are a super-user.
@@ -83,11 +85,11 @@ def main():
 if __name__ == '__main__':
     try:
         sys.exit(abs(main() or 0))
-    except SystemExit, e:
+    except SystemExit as e:
         # this is a non-exceptional exception thrown by Python 2.4, just
         # re-raise, bypassing handle_exception
         raise e
     except KeyboardInterrupt:
         system_exit(0, "\nUser interrupted process.")
-    except Exception, e:
+    except Exception as e:
         handle_exception("Exception caught in sat5to6", e)

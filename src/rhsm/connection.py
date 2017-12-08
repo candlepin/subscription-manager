@@ -235,7 +235,7 @@ class ExpiredIdentityCertException(ConnectionException):
 
 
 def _encode_auth(username, password):
-    encoded = base64.b64encode(':'.join((username, password)).encode('utf-8'))
+    encoded = base64.b64encode(':'.join((username, password)).encode('utf-8')).decode('utf-8')
     return 'Basic %s' % encoded
 
 

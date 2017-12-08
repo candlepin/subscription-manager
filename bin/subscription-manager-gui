@@ -29,9 +29,11 @@ if __name__ != '__main__':
 # hack to allow bytes/strings to be interpolated w/ unicode values (gettext gives us bytes)
 # Without this, for example, "Формат: %s\n" % u"foobar" will fail with UnicodeDecodeError
 # See http://stackoverflow.com/a/29832646/6124862 for more details
+import six
 import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if six.PY2:
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 import warnings
 # this is a deprecation warning we see on rhel6, but the
@@ -95,7 +97,7 @@ def _request_name(bus, bus_name):
 try:
     import dbus.dbus_bindings
     request_name = _request_name_rhel5
-except ImportError, e:
+except ImportError as e:
     request_name = _request_name
 
 
@@ -128,7 +130,7 @@ try:
     from subscription_manager.ga import Gtk as ga_Gtk
     from subscription_manager.ga import gtk_compat
     gtk_compat.threads_init()
-except RuntimeError, e:
+except RuntimeError as e:
     system_exit(2, "Unable to start.  Error: %s" % e)
 
 try:
@@ -149,7 +151,7 @@ try:
     from subscription_manager.gui import managergui
     from subscription_manager.i18n_optparse import OptionParser, \
         WrappedIndentedHelpFormatter, USAGE
-except ImportError, e:
+except ImportError as e:
     log.exception(e)
     system_exit(2, "Unable to find Subscription Manager module.\n"
                   "Error: %s" % e)
@@ -190,7 +192,7 @@ if __name__ == '__main__':
 
     try:
         bus = dbus.SessionBus()
-    except dbus.exceptions.DBusException, e:
+    except dbus.exceptions.DBusException as e:
         log.debug("Enabled to connect to dbus SessionBus")
         log.exception(e)
         # Just ignore it if for some reason we can't find the session bus
@@ -202,7 +204,7 @@ if __name__ == '__main__':
             remote_object = bus.get_object(BUS_NAME, BUS_PATH)
             remote_object.show_window(dbus_interface=BUS_NAME)
             log.debug("subscription-manager-gui already running, showing main window")
-        except dbus.exceptions.DBusException, e:
+        except dbus.exceptions.DBusException as e:
             log.debug("Error attempting to show main window via dbus")
             log.debug("dbus remote_object with no show_window: %s" % remote_object)
             log.debug(e)
@@ -223,12 +225,12 @@ if __name__ == '__main__':
         main.main_window.connect('hide', ga_Gtk.main_quit)
 
         sys.exit(ga_Gtk.main() or 0)
-    except SystemExit, e:
+    except SystemExit as e:
         # this is a non-exceptional exception thrown by Python 2.4, just
         # re-raise, bypassing handle_exception
         raise e
     except KeyboardInterrupt:
         system_exit(0, "\nUser interrupted process.")
-    except Exception, e:
+    except Exception as e:
         log.exception(e)
         system_exit(1, e)

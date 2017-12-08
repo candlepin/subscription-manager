@@ -168,12 +168,8 @@ class CdnReleaseVersionProvider(object):
     def _build_listing_path(self, content_url):
         listing_parts = content_url.split('$releasever', 1)
         listing_base = listing_parts[0]
-        listing_path = u"%s/listing" % listing_base
         # FIXME: cleanup paths ("//"'s, etc)
-
-        # Make sure content URLS are encoded to the default utf8
-        # as unicode strings aren't valid. See rhbz#1134963
-        return listing_path.encode()
+        return u"%s/listing" % listing_base  # FIXME(khowell): ensure that my changes here don't break earlier fix
 
     # require tags provided by installed products?
 

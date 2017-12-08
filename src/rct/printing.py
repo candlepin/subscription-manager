@@ -16,6 +16,8 @@ from __future__ import print_function, division, absolute_import
 #
 import signal
 
+import six
+
 from rhsm.certificate2 import EntitlementCertificate, ProductCertificate, IdentityCertificate
 
 # BZ 973938 python doesn't correctly handle SIGPIPE
@@ -30,7 +32,7 @@ from subscription_manager.i18n import ugettext as _
 def xstr(value):
     if value is None:
         return ''
-    elif isinstance(value, unicode):
+    elif isinstance(value, six.text_type) and six.PY2:
         return value.encode('utf-8')
     else:
         return str(value)

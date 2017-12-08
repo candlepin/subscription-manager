@@ -45,7 +45,7 @@ class TestLock(unittest.TestCase):
         acquire_timeout = acquire_timeout or 5.0
 
         sys_path = os.path.join(os.path.dirname(__file__), "../src")
-        self.other_process = subprocess.Popen(["/usr/bin/python", __file__, lockfile_path],
+        self.other_process = subprocess.Popen([sys.executable, __file__, lockfile_path],
                                               close_fds=True,
                                               stdin=subprocess.PIPE,
                                                env={'PYTHONPATH': sys_path})
@@ -73,7 +73,7 @@ class TestLock(unittest.TestCase):
 
     def close_lock_holder(self):
         try:
-            self.other_process.communicate("whatever")
+            self.other_process.communicate("whatever".encode('utf-8'))
         except Exception as e:
             print(e)
             # whatever, we closed it in the other thread
@@ -125,7 +125,7 @@ class TestLock(unittest.TestCase):
         b = lock.Lock(lock_path)
         res = b.acquire(blocking=False)
         self.assertFalse(b.acquired())
-        self.other_process.communicate("whatever")
+        self.other_process.communicate("whatever".encode('utf-8'))
         self.assertFalse(res)
 
     def test_lock(self):

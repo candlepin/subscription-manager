@@ -264,7 +264,7 @@ class SaferFileMove(object):
 
         If dest is /tmp, or a specific name in /tmp, we want to
         create it excl if we can."""
-        with open(src, 'r') as src_fo:
+        with open(src, 'rb') as src_fo:
             # if dest doesn't exist, and we can open it excl, then open it,
             # keep the fd, create a file object for it, and write to it
             with self._open_excl(dest) as dest_fo:
@@ -275,7 +275,7 @@ class SaferFileMove(object):
     def _open_excl(self, path):
         """Return a file object that we know we created and nothing else owns."""
         return os.fdopen(os.open(path, os.O_RDWR | os.O_CREAT | os.O_EXCL,
-                                 self.default_perms), 'w+')
+                                 self.default_perms), 'wb+')
 
     def _copyfileobj(self, src_fo, dest_fo):
         while True:

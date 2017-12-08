@@ -35,6 +35,8 @@ except ImportError:
 #grumble, no hashblib on 2.4 and
 # md5 is deprecated on 2.6
 def md5sum(buf):
+    if isinstance(buf, six.text_type):
+        buf = buf.encode('utf-8')
     if hashlib:
         md = hashlib.md5(buf)
         return md.hexdigest()

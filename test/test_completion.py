@@ -21,7 +21,10 @@ import subprocess
 
 class CompletionTest(TestCase):
     def test_posix_compliance(self):
-        for name in os.listdir(os.path.join(os.getcwd(), 'etc-conf')):
-            full_name = os.path.join(os.getcwd(), 'etc-conf', name)
+        _root_dir = os.getcwd()
+        if not os.path.exists(os.path.join(_root_dir, 'etc-conf')):
+            _root_dir = os.path.join(os.getcwd(), '..')
+        for name in os.listdir(os.path.join(_root_dir, 'etc-conf')):
+            full_name = os.path.join(_root_dir, 'etc-conf', name)
             if name.endswith('.completion.sh'):
                 subprocess.check_call(['bash', '--posix', full_name])

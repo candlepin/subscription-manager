@@ -34,7 +34,7 @@ from test.rhsmlib_test.base import DBusObjectTest, InjectionMockingTest
 
 from rhsm import connection
 
-from rhsmlib.dbus import dbus_utils, constants
+from rhsmlib.dbus import constants
 from rhsmlib.dbus.objects import RegisterDBusObject
 
 from rhsmlib.services import register, exceptions
@@ -351,11 +351,11 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
         return dbus.Interface(socket_proxy, constants.PRIVATE_REGISTER_INTERFACE)
 
     def test_can_register_over_domain_socket(self):
-        expected_consumer = json.loads(CONTENT_JSON, object_hook=dbus_utils._decode_dict)
+        expected_consumer = json.loads(CONTENT_JSON)
 
         def assertions(*args):
             # Be sure we are persisting the consumer cert
-            self.assertEqual(json.loads(args[0], object_hook=dbus_utils._decode_dict), expected_consumer)
+            self.assertEqual(json.loads(args[0]), expected_consumer)
 
         self.mock_identity.is_valid.return_value = False
         self.mock_identity.uuid = 'INVALIDCONSUMERUUID'
@@ -366,11 +366,11 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
         self.dbus_request(assertions, self._build_interface().Register, dbus_method_args)
 
     def test_can_register_over_domain_socket_with_activation_keys(self):
-        expected_consumer = json.loads(CONTENT_JSON, object_hook=dbus_utils._decode_dict)
+        expected_consumer = json.loads(CONTENT_JSON)
 
         def assertions(*args):
             # Be sure we are persisting the consumer cert
-            self.assertEqual(json.loads(args[0], object_hook=dbus_utils._decode_dict), expected_consumer)
+            self.assertEqual(json.loads(args[0]), expected_consumer)
 
         self.mock_identity.is_valid.return_value = False
         self.mock_identity.uuid = 'INVALIDCONSUMERUUID'
