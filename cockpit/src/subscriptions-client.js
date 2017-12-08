@@ -400,8 +400,13 @@ client.unregisterSystem = () => {
     client.subscriptionStatus.status = "Unregistering";
     needRender();
     unregisterService.wait(() => {
-        unregisterService.Unregister({}, userLang) // FIXME: user proxy settings
+        unregisterService.Unregister({}, userLang) // FIXME: use proxy settings
+            .catch(error => {
+                console.error('error unregistering system', error);
+                client.subscriptionStatus.error = parseErrorMessage(error);
+            })
             .always(() => {
+                console.debug('requesting update');
                 requestUpdate();
             });
     });
