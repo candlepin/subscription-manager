@@ -1,4 +1,3 @@
-#!/usr/bin/python -Es
 # -*- coding: utf-8 -*-
 # ^ is to prevent selinux denials trying to load modules from unintended
 #   paths. See https://bugzilla.redhat.com/show_bug.cgi?id=1136163
@@ -55,7 +54,7 @@ def exit_on_signal(_signumber, _stackframe):
     sys.exit(0)
 
 
-def main(options, log):
+def _main(options, log):
     # Set default mainloop
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
@@ -125,8 +124,7 @@ def main(options, log):
         raise ge
 
 
-if __name__ == '__main__':
-
+def main():
     logutil.init_logger()
     log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -136,7 +134,7 @@ if __name__ == '__main__':
             default=False, help="perform an autoheal check")
     (options, args) = parser.parse_args()
     try:
-        main(options, log)
+        _main(options, log)
     except SystemExit as se:
         # sys.exit triggers an exception in older Python versions, which
         # in this case  we can safely ignore as we do not want to log the

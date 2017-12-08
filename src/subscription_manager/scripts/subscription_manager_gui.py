@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function, division, absolute_import
@@ -21,10 +20,6 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
-
-if __name__ != '__main__':
-    raise ImportError("module cannot be imported")
 
 # hack to allow bytes/strings to be interpolated w/ unicode values (gettext gives us bytes)
 # Without this, for example, "Формат: %s\n" % u"foobar" will fail with UnicodeDecodeError
@@ -181,7 +176,8 @@ def already_running(bus):
         return True
     return False
 
-if __name__ == '__main__':
+
+def main():
     parser = OptionParser(usage=USAGE,
                           formatter=WrappedIndentedHelpFormatter())
     parser.add_option("--register", action='store_true',
@@ -234,3 +230,6 @@ if __name__ == '__main__':
     except Exception as e:
         log.exception(e)
         system_exit(1, e)
+
+if __name__ == '__main__':
+    main()

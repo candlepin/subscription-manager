@@ -9,6 +9,33 @@ from the  Candlepin.
  - https://fedorahosted.org/subscription-manager/
  - https://github.com/candlepin/subscription-Manager
 
+Local Installation
+------------------
+Consider using Vagrant instead (see below) for development as it can be a much
+more consistent and easy experience.
+
+In order to build, develop, and test locally, please follow
+[instructions at candlepinproject.org](http://www.candlepinproject.org/docs/subscription-manager/installation.html#installation-of-upstream-from-source-code).
+
+Due to unintuitive behavior with `sys.path`
+(see https://github.com/asottile/scratch/wiki/PythonPathSadness),
+`python src/subscription_manager/scripts/subscription_manager.py` does not work
+as expected. One can run the script like this instead:
+
+```bash
+PYTHONPATH=./src python -m subscription_manager.scripts.subscription_manager
+```
+
+Similar for other bin scripts:
+
+```bash
+PYTHONPATH=./src python -m subscription_manager.scripts.rct
+PYTHONPATH=./src python -m subscription_manager.scripts.rhn_migrate_classic_to_rhsm
+# ... etc.
+```
+
+(You can also just export `PYTHONPATH` instead of setting it in each command).
+
 Vagrant
 -------
 
