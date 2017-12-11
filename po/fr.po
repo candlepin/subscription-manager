@@ -13,12 +13,12 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-28 13:14-0500\n"
+"POT-Creation-Date: 2017-12-11 16:15-0500\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-11-28 01:44-0500\n"
-"Last-Translator: Kevin Howell <kevin@kahowell.net>\n"
+"PO-Revision-Date: 2017-12-11 03:02-0500\n"
+"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -1165,7 +1165,7 @@ msgstr "Arguments inconnus : %s"
 #: src/rhsmlib/services/entitlement.py:164
 #: src/subscription_manager/gui/mysubstab.py:299
 #: src/subscription_manager/gui/widgets.py:862
-#: src/subscription_manager/managercli.py:2333
+#: src/subscription_manager/managercli.py:2329
 msgid "Virtual"
 msgstr "Virtuel"
 
@@ -1173,21 +1173,21 @@ msgstr "Virtuel"
 #: src/rhsmlib/services/entitlement.py:166
 #: src/subscription_manager/gui/mysubstab.py:301
 #: src/subscription_manager/gui/widgets.py:861
-#: src/subscription_manager/managercli.py:2335
+#: src/subscription_manager/managercli.py:2331
 msgid "Physical"
 msgstr "Physique"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rhsmlib/services/entitlement.py:169
 #: src/subscription_manager/gui/mysubstab.py:304
-#: src/subscription_manager/managercli.py:2338
+#: src/subscription_manager/managercli.py:2334
 msgid "Yes"
 msgstr "Oui"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rhsmlib/services/entitlement.py:171
 #: src/subscription_manager/gui/mysubstab.py:306
-#: src/subscription_manager/managercli.py:2340
+#: src/subscription_manager/managercli.py:2336
 msgid "No"
 msgstr "Non"
 
@@ -1221,19 +1221,19 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsmlib/services/entitlement.py:249
-#: src/subscription_manager/managercli.py:2259
+#: src/subscription_manager/managercli.py:2255
 msgid "Error: --all is only applicable with --available"
 msgstr "Erreur : --all ne s'applique qu'avec --available"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsmlib/services/entitlement.py:253
-#: src/subscription_manager/managercli.py:2261
+#: src/subscription_manager/managercli.py:2257
 msgid "Error: --ondate is only applicable with --available"
 msgstr "Erreur : --ondate ne s'applique qu'avec --available"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rhsmlib/services/entitlement.py:258
-#: src/subscription_manager/managercli.py:2263
+#: src/subscription_manager/managercli.py:2259
 msgid ""
 "Error: --servicelevel is only applicable with --available or --consumed"
 msgstr ""
@@ -1241,17 +1241,17 @@ msgstr ""
 "consumed"
 
 #: src/rhsmlib/services/entitlement.py:262
-#: src/subscription_manager/managercli.py:2267
+#: src/subscription_manager/managercli.py:2263
 msgid "Error: --match-installed is only applicable with --available"
 msgstr "Erreur : --match-installed est uniquement applicable avec --available"
 
 #: src/rhsmlib/services/entitlement.py:266
-#: src/subscription_manager/managercli.py:2269
+#: src/subscription_manager/managercli.py:2265
 msgid "Error: --no-overlap is only applicable with --available"
 msgstr "Erreur : --no-overlap est uniquement applicable avec --available"
 
 #: src/rhsmlib/services/entitlement.py:271
-#: src/subscription_manager/managercli.py:2271
+#: src/subscription_manager/managercli.py:2267
 msgid ""
 "Error: --pool-only is only applicable with --available and/or --consumed"
 msgstr ""
@@ -1337,7 +1337,7 @@ msgstr "Ce système est enregistré sur spacewalk"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/branding/__init__.py:85
 #: src/subscription_manager/branding/redhat_branding.py:12
-#: src/subscription_manager/managercli.py:2630
+#: src/subscription_manager/managercli.py:2626
 #: src/subscription_manager/migrate/migrate.py:1000
 msgid "WARNING"
 msgstr "AVERTISSEMENT"
@@ -1506,7 +1506,7 @@ msgstr "Invalide"
 #: src/subscription_manager/managercli.py:335
 #: src/subscription_manager/managercli.py:336
 #: src/subscription_manager/managercli.py:337
-#: src/subscription_manager/managercli.py:1823
+#: src/subscription_manager/managercli.py:1819
 #: src/subscription_manager/reasons.py:94 src/subscription_manager/utils.py:219
 #: src/subscription_manager/utils.py:231 src/subscription_manager/utils.py:233
 #: src/subscription_manager/utils.py:251 src/subscription_manager/utils.py:252
@@ -3525,10 +3525,13 @@ msgstr "Navigateur non détecté. L'URL de la documentation est %s."
 #: src/subscription_manager/gui/managergui.py:193
 msgid "Wrong proxy username or password, please check your settings."
 msgstr ""
+"Nom d'utilisateur ou mot de passe erroné, veuillez vérifier vos paramètres "
+"de configuration."
 
 #: src/subscription_manager/gui/managergui.py:195
 msgid "Proxy authentication required, please check your settings."
 msgstr ""
+"Authentification exigée, veuillez vérifier vos paramètres de configuration."
 
 #: src/subscription_manager/gui/managergui.py:197
 #: src/subscription_manager/gui/registergui.py:1875
@@ -3683,8 +3686,8 @@ msgid "Please wait"
 msgstr "Veuillez patienter"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/gui/preferences.py:122
-#: src/subscription_manager/gui/preferences.py:150
+#: src/subscription_manager/gui/preferences.py:123
+#: src/subscription_manager/gui/preferences.py:156
 #: src/subscription_manager/gui/widgets.py:487
 msgid "Not Set"
 msgstr "Non défini"
@@ -3921,8 +3924,8 @@ msgstr "Aucun référentiel n'est disponible sans abonnement attaché."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/reposgui.py:56
-#: src/subscription_manager/managercli.py:2015
-#: src/subscription_manager/managercli.py:2490
+#: src/subscription_manager/managercli.py:2011
+#: src/subscription_manager/managercli.py:2486
 msgid "Repositories disabled by configuration."
 msgstr "Référentiels désactivés par la configuration."
 
@@ -4407,7 +4410,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:670
 #: src/subscription_manager/managercli.py:673
-#: src/subscription_manager/managercli.py:2562
+#: src/subscription_manager/managercli.py:2558
 #, python-format
 msgid "server type: %s"
 msgstr "type de serveur : %s"
@@ -4619,7 +4622,7 @@ msgstr "Erreur : incapable de retrouver les niveaux de service."
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:927
 #: src/subscription_manager/managercli.py:1167
-#: src/subscription_manager/managercli.py:1600
+#: src/subscription_manager/managercli.py:1596
 #, python-format
 msgid "Service level set to: %s"
 msgstr "Niveau de service paramétré sur : %s"
@@ -4780,7 +4783,7 @@ msgstr "Le nom du système enregistré est : %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1162
-#: src/subscription_manager/managercli.py:1594
+#: src/subscription_manager/managercli.py:1590
 msgid ""
 "Error: The --servicelevel option is not supported by the server. Did not "
 "complete your request."
@@ -4877,17 +4880,13 @@ msgstr "Version : %s"
 msgid "Release not set"
 msgstr "Version non définie"
 
-#: src/subscription_manager/managercli.py:1392
-msgid "Error: More than one release product certificate installed."
-msgstr "Erreur : plus d'un certificat de version de produit installés."
-
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:1412
+#: src/subscription_manager/managercli.py:1408
 msgid "Release preference has been unset"
 msgstr "La préférence de la version a été désélectionnée"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:1428
+#: src/subscription_manager/managercli.py:1424
 #, python-format
 msgid "No releases match '%s'.  Consult 'release --list' for a full listing."
 msgstr ""
@@ -4895,32 +4894,32 @@ msgstr ""
 "pour voir la liste complète."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:1432
+#: src/subscription_manager/managercli.py:1428
 #, python-format
 msgid "Release set to: %s"
 msgstr "Version définie sur : %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:1442
+#: src/subscription_manager/managercli.py:1438
 msgid "No release versions available, please check subscriptions."
 msgstr "Aucune version disponible, veuillez vérifier les abonnements."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:1445
+#: src/subscription_manager/managercli.py:1441
 msgid "Available Releases"
 msgstr "Versions disponibles"
 
-#: src/subscription_manager/managercli.py:1466
+#: src/subscription_manager/managercli.py:1462
 msgid "The ID of the pool to attach (can be specified more than once)"
 msgstr "ID du pool à attacher (peut être spécifié plus d'une fois)"
 
-#: src/subscription_manager/managercli.py:1468
+#: src/subscription_manager/managercli.py:1464
 msgid ""
 "Number of subscriptions to attach. May not be used with an auto-attach."
 msgstr ""
 "Nombre d'abonnements à attacher. Ne peut pas être utilisé avec auto-attach."
 
-#: src/subscription_manager/managercli.py:1470
+#: src/subscription_manager/managercli.py:1466
 msgid ""
 "Automatically attach compatible subscriptions to this system. This is the "
 "default action."
@@ -4928,7 +4927,7 @@ msgstr ""
 "Attache automatiquement des abonnements compatibles à ce système. Ceci est "
 "l'action par défaut."
 
-#: src/subscription_manager/managercli.py:1472
+#: src/subscription_manager/managercli.py:1468
 msgid ""
 "Automatically attach only subscriptions matching the specified service "
 "level; only used with --auto"
@@ -4936,7 +4935,7 @@ msgstr ""
 "Attacher automatiquement les abonnements correspondants uniquement au niveau "
 "de service spécifié ; utiliser uniquement avec --auto"
 
-#: src/subscription_manager/managercli.py:1474
+#: src/subscription_manager/managercli.py:1470
 msgid ""
 "A file from which to read pool IDs. If a hyphen is provided, pool IDs will "
 "be read from stdin."
@@ -4945,76 +4944,76 @@ msgstr ""
 "fourni, les ID de pool seront lus à partir de stdin."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:1477
+#: src/subscription_manager/managercli.py:1473
 msgid "All installed products are covered by valid entitlements."
 msgstr ""
 "Tous les produits installés sont couverts par des abonnements valides."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:1478
+#: src/subscription_manager/managercli.py:1474
 msgid "No need to update subscriptions at this time."
 msgstr ""
 "Il n'est pas nécessaire de mettre à jour les abonnements pour le moment."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:1489
+#: src/subscription_manager/managercli.py:1485
 msgid "Attach a specified subscription to the registered system"
 msgstr "Attacher un abonnement spécifié au système enregistré"
 
-#: src/subscription_manager/managercli.py:1500
+#: src/subscription_manager/managercli.py:1496
 msgid "Error: --auto may not be used when specifying pools."
 msgstr ""
 "Erreur : --auto ne peut pas être utilisé lors de la spécification de pools."
 
-#: src/subscription_manager/managercli.py:1502
+#: src/subscription_manager/managercli.py:1498
 msgid "Error: The --servicelevel option cannot be used when specifying pools."
 msgstr ""
 "Erreur : l'option --servicelevel ne peut pas être utilisée lors de la "
 "spécification de pools."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:1509
+#: src/subscription_manager/managercli.py:1505
 msgid "Error: Quantity must be a positive integer."
 msgstr "Erreur : la quantité doit être un entier positif­."
 
-#: src/subscription_manager/managercli.py:1511
+#: src/subscription_manager/managercli.py:1507
 msgid "Error: --quantity may not be used with an auto-attach"
 msgstr "Erreur : --quantity ne peut pas être utilisé avec auto-attach"
 
-#: src/subscription_manager/managercli.py:1523
+#: src/subscription_manager/managercli.py:1519
 msgid "Error: Received data does not contain any pool IDs."
 msgstr "Erreur : les données reçues ne contiennent aucun ID de pool."
 
-#: src/subscription_manager/managercli.py:1525
+#: src/subscription_manager/managercli.py:1521
 #, python-format
 msgid "Error: The file \"%s\" does not contain any pool IDs."
 msgstr "Erreur : le fichier \"%s\" ne contient aucun ID de pool."
 
-#: src/subscription_manager/managercli.py:1527
+#: src/subscription_manager/managercli.py:1523
 #, python-format
 msgid "Error: The file \"%s\" does not exist or cannot be read."
 msgstr "Erreur : le fichier « %s » n'existe pas ou ne peut pas être lu."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:1554
+#: src/subscription_manager/managercli.py:1550
 msgid "Please enter a valid numeric pool ID."
 msgstr "Veuillez saisir un ID de pool numérique valide."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:1561
+#: src/subscription_manager/managercli.py:1557
 #, python-format
 msgid "Successfully attached a subscription for: %s"
 msgstr "Abonnement attaché avec succès pour : %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:1582
+#: src/subscription_manager/managercli.py:1578
 msgid "No Installed products on system. No need to attach subscriptions."
 msgstr ""
 "Aucun produit installé sur le système. Il n'est pas nécessaire d'attacher "
 "des abonnements."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:1585
+#: src/subscription_manager/managercli.py:1581
 msgid ""
 "All installed products are covered by valid entitlements. No need to update "
 "subscriptions at this time."
@@ -5022,46 +5021,46 @@ msgstr ""
 "Tous les produits installés sont couverts par des droits d'accès valides. Il "
 "n'est pas nécessaire de mettre à jour les abonnements."
 
-#: src/subscription_manager/managercli.py:1607
+#: src/subscription_manager/managercli.py:1603
 msgid "Entitlement Certificate(s) update failed due to the following reasons:"
 msgstr ""
 "La mise à jour du(des) certificat(s) de droits d'accès a échoué à cause des "
 "raisons suivantes :"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:1632
+#: src/subscription_manager/managercli.py:1628
 msgid "Deprecated, see attach"
 msgstr "Déprécié, voir attach (attacher)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:1650
+#: src/subscription_manager/managercli.py:1646
 msgid "certificate serial number to remove (can be specified more than once)"
 msgstr ""
 "numéro de série du certificat à supprimer (peut être spécifié plus d'une "
 "fois)"
 
-#: src/subscription_manager/managercli.py:1652
+#: src/subscription_manager/managercli.py:1648
 msgid "the ID of the pool to remove (can be specified more than once)"
 msgstr "ID du pool à supprimer (peut être spécifié plus d'une fois)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:1654
+#: src/subscription_manager/managercli.py:1650
 msgid "remove all subscriptions from this system"
 msgstr "supprimer tous les abonnements de ce système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:1657
+#: src/subscription_manager/managercli.py:1653
 msgid "Remove all or specific subscriptions from this system"
 msgstr ""
 "Supprimer tous les abonnements ou des abonnements spécifiques de ce système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:1670
+#: src/subscription_manager/managercli.py:1666
 #, python-format
 msgid "Error: '%s' is not a valid serial number"
 msgstr "Erreur : '%s' n'est pas un numéro de série valide"
 
-#: src/subscription_manager/managercli.py:1676
+#: src/subscription_manager/managercli.py:1672
 msgid ""
 "Error: The registered entitlement server does not support remove --pool.\n"
 "Instead, use the remove --serial option."
@@ -5070,7 +5069,7 @@ msgstr ""
 "remove --pool.\n"
 "Veuillez plutôt utiliser l'option remove --serial."
 
-#: src/subscription_manager/managercli.py:1679
+#: src/subscription_manager/managercli.py:1675
 msgid ""
 "Error: This command requires that you specify one of --serial, --pool or --"
 "all."
@@ -5078,40 +5077,40 @@ msgstr ""
 "Erreur : cette commande requiert que vous spécifiez --serial,  --pool ou --"
 "all."
 
-#: src/subscription_manager/managercli.py:1684
+#: src/subscription_manager/managercli.py:1680
 msgid "The entitlement server successfully removed these pools:"
 msgstr "Le serveur pour les abonnements a pu supprimer ces pools :"
 
-#: src/subscription_manager/managercli.py:1686
+#: src/subscription_manager/managercli.py:1682
 msgid "The entitlement server successfully removed these serial numbers:"
 msgstr ""
 "Le serveur pour les droits d'accès a pu supprimer ces numéros de série :"
 
-#: src/subscription_manager/managercli.py:1688
+#: src/subscription_manager/managercli.py:1684
 msgid "The entitlement server successfully removed these IDs:"
 msgstr "Le serveur pour les abonnements a pu supprimer ces ID :"
 
-#: src/subscription_manager/managercli.py:1693
+#: src/subscription_manager/managercli.py:1689
 msgid "The entitlement server failed to remove these pools:"
 msgstr "Le serveur pour les droits d'accès a pu supprimer ces pools :"
 
-#: src/subscription_manager/managercli.py:1695
+#: src/subscription_manager/managercli.py:1691
 msgid "The entitlement server failed to remove these serial numbers:"
 msgstr ""
 "Le serveur pour les droits d'accès n'a pas pu supprimer ces numéros de "
 "série :"
 
-#: src/subscription_manager/managercli.py:1697
+#: src/subscription_manager/managercli.py:1693
 msgid "The entitlement server failed to remove these IDs:"
 msgstr "Le serveur pour les droits d'accès n'a pas pu supprimer ces IDs :"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:1715
+#: src/subscription_manager/managercli.py:1711
 msgid "All subscriptions have been removed at the server."
 msgstr "Tous les abonnements ont été supprimés au niveau du serveur."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:1718
+#: src/subscription_manager/managercli.py:1714
 #, python-format
 msgid "%s subscription removed at the server."
 msgid_plural "%s subscriptions removed at the server."
@@ -5119,60 +5118,60 @@ msgstr[0] "%s abonnement a été supprimé au niveau du serveur."
 msgstr[1] "%s abonnements ont été supprimés au niveau du serveur."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:1746
-#: src/subscription_manager/managercli.py:1770
+#: src/subscription_manager/managercli.py:1742
+#: src/subscription_manager/managercli.py:1766
 #, python-format
 msgid "Unable to perform remove due to the following exception: %s"
 msgstr "Échec de la suppression dû à l'exception suivante : %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:1755
+#: src/subscription_manager/managercli.py:1751
 #, python-format
 msgid "%s subscriptions removed from this system."
 msgstr "%s abonnements supprimés de ce système."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:1765
+#: src/subscription_manager/managercli.py:1761
 #, python-format
 msgid "Subscription with serial number %s removed from this system"
 msgstr "Abonnement avec le numéro de série %s supprimé de ce système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:1783
+#: src/subscription_manager/managercli.py:1779
 msgid "Deprecated, see remove"
 msgstr "Déprécié, voir remove (suppression)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:1795
+#: src/subscription_manager/managercli.py:1791
 msgid "View or update the detected system information"
 msgstr "Afficher ou mettre à jour les informations du système détecté"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:1799
+#: src/subscription_manager/managercli.py:1795
 msgid "list known facts for this system"
 msgstr "répertorier les faits connus de ce système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:1801
+#: src/subscription_manager/managercli.py:1797
 msgid "update the system facts"
 msgstr "mettre à jour les faits du système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:1834
+#: src/subscription_manager/managercli.py:1830
 msgid "Successfully updated the system facts."
 msgstr "Mise à jour des faits système réussie."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:1839
+#: src/subscription_manager/managercli.py:1835
 msgid "Import certificates which were provided outside of the tool"
 msgstr "Importe des certificats fournis en-dehors de l'outil"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:1843
+#: src/subscription_manager/managercli.py:1839
 msgid "certificate file to import (can be specified more than once)"
 msgstr "fichier certificat à importer (peut être spécifié plus d'une fois)"
 
-#: src/subscription_manager/managercli.py:1847
+#: src/subscription_manager/managercli.py:1843
 msgid ""
 "Error: You may not import certificates into a system that is registered to a "
 "subscription management service."
@@ -5181,7 +5180,7 @@ msgstr ""
 "enregistré à un service de gestion des abonnements."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:1849
+#: src/subscription_manager/managercli.py:1845
 msgid ""
 "Error: This command requires that you specify a certificate with --"
 "certificate."
@@ -5190,13 +5189,13 @@ msgstr ""
 "certificate."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:1864
+#: src/subscription_manager/managercli.py:1860
 #, python-format
 msgid "Successfully imported certificate %s"
 msgstr "Import du certificat %s réussi"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:1870
+#: src/subscription_manager/managercli.py:1866
 #, python-format
 msgid "%s is not a valid certificate file. Please use a valid certificate."
 msgstr ""
@@ -5204,7 +5203,7 @@ msgstr ""
 "valide."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:1876
+#: src/subscription_manager/managercli.py:1872
 msgid ""
 "An error occurred while importing the certificate. Please check log file for "
 "more information."
@@ -5212,66 +5211,66 @@ msgstr ""
 "Une erreur s'est produite lors de l'importation du certificat. Veuillez "
 "vérifier le fichier journal pour obtenir plus d'informations."
 
-#: src/subscription_manager/managercli.py:1880
+#: src/subscription_manager/managercli.py:1876
 #, python-format
 msgid "%s: file not found."
 msgstr "%s : fichier non trouvé."
 
-#: src/subscription_manager/managercli.py:1903
+#: src/subscription_manager/managercli.py:1899
 msgid "View and configure with 'subscription-manager plugins'"
 msgstr "Afficher et configurer avec des « subscription-manager plugins »"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author jcarbone
-#: src/subscription_manager/managercli.py:1907
+#: src/subscription_manager/managercli.py:1903
 #, python-format
 msgid "list %s plugins"
 msgstr "répertorier %s plugins"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author jcarbone
-#: src/subscription_manager/managercli.py:1909
+#: src/subscription_manager/managercli.py:1905
 #, python-format
 msgid "list %s plugin slots"
 msgstr "répertorier %s emplacements de plugins"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author jcarbone
-#: src/subscription_manager/managercli.py:1911
+#: src/subscription_manager/managercli.py:1907
 #, python-format
 msgid "list %s plugin hooks"
 msgstr "répertorier %s hooks de plugins"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:1914
+#: src/subscription_manager/managercli.py:1910
 msgid "show verbose plugin info"
 msgstr "afficher les informations verbeuses du plugin"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:1928
+#: src/subscription_manager/managercli.py:1924
 msgid "disabled"
 msgstr "désactivé"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:1930
+#: src/subscription_manager/managercli.py:1926
 msgid "enabled"
 msgstr "activé"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:1957
+#: src/subscription_manager/managercli.py:1953
 msgid "List the repositories which this system is entitled to use"
 msgstr "Répertorier les référentiels que ce système a le droit d'utiliser"
 
-#: src/subscription_manager/managercli.py:1991
+#: src/subscription_manager/managercli.py:1987
 msgid "list all known repositories for this system"
 msgstr "répertorier tous les référentiels connus de ce système"
 
-#: src/subscription_manager/managercli.py:1994
+#: src/subscription_manager/managercli.py:1990
 msgid "list known, enabled repositories for this system"
 msgstr "répertorier les référentiels connus et activés de ce système"
 
-#: src/subscription_manager/managercli.py:1997
+#: src/subscription_manager/managercli.py:1993
 msgid "list known, disabled repositories for this system"
 msgstr "répertorier les référentiels connus et désactivés de ce système"
 
-#: src/subscription_manager/managercli.py:2000
+#: src/subscription_manager/managercli.py:1996
 msgid ""
 "repository to enable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
@@ -5279,7 +5278,7 @@ msgstr ""
 "référentiel à activer (peut être spécifié plus d'une fois). Les caractères "
 "génériques (« * » et « ? ») sont admis."
 
-#: src/subscription_manager/managercli.py:2003
+#: src/subscription_manager/managercli.py:1999
 msgid ""
 "repository to disable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
@@ -5288,23 +5287,23 @@ msgstr ""
 "caractères génériques (« * » et « ? ») sont admis."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:2046
+#: src/subscription_manager/managercli.py:2042
 #, python-format
 msgid "    Available Repositories in %s"
 msgstr "    Référentiels disponibles dans %s"
 
-#: src/subscription_manager/managercli.py:2056
+#: src/subscription_manager/managercli.py:2052
 msgid "There were no available repositories matching the specified criteria."
 msgstr "Aucun référentiel disponible ne correspond aux critères spécifiés."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:2058
+#: src/subscription_manager/managercli.py:2054
 msgid "This system has no repositories available through subscriptions."
 msgstr ""
 "Ce système ne possède pas de référentiel disponible à travers des "
 "abonnements."
 
-#: src/subscription_manager/managercli.py:2080
+#: src/subscription_manager/managercli.py:2076
 #, python-format
 msgid ""
 "Error: '%s' does not match a valid repository ID. Use \"subscription-manager "
@@ -5313,18 +5312,18 @@ msgstr ""
 "Erreur : %s n'est pas un ID de référentiel valide. Utilisez l'option -"
 "subscription-manager repos --list pour afficher les référentiels valides."
 
-#: src/subscription_manager/managercli.py:2120
+#: src/subscription_manager/managercli.py:2116
 #, python-format
 msgid "Repository '%s' is enabled for this system."
 msgstr "Le référentiel « %s » est activé pour ce système."
 
-#: src/subscription_manager/managercli.py:2122
+#: src/subscription_manager/managercli.py:2118
 #, python-format
 msgid "Repository '%s' is disabled for this system."
 msgstr "Le référentiel « %s » est désactivé pour ce système."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:2129
+#: src/subscription_manager/managercli.py:2125
 msgid ""
 "List, set, or remove the configuration parameters in use by this system"
 msgstr ""
@@ -5332,23 +5331,23 @@ msgstr ""
 "par ce système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:2133
+#: src/subscription_manager/managercli.py:2129
 msgid "list the configuration for this system"
 msgstr "répertorie la configurations de ce système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:2135
+#: src/subscription_manager/managercli.py:2131
 msgid "remove configuration entry by section.name"
 msgstr "supprimer l'entrée de la configuration par section.nom"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:2140
+#: src/subscription_manager/managercli.py:2136
 #, python-format
 msgid "Section: %s, Name: %s"
 msgstr "Section : %s, Nom : %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:2155
+#: src/subscription_manager/managercli.py:2151
 msgid ""
 "Error: --list should not be used with any other options for setting or "
 "removing configurations."
@@ -5357,7 +5356,7 @@ msgstr ""
 "l'installation ou la suppression de configurations."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:2171
+#: src/subscription_manager/managercli.py:2167
 msgid ""
 "Error: configuration entry designation for removal must be of format "
 "[section.name]"
@@ -5366,60 +5365,60 @@ msgstr ""
 "doit être sous le format [section.nom]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:2181
+#: src/subscription_manager/managercli.py:2177
 #, python-format
 msgid "Error: Section %s and name %s does not exist."
 msgstr "Erreur : la section %s et le nom %s n'existent pas."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:2199
+#: src/subscription_manager/managercli.py:2195
 msgid "[] - Default value in use"
 msgstr "[] - Valeur par défaut en cours d'utilisation"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:2208
-#: src/subscription_manager/managercli.py:2211
+#: src/subscription_manager/managercli.py:2204
+#: src/subscription_manager/managercli.py:2207
 #, python-format
 msgid "You have removed the value for section %s and name %s."
 msgstr "Vous avez supprimé la valeur pour la section %s et le nom %s."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:2212
+#: src/subscription_manager/managercli.py:2208
 #, python-format
 msgid "The default value for %s will now be used."
 msgstr "La valeur par défaut de %s sera maintenant utilisée."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:2214
+#: src/subscription_manager/managercli.py:2210
 #, python-format
 msgid "Section %s and name %s cannot be removed."
 msgstr "La section %s et le nom %s ne peuvent pas être supprimés."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:2232
+#: src/subscription_manager/managercli.py:2228
 msgid "List subscription and product information for this system"
 msgstr ""
 "Répertorier les informations des produits et abonnements de ce système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:2236
+#: src/subscription_manager/managercli.py:2232
 msgid "list shows those products which are installed (default)"
 msgstr "la liste affiche les produits installés (par défaut)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:2238
+#: src/subscription_manager/managercli.py:2234
 msgid "show those subscriptions which are available"
 msgstr "afficher les abonnements disponibles"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:2240
+#: src/subscription_manager/managercli.py:2236
 msgid "used with --available to ensure all subscriptions are returned"
 msgstr ""
 "utilisé avec --available pour assurer que tous les abonnements soient bien "
 "retournés"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:2242
+#: src/subscription_manager/managercli.py:2238
 #, python-format
 msgid ""
 "date to search on, defaults to today's date, only used with --available "
@@ -5429,12 +5428,12 @@ msgstr ""
 "available (exemple : %s)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:2245
+#: src/subscription_manager/managercli.py:2241
 msgid "show the subscriptions being consumed by this system"
 msgstr "afficher les abonnements consommés par ce système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:2247
+#: src/subscription_manager/managercli.py:2243
 msgid ""
 "shows only subscriptions matching the specified service level; only used "
 "with --available and --consumed"
@@ -5442,7 +5441,7 @@ msgstr ""
 "affiche uniquement les abonnements correspondants au niveau de service "
 "spécifié ; uniquement utilisé avec --available et --consumed"
 
-#: src/subscription_manager/managercli.py:2249
+#: src/subscription_manager/managercli.py:2245
 msgid ""
 "shows pools which provide products that are not already covered; only used "
 "with --available"
@@ -5450,7 +5449,7 @@ msgstr ""
 "affiche les pools fournissant des produits qui ne sont pas déjà couverts ; "
 "uniquement utilisé avec --available"
 
-#: src/subscription_manager/managercli.py:2251
+#: src/subscription_manager/managercli.py:2247
 msgid ""
 "shows only subscriptions matching products that are currently installed; "
 "only used with --available"
@@ -5458,7 +5457,7 @@ msgstr ""
 "affiche seulement les abonnements correspondants aux produits actuellement "
 "installés ; uniquement utilisé avec --available"
 
-#: src/subscription_manager/managercli.py:2253
+#: src/subscription_manager/managercli.py:2249
 msgid ""
 "lists only subscriptions or products containing the specified expression in "
 "the subscription or product information, varying with the list requested and "
@@ -5469,7 +5468,7 @@ msgstr ""
 "fonction de la liste requise et de la version du serveur (insensible à la "
 "casse)."
 
-#: src/subscription_manager/managercli.py:2255
+#: src/subscription_manager/managercli.py:2251
 msgid ""
 "lists only the pool IDs for applicable available or consumed subscriptions; "
 "only used with --available and --consumed"
@@ -5479,22 +5478,22 @@ msgstr ""
 "consumed"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:2284
+#: src/subscription_manager/managercli.py:2280
 msgid "    Installed Product Status"
 msgstr "    Statut des produits installés"
 
-#: src/subscription_manager/managercli.py:2294
+#: src/subscription_manager/managercli.py:2290
 #, python-format
 msgid "No installed products were found matching the expression \"%s\"."
 msgstr ""
 "Aucun produit installé correspondant à l'expression « %s » n'a été trouvé."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:2296
+#: src/subscription_manager/managercli.py:2292
 msgid "No installed products to list"
 msgstr "Aucun produit installé à répertorier"
 
-#: src/subscription_manager/managercli.py:2308
+#: src/subscription_manager/managercli.py:2304
 #, python-brace-format
 msgid ""
 "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
@@ -5504,11 +5503,11 @@ msgstr ""
 "(exemple: {dateexample})"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:2328
+#: src/subscription_manager/managercli.py:2324
 msgid "Available Subscriptions"
 msgstr "Abonnements disponibles"
 
-#: src/subscription_manager/managercli.py:2362
+#: src/subscription_manager/managercli.py:2358
 #, python-format
 msgid ""
 "No available subscription pools were found matching the expression \"%s\" "
@@ -5517,7 +5516,7 @@ msgstr ""
 "Aucun pool d'abonnement disponible  correspondant à l'expression « %s » et "
 "au niveau de service « %s » n'a été trouvé."
 
-#: src/subscription_manager/managercli.py:2367
+#: src/subscription_manager/managercli.py:2363
 #, python-format
 msgid ""
 "No available subscription pools were found matching the expression \"%s\"."
@@ -5525,7 +5524,7 @@ msgstr ""
 "Aucun pool d'abonnement disponible  correspondant à l'expression « %s » n'a "
 "été trouvé."
 
-#: src/subscription_manager/managercli.py:2372
+#: src/subscription_manager/managercli.py:2368
 #, python-format
 msgid ""
 "No available subscription pools were found matching the service level \"%s\"."
@@ -5535,16 +5534,16 @@ msgstr ""
 "« %s » n'a été trouvé."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:2376
+#: src/subscription_manager/managercli.py:2372
 msgid "No available subscription pools to list"
 msgstr "Aucun pool d'abonnement disponible à répertorier"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:2396
+#: src/subscription_manager/managercli.py:2392
 msgid "Consumed Subscriptions"
 msgstr "Abonnements consommés"
 
-#: src/subscription_manager/managercli.py:2408
+#: src/subscription_manager/managercli.py:2404
 #, python-format
 msgid ""
 "No consumed subscription pools were found matching the expression \"%s\" and "
@@ -5553,7 +5552,7 @@ msgstr ""
 "Aucun pool d'abonnement consommé  correspondant à l'expression « %s » et au "
 "niveau de service « %s » n'a été trouvé."
 
-#: src/subscription_manager/managercli.py:2413
+#: src/subscription_manager/managercli.py:2409
 #, python-format
 msgid ""
 "No consumed subscription pools were found matching the expression \"%s\"."
@@ -5561,7 +5560,7 @@ msgstr ""
 "Aucun pool d'abonnement consommé  correspondant à l'expression « %s » n'a "
 "été trouvé."
 
-#: src/subscription_manager/managercli.py:2418
+#: src/subscription_manager/managercli.py:2414
 #, python-format
 msgid ""
 "No consumed subscription pools were found matching the service level \"%s\"."
@@ -5569,19 +5568,19 @@ msgstr ""
 "Aucun pool d'abonnement consommé  correspondant au niveau de service « %s » "
 "n'a été trouvé."
 
-#: src/subscription_manager/managercli.py:2422
+#: src/subscription_manager/managercli.py:2418
 msgid "No consumed subscription pools were found."
 msgstr "Aucun pool d'abonnement consommé n'a été trouvé."
 
-#: src/subscription_manager/managercli.py:2427
+#: src/subscription_manager/managercli.py:2423
 msgid "Manage custom content repository settings"
 msgstr "Gérer les paramètres des référentiels au contenu personnalisé"
 
-#: src/subscription_manager/managercli.py:2430
+#: src/subscription_manager/managercli.py:2426
 msgid "repository to modify (can be specified more than once)"
 msgstr "référentiel à modifier (peut être spécifié plus d'une fois)"
 
-#: src/subscription_manager/managercli.py:2432
+#: src/subscription_manager/managercli.py:2428
 msgid ""
 "name of the override to remove (can be specified more than once); used with -"
 "-repo option."
@@ -5589,7 +5588,7 @@ msgstr ""
 "nom de la substitution à supprimer (peut être spécifié plus d'une fois), "
 "utilisé avec l'option --repo."
 
-#: src/subscription_manager/managercli.py:2435
+#: src/subscription_manager/managercli.py:2431
 msgid ""
 "name and value of the option to override separated by a colon (can be "
 "specified more than once); used with --repo option."
@@ -5597,106 +5596,106 @@ msgstr ""
 "nom et valeur de l'option à substituer séparé par un Deux points (« : ») "
 "(peut être spécifié plus d'une fois), utilisé avec l'option --repo."
 
-#: src/subscription_manager/managercli.py:2437
+#: src/subscription_manager/managercli.py:2433
 msgid ""
 "remove all overrides; can be specific to a repository by providing --repo"
 msgstr ""
 "supprime toutes les substitutions, peut être spécifique à un référentiel en "
 "fournissant l'option --repo"
 
-#: src/subscription_manager/managercli.py:2439
+#: src/subscription_manager/managercli.py:2435
 msgid ""
 "list all overrides; can be specific to a repository by providing --repo"
 msgstr ""
 "répertorie toutes les substitutions, peut être spécifique à un référentiel "
 "en fournissant l'option --repo"
 
-#: src/subscription_manager/managercli.py:2445
+#: src/subscription_manager/managercli.py:2441
 msgid "You must specify an override in the form of \"name:value\" with --add."
 msgstr ""
 "Vous devez spécifier un remplacement sous la forme \"name:value\" avec --add."
 ""
 
-#: src/subscription_manager/managercli.py:2449
+#: src/subscription_manager/managercli.py:2445
 msgid "--add arguments should be in the form of \"name:value\""
 msgstr "Les arguments --add doivent être sous le format « nom:valeur »"
 
-#: src/subscription_manager/managercli.py:2456
+#: src/subscription_manager/managercli.py:2452
 msgid "Error: You must specify a repository to modify"
 msgstr "Erreur : vous devez spécifier un référentiel à modifier"
 
-#: src/subscription_manager/managercli.py:2458
+#: src/subscription_manager/managercli.py:2454
 msgid "Error: You may not use --add or --remove with --remove-all and --list"
 msgstr ""
 "Erreur : vous ne pouvez pas utiliser --add ou --remove avec --remove-all et -"
 "-list"
 
-#: src/subscription_manager/managercli.py:2460
+#: src/subscription_manager/managercli.py:2456
 msgid "Error: You may not use --list with --remove-all"
 msgstr "Erreur : vous ne pouvez pas utiliser --list avec --remove-all"
 
-#: src/subscription_manager/managercli.py:2463
+#: src/subscription_manager/managercli.py:2459
 msgid ""
 "Error: The --repo option must be used with --list or --add or --remove."
 msgstr ""
 "Erreur : l'option --repo doit être utilisée avec --list, --add ou --remove."
 
-#: src/subscription_manager/managercli.py:2467
+#: src/subscription_manager/managercli.py:2463
 msgid "Error: You must specify an override name with --remove."
 msgstr "Erreur : vous devez choisir un nom à remplacer avec --remove"
 
-#: src/subscription_manager/managercli.py:2479
+#: src/subscription_manager/managercli.py:2475
 msgid "Error: The 'repo-override' command is not supported by the server."
 msgstr ""
 "Erreur : la commande « repo-override » n'est pas prise en charge par le "
 "serveur."
 
-#: src/subscription_manager/managercli.py:2497
+#: src/subscription_manager/managercli.py:2493
 msgid "This system does not have any content overrides applied to it."
 msgstr "Aucune substitution de contenu n'est appliquée à ce système."
 
-#: src/subscription_manager/managercli.py:2516
+#: src/subscription_manager/managercli.py:2512
 #, python-format
 msgid ""
 "Repository '%s' does not currently exist, but the override has been added."
 msgstr ""
 "Le référentiel « %s » n'existe pas, mais la substitution a été ajoutée."
 
-#: src/subscription_manager/managercli.py:2540
+#: src/subscription_manager/managercli.py:2536
 #, python-format
 msgid "Nothing is known about '%s'"
 msgstr "Rien n'est connu sur « %s »"
 
-#: src/subscription_manager/managercli.py:2545
+#: src/subscription_manager/managercli.py:2541
 #, python-format
 msgid "Repository: %s"
 msgstr "Référentiel : %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:2556
+#: src/subscription_manager/managercli.py:2552
 msgid "Print version information"
 msgstr "Imprimer les informations de version"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:2563
+#: src/subscription_manager/managercli.py:2559
 #, python-format
 msgid "subscription management server: %s"
 msgstr "serveur de gestion des abonnements : %s"
 
-#: src/subscription_manager/managercli.py:2564
+#: src/subscription_manager/managercli.py:2560
 #, python-format
 msgid "subscription management rules: %s"
 msgstr "règles de gestion des abonnements : %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:2571
+#: src/subscription_manager/managercli.py:2567
 msgid "Show status information for this system's subscriptions and products"
 msgstr ""
 "Afficher les informations de statut des abonnements et produits de ce "
 "système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:2574
+#: src/subscription_manager/managercli.py:2570
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
 msgstr ""
@@ -5704,12 +5703,12 @@ msgstr ""
 "d'aujourd'hui (exemple : %s)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:2584
+#: src/subscription_manager/managercli.py:2580
 msgid "Past dates are not allowed"
 msgstr "Les dates révolues ne sont pas autorisées"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/managercli.py:2586
+#: src/subscription_manager/managercli.py:2582
 msgid ""
 "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr ""
@@ -5717,12 +5716,12 @@ msgstr ""
 "(exemple : "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:2589
+#: src/subscription_manager/managercli.py:2585
 msgid "System Status Details"
 msgstr "Détails du statut du système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/managercli.py:2600
+#: src/subscription_manager/managercli.py:2596
 #, python-format
 msgid "Overall Status: %s\n"
 msgstr "Statut général : %s\n"
@@ -6176,17 +6175,12 @@ msgstr "Abonnement "
 msgid "Stack "
 msgstr "Pile "
 
-#: src/subscription_manager/repolib.py:106
+#: src/subscription_manager/release.py:48
 #, python-format
 msgid ""
-"The yum plugins: %s were automatically enabled for the benefit of Red Hat "
-"Subscription Management. If not desired, use \"subscription-manager config --"
-"rhsm.auto_enable_yum_plugins=0\" to block this behavior.\n"
+"Error: More than one release product certificate installed. Certificate "
+"paths: %s"
 msgstr ""
-"Les plugins yum : %s ont été activées automatiquement pour le bénéfice de "
-"Red Hat Subscription Management. Si vous ne le souhaitez pas, utiliser "
-"\"subscription-manager config --rhsm.auto_enable_yum_plugins=0\" pour "
-"bloquer ce comportement.\n"
 
 #: src/subscription_manager/repolib.py:106
 #, python-format
