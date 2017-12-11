@@ -25,6 +25,7 @@ log = logging.getLogger(__name__)
 
 class BaseFacts(base_object.BaseObject):
     interface_name = constants.FACTS_DBUS_INTERFACE
+    default_dbus_path = constants.FACTS_DBUS_PATH
     default_props_data = {}
     facts_collector_class = collector.FactsCollector
 
