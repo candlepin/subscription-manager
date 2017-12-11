@@ -33,6 +33,14 @@
 %global use_yum (0%{?rhel} && 0%{?rhel} <= 7) || (0%{?suse_version})
 %global use_cockpit 0%{?fedora} || 0%{?rhel} >= 7
 
+%if %use_python3
+%global python_sitearch %python3_sitearch
+%global __python %__python3
+%global py_package_prefix python3
+%else
+%global py_package_prefix python
+%endif
+
 %global _hardened_build 1
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
@@ -113,16 +121,23 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 # nesting is required since RPM requires the various preamble directives to be
 # at the start of a line making meaningful indentation impossible.
 
-Requires:  python-ethtool
-Requires:  python-iniparse
-Requires:  python-decorator
+Requires:  %{py_package_prefix}-ethtool
+Requires:  %{py_package_prefix}-iniparse
+Requires:  %{py_package_prefix}-decorator
 Requires:  virt-what
+%if %use_python3
+Requires:  python3-subscription-manager-rhsm = %{version}
+%else
 Requires:  subscription-manager-rhsm = %{version}
-Requires:  python-decorator
-Requires:  python-six
-Requires:  python-dateutil
+%endif
+Requires:  %{py_package_prefix}-six
+Requires:  %{py_package_prefix}-dateutil
 
+%if %use_python3
+Requires: python3-dbus
+%else
 Requires: %{?suse_version:dbus-1-python} %{!?suse_version:dbus-python}
+%endif
 Requires: %{?suse_version:aaa_base} %{!?suse_version:chkconfig}
 Requires: %{?suse_version:yum} %{!?suse_version:yum >= 3.2.29-73}
 
@@ -131,16 +146,20 @@ Requires: %{?suse_version:yum} %{!?suse_version:yum >= 3.2.29-73}
 Requires: %{?gtk3:python-gobject} %{!?gtk3:python-gobject2, libzypp, zypp-plugin-python, python-zypp}
 %else
 Requires:  usermode
+%if %use_python3
+Requires: python3-gobject
+%else
 Requires:  %{?gtk3:gobject-introspection, pygobject3-base} %{!?gtk3:pygobject2}
+%endif
 # There's no dmi to read on these arches, so don't pull in this dep.
 # Additionally, dmidecode isn't packaged at all on SUSE
 %ifnarch ppc ppc64 s390 s390x
-Requires:  python-dmidecode
+Requires:  %{py_package_prefix}-dmidecode
 %endif
 %endif
 
 %if %use_inotify
-Requires:  python-inotify
+Requires:  %{py_package_prefix}-inotify
 %endif
 
 %if %use_systemd
@@ -152,13 +171,13 @@ Requires(post): %{?suse_version:aaa_base} %{!?suse_version:chkconfig}
 Requires(preun): %{?suse_version:aaa_base} %{!?suse_version:chkconfig, initscripts}
 %endif
 
-BuildRequires: python-devel
-BuildRequires: python-setuptools
+BuildRequires: %{py_package_prefix}-devel
+BuildRequires: %{py_package_prefix}-setuptools
 BuildRequires: gettext
 BuildRequires: intltool
 BuildRequires: libnotify-devel
 BuildRequires: desktop-file-utils
-BuildRequires: python-six
+BuildRequires: %{py_package_prefix}-six
 
 BuildRequires: %{?suse_version:dbus-1-glib-devel} %{!?suse_version:dbus-glib-devel}
 BuildRequires: %{?suse_version:lsb-release, distribution-release} %{!?suse_version:redhat-lsb}
@@ -182,7 +201,7 @@ BuildRequires: systemd
 
 # The %{?something:foo} expands to foo only when something is **defined**.  Likewise the
 # %{!?something:foo} expands only when something is **not defined**.
-BuildRequires: %{?suse_version:python-devel >= 2.6} %{!?suse_version:python2-devel}
+BuildRequires: %{?suse_version:python-devel >= 2.6} %{!?suse_version:%{py_package_prefix}-devel}
 BuildRequires: openssl-devel
 
 %description
@@ -259,7 +278,11 @@ Summary: Subscription Manager plugins for DNF
 Group: System Environment/Base
 Requires: %{name} = %{version}-%{release}
 Requires: dnf >= 1.0.0
+%if %use_python3
+Requires: python3-dnf-plugins-core
+%else
 Requires: python2-dnf-plugins-core
+%endif
 
 %description -n dnf-plugin-subscription-manager
 This package provides plugins to interact with repositories and subscriptions
@@ -303,7 +326,7 @@ Group: System Environment/Base
 
 Requires: pygobject3-base
 # plugin needs a slightly newer version of python-iniparse for 'tidy'
-Requires:  python-iniparse >= 0.4
+Requires:  %{py_package_prefix}-iniparse >= 0.4
 Requires: %{name} = %{version}-%{release}
 
 %description -n subscription-manager-plugin-ostree
@@ -313,6 +336,7 @@ the remote in the currently deployed .origin file.
 %endif
 
 
+%if !%{use_python3}
 %package -n subscription-manager-rhsm
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
 Group: Development/Libraries
@@ -333,6 +357,7 @@ Obsoletes: python-rhsm <= 1.20.3-1
 A small library for communicating with the REST interface of a Red Hat Unified
 Entitlement Platform. This interface is used for the management of system
 entitlements, certificates, and access to content.
+%endif
 
 
 %if %{use_python3}
@@ -395,20 +420,8 @@ make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
 
 %install
 rm -rf %{buildroot}
-%if %{use_python3}
 make -f Makefile install VERSION=%{version}-%{release} \
-    PYTHON=/usr/bin/python3 \
-    PREFIX=%{buildroot} PYTHON_SITELIB=%{python3_sitearch} \
-    OS_VERSION=%{?fedora}%{?rhel}%{?suse_version} OS_DIST=%{dist} \
-    %{?install_ostree} %{?post_boot_tool} %{?gtk_version} \
-    %{?install_yum_plugins} %{?install_dnf_plugins} \
-    %{?install_zypper_plugins} \
-    %{?with_systemd}
-rm %{buildroot}/usr/bin/subscription-manager
-rm %{buildroot}/usr/bin/subscription-manager-gui
-%endif
-make -f Makefile install VERSION=%{version}-%{release} \
-    PYTHON=/usr/bin/python2 \
+    PYTHON=%{__python} \
     PREFIX=%{buildroot} PYTHON_SITELIB=%{python_sitearch} \
     OS_VERSION=%{?fedora}%{?rhel}%{?suse_version} OS_DIST=%{dist} \
     %{?install_ostree} %{?post_boot_tool} %{?gtk_version} \
@@ -487,9 +500,6 @@ rm -rf %{buildroot}
 %dir %{python_sitearch}/subscription_manager/model
 %dir %{python_sitearch}/subscription_manager/plugin
 %dir %{python_sitearch}/subscription_manager/scripts
-%if %{use_python3}
-%exclude %{python3_sitearch}/rhsmlib
-%endif
 %dir %{_var}/spool/rhsm
 %dir %{_prefix}/share/polkit-1
 %dir %{_prefix}/share/polkit-1/actions
@@ -569,14 +579,21 @@ rm -rf %{buildroot}
 %{python_sitearch}/subscription_manager/model/*.py*
 %{python_sitearch}/subscription_manager/plugin/__init__.py*
 %{python_sitearch}/subscription_manager/scripts/*.py*
-%if %{use_python3}
-%exclude %{python3_sitearch}/subscription_manager-*.egg-info/*
-%exclude %{python3_sitearch}/subscription_manager
+%if %use_python3
+%{python_sitearch}/subscription_manager/__pycache__
+%{python_sitearch}/subscription_manager/api/__pycache__
+%{python_sitearch}/subscription_manager/branding/__pycache__
+%{python_sitearch}/subscription_manager/model/__pycache__
+%{python_sitearch}/subscription_manager/plugin/__pycache__
+%{python_sitearch}/subscription_manager/scripts/__pycache__
 %endif
 
 # our gtk2/gtk3 compat modules
 %dir %{python_sitearch}/subscription_manager/ga_impls
 %{python_sitearch}/subscription_manager/ga_impls/__init__.py*
+%if %use_python3
+%{python_sitearch}/subscription_manager/ga_impls/__pycache__
+%endif
 
 %if 0%{?gtk3}
 %{python_sitearch}/subscription_manager/ga_impls/ga_gtk3.py*
@@ -615,7 +632,14 @@ rm -rf %{buildroot}
 %{python_sitearch}/rhsmlib/dbus/facts/*.py*
 %{python_sitearch}/rhsmlib/dbus/objects/*.py*
 %if %{use_python3}
-%exclude %{python3_sitearch}/rhsmlib
+%{python_sitearch}/rhsmlib/__pycache__
+%{python_sitearch}/rhsmlib/candlepin/__pycache__
+%{python_sitearch}/rhsmlib/compat/__pycache__
+%{python_sitearch}/rhsmlib/dbus/__pycache__
+%{python_sitearch}/rhsmlib/dbus/facts/__pycache__
+%{python_sitearch}/rhsmlib/dbus/objects/__pycache__
+%{python_sitearch}/rhsmlib/facts/__pycache__
+%{python_sitearch}/rhsmlib/services/__pycache__
 %endif
 
 %{_datadir}/polkit-1/actions/com.redhat.*.policy
@@ -634,16 +658,16 @@ rm -rf %{buildroot}
 # Incude rt CLI tool
 %dir %{python_sitearch}/rct
 %{python_sitearch}/rct/*.py*
-%if %{use_python3}
-%exclude %{python3_sitearch}/rct
+%if %use_python3
+%{python_sitearch}/rct/__pycache__
 %endif
 %attr(755,root,root) %{_bindir}/rct
 
 # Include consumer debug CLI tool
 %dir %{python_sitearch}/rhsm_debug
 %{python_sitearch}/rhsm_debug/*.py*
-%if %{use_python3}
-%exclude %{python3_sitearch}/rhsm_debug
+%if %use_python3
+%{python_sitearch}/rhsm_debug/__pycache__
 %endif
 %attr(755,root,root) %{_bindir}/rhsm-debug
 
@@ -679,6 +703,9 @@ rm -rf %{buildroot}
 %{python_sitearch}/subscription_manager/gui/data/ui/*.ui
 %{python_sitearch}/subscription_manager/gui/data/glade/*.glade
 %{python_sitearch}/subscription_manager/gui/data/icons/*.svg
+%if %use_python3
+%{python_sitearch}/subscription_manager/gui/__pycache__
+%endif
 
 %{_datadir}/applications/subscription-manager-gui.desktop
 %{_datadir}/icons/hicolor/16x16/apps/*.png
@@ -709,6 +736,9 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %dir %{python_sitearch}/subscription_manager/migrate
 %{python_sitearch}/subscription_manager/migrate/*.py*
+%if %use_python3
+%{python_sitearch}/subscription_manager/migrate/__pycache__
+%endif
 %attr(755,root,root) %{_sbindir}/rhn-migrate-classic-to-rhsm
 
 %doc
@@ -729,6 +759,9 @@ rm -rf %{buildroot}
 %endif
 %{_sysconfdir}/rhsm/pluginconf.d/container_content.ContainerContentPlugin.conf
 %{rhsm_plugins_dir}/container_content.py*
+%if %use_python3
+%{rhsm_plugins_dir}/__pycache__
+%endif
 %{python_sitearch}/subscription_manager/plugin/container.py*
 
 # Copying Red Hat CA cert into each directory:
@@ -743,6 +776,9 @@ rm -rf %{buildroot}
 %{_sysconfdir}/rhsm/pluginconf.d/ostree_content.OstreeContentPlugin.conf
 %{rhsm_plugins_dir}/ostree_content.py*
 %{python_sitearch}/subscription_manager/plugin/ostree/*.py*
+%if %use_python3
+%{python_sitearch}/subscription_manager/plugin/ostree/__pycache__
+%endif
 %endif
 
 
@@ -756,6 +792,13 @@ rm -rf %{buildroot}
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/*.py*
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/categories/*.py*
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/ks/*.py*
+%if %use_python3
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/__pycache__
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/__pycache__
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/__pycache__
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/categories/__pycache__
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/ks/__pycache__
+%endif
 %endif
 
 
@@ -775,16 +818,15 @@ rm -rf %{buildroot}
 %files -n dnf-plugin-subscription-manager
 %defattr(-,root,root,-)
 %{python_sitearch}/dnf-plugins/*
-%if %{use_python3}
-%exclude %{python3_sitearch}/dnf-plugins/*
-%endif
 %endif
 
 
+%if !%{use_python3}
 %files -n subscription-manager-rhsm
 %defattr(-,root,root,-)
-%dir %{python2_sitearch}/rhsm
-%{python2_sitearch}/rhsm/*
+%dir %{python_sitearch}/rhsm
+%{python_sitearch}/rhsm/*
+%endif
 
 %if %{use_python3}
 %files -n python3-subscription-manager-rhsm
