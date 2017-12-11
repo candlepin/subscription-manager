@@ -213,7 +213,8 @@ class StatusChecker(dbus.service.Object):
         """
         log.debug("D-Bus interface com.redhat.SubscriptionManager.EntitlementStatus.check_status called")
         status = check_status(self.force_signal)
-        if (status != self.rhsm_icon_cache._read_cache()):
+        cached_status = self.rhsm_icon_cache.read_cache_only()
+        if cached_status and status != cached_status:
             debug("Validity status changed, fire signal in check_status")
             self.entitlement_status_changed(status)
         self.rhsm_icon_cache.data = status
@@ -234,9 +235,8 @@ class StatusChecker(dbus.service.Object):
             status = pre_result
         # At comment time, update status is called every time we start the GUI. So we use
         # a persistent cache to ensure we fire a signal only when the status changes.
-        if not self.rhsm_icon_cache._cache_exists():
-            log.debug("Cache file: %s does not exist yet" % self.rhsm_icon_cache.CACHE_FILE)
-        elif status != self.rhsm_icon_cache._read_cache():
+        cached_status = self.rhsm_icon_cache.read_cache_only()
+        if cached_status and status != cached_status:
             debug("Validity status changed, fire signal")
             self.entitlement_status_changed(status)
         self.rhsm_icon_cache.data = status
