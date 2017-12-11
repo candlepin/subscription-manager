@@ -82,7 +82,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.20.7
+Version: 1.20.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -880,6 +880,18 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Mon Dec 11 2017 Kevin Howell <khowell@redhat.com> 1.20.8-1
+- Sync zanata translations (khowell@redhat.com)
+- Add parameter to D-Bus API to pass locale for localization of errors
+  (jhnidek@redhat.com)
+- 1463765: Fix wrong Indic-language translations (khowell@redhat.com)
+- 1487600: Cockpit - Save configuration from register dialog
+  (jhnidek@redhat.com)
+- 1464571: Improve multiple product certs errors (khowell@redhat.com)
+- Replace cockpit-subscriptions (khowell@redhat.com)
+- 1507158: Provide Host: in http CONNECT header (jhnidek@redhat.com)
+- 1319927: Remove newline from auto enable message (khowell@redhat.com)
+
 * Tue Nov 28 2017 Kevin Howell <khowell@redhat.com> 1.20.7-1
 - Sync zanata translations (khowell@redhat.com)
 
