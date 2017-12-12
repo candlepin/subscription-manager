@@ -397,8 +397,8 @@ make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
 rm -rf %{buildroot}
 %if %{use_python3}
 make -f Makefile install VERSION=%{version}-%{release} \
-    PYTHON=/usr/bin/python3 \
-    PREFIX=%{buildroot} PYTHON_SITELIB=%{python3_sitearch} \
+    PYTHON=/usr/bin/python3 PREFIX=%{_prefix} \
+    DESTDIR=%{buildroot} PYTHON_SITELIB=%{python3_sitearch} \
     OS_VERSION=%{?fedora}%{?rhel}%{?suse_version} OS_DIST=%{dist} \
     %{?install_ostree} %{?post_boot_tool} %{?gtk_version} \
     %{?install_yum_plugins} %{?install_dnf_plugins} \
@@ -408,8 +408,8 @@ rm %{buildroot}/usr/bin/subscription-manager
 rm %{buildroot}/usr/bin/subscription-manager-gui
 %endif
 make -f Makefile install VERSION=%{version}-%{release} \
-    PYTHON=/usr/bin/python2 \
-    PREFIX=%{buildroot} PYTHON_SITELIB=%{python_sitearch} \
+    PYTHON=/usr/bin/python2 PREFIX=%{_prefix} \
+    DESTDIR=%{buildroot} PYTHON_SITELIB=%{python_sitearch} \
     OS_VERSION=%{?fedora}%{?rhel}%{?suse_version} OS_DIST=%{dist} \
     %{?install_ostree} %{?post_boot_tool} %{?gtk_version} \
     %{?install_yum_plugins} %{?install_dnf_plugins} \
