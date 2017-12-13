@@ -227,8 +227,6 @@ class StatusCache(CacheManager):
             self.last_error = ex
             log.error("Bad identity, unable to connect to server")
             return None
-        except connection.GoneException:
-            raise
         # all of the abover are subclasses of ConnectionException that
         # get handled first
         except (connection.ConnectionException, connection.RateLimitExceededException,
