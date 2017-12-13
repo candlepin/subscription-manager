@@ -13,11 +13,10 @@
         <allow_any>yes</allow_any>
         <allow_inactive>yes</allow_inactive>
         <allow_active>yes</allow_active>
-
     </defaults>
   </action>
 
-   <action id="com.redhat.RHSM1.Facts.collect">
+  <action id="com.redhat.RHSM1.Facts.collect">
     <description>RHSM Facts collection</description>
     <message>System policy prevents collect action to admin Facts service</message>
     <defaults>
