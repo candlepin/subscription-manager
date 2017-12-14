@@ -94,7 +94,7 @@ def format_name(name, indent, max_length):
     """
     if not name or not max_length or (max_length - indent) <= 2 or not isinstance(name, six.string_types):
         return name
-    if not isinstance(name, unicode):
+    if not isinstance(name, six.text_type):
         name = name.decode("utf-8")
     words = name.split()
     lines = []
@@ -201,6 +201,6 @@ def echo_columnize_callback(template_str, *args, **kwargs):
 # from http://farmdev.com/talks/unicode/
 def to_unicode_or_bust(obj, encoding='utf-8'):
     if isinstance(obj, six.string_types):
-        if not isinstance(obj, unicode):
-            obj = unicode(obj, encoding)
+        if not isinstance(obj, six.text_type):
+            obj = six.text_type(obj, encoding)
     return obj

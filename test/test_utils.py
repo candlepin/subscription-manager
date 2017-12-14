@@ -536,7 +536,6 @@ class TestFriendlyJoin(fixture.SubManFixture):
         self.assertEqual("One", friendly_join(["One"]))
         self.assertEqual("One and Two", friendly_join(["One", "Two"]))
         self.assertEqual("One, Two, and Three", friendly_join(["One", "Two", "Three"]))
-        self.assertEqual("Three, Two, and One", friendly_join(set(["One", "Two", "Three"])))
         self.assertEqual("", friendly_join([]))
         self.assertEqual("", friendly_join(None))
         self.assertEqual("", friendly_join(set()))

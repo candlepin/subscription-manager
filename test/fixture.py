@@ -33,12 +33,17 @@ from rhsmlib.services import config
 # use instead of the normal pid file based ActionLock
 from threading import RLock
 
+if six.PY2:
+    OPEN_FUNCTION = '__builtin__.open'
+else:
+    OPEN_FUNCTION = 'builtins.open'
+
 
 @contextmanager
 def open_mock(content=None, **kwargs):
     content_out = six.StringIO()
     m = mock_open(read_data=content)
-    with patch('__builtin__.open', m, create=True, **kwargs) as mo:
+    with patch(OPEN_FUNCTION, m, create=True, **kwargs) as mo:
         stream = six.StringIO(content)
         rv = mo.return_value
         rv.write = lambda x: content_out.write(x)
@@ -52,7 +57,7 @@ def temp_file(content, *args, **kwargs):
     try:
         kwargs['delete'] = False
         kwargs.setdefault('prefix', 'sub-man-test')
-        fh = tempfile.NamedTemporaryFile(*args, **kwargs)
+        fh = tempfile.NamedTemporaryFile(mode='w+', *args, **kwargs)
         fh.write(content)
         fh.close()
         yield fh.name
@@ -248,7 +253,7 @@ class SubManFixture(unittest.TestCase):
         Write out a tempfile and append it to the list of those to be
         cleaned up in tearDown.
         """
-        fid = tempfile.NamedTemporaryFile(mode='w+b', suffix='.tmp')
+        fid = tempfile.NamedTemporaryFile(mode='w+', suffix='.tmp')
         fid.write(contents)
         fid.seek(0)
         self.files_to_cleanup.append(fid)
@@ -352,7 +357,7 @@ class SubManFixture(unittest.TestCase):
 
     def assert_items_equals(self, a, b):
         """Assert that two lists contain the same items regardless of order."""
-        if sorted(a) != sorted(b):
+        if sorted(a, key=lambda item: str(item)) != sorted(b, key=lambda item: str(item)):
             self.fail("%s != %s" % (a, b))
         return True
 

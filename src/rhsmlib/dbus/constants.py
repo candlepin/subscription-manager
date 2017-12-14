@@ -12,8 +12,6 @@ from __future__ import print_function, division, absolute_import
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
-import string
-
 __all__ = [
     'NAME_BASE',
     'VERSION',
@@ -51,7 +49,7 @@ INTERFACE_BASE = BUS_NAME
 # Note: No trailing '/'
 #
 # /com/redhat/RHSM1
-ROOT_DBUS_PATH = '/' + string.replace(BUS_NAME, '.', '/')
+ROOT_DBUS_PATH = '/' + str.replace(BUS_NAME, '.', '/')
 
 MAIN_INTERFACE = INTERFACE_BASE
 MAIN_DBUS_PATH = ROOT_DBUS_PATH

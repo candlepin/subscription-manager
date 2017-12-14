@@ -94,7 +94,7 @@ class TestLogutil(fixture.SubManFixture):
         for logger_name, log_level in logging_conf:
             real_log_level = logging.getLogger(logger_name).getEffectiveLevel()
             self.assertTrue(
-                logging._levelNames[log_level] == real_log_level or
+                logging.getLevelName(log_level) == real_log_level or
                 log_level == real_log_level)
 
     def test_set_invalid_logger_level(self):

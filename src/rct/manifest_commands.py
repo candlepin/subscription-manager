@@ -18,7 +18,7 @@ import errno
 import os
 import sys
 
-from six.moves import cStringIO
+from six import BytesIO
 from zipfile import ZipFile, BadZipfile
 
 from rhsm import certificate
@@ -67,13 +67,13 @@ class ZipExtractAll(ZipFile):
 
     def _get_inner_zip(self):
         if self.inner_zip is None:
-            output = cStringIO(self.read(RCTManifestCommand.INNER_FILE))
+            output = BytesIO(self.read(RCTManifestCommand.INNER_FILE))
             self.inner_zip = ZipExtractAll(output, 'r')
         return self.inner_zip
 
     def _read_file(self, file_path, is_inner=False):
         try:
-            output = cStringIO(self.read(file_path))
+            output = BytesIO(self.read(file_path))
             result = output.getvalue()
             output.close()
         except KeyError:
@@ -95,7 +95,7 @@ class ZipExtractAll(ZipFile):
         return results
 
     def _open_excl(self, path):
-        return os.fdopen(os.open(path, os.O_RDWR | os.O_CREAT | os.O_EXCL), 'w')
+        return os.fdopen(os.open(path, os.O_RDWR | os.O_CREAT | os.O_EXCL), 'wb')
 
     def _write_file(self, output_path, archive_path):
         outfile = self._open_excl(output_path)
@@ -262,7 +262,7 @@ class CatManifestCommand(RCTManifestCommand):
             to_print.append((_("Certificate File"), cert_file))
 
             try:
-                cert = certificate.create_from_pem(zip_archive._read_file(cert_file))
+                cert = certificate.create_from_pem(zip_archive._read_file(cert_file).decode('utf-8'))
             except certificate.CertificateException as ce:
                 raise certificate.CertificateException(
                         _("Unable to read certificate file '%s': %s") % (cert_file,

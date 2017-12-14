@@ -19,6 +19,7 @@ from __future__ import print_function, division, absolute_import
 
 from mock import Mock, patch
 from datetime import timedelta, datetime
+import six
 
 from .stubs import StubEntitlementCertificate, StubProduct, StubEntitlementDirectory
 
@@ -52,11 +53,11 @@ class TestEntCertUpdateReport(fixture.SubManFixture):
         r.rogue.append(self._stub_cert())
 
         # an UnicodeError will fail the tests
-        report_str = unicode(r)
+        report_str = six.text_type(r)
         '%s' % report_str
 
         with fixture.locale_context('de_DE.utf8'):
-            report_str = unicode(r)
+            report_str = six.text_type(r)
             '%s' % r
 
     def _stub_cert(self):

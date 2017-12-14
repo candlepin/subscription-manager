@@ -116,7 +116,7 @@ class RhsmConfigParser(SafeConfigParser):
 
     def save(self, config_file=None):
         """Writes config file to storage."""
-        fo = open(self.config_file, "wb")
+        fo = open(self.config_file, "w")
         self.write(fo)
 
     def get(self, section, prop):

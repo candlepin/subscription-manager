@@ -91,8 +91,8 @@ class AboutDialog(object):
     def _set_next_update(self, next_update_label, next_auto_attach_label):
         try:
             if self._rhsmcertd_on():
-                next_update = int(file(CERT_CHECK_UPDATE_FILE).read())
-                next_auto_attach = int(file(AUTO_ATTACH_UPDATE_FILE).read())
+                next_update = int(open(CERT_CHECK_UPDATE_FILE, 'r').read())
+                next_auto_attach = int(open(AUTO_ATTACH_UPDATE_FILE, 'r').read())
             else:
                 next_update = None
                 next_auto_attach = None

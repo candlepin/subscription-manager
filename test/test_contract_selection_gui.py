@@ -21,8 +21,8 @@ def stubCancelCallback(self):
 
 class ContractSelection(unittest.TestCase):
     pool = {'productName': 'SomeProduct',
-            'consumed': '3',
-            'quantity': '10',
+            'consumed': 3,
+            'quantity': 10,
             'startDate': datetime.datetime.now(tz=tzutc()).isoformat(),
             'endDate': datetime.datetime.now(tz=tzutc()).isoformat(),
             'contractNumber': 'contractNumber',

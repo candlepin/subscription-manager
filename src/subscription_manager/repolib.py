@@ -32,6 +32,7 @@ from six.moves.urllib.parse import parse_qs, urlparse, urlunparse, urlencode
 from six.moves import configparser
 
 from rhsm.config import initConfig, in_container
+import six
 
 # FIXME: local imports
 
@@ -649,6 +650,7 @@ class RepoUpdateActionCommand(object):
         self.report.repo_deleted.append(section)
 
 
+@six.python_2_unicode_compatible
 class RepoActionReport(ActionReport):
     """Report class for reporting yum repo updates."""
     name = u"Repo Updates"
@@ -687,7 +689,7 @@ class RepoActionReport(ActionReport):
     def format_sections(self, sections):
         return self.format_repos_info(sections, self.section_format)
 
-    def __unicode__(self):
+    def __str__(self):
         s = [_('Repo updates') + '\n']
         s.append(_('Total repo updates: %d') % self.updates())
         s.append(_('Updated'))
@@ -698,9 +700,6 @@ class RepoActionReport(ActionReport):
         # deleted are former repo sections, but they are the same type
         s.append(self.format_sections(self.repo_deleted))
         return u'\n'.join(s)
-
-    def __str__(self):  # TODO use six.python_2_unicode_compatible instead
-        return self.__unicode__().encode('utf-8')
 
 
 class Repo(dict):

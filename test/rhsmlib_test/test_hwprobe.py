@@ -22,8 +22,10 @@ import six
 
 from mock import patch
 from mock import Mock
+from mock import mock_open
 
 import test.fixture
+from test.fixture import OPEN_FUNCTION
 from rhsmlib.facts import hwprobe
 
 PROC_BONDING_RR = """Ethernet Channel Bonding Driver: v3.6.0 (September 26, 2009)
@@ -176,14 +178,14 @@ class HardwareProbeTest(test.fixture.SubManFixture):
         self.hw_check_topo_patcher.stop()
         super(HardwareProbeTest, self).tearDown()
 
-    @patch("__builtin__.open")
+    @patch(OPEN_FUNCTION)
     def test_distro_no_release(self, MockOpen):
         hw = hwprobe.HardwareCollector()
         MockOpen.side_effect = IOError()
         self.assertRaises(IOError, hw.get_release_info)
 
     @patch("os.path.exists")
-    @patch("__builtin__.open")
+    @patch(OPEN_FUNCTION)
     def test_distro_bogus_content_no_platform_module(self, MockOpen, MockExists):
         hw = hwprobe.HardwareCollector()
         MockExists.side_effect = [False, True]
@@ -198,7 +200,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
             self.assertEqual(hw.get_release_info(), expected)
 
     @patch("os.path.exists")
-    @patch("__builtin__.open")
+    @patch(OPEN_FUNCTION)
     def test_distro(self, MockOpen, MockExists):
         MockExists.side_effect = [False, True]
         hw = hwprobe.HardwareCollector()
@@ -212,7 +214,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
         self.assertEqual(hw.get_release_info(), expected)
 
     @patch("os.path.exists")
-    @patch("__builtin__.open")
+    @patch(OPEN_FUNCTION)
     def test_distro_newline_in_release(self, MockOpen, MockExists):
         hw = hwprobe.HardwareCollector()
         MockExists.side_effect = [False, True]
@@ -226,7 +228,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
         self.assertEqual(hw.get_release_info(), expected)
 
     @patch("os.path.exists")
-    @patch("__builtin__.open")
+    @patch(OPEN_FUNCTION)
     def test_manual_distro_bogus_content_os_release(self, MockOpen, MockExists):
         hw = hwprobe.HardwareCollector()
         with patch('rhsmlib.facts.hwprobe.platform'):
@@ -241,12 +243,10 @@ class HardwareProbeTest(test.fixture.SubManFixture):
             self.assertEqual(hw.get_release_info(), expected)
 
     @patch("os.path.exists")
-    @patch("__builtin__.open")
-    def test_distro_with_platform(self, MockOpen, MockExists):
+    @patch(OPEN_FUNCTION, mock_open(read_data="Awesome OS release 42 Mega (Go4It)"))  # TODO figure out why necessary...
+    def test_distro_with_platform(self, MockExists):
         MockExists.return_value = False
         hw = hwprobe.HardwareCollector()
-        MockOpen.return_value.readline.return_value = "Awesome OS release 42 (Go4It)"
-        MockOpen.return_value.read.return_value = "Awesome OS release 42 (Go4It)"
         expected = {
             'distribution.version': '42',
             'distribution.name': 'Awesome OS',
@@ -256,7 +256,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
         self.assertEqual(hw.get_release_info(), expected)
 
     @patch("os.path.exists")
-    @patch("__builtin__.open")
+    @patch(OPEN_FUNCTION)
     def test_manual_distro_with_modifier(self, MockOpen, MockExists):
         MockExists.side_effect = [False, True]
         hw = hwprobe.HardwareCollector()
@@ -271,7 +271,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
             self.assertEqual(hw.get_release_info(), expected)
 
     @patch("os.path.exists")
-    @patch("__builtin__.open")
+    @patch(OPEN_FUNCTION)
     def test_distro_os_release(self, MockOpen, MockExists):
         MockExists.return_value = True
         hw = hwprobe.HardwareCollector()
@@ -286,7 +286,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
             self.assertEqual(hw.get_release_info(), expected)
 
     @patch("os.path.exists")
-    @patch("__builtin__.open")
+    @patch(OPEN_FUNCTION)
     def test_distro_os_release_colon(self, MockOpen, MockExists):
         MockExists.return_value = True
         hw = hwprobe.HardwareCollector()
@@ -434,7 +434,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
         self.assertEqual(net_int['net.interface.lo.ipv6_address.global'], '::1')
         self.assertFalse('net.interface.lo.mac_address' in net_int)
 
-    @patch("__builtin__.open")
+    @patch(OPEN_FUNCTION)
     def test_get_slave_hwaddr_rr(self, MockOpen):
         MockOpen.return_value = six.StringIO(PROC_BONDING_RR)
         hw = hwprobe.HardwareCollector()
@@ -442,7 +442,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
         # note we .upper the result
         self.assertEqual("52:54:00:07:03:BA", slave_hw)
 
-    @patch("__builtin__.open")
+    @patch(OPEN_FUNCTION)
     def test_get_slave_hwaddr_alb(self, MockOpen):
         MockOpen.return_value = six.StringIO(PROC_BONDING_ALB)
         hw = hwprobe.HardwareCollector()
