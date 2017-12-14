@@ -1,5 +1,3 @@
-#! /usr/bin/env python
-
 from __future__ import print_function, division, absolute_import
 
 #
@@ -27,7 +25,8 @@ import sys
 from rhsmlib.dbus import service_wrapper
 from rhsmlib.dbus.facts import base, constants
 
-if __name__ == "__main__":
+
+def main():
     try:
         object_classes = [
             base.AllFacts,
@@ -39,8 +38,6 @@ if __name__ == "__main__":
         )
     except Exception:
         log.exception("DBus service startup failed")
-else:
-    # Importing this module would screw up the importer's logging configuration since
-    # we're setting up logging very early in module scope to catch any log messages that
-    # occur during the loading of the dependent modules.
-    raise ImportError("This module is not meant to be imported")
+
+if __name__ == "__main__":
+    main()

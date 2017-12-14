@@ -14,18 +14,17 @@ from __future__ import print_function, division, absolute_import
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
-import fnmatch
 import os
 import re
 import subprocess
 
 from glob import glob
 from setuptools import setup, find_packages, Extension
+from setuptools.command.install import install as _install
 
 
 from distutils import log
 from distutils.command.install_data import install_data as _install_data
-from distutils.command.install import install as _install
 from distutils.command.build import build as _build
 from distutils.command.clean import clean as _clean
 from distutils.command.build_py import build_py as _build_py
@@ -170,14 +169,11 @@ class install_data(_install_data):
 
     def initialize_options(self):
         _install_data.initialize_options(self)
-        self.transforms = None
         self.with_systemd = None
         # Can't use super() because Command isn't a new-style class.
 
     def finalize_options(self):
         _install_data.finalize_options(self)
-        if self.transforms is None:
-            self.transforms = []
         self.set_undefined_options('install', ('with_systemd', 'with_systemd'))
         if self.with_systemd is None:
             self.with_systemd = True  # default to True
@@ -191,21 +187,9 @@ class install_data(_install_data):
         self.add_dbus_service_files()
         self.add_systemd_services()
         _install_data.run(self)
-        self.transform_files()
 
     def join(self, *args):
         return os.path.normpath(os.path.join(*args))
-
-    def transform_files(self):
-        for file_glob, new_extension in self.transforms:
-            matches = fnmatch.filter(self.outfiles, file_glob)
-            for f in matches:
-                out_dir = os.path.dirname(f)
-                out_name = os.path.basename(f).split('.')[0] + new_extension
-                dest = self.join(out_dir, out_name)
-                if os.path.exists(dest):
-                    os.remove(dest)
-                self.move_file(f, dest)
 
     def add_messages(self):
         for lang in os.listdir(self.join('build', 'locale')):
@@ -288,17 +272,6 @@ cmdclass = {
     'flake8': lint.PluginLoadingFlake8
 }
 
-transforms = [
-    ('*/rhsmcertd-worker.py', ''),
-]
-
-try:
-    cmd = ['rpm', '--eval=%_libexecdir']
-    process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    libexecdir = process.communicate()[0].decode('utf-8').strip()
-except OSError:
-    libexecdir = 'libexec'
-
 setup(
     name="subscription-manager",
     version='1.20.8',
@@ -313,10 +286,22 @@ setup(
     package_data={
         'subscription_manager.gui': ['data/glade/*.glade', 'data/ui/*.ui', 'data/icons/*.svg'],
     },
+    entry_points={
+        'console_scripts': [
+            'subscription-manager = subscription_manager.scripts.subscription_manager:main',
+            'rhn-migrate-classic-to-rhsm = subscription_manager.scripts.rhn_migrate_classic_to_rhsm:main',
+            'rct = subscription_manager.scripts.rct:main',
+            'rhsm-debug = subscription_manager.scripts.rhsm_debug:main',
+            'rhsm-facts-service = subscription_manager.scripts.rhsm_facts_service:main',
+            'rhsm-service = subscription_manager.scripts.rhsm_service:main',
+            'rhsmcertd-worker = subscription_manager.scripts.rhsmcertd_worker:main',
+            'rhsmd = subscription_manager.scripts.rhsm_d:main',
+        ],
+        'gui_scripts': [
+            'subscription-manager-gui = subscription_manager.scripts.subscription_manager_gui:main',
+        ],
+    },
     data_files=[
-        ('sbin', ['bin/subscription-manager', 'bin/subscription-manager-gui', 'bin/rhn-migrate-classic-to-rhsm']),
-        ('bin', ['bin/rct', 'bin/rhsm-debug']),
-        (libexecdir, ['src/daemons/rhsmcertd-worker.py', 'bin/rhsm-facts-service', 'bin/rhsm-service']),
         # sat5to6 is packaged separately
         ('share/man/man8', set(glob('man/*.8')) - set(['man/sat5to6.8'])),
         ('share/man/man5', glob('man/*.5')),
@@ -325,9 +310,6 @@ setup(
         ('share/omf/subscription-manager', glob('docs/*.omf')),
     ],
     command_options={
-        'install_data': {
-            'transforms': ('setup.py', transforms),
-        },
         'egg_info': {
             'egg_base': ('setup.py', os.curdir),
         },

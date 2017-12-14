@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function, division, absolute_import
@@ -36,7 +35,8 @@ if six.PY2:
 from rhsmlib.dbus import service_wrapper
 from rhsmlib.dbus import objects
 
-if __name__ == "__main__":
+
+def main():
     try:
         object_classes = [
             objects.ConfigDBusObject,
@@ -50,8 +50,6 @@ if __name__ == "__main__":
         sys.exit(service_wrapper.main(sys.argv, object_classes=object_classes))
     except Exception:
         log.exception("DBus service startup failed")
-else:
-    # Importing this module would screw up the importer's logging configuration since
-    # we're setting up logging very early in module scope to catch any log messages that
-    # occur during the loading of the dependent modules.
-    raise ImportError("This module is not meant to be imported")
+
+if __name__ == '__main__':
+    main()

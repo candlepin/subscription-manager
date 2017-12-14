@@ -1,14 +1,9 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function, division, absolute_import
 
 #
-# wrapper for subscription Manager commandline tool.
-#
-# Copyright (c) 2010 Red Hat, Inc.
-#
-# Authors: Pradeep Kilambi
+# Copyright (c) 2013 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
 # version 2 (GPLv2). There is NO WARRANTY for this software, express or
@@ -22,9 +17,6 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 #
 
-if __name__ != '__main__':
-    raise ImportError("module cannot be imported")
-
 # hack to allow bytes/strings to be interpolated w/ unicode values (gettext gives us bytes)
 # Without this, for example, "Формат: %s\n" % u"foobar" will fail with UnicodeDecodeError
 # See http://stackoverflow.com/a/29832646/6124862 for more details
@@ -35,19 +27,15 @@ if six.PY2:
     sys.setdefaultencoding('utf-8')
 import os
 
-# work around for https://bugzilla.redhat.com/show_bug.cgi?id=1402009
-if 'TERM' in os.environ:
-    del os.environ['TERM']
-
 
 def system_exit(code, msgs=None):
-    """Exit with a code and optional message(s). Saved a few lines of code."""
+    "Exit with a code and optional message(s). Saved a few lines of code."
 
     if msgs:
         if type(msgs) not in [type([]), type(())]:
             msgs = (msgs, )
         for msg in msgs:
-            sys.stderr.write(str(msg) + '\n')
+            sys.stderr.write(six.text_type(msg) + '\n')
     sys.exit(code)
 
 # quick check to see if you are a super-user.
@@ -66,16 +54,13 @@ try:
     from subscription_manager.injectioninit import init_dep_injection
     init_dep_injection()
 
-    import subscription_manager.injection as inj
-    # Set up DBus mainloop via DBUS_IFACE
-    inj.require(inj.DBUS_IFACE)
+    try:
+        from sat5to6 import migrate
+    except ImportError:
+        # Allow us to run from the sub-man repo
+        from subscription_manager.migrate import migrate
 
-    from subscription_manager import managercli
     from subscription_manager.managercli import handle_exception
-
-    from subscription_manager import ga_loader
-    ga_loader.init_ga()
-
 except KeyboardInterrupt:
     system_exit(0, "\nUser interrupted process.")
 except ImportError as err:
@@ -86,7 +71,7 @@ except ImportError as err:
 def main():
     # execute
     try:
-        return managercli.ManagerCLI().main()
+        return migrate.main(five_to_six_script=True)
     except KeyboardInterrupt:
         system_exit(0, "\nUser interrupted process.")
 
@@ -96,11 +81,11 @@ def main():
 if __name__ == '__main__':
     try:
         sys.exit(abs(main() or 0))
-    except SystemExit as err:
-        # This is a non-exceptional exception thrown by Python 2.4, just
+    except SystemExit as e:
+        # this is a non-exceptional exception thrown by Python 2.4, just
         # re-raise, bypassing handle_exception
-        raise err
+        raise e
     except KeyboardInterrupt:
         system_exit(0, "\nUser interrupted process.")
     except Exception as e:
-        handle_exception("exception caught in subscription-manager", e)
+        handle_exception("Exception caught in sat5to6", e)

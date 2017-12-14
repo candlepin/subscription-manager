@@ -120,10 +120,14 @@ clean:
 	$(PYTHON) ./setup.py clean --all
 	rm -rf cover/ htmlcov/ docs/sphinx/_build/ build/ dist/
 
-rhsmcertd: $(DAEMONS_SRC_DIR)/rhsmcertd.c
+.PHONY: mkdir-bin
+mkdir-bin:
+	mkdir -p bin
+
+rhsmcertd: mkdir-bin $(DAEMONS_SRC_DIR)/rhsmcertd.c
 	$(CC) $(CFLAGS) $(RHSMCERTD_CFLAGS) -DLIBEXECDIR='"$(LIBEXEC_DIR)"' $(DAEMONS_SRC_DIR)/rhsmcertd.c -o bin/rhsmcertd $(LDFLAGS) $(RHSMCERTD_LDFLAGS)
 
-rhsm-icon: $(RHSM_ICON_SRC_DIR)/rhsm_icon.c
+rhsm-icon: mkdir-bin $(RHSM_ICON_SRC_DIR)/rhsm_icon.c
 	$(CC) $(CFLAGS) $(ICON_CFLAGS) $(RHSM_ICON_SRC_DIR)/rhsm_icon.c -o bin/rhsm-icon $(LDFLAGS) $(ICON_LDFLAGS)
 
 .PHONY: check-syntax
@@ -138,7 +142,6 @@ dbus-common-install:
 
 dbus-rhsmd-service-install: dbus-common-install
 	install -m 644 etc-conf/dbus/system.d/com.redhat.SubscriptionManager.conf $(PREFIX)/etc/dbus-1/system.d
-	install -m 744 $(DAEMONS_SRC_DIR)/rhsm_d.py $(PREFIX)/$(LIBEXEC_DIR)/rhsmd
 
 dbus-facts-service-install: dbus-common-install
 	install -m 644 etc-conf/dbus/system.d/com.redhat.RHSM1.Facts.conf $(PREFIX)/etc/dbus-1/system.d
@@ -277,6 +280,15 @@ install-post-boot: install-firstboot install-initial-setup
 .PHONY: install-via-setup
 install-via-setup:
 	$(PYTHON) ./setup.py install --root $(PREFIX) --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION) --with-systemd=$(WITH_SYSTEMD) --prefix=/usr
+	mkdir -p $(PREFIX)/usr/sbin/
+	mkdir -p $(PREFIX)/$(LIBEXEC_DIR)/
+	mv $(PREFIX)/usr/bin/subscription-manager $(PREFIX)/usr/sbin/
+	mv $(PREFIX)/usr/bin/subscription-manager-gui $(PREFIX)/usr/sbin/
+	mv $(PREFIX)/usr/bin/rhn-migrate-classic-to-rhsm $(PREFIX)/usr/sbin/
+	mv $(PREFIX)/usr/bin/rhsmcertd-worker $(PREFIX)/$(LIBEXEC_DIR)/
+	mv $(PREFIX)/usr/bin/rhsm-service $(PREFIX)/$(LIBEXEC_DIR)/
+	mv $(PREFIX)/usr/bin/rhsm-facts-service $(PREFIX)/$(LIBEXEC_DIR)/
+	mv $(PREFIX)/usr/bin/rhsmd $(PREFIX)/$(LIBEXEC_DIR)/
 
 .PHONY: install
 install: install-via-setup install-files

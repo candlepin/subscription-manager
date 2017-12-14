@@ -395,14 +395,6 @@ make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
 
 %install
 rm -rf %{buildroot}
-make -f Makefile install VERSION=%{version}-%{release} \
-    PYTHON=/usr/bin/python2 \
-    PREFIX=%{buildroot} PYTHON_SITELIB=%{python_sitearch} \
-    OS_VERSION=%{?fedora}%{?rhel}%{?suse_version} OS_DIST=%{dist} \
-    %{?install_ostree} %{?post_boot_tool} %{?gtk_version} \
-    %{?install_yum_plugins} %{?install_dnf_plugins} \
-    %{?install_zypper_plugins} \
-    %{?with_systemd}
 %if %{use_python3}
 make -f Makefile install VERSION=%{version}-%{release} \
     PYTHON=/usr/bin/python3 \
@@ -412,7 +404,17 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?install_yum_plugins} %{?install_dnf_plugins} \
     %{?install_zypper_plugins} \
     %{?with_systemd}
+rm %{buildroot}/usr/bin/subscription-manager
+rm %{buildroot}/usr/bin/subscription-manager-gui
 %endif
+make -f Makefile install VERSION=%{version}-%{release} \
+    PYTHON=/usr/bin/python2 \
+    PREFIX=%{buildroot} PYTHON_SITELIB=%{python_sitearch} \
+    OS_VERSION=%{?fedora}%{?rhel}%{?suse_version} OS_DIST=%{dist} \
+    %{?install_ostree} %{?post_boot_tool} %{?gtk_version} \
+    %{?install_yum_plugins} %{?install_dnf_plugins} \
+    %{?install_zypper_plugins} \
+    %{?with_systemd}
 
 %if 0%{?suse_version}
 %suse_update_desktop_file -n -r subscription-manager-gui Settings PackageManager
@@ -484,6 +486,7 @@ rm -rf %{buildroot}
 %dir %{python_sitearch}/subscription_manager/branding
 %dir %{python_sitearch}/subscription_manager/model
 %dir %{python_sitearch}/subscription_manager/plugin
+%dir %{python_sitearch}/subscription_manager/scripts
 %if %{use_python3}
 %exclude %{python3_sitearch}/rhsmlib
 %endif
@@ -565,6 +568,7 @@ rm -rf %{buildroot}
 %{python_sitearch}/subscription_manager/branding/*.py*
 %{python_sitearch}/subscription_manager/model/*.py*
 %{python_sitearch}/subscription_manager/plugin/__init__.py*
+%{python_sitearch}/subscription_manager/scripts/*.py*
 %if %{use_python3}
 %exclude %{python3_sitearch}/subscription_manager-*.egg-info/*
 %exclude %{python3_sitearch}/subscription_manager
