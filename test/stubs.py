@@ -60,7 +60,8 @@ proxy_password = proxy_password
 no_proxy =
 
 [rhsm]
-baseurl= https://content.example.com
+baseurl = https://content.example.com
+repomd_gpg_url =
 repo_ca_cert = %(ca_cert_dir)sredhat-uep.pem
 productCertDir = /etc/pki/product
 entitlementCertDir = /etc/pki/entitlement

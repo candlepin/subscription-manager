@@ -47,7 +47,8 @@ proxy_password =
 
 [rhsm]
 ca_cert_dir = /etc/rhsm/ca-test/
-baseurl= https://content.example.com
+baseurl = https://content.example.com
+repomd_gpg_url =
 repo_ca_cert = %(ca_cert_dir)sredhat-uep-non-default.pem
 productCertDir = /etc/pki/product
 entitlementCertDir = /etc/pki/entitlement

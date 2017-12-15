@@ -82,6 +82,11 @@ baseurl::
   the full *baseurl* would be for example:
   *https://sat6.example.com/pulp/repos* .
 
+repomd_gpg_url::
+  The URL of the GPG key that was used to sign this repository's metadata.
+  The specified GPG key will be used in addition to any GPG keys defined
+  by the entitlement.
+
 ca_cert_dir::
   The location for the certificates which are used to communicate with the
   server and to pulldown content.
