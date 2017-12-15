@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-12-08 01:15-0500\n"
+"PO-Revision-Date: 2017-12-13 12:44-0500\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -358,7 +358,7 @@ msgstr "詳しい情報を参照するには、rhsmcertd --help を実行して�
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/daemons/rhsmcertd.c:393
 msgid "Wrong number of arguments specified.\n"
-msgstr "無効な引数の番号が指定されています。\n"
+msgstr "無効な引数番号が指定されています。\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/daemons/rhsmcertd.c:457
@@ -403,7 +403,7 @@ msgstr ""
 "*** 警告 ***\n"
 "以下の製品のサブスクリプションの期限が切れています:\n"
 "%s\n"
-"これらの製品を提供するリポジトリーにはアクセスできません。セキュリティーと、その他の重要な更新へのアクセスを再開するには、アクティブなサブスクリプションを適用する必要があります。アクティブなサブスクリプションがない場合は、有効期限の切れたサブスクリプションを更新できます。 "
+"これらの製品を提供するリポジトリーにはアクセスできません。セキュリティーの更新と、その他の重要な更新へのアクセスを再開するには、アクティブなサブスクリプションを適用する必要があります。アクティブなサブスクリプションがない場合は、有効期限の切れたサブスクリプションを更新できます。 "
 " "
 
 #: src/dnf-plugins/subscription-manager.py:40
@@ -417,7 +417,7 @@ msgid ""
 "This system is registered to Red Hat Subscription Management, but is not "
 "receiving updates. You can use subscription-manager to assign subscriptions."
 msgstr ""
-"このシステムは、Red Hat サブスクリプション管理に登録されていますが、更新を受信していません。 subscription-manager "
+"このシステムは、Red Hat サブスクリプション管理に登録されていますが、更新を受けていません。 subscription-manager "
 "でサブスクリプションを割り当てることができます。"
 
 #: src/dnf-plugins/subscription-manager.py:72
@@ -1120,7 +1120,7 @@ msgstr "システムの DMI 情報の読み込みでエラー: %s"
 #: src/rhsmlib/facts/dmiinfo.py:99
 #, python-format
 msgid "Error reading system DMI information with %s: %s"
-msgstr "%s でシステムの DMI 情報の読み込みでエラー: %s"
+msgstr "%s で、システムの DMI 情報の読み込みにエラー: %s"
 
 #: src/rhsmlib/services/entitlement.py:56 src/rhsmlib/services/register.py:44
 #, python-format
@@ -1632,7 +1632,7 @@ msgstr "<b>%s バージョン:</b> %s"
 #: src/subscription_manager/gui/about.py:78
 #, python-format
 msgid "<b>subscription management service version:</b> %s"
-msgstr "<b>サブスクリプション管理サービスバージョン:</b> %s"
+msgstr "<b>サブスクリプション管理サービスのバージョン:</b> %s"
 
 #: src/subscription_manager/gui/about.py:105
 #, python-format
@@ -1670,7 +1670,7 @@ msgstr "サブスクリプションの検索には「更新」を押してくだ
 #: src/subscription_manager/gui/allsubs.py:210
 #, python-format
 msgid "No subscriptions are available on %s."
-msgstr "%s には利用できるサブスクリプションがありません。"
+msgstr "%s には、利用できるサブスクリプションがありません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/gui/allsubs.py:216
@@ -1696,7 +1696,7 @@ msgstr "サブスクリプションを検索中です。お待ちください"
 #: src/subscription_manager/gui/allsubs.py:369
 #, python-format
 msgid "Error fetching subscriptions from server:  %s"
-msgstr "サーバーからサブスクリプションの取り出しでエラー:  %s"
+msgstr "サーバーからサブスクリプションの取得時にエラー:  %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/allsubs.py:383
@@ -1721,7 +1721,7 @@ msgstr "添付中"
 
 #: src/subscription_manager/gui/allsubs.py:406
 msgid "Attaching subscription. Please wait."
-msgstr "サブスクリプションを添付中です。お待ちください"
+msgstr "サブスクリプションを割り当て中です。お待ちください"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/allsubs.py:424
@@ -1847,7 +1847,7 @@ msgstr "割り当て"
 msgid ""
 "The subscription management service you register with will provide your "
 "system with updates and allow additional management."
-msgstr "登録するサブスクリプション管理サービスにより、システムに更新が提供され、 その他の管理もここで行うことができるようになります。"
+msgstr "登録するサブスクリプション管理サービスにより、システムに更新が提供され、 その他の管理もここでできるようになります。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/gui/data/glade/choose_server.glade:31
@@ -2375,7 +2375,8 @@ msgid ""
 "You will need to use Red Hat Subscription Manager to manually attach "
 "subscriptions to this system after completing firstboot."
 msgstr ""
-"firstboot が完了したら、 Red Hat サブスクリプションマネージャーを使って、このシステムにサブスクリプションを割り当てる必要があります。"
+"firstboot が完了したら、 Red Hat "
+"サブスクリプションマネージャーを使用して、このシステムにサブスクリプションを割り当てる必要があります。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/data/glade/manually_subscribe.glade:52
@@ -2384,8 +2385,7 @@ msgid ""
 "After opening Red Hat Subscription Manager, manually attach subscriptions "
 "via the <b>All Available Subscriptions</b> tab."
 msgstr ""
-"Red Hat サブスクリプションマネージャーを開いたら、 <b>利用できる全サブスクリプション</b> "
-"タブからサブスクリプションの割り当てを行います。"
+"Red Hat サブスクリプションマネージャーを開いたら、 <b>利用できる全サブスクリプション</b> タブからサブスクリプションを割り当てます。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/data/glade/mysubs.glade:30
@@ -2465,13 +2465,13 @@ msgstr "認証のチェックボックス"
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:185
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:253
 msgid "Proxy _Username:"
-msgstr "プロキシー ユーザー名(_U):"
+msgstr "プロキシーユーザー名(_U):"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:198
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:267
 msgid "Proxy P_assword:"
-msgstr "プロキシー パスワード(_A):"
+msgstr "プロキシーパスワード(_A):"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:217
@@ -2814,7 +2814,7 @@ msgstr "登録する理由"
 msgid ""
 "Registering your system with Red Hat allows you to take full advantage of "
 "the benefits of a paid subscription, including:"
-msgstr "Red Hat に登録すると、有料サブスクリプションで提供している次のようなサービスをすべてお受け頂くことができます。"
+msgstr "Red Hat に登録すると、有料サブスクリプションで提供している次のようなサービスを、すべてご利用になれます。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/data/glade/registration_info.glade:252
@@ -2833,7 +2833,7 @@ msgid ""
 "Receive the latest software updates, including security updates, keeping "
 "this Red Hat Enterprise Linux system <b>updated</b> and <b>secure</b>."
 msgstr ""
-"セキュリティー更新など最新のソフトウェア更新を受信し、Red Hat Enterprise Linux システムを<b>最新</b>で<b>安全</"
+"セキュリティー更新など、最新のソフトウェア更新を受け取り、Red Hat Enterprise Linux システムを<b>最新</b>で<b>安全</"
 "b>な状態に維持します。"
 
 #: src/subscription_manager/gui/data/glade/registration_info.glade:357
@@ -3168,7 +3168,7 @@ msgid ""
 "This assistant will guide you through the process of registering your system "
 "with Red Hat to receive software updates and other benefits. "
 msgstr ""
-"ソフトウェア更新やその他のサービスをご利用になれるよう、システムを Red Hat に登録していただく手順を順を追って説明していくツールです。 "
+"ソフトウェア更新やその他のサービスをご利用になれるよう、システムを Red Hat に登録していただく手順を、順を追って説明していくツールです。 "
 
 #: src/subscription_manager/gui/data/ui/registration_info.ui:64
 msgid " You will need the following to register:"
@@ -4398,7 +4398,7 @@ msgstr "エラー: --org は、 --list オプションと併用でのみサポ�
 msgid ""
 "Error: you must register or specify --username and --password to list "
 "service levels"
-msgstr "エラー: サービスレベルを一覧表示するには、 --username と --password を指定するか登録を行なう必要があります"
+msgstr "エラー: サービスレベルを一覧表示するには、 --username と --password を指定するか、登録を行なう必要があります"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:920
@@ -4612,7 +4612,7 @@ msgstr "使用するオペレーティングシステムを設定"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1366
 msgid "shows current release setting; default command"
-msgstr "現在のリリース設定を表示、デフォルトのコマンド"
+msgstr "現在のリリース設定を表示。デフォルトのコマンド"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1368
@@ -5148,19 +5148,19 @@ msgstr "このシステムで使用しているサブスクリプションを表
 msgid ""
 "shows only subscriptions matching the specified service level; only used "
 "with --available and --consumed"
-msgstr "指定したサービスレベルと一致するサブスクリプションのみを表示、 --available および --consumed との併用のみ"
+msgstr "指定したサービスレベルと一致するサブスクリプションのみを表示。--available および --consumed との併用のみ"
 
 #: src/subscription_manager/managercli.py:2245
 msgid ""
 "shows pools which provide products that are not already covered; only used "
 "with --available"
-msgstr "まだサービス適用対象に入っていない製品を示すプールを表示、--available との併用のみ"
+msgstr "まだサービス適用対象に入っていない製品を示すプールを表示。--available との併用のみ"
 
 #: src/subscription_manager/managercli.py:2247
 msgid ""
 "shows only subscriptions matching products that are currently installed; "
 "only used with --available"
-msgstr "現在インストールされている製品と一致するサブスクリプションのみを表示、--available との併用のみ"
+msgstr "現在インストールされている製品と一致するサブスクリプションのみを表示。--available との併用のみ"
 
 #: src/subscription_manager/managercli.py:2249
 msgid ""
@@ -5270,7 +5270,7 @@ msgstr "変更するリポジトリー (複数回の指定が可能)"
 msgid ""
 "name of the override to remove (can be specified more than once); used with -"
 "-repo option."
-msgstr "削除するオーバーライドの名前 (複数回の指定が可能); --repo  オプションと併用します。"
+msgstr "削除するオーバーライドの名前 (複数回の指定が可能)。--repo  オプションと併用します。"
 
 #: src/subscription_manager/managercli.py:2431
 msgid ""
@@ -5514,7 +5514,7 @@ msgstr "移行を続行できません!"
 #: src/subscription_manager/migrate/migrate.py:460
 msgid ""
 "You are subscribed to channels that have conflicting product certificates."
-msgstr "競合している製品証明書があるチャンネルをサブスクライブしています。"
+msgstr "製品証明書が競合しているチャンネルをサブスクライブしています。"
 
 #: src/subscription_manager/migrate/migrate.py:464
 #, python-format
@@ -5805,7 +5805,7 @@ msgstr "スタック "
 msgid ""
 "Error: More than one release product certificate installed. Certificate "
 "paths: %s"
-msgstr ""
+msgstr "エラー: リリースの製品証明書が 1 つ以上インストールされています。証明書パス: %s"
 
 #: src/subscription_manager/repolib.py:106
 #, python-format

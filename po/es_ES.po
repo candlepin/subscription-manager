@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-12-08 01:16-0500\n"
+"PO-Revision-Date: 2017-12-13 12:45-0500\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Spanish (Spain)\n"
 "Language: es-ES\n"
@@ -6086,6 +6086,8 @@ msgid ""
 "Error: More than one release product certificate installed. Certificate "
 "paths: %s"
 msgstr ""
+"Error: se instaló más de un certificado de producto de lanzamiento. Rutas de "
+"certificados: %s"
 
 #: src/subscription_manager/repolib.py:106
 #, python-format
@@ -6096,7 +6098,7 @@ msgid ""
 msgstr ""
 "Los plugins yum: %s se habilitaron automáticamente para el beneficio de Red "
 "Hat Subscription Management. Si no se desea, utilice \"subscription-manager "
-"config--rhsm.auto_enable_yum_plugins=0\" para bloquear este comportamiento."
+"config --rhsm.auto_enable_yum_plugins=0\" para bloquear este comportamiento."
 
 #: src/subscription_manager/repolib.py:691
 msgid "Repo updates"
