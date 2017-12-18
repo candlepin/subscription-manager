@@ -280,7 +280,7 @@ install-post-boot: install-firstboot install-initial-setup
 
 .PHONY: install-via-setup
 install-via-setup:
-	$(PYTHON) ./setup.py install --root $(DESTDIR) --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION) --with-systemd=$(WITH_SYSTEMD) --prefix=/usr
+	$(PYTHON) ./setup.py install --root $(DESTDIR) --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION) --with-systemd=$(WITH_SYSTEMD) --prefix=$(PREFIX)
 	mkdir -p $(DESTDIR)/$(PREFIX)/sbin/
 	mkdir -p $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/subscription-manager $(DESTDIR)/$(PREFIX)/sbin/
