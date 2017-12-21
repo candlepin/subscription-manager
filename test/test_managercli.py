@@ -401,6 +401,7 @@ class TestRegisterCommand(TestCliProxyCommand):
 
 class TestListCommand(TestCliProxyCommand):
     command_class = managercli.ListCommand
+    valid_date = '2018-05-01'
 
     def setUp(self):
         super(TestListCommand, self).setUp(False)
@@ -413,6 +414,78 @@ class TestListCommand(TestCliProxyCommand):
         argv_patcher = patch.object(sys, 'argv', ['subscription-manager', 'list'])
         argv_patcher.start()
         self.addCleanup(argv_patcher.stop)
+
+    def _test_after_option(self, argv, method, should_exit=True, expected_exit_code=0):
+        msg = ""
+        with patch.object(sys, 'argv', argv):
+            try:
+                method()
+            except SystemExit as e:
+                self.assertEqual(e.code, expected_exit_code,
+                    """Cli should have exited with code '{}', got '{}'""".format(expected_exit_code,
+                        e.code))
+                fail = False
+            except Exception as e:
+                fail = True
+                msg = "Expected SystemExit, got \'\'\'{}\'\'\'".format(e)
+            else:
+                fail = should_exit
+                if fail:
+                    msg = "Expected SystemExit, No Exception was raised"
+
+            if fail:
+                self.fail(msg)
+
+    def test_after_option_bad_date(self):
+        argv = ['subscription-manager', 'list', '--all', '--available', '--after',
+                'not_a_real_date']
+        self._test_after_option(argv, self.cc.main, expected_exit_code=os.EX_DATAERR)
+
+    def test_after_option_no_date(self):
+        argv = ['subscription-manager', 'list', '--all', '--available', '--after']
+        # Error code of 2 is expected from optparse in this case.
+        self._test_after_option(argv, self.cc.main, expected_exit_code=2)
+
+    def test_after_option_missing_options(self):
+        # Just missing "all"
+        argv = ['subscription-manager', 'list', '--after', self.valid_date, '--available']
+        self._test_after_option(argv, self.cc.main, expected_exit_code=os.EX_USAGE)
+
+        # Just missing "available"
+        argv = ['subscription-manager', 'list', '--after', self.valid_date, '--all']
+        self._test_after_option(argv, self.cc.main, expected_exit_code=os.EX_USAGE)
+
+        # Missing both
+        argv = ['subscription-manager', 'list', '--after', self.valid_date]
+        self._test_after_option(argv, self.cc.main, expected_exit_code=os.EX_USAGE)
+
+    def test_after_option_with_ondate(self):
+        argv = ['subscription-manager', 'list', '--after', self.valid_date, '--ondate',
+            self.valid_date]
+        self._test_after_option(argv, self.cc.main, expected_exit_code=os.EX_USAGE)
+
+    @patch('subscription_manager.managerlib.get_available_entitlements')
+    def test_after_option_valid(self, es):
+        def create_pool_list(*args, **kwargs):
+            return [{'productName': 'dummy-name',
+                     'productId': 'dummy-id',
+                     'providedProducts': [],
+                     'id': '888888888888',
+                     'management_enabled': True,
+                     'attributes': [{'name': 'is_virt_only',
+                                     'value': 'false'}],
+                     'pool_type': 'Some Type',
+                     'quantity': '4',
+                     'service_level': '',
+                     'service_type': '',
+                     'contractNumber': '5',
+                     'multi-entitlement': 'false',
+                     'endDate': '',
+                     'suggested': '2'}]
+        es.return_value = create_pool_list()
+
+        argv = ['subscription-manager', 'list', '--all', '--available', '--after', self.valid_date]
+        self._test_after_option(argv, self.cc.main, should_exit=False)
 
     @patch('subscription_manager.managerlib.get_available_entitlements')
     def test_none_wrap_available_pool_id(self, mget_ents):
