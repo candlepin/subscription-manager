@@ -61,6 +61,7 @@ SERVER_DEFAULTS = {
         }
 RHSM_DEFAULTS = {
         'baseurl': 'https://' + DEFAULT_CDN_HOSTNAME,
+        'repomd_gpg_url': '',
         'ca_cert_dir': DEFAULT_CA_CERT_DIR,
         'repo_ca_cert': '%(ca_cert_dir)sredhat-uep.pem',
         'productcertdir': '/etc/pki/product',
