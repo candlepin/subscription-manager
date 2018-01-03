@@ -25,7 +25,12 @@ import logging
 import os
 import re
 import string
-from debian.deb822 import Deb822
+
+try:
+    from debian.deb822 import Deb822
+    HAS_DEB822 = True
+except ImportError as e:
+    HAS_DEB822 = False
 
 from subscription_manager import utils
 from subscription_manager.certdirectory import Path
@@ -342,12 +347,13 @@ class RepoFileBase(object):
         return cls('var/lib/rhsm/repo_server_val/')
 
 
-class AptRepoFile(RepoFileBase):
+if HAS_DEB822:
+    class AptRepoFile(RepoFileBase):
 
-    PATH = 'etc/apt/sources.list.d'
-    NAME = 'rhsm.sources'
-    CONTENT_TYPES = ['deb']
-    REPOFILE_HEADER = """#
+        PATH = 'etc/apt/sources.list.d'
+        NAME = 'rhsm.sources'
+        CONTENT_TYPES = ['deb']
+        REPOFILE_HEADER = """#
 # Certificate-Based Repositories
 # Managed by (rhsm) subscription-manager
 #
@@ -361,67 +367,66 @@ class AptRepoFile(RepoFileBase):
 #
 """
 
-    def __init__(self, path=None, name=None):
-        super(AptRepoFile, self).__init__(path, name)
-        self.repos822 = []
+        def __init__(self, path=None, name=None):
+            super(AptRepoFile, self).__init__(path, name)
+            self.repos822 = []
 
-    def read(self):
-        with open(self.path, 'r') as f:
-            for repo822 in Deb822.iter_paragraphs(f, shared_storage=False):
-                self.repos822.append(repo822)
+        def read(self):
+            with open(self.path, 'r') as f:
+                for repo822 in Deb822.iter_paragraphs(f, shared_storage=False):
+                    self.repos822.append(repo822)
 
-    def write(self):
-        if not self.manage_repos:
-            log.debug("Skipping write due to manage_repos setting: %s" %
-                    self.path)
-            return
-        with open(self.path, 'w') as f:
-            f.write(self.REPOFILE_HEADER)
-            for repo822 in self.repos822:
-                f.write('\n')
-                repo822.dump(f)
+        def write(self):
+            if not self.manage_repos:
+                log.debug("Skipping write due to manage_repos setting: %s" %
+                        self.path)
+                return
+            with open(self.path, 'w') as f:
+                f.write(self.REPOFILE_HEADER)
+                for repo822 in self.repos822:
+                    f.write('\n')
+                    repo822.dump(f)
 
-    def add(self, repo):
-        repo_dict = dict([(str(k), str(v)) for (k, v) in repo.items()])
-        repo_dict['id'] = repo.id
-        self.repos822.append(Deb822(repo_dict))
+        def add(self, repo):
+            repo_dict = dict([(str(k), str(v)) for (k, v) in repo.items()])
+            repo_dict['id'] = repo.id
+            self.repos822.append(Deb822(repo_dict))
 
-    def delete(self, repo):
-        self.repos822[:] = [repo822 for repo822 in self.repos822 if repo822['id'] != repo.id]
+        def delete(self, repo):
+            self.repos822[:] = [repo822 for repo822 in self.repos822 if repo822['id'] != repo.id]
 
-    def update(self, repo):
-        repo_dict = dict([(str(k), str(v)) for (k, v) in repo.items()])
-        repo_dict['id'] = repo.id
-        self.repos822[:] = [repo822 if repo822['id'] != repo.id else Deb822(repo_dict) for repo822 in self.repos822]
+        def update(self, repo):
+            repo_dict = dict([(str(k), str(v)) for (k, v) in repo.items()])
+            repo_dict['id'] = repo.id
+            self.repos822[:] = [repo822 if repo822['id'] != repo.id else Deb822(repo_dict) for repo822 in self.repos822]
 
-    def section(self, repo_id):
-        result = [Repo(repo822) for repo822 in self.repos822 if repo822['id'] == repo_id]
-        if len(result) > 0:
-            return result[0]
-        else:
-            return None
+        def section(self, repo_id):
+            result = [Repo(repo822) for repo822 in self.repos822 if repo822['id'] == repo_id]
+            if len(result) > 0:
+                return result[0]
+            else:
+                return None
 
-    def sections(self):
-        return [Repo(repo822) for repo822 in self.repos822]
+        def sections(self):
+            return [Repo(repo822) for repo822 in self.repos822]
 
-    def fix_content(self, content):
-        # Luckily apt ignores all Fields it does not recognize
-        baseurl = content['baseurl']
-        url_res = re.match(r"^https?://(?P<location>.*)$", baseurl)
-        ent_res = re.match(r"^/etc/pki/entitlement/(?P<entitlement>.*).pem$", content['sslclientcert'])
-        if url_res and ent_res:
-            location = url_res.group('location')
-            entitlement = ent_res.group('entitlement')
-            baseurl = 'katello://{}@{}'.format(entitlement, location)
+        def fix_content(self, content):
+            # Luckily apt ignores all Fields it does not recognize
+            baseurl = content['baseurl']
+            url_res = re.match(r"^https?://(?P<location>.*)$", baseurl)
+            ent_res = re.match(r"^/etc/pki/entitlement/(?P<entitlement>.*).pem$", content['sslclientcert'])
+            if url_res and ent_res:
+                location = url_res.group('location')
+                entitlement = ent_res.group('entitlement')
+                baseurl = 'katello://{}@{}'.format(entitlement, location)
 
-        apt_cont = content.copy()
-        apt_cont['Types'] = 'deb'
-        apt_cont['URIs'] = baseurl
-        # TODO retrieve these informations from katello
-        apt_cont['Suites'] = 'default'
-        apt_cont['Components'] = 'all'
-        apt_cont['Trusted'] = 'yes'
-        return apt_cont
+            apt_cont = content.copy()
+            apt_cont['Types'] = 'deb'
+            apt_cont['URIs'] = baseurl
+            apt_cont['Suites'] = 'default'
+            apt_cont['Components'] = 'all'
+            apt_cont['Trusted'] = 'yes'
+            return apt_cont
 
 
 class YumRepoFile(RepoFileBase, ConfigParser):
@@ -575,9 +580,12 @@ class ZypperRepoFile(YumRepoFile):
 
 
 def init_repo_files():
+    repo_file_classes = [YumRepoFile, ZypperRepoFile]
+    if HAS_DEB822:
+        repo_file_classes.append(AptRepoFile)
     repo_files = [
         (RepoFile(), RepoFile.server_value_repo_file())
-        for RepoFile in [AptRepoFile, YumRepoFile, ZypperRepoFile]
+        for RepoFile in repo_file_classes
         if RepoFile.installed()
     ]
     return repo_files
