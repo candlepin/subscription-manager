@@ -48,7 +48,8 @@ client.config = {
 const RHSM_DEFAULTS = { // TODO get these from a d-bus service instead
     hostname: 'subscription.rhsm.redhat.com',
     port: '443',
-    prefix: '/subscription'
+    prefix: '/subscription',
+    proxy_port: '3128',
 };
 
 // we trigger an event called "dataChanged" when the data has changed
@@ -121,9 +122,37 @@ function getSubscriptionDetails() {
     });
 }
 
+/* convenience function for specifying d-bus strings */
+function dbus_str(value) {
+    return {
+        t: 's',
+        v: value,
+    };
+}
+
+/* Overall flow is as follows:
+
+Preconditions:
+ - subscriptionDetails is populated with values from the config file
+ - subscriptionDetails is then modified by UI interaction
+
+1. connection_options is populated with default values
+2. connection_options is updated by subscriptionDetails; if an option isn't specified, it remains the default.
+3. if an option is different than what's in the config, we set the config option
+ */
 client.registerSystem = subscriptionDetails => {
     const dfd = cockpit.defer();
-    const connection_options = {};
+    // Note: when values are not specified we force use of default
+    // values. Otherwise old and obsolete values from rhsm.conf could be used.
+    const connection_options = {
+        host: dbus_str(RHSM_DEFAULTS.hostname),
+        port: dbus_str(RHSM_DEFAULTS.port),
+        proxy_hostname: dbus_str(''),
+        proxy_port: dbus_str(''),
+        proxy_user: dbus_str(''),
+        proxy_password: dbus_str(''),
+        handler: dbus_str(RHSM_DEFAULTS.prefix),
+    };
 
     if (subscriptionDetails.url !== 'default') {
         /*  parse url into host, port, handler; sorry about the ugly regex */
@@ -145,55 +174,17 @@ client.registerSystem = subscriptionDetails => {
             throw 'malformed server url; ipv6 address syntax and hostname are mutually exclusive';
         }
         if (ipv6Address) {
-            connection_options.host = {
-                t: 's',
-                v: ipv6Address,
-            };
+            connection_options.host = dbus_str(ipv6Address);
         }
         if (address) {
-            connection_options.host = {
-                t: 's',
-                v: address,
-            };
+            connection_options.host = dbus_str(address);
         }
-        // Note: when port or handler options are not specified, then we force use default
-        // values. Otherwise old an obsolete values from rhsm.conf could be used.
         if (port) {
-            connection_options.port = {
-                t: 's',
-                v: port,
-            };
-        } else {
-            connection_options.port = {
-                t: 's',
-                v: RHSM_DEFAULTS.port
-            };
+            connection_options.port = dbus_str(port);
         }
         if (path) {
-            connection_options.handler = {
-                t: 's',
-                v: path,
-            };
-        } else {
-            connection_options.handler = {
-                t: 's',
-                v: RHSM_DEFAULTS.prefix,
-            };
+            connection_options.handler = dbus_str(path);
         }
-    }
-    else {
-        connection_options.host = {
-            t: 's',
-            v: RHSM_DEFAULTS.hostname,
-        };
-        connection_options.port = {
-            t: 's',
-            v: RHSM_DEFAULTS.port,
-        };
-        connection_options.handler = {
-            t: 's',
-            v: RHSM_DEFAULTS.prefix,
-        };
     }
 
     // proxy is optional
@@ -209,40 +200,28 @@ client.registerSystem = subscriptionDetails => {
             const match = pattern.exec(subscriptionDetails.proxy_server);
             const ipv6Address = match[1];
             const address = match[2];
-            const port = match[3];
+            let port = match[3];
             if (ipv6Address && address) {
                 throw 'malformed proxy url; ipv6 address syntax and hostname are mutually exclusive';
             }
             if (ipv6Address) {
-                connection_options.proxy_hostname = {
-                    t: 's',
-                    v: ipv6Address,
-                };
+                connection_options.proxy_hostname = dbus_str(ipv6Address);
             }
             if (address) {
-                connection_options.proxy_hostname = {
-                    t: 's',
-                    v: address,
-                };
+                connection_options.proxy_hostname = dbus_str(address);
+            }
+            if (!port) {
+                port = RHSM_DEFAULTS.proxy_port;
             }
             if (port) {
-                connection_options.proxy_port = {
-                    t: 's',
-                    v: port,
-                };
+                connection_options.proxy_port = dbus_str(port);
             }
         }
         if (subscriptionDetails.proxy_user) {
-            connection_options.proxy_user = {
-                t: 's',
-                v: subscriptionDetails.proxy_user,
-            };
+            connection_options.proxy_user = dbus_str(subscriptionDetails.proxy_user);
         }
         if (subscriptionDetails.proxy_password) {
-            connection_options.proxy_password = {
-                t: 's',
-                v: subscriptionDetails.proxy_password,
-            };
+            connection_options.proxy_password = dbus_str(subscriptionDetails.proxy_password);
         }
     }
 
@@ -266,7 +245,7 @@ client.registerSystem = subscriptionDetails => {
                     '/com/redhat/RHSM1/Register'
                 );
                 if (subscriptionDetails.activationKeys) {
-                    return registerService.call(
+                    let result = registerService.call(
                         'RegisterWithActivationKeys',
                         [
                             subscriptionDetails.org,
@@ -276,9 +255,11 @@ client.registerSystem = subscriptionDetails => {
                             userLang
                         ]
                     );
+                    registered = true;
+                    return result;
                 }
                 else {
-                    return registerService.call(
+                    let result = registerService.call(
                         'Register',
                         [
                             subscriptionDetails.org,
@@ -289,6 +270,8 @@ client.registerSystem = subscriptionDetails => {
                             userLang
                         ]
                     );
+                    registered = true;
+                    return result;
                 }
             })
             .catch(error => {
@@ -305,7 +288,7 @@ client.registerSystem = subscriptionDetails => {
                 dfd.reject(parseErrorMessage(error));
             })
             .then(() => {
-                if (registered === true) {
+                if (registered) {
                     // Dictionary (key: client.config / rhsm.conf options, value are
                     // attributes of connection_options) ... ('handler' and 'host' are different)
                     // Note: only options from [server] section are supported
@@ -320,31 +303,13 @@ client.registerSystem = subscriptionDetails => {
                     };
                     // for (let key in dict) {
                     Object.keys(dict).forEach(function (key) {
-                        // To be sure that config option was loaded from rhsm.conf
-                        if (client.config.hasOwnProperty(key)) {
-                            // Was this config option specified in dialog?
-                            if (connection_options.hasOwnProperty(dict[key])) {
-                                // Is config option in dialog different from  rhsm.conf
-                                if (client.config[key] !== connection_options[dict[key]].v) {
-                                    console.debug('saving: server.' + key, connection_options[dict[key]]);
-                                    configService.Set('server.' + key, connection_options[dict[key]], userLang)
-                                        .catch(error => {
-                                            console.error('unable to save server.' + key, error);
-                                        });
-                                }
-                            } else {
-                                let default_value = '';
-                                if (RHSM_DEFAULTS.hasOwnProperty(key)) {
-                                    default_value = RHSM_DEFAULTS[key];
-                                }
-                                // When config option was not specified in dialog, then it is
-                                // necessary to reset it in rhsm.conf (e.g. proxy options are optional)
-                                console.debug('resetting: server.' + key);
-                                configService.Set('server.' + key, {'t': 's', 'v': default_value}, userLang)
-                                    .catch(error => {
-                                        console.error('unable to reset server.' + key, error);
-                                    });
-                            }
+                        // Is config option in dialog different from  rhsm.conf
+                        if (client.config[key] !== connection_options[dict[key]].v) {
+                            console.debug('saving: server.' + key, connection_options[dict[key]]);
+                            configService.Set('server.' + key, connection_options[dict[key]], userLang)
+                                .catch(error => {
+                                    console.error('unable to save server.' + key, error);
+                                });
                         }
                     });
 
