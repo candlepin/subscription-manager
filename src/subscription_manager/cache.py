@@ -121,6 +121,7 @@ class CacheManager(object):
         Load the last data we sent to the server.
         Returns none if no cache file exists.
         """
+
         try:
             f = open(self.CACHE_FILE)
             data = self._load_data(f)
@@ -418,7 +419,7 @@ class ProfileManager(CacheManager):
 
     def has_changed(self):
         if not self._cache_exists():
-            log.debug("Cache does not exist")
+            log.debug("Cache file %s does not exist" % self.CACHE_FILE)
             return True
 
         cached_profile = self._read_cache()
@@ -466,7 +467,7 @@ class InstalledProductsManager(CacheManager):
 
     def has_changed(self):
         if not self._cache_exists():
-            log.debug("Cache does not exist")
+            log.debug("Cache file %s does not exist" % self.CACHE_FILE)
             return True
 
         cached = self._read_cache()
