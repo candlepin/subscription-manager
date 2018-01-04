@@ -775,8 +775,12 @@ class Repo(dict):
 
         # If no GPG key URL is specified, turn gpgcheck off:
         gpg_url = content.gpg
-        if gpg_url:
+        if not gpg_url:
+            gpg_url = ''
+            repo['gpgcheck'] = '0'
+        else:
             gpg_url = utils.url_base_join(baseurl, gpg_url)
+            # Leave gpgcheck as the default of 1
         repomd_gpg_url = conf['rhsm']['repomd_gpg_url']
         if repomd_gpg_url:
             repomd_gpg_url = utils.url_base_join(baseurl, repomd_gpg_url)
@@ -784,12 +788,7 @@ class Repo(dict):
                 gpg_url = repomd_gpg_url
             elif repomd_gpg_url not in gpg_url:
                 gpg_url += ',' + repomd_gpg_url
-        if not gpg_url:
-            repo['gpgkey'] = ""
-            repo['gpgcheck'] = '0'
-        else:
-            repo['gpgkey'] = gpg_url
-            # Leave gpgcheck as the default of 1
+        repo['gpgkey'] = gpg_url
 
         repo['sslclientkey'] = content.cert.key_path()
         repo['sslclientcert'] = content.cert.path
