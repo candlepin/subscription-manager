@@ -214,15 +214,6 @@
     regexp: '^Defaults\s+secure_path.*'
   become: yes
 
-- name: replace rhsm-service with symlink
-  file:
-    src: /vagrant/bin/rhsm-service
-    dest: "{{ libexec_path }}/rhsm-service"
-    state: link
-    force: yes
-  become: yes
-  when: subman_setup_hacking_environment
-
 # needed for dbus to read /vagrant/etc-conf/dbus/system.d
 - name: disable selinux
   selinux:

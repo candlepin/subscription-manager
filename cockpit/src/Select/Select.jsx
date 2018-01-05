@@ -2,8 +2,7 @@ import React from 'react';
 import $ from 'jquery';
 import 'bootstrap';
 import 'bootstrap-select';
-
-const PropTypes = React.PropTypes;
+import PropTypes from 'prop-types';
 
 /* React pattern component for a dropdown/select control */
 class Select extends React.Component {

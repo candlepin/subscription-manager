@@ -17,10 +17,12 @@
  * along with Cockpit; If not, see <http://www.gnu.org/licenses/>.
  */
 
-var cockpit = require("cockpit");
-var React = require("react");
-var ReactDOM = require("react-dom");
-var _ = cockpit.gettext;
+import cockpit from 'cockpit';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
+
+let _ = cockpit.gettext;
 
 /*
  * React template for a Cockpit dialog footer
@@ -42,45 +44,39 @@ var _ = cockpit.gettext;
  *  - static_error optional, always show this error
  *  - dialog_done optional, callback when dialog is finished (param true if success, false on cancel)
  */
-var DialogFooter = React.createClass({
-    propTypes: {
-        cancel_clicked: React.PropTypes.func,
-        cancel_caption: React.PropTypes.string,
-        actions: React.PropTypes.array,
-        static_error: React.PropTypes.string,
-        dialog_done: React.PropTypes.func,
-    },
-    getInitialState: function() {
-        return {
+class DialogFooter extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             action_in_progress: false,
             action_in_progress_promise: null,
             action_progress_message: '',
             action_canceled: false,
             error_message: null,
         };
-    },
-    keyUpHandler: function(e) {
-        if (e.keyCode == 27) {
+    }
+    keyUpHandler(e) {
+        if (e.keyCode === 27) {
             this.cancel_click();
             e.stopPropagation();
         }
-    },
-    componentDidMount: function() {
+    }
+    componentDidMount() {
         document.body.classList.add("modal-in");
         document.addEventListener('keyup', event => this.keyUpHandler(event));
-    },
-    componentWillUnmount: function() {
+    }
+    componentWillUnmount() {
         document.body.classList.remove("modal-in");
         document.removeEventListener('keyup', event => this.keyUpHandler(event));
-    },
-    update_progress: function(msg) {
+    }
+    update_progress(msg) {
         this.setState({ action_progress_message: msg });
-    },
-    action_click: function(handler, e) {
+    }
+    action_click(handler, e) {
         // only consider clicks with the primary button
         if (e && e.button !== 0)
             return;
-        var self = this;
+        let self = this;
         this.setState({
             error_message: null,
             action_progress_message: '',
@@ -107,8 +103,8 @@ var DialogFooter = React.createClass({
             .progress(message => this.update_progress(message));
         if (e)
             e.stopPropagation();
-    },
-    cancel_click: function(e) {
+    }
+    cancel_click(e) {
         // only consider clicks with the primary button
         if (e && e.button !== 0)
             return;
@@ -128,9 +124,9 @@ var DialogFooter = React.createClass({
             this.props.dialog_done(false);
         if (e)
             e.stopPropagation();
-    },
-    render: function() {
-        var cancel_caption, cancel_style;
+    }
+    render() {
+        let cancel_caption, cancel_style;
         if ('cancel_caption' in this.props)
             cancel_caption = this.props.cancel_caption;
         else
@@ -143,30 +139,30 @@ var DialogFooter = React.createClass({
         cancel_style = "btn btn-default " + cancel_style;
 
         // If an action is in progress, show the spinner with its message and disable all actions except cancel
-        var wait_element;
-        var actions_disabled;
+        let wait_element;
+        let actions_disabled;
         if (this.state.action_in_progress) {
             actions_disabled = 'disabled';
             wait_element = <div className="dialog-wait-ct pull-left">
-                <div className="spinner spinner-sm"></div>
+                <div className="spinner spinner-sm"/>
                 <span>{ this.state.action_progress_message }</span>
             </div>;
         }
 
-        var self = this;
-        var action_buttons = this.props.actions.map(function(action) {
-            var caption;
+        let self = this;
+        let action_buttons = this.props.actions.map(function(action) {
+            let caption;
             if ('caption' in action)
                 caption = action.caption;
             else
                 caption = _("Ok");
 
-            var button_style = "btn-default";
-            var button_style_mapping = { 'primary': 'btn-primary', 'danger': 'btn-danger' };
+            let button_style = "btn-default";
+            let button_style_mapping = { 'primary': 'btn-primary', 'danger': 'btn-danger' };
             if ('style' in action && action.style in button_style_mapping)
                 button_style = button_style_mapping[action.style];
             button_style = "btn " + button_style + " apply";
-            var action_disabled = actions_disabled || ('disabled' in action && action.disabled);
+            let action_disabled = actions_disabled || ('disabled' in action && action.disabled);
             return (<button
                     key={ caption }
                     className={ button_style }
@@ -177,15 +173,15 @@ var DialogFooter = React.createClass({
         });
 
         // If we have an error message, display the error
-        var error_element;
-        var error_message;
+        let error_element;
+        let error_message;
         if (this.props.static_error !== undefined && this.props.static_error !== null)
             error_message = this.props.static_error;
         else
             error_message = this.state.error_message;
         if (error_message) {
             error_element = <div className="alert alert-danger dialog-error">
-                <span className="fa fa-exclamation-triangle"></span>
+                <span className="fa fa-exclamation-triangle"/>
                 <span>{ error_message }</span>
             </div>;
         }
@@ -201,7 +197,16 @@ var DialogFooter = React.createClass({
             </div>
         );
     }
-});
+}
+
+DialogFooter.propTypes = {
+    cancel_clicked: PropTypes.func,
+    cancel_caption: PropTypes.string,
+    cancel_style: PropTypes.string,
+    actions: PropTypes.array,
+    static_error: PropTypes.string,
+    dialog_done: PropTypes.func,
+};
 
 /*
  * React template for a Cockpit dialog
@@ -218,23 +223,16 @@ var DialogFooter = React.createClass({
  *  - footer (react element, top element should be of class modal-footer)
  *  - id optional, id that is assigned to the top level dialog node, but not the backdrop
  */
-var Dialog = React.createClass({
-    propTypes: {
-        title: React.PropTypes.string.isRequired,
-        no_backdrop: React.PropTypes.bool,
-        body: React.PropTypes.element.isRequired,
-        footer: React.PropTypes.element.isRequired,
-        id: React.PropTypes.string,
-    },
-    componentDidMount: function() {
+class Dialog extends React.Component{
+    static componentDidMount() {
         // if we used a button to open this, make sure it's not focused anymore
         if (document.activeElement)
             document.activeElement.blur();
-    },
-    render: function() {
-        var backdrop;
+    }
+    render() {
+        let backdrop;
         if (!this.props.no_backdrop) {
-            backdrop = <div className="modal-backdrop fade in"></div>;
+            backdrop = <div className="modal-backdrop fade in"/>;
         }
         return (
             <div>
@@ -253,7 +251,15 @@ var Dialog = React.createClass({
             </div>
         );
     }
-});
+}
+
+Dialog.propTypes = {
+    title: PropTypes.string.isRequired,
+    no_backdrop: PropTypes.bool,
+    body: PropTypes.element.isRequired,
+    footer: PropTypes.element.isRequired,
+    id: PropTypes.string,
+};
 
 /* Create and show a dialog
  * For this, create a containing DOM node at the body level
@@ -263,28 +269,28 @@ var Dialog = React.createClass({
  *     - render         render again using the stored props
  * The DOM node and React metadata are freed once the dialog has closed
  */
-var show_modal_dialog = function(props, footerProps) {
-    var dialogName = 'cockpit_modal_dialog';
+let show_modal_dialog = function(props, footerProps) {
+    let dialogName = 'cockpit_modal_dialog';
     // don't allow nested dialogs
     if (document.getElementById(dialogName)) {
         console.warn('Unable to create nested dialog');
         return;
     }
     // create an element to render into
-    var rootElement = document.createElement("div");
+    let rootElement = document.createElement("div");
     rootElement.id = dialogName;
     document.body.appendChild(rootElement);
 
     // register our own on-close callback
-    var origCallback;
-    var closeCallback = function() {
+    let origCallback;
+    let closeCallback = function() {
         if (origCallback)
             origCallback.apply(this, arguments);
         ReactDOM.unmountComponentAtNode(rootElement);
         rootElement.remove();
     };
 
-    var dialogObj = { };
+    let dialogObj = { };
     dialogObj.props = null;
     dialogObj.footerProps = null;
     dialogObj.render = function() {
@@ -304,7 +310,7 @@ var show_modal_dialog = function(props, footerProps) {
         dialogObj.footerProps = footerProps;
         if (dialogObj.footerProps === null || dialogObj.footerProps === undefined)
             dialogObj.footerProps = { };
-        if (dialogObj.footerProps.dialog_done != closeCallback) {
+        if (dialogObj.footerProps.dialog_done !== closeCallback) {
             origCallback = dialogObj.footerProps.dialog_done;
             dialogObj.footerProps.dialog_done = closeCallback;
         }

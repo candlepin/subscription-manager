@@ -28,8 +28,8 @@ import Select from "./Select/Select.jsx";
  *   - onChange  callback to signal when the data has changed
  *   - properties as in defaultRegisterDialogSettings()
  */
-var PatternDialogBody = React.createClass({
-    render: function() {
+class PatternDialogBody extends React.Component {
+    render() {
         let customURL;
         if (this.props.url === 'custom') {
             customURL = (
@@ -39,8 +39,7 @@ var PatternDialogBody = React.createClass({
         }
         let proxy;
         if (this.props.proxy) {
-            proxy = [
-                <br />,
+            proxy = (
                 <table className="form-group-ct">
                     <tbody>
                         <tr>
@@ -49,7 +48,8 @@ var PatternDialogBody = React.createClass({
                                     {_("Proxy Location")}
                                 </label>
                             </td>
-                            <td><input className="form-control" id="subscription-proxy-server" type="text"
+                            <td>
+                                <input className="form-control" id="subscription-proxy-server" type="text"
                                        placeholder="hostname:port" value={this.props.proxy_server}
                                        onChange={value => this.props.onChange('proxy_server', value)}/>
                             </td>
@@ -61,7 +61,8 @@ var PatternDialogBody = React.createClass({
                                     {_("Proxy Username")}
                                 </label>
                             </td>
-                            <td><input className="form-control" id="subscription-proxy-user" type="text"
+                            <td>
+                                <input className="form-control" id="subscription-proxy-user" type="text"
                                        value={this.props.proxy_user}
                                        onChange={value => this.props.onChange('proxy_user', value)}/>
                             </td>
@@ -73,14 +74,15 @@ var PatternDialogBody = React.createClass({
                                     {_("Proxy Password")}
                                 </label>
                             </td>
-                            <td><input className="form-control" id="subscription-proxy-password" type="password"
+                            <td>
+                                <input className="form-control" id="subscription-proxy-password" type="password"
                                        value={this.props.proxy_password}
                                        onChange={value => this.props.onChange('proxy_password', value)}/>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-            ];
+            );
         }
         const urlEntries = {
             'default': _("Default"),
@@ -173,7 +175,7 @@ var PatternDialogBody = React.createClass({
             </div>
         );
     }
-});
+}
 
 module.exports = {
     dialogBody: PatternDialogBody,
