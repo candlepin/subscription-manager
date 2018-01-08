@@ -39,7 +39,8 @@ proxy_password =
 
 [rhsm]
 ca_cert_dir = /etc/rhsm/ca-test/
-baseurl= https://content.example.com
+baseurl = https://content.example.com
+repomd_gpg_url = https://content.example.com/gpg
 repo_ca_cert = %(ca_cert_dir)sredhat-uep-non-default.pem
 productCertDir = /etc/pki/product
 entitlementCertDir = /etc/pki/entitlement
@@ -100,7 +101,8 @@ proxy_user =
 proxy_password =
 
 [rhsm]
-baseurl= https://content.example.com
+baseurl = https://content.example.com
+repomd_gpg_url = https://content.example.com/gpg
 repo_ca_cert = %(ca_cert_dir)sredhat-uep.pem
 productCertDir = /etc/pki/product
 entitlementCertDir = /etc/pki/entitlement
@@ -130,7 +132,8 @@ proxy_user =
 proxy_password =
 
 [rhsm]
-baseurl= https://content.example.com
+baseurl = https://content.example.com
+repomd_gpg_url = https://content.example.com/gpg
 repo_ca_cert = %(s %%(ca_cert_dir)sredhat-uep.pem
 productCertDir = /etc/pki/product
 entitlementCertDir = /etc/pki/entitlement
@@ -264,6 +267,10 @@ class ConfigTests(BaseConfigTests):
     def test_get_empty(self):
         value = self.cfgParser.get("foo", "bar")
         self.assertEqual("", value)
+
+    def test_get_repomd_gpg_url(self):
+        value = self.cfgParser.get("rhsm", "repomd_gpg_url")
+        self.assertEqual("https://content.example.com/gpg", value)
 
     def test_get_repo_ca_cert(self):
         value = self.cfgParser.get("rhsm", "repo_ca_cert")

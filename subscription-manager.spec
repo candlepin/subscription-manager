@@ -421,8 +421,8 @@ make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
 %install
 rm -rf %{buildroot}
 make -f Makefile install VERSION=%{version}-%{release} \
-    PYTHON=%{__python} \
-    PREFIX=%{buildroot} PYTHON_SITELIB=%{python_sitearch} \
+    PYTHON=%{__python} PREFIX=%{_prefix} \
+    DESTDIR=%{buildroot} PYTHON_SITELIB=%{python_sitearch} \
     OS_VERSION=%{?fedora}%{?rhel}%{?suse_version} OS_DIST=%{dist} \
     %{?install_ostree} %{?post_boot_tool} %{?gtk_version} \
     %{?install_yum_plugins} %{?install_dnf_plugins} \
