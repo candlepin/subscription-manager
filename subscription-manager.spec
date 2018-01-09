@@ -7,15 +7,17 @@
 %global use_firstboot 0
 %global use_kitchen 1
 %global use_inotify 1
-%global use_python3 0%{?fedora}
+
+# borrowed from dnf spec file
+%if 0%{?rhel} && 0%{?rhel} <= 7
+%bcond_with python3
+%else
+%bcond_without python3
+%endif
+
 %global rhsm_plugins_dir  /usr/share/rhsm-plugins
 # on recent Fedora and RHEL 7, let's not use m2crypto
 %global use_m2crypto (0%{?fedora} < 23 && 0%{?rhel} < 7)
-
-# SLES 11 and RHEL6 don't have macros defined for python2; just "python".  Alias them.
-%{!?__python2:%global __python2 %__python}
-%{!?python2_sitearch:%global python2_sitearch %python_sitearch}
-%{?python_provide:%python_provide python-rhsm}
 
 %if %{use_systemd}
 # Note that %gtk3 will be undefined if it's not used
@@ -33,12 +35,14 @@
 %global use_yum (0%{?rhel} && 0%{?rhel} <= 7) || (0%{?suse_version})
 %global use_cockpit 0%{?fedora} || 0%{?rhel} >= 7
 
-%if %use_python3
+%if %{with python3}
 %global python_sitearch %python3_sitearch
 %global __python %__python3
-%global py_package_prefix python3
+%global py_package_prefix python%{python3_pkgversion}
+%global rhsm_package_name python3-subscription-manager-rhsm
 %else
 %global py_package_prefix python
+%global rhsm_package_name subscription-manager-rhsm
 %endif
 
 %global _hardened_build 1
@@ -125,15 +129,11 @@ Requires:  %{py_package_prefix}-ethtool
 Requires:  %{py_package_prefix}-iniparse
 Requires:  %{py_package_prefix}-decorator
 Requires:  virt-what
-%if %use_python3
-Requires:  python3-subscription-manager-rhsm = %{version}
-%else
-Requires:  subscription-manager-rhsm = %{version}
-%endif
+Requires:  %{rhsm_package_name} = %{version}
 Requires:  %{py_package_prefix}-six
 Requires:  %{py_package_prefix}-dateutil
 
-%if %use_python3
+%if %{with python3}
 Requires: python3-dbus
 %else
 Requires: %{?suse_version:dbus-1-python} %{!?suse_version:dbus-python}
@@ -146,7 +146,7 @@ Requires: %{?suse_version:yum} %{!?suse_version:yum >= 3.2.29-73}
 Requires: %{?gtk3:python-gobject} %{!?gtk3:python-gobject2, libzypp, zypp-plugin-python, python-zypp}
 %else
 Requires:  usermode
-%if %use_python3
+%if %{with python3}
 Requires: python3-gobject
 %else
 Requires:  %{?gtk3:gobject-introspection, pygobject3-base} %{!?gtk3:pygobject2}
@@ -278,7 +278,7 @@ Summary: Subscription Manager plugins for DNF
 Group: System Environment/Base
 Requires: %{name} = %{version}-%{release}
 Requires: dnf >= 1.0.0
-%if %use_python3
+%if %{with python3}
 Requires: python3-dnf-plugins-core
 %else
 Requires: python2-dnf-plugins-core
@@ -335,56 +335,34 @@ from the server. Populates /ostree/repo/config as well as updates
 the remote in the currently deployed .origin file.
 %endif
 
-
-%if !%{use_python3}
-%package -n subscription-manager-rhsm
+%package -n %{rhsm_package_name}
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
 Group: Development/Libraries
 
 %if %use_m2crypto
 Requires: %{?suse_version:python-m2crypto} %{!?suse_version:m2crypto}
 %endif
-Requires: python-dateutil
-Requires: python-iniparse
+Requires: %{py_package_prefix}-dateutil
+Requires: %{py_package_prefix}-iniparse
 # rpm-python is an old name for python2-rpm but RHEL6 uses the old name
-Requires: rpm-python
-Requires: python-six
+Requires: %{py_package_prefix}-six
 Requires: subscription-manager-rhsm-certificates = %{version}-%{release}
-Provides: python-rhsm = %{version}-%{release}
-Obsoletes: python-rhsm <= 1.20.3-1
-
-%description -n subscription-manager-rhsm
-A small library for communicating with the REST interface of a Red Hat Unified
-Entitlement Platform. This interface is used for the management of system
-entitlements, certificates, and access to content.
-%endif
-
-
-%if %{use_python3}
-%package -n python3-subscription-manager-rhsm
-Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
-BuildRequires: python3-devel
-BuildRequires: python3-setuptools
-BuildRequires: python3-six
-
-Requires: python3-dateutil
-Requires: python3-iniparse
+# Required by Fedora packaging guidelines
+%{?python_provide:%python_provide %{py_package_prefix}-rhsm}
+%if %{with python3}
 Requires: python3-rpm
-Requires: python3-six
-# M2Crypto isn't even used in new Fedoras and RHEL 8
-Requires: subscription-manager-rhsm-certificates = %{version}-%{release}
 Provides: python3-python-rhsm = %{version}-%{release}
 Obsoletes: python3-python-rhsm <= 1.20.3-1
+%else
+Requires: rpm-python
+Provides: python-rhsm = %{version}-%{release}
+Obsoletes: python-rhsm <= 1.20.3-1
+%endif
 
-# Required by Fedora packaging guidelines
-%{?python_provide:%python_provide python3-python-rhsm}
-
-%description -n python3-subscription-manager-rhsm
+%description -n %{rhsm_package_name}
 A small library for communicating with the REST interface of a Red Hat Unified
 Entitlement Platform. This interface is used for the management of system
 entitlements, certificates, and access to content.
-%endif
-
 
 %package -n subscription-manager-rhsm-certificates
 Summary: Certificates required to communicate with a Red Hat Unified Entitlement Platform
@@ -579,7 +557,7 @@ rm -rf %{buildroot}
 %{python_sitearch}/subscription_manager/model/*.py*
 %{python_sitearch}/subscription_manager/plugin/__init__.py*
 %{python_sitearch}/subscription_manager/scripts/*.py*
-%if %use_python3
+%if %{with python3}
 %{python_sitearch}/subscription_manager/__pycache__
 %{python_sitearch}/subscription_manager/api/__pycache__
 %{python_sitearch}/subscription_manager/branding/__pycache__
@@ -591,7 +569,7 @@ rm -rf %{buildroot}
 # our gtk2/gtk3 compat modules
 %dir %{python_sitearch}/subscription_manager/ga_impls
 %{python_sitearch}/subscription_manager/ga_impls/__init__.py*
-%if %use_python3
+%if %{with python3}
 %{python_sitearch}/subscription_manager/ga_impls/__pycache__
 %endif
 
@@ -631,7 +609,7 @@ rm -rf %{buildroot}
 %{python_sitearch}/rhsmlib/dbus/*.py*
 %{python_sitearch}/rhsmlib/dbus/facts/*.py*
 %{python_sitearch}/rhsmlib/dbus/objects/*.py*
-%if %{use_python3}
+%if %{with python3}
 %{python_sitearch}/rhsmlib/__pycache__
 %{python_sitearch}/rhsmlib/candlepin/__pycache__
 %{python_sitearch}/rhsmlib/compat/__pycache__
@@ -658,7 +636,7 @@ rm -rf %{buildroot}
 # Incude rt CLI tool
 %dir %{python_sitearch}/rct
 %{python_sitearch}/rct/*.py*
-%if %use_python3
+%if %{with python3}
 %{python_sitearch}/rct/__pycache__
 %endif
 %attr(755,root,root) %{_bindir}/rct
@@ -666,7 +644,7 @@ rm -rf %{buildroot}
 # Include consumer debug CLI tool
 %dir %{python_sitearch}/rhsm_debug
 %{python_sitearch}/rhsm_debug/*.py*
-%if %use_python3
+%if %{with python3}
 %{python_sitearch}/rhsm_debug/__pycache__
 %endif
 %attr(755,root,root) %{_bindir}/rhsm-debug
@@ -703,7 +681,7 @@ rm -rf %{buildroot}
 %{python_sitearch}/subscription_manager/gui/data/ui/*.ui
 %{python_sitearch}/subscription_manager/gui/data/glade/*.glade
 %{python_sitearch}/subscription_manager/gui/data/icons/*.svg
-%if %use_python3
+%if %{with python3}
 %{python_sitearch}/subscription_manager/gui/__pycache__
 %endif
 
@@ -736,7 +714,7 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %dir %{python_sitearch}/subscription_manager/migrate
 %{python_sitearch}/subscription_manager/migrate/*.py*
-%if %use_python3
+%if %{with python3}
 %{python_sitearch}/subscription_manager/migrate/__pycache__
 %endif
 %attr(755,root,root) %{_sbindir}/rhn-migrate-classic-to-rhsm
@@ -759,7 +737,7 @@ rm -rf %{buildroot}
 %endif
 %{_sysconfdir}/rhsm/pluginconf.d/container_content.ContainerContentPlugin.conf
 %{rhsm_plugins_dir}/container_content.py*
-%if %use_python3
+%if %{with python3}
 %{rhsm_plugins_dir}/__pycache__
 %endif
 %{python_sitearch}/subscription_manager/plugin/container.py*
@@ -776,7 +754,7 @@ rm -rf %{buildroot}
 %{_sysconfdir}/rhsm/pluginconf.d/ostree_content.OstreeContentPlugin.conf
 %{rhsm_plugins_dir}/ostree_content.py*
 %{python_sitearch}/subscription_manager/plugin/ostree/*.py*
-%if %use_python3
+%if %{with python3}
 %{python_sitearch}/subscription_manager/plugin/ostree/__pycache__
 %endif
 %endif
@@ -792,7 +770,7 @@ rm -rf %{buildroot}
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/*.py*
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/categories/*.py*
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/ks/*.py*
-%if %use_python3
+%if %{with python3}
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/__pycache__
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/__pycache__
 %{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/__pycache__
@@ -821,19 +799,10 @@ rm -rf %{buildroot}
 %endif
 
 
-%if !%{use_python3}
-%files -n subscription-manager-rhsm
+%files -n %{rhsm_package_name}
 %defattr(-,root,root,-)
 %dir %{python_sitearch}/rhsm
 %{python_sitearch}/rhsm/*
-%endif
-
-%if %{use_python3}
-%files -n python3-subscription-manager-rhsm
-%defattr(-,root,root,-)
-%dir %{python3_sitearch}/rhsm
-%{python3_sitearch}/rhsm/*
-%endif
 
 %files -n subscription-manager-rhsm-certificates
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm
