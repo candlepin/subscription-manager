@@ -8,8 +8,8 @@
 %global use_kitchen 1
 %global use_inotify 1
 
-# borrowed from dnf spec file
-%if 0%{?rhel} && 0%{?rhel} <= 7
+# borrowed from dnf spec file & tweaked
+%if (0%{?rhel} && 0%{?rhel} <= 7) || 0%{?suse_version}
 %bcond_with python3
 %else
 %bcond_without python3
