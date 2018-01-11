@@ -82,7 +82,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.20.8
+Version: 1.21.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -884,6 +884,18 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Thu Jan 11 2018 Alex Wood <awood@redhat.com> 1.21.1-1
+- Do not enable gpgcheck if the only a metadata gpg key is configured
+  (git@PaulSD.com)
+- 1448313: Do not log error, when rhsmcertd is restarted (jhnidek@redhat.com)
+- Support configuration of a repo metadata signing key (git@PaulSD.com)
+- Generate bin scripts via setuptools entry_points (khowell@redhat.com)
+- 1304056: Fix D-Bus path of com.redhat.RHSM1.Facts (jhnidek@redhat.com)
+- 1516439: Cockpit reports error during unregister when candlepin unavailable
+  (jhnidek@redhat.com)
+- 1510727: Enable starting of subman GUI, when consumer has been deleted
+  (jhnidek@redhat.com)
+
 * Mon Dec 11 2017 Kevin Howell <khowell@redhat.com> 1.20.8-1
 - Sync zanata translations (khowell@redhat.com)
 - Add parameter to D-Bus API to pass locale for localization of errors
