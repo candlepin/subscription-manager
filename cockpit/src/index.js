@@ -17,24 +17,27 @@
  * along with Cockpit; If not, see <http://www.gnu.org/licenses/>.
  */
 
-var cockpit = require("cockpit");
-var React = require("react");
-var ReactDOM = require("react-dom");
-var subscriptionsClient = require("./subscriptions-client");
-var subscriptionsRegister = require("./subscriptions-register.jsx");
-var subscriptionsView = require("./subscriptions-view.jsx");
-var Dialog = require("./cockpit-components-dialog.jsx");
+import cockpit from 'cockpit';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-var _ = cockpit.gettext;
+import subscriptionsClient from './subscriptions-client';
+import subscriptionsRegister from './subscriptions-register.jsx';
+import subscriptionsView from './subscriptions-view.jsx';
+import Dialog from './cockpit-components-dialog.jsx';
 
-var dataStore = { };
-var registerDialogDetails = {
+let _ = cockpit.gettext;
+
+let dataStore = { };
+
+let registerDialogDetails = {
     user: '',
     password: '',
-    proxy_user: '',
-    proxy_password: '',
     activation_keys: '',
     org: '',
+    proxy_server: '',
+    proxy_user: '',
+    proxy_password: '',
 };
 
 function dismissStatusError() {
@@ -46,7 +49,7 @@ function registerSystem () {
     return subscriptionsClient.registerSystem(registerDialogDetails);
 }
 
-var footerProps = {
+let footerProps = {
     'actions': [
         { 'clicked': registerSystem,
          'caption': _("Register"),
@@ -56,10 +59,16 @@ var footerProps = {
 };
 
 function openRegisterDialog() {
-    Object.assign(registerDialogDetails, subscriptionsClient.config); // set config to what was loaded
+    // set config to what was loaded and clean previous credential information
+    Object.assign(registerDialogDetails, subscriptionsClient.config, {
+        user: '',
+        password: '',
+        activation_keys: '',
+        org: '',
+    });
     // show dialog to register
-    var renderDialog;
-    var updatedData = function(prop, data) {
+    let renderDialog;
+    let updatedData = function(prop, data) {
         if (prop) {
             if (data.target) {
                 if (data.target.type === "checkbox") {
@@ -74,7 +83,7 @@ function openRegisterDialog() {
 
         registerDialogDetails.onChange = updatedData;
 
-        var dialogProps = {
+        let dialogProps = {
               'title': _("Register System"),
               'body': React.createElement(subscriptionsRegister.dialogBody, registerDialogDetails),
           };
