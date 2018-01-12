@@ -16,6 +16,8 @@ Consumer:
 \tUUID: ba5ac769-207e-421c-bfd2-a23c767114af
 \tContent Access Mode: entitlement
 \tType: sam
+\tAPI URL: https://subscription.rhn.stage.redhat.com/subscription/consumers/
+\tWeb URL: access.stage.redhat.com/management/distributors/
 
 Subscription:
 \tName: RHN Monitoring (Up to 1 guest)
@@ -48,7 +50,9 @@ consumer_json = """
         "label": "sam",
         "manifest": true
     },
-    "uuid": "ba5ac769-207e-421c-bfd2-a23c767114af"
+    "uuid": "ba5ac769-207e-421c-bfd2-a23c767114af",
+    "urlApi": "https://subscription.rhn.stage.redhat.com/subscription/consumers/",
+    "urlWeb": "access.stage.redhat.com/management/distributors/"
 }"""
 
 meta_json = """
