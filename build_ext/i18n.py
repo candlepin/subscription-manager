@@ -173,7 +173,7 @@ class Gettext(BaseCommand):
         for desktop_file in Utils.find_files_of_type('etc-conf', '*.desktop.in'):
             spawn(cmd + [desktop_file])
 
-        cmd = ['xgettext', '--from-code=utf-8', '--sort-by-file', '-o', tmp_key_file]
+        cmd = ['xgettext', '--from-code=utf-8', '--add-comments=TRANSLATORS:', '--sort-by-file', '-o', tmp_key_file]
 
         # These tuples contain a template for the file name that will contain a list of
         # all source files of a given type to translate, a function that finds all the
