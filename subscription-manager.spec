@@ -39,8 +39,10 @@
 %global python_sitearch %python3_sitearch
 %global __python %__python3
 %global py_package_prefix python%{python3_pkgversion}
+%global rhsm_package_name %{py_package_prefix}-subscription-manager-rhsm
 %else
 %global py_package_prefix python
+%global rhsm_package_name subscription-manager-rhsm
 %endif
 
 %global _hardened_build 1
@@ -127,7 +129,7 @@ Requires:  %{py_package_prefix}-ethtool
 Requires:  %{py_package_prefix}-iniparse
 Requires:  %{py_package_prefix}-decorator
 Requires:  virt-what
-Requires:  %{py_package_prefix}-rhsm = %{version}
+Requires:  %{rhsm_package_name} = %{version}
 Requires:  %{py_package_prefix}-six
 Requires:  %{py_package_prefix}-dateutil
 
@@ -333,7 +335,8 @@ from the server. Populates /ostree/repo/config as well as updates
 the remote in the currently deployed .origin file.
 %endif
 
-%package -n %{py_package_prefix}-rhsm
+
+%package -n %{rhsm_package_name}
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
 Group: Development/Libraries
 
@@ -359,7 +362,7 @@ Provides: subscription-manager-rhsm = %{version}-%{release}
 Obsoletes: subscription-manager-rhsm <= 1.21.0-1
 %endif
 
-%description -n %{py_package_prefix}-rhsm
+%description -n %{rhsm_package_name}
 A small library for communicating with the REST interface of a Red Hat Unified
 Entitlement Platform. This interface is used for the management of system
 entitlements, certificates, and access to content.
@@ -799,7 +802,7 @@ rm -rf %{buildroot}
 %endif
 
 
-%files -n %{py_package_prefix}-rhsm
+%files -n %{rhsm_package_name}
 %defattr(-,root,root,-)
 %dir %{python_sitearch}/rhsm
 %{python_sitearch}/rhsm/*
