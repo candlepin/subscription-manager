@@ -213,6 +213,8 @@ class CatManifestCommand(RCTManifestCommand):
             contentAccessMode = 'org_environment'
         to_print.append((_("Content Access Mode"), contentAccessMode))
         to_print.append((_("Type"), get_value(data, "type.label")))
+        to_print.append((_("API URL"), get_value(data, "urlApi")))
+        to_print.append((_("Web URL"), get_value(data, "urlWeb")))
         self._print_section(_("Consumer:"), to_print)
 
     def _get_product_attribute(self, name, data):
