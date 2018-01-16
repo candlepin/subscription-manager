@@ -280,6 +280,8 @@ client.registerSystem = subscriptionDetails => {
                 dfd.reject(parseErrorMessage(error));
             })
             .then(() => {
+                console.debug('successfully registered');
+                registered = true;
                 console.debug('stopping registration server');
                 return registerServer.Stop(userLang);
             })
