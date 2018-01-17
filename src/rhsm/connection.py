@@ -135,7 +135,8 @@ class RestlibException(ConnectionException):
         self.headers = headers or {}
 
     def __str__(self):
-        return self.msg
+        error_title = httplib.responses.get(self.code, "Unknown")
+        return "HTTP error (%s - %s): %s" % (self.code, error_title, self.msg)
 
 
 class GoneException(RestlibException):
@@ -167,7 +168,8 @@ class NetworkException(ConnectionException):
         self.code = code
 
     def __str__(self):
-        return "Network error code: %s" % self.code
+        error_title = httplib.responses.get(self.code, "Unknown")
+        return "HTTP error (%s - %s)" % (self.code, error_title)
 
 
 class RemoteServerException(ConnectionException):

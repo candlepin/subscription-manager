@@ -87,7 +87,7 @@ class TestExceptionMapper(unittest.TestCase):
         mapper = ExceptionMapper()
 
         err = RestlibException(404, expected_message)
-        self.assertEqual(expected_message, mapper.get_message(err))
+        self.assertEqual("HTTP error code 404: %s" % expected_message, mapper.get_message(err))
 
     def test_returns_none_when_no_mapped_exception_present(self):
         mapper = ExceptionMapper()
