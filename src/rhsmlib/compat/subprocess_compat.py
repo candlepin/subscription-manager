@@ -19,6 +19,7 @@ from __future__ import print_function, division, absolute_import
 
 import logging
 import subprocess
+import six
 
 log = logging.getLogger(__name__)
 
@@ -40,7 +41,14 @@ def check_output_2_6(*args, **kwargs):
     return output
 
 
+def check_output_six(*args, **kwargs):
+    output = subprocess.check_output(*args, **kwargs)
+    if six.PY3 and isinstance(output, bytes):
+        output = output.decode('utf-8')
+    return output
+
+
 check_output = check_output_2_6
 
 if hasattr(subprocess, 'check_output'):
-    check_output = subprocess.check_output
+    check_output = check_output_six
