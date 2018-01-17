@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from __future__ import print_function, division, absolute_import
 
 #
@@ -169,6 +171,28 @@ class TestProfileManager(unittest.TestCase):
 
         res = self.profile_mgr.update_check(uep, uuid)
         self.assertEqual(0, res)
+
+    def test_package_json_handles_non_unicode(self):
+        package = Package(name="package1", version="1.0.0", release=1, arch="x86_64", vendor=b'\xf6')
+        data = package.to_dict()
+        json_str = json.dumps(data)  # to json
+        data = json.loads(json_str)  # and back to an object
+        self.assertEqual(u'\ufffd', data['vendor'])
+
+    def test_package_json_vendor_as_unicode_type(self):
+        # note that the data type at time of writing is bytes, so this is just defensive coding
+        package = Package(name="package1", version="1.0.0", release=1, arch="x86_64", vendor=u'Björk')
+        data = package.to_dict()
+        json_str = json.dumps(data)  # to json
+        data = json.loads(json_str)  # and back to an object
+        self.assertEqual(u'Björk', data['vendor'])
+
+    def test_package_json_missing_vendor(self):
+        package = Package(name="package1", version="1.0.0", release=1, arch="x86_64", vendor=None)
+        data = package.to_dict()
+        json_str = json.dumps(data)  # to json
+        data = json.loads(json_str)  # and back to an object
+        self.assertEqual(None, data['vendor'])
 
     @staticmethod
     def _mock_pkg_profile(packages):
