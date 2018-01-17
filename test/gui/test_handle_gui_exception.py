@@ -10,9 +10,10 @@ import socket
 from rhsm.https import ssl
 
 from subscription_manager.gui import utils
-from .fixture import FakeException, FakeLogger
+from test.fixture import FakeException, FakeLogger
 
 import rhsm.connection as connection
+from nose.plugins.attrib import attr
 
 
 class FakeErrorWindow(object):
@@ -20,6 +21,7 @@ class FakeErrorWindow(object):
         self.msg = msg
 
 
+@attr('gui')
 @patch('subscription_manager.gui.utils.log', FakeLogger())
 @patch('subscription_manager.gui.utils.show_error_window', FakeErrorWindow)
 class HandleGuiExceptionTests(unittest.TestCase):

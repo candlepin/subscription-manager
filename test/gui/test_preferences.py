@@ -18,14 +18,15 @@ from __future__ import print_function, division, absolute_import
 import mock
 
 
-from . import stubs
+from test import stubs
 
-from .fixture import SubManFixture
+from test.fixture import SubManFixture
 from subscription_manager.ga import Gdk as ga_Gdk
 
 from subscription_manager.injection import require, IDENTITY
 
 from subscription_manager.gui import preferences
+from nose.plugins.attrib import attr
 
 CONSUMER_DATA = {'autoheal': True,
                  'releaseVer': {'id': 1, 'releaseVer': '123123'},
@@ -41,6 +42,7 @@ def get_releases():
     return ["123123", "1", "2", "4", "blippy"]
 
 
+@attr('gui')
 class TestPreferencesDialog(SubManFixture):
     _getConsumerData = None
 

@@ -2,9 +2,9 @@ from __future__ import print_function, division, absolute_import
 
 from mock import Mock, patch
 
-from .fixture import SubManFixture
+from test.fixture import SubManFixture
 
-from .stubs import StubBackend, StubFacts
+from test.stubs import StubBackend, StubFacts
 from subscription_manager.gui.registergui import RegisterWidget, RegisterInfo,  \
     CredentialsScreen, ActivationKeyScreen, ChooseServerScreen, AsyncBackend, \
     CREDENTIALS_PAGE, CHOOSE_SERVER_PAGE
@@ -15,8 +15,10 @@ from subscription_manager.ga import Gtk as ga_Gtk
 
 import sys
 import six
+from nose.plugins.attrib import attr
 
 
+@attr('gui')
 class RegisterWidgetTests(SubManFixture):
     def setUp(self):
         super(RegisterWidgetTests, self).setUp()
@@ -145,6 +147,7 @@ class StubReg(object):
         self.facts = StubFacts(fact_dict=self.expected_facts)
 
 
+@attr('gui')
 class CredentialsScreenTests(SubManFixture):
 
     def setUp(self):
@@ -170,6 +173,7 @@ class CredentialsScreenTests(SubManFixture):
                           self.screen.consumer_name.get_text())
 
 
+@attr('gui')
 class ActivationKeyScreenTests(SubManFixture):
     def setUp(self):
         super(ActivationKeyScreenTests, self).setUp()
@@ -185,6 +189,7 @@ class ActivationKeyScreenTests(SubManFixture):
         self.assertEqual(expected, result)
 
 
+@attr('gui')
 class ChooseServerScreenTests(SubManFixture):
     def setUp(self):
         super(ChooseServerScreenTests, self).setUp()
@@ -224,6 +229,7 @@ class ChooseServerScreenTests(SubManFixture):
         self.assertEqual(expected, result)
 
 
+@attr('gui')
 class AsyncBackendTests(SubManFixture):
     def setUp(self):
         super(AsyncBackendTests, self).setUp()

@@ -9,6 +9,7 @@ import datetime
 from dateutil.tz import tzutc
 
 from subscription_manager.gui import contract_selection
+from nose.plugins.attrib import attr
 
 
 def stubSelectedCallback(self, pool):
@@ -19,6 +20,7 @@ def stubCancelCallback(self):
     pass
 
 
+@attr('gui')
 class ContractSelection(unittest.TestCase):
     pool = {'productName': 'SomeProduct',
             'consumed': 3,

@@ -24,9 +24,11 @@ import mock
 
 from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.gui import about
-from .fixture import OPEN_FUNCTION
+from test.fixture import OPEN_FUNCTION
+from nose.plugins.attrib import attr
 
 
+@attr('gui')
 class TestAboutDialog(unittest.TestCase):
     @mock.patch('subscription_manager.gui.about.get_server_versions')
     @mock.patch('subscription_manager.gui.about.get_client_versions')

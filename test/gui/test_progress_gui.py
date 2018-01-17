@@ -6,8 +6,10 @@ except ImportError:
     import unittest
 
 from subscription_manager.gui import progress
+from nose.plugins.attrib import attr
 
 
+@attr('gui')
 class TestProgress(unittest.TestCase):
     def setUp(self):
         self.pw = progress.Progress("test title", "this is a test label")
