@@ -70,8 +70,8 @@ log = logging.getLogger(__name__)
 
 cfg = config.initConfig()
 
-ONLINE_DOC_URL_TEMPLATE = "https://access.redhat.com/knowledge/docs/Red_Hat_Subscription_Management/?locale=%s"
-ONLINE_DOC_FALLBACK_URL = "https://access.redhat.com/knowledge/docs/Red_Hat_Subscription_Management/"
+ONLINE_DOC_URL_TEMPLATE = "https://access.redhat.com/documentation/%s/red_hat_subscription_management/"
+ONLINE_DOC_FALLBACK_URL = "https://access.redhat.com/documentation/en-us/red_hat_subscription_management/"
 
 # every GUI browser from https://docs.python.org/2/library/webbrowser.html with updates within last 2 years of writing
 PREFERRED_BROWSERS = [
@@ -609,7 +609,7 @@ class MainWindow(widgets.SubmanBaseWidget):
     def _get_online_doc_url(self):
         lang, encoding = locale.getdefaultlocale()
         if lang is not None:
-            url = ONLINE_DOC_URL_TEMPLATE % (lang.replace("_", "-"))
+            url = ONLINE_DOC_URL_TEMPLATE % (lang.replace("_", "-").lower())
         else:
             url = ONLINE_DOC_FALLBACK_URL
         try:
