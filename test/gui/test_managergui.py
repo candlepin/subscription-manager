@@ -1,14 +1,16 @@
 from __future__ import print_function, division, absolute_import
 
-from .fixture import SubManFixture
+from test.fixture import SubManFixture
 import mock
 
-from . import stubs
+from test import stubs
 from subscription_manager.gui import managergui, registergui
 from subscription_manager.injection import provide, \
         PRODUCT_DATE_RANGE_CALCULATOR, PROD_DIR
+from nose.plugins.attrib import attr
 
 
+@attr('gui')
 class TestManagerGuiMainWindow(SubManFixture):
     def test_main_window(self):
 
@@ -20,6 +22,7 @@ class TestManagerGuiMainWindow(SubManFixture):
                               prod_dir=stubs.StubProductDirectory([]))
 
 
+@attr('gui')
 class TestRegisterScreen(SubManFixture):
     def test_register_screen(self):
         registergui.RegisterDialog(stubs.StubBackend())

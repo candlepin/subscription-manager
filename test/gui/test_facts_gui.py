@@ -1,13 +1,15 @@
 from __future__ import print_function, division, absolute_import
 
-from .fixture import SubManFixture
+from test.fixture import SubManFixture
 
 from subscription_manager.injection import provide, IDENTITY
-from .stubs import StubUEP, StubFacts
+from test.stubs import StubUEP, StubFacts
 from subscription_manager.gui import factsgui
 from mock import NonCallableMock, patch
+from nose.plugins.attrib import attr
 
 
+@attr('gui')
 class FactDialogTests(SubManFixture):
 
     def setUp(self):

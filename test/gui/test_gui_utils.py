@@ -9,6 +9,7 @@ from rhsm.connection import RestlibException
 from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.gui import utils
 from subscription_manager.gui import storage
+from nose.plugins.attrib import attr
 
 # we need gtk 2.18+ to do the right markup in likify
 MIN_GTK_MAJOR = 2
@@ -16,6 +17,7 @@ MIN_GTK_MINOR = 18
 MIN_GTK_MICRO = 0
 
 
+@attr('gui')
 class TestLinkify(unittest.TestCase):
     no_url = "this does not have a url"
     https_url = "https://www.redhat.com"
@@ -72,6 +74,7 @@ class TestLinkify(unittest.TestCase):
         self.assertEqual(ret, self.expected_example_2)
 
 
+@attr('gui')
 class TestGatherGroup(unittest.TestCase):
     def test_gather_group(self):
         """
@@ -99,6 +102,7 @@ class TestGatherGroup(unittest.TestCase):
         self.assertEqual(names, set(['root', 'child-1', 'child-2', 'grandchild-1']))
 
 
+@attr('gui')
 class TestGuiExceptionMapper(unittest.TestCase):
     def test_restlib_exception_with_markup(self):
         exception_mapper = utils.GuiExceptionMapper()

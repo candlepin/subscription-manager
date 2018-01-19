@@ -1,15 +1,17 @@
 from __future__ import print_function, division, absolute_import
 
-from .fixture import SubManFixture
+from test.fixture import SubManFixture
 from subscription_manager.gui import networkConfig
 import mock
 import rhsm.connection as connection
 import rhsm.config
 import rhsm.utils
 import socket
-from . import stubs
+from test import stubs
+from nose.plugins.attrib import attr
 
 
+@attr('gui')
 class TestNetworkConfigDialog(SubManFixture):
 
     def setUp(self):

@@ -15,14 +15,16 @@ from __future__ import print_function, division, absolute_import
 #
 
 from mock import Mock
-from .fixture import SubManFixture
+from test.fixture import SubManFixture
 from subscription_manager.async import AsyncRepoOverridesUpdate
 from subscription_manager.gui.reposgui import RepositoriesDialog
 from subscription_manager.repolib import Repo
 from subscription_manager.overrides import Override
-from .stubs import StubEntitlementCertificate, StubProduct
+from test.stubs import StubEntitlementCertificate, StubProduct
+from nose.plugins.attrib import attr
 
 
+@attr('gui')
 class TestReposGui(SubManFixture):
 
     def setUp(self):
@@ -166,6 +168,7 @@ class TestReposGui(SubManFixture):
         return combo_box.get_model()[column][1]
 
 
+@attr('gui')
 class TestingOverridesAsync(AsyncRepoOverridesUpdate):
 
     def _process_callback(self, callback, *args):
