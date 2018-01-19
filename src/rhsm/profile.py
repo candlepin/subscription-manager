@@ -15,6 +15,7 @@ from __future__ import print_function, division, absolute_import
 import logging
 
 import rpm
+import six
 
 from rhsm import ourjson as json
 
@@ -49,7 +50,7 @@ class Package(object):
                 'release': self.release,
                 'arch': self.arch,
                 'epoch': self.epoch,
-                'vendor': self.vendor,
+                'vendor': self._normalize_string(self.vendor),  # bz1519512 handle vendors that aren't utf-8
         }
 
     def __eq__(self, other):
@@ -71,6 +72,12 @@ class Package(object):
 
     def __str__(self):
         return "<Package: %s %s %s>" % (self.name, self.version, self.release)
+
+    @staticmethod
+    def _normalize_string(value):
+        if type(value) is six.binary_type:
+            return value.decode('utf-8', errors='replace')
+        return value
 
 
 class RPMProfile(object):
