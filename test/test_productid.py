@@ -873,10 +873,31 @@ class TestProductManager(SubManFixture):
         self.assertTrue(self.prod_db_mock.delete.called)
         self.assertFalse(server_cert.delete.called)
 
+    def test_update_removed_product_cert_in_protected_dir(self):
+        """Simulates situation, when there is product certificate
+        in protected directory"""
+        cert = self._create_non_rhel_cert()
+        self.prod_dir.certs.append(cert)
+
+        # Modify path of cert to be in protected directory
+        cert.path = '/etc/pki/product-default/fake_product.pem'
+
+        self.prod_mgr.pdir.refresh = Mock()
+
+        # Simulate situation, where product cert would be deleted outside
+        # protected directory
+        self.prod_repo_map = {'1234568': 'medios-6-server-rpms'}
+        self.prod_db_mock.find_repos = Mock(side_effect=self.find_repos_side_effect)
+
+        self.prod_mgr.update_removed(set([]))
+
+        self.assertFalse(cert.delete.called)
+        self.assertFalse(self.prod_db_mock.delete.called)
+
     def test_update_removed_no_active_with_product_cert_anaconda_and_rhel(self):
-        #"""simulate packages are installed with anaconda repo, and none
-        #installed from the enabled repo. This currently causes a product
-        #cert deletion"""
+        """simulate packages are installed with anaconda repo, and none
+        installed from the enabled repo. This currently causes a product
+        cert deletion"""
         cert = self._create_server_cert()
         self.prod_dir.certs.append(cert)
 
@@ -892,9 +913,9 @@ class TestProductManager(SubManFixture):
         self.assertFalse(self.prod_db_mock.delete.called)
 
     def test_update_removed_no_active_with_product_cert_anaconda(self):
-        #"""simulate packages are installed with anaconda repo, and none
-        #installed from the enabled repo. This currently causes a product
-        #cert deletion"""
+        """simulate packages are installed with anaconda repo, and none
+        installed from the enabled repo. This currently causes a product
+        cert deletion"""
         cert = self._create_server_cert()
         self.prod_dir.certs.append(cert)
 
