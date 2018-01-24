@@ -22,6 +22,7 @@ import os
 import six
 # for labelCompare
 import rpm
+import subprocess
 
 from rhsm.certificate import create_from_pem
 
@@ -35,6 +36,8 @@ from subscription_manager import repolib
 
 import subscription_manager.injection as inj
 from rhsm import ourjson as json
+
+from rhsmlib.compat import check_output as compat_check_output
 
 log = logging.getLogger(__name__)
 
@@ -420,7 +423,6 @@ class ProductManager(object):
         log.debug("Checking for product id certs to install or update.")
         products_to_install = []
         products_to_update_db = []
-        products_installed = []
 
         log.debug("active %s", active)
         log.debug("enabled %s", enabled)
@@ -525,7 +527,7 @@ class ProductManager(object):
         products_to_update = self._desktop_workstation_cleanup(products_to_update)
 
         db_updated = False
-        for (product, repo) in products_to_update_db:
+        for product, repo in products_to_update_db:
             # known_repos is None means we have no repo info at all
             log.info("Updating product db with %s -> %s" % (product.id, repo))
             # if we don't have a db entry for that prod->repo mapping, add one
@@ -538,8 +540,8 @@ class ProductManager(object):
         products_installed = self.install_product_certs(products_to_install)
         products_updated = self.update_product_certs(products_to_update)
 
-        #FIXME: nothing uses the return value here
-        return (products_installed, products_updated)
+        # FIXME: nothing uses the return value here
+        return products_installed, products_updated
 
     def install_product_certs(self, product_certs):
         # collect info, then do the needful later, so we can hook
@@ -640,13 +642,28 @@ class ProductManager(object):
                   active)
 
         for cert in self.pdir.list():
-            p = cert.products[0]
-            prod_hash = p.id
-
-            # FIXME: or if the productid.hs wasn't updated to reflect a new repo
-            repos = self.db.find_repos(prod_hash)
-
             delete_product_cert = True
+
+            # We never remove product certificates provided by RPM package
+            # e.g. /etc/pki/product/69.pem is povided by the redhat-release. Other
+            # product certificates can be provided by RPM packages too.
+            # Note: it is probably possible to do following check using rpm Python
+            # module, but documentation of rpm package is
+            rpm_qf_cmd = ['/usr/bin/rpm', '-qf', str(cert.path)]
+            # We don't want to see localized error messages in rhsm.log
+            rpm_qf_env = dict(os.environ)
+            rpm_qf_env.update({'LANGUAGE': 'en_US.UTF-8'})
+            try:
+                rpm_qf_output = compat_check_output(rpm_qf_cmd, env=rpm_qf_env, stderr=subprocess.PIPE)
+            except subprocess.CalledProcessError as err:
+                log.debug(err)
+            else:
+                # The cert is provided by some RPM package
+                log.debug("command '%s' returned: %s", ' '.join(rpm_qf_cmd), rpm_qf_output)
+                delete_product_cert = False
+
+            product = cert.products[0]
+            prod_hash = product.id
 
             # this is the core of a fix for rhbz #859197
             #
@@ -658,17 +675,20 @@ class ProductManager(object):
             # is not 'active'. So it ends up deleting the product cert for rhel since
             # it appears it is not being used. It is kind of a strange case for the
             # base os product cert, so we hardcode a special case here.
-            rhel_matcher = rhelproduct.RHELProductMatcher(p)
+            rhel_matcher = rhelproduct.RHELProductMatcher(product)
             if rhel_matcher.is_rhel():
                 delete_product_cert = False
 
+            # FIXME: or if the productid.hs wasn't updated to reflect a new repo
+            repos = self.db.find_repos(prod_hash)
+
             # If productid database does not know about the the product,
             # ie, repo is None (basically, return from a db.content.get(),
-            # dont delete the cert because we dont know anything about it
+            # don't delete the cert because we don't know anything about it
             if repos is None or repos is []:
                 # FIXME: this can also mean we need to update the product cert
                 #        for prod_hash, since it is installed, but no longer maps to a repo
-                delete_product_cert = False
+                # delete_product_cert = False
                 # no repos to check, go to next cert
                 continue
 
@@ -698,7 +718,7 @@ class ProductManager(object):
             # appears to be installed from the repo[s]
             #
             if delete_product_cert:
-                certs_to_delete.append((p, cert))
+                certs_to_delete.append((product, cert))
 
         # TODO: plugin hook for pre_product_id_delete
         for (product, cert) in certs_to_delete:
@@ -708,7 +728,7 @@ class ProductManager(object):
             log.info("product cert %s for %s is being deleted" % (product.id, product.id))
             cert.delete()
             self.pdir.refresh()
-            #TODO: plugin hook for post_product_id_delete
+            # TODO: plugin hook for post_product_id_delete
 
             # it should be safe to delete it's entry now, we either dont
             # know anything about it's repos, it doesnt have any, or none
@@ -729,5 +749,11 @@ class ProductManager(object):
 
 
 if __name__ == '__main__':
+    from subscription_manager.injectioninit import init_dep_injection
+    init_dep_injection()
+
+    logging.basicConfig(filename='/var/log/rhsm/rhsm.log', level=logging.DEBUG)
+
+    log.debug('productid smoke testing')
     pm = ProductManager()
-    pm.update(yb=None)
+    pm.update_removed(active=set([]))
