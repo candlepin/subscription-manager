@@ -823,10 +823,11 @@ class TestProductManager(SubManFixture):
         self.assertFalse(self.prod_db_mock.delete.called)
 
     def test_update_removed_no_active_with_product_cert_anaconda_and_rhel(self):
-        """simulate packages are installed with anaconda repo, and none
-        installed from the enabled repo. This currently causes a product
-        cert deletion"""
+        """Simulate packages are installed with anaconda repo, and none
+        installed from the enabled repo."""
         cert = self._create_server_cert()
+        # Prod. cert. is in protected directory
+        cert.path = '/etc/pki/product-default/69.pem'
         self.prod_dir.certs.append(cert)
 
         self.prod_db_mock.find_repos.return_value = ["anaconda", "rhel-6-server-rpms"]
@@ -841,10 +842,11 @@ class TestProductManager(SubManFixture):
         self.assertFalse(self.prod_db_mock.delete.called)
 
     def test_update_removed_no_active_with_product_cert_anaconda(self):
-        """simulate packages are installed with anaconda repo, and none
-        installed from the enabled repo. This currently causes a product
-        cert deletion"""
+        """Simulate packages are installed with anaconda repo, and none
+        installed from the enabled repo."""
         cert = self._create_server_cert()
+        # Prod. cert. is in protected directory
+        cert.path = '/etc/pki/product-default/69.pem'
         self.prod_dir.certs.append(cert)
 
         self.prod_db_mock.find_repos.return_value = ["anaconda"]
@@ -895,8 +897,13 @@ class TestProductManager(SubManFixture):
         self.assertFalse(cert.delete.called)
 
     def test_update_removed_no_packages_no_repos_no_active_rhel(self):
-        """we have a product cert, but it is not in active, but it is rhel, so do not delete"""
+        """
+        We have a product cert, It is not in active, but it is in protected
+        directory. Thus it will not be deleted.
+        """
         cert = self._create_server_cert()
+        # Prod. cert. is in protected directory
+        cert.path = '/etc/pki/product-default/69.pem'
         self.prod_dir.certs.append(cert)
 
         self.prod_mgr.pdir.refresh = Mock()
@@ -907,15 +914,13 @@ class TestProductManager(SubManFixture):
         self.prod_mgr.update_removed(set([]))
         self.assertFalse(self.prod_db_mock.delete.called)
         self.assertFalse(self.prod_db_mock.write.called)
-        # we have 69.pem installed, but it is not active, we
-        # should delete it from prod db
-        #self.prod_db_mock.delete.assert_called_with('69')
         self.assertFalse(cert.delete.called)
 
         self.assertFalse(self.prod_mgr.pdir.refresh.called)
 
     def test_update_removed_non_rhel_repo_disabled(self):
         cert1 = self._create_server_cert()
+        cert1.path = '/etc/pki/product-default/69.pem'
         self.prod_dir.certs.append(cert1)
 
         cert2 = self._create_non_rhel_cert()
@@ -929,12 +934,14 @@ class TestProductManager(SubManFixture):
 
         self.prod_mgr.update_removed(set(['rhel-6-server-rpms']),
                                      temp_disabled_repos=['medios-6-server-rpms'])
+        self.assertFalse(cert1.delete.called)
         self.assertFalse(cert2.delete.called)
         self.assertFalse(self.prod_db_mock.delete.called)
         self.assertFalse(self.prod_db_mock.write.called)
 
         self.prod_mgr.update_removed(set(['rhel-6-server-rpms', 'medios-6-server-rpms']),
                                      temp_disabled_repos=['medios-6-server-rpms'])
+        self.assertFalse(cert1.delete.called)
         self.assertFalse(cert2.delete.called)
         self.assertFalse(self.prod_db_mock.delete.called)
         self.assertFalse(self.prod_db_mock.write.called)

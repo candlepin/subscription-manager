@@ -28,8 +28,6 @@ from rhsm.certificate import create_from_pem
 from subscription_manager.certdirectory import Directory
 from subscription_manager.injection import PLUGIN_MANAGER, require
 
-from subscription_manager import rhelproduct
-
 from subscription_manager import utils
 from subscription_manager import repolib
 
@@ -647,21 +645,6 @@ class ProductManager(object):
             # See: BZ: 1526622
             if cert.path.startswith('/etc/pki/product-default/'):
                 log.debug('Skipping prod. cert.: %s in protected directory' % cert.path)
-                continue
-
-            # this is the core of a fix for rhbz #859197
-            #
-            # which is a scenario where we have rhel installed, a rhel cert installed,
-            # a rhel entitlement, a rhel enabled repo, yet no packages installed from
-            # that rhel repo. Aka, a system anaconda installed from a cloned repo
-            # perhaps. In that case, all the installed package think they came from
-            # that other repo (say, 'anaconda-repo'), so it looks like the rhel repo
-            # is not 'active'. So it ends up deleting the product cert for rhel since
-            # it appears it is not being used. It is kind of a strange case for the
-            # base os product cert, so we hardcode a special case here.
-            rhel_matcher = rhelproduct.RHELProductMatcher(product)
-            if rhel_matcher.is_rhel():
-                log.debug('Skipping RHEL prod. cert.: %s' % cert.path)
                 continue
 
             # FIXME: or if the productid.hs wasn't updated to reflect a new repo
