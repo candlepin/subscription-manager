@@ -688,7 +688,7 @@ class TestLscpu(unittest.TestCase):
     def test_lscpu_ignores_locale(self):
         hw_check_topo = hwprobe.HardwareCollector()
         facts = hw_check_topo.get_ls_cpu_info()
-        # if all values can be decoded as ascii, then lscpu is not using JP locale
+        # if all values can be encoded as ascii, then lscpu is not using JP locale
         for key, value in facts.items():
-            key.decode('ascii')
-            value.decode('ascii')
+            key.encode('ascii')
+            value.encode('ascii')
