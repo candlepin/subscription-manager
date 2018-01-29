@@ -16,15 +16,17 @@ from __future__ import print_function, division, absolute_import
 
 import datetime
 
-from .fixture import SubManFixture
-from .stubs import StubUEP, StubEntitlementCertificate, \
+from test.fixture import SubManFixture
+from test.stubs import StubUEP, StubEntitlementCertificate, \
         StubCertificateDirectory, StubProduct, StubBackend, \
         StubProductDirectory
 from subscription_manager.gui.mysubstab import MySubscriptionsTab, \
         EXPIRING_IMG, WARNING_IMG, EXPIRED_IMG
 from mock import Mock
+from nose.plugins.attrib import attr
 
 
+@attr('gui')
 class MySubscriptionsTabTest(SubManFixture):
 
     def setUp(self):

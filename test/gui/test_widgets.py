@@ -28,8 +28,10 @@ from subscription_manager.gui.widgets import MachineTypeColumn, QuantitySelectio
                                              SubDetailsWidget, ContractSubDetailsWidget, \
                                              DatePicker, HasSortableWidget
 from dateutil.tz import tzlocal
+from nose.plugins.attrib import attr
 
 
+@attr('gui')
 class TestSubDetailsWidget(unittest.TestCase):
     widget = SubDetailsWidget
     sku_text = "Some SKU"
@@ -58,6 +60,7 @@ class TestSubDetailsWidget(unittest.TestCase):
         self.assertEqual(self.expected_sub_text, sub_text)
 
 
+@attr('gui')
 class TestContractSubDetailsWidget(TestSubDetailsWidget):
     widget = ContractSubDetailsWidget
     expected_sub_text = "Subscription Text"
@@ -100,6 +103,7 @@ class TestContractSubDetailsWidget(TestSubDetailsWidget):
         self.assertEqual(details.virt_only_text.get_buffer().get_text(s_iter, e_iter, False), 'v_o')
 
 
+@attr('gui')
 class TestDatePicker(unittest.TestCase):
     def test_date_picker_date(self):
         d = datetime(2033, 12, 29, tzinfo=tzlocal())
@@ -142,6 +146,7 @@ class BaseColumnTest(unittest.TestCase):
         self.assertEqual(expected_text, column.renderer.get_property("text"))
 
 
+@attr('gui')
 class TestHasSortableWidget(unittest.TestCase):
 
     def _run_cases(self, cases, expected):
@@ -203,6 +208,7 @@ class TestHasSortableWidget(unittest.TestCase):
         self._run_cases(cases, expected)
 
 
+@attr('gui')
 class TestMachineTypeColumn(BaseColumnTest):
 
     def test_render_virtual_when_virt_only(self):
@@ -214,6 +220,7 @@ class TestMachineTypeColumn(BaseColumnTest):
                                    MachineTypeColumn.PHYSICAL_MACHINE)
 
 
+@attr('gui')
 class TestQuantitySelectionColumnTests(unittest.TestCase):
 
     def test__update_cell_based_on_data_clears_cell_when_row_has_children(self):
