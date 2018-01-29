@@ -1115,7 +1115,8 @@ class TestGetAvailableEntitlements(SubManFixture):
         cp = self.get_consumer_cp()
 
         # patch the mock for getPoolsList
-        def get_pools_list(consumer=None, listAll=False, active_on=None, owner=None, filter_string=None):
+        def get_pools_list(consumer=None, listAll=False, active_on=None, owner=None, filter_string=None,
+                           after=None, future=None):
             if listAll:
                 return [self.build_pool_dict('1234'),
                         self.build_pool_dict('4321')]
@@ -1133,7 +1134,8 @@ class TestGetAvailableEntitlements(SubManFixture):
     def test_installed(self):
         cp = self.get_consumer_cp()
 
-        def get_pools_list(consumer=None, listAll=False, active_on=None, owner=None, filter_string=None):
+        def get_pools_list(consumer=None, listAll=False, active_on=None, owner=None, filter_string=None,
+                           after=None, future=None):
             if listAll:
                 return [self.build_pool_dict('1234', ['some_product']),
                         self.build_pool_dict('4321'),

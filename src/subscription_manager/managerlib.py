@@ -251,7 +251,8 @@ class PoolFilter(object):
         return filtered_pools
 
 
-def list_pools(uep, consumer_uuid, list_all=False, active_on=None, filter_string=None):
+def list_pools(uep, consumer_uuid, list_all=False, active_on=None, filter_string=None, future=None,
+               after=None):
     """
     Wrapper around the UEP call to fetch pools, which forces a facts update
     if anything has changed before making the request. This ensures the
@@ -283,14 +284,16 @@ def list_pools(uep, consumer_uuid, list_all=False, active_on=None, filter_string
     ownerid = owner['key']
 
     return uep.getPoolsList(consumer=consumer_uuid, listAll=list_all,
-            active_on=active_on, owner=ownerid, filter_string=filter_string)
+            active_on=active_on, owner=ownerid, filter_string=filter_string, future=future,
+                            after=after)
 
 
 # TODO: This method is morphing the actual pool json and returning a new
 # dict which does not contain all the pool info. Not sure if this is really
 # necessary. Also some "view" specific things going on in here.
 def get_available_entitlements(get_all=False, active_on=None, overlapping=False,
-                               uninstalled=False, text=None, filter_string=None):
+                               uninstalled=False, text=None, filter_string=None,
+                               future=None, after=None):
     """
     Returns a list of entitlement pools from the server.
 
@@ -316,7 +319,7 @@ def get_available_entitlements(get_all=False, active_on=None, overlapping=False,
 
     pool_stash = PoolStash()
     dlist = pool_stash.get_filtered_pools_list(active_on, not get_all,
-           overlapping, uninstalled, text, filter_string)
+           overlapping, uninstalled, text, filter_string, future=future, after=after)
 
     for pool in dlist:
         pool_wrapper = PoolWrapper(pool)
@@ -506,7 +509,7 @@ class PoolStash(object):
         log.debug("   %s already subscribed" % len(self.subscribed_pool_ids))
 
     def get_filtered_pools_list(self, active_on, incompatible,
-            overlapping, uninstalled, text, filter_string):
+            overlapping, uninstalled, text, filter_string, future=None, after=None):
         """
         Used for CLI --available filtering
         cuts down on api calls
@@ -520,11 +523,13 @@ class PoolStash(object):
 
         if incompatible:
             for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
-                    self.identity.uuid, active_on=active_on, filter_string=filter_string):
+                self.identity.uuid, active_on=active_on,
+                filter_string=filter_string, future=future, after=after):
                 self.compatible_pools[pool['id']] = pool
         else:  # --all has been used
             for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
-                    self.identity.uuid, list_all=True, active_on=active_on, filter_string=filter_string):
+                self.identity.uuid, list_all=True, active_on=active_on,
+                filter_string=filter_string, future=future, after=after):
                 self.all_pools[pool['id']] = pool
 
         return self._filter_pools(incompatible, overlapping, uninstalled, False, text)

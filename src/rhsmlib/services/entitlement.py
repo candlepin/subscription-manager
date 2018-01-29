@@ -49,7 +49,8 @@ class EntitlementService(object):
             return {'status': 'Unknown', 'reasons': {}, 'valid': False}
 
     def get_pools(self, pool_subsets=None, matches=None, pool_only=None, match_installed=None,
-                  no_overlap=None, service_level=None, show_all=None, on_date=None, **kwargs):
+                  no_overlap=None, service_level=None, show_all=None, on_date=None, future=None,
+                  after=None, **kwargs):
         # We accept a **kwargs argument so that the DBus object can pass whatever dictionary it receives
         # via keyword expansion.
         if kwargs:
@@ -71,6 +72,8 @@ class EntitlementService(object):
             'service_level': service_level,
             'show_all': show_all,
             'on_date': on_date,
+            'future': future,
+            'after': after,
         }
         self.validate_options(options)
         results = {}
@@ -90,7 +93,10 @@ class EntitlementService(object):
                 no_overlap=no_overlap,
                 match_installed=match_installed,
                 matches=matches,
-                service_level=service_level)
+                service_level=service_level,
+                future=future,
+                after=after,
+            )
             if pool_only:
                 results['available'] = [x['id'] for x in available]
             else:
@@ -218,13 +224,16 @@ class EntitlementService(object):
         return consumed_statuses
 
     def get_available_pools(self, show_all=None, on_date=None, no_overlap=None,
-                            match_installed=None, matches=None, service_level=None):
+                            match_installed=None, matches=None, service_level=None, future=None,
+                            after=None):
         available_pools = managerlib.get_available_entitlements(
             get_all=show_all,
             active_on=on_date,
             overlapping=no_overlap,
             uninstalled=match_installed,
-            filter_string=matches
+            filter_string=matches,
+            future=future,
+            after=after,
         )
 
         def filter_pool_by_service_level(pool_data):
