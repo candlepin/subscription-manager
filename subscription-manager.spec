@@ -82,7 +82,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.20.9
+Version: 1.20.10
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -880,6 +880,21 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Tue Jan 30 2018 Kevin Howell <khowell@redhat.com> 1.20.10-1
+- Update translations from zanata (khowell@redhat.com)
+- 1510024: Handle rhel-alt product tags properly (khowell@redhat.com)
+- 1526622: Do not delete product certificates in protected directory
+  (jhnidek@redhat.com)
+- 1527813: subman-gui use new URL of Online Documentation (jhnidek@redhat.com)
+- 1519512: Handle non-UTF8 RPM vendors (khowell@redhat.com)
+- 1526385: Bug fix of autoregistration in subman--cockpit plugin
+  (jhnidek@redhat.com)
+- 1527392: Clear credential data in register dialog (jhnidek@redhat.com)
+- 1526385: Fix registration success detection (khowell@redhat.com)
+- 1448313: Do not log error, when rhsmcertd is restarted (jhnidek@redhat.com)
+- 1516439: Cockpit reports error during unregister when candlepin unavailable
+  (jhnidek@redhat.com)
+
 * Fri Dec 15 2017 Kevin Howell <khowell@redhat.com> 1.20.9-1
 - Sync zanata translations (khowell@redhat.com)
 - 1510727: Enable starting of subman GUI, when consumer has been deleted
