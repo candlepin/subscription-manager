@@ -132,6 +132,7 @@ Requires:  virt-what
 Requires:  %{rhsm_package_name} = %{version}
 Requires:  %{py_package_prefix}-six
 Requires:  %{py_package_prefix}-dateutil
+Requires:  %{py_package_prefix}-setuptools
 
 %if %{with python3}
 Requires: python3-dbus
