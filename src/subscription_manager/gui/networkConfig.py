@@ -182,6 +182,10 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
             # delete config options if we disable it in the ui
             self.cfg.set("server", "proxy_hostname", "")
             self.cfg.set("server", "proxy_port", "")
+            # BZ 1500213: make sure all proxy related env. variables are reset
+            env_vars = ["HTTPS_PROXY", "https_proxy", "HTTP_PROXY", "http_proxy"]
+            for env_var in env_vars:
+                os.environ[env_var] = ""
 
         # settings of HTTP proxy authentication
         if self.enableProxyAuthButton.get_active():
@@ -198,11 +202,13 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
 
         # settings of bypass the HTTP proxy for specific host/domain
         if self.enableProxyBypassButton.get_active():
-            if self.noProxyEntry.get_text() is not None:
-                self.cfg.set("server", "no_proxy",
-                         str(self.noProxyEntry.get_text()))
+            no_proxy_entry = self.noProxyEntry.get_text()
+            if no_proxy_entry is not None:
+                self.cfg.set("server", "no_proxy", str(no_proxy_entry))
         else:
             self.cfg.set("server", "no_proxy", "")
+            # BZ 1500213: make sure NO_PROXY env. variable is reset
+            os.environ['no_proxy'] = os.environ['NO_PROXY'] = ""
 
         try:
             self.cfg.save()
