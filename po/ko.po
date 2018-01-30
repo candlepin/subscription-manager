@@ -1,13 +1,6 @@
-# eukim <eukim@fedoraproject.org>, 2014. #zanata
-# Chris Rog <crog@redhat.com>, 2015. #zanata
-# John Sefler <jsefler@redhat.com>, 2015. #zanata
-# eukim <eukim@fedoraproject.org>, 2015. #zanata
-# John Sefler <jsefler@redhat.com>, 2016. #zanata
-# eukim <eukim@fedoraproject.org>, 2016. #zanata
-# John Sefler <jsefler@redhat.com>, 2017. #zanata
-# Kevin Howell <kevin@kahowell.net>, 2017. #zanata
-# Ludek Janda <ljanda@redhat.com>, 2017. #zanata
-# eukim <eukim@fedoraproject.org>, 2017. #zanata
+# eukim <eukim@redhat.com>, 2017. #zanata
+# ljanda <ljanda@redhat.com>, 2017. #zanata
+# khowell <khowell@redhat.com>, 2018. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -16,12 +9,12 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-12-14 05:38-0500\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
+"PO-Revision-Date: 2018-01-25 09:00+0000\n"
+"Last-Translator: khowell <khowell@redhat.com>\n"
 "Language-Team: Korean\n"
 "Language: ko\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: Zanata 3.9.6\n"
+"X-Generator: Zanata 4.3.2\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python2.7/optparse.py:140
@@ -142,7 +135,7 @@ msgstr "취소"
 
 #: cockpit/src/cockpit-components-dialog.jsx:162
 msgid "Ok"
-msgstr "OK"
+msgstr "확인"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/index.js:52 cockpit/src/subscriptions-view.jsx:147
@@ -186,7 +179,7 @@ msgstr "URL"
 
 #: cockpit/src/subscriptions-register.jsx:111
 msgid "Proxy"
-msgstr "프록시 "
+msgstr "프록시"
 
 #: cockpit/src/subscriptions-register.jsx:118
 msgid "I would like to connect via an HTTP proxy."
@@ -240,7 +233,7 @@ msgstr "서브스크립션"
 
 #: cockpit/src/subscriptions-view.jsx:195
 msgid "Access denied"
-msgstr "액세스 거부됨 "
+msgstr "액세스 거부됨"
 
 #: cockpit/src/subscriptions-view.jsx:196
 msgid "The current user isn't allowed to access system subscription status."
@@ -1189,7 +1182,7 @@ msgstr "서브스크립션 관리 서비스가 상태 정보를 지원하지 않
 msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
-msgstr "오류: 잘못된 목록 유형이 제공되었습니다. \"설치됨\", \"소비됨\", \"사용 가능\"만 허용됩니다 "
+msgstr "오류: 잘못된 목록 유형이 제공되었습니다. \"설치됨\", \"소비됨\", \"사용 가능\"만 허용됩니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:249
@@ -1230,7 +1223,7 @@ msgstr "오류: --pool-only는  --available 또는 --consumed와만 사용 가�
 
 #: src/rhsmlib/services/entitlement.py:274
 msgid "Error: this system is not registered"
-msgstr "오류: 이 시스템은 등록되어 있지 않습니다 "
+msgstr "오류: 이 시스템은 등록되어 있지 않습니다"
 
 #: src/rhsmlib/services/register.py:88
 msgid "This system is already registered. Add force to options to override."
@@ -1532,7 +1525,7 @@ msgstr "네트워크 오류. 연결 정보 또는 /var/log/rhsm/rhsm.log를 확�
 
 #: src/subscription_manager/exceptions.py:30
 msgid "Proxy error, unable to connect to proxy server."
-msgstr "프록시 오류, 프록시 서버에 연결할 수 없습니다. "
+msgstr "프록시 오류, 프록시 서버에 연결할 수 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:31
@@ -3432,11 +3425,11 @@ msgstr "브라우저가 발견되지 않았습니다. 문서 URL은 %s입니다.
 
 #: src/subscription_manager/gui/managergui.py:193
 msgid "Wrong proxy username or password, please check your settings."
-msgstr "프록시 사용자 이름 또는 비밀번호가 잘못 입력되었습니다. 설정을 확인하십시오. "
+msgstr "프록시 사용자 이름 또는 비밀번호가 잘못 입력되었습니다. 설정을 확인하십시오."
 
 #: src/subscription_manager/gui/managergui.py:195
 msgid "Proxy authentication required, please check your settings."
-msgstr "프록시 인증이 필요합니다. 설정을 확인하십시오. "
+msgstr "프록시 인증이 필요합니다. 설정을 확인하십시오."
 
 #: src/subscription_manager/gui/managergui.py:197
 #: src/subscription_manager/gui/registergui.py:1875
@@ -3447,7 +3440,7 @@ msgstr "프록시 연결에 실패했습니다. 설정을 확인하십시오."
 
 #: src/subscription_manager/gui/managergui.py:331
 msgid "Warning - subscription-manager plugins were automatically enabled"
-msgstr "경고: subscription-manager 플러그인이 자동으로 활성화되어 있습니다 "
+msgstr "경고: subscription-manager 플러그인이 자동으로 활성화되어 있습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/managergui.py:486
@@ -3792,7 +3785,7 @@ msgid ""
 "Not all expected subscriptions were attached, see /var/log/rhsm/rhsm.log for "
 "more details."
 msgstr ""
-"필요한 모든 서브스크립션이 연결되어 있지 않습니다. 보다 자세한 내용은 /var/log/rhsm/rhsm.log에서 참조하십시오. "
+"필요한 모든 서브스크립션이 연결되어 있지 않습니다. 보다 자세한 내용은 /var/log/rhsm/rhsm.log에서 참조하십시오."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/reposgui.py:54
@@ -4616,7 +4609,7 @@ msgstr "등록 도중 오류 발생: %s"
 #: src/subscription_manager/managercli.py:1121
 #, python-format
 msgid "The system has been registered with ID: %s"
-msgstr "시스템은 ID로 등록되어 있습니다: %s "
+msgstr "시스템은 ID로 등록되어 있습니다: %s"
 
 #: src/subscription_manager/managercli.py:1122
 #, python-format

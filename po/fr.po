@@ -1,14 +1,6 @@
-# samfreemanz <sfriedma@redhat.com>, 2014. #zanata
-# John Sefler <jsefler@redhat.com>, 2015. #zanata
-# jcarbone <jcarbone@redhat.com>, 2015. #zanata
-# samfreemanz <sfriedma@redhat.com>, 2015. #zanata
-# John Sefler <jsefler@redhat.com>, 2016. #zanata
-# croe <croe@redhat.com>, 2016. #zanata
-# John Sefler <jsefler@redhat.com>, 2017. #zanata
-# Kevin Howell <kevin@kahowell.net>, 2017. #zanata
-# Ludek Janda <ljanda@redhat.com>, 2017. #zanata
-# Vritant Jain <vrjain@redhat.com>, 2017. #zanata
 # croe <croe@redhat.com>, 2017. #zanata
+# ljanda <ljanda@redhat.com>, 2017. #zanata
+# khowell <khowell@redhat.com>, 2018. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -17,12 +9,12 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-12-13 12:45-0500\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
+"PO-Revision-Date: 2018-01-25 09:09+0000\n"
+"Last-Translator: khowell <khowell@redhat.com>\n"
 "Language-Team: French\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
-"X-Generator: Zanata 3.9.6\n"
+"X-Generator: Zanata 4.3.2\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python2.7/optparse.py:140
@@ -143,7 +135,7 @@ msgstr "Annuler"
 
 #: cockpit/src/cockpit-components-dialog.jsx:162
 msgid "Ok"
-msgstr "Ok"
+msgstr "Valider"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/index.js:52 cockpit/src/subscriptions-view.jsx:147
@@ -191,7 +183,7 @@ msgstr "Proxy"
 
 #: cockpit/src/subscriptions-register.jsx:118
 msgid "I would like to connect via an HTTP proxy."
-msgstr "Je voudrais me connecter via un proxy _HTTP"
+msgstr "Je voudrais me connecter via un proxy HTTP"
 
 #: cockpit/src/subscriptions-register.jsx:126
 msgid "Login"
@@ -1217,7 +1209,7 @@ msgid ""
 "\"available\" are allowed"
 msgstr ""
 "Erreur : type de listing non valide. Valeurs autorisées: « installés » "
-"(installed) « consommés » (consumed) ou « disponibles » (available). "
+"(installed) « consommés » (consumed) ou « disponibles » (available)."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsmlib/services/entitlement.py:249
@@ -1461,7 +1453,7 @@ msgid ""
 "forgot_password"
 msgstr ""
 "Conseil : Vous avez oublié votre mot de passe ou votre identifiant ? "
-"Retrouvez-le sur http://redhat.com/forgot_password"
+"Retrouvez-le sur https://redhat.com/forgot_password"
 
 #: src/subscription_manager/cache.py:157
 #, python-format
