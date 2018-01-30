@@ -34,9 +34,11 @@ class RHELProductMatcher(object):
     """
     def __init__(self, product=None):
         self.product = product
-        # Match "rhel-6" or "rhel-11"
+        # Match "rhel-6" or "rhel-11" or "rhel-alt-7" (bz1510024)
         # but not "rhel-6-server" or "rhel-6-server-highavailabilty"
-        self.pattern = "rhel-\d+$|rhel-5-workstation$"
+        # NOTE: we considered rhel(-[\w\d]+)?-\d+$ but decided against it
+        # due to possibility of unintentional matches
+        self.pattern = "rhel(-alt)?-\d+$|rhel-5-workstation$"
 
     def is_rhel(self):
         """return true if this is a rhel product cert"""
