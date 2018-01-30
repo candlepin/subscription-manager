@@ -139,8 +139,10 @@ Requires: python3-dbus
 %else
 Requires: %{?suse_version:dbus-1-python} %{!?suse_version:dbus-python}
 %endif
-Requires: %{?suse_version:aaa_base} %{!?suse_version:chkconfig}
+
+%if %{use_yum}
 Requires: %{?suse_version:yum} %{!?suse_version:yum >= 3.2.29-73}
+%endif
 
 # Support GTK2 and GTK3 on both SUSE and RHEL...
 %if 0%{?suse_version}
@@ -168,6 +170,7 @@ Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
 %else
+Requires: %{?suse_version:aaa_base} %{!?suse_version:chkconfig}
 Requires(post): %{?suse_version:aaa_base} %{!?suse_version:chkconfig}
 Requires(preun): %{?suse_version:aaa_base} %{!?suse_version:chkconfig, initscripts}
 %endif
