@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <config xmlns="http://zanata.org/namespace/config/">
-    <url>https://translate.zanata.org/</url>
+    <url>https://vendors.zanata.redhat.com/</url>
     <project>subscription-manager</project>
-    <project-version>1.20.X</project-version>
+    <project-version>RHEL-7.5</project-version>
     <project-type>gettext</project-type>
     <locales>
-        <locale map-from="de_DE">de-DE</locale>
-        <locale map-from="es_ES">es-ES</locale>
+        <locale>de</locale>
+        <locale>es</locale>
         <locale>fr</locale>
         <locale>it</locale>
         <locale>ja</locale>
         <locale>ko</locale>
         <locale map-from="pt_BR">pt-BR</locale>
         <locale>ru</locale>
-        <locale map-from="zh_CN">zh-Hans-CN</locale>
-        <locale map-from="zh_TW">zh-Hant-TW</locale>
+        <locale map-from="zh_CN">zh-Hans</locale>
+        <locale map-from="zh_TW">zh-Hant</locale>
     </locales>
 </config>
