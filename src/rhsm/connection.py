@@ -669,7 +669,8 @@ class BaseRestLib(object):
                                              request_type=request_type,
                                              handler=handler)
                 elif str(response['status']) in ['429']:
-                    raise RateLimitExceededException(response['status'])
+                    raise RateLimitExceededException(response['status'],
+                                                     headers=response.get('headers'))
 
                 elif str(response['status']) == str(httplib.PROXY_AUTHENTICATION_REQUIRED):
                     raise ProxyException
