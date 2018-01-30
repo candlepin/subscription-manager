@@ -17,26 +17,29 @@ from .fixture import SubManFixture
 #  rhel-6-resilientstorage
 class TestRHELProductMatcher(SubManFixture):
 
-    matches = ["rhel-6,rhel-6-client",
-               "rhel-6,rhel-6-client",
-               "rhel-6,rhel-6-computenode",
-               "rhel-6,rhel-6-server",
-               "rhel-6,rhel-6-ibm-power",
-               "rhel-6,rhel-6-ibm-system-z",
-               "rhel-6,rhel-6-server",
-               "rhel-6,rhel-6-workstation",
-               "rhel-6,rhel-6-workstation",
-               "rhel-11",
-               "rhel-6,rhel-6-someotherthing",
-               "rhel-11,rhel-11-something",
-               # See bz1108257 rhel-5-workstation is a RHEL variant, but doesn't have
-               # a rhel-5 product tag.
-               "rhel-5-client-workstation,rhel-5-workstation",
-               "rhel-5-workstation",
-               # RHEL5 Client variant, 68.pem, aka Desktop
-               # "rhel-5-client" should never appear as the only tag, it's a
-               # rhel-5 variant
-               "rhel-5,rhel-5-client"]
+    matches = [
+        "rhel-alt-7,rhel-alt-7-power9",
+        "rhel-6,rhel-6-client",
+        "rhel-6,rhel-6-client",
+        "rhel-6,rhel-6-computenode",
+        "rhel-6,rhel-6-server",
+        "rhel-6,rhel-6-ibm-power",
+        "rhel-6,rhel-6-ibm-system-z",
+        "rhel-6,rhel-6-server",
+        "rhel-6,rhel-6-workstation",
+        "rhel-6,rhel-6-workstation",
+        "rhel-11",
+        "rhel-6,rhel-6-someotherthing",
+        "rhel-11,rhel-11-something",
+        # See bz1108257 rhel-5-workstation is a RHEL variant, but doesn't have
+        # a rhel-5 product tag.
+        "rhel-5-client-workstation,rhel-5-workstation",
+        "rhel-5-workstation",
+        # RHEL5 Client variant, 68.pem, aka Desktop
+        # "rhel-5-client" should never appear as the only tag, it's a
+        # rhel-5 variant
+        "rhel-5,rhel-5-client",
+    ]
 
     not_matches = ["rhel-5-server-scalablefilesystem,rhel-5-scalablefilesystem",
                    "rhel-5-server-clusterstorage,rhel-5-clusterstorage",
