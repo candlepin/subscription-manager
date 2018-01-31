@@ -451,10 +451,6 @@ class TestListCommand(TestCliProxyCommand):
         self._test_after_option(argv, self.cc.main, expected_exit_code=2)
 
     def test_after_option_missing_options(self):
-        # Just missing "all"
-        argv = ['subscription-manager', 'list', '--after', self.valid_date, '--available']
-        self._test_after_option(argv, self.cc.main, expected_exit_code=os.EX_USAGE)
-
         # Just missing "available"
         argv = ['subscription-manager', 'list', '--after', self.valid_date, '--all']
         self._test_after_option(argv, self.cc.main, expected_exit_code=os.EX_USAGE)
