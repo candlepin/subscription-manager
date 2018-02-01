@@ -1161,6 +1161,7 @@ class TestGetAvailableEntitlements(SubManFixture):
             'quantity': 5,
             'consumed': 1,
             'productId': '',
+            'startDate': datetime.now(GMT()).isoformat(),
             'endDate': datetime.now(GMT()).isoformat(),
             'providedProducts': [{'productId': prod_id} for prod_id in provided_products],
             'productAttributes': [{'name': 'foo',

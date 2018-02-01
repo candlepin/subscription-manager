@@ -110,6 +110,7 @@ AVAILABLE_SUBS_LIST = [
     _("Service Level:"),
     _("Service Type:"),
     _("Subscription Type:"),
+    _("Starts:"),
     _("Ends:"),
     _("System Type:")
 ]
@@ -2370,6 +2371,7 @@ class ListCommand(CliCommand):
                                 data['service_level'] or "",
                                 data['service_type'] or "",
                                 data['pool_type'],
+                                data['startDate'],
                                 data['endDate'],
                                 machine_type, **kwargs) + "\n")
             elif not self.options.pid_only:

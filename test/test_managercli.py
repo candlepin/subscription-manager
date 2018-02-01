@@ -480,6 +480,7 @@ class TestListCommand(TestCliProxyCommand):
                      'service_type': '',
                      'contractNumber': '5',
                      'multi-entitlement': 'false',
+                     'startDate': '',
                      'endDate': '',
                      'suggested': '2'}]
         es.return_value = create_pool_list()
@@ -505,6 +506,7 @@ class TestListCommand(TestCliProxyCommand):
                      'service_type': '',
                      'contractNumber': '5',
                      'multi-entitlement': 'false',
+                     'startDate': '',
                      'endDate': '',
                      'suggested': '2'}]
         mget_ents.return_value = create_pool_list()
