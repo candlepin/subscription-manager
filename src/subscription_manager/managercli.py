@@ -2267,8 +2267,8 @@ class ListCommand(CliCommand):
             system_exit(os.EX_USAGE, _("Error: --no-overlap is only applicable with --available"))
         if self.options.pid_only and self.options.installed:
             system_exit(os.EX_USAGE, _("Error: --pool-only is only applicable with --available and/or --consumed"))
-        if self.options.after and not (self.options.available and self.options.all):
-            system_exit(os.EX_USAGE, _("Error: --after is only applicable with --available and --all"))
+        if self.options.after and not self.options.available:
+            system_exit(os.EX_USAGE, _("Error: --after is only applicable with --available"))
         if self.options.after and self.options.on_date:
             system_exit(os.EX_USAGE, _("Error: --after cannot be used with --ondate"))
 
