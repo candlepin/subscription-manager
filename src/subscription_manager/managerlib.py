@@ -304,6 +304,7 @@ def get_available_entitlements(get_all=False, active_on=None, overlapping=False,
         'id',
         'quantity',
         'consumed',
+        'startDate',
         'endDate',
         'productName',
         'providedProducts',
@@ -348,6 +349,7 @@ def get_available_entitlements(get_all=False, active_on=None, overlapping=False,
         else:
             d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
 
+        d['startDate'] = format_date(isodate.parse_date(d['startDate']))
         d['endDate'] = format_date(isodate.parse_date(d['endDate']))
         del d['consumed']
 
