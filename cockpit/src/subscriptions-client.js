@@ -130,6 +130,8 @@ function dbus_str(value) {
     };
 }
 
+client.closeRegisterDialog = false;
+
 /* Overall flow is as follows:
 
 Preconditions:
@@ -352,8 +354,8 @@ client.registerSystem = subscriptionDetails => {
             })
             .then(() => {
                 console.debug('requesting update');
-                requestUpdate();
-                dfd.resolve();
+                client.closeRegisterDialog = true;
+                requestUpdate(dfd);
             });
     });
 
@@ -389,7 +391,7 @@ const subscriptionStatusValues = [
     'RHSM_PARTIALLY_VALID',
     'RHSM_REGISTRATION_REQUIRED'
 ];
-function requestUpdate() {
+function requestUpdate(dfd = null) {
     legacyService.wait(() => {
         legacyService.call('/EntitlementStatus',
             'com.redhat.SubscriptionManager.EntitlementStatus',
@@ -401,7 +403,7 @@ function requestUpdate() {
             })
             .done(result => {
                 client.subscriptionStatus.serviceStatus = subscriptionStatusValues[result[0]];
-                client.getSubscriptionStatus();
+                client.getSubscriptionStatus(dfd);
             })
             .catch(ex => {
                 statusUpdateFailed("EntitlementStatus.check_status() failed:", ex);
@@ -416,7 +418,8 @@ function requestUpdate() {
 
 let gettingStatus = false;
 /* get subscription summary */
-client.getSubscriptionStatus = () => {
+client.getSubscriptionStatus = function(dfd = null) {
+    this.dfd = dfd;
     if (gettingStatus) {
         return;
     }
@@ -427,6 +430,10 @@ client.getSubscriptionStatus = () => {
             .then(result => {
                 const status = JSON.parse(result);
                 client.subscriptionStatus.status = status.status;
+                if (this.dfd && client.closeRegisterDialog) {
+                    this.dfd.resolve();
+                    client.closeRegisterDialog = false;
+                }
             })
             .catch(() => {
                 client.subscriptionStatus.status = 'Unknown';
