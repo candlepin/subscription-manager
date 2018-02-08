@@ -39,6 +39,17 @@ PYTHONPATH=./src python -m subscription_manager.scripts.rhn_migrate_classic_to_r
 Vagrant
 -------
 
+The setup that most developers are using is `vagrant-libvirt` with
+`vagrant-hostmanager` installed on Fedora via:
+
+```bash
+dnf install vagrant-libvirt vagrant-hostmanager
+```
+
+We are avoiding coupling to libvirt, but use of VirtualBox is less tested.
+If you'd like to ensure vagrant uses libvirt, you can set
+`VAGRANT_DEFAULT_PROVIDER=libvirt` in your environment.
+
 `vagrant up` can be used to spin up various VMs set up for development work.
 These VMs are all configured using the included ansible role "subman-devel".
 The python paths and `PATH` inside these environments are modified so that
