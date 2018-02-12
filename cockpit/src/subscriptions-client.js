@@ -246,12 +246,13 @@ client.registerSystem = subscriptionDetails => {
                     'com.redhat.RHSM1.Register',
                     '/com/redhat/RHSM1/Register'
                 );
-                if (subscriptionDetails.activationKeys) {
+                if (subscriptionDetails.activation_keys) {
+                    console.debug('registering using activation key');
                     let result = registerService.call(
                         'RegisterWithActivationKeys',
                         [
                             subscriptionDetails.org,
-                            subscriptionDetails.activationKeys.split(','),
+                            subscriptionDetails.activation_keys.split(','),
                             {},
                             connection_options,
                             userLang
@@ -261,6 +262,7 @@ client.registerSystem = subscriptionDetails => {
                     return result;
                 }
                 else {
+                    console.debug('registering using username and password');
                     let result = registerService.call(
                         'Register',
                         [
