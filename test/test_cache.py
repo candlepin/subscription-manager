@@ -173,26 +173,29 @@ class TestProfileManager(unittest.TestCase):
         self.assertEqual(0, res)
 
     def test_package_json_handles_non_unicode(self):
-        package = Package(name="package1", version="1.0.0", release=1, arch="x86_64", vendor=b'\xf6')
+        package = Package(name=b'\xf6', version=b'\xf6', release=b'\xf6', arch=b'\xf6', vendor=b'\xf6')
         data = package.to_dict()
         json_str = json.dumps(data)  # to json
         data = json.loads(json_str)  # and back to an object
-        self.assertEqual(u'\ufffd', data['vendor'])
+        for attr in ['name', 'version', 'release', 'arch', 'vendor']:
+            self.assertEqual(u'\ufffd', data[attr])
 
-    def test_package_json_vendor_as_unicode_type(self):
+    def test_package_json_as_unicode_type(self):
         # note that the data type at time of writing is bytes, so this is just defensive coding
-        package = Package(name="package1", version="1.0.0", release=1, arch="x86_64", vendor=u'Björk')
+        package = Package(name=u'Björk', version=u'Björk', release=u'Björk', arch=u'Björk', vendor=u'Björk')
         data = package.to_dict()
         json_str = json.dumps(data)  # to json
         data = json.loads(json_str)  # and back to an object
-        self.assertEqual(u'Björk', data['vendor'])
+        for attr in ['name', 'version', 'release', 'arch', 'vendor']:
+            self.assertEqual(u'Björk', data[attr])
 
-    def test_package_json_missing_vendor(self):
-        package = Package(name="package1", version="1.0.0", release=1, arch="x86_64", vendor=None)
+    def test_package_json_missing_attributes(self):
+        package = Package(name=None, version=None, release=None, arch=None, vendor=None)
         data = package.to_dict()
         json_str = json.dumps(data)  # to json
         data = json.loads(json_str)  # and back to an object
-        self.assertEqual(None, data['vendor'])
+        for attr in ['name', 'version', 'release', 'arch', 'vendor']:
+            self.assertEqual(None, data[attr])
 
     @staticmethod
     def _mock_pkg_profile(packages):

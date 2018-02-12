@@ -45,11 +45,11 @@ class Package(object):
     def to_dict(self):
         """ Returns a dict representation of this packages info. """
         return {
-                'name': self.name,
-                'version': self.version,
-                'release': self.release,
-                'arch': self.arch,
-                'epoch': self.epoch,
+                'name': self._normalize_string(self.name),
+                'version': self._normalize_string(self.version),
+                'release': self._normalize_string(self.release),
+                'arch': self._normalize_string(self.arch),
+                'epoch': self._normalize_string(self.epoch),
                 'vendor': self._normalize_string(self.vendor),  # bz1519512 handle vendors that aren't utf-8
         }
 
@@ -73,6 +73,7 @@ class Package(object):
     def __str__(self):
         return "<Package: %s %s %s>" % (self.name, self.version, self.release)
 
+    # added in support of bz1519512, bz1543639
     @staticmethod
     def _normalize_string(value):
         if type(value) is six.binary_type:
