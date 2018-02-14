@@ -452,9 +452,6 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/ca/redhat-uep.pem %{buildroo
     tar --strip-components=1 -xzf %{SOURCE1} -C %{buildroot}
 %endif
 
-%clean
-rm -rf %{buildroot}
-
 
 # base/cli tools use the gettext domain 'rhsm', while the
 # gnome-help tools use domain 'subscription-manager'
