@@ -175,6 +175,7 @@ Requires(post): %{?suse_version:aaa_base} %{!?suse_version:chkconfig}
 Requires(preun): %{?suse_version:aaa_base} %{!?suse_version:chkconfig, initscripts}
 %endif
 
+BuildRequires: gcc
 BuildRequires: %{py_package_prefix}-devel
 BuildRequires: %{py_package_prefix}-setuptools
 BuildRequires: gettext
