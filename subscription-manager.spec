@@ -179,8 +179,9 @@ Requires(post): %{?suse_version:aaa_base} %{!?suse_version:chkconfig}
 Requires(preun): %{?suse_version:aaa_base} %{!?suse_version:chkconfig, initscripts}
 %endif
 
+BuildRequires: %{?suse_version:python-devel >= 2.6} %{!?suse_version:%{py_package_prefix}-devel}
+BuildRequires: openssl-devel
 BuildRequires: gcc
-BuildRequires: %{py_package_prefix}-devel
 BuildRequires: %{py_package_prefix}-setuptools
 BuildRequires: gettext
 BuildRequires: intltool
@@ -208,10 +209,6 @@ BuildRequires: systemd-rpm-macros
 BuildRequires: systemd
 %endif
 
-# The %{?something:foo} expands to foo only when something is **defined**.  Likewise the
-# %{!?something:foo} expands only when something is **not defined**.
-BuildRequires: %{?suse_version:python-devel >= 2.6} %{!?suse_version:%{py_package_prefix}-devel}
-BuildRequires: openssl-devel
 
 %description
 The Subscription Manager package provides programs and libraries to allow users
@@ -406,7 +403,7 @@ Subscription Manager Cockpit UI
 
 %build
 make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
-    LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" %{?gtk_version}
+    LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" %{?gtk_version}
 
 %install
 rm -rf %{buildroot}
