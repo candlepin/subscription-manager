@@ -144,6 +144,10 @@ Requires: %{?suse_version:dbus-1-python} %{!?suse_version:dbus-python}
 Requires: %{?suse_version:yum} %{!?suse_version:yum >= 3.2.29-73}
 %endif
 
+%if %{use_kitchen}
+Requires: %{py_package_prefix}-kitchen
+%endif
+
 # Support GTK2 and GTK3 on both SUSE and RHEL...
 %if 0%{?suse_version}
 Requires: %{?gtk3:python-gobject} %{!?gtk3:python-gobject2, libzypp, zypp-plugin-python, python-zypp}
