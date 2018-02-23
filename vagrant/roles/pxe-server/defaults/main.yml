@@ -1,0 +1,49 @@
+---
+required_rpms:
+  - dhcp
+  - tftp
+  - tftp-server
+  - syslinux
+  - wget
+  - vsftpd
+
+##### CentOS 7 #####
+
+# distro_name: "centos"
+# distro_version: "7"
+# # Newer version is available e.g. here: http://ftp.cvut.cz/centos/7/isos/x86_64/
+# iso_img_server: "http://ftp.cvut.cz/centos/7/isos/x86_64"
+# iso_img_file: "CentOS-7-x86_64-Minimal-1708.iso"
+# # Fresh sha256 checksums of CentOS images can be found e.g. here:
+# # http://ftp.cvut.cz/centos/7/isos/x86_64/sha256sum.txt
+# iso_img_checksum: "sha256:bba314624956961a2ea31dd460cd860a77911c1e0a56e4820a12b9c5dad363f5"
+
+##### Fedora 27 #####
+
+distro_name: "fedora"
+distro_version: "27"
+# Newer version is available e.g. here: https://download.fedoraproject.org/pub/fedora/linux/releases/
+iso_img_server: "https://download.fedoraproject.org/pub/fedora/linux/releases/27/Server/x86_64/iso"
+iso_img_file: "Fedora-Server-dvd-x86_64-27-1.6.iso"
+# Fresh sha256 checksums of Fedora images can be found here:
+# https://download.fedoraproject.org/pub/fedora/linux/releases/27/Server/x86_64/iso/Fedora-Server-27-1.6-x86_64-CHECKSUM
+iso_img_checksum: "sha256:e383dd414bb57231b20cbed11c4953cac71785f7d4f5990b0df5ad534a0ba95c"
+
+iso_img_url: "{{iso_img_server}}/{{iso_img_file}}"
+iso_img_mount_path: "/mnt/iso_img"
+
+# This is only default value and it is overwritten in Vagrantfile
+# by ansible.extra_vars, because IP address of PXE server has to
+# be known during definition of private network used by PXE server.
+pxe_server_ip_addr: "192.168.111.5/24"
+
+syslinux_files:
+  - pxelinux.0
+  - menu.c32
+  - memdisk
+  - mboot.c32
+  - chain.c32
+
+kernel_files:
+  - vmlinuz
+  - initrd.img

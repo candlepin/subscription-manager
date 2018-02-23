@@ -5,11 +5,11 @@
     - name: install libs so we can use ansible (fedora only)
       raw: sudo yum install -y python python2-dnf
 
-- hosts: all
+- hosts: "subman-devel"
   roles:
     - subman-devel
 
-- hosts: all
+- hosts: "subman-devel"
   gather_facts: no
   become: yes
   tasks:

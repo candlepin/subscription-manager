@@ -1,0 +1,23 @@
+# DHCP Server Configuration file.
+#   see /usr/share/doc/dhcp*/dhcpd.conf.example
+#   see dhcpd.conf(5) man page
+#
+# option definitions common to all supported networks...
+ddns-update-style interim;
+ignore client-updates;
+authoritative;
+allow booting;
+allow bootp;
+allow unknown-clients;
+subnet {{pxe_server_ip_addr | ipaddr('network')}} netmask {{pxe_server_ip_addr | ipaddr('netmask')}} {
+  range {{pxe_server_ip_addr | ipaddr('network') | regex_replace('.0$', '.50')}} {{pxe_server_ip_addr | ipaddr('network') | regex_replace('.0$', '.253')}};
+  option domain-name-servers {{pxe_server_ip_addr | ipaddr('address')}};
+  option domain-name "server1.example.com";
+  option routers {{pxe_server_ip_addr | ipaddr('address')}};
+  option broadcast-address {{pxe_server_ip_addr | ipaddr('broadcast')}};
+  default-lease-time 600;
+  max-lease-time 7200;
+
+  next-server {{pxe_server_ip_addr | ipaddr('address')}};
+  filename "pxelinux.0";
+}

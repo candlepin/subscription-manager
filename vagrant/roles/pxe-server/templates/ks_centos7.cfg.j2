@@ -1,0 +1,50 @@
+#version=DEVEL
+# System authorization information
+auth --enableshadow --passalgo=sha512
+# Use network installation
+url --url="ftp://{{pxe_server_ip_addr | ipaddr('address')}}/pub"
+# Use graphical install
+graphical
+# Run the Setup Agent on first boot
+firstboot --enable
+ignoredisk --only-use=vda
+# Keyboard layouts
+keyboard --vckeymap=us --xlayouts='us'
+# System language
+lang en_US.UTF-8
+
+# Network information
+network  --bootproto=dhcp --device=eth0 --ipv6=auto --activate
+network  --hostname=localhost.localdomain
+
+# Root password
+rootpw --plaintext redhat
+# System services
+services --disabled="chronyd"
+# System timezone
+timezone Europe/Prague --isUtc --nontp
+# System bootloader configuration
+bootloader --location=mbr --boot-drive=vda
+# Partition clearing information
+clearpart --all --initlabel --drives=vda
+# Disk partitioning information
+autopart --type=lvm
+
+# Shut down and power off the system after the installation has successfully completed
+poweroff
+
+%packages
+@^minimal
+@core
+
+%end
+
+%addon com_redhat_kdump --disable --reserve-mb='auto'
+
+%end
+
+%anaconda
+pwpolicy root --minlen=6 --minquality=1 --notstrict --nochanges --notempty
+pwpolicy user --minlen=6 --minquality=1 --notstrict --nochanges --emptyok
+pwpolicy luks --minlen=6 --minquality=1 --notstrict --nochanges --notempty
+%end
