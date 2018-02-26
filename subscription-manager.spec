@@ -94,7 +94,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.21.1
+Version: 1.21.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -904,6 +904,34 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Mon Feb 26 2018 Alex Wood <awood@redhat.com> 1.21.2-1
+- 1547354: Add missing requires for python-kitchen (awood@redhat.com)
+- 1528625: Prevent dmidecode failure from returning None (awood@redhat.com)
+- 1543639: Properly encode package profile data (jturel@redhat.com)
+- 1527396: Subman cockpit plugin - fix registration using act. keys
+  (jhnidek@redhat.com)
+- 1535974: Close register dialog, when status is changed (jhnidek@redhat.com)
+- Add start date to available pool listing (wpoteat@redhat.com)
+- Condition requiring --after and --all is unnecessary (wpoteat@redhat.com)
+- 1510024: Handle rhel-alt product tags properly (khowell@redhat.com)
+- 1540204: Raise RateLimitExceededException with headers (jhnidek@redhat.com)
+- 1533905: Remove dependency on yum and chkconfig. (jhnidek@redhat.com)
+- 1479353: Add --after option to list command (csnyder@redhat.com)
+- 1537473: Subman rpm requires python-setuptools (jhnidek@redhat.com)
+- 1525238: Do not protect rhel prod. cert with special case
+  (jhnidek@redhat.com)
+- 1526622: Do not delete product certificates in protected directory
+  (jhnidek@redhat.com)
+- 1519512: Handle non-UTF8 RPM vendors (khowell@redhat.com)
+- 1487600: Fix registration success detection (khowell@redhat.com)
+- 1527813: subman-gui use new URL of Online Documentation (jhnidek@redhat.com)
+- 1527392: Clear credential data in register dialog (jhnidek@redhat.com)
+- rct cat-manifest: show Web and API urls from consumer.json (evgeni@golov.de)
+- Use dnf on RHEL or Fedora w/ using Python 3 (khowell@redhat.com)
+- 1507030: RestlibExceptions should show they originate server-side
+  (awood@redhat.com)
+- Package for Python 3 on Fedora (khowell@redhat.com)
+
 * Thu Jan 11 2018 Alex Wood <awood@redhat.com> 1.21.1-1
 - Do not enable gpgcheck if the only a metadata gpg key is configured
   (git@PaulSD.com)
