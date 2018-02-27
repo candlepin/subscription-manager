@@ -95,7 +95,7 @@
 
 Name: subscription-manager
 Version: 1.21.2
-Release: 2
+Release: 3%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -900,6 +900,9 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Tue Feb 27 2018 Alex Wood <awood@redhat.com> 1.21.2-3
+- Add missing dist macro to release
+
 * Mon Feb 26 2018 Alex Wood <awood@redhat.com> 1.21.2-2
 - Remove %%clean section (ignatenkobrain@fedoraproject.org)
 - Remove BuildRoot definition (ignatenkobrain@fedoraproject.org)
