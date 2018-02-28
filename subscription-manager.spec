@@ -83,7 +83,7 @@
 
 Name: subscription-manager
 Version: 1.20.10
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -880,6 +880,9 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Wed Feb 28 2018 Christopher Snyder <csnyder@redhat.com> 1.20.10-2
+- Update cockpit license to LGPL2+ (csnyder@redhat.com)
+
 * Tue Jan 30 2018 Kevin Howell <khowell@redhat.com> 1.20.10-1
 - Update translations from zanata (khowell@redhat.com)
 - 1510024: Handle rhel-alt product tags properly (khowell@redhat.com)
