@@ -39,7 +39,7 @@ class ImportSubDialog(object):
         self.dialog = ga_Gtk.FileChooserDialog(_("Import Certificates"),
                 None, ga_Gtk.FileChooserAction.OPEN,
                 (ga_Gtk.STOCK_CANCEL, ga_Gtk.ResponseType.CANCEL,
-                 _("Import"), ga_Gtk.ResponseType.OK))
+                 _("Import").encode('utf-8', 'replace'), ga_Gtk.ResponseType.OK))
         self.dialog.set_default_response(ga_Gtk.ResponseType.OK)
         self.dialog.set_modal(True)
 
