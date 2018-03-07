@@ -77,7 +77,7 @@ class Package(object):
     @staticmethod
     def _normalize_string(value):
         if type(value) is six.binary_type:
-            return value.decode('utf-8', errors='replace')
+            return value.decode('utf-8', 'replace')
         return value
 
 
