@@ -25,6 +25,8 @@ LOG_FORMAT = u'%(asctime)s [%(levelname)s] %(cmd_name)s:%(process)d:' \
 
 _rhsm_log_handler = None
 _subman_debug_handler = None
+_syslog_handler = None
+
 log = None
 ROOT_NAMESPACES = ['subscription_manager',
                    'rhsm',
@@ -131,6 +133,14 @@ def _get_default_subman_debug_handler():
     return _subman_debug_handler
 
 
+def _get_default_syslog_handler():
+    global _syslog_handler
+    if not _syslog_handler:
+        _syslog_handler = logging.handlers.SysLogHandler('/dev/log')
+        _syslog_handler.setFormatter(logging.Formatter(LOG_FORMAT))
+    return _syslog_handler
+
+
 def init_logger():
     """Load logging config file and setup logging.
 
@@ -148,6 +158,7 @@ def init_logger():
         logger = logging.getLogger(root_namespace)
         logger.addHandler(_get_default_rhsm_log_handler())
         logger.addHandler(_get_default_subman_debug_handler())
+        logger.addHandler(_get_default_syslog_handler())
         logger.setLevel(getattr(logging, default_log_level.strip()))
 
     for logger_name, logging_level in config.items('logging'):
