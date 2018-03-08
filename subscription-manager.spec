@@ -806,6 +806,7 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/ca/redhat-uep.pem %{buildroo
 %defattr(-,root,root,-)
 %dir %{python_sitearch}/rhsm
 %{python_sitearch}/rhsm/*
+%{python_sitearch}/rhsm-*.egg-info
 
 %files -n subscription-manager-rhsm-certificates
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm
