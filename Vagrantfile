@@ -5,6 +5,8 @@ require 'yaml'
 
 VAGRANTFILE_DIR = File.dirname(__FILE__)
 
+Vagrant::DEFAULT_SERVER_URL.replace('https://vagrantcloud.com')
+
 Vagrant.configure("2") do |config|
   vm_boxes = {
     "centos7" => "centos/7",
@@ -41,6 +43,7 @@ Vagrant.configure("2") do |config|
     "src/rhsm/_certificate.so",
     "subscription-manager.egg-info",
     "cockpit/node_modules",
+    "vagrant/vagrant_data",
   ]
 
   # Set up the hostmanager plugin to automatically configure host & guest hostnames
@@ -75,6 +78,9 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "ansible", run: "always" do |ansible|
     ansible.playbook = "vagrant/vagrant.yml"
+    ansible.groups = {
+      "subman-devel" => vm_boxes.keys()
+    }
     ansible.extra_vars = {
       "subman_checkout_dir" => "/vagrant",
       "subman_setup_hacking_environment" => "true",
@@ -92,5 +98,36 @@ Vagrant.configure("2") do |config|
           ansible.extra_vars[new_var_key] = value
       end
     end
+  end
+end
+
+# We need to specify static IP address, because this IP address has to be part
+# of private network configuration, see: libvirt__dhcp_bootp_server: ip_addr
+ip_addr = '192.168.111.5'
+ip_prefix = '24'
+
+Vagrant.configure("2") do |config|
+  config.vm.hostname = 'pxe-server'
+  config.vm.box = 'centos/7'
+  config.vm.define 'pxe-server', autostart: false
+
+  config.ssh.forward_x11 = true
+
+  config.vm.network "private_network",
+    ip: ip_addr,
+    auto_config: false,
+    libvirt__dhcp_bootp_file: 'pxelinux.0',
+    libvirt__dhcp_bootp_server: ip_addr
+
+  config.vm.provision "ansible", run: "always" do |ansible|
+    ansible.playbook = "vagrant/vagrant_pxe_server.yml"
+    ansible.groups = {
+      "pxe-servers" => [
+        "pxe-server"
+      ]
+    }
+    ansible.extra_vars = {
+      "pxe_server_ip_addr" => ip_addr + '/' + ip_prefix
+    }
   end
 end

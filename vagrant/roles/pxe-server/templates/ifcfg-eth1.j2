@@ -1,0 +1,6 @@
+DEVICE="eth1"
+BOOTPROTO="static"
+ONBOOT="yes"
+TYPE="Ethernet"
+IPADDR={{pxe_server_ip_addr | ipaddr('address')}}
+NETMASK={{pxe_server_ip_addr | ipaddr('netmask')}}
