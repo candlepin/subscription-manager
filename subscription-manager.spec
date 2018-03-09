@@ -114,6 +114,9 @@ Source1: %{name}-cockpit-%{version}.tar.gz
 Source2: subscription-manager-rpmlintrc
 %endif
 
+%if 0%{?suse_version} < 1200
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+%endif
 
 # A note about the %{?foo:bar} %{!?foo:quux} convention.  The %{?foo:bar}
 # syntax evaluates foo and if it is **defined**, it expands to "bar" otherwise it
