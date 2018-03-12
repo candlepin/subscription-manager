@@ -103,31 +103,46 @@ end
 
 # We need to specify static IP address, because this IP address has to be part
 # of private network configuration, see: libvirt__dhcp_bootp_server: ip_addr
-ip_addr = '192.168.111.5'
+ip_addr_server = '192.168.111.5'
 ip_prefix = '24'
 
 Vagrant.configure("2") do |config|
-  config.vm.hostname = 'pxe-server'
-  config.vm.box = 'centos/7'
-  config.vm.define 'pxe-server', autostart: false
-
   config.ssh.forward_x11 = true
 
   config.vm.network "private_network",
-    ip: ip_addr,
+    ip: ip_addr_server,
     auto_config: false,
     libvirt__dhcp_bootp_file: 'pxelinux.0',
-    libvirt__dhcp_bootp_server: ip_addr
+    libvirt__dhcp_bootp_server: ip_addr_server,
+    libvirt__network_name: 'pxe-server0'
 
-  config.vm.provision "ansible", run: "always" do |ansible|
-    ansible.playbook = "vagrant/vagrant_pxe_server.yml"
-    ansible.groups = {
-      "pxe-servers" => [
-        "pxe-server"
-      ]
-    }
-    ansible.extra_vars = {
-      "pxe_server_ip_addr" => ip_addr + '/' + ip_prefix
-    }
+  # PXE server
+  config.vm.define 'pxe-server', autostart: false do |host|
+    host.vm.hostname = 'pxe-server'
+    host.vm.box = 'centos/7'
+
+    host.vm.provision "ansible", run: "always" do |ansible|
+      ansible.playbook = "vagrant/vagrant_pxe_server.yml"
+      ansible.groups = {
+        "pxe-servers" => [
+          "pxe-server"
+        ]
+      }
+      ansible.extra_vars = {
+        "pxe_server_ip_addr" => ip_addr_server + '/' + ip_prefix
+      }
+    end
+  end
+
+  # PXE client
+  config.vm.define 'pxe-client', autostart: false do |host|
+    host.vm.hostname = 'pxe-client'
+    host.ssh.username = 'root'
+    host.vm.provider :libvirt do |domain|
+      boot_network = {'network' => 'pxe-server0'}
+      domain.memory = 2048
+      domain.storage :file, :size => '20G', :type => 'qcow2'
+      domain.boot boot_network
+    end
   end
 end
