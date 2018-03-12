@@ -1109,7 +1109,8 @@ class RegisterCommand(UserPassCommand):
                     activation_keys=self.options.activation_keys,
                     environment=environment_id,
                     force=self.options.force,
-                    name=self.options.consumername
+                    name=self.options.consumername,
+                    type=self.options.consumertype
                 )
         except (connection.RestlibException, exceptions.ServiceError) as re:
             log.exception(re)

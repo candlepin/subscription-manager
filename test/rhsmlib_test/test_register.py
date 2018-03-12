@@ -120,7 +120,8 @@ class RegisterServiceTest(InjectionMockingTest):
             environment="environment",
             keys=None,
             installed_products=[],
-            content_tags=[])
+            content_tags=[],
+            type="system")
         self.mock_installed_products.write_cache.assert_called()
 
         mock_persist_consumer.assert_called_once_with(expected_consumer)
@@ -151,7 +152,8 @@ class RegisterServiceTest(InjectionMockingTest):
             environment=None,
             keys=[1],
             installed_products=[],
-            content_tags=[])
+            content_tags=[],
+            type="system")
         self.mock_installed_products.write_cache.assert_called()
 
         mock_persist_consumer.assert_called_once_with(expected_consumer)
