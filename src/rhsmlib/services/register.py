@@ -33,7 +33,7 @@ class RegisterService(object):
         self.cp = cp
 
     def register(self, org, activation_keys=None, environment=None, force=None, name=None, consumerid=None,
-            **kwargs):
+            type=None, **kwargs):
         # We accept a kwargs argument so that the DBus object can pass the options dictionary it
         # receives transparently to the service via dictionary unpacking.  This strategy allows the
         # DBus object to be more independent of the service implementation.
@@ -43,12 +43,15 @@ class RegisterService(object):
         if kwargs:
             raise exceptions.ValidationError(_("Unknown arguments: %s") % kwargs.keys())
 
+        type = type or "system"
+
         options = {
             'activation_keys': activation_keys,
             'environment': environment,
             'force': force,
             'name': name,
-            'consumerid': consumerid
+            'consumerid': consumerid,
+            'type': type
         }
         self.validate_options(options)
 
@@ -73,7 +76,8 @@ class RegisterService(object):
                 environment=environment,
                 keys=options.get('activation_keys'),
                 installed_products=self.installed_mgr.format_for_server(),
-                content_tags=self.installed_mgr.tags
+                content_tags=self.installed_mgr.tags,
+                type=type
             )
         self.installed_mgr.write_cache()
         self.plugin_manager.run("post_register_consumer", consumer=consumer, facts=facts_dict)

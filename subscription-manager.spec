@@ -94,8 +94,8 @@
 %endif
 
 Name: subscription-manager
-Version: 1.21.1
-Release: 1%{?dist}
+Version: 1.21.2
+Release: 3%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -114,7 +114,9 @@ Source1: %{name}-cockpit-%{version}.tar.gz
 Source2: subscription-manager-rpmlintrc
 %endif
 
+%if 0%{?suse_version} < 1200
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+%endif
 
 # A note about the %{?foo:bar} %{!?foo:quux} convention.  The %{?foo:bar}
 # syntax evaluates foo and if it is **defined**, it expands to "bar" otherwise it
@@ -142,6 +144,10 @@ Requires: %{?suse_version:dbus-1-python} %{!?suse_version:dbus-python}
 
 %if %{use_yum}
 Requires: %{?suse_version:yum} %{!?suse_version:yum >= 3.2.29-73}
+%endif
+
+%if %{use_kitchen}
+Requires: %{py_package_prefix}-kitchen
 %endif
 
 # Support GTK2 and GTK3 on both SUSE and RHEL...
@@ -175,7 +181,9 @@ Requires(post): %{?suse_version:aaa_base} %{!?suse_version:chkconfig}
 Requires(preun): %{?suse_version:aaa_base} %{!?suse_version:chkconfig, initscripts}
 %endif
 
-BuildRequires: %{py_package_prefix}-devel
+BuildRequires: %{?suse_version:python-devel >= 2.6} %{!?suse_version:%{py_package_prefix}-devel}
+BuildRequires: openssl-devel
+BuildRequires: gcc
 BuildRequires: %{py_package_prefix}-setuptools
 BuildRequires: gettext
 BuildRequires: intltool
@@ -203,10 +211,6 @@ BuildRequires: systemd-rpm-macros
 BuildRequires: systemd
 %endif
 
-# The %{?something:foo} expands to foo only when something is **defined**.  Likewise the
-# %{!?something:foo} expands only when something is **not defined**.
-BuildRequires: %{?suse_version:python-devel >= 2.6} %{!?suse_version:%{py_package_prefix}-devel}
-BuildRequires: openssl-devel
 
 %description
 The Subscription Manager package provides programs and libraries to allow users
@@ -356,14 +360,12 @@ Requires: subscription-manager-rhsm-certificates = %{version}-%{release}
 %{?python_provide:%python_provide %{py_package_prefix}-rhsm}
 %if %{with python3}
 Requires: python3-rpm
-Provides: python3-python-rhsm = %{version}-%{release}
-Obsoletes: python3-python-rhsm <= 1.20.3-1
+Provides: python3-rhsm = %{version}-%{release}
+Obsoletes: python3-rhsm <= 1.20.3-1
 %else
 Requires: rpm-python
 Provides: python-rhsm = %{version}-%{release}
 Obsoletes: python-rhsm <= 1.20.3-1
-Provides: subscription-manager-rhsm = %{version}-%{release}
-Obsoletes: subscription-manager-rhsm <= 1.21.0-1
 %endif
 
 %description -n %{rhsm_package_name}
@@ -401,7 +403,7 @@ Subscription Manager Cockpit UI
 
 %build
 make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
-    LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" %{?gtk_version}
+    LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" %{?gtk_version}
 
 %install
 rm -rf %{buildroot}
@@ -450,9 +452,6 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/ca/redhat-uep.pem %{buildroo
     # install cockpit dist targz
     tar --strip-components=1 -xzf %{SOURCE1} -C %{buildroot}
 %endif
-
-%clean
-rm -rf %{buildroot}
 
 
 # base/cli tools use the gettext domain 'rhsm', while the
@@ -902,6 +901,44 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Tue Feb 27 2018 Alex Wood <awood@redhat.com> 1.21.2-3
+- Add missing dist macro to release
+
+* Mon Feb 26 2018 Alex Wood <awood@redhat.com> 1.21.2-2
+- Remove %%clean section (ignatenkobrain@fedoraproject.org)
+- Remove BuildRoot definition (ignatenkobrain@fedoraproject.org)
+
+* Mon Feb 26 2018 Alex Wood <awood@redhat.com> 1.21.2-1
+- 1547354: Add missing requires for python-kitchen (awood@redhat.com)
+- 1528625: Prevent dmidecode failure from returning None (awood@redhat.com)
+- 1543639: Properly encode package profile data (jturel@redhat.com)
+- 1527396: Subman cockpit plugin - fix registration using act. keys
+  (jhnidek@redhat.com)
+- 1535974: Close register dialog, when status is changed (jhnidek@redhat.com)
+- Add start date to available pool listing (wpoteat@redhat.com)
+- Condition requiring --after and --all is unnecessary (wpoteat@redhat.com)
+- 1510024: Handle rhel-alt product tags properly (khowell@redhat.com)
+- 1540204: Raise RateLimitExceededException with headers (jhnidek@redhat.com)
+- 1533905: Remove dependency on yum and chkconfig. (jhnidek@redhat.com)
+- 1479353: Add --after option to list command (csnyder@redhat.com)
+- 1537473: Subman rpm requires python-setuptools (jhnidek@redhat.com)
+- 1525238: Do not protect rhel prod. cert with special case
+  (jhnidek@redhat.com)
+- 1526622: Do not delete product certificates in protected directory
+  (jhnidek@redhat.com)
+- 1519512: Handle non-UTF8 RPM vendors (khowell@redhat.com)
+- 1487600: Fix registration success detection (khowell@redhat.com)
+- 1527813: subman-gui use new URL of Online Documentation (jhnidek@redhat.com)
+- 1527392: Clear credential data in register dialog (jhnidek@redhat.com)
+- rct cat-manifest: show Web and API urls from consumer.json (evgeni@golov.de)
+- Use dnf on RHEL or Fedora w/ using Python 3 (khowell@redhat.com)
+- 1507030: RestlibExceptions should show they originate server-side
+  (awood@redhat.com)
+- Package for Python 3 on Fedora (khowell@redhat.com)
+
+* Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.21.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
 * Thu Jan 11 2018 Alex Wood <awood@redhat.com> 1.21.1-1
 - Do not enable gpgcheck if the only a metadata gpg key is configured
   (git@PaulSD.com)
