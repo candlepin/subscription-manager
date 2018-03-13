@@ -1,6 +1,11 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# Uncomment following line, when you have problem with reaching
+# https://atlas.hashicorp.com during `vagrant up <machine>`
+# More details here: https://github.com/hashicorp/vagrant/issues/9442
+#Vagrant::DEFAULT_SERVER_URL.replace('https://vagrantcloud.com')
+
 require 'yaml'
 
 VAGRANTFILE_DIR = File.dirname(__FILE__)
@@ -118,7 +123,7 @@ Vagrant.configure("2") do |config|
   # PXE server
   config.vm.define 'pxe-server', autostart: false do |host|
     host.vm.hostname = 'pxe-server'
-    host.vm.box = 'centos/7'
+    host.vm.box = 'fedora/27-cloud-base'
 
     host.vm.provision "ansible", run: "always" do |ansible|
       ansible.playbook = "vagrant/vagrant_pxe_server.yml"
@@ -128,7 +133,11 @@ Vagrant.configure("2") do |config|
         ]
       }
       ansible.extra_vars = {
-        "pxe_server_ip_addr" => ip_addr_server + '/' + ip_prefix
+        "pxe_server_ip_addr" => ip_addr_server + '/' + ip_prefix,
+        # There is no python command by default on Fedora 27
+        # and it is necessary to set python interpreter manually
+        # to python3
+        "ansible_python_interpreter" => "/usr/bin/python3"
       }
     end
   end

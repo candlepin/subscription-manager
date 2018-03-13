@@ -6,6 +6,21 @@ required_rpms:
   - syslinux
   - wget
   - vsftpd
+  - GConf2-devel
+  - git
+  - gcc
+  - make
+  - glib2-devel
+  - dbus-glib-devel
+  - libnotify-devel
+  - gtk3-devel
+  - intltool
+  - python3-devel
+  - openssl-devel
+  - redhat-rpm-config
+  - redhat-lsb-core
+  - m2crypto
+  - librsvg2
 
 ##### CentOS 7 #####
 
@@ -39,10 +54,14 @@ pxe_server_ip_addr: "192.168.111.5/24"
 
 syslinux_files:
   - pxelinux.0
+  - ldlinux.c32
   - menu.c32
   - memdisk
   - mboot.c32
   - chain.c32
+  - vesamenu.c32
+  - libcom32.c32
+  - libutil.c32
 
 kernel_files:
   - vmlinuz
