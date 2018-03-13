@@ -5,8 +5,6 @@ require 'yaml'
 
 VAGRANTFILE_DIR = File.dirname(__FILE__)
 
-Vagrant::DEFAULT_SERVER_URL.replace('https://vagrantcloud.com')
-
 Vagrant.configure("2") do |config|
   vm_boxes = {
     "centos7" => "centos/7",
@@ -43,6 +41,7 @@ Vagrant.configure("2") do |config|
     "src/rhsm/_certificate.so",
     "subscription-manager.egg-info",
     "cockpit/node_modules",
+    "updates.img",
     "vagrant/vagrant_data",
   ]
 
