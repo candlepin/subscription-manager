@@ -6,4 +6,4 @@ MENU TITLE *** PXE Menu ***
 LABEL {{distro_name}}{{distro_version}}_x64
 MENU LABEL {{distro_name}} {{distro_version}} x86_64
 KERNEL /netboot/vmlinuz
-APPEND initrd=/netboot/initrd.img inst.repo=ftp://{{pxe_server_ip_addr | ipaddr('address')}}/pub ks=ftp://{{pxe_server_ip_addr | ipaddr('address')}}/pub/ks.cfg inst.sshd
+APPEND initrd=/netboot/initrd.img inst.repo=ftp://{{pxe_server_ip_addr | ipaddr('address')}}/pub ks=ftp://{{pxe_server_ip_addr | ipaddr('address')}}/pub/ks.cfg inst.sshd inst.updates=ftp://{{pxe_server_ip_addr | ipaddr('address')}}/pub/updates.img
