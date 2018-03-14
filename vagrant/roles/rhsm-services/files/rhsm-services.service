@@ -1,0 +1,11 @@
+[Unit]
+Description=RHSM Testing Services
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/node /opt/rhsm-services/src/server.js
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

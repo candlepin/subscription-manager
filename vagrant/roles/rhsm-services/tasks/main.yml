@@ -1,0 +1,31 @@
+---
+- name: install required RPMs
+  package:
+    name: "{{item}}"
+    state: present
+  become: yes
+  with_items: "{{required_rpms}}"
+
+- name: clone a repo
+  git:
+    repo: "{{repo_url}}"
+    dest: "{{repo_dir}}"
+  become: yes
+
+- name: install modules from package.json
+  npm:
+    path: "{{repo_dir}}"
+  become: yes
+
+- name: copy systemctl service file
+  copy:
+    src: rhsm-services.service
+    dest: /etc/systemd/system/
+  become: yes
+
+- name: start and enable rhsm-services
+  systemd:
+    name: rhsm-services
+    enabled: yes
+    state: started
+  become: yes
