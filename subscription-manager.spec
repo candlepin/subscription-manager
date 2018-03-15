@@ -83,7 +83,7 @@
 
 Name: subscription-manager
 Version: 1.20.10
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -880,6 +880,11 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Thu Mar 15 2018 Christopher Snyder <csnyder@redhat.com> 1.20.10-3
+- 1554482: Reenable RHUI support (csnyder@redhat.com)
+- 1551465: Fix unicode decode issue on py 2.6 (csnyder@redhat.com)
+- 1551386: Cannot put unicode into gtk for button label (wpoteat@redhat.com)
+
 * Wed Feb 28 2018 Christopher Snyder <csnyder@redhat.com> 1.20.10-2
 - Update cockpit license to LGPL2+ (csnyder@redhat.com)
 
