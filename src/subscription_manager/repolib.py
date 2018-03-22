@@ -32,6 +32,7 @@ from six.moves.urllib.parse import parse_qs, urlparse, urlunparse, urlencode
 from six.moves import configparser
 
 from rhsm.config import initConfig, in_container
+from rhsm import connection
 import six
 
 # FIXME: local imports
@@ -360,10 +361,11 @@ class RepoUpdateActionCommand(object):
         self.override_supported = False
         try:
             self.override_supported = bool(self.identity.is_valid() and self.uep and self.uep.supports_resource('content_overrides'))
-        except socket.error as e:
+        except (socket.error, connection.ConnectionException) as e:
             # swallow the error to fix bz 1298327
             log.exception(e)
             pass
+
         self.written_overrides = WrittenOverrideCache()
 
         # FIXME: empty report at the moment, should be changed to include
