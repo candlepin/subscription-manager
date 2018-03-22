@@ -51,6 +51,7 @@ Vagrant.configure("2") do |config|
     config.hostmanager.manage_host = true
     config.hostmanager.manage_guest = true
     config.hostmanager.include_offline = true
+    config.hostmanager.ignore_private_ip = true
   end
 
   vm_boxes.each do |name, box|
