@@ -57,6 +57,27 @@ make -e clean
 make
 make -e install
 
+# Get site-packages dir
+PYTHON_SITE_PACKAGE_DIRS=`${PYTHON_BIN} -c "import site; print(' '.join(site.getsitepackages()))"`
+
+# List of required Python packages
+PY_PACKAGES="kitchen kitchen-1.2.4-py3.6.egg-info dateutil"
+
+# Copy required Python modules to updates.img too
+for pkg in `echo ${PY_PACKAGES}`
+do
+        for site_pkg_dir in `echo ${PYTHON_SITE_PACKAGE_DIRS}`
+        do
+                if [ -d "${site_pkg_dir}/${pkg}" ]
+                then
+                        mkdir -p "${UPDATE_DIR}/${site_pkg_dir}"
+                        echo "copying ${site_pkg_dir}/${pkg} to ${UPDATE_DIR}/${site_pkg_dir}"
+                        cp -R "${site_pkg_dir}/${pkg}" "${UPDATE_DIR}/${site_pkg_dir}"
+                        break
+                fi
+        done
+done
+
 pushd $UPDATE_DIR
 
 # Build img file (See https://fedoraproject.org/wiki/Anaconda/Updates)
