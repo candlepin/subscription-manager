@@ -8,6 +8,7 @@
 - hosts: "subman-devel"
   roles:
     - subman-devel
+    - { role: rhsm-services, when: subman_with_system_tests }
 
 - hosts: "subman-devel"
   gather_facts: no

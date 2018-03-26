@@ -141,6 +141,8 @@ for all platforms, they are not run by default. They can be included via
 tests to also use `--with-xvfb` in order to use Xvfb instead of spawning
 GTK windows in your desktop session (ex. `nosetests -a gui --with-xvfb`).
 
+[More details about testing](./TESTING.md)
+
 Troubleshooting
 ---------------
 
