@@ -155,3 +155,27 @@ Vagrant.configure("2") do |config|
     end
   end
 end
+
+## VM for proxy server
+Vagrant.configure("2") do |config|
+  config.vm.hostname = 'proxy-server.subman.example.com'
+  config.vm.box = 'centos/7'
+  config.vm.define 'proxy-server', autostart: false
+
+  # Set up the hostmanager plugin to automatically configure host & guest hostnames
+  if Vagrant.has_plugin?("vagrant-hostmanager")
+    config.hostmanager.enabled = true
+    config.hostmanager.manage_host = true
+    config.hostmanager.manage_guest = true
+    config.hostmanager.ignore_private_ip = true
+  end
+
+  config.vm.provision "ansible", run: "always" do |ansible|
+    ansible.playbook = "vagrant/vagrant_proxy_server.yml"
+    ansible.groups = {
+      "proxy-servers" => [
+        "proxy-server"
+      ]
+    }
+  end
+end

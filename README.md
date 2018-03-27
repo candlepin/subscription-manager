@@ -111,6 +111,16 @@ Note, however, since the registration is necessary to download RPMs to set up
 the VM for development, registering against a local candlepin might not be
 particularly useful (at least not for initial provisioning).
 
+
+> If you want use proxy server to play with subscription you can run it using vagrant:
+>       vagrant up proxy-server
+
+The current info about proxy
+
+url | proxy-server.subman.example.com:3128
+username | proxyuser
+password | password
+
 D-Bus Development
 -----------------
 In a vagrant VM, the `com.redhat.RHSM1` service along with related files 

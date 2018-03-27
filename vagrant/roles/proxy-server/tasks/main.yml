@@ -1,0 +1,32 @@
+---
+- name: install required RPMs
+  package:
+    name: "{{item}}"
+    state: present
+  become: yes
+  with_items: "{{required_rpms}}"
+
+- name: create configuration file for squid
+  copy:
+    src: squid.conf
+    dest: /etc/squid/squid.conf
+    follow: yes
+  become: yes
+    
+- name: create passwd file for an authorized user of squid
+  htpasswd:
+    path: /etc/squid/passwd
+    name: "{{ proxy_user_name }}"
+    password: "{{ proxy_password }}"
+    crypt_scheme: apr_md5_crypt
+    mode: 0640
+    owner: root
+    group: squid
+  become: yes
+
+- name: start and enable squid service
+  service:
+    name: squid
+    enabled: yes
+    state: started
+  become: true
