@@ -7,6 +7,7 @@
 %global use_firstboot 0
 %global use_kitchen 1
 %global use_inotify 1
+%global py2_package_prefix python2
 
 # borrowed from dnf spec file & tweaked
 %if (0%{?rhel} && 0%{?rhel} <= 7) || 0%{?suse_version}
@@ -15,12 +16,19 @@
 %bcond_without python3
 %endif
 
+%if !(0%{?fedora} && %{with python3})
+%bcond_with python2_rhsm
+%else
+%bcond_without python2_rhsm
+%endif
+
+
 %global rhsm_plugins_dir  /usr/share/rhsm-plugins
 # on recent Fedora and RHEL 7, let's not use m2crypto
 %global use_m2crypto (0%{?fedora} < 23 && 0%{?rhel} < 7)
 
 %if %{use_systemd}
-# Note that %gtk3 will be undefined if it's not used
+# Note that the global gtk3 will be undefined if it's not used
 %global gtk3 1
 %endif
 
@@ -118,9 +126,12 @@ Source2: subscription-manager-rpmlintrc
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 %endif
 
-# A note about the %{?foo:bar} %{!?foo:quux} convention.  The %{?foo:bar}
+# The following macro examples are preceeded by '%' to stop macro expansion
+# in the comments. (See https://bugzilla.redhat.com/show_bug.cgi?id=1224660 for
+# why this is necessary)
+# A note about the %%{?foo:bar} %%{!?foo:quux} convention.  The %%{?foo:bar}
 # syntax evaluates foo and if it is **defined**, it expands to "bar" otherwise it
-# expands to nothing.  The %{!?foo:quux} syntax similarily only the expansion
+# expands to nothing.  The %%{!?foo:quux} syntax similarily only the expansion
 # occurs when foo is **undefined**.  Since one and only one of the expressions will
 # expand we can more concisely handle when a dependency has different names in
 # SUSE versus RHEL.  The traditional if syntax gets extremely confusing when
@@ -373,6 +384,32 @@ A small library for communicating with the REST interface of a Red Hat Unified
 Entitlement Platform. This interface is used for the management of system
 entitlements, certificates, and access to content.
 
+
+%if %{with python2_rhsm}
+%package -n python2-subscription-manager-rhsm
+Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
+Group: Development/Libraries
+
+%if %use_m2crypto
+Requires: %{?suse_version:python-m2crypto} %{!?suse_version:m2crypto}
+%endif
+Requires: %{py2_package_prefix}-dateutil
+Requires: %{py2_package_prefix}-iniparse
+# rpm-python is an old name for python2-rpm but RHEL6 uses the old name
+Requires: %{py2_package_prefix}-six
+Requires: subscription-manager-rhsm-certificates = %{version}-%{release}
+# Required by Fedora packaging guidelines
+%{?python_provide:%python_provide %{py2_package_prefix}-rhsm}
+Requires: rpm-python
+Provides: python-rhsm = %{version}-%{release}
+Obsoletes: python-rhsm <= 1.20.3-1
+
+%description -n python2-subscription-manager-rhsm
+A small library for communicating with the REST interface of a Red Hat Unified
+Entitlement Platform. This interface is used for the management of system
+entitlements, certificates, and access to content.
+%endif
+
 %package -n subscription-manager-rhsm-certificates
 Summary: Certificates required to communicate with a Red Hat Unified Entitlement Platform
 Group: Development/Libraries
@@ -405,6 +442,10 @@ Subscription Manager Cockpit UI
 make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
     LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" %{?gtk_version}
 
+%if %{with python2_rhsm}
+./setup.py build --quiet --gtk-version=%{?gtk3:3}%{?!gtk3:2} --rpm-version=%{version}-%{release}
+%endif
+
 %install
 rm -rf %{buildroot}
 make -f Makefile install VERSION=%{version}-%{release} \
@@ -415,6 +456,11 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?install_yum_plugins} %{?install_dnf_plugins} \
     %{?install_zypper_plugins} \
     %{?with_systemd}
+
+%if %{with python2_rhsm}
+mkdir -p %{buildroot}%{python2_sitearch}
+cp -r %{buildroot}%{python_sitearch}/rhsm %{buildroot}%{python2_sitearch}/rhsm
+%endif
 
 %if 0%{?suse_version}
 %suse_update_desktop_file -n -r subscription-manager-gui Settings PackageManager
@@ -809,6 +855,13 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/ca/redhat-uep.pem %{buildroo
 %defattr(-,root,root,-)
 %dir %{python_sitearch}/rhsm
 %{python_sitearch}/rhsm/*
+
+%if %{with python2_rhsm}
+%files -n python2-subscription-manager-rhsm
+%defattr(-,root,root,-)
+%dir %{python2_sitearch}/rhsm
+%{python2_sitearch}/rhsm/*
+%endif
 
 %files -n subscription-manager-rhsm-certificates
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm
