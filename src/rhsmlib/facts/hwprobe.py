@@ -638,7 +638,7 @@ class HardwareCollector(collector.FactsCollector):
                 ip_list = set([x[4][0] for x in info])
                 net_info['network.ipv4_address'] = ', '.join(ip_list)
             except Exception as err:
-                log.error("Error during resolving IPv4 address of hostname: %s, %s" % (hostname, err))
+                log.debug("Error during resolving IPv4 address of hostname: %s, %s" % (hostname, err))
                 net_info['network.ipv4_address'] = ', '.join(self._get_ipv4_addr_list())
 
             try:
@@ -646,7 +646,7 @@ class HardwareCollector(collector.FactsCollector):
                 ip_list = set([x[4][0] for x in info])
                 net_info['network.ipv6_address'] = ', '.join(ip_list)
             except Exception as err:
-                log.error("Error during resolving IPv6 address of hostname: %s, %s" % (hostname, err))
+                log.debug("Error during resolving IPv6 address of hostname: %s, %s" % (hostname, err))
                 net_info['network.ipv6_address'] = ', '.join(self._get_ipv6_addr_list())
 
         except Exception as err:
