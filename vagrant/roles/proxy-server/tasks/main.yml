@@ -30,3 +30,18 @@
     enabled: yes
     state: started
   become: true
+
+- name: get IP address for candlepin.example.com
+  local_action: getent
+  args:
+    database: ahostsv4
+    key: candlepin.example.com
+
+- name: add candlepin.example.com to /etc/hosts
+  lineinfile:
+    name: /etc/hosts
+    line: "{{ getent_ahostsv4.keys()[0] }} candlepin.example.com"
+    regexp: 'candlepin.example.com'
+  become: yes
+  ignore_errors: yes
+  when: subman_add_vagrant_candlepin_to_hosts
