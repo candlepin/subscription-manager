@@ -47,6 +47,7 @@ ANACONDA_ADDON_INST_DIR := $(PREFIX)/share/anaconda/addons
 INITIAL_SETUP_INST_DIR := $(ANACONDA_ADDON_INST_DIR)/$(ANACONDA_ADDON_NAME)
 POLKIT_ACTIONS_INST_DIR := $(INSTALL_DIR)/polkit-1/actions
 LIBEXEC_DIR ?= $(shell rpm --eval='%_libexecdir')
+SUBPACKAGES ?= $(shell ls packages)
 
 # If we skip install ostree plugin, unset by default
 # override from spec file for rhel6
@@ -81,6 +82,7 @@ INSTALL_DNF_PLUGINS ?= false
 DNF_PLUGINS_SRC_DIR := src/plugins
 
 INSTALL_ZYPPER_PLUGINS ?= false
+INCLUDE_INTENTCTL ?= 0
 
 # sets a version that is more or less latest tag plus commit sha
 VERSION ?= $(shell git describe | awk ' { sub(/subscription-manager-/,"")};1' )
@@ -158,7 +160,7 @@ install-conf:
 	install -d $(DESTDIR)/etc/{cron.daily,logrotate.d,pam.d,bash_completion.d,rhsm}
 	install -d $(DESTDIR)/etc/rc.d/init.d
 	install -d $(DESTDIR)/etc/init.d
-	install -d $(DESTDIR)/etc/rhsm/facts
+	install -d $(DESTDIR)/etc/rhsm/{facts,intent}
 	install -d $(DESTDIR)/etc/security/console.apps
 	install -m 644 etc-conf/rhsm.conf $(DESTDIR)/etc/rhsm/
 	install -T etc-conf/logging.conf $(DESTDIR)/etc/rhsm/logging.conf
@@ -279,7 +281,7 @@ endif
 install-post-boot: install-firstboot install-initial-setup
 
 .PHONY: install-via-setup
-install-via-setup:
+install-via-setup: install-subpackages-via-setup
 	$(PYTHON) ./setup.py install --root $(DESTDIR) --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION) --with-systemd=$(WITH_SYSTEMD) --prefix=$(PREFIX)
 	mkdir -p $(DESTDIR)/$(PREFIX)/sbin/
 	mkdir -p $(DESTDIR)/$(LIBEXEC_DIR)/
@@ -290,9 +292,23 @@ install-via-setup:
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-service $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-facts-service $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsmd $(DESTDIR)/$(LIBEXEC_DIR)/
+	if [[ "$(INCLUDE_INTENTCTL)" = "1" ]]; then \
+		mv $(DESTDIR)/$(PREFIX)/bin/intentctl $(DESTDIR)/$(PREFIX)/sbin/; \
+	fi;
+
+
+.PHONY: install-subpackages-via-setup
+install-subpackages-via-setup:
+	for subpackage in $(SUBPACKAGES); \
+	do \
+	    pushd packages/$$subpackage; \
+	    $(PYTHON) ./setup.py install --root=$(DESTDIR) --prefix=$(PREFIX); \
+		popd; \
+	done;
 
 .PHONY: install
 install: install-via-setup install-files
+
 
 .PHONY: install-files
 install-files: dbus-install install-conf install-plugins install-post-boot install-ga
