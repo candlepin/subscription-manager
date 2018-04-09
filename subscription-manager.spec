@@ -9,6 +9,10 @@
 %global use_inotify 1
 %global py2_package_prefix python2
 
+%if (0%{?rhel} >= 7 || 0%{?fedora})
+%global dmidecode_version >= 3.12.2
+%endif
+
 # borrowed from dnf spec file & tweaked
 %if (0%{?rhel} && 0%{?rhel} <= 7) || 0%{?suse_version}
 %bcond_with python3
@@ -174,7 +178,7 @@ Requires:  %{?gtk3:gobject-introspection, pygobject3-base} %{!?gtk3:pygobject2}
 # There's no dmi to read on these arches, so don't pull in this dep.
 # Additionally, dmidecode isn't packaged at all on SUSE
 %ifnarch ppc ppc64 s390 s390x
-Requires:  %{py_package_prefix}-dmidecode
+Requires:  %{py_package_prefix}-dmidecode %{?dmidecode_version}
 %endif
 %endif
 
