@@ -32,6 +32,7 @@ import sys
 from time import localtime, strftime, strptime
 
 from rhsm.certificate import CertificateException
+from rhsm.certificate2 import CONTENT_ACCESS_CERT_TYPE
 from rhsm.https import ssl
 
 import rhsm.config
@@ -2616,7 +2617,23 @@ class StatusCommand(CliCommand):
         else:
             result = 1
 
-        print(_("Overall Status: %s\n") % service_status['status'])
+        ca_message = ""
+        has_cert = (_(
+                "Content Access Mode is set to Organization/Environment Access. This host has access to content, regardless of subscription status.\n"))
+
+        certs = self.entitlement_dir.list_with_content_access()
+        ca_certs = [cert for cert in certs if cert.entitlement_type == CONTENT_ACCESS_CERT_TYPE]
+        if ca_certs:
+            ca_message = has_cert
+        else:
+            try:
+                owner = self.cp.getOwner(self.identity.uuid)
+                if (owner['contentAccessMode'] == "org_environment"):
+                    ca_message = has_cert
+            except Exception as e:
+                log.debug("Unable to check the orgs content access mode: %s" % e)
+
+        print(_("Overall Status: %s\n%s") % (service_status['status'], ca_message))
 
         columns = get_terminal_width()
         for name in reasons:
