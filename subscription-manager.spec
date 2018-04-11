@@ -83,7 +83,7 @@
 
 Name: subscription-manager
 Version: 1.20.10
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -880,6 +880,10 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Wed Apr 11 2018 Christopher Snyder <csnyder@redhat.com> 1.20.10-4
+- 1559743: Reduce log level of network address fact collection to debug
+  (csnyder@redhat.com)
+
 * Thu Mar 15 2018 Christopher Snyder <csnyder@redhat.com> 1.20.10-3
 - 1554482: Reenable RHUI support (csnyder@redhat.com)
 - 1551465: Fix unicode decode issue on py 2.6 (csnyder@redhat.com)
