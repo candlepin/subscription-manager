@@ -28,6 +28,7 @@ import os
 import threading
 import time
 import socket
+import subprocess
 
 import rhsm.config as config
 
@@ -561,12 +562,21 @@ class MainWindow(widgets.SubmanBaseWidget):
 
     def _getting_started_item_clicked(self, widget):
         try:
-            # try to open documentation in yelp
-            ga_Gtk.show_uri(None, 'ghelp:subscription-manager', time.time())
+            # try to open documentation in yelp, first with gnome-open
+            if os.path.exists('/usr/bin/gnome-open'):
+                DEVNULL = open(os.devnull, 'w')
+                subprocess.call(['/usr/bin/gnome-open', 'ghelp:subscription-manager'],
+                                stderr=DEVNULL)
         except Exception as e:
+            # Log one warning only, the last caught in our series of attempts
+            error = e
+            try:
+                ga_Gtk.show_uri(None, 'ghelp:subscription-manager', time.time())
+            except Exception as ex:
+                error = ex
             # if we can't open it, it's probably because the user didn't
             # install the docs, or yelp. no need to bother them.
-            log.warn("Unable to open help documentation: %s", e)
+            log.warn("Unable to open help documentation: %s", error)
 
     def _about_item_clicked(self, widget):
         about = AboutDialog(self._get_window(), self.backend)
