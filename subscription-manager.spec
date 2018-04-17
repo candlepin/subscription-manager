@@ -10,7 +10,7 @@
 %global py2_package_prefix python2
 
 %if (0%{?rhel} >= 7 || 0%{?fedora})
-%global dmidecode_version >= 3.12.2
+%global dmidecode_version >= 3.12.2-2
 %endif
 
 # borrowed from dnf spec file & tweaked
