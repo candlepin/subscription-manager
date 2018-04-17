@@ -141,9 +141,14 @@ class Identity(object):
             # XXX shouldn't catch the global exception here, but that's what
             # existsAndValid did, so this is better.
             except (CertificateException, IOError) as err:
-                log.error("Reload of consumer identity cert %s raised an exception with msg: %s",
-                          ConsumerIdentity.certpath(), err)
                 self.consumer = None
+                msg = "Reload of consumer identity cert {} raised an exception with msg: {}" \
+                    .format(ConsumerIdentity.certpath(), err)
+                if isinstance(err, IOError) and err.errno == os.errno.ENOENT:
+                    log.debug(msg)
+                else:
+                    log.error(msg)
+
             if self.consumer is not None:
                 self._name = self.consumer.getConsumerName()
                 self._uuid = self.consumer.getConsumerId()
