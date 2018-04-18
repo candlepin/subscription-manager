@@ -142,8 +142,8 @@ class Identity(object):
             # existsAndValid did, so this is better.
             except (CertificateException, IOError) as err:
                 self.consumer = None
-                msg = "Reload of consumer identity cert {} raised an exception with msg: {}" \
-                    .format(ConsumerIdentity.certpath(), err)
+                msg = "Reload of consumer identity cert %s raised an exception with msg: %s" \
+                    % (ConsumerIdentity.certpath(), err)
                 if isinstance(err, IOError) and err.errno == os.errno.ENOENT:
                     log.debug(msg)
                 else:
