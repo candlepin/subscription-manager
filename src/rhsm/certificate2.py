@@ -543,7 +543,10 @@ class EntitlementCertificate(ProductCertificate):
 
     @property
     def entitlement_type(self):
-        return self.extensions.get(EXT_ENT_TYPE) or 'Basic'
+        if self.extensions.get(EXT_ENT_TYPE):
+            return self.extensions.get(EXT_ENT_TYPE).decode('utf-8')
+        else:
+            return 'Basic'
 
     @property
     def _path_tree(self):
