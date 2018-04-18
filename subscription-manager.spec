@@ -83,7 +83,7 @@
 
 Name: subscription-manager
 Version: 1.20.10
-Release: 5%{?dist}
+Release: 6%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -880,6 +880,9 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Wed Apr 18 2018 Christopher Snyder <csnyder@redhat.com> 1.20.10-6
+- 1559227: Do not use str format for python 2.6 (csnyder@redhat.com)
+
 * Wed Apr 18 2018 Christopher Snyder <csnyder@redhat.com> 1.20.10-5
 - 1559227: Do not log Error messages for missing identity cert/key
   (csnyder@redhat.com)
