@@ -19,6 +19,7 @@ import os
 
 from subscription_manager import injection as inj
 from subscription_manager.repolib import RepoActionInvoker
+from subscription_manager.entcertlib import EntCertActionInvoker
 from rhsmlib.facts.hwprobe import ClassicCheck
 from subscription_manager.utils import chroot
 from subscription_manager.injectioninit import init_dep_injection
@@ -102,7 +103,10 @@ class SubscriptionManager(dnf.Plugin):
         if config.in_container():
             logger.info(_("Subscription Manager is operating in container mode."))
 
-        rl = RepoActionInvoker(cache_only=cache_only)
+        if not cache_only:
+            rl = EntCertActionInvoker()
+        else:
+            rl = RepoActionInvoker(cache_only=cache_only)
         rl.update()
 
     def _warnExpired(self):

@@ -22,6 +22,7 @@ from yum.plugins import TYPE_CORE
 
 from subscription_manager import injection as inj
 from subscription_manager.repolib import RepoActionInvoker
+from subscription_manager.entcertlib import EntCertActionInvoker
 from rhsmlib.facts.hwprobe import ClassicCheck
 from subscription_manager.certlib import Locker
 from subscription_manager.utils import chroot
@@ -110,7 +111,10 @@ def update(conduit, cache_only):
     if config.in_container():
         conduit.info(3, "Subscription Manager is operating in container mode.")
 
-    rl = RepoActionInvoker(cache_only=cache_only, locker=YumRepoLocker(conduit=conduit))
+    if not cache_only:
+        rl = EntCertActionInvoker(locker=YumRepoLocker(conduit=conduit))
+    else:
+        rl = RepoActionInvoker(cache_only=cache_only, locker=YumRepoLocker(conduit=conduit))
     rl.update()
 
 

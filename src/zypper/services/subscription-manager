@@ -20,6 +20,7 @@ import sys
 
 from subscription_manager import injection as inj
 from subscription_manager.repolib import RepoActionInvoker, ZYPPER_REPO_DIR
+from subscription_manager.entcertlib import EntCertActionInvoker
 from subscription_manager.certlib import Locker
 from subscription_manager.injectioninit import init_dep_injection
 from subscription_manager import logutil
@@ -102,8 +103,12 @@ class ZypperService(object):
         key_file = ConsumerIdentity.keypath()
 
         connection.UEPConnection(cert_file=cert_file, key_file=key_file)
+        cache_only = not self.full_refresh_on_yum
 
-        rl = RepoActionInvoker(cache_only=not self.full_refresh_on_yum, locker=RepoLocker())
+        if not cache_only:
+            rl = EntCertActionInvoker(locker=RepoLocker())
+        else:
+            rl = RepoActionInvoker(cache_only=cache_only, locker=RepoLocker())
         rl.update()
 
         # Rehash CA-certificates since zypper accepts only capath
