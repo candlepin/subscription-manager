@@ -107,6 +107,7 @@ class HardwareCollector(collector.FactsCollector):
             self.get_release_info,
             self.get_mem_info,
             self.get_proc_cpuinfo,
+            self.get_proc_stat,
             self.get_cpu_info,
             self.get_ls_cpu_info,
             self.get_network_info,
@@ -351,6 +352,24 @@ class HardwareCollector(collector.FactsCollector):
         # we could enumerate each processor here as proc_cpuinfo.cpu.3.key =
         # value, but that is a lot of fact table entries
         return proc_cpuinfo
+
+    def get_proc_stat(self):
+        proc_stat = {}
+        fact_namespace = 'proc_stat'
+        proc_stat_path = '/proc/stat'
+
+        btime_re = r'btime\W*([0-9]+)\W*$'
+        try:
+            with open(proc_stat_path, 'r') as proc_stat_file:
+                for line in proc_stat_file.readlines():
+                    match = re.match(btime_re, line.strip())
+                    if match:
+                        proc_stat['%s.btime' % (fact_namespace)] = match.group(1)
+                        break  # We presently only care about the btime fact
+        except Exception as e:
+            # This fact is not required, only log failure to gather it at the debug level
+            log.debug("Could not gather proc_stat facts: %s", e)
+        return proc_stat
 
     def get_cpu_info(self):
         cpu_info = {}
