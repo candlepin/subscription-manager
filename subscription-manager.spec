@@ -52,6 +52,7 @@
 %global __python %__python3
 %global py_package_prefix python%{python3_pkgversion}
 %global rhsm_package_name %{py_package_prefix}-subscription-manager-rhsm
+%define include_intentctl 1
 %else
 %global py_package_prefix python
 %global rhsm_package_name subscription-manager-rhsm
@@ -104,6 +105,8 @@
 %else
 %define with_systemd WITH_SYSTEMD=false
 %endif
+
+%define subpackages SUBPACKAGES="%{?include_intentctl:intentctl}"
 
 Name: subscription-manager
 Version: 1.21.2
@@ -226,11 +229,20 @@ BuildRequires: systemd-rpm-macros
 BuildRequires: systemd
 %endif
 
-
 %description
 The Subscription Manager package provides programs and libraries to allow users
 to manage subscriptions and yum repositories from the Red Hat entitlement
 platform.
+
+%if %{with python3}
+%package -n %{py_package_prefix}-intentctl
+Summary: A commandline utility for declaring system intent
+Group: System Environment/Base
+
+%description -n %{py_package_prefix}-intentctl
+Provides the intentctl commandline utility. This utility manages the
+system intent.
+%endif
 
 
 %package -n subscription-manager-plugin-container
@@ -444,7 +456,7 @@ Subscription Manager Cockpit UI
 
 %build
 make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
-    LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" %{?gtk_version}
+    LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" %{?gtk_version} %{?subpackages} %{?include_intentctl:INCLUDE_INTENTCTL="1"}
 
 %if %{with python2_rhsm}
 ./setup.py build --quiet --gtk-version=%{?gtk3:3}%{?!gtk3:2} --rpm-version=%{version}-%{release}
@@ -459,7 +471,9 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?install_ostree} %{?post_boot_tool} %{?gtk_version} \
     %{?install_yum_plugins} %{?install_dnf_plugins} \
     %{?install_zypper_plugins} \
-    %{?with_systemd}
+    %{?with_systemd} \
+    %{?subpackages} \
+    %{?include_intentctl:INCLUDE_INTENTCTL="1"}
 
 %if %{with python2_rhsm}
 mkdir -p %{buildroot}%{python2_sitearch}
@@ -782,6 +796,17 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/ca/redhat-uep.pem %{buildroo
 %doc README.Fedora
 %endif
 
+%if %{with python3}
+%files -n %{py_package_prefix}-intentctl
+%defattr(-,root,root,-)
+%dir %{python3_sitelib}/intentctl*.egg-info
+%{python3_sitelib}/intentctl*.egg-info/*
+%dir %{_sysconfdir}/rhsm/intent
+%dir %{python3_sitelib}/intentctl
+%{python3_sitelib}/intentctl/{*.py*,__pycache__/*}
+
+%attr(755, root, root) %{_sbindir}/intentctl
+%endif
 
 %files -n subscription-manager-plugin-container
 %defattr(-,root,root,-)

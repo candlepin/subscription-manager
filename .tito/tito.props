@@ -2,6 +2,9 @@
 lib_dir = .tito/lib
 builder = rhsmbuild.ScriptBuilder
 script_builder_script = .tito/cockpit-build.sh
-tagger = tito.tagger.VersionTagger
+tagger = rhsmtagger.MultiPythonPackageVersionTagger
 changelog_do_not_remove_cherrypick = 0
 changelog_format = %s (%ae)
+
+[tagconfig]
+python_subpackage_dir=packages
