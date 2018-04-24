@@ -169,13 +169,15 @@ Vagrant.configure("2") do |config|
     config.hostmanager.manage_guest = true
     config.hostmanager.ignore_private_ip = true
   end
-
   config.vm.provision "ansible", run: "always" do |ansible|
     ansible.playbook = "vagrant/vagrant_proxy_server.yml"
     ansible.groups = {
       "proxy-servers" => [
         "proxy-server"
       ]
+    }
+    ansible.extra_vars = {
+      "subman_add_vagrant_candlepin_to_hosts" => "true",
     }
   end
 end
