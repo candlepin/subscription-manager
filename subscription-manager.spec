@@ -109,8 +109,8 @@
 %define subpackages SUBPACKAGES="%{?include_intentctl:intentctl}"
 
 Name: subscription-manager
-Version: 1.21.2
-Release: 3%{?dist}
+Version: 1.21.3
+Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -983,6 +983,42 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Wed Apr 25 2018 Christopher Snyder <csnyder@redhat.com> 1.21.3-1
+- 1439645: Perform a full entitlement refresh in the yum/dnf/zypper plugins
+  (csnyder@redhat.com)
+- 1527727: Add proc_stat.btime fact (csnyder@redhat.com)
+- 1568214: rhsmcertd no longer uses reload on py3 (csnyder@redhat.com)
+- 1559227: Do not use str format for python 2.6 (csnyder@redhat.com)
+- 1425766: Additional message in status to indicate content access
+  (wpoteat@redhat.com)
+- Adds a new cli utility 'intentctl' (csnyder@redhat.com)
+- 1559227: Do not log Error messages for missing identity cert/key
+  (csnyder@redhat.com)
+- 1458159: python-dmidecode bug fix requires specific RPM release.
+  (awood@redhat.com)
+- fix for proxy-server provisioning - resolving of 'candlepin.example.com'
+  (jstavel@redhat.com)
+- 1458159: Require latest version of python-dmidecode (awood@redhat.com)
+- 1551044: Add the option to build both python{3,2}-subscription-manager-rhsm
+  (csnyder@redhat.com)
+- 1559743: Reduce log level of network address fact collection to debug
+  (csnyder@redhat.com)
+- added a vagrant section for a VM for proxy-server (jstavel@redhat.com)
+- ansible role rhsm-services and TESTING.md document (jstavel@redhat.com)
+- Fix updates.img to include required Python packages (jhnidek@redhat.com)
+- Do not remove existing zypper repos when disconnected (csnyder@redhat.com)
+- Apply updates.img druing PXE boot (jhnidek@redhat.com)
+- Do not use private network addresses for vagrant hostmanager
+  (csnyder@redhat.com)
+- Adds tool to make updates.img file for use with anaconda (csnyder@redhat.com)
+- 1554482: Reenable RHUI support (csnyder@redhat.com)
+- Fix building on SLES 11 (jhnidek@redhat.com)
+- Added PXE BOOT client to the Vagrant setup (jhnidek@redhat.com)
+- New Vagrant file for creating PXEBOOT server (jhnidek@redhat.com)
+- 1551386: Cannot put unicode into gtk for button label (wpoteat@redhat.com)
+- 1551465: Fix unicode decode issue on py 2.6 (csnyder@redhat.com)
+- Remove unneeded spec file directives (awood@redhat.com)
+
 * Tue Feb 27 2018 Alex Wood <awood@redhat.com> 1.21.2-3
 - Add missing dist macro to release
 
