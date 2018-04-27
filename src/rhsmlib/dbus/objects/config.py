@@ -22,7 +22,7 @@ from subscription_manager.i18n import Locale
 from rhsmlib.dbus import constants, base_object, util, dbus_utils
 from rhsmlib.services.config import Config
 
-from dbus import DBusException
+from dbus import DBusException, service
 log = logging.getLogger(__name__)
 
 
@@ -84,3 +84,9 @@ class ConfigDBusObject(base_object.BaseObject):
             return self.config[section][property_name]
         else:
             return dbus.Dictionary(self.config[section], signature='sv')
+
+    @service.signal(
+        constants.CONFIG_INTERFACE,
+        signature='')
+    def ConfigChanged(self):
+        log.debug("Emitting ConfigChanged Signal")

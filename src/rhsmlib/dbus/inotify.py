@@ -21,6 +21,7 @@ certificates.
 
 import logging
 import pyinotify
+import os
 
 from subscription_manager import injection as inj
 
@@ -34,6 +35,7 @@ class EventHandler(pyinotify.ProcessEvent):
     def __init__(self, *args, **kwargs):
         super(EventHandler, self).__init__(*args, **kwargs)
         self.identity = inj.require(inj.IDENTITY)
+        self.dir_watches = kwargs.pop("dir_watches", [])
 
     def process_IN_CREATE(self, event):
         """
@@ -61,6 +63,15 @@ class EventHandler(pyinotify.ProcessEvent):
             log.debug("Existing consumer key %s was removed", event.pathname)
         self.identity.reload()
 
+    def process_default(self, event):
+        for dir_watch in self.dir_watches:
+            if dir_watch.match_path(event.pathname) and dir_watch.match_mask(event.mask):
+                dir_watch.notify()
+
+    @classmethod
+    def from_dir_watches(cls, dir_watches=None, changed_callback=None):
+        return cls(dir_watches=dir_watches)
+
 
 def inotify_cb(notifier):
     """
@@ -71,7 +82,7 @@ def inotify_cb(notifier):
     return notifier.server.terminate_loop
 
 
-def inotify_worker(server):
+def inotify_worker(server, dir_watches=None):
     """
     Thread worker using inotify for checking changes in directory
     with consumer certificates
@@ -80,7 +91,7 @@ def inotify_worker(server):
     """
     watch_manager = pyinotify.WatchManager()
     # Create custom event handler
-    handler = EventHandler()
+    handler = EventHandler.from_dir_watches(dir_watches=dir_watches)
     # Create notifier with timeout (one second).
     notifier = pyinotify.Notifier(watch_manager, handler, timeout=1000)
     # Add reference at server into notifier

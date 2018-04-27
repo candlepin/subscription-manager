@@ -126,9 +126,9 @@ class Server(object):
             except TypeError:
                 clazz = item
                 kwargs = {}
-
+            new_object = clazz(object_path=clazz.default_dbus_path, bus_name=self.connection_name, **kwargs)
             self.objects.append(
-                clazz(object_path=clazz.default_dbus_path, bus_name=self.connection_name, **kwargs)
+                new_object
             )
 
     def run(self, started_event=None, stopped_event=None):

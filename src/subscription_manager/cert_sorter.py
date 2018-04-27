@@ -325,18 +325,17 @@ class CertSorter(ComplianceManager):
         super(CertSorter, self).__init__(on_date)
         self.callbacks = set()
 
-        cert_dir_monitors = [file_monitor.MonitorDirectory(inj.require(inj.PROD_DIR).path,
-                                                           self.on_prod_dir_changed),
-                             file_monitor.MonitorDirectory(inj.require(inj.ENT_DIR).path,
-                                                           self.on_ent_dir_changed),
-                             file_monitor.MonitorDirectory(inj.require(inj.IDENTITY).cert_dir_path,
-                                                           self.on_identity_changed)]
+        cert_dir_monitors = [file_monitor.DirectoryWatch(inj.require(inj.PROD_DIR).path,
+                                                         self.on_prod_dir_changed),
+                             file_monitor.DirectoryWatch(inj.require(inj.ENT_DIR).path,
+                                                         self.on_ent_dir_changed),
+                             file_monitor.DirectoryWatch(inj.require(inj.IDENTITY).cert_dir_path,
+                                                         self.on_identity_changed)]
 
         # Note: no timer is setup to poll file_monitor by cert_sorter itself,
         # the gui can add one.
-        self.cert_monitor = \
-            file_monitor.MonitorDirectories(dir_monitors=cert_dir_monitors,
-                                            changed_callback=self.on_certs_changed)
+        self.cert_monitor = file_monitor.MonitorDirectories\
+            .from_dir_watches(cert_dir_monitors, self.on_certs_changed)
 
     def get_compliance_status(self):
         status_cache = inj.require(inj.ENTITLEMENT_STATUS_CACHE)

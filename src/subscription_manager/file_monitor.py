@@ -18,7 +18,9 @@ from __future__ import print_function, division, absolute_import
 """
 Watch for and be notified of changes in a file.
 """
+import fnmatch
 import os
+import time
 
 
 class MonitorDirectory(object):
@@ -93,3 +95,49 @@ class MonitorDirectories(object):
         dir_monitors = [MonitorDirectory(path) for path in path_list]
         return cls(dir_monitors=dir_monitors,
                    changed_callback=changed_callback)
+
+    @classmethod
+    def from_dir_watches(cls, watches=None, changed_callback=None):
+        dir_monitors = [MonitorDirectory(watch.path, watch.notify) for watch in watches]
+        return cls(dir_monitors=dir_monitors,
+                   changed_callback=changed_callback)
+
+
+class DirectoryWatch(object):
+    """
+    Represents a path (or glob of paths) to watch along with a set of methods to be called when
+    there has been a change to one of the files on the path.
+    """
+    # Constants shared with pyinotify
+    IN_CREATE = 0x00000100
+    IN_DELETE = 0x00000200
+    IN_MODIFY = 0x00000002
+
+    def __init__(self, path, changed_cb=None, mask=None, glob=False):
+        """
+        :param path: The path to be watched, should be a path to a directory or file or glob
+        :type path: str
+        :param changed_cb: the method to call when there are changes
+          defaults to the self.notify method (calls all callbacks in self.callbacks
+        :type changed_cb: callable
+        :param mask: An integer mask representing the actions
+        :param glob:
+        """
+        self.path = path
+        self.glob = glob
+        self.mask = mask or (DirectoryWatch.IN_CREATE | DirectoryWatch.IN_DELETE | DirectoryWatch.IN_MODIFY)
+        self.callbacks = set()
+        self.changed_cb = changed_cb or self.notify
+
+    def match_path(self, path):
+        if not self.glob:
+            return os.path.commonprefix([path, self.path]) == self.path
+        else:
+            return fnmatch.fnmatch(path, self.path)
+
+    def match_mask(self, mask):
+        return self.mask & mask
+
+    def notify(self):
+        for cb in self.callbacks:
+            cb()
