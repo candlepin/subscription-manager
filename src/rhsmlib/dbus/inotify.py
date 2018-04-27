@@ -21,7 +21,7 @@ certificates.
 
 import logging
 import pyinotify
-import os
+import time
 
 from subscription_manager import injection as inj
 
@@ -64,6 +64,11 @@ class EventHandler(pyinotify.ProcessEvent):
         self.identity.reload()
 
     def process_default(self, event):
+        """
+        This method will check for a match of the event against all directories given to watch.
+        :param event: Inotify event
+        :return:
+        """
         for dir_watch in self.dir_watches:
             if dir_watch.match_path(event.pathname) and dir_watch.match_mask(event.mask):
                 dir_watch.notify()
@@ -71,6 +76,21 @@ class EventHandler(pyinotify.ProcessEvent):
     @classmethod
     def from_dir_watches(cls, dir_watches=None, changed_callback=None):
         return cls(dir_watches=dir_watches)
+
+
+class Notifier(pyinotify.Notifier):
+
+    def update(self):
+        """
+        Perform a single round of updates.
+        :return:
+        """
+        if self.check_events():
+            self.read_events()
+        self.process_events()
+
+    def sleep(self):
+        self._sleep(time.time())
 
 
 def inotify_cb(notifier):
@@ -87,6 +107,7 @@ def inotify_worker(server, dir_watches=None):
     Thread worker using inotify for checking changes in directory
     with consumer certificates
     :param server: Reference to instance of Server
+    :param dir_watches: List of DirectoryWatches, used to
     :return None
     """
     watch_manager = pyinotify.WatchManager()
