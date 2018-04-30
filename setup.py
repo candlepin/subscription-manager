@@ -98,13 +98,16 @@ class install(_install):
     user_options = _install.user_options + [
         ('gtk-version=', None, 'GTK version this is built for'),
         ('rpm-version=', None, 'version and release of the RPM this is built for'),
-        ('with-systemd=', None, 'whether to install w/ systemd support or not')]
+        ('with-systemd=', None, 'whether to install w/ systemd support or not'),
+        ('with-subman-gui=', None, 'whether to install subman GUI or not')
+        ]
 
     def initialize_options(self):
         _install.initialize_options(self)
         self.rpm_version = None
         self.gtk_version = None
         self.with_systemd = None
+        self.with_subman_gui = None
 
     def finalize_options(self):
         _install.finalize_options(self)
@@ -165,25 +168,35 @@ class install_data(_install_data):
     or desktop files with merged translations) or an entire tree of data files.
     """
     user_options = _install_data.user_options + [
-        ('with-systemd=', None, 'whether to install w/ systemd support or not')]
+        ('with-systemd=', None, 'whether to install w/ systemd support or not'),
+        ('with-subman-gui=', None, 'whether to install subman GUI or not'),
+        ]
 
     def initialize_options(self):
         _install_data.initialize_options(self)
         self.with_systemd = None
+        self.with_subman_gui = None
         # Can't use super() because Command isn't a new-style class.
 
     def finalize_options(self):
         _install_data.finalize_options(self)
         self.set_undefined_options('install', ('with_systemd', 'with_systemd'))
+        self.set_undefined_options('install', ('with_subman_gui', 'with_subman_gui'))
         if self.with_systemd is None:
             self.with_systemd = True  # default to True
         else:
             self.with_systemd = self.with_systemd == 'true'
+        if self.with_subman_gui is None:
+            self.with_subman_gui = True  # default to True
+        else:
+            self.with_subman_gui = self.with_subman_gui == 'true'
 
     def run(self):
         self.add_messages()
-        self.add_desktop_files()
-        self.add_icons()
+        if self.with_subman_gui:
+            self.add_desktop_files()
+            self.add_icons()
+            self.add_gui_doc_files()
         self.add_dbus_service_files()
         self.add_systemd_services()
         _install_data.run(self)
@@ -209,6 +222,20 @@ class install_data(_install_data):
         autostart_dir = self.join('/etc', 'xdg', 'autostart')
         autostart_file = self.join('build', 'autostart', 'rhsm-icon.desktop')
         self.data_files.append((autostart_dir, [autostart_file]))
+
+    def add_gui_doc_files(self):
+        """
+        Add documentation for subscription-manager-gui and rhsm-icon
+        """
+        self.data_files.append(('share/gnome/help/subscription-manager/C', glob('docs/*.xml')))
+        self.data_files.append(('share/gnome/help/subscription-manager/C/figures', glob('docs/figures/*.png')))
+        self.data_files.append(('share/omf/subscription-manager', glob('docs/*.omf')))
+        # Add manual pages for subman-gui na rhsm-icon
+        data_files = dict(self.data_files)
+        man8_pages = data_files['share/man/man8']
+        man8_pages = man8_pages.union(set(['man/subscription-manager-gui.8', 'man/rhsm-icon.8']))
+        data_files['share/man/man8'] = man8_pages
+        self.data_files = [(item, value) for item, value in data_files.items()]
 
     def add_dbus_service_files(self):
         dbus_service_directory = self.join('share', 'dbus-1', 'system-services')
@@ -303,11 +330,9 @@ setup(
     },
     data_files=[
         # sat5to6 is packaged separately
-        ('share/man/man8', set(glob('man/*.8')) - set(['man/sat5to6.8'])),
+        # man pages for gui are added in add_gui_doc_files(), when GUI package is created
+        ('share/man/man8', set(glob('man/*.8')) - set(['man/sat5to6.8']) - set(['man/subscription-manager-gui.8', 'man/rhsm-icon.8'])),
         ('share/man/man5', glob('man/*.5')),
-        ('share/gnome/help/subscription-manager/C', glob('docs/*.xml')),
-        ('share/gnome/help/subscription-manager/C/figures', glob('docs/figures/*.png')),
-        ('share/omf/subscription-manager', glob('docs/*.omf')),
     ],
     command_options={
         'egg_info': {
