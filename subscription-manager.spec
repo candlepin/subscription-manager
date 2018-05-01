@@ -127,7 +127,7 @@
 
 Name: subscription-manager
 Version: 1.21.4
-Release: 1%{?dist}
+Release: 2
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1049,6 +1049,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue May 01 2018 Christopher Snyder <csnyder@redhat.com> 1.21.4-2
+- Add missing buildrequires to fix upstream fedora python2 builds
+  (csnyder@redhat.com)
+
 * Tue May 01 2018 Christopher Snyder <csnyder@redhat.com> 1.21.4-1
 - Stop building subscription-manager-gui, when Python 3 is used
   (jhnidek@redhat.com)
