@@ -127,7 +127,7 @@
 
 Name: subscription-manager
 Version: 1.21.4
-Release: 2
+Release: 2%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
