@@ -21,7 +21,7 @@ test_require = [
 
 setup(
     name="intentctl",
-    version="1.21.3",
+    version="1.21.4",
     url="http://www.candlepinproject.org",
     description="Manage Red Hat System Intent",
     license="GPLv2",

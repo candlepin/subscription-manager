@@ -126,7 +126,7 @@
 %define subpackages SUBPACKAGES="%{?include_intentctl:intentctl}"
 
 Name: subscription-manager
-Version: 1.21.3
+Version: 1.21.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1047,6 +1047,11 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue May 01 2018 Christopher Snyder <csnyder@redhat.com> 1.21.4-1
+- Stop building subscription-manager-gui, when Python 3 is used
+  (jhnidek@redhat.com)
+- Remove kitchen from install_requires (khowell@redhat.com)
+
 * Wed Apr 25 2018 Christopher Snyder <csnyder@redhat.com> 1.21.3-1
 - 1439645: Perform a full entitlement refresh in the yum/dnf/zypper plugins
   (csnyder@redhat.com)
