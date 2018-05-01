@@ -439,6 +439,8 @@ entitlements, certificates, and access to content.
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
 Group: Development/Libraries
 
+BuildRequires: python2-devel
+
 %if %use_m2crypto
 Requires: %{?suse_version:python-m2crypto} %{!?suse_version:m2crypto}
 %endif
