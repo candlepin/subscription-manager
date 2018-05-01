@@ -26,6 +26,11 @@
 %bcond_without python2_rhsm
 %endif
 
+%if %{with python3}
+%global use_subman_gui 0
+%else
+%global use_subman_gui 1
+%endif
 
 %global rhsm_plugins_dir  /usr/share/rhsm-plugins
 # on recent Fedora and RHEL 7, let's not use m2crypto
@@ -41,6 +46,12 @@
 %global use_firstboot 1
 %global use_kitchen 0
 %global use_inotify 0
+%endif
+
+%if %{use_subman_gui} || %{use_initial_setup} || %{use_firstboot}
+%global use_rhsm_gtk 1
+%else
+%global use_rhsm_gtk 0
 %endif
 
 %global use_dnf %{with python3} && (0%{?fedora} || (0%{?rhel}))
@@ -104,6 +115,12 @@
 %define with_systemd WITH_SYSTEMD=true
 %else
 %define with_systemd WITH_SYSTEMD=false
+%endif
+
+%if %{use_subman_gui}
+%define with_subman_gui WITH_SUBMAN_GUI=true
+%else
+%define with_subman_gui WITH_SUBMAN_GUI=false
 %endif
 
 %define subpackages SUBPACKAGES="%{?include_intentctl:intentctl}"
@@ -206,8 +223,11 @@ BuildRequires: %{py_package_prefix}-setuptools
 BuildRequires: gettext
 BuildRequires: intltool
 BuildRequires: libnotify-devel
-BuildRequires: desktop-file-utils
 BuildRequires: %{py_package_prefix}-six
+
+%if %use_subman_gui
+BuildRequires: desktop-file-utils
+%endif
 
 BuildRequires: %{?suse_version:dbus-1-glib-devel} %{!?suse_version:dbus-glib-devel}
 BuildRequires: %{?suse_version:lsb-release, distribution-release} %{!?suse_version:redhat-lsb}
@@ -255,15 +275,15 @@ Enables handling of content of type 'containerImage' in any certificates
 from the server. Populates /etc/docker/certs.d appropriately.
 
 
-%package -n subscription-manager-gui
-Summary: A GUI interface to manage Red Hat product subscriptions
+%if %{use_rhsm_gtk}
+%package -n rhsm-gtk
+Summary: GTK+ widgets used by subscription-manager-gui and initial_setup
 Group: System Environment/Base
-Requires: %{name} = %{version}-%{release}
-
-# We need pygtk3 and gtk2 until rhsm-icon is ported to gtk3
 Requires: %{?gtk3:pygobject3, gtk3} %{!?gtk3:pygtk2, pygtk2-libglade}
 Requires: usermode-gtk
-Requires: gnome-icon-theme
+# Fedora can figure this out automatically, but RHEL cannot:
+# See #987071
+Requires: librsvg2%{?_isa}
 
 %if 0%{?gtk3}
 Requires: font(cantarell)
@@ -276,18 +296,31 @@ Requires(post): scrollkeeper
 Requires(postun): scrollkeeper
 %endif
 
+%description -n rhsm-gtk
+This package contains GUI and widgets used by subscription-manager-gui
+and RHSM initial_setup module for Anaconda.
+%endif
+
+
+%if %{use_subman_gui}
+%package -n subscription-manager-gui
+Summary: A GUI interface to manage Red Hat product subscriptions
+Group: System Environment/Base
+Requires: %{name} = %{version}-%{release}
+Requires: gnome-icon-theme
+
+# We need pygtk3 and gtk2 until rhsm-icon is ported to gtk3
+Requires: rhsm-gtk = %{version}-%{release}
+
 # Renamed from -gnome, so obsolete it properly
 Obsoletes: %{name}-gnome < 1.0.3-1
 Provides: %{name}-gnome = %{version}-%{release}
-
-# Fedora can figure this out automatically, but RHEL cannot:
-# See #987071
-Requires: librsvg2%{?_isa}
 
 %description -n subscription-manager-gui
 This package contains a GTK+ graphical interface for configuring and
 registering a system with a Red Hat Entitlement platform and manage
 subscriptions.
+%endif
 
 
 %package -n subscription-manager-migration
@@ -330,7 +363,7 @@ product-id plugins.
 %package -n subscription-manager-firstboot
 Summary: Firstboot screens for subscription manager
 Group: System Environment/Base
-Requires: %{name}-gui = %{version}-%{release}
+Requires: rhsm-gtk = %{version}-%{release}
 Requires: rhn-setup-gnome
 
 # Fedora can figure this out automatically, but RHEL cannot:
@@ -345,7 +378,7 @@ This package contains the firstboot screens for subscription-manager.
 %package -n subscription-manager-initial-setup-addon
 Summary: initial-setup screens for subscription-manager
 Group: System Environment/Base
-Requires: %{name}-gui = %{version}-%{release}
+Requires: rhsm-gtk = %{version}-%{release}
 Requires: initial-setup-gui >= 0.3.9.24-1
 Obsoletes: subscription-manager-firstboot < 1.15.3-1
 
@@ -472,6 +505,7 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?install_yum_plugins} %{?install_dnf_plugins} \
     %{?install_zypper_plugins} \
     %{?with_systemd} \
+    %{?with_subman_gui} \
     %{?subpackages} \
     %{?include_intentctl:INCLUDE_INTENTCTL="1"}
 
@@ -484,11 +518,16 @@ cp -r %{buildroot}%{python_sitearch}/rhsm %{buildroot}%{python2_sitearch}/rhsm
 %suse_update_desktop_file -n -r subscription-manager-gui Settings PackageManager
 %endif
 
+%if %use_subman_gui
 desktop-file-validate %{buildroot}/etc/xdg/autostart/rhsm-icon.desktop
 desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-gui.desktop
+%endif
 
 %find_lang rhsm
-%find_lang %{name} --with-gnome
+
+#%if %{use_subman_gui}
+#%find_lang %{name} --with-gnome
+#%endif
 
 # fix timestamps on our byte compiled files so they match across arches
 find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
@@ -614,8 +653,11 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/ca/redhat-uep.pem %{buildroo
 %{_sysconfdir}/bash_completion.d/rct
 %{_sysconfdir}/bash_completion.d/rhsm-debug
 %{_sysconfdir}/bash_completion.d/rhn-migrate-classic-to-rhsm
-%{_sysconfdir}/bash_completion.d/rhsm-icon
 %{_sysconfdir}/bash_completion.d/rhsmcertd
+
+%if %use_subman_gui
+%{_sysconfdir}/bash_completion.d/rhsm-icon
+%endif
 
 %dir %{python_sitearch}/subscription_manager
 
@@ -728,7 +770,23 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/ca/redhat-uep.pem %{buildroo
 %doc LICENSE
 
 
-%files -n subscription-manager-gui -f subscription-manager.lang
+%if %{use_rhsm_gtk}
+%files -n rhsm-gtk
+%defattr(-,root,root,-)
+%dir %{python_sitearch}/subscription_manager/gui
+%{python_sitearch}/subscription_manager/gui/*.py*
+%{python_sitearch}/subscription_manager/gui/data/ui/*.ui
+%{python_sitearch}/subscription_manager/gui/data/glade/*.glade
+%{python_sitearch}/subscription_manager/gui/data/icons/*.svg
+%if %{with python3}
+%{python_sitearch}/subscription_manager/gui/__pycache__
+%endif
+%endif
+
+
+%if %{use_subman_gui}
+#%files -n subscription-manager-gui -f subscription-manager.lang
+%files -n subscription-manager-gui
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
 %if 0%{?suse_version}
@@ -739,21 +797,20 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/ca/redhat-uep.pem %{buildroo
 %dir %{_datadir}/appdata
 %dir %{_datadir}/gnome
 %dir %{_datadir}/gnome/help
+%dir %{_datadir}/gnome/help/subscription-manager
+%dir %{_datadir}/gnome/help/subscription-manager/C
+%dir %{_datadir}/gnome/help/subscription-manager/C/figures
 %dir %{_datadir}/omf
+%dir %{_datadir}/omf/subscription-manager
 %else
 # symlink to console-helper
 %{_bindir}/subscription-manager-gui
 %endif
 %{_bindir}/rhsm-icon
 
-%dir %{python_sitearch}/subscription_manager/gui
-%{python_sitearch}/subscription_manager/gui/*.py*
-%{python_sitearch}/subscription_manager/gui/data/ui/*.ui
-%{python_sitearch}/subscription_manager/gui/data/glade/*.glade
-%{python_sitearch}/subscription_manager/gui/data/icons/*.svg
-%if %{with python3}
-%{python_sitearch}/subscription_manager/gui/__pycache__
-%endif
+%{_datadir}/gnome/help/subscription-manager/C/figures/*.png
+%{_datadir}/gnome/help/subscription-manager/C/*.xml
+%{_datadir}/omf/subscription-manager/subscription-manager-C.omf
 
 %{_datadir}/applications/subscription-manager-gui.desktop
 %{_datadir}/icons/hicolor/16x16/apps/*.png
@@ -766,18 +823,42 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/ca/redhat-uep.pem %{buildroo
 %{_datadir}/icons/hicolor/scalable/apps/*.svg
 %{_datadir}/appdata/subscription-manager-gui.appdata.xml
 
-# gui system config files
+# desktop config files
 %{_sysconfdir}/xdg/autostart/rhsm-icon.desktop
 %if !0%{?suse_version}
 %{_sysconfdir}/pam.d/subscription-manager-gui
 %{_sysconfdir}/security/console.apps/subscription-manager-gui
 %endif
+
 %{_sysconfdir}/bash_completion.d/subscription-manager-gui
 
 %doc
 %{_mandir}/man8/subscription-manager-gui.8*
 %{_mandir}/man8/rhsm-icon.8*
 %doc LICENSE
+%endif
+
+
+%if %use_initial_setup
+
+%files -n subscription-manager-initial-setup-addon
+%defattr(-,root,root,-)
+%dir %{_datadir}/anaconda/addons/com_redhat_subscription_manager/
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/*.py*
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/*.py*
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/*.ui
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/*.py*
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/categories/*.py*
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/ks/*.py*
+%if %{with python3}
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/__pycache__
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/__pycache__
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/__pycache__
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/categories/__pycache__
+%{_datadir}/anaconda/addons/com_redhat_subscription_manager/ks/__pycache__
+%endif
+
+%endif
 
 
 %files -n subscription-manager-migration
@@ -837,26 +918,6 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/ca/redhat-uep.pem %{buildroo
 %{python_sitearch}/subscription_manager/plugin/ostree/*.py*
 %if %{with python3}
 %{python_sitearch}/subscription_manager/plugin/ostree/__pycache__
-%endif
-%endif
-
-
-%if %use_initial_setup
-%files -n subscription-manager-initial-setup-addon
-%defattr(-,root,root,-)
-%dir %{_datadir}/anaconda/addons/com_redhat_subscription_manager/
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/*.py*
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/*.py*
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/*.ui
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/*.py*
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/categories/*.py*
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/ks/*.py*
-%if %{with python3}
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/__pycache__
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/__pycache__
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/__pycache__
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/categories/__pycache__
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/ks/__pycache__
 %endif
 %endif
 
@@ -937,10 +998,12 @@ if [ "$1" -eq "2" ] ; then
 fi
 %endif
 
+%if %{use_subman_gui}
 %post -n subscription-manager-gui
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 %if !0%{?suse_version}
 scrollkeeper-update -q -o %{_datadir}/omf/%{name} || :
+%endif
 %endif
 
 %post -n subscription-manager-plugin-container
@@ -969,6 +1032,7 @@ fi
     %endif
 %endif
 
+%if %{use_subman_gui}
 %postun -n subscription-manager-gui
 if [ $1 -eq 0 ] ; then
     touch --no-create %{_datadir}/icons/hicolor &>/dev/null
@@ -977,10 +1041,10 @@ if [ $1 -eq 0 ] ; then
     scrollkeeper-update -q || :
     %endif
 fi
-
 %posttrans -n subscription-manager-gui
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
+%endif
 
 %changelog
 * Wed Apr 25 2018 Christopher Snyder <csnyder@redhat.com> 1.21.3-1

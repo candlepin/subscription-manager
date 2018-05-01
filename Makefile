@@ -54,6 +54,7 @@ SUBPACKAGES ?= $(shell ls packages)
 INSTALL_OSTREE_PLUGIN ?= true
 
 WITH_SYSTEMD ?= true
+WITH_SUBMAN_GUI ?= true
 
 # Default differences between el6 and el7
 ifeq ($(OS_DIST),.el6)
@@ -97,10 +98,11 @@ ICON_CFLAGS=`pkg-config --cflags "gtk+-$(GTK_VERSION).0 libnotify gconf-2.0 dbus
 ICON_LDFLAGS=`pkg-config --libs "gtk+-$(GTK_VERSION).0 libnotify gconf-2.0 dbus-glib-1"`
 
 PYFILES := `find src/ test/ -name "*.py"`
-BIN_FILES := bin/subscription-manager bin/subscription-manager-gui \
+BIN_FILES := bin/subscription-manager \
 			 bin/rhn-migrate-classic-to-rhsm \
 			 bin/rct \
 			 bin/rhsm-debug
+
 STYLEFILES=$(PYFILES) $(BIN_FILES)
 
 .DEFAULT_GOAL := build
@@ -169,15 +171,17 @@ install-conf:
 	install -m 644 etc-conf/rct.completion.sh $(DESTDIR)/etc/bash_completion.d/rct
 	install -m 644 etc-conf/rhsm-debug.completion.sh $(DESTDIR)/etc/bash_completion.d/rhsm-debug
 	install -m 644 etc-conf/rhn-migrate-classic-to-rhsm.completion.sh $(DESTDIR)/etc/bash_completion.d/rhn-migrate-classic-to-rhsm
-	install -m 644 etc-conf/subscription-manager-gui.completion.sh $(DESTDIR)/etc/bash_completion.d/subscription-manager-gui
-	install -m 644 etc-conf/rhsm-icon.completion.sh $(DESTDIR)/etc/bash_completion.d/rhsm-icon
 	install -m 644 etc-conf/rhsmcertd.completion.sh $(DESTDIR)/etc/bash_completion.d/rhsmcertd
 	install -d $(DESTDIR)/$(PREFIX)/share/appdata
-	install -m 644 etc-conf/subscription-manager-gui.appdata.xml $(DESTDIR)/$(INSTALL_DIR)/appdata/subscription-manager-gui.appdata.xml
 	install -d $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
 	install -m 644 etc-conf/dbus/polkit/com.redhat.RHSM1.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
 	install -m 644 etc-conf/dbus/polkit/com.redhat.RHSM1.Facts.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
 	install -m 644 etc-conf/dbus/polkit/com.redhat.SubscriptionManager.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
+	if [[ "$(WITH_SUBMAN_GUI)" == "true" ]]; then \
+		install -m 644 etc-conf/subscription-manager-gui.appdata.xml $(DESTDIR)/$(INSTALL_DIR)/appdata/subscription-manager-gui.appdata.xml; \
+		install -m 644 etc-conf/subscription-manager-gui.completion.sh $(DESTDIR)/etc/bash_completion.d/subscription-manager-gui; \
+		install -m 644 etc-conf/rhsm-icon.completion.sh $(DESTDIR)/etc/bash_completion.d/rhsm-icon; \
+	fi;
 
 .PHONY: install-plugins
 install-plugins:
@@ -282,16 +286,20 @@ install-post-boot: install-firstboot install-initial-setup
 
 .PHONY: install-via-setup
 install-via-setup: install-subpackages-via-setup
-	$(PYTHON) ./setup.py install --root $(DESTDIR) --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION) --with-systemd=$(WITH_SYSTEMD) --prefix=$(PREFIX)
+	$(PYTHON) ./setup.py install --root $(DESTDIR) --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION) --with-systemd=$(WITH_SYSTEMD) --prefix=$(PREFIX) --with-subman-gui=${WITH_SUBMAN_GUI}
 	mkdir -p $(DESTDIR)/$(PREFIX)/sbin/
 	mkdir -p $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/subscription-manager $(DESTDIR)/$(PREFIX)/sbin/
-	mv $(DESTDIR)/$(PREFIX)/bin/subscription-manager-gui $(DESTDIR)/$(PREFIX)/sbin/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhn-migrate-classic-to-rhsm $(DESTDIR)/$(PREFIX)/sbin/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsmcertd-worker $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-service $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-facts-service $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsmd $(DESTDIR)/$(LIBEXEC_DIR)/
+	if [[ "$(WITH_SUBMAN_GUI)" == "true" ]]; then \
+		mv $(DESTDIR)/$(PREFIX)/bin/subscription-manager-gui $(DESTDIR)/$(PREFIX)/sbin/; \
+	else \
+		rm $(DESTDIR)/$(PREFIX)/bin/subscription-manager-gui; \
+	fi; \
 	if [[ "$(INCLUDE_INTENTCTL)" = "1" ]]; then \
 		mv $(DESTDIR)/$(PREFIX)/bin/intentctl $(DESTDIR)/$(PREFIX)/sbin/; \
 	fi;
@@ -351,17 +359,20 @@ install-files: dbus-install install-conf install-plugins install-post-boot insta
 
 	# SUSE Linux does not make use of consolehelper
 	if [[ ! $(OS) == *"SUSE" ]]; then \
-		ln -sf /usr/bin/consolehelper $(DESTDIR)/$(PREFIX)/bin/subscription-manager-gui; \
 		ln -sf /usr/bin/consolehelper $(DESTDIR)/$(PREFIX)/bin/subscription-manager; \
-		\
-		install -m 644 etc-conf/subscription-manager-gui.pam $(DESTDIR)/etc/pam.d/subscription-manager-gui; \
 		install -m 644 etc-conf/subscription-manager.pam $(DESTDIR)/etc/pam.d/subscription-manager; \
-		\
-		install -m 644 etc-conf/subscription-manager-gui.console $(DESTDIR)/etc/security/console.apps/subscription-manager-gui; \
 		install -m 644 etc-conf/subscription-manager.console $(DESTDIR)/etc/security/console.apps/subscription-manager; \
+		if [[ "$(WITH_SUBMAN_GUI)" == "true" ]]; then \
+			ln -sf /usr/bin/consolehelper $(DESTDIR)/$(PREFIX)/bin/subscription-manager-gui; \
+			install -m 644 etc-conf/subscription-manager-gui.pam $(DESTDIR)/etc/pam.d/subscription-manager-gui; \
+			install -m 644 etc-conf/subscription-manager-gui.console $(DESTDIR)/etc/security/console.apps/subscription-manager-gui; \
+		fi; \
 	fi; \
 
-	install -m 755 bin/rhsm-icon $(DESTDIR)/$(PREFIX)/bin/rhsm-icon
+	if [[ "$(WITH_SUBMAN_GUI)" == "true" ]]; then \
+		install -m 755 bin/rhsm-icon $(DESTDIR)/$(PREFIX)/bin/rhsm-icon; \
+	fi; \
+
 	install -m 755 bin/rhsmcertd $(DESTDIR)/$(PREFIX)/bin/rhsmcertd
 
 .PHONY: check
