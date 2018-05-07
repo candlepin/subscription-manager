@@ -1,0 +1,11 @@
+[Unit]
+Description=Automatic rebuilding of subscription-manager updates.img used by Anaconda installer
+After=network.target
+
+[Service]
+WorkingDirectory=/vagrant
+ExecStart=/bin/bash /vagrant/scripts/autobuild_updates_img.sh --python python3 --src /vagrant --dest /var/ftp/pub/
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
