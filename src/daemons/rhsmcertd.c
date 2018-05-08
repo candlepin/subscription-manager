@@ -193,16 +193,17 @@ log_update_from_cert_data(gpointer data)
     return log_update(cert_data->interval_seconds, cert_data->next_update_file);
 }
 
-int gen_random(long int max) {
+long long gen_random(long long max) {
     // This function will return a random number between [0, max]
     // Find the nearest number to RAND_MAX that is divisible by the given max
     // The rand function will generate a random number in the range [0, RAND_MAX]
     // This function will constrain the output of rand to the range [0, max] while ensuring the output has no bias.
     // See http://www.azillionmonkeys.com/qed/random.html for an explanation of why this is necessary
-    long int true_max = max + (long int) 1;
+    long long true_max = max + (long long) 1;
     // 1 must be type cast to a long int to avoid integer overflow on certain systems
-    long int range_max = ((RAND_MAX + (long int) 1) / true_max) * true_max;
-    long int random_num = -1;
+    long long rand_max = (long long) RAND_MAX;
+    long long range_max = ((rand_max + (long long) 1) / true_max) * true_max;
+    long long random_num = -1;
     do {
         random_num = rand();
     } while(!(random_num < range_max));
