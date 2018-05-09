@@ -83,7 +83,7 @@
 
 Name: subscription-manager
 Version: 1.20.10
-Release: 6%{?dist}
+Release: 7%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -880,6 +880,9 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Wed May 09 2018 Christopher Snyder <csnyder@redhat.com> 1.20.10-7
+- 1574529: Fix rhsmcertd integer overflow on i386 & i686 (csnyder@redhat.com)
+
 * Wed Apr 18 2018 Christopher Snyder <csnyder@redhat.com> 1.20.10-6
 - 1559227: Do not use str format for python 2.6 (csnyder@redhat.com)
 
