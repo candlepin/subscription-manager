@@ -48,7 +48,7 @@ Vagrant.configure("2") do |config|
     "cockpit/node_modules",
     "updates.img",
     "vagrant/vagrant_data",
-  ]
+  ], rsync__args: ["--verbose", "--archive", "--delete", "-z", "--copy-links", "-W"]
 
   # Set up the hostmanager plugin to automatically configure host & guest hostnames
   if Vagrant.has_plugin?("vagrant-hostmanager")

@@ -23,6 +23,7 @@ required_rpms:
   - librsvg2
   - python3-dateutil
   - python3-kitchen
+  - inotify-tools
 
 ##### CentOS 7 #####
 
@@ -53,6 +54,9 @@ iso_img_mount_path: "/mnt/iso_img"
 # by ansible.extra_vars, because IP address of PXE server has to
 # be known during definition of private network used by PXE server.
 pxe_server_ip_addr: "192.168.111.5/24"
+
+# Directory with systemd service files
+systemd_service_dir: "/usr/lib/systemd/system/"
 
 syslinux_files:
   - pxelinux.0

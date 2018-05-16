@@ -3,6 +3,7 @@
 # A script that wraps make install to create an updates.img suitable for anaconda.
 # Note: This script must be run on Fedora 27 to produce an updates image suitable for Fedora 27
 #       due to compatibility of binary modules.
+
 PROJECT_ROOT=$(git rev-parse --show-toplevel)
 UPDATE_DIR=$(mktemp -d)
 pushd $PROJECT_ROOT
@@ -10,12 +11,14 @@ pushd $PROJECT_ROOT
 rm -f ./updates.img 2>/dev/null
 
 usage() {
-    cat <<USAGE
-usage: build_updates_img.sh [options]
+    cat << USAGE
+
+Usage: build_updates_img.sh [options]
 OPTIONS:
   -p | --python <python_interpreter>  Python interpreter to use. Use to differentiate between Python 2
                                         and Python 3.
   -h | --help                         Print this help text
+
 USAGE
 }
 

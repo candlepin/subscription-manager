@@ -128,6 +128,19 @@
     dest: /var/ftp/pub/updates.img
   become: true
 
+- name: create service for automatic building of updates.img
+  copy:
+    src: autobuild_updates_img.service
+    dest: "{{systemd_service_dir}}"
+  become: yes
+
+- name: enable and start service for automatic building of updates.img
+  service:
+    name: autobuild_updates_img
+    enabled: yes
+    state: started
+  become: true
+
 - name: create default file containing boot menu
   template:
     src: default.j2
