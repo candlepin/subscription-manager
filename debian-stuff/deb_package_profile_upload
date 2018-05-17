@@ -1,0 +1,35 @@
+#!/bin/sh
+
+set -eu
+
+exit_msg() {
+  echo $1
+  exit
+}
+
+[ -f /etc/rhsm/rhsm.conf ] || exit_msg "subscription-manager is not installed. Skipping."
+
+KATELLO_SERVER=$(sed -n -e 's/^hostname\s*=\s*\(.*\)$/\1/p' /etc/rhsm/rhsm.conf)
+
+[ "${KATELLO_SERVER}" ] || exit_msg "No Katello server is configured. Skipping."
+
+IDENTITY=$(subscription-manager identity 2> /dev/null | sed -n 's/system identity: //p')
+
+[ "${IDENTITY}" ] || exit_msg "Host is not registered with Katello. Skipping."
+
+echo -n "Upload Package Profile"
+
+dpkg -l |\
+  awk '$1 ~ /^ii/ { sub(/:.*$/, "", $2); printf("{\"name\": \"%s\", \"version\": \"%s\", \"architecture\": \"%s\"}\n", $2, $3, $4) }' |\
+  jq -s '{"deb_package_profile": {"deb_packages": .}}' |\
+  http --cert /etc/pki/consumer/cert.pem --cert-key /etc/pki/consumer/key.pem --verify /etc/rhsm/ca/katello-default-ca.pem PUT https://${KATELLO_SERVER}/rhsm/systems/${IDENTITY}/deb_package_profile/ > /dev/null || exit_msg "Something went wrong."
+
+echo .
+
+if [ -f /etc/apt/sources.list.d/rhsm.sources ]
+then
+  echo -n "Update bound repositories"
+  sed -ne 's/^baseurl:\s*\(.*\)$/"\1"/p' < /etc/apt/sources.list.d/rhsm.sources | jq -s "{enabled_repos: {repos: map({baseurl: [.]})}}" |\
+    http --cert /etc/pki/consumer/cert.pem --cert-key /etc/pki/consumer/key.pem --verify /etc/rhsm/ca/katello-default-ca.pem PUT https://${KATELLO_SERVER}/rhsm/systems/${IDENTITY}/enabled_repos/ > /dev/null || exit_msg "Something went wrong."
+  echo .
+fi
