@@ -17,6 +17,7 @@ from __future__ import print_function, division, absolute_import
 
 import argparse
 from intentctl.intentfiles import IntentStore, USER_INTENT
+from intentctl.utils import in_container
 import json
 
 
@@ -169,6 +170,10 @@ def main():
     """
     parser = setup_arg_parser()
     args = parser.parse_args()
+
+    # Intent is not intended to be used in containers for the time being (could change later).
+    if in_container():
+        print("WARNING: Setting intent in containers has no effect. Please run intentctl on the host.\n")
 
     intentstore = IntentStore.read(USER_INTENT)
 
