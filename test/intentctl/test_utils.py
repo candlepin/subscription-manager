@@ -27,6 +27,9 @@ from intentctl import utils
 
 class UtilsTests(IntentCtlTestBase):
 
+    def tearDown(self):
+        utils.HOST_CONFIG_DIR = "/etc/rhsm-host/"
+
     @mock.patch('intentctl.utils.system_exit')
     def test_create_dir(self, mock_system_exit):
         """
@@ -97,3 +100,20 @@ class UtilsTests(IntentCtlTestBase):
 
             self.assertRaises(OSError, utils.create_file, to_create, test_data)
             self.assertFalse(os.path.exists(to_create))
+
+    def test_in_container_host_config_dir_exists(self):
+        """
+        Verify that in_container returns true when utils.HOST_CONFIG_DIR dir exists.
+        :return:
+        """
+        temp_dir = self._mktmp()
+        utils.HOST_CONFIG_DIR = temp_dir
+        self.assertTrue(utils.in_container())
+
+    def test_in_container_host_config_dir_does_not_exist(self):
+        """
+        Verify that in_container returns false when utils.HOST_CONFIG_DIR dir does not exist.
+        :return:
+        """
+        utils.HOST_CONFIG_DIR = "/does/not/exist/"
+        self.assertFalse(utils.in_container())

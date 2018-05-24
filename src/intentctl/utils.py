@@ -21,6 +21,8 @@ import json
 import os
 import sys
 
+HOST_CONFIG_DIR = "/etc/rhsm-host/"  # symlink inside docker containers
+
 
 # Borrowed from the subscription-manager cli script
 def system_exit(code, msgs=None):
@@ -73,3 +75,16 @@ def create_file(path, contents):
         else:
             raise
     return True
+
+
+# Borrowed from the subscription-manager config module
+def in_container():
+    """
+    Are we running in a docker container or not?
+
+    Assumes that if we see host rhsm configuration shared with us, we must
+    be running in a container.
+    """
+    if os.path.exists(HOST_CONFIG_DIR):
+        return True
+    return False
