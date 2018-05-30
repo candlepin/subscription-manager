@@ -84,7 +84,7 @@ class IntentStoreTests(IntentCtlTestBase):
 
     def test_create(self):
         """
-        Verify that the create method will create the directory (if needed), and that the resulting
+        Verify that the create method will create the directory (if needed), and that the resulting \
         file in the directory is writable by us.
         :return:
         """

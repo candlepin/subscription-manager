@@ -44,8 +44,7 @@ class IntentStore(object):
             return False
         except OSError as e:
             if e.errno == os.errno.EACCES:
-                system_exit(os.EX_NOPERM,
-                            'Cannot read intent file {}\nAre you root?'.format(self.path))
+                system_exit(os.EX_NOPERM, 'Cannot read intent file {}\nAre you root?'.format(self.path))
 
     def create(self):
         """

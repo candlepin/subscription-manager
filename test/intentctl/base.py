@@ -36,7 +36,7 @@ class IntentCtlTestBase(unittest.TestCase):
 
     def assertRaisesNothing(self, *args, **kwargs):
         """
-        Assert that the first arg given, when called with the remaining args amd kwargs
+        Assert that the first arg given, when called with the remaining args and kwargs
         does not raise any exception
         :return: Whatever the call to the method returns
         """
