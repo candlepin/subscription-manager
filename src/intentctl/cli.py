@@ -105,14 +105,72 @@ def setup_arg_parser():
     remove_options.set_defaults(func=remove_command, requires_write=True)
 
     set_options = argparse.ArgumentParser(add_help=False)
-    set_options.add_argument("value", help="The value to set",
-                            action="store")
+    set_options.add_argument("value", help="The value to set", action="store")
     set_options.set_defaults(func=set_command, requires_write=True)
 
     unset_options = argparse.ArgumentParser(add_help=False)
     unset_options.set_defaults(func=unset_command, requires_write=True)
 
-    # Offerings
+    # Generic assignments
+    # Set ################
+    generic_set_parser = subparsers.add_parser("set",
+        help="Sets the value for the given property")
+
+    generic_set_parser.add_argument("prop_name",
+        metavar="property",
+        help="The name of the property to set/update",
+        action="store")
+
+    generic_set_parser.add_argument("value",
+        help="The value to set",
+        action="store")
+
+    generic_set_parser.set_defaults(func=set_command, requires_write=True)
+
+    # Unset ##############
+    generic_unset_parser = subparsers.add_parser("unset",
+        help="Unsets (clears) the value for the given property",
+        parents=[unset_options])
+
+    generic_unset_parser.add_argument("prop_name",
+        metavar="property",
+        help="The name of the property to set/update",
+        action="store")
+
+    # Add ################
+    generic_add_parser = subparsers.add_parser("add",
+        help="Adds the value(s) to the given property")
+
+    generic_add_parser.add_argument("prop_name",
+        metavar="property",
+        help="The name of the property to update",
+        action="store")
+
+    generic_add_parser.add_argument("values",
+        help="The value(s) to add",
+        action="store",
+        nargs="+")
+
+    generic_add_parser.set_defaults(func=add_command, requires_write=True)
+
+    # Remove #############
+    generic_remove_parser = subparsers.add_parser("remove",
+        help="Removes the value(s) from the given property")
+
+    generic_remove_parser.add_argument("prop_name",
+        metavar="property",
+        help="The name of the property to update",
+        action="store")
+
+    generic_remove_parser.add_argument("values",
+        help="The value(s) to remove",
+        action="store",
+        nargs="+")
+
+    generic_remove_parser.set_defaults(func=remove_command, requires_write=True)
+
+    # Targeted commands
+    # Offerings ##########
     add_offering_parser = subparsers.add_parser("add-offerings",
                                                 help="Add one or more offerings to the system intent.",
                                                 parents=[add_options])
@@ -129,11 +187,10 @@ def setup_arg_parser():
                                                   parents=[unset_options])
     unset_offering_parser.set_defaults(prop_name="offering_name")
 
-    # SLA
+    # SLA ################
     set_sla_parser = subparsers.add_parser("set-sla",
                                            help="Set the system sla",
                                            parents=[set_options])
-
     set_sla_parser.set_defaults(prop_name="service_level_agreement")
 
     unset_sla_parser = subparsers.add_parser("unset-sla",
@@ -141,8 +198,7 @@ def setup_arg_parser():
                                              parents=[unset_options])
     unset_sla_parser.set_defaults(prop_name="service_level_agreement")
 
-    # USAGE
-
+    # USAGE ##############
     set_usage_parser = subparsers.add_parser("set-usage",
                                            help="Set the system usage",
                                            parents=[set_options])
@@ -155,7 +211,6 @@ def setup_arg_parser():
     unset_usage_parser.set_defaults(prop_name="usage_type")
 
     # Pretty Print Json contents of default intent file
-
     show_parser = subparsers.add_parser("show",
                                         help="Show the current system intent")
     show_parser.set_defaults(func=show_contents, requires_write=False)
