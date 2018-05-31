@@ -25,7 +25,7 @@ OS_DIST ?= $(shell rpm --eval='%dist')
 
 PYTHON_VER ?= $(shell $(PYTHON) -c 'import sys; print("python%s.%s" % sys.version_info[:2])')
 
-PYTHON_SITELIB ?= $(PREFIX)/lib/$(PYTHON_VER)/site-packages
+PYTHON_SITELIB ?= $(PREFIX)/lib64/$(PYTHON_VER)/site-packages
 # Note the underscore used instead of a hyphen
 PYTHON_INST_DIR = $(PYTHON_SITELIB)/subscription_manager
 
