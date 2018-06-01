@@ -34,7 +34,7 @@ class BuildTemplate(BaseCommand):
         try:
             cmd = ['rpm', '--eval=%_libexecdir']
             process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-            return process.communicate()[0].strip()
+            return process.communicate()[0].strip().decode('UTF-8', 'strict')
         except OSError:
             return 'libexec'
 
