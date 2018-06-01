@@ -99,7 +99,8 @@ class install(_install):
         ('gtk-version=', None, 'GTK version this is built for'),
         ('rpm-version=', None, 'version and release of the RPM this is built for'),
         ('with-systemd=', None, 'whether to install w/ systemd support or not'),
-        ('with-subman-gui=', None, 'whether to install subman GUI or not')
+        ('with-subman-gui=', None, 'whether to install subman GUI or not'),
+        ('with-cockpit-desktop-entry=', None, 'whether to install desktop entry for subman cockpit plugin or not')
         ]
 
     def initialize_options(self):
@@ -108,6 +109,7 @@ class install(_install):
         self.gtk_version = None
         self.with_systemd = None
         self.with_subman_gui = None
+        self.with_cockpit_desktop_entry = None
 
     def finalize_options(self):
         _install.finalize_options(self)
@@ -170,18 +172,21 @@ class install_data(_install_data):
     user_options = _install_data.user_options + [
         ('with-systemd=', None, 'whether to install w/ systemd support or not'),
         ('with-subman-gui=', None, 'whether to install subman GUI or not'),
+        ('with-cockpit-desktop-entry=', None, 'whether to install desktop entry for subman cockpit plugin or not')
         ]
 
     def initialize_options(self):
         _install_data.initialize_options(self)
         self.with_systemd = None
         self.with_subman_gui = None
+        self.with_cockpit_desktop_entry = None
         # Can't use super() because Command isn't a new-style class.
 
     def finalize_options(self):
         _install_data.finalize_options(self)
         self.set_undefined_options('install', ('with_systemd', 'with_systemd'))
         self.set_undefined_options('install', ('with_subman_gui', 'with_subman_gui'))
+        self.set_undefined_options('install', ('with_cockpit_desktop_entry', 'with_cockpit_desktop_entry'))
         if self.with_systemd is None:
             self.with_systemd = True  # default to True
         else:
@@ -190,6 +195,15 @@ class install_data(_install_data):
             self.with_subman_gui = True  # default to True
         else:
             self.with_subman_gui = self.with_subman_gui == 'true'
+        # Enable creating desktop entry for cockpit plugin only in case that subman gui will not be
+        # installed
+        if self.with_subman_gui is False:
+            if self.with_cockpit_desktop_entry is None:
+                self.with_cockpit_desktop_entry = True  # default to True
+            else:
+                self.with_cockpit_desktop_entry = self.with_cockpit_desktop_entry == 'true'
+        else:
+            self.with_cockpit_desktop_entry = False
 
     def run(self):
         self.add_messages()
@@ -197,6 +211,8 @@ class install_data(_install_data):
             self.add_desktop_files()
             self.add_icons()
             self.add_gui_doc_files()
+        if self.with_cockpit_desktop_entry:
+            self.add_cockpit_desktop_entry()
         self.add_dbus_service_files()
         self.add_systemd_services()
         _install_data.run(self)
@@ -210,10 +226,16 @@ class install_data(_install_data):
             lang_file = self.join('build', 'locale', lang, 'LC_MESSAGES', 'rhsm.mo')
             self.data_files.append((lang_dir, [lang_file]))
 
-    def add_desktop_files(self):
+    def __add_desktop_entry(self, desktop_entry_file):
         desktop_dir = self.join('share', 'applications')
-        desktop_file = self.join('build', 'applications', 'subscription-manager-gui.desktop')
+        desktop_file = self.join('build', 'applications', desktop_entry_file)
         self.data_files.append((desktop_dir, [desktop_file]))
+
+    def add_cockpit_desktop_entry(self):
+        self.__add_desktop_entry('subscription-manager-cockpit.desktop')
+
+    def add_desktop_files(self):
+        self.__add_desktop_entry('subscription-manager-gui.desktop')
 
         # Installing files outside of the "prefix" with setuptools looks to be flakey:
         # See https://github.com/pypa/setuptools/issues/460.  However, this seems to work

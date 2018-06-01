@@ -55,6 +55,7 @@ INSTALL_OSTREE_PLUGIN ?= true
 
 WITH_SYSTEMD ?= true
 WITH_SUBMAN_GUI ?= true
+WITH_COCKPIT ?= true
 
 # Default differences between el6 and el7
 ifeq ($(OS_DIST),.el6)
@@ -286,7 +287,8 @@ install-post-boot: install-firstboot install-initial-setup
 
 .PHONY: install-via-setup
 install-via-setup: install-subpackages-via-setup
-	$(PYTHON) ./setup.py install --root $(DESTDIR) --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION) --with-systemd=$(WITH_SYSTEMD) --prefix=$(PREFIX) --with-subman-gui=${WITH_SUBMAN_GUI}
+	$(PYTHON) ./setup.py install --root $(DESTDIR) --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION) --prefix=$(PREFIX) \
+	--with-systemd=$(WITH_SYSTEMD) --with-subman-gui=${WITH_SUBMAN_GUI} --with-cockpit-desktop-entry=${WITH_COCKPIT}
 	mkdir -p $(DESTDIR)/$(PREFIX)/sbin/
 	mkdir -p $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/subscription-manager $(DESTDIR)/$(PREFIX)/sbin/
