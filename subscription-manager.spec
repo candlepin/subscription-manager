@@ -494,7 +494,7 @@ make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
     LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" %{?gtk_version} %{?subpackages} %{?include_intentctl:INCLUDE_INTENTCTL="1"}
 
 %if %{with python2_rhsm}
-./setup.py build --quiet --gtk-version=%{?gtk3:3}%{?!gtk3:2} --rpm-version=%{version}-%{release}
+python2 ./setup.py build --quiet --gtk-version=%{?gtk3:3}%{?!gtk3:2} --rpm-version=%{version}-%{release}
 %endif
 
 %install
@@ -512,8 +512,11 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?include_intentctl:INCLUDE_INTENTCTL="1"}
 
 %if %{with python2_rhsm}
-mkdir -p %{buildroot}%{python2_sitearch}
-cp -r %{buildroot}%{python_sitearch}/rhsm %{buildroot}%{python2_sitearch}/rhsm
+mkdir -p %{buildroot}%{python2_sitearch}/rhsm
+# Build binary extension in Python2 site-packages directory
+python2 ./setup.py build_ext --build-lib %{buildroot}%{python2_sitearch} --quiet
+# Copy all *.py file from Python3 to Python2 directory
+cp %{buildroot}%{python_sitearch}/rhsm/*.py %{buildroot}%{python2_sitearch}/rhsm/
 %endif
 
 %if 0%{?suse_version}
