@@ -10,12 +10,14 @@ from datetime import datetime, timedelta
 import re
 import sys
 import socket
+import shutil
 import os
 import tempfile
 import contextlib
 
 import six
 
+from subscription_manager import intentstore_interface
 from subscription_manager import managercli, managerlib
 from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_TYPE
 from subscription_manager.injection import provide, \
@@ -163,6 +165,14 @@ class InstalledProductStatusTests(SubManFixture):
 
 
 class TestCli(SubManFixture):
+    def setUp(self):
+        super(TestCli, self).setUp()
+        intentstore_interface.USER_INTENT = self.write_tempfile("{}").name
+
+    def tearDown(self):
+        super(TestCli, self).tearDown()
+        intentstore_interface.USER_INTENT = "/etc/rhsm/intent/intent.json"
+
     def test_cli(self):
         cli = managercli.ManagerCLI()
         self.assertTrue('register' in cli.cli_commands)
@@ -341,6 +351,11 @@ class TestRegisterCommand(TestCliProxyCommand):
         argv_patcher = patch.object(sys, 'argv', ['subscription-manager', 'register'])
         argv_patcher.start()
         self.addCleanup(argv_patcher.stop)
+        intentstore_interface.USER_INTENT = self.write_tempfile("{}").name
+
+    def tearDown(self):
+        super(TestRegisterCommand, self).tearDown()
+        intentstore_interface.USER_INTENT = "/etc/rhsm/intent/intent.json"
 
     def _test_exception(self, args):
         try:
@@ -1289,6 +1304,11 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         TestCliProxyCommand.setUp(self)
         self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
+        intentstore_interface.USER_INTENT = self.write_tempfile("{}").name
+
+    def tearDown(self):
+        super(TestServiceLevelCommand, self).tearDown()
+        intentstore_interface.USER_INTENT = "/etc/rhsm/intent/intent.json"
 
     def test_main_server_url(self):
         server_url = "https://subscription.rhsm.redhat.com/subscription"
@@ -1319,6 +1339,26 @@ class TestServiceLevelCommand(TestCliProxyCommand):
     def test_service_level_supported(self):
         self.cc.cp.setConsumer({'serviceLevel': 'Jarjar'})
         self.cc.set_service_level('JRJAR')
+
+    def test_service_level_creates_intent_dir_and_file(self):
+        # create a mock /etc/rhsm/ directory, and set the value of a mock USER_INTENT under that
+        mock_etc_rhsm_dir = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, mock_etc_rhsm_dir)
+        mock_intent_file = os.path.join(mock_etc_rhsm_dir, "intent/intent.json")
+        intentstore_interface.USER_INTENT = mock_intent_file
+
+        # make sure the subdirectory 'mock_etc_rhsm_dir/intent' does not exist yet:
+        self.assertFalse(os.path.isdir(os.path.join(mock_etc_rhsm_dir, "intent")))
+
+        self.cc.cp.setConsumer({'serviceLevel': 'Jarjar'})
+        self.cc.set_service_level('JRJAR')
+
+        # make sure the subdirectory 'mock_etc_rhsm_dir/intent' has been created by the sla command:
+        self.assertTrue(os.path.isdir(os.path.join(mock_etc_rhsm_dir, "intent")))
+
+        # make sure the sla has been persisted in intent.json:
+        contents = intentstore_interface.IntentStore.read(intentstore_interface.USER_INTENT).contents
+        self.assertEqual(contents.get("service_level_agreement"), "JRJAR")
 
 
 class TestReleaseCommand(TestCliProxyCommand):
