@@ -569,7 +569,7 @@ class BaseRestLib(object):
                                         err))
             raise
         except socket.error as err:
-            if str(err)[-3:] == str(httplib.PROXY_AUTHENTICATION_REQUIRED):
+            if str(httplib.PROXY_AUTHENTICATION_REQUIRED) in str(err):
                 raise ProxyException(err)
             raise
         response = conn.getresponse()
