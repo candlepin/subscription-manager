@@ -2253,7 +2253,7 @@ class ListCommand(CliCommand):
         self.parser.add_option("--pool-only", dest="pid_only", action="store_true",
                                help=_("lists only the pool IDs for applicable available or consumed subscriptions; only used with --available and --consumed"))
         self.parser.add_option('--after', dest="after",
-                               help=_("show pools that are active on or after the given date; only used with --available and --all"))
+                               help=_("show pools that are active on or after the given date; only used with --available"))
 
     def _validate_options(self):
         if self.options.all and not self.options.available:
