@@ -123,6 +123,12 @@
 %define with_subman_gui WITH_SUBMAN_GUI=false
 %endif
 
+%if %{use_cockpit} && !0%{use_subman_gui}
+%define with_cockpit WITH_COCKPIT=true
+%else
+%define with_cockpit WITH_COCKPIT=false
+%endif
+
 %define subpackages SUBPACKAGES="%{?include_intentctl:intentctl}"
 
 Name: subscription-manager
@@ -508,6 +514,7 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?install_zypper_plugins} \
     %{?with_systemd} \
     %{?with_subman_gui} \
+    %{?with_cockpit} \
     %{?subpackages} \
     %{?include_intentctl:INCLUDE_INTENTCTL="1"}
 
@@ -526,6 +533,10 @@ cp %{buildroot}%{python_sitearch}/rhsm/*.py %{buildroot}%{python2_sitearch}/rhsm
 %if %use_subman_gui
 desktop-file-validate %{buildroot}/etc/xdg/autostart/rhsm-icon.desktop
 desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-gui.desktop
+%else
+%if %use_cockpit
+desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-cockpit.desktop
+%endif
 %endif
 
 %find_lang rhsm
@@ -976,6 +987,9 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/ca/redhat-uep.pem %{buildroo
 %{_datadir}/cockpit/subscription-manager/po.js
 %{_datadir}/cockpit/subscription-manager/node_modules/*
 %{_datadir}/metainfo/org.cockpit-project.subscription-manager.metainfo.xml
+%if ! %use_subman_gui
+%{_datadir}/applications/subscription-manager-cockpit.desktop
+%endif
 %endif
 
 %post
