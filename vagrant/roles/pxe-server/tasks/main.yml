@@ -152,3 +152,7 @@
     src: "ks_{{distro_name}}{{distro_version}}.cfg.j2"
     dest: /var/ftp/pub/ks.cfg
   become: true
+
+- name: disable SELinux
+  shell: "setenforce 0"
+  become: true

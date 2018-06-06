@@ -35,7 +35,7 @@ ethtool = None
 try:
     import ethtool
 except ImportError as e:
-    log.warn("Unable to import the 'ethtool' module.")
+    log.warning("Unable to import the 'ethtool' module.")
 
 # For python2.6 that doesn't have subprocess.check_output
 from rhsmlib.compat import check_output as compat_check_output
@@ -216,7 +216,7 @@ class HardwareCollector(collector.FactsCollector):
                     nkey = '.'.join(["memory", key.lower()])
                     meminfo[nkey] = "%s" % int(value)
         except Exception as e:
-            log.warn("Error reading system memory information: %s", e)
+            log.warning("Error reading system memory information: %s", e)
         return meminfo
 
     def count_cpumask_entries(self, cpu, field):
@@ -561,7 +561,7 @@ class HardwareCollector(collector.FactsCollector):
                                             env=lscpu_env)
         except CalledProcessError as e:
             log.exception(e)
-            log.warn('Error with lscpu (%s) subprocess: %s', lscpu_cmd_string, e)
+            log.warning('Error with lscpu (%s) subprocess: %s', lscpu_cmd_string, e)
             return lscpu_info
 
         errors = []
@@ -578,7 +578,7 @@ class HardwareCollector(collector.FactsCollector):
                     errors.append(e)
 
         except Exception as e:
-            log.warn('Error reading system CPU information: %s', e)
+            log.warning('Error reading system CPU information: %s', e)
         if errors:
             log.debug('Errors while parsing lscpu output: %s', errors)
 
@@ -669,7 +669,7 @@ class HardwareCollector(collector.FactsCollector):
                 net_info['network.ipv6_address'] = ', '.join(self._get_ipv6_addr_list())
 
         except Exception as err:
-            log.warn('Error reading networking information: %s', err)
+            log.warning('Error reading networking information: %s', err)
 
         return net_info
 
@@ -770,7 +770,7 @@ class HardwareCollector(collector.FactsCollector):
 
         except Exception as e:
             log.exception(e)
-            log.warn("Error reading network interface information: %s", e)
+            log.warning("Error reading network interface information: %s", e)
         return netinfdict
 
     # from rhn-client-tools  hardware.py

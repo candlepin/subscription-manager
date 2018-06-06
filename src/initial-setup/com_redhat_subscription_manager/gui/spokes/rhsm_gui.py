@@ -22,9 +22,12 @@ import logging
 
 from pyanaconda.ui.communication import hubQ
 from pyanaconda.ui.gui.spokes import NormalSpoke
-from pyanaconda.ui.common import FirstbootOnlySpokeMixIn
+from pyanaconda.ui.common import FirstbootSpokeMixIn
 from pyanaconda.ui.categories.system import SystemCategory
+from pyanaconda.ui.categories.user_settings import UserSettingsCategory
 from pyanaconda.ui.gui.utils import really_hide
+from pyanaconda.flags import flags
+from pyanaconda.constants import ANACONDA_ENVIRON
 
 log = logging.getLogger(__name__)
 
@@ -49,12 +52,21 @@ __all__ = ["RHSMSpoke"]
 configure_gettext()
 
 
-class RHSMSpoke(FirstbootOnlySpokeMixIn, NormalSpoke):
+class RHSMSpoke(FirstbootSpokeMixIn, NormalSpoke):
+    """
+    Spoke used for registration of system in Anaconda or Initial Setup
+    """
     buildrObjects = ["RHSMSpokeWindow"]
     mainWidgetName = "RHSMSpokeWindow"
     uiFile = "rhsm_gui.ui"
     helpFile = "SubscriptionManagerSpoke.xml"
-    category = SystemCategory
+    # Display our spoke in second hub for testing purpose. There is also
+    # no more space in first hub. See this bug report:
+    # https://bugzilla.redhat.com/show_bug.cgi?id=1584160
+    if ANACONDA_ENVIRON in flags.environs:
+        category = UserSettingsCategory
+    else:
+        category = SystemCategory
     icon = "subscription-manager"
     title = "_Subscription Manager"
 

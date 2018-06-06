@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Bash script used for automatic rebuilding of updates.img used by Anaconda installer.
-# This script is usualy started as service by systemd, but it can be also started manualy
+# This script is usually started as service by systemd, but it can be also started manually
 # On PXE server providing updates.img to PXE client.
 
 usage() {
