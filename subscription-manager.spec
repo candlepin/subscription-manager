@@ -132,8 +132,8 @@
 %define subpackages SUBPACKAGES="%{?include_intentctl:intentctl}"
 
 Name: subscription-manager
-Version: 1.21.4
-Release: 3%{?dist}
+Version: 1.21.5
+Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1068,6 +1068,28 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Jun 07 2018 Christopher Snyder <csnyder@redhat.com> 1.21.5-1
+- Fix python-rhsm Provides and Obsoletes (csnyder@redhat.com)
+- 1568609: Updated man page for --after list option (aparadka@redhat.com)
+- Get Initial Setup Addon to run during installation in Vagrant
+  (jhnidek@redhat.com)
+- ENT-447 Create .desktop file that opens web page with our cockpit plugin
+  (jhnidek@redhat.com)
+- ENT-481 service-level command & options now update intent metadata
+  (nmoumoul@redhat.com)
+- 1560727: Search for proxy auth message in whole error string
+  (aria.paradkar@gmail.com)
+- 1555384: get_libexecdir now returns a string instead of bytes
+  (aria.paradkar@gmail.com)
+- Added generic set/unset and add/remove commands to intentctl
+  (crog@redhat.com)
+- ENT-488 intentctl now warns if running in container (nmoumoul@redhat.com)
+- 1574706: Create python2-subscription-manager-rhsm properly
+  (jhnidek@redhat.com)
+- Automatic rebuilding of updates.img on PXE Server (jhnidek@redhat.com)
+- 1574529: Fix rhsmcertd integer overflow on i386 & i686 (csnyder@redhat.com)
+- Respecting proxy port configured in rhsm.conf (oskar@wycislak.pl)
+
 * Tue May 01 2018 Christopher Snyder <csnyder@redhat.com> 1.21.4-3
 - Add dist back to release (csnyder@redhat.com)
 
