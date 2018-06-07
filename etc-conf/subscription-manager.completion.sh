@@ -107,7 +107,7 @@ _subscription_manager_import()
 
 _subscription_manager_list()
 {
-  local opts="--all --available --consumed --installed
+  local opts="--after --all --available --consumed --installed
               --ondate --servicelevel
               --match-installed --no-overlap
               --matches
