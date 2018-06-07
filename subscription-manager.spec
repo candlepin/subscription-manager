@@ -428,6 +428,8 @@ Requires: subscription-manager-rhsm-certificates = %{version}-%{release}
 Requires: python3-rpm
 Provides: python3-rhsm = %{version}-%{release}
 Obsoletes: python3-rhsm <= 1.20.3-1
+Provides: python-rhsm = %{version}-%{release}
+Obsoletes: python-rhsm <= 1.20.3-1
 %else
 Requires: rpm-python
 Provides: python-rhsm = %{version}-%{release}
