@@ -483,7 +483,7 @@ and to receive access to content.
 %if %use_cockpit
 %package -n subscription-manager-cockpit
 Summary: Subscription Manager Cockpit UI
-License: LGPLv2.1+
+License: GPLv2
 BuildArch: noarch
 
 Requires: subscription-manager
