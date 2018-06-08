@@ -139,8 +139,7 @@
 
 - name: install python test deps
   pip:
-    requirements: test-requirements.txt
-    chdir: "{{ subman_checkout_dir }}"
+    requirements: "{{ subman_checkout_dir }}/test-requirements.txt"
   become: yes
 
 - name: clean build artifacts
