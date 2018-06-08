@@ -132,7 +132,7 @@
 %define subpackages SUBPACKAGES="%{?include_intentctl:intentctl}"
 
 Name: subscription-manager
-Version: 1.21.5
+Version: 1.22.0
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1068,6 +1068,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Jun 08 2018 Christopher Snyder <csnyder@redhat.com> 1.22.0-1
+- Remove F26 from releasers (Fedora 26 EOL) (csnyder@redhat.com)
+
 * Thu Jun 07 2018 Christopher Snyder <csnyder@redhat.com> 1.21.5-1
 - Fix python-rhsm Provides and Obsoletes (csnyder@redhat.com)
 - 1568609: Updated man page for --after list option (aparadka@redhat.com)
