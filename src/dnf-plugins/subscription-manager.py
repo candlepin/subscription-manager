@@ -104,10 +104,11 @@ class SubscriptionManager(dnf.Plugin):
             logger.info(_("Subscription Manager is operating in container mode."))
 
         if not cache_only:
-            rl = EntCertActionInvoker()
-        else:
-            rl = RepoActionInvoker(cache_only=cache_only)
-        rl.update()
+            cert_action_invoker = EntCertActionInvoker()
+            cert_action_invoker.update()
+
+        repo_action_invoker = RepoActionInvoker(cache_only=cache_only)
+        repo_action_invoker.update()
 
     def _warnExpired(self):
         """ display warning for expired entitlements """
