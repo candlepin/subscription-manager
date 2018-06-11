@@ -298,7 +298,6 @@ test_require = [
       'nose-randomly',
       'coverage',
       'polib',
-      'freezegun',
       'flake8',
       'lxml',
     ] + install_requires + setup_requires
