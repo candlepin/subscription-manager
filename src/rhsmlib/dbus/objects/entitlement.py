@@ -98,9 +98,9 @@ class EntitlementDBusObject(base_object.BaseObject):
         if on_date != "":
             options['on_date'] = self._parse_date(on_date)
 
-        after = options.setdefault("after", "")
-        if after != "":
-            options["after"] = self._parse_date(after)
+        after_date = options.setdefault("after_date", "")
+        if after_date != "":
+            options["after_date"] = self._parse_date(after_date)
 
         future = options.setdefault("future", "")
         if future != "":

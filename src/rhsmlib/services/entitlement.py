@@ -50,7 +50,7 @@ class EntitlementService(object):
 
     def get_pools(self, pool_subsets=None, matches=None, pool_only=None, match_installed=None,
                   no_overlap=None, service_level=None, show_all=None, on_date=None, future=None,
-                  after=None, **kwargs):
+                  after_date=None, **kwargs):
         # We accept a **kwargs argument so that the DBus object can pass whatever dictionary it receives
         # via keyword expansion.
         if kwargs:
@@ -73,7 +73,7 @@ class EntitlementService(object):
             'show_all': show_all,
             'on_date': on_date,
             'future': future,
-            'after': after,
+            'after_date': after_date,
         }
         self.validate_options(options)
         results = {}
@@ -95,7 +95,7 @@ class EntitlementService(object):
                 matches=matches,
                 service_level=service_level,
                 future=future,
-                after=after,
+                after_date=after_date,
             )
             if pool_only:
                 results['available'] = [x['id'] for x in available]
@@ -225,7 +225,7 @@ class EntitlementService(object):
 
     def get_available_pools(self, show_all=None, on_date=None, no_overlap=None,
                             match_installed=None, matches=None, service_level=None, future=None,
-                            after=None):
+                            after_date=None):
         available_pools = managerlib.get_available_entitlements(
             get_all=show_all,
             active_on=on_date,
@@ -233,7 +233,7 @@ class EntitlementService(object):
             uninstalled=match_installed,
             filter_string=matches,
             future=future,
-            after=after,
+            after_date=after_date,
         )
 
         def filter_pool_by_service_level(pool_data):
