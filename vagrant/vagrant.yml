@@ -14,11 +14,21 @@
   gather_facts: no
   become: yes
   tasks:
+    - name: Make fake Xauthority (if needed)
+      copy:
+        content: ""
+        owner: vagrant
+        group: vagrant
+        dest: /home/vagrant/.Xauthority
+        force: no
+      tags:
+        - xauth
+
     - name: link vagrant's Xauthority to root user
       file:
         src: /home/vagrant/.Xauthority
         dest: /root/.Xauthority
-        owner: root
-        group: root
         state: link
-        force: yes
+      tags:
+        - xauth
+

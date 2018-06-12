@@ -265,3 +265,13 @@
   become: yes
   ignore_errors: yes
   when: subman_add_vagrant_candlepin_to_hosts
+
+- name: update glibc-common if not already latest
+  package:
+    name: glibc-common
+    state: latest
+
+- name: reinstall glibc-common to lay down langs
+  become: true
+  become_method: sudo
+  command: yum -y reinstall glibc-common
