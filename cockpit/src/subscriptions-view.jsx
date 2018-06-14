@@ -194,7 +194,13 @@ class SubscriptionsPage extends React.Component {
         let icon;
         let description;
         let message;
-        if (this.props.status === undefined || !subscriptionsClient.config.loaded) {
+        if (this.props.status === "service-unavailable") {
+            icon = <div className="fa fa-exclamation-circle"/>;
+            message = _("The rhsm service is unavailable. Make sure subscription-manager is installed " +
+                "and try reloading the page. Additionally, make sure that you have checked the " +
+                "'Reuse my password for privileged tasks' checkbox on the login page.");
+            description = _("Unable to the reach the rhsm service.");
+        } else if (this.props.status === undefined || !subscriptionsClient.config.loaded) {
             icon = <div className="spinner spinner-lg" />;
             message = _("Updating");
             description = _("Retrieving subscription status...");
