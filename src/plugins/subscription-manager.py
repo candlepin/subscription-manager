@@ -112,10 +112,11 @@ def update(conduit, cache_only):
         conduit.info(3, "Subscription Manager is operating in container mode.")
 
     if not cache_only:
-        rl = EntCertActionInvoker(locker=YumRepoLocker(conduit=conduit))
-    else:
-        rl = RepoActionInvoker(cache_only=cache_only, locker=YumRepoLocker(conduit=conduit))
-    rl.update()
+        cert_action_invoker = EntCertActionInvoker(locker=YumRepoLocker(conduit=conduit))
+        cert_action_invoker.update()
+
+    repo_action_invoker = RepoActionInvoker(cache_only=cache_only, locker=YumRepoLocker(conduit=conduit))
+    repo_action_invoker.update()
 
 
 def warnExpired(conduit):

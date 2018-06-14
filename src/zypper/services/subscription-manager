@@ -106,10 +106,11 @@ class ZypperService(object):
         cache_only = not self.full_refresh_on_yum
 
         if not cache_only:
-            rl = EntCertActionInvoker(locker=RepoLocker())
-        else:
-            rl = RepoActionInvoker(cache_only=cache_only, locker=RepoLocker())
-        rl.update()
+            cert_action_invoker = EntCertActionInvoker(locker=RepoLocker())
+            cert_action_invoker.update()
+
+        repo_action_invoker = RepoActionInvoker(cache_only=cache_only, locker=RepoLocker())
+        repo_action_invoker.update()
 
         # Rehash CA-certificates since zypper accepts only capath
         if os.path.isfile(c_rehash):
