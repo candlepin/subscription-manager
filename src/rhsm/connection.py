@@ -1539,6 +1539,14 @@ class UEPConnection(object):
         results = self.conn.request_get(method)
         return results
 
+    def cancelJob(self, job_id):
+        """
+        Given a job id representing a candlepin JobStatus, cancel it.
+        """
+        method = "/jobs/%s" % (job_id)
+        results = self.conn.request_delete(method)
+        return results
+
     def sanitize(self, url_param, plus=False):
         # This is a wrapper around urllib.quote to avoid issues like the one
         # discussed in http://bugs.python.org/issue9301
