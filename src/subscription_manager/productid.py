@@ -25,7 +25,7 @@ import rpm
 
 from rhsm.certificate import create_from_pem
 
-from subscription_manager.certdirectory import Directory
+from subscription_manager.certdirectory import Directory, DEFAULT_PRODUCT_CERT_DIR
 from subscription_manager.injection import PLUGIN_MANAGER, require
 
 from subscription_manager import utils
@@ -643,7 +643,7 @@ class ProductManager(object):
 
             # Protect all product certificates in /etc/pki/product-default
             # See: BZ: 1526622
-            if cert.path.startswith('/etc/pki/product-default/'):
+            if cert.path.startswith(DEFAULT_PRODUCT_CERT_DIR):
                 log.debug('Skipping prod. cert.: %s in protected directory' % cert.path)
                 continue
 
