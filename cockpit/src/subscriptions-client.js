@@ -96,6 +96,32 @@ function parseErrorMessage(error) {
     return err;
 }
 
+/**
+ * Method that calls a method on a dbus service proxy, only if it is available.
+ *
+ * If the service does not contain the provided method, we try to restart the rhsm service,
+ * and if the restart is successful, we call the delegate method; otherwise, we fail gracefully.
+ *
+ * @param serviceProxy a dbus service proxy
+ * @param methodName a method on the provided serviceProxy
+ * @param delegateMethod the method that we delegate the actual call to dbus
+ */
+function safeDBusCall(serviceProxy, methodName, delegateMethod) {
+    if (!Object.prototype.hasOwnProperty.call(serviceProxy, methodName)) {
+        cockpit.spawn(['systemctl', 'restart', 'rhsm'], { superuser: "require" })
+            .done(() => {
+                console.debug("rhsm service force restart successfully");
+                delegateMethod();
+            }).fail(() => {
+                console.warn('service method ' + methodName + ' is unavailable.');
+                client.subscriptionStatus.status = "service-unavailable";
+                needRender();
+            });
+    } else {
+        delegateMethod();
+    }
+}
+
 let gettingDetails = false;
 let getDetailsRequested = false;
 function getSubscriptionDetails() {
@@ -106,7 +132,8 @@ function getSubscriptionDetails() {
     getDetailsRequested = false;
     gettingDetails = true;
     productsService.wait(() => {
-        productsService.ListInstalledProducts('', {}, userLang) // FIXME: use proxy settings
+        safeDBusCall(productsService, 'ListInstalledProducts', () => {
+            productsService.ListInstalledProducts('', {}, userLang) // FIXME: use proxy settings
             .then(result => {
                 client.subscriptionStatus.products = parseProducts(result);
             })
@@ -119,6 +146,7 @@ function getSubscriptionDetails() {
                     getSubscriptionDetails();
                 needRender();
             });
+        });
     });
 }
 
@@ -381,6 +409,12 @@ client.unregisterSystem = () => {
     });
 };
 
+function statusUpdateFailed(reason) {
+    console.warn("Subscription status update failed:", reason);
+    client.subscriptionStatus.status = "not-found";
+    needRender();
+}
+
 /* request update via DBus
  * possible status values: https://github.com/candlepin/subscription-manager/blob/30c3b52320c3e73ebd7435b4fc8b0b6319985d19/src/rhsm_icon/rhsm_icon.c#L98
  * [ RHSM_VALID, RHSM_EXPIRED, RHSM_WARNING, RHN_CLASSIC, RHSM_PARTIALLY_VALID, RHSM_REGISTRATION_REQUIRED ]
@@ -428,7 +462,8 @@ client.getSubscriptionStatus = function(dfd = null) {
     gettingStatus = true;
 
     entitlementService.wait(() => {
-        entitlementService.GetStatus('', userLang)
+        safeDBusCall(entitlementService, 'GetStatus', () => {
+            entitlementService.GetStatus('', userLang)
             .then(result => {
                 const status = JSON.parse(result);
                 client.subscriptionStatus.status = status.status;
@@ -445,52 +480,57 @@ client.getSubscriptionStatus = function(dfd = null) {
                 getSubscriptionDetails();
                 needRender();
             });
+        });
     });
 };
 
 client.readConfig = () => {
-    return configService.wait(() => configService.GetAll(userLang).then(config => {
-        const hostname = config.server.v.hostname;
-        const port = config.server.v.port;
-        const prefix = config.server.v.prefix;
-        const proxyHostname = config.server.v.proxy_hostname;
-        const proxyPort = config.server.v.proxy_port;
-        const proxyUser = config.server.v.proxy_user;
-        const proxyPassword = config.server.v.proxy_password;
+    return configService.wait(() => {
+        safeDBusCall(configService, 'GetAll', () => {
+            configService.GetAll(userLang).then(config => {
+                const hostname = config.server.v.hostname;
+                const port = config.server.v.port;
+                const prefix = config.server.v.prefix;
+                const proxyHostname = config.server.v.proxy_hostname;
+                const proxyPort = config.server.v.proxy_port;
+                const proxyUser = config.server.v.proxy_user;
+                const proxyPassword = config.server.v.proxy_password;
 
-        const usingDefaultUrl = (port === '443' &&
-            hostname === RHSM_DEFAULTS.hostname &&
-            port === RHSM_DEFAULTS.port &&
-            prefix === RHSM_DEFAULTS.prefix
-        );
+                const usingDefaultUrl = (port === '443' &&
+                    hostname === RHSM_DEFAULTS.hostname &&
+                    port === RHSM_DEFAULTS.port &&
+                    prefix === RHSM_DEFAULTS.prefix
+                );
 
-        const maybePort = port === '443' ? '' : `:${port}`;
-        const maybePrefix = prefix === '/subscription' ? '' : prefix;
-        const hostnamePart = hostname.includes(':') ? `[${hostname}]`: hostname;
-        const serverUrl = usingDefaultUrl ? '' : `${hostnamePart}${maybePort}${maybePrefix}`;
-        const proxyHostnamePart = proxyHostname.includes(':') ? `[${proxyHostname}]` : proxyHostname;
-        const usingProxy = proxyHostname !== '';
-        const maybeProxyPort = proxyPort ? `:${proxyPort}`: '';
-        const proxyServer = usingProxy ? `${proxyHostnamePart}${maybeProxyPort}`: '';
+                const maybePort = port === '443' ? '' : `:${port}`;
+                const maybePrefix = prefix === '/subscription' ? '' : prefix;
+                const hostnamePart = hostname.includes(':') ? `[${hostname}]`: hostname;
+                const serverUrl = usingDefaultUrl ? '' : `${hostnamePart}${maybePort}${maybePrefix}`;
+                const proxyHostnamePart = proxyHostname.includes(':') ? `[${proxyHostname}]` : proxyHostname;
+                const usingProxy = proxyHostname !== '';
+                const maybeProxyPort = proxyPort ? `:${proxyPort}`: '';
+                const proxyServer = usingProxy ? `${proxyHostnamePart}${maybeProxyPort}`: '';
 
-        // Note: we don't use camelCase, because we keep naming convention of rhsm.conf
-        // Thus we can do some simplification of code
-        Object.assign(client.config, {
-            url: usingDefaultUrl ? 'default' : 'custom',
-            hostname: hostname,
-            port: port,
-            prefix: prefix,
-            server_url: serverUrl,
-            proxy: usingProxy,
-            proxy_server: proxyServer,
-            proxy_hostname: proxyHostname,
-            proxy_port: proxyPort,
-            proxy_user: proxyUser,
-            proxy_password: proxyPassword,
-            loaded: true,
+                // Note: we don't use camelCase, because we keep naming convention of rhsm.conf
+                // Thus we can do some simplification of code
+                Object.assign(client.config, {
+                    url: usingDefaultUrl ? 'default' : 'custom',
+                    hostname: hostname,
+                    port: port,
+                    prefix: prefix,
+                    server_url: serverUrl,
+                    proxy: usingProxy,
+                    proxy_server: proxyServer,
+                    proxy_hostname: proxyHostname,
+                    proxy_port: proxyPort,
+                    proxy_user: proxyUser,
+                    proxy_password: proxyPassword,
+                    loaded: true,
+                });
+                console.debug('loaded client config', client.config);
+            });
         });
-        console.debug('loaded client config', client.config);
-    }));
+    });
 };
 
 client.init = () => {
