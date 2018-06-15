@@ -991,6 +991,14 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/ca/redhat-uep.pem %{buildroo
 %{_datadir}/metainfo/org.cockpit-project.subscription-manager.metainfo.xml
 %if ! %use_subman_gui
 %{_datadir}/applications/subscription-manager-cockpit.desktop
+%{_datadir}/icons/hicolor/16x16/apps/*.png
+%{_datadir}/icons/hicolor/22x22/apps/*.png
+%{_datadir}/icons/hicolor/24x24/apps/*.png
+%{_datadir}/icons/hicolor/32x32/apps/*.png
+%{_datadir}/icons/hicolor/48x48/apps/*.png
+%{_datadir}/icons/hicolor/96x96/apps/*.png
+%{_datadir}/icons/hicolor/256x256/apps/*.png
+%{_datadir}/icons/hicolor/scalable/apps/*.svg
 %endif
 %endif
 

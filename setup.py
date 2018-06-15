@@ -213,6 +213,7 @@ class install_data(_install_data):
             self.add_gui_doc_files()
         if self.with_cockpit_desktop_entry:
             self.add_cockpit_desktop_entry()
+            self.add_icons()
         self.add_dbus_service_files()
         self.add_systemd_services()
         _install_data.run(self)
