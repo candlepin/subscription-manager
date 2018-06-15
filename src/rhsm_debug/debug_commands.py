@@ -28,6 +28,7 @@ import subscription_manager.injection as inj
 import subscription_manager.managercli as managercli
 from subscription_manager.managercli import CliCommand
 from subscription_manager.cli import InvalidCLIOptionError, system_exit
+from subscription_manager.certdirectory import DEFAULT_PRODUCT_CERT_DIR
 from rhsm import ourjson as json
 from rhsm.config import initConfig
 from rhsmlib.services import config
@@ -146,7 +147,7 @@ class SystemCommand(CliCommand):
                 self._copy_directory('/var/lib/rhsm', content_path)
 
             if not sos:
-                self._copy_cert_directory('/etc/pki/product-default', content_path)
+                self._copy_cert_directory(DEFAULT_PRODUCT_CERT_DIR, content_path)
 
             if defaults['productcertdir'] != conf['rhsm']['productCertDir'] or not sos:
                 self._copy_cert_directory(conf['rhsm']['productCertDir'], content_path)
