@@ -782,8 +782,10 @@ class TestProductManager(SubManFixture):
         self.prod_dir.certs.append(jboss_cert)
         self.prod_dir.certs.append(server_cert)
 
-        self.prod_repo_map = {"183": ['some-other-repo'], "69": [
-            'rhel-6-server-rpms']}
+        self.prod_repo_map = {
+            "183": ['some-other-repo'],
+            "69": ['rhel-6-server-rpms']
+        }
         self.prod_db_mock.find_repos = Mock(
                 side_effect=self.find_repos_side_effect)
         enabled = [(jboss_cert, 'some-other-repo'),
@@ -992,37 +994,41 @@ class TestProductManager(SubManFixture):
         self.assertFalse(self.prod_db_mock.write.called)
         self.assertFalse(cert.delete.called)
 
-    def _create_cert(self, product_id, label, version, provided_tags):
+    def _create_cert(self, product_id, label, version, provided_tags, prod_default=False):
         cert = stubs.StubProductCertificate(
                 stubs.StubProduct(product_id, label, version=version,
                                    provided_tags=provided_tags))
         cert.delete = Mock()
         cert.write = Mock()
+        if prod_default:
+            cert.path = '/etc/pki/product-default/' + product_id + '.pem'
+        else:
+            cert.path = '/etc/pki/product/' + product_id + '.pem'
         return cert
 
     def _create_desktop_cert(self):
         return self._create_cert("68", "Red Hat Enterprise Linux Desktop",
-                                 "5.9", "rhel-5,rhel-5-client")
+                                 "5.9", "rhel-5,rhel-5-client", True)
 
     def _create_workstation_cert(self):
         return self._create_cert("71", "Red Hat Enterprise Linux Workstation",
-                                 "5.9", "rhel-5-client-workstation,rhel-5-workstation")
+                                 "5.9", "rhel-5-client-workstation,rhel-5-workstation", True)
 
     def _create_newer_workstation_cert(self):
         return self._create_cert("71", "Red Hat Enterprise Linux Workstation",
-                                 "5.10", "rhel-5-client-workstation,rhel-5-workstation")
+                                 "5.10", "rhel-5-client-workstation,rhel-5-workstation", True)
 
     def _create_server_cert(self):
         return self._create_cert("69", "Red Hat Enterprise Linux Server",
-                                 "6", "rhel-6,rhel-6-server")
+                                 "6", "rhel-6,rhel-6-server", True)
 
     def _create_newer_server_cert(self):
         return self._create_cert("69", "Red Hat Enterprise Linux Server",
-                                 "6.1", "rhel-6,rhel-6-server")
+                                 "6.1", "rhel-6,rhel-6-server", True)
 
     def _create_non_rhel_cert(self):
         return self._create_cert("1234568", "Mediocre OS",
-                                 "6", "medios-6,medios-6-server")
+                                 "6", "medios-6,medios-6-server", False)
 
     def test_is_workstation(self):
         workstation_cert = self._create_workstation_cert()

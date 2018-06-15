@@ -483,12 +483,26 @@ class Certificate(object):
         gmt = gmt.replace(tzinfo=GMT())
         return self.valid_range.end() < gmt
 
-    def __cmp__(self, other):
-        if self.end < other.end:
-            return -1
-        if self.end > other.end:
-            return 1
-        return 0
+    def __lt__(self, other):
+        return self.end < other.end
+
+    def __le__(self, other):
+        return self.end < other.end
+
+    def __gt__(self, other):
+        return self.end > other.end
+
+    def __ge__(self, other):
+        return self.end > other.end
+
+    def __eq__(self, other):
+        return self.serial == other.serial
+
+    def __ne__(self, other):
+        return self.serial != other.serial
+
+    def __hash__(self):
+        return self.serial
 
     def write(self, path):
         """

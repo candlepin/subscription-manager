@@ -123,16 +123,30 @@ class HuffmanNode(object):
                 return left
             heapq.heappush(queue, (cls.combine(left, right), next(counter)))
 
-    def __cmp__(self, other):
-        return cmp(self.weight, other.weight)
-
     def __lt__(self, other):
         return self.weight < other.weight
+
+    def __le__(self, other):
+        return self.weight <= other.weight
+
+    def __gt__(self, other):
+        return self.weight > other.weight
+
+    def __ge__(self, other):
+        return self.weight >= other.weight
 
     def __eq__(self, other):
         if not hasattr(other, 'weight'):
             return False
         return self.weight == other.weight
+
+    def __ne__(self, other):
+        if not hasattr(other, 'weight'):
+            return True
+        return self.weight != other.weight
+
+    def __hash__(self):
+        return self.value
 
     def __repr__(self):
         return 'HuffmanNode(%d, "%s")' % (self.weight, self.value)

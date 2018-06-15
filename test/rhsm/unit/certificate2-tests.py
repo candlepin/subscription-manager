@@ -27,30 +27,52 @@ from mock import patch
 
 class V1ProductCertTests(unittest.TestCase):
     def setUp(self):
-        self.prod_cert = create_from_pem(certdata.PRODUCT_CERT_V1_0)
+        self.prod_cert_1 = create_from_pem(certdata.PRODUCT_CERT_V1_0)
+        self.prod_cert_1.path = '/etc/pki/product/' + self.prod_cert_1.subject['CN'] + '.pem'
+        self.prod_cert_2 = create_from_pem(certdata.PRODUCT_CERT_V1_1)
+        self.prod_cert_2.path = '/etc/pki/product/' + self.prod_cert_2.subject['CN'] + '.pem'
+        self.prod_cert_2_copy = create_from_pem(certdata.PRODUCT_CERT_V1_1)
+        self.prod_cert_2_copy.path = '/etc/pki/product/' + self.prod_cert_2.subject['CN'] + '.pem'
 
     def test_factory_method_on_product_cert(self):
-        self.assertEqual("1.0", str(self.prod_cert.version))
-        self.assertTrue(isinstance(self.prod_cert, ProductCertificate))
-        self.assertEqual(1, len(self.prod_cert.products))
+        self.assertEqual("1.0", str(self.prod_cert_1.version))
+        self.assertTrue(isinstance(self.prod_cert_1, ProductCertificate))
+        self.assertEqual(1, len(self.prod_cert_1.products))
         self.assertEqual('Awesome OS for x86_64 Bits',
-                self.prod_cert.products[0].name)
-        self.assertEqual('100000000000002', self.prod_cert.subject['CN'])
+                         self.prod_cert_1.products[0].name)
+        self.assertEqual('100000000000002', self.prod_cert_1.subject['CN'])
 
     def test_os_old_cert(self):
-        self.assertTrue(self.prod_cert.products[0].brand_type is None)
+        self.assertTrue(self.prod_cert_1.products[0].brand_type is None)
 
     def test_set_brand_type(self):
         brand_type = "OS"
 
-        self.prod_cert.products[0].brand_type = brand_type
-        self.assertEqual(brand_type, self.prod_cert.products[0].brand_type)
+        self.prod_cert_1.products[0].brand_type = brand_type
+        self.assertEqual(brand_type, self.prod_cert_1.products[0].brand_type)
 
     def test_set_brand_name(self):
         brand_name = "Awesome OS Super"
 
-        self.prod_cert.products[0].brand_name = brand_name
-        self.assertEqual(brand_name, self.prod_cert.products[0].brand_name)
+        self.prod_cert_1.products[0].brand_name = brand_name
+        self.assertEqual(brand_name, self.prod_cert_1.products[0].brand_name)
+
+    def test_compare_certs(self):
+        # Test comparison methods of Certificate object:
+        # __lt__, __le__, __gt__, __ge__, __eq__, __ne__
+        self.assertLess(self.prod_cert_1, self.prod_cert_2)
+        self.assertLessEqual(self.prod_cert_1, self.prod_cert_2)
+        self.assertGreater(self.prod_cert_2, self.prod_cert_1)
+        self.assertGreaterEqual(self.prod_cert_2, self.prod_cert_1)
+        self.assertEqual(self.prod_cert_1, self.prod_cert_1)
+        self.assertNotEqual(self.prod_cert_1, self.prod_cert_2)
+
+    def test_cert_membership(self):
+        # Comparison methods are also used, when we test membership of certificate
+        # in the list of certificates:
+        list_of_certs = [self.prod_cert_1, self.prod_cert_2]
+        self.assertIn(self.prod_cert_1, list_of_certs)
+        self.assertIn(self.prod_cert_2_copy, list_of_certs)
 
 
 class V1EntCertTests(unittest.TestCase):
