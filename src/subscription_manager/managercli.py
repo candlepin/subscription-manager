@@ -260,13 +260,15 @@ class CliCommand(AbstractCLICommand):
         return logging.getLogger('rhsm-app.%s.%s' % (self.__module__, self.__class__.__name__))
 
     def test_proxy_connection(self):
-        result = None
         if not self.proxy_hostname and not conf["server"]["proxy_hostname"]:
             return True
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.settimeout(10)
-            result = s.connect_ex((self.proxy_hostname or conf["server"]["proxy_hostname"], int(self.proxy_port or conf["server"]["proxy_port"] or rhsm.config.DEFAULT_PROXY_PORT)))
+            result = s.connect_ex((
+                self.proxy_hostname or conf["server"]["proxy_hostname"],
+                int(self.proxy_port or conf["server"]["proxy_port"] or rhsm.config.DEFAULT_PROXY_PORT)
+            ))
         except Exception as e:
             log.info("Attempted bad proxy: %s" % e)
             return False
