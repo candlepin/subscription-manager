@@ -397,7 +397,6 @@ class TestEntitlementDBusObject(DBusObjectTest, InjectionMockingTest):
         entitlement_patcher = mock.patch('rhsmlib.dbus.objects.entitlement.EntitlementService', autospec=True)
         self.mock_entitlement = entitlement_patcher.start().return_value
         self.addCleanup(entitlement_patcher.stop)
-        self.mock_identity = mock.Mock(spec=Identity, name="Identity").return_value
         self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection").return_value
         self.mock_sorter_class = mock.Mock(spec=CertSorter, name="CertSorter")
         self.mock_ent_dir = mock.Mock(spec=EntitlementDirectory, name="EntitlementDirectory").return_value

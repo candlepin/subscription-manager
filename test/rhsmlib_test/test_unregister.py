@@ -68,7 +68,6 @@ class TestUnregisterDBusObject(DBusObjectTest, InjectionMockingTest):
         self.unregister = unregister_patcher.start().return_value
         self.addCleanup(unregister_patcher.stop)
 
-        self.mock_identity = mock.Mock(spec=Identity, name="Identity").return_value
         self.mock_identity.is_valid.return_value = True
         self.mock_identity.uuid = "7a002098-c167-41f2-91b3-d0c71e808142"
 

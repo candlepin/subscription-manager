@@ -257,7 +257,6 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
         self.proxy = self.proxy_for(RegisterDBusObject.default_dbus_path)
         self.interface = dbus.Interface(self.proxy, constants.REGISTER_INTERFACE)
 
-        self.mock_identity = mock.Mock(spec=Identity, name="Identity")
         self.mock_identity.is_valid.return_value = True
 
         self.mock_cp_provider = mock.Mock(spec=CPProvider, name="CPProvider")

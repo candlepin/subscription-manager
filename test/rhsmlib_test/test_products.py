@@ -20,7 +20,6 @@ import datetime
 from test.rhsmlib_test.base import DBusObjectTest, InjectionMockingTest
 
 from subscription_manager import injection as inj
-from subscription_manager.identity import Identity
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.validity import ValidProductDateRangeCalculator
 from subscription_manager.cp_provider import CPProvider
@@ -325,8 +324,6 @@ class TestProductsDBusObject(DBusObjectTest, InjectionMockingTest):
         products_patcher = mock.patch('rhsmlib.dbus.objects.products.InstalledProducts')
         self.mock_products = products_patcher.start().return_value
         self.addCleanup(products_patcher.stop)
-
-        self.mock_identity = mock.Mock(spec=Identity, name="Identity")
         self.mock_identity.is_valid.return_value = True
         self.mock_identity.uuid = "id"
 

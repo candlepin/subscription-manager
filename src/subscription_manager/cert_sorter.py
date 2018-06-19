@@ -22,7 +22,7 @@ from rhsm.connection import RestlibException
 import subscription_manager.injection as inj
 from subscription_manager.isodate import parse_date
 from subscription_manager.reasons import Reasons
-from subscription_manager import file_monitor
+from rhsmlib import file_monitor
 from subscription_manager import utils
 
 from subscription_manager.i18n import ugettext as _
@@ -325,18 +325,16 @@ class CertSorter(ComplianceManager):
         super(CertSorter, self).__init__(on_date)
         self.callbacks = set()
 
-        cert_dir_monitors = [file_monitor.MonitorDirectory(inj.require(inj.PROD_DIR).path,
-                                                           self.on_prod_dir_changed),
-                             file_monitor.MonitorDirectory(inj.require(inj.ENT_DIR).path,
-                                                           self.on_ent_dir_changed),
-                             file_monitor.MonitorDirectory(inj.require(inj.IDENTITY).cert_dir_path,
-                                                           self.on_identity_changed)]
+        cert_dir_monitors = [file_monitor.DirectoryWatch(inj.require(inj.PROD_DIR).path,
+                                                         [self.on_prod_dir_changed, self.load]),
+                             file_monitor.DirectoryWatch(inj.require(inj.ENT_DIR).path,
+                                                         [self.on_ent_dir_changed, self.load]),
+                             file_monitor.DirectoryWatch(inj.require(inj.IDENTITY).cert_dir_path,
+                                                         [self.on_identity_changed, self.load])]
 
         # Note: no timer is setup to poll file_monitor by cert_sorter itself,
         # the gui can add one.
-        self.cert_monitor = \
-            file_monitor.MonitorDirectories(dir_monitors=cert_dir_monitors,
-                                            changed_callback=self.on_certs_changed)
+        self.cert_monitor = file_monitor.FilesystemWatcher(cert_dir_monitors)
 
     def get_compliance_status(self):
         status_cache = inj.require(inj.ENTITLEMENT_STATUS_CACHE)

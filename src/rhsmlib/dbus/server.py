@@ -18,67 +18,17 @@ import dbus.service
 import dbus.server
 import dbus.mainloop.glib
 import threading
-import sys
-import time
-
-from rhsm.config import initConfig
 
 from rhsmlib.dbus import constants
-from rhsmlib.services import config
 
 from subscription_manager import ga_loader
 ga_loader.init_ga()
 from subscription_manager.ga import GLib
-from subscription_manager import cert_sorter
-
-from six.moves import configparser
 from functools import partial
+from rhsmlib.file_monitor import create_filesystem_watcher, DirectoryWatch
+from subscription_manager import injection as inj
 
 log = logging.getLogger(__name__)
-
-try:
-    import pyinotify
-except ImportError:
-    log.info('Module pyinotify cannot be imported. Fallback mode: periodical directory polling will be used.')
-else:
-    from rhsmlib.dbus import inotify
-
-conf = config.Config(initConfig())
-
-
-def polling_worker(server):
-    """
-    Thread worker using periodical polling of directories with certificates.
-    This is used only in fallback mode, when it is not possible to use pyinotify
-    or using of inotify was disabled in rhsm.conf.
-    :param server: Reference to instance of Server
-    :return: None
-    """
-    cs = cert_sorter.CertSorter()
-    while server.terminate_loop is False:
-        cs.force_cert_check()
-        time.sleep(2.0)
-
-
-def inotify_enabled():
-    """
-    Check if inotify is enabled or disabled in rhsm.conf.
-    It is enabled by default.
-    :return: It returns True, when inotify is enabled. Otherwise it returns False.
-    """
-    try:
-        use_inotify = conf['rhsm'].get_int('inotify')
-    except ValueError as e:
-        log.exception(e)
-        return True
-    except configparser.Error as e:
-        log.exception(e)
-        return True
-    else:
-        if use_inotify is None:
-            return True
-
-    return bool(use_inotify)
 
 
 class Server(object):
@@ -101,21 +51,14 @@ class Server(object):
         bus_kwargs = bus_kwargs or {}
         object_classes = object_classes or []
         self.objects = []
+        self.object_map = {}
 
         try:
             self.bus = bus_class(**bus_kwargs)
         except dbus.exceptions.DBusException:
             log.exception("Could not create bus class")
             raise
-
-        self.terminate_loop = False
-        #
-        if 'pyinotify' in sys.modules and inotify_enabled():
-            log.debug('Using pyinotify %s' % pyinotify.__version__)
-            self._thread = threading.Thread(target=inotify.inotify_worker, args=(self,))
-        else:
-            self._thread = threading.Thread(target=polling_worker, args=(self,))
-        self._thread.start()
+        self.identity = inj.require(inj.IDENTITY)
 
         self.connection_name = dbus.service.BusName(self.bus_name, self.bus)
         self.mainloop = GLib.MainLoop()
@@ -127,9 +70,18 @@ class Server(object):
                 clazz = item
                 kwargs = {}
 
-            self.objects.append(
-                clazz(object_path=clazz.default_dbus_path, bus_name=self.connection_name, **kwargs)
-            )
+            clazz_instance = clazz(object_path=clazz.default_dbus_path, bus_name=self.connection_name, **kwargs)
+            self.objects.append(clazz_instance)
+            self.object_map[str(clazz.__name__)] = clazz_instance
+
+        dir_list = [self.identity.reload]
+        if "ConsumerDBusObject" in self.object_map:
+            dir_list.append(self.object_map["ConsumerDBusObject"].ConsumerChanged)
+
+        directory_watch = DirectoryWatch(self.identity.cert_dir_path, dir_list)
+        self.filesystem_watcher = create_filesystem_watcher([directory_watch])
+        self._thread = threading.Thread(target=self.filesystem_watcher.loop)
+        self._thread.start()
 
     def run(self, started_event=None, stopped_event=None):
         """
@@ -147,7 +99,7 @@ class Server(object):
             log.exception(e)
         finally:
             # Terminate loop of notifier
-            self.terminate_loop = True
+            self.filesystem_watcher.stop()
             if stopped_event:
                 stopped_event.set()
 
@@ -171,7 +123,7 @@ class Server(object):
         self.mainloop.quit()
 
         # Make sure loop is terminated
-        self.terminate_loop = True
+        self.filesystem_watcher.stop()
         # Wait for notification thread to join
         self._thread.join(2)
 
