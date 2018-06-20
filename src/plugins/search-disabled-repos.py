@@ -31,7 +31,7 @@ requires_api_version = '2.7'
 plugin_type = (TYPE_CORE, TYPE_INTERACTIVE)
 
 PLUGIN_CONF_PATH = '/etc/yum/pluginconf.d/search-disabled-repos.conf'
-DEFAULT_IGNORED_REPOS = ('*debug-rpms', '*source-rpms', '*beta-rpms')
+DEFAULT_IGNORED_REPOS = ('*debug-rpms', '*source-rpms', '*beta-rpms', '*htb-rpms')
 
 attempted = False
 old_enabled_repos = []
