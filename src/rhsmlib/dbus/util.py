@@ -26,6 +26,7 @@ log = logging.getLogger(__name__)
 __all__ = [
     'dbus_handle_exceptions',
     'dbus_service_method',
+    'dbus_service_signal'
 ]
 
 
@@ -56,3 +57,13 @@ def dbus_service_method(*args, **kwargs):
     # defined.
     kwargs.setdefault("sender_keyword", "sender")
     return dbus.service.method(*args, **kwargs)
+
+
+def dbus_service_signal(*args, **kwargs):
+    """
+    Decorator used for signal
+    :param args:
+    :param kwargs:
+    :return:
+    """
+    return dbus.service.signal(*args, **kwargs)

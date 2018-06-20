@@ -45,6 +45,7 @@ def main():
             objects.ProductsDBusObject,
             objects.UnregisterDBusObject,
             objects.EntitlementDBusObject,
+            objects.ConsumerDBusObject,
             objects.Main
         ]
         sys.exit(service_wrapper.main(sys.argv, object_classes=object_classes))

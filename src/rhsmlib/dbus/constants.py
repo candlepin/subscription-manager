@@ -32,6 +32,8 @@ __all__ = [
     'PRODUCTS_DBUS_PATH',
     'ENTITLEMENT_INTERFACE',
     'ENTITLEMENT_DBUS_PATH',
+    'CONSUMER_INTERFACE',
+    'CONSUMER_DBUS_PATH'
 ]
 
 # The base of the 'well known name' used for bus and service names, as well
@@ -74,3 +76,6 @@ PRODUCTS_DBUS_PATH = '%s/%s' % (ROOT_DBUS_PATH, 'Products')
 
 ENTITLEMENT_INTERFACE = '%s.%s' % (INTERFACE_BASE, 'Entitlement')
 ENTITLEMENT_DBUS_PATH = '%s/%s' % (ROOT_DBUS_PATH, 'Entitlement')
+
+CONSUMER_INTERFACE = '%s.%s' % (INTERFACE_BASE, 'Consumer')
+CONSUMER_DBUS_PATH = '%s/%s' % (ROOT_DBUS_PATH, 'Consumer')
