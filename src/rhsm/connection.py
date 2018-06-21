@@ -1284,7 +1284,7 @@ class UEPConnection(object):
 
         return self.conn.request_put(method)
 
-    def getPoolsList(self, consumer=None, listAll=False, active_on=None, owner=None, filter_string=None, future=None, after=None):
+    def getPoolsList(self, consumer=None, listAll=False, active_on=None, owner=None, filter_string=None, future=None, after_date=None):
         """
         List pools for a given consumer or owner.
 
@@ -1309,10 +1309,10 @@ class UEPConnection(object):
             method = "%s&listall=true" % method
         if future in ('add', 'only'):
             method = "%s&%s_future=true" % (method, future)
-        if after:
+        if after_date:
             method = "%s&after=%s" % (method,
-                    self.sanitize(after.isoformat(), plus=True))
-        if active_on and not after:
+                    self.sanitize(after_date.isoformat(), plus=True))
+        if active_on and not after_date:
             method = "%s&activeon=%s" % (method,
                     self.sanitize(active_on.isoformat(), plus=True))
         if filter_string:

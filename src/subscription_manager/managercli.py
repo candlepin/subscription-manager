@@ -2257,8 +2257,8 @@ class ListCommand(CliCommand):
                                help=_("lists only subscriptions or products containing the specified expression in the subscription or product information, varying with the list requested and the server version (case-insensitive)."))
         self.parser.add_option("--pool-only", dest="pid_only", action="store_true",
                                help=_("lists only the pool IDs for applicable available or consumed subscriptions; only used with --available and --consumed"))
-        self.parser.add_option('--after', dest="after",
-                               help=_("show pools that are active on or after the given date; only used with --available"))
+        self.parser.add_option('--afterdate', dest="after_date",
+                help=(_("show pools that are active on or after the given date; only used with --available (example: %s)") % strftime("%Y-%m-%d", localtime())))
 
     def _validate_options(self):
         if self.options.all and not self.options.available:
@@ -2275,10 +2275,10 @@ class ListCommand(CliCommand):
             system_exit(os.EX_USAGE, _("Error: --no-overlap is only applicable with --available"))
         if self.options.pid_only and self.options.installed:
             system_exit(os.EX_USAGE, _("Error: --pool-only is only applicable with --available and/or --consumed"))
-        if self.options.after and not self.options.available:
-            system_exit(os.EX_USAGE, _("Error: --after is only applicable with --available"))
-        if self.options.after and self.options.on_date:
-            system_exit(os.EX_USAGE, _("Error: --after cannot be used with --ondate"))
+        if self.options.after_date and not self.options.available:
+            system_exit(os.EX_USAGE, _("Error: --afterdate is only applicable with --available"))
+        if self.options.after_date and self.options.on_date:
+            system_exit(os.EX_USAGE, _("Error: --afterdate cannot be used with --ondate"))
 
     def _parse_date(self, date):
         """
@@ -2327,11 +2327,11 @@ class ListCommand(CliCommand):
         if self.options.available:
             self.assert_should_be_registered()
             on_date = None
-            after = None
+            after_date = None
             if self.options.on_date:
                 on_date = self._parse_date(self.options.on_date)
-            elif self.options.after:
-                after = self._parse_date(self.options.after)
+            elif self.options.after_date:
+                after_date = self._parse_date(self.options.after_date)
 
             epools = entitlement.EntitlementService().get_available_pools(
                 show_all=self.options.all,
@@ -2340,7 +2340,7 @@ class ListCommand(CliCommand):
                 match_installed=self.options.match_installed,
                 matches=self.options.filter_string,
                 service_level=self.options.service_level,
-                after=after,
+                after_date=after_date,
             )
 
             if len(epools):
