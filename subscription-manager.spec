@@ -132,7 +132,7 @@
 %define subpackages SUBPACKAGES="%{?include_intentctl:intentctl}"
 
 Name: subscription-manager
-Version: 1.22.0
+Version: 1.22.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1076,6 +1076,33 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Jun 22 2018 Christopher Snyder <csnyder@redhat.com> 1.22.1-1
+- 1571998: Ignore HTB repos (nmoumoul@redhat.com)
+- 1589296: subman list option --after now named --afterdate
+  (aparadka@redhat.com)
+- 1558411: Begin building dnf-plugin-subscription-manager for RHEL 7
+  (csnyder@redhat.com)
+- Use constant defined in cerdirectory.py. (jhnidek@redhat.com)
+- 1553266: When d-bus methods are unavailable, show appropriate message. *
+  Added a "safe call" mechanism that makes the initial dbus calls
+  (entitlementService, configService, productsService) only if the service is
+  available, tries to restart the rhsm service if possible, and otherwise
+  failing gracefully. * Added new UI curtain that provides a meaningful message
+  and advice to the end user. * Re-added utility method statusUpdateFailed that
+  was accidentally deleted. (nmoumoul@redhat.com)
+- 1580996: Fix comparision of objects in Python 3 (ENT-578)
+  (jhnidek@redhat.com)
+- Make xauth Idempotent again (csnyder@redhat.com)
+- Fixes missing locale issues while running nosetests (csnyder@redhat.com)
+- Remove freezegun (khowell@redhat.com)
+- 1576582: Make rhsm.full_fresh_on_yum=1 working again (ENT-534)
+  (jhnidek@redhat.com)
+- ansible-fix: fixed ansible failing during vagrant up (aparadka@redhat.com)
+- Update the license of the subman-cockpit-plugin to GPLv2 (csnyder@redhat.com)
+- 1510920: Allow access to job cancellation API (wpoteat@redhat.com)
+- ENT-447 Add icons to RPM package for subman cockpit plugin
+  (jhnidek@redhat.com)
+
 * Fri Jun 08 2018 Christopher Snyder <csnyder@redhat.com> 1.22.0-1
 - Remove F26 from releasers (Fedora 26 EOL) (csnyder@redhat.com)
 
