@@ -17,6 +17,7 @@ import collections
 import datetime
 import logging
 import six
+import time
 
 from subscription_manager import injection as inj
 from subscription_manager.i18n import ugettext as _
@@ -38,8 +39,35 @@ class EntitlementService(object):
         self.entitlement_dir = inj.require(inj.ENT_DIR)
         self.entcertlib = EntCertActionInvoker()
 
+    @classmethod
+    def parse_date(cls, on_date):
+        """
+        Return new datetime parsed from date
+        :param on_date: String representing date
+        :return It returns datetime.datime structure representing date
+        """
+        try:
+            on_date = datetime.datetime.strptime(on_date, '%Y-%m-%d')
+        except ValueError:
+            raise ValueError(
+                _("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ") +
+                time.strftime("%Y-%m-%d", time.localtime()) + " )"
+            )
+        if on_date.date() < datetime.datetime.now().date():
+            raise ValueError(_("Past dates are not allowed"))
+        return on_date
+
     def get_status(self, on_date=None):
         sorter = inj.require(inj.CERT_SORTER, on_date)
+        # When singleton CertSorter was created with different argument on_date, then
+        # it is necessary to update corresponding attribute in object (dependency
+        # injection doesn't do it automatically).
+        if sorter.on_date != on_date:
+            sorter.on_date = on_date
+            # Force reload status from the server to be sure that we get valid status for new date.
+            # It is necessary to do it for rhsm.service, because it can run for very long time without
+            # restart.
+            sorter.load()
         if self.identity.is_valid():
             overall_status = sorter.get_system_status()
             reasons = sorter.reasons.get_name_message_map()

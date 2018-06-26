@@ -2604,11 +2604,9 @@ class StatusCommand(CliCommand):
         on_date = None
         if self.options.on_date:
             try:
-                on_date = datetime.datetime.strptime(self.options.on_date, '%Y-%m-%d')
-                if on_date.date() < datetime.datetime.now().date():
-                    system_exit(os.EX_USAGE, _("Past dates are not allowed"))
-            except Exception:
-                system_exit(os.EX_DATAERR, _("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ") + strftime("%Y-%m-%d", localtime()) + " )")
+                on_date = entitlement.EntitlementService.parse_date(self.options.on_date)
+            except ValueError as err:
+                system_exit(os.EX_DATAERR, err)
 
         print("+-------------------------------------------+")
         print("   " + _("System Status Details"))
