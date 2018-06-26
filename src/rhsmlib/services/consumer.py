@@ -1,6 +1,6 @@
 from __future__ import print_function, division, absolute_import
 
-# Copyright (c) 2016 Red Hat, Inc.
+# Copyright (c) 2017 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
 # version 2 (GPLv2). There is NO WARRANTY for this software, express or
@@ -12,12 +12,31 @@ from __future__ import print_function, division, absolute_import
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
-#
-from rhsmlib.dbus.objects.config import ConfigDBusObject  # NOQA
-from rhsmlib.dbus.objects.main import Main  # NOQA
-from rhsmlib.dbus.objects.register import RegisterDBusObject, DomainSocketRegisterDBusObject  # NOQA
-from rhsmlib.dbus.objects.attach import AttachDBusObject  # NOQA
-from rhsmlib.dbus.objects.products import ProductsDBusObject  # NOQA
-from rhsmlib.dbus.objects.unregister import UnregisterDBusObject  # NOQA
-from rhsmlib.dbus.objects.entitlement import EntitlementDBusObject  # NOQA
-from rhsmlib.dbus.objects.consumer import ConsumerDBusObject  # NOQA
+
+"""
+This module provides service for consumer identity.
+"""
+
+
+from subscription_manager import injection as inj
+
+
+class Consumer(object):
+    def __init__(self):
+        """
+        Initialization of Consumer instance.
+        """
+        pass
+
+    def get_consumer_uuid(self):
+        """
+        Method for getting UUID of consumer
+        :return: string representing UUID
+        """
+
+        identity = inj.require(inj.IDENTITY)
+
+        if identity.uuid is None:
+            return ""
+        else:
+            return identity.uuid
