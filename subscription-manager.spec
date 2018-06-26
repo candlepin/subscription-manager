@@ -187,6 +187,10 @@ Requires: %{?suse_version:dbus-1-python} %{!?suse_version:dbus-python}
 Requires: %{?suse_version:yum} %{!?suse_version:yum >= 3.2.29-73}
 %endif
 
+%if (%{use_dnf} && (0%{?fedora} || 0%{?rhel} >= 8))
+Requires: dnf-plugin-subscription-manager = %{version}
+%endif
+
 %if %{use_kitchen}
 Requires: %{py_package_prefix}-kitchen
 %endif
