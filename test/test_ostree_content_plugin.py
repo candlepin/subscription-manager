@@ -523,7 +523,7 @@ tls-client-key-path = /etc/pki/entitlement/12345-key.pem
 
         rf.set_remote(remote)
 
-        expected_proxy = "http://proxy_user:proxy_password@notaproxy.grimlock.usersys.redhat.com:3128"
+        expected_proxy = "http://proxy_user:proxy_password@notaproxy.grimlock.usersys.redhat.com:4567"
         repo_proxy_uri = rf.config_parser.get('remote "awesomeos-remote"', 'proxy')
         self.assertEqual(expected_proxy, repo_proxy_uri)
 
