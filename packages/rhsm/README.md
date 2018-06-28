@@ -13,4 +13,4 @@ From inside this virtual env you can freely install python-rhsm and test it as y
 Just run `python ./setup.py install` to install and `python ./setup.py test` to run the tests.
 
 The source for this subpackage is located (from checkout root) at ./src/rhsm
-The tests for this subpackage is located (from checkout root) at ./test/rhsmlib_test
+The tests for this subpackage is located (from checkout root) at ./test/rhsm/unit
