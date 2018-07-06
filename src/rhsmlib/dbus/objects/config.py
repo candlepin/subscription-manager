@@ -34,6 +34,19 @@ class ConfigDBusObject(base_object.BaseObject):
         self.config = Config(parser)
         super(ConfigDBusObject, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
 
+    @util.dbus_service_signal(
+        constants.CONFIG_INTERFACE,
+        signature=''
+    )
+    @util.dbus_handle_exceptions
+    def ConfigChanged(self):
+        """
+        Signal fired, when config is created/deleted/changed
+        :return: None
+        """
+        log.debug("D-Bus signal %s emitted" % constants.CONFIG_INTERFACE)
+        return None
+
     @util.dbus_service_method(
         constants.CONFIG_INTERFACE,
         in_signature='svs')

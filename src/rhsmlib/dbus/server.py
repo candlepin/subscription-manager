@@ -21,8 +21,9 @@ import threading
 
 from rhsmlib.dbus import constants
 
-from subscription_manager import ga_loader
+from subscription_manager import ga_loader, logutil
 ga_loader.init_ga()
+logutil.init_logger()
 from subscription_manager.ga import GLib
 from functools import partial
 from rhsmlib.file_monitor import create_filesystem_watcher, DirectoryWatch
@@ -59,6 +60,7 @@ class Server(object):
             log.exception("Could not create bus class")
             raise
         self.identity = inj.require(inj.IDENTITY)
+        config_cert_dir = "/etc/rhsm/rhsm.conf"
 
         self.connection_name = dbus.service.BusName(self.bus_name, self.bus)
         self.mainloop = GLib.MainLoop()
@@ -75,11 +77,15 @@ class Server(object):
             self.object_map[str(clazz.__name__)] = clazz_instance
 
         dir_list = [self.identity.reload]
+        config_dir_list = []
         if "ConsumerDBusObject" in self.object_map:
             dir_list.append(self.object_map["ConsumerDBusObject"].ConsumerChanged)
+        if "ConfigDBusObject" in self.object_map:
+            config_dir_list.append(self.object_map["ConfigDBusObject"].ConfigChanged)
 
         directory_watch = DirectoryWatch(self.identity.cert_dir_path, dir_list)
-        self.filesystem_watcher = create_filesystem_watcher([directory_watch])
+        config_dir_watch = DirectoryWatch(config_cert_dir, config_dir_list)
+        self.filesystem_watcher = create_filesystem_watcher([directory_watch, config_dir_watch])
         self._thread = threading.Thread(target=self.filesystem_watcher.loop)
         self._thread.start()
 
