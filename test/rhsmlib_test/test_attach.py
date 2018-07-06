@@ -177,7 +177,6 @@ class TestAttachDBusObject(DBusObjectTest, InjectionMockingTest):
         self.mock_action_invoker = entcertlib_patcher.start().return_value
         self.addCleanup(entcertlib_patcher.stop)
 
-        self.mock_identity = mock.Mock(spec=Identity, name="Identity").return_value
         self.mock_identity.is_valid.return_value = True
         self.mock_identity.uuid = "id"
 

@@ -35,6 +35,7 @@ import six
 
 from six.moves import queue
 from rhsmlib.dbus import constants, server
+from subscription_manager.identity import Identity
 
 # Set DBus mainloop early in test run (test import time!)
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
@@ -86,6 +87,8 @@ class DBusObjectTest(unittest.TestCase):
         self.started_event = threading.Event()
         self.stopped_event = threading.Event()
         self.handler_complete_event = threading.Event()
+        # This is up a level because it needs to be defined before the server is instantiated
+        self.mock_identity = mock.Mock(spec=Identity, name="Identity").return_value
 
         # If we don't use a BusConnection and use say dbus.SessionBus() directly, each test will end up
         # getting old bus connections since the dbus bindings cache bus connections.  You can use the private

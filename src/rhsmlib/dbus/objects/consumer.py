@@ -70,16 +70,14 @@ class ConsumerDBusObject(base_object.BaseObject):
 
     @util.dbus_service_signal(
         constants.CONSUMER_INTERFACE,
-        signature='i'
+        signature=''
     )
     @util.dbus_handle_exceptions
-    def ConsumerChanged(self, status_code):
+    def ConsumerChanged(self):
         """
         Signal fired, when consumer is created/deleted/changed
         :param sender:
         :return: None
         """
-        log.debug("D-Bus signal %s emitted with signature %i" % (
-            constants.CONSUMER_INTERFACE, status_code
-        ))
+        log.debug("D-Bus signal %s emitted" % constants.CONSUMER_INTERFACE)
         return None
