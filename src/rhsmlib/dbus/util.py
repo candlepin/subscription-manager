@@ -49,7 +49,7 @@ def dbus_handle_exceptions(func, *args, **kwargs):
                 "message": str(err)
             }
         )
-        six.reraise(exceptions.RHSM1DBusException, error_msg, trace)
+        six.reraise(exceptions.RHSM1DBusException, exceptions.RHSM1DBusException(error_msg), trace)
 
 
 def dbus_service_method(*args, **kwargs):
