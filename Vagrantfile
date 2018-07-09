@@ -7,6 +7,7 @@
 #Vagrant::DEFAULT_SERVER_URL.replace('https://vagrantcloud.com')
 
 require 'yaml'
+require 'uri'
 
 VAGRANTFILE_DIR = File.dirname(__FILE__)
 
@@ -20,15 +21,19 @@ Vagrant.configure("2") do |config|
   }
 
   extra_boxes_loaded = false
+  extra_vars = {}
 
   # allows us to share base boxes with Katello/forklift
-  base_boxes = Dir.glob "#{VAGRANTFILE_DIR}/vagrant/plugins/*/base_boxes.yaml"
+  base_boxes = Dir.glob "#{VAGRANTFILE_DIR}/vagrant/plugins/*/vagrant/boxes.d/*.yaml"
   base_boxes.each do |file|
     boxes = YAML.load_file(file)
     boxes.each do |name, config|
       if config.has_key? 'libvirt' and not name.include? 'sat'
         vm_boxes[name] = config['libvirt']
         extra_boxes_loaded = true
+        if config.has_key? 'vars'
+          extra_vars[name] = config['vars']
+        end
       end
     end
   end
@@ -63,7 +68,12 @@ Vagrant.configure("2") do |config|
     is_primary = name == primary_vm
     config.vm.define name, autostart: is_primary, primary: is_primary do |host|
       host.vm.host_name = "#{name}.subman.example.com"
-      host.vm.box = box
+      if box =~ URI::regexp
+        host.vm.box = name
+        host.vm.box_url = box
+      else
+        host.vm.box = box
+      end
       host.vm.provider :libvirt do |domain|
         domain.graphics_type = "spice"
         domain.video_type = "qxl"
@@ -71,6 +81,30 @@ Vagrant.configure("2") do |config|
       end
       host.vm.provider :virtualbox do |domain, override|
         override.vm.network "forwarded_port", guest: 9090, host: 9090  # allow VirtualBox to serve cockpit over 9090
+      end
+
+      host.vm.provision "ansible", run: "always" do |ansible|
+        ansible.playbook = "vagrant/vagrant.yml"
+        ansible.groups = {
+          "subman-devel" => vm_boxes.keys()
+        }
+        ansible.extra_vars = extra_vars.fetch(name, {}).merge({
+          "subman_checkout_dir" => "/vagrant",
+          "subman_setup_hacking_environment" => "true",
+          "subman_add_vagrant_candlepin_to_hosts" => "true",
+        })
+        # This will pass any environment variables beginning with "SUBMAN_" or
+        # "subman_" (less the prefix) along with their values to ansible for
+        # use in our playbooks.
+        #
+        # Check the playbooks to see how these variables are used.
+        env_prefix = "subman_"
+        ENV.each do |key, value|
+          if key.downcase.start_with?(env_prefix)
+              new_var_key = key.downcase()
+              ansible.extra_vars[new_var_key] = value
+          end
+        end
       end
     end
   end
@@ -81,29 +115,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.provision "ansible", run: "always" do |ansible|
-    ansible.playbook = "vagrant/vagrant.yml"
-    ansible.groups = {
-      "subman-devel" => vm_boxes.keys()
-    }
-    ansible.extra_vars = {
-      "subman_checkout_dir" => "/vagrant",
-      "subman_setup_hacking_environment" => "true",
-      "subman_add_vagrant_candlepin_to_hosts" => "true",
-    }
-    # This will pass any environment variables beginning with "SUBMAN_" or
-    # "subman_" (less the prefix) along with their values to ansible for
-    # use in our playbooks.
-    #
-    # Check the playbooks to see how these variables are used.
-    env_prefix = "subman_"
-    ENV.each do |key, value|
-      if key.downcase.start_with?(env_prefix)
-          new_var_key = key.downcase()
-          ansible.extra_vars[new_var_key] = value
-      end
-    end
-  end
 end
 
 # We need to specify static IP address, because this IP address has to be part

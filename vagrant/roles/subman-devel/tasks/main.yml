@@ -12,17 +12,17 @@
 - name: configure rhsm hostname (rhel only)
   command: "subscription-manager config --server.hostname {{ subman_rhsm_hostname }}"
   become: yes
-  when: subman_rhsm_hostname is defined and ansible_distribution == 'RedHat'
+  when: subman_rhsm_hostname is defined and ansible_distribution == 'RedHat' and subman_modify_repos
 
 - name: configure rhsm port (rhel only)
   command: "subscription-manager config --server.port {{ subman_rhsm_port }}"
   become: yes
-  when: subman_rhsm_port is defined and ansible_distribution == 'RedHat'
+  when: subman_rhsm_port is defined and ansible_distribution == 'RedHat' and subman_modify_repos
 
 - name: configure rhsm insecure (rhel only)
   command: "subscription-manager config --server.insecure {{ subman_rhsm_insecure }}"
   become: yes
-  when: subman_rhsm_insecure is defined and ansible_distribution == 'RedHat'
+  when: subman_rhsm_insecure is defined and ansible_distribution == 'RedHat' and subman_modify_repos
 
 - name: register and attach using installed subscription-manager (rhel only)
   redhat_subscription:
@@ -31,7 +31,7 @@
     server_hostname: "{{ subman_rhsm_hostname }}"
     autosubscribe: yes
   become: yes
-  when: subman_rhsm_username is defined and ansible_distribution == 'RedHat'
+  when: subman_rhsm_username is defined and ansible_distribution == 'RedHat' and subman_modify_repos
 
 - name: install epel (centos)
   yum:
@@ -45,19 +45,19 @@
     name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
     state: present
   become: yes
-  when: ansible_distribution == 'RedHat'
+  when: ansible_distribution == 'RedHat' and subman_modify_repos
 
 - name: enable optional repos (rhel only)
   command: "subscription-manager repos --enable rhel-{{ ansible_distribution_major_version }}-server-optional-rpms"
   become: yes
-  when: ansible_distribution == 'RedHat'
+  when: ansible_distribution == 'RedHat' and subman_modify_repos
 
 - name: install spacewalk repo (openSUSE Leap)
   get_url:
     url: http://download.opensuse.org/repositories/systemsmanagement:/spacewalk/openSUSE_Leap_42.2/systemsmanagement:spacewalk.repo
     dest: /etc/zypp/repos.d/
   become: yes
-  when: ansible_distribution == 'openSUSE Leap'
+  when: ansible_distribution == 'openSUSE Leap' and subman_modify_repos
 
 - name: Update vagrant env_keep to include DISPLAY (openSUSE Leap)
   lineinfile:
@@ -69,10 +69,9 @@
 
 - name: install non-pip/spec deps
   package:
-    name: "{{ item }}"
+    name: "{{ distro_specific_deps }}"
     state: present
   become: yes
-  with_items: "{{ distro_specific_deps }}"
   when: distro_specific_deps is defined
 
 - name: install tito deps (openSUSE Leap)
@@ -149,7 +148,7 @@
   when: subman_setup_hacking_environment
 
 - name: build
-  command: python setup.py build_ext --inplace
+  command: "{{ subman_python_interpreter }} setup.py build_ext --inplace"
   args:
     chdir: "{{ subman_checkout_dir }}"
   when: subman_setup_hacking_environment
@@ -159,7 +158,7 @@
   args:
     chdir: "{{ subman_checkout_dir }}"
     creates: /usr/lib*/python*/site-packages/subscription_manager
-  when: subman_setup_hacking_environment and not (ansible_distribution == 'Debian')
+  when: subman_setup_hacking_environment and not (ansible_distribution == 'Debian') and subman_use_tito
 
 - name: install subscription-manager (initial)
   shell: "{{ distro_package_command }} install -y /tmp/tito/*/subscription-manager-{rhsm-{certificates-,},}[0-9]*"
@@ -167,7 +166,7 @@
     chdir: "{{ subman_checkout_dir }}"
     creates: /usr/lib*/python*/site-packages/subscription_manager
   become: yes
-  when: subman_setup_hacking_environment and not (ansible_distribution == 'Debian')
+  when: subman_setup_hacking_environment and not (ansible_distribution == 'Debian') and subman_use_tito
 
 - name: alter PATH
   template:
@@ -270,8 +269,8 @@
   package:
     name: glibc-common
     state: latest
+  become: yes
 
 - name: reinstall glibc-common to lay down langs
   become: true
-  become_method: sudo
   command: yum -y reinstall glibc-common

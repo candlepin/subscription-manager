@@ -3,6 +3,9 @@ subman_checkout_dir: .
 subman_setup_hacking_environment: false
 subman_add_vagrant_candlepin_to_hosts: false
 subman_nodejs_version: v6.11.3
+subman_use_tito: True
+subman_modify_repos: True
+subman_python_interpreter: /usr/bin/python
 distro_package_command: yum
 distro_specific_deps:
   - dbus-x11
