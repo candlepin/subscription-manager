@@ -38,6 +38,19 @@ class ProductsDBusObject(base_object.BaseObject):
     def __init__(self, conn=None, object_path=None, bus_name=None):
         super(ProductsDBusObject, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
 
+    @util.dbus_service_signal(
+        constants.PRODUCTS_INTERFACE,
+        signature=''
+    )
+    @util.dbus_handle_exceptions
+    def InstalledProductsChanged(self):
+        """
+        Signal fired, when installed products is created/deleted/changed
+        :return: None
+        """
+        log.debug("D-Bus signal %s emitted" % constants.PRODUCTS_INTERFACE)
+        return None
+
     @util.dbus_service_method(
         constants.PRODUCTS_INTERFACE,
         in_signature='sa{sv}s',

@@ -26,10 +26,14 @@ ga_loader.init_ga()
 logutil.init_logger()
 from subscription_manager.ga import GLib
 from functools import partial
+from rhsmlib.services import config
+from rhsm.config import initConfig
 from rhsmlib.file_monitor import create_filesystem_watcher, DirectoryWatch
 from subscription_manager import injection as inj
 
 log = logging.getLogger(__name__)
+
+conf = config.Config(initConfig())
 
 
 class Server(object):
@@ -61,6 +65,7 @@ class Server(object):
             raise
         self.identity = inj.require(inj.IDENTITY)
         config_cert_dir = "/etc/rhsm/rhsm.conf"
+        products_cert_dir = conf['rhsm']['productCertDir']
 
         self.connection_name = dbus.service.BusName(self.bus_name, self.bus)
         self.mainloop = GLib.MainLoop()
@@ -78,14 +83,22 @@ class Server(object):
 
         dir_list = [self.identity.reload]
         config_dir_list = []
+        products_dir_list = []
         if "ConsumerDBusObject" in self.object_map:
             dir_list.append(self.object_map["ConsumerDBusObject"].ConsumerChanged)
         if "ConfigDBusObject" in self.object_map:
             config_dir_list.append(self.object_map["ConfigDBusObject"].ConfigChanged)
+        if "ProductsDBusObject" in self.object_map:
+            products_dir_list.append(self.object_map["ProductsDBusObject"].InstalledProductsChanged)
 
         directory_watch = DirectoryWatch(self.identity.cert_dir_path, dir_list)
         config_dir_watch = DirectoryWatch(config_cert_dir, config_dir_list)
-        self.filesystem_watcher = create_filesystem_watcher([directory_watch, config_dir_watch])
+        products_dir_watch = DirectoryWatch(products_cert_dir, products_dir_list)
+        self.filesystem_watcher = create_filesystem_watcher(
+            [directory_watch,
+             config_dir_watch,
+             products_dir_watch]
+        )
         self._thread = threading.Thread(target=self.filesystem_watcher.loop)
         self._thread.start()
 
