@@ -64,8 +64,9 @@ class Server(object):
             log.exception("Could not create bus class")
             raise
         self.identity = inj.require(inj.IDENTITY)
-        config_cert_dir = "/etc/rhsm/rhsm.conf"
-        products_cert_dir = conf['rhsm']['productCertDir']
+        config_cert_dir_path = "/etc/rhsm/rhsm.conf"
+        products_cert_dir_path = conf['rhsm']['productCertDir']
+        entitlement_cert_dir_path = conf['rhsm']['entitlementCertDir']
 
         self.connection_name = dbus.service.BusName(self.bus_name, self.bus)
         self.mainloop = GLib.MainLoop()
@@ -81,24 +82,29 @@ class Server(object):
             self.objects.append(clazz_instance)
             self.object_map[str(clazz.__name__)] = clazz_instance
 
-        dir_list = [self.identity.reload]
+        consumer_dir_list = [self.identity.reload]
+        entitlement_dir_list = []
         config_dir_list = []
         products_dir_list = []
         if "ConsumerDBusObject" in self.object_map:
-            dir_list.append(self.object_map["ConsumerDBusObject"].ConsumerChanged)
+            consumer_dir_list.append(self.object_map["ConsumerDBusObject"].ConsumerChanged)
         if "ConfigDBusObject" in self.object_map:
             config_dir_list.append(self.object_map["ConfigDBusObject"].ConfigChanged)
         if "ProductsDBusObject" in self.object_map:
             products_dir_list.append(self.object_map["ProductsDBusObject"].InstalledProductsChanged)
+        if "EntitlementDBusObject" in self.object_map:
+            entitlement_dir_list.append(self.object_map["EntitlementDBusObject"].EntitlementChanged)
 
-        directory_watch = DirectoryWatch(self.identity.cert_dir_path, dir_list)
-        config_dir_watch = DirectoryWatch(config_cert_dir, config_dir_list)
-        products_dir_watch = DirectoryWatch(products_cert_dir, products_dir_list)
-        self.filesystem_watcher = create_filesystem_watcher(
-            [directory_watch,
-             config_dir_watch,
-             products_dir_watch]
-        )
+        consumer_dir_watch = DirectoryWatch(self.identity.cert_dir_path, consumer_dir_list)
+        entitlement_dir_watch = DirectoryWatch(entitlement_cert_dir_path, entitlement_dir_list)
+        config_dir_watch = DirectoryWatch(config_cert_dir_path, config_dir_list)
+        products_dir_watch = DirectoryWatch(products_cert_dir_path, products_dir_list)
+        self.filesystem_watcher = create_filesystem_watcher([
+            consumer_dir_watch,
+            entitlement_dir_watch,
+            config_dir_watch,
+            products_dir_watch,
+        ])
         self._thread = threading.Thread(target=self.filesystem_watcher.loop)
         self._thread.start()
 

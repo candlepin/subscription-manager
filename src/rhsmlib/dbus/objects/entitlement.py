@@ -73,6 +73,20 @@ class EntitlementDBusObject(base_object.BaseObject):
 
         return json.dumps(status)
 
+    @util.dbus_service_signal(
+        constants.ENTITLEMENT_INTERFACE,
+        signature=''
+    )
+    @util.dbus_handle_exceptions
+    def EntitlementChanged(self):
+        """
+        Signal fired, when entitlement is created/deleted/changed
+        :return: None
+        """
+
+        log.debug("D-Bus signal %s emitted" % constants.ENTITLEMENT_INTERFACE)
+        return None
+
     @util.dbus_service_method(
         constants.ENTITLEMENT_INTERFACE,
         in_signature='a{sv}a{sv}s',
