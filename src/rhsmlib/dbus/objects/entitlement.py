@@ -17,8 +17,6 @@ import dbus
 import json
 import logging
 
-from datetime import datetime
-
 from rhsmlib.dbus import constants, base_object, util, dbus_utils
 from rhsmlib.services.entitlement import EntitlementService
 
@@ -127,9 +125,16 @@ class EntitlementDBusObject(base_object.BaseObject):
 
     @staticmethod
     def _parse_date(on_date):
-        on_date = datetime.strptime(on_date, '%Y-%m-%d')
-        if on_date.date() < datetime.now().date():
-            raise dbus.DBusException("Past dates are not allowed")
+        """
+        Return new datetime parsed from date
+        :param on_date: String representing date
+        :return It returns datetime.datime structure representing date
+        """
+        try:
+            on_date = EntitlementService.parse_date(on_date)
+        except ValueError as err:
+            raise dbus.DBusException(err)
+        return on_date
 
     @util.dbus_service_method(
         constants.ENTITLEMENT_INTERFACE,

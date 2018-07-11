@@ -387,6 +387,33 @@ class TestEntitlementService(InjectionMockingTest):
         self.assertEqual(expected_removed_serials, removed_serial)
         self.assertEqual(expected_unremoved_serials, unremoved_serials)
 
+    def test_parse_valid_date(self):
+        """
+        Test parsing valid date
+        """
+        on_date = datetime.date.today().strftime('%Y-%m-%d')
+        ent_service = EntitlementService(self.mock_cp)
+        expected_result = datetime.datetime.strptime(on_date, "%Y-%m-%d")
+        parsed_date = ent_service.parse_date(on_date)
+        self.assertEqual(expected_result, parsed_date)
+
+    def test_parse_invalid_date(self):
+        """
+        Test parsing invalid date (invalid format)
+        """
+        on_date = "2000-20-20"
+        ent_service = EntitlementService(self.mock_cp)
+        self.assertRaises(ValueError, ent_service.parse_date, on_date)
+
+    def test_parse_yesterday(self):
+        """
+        Test parsing invalid date (past dates are not allowed)
+        """
+        yesterday = datetime.date.today() - datetime.timedelta(1)
+        on_date = yesterday.strftime('%Y-%m-%d')
+        ent_service = EntitlementService(self.mock_cp)
+        self.assertRaises(ValueError, ent_service.parse_date, on_date)
+
 
 class TestEntitlementDBusObject(DBusObjectTest, InjectionMockingTest):
     def setUp(self):
