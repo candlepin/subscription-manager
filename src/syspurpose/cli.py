@@ -16,81 +16,81 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 
 import argparse
-from intentctl.intentfiles import IntentStore, USER_INTENT
-from intentctl.utils import in_container
+from syspurpose.files import SyspurposeStore, USER_SYSPURPOSE
+from syspurpose.utils import in_container
 import json
 
 
-def add_command(args, intentstore):
+def add_command(args, syspurposestore):
     """
-    Uses the intentstore to add one or more values to a particular property.
+    Uses the syspurposestore to add one or more values to a particular property.
     :param args: The parsed args from argparse, expected attributes are:
         prop_name: the string name of the property to add to
         values: A list of the values to add to the given property (could be anything json-serializable)
-    :param intentstore: An IntentStore object to manipulate
+    :param syspurposestore: An SyspurposeStore object to manipulate
     :return: None
     """
     for value in args.values:
-        intentstore.add(args.prop_name, value)
+        syspurposestore.add(args.prop_name, value)
     print("Added {} to {}".format(args.values, args.prop_name))
 
 
-def remove_command(args, intentstore):
+def remove_command(args, syspurposestore):
     """
-    Uses the intentstore to remove one or more values from a particular property.
+    Uses the syspurposestore to remove one or more values from a particular property.
     :param args: The parsed args from argparse, expected attributes are:
         prop_name: the string name of the property to add to
         values: A list of the values to remove from the given property (could be anything json-serializable)
-    :param intentstore: An IntentStore object to manipulate
+    :param syspurposestore: An SyspurposeStore object to manipulate
     :return: None
     """
     for value in args.values:
-        intentstore.remove(args.prop_name, value)
+        syspurposestore.remove(args.prop_name, value)
     print("Removed {} from {}".format(args.values, args.prop_name))
 
 
-def set_command(args, intentstore):
+def set_command(args, syspurposestore):
     """
-    Uses the intentstore to set the prop_name to value.
+    Uses the syspurposestore to set the prop_name to value.
     :param args: The parsed args from argparse, expected attributes are:
         prop_name: the string name of the property to set
         value: An object to set the property to (could be anything json-serializable)
-    :param intentstore: An IntentStore object to manipulate
+    :param syspurposestore: An SyspurposeStore object to manipulate
     :return: None
     """
-    intentstore.set(args.prop_name, args.value)
+    syspurposestore.set(args.prop_name, args.value)
     print("{} set to {}".format(args.prop_name, args.value))
 
 
-def unset_command(args, intentstore):
+def unset_command(args, syspurposestore):
     """
-    Uses the intentstore to unset (clear entirely) the prop_name.
+    Uses the syspurposestore to unset (clear entirely) the prop_name.
     :param args: The parsed args from argparse, expected attributes are:
         prop_name: the string name of the property to unset (clear)
-    :param intentstore: An IntentStore object to manipulate
+    :param syspurposestore: An SyspurposeStore object to manipulate
     :return: None
     """
-    intentstore.unset(args.prop_name)
+    syspurposestore.unset(args.prop_name)
     print("{} unset.".format(args.prop_name))
 
 
-def show_contents(args, intentstore):
+def show_contents(args, syspurposestore):
     """
     :param args:
-    :param intentstore:
+    :param syspurposestore:
     :return:
     """
 
-    contents = intentstore.contents
+    contents = syspurposestore.contents
     print(json.dumps(contents, indent=2))
 
 
 def setup_arg_parser():
     """
-    Sets up argument parsing for the intentctl tool.
+    Sets up argument parsing for the syspurpose tool.
     :return: An argparse.ArgumentParser ready to use to parse_args
     """
-    parser = argparse.ArgumentParser(prog="intentctl", description="System Intent Management Tool")
+    parser = argparse.ArgumentParser(prog="syspurpose", description="System Syspurpose Management Tool")
     parser.set_defaults(func=None, requires_write=False)
 
     subparsers = parser.add_subparsers(help="sub-command help")
@@ -172,7 +172,7 @@ def setup_arg_parser():
     # Targeted commands
     # Offerings ##########
     add_offering_parser = subparsers.add_parser("add-offerings",
-                                                help="Add one or more offerings to the system intent.",
+                                                help="Add one or more offerings to the system syspurpose.",
                                                 parents=[add_options])
     # TODO: Set prop_name from schema file
     add_offering_parser.set_defaults(prop_name="offering_name")
@@ -210,9 +210,9 @@ def setup_arg_parser():
                                              parents=[unset_options])
     unset_usage_parser.set_defaults(prop_name="usage_type")
 
-    # Pretty Print Json contents of default intent file
+    # Pretty Print Json contents of default syspurpose file
     show_parser = subparsers.add_parser("show",
-                                        help="Show the current system intent")
+                                        help="Show the current system syspurpose")
     show_parser.set_defaults(func=show_contents, requires_write=False)
 
     return parser
@@ -220,23 +220,24 @@ def setup_arg_parser():
 
 def main():
     """
-    Run the cli (Do the intentctl tool thing!!)
+    Run the cli (Do the syspurpose tool thing!!)
     :return: 0
     """
     parser = setup_arg_parser()
     args = parser.parse_args()
 
-    # Intent is not intended to be used in containers for the time being (could change later).
+    # Syspurpose is not intended to be used in containers for the time being (could change later).
     if in_container():
-        print("WARNING: Setting intent in containers has no effect. Please run intentctl on the host.\n")
+        print("WARNING: Setting syspurpose in containers has no effect."
+              "Please run syspurpose on the host.\n")
 
-    intentstore = IntentStore.read(USER_INTENT)
+    syspurposestore = SyspurposeStore.read(USER_SYSPURPOSE)
 
     if args.func is not None:
-        args.func(args, intentstore)
+        args.func(args, syspurposestore)
     else:
         parser.print_usage()
 
     if args.requires_write:
-        intentstore.write()
+        syspurposestore.write()
     return 0

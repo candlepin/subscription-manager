@@ -18,18 +18,18 @@ from __future__ import print_function, division, absolute_import
 
 import json
 import os
-from intentctl.utils import system_exit, create_dir, create_file
+from syspurpose.utils import system_exit, create_dir, create_file
 
-# This modules contains utilities for manipulating files pertaining to system intent
+# This modules contains utilities for manipulating files pertaining to system syspurpose
 
-# Constants for locations of the two system intent files
-USER_INTENT = "/etc/rhsm/intent/intent.json"
-VALID_FIELDS = "/etc/rhsm/intent/valid_fields.json"  # Will be used for future validation
+# Constants for locations of the two system syspurpose files
+USER_SYSPURPOSE = "/etc/rhsm/syspurpose/syspurpose.json"
+VALID_FIELDS = "/etc/rhsm/syspurpose/valid_fields.json"  # Will be used for future validation
 
 
-class IntentStore(object):
+class SyspurposeStore(object):
     """
-    Represents and maintains a json intent file
+    Represents and maintains a json syspurpose file
     """
 
     def __init__(self, path):
@@ -44,7 +44,8 @@ class IntentStore(object):
             return False
         except OSError as e:
             if e.errno == os.errno.EACCES:
-                system_exit(os.EX_NOPERM, 'Cannot read intent file {}\nAre you root?'.format(self.path))
+                system_exit(os.EX_NOPERM,
+                            'Cannot read syspurpose file {}\nAre you root?'.format(self.path))
 
     def create(self):
         """
@@ -94,8 +95,8 @@ class IntentStore(object):
 
     def set(self, key, value):
         """
-        Set a key (intent parameter) to value
-        :param key: The parameter of the intent file to set
+        Set a key (syspurpose parameter) to value
+        :param key: The parameter of the syspurpose file to set
         :type key: str
 
         :param value: The value to set that parameter to
@@ -121,7 +122,7 @@ class IntentStore(object):
         """
         Read the file represented by path. If the file does not exist it is created.
         :param path: The path on the file system to read, should be a json file
-        :return: new IntentStore with the contents read in
+        :return: new SyspurposeStore with the contents read in
         """
         new_store = cls(path)
 

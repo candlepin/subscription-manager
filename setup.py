@@ -329,7 +329,7 @@ setup(
     author="Adrian Likins",
     author_email="alikins@redhat.com",
     cmdclass=cmdclass,
-    packages=find_packages('src', exclude=['subscription_manager.gui.firstboot.*', '*.ga_impls', '*.ga_impls.*', '*.plugin.ostree', '*.services.examples', 'intentctl*']),
+    packages=find_packages('src', exclude=['subscription_manager.gui.firstboot.*', '*.ga_impls', '*.ga_impls.*', '*.plugin.ostree', '*.services.examples', 'syspurpose*']),
     package_dir={'': 'src'},
     package_data={
         'subscription_manager.gui': ['data/glade/*.glade', 'data/ui/*.ui', 'data/icons/*.svg'],

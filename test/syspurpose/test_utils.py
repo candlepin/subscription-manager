@@ -15,22 +15,22 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
-# A group of tests for the miscellaneous utilities in the utils module of intentctl
+# A group of tests for the miscellaneous utilities in the utils module of syspurpose
 
-from base import IntentCtlTestBase
+from base import SyspurposeTestBase
 import os
 import json
 import mock
 
-from intentctl import utils
+from syspurpose import utils
 
 
-class UtilsTests(IntentCtlTestBase):
+class UtilsTests(SyspurposeTestBase):
 
     def tearDown(self):
         utils.HOST_CONFIG_DIR = "/etc/rhsm-host/"
 
-    @mock.patch('intentctl.utils.system_exit')
+    @mock.patch('syspurpose.utils.system_exit')
     def test_create_dir(self, mock_system_exit):
         """
         Verify that the create_dir utility method creates directories as we expect.
@@ -63,7 +63,7 @@ class UtilsTests(IntentCtlTestBase):
         # Should try to exit when the directory could not be created due to bad permissions
         mock_system_exit.assert_called_once()
 
-    @mock.patch('intentctl.utils.system_exit')
+    @mock.patch('syspurpose.utils.system_exit')
     def test_create_file(self, mock_system_exit):
         temp_dir = self._mktmp()
         to_create = os.path.join(temp_dir, "my_cool_file.json")
@@ -82,7 +82,7 @@ class UtilsTests(IntentCtlTestBase):
         to_create = os.path.join(temp_dir, "my_super_chill_file.json")
 
         # And now when the file appears to exist
-        with mock.patch('intentctl.utils.open') as mock_open:
+        with mock.patch('syspurpose.utils.open') as mock_open:
             error_to_raise = OSError()
             error_to_raise.errno = os.errno.EEXIST
             mock_open.side_effect = error_to_raise
@@ -93,7 +93,7 @@ class UtilsTests(IntentCtlTestBase):
         to_create = os.path.join(temp_dir, "my_other_cool_file.json")
 
         # And now with an unexpected OSError
-        with mock.patch('intentctl.utils.open') as mock_open:
+        with mock.patch('syspurpose.utils.open') as mock_open:
             error_to_raise = OSError()
             error_to_raise.errno = os.errno.E2BIG  # Anything aside from the ones expected
             mock_open.side_effect = error_to_raise
