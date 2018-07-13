@@ -84,7 +84,7 @@ INSTALL_DNF_PLUGINS ?= false
 DNF_PLUGINS_SRC_DIR := src/plugins
 
 INSTALL_ZYPPER_PLUGINS ?= false
-INCLUDE_INTENTCTL ?= 0
+INCLUDE_SYSPURPOSE ?= 0
 
 # sets a version that is more or less latest tag plus commit sha
 VERSION ?= $(shell git describe | awk ' { sub(/subscription-manager-/,"")};1' )
@@ -163,7 +163,7 @@ install-conf:
 	install -d $(DESTDIR)/etc/{cron.daily,logrotate.d,pam.d,bash_completion.d,rhsm}
 	install -d $(DESTDIR)/etc/rc.d/init.d
 	install -d $(DESTDIR)/etc/init.d
-	install -d $(DESTDIR)/etc/rhsm/{facts,intent}
+	install -d $(DESTDIR)/etc/rhsm/{facts,syspurpose}
 	install -d $(DESTDIR)/etc/security/console.apps
 	install -m 644 etc-conf/rhsm.conf $(DESTDIR)/etc/rhsm/
 	install -T etc-conf/logging.conf $(DESTDIR)/etc/rhsm/logging.conf
@@ -302,8 +302,8 @@ install-via-setup: install-subpackages-via-setup
 	else \
 		rm $(DESTDIR)/$(PREFIX)/bin/subscription-manager-gui; \
 	fi; \
-	if [[ "$(INCLUDE_INTENTCTL)" = "1" ]]; then \
-		mv $(DESTDIR)/$(PREFIX)/bin/intentctl $(DESTDIR)/$(PREFIX)/sbin/; \
+	if [[ "$(INCLUDE_SYSPURPOSE)" = "1" ]]; then \
+		mv $(DESTDIR)/$(PREFIX)/bin/syspurpose $(DESTDIR)/$(PREFIX)/sbin/; \
 	fi;
 
 

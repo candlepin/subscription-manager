@@ -63,7 +63,7 @@
 %global __python %__python3
 %global py_package_prefix python%{python3_pkgversion}
 %global rhsm_package_name %{py_package_prefix}-subscription-manager-rhsm
-%define include_intentctl 1
+%define include_syspurpose 1
 %else
 %global py_package_prefix python
 %global rhsm_package_name subscription-manager-rhsm
@@ -129,7 +129,7 @@
 %define with_cockpit WITH_COCKPIT=false
 %endif
 
-%define subpackages SUBPACKAGES="%{?include_intentctl:intentctl}"
+%define subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
 Version: 1.22.1
@@ -265,13 +265,13 @@ to manage subscriptions and yum repositories from the Red Hat entitlement
 platform.
 
 %if %{with python3}
-%package -n %{py_package_prefix}-intentctl
-Summary: A commandline utility for declaring system intent
+%package -n %{py_package_prefix}-syspurpose
+Summary: A commandline utility for declaring system syspurpose
 Group: System Environment/Base
 
-%description -n %{py_package_prefix}-intentctl
-Provides the intentctl commandline utility. This utility manages the
-system intent.
+%description -n %{py_package_prefix}-syspurpose
+Provides the syspurpose commandline utility. This utility manages the
+system syspurpose.
 %endif
 
 
@@ -503,7 +503,7 @@ Subscription Manager Cockpit UI
 
 %build
 make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
-    LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" %{?gtk_version} %{?subpackages} %{?include_intentctl:INCLUDE_INTENTCTL="1"}
+    LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" %{?gtk_version} %{?subpackages} %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"}
 
 %if %{with python2_rhsm}
 python2 ./setup.py build --quiet --gtk-version=%{?gtk3:3}%{?!gtk3:2} --rpm-version=%{version}-%{release}
@@ -522,7 +522,7 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?with_subman_gui} \
     %{?with_cockpit} \
     %{?subpackages} \
-    %{?include_intentctl:INCLUDE_INTENTCTL="1"}
+    %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"}
 
 %if %{with python2_rhsm}
 mkdir -p %{buildroot}%{python2_sitearch}/rhsm
@@ -900,15 +900,15 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/ca/redhat-uep.pem %{buildroo
 %endif
 
 %if %{with python3}
-%files -n %{py_package_prefix}-intentctl
+%files -n %{py_package_prefix}-syspurpose
 %defattr(-,root,root,-)
-%dir %{python3_sitelib}/intentctl*.egg-info
-%{python3_sitelib}/intentctl*.egg-info/*
-%dir %{_sysconfdir}/rhsm/intent
-%dir %{python3_sitelib}/intentctl
-%{python3_sitelib}/intentctl/{*.py*,__pycache__/*}
+%dir %{python3_sitelib}/syspurpose*.egg-info
+%{python3_sitelib}/syspurpose*.egg-info/*
+%dir %{_sysconfdir}/rhsm/syspurpose
+%dir %{python3_sitelib}/syspurpose
+%{python3_sitelib}/syspurpose/{*.py*,__pycache__/*}
 
-%attr(755, root, root) %{_sbindir}/intentctl
+%attr(755, root, root) %{_sbindir}/syspurpose
 %endif
 
 %files -n subscription-manager-plugin-container
@@ -1117,15 +1117,15 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
   (jhnidek@redhat.com)
 - ENT-447 Create .desktop file that opens web page with our cockpit plugin
   (jhnidek@redhat.com)
-- ENT-481 service-level command & options now update intent metadata
+- ENT-481 service-level command & options now update syspurpose metadata
   (nmoumoul@redhat.com)
 - 1560727: Search for proxy auth message in whole error string
   (aria.paradkar@gmail.com)
 - 1555384: get_libexecdir now returns a string instead of bytes
   (aria.paradkar@gmail.com)
-- Added generic set/unset and add/remove commands to intentctl
+- Added generic set/unset and add/remove commands to syspurpose
   (crog@redhat.com)
-- ENT-488 intentctl now warns if running in container (nmoumoul@redhat.com)
+- ENT-488 syspurpose now warns if running in container (nmoumoul@redhat.com)
 - 1574706: Create python2-subscription-manager-rhsm properly
   (jhnidek@redhat.com)
 - Automatic rebuilding of updates.img on PXE Server (jhnidek@redhat.com)
@@ -1152,7 +1152,7 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 - 1559227: Do not use str format for python 2.6 (csnyder@redhat.com)
 - 1425766: Additional message in status to indicate content access
   (wpoteat@redhat.com)
-- Adds a new cli utility 'intentctl' (csnyder@redhat.com)
+- Adds a new cli utility 'syspurpose' (csnyder@redhat.com)
 - 1559227: Do not log Error messages for missing identity cert/key
   (csnyder@redhat.com)
 - 1458159: python-dmidecode bug fix requires specific RPM release.

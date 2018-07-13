@@ -16,8 +16,8 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 
 import sys
-from intentctl import cli
-from intentctl.utils import system_exit
+from syspurpose import cli
+from syspurpose.utils import system_exit
 
 
 def main():

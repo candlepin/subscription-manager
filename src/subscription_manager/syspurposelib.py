@@ -18,30 +18,30 @@ from __future__ import print_function, division, absolute_import
 #
 
 """
-This module is an interface to intentctl's IntentStore class from subscription-manager.
-It contains methods for accessing/manipulating the local intent.json metadata file through IntentStore.
+This module is an interface to syspurpose's SyspurposeStore class from subscription-manager.
+It contains methods for accessing/manipulating the local syspurpose.json metadata file through SyspurposeStore.
 """
 
 import logging
 log = logging.getLogger(__name__)
 
 try:
-    from intentctl.intentfiles import IntentStore, USER_INTENT
+    from syspurpose.files import SyspurposeStore, USER_SYSPURPOSE
 except ImportError:
-    log.error("Could not import from module intentctl.")
+    log.error("Could not import from module syspurpose.")
 
 
-def save_sla_to_intent_metadata(service_level):
+def save_sla_to_syspurpose_metadata(service_level):
     """
-    Saves the provided service-level value to the local Intent Metadata (intent.json) file.
-    If the service level provided is null or empty, the sla value to the local intent file is set to null.
+    Saves the provided service-level value to the local Syspurpose Metadata (syspurpose.json) file.
+    If the service level provided is null or empty, the sla value to the local syspurpose file is set to null.
 
-    :param service_level: The service-level value to be saved in the intent file.
+    :param service_level: The service-level value to be saved in the syspurpose file.
     :type service_level: str
     """
 
-    if 'IntentStore' in globals():
-        store = IntentStore.read(USER_INTENT)
+    if 'SyspurposeStore' in globals():
+        store = SyspurposeStore.read(USER_SYSPURPOSE)
 
         # if empty, set it to null
         if service_level is None or service_level == "":
@@ -49,6 +49,6 @@ def save_sla_to_intent_metadata(service_level):
 
         store.set("service_level_agreement", service_level)
         store.write()
-        log.info("Intent SLA value successfully saved locally.")
+        log.info("Syspurpose SLA value successfully saved locally.")
     else:
-        log.error("IntentStore could not be imported. Intent SLA value not saved locally.")
+        log.error("SyspurposeStore could not be imported. Syspurpose SLA value not saved locally.")
