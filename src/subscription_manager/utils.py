@@ -62,6 +62,73 @@ class DefaultDict(collections.defaultdict):
         return pprint.pformat(self.as_dict())
 
 
+def three_way_merge(local, base, remote, on_conflict="remote"):
+    """
+    Performs a three-way merge on the local and remote dictionaries with a given base.
+    :param local: The dictionary of the current local values
+    :param base: The dictionary with the values we've last seen
+    :param remote: The dictionary with "their" values
+    :param on_conflict: Either "remote" or "local" or None. If "remote", the remote changes
+                               will win any conflict. If "local", the local changes will win any
+                               conflict. If anything else, an error will be thrown.
+
+    :return: The dictionary of values as merged between the three provided dictionaries.
+    """
+    result = {}
+    local = local or {}
+    base = base or {}
+    remote = remote or {}
+
+    if on_conflict == "remote":
+        winner = remote
+    elif on_conflict == "local":
+        winner = local
+    else:
+        raise ValueError('keyword argument "on_conflict" must be either "remote" or "local"')
+
+    all_keys = set(local.keys()) | set(base.keys()) | set(remote.keys())
+
+    for key in all_keys:
+
+        local_changed = detect_changed(base=base, other=local, key=key)
+        remote_changed = detect_changed(base=base, other=remote, key=key)
+
+        if local_changed == remote_changed:
+            if key in winner:
+                result[key] = winner[key]
+        elif remote_changed:
+            if key in remote:
+                result[key] = remote[key]
+        elif local_changed:
+            if key in local:
+                result[key] = local[key]
+
+    return result
+
+
+def detect_changed(base, other, key):
+    """
+    Detect the type of change that has occurred between base and other for a given key.
+    :param base: The dictionary of values we are starting with
+    :param other: The dictionary of now current values
+    :param key: The key that we are interested in knowing how it changed
+    :return: True if there was a change, false if there was no change
+    :rtype: bool
+    """
+    base = base or {}
+    other = other or {}
+
+    if key in base and key in other:
+        if base[key] == other[key]:
+            return False
+        else:
+            return True
+    elif key not in base and key not in other:
+        return False
+    else:
+        return True
+
+
 def parse_server_info(local_server_entry, config=None):
     hostname = ''
     port = ''

@@ -11,7 +11,7 @@ from subscription_manager.utils import parse_server_info, \
     parse_baseurl_info, format_baseurl, \
     get_version, get_client_versions, unique_list_items, \
     get_server_versions, friendly_join, is_true_value, url_base_join,\
-    ProductCertificateFilter, EntitlementCertificateFilter
+    ProductCertificateFilter, EntitlementCertificateFilter, three_way_merge, detect_changed
 from .stubs import StubProductCertificate, StubProduct, StubEntitlementCertificate
 from .fixture import SubManFixture
 
@@ -753,3 +753,248 @@ class TestEntitlementCertificateFilter(fixture.SubManFixture):
             result = cert_filter.match(data[2])
 
             self.assertEqual(result, data[3], "EntitlementCertificateFilter.match failed with data set %i.\nActual:   %s\nExpected: %s" % (index, result, data[3]))
+
+
+class TestThreeWayMerge(fixture.SubManFixture):
+
+    def test_all_empty(self):
+        base = {}
+        remote = {}
+        local = {}
+
+        expected = {}
+        result = three_way_merge(local=local, base=base, remote=remote)
+        self.assert_equal_dict(expected, result)
+
+    def test_empty_base_no_conflict(self):
+        base = {}
+        remote = {"A": "remote"}
+        local = {"B": "local"}
+
+        expected = {"A": "remote", "B": "local"}
+        result = three_way_merge(local=local, base=base, remote=remote)
+        self.assert_equal_dict(expected, result)
+
+    def test_local_only(self):
+        base = {}
+        remote = {}
+        local = {"B": "local"}
+
+        expected = local
+        result = three_way_merge(local=local, base=base, remote=remote)
+        self.assert_equal_dict(expected, result)
+
+    def test_remote_only(self):
+        base = {}
+        remote = {"A": "remote"}
+        local = {}
+
+        expected = remote
+        result = three_way_merge(local=local, base=base, remote=remote)
+        self.assert_equal_dict(expected, result)
+
+    def test_key_removed_no_conflict(self):
+        base = {"C": "base"}
+        remote = {}
+        local = {}
+
+        expected = {}  # Should be empty as "C" was removed from both
+        result = three_way_merge(local=local, base=base, remote=remote)
+        self.assert_equal_dict(expected, result)
+
+    def test_key_removed_from_remote(self):
+        base = {"C": "base"}
+        remote = {}
+        local = {"C": "base"}
+
+        expected = remote
+        result = three_way_merge(local=local, base=base, remote=remote)
+        self.assert_equal_dict(expected, result)
+
+        # Now with the on_conflict param set to "local"
+
+        expected = remote  # Should still be empty because local is unchanged
+        result = three_way_merge(local=local, base=base, remote=remote, on_conflict="local")
+        self.assert_equal_dict(expected, result)
+
+    def test_key_removed_from_local(self):
+        base = {"C": "base"}
+        remote = {"C": "base"}
+        local = {}
+
+        expected = local
+        result = three_way_merge(local=local, base=base, remote=remote)
+        self.assert_equal_dict(expected, result)
+
+        # Now with the on_conflict param set to "local"
+
+        expected = local
+        result = three_way_merge(local=local, base=base, remote=remote, on_conflict="local")
+        self.assert_equal_dict(expected, result)
+
+    def test_merge_no_potential_conflict(self):
+        base = {"C": "base"}
+        remote = {"A": "remote", "C": "base"}
+        local = {"B": "local", "C": "base"}
+
+        expected = {"A": "remote", "B": "local", "C": "base"}
+        result = three_way_merge(local=local, base=base, remote=remote)
+        self.assert_equal_dict(expected, result)
+
+    def test_merge(self):
+        """
+        Shows that a change in only one place does not consitute a conflict.
+        :return:
+        """
+        base = {"C": "base"}
+        remote = {"A": "remote", "C": "remote"}
+        local = {"B": "local", "C": "base"}
+
+        expected = {"A": "remote", "B": "local", "C": "remote"}
+        result = three_way_merge(local=local, base=base, remote=remote)
+        self.assert_equal_dict(expected, result)
+
+        # Now with local as the on_conflict winner
+        expected = {"A": "remote", "B": "local", "C": "remote"}
+        result = three_way_merge(local=local, base=base, remote=remote, on_conflict="local")
+        self.assert_equal_dict(expected, result)
+
+    def test_concurrent_modification(self):
+        """
+        This test shows that remote wins by default in the case of concurrent modification of
+        a shared key. It also shows that the on_conflict kwarg can override this.
+        :return:
+        """
+        shared_key = "C"
+        base = {shared_key: "base"}
+        # Here the key "C" is changed from "base" to "remote" for remote and to "local" for local
+        remote = {"A": "remote", shared_key: "remote"}
+        local = {"B": "local", shared_key: "local"}
+
+        expected = {"A": "remote", "B": "local", shared_key: "remote"}
+
+        result = three_way_merge(local=local, base=base, remote=remote)
+        self.assert_equal_dict(expected, result)
+
+        # Now with local set to win
+        expected = {"A": "remote", "B": "local", shared_key: "local"}
+        result = three_way_merge(local=local, base=base, remote=remote, on_conflict="local")
+        self.assert_equal_dict(expected, result)
+
+    def test_concurrent_modification_key_added(self):
+        """
+        This test shows that remote wins by default in the case of concurrent modification of
+        a shared key even when the shared key is not in the base.
+        It also shows that the on_conflict kwarg can override this.
+        :return:
+        """
+        shared_key = "C"
+        base = {}
+        # Here the key "C" is changed from "base" to "remote" for remote and to "local" for local
+        remote = {"A": "remote", shared_key: "remote"}
+        local = {"B": "local", shared_key: "local"}
+
+        expected = {"A": "remote", "B": "local", shared_key: "remote"}
+
+        result = three_way_merge(local=local, base=base, remote=remote)
+        self.assert_equal_dict(expected, result)
+
+        # Now with local set to win
+        expected = {"A": "remote", "B": "local", shared_key: "local"}
+        result = three_way_merge(local=local, base=base, remote=remote, on_conflict="local")
+        self.assert_equal_dict(expected, result)
+
+    def test_merge_conflicting_lists(self):
+        """
+        This test shows that lists are treated atomically (as in we do not merge differing lists).
+        :return:
+        """
+        shared_key = "C"
+        base = {shared_key: ["base"]}
+        # Here the key "C" is changed from "base" to "remote" for remote and to "local" for local
+        remote = {"A": "remote", shared_key: ["remote"]}
+        local = {"B": "local", shared_key: ["local"]}
+
+        expected = {"A": "remote", "B": "local", shared_key: ["remote"]}
+        result = three_way_merge(local=local, base=base, remote=remote)
+        self.assert_equal_dict(expected, result)
+
+        # Now with local set to win
+        expected = {"A": "remote", "B": "local", shared_key: ["local"]}
+        result = three_way_merge(local=local, base=base, remote=remote, on_conflict="local")
+        self.assert_equal_dict(expected, result)
+
+    def test_invalid_on_conflict_value(self):
+        self.assertRaises(ValueError, three_way_merge, local={}, base={}, remote={},
+                          on_conflict="oops")
+
+
+class TestDetectChange(fixture.SubManFixture):
+
+    def test_added(self):
+        """
+        Shows that when a key is added to the other dictionary that the result is ChangeType.Added
+        """
+        key = "a"
+        value = "value"
+        base = {}
+        other = {key: value}
+
+        result = detect_changed(base=base, other=other, key=key)
+
+        self.assertEqual(result, True)
+
+    def test_removed(self):
+        """
+        Shows that when a key is removed from the other dict that the result is ChangeType.REMOVED
+        """
+        key = "a"
+        value = "value"
+        base = {key: value}
+        other = {}
+
+        result = detect_changed(base=base, other=other, key=key)
+
+        self.assertEqual(result, True)
+
+    def test_changed(self):
+        """
+        Shows that when a key is changed from the other dict that the result is ChangeType.CHANGED
+        """
+        key = "a"
+        value = "value"
+        next_value = "next_value"
+        base = {key: value}
+        other = {key: next_value}
+
+        result = detect_changed(base=base, other=other, key=key)
+
+        self.assertEqual(result, True)
+
+    def test_same(self):
+        """
+        Shows that when a key is the same as in the other dict that the result is ChangeType.SAME.
+        """
+        key = "a"
+        value = "value"
+        base = {key: value}
+        other = {key: value}
+
+        result = detect_changed(base=base, other=other, key=key)
+
+        self.assertEqual(result, False)
+
+    def test_same_empty(self):
+        """
+        Shows that when a key is not in either other or base the result is ChangeType.SAME
+        """
+        key = "a"
+        non_existant_key = "b"
+        value = "value"
+        next_value = "next_value"
+        base = {key: value}
+        other = {key: next_value}
+
+        result = detect_changed(base=base, other=other, key=non_existant_key)
+
+        self.assertEqual(result, False)
