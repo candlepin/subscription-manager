@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 #
 # Copyright (c) 2018 Red Hat, Inc.
 #
@@ -12,12 +13,26 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
+import sys
+import os
+
+build_ext_home = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+sys.path.append(build_ext_home)
+
 from setuptools import setup, find_packages
+from build_ext import i18n
 
 test_require = [
     'mock',
     'nose'
 ]
+
+cmdclass = {
+    'build_trans': i18n.BuildTrans,
+    'update_trans': i18n.UpdateTrans,
+    'uniq_trans': i18n.UniqTrans,
+    'gettext': i18n.Gettext,
+}
 
 setup(
     name="syspurpose",
@@ -27,6 +42,7 @@ setup(
     license="GPLv2",
     author="Chris Snyder",
     author_email="chainsaw@redhat.com",
+    cmdclass=cmdclass,
     packages=find_packages('../../src', include=["syspurpose"]),
     package_dir={
         "syspurpose": "../../src/syspurpose"
