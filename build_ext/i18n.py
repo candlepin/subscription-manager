@@ -114,12 +114,18 @@ class Gettext(BaseCommand):
         self.key_file = os.path.join(os.curdir, 'po', 'keys.pot')
 
     def finalize_options(self):
+        self.src_dirs = self.distribution.package_dir
+        print()
         if self.lint:
             self.key_file = '/dev/null'
 
     def find_py(self):
         files = []
-        files.extend(list(Utils.find_files_of_type('src', '*.py')))
+
+        for src in self.src_dirs.values():
+            print(src)
+            files.extend(list(Utils.find_files_of_type(src, '*.py')))
+
         files.extend(list(Utils.find_files_of_type('bin', '*')))
 
         # We need to grab some strings out of optparse for translation
@@ -133,13 +139,17 @@ class Gettext(BaseCommand):
 
     def find_c(self):
         files = []
-        files.extend(list(Utils.find_files_of_type('src', '*.c', '*.h')))
+
+        for src in self.src_dirs.values():
+            files.extend(list(Utils.find_files_of_type(src, '*.c', '*.h')))
+
         files.extend(list(Utils.find_files_of_type('tmp', '*.h')))
         return files
 
     def find_glade(self):
         files = []
-        files.extend(list(Utils.find_files_of_type('src', '*.ui', '*.glade')))
+        for src in self.src_dirs.values():
+            files.extend(list(Utils.find_files_of_type(src, '*.ui', '*.glade')))
         return files
 
     def find_js(self):
