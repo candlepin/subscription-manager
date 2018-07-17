@@ -22,7 +22,7 @@ import sys
 import traceback
 
 
-class IntentCtlTestBase(unittest.TestCase):
+class SyspurposeTestBase(unittest.TestCase):
 
     def _mktmp(self):
         """

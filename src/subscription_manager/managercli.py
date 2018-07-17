@@ -64,7 +64,7 @@ from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, \
         none_wrap_columnize_callback, echo_columnize_callback, highlight_by_filter_string_columnize_cb
 from subscription_manager.utils import generate_correlation_id
-from subscription_manager.intentstore_interface import save_sla_to_intent_metadata
+from subscription_manager.syspurposelib import save_sla_to_syspurpose_metadata
 
 from subscription_manager.i18n import ungettext, ugettext as _
 
@@ -868,7 +868,7 @@ class ServiceLevelCommand(OrgCommand):
         if 'serviceLevel' not in consumer:
             system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
         self.cp.updateConsumer(self.identity.uuid, service_level=service_level)
-        save_sla_to_intent_metadata(service_level)
+        save_sla_to_syspurpose_metadata(service_level)
 
     def _validate_options(self):
 
@@ -1176,7 +1176,7 @@ class RegisterCommand(UserPassCommand):
                 log.exception("Auto-attach failed")
                 raise
             else:
-                save_sla_to_intent_metadata(self.options.service_level)
+                save_sla_to_syspurpose_metadata(self.options.service_level)
                 if self.options.service_level is not None:
                     print(_("Service level set to: %s") % self.options.service_level)
 
@@ -1601,7 +1601,7 @@ class AttachCommand(CliCommand):
                                              "complete your request."))
 
                     attach_service.attach_auto(self.options.service_level)
-                    save_sla_to_intent_metadata(self.options.service_level)
+                    save_sla_to_syspurpose_metadata(self.options.service_level)
                     if self.options.service_level is not None:
                         print(_("Service level set to: %s") % self.options.service_level)
 

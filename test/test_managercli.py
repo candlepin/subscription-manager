@@ -17,7 +17,7 @@ import contextlib
 
 import six
 
-from subscription_manager import intentstore_interface
+from subscription_manager import syspurposelib
 from subscription_manager import managercli, managerlib
 from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_TYPE
 from subscription_manager.injection import provide, \
@@ -167,11 +167,11 @@ class InstalledProductStatusTests(SubManFixture):
 class TestCli(SubManFixture):
     def setUp(self):
         super(TestCli, self).setUp()
-        intentstore_interface.USER_INTENT = self.write_tempfile("{}").name
+        syspurposelib.USER_SYSPURPOSE = self.write_tempfile("{}").name
 
     def tearDown(self):
         super(TestCli, self).tearDown()
-        intentstore_interface.USER_INTENT = "/etc/rhsm/intent/intent.json"
+        syspurposelib.USER_SYSPURPOSE = "/etc/rhsm/syspurpose/syspurpose.json"
 
     def test_cli(self):
         cli = managercli.ManagerCLI()
@@ -384,11 +384,11 @@ class TestRegisterCommand(TestCliProxyCommand):
         argv_patcher = patch.object(sys, 'argv', ['subscription-manager', 'register'])
         argv_patcher.start()
         self.addCleanup(argv_patcher.stop)
-        intentstore_interface.USER_INTENT = self.write_tempfile("{}").name
+        syspurposelib.USER_SYSPURPOSE = self.write_tempfile("{}").name
 
     def tearDown(self):
         super(TestRegisterCommand, self).tearDown()
-        intentstore_interface.USER_INTENT = "/etc/rhsm/intent/intent.json"
+        syspurposelib.USER_SYSPURPOSE = "/etc/rhsm/syspurpose/syspurpose.json"
 
     def _test_exception(self, args):
         try:
@@ -1101,7 +1101,7 @@ class TestAttachCommand(TestCliProxyCommand):
         os.write(cls.tempfiles[1][0], "pool1 pool2   pool3 \npool4\npool5\r\npool6\t\tpool7\n  pool8\n\n\n".encode('utf-8'))
         os.close(cls.tempfiles[1][0])
 
-        # The third temp file intentionally left empty for testing empty sets of data.
+        # The third temp file syspurposeionally left empty for testing empty sets of data.
         os.close(cls.tempfiles[2][0])
 
     @classmethod
@@ -1337,11 +1337,11 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         TestCliProxyCommand.setUp(self)
         self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
-        intentstore_interface.USER_INTENT = self.write_tempfile("{}").name
+        syspurposelib.USER_SYSPURPOSE = self.write_tempfile("{}").name
 
     def tearDown(self):
         super(TestServiceLevelCommand, self).tearDown()
-        intentstore_interface.USER_INTENT = "/etc/rhsm/intent/intent.json"
+        syspurposelib.USER_SYSPURPOSE = "/etc/rhsm/syspurpose/syspurpose.json"
 
     def test_main_server_url(self):
         server_url = "https://subscription.rhsm.redhat.com/subscription"
@@ -1373,24 +1373,24 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         self.cc.cp.setConsumer({'serviceLevel': 'Jarjar'})
         self.cc.set_service_level('JRJAR')
 
-    def test_service_level_creates_intent_dir_and_file(self):
-        # create a mock /etc/rhsm/ directory, and set the value of a mock USER_INTENT under that
+    def test_service_level_creates_syspurpose_dir_and_file(self):
+        # create a mock /etc/rhsm/ directory, and set the value of a mock USER_SYSPURPOSE under that
         mock_etc_rhsm_dir = tempfile.mkdtemp()
         self.addCleanup(shutil.rmtree, mock_etc_rhsm_dir)
-        mock_intent_file = os.path.join(mock_etc_rhsm_dir, "intent/intent.json")
-        intentstore_interface.USER_INTENT = mock_intent_file
+        mock_syspurpose_file = os.path.join(mock_etc_rhsm_dir, "syspurpose/syspurpose.json")
+        syspurposelib.USER_SYSPURPOSE = mock_syspurpose_file
 
-        # make sure the subdirectory 'mock_etc_rhsm_dir/intent' does not exist yet:
-        self.assertFalse(os.path.isdir(os.path.join(mock_etc_rhsm_dir, "intent")))
+        # make sure the subdirectory 'mock_etc_rhsm_dir/syspurpose' does not exist yet:
+        self.assertFalse(os.path.isdir(os.path.join(mock_etc_rhsm_dir, "syspurpose")))
 
         self.cc.cp.setConsumer({'serviceLevel': 'Jarjar'})
         self.cc.set_service_level('JRJAR')
 
-        # make sure the subdirectory 'mock_etc_rhsm_dir/intent' has been created by the sla command:
-        self.assertTrue(os.path.isdir(os.path.join(mock_etc_rhsm_dir, "intent")))
+        # make sure the subdirectory 'mock_etc_rhsm_dir/syspurpose' has been created by the sla command:
+        self.assertTrue(os.path.isdir(os.path.join(mock_etc_rhsm_dir, "syspurpose")))
 
-        # make sure the sla has been persisted in intent.json:
-        contents = intentstore_interface.IntentStore.read(intentstore_interface.USER_INTENT).contents
+        # make sure the sla has been persisted in syspurpose.json:
+        contents = syspurposelib.SyspurposeStore.read(syspurposelib.USER_SYSPURPOSE).contents
         self.assertEqual(contents.get("service_level_agreement"), "JRJAR")
 
 

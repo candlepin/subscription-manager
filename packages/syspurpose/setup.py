@@ -20,22 +20,22 @@ test_require = [
 ]
 
 setup(
-    name="intentctl",
+    name="syspurpose",
     version="1.22.1",
     url="http://www.candlepinproject.org",
     description="Manage Red Hat System Intent",
     license="GPLv2",
     author="Chris Snyder",
     author_email="chainsaw@redhat.com",
-    packages=find_packages('../../src', include=["intentctl"]),
+    packages=find_packages('../../src', include=["syspurpose"]),
     package_dir={
-        "intentctl": "../../src/intentctl"
+        "syspurpose": "../../src/syspurpose"
     },
     tests_require=test_require,
     test_suite='nose.collector',
     entry_points={
         "console_scripts": [
-            "intentctl = intentctl.main:main"
+            "syspurpose = syspurpose.main:main"
         ]
     }
 )

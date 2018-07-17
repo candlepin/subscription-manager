@@ -1,4 +1,4 @@
-# Getting started developing the intentctl utility
+# Getting started developing the syspurpose utility
 
 This subpackage in the rhsm ecosystem uses pipenv to define python requirements and maintain a
 virtual environment for development.
@@ -11,8 +11,8 @@ The recommended workflow is as follows:
 1) Run the following to enter the virtual env: `pipenv shell`
 
 
-From inside this virtual env you can freely install the intentctl tool and test it as you like.
+From inside this virtual env you can freely install the syspurpose tool and test it as you like.
 Just run `python ./setup.py install` to install and `python ./setup.py test` to run the tests.
 
-The source for this subpackage is located (from checkout root) at ./src/intentctl
-The tests for this subpackage is located (from checkout root) at ./test/intentctl
+The source for this subpackage is located (from checkout root) at ./src/syspurpose
+The tests for this subpackage is located (from checkout root) at ./test/syspurpose

@@ -143,12 +143,12 @@ can be used:
 See `cockpit/README.md` for more detailed information on cockpit development.
 
 
-intentctl
+syspurpose
 ---------
-The intentctl utility manages certain user-definable values tracked in
-the /etc/rhsm/intent/intent.json file (in json format).
+The syspurpose utility manages certain user-definable values tracked in
+the /etc/rhsm/syspurpose/syspurpose.json file (in json format).
 
-See ./packages/intentctl/README.md for details on getting started
+See ./packages/syspurpose/README.md for details on getting started
 
 
 Testing
