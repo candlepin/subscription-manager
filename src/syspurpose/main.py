@@ -19,14 +19,19 @@ import sys
 from syspurpose import cli
 from syspurpose.utils import system_exit
 
+import syspurpose.i8n as i18n
+i18n.configure_i18n()
+
+from syspurpose.i18n import ugettext as _
 
 def main():
     try:
         sys.exit(cli.main() or 0)
     except KeyboardInterrupt:
-        system_exit(0, "User interrupted process")
+        system_exit(0, _("User interrupted process"))
     except Exception as e:
         system_exit(-1, str(e))
+
 
 if __name__ == "__main__":
     main()

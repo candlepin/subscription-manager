@@ -19,6 +19,7 @@ from __future__ import print_function, division, absolute_import
 import json
 import os
 from syspurpose.utils import system_exit, create_dir, create_file
+from syspurpose.i18n import ugettext as _
 
 # This modules contains utilities for manipulating files pertaining to system syspurpose
 
@@ -51,7 +52,7 @@ class SyspurposeStore(object):
         except OSError as e:
             if e.errno == os.errno.EACCES:
                 system_exit(os.EX_NOPERM,
-                            'Cannot read syspurpose file {}\nAre you root?'.format(self.path))
+                            _('Cannot read syspurpose file {}\nAre you root?').format(self.path))
         except IOError as ioerr:
             if ioerr.errno == os.errno.ENOENT:
                 return False

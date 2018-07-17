@@ -18,6 +18,7 @@ from __future__ import print_function, division, absolute_import
 import argparse
 from syspurpose.files import SyspurposeStore, USER_SYSPURPOSE
 from syspurpose.utils import in_container
+from syspurpose.i18n import ugettext as _
 import json
 
 
@@ -32,7 +33,7 @@ def add_command(args, syspurposestore):
     """
     for value in args.values:
         syspurposestore.add(args.prop_name, value)
-    print("Added {} to {}".format(args.values, args.prop_name))
+    print(_("Added {} to {}").format(args.values, args.prop_name))
 
 
 def remove_command(args, syspurposestore):
@@ -46,7 +47,7 @@ def remove_command(args, syspurposestore):
     """
     for value in args.values:
         syspurposestore.remove(args.prop_name, value)
-    print("Removed {} from {}".format(args.values, args.prop_name))
+    print(_("Removed {} from {}").format(args.values, args.prop_name))
 
 
 def set_command(args, syspurposestore):
@@ -59,7 +60,7 @@ def set_command(args, syspurposestore):
     :return: None
     """
     syspurposestore.set(args.prop_name, args.value)
-    print("{} set to {}".format(args.prop_name, args.value))
+    print(_("{} set to {}").format(args.prop_name, args.value))
 
 
 def unset_command(args, syspurposestore):
@@ -71,7 +72,7 @@ def unset_command(args, syspurposestore):
     :return: None
     """
     syspurposestore.unset(args.prop_name)
-    print("{} unset.".format(args.prop_name))
+    print(_("{} unset").format(args.prop_name))
 
 
 def show_contents(args, syspurposestore):
@@ -114,40 +115,40 @@ def setup_arg_parser():
     # Generic assignments
     # Set ################
     generic_set_parser = subparsers.add_parser("set",
-        help="Sets the value for the given property")
+        help=_("Sets the value for the given property"))
 
     generic_set_parser.add_argument("prop_name",
         metavar="property",
-        help="The name of the property to set/update",
+        help=_("The name of the property to set/update"),
         action="store")
 
     generic_set_parser.add_argument("value",
-        help="The value to set",
+        help=_("The value to set"),
         action="store")
 
     generic_set_parser.set_defaults(func=set_command, requires_write=True)
 
     # Unset ##############
     generic_unset_parser = subparsers.add_parser("unset",
-        help="Unsets (clears) the value for the given property",
+        help=_("Unsets (clears) the value for the given property"),
         parents=[unset_options])
 
     generic_unset_parser.add_argument("prop_name",
         metavar="property",
-        help="The name of the property to set/update",
+        help=_("The name of the property to set/update"),
         action="store")
 
     # Add ################
     generic_add_parser = subparsers.add_parser("add",
-        help="Adds the value(s) to the given property")
+        help=_("Adds the value(s) to the given property"))
 
     generic_add_parser.add_argument("prop_name",
         metavar="property",
-        help="The name of the property to update",
+        help=_("The name of the property to update"),
         action="store")
 
     generic_add_parser.add_argument("values",
-        help="The value(s) to add",
+        help=_("The value(s) to add"),
         action="store",
         nargs="+")
 
@@ -155,15 +156,15 @@ def setup_arg_parser():
 
     # Remove #############
     generic_remove_parser = subparsers.add_parser("remove",
-        help="Removes the value(s) from the given property")
+        help=_("Removes the value(s) from the given property"))
 
     generic_remove_parser.add_argument("prop_name",
         metavar="property",
-        help="The name of the property to update",
+        help=_("The name of the property to update"),
         action="store")
 
     generic_remove_parser.add_argument("values",
-        help="The value(s) to remove",
+        help=_("The value(s) to remove"),
         action="store",
         nargs="+")
 
@@ -172,42 +173,42 @@ def setup_arg_parser():
     # Targeted commands
     # Roles ##########
     set_role_parser = subparsers.add_parser("set-role",
-                                           help="Set the system role to the system syspurpose",
-                                           parents=[set_options])
+        help=_("Set the system role to the system syspurpose"),
+        parents=[set_options])
     # TODO: Set prop_name from schema file
     set_role_parser.set_defaults(prop_name="role")
 
     unset_role_parser = subparsers.add_parser("unset-role",
-                                                  help="Clear set role",
-                                                  parents=[unset_options])
+        help=_("Clear set role"),
+        parents=[unset_options])
     unset_role_parser.set_defaults(prop_name="role")
 
     # SLA ################
     set_sla_parser = subparsers.add_parser("set-sla",
-                                           help="Set the system sla",
-                                           parents=[set_options])
+        help=_("Set the system sla"),
+        parents=[set_options])
     set_sla_parser.set_defaults(prop_name="service_level_agreement")
 
     unset_sla_parser = subparsers.add_parser("unset-sla",
-                                             help="Clear set sla",
-                                             parents=[unset_options])
+        help=_("Clear set sla"),
+        parents=[unset_options])
     unset_sla_parser.set_defaults(prop_name="service_level_agreement")
 
     # USAGE ##############
     set_usage_parser = subparsers.add_parser("set-usage",
-                                           help="Set the system usage",
-                                           parents=[set_options])
+       help=_("Set the system usage"),
+       parents=[set_options])
 
     set_usage_parser.set_defaults(prop_name="usage_type")
 
     unset_usage_parser = subparsers.add_parser("unset-usage",
-                                             help="Clear set usage",
-                                             parents=[unset_options])
+        help=_("Clear set usage"),
+        parents=[unset_options])
     unset_usage_parser.set_defaults(prop_name="usage_type")
 
     # Pretty Print Json contents of default syspurpose file
     show_parser = subparsers.add_parser("show",
-                                        help="Show the current system syspurpose")
+        help=_("Show the current system syspurpose"))
     show_parser.set_defaults(func=show_contents, requires_write=False)
 
     return parser
@@ -223,8 +224,8 @@ def main():
 
     # Syspurpose is not intended to be used in containers for the time being (could change later).
     if in_container():
-        print("WARNING: Setting syspurpose in containers has no effect."
-              "Please run syspurpose on the host.\n")
+        print(_("WARNING: Setting syspurpose in containers has no effect."
+              "Please run syspurpose on the host.\n"))
 
     syspurposestore = SyspurposeStore.read(USER_SYSPURPOSE)
 

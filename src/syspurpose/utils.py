@@ -20,6 +20,7 @@ from __future__ import print_function, division, absolute_import
 import json
 import os
 import sys
+from syspurpose.i18n import ugettext as _
 
 HOST_CONFIG_DIR = "/etc/rhsm-host/"  # symlink inside docker containers
 
@@ -50,7 +51,7 @@ def create_dir(path):
             return False
         if e.errno == os.errno.EACCES:
             system_exit(os.EX_NOPERM,
-                        'Cannot create directory {}\nAre you root?'.format(path))
+                        _('Cannot create directory {}\nAre you root?').format(path))
     return True
 
 
@@ -71,7 +72,7 @@ def create_file(path, contents):
             # If the file exists no changes necessary
             return False
         if e.errno == os.errno.EACCES:
-            system_exit(os.EX_NOPERM, "Cannot create file {}\nAre you root?".format(path))
+            system_exit(os.EX_NOPERM, _("Cannot create file {}\nAre you root?").format(path))
         else:
             raise
     return True
