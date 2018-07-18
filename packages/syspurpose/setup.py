@@ -16,11 +16,14 @@
 import sys
 import os
 
+# Add modules used for building from subscription-manager
 build_ext_home = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 sys.path.append(build_ext_home)
 
 from setuptools import setup, find_packages
-from build_ext import i18n
+
+from build_ext import i18n, utils
+
 
 test_require = [
     'mock',
@@ -32,6 +35,7 @@ cmdclass = {
     'update_trans': i18n.UpdateTrans,
     'uniq_trans': i18n.UniqTrans,
     'gettext': i18n.Gettext,
+    'clean': utils.clean,
 }
 
 setup(

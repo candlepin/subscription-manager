@@ -26,12 +26,10 @@ from setuptools.command.install import install as _install
 from distutils import log
 from distutils.command.install_data import install_data as _install_data
 from distutils.command.build import build as _build
-from distutils.command.clean import clean as _clean
 from distutils.command.build_py import build_py as _build_py
-from distutils.dir_util import remove_tree
 
 from build_ext import i18n, lint, template
-from build_ext.utils import Utils
+from build_ext.utils import Utils, clean
 
 
 # subclass build_py so we can generate
@@ -75,23 +73,6 @@ class rpm_version_release_build_py(_build_py):
                             f.write(l)
                 except EnvironmentError:
                     raise
-
-
-class clean(_clean):
-    def initialize_options(self):
-        self.egg_base = None
-        _clean.initialize_options(self)
-
-    def finalize_options(self):
-        self.set_undefined_options('egg_info', ('egg_base', 'egg_base'))
-        _clean.finalize_options(self)
-
-    def run(self):
-        if self.all:
-            for f in glob(os.path.join(self.egg_base, '*.egg-info')):
-                log.info("removing %s" % f)
-                remove_tree(f, dry_run=self.dry_run)
-        _clean.run(self)
 
 
 class install(_install):
