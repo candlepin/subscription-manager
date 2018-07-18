@@ -127,14 +127,6 @@ class Gettext(BaseCommand):
             files.extend(list(Utils.find_files_of_type(src, '*.py')))
 
         files.extend(list(Utils.find_files_of_type('bin', '*')))
-
-        # We need to grab some strings out of optparse for translation
-        import optparse
-        optparse_source = "%s.py" % os.path.splitext(optparse.__file__)[0]
-        if not os.path.exists(optparse_source):
-            raise RuntimeError("Could not find optparse.py at %s" % optparse_source)
-        files.append(optparse_source)
-
         return files
 
     def find_c(self):
