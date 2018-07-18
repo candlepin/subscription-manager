@@ -18,10 +18,16 @@ from __future__ import print_function, division, absolute_import
 #
 
 import json
-import os
 import shutil
 import tempfile
 import unittest
+
+import sys
+import os
+
+# Add modules used for building from subscription-manager
+syspurpose_home = os.path.abspath(os.path.join(os.path.dirname(__file__), "../packages/syspurpose/src"))
+sys.path.append(syspurpose_home)
 
 from subscription_manager import syspurposelib
 

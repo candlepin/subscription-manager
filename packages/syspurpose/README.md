@@ -10,9 +10,5 @@ The recommended workflow is as follows:
 1) Run the following to install project deps in the virtualenv: `pipenv install`
 1) Run the following to enter the virtual env: `pipenv shell`
 
-
 From inside this virtual env you can freely install the syspurpose tool and test it as you like.
 Just run `python ./setup.py install` to install and `python ./setup.py test` to run the tests.
-
-The source for this subpackage is located (from checkout root) at ./src/syspurpose
-The tests for this subpackage is located (from checkout root) at ./test/syspurpose

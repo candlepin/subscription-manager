@@ -43,10 +43,8 @@ setup(
     author="Chris Snyder",
     author_email="chainsaw@redhat.com",
     cmdclass=cmdclass,
-    packages=find_packages('../../src', include=["syspurpose"]),
-    package_dir={
-        "syspurpose": "../../src/syspurpose"
-    },
+    packages=find_packages('src', include=["syspurpose"]),
+    package_dir={'': 'src'},
     tests_require=test_require,
     test_suite='nose.collector',
     entry_points={
