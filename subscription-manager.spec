@@ -5,7 +5,6 @@
 %global has_ostree %use_systemd && 0%{?suse_version} == 0
 %global use_initial_setup 1
 %global use_firstboot 0
-%global use_kitchen 1
 %global use_inotify 1
 %global py2_package_prefix python2
 
@@ -44,7 +43,6 @@
 %if 0%{?rhel} == 6 || 0%{?suse_version}
 %global use_initial_setup 0
 %global use_firstboot 1
-%global use_kitchen 0
 %global use_inotify 0
 %endif
 
@@ -189,10 +187,6 @@ Requires: %{?suse_version:yum} %{!?suse_version:yum >= 3.2.29-73}
 
 %if (%{use_dnf} && (0%{?fedora} || 0%{?rhel} >= 8))
 Requires: dnf-plugin-subscription-manager = %{version}
-%endif
-
-%if %{use_kitchen}
-Requires: %{py_package_prefix}-kitchen
 %endif
 
 # Support GTK2 and GTK3 on both SUSE and RHEL...

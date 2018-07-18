@@ -19,11 +19,7 @@ import re
 import logging
 import six
 
-try:
-    from yum.i18n import utf8_width
-except ImportError:
-    from kitchen.text.display import textual_width as utf8_width
-
+from subscription_manager.unicode_width import textual_width as utf8_width
 from subscription_manager.utils import get_terminal_width
 
 from subscription_manager.i18n import ugettext as _
