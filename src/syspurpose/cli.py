@@ -170,22 +170,17 @@ def setup_arg_parser():
     generic_remove_parser.set_defaults(func=remove_command, requires_write=True)
 
     # Targeted commands
-    # Offerings ##########
-    add_offering_parser = subparsers.add_parser("add-offerings",
-                                                help="Add one or more offerings to the system syspurpose.",
-                                                parents=[add_options])
+    # Roles ##########
+    set_role_parser = subparsers.add_parser("set-role",
+                                           help="Set the system role to the system syspurpose",
+                                           parents=[set_options])
     # TODO: Set prop_name from schema file
-    add_offering_parser.set_defaults(prop_name="offering_name")
+    set_role_parser.set_defaults(prop_name="role")
 
-    remove_offering_parser = subparsers.add_parser("remove-offerings",
-                                                   help="Remove one or more offerings.",
-                                                   parents=[remove_options])
-    remove_offering_parser.set_defaults(prop_name="offering_name")
-
-    unset_offering_parser = subparsers.add_parser("unset-offerings",
-                                                  help="Unset all offerings.",
+    unset_role_parser = subparsers.add_parser("unset-role",
+                                                  help="Clear set role",
                                                   parents=[unset_options])
-    unset_offering_parser.set_defaults(prop_name="offering_name")
+    unset_role_parser.set_defaults(prop_name="role")
 
     # SLA ################
     set_sla_parser = subparsers.add_parser("set-sla",
@@ -206,7 +201,7 @@ def setup_arg_parser():
     set_usage_parser.set_defaults(prop_name="usage_type")
 
     unset_usage_parser = subparsers.add_parser("unset-usage",
-                                             help="Clear set usage/",
+                                             help="Clear set usage",
                                              parents=[unset_options])
     unset_usage_parser.set_defaults(prop_name="usage_type")
 
