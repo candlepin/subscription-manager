@@ -1,14 +1,17 @@
 -r requirements.txt
-lxml
+
+# Install in editable mode.  Instead of copying the py files, pip will create a .egg-link
+# file linking to the checkout directory.  Any changes made to the files will then be
+# immediately available.
+-e ./packages/build_ext
+-e ./packages/syspurpose
+
 nose
 nose-capturestderr
 nose-randomly
 coverage
 polib
-pep8==1.5.7
-pyflakes
 pyinotify
-flake8==3.0.4
 simplejson
 mock
 Sphinx

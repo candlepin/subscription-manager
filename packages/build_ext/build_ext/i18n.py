@@ -209,3 +209,18 @@ class Gettext(BaseCommand):
         # Delete the directory holding the temporary files created by intltool-extract
         # and the temporary keys.pot
         shutil.rmtree('tmp')
+
+
+class GettextWithOptParse(Gettext):
+    def find_py(self):
+        # Can't use super since we're descended from a old-style class
+        files = Gettext.find_py(self)
+
+        # We need to grab some strings out of optparse for translation
+        import optparse
+        optparse_source = "%s.py" % os.path.splitext(optparse.__file__)[0]
+        if not os.path.exists(optparse_source):
+            raise RuntimeError("Could not find optparse.py at %s" % optparse_source)
+        files.append(optparse_source)
+        return files
+

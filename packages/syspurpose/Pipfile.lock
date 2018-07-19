@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "4e55147db217bb4120f6e68cb8cad7bc37011457441ce0eb9d97308315625834"
+            "sha256": "06c8cbe97d646cd084b91bda7c9514baab0ce22df269c0d869c99fe8d249b885"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,5 +16,10 @@
         ]
     },
     "default": {},
-    "develop": {}
+    "develop": {
+        "build-ext": {
+            "editable": true,
+            "path": "../build_ext"
+        }
+    }
 }

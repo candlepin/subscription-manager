@@ -12,23 +12,18 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
+from setuptools import setup, find_packages
 
 import sys
 import os
 
-# Add modules used for building from subscription-manager
-build_ext_home = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+# Note that importing build_ext alone won't be enough to make certain tasks (like lint) work
+# those tasks require that some dependencies (e.g. lxml) be installed.  Munging the syspath
+# here is just so that setup.py will be able to load and run in Jenkins jobs and RPM builds
+# that don't do pip install -r test-requirements.txt
+build_ext_home = os.path.abspath(os.path.join(os.path.dirname(__file__), "../build_ext"))
 sys.path.append(build_ext_home)
-
-from setuptools import setup, find_packages
-
 from build_ext import i18n, utils
-
-
-test_require = [
-    'mock',
-    'nose'
-]
 
 cmdclass = {
     'build_trans': i18n.BuildTrans,
@@ -37,6 +32,11 @@ cmdclass = {
     'gettext': i18n.Gettext,
     'clean': utils.clean,
 }
+
+test_require = [
+    'mock',
+    'nose'
+]
 
 setup(
     name="syspurpose",
