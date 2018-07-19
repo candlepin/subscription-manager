@@ -21,9 +21,8 @@ import threading
 
 from rhsmlib.dbus import constants
 
-from subscription_manager import ga_loader, logutil
+from subscription_manager import ga_loader
 ga_loader.init_ga()
-logutil.init_logger()
 from subscription_manager.ga import GLib
 from functools import partial
 from rhsmlib.services import config
