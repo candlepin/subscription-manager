@@ -64,7 +64,7 @@ make -e install
 PYTHON_SITE_PACKAGE_DIRS=`${PYTHON_BIN} -c "import site; print(' '.join(site.getsitepackages()))"`
 
 # List of required Python packages
-PY_PACKAGES="kitchen kitchen-1.2.4-py3.6.egg-info dateutil"
+PY_PACKAGES="dateutil"
 
 # Copy required Python modules to updates.img too
 for pkg in `echo ${PY_PACKAGES}`
