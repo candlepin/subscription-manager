@@ -212,3 +212,9 @@ class EntitlementDBusObject(base_object.BaseObject):
         removed_serials, unremoved_serials = entitlement_service.remove_entitlements_by_serials(serials)
 
         return json.dumps(removed_serials)
+
+    def reload(self):
+        entitlement_service = EntitlementService()
+        # TODO: find better solution
+        entitlement_service.identity.reload()
+        entitlement_service.reload()

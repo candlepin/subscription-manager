@@ -131,7 +131,7 @@ class InotifyFilesystemWatcher(FilesystemWatcher):
         self.notifier = pyinotify.Notifier(self.watch_manager, self.handle_event)
         self.add_watches()
 
-        def inotify_callback():  # arg: notifier, required for pyinotify
+        def inotify_callback():
             return end_loop_cb(self, user_callback=callback)
 
         while not inotify_callback():
@@ -146,7 +146,7 @@ class InotifyFilesystemWatcher(FilesystemWatcher):
         :return:
         """
         for dir_watch in self.dir_watches:
-            if dir_watch.paths_match(event.path) and dir_watch.file_modified(event.mask):
+            if dir_watch.paths_match(event.path, event.pathname) and dir_watch.file_modified(event.mask):
                 dir_watch.notify()
 
     def add_watches(self):
@@ -155,7 +155,13 @@ class InotifyFilesystemWatcher(FilesystemWatcher):
         :return:
         """
         for dir_watch in self.dir_watches:
-            self.watch_manager.add_watch(dir_watch.path, dir_watch.mask, do_glob=dir_watch.is_glob)
+            if dir_watch.is_file:
+                # watch for any changes in the directory, but only be notified of the specific path
+                dir_name = os.path.abspath(os.path.dirname(dir_watch.path))
+                self.watch_manager.add_watch(dir_name, dir_watch.mask, self.handle_event, do_glob=dir_watch.is_glob)
+            else:
+                # is already directory
+                self.watch_manager.add_watch(dir_watch.path, dir_watch.mask, self.handle_event, do_glob=dir_watch.is_glob)
 
 
 class DirectoryWatch(object):
@@ -172,15 +178,15 @@ class DirectoryWatch(object):
         :param callbacks: list of methods called when directory is changed
         :param is_glob: bool - if path provided is glob or not
         """
-        self.IN_CREATE = 0x00000100
         self.IN_DELETE = 0x00000200
         self.IN_MODIFY = 0x00000002
 
-        self.path = path
+        self.path = os.path.abspath(path)
+        self.is_file = os.path.isfile(self.path)
         self.timestamp = None
         self.is_glob = is_glob
         self.callbacks = callbacks
-        self.mask = self.IN_CREATE | self.IN_DELETE | self.IN_MODIFY
+        self.mask = self.IN_DELETE | self.IN_MODIFY
 
     def notify(self):
         """
@@ -194,12 +200,19 @@ class DirectoryWatch(object):
                 except Exception as e:
                     log.exception(e)
 
-    def paths_match(self, event_path):
+    def paths_match(self, event_path, event_pathname):
         """
-        checks if event path matches any of the dir watch paths associated to it (in case dir watch path is glob)
+        checks if event path matches any of the dir watch paths associated to it
         :param event_path: path of the inotify event object
+        :param event_pathname: pathname of the inotify event object
+        see pyinotify event class for more info
         :return: bool - if paths match or not
         """
+        event_pathname = os.path.realpath(event_pathname)
+        event_path = os.path.realpath(event_path)
+        if self.is_file:
+            # we do not care about events on other paths, like .swp files
+            return fnmatch.fnmatchcase(event_pathname, self.path)
         return fnmatch.fnmatchcase(event_path, self.path)
 
     def file_modified(self, event_mask):
