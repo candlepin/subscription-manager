@@ -33,9 +33,10 @@ class SyspurposeStore(object):
     Represents and maintains a json syspurpose file
     """
 
-    def __init__(self, path):
+    def __init__(self, path, raise_on_error=False):
         self.path = path
         self.contents = {}
+        self.raise_on_error = raise_on_error
 
     def read_file(self):
         """
@@ -50,12 +51,16 @@ class SyspurposeStore(object):
         except ValueError:
             return False
         except OSError as e:
-            if e.errno == os.errno.EACCES:
+            if e.errno == os.errno.EACCES and not self.raise_on_error:
                 system_exit(os.EX_NOPERM,
                             _('Cannot read syspurpose file {}\nAre you root?').format(self.path))
+            if self.raise_on_error:
+                raise e
         except IOError as ioerr:
             if ioerr.errno == os.errno.ENOENT:
                 return False
+            if self.raise_on_error:
+                raise e
 
     def create(self):
         """
@@ -145,13 +150,13 @@ class SyspurposeStore(object):
             json.dump(self.contents, fp)
 
     @classmethod
-    def read(cls, path):
+    def read(cls, path, raise_on_error=False):
         """
         Read the file represented by path. If the file does not exist it is created.
         :param path: The path on the file system to read, should be a json file
         :return: new SyspurposeStore with the contents read in
         """
-        new_store = cls(path)
+        new_store = cls(path, raise_on_error=raise_on_error)
 
         if not os.access(path, os.W_OK):
             new_store.create()
