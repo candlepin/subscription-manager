@@ -961,6 +961,7 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/ca/redhat-uep.pem %{buildroo
 %defattr(-,root,root,-)
 %dir %{python_sitearch}/rhsm
 %{python_sitearch}/rhsm/*
+%{python_sitearch}/rhsm-*.egg-info
 
 %if %{with python2_rhsm}
 %files -n python2-subscription-manager-rhsm
