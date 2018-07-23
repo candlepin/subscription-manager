@@ -37,15 +37,24 @@ class SyspurposeStore(object):
         self.contents = {}
 
     def read_file(self):
+        """
+        Opens & reads the contents of the store's file based on the 'path' provided to the constructor,
+        and stores them on this object. If the user doesn't have access rights to the file, the program exits.
+        :return: False if the contents of the file were empty, or the file doesn't exist; otherwise, nothing.
+        """
         try:
             with open(self.path, 'r') as f:
                 self.contents = json.load(f)
+                return True
         except ValueError:
             return False
         except OSError as e:
             if e.errno == os.errno.EACCES:
                 system_exit(os.EX_NOPERM,
                             'Cannot read syspurpose file {}\nAre you root?'.format(self.path))
+        except IOError as ioerr:
+            if ioerr.errno == os.errno.ENOENT:
+                return False
 
     def create(self):
         """

@@ -46,6 +46,22 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         res = self.assertRaisesNothing(syspurpose_store.read_file)
         self.assertFalse(bool(res))
 
+    def test_read_file_existent_file(self):
+        """
+        The SyspurposeStore.read_file method should return True if the file was successfully read.
+        :return:
+        """
+        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        test_data = {}
+        with open(temp_dir, 'w') as f:
+            json.dump(test_data, f)
+
+        self.assertTrue(os.path.exists(temp_dir))
+
+        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        res = self.assertRaisesNothing(syspurpose_store.read_file)
+        self.assertTrue(bool(res))
+
     def _read_file(self, file_contents=None, expected_contents=None):
         """
         Utility method for logic common to the *read_file* tests.
