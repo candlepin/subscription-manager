@@ -223,4 +223,3 @@ class GettextWithOptParse(Gettext):
             raise RuntimeError("Could not find optparse.py at %s" % optparse_source)
         files.append(optparse_source)
         return files
-

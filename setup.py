@@ -33,7 +33,7 @@ from distutils.command.build_py import build_py as _build_py
 # those tasks require that some dependencies (e.g. lxml) be installed.  Munging the syspath
 # here is just so that setup.py will be able to load and run in Jenkins jobs and RPM builds
 # that don't set up a proper development environment.
-build_ext_home = os.path.abspath(os.path.join(os.path.dirname(__file__), "packages/build_ext"))
+build_ext_home = os.path.abspath(os.path.join(os.path.dirname(__file__), "./build_ext"))
 sys.path.append(build_ext_home)
 from build_ext import i18n, lint, template, utils
 
