@@ -25,7 +25,7 @@ const attachService = service.proxy('com.redhat.RHSM1.Attach', '/com/redhat/RHSM
 const entitlementService = service.proxy('com.redhat.RHSM1.Entitlement', '/com/redhat/RHSM1/Entitlement');
 const unregisterService = service.proxy('com.redhat.RHSM1.Unregister', '/com/redhat/RHSM1/Unregister');
 const productsService = service.proxy('com.redhat.RHSM1.Products', '/com/redhat/RHSM1/Products');
-const legacyService = cockpit.dbus('com.redhat.SubscriptionManager');  // FIXME replace?
+const consumerService = service.proxy('com.redhat.RHSM1.Consumer', '/com/redhat/RHSM1/Consumer');
 const _ = cockpit.gettext;
 
 const client = { };
@@ -35,7 +35,6 @@ const userLang = navigator.language || navigator.userLanguage;
 cockpit.event_target(client);
 
 client.subscriptionStatus = {
-    serviceStatus: undefined,
     status: undefined,
     products: [],
     error: undefined,
@@ -63,7 +62,6 @@ function needRender() {
 /* we trigger status update via dbus
  * if we don't get a timely reply, consider subscription-manager failure
  */
-let updateTimeout;
 
 function parseProducts(text) {
     const products = JSON.parse(text);
@@ -364,13 +362,13 @@ client.registerSystem = subscriptionDetails => {
                         if (connection_options.proxy_password) {
                             proxy_options.proxy_password = connection_options.proxy_password;
                         }
-                        attachService.AutoAttach('', proxy_options, userLang)
+                        return attachService.AutoAttach('', proxy_options, userLang)
                             .catch(error => {
                                 console.error('error during autoattach', error);
                                 dfd.reject(parseErrorMessage(error));
                             });
                     } else {
-                        attachService.AutoAttach('', {}, userLang)
+                        return attachService.AutoAttach('', {}, userLang)
                             .catch(error => {
                                 console.error('error during autoattach', error);
                                 dfd.reject(parseErrorMessage(error));
@@ -385,11 +383,11 @@ client.registerSystem = subscriptionDetails => {
             .then(() => {
                 console.debug('requesting update');
                 client.closeRegisterDialog = true;
-                requestUpdate(dfd);
+                requestUpdate().always(() => {
+                    dfd.resolve();
+                });
             });
     });
-
-    requestUpdate();
     return dfd.promise();
 };
 
@@ -427,39 +425,14 @@ const subscriptionStatusValues = [
     'RHSM_PARTIALLY_VALID',
     'RHSM_REGISTRATION_REQUIRED'
 ];
-function requestUpdate(dfd = null) {
-    legacyService.wait(() => {
-        legacyService.call('/EntitlementStatus',
-            'com.redhat.SubscriptionManager.EntitlementStatus',
-            'check_status',
-            []
-        )
-            .always(() => {
-                window.clearTimeout(updateTimeout);
-            })
-            .done(result => {
-                client.subscriptionStatus.serviceStatus = subscriptionStatusValues[result[0]];
-                client.getSubscriptionStatus(dfd);
-            })
-            .catch(ex => {
-                statusUpdateFailed("EntitlementStatus.check_status() failed:", ex);
-            });
-
-        /* TODO: Don't use a timeout here. Needs better API */
-        updateTimeout = window.setTimeout(() => {
-            statusUpdateFailed("timeout");
-        }, 60000);
-    });
+function requestUpdate() {
+    return client.getSubscriptionStatus()
+        .catch(ex => statusUpdateFailed(ex));
 }
 
-let gettingStatus = false;
 /* get subscription summary */
-client.getSubscriptionStatus = function(dfd = null) {
-    this.dfd = dfd;
-    if (gettingStatus) {
-        return;
-    }
-    gettingStatus = true;
+client.getSubscriptionStatus = function() {
+    this.dfd = cockpit.defer();
 
     entitlementService.wait(() => {
         safeDBusCall(entitlementService, 'GetStatus', () => {
@@ -467,21 +440,22 @@ client.getSubscriptionStatus = function(dfd = null) {
             .then(result => {
                 const status = JSON.parse(result);
                 client.subscriptionStatus.status = status.status;
-                if (this.dfd && client.closeRegisterDialog) {
-                    this.dfd.resolve();
+                this.dfd.resolve();
+                if (client.closeRegisterDialog) {
                     client.closeRegisterDialog = false;
                 }
             })
-            .catch(() => {
+            .catch(ex => {
+                console.debug(ex);
                 client.subscriptionStatus.status = 'Unknown';
             })
             .then(() => {
-                gettingStatus = false;
                 getSubscriptionDetails();
                 needRender();
             });
         });
     });
+    return this.dfd.promise();
 };
 
 client.readConfig = () => {
@@ -533,38 +507,17 @@ client.readConfig = () => {
     });
 };
 
+const updateConfig =
+    () => {
+        client.readConfig().then(needRender);
+    };
+
 client.init = () => {
     /* we want to get notified if subscription status of the system changes */
-    legacyService.subscribe(
-        { path: '/EntitlementStatus',
-          interface: 'com.redhat.SubscriptionManager.EntitlementStatus',
-          member: 'entitlement_status_changed'
-        },
-        () => {
-            window.clearTimeout(updateTimeout);
-            /*
-             * status has changed, now get actual status via command line
-             * since older versions of subscription-manager don't deliver this via DBus
-             * note: subscription-manager needs superuser privileges
-             */
-
-            client.getSubscriptionStatus();
-        }
-    );
-
-    /* ideally we could get detailed subscription info via DBus, but we
-     * can't rely on this being present on all systems we work on
-     */
-    legacyService.subscribe(
-        { path: "/EntitlementStatus",
-          interface: "org.freedesktop.DBUS.Properties",
-          member: "PropertiesChanged"
-        },
-        () => {
-            client.getSubscriptionStatus();
-        }
-    );
-
+    entitlementService.addEventListener("EntitlementChanged", requestUpdate);
+    productsService.addEventListener("InstalledProductsChanged", requestUpdate);
+    consumerService.addEventListener("ConsumerChanged", requestUpdate);
+    configService.addEventListener("ConfigChanged", updateConfig);
     // get initial status
     requestUpdate();
     // read config (async)

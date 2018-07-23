@@ -16,6 +16,7 @@ from __future__ import print_function, division, absolute_import
 import dbus
 import logging
 import six
+import rhsm
 
 from subscription_manager.i18n import Locale
 
@@ -97,3 +98,9 @@ class ConfigDBusObject(base_object.BaseObject):
             return self.config[section][property_name]
         else:
             return dbus.Dictionary(self.config[section], signature='sv')
+
+    def reload(self):
+        parser = rhsm.config.initConfig("/etc/rhsm/rhsm.conf")
+        self.config = Config(parser)
+        log.debug("port: %s" % str(self.config["server"]["port"]))
+        log.debug("reloaded successfully")

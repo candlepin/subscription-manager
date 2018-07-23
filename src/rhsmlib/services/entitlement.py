@@ -375,3 +375,7 @@ class EntitlementService(object):
         self.entcertlib.update()
 
         return removed_serials, unremoved_serials
+
+    def reload(self):
+        sorter = inj.require(inj.CERT_SORTER, on_date=None)
+        sorter.load()

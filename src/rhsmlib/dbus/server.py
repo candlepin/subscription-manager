@@ -85,14 +85,18 @@ class Server(object):
         entitlement_dir_list = []
         config_dir_list = []
         products_dir_list = []
+        if "EntitlementDBusObject" in self.object_map:
+            entitlement_dir_list.append(self.object_map["EntitlementDBusObject"].reload)
+            consumer_dir_list.append(self.object_map["EntitlementDBusObject"].reload)
+            products_dir_list.append(self.object_map["EntitlementDBusObject"].reload)
+            entitlement_dir_list.append(self.object_map["EntitlementDBusObject"].EntitlementChanged)
         if "ConsumerDBusObject" in self.object_map:
             consumer_dir_list.append(self.object_map["ConsumerDBusObject"].ConsumerChanged)
         if "ConfigDBusObject" in self.object_map:
+            config_dir_list.append(self.object_map["ConfigDBusObject"].reload)
             config_dir_list.append(self.object_map["ConfigDBusObject"].ConfigChanged)
         if "ProductsDBusObject" in self.object_map:
             products_dir_list.append(self.object_map["ProductsDBusObject"].InstalledProductsChanged)
-        if "EntitlementDBusObject" in self.object_map:
-            entitlement_dir_list.append(self.object_map["EntitlementDBusObject"].EntitlementChanged)
 
         consumer_dir_watch = DirectoryWatch(self.identity.cert_dir_path, consumer_dir_list)
         entitlement_dir_watch = DirectoryWatch(entitlement_cert_dir_path, entitlement_dir_list)

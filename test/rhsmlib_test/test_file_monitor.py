@@ -17,8 +17,8 @@ from rhsmlib import file_monitor
 from six.moves import configparser
 from mock import Mock, patch
 from test import fixture
-import subprocess
 from threading import Thread
+import subprocess
 
 
 class TestFilesystemWatcher(fixture.SubManFixture):
@@ -164,6 +164,7 @@ class TestFilesystemWatcher(fixture.SubManFixture):
     @patch("pyinotify.Event")
     def test_handle_event(self, mock_event, mock_notify):
         mock_event.path = self.testpath1
+        mock_event.pathname = self.testpath1
         mock_event.mask = self.dw3.IN_MODIFY
         self.fsw2.handle_event(mock_event)
         self.assertEqual(mock_notify.call_count, 1)
@@ -174,6 +175,7 @@ class TestFilesystemWatcher(fixture.SubManFixture):
         mock_notify.call_count = 0
 
         mock_event.path = self.testpath2
+        mock_event.pathname = self.testpath2
         mock_event.mask = self.dw3.IN_MODIFY
         self.fsw2.handle_event(mock_event)
         self.assertEqual(mock_notify.call_count, 2)
@@ -184,6 +186,7 @@ class TestFilesystemWatcher(fixture.SubManFixture):
         mock_notify.call_count = 0
 
         mock_event.path = self.testpath3
+        mock_event.pathname = self.testpath3
         mock_event.mask = self.dw3.IN_MODIFY
         self.fsw2.handle_event(mock_event)
         self.assertEqual(mock_notify.call_count, 0)
@@ -214,14 +217,22 @@ class TestDirectoryWatch(fixture.SubManFixture):
     @patch("pyinotify.Event")
     def test_paths_match(self, mock_event):
         mock_event.path = self.testpath2
-        self.dw3.glob = True
-        self.assertTrue(self.dw3.paths_match(mock_event.path))
+        mock_event.pathname = self.testpath2
+        self.assertTrue(self.dw3.paths_match(mock_event.path, mock_event.pathname))
+        mock_event.pathname = "%s.swp" % self.testpath2
+        self.assertFalse(self.dw3.paths_match(mock_event.path, mock_event.pathname))
+        mock_event.pathname = self.testpath2
         mock_event.path = self.testpath1
-        self.assertFalse(self.dw3.paths_match(mock_event.path))
-        self.dw3.glob = False
-        self.assertFalse(self.dw3.paths_match(mock_event.path))
-        mock_event.path = self.testpath2
-        self.assertTrue(self.dw3.paths_match(mock_event.path))
+        self.assertTrue(self.dw3.paths_match(mock_event.path, mock_event.pathname))
+        mock_event.pathname = self.testpath1
+        self.assertFalse(self.dw3.paths_match(mock_event.path, mock_event.pathname))
+
+    @patch("pyinotify.Event")
+    def test_file_modified(self, mock_event):
+        mock_event.mask = 1
+        self.assertFalse(self.dw3.file_modified(mock_event.mask))
+        mock_event.mask = 2
+        self.assertTrue(self.dw3.file_modified(mock_event.mask))
 
 
 class TestLoop:

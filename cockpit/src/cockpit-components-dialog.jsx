@@ -72,9 +72,9 @@ class DialogFooter extends React.Component {
     update_progress(msg) {
         this.setState({ action_progress_message: msg });
     }
-    action_click(handler, e) {
+    action_click(handler, event) {
         // only consider clicks with the primary button
-        if (e && e.button !== 0)
+        if (event && event.button !== 0)
             return;
         let self = this;
         this.setState({
@@ -101,29 +101,26 @@ class DialogFooter extends React.Component {
                 self.setState({ action_in_progress: false, error_message: String(error) });
             })
             .progress(message => this.update_progress(message));
-        if (e)
-            e.stopPropagation();
+        if (event)
+            event.stopPropagation();
     }
-    cancel_click(e) {
+    cancel_click(event) {
         // only consider clicks with the primary button
-        if (e && e.button !== 0)
+        if (event && event.button !== 0)
             return;
 
-        this.setState({ action_canceled: true });
-
+        this.setState({action_canceled: true});
         if (this.props.cancel_clicked)
             this.props.cancel_clicked();
-
         // an action might be in progress, let that handler decide what to do if they added a cancel function
         if (this.state.action_in_progress && 'cancel' in this.state.action_in_progress_promise) {
             this.state.action_in_progress_promise.cancel();
             return;
         }
-
         if (this.props.dialog_done)
             this.props.dialog_done(false);
-        if (e)
-            e.stopPropagation();
+        if (event)
+            event.stopPropagation();
     }
     render() {
         let cancel_caption, cancel_style;

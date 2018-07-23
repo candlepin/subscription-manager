@@ -89,6 +89,8 @@ class DBusObjectTest(unittest.TestCase):
         self.handler_complete_event = threading.Event()
         # This is up a level because it needs to be defined before the server is instantiated
         self.mock_identity = mock.Mock(spec=Identity, name="Identity").return_value
+        self.mock_identity.cert_dir_path = "path.txt"  # must be a string, otherwise it is set as a mock object
+        # and os.path throws type error, causing tests to hang
 
         # If we don't use a BusConnection and use say dbus.SessionBus() directly, each test will end up
         # getting old bus connections since the dbus bindings cache bus connections.  You can use the private
