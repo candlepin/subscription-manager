@@ -19,10 +19,11 @@ import sys
 from syspurpose import cli
 from syspurpose.utils import system_exit
 
-import syspurpose.i8n as i18n
+import syspurpose.i18n as i18n
 i18n.configure_i18n()
 
 from syspurpose.i18n import ugettext as _
+
 
 def main():
     try:
