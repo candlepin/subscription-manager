@@ -72,6 +72,7 @@ log = logging.getLogger(__name__)
 
 from rhsmlib.services import config, attach, products, unregister, entitlement, register
 from rhsmlib.services import exceptions
+from subscription_manager.syspurposelib import read_syspurpose
 
 conf = config.Config(rhsm.config.initConfig())
 
@@ -1102,10 +1103,12 @@ class RegisterCommand(UserPassCommand):
             # This is blocking and not async, which aside from blocking here, also
             # means things like following name owner changes gets weird.
             service = register.RegisterService(admin_cp)
+            syspurpose = read_syspurpose()
 
             if self.options.consumerid:
                 log.info("Registering as existing consumer: %s" % self.options.consumerid)
-                consumer = service.register(None, consumerid=self.options.consumerid)
+                consumer = service.register(None, consumerid=self.options.consumerid,
+                                            syspurpose=syspurpose)
             else:
                 owner_key = self._determine_owner_key(admin_cp)
                 environment_id = self._get_environment_id(admin_cp, owner_key, self.options.environment)
@@ -1116,7 +1119,8 @@ class RegisterCommand(UserPassCommand):
                     environment=environment_id,
                     force=self.options.force,
                     name=self.options.consumername,
-                    type=self.options.consumertype
+                    type=self.options.consumertype,
+                    syspurpose=syspurpose
                 )
         except (connection.RestlibException, exceptions.ServiceError) as re:
             log.exception(re)

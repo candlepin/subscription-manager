@@ -23,12 +23,18 @@ It contains methods for accessing/manipulating the local syspurpose.json metadat
 """
 
 import logging
+import json
+import os
 log = logging.getLogger(__name__)
 
 try:
     from syspurpose.files import SyspurposeStore, USER_SYSPURPOSE
 except ImportError:
     log.error("Could not import from module syspurpose.")
+    SyspurposeStore = None
+    USER_SYSPURPOSE = "/etc/rhsm/syspurpose/syspurpose.json"
+
+syspurpose = None
 
 
 def save_sla_to_syspurpose_metadata(service_level):
@@ -40,7 +46,7 @@ def save_sla_to_syspurpose_metadata(service_level):
     :type service_level: str
     """
 
-    if 'SyspurposeStore' in globals():
+    if 'SyspurposeStore' in globals() and SyspurposeStore is not None:
         store = SyspurposeStore.read(USER_SYSPURPOSE)
 
         # if empty, set it to null
@@ -52,3 +58,19 @@ def save_sla_to_syspurpose_metadata(service_level):
         log.info("Syspurpose SLA value successfully saved locally.")
     else:
         log.error("SyspurposeStore could not be imported. Syspurpose SLA value not saved locally.")
+
+def read_syspurpose():
+    """
+
+    :return: A dictionary containing the total syspurpose.
+    """
+    if SyspurposeStore is not None:
+        syspurpose = SyspurposeStore.read(USER_SYSPURPOSE).contents
+    else:
+        try:
+            syspurpose = json.load(open(USER_SYSPURPOSE))
+
+        except (os.error, ValueError):
+            # In the event this file could not be read treat it as empty
+            syspurpose = {}
+    return syspurpose

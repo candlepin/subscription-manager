@@ -33,7 +33,7 @@ class RegisterService(object):
         self.cp = cp
 
     def register(self, org, activation_keys=None, environment=None, force=None, name=None, consumerid=None,
-            type=None, **kwargs):
+            type=None, syspurpose=None, **kwargs):
         # We accept a kwargs argument so that the DBus object can pass the options dictionary it
         # receives transparently to the service via dictionary unpacking.  This strategy allows the
         # DBus object to be more independent of the service implementation.
@@ -77,8 +77,13 @@ class RegisterService(object):
                 keys=options.get('activation_keys'),
                 installed_products=self.installed_mgr.format_for_server(),
                 content_tags=self.installed_mgr.tags,
-                type=type
+                type=type,
+                role=syspurpose.get('role'),
+                addons=syspurpose.get('addons'),
+                service_level=syspurpose.get('service_level_agreement'),
+                usage=syspurpose.get('usage')
             )
+        log.info(consumer)
         self.installed_mgr.write_cache()
         self.plugin_manager.run("post_register_consumer", consumer=consumer, facts=facts_dict)
         managerlib.persist_consumer_cert(consumer)
