@@ -283,7 +283,7 @@ from the server. Populates /etc/docker/certs.d appropriately.
 %package -n rhsm-gtk
 Summary: GTK+ widgets used by subscription-manager-gui and initial_setup
 Group: System Environment/Base
-Requires: %{?gtk3:pygobject3, gtk3} %{!?gtk3:pygtk2, pygtk2-libglade}
+Requires: %{?gtk3:%{py_package_prefix}-gobject, gtk3} %{!?gtk3:pygtk2, pygtk2-libglade}
 Requires: usermode-gtk
 # Fedora can figure this out automatically, but RHEL cannot:
 # See #987071
@@ -396,7 +396,7 @@ This package contains the initial-setup screens for subscription-manager.
 Summary: A plugin for handling OSTree content.
 Group: System Environment/Base
 
-Requires: pygobject3-base
+Requires: %{py_package_prefix}-gobject-base
 # plugin needs a slightly newer version of python-iniparse for 'tidy'
 Requires:  %{py_package_prefix}-iniparse >= 0.4
 Requires: %{name} = %{version}-%{release}
@@ -572,6 +572,10 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/ca/redhat-uep.pem %{buildroo
     tar --strip-components=1 -xzf %{SOURCE1} -C %{buildroot}
 %endif
 
+%if %{with python3}
+%py_byte_compile %{__python3} %{buildroot}%{rhsm_plugins_dir}/
+%py_byte_compile %{__python3} %{buildroot}%{_datadir}/anaconda/addons/com_redhat_subscription_manager/
+%endif
 
 # base/cli tools use the gettext domain 'rhsm', while the
 # gnome-help tools use domain 'subscription-manager'
@@ -946,6 +950,8 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/ca/redhat-uep.pem %{buildroo
 %dir %{_datadir}/rhn/up2date_client
 %dir %{_datadir}/rhn/up2date_client/firstboot
 %endif
+# Not explicitly byte compiling this as we do not support firstboot
+# on newer versions of fedora
 %{_datadir}/rhn/up2date_client/firstboot/rhsm_login.py*
 %endif
 
