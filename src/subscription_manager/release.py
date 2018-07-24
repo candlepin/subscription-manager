@@ -200,5 +200,8 @@ class CdnReleaseVersionProvider(object):
                         return True
                     # else, we don't match, keep looking
 
-        log.debug("No matching products with RHEL product tags found")
+        log.debug("Ignoring content with tags [%s] because it does not match installed product tags [%s]" % (
+            ','.join(content_tags),
+            ','.join(product_tags)
+        ))
         return False
