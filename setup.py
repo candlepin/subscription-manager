@@ -192,7 +192,7 @@ class install_data(_install_data):
         else:
             self.with_systemd = self.with_systemd == 'true'
         if self.with_subman_gui is None:
-            self.with_subman_gui = True  # default to True
+            self.with_subman_gui = False  # default to False
         else:
             self.with_subman_gui = self.with_subman_gui == 'true'
         # Enable creating desktop entry for cockpit plugin only in case that subman gui will not be
