@@ -2647,6 +2647,13 @@ class StatusCommand(CliCommand):
                 print('- %s' % format_name(message, 2, columns))
             print('')
 
+        purposeStatus = "Unknown"
+        if self.cp.has_capability("syspurpose"):
+            consumer = self.cp.getConsumer(self.identity.uuid)
+            if consumer.get("systemPurposeStatus"):
+                purposeStatus = consumer['systemPurposeStatus']
+        print(_("System Purpose Status: %s\n") % purposeStatus)
+
         return result
 
 

@@ -302,6 +302,47 @@ class TestProxyConnection(SubManFixture):
         sock_instance.connect_ex.assert_called_once_with(('notaproxy.grimlock.usersys.redhat.com', 4567))
 
 
+class TestStatusCommand(SubManFixture):
+    command_class = managercli.StatusCommand
+
+    def setUp(self):
+        super(TestStatusCommand, self).setUp()
+        self.cc = self.command_class()
+
+    def test_purpose_status_success(self):
+        self.cc.consumerIdentity = StubConsumerIdentity
+        self.cc.cp = StubUEP()
+        self.cc.cp.setConsumer({'systemPurposeStatus': 'Matched'})
+        self.cc.cp._capabilities = ["syspurpose"]
+        self.cc.options = Mock()
+        self.cc.options.on_date = None
+        with Capture() as cap:
+            self.cc._do_command()
+        self.assertTrue('System Purpose Status: Matched' in cap.out)
+
+    def test_purpose_status_consumer_lack(self):
+        self.cc.consumerIdentity = StubConsumerIdentity
+        self.cc.cp = StubUEP()
+        self.cc.cp.setConsumer({})
+        self.cc.cp._capabilities = ["syspurpose"]
+        self.cc.options = Mock()
+        self.cc.options.on_date = None
+        with Capture() as cap:
+            self.cc._do_command()
+        self.assertTrue('System Purpose Status: Unknown' in cap.out)
+
+    def test_purpose_status_consumer_no_capability(self):
+        self.cc.consumerIdentity = StubConsumerIdentity
+        self.cc.cp = StubUEP()
+        self.cc.cp.setConsumer({})
+        self.cc.cp._capabilities = []
+        self.cc.options = Mock()
+        self.cc.options.on_date = None
+        with Capture() as cap:
+            self.cc._do_command()
+        self.assertTrue('System Purpose Status: Unknown' in cap.out)
+
+
 # for command classes that expect proxy related cli args
 class TestCliProxyCommand(TestCliCommand):
     def test_main_proxy_url(self):
