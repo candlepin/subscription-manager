@@ -4,8 +4,10 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
+build_ext = { path = "../build_ext", editable = true }
 
 [packages]
+six = "*"
 
 [requires]
 python_version = "3.6"

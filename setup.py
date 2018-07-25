@@ -15,6 +15,7 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 import os
+import sys
 import re
 import subprocess
 
@@ -26,12 +27,15 @@ from setuptools.command.install import install as _install
 from distutils import log
 from distutils.command.install_data import install_data as _install_data
 from distutils.command.build import build as _build
-from distutils.command.clean import clean as _clean
 from distutils.command.build_py import build_py as _build_py
-from distutils.dir_util import remove_tree
 
-from build_ext import i18n, lint, template
-from build_ext.utils import Utils
+# Note that importing build_ext alone won't be enough to make certain tasks (like lint) work
+# those tasks require that some dependencies (e.g. lxml) be installed.  Munging the syspath
+# here is just so that setup.py will be able to load and run in Jenkins jobs and RPM builds
+# that don't set up a proper development environment.
+build_ext_home = os.path.abspath(os.path.join(os.path.dirname(__file__), "./build_ext"))
+sys.path.append(build_ext_home)
+from build_ext import i18n, lint, template, utils
 
 
 # subclass build_py so we can generate
@@ -75,23 +79,6 @@ class rpm_version_release_build_py(_build_py):
                             f.write(l)
                 except EnvironmentError:
                     raise
-
-
-class clean(_clean):
-    def initialize_options(self):
-        self.egg_base = None
-        _clean.initialize_options(self)
-
-    def finalize_options(self):
-        self.set_undefined_options('egg_info', ('egg_base', 'egg_base'))
-        _clean.finalize_options(self)
-
-    def run(self):
-        if self.all:
-            for f in glob(os.path.join(self.egg_base, '*.egg-info')):
-                log.info("removing %s" % f)
-                remove_tree(f, dry_run=self.dry_run)
-        _clean.run(self)
 
 
 class install(_install):
@@ -157,7 +144,7 @@ class build(_build):
 
     def has_po_files(self):
         try:
-            next(Utils.find_files_of_type('po', '*.po'))
+            next(utils.Utils.find_files_of_type('po', '*.po'))
             return True
         except StopIteration:
             return False
@@ -286,6 +273,20 @@ class install_data(_install_data):
             self.data_files.append((icon_dir, icon_source_files))
 
 
+class GettextWithOptParse(i18n.Gettext):
+    def find_py(self):
+        # Can't use super since we're descended from a old-style class
+        files = i18n.Gettext.find_py(self)
+
+        # We need to grab some strings out of optparse for translation
+        import optparse
+        optparse_source = "%s.py" % os.path.splitext(optparse.__file__)[0]
+        if not os.path.exists(optparse_source):
+            raise RuntimeError("Could not find optparse.py at %s" % optparse_source)
+        files.append(optparse_source)
+        return files
+
+
 setup_requires = []
 
 install_requires = [
@@ -304,7 +305,7 @@ test_require = [
     ] + install_requires + setup_requires
 
 cmdclass = {
-    'clean': clean,
+    'clean': utils.clean,
     'install': install,
     'install_data': install_data,
     'build': build,
@@ -313,7 +314,7 @@ cmdclass = {
     'build_template': template.BuildTemplate,
     'update_trans': i18n.UpdateTrans,
     'uniq_trans': i18n.UniqTrans,
-    'gettext': i18n.Gettext,
+    'gettext': GettextWithOptParse,
     'lint': lint.Lint,
     'lint_glade': lint.GladeLint,
     'lint_rpm': lint.RpmLint,

@@ -114,32 +114,34 @@ class Gettext(BaseCommand):
         self.key_file = os.path.join(os.curdir, 'po', 'keys.pot')
 
     def finalize_options(self):
+        self.src_dirs = self.distribution.package_dir
+        print()
         if self.lint:
             self.key_file = '/dev/null'
 
     def find_py(self):
         files = []
-        files.extend(list(Utils.find_files_of_type('src', '*.py')))
+
+        for src in self.src_dirs.values():
+            print(src)
+            files.extend(list(Utils.find_files_of_type(src, '*.py')))
+
         files.extend(list(Utils.find_files_of_type('bin', '*')))
-
-        # We need to grab some strings out of optparse for translation
-        import optparse
-        optparse_source = "%s.py" % os.path.splitext(optparse.__file__)[0]
-        if not os.path.exists(optparse_source):
-            raise RuntimeError("Could not find optparse.py at %s" % optparse_source)
-        files.append(optparse_source)
-
         return files
 
     def find_c(self):
         files = []
-        files.extend(list(Utils.find_files_of_type('src', '*.c', '*.h')))
+
+        for src in self.src_dirs.values():
+            files.extend(list(Utils.find_files_of_type(src, '*.c', '*.h')))
+
         files.extend(list(Utils.find_files_of_type('tmp', '*.h')))
         return files
 
     def find_glade(self):
         files = []
-        files.extend(list(Utils.find_files_of_type('src', '*.ui', '*.glade')))
+        for src in self.src_dirs.values():
+            files.extend(list(Utils.find_files_of_type(src, '*.ui', '*.glade')))
         return files
 
     def find_js(self):
@@ -207,3 +209,17 @@ class Gettext(BaseCommand):
         # Delete the directory holding the temporary files created by intltool-extract
         # and the temporary keys.pot
         shutil.rmtree('tmp')
+
+
+class GettextWithOptParse(Gettext):
+    def find_py(self):
+        # Can't use super since we're descended from a old-style class
+        files = Gettext.find_py(self)
+
+        # We need to grab some strings out of optparse for translation
+        import optparse
+        optparse_source = "%s.py" % os.path.splitext(optparse.__file__)[0]
+        if not os.path.exists(optparse_source):
+            raise RuntimeError("Could not find optparse.py at %s" % optparse_source)
+        files.append(optparse_source)
+        return files

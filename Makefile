@@ -47,7 +47,7 @@ ANACONDA_ADDON_INST_DIR := $(PREFIX)/share/anaconda/addons
 INITIAL_SETUP_INST_DIR := $(ANACONDA_ADDON_INST_DIR)/$(ANACONDA_ADDON_NAME)
 POLKIT_ACTIONS_INST_DIR := $(INSTALL_DIR)/polkit-1/actions
 LIBEXEC_DIR ?= $(shell rpm --eval='%_libexecdir')
-SUBPACKAGES ?= $(shell ls packages)
+SUBPACKAGES ?= $(shell ls -d syspurpose)
 
 # If we skip install ostree plugin, unset by default
 # override from spec file for rhel6
@@ -311,7 +311,7 @@ install-via-setup: install-subpackages-via-setup
 install-subpackages-via-setup:
 	for subpackage in $(SUBPACKAGES); \
 	do \
-	    pushd packages/$$subpackage; \
+	    pushd $$subpackage; \
 	    $(PYTHON) ./setup.py install --root=$(DESTDIR) --prefix=$(PREFIX); \
 		popd; \
 	done;
