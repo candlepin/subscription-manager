@@ -64,7 +64,7 @@ from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, \
         none_wrap_columnize_callback, echo_columnize_callback, highlight_by_filter_string_columnize_cb
 from subscription_manager.utils import generate_correlation_id
-from subscription_manager.syspurposelib import save_sla_to_syspurpose_metadata
+from subscription_manager.syspurposelib import save_sla_to_syspurpose_metadata, save_usage_to_syspurpose_metadata
 
 from subscription_manager.i18n import ungettext, ugettext as _
 
@@ -971,6 +971,89 @@ class ServiceLevelCommand(OrgCommand):
                 system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
             else:
                 raise e
+
+
+class UsageCommand(OrgCommand):
+
+    def __init__(self):
+
+        shortdesc = _("Manage usage setting for this system")
+        self._org_help_text = _("use set and unset to define the value for this field")
+        super(UsageCommand, self).__init__("usage", shortdesc,
+                                                  False)
+
+        self._add_url_options()
+        self.parser.add_option("--show", action='store_true',
+                help=_("show this system's current usage setting"))
+        self.parser.add_option("--set", dest="usage",
+                help=_("usage setting to apply to this system"))
+        self.parser.add_option("--unset", dest="unset",
+                action='store_true',
+                help=_("unset the usage setting for this system"))
+
+        self.identity = inj.require(inj.IDENTITY)
+
+    def _set_usage(self, usage):
+        consumer = self.cp.getConsumer(self.identity.uuid)
+        if 'usage' not in consumer:
+            system_exit(os.EX_UNAVAILABLE, _("Error: The usage command is not supported by the server."))
+        self.cp.updateConsumer(self.identity.uuid, usage=usage)
+        save_usage_to_syspurpose_metadata(usage)
+
+    def _validate_options(self):
+
+        if self.options.usage:
+            self.options.usage = self.options.usage.strip()
+
+        # Assume --show if run with no args:
+        if not self.options.show and \
+           not self.options.usage and \
+           not self.options.usage == "" and \
+           not self.options.unset:
+            self.options.show = True
+
+    def _do_command(self):
+        self._validate_options()
+
+        # If we have a username/password, we're going to use that, otherwise
+        # we'll use the identity certificate. We already know one or the other
+        # exists:
+        if self.options.username and self.options.password:
+            self.cp_provider.set_user_pass(self.username, self.password)
+            self.cp = self.cp_provider.get_basic_auth_cp()
+        else:
+            # get an UEP as consumer
+            self.cp = self.cp_provider.get_consumer_auth_cp()
+
+        if self.options.unset:
+            self.unset_usage()
+
+        if self.options.usage is not None:
+            self.set_usage(self.options.usage)
+
+        if self.options.show:
+            self.show_usage()
+
+    def set_usage(self, usage):
+        if usage == "":
+            self.unset_usage()
+        else:
+            self._set_usage(usage)
+            print(_("Usage set to: %s") % usage)
+
+    def unset_usage(self):
+        self._set_usage("")
+        print(_("Usage setting has been unset"))
+
+    def show_usage(self):
+        consumer = self.cp.getConsumer(self.identity.uuid)
+        if 'usage' not in consumer:
+            system_exit(os.EX_UNAVAILABLE, _("Error: The usage command is not supported by the server."))
+        usage = consumer['usage'] or ""
+        if usage:
+            print(_("Current usage setting: %s") % usage)
+        else:
+            print(_("Usage setting not set"))
 
 
 class RegisterCommand(UserPassCommand):
@@ -2666,7 +2749,7 @@ class ManagerCLI(CLI):
                     RedeemCommand, ReposCommand, ReleaseCommand, StatusCommand,
                     EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand,
                     VersionCommand, RemoveCommand, AttachCommand, PluginsCommand,
-                    AutohealCommand, OverrideCommand]
+                    AutohealCommand, OverrideCommand, UsageCommand]
         CLI.__init__(self, command_classes=commands)
 
     def main(self):

@@ -1010,7 +1010,8 @@ class UEPConnection(object):
 
     def updateConsumer(self, uuid, facts=None, installed_products=None,
             guest_uuids=None, service_level=None, release=None,
-            autoheal=None, hypervisor_id=None, content_tags=None):
+            autoheal=None, hypervisor_id=None, content_tags=None,
+            usage=None):
         """
         Update a consumer on the server.
 
@@ -1046,6 +1047,9 @@ class UEPConnection(object):
         # here:
         if service_level is not None:
             params['serviceLevel'] = service_level
+
+        if usage is not None:
+            params['usage'] = usage
 
         method = "/consumers/%s" % self.sanitize(uuid)
         ret = self.conn.request_put(method, params)
