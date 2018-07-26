@@ -52,3 +52,26 @@ def save_sla_to_syspurpose_metadata(service_level):
         log.info("Syspurpose SLA value successfully saved locally.")
     else:
         log.error("SyspurposeStore could not be imported. Syspurpose SLA value not saved locally.")
+
+
+def save_usage_to_syspurpose_metadata(usage):
+    """
+    Saves the provided usage value to the local Syspurpose Metadata (syspurpose.json) file.
+    If the usage setting provided is null or empty, the usage value to the local syspurpose file is set to null.
+
+    :param usage: The usage value to be saved in the syspurpose file.
+    :type usage: str
+    """
+
+    if 'SyspurposeStore' in globals():
+        store = SyspurposeStore.read(USER_SYSPURPOSE)
+
+        # if empty, set it to null
+        if usage is None or usage == "":
+            usage = None
+
+        store.set("usage", usage)
+        store.write()
+        log.info("Syspurpose Usage value successfully saved locally.")
+    else:
+        log.error("SyspurposeStore could not be imported. Syspurpose Usage value not saved locally.")

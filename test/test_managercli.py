@@ -1435,6 +1435,56 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         self.assertEqual(contents.get("service_level_agreement"), "JRJAR")
 
 
+class TestUsageCommand(TestCliProxyCommand):
+    command_class = managercli.UsageCommand
+
+    def setUp(self):
+        TestCliProxyCommand.setUp(self)
+        self.cc.consumerIdentity = StubConsumerIdentity
+        self.cc.cp = StubUEP()
+        syspurposelib.USER_SYSPURPOSE = self.write_tempfile("{}").name
+
+    def tearDown(self):
+        super(TestUsageCommand, self).tearDown()
+        syspurposelib.USER_SYSPURPOSE = "/etc/rhsm/syspurpose/syspurpose.json"
+
+    def test_main_server_url(self):
+        server_url = "https://subscription.rhsm.redhat.com/subscription"
+        self.cc.main(["--serverurl", server_url])
+
+    def test_insecure(self):
+        self.cc.main(["--insecure"])
+
+    def test_usage_not_supported(self):
+        self.cc.cp.setConsumer({})
+        with self.assertRaisesRegexp(SystemExit, r'' + str(os.EX_UNAVAILABLE)):
+            self.cc.set_usage('JARJAR')
+
+    def test_usage_supported(self):
+        self.cc.cp.setConsumer({'usage': 'Jarjar'})
+        self.cc.set_usage('JRJAR')
+
+    def test_usage_creates_syspurpose_dir_and_file(self):
+        # create a mock /etc/rhsm/ directory, and set the value of a mock USER_SYSPURPOSE under that
+        mock_etc_rhsm_dir = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, mock_etc_rhsm_dir)
+        mock_syspurpose_file = os.path.join(mock_etc_rhsm_dir, "syspurpose/syspurpose.json")
+        syspurposelib.USER_SYSPURPOSE = mock_syspurpose_file
+
+        # make sure the subdirectory 'mock_etc_rhsm_dir/syspurpose' does not exist yet:
+        self.assertFalse(os.path.isdir(os.path.join(mock_etc_rhsm_dir, "syspurpose")))
+
+        self.cc.cp.setConsumer({'usage': 'Jarjar'})
+        self.cc.set_usage('JRJAR')
+
+        # make sure the subdirectory 'mock_etc_rhsm_dir/syspurpose' has been created by the sla command:
+        self.assertTrue(os.path.isdir(os.path.join(mock_etc_rhsm_dir, "syspurpose")))
+
+        # make sure the sla has been persisted in syspurpose.json:
+        contents = syspurposelib.SyspurposeStore.read(syspurposelib.USER_SYSPURPOSE).contents
+        self.assertEqual(contents.get("usage"), "JRJAR")
+
+
 class TestReleaseCommand(TestCliProxyCommand):
     command_class = managercli.ReleaseCommand
 
