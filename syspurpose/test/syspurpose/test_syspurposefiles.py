@@ -138,6 +138,47 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         self.assertEqual(syspurpose_store.contents["already_present_key"], ["preexisting_value", "new_value_2"])
         self.assertTrue(res, "The add method should return true when the store has changed")
 
+    def test_add_does_not_override_existing_scalar_value(self):
+        """
+        Verify that the add method of SyspurposeStore is able to add items to a property
+        in the store, without overriding an existing scalar value the property might already contain.
+        :return:
+        :return:
+        """
+        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        test_data = {"already_present_key": "preexisting_scalar_value"}
+        with open(temp_dir, 'w') as f:
+            json.dump(test_data, f)
+
+        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store.contents = dict(**test_data)
+
+        # Add to an already seen existing key, that contains a scalar value
+        res = self.assertRaisesNothing(syspurpose_store.add, "already_present_key", "new_value_2")
+        self.assertIn("already_present_key", syspurpose_store.contents)
+        self.assertEqual(syspurpose_store.contents["already_present_key"], ["preexisting_scalar_value", "new_value_2"])
+        self.assertTrue(res, "The add method should return true when the store has changed")
+
+    def test_add_does_not_duplicate_existing_value(self):
+        """
+        Verify that the add method of SyspurposeStore will not add an item to a list, if that list already contains
+        the item we're trying to add.
+        :return:
+        """
+        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        test_data = {"already_present_key": ["preexisting_value"]}
+        with open(temp_dir, 'w') as f:
+            json.dump(test_data, f)
+
+        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store.contents = dict(**test_data)
+
+        # Try to add a value that already exists to an already seen existing key
+        self.assertRaisesNothing(syspurpose_store.add, "already_present_key", "preexisting_value")
+        self.assertIn("already_present_key", syspurpose_store.contents)
+        self.assertEqual(len(syspurpose_store.contents["already_present_key"]), 1)
+        self.assertEqual(syspurpose_store.contents["already_present_key"], ["preexisting_value"])
+
     def test_remove(self):
         """
         Verify that the remove method can remove items from the store.
@@ -160,6 +201,26 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         # Try to remove an item that we've previously not seen
         res = self.assertRaisesNothing(syspurpose_store.remove, "new_key", "any_value")
         self.assertFalse(res, "The remove method should return false when the store has not changed")
+
+    def test_remove_unsets_existing_scalar_value(self):
+        """
+        Verify that the remove_command, in case the value specified for removal is a scalar/non-list value,
+        unsets this value.
+        :return:
+        """
+        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        test_data = {"already_present_key": "preexisting_scalar_value"}
+        with open(temp_dir, 'w') as f:
+            json.dump(test_data, f)
+
+        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store.contents = dict(**test_data)
+
+        # Remove an item from the store which we have previously seen, whose value is scalar / not contained in a list
+        res = self.assertRaisesNothing(syspurpose_store.remove, "already_present_key", "preexisting_scalar_value")
+        self.assertIn("already_present_key", syspurpose_store.contents)
+        self.assertEqual(syspurpose_store.contents["already_present_key"], None)
+        self.assertTrue(res, "The remove method should return true when the store has changed")
 
     def test_unset(self):
         """
