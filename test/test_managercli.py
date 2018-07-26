@@ -12,6 +12,7 @@ import sys
 import socket
 import shutil
 import os
+import json
 import tempfile
 import contextlib
 
@@ -268,6 +269,22 @@ class TestCliCommand(SubManFixture):
                     self.assertEqual(os.EX_CONFIG, e.code)
             self.assertEqual(err_msg, cap.err)
 
+    def _test_exception(self, args):
+        try:
+            self.cc.main(args)
+            self.cc._validate_options()
+        except SystemExit as e:
+            self.assertEqual(e.code, os.EX_USAGE)
+        else:
+            self.fail("No Exception Raised")
+
+    def _test_no_exception(self, args):
+        try:
+            self.cc.main(args)
+            self.cc._validate_options()
+        except SystemExit:
+            self.fail("Exception Raised")
+
 
 class TestProxyConnection(SubManFixture):
     """
@@ -431,22 +448,6 @@ class TestRegisterCommand(TestCliProxyCommand):
         super(TestRegisterCommand, self).tearDown()
         syspurposelib.USER_SYSPURPOSE = "/etc/rhsm/syspurpose/syspurpose.json"
 
-    def _test_exception(self, args):
-        try:
-            self.cc.main(args)
-            self.cc._validate_options()
-        except SystemExit as e:
-            self.assertEqual(e.code, os.EX_USAGE)
-        else:
-            self.fail("No Exception Raised")
-
-    def _test_no_exception(self, args):
-        try:
-            self.cc.main(args)
-            self.cc._validate_options()
-        except SystemExit:
-            self.fail("Exception Raised")
-
     def test_keys_and_consumerid(self):
         self._test_exception(["--consumerid", "22", "--activationkey", "key"])
 
@@ -490,6 +491,49 @@ class TestRegisterCommand(TestCliProxyCommand):
         with patch.object(self.mock_cfg_parser, "save") as mock_save:
             self._test_no_exception(["--insecure"])
             mock_save.assert_called_with()
+
+
+class TestAddonsCommand(TestCliCommand):
+    command_class = managercli.AddonsCommand
+
+    def _set_syspurpose(self, syspurpose):
+        """
+        Set the mocked out syspurpose to the given dictionary of values.
+        Assumes it is called after syspurposelib.USER_SYSPURPOSE is mocked out.
+        :param syspurpose: A dict of values to be set as the syspurpose
+        :return: None
+        """
+        with open(syspurposelib.USER_SYSPURPOSE, 'w') as sp_file:
+            json.dump(syspurpose, sp_file, ensure_ascii=True)
+
+    def setUp(self):
+        super(TestAddonsCommand, self).setUp()
+        argv_patcher = patch.object(sys, 'argv', ['subscription-manager', 'addons'])
+        argv_patcher.start()
+        self.addCleanup(argv_patcher.stop)
+        syspurposelib.USER_SYSPURPOSE = self.write_tempfile("{}").name
+
+    def tearDown(self):
+        super(TestAddonsCommand, self).tearDown()
+        syspurposelib.USER_SYSPURPOSE = "/etc/rhsm/syspurpose/syspurpose.json"
+
+    def test_view(self):
+        self._test_no_exception([])
+
+    def test_add(self):
+        self._test_no_exception(['--add', 'test'])
+
+    def test_add_and_remove(self):
+        self._test_exception(['--add', 'test', '--remove', 'something_else'])
+
+    def test_remove(self):
+        self._test_no_exception(['--remove', 'test'])
+
+    def test_unset(self):
+        self._test_no_exception(['--unset'])
+
+    def test_unset_and_add_and_remove(self):
+        self._test_exception(['--add', 'test', '--remove', 'item', '--unset'])
 
 
 class TestListCommand(TestCliProxyCommand):
@@ -1461,13 +1505,6 @@ class TestUsageCommand(TestCliProxyCommand):
     def tearDown(self):
         super(TestUsageCommand, self).tearDown()
         syspurposelib.USER_SYSPURPOSE = "/etc/rhsm/syspurpose/syspurpose.json"
-
-    def test_main_server_url(self):
-        server_url = "https://subscription.rhsm.redhat.com/subscription"
-        self.cc.main(["--serverurl", server_url])
-
-    def test_insecure(self):
-        self.cc.main(["--insecure"])
 
     def test_usage_not_supported(self):
         self.cc.cp.setConsumer({})
