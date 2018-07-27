@@ -32,8 +32,10 @@ def add_command(args, syspurposestore):
     :return: None
     """
     for value in args.values:
-        syspurposestore.add(args.prop_name, value)
-    print(_("Added {} to {}").format(args.values, args.prop_name))
+        if syspurposestore.add(args.prop_name, value):
+            print(_("Added {} to {}.").format(value, args.prop_name))
+        else:
+            print(_("Not adding value {} to {}; it already exists.").format(value, args.prop_name))
 
 
 def remove_command(args, syspurposestore):
@@ -46,9 +48,10 @@ def remove_command(args, syspurposestore):
     :return: None
     """
     for value in args.values:
-        syspurposestore.remove(args.prop_name, value)
-    print(_("Removed {} from {}").format(args.values, args.prop_name))
-
+        if syspurposestore.remove(args.prop_name, value):
+            print(_("Removed {} from {}.").format(value, args.prop_name))
+        else:
+            print(_("Not removing value {} from {}; it was not there.").format(value, args.prop_name))
 
 def set_command(args, syspurposestore):
     """

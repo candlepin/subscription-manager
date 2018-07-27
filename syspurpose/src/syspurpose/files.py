@@ -68,13 +68,21 @@ class SyspurposeStore(object):
 
     def add(self, key, value):
         """
-        Add a value to a list of values specified by key
+        Add a value to a list of values specified by key. If the current value specified by the key is scalar/non-list,
+        it is not overridden, but maintained in the list, along with the new value.
         :param key: The name of the list
         :param value: The value to append to the list
         :return: None
         """
         try:
-            self.contents[key].append(value)
+            current_value = self.contents[key]
+            if current_value is not None and not isinstance(current_value, list):
+                self.contents[key] = [current_value]
+
+            if value not in self.contents[key]:
+                self.contents[key].append(value)
+            else:
+                return False
         except (AttributeError, KeyError):
             self.contents[key] = [value]
         return True
@@ -82,12 +90,21 @@ class SyspurposeStore(object):
     def remove(self, key, value):
         """
         Remove a value from a list specified by key.
+        If the current value specified by the key is not a list, unset the value.
         :param key: The name of the list parameter to manipulate
         :param value: The value to attempt to remove
         :return: True if the value was in the list, False if it was not
         """
         try:
-            self.contents[key].remove(value)
+            current_value = self.contents[key]
+            if current_value is not None and not isinstance(current_value, list) and current_value == value:
+                self.contents[key] = None
+                return True
+
+            if value in self.contents[key]:
+                self.contents[key].remove(value)
+            else:
+                return False
             return True
         except (AttributeError, KeyError, ValueError):
             return False
