@@ -25,7 +25,7 @@ from subscription_manager import injection as inj
 from subscription_manager import cache
 from subscription_manager.identity import ConsumerIdentity
 
-from .fixture import SubManFixture, Capture
+from .fixture import SubManFixture, Capture, set_up_mock_sp_store
 
 from rhsmlib.services.register import RegisterService
 from rhsmlib.services import exceptions
@@ -44,6 +44,16 @@ class CliRegistrationTests(SubManFixture):
             spec=ConsumerIdentity)
         self.mock_consumer_identity = identity_patcher.start().return_value
         self.addCleanup(identity_patcher.stop)
+
+        from subscription_manager import syspurposelib
+
+        self.syspurposelib = syspurposelib
+        self.syspurposelib.USER_SYSPURPOSE = self.write_tempfile("{}").name
+
+        syspurpose_patch = patch('subscription_manager.syspurposelib.SyspurposeStore')
+        self.mock_sp_store = syspurpose_patch.start()
+        self.mock_sp_store, self.mock_sp_store_contents = set_up_mock_sp_store(self.mock_sp_store)
+        self.addCleanup(syspurpose_patch.stop)
 
     def _inject_ipm(self):
         mock_ipm = NonCallableMock(spec=cache.InstalledProductsManager)
@@ -74,7 +84,8 @@ class CliRegistrationTests(SubManFixture):
         self._inject_ipm()
 
         cmd.main(['register', '--consumerid=123456', '--username=testuser1', '--password=password', '--org=test_org'])
-        self.mock_register.register.assert_called_once_with(None, consumerid='123456')
+        self.mock_register.register.assert_called_once_with(None, consumerid='123456', role=None,
+                                                            addons=None, service_level=None, usage=None)
         mock_entcertlib.update.assert_called_once()
 
     def test_consumerid_with_distributor_id(self):

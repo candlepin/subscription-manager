@@ -934,7 +934,7 @@ class UEPConnection(object):
     def registerConsumer(self, name="unknown", type="system", facts={},
             owner=None, environment=None, keys=None,
             installed_products=None, uuid=None, hypervisor_id=None,
-            content_tags=None):
+            content_tags=None, role=None, addons=None, service_level=None, usage=None):
         """
         Creates a consumer on candlepin server
         """
@@ -952,6 +952,14 @@ class UEPConnection(object):
 
         if content_tags is not None:
             params['contentTags'] = content_tags
+        if role is not None:
+            params['role'] = role
+        if addons is not None:
+            params['addOns'] = addons
+        if usage is not None:
+            params['usage'] = usage
+        if service_level is not None:
+            params['serviceLevel'] = service_level
 
         url = "/consumers"
         if environment:
@@ -1010,7 +1018,7 @@ class UEPConnection(object):
 
     def updateConsumer(self, uuid, facts=None, installed_products=None,
             guest_uuids=None, service_level=None, release=None,
-            autoheal=None, hypervisor_id=None, content_tags=None,
+            autoheal=None, hypervisor_id=None, content_tags=None, role=None, addons=None,
             usage=None):
         """
         Update a consumer on the server.
@@ -1041,15 +1049,18 @@ class UEPConnection(object):
             params['hypervisorId'] = {'hypervisorId': hypervisor_id}
         if content_tags is not None:
             params['contentTags'] = content_tags
+        if role is not None:
+            params['role'] = role
+        if addons is not None:
+            params['addOns'] = addons
+        if usage is not None:
+            params['usage'] = usage
 
         # The server will reject a service level that is not available
         # in the consumer's organization, so no need to check if it's safe
         # here:
         if service_level is not None:
             params['serviceLevel'] = service_level
-
-        if usage is not None:
-            params['usage'] = usage
 
         method = "/consumers/%s" % self.sanitize(uuid)
         ret = self.conn.request_put(method, params)

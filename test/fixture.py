@@ -404,3 +404,44 @@ class Capture(object):
     def __exit__(self, exc_type, exc_value, traceback):
         sys.stdout = self.stdout
         sys.stderr = self.stderr
+
+
+def set_up_mock_sp_store(mock_sp_store):
+    """
+    Sets up the mock syspurpose store with methods that are mock versions of the real deal.
+    Allows us to test in the absence of the syspurpose module.
+    This documents the essential expected behaviour of the methods subman relies upon
+    from the syspurpose codebase.
+    :return:
+    """
+    contents = {}
+    mock_sp_store_contents = contents
+
+    def set(item, value):
+        contents[item] = value
+
+    def read(path, raise_on_error=False):
+        return mock_sp_store
+
+    def unset(item):
+        contents[item] = None
+
+    def add(item, value):
+        current = contents.get(item, [])
+        if value not in current:
+            current.append(value)
+        contents[item] = current
+
+    def remove(item, value):
+        current = contents.get(item)
+        if current is not None and isinstance(current, list) and value in current:
+            current.remove(value)
+
+    mock_sp_store.set = Mock(side_effect=set)
+    mock_sp_store.read = Mock(side_effect=read)
+    mock_sp_store.unset = Mock(side_effect=unset)
+    mock_sp_store.add = Mock(side_effect=add)
+    mock_sp_store.remove = Mock(side_effect=remove)
+    mock_sp_store.contents = mock_sp_store_contents
+
+    return mock_sp_store, mock_sp_store_contents
