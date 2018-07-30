@@ -18,6 +18,7 @@ from __future__ import print_function, division, absolute_import
 # A group of tests for the miscellaneous utilities in the utils module of syspurpose
 
 from base import SyspurposeTestBase
+import io
 import os
 import json
 import mock
@@ -74,15 +75,15 @@ class UtilsTests(SyspurposeTestBase):
         self.assertTrue(res)
         self.assertTrue(os.path.exists(to_create))
 
-        with open(to_create, 'r') as fp:
-            actual_contents = json.load(fp)
+        with io.open(to_create, 'r', encoding='utf-8') as fp:
+            actual_contents = json.load(fp, encoding='utf-8')
 
         self.assertDictEqual(actual_contents, test_data)
 
         to_create = os.path.join(temp_dir, "my_super_chill_file.json")
 
         # And now when the file appears to exist
-        with mock.patch('syspurpose.utils.open') as mock_open:
+        with mock.patch('syspurpose.utils.io.open') as mock_open:
             error_to_raise = OSError()
             error_to_raise.errno = os.errno.EEXIST
             mock_open.side_effect = error_to_raise
@@ -93,7 +94,7 @@ class UtilsTests(SyspurposeTestBase):
         to_create = os.path.join(temp_dir, "my_other_cool_file.json")
 
         # And now with an unexpected OSError
-        with mock.patch('syspurpose.utils.open') as mock_open:
+        with mock.patch('syspurpose.utils.io.open') as mock_open:
             error_to_raise = OSError()
             error_to_raise.errno = os.errno.E2BIG  # Anything aside from the ones expected
             mock_open.side_effect = error_to_raise
