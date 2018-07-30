@@ -16,10 +16,11 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 
 from base import SyspurposeTestBase
+import io
 import json
 import os
 
-from syspurpose import files
+from syspurpose import files, utils
 
 
 class SyspurposeStoreTests(SyspurposeTestBase):
@@ -53,8 +54,24 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         test_data = {}
-        with open(temp_dir, 'w') as f:
-            json.dump(test_data, f)
+        with io.open(temp_dir, 'w', encoding='utf-8') as f:
+            utils.write_to_file_utf8(f, test_data)
+
+        self.assertTrue(os.path.exists(temp_dir))
+
+        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        res = self.assertRaisesNothing(syspurpose_store.read_file)
+        self.assertTrue(bool(res))
+
+    def test_read_file_with_unicode_content(self):
+        """
+        The SyspurposeStore.read_file method should return True if the file with unicode content was successfully read.
+        :return:
+        """
+        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        test_data = {'key1': u'Νίκος', 'key2': [u'value_with_ř']}
+        with io.open(temp_dir, 'w', encoding='utf-8') as f:
+            utils.write_to_file_utf8(f, test_data)
 
         self.assertTrue(os.path.exists(temp_dir))
 
@@ -70,11 +87,11 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         :return:
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
-        with open(temp_dir, 'w') as f:
+        with io.open(temp_dir, 'w', encoding='utf-8') as f:
             if file_contents and not isinstance(file_contents, str):
-                json.dump(file_contents, f)
+                utils.write_to_file_utf8(f, file_contents)
             else:
-                f.write(file_contents or '')
+                f.write(utils.make_utf8(file_contents or ''))
             f.flush()
         self.assertTrue(os.path.exists(temp_dir), "Unable to create test file in temp dir")
 
@@ -120,8 +137,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         test_data = {"already_present_key": ["preexisting_value"]}
-        with open(temp_dir, 'w') as f:
-            json.dump(test_data, f)
+        with io.open(temp_dir, 'w', encoding='utf-8') as f:
+            utils.write_to_file_utf8(f, test_data)
 
         syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
         syspurpose_store.contents = dict(**test_data)
@@ -159,6 +176,26 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         self.assertEqual(syspurpose_store.contents["already_present_key"], ["preexisting_scalar_value", "new_value_2"])
         self.assertTrue(res, "The add method should return true when the store has changed")
 
+    def test_add_with_unicode_strings(self):
+        """
+        Verify that the add method of SyspurposeStore is able to add unicode strings to lists of items
+        in the store.
+        :return:
+        """
+        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        test_data = {u'ονόματα': [u'Νίκος']}
+        with io.open(temp_dir, 'w', encoding='utf-8') as f:
+            utils.write_to_file_utf8(f, test_data)
+
+        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store.contents = dict(**test_data)
+
+        # Add to an already seen existing key
+        res = self.assertRaisesNothing(syspurpose_store.add, 'ονόματα', 'Κώστας')
+        self.assertIn(u'ονόματα', syspurpose_store.contents)
+        self.assertEqual(syspurpose_store.contents[u'ονόματα'], [u'Νίκος', u'Κώστας'])
+        self.assertTrue(res, "The add method should return true when the store has changed")
+
     def test_add_does_not_duplicate_existing_value(self):
         """
         Verify that the add method of SyspurposeStore will not add an item to a list, if that list already contains
@@ -186,8 +223,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         test_data = {"already_present_key": ["preexisting_value"]}
-        with open(temp_dir, 'w') as f:
-            json.dump(test_data, f)
+        with io.open(temp_dir, 'w', encoding='utf-8') as f:
+            utils.write_to_file_utf8(f, test_data)
 
         syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
         syspurpose_store.contents = dict(**test_data)
@@ -222,6 +259,26 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         self.assertEqual(syspurpose_store.contents["already_present_key"], None)
         self.assertTrue(res, "The remove method should return true when the store has changed")
 
+    def test_remove_with_unicode_strings(self):
+        """
+        Verify that the remove method of SyspurposeStore is able to remove unicode strings from lists of items
+        in the store.
+        :return:
+        """
+        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        test_data = {u'ονόματα': [u'Νίκος', u'Κώστας']}
+        with io.open(temp_dir, 'w', encoding='utf-8') as f:
+            utils.write_to_file_utf8(f, test_data)
+
+        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store.contents = dict(**test_data)
+
+        # Remove from an already seen existing key
+        res = self.assertRaisesNothing(syspurpose_store.remove, 'ονόματα', 'Κώστας')
+        self.assertIn(u'ονόματα', syspurpose_store.contents)
+        self.assertEqual(syspurpose_store.contents[u'ονόματα'], [u'Νίκος'])
+        self.assertTrue(res, "The add method should return true when the store has changed")
+
     def test_unset(self):
         """
         Verify the operation of the unset method of SyspurposeStore
@@ -244,6 +301,32 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         # We expect falsey values when the store was not modified
         self.assertFalse(res, "The unset method should return false when the store has not changed")
         self.assertNotIn("unseen_key", syspurpose_store.contents, msg="The key passed to unset, has been added to the store")
+
+    def test_unset_with_unicode_strings(self):
+        """
+        Verify that the unset method of SyspurposeStore is able to unset unicode strings from items
+        in the store.
+        :return:
+        """
+        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        test_data = {u'ονόματα': [u'Νίκος']}
+        with io.open(temp_dir, 'w', encoding='utf-8') as f:
+            utils.write_to_file_utf8(f, test_data)
+
+        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store.contents = dict(**test_data)
+
+        res = self.assertRaisesNothing(syspurpose_store.unset, "ονόματα")
+        # We expect a value of true from this method when the store was changed
+        self.assertTrue(res, "The unset method should return true when the store has changed")
+        self.assertIn(u'ονόματα', syspurpose_store.contents, msg="Expected the key to still be in the contents, but reset to None")
+        # We expect the item to have been unset to None
+        self.assertEqual(syspurpose_store.contents[u'ονόματα'], None)
+
+        res = self.assertRaisesNothing(syspurpose_store.unset, 'άκυρο_κλειδί')
+        # We expect falsey values when the store was not modified
+        self.assertFalse(res, "The unset method should return false when the store has not changed")
+        self.assertNotIn(u'άκυρο_κλειδί', syspurpose_store.contents, msg="The key passed to unset, has been added to the store")
 
     def test_set(self):
         """
@@ -274,6 +357,35 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         self.assertIn("new_key", syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents["new_key"], "new_value_2")
 
+    def test_set_with_unicode_strings(self):
+        """
+        Verify the operation of the set method of SyspurposeStore when using unicode strings
+        :return:
+        """
+        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        test_data = {u'ονόματα': u'Νίκος'}
+
+        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store.contents = dict(**test_data)
+
+        # Check the behaviour of manipulating an existing key with an identical value (no update)
+        res = self.assertRaisesNothing(syspurpose_store.set, 'ονόματα', 'Νίκος')
+        self.assertFalse(res, "When a value is not actually changed, set should return false")
+        self.assertIn(u'ονόματα', syspurpose_store.contents)
+        self.assertEqual(syspurpose_store.contents[u'ονόματα'], u'Νίκος')
+
+        # Modify existing item
+        res = self.assertRaisesNothing(syspurpose_store.set, 'ονόματα', 'Κώστας')
+        self.assertTrue(res, "When an item is set to a new value, set should return true")
+        self.assertIn(u'ονόματα', syspurpose_store.contents)
+        self.assertEqual(syspurpose_store.contents[u'ονόματα'], u'Κώστας')
+
+        # Add new item set to a new value
+        res = self.assertRaisesNothing(syspurpose_store.set, 'καινούργιο', 'Άλεξανδρος')
+        self.assertTrue(res, "When an item is set to a new value, set should return true")
+        self.assertIn(u'καινούργιο', syspurpose_store.contents)
+        self.assertEqual(syspurpose_store.contents[u'καινούργιο'], u'Άλεξανδρος')
+
     def test_write(self):
         """
         Verify that the SyspurposeStore can write changes to the expected file.
@@ -286,8 +398,25 @@ class SyspurposeStoreTests(SyspurposeTestBase):
 
         self.assertRaisesNothing(syspurpose_store.write)
 
-        with open(temp_dir, 'r') as f:
-            actual_contents = self.assertRaisesNothing(json.load, f)
+        with io.open(temp_dir, 'r', encoding='utf-8') as f:
+            actual_contents = self.assertRaisesNothing(json.load, f, encoding='utf-8')
+
+        self.assertDictEqual(actual_contents, test_data)
+
+    def test_write_with_unicode_content(self):
+        """
+        Verify that the SyspurposeStore can write changes that include unicode strings to the expected file.
+        :return:
+        """
+        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        test_data = {u'όνομα': u'Νίκος'}
+        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store.contents = dict(**test_data)
+
+        self.assertRaisesNothing(syspurpose_store.write)
+
+        with io.open(temp_dir, 'r', encoding='utf-8') as f:
+            actual_contents = self.assertRaisesNothing(json.load, f, encoding='utf-8')
 
         self.assertDictEqual(actual_contents, test_data)
 
@@ -299,8 +428,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         test_data = {"arbitrary_key": "arbitrary_value"}
 
-        with open(temp_dir, 'w') as f:
-            json.dump(test_data, f)
+        with io.open(temp_dir, 'w', encoding='utf-8') as f:
+            utils.write_to_file_utf8(f, test_data)
 
         syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore.read, temp_dir)
         self.assertDictEqual(syspurpose_store.contents, test_data)

@@ -18,7 +18,8 @@ from __future__ import print_function, division, absolute_import
 
 import json
 import os
-from syspurpose.utils import system_exit, create_dir, create_file
+import io
+from syspurpose.utils import system_exit, create_dir, create_file, make_utf8, write_to_file_utf8
 from syspurpose.i18n import ugettext as _
 
 # This modules contains utilities for manipulating files pertaining to system syspurpose
@@ -44,8 +45,8 @@ class SyspurposeStore(object):
         :return: False if the contents of the file were empty, or the file doesn't exist; otherwise, nothing.
         """
         try:
-            with open(self.path, 'r') as f:
-                self.contents = json.load(f)
+            with io.open(self.path, 'r', encoding='utf-8') as f:
+                self.contents = json.load(f, encoding='utf-8')
                 return True
         except ValueError:
             return False
@@ -74,6 +75,8 @@ class SyspurposeStore(object):
         :param value: The value to append to the list
         :return: None
         """
+        value = make_utf8(value)
+        key = make_utf8(key)
         try:
             current_value = self.contents[key]
             if current_value is not None and not isinstance(current_value, list):
@@ -95,6 +98,8 @@ class SyspurposeStore(object):
         :param value: The value to attempt to remove
         :return: True if the value was in the list, False if it was not
         """
+        value = make_utf8(value)
+        key = make_utf8(key)
         try:
             current_value = self.contents[key]
             if current_value is not None and not isinstance(current_value, list) and current_value == value:
@@ -115,6 +120,7 @@ class SyspurposeStore(object):
         :param key: The key to unset
         :return: boolean
         """
+        key = make_utf8(key)
         org = self.contents.get(key, None)
         if org is not None:
             self.contents[key] = None
@@ -129,7 +135,9 @@ class SyspurposeStore(object):
         :param value: The value to set that parameter to
         :return: Whether any change was made
         """
-        org = self.contents.get(key, None)
+        value = make_utf8(value)
+        key = make_utf8(key)
+        org = make_utf8(self.contents.get(key, None))
         self.contents[key] = value
         return org != value or org is None
 
@@ -138,11 +146,11 @@ class SyspurposeStore(object):
         Write the current contents to the file at self.path
         """
         if not fp:
-            with open(self.path, 'w') as f:
-                json.dump(self.contents, f)
+            with io.open(self.path, 'w', encoding='utf-8') as f:
+                write_to_file_utf8(f, self.contents)
                 f.flush()
         else:
-            json.dump(self.contents, fp)
+            write_to_file_utf8(fp, self.contents)
 
     @classmethod
     def read(cls, path):

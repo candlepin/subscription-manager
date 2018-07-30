@@ -17,9 +17,11 @@ from __future__ import print_function, division, absolute_import
 
 # Utility methods for the syspurpose command
 
+import io
 import json
 import os
 import sys
+import six
 from syspurpose.i18n import ugettext as _
 
 HOST_CONFIG_DIR = "/etc/rhsm-host/"  # symlink inside docker containers
@@ -63,9 +65,9 @@ def create_file(path, contents):
     :return: True if the file was newly created, false otherwise
     """
     try:
-        with open(path, 'w') as f:
+        with io.open(path, 'w', encoding='utf-8') as f:
             if contents:
-                json.dump(contents, f)
+                write_to_file_utf8(f, contents)
             f.flush()
     except OSError as e:
         if e.errno == os.errno.EEXIST:
@@ -89,3 +91,27 @@ def in_container():
     if os.path.exists(HOST_CONFIG_DIR):
         return True
     return False
+
+def make_utf8(obj):
+    """
+    Transforms the provided string into unicode if it is not already
+    :param obj: the string to decode
+    :return: the unicode format of the string
+    """
+    if six.PY3:
+        return obj
+    elif obj is not None and isinstance(obj, str) and not isinstance(obj, unicode):
+        obj =  obj.decode('utf-8')
+        return obj
+    else:
+        return obj
+
+def write_to_file_utf8(file, data):
+    """
+    Writes out the provided data to the specified file, with user-friendly indentation,
+    and in utf-8 encoding.
+    :param file: The file to write to
+    :param data: The data to be written
+    :return:
+    """
+    file.write(make_utf8(json.dumps(data, indent=2, ensure_ascii=False)))

@@ -17,7 +17,7 @@ from __future__ import print_function, division, absolute_import
 
 import argparse
 from syspurpose.files import SyspurposeStore, USER_SYSPURPOSE
-from syspurpose.utils import in_container
+from syspurpose.utils import in_container, make_utf8
 from syspurpose.i18n import ugettext as _
 import json
 
@@ -33,10 +33,9 @@ def add_command(args, syspurposestore):
     """
     for value in args.values:
         if syspurposestore.add(args.prop_name, value):
-            print(_("Added {} to {}.").format(value, args.prop_name))
+            print(_("Added {} to {}.").format(make_utf8(value), make_utf8(args.prop_name)))
         else:
-            print(_("Not adding value {} to {}; it already exists.").format(value, args.prop_name))
-
+            print(_("Not adding value {} to {}; it already exists.").format(make_utf8(value), make_utf8(args.prop_name)))
 
 def remove_command(args, syspurposestore):
     """
@@ -49,9 +48,9 @@ def remove_command(args, syspurposestore):
     """
     for value in args.values:
         if syspurposestore.remove(args.prop_name, value):
-            print(_("Removed {} from {}.").format(value, args.prop_name))
+            print(_("Removed {} from {}.").format(make_utf8(value), make_utf8(args.prop_name)))
         else:
-            print(_("Not removing value {} from {}; it was not there.").format(value, args.prop_name))
+            print(_("Not removing value {} from {}; it was not there.").format(make_utf8(value), make_utf8(args.prop_name)))
 
 def set_command(args, syspurposestore):
     """
@@ -63,7 +62,7 @@ def set_command(args, syspurposestore):
     :return: None
     """
     syspurposestore.set(args.prop_name, args.value)
-    print(_("{} set to {}").format(args.prop_name, args.value))
+    print(_("{} set to {}").format(make_utf8(args.prop_name), make_utf8(args.value)))
 
 
 def unset_command(args, syspurposestore):
@@ -75,7 +74,7 @@ def unset_command(args, syspurposestore):
     :return: None
     """
     syspurposestore.unset(args.prop_name)
-    print(_("{} unset").format(args.prop_name))
+    print(_("{} unset").format(make_utf8(args.prop_name)))
 
 
 def show_contents(args, syspurposestore):
@@ -86,7 +85,7 @@ def show_contents(args, syspurposestore):
     """
 
     contents = syspurposestore.contents
-    print(json.dumps(contents, indent=2))
+    print(json.dumps(contents, indent=2, ensure_ascii=False))
 
 
 def setup_arg_parser():
