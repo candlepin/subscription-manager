@@ -33,7 +33,7 @@ from .stubs import StubProductCertificate, StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP, StubProductDirectory, \
         StubCertSorter, StubPool
 from .fixture import FakeException, FakeLogger, SubManFixture, \
-        Capture, Matcher
+        Capture, Matcher, set_up_mock_sp_store
 
 from mock import patch, Mock, MagicMock, call
 from nose import SkipTest
@@ -1378,7 +1378,16 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         TestCliProxyCommand.setUp(self)
         self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
-        syspurposelib.USER_SYSPURPOSE = self.write_tempfile("{}").name
+        # Set up syspurpose mocking, do not test functionality of other source tree.
+        from subscription_manager import syspurposelib
+
+        self.syspurposelib = syspurposelib
+        self.syspurposelib.USER_SYSPURPOSE = self.write_tempfile("{}").name
+
+        syspurpose_patch = patch('subscription_manager.syspurposelib.SyspurposeStore')
+        self.mock_sp_store = syspurpose_patch.start()
+        self.mock_sp_store, self.mock_sp_store_contents = set_up_mock_sp_store(self.mock_sp_store)
+        self.addCleanup(syspurpose_patch.stop)
 
     def tearDown(self):
         super(TestServiceLevelCommand, self).tearDown()
@@ -1421,14 +1430,10 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         mock_syspurpose_file = os.path.join(mock_etc_rhsm_dir, "syspurpose/syspurpose.json")
         syspurposelib.USER_SYSPURPOSE = mock_syspurpose_file
 
-        # make sure the subdirectory 'mock_etc_rhsm_dir/syspurpose' does not exist yet:
-        self.assertFalse(os.path.isdir(os.path.join(mock_etc_rhsm_dir, "syspurpose")))
-
         self.cc.cp.setConsumer({'serviceLevel': 'Jarjar'})
         self.cc.set_service_level('JRJAR')
-
-        # make sure the subdirectory 'mock_etc_rhsm_dir/syspurpose' has been created by the sla command:
-        self.assertTrue(os.path.isdir(os.path.join(mock_etc_rhsm_dir, "syspurpose")))
+        self.mock_sp_store.set.assert_has_calls([call("service_level_agreement", "JRJAR")])
+        self.mock_sp_store.write.assert_called_once()
 
         # make sure the sla has been persisted in syspurpose.json:
         contents = syspurposelib.SyspurposeStore.read(syspurposelib.USER_SYSPURPOSE).contents
@@ -1442,7 +1447,16 @@ class TestUsageCommand(TestCliProxyCommand):
         TestCliProxyCommand.setUp(self)
         self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
-        syspurposelib.USER_SYSPURPOSE = self.write_tempfile("{}").name
+
+        from subscription_manager import syspurposelib
+
+        self.syspurposelib = syspurposelib
+        self.syspurposelib.USER_SYSPURPOSE = self.write_tempfile("{}").name
+
+        syspurpose_patch = patch('subscription_manager.syspurposelib.SyspurposeStore')
+        self.mock_sp_store = syspurpose_patch.start()
+        self.mock_sp_store, self.mock_sp_store_contents = set_up_mock_sp_store(self.mock_sp_store)
+        self.addCleanup(syspurpose_patch.stop)
 
     def tearDown(self):
         super(TestUsageCommand, self).tearDown()
@@ -1472,16 +1486,15 @@ class TestUsageCommand(TestCliProxyCommand):
         syspurposelib.USER_SYSPURPOSE = mock_syspurpose_file
 
         # make sure the subdirectory 'mock_etc_rhsm_dir/syspurpose' does not exist yet:
-        self.assertFalse(os.path.isdir(os.path.join(mock_etc_rhsm_dir, "syspurpose")))
+        self.mock_sp_store.get.assert_not_called()
 
         self.cc.cp.setConsumer({'usage': 'Jarjar'})
         self.cc.set_usage('JRJAR')
-
-        # make sure the subdirectory 'mock_etc_rhsm_dir/syspurpose' has been created by the sla command:
-        self.assertTrue(os.path.isdir(os.path.join(mock_etc_rhsm_dir, "syspurpose")))
+        self.mock_sp_store.set.assert_has_calls([call("usage", "JRJAR")])
+        self.mock_sp_store.write.assert_called_once()
 
         # make sure the sla has been persisted in syspurpose.json:
-        contents = syspurposelib.SyspurposeStore.read(syspurposelib.USER_SYSPURPOSE).contents
+        contents = syspurposelib.read_syspurpose()
         self.assertEqual(contents.get("usage"), "JRJAR")
 
 
