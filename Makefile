@@ -19,8 +19,7 @@ PREFIX ?= /usr/local
 SYSCONF ?= etc
 INSTALL_DIR = $(PREFIX)/share
 
-OS = $(shell lsb_release -i | awk '{ print $$3 }' | awk -F. '{ print $$1}')
-OS_VERSION = $(shell lsb_release -r | awk '{ print $$2 }' | awk -F. '{ print $$1}')
+OS = $(shell test -f /etc/os-release && source /etc/os-release; echo $$ID)
 OS_DIST ?= $(shell rpm --eval='%dist')
 
 PYTHON_VER ?= $(shell $(PYTHON) -c 'import sys; print("python%s.%s" % sys.version_info[:2])')
@@ -57,22 +56,22 @@ WITH_SYSTEMD ?= true
 WITH_SUBMAN_GUI ?= true
 WITH_COCKPIT ?= true
 
-# Default differences between el6 and el7
-ifeq ($(OS_DIST),.el6)
+# if OS is empty string, we're on el6 or sles11
+ifeq ($(OS),)
    GTK_VERSION?=2
-   FIRSTBOOT_MODULES_DIR?=$(PREFIX)/share/rhn/up2date_client/firstboot
-   INSTALL_FIRSTBOOT?=true
-   INSTALL_INITIAL_SETUP?=false
-else ifeq ($(findstring SUSE,$(OS)),SUSE)
-   GTK_VERSION?=2
-   FIRSTBOOT_MODULES_DIR?=$(PREFIX)/share/rhn/up2date_client/firstboot
    INSTALL_FIRSTBOOT?=true
    INSTALL_INITIAL_SETUP?=false
 else
    GTK_VERSION?=3
-   FIRSTBOOT_MODULES_DIR?=$(PREFIX)/share/firstboot/modules
    INSTALL_FIRSTBOOT?=true
    INSTALL_INITIAL_SETUP?=true
+endif
+
+# /usr/share/rhn location for el6, suse
+ifeq ($(filter-out sles opensuse,$(OS)),)
+   FIRSTBOOT_MODULES_DIR?=$(PREFIX)/share/rhn/up2date_client/firstboot
+else
+   FIRSTBOOT_MODULES_DIR?=$(PREFIX)/share/firstboot/modules
 endif
 
 # always true until fedora is just dnf
@@ -327,40 +326,28 @@ install-files: dbus-install install-conf install-plugins install-post-boot insta
 	install -d $(DESTDIR)/var/run/rhsm
 	install -d -m 750 $(DESTDIR)/var/lib/rhsm/{cache,facts,packages,repo_server_val}
 
-	# Set up rhsmcertd daemon. If installing on Fedora or RHEL 7+
-	# we prefer systemd over sysv as this is the new trend.
-	if [ $(OS) = Fedora ] ; then \
+	# Set up rhsmcertd daemon. Installation location depends on distro...
+	# if /etc/os-release exists, sles12, opensuse42, el7+, or fedora
+	# otherwise, if /etc/redhat-release exists: el6
+	# otherwise, sles11
+	if [ -f /etc/os-release ]; then \
+		install -d $(DESTDIR)/$(SYSTEMD_INST_DIR); \
 		install -d $(DESTDIR)/$(PREFIX)/lib/tmpfiles.d; \
 		install etc-conf/rhsmcertd.service $(DESTDIR)/$(SYSTEMD_INST_DIR); \
 		install etc-conf/subscription-manager.conf.tmpfiles \
 			$(DESTDIR)/$(PREFIX)/lib/tmpfiles.d/subscription-manager.conf; \
-	elif [[ $(OS) == *"SUSE" ]]; then \
-		if [ $(OS_VERSION) -lt 1315 ]; then \
-			install etc-conf/rhsmcertd.init.d \
-				$(DESTDIR)/etc/init.d/rhsmcertd; \
-		else \
-			install -d $(DESTDIR)/$(SYSTEMD_INST_DIR); \
-			install -d $(DESTDIR)/$(PREFIX)/lib/tmpfiles.d; \
-			install etc-conf/rhsmcertd.service $(DESTDIR)/$(SYSTEMD_INST_DIR); \
-			install etc-conf/subscription-manager.conf.tmpfiles \
-			$(DESTDIR)/$(PREFIX)/lib/tmpfiles.d/subscription-manager.conf; \
-		fi; \
+	elif [ -f /etc/redhat-release ]; then \
+		install etc-conf/rhsmcertd.init.d \
+			$(DESTDIR)/etc/rc.d/init.d/rhsmcertd; \
 	else \
-		if [ $(OS_VERSION) -lt 7 ]; then \
-			install etc-conf/rhsmcertd.init.d \
-				$(DESTDIR)/etc/rc.d/init.d/rhsmcertd; \
-		else \
-			install -d $(DESTDIR)/$(PREFIX)/lib/tmpfiles.d; \
-			install etc-conf/rhsmcertd.service $(DESTDIR)/$(SYSTEMD_INST_DIR); \
-			install etc-conf/subscription-manager.conf.tmpfiles \
-				$(DESTDIR)/$(PREFIX)/lib/tmpfiles.d/subscription-manager.conf; \
-		fi; \
-	fi; \
+		install etc-conf/rhsmcertd.init.d \
+			$(DESTDIR)/etc/init.d/rhsmcertd; \
+	fi;
 
 	install -m 700 etc-conf/rhsmd.cron $(DESTDIR)/etc/cron.daily/rhsmd
 
 	# SUSE Linux does not make use of consolehelper
-	if [[ ! $(OS) == *"SUSE" ]]; then \
+	if [ -f /etc/redhat-release ]; then \
 		ln -sf /usr/bin/consolehelper $(DESTDIR)/$(PREFIX)/bin/subscription-manager; \
 		install -m 644 etc-conf/subscription-manager.pam $(DESTDIR)/etc/pam.d/subscription-manager; \
 		install -m 644 etc-conf/subscription-manager.console $(DESTDIR)/etc/security/console.apps/subscription-manager; \
