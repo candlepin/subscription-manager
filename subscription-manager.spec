@@ -229,12 +229,12 @@ BuildRequires: intltool
 BuildRequires: libnotify-devel
 BuildRequires: %{py_package_prefix}-six
 
-%if %use_subman_gui
+%if %{use_subman_gui} || %{use_cockpit}
 BuildRequires: desktop-file-utils
 %endif
 
 BuildRequires: %{?suse_version:dbus-1-glib-devel} %{!?suse_version:dbus-glib-devel}
-BuildRequires: %{?suse_version:lsb-release, distribution-release} %{!?suse_version:redhat-lsb}
+BuildRequires: %{?suse_version:distribution-release} %{!?suse_version:system-release}
 BuildRequires: %{?suse_version:gconf2-devel} %{!?suse_version:GConf2-devel}
 BuildRequires: %{?suse_version:update-desktop-files} %{!?suse_version:scrollkeeper}
 
