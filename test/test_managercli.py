@@ -1538,6 +1538,121 @@ class TestReleaseCommand(TestCliProxyCommand):
                 mock_repo_invoker.update.assert_called_with()
 
 
+class TestRoleCommand(TestCliCommand):
+    command_class = managercli.RoleCommand
+
+    def setUp(self):
+        super(TestRoleCommand, self).setUp(False)
+        self.cc = self.command_class()
+
+    def test_wrong_options_syspurpose_role(self):
+        """It is possible to use --set or --unset options. It's not possible to use both of them together."""
+        try:
+            self.cc.main(["--set", "Foo", "--unset"])
+            self.cc._validate_options()
+        except SystemExit as e:
+            self.assertEqual(e.code, os.EX_USAGE)
+
+    @patch("subscription_manager.syspurposelib.SyspurposeStore")
+    def test_main_no_args(self, mock_syspurpose):
+        """It is necessary to mock SyspurposeStore for test function of parent class"""
+        mock_syspurpose.read = Mock()
+        mock_syspurpose.read.return_value = Mock()
+        instance_syspurpose_store = mock_syspurpose.read.return_value
+        instance_syspurpose_store.contents = {'role': 'Foo'}
+        super(TestRoleCommand, self).test_main_no_args()
+
+    @patch("subscription_manager.syspurposelib.SyspurposeStore")
+    def test_main_empty_args(self, mock_syspurpose):
+        """It is necessary to mock SyspurposeStore for test function of parent class"""
+        mock_syspurpose.read = Mock()
+        mock_syspurpose.read.return_value = Mock()
+        instance_syspurpose_store = mock_syspurpose.read.return_value
+        instance_syspurpose_store.contents = {'role': 'Foo'}
+        super(TestRoleCommand, self).test_main_empty_args()
+
+    @patch("subscription_manager.syspurposelib.SyspurposeStore")
+    def test_display_valid_syspurpose_role(self, mock_syspurpose):
+        mock_syspurpose.read = Mock()
+        mock_syspurpose.read.return_value = Mock()
+        instance_syspurpose_store = mock_syspurpose.read.return_value
+        instance_syspurpose_store.contents = {'role': 'Foo'}
+
+        self.cc.options = Mock()
+        self.cc.options.set_role = None
+        self.cc.options.unset_role = False
+
+        with Capture() as cap:
+            self.cc._do_command()
+        self.assertIn("System purpose role: Foo", cap.out)
+
+    @patch("subscription_manager.syspurposelib.SyspurposeStore")
+    def test_display_none_syspurpose_role(self, mock_syspurpose):
+        mock_syspurpose.read = Mock()
+        mock_syspurpose.read.return_value = Mock()
+        instance_syspurpose_store = mock_syspurpose.read.return_value
+        instance_syspurpose_store.contents = {'role': None}
+
+        self.cc.options = Mock()
+        self.cc.options.set_role = None
+        self.cc.options.unset_role = False
+        with Capture() as cap:
+            self.cc._do_command()
+        self.assertIn("This system does not have any system purpose role", cap.out)
+
+    @patch("subscription_manager.syspurposelib.SyspurposeStore")
+    def test_display_nonexisting_syspurpose_role(self, mock_syspurpose):
+        mock_syspurpose.read = Mock()
+        mock_syspurpose.read.return_value = Mock()
+        instance_syspurpose_store = mock_syspurpose.read.return_value
+        instance_syspurpose_store.contents = {}
+
+        self.cc.options = Mock()
+        self.cc.options.set_role = None
+        self.cc.options.unset_role = False
+        with Capture() as cap:
+            self.cc._do_command()
+        self.assertIn("This system does not have any system purpose role", cap.out)
+
+    @patch("subscription_manager.syspurposelib.SyspurposeStore")
+    def test_setting_syspurpose_role(self, mock_syspurpose):
+        mock_syspurpose.read = Mock()
+        mock_syspurpose.read.return_value = Mock()
+        instance_syspurpose_store = mock_syspurpose.read.return_value
+        instance_syspurpose_store.contents = {}
+        instance_syspurpose_store.set = MagicMock(return_value=True)
+        instance_syspurpose_store.write = MagicMock(return_value=None)
+
+        self.cc.options = Mock()
+        self.cc.options.set_role = 'Foo'
+        self.cc.options.unset_role = False
+        with Capture() as cap:
+            self.cc._do_command()
+
+        self.assertIn("System Purpose role has been set to: Foo", cap.out)
+        instance_syspurpose_store.set.assert_called_once_with('role', 'Foo')
+        instance_syspurpose_store.write.assert_called_once()
+
+    @patch("subscription_manager.syspurposelib.SyspurposeStore")
+    def test_unsetting_syspurpose_role(self, mock_syspurpose):
+        mock_syspurpose.read = Mock()
+        mock_syspurpose.read.return_value = Mock()
+        instance_syspurpose_store = mock_syspurpose.read.return_value
+        instance_syspurpose_store.contents = {'role': 'Foo'}
+        instance_syspurpose_store.unset = MagicMock(return_value=True)
+        instance_syspurpose_store.write = MagicMock(return_value=None)
+
+        self.cc.options = Mock()
+        self.cc.options.set_role = None
+        self.cc.options.unset_role = True
+        with Capture() as cap:
+            self.cc._do_command()
+
+        self.assertIn("System Purpose role has been unset", cap.out)
+        instance_syspurpose_store.unset.assert_called_once_with('role')
+        instance_syspurpose_store.write.assert_called_once()
+
+
 class TestVersionCommand(TestCliCommand):
     command_class = managercli.VersionCommand
 

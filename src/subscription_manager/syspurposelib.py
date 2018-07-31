@@ -60,6 +60,28 @@ def save_sla_to_syspurpose_metadata(service_level):
         log.error("SyspurposeStore could not be imported. Syspurpose SLA value not saved locally.")
 
 
+def save_role_to_syspurpose_metadata(role):
+    """
+    Save provided role value to the local Syspurpose Metadata (syspurpose.json) file.
+    :param role: The value of role to be saved in the syspurpose file.
+    :type role: str
+    :return: None
+    """
+
+    if SyspurposeStore:
+        store = SyspurposeStore.read(USER_SYSPURPOSE)
+
+        if role is None or role == "":
+            store.unset("role")
+        else:
+            store.set("role", role)
+        store.write()
+        return True
+    else:
+        log.error("SyspurposeStore could not be imported. Syspurpose role value not saved locally.")
+        return False
+
+
 def save_usage_to_syspurpose_metadata(usage):
     """
     Saves the provided usage value to the local Syspurpose Metadata (syspurpose.json) file.
@@ -91,13 +113,12 @@ def read_syspurpose():
     """
     if SyspurposeStore is not None:
         try:
-            syspurpose = SyspurposeStore.read(USER_SYSPURPOSE, raise_on_error=True).contents
+            syspurpose = SyspurposeStore.read(USER_SYSPURPOSE).contents
         except (OSError, IOError):
             syspurpose = {}
     else:
         try:
             syspurpose = json.load(open(USER_SYSPURPOSE))
-
         except (os.error, ValueError):
             # In the event this file could not be read treat it as empty
             syspurpose = {}
