@@ -64,7 +64,8 @@ from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, \
         none_wrap_columnize_callback, echo_columnize_callback, highlight_by_filter_string_columnize_cb
 from subscription_manager.utils import generate_correlation_id
-from subscription_manager.syspurposelib import save_sla_to_syspurpose_metadata, save_usage_to_syspurpose_metadata
+from subscription_manager.syspurposelib import save_sla_to_syspurpose_metadata, \
+        save_role_to_syspurpose_metadata, save_usage_to_syspurpose_metadata
 
 from subscription_manager.i18n import ungettext, ugettext as _
 
@@ -2671,6 +2672,47 @@ class OverrideCommand(CliCommand):
             print(columnize(names, echo_columnize_callback, *values, indent=2) + "\n")
 
 
+class RoleCommand(CliCommand):
+    def __init__(self):
+        shortdesc = _("Modify system purpose role")
+        super(RoleCommand, self).__init__("role", shortdesc, primary=False)
+        self.parser.add_option("--set", dest="set_role",
+                               help=(_("Set role of system purpose")))
+        self.parser.add_option("--unset", dest="unset_role", action="store_true",
+                               help=(_("Unset role of system purpose")))
+
+    def _validate_options(self):
+        if self.options.set_role and self.options.unset_role:
+            system_exit(os.EX_USAGE, _("Error: Options --set and --unset of role subcommand are mutually exclusive."))
+
+    def _set_role(self, role):
+        ret = save_role_to_syspurpose_metadata(role)
+        if ret:
+            print(_("System Purpose role has been set to: %s") % role)
+        else:
+            print(_("Error: System Purpose role has NOT been set to: %s") % role)
+
+    def _unset_role(self):
+        ret = save_role_to_syspurpose_metadata(None)
+        if ret:
+            print(_("System Purpose role has been unset"))
+        else:
+            print(_("Error: System Purpose role has NOT been unset"))
+
+    def _do_command(self):
+        self._validate_options()
+        if self.options.set_role:
+            self._set_role(self.options.set_role)
+        elif self.options.unset_role:
+            self._unset_role()
+        else:
+            sys_purpose_contents = read_syspurpose()
+            if 'role' in sys_purpose_contents and sys_purpose_contents['role'] is not None:
+                print(_("System purpose role: %s") % sys_purpose_contents['role'])
+            else:
+                print(_("This system does not have any system purpose role"))
+
+
 class VersionCommand(CliCommand):
 
     def __init__(self):
@@ -2760,7 +2802,7 @@ class ManagerCLI(CLI):
                     RedeemCommand, ReposCommand, ReleaseCommand, StatusCommand,
                     EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand,
                     VersionCommand, RemoveCommand, AttachCommand, PluginsCommand,
-                    AutohealCommand, OverrideCommand, UsageCommand]
+                    AutohealCommand, OverrideCommand, RoleCommand, UsageCommand]
         CLI.__init__(self, command_classes=commands)
 
     def main(self):
