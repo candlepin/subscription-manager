@@ -73,7 +73,7 @@ log = logging.getLogger(__name__)
 
 from rhsmlib.services import config, attach, products, unregister, entitlement, register
 from rhsmlib.services import exceptions
-from subscription_manager.syspurposelib import read_syspurpose
+from subscription_manager import syspurposelib
 
 conf = config.Config(rhsm.config.initConfig())
 
@@ -975,7 +975,7 @@ class ServiceLevelCommand(OrgCommand):
                 raise e
 
 
-class UsageCommand(OrgCommand):
+class UsageCommand(UserPassCommand):
 
     def __init__(self):
 
@@ -984,9 +984,6 @@ class UsageCommand(OrgCommand):
         super(UsageCommand, self).__init__("usage", shortdesc,
                                                   False)
 
-        self._add_url_options()
-        self.parser.add_option("--show", action='store_true',
-                help=_("show this system's current usage setting"))
         self.parser.add_option("--set", dest="usage",
                 help=_("usage setting to apply to this system"))
         self.parser.add_option("--unset", dest="unset",
@@ -1007,12 +1004,8 @@ class UsageCommand(OrgCommand):
         if self.options.usage:
             self.options.usage = self.options.usage.strip()
 
-        # Assume --show if run with no args:
-        if not self.options.show and \
-           not self.options.usage and \
-           not self.options.usage == "" and \
-           not self.options.unset:
-            self.options.show = True
+        if self.options.usage and self.options.unset:
+            system_exit(os.EX_USAGE, _("Error: --set cannot be used with --unset"))
 
     def _do_command(self):
         self._validate_options()
@@ -1029,11 +1022,9 @@ class UsageCommand(OrgCommand):
 
         if self.options.unset:
             self.unset_usage()
-
-        if self.options.usage is not None:
+        elif self.options.usage is not None:
             self.set_usage(self.options.usage)
-
-        if self.options.show:
+        else:
             self.show_usage()
 
     def set_usage(self, usage):
@@ -1187,7 +1178,7 @@ class RegisterCommand(UserPassCommand):
             # This is blocking and not async, which aside from blocking here, also
             # means things like following name owner changes gets weird.
             service = register.RegisterService(admin_cp)
-            syspurpose = read_syspurpose()
+            syspurpose = syspurposelib.read_syspurpose()
 
             if self.options.consumerid:
                 log.info("Registering as existing consumer: %s" % self.options.consumerid)
@@ -1405,6 +1396,48 @@ class UnRegisterCommand(CliCommand):
         restart_virt_who()
 
         print(_("System has been unregistered."))
+
+
+class AddonsCommand(CliCommand):
+
+    def __init__(self):
+        shortdesc = _("Modify or view the addons attribute of the system purpose")
+        super(AddonsCommand, self).__init__("addons", shortdesc=shortdesc, primary=False)
+
+        self.parser.add_option("--add", dest="to_add", action="append", default=[],
+                               help=_("Add an addon to the list."))
+        self.parser.add_option("--remove", dest="to_remove", action="append", default=[],
+                               help=_("Remove an addon from the list."))
+        self.parser.add_option("--unset", dest="unset", action="store_true",
+                               help=_("Remove all addons from the list"), default=False)
+
+    def _validate_options(self):
+        if self.options.unset and (self.options.to_add or self.options.to_remove):
+            system_exit(os.EX_USAGE, _("Error: --unset cannot be used with either --add or --remove"))
+        if self.options.to_add and self.options.to_remove:
+            system_exit(os.EX_USAGE, _("Error: --add cannot be used with --remove"))
+
+    def _do_command(self):
+        self._validate_options()
+
+        if not self.options.unset and not self.options.to_add and not self.options.to_remove:
+            addons = syspurposelib.read_syspurpose().get("addons")
+            if addons:
+                print(_("Current addons: %s" % ", ".join(addons)))
+            else:
+                print(_("This system does not have any system purpose addons specified."))
+            return
+
+        if self.options.unset:
+            syspurposelib.unset("addons")
+            print(_("Addons unset."))
+        elif self.options.to_add:
+            syspurposelib.add_all("addons", self.options.to_add)
+            print(_("Addons added: %s" % ", ".join(self.options.to_add)))
+        elif self.options.to_remove:
+            syspurposelib.remove_all("addons", self.options.to_remove)
+            print(_("Addons removed: %s" % ", ".join(self.options.to_remove)))
+        syspurposelib.write()
 
 
 class RedeemCommand(CliCommand):
@@ -2706,7 +2739,7 @@ class RoleCommand(CliCommand):
         elif self.options.unset_role:
             self._unset_role()
         else:
-            sys_purpose_contents = read_syspurpose()
+            sys_purpose_contents = syspurposelib.read_syspurpose()
             if 'role' in sys_purpose_contents and sys_purpose_contents['role'] is not None:
                 print(_("System purpose role: %s") % sys_purpose_contents['role'])
             else:
@@ -2796,7 +2829,7 @@ class StatusCommand(CliCommand):
 class ManagerCLI(CLI):
 
     def __init__(self):
-        commands = [RegisterCommand, UnRegisterCommand, ConfigCommand, ListCommand,
+        commands = [RegisterCommand, UnRegisterCommand, AddonsCommand, ConfigCommand, ListCommand,
                     SubscribeCommand, UnSubscribeCommand, FactsCommand,
                     IdentityCommand, OwnersCommand, RefreshCommand, CleanCommand,
                     RedeemCommand, ReposCommand, ReleaseCommand, StatusCommand,
