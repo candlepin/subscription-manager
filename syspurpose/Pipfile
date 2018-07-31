@@ -5,6 +5,11 @@ name = "pypi"
 
 [dev-packages]
 build_ext = { path = "../build_ext", editable = true }
+nose-randomly = "*"
+nose-capturestderr = "*"
+nose = "*"
+mock = "*"
+coverage = "*"
 
 [packages]
 six = "*"

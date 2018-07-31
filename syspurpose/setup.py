@@ -32,10 +32,14 @@ cmdclass = {
     'gettext': i18n.Gettext,
     'clean': utils.clean,
 }
+setup_requires = [
+    'nose'
+]
 
 test_require = [
     'mock',
-    'nose'
+    'nose-randomly',
+    'nose-capturestderr'
 ]
 
 setup(
@@ -50,6 +54,7 @@ setup(
     packages=find_packages('src', include=["syspurpose"]),
     package_dir={'': 'src'},
     tests_require=test_require,
+    setup_requires=setup_requires,
     test_suite='nose.collector',
     entry_points={
         "console_scripts": [
