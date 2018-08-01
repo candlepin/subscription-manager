@@ -71,7 +71,7 @@ from subscription_manager.i18n import ungettext, ugettext as _
 
 log = logging.getLogger(__name__)
 
-from rhsmlib.services import config, attach, products, unregister, entitlement, register
+from rhsmlib.services import config, attach, products, unregister, entitlement, register, syspurpose
 from rhsmlib.services import exceptions
 from subscription_manager import syspurposelib
 
@@ -2819,12 +2819,8 @@ class StatusCommand(CliCommand):
                 print('- %s' % format_name(message, 2, columns))
             print('')
 
-        purposeStatus = "Unknown"
-        if self.cp.has_capability("syspurpose"):
-            consumer = self.cp.getConsumer(self.identity.uuid)
-            if consumer.get("systemPurposeStatus"):
-                purposeStatus = consumer['systemPurposeStatus']
-        print(_("System Purpose Status: %s\n") % purposeStatus)
+        syspurpose_service = syspurpose.Syspurpose(self.cp)
+        print(_("System Purpose Status: %s\n") % syspurpose_service.get_syspurpose_status())
 
         return result
 

@@ -33,7 +33,10 @@ __all__ = [
     'ENTITLEMENT_INTERFACE',
     'ENTITLEMENT_DBUS_PATH',
     'CONSUMER_INTERFACE',
-    'CONSUMER_DBUS_PATH'
+    'CONSUMER_DBUS_PATH',
+    'SYSPURPOSE_INTERFACE',
+    'SYSPURPOSE_DBUS_PATH',
+    'DBUS_PROPERTIES_INTERFACE',
 ]
 
 # The base of the 'well known name' used for bus and service names, as well
@@ -79,3 +82,8 @@ ENTITLEMENT_DBUS_PATH = '%s/%s' % (ROOT_DBUS_PATH, 'Entitlement')
 
 CONSUMER_INTERFACE = '%s.%s' % (INTERFACE_BASE, 'Consumer')
 CONSUMER_DBUS_PATH = '%s/%s' % (ROOT_DBUS_PATH, 'Consumer')
+
+SYSPURPOSE_INTERFACE = '%s.%s' % (INTERFACE_BASE, 'Syspurpose')
+SYSPURPOSE_DBUS_PATH = '%s/%s' % (ROOT_DBUS_PATH, 'Syspurpose')
+
+DBUS_PROPERTIES_INTERFACE = 'org.freedesktop.DBus.Properties'

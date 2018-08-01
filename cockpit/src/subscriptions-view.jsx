@@ -148,14 +148,72 @@ class SubscriptionStatus extends React.Component {
         let label;
         let action;
         let note;
+        let syspurpose;
+        let sla;
+        let usage;
+        let role;
+        let add_ons;
+        let syspurpose_status;
         let isUnregistering = (this.props.status === "unregistering");
+        if (this.props.syspurpose["service_level_agreement"]) {
+            sla = (
+                <div>
+                    { _("Service Level:  ") }
+                    { _(String(this.props.syspurpose["service_level_agreement"])) }
+                </div>
+            );
+        }
+        if (this.props.syspurpose["usage"]) {
+            usage = (
+                <div>
+                    { _("Usage:  ") }
+                    { _(String(this.props.syspurpose["usage"])) }
+                </div>
+            );
+        }
+        if (this.props.syspurpose["role"]) {
+            role = (
+                <div>
+                    { _("Role:  ") }
+                    { _(String(this.props.syspurpose["role"])) }
+                </div>
+            );
+        }
+        if (this.props.syspurpose["addons"]) {
+            add_ons = (
+                <div>
+                    { _("AddOns:  ") }
+                    { _(String(subscriptionsClient.toArray(this.props.syspurpose["addons"]).join(", "))) }
+                </div>
+            );
+        }
+        if (this.props.syspurpose_status) {
+            syspurpose_status = (
+                <div>
+                    { _("Status: ") }
+                    { _(String(this.props.syspurpose_status)) }
+                </div>
+            );
+        }
+        syspurpose = (
+            <div>
+                <h2>{_("System Purpose")}</h2>
+                <div className="dl-horizontal">
+                    <div><label>{syspurpose_status}</label></div>
+                    <div><label>{sla}</label></div>
+                    <div><label>{usage}</label></div>
+                    <div><label>{role}</label></div>
+                    <div><label>{add_ons}</label></div>
+                </div>
+            </div>
+        );
         if (this.props.status === 'Unknown') {
-            label = <label>{ cockpit.format(_("Status: $0"), _("This system is currently not registered.")) }</label>;
+            label = <label>{ `${_("Status")}: ${_("This system is currently not registered.")}` }</label>;
             action = (<button className="btn btn-primary"
                               onClick={this.handleRegisterSystem}>{_("Register")}</button>
             );
         } else {
-            label = <label>{ cockpit.format(_("Status: $0"), this.props.status) }</label>;
+            label = <label>{ `${_("Status")}: ${this.props.status}` }</label>;
             action = (<button className="btn btn-primary" disabled={isUnregistering}
                               onClick={this.handleUnregisterSystem}>{_("Unregister")}</button>
             );
@@ -174,6 +232,7 @@ class SubscriptionStatus extends React.Component {
                 {errorMessage}
                 {label}
                 {action}
+                {syspurpose}
                 {note}
             </div>
         );

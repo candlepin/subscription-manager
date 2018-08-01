@@ -21,3 +21,4 @@ from rhsmlib.dbus.objects.products import ProductsDBusObject  # NOQA
 from rhsmlib.dbus.objects.unregister import UnregisterDBusObject  # NOQA
 from rhsmlib.dbus.objects.entitlement import EntitlementDBusObject  # NOQA
 from rhsmlib.dbus.objects.consumer import ConsumerDBusObject  # NOQA
+from rhsmlib.dbus.objects.syspurpose import SyspurposeDBusObject  # NOQA

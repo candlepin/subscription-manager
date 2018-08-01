@@ -17,7 +17,7 @@ import logging
 import six
 import dbus.service
 
-from rhsmlib.dbus import constants, exceptions
+from rhsmlib.dbus import constants, exceptions, util
 
 from subscription_manager import utils
 from subscription_manager import injection as inj
@@ -96,3 +96,12 @@ class BaseObject(dbus.service.Object):
             return cp_provider.get_basic_auth_cp()
         else:
             return cp_provider.get_no_auth_cp()
+
+    @util.dbus_service_method(
+        constants.DBUS_PROPERTIES_INTERFACE,
+        in_signature='s',
+        out_signature='a{sv}')
+    @util.dbus_handle_exceptions
+    def GetAll(self, _, sender=None):
+
+        return dbus.Dictionary({}, signature='sv')
