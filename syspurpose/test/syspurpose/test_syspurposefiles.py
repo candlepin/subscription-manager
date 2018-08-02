@@ -15,7 +15,7 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
-from base import SyspurposeTestBase
+from .base import SyspurposeTestBase
 import io
 import json
 import os

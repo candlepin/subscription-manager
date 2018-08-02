@@ -17,7 +17,7 @@ from __future__ import print_function, division, absolute_import
 
 # A group of tests for the miscellaneous utilities in the utils module of syspurpose
 
-from base import SyspurposeTestBase
+from .base import SyspurposeTestBase
 import io
 import os
 import json
