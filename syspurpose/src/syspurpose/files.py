@@ -61,7 +61,7 @@ class SyspurposeStore(object):
             if ioerr.errno == os.errno.ENOENT:
                 return False
             if self.raise_on_error:
-                raise e
+                raise ioerr
 
     def create(self):
         """
