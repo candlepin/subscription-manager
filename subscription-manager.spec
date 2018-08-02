@@ -195,7 +195,7 @@ Requires: %{?gtk3:python-gobject} %{!?gtk3:python-gobject2, libzypp, zypp-plugin
 %else
 Requires:  usermode
 %if %{with python3}
-Requires: python3-gobject
+Requires: python3-gobject-base
 %else
 Requires:  %{?gtk3:gobject-introspection, pygobject3-base} %{!?gtk3:pygobject2}
 %endif
