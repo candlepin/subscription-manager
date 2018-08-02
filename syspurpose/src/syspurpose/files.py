@@ -87,6 +87,9 @@ class SyspurposeStore(object):
             if current_value is not None and not isinstance(current_value, list):
                 self.contents[key] = [current_value]
 
+            if self.contents[key] is None:
+                self.contents[key] = []
+
             if value not in self.contents[key]:
                 self.contents[key].append(value)
             else:

@@ -28,7 +28,6 @@ class SyspurposeStoreTests(SyspurposeTestBase):
     def test_new_syspurpose_store(self):
         """
         A smoke test to ensure nothing bizarre happens on SyspurposeStore object creation
-        :return:
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
@@ -38,7 +37,6 @@ class SyspurposeStoreTests(SyspurposeTestBase):
     def test_read_file_non_existent_file(self):
         """
         Can the SyspurposeStore.read_file method handle attempting to read a file which does not exist?
-        :return:
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         self.assertFalse(os.path.exists(temp_dir))
@@ -50,7 +48,6 @@ class SyspurposeStoreTests(SyspurposeTestBase):
     def test_read_file_existent_file(self):
         """
         The SyspurposeStore.read_file method should return True if the file was successfully read.
-        :return:
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         test_data = {}
@@ -66,7 +63,6 @@ class SyspurposeStoreTests(SyspurposeTestBase):
     def test_read_file_with_unicode_content(self):
         """
         The SyspurposeStore.read_file method should return True if the file with unicode content was successfully read.
-        :return:
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         test_data = {'key1': u'Νίκος', 'key2': [u'value_with_ř']}
@@ -84,7 +80,7 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         Utility method for logic common to the *read_file* tests.
         :param file_contents:
         :param expected_contents:
-        :return:
+        :return: None
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
@@ -103,14 +99,12 @@ class SyspurposeStoreTests(SyspurposeTestBase):
     def test_read_file_empty_file(self):
         """
         Can the SyspurposeStore.read_file method handle attempting to read an empty file?
-        :return:
         """
         self._read_file(file_contents='', expected_contents={})
 
     def test_read_file_non_empty(self):
         """
         Lets see if we can read a file that is non-empty
-        :return:
         """
         test_data = {"arbitrary": "data"}
         self._read_file(file_contents=test_data, expected_contents=test_data)
@@ -119,7 +113,6 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Verify that the create method will create the directory (if needed), and that the resulting \
         file in the directory is writable by us.
-        :return:
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
 
@@ -133,7 +126,6 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Verify that the add method of SyspurposeStore is able to add items to lists of items
         in the store, whether they existed prior or not.
-        :return:
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         test_data = {"already_present_key": ["preexisting_value"]}
@@ -155,12 +147,29 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         self.assertEqual(syspurpose_store.contents["already_present_key"], ["preexisting_value", "new_value_2"])
         self.assertTrue(res, "The add method should return true when the store has changed")
 
+    def test_add_new_value_to_key_with_null_value(self):
+        """
+        Verify that the add method of SyspurposeStore is able to add item to key with
+        null value
+        """
+        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        test_data = {"already_present_key": None}
+        with io.open(temp_dir, 'w', encoding='utf-8') as f:
+            utils.write_to_file_utf8(f, test_data)
+
+        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store.contents = dict(**test_data)
+
+        # Brand new unseen key is added
+        res = self.assertRaisesNothing(syspurpose_store.add, "already_present_key", "new_value")
+        self.assertIn("already_present_key", syspurpose_store.contents)
+        self.assertEqual(syspurpose_store.contents["already_present_key"], ["new_value"])
+        self.assertTrue(res, "The add method should return true when the store has changed")
+
     def test_add_does_not_override_existing_scalar_value(self):
         """
         Verify that the add method of SyspurposeStore is able to add items to a property
         in the store, without overriding an existing scalar value the property might already contain.
-        :return:
-        :return:
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         test_data = {"already_present_key": "preexisting_scalar_value"}
@@ -180,7 +189,6 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Verify that the add method of SyspurposeStore is able to add unicode strings to lists of items
         in the store.
-        :return:
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         test_data = {u'ονόματα': [u'Νίκος']}
@@ -200,7 +208,6 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Verify that the add method of SyspurposeStore will not add an item to a list, if that list already contains
         the item we're trying to add.
-        :return:
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         test_data = {"already_present_key": ["preexisting_value"]}
@@ -219,7 +226,6 @@ class SyspurposeStoreTests(SyspurposeTestBase):
     def test_remove(self):
         """
         Verify that the remove method can remove items from the store.
-        :return:
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         test_data = {"already_present_key": ["preexisting_value"]}
@@ -243,7 +249,6 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Verify that the remove_command, in case the value specified for removal is a scalar/non-list value,
         unsets this value.
-        :return:
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         test_data = {"already_present_key": "preexisting_scalar_value"}
@@ -263,7 +268,6 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Verify that the remove method of SyspurposeStore is able to remove unicode strings from lists of items
         in the store.
-        :return:
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         test_data = {u'ονόματα': [u'Νίκος', u'Κώστας']}
@@ -282,7 +286,6 @@ class SyspurposeStoreTests(SyspurposeTestBase):
     def test_unset(self):
         """
         Verify the operation of the unset method of SyspurposeStore
-        :return:
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         test_data = {"already_present_key": ["preexisting_value"]}
@@ -306,7 +309,6 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Verify that the unset method of SyspurposeStore is able to unset unicode strings from items
         in the store.
-        :return:
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         test_data = {u'ονόματα': [u'Νίκος']}
@@ -331,7 +333,6 @@ class SyspurposeStoreTests(SyspurposeTestBase):
     def test_set(self):
         """
         Verify the operation of the set method of SyspurposeStore
-        :return:
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         test_data = {"already_present_key": "old_value"}
@@ -360,7 +361,6 @@ class SyspurposeStoreTests(SyspurposeTestBase):
     def test_set_with_unicode_strings(self):
         """
         Verify the operation of the set method of SyspurposeStore when using unicode strings
-        :return:
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         test_data = {u'ονόματα': u'Νίκος'}
@@ -389,7 +389,6 @@ class SyspurposeStoreTests(SyspurposeTestBase):
     def test_write(self):
         """
         Verify that the SyspurposeStore can write changes to the expected file.
-        :return:
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         test_data = {"arbitrary_key": "arbitrary_value"}
@@ -406,7 +405,6 @@ class SyspurposeStoreTests(SyspurposeTestBase):
     def test_write_with_unicode_content(self):
         """
         Verify that the SyspurposeStore can write changes that include unicode strings to the expected file.
-        :return:
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         test_data = {u'όνομα': u'Νίκος'}
@@ -423,7 +421,6 @@ class SyspurposeStoreTests(SyspurposeTestBase):
     def test_read(self):
         """
         Does read properly initialize a new SyspurposeStore?
-        :return:
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
         test_data = {"arbitrary_key": "arbitrary_value"}

@@ -1423,7 +1423,10 @@ class AddonsCommand(CliCommand):
         if not self.options.unset and not self.options.to_add and not self.options.to_remove:
             addons = syspurposelib.read_syspurpose().get("addons")
             if addons:
-                print(_("Current addons: %s" % ", ".join(addons)))
+                if isinstance(addons, list):
+                    print(_("Current addons: %s" % ", ".join(addons)))
+                else:
+                    print(_("Current addons: %s" % addons))
             else:
                 print(_("This system does not have any system purpose addons specified."))
             return
