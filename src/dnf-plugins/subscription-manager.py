@@ -53,6 +53,7 @@ class SubscriptionManager(dnf.Plugin):
         super(SubscriptionManager, self).__init__(base, cli)
         self.base = base
         self.cli = cli
+        self.config()
 
     def config(self):
         """ update """
