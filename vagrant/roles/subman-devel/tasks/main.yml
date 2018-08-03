@@ -274,3 +274,11 @@
 - name: reinstall glibc-common to lay down langs
   become: true
   command: yum -y reinstall glibc-common
+
+- name: replace RHSM service file with shim
+  copy:
+    src: rhsm_service_shim.py
+    dest: /usr/libexec/rhsm-service
+    force: yes
+  become: yes
+  when: subman_setup_hacking_environment

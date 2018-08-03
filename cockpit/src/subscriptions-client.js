@@ -18,15 +18,22 @@
  */
 
 const cockpit = require("cockpit");
-const service = cockpit.dbus('com.redhat.RHSM1', {'superuser': 'require'});
-const configService = service.proxy('com.redhat.RHSM1.Config', '/com/redhat/RHSM1/Config');
-const registerServer = service.proxy('com.redhat.RHSM1.RegisterServer', '/com/redhat/RHSM1/RegisterServer');
-const attachService = service.proxy('com.redhat.RHSM1.Attach', '/com/redhat/RHSM1/Attach');
-const entitlementService = service.proxy('com.redhat.RHSM1.Entitlement', '/com/redhat/RHSM1/Entitlement');
-const unregisterService = service.proxy('com.redhat.RHSM1.Unregister', '/com/redhat/RHSM1/Unregister');
-const productsService = service.proxy('com.redhat.RHSM1.Products', '/com/redhat/RHSM1/Products');
-const consumerService = service.proxy('com.redhat.RHSM1.Consumer', '/com/redhat/RHSM1/Consumer');
 const _ = cockpit.gettext;
+
+function createProxy(name) {
+    let service = cockpit.dbus('com.redhat.RHSM1', {'superuser': 'require'});
+    return service.proxy(`com.redhat.RHSM1.${name}`, `/com/redhat/RHSM1/${name}`);
+}
+
+// creates multiple services otherwise only readies one proxy at a time
+const configService = createProxy('Config');
+const registerServer = createProxy('RegisterServer');
+const attachService = createProxy('Attach');
+const entitlementService = createProxy('Entitlement');
+const unregisterService = createProxy('Unregister');
+const productsService = createProxy('Products');
+const consumerService = createProxy('Consumer');
+const syspurposeService = createProxy('Syspurpose');
 
 const client = { };
 
@@ -44,6 +51,16 @@ client.config = {
     loaded: false,
 };
 
+client.syspurposeStatus = {
+    info : {
+        "service_level_agreement" : null,
+        "usage" : null,
+        "role" : null,
+        "addons" : null,
+    },
+    status : null,
+};
+
 const RHSM_DEFAULTS = { // TODO get these from a d-bus service instead
     hostname: 'subscription.rhsm.redhat.com',
     port: '443',
@@ -54,9 +71,9 @@ const RHSM_DEFAULTS = { // TODO get these from a d-bus service instead
 // we trigger an event called "dataChanged" when the data has changed
 
 function needRender() {
-    let ev = document.createEvent("Event");
-    ev.initEvent("dataChanged", false, false);
-    client.dispatchEvent(ev);
+    let event = document.createEvent("Event");
+    event.initEvent("dataChanged", false, false);
+    client.dispatchEvent(event);
 }
 
 /* we trigger status update via dbus
@@ -104,20 +121,13 @@ function parseErrorMessage(error) {
  * @param methodName a method on the provided serviceProxy
  * @param delegateMethod the method that we delegate the actual call to dbus
  */
-function safeDBusCall(serviceProxy, methodName, delegateMethod) {
-    if (!Object.prototype.hasOwnProperty.call(serviceProxy, methodName)) {
-        cockpit.spawn(['systemctl', 'restart', 'rhsm'], { superuser: "require" })
-            .done(() => {
-                console.debug("rhsm service force restart successfully");
-                delegateMethod();
-            }).fail(() => {
-                console.warn('service method ' + methodName + ' is unavailable.');
-                client.subscriptionStatus.status = "service-unavailable";
-                needRender();
-            });
-    } else {
-        delegateMethod();
-    }
+function safeDBusCall(serviceProxy, delegateMethod) {
+    return serviceProxy.wait()
+        .then(delegateMethod)
+        .fail(ex => {
+            console.debug(ex);
+            delegateMethod();
+        });
 }
 
 let gettingDetails = false;
@@ -129,21 +139,19 @@ function getSubscriptionDetails() {
     }
     getDetailsRequested = false;
     gettingDetails = true;
-    productsService.wait(() => {
-        safeDBusCall(productsService, 'ListInstalledProducts', () => {
-            productsService.ListInstalledProducts('', {}, userLang) // FIXME: use proxy settings
-            .then(result => {
-                client.subscriptionStatus.products = parseProducts(result);
-            })
-            .catch(ex => {
-                client.subscriptionStatus.error = ex;
-            })
-            .then(() => {
-                gettingDetails = false;
-                if (getDetailsRequested)
-                    getSubscriptionDetails();
-                needRender();
-            });
+    safeDBusCall(productsService, () => {
+        productsService.ListInstalledProducts('', {}, userLang) // FIXME: use proxy settings
+        .then(result => {
+            client.subscriptionStatus.products = parseProducts(result);
+        })
+        .catch(ex => {
+            client.subscriptionStatus.error = ex;
+        })
+        .then(() => {
+            gettingDetails = false;
+            if (getDetailsRequested)
+                getSubscriptionDetails();
+            needRender();
         });
     });
 }
@@ -383,7 +391,7 @@ client.registerSystem = subscriptionDetails => {
             .then(() => {
                 console.debug('requesting update');
                 client.closeRegisterDialog = true;
-                requestUpdate().always(() => {
+                requestSubscriptionStatusUpdate().always(() => {
                     dfd.resolve();
                 });
             });
@@ -402,7 +410,7 @@ client.unregisterSystem = () => {
             })
             .always(() => {
                 console.debug('requesting update');
-                requestUpdate();
+                requestSubscriptionStatusUpdate();
             });
     });
 };
@@ -425,8 +433,24 @@ const subscriptionStatusValues = [
     'RHSM_PARTIALLY_VALID',
     'RHSM_REGISTRATION_REQUIRED'
 ];
-function requestUpdate() {
+
+function requestUpdate(callback) {
+    return callback()
+        .catch(ex => statusUpdateFailed(ex));
+}
+
+function requestSubscriptionStatusUpdate() {
     return client.getSubscriptionStatus()
+        .catch(ex => statusUpdateFailed(ex));
+}
+
+function requestSyspurposeStatusUpdate() {
+    return client.getSyspurposeStatus()
+        .catch(ex => statusUpdateFailed(ex));
+}
+
+function requestSyspurposeUpdate() {
+    return client.getSyspurpose()
         .catch(ex => statusUpdateFailed(ex));
 }
 
@@ -434,94 +458,143 @@ function requestUpdate() {
 client.getSubscriptionStatus = function() {
     this.dfd = cockpit.defer();
 
-    entitlementService.wait(() => {
-        safeDBusCall(entitlementService, 'GetStatus', () => {
-            entitlementService.GetStatus('', userLang)
-            .then(result => {
-                const status = JSON.parse(result);
-                client.subscriptionStatus.status = status.status;
-                this.dfd.resolve();
-                if (client.closeRegisterDialog) {
-                    client.closeRegisterDialog = false;
-                }
-            })
-            .catch(ex => {
-                console.debug(ex);
-                client.subscriptionStatus.status = 'Unknown';
-            })
-            .then(() => {
-                getSubscriptionDetails();
-                needRender();
-            });
+    safeDBusCall(entitlementService, () => {
+        entitlementService.GetStatus('', userLang)
+        .then(result => {
+            const status = JSON.parse(result);
+            client.subscriptionStatus.status = status.status;
+            this.dfd.resolve();
+            if (client.closeRegisterDialog) {
+                client.closeRegisterDialog = false;
+            }
+        })
+        .catch(ex => {
+            console.debug(ex);
+            client.subscriptionStatus.status = 'Unknown';
+        })
+        .then(() => {
+            getSubscriptionDetails();
+            needRender();
         });
     });
     return this.dfd.promise();
 };
 
+client.getSyspurposeStatus = () => {
+    return safeDBusCall(syspurposeService, () => {
+        syspurposeService.GetSyspurposeStatus()
+        .then(result => {
+            client.syspurposeStatus.status = result;
+        });
+    })
+    .catch(ex => {
+        console.debug(ex);
+        client.syspurposeStatus.status = null; // TODO: change to something meaningful
+    })
+    .then(needRender);
+};
+
+client.getSyspurpose = () => {
+    this.dfd = cockpit.defer();
+
+    safeDBusCall(syspurposeService, () => {
+        syspurposeService.GetSyspurpose(userLang)
+        .then(result => {
+            client.syspurposeStatus.info = JSON.parse(result);
+        })
+        .then(() => {
+            this.dfd.resolve();
+        });
+    })
+    .catch(ex => {
+        console.debug(ex);
+        client.syspurposeStatus.info = 'Unknown'; // TODO: change to something meaningful
+    })
+    .then(needRender);
+    return this.dfd.promise();
+};
+
 client.readConfig = () => {
-    return configService.wait(() => {
-        safeDBusCall(configService, 'GetAll', () => {
-            configService.GetAll(userLang).then(config => {
-                const hostname = config.server.v.hostname;
-                const port = config.server.v.port;
-                const prefix = config.server.v.prefix;
-                const proxyHostname = config.server.v.proxy_hostname;
-                const proxyPort = config.server.v.proxy_port;
-                const proxyUser = config.server.v.proxy_user;
-                const proxyPassword = config.server.v.proxy_password;
+    return safeDBusCall(configService, () => {
+        configService.GetAll(userLang).then(config => {
+            const hostname = config.server.v.hostname;
+            const port = config.server.v.port;
+            const prefix = config.server.v.prefix;
+            const proxyHostname = config.server.v.proxy_hostname;
+            const proxyPort = config.server.v.proxy_port;
+            const proxyUser = config.server.v.proxy_user;
+            const proxyPassword = config.server.v.proxy_password;
 
-                const usingDefaultUrl = (port === '443' &&
-                    hostname === RHSM_DEFAULTS.hostname &&
-                    port === RHSM_DEFAULTS.port &&
-                    prefix === RHSM_DEFAULTS.prefix
-                );
+            const usingDefaultUrl = (port === '443' &&
+                hostname === RHSM_DEFAULTS.hostname &&
+                port === RHSM_DEFAULTS.port &&
+                prefix === RHSM_DEFAULTS.prefix
+            );
 
-                const maybePort = port === '443' ? '' : `:${port}`;
-                const maybePrefix = prefix === '/subscription' ? '' : prefix;
-                const hostnamePart = hostname.includes(':') ? `[${hostname}]`: hostname;
-                const serverUrl = usingDefaultUrl ? '' : `${hostnamePart}${maybePort}${maybePrefix}`;
-                const proxyHostnamePart = proxyHostname.includes(':') ? `[${proxyHostname}]` : proxyHostname;
-                const usingProxy = proxyHostname !== '';
-                const maybeProxyPort = proxyPort ? `:${proxyPort}`: '';
-                const proxyServer = usingProxy ? `${proxyHostnamePart}${maybeProxyPort}`: '';
+            const maybePort = port === '443' ? '' : `:${port}`;
+            const maybePrefix = prefix === '/subscription' ? '' : prefix;
+            const hostnamePart = hostname.includes(':') ? `[${hostname}]`: hostname;
+            const serverUrl = usingDefaultUrl ? '' : `${hostnamePart}${maybePort}${maybePrefix}`;
+            const proxyHostnamePart = proxyHostname.includes(':') ? `[${proxyHostname}]` : proxyHostname;
+            const usingProxy = proxyHostname !== '';
+            const maybeProxyPort = proxyPort ? `:${proxyPort}`: '';
+            const proxyServer = usingProxy ? `${proxyHostnamePart}${maybeProxyPort}`: '';
 
-                // Note: we don't use camelCase, because we keep naming convention of rhsm.conf
-                // Thus we can do some simplification of code
-                Object.assign(client.config, {
-                    url: usingDefaultUrl ? 'default' : 'custom',
-                    hostname: hostname,
-                    port: port,
-                    prefix: prefix,
-                    server_url: serverUrl,
-                    proxy: usingProxy,
-                    proxy_server: proxyServer,
-                    proxy_hostname: proxyHostname,
-                    proxy_port: proxyPort,
-                    proxy_user: proxyUser,
-                    proxy_password: proxyPassword,
-                    loaded: true,
-                });
-                console.debug('loaded client config', client.config);
+            // Note: we don't use camelCase, because we keep naming convention of rhsm.conf
+            // Thus we can do some simplification of code
+            Object.assign(client.config, {
+                url: usingDefaultUrl ? 'default' : 'custom',
+                hostname: hostname,
+                port: port,
+                prefix: prefix,
+                server_url: serverUrl,
+                proxy: usingProxy,
+                proxy_server: proxyServer,
+                proxy_hostname: proxyHostname,
+                proxy_port: proxyPort,
+                proxy_user: proxyUser,
+                proxy_password: proxyPassword,
+                loaded: true,
             });
+            console.debug('loaded client config', client.config);
         });
     });
 };
 
-const updateConfig =
-    () => {
-        client.readConfig().then(needRender);
+client.toArray = obj => {
+        /*
+        checks if object passed in is an iterable or not
+        see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
+        for more info
+         */
+        if (obj == null) {
+            return [];
+        }
+        if (typeof obj === 'string') {
+            return [obj];
+        }
+        if (typeof obj[Symbol.iterator] === 'function' ) {
+            return Array.from(obj);
+        }
+    };
+
+const updateConfig = () => {
+        return client.readConfig().then(needRender);
     };
 
 client.init = () => {
     /* we want to get notified if subscription status of the system changes */
-    entitlementService.addEventListener("EntitlementChanged", requestUpdate);
-    productsService.addEventListener("InstalledProductsChanged", requestUpdate);
-    consumerService.addEventListener("ConsumerChanged", requestUpdate);
+    entitlementService.addEventListener("EntitlementChanged", requestSubscriptionStatusUpdate);
+    productsService.addEventListener("InstalledProductsChanged", requestSubscriptionStatusUpdate);
+    consumerService.addEventListener("ConsumerChanged", requestSubscriptionStatusUpdate);
     configService.addEventListener("ConfigChanged", updateConfig);
+    syspurposeService.addEventListener("SyspurposeChanged", requestSyspurposeUpdate);
     // get initial status
-    requestUpdate();
+    requestSubscriptionStatusUpdate();
+    requestSyspurposeUpdate();
+    requestSyspurposeStatusUpdate();
     // read config (async)
-    client.readConfig().then(needRender);
+    configService.wait().then(updateConfig);
 };
 
 module.exports = client;

@@ -182,7 +182,7 @@ class DirectoryWatch(object):
         self.IN_MODIFY = 0x00000002
 
         self.path = os.path.abspath(path)
-        self.is_file = os.path.isfile(self.path)
+        self.is_file = not os.path.isdir(self.path)  # used isdir because if path does not exist, assumed to be file
         self.timestamp = None
         self.is_glob = is_glob
         self.callbacks = callbacks

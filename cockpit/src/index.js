@@ -102,20 +102,20 @@ function unregisterSystem() {
 
 function initStore(rootElement) {
     subscriptionsClient.addEventListener("dataChanged",
-        function() {
+        () => {
             dataStore.render();
         }
     );
 
-    subscriptionsClient.init();
-
-    dataStore.render = function() {
+    dataStore.render = () => {
         ReactDOM.render(React.createElement(
             subscriptionsView.page,
             {
                 status: subscriptionsClient.subscriptionStatus.status,
                 products:subscriptionsClient.subscriptionStatus.products,
                 error: subscriptionsClient.subscriptionStatus.error,
+                syspurpose: subscriptionsClient.syspurposeStatus.info,
+                syspurpose_status: subscriptionsClient.syspurposeStatus.status,
                 dismissError: dismissStatusError,
                 register: openRegisterDialog,
                 unregister: unregisterSystem,
@@ -123,6 +123,7 @@ function initStore(rootElement) {
             rootElement
         );
     };
+    subscriptionsClient.init();
 }
 
 document.addEventListener("DOMContentLoaded", function() {
