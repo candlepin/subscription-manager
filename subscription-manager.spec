@@ -130,7 +130,7 @@
 %define subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.22.1
+Version: 1.23.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1080,6 +1080,75 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Aug 03 2018 Christopher Snyder <csnyder@redhat.com> 1.23.1-1
+- Integrate Syspurpose DBus Signal with Cockpit (aparadka@redhat.com)
+- Change usage_type to usage (csnyder@redhat.com)
+- ENT-715 Sync syspurpose with server (csnyder@redhat.com)
+- 1609052: DNF Plugin needs config initiated earlier (wpoteat@redhat.com)
+- 1608963: Minimize packaging for python 3 (wpoteat@redhat.com)
+- Improve test setup for syspurpose tests. (awood@redhat.com)
+- Two simple fixes for syspurpose (jhnidek@redhat.com)
+- Raise ioerr when necessary during sp read (csnyder@redhat.com)
+- ENT-720 Adds the addons subcommand (csnyder@redhat.com)
+- 1602056: Added role subcommand ENT-719 (jhnidek@redhat.com)
+- Replace lsb-release in spec and Makefile (khowell@redhat.com)
+- Mock out syspurpose code from being executed in subman tests
+  (csnyder@redhat.com)
+- ENT-584 syspurpose UTF-8 support & better formatting - All syspurpose
+  operations now support UTF-8 - syspurpose.json now has user-friendly
+  indentation (nmoumoul@redhat.com)
+- ENT-446 Report systempurpose on registration (csnyder@redhat.com)
+- 1512944: Fix up remaining python2 deps ENT-724 (csnyder@redhat.com)
+- ENT-721: Usage command (wpoteat@redhat.com)
+- ENT-590 Enhanced SyspurposeStore add/remove operations - 'add' will now not
+  override an existing value that was added by the 'set' command, but it will
+  be maintained and added in a list along with the newly added value. - 'add'
+  will now not add an element to a list if the list already contains it (no
+  duplicates). - 'remove' will now unset the current value, if that turns out
+  to be scalar instead of being contained in a list. (nmoumoul@redhat.com)
+- Move syspurpose out of packages directory. (awood@redhat.com)
+- Correct small problems in syspurpose. (awood@redhat.com)
+- ansible vagrant QOL fixes (khowell@redhat.com)
+- ENT-723: Add System Purpose Status to System Status output
+  (wpoteat@redhat.com)
+- Improve debug logging for release listing (khowell@redhat.com)
+- Remove other references to python-kitchen. (awood@redhat.com)
+- Make build_ext a proper dependency. (awood@redhat.com)
+- Add zanata.xml configuration file and gettext keys.pot (awood@redhat.com)
+- Move clean command to common build_ext module. (awood@redhat.com)
+- Only gather optparse strings in subscription-manager. (awood@redhat.com)
+- Move syspurpose source files to be under package directory.
+  (awood@redhat.com)
+- Look for source files based on package directory locations.
+  (awood@redhat.com)
+- Add gettext calls to syspurpose. (awood@redhat.com)
+- Load build_ext i18n commands in setup.py (awood@redhat.com)
+- Integrate Dbus signals with Cockpit GUI (aparadka@redhat.com)
+- Do not install subman-gui from setup.py by default (khowell@redhat.com)
+- ENT-591 Handle when syspurpose.json is missing & create it.
+  (nmoumoul@redhat.com)
+- Fix indeterminate unit test failure. (awood@redhat.com)
+- Removal of python-kitchen (wpoteat@redhat.com)
+- ENT-731 Replaced syspurpose 'offerings' commands with 'role': - Removed
+  commands 'add-offerings', 'remove-offerings', 'unset-offerings' - Added
+  commands 'set-role' and 'unset-role' (nmoumoul@redhat.com)
+- ENT-589 Intentctl -> syspurpose (csnyder@redhat.com)
+- ENT-710: Add three_way_merge utility function (csnyder@redhat.com)
+- ENT-477: Add signal EntitlementsChanged (aparadka@redhat.com)
+- ENT-476: Add signal InstalledProductsChanged (aparadka@redhat.com)
+- 1594733: Fix GetStatus in com.redhat.RHSM1.Entitlement ENT-641
+  (jhnidek@redhat.com)
+- Make vagrant setup more flexible (khowell@redhat.com)
+- ENT-475: Add signal ConfigChanged (aparadka@redhat.com)
+- 1581777: Reraise exception properly. ENT-566 (jhnidek@redhat.com)
+- Replace curly quote with straight quote (khowell@redhat.com)
+- Add implementation of filesystem watcher (aparadka@redhat.com)
+- 1581410: ENT-572: subman should require dnf-plugin-subscription-manager
+  (adarshvritant@gmail.com)
+- ENT-478 com.redhat.RHSM1.Consumer D-Bus service object (jhnidek@redhat.com)
+- 1576423: Polished changes provided in #1816 and added unit test.
+  (jhnidek@redhat.com)
+
 * Fri Jun 22 2018 Christopher Snyder <csnyder@redhat.com> 1.22.1-1
 - 1571998: Ignore HTB repos (nmoumoul@redhat.com)
 - 1589296: subman list option --after now named --afterdate
