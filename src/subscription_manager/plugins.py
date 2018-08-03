@@ -15,11 +15,14 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 #
 import glob
-import imp
 import inspect
 import logging
 import os
 import six
+if six.PY2:
+    import imp
+else:
+    import importlib.util
 
 from iniparse import SafeConfigParser
 from iniparse.compat import NoSectionError, NoOptionError
@@ -763,9 +766,13 @@ class BasePluginManager(object):
             raise SlotNameException(slot_name)
 
         for func in self._slot_to_funcs[slot_name]:
-            func_module = inspect.getmodule(func).__name__
-            func_class = six.get_method_self(func).__class__.__name__
-            plugin_key = ".".join([func_module, func_class])
+            module = inspect.getmodule(func)
+            if module:
+                func_module_name = module.__name__
+            else:
+                func_module_name = 'unknown_module'
+            func_class_name = six.get_method_self(func).__class__.__name__
+            plugin_key = ".".join([func_module_name, func_class_name])
             log.debug("Running %s in %s" % (six.get_method_function(func).__name__, plugin_key))
             # resolve slot_name to conduit
             # FIXME: handle cases where we don't have a conduit for a slot_name
@@ -931,11 +938,16 @@ class PluginManager(BasePluginManager):
         module_name = module_name.split(".py")[0]
 
         try:
-            fp, pathname, description = imp.find_module(module_name, [dir_path])
-            try:
-                loaded_module = imp.load_module(module_name, fp, pathname, description)
-            finally:
-                fp.close()
+            if six.PY2:
+                fp, pathname, description = imp.find_module(module_name, [dir_path])
+                try:
+                    loaded_module = imp.load_module(module_name, fp, pathname, description)
+                finally:
+                    fp.close()
+            else:
+                spec = importlib.util.spec_from_file_location(module_name, module_file)
+                loaded_module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(loaded_module)
         # we could catch BaseException too for system exit
         except Exception as e:
             log.exception(e)
@@ -943,10 +955,12 @@ class PluginManager(BasePluginManager):
 
         # FIXME: look up module conf, so we can enable entire plugin modules
         if not hasattr(loaded_module, "requires_api_version"):
-            raise PluginModuleImportApiVersionMissingException(module_file, module_name, "Plugin doesn't specify required API version")
+            raise PluginModuleImportApiVersionMissingException(module_file, module_name,
+                                                               "Plugin doesn't specify required API version")
         if not api_version_ok(API_VERSION, loaded_module.requires_api_version):
             raise PluginModuleImportApiVersionException(module_file, module_name,
-                                                        module_ver=loaded_module.requires_api_version, api_ver=API_VERSION)
+                                                        module_ver=loaded_module.requires_api_version,
+                                                        api_ver=API_VERSION)
 
         return loaded_module
 
