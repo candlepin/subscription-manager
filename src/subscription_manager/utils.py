@@ -62,7 +62,12 @@ class DefaultDict(collections.defaultdict):
         return pprint.pformat(self.as_dict())
 
 
-def three_way_merge(local, base, remote, on_conflict="remote"):
+# A simple container class used to hold the values representing a change detected
+# during three_way_merge
+DiffChange = collections.namedtuple('DiffChange', ['key', 'previous_value', 'new_value', 'source', 'in_base', 'in_result'])
+
+
+def three_way_merge(local, base, remote, on_conflict="remote", on_change=None):
     """
     Performs a three-way merge on the local and remote dictionaries with a given base.
     :param local: The dictionary of the current local values
@@ -71,7 +76,8 @@ def three_way_merge(local, base, remote, on_conflict="remote"):
     :param on_conflict: Either "remote" or "local" or None. If "remote", the remote changes
                                will win any conflict. If "local", the local changes will win any
                                conflict. If anything else, an error will be thrown.
-
+    :param on_change: This is an optional function which will be given each change as it is
+                      detected.
     :return: The dictionary of values as merged between the three provided dictionaries.
     """
     result = {}
@@ -86,22 +92,37 @@ def three_way_merge(local, base, remote, on_conflict="remote"):
     else:
         raise ValueError('keyword argument "on_conflict" must be either "remote" or "local"')
 
+    if on_change is None:
+        on_change = lambda change: change
+
     all_keys = set(local.keys()) | set(base.keys()) | set(remote.keys())
 
     for key in all_keys:
 
         local_changed = detect_changed(base=base, other=local, key=key)
         remote_changed = detect_changed(base=base, other=remote, key=key)
+        changed = local_changed or remote_changed
+        source = 'base'
 
         if local_changed == remote_changed:
+            source = on_conflict
             if key in winner:
                 result[key] = winner[key]
         elif remote_changed:
+            source = 'remote'
             if key in remote:
                 result[key] = remote[key]
         elif local_changed:
+            source = 'local'
             if key in local:
                 result[key] = local[key]
+
+        if changed:
+            original = base.get(key)
+            diff = DiffChange(key=key, source=source, previous_value=original,
+                              new_value=result.get(key), in_base=key in base,
+                              in_result=key in result)
+            on_change(diff)
 
     return result
 

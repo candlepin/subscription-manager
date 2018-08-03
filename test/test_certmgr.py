@@ -34,7 +34,7 @@ from rhsm.profile import RPMProfile
 from rhsm.connection import GoneException
 from rhsm.certificate import GMT
 
-from .fixture import SubManFixture
+from .fixture import SubManFixture, set_up_mock_sp_store
 
 
 CONSUMER_DATA = {'releaseVer': {'id': 1, 'releaseVer': '123123'},
@@ -131,10 +131,14 @@ class ActionClientTestBase(SubManFixture):
 
         injection.provide(injection.CERT_SORTER, self.mock_cert_sorter)
 
+        syspurpose_patch = mock.patch('subscription_manager.syspurposelib.SyspurposeStore')
+        self.mock_sp_store = syspurpose_patch.start()
+        self.mock_sp_store, self.mock_sp_store_contents = set_up_mock_sp_store(self.mock_sp_store)
+        self.addCleanup(syspurpose_patch.stop)
+
     def tearDown(self):
         self.patcher3.stop()
         self.patcher6.stop()
-        #self.patcher8.stop()
 
         self.patcher_entcertlib_writer.stop()
 

@@ -29,7 +29,7 @@ from subscription_manager.factlib import FactsActionInvoker
 from subscription_manager.packageprofilelib import PackageProfileActionInvoker
 from subscription_manager.installedproductslib import InstalledProductsActionInvoker
 from subscription_manager.content_action_client import ContentActionClient
-
+from subscription_manager.syspurposelib import SyspurposeSyncActionInvoker
 
 log = logging.getLogger(__name__)
 
@@ -45,13 +45,14 @@ class ActionClient(base_action_client.BaseActionClient):
         self.profilelib = PackageProfileActionInvoker()
         self.installedprodlib = InstalledProductsActionInvoker()
         self.idcertlib = IdentityCertActionInvoker()
+        self.syspurposelib = SyspurposeSyncActionInvoker()
 
         # WARNING: order is important here, we need to update a number
         # of things before attempting to autoheal, and we need to autoheal
         # before attempting to fetch our certificates:
         lib_set = [self.entcertlib, self.idcertlib, self.content_client,
                    self.factlib, self.profilelib,
-                   self.installedprodlib]
+                   self.installedprodlib, self.syspurposelib]
 
         return lib_set
 
@@ -61,9 +62,10 @@ class HealingActionClient(base_action_client.BaseActionClient):
 
         self.entcertlib = EntCertActionInvoker()
         self.installedprodlib = InstalledProductsActionInvoker()
+        self.syspurposelib = SyspurposeSyncActionInvoker()
         self.healinglib = HealingActionInvoker()
 
-        lib_set = [self.installedprodlib, self.healinglib, self.entcertlib]
+        lib_set = [self.installedprodlib, self.syspurposelib, self.healinglib, self.entcertlib]
 
         return lib_set
 
