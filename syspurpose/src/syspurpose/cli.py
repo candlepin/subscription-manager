@@ -201,12 +201,12 @@ def setup_arg_parser():
        help=_("Set the system usage"),
        parents=[set_options])
 
-    set_usage_parser.set_defaults(prop_name="usage_type")
+    set_usage_parser.set_defaults(prop_name="usage")
 
     unset_usage_parser = subparsers.add_parser("unset-usage",
         help=_("Clear set usage"),
         parents=[unset_options])
-    unset_usage_parser.set_defaults(prop_name="usage_type")
+    unset_usage_parser.set_defaults(prop_name="usage")
 
     # Pretty Print Json contents of default syspurpose file
     show_parser = subparsers.add_parser("show",
