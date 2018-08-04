@@ -130,7 +130,7 @@
 %define subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.23.1
+Version: 1.23.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1080,6 +1080,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Aug 03 2018 Christopher Snyder <csnyder@redhat.com> 1.23.2-1
+- Move "nose" to test requirements for syspurpose (csnyder@redhat.com)
+
 * Fri Aug 03 2018 Christopher Snyder <csnyder@redhat.com> 1.23.1-1
 - Integrate Syspurpose DBus Signal with Cockpit (aparadka@redhat.com)
 - Change usage_type to usage (csnyder@redhat.com)
