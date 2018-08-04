@@ -32,12 +32,11 @@ cmdclass = {
     'gettext': i18n.Gettext,
     'clean': utils.clean,
 }
-setup_requires = [
-    'nose'
-]
+setup_requires = []
 
 test_require = [
     'mock',
+    'nose',
     'nose-randomly',
     'nose-capturestderr'
 ]
@@ -46,7 +45,7 @@ setup(
     name="syspurpose",
     version="1.22.1",
     url="http://www.candlepinproject.org",
-    description="Manage Red Hat System Intent",
+    description="Manage Red Hat System Purpose",
     license="GPLv2",
     author="Chris Snyder",
     author_email="chainsaw@redhat.com",
