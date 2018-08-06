@@ -1052,7 +1052,10 @@ class UEPConnection(object):
         if role is not None:
             params['role'] = role
         if addons is not None:
-            params['addOns'] = addons
+            if isinstance(addons, list):
+                params['addOns'] = addons
+            elif isinstance(addons, str):
+                params['addOns'] = [addons]
         if usage is not None:
             params['usage'] = usage
 

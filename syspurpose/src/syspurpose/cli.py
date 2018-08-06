@@ -17,6 +17,7 @@ from __future__ import print_function, division, absolute_import
 
 import argparse
 from syspurpose.files import SyspurposeStore, USER_SYSPURPOSE
+from syspurpose.sync import SyspurposeSync
 from syspurpose.utils import in_container, make_utf8
 from syspurpose.i18n import ugettext as _
 import json
@@ -238,4 +239,15 @@ def main():
 
     if args.requires_write:
         syspurposestore.write()
+
+        try:
+            syspurpose_sync = SyspurposeSync()
+        except ImportError:
+            print(_("Warning: Unable to sync system purpose with candlepin server: rhsm module is not available."))
+        else:
+            ret = syspurpose_sync.send_syspurpose_to_candlepin(syspurposestore)
+            if ret:
+                print(_("System purpose successfully sent to candlepin server."))
+            else:
+                print(_("Unable to sent system purpose to candlepin server"))
     return 0
