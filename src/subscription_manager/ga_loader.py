@@ -15,7 +15,7 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 #
 
-import imp
+import types
 import os
 import sys
 
@@ -129,7 +129,7 @@ class GaImporter(object):
 
     def _new_module(self, fullname):
         """Create a an empty module, we can populate with impl specific."""
-        ret = sys.modules.setdefault(fullname, imp.new_module(fullname))
+        ret = sys.modules.setdefault(fullname, types.ModuleType(fullname))
         ret.__name__ = fullname
         ret.__loader__ = self
         ret.__filename__ = fullname
