@@ -15,14 +15,15 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
+"""
+This module contains utilities for manipulating files pertaining to system syspurpose
+"""
 
 import json
 import os
 import io
 from syspurpose.utils import system_exit, create_dir, create_file, make_utf8, write_to_file_utf8
 from syspurpose.i18n import ugettext as _
-
-# This modules contains utilities for manipulating files pertaining to system syspurpose
 
 # Constants for locations of the two system syspurpose files
 USER_SYSPURPOSE = "/etc/rhsm/syspurpose/syspurpose.json"
@@ -165,6 +166,7 @@ class SyspurposeStore(object):
         """
         Read the file represented by path. If the file does not exist it is created.
         :param path: The path on the file system to read, should be a json file
+        :param raise_on_error: When it is set to True, then exceptions are raised as expected.
         :return: new SyspurposeStore with the contents read in
         """
         new_store = cls(path, raise_on_error=raise_on_error)

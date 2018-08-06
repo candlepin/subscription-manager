@@ -84,8 +84,8 @@ class CliRegistrationTests(SubManFixture):
         self._inject_ipm()
 
         cmd.main(['register', '--consumerid=123456', '--username=testuser1', '--password=password', '--org=test_org'])
-        self.mock_register.register.assert_called_once_with(None, consumerid='123456', role=None,
-                                                            addons=None, service_level=None, usage=None)
+        self.mock_register.register.assert_called_once_with(None, consumerid='123456', role='',
+                                                            addons=[''], service_level='', usage='')
         mock_entcertlib.update.assert_called_once()
 
     def test_consumerid_with_distributor_id(self):

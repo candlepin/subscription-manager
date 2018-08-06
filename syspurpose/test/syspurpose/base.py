@@ -41,7 +41,6 @@ class SyspurposeTestBase(unittest.TestCase):
         :return: Whatever the call to the method returns
         """
         method = args[0]
-        err_msg = None
 
         try:
             if kwargs:
@@ -57,6 +56,4 @@ class SyspurposeTestBase(unittest.TestCase):
                 arguments += str(kwargs)
             err_msg = "Expected no exception from method call \"{method}({args})\"\n Got Exception: \"{msg}\"\nTraceback during target method call:\n"\
                 .format(method=method.__name__, args=arguments, msg=str(e)) + "".join(traceback.format_tb(tb))
-
-        if err_msg:
             self.fail(err_msg)

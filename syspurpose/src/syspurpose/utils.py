@@ -15,7 +15,9 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
-# Utility methods for the syspurpose command
+"""
+Utility methods for the syspurpose command
+"""
 
 import io
 import json
