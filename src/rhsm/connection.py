@@ -1054,7 +1054,7 @@ class UEPConnection(object):
         if addons is not None:
             if isinstance(addons, list):
                 params['addOns'] = addons
-            elif isinstance(addons, str):
+            elif isinstance(addons, six.text_type):
                 params['addOns'] = [addons]
         if usage is not None:
             params['usage'] = usage

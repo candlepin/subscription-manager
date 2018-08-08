@@ -97,7 +97,7 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         test_data = {
             "role": "foo-role",
             "service_level_agreement": "foo-sla",
-            "addons": ["foo-addons", "bar-addon"],
+            "addons": ["foo-addon", "bar-addon"],
             "usage": "foo-usage"
         }
         with io.open(temp_file, 'w', encoding='utf-8') as f:
@@ -112,7 +112,7 @@ class SyspurposeStoreTests(SyspurposeTestBase):
             uuid="9d4778ae-80fe-4eed-a631-6be35fded7fe",
             role="foo-role",
             service_level="foo-sla",
-            addons=["foo-addons", "bar-addon"],
+            addons=["foo-addon", "bar-addon"],
             usage="foo-usage"
         )
 
