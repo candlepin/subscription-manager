@@ -245,7 +245,7 @@ class RegisterWidget(widgets.SubmanBaseWidget):
 
         self.backend = backend
 
-        self.async = AsyncBackend(self.backend)
+        self.async_backend = AsyncBackend(self.backend)
 
         # TODO: should be able to get rid of this soon, the
         #       only thing that uses it is the NetworkConfigDialog in
@@ -318,7 +318,7 @@ class RegisterWidget(widgets.SubmanBaseWidget):
 
     def add_screen(self, idx, screen_class):
         screen = screen_class(reg_info=self.info,
-                              async_backend=self.async,
+                              async_backend=self.async_backend,
                               parent_window=self.parent_window)
 
         # add the index of the screen in self._screens to the class itself
@@ -486,8 +486,8 @@ class RegisterWidget(widgets.SubmanBaseWidget):
 
         self.current_screen.set_property('ready', False)
 
-        async = next_screen.pre()
-        if async:
+        is_async = next_screen.pre()
+        if is_async:
             self.start_progress_timer()
             next_screen.emit('move-to-screen', PROGRESS_PAGE)
 
@@ -622,18 +622,18 @@ class RegisterWidget(widgets.SubmanBaseWidget):
     # HMMM: If the connect/backend/async, and the auth info is composited into
     #       the same GObject, these could be class closure handlers
     def _on_username_password_change(self, *args):
-        self.async.set_user_pass(self.info.username, self.info.password)
+        self.async_backend.set_user_pass(self.info.username, self.info.password)
 
     def _on_connection_info_change(self, *args):
-        self.async.update()
+        self.async_backend.update()
 
     def _on_activation_keys_change(self, obj, param):
         activation_keys = obj.get_property('activation-keys')
 
         # Unset backend from attempting to use basic auth
         if activation_keys:
-            self.async.set_user_pass()
-            self.async.update()
+            self.async_backend.set_user_pass()
+            self.async_backend.update()
 
     def _on_details_label_txt_change(self, obj, value):
         """Update the label under the progress bar on progress page."""
@@ -891,7 +891,7 @@ class Screen(widgets.SubmanBaseWidget):
 
         self.parent_window = parent_window
         self.info = reg_info
-        self.async = async_backend
+        self.async_backend = async_backend
 
     def stay(self):
         self.emit('stay-on-screen')
@@ -951,7 +951,7 @@ class NoGuiScreen(ga_GObject.GObject):
 
         self.parent_window = parent_window
         self.info = reg_info
-        self.async = async_backend
+        self.async_backend = async_backend
 
         self.button_label = None
         self.needs_gui = False
@@ -1029,7 +1029,7 @@ class PerformRegisterScreen(NoGuiScreen):
                   self.info.get_property('environment'))
         self.info.set_property('register-status', msg)
 
-        self.async.register_consumer(self.info.get_property('consumername'),
+        self.async_backend.register_consumer(self.info.get_property('consumername'),
                                      self.info.get_property('owner-key'),
                                      self.info.get_property('environment'),
                                      self.info.get_property('activation-keys'),
@@ -1067,7 +1067,7 @@ class PerformUnregisterScreen(NoGuiScreen):
 
         # Unregister if we have gotten here with a valid identity and have old server info
         if self.info.identity.is_valid() and self.info.get_property('server-info') and self.info.get_property('enable-unregister'):
-            self.async.unregister_consumer(self.info.identity.uuid,
+            self.async_backend.unregister_consumer(self.info.identity.uuid,
                                            self.info.get_property('server-info'),
                                            self._on_unregistration_finished_cb)
             return True
@@ -1121,7 +1121,7 @@ class PerformPackageProfileSyncScreen(NoGuiScreen):
         return
 
     def pre(self):
-        self.async.update_package_profile(self.info.identity.uuid,
+        self.async_backend.update_package_profile(self.info.identity.uuid,
                                           self._on_update_package_profile_finished_cb)
         return True
 
@@ -1147,7 +1147,7 @@ class PerformSubscribeScreen(NoGuiScreen):
     def pre(self):
         self.info.set_property('details-label-txt', self.pre_message)
         self.info.set_property('register-state', RegisterState.SUBSCRIBING)
-        self.async.subscribe(self.info.identity.uuid,
+        self.async_backend.subscribe(self.info.identity.uuid,
                              self.info.get_property('current-sla'),
                              self.info.get_property('dry-run-result'),
                              self._on_subscribing_finished_cb)
@@ -1398,8 +1398,8 @@ class SelectSLAScreen(Screen):
         self.info.set_property('register-state', RegisterState.SUBSCRIBING)
         self.info.identity.reload()
 
-        self.async.find_service_levels(self.info.identity.uuid,
-                                       self._on_get_service_levels_cb)
+        self.async_backend.find_service_levels(self.info.identity.uuid,
+                                               self._on_get_service_levels_cb)
         return True
 
     def _can_add_more_subs(self, current_sla, sla_data_map):
@@ -1455,8 +1455,8 @@ class EnvironmentScreen(Screen):
 
     def pre(self):
         self.info.set_property('details-label-txt', self.pre_message)
-        self.async.get_environment_list(self.info.get_property('owner-key'),
-                                        self._on_get_environment_list_cb)
+        self.async_backend.get_environment_list(self.info.get_property('owner-key'),
+                                                self._on_get_environment_list_cb)
         return True
 
     def back_handler(self):
@@ -1529,8 +1529,8 @@ class OrganizationScreen(Screen):
 
     def pre(self):
         self.info.set_property('details-label-txt', self.pre_message)
-        self.async.get_owner_list(self.info.get_property('username'),
-                                  self._on_get_owner_list_cb)
+        self.async_backend.get_owner_list(self.info.get_property('username'),
+                                          self._on_get_owner_list_cb)
         return True
 
     def back_handler(self):
@@ -1766,7 +1766,7 @@ class RefreshSubscriptionsScreen(NoGuiScreen):
     def pre(self):
         self.info.set_property('details-label-txt', self.pre_message)
         self.info.set_property('register-state', RegisterState.SUBSCRIBING)
-        self.async.refresh(self._on_refresh_cb)
+        self.async_backend.refresh(self._on_refresh_cb)
         return True
 
 
@@ -1910,7 +1910,7 @@ class ValidateServerScreen(NoGuiScreen):
         hostname = self.info.get_property('hostname')
         port = self.info.get_property('port')
         prefix = self.info.get_property('prefix')
-        self.async.validate_server(hostname, port=port, prefix=prefix, callback=self._on_validate_server)
+        self.async_backend.validate_server(hostname, port=port, prefix=prefix, callback=self._on_validate_server)
         return True
 
     def back_handler(self):

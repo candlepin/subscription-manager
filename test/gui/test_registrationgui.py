@@ -131,14 +131,14 @@ def mock_parent():
     parent = Mock()
     backend = StubBackend()
     parent.backend = backend
-    parent.async = Mock()
+    parent.async_backend = Mock()
 
 
 class StubReg(object):
     def __init__(self):
         self.parent_window = Mock()
         self.backend = StubBackend()
-        self.async = Mock()
+        self.async_backend = Mock()
         self.reg_info = Mock()
         self.expected_facts = {'fact1': 'one',
                                'fact2': 'two',
@@ -155,7 +155,7 @@ class CredentialsScreenTests(SubManFixture):
 
         stub_reg = StubReg()
         self.screen = CredentialsScreen(reg_info=stub_reg.reg_info,
-                                        async_backend=stub_reg.async,
+                                        async_backend=stub_reg.async_backend,
                                         parent_window=stub_reg.parent_window)
 
     def test_clear_credentials_dialog(self):
@@ -179,7 +179,7 @@ class ActivationKeyScreenTests(SubManFixture):
         super(ActivationKeyScreenTests, self).setUp()
         stub_reg = StubReg()
         self.screen = ActivationKeyScreen(reg_info=stub_reg.reg_info,
-                                          async_backend=stub_reg.async,
+                                          async_backend=stub_reg.async_backend,
                                           parent_window=stub_reg.parent_window)
 
     def test_split_activation_keys(self):
@@ -195,7 +195,7 @@ class ChooseServerScreenTests(SubManFixture):
         super(ChooseServerScreenTests, self).setUp()
         stub_reg = StubReg()
         self.screen = ChooseServerScreen(reg_info=stub_reg.reg_info,
-                                         async_backend=stub_reg.async,
+                                         async_backend=stub_reg.async_backend,
                                          parent_window=stub_reg.parent_window)
 
     def test_activation_key_checkbox_sensitive(self):

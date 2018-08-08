@@ -24,7 +24,7 @@ import mock
 from subscription_manager.ga import GObject as ga_GObject
 import subscription_manager.injection as inj
 from subscription_manager.injection import provide
-from subscription_manager import async
+from subscription_manager import async_utils
 from subscription_manager import managerlib
 
 from . import stubs
@@ -67,7 +67,7 @@ class TestAsyncPool(fixture.SubManFixture):
         self.pool_stash = \
                 managerlib.PoolStash()
 
-        self.ap = async.AsyncPool(self.pool_stash)
+        self.ap = async_utils.AsyncPool(self.pool_stash)
 
         # add a timeout and a idle handler
         self.idle = ga_GObject.idle_add(self.ap.refresh, datetime.date.today(), self.idle_callback)
