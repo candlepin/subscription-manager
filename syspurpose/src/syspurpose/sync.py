@@ -100,7 +100,7 @@ class SyspurposeSync(object):
                     role=syspurpose_store.contents.get('role') or '',
                     addons=syspurpose_store.contents.get('addons') or [''],
                     service_level=syspurpose_store.contents.get('service_level_agreement') or '',
-                    usage=syspurpose_store.contents.get('usage_type') or ''
+                    usage=syspurpose_store.contents.get('usage') or ''
                 )
             except Exception as err:
                 print('Unable to update consumer with system purpose: %s' % err)

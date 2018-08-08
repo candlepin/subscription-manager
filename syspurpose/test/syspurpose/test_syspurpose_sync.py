@@ -98,7 +98,7 @@ class SyspurposeStoreTests(SyspurposeTestBase):
             "role": "foo-role",
             "service_level_agreement": "foo-sla",
             "addons": ["foo-addons", "bar-addon"],
-            "usage_type": "foo-usage"
+            "usage": "foo-usage"
         }
         with io.open(temp_file, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
