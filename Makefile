@@ -177,6 +177,9 @@ install-conf:
 	install -m 644 etc-conf/dbus/polkit/com.redhat.RHSM1.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
 	install -m 644 etc-conf/dbus/polkit/com.redhat.RHSM1.Facts.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
 	install -m 644 etc-conf/dbus/polkit/com.redhat.SubscriptionManager.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
+	if [[ "$(INCLUDE_SYSPURPOSE)" = "1" ]]; then \
+		install -m 644 etc-conf/syspurpose/valid_fields.json $(DESTDIR)/etc/rhsm/syspurpose/valid_fields.json; \
+	fi;
 	if [[ "$(WITH_SUBMAN_GUI)" == "true" ]]; then \
 		install -m 644 etc-conf/subscription-manager-gui.appdata.xml $(DESTDIR)/$(INSTALL_DIR)/appdata/subscription-manager-gui.appdata.xml; \
 		install -m 644 etc-conf/subscription-manager-gui.completion.sh $(DESTDIR)/etc/bash_completion.d/subscription-manager-gui; \

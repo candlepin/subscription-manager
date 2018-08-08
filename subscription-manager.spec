@@ -907,6 +907,7 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/ca/redhat-uep.pem %{buildroo
 %{python3_sitelib}/syspurpose/{*.py*,__pycache__/*}
 
 %attr(755, root, root) %{_sbindir}/syspurpose
+%attr(644,root,root) %{_sysconfdir}/rhsm/syspurpose/valid_fields.json
 %endif
 
 %files -n subscription-manager-plugin-container
