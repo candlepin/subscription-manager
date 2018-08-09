@@ -485,32 +485,31 @@ client.getSyspurposeStatus = () => {
         syspurposeService.GetSyspurposeStatus()
         .then(result => {
             client.syspurposeStatus.status = result;
-        });
-    })
-    .catch(ex => {
-        console.debug(ex);
-        client.syspurposeStatus.status = null; // TODO: change to something meaningful
-    })
-    .then(needRender);
+        })
+        .catch(ex => {
+                console.debug(ex);
+                client.syspurposeStatus.status = null; // TODO: change to something meaningful
+        })
+        .then(needRender);
+    });
 };
 
-client.getSyspurpose = () => {
+client.getSyspurpose = function() {
     this.dfd = cockpit.defer();
 
     safeDBusCall(syspurposeService, () => {
         syspurposeService.GetSyspurpose(userLang)
         .then(result => {
             client.syspurposeStatus.info = JSON.parse(result);
-        })
-        .then(() => {
             this.dfd.resolve();
-        });
-    })
-    .catch(ex => {
-        console.debug(ex);
-        client.syspurposeStatus.info = 'Unknown'; // TODO: change to something meaningful
-    })
-    .then(needRender);
+        })
+        .catch(ex => {
+            console.debug(ex);
+            client.syspurposeStatus.info = 'Unknown'; // TODO: change to something meaningful
+        })
+        .then(needRender);
+    });
+
     return this.dfd.promise();
 };
 

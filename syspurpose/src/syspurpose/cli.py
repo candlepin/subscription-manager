@@ -95,7 +95,6 @@ def setup_arg_parser():
     :return: An argparse.ArgumentParser ready to use to parse_args
     """
     parser = argparse.ArgumentParser(prog="syspurpose", description="System Syspurpose Management Tool")
-    parser.set_defaults(func=None, requires_write=False)
 
     subparsers = parser.add_subparsers(help="sub-command help")
 

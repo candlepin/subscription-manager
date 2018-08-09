@@ -158,40 +158,50 @@ class SubscriptionStatus extends React.Component {
         if (this.props.syspurpose["service_level_agreement"]) {
             sla = (
                 <div>
-                    { _("Service Level:  ") }
-                    { _(String(this.props.syspurpose["service_level_agreement"])) }
+                    <label>
+                        { _("Service Level:  ") }
+                        { _(String(this.props.syspurpose["service_level_agreement"])) }
+                    </label>
                 </div>
             );
         }
         if (this.props.syspurpose["usage"]) {
             usage = (
                 <div>
-                    { _("Usage:  ") }
-                    { _(String(this.props.syspurpose["usage"])) }
+                    <label>
+                        { _("Usage:  ") }
+                        { _(String(this.props.syspurpose["usage"])) }
+                    </label>
                 </div>
-            );
+        );
         }
         if (this.props.syspurpose["role"]) {
             role = (
                 <div>
-                    { _("Role:  ") }
-                    { _(String(this.props.syspurpose["role"])) }
+                    <label>
+                        { _("Role:  ") }
+                        { _(String(this.props.syspurpose["role"])) }
+                    </label>
                 </div>
             );
         }
         if (this.props.syspurpose["addons"]) {
             add_ons = (
                 <div>
-                    { _("AddOns:  ") }
-                    { _(String(subscriptionsClient.toArray(this.props.syspurpose["addons"]).join(", "))) }
+                    <label>
+                        { _("Addons:  ") }
+                        { _(String(subscriptionsClient.toArray(this.props.syspurpose["addons"]).join(", "))) }
+                    </label>
                 </div>
             );
         }
         if (this.props.syspurpose_status) {
             syspurpose_status = (
                 <div>
-                    { _("Status: ") }
-                    { _(String(this.props.syspurpose_status)) }
+                    <label>
+                        { _("Status: ") }
+                        { _(String(this.props.syspurpose_status)) }
+                    </label>
                 </div>
             );
         }
@@ -199,11 +209,11 @@ class SubscriptionStatus extends React.Component {
             <div>
                 <h2>{_("System Purpose")}</h2>
                 <div className="dl-horizontal">
-                    <div><label>{syspurpose_status}</label></div>
-                    <div><label>{sla}</label></div>
-                    <div><label>{usage}</label></div>
-                    <div><label>{role}</label></div>
-                    <div><label>{add_ons}</label></div>
+                    {syspurpose_status}
+                    {sla}
+                    {usage}
+                    {role}
+                    {add_ons}
                 </div>
             </div>
         );
