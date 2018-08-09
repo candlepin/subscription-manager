@@ -299,7 +299,7 @@ class SyspurposeSyncActionReport(certlib.ActionReport):
                     key=change.key, value=change.new_value, source=source
             )
         elif change.in_base and change.previous_value != change.new_value:
-            msg = "'{key}' updated from '{old_value}' to '{old_value}' due to change in {source}"\
+            msg = "'{key}' updated from '{old_value}' to '{new_value}' due to change in {source}"\
                 .format(key=change.key, new_value=change.new_value,
                         old_value=change.previous_value, source=source)
 
