@@ -910,9 +910,13 @@ class ServiceLevelCommand(OrgCommand):
 
             if self.options.unset:
                 self.unset_service_level()
+                # Synchronize syspurpose with server
+                syspurposelib.SyspurposeSyncActionCommand().perform()
 
             if self.options.service_level is not None:
                 self.set_service_level(self.options.service_level)
+                # Synchronize syspurpose with server
+                syspurposelib.SyspurposeSyncActionCommand().perform()
 
             if self.options.show:
                 self.show_service_level()
@@ -975,14 +979,13 @@ class ServiceLevelCommand(OrgCommand):
                 raise e
 
 
-class UsageCommand(UserPassCommand):
+class UsageCommand(CliCommand):
 
     def __init__(self):
 
         shortdesc = _("Manage usage setting for this system")
         self._org_help_text = _("use set and unset to define the value for this field")
-        super(UsageCommand, self).__init__("usage", shortdesc,
-                                                  False)
+        super(UsageCommand, self).__init__("usage", shortdesc, False)
 
         self.parser.add_option("--set", dest="usage",
                 help=_("usage setting to apply to this system"))
@@ -996,7 +999,6 @@ class UsageCommand(UserPassCommand):
         consumer = self.cp.getConsumer(self.identity.uuid)
         if 'usage' not in consumer:
             system_exit(os.EX_UNAVAILABLE, _("Error: The usage command is not supported by the server."))
-        self.cp.updateConsumer(self.identity.uuid, usage=usage)
         save_usage_to_syspurpose_metadata(usage)
 
     def _validate_options(self):
@@ -1009,16 +1011,6 @@ class UsageCommand(UserPassCommand):
 
     def _do_command(self):
         self._validate_options()
-
-        # If we have a username/password, we're going to use that, otherwise
-        # we'll use the identity certificate. We already know one or the other
-        # exists:
-        if self.options.username and self.options.password:
-            self.cp_provider.set_user_pass(self.username, self.password)
-            self.cp = self.cp_provider.get_basic_auth_cp()
-        else:
-            # get an UEP as consumer
-            self.cp = self.cp_provider.get_consumer_auth_cp()
 
         if self.options.unset:
             self.unset_usage()
@@ -1033,10 +1025,14 @@ class UsageCommand(UserPassCommand):
         else:
             self._set_usage(usage)
             print(_("Usage set to: %s") % usage)
+        # Synchronize syspurpose with server
+        syspurposelib.SyspurposeSyncActionCommand().perform()
 
     def unset_usage(self):
         self._set_usage("")
         print(_("Usage setting has been unset"))
+        # Synchronize syspurpose with server
+        syspurposelib.SyspurposeSyncActionCommand().perform()
 
     def show_usage(self):
         consumer = self.cp.getConsumer(self.identity.uuid)
@@ -1441,6 +1437,9 @@ class AddonsCommand(CliCommand):
             syspurposelib.remove_all("addons", self.options.to_remove)
             print(_("Addons removed: %s" % ", ".join(self.options.to_remove)))
         syspurposelib.write()
+
+        # Synchronize syspurpose with server
+        syspurposelib.SyspurposeSyncActionCommand().perform()
 
 
 class RedeemCommand(CliCommand):
@@ -2722,14 +2721,24 @@ class RoleCommand(CliCommand):
             system_exit(os.EX_USAGE, _("Error: Options --set and --unset of role subcommand are mutually exclusive."))
 
     def _set_role(self, role):
+        consumer = self.cp.getConsumer(self.identity.uuid)
+        if 'role' not in consumer:
+            system_exit(os.EX_UNAVAILABLE, _("Error: The role command is not supported by the server."))
         ret = save_role_to_syspurpose_metadata(role)
+        # Synchronize syspurpose with server
+        syspurposelib.SyspurposeSyncActionCommand().perform()
         if ret:
             print(_("System Purpose role has been set to: %s") % role)
         else:
             print(_("Error: System Purpose role has NOT been set to: %s") % role)
 
     def _unset_role(self):
-        ret = save_role_to_syspurpose_metadata(None)
+        consumer = self.cp.getConsumer(self.identity.uuid)
+        if 'role' not in consumer:
+            system_exit(os.EX_UNAVAILABLE, _("Error: The role command is not supported by the server."))
+        ret = save_role_to_syspurpose_metadata('')
+        # Synchronize syspurpose with server
+        syspurposelib.SyspurposeSyncActionCommand().perform()
         if ret:
             print(_("System Purpose role has been unset"))
         else:

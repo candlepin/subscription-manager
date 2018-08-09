@@ -92,7 +92,7 @@ def save_role_to_syspurpose_metadata(role):
     :return: None
     """
 
-    if SyspurposeStore:
+    if 'SyspurposeStore' in globals() and SyspurposeStore is not None:
         store = SyspurposeStore.read(USER_SYSPURPOSE)
 
         if role is None or role == "":
