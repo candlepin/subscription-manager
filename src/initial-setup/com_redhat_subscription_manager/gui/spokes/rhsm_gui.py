@@ -22,7 +22,6 @@ import logging
 
 from pyanaconda.ui.communication import hubQ
 from pyanaconda.ui.gui.spokes import NormalSpoke
-from pyanaconda.ui.common import FirstbootSpokeMixIn
 from pyanaconda.ui.categories.system import SystemCategory
 from pyanaconda.ui.categories.user_settings import UserSettingsCategory
 from pyanaconda.ui.gui.utils import really_hide
@@ -52,7 +51,7 @@ __all__ = ["RHSMSpoke"]
 configure_gettext()
 
 
-class RHSMSpoke(FirstbootSpokeMixIn, NormalSpoke):
+class RHSMSpoke(NormalSpoke):
     """
     Spoke used for registration of system in Anaconda or Initial Setup
     """
@@ -69,6 +68,11 @@ class RHSMSpoke(FirstbootSpokeMixIn, NormalSpoke):
         category = SystemCategory
     icon = "subscription-manager"
     title = "_Subscription Manager"
+
+    @classmethod
+    def should_run(cls, environment, data):
+        """Run this spoke for Anaconda and InitialSetup"""
+        return True
 
     def __init__(self, data, storage, payload, instclass):
         NormalSpoke.__init__(self, data, storage, payload, instclass)
