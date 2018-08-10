@@ -23,7 +23,7 @@ from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.ga import GObject as ga_GObject
 from subscription_manager.ga import GdkPixbuf as ga_GdkPixbuf
 
-from subscription_manager.async import AsyncBind
+from subscription_manager.async_utils import AsyncBind
 from subscription_manager.cert_sorter import EntitlementCertStackingGroupSorter
 from subscription_manager.entcertlib import EntCertDeleteAction
 from subscription_manager import injection as inj

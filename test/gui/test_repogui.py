@@ -16,7 +16,7 @@ from __future__ import print_function, division, absolute_import
 
 from mock import Mock
 from test.fixture import SubManFixture
-from subscription_manager.async import AsyncRepoOverridesUpdate
+from subscription_manager.async_utils import AsyncRepoOverridesUpdate
 from subscription_manager.gui.reposgui import RepositoriesDialog
 from subscription_manager.repolib import Repo
 from subscription_manager.overrides import Override

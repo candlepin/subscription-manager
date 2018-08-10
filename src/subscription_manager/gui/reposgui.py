@@ -26,7 +26,7 @@ from subscription_manager.gui.utils import handle_gui_exception
 from subscription_manager.gui import widgets
 from subscription_manager.gui import progress
 
-from subscription_manager.async import AsyncRepoOverridesUpdate
+from subscription_manager.async_utils import AsyncRepoOverridesUpdate
 from subscription_manager.injection import IDENTITY, ENT_DIR, require
 from subscription_manager.gui.storage import MappedListStore
 from subscription_manager.gui.widgets import TextTreeViewColumn, CheckBoxColumn,\

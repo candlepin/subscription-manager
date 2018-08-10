@@ -218,7 +218,7 @@ class RHSMSpoke(NormalSpoke):
         """When the spoke is left, this can run anything that needs to happen.
 
         Wait for any async processing to complete."""
-        self.register_widget.async.block_until_complete()
+        self.register_widget.async_backend.block_until_complete()
 
     def _on_register_status_change(self, obj, params):
         status = obj.get_property('register-status')

@@ -20,7 +20,7 @@ import logging
 from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.ga import GObject as ga_GObject
 
-from subscription_manager import async
+from subscription_manager import async_utils
 from subscription_manager.gui.contract_selection import ContractSelectionWindow
 from subscription_manager.gui.filter import FilterOptionsWindow, Filters
 from subscription_manager.gui import progress
@@ -66,7 +66,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.pool_stash = managerlib.PoolStash()
 
-        self.async_bind = async.AsyncBind(self.backend.certlib)
+        self.async_bind = async_utils.AsyncBind(self.backend.certlib)
 
         today = datetime.date.today()
         self.date_picker = widgets.DatePicker(today)
@@ -363,7 +363,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
                 self.pb.set_transient_for(self.parent_win)
 
             # fire off async refresh
-            async_stash = async.AsyncPool(self.pool_stash)
+            async_stash = async_utils.AsyncPool(self.pool_stash)
             async_stash.refresh(self.date_picker.date, self._update_display)
         except Exception as e:
             handle_gui_exception(e, _("Error fetching subscriptions from server:  %s"),
