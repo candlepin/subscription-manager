@@ -947,7 +947,7 @@ class TestYumPluginManager(unittest.TestCase):
     This class is intended for testing YumPluginManager
     """
 
-    ORIGINAL_YUM_PLUGIN_DIR = YumPluginManager.YUM_PLUGIN_DIR
+    ORIGINAL_DNF_PLUGIN_DIR = YumPluginManager.DNF_PLUGIN_DIR
     ORIGINAL_YUM_PLUGINS = YumPluginManager.YUM_PLUGINS
 
     def init_plugin_conf_files(self, conf_string):
@@ -964,7 +964,7 @@ class TestYumPluginManager(unittest.TestCase):
         self.plug_file_name_01 = plug_file_name_01
         self.plug_file_name_02 = plug_file_name_02
         self.tmp_dir = tmp_dir
-        YumPluginManager.YUM_PLUGIN_DIR = tmp_dir
+        YumPluginManager.DNF_PLUGIN_DIR = tmp_dir
         YumPluginManager.YUM_PLUGINS = [
             plug_file_name_01.replace(tmp_dir, '').replace('.conf', ''),
             plug_file_name_02.replace(tmp_dir, '').replace('.conf', '')
@@ -974,7 +974,7 @@ class TestYumPluginManager(unittest.TestCase):
         """
         Restore original constants in YumPluginManager
         """
-        YumPluginManager.YUM_PLUGIN_DIR = self.ORIGINAL_YUM_PLUGIN_DIR
+        YumPluginManager.DNF_PLUGIN_DIR = self.ORIGINAL_DNF_PLUGIN_DIR
         YumPluginManager.YUM_PLUGINS = self.ORIGINAL_YUM_PLUGINS
         os.unlink(self.plug_file_name_01)
         os.unlink(self.plug_file_name_02)
@@ -990,7 +990,7 @@ class TestYumPluginManager(unittest.TestCase):
         self.assertEqual(len(plugin_list), 2)
         for plugin_conf_file_name in YumPluginManager.YUM_PLUGINS:
             yum_plugin_config = ConfigParser()
-            result = yum_plugin_config.read(YumPluginManager.YUM_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf')
+            result = yum_plugin_config.read(YumPluginManager.DNF_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf')
             self.assertGreater(len(result), 0)
             is_plugin_enabled = yum_plugin_config.getint('main', 'enabled')
             self.assertEqual(is_plugin_enabled, 1)
@@ -1006,7 +1006,7 @@ class TestYumPluginManager(unittest.TestCase):
         self.assertEqual(len(plugin_list), 0)
         for plugin_conf_file_name in YumPluginManager.YUM_PLUGINS:
             yum_plugin_config = ConfigParser()
-            result = yum_plugin_config.read(YumPluginManager.YUM_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf')
+            result = yum_plugin_config.read(YumPluginManager.DNF_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf')
             self.assertGreater(len(result), 0)
             is_plugin_enabled = yum_plugin_config.getboolean('main', 'enabled')
             self.assertEqual(is_plugin_enabled, False)
@@ -1022,7 +1022,7 @@ class TestYumPluginManager(unittest.TestCase):
         self.assertEqual(len(plugin_list), 0)
         for plugin_conf_file_name in YumPluginManager.YUM_PLUGINS:
             yum_plugin_config = ConfigParser()
-            result = yum_plugin_config.read(YumPluginManager.YUM_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf')
+            result = yum_plugin_config.read(YumPluginManager.DNF_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf')
             self.assertGreater(len(result), 0)
             is_plugin_enabled = yum_plugin_config.getint('main', 'enabled')
             self.assertEqual(is_plugin_enabled, 1)
@@ -1038,7 +1038,7 @@ class TestYumPluginManager(unittest.TestCase):
         self.assertEqual(len(plugin_list), 0)
         for plugin_conf_file_name in YumPluginManager.YUM_PLUGINS:
             yum_plugin_config = ConfigParser()
-            result = yum_plugin_config.read(YumPluginManager.YUM_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf')
+            result = yum_plugin_config.read(YumPluginManager.DNF_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf')
             self.assertGreater(len(result), 0)
             # The file was not modified. We have to read value with with getboolean()
             is_plugin_enabled = yum_plugin_config.getboolean('main', 'enabled')
@@ -1055,7 +1055,7 @@ class TestYumPluginManager(unittest.TestCase):
         self.assertEqual(len(plugin_list), 2)
         for plugin_conf_file_name in YumPluginManager.YUM_PLUGINS:
             yum_plugin_config = ConfigParser()
-            result = yum_plugin_config.read(YumPluginManager.YUM_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf')
+            result = yum_plugin_config.read(YumPluginManager.DNF_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf')
             self.assertGreater(len(result), 0)
             is_plugin_enabled = yum_plugin_config.getint('main', 'enabled')
             self.assertEqual(is_plugin_enabled, 1)
@@ -1071,7 +1071,7 @@ class TestYumPluginManager(unittest.TestCase):
         self.assertEqual(len(plugin_list), 2)
         for plugin_conf_file_name in YumPluginManager.YUM_PLUGINS:
             yum_plugin_config = ConfigParser()
-            result = yum_plugin_config.read(YumPluginManager.YUM_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf')
+            result = yum_plugin_config.read(YumPluginManager.DNF_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf')
             self.assertGreater(len(result), 0)
             is_plugin_enabled = yum_plugin_config.getint('main', 'enabled')
             self.assertEqual(is_plugin_enabled, 1)

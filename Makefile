@@ -25,6 +25,7 @@ OS_DIST ?= $(shell rpm --eval='%dist')
 PYTHON_VER ?= $(shell $(PYTHON) -c 'import sys; print("python%s.%s" % sys.version_info[:2])')
 
 PYTHON_SITELIB ?= $(PREFIX)/lib64/$(PYTHON_VER)/site-packages
+DNF_PLUGIN_PYTHON_SITELIB ?= $(PREFIX)/lib/$(PYTHON_VER)/site-packages
 # Note the underscore used instead of a hyphen
 PYTHON_INST_DIR = $(PYTHON_SITELIB)/subscription_manager
 
@@ -111,7 +112,11 @@ build: rhsmcertd rhsm-icon
 # Install doesn't perform a build if it doesn't have too.  Best to clean out
 # any cruft so developers don't end up install old builds.
 	$(PYTHON) ./setup.py clean --all
-	$(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
+	if [ "$(OS)" = "RHEL" -a "$(OS_VERSION)" -gt 7 ] || [ "$(OS)" = "FEDORA" -a "$(OS_VERSION)" -gt 21 ] ; then \
+            $(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION) --use-dnf=true; \
+        else \
+            $(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION) --use-dnf=false; \
+        fi; \
 
 # we never "remake" this makefile, so add a target so
 # we stop searching for implicit rules on how to remake it
@@ -212,8 +217,10 @@ install-plugins:
 
 	if [ "$(INSTALL_DNF_PLUGINS)" = "true" ] ; then \
 		echo "Installing DNF plugins" ; \
-		install -d $(DESTDIR)/$(PYTHON_SITELIB)/dnf-plugins/ ; \
-		install -m 644 -p src/dnf-plugins/*.py $(DESTDIR)/$(PYTHON_SITELIB)/dnf-plugins/ ; \
+		install -d $(DESTDIR)/$(DNF_PLUGIN_PYTHON_SITELIB)/dnf-plugins/ ; \
+		install -d $(DESTDIR)/etc/dnf/plugins/ ; \
+		install -m 644 -p src/dnf-plugins/*.py $(DESTDIR)/$(DNF_PLUGIN_PYTHON_SITELIB)/dnf-plugins/ ; \
+		install -m 644 etc-conf/plugin/*.conf $(DESTDIR)/etc/dnf/plugins/ ; \
 	fi;
 
 	# ostree stuff

@@ -58,6 +58,7 @@
 
 %if %{with python3}
 %global python_sitearch %python3_sitearch
+%global python_sitelib %python3_sitelib
 %global __python %__python3
 %global py_package_prefix python%{python3_pkgversion}
 %global rhsm_package_name %{py_package_prefix}-subscription-manager-rhsm
@@ -541,9 +542,6 @@ desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-c
 
 %find_lang rhsm
 
-#%if %{use_subman_gui}
-#%find_lang %{name} --with-gnome
-#%endif
 
 # fake out the redhat.repo file
 %if %{use_yum} || %{use_dnf}
@@ -588,6 +586,12 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
     %dir %{_sysconfdir}/yum
     %dir %{_sysconfdir}/yum/pluginconf.d
     %dir %{_prefix}/lib/yum-plugins/
+%endif
+
+%if %{use_dnf}
+    %dir %{_sysconfdir}/dnf
+    %dir %{_sysconfdir}/dnf/plugins
+    %dir %{_prefix}/lib/dnf-plugins/
 %endif
 
 %if %{use_yum} || %{use_dnf}
@@ -654,6 +658,14 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
     %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/subscription-manager.conf
     %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/product-id.conf
     %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/search-disabled-repos.conf
+%endif
+
+# dnf plugin config
+%if %{use_dnf}
+    # remove the repo file when we are deleted
+    %config(noreplace) %attr(644,root,root) %{_sysconfdir}/dnf/plugins/subscription-manager.conf
+    %config(noreplace) %attr(644,root,root) %{_sysconfdir}/dnf/plugins/product-id.conf
+    %config(noreplace) %attr(644,root,root) %{_sysconfdir}/dnf/plugins/search-disabled-repos.conf
 %endif
 
 # misc system config
@@ -960,7 +972,7 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %if %use_dnf
 %files -n dnf-plugin-subscription-manager
 %defattr(-,root,root,-)
-%{python_sitearch}/dnf-plugins/*
+%{python_sitelib}/dnf-plugins/*
 %endif
 
 
