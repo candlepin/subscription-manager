@@ -185,6 +185,24 @@ def setup_arg_parser():
         parents=[unset_options])
     unset_role_parser.set_defaults(prop_name="role")
 
+    # ADDONS #############
+    add_addons_parser = subparsers.add_parser("add-addons",
+        help=_("Add addons to the system syspurpose"),
+        parents=[add_options])
+    # TODO: Set prop_name from schema file
+    add_addons_parser.set_defaults(prop_name="addons")
+
+    remove_addons_parser = subparsers.add_parser("remove-addons",
+        help=_("Remove addons from the system syspurpose"),
+        parents=[remove_options])
+    remove_addons_parser.set_defaults(prop_name="addons")
+
+    unset_role_parser = subparsers.add_parser("unset-addons",
+        help=_("Clear set addons"),
+        parents=[unset_options])
+    unset_role_parser.set_defaults(prop_name="addons")
+
+
     # SLA ################
     set_sla_parser = subparsers.add_parser("set-sla",
         help=_("Set the system sla"),
