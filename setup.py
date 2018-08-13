@@ -45,20 +45,23 @@ from build_ext import i18n, lint, template, utils
 class rpm_version_release_build_py(_build_py):
     user_options = _build_py.user_options + [
         ('gtk-version=', None, 'GTK version this is built for'),
-        ('rpm-version=', None, 'version and release of the RPM this is built for')]
+        ('rpm-version=', None, 'version and release of the RPM this is built for'),
+        ('use-dnf=', None, 'True if dnf is used, False if yum is used')]
 
     def initialize_options(self):
         _build_py.initialize_options(self)
         self.rpm_version = None
         self.gtk_version = None
         self.versioned_packages = []
+        self.use_dnf = None
 
     def finalize_options(self):
         _build_py.finalize_options(self)
-        self.set_undefined_options('build', ('rpm_version', 'rpm_version'), ('gtk_version', 'gtk_version'))
+        self.set_undefined_options('build', ('rpm_version', 'rpm_version'), ('gtk_version', 'gtk_version'),
+            ('use_dnf', 'use_dnf'))
 
     def run(self):
-        log.info("Building with GTK_VERSION=%s and RPM_VERSION=%s" % (self.gtk_version, self.rpm_version))
+        log.info("Building with GTK_VERSION=%s, RPM_VERSION=%s and USE_DNF = %s" % (self.gtk_version, self.rpm_version, self.use_dnf))
         _build_py.run(self)
         # create a "version.py" that includes the rpm version
         # info passed to our new build_py args
@@ -72,6 +75,7 @@ class rpm_version_release_build_py(_build_py):
                         for l in f.readlines():
                             l = l.replace("RPM_VERSION", str(self.rpm_version))
                             l = l.replace("GTK_VERSION", str(self.gtk_version))
+                            l = l.replace("USE_DNF", str(self.use_dnf))
                             lines.append(l)
 
                     with open(version_file, 'w') as f:
@@ -85,6 +89,7 @@ class install(_install):
     user_options = _install.user_options + [
         ('gtk-version=', None, 'GTK version this is built for'),
         ('rpm-version=', None, 'version and release of the RPM this is built for'),
+        ('use-dnf=', None, 'True if dnf is used, False if yum is used'),
         ('with-systemd=', None, 'whether to install w/ systemd support or not'),
         ('with-subman-gui=', None, 'whether to install subman GUI or not'),
         ('with-cockpit-desktop-entry=', None, 'whether to install desktop entry for subman cockpit plugin or not')
@@ -94,24 +99,28 @@ class install(_install):
         _install.initialize_options(self)
         self.rpm_version = None
         self.gtk_version = None
+        self.use_dnf = None
         self.with_systemd = None
         self.with_subman_gui = None
         self.with_cockpit_desktop_entry = None
 
     def finalize_options(self):
         _install.finalize_options(self)
-        self.set_undefined_options('build', ('rpm_version', 'rpm_version'), ('gtk_version', 'gtk_version'))
+        self.set_undefined_options('build', ('rpm_version', 'rpm_version'), ('gtk_version', 'gtk_version'),
+            ('use_dnf', 'use_dnf'))
 
 
 class build(_build):
     user_options = _build.user_options + [
         ('gtk-version=', None, 'GTK version this is built for'),
-        ('rpm-version=', None, 'version and release of the RPM this is built for')]
+        ('rpm-version=', None, 'version and release of the RPM this is built for'),
+        ('use-dnf=', None, 'True if dnf is used, False if yum is used')]
 
     def initialize_options(self):
         _build.initialize_options(self)
         self.rpm_version = None
         self.gtk_version = None
+        self.use_dnf = None
         self.git_tag_prefix = "subscription-manager-"
 
     def finalize_options(self):
@@ -121,6 +130,9 @@ class build(_build):
 
         if not self.gtk_version:
             self.gtk_version = self.get_gtk_version()
+
+        if not self.use_dnf:
+            self.use_dnf = False
 
     def get_git_describe(self):
         try:
