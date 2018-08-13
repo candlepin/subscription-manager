@@ -130,7 +130,7 @@
 %define subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.23.2
+Version: 1.23.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1081,6 +1081,20 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Aug 13 2018 Christopher Snyder <csnyder@redhat.com> 1.23.3-1
+- 1606435: Rename the async module for compatibility with python 3.7; ENT-737
+  (csnyder@redhat.com)
+- Cockpit/Syspurpose service integration fix (aparadka@redhat.com)
+- Display both new and old value in syspurpose diff message
+  (csnyder@redhat.com)
+- Fix sending single value of addons. (jhnidek@redhat.com)
+- Fix synchronization of usage with candlepin (jhnidek@redhat.com)
+- 1596294: Fix displayin RHSM Spoke in Initial Setup (jhnidek@redhat.com)
+- Syspurpose field value lists [ENT-766] (wpoteat@redhat.com)
+- ENT-717: Syncing of syspurpose store with candlepin (jhnidek@redhat.com)
+- 1609048: Replacement of imp module with importlib; ENT-758
+  (jhnidek@redhat.com)
+
 * Fri Aug 03 2018 Christopher Snyder <csnyder@redhat.com> 1.23.2-1
 - Move "nose" to test requirements for syspurpose (csnyder@redhat.com)
 
