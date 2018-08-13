@@ -545,9 +545,6 @@ desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-c
 #%find_lang %{name} --with-gnome
 #%endif
 
-# fix timestamps on our byte compiled files so they match across arches
-find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
-
 # fake out the redhat.repo file
 %if %{use_yum} || %{use_dnf}
     %{__mkdir} %{buildroot}%{_sysconfdir}/yum.repos.d
@@ -576,6 +573,9 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/ca/redhat-uep.pem %{buildroo
 %py_byte_compile %{__python3} %{buildroot}%{rhsm_plugins_dir}/
 %py_byte_compile %{__python3} %{buildroot}%{_datadir}/anaconda/addons/com_redhat_subscription_manager/
 %endif
+
+# fix timestamps on our byte compiled files so they match across arches
+find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 
 # base/cli tools use the gettext domain 'rhsm', while the
 # gnome-help tools use domain 'subscription-manager'
