@@ -36,7 +36,7 @@ log = logging.getLogger(__name__)
 try:
     from syspurpose.files import SyspurposeStore, USER_SYSPURPOSE
 except ImportError:
-    log.error("Could not import from module syspurpose.")
+    log.debug("Could not import from module syspurpose.")
     SyspurposeStore = None
     USER_SYSPURPOSE = "/etc/rhsm/syspurpose/syspurpose.json"
 
