@@ -83,38 +83,33 @@ Vagrant.configure("2") do |config|
         override.vm.network "forwarded_port", guest: 9090, host: 9090  # allow VirtualBox to serve cockpit over 9090
       end
 
-      host.vm.provision "ansible", run: "always" do |ansible|
-        ansible.playbook = "vagrant/vagrant.yml"
-        ansible.groups = {
-          "subman-devel" => vm_boxes.keys()
-        }
-        ansible.extra_vars = extra_vars.fetch(name, {}).merge({
-          "subman_checkout_dir" => "/vagrant",
-          "subman_setup_hacking_environment" => "true",
-          "subman_add_vagrant_candlepin_to_hosts" => "true",
-        })
-        # This will pass any environment variables beginning with "SUBMAN_" or
-        # "subman_" (less the prefix) along with their values to ansible for
-        # use in our playbooks.
-        #
-        # Check the playbooks to see how these variables are used.
-        env_prefix = "subman_"
-        ENV.each do |key, value|
-          if key.downcase.start_with?(env_prefix)
-              new_var_key = key.downcase()
-              ansible.extra_vars[new_var_key] = value
+      if extra_vars.fetch(name, {}).fetch('needs_provision', true)
+        host.vm.provision "ansible", run: "always" do |ansible|
+          ansible.playbook = "vagrant/vagrant.yml"
+          ansible.groups = {
+            "subman-devel" => vm_boxes.keys()
+          }
+          ansible.extra_vars = extra_vars.fetch(name, {}).merge({
+            "subman_checkout_dir" => "/vagrant",
+            "subman_setup_hacking_environment" => "true",
+            "subman_add_vagrant_candlepin_to_hosts" => "true",
+          })
+          # This will pass any environment variables beginning with "SUBMAN_" or
+          # "subman_" (less the prefix) along with their values to ansible for
+          # use in our playbooks.
+          #
+          # Check the playbooks to see how these variables are used.
+          env_prefix = "subman_"
+          ENV.each do |key, value|
+            if key.downcase.start_with?(env_prefix)
+                new_var_key = key.downcase()
+                ansible.extra_vars[new_var_key] = value
+            end
           end
         end
       end
     end
   end
-
-  ['SUBMAN_RHSM_USERNAME', 'SUBMAN_RHSM_PASSWORD'].each do |var|
-    if extra_boxes_loaded and not ENV.include? var
-      puts "#{var} not defined. Expect failures. Please set up environment accordingly, and run `vagrant provision`. to correct"
-    end
-  end
-
 end
 
 # We need to specify static IP address, because this IP address has to be part
