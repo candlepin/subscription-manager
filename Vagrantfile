@@ -86,6 +86,7 @@ Vagrant.configure("2") do |config|
       if extra_vars.fetch(name, {}).fetch('needs_provision', true)
         host.vm.provision "ansible", run: "always" do |ansible|
           ansible.playbook = "vagrant/vagrant.yml"
+          ansible.galaxy_role_file = "vagrant/requirements.yml"
           ansible.groups = {
             "subman-devel" => vm_boxes.keys()
           }
