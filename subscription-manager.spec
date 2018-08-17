@@ -905,6 +905,8 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/ca/redhat-uep.pem %{buildroo
 %dir %{_sysconfdir}/rhsm/syspurpose
 %dir %{python3_sitelib}/syspurpose
 %{python3_sitelib}/syspurpose/{*.py*,__pycache__/*}
+%doc %{_mandir}/man8/syspurpose.8.*
+%doc LICENSE
 
 %attr(755, root, root) %{_sbindir}/syspurpose
 %endif
