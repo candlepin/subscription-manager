@@ -50,7 +50,7 @@ setup(
     author="Chris Snyder",
     author_email="chainsaw@redhat.com",
     cmdclass=cmdclass,
-    packages=find_packages('src', include=["syspurpose"]),
+    packages=find_packages('src'),
     package_dir={'': 'src'},
     tests_require=test_require,
     setup_requires=setup_requires,
