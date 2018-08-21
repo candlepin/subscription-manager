@@ -13,7 +13,7 @@ VAGRANTFILE_DIR = File.dirname(__FILE__)
 
 Vagrant.configure("2") do |config|
   vm_boxes = {
-    "centos7" => "centos/7",
+    "centos7" => "candlepin/subscription-manager-centos7",
     "centos6" => "centos/6",
     "debian9" => "debian/stretch64",
     "fedora25" => "fedora/25-cloud-base",
@@ -21,7 +21,11 @@ Vagrant.configure("2") do |config|
   }
 
   extra_boxes_loaded = false
-  extra_vars = {}
+  extra_vars = {
+    "centos7" => {
+      "needs_provision" => false,
+    },
+  }
 
   # allows us to share base boxes with Katello/forklift
   base_boxes = Dir.glob "#{VAGRANTFILE_DIR}/vagrant/plugins/*/vagrant/boxes.d/*.yaml"
