@@ -119,7 +119,7 @@ class TestYumProductManager(fixture.SubManFixture):
         self.mock_yb.repos.listEnabled.return_value = [mock_repo]
         enabled = pm.get_enabled()
 
-        self.assertTrue(mock_log.warn.called)
+        self.assertTrue(mock_log.warning.called)
         self.assertEqual([], enabled)
 
     @mock.patch('yum_product_id.log')

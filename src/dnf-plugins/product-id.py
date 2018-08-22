@@ -72,12 +72,11 @@ class DnfProductManager(ProductManager):
                            self.get_active(),
                            True)
 
-    def _download_productid(self, repo):
-        with dnf.util.tmpdir() as tmpdir:
-            handle = repo._handle_new_remote(tmpdir)
-            handle.setopt(librepo.LRO_PROGRESSCB, None)
-            handle.setopt(librepo.LRO_YUMDLIST, [self.PRODUCTID])
-            res = handle.perform()
+    def _download_productid(self, repo, tmpdir):
+        handle = repo._handle_new_remote(tmpdir)
+        handle.setopt(librepo.LRO_PROGRESSCB, None)
+        handle.setopt(librepo.LRO_YUMDLIST, [self.PRODUCTID])
+        res = handle.perform()
         return res.yum_repo.get(self.PRODUCTID, None)
 
     def get_enabled(self):
@@ -88,18 +87,19 @@ class DnfProductManager(ProductManager):
         # skip repo's that we don't have productid info for...
         for repo in enabled:
             try:
-                fn = self._download_productid(repo)
-                if fn:
-                    cert = self._get_cert(fn)
-                    if cert is None:
-                        continue
-                    lst.append((cert, repo.id))
-                else:
-                    # We have to look in all repos for productids, not just
-                    # the ones we create, or anaconda doesn't install it.
-                    self.meta_data_errors.append(repo.id)
+                with dnf.util.tmpdir() as tmpdir:
+                    fn = self._download_productid(repo, tmpdir)
+                    if fn:
+                        cert = self._get_cert(fn)
+                        if cert is None:
+                            continue
+                        lst.append((cert, repo.id))
+                    else:
+                        # We have to look in all repos for productids, not just
+                        # the ones we create, or anaconda doesn't install it.
+                        self.meta_data_errors.append(repo.id)
             except Exception as e:
-                log.warn("Error loading productid metadata for %s." % repo)
+                log.warning("Error loading productid metadata for %s." % repo)
                 log.exception(e)
                 self.meta_data_errors.append(repo.id)
 
@@ -111,7 +111,10 @@ class DnfProductManager(ProductManager):
     # find the list of repo's that provide packages that
     # are actually installed.
     def get_active(self):
-        """find yum repos that have packages installed"""
+        """find repos that have packages installed"""
+
+        # Fill sack with fresh data to include newly installed packages
+        self.base.fill_sack()
 
         # installed packages
         q_installed = self.base.sack.query().installed()
