@@ -917,6 +917,8 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %dir %{_sysconfdir}/rhsm/syspurpose
 %dir %{python3_sitelib}/syspurpose
 %{python3_sitelib}/syspurpose/{*.py*,__pycache__/*}
+%doc %{_mandir}/man8/syspurpose.8.*
+%doc LICENSE
 
 %attr(755, root, root) %{_sbindir}/syspurpose
 %attr(644,root,root) %{_sysconfdir}/rhsm/syspurpose/valid_fields.json

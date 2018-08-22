@@ -16,6 +16,7 @@ from setuptools import setup, find_packages
 
 import sys
 import os
+from glob import glob
 
 # Note that importing build_ext alone won't be enough to make certain tasks (like lint) work
 # those tasks require that some dependencies (e.g. lxml) be installed.  Munging the syspath
@@ -55,6 +56,9 @@ setup(
     tests_require=test_require,
     setup_requires=setup_requires,
     test_suite='nose.collector',
+    data_files=[
+        ('share/man/man8', glob('man/*.8'))
+    ],
     entry_points={
         "console_scripts": [
             "syspurpose = syspurpose.main:main"
