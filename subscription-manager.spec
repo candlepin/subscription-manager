@@ -91,6 +91,7 @@
 %endif
 
 %if 0%{?suse_version}
+%define dist suse%{?suse_version}
 %define install_zypper_plugins INSTALL_ZYPPER_PLUGINS=true
 %else
 %define install_zypper_plugins INSTALL_ZYPPER_PLUGINS=false
@@ -132,7 +133,13 @@
 
 Name: subscription-manager
 Version: 1.23.3
+
+%if 0%{?suse_version}
+Release: <CI_CNT>.<B_CNT>.%{?dist}
+%else
 Release: 1%{?dist}
+%endif
+
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
