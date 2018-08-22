@@ -87,7 +87,7 @@ class YumProductManager(ProductManager):
                 # the ones we create, or anaconda doesn't install it.
                 self.meta_data_errors.append(repo.id)
             except Exception as e:
-                log.warn("Error loading productid metadata for %s." % repo)
+                log.warning("Error loading productid metadata for %s." % repo)
                 log.exception(e)
                 self.meta_data_errors.append(repo.id)
 
