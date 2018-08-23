@@ -2,7 +2,7 @@ from __future__ import print_function, division, absolute_import
 
 from mock import Mock, patch
 
-from test.fixture import SubManFixture
+from test.fixture import SubManFixture, set_up_mock_sp_store
 
 from test.stubs import StubBackend, StubFacts
 from subscription_manager.gui.registergui import RegisterWidget, RegisterInfo,  \
@@ -235,6 +235,10 @@ class AsyncBackendTests(SubManFixture):
         super(AsyncBackendTests, self).setUp()
         self.backend = StubBackend()
         self.asyncBackend = AsyncBackend(self.backend)
+        syspurpose_patch = patch('subscription_manager.syspurposelib.SyspurposeStore')
+        self.mock_sp_store = syspurpose_patch.start()
+        self.mock_sp_store, self.mock_sp_store_contents = set_up_mock_sp_store(self.mock_sp_store)
+        self.addCleanup(syspurpose_patch.stop)
 
     def test_auto_system_complete(self):
         self.backend.cp_provider.get_consumer_auth_cp().getConsumer = \

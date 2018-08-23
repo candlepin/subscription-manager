@@ -856,6 +856,7 @@ def clean_all_data(backup=True):
     # for deleting persistent caches
     cache.ProfileManager.delete_cache()
     cache.InstalledProductsManager.delete_cache()
+    cache.SyspurposeCache.delete_cache()
 
     # FIXME: implement as dbus client to facts service DeleteCache() once implemented
     #Facts.delete_cache()

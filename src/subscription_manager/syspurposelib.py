@@ -92,7 +92,7 @@ def save_role_to_syspurpose_metadata(role):
     :return: None
     """
 
-    if SyspurposeStore:
+    if 'SyspurposeStore' in globals() and SyspurposeStore is not None:
         store = SyspurposeStore.read(USER_SYSPURPOSE)
 
         if role is None or role == "":
@@ -320,19 +320,23 @@ class SyspurposeSyncActionCommand(object):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = self.cp_provider.get_consumer_auth_cp()
 
-    def perform(self):
+    def perform(self, include_result=False):
         """
         Perform the action that this Command represents.
         :return:
         """
+        result = {}
         try:
-            self.sync()
+            result = self.sync()
         except ConnectionException as e:
             self.report._exceptions.append('Unable to sync syspurpose with server: %s' % str(e))
             self.report._status = 'Failed to sync system purpose'
         self.report._updates = "\n\t\t ".join(self.report._updates)
         log.debug("Syspurpose updated: %s" % self.report)
-        return self.report
+        if not include_result:
+            return self.report
+        else:
+            return self.report, result
 
     def sync(self):
         """
@@ -342,7 +346,7 @@ class SyspurposeSyncActionCommand(object):
         """
         if not self.uep.has_capability('syspurpose'):
             log.debug('Server does not support syspurpose, not syncing')
-            return
+            return read_syspurpose()
 
         consumer_identity = inj.require(inj.IDENTITY)
         consumer = self.uep.getConsumer(consumer_identity.uuid)
@@ -351,7 +355,10 @@ class SyspurposeSyncActionCommand(object):
         sp_cache = SyspurposeCache()
         # Translate from the remote values to the local, filtering out items not known
         for attr in ATTRIBUTES:
-            server_sp[attr] = consumer.get(LOCAL_TO_REMOTE[attr])
+            value = consumer.get(LOCAL_TO_REMOTE[attr])
+            if value is None:
+                value = ""
+            server_sp[attr] = value
 
         try:
             filesystem_sp = read_syspurpose(raise_on_error=True)
@@ -371,11 +378,14 @@ class SyspurposeSyncActionCommand(object):
         sp_cache.write_cache()
 
         write_syspurpose(result)
-
-        self.uep.updateConsumer(consumer_identity.uuid, role=result[ROLE],
-                                addons=result[ADDONS],
-                                service_level=result[SERVICE_LEVEL],
-                                usage=result[USAGE])
+        addons = result.get(ADDONS)
+        self.uep.updateConsumer(
+                consumer_identity.uuid,
+                role=result.get(ROLE) or "",
+                addons=addons if addons is not None else "",
+                service_level=result.get(SERVICE_LEVEL) or "",
+                usage=result.get(USAGE) or ""
+        )
 
         self.report._status = 'Successfully synced system purpose'
 
