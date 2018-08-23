@@ -1581,6 +1581,8 @@ class TestRoleCommand(TestCliCommand):
     def setUp(self):
         super(TestRoleCommand, self).setUp(False)
         self.cc = self.command_class()
+        self.cc.cp = StubUEP()
+        self.cc.cp.registered_consumer_info['role'] = None
 
     def test_wrong_options_syspurpose_role(self):
         """It is possible to use --set or --unset options. It's not possible to use both of them together."""
