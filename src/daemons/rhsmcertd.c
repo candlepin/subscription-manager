@@ -73,6 +73,7 @@ static gboolean run_now = FALSE;
 static gint arg_cert_interval_minutes = -1;
 static gint arg_heal_interval_minutes = -1;
 static gboolean arg_no_splay = FALSE;
+static int fd_lock = -1;
 
 struct CertCheckData {
     int interval_seconds;
@@ -214,6 +215,11 @@ long long gen_random(long long max) {
 void
 signal_handler(int signo) {
     if (signo == SIGTERM) {
+        /* Close lock file and release lock on this file */
+        if (fd_lock != -1) {
+            close(fd_lock);
+            fd_lock = -1;
+        }
         info ("rhsmcertd is shutting down...");
         signal (signo, SIG_DFL);
         raise (signo);
@@ -223,15 +229,20 @@ signal_handler(int signo) {
 int
 get_lock ()
 {
-    int fdlock;
+    fd_lock = open (LOCKFILE, O_WRONLY | O_CREAT, 0640);
+    int ret = 0;
 
-    if ((fdlock = open (LOCKFILE, O_WRONLY | O_CREAT, 0640)) == -1)
-        return 1;
+    if (fd_lock == -1) {
+        ret = 1;
+    } else {
+        if (flock (fd_lock, LOCK_EX | LOCK_NB) == -1) {
+            close (fd_lock);
+            fd_lock = -1;
+            ret = 1;
+        }
+    }
 
-    if (flock (fdlock, LOCK_EX | LOCK_NB) == -1)
-        return 1;
-
-    return 0;
+    return ret;
 }
 
 static gboolean
@@ -500,7 +511,6 @@ parse_cli_args (int *argc, char *argv[])
 int
 main (int argc, char *argv[])
 {
-
     if (signal(SIGTERM, signal_handler) == SIG_ERR) {
         warn ("Unable to catch SIGTERM\n");
     }
