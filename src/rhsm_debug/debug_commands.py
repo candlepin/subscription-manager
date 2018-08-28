@@ -86,11 +86,10 @@ class SystemCommand(CliCommand):
         return _("%%prog %s [OPTIONS] ") % self.name
 
     def _validate_options(self):
-        if self.options.archive:
-            if self.options.destination and not os.path.exists(self.options.destination):
-                raise InvalidCLIOptionError(_("The destination directory for the archive must already exist."))
+        if self.options.destination and not os.path.exists(self.options.destination):
+            raise InvalidCLIOptionError(_("The directory specified by '--destination' must already exist."))
         # no archive, check if we can safely copy to dest.
-        else:
+        if not self.options.archive:
             if not self._dirs_on_same_device(self.assemble_path, self.options.destination):
                 msg = _("To use the no-archive option, the destination directory '%s' "
                         "must exist on the same file system as the "

@@ -228,7 +228,7 @@ class TestCompileCommand(TestCliCommand):
             self.cc.main(["--destination", self.path])
             self.cc._validate_options()
         except InvalidCLIOptionError as e:
-            self.assertEqual(six.text_type(e), "The destination directory for the archive must already exist.")
+            self.assertEqual(six.text_type(e), "The directory specified by '--destination' must already exist.")
         else:
             self.fail("No Exception Raised")
 
