@@ -237,7 +237,7 @@ def read_syspurpose(raise_on_error=False):
     else:
         try:
             syspurpose = json.load(open(USER_SYSPURPOSE))
-        except (os.error, ValueError):
+        except (os.error, ValueError, IOError):
             # In the event this file could not be read treat it as empty
             if raise_on_error:
                 raise
