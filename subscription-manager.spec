@@ -131,7 +131,7 @@
 %define subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.23.3
+Version: 1.23.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1095,6 +1095,29 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Aug 30 2018 Christopher Snyder <csnyder@redhat.com> 1.23.4-1
+- 1600694: Log dbus exception tracebacks at the debug level
+  (csnyder@redhat.com)
+- 1623368: Register a system without a syspurpose.json file
+  (jhnidek@redhat.com)
+- Revert "Add sles version to dist" (cnsnyder@users.noreply.github.com)
+- 1596699: Handle non-existant rhsm-debug destination (ENT-780)
+  (nmoumoul@redhat.com)
+- Sync system purpose for sub-man subcommands (jhnidek@redhat.com)
+- Add man page for syspurpose. (awood@redhat.com)
+- 1613968: DNF product-id plugin can install product cert; ENT-789
+  (jhnidek@redhat.com)
+- Add sles version to dist (jsherril@redhat.com)
+- Remove extraneous include in setup() (khowell@redhat.com)
+- Updated translations (csnyder@redhat.com)
+- 1596001: Change syspurpose import error log level to debug level
+  (csnyder@redhat.com)
+- 1602702: rhsmcertd did not close lock file; ENT-736 (jhnidek@redhat.com)
+- Adds the addons set of commands to syspurpose (csnyder@redhat.com)
+- 1581445: ENT-564: rhsm configuration manage_repos is not working on RHEL8
+  (jhnidek@redhat.com)
+- Fix time stamps of pyc files (csnyder@redhat.com)
+
 * Mon Aug 13 2018 Christopher Snyder <csnyder@redhat.com> 1.23.3-1
 - 1606435: Rename the async module for compatibility with python 3.7; ENT-737
   (csnyder@redhat.com)
