@@ -112,11 +112,7 @@ build: rhsmcertd rhsm-icon
 # Install doesn't perform a build if it doesn't have too.  Best to clean out
 # any cruft so developers don't end up install old builds.
 	$(PYTHON) ./setup.py clean --all
-	if [ "$(OS)" = "RHEL" -a "$(OS_VERSION)" -gt 7 ] || [ "$(OS)" = "FEDORA" -a "$(OS_VERSION)" -gt 21 ] ; then \
-            $(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION) --use-dnf=true; \
-        else \
-            $(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION) --use-dnf=false; \
-        fi; \
+	$(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
 
 # we never "remake" this makefile, so add a target so
 # we stop searching for implicit rules on how to remake it

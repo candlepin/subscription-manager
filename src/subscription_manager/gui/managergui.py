@@ -323,7 +323,7 @@ class MainWindow(widgets.SubmanBaseWidget):
         if auto_launch_registration and not self.registered():
             self._register_item_clicked(None)
 
-        enabled_yum_plugins = YumPluginManager.enable_yum_plugins()
+        enabled_yum_plugins = YumPluginManager.enable_pkg_plugins()
         if len(enabled_yum_plugins) > 0:
             messageWindow.InfoDialog(
                 YumPluginManager.warning_message(enabled_yum_plugins),
