@@ -20,6 +20,8 @@ import dbus.mainloop
 import dbus.mainloop.glib
 
 import inspect
+import traceback
+import sys
 import logging
 import subscription_manager.injection as inj
 
@@ -47,11 +49,12 @@ class DbusIface(object):
             # Activate methods now that we're connected
             # Avoids some messy exception handling if dbus isn't installed
             self.update = self._update
-        except dbus.DBusException as e:
+        except dbus.DBusException:
             # we can't connect to dbus. it's not running, likely from a minimal
             # install. we can't do anything here, so just ignore it.
             log.debug("Unable to connect to dbus")
-            log.exception(e)
+            # BZ 1600694 We should print the dbus traceback at the debug level
+            log.debug(''.join(traceback.format_tb(sys.exc_info()[2])))
 
     def update(self):
         pass
