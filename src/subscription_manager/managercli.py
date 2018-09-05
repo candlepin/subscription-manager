@@ -1016,8 +1016,7 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
         shortdesc = _("Manage service levels for this system")
         self._org_help_text = _("specify an organization when listing available service levels using the organization key, only used with --list")
         super(ServiceLevelCommand, self).__init__("service-level", shortdesc,
-                                                  False)
-
+                                                  False, attr="service_level_agreement")
         self._add_url_options()
         self.parser.add_option(
             "--show",
