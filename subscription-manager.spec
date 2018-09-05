@@ -96,14 +96,14 @@
 %define install_zypper_plugins INSTALL_ZYPPER_PLUGINS=false
 %endif
 
-# makefile defaults to INSTALL_DNF_PLUGIN=false
+# makefile defaults to INSTALL_DNF_PLUGINS=false
 %if %{use_dnf}
 %define install_dnf_plugins INSTALL_DNF_PLUGINS=true
 %else
 %define install_dnf_plugins INSTALL_DNF_PLUGINS=false
 %endif
 
-# makefile defaults to INSTALL_DNF_PLUGIN=true
+# makefile defaults to INSTALL_YUM_PLUGINS=true
 %if %{use_yum}
 %define install_yum_plugins INSTALL_YUM_PLUGINS=true
 %else
@@ -498,7 +498,8 @@ Subscription Manager Cockpit UI
 
 %build
 make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
-    LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" %{?gtk_version} %{?subpackages} %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"}
+    LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" \
+    %{?gtk_version} %{?subpackages} %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"}
 
 %if %{with python2_rhsm}
 python2 ./setup.py build --quiet --gtk-version=%{?gtk3:3}%{?!gtk3:2} --rpm-version=%{version}-%{release}

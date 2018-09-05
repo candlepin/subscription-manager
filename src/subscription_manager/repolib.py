@@ -27,7 +27,6 @@ import subscription_manager.injection as inj
 from subscription_manager.cache import OverrideStatusCache, WrittenOverrideCache
 from subscription_manager import utils
 from subscription_manager import model
-from subscription_manager import version
 from subscription_manager.model import ent_cert
 from six.moves.urllib.parse import parse_qs, urlparse, urlunparse, urlencode
 from six.moves import configparser
@@ -80,10 +79,10 @@ class YumPluginManager(object):
 
     # List of yum plugins in YUM_PLUGIN_DIR which are automatically enabled
     # during sub-man CLI/GUI start
-    YUM_PLUGINS = ['subscription-manager', 'product-id']
+    PLUGINS = ['subscription-manager', 'product-id']
 
-    YUM_PLUGIN_ENABLED = 1
-    YUM_PLUGIN_DISABLED = 0
+    PLUGIN_ENABLED = 1
+    PLUGIN_DISABLED = 0
 
     @staticmethod
     def is_auto_enable_enabled():
@@ -107,16 +106,83 @@ class YumPluginManager(object):
 
     @staticmethod
     def warning_message(enabled_yum_plugins):
-        message = _('The yum plugins: %s were automatically enabled for the benefit of '
+        message = _('The yum/dnf plugins: %s were automatically enabled for the benefit of '
                     'Red Hat Subscription Management. If not desired, use '
                     '"subscription-manager config --rhsm.auto_enable_yum_plugins=0" to '
                     'block this behavior.') % ', '.join(enabled_yum_plugins)
         return message
 
     @classmethod
-    def enable_yum_plugins(cls):
+    def _enable_plugins(cls, pkg_mgr_name, plugin_dir):
         """
-        This function tries to enable yum plugins: subscription-manager and product-id.
+        This class method tries to enable plugins for DNF or YUM
+        :param pkg_mgr_name: It can be "dnf" or "yum"
+        :type pkg_mgr_name: str
+        :param plugin_dir: Directory with configuration files for (dnf/yum) plugins
+        :type plugin_dir: str
+        :return:
+        """
+        # List of successfully enabled plugins
+        enabled_lugins = []
+        # Go through the list of yum plugins and try to find configuration
+        # file of these plugins.
+        for plugin_name in cls.PLUGINS:
+            plugin_file_name = plugin_dir + '/' + plugin_name + '.conf'
+            plugin_config = ConfigParser()
+            try:
+                result = plugin_config.read(plugin_file_name)
+            except Exception as err:
+                # Capture all errors during reading yum plugin conf file
+                # report them and skip this conf file
+                log.error(
+                    "Error during reading %s plugin config file '%s': %s. Skipping this file." %
+                    (pkg_mgr_name, plugin_file_name, err)
+                )
+                continue
+
+            if len(result) == 0:
+                log.info('Configuration file of %s plugin: "%s" cannot be read' %
+                         (pkg_mgr_name, plugin_file_name))
+                continue
+
+            is_plugin_enabled = False
+            if not plugin_config.has_section('main'):
+                log.warning(
+                    'Configuration file of %s plugin: "%s" does not include main section. Adding main section.' %
+                    (pkg_mgr_name, plugin_file_name)
+                )
+                plugin_config.add_section('main')
+            elif plugin_config.has_option('main', 'enabled'):
+                try:
+                    # Options 'enabled' can be 0 or 1
+                    is_plugin_enabled = plugin_config.getint('main', 'enabled')
+                except ValueError:
+                    try:
+                        # Options 'enabled' can be also: true or false
+                        is_plugin_enabled = plugin_config.getboolean('main', 'enabled')
+                    except ValueError:
+                        log.warning(
+                            "File %s has wrong value of options: 'enabled' in section: 'main' (not a int nor boolean)" %
+                            plugin_file_name
+                        )
+
+            if is_plugin_enabled == cls.PLUGIN_ENABLED:
+                log.debug('%s plugin: "%s" already enabled. Nothing to do.' %
+                          (pkg_mgr_name, plugin_file_name))
+            else:
+                log.warning('Enabling %s plugin: "%s".' % (pkg_mgr_name, plugin_file_name))
+                # Change content of plugin configuration file and enable this plugin.
+                with open(plugin_file_name, 'w') as cfg_file:
+                    plugin_config.set('main', 'enabled', cls.PLUGIN_ENABLED)
+                    plugin_config.write(cfg_file)
+                enabled_lugins.append(plugin_file_name)
+
+        return enabled_lugins
+
+    @classmethod
+    def enable_pkg_plugins(cls):
+        """
+        This function tries to enable dnf/yum plugins: subscription-manager and product-id.
         It takes no action, when automatic enabling of yum plugins is disabled in rhsm.conf.
         :return: It returns list of enabled plugins
         """
@@ -128,66 +194,13 @@ class YumPluginManager(object):
 
         log.debug('The rhsm.auto_enable_yum_plugins is enabled')
 
-        # List of successfully enabled plugins
-        enabled_yum_plugins = []
-        plugin_dir = ""
-        if version.use_dnf:
-            plugin_dir = cls.DNF_PLUGIN_DIR
-        else:
-            plugin_dir = cls.YUM_PLUGIN_DIR
+        enabled_plugins = []
 
-        # Go through the list of yum plugins and try to find configuration
-        # file of these plugins.
-        for yum_plugin_name in cls.YUM_PLUGINS:
-            yum_plugin_file_name = plugin_dir + '/' + yum_plugin_name + '.conf'
-            yum_plugin_config = ConfigParser()
-            try:
-                result = yum_plugin_config.read(yum_plugin_file_name)
-            except Exception as err:
-                # Capture all errors during reading yum plugin conf file
-                # report them and skip this conf file
-                log.error(
-                    "Error during reading yum plugin config file '%s': %s. Skipping this file." %
-                    (yum_plugin_file_name, err)
-                )
-                continue
+        enabled_plugins.extend(cls._enable_plugins("dnf", cls.DNF_PLUGIN_DIR))
 
-            if len(result) == 0:
-                log.info('Configuration file of yum plugin: "%s" cannot be read' % yum_plugin_file_name)
-                continue
+        enabled_plugins.extend(cls._enable_plugins("yum", cls.YUM_PLUGIN_DIR))
 
-            is_plugin_enabled = False
-            if not yum_plugin_config.has_section('main'):
-                log.warn(
-                    'Configuration file of yum plugin: "%s" does not include main section. Adding main section.' %
-                    yum_plugin_file_name
-                )
-                yum_plugin_config.add_section('main')
-            elif yum_plugin_config.has_option('main', 'enabled'):
-                try:
-                    # Options 'enabled' can be 0 or 1
-                    is_plugin_enabled = yum_plugin_config.getint('main', 'enabled')
-                except ValueError:
-                    try:
-                        # Options 'enabled' can be also: true or false
-                        is_plugin_enabled = yum_plugin_config.getboolean('main', 'enabled')
-                    except ValueError:
-                        log.warn(
-                            "File %s has wrong value of options: 'enabled' in section: 'main' (not a int nor boolean)" %
-                            yum_plugin_file_name
-                        )
-
-            if is_plugin_enabled == cls.YUM_PLUGIN_ENABLED:
-                log.debug('Yum plugin: "%s" already enabled. Nothing to do.' % yum_plugin_file_name)
-            else:
-                log.warn('Enabling yum plugin: "%s".' % yum_plugin_file_name)
-                # Change content of plugin configuration file and enable this plugin.
-                with open(yum_plugin_file_name, 'w') as cfg_file:
-                    yum_plugin_config.set('main', 'enabled', cls.YUM_PLUGIN_ENABLED)
-                    yum_plugin_config.write(cfg_file)
-                enabled_yum_plugins.append(yum_plugin_file_name)
-
-        return enabled_yum_plugins
+        return enabled_plugins
 
 
 class RepoActionInvoker(BaseActionInvoker):
