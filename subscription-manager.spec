@@ -131,7 +131,7 @@
 %define subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.23.4
+Version: 1.24.0
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1096,6 +1096,13 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Sep 10 2018 Christopher Snyder <csnyder@redhat.com> 1.24.0-1
+- Use the "service_level_agreement" attribute for the SlaCommand
+  (csnyder@redhat.com)
+- 1623262: Make automatic enablement of yum plugins working again; ENT-820
+  (jhnidek@redhat.com)
+- Start releasing to f29 (csnyder@redhat.com)
+
 * Thu Aug 30 2018 Christopher Snyder <csnyder@redhat.com> 1.23.4-1
 - 1600694: Log dbus exception tracebacks at the debug level
   (csnyder@redhat.com)
