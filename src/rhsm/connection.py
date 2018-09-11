@@ -320,15 +320,12 @@ class ContentConnection(object):
     def user_agent(self):
         return "RHSM-content/1.0 (cmd=%s)" % utils.cmd_name(sys.argv)
 
-    def _request(self, request_type, handler, body=None, headers=None):
-        # See note in Restlib._request
-        context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
-
-        # Disable SSLv2 and SSLv3 support to avoid poodles.
-        context.options = ssl.OP_NO_SSLv2 | ssl.OP_NO_SSLv3
-
-        self._load_ca_certificates(context)
-
+    def _create_connection(self, context):
+        """
+        Try to create new TLS connection with CDN server.
+        :param context: SSL context
+        :return: New TLS connections
+        """
         if self.proxy_hostname and self.proxy_port:
             log.debug("Using proxy: %s:%s" %
                       (normalized_host(self.proxy_hostname), safe_int(self.proxy_port)))
@@ -343,41 +340,81 @@ class ContentConnection(object):
         else:
             conn = httplib.HTTPSConnection(self.host, self.ssl_port, context=context, timeout=self.timeout)
 
+        return conn
+
+    def _get_ent_cert_key_list(self):
+        """
+        Create list of cert-key pairs that can be used for connection with CDN
+        :return: List of tuples containing certificate and private key
+        """
+
+        ent_cert_key_pairs = []
+
+        for cert_file in os.listdir(self.ent_dir):
+            if cert_file.endswith(".pem") and not cert_file.endswith("-key.pem"):
+                cert_path = os.path.join(self.ent_dir, cert_file)
+                key_path = os.path.join(self.ent_dir, "%s-key.pem" % cert_file.split('.', 1)[0])
+                ent_cert_key_pairs.append((cert_path, key_path))
+
+        return ent_cert_key_pairs
+
+    def _load_ca_certificate(self, context, cert_path, key_path):
+        """
+        Try to load certificate
+        :param context:
+        :param cert_path:
+        :param key_path:
+        :return:
+        """
+        log.debug("Loading CA certificate: '%s'" % cert_path)
+        try:
+            context.load_verify_locations(cert_path)
+            context.load_cert_chain(cert_path, key_path)
+        except ssl.SSLError as e:
+            raise BadCertificateException(cert_path)
+        except OSError as e:
+            raise ConnectionSetupException(e.strerror)
+
+    def _request(self, request_type, handler, body="", headers=None, ent_cert_key_pairs=None):
+        # See note in Restlib._request
+        context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+
+        # Disable SSLv2 and SSLv3 support to avoid poodles.
+        context.options = ssl.OP_NO_SSLv2 | ssl.OP_NO_SSLv3
+
         final_headers = {"Host": "%s:%s" % (normalized_host(self.host), self.ssl_port),
                          "Content-Length": "0",
                          "User-Agent": self.user_agent}
         if headers:
             final_headers.update(headers)
 
-        conn.request("GET", handler,
-                     body="",
-                     headers=final_headers)
-        response = conn.getresponse()
-        result = {
-            "content": response.read().decode('utf-8'),
-            "status": response.status,
-            "headers": dict(response.getheaders())}
+        # When no list of entitlement certificates is provided, then try to use all
+        # entitlement certificates installed on the system
+        if ent_cert_key_pairs is None or len(ent_cert_key_pairs) == 0:
+            ent_cert_key_pairs = self._get_ent_cert_key_list()
+
+        # Just anything else than 200
+        result = {"status": 123456}
+
+        for cert_path, key_path in ent_cert_key_pairs:
+            self._load_ca_certificate(context, cert_path, key_path)
+
+            conn = self._create_connection(context)
+
+            conn.request(request_type, handler,
+                         body=body,
+                         headers=final_headers)
+            response = conn.getresponse()
+
+            result = {
+                "content": response.read().decode('utf-8'),
+                "status": response.status,
+                "headers": dict(response.getheaders())}
+
+            if response.status == 200:
+                break
 
         return result
-
-    def _load_ca_certificates(self, context):
-        cert_path = ''
-        try:
-            for cert_file in os.listdir(self.ent_dir):
-                if cert_file.endswith(".pem") and not cert_file.endswith("-key.pem"):
-                    cert_path = os.path.join(self.ent_dir, cert_file)
-                    key_path = os.path.join(self.ent_dir, "%s-key.pem" % cert_file.split('.', 1)[0])
-                    log.debug("Loading CA certificate: '%s'" % cert_path)
-
-                    # FIXME: reenable res =
-                    context.load_verify_locations(cert_path)
-                    context.load_cert_chain(cert_path, key_path)
-                    # if res == 0:
-                    #     raise BadCertificateException(cert_path)
-        except ssl.SSLError as e:
-            raise BadCertificateException(cert_path)
-        except OSError as e:
-            raise ConnectionSetupException(e.strerror)
 
     def test(self):
         pass
@@ -385,12 +422,13 @@ class ContentConnection(object):
     def request_get(self, method):
         return self._request("GET", method)
 
-    def get_versions(self, path):
+    def get_versions(self, path, ent_cert_key_pairs=None):
         handler = "%s/%s" % (self.handler, path)
-        results = self._request("GET", handler, body="")
+        result = self._request("GET", handler, body="", ent_cert_key_pairs=ent_cert_key_pairs)
 
-        if results['status'] == 200:
-            return results['content']
+        if result['status'] == 200:
+            return result['content']
+
         return ''
 
     def _get_versions_for_product(self, product_id):
