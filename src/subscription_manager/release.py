@@ -118,6 +118,7 @@ class CdnReleaseVersionProvider(object):
         entitlements = self.entitlement_dir.list_for_product(release_product.id)
 
         listings = []
+        ent_cert_key_pairs = []
         for entitlement in entitlements:
             contents = entitlement.content
             for content in contents:
@@ -129,6 +130,7 @@ class CdnReleaseVersionProvider(object):
                                          content.required_tags):
                     listing_path = self._build_listing_path(content.url)
                     listings.append(listing_path)
+                    ent_cert_key_pairs.append((entitlement.path, entitlement.key_path()))
 
         # FIXME: not sure how to get the "base" content if we have multiple
         # entitlements for a product
@@ -142,7 +144,7 @@ class CdnReleaseVersionProvider(object):
         listings = sorted(set(listings))
         for listing_path in listings:
             try:
-                data = self.content_connection.get_versions(listing_path)
+                data = self.content_connection.get_versions(listing_path, ent_cert_key_pairs)
             except (socket.error,
                     six.moves.http_client.HTTPException,
                     ssl.SSLError) as e:

@@ -342,13 +342,20 @@ class ConnectionTests(unittest.TestCase):
         self.assertEqual(expected_guestIds, resultGuestIds)
 
     def test_bad_ca_cert(self):
-        f = open(os.path.join(self.temp_ent_dir, "foo.pem"), 'w+')
-        f.write('xxxxxx\n')
-        f.close()
+        cert = open(os.path.join(self.temp_ent_dir, "foo.pem"), 'w+')
+        cert.write('xxxxxx\n')
+        cert.close()
+        key = open(os.path.join(self.temp_ent_dir, "foo-key.pem"), 'w+')
+        key.write('xxxxxx\n')
+        key.close()
         cont_conn = ContentConnection(host="foobar", username="dummy", password="dummy", insecure=True)
         cont_conn.ent_dir = self.temp_ent_dir
         with self.assertRaises(BadCertificateException):
-            cont_conn._load_ca_certificates(ssl.SSLContext(ssl.PROTOCOL_SSLv23))
+            cont_conn._load_ca_certificate(
+                ssl.SSLContext(ssl.PROTOCOL_SSLv23),
+                self.temp_ent_dir + '/foo.pem',
+                self.temp_ent_dir + '/foo-key.pem'
+            )
         restlib = Restlib("somehost", "123", "somehandler")
         restlib.ca_dir = self.temp_ent_dir
         with self.assertRaises(BadCertificateException):
