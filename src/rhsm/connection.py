@@ -1111,8 +1111,18 @@ class UEPConnection(object):
         package headers we're interested in. See profile.py.
         """
         method = "/consumers/%s/packages" % self.sanitize(consumer_uuid)
-        ret = self.conn.request_put(method, pkg_dicts)
-        return ret
+        return self.conn.request_put(method, pkg_dicts)
+
+    def updateCombinedProfile(self, consumer_uuid, profile):
+        """
+        Updates the costumers' combined profile containing package profile,
+        enabled repositories and dnf/yum modules.
+        :param consumer_uuid: UUID of consumer
+        :param profile: Combined profile
+        :return: Dict containing response from HTTP server
+        """
+        method = "/consumers/%s/profiles" % self.sanitize(consumer_uuid)
+        return self.conn.request_put(method, profile)
 
     # FIXME: username and password not used here
     def getConsumer(self, uuid, username=None, password=None):

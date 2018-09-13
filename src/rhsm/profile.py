@@ -33,8 +33,7 @@ class Package(object):
     """
     Represents a package installed on the system.
     """
-    def __init__(self, name, version, release, arch, epoch=0, vendor=None,
-                 from_dict=None):
+    def __init__(self, name, version, release, arch, epoch=0, vendor=None):
         self.name = name
         self.version = version
         self.release = release
@@ -81,6 +80,30 @@ class Package(object):
         return value
 
 
+class ModuleProfile(object):
+
+    def collect(self):
+        """
+        Gather list of modules reported to candlepin server
+        :return: List of modules
+        """
+        module_list = []
+        # TODO: gather list of modules
+        return module_list
+
+
+class EnabledReposProfile(object):
+
+    def collect(self):
+        """
+        Gather list of enabled repositories
+        :return: List of enabled repositories
+        """
+        enabled_repos_list = []
+        # TODO: gather list of enabled repos
+        return enabled_repos_list
+
+
 class RPMProfile(object):
 
     def __init__(self, from_file=None):
@@ -91,7 +114,7 @@ class RPMProfile(object):
         """
         self.packages = []
         if from_file:
-            log.debug("Loading RPM profile from file.")
+            log.debug("Loading RPM profile from file: %s" % from_file.name)
             json_buffer = from_file.read()
             pkg_dicts = json.loads(json_buffer)
             for pkg_dict in pkg_dicts:
@@ -110,7 +133,8 @@ class RPMProfile(object):
             installed = ts.dbMatch()
             self.packages = self._accumulate_profile(installed)
 
-    def _accumulate_profile(self, rpm_header_list):
+    @staticmethod
+    def _accumulate_profile(rpm_header_list):
         """
         Accumulates list of installed rpm info
         @param rpm_header_list: list of rpm headers
@@ -122,8 +146,8 @@ class RPMProfile(object):
         pkg_list = []
         for h in rpm_header_list:
             if h['name'] == "gpg-pubkey":
-                #dbMatch includes imported gpg keys as well
-                # skip these for now as there isnt compelling
+                # dbMatch includes imported gpg keys as well
+                # skip these for now as there isn't compelling
                 # reason for server to know this info
                 continue
             pkg_list.append(Package(
@@ -163,7 +187,7 @@ class RPMProfile(object):
             return False
 
         for pkg in self.packages:
-            if not pkg in other.packages:
+            if pkg not in other.packages:
                 return False
 
         return True
@@ -172,8 +196,8 @@ class RPMProfile(object):
 def get_profile(profile_type):
     """
     Returns an instance of a Profile object
-    @param type: profile type
-    @type type: string
+    @param profile_type: profile type
+    @type profile_type: string
     Returns an instance of a Profile object
     """
     if profile_type not in PROFILE_MAP:
@@ -185,4 +209,6 @@ def get_profile(profile_type):
 # Profile types we support:
 PROFILE_MAP = {
     "rpm": RPMProfile,
+    "enabled_repos": EnabledReposProfile,
+    "modulemd": ModuleProfile
 }

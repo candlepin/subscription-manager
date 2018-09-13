@@ -63,9 +63,11 @@ class TestProfileManager(unittest.TestCase):
     def setUp(self):
         current_pkgs = [
                 Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
-                Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
+                Package(name="package2", version="2.0.0", release=2, arch="x86_64")
+        ]
         self.current_profile = self._mock_pkg_profile(current_pkgs)
-        self.profile_mgr = ProfileManager(current_profile=self.current_profile)
+        self.profile_mgr = ProfileManager()
+        self.profile_mgr.current_profile = self.current_profile
 
     def test_update_check_no_change(self):
         uuid = 'FAKEUUID'
@@ -82,6 +84,7 @@ class TestProfileManager(unittest.TestCase):
     def test_update_check_has_changed(self):
         uuid = 'FAKEUUID'
         uep = Mock()
+        uep.has_capability = Mock(return_value=False)
         uep.updatePackageProfile = Mock()
         self.profile_mgr.has_changed = Mock(return_value=True)
         self.profile_mgr.write_cache = Mock()
@@ -123,6 +126,7 @@ class TestProfileManager(unittest.TestCase):
     def test_update_check_error_uploading(self):
         uuid = 'FAKEUUID'
         uep = Mock()
+        uep.has_capability = Mock(return_value=False)
 
         self.profile_mgr.has_changed = Mock(return_value=True)
         self.profile_mgr.write_cache = Mock()
@@ -210,7 +214,12 @@ class TestProfileManager(unittest.TestCase):
         mock_file = Mock()
         mock_file.read = Mock(return_value=json.dumps(dict_list))
 
-        mock_profile = RPMProfile(from_file=mock_file)
+        mock_rpm_profile = RPMProfile(from_file=mock_file)
+        mock_profile = {
+            "rpm": mock_rpm_profile,
+            "enabled_repos": [],
+            "modulemd": []
+        }
         return mock_profile
 
 
