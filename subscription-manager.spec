@@ -202,7 +202,7 @@ Requires:  %{?gtk3:gobject-introspection, pygobject3-base} %{!?gtk3:pygobject2}
 %endif
 # There's no dmi to read on these arches, so don't pull in this dep.
 # Additionally, dmidecode isn't packaged at all on SUSE
-%ifnarch ppc ppc64 s390 s390x
+%ifnarch aarch64 ppc ppc64 ppc64le s390 s390x
 Requires:  %{py_package_prefix}-dmidecode %{?dmidecode_version}
 %endif
 %endif
