@@ -131,7 +131,7 @@
 %define subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.23.5
+Version: 1.23.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1096,6 +1096,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Sep 14 2018 Kevin Howell <khowell@redhat.com> 1.23.6-1
+- 1629073: No python3-dmidecode on aarch64, ppc64le (khowell@redhat.com)
+
 * Fri Sep 14 2018 Kevin Howell <khowell@redhat.com> 1.23.5-1
 - Sync zanata translations (khowell@redhat.com)
 - 1614653: Update intermediate CA (khowell@redhat.com)
