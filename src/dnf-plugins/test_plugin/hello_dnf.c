@@ -1,0 +1,73 @@
+/**
+ * Copyright (c) 2018 Red Hat, Inc.
+ *
+ * This software is licensed to you under the GNU General Public License,
+ * version 2 (GPLv2). There is NO WARRANTY for this software, express or
+ * implied, including the implied warranties of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2
+ * along with this software; if not, see
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
+ *
+ * Red Hat trademarks are not licensed under GPLv2. No permission is
+ * granted to use or replicate Red Hat trademarks that are incorporated
+ * in this software or its documentation.
+ */
+#include <libdnf/plugin/plugin.h>
+#include <libdnf/libdnf.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+
+
+// This stuff could go in a header file, I guess
+static const PluginInfo pinfo = {
+    .name = "Hello-DNF Test Plugin",
+    .version = "1.0.0"
+};
+
+struct _PluginHandle {
+    // Data provided by the init method
+    int version;
+    PluginMode mode;
+    void* initData;
+
+    // Add plugin-specific "private" data here
+};
+
+
+
+const PluginInfo* pluginGetInfo() {
+    return &pinfo;
+}
+
+PluginHandle* pluginInitHandle(int version, PluginMode mode, void* initData) {
+    printf("%s initializing handle!", pinfo.name);
+
+    PluginHandle* handle = malloc(sizeof(PluginHandle));
+
+    if (handle) {
+        handle->version = version;
+        handle->mode = mode;
+        handle->initData = initData;
+    }
+
+    return handle;
+}
+
+void pluginFreeHandle(PluginHandle* handle) {
+    printf("%s freeing handle!", pinfo.name);
+
+    if (handle) {
+        free(handle);
+    }
+}
+
+int pluginHook(PluginHandle* handle, PluginHookId id, void* hookData, PluginHookError* error) {
+    if (!handle) {
+        // We must have failed to allocate our handle during init; don't do anything.
+        return 1;
+    }
+
+    printf("%s v%s, running on DNF version %d", pinfo.name, pinfo.version, handle->version);
+    return 0;
+}
