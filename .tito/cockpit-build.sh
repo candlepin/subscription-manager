@@ -6,6 +6,7 @@ if [ ! $(which yarn) ] ; then
   exit 1
 fi
 pushd cockpit
+yarn cache clean
 yarn install --frozen-lockfile
 make dist-gzip
 popd
