@@ -146,7 +146,10 @@ class build(_build):
 
     def get_gtk_version(self):
         cmd = ['rpm', '--eval=%dist']
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+        try:
+            process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+        except:
+            return "3"  # in cases where we can't use RPM to discover, assume GTK3
         output = process.communicate()[0].decode('utf-8').strip()
         if re.search('el6', output):
             return "2"
