@@ -41,7 +41,7 @@ const PluginInfo* pluginGetInfo() {
 }
 
 PluginHandle* pluginInitHandle(int version, PluginMode mode, void* initData) {
-    printf("%s initializing handle!", pinfo.name);
+    printf("%s initializing handle!\n", pinfo.name);
 
     PluginHandle* handle = malloc(sizeof(PluginHandle));
 
@@ -55,7 +55,7 @@ PluginHandle* pluginInitHandle(int version, PluginMode mode, void* initData) {
 }
 
 void pluginFreeHandle(PluginHandle* handle) {
-    printf("%s freeing handle!", pinfo.name);
+    printf("%s freeing handle!\n", pinfo.name);
 
     if (handle) {
         free(handle);
@@ -65,9 +65,9 @@ void pluginFreeHandle(PluginHandle* handle) {
 int pluginHook(PluginHandle* handle, PluginHookId id, void* hookData, PluginHookError* error) {
     if (!handle) {
         // We must have failed to allocate our handle during init; don't do anything.
-        return 1;
+        return 0;
     }
 
-    printf("%s v%s, running on DNF version %d", pinfo.name, pinfo.version, handle->version);
-    return 0;
+    printf("%s v%s, running on DNF version %d\n", pinfo.name, pinfo.version, handle->version);
+    return 1;
 }
