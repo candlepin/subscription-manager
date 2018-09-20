@@ -178,6 +178,7 @@ Requires:  %{py_package_prefix}-setuptools
 
 %if %{with python3}
 Requires: python3-dbus
+Requires: python3-syspurpose
 %else
 Requires: %{?suse_version:dbus-1-python} %{!?suse_version:dbus-python}
 %endif
