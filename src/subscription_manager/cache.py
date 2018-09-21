@@ -444,7 +444,7 @@ class ProfileManager(CacheManager):
         and it also has to be able to send only profile containing list of installed RPMs.
         """
         combined_profile = self.current_profile
-        if uep.has_capability("combined reporting"):
+        if uep.has_capability("combined_reporting"):
             _combined_profile = [
                 {
                     "content_type": "rpm",
