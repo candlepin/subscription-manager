@@ -95,6 +95,20 @@ class TestProfileManager(unittest.TestCase):
                 FACT_MATCHER)
         self.assertEqual(1, self.profile_mgr.write_cache.call_count)
 
+    def test_combined_profile_update_check_has_changed(self):
+        uuid = 'FAKEUUID'
+        uep = Mock()
+        uep.has_capability = Mock(return_value=True)
+        uep.updateCombinedProfile = Mock()
+        self.profile_mgr.has_changed = Mock(return_value=True)
+        self.profile_mgr.write_cache = Mock()
+
+        self.profile_mgr.update_check(uep, uuid)
+
+        uep.updateCombinedProfile.assert_called_with(uuid,
+                FACT_MATCHER)
+        self.assertEqual(1, self.profile_mgr.write_cache.call_count)
+
     def test_update_check_packages_not_supported(self):
         uuid = 'FAKEUUID'
         uep = Mock()
@@ -135,6 +149,21 @@ class TestProfileManager(unittest.TestCase):
 
         self.assertRaises(Exception, self.profile_mgr.update_check, uep, uuid)
         uep.updatePackageProfile.assert_called_with(uuid,
+                FACT_MATCHER)
+        self.assertEqual(0, self.profile_mgr.write_cache.call_count)
+
+    def test_combined_profile_update_check_error_uploading(self):
+        uuid = 'FAKEUUID'
+        uep = Mock()
+        uep.has_capability = Mock(return_value=True)
+
+        self.profile_mgr.has_changed = Mock(return_value=True)
+        self.profile_mgr.write_cache = Mock()
+        # Throw an exception when trying to upload:
+        uep.updateCombinedProfile = Mock(side_effect=Exception('BOOM!'))
+
+        self.assertRaises(Exception, self.profile_mgr.update_check, uep, uuid)
+        uep.updateCombinedProfile.assert_called_with(uuid,
                 FACT_MATCHER)
         self.assertEqual(0, self.profile_mgr.write_cache.call_count)
 
