@@ -28,7 +28,7 @@ from rhsm.https import ssl
 
 from rhsm.config import initConfig
 import rhsm.connection as connection
-from rhsm.profile import get_profile, RPMProfile
+from rhsm.profile import get_profile
 import subscription_manager.injection as inj
 from subscription_manager.jsonwrapper import PoolWrapper
 from rhsm import ourjson as json
@@ -366,40 +366,53 @@ class ReleaseStatusCache(StatusCache):
 # this is injected normally
 class ProfileManager(CacheManager):
     """
-    Manages the profile of packages installed on this system.
+    Manages profile of installed packages, enabled repositories and plugins
     """
-    CACHE_FILE = "/var/lib/rhsm/packages/packages.json"
 
-    def __init__(self, current_profile=None):
+    CACHE_FILE = "/var/lib/rhsm/cache/profile.json"
 
+    def __init__(self):
         # Could be None, we'll read the system's current profile later once
         # we're sure we actually need the data.
-        self._current_profile = current_profile
+        self._current_profile = None
         self._report_package_profile = conf['rhsm'].get_int('report_package_profile')
 
     # give tests a chance to use something other than RPMProfile
     def _get_profile(self, profile_type):
         return get_profile(profile_type)
 
-    def _get_current_profile(self):
-        # If we weren't given a profile, load the current systems packages:
-        if not self._current_profile:
-            self._current_profile = self._get_profile('rpm')
-        return self._current_profile
-
-    def _set_current_profile(self, value):
-        self._current_profile = value
-
     def _set_report_package_profile(self, value):
         self._report_package_profile = value
 
-    current_profile = property(_get_current_profile, _set_current_profile)
+    @staticmethod
+    def _assembly_profile(rpm_profile, enabled_repos_profile, module_profile):
+        combined_profile = {
+            'rpm': rpm_profile,
+            'enabled_repos': enabled_repos_profile,
+            'modulemd': module_profile
+        }
+        return combined_profile
+
+    @property
+    def current_profile(self):
+        if not self._current_profile:
+            rpm_profile = get_profile('rpm').collect()
+            enabled_repos = get_profile('enabled_repos').collect()
+            module_profile = get_profile('modulemd').collect()
+            combined_profile = self._assembly_profile(rpm_profile, enabled_repos, module_profile)
+            self._current_profile = combined_profile
+        return self._current_profile
+
+    @current_profile.setter
+    def current_profile(self, new_profile):
+        self._current_profile = new_profile
 
     def to_dict(self):
-        return self.current_profile.collect()
+        return self.current_profile
 
     def _load_data(self, open_file):
-        return RPMProfile(from_file=open_file)
+        json_str = open_file.read()
+        return json.loads(json_str)
 
     def update_check(self, uep, consumer_uuid, force=False):
         """
@@ -426,8 +439,35 @@ class ProfileManager(CacheManager):
         return not cached_profile == self.current_profile
 
     def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
-        uep.updatePackageProfile(consumer_uuid,
-                self.current_profile.collect())
+        """
+        This method has to be able to sync combined profile, when server supports this functionality
+        and it also has to be able to send only profile containing list of installed RPMs.
+        """
+        combined_profile = self.current_profile
+        if uep.has_capability("combined_reporting"):
+            _combined_profile = [
+                {
+                    "content_type": "rpm",
+                    "profile": combined_profile["rpm"]
+                },
+                {
+                    "content_type": "enabled_repos",
+                    "profile": combined_profile["enabled_repos"]
+                },
+                {
+                    "content_type": "modulemd",
+                    "profile": combined_profile["modulemd"]
+                },
+            ]
+            uep.updateCombinedProfile(
+                consumer_uuid,
+                _combined_profile
+            )
+        else:
+            uep.updatePackageProfile(
+                consumer_uuid,
+                combined_profile["rpm"]
+            )
 
 
 class InstalledProductsManager(CacheManager):
