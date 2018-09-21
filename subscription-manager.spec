@@ -353,8 +353,10 @@ Requires: %{name} = %{version}-%{release}
 Requires: dnf >= 1.0.0
 %if %{with python3}
 Requires: python3-dnf-plugins-core
+Requires: python3-librepo
 %else
 Requires: python2-dnf-plugins-core
+Requires: python2-librepo
 %endif
 
 %description -n dnf-plugin-subscription-manager
