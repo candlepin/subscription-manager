@@ -24,6 +24,7 @@ import six
 
 import six.moves.http_client
 from rhsm.https import ssl
+from rhsm.connection import NoValidEntitlement
 
 import rhsm.config
 
@@ -118,6 +119,7 @@ class CdnReleaseVersionProvider(object):
         entitlements = self.entitlement_dir.list_for_product(release_product.id)
 
         listings = []
+        ent_cert_key_pairs = set()
         for entitlement in entitlements:
             contents = entitlement.content
             for content in contents:
@@ -129,6 +131,7 @@ class CdnReleaseVersionProvider(object):
                                          content.required_tags):
                     listing_path = self._build_listing_path(content.url)
                     listings.append(listing_path)
+                    ent_cert_key_pairs.add((entitlement.path, entitlement.key_path()))
 
         # FIXME: not sure how to get the "base" content if we have multiple
         # entitlements for a product
@@ -142,10 +145,11 @@ class CdnReleaseVersionProvider(object):
         listings = sorted(set(listings))
         for listing_path in listings:
             try:
-                data = self.content_connection.get_versions(listing_path)
+                data = self.content_connection.get_versions(listing_path, list(ent_cert_key_pairs))
             except (socket.error,
                     six.moves.http_client.HTTPException,
-                    ssl.SSLError) as e:
+                    ssl.SSLError,
+                    NoValidEntitlement) as e:
                 # content connection doesn't handle any exceptions
                 # and the code that invokes this doesn't either, so
                 # swallow them here.
