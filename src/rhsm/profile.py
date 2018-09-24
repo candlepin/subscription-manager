@@ -16,8 +16,22 @@ import logging
 
 import rpm
 import six
-
+import os.path
 from rhsm import ourjson as json
+from iniparse import SafeConfigParser
+
+try:
+    import dnf
+except ImportError:
+    dnf = None
+
+try:
+    import yum
+except ImportError:
+    yum = None
+
+
+REPOSITORY_PATH = "/etc/yum.repos.d/redhat.repo"
 
 log = logging.getLogger(__name__)
 
@@ -27,6 +41,88 @@ class InvalidProfileType(Exception):
     Thrown when attempting to get a profile of an unsupported type.
     """
     pass
+
+
+class ModuleProfile(object):
+
+    def collect(self):
+        """
+        Gather list of modules reported to candlepin server
+        :return: List of modules
+        """
+        module_list = []
+        # TODO: gather list of modules
+        return module_list
+
+
+class EnabledRepos(object):
+    def __generate(self):
+        if not os.path.exists(self.repofile):
+            return []
+
+        config = SafeConfigParser()
+        config.read(self.repofile)
+        enabled_sections = [section for section in config.sections() if config.getboolean(section, "enabled")]
+        enabled_repos = [
+            {
+                "repositoryid": section,
+                "baseurl": [self._replace_vars(config.get(section, "baseurl"))]
+            } for section in enabled_sections]
+        return enabled_repos
+
+    def __init__(self, repo_file=REPOSITORY_PATH):
+        """
+        :param path: A .repo file path used to filter the report.
+        :type path: str
+        """
+        self.repofile = repo_file
+        self.content = self.__generate()
+
+    def __str__(self):
+        return str(self.content)
+
+    def _replace_vars(self, repo_url):
+        """
+        returns a string with "$basearch" and "$releasever" replaced.
+
+        :param repo_url: a repo URL that you want to replace $basearch and $releasever in.
+        :type path: str
+        """
+        mappings = self._obtain_mappings()
+        return repo_url.replace('$releasever', mappings['releasever']).replace('$basearch', mappings['basearch'])
+
+    def _obtain_mappings(self):
+        """
+        returns a hash with "basearch" and "releasever" set. This will try dnf first, and them yum if dnf is
+        not installed.
+        """
+        if dnf is not None:
+            return self._obtain_mappings_dnf()
+        elif yum is not None:
+            return self._obtain_mappings_yum()
+        else:
+            return {'releasever': None, 'basearch': None}
+
+    def _obtain_mappings_dnf(self):
+        db = dnf.dnf.Base()
+        return {'releasever': db.conf.substitutions['releasever'], 'basearch': db.conf.substitutions['basearch']}
+
+    def _obtain_mappings_yum(self):
+        yb = yum.YumBase()
+        return {'releasever': yb.conf.yumvar['releasever'], 'basearch': yb.conf.yumvar['basearch']}
+
+
+class EnabledReposProfile(object):
+
+    def __init__(self):
+        self._enabled_repos = EnabledRepos()
+
+    def collect(self):
+        """
+        Gather list of enabled repositories
+        :return: List of enabled repositories
+        """
+        return self._enabled_repos.content
 
 
 class Package(object):
@@ -78,30 +174,6 @@ class Package(object):
         if type(value) is six.binary_type:
             return value.decode('utf-8', 'replace')
         return value
-
-
-class ModuleProfile(object):
-
-    def collect(self):
-        """
-        Gather list of modules reported to candlepin server
-        :return: List of modules
-        """
-        module_list = []
-        # TODO: gather list of modules
-        return module_list
-
-
-class EnabledReposProfile(object):
-
-    def collect(self):
-        """
-        Gather list of enabled repositories
-        :return: List of enabled repositories
-        """
-        enabled_repos_list = []
-        # TODO: gather list of enabled repos
-        return enabled_repos_list
 
 
 class RPMProfile(object):
