@@ -39,7 +39,7 @@ from subscription_manager.cache import ProfileManager, \
     PoolTypeCache, ReleaseStatusCache, ContentAccessCache, \
     PoolStatusCache
 
-from rhsm.profile import Package, RPMProfile
+from rhsm.profile import Package, RPMProfile, EnabledRepos
 
 from rhsm.connection import RestlibException, UnauthorizedException, \
     RateLimitExceededException
@@ -58,14 +58,50 @@ class _FACT_MATCHER(object):
 
 FACT_MATCHER = _FACT_MATCHER()
 
+CONTENT_REPO_FILE = """
+[awesome-os-for-x86_64-upstream-rpms]
+name = Awesome OS for x86_64 - Upstream (RPMs)
+baseurl = https://cdn.awesome.com/content/dist/awesome/$releasever/x86_64/upstream/os
+enabled = 1
+gpgcheck = 1
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-awesome-release
+sslverify = 1
+sslcacert = /etc/rhsm/ca/awesome-uep.pem
+sslclientkey = /etc/pki/entitlement/0123456789012345678-key.pem
+sslclientcert = /etc/pki/entitlement/0123456789012345678.pem
+metadata_expire = 86400
+ui_repoid_vars = releasever
+
+[awesome-os-for-x86_64-debug-rpms]
+name = Awesome OS for x86_64 - Debug (RPMs)
+baseurl = https://cdn.awesome.com/content/dist/awesome/$releasever/x86_64/upstream/debug
+enabled = 0
+gpgcheck = 1
+gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-awesome-release
+sslverify = 1
+sslcacert = /etc/rhsm/ca/awesome-uep.pem
+sslclientkey = /etc/pki/entitlement/0123456789012345678-key.pem
+sslclientcert = /etc/pki/entitlement/0123456789012345678.pem
+metadata_expire = 86400
+ui_repoid_vars = releasever
+"""
+
 
 class TestProfileManager(unittest.TestCase):
     def setUp(self):
         current_pkgs = [
-                Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
-                Package(name="package2", version="2.0.0", release=2, arch="x86_64")
+            Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
+            Package(name="package2", version="2.0.0", release=2, arch="x86_64")
         ]
-        self.current_profile = self._mock_pkg_profile(current_pkgs)
+        temp_repo_dir = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, temp_repo_dir)
+        repo_file_name = os.path.join(temp_repo_dir, 'awesome.repo')
+        with open(repo_file_name, 'w') as repo_file:
+            repo_file.write(CONTENT_REPO_FILE)
+        enabled_repos = [
+            EnabledRepos(repo_file=repo_file_name)
+        ]
+        self.current_profile = self._mock_pkg_profile(current_pkgs, enabled_repos)
         self.profile_mgr = ProfileManager()
         self.profile_mgr.current_profile = self.current_profile
 
@@ -174,8 +210,17 @@ class TestProfileManager(unittest.TestCase):
     def test_has_changed_no_changes(self):
         cached_pkgs = [
                 Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
-                Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
-        cached_profile = self._mock_pkg_profile(cached_pkgs)
+                Package(name="package2", version="2.0.0", release=2, arch="x86_64")
+        ]
+        temp_repo_dir = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, temp_repo_dir)
+        repo_file_name = os.path.join(temp_repo_dir, 'awesome.repo')
+        with open(repo_file_name, 'w') as repo_file:
+            repo_file.write(CONTENT_REPO_FILE)
+        cached_enabled_repos = [
+            EnabledRepos(repo_file=repo_file_name)
+        ]
+        cached_profile = self._mock_pkg_profile(cached_pkgs, cached_enabled_repos)
 
         self.profile_mgr._cache_exists = Mock(return_value=True)
         self.profile_mgr._read_cache = Mock(return_value=cached_profile)
@@ -187,7 +232,7 @@ class TestProfileManager(unittest.TestCase):
         cached_pkgs = [
                 Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
                 Package(name="package3", version="3.0.0", release=3, arch="x86_64")]
-        cached_profile = self._mock_pkg_profile(cached_pkgs)
+        cached_profile = self._mock_pkg_profile(cached_pkgs, [])
 
         self.profile_mgr._cache_exists = Mock(return_value=True)
         self.profile_mgr._read_cache = Mock(return_value=cached_profile)
@@ -231,7 +276,7 @@ class TestProfileManager(unittest.TestCase):
             self.assertEqual(None, data[attr])
 
     @staticmethod
-    def _mock_pkg_profile(packages):
+    def _mock_pkg_profile(packages, enabled_repos):
         """
         Turn a list of package objects into an RPMProfile object.
         """
@@ -246,7 +291,7 @@ class TestProfileManager(unittest.TestCase):
         mock_rpm_profile = RPMProfile(from_file=mock_file)
         mock_profile = {
             "rpm": mock_rpm_profile,
-            "enabled_repos": [],
+            "enabled_repos": enabled_repos,
             "modulemd": []
         }
         return mock_profile

@@ -78,6 +78,9 @@ class EnabledRepos(object):
         self.repofile = repo_file
         self.content = self.__generate()
 
+    def __eq__(self, other):
+        return self.content == other.content
+
     def __str__(self):
         return str(self.content)
 
