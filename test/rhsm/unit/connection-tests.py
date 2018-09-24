@@ -342,12 +342,10 @@ class ConnectionTests(unittest.TestCase):
         self.assertEqual(expected_guestIds, resultGuestIds)
 
     def test_bad_ca_cert(self):
-        cert = open(os.path.join(self.temp_ent_dir, "foo.pem"), 'w+')
-        cert.write('xxxxxx\n')
-        cert.close()
-        key = open(os.path.join(self.temp_ent_dir, "foo-key.pem"), 'w+')
-        key.write('xxxxxx\n')
-        key.close()
+        with open(os.path.join(self.temp_ent_dir, "foo.pem"), 'w+') as cert:
+            cert.write('xxxxxx\n')
+        with open(os.path.join(self.temp_ent_dir, "foo-key.pem"), 'w+') as key:
+            key.write('xxxxxx\n')
         cont_conn = ContentConnection(host="foobar", username="dummy", password="dummy", insecure=True)
         cont_conn.ent_dir = self.temp_ent_dir
         with self.assertRaises(BadCertificateException):

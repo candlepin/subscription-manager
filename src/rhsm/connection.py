@@ -99,6 +99,11 @@ logging.getLogger("rhsm").addHandler(h)
 log = logging.getLogger(__name__)
 
 
+class NoValidEntitlement(Exception):
+    """Throw when there is no valid entitlement certificate for accessing CDN"""
+    pass
+
+
 class ConnectionException(Exception):
     pass
 
@@ -393,9 +398,6 @@ class ContentConnection(object):
         if ent_cert_key_pairs is None or len(ent_cert_key_pairs) == 0:
             ent_cert_key_pairs = self._get_ent_cert_key_list()
 
-        # Just anything else than 200
-        result = {"status": 123456}
-
         for cert_path, key_path in ent_cert_key_pairs:
             self._load_ca_certificate(context, cert_path, key_path)
 
@@ -412,9 +414,15 @@ class ContentConnection(object):
                 "headers": dict(response.getheaders())}
 
             if response.status == 200:
-                break
+                return result
 
-        return result
+            log.debug("Unable to get valid response: %s from CDN: %s" %
+                      (result, self.host))
+
+        raise NoValidEntitlement(
+            "Cannot access CDN content on: %s using any of entitlement cert-key pair: %s" %
+            (self.host, ent_cert_key_pairs)
+        )
 
     def test(self):
         pass
