@@ -350,7 +350,10 @@ subscriptions
 %package -n dnf-plugin-subscription-manager
 Summary: Subscription Manager plugins for DNF
 Group: System Environment/Base
+# See BZ 1581410 - avoid a circular dependency
+%if (0%{?rhel} < 8)
 Requires: %{name} = %{version}-%{release}
+%endif
 Requires: dnf >= 1.0.0
 %if %{with python3}
 Requires: python3-dnf-plugins-core
