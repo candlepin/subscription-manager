@@ -21,6 +21,7 @@ from syspurpose.sync import SyspurposeSync
 from syspurpose.utils import in_container, make_utf8
 from syspurpose.i18n import ugettext as _
 import json
+import sys
 
 
 def add_command(args, syspurposestore):
@@ -240,6 +241,10 @@ def main():
     :return: 0
     """
     parser = setup_arg_parser()
+    if len(sys.argv[1:]) == 0:
+        parser.print_help()
+        parser.exit()
+
     args = parser.parse_args()
 
     # Syspurpose is not intended to be used in containers for the time being (could change later).
