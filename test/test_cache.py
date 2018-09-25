@@ -39,7 +39,7 @@ from subscription_manager.cache import ProfileManager, \
     PoolTypeCache, ReleaseStatusCache, ContentAccessCache, \
     PoolStatusCache
 
-from rhsm.profile import Package, RPMProfile, EnabledRepos
+from rhsm.profile import Package, RPMProfile, EnabledReposProfile, ModulesProfile
 
 from rhsm.connection import RestlibException, UnauthorizedException, \
     RateLimitExceededException
@@ -86,6 +86,25 @@ metadata_expire = 86400
 ui_repoid_vars = releasever
 """
 
+ENABLED_MODULES = [
+    {
+        "name": "duck",
+        "stream": 0,
+        "version": "20180730233102",
+        "context": "deadbeef",
+        "arch": "noarch",
+        "profiles": ["default"]
+    },
+    {
+        "name": "flipper",
+        "stream": 0.69,
+        "version": "20180707144203",
+        "context": "c0ffee42",
+        "arch": "x86_64",
+        "profiles": ["default", "server"]
+    }
+]
+
 
 class TestProfileManager(unittest.TestCase):
     def setUp(self):
@@ -98,10 +117,7 @@ class TestProfileManager(unittest.TestCase):
         repo_file_name = os.path.join(temp_repo_dir, 'awesome.repo')
         with open(repo_file_name, 'w') as repo_file:
             repo_file.write(CONTENT_REPO_FILE)
-        enabled_repos = [
-            EnabledRepos(repo_file=repo_file_name)
-        ]
-        self.current_profile = self._mock_pkg_profile(current_pkgs, enabled_repos)
+        self.current_profile = self._mock_pkg_profile(current_pkgs, repo_file_name, ENABLED_MODULES)
         self.profile_mgr = ProfileManager()
         self.profile_mgr.current_profile = self.current_profile
 
@@ -217,10 +233,7 @@ class TestProfileManager(unittest.TestCase):
         repo_file_name = os.path.join(temp_repo_dir, 'awesome.repo')
         with open(repo_file_name, 'w') as repo_file:
             repo_file.write(CONTENT_REPO_FILE)
-        cached_enabled_repos = [
-            EnabledRepos(repo_file=repo_file_name)
-        ]
-        cached_profile = self._mock_pkg_profile(cached_pkgs, cached_enabled_repos)
+        cached_profile = self._mock_pkg_profile(cached_pkgs, repo_file_name, ENABLED_MODULES)
 
         self.profile_mgr._cache_exists = Mock(return_value=True)
         self.profile_mgr._read_cache = Mock(return_value=cached_profile)
@@ -231,8 +244,9 @@ class TestProfileManager(unittest.TestCase):
     def test_has_changed(self):
         cached_pkgs = [
                 Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
-                Package(name="package3", version="3.0.0", release=3, arch="x86_64")]
-        cached_profile = self._mock_pkg_profile(cached_pkgs, [])
+                Package(name="package3", version="3.0.0", release=3, arch="x86_64")
+        ]
+        cached_profile = self._mock_pkg_profile(cached_pkgs, "/non/existing/path/to/repo/file", [])
 
         self.profile_mgr._cache_exists = Mock(return_value=True)
         self.profile_mgr._read_cache = Mock(return_value=cached_profile)
@@ -276,7 +290,7 @@ class TestProfileManager(unittest.TestCase):
             self.assertEqual(None, data[attr])
 
     @staticmethod
-    def _mock_pkg_profile(packages, enabled_repos):
+    def _mock_pkg_profile(packages, repo_file, enabled_modules):
         """
         Turn a list of package objects into an RPMProfile object.
         """
@@ -289,10 +303,16 @@ class TestProfileManager(unittest.TestCase):
         mock_file.read = Mock(return_value=json.dumps(dict_list))
 
         mock_rpm_profile = RPMProfile(from_file=mock_file)
+
+        mock_enabled_repos_profile = EnabledReposProfile(repo_file=repo_file)
+
+        mock_module_profile = ModulesProfile()
+        mock_module_profile.collect = Mock(return_value=enabled_modules)
+
         mock_profile = {
             "rpm": mock_rpm_profile,
-            "enabled_repos": enabled_repos,
-            "modulemd": []
+            "enabled_repos": mock_enabled_repos_profile,
+            "modulemd": mock_module_profile
         }
         return mock_profile
 
