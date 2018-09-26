@@ -93,3 +93,49 @@ is used.
 
 It also creates log file `/tmp/libdnf_plugin.log` and it writes
 some timestamps there (useful for testing of `pkcon`).
+
+Not installing to the root
+--------------------------
+
+With some extra work, you can avoid installing anything to the root filesystem.
+
+* Run `cmake` for libdnf as follows:
+
+  ```
+  mkdir ~/libdnf
+  cmake ../ -DPYTHON_DESIRED=3 -DCMAKE_INSTALL_PREFIX:PATH=~/libdnf
+  ```
+
+* Run `make` and `make install`.  The libdnf so file will be in `~/libdnf/lib64`
+* Go to your microdnf checkout and run `cmake` as follows:
+
+  ```
+  PKG_CONFIG_PATH=~/libdnf/lib64/pkgconfig cmake ../
+  ```
+
+* CMake will build the make file
+* Run `make` list so:
+
+  ```
+  LIBRARY_PATH=$HOME/libdnf/lib64 make
+  ```
+
+* `microdnf` is now compiled and linked against your custom libdnf, but you
+  still need to tell it how to find libdnf at runtime.  You can do this using
+  the `LD_LIBRARY_PATH` environment variable although I had some trouble with
+  getting that passed through when using `sudo`.  The easier way is just to
+  update where the linker looks for libraries.
+* Open `/etc/ld.so.conf.d/libdnf.conf` in an editor and put the text
+  "HOME/libdnf/lib64" in the file (substituting your home directory for
+  HOME)
+* Run `ldconfig` to update the runtime bindings for the linker
+* `microdnf` will now run against the `libdnf` you have in your home directory
+  and you haven't messed up your root filesystem at all.
+* To compile the sample plugin, run
+
+  ```
+  CPATH=~/libdnf/include make
+  ```
+* Make the directory `/usr/lib64/libdnf/plugins` and place the plugin's so file
+  in it.  Currently libdnf only reads plugins out of this directory.  You could
+  hack the source to look elsewhere.  The constant is defined in dnf-context.cpp
