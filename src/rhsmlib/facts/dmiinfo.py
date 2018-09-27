@@ -20,6 +20,7 @@ Note: This module will fail to import if dmidecode fails to import.
       module that imports it should handle an import error as well."""
 import logging
 import os
+import six
 
 from subscription_manager.i18n import ugettext as _
 
@@ -103,7 +104,7 @@ class DmiFirmwareInfoCollector(collector.FactsCollector):
         for key, value in list(func.items()):
             for key1, value1 in list(value['data'].items()):
                 # FIXME: this loses useful data...
-                if not isinstance(value1, str):
+                if not isinstance(value1, six.text_type) and not isinstance(value1, six.binary_type):
                     # we are skipping things like int and bool values, as
                     # well as lists and dicts
                     continue
@@ -114,7 +115,7 @@ class DmiFirmwareInfoCollector(collector.FactsCollector):
                     self._socket_designation.append(value1)
 
                 nkey = ''.join([tag, key1.lower()]).replace(" ", "_")
-                ddict[nkey] = str(value1)
+                ddict[nkey] = six.text_type(value1, 'utf-8')
 
         # Populate how many socket descriptions we saw in a faux-fact, so we can
         # use it to munge lscpu info later if needed.
