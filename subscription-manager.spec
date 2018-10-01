@@ -574,13 +574,13 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/ca/redhat-uep.pem %{buildroo
     tar --strip-components=1 -xzf %{SOURCE1} -C %{buildroot}
 %endif
 
+# fix timestamps on our byte compiled files so they match across arches
+find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
+
 %if %{with python3}
 %py_byte_compile %{__python3} %{buildroot}%{rhsm_plugins_dir}/
 %py_byte_compile %{__python3} %{buildroot}%{_datadir}/anaconda/addons/com_redhat_subscription_manager/
 %endif
-
-# fix timestamps on our byte compiled files so they match across arches
-find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 
 # base/cli tools use the gettext domain 'rhsm', while the
 # gnome-help tools use domain 'subscription-manager'
