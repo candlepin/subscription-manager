@@ -10,8 +10,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2018-07-03 05:01+0000\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2018-09-24 11:44+0000\n"
+"Last-Translator: myamamot <myamamot@redhat.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0\n"
@@ -190,27 +190,27 @@ msgstr "組織"
 
 #: cockpit/src/subscriptions-view.jsx:162
 msgid "Service Level:  "
-msgstr ""
+msgstr "サービスレベル:"
 
 #: cockpit/src/subscriptions-view.jsx:172
 msgid "Usage:  "
-msgstr ""
+msgstr "使用法:"
 
 #: cockpit/src/subscriptions-view.jsx:182
 msgid "Role:  "
-msgstr ""
+msgstr "ロール:  "
 
 #: cockpit/src/subscriptions-view.jsx:192
 msgid "Addons:  "
-msgstr ""
+msgstr "アドオン:  "
 
 #: cockpit/src/subscriptions-view.jsx:202
 msgid "Status: "
-msgstr ""
+msgstr "ステータス: "
 
 #: cockpit/src/subscriptions-view.jsx:210
 msgid "System Purpose"
-msgstr ""
+msgstr "システムの目的"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:221
@@ -240,21 +240,22 @@ msgstr "サブスクリプション"
 
 #: cockpit/src/subscriptions-view.jsx:274
 msgid "Updating"
-msgstr ""
+msgstr "更新中"
 
 #: cockpit/src/subscriptions-view.jsx:275
 msgid "Retrieving subscription status..."
-msgstr ""
+msgstr "サブスクリプションステータスを再取得中 ..."
 
 #: cockpit/src/subscriptions-view.jsx:282
 msgid "Unable to connect"
-msgstr ""
+msgstr "接続できません"
 
 #: cockpit/src/subscriptions-view.jsx:283
 msgid ""
 "Couldn't get system subscription status. Please ensure subscription-manager "
 "is installed."
 msgstr ""
+"システムサブスクリプションステータスを取得できませんでした。subscription-manager がインストールされていることを確認してください。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:304
@@ -618,11 +619,11 @@ msgstr "タイプ"
 
 #: src/rct/manifest_commands.py:216
 msgid "API URL"
-msgstr ""
+msgstr "API URL"
 
 #: src/rct/manifest_commands.py:217
 msgid "Web URL"
-msgstr ""
+msgstr "Web URL"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/rct/manifest_commands.py:218
@@ -993,7 +994,7 @@ msgstr "%%prog %s [オプション] "
 
 #: src/rhsm_debug/debug_commands.py:90
 msgid "The directory specified by '--destination' must already exist."
-msgstr ""
+msgstr "'--destination' で指定したディレクトリーが必要です。"
 
 #: src/rhsm_debug/debug_commands.py:94
 #, python-format
@@ -1606,7 +1607,7 @@ msgstr "サーバーレートの制限を超えました。後で再試行して
 #: src/subscription_manager/exceptions.py:48
 #, python-format
 msgid "HTTP error code %s: %s"
-msgstr ""
+msgstr "HTTP エラーコード %s: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/gui/about.py:28
@@ -4067,13 +4068,14 @@ msgstr "使用数量:"
 msgid ""
 "Due to a conflicting change made at the server the {attr} has not been set.\n"
 "{advice}"
-msgstr ""
+msgstr "サーバーで加えた変更が競合しているので、{attr} が設定されませんでした。\n"
+"{advice}"
 
 #: src/subscription_manager/managercli.py:174
 #, python-brace-format
 msgid ""
 "If you'd like to overwrite the server side change please run: {command}"
-msgstr ""
+msgstr "サーバー側の変更を上書きするには次のコマンドを実行してください: {command}"
 
 # translation auto-copied from project subscription-manager, version 1.13.X, document keys
 #: src/subscription_manager/managercli.py:209
@@ -4169,58 +4171,58 @@ msgstr ""
 #: src/subscription_manager/managercli.py:540
 #, python-brace-format
 msgid "Set {attr} of system purpose"
-msgstr ""
+msgstr "システムの目的の {attr} を設定します"
 
 #: src/subscription_manager/managercli.py:547
 #, python-brace-format
 msgid "Unset {attr} of system purpose"
-msgstr ""
+msgstr "システムの目的の {attr} 設定を解除します"
 
 #: src/subscription_manager/managercli.py:555
 #, python-brace-format
 msgid "Add an item to the list ({attr})."
-msgstr ""
+msgstr "リスト ({attr}) にアイテムを追加します。"
 
 #: src/subscription_manager/managercli.py:563
 #, python-brace-format
 msgid "Remove an item from the list ({attr})."
-msgstr ""
+msgstr "リスト ({attr}) からアイテムを削除します。"
 
 #: src/subscription_manager/managercli.py:581
 msgid "--unset cannot be used with --set, --add, or --remove"
-msgstr ""
+msgstr "--unset は --set、--add または --remove と併用できません"
 
 #: src/subscription_manager/managercli.py:583
 msgid "--add cannot be used with --remove"
-msgstr ""
+msgstr "--add は --remove と併用できません"
 
 #: src/subscription_manager/managercli.py:601
 #, python-brace-format
 msgid "{attr} unset."
-msgstr ""
+msgstr "{attr} の設定が解除されました。"
 
 #: src/subscription_manager/managercli.py:614
 #: src/subscription_manager/managercli.py:629
 #, python-brace-format
 msgid "{attr} updated."
-msgstr ""
+msgstr "{attr} を更新しました。"
 
 #: src/subscription_manager/managercli.py:650
 #, python-brace-format
 msgid "Current {name}: {val}"
-msgstr ""
+msgstr "現在の {name}: {val}"
 
 #: src/subscription_manager/managercli.py:653
 #, python-brace-format
 msgid "{name} not set."
-msgstr ""
+msgstr "{name} が設定されていません。"
 
 #: src/subscription_manager/managercli.py:674
 #, python-brace-format
 msgid ""
 "Note: The currently configured entitlement server does not support System "
 "Purpose {attr}."
-msgstr ""
+msgstr "注: 現在せっていされているエンタイトルメントサーバーはシステムの目的 {attr} をサポートしません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/managercli.py:700
@@ -4511,11 +4513,11 @@ msgstr "この組織には、サービスレベルが設定されているサブ
 
 #: src/subscription_manager/managercli.py:1133
 msgid "Manage usage setting for this system"
-msgstr ""
+msgstr "このシステムの使用状況に関する設定を管理します"
 
 #: src/subscription_manager/managercli.py:1134
 msgid "use set and unset to define the value for this field"
-msgstr ""
+msgstr "このフィールドの値を定義するには、set および unset を使用します"
 
 #: src/subscription_manager/managercli.py:1153
 msgid "base URL for content in form of https://hostname:port/prefix"
@@ -4668,7 +4670,7 @@ msgstr "システムの登録は解除されました。"
 
 #: src/subscription_manager/managercli.py:1497
 msgid "Modify or view the addons attribute of the system purpose"
-msgstr ""
+msgstr "システムの目的のアドオン属性を変更または表示します"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1518
@@ -5274,15 +5276,15 @@ msgstr ""
 msgid ""
 "show pools that are active on or after the given date; only used with --"
 "available (example: %s)"
-msgstr ""
+msgstr "特定の日付以降にアクティブなプールを表示します。--available と併用する場合のみ使用できます (例: %s)"
 
 #: src/subscription_manager/managercli.py:2481
 msgid "Error: --afterdate is only applicable with --available"
-msgstr ""
+msgstr "エラー: --afterdate は、--available との併用でのみ適用可能"
 
 #: src/subscription_manager/managercli.py:2483
 msgid "Error: --afterdate cannot be used with --ondate"
-msgstr ""
+msgstr "エラー: --afterdate は、--ondate と併用することはできません"
 
 #: src/subscription_manager/managercli.py:2498
 #, python-brace-format
@@ -5449,12 +5451,12 @@ msgstr "リポジトリー: %s"
 
 #: src/subscription_manager/managercli.py:2782
 msgid "Modify system purpose role"
-msgstr ""
+msgstr "システムの目的ロールを変更します"
 
 #: src/subscription_manager/managercli.py:2789
 msgid ""
 "Error: Options --set and --unset of role subcommand are mutually exclusive."
-msgstr ""
+msgstr "エラー: role のサブコマンドのオプション --set と --unset は同時に指定できません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/managercli.py:2798
@@ -5493,17 +5495,19 @@ msgid ""
 "Content Access Mode is set to Organization/Environment Access. This host has "
 "access to content, regardless of subscription status.\n"
 msgstr ""
+"コンテンツアクセスモードは組織/環境アクセスに設定されています。サブスクリプションのステータスに関係なく、このホストはコンテンツにアクセスできます。\n"
 
 #: src/subscription_manager/managercli.py:2856
 #, python-format
 msgid "Overall Status: %s\n"
 "%s"
-msgstr ""
+msgstr "全体のステータス: %s\n"
+"%s"
 
 #: src/subscription_manager/managercli.py:2866
 #, python-format
 msgid "System Purpose Status: %s\n"
-msgstr ""
+msgstr "システムの目的のステータス: %s\n"
 
 #: src/subscription_manager/migrate/migrate.py:54
 #: src/subscription_manager/migrate/migrate.py:56
@@ -5929,6 +5933,9 @@ msgid ""
 "Hat Subscription Management. If not desired, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
+"yum/dnf プラグイン: Red Hat サブスクリプション管理に対して %s "
+"が自動的に有効になりました。自動的に有効化しない場合は、\"subscription-manager config --rhsm."
+"auto_enable_yum_plugins=0\" で無効にします。"
 
 #: src/subscription_manager/repolib.py:715
 msgid "Repo updates"

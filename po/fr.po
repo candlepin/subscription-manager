@@ -11,8 +11,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2018-08-16 04:05+0000\n"
-"Last-Translator: Chris Snyder <csnyder@redhat.com>\n"
+"PO-Revision-Date: 2018-09-23 11:52+0000\n"
+"Last-Translator: croe <croe@redhat.com>\n"
 "Language-Team: French\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -191,27 +191,27 @@ msgstr "Organisation"
 
 #: cockpit/src/subscriptions-view.jsx:162
 msgid "Service Level:  "
-msgstr ""
+msgstr "Niveau de service :"
 
 #: cockpit/src/subscriptions-view.jsx:172
 msgid "Usage:  "
-msgstr ""
+msgstr "Utilisation :"
 
 #: cockpit/src/subscriptions-view.jsx:182
 msgid "Role:  "
-msgstr ""
+msgstr "Rôle :  "
 
 #: cockpit/src/subscriptions-view.jsx:192
 msgid "Addons:  "
-msgstr ""
+msgstr "Addons :  "
 
 #: cockpit/src/subscriptions-view.jsx:202
 msgid "Status: "
-msgstr ""
+msgstr "Statut : "
 
 #: cockpit/src/subscriptions-view.jsx:210
 msgid "System Purpose"
-msgstr ""
+msgstr "Objectif système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:221
@@ -219,7 +219,7 @@ msgstr ""
 #: cockpit/src/subscriptions-view.jsx:327
 #: src/subscription_manager/gui/installedtab.py:94
 msgid "Status"
-msgstr "État"
+msgstr "Statut"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:221
@@ -241,21 +241,23 @@ msgstr "Abonnements"
 
 #: cockpit/src/subscriptions-view.jsx:274
 msgid "Updating"
-msgstr ""
+msgstr "Mise à jour"
 
 #: cockpit/src/subscriptions-view.jsx:275
 msgid "Retrieving subscription status..."
-msgstr ""
+msgstr "Récupération du statut de l'abonnement ..."
 
 #: cockpit/src/subscriptions-view.jsx:282
 msgid "Unable to connect"
-msgstr ""
+msgstr "Impossible de se connecter"
 
 #: cockpit/src/subscriptions-view.jsx:283
 msgid ""
 "Couldn't get system subscription status. Please ensure subscription-manager "
 "is installed."
 msgstr ""
+"Impossible d'obtenir le statut d'abonnement au système. Veuillez vous "
+"assurer que le gestionnaire d'abonnement est installé."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:304
@@ -633,11 +635,11 @@ msgstr "Type"
 
 #: src/rct/manifest_commands.py:216
 msgid "API URL"
-msgstr ""
+msgstr "URL API"
 
 #: src/rct/manifest_commands.py:217
 msgid "Web URL"
-msgstr ""
+msgstr "URL Web"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rct/manifest_commands.py:218
@@ -1014,7 +1016,7 @@ msgstr "%%prog %s [OPTIONS] "
 
 #: src/rhsm_debug/debug_commands.py:90
 msgid "The directory specified by '--destination' must already exist."
-msgstr ""
+msgstr "Le répertoire spécifié par « --destination » doit déjà exister."
 
 #: src/rhsm_debug/debug_commands.py:94
 #, python-format
@@ -1688,7 +1690,7 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:48
 #, python-format
 msgid "HTTP error code %s: %s"
-msgstr ""
+msgstr "Code erreur HTTP %s: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/gui/about.py:28
@@ -4247,12 +4249,17 @@ msgid ""
 "Due to a conflicting change made at the server the {attr} has not been set.\n"
 "{advice}"
 msgstr ""
+"En raison d'un changement conflictuel au niveau serveur,  {attr} n'a pas été "
+"défini.\n"
+"{advice}"
 
 #: src/subscription_manager/managercli.py:174
 #, python-brace-format
 msgid ""
 "If you'd like to overwrite the server side change please run: {command}"
 msgstr ""
+"Si vous souhaitez remplacer des données au niveau serveur, veuillez exécuter "
+": {command}"
 
 # translation auto-copied from project subscription-manager, version 1.13.X, document keys
 #: src/subscription_manager/managercli.py:209
@@ -4357,51 +4364,51 @@ msgstr ""
 #: src/subscription_manager/managercli.py:540
 #, python-brace-format
 msgid "Set {attr} of system purpose"
-msgstr ""
+msgstr "Définir {attr} de l'objectif système"
 
 #: src/subscription_manager/managercli.py:547
 #, python-brace-format
 msgid "Unset {attr} of system purpose"
-msgstr ""
+msgstr "Désélectionner {attr} de l'objectif système"
 
 #: src/subscription_manager/managercli.py:555
 #, python-brace-format
 msgid "Add an item to the list ({attr})."
-msgstr ""
+msgstr "Ajouter l'élément à la liste ({attr})."
 
 #: src/subscription_manager/managercli.py:563
 #, python-brace-format
 msgid "Remove an item from the list ({attr})."
-msgstr ""
+msgstr "Supprimer un élément de la liste ({attr})."
 
 #: src/subscription_manager/managercli.py:581
 msgid "--unset cannot be used with --set, --add, or --remove"
-msgstr ""
+msgstr "--unset ne peut pas être utilisé avec --set, --add, ou --remove"
 
 #: src/subscription_manager/managercli.py:583
 msgid "--add cannot be used with --remove"
-msgstr ""
+msgstr "--add ne peut pas être utilisée avec --remove"
 
 #: src/subscription_manager/managercli.py:601
 #, python-brace-format
 msgid "{attr} unset."
-msgstr ""
+msgstr "{attr} désélectionné."
 
 #: src/subscription_manager/managercli.py:614
 #: src/subscription_manager/managercli.py:629
 #, python-brace-format
 msgid "{attr} updated."
-msgstr ""
+msgstr "{attr} mis à jour."
 
 #: src/subscription_manager/managercli.py:650
 #, python-brace-format
 msgid "Current {name}: {val}"
-msgstr ""
+msgstr "{name} actel : {val}"
 
 #: src/subscription_manager/managercli.py:653
 #, python-brace-format
 msgid "{name} not set."
-msgstr ""
+msgstr "{name} non défini."
 
 #: src/subscription_manager/managercli.py:674
 #, python-brace-format
@@ -4409,6 +4416,8 @@ msgid ""
 "Note: The currently configured entitlement server does not support System "
 "Purpose {attr}."
 msgstr ""
+"Remarque : le serveur de permissions actuellement configuré ne prend pas en "
+"charge l'Objectif système {attr}."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/managercli.py:700
@@ -4726,11 +4735,11 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:1133
 msgid "Manage usage setting for this system"
-msgstr ""
+msgstr "Gérer la configuration de l'utilisation pour ce système"
 
 #: src/subscription_manager/managercli.py:1134
 msgid "use set and unset to define the value for this field"
-msgstr ""
+msgstr "utiliser définir et désélectionner pour définir la valeur de ce champ"
 
 #: src/subscription_manager/managercli.py:1153
 msgid "base URL for content in form of https://hostname:port/prefix"
@@ -4897,6 +4906,8 @@ msgstr "Le système a été désenregistré."
 #: src/subscription_manager/managercli.py:1497
 msgid "Modify or view the addons attribute of the system purpose"
 msgstr ""
+"Modifier ou afficher l'attribut des addons (modules complémentaires) de "
+"l'Objectif système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1518
@@ -5572,14 +5583,16 @@ msgid ""
 "show pools that are active on or after the given date; only used with --"
 "available (example: %s)"
 msgstr ""
+"affiche les pools actifs à date donnée ou passé cette date, uniquement "
+"utilisé avec --available (exemple : %s)"
 
 #: src/subscription_manager/managercli.py:2481
 msgid "Error: --afterdate is only applicable with --available"
-msgstr ""
+msgstr "Erreur : --afterdate ne s'applique qu'avec --available"
 
 #: src/subscription_manager/managercli.py:2483
 msgid "Error: --afterdate cannot be used with --ondate"
-msgstr ""
+msgstr "Erreur : --afterdate ne peut pas être utilisé avec --ondate"
 
 #: src/subscription_manager/managercli.py:2498
 #, python-brace-format
@@ -5777,12 +5790,14 @@ msgstr "Référentiel : %s"
 
 #: src/subscription_manager/managercli.py:2782
 msgid "Modify system purpose role"
-msgstr ""
+msgstr "Modifier le rôle de l'Objectif système"
 
 #: src/subscription_manager/managercli.py:2789
 msgid ""
 "Error: Options --set and --unset of role subcommand are mutually exclusive."
 msgstr ""
+"Erreur : les options --set et --unset de la sous-commande du rôle sont "
+"mutuellement exclusives."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/managercli.py:2798
@@ -5825,17 +5840,20 @@ msgid ""
 "Content Access Mode is set to Organization/Environment Access. This host has "
 "access to content, regardless of subscription status.\n"
 msgstr ""
+"Le Mode d'accès au contenu est défini sur Organisation/Accès Environnement. "
+"Cet hôte a accès au contenu, quelle que soit le statut de son abonnement.\n"
 
 #: src/subscription_manager/managercli.py:2856
 #, python-format
 msgid "Overall Status: %s\n"
 "%s"
-msgstr ""
+msgstr "Statut général : %s\n"
+"%s"
 
 #: src/subscription_manager/managercli.py:2866
 #, python-format
 msgid "System Purpose Status: %s\n"
-msgstr ""
+msgstr "Statut de l'Objectif système : %s\n"
 
 #: src/subscription_manager/migrate/migrate.py:54
 #: src/subscription_manager/migrate/migrate.py:56
@@ -6302,6 +6320,10 @@ msgid ""
 "Hat Subscription Management. If not desired, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
+"Les plugins yum : %s ont été activées automatiquement pour le bénéfice de "
+"Red Hat Subscription Management. Si vous ne le souhaitez pas, utiliser "
+"\"subscription-manager config --rhsm.auto_enable_yum_plugins=0\" pour "
+"bloquer ce comportement."
 
 #: src/subscription_manager/repolib.py:715
 msgid "Repo updates"
