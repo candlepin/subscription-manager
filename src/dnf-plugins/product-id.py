@@ -24,7 +24,11 @@ from subscription_manager.injectioninit import init_dep_injection
 
 from dnfpluginscore import _, logger
 import dnf
+import dnf.base
+import dnf.sack
 import librepo
+import os
+from rhsm import ourjson as json
 
 
 class ProductId(dnf.Plugin):
@@ -34,6 +38,14 @@ class ProductId(dnf.Plugin):
         super(ProductId, self).__init__(base, cli)
         self.base = base
         self.cli = cli
+        self._enabled_repos = []
+
+    def config(self):
+        super(ProductId, self).config()
+        # We are adding list of enabled repos to the list to be
+        # able to access this list later in transaction hook
+        for repo in self.base.repos.iter_enabled():
+            self._enabled_repos.append(repo)
 
     def transaction(self):
         """
@@ -53,7 +65,7 @@ class ProductId(dnf.Plugin):
         chroot(self.base.conf.installroot)
         try:
             pm = DnfProductManager(self.base)
-            pm.update_all()
+            pm.update_all(self._enabled_repos)
             logger.info(_('Installed products updated.'))
         except Exception as e:
             logger.error(str(e))
@@ -63,12 +75,15 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 
 class DnfProductManager(ProductManager):
+
+    CACHE_FILE = "/var/lib/rhsm/cache/package_repo_mapping.json"
+
     def __init__(self, base):
         self.base = base
         ProductManager.__init__(self)
 
-    def update_all(self):
-        return self.update(self.get_enabled(),
+    def update_all(self, enabled_repos):
+        return self.update(self.get_certs_for_enabled_repos(enabled_repos),
                            self.get_active(),
                            True)
 
@@ -79,19 +94,21 @@ class DnfProductManager(ProductManager):
         res = handle.perform()
         return res.yum_repo.get(self.PRODUCTID, None)
 
-    def get_enabled(self):
-        """find repos that are enabled"""
+    def get_certs_for_enabled_repos(self, enabled_repos):
+        """
+        Find enabled repos that are providing product certificates
+        """
         lst = []
-        enabled = self.base.repos.iter_enabled()
 
         # skip repo's that we don't have productid info for...
-        for repo in enabled:
+        for repo in enabled_repos:
             try:
                 with dnf.util.tmpdir() as tmpdir:
                     fn = self._download_productid(repo, tmpdir)
                     if fn:
                         cert = self._get_cert(fn)
                         if cert is None:
+                            log.debug('Repository %s does not provide cert' % repo.id)
                             continue
                         lst.append((cert, repo.id))
                     else:
@@ -108,16 +125,52 @@ class DnfProductManager(ProductManager):
                       self.meta_data_errors)
         return lst
 
+    @staticmethod
+    def _get_available():
+        """Try to get list of available packages"""
+        # FIXME: It is not safe to use two base objects in transaction hook.
+        # Try to remove it, when dnf support getting list of available
+        # packages during "dnf remove".
+        with dnf.base.Base() as base:
+            base.read_all_repos()
+            base.fill_sack(load_system_repo=True, load_available_repos=True)
+            available = base.sack.query().available()
+        return available
+
+    def write_avail_pkgs_cache(self, avail_pkgs):
+        try:
+            if not os.access(os.path.dirname(self.CACHE_FILE), os.R_OK):
+                os.makedirs(os.path.dirname(self.CACHE_FILE))
+            with open(self.CACHE_FILE, "w") as file:
+                json.dump(avail_pkgs, file, default=json.encode)
+            log.debug("Wrote cache: %s" % self.CACHE_FILE)
+        except IOError as err:
+            log.error("Unable to write cache: %s" % self.CACHE_FILE)
+            log.exception(err)
+
+    def read_avail_pkgs_cache(self):
+        try:
+            with open(self.CACHE_FILE) as file:
+                json_str = file.read()
+                data = json.loads(json_str)
+            return data
+        except IOError as err:
+            log.error("Unable to read cache: %s" % self.CACHE_FILE)
+            log.exception(err)
+        except ValueError:
+            # ignore json file parse errors, we are going to generate
+            # a new as if it didn't exist
+            pass
+        return None
+
     # find the list of repo's that provide packages that
     # are actually installed.
     def get_active(self):
         """find repos that have packages installed"""
 
-        # Fill sack with fresh data to include newly installed packages
-        self.base.fill_sack()
-
-        # installed packages
-        q_installed = self.base.sack.query().installed()
+        # Create new sack to get fresh list of installed packages
+        rpmdb_sack = dnf.sack._rpmdb_sack(self.base)
+        q_installed = rpmdb_sack.query().installed()
         if hasattr(q_installed, "_na_dict"):
             # dnf 2.0
             installed_na = q_installed._na_dict()
@@ -125,13 +178,26 @@ class DnfProductManager(ProductManager):
             # dnf 1.0
             installed_na = q_installed.na_dict()
 
-        # available version of installed
-        avail_pkgs = self.base.sack.query().available().filter(name=[
-            k[0] for k in list(installed_na.keys())])
+        available = self.base.sack.query().available()
+
+        avail_pkgs = None
+        if len(available) == 0:
+            # When dnf does not provide list of available packages, then
+            # try to get this list from cache
+            avail_pkgs = self.read_avail_pkgs_cache()
+
+            # When there is no cache, then try to force get this list from repositories
+            if avail_pkgs is None:
+                available = self._get_available()
+
+        if avail_pkgs is None:
+            avail_pkgs = available.filter(name=[k[0] for k in list(installed_na.keys())])
+            avail_pkgs = [(p.name, p.arch, p.repoid) for p in avail_pkgs]
+            self.write_avail_pkgs_cache(avail_pkgs)
 
         active = set()
         for p in avail_pkgs:
-            if (p.name, p.arch) in installed_na:
-                active.add(p.repoid)
+            if (p[0], p[1]) in installed_na:
+                active.add(p[2])
 
         return active
