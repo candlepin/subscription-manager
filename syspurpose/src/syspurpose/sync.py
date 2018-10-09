@@ -87,6 +87,10 @@ class SyspurposeSync(object):
                 key_file=key_file_path
             )
 
+            if not self.connection.has_capability("syspurpose"):
+                print("Note: The currently configured entitlement server does not support System Purpose")
+                return False
+
             try:
                 consumer_cert = rhsm.certificate.create_from_file(cert_file_path)
             except rhsm.certificate.CertificateException as err:
