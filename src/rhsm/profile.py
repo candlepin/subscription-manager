@@ -26,6 +26,11 @@ except ImportError:
     dnf = None
 
 try:
+    import libdnf
+except ImportError:
+    libdnf = None
+
+try:
     import yum
 except ImportError:
     yum = None
@@ -43,16 +48,54 @@ class InvalidProfileType(Exception):
     pass
 
 
-class ModuleProfile(object):
+class ModulesProfile(object):
+
+    def __init__(self):
+        self.content = self.__generate()
+
+    def __str__(self):
+        return str(self.content)
+
+    def __eq__(self, other):
+        return self.content == other.content
+
+    @staticmethod
+    def __generate():
+        module_list = []
+        if dnf is not None and libdnf is not None:
+            base = dnf.Base()
+            base.read_all_repos()
+            base.fill_sack()
+            # FIXME: DNF doesn't provide public API for modulemd
+            try:
+                modules = base._moduleContainer
+            except AttributeError:
+                log.info("DNF does not provide modulemd functionality")
+                return []
+            all_module_list = modules.getModulePackages()
+            enabled_modules_per_repo = modules.getLatestModulesPerRepo(
+                libdnf.module.ModulePackageContainer.ModuleState_ENABLED,
+                all_module_list
+            )
+            for modules_per_repo in enabled_modules_per_repo:
+                for module_pkgs in modules_per_repo:
+                    for module_pkg in module_pkgs:
+                        module_list.append({
+                            "name": module_pkg.getName(),
+                            "stream": module_pkg.getStream(),
+                            "version": module_pkg.getVersion(),
+                            "context": module_pkg.getContext(),
+                            "arch": module_pkg.getArch(),
+                            "profiles": [profile.getName() for profile in module_pkg.getProfiles()]
+                        })
+        return module_list
 
     def collect(self):
         """
         Gather list of modules reported to candlepin server
         :return: List of modules
         """
-        module_list = []
-        # TODO: gather list of modules
-        return module_list
+        return self.content
 
 
 class EnabledRepos(object):
@@ -63,23 +106,26 @@ class EnabledRepos(object):
         config = SafeConfigParser()
         config.read(self.repofile)
         enabled_sections = [section for section in config.sections() if config.getboolean(section, "enabled")]
-        enabled_repos = [
-            {
-                "repositoryid": section,
-                "baseurl": [self._replace_vars(config.get(section, "baseurl"))]
-            } for section in enabled_sections]
+        enabled_repos = []
+        for section in enabled_sections:
+            try:
+                enabled_repos.append(
+                    {
+                        "repositoryid": section,
+                        "baseurl": [self._replace_vars(config.get(section, "baseurl"))]
+                    }
+                )
+            except ImportError:
+                break
         return enabled_repos
 
-    def __init__(self, repo_file=REPOSITORY_PATH):
+    def __init__(self, repo_file):
         """
         :param path: A .repo file path used to filter the report.
         :type path: str
         """
         self.repofile = repo_file
         self.content = self.__generate()
-
-    def __eq__(self, other):
-        return self.content == other.content
 
     def __str__(self):
         return str(self.content)
@@ -104,7 +150,8 @@ class EnabledRepos(object):
         elif yum is not None:
             return self._obtain_mappings_yum()
         else:
-            return {'releasever': None, 'basearch': None}
+            log.error('Unable to load module for any supported package manager (dnf, yum).')
+            raise ImportError
 
     def _obtain_mappings_dnf(self):
         db = dnf.dnf.Base()
@@ -116,9 +163,15 @@ class EnabledRepos(object):
 
 
 class EnabledReposProfile(object):
+    """
+    Collect information about enabled repositories
+    """
 
-    def __init__(self):
-        self._enabled_repos = EnabledRepos()
+    def __init__(self, repo_file=REPOSITORY_PATH):
+        self._enabled_repos = EnabledRepos(repo_file)
+
+    def __eq__(self, other):
+        return self._enabled_repos.content == other._enabled_repos.content
 
     def collect(self):
         """
@@ -285,5 +338,5 @@ def get_profile(profile_type):
 PROFILE_MAP = {
     "rpm": RPMProfile,
     "enabled_repos": EnabledReposProfile,
-    "modulemd": ModuleProfile
+    "modulemd": ModulesProfile
 }
