@@ -20,7 +20,7 @@
 #include <time.h>
 
 
-void write_log_msg(void);
+void fetchProductId(DnfRepo *repo);
 
 // This stuff could go in a header file, I guess
 static const PluginInfo pinfo = {
@@ -43,8 +43,7 @@ const PluginInfo *pluginGetInfo() {
     return &pinfo;
 }
 
-void write_log_msg(void)
-{
+void write_log_msg(void) {
     FILE *f = fopen("/tmp/libdnf_plugin.log", "a");
     if(f != NULL) {
 	time_t result = time(NULL);
@@ -78,22 +77,34 @@ void pluginFreeHandle(PluginHandle *handle) {
     }
 }
 
-void downloadProductId(DnfRepo *repo) {
-
-}
-
+/**
+ * Find the list of repos that are actually enabled
+ * @param repos all available repos
+ * @param enabledRepos the list of enabled repos
+ */
 void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos) {
     for (int i = 0; i < repos->len; i++) {
         DnfRepo* repo = g_ptr_array_index(repos, i);
         bool enabled = (dnf_repo_get_enabled(repo) & DNF_REPO_ENABLED_PACKAGES) > 0;
         if (enabled) {
-            // download ProductId
-            // Get the cert.
-            // If download fails, add error
-            // if cert is not none, add it to the enabledRepos list
             g_ptr_array_add(enabledRepos, repo);
         }
     }
+}
+
+
+/**
+ * Find the list of repos that provide packages that are actually installed.
+ * @param repos all available repos
+ * @param activeRepos the list of repos providing active
+ */
+void getActive(DnfContext *context, const GPtrArray *repos, GPtrArray *activeRepos) {
+//    DnfSack *dnfSack = dnf_context_get_sack(context);
+}
+
+void printError(GError *err) {
+    fprintf(stderr, "Error encountered: %d: %s\n", err->code, err->message);
+    g_error_free(err);
 }
 
 int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHookError *error) {
@@ -109,10 +120,59 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
         DnfContext *dnfContext = handle->initData;
         GPtrArray *repos = dnf_context_get_repos(dnfContext);
         GPtrArray *enabledRepos = g_ptr_array_sized_new(repos->len);
+        GPtrArray *activeRepos = g_ptr_array_sized_new(repos->len);
 
         getEnabled(repos, enabledRepos);
+        getActive(dnfContext, repos, activeRepos);
 
+        for (unsigned int i = 0; i < enabledRepos->len; i++) {
+            DnfRepo *repo = g_ptr_array_index(enabledRepos, i);
+            LrResult *lrResult = dnf_repo_get_lr_result(repo);
+            LrYumRepoMd *repoMd;
+            GError *tmp_err = NULL;
+
+            lr_result_getinfo(lrResult, &tmp_err, LRR_YUM_REPOMD, &repoMd);
+            if (tmp_err) {
+                printError(tmp_err);
+            }
+            else {
+                LrYumRepoMdRecord *repoMdRecord = lr_yum_repomd_get_record(repoMd, "productid");
+                if (repoMdRecord) {
+                    fetchProductId(repo);
+                }
+            }
+        }
     }
     return 1;
 }
 
+void fetchProductId(DnfRepo *repo) {
+    GError *tmp_err = NULL;
+    LrHandle *lrHandle = dnf_repo_get_lr_handle(repo);
+    char *downloadList[] = {"productid", NULL};
+
+    LrHandle *h = lr_handle_init();
+    LrResult *r = lr_result_init();
+
+    char *url;
+    lr_handle_getinfo(lrHandle, &tmp_err, LRO_URLS, &url);
+    if (tmp_err) {
+        printError(tmp_err);
+    }
+    lr_handle_setopt(h, NULL, LRO_URLS, url);
+    lr_handle_setopt(h, NULL, LRO_REPOTYPE, LR_YUMREPO);
+    lr_handle_setopt(h, NULL, LRO_YUMDLIST, downloadList);
+
+    printf("Ready to perform\n");
+    gboolean ret = lr_handle_perform(h, r, &tmp_err);
+    if (ret) {
+        char *destdir;
+        lr_handle_getinfo(h, &tmp_err, LRI_DESTDIR, &destdir);
+        printf("Dest dir is %s\n", destdir);
+    } else {
+        printError(tmp_err);
+    }
+
+    lr_handle_free(h);
+    lr_result_free(r);
+}
