@@ -261,11 +261,11 @@ def main():
         try:
             syspurpose_sync = SyspurposeSync()
         except ImportError:
-            print(_("Warning: Unable to sync system purpose with candlepin server: rhsm module is not available."))
+            print(_("Warning: Unable to sync system purpose with subscription management server: rhsm module is not available."))
         else:
             ret = syspurpose_sync.send_syspurpose_to_candlepin(syspurposestore)
             if ret:
-                print(_("System purpose successfully sent to candlepin server."))
+                print(_("System purpose successfully sent to subscription management server."))
             else:
-                print(_("Unable to sent system purpose to candlepin server"))
+                print(_("Unable to send system purpose to subscription management server"))
     return 0
