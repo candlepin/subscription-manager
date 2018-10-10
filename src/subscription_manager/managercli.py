@@ -1053,6 +1053,8 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
             if self.options.list:
                 if not (self.options.username and self.options.password):
                     system_exit(os.EX_USAGE, _("Error: you must register or specify --username and --password to list service levels"))
+            elif self.options.unset or self.options.set:
+                pass  # RHBZ 1632248 : User should be able to set/unset while not registered.
             else:
                 system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
 
