@@ -141,7 +141,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
                     if(ret_val == 1) {
                         DnfSack *sack = dnf_context_get_sack(handle->initData);
                         HyQuery query = hy_query_create_flags(sack, 0);
-                        hy_query_filter_empty(query);
+                        hy_query_filter(query, HY_PKG_NAME, HY_GLOB, "*");
                         DnfPackageSet *package_set = hy_query_run_set(query);
                         printf("Number of packages: %ld\n", dnf_packageset_count(package_set));
                         hy_query_free(query);
