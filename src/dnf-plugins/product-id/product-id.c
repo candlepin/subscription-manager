@@ -19,7 +19,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-
 void fetchProductId(DnfRepo *repo);
 
 // This stuff could go in a header file, I guess
@@ -99,7 +98,49 @@ void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos) {
  * @param activeRepos the list of repos providing active
  */
 void getActive(DnfContext *context, const GPtrArray *repos, GPtrArray *activeRepos) {
-//    DnfSack *dnfSack = dnf_context_get_sack(context);
+    DnfSack *dnfSack = dnf_context_get_sack(context);
+
+    HyQuery query = hy_query_create_flags(dnfSack, 0);
+    hy_query_filter(query, HY_PKG_NAME, HY_GLOB, "*");
+
+    GPtrArray *packageList = hy_query_run(query);
+    GPtrArray *installedPackages = g_ptr_array_sized_new(packageList->len);
+    hy_query_free(query);
+
+    for (int i = 0; i < packageList->len; i++) {
+        DnfPackage *pkg = g_ptr_array_index(packageList, i);
+        guint64 id = dnf_package_get_rpmdbid(pkg);
+
+        if (id) {
+            g_ptr_array_add(installedPackages, pkg);
+        }
+    }
+
+    for (int i = 0; i < repos->len; i++) {
+        DnfRepo* repo = g_ptr_array_index(repos, i);
+        printf("Looking in %s against %i packages\n", dnf_repo_get_id(repo), installedPackages->len);
+
+        for (int j = 0; j < installedPackages->len; j++) {
+            DnfPackage *instPkg = g_ptr_array_index(installedPackages, j);
+            HyQuery repoQuery = hy_query_create_flags(dnfSack, 0);
+            hy_query_filter(repoQuery, HY_PKG_NEVRA, HY_EQ, dnf_package_get_nevra(instPkg));
+            hy_query_filter(repoQuery, HY_PKG_REPONAME, HY_EQ, dnf_repo_get_id(repo));
+
+            GPtrArray *repoPackageList = hy_query_run(repoQuery);
+            hy_query_free(repoQuery);
+
+            if (repoPackageList->len) {
+                const char *nvra = dnf_package_get_nevra(instPkg);
+                const char *repoName = dnf_package_get_reponame(instPkg);
+                printf("%s is from %s\n", nvra, repoName);
+                g_ptr_array_add(activeRepos, repo);
+                break;
+            }
+            g_ptr_array_unref(repoPackageList);
+        }
+    }
+    g_ptr_array_unref(installedPackages);
+    g_ptr_array_unref(packageList);
 }
 
 void printError(GError *err) {
