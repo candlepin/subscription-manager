@@ -20,7 +20,7 @@
 #include <time.h>
 
 
-void fetchProductId(DnfRepo *repo);
+int fetchProductId(DnfRepo *repo);
 
 // This stuff could go in a header file, I guess
 static const PluginInfo pinfo = {
@@ -134,11 +134,18 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
             lr_result_getinfo(lrResult, &tmp_err, LRR_YUM_REPOMD, &repoMd);
             if (tmp_err) {
                 printError(tmp_err);
-            }
-            else {
+            } else {
                 LrYumRepoMdRecord *repoMdRecord = lr_yum_repomd_get_record(repoMd, "productid");
                 if (repoMdRecord) {
-                    fetchProductId(repo);
+                    int ret_val = fetchProductId(repo);
+                    if(ret_val == 1) {
+                        DnfSack *sack = dnf_context_get_sack(handle->initData);
+                        HyQuery query = hy_query_create_flags(sack, 0);
+                        hy_query_filter_empty(query);
+                        DnfPackageSet *package_set = hy_query_run_set(query);
+                        printf("Number of packages: %ld\n", dnf_packageset_count(package_set));
+                        hy_query_free(query);
+                    }
                 }
             }
         }
@@ -146,10 +153,11 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
     return 1;
 }
 
-void fetchProductId(DnfRepo *repo) {
+int fetchProductId(DnfRepo *repo) {
     GError *tmp_err = NULL;
     LrHandle *lrHandle = dnf_repo_get_lr_handle(repo);
     char *downloadList[] = {"productid", NULL};
+    int ret_val = 0;
 
     LrHandle *h = lr_handle_init();
     LrResult *r = lr_result_init();
@@ -168,11 +176,13 @@ void fetchProductId(DnfRepo *repo) {
     if (ret) {
         char *destdir;
         lr_handle_getinfo(h, &tmp_err, LRI_DESTDIR, &destdir);
-        printf("Dest dir is %s\n", destdir);
+        printf("Dest dir is: %s\n", destdir);
+        ret_val = 1;
     } else {
         printError(tmp_err);
     }
 
     lr_handle_free(h);
     lr_result_free(r);
+    return ret_val;
 }
