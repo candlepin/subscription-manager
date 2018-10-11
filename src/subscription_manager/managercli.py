@@ -653,7 +653,7 @@ class SyspurposeCommand(CliCommand):
             print(_("{name} not set.".format(name=self.name.capitalize())))
 
     def sync(self):
-        return syspurposelib.SyspurposeSyncActionCommand().perform(include_result=True)[1]
+        return syspurposelib.SyspurposeSyncActionCommand(self.attr).perform(include_result=True)[1]
 
     def _do_command(self):
         self._validate_options()
@@ -676,7 +676,7 @@ class SyspurposeCommand(CliCommand):
     def _check_result(self, expectation, success_msg, command, attr):
         result = None
         if self.is_registered():
-            result = syspurposelib.SyspurposeSyncActionCommand().perform(include_result=True)[1]
+            result = syspurposelib.SyspurposeSyncActionCommand(self.attr).perform(include_result=True)[1]
 
         if result and not expectation(result):
             advice = SP_ADVICE.format(command=command)

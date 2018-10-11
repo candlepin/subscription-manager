@@ -315,10 +315,11 @@ class SyspurposeSyncActionCommand(object):
       - The current values on the file system
     """
 
-    def __init__(self):
+    def __init__(self, command_name=None):
         self.report = SyspurposeSyncActionReport()
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = self.cp_provider.get_consumer_auth_cp()
+        self.command = command_name
 
     def perform(self, include_result=False):
         """
@@ -344,7 +345,7 @@ class SyspurposeSyncActionCommand(object):
         Saves the merged changes between client and server in the SyspurposeCache.
         :return: The synced values
         """
-        if not self.uep.has_capability('syspurpose'):
+        if not self.uep.has_capability('syspurpose') and self.command != 'service_level_agreement':
             log.debug('Server does not support syspurpose, not syncing')
             return read_syspurpose()
 
