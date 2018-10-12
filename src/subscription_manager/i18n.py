@@ -18,6 +18,8 @@ import locale
 import logging
 from threading import local
 
+import os
+
 import six
 
 # Localization domain:
@@ -46,6 +48,7 @@ def configure_i18n():
     except locale.Error:
         locale.setlocale(locale.LC_ALL, 'C')
     configure_gettext()
+    Locale.set(os.environ.get("LANG"))
 
 
 def configure_gettext():
