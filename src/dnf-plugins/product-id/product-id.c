@@ -92,7 +92,6 @@ void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos) {
     }
 }
 
-
 /**
  * Find the list of repos that provide packages that are actually installed.
  * @param repos all available repos
@@ -101,11 +100,12 @@ void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos) {
 void getActive(DnfContext *context, const GPtrArray *repos, GPtrArray *activeRepos) {
     DnfSack *dnfSack = dnf_context_get_sack(context);
 
-    // TODO: this query does not provide fresh list of installed packages
+    // FIXME: this query does not provide fresh list of installed packages
     // Currently installed/removed package is not listed in the query.
     // The problem is with sack. We have to get it in different way.
     HyQuery query = hy_query_create_flags(dnfSack, 0);
     hy_query_filter(query, HY_PKG_NAME, HY_GLOB, "*");
+    hy_query_filter(query, HY_REPO_NAME, HY_EQ, HY_SYSTEM_REPO_NAME);
 
     GPtrArray *packageList = hy_query_run(query);
     GPtrArray *installedPackages = g_ptr_array_sized_new(packageList->len);
@@ -113,82 +113,51 @@ void getActive(DnfContext *context, const GPtrArray *repos, GPtrArray *activeRep
 
     for (int i = 0; i < packageList->len; i++) {
         DnfPackage *pkg = g_ptr_array_index(packageList, i);
-        guint64 id = dnf_package_get_rpmdbid(pkg);
 
-        if (id) {
+        if (dnf_package_installed(pkg)) {
+            printf("%s is installed from %s\n", dnf_package_get_nevra(pkg), dnf_package_get_reponame(pkg));
             g_ptr_array_add(installedPackages, pkg);
-            printf("Package: %s from: %s\n",
-                    dnf_package_get_nevra(pkg),
-                    dnf_package_get_reponame(pkg));
         }
     }
 
     for (int i = 0; i < repos->len; i++) {
         DnfRepo* repo = g_ptr_array_index(repos, i);
-        printf("Repository: %s\n", dnf_repo_get_id(repo));
+        HyQuery availQuery = hy_query_create_flags(dnfSack, 0);
+        hy_query_filter(availQuery, HY_PKG_REPONAME, HY_EQ, dnf_repo_get_id(repo));
+        GPtrArray *availPackageList = hy_query_run(availQuery);
+        hy_query_free(availQuery);
 
-        HyQuery avail_query = hy_query_create_flags(dnfSack, 0);
-        // TODO: this filter is not correct
-        hy_query_filter(avail_query, HY_PKG_REPONAME, HY_NEQ, dnf_repo_get_id(repo));
-        GPtrArray *availPackageList = hy_query_run(avail_query);
-        hy_query_free(avail_query);
-
-        printf("Number of available packages: %d\n", availPackageList->len);
+        // NB: Another way to do this would be with a bloom filter.  A bloom filter can give a very quick,
+        // accurate answer to the question "Is this item not in this set of things?" if the result is
+        // negative.  A positive result is probabilistic and requires a second full scan of the set to get the
+        // ultimate answer.  The bloom filter approach would eliminate the need for the O(n^2) nested for-loop
+        // solution we have.
 
         // Go through all available packages from repository
-        for (int i = 0; i < availPackageList->len; i++) {
-            int package_found = 0;
-            DnfPackage *pkg = g_ptr_array_index(availPackageList, i);
-            guint64 id = dnf_package_get_rpmdbid(pkg);
+        for (int j = 0; j < availPackageList->len; j++) {
+            DnfPackage *pkg = g_ptr_array_index(availPackageList, j);
+            gboolean package_found = FALSE;
 
-            if (id) {
-                printf("Available Package: %s from: %s\n",
-                       dnf_package_get_nevra(pkg),
-                       dnf_package_get_reponame(pkg));
-                // Try to find if this available package is in the list of installed packages
-                for(int j=0; j < installedPackages->len; j++) {
-                    DnfPackage *instPkg = g_ptr_array_index(installedPackages, j);
-                    if(strcmp(dnf_package_get_nevra(pkg), dnf_package_get_nevra(instPkg)) == 0) {
-                        printf("Installed package %s is from repository: %s\n",
-                               dnf_package_get_nevra(pkg),
-                               dnf_repo_get_id(repo));
-                        g_ptr_array_add(activeRepos, repo);
-                        package_found = 1;
-                        break;
-                    }
+            // Try to find if this available package is in the list of installed packages
+            for(int k = 0; k < installedPackages->len; k++) {
+                DnfPackage *instPkg = g_ptr_array_index(installedPackages, k);
+                if(strcmp(dnf_package_get_nevra(pkg), dnf_package_get_nevra(instPkg)) == 0) {
+                    printf("Repo \"%s\" marked active due to installed package %s\n",
+                           dnf_repo_get_id(repo),
+                           dnf_package_get_nevra(pkg));
+                    g_ptr_array_add(activeRepos, repo);
+                    package_found = TRUE;
+                    break;
                 }
             }
 
-            if(package_found == 1) {
+            if(package_found == TRUE) {
                 break;
             }
         }
         g_ptr_array_unref(availPackageList);
     }
 
-//    for (int i = 0; i < repos->len; i++) {
-//        DnfRepo* repo = g_ptr_array_index(repos, i);
-//        printf("Looking in %s against %i packages\n", dnf_repo_get_id(repo), installedPackages->len);
-//
-//        for (int j = 0; j < installedPackages->len; j++) {
-//            DnfPackage *instPkg = g_ptr_array_index(installedPackages, j);
-//            HyQuery repoQuery = hy_query_create_flags(dnfSack, 0);
-//            hy_query_filter(repoQuery, HY_PKG_NEVRA, HY_EQ, dnf_package_get_nevra(instPkg));
-//            hy_query_filter(repoQuery, HY_PKG_REPONAME, HY_EQ, dnf_repo_get_id(repo));
-//
-//            GPtrArray *repoPackageList = hy_query_run(repoQuery);
-//            hy_query_free(repoQuery);
-//
-//            if (repoPackageList->len) {
-//                const char *nvra = dnf_package_get_nevra(instPkg);
-//                const char *repoName = dnf_package_get_reponame(instPkg);
-//                printf("%s is from %s\n", nvra, repoName);
-//                g_ptr_array_add(activeRepos, repo);
-//                break;
-//            }
-//            g_ptr_array_unref(repoPackageList);
-//        }
-//    }
     g_ptr_array_unref(installedPackages);
     g_ptr_array_unref(packageList);
 }
@@ -220,7 +189,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
 
         getEnabled(repos, enabledRepos);
 
-        for (unsigned int i = 0; i < enabledRepos->len; i++) {
+        for (int i = 0; i < enabledRepos->len; i++) {
             DnfRepo *repo = g_ptr_array_index(enabledRepos, i);
             LrResult *lrResult = dnf_repo_get_lr_result(repo);
             LrYumRepoMd *repoMd;
@@ -240,9 +209,14 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
                 }
             }
         }
-
         getActive(dnfContext, enabledProdIDRepos, activeRepos);
+
+        g_ptr_array_unref(repos);
+        g_ptr_array_unref(enabledRepos);
+        g_ptr_array_unref(enabledProdIDRepos);
+        g_ptr_array_unref(activeRepos);
     }
+
     return 1;
 }
 
