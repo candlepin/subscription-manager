@@ -19,6 +19,8 @@ from __future__ import print_function, division, absolute_import
 This module contains utilities for syncing system syspurpose with candlepin server
 """
 
+import os
+
 # We do not want to have hard dependency on rhsm module nor subscription_manager
 try:
     import rhsm
@@ -78,6 +80,11 @@ class SyspurposeSync(object):
             cert_dir = self.config.get('rhsm', 'consumerCertDir')
             cert_file_path = cert_dir + '/cert.pem'
             key_file_path = cert_dir + '/key.pem'
+
+            if not os.path.exists(cert_file_path):
+                print('Note: System not registered')
+                return False
+
             self.connection = rhsm.connection.UEPConnection(
                 proxy_hostname=self.proxy_server,
                 proxy_port=self.proxy_port,
