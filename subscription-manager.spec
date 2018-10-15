@@ -567,7 +567,7 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-entitlement-authority
 
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/etc/rhsm/ca
 install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-entitlement-authority.pem %{buildroot}/%{_sysconfdir}/rhsm/ca/redhat-entitlement-authority.pem
-install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/ca/redhat-uep.pem %{buildroot}/%{_sysconfdir}/rhsm/ca/redhat-uep.pem
+install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-uep.pem %{buildroot}/%{_sysconfdir}/rhsm/ca/redhat-uep.pem
 
 %if %use_cockpit
     # install cockpit dist targz
