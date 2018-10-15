@@ -19,8 +19,20 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <zlib.h>
+
+#define CHUNK 16384
 
 int fetchProductId(DnfRepo *repo);
+int unzipProductId(const char *productIdPath);
+void printError(GError *err);
+void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos);
+void getActive(DnfContext *context, const GPtrArray *repos, GPtrArray *activeRepos);
+
+/**
+ * Decompress product certificate
+ */
+int decompress(gzFile input, FILE *output) ;
 
 // This stuff could go in a header file, I guess
 static const PluginInfo pinfo = {
@@ -54,8 +66,8 @@ void write_log_msg(void) {
 }
 
 PluginHandle *pluginInitHandle(int version, PluginMode mode, void *initData) {
-    printf("%s initializing handle!\n", pinfo.name);
-    write_log_msg();
+//    printf("%s initializing handle!\n", pinfo.name);
+//    write_log_msg();
 
     PluginHandle* handle = malloc(sizeof(PluginHandle));
 
@@ -69,8 +81,8 @@ PluginHandle *pluginInitHandle(int version, PluginMode mode, void *initData) {
 }
 
 void pluginFreeHandle(PluginHandle *handle) {
-    printf("%s freeing handle!\n", pinfo.name);
-    write_log_msg();
+//    printf("%s freeing handle!\n", pinfo.name);
+//    write_log_msg();
 
     if (handle) {
         free(handle);
@@ -115,7 +127,6 @@ void getActive(DnfContext *context, const GPtrArray *repos, GPtrArray *activeRep
         DnfPackage *pkg = g_ptr_array_index(packageList, i);
 
         if (dnf_package_installed(pkg)) {
-            printf("%s is installed from %s\n", dnf_package_get_nevra(pkg), dnf_package_get_reponame(pkg));
             g_ptr_array_add(installedPackages, pkg);
         }
     }
@@ -173,8 +184,8 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
         return 0;
     }
 
-    printf("%s v%s, running on DNF version %d\n", pinfo.name, pinfo.version, handle->version);
-    write_log_msg();
+//    printf("%s v%s, running on DNF version %d\n", pinfo.name, pinfo.version, handle->version);
+//    write_log_msg();
 
     if (id == PLUGIN_HOOK_ID_CONTEXT_PRE_TRANSACTION) {
         DnfContext *dnfContext = handle->initData;
@@ -195,6 +206,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
             LrYumRepoMd *repoMd;
             GError *tmp_err = NULL;
 
+            printf("Enabled: %s\n", dnf_repo_get_id(repo));
             lr_result_getinfo(lrResult, &tmp_err, LRR_YUM_REPOMD, &repoMd);
             if (tmp_err) {
                 printError(tmp_err);
@@ -202,6 +214,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
             else {
                 LrYumRepoMdRecord *repoMdRecord = lr_yum_repomd_get_record(repoMd, "productid");
                 if (repoMdRecord) {
+                    printf("%s has a productid\n", dnf_repo_get_id(repo));
                     int ret = fetchProductId(repo);
                     if(ret == 1) {
                         g_ptr_array_add(enabledProdIDRepos, repo);
@@ -221,36 +234,109 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
 }
 
 int fetchProductId(DnfRepo *repo) {
+    int ret_val = 0;
     GError *tmp_err = NULL;
     LrHandle *lrHandle = dnf_repo_get_lr_handle(repo);
-    char *downloadList[] = {"productid", NULL};
-    int ret_val = 0;
+    LrResult *lrResult = dnf_repo_get_lr_result(repo);
 
-    LrHandle *h = lr_handle_init();
-    LrResult *r = lr_result_init();
-
-    char *url;
-    lr_handle_getinfo(lrHandle, &tmp_err, LRO_URLS, &url);
+    // getinfo uses the LRI* constants while setopt using LRO*
+    char *destdir;
+    lr_handle_getinfo(lrHandle, &tmp_err, LRI_DESTDIR, &destdir);
     if (tmp_err) {
         printError(tmp_err);
     }
+
+    char *url;
+    lr_handle_getinfo(lrHandle, &tmp_err, LRI_URLS, &url);
+    if (tmp_err) {
+        printError(tmp_err);
+    }
+
+    /* Set information on our LrHandle instance.  The LRO_UPDATE option is to tell the LrResult to update the
+     * repo (i.e. download missing information) rather than attempt to replace it.
+     *
+     * FIXME: The internals of this are unclear.  Do we need to create our own LrHandle instance or could we
+     * use the one provided and just modify the download list?  Is reusing the LrResult going to cause
+     * problems?
+     */
+    char *downloadList[] = {"productid", NULL};
+    LrHandle *h = lr_handle_init();
+    lr_handle_setopt(h, NULL, LRO_YUMDLIST, downloadList);
     lr_handle_setopt(h, NULL, LRO_URLS, url);
     lr_handle_setopt(h, NULL, LRO_REPOTYPE, LR_YUMREPO);
-    lr_handle_setopt(h, NULL, LRO_YUMDLIST, downloadList);
+    lr_handle_setopt(h, NULL, LRO_DESTDIR, destdir);
+    lr_handle_setopt(h, NULL, LRO_UPDATE, TRUE);
 
-    printf("Ready to perform\n");
-    gboolean ret = lr_handle_perform(h, r, &tmp_err);
+    gboolean ret = lr_handle_perform(h, lrResult, &tmp_err);
     if (ret) {
-        char *destdir;
-        lr_handle_getinfo(h, &tmp_err, LRI_DESTDIR, &destdir);
-        printf("Product id cert downloaded to dest dir is %s\n", destdir);
-        ret_val = 1;
+        char *returnedDestDir;
+        lr_handle_getinfo(h, &tmp_err, LRI_DESTDIR, &returnedDestDir);
+
+        LrYumRepo *lrYumRepo = lr_yum_repo_init();
+        lr_result_getinfo(lrResult, &tmp_err, LRR_YUM_REPO, &lrYumRepo);
+        ret_val = unzipProductId(lr_yum_repo_path(lrYumRepo, "productid"));
+        lr_yum_repo_free(lrYumRepo);
     } else {
         printError(tmp_err);
     }
 
     lr_handle_free(h);
-    lr_result_free(r);
+    return ret_val;
+}
+
+int unzipProductId(const char *productIdPath) {
+    int ret_val = 0;
+    printf("Product id cert downloaded to %s\n", productIdPath);
+
+    gzFile input = gzopen(productIdPath, "r");
+    // TODO figure out where and what name to put the PEM file under
+    FILE *output = fopen("/tmp/my.pem", "w+");
+
+    if (input != NULL && output != NULL) {
+        printf("Decompresing product certificate\n");
+        ret_val = decompress(input, output);
+        printf("DONE: %d\n", ret_val);
+    }
+    if(input != NULL) {
+        gzclose(input);
+    } else {
+        printf("Error: Unable to open compressed product certificate\n");
+    }
+    if(output != NULL) {
+        fclose(output);
+    } else {
+        printf("Error: Unable to open dest. certificate file\n");
+    }
 
     return ret_val;
+}
+
+/**
+ * Decompress product certificate
+ */
+int decompress(gzFile input, FILE *output) {
+    int ret = TRUE;
+    while (1) {
+        int err;
+        int bytes_read;
+        unsigned char buffer[CHUNK];
+        bytes_read = gzread(input, buffer, CHUNK - 1);
+        buffer[bytes_read] = '\0';
+        fprintf(output, "%s", buffer);
+        if (bytes_read < CHUNK - 1) {
+            if (gzeof (input)) {
+                break;
+            }
+            else {
+                const char * error_string;
+                error_string = gzerror(input, & err);
+                if (err) {
+                    fprintf (stderr, "Error: %s.\n", error_string);
+                    ret = FALSE;
+                    break;
+                }
+            }
+        }
+    }
+    return ret;
 }
