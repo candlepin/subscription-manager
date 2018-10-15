@@ -118,7 +118,9 @@ full_refresh_on_yum::
 report_package_profile::
   Set to '1' if *rhsmcertd* should report the system's current package
   profile to the subscription service. This report helps the subscription
-  service provide better errata notifications.
+  service provide better errata notifications. If supported by the
+  entitlement server, enabled repos, enabled modules, and packages present
+  will be reported.
 
 pluginDir::
   The directory to search for subscription manager plugins
