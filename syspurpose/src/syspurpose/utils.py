@@ -68,9 +68,9 @@ def create_file(path, contents):
     """
     try:
         with io.open(path, 'w', encoding='utf-8') as f:
-            if contents:
-                write_to_file_utf8(f, contents)
+            write_to_file_utf8(f, contents)
             f.flush()
+
     except OSError as e:
         if e.errno == os.errno.EEXIST:
             # If the file exists no changes necessary

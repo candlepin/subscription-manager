@@ -51,11 +51,17 @@ class SyspurposeStore(object):
                 self.contents = json.load(f, encoding='utf-8')
                 return True
         except ValueError:
+            # Malformed JSON or empty file. Let's not error out on an empty file
+            if os.path.getsize(self.path):
+                system_exit(os.EX_CONFIG,
+                    _("Error: Malformed data in file {}; please review and correct.").format(self.path))
+
             return False
         except OSError as e:
             if e.errno == os.errno.EACCES and not self.raise_on_error:
                 system_exit(os.EX_NOPERM,
-                            _('Cannot read syspurpose file {}\nAre you root?').format(self.path))
+                    _('Cannot read syspurpose file {}\nAre you root?').format(self.path))
+
             if self.raise_on_error:
                 raise e
         except IOError as ioerr:
