@@ -131,7 +131,7 @@
 %define subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.0
+Version: 1.24.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1102,6 +1102,43 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Oct 15 2018 Christopher Snyder <csnyder@redhat.com> 1.24.1-1
+- Rename zypper plugin to rhsm (khowell@redhat.com)
+- 1632384: Sync SLA regardless of capability: (nmoumoul@redhat.com)
+- 1621783: Updated syspurpose fields to match expected values (crog@redhat.com)
+- 1633575: Update error message when syspurpose is not supported by server
+  (csnyder@redhat.com)
+- 1614925: Fix grammar (csnyder@redhat.com)
+- Added support of modulemd to combined profile; ENT-834 (jhnidek@redhat.com)
+- 1620136: dnf plugin deletes prod cert as expected; ENT-773
+  (jhnidek@redhat.com)
+- 1615944: Show help when no args are provided (csnyder@redhat.com)
+- 1614943: Fix bytes/unicode handling of dmi data (khowell@redhat.com)
+- 1618825: Rename de_DE.po and es_ES.po (awood@redhat.com)
+- Combined profile: WIP enabled repos (jhnidek@redhat.com)
+- Added list of enabled repos to combined profile; ENT-833 (jhnidek@redhat.com)
+- 1607955: WIP: polishing PR with bug fix of release --list
+  (jhnidek@redhat.com)
+- Fixed name of capability and added two unit tests. (jhnidek@redhat.com)
+- Explict requires added for package we use directly (wpoteat@redhat.com)
+- 1581410: Eliminate potential for circular dependency (awood@redhat.com)
+- 1631076: subscription-manager rpm now requires python3-syspurpose
+  (nmoumoul@redhat.com)
+- For tito build, clean the yarn cache (khowell@redhat.com)
+- Fix ubuntu compat for virt-who travis runs (khowell@redhat.com)
+- Fix RPMDiff issue with multilib (jhnidek@redhat.com)
+- Use Combined Profile reporting (jhnidek@redhat.com)
+- 1629073: No python3-dmidecode on aarch64, ppc64le (khowell@redhat.com)
+- Simplify and fix subpackages logic (khowell@redhat.com)
+- 1614653: Update intermediate CA (khowell@redhat.com)
+- Fix spelling to capitalize Workstation properly (bcourt@redhat.com)
+- 1607955: Try to use all entitlement certs for connection with CDN
+  (jhnidek@redhat.com)
+- Use pre-provisioned centos7 box (khowell@redhat.com)
+- Vagrant: use ansible-role-subman-devel via galaxy (khowell@redhat.com)
+- Vagrant: skip provisioning if var needs_provision is false
+  (khowell@redhat.com)
+
 * Mon Sep 10 2018 Christopher Snyder <csnyder@redhat.com> 1.24.0-1
 - Use the "service_level_agreement" attribute for the SlaCommand
   (csnyder@redhat.com)
