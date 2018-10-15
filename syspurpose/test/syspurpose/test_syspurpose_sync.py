@@ -71,8 +71,9 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         self.assertEqual(syspurpose_sync.proxy_user, "user")
         self.assertEqual(syspurpose_sync.proxy_pass, "secret")
 
+    @patch("os.path.exists")
     @patch("syspurpose.sync.rhsm")
-    def test_sync_object_update_consumer_set_data(self, mock_rhsm):
+    def test_sync_object_update_consumer_set_data(self, mock_rhsm, mock_exists):
         # Mocking of rhsm.config
         mock_rhsm.config = Mock()
         mock_rhsm.config.DEFAULT_PROXY_PORT = "3128"
@@ -90,6 +91,7 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         instance_certificate = mock_rhsm.certificate.create_from_file.return_value
         instance_certificate.subject = Mock()
         instance_certificate.subject.get = Mock(return_value="9d4778ae-80fe-4eed-a631-6be35fded7fe")
+        mock_exists.return_value = True
 
         syspurpose_sync = sync.SyspurposeSync("proxy.example.com", "1234", "user", "secret")
 
@@ -116,8 +118,9 @@ class SyspurposeStoreTests(SyspurposeTestBase):
             usage="foo-usage"
         )
 
+    @patch("os.path.exists")
     @patch("syspurpose.sync.rhsm")
-    def test_sync_object_update_consumer_unset_data(self, mock_rhsm):
+    def test_sync_object_update_consumer_unset_data(self, mock_rhsm, mock_exists):
         # Mocking of rhsm.config
         mock_rhsm.config = Mock()
         mock_rhsm.config.DEFAULT_PROXY_PORT = "3128"
@@ -135,6 +138,7 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         instance_certificate = mock_rhsm.certificate.create_from_file.return_value
         instance_certificate.subject = Mock()
         instance_certificate.subject.get = Mock(return_value="9d4778ae-80fe-4eed-a631-6be35fded7fe")
+        mock_exists.return_value = True
 
         syspurpose_sync = sync.SyspurposeSync("proxy.example.com", "1234", "user", "secret")
 
