@@ -102,7 +102,7 @@ class SyspurposeSync(object):
                 self.connection.updateConsumer(
                     uuid=consumer_uuid,
                     role=syspurpose_store.contents.get('role') or '',
-                    addons=syspurpose_store.contents.get('addons') or [''],
+                    addons=syspurpose_store.contents.get('addons') or [],
                     service_level=syspurpose_store.contents.get('service_level_agreement') or '',
                     usage=syspurpose_store.contents.get('usage') or ''
                 )

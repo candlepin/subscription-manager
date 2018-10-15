@@ -260,8 +260,7 @@ class SyspurposeStoreTests(SyspurposeTestBase):
 
         # Remove an item from the store which we have previously seen, whose value is scalar / not contained in a list
         res = self.assertRaisesNothing(syspurpose_store.remove, "already_present_key", "preexisting_scalar_value")
-        self.assertIn("already_present_key", syspurpose_store.contents)
-        self.assertEqual(syspurpose_store.contents["already_present_key"], None)
+        self.assertNotIn("already_present_key", syspurpose_store.contents)
         self.assertTrue(res, "The remove method should return true when the store has changed")
 
     def test_remove_with_unicode_strings(self):
@@ -296,9 +295,7 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         res = self.assertRaisesNothing(syspurpose_store.unset, "already_present_key")
         # We expect a value of true from this method when the store was changed
         self.assertTrue(res, "The unset method should return true when the store has changed")
-        self.assertIn("already_present_key", syspurpose_store.contents, msg="Expected the key to still be in the contents, but reset to None")
-        # We expect the item to have been unset to None
-        self.assertEqual(syspurpose_store.contents["already_present_key"], None)
+        self.assertNotIn("already_present_key", syspurpose_store.contents, msg="Expected the key to no longer be present")
 
         res = self.assertRaisesNothing(syspurpose_store.unset, "unseen_key")
         # We expect falsey values when the store was not modified
@@ -321,14 +318,29 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         res = self.assertRaisesNothing(syspurpose_store.unset, "ονόματα")
         # We expect a value of true from this method when the store was changed
         self.assertTrue(res, "The unset method should return true when the store has changed")
-        self.assertIn(u'ονόματα', syspurpose_store.contents, msg="Expected the key to still be in the contents, but reset to None")
-        # We expect the item to have been unset to None
-        self.assertEqual(syspurpose_store.contents[u'ονόματα'], None)
+        self.assertNotIn(u'ονόματα', syspurpose_store.contents, msg="Expected the key to no longer be present")
 
         res = self.assertRaisesNothing(syspurpose_store.unset, 'άκυρο_κλειδί')
         # We expect falsey values when the store was not modified
         self.assertFalse(res, "The unset method should return false when the store has not changed")
         self.assertNotIn(u'άκυρο_κλειδί', syspurpose_store.contents, msg="The key passed to unset, has been added to the store")
+
+    def test_unset_sla(self):
+        """
+        Verify the unset operation handles the special case for the SLA field
+        """
+        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        test_data = {"service_level_agreement": "preexisting_value"}
+
+        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store.contents = dict(**test_data)
+
+        res = self.assertRaisesNothing(syspurpose_store.unset, "service_level_agreement")
+        # We expect a value of true from this method when the store was changed
+        self.assertTrue(res, "The unset method should return true when the store has changed")
+        self.assertIn("service_level_agreement", syspurpose_store.contents, msg="Expected the key to still be in the contents, but reset to an empty string")
+        # We expect the item to have been unset to None
+        self.assertEqual(syspurpose_store.contents["service_level_agreement"], '')
 
     def test_set(self):
         """
