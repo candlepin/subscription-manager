@@ -607,7 +607,8 @@ class SyspurposeCommand(CliCommand):
         )
 
     def _unset(self):
-        self._set("")
+        syspurposelib.unset(self.attr)
+        syspurposelib.write()
 
     def add(self):
         self._add(self.options.to_add)
@@ -686,7 +687,6 @@ class SyspurposeCommand(CliCommand):
 
 
 class UserPassCommand(CliCommand):
-
     """
     Abstract class for commands that require a username and password
     """
@@ -1129,17 +1129,12 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
 class UsageCommand(SyspurposeCommand):
 
     def __init__(self):
-
         shortdesc = _("Manage usage setting for this system")
         self._org_help_text = _("use set and unset to define the value for this field")
-        super(UsageCommand, self).__init__("usage", shortdesc, False, attr='usage',
-                                           commands=('set', 'unset'))
+        super(UsageCommand, self).__init__("usage", shortdesc, False, attr='usage', commands=('set', 'unset'))
 
     def _set(self, usage):
         save_usage_to_syspurpose_metadata(usage)
-
-    def _unset(self):
-        self._set("")
 
 
 class RegisterCommand(UserPassCommand):
@@ -1496,12 +1491,7 @@ class AddonsCommand(SyspurposeCommand):
     def __init__(self):
         shortdesc = _("Modify or view the addons attribute of the system purpose")
         super(AddonsCommand, self).__init__("addons", shortdesc=shortdesc, primary=False,
-                                            attr='addons', commands=['unset', 'add',
-                                                                     'remove'])
-
-    def _unset(self):
-        syspurposelib.set("addons", [])
-        syspurposelib.write()
+                                            attr='addons', commands=['unset', 'add', 'remove'])
 
     def _remove(self, val):
         syspurposelib.remove_all("addons", val)
