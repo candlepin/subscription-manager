@@ -152,6 +152,6 @@ class SyspurposeStoreTests(SyspurposeTestBase):
             uuid="9d4778ae-80fe-4eed-a631-6be35fded7fe",
             role="",
             service_level="",
-            addons=[""],
+            addons=[],
             usage=""
         )

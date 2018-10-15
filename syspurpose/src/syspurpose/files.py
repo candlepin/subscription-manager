@@ -118,13 +118,13 @@ class SyspurposeStore(object):
         try:
             current_value = self.contents[key]
             if current_value is not None and not isinstance(current_value, list) and current_value == value:
-                self.contents[key] = None
-                return True
+                return self.unset(key)
 
-            if value in self.contents[key]:
+            if value in current_value:
                 self.contents[key].remove(value)
             else:
                 return False
+
             return True
         except (AttributeError, KeyError, ValueError):
             return False
@@ -136,10 +136,16 @@ class SyspurposeStore(object):
         :return: boolean
         """
         key = make_utf8(key)
-        org = self.contents.get(key, None)
-        if org is not None:
-            self.contents[key] = None
-        return org is not None
+
+        # Special handling is required for the SLA, since it deviates from the typical CP
+        # empty => null semantics
+        if key == 'service_level_agreement':
+            value = self.contents.get(key, None)
+            self.contents[key] = ''
+        else:
+            value = self.contents.pop(key, None)
+
+        return value is not None
 
     def set(self, key, value):
         """

@@ -139,15 +139,10 @@ def detect_changed(base, other, key):
     base = base or {}
     other = other or {}
 
-    if key in base and key in other:
-        if base[key] == other[key]:
-            return False
-        else:
-            return True
-    elif key not in base and key not in other:
-        return False
-    else:
-        return True
+    base_val = base.get(key)
+    other_val = other.get(key)
+
+    return base_val != other_val
 
 
 def parse_server_info(local_server_entry, config=None):
