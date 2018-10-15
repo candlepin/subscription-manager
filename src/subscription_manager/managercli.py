@@ -1350,8 +1350,8 @@ class RegisterCommand(UserPassCommand):
                 log.exception("Auto-attach failed")
                 raise
             else:
-                save_sla_to_syspurpose_metadata(self.options.service_level)
                 if self.options.service_level is not None:
+                    save_sla_to_syspurpose_metadata(self.options.service_level)
                     print(_("Service level set to: %s") % self.options.service_level)
 
         if self.options.consumerid or self.options.activation_keys or self.autoattach or self.cp.has_capability(CONTENT_ACCESS_CERT_CAPABILITY):
@@ -1791,8 +1791,10 @@ class AttachCommand(CliCommand):
                                              "complete your request."))
 
                     attach_service.attach_auto(self.options.service_level)
-                    save_sla_to_syspurpose_metadata(self.options.service_level)
                     if self.options.service_level is not None:
+                        #  RHBZ 1632797 we should only save the sla if the sla was actually
+                        #  specified
+                        save_sla_to_syspurpose_metadata(self.options.service_level)
                         print(_("Service level set to: %s") % self.options.service_level)
 
             report = None
