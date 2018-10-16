@@ -357,9 +357,8 @@ class SyspurposeSyncActionCommand(object):
         # Translate from the remote values to the local, filtering out items not known
         for attr in ATTRIBUTES:
             value = consumer.get(LOCAL_TO_REMOTE[attr])
-            if value is None:
-                value = ""
-            server_sp[attr] = value
+            if value is not None:
+                server_sp[attr] = value
 
         try:
             filesystem_sp = read_syspurpose(raise_on_error=True)
