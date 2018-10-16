@@ -139,6 +139,9 @@ def detect_changed(base, other, key):
     base = base or {}
     other = other or {}
 
+    if key not in other.keys():
+        return False
+
     base_val = base.get(key)
     other_val = other.get(key)
 
