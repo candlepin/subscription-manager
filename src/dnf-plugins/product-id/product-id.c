@@ -17,6 +17,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <openssl/pem.h>
+#include <openssl/x509.h>
 #include <time.h>
 #include <string.h>
 #include <zlib.h>
@@ -32,7 +34,9 @@ void getActive(DnfContext *context, const GPtrArray *repos, GPtrArray *activeRep
 /**
  * Decompress product certificate
  */
-int decompress(gzFile input, FILE *output) ;
+int decompress(gzFile input, GString *output) ;
+
+GString *findFileName(GString *pString);
 
 // This stuff could go in a header file, I guess
 static const PluginInfo pinfo = {
@@ -275,7 +279,6 @@ int fetchProductId(DnfRepo *repo) {
         LrYumRepo *lrYumRepo = lr_yum_repo_init();
         lr_result_getinfo(lrResult, &tmp_err, LRR_YUM_REPO, &lrYumRepo);
         ret_val = unzipProductId(lr_yum_repo_path(lrYumRepo, "productid"));
-        lr_yum_repo_free(lrYumRepo);
     } else {
         printError(tmp_err);
     }
@@ -290,11 +293,24 @@ int unzipProductId(const char *productIdPath) {
 
     gzFile input = gzopen(productIdPath, "r");
     // TODO figure out where and what name to put the PEM file under
-    FILE *output = fopen("/tmp/my.pem", "w+");
 
-    if (input != NULL && output != NULL) {
+    if (input != NULL) {
         printf("Decompresing product certificate\n");
+        GString *output = g_string_new("");
         ret_val = decompress(input, output);
+        printf("Cert is %s\n", output->str);
+
+        GString *outname = findFileName(output);
+        g_string_prepend(outname, "/tmp/");
+        FILE *fileOutput = fopen(outname->str, "w+");
+        if(fileOutput != NULL) {
+            fprintf(fileOutput, "%s", output->str);
+            fclose(fileOutput);
+        } else {
+            printf("Error: Unable to open dest. certificate file\n");
+        }
+        g_string_free(outname, TRUE);
+        g_string_free(output, TRUE);
         printf("DONE: %d\n", ret_val);
     }
     if(input != NULL) {
@@ -302,19 +318,48 @@ int unzipProductId(const char *productIdPath) {
     } else {
         printf("Error: Unable to open compressed product certificate\n");
     }
-    if(output != NULL) {
-        fclose(output);
-    } else {
-        printf("Error: Unable to open dest. certificate file\n");
-    }
 
     return ret_val;
 }
 
 /**
+ * Look at the PEM of a certificate and figure out what filename to write it to.
+ * @param certContent
+ * @return
+ */
+GString *findFileName(GString *certContent) {
+    //TODO This is probably really brittle.  No error checking or anything.
+    GString *result = g_string_new("");
+    BIO *bio = BIO_new_mem_buf(certContent->str, (int) certContent->len);
+    X509 *x509 = PEM_read_bio_X509(bio, NULL, NULL, NULL);
+    BIO_free(bio);
+
+    int exts = X509_get_ext_count(x509);
+    int MAX_BUFF = 256;
+    for (int i = 0; i < exts; i++) {
+        char oid[MAX_BUFF];
+        X509_EXTENSION *ext = X509_get_ext(x509, i);
+        OBJ_obj2txt(oid, MAX_BUFF, X509_EXTENSION_get_object(ext), 1);
+
+        // The Red Hat OID plus ".1" which is the product namespace
+        char *prefix = "1.3.6.1.4.1.2312.9.1";
+        if (strncmp(prefix, oid, strlen(prefix)) == 0) {
+            gchar **components = g_strsplit(oid, ".", -1);
+            printf("Product id is %s\n", components[9]);
+            g_string_assign(result, components[9]);
+            g_string_append(result, ".pem");
+            g_strfreev(components);
+            break;
+        }
+    }
+
+    return result;
+}
+
+/**
  * Decompress product certificate
  */
-int decompress(gzFile input, FILE *output) {
+int decompress(gzFile input, GString *output) {
     int ret = TRUE;
     while (1) {
         int err;
@@ -322,7 +367,7 @@ int decompress(gzFile input, FILE *output) {
         unsigned char buffer[CHUNK];
         bytes_read = gzread(input, buffer, CHUNK - 1);
         buffer[bytes_read] = '\0';
-        fprintf(output, "%s", buffer);
+        g_string_printf(output, "%s", buffer);
         if (bytes_read < CHUNK - 1) {
             if (gzeof (input)) {
                 break;
@@ -331,7 +376,7 @@ int decompress(gzFile input, FILE *output) {
                 const char * error_string;
                 error_string = gzerror(input, & err);
                 if (err) {
-                    fprintf (stderr, "Error: %s.\n", error_string);
+                    fprintf(stderr, "Error: %s.\n", error_string);
                     ret = FALSE;
                     break;
                 }
