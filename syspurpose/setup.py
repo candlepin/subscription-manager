@@ -44,7 +44,7 @@ test_require = [
 
 setup(
     name="syspurpose",
-    version="1.23.7",
+    version="1.23.8",
     url="http://www.candlepinproject.org",
     description="Manage Red Hat System Purpose",
     license="GPLv2",

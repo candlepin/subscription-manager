@@ -131,7 +131,7 @@
 %define subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.23.7
+Version: 1.23.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1102,6 +1102,29 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Oct 15 2018 Christopher Snyder <csnyder@redhat.com> 1.23.8-1
+- 1637183: Replace redhat-uep.pem properly (khowell@redhat.com)
+- 1623390: Fix unregistered messaging in syspurpose (khowell@redhat.com)
+- 1632248: User should be able to set/unset while not registered
+  (csnyder@redhat.com)
+- 1632797: Only save SLA set during register or attach if specified
+  (csnyder@redhat.com)
+- 1616366: Use LANG from environment (csnyder@redhat.com)
+- 1625293: Updated how syspurpose handles unsetting values (crog@redhat.com)
+- 1632956: syspurpose no longer supresses JSON malformation errors
+  (crog@redhat.com)
+- 1614925: Fix grammar (csnyder@redhat.com)
+- 1632384: Sync SLA regardless of capability: (nmoumoul@redhat.com)
+- 1621783: Updated syspurpose fields to match expected values (crog@redhat.com)
+- Rename zypper plugin to rhsm (khowell@redhat.com)
+- 1633575: Update error message when syspurpose is not supported by server
+  (csnyder@redhat.com)
+- Added support of modulemd to combined profile; ENT-834 (jhnidek@redhat.com)
+- 1620136: dnf plugin deletes prod cert as expected; ENT-773
+  (jhnidek@redhat.com)
+  (khowell@redhat.com)
+- 1614943: Fix bytes/unicode handling of dmi data (khowell@redhat.com)
+
 * Tue Oct 02 2018 Christopher Snyder <csnyder@redhat.com> 1.23.7-1
 - Sync translations (csnyder@redhat.com)
 - 1615944: Show help when no args are provided (csnyder@redhat.com)
