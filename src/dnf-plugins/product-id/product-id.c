@@ -28,22 +28,15 @@
 #define LOGFILE "/var/log/rhsm/productid.log"
 #define CHUNK 16384
 
-int fetchProductId(DnfRepo *repo);
-int unzipProductId(const char *productIdPath);
-void printError(GError *err);
-void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos);
-void getActive(DnfContext *context, const GPtrArray *repos, GPtrArray *activeRepos);
-
-// Prototypes of functions used in this plugin
-int decompress(gzFile input, GString *output) ;
-int findProductId(GString *pString, GString *result);
-
 // This stuff could go in a header file, I guess
 static const PluginInfo pinfo = {
     .name = "Product ID - DNF Test Plugin",
     .version = "1.0.0"
 };
 
+static char *const PRODUCT_CERT_DIR = "/etc/pki/product/";
+
+static const int MAX_BUFF = 256;
 /**
  * Structure holding all data specific for this plugin
  */
@@ -56,15 +49,31 @@ struct _PluginHandle {
     // Add plugin-specific "private" data here
 };
 
+typedef struct {
+    DnfRepo *repo;
+    const char *productIdPath;
+
+} RepoProductId;
+
+static gboolean show_debug = TRUE;
+
+int unzipProductId(const char *productIdPath);
+void printError(GError *err);
+void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos);
+void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds);
+
+// Prototypes of functions used in this plugin
+int decompress(gzFile input, GString *output) ;
+int findProductId(GString *certContent, GString *result);
+int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId);
+int installProductId(RepoProductId *repoProductId) ;
 
 const PluginInfo *pluginGetInfo() {
     return &pinfo;
 }
 
-static gboolean show_debug = TRUE;
 
-const char *timestamp ()
-{
+const char *timestamp () {
     time_t tm = time (0);
     char *ts = asctime (localtime (&tm));
     char *p = ts;
@@ -165,9 +174,9 @@ void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos) {
 /**
  * Find the list of repos that provide packages that are actually installed.
  * @param repos all available repos
- * @param activeRepos the list of repos providing active
+ * @param activeRepoAndProductIds the list of repos providing active
  */
-void getActive(DnfContext *context, const GPtrArray *repos, GPtrArray *activeRepos) {
+void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds) {
     DnfSack *dnfSack = dnf_context_get_sack(context);
 
     // FIXME: this query does not provide fresh list of installed packages
@@ -189,8 +198,9 @@ void getActive(DnfContext *context, const GPtrArray *repos, GPtrArray *activeRep
         }
     }
 
-    for (int i = 0; i < repos->len; i++) {
-        DnfRepo* repo = g_ptr_array_index(repos, i);
+    for (int i = 0; i < repoAndProductIds->len; i++) {
+        RepoProductId *repoProductId = g_ptr_array_index(repoAndProductIds, i);
+        DnfRepo *repo = repoProductId->repo;
         HyQuery availQuery = hy_query_create_flags(dnfSack, 0);
         hy_query_filter(availQuery, HY_PKG_REPONAME, HY_EQ, dnf_repo_get_id(repo));
         GPtrArray *availPackageList = hy_query_run(availQuery);
@@ -214,7 +224,7 @@ void getActive(DnfContext *context, const GPtrArray *repos, GPtrArray *activeRep
                     debug("Repo \"%s\" marked active due to installed package %s",
                            dnf_repo_get_id(repo),
                            dnf_package_get_nevra(pkg));
-                    g_ptr_array_add(activeRepos, repo);
+                    g_ptr_array_add(activeRepoAndProductIds, repoProductId);
                     package_found = TRUE;
                     break;
                 }
@@ -261,9 +271,9 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
         // List of enabled repositories
         GPtrArray *enabledRepos = g_ptr_array_sized_new(repos->len);
         // Enabled repositories with product id certificate
-        GPtrArray *enabledProdIDRepos = g_ptr_array_sized_new(repos->len);
+        GPtrArray *repoAndProductIds = g_ptr_array_sized_new(repos->len);
         // Enabled repositories with prouctid cert that are actively used
-        GPtrArray *activeRepos = g_ptr_array_sized_new(repos->len);
+        GPtrArray *activeRepoAndProductIds = g_ptr_array_sized_new(repos->len);
 
         getEnabled(repos, enabledRepos);
 
@@ -282,31 +292,38 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
                 LrYumRepoMdRecord *repoMdRecord = lr_yum_repomd_get_record(repoMd, "productid");
                 if (repoMdRecord) {
                     debug("Repository %s has a productid", dnf_repo_get_id(repo));
-                    int ret = fetchProductId(repo);
-                    if(ret == 1) {
-                        g_ptr_array_add(enabledProdIDRepos, repo);
+                    RepoProductId *repoProductId = malloc(sizeof(RepoProductId));
+                    int fetchSuccess = fetchProductId(repo, repoProductId);
+                    if(fetchSuccess == 1) {
+                        g_ptr_array_add(repoAndProductIds, repoProductId);
                     }
                 }
             }
         }
-        getActive(dnfContext, enabledProdIDRepos, activeRepos);
+
+        getActive(dnfContext, repoAndProductIds, activeRepoAndProductIds);
+        for (int i = 0; i < activeRepoAndProductIds->len; i++) {
+            RepoProductId *activeRepoProductId = g_ptr_array_index(activeRepoAndProductIds, i);
+            debug("Handling active repo %s\n", dnf_repo_get_id(activeRepoProductId->repo));
+            unzipProductId(activeRepoProductId->productIdPath);
+        }
 
         g_ptr_array_unref(repos);
         g_ptr_array_unref(enabledRepos);
-        g_ptr_array_unref(enabledProdIDRepos);
-        g_ptr_array_unref(activeRepos);
+        g_ptr_array_unref(repoAndProductIds);
+        g_ptr_array_unref(activeRepoAndProductIds);
     }
 
     return 1;
 }
 
-int fetchProductId(DnfRepo *repo) {
-    int ret_val = 0;
+int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
+    int ret = 0;
     GError *tmp_err = NULL;
     LrHandle *lrHandle = dnf_repo_get_lr_handle(repo);
     LrResult *lrResult = dnf_repo_get_lr_result(repo);
 
-    // getinfo uses the LRI* constants while setopt using LRO*
+    // getinfo uses the LRI* constants while setopt uses LRO*
     char *destdir;
     lr_handle_getinfo(lrHandle, &tmp_err, LRI_DESTDIR, &destdir);
     if (tmp_err) {
@@ -334,28 +351,26 @@ int fetchProductId(DnfRepo *repo) {
     lr_handle_setopt(h, NULL, LRO_DESTDIR, destdir);
     lr_handle_setopt(h, NULL, LRO_UPDATE, TRUE);
 
-    gboolean ret = lr_handle_perform(h, lrResult, &tmp_err);
-    if (ret) {
-        char *returnedDestDir;
-        lr_handle_getinfo(h, &tmp_err, LRI_DESTDIR, &returnedDestDir);
-
+    gboolean handleSuccess = lr_handle_perform(h, lrResult, &tmp_err);
+    if (handleSuccess) {
         LrYumRepo *lrYumRepo = lr_yum_repo_init();
         lr_result_getinfo(lrResult, &tmp_err, LRR_YUM_REPO, &lrYumRepo);
-        ret_val = unzipProductId(lr_yum_repo_path(lrYumRepo, "productid"));
+        repoProductId->repo = repo;
+        repoProductId->productIdPath = lr_yum_repo_path(lrYumRepo, "productid");
+        info("Product id cert downloaded from repo metadata to %s", repoProductId->productIdPath);
+        ret = 1;
     } else {
         printError(tmp_err);
     }
 
     lr_handle_free(h);
-    return ret_val;
+    return ret;
 }
 
 int unzipProductId(const char *productIdPath) {
     int ret_val = 0;
-    info("Product id cert downloaded to %s", productIdPath);
 
     gzFile input = gzopen(productIdPath, "r");
-    // TODO figure out where and what name to put the PEM file under
 
     if (input != NULL) {
         GString *output = g_string_new("");
@@ -368,7 +383,7 @@ int unzipProductId(const char *productIdPath) {
 
         int product_id_found = findProductId(output, outname);
         if (product_id_found) {
-            g_string_prepend(outname, "/etc/pki/product/");
+            g_string_prepend(outname, PRODUCT_CERT_DIR);
             g_string_append(outname, ".pem");
             FILE *fileOutput = fopen(outname->str, "w+");
             if (fileOutput != NULL) {
@@ -420,7 +435,6 @@ int findProductId(GString *certContent, GString *result) {
     bio = NULL;
 
     int exts = X509_get_ext_count(x509);
-    int MAX_BUFF = 256;
     for (int i = 0; i < exts; i++) {
         char oid[MAX_BUFF];
         X509_EXTENSION *ext = X509_get_ext(x509, i);
