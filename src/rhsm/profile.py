@@ -86,7 +86,8 @@ class ModulesProfile(object):
                             "version": module_pkg.getVersion(),
                             "context": module_pkg.getContext(),
                             "arch": module_pkg.getArch(),
-                            "profiles": [profile.getName() for profile in module_pkg.getProfiles()]
+                            "profiles": [profile.getName() for profile in module_pkg.getProfiles()],
+                            "installed_profiles": modules.getInstalledProfiles(module_pkg.getName())
                         })
         return module_list
 
