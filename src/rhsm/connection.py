@@ -1198,6 +1198,16 @@ class UEPConnection(object):
                     self.sanitize(on_date.isoformat(), plus=True))
         return self.conn.request_get(method)
 
+    def getSyspurposeCompliance(self, uuid, on_date=None):
+        """
+        Returns a system purpose compliance object with compliance status information
+        """
+        method = '/consumers/%s/purpose_compliance' % self.sanitize(uuid)
+        if on_date:
+            method = "%s?on_date=%s" % (method,
+                                        self.sanitize(on_date.isoformat(), plus=True))
+        return self.conn.request_get(method)
+
     def createOwner(self, ownerKey, ownerDisplayName=None):
         params = {"key": ownerKey}
         if ownerDisplayName:

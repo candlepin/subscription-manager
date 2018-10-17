@@ -82,7 +82,8 @@ class SyspurposeDBusObject(base_object.BaseObject):
     def GetSyspurposeStatus(self, sender=None):
         cp = inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()
         systempurpose = syspurpose.Syspurpose(cp)
-        return systempurpose.get_syspurpose_status()
+        syspurpose_status = systempurpose.get_syspurpose_status()['status']
+        return systempurpose.get_overall_status(syspurpose_status)
 
     @util.dbus_service_signal(
         constants.SYSPURPOSE_INTERFACE,

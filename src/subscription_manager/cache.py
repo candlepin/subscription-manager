@@ -34,7 +34,7 @@ from subscription_manager.jsonwrapper import PoolWrapper
 from rhsm import ourjson as json
 from subscription_manager.isodate import parse_date
 
-from rhsmlib.services import config
+from rhsmlib.services import config, syspurpose
 
 from subscription_manager.i18n import ugettext as _
 
@@ -317,6 +317,22 @@ class EntitlementStatusCache(StatusCache):
 
     def _sync_with_server(self, uep, uuid, on_date=None, *args, **kwargs):
         self.server_status = uep.getCompliance(uuid, on_date)
+
+
+class SyspurposeComplianceStatusCache(StatusCache):
+    """
+    Manages the system cache of system purpose compliance status from the server.
+    Unlike other cache managers, this one gets info from the server rather
+    than sending it.
+    """
+    CACHE_FILE = "/var/lib/rhsm/cache/syspurpose_compliance_status.json"
+
+    def _sync_with_server(self, uep, uuid, on_date=None, *args, **kwargs):
+        self.syspurpose_service = syspurpose.Syspurpose(uep)
+        self.server_status = self.syspurpose_service.get_syspurpose_status()
+
+    def get_overall_status(self):
+        return self.syspurpose_service.get_overall_status(self.server_status['status'])
 
 
 class ProductStatusCache(StatusCache):
