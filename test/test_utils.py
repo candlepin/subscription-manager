@@ -768,8 +768,14 @@ class TestThreeWayMerge(fixture.SubManFixture):
 
     def test_empty_base_no_conflict(self):
         base = {}
-        remote = {"A": "remote"}
-        local = {"B": "local"}
+        remote = {
+            "A": "remote",
+            "B": None,
+        }
+        local = {
+            "A": None,
+            "B": "local",
+        }
 
         expected = {"A": "remote", "B": "local"}
         result = three_way_merge(local=local, base=base, remote=remote)
@@ -777,7 +783,7 @@ class TestThreeWayMerge(fixture.SubManFixture):
 
     def test_local_only(self):
         base = {}
-        remote = {}
+        remote = {"B": None}
         local = {"B": "local"}
 
         expected = local
@@ -787,7 +793,7 @@ class TestThreeWayMerge(fixture.SubManFixture):
     def test_remote_only(self):
         base = {}
         remote = {"A": "remote"}
-        local = {}
+        local = {"A": None}
 
         expected = remote
         result = three_way_merge(local=local, base=base, remote=remote)
@@ -795,16 +801,16 @@ class TestThreeWayMerge(fixture.SubManFixture):
 
     def test_key_removed_no_conflict(self):
         base = {"C": "base"}
-        remote = {}
-        local = {}
+        remote = {"C": None}
+        local = {"C": None}
 
-        expected = {}  # Should be empty as "C" was removed from both
+        expected = {"C": None}  # C should be set to None since it was unset for both
         result = three_way_merge(local=local, base=base, remote=remote)
         self.assert_equal_dict(expected, result)
 
     def test_key_removed_from_remote(self):
         base = {"C": "base"}
-        remote = {}
+        remote = {"C": None}
         local = {"C": "base"}
 
         expected = remote
@@ -820,7 +826,7 @@ class TestThreeWayMerge(fixture.SubManFixture):
     def test_key_removed_from_local(self):
         base = {"C": "base"}
         remote = {"C": "base"}
-        local = {}
+        local = {"C": None}
 
         expected = local
         result = three_way_merge(local=local, base=base, remote=remote)
@@ -928,6 +934,20 @@ class TestThreeWayMerge(fixture.SubManFixture):
         self.assertRaises(ValueError, three_way_merge, local={}, base={}, remote={},
                           on_conflict="oops")
 
+    def test_merge_remote_missing_field(self):
+        """
+        Shows that if the server does not support a field, local gets to modify it.
+        :return:
+        """
+        base = {"B": None}
+        remote = {}
+        local = {"B": "local"}
+
+        expected = {"B": "local"}
+
+        result = three_way_merge(local=local, base=base, remote=remote)
+        self.assert_equal_dict(expected, result)
+
 
 class TestDetectChange(fixture.SubManFixture):
 
@@ -951,11 +971,24 @@ class TestDetectChange(fixture.SubManFixture):
         key = "a"
         value = "value"
         base = {key: value}
-        other = {}
+        other = {key: None}
 
         result = detect_changed(base=base, other=other, key=key)
 
         self.assertEqual(result, True)
+
+    def test_absence_of_field_means_no_change(self):
+        """
+        Shows when the server does not support a particular type of field, local controls it.
+        """
+        key = "a"
+        value = "value"
+        base = {key: value}
+        other = {}
+
+        result = detect_changed(base=base, other=other, key=key)
+
+        self.assertFalse(result)
 
     def test_changed(self):
         """
