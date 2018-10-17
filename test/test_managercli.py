@@ -329,18 +329,18 @@ class TestStatusCommand(SubManFixture):
     def test_purpose_status_success(self):
         self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
-        self.cc.cp.setConsumer({'systemPurposeStatus': 'Matched'})
+        self.cc.cp.setSyspurposeCompliance({'status': 'valid'})
         self.cc.cp._capabilities = ["syspurpose"]
         self.cc.options = Mock()
         self.cc.options.on_date = None
         with Capture() as cap:
             self.cc._do_command()
-        self.assertTrue('System Purpose Status: Matched' in cap.out)
+        self.assertTrue('System Purpose Status: Current' in cap.out)
 
     def test_purpose_status_consumer_lack(self):
         self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
-        self.cc.cp.setConsumer({})
+        self.cc.cp.setSyspurposeCompliance({'status': 'unknown'})
         self.cc.cp._capabilities = ["syspurpose"]
         self.cc.options = Mock()
         self.cc.options.on_date = None
@@ -351,7 +351,7 @@ class TestStatusCommand(SubManFixture):
     def test_purpose_status_consumer_no_capability(self):
         self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
-        self.cc.cp.setConsumer({})
+        self.cc.cp.setSyspurposeCompliance({'status': 'unknown'})
         self.cc.cp._capabilities = []
         self.cc.options = Mock()
         self.cc.options.on_date = None

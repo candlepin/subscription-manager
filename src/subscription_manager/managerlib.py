@@ -31,7 +31,7 @@ import subscription_manager.cache as cache
 from subscription_manager.cert_sorter import StackingGroupSorter, ComplianceManager
 from subscription_manager import identity
 from subscription_manager.injection import require, CERT_SORTER, \
-        IDENTITY, ENTITLEMENT_STATUS_CACHE, \
+        IDENTITY, ENTITLEMENT_STATUS_CACHE, SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE, \
         PROD_STATUS_CACHE, ENT_DIR, PROD_DIR, CP_PROVIDER, OVERRIDE_STATUS_CACHE, \
         POOLTYPE_CACHE, RELEASE_STATUS_CACHE, FACTS, POOL_STATUS_CACHE
 from subscription_manager import isodate
@@ -868,6 +868,7 @@ def clean_all_data(backup=True):
     # and delete_cache is an instance method, so we need to call
     # the delete_cache on the instances created in injectioninit.
     require(ENTITLEMENT_STATUS_CACHE).delete_cache()
+    require(SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE).delete_cache()
     require(PROD_STATUS_CACHE).delete_cache()
     require(POOL_STATUS_CACHE).delete_cache()
     require(OVERRIDE_STATUS_CACHE).delete_cache()
