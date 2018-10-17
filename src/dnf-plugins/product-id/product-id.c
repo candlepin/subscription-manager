@@ -57,7 +57,6 @@ typedef struct {
 
 static gboolean show_debug = TRUE;
 
-int unzipProductId(const char *productIdPath);
 void printError(GError *err);
 void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos);
 void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds);
@@ -66,7 +65,7 @@ void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArra
 int decompress(gzFile input, GString *output) ;
 int findProductId(GString *certContent, GString *result);
 int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId);
-int installProductId(RepoProductId *repoProductId) ;
+int installProductId(const char *productIdPath);
 
 const PluginInfo *pluginGetInfo() {
     return &pinfo;
@@ -215,7 +214,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
         for (int i = 0; i < activeRepoAndProductIds->len; i++) {
             RepoProductId *activeRepoProductId = g_ptr_array_index(activeRepoAndProductIds, i);
             debug("Handling active repo %s\n", dnf_repo_get_id(activeRepoProductId->repo));
-            unzipProductId(activeRepoProductId->productIdPath);
+            installProductId(activeRepoProductId->productIdPath);
         }
 
         g_ptr_array_unref(repos);
@@ -367,7 +366,7 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
     return ret;
 }
 
-int unzipProductId(const char *productIdPath) {
+int installProductId(const char *productIdPath) {
     int ret_val = 0;
 
     gzFile input = gzopen(productIdPath, "r");
