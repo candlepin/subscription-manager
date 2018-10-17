@@ -23,6 +23,7 @@
 #include <string.h>
 #include <zlib.h>
 
+#define LOGFILE "/var/log/rhsm/productid.log"
 #define CHUNK 16384
 
 int fetchProductId(DnfRepo *repo);
@@ -31,11 +32,8 @@ void printError(GError *err);
 void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos);
 void getActive(DnfContext *context, const GPtrArray *repos, GPtrArray *activeRepos);
 
-/**
- * Decompress product certificate
- */
+// Prototypes of functions used in this plugin
 int decompress(gzFile input, GString *output) ;
-
 GString *findFileName(GString *pString);
 
 // This stuff could go in a header file, I guess
@@ -44,6 +42,9 @@ static const PluginInfo pinfo = {
     .version = "1.0.0"
 };
 
+/**
+ * Structure holding all data specific for this plugin
+ */
 struct _PluginHandle {
     // Data provided by the init method
     int version;
@@ -54,24 +55,72 @@ struct _PluginHandle {
 };
 
 
-
 const PluginInfo *pluginGetInfo() {
     return &pinfo;
 }
 
-void write_log_msg(void) {
-    FILE *f = fopen("/tmp/libdnf_plugin.log", "a");
-    if(f != NULL) {
-	time_t result = time(NULL);
-        fprintf(f, "libdnf plugin: %s%ju\n", asctime(localtime(&result)), (uintmax_t)result);
-        fclose(f);
-        f = NULL;
+static gboolean show_debug = TRUE;
+
+const char *timestamp ()
+{
+    time_t tm = time (0);
+    char *ts = asctime (localtime (&tm));
+    char *p = ts;
+    while (*p) {
+        p++;
+        if (*p == '\n') {
+            *p = 0;
+        }
     }
+    return ts;
 }
 
+/*
+ * log function. If we can't open the log, attempt to log to stdout
+ * rather than fail. opening the log each time is OK since we log so rarely.
+ *
+ * prototype included here so we can use the printf format checking.
+ */
+void r_log (const char *level, const char *message, ...)
+__attribute__ ((format (printf, 2, 3)));
+
+void r_log (const char *level, const char *message, ...)
+{
+    bool use_stdout = false;
+    va_list argp;
+    FILE *log_file = fopen (LOGFILE, "a");
+    if (!log_file) {
+        // redirect message to stdout
+        log_file = stdout;
+        use_stdout = true;
+    }
+    va_start (argp, message);
+
+    fprintf (log_file, "%s [%s] ", timestamp (), level);
+    vfprintf (log_file, message, argp);
+    putc ('\n', log_file);
+
+    if (!use_stdout) {
+        fclose (log_file);
+    }
+
+    va_end(argp);
+}
+
+#define info(msg, ...) r_log ("INFO", msg, ##__VA_ARGS__)
+#define warn(msg, ...) r_log ("WARN", msg, ##__VA_ARGS__)
+#define error(msg, ...) r_log ("ERROR", msg, ##__VA_ARGS__)
+#define debug(msg, ...) if (show_debug) r_log ("DEBUG", msg, ##__VA_ARGS__)
+
+/**
+ * Initialize handle of this plugin
+ * @param version
+ * @param mode
+ * @param initData
+ * @return
+ */
 PluginHandle *pluginInitHandle(int version, PluginMode mode, void *initData) {
-//    printf("%s initializing handle!\n", pinfo.name);
-//    write_log_msg();
+    debug("%s initializing handle!", pinfo.name);
 
     PluginHandle* handle = malloc(sizeof(PluginHandle));
 
@@ -84,9 +133,12 @@ PluginHandle *pluginInitHandle(int version, PluginMode mode, void *initData) {
     return handle;
 }
 
+/**
+ * Free handle and all
+ * @param handle
+ */
 void pluginFreeHandle(PluginHandle *handle) {
-//    printf("%s freeing handle!\n", pinfo.name);
-//    write_log_msg();
+    debug("%s freeing handle!", pinfo.name);
 
     if (handle) {
         free(handle);
@@ -157,7 +209,7 @@ void getActive(DnfContext *context, const GPtrArray *repos, GPtrArray *activeRep
             for(int k = 0; k < installedPackages->len; k++) {
                 DnfPackage *instPkg = g_ptr_array_index(installedPackages, k);
                 if(strcmp(dnf_package_get_nevra(pkg), dnf_package_get_nevra(instPkg)) == 0) {
-                    printf("Repo \"%s\" marked active due to installed package %s\n",
+                    debug("Repo \"%s\" marked active due to installed package %s",
                            dnf_repo_get_id(repo),
                            dnf_package_get_nevra(pkg));
                     g_ptr_array_add(activeRepos, repo);
@@ -178,18 +230,27 @@ void getActive(DnfContext *context, const GPtrArray *repos, GPtrArray *activeRep
 }
 
 void printError(GError *err) {
-    fprintf(stderr, "Error encountered: %d: %s\n", err->code, err->message);
+    error("Encountered: %d: %s", err->code, err->message);
     g_error_free(err);
 }
 
+/**
+ * Callback function. This method is executed for every libdnf hook. This callback
+ * is called several times during transaction, but we are interested only in one situation.
+ *
+ * @param handle Pointer on structure with data specific for this plugin
+ * @param id Id of hook (moment of transaction, when this callback is called)
+ * @param hookData
+ * @param error
+ * @return
+ */
 int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHookError *error) {
     if (!handle) {
         // We must have failed to allocate our handle during init; don't do anything.
         return 0;
     }
 
-//    printf("%s v%s, running on DNF version %d\n", pinfo.name, pinfo.version, handle->version);
-//    write_log_msg();
+    debug("%s v%s, running hook: %d on DNF version %d", pinfo.name, pinfo.version, id, handle->version);
 
     if (id == PLUGIN_HOOK_ID_CONTEXT_PRE_TRANSACTION) {
         DnfContext *dnfContext = handle->initData;
@@ -210,7 +271,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
             LrYumRepoMd *repoMd;
             GError *tmp_err = NULL;
 
-            printf("Enabled: %s\n", dnf_repo_get_id(repo));
+            debug("Enabled: %s", dnf_repo_get_id(repo));
             lr_result_getinfo(lrResult, &tmp_err, LRR_YUM_REPOMD, &repoMd);
             if (tmp_err) {
                 printError(tmp_err);
@@ -218,7 +279,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
             else {
                 LrYumRepoMdRecord *repoMdRecord = lr_yum_repomd_get_record(repoMd, "productid");
                 if (repoMdRecord) {
-                    printf("%s has a productid\n", dnf_repo_get_id(repo));
+                    debug("Repository %s has a productid", dnf_repo_get_id(repo));
                     int ret = fetchProductId(repo);
                     if(ret == 1) {
                         g_ptr_array_add(enabledProdIDRepos, repo);
@@ -289,34 +350,34 @@ int fetchProductId(DnfRepo *repo) {
 
 int unzipProductId(const char *productIdPath) {
     int ret_val = 0;
-    printf("Product id cert downloaded to %s\n", productIdPath);
+    info("Product id cert downloaded to %s", productIdPath);
 
     gzFile input = gzopen(productIdPath, "r");
     // TODO figure out where and what name to put the PEM file under
 
     if (input != NULL) {
-        printf("Decompresing product certificate\n");
+        debug("Decompresing product certificate");
         GString *output = g_string_new("");
         ret_val = decompress(input, output);
-        printf("Cert is %s\n", output->str);
+        debug("Content of product cert:\n%s", output->str);
 
         GString *outname = findFileName(output);
-        g_string_prepend(outname, "/tmp/");
+        g_string_prepend(outname, "/etc/pki/product");
         FILE *fileOutput = fopen(outname->str, "w+");
         if(fileOutput != NULL) {
             fprintf(fileOutput, "%s", output->str);
             fclose(fileOutput);
         } else {
-            printf("Error: Unable to open dest. certificate file\n");
+            error("Unable write to file with certificate file :%s", outname->str);
         }
         g_string_free(outname, TRUE);
         g_string_free(output, TRUE);
-        printf("DONE: %d\n", ret_val);
+        debug("Decompressing of certificate finished with status: %d", ret_val);
     }
     if(input != NULL) {
         gzclose(input);
     } else {
-        printf("Error: Unable to open compressed product certificate\n");
+        debug("Unable to open compressed product certificate");
     }
 
     return ret_val;
@@ -345,7 +406,7 @@ GString *findFileName(GString *certContent) {
         char *prefix = "1.3.6.1.4.1.2312.9.1";
         if (strncmp(prefix, oid, strlen(prefix)) == 0) {
             gchar **components = g_strsplit(oid, ".", -1);
-            printf("Product id is %s\n", components[9]);
+            debug("ID of product certificate: %s", components[9]);
             g_string_assign(result, components[9]);
             g_string_append(result, ".pem");
             g_strfreev(components);
@@ -358,6 +419,10 @@ GString *findFileName(GString *certContent) {
 
 /**
  * Decompress product certificate
+ *
+ * @param input This is pointer at input compressed file
+ * @param output Pointer at string, where content of certificate will be stored
+ * @return Return TRUE, when decompression was successful. Otherwise return FALSE.
  */
 int decompress(gzFile input, GString *output) {
     int ret = TRUE;
@@ -376,7 +441,7 @@ int decompress(gzFile input, GString *output) {
                 const char * error_string;
                 error_string = gzerror(input, & err);
                 if (err) {
-                    fprintf(stderr, "Error: %s.\n", error_string);
+                    error("Decompressing failed with error: %s.", error_string);
                     ret = FALSE;
                     break;
                 }
