@@ -157,6 +157,77 @@ void pluginFreeHandle(PluginHandle *handle) {
 }
 
 /**
+ * Callback function. This method is executed for every libdnf hook. This callback
+ * is called several times during transaction, but we are interested only in one situation.
+ *
+ * @param handle Pointer on structure with data specific for this plugin
+ * @param id Id of hook (moment of transaction, when this callback is called)
+ * @param hookData
+ * @param error
+ * @return
+ */
+int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHookError *error) {
+    if (!handle) {
+        // We must have failed to allocate our handle during init; don't do anything.
+        return 0;
+    }
+
+    debug("%s v%s, running hook: %d on DNF version %d", pinfo.name, pinfo.version, id, handle->version);
+
+    if (id == PLUGIN_HOOK_ID_CONTEXT_PRE_TRANSACTION) {
+        DnfContext *dnfContext = handle->initData;
+        // List of all repositories
+        GPtrArray *repos = dnf_context_get_repos(dnfContext);
+        // List of enabled repositories
+        GPtrArray *enabledRepos = g_ptr_array_sized_new(repos->len);
+        // Enabled repositories with product id certificate
+        GPtrArray *repoAndProductIds = g_ptr_array_sized_new(repos->len);
+        // Enabled repositories with prouctid cert that are actively used
+        GPtrArray *activeRepoAndProductIds = g_ptr_array_sized_new(repos->len);
+
+        getEnabled(repos, enabledRepos);
+
+        for (int i = 0; i < enabledRepos->len; i++) {
+            DnfRepo *repo = g_ptr_array_index(enabledRepos, i);
+            LrResult *lrResult = dnf_repo_get_lr_result(repo);
+            LrYumRepoMd *repoMd;
+            GError *tmp_err = NULL;
+
+            debug("Enabled: %s", dnf_repo_get_id(repo));
+            lr_result_getinfo(lrResult, &tmp_err, LRR_YUM_REPOMD, &repoMd);
+            if (tmp_err) {
+                printError(tmp_err);
+            }
+            else {
+                LrYumRepoMdRecord *repoMdRecord = lr_yum_repomd_get_record(repoMd, "productid");
+                if (repoMdRecord) {
+                    debug("Repository %s has a productid", dnf_repo_get_id(repo));
+                    RepoProductId *repoProductId = malloc(sizeof(RepoProductId));
+                    int fetchSuccess = fetchProductId(repo, repoProductId);
+                    if(fetchSuccess == 1) {
+                        g_ptr_array_add(repoAndProductIds, repoProductId);
+                    }
+                }
+            }
+        }
+
+        getActive(dnfContext, repoAndProductIds, activeRepoAndProductIds);
+        for (int i = 0; i < activeRepoAndProductIds->len; i++) {
+            RepoProductId *activeRepoProductId = g_ptr_array_index(activeRepoAndProductIds, i);
+            debug("Handling active repo %s\n", dnf_repo_get_id(activeRepoProductId->repo));
+            unzipProductId(activeRepoProductId->productIdPath);
+        }
+
+        g_ptr_array_unref(repos);
+        g_ptr_array_unref(enabledRepos);
+        g_ptr_array_unref(repoAndProductIds);
+        g_ptr_array_unref(activeRepoAndProductIds);
+    }
+
+    return 1;
+}
+
+/**
  * Find the list of repos that are actually enabled
  * @param repos all available repos
  * @param enabledRepos the list of enabled repos
@@ -244,77 +315,6 @@ void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArra
 void printError(GError *err) {
     error("Encountered: %d: %s", err->code, err->message);
     g_error_free(err);
-}
-
-/**
- * Callback function. This method is executed for every libdnf hook. This callback
- * is called several times during transaction, but we are interested only in one situation.
- *
- * @param handle Pointer on structure with data specific for this plugin
- * @param id Id of hook (moment of transaction, when this callback is called)
- * @param hookData
- * @param error
- * @return
- */
-int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHookError *error) {
-    if (!handle) {
-        // We must have failed to allocate our handle during init; don't do anything.
-        return 0;
-    }
-
-    debug("%s v%s, running hook: %d on DNF version %d", pinfo.name, pinfo.version, id, handle->version);
-
-    if (id == PLUGIN_HOOK_ID_CONTEXT_PRE_TRANSACTION) {
-        DnfContext *dnfContext = handle->initData;
-        // List of all repositories
-        GPtrArray *repos = dnf_context_get_repos(dnfContext);
-        // List of enabled repositories
-        GPtrArray *enabledRepos = g_ptr_array_sized_new(repos->len);
-        // Enabled repositories with product id certificate
-        GPtrArray *repoAndProductIds = g_ptr_array_sized_new(repos->len);
-        // Enabled repositories with prouctid cert that are actively used
-        GPtrArray *activeRepoAndProductIds = g_ptr_array_sized_new(repos->len);
-
-        getEnabled(repos, enabledRepos);
-
-        for (int i = 0; i < enabledRepos->len; i++) {
-            DnfRepo *repo = g_ptr_array_index(enabledRepos, i);
-            LrResult *lrResult = dnf_repo_get_lr_result(repo);
-            LrYumRepoMd *repoMd;
-            GError *tmp_err = NULL;
-
-            debug("Enabled: %s", dnf_repo_get_id(repo));
-            lr_result_getinfo(lrResult, &tmp_err, LRR_YUM_REPOMD, &repoMd);
-            if (tmp_err) {
-                printError(tmp_err);
-            }
-            else {
-                LrYumRepoMdRecord *repoMdRecord = lr_yum_repomd_get_record(repoMd, "productid");
-                if (repoMdRecord) {
-                    debug("Repository %s has a productid", dnf_repo_get_id(repo));
-                    RepoProductId *repoProductId = malloc(sizeof(RepoProductId));
-                    int fetchSuccess = fetchProductId(repo, repoProductId);
-                    if(fetchSuccess == 1) {
-                        g_ptr_array_add(repoAndProductIds, repoProductId);
-                    }
-                }
-            }
-        }
-
-        getActive(dnfContext, repoAndProductIds, activeRepoAndProductIds);
-        for (int i = 0; i < activeRepoAndProductIds->len; i++) {
-            RepoProductId *activeRepoProductId = g_ptr_array_index(activeRepoAndProductIds, i);
-            debug("Handling active repo %s\n", dnf_repo_get_id(activeRepoProductId->repo));
-            unzipProductId(activeRepoProductId->productIdPath);
-        }
-
-        g_ptr_array_unref(repos);
-        g_ptr_array_unref(enabledRepos);
-        g_ptr_array_unref(repoAndProductIds);
-        g_ptr_array_unref(activeRepoAndProductIds);
-    }
-
-    return 1;
 }
 
 int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
