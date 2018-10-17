@@ -15,10 +15,12 @@
 #include <libdnf/plugin/plugin.h>
 #include <libdnf/libdnf.h>
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <openssl/pem.h>
 #include <openssl/x509.h>
+#include <openssl/err.h>
+
+#include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 #include <string.h>
 #include <zlib.h>
@@ -34,7 +36,7 @@ void getActive(DnfContext *context, const GPtrArray *repos, GPtrArray *activeRep
 
 // Prototypes of functions used in this plugin
 int decompress(gzFile input, GString *output) ;
-GString *findFileName(GString *pString);
+int findProductId(GString *pString, GString *result);
 
 // This stuff could go in a header file, I guess
 static const PluginInfo pinfo = {
@@ -356,23 +358,31 @@ int unzipProductId(const char *productIdPath) {
     // TODO figure out where and what name to put the PEM file under
 
     if (input != NULL) {
-        debug("Decompresing product certificate");
         GString *output = g_string_new("");
+        GString *outname = g_string_new("");
+
+        debug("Decompresing product certificate");
         ret_val = decompress(input, output);
+        debug("Decompressing of certificate finished with status: %d", ret_val);
         debug("Content of product cert:\n%s", output->str);
 
-        GString *outname = findFileName(output);
-        g_string_prepend(outname, "/etc/pki/product");
-        FILE *fileOutput = fopen(outname->str, "w+");
-        if(fileOutput != NULL) {
-            fprintf(fileOutput, "%s", output->str);
-            fclose(fileOutput);
+        int product_id_found = findProductId(output, outname);
+        if (product_id_found) {
+            g_string_prepend(outname, "/etc/pki/product/");
+            g_string_append(outname, ".pem");
+            FILE *fileOutput = fopen(outname->str, "w+");
+            if (fileOutput != NULL) {
+                debug("Content of certificate written to: %s", outname->str);
+                fprintf(fileOutput, "%s", output->str);
+                fclose(fileOutput);
+            } else {
+                error("Unable write to file with certificate file :%s", outname->str);
+            }
         } else {
-            error("Unable write to file with certificate file :%s", outname->str);
+            ret_val = -1;
         }
         g_string_free(outname, TRUE);
         g_string_free(output, TRUE);
-        debug("Decompressing of certificate finished with status: %d", ret_val);
     }
     if(input != NULL) {
         gzclose(input);
@@ -384,37 +394,65 @@ int unzipProductId(const char *productIdPath) {
 }
 
 /**
- * Look at the PEM of a certificate and figure out what filename to write it to.
- * @param certContent
+ * Look at the PEM of a certificate and figure out what is ID of the product.
+ *
+ * @param certContent String containing content of product certificate
+ * @param result String containing ID of of product certificate
  * @return
  */
-GString *findFileName(GString *certContent) {
-    //TODO This is probably really brittle.  No error checking or anything.
-    GString *result = g_string_new("");
+int findProductId(GString *certContent, GString *result) {
+    // The Red Hat OID plus ".1" which is the product namespace
+    char *prefix = "1.3.6.1.4.1.2312.9.1";
+
     BIO *bio = BIO_new_mem_buf(certContent->str, (int) certContent->len);
+    if (bio == NULL) {
+        debug("Unable to create buffer for content of certificate: %s",
+                ERR_error_string(ERR_get_error(), NULL));
+        return -1;
+    }
     X509 *x509 = PEM_read_bio_X509(bio, NULL, NULL, NULL);
+    if (x509 == NULL) {
+        debug("Failed to read content of certificate from buffer to X509 structure: %s",
+                ERR_error_string(ERR_get_error(), NULL));
+        return -1;
+    }
     BIO_free(bio);
+    bio = NULL;
 
     int exts = X509_get_ext_count(x509);
     int MAX_BUFF = 256;
     for (int i = 0; i < exts; i++) {
         char oid[MAX_BUFF];
         X509_EXTENSION *ext = X509_get_ext(x509, i);
+        if (ext == NULL) {
+            debug("Failed to get extension of X509 structure: %s",
+                  ERR_error_string(ERR_get_error(), NULL));
+            return -1;
+        }
         OBJ_obj2txt(oid, MAX_BUFF, X509_EXTENSION_get_object(ext), 1);
 
-        // The Red Hat OID plus ".1" which is the product namespace
-        char *prefix = "1.3.6.1.4.1.2312.9.1";
         if (strncmp(prefix, oid, strlen(prefix)) == 0) {
             gchar **components = g_strsplit(oid, ".", -1);
-            debug("ID of product certificate: %s", components[9]);
-            g_string_assign(result, components[9]);
-            g_string_append(result, ".pem");
+            int comp_id=0;
+            // Because g_strsplit() returns array of NULL terminated pointers,
+            // then we have to make sure that array is long enough to contain
+            // required ID
+            while(components[comp_id] != NULL) {
+                comp_id++;
+            }
+            debug("Number of OID components: %d", comp_id);
+            if (comp_id > 9) {
+                debug("ID of product certificate: %s", (char*)components[9]);
+                g_string_assign(result, components[9]);
+            } else {
+                error("Product certificate does not contain required ID");
+            }
             g_strfreev(components);
             break;
         }
     }
 
-    return result;
+    return 1;
 }
 
 /**
