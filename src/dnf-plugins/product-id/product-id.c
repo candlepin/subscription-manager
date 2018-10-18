@@ -19,6 +19,8 @@
 #include <openssl/x509.h>
 #include <openssl/err.h>
 
+#include <json-c/json.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -37,6 +39,10 @@ static const PluginInfo pinfo = {
 static char *const PRODUCT_CERT_DIR = "/etc/pki/product/";
 
 static const int MAX_BUFF = 256;
+
+// The Red Hat OID plus ".1" which is the product namespace
+static char *const REDHAT_PRODUCT_OID = "1.3.6.1.4.1.2312.9.1";
+
 /**
  * Structure holding all data specific for this plugin
  */
@@ -65,12 +71,13 @@ void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArra
 int decompress(gzFile input, GString *output) ;
 int findProductId(GString *certContent, GString *result);
 int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId);
-int installProductId(const char *productIdPath);
+int installProductId(RepoProductId *repoProductId, GHashTable *repoMap);
+void clearTable(gpointer key, gpointer value, gpointer data);
+void writeRepoMap(GHashTable *repoMap) ;
 
 const PluginInfo *pluginGetInfo() {
     return &pinfo;
 }
-
 
 const char *timestamp () {
     time_t tm = time (0);
@@ -211,18 +218,35 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
         }
 
         getActive(dnfContext, repoAndProductIds, activeRepoAndProductIds);
+
+        if (activeRepoAndProductIds->len) {
+            // open file
+        }
+
+        //TODO handle removals here
+
+        GHashTable *repoMap = g_hash_table_new(g_str_hash, g_str_equal);
         for (int i = 0; i < activeRepoAndProductIds->len; i++) {
             RepoProductId *activeRepoProductId = g_ptr_array_index(activeRepoAndProductIds, i);
             debug("Handling active repo %s\n", dnf_repo_get_id(activeRepoProductId->repo));
-            installProductId(activeRepoProductId->productIdPath);
+            int installSuccess = installProductId(activeRepoProductId, repoMap);
         }
 
-        // We have to free memory allocated for all items of repoAndProductIds
+        // RepoMap is now a GHashTable with each product ID mapping to a GList of the repoId's associated
+        // with that product.
+
+        writeRepoMap(repoMap);
+
+        // We have to free memory allocated for all items of repoAndProductIds. This should also handle
+        // activeRepoAndProductIds since the pointers in that array are pointing to the same underlying
+        // values at repoAndProductIds.
         for (int i=0; i < repoAndProductIds->len; i++) {
             RepoProductId *repoProductId = g_ptr_array_index(repoAndProductIds, i);
             free(repoProductId);
         }
 
+        g_hash_table_foreach(repoMap, (GHFunc) clearTable, NULL);
+        g_hash_table_destroy(repoMap);
         g_ptr_array_unref(repos);
         g_ptr_array_unref(enabledRepos);
         g_ptr_array_unref(repoAndProductIds);
@@ -230,6 +254,27 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
     }
 
     return 1;
+}
+
+void writeRepoMap(GHashTable *repoMap) {
+    json_object *productIdDb = json_object_new_object();
+
+    GList *keys = g_hash_table_get_keys(repoMap);
+
+    // TODO: This is a terrible way to traverse a linked list
+    for (guint i = 0; i < g_list_length(keys); i++) {
+        char *productId = g_list_nth_data(keys, i);
+        json_object *repoIdJson = json_object_new_array();
+        GList *values = g_hash_table_lookup(repoMap, productId);
+
+        for (guint j = 0; j < g_list_length(values); j++) {
+            char *repoId = g_list_nth_data(values, j);
+            json_object_array_add(repoIdJson, json_object_new_string(repoId));
+        }
+        json_object_object_add(productIdDb, productId, repoIdJson);
+    }
+
+    debug("JSON is %s\n", json_object_to_json_string(productIdDb));
 }
 
 /**
@@ -365,8 +410,10 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
             repoProductId->productIdPath = lr_yum_repo_path(lrYumRepo, "productid");
             info("Product id cert downloaded from repo metadata to %s", repoProductId->productIdPath);
             ret = 1;
-            lr_yum_repo_free(lrYumRepo);
-            lrYumRepo = NULL;
+            // Causes a segfault.  LrYumRepo isn't inited properly or something and the LrYumRepoPaths in it
+            // are FUBAR
+            // lr_yum_repo_free(lrYumRepo);
+            // lrYumRepo = NULL;
         } else {
             error("Unable to initialize LrYumRepo");
         }
@@ -381,45 +428,61 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
     return ret;
 }
 
-int installProductId(const char *productIdPath) {
-    int ret_val = 0;
+int installProductId(RepoProductId *repoProductId, GHashTable *repoMap) {
+    int ret = 0;
 
+    const char *productIdPath = repoProductId->productIdPath;
     gzFile input = gzopen(productIdPath, "r");
 
     if (input != NULL) {
-        GString *output = g_string_new("");
+        GString *pemOutput = g_string_new("");
         GString *outname = g_string_new("");
 
-        debug("Decompresing product certificate");
-        ret_val = decompress(input, output);
-        debug("Decompressing of certificate finished with status: %d", ret_val);
-        debug("Content of product cert:\n%s", output->str);
+        debug("Decompressing product certificate");
+        int decompressSuccess = decompress(input, pemOutput);
+        if (decompressSuccess == FALSE) {
+            goto out;
+        }
+        debug("Decompressing of certificate finished with status: %d", ret);
+        debug("Content of product cert:\n%s", pemOutput->str);
 
-        int product_id_found = findProductId(output, outname);
-        if (product_id_found) {
+        int productIdFound = findProductId(pemOutput, outname);
+        if (productIdFound) {
+            char *mapKey = g_strdup(outname->str);
             g_string_prepend(outname, PRODUCT_CERT_DIR);
             g_string_append(outname, ".pem");
             FILE *fileOutput = fopen(outname->str, "w+");
             if (fileOutput != NULL) {
                 debug("Content of certificate written to: %s", outname->str);
-                fprintf(fileOutput, "%s", output->str);
+                fprintf(fileOutput, "%s", pemOutput->str);
                 fclose(fileOutput);
+
+                gpointer valueList = g_hash_table_lookup(repoMap, mapKey);
+                g_hash_table_insert(
+                    repoMap,
+                    mapKey,
+                    g_list_prepend(valueList, (gpointer) dnf_repo_get_id(repoProductId->repo)
+                ));
+
+                ret = 1;
+
             } else {
                 error("Unable write to file with certificate file :%s", outname->str);
             }
-        } else {
-            ret_val = -1;
         }
+
+        out:
         g_string_free(outname, TRUE);
-        g_string_free(output, TRUE);
+        g_string_free(pemOutput, TRUE);
     }
+
     if(input != NULL) {
         gzclose(input);
     } else {
         debug("Unable to open compressed product certificate");
     }
 
-    return ret_val;
+    return ret;
 }
 
 /**
@@ -430,9 +493,6 @@ int installProductId(const char *productIdPath) {
  * @return
  */
 int findProductId(GString *certContent, GString *result) {
-    // The Red Hat OID plus ".1" which is the product namespace
-    char *prefix = "1.3.6.1.4.1.2312.9.1";
-
     BIO *bio = BIO_new_mem_buf(certContent->str, (int) certContent->len);
     if (bio == NULL) {
         debug("Unable to create buffer for content of certificate: %s",
@@ -459,7 +519,7 @@ int findProductId(GString *certContent, GString *result) {
         }
         OBJ_obj2txt(oid, MAX_BUFF, X509_EXTENSION_get_object(ext), 1);
 
-        if (strncmp(prefix, oid, strlen(prefix)) == 0) {
+        if (strncmp(REDHAT_PRODUCT_OID, oid, strlen(REDHAT_PRODUCT_OID)) == 0) {
             gchar **components = g_strsplit(oid, ".", -1);
             int comp_id=0;
             // Because g_strsplit() returns array of NULL terminated pointers,
@@ -515,4 +575,8 @@ int decompress(gzFile input, GString *output) {
         }
     }
     return ret;
+}
+
+void clearTable(gpointer key, gpointer value, gpointer data) {
+    g_slist_free(value);
 }
