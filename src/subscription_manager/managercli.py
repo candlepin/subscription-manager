@@ -64,8 +64,7 @@ from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, \
         none_wrap_columnize_callback, echo_columnize_callback, highlight_by_filter_string_columnize_cb
 from subscription_manager.utils import generate_correlation_id
-from subscription_manager.syspurposelib import save_sla_to_syspurpose_metadata, \
-        save_role_to_syspurpose_metadata, save_usage_to_syspurpose_metadata
+from subscription_manager.syspurposelib import save_sla_to_syspurpose_metadata
 
 from subscription_manager.i18n import ungettext, ugettext as _
 
@@ -533,6 +532,8 @@ class SyspurposeCommand(CliCommand):
         self.commands = commands
         self.attr = attr
 
+        self.store = self._get_synced_store()
+
         if 'set' in commands:
             self.parser.add_option(
                 "--set",
@@ -562,6 +563,14 @@ class SyspurposeCommand(CliCommand):
                 default=[],
                 help=_("Remove an item from the list ({attr}).".format(attr=attr))
             )
+
+    def _get_synced_store(self):
+        try:
+            from syspurpose.files import SyncedStore
+            uep = inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()
+            return SyncedStore(uep=uep, consumer_uuid=self.identity.uuid)
+        except ImportError:
+            return None
 
     def _validate_options(self):
         set = getattr(self.options, 'set', None)
@@ -594,7 +603,8 @@ class SyspurposeCommand(CliCommand):
         )
 
     def _set(self, to_set):
-        raise NotImplementedError("To be implemented in subclasses")
+        if self.store:
+            self.store.set(self.attr, to_set)
 
     def unset(self):
         self._unset()
@@ -607,13 +617,13 @@ class SyspurposeCommand(CliCommand):
         )
 
     def _unset(self):
-        syspurposelib.unset(self.attr)
-        syspurposelib.write()
+        if self.store:
+            self.store.unset(self.attr)
 
     def add(self):
         self._add(self.options.to_add)
         success_msg = _("{attr} updated.").format(attr=self.name)
-        to_add = "--add " + "--add ".join(self.options.to_add)
+        to_add = "--add " + " --add ".join(self.options.to_add)
         command = "subscription-manager {name} ".format(name=self.name) + to_add
         self._check_result(
             expectation=lambda res: all(x in res.get('addons', []) for x in self.options.to_add),
@@ -623,7 +633,12 @@ class SyspurposeCommand(CliCommand):
         )
 
     def _add(self, to_add):
-        raise NotImplementedError("To be implemented in subclasses")
+        if not isinstance(to_add, list):
+            to_add = [to_add]
+
+        if self.store:
+            for item in to_add:
+                self.store.add(self.attr, item)
 
     def remove(self):
         self._remove(self.options.to_remove)
@@ -638,7 +653,12 @@ class SyspurposeCommand(CliCommand):
         )
 
     def _remove(self, to_remove):
-        raise NotImplementedError("To be implemented in subclasses")
+        if not isinstance(to_remove, list):
+            to_remove = [to_remove]
+
+        if self.store:
+            for item in to_remove:
+                self.store.remove(self.attr, item)
 
     def show(self):
         if self.is_registered():
@@ -675,10 +695,11 @@ class SyspurposeCommand(CliCommand):
             print(_("Note: The currently configured entitlement server does not support System Purpose {attr}.".format(attr=attr)))
 
     def _check_result(self, expectation, success_msg, command, attr):
-        result = None
-        if self.is_registered():
-            result = syspurposelib.SyspurposeSyncActionCommand(self.attr).perform(include_result=True)[1]
-
+        if self.store:
+            self.store.finish()
+            result = self.store.get_cached_contents()
+        else:
+            result = {}
         if result and not expectation(result):
             advice = SP_ADVICE.format(command=command)
             system_exit(os.EX_SOFTWARE, msgs=_(SP_CONFLICT_MESSAGE.format(attr=attr, advice=advice)))
@@ -937,7 +958,7 @@ class EnvironmentsCommand(OrgCommand):
                                                   False)
         self._add_url_options()
 
-    def _get_enviornments(self, org):
+    def _get_environments(self, org):
         return self.cp.getEnvironmentList(org)
 
     def _do_command(self):
@@ -946,7 +967,7 @@ class EnvironmentsCommand(OrgCommand):
             self.cp_provider.set_user_pass(self.username, self.password)
             self.cp = self.cp_provider.get_basic_auth_cp()
             if self.cp.supports_resource('environments'):
-                environments = self._get_enviornments(self.org)
+                environments = self._get_environments(self.org)
 
                 if len(environments):
                     print("+-------------------------------------------+")
@@ -1088,8 +1109,12 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
             else:
                 self.show_service_level()
 
-    def _set(self, service_level):
-        save_sla_to_syspurpose_metadata(service_level)
+    def set(self):
+        if self.cp.has_capability("syspurpose"):
+            super(ServiceLevelCommand, self).set()
+        else:
+            # TODO Find old impl of service level command.
+            pass
 
     def show_service_level(self):
         consumer = self.cp.getConsumer(self.identity.uuid)
@@ -1136,9 +1161,6 @@ class UsageCommand(SyspurposeCommand):
         shortdesc = _("Manage usage setting for this system")
         self._org_help_text = _("use set and unset to define the value for this field")
         super(UsageCommand, self).__init__("usage", shortdesc, False, attr='usage', commands=('set', 'unset'))
-
-    def _set(self, usage):
-        save_usage_to_syspurpose_metadata(usage)
 
 
 class RegisterCommand(UserPassCommand):
@@ -1276,7 +1298,7 @@ class RegisterCommand(UserPassCommand):
                 log.info("Registering as existing consumer: %s" % self.options.consumerid)
                 consumer = service.register(None, consumerid=self.options.consumerid,
                                             role=syspurpose.get('role') or '',
-                                            addons=syspurpose.get('addons') or [''],
+                                            addons=syspurpose.get('addons') or [],
                                             service_level=syspurpose.get('service_level_agreement') or '',
                                             usage=syspurpose.get('usage') or ''
                                             )
@@ -1292,7 +1314,7 @@ class RegisterCommand(UserPassCommand):
                     name=self.options.consumername,
                     type=self.options.consumertype,
                     role=syspurpose.get('role') or '',
-                    addons=syspurpose.get('addons') or [''],
+                    addons=syspurpose.get('addons') or [],
                     service_level=syspurpose.get('service_level_agreement') or '',
                     usage=syspurpose.get('usage') or ''
                 )
@@ -1496,14 +1518,6 @@ class AddonsCommand(SyspurposeCommand):
         shortdesc = _("Modify or view the addons attribute of the system purpose")
         super(AddonsCommand, self).__init__("addons", shortdesc=shortdesc, primary=False,
                                             attr='addons', commands=['unset', 'add', 'remove'])
-
-    def _remove(self, val):
-        syspurposelib.remove_all("addons", val)
-        syspurposelib.write()
-
-    def _add(self, val):
-        syspurposelib.add_all("addons", val)
-        syspurposelib.write()
 
 
 class RedeemCommand(CliCommand):
@@ -2783,9 +2797,6 @@ class RoleCommand(SyspurposeCommand):
         self.check_syspurpose_support('role')
         if self.options.set and self.options.unset:
             system_exit(os.EX_USAGE, _("Error: Options --set and --unset of role subcommand are mutually exclusive."))
-
-    def _set(self, val):
-        save_role_to_syspurpose_metadata(val)
 
 
 class VersionCommand(CliCommand):

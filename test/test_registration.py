@@ -50,7 +50,7 @@ class CliRegistrationTests(SubManFixture):
         self.syspurposelib = syspurposelib
         self.syspurposelib.USER_SYSPURPOSE = self.write_tempfile("{}").name
 
-        syspurpose_patch = patch('subscription_manager.syspurposelib.SyspurposeStore')
+        syspurpose_patch = patch('subscription_manager.syspurposelib.SyncedStore')
         self.mock_sp_store = syspurpose_patch.start()
         self.mock_sp_store, self.mock_sp_store_contents = set_up_mock_sp_store(self.mock_sp_store)
         self.addCleanup(syspurpose_patch.stop)
@@ -85,7 +85,7 @@ class CliRegistrationTests(SubManFixture):
 
         cmd.main(['register', '--consumerid=123456', '--username=testuser1', '--password=password', '--org=test_org'])
         self.mock_register.register.assert_called_once_with(None, consumerid='123456', role='',
-                                                            addons=[''], service_level='', usage='')
+                                                            addons=[], service_level='', usage='')
         mock_entcertlib.update.assert_called_once()
 
     def test_consumerid_with_distributor_id(self):
