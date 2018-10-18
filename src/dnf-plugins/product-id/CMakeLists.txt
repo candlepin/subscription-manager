@@ -11,17 +11,19 @@ pkg_check_modules (GLIB REQUIRED glib-2.0>=2.44.0)
 pkg_check_modules (LIBDNF REQUIRED libdnf>=0.7.0)
 pkg_check_modules (ZLIB zlib REQUIRED zlib>=1.2.0)
 pkg_check_modules (OPENSSL libcrypto libssl REQUIRED)
+pkg_check_modules (JSONC json-c REQUIRED)
 
 include_directories (${GLIB_INCLUDE_DIRS})
 include_directories (${LIBDNF_INCLUDE_DIRS})
 include_directories(${ZLIB_INCLUDE_DIRS})
 include_directories(${OPENSSL_INCLUDE_DIR})
+include_directories(${JSONC_INCLUDE_DIR})
 
 add_library(product-id SHARED product-id.c)
 
 # Don't put "lib" on the front
 set_target_properties(product-id PROPERTIES PREFIX "")
 
-target_link_libraries(product-id ${ZLIB_LIBRARIES} ${OPENSSL_LIBRARIES})
+target_link_libraries(product-id ${ZLIB_LIBRARIES} ${OPENSSL_LIBRARIES} ${JSONC_LIBRARIES})
 
 install(TARGETS product-id LIBRARY DESTINATION /usr/lib64/libdnf/plugins)
