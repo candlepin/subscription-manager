@@ -217,6 +217,12 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
             installProductId(activeRepoProductId->productIdPath);
         }
 
+        // We have to free memory allocated for all items of repoAndProductIds
+        for (int i=0; i < repoAndProductIds->len; i++) {
+            RepoProductId *repoProductId = g_ptr_array_index(repoAndProductIds, i);
+            free(repoProductId);
+        }
+
         g_ptr_array_unref(repos);
         g_ptr_array_unref(enabledRepos);
         g_ptr_array_unref(repoAndProductIds);
@@ -329,7 +335,7 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
         printError(tmp_err);
     }
 
-    char *url;
+    char *url = NULL;
     lr_handle_getinfo(lrHandle, &tmp_err, LRI_URLS, &url);
     if (tmp_err) {
         printError(tmp_err);
@@ -353,15 +359,24 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
     gboolean handleSuccess = lr_handle_perform(h, lrResult, &tmp_err);
     if (handleSuccess) {
         LrYumRepo *lrYumRepo = lr_yum_repo_init();
-        lr_result_getinfo(lrResult, &tmp_err, LRR_YUM_REPO, &lrYumRepo);
-        repoProductId->repo = repo;
-        repoProductId->productIdPath = lr_yum_repo_path(lrYumRepo, "productid");
-        info("Product id cert downloaded from repo metadata to %s", repoProductId->productIdPath);
-        ret = 1;
+        if (lrYumRepo != NULL) {
+            lr_result_getinfo(lrResult, &tmp_err, LRR_YUM_REPO, &lrYumRepo);
+            repoProductId->repo = repo;
+            repoProductId->productIdPath = lr_yum_repo_path(lrYumRepo, "productid");
+            info("Product id cert downloaded from repo metadata to %s", repoProductId->productIdPath);
+            ret = 1;
+            lr_yum_repo_free(lrYumRepo);
+            lrYumRepo = NULL;
+        } else {
+            error("Unable to initialize LrYumRepo");
+        }
     } else {
         printError(tmp_err);
     }
 
+    if(url) {
+        free(url);
+    }
     lr_handle_free(h);
     return ret;
 }
