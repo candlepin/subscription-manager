@@ -1124,7 +1124,7 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
         except connection.RestlibException as e:
             if e.code == 404 and e.msg.find('/servicelevels') > 0:
                 system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
-            elif e.code == 404 and e.msg.find('Organization') >= 0 and e.msg.find('could not be found') > 0:
+            elif e.code == 404:
                 system_exit(os.EX_DATAERR, _(e.msg))
             else:
                 raise e
