@@ -37,6 +37,7 @@ from subscription_manager.injection import require, CERT_SORTER, \
 from subscription_manager import isodate
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.repolib import RepoActionInvoker
+from subscription_manager.syspurposelib import SyncedStore
 from subscription_manager import utils
 
 # FIXME FIXME
@@ -856,14 +857,12 @@ def clean_all_data(backup=True):
     # for deleting persistent caches
     cache.ProfileManager.delete_cache()
     cache.InstalledProductsManager.delete_cache()
-    cache.SyspurposeCache.delete_cache()
-
+    if SyncedStore is not None:
+        SyncedStore(None).update_cache({})
     # FIXME: implement as dbus client to facts service DeleteCache() once implemented
-    #Facts.delete_cache()
-
+    # Facts.delete_cache()
     # WrittenOverridesCache is also a subclass of cache.CacheManager, but
     # it is deleted in RepoActionInvoker.delete_repo_file() below.
-
     # StatusCache subclasses have a a per instance cache varable
     # and delete_cache is an instance method, so we need to call
     # the delete_cache on the instances created in injectioninit.

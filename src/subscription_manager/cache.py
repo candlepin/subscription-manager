@@ -755,30 +755,3 @@ class WrittenOverrideCache(CacheManager):
             # ignore json file parse errors, we are going to generate
             # a new as if it didn't exist
             pass
-
-
-class SyspurposeCache(CacheManager):
-    """
-    Cache to keep track of the last known synchronized state of the system purpose values
-    for this system.
-    """
-
-    CACHE_FILE = "/var/lib/rhsm/cache/syspurpose.json"
-
-    def __init__(self, syspurpose=None):
-        self.syspurpose = syspurpose or {}
-
-    def to_dict(self):
-        return self.syspurpose
-
-    def _load_data(self, open_file):
-        try:
-            self.syspurpose = json.loads(open_file.read()) or {}
-            return self.syspurpose
-        except IOError as err:
-            log.error("Unable to read cache: %s" % self.CACHE_FILE)
-            log.exception(err)
-        except ValueError:
-            # ignore json file parse errors, we are going to generate
-            # a new as if it didn't exist
-            pass

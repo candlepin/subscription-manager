@@ -167,6 +167,9 @@ class InstalledProductStatusTests(SubManFixture):
 
 class TestCli(SubManFixture):
     def setUp(self):
+        syspurpose_patch = patch('syspurpose.files.SyncedStore')
+        sp_patch = syspurpose_patch.start()
+        self.addCleanup(sp_patch.stop)
         super(TestCli, self).setUp()
         syspurposelib.USER_SYSPURPOSE = self.write_tempfile("{}").name
 
@@ -429,7 +432,7 @@ class TestEnvironmentsCommand(TestCliProxyCommand):
         environments.append({'name': 'library'})
         environments.append({'name': 'Binks'})
         self.cc.cp.setEnvironmentList(environments)
-        results = self.cc._get_enviornments("Anikan")
+        results = self.cc._get_environments("Anikan")
         self.assertTrue(len(results) == 4)
 
 
@@ -507,6 +510,9 @@ class TestAddonsCommand(TestCliCommand):
             json.dump(syspurpose, sp_file, ensure_ascii=True)
 
     def setUp(self):
+        syspurpose_patch = patch('syspurpose.files.SyncedStore')
+        sp_patch = syspurpose_patch.start()
+        self.addCleanup(sp_patch.stop)
         super(TestAddonsCommand, self).setUp()
         argv_patcher = patch.object(sys, 'argv', ['subscription-manager', 'addons'])
         argv_patcher.start()
@@ -860,7 +866,7 @@ class TestReposCommand(TestCliCommand):
         argv_patcher.start()
         self.addCleanup(argv_patcher.stop)
         self.cc.cp = Mock()
-        syspurpose_patch = patch('subscription_manager.syspurposelib.SyspurposeStore')
+        syspurpose_patch = patch('subscription_manager.syspurposelib.SyncedStore')
         self.mock_sp_store = syspurpose_patch.start()
         self.mock_sp_store, self.mock_sp_store_contents = set_up_mock_sp_store(self.mock_sp_store)
         self.addCleanup(syspurpose_patch.stop)
@@ -1423,6 +1429,9 @@ class TestServiceLevelCommand(TestCliProxyCommand):
     command_class = managercli.ServiceLevelCommand
 
     def setUp(self):
+        syspurpose_patch = patch('syspurpose.files.SyncedStore')
+        sp_patch = syspurpose_patch.start()
+        self.addCleanup(sp_patch.stop)
         TestCliProxyCommand.setUp(self)
         self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
@@ -1432,7 +1441,7 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         self.syspurposelib = syspurposelib
         self.syspurposelib.USER_SYSPURPOSE = self.write_tempfile("{}").name
 
-        syspurpose_patch = patch('subscription_manager.syspurposelib.SyspurposeStore')
+        syspurpose_patch = patch('subscription_manager.syspurposelib.SyncedStore')
         self.mock_sp_store = syspurpose_patch.start()
         self.mock_sp_store, self.mock_sp_store_contents = set_up_mock_sp_store(self.mock_sp_store)
         self.addCleanup(syspurpose_patch.stop)
@@ -1469,13 +1478,14 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         mock_syspurpose_file = os.path.join(mock_etc_rhsm_dir, "syspurpose/syspurpose.json")
         syspurposelib.USER_SYSPURPOSE = mock_syspurpose_file
 
+        self.cc.store = self.mock_sp_store()
         self.cc.cp.setConsumer({'serviceLevel': 'Jarjar'})
         self.cc._set('JRJAR')
-        self.mock_sp_store.set.assert_has_calls([call("service_level_agreement", "JRJAR")])
-        self.mock_sp_store.write.assert_called_once()
+
+        self.cc.store.set.assert_has_calls([call("service_level_agreement", "JRJAR")])
 
         # make sure the sla has been persisted in syspurpose.json:
-        contents = syspurposelib.SyspurposeStore.read(syspurposelib.USER_SYSPURPOSE).contents
+        contents = self.cc.store.get_local_contents()
         self.assertEqual(contents.get("service_level_agreement"), "JRJAR")
 
 
@@ -1523,6 +1533,9 @@ class TestRoleCommand(TestCliCommand):
     command_class = managercli.RoleCommand
 
     def setUp(self):
+        syspurpose_patch = patch('syspurpose.files.SyncedStore')
+        sp_patch = syspurpose_patch.start()
+        self.addCleanup(sp_patch.stop)
         super(TestRoleCommand, self).setUp(False)
         self.cc = self.command_class()
         self.cc.cp = StubUEP()
@@ -1540,41 +1553,29 @@ class TestRoleCommand(TestCliCommand):
         except SystemExit as e:
             self.assertEqual(e.code, os.EX_USAGE)
 
-    @patch("subscription_manager.syspurposelib.SyspurposeStore")
-    @patch("subscription_manager.syspurposelib.SyspurposeCache")
-    def test_main_no_args(self, mock_syspurpose_cache, mock_syspurpose):
+    @patch("subscription_manager.syspurposelib.SyncedStore")
+    def test_main_no_args(self, mock_syspurpose):
         """It is necessary to mock SyspurposeStore for test function of parent class"""
         mock_syspurpose.read = Mock()
         mock_syspurpose.read.return_value = Mock()
         instance_syspurpose_store = mock_syspurpose.read.return_value
-        instance_syspurpose_store.contents = {'role': 'Foo'}
-
-        mock_syspurpose_cache.return_value = Mock()
-        instance_mock_syspurpose_cache = mock_syspurpose_cache.return_value
-        instance_mock_syspurpose_cache.write_cache = Mock()
-        instance_mock_syspurpose_cache.read_cache_only = Mock(return_value={})
+        instance_syspurpose_store.local_contents = {'role': 'Foo'}
 
         with patch.object(managercli.SyspurposeCommand, 'check_syspurpose_support', Mock(return_value=None)):
             super(TestRoleCommand, self).test_main_no_args()
 
-    @patch("subscription_manager.syspurposelib.SyspurposeStore")
-    @patch("subscription_manager.syspurposelib.SyspurposeCache")
-    def test_main_empty_args(self, mock_syspurpose_cache, mock_syspurpose):
+    @patch("subscription_manager.syspurposelib.SyncedStore")
+    def test_main_empty_args(self, mock_syspurpose):
         """It is necessary to mock SyspurposeStore for test function of parent class"""
         mock_syspurpose.read = Mock()
         mock_syspurpose.read.return_value = Mock()
         instance_syspurpose_store = mock_syspurpose.read.return_value
-        instance_syspurpose_store.contents = {'role': 'Foo'}
-
-        mock_syspurpose_cache.return_value = Mock()
-        instance_mock_syspurpose_cache = mock_syspurpose_cache.return_value
-        instance_mock_syspurpose_cache.write_cache = Mock()
-        instance_mock_syspurpose_cache.read_cache_only = Mock(return_value={})
+        instance_syspurpose_store.local_contents = {'role': 'Foo'}
 
         with patch.object(managercli.SyspurposeCommand, 'check_syspurpose_support', Mock(return_value=None)):
             super(TestRoleCommand, self).test_main_empty_args()
 
-    @patch("subscription_manager.syspurposelib.SyspurposeStore")
+    @patch("subscription_manager.syspurposelib.SyncedStore")
     @patch("subscription_manager.syspurposelib.SyspurposeSyncActionCommand")
     def test_display_valid_syspurpose_role(self, mock_syspurpose_sync, mock_syspurpose):
         mock_syspurpose.read = Mock()
@@ -1594,18 +1595,12 @@ class TestRoleCommand(TestCliCommand):
             self.cc._do_command()
         self.assertIn("Current Role: Foo", cap.out)
 
-    @patch("subscription_manager.syspurposelib.SyspurposeStore")
-    @patch("subscription_manager.syspurposelib.SyspurposeCache")
-    def test_display_none_syspurpose_role(self, mock_syspurpose_cache, mock_syspurpose):
+    @patch("subscription_manager.syspurposelib.SyncedStore")
+    def test_display_none_syspurpose_role(self, mock_syspurpose):
         mock_syspurpose.read = Mock()
         mock_syspurpose.read.return_value = Mock()
         instance_syspurpose_store = mock_syspurpose.read.return_value
         instance_syspurpose_store.contents = {'role': None}
-
-        mock_syspurpose_cache.return_value = Mock()
-        instance_mock_syspurpose_cache = mock_syspurpose_cache.return_value
-        instance_mock_syspurpose_cache.write_cache = Mock()
-        instance_mock_syspurpose_cache.read_cache_only = Mock(return_value={})
 
         self.cc.options = Mock(spec=['set', 'unset'])
         self.cc.options.set = None
@@ -1614,9 +1609,8 @@ class TestRoleCommand(TestCliCommand):
             self.cc._do_command()
         self.assertIn("Role not set", cap.out)
 
-    @patch("subscription_manager.syspurposelib.SyspurposeStore")
-    @patch("subscription_manager.syspurposelib.SyspurposeCache")
-    def test_display_nonexisting_syspurpose_role(self, mock_syspurpose_cache, mock_syspurpose):
+    @patch("subscription_manager.syspurposelib.SyncedStore")
+    def test_display_nonexisting_syspurpose_role(self, mock_syspurpose):
         mock_syspurpose.read = Mock()
         mock_syspurpose.read.return_value = Mock()
         instance_syspurpose_store = mock_syspurpose.read.return_value
@@ -1626,65 +1620,55 @@ class TestRoleCommand(TestCliCommand):
         self.cc.options.set = None
         self.cc.options.unset = False
 
-        mock_syspurpose_cache.return_value = Mock()
-        instance_mock_syspurpose_cache = mock_syspurpose_cache.return_value
-        instance_mock_syspurpose_cache.write_cache = Mock()
-        instance_mock_syspurpose_cache.read_cache_only = Mock(return_value={})
-
         with Capture() as cap:
             self.cc._do_command()
         self.assertIn("Role not set.", cap.out)
 
-    @patch("subscription_manager.syspurposelib.SyspurposeStore")
+    @patch("subscription_manager.syspurposelib.SyncedStore")
     @patch("subscription_manager.syspurposelib.SyspurposeSyncActionCommand")
-    @patch("subscription_manager.syspurposelib.SyspurposeCache")
-    def test_setting_syspurpose_role(self, mock_syspurpose_cache, mock_syspurpose_sync, mock_syspurpose):
+    def test_setting_syspurpose_role(self, mock_syspurpose_sync, mock_syspurpose):
         mock_syspurpose.read = Mock()
         mock_syspurpose.read.return_value = Mock()
         instance_syspurpose_store = mock_syspurpose.read.return_value
         instance_syspurpose_store.contents = {}
         instance_syspurpose_store.set = MagicMock(return_value=True)
         instance_syspurpose_store.write = MagicMock(return_value=None)
+        instance_syspurpose_store.get_cached_contents = Mock(return_value={"role": "Foo"})
 
         mock_syspurpose_sync.return_value = Mock()
+        mock_syspurpose.return_value = instance_syspurpose_store
         instance_mock_syspurpose_sync = mock_syspurpose_sync.return_value
         instance_mock_syspurpose_sync.perform = Mock(return_value=({}, {"role": "Foo"}))
-
-        mock_syspurpose_cache.return_value = Mock()
-        instance_mock_syspurpose_cache = mock_syspurpose_cache.return_value
-        instance_mock_syspurpose_cache.write_cache = Mock()
-        instance_mock_syspurpose_cache.read_cache_only = Mock(return_value={})
 
         self.cc.options = Mock(spec=['set', 'unset'])
         self.cc.options.set = 'Foo'
         self.cc.options.unset = False
+        # Effectively mock out the store used, force it to be our mock here.
+        self.cc.store = instance_syspurpose_store
+
         with Capture() as cap:
             self.cc._do_command()
 
         self.assertIn('role set to "Foo"', cap.out)
         instance_syspurpose_store.set.assert_called_once_with('role', 'Foo')
-        instance_syspurpose_store.write.assert_called_once()
+        instance_syspurpose_store.finish.assert_called_once()
 
-    @patch("subscription_manager.syspurposelib.SyspurposeStore")
+    @patch("subscription_manager.syspurposelib.SyncedStore")
     @patch("subscription_manager.syspurposelib.SyspurposeSyncActionCommand")
-    @patch("subscription_manager.syspurposelib.SyspurposeCache")
-    def test_unsetting_syspurpose_role(self, mock_syspurpose_cache, mock_syspurpose_sync, mock_syspurpose):
+    def test_unsetting_syspurpose_role(self, mock_syspurpose_sync, mock_syspurpose):
         mock_syspurpose.read = Mock()
         mock_syspurpose.read.return_value = Mock()
         instance_syspurpose_store = mock_syspurpose.read.return_value
         instance_syspurpose_store.contents = {'role': 'Foo'}
         instance_syspurpose_store.unset = MagicMock(return_value=True)
         instance_syspurpose_store.write = MagicMock(return_value=None)
+        instance_syspurpose_store.get_cached_contents = Mock(return_value={})
 
         mock_syspurpose_sync.return_value = Mock()
         instance_mock_syspurpose_sync = mock_syspurpose_sync.return_value
         instance_mock_syspurpose_sync.perform = Mock(return_value=({}, {"role": ""}))
 
-        mock_syspurpose_cache.return_value = Mock()
-        instance_mock_syspurpose_cache = mock_syspurpose_cache.return_value
-        instance_mock_syspurpose_cache.write_cache = Mock()
-        instance_mock_syspurpose_cache.read_cache_only = Mock(return_value={})
-
+        self.cc.store = instance_syspurpose_store
         self.cc.options = Mock(spec=['set', 'unset'])
         self.cc.options.set = None
         self.cc.options.unset = True
@@ -1693,7 +1677,7 @@ class TestRoleCommand(TestCliCommand):
 
         self.assertIn("role unset", cap.out)
         instance_syspurpose_store.unset.assert_called_once_with('role')
-        instance_syspurpose_store.write.assert_called_once()
+        instance_syspurpose_store.finish.assert_called_once()
 
 
 class TestVersionCommand(TestCliCommand):

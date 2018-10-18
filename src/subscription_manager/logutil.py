@@ -30,6 +30,7 @@ ROOT_NAMESPACES = ['subscription_manager',
                    'rhsm',
                    'rhsm-app',
                    'rhsmlib',
+                   'syspurpose',
                    ]
 
 
