@@ -20,7 +20,8 @@ import subscription_manager.injection as inj
 from subscription_manager.cache import ProductStatusCache, \
     EntitlementStatusCache, OverrideStatusCache, ProfileManager, \
     InstalledProductsManager, PoolTypeCache, ReleaseStatusCache, \
-    RhsmIconCache, ContentAccessCache, PoolStatusCache
+    RhsmIconCache, ContentAccessCache, PoolStatusCache, \
+    SyspurposeComplianceStatusCache
 
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.certdirectory import EntitlementDirectory
@@ -54,6 +55,7 @@ def init_dep_injection():
     #        attributes of inj (can happen if yum has old inj module,
     #        but runs a new version of injectioninit...)
     inj.provide(inj.ENTITLEMENT_STATUS_CACHE, EntitlementStatusCache, singleton=True)
+    inj.provide(inj.SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE, SyspurposeComplianceStatusCache, singleton=True)
     inj.provide(inj.RHSM_ICON_CACHE, RhsmIconCache, singleton=True)
     inj.provide(inj.PROD_STATUS_CACHE, ProductStatusCache, singleton=True)
     inj.provide(inj.OVERRIDE_STATUS_CACHE, OverrideStatusCache, singleton=True)

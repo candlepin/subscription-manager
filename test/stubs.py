@@ -496,6 +496,12 @@ class StubUEP(object):
     def getCompliance(self, uuid, on_data=None):
         return {}
 
+    def getSyspurposeCompliance(self, uuid, on_date=None):
+        return self.syspurpose_compliance_status
+
+    def setSyspurposeCompliance(self, status):
+        self.syspurpose_compliance_status = status
+
     def getEntitlementList(self, uuid):
         return [{'id': 'ent1'}, {'id': 'ent2'}]
 

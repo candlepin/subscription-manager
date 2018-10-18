@@ -18,6 +18,13 @@ This module provides service for system purpose identity.
 """
 
 from subscription_manager import injection as inj
+from subscription_manager.i18n import ugettext as _
+
+
+STATUS_MAP = {'valid': _('Current'),
+        'partial': _('Insufficient'),
+        'invalid': _('Invalid'),
+        'unknown': _('Unknown')}
 
 
 class Syspurpose(object):
@@ -25,11 +32,12 @@ class Syspurpose(object):
     def __init__(self, cp):
         self.cp = cp
         self.identity = inj.require(inj.IDENTITY)
+        self.purpose_status = {'status': 'unknown'}
 
     def get_syspurpose_status(self):
-        purpose_status = "Unknown"
-        if self.cp.has_capability("syspurpose"):
-            consumer = self.cp.getConsumer(self.identity.uuid)
-            if consumer.get("systemPurposeStatus"):
-                purpose_status = consumer['systemPurposeStatus']
-        return purpose_status
+        if self.identity.is_valid() and self.cp.has_capability("syspurpose"):
+            self.purpose_status = self.cp.getSyspurposeCompliance(self.identity.uuid)
+        return self.purpose_status
+
+    def get_overall_status(self, status):
+        return STATUS_MAP.get(status, STATUS_MAP['unknown'])
