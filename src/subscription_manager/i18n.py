@@ -46,7 +46,9 @@ def configure_i18n():
     try:
         locale.setlocale(locale.LC_ALL, '')
     except locale.Error:
-        locale.setlocale(locale.LC_ALL, 'C')
+        print("You are attempting to use a locale that is not installed.")
+        os.environ['LC_ALL'] = 'C.UTF-8'
+        locale.setlocale(locale.LC_ALL, 'C.UTF-8')
     configure_gettext()
     Locale.set(os.environ.get("LANG"))
 
