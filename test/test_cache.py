@@ -93,7 +93,8 @@ ENABLED_MODULES = [
         "version": "20180730233102",
         "context": "deadbeef",
         "arch": "noarch",
-        "profiles": ["default"]
+        "profiles": ["default"],
+        "installed_profiles": []
     },
     {
         "name": "flipper",
@@ -101,7 +102,8 @@ ENABLED_MODULES = [
         "version": "20180707144203",
         "context": "c0ffee42",
         "arch": "x86_64",
-        "profiles": ["default", "server"]
+        "profiles": ["default", "server"],
+        "installed_profiles": ["server"]
     }
 ]
 
