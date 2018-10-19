@@ -216,7 +216,7 @@ class Package(object):
                 self.release == other.release and \
                 self.arch == other.arch and \
                 self.epoch == other.epoch and \
-                self.vendor == other.vendor:
+                self._normalize_string(self.vendor) == self._normalize_string(other.vendor):
             return True
 
         return False
