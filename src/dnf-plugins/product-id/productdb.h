@@ -1,0 +1,34 @@
+/**
+ * Copyright (c) 2018 Red Hat, Inc.
+ *
+ * This software is licensed to you under the GNU General Public License,
+ * version 2 (GPLv2). There is NO WARRANTY for this software, express or
+ * implied, including the implied warranties of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2
+ * along with this software; if not, see
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
+ *
+ * Red Hat trademarks are not licensed under GPLv2. No permission is
+ * granted to use or replicate Red Hat trademarks that are incorporated
+ * in this software or its documentation.
+ */
+
+#ifndef PRODUCT_ID_PRODUCTDB_H
+#define PRODUCT_ID_PRODUCTDB_H
+
+#include <glib.h>
+
+typedef struct {
+    const char *path;
+    GHashTable *repoMap;
+} ProductDb;
+
+ProductDb * initProductDb();
+void freeProductDb(ProductDb *productDb);
+void readProductDb(ProductDb *productDb, GError *err);
+void writeProductDb(ProductDb *productDb, GError *err);
+void addRepoId(ProductDb *productDb, const char *productId, const char *repoId, GError *err);
+void removeRepoId(ProductDb *productDb, const char *productId, const char *repoId, GError *err);
+void hasRepoId(ProductDb *productDb, const char *productId, const char *repoId, GError *err);
+
+#endif //PRODUCT_ID_PRODUCTDB_H

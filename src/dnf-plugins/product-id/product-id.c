@@ -27,6 +27,8 @@
 #include <string.h>
 #include <zlib.h>
 
+#include "util.h"
+
 #define LOGFILE "/var/log/rhsm/productid.log"
 #define CHUNK 16384
 
@@ -61,8 +63,6 @@ typedef struct {
 
 } RepoProductId;
 
-static gboolean show_debug = TRUE;
-
 void printError(const char *msg, GError *err);
 void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos);
 void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds);
@@ -72,62 +72,12 @@ int decompress(gzFile input, GString *output) ;
 int findProductId(GString *certContent, GString *result);
 int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId);
 int installProductId(RepoProductId *repoProductId, GHashTable *repoMap);
-void clearTable(gpointer key, gpointer value, gpointer data);
+void clearMyTable(gpointer key, gpointer value, gpointer data);
 void writeRepoMap(GHashTable *repoMap) ;
 
 const PluginInfo *pluginGetInfo() {
     return &pinfo;
 }
-
-const char *timestamp () {
-    time_t tm = time (0);
-    char *ts = asctime (localtime (&tm));
-    char *p = ts;
-    while (*p) {
-        p++;
-        if (*p == '\n') {
-            *p = 0;
-        }
-    }
-    return ts;
-}
-
-/*
- * log function. If we can't open the log, attempt to log to stdout
- * rather than fail. opening the log each time is OK since we log so rarely.
- *
- * prototype included here so we can use the printf format checking.
- */
-void r_log (const char *level, const char *message, ...)
-__attribute__ ((format (printf, 2, 3)));
-
-void r_log (const char *level, const char *message, ...)
-{
-    bool use_stdout = false;
-    va_list argp;
-    FILE *log_file = fopen (LOGFILE, "a");
-    if (!log_file) {
-        // redirect message to stdout
-        log_file = stdout;
-        use_stdout = true;
-    }
-    va_start (argp, message);
-
-    fprintf (log_file, "%s [%s] ", timestamp (), level);
-    vfprintf (log_file, message, argp);
-    putc ('\n', log_file);
-
-    if (!use_stdout) {
-        fclose (log_file);
-    }
-
-    va_end(argp);
-}
-
-#define info(msg, ...) r_log ("INFO", msg, ##__VA_ARGS__)
-#define warn(msg, ...) r_log ("WARN", msg, ##__VA_ARGS__)
-#define error(msg, ...) r_log ("ERROR", msg, ##__VA_ARGS__)
-#define debug(msg, ...) if (show_debug) r_log ("DEBUG", msg, ##__VA_ARGS__)
 
 /**
  * Initialize handle of this plugin
@@ -247,7 +197,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
             free(repoProductId);
         }
 
-        g_hash_table_foreach(repoMap, (GHFunc) clearTable, NULL);
+        g_hash_table_foreach(repoMap, (GHFunc) clearMyTable, NULL);
         g_hash_table_destroy(repoMap);
         g_ptr_array_unref(repos);
         g_ptr_array_unref(enabledRepos);
@@ -607,6 +557,6 @@ int decompress(gzFile input, GString *output) {
     return ret;
 }
 
-void clearTable(gpointer key, gpointer value, gpointer data) {
+void clearMyTable(gpointer key, gpointer value, gpointer data) {
     g_slist_free(value);
 }
