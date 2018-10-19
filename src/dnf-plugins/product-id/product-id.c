@@ -63,7 +63,7 @@ typedef struct {
 
 static gboolean show_debug = TRUE;
 
-void printError(GError *err);
+void printError(const char *msg, GError *err);
 void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos);
 void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds);
 
@@ -202,7 +202,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
             debug("Enabled: %s", dnf_repo_get_id(repo));
             lr_result_getinfo(lrResult, &tmp_err, LRR_YUM_REPOMD, &repoMd);
             if (tmp_err) {
-                printError(tmp_err);
+                printError("Unable to get information about repository", tmp_err);
             }
             else {
                 LrYumRepoMdRecord *repoMdRecord = lr_yum_repomd_get_record(repoMd, "productid");
@@ -212,6 +212,8 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
                     int fetchSuccess = fetchProductId(repo, repoProductId);
                     if(fetchSuccess == 1) {
                         g_ptr_array_add(repoAndProductIds, repoProductId);
+                    } else {
+                        free(repoProductId);
                     }
                 }
             }
@@ -223,7 +225,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
             // open file
         }
 
-        //TODO handle removals here
+        // TODO: handle removals here
 
         GHashTable *repoMap = g_hash_table_new(g_str_hash, g_str_equal);
         for (int i = 0; i < activeRepoAndProductIds->len; i++) {
@@ -275,6 +277,8 @@ void writeRepoMap(GHashTable *repoMap) {
     }
 
     debug("JSON is %s\n", json_object_to_json_string(productIdDb));
+
+    json_object_put(productIdDb);
 }
 
 /**
@@ -362,8 +366,8 @@ void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArra
     g_ptr_array_unref(packageList);
 }
 
-void printError(GError *err) {
-    error("Encountered: %d: %s", err->code, err->message);
+void printError(const char *msg, GError *err) {
+    error("%s, error: %d: %s", msg, err->code, err->message);
     g_error_free(err);
 }
 
@@ -377,13 +381,13 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
     char *destdir;
     lr_handle_getinfo(lrHandle, &tmp_err, LRI_DESTDIR, &destdir);
     if (tmp_err) {
-        printError(tmp_err);
+        printError("Unable to get information about destination folder", tmp_err);
     }
 
-    char *url = NULL;
-    lr_handle_getinfo(lrHandle, &tmp_err, LRI_URLS, &url);
+    char **urls = NULL;
+    lr_handle_getinfo(lrHandle, &tmp_err, LRI_URLS, &urls);
     if (tmp_err) {
-        printError(tmp_err);
+        printError("Unable to get information about URLs", tmp_err);
     }
 
     /* Set information on our LrHandle instance.  The LRO_UPDATE option is to tell the LrResult to update the
@@ -396,16 +400,26 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
     char *downloadList[] = {"productid", NULL};
     LrHandle *h = lr_handle_init();
     lr_handle_setopt(h, NULL, LRO_YUMDLIST, downloadList);
-    lr_handle_setopt(h, NULL, LRO_URLS, url);
+    lr_handle_setopt(h, NULL, LRO_URLS, urls);
     lr_handle_setopt(h, NULL, LRO_REPOTYPE, LR_YUMREPO);
     lr_handle_setopt(h, NULL, LRO_DESTDIR, destdir);
     lr_handle_setopt(h, NULL, LRO_UPDATE, TRUE);
 
+    if(urls != NULL) {
+        int url_id = 0;
+        do {
+            debug("Downloading metadata from: %s to %s", urls[url_id], destdir);
+            url_id++;
+        } while(urls[url_id] != NULL);
+    }
     gboolean handleSuccess = lr_handle_perform(h, lrResult, &tmp_err);
     if (handleSuccess) {
         LrYumRepo *lrYumRepo = lr_yum_repo_init();
         if (lrYumRepo != NULL) {
             lr_result_getinfo(lrResult, &tmp_err, LRR_YUM_REPO, &lrYumRepo);
+            if (tmp_err) {
+                printError("Unable to get information about repository", tmp_err);
+            }
             repoProductId->repo = repo;
             repoProductId->productIdPath = lr_yum_repo_path(lrYumRepo, "productid");
             info("Product id cert downloaded from repo metadata to %s", repoProductId->productIdPath);
@@ -418,11 +432,17 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
             error("Unable to initialize LrYumRepo");
         }
     } else {
-        printError(tmp_err);
+        printError("Unable to download product certificate", tmp_err);
     }
 
-    if(url) {
-        free(url);
+    if(urls) {
+        int url_id = 0;
+        do {
+            free(urls[url_id]);
+            url_id++;
+        } while(urls[url_id] != NULL);
+        free(urls);
+        urls = NULL;
     }
     lr_handle_free(h);
     return ret;
