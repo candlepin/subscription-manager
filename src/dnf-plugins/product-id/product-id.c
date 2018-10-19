@@ -390,6 +390,13 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
         printError("Unable to get information about URLs", tmp_err);
     }
 
+    // Getting information about variable substitution
+    LrUrlVars *var_subst = NULL;
+    lr_handle_getinfo(lrHandle, &tmp_err, LRI_VARSUB, &var_subst);
+    if (tmp_err) {
+        printError("Unable to get variable substitution for URL", tmp_err);
+    }
+
     /* Set information on our LrHandle instance.  The LRO_UPDATE option is to tell the LrResult to update the
      * repo (i.e. download missing information) rather than attempt to replace it.
      *
@@ -403,6 +410,7 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
     lr_handle_setopt(h, NULL, LRO_URLS, urls);
     lr_handle_setopt(h, NULL, LRO_REPOTYPE, LR_YUMREPO);
     lr_handle_setopt(h, NULL, LRO_DESTDIR, destdir);
+    lr_handle_setopt(h, NULL, LRO_VARSUB, var_subst);
     lr_handle_setopt(h, NULL, LRO_UPDATE, TRUE);
 
     if(urls != NULL) {
@@ -422,7 +430,9 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
             }
             repoProductId->repo = repo;
             repoProductId->productIdPath = lr_yum_repo_path(lrYumRepo, "productid");
-            info("Product id cert downloaded from repo metadata to %s", repoProductId->productIdPath);
+            info("Product id cert downloaded metadata from repo %s to %s",
+                 dnf_repo_get_id(repo),
+                 repoProductId->productIdPath);
             ret = 1;
             // Causes a segfault.  LrYumRepo isn't inited properly or something and the LrYumRepoPaths in it
             // are FUBAR
