@@ -37,15 +37,15 @@ void freeProductDb(ProductDb *productDb) {
     free(productDb);
 }
 
-void readProductDb(ProductDb *productDb, GError *err) {
+void readProductDb(ProductDb *productDb, GError **err) {
 
 }
 
-void writeProductDb(ProductDb *productDb, GError *err) {
+void writeProductDb(ProductDb *productDb, GError **err) {
 
 }
 
-void addRepoId(ProductDb *productDb, const char *productId, const char *repoId, GError *err) {
+void addRepoId(ProductDb *productDb, const char *productId, const char *repoId, GError **err) {
     gpointer valueList = g_hash_table_lookup(productDb->repoMap, productId);
     // We prepend so that we don't have to walk the entire linked list
     g_hash_table_insert(
@@ -56,30 +56,46 @@ void addRepoId(ProductDb *productDb, const char *productId, const char *repoId, 
 
 }
 
-void removeRepoId(ProductDb *productDb, const char *productId, const char *repoId, GError *err) {
+void removeRepoId(ProductDb *productDb, const char *productId, const char *repoId, GError **err) {
 
 }
 
-void hasRepoId(ProductDb *productDb, const char *productId, const char *repoId, GError *err) {
+gboolean hasProductId(ProductDb *productDb, const char *productId) {
+    return g_hash_table_contains(productDb->repoMap, productId);
+}
 
+
+gboolean hasRepoId(ProductDb *productDb, const char *productId, const char *repoId) {
+    GSList *repoIds = g_hash_table_lookup(productDb->repoMap, productId);
+    if (repoIds) {
+        GSList *iterator = NULL;
+        for (iterator = repoIds; iterator; iterator = iterator->next) {
+            if(g_strcmp0(repoId, iterator->data) == 0) {
+                return TRUE;
+            }
+        }
+
+    }
+    return FALSE;
 };
 
+
 void printTable(gpointer key, gpointer value, gpointer data) {
-    g_string_printf(data, "\t%s:", (char *) key);
+    g_string_append_printf(data, "\t%s:", (char *) key);
 
     GSList *iterator = NULL;
     for (iterator = value; iterator; iterator = iterator->next) {
-        g_string_printf(data, "%s ", (char *) iterator->data);
+        g_string_append_printf(data, "%s ", (char *) iterator->data);
     }
     g_string_append(data, "\n");
 }
 
-GString *toString(ProductDb *productDb) {
+char *toString(ProductDb *productDb) {
     GString *out = g_string_new("");
     g_string_printf(out, "Path: %s\n", productDb->path);
     g_string_append(out, "Contents:\n");
 
     g_hash_table_foreach(productDb->repoMap, (GHFunc) printTable, out);
-    return out;
+    return g_strdup(out->str);
 }
 

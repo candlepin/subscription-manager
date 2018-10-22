@@ -25,10 +25,12 @@ typedef struct {
 
 ProductDb * initProductDb();
 void freeProductDb(ProductDb *productDb);
-void readProductDb(ProductDb *productDb, GError *err);
-void writeProductDb(ProductDb *productDb, GError *err);
-void addRepoId(ProductDb *productDb, const char *productId, const char *repoId, GError *err);
-void removeRepoId(ProductDb *productDb, const char *productId, const char *repoId, GError *err);
-void hasRepoId(ProductDb *productDb, const char *productId, const char *repoId, GError *err);
+void readProductDb(ProductDb *productDb, GError **err);
+void writeProductDb(ProductDb *productDb, GError **err);
+void addRepoId(ProductDb *productDb, const char *productId, const char *repoId, GError **err);
+void removeRepoId(ProductDb *productDb, const char *productId, const char *repoId, GError **err);
+gboolean hasProductId(ProductDb *productDb, const char *productId);
+gboolean hasRepoId(ProductDb *productDb, const char *productId, const char *repoId);
 
+char *toString(ProductDb *productDb);
 #endif //PRODUCT_ID_PRODUCTDB_H
