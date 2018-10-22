@@ -26,10 +26,12 @@
 #include <time.h>
 #include <string.h>
 #include <zlib.h>
+#include <errno.h>
 
 #include "util.h"
 
 #define LOGFILE "/var/log/rhsm/productid.log"
+#define PRODUCTDB_FILE "/var/lib/rhsm/productid.js"
 #define CHUNK 16384
 
 // This stuff could go in a header file, I guess
@@ -113,6 +115,48 @@ void pluginFreeHandle(PluginHandle *handle) {
 }
 
 /**
+ * This function tries to remove unused product certificates.
+ *
+ * @param repoMap hash map of active repositories
+ * @return
+ */
+int removeUnusedProductCerts(GHashTable *repoMap) {
+    // "Open" directory with product certificates
+    GError *tmp_err = NULL;
+    GDir* productDir = g_dir_open(PRODUCT_CERT_DIR, 0, &tmp_err);
+    if (productDir != NULL) {
+        const gchar *file_name = NULL;
+        do {
+            // Read all files in the directory. When file_name is NULL, then
+            // it usually means that there is no more file.
+            file_name = g_dir_read_name(productDir);
+            if(file_name != NULL) {
+                if(g_str_has_suffix(file_name, ".pem") == TRUE) {
+                    gchar *product_id = g_strndup(file_name, strlen(file_name) - 4);
+                    // When product certificate is not in the has table of active repositories
+                    // then it is IMHO possible to remove this product certificate
+                    if (g_hash_table_contains(repoMap, product_id) == FALSE) {
+                        gchar *abs_file_name = g_strconcat(PRODUCT_CERT_DIR, file_name, NULL);
+                        debug("Removing product certificate: %s", abs_file_name);
+                        int ret = g_remove(abs_file_name);
+                        if (ret == -1) {
+                            error("Unable to remove product certificate: %s", abs_file_name);
+                        }
+                        g_free(abs_file_name);
+                    }
+                    g_free(product_id);
+                }
+            } else if (errno != 0 && errno != ENODATA) {
+                error("Unable to read content of %s directory, %d, %s", PRODUCT_CERT_DIR, errno, strerror(errno));
+            }
+        } while(file_name != NULL);
+    } else {
+        printError("Unable to open directory with product certificates", tmp_err);
+    }
+    return 0;
+}
+
+/**
  * Callback function. This method is executed for every libdnf hook. This callback
  * is called several times during transaction, but we are interested only in one situation.
  *
@@ -130,7 +174,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
 
     debug("%s v%s, running hook: %d on DNF version %d", pinfo.name, pinfo.version, id, handle->version);
 
-    if (id == PLUGIN_HOOK_ID_CONTEXT_PRE_TRANSACTION) {
+    if (id == PLUGIN_HOOK_ID_CONTEXT_TRANSACTION) {
         DnfContext *dnfContext = handle->initData;
         // List of all repositories
         GPtrArray *repos = dnf_context_get_repos(dnfContext);
@@ -175,8 +219,6 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
             // open file
         }
 
-        // TODO: handle removals here
-
         GHashTable *repoMap = g_hash_table_new(g_str_hash, g_str_equal);
         for (int i = 0; i < activeRepoAndProductIds->len; i++) {
             RepoProductId *activeRepoProductId = g_ptr_array_index(activeRepoAndProductIds, i);
@@ -184,9 +226,11 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
             int installSuccess = installProductId(activeRepoProductId, repoMap);
         }
 
+        // Handle removals here
+        removeUnusedProductCerts(repoMap);
+
         // RepoMap is now a GHashTable with each product ID mapping to a GList of the repoId's associated
         // with that product.
-
         writeRepoMap(repoMap);
 
         // We have to free memory allocated for all items of repoAndProductIds. This should also handle
@@ -228,6 +272,14 @@ void writeRepoMap(GHashTable *repoMap) {
 
     debug("JSON is %s\n", json_object_to_json_string(productIdDb));
 
+    FILE *productdb_file = fopen(PRODUCTDB_FILE, "w");
+    if (productdb_file != NULL) {
+        fprintf(productdb_file, "%s", json_object_to_json_string(productIdDb));
+        fclose(productdb_file);
+    } else {
+        error("Unable to write productdb to file: %s", PRODUCTDB_FILE);
+    }
+
     json_object_put(productIdDb);
 }
 
@@ -253,6 +305,14 @@ void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos) {
  */
 void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds) {
     DnfSack *dnfSack = dnf_context_get_sack(context);
+
+//    GError *tmp_err = NULL;
+//    gboolean sack_res;
+//    DnfSack *dnfSack = dnf_sack_new();
+//    sack_res = dnf_sack_setup(dnfSack, 0, &tmp_err);
+//    if (sack_res != TRUE) {
+//        printError("Unable to setup new sack object", tmp_err);
+//    }
 
     // FIXME: this query does not provide fresh list of installed packages
     // Currently installed/removed package is not listed in the query.

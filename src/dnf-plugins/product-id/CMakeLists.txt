@@ -44,8 +44,8 @@ set_target_properties(product-id PROPERTIES PREFIX "")
 
 target_link_libraries(product-id
     ${GLIB_LIBRARIES}
-    # TODO Using link libraries since I don't have libdnf on the normal ld path
-    ${LIBDNF_LINK_LIBRARIES}
+    # ${LIBDNF_LINK_LIBRARIES}
+    ${LIBDNF_LIBRARIES}
     ${ZLIB_LIBRARIES}
     ${OPENSSL_LIBRARIES}
     ${JSONC_LIBRARIES}
