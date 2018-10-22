@@ -94,7 +94,8 @@ ENABLED_MODULES = [
         "context": "deadbeef",
         "arch": "noarch",
         "profiles": ["default"],
-        "installed_profiles": []
+        "installed_profiles": [],
+        "status": "enabled"
     },
     {
         "name": "flipper",
@@ -104,6 +105,7 @@ ENABLED_MODULES = [
         "arch": "x86_64",
         "profiles": ["default", "server"],
         "installed_profiles": ["server"]
+        "status": "unknown"
     }
 ]
 
