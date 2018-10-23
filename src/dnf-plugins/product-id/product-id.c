@@ -15,6 +15,8 @@
 #include <libdnf/plugin/plugin.h>
 #include <libdnf/libdnf.h>
 
+#include <glib/gstdio.h>
+
 #include <openssl/pem.h>
 #include <openssl/x509.h>
 #include <openssl/err.h>
@@ -133,9 +135,20 @@ int removeUnusedProductCerts(GHashTable *repoMap) {
             if(file_name != NULL) {
                 if(g_str_has_suffix(file_name, ".pem") == TRUE) {
                     gchar *product_id = g_strndup(file_name, strlen(file_name) - 4);
-                    // When product certificate is not in the has table of active repositories
+                    gboolean is_num = TRUE;
+                    // Test if string represent number
+                    for(int i=0; i<strlen(product_id); i++) {
+                        if (g_ascii_isdigit(product_id[i]) != TRUE) {
+                            is_num = FALSE;
+                            break;
+                        }
+                    }
+                    if (is_num != TRUE) {
+                        debug("Name of product certificate is wrong (not digits only): %s. Skipping.", file_name);
+                    }
+                    // When product certificate is not in the hash table of active repositories
                     // then it is IMHO possible to remove this product certificate
-                    if (g_hash_table_contains(repoMap, product_id) == FALSE) {
+                    else if (g_hash_table_contains(repoMap, product_id) == FALSE) {
                         gchar *abs_file_name = g_strconcat(PRODUCT_CERT_DIR, file_name, NULL);
                         debug("Removing product certificate: %s", abs_file_name);
                         int ret = g_remove(abs_file_name);
@@ -157,6 +170,30 @@ int removeUnusedProductCerts(GHashTable *repoMap) {
 }
 
 /**
+ * Returns string representation of pluginHookdId. There is no need to free string, because it is statically
+ * allocated.
+ *
+ * @param id Id of plugin hook
+ * @return String representing hook
+ */
+gchar *strHookId(PluginHookId id) {
+    switch(id) {
+        case PLUGIN_HOOK_ID_CONTEXT_PRE_CONF:
+            return "CONTEXT_PRE_CONF";
+        case PLUGIN_HOOK_ID_CONTEXT_CONF:
+            return "CONTEXT_CONF";
+        case PLUGIN_HOOK_ID_CONTEXT_PRE_TRANSACTION:
+            return "PRE_TRANSACTION";
+        case PLUGIN_HOOK_ID_CONTEXT_TRANSACTION:
+            return "CONTEXT_TRANSACTION";
+        case PLUGIN_HOOK_ID_CONTEXT_PRE_REPOS_RELOAD:
+            return "CONTEXT_PRE_REPOS_RELOAD";
+        default:
+            return "UNKNOWN";
+    }
+}
+
+/**
  * Callback function. This method is executed for every libdnf hook. This callback
  * is called several times during transaction, but we are interested only in one situation.
  *
@@ -172,7 +209,8 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
         return 0;
     }
 
-    debug("%s v%s, running hook: %d on DNF version %d", pinfo.name, pinfo.version, id, handle->version);
+    debug("%s v%s, running hook_id: %s on DNF version %d",
+            pinfo.name, pinfo.version, strHookId(id), handle->version);
 
     if (id == PLUGIN_HOOK_ID_CONTEXT_TRANSACTION) {
         DnfContext *dnfContext = handle->initData;
@@ -223,7 +261,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
         for (int i = 0; i < activeRepoAndProductIds->len; i++) {
             RepoProductId *activeRepoProductId = g_ptr_array_index(activeRepoAndProductIds, i);
             debug("Handling active repo %s\n", dnf_repo_get_id(activeRepoProductId->repo));
-            int installSuccess = installProductId(activeRepoProductId, repoMap);
+            installProductId(activeRepoProductId, repoMap);
         }
 
         // Handle removals here
@@ -306,18 +344,28 @@ void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos) {
 void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds) {
     DnfSack *dnfSack = dnf_context_get_sack(context);
 
-//    GError *tmp_err = NULL;
-//    gboolean sack_res;
-//    DnfSack *dnfSack = dnf_sack_new();
-//    sack_res = dnf_sack_setup(dnfSack, 0, &tmp_err);
-//    if (sack_res != TRUE) {
-//        printError("Unable to setup new sack object", tmp_err);
-//    }
+    // Create special sack object only for quering current rpmdb to get fresh list
+    // of installed packages. Quering dnfSack would not include just installed RPM
+    // package(s) or it would still include just removed package(s).
+    DnfSack *rpmDbSack = dnf_sack_new();
+    if(rpmDbSack == NULL) {
+        error("Unable to create new sack object for quering rpmdb");
+        return;
+    }
 
-    // FIXME: this query does not provide fresh list of installed packages
-    // Currently installed/removed package is not listed in the query.
-    // The problem is with sack. We have to get it in different way.
-    HyQuery query = hy_query_create_flags(dnfSack, 0);
+    GError *tmp_err = NULL;
+    gboolean ret;
+    ret = dnf_sack_setup(rpmDbSack, 0, &tmp_err);
+    if (ret == FALSE) {
+        printError("Unable to setup new sack object", tmp_err);
+    }
+
+    ret = dnf_sack_load_system_repo(rpmDbSack, NULL, 0, &tmp_err);
+    if (ret == FALSE) {
+        printError("Unable to load system repo to sack object", tmp_err);
+    }
+
+    HyQuery query = hy_query_create_flags(rpmDbSack, 0);
     hy_query_filter(query, HY_PKG_NAME, HY_GLOB, "*");
     hy_query_filter(query, HY_REPO_NAME, HY_EQ, HY_SYSTEM_REPO_NAME);
 
@@ -329,6 +377,7 @@ void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArra
         DnfPackage *pkg = g_ptr_array_index(packageList, i);
 
         if (dnf_package_installed(pkg)) {
+            // debug("Installed package: %s", dnf_package_get_nevra(pkg));
             g_ptr_array_add(installedPackages, pkg);
         }
     }
