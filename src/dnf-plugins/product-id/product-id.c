@@ -136,7 +136,7 @@ int removeUnusedProductCerts(GHashTable *repoMap) {
                 if(g_str_has_suffix(file_name, ".pem") == TRUE) {
                     gchar *product_id = g_strndup(file_name, strlen(file_name) - 4);
                     gboolean is_num = TRUE;
-                    // Test if string represent number
+                    // Test if string represents number
                     for(int i=0; i<strlen(product_id); i++) {
                         if (g_ascii_isdigit(product_id[i]) != TRUE) {
                             is_num = FALSE;
@@ -159,10 +159,11 @@ int removeUnusedProductCerts(GHashTable *repoMap) {
                     }
                     g_free(product_id);
                 }
-            } else if (errno != 0 && errno != ENODATA) {
+            } else if (errno != 0 && errno != ENODATA && errno != EEXIST) {
                 error("Unable to read content of %s directory, %d, %s", PRODUCT_CERT_DIR, errno, strerror(errno));
             }
         } while(file_name != NULL);
+        g_dir_close(productDir);
     } else {
         printError("Unable to open directory with product certificates", tmp_err);
     }
@@ -213,6 +214,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
             pinfo.name, pinfo.version, strHookId(id), handle->version);
 
     if (id == PLUGIN_HOOK_ID_CONTEXT_TRANSACTION) {
+        // Get DNF context
         DnfContext *dnfContext = handle->initData;
         // List of all repositories
         GPtrArray *repos = dnf_context_get_repos(dnfContext);
@@ -240,7 +242,16 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
                 LrYumRepoMdRecord *repoMdRecord = lr_yum_repomd_get_record(repoMd, "productid");
                 if (repoMdRecord) {
                     debug("Repository %s has a productid", dnf_repo_get_id(repo));
-                    RepoProductId *repoProductId = malloc(sizeof(RepoProductId));
+                    RepoProductId *repoProductId = (RepoProductId*)malloc(sizeof(RepoProductId));
+                    // TODO: do not fetch productid certificate, when dnf context is
+                    // set to cache-only mode. Microdnf not package do not support this
+                    // feature ATM
+                    gboolean cache_only = dnf_context_get_cache_only(dnfContext);
+                    if (cache_only == TRUE) {
+                        debug("DNF context is set to: cache-only");
+                    } else {
+                        debug("DNF context is NOT set to: cache-only");
+                    }
                     int fetchSuccess = fetchProductId(repo, repoProductId);
                     if(fetchSuccess == 1) {
                         g_ptr_array_add(repoAndProductIds, repoProductId);
@@ -318,6 +329,7 @@ void writeRepoMap(GHashTable *repoMap) {
         error("Unable to write productdb to file: %s", PRODUCTDB_FILE);
     }
 
+    g_list_free(keys);
     json_object_put(productIdDb);
 }
 
@@ -423,11 +435,16 @@ void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArra
 
     g_ptr_array_unref(installedPackages);
     g_ptr_array_unref(packageList);
+    g_object_unref(rpmDbSack);
 }
 
 void printError(const char *msg, GError *err) {
     error("%s, error: %d: %s", msg, err->code, err->message);
     g_error_free(err);
+}
+
+static void copy_lr_val(LrVar *lr_val, LrUrlVars **newVarSubst) {
+    *newVarSubst = lr_urlvars_set(*newVarSubst, lr_val->var, lr_val->val);
 }
 
 int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
@@ -450,11 +467,16 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
     }
 
     // Getting information about variable substitution
-    LrUrlVars *var_subst = NULL;
-    lr_handle_getinfo(lrHandle, &tmp_err, LRI_VARSUB, &var_subst);
+    LrUrlVars *varSubst = NULL;
+    lr_handle_getinfo(lrHandle, &tmp_err, LRI_VARSUB, &varSubst);
     if (tmp_err) {
         printError("Unable to get variable substitution for URL", tmp_err);
     }
+
+    // It is necessary to create copy of list of URL variables to avoid memory leaks
+    // Two handles cannot share same GSList
+    LrUrlVars *newVarSubst = NULL;
+    g_slist_foreach(varSubst, (GFunc)copy_lr_val, &newVarSubst);
 
     /* Set information on our LrHandle instance.  The LRO_UPDATE option is to tell the LrResult to update the
      * repo (i.e. download missing information) rather than attempt to replace it.
@@ -469,7 +491,7 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
     lr_handle_setopt(h, NULL, LRO_URLS, urls);
     lr_handle_setopt(h, NULL, LRO_REPOTYPE, LR_YUMREPO);
     lr_handle_setopt(h, NULL, LRO_DESTDIR, destdir);
-    lr_handle_setopt(h, NULL, LRO_VARSUB, var_subst);
+    lr_handle_setopt(h, NULL, LRO_VARSUB, newVarSubst);
     lr_handle_setopt(h, NULL, LRO_UPDATE, TRUE);
 
     if(urls != NULL) {
@@ -554,7 +576,6 @@ int installProductId(RepoProductId *repoProductId, GHashTable *repoMap) {
                 ));
 
                 ret = 1;
-
             } else {
                 error("Unable write to file with certificate file :%s", outname->str);
             }
@@ -629,6 +650,8 @@ int findProductId(GString *certContent, GString *result) {
         }
     }
 
+    X509_free(x509);
+
     return 1;
 }
 
@@ -667,5 +690,6 @@ int decompress(gzFile input, GString *output) {
 }
 
 void clearMyTable(gpointer key, gpointer value, gpointer data) {
+    g_free(key);
     g_slist_free(value);
 }
