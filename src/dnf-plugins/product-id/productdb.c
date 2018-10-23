@@ -45,19 +45,39 @@ void writeProductDb(ProductDb *productDb, GError **err) {
 
 }
 
-void addRepoId(ProductDb *productDb, const char *productId, const char *repoId, GError **err) {
+void addRepoId(ProductDb *productDb, const char *productId, const char *repoId) {
+    // If the value isn't present, this value will be a NULL and g_slist_prepend will
+    // begin a new list
     gpointer valueList = g_hash_table_lookup(productDb->repoMap, productId);
     // We prepend so that we don't have to walk the entire linked list
     g_hash_table_insert(
         productDb->repoMap,
         (gpointer) productId,
-        g_list_prepend(valueList, (gpointer) repoId)
+        g_slist_prepend(valueList, (gpointer) repoId)
     );
 
 }
 
-void removeRepoId(ProductDb *productDb, const char *productId, const char *repoId, GError **err) {
+gboolean removeProductId(ProductDb *productDb, const char *productId) {
+    gpointer valueList = g_hash_table_lookup(productDb->repoMap, productId);
+    if (valueList) {
+        g_hash_table_replace(productDb->repoMap, (gpointer) productId, NULL);
+        g_slist_free(valueList);
+    }
+    return g_hash_table_remove(productDb->repoMap, productId);
+}
 
+gboolean removeRepoId(ProductDb *productDb, const char *productId, const char *repoId) {
+    GSList *repoIds = g_hash_table_lookup(productDb->repoMap, productId);
+    if (repoIds) {
+        GSList *modifiedRepoIds = g_slist_remove_all(repoIds, repoId);
+        // If an item is removed modifiedList will point to a different place than valueList
+        if (repoIds == modifiedRepoIds) {
+            g_hash_table_replace(productDb->repoMap, (gpointer) productId, modifiedRepoIds);
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 gboolean hasProductId(ProductDb *productDb, const char *productId) {
