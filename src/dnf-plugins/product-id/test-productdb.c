@@ -15,6 +15,8 @@
 
 #include <glib.h>
 #include <stdio.h>
+#include <gio/gio.h>
+#include <string.h>
 #include "productdb.h"
 
 typedef struct {
@@ -74,9 +76,38 @@ void testRemoveRepoId(dbFixture *fixture, gconstpointer ignored) {
     g_assert_true(hasRepoId(db, "69", "jboss"));
 
     g_assert_false(hasRepoId(db, "69", "notPresentRepoId"));
-
 }
 
+void testReadMissingFile(dbFixture *fixture, gconstpointer ignored) {
+    ProductDb *db = fixture->db;
+    db->path = "/does/not/exist";
+    GError *err = NULL;
+    readProductDb(db, &err);
+    g_assert_nonnull(err);
+    g_error_free(err);
+}
+
+void testReadFile(dbFixture *fixture, gconstpointer ignored) {
+    ProductDb *db = fixture->db;
+    GError *err = NULL;
+
+    GFileIOStream *ioStream;
+
+    GFile *testJsonFile = g_file_new_tmp("productidTest-XXXXXX", &ioStream, &err);
+
+    if (err) {
+        g_test_fail();
+    }
+
+    gchar *testJson = "{'69': ['rhel'], '81': ['jboss', 'ceph']}\n";
+    GOutputStream *outStream = g_io_stream_get_output_stream((GIOStream*) ioStream);
+    g_output_stream_write_all(outStream, testJson, strlen(testJson), NULL, NULL, &err);
+    g_io_stream_close((GIOStream*) ioStream, NULL, &err);
+    db->path = g_file_get_path(testJsonFile);
+
+    readProductDb(db, &err);
+    g_file_delete(testJsonFile, NULL, NULL);
+}
 
 int main(int argc, char **argv) {
     g_test_init(&argc, &argv, NULL);
@@ -85,5 +116,7 @@ int main(int argc, char **argv) {
     g_test_add("/set1/test remove product id", dbFixture, NULL, setup, testRemoveProductId, teardown);
     g_test_add("/set1/test has repo id", dbFixture, NULL, setup, testHasRepoId, teardown);
     g_test_add("/set1/test remove repo id", dbFixture, NULL, setup, testRemoveRepoId, teardown);
+    g_test_add("/set1/test read missing file", dbFixture, NULL, setup, testReadMissingFile, teardown);
+    g_test_add("/set1/test read file", dbFixture, NULL, setup, testReadFile, teardown);
     return g_test_run();
 }
