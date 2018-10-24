@@ -19,6 +19,7 @@
 #include <json-c/json.h>
 
 #include <glib.h>
+#include <gio/gio.h>
 #include "productdb.h"
 
 ProductDb * initProductDb() {
@@ -38,7 +39,30 @@ void freeProductDb(ProductDb *productDb) {
 }
 
 void readProductDb(ProductDb *productDb, GError **err) {
+    GFile *dbFile = g_file_new_for_path(productDb->path);
+    gchar *contents;
 
+    GError *internalErr = NULL;
+    gboolean loadedFile = g_file_load_contents(dbFile, NULL, &contents, NULL, NULL, &internalErr);
+
+    if (!loadedFile) {
+        *err = g_error_copy(internalErr);
+        g_error_free(internalErr);
+        return;
+    }
+
+    g_object_unref(dbFile);
+    json_object *dbJson = json_tokener_parse(contents);
+
+    GHashTable *repoMap = g_hash_table_new(g_str_hash, g_str_equal);
+    struct json_object_iterator it = json_object_iter_begin(dbJson);
+    struct json_object_iterator itEnd = json_object_iter_end(dbJson);
+    while (!json_object_iter_equal(&it, &itEnd)) {
+        gchar *productId = json_object_iter_peek_name(&it);
+        g_hash_table_add(repoMap, productId);
+        json_object *repoIds = json_object_iter_peek_value(&it);
+        json_object_iter_next(&it);
+    }
 }
 
 void writeProductDb(ProductDb *productDb, GError **err) {
