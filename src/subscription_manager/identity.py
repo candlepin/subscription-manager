@@ -17,6 +17,7 @@ from __future__ import print_function, division, absolute_import
 
 import logging
 import os
+import errno
 import threading
 
 from rhsm.certificate import create_from_pem
@@ -144,7 +145,7 @@ class Identity(object):
                 self.consumer = None
                 msg = "Reload of consumer identity cert %s raised an exception with msg: %s" \
                     % (ConsumerIdentity.certpath(), err)
-                if isinstance(err, IOError) and err.errno == os.errno.ENOENT:
+                if isinstance(err, IOError) and err.errno == errno.ENOENT:
                     log.debug(msg)
                 else:
                     log.error(msg)
