@@ -73,22 +73,24 @@ class ModulesProfile(object):
                 log.info("DNF does not provide modulemd functionality")
                 return []
             all_module_list = modules.getModulePackages()
-            enabled_modules_per_repo = modules.getLatestModulesPerRepo(
-                libdnf.module.ModulePackageContainer.ModuleState_ENABLED,
-                all_module_list
-            )
-            for modules_per_repo in enabled_modules_per_repo:
-                for module_pkgs in modules_per_repo:
-                    for module_pkg in module_pkgs:
-                        module_list.append({
-                            "name": module_pkg.getName(),
-                            "stream": module_pkg.getStream(),
-                            "version": module_pkg.getVersion(),
-                            "context": module_pkg.getContext(),
-                            "arch": module_pkg.getArch(),
-                            "profiles": [profile.getName() for profile in module_pkg.getProfiles()],
-                            "installed_profiles": modules.getInstalledProfiles(module_pkg.getName())
-                        })
+
+            for module_pkg in all_module_list:
+                status = "unknown"
+                if modules.isEnabled(module_pkg.getName(), module_pkg.getStream()):
+                    status = "enabled"
+                elif modules.isDisabled(module_pkg.getName()):
+                    status = "disabled"
+                module_list.append({
+                    "name": module_pkg.getName(),
+                    "stream": module_pkg.getStream(),
+                    "version": module_pkg.getVersion(),
+                    "context": module_pkg.getContext(),
+                    "arch": module_pkg.getArch(),
+                    "profiles": [profile.getName() for profile in module_pkg.getProfiles()],
+                    "installed_profiles": modules.getInstalledProfiles(module_pkg.getName()),
+                    "status": status
+                })
+
         return module_list
 
     def collect(self):
