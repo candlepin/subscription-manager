@@ -20,6 +20,7 @@
 
 #include <glib.h>
 #include <gio/gio.h>
+#include <string.h>
 #include "productdb.h"
 
 ProductDb * initProductDb() {
@@ -47,40 +48,76 @@ void freeProductDb(ProductDb *productDb) {
  */
 void readProductDb(ProductDb *productDb, GError **err) {
     GFile *dbFile = g_file_new_for_path(productDb->path);
-    gchar *contents;
+    gchar *fileContents;
 
     GError *internalErr = NULL;
-    gboolean loadedFile = g_file_load_contents(dbFile, NULL, &contents, NULL, NULL, &internalErr);
-
-    if (!loadedFile) {
+    gboolean loadedFileSuccess = g_file_load_contents(dbFile, NULL, &fileContents, NULL, NULL, &internalErr);
+    if (!loadedFileSuccess) {
         *err = g_error_copy(internalErr);
         g_error_free(internalErr);
         return;
     }
-
     g_object_unref(dbFile);
-    json_object *dbJson = json_tokener_parse(contents);
 
-    // TODO: use g_hash_table_new_full() and implement methods for freeing key and value
-    GHashTable *repoMap = g_hash_table_new(g_str_hash, g_str_equal);
+    json_object *dbJson = json_tokener_parse(fileContents);
+
+    // TODO: implement methods for freeing key and value
+    GHashTable *repoMap = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, NULL);
     struct json_object_iterator it = json_object_iter_begin(dbJson);
     struct json_object_iterator itEnd = json_object_iter_end(dbJson);
     while (!json_object_iter_equal(&it, &itEnd)) {
-        gchar *productId = json_object_iter_peek_name(&it);
+        gchar *productId = g_strdup(json_object_iter_peek_name(&it));
         json_object *repoIds = json_object_iter_peek_value(&it);
-        g_hash_table_add(repoMap, productId);
-        // TODO: use g_hash_table_insert(); to save value too
+        GSList *repoList = NULL;
+
+        array_list *idArray = json_object_get_array(repoIds);
+        int len = array_list_length(idArray);
+
+        for (int i=0; i<len; i++) {
+            json_object *o = array_list_get_idx(idArray, i);
+            gchar *repoId = g_strdup(json_object_get_string(o));
+            repoList = g_slist_prepend(repoList, (gpointer) repoId);
+        }
+
+        g_hash_table_insert(repoMap, productId, repoList);
         json_object_iter_next(&it);
     }
-    // TODO: hold results of reading here: productDb->repoMap = repoMap;
-    g_hash_table_destroy(repoMap);
+
+    productDb->repoMap = repoMap;
 
     json_object_put(dbJson);
-    g_free(contents);
+    g_free(fileContents);
 }
 
 void writeProductDb(ProductDb *productDb, GError **err) {
+    json_object *productIdDb = json_object_new_object();
+    GList *keys = g_hash_table_get_keys(productDb->repoMap);
 
+    GList *iterator = NULL;
+
+    for(iterator = keys; iterator; iterator=iterator->next) {
+        gchar *productId = g_strdup(iterator->data);
+        json_object *repoIdJson = json_object_new_array();
+
+        GList *values = g_hash_table_lookup(productDb->repoMap, productId);
+        GList *valuesIterator = NULL;
+        for(valuesIterator = values; valuesIterator; valuesIterator=valuesIterator->next) {
+            gchar *repoId = g_strdup(valuesIterator->data);
+            json_object_array_add(repoIdJson, json_object_new_string(repoId));
+        }
+        json_object_object_add(productIdDb, productId, repoIdJson);
+    }
+
+    gchar *dbJson = (gchar *) json_object_to_json_string(productIdDb);
+
+    g_list_free(keys);
+
+    // FIXME does not write correctly
+    GFile *dbFile = g_file_new_for_path(productDb->path);
+    GError *internalErr = NULL;
+
+    GOutputStream *outStream = (GOutputStream *) g_file_replace(dbFile, NULL, FALSE, G_FILE_CREATE_NONE, NULL, &internalErr);
+    g_output_stream_write_all(outStream, dbJson, strlen(dbJson), NULL, NULL, &internalErr);
 }
 
 void addRepoId(ProductDb *productDb, const char *productId, const char *repoId) {

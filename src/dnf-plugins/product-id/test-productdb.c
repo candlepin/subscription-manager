@@ -105,11 +105,35 @@ void testReadFile(dbFixture *fixture, gconstpointer ignored) {
     g_output_stream_write_all(outStream, testJson, strlen(testJson), NULL, NULL, &err);
     g_io_stream_close((GIOStream*) ioStream, NULL, &err);
     gchar *path = g_file_get_path(testJsonFile);
-    db->path = (const char*)path;
+    db->path = path;
 
     readProductDb(db, &err);
+
+    g_assert_true(g_hash_table_contains(db->repoMap, "69"));
+    GSList *result = g_hash_table_lookup(db->repoMap, "69");
+    g_assert_cmpstr("rhel", ==, result->data);
+
     g_free(path);
     g_file_delete(testJsonFile, NULL, NULL);
+    g_object_unref(ioStream);
+    g_object_unref(testJsonFile);
+}
+
+void testWriteFile(dbFixture *fixture, gconstpointer ignored) {
+    ProductDb *db = fixture->db;
+    GError *err = NULL;
+
+    addRepoId(db, "69", "rhel");
+    addRepoId(db, "69", "jboss");
+
+    GFileIOStream *ioStream;
+    GFile *testJsonFile = g_file_new_tmp("productidTest-XXXXXX", &ioStream, &err);
+    gchar *path = g_file_get_path(testJsonFile);
+    db->path = path;
+
+    writeProductDb(db, &err);
+
+    g_free(path);
     g_object_unref(ioStream);
     g_object_unref(testJsonFile);
 }
@@ -123,5 +147,6 @@ int main(int argc, char **argv) {
     g_test_add("/set1/test remove repo id", dbFixture, NULL, setup, testRemoveRepoId, teardown);
     g_test_add("/set1/test read missing file", dbFixture, NULL, setup, testReadMissingFile, teardown);
     g_test_add("/set1/test read file", dbFixture, NULL, setup, testReadFile, teardown);
+    g_test_add("/set1/test write file", dbFixture, NULL, setup, testWriteFile, teardown);
     return g_test_run();
 }
