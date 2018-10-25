@@ -104,7 +104,7 @@ ENABLED_MODULES = [
         "context": "c0ffee42",
         "arch": "x86_64",
         "profiles": ["default", "server"],
-        "installed_profiles": ["server"]
+        "installed_profiles": ["server"],
         "status": "unknown"
     }
 ]
