@@ -103,10 +103,14 @@ void testReadFile(dbFixture *fixture, gconstpointer ignored) {
     GOutputStream *outStream = g_io_stream_get_output_stream((GIOStream*) ioStream);
     g_output_stream_write_all(outStream, testJson, strlen(testJson), NULL, NULL, &err);
     g_io_stream_close((GIOStream*) ioStream, NULL, &err);
-    db->path = g_file_get_path(testJsonFile);
+    gchar *path = g_file_get_path(testJsonFile);
+    db->path = (const char*)path;
 
     readProductDb(db, &err);
+    g_free(path);
     g_file_delete(testJsonFile, NULL, NULL);
+    g_object_unref(ioStream);
+    g_object_unref(testJsonFile);
 }
 
 int main(int argc, char **argv) {
