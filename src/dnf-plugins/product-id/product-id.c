@@ -319,7 +319,7 @@ void writeRepoMap(GHashTable *repoMap) {
         json_object_object_add(productIdDb, productId, repoIdJson);
     }
 
-    debug("JSON is %s\n", json_object_to_json_string(productIdDb));
+    debug("JSON is %s", json_object_to_json_string(productIdDb));
 
     FILE *productdb_file = fopen(PRODUCTDB_FILE, "w");
     if (productdb_file != NULL) {

@@ -24,6 +24,7 @@
 
 ProductDb * initProductDb() {
     ProductDb *productDb = malloc(sizeof(ProductDb));
+    productDb->path = NULL;
     productDb->repoMap = g_hash_table_new(g_str_hash, g_str_equal);
     return productDb;
 }
@@ -38,6 +39,12 @@ void freeProductDb(ProductDb *productDb) {
     free(productDb);
 }
 
+/**
+ * Read content of product db from json file into structure
+ *
+ * @param productDb  Pointer at structure holding product db
+ * @param err Pointer at pointer with glib error
+ */
 void readProductDb(ProductDb *productDb, GError **err) {
     GFile *dbFile = g_file_new_for_path(productDb->path);
     gchar *contents;
@@ -54,15 +61,22 @@ void readProductDb(ProductDb *productDb, GError **err) {
     g_object_unref(dbFile);
     json_object *dbJson = json_tokener_parse(contents);
 
+    // TODO: use g_hash_table_new_full() and implement methods for freeing key and value
     GHashTable *repoMap = g_hash_table_new(g_str_hash, g_str_equal);
     struct json_object_iterator it = json_object_iter_begin(dbJson);
     struct json_object_iterator itEnd = json_object_iter_end(dbJson);
     while (!json_object_iter_equal(&it, &itEnd)) {
         gchar *productId = json_object_iter_peek_name(&it);
-        g_hash_table_add(repoMap, productId);
         json_object *repoIds = json_object_iter_peek_value(&it);
+        g_hash_table_add(repoMap, productId);
+        // TODO: use g_hash_table_insert(); to save value too
         json_object_iter_next(&it);
     }
+    // TODO: hold results of reading here: productDb->repoMap = repoMap;
+    g_hash_table_destroy(repoMap);
+
+    json_object_put(dbJson);
+    g_free(contents);
 }
 
 void writeProductDb(ProductDb *productDb, GError **err) {
