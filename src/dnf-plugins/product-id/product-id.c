@@ -83,10 +83,10 @@ void pluginFreeHandle(PluginHandle *handle) {
 /**
  * This function tries to remove unused product certificates.
  *
- * @param repoMap hash map of active repositories
+ * @param productDb
  * @return
  */
-int removeUnusedProductCerts(GHashTable *repoMap) {
+int removeUnusedProductCerts(ProductDb *productDb) {
     // "Open" directory with product certificates
     GError *tmp_err = NULL;
     GDir* productDir = g_dir_open(PRODUCT_CERT_DIR, 0, &tmp_err);
@@ -112,7 +112,7 @@ int removeUnusedProductCerts(GHashTable *repoMap) {
                     }
                     // When product certificate is not in the hash table of active repositories
                     // then it is IMHO possible to remove this product certificate
-                    else if (g_hash_table_contains(repoMap, product_id) == FALSE) {
+                    else if (!hasProductId(productDb, product_id)) {
                         gchar *abs_file_name = g_strconcat(PRODUCT_CERT_DIR, file_name, NULL);
                         debug("Removing product certificate: %s", abs_file_name);
                         int ret = g_remove(abs_file_name);
@@ -126,7 +126,7 @@ int removeUnusedProductCerts(GHashTable *repoMap) {
             } else if (errno != 0 && errno != ENODATA && errno != EEXIST) {
                 error("Unable to read content of %s directory, %d, %s", PRODUCT_CERT_DIR, errno, strerror(errno));
             }
-        } while(file_name != NULL);
+        } while (file_name != NULL);
         g_dir_close(productDir);
     } else {
         printError("Unable to open directory with product certificates", tmp_err);
@@ -193,6 +193,9 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
         // Enabled repositories with prouctid cert that are actively used
         GPtrArray *activeRepoAndProductIds = g_ptr_array_sized_new(repos->len);
 
+        ProductDb *productDb = initProductDb();
+        productDb->path = PRODUCTDB_FILE;
+
         getEnabled(repos, enabledRepos);
 
         for (int i = 0; i < enabledRepos->len; i++) {
@@ -210,10 +213,9 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
                 LrYumRepoMdRecord *repoMdRecord = lr_yum_repomd_get_record(repoMd, "productid");
                 if (repoMdRecord) {
                     debug("Repository %s has a productid", dnf_repo_get_id(repo));
-                    RepoProductId *repoProductId = (RepoProductId*)malloc(sizeof(RepoProductId));
-                    // TODO: do not fetch productid certificate, when dnf context is
-                    // set to cache-only mode. Microdnf not package do not support this
-                    // feature ATM
+                    RepoProductId *repoProductId = (RepoProductId*) malloc(sizeof(RepoProductId));
+                    // TODO: do not fetch productid certificate, when dnf context is set to cache-only mode
+                    // Microdnf not package do not support this feature ATM
                     gboolean cache_only = dnf_context_get_cache_only(dnfContext);
                     if (cache_only == TRUE) {
                         debug("DNF context is set to: cache-only");
@@ -236,19 +238,18 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
             // open file
         }
 
-        GHashTable *repoMap = g_hash_table_new(g_str_hash, g_str_equal);
         for (int i = 0; i < activeRepoAndProductIds->len; i++) {
             RepoProductId *activeRepoProductId = g_ptr_array_index(activeRepoAndProductIds, i);
             debug("Handling active repo %s\n", dnf_repo_get_id(activeRepoProductId->repo));
-            installProductId(activeRepoProductId, repoMap);
+            installProductId(activeRepoProductId, productDb);
         }
 
         // Handle removals here
-        removeUnusedProductCerts(repoMap);
+        removeUnusedProductCerts(productDb);
 
         // RepoMap is now a GHashTable with each product ID mapping to a GList of the repoId's associated
         // with that product.
-        writeRepoMap(repoMap);
+        writeRepoMap(productDb);
 
         // We have to free memory allocated for all items of repoAndProductIds. This should also handle
         // activeRepoAndProductIds since the pointers in that array are pointing to the same underlying
@@ -258,8 +259,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
             free(repoProductId);
         }
 
-        g_hash_table_foreach(repoMap, (GHFunc) clearMyTable, NULL);
-        g_hash_table_destroy(repoMap);
+        freeProductDb(productDb);
         g_ptr_array_unref(repos);
         g_ptr_array_unref(enabledRepos);
         g_ptr_array_unref(repoAndProductIds);
@@ -269,36 +269,13 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
     return 1;
 }
 
-void writeRepoMap(GHashTable *repoMap) {
-    json_object *productIdDb = json_object_new_object();
+void writeRepoMap(ProductDb *productDb) {
+    GError *err = NULL;
+    writeProductDb(productDb, &err);
 
-    GList *keys = g_hash_table_get_keys(repoMap);
-
-    // TODO: This is a terrible way to traverse a linked list
-    for (guint i = 0; i < g_list_length(keys); i++) {
-        char *productId = g_list_nth_data(keys, i);
-        json_object *repoIdJson = json_object_new_array();
-        GList *values = g_hash_table_lookup(repoMap, productId);
-
-        for (guint j = 0; j < g_list_length(values); j++) {
-            char *repoId = g_list_nth_data(values, j);
-            json_object_array_add(repoIdJson, json_object_new_string(repoId));
-        }
-        json_object_object_add(productIdDb, productId, repoIdJson);
-    }
-
-    debug("JSON is %s", json_object_to_json_string(productIdDb));
-
-    FILE *productdb_file = fopen(PRODUCTDB_FILE, "w");
-    if (productdb_file != NULL) {
-        fprintf(productdb_file, "%s", json_object_to_json_string(productIdDb));
-        fclose(productdb_file);
-    } else {
+    if (err) {
         error("Unable to write productdb to file: %s", PRODUCTDB_FILE);
     }
-
-    g_list_free(keys);
-    json_object_put(productIdDb);
 }
 
 /**
@@ -507,7 +484,7 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
     return ret;
 }
 
-int installProductId(RepoProductId *repoProductId, GHashTable *repoMap) {
+int installProductId(RepoProductId *repoProductId, ProductDb *productDb) {
     int ret = 0;
 
     const char *productIdPath = repoProductId->productIdPath;
@@ -527,7 +504,7 @@ int installProductId(RepoProductId *repoProductId, GHashTable *repoMap) {
 
         int productIdFound = findProductId(pemOutput, outname);
         if (productIdFound) {
-            char *mapKey = g_strdup(outname->str);
+            gchar *productId = g_strdup(outname->str);
             g_string_prepend(outname, PRODUCT_CERT_DIR);
             g_string_append(outname, ".pem");
             FILE *fileOutput = fopen(outname->str, "w+");
@@ -536,13 +513,7 @@ int installProductId(RepoProductId *repoProductId, GHashTable *repoMap) {
                 fprintf(fileOutput, "%s", pemOutput->str);
                 fclose(fileOutput);
 
-                gpointer valueList = g_hash_table_lookup(repoMap, mapKey);
-                g_hash_table_insert(
-                    repoMap,
-                    mapKey,
-                    g_list_prepend(valueList, (gpointer) dnf_repo_get_id(repoProductId->repo)
-                ));
-
+                addRepoId(productDb, productId, dnf_repo_get_id(repoProductId->repo));
                 ret = 1;
             } else {
                 error("Unable write to file with certificate file :%s", outname->str);
