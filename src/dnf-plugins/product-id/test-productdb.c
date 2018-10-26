@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <gio/gio.h>
 #include <string.h>
+
 #include "productdb.h"
 
 typedef struct {
