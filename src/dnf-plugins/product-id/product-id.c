@@ -69,7 +69,7 @@ PluginHandle *pluginInitHandle(int version, PluginMode mode, void *initData) {
 }
 
 /**
- * Free handle and all
+ * Free handle and all other private date of handle
  * @param handle
  */
 void pluginFreeHandle(PluginHandle *handle) {
@@ -182,6 +182,10 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
         DnfContext *dnfContext = handle->initData;
         // List of all repositories
         GPtrArray *repos = dnf_context_get_repos(dnfContext);
+        // When there are no repositories, then we can't do anything
+        if(repos == NULL) {
+            return 1;
+        }
         // List of enabled repositories
         GPtrArray *enabledRepos = g_ptr_array_sized_new(repos->len);
         // Enabled repositories with product id certificate
