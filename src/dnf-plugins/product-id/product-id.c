@@ -31,53 +31,7 @@
 #include <errno.h>
 
 #include "util.h"
-
-#define LOGFILE "/var/log/rhsm/productid.log"
-#define PRODUCTDB_FILE "/var/lib/rhsm/productid.js"
-#define CHUNK 16384
-
-// This stuff could go in a header file, I guess
-static const PluginInfo pinfo = {
-    .name = "Product ID - DNF Test Plugin",
-    .version = "1.0.0"
-};
-
-static char *const PRODUCT_CERT_DIR = "/etc/pki/product/";
-
-static const int MAX_BUFF = 256;
-
-// The Red Hat OID plus ".1" which is the product namespace
-static char *const REDHAT_PRODUCT_OID = "1.3.6.1.4.1.2312.9.1";
-
-/**
- * Structure holding all data specific for this plugin
- */
-struct _PluginHandle {
-    // Data provided by the init method
-    int version;
-    PluginMode mode;
-    void* initData;
-
-    // Add plugin-specific "private" data here
-};
-
-typedef struct {
-    DnfRepo *repo;
-    const char *productIdPath;
-
-} RepoProductId;
-
-void printError(const char *msg, GError *err);
-void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos);
-void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds);
-
-// Prototypes of functions used in this plugin
-int decompress(gzFile input, GString *output) ;
-int findProductId(GString *certContent, GString *result);
-int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId);
-int installProductId(RepoProductId *repoProductId, GHashTable *repoMap);
-void clearMyTable(gpointer key, gpointer value, gpointer data);
-void writeRepoMap(GHashTable *repoMap) ;
+#include "product-id.h"
 
 const PluginInfo *pluginGetInfo() {
     return &pinfo;

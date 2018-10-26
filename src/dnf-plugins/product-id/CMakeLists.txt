@@ -39,7 +39,7 @@ include_directories(${ZLIB_INCLUDE_DIRS})
 include_directories(${OPENSSL_INCLUDE_DIR})
 include_directories(${JSONC_INCLUDE_DIR})
 
-add_library(product-id SHARED product-id.c util.c productdb.c)
+add_library(product-id SHARED product-id.c util.c productdb.c test-product-id.c)
 
 # Don't put "lib" on the front
 set_target_properties(product-id PROPERTIES PREFIX "")
@@ -56,6 +56,13 @@ target_link_libraries(product-id
 install(TARGETS product-id LIBRARY DESTINATION /usr/lib64/libdnf/plugins)
 
 enable_testing()
+
+# Testing of productdb
 add_executable(test-productdb test-productdb.c)
 target_link_libraries(test-productdb product-id)
 add_test(productdb test-productdb)
+
+# Testing of product-id
+add_executable(test-product-id test-product-id.c)
+target_link_libraries(test-product-id product-id)
+add_test(product-id test-product-id)
