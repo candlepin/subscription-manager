@@ -25,14 +25,6 @@ typedef struct {
     DnfContext *dnfContext;
 } handleFixture;
 
-void setupUnsupportedApiVersion(handleFixture *fixture, gconstpointer testData) {
-    (void)testData;
-    fixture->dnfContext = dnf_context_new();
-    PluginMode mode = PLUGIN_MODE_CONTEXT;
-    // This is never explicitly called (This plugin version is not supported
-    fixture->handle = pluginInitHandle(10000, mode, (void*)fixture->dnfContext);
-}
-
 void setup(handleFixture *fixture, gconstpointer testData) {
     (void)testData;
     fixture->dnfContext = dnf_context_new();
@@ -54,7 +46,29 @@ void testHandleCreated(handleFixture *fixture, gconstpointer ignored) {
     g_assert_cmpint(fixture->handle->mode, ==, PLUGIN_MODE_CONTEXT);
 }
 
-void testHandleNotCreated(handleFixture *fixture, gconstpointer ignored) {
+void setupUnsupportedApiVersion(handleFixture *fixture, gconstpointer testData) {
+    (void)testData;
+    fixture->dnfContext = dnf_context_new();
+    PluginMode mode = PLUGIN_MODE_CONTEXT;
+    // This is never explicitly called (This plugin version should not be supported)
+    fixture->handle = pluginInitHandle(10000, mode, (void*)fixture->dnfContext);
+}
+
+void testHandleNotCreatedVersion(handleFixture *fixture, gconstpointer ignored) {
+    // This test has to be run with setupUnsupportedApiVersion
+    (void)ignored;
+    g_assert_null(fixture->handle);
+}
+
+void setupUnsupportedMode(handleFixture *fixture, gconstpointer testData) {
+    (void)testData;
+    fixture->dnfContext = dnf_context_new();
+    PluginMode mode = 0;
+    // This is never explicitly called (This plugin mode should not be supported)
+    fixture->handle = pluginInitHandle(1, mode, (void*)fixture->dnfContext);
+}
+
+void testHandleNotCreatedMode(handleFixture *fixture, gconstpointer ignored) {
     (void)ignored;
     g_assert_null(fixture->handle);
 }
@@ -67,10 +81,18 @@ void testUnsupportedHookCalled(handleFixture *fixture, gconstpointer ignored) {
     g_assert_cmpint(ret_val, ==, 1);
 }
 
+void testSupportedHookCalled(handleFixture *fixture, gconstpointer ignored) {
+    (void)ignored;
+    int ret_val = pluginHook(fixture->handle, PLUGIN_HOOK_ID_CONTEXT_TRANSACTION, NULL, NULL);
+    g_assert_cmpint(ret_val, ==, 1);
+}
+
 int main(int argc, char **argv) {
     g_test_init(&argc, &argv, NULL);
     g_test_add("/set2/test handle created", handleFixture, NULL, setup, testHandleCreated, teardown);
-    g_test_add("/set2/test handle not created", handleFixture, NULL, setupUnsupportedApiVersion, testHandleNotCreated, teardown);
+    g_test_add("/set2/test handle not created (version)", handleFixture, NULL, setupUnsupportedApiVersion, testHandleNotCreatedVersion, teardown);
+    g_test_add("/set2/test handle not created (mode)", handleFixture, NULL, setupUnsupportedMode, testHandleNotCreatedMode, teardown);
     g_test_add("/set2/test unsupported hook called", handleFixture, NULL, setup, testUnsupportedHookCalled, teardown);
+    g_test_add("/set2/test supported hook called", handleFixture, NULL, setup, testSupportedHookCalled, teardown);
     return g_test_run();
 }

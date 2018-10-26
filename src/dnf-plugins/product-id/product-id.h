@@ -20,7 +20,6 @@
 #include <libdnf/libdnf.h>
 #include <zlib.h>
 
-#define LOGFILE "/var/log/rhsm/productid.log"
 #define PRODUCTDB_FILE "/var/lib/rhsm/productid.js"
 #define PRODUCT_CERT_DIR "/etc/pki/product/"
 
