@@ -144,6 +144,7 @@ void testWriteFile(dbFixture *fixture, gconstpointer ignored) {
     writeProductDb(db, &err);
 
     g_free(path);
+    g_file_delete(testJsonFile, NULL, NULL);
     g_object_unref(ioStream);
     g_object_unref(testJsonFile);
 }

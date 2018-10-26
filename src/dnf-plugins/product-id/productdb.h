@@ -35,5 +35,5 @@ gboolean removeRepoId(ProductDb *productDb, const char *productId, const char *r
 gboolean hasProductId(ProductDb *productDb, const char *productId);
 gboolean hasRepoId(ProductDb *productDb, const char *productId, const char *repoId);
 
-char *toString(ProductDb *productDb);
+char *productDbToString(ProductDb *productDb);
 #endif //PRODUCT_ID_PRODUCTDB_H

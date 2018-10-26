@@ -31,6 +31,8 @@
 // The Red Hat OID plus ".1" which is the product namespace
 #define REDHAT_PRODUCT_OID "1.3.6.1.4.1.2312.9.1"
 
+#include "productdb.h"
+
 /**
  * Information about libdnf plugin
  */
@@ -70,8 +72,8 @@ void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArra
 int decompress(gzFile input, GString *output) ;
 int findProductId(GString *certContent, GString *result);
 int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId);
-int installProductId(RepoProductId *repoProductId, GHashTable *repoMap);
+int installProductId(RepoProductId *repoProductId, ProductDb *productDb);
 void clearMyTable(gpointer key, gpointer value, gpointer data);
-void writeRepoMap(GHashTable *repoMap) ;
+void writeRepoMap(ProductDb *productDb) ;
 
 #endif //PRODUCT_ID_PRODUCT_ID_H
