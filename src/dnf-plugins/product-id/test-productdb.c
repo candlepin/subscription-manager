@@ -25,20 +25,24 @@ typedef struct {
 } dbFixture;
 
 void setup(dbFixture *fixture, gconstpointer testData) {
+    (void)testData;
     fixture->db = initProductDb();
 }
 
 void teardown(dbFixture *fixture, gconstpointer testData) {
+    (void)testData;
     freeProductDb(fixture->db);
 }
 
 void testAdd(dbFixture *fixture, gconstpointer ignored) {
+    (void)ignored;
     ProductDb *db = fixture->db;
     db->path = "testing";
     addRepoId(db, "69", "rhel");
 }
 
 void testHasProductId(dbFixture *fixture, gconstpointer ignored) {
+    (void)ignored;
     ProductDb *db = fixture->db;
     db->path = "testing";
     addRepoId(db, "69", "rhel");
@@ -47,6 +51,7 @@ void testHasProductId(dbFixture *fixture, gconstpointer ignored) {
 }
 
 void testRemoveProductId(dbFixture *fixture, gconstpointer ignored) {
+    (void)ignored;
     ProductDb *db = fixture->db;
     db->path = "testing";
     addRepoId(db, "69", "rhel");
@@ -58,6 +63,7 @@ void testRemoveProductId(dbFixture *fixture, gconstpointer ignored) {
 }
 
 void testHasRepoId(dbFixture *fixture, gconstpointer ignored) {
+    (void)ignored;
     ProductDb *db = fixture->db;
     db->path = "testing";
     addRepoId(db, "69", "rhel");
@@ -67,6 +73,7 @@ void testHasRepoId(dbFixture *fixture, gconstpointer ignored) {
 }
 
 void testRemoveRepoId(dbFixture *fixture, gconstpointer ignored) {
+    (void)ignored;
     ProductDb *db = fixture->db;
     db->path = "testing";
     addRepoId(db, "69", "rhel");
@@ -80,6 +87,7 @@ void testRemoveRepoId(dbFixture *fixture, gconstpointer ignored) {
 }
 
 void testReadMissingFile(dbFixture *fixture, gconstpointer ignored) {
+    (void)ignored;
     ProductDb *db = fixture->db;
     db->path = "/does/not/exist";
     GError *err = NULL;
@@ -89,6 +97,7 @@ void testReadMissingFile(dbFixture *fixture, gconstpointer ignored) {
 }
 
 void testReadFile(dbFixture *fixture, gconstpointer ignored) {
+    (void)ignored;
     ProductDb *db = fixture->db;
     GError *err = NULL;
 
@@ -120,6 +129,7 @@ void testReadFile(dbFixture *fixture, gconstpointer ignored) {
 }
 
 void testWriteFile(dbFixture *fixture, gconstpointer ignored) {
+    (void)ignored;
     ProductDb *db = fixture->db;
     GError *err = NULL;
 

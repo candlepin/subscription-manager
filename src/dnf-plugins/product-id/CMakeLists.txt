@@ -22,7 +22,16 @@ MACRO_ENSURE_OUT_OF_SOURCE_BUILD(
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_STANDARD 11)
 
-ADD_COMPILE_OPTIONS(-Wall -fPIC -g -Wl,as-needed)
+#ADD_COMPILE_OPTIONS(-Wall -fPIC -g -Wl,as-needed)
+
+if (CMAKE_COMPILER_IS_GNUCC)
+    set (CMAKE_C_FLAGS "-Wall -fPIC -Wextra -pedantic -Wno-long-long")
+    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+        set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ggdb -O0")
+    elseif( CMAKE_BUILD_TYPE STREQUAL "Release" )
+        set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DNDEBUG -O3 -fno-strict-aliasing")
+    endif ()
+endif (CMAKE_COMPILER_IS_GNUCC)
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GLIB REQUIRED glib-2.0>=2.44.0)
