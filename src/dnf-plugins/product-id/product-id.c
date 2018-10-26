@@ -47,6 +47,16 @@ const PluginInfo *pluginGetInfo() {
 PluginHandle *pluginInitHandle(int version, PluginMode mode, void *initData) {
     debug("%s initializing handle!", pinfo.name);
 
+    if (version != SUPPORTED_LIBDNF_PLUGIN_API_VERSION) {
+        error("Unsupported version of libdnf plugin API: %d", version);
+        return NULL;
+    }
+
+    if (mode != PLUGIN_MODE_CONTEXT) {
+        error("Unsupported mode of libdnf plugin: %d", (int)mode);
+        return NULL;
+    }
+
     PluginHandle* handle = malloc(sizeof(PluginHandle));
 
     if (handle) {
