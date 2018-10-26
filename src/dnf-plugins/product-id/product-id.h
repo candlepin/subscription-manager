@@ -24,6 +24,8 @@
 #define PRODUCTDB_FILE "/var/lib/rhsm/productid.js"
 #define PRODUCT_CERT_DIR "/etc/pki/product/"
 
+#define SUPPORTED_LIBDNF_PLUGIN_API_VERSION 1
+
 #define CHUNK 16384
 #define MAX_BUFF 256
 
@@ -58,6 +60,10 @@ typedef struct {
     DnfRepo *repo;
     const char *productIdPath;
 } RepoProductId;
+
+PluginHandle *pluginInitHandle(int version, PluginMode mode, void *initData);
+void pluginFreeHandle(PluginHandle *handle);
+int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHookError *error);
 
 void printError(const char *msg, GError *err);
 void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos);
