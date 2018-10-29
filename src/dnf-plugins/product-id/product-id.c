@@ -546,6 +546,7 @@ int installProductId(RepoProductId *repoProductId, ProductDb *productDb) {
  * @return
  */
 int findProductId(GString *certContent, GString *result) {
+    int ret_val = 1;
     BIO *bio = BIO_new_mem_buf(certContent->str, (int) certContent->len);
     if (bio == NULL) {
         debug("Unable to create buffer for content of certificate: %s",
@@ -562,17 +563,20 @@ int findProductId(GString *certContent, GString *result) {
     bio = NULL;
 
     int exts = X509_get_ext_count(x509);
+    gboolean redhat_oid_found = FALSE;
     for (int i = 0; i < exts; i++) {
         char oid[MAX_BUFF];
         X509_EXTENSION *ext = X509_get_ext(x509, i);
         if (ext == NULL) {
             debug("Failed to get extension of X509 structure: %s",
                   ERR_error_string(ERR_get_error(), NULL));
-            return -1;
+            ret_val = -1;
+            break;
         }
         OBJ_obj2txt(oid, MAX_BUFF, X509_EXTENSION_get_object(ext), 1);
 
         if (strncmp(REDHAT_PRODUCT_OID, oid, strlen(REDHAT_PRODUCT_OID)) == 0) {
+            redhat_oid_found = TRUE;
             gchar **components = g_strsplit(oid, ".", -1);
             int comp_id=0;
             // Because g_strsplit() returns array of NULL terminated pointers,
@@ -587,15 +591,21 @@ int findProductId(GString *certContent, GString *result) {
                 g_string_assign(result, components[9]);
             } else {
                 error("Product certificate does not contain required ID");
+                ret_val = -1;
             }
             g_strfreev(components);
             break;
         }
     }
 
+    if (redhat_oid_found == FALSE) {
+        warn("RedHat Product OID: %s not found", REDHAT_PRODUCT_OID);
+        ret_val = -1;
+    }
+
     X509_free(x509);
 
-    return 1;
+    return ret_val;
 }
 
 /**
