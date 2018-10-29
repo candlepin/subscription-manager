@@ -23,6 +23,10 @@
 #include <string.h>
 #include "productdb.h"
 
+/**
+ * Function to free the values in the GHashTable we use to represent the productDB internally
+ * @param value pointer to the GSList that holds the repo IDs.
+ */
 void valueFree(gpointer value) {
     GSList *iterator = NULL;
     for (iterator = value; iterator; iterator = iterator->next) {
@@ -31,6 +35,10 @@ void valueFree(gpointer value) {
     g_slist_free(value);
 }
 
+/**
+ * Allocate memory for a new ProductDb.
+ * @return a ProductId
+ */
 ProductDb *initProductDb() {
     ProductDb *productDb = malloc(sizeof(ProductDb));
     productDb->path = NULL;
@@ -47,8 +55,8 @@ void freeProductDb(ProductDb *productDb) {
 /**
  * Read content of product db from json file into structure
  *
- * @param productDb  Pointer at structure holding product db
- * @param err Pointer at pointer with glib error
+ * @param productDb Pointer at ProductDb struct.  The ProductDb is populated.
+ * @param err Pointer to a pointer to a glib error.  Updated if an error occurs.
  */
 void readProductDb(ProductDb *productDb, GError **err) {
     GFile *dbFile = g_file_new_for_path(productDb->path);
@@ -91,6 +99,11 @@ void readProductDb(ProductDb *productDb, GError **err) {
     g_free(fileContents);
 }
 
+/**
+ * Write the GHashTable in the ProductDb repoMap field to the path stored in the ProductDb path field.
+ * @param productDb populated ProductDb
+ * @param err a pointer to a pointer to a glib error.  Updated if an error occurs.
+ */
 void writeProductDb(ProductDb *productDb, GError **err) {
     json_object *productIdDb = json_object_new_object();
     GList *keys = g_hash_table_get_keys(productDb->repoMap);
@@ -135,19 +148,34 @@ void writeProductDb(ProductDb *productDb, GError **err) {
     }
 }
 
+/**
+ * Add a repo ID to the list of repo IDs associated to a product ID.  The list deduplicates redundant entries.
+ * @param productDb ProductDb to update
+ * @param productId ID to associate the repo ID to
+ * @param repoId repo ID to associate
+ */
 void addRepoId(ProductDb *productDb, const char *productId, const char *repoId) {
     // If the value isn't present, this value will be a NULL and g_slist_prepend will
     // begin a new list
     gpointer valueList = g_hash_table_lookup(productDb->repoMap, productId);
-    // We prepend so that we don't have to walk the entire linked list
-    g_hash_table_insert(
-        productDb->repoMap,
-        (gpointer) productId,
-        g_slist_prepend(valueList, (gpointer) repoId)
-    );
 
+    GSList *existsNode = g_slist_find((GSList *) valueList, repoId);
+    if (!existsNode) {
+        // We prepend so that we don't have to walk the entire linked list
+        g_hash_table_insert(
+            productDb->repoMap,
+            (gpointer) productId,
+            g_slist_prepend(valueList, (gpointer) repoId)
+        );
+    }
 }
 
+/**
+ * Remove of a product ID from the product DB.
+ * @param productDb ProductDb to update
+ * @param productId ID to remove
+ * @return TRUE if the ID was found and removed
+ */
 gboolean removeProductId(ProductDb *productDb, const char *productId) {
     gpointer valueList = g_hash_table_lookup(productDb->repoMap, productId);
     if (valueList) {
@@ -157,6 +185,13 @@ gboolean removeProductId(ProductDb *productDb, const char *productId) {
     return g_hash_table_remove(productDb->repoMap, productId);
 }
 
+/**
+ * Remove a repo ID from the list of repo IDs associated to a product ID.
+ * @param productDb ProductDb to update
+ * @param productId product ID to edit
+ * @param repoId repo ID to remove from the list associate to the product ID
+ * @return TRUE if the ID was found and removed
+ */
 gboolean removeRepoId(ProductDb *productDb, const char *productId, const char *repoId) {
     GSList *repoIds = g_hash_table_lookup(productDb->repoMap, productId);
     if (repoIds) {
@@ -170,10 +205,23 @@ gboolean removeRepoId(ProductDb *productDb, const char *productId, const char *r
     return FALSE;
 }
 
+/**
+ * Search for a given product ID in a product DB.
+ * @param productDb productDB to interrogate
+ * @param productId product ID to search for
+ * @return TRUE if this productDB contains the given product ID
+ */
 gboolean hasProductId(ProductDb *productDb, const char *productId) {
     return g_hash_table_contains(productDb->repoMap, productId);
 }
 
+/**
+ * Search for a given repo ID within the scope of a given product ID.
+ * @param productDb productDB to interrogate
+ * @param productId product ID to interrogate
+ * @param repoId repo ID to search for
+ * @return TRUE if the product ID in the given product DB contains the repo ID
+ */
 gboolean hasRepoId(ProductDb *productDb, const char *productId, const char *repoId) {
     GSList *repoIds = g_hash_table_lookup(productDb->repoMap, productId);
     if (repoIds) {
@@ -188,6 +236,12 @@ gboolean hasRepoId(ProductDb *productDb, const char *productId, const char *repo
     return FALSE;
 }
 
+/**
+ * Private-ish method used to print out entries from a GHashTable
+ * @param key hash key
+ * @param value hash value
+ * @param data in this case, a GString to append to
+ */
 void printProductIdHashTable(gpointer key, gpointer value, gpointer data) {
     // data is a pointer to a GString
     g_string_append_printf(data, "\t%s:", (char *) key);
@@ -199,6 +253,11 @@ void printProductIdHashTable(gpointer key, gpointer value, gpointer data) {
     g_string_append(data, "\n");
 }
 
+/**
+ * Create a string representation of a product DB.
+ * @param productDb product DB to print
+ * @return string containing the data in a product DB
+ */
 char *productDbToString(ProductDb *productDb) {
     GString *out = g_string_new("");
     g_string_printf(out, "Path: %s\n", productDb->path);
