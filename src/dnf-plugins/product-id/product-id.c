@@ -101,7 +101,7 @@ int removeUnusedProductCerts(ProductDb *productDb) {
                     gchar *product_id = g_strndup(file_name, strlen(file_name) - 4);
                     gboolean is_num = TRUE;
                     // Test if string represents number
-                    for(int i=0; i<strlen(product_id); i++) {
+                    for(size_t i=0; i<strlen(product_id); i++) {
                         if (g_ascii_isdigit(product_id[i]) != TRUE) {
                             is_num = FALSE;
                             break;
@@ -169,6 +169,10 @@ gchar *strHookId(PluginHookId id) {
  * @return
  */
 int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHookError *error) {
+    // We do not need this for anything
+    (void)hookData;
+    (void)error;
+
     if (!handle) {
         // We must have failed to allocate our handle during init; don't do anything.
         return 0;
@@ -198,7 +202,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
 
         getEnabled(repos, enabledRepos);
 
-        for (int i = 0; i < enabledRepos->len; i++) {
+        for (guint i = 0; i < enabledRepos->len; i++) {
             DnfRepo *repo = g_ptr_array_index(enabledRepos, i);
             LrResult *lrResult = dnf_repo_get_lr_result(repo);
             LrYumRepoMd *repoMd;
@@ -238,7 +242,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
             // open file
         }
 
-        for (int i = 0; i < activeRepoAndProductIds->len; i++) {
+        for (guint i = 0; i < activeRepoAndProductIds->len; i++) {
             RepoProductId *activeRepoProductId = g_ptr_array_index(activeRepoAndProductIds, i);
             debug("Handling active repo %s\n", dnf_repo_get_id(activeRepoProductId->repo));
             installProductId(activeRepoProductId, productDb);
@@ -254,7 +258,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
         // We have to free memory allocated for all items of repoAndProductIds. This should also handle
         // activeRepoAndProductIds since the pointers in that array are pointing to the same underlying
         // values at repoAndProductIds.
-        for (int i=0; i < repoAndProductIds->len; i++) {
+        for (guint i=0; i < repoAndProductIds->len; i++) {
             RepoProductId *repoProductId = g_ptr_array_index(repoAndProductIds, i);
             free(repoProductId);
         }
@@ -284,7 +288,7 @@ void writeRepoMap(ProductDb *productDb) {
  * @param enabledRepos the list of enabled repos
  */
 void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos) {
-    for (int i = 0; i < repos->len; i++) {
+    for (guint i = 0; i < repos->len; i++) {
         DnfRepo* repo = g_ptr_array_index(repos, i);
         bool enabled = (dnf_repo_get_enabled(repo) & DNF_REPO_ENABLED_PACKAGES) > 0;
         if (enabled) {
@@ -330,7 +334,7 @@ void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArra
     GPtrArray *installedPackages = g_ptr_array_sized_new(packageList->len);
     hy_query_free(query);
 
-    for (int i = 0; i < packageList->len; i++) {
+    for (guint i = 0; i < packageList->len; i++) {
         DnfPackage *pkg = g_ptr_array_index(packageList, i);
 
         if (dnf_package_installed(pkg)) {
@@ -339,7 +343,7 @@ void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArra
         }
     }
 
-    for (int i = 0; i < repoAndProductIds->len; i++) {
+    for (guint i = 0; i < repoAndProductIds->len; i++) {
         RepoProductId *repoProductId = g_ptr_array_index(repoAndProductIds, i);
         DnfRepo *repo = repoProductId->repo;
         HyQuery availQuery = hy_query_create_flags(dnfSack, 0);
@@ -354,12 +358,12 @@ void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArra
         // solution we have.
 
         // Go through all available packages from repository
-        for (int j = 0; j < availPackageList->len; j++) {
+        for (guint j = 0; j < availPackageList->len; j++) {
             DnfPackage *pkg = g_ptr_array_index(availPackageList, j);
             gboolean package_found = FALSE;
 
             // Try to find if this available package is in the list of installed packages
-            for(int k = 0; k < installedPackages->len; k++) {
+            for(guint k = 0; k < installedPackages->len; k++) {
                 DnfPackage *instPkg = g_ptr_array_index(installedPackages, k);
                 if(strcmp(dnf_package_get_nevra(pkg), dnf_package_get_nevra(instPkg)) == 0) {
                     debug("Repo \"%s\" marked active due to installed package %s",
@@ -626,9 +630,4 @@ int decompress(gzFile input, GString *output) {
         }
     }
     return ret;
-}
-
-void clearMyTable(gpointer key, gpointer value, gpointer data) {
-    g_free(key);
-    g_slist_free(value);
 }
