@@ -186,7 +186,7 @@ gboolean hasRepoId(ProductDb *productDb, const char *productId, const char *repo
 
     }
     return FALSE;
-};
+}
 
 void printProductIdHashTable(gpointer key, gpointer value, gpointer data) {
     // data is a pointer to a GString
