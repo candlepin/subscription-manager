@@ -41,6 +41,19 @@ void testAdd(dbFixture *fixture, gconstpointer ignored) {
     addRepoId(db, "69", "rhel");
 }
 
+void testAddDuplicateRepoId(dbFixture *fixture, gconstpointer ignored) {
+    (void)ignored;
+    ProductDb *db = fixture->db;
+    db->path = "testing";
+    addRepoId(db, "69", "rhel");
+    addRepoId(db, "69", "rhel");
+    addRepoId(db, "69", "jboss");
+
+    gpointer repoIdList = g_hash_table_lookup(db->repoMap, "69");
+    guint listLength = g_slist_length((GSList *) repoIdList);
+    g_assert_cmpint(2, ==, listLength);
+}
+
 void testHasProductId(dbFixture *fixture, gconstpointer ignored) {
     (void)ignored;
     ProductDb *db = fixture->db;
@@ -152,6 +165,7 @@ void testWriteFile(dbFixture *fixture, gconstpointer ignored) {
 int main(int argc, char **argv) {
     g_test_init(&argc, &argv, NULL);
     g_test_add("/set1/test add", dbFixture, NULL, setup, testAdd, teardown);
+    g_test_add("/set1/test add duplicate repo id", dbFixture, NULL, setup, testAddDuplicateRepoId, teardown);
     g_test_add("/set1/test has product id", dbFixture, NULL, setup, testHasProductId, teardown);
     g_test_add("/set1/test remove product id", dbFixture, NULL, setup, testRemoveProductId, teardown);
     g_test_add("/set1/test has repo id", dbFixture, NULL, setup, testHasRepoId, teardown);
