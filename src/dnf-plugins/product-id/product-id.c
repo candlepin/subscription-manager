@@ -13,7 +13,6 @@
  * in this software or its documentation.
  */
 #include <libdnf/plugin/plugin.h>
-#include <libdnf/libdnf.h>
 
 #include <glib/gstdio.h>
 
@@ -587,7 +586,7 @@ int findProductId(GString *certContent, GString *result) {
             }
             debug("Number of OID components: %d", comp_id);
             if (comp_id > 9) {
-                debug("ID of product certificate: %s", (char*)components[9]);
+                debug("ID of product certificate: %s", components[9]);
                 g_string_assign(result, components[9]);
             } else {
                 error("Product certificate does not contain required ID");

@@ -16,9 +16,11 @@
 #ifndef PRODUCT_ID_PRODUCT_ID_H
 #define PRODUCT_ID_PRODUCT_ID_H
 
-#include <libdnf/plugin/plugin.h>
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wvariadic-macros"
 #include <libdnf/libdnf.h>
 #include <zlib.h>
+#pragma GCC diagnostic pop
 
 #define PRODUCTDB_FILE "/var/lib/rhsm/productid.js"
 #define PRODUCT_CERT_DIR "/etc/pki/product/"
@@ -62,10 +64,6 @@ typedef struct {
     const char *productIdPath;
 } RepoProductId;
 
-PluginHandle *pluginInitHandle(int version, PluginMode mode, void *initData);
-void pluginFreeHandle(PluginHandle *handle);
-int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHookError *error);
-
 void printError(const char *msg, GError *err);
 void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos);
 void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds);
@@ -73,7 +71,6 @@ int decompress(gzFile input, GString *output) ;
 int findProductId(GString *certContent, GString *result);
 int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId);
 int installProductId(RepoProductId *repoProductId, ProductDb *productDb);
-void clearMyTable(gpointer key, gpointer value, gpointer data);
 void writeRepoMap(ProductDb *productDb) ;
 
 #endif //PRODUCT_ID_PRODUCT_ID_H
