@@ -18,7 +18,6 @@ MACRO_ENSURE_OUT_OF_SOURCE_BUILD(
 "${CMAKE_PROJECT_NAME} requires an out of source build. Delete all CMake generated files or CLion won't work."
 )
 
-
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_STANDARD 11)
 
@@ -37,7 +36,7 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(GLIB REQUIRED glib-2.0>=2.44.0)
 pkg_check_modules(GIO REQUIRED gio-2.0>=2.54.3)
 pkg_check_modules(LIBDNF REQUIRED libdnf>=0.7.0)
-pkg_check_modules(ZLIB zlib REQUIRED zlib>=1.2.0)
+pkg_check_modules(ZLIB REQUIRED zlib>=1.2.0)
 pkg_check_modules(OPENSSL libcrypto libssl REQUIRED)
 pkg_check_modules(JSONC json-c REQUIRED)
 
