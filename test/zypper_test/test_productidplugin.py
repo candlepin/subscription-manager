@@ -1,6 +1,6 @@
 from __future__ import print_function, division, absolute_import
 
-from unittest import TestCase
+from unittest import TestCase, skip
 import glob
 import os
 import subprocess
@@ -21,6 +21,7 @@ class TestProductIdPlugin(TestCase):
         if missing:
             raise EnvironmentError('Missing {0} environment variables'.format(str(missing)))
 
+    @skip("See BZ 1633304")
     def test_updates_products_after_install(self):
         subprocess.call('subscription-manager register --username={RHSM_USER} --password={RHSM_PASSWORD} --serverurl={RHSM_URL}'.format(**os.environ), shell=True)
         subprocess.call('subscription-manager attach --pool={RHSM_POOL}'.format(**os.environ), shell=True)

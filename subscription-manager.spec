@@ -747,7 +747,6 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 # zypper plugins
 %if 0%{?suse_version}
 %{_prefix}/lib/zypp/plugins/services/rhsm
-%{_prefix}/lib/zypp/plugins/commit/product-id
 %endif
 
 # rhsmlib
