@@ -62,7 +62,7 @@
 %global __python %__python3
 %global py_package_prefix python%{python3_pkgversion}
 %global rhsm_package_name %{py_package_prefix}-subscription-manager-rhsm
-%define include_syspurpose 1
+%global include_syspurpose 1
 %else
 %global py_package_prefix python
 %global rhsm_package_name subscription-manager-rhsm
@@ -72,63 +72,63 @@
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
 %if %{has_ostree}
-%define install_ostree INSTALL_OSTREE_PLUGIN=true
+%global install_ostree INSTALL_OSTREE_PLUGIN=true
 %else
-%define install_ostree INSTALL_OSTREE_PLUGIN=false
+%global install_ostree INSTALL_OSTREE_PLUGIN=false
 %endif
 
 # makefile will guess, but be specific.
 %if 0%{?gtk3}
-%define gtk_version GTK_VERSION=3
+%global gtk_version GTK_VERSION=3
 %else
-%define gtk_version GTK_VERSION=2
+%global gtk_version GTK_VERSION=2
 %endif
 
 %if %{use_initial_setup}
-%define post_boot_tool INSTALL_INITIAL_SETUP=true INSTALL_FIRSTBOOT=false
+%global post_boot_tool INSTALL_INITIAL_SETUP=true INSTALL_FIRSTBOOT=false
 %else
-%define post_boot_tool INSTALL_INITIAL_SETUP=false INSTALL_FIRSTBOOT=true
+%global post_boot_tool INSTALL_INITIAL_SETUP=false INSTALL_FIRSTBOOT=true
 %endif
 
 %if 0%{?suse_version}
-%define install_zypper_plugins INSTALL_ZYPPER_PLUGINS=true
+%global install_zypper_plugins INSTALL_ZYPPER_PLUGINS=true
 %else
-%define install_zypper_plugins INSTALL_ZYPPER_PLUGINS=false
+%global install_zypper_plugins INSTALL_ZYPPER_PLUGINS=false
 %endif
 
 # makefile defaults to INSTALL_DNF_PLUGINS=false
 %if %{use_dnf}
-%define install_dnf_plugins INSTALL_DNF_PLUGINS=true
+%global install_dnf_plugins INSTALL_DNF_PLUGINS=true
 %else
-%define install_dnf_plugins INSTALL_DNF_PLUGINS=false
+%global install_dnf_plugins INSTALL_DNF_PLUGINS=false
 %endif
 
 # makefile defaults to INSTALL_YUM_PLUGINS=true
 %if %{use_yum}
-%define install_yum_plugins INSTALL_YUM_PLUGINS=true
+%global install_yum_plugins INSTALL_YUM_PLUGINS=true
 %else
-%define install_yum_plugins INSTALL_YUM_PLUGINS=false
+%global install_yum_plugins INSTALL_YUM_PLUGINS=false
 %endif
 
 %if %{use_systemd}
-%define with_systemd WITH_SYSTEMD=true
+%global with_systemd WITH_SYSTEMD=true
 %else
-%define with_systemd WITH_SYSTEMD=false
+%global with_systemd WITH_SYSTEMD=false
 %endif
 
 %if %{use_subman_gui}
-%define with_subman_gui WITH_SUBMAN_GUI=true
+%global with_subman_gui WITH_SUBMAN_GUI=true
 %else
-%define with_subman_gui WITH_SUBMAN_GUI=false
+%global with_subman_gui WITH_SUBMAN_GUI=false
 %endif
 
 %if %{use_cockpit} && !0%{use_subman_gui}
-%define with_cockpit WITH_COCKPIT=true
+%global with_cockpit WITH_COCKPIT=true
 %else
-%define with_cockpit WITH_COCKPIT=false
+%global with_cockpit WITH_COCKPIT=false
 %endif
 
-%define subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
+%global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
 Version: 1.24.1
