@@ -80,6 +80,9 @@ class ModulesProfile(object):
                     status = "enabled"
                 elif modules.isDisabled(module_pkg.getName()):
                     status = "disabled"
+                installed_profiles = []
+                if status == "enabled":
+                    installed_profiles = modules.getInstalledProfiles(module_pkg.getName())
                 module_list.append({
                     "name": module_pkg.getName(),
                     "stream": module_pkg.getStream(),
@@ -87,7 +90,7 @@ class ModulesProfile(object):
                     "context": module_pkg.getContext(),
                     "arch": module_pkg.getArch(),
                     "profiles": [profile.getName() for profile in module_pkg.getProfiles()],
-                    "installed_profiles": modules.getInstalledProfiles(module_pkg.getName()),
+                    "installed_profiles": installed_profiles,
                     "status": status
                 })
 
