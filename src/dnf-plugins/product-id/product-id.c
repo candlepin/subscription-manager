@@ -386,11 +386,6 @@ void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArra
     g_object_unref(rpmDbSack);
 }
 
-void printError(const char *msg, GError *err) {
-    error("%s, error: %d: %s", msg, err->code, err->message);
-    g_error_free(err);
-}
-
 static void copy_lr_val(LrVar *lr_val, LrUrlVars **newVarSubst) {
     *newVarSubst = lr_urlvars_set(*newVarSubst, lr_val->var, lr_val->val);
 }
@@ -521,6 +516,7 @@ int installProductId(RepoProductId *repoProductId, ProductDb *productDb) {
             } else {
                 error("Unable write to file with certificate file :%s", outname->str);
             }
+            g_free(productId);
         }
 
         out:
@@ -552,14 +548,16 @@ int findProductId(GString *certContent, GString *result) {
                 ERR_error_string(ERR_get_error(), NULL));
         return -1;
     }
+
     X509 *x509 = PEM_read_bio_X509(bio, NULL, NULL, NULL);
+    BIO_free(bio);
+    bio = NULL;
+
     if (x509 == NULL) {
         debug("Failed to read content of certificate from buffer to X509 structure: %s",
                 ERR_error_string(ERR_get_error(), NULL));
         return -1;
     }
-    BIO_free(bio);
-    bio = NULL;
 
     int exts = X509_get_ext_count(x509);
     gboolean redhat_oid_found = FALSE;

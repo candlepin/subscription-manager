@@ -21,18 +21,16 @@
 #include <glib.h>
 #include <gio/gio.h>
 #include <string.h>
+
 #include "productdb.h"
+#include "util.h"
 
 /**
- * Function to free the values in the GHashTable we use to represent the productDB internally
- * @param value pointer to the GSList that holds the repo IDs.
+ * Function to free keys in the GHashTable we use to represent the productDB internally
+ * @param key pointer to the string with product ID
  */
-void valueFree(gpointer value) {
-    GSList *iterator = NULL;
-    for (iterator = value; iterator; iterator = iterator->next) {
-        g_free(iterator->data);
-    }
-    g_slist_free(value);
+void keyFree(gpointer key) {
+    g_free(key);
 }
 
 /**
@@ -42,12 +40,24 @@ void valueFree(gpointer value) {
 ProductDb *initProductDb() {
     ProductDb *productDb = malloc(sizeof(ProductDb));
     productDb->path = NULL;
-    // TODO: implement methods for freeing key and value
-    productDb->repoMap = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, NULL);
+    // We do not provide method for freeing value, because it would be ineficient to
+    // free and recreate GSList everytime we add/remove item in the list
+    productDb->repoMap = g_hash_table_new_full(g_str_hash, g_str_equal, keyFree, NULL);
     return productDb;
 }
 
+static void freeRepodIds(gpointer key, gpointer value, gpointer unused) {
+    (void) key;
+    (void) unused;
+    g_slist_free_full(value, g_free);
+}
+
+/**
+ * Free memory used by ProductDb
+ * @param productDb
+ */
 void freeProductDb(ProductDb *productDb) {
+    g_hash_table_foreach(productDb->repoMap, freeRepodIds, NULL);
     g_hash_table_destroy(productDb->repoMap);
     free(productDb);
 }
@@ -64,12 +74,13 @@ void readProductDb(ProductDb *productDb, GError **err) {
 
     GError *internalErr = NULL;
     gboolean loadedFileSuccess = g_file_load_contents(dbFile, NULL, &fileContents, NULL, NULL, &internalErr);
+    g_object_unref(dbFile);
+
     if (!loadedFileSuccess) {
         *err = g_error_copy(internalErr);
         g_error_free(internalErr);
         return;
     }
-    g_object_unref(dbFile);
 
     json_object *dbJson = json_tokener_parse(fileContents);
 
@@ -111,13 +122,13 @@ void writeProductDb(ProductDb *productDb, GError **err) {
     GList *iterator = NULL;
 
     for(iterator = keys; iterator; iterator=iterator->next) {
-        gchar *productId = g_strdup(iterator->data);
+        const gchar *productId = iterator->data;
         json_object *repoIdJson = json_object_new_array();
 
         GList *values = g_hash_table_lookup(productDb->repoMap, productId);
         GList *valuesIterator = NULL;
-            for(valuesIterator = values; valuesIterator; valuesIterator=valuesIterator->next) {
-            gchar *repoId = g_strdup(valuesIterator->data);
+        for(valuesIterator = values; valuesIterator; valuesIterator=valuesIterator->next) {
+            const gchar *repoId = valuesIterator->data;
             json_object_array_add(repoIdJson, json_object_new_string(repoId));
         }
         json_object_object_add(productIdDb, productId, repoIdJson);
@@ -132,8 +143,17 @@ void writeProductDb(ProductDb *productDb, GError **err) {
 
     GFileOutputStream *os = g_file_replace(dbFile, NULL, FALSE, G_FILE_CREATE_NONE, NULL, &internalErr);
     if (!internalErr) {
-        g_output_stream_write_all((GOutputStream *) os, dbJson, strlen(dbJson), NULL, NULL, &internalErr);
-        g_output_stream_close((GOutputStream *) os, NULL, &internalErr);
+        gboolean ret;
+        ret = g_output_stream_write_all((GOutputStream *) os, dbJson, strlen(dbJson), NULL, NULL, &internalErr);
+        if (ret == FALSE && internalErr) {
+            printError("Unable to write into /var/lib/rhsm/productid.js file", internalErr);
+        }
+        ret = g_output_stream_close((GOutputStream *) os, NULL, &internalErr);
+        if (ret == FALSE && internalErr) {
+            printError("Unable to close /var/lib/rhsm/productid.js file", internalErr);
+        }
+    } else {
+        printError("Unable to update /var/lib/rhsm/productid.js file", internalErr);
     }
 
     // Free productIdDb.  JSON-C has a confusing method name for this
@@ -149,9 +169,19 @@ void writeProductDb(ProductDb *productDb, GError **err) {
 }
 
 /**
+ * Function used for comparing two values (strings) in GSList
+ * @param value1 pointer at string in GSList
+ * @param value2 pointer at new data
+ * @return
+ */
+static int compareRepoIds(gconstpointer str1, gconstpointer str2) {
+    return strcmp((char*)str1, (char*)str2);
+}
+
+/**
  * Add a repo ID to the list of repo IDs associated to a product ID.  The list deduplicates redundant entries.
  * @param productDb ProductDb to update
- * @param productId ID to associate the repo ID to
+ * @param productId ID to associate the repo ID to.
  * @param repoId repo ID to associate
  */
 void addRepoId(ProductDb *productDb, const char *productId, const char *repoId) {
@@ -159,13 +189,15 @@ void addRepoId(ProductDb *productDb, const char *productId, const char *repoId) 
     // begin a new list
     gpointer valueList = g_hash_table_lookup(productDb->repoMap, productId);
 
-    GSList *existsNode = g_slist_find((GSList *) valueList, repoId);
+    GSList *existsNode = g_slist_find_custom((GSList *) valueList, repoId, compareRepoIds);
     if (!existsNode) {
-        // We prepend so that we don't have to walk the entire linked list
+        // We prepend so that we don't have to walk the entire linked list, but we
+        // have to update record in has table despite linked list already exist, because
+        // first item of the linked list is different.
         g_hash_table_insert(
-            productDb->repoMap,
-            (gpointer) productId,
-            g_slist_prepend(valueList, (gpointer) repoId)
+                productDb->repoMap,
+                (gpointer) g_strdup(productId),
+                g_slist_prepend(valueList, (gpointer) g_strdup(repoId))
         );
     }
 }
@@ -179,8 +211,7 @@ void addRepoId(ProductDb *productDb, const char *productId, const char *repoId) 
 gboolean removeProductId(ProductDb *productDb, const char *productId) {
     gpointer valueList = g_hash_table_lookup(productDb->repoMap, productId);
     if (valueList) {
-        g_hash_table_replace(productDb->repoMap, (gpointer) productId, NULL);
-        g_slist_free(valueList);
+        g_slist_free_full(valueList, g_free);
     }
     return g_hash_table_remove(productDb->repoMap, productId);
 }
@@ -193,12 +224,16 @@ gboolean removeProductId(ProductDb *productDb, const char *productId) {
  * @return TRUE if the ID was found and removed
  */
 gboolean removeRepoId(ProductDb *productDb, const char *productId, const char *repoId) {
-    GSList *repoIds = g_hash_table_lookup(productDb->repoMap, productId);
+    GSList *repoIds = (GSList*)g_hash_table_lookup(productDb->repoMap, productId);
     if (repoIds) {
-        GSList *modifiedRepoIds = g_slist_remove_all(repoIds, repoId);
-        // If an item is removed modifiedList will point to a different place than valueList
-        if (repoIds == modifiedRepoIds) {
-            g_hash_table_replace(productDb->repoMap, (gpointer) productId, modifiedRepoIds);
+        GSList *existsNode = g_slist_find_custom((GSList *) repoIds, repoId, compareRepoIds);
+        if (existsNode) {
+            g_free(existsNode->data);
+            GSList *modifiedRepoIds = g_slist_delete_link(repoIds, existsNode);
+            // If an item is removed modifiedList will point to a different place than valueList
+            if (repoIds == modifiedRepoIds) {
+                g_hash_table_replace(productDb->repoMap, (gpointer) g_strdup(productId), modifiedRepoIds);
+            }
             return TRUE;
         }
     }

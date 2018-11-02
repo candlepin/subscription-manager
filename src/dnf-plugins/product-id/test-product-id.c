@@ -103,6 +103,7 @@ void setup(handleFixture *fixture, gconstpointer testData) {
 void teardown(handleFixture *fixture, gconstpointer testData) {
     (void)testData;
     pluginFreeHandle(fixture->handle);
+    g_object_unref(fixture->dnfContext);
 }
 
 void testHandleCreated(handleFixture *fixture, gconstpointer ignored) {
@@ -159,9 +160,11 @@ void testFindProductIdInCorrectPEM(handleFixture *fixture, gconstpointer ignored
     (void)fixture;
     (void)ignored;
     GString *result = g_string_new("");
-    int ret = findProductId(g_string_new(CORRECT_PEM_CERT), result);
+    GString *certContent = g_string_new(CORRECT_PEM_CERT);
+    int ret = findProductId(certContent, result);
     g_assert_cmpint(ret, ==, 1);
     g_assert_cmpstr(result->str, ==, "69");
+    g_string_free(certContent, TRUE);
     g_string_free(result, TRUE);
 }
 
@@ -170,9 +173,11 @@ void testFindProductIdInCorruptedPEM(handleFixture *fixture, gconstpointer ignor
     (void)fixture;
     (void)ignored;
     GString *result = g_string_new("");
-    int ret = findProductId(g_string_new(CORRUPTED_PEM_CERT), result);
+    GString *certContent = g_string_new(CORRUPTED_PEM_CERT);
+    int ret = findProductId(certContent, result);
     g_assert_cmpint(ret, ==, -1);
     g_assert_cmpstr(result->str, ==, "");
+    g_string_free(certContent, TRUE);
     g_string_free(result, TRUE);
 }
 
@@ -181,9 +186,11 @@ void testFindProductIdInConsomerPEM(handleFixture *fixture, gconstpointer ignore
     (void)fixture;
     (void)ignored;
     GString *result = g_string_new("");
-    int ret = findProductId(g_string_new(CONSUMER_CERT), result);
+    GString *certContent = g_string_new(CONSUMER_CERT);
+    int ret = findProductId(certContent, result);
     g_assert_cmpint(ret, ==, -1);
     g_assert_cmpstr(result->str, ==, "");
+    g_string_free(certContent, TRUE);
     g_string_free(result, TRUE);
 }
 
