@@ -15,6 +15,8 @@
 #ifndef PRODUCT_ID_UTIL_H
 #define PRODUCT_ID_UTIL_H
 
+#include <glib.h>
+
 #define LOGFILE "/var/log/rhsm/productid.log"
 #define SHOW_DEBUG TRUE
 
@@ -24,5 +26,7 @@
 #define debug(msg, ...) if (SHOW_DEBUG) r_log ("DEBUG", msg, ##__VA_ARGS__)
 
 void r_log (const char *level, const char *message, ...);
+
+void printError(const char *msg, GError *err);
 
 #endif //PRODUCT_ID_UTIL_H
