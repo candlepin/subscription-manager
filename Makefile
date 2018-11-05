@@ -333,10 +333,10 @@ install-files: dbus-install install-conf install-plugins install-post-boot insta
 	install -d -m 750 $(DESTDIR)/var/lib/rhsm/{cache,facts,packages,repo_server_val}
 
 	# Set up rhsmcertd daemon. Installation location depends on distro...
-	# if /etc/os-release exists, sles12, opensuse42, el7+, or fedora
+	# if WITH_SYSTEMD == true: sles12, opensuse42, el7+, or fedora
 	# otherwise, if /etc/redhat-release exists: el6
-	# otherwise, sles11
-	if [ -f /etc/os-release ]; then \
+	# otherwise, if SuSE-release says 11, sles11
+	if [ "$(WITH_SYSTEMD)" == "true" ]; then \
 		install -d $(DESTDIR)/$(SYSTEMD_INST_DIR); \
 		install -d $(DESTDIR)/$(PREFIX)/lib/tmpfiles.d; \
 		install etc-conf/rhsmcertd.service $(DESTDIR)/$(SYSTEMD_INST_DIR); \
@@ -345,7 +345,7 @@ install-files: dbus-install install-conf install-plugins install-post-boot insta
 	elif [ -f /etc/redhat-release ]; then \
 		install etc-conf/rhsmcertd.init.d \
 			$(DESTDIR)/etc/rc.d/init.d/rhsmcertd; \
-	else \
+	elif [ "$(shell cat /etc/SuSE-release | grep VERSION | awk '{ print $$3 }')" == "11" ]; then \
 		install etc-conf/rhsmcertd.init.d \
 			$(DESTDIR)/etc/init.d/rhsmcertd; \
 	fi;
