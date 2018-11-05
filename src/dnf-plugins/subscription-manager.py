@@ -104,7 +104,7 @@ class SubscriptionManager(dnf.Plugin):
         if config.in_container():
             logger.info(_("Subscription Manager is operating in container mode."))
 
-        if not cache_only:
+        if not cache_only and not config.in_container():
             cert_action_invoker = EntCertActionInvoker()
             cert_action_invoker.update()
 

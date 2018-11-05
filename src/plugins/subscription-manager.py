@@ -111,7 +111,7 @@ def update(conduit, cache_only):
     if config.in_container():
         conduit.info(3, "Subscription Manager is operating in container mode.")
 
-    if not cache_only:
+    if not cache_only and not config.in_container():
         cert_action_invoker = EntCertActionInvoker(locker=YumRepoLocker(conduit=conduit))
         cert_action_invoker.update()
 
