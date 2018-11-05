@@ -105,7 +105,7 @@ class ZypperService(object):
         connection.UEPConnection(cert_file=cert_file, key_file=key_file)
         cache_only = not self.full_refresh_on_yum
 
-        if not cache_only:
+        if not cache_only and not config.in_container():
             cert_action_invoker = EntCertActionInvoker(locker=RepoLocker())
             cert_action_invoker.update()
 
