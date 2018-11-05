@@ -131,7 +131,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.1
+Version: 1.24.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1101,6 +1101,49 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Nov 05 2018 Christopher Snyder <csnyder@redhat.com> 1.24.2-1
+- 1645205: Do not update ent certs inside containers (csnyder@redhat.com)
+- 1633304: Disable zypper product-id plugin. (awood@redhat.com)
+- Fedora documentation guidelines favor global over define. (awood@redhat.com)
+- Show installed profiles only for enabled modules (paji@redhat.com)
+- 1631339: Fix os.errno issue (rob@sandersmail.eu)
+- Add a missing comma in test_cache (nmoumoul@redhat.com)
+- Add module enabled and disabled information (paji@redhat.com)
+- 1636381: Fix up our detection of missing org for service-level list
+  (csnyder@redhat.com)
+- 1616403: Better handling of missing locale use (wpoteat@redhat.com)
+- 1636381: Handle case of nonexistant org (nmoumoul@redhat.com)
+- Add scripts to setup local development environment (khowell@redhat.com)
+- 1633380: Add syspurpose compliance status cache - Altered the syspurpose
+  compliance status connection call to use the
+  /consumers/{uuid}/purpose_compliance API instead of fetching the consumer
+  object and reading the syspurpose compliance field off of it. - Added new
+  syspurpose compliance status cache saved in
+  /var/lib/rhsm/cache/syspurpose_compliance_status.json similar to the
+  entitlement status cache. - When the server is unreachable, we don't
+  traceback, but rather use the new cache value instead. (nmoumoul@redhat.com)
+- 1639625: Tolerate server missing syspurpose fields (khowell@redhat.com)
+- 1639086: Fix vendor comparison (hyu@redhat.com)
+- Includes the installed module profiles (paji@redhat.com)
+- 1623390: Fix unregistered messaging in syspurpose (khowell@redhat.com)
+- 1637183: Replace redhat-uep.pem properly (khowell@redhat.com)
+- 1632797: Only save SLA set during register or attach if specified
+  (csnyder@redhat.com)
+- Updated how syspurpose handles unsetting values (crog@redhat.com)
+- Update man page for report_package_profile option (nmoumoul@redhat.com)
+- Automatic commit of package [subscription-manager] release [1.24.1-1].
+  (csnyder@redhat.com)
+- 1616366: Use LANG from environment (csnyder@redhat.com)
+- syspurpose no longer supresses JSON malformation errors (crog@redhat.com)
+- Rename zypper plugin to rhsm (khowell@redhat.com)
+- 1632384: Sync SLA regardless of capability: (nmoumoul@redhat.com)
+- 1621783: Updated syspurpose fields to match expected values (crog@redhat.com)
+- 1632248: User should be able to set/unset while not registered
+  (csnyder@redhat.com)
+- 1633575: Update error message when syspurpose is not supported by server
+  (csnyder@redhat.com)
+- 1614925: Fix grammar (csnyder@redhat.com)
+
 * Mon Oct 15 2018 Christopher Snyder <csnyder@redhat.com> 1.24.1-1
 - Rename zypper plugin to rhsm (khowell@redhat.com)
 - 1632384: Sync SLA regardless of capability: (nmoumoul@redhat.com)
