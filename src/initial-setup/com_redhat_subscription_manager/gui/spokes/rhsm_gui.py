@@ -26,7 +26,10 @@ from pyanaconda.ui.categories.system import SystemCategory
 from pyanaconda.ui.categories.user_settings import UserSettingsCategory
 from pyanaconda.ui.gui.utils import really_hide
 from pyanaconda.flags import flags
-from pyanaconda.constants import ANACONDA_ENVIRON
+try:
+    from pyanaconda.constants import ANACONDA_ENVIRON
+except ImportError:
+    from pyanaconda.core.constants import ANACONDA_ENVIRON
 
 log = logging.getLogger(__name__)
 
