@@ -391,14 +391,20 @@ class ProfileManager(CacheManager):
         # Could be None, we'll read the system's current profile later once
         # we're sure we actually need the data.
         self._current_profile = None
-        self._report_package_profile = conf['rhsm'].get_int('report_package_profile')
+        self.report_package_profile = self.profile_reporting_enabled()
+
+    def profile_reporting_enabled(self):
+        # If profile reporting is disabled from the environment, that overrides the setting in the conf file
+        # If the environment variable is 0, defer to the setting in the conf file; likewise if the environment
+        # variable is completely unset.
+        if 'SUBMAN_DISABLE_PROFILE_REPORTING' in os.environ and \
+            os.environ['SUBMAN_DISABLE_PROFILE_REPORTING'].lower() in ['true', '1', 'yes', 'on']:
+            return False
+        return conf['rhsm'].get_int('report_package_profile') == 1
 
     # give tests a chance to use something other than RPMProfile
     def _get_profile(self, profile_type):
         return get_profile(profile_type)
-
-    def _set_report_package_profile(self, value):
-        self._report_package_profile = value
 
     @staticmethod
     def _assembly_profile(rpm_profile, enabled_repos_profile, module_profile):
@@ -440,7 +446,7 @@ class ProfileManager(CacheManager):
             log.info("Server does not support packages, skipping profile upload.")
             return 0
 
-        if not self._report_package_profile:
+        if not self.report_package_profile:
             log.info("Skipping package profile upload due to report_package_profile setting.")
             return 0
 
