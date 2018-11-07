@@ -19,6 +19,7 @@ from mock import Mock, patch
 from test import fixture
 from threading import Thread
 import subprocess
+import tempfile
 
 
 class TestFilesystemWatcher(fixture.SubManFixture):
@@ -201,13 +202,19 @@ class TestDirectoryWatch(fixture.SubManFixture):
         super(TestDirectoryWatch, self).setUp()
         self.mock_cb1 = Mock(return_value=None)
         self.mock_cb2 = Mock(return_value=None)
-        self.testpath1 = "file1"
-        self.testpath2 = "file2"
+        self.tmp_file1 = tempfile.NamedTemporaryFile(prefix="directory_watcher_test_")
+        self.tmp_file2 = tempfile.NamedTemporaryFile(prefix="directory_watcher_test_")
+        self.testpath1 = self.tmp_file1.name
+        self.testpath2 = self.tmp_file2.name
         subprocess.call("touch %s" % self.testpath1, shell=True)
         subprocess.call("touch %s" % self.testpath2, shell=True)
         self.dw1 = file_monitor.DirectoryWatch(self.testpath1, [], is_glob=True)
         self.dw2 = file_monitor.DirectoryWatch(self.testpath2, [], is_glob=False)
         self.dw3 = file_monitor.DirectoryWatch(self.testpath2, [self.mock_cb1, self.mock_cb2], is_glob=False)
+
+    def tearDown(self):
+        self.tmp_file1.close()
+        self.tmp_file2.close()
 
     def test_notify(self):
         self.dw3.notify()
