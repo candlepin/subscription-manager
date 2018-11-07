@@ -458,10 +458,6 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
                  dnf_repo_get_id(repo),
                  repoProductId->productIdPath);
             ret = 1;
-            // Causes a segfault.  LrYumRepo isn't inited properly or something and the LrYumRepoPaths in it
-            // are FUBAR
-            // lr_yum_repo_free(lrYumRepo);
-            // lrYumRepo = NULL;
         } else {
             error("Unable to initialize LrYumRepo");
         }
@@ -505,6 +501,7 @@ int installProductId(RepoProductId *repoProductId, ProductDb *productDb) {
             gchar *productId = g_strdup(outname->str);
             g_string_prepend(outname, PRODUCT_CERT_DIR);
             g_string_append(outname, ".pem");
+            // TODO switch to using GFile methods to remain consistent with using GLib stuff when possible
             FILE *fileOutput = fopen(outname->str, "w+");
             if (fileOutput != NULL) {
                 debug("Content of certificate written to: %s", outname->str);
@@ -572,7 +569,7 @@ int findProductId(GString *certContent, GString *result) {
         }
         OBJ_obj2txt(oid, MAX_BUFF, X509_EXTENSION_get_object(ext), 1);
 
-        if (strncmp(REDHAT_PRODUCT_OID, oid, strlen(REDHAT_PRODUCT_OID)) == 0) {
+        if (g_str_has_prefix(oid, REDHAT_PRODUCT_OID)) {
             redhat_oid_found = TRUE;
             gchar **components = g_strsplit(oid, ".", -1);
             int comp_id=0;
@@ -582,7 +579,6 @@ int findProductId(GString *certContent, GString *result) {
             while(components[comp_id] != NULL) {
                 comp_id++;
             }
-            debug("Number of OID components: %d", comp_id);
             if (comp_id > 9) {
                 debug("ID of product certificate: %s", components[9]);
                 g_string_assign(result, components[9]);
@@ -596,7 +592,7 @@ int findProductId(GString *certContent, GString *result) {
     }
 
     if (redhat_oid_found == FALSE) {
-        warn("RedHat Product OID: %s not found", REDHAT_PRODUCT_OID);
+        warn("Red Hat Product OID: %s not found", REDHAT_PRODUCT_OID);
         ret_val = -1;
     }
 

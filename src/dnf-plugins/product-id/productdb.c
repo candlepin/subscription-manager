@@ -26,14 +26,6 @@
 #include "util.h"
 
 /**
- * Function to free keys in the GHashTable we use to represent the productDB internally
- * @param key pointer to the string with product ID
- */
-void keyFree(gpointer key) {
-    g_free(key);
-}
-
-/**
  * Allocate memory for a new ProductDb.
  * @return a ProductId
  */
@@ -42,7 +34,7 @@ ProductDb *initProductDb() {
     productDb->path = NULL;
     // We do not provide method for freeing value, because it would be ineficient to
     // free and recreate GSList everytime we add/remove item in the list
-    productDb->repoMap = g_hash_table_new_full(g_str_hash, g_str_equal, keyFree, NULL);
+    productDb->repoMap = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
     return productDb;
 }
 
@@ -175,7 +167,7 @@ void writeProductDb(ProductDb *productDb, GError **err) {
  * @return
  */
 static int compareRepoIds(gconstpointer str1, gconstpointer str2) {
-    return strcmp((char*)str1, (char*)str2);
+    return g_strcmp0((char*)str1, (char*)str2);
 }
 
 /**
