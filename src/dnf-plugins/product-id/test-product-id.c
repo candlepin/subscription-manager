@@ -182,7 +182,7 @@ void testFindProductIdInCorruptedPEM(handleFixture *fixture, gconstpointer ignor
 }
 
 // Test reading wrong certificate (consumer certificate not product certificate)
-void testFindProductIdInConsomerPEM(handleFixture *fixture, gconstpointer ignored) {
+void testFindProductIdInConsumerPEM(handleFixture *fixture, gconstpointer ignored) {
     (void)fixture;
     (void)ignored;
     GString *result = g_string_new("");
@@ -202,7 +202,7 @@ int main(int argc, char **argv) {
     g_test_add("/set2/test unsupported hook called", handleFixture, NULL, setup, testUnsupportedHookCalled, teardown);
     g_test_add("/set2/test supported hook called", handleFixture, NULL, setup, testSupportedHookCalled, teardown);
     g_test_add("/set2/test find product ID", handleFixture, NULL, setup, testFindProductIdInCorrectPEM, teardown);
-    g_test_add("/set2/test corrupeted certificate", handleFixture, NULL, setup, testFindProductIdInCorruptedPEM, teardown);
-    g_test_add("/set2/test consumer certificate", handleFixture, NULL, setup, testFindProductIdInConsomerPEM, teardown);
+    g_test_add("/set2/test corrupted certificate", handleFixture, NULL, setup, testFindProductIdInCorruptedPEM, teardown);
+    g_test_add("/set2/test consumer certificate", handleFixture, NULL, setup, testFindProductIdInConsumerPEM, teardown);
     return g_test_run();
 }
