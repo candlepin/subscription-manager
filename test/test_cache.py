@@ -46,7 +46,7 @@ from rhsm.connection import RestlibException, UnauthorizedException, \
 
 from subscription_manager import injection as inj
 
-from subscription_manager import isodate
+from subscription_manager import isodate, cache
 
 log = logging.getLogger(__name__)
 
@@ -182,7 +182,7 @@ class TestProfileManager(unittest.TestCase):
     def test_update_check_packages_disabled(self):
         uuid = 'FAKEUUID'
         uep = Mock()
-        self.profile_mgr._set_report_package_profile(0)
+        self.profile_mgr.report_package_profile = 0
         uep.updatePackageProfile = Mock()
         self.profile_mgr.has_changed = Mock(return_value=True)
         self.profile_mgr.write_cache = Mock()
@@ -192,6 +192,39 @@ class TestProfileManager(unittest.TestCase):
         self.assertEqual(0, uep.updatePackageProfile.call_count)
         uep.supports_resource.assert_called_with('packages')
         self.assertEqual(0, self.profile_mgr.write_cache.call_count)
+
+    def test_report_package_profile_environment_variable(self):
+        with patch.dict('os.environ', {'SUBMAN_DISABLE_PROFILE_REPORTING': '1'}), \
+            patch.object(cache, 'conf') as conf:
+                # report_package_profile is set to 1 and SUBMAN_DISABLE_PROFILE_REPORTING is set to 1, the
+                # package profile should not be reported.
+                conf.__getitem__.return_value.get_int.return_value = 1
+                self.assertFalse(self.profile_mgr.profile_reporting_enabled())
+                # report_package_profile in rhsm.conf is set to 0 and SUBMAN_DISABLE_PROFILE_REPORTING is set
+                # to 1, the package profile should not be reported.
+                conf.__getitem__.return_value.get_int.return_value = 0
+                self.assertFalse(self.profile_mgr.profile_reporting_enabled())
+
+        with patch.dict('os.environ', {'SUBMAN_DISABLE_PROFILE_REPORTING': '0'}), \
+            patch.object(cache, 'conf') as conf:
+                # report_package_profile in rhsm.conf is set to 1 and SUBMAN_DISABLE_PROFILE_REPORTING is set
+                # to 0, the package profile should be reported.
+                conf.__getitem__.return_value.get_int.return_value = 1
+                self.assertTrue(self.profile_mgr.profile_reporting_enabled())
+                # report_package_profile in rhsm.conf is set to 0 and SUBMAN_DISABLE_PROFILE_REPORTING is set
+                # to 0, the package profile should not be reported.
+                conf.__getitem__.return_value.get_int.return_value = 0
+                self.assertFalse(self.profile_mgr.profile_reporting_enabled())
+
+        with patch.dict('os.environ', {}), patch.object(cache, 'conf') as conf:
+                # report_package_profile in rhsm.conf is set to 1 and SUBMAN_DISABLE_PROFILE_REPORTING is not
+                # set, the package profile should be reported.
+                conf.__getitem__.return_value.get_int.return_value = 1
+                self.assertTrue(self.profile_mgr.profile_reporting_enabled())
+                # report_package_profile in rhsm.conf is set to 0 and SUBMAN_DISABLE_PROFILE_REPORTING is not
+                # set, the package profile should not be reported.
+                conf.__getitem__.return_value.get_int.return_value = 0
+                self.assertFalse(self.profile_mgr.profile_reporting_enabled())
 
     def test_update_check_error_uploading(self):
         uuid = 'FAKEUUID'
