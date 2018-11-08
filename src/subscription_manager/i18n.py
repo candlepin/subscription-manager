@@ -50,7 +50,10 @@ def configure_i18n():
         os.environ['LC_ALL'] = 'C.UTF-8'
         locale.setlocale(locale.LC_ALL, 'C.UTF-8')
     configure_gettext()
-    Locale.set(os.environ.get("LANG"))
+    # RHBZ 1642271  Don't set a None lang
+    lang = os.environ.get("LANG")
+    if lang is not None:
+        Locale.set(lang)
 
 
 def configure_gettext():
