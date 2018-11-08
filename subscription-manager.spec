@@ -552,20 +552,20 @@ desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-c
 
 # fake out the redhat.repo file
 %if %{use_yum} || %{use_dnf}
-    %{__mkdir} %{buildroot}%{_sysconfdir}/yum.repos.d
+    mkdir %{buildroot}%{_sysconfdir}/yum.repos.d
     touch %{buildroot}%{_sysconfdir}/yum.repos.d/redhat.repo
 %endif
 
 # fake out the certificate directories
-%{__mkdir_p} %{buildroot}%{_sysconfdir}/pki/consumer
-%{__mkdir_p} %{buildroot}%{_sysconfdir}/pki/entitlement
+mkdir -p %{buildroot}%{_sysconfdir}/pki/consumer
+mkdir -p %{buildroot}%{_sysconfdir}/pki/entitlement
 
 # Setup cert directories for the container plugin:
-%{__mkdir_p} %{buildroot}%{_sysconfdir}/docker/certs.d/
-%{__mkdir} %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com
+mkdir -p %{buildroot}%{_sysconfdir}/docker/certs.d/
+mkdir %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com
 install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-entitlement-authority.pem %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com/redhat-entitlement-authority.crt
 
-%{__mkdir_p} %{buildroot}%{_sysconfdir}/etc/rhsm/ca
+mkdir -p %{buildroot}%{_sysconfdir}/etc/rhsm/ca
 install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-entitlement-authority.pem %{buildroot}/%{_sysconfdir}/rhsm/ca/redhat-entitlement-authority.pem
 install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-uep.pem %{buildroot}/%{_sysconfdir}/rhsm/ca/redhat-uep.pem
 
