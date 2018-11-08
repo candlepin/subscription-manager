@@ -10,7 +10,7 @@ MACRO(MACRO_ENSURE_OUT_OF_SOURCE_BUILD MSG)
     STRING(COMPARE EQUAL "${CMAKE_SOURCE_DIR}"
     "${PARENTDIR}" insourcesubdir)
     IF(insource OR insourcesubdir)
-        MESSAGE(FATAL_ERROR "${MSG}")
+        MESSAGE(WARNING "${MSG}")
     ENDIF(insource OR insourcesubdir)
 ENDMACRO(MACRO_ENSURE_OUT_OF_SOURCE_BUILD)
 
