@@ -350,11 +350,15 @@ subscriptions
 %package -n dnf-plugin-subscription-manager
 Summary: Subscription Manager plugins for DNF
 Group: System Environment/Base
+BuildRequires: cmake
+BuildRequires: gcc
+BuildRequires: libdnf-devel >= 0.22.0
 # See BZ 1581410 - avoid a circular dependency
 %if (0%{?rhel} < 8)
 Requires: %{name} = %{version}-%{release}
 %endif
 Requires: dnf >= 1.0.0
+Requires: libdnf >= 0.22.0
 %if %{with python3}
 Requires: python3-dnf-plugins-core
 Requires: python3-librepo
@@ -511,6 +515,13 @@ make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
 python2 ./setup.py build --quiet --gtk-version=%{?gtk3:3}%{?!gtk3:2} --rpm-version=%{version}-%{release}
 %endif
 
+%if %use_dnf
+pushd src/dnf-plugins/product-id
+%cmake -DCMAKE_BUILD_TYPE="Release" .
+%make_build
+popd
+%endif
+
 %install
 rm -rf %{buildroot}
 make -f Makefile install VERSION=%{version}-%{release} \
@@ -525,6 +536,13 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?with_cockpit} \
     %{?subpackages} \
     %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"}
+
+%if %use_dnf
+pushd src/dnf-plugins/product-id
+mkdir -p %{buildroot}%{_libdir}/libdnf/plugins
+%make_install
+popd
+%endif
 
 %if %{with python2_rhsm}
 mkdir -p %{buildroot}%{python2_sitearch}/rhsm
@@ -981,6 +999,7 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %files -n dnf-plugin-subscription-manager
 %defattr(-,root,root,-)
 %{python_sitelib}/dnf-plugins/*
+%{_libdir}/libdnf/plugins/product-id.so
 %endif
 
 
