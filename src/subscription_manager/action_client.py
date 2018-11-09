@@ -87,3 +87,16 @@ class UnregisterActionClient(base_action_client.BaseActionClient):
 
         lib_set = [self.entcertlib, self.content_action_client]
         return lib_set
+
+
+class ProfileActionClient(base_action_client.BaseActionClient):
+    """
+    This class should not need a consumer id, or a uep connection, since it
+    is running post unregister.
+    """
+    def _get_libset(self):
+
+        self.profilelib = PackageProfileActionInvoker()
+
+        lib_set = [self.profilelib]
+        return lib_set
