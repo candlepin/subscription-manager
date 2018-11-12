@@ -198,6 +198,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
 
         ProductDb *productDb = initProductDb();
         productDb->path = PRODUCTDB_FILE;
+        // TODO: read product DB here, when cache-only mode is supported
 
         getEnabled(repos, enabledRepos);
 
@@ -218,7 +219,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
                     debug("Repository %s has a productid", dnf_repo_get_id(repo));
                     RepoProductId *repoProductId = (RepoProductId*) malloc(sizeof(RepoProductId));
                     // TODO: do not fetch productid certificate, when dnf context is set to cache-only mode
-                    // Microdnf not package do not support this feature ATM
+                    // Microdnf nor PackageKit do not support this feature ATM
                     gboolean cache_only = dnf_context_get_cache_only(dnfContext);
                     if (cache_only == TRUE) {
                         debug("DNF context is set to: cache-only");
@@ -236,10 +237,6 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
         }
 
         getActive(dnfContext, repoAndProductIds, activeRepoAndProductIds);
-
-        if (activeRepoAndProductIds->len) {
-            // open file
-        }
 
         for (guint i = 0; i < activeRepoAndProductIds->len; i++) {
             RepoProductId *activeRepoProductId = g_ptr_array_index(activeRepoAndProductIds, i);
@@ -325,22 +322,11 @@ void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArra
         printError("Unable to load system repo to sack object", tmp_err);
     }
 
+    // Get list of installed packages
     HyQuery query = hy_query_create_flags(rpmDbSack, 0);
-    hy_query_filter(query, HY_PKG_NAME, HY_GLOB, "*");
     hy_query_filter(query, HY_REPO_NAME, HY_EQ, HY_SYSTEM_REPO_NAME);
-
-    GPtrArray *packageList = hy_query_run(query);
-    GPtrArray *installedPackages = g_ptr_array_sized_new(packageList->len);
+    GPtrArray *installedPackages = hy_query_run(query);
     hy_query_free(query);
-
-    for (guint i = 0; i < packageList->len; i++) {
-        DnfPackage *pkg = g_ptr_array_index(packageList, i);
-
-        if (dnf_package_installed(pkg)) {
-            // debug("Installed package: %s", dnf_package_get_nevra(pkg));
-            g_ptr_array_add(installedPackages, pkg);
-        }
-    }
 
     for (guint i = 0; i < repoAndProductIds->len; i++) {
         RepoProductId *repoProductId = g_ptr_array_index(repoAndProductIds, i);
@@ -364,7 +350,7 @@ void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArra
             // Try to find if this available package is in the list of installed packages
             for(guint k = 0; k < installedPackages->len; k++) {
                 DnfPackage *instPkg = g_ptr_array_index(installedPackages, k);
-                if(strcmp(dnf_package_get_nevra(pkg), dnf_package_get_nevra(instPkg)) == 0) {
+                if(g_strcmp0(dnf_package_get_nevra(pkg), dnf_package_get_nevra(instPkg)) == 0) {
                     debug("Repo \"%s\" marked active due to installed package %s",
                            dnf_repo_get_id(repo),
                            dnf_package_get_nevra(pkg));
@@ -382,7 +368,6 @@ void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArra
     }
 
     g_ptr_array_unref(installedPackages);
-    g_ptr_array_unref(packageList);
     g_object_unref(rpmDbSack);
 }
 
@@ -451,13 +436,14 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
             lr_result_getinfo(lrResult, &tmp_err, LRR_YUM_REPO, &lrYumRepo);
             if (tmp_err) {
                 printError("Unable to get information about repository", tmp_err);
+            } else {
+                repoProductId->repo = repo;
+                repoProductId->productIdPath = lr_yum_repo_path(lrYumRepo, "productid");
+                info("Product id cert downloaded metadata from repo %s to %s",
+                     dnf_repo_get_id(repo),
+                     repoProductId->productIdPath);
+                ret = 1;
             }
-            repoProductId->repo = repo;
-            repoProductId->productIdPath = lr_yum_repo_path(lrYumRepo, "productid");
-            info("Product id cert downloaded metadata from repo %s to %s",
-                 dnf_repo_get_id(repo),
-                 repoProductId->productIdPath);
-            ret = 1;
         } else {
             error("Unable to initialize LrYumRepo");
         }
