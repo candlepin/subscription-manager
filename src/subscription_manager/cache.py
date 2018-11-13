@@ -446,7 +446,7 @@ class ProfileManager(CacheManager):
             log.info("Server does not support packages, skipping profile upload.")
             return 0
 
-        if not self.report_package_profile:
+        if not force and not self.report_package_profile:
             log.info("Skipping package profile upload due to report_package_profile setting.")
             return 0
 

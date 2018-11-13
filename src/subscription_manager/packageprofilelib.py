@@ -36,10 +36,10 @@ class PackageProfileActionCommand(object):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = self.cp_provider.get_consumer_auth_cp()
 
-    def perform(self):
+    def perform(self, force_upload=False):
         profile_mgr = inj.require(inj.PROFILE_MANAGER)
         consumer_identity = inj.require(inj.IDENTITY)
-        ret = profile_mgr.update_check(self.uep, consumer_identity.uuid)
+        ret = profile_mgr.update_check(self.uep, consumer_identity.uuid, force=force_upload)
         self.report._status = ret
         return self.report
 
