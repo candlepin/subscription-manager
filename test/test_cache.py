@@ -326,6 +326,35 @@ class TestProfileManager(unittest.TestCase):
         for attr in ['name', 'version', 'release', 'arch', 'vendor']:
             self.assertEqual(None, data[attr])
 
+    def test_module_md_uniquify(self):
+        modules_input = [
+            {
+                "name": "duck",
+                "stream": 0,
+                "version": "20180730233102",
+                "context": "deadbeef",
+                "arch": "noarch",
+                "profiles": ["default"],
+                "installed_profiles": [],
+                "status": "enabled"
+            },
+            {
+                "name": "duck",
+                "stream": 0,
+                "version": "20180707144203",
+                "context": "c0ffee42",
+                "arch": "noarch",
+                "profiles": ["default", "server"],
+                "installed_profiles": ["server"],
+                "status": "unknown"
+            }
+
+        ]
+
+        self.assertEqual(modules_input, ModulesProfile._uniquify(modules_input))
+        # now test dup modules
+        self.assertEqual(modules_input, ModulesProfile._uniquify(modules_input + [modules_input[0]]))
+
     @staticmethod
     def _mock_pkg_profile(packages, repo_file, enabled_modules):
         """

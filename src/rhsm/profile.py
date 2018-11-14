@@ -60,6 +60,14 @@ class ModulesProfile(object):
         return self.content == other.content
 
     @staticmethod
+    def _uniquify(module_list):
+        ret = {}
+        for module in module_list:
+            key = (module["name"], module["stream"], module["version"], module["context"], module["arch"])
+            ret[key] = module
+        return list(ret.values())
+
+    @staticmethod
     def __generate():
         module_list = []
         if dnf is not None and libdnf is not None:
@@ -94,7 +102,7 @@ class ModulesProfile(object):
                     "status": status
                 })
 
-        return module_list
+        return ModulesProfile._uniquify(module_list)
 
     def collect(self):
         """
