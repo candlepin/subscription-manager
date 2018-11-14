@@ -2,6 +2,7 @@
 *.py?
 *.sw?
 *.so
+*.o
 .idea*
 *.coverage
 .ropeproject
@@ -26,6 +27,7 @@ etc-conf/*.desktop
 bin/rhsmcertd
 bin/rhsm-icon
 .idea
+cmake-build-*
 build/
 dist
 .cproject
@@ -36,3 +38,4 @@ updates.img
 .vagrant
 vagrant/vagrant_data/*.iso
 vagrant/roles/subman-devel
+src/dnf-plugins/product-id/Makefile

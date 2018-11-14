@@ -350,11 +350,16 @@ subscriptions
 %package -n dnf-plugin-subscription-manager
 Summary: Subscription Manager plugins for DNF
 Group: System Environment/Base
+%if (0%{?fedora} >= 29 || 0%{?rhel} >= 8)
+BuildRequires: cmake
+BuildRequires: gcc
+BuildRequires: libdnf-devel >= 0.22.0
+Requires: libdnf >= 0.22.0
+%endif
 # See BZ 1581410 - avoid a circular dependency
 %if (0%{?rhel} < 8)
 Requires: %{name} = %{version}-%{release}
 %endif
-Requires: dnf >= 1.0.0
 %if %{with python3}
 Requires: python3-dnf-plugins-core
 Requires: python3-librepo
@@ -362,6 +367,7 @@ Requires: python3-librepo
 Requires: python2-dnf-plugins-core
 Requires: python2-librepo
 %endif
+Requires: dnf >= 1.0.0
 
 %description -n dnf-plugin-subscription-manager
 This package provides plugins to interact with repositories and subscriptions
@@ -511,6 +517,13 @@ make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
 python2 ./setup.py build --quiet --gtk-version=%{?gtk3:3}%{?!gtk3:2} --rpm-version=%{version}-%{release}
 %endif
 
+%if (%{use_dnf} && (0%{?fedora} >= 29 || 0%{?rhel} >= 8))
+pushd src/dnf-plugins/product-id
+%cmake -DCMAKE_BUILD_TYPE="Release" .
+%make_build
+popd
+%endif
+
 %install
 rm -rf %{buildroot}
 make -f Makefile install VERSION=%{version}-%{release} \
@@ -525,6 +538,13 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?with_cockpit} \
     %{?subpackages} \
     %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"}
+
+%if (%{use_dnf} && (0%{?fedora} >= 29 || 0%{?rhel} >= 8))
+pushd src/dnf-plugins/product-id
+mkdir -p %{buildroot}%{_libdir}/libdnf/plugins
+%make_install
+popd
+%endif
 
 %if %{with python2_rhsm}
 mkdir -p %{buildroot}%{python2_sitearch}/rhsm
@@ -552,20 +572,20 @@ desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-c
 
 # fake out the redhat.repo file
 %if %{use_yum} || %{use_dnf}
-    %{__mkdir} %{buildroot}%{_sysconfdir}/yum.repos.d
+    mkdir %{buildroot}%{_sysconfdir}/yum.repos.d
     touch %{buildroot}%{_sysconfdir}/yum.repos.d/redhat.repo
 %endif
 
 # fake out the certificate directories
-%{__mkdir_p} %{buildroot}%{_sysconfdir}/pki/consumer
-%{__mkdir_p} %{buildroot}%{_sysconfdir}/pki/entitlement
+mkdir -p %{buildroot}%{_sysconfdir}/pki/consumer
+mkdir -p %{buildroot}%{_sysconfdir}/pki/entitlement
 
 # Setup cert directories for the container plugin:
-%{__mkdir_p} %{buildroot}%{_sysconfdir}/docker/certs.d/
-%{__mkdir} %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com
+mkdir -p %{buildroot}%{_sysconfdir}/docker/certs.d/
+mkdir %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com
 install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-entitlement-authority.pem %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com/redhat-entitlement-authority.crt
 
-%{__mkdir_p} %{buildroot}%{_sysconfdir}/etc/rhsm/ca
+mkdir -p %{buildroot}%{_sysconfdir}/etc/rhsm/ca
 install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-entitlement-authority.pem %{buildroot}/%{_sysconfdir}/rhsm/ca/redhat-entitlement-authority.pem
 install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-uep.pem %{buildroot}/%{_sysconfdir}/rhsm/ca/redhat-uep.pem
 
@@ -981,6 +1001,9 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %files -n dnf-plugin-subscription-manager
 %defattr(-,root,root,-)
 %{python_sitelib}/dnf-plugins/*
+%if (0%{?fedora} >= 29 || 0%{?rhel} >= 8)
+%{_libdir}/libdnf/plugins/product-id.so
+%endif
 %endif
 
 
