@@ -590,8 +590,9 @@ def init_repo_files():
     ]
     return repo_files
 
-repo_files = init_repo_files()
-
 
 def get_repo_files():
+    global repo_files
+    if not repo_files:
+        repo_files = init_repo_files()
     return repo_files
