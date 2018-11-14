@@ -155,7 +155,7 @@ class ZypperService(object):
 
     def print_zypper_repos(self):
         try:
-            repofile = ZypperRepoFile()
+            repo_file = ZypperRepoFile()
             with open(repo_file.path) as repo:
                 print(repo.read())
         except (OSError, IOError):
