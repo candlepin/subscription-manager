@@ -34,7 +34,7 @@ import dbus.mainloop.glib
 from subscription_manager import logutil
 import subscription_manager.injection as inj
 
-from rhsm import connection
+from rhsm import connection, config
 
 from subscription_manager import ga_loader
 ga_loader.init_ga()
@@ -47,6 +47,7 @@ from subscription_manager import managerlib
 from subscription_manager.identity import ConsumerIdentity
 from subscription_manager.i18n_optparse import OptionParser, \
     WrappedIndentedHelpFormatter, USAGE
+from optparse import SUPPRESS_HELP
 from subscription_manager.utils import generate_correlation_id
 
 from subscription_manager.i18n import ugettext as _
@@ -69,6 +70,12 @@ def _main(options, log):
     correlation_id = generate_correlation_id()
     log.info('X-Correlation-ID: %s', correlation_id)
     cp_provider.set_correlation_id(correlation_id)
+    cfg = config.initConfig()
+
+    log.debug('check for rhsmcertd disable')
+    if '1' == cfg.get('rhsmcertd', 'disable') and not options.force:
+        log.warning('The rhsmcertd process has been disabled by configuration.')
+        sys.exit(-1)
 
     if not ConsumerIdentity.existsAndValid():
         log.error('Either the consumer is not registered or the certificates' +
@@ -134,6 +141,8 @@ def main():
                           formatter=WrappedIndentedHelpFormatter())
     parser.add_option("--autoheal", dest="autoheal", action="store_true",
             default=False, help="perform an autoheal check")
+    parser.add_option("--force", dest="force", action="store_true",
+            default=False, help=SUPPRESS_HELP)
     (options, args) = parser.parse_args()
     try:
         _main(options, log)
