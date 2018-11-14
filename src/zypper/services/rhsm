@@ -19,7 +19,8 @@ import os
 import sys
 
 from subscription_manager import injection as inj
-from subscription_manager.repolib import RepoActionInvoker, ZYPPER_REPO_DIR
+from subscription_manager.repofile import ZypperRepoFile
+from subscription_manager.repolib import RepoActionInvoker
 from subscription_manager.entcertlib import EntCertActionInvoker
 from subscription_manager.certlib import Locker
 from subscription_manager.injectioninit import init_dep_injection
@@ -153,14 +154,13 @@ class ZypperService(object):
                 sys.stderr.write("\n")
 
     def print_zypper_repos(self):
-        filenames = []
         try:
-            filenames = os.listdir(ZYPPER_REPO_DIR)
-        except OSError:
-            pass
-        for filename in filenames:
-            with open(os.path.join(ZYPPER_REPO_DIR, filename)) as repo:
+            repofile = ZypperRepoFile()
+            with open(repo_file.path) as repo:
                 print(repo.read())
+        except (OSError, IOError):
+            pass
+
 
 if __name__ == '__main__':
     service = ZypperService()
