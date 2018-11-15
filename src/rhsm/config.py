@@ -79,7 +79,8 @@ RHSM_DEFAULTS = {
 RHSMCERTD_DEFAULTS = {
         'certcheckinterval': '240',
         'autoattachinterval': '1440',
-        'splay': '1'
+        'splay': '1',
+        'disable': '0'
         }
 
 LOGGING_DEFAULTS = {
