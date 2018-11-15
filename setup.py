@@ -304,6 +304,10 @@ setup_requires = []
 
 install_requires = [
         'six',
+        'iniparse',
+        'python-dateutil',
+        'ethtool',
+        'dbus-python',
     ]
 
 test_require = [

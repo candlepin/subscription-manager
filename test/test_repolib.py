@@ -34,14 +34,15 @@ from iniparse import ConfigParser
 from .stubs import StubProductCertificate, \
         StubProduct, StubEntitlementCertificate, StubContent, \
         StubProductDirectory, StubConsumerIdentity, StubEntitlementDirectory
-from subscription_manager.repolib import Repo, RepoActionInvoker, \
-        RepoUpdateActionCommand, TidyWriter, YumRepoFile, YumReleaseverSource, \
-        YumPluginManager
+from subscription_manager.repolib import RepoActionInvoker, \
+        RepoUpdateActionCommand, YumReleaseverSource, YumPluginManager
+from subscription_manager.repofile import Repo, TidyWriter, YumRepoFile
 from subscription_manager import injection as inj
 from rhsm.config import RhsmConfigParser
 from rhsmlib.services import config
 
 from subscription_manager import repolib
+from subscription_manager import repofile
 from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_TYPE
 
 
@@ -261,10 +262,13 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         self.assertEqual('blah', old_repo['gpgcheck'])
         self.assertEqual('some_key', old_repo['gpgkey'])
 
-    @patch("subscription_manager.repolib.YumRepoFile")
-    def test_update_when_new_repo(self, mock_file):
-        mock_file = mock_file.return_value
+    @patch("subscription_manager.repolib.get_repo_files")
+    def test_update_when_new_repo(self, mock_get_repo_files):
+        mock_file = MagicMock()
+        mock_file.CONTENT_TYPES = [None]
+        mock_file.fix_content = lambda x: x
         mock_file.section.return_value = None
+        mock_get_repo_files.return_value = [(mock_file, mock_file)]
 
         def stub_content():
             return [Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])]
@@ -277,13 +281,16 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         self.assertEqual('some_key', written_repo['gpgkey'])
         self.assertEqual(1, update_report.updates())
 
-    @patch("subscription_manager.repolib.YumRepoFile")
-    def test_update_when_repo_not_modified_on_mutable(self, mock_file):
+    @patch("subscription_manager.repolib.get_repo_files")
+    def test_update_when_repo_not_modified_on_mutable(self, mock_get_repo_files):
         self._inject_mock_invalid_consumer()
-        mock_file = mock_file.return_value
         modified_repo = Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
         server_repo = Repo('x', [('gpgcheck', 'original')])
-        mock_file.section = MagicMock(side_effect=[modified_repo, server_repo])
+        mock_file = MagicMock()
+        mock_file.CONTENT_TYPES = [None]
+        mock_file.fix_content = lambda x: x
+        mock_file.section.side_effect = [modified_repo, server_repo]
+        mock_get_repo_files.return_value = [(mock_file, mock_file)]
 
         def stub_content():
             return [Repo('x', [('gpgcheck', 'new'), ('gpgkey', 'new_key'), ('name', 'test')])]
@@ -300,13 +307,16 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         self.assertEqual('new', written_repo['gpgcheck'])
         self.assertEqual(None, written_repo['gpgkey'])
 
-    @patch("subscription_manager.repolib.YumRepoFile")
-    def test_update_when_repo_modified_on_mutable(self, mock_file):
+    @patch("subscription_manager.repolib.get_repo_files")
+    def test_update_when_repo_modified_on_mutable(self, mock_get_repo_files):
         self._inject_mock_invalid_consumer()
-        mock_file = mock_file.return_value
         modified_repo = Repo('x', [('gpgcheck', 'unoriginal'), ('gpgkey', 'some_key')])
         server_repo = Repo('x', [('gpgcheck', 'original')])
-        mock_file.section = MagicMock(side_effect=[modified_repo, server_repo])
+        mock_file = MagicMock()
+        mock_file.CONTENT_TYPES = [None]
+        mock_file.fix_content = lambda x: x
+        mock_file.section.side_effect = [modified_repo, server_repo]
+        mock_get_repo_files.return_value = [(mock_file, mock_file)]
 
         def stub_content():
             return [Repo('x', [('gpgcheck', 'new'), ('gpgkey', 'new_key'), ('name', 'test')])]
@@ -747,8 +757,8 @@ class YumReleaseverSourceIsSetTest(fixture.SubManFixture):
 
 class YumRepoFileTest(unittest.TestCase):
 
-    @patch("subscription_manager.repolib.YumRepoFile.create")
-    @patch("subscription_manager.repolib.TidyWriter")
+    @patch("subscription_manager.repofile.YumRepoFile.create")
+    @patch("subscription_manager.repofile.TidyWriter")
     def test_configparsers_equal(self, tidy_writer, stub_create):
         rf = YumRepoFile()
         other = RawConfigParser()
@@ -757,8 +767,8 @@ class YumRepoFileTest(unittest.TestCase):
             parser.set('test', 'key', 'val')
         self.assertTrue(rf._configparsers_equal(other))
 
-    @patch("subscription_manager.repolib.YumRepoFile.create")
-    @patch("subscription_manager.repolib.TidyWriter")
+    @patch("subscription_manager.repofile.YumRepoFile.create")
+    @patch("subscription_manager.repofile.TidyWriter")
     def test_configparsers_diff_sections(self, tidy_writer, stub_create):
         rf = YumRepoFile()
         rf.add_section('new_section')
@@ -768,8 +778,8 @@ class YumRepoFileTest(unittest.TestCase):
             parser.set('test', 'key', 'val')
         self.assertFalse(rf._configparsers_equal(other))
 
-    @patch("subscription_manager.repolib.YumRepoFile.create")
-    @patch("subscription_manager.repolib.TidyWriter")
+    @patch("subscription_manager.repofile.YumRepoFile.create")
+    @patch("subscription_manager.repofile.TidyWriter")
     def test_configparsers_diff_item_val(self, tidy_writer, stub_create):
         rf = YumRepoFile()
         other = RawConfigParser()
@@ -779,8 +789,8 @@ class YumRepoFileTest(unittest.TestCase):
         rf.set('test', 'key', 'val2')
         self.assertFalse(rf._configparsers_equal(other))
 
-    @patch("subscription_manager.repolib.YumRepoFile.create")
-    @patch("subscription_manager.repolib.TidyWriter")
+    @patch("subscription_manager.repofile.YumRepoFile.create")
+    @patch("subscription_manager.repofile.TidyWriter")
     def test_configparsers_diff_items(self, tidy_writer, stub_create):
         rf = YumRepoFile()
         other = RawConfigParser()
@@ -790,8 +800,8 @@ class YumRepoFileTest(unittest.TestCase):
         rf.set('test', 'somekey', 'val')
         self.assertFalse(rf._configparsers_equal(other))
 
-    @patch("subscription_manager.repolib.YumRepoFile.create")
-    @patch("subscription_manager.repolib.TidyWriter")
+    @patch("subscription_manager.repofile.YumRepoFile.create")
+    @patch("subscription_manager.repofile.TidyWriter")
     def test_configparsers_equal_int(self, tidy_writer, stub_create):
         rf = YumRepoFile()
         other = RawConfigParser()
@@ -851,37 +861,37 @@ manage_repos = 37
 
 
 class TestManageReposEnabled(fixture.SubManFixture):
-    @patch.object(repolib, 'conf', ConfigFromString(config_string=unset_config))
+    @patch.object(repofile, 'conf', ConfigFromString(config_string=unset_config))
     def test(self):
         # default stub config, no manage_repo defined, uses default
-        manage_repos_enabled = repolib.manage_repos_enabled()
+        manage_repos_enabled = repofile.manage_repos_enabled()
         self.assertEqual(manage_repos_enabled, True)
 
-    @patch.object(repolib, 'conf', ConfigFromString(config_string=unset_manage_repos_cfg_buf))
+    @patch.object(repofile, 'conf', ConfigFromString(config_string=unset_manage_repos_cfg_buf))
     def test_empty_manage_repos(self):
-        manage_repos_enabled = repolib.manage_repos_enabled()
+        manage_repos_enabled = repofile.manage_repos_enabled()
         self.assertEqual(manage_repos_enabled, True)
 
-    @patch.object(repolib, 'conf', ConfigFromString(config_string=manage_repos_zero_config))
+    @patch.object(repofile, 'conf', ConfigFromString(config_string=manage_repos_zero_config))
     def test_empty_manage_repos_zero(self):
-        manage_repos_enabled = repolib.manage_repos_enabled()
+        manage_repos_enabled = repofile.manage_repos_enabled()
         self.assertEqual(manage_repos_enabled, False)
 
-    @patch.object(repolib, 'config', ConfigFromString(config_string=manage_repos_bool_config))
+    @patch.object(repofile, 'config', ConfigFromString(config_string=manage_repos_bool_config))
     def test_empty_manage_repos_bool(self):
-        manage_repos_enabled = repolib.manage_repos_enabled()
+        manage_repos_enabled = repofile.manage_repos_enabled()
         # Should fail, and return default of 1
         self.assertEqual(manage_repos_enabled, True)
 
-    @patch.object(repolib, 'config', ConfigFromString(config_string=manage_repos_not_an_int))
+    @patch.object(repofile, 'config', ConfigFromString(config_string=manage_repos_not_an_int))
     def test_empty_manage_repos_not_an_int(self):
-        manage_repos_enabled = repolib.manage_repos_enabled()
+        manage_repos_enabled = repofile.manage_repos_enabled()
         # Should fail, and return default of 1
         self.assertEqual(manage_repos_enabled, True)
 
-    @patch.object(repolib, 'conf', ConfigFromString(config_string=manage_repos_int_37))
+    @patch.object(repofile, 'conf', ConfigFromString(config_string=manage_repos_int_37))
     def test_empty_manage_repos_int_37(self):
-        manage_repos_enabled = repolib.manage_repos_enabled()
+        manage_repos_enabled = repofile.manage_repos_enabled()
         # Should fail, and return default of 1
         self.assertEqual(manage_repos_enabled, True)
 
