@@ -30,7 +30,7 @@ class TestServicePlugin(TestCase):
         for repo in repos.sections():
             repo_info = dict(repos.items(repo))
             service = repo_info.get('service', None)
-            if service == 'subscription-manager':
+            if service == 'rhsm':
                 return True
         return False
 
