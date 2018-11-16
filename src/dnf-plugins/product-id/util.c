@@ -44,10 +44,18 @@ __attribute__ ((format (printf, 2, 3)));
 
 void r_log (const char *level, const char *message, ...) {
     gboolean use_stdout = FALSE;
+    gint ret;
     va_list argp;
-    FILE *log_file = fopen (LOGFILE, "a");
-    if (!log_file) {
-        // redirect message to stdout
+    FILE *log_file;
+    ret = g_mkdir_with_parents(RHSM_LOG_DIR, 0755);
+    if (ret == 0) {
+        log_file = fopen(LOGFILE, "a");
+        if (!log_file) {
+            // redirect message to stdout
+            log_file = stdout;
+            use_stdout = TRUE;
+        }
+    } else {
         log_file = stdout;
         use_stdout = TRUE;
     }
