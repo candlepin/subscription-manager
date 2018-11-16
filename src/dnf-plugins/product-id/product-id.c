@@ -113,7 +113,7 @@ int removeUnusedProductCerts(ProductDb *productDb) {
                     // then it is IMHO possible to remove this product certificate
                     else if (!hasProductId(productDb, product_id)) {
                         gchar *abs_file_name = g_strconcat(PRODUCT_CERT_DIR, file_name, NULL);
-                        debug("Removing product certificate: %s", abs_file_name);
+                        info("Removing product certificate: %s", abs_file_name);
                         int ret = g_remove(abs_file_name);
                         if (ret == -1) {
                             error("Unable to remove product certificate: %s", abs_file_name);
@@ -183,6 +183,12 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
     if (id == PLUGIN_HOOK_ID_CONTEXT_TRANSACTION) {
         // Get DNF context
         DnfContext *dnfContext = handle->initData;
+        // Directory with productdb has to exist or plugin has to be able to create it.
+        gint ret_val = g_mkdir_with_parents(PRODUCTDB_DIR, 0750);
+        if (ret_val != 0) {
+            error("Unable to create %s directory, %s", PRODUCTDB_DIR, strerror(errno));
+            return 1;
+        }
         // List of all repositories
         GPtrArray *repos = dnf_context_get_repos(dnfContext);
         // When there are no repositories, then we can't do anything
@@ -439,7 +445,7 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
             } else {
                 repoProductId->repo = repo;
                 repoProductId->productIdPath = lr_yum_repo_path(lrYumRepo, "productid");
-                info("Product id cert downloaded metadata from repo %s to %s",
+                debug("Product id cert downloaded metadata from repo %s to %s",
                      dnf_repo_get_id(repo),
                      repoProductId->productIdPath);
                 ret = 1;
@@ -484,22 +490,27 @@ int installProductId(RepoProductId *repoProductId, ProductDb *productDb) {
 
         int productIdFound = findProductId(pemOutput, outname);
         if (productIdFound) {
-            gchar *productId = g_strdup(outname->str);
-            g_string_prepend(outname, PRODUCT_CERT_DIR);
-            g_string_append(outname, ".pem");
-            // TODO switch to using GFile methods to remain consistent with using GLib stuff when possible
-            FILE *fileOutput = fopen(outname->str, "w+");
-            if (fileOutput != NULL) {
-                debug("Content of certificate written to: %s", outname->str);
-                fprintf(fileOutput, "%s", pemOutput->str);
-                fclose(fileOutput);
+            gint ret_val = g_mkdir_with_parents(PRODUCT_CERT_DIR, 0775);
+            if (ret_val == 0) {
+                gchar *productId = g_strdup(outname->str);
+                g_string_prepend(outname, PRODUCT_CERT_DIR);
+                g_string_append(outname, ".pem");
+                // TODO switch to using GFile methods to remain consistent with using GLib stuff when possible
+                FILE *fileOutput = fopen(outname->str, "w+");
+                if (fileOutput != NULL) {
+                    info("Product certificate installed to: %s", outname->str);
+                    fprintf(fileOutput, "%s", pemOutput->str);
+                    fclose(fileOutput);
 
-                addRepoId(productDb, productId, dnf_repo_get_id(repoProductId->repo));
-                ret = 1;
+                    addRepoId(productDb, productId, dnf_repo_get_id(repoProductId->repo));
+                    ret = 1;
+                } else {
+                    error("Unable write to file with certificate file :%s", outname->str);
+                }
+                g_free(productId);
             } else {
-                error("Unable write to file with certificate file :%s", outname->str);
+                error("Unable to create directory %s, %s", PRODUCT_CERT_DIR, strerror(errno));
             }
-            g_free(productId);
         }
 
         out:
