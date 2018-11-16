@@ -18,6 +18,7 @@ from __future__ import print_function, division, absolute_import
 import os
 
 from subscription_manager import injection as inj
+from subscription_manager.action_client import ProfileActionClient
 from subscription_manager.repolib import RepoActionInvoker
 from subscription_manager.entcertlib import EntCertActionInvoker
 from rhsmlib.facts.hwprobe import ClassicCheck
@@ -140,3 +141,15 @@ class SubscriptionManager(dnf.Plugin):
         finally:
             if msg:
                 logger.info(msg)
+
+    def transaction(self):
+        """
+        Call Package Profile
+        """
+        cfg = config.initConfig()
+        if '1' == cfg.get('rhsm', 'package_profile_on_trans'):
+            package_profile_client = ProfileActionClient()
+            package_profile_client.update()
+        else:
+            # do nothing
+            return
