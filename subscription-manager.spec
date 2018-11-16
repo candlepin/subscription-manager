@@ -353,7 +353,9 @@ Group: System Environment/Base
 %if (0%{?fedora} >= 29 || 0%{?rhel} >= 8)
 BuildRequires: cmake
 BuildRequires: gcc
+BuildRequires: json-c-devel
 BuildRequires: libdnf-devel >= 0.22.0
+Requires: json-c
 Requires: libdnf >= 0.22.0
 %endif
 # See BZ 1581410 - avoid a circular dependency
