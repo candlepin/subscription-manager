@@ -211,15 +211,14 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
         for (guint i = 0; i < enabledRepos->len; i++) {
             DnfRepo *repo = g_ptr_array_index(enabledRepos, i);
             LrResult *lrResult = dnf_repo_get_lr_result(repo);
-            LrYumRepoMd *repoMd;
+            LrYumRepoMd *repoMd = NULL;
             GError *tmp_err = NULL;
 
             debug("Enabled: %s", dnf_repo_get_id(repo));
             lr_result_getinfo(lrResult, &tmp_err, LRR_YUM_REPOMD, &repoMd);
             if (tmp_err) {
                 printError("Unable to get information about repository", tmp_err);
-            }
-            else {
+            } else if (repoMd != NULL) {
                 LrYumRepoMdRecord *repoMdRecord = lr_yum_repomd_get_record(repoMd, "productid");
                 if (repoMdRecord) {
                     debug("Repository %s has a productid", dnf_repo_get_id(repo));
@@ -239,6 +238,8 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
                         free(repoProductId);
                     }
                 }
+            } else {
+                error("Unable to get valid information about repository");
             }
         }
 
