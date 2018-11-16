@@ -18,6 +18,7 @@
 
 #include <glib.h>
 
+#define PRODUCTDB_DIR "/var/lib/rhsm/"
 #define PRODUCTDB_FILE "/var/lib/rhsm/productid.js"
 
 typedef struct {

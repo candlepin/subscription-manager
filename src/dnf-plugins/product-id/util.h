@@ -17,8 +17,14 @@
 
 #include <glib.h>
 
-#define LOGFILE "/var/log/rhsm/productid.log"
+#define RHSM_LOG_DIR "/var/log/rhsm/"
+#define LOGFILE RHSM_LOG_DIR "productid.log"
+
+#ifndef NDEBUG
 #define SHOW_DEBUG TRUE
+#else
+#define SHOW_DEBUG FALSE
+#endif
 
 #define info(msg, ...) r_log ("INFO", msg, ##__VA_ARGS__)
 #define warn(msg, ...) r_log ("WARN", msg, ##__VA_ARGS__)
