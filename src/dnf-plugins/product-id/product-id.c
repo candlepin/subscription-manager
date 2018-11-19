@@ -157,6 +157,17 @@ gchar *strHookId(PluginHookId id) {
     }
 }
 
+RepoProductId *initRepoProductId() {
+    RepoProductId *repoProductId = (RepoProductId*) malloc(sizeof(RepoProductId));
+    repoProductId->repo = NULL;
+    repoProductId->productIdPath = NULL;
+    return repoProductId;
+}
+
+void freeRepoProductId(RepoProductId *repoProductId) {
+    free(repoProductId);
+}
+
 /**
  * Callback function. This method is executed for every libdnf hook. This callback
  * is called several times during transaction, but we are interested only in one situation.
@@ -222,7 +233,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
                 LrYumRepoMdRecord *repoMdRecord = lr_yum_repomd_get_record(repoMd, "productid");
                 if (repoMdRecord) {
                     debug("Repository %s has a productid", dnf_repo_get_id(repo));
-                    RepoProductId *repoProductId = (RepoProductId*) malloc(sizeof(RepoProductId));
+                    RepoProductId *repoProductId = initRepoProductId();
                     // TODO: do not fetch productid certificate, when dnf context is set to cache-only mode
                     // Microdnf nor PackageKit do not support this feature ATM
                     gboolean cache_only = dnf_context_get_cache_only(dnfContext);
@@ -471,8 +482,21 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
     return ret;
 }
 
+/**
+ * This function tries to install productid certificate into system (typically to
+ * /etc/pki/product/<product_id>.pem
+ *
+ * @param repoProductId Pointer on struct holding pointer at repository and destincation path
+ * @param productDb Pointer at structure with information about installed product certs
+ *
+ * @return Return 1, when product certificate was installed to the system. Otherwise, return zero.
+ */
 int installProductId(RepoProductId *repoProductId, ProductDb *productDb) {
     int ret = 0;
+
+    if (repoProductId == NULL || productDb == NULL) {
+        return 0;
+    }
 
     const char *productIdPath = repoProductId->productIdPath;
     gzFile input = gzopen(productIdPath, "r");
@@ -517,12 +541,12 @@ int installProductId(RepoProductId *repoProductId, ProductDb *productDb) {
         out:
         g_string_free(outname, TRUE);
         g_string_free(pemOutput, TRUE);
+    } else {
+        debug("Unable to open compressed product certificate: %s", productIdPath);
     }
 
     if(input != NULL) {
         gzclose(input);
-    } else {
-        debug("Unable to open compressed product certificate");
     }
 
     return ret;
@@ -607,6 +631,7 @@ int findProductId(GString *certContent, GString *result) {
  * @return Return TRUE, when decompression was successful. Otherwise return FALSE.
  */
 int decompress(gzFile input, GString *output) {
+    // TODO: This method will be useless soon. See: https://bugzilla.redhat.com/show_bug.cgi?id=1640220
     int ret = TRUE;
     while (1) {
         int err;

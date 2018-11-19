@@ -194,6 +194,39 @@ void testFindProductIdInConsumerPEM(handleFixture *fixture, gconstpointer ignore
     g_string_free(result, TRUE);
 }
 
+typedef struct {
+    RepoProductId *repoProductId;
+    ProductDb *productDb;
+} productFixture;
+
+void setupProduct(productFixture *fixture, gconstpointer testData) {
+    (void)testData;
+
+    fixture->productDb = initProductDb();
+    fixture->repoProductId = initRepoProductId();
+}
+
+void teardownProduct(productFixture *fixture, gconstpointer testData) {
+    (void)testData;
+
+    freeProductDb(fixture->productDb);
+    freeRepoProductId(fixture->repoProductId);
+}
+
+void testProductNullPointers(productFixture *fixture, gconstpointer testData) {
+    (void)fixture;
+    (void)testData;
+    int ret = installProductId(NULL, NULL);
+    g_assert_cmpint(ret, ==, 0);
+}
+
+void testWrongPathToCompressedProductCert(productFixture *fixture, gconstpointer testData) {
+    (void)testData;
+    fixture->repoProductId->productIdPath = "/path/to/non-existing-compressed-cert.gz";
+    int ret = installProductId(fixture->repoProductId, fixture->productDb);
+    g_assert_cmpint(ret, ==, 0);
+}
+
 int main(int argc, char **argv) {
     g_test_init(&argc, &argv, NULL);
     g_test_add("/set2/test plugin handle created", handleFixture, NULL, setup, testHandleCreated, teardown);
@@ -204,5 +237,7 @@ int main(int argc, char **argv) {
     g_test_add("/set2/test find product ID", handleFixture, NULL, setup, testFindProductIdInCorrectPEM, teardown);
     g_test_add("/set2/test corrupted certificate", handleFixture, NULL, setup, testFindProductIdInCorruptedPEM, teardown);
     g_test_add("/set2/test consumer certificate", handleFixture, NULL, setup, testFindProductIdInConsumerPEM, teardown);
+    g_test_add("/set2/test installProductId null pointers", productFixture, NULL, setupProduct, testProductNullPointers, teardownProduct);
+    g_test_add("/set2/test invalid repoProductId", productFixture, NULL, setupProduct, testWrongPathToCompressedProductCert, teardownProduct);
     return g_test_run();
 }

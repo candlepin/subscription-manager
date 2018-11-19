@@ -64,6 +64,8 @@ typedef struct {
     const char *productIdPath;
 } RepoProductId;
 
+RepoProductId *initRepoProductId();
+void freeRepoProductId(RepoProductId *repoProductId);
 void printError(const char *msg, GError *err);
 void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos);
 void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds);
