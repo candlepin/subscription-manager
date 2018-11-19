@@ -2,6 +2,8 @@ CMAKE_MINIMUM_REQUIRED (VERSION 3.11.2)
 
 project(product-id C)
 
+include(GNUInstallDirs)
+
 # Warn user because CLion is upset by in source builds
 MACRO(MACRO_ENSURE_OUT_OF_SOURCE_BUILD MSG)
     STRING(COMPARE EQUAL "${CMAKE_SOURCE_DIR}"
@@ -69,7 +71,7 @@ target_link_libraries(product-id
     ${JSONC_LIBRARIES}
 )
 
-install(TARGETS product-id LIBRARY DESTINATION /usr/lib64/libdnf/plugins)
+install(TARGETS product-id LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/libdnf/plugins)
 
 enable_testing()
 
