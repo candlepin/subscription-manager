@@ -259,7 +259,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
         for (guint i = 0; i < activeRepoAndProductIds->len; i++) {
             RepoProductId *activeRepoProductId = g_ptr_array_index(activeRepoAndProductIds, i);
             debug("Handling active repo %s\n", dnf_repo_get_id(activeRepoProductId->repo));
-            installProductId(activeRepoProductId, productDb);
+            installProductId(activeRepoProductId, productDb, PRODUCT_CERT_DIR);
         }
 
         // Handle removals here
@@ -491,7 +491,7 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
  *
  * @return Return 1, when product certificate was installed to the system. Otherwise, return zero.
  */
-int installProductId(RepoProductId *repoProductId, ProductDb *productDb) {
+int installProductId(RepoProductId *repoProductId, ProductDb *productDb, const char *product_cert_dir) {
     int ret = 0;
 
     if (repoProductId == NULL || productDb == NULL) {
@@ -515,10 +515,10 @@ int installProductId(RepoProductId *repoProductId, ProductDb *productDb) {
 
         int productIdFound = findProductId(pemOutput, outname);
         if (productIdFound) {
-            gint ret_val = g_mkdir_with_parents(PRODUCT_CERT_DIR, 0775);
+            gint ret_val = g_mkdir_with_parents(product_cert_dir, 0775);
             if (ret_val == 0) {
                 gchar *productId = g_strdup(outname->str);
-                g_string_prepend(outname, PRODUCT_CERT_DIR);
+                g_string_prepend(outname, product_cert_dir);
                 g_string_append(outname, ".pem");
                 // TODO switch to using GFile methods to remain consistent with using GLib stuff when possible
                 FILE *fileOutput = fopen(outname->str, "w+");
@@ -534,7 +534,7 @@ int installProductId(RepoProductId *repoProductId, ProductDb *productDb) {
                 }
                 g_free(productId);
             } else {
-                error("Unable to create directory %s, %s", PRODUCT_CERT_DIR, strerror(errno));
+                error("Unable to create directory %s, %s", product_cert_dir, strerror(errno));
             }
         }
 

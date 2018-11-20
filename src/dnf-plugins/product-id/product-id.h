@@ -72,7 +72,7 @@ void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArra
 int decompress(gzFile input, GString *output) ;
 int findProductId(GString *certContent, GString *result);
 int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId);
-int installProductId(RepoProductId *repoProductId, ProductDb *productDb);
+int installProductId(RepoProductId *repoProductId, ProductDb *productDb, const char *product_cert_dir);
 void writeRepoMap(ProductDb *productDb) ;
 
 #endif //PRODUCT_ID_PRODUCT_ID_H

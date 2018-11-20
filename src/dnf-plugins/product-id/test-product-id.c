@@ -216,15 +216,34 @@ void teardownProduct(productFixture *fixture, gconstpointer testData) {
 void testProductNullPointers(productFixture *fixture, gconstpointer testData) {
     (void)fixture;
     (void)testData;
-    int ret = installProductId(NULL, NULL);
+    int ret = installProductId(NULL, NULL, "/tmp");
     g_assert_cmpint(ret, ==, 0);
 }
 
 void testWrongPathToCompressedProductCert(productFixture *fixture, gconstpointer testData) {
     (void)testData;
     fixture->repoProductId->productIdPath = "/path/to/non-existing-compressed-cert.gz";
-    int ret = installProductId(fixture->repoProductId, fixture->productDb);
+    int ret = installProductId(fixture->repoProductId, fixture->productDb, "/tmp");
     g_assert_cmpint(ret, ==, 0);
+}
+
+void testCorruptedCompressedProductCert(productFixture *fixture, gconstpointer testData) {
+    (void)testData;
+    fixture->repoProductId->productIdPath = "./test_data/corrupted_compressed_productid.pem.gz";
+    int ret = installProductId(fixture->repoProductId, fixture->productDb, "/tmp");
+    g_assert_cmpint(ret, ==, 0);
+}
+
+void testInstallingCompressedProductCert(productFixture *fixture, gconstpointer testData) {
+    (void)testData;
+    // Set path to correct productid certificate
+    fixture->repoProductId->productIdPath = "./test_data/59803427316a729fb1d67fd08e7d0c8ccd2a4a5377729b747b76345851bdba6c-productid.gz";
+    // Create dummy repository
+    DnfContext *dnfContext = dnf_context_new();
+    fixture->repoProductId->repo = dnf_repo_new(dnfContext);
+    int ret = installProductId(fixture->repoProductId, fixture->productDb, "./");
+    g_object_unref(dnfContext);
+    g_assert_cmpint(ret, ==, 1);
 }
 
 int main(int argc, char **argv) {
@@ -239,5 +258,7 @@ int main(int argc, char **argv) {
     g_test_add("/set2/test consumer certificate", handleFixture, NULL, setup, testFindProductIdInConsumerPEM, teardown);
     g_test_add("/set2/test installProductId null pointers", productFixture, NULL, setupProduct, testProductNullPointers, teardownProduct);
     g_test_add("/set2/test invalid repoProductId", productFixture, NULL, setupProduct, testWrongPathToCompressedProductCert, teardownProduct);
+    g_test_add("/set2/test corrupted compressed productid cert", productFixture, NULL, setupProduct, testCorruptedCompressedProductCert, teardownProduct);
+    g_test_add("/set2/test installing productid cert", productFixture, NULL, setupProduct, testInstallingCompressedProductCert, teardownProduct);
     return g_test_run();
 }
