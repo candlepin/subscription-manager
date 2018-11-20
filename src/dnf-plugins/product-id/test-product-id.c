@@ -242,6 +242,7 @@ void testInstallingCompressedProductCert(productFixture *fixture, gconstpointer 
     DnfContext *dnfContext = dnf_context_new();
     fixture->repoProductId->repo = dnf_repo_new(dnfContext);
     int ret = installProductId(fixture->repoProductId, fixture->productDb, "./");
+    g_object_unref(fixture->repoProductId->repo);
     g_object_unref(dnfContext);
     g_assert_cmpint(ret, ==, 1);
 }
