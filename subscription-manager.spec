@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1126,6 +1126,124 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Nov 20 2018 Christopher Snyder <csnyder@redhat.com> 1.23.8-2
+- 1650941: Fix value of Self-Support SLA in valid_fields.json
+  (csnyder@redhat.com)
+- Add product-id plugin compatible with libdnf (awood@redhat.com)
+- Fixed bug that caused crashes of PackageKit daemon. (jhnidek@redhat.com)
+- Small fixes of libdnf product-id plugin (jhnidek@redhat.com)
+- Disable rhsmcertd by config entry (wpoteat@redhat.com)
+- Typo fixes (khowell@redhat.com)
+- Add fixes from @kahowell (dellweg@atix.de)
+- Add dpkg-post-invoke hook deb_package_profile_upload (dellweg@atix.de)
+- Add apt-transport-katello (dellweg@atix.de)
+- Fall back to python package version (dellweg@atix.de)
+- Make AptRepoFile dependent on the existence of python-deb822
+  (dellweg@atix.de)
+- Add dependencies (dellweg@atix.de)
+- Multiplex server_value_repo_logic for all packet managers (dellweg@atix.de)
+- Factor out repofile.py from repolib.py (dellweg@atix.de)
+- Make apt, yum and zypper equal siblings in repolib (dellweg@atix.de)
+- Add AptRepoFile (dellweg@atix.de)
+- Remove zypper productid tests (for now) (khowell@redhat.com)
+- Fix service name in zypper tests (khowell@redhat.com)
+- Do not build libdnf plugin on RHEL 7 or Fedora 28. (awood@redhat.com)
+- Uniquify the module list (paji@redhat.com)
+- ENT-949: run the package profile reporting on the post_trans_hook for each
+  transaction (wpoteat@redhat.com)
+- Add module that can be invoked to force package profile upload.
+  (awood@redhat.com)
+- Polished libdnf product-id plugin according feedback from PR.
+  (jhnidek@redhat.com)
+- 1632394 Fix error caused by changes in pyanaconda API. ENT-906
+  (jhnidek@redhat.com)
+- Package product-id plugin (awood@redhat.com)
+- Remove macro forms of system executables (awood@redhat.com)
+- Change in-source build message to a warning. (awood@redhat.com)
+- Correct a few issues from code review. (awood@redhat.com)
+- Remove "hello world" plugin (awood@redhat.com)
+- Fixed almost all memory leaks from product-id plugin (jhnidek@redhat.com)
+- Make "Debug" default built type. (jhnidek@redhat.com)
+- Solve some warnings. (awood@redhat.com)
+- Added documentation about product-id plugin. (jhnidek@redhat.com)
+- Add docs. Deduplicate repo IDs. (awood@redhat.com)
+- Added some unit tests for reading product certificate. (jhnidek@redhat.com)
+- Get rid of remaining compile warnings. (jhnidek@redhat.com)
+- Incorporate productDB code. (awood@redhat.com)
+- Add option to make production ready code, added some more strict gcc options.
+  (jhnidek@redhat.com)
+- Added more unit tests and fixed one bug. (jhnidek@redhat.com)
+- Added some basic test for creating handle and hook. (jhnidek@redhat.com)
+- Add incomplete method to write database. (awood@redhat.com)
+- Added basic support for testing product-id.c (jhnidek@redhat.com)
+- Fixed some memory leaks from productdb and unit tests. (jhnidek@redhat.com)
+- Additional product db work (awood@redhat.com)
+- Fix memory leaks and logging messages. (jhnidek@redhat.com)
+- Fixed issue with list of installed packages and small changes
+  (jhnidek@redhat.com)
+- More productdb functions and tests. (awood@redhat.com)
+- Removing of unused product certs and productdb (jhnidek@redhat.com)
+- Code and tests for product-db. (awood@redhat.com)
+- Basic refactoring, add unit framework. (awood@redhat.com)
+- Fixed issue with variable substitution. (jhnidek@redhat.com)
+- Removed more memory leaks and improved printError(). (jhnidek@redhat.com)
+- Write the map of product ID to repos into JSON. (awood@redhat.com)
+- Added support for JSON-C into CMakeLists.txt. (jhnidek@redhat.com)
+- Fixed several memory leaks using Valgrind (jhnidek@redhat.com)
+- Rename method to denote it actually installs a cert. (awood@redhat.com)
+- Move hook method up to be with its friends. (awood@redhat.com)
+- Only install product certs from active repos. (awood@redhat.com)
+- Switch to CMake for product-id plugin by removing Makefile.
+  (awood@redhat.com)
+- Make reading of product certificate more robust. (jhnidek@redhat.com)
+- Loging of productid plugin and put decompressed cert to /etc/pki/product
+  (jhnidek@redhat.com)
+- Figure out what file name to use for the product cert. (awood@redhat.com)
+- Link product-id.so with zlib, libcrypto and libssl libraries.
+  (jhnidek@redhat.com)
+- Gunzip the product certificate. (awood@redhat.com)
+- Find active packages (awood@redhat.com)
+- Faster method of fetching active repos. (jhnidek@redhat.com)
+- Look for active packages (awood@redhat.com)
+- Fetch productid file. (awood@redhat.com)
+- Ignore cmake build directories (awood@redhat.com)
+- Rename using hyphen (awood@redhat.com)
+- Add CMake file (awood@redhat.com)
+- Makefile and trivial version of product id plugin (awood@redhat.com)
+- Add note about using a local build. (awood@redhat.com)
+- Added debug printing to log file (testing of pkcon). (jhnidek@redhat.com)
+- Added more notes to README.md. (jhnidek@redhat.com)
+- Added README.md; fixed bug in plugin and added some \n to printf.
+  (jhnidek@redhat.com)
+- Added initial test/example libdnf plugin (crog@redhat.com)
+- Clean up temp files after unit tests. (awood@redhat.com)
+- Add an environment variable to disable package profile reporting
+  (awood@redhat.com)
+- 1645205: Do not update ent certs inside containers (csnyder@redhat.com)
+- 1642271: Do not set a None lang (csnyder@redhat.com)
+- Detect sles11 via /etc/SuSE-release (khowell@redhat.com)
+- 1633304: Disable zypper product-id plugin. (awood@redhat.com)
+- Fedora documentation guidelines favor global over define. (awood@redhat.com)
+- Show installed profiles only for enabled modules (paji@redhat.com)
+- 1631339: Fix os.errno issue (rob@sandersmail.eu)
+- Add a missing comma in test_cache (nmoumoul@redhat.com)
+- Add module enabled and disabled information (paji@redhat.com)
+- 1636381: Fix up our detection of missing org for service-level list
+  (csnyder@redhat.com)
+- 1616403: Better handling of missing locale use (wpoteat@redhat.com)
+- 1636381: Handle case of nonexistant org (nmoumoul@redhat.com)
+- 1633380: Add syspurpose compliance status cache - Altered the syspurpose
+  compliance status connection call to use the
+  /consumers/{uuid}/purpose_compliance API instead of fetching the consumer
+  object and reading the syspurpose compliance field off of it. - Added new
+  syspurpose compliance status cache saved in
+  /var/lib/rhsm/cache/syspurpose_compliance_status.json similar to the
+  entitlement status cache. - When the server is unreachable, we don't
+  traceback, but rather use the new cache value instead. (nmoumoul@redhat.com)
+- 1639625: Tolerate server missing syspurpose fields (khowell@redhat.com)
+- 1639086: Fix vendor comparison (hyu@redhat.com)
+- Includes the installed module profiles (paji@redhat.com)
+
 * Mon Oct 15 2018 Christopher Snyder <csnyder@redhat.com> 1.23.8-1
 - 1637183: Replace redhat-uep.pem properly (khowell@redhat.com)
 - 1623390: Fix unregistered messaging in syspurpose (khowell@redhat.com)
