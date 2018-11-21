@@ -36,7 +36,7 @@ endif ()
 if (CMAKE_COMPILER_IS_GNUCC)
     set (CMAKE_C_FLAGS "-Wall -fPIC -Wextra -pedantic -Wno-long-long")
     if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-        set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ggdb -O0")
+        set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ggdb -O0 --coverage")
     elseif( CMAKE_BUILD_TYPE STREQUAL "Release" )
         set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DNDEBUG -O3 -fno-strict-aliasing")
     endif ()
@@ -77,7 +77,9 @@ target_link_libraries(product-id
     ${JSONC_LIBRARIES}
 )
 
-install(TARGETS product-id LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/libdnf/plugins)
+# We have to use hardcoded directory /usr/lib64/libdnf/plugins, because
+# libdnf search only for this directory
+install(TARGETS product-id LIBRARY DESTINATION /usr/lib64/libdnf/plugins)
 
 enable_testing()
 

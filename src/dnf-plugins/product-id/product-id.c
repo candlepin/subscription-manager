@@ -312,21 +312,10 @@ void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos) {
 }
 
 /**
- * Find the list of repos that provide packages that are actually installed.
- * @param repos all available repos
- * @param activeRepoAndProductIds the list of repos providing active
+ * This function tries to get array of installed packages
+ * @return New array of installed packages
  */
-void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds) {
-    DnfSack *dnfSack = dnf_context_get_sack(context);
-
-    // Create special sack object only for quering current rpmdb to get fresh list
-    // of installed packages. Quering dnfSack would not include just installed RPM
-    // package(s) or it would still include just removed package(s).
-    DnfSack *rpmDbSack = dnf_sack_new();
-    if(rpmDbSack == NULL) {
-        error("Unable to create new sack object for quering rpmdb");
-        return;
-    }
+GPtrArray *getInstalledPackages(DnfSack *rpmDbSack) {
 
     GError *tmp_err = NULL;
     gboolean ret;
@@ -346,42 +335,83 @@ void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArra
     GPtrArray *installedPackages = hy_query_run(query);
     hy_query_free(query);
 
-    for (guint i = 0; i < repoAndProductIds->len; i++) {
-        RepoProductId *repoProductId = g_ptr_array_index(repoAndProductIds, i);
-        DnfRepo *repo = repoProductId->repo;
-        HyQuery availQuery = hy_query_create_flags(dnfSack, 0);
-        hy_query_filter(availQuery, HY_PKG_REPONAME, HY_EQ, dnf_repo_get_id(repo));
-        GPtrArray *availPackageList = hy_query_run(availQuery);
-        hy_query_free(availQuery);
+    return installedPackages;
+}
 
-        // NB: Another way to do this would be with a bloom filter.  A bloom filter can give a very quick,
-        // accurate answer to the question "Is this item not in this set of things?" if the result is
-        // negative.  A positive result is probabilistic and requires a second full scan of the set to get the
-        // ultimate answer.  The bloom filter approach would eliminate the need for the O(n^2) nested for-loop
-        // solution we have.
+/**
+ * Get list of available package for given repository
+ *
+ * @param dnfSack pointer at dnf sack
+ * @param repo poiner at dnf repository
+ * @return array of available packages in given repository
+ */
+GPtrArray *getAvailPackageList(DnfSack *dnfSack, DnfRepo *repo) {
+    HyQuery availQuery = hy_query_create_flags(dnfSack, 0);
+    hy_query_filter(availQuery, HY_PKG_REPONAME, HY_EQ, dnf_repo_get_id(repo));
+    GPtrArray *availPackageList = hy_query_run(availQuery);
+    hy_query_free(availQuery);
+    return availPackageList;
+}
 
-        // Go through all available packages from repository
-        for (guint j = 0; j < availPackageList->len; j++) {
-            DnfPackage *pkg = g_ptr_array_index(availPackageList, j);
-            gboolean package_found = FALSE;
+/**
+ * Try to find at least one installed package in the list of available packages.
+ *
+ * @param installedPackages pointer at array of installed packages
+ * @param availPackageList pointer at array of available packages
+ * @return Return TRUE, when at least one installed package is included in the list of available packages.
+ */
+gboolean isAvailPackageInInstalledPackages(GPtrArray *installedPackages, GPtrArray *availPackageList) {
+    // NB: Another way to do this would be with a bloom filter. A bloom filter can give a very quick,
+    // accurate answer to the question "Is this item not in this set of things?" if the result is
+    // negative. A positive result is probabilistic and requires a second full scan of the set to get the
+    // ultimate answer. The bloom filter approach would eliminate the need for the O(n^2) nested for-loop
+    // solution we have.
 
-            // Try to find if this available package is in the list of installed packages
-            for(guint k = 0; k < installedPackages->len; k++) {
-                DnfPackage *instPkg = g_ptr_array_index(installedPackages, k);
-                if(g_strcmp0(dnf_package_get_nevra(pkg), dnf_package_get_nevra(instPkg)) == 0) {
-                    debug("Repo \"%s\" marked active due to installed package %s",
-                           dnf_repo_get_id(repo),
-                           dnf_package_get_nevra(pkg));
-                    g_ptr_array_add(activeRepoAndProductIds, repoProductId);
-                    package_found = TRUE;
-                    break;
-                }
-            }
+    // Go through all available packages from repository
+    for (guint j = 0; j < availPackageList->len; j++) {
+        DnfPackage *pkg = g_ptr_array_index(availPackageList, j);
 
-            if(package_found == TRUE) {
-                break;
+        // Try to find if this available package is in the list of installed packages
+        for(guint k = 0; k < installedPackages->len; k++) {
+            DnfPackage *instPkg = g_ptr_array_index(installedPackages, k);
+            if(g_strcmp0(dnf_package_get_nevra(pkg), dnf_package_get_nevra(instPkg)) == 0) {
+                return TRUE;
             }
         }
+    }
+
+    return FALSE;
+}
+
+/**
+ * Find the list of repos that provide packages that are actually installed.
+ * @param repos all available repos
+ * @param activeRepoAndProductIds the list of repos providing active
+ */
+void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds) {
+    DnfSack *dnfSack = dnf_context_get_sack(context);
+
+    // Create special sack object only for quering current rpmdb to get fresh list
+    // of installed packages. Quering dnfSack would not include just installed RPM
+    // package(s) or it would still include just removed package(s).
+    DnfSack *rpmDbSack = dnf_sack_new();
+    if(rpmDbSack == NULL) {
+        error("Unable to create new sack object for quering rpmdb");
+        return;
+    }
+
+    GPtrArray *installedPackages = getInstalledPackages(rpmDbSack);
+
+    for (guint i = 0; i < repoAndProductIds->len; i++) {
+        RepoProductId *repoProductId = g_ptr_array_index(repoAndProductIds, i);
+        GPtrArray *availPackageList = getAvailPackageList(dnfSack, repoProductId->repo);
+
+        gboolean ret = isAvailPackageInInstalledPackages(installedPackages, availPackageList);
+        if (ret == TRUE) {
+            debug("Repo \"%s\" marked active", dnf_repo_get_id(repoProductId->repo));
+            g_ptr_array_add(activeRepoAndProductIds, repoProductId);
+        }
+
         g_ptr_array_unref(availPackageList);
     }
 
@@ -404,12 +434,22 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
     lr_handle_getinfo(lrHandle, &tmp_err, LRI_DESTDIR, &destdir);
     if (tmp_err) {
         printError("Unable to get information about destination folder", tmp_err);
+    } else {
+        if (destdir) {
+            debug("Destination folder: %s", destdir);
+        } else {
+            error("Destination folder not set");
+        }
     }
 
     char **urls = NULL;
     lr_handle_getinfo(lrHandle, &tmp_err, LRI_URLS, &urls);
     if (tmp_err) {
         printError("Unable to get information about URLs", tmp_err);
+    } else {
+        if (!urls) {
+            error("No repository URL set");
+        }
     }
 
     // Getting information about variable substitution
@@ -417,6 +457,17 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
     lr_handle_getinfo(lrHandle, &tmp_err, LRI_VARSUB, &varSubst);
     if (tmp_err) {
         printError("Unable to get variable substitution for URL", tmp_err);
+    } else {
+        if (varSubst) {
+            for (LrUrlVars *elem = varSubst; elem; elem = g_slist_next(elem)) {
+                LrVar *var_val = elem->data;
+                if (var_val) {
+                    debug("URL substitution: %s = %s", var_val->var, var_val->val);
+                }
+            }
+        } else {
+            debug("No URL substitution set");
+        }
     }
 
     // It is necessary to create copy of list of URL variables to avoid memory leaks
