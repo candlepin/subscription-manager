@@ -68,6 +68,8 @@ RepoProductId *initRepoProductId();
 void freeRepoProductId(RepoProductId *repoProductId);
 void printError(const char *msg, GError *err);
 void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos);
+GPtrArray *getAvailPackageList(DnfSack *dnfSack, DnfRepo *repo);
+GPtrArray *getInstalledPackages(DnfSack *rpmDbSack);
 void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds);
 int decompress(gzFile input, GString *output) ;
 int findProductId(GString *certContent, GString *result);

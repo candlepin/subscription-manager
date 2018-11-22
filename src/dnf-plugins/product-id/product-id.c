@@ -316,17 +316,22 @@ void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos) {
  * @return New array of installed packages
  */
 GPtrArray *getInstalledPackages(DnfSack *rpmDbSack) {
+    if(rpmDbSack == NULL) {
+        return NULL;
+    }
 
     GError *tmp_err = NULL;
     gboolean ret;
     ret = dnf_sack_setup(rpmDbSack, 0, &tmp_err);
     if (ret == FALSE) {
         printError("Unable to setup new sack object", tmp_err);
+        return NULL;
     }
 
     ret = dnf_sack_load_system_repo(rpmDbSack, NULL, 0, &tmp_err);
     if (ret == FALSE) {
         printError("Unable to load system repo to sack object", tmp_err);
+        return NULL;
     }
 
     // Get list of installed packages
@@ -346,6 +351,9 @@ GPtrArray *getInstalledPackages(DnfSack *rpmDbSack) {
  * @return array of available packages in given repository
  */
 GPtrArray *getAvailPackageList(DnfSack *dnfSack, DnfRepo *repo) {
+    if (dnfSack == NULL || repo == NULL) {
+        return NULL;
+    }
     HyQuery availQuery = hy_query_create_flags(dnfSack, 0);
     hy_query_filter(availQuery, HY_PKG_REPONAME, HY_EQ, dnf_repo_get_id(repo));
     GPtrArray *availPackageList = hy_query_run(availQuery);
@@ -361,6 +369,10 @@ GPtrArray *getAvailPackageList(DnfSack *dnfSack, DnfRepo *repo) {
  * @return Return TRUE, when at least one installed package is included in the list of available packages.
  */
 gboolean isAvailPackageInInstalledPackages(GPtrArray *installedPackages, GPtrArray *availPackageList) {
+    if (installedPackages == NULL || availPackageList == NULL) {
+        return FALSE;
+    }
+
     // NB: Another way to do this would be with a bloom filter. A bloom filter can give a very quick,
     // accurate answer to the question "Is this item not in this set of things?" if the result is
     // negative. A positive result is probabilistic and requires a second full scan of the set to get the
@@ -390,6 +402,11 @@ gboolean isAvailPackageInInstalledPackages(GPtrArray *installedPackages, GPtrArr
  */
 void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds) {
     DnfSack *dnfSack = dnf_context_get_sack(context);
+
+    if(dnfSack == NULL) {
+        error("Unable to get dnf sack from dnf context");
+        return;
+    }
 
     // Create special sack object only for quering current rpmdb to get fresh list
     // of installed packages. Quering dnfSack would not include just installed RPM

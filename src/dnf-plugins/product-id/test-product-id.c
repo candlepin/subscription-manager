@@ -323,8 +323,10 @@ void setupActiveRepos(activeReposFixture *fixture, gconstpointer testData) {
     fixture->repoAndProductIds = g_ptr_array_sized_new(max_size);
     fixture->repoProductId1 = initRepoProductId();
     fixture->repoProductId1->repo = dnf_repo_new(fixture->dnfContext);
+    dnf_repo_set_enabled(fixture->repoProductId1->repo, TRUE);
     fixture->repoProductId2 = initRepoProductId();
     fixture->repoProductId2->repo = dnf_repo_new(fixture->dnfContext);
+    dnf_repo_set_enabled(fixture->repoProductId2->repo, TRUE);
     fixture->repoProductId3 = initRepoProductId();
     fixture->repoProductId3->repo = dnf_repo_new(fixture->dnfContext);
     fixture->activeRepoAndProductIds = g_ptr_array_sized_new(max_size);
@@ -346,7 +348,31 @@ void teardownActiveRepos(activeReposFixture *fixture, gconstpointer testData) {
 void testGetActiveRepos(activeReposFixture *fixture, gconstpointer testData) {
     (void)testData;
     getActive(fixture->dnfContext, fixture->repoAndProductIds, fixture->activeRepoAndProductIds);
-    printf("Number of active repos: %d\n", fixture->activeRepoAndProductIds->len);
+    // TODO: improve this unit test to get at least one active repository
+    g_assert_cmpint(fixture->activeRepoAndProductIds->len, ==, 0);
+}
+
+typedef struct {
+    DnfSack *rpmDbSack;
+} installedPackageFixture;
+
+void setupInstalledPackages(installedPackageFixture *fixture, gconstpointer testData) {
+    (void)testData;
+    fixture->rpmDbSack = dnf_sack_new();
+}
+
+void teardownInstalledPackages(installedPackageFixture *fixture, gconstpointer testData) {
+    (void)testData;
+    g_object_unref(fixture->rpmDbSack);
+}
+
+void testInstalledPackages(installedPackageFixture *fixture, gconstpointer testData) {
+    (void)testData;
+    // Note: it is probably not possible to mock functions used in getInstalledPackages
+    // for quering. Thus this method return list of packages installed in current system
+    GPtrArray *installedPackages = getInstalledPackages(fixture->rpmDbSack);
+    // We expect that the length of the list will be bigger than zero :-)
+    g_assert_cmpint(installedPackages->len, >, 0);
 }
 
 int main(int argc, char **argv) {
@@ -366,5 +392,6 @@ int main(int argc, char **argv) {
     g_test_add("/set2/test fetching of product-id cert", productFixture, NULL, setupProduct, testFetchingProductId, teardownProduct);
     g_test_add("/set2/test getting enabled repos", enabledReposFixture, NULL, setupEnabledRepos, testGetEnabledRepos, teardownEnabledRepos);
     g_test_add("/set2/test getting active repos", activeReposFixture, NULL, setupActiveRepos, testGetActiveRepos, teardownActiveRepos);
+    g_test_add("/set2/test installed packages", installedPackageFixture, NULL, setupInstalledPackages, testInstalledPackages, teardownInstalledPackages);
     return g_test_run();
 }
