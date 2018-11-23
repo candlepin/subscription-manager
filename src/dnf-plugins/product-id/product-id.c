@@ -43,7 +43,7 @@ const PluginInfo *pluginGetInfo() {
  * @param initData
  * @return
  */
-PluginHandle *pluginInitHandle(int version, PluginMode mode, void *initData) {
+PluginHandle *pluginInitHandle(int version, PluginMode mode, DnfPluginInitData *initData) {
     debug("%s initializing handle!", pinfo.name);
 
     if (version != SUPPORTED_LIBDNF_PLUGIN_API_VERSION) {
@@ -61,7 +61,7 @@ PluginHandle *pluginInitHandle(int version, PluginMode mode, void *initData) {
     if (handle) {
         handle->version = version;
         handle->mode = mode;
-        handle->initData = initData;
+        handle->context = pluginGetContext(initData);
     }
 
     return handle;
@@ -178,9 +178,8 @@ void freeRepoProductId(RepoProductId *repoProductId) {
  * @param error
  * @return
  */
-int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHookError *error) {
+int pluginHook(PluginHandle *handle, PluginHookId id, DnfPluginHookData *hookData, DnfPluginError *error) {
     // We do not need this for anything
-    (void)hookData;
     (void)error;
 
     if (!handle) {
@@ -193,7 +192,12 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
 
     if (id == PLUGIN_HOOK_ID_CONTEXT_TRANSACTION) {
         // Get DNF context
-        DnfContext *dnfContext = handle->initData;
+        DnfContext *dnfContext = handle->context;
+        if (dnfContext == NULL) {
+            error("Unable to get get dnf context");
+            return 1;
+        }
+
         // Directory with productdb has to exist or plugin has to be able to create it.
         gint ret_val = g_mkdir_with_parents(PRODUCTDB_DIR, 0750);
         if (ret_val != 0) {
@@ -254,7 +258,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
             }
         }
 
-        getActive(dnfContext, repoAndProductIds, activeRepoAndProductIds);
+        getActive(hookData, repoAndProductIds, activeRepoAndProductIds);
 
         for (guint i = 0; i < activeRepoAndProductIds->len; i++) {
             RepoProductId *activeRepoProductId = g_ptr_array_index(activeRepoAndProductIds, i);
@@ -400,10 +404,19 @@ gboolean isAvailPackageInInstalledPackages(GPtrArray *installedPackages, GPtrArr
  * @param repos all available repos
  * @param activeRepoAndProductIds the list of repos providing active
  */
-void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds) {
-    DnfSack *dnfSack = dnf_context_get_sack(context);
+void getActive(DnfPluginHookData *hookData, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds) {
+    if (hookData == NULL) {
+        return;
+    }
 
-    if(dnfSack == NULL) {
+    HyGoal goal = hookContextTransactionGetGoal(hookData);
+    if (goal == NULL) {
+        error("Unable to get transaction goal");
+        return;
+    }
+
+    DnfSack *dnfSack = hy_goal_get_sack(goal);
+    if (dnfSack == NULL) {
         error("Unable to get dnf sack from dnf context");
         return;
     }

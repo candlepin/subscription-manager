@@ -308,6 +308,7 @@ void testGetEnabledRepos(enabledReposFixture *fixture, gconstpointer testData) {
 }
 
 typedef struct {
+    DnfPluginHookData *hookData;
     DnfContext *dnfContext;
     GPtrArray *repoAndProductIds;
     GPtrArray *activeRepoAndProductIds;
@@ -318,6 +319,7 @@ typedef struct {
 
 void setupActiveRepos(activeReposFixture *fixture, gconstpointer testData) {
     (void)testData;
+    fixture->hookData = NULL;
     fixture->dnfContext = dnf_context_new();
     int max_size = 3;
     fixture->repoAndProductIds = g_ptr_array_sized_new(max_size);
@@ -347,7 +349,7 @@ void teardownActiveRepos(activeReposFixture *fixture, gconstpointer testData) {
 
 void testGetActiveRepos(activeReposFixture *fixture, gconstpointer testData) {
     (void)testData;
-    getActive(fixture->dnfContext, fixture->repoAndProductIds, fixture->activeRepoAndProductIds);
+    getActive(fixture->hookData, fixture->repoAndProductIds, fixture->activeRepoAndProductIds);
     // TODO: improve this unit test to get at least one active repository
     g_assert_cmpint(fixture->activeRepoAndProductIds->len, ==, 0);
 }
