@@ -77,9 +77,10 @@ target_link_libraries(product-id
     ${JSONC_LIBRARIES}
 )
 
-# We have to use hardcoded directory /usr/lib64/libdnf/plugins, because
-# libdnf search only for this directory
-install(TARGETS product-id LIBRARY DESTINATION /usr/lib64/libdnf/plugins)
+# Note: libdnf use "hardcoded" directory /usr/lib64/libdnf/plugins for searching
+# libdnf plugins. This directory cannot be changed by any configuration file ATM.
+# It can be changed only during building of libdnf using CMAKE_INSTALL_FULL_LIBDIR
+install(TARGETS product-id LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/libdnf/plugins)
 
 enable_testing()
 
