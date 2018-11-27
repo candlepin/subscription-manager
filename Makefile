@@ -309,6 +309,7 @@ install-via-setup: install-subpackages-via-setup
 	if [[ "$(INCLUDE_SYSPURPOSE)" = "1" ]]; then \
 		mv $(DESTDIR)/$(PREFIX)/bin/syspurpose $(DESTDIR)/$(PREFIX)/sbin/; \
 	fi;
+	find $(DESTDIR)/$(PYTHON_SITELIB) -name requires.txt -exec sed -i '/dbus-python/d' {} \;
 
 
 .PHONY: install-subpackages-via-setup
