@@ -22,6 +22,7 @@ Utility methods for the syspurpose command
 import io
 import json
 import os
+import errno
 import sys
 import six
 from syspurpose.i18n import ugettext as _
@@ -50,10 +51,10 @@ def create_dir(path):
     try:
         os.makedirs(path, mode=0o755)
     except OSError as e:
-        if e.errno == os.errno.EEXIST:
+        if e.errno == errno.EEXIST:
             # If the directory exists no changes necessary
             return False
-        if e.errno == os.errno.EACCES:
+        if e.errno == errno.EACCES:
             system_exit(os.EX_NOPERM,
                         _('Cannot create directory {}\nAre you root?').format(path))
     return True
@@ -72,10 +73,10 @@ def create_file(path, contents):
             f.flush()
 
     except OSError as e:
-        if e.errno == os.errno.EEXIST:
+        if e.errno == errno.EEXIST:
             # If the file exists no changes necessary
             return False
-        if e.errno == os.errno.EACCES:
+        if e.errno == errno.EACCES:
             system_exit(os.EX_NOPERM, _("Cannot create file {}\nAre you root?").format(path))
         else:
             raise
