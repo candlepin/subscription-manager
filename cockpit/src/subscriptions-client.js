@@ -190,6 +190,12 @@ client.registerSystem = subscriptionDetails => {
         handler: dbus_str(RHSM_DEFAULTS.prefix),
     };
 
+    if (subscriptionDetails.activation_keys && !subscriptionDetails.org) {
+        var error = new Error("'Organization' is required when using activation keys...");
+        dfd.reject(error);
+        return dfd.promise();
+    }
+
     if (subscriptionDetails.url !== 'default') {
         /*  parse url into host, port, handler; sorry about the ugly regex */
         const pattern = new RegExp(
