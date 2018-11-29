@@ -174,7 +174,13 @@ Requires:  virt-what
 Requires:  %{rhsm_package_name} = %{version}
 Requires:  %{py_package_prefix}-six
 Requires:  %{py_package_prefix}-dateutil
+
+# rhel 8 has different naming for setuptools going forward
+%if (0%{?rhel} && 0%{?rhel} >= 8)
+Requires:  platform-python-setuptools
+%else
 Requires:  %{py_package_prefix}-setuptools
+%endif
 
 %if %{with python3}
 Requires: python3-dbus
