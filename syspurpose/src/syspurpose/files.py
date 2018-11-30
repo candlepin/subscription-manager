@@ -21,6 +21,7 @@ This module contains utilities for manipulating files pertaining to system syspu
 
 import json
 import os
+import errno
 import io
 from syspurpose.utils import system_exit, create_dir, create_file, make_utf8, write_to_file_utf8
 from syspurpose.i18n import ugettext as _
@@ -58,14 +59,14 @@ class SyspurposeStore(object):
 
             return False
         except OSError as e:
-            if e.errno == os.errno.EACCES and not self.raise_on_error:
+            if e.errno == errno.EACCES and not self.raise_on_error:
                 system_exit(os.EX_NOPERM,
                     _('Cannot read syspurpose file {}\nAre you root?').format(self.path))
 
             if self.raise_on_error:
                 raise e
         except IOError as ioerr:
-            if ioerr.errno == os.errno.ENOENT:
+            if ioerr.errno == errno.ENOENT:
                 return False
             if self.raise_on_error:
                 raise ioerr

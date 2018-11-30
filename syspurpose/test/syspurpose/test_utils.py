@@ -20,6 +20,7 @@ from __future__ import print_function, division, absolute_import
 from .base import SyspurposeTestBase
 import io
 import os
+import errno
 import json
 import mock
 
@@ -85,7 +86,7 @@ class UtilsTests(SyspurposeTestBase):
         # And now when the file appears to exist
         with mock.patch('syspurpose.utils.io.open') as mock_open:
             error_to_raise = OSError()
-            error_to_raise.errno = os.errno.EEXIST
+            error_to_raise.errno = errno.EEXIST
             mock_open.side_effect = error_to_raise
 
             res = self.assertRaisesNothing(utils.create_file, to_create, test_data)
@@ -96,7 +97,7 @@ class UtilsTests(SyspurposeTestBase):
         # And now with an unexpected OSError
         with mock.patch('syspurpose.utils.io.open') as mock_open:
             error_to_raise = OSError()
-            error_to_raise.errno = os.errno.E2BIG  # Anything aside from the ones expected
+            error_to_raise.errno = errno.E2BIG  # Anything aside from the ones expected
             mock_open.side_effect = error_to_raise
 
             self.assertRaises(OSError, utils.create_file, to_create, test_data)
