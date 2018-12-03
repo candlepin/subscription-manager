@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1132,6 +1132,18 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Dec 03 2018 Christopher Snyder <csnyder@redhat.com> 1.23.8-3
+- 1650323: dnf subcommand for profile uploads; ENT-984 (jhnidek@redhat.com)
+- 1599801: fix Python2 and Python3 incompatibility; ENT-776
+  (jhnidek@redhat.com)
+- 1649125: setuptools naming change (wpoteat@redhat.com)
+- 1618498: cockpit will notify activation keys require org - When trying to
+  register with activation keys in cockpit, now the proper message   will be
+  displayed to the user when he doesn't also provide an organisation.
+  (nmoumoul@redhat.com)
+- 1651669: Remove dbus-python from egg requirements (khowell@redhat.com)
+- Fix several issues with os.errno (jhnidek@redhat.com)
+
 * Tue Nov 20 2018 Christopher Snyder <csnyder@redhat.com> 1.23.8-2
 - 1650941: Fix value of Self-Support SLA in valid_fields.json
   (csnyder@redhat.com)
