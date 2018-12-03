@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1132,6 +1132,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Dec 03 2018 Christopher Snyder <csnyder@redhat.com> 1.23.8-4
+- Fix issue in Korean Translations (csnyder@redhat.com)
+
 * Mon Dec 03 2018 Christopher Snyder <csnyder@redhat.com> 1.23.8-3
 - 1650323: dnf subcommand for profile uploads; ENT-984 (jhnidek@redhat.com)
 - 1599801: fix Python2 and Python3 incompatibility; ENT-776
