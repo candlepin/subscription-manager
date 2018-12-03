@@ -614,8 +614,12 @@ class BaseRestLib(object):
                                         safe_int(self.proxy_port),
                                         err))
             raise
-        except socket.error as err:
-            if str(httplib.PROXY_AUTHENTICATION_REQUIRED) in str(err):
+        except (socket.error, OSError) as err:
+            if six.PY2:
+                code = httplib.PROXY_AUTHENTICATION_REQUIRED
+            else:
+                code = httplib.PROXY_AUTHENTICATION_REQUIRED.value
+            if str(code) in str(err):
                 raise ProxyException(err)
             raise
         response = conn.getresponse()
