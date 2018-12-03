@@ -1,5 +1,6 @@
 # ljanda <ljanda@redhat.com>, 2017. #zanata
 # John Sefler <jsefler@redhat.com>, 2018. #zanata
+# ljanda <ljanda@redhat.com>, 2018. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -8,8 +9,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2018-08-15 08:03+0000\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2018-11-22 12:07+0000\n"
+"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: German (Germany)\n"
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -188,27 +189,27 @@ msgstr "Organisation"
 
 #: cockpit/src/subscriptions-view.jsx:162
 msgid "Service Level:  "
-msgstr ""
+msgstr "Servicelevel:  "
 
 #: cockpit/src/subscriptions-view.jsx:172
 msgid "Usage:  "
-msgstr ""
+msgstr "Aufruf:  "
 
 #: cockpit/src/subscriptions-view.jsx:182
 msgid "Role:  "
-msgstr ""
+msgstr "Rolle:  "
 
 #: cockpit/src/subscriptions-view.jsx:192
 msgid "Addons:  "
-msgstr ""
+msgstr "Addons:  "
 
 #: cockpit/src/subscriptions-view.jsx:202
 msgid "Status: "
-msgstr ""
+msgstr "Status: "
 
 #: cockpit/src/subscriptions-view.jsx:210
 msgid "System Purpose"
-msgstr ""
+msgstr "Systemzweck"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:221
@@ -238,21 +239,23 @@ msgstr "Subskriptionen"
 
 #: cockpit/src/subscriptions-view.jsx:274
 msgid "Updating"
-msgstr ""
+msgstr "Aktualisiere"
 
 #: cockpit/src/subscriptions-view.jsx:275
 msgid "Retrieving subscription status..."
-msgstr ""
+msgstr "Abonnementstatus abrufen ..."
 
 #: cockpit/src/subscriptions-view.jsx:282
 msgid "Unable to connect"
-msgstr ""
+msgstr "Kann keine Verbindung herstellen"
 
 #: cockpit/src/subscriptions-view.jsx:283
 msgid ""
 "Couldn't get system subscription status. Please ensure subscription-manager "
 "is installed."
 msgstr ""
+"Status des Systemabonnements konnte nicht abgerufen werden. Bitte stellen "
+"Sie sicher, dass der Abo-Manager installiert ist."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:304
@@ -624,11 +627,11 @@ msgstr "Typ"
 
 #: src/rct/manifest_commands.py:216
 msgid "API URL"
-msgstr ""
+msgstr "API-URL"
 
 #: src/rct/manifest_commands.py:217
 msgid "Web URL"
-msgstr ""
+msgstr "Web-URL"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/rct/manifest_commands.py:218
@@ -750,7 +753,7 @@ msgstr "Inhaltssets:"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/rct/manifest_commands.py:300
 msgid "\tManifest"
-msgstr "\tManifest"
+msgstr "\\tManifest"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/rct/manifest_commands.py:312
@@ -1004,6 +1007,8 @@ msgstr "%%prog %s [OPTIONEN] "
 #: src/rhsm_debug/debug_commands.py:90
 msgid "The directory specified by '--destination' must already exist."
 msgstr ""
+"Das durch '--destination' angegebene Verzeichnis muss bereits vorhanden sein."
+""
 
 #: src/rhsm_debug/debug_commands.py:94
 #, python-format
@@ -1667,7 +1672,7 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:48
 #, python-format
 msgid "HTTP error code %s: %s"
-msgstr ""
+msgstr "HTTP-Fehlercode %s: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/subscription_manager/gui/about.py:28
@@ -4203,12 +4208,17 @@ msgid ""
 "Due to a conflicting change made at the server the {attr} has not been set.\n"
 "{advice}"
 msgstr ""
+"Aufgrund einer widersprüchlichen Änderung am Server wird die {attr} wurde "
+"nicht gesetzt.\n"
+"{advice}"
 
 #: src/subscription_manager/managercli.py:174
 #, python-brace-format
 msgid ""
 "If you'd like to overwrite the server side change please run: {command}"
 msgstr ""
+"Wenn Sie die serverseitige Änderung überschreiben möchten, führen Sie bitte "
+"Folgendes aus: {command}"
 
 # translation auto-copied from project subscription-manager, version 1.13.X, document keys
 #: src/subscription_manager/managercli.py:209
@@ -4311,51 +4321,51 @@ msgstr ""
 #: src/subscription_manager/managercli.py:540
 #, python-brace-format
 msgid "Set {attr} of system purpose"
-msgstr ""
+msgstr "einstellen {attr} vom Systemzweck"
 
 #: src/subscription_manager/managercli.py:547
 #, python-brace-format
 msgid "Unset {attr} of system purpose"
-msgstr ""
+msgstr "Nicht gesetzt {attr} vom Systemzweck"
 
 #: src/subscription_manager/managercli.py:555
 #, python-brace-format
 msgid "Add an item to the list ({attr})."
-msgstr ""
+msgstr "Einen Eintrag zur Liste hinzufügen ({attr})."
 
 #: src/subscription_manager/managercli.py:563
 #, python-brace-format
 msgid "Remove an item from the list ({attr})."
-msgstr ""
+msgstr "Einen Artikel aus der Liste entfernen ({attr})."
 
 #: src/subscription_manager/managercli.py:581
 msgid "--unset cannot be used with --set, --add, or --remove"
-msgstr ""
+msgstr "--unset kann nicht mit --set, --add oder --remove verwendet werden"
 
 #: src/subscription_manager/managercli.py:583
 msgid "--add cannot be used with --remove"
-msgstr ""
+msgstr "--add kann nicht mit --remove verwendet werden"
 
 #: src/subscription_manager/managercli.py:601
 #, python-brace-format
 msgid "{attr} unset."
-msgstr ""
+msgstr "{attr} unset"
 
 #: src/subscription_manager/managercli.py:614
 #: src/subscription_manager/managercli.py:629
 #, python-brace-format
 msgid "{attr} updated."
-msgstr ""
+msgstr "{attr} aktualisierte."
 
 #: src/subscription_manager/managercli.py:650
 #, python-brace-format
 msgid "Current {name}: {val}"
-msgstr ""
+msgstr "Aktuell {name}: {val}"
 
 #: src/subscription_manager/managercli.py:653
 #, python-brace-format
 msgid "{name} not set."
-msgstr ""
+msgstr "{name} nicht eingestellt."
 
 #: src/subscription_manager/managercli.py:674
 #, python-brace-format
@@ -4363,6 +4373,8 @@ msgid ""
 "Note: The currently configured entitlement server does not support System "
 "Purpose {attr}."
 msgstr ""
+"Hinweis: Der derzeit konfigurierte Berechtigungsserver unterstützt keine "
+"Systemfunktion {attr}."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/subscription_manager/managercli.py:700
@@ -4676,11 +4688,12 @@ msgstr "Diese Organisation hat keine Subskriptionen mit Servicelevels."
 
 #: src/subscription_manager/managercli.py:1133
 msgid "Manage usage setting for this system"
-msgstr ""
+msgstr "Verwalten Sie die Nutzungseinstellungen für dieses System"
 
 #: src/subscription_manager/managercli.py:1134
 msgid "use set and unset to define the value for this field"
 msgstr ""
+"Verwenden Sie set und unset, um den Wert für dieses Feld zu definieren"
 
 #: src/subscription_manager/managercli.py:1153
 msgid "base URL for content in form of https://hostname:port/prefix"
@@ -4843,7 +4856,7 @@ msgstr "System wurde abgemeldet."
 
 #: src/subscription_manager/managercli.py:1497
 msgid "Modify or view the addons attribute of the system purpose"
-msgstr ""
+msgstr "Ändern Sie das Addons-Attribut des Systemzwecks oder zeigen Sie es an"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1518
@@ -5518,14 +5531,16 @@ msgid ""
 "show pools that are active on or after the given date; only used with --"
 "available (example: %s)"
 msgstr ""
+"Pools anzeigen, die an oder nach dem angegebenen Datum aktiv sind; Wird nur "
+"mit --available verwendet (Beispiel: %s)"
 
 #: src/subscription_manager/managercli.py:2481
 msgid "Error: --afterdate is only applicable with --available"
-msgstr ""
+msgstr "Fehler: --afterdate gilt nur zusammen mit --available"
 
 #: src/subscription_manager/managercli.py:2483
 msgid "Error: --afterdate cannot be used with --ondate"
-msgstr ""
+msgstr "Fehler: --afterdate kann nicht mit --ondate verwendet werden"
 
 #: src/subscription_manager/managercli.py:2498
 #, python-brace-format
@@ -5723,12 +5738,14 @@ msgstr "Repository: %s"
 
 #: src/subscription_manager/managercli.py:2782
 msgid "Modify system purpose role"
-msgstr ""
+msgstr "Ändern Sie die Systemzweckrolle"
 
 #: src/subscription_manager/managercli.py:2789
 msgid ""
 "Error: Options --set and --unset of role subcommand are mutually exclusive."
 msgstr ""
+"Fehler: Die Optionen --set und --unset des Rollenunterbefehls schließen sich "
+"gegenseitig aus."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/subscription_manager/managercli.py:2798
@@ -5771,17 +5788,21 @@ msgid ""
 "Content Access Mode is set to Organization/Environment Access. This host has "
 "access to content, regardless of subscription status.\n"
 msgstr ""
+"Der Inhaltszugriffsmodus ist auf Organisations- / Umgebungszugriff "
+"eingestellt. Dieser Host hat unabhängig vom Abonnementstatus Zugriff auf "
+"Inhalte.\n"
 
 #: src/subscription_manager/managercli.py:2856
 #, python-format
 msgid "Overall Status: %s\n"
 "%s"
-msgstr ""
+msgstr "Gesamtstatus: %s\n"
+"%s"
 
 #: src/subscription_manager/managercli.py:2866
 #, python-format
 msgid "System Purpose Status: %s\n"
-msgstr ""
+msgstr "Systemzweckstatus: %s\n"
 
 #: src/subscription_manager/migrate/migrate.py:54
 #: src/subscription_manager/migrate/migrate.py:56
@@ -6246,6 +6267,10 @@ msgid ""
 "Hat Subscription Management. If not desired, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
+"Die yum / dnf-Plugins: %s wurden automatisch für das Red Hat Subscription "
+"Management aktiviert. Wenn nicht gewünscht, verwenden Sie \"abonnement-"
+"manager config --rhsm.auto_enable_yum_plugins = 0\", um dieses Verhalten zu "
+"blockieren."
 
 #: src/subscription_manager/repolib.py:715
 msgid "Repo updates"
