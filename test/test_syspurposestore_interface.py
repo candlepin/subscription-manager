@@ -43,7 +43,7 @@ class SyspurposeStoreInterfaceTests(unittest.TestCase):
         self.syspurposelib = syspurposelib
         syspurposelib.USER_SYSPURPOSE = mock_syspurpose_file
 
-        syspurpose_patch = mock.patch('subscription_manager.syspurposelib.SyspurposeStore')
+        syspurpose_patch = mock.patch('subscription_manager.syspurposelib.SyncedStore')
         self.mock_sp_store = syspurpose_patch.start()
         self.mock_sp_store, self.mock_sp_store_contents = set_up_mock_sp_store(self.mock_sp_store)
         self.addCleanup(syspurpose_patch.stop)
@@ -124,15 +124,15 @@ class SyspurposeStoreInterfaceTests(unittest.TestCase):
         """
         # Remove SyspurposeStore and USER_SYSPURPOSE from syspurposestore_interface's scope temporarily
         # to simulate that importing them failed.
-        tmp_syspurpose_store = self.syspurposelib.SyspurposeStore
+        tmp_syspurpose_store = self.syspurposelib.SyncedStore
         tmp_user_syspurpose = self.syspurposelib.USER_SYSPURPOSE
-        del self.syspurposelib.SyspurposeStore
+        del self.syspurposelib.SyncedStore
         del self.syspurposelib.USER_SYSPURPOSE
 
         self.syspurposelib.save_sla_to_syspurpose_metadata("Freemium")
 
         # Add SyspurposeStore and USER_SYSPURPOSE back to syspurposestore_interface's scope
-        self.syspurposelib.SyspurposeStore = tmp_syspurpose_store
+        self.syspurposelib.SyncedStore = tmp_syspurpose_store
         self.syspurposelib.USER_SYSPURPOSE = tmp_user_syspurpose
 
         # Check that the contents of the syspurpose.json are empty (thus sla was not set)

@@ -235,7 +235,7 @@ class AsyncBackendTests(SubManFixture):
         super(AsyncBackendTests, self).setUp()
         self.backend = StubBackend()
         self.asyncBackend = AsyncBackend(self.backend)
-        syspurpose_patch = patch('subscription_manager.syspurposelib.SyspurposeStore')
+        syspurpose_patch = patch('subscription_manager.syspurposelib.SyncedStore')
         self.mock_sp_store = syspurpose_patch.start()
         self.mock_sp_store, self.mock_sp_store_contents = set_up_mock_sp_store(self.mock_sp_store)
         self.addCleanup(syspurpose_patch.stop)

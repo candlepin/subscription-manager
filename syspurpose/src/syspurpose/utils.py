@@ -95,6 +95,7 @@ def in_container():
         return True
     return False
 
+
 def make_utf8(obj):
     """
     Transforms the provided string into unicode if it is not already
@@ -108,6 +109,7 @@ def make_utf8(obj):
         return obj
     else:
         return obj
+
 
 def write_to_file_utf8(file, data):
     """

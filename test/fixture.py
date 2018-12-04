@@ -238,6 +238,11 @@ class SubManFixture(unittest.TestCase):
         test_proxy_connection_mock = self.test_proxy_connection_patcher.start()
         test_proxy_connection_mock.return_value = True
 
+        self.syncedstore_patcher = patch('subscription_manager.syspurposelib.SyncedStore')
+        syncedstore_mock = self.syncedstore_patcher.start()
+
+        set_up_mock_sp_store(syncedstore_mock)
+
         self.files_to_cleanup = []
 
     def tearDown(self):
@@ -437,11 +442,20 @@ def set_up_mock_sp_store(mock_sp_store):
         if current is not None and isinstance(current, list) and value in current:
             current.remove(value)
 
-    mock_sp_store.set = Mock(side_effect=set)
-    mock_sp_store.read = Mock(side_effect=read)
-    mock_sp_store.unset = Mock(side_effect=unset)
-    mock_sp_store.add = Mock(side_effect=add)
-    mock_sp_store.remove = Mock(side_effect=remove)
-    mock_sp_store.contents = mock_sp_store_contents
+    def get_local_contents():
+        return contents
+
+    def update_local(data):
+        global contents
+        contents = data
+
+    mock_sp_store.return_value.set = Mock(side_effect=set)
+    mock_sp_store.return_value.read = Mock(side_effect=read)
+    mock_sp_store.return_value.unset = Mock(side_effect=unset)
+    mock_sp_store.return_value.add = Mock(side_effect=add)
+    mock_sp_store.return_value.remove = Mock(side_effect=remove)
+    mock_sp_store.return_value.local_contents = mock_sp_store_contents
+    mock_sp_store.return_value.get_local_contents = Mock(side_effect=get_local_contents)
+    mock_sp_store.return_value.update_local = Mock(side_effect=update_local)
 
     return mock_sp_store, mock_sp_store_contents
