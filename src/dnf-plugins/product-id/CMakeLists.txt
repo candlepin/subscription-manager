@@ -38,7 +38,7 @@ if (CMAKE_COMPILER_IS_GNUCC)
     if (CMAKE_BUILD_TYPE STREQUAL "Debug")
         set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ggdb -O0")
     elseif( CMAKE_BUILD_TYPE STREQUAL "Release" )
-        set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DNDEBUG -O3 -fno-strict-aliasing")
+        set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DNDEBUG -g -O3 -fno-strict-aliasing")
     endif ()
 endif (CMAKE_COMPILER_IS_GNUCC)
 
