@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 5%{?dist}
+Release: 6%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1132,6 +1132,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Dec 06 2018 Christopher Snyder <csnyder@redhat.com> 1.23.8-6
+- Fix issue in Korean Translations part 2 (csnyder@redhat.com)
+
 * Thu Dec 06 2018 Christopher Snyder <csnyder@redhat.com> 1.23.8-5
 - 1633264: Sync changes with Entitlement Server from both subman and syspurpose
   (csnyder@redhat.com)
