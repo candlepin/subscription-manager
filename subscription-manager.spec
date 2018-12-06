@@ -1136,6 +1136,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 - 1633264: Sync changes with Entitlement Server from both subman and syspurpose
   (csnyder@redhat.com)
 
+* Mon Dec 03 2018 Christopher Snyder <csnyder@redhat.com> 1.23.8-4
+- Fix issue in Korean Translations (csnyder@redhat.com)
+
 * Mon Dec 03 2018 Christopher Snyder <csnyder@redhat.com> 1.23.8-3
 - 1650323: dnf subcommand for profile uploads; ENT-984 (jhnidek@redhat.com)
 - 1599801: fix Python2 and Python3 incompatibility; ENT-776
