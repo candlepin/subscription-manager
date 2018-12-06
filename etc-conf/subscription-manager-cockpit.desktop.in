@@ -2,6 +2,6 @@
 _Name=Red Hat Subscription Manager
 Icon=subscription-manager
 Type=Application
-Exec=xdg-open "http://localhost:9090/subscriptions"
+Exec=/usr/libexec/cockpit-desktop /cockpit/@localhost/subscriptions/index.html
 Terminal=false
 Categories=System;X-Red-Hat-Base;
