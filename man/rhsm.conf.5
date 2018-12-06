@@ -77,6 +77,16 @@ proxy_port
 Set this to a non\-blank value if
 \fBsubscription\-manager\fR
 should use a reverse proxy to access the subscription service\&. This sets the port for the reverse proxy\&. Overrides port from \fBHTTP_PROXY\fR and \fBHTTPS_PROXY\fR environment variables\&.
+
+Please note that setting this to any value other than 3128 (depending on your selinux configuration) will require an update to that policy.
+
+To add a local policy:
+
+# semanage port -a -t squid_port_t -p tcp <port number>
+
+To change the system back to look at 3128 port, just remove the policy:
+
+# semanage port -d -t squid_port_t -p tcp <port number>
 .RE
 .PP
 proxy_username
