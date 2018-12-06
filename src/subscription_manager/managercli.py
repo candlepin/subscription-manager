@@ -674,7 +674,7 @@ class SyspurposeCommand(CliCommand):
             print(_("{name} not set.".format(name=self.name.capitalize())))
 
     def sync(self):
-        return syspurposelib.SyspurposeSyncActionCommand(self.attr).perform(include_result=True)[1]
+        return syspurposelib.SyspurposeSyncActionCommand().perform(include_result=True)[1]
 
     def _do_command(self):
         self._validate_options()
@@ -1113,8 +1113,20 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
         if self.cp.has_capability("syspurpose"):
             super(ServiceLevelCommand, self).set()
         else:
-            # TODO Find old impl of service level command.
-            pass
+            self.update_service_level(self.options.set)
+
+    def unset(self):
+        if self.cp.has_capability("syspurpose"):
+            super(ServiceLevelCommand, self).unset()
+        else:
+            self.update_service_level("")
+
+    def update_service_level(self, service_level):
+        consumer = self.cp.getConsumer(self.identity.uuid)
+        if 'serviceLevel' not in consumer:
+            system_exit(os.EX_UNAVAILABLE,
+                        _("Error: The service-level command is not supported by the server."))
+        self.cp.updateConsumer(self.identity.uuid, service_level=service_level)
 
     def show_service_level(self):
         consumer = self.cp.getConsumer(self.identity.uuid)
