@@ -956,6 +956,7 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 
 %attr(755, root, root) %{_sbindir}/syspurpose
 %attr(644,root,root) %{_sysconfdir}/rhsm/syspurpose/valid_fields.json
+%attr(644,root,root) %{_sysconfdir}/bash_completion.d/syspurpose
 %endif
 
 %files -n subscription-manager-plugin-container
