@@ -185,6 +185,45 @@ SgW0kgf/C5sFxdgD6s9NKmP/u6OgI/qqE+KfnCex/ko=
 -----END RSA SIGNATURE-----
 """
 
+ENTITLEMENT_CERT_V3_0_NO_CONTENT= """
+-----BEGIN CERTIFICATE-----
+MIIDejCCAuOgAwIBAgIIY4bpXjAB064wDQYJKoZIhvcNAQEFBQAwPDEbMBkGA1UE
+AwwSY2FuZGxlLmxvY2FsZG9tYWluMQswCQYDVQQGEwJVUzEQMA4GA1UEBwwHUmFs
+ZWlnaDAeFw0xODExMTkwMDAwMDBaFw0xOTExMTkwMDAwMDBaMDsxDjAMBgNVBAoT
+BWFkbWluMSkwJwYDVQQDEyA0MDI4ZmE3YTY3MmMwMWUxMDE2NzJjMjBkMWQxMDli
+ZTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAIasgH1wyYDhvtWG7zcu
+fR2R7JyqTOHgv/gOxK2vWSaGaU92aaNN+4Ukip9zBoMSXeqQLdLIGKLPJrMIZO3y
+35MHtI/KgvWoLLGaHTjuuu+/1w59LTNv12+6Q9b+cMUNZwHINfcE1YLtpxbWbxrn
+/yBZqOSNqjhhxUxXpKY6uZm51Ymztl90bujCzNaDNKU3mli8uX6/GoRyda5e+/8j
+ey5BxRyPoUGctO3Eha5G2AgzlO1S7psQLfikPOZWU9KCvWh6uy14VZgfNgLsZvRi
+Qt3+l3L+M7xgejm8RgL6yp5bnO6bBh5XxAq63Gedf3NppNK4VpBilkttCckiYuGV
+tZ8CAwEAAaOCAQAwgf0wEQYJYIZIAYb4QgEBBAQDAgWgMAsGA1UdDwQEAwIEsDBs
+BgNVHSMEZTBjgBR+GGFdclqCRTwQ5OylB26+7guhe6FApD4wPDEbMBkGA1UEAwwS
+Y2FuZGxlLmxvY2FsZG9tYWluMQswCQYDVQQGEwJVUzEQMA4GA1UEBwwHUmFsZWln
+aIIJAIfmGC26Avq2MB0GA1UdDgQWBBQh4zE1pDNNBtb5SElgJmU2g8buTTATBgNV
+HSUEDDAKBggrBgEFBQcDAjASBgkrBgEEAZIICQYEBQwDMy4zMBQGCSsGAQQBkggJ
+CAQHDAVCYXNpYzAPBgkrBgEEAZIICQcEAgQAMA0GCSqGSIb3DQEBBQUAA4GBAJkP
+hN0v/br7rMKg6EB2XBmMDOc0J7CTTtj1FKd2jXFFbYsb1K4hE0k92tSW92AfgsVL
+OhcewkOoEuHMgiO7FizI4nu0W0WLDuuzgC2CMjfniSV93VjBwYjYuVwOGazcssl5
+mWBrODrkVzB/wBbqRtoQ//PjaE07fCBszdxgCsyc
+-----END CERTIFICATE-----
+-----BEGIN ENTITLEMENT DATA-----
+eJx1UE1r4zAQ/StmTi1URWPFjuVbe+mlC4HtqaUUWZZ3RfyRlUdhQ8h/35ECe2kL
+BnnevPfmzZzBLvMaJxegBVVZjVpqUdWyEhtEKRqLg9CDLnWtdKcHhDv4E81Mnk7Q
+Vnewxm61wR/ILzO0Z1j3kZ2CmUoxxZG8IQqsmc3kGP+RIPHAmO8iueInGbs33eiK
+m7J4erxlJkuhLdnYhaO3LnmO7uhGVu+Cm3ycmESnQ7J7To1CwYXpycnPvz58z43/
+o0XGBbmVEmsJfdr0DHOcurxzRkRTbysl9aflyARiUimxEYgC9YuUbf5emevm/trU
+XzT5rhSMTXLJpbF2iXOqsFQKUfGDKdIhLH20tEL7doYcXkv5/cWe/eTJ9cXuKmPi
+0YU1Hx/wPk8K9jdTLMXgkiv8beqPegPv10wuhXh7v3B5WJYxHSNP3ciyGczW1NvS
+SnQoMf/Vg5KNVHYDl8s/gJaozA==
+-----END ENTITLEMENT DATA-----
+-----BEGIN RSA SIGNATURE-----
+GgQryM9Caj38NNvVS/+wiAFzhxkBxtci+oNVkXG2HwUEuw8nVXRv/DpIHkfLTLm5
+gRiWpxSH036c4bfOsXaBtYlvwh2UDBS3WDhh0e7st4IEt9Be70T7XAgLCXUAILMe
+U2cdYX6mLGP/5bBrpCwjz/jECXuGp+pO2I+srx7bujQ=
+-----END RSA SIGNATURE-----
+"""
+
 
 IDENTITY_CERT = """
 -----BEGIN CERTIFICATE-----
@@ -431,6 +470,12 @@ Order:
 \tWarning Period: 30
 \tProvides Management: False
 
+Authorized Content URLs:
+\t/foo/path/always/$releasever
+\t/foo/path/never
+\t/path/to/$basearch/$releasever/awesomeos
+\t/path/to/awesomeos/x86_64
+
 Content:
 \tType: yum
 \tName: always-enabled-content
@@ -478,6 +523,58 @@ Content:
 \tExpires: 600
 \tRequired Tags:%(space)s
 \tArches:%(space)s
+""" % ({'space': ' '})
+
+
+ENTITLEMENT_CERT_V3_0_NO_CONTENT_OUTPUT = """
++-------------------------------------------+
+\tEntitlement Certificate
++-------------------------------------------+
+
+Certificate:
+\tPath:%(space)s
+\tVersion: 3.3
+\tSerial: 7171676047375717294
+\tStart Date: 2018-11-19 00:00:00+00:00
+\tEnd Date: 2019-11-19 00:00:00+00:00
+\tPool ID: 4028fa7a672c01e101672c06f30803c4
+
+Subject:
+\tCN: 4028fa7a672c01e101672c20d1d109be
+\tO: admin
+
+Issuer:
+\tC: US
+\tCN: candle.localdomain
+\tL: Raleigh
+
+Product:
+\tID: 900
+\tName: Multi-Attribute Limited Product
+\tVersion: 1.0
+\tArch: x86_64
+\tTags:%(space)s
+\tBrand Type:%(space)s
+\tBrand Name:%(space)s
+
+Order:
+\tName: Multi-Attribute Stackable (2 GB)
+\tNumber: order-8675309
+\tSKU: ram2-multiattr
+\tContract: 0
+\tAccount: 12331131231
+\tService Level: Premium
+\tService Type: Level 3
+\tQuantity: 5
+\tQuantity Used: 5
+\tSocket Limit:%(space)s
+\tRAM Limit: 2
+\tCore Limit:%(space)s
+\tVirt Only: False
+\tStacking ID: multiattr-stack-test
+\tWarning Period: 0
+\tProvides Management: False
+
 """ % ({'space': ' '})
 
 PRODUCT_CERT_V1_0_OUTPUT = """

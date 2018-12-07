@@ -203,11 +203,18 @@ class EntitlementCertificatePrinter(ProductCertificatePrinter):
         content_printer = ContentPrinter()
 
         s = []
-        if not self.skip_content and cert.content:
-            # sort content by label - makes content easier to read/locate
-            sorted_content = sorted(cert.content, key=lambda content: content.label)
-            for c in sorted_content:
-                s.append("\n%s" % content_printer.as_str(c))
+        if not self.skip_content:
+            try:
+                s.append("\n%s" % xstr(self._get_paths(cert)))
+            except AttributeError:
+                # v1 certificates won't have this data and some v3 certificates have empty extensions.
+                pass
+
+            if cert.content:
+                # sort content by label - makes content easier to read/locate
+                sorted_content = sorted(cert.content, key=lambda content: content.label)
+                for c in sorted_content:
+                    s.append("\n%s" % content_printer.as_str(c))
 
         return "%s\n%s%s" % (ProductCertificatePrinter.cert_to_str(self, cert),
                            order_printer.as_str(cert.order), "\n".join(s))
@@ -217,6 +224,13 @@ class EntitlementCertificatePrinter(ProductCertificatePrinter):
         if hasattr(cert.pool, "id"):
             pool_id = cert.pool.id
         str_parts_list.append("\t%s: %s" % (_("Pool ID"), pool_id))
+
+    def _get_paths(self, cert):
+        s = []
+        s.append(_("Authorized Content URLs:"))
+        for p in sorted(cert.provided_paths):
+            s.append("\t%s" % p)
+        return "%s" % '\n'.join(s)
 
 
 class CertificatePrinterFactory(object):

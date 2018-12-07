@@ -16,6 +16,7 @@ from __future__ import print_function, division, absolute_import
 from collections import deque
 import os
 import unittest
+import six
 
 from rhsm.bitstream import GhettoBitStream
 from rhsm.huffman import HuffmanNode
@@ -92,6 +93,23 @@ class TestPathTree(unittest.TestCase):
         self.assertTrue(pt.match_path('/foo/path/bar/a/b/c'))
         self.assertFalse(pt.match_path('/foo'))
         self.assertFalse(pt.match_path('/bar'))
+
+    def test_build_path_list(self):
+        f = os.path.join(os.path.dirname(os.path.abspath(__file__)), "satellite_generated_data.bin")
+        data = open(f, 'rb').read()
+        pt = PathTree(data)
+        paths = []
+        pt.build_path_list(paths)
+        expected = [
+            '/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/$releasever/$basearch/os',
+            '/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/$releasever/$basearch/optional/os',
+            '/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/$releasever/$basearch/rh-common/os',
+            '/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/$releasever/$basearch/rhn-tools/os',
+            '/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/7Server/$basearch/extras/os',
+            '/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/7Server/$basearch/sat-tools/6.3/os'
+        ]
+        # Assert the lists contain the same items regardless of order
+        six.assertCountEqual(self, expected, paths)
 
     def test_match_path_listing(self):
         tree = {'foo': [{'path': [{'bar': [{PATH_END: None}]}]}]}
