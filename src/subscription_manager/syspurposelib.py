@@ -178,11 +178,10 @@ class SyspurposeSyncActionCommand(object):
       - The current values on the file system
     """
 
-    def __init__(self, command_name=None):
+    def __init__(self):
         self.report = SyspurposeSyncActionReport()
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = self.cp_provider.get_consumer_auth_cp()
-        self.command = command_name
 
     def perform(self, include_result=False):
         """
