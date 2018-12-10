@@ -187,6 +187,15 @@ if
 should report the system's current package profile to the subscription service\&. This report helps the subscription service provide better errata notifications\&. If supported by the entitlement server, enabled repos, enabled modules, and packages present will be reported\&.
 .RE
 .PP
+package_profile_on_trans
+.RS 4
+Set to
+\fI1\fR
+if the
+\fBdnf/yum subscription-manager plugin\fR
+should report the system's current package profile to the subscription service on execution of dnf/yum transactions (for example on package install)\&. This report helps the subscription service provide better errata notifications\&. If supported by the entitlement server, enabled repos, enabled modules, and packages present will be reported\&. The \fBreport_package_profile\fR option needs to also be set to 1 for this option to have any effect.
+.RE
+.PP
 pluginDir
 .RS 4
 The directory to search for subscription manager plug-ins
