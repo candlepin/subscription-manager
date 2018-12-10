@@ -180,6 +180,7 @@ install-conf:
 	install -m 644 etc-conf/dbus/polkit/com.redhat.SubscriptionManager.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
 	if [[ "$(INCLUDE_SYSPURPOSE)" = "1" ]]; then \
 		install -m 644 etc-conf/syspurpose/valid_fields.json $(DESTDIR)/etc/rhsm/syspurpose/valid_fields.json; \
+		install -m 644 etc-conf/syspurpose.completion.sh $(DESTDIR)/etc/bash_completion.d/syspurpose; \
 	fi;
 	if [[ "$(WITH_SUBMAN_GUI)" == "true" ]]; then \
 		install -m 644 etc-conf/subscription-manager-gui.appdata.xml $(DESTDIR)/$(INSTALL_DIR)/appdata/subscription-manager-gui.appdata.xml; \
