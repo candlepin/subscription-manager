@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 6%{?dist}
+Release: 7%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1133,6 +1133,15 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Dec 10 2018 Christopher Snyder <csnyder@redhat.com> 1.23.8-7
+- 1638153: Restore service-level command for older servers (csnyder@redhat.com)
+- 1624859: Add bash completion for syspurpose aspects (csnyder@redhat.com)
+- 1642888: Add semanage advice on setting non-default proxy_port
+  (csnyder@redhat.com)
+- 1651621: use cockpit-desktop to launch cockpit based gui (csnyder@redhat.com)
+- Bug fix: include debuginfo in RPM with debuginfo information
+  (jhnidek@redhat.com)
+
 * Thu Dec 06 2018 Christopher Snyder <csnyder@redhat.com> 1.23.8-6
 - Fix issue in Korean Translations part 2 (csnyder@redhat.com)
 
