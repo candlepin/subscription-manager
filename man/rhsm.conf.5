@@ -234,6 +234,11 @@ splay
 1 to enable splay. 0 to disable splay. If enabled, this feature delays the initial auto attach and cert check by an amount between 0 seconds and the interval given for the action being delayed. For example if the
 .B certCheckInterval
 were set to 3 minutes, the initial cert check would begin somewhere between 2 minutes after start up (minimum delay) and 5 minutes after start up. This is useful to reduce peak load on the Satellite or entitlement service used by a large number of machines.
+.RE
+.PP
+disable
+.RS 4
+set to 1 to disable rhsmcertd operation entirely.
 .SH "[LOGGING] OPTIONS"
 .PP
 default_log_level
