@@ -254,6 +254,7 @@ def main():
         uuid = identity.uuid
         uep = CPProvider().get_consumer_auth_cp()
     except ImportError:
+        identity = None
         uuid = None
         uep = None
         print(_("Warning: Unable to sync system purpose with subscription management server:"
@@ -269,7 +270,7 @@ def main():
     if result:
         if result.remote_changed:
             print(_("System purpose successfully sent to subscription management server."))
-        else:
+        elif identity and identity.is_valid():
             print(_("Unable to send system purpose to subscription management server"))
 
     return 0

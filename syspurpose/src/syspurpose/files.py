@@ -270,7 +270,11 @@ class SyncedStore(object):
         cached_contents = self.get_cached_contents()
 
         result = self.merge(local=local_contents,
-                            remote=remote_contents,
+                            # RHBZ 1641577 Only compare against remote values if there are some
+                            # otherwise use only local merged with cached_contents
+                            # This prevents a singular change to the local contents emptying out
+                            # all other values.
+                            remote=remote_contents or cached_contents,
                             base=cached_contents)
 
         sync_result = SyncResult(result, self.update_remote(result),
