@@ -21,7 +21,7 @@ import json
 import os
 
 from syspurpose import files, utils
-from syspurpose.files import detect_changed, three_way_merge
+from syspurpose.files import detect_changed, three_way_merge, UNSUPPORTED
 
 
 class SyspurposeStoreTests(SyspurposeTestBase):
@@ -470,7 +470,11 @@ class TestDetectChange(SyspurposeTestBase):
         other = {key: None}
 
         result = detect_changed(base=base, other=other, key=key)
+        # For a source of "server" we should not consider the removal a change if the value is None
+        self.assertEqual(result, True)
 
+        result = detect_changed(base=base, other=other, key=key, source="local")
+        # For a source of "local" we should consider the removal a change
         self.assertEqual(result, True)
 
     def test_absence_of_field_means_no_change(self):
@@ -484,7 +488,7 @@ class TestDetectChange(SyspurposeTestBase):
 
         result = detect_changed(base=base, other=other, key=key)
 
-        self.assertFalse(result)
+        self.assertEqual(result, UNSUPPORTED)
 
     def test_changed(self):
         """
@@ -524,7 +528,11 @@ class TestDetectChange(SyspurposeTestBase):
         base = {key: value}
         other = {key: next_value}
 
-        result = detect_changed(base=base, other=other, key=non_existant_key)
+        result = detect_changed(base=base, other=other, key=non_existant_key, source='server')
+
+        self.assertEqual(result, UNSUPPORTED)
+
+        result = detect_changed(base=base, other=other, key=non_existant_key, source='local')
 
         self.assertEqual(result, False)
 
@@ -578,23 +586,35 @@ class TestThreeWayMerge(SyspurposeTestBase):
         remote = {"C": None}
         local = {"C": None}
 
-        expected = {"C": None}  # C should be set to None since it was unset for both
+        expected = {}  # C should be removed as it has been unset on both sides
         result = three_way_merge(local=local, base=base, remote=remote)
         self.assert_equal_dict(expected, result)
 
-    def test_key_removed_from_remote(self):
+    def test_key_removed_remote_not_in_base(self):
+        base = {}
+        remote = {}
+        local = {"C": "local"}
+
+        expected = local  # Expect Local to win
+        result = three_way_merge(local=local, base=base, remote=remote)
+        self.assert_equal_dict(expected, result)
+
+    def test_key_no_longer_supported_from_remote(self):
+        base = {"C": "base"}
+        remote = {}
+        local = {"C": "base"}
+
+        expected = local
+        result = three_way_merge(local=local, base=base, remote=remote)
+        self.assert_equal_dict(expected, result)
+
+    def test_key_unset_from_remote_with_false_value(self):
         base = {"C": "base"}
         remote = {"C": None}
         local = {"C": "base"}
 
-        expected = remote
+        expected = {}
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
-
-        # Now with the on_conflict param set to "local"
-
-        expected = remote  # Should still be empty because local is unchanged
-        result = three_way_merge(local=local, base=base, remote=remote, on_conflict="local")
         self.assert_equal_dict(expected, result)
 
     def test_key_removed_from_local(self):
@@ -602,19 +622,21 @@ class TestThreeWayMerge(SyspurposeTestBase):
         remote = {"C": "base"}
         local = {"C": None}
 
-        expected = local
+        expected = {}
         result = three_way_merge(local=local, base=base, remote=remote)
         self.assert_equal_dict(expected, result)
 
         # Now with the on_conflict param set to "local"
 
-        expected = local
+        expected = {}
         result = three_way_merge(local=local, base=base, remote=remote, on_conflict="local")
         self.assert_equal_dict(expected, result)
 
     def test_merge_no_potential_conflict(self):
         base = {"C": "base"}
-        remote = {"A": "remote", "C": "base"}
+        # A key included from candlepin with a falsey value means that the key is supported, but
+        # that there is no value presently set for it.
+        remote = {"A": "remote", "B": None, "C": "base"}
         local = {"B": "local", "C": "base"}
 
         expected = {"A": "remote", "B": "local", "C": "base"}
@@ -648,7 +670,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
         shared_key = "C"
         base = {shared_key: "base"}
         # Here the key "C" is changed from "base" to "remote" for remote and to "local" for local
-        remote = {"A": "remote", shared_key: "remote"}
+        remote = {"A": "remote", "B": None, shared_key: "remote"}
         local = {"B": "local", shared_key: "local"}
 
         expected = {"A": "remote", "B": "local", shared_key: "remote"}
@@ -671,7 +693,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
         shared_key = "C"
         base = {}
         # Here the key "C" is changed from "base" to "remote" for remote and to "local" for local
-        remote = {"A": "remote", shared_key: "remote"}
+        remote = {"A": "remote", "B": None, shared_key: "remote"}
         local = {"B": "local", shared_key: "local"}
 
         expected = {"A": "remote", "B": "local", shared_key: "remote"}
@@ -692,7 +714,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
         shared_key = "C"
         base = {shared_key: ["base"]}
         # Here the key "C" is changed from "base" to "remote" for remote and to "local" for local
-        remote = {"A": "remote", shared_key: ["remote"]}
+        remote = {"A": "remote", "B": None, shared_key: ["remote"]}
         local = {"B": "local", shared_key: ["local"]}
 
         expected = {"A": "remote", "B": "local", shared_key: ["remote"]}
