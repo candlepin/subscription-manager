@@ -51,6 +51,11 @@ LOCAL_TO_REMOTE = {
 ATTRIBUTES = [ROLE, ADDONS, SERVICE_LEVEL, USAGE]
 
 
+# Values used in determining changes between client and server
+UNSUPPORTED = "unsupported"
+
+
+
 log = logging.getLogger(__name__)
 
 
@@ -265,6 +270,9 @@ class SyncedStore(object):
         return False
 
     def sync(self):
+        if self.uep and not self.uep.has_capability('syspurpose'):
+            return self._sync_local_only()
+
         remote_contents = self.get_remote_contents()
         local_contents = self.get_local_contents()
         cached_contents = self.get_cached_contents()
@@ -285,13 +293,21 @@ class SyncedStore(object):
 
         return sync_result
 
+    def _sync_local_only(self):
+        local_updated = self.update_local(self.get_local_contents())
+        return SyncResult(self.local_contents, False, local_updated, False, self.report)
+
     def merge(self, local=None, remote=None, base=None):
-        return three_way_merge(local=local, base=base, remote=remote,
+        result = three_way_merge(local=local, base=base, remote=remote,
                                      on_change=self.on_changed)
+        # Filter out those keys which have a falsey value (we don't need those)
+        result = {key: result[key] for key in result if result[key]}
+
+        return result
 
     def get_local_contents(self):
         try:
-            if not self.local_contents:
+            if self.local_contents is None:
                 try:
                     self.local_contents = json.load(io.open(self.path, 'r', encoding='utf-8'))
                 except ValueError:
@@ -321,8 +337,7 @@ class SyncedStore(object):
         # Translate from the remote values to the local, filtering out items not known
         for attr in ATTRIBUTES:
             value = consumer.get(LOCAL_TO_REMOTE[attr])
-            if value is not None:
-                result[attr] = value
+            result[attr] = value
 
         return result
 
@@ -534,20 +549,20 @@ def three_way_merge(local, base, remote, on_conflict="remote", on_change=None):
 
         local_changed = detect_changed(base=base, other=local, key=key, source="local")
         remote_changed = detect_changed(base=base, other=remote, key=key, source="server")
-        changed = local_changed or remote_changed
+        changed = local_changed or remote_changed and remote_changed != UNSUPPORTED
         source = 'base'
 
         if local_changed == remote_changed:
             source = on_conflict
-            if key in winner:
+            if key in winner and winner[key]:
                 result[key] = winner[key]
-        elif remote_changed:
+        elif remote_changed is True:
             source = 'remote'
-            if key in remote:
+            if key in remote and remote[key]:
                 result[key] = remote[key]
-        elif local_changed:
+        elif local_changed or remote_changed == UNSUPPORTED:
             source = 'local'
-            if key in local:
+            if key in local and local[key]:
                 result[key] = local[key]
 
         if changed:
@@ -574,9 +589,8 @@ def detect_changed(base, other, key, source="server"):
     """
     base = base or {}
     other = other or {}
-
-    if key not in other.keys() and source != "local":
-        return False
+    if key not in other and source != "local":
+        return UNSUPPORTED
 
     base_val = base.get(key)
     other_val = other.get(key)

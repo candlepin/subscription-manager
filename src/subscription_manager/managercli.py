@@ -1309,10 +1309,10 @@ class RegisterCommand(UserPassCommand):
             if self.options.consumerid:
                 log.info("Registering as existing consumer: %s" % self.options.consumerid)
                 consumer = service.register(None, consumerid=self.options.consumerid,
-                                            role=syspurpose.get('role') or '',
+                                            role=syspurpose.get('role'),
                                             addons=syspurpose.get('addons') or [],
                                             service_level=syspurpose.get('service_level_agreement') or '',
-                                            usage=syspurpose.get('usage') or ''
+                                            usage=syspurpose.get('usage')
                                             )
             else:
                 owner_key = self._determine_owner_key(admin_cp)
@@ -1325,11 +1325,16 @@ class RegisterCommand(UserPassCommand):
                     force=self.options.force,
                     name=self.options.consumername,
                     type=self.options.consumertype,
-                    role=syspurpose.get('role') or '',
+                    role=syspurpose.get('role'),
                     addons=syspurpose.get('addons') or [],
                     service_level=syspurpose.get('service_level_agreement') or '',
-                    usage=syspurpose.get('usage') or ''
+                    usage=syspurpose.get('usage')
                 )
+
+                store = syspurposelib.SyncedStore
+                if store:
+                    store = store(admin_cp, consumer_uuid=consumer['uuid'])
+                    store.sync()
         except (connection.RestlibException, exceptions.ServiceError) as re:
             log.exception(re)
             system_exit(os.EX_SOFTWARE, re)
