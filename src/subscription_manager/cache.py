@@ -331,8 +331,15 @@ class SyspurposeComplianceStatusCache(StatusCache):
         self.syspurpose_service = syspurpose.Syspurpose(uep)
         self.server_status = self.syspurpose_service.get_syspurpose_status()
 
+    def write_cache(self):
+        if self.server_status is not None and self.server_status['status'] != 'unknown':
+            super(SyspurposeComplianceStatusCache, self).write_cache()
+
     def get_overall_status(self):
-        return self.syspurpose_service.get_overall_status(self.server_status['status'])
+        if self.server_status is not None:
+            return self.syspurpose_service.get_overall_status(self.server_status['status'])
+        else:
+            return self.syspurpose_service.get_overall_status('unknown')
 
 
 class ProductStatusCache(StatusCache):
