@@ -238,7 +238,11 @@ class TestDirectoryWatch(fixture.SubManFixture):
     def test_file_modified(self, mock_event):
         mock_event.mask = 1
         self.assertFalse(self.dw3.file_modified(mock_event.mask))
-        mock_event.mask = 2
+        mock_event.mask = self.dw3.IN_MODIFY
+        self.assertTrue(self.dw3.file_modified(mock_event.mask))
+        mock_event.mask = self.dw3.IN_DELETE
+        self.assertTrue(self.dw3.file_modified(mock_event.mask))
+        mock_event.mask = self.dw3.IN_MOVED_TO
         self.assertTrue(self.dw3.file_modified(mock_event.mask))
 
 
