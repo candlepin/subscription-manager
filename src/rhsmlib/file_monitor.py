@@ -180,13 +180,14 @@ class DirectoryWatch(object):
         """
         self.IN_DELETE = 0x00000200
         self.IN_MODIFY = 0x00000002
+        self.IN_MOVED_TO = 0x00000080
 
         self.path = os.path.abspath(path)
         self.is_file = not os.path.isdir(self.path)  # used isdir because if path does not exist, assumed to be file
         self.timestamp = None
         self.is_glob = is_glob
         self.callbacks = callbacks
-        self.mask = self.IN_DELETE | self.IN_MODIFY
+        self.mask = self.IN_DELETE | self.IN_MODIFY | self.IN_MOVED_TO
 
     def notify(self):
         """
