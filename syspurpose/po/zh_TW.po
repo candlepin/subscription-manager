@@ -1,0 +1,124 @@
+# ljanda <ljanda@redhat.com>, 2018. #zanata
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-07-18 12:05-0400\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2018-11-21 02:38+0000\n"
+"Language-Team: \n"
+"X-Generator: Zanata 4.6.2\n"
+"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: zh_Hant\n"
+
+#: src/syspurpose/cli.py:36
+msgid "Added {} to {}"
+msgstr "添加到 {}"
+
+#: src/syspurpose/cli.py:50
+msgid "Removed {} from {}"
+msgstr "已經從...刪除 {}"
+
+#: src/syspurpose/cli.py:63
+msgid "{} set to {}"
+msgstr "{} 調成 {}"
+
+#: src/syspurpose/cli.py:75
+msgid "{} unset"
+msgstr "{}未設置"
+
+#: src/syspurpose/cli.py:118
+msgid "Sets the value for the given property"
+msgstr "設置給定屬性的值"
+
+#: src/syspurpose/cli.py:122 src/syspurpose/cli.py:138
+msgid "The name of the property to set/update"
+msgstr "要設置/更新的屬性的名稱"
+
+#: src/syspurpose/cli.py:126
+msgid "The value to set"
+msgstr "要設置的值"
+
+#: src/syspurpose/cli.py:133
+msgid "Unsets (clears) the value for the given property"
+msgstr "取消（清除）給定屬性的值"
+
+#: src/syspurpose/cli.py:143
+msgid "Adds the value(s) to the given property"
+msgstr "將值添加到給定屬性"
+
+#: src/syspurpose/cli.py:147 src/syspurpose/cli.py:163
+msgid "The name of the property to update"
+msgstr "要更新的屬性的名稱"
+
+#: src/syspurpose/cli.py:151
+msgid "The value(s) to add"
+msgstr "要添加的值"
+
+#: src/syspurpose/cli.py:159
+msgid "Removes the value(s) from the given property"
+msgstr "從給定屬性中刪除值"
+
+#: src/syspurpose/cli.py:167
+msgid "The value(s) to remove"
+msgstr "要刪除的值"
+
+#: src/syspurpose/cli.py:176
+msgid "Add one or more offerings to the system syspurpose."
+msgstr "將一個或多個產品添加到系統syspurpose。"
+
+#: src/syspurpose/cli.py:182
+msgid "Remove one or more offerings."
+msgstr "刪除一個或多個產品。"
+
+#: src/syspurpose/cli.py:187
+msgid "Unset all offerings."
+msgstr "取消所有產品。"
+
+#: src/syspurpose/cli.py:193
+msgid "Set the system sla"
+msgstr "設置系統sla"
+
+#: src/syspurpose/cli.py:198
+msgid "Clear set sla"
+msgstr "清除設置sla"
+
+#: src/syspurpose/cli.py:204
+msgid "Set the system usage"
+msgstr "設置系統使用情況"
+
+#: src/syspurpose/cli.py:210
+msgid "Clear set usage/"
+msgstr "清除設置用法/"
+
+#: src/syspurpose/cli.py:216
+msgid "Show the current system syspurpose"
+msgstr "顯示當前系統syspurpose"
+
+#: src/syspurpose/cli.py:232
+msgid ""
+"WARNING: Setting syspurpose in containers has no effect.Please run "
+"syspurpose on the host.\n"
+msgstr "警告：在容器中設置syspurpose無效。請在主機上運行syspurpose。\n"
+
+#: src/syspurpose/files.py:49
+msgid "Cannot read syspurpose file {}\n"
+"Are you root?"
+msgstr "無法讀取syspurpose文件{}你是root用戶嗎？"
+
+#: src/syspurpose/main.py:31
+msgid "User interrupted process"
+msgstr "用戶中斷過程"
+
+#: src/syspurpose/utils.py:54
+msgid "Cannot create directory {}\n"
+"Are you root?"
+msgstr "無法創建目錄{}你是root用戶嗎？"
+
+#: src/syspurpose/utils.py:75
+msgid "Cannot create file {}\n"
+"Are you root?"
+msgstr "無法創建文件{}你是root用戶嗎？"
