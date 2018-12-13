@@ -705,14 +705,18 @@ class ProductManager(object):
             self.db.delete(product.id)
             self.db.write()
 
-    def _get_cert(self, fn):
-        if fn.endswith('.gz'):
-            f = GzipFile(fn)
+    def _get_cert(self, filename):
+        if filename.endswith('.gz'):
+            f = GzipFile(filename)
         else:
-            f = open(fn)
+            f = open(filename)
         try:
             pem = f.read()
-            return create_from_pem(pem)
+            if type(pem) == bytes:
+                pem = pem.decode('utf-8')
+            cert = create_from_pem(pem)
+            cert.pem = pem
+            return cert
         finally:
             f.close()
 

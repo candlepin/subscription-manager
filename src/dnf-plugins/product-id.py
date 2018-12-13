@@ -21,11 +21,13 @@ from subscription_manager import logutil
 from subscription_manager.productid import ProductManager
 from subscription_manager.utils import chroot
 from subscription_manager.injectioninit import init_dep_injection
+from rhsm.certificate import create_from_pem
 
 from dnfpluginscore import _, logger
 import dnf
 import dnf.base
 import dnf.sack
+import dnf.exceptions
 import librepo
 import os
 from rhsm import ourjson as json
@@ -46,6 +48,9 @@ class ProductId(dnf.Plugin):
         # able to access this list later in transaction hook
         for repo in self.base.repos.iter_enabled():
             self._enabled_repos.append(repo)
+            if hasattr(repo, 'add_metadata_type_to_download'):
+                log.debug('Adding productid metadata type to download for repo: %s' % repo.id)
+                repo.add_metadata_type_to_download('productid')
 
     def transaction(self):
         """
@@ -76,7 +81,13 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 class DnfProductManager(ProductManager):
 
-    CACHE_FILE = "/var/lib/rhsm/cache/package_repo_mapping.json"
+    # Json file containing dictionary. Key is id of repository and
+    # value is list of available packages in corresponding repository
+    AVAIL_PKGS_CACHE_FILE = "/var/lib/rhsm/cache/package_repo_mapping.json"
+
+    # Json file containing dictionary. Key is id of repository and
+    # value is content of productid certificate of corresponding repository
+    PRODUCTID_CACHE_FILE = "/var/lib/rhsm/cache/productid_repo_mapping.json"
 
     def __init__(self, base):
         self.base = base
@@ -88,28 +99,49 @@ class DnfProductManager(ProductManager):
                            True)
 
     def _download_productid(self, repo, tmpdir):
-        handle = repo._handle_new_remote(tmpdir)
-        handle.setopt(librepo.LRO_PROGRESSCB, None)
-        handle.setopt(librepo.LRO_YUMDLIST, [self.PRODUCTID])
-        res = handle.perform()
-        return res.yum_repo.get(self.PRODUCTID, None)
+        if hasattr(repo, 'get_metadata_content'):
+            log.debug('Getting productid cert for repo: %s' % repo.id)
+            content = repo.get_metadata_content('productid')
+            log.debug("Content of productid cert: %s" % content)
+
+            filename = repo.get_metadata_path('productid')
+            if filename == "":
+                filename = None
+            if filename is not None:
+                log.debug('Filename with productid cert: %s' % filename)
+            else:
+                log.debug('Unable to load product id cert')
+        else:
+            handle = repo._handle_new_remote(tmpdir)
+            handle.setopt(librepo.LRO_PROGRESSCB, None)
+            handle.setopt(librepo.LRO_YUMDLIST, [self.PRODUCTID])
+            res = handle.perform()
+            filename = res.yum_repo.get(self.PRODUCTID, None)
+        return filename
 
     def get_certs_for_enabled_repos(self, enabled_repos):
         """
         Find enabled repos that are providing product certificates
         """
         lst = []
+        cache = self.read_productid_cache()
+        if cache is None:
+            cache = {}
 
         # skip repo's that we don't have productid info for...
         for repo in enabled_repos:
             try:
                 with dnf.util.tmpdir() as tmpdir:
-                    fn = self._download_productid(repo, tmpdir)
-                    if fn:
-                        cert = self._get_cert(fn)
+                    filename = self._download_productid(repo, tmpdir)
+                    if filename:
+                        cert = self._get_cert(filename)
                         if cert is None:
                             log.debug('Repository %s does not provide cert' % repo.id)
                             continue
+                        lst.append((cert, repo.id))
+                        cache[repo.id] = cert.pem
+                    elif repo.id in cache:
+                        cert = create_from_pem(cache[repo.id])
                         lst.append((cert, repo.id))
                     else:
                         # We have to look in all repos for productids, not just
@@ -123,6 +155,10 @@ class DnfProductManager(ProductManager):
         if self.meta_data_errors:
             log.debug("Unable to load productid metadata for repos: %s",
                       self.meta_data_errors)
+
+        if len(cache) > 0:
+            self.write_productid_cache(cache)
+
         return lst
 
     @staticmethod
@@ -137,31 +173,47 @@ class DnfProductManager(ProductManager):
             available = base.sack.query().available()
         return available
 
-    def write_avail_pkgs_cache(self, avail_pkgs):
+    @staticmethod
+    def __write_cache_file(data, file_name):
         try:
-            if not os.access(os.path.dirname(self.CACHE_FILE), os.R_OK):
-                os.makedirs(os.path.dirname(self.CACHE_FILE))
-            with open(self.CACHE_FILE, "w") as file:
-                json.dump(avail_pkgs, file, default=json.encode)
-            log.debug("Wrote cache: %s" % self.CACHE_FILE)
+            dir_name = os.path.dirname(file_name)
+            if not os.access(dir_name, os.R_OK):
+                log.debug("Try to create directory: %s" % dir_name)
+                os.makedirs(dir_name)
+            with open(file_name, "w") as file:
+                json.dump(data, file, default=json.encode)
+            log.debug("Wrote cache: %s" % file_name)
         except IOError as err:
-            log.error("Unable to write cache: %s" % self.CACHE_FILE)
+            log.error("Unable to write cache: %s" % file_name)
             log.exception(err)
 
-    def read_avail_pkgs_cache(self):
+    @staticmethod
+    def __read_cache_file(file_name):
         try:
-            with open(self.CACHE_FILE) as file:
+            with open(file_name) as file:
                 json_str = file.read()
                 data = json.loads(json_str)
             return data
         except IOError as err:
-            log.error("Unable to read cache: %s" % self.CACHE_FILE)
+            log.error("Unable to read cache: %s" % file_name)
             log.exception(err)
         except ValueError:
             # ignore json file parse errors, we are going to generate
             # a new as if it didn't exist
             pass
         return None
+
+    def write_avail_pkgs_cache(self, avail_pkgs):
+        self.__write_cache_file(avail_pkgs, self.AVAIL_PKGS_CACHE_FILE)
+
+    def read_avail_pkgs_cache(self):
+        return self.__read_cache_file(self.AVAIL_PKGS_CACHE_FILE)
+
+    def write_productid_cache(self, product_ids):
+        self.__write_cache_file(product_ids, self.PRODUCTID_CACHE_FILE)
+
+    def read_productid_cache(self):
+        return self.__read_cache_file(self.PRODUCTID_CACHE_FILE)
 
     # find the list of repo's that provide packages that
     # are actually installed.
