@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 7%{?dist}
+Release: 8%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1133,6 +1133,23 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Dec 13 2018 Christopher Snyder <csnyder@redhat.com> 1.23.8-8
+- 1658383: Sync Translations for syspurpose (csnyder@redhat.com)
+- 1636852 & 1646384: better auth handling when listing service-levels - When
+  running service-level --list with invalid credentials,   dont traceback, but
+  show the proper error to the user. - This is handled when either the
+  --serverurl, or --username   and --password options are used.
+  (nmoumoul@redhat.com)
+- 1654491: Use new API of DNF (jhnidek@redhat.com)
+- 1625214: send ConfigChanged event when file replaced - Now, the ConfigChanged
+  event will be sent not only when a monitored   file is edited in place, but
+  also when the whole file is replaced   with another who is moved/renamed to
+  the same location & name. (nmoumoul@redhat.com)
+- 1633264: Ensure we sync syspurpose on register (csnyder@redhat.com)
+- 1654873: Add man entry for rhsmcertd.disable (csnyder@redhat.com)
+- 1654868: Add man page docs of the package_profile_on_trans option
+  (csnyder@redhat.com)
+
 * Mon Dec 10 2018 Christopher Snyder <csnyder@redhat.com> 1.23.8-7
 - 1638153: Restore service-level command for older servers (csnyder@redhat.com)
 - 1624859: Add bash completion for syspurpose aspects (csnyder@redhat.com)
