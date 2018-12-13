@@ -485,9 +485,8 @@ class RestlibValidateResponseTests(unittest.TestCase):
         content = u'{"errors": ["Unauthorized message"]}'
         try:
             self.vr("401", content)
-        except RestlibException as e:
+        except UnauthorizedException as e:
             self.assertEqual("401", e.code)
-            self.assertEqual("Unauthorized message", e.msg)
         else:
             self.fails("Should have raised a RestlibException")
 

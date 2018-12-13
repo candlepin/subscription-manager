@@ -37,7 +37,7 @@ from rhsm.https import ssl
 
 import rhsm.config
 import rhsm.connection as connection
-from rhsm.connection import ProxyException
+from rhsm.connection import ProxyException, UnauthorizedException
 from rhsm.utils import remove_scheme, ServerUrlParseError
 
 from subscription_manager import identity
@@ -1098,16 +1098,19 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
         except Exception as e:
             handle_exception(_("Error: Unable to retrieve service levels."), e)
         else:
-            if self.options.unset:
-                self.unset()
-            elif self.options.set is not None:
-                self.set()
-            elif self.options.list:
-                self.list_service_levels()
-            elif self.options.show:
-                self.show_service_level()
-            else:
-                self.show_service_level()
+            try:
+                if self.options.unset:
+                    self.unset()
+                elif self.options.set is not None:
+                    self.set()
+                elif self.options.list:
+                    self.list_service_levels()
+                elif self.options.show:
+                    self.show_service_level()
+                else:
+                    self.show_service_level()
+            except UnauthorizedException as uex:
+                handle_exception(_(str(uex)), uex)
 
     def set(self):
         if self.cp.has_capability("syspurpose"):
@@ -1156,6 +1159,8 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
                     print(sla)
             else:
                 print(_("This org does not have any subscriptions with service levels."))
+        except UnauthorizedException as e:
+            raise e
         except connection.RemoteServerException as e:
             system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
         except connection.RestlibException as e:
