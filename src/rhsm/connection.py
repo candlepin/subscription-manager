@@ -690,16 +690,21 @@ class BaseRestLib(object):
                     raise RateLimitExceededException(response['status'],
                                                      error_msg,
                                                      headers=response.get('headers'))
-                # If the proxy is not configured correctly
-                # it connects to the server without the identity cert
-                # even if the cert is valid
-                if str(response['status']) in ["401"] and self.proxy_hostname:
-                    if self.cert_file:
-                        id_cert = certificate.create_from_file(self.cert_file)
-                        if id_cert.is_valid():
-                            raise RestlibException(response['status'], ("Unable to make a connection "
-                                "using SSL client certificate. Please review proxy configuration and connectivity."),
-                                response.get('headers'))
+
+                if str(response['status']) in ["401"]:
+                    # If the proxy is not configured correctly
+                    # it connects to the server without the identity cert
+                    # even if the cert is valid
+                    if self.proxy_hostname:
+                        if self.cert_file:
+                            id_cert = certificate.create_from_file(self.cert_file)
+                            if id_cert.is_valid():
+                                raise RestlibException(response['status'],
+                                                       ("Unable to make a connection using SSL client certificate."
+                                                        "Please review proxy configuration and connectivity."),
+                                                       response.get('headers'))
+                    else:
+                        raise UnauthorizedException(response['status'], request_type=request_type, handler=handler)
 
                 # FIXME: we can get here with a valid json response that
                 # could be anything, we don't verify it anymore
