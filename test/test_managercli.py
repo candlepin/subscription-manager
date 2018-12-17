@@ -1589,7 +1589,10 @@ class TestRoleCommand(TestCliCommand):
 
         mock_syspurpose_sync.return_value = Mock()
         instance_mock_syspurpose_sync = mock_syspurpose_sync.return_value
-        instance_mock_syspurpose_sync.perform = Mock(return_value=({}, {"role": "Foo"}))
+
+        mock_sync_result = Mock()
+        mock_sync_result.result = {"role": "Foo"}
+        instance_mock_syspurpose_sync.perform = Mock(return_value=({}, mock_sync_result))
 
         with Capture() as cap:
             self.cc._do_command()

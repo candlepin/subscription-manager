@@ -662,7 +662,7 @@ class SyspurposeCommand(CliCommand):
 
     def show(self):
         if self.is_registered():
-            syspurpose = self.sync()
+            syspurpose = self.sync().result
         else:
             syspurpose = syspurposelib.read_syspurpose()
         if syspurpose is not None and self.attr in syspurpose and syspurpose[self.attr]:
