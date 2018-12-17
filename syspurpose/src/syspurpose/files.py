@@ -270,7 +270,9 @@ class SyncedStore(object):
         return False
 
     def sync(self):
+        log.debug('Attempting to sync syspurpose content...')
         if self.uep and not self.uep.has_capability('syspurpose'):
+            log.debug('Server does not support syspurpose, syncing only locally.')
             return self._sync_local_only()
 
         remote_contents = self.get_remote_contents()
@@ -284,6 +286,8 @@ class SyncedStore(object):
         sync_result = SyncResult(result, self.update_remote(result),
                           self.update_local(result),
                           self.update_cache(result), self.report)
+
+        log.debug('Successfully synced system purpose.')
 
         # Reset the changed attribute as all items should be synced if we've gotten to this point
         self.changed = False
@@ -308,10 +312,8 @@ class SyncedStore(object):
     def get_local_contents(self):
         try:
             if self.local_contents is None:
-                try:
-                    self.local_contents = json.load(io.open(self.path, 'r', encoding='utf-8'))
-                except ValueError:
-                    self.local_contents = {}
+                self.local_contents = json.load(io.open(self.path, 'r', encoding='utf-8'))
+                log.debug('Successfully read local syspurpose contents.')
             return self.local_contents
         except (os.error, ValueError, IOError):
             if self.report is not None:
@@ -326,9 +328,11 @@ class SyncedStore(object):
 
     def get_remote_contents(self):
         if self.uep is None or self.consumer_uuid is None:
+            log.debug('Failed to read remote syspurpose from server: no available connection, '
+                      'or the consumer is not registered.')
             return {}
         if not self.uep.has_capability('syspurpose'):
-            log.debug('Server does not support syspurpose, not syncing')
+            log.debug('Server does not support syspurpose, not syncing.')
             return {}
 
         consumer = self.uep.getConsumer(self.consumer_uuid)
@@ -338,6 +342,7 @@ class SyncedStore(object):
         for attr in ATTRIBUTES:
             value = consumer.get(LOCAL_TO_REMOTE[attr])
             result[attr] = value
+        log.debug('Successfully read remote syspurpose from server.')
 
         return result
 
@@ -345,7 +350,9 @@ class SyncedStore(object):
         if not self.cache_contents:
             try:
                 self.cache_contents = json.load(io.open(self.cache_path, 'r', encoding='utf-8'))
+                log.debug('Successfully read cached syspurpose contents.')
             except (ValueError, os.error, IOError):
+                log.debug('Unable to read cached syspurpose contents at \'%s\'.' % USER_SYSPURPOSE)
                 self.cache_contents = {}
                 self.update_cache({})
         return self.cache_contents
@@ -360,6 +367,8 @@ class SyncedStore(object):
 
     def update_remote(self, data):
         if self.uep is None or self.consumer_uuid is None:
+            log.debug('Failed to update remote syspurpose on the server: no available connection, '
+                      'or the consumer is not registered.')
             return False
 
         addons = data.get(ADDONS)
@@ -370,6 +379,7 @@ class SyncedStore(object):
                 service_level=data.get(SERVICE_LEVEL) or "",
                 usage=data.get(USAGE) or ""
         )
+        log.debug('Successfully updated remote syspurpose on the server.')
         return True
 
     def add(self, key, value):
@@ -393,10 +403,12 @@ class SyncedStore(object):
             if value not in self.local_contents[key]:
                 self.local_contents[key].append(value)
             else:
+                log.debug('Will not add value \'%s\' to key \'%s\'.' % (value, key))
                 return False
         except (AttributeError, KeyError):
             self.local_contents[key] = [value]
         self.changed = True
+        log.debug('Adding value \'%s\' to key \'%s\'.' % (value, key))
         return True
 
     def remove(self, key, value):
@@ -419,8 +431,10 @@ class SyncedStore(object):
             else:
                 return False
             self.changed = True
+            log.debug('Removing value \'%s\' from key \'%s\'.' % (value, key))
             return True
         except (AttributeError, KeyError, ValueError):
+            log.debug('Will not remove value \'%s\' from key \'%s\'.' % (value, key))
             return False
 
     def unset(self, key):
@@ -442,6 +456,7 @@ class SyncedStore(object):
         else:
             value = self.local_contents.pop(key, None)
         self.changed = True
+        log.debug('Unsetting value \'%s\' of key \'%s\'.' % (value, key))
 
         return value is not None
 
@@ -461,6 +476,7 @@ class SyncedStore(object):
 
         if org != value or org is None:
             self.changed = True
+            log.debug('Setting value \'%s\' to key \'%s\'.' % (value, key))
 
         return org != value or org is None
 
@@ -484,7 +500,9 @@ class SyncedStore(object):
                 write_to_file_utf8(f, data)
                 f.flush()
                 f.close()
+                log.debug('Successfully updated syspurpose values at \'%s\'.' % path)
                 return True
+        log.debug('Failed to update syspurpose values at \'%s\'.' % path)
         return False
 
 
@@ -528,6 +546,7 @@ def three_way_merge(local, base, remote, on_conflict="remote", on_change=None):
                       detected.
     :return: The dictionary of values as merged between the three provided dictionaries.
     """
+    log.debug('Attempting a three-way merge...')
     result = {}
     local = local or {}
     base = base or {}
@@ -553,14 +572,18 @@ def three_way_merge(local, base, remote, on_conflict="remote", on_change=None):
         source = 'base'
 
         if local_changed == remote_changed:
+            if local_changed == True:
+                log.debug('Three way merge conflict: both local and remote values changed for key \'%s\'.' % key)
             source = on_conflict
             if key in winner and winner[key]:
                 result[key] = winner[key]
         elif remote_changed is True:
+            log.debug('Three way merge: remote value was changed for key \'%s\'.' % key)
             source = 'remote'
             if key in remote and remote[key]:
                 result[key] = remote[key]
         elif local_changed or remote_changed == UNSUPPORTED:
+            log.debug('Three way merge: local value was changed for key \'%s\'.' % key)
             source = 'local'
             if key in local and local[key]:
                 result[key] = local[key]
