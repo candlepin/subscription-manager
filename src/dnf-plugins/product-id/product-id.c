@@ -43,7 +43,7 @@ const PluginInfo *pluginGetInfo() {
  * @param initData
  * @return
  */
-PluginHandle *pluginInitHandle(int version, PluginMode mode, void *initData) {
+PluginHandle *pluginInitHandle(int version, PluginMode mode, DnfPluginInitData *initData) {
     debug("%s initializing handle!", pinfo.name);
 
     if (version != SUPPORTED_LIBDNF_PLUGIN_API_VERSION) {
@@ -61,7 +61,7 @@ PluginHandle *pluginInitHandle(int version, PluginMode mode, void *initData) {
     if (handle) {
         handle->version = version;
         handle->mode = mode;
-        handle->initData = initData;
+        handle->context = pluginGetContext(initData);
     }
 
     return handle;
@@ -157,6 +157,17 @@ gchar *strHookId(PluginHookId id) {
     }
 }
 
+RepoProductId *initRepoProductId() {
+    RepoProductId *repoProductId = (RepoProductId*) malloc(sizeof(RepoProductId));
+    repoProductId->repo = NULL;
+    repoProductId->productIdPath = NULL;
+    return repoProductId;
+}
+
+void freeRepoProductId(RepoProductId *repoProductId) {
+    free(repoProductId);
+}
+
 /**
  * Callback function. This method is executed for every libdnf hook. This callback
  * is called several times during transaction, but we are interested only in one situation.
@@ -167,9 +178,8 @@ gchar *strHookId(PluginHookId id) {
  * @param error
  * @return
  */
-int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHookError *error) {
+int pluginHook(PluginHandle *handle, PluginHookId id, DnfPluginHookData *hookData, DnfPluginError *error) {
     // We do not need this for anything
-    (void)hookData;
     (void)error;
 
     if (!handle) {
@@ -182,7 +192,12 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
 
     if (id == PLUGIN_HOOK_ID_CONTEXT_TRANSACTION) {
         // Get DNF context
-        DnfContext *dnfContext = handle->initData;
+        DnfContext *dnfContext = handle->context;
+        if (dnfContext == NULL) {
+            error("Unable to get dnf context");
+            return 1;
+        }
+
         // Directory with productdb has to exist or plugin has to be able to create it.
         gint ret_val = g_mkdir_with_parents(PRODUCTDB_DIR, 0750);
         if (ret_val != 0) {
@@ -222,7 +237,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
                 LrYumRepoMdRecord *repoMdRecord = lr_yum_repomd_get_record(repoMd, "productid");
                 if (repoMdRecord) {
                     debug("Repository %s has a productid", dnf_repo_get_id(repo));
-                    RepoProductId *repoProductId = (RepoProductId*) malloc(sizeof(RepoProductId));
+                    RepoProductId *repoProductId = initRepoProductId();
                     // TODO: do not fetch productid certificate, when dnf context is set to cache-only mode
                     // Microdnf nor PackageKit do not support this feature ATM
                     gboolean cache_only = dnf_context_get_cache_only(dnfContext);
@@ -243,12 +258,12 @@ int pluginHook(PluginHandle *handle, PluginHookId id, void *hookData, PluginHook
             }
         }
 
-        getActive(dnfContext, repoAndProductIds, activeRepoAndProductIds);
+        getActive(hookData, repoAndProductIds, activeRepoAndProductIds);
 
         for (guint i = 0; i < activeRepoAndProductIds->len; i++) {
             RepoProductId *activeRepoProductId = g_ptr_array_index(activeRepoAndProductIds, i);
             debug("Handling active repo %s\n", dnf_repo_get_id(activeRepoProductId->repo));
-            installProductId(activeRepoProductId, productDb);
+            installProductId(activeRepoProductId, productDb, PRODUCT_CERT_DIR);
         }
 
         // Handle removals here
@@ -301,12 +316,110 @@ void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos) {
 }
 
 /**
+ * This function tries to get array of installed packages
+ * @return New array of installed packages
+ */
+GPtrArray *getInstalledPackages(DnfSack *rpmDbSack) {
+    if(rpmDbSack == NULL) {
+        return NULL;
+    }
+
+    GError *tmp_err = NULL;
+    gboolean ret;
+    ret = dnf_sack_setup(rpmDbSack, 0, &tmp_err);
+    if (ret == FALSE) {
+        printError("Unable to setup new sack object", tmp_err);
+        return NULL;
+    }
+
+    ret = dnf_sack_load_system_repo(rpmDbSack, NULL, 0, &tmp_err);
+    if (ret == FALSE) {
+        printError("Unable to load system repo to sack object", tmp_err);
+        return NULL;
+    }
+
+    // Get list of installed packages
+    HyQuery query = hy_query_create_flags(rpmDbSack, 0);
+    hy_query_filter(query, HY_REPO_NAME, HY_EQ, HY_SYSTEM_REPO_NAME);
+    GPtrArray *installedPackages = hy_query_run(query);
+    hy_query_free(query);
+
+    return installedPackages;
+}
+
+/**
+ * Get list of available package for given repository
+ *
+ * @param dnfSack pointer at dnf sack
+ * @param repo poiner at dnf repository
+ * @return array of available packages in given repository
+ */
+GPtrArray *getAvailPackageList(DnfSack *dnfSack, DnfRepo *repo) {
+    if (dnfSack == NULL || repo == NULL) {
+        return NULL;
+    }
+    HyQuery availQuery = hy_query_create_flags(dnfSack, 0);
+    hy_query_filter(availQuery, HY_PKG_REPONAME, HY_EQ, dnf_repo_get_id(repo));
+    GPtrArray *availPackageList = hy_query_run(availQuery);
+    hy_query_free(availQuery);
+    return availPackageList;
+}
+
+/**
+ * Try to find at least one installed package in the list of available packages.
+ *
+ * @param installedPackages pointer at array of installed packages
+ * @param availPackageList pointer at array of available packages
+ * @return Return TRUE, when at least one installed package is included in the list of available packages.
+ */
+gboolean isAvailPackageInInstalledPackages(GPtrArray *installedPackages, GPtrArray *availPackageList) {
+    if (installedPackages == NULL || availPackageList == NULL) {
+        return FALSE;
+    }
+
+    // NB: Another way to do this would be with a bloom filter. A bloom filter can give a very quick,
+    // accurate answer to the question "Is this item not in this set of things?" if the result is
+    // negative. A positive result is probabilistic and requires a second full scan of the set to get the
+    // ultimate answer. The bloom filter approach would eliminate the need for the O(n^2) nested for-loop
+    // solution we have.
+
+    // Go through all available packages from repository
+    for (guint j = 0; j < availPackageList->len; j++) {
+        DnfPackage *pkg = g_ptr_array_index(availPackageList, j);
+
+        // Try to find if this available package is in the list of installed packages
+        for(guint k = 0; k < installedPackages->len; k++) {
+            DnfPackage *instPkg = g_ptr_array_index(installedPackages, k);
+            if(g_strcmp0(dnf_package_get_nevra(pkg), dnf_package_get_nevra(instPkg)) == 0) {
+                return TRUE;
+            }
+        }
+    }
+
+    return FALSE;
+}
+
+/**
  * Find the list of repos that provide packages that are actually installed.
  * @param repos all available repos
  * @param activeRepoAndProductIds the list of repos providing active
  */
-void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds) {
-    DnfSack *dnfSack = dnf_context_get_sack(context);
+void getActive(DnfPluginHookData *hookData, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds) {
+    if (hookData == NULL) {
+        return;
+    }
+
+    HyGoal goal = hookContextTransactionGetGoal(hookData);
+    if (goal == NULL) {
+        error("Unable to get transaction goal");
+        return;
+    }
+
+    DnfSack *dnfSack = hy_goal_get_sack(goal);
+    if (dnfSack == NULL) {
+        error("Unable to get dnf sack from dnf context");
+        return;
+    }
 
     // Create special sack object only for quering current rpmdb to get fresh list
     // of installed packages. Quering dnfSack would not include just installed RPM
@@ -317,60 +430,18 @@ void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArra
         return;
     }
 
-    GError *tmp_err = NULL;
-    gboolean ret;
-    ret = dnf_sack_setup(rpmDbSack, 0, &tmp_err);
-    if (ret == FALSE) {
-        printError("Unable to setup new sack object", tmp_err);
-    }
-
-    ret = dnf_sack_load_system_repo(rpmDbSack, NULL, 0, &tmp_err);
-    if (ret == FALSE) {
-        printError("Unable to load system repo to sack object", tmp_err);
-    }
-
-    // Get list of installed packages
-    HyQuery query = hy_query_create_flags(rpmDbSack, 0);
-    hy_query_filter(query, HY_REPO_NAME, HY_EQ, HY_SYSTEM_REPO_NAME);
-    GPtrArray *installedPackages = hy_query_run(query);
-    hy_query_free(query);
+    GPtrArray *installedPackages = getInstalledPackages(rpmDbSack);
 
     for (guint i = 0; i < repoAndProductIds->len; i++) {
         RepoProductId *repoProductId = g_ptr_array_index(repoAndProductIds, i);
-        DnfRepo *repo = repoProductId->repo;
-        HyQuery availQuery = hy_query_create_flags(dnfSack, 0);
-        hy_query_filter(availQuery, HY_PKG_REPONAME, HY_EQ, dnf_repo_get_id(repo));
-        GPtrArray *availPackageList = hy_query_run(availQuery);
-        hy_query_free(availQuery);
+        GPtrArray *availPackageList = getAvailPackageList(dnfSack, repoProductId->repo);
 
-        // NB: Another way to do this would be with a bloom filter.  A bloom filter can give a very quick,
-        // accurate answer to the question "Is this item not in this set of things?" if the result is
-        // negative.  A positive result is probabilistic and requires a second full scan of the set to get the
-        // ultimate answer.  The bloom filter approach would eliminate the need for the O(n^2) nested for-loop
-        // solution we have.
-
-        // Go through all available packages from repository
-        for (guint j = 0; j < availPackageList->len; j++) {
-            DnfPackage *pkg = g_ptr_array_index(availPackageList, j);
-            gboolean package_found = FALSE;
-
-            // Try to find if this available package is in the list of installed packages
-            for(guint k = 0; k < installedPackages->len; k++) {
-                DnfPackage *instPkg = g_ptr_array_index(installedPackages, k);
-                if(g_strcmp0(dnf_package_get_nevra(pkg), dnf_package_get_nevra(instPkg)) == 0) {
-                    debug("Repo \"%s\" marked active due to installed package %s",
-                           dnf_repo_get_id(repo),
-                           dnf_package_get_nevra(pkg));
-                    g_ptr_array_add(activeRepoAndProductIds, repoProductId);
-                    package_found = TRUE;
-                    break;
-                }
-            }
-
-            if(package_found == TRUE) {
-                break;
-            }
+        gboolean ret = isAvailPackageInInstalledPackages(installedPackages, availPackageList);
+        if (ret == TRUE) {
+            debug("Repo \"%s\" marked active", dnf_repo_get_id(repoProductId->repo));
+            g_ptr_array_add(activeRepoAndProductIds, repoProductId);
         }
+
         g_ptr_array_unref(availPackageList);
     }
 
@@ -393,12 +464,22 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
     lr_handle_getinfo(lrHandle, &tmp_err, LRI_DESTDIR, &destdir);
     if (tmp_err) {
         printError("Unable to get information about destination folder", tmp_err);
+    } else {
+        if (destdir) {
+            debug("Destination folder: %s", destdir);
+        } else {
+            error("Destination folder not set");
+        }
     }
 
     char **urls = NULL;
     lr_handle_getinfo(lrHandle, &tmp_err, LRI_URLS, &urls);
     if (tmp_err) {
         printError("Unable to get information about URLs", tmp_err);
+    } else {
+        if (!urls) {
+            error("No repository URL set");
+        }
     }
 
     // Getting information about variable substitution
@@ -406,6 +487,17 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
     lr_handle_getinfo(lrHandle, &tmp_err, LRI_VARSUB, &varSubst);
     if (tmp_err) {
         printError("Unable to get variable substitution for URL", tmp_err);
+    } else {
+        if (varSubst) {
+            for (LrUrlVars *elem = varSubst; elem; elem = g_slist_next(elem)) {
+                LrVar *var_val = elem->data;
+                if (var_val) {
+                    debug("URL substitution: %s = %s", var_val->var, var_val->val);
+                }
+            }
+        } else {
+            debug("No URL substitution set");
+        }
     }
 
     // It is necessary to create copy of list of URL variables to avoid memory leaks
@@ -471,8 +563,21 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
     return ret;
 }
 
-int installProductId(RepoProductId *repoProductId, ProductDb *productDb) {
+/**
+ * This function tries to install productid certificate into system (typically to
+ * /etc/pki/product/<product_id>.pem
+ *
+ * @param repoProductId Pointer on struct holding pointer at repository and destincation path
+ * @param productDb Pointer at structure with information about installed product certs
+ *
+ * @return Return 1, when product certificate was installed to the system. Otherwise, return zero.
+ */
+int installProductId(RepoProductId *repoProductId, ProductDb *productDb, const char *product_cert_dir) {
     int ret = 0;
+
+    if (repoProductId == NULL || productDb == NULL) {
+        return 0;
+    }
 
     const char *productIdPath = repoProductId->productIdPath;
     gzFile input = gzopen(productIdPath, "r");
@@ -491,10 +596,10 @@ int installProductId(RepoProductId *repoProductId, ProductDb *productDb) {
 
         int productIdFound = findProductId(pemOutput, outname);
         if (productIdFound) {
-            gint ret_val = g_mkdir_with_parents(PRODUCT_CERT_DIR, 0775);
+            gint ret_val = g_mkdir_with_parents(product_cert_dir, 0775);
             if (ret_val == 0) {
                 gchar *productId = g_strdup(outname->str);
-                g_string_prepend(outname, PRODUCT_CERT_DIR);
+                g_string_prepend(outname, product_cert_dir);
                 g_string_append(outname, ".pem");
                 // TODO switch to using GFile methods to remain consistent with using GLib stuff when possible
                 FILE *fileOutput = fopen(outname->str, "w+");
@@ -510,19 +615,19 @@ int installProductId(RepoProductId *repoProductId, ProductDb *productDb) {
                 }
                 g_free(productId);
             } else {
-                error("Unable to create directory %s, %s", PRODUCT_CERT_DIR, strerror(errno));
+                error("Unable to create directory %s, %s", product_cert_dir, strerror(errno));
             }
         }
 
         out:
         g_string_free(outname, TRUE);
         g_string_free(pemOutput, TRUE);
+    } else {
+        debug("Unable to open compressed product certificate: %s", productIdPath);
     }
 
     if(input != NULL) {
         gzclose(input);
-    } else {
-        debug("Unable to open compressed product certificate");
     }
 
     return ret;
@@ -607,6 +712,7 @@ int findProductId(GString *certContent, GString *result) {
  * @return Return TRUE, when decompression was successful. Otherwise return FALSE.
  */
 int decompress(gzFile input, GString *output) {
+    // TODO: This method will be useless soon. See: https://bugzilla.redhat.com/show_bug.cgi?id=1640220
     int ret = TRUE;
     while (1) {
         int err;

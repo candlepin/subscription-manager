@@ -9,7 +9,7 @@ to restart packagekit service after any change of libdnf plugin.
 Requirements
 ------------
 
-You have two options. You can install Fedora 29 (beta) and then install
+You have two options. You can install Fedora 29 and then install
 libdnf and microdnf packages from default repositories or you can use
 following steps:
 
@@ -79,7 +79,7 @@ Building of our libdnf plugin can be triggered using this:
 
     $ mkdir build
     $ cd build
-    $ cmake ..
+    $ cmake .. -DCMAKE_INSTALL_LIBDIR=/usr/lib64
     $ make
     
 CMake has the concept of "in source" and "out of source" builds.  These build
