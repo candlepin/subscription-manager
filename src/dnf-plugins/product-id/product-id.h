@@ -50,7 +50,7 @@ typedef struct _PluginHandle {
     // Data provided by the init method
     int version;
     PluginMode mode;
-    void* initData;
+    DnfContext *context;
 
     // Add plugin-specific "private" data here
 } _PluginHandle;
@@ -64,13 +64,17 @@ typedef struct {
     const char *productIdPath;
 } RepoProductId;
 
+RepoProductId *initRepoProductId();
+void freeRepoProductId(RepoProductId *repoProductId);
 void printError(const char *msg, GError *err);
 void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos);
-void getActive(DnfContext *context, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds);
+GPtrArray *getAvailPackageList(DnfSack *dnfSack, DnfRepo *repo);
+GPtrArray *getInstalledPackages(DnfSack *rpmDbSack);
+void getActive(DnfPluginHookData *hookData, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds);
 int decompress(gzFile input, GString *output) ;
 int findProductId(GString *certContent, GString *result);
 int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId);
-int installProductId(RepoProductId *repoProductId, ProductDb *productDb);
+int installProductId(RepoProductId *repoProductId, ProductDb *productDb, const char *product_cert_dir);
 void writeRepoMap(ProductDb *productDb) ;
 
 #endif //PRODUCT_ID_PRODUCT_ID_H
