@@ -16,10 +16,15 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 
 import argparse
+import logging
+from subscription_manager import logutil
 from syspurpose.files import SyncedStore
 from syspurpose.utils import in_container, make_utf8
 from syspurpose.i18n import ugettext as _
 import json
+
+logutil.init_logger()
+log = logging.getLogger(__name__)
 
 
 def add_command(args, syspurposestore):
@@ -239,6 +244,8 @@ def main():
     Run the cli (Do the syspurpose tool thing!!)
     :return: 0
     """
+    log.debug("Running the syspurpose utility...")
+
     parser = setup_arg_parser()
     args = parser.parse_args()
 
