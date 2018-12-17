@@ -194,7 +194,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, DnfPluginHookData *hookDat
         // Get DNF context
         DnfContext *dnfContext = handle->context;
         if (dnfContext == NULL) {
-            error("Unable to get get dnf context");
+            error("Unable to get dnf context");
             return 1;
         }
 
