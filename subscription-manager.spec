@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 9%{?dist}
+Release: 10%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1133,6 +1133,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Dec 17 2018 Christopher Snyder <csnyder@redhat.com> 1.23.8-10
+- 1633216: Added several unit tests and refactoring of code to libdnf product ID plugin
+  (jhnidek@redhat.com)
+
 * Mon Dec 17 2018 Christopher Snyder <csnyder@redhat.com> 1.23.8-9
 - 1633277: syspurpose tool will now log in rhsm.log - The syspurpose tool will
   now log all communication with the server   in the rhsm.log - Added a lot of
