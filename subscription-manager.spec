@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 8%{?dist}
+Release: 9%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1133,6 +1133,12 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Dec 17 2018 Christopher Snyder <csnyder@redhat.com> 1.23.8-9
+- 1633277: syspurpose tool will now log in rhsm.log - The syspurpose tool will
+  now log all communication with the server   in the rhsm.log - Added a lot of
+  log statements in the key actions of the syspurpose   tool itself, to help
+  with debugging. (nmoumoul@redhat.com)
+
 * Thu Dec 13 2018 Christopher Snyder <csnyder@redhat.com> 1.23.8-8
 - 1658383: Sync Translations for syspurpose (csnyder@redhat.com)
 - 1636852 & 1646384: better auth handling when listing service-levels - When
