@@ -283,8 +283,10 @@ class SyncedStore(object):
                             remote=remote_contents,
                             base=cached_contents)
 
+        local_result = {key: result[key] for key in result if result[key]}
+
         sync_result = SyncResult(result, self.update_remote(result),
-                          self.update_local(result),
+                          self.update_local(local_result),
                           self.update_cache(result), self.report)
 
         log.debug('Successfully synced system purpose.')
@@ -304,9 +306,6 @@ class SyncedStore(object):
     def merge(self, local=None, remote=None, base=None):
         result = three_way_merge(local=local, base=base, remote=remote,
                                      on_change=self.on_changed)
-        # Filter out those keys which have a falsey value (we don't need those)
-        result = {key: result[key] for key in result if result[key]}
-
         return result
 
     def get_local_contents(self):
@@ -575,17 +574,18 @@ def three_way_merge(local, base, remote, on_conflict="remote", on_change=None):
             if local_changed == True:
                 log.debug('Three way merge conflict: both local and remote values changed for key \'%s\'.' % key)
             source = on_conflict
-            if key in winner and winner[key]:
+            if key in winner:
                 result[key] = winner[key]
         elif remote_changed is True:
             log.debug('Three way merge: remote value was changed for key \'%s\'.' % key)
             source = 'remote'
-            if key in remote and remote[key]:
+            if key in remote:
                 result[key] = remote[key]
         elif local_changed or remote_changed == UNSUPPORTED:
-            log.debug('Three way merge: local value was changed for key \'%s\'.' % key)
+            if local_changed == True:
+                log.debug('Three way merge: local value was changed for key \'%s\'.' % key)
             source = 'local'
-            if key in local and local[key]:
+            if key in local:
                 result[key] = local[key]
 
         if changed:
@@ -617,5 +617,15 @@ def detect_changed(base, other, key, source="server"):
 
     base_val = base.get(key)
     other_val = other.get(key)
+
+    if key not in other and source == "local":
+        # If the local values no longer contain the key we want to treat this as removal
+        # It would constitute a change if the base had a truthy value. The values tracked from the
+        # server all have falsey values.
+        return bool(base_val)
+
+    # Handle "addons" (the lists might be out of order from the server)
+    if type(base_val) == list and type(other_val) == list:
+        return sorted(base_val) != sorted(other_val)
 
     return base_val != other_val
