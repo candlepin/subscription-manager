@@ -119,4 +119,4 @@ def write_to_file_utf8(file, data):
     :param data: The data to be written
     :return:
     """
-    file.write(make_utf8(json.dumps(data, indent=2, ensure_ascii=False)))
+    file.write(make_utf8(json.dumps(data, indent=2, ensure_ascii=False, sort_keys=True)))

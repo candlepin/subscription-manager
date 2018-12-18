@@ -15,13 +15,14 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
-from .base import SyspurposeTestBase
+from .base import SyspurposeTestBase, write_to_file_utf8
 import io
 import json
 import os
+import mock
 
 from syspurpose import files, utils
-from syspurpose.files import detect_changed, three_way_merge, UNSUPPORTED
+from syspurpose.files import detect_changed, three_way_merge, UNSUPPORTED, SyncedStore, SyncResult
 
 
 class SyspurposeStoreTests(SyspurposeTestBase):
@@ -445,6 +446,288 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         self.assertDictEqual(syspurpose_store.contents, test_data)
 
 
+class TestSyncedStore(SyspurposeTestBase):
+    """
+    Tests to show the proper overall syncing functionality of the SyncedStore class.
+    This class (at the time of writing) is responsible for maintaining the local syspurpose file,
+    the local syspurpose cache file and retriving and syncing the syspurpose values from the server
+    should the system be able to.
+    """
+
+    # These are the values we typically expect the server will return when no syspurpose is set.
+    default_remote_values = {"role": None,
+                             "usage": None,
+                             "addOns": [],
+                             "serviceLevel": u""
+                             }
+
+    def setUp(self):
+        self.temp_dir = self._mktmp()
+        self.local_syspurpose_file = os.path.join(self.temp_dir, 'syspurpose.json')
+        self.cache_syspurpose_file = os.path.join(self.temp_dir, 'cache.json')
+
+        # For these tests we want to make sure that the paths that are used are our mock files
+        synced_store_local_patch = mock.patch('syspurpose.files.SyncedStore.PATH',
+                                              self.local_syspurpose_file)
+        synced_store_local_patch.start()
+        self.addCleanup(synced_store_local_patch.stop)
+
+        synced_store_cache_patch = mock.patch('syspurpose.files.SyncedStore.CACHE_PATH',
+                                              self.cache_syspurpose_file)
+        synced_store_cache_patch.start()
+        self.addCleanup(synced_store_cache_patch.stop)
+
+        self.uep = mock.Mock()
+        self.uep.getConsumer.return_value = self.default_remote_values
+
+        # Fake that the connected server supports syspurpose
+        self.uep.has_capability = mock.Mock(side_effect=lambda x: x in ['syspurpose'])
+
+
+    def test_falsey_values_removed_from_local_empty_local(self):
+        # The falsey values ([], "", {}, None) should never end up after a SyncedStore.sync in
+        # the local syspurpose file.
+        self._assert_falsey_values_removed_from_local(remote_contents=self.default_remote_values,
+                                                      local_contents={},
+                                                      cache_contents={})
+
+    def test_falsey_values_removed_from_local_with_local_values(self):
+        # The falsey values ([], "", {}, None) should never end up after a SyncedStore.sync in
+        # the local syspurpose file. Even if they were added to the local file itself
+        self._assert_falsey_values_removed_from_local(remote_contents=self.default_remote_values,
+                                                      local_contents={"role": ""},
+                                                      cache_contents={})
+
+    def test_falsey_values_removed_from_local_empty_strings_from_remote(self):
+        # The falsey values ([], "", {}, None) should never end up after a SyncedStore.sync in
+        # the local syspurpose file.
+
+        remote_content = {
+            "role": "",
+            "usage": "",
+            "serviceLevel": "",
+            "addOns": []
+        }
+        self._assert_falsey_values_removed_from_local(remote_contents=remote_content,
+                                                      local_contents={},
+                                                      cache_contents={})
+
+    def _assert_falsey_values_removed_from_local(self, remote_contents, local_contents, cache_contents):
+        self.uep.getConsumer.return_value = remote_contents
+
+        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), local_contents)
+        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), cache_contents)
+
+        synced_store = SyncedStore(self.uep, consumer_uuid="something")
+        result = self.assertRaisesNothing(synced_store.sync)
+
+        self.assertTrue(isinstance(result, SyncResult))
+        local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
+        # All the values from the local file should be truthy.
+        self.assertTrue(all(local_result[key] for key in local_result))
+
+        cache_result = json.load(io.open(self.cache_syspurpose_file, 'r'))
+        # The cache should contain the entire set of values from the SyncResult
+        self.assertDictEqual(cache_result, result.result)
+
+    def test_list_items_are_order_agnostic(self):
+        addons = [1, 2]
+        self.uep.getConsumer.return_value = {'addOns': addons}
+
+        # Write an out of order list to both the local and cache
+        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'addons': addons[::-1]})
+        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {'addons': addons[::-1]})
+
+        synced_store = SyncedStore(self.uep, consumer_uuid="something")
+        result = self.assertRaisesNothing(synced_store.sync)
+
+        self.assertTrue(isinstance(result, SyncResult))
+
+        local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
+        cache_result = json.load(io.open(self.cache_syspurpose_file, 'r'))
+
+        self.assertSetEqual(set(result.result['addons']), set(local_result['addons']),
+                            'Expected local file to have the same set of addons as the result')
+        self.assertSetEqual(set(result.result['addons']),  set(cache_result['addons']),
+                            'Expected cache file to have the same set of addons as the result')
+
+    def test_server_side_falsey_removes_value_locally(self):
+        initial_syspurpose = {'role': 'something'}
+        remote_contents = {'role': ''}
+        self.uep.getConsumer.return_value = remote_contents
+
+        # Write an out of order list to both the local and cache
+        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), initial_syspurpose)
+        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), initial_syspurpose)
+
+        synced_store = SyncedStore(self.uep, consumer_uuid="something")
+        result = self.assertRaisesNothing(synced_store.sync)
+
+        self.assertTrue(isinstance(result, SyncResult))
+
+        local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
+        cache_result = json.load(io.open(self.cache_syspurpose_file, 'r'))
+
+        self.assertTrue('role' not in local_result,
+                        'The role was falsey and should not have been in the local file')
+        self.assertTrue('role' in cache_result and cache_result['role'] == remote_contents['role'],
+                        'Expected the cache file to contain the same value for role as the remote')
+
+    def test_values_not_known_server_side_are_left_alone(self):
+        cache_contents = {
+            u'role': u'initial_role',
+            u'usage': u'initial_usage',
+            u'service_level_agreement': u'',
+            u'addons': []
+        }
+        local_contents = {
+            u'role': cache_contents[u'role'],
+            u'usage': cache_contents[u'usage'],
+            u'made_up_key': u'arbitrary_value'  # this key was added and is not known
+        }
+        remote_contents = {
+            u'role': u'remote_role',
+            u'usage': u'',  # Usage has been reset on the server side, should be removed locally
+            u'serviceLevel': u'',
+            u'addOns': []
+        }
+
+        self.uep.getConsumer.return_value = remote_contents
+
+        # Write an out of order list to both the local and cache
+        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), local_contents)
+        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), cache_contents)
+
+        synced_store = SyncedStore(self.uep, consumer_uuid="something")
+        result = self.assertRaisesNothing(synced_store.sync)
+
+        self.assertTrue(isinstance(result, SyncResult))
+
+        local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
+        cache_result = json.load(io.open(self.cache_syspurpose_file, 'r'))
+
+        expected_local = {
+            u'role': remote_contents['role'],
+            u'made_up_key': local_contents['made_up_key']
+        }
+        expected_cache = {
+            u'role': remote_contents['role'],
+            u'usage': remote_contents['usage'],
+            u'made_up_key': local_contents['made_up_key'],
+            u'addons': [],
+            u'service_level_agreement': u''
+        }
+
+        self.assert_equal_dict(expected_local, local_result)
+        self.assert_equal_dict(expected_cache, cache_result)
+
+    def test_server_does_not_support_syspurpose(self):
+        # This is how we detect if we have syspurpose support
+        self.uep.has_capability = mock.Mock(side_effect=lambda x: x in [])
+
+        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {u'role': u'initial'})
+        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
+
+        synced_store = SyncedStore(self.uep, consumer_uuid="something")
+
+        self.assertRaisesNothing(synced_store.set, u'role', u'new_role')
+        result = self.assertRaisesNothing(synced_store.sync)
+
+        self.assertTrue(isinstance(result, SyncResult))
+
+        local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
+        cache_result = json.load(io.open(self.cache_syspurpose_file, 'r'))
+
+        # The cache should not be updated at all
+        self.assert_equal_dict({}, cache_result)
+        self.assert_equal_dict({u'role': u'new_role'}, local_result)
+
+        self.uep.updateConsumer.assert_not_called()
+
+    def test_server_upgraded_to_support_syspurpose(self):
+        # This one attempts to show that if a server does not support syspurpose and then does
+        # after an upgrade perhaps, that we do the right thing (not unsetting all the user set
+        # values
+
+        self.uep.has_capability = mock.Mock(side_effect=lambda x: x in [])
+        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {u'role': u'initial'})
+        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
+
+        synced_store = SyncedStore(self.uep, consumer_uuid="something")
+        result = self.assertRaisesNothing(synced_store.sync)
+
+        self.assertTrue(isinstance(result, SyncResult))
+
+        local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
+        cache_result = json.load(io.open(self.cache_syspurpose_file, 'r'))
+
+        self.assert_equal_dict({u'role': u'initial'}, local_result)
+        self.assert_equal_dict({}, cache_result)
+
+        # Now the "fake" upgrade
+
+        self.uep.has_capability = mock.Mock(side_effect=lambda x: x in ["syspurpose"])
+        self.uep.getConsumer.return_value = self.default_remote_values
+
+        synced_store = SyncedStore(self.uep, consumer_uuid="something")
+        result = self.assertRaisesNothing(synced_store.sync)
+
+        self.assertTrue(isinstance(result, SyncResult))
+
+        local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
+        cache_result = json.load(io.open(self.cache_syspurpose_file, 'r'))
+
+        expected_cache = {
+            u'role': u'initial',  # This was set locally before and should still be
+            u'usage': self.default_remote_values['usage'],
+            u'service_level_agreement': self.default_remote_values['serviceLevel'],
+            u'addons': self.default_remote_values['addOns']
+        }
+
+        self.assert_equal_dict({u'role': u'initial'}, local_result)
+        self.assert_equal_dict(expected_cache, cache_result)
+
+    def test_user_deletes_syspurpose_file(self):
+        cache_contents = {
+            u'role': u'initial_role',
+            u'usage': u'initial_usage',
+            u'service_level_agreement': u'',
+            u'addons': []
+        }
+        remote_contents = {
+            u'role': u'initial_role',
+            u'usage': u'initial_usage',
+            u'serviceLevel': u'',
+            u'addOns': []
+        }
+        consumer_uuid = "something"
+        self.uep.getConsumer.return_value = remote_contents
+        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), cache_contents)
+        # We don't write anything to the self.local_syspurpose_file anywhere else, so not making
+        # one is equivalent to removing an existing one.
+
+        synced_store = SyncedStore(self.uep, consumer_uuid=consumer_uuid)
+        result = self.assertRaisesNothing(synced_store.sync)
+
+        expected_cache = {u'service_level_agreement': u'',
+                          u'addons': []}
+        expected_local = {}
+
+        local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
+        cache_result = json.load(io.open(self.cache_syspurpose_file, 'r'))
+
+        self.assert_equal_dict(expected_local, local_result)
+        self.assert_equal_dict(expected_cache, cache_result)
+        self.uep.updateConsumer.assert_called_once_with(consumer_uuid,
+                                                        role="",
+                                                        usage="",
+                                                        service_level=u"",
+                                                        addons=[])
+
+
+
+
+
 class TestDetectChange(SyspurposeTestBase):
 
     def test_added(self):
@@ -503,6 +786,21 @@ class TestDetectChange(SyspurposeTestBase):
         result = detect_changed(base=base, other=other, key=key)
 
         self.assertEqual(result, True)
+
+    def test_lists_out_of_order(self):
+        """
+        Shows that when two lists are out of order but contain the same elements it is not
+        considered a change.
+        """
+        key = "a"
+        value = ["value1", "value2"]
+        next_value = value[::-1]
+        base = {key: value}
+        other = {key: next_value}
+
+        result = detect_changed(base=base, other=other, key=key)
+
+        self.assertEqual(result, False)
 
     def test_same(self):
         """
@@ -586,7 +884,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
         remote = {"C": None}
         local = {"C": None}
 
-        expected = {}  # C should be removed as it has been unset on both sides
+        expected = {"C": None}  # C should have the None value
         result = three_way_merge(local=local, base=base, remote=remote)
         self.assert_equal_dict(expected, result)
 
@@ -613,7 +911,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
         remote = {"C": None}
         local = {"C": "base"}
 
-        expected = {}
+        expected = {"C": None}
         result = three_way_merge(local=local, base=base, remote=remote)
         self.assert_equal_dict(expected, result)
 
@@ -622,13 +920,13 @@ class TestThreeWayMerge(SyspurposeTestBase):
         remote = {"C": "base"}
         local = {"C": None}
 
-        expected = {}
+        expected = {"C": None}
         result = three_way_merge(local=local, base=base, remote=remote)
         self.assert_equal_dict(expected, result)
 
         # Now with the on_conflict param set to "local"
 
-        expected = {}
+        expected = {"C": None}
         result = three_way_merge(local=local, base=base, remote=remote, on_conflict="local")
         self.assert_equal_dict(expected, result)
 
