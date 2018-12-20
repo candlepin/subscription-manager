@@ -1,9 +1,7 @@
-# eukim <eukim@redhat.com>, 2017. #zanata
 # ljanda <ljanda@redhat.com>, 2017. #zanata
 # Chris Snyder <csnyder@redhat.com>, 2018. #zanata
 # John Sefler <jsefler@redhat.com>, 2018. #zanata
 # eukim <eukim@redhat.com>, 2018. #zanata
-# khowell <khowell@redhat.com>, 2018. #zanata
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 msgid ""
 msgstr ""
@@ -13,8 +11,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2018-12-03 11:18+0000\n"
-"Last-Translator: Chris Snyder <csnyder@redhat.com>\n"
+"PO-Revision-Date: 2018-12-12 10:40+0000\n"
+"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Korean\n"
 "Language: ko\n"
 "X-Generator: Zanata 4.6.2\n"
@@ -196,7 +194,7 @@ msgstr "서비스 레벨:  "
 
 #: cockpit/src/subscriptions-view.jsx:172
 msgid "Usage:  "
-msgstr "사용법 :"
+msgstr "사용법:  "
 
 #: cockpit/src/subscriptions-view.jsx:182
 msgid "Role:  "
@@ -551,7 +549,7 @@ msgstr "심볼릭 링크를 추적할 수 없습니다. 순환 링크일 가능�
 #: src/rct/manifest_commands.py:141
 #, python-format
 msgid "%%prog %s [OPTIONS] MANIFEST_FILE"
-msgstr "%%PROG %s [옵션] MANIFEST_FILE"
+msgstr "%%prog %s [옵션] MANIFEST_FILE"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:146
@@ -746,7 +744,7 @@ msgstr "컨텐츠 모음:"
 
 #: src/rct/manifest_commands.py:300
 msgid "\tManifest"
-msgstr "매니페스트 "
+msgstr "\t매니페스트"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:312
@@ -2341,7 +2339,7 @@ msgstr "인증서 상태 텍스트"
 #: src/subscription_manager/gui/data/glade/installed.glade:345
 #: src/subscription_manager/gui/data/ui/installed.ui:348
 msgid "<b>Arch:</b>"
-msgstr "<b>Arch:</b>"
+msgstr "<b>아키텍처:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/installed.glade:368
@@ -2547,7 +2545,7 @@ msgstr "호스트 이름/도메인 무시 목록 (_H):"
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:338
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:367
 msgid "comma-separated list of hostnames/domains"
-msgstr "콤마로 구분된 호스트이름/도메인 목록 "
+msgstr "콤마로 구분된 호스트이름/도메인 목록"
 
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:342
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:371
@@ -3371,7 +3369,7 @@ msgstr "만료됨"
 #: src/subscription_manager/gui/installedtab.py:204
 #, python-format
 msgid "Subscription %s is expired"
-msgstr "%s 서브스크립션이 만료됨 "
+msgstr "%s 서브스크립션이 만료됨"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/installedtab.py:207
@@ -4236,7 +4234,7 @@ msgstr "시스템 용도 {attr}을/를 설정 해제합니다."
 #: src/subscription_manager/managercli.py:555
 #, python-brace-format
 msgid "Add an item to the list ({attr})."
-msgstr "목록 ({attr})에 항목을 추가합니다. "
+msgstr "목록 ({attr})에 항목을 추가합니다."
 
 #: src/subscription_manager/managercli.py:563
 #, python-brace-format
@@ -4254,7 +4252,7 @@ msgstr "--add는 --remove와 함께 사용할 수 없습니다."
 #: src/subscription_manager/managercli.py:601
 #, python-brace-format
 msgid "{attr} unset."
-msgstr "{attr} 설정이 해제되었습니다. "
+msgstr "{attr} 설정이 해제되었습니다."
 
 #: src/subscription_manager/managercli.py:614
 #: src/subscription_manager/managercli.py:629
@@ -4270,7 +4268,7 @@ msgstr "현재 {name}: {val}"
 #: src/subscription_manager/managercli.py:653
 #, python-brace-format
 msgid "{name} not set."
-msgstr "{name}이/가 설정되어 있지 않습니다. "
+msgstr "{name}이/가 설정되어 있지 않습니다."
 
 #: src/subscription_manager/managercli.py:674
 #, python-brace-format
@@ -4575,7 +4573,7 @@ msgstr "이 시스템 사용에 대한 설정을 관리합니다"
 
 #: src/subscription_manager/managercli.py:1134
 msgid "use set and unset to define the value for this field"
-msgstr "이 필드의 값을 정의하려면 set 및 unset을 사용합니다. "
+msgstr "이 필드의 값을 정의하려면 set 및 unset을 사용합니다"
 
 #: src/subscription_manager/managercli.py:1153
 msgid "base URL for content in form of https://hostname:port/prefix"
@@ -4729,7 +4727,7 @@ msgstr "시스템이 등록 취소되었습니다."
 
 #: src/subscription_manager/managercli.py:1497
 msgid "Modify or view the addons attribute of the system purpose"
-msgstr "시스템 용도의 추가 속성을 변경 또는 표시합니다. "
+msgstr "시스템 용도의 추가 속성을 변경 또는 표시합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1518
@@ -5518,7 +5516,7 @@ msgstr "리포지터리: %s"
 
 #: src/subscription_manager/managercli.py:2782
 msgid "Modify system purpose role"
-msgstr "시스템 용도 역할을 변경합니다. "
+msgstr "시스템 용도 역할을 변경합니다"
 
 #: src/subscription_manager/managercli.py:2789
 msgid ""
