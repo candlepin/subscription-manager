@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 11%{?dist}
+Release: 12%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1133,6 +1133,13 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Jan 03 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-12
+- 1660224: Allow setting and unsetting of addons and service level
+  (csnyder@redhat.com)
+- 1643128: Do not execute subscription-manager dnf plugin twice; ENT-987
+  (jhnidek@redhat.com)
+- 1658374: Update translations with whitespace fixes (csnyder@redhat.com)
+
 * Mon Dec 17 2018 Christopher Snyder <csnyder@redhat.com> 1.23.8-11
 - 1660224: Use the result from SyncResult objects for showing syspurpose
   (csnyder@redhat.com)
