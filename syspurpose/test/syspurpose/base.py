@@ -15,10 +15,12 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
+import json
 import pprint
 import unittest
 import tempfile
 import shutil
+import six
 import sys
 import traceback
 
@@ -100,3 +102,30 @@ class SyspurposeTestBase(unittest.TestCase):
 
         if mismatches or missing_keys or extra:
             self.fail(message)
+
+
+# utility functions from syspurpose.utils to help ensure data written to files is utf-8
+def make_utf8(obj):
+    """
+    Transforms the provided string into unicode if it is not already
+    :param obj: the string to decode
+    :return: the unicode format of the string
+    """
+    if six.PY3:
+        return obj
+    elif obj is not None and isinstance(obj, str) and not isinstance(obj, unicode):
+        obj = obj.decode('utf-8')
+        return obj
+    else:
+        return obj
+
+
+def write_to_file_utf8(file, data):
+    """
+    Writes out the provided data to the specified file, with user-friendly indentation,
+    and in utf-8 encoding.
+    :param file: The file to write to
+    :param data: The data to be written
+    :return:
+    """
+    file.write(make_utf8(json.dumps(data, indent=2, ensure_ascii=False)))

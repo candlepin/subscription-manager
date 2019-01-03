@@ -1654,7 +1654,7 @@ class TestRoleCommand(TestCliCommand):
 
         self.assertIn('role set to "Foo"', cap.out)
         instance_syspurpose_store.set.assert_called_once_with('role', 'Foo')
-        instance_syspurpose_store.finish.assert_called_once()
+        instance_syspurpose_store.sync.assert_called_once()
 
     @patch("subscription_manager.syspurposelib.SyncedStore")
     @patch("subscription_manager.syspurposelib.SyspurposeSyncActionCommand")
@@ -1680,7 +1680,7 @@ class TestRoleCommand(TestCliCommand):
 
         self.assertIn("role unset", cap.out)
         instance_syspurpose_store.unset.assert_called_once_with('role')
-        instance_syspurpose_store.finish.assert_called_once()
+        instance_syspurpose_store.sync.assert_called_once()
 
 
 class TestVersionCommand(TestCliCommand):

@@ -90,7 +90,8 @@ def show_contents(args, syspurposestore):
     """
 
     contents = syspurposestore.sync().result
-    print(json.dumps(contents, indent=2, ensure_ascii=False))
+    contents = {key: contents[key] for key in contents if contents[key]}
+    print(json.dumps(contents, indent=2, ensure_ascii=False, sort_keys=True))
 
 
 def setup_arg_parser():

@@ -696,7 +696,7 @@ class SyspurposeCommand(CliCommand):
 
     def _check_result(self, expectation, success_msg, command, attr):
         if self.store:
-            self.store.finish()
+            self.store.sync()
             result = self.store.get_cached_contents()
         else:
             result = {}
