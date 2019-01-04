@@ -767,10 +767,12 @@ class BasePluginManager(object):
 
         for func in self._slot_to_funcs[slot_name]:
             module = inspect.getmodule(func)
-            if module:
-                func_module_name = module.__name__
-            else:
-                func_module_name = 'unknown_module'
+            func_module_name = getattr(func, '__module__')
+            if not func_module_name:
+                if module:
+                    func_module_name = module.__name__
+                else:
+                    func_module_name = 'unknown_module'
             func_class_name = six.get_method_self(func).__class__.__name__
             plugin_key = ".".join([func_module_name, func_class_name])
             log.debug("Running %s in %s" % (six.get_method_function(func).__name__, plugin_key))
