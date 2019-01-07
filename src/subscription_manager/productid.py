@@ -326,6 +326,20 @@ class ProductManager(object):
 
         self.plugin_manager = require(PLUGIN_MANAGER)
 
+    def find_disabled_repos(self):
+        """Find repos disabled in redhat.repo"""
+        repo_file = repolib.YumRepoFile()
+        repo_file.read()
+
+        disabled_in_redhat_repo = []
+        for section in repo_file.sections():
+            repo = repo_file.section(section)
+
+            if not utils.is_true_value(repo.get('enabled', '0')):
+                disabled_in_redhat_repo.append(repo.id)
+
+        return disabled_in_redhat_repo
+
     def find_temp_disabled_repos(self, enabled):
         """Find repo from redhat.repo that have been disabled from cli."""
         yum_enabled = [x[1] for x in enabled]
@@ -637,6 +651,8 @@ class ProductManager(object):
         log.debug("Checking for product certs to remove. Active include: %s",
                   active)
 
+        disabled_repos = self.find_disabled_repos()
+
         for cert in self.pdir.list():
             product = cert.products[0]
             prod_hash = product.id
@@ -678,7 +694,12 @@ class ProductManager(object):
                 # If product id maps to a repo that we know is only temporarily
                 # disabled, don't delete it.
                 if repo in temp_disabled_repos:
-                    log.warn("%s is disabled via yum cmdline. Not deleting product cert %s", repo, prod_hash)
+                    log.warning("%s is disabled via yum cmdline. Not deleting product cert %s", repo, prod_hash)
+                    delete_product_cert = False
+
+                # If product id maps to a repo that we know is disabled, don't delete it.
+                if repo in disabled_repos:
+                    log.info("%s is disabled. Not deleting product cert %s", repo, prod_hash)
                     delete_product_cert = False
 
                 # is the repo we find here actually active? try harder to find active?
