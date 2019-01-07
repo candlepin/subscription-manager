@@ -358,7 +358,7 @@ class CliCommand(AbstractCLICommand):
 
         # get_server_versions needs to handle any exceptions
         # and return the server dict
-        self.server_versions = get_server_versions(self.no_auth_cp, exception_on_timeout=True)
+        self.server_versions = get_server_versions(self.no_auth_cp, exception_on_timeout=False)
         log.info("Server Versions: %s" % self.server_versions)
 
     def main(self, args=None):
