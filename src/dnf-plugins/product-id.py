@@ -140,7 +140,7 @@ class DnfProductManager(ProductManager):
                             continue
                         lst.append((cert, repo.id))
                         cache[repo.id] = cert.pem
-                    elif repo.id in cache:
+                    elif repo.id in cache and cache[repo.id] is not None:
                         cert = create_from_pem(cache[repo.id])
                         lst.append((cert, repo.id))
                     else:
