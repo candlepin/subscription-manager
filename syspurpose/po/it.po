@@ -1,0 +1,128 @@
+# ljanda <ljanda@redhat.com>, 2018. #zanata
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-07-18 12:05-0400\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2018-11-21 02:38+0000\n"
+"Language-Team: \n"
+"X-Generator: Zanata 4.6.2\n"
+"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: it\n"
+
+#: src/syspurpose/cli.py:36
+msgid "Added {} to {}"
+msgstr "Aggiunto {} a {}"
+
+#: src/syspurpose/cli.py:50
+msgid "Removed {} from {}"
+msgstr "Rimosso {} da {}"
+
+#: src/syspurpose/cli.py:63
+msgid "{} set to {}"
+msgstr "{} impostato {}"
+
+#: src/syspurpose/cli.py:75
+msgid "{} unset"
+msgstr "{} disinserito"
+
+#: src/syspurpose/cli.py:118
+msgid "Sets the value for the given property"
+msgstr "Imposta il valore per la proprietà data"
+
+#: src/syspurpose/cli.py:122 src/syspurpose/cli.py:138
+msgid "The name of the property to set/update"
+msgstr "Il nome della proprietà da impostare / aggiornare"
+
+#: src/syspurpose/cli.py:126
+msgid "The value to set"
+msgstr "Il valore da impostare"
+
+#: src/syspurpose/cli.py:133
+msgid "Unsets (clears) the value for the given property"
+msgstr "Annulla (cancella) il valore per la proprietà data"
+
+#: src/syspurpose/cli.py:143
+msgid "Adds the value(s) to the given property"
+msgstr "Aggiunge il valore (s) alla proprietà data"
+
+#: src/syspurpose/cli.py:147 src/syspurpose/cli.py:163
+msgid "The name of the property to update"
+msgstr "Il nome della proprietà da aggiornare"
+
+#: src/syspurpose/cli.py:151
+msgid "The value(s) to add"
+msgstr "Il valore (s) da aggiungere"
+
+#: src/syspurpose/cli.py:159
+msgid "Removes the value(s) from the given property"
+msgstr "Rimuove il valore (s) dalla proprietà data"
+
+#: src/syspurpose/cli.py:167
+msgid "The value(s) to remove"
+msgstr "Il valore (s) da rimuovere"
+
+#: src/syspurpose/cli.py:176
+msgid "Add one or more offerings to the system syspurpose."
+msgstr "Aggiungi una o più offerte al sistema syspurpose."
+
+#: src/syspurpose/cli.py:182
+msgid "Remove one or more offerings."
+msgstr "Rimuovi una o più offerte."
+
+#: src/syspurpose/cli.py:187
+msgid "Unset all offerings."
+msgstr "Disinserire tutte le offerte."
+
+#: src/syspurpose/cli.py:193
+msgid "Set the system sla"
+msgstr "Imposta il sistema sla"
+
+#: src/syspurpose/cli.py:198
+msgid "Clear set sla"
+msgstr "Cancella set sla"
+
+#: src/syspurpose/cli.py:204
+msgid "Set the system usage"
+msgstr "Imposta l'utilizzo del sistema"
+
+#: src/syspurpose/cli.py:210
+msgid "Clear set usage/"
+msgstr "Cancella l'utilizzo del set /"
+
+#: src/syspurpose/cli.py:216
+msgid "Show the current system syspurpose"
+msgstr "Mostra il sistema attuale condiviso"
+
+#: src/syspurpose/cli.py:232
+msgid ""
+"WARNING: Setting syspurpose in containers has no effect.Please run "
+"syspurpose on the host.\n"
+msgstr ""
+"AVVISO: l'impostazione di syspurpose nei contenitori non ha alcun effetto. "
+"Eseguire syspurpose sull'host.\n"
+
+#: src/syspurpose/files.py:49
+msgid "Cannot read syspurpose file {}\n"
+"Are you root?"
+msgstr "Impossibile leggere il file syspurpose {} \n"
+"Sei root?"
+
+#: src/syspurpose/main.py:31
+msgid "User interrupted process"
+msgstr "Processo interrotto dall'utente"
+
+#: src/syspurpose/utils.py:54
+msgid "Cannot create directory {}\n"
+"Are you root?"
+msgstr "Impossibile creare la directory {} \n"
+"Sei root?"
+
+#: src/syspurpose/utils.py:75
+msgid "Cannot create file {}\n"
+"Are you root?"
+msgstr "Impossibile creare il file {} Sei root?"

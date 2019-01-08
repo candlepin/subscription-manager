@@ -1,0 +1,127 @@
+# kemorigu <kemorigu@redhat.com>, 2018. #zanata
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-07-18 12:05-0400\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2018-09-05 04:16+0000\n"
+"Last-Translator: kemorigu <kemorigu@redhat.com>\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"X-Generator: Zanata 4.6.2\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+
+#: src/syspurpose/cli.py:36
+msgid "Added {} to {}"
+msgstr "{} に {} を追加しました"
+
+#: src/syspurpose/cli.py:50
+msgid "Removed {} from {}"
+msgstr "{} から {} を削除しました"
+
+#: src/syspurpose/cli.py:63
+msgid "{} set to {}"
+msgstr "{} に設定された {}"
+
+#: src/syspurpose/cli.py:75
+msgid "{} unset"
+msgstr "{} 無効にする"
+
+#: src/syspurpose/cli.py:118
+msgid "Sets the value for the given property"
+msgstr "指定プロパティーの値を設定"
+
+#: src/syspurpose/cli.py:122 src/syspurpose/cli.py:138
+msgid "The name of the property to set/update"
+msgstr "設定/更新するプロパティーの名前"
+
+#: src/syspurpose/cli.py:126
+msgid "The value to set"
+msgstr "設定する値"
+
+#: src/syspurpose/cli.py:133
+msgid "Unsets (clears) the value for the given property"
+msgstr "指定プロパティーの値を無効化 (削除)"
+
+#: src/syspurpose/cli.py:143
+msgid "Adds the value(s) to the given property"
+msgstr "指定プロパティーに値を追加"
+
+#: src/syspurpose/cli.py:147 src/syspurpose/cli.py:163
+msgid "The name of the property to update"
+msgstr "更新するプロパティーの名前"
+
+#: src/syspurpose/cli.py:151
+msgid "The value(s) to add"
+msgstr "追加する値"
+
+#: src/syspurpose/cli.py:159
+msgid "Removes the value(s) from the given property"
+msgstr "指定プロパティーから値を削除"
+
+#: src/syspurpose/cli.py:167
+msgid "The value(s) to remove"
+msgstr "削除する値"
+
+#: src/syspurpose/cli.py:176
+msgid "Add one or more offerings to the system syspurpose."
+msgstr "システムの syspurpose に 1 つ以上のオファリングを追加"
+
+#: src/syspurpose/cli.py:182
+msgid "Remove one or more offerings."
+msgstr "1 つ以上のオファリングを削除"
+
+#: src/syspurpose/cli.py:187
+msgid "Unset all offerings."
+msgstr "すべてのオファリングを無効にします。"
+
+#: src/syspurpose/cli.py:193
+msgid "Set the system sla"
+msgstr "システム SLA を設定"
+
+#: src/syspurpose/cli.py:198
+msgid "Clear set sla"
+msgstr "SLA の設定を削除"
+
+#: src/syspurpose/cli.py:204
+msgid "Set the system usage"
+msgstr "システムの使用方法を設定します"
+
+#: src/syspurpose/cli.py:210
+msgid "Clear set usage/"
+msgstr "使用方法の設定を削除します/"
+
+#: src/syspurpose/cli.py:216
+msgid "Show the current system syspurpose"
+msgstr "現行システムの syspurpose を表示します"
+
+#: src/syspurpose/cli.py:232
+msgid ""
+"WARNING: Setting syspurpose in containers has no effect.Please run "
+"syspurpose on the host.\n"
+msgstr "警告: syspurpose をコンテナーに設定しても効果がありません。syspurpose をホスト上で実行してください。\n"
+
+#: src/syspurpose/files.py:49
+msgid "Cannot read syspurpose file {}\n"
+"Are you root?"
+msgstr "syspurpose ファイル {} を読み込めません。\n"
+"root ユーザーでしょうか?"
+
+#: src/syspurpose/main.py:31
+msgid "User interrupted process"
+msgstr "ユーザーによる割り込みプロセスです"
+
+#: src/syspurpose/utils.py:54
+msgid "Cannot create directory {}\n"
+"Are you root?"
+msgstr "ディレクトリー {} を作成できません。\n"
+"root ユーザーでしょうか?"
+
+#: src/syspurpose/utils.py:75
+msgid "Cannot create file {}\n"
+"Are you root?"
+msgstr "ファイル {} を作成できません。\n"
+"root ユーザーでしょうか?"
