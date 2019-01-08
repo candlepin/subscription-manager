@@ -262,13 +262,14 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         self.assertEqual('blah', old_repo['gpgcheck'])
         self.assertEqual('some_key', old_repo['gpgkey'])
 
-    @patch("subscription_manager.repolib.get_repo_files")
-    def test_update_when_new_repo(self, mock_get_repo_files):
+    @patch("subscription_manager.repolib.get_repo_file_classes")
+    def test_update_when_new_repo(self, mock_get_repo_file_classes):
         mock_file = MagicMock()
         mock_file.CONTENT_TYPES = [None]
         mock_file.fix_content = lambda x: x
         mock_file.section.return_value = None
-        mock_get_repo_files.return_value = [(mock_file, mock_file)]
+        mock_class = MagicMock(return_value=mock_file)
+        mock_get_repo_file_classes.return_value = [(mock_class, mock_class)]
 
         def stub_content():
             return [Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])]
@@ -281,8 +282,8 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         self.assertEqual('some_key', written_repo['gpgkey'])
         self.assertEqual(1, update_report.updates())
 
-    @patch("subscription_manager.repolib.get_repo_files")
-    def test_update_when_repo_not_modified_on_mutable(self, mock_get_repo_files):
+    @patch("subscription_manager.repolib.get_repo_file_classes")
+    def test_update_when_repo_not_modified_on_mutable(self, mock_get_repo_file_classes):
         self._inject_mock_invalid_consumer()
         modified_repo = Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
         server_repo = Repo('x', [('gpgcheck', 'original')])
@@ -290,7 +291,8 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         mock_file.CONTENT_TYPES = [None]
         mock_file.fix_content = lambda x: x
         mock_file.section.side_effect = [modified_repo, server_repo]
-        mock_get_repo_files.return_value = [(mock_file, mock_file)]
+        mock_class = MagicMock(return_value=mock_file)
+        mock_get_repo_file_classes.return_value = [(mock_class, mock_class)]
 
         def stub_content():
             return [Repo('x', [('gpgcheck', 'new'), ('gpgkey', 'new_key'), ('name', 'test')])]
@@ -307,8 +309,8 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         self.assertEqual('new', written_repo['gpgcheck'])
         self.assertEqual(None, written_repo['gpgkey'])
 
-    @patch("subscription_manager.repolib.get_repo_files")
-    def test_update_when_repo_modified_on_mutable(self, mock_get_repo_files):
+    @patch("subscription_manager.repolib.get_repo_file_classes")
+    def test_update_when_repo_modified_on_mutable(self, mock_get_repo_file_classes):
         self._inject_mock_invalid_consumer()
         modified_repo = Repo('x', [('gpgcheck', 'unoriginal'), ('gpgkey', 'some_key')])
         server_repo = Repo('x', [('gpgcheck', 'original')])
@@ -316,7 +318,8 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         mock_file.CONTENT_TYPES = [None]
         mock_file.fix_content = lambda x: x
         mock_file.section.side_effect = [modified_repo, server_repo]
-        mock_get_repo_files.return_value = [(mock_file, mock_file)]
+        mock_class = MagicMock(return_value=mock_file)
+        mock_get_repo_file_classes.return_value = [(mock_class, mock_class)]
 
         def stub_content():
             return [Repo('x', [('gpgcheck', 'new'), ('gpgkey', 'new_key'), ('name', 'test')])]
