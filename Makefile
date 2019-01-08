@@ -108,7 +108,16 @@ STYLEFILES=$(PYFILES) $(BIN_FILES)
 
 .DEFAULT_GOAL := build
 
-build: rhsmcertd rhsm-icon
+build-subpackages:
+	for subpackage in $(SUBPACKAGES); \
+	do \
+	    pushd $$subpackage; \
+	    $(PYTHON) ./setup.py clean --all \
+	    $(PYTHON) ./setup.py build --root=$(DESTDIR) --prefix=$(PREFIX); \
+	    popd; \
+	done;
+
+build: rhsmcertd rhsm-icon build-subpackages
 # Install doesn't perform a build if it doesn't have too.  Best to clean out
 # any cruft so developers don't end up install old builds.
 	$(PYTHON) ./setup.py clean --all
