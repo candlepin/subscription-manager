@@ -960,14 +960,16 @@ class TestReposCommand(TestCliCommand):
         self.cc.main(["--list-enabled"])
         self.cc._validate_options()
 
-        repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")])]
+        repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]), Repo("z", [("enabled", "0")]),
+                 Repo("a", [("enabled", "false")]), Repo("b", [("enabled", "False")]), Repo("c", [("enabled", "true")])
+                 ]
         mock_invoker.return_value.get_repos.return_value = repos
 
         with Capture() as cap:
             self.cc._do_command()
 
         result = self.check_output_for_repos(cap.out, repos)
-        self.assertEqual((True, False, False), result)
+        self.assertEqual((True, False, False, False, False, True), result)
 
     @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_list_disabled(self, mock_invoker):
