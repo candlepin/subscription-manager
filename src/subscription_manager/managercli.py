@@ -2272,8 +2272,10 @@ class ReposCommand(CliCommand):
             if len(repos):
                 # TODO: Perhaps this should be abstracted out as well...?
                 def filter_repos(repo):
-                    show_enabled = (self.options.list_enabled and repo["enabled"] != '0')
-                    show_disabled = (self.options.list_disabled and repo["enabled"] == '0')
+                    disabled_values = ['false', '0']
+                    repo_enabled = repo['enabled'].lower()
+                    show_enabled = (self.options.list_enabled and repo_enabled not in disabled_values)
+                    show_disabled = (self.options.list_disabled and repo_enabled in disabled_values)
 
                     return show_enabled or show_disabled
 
