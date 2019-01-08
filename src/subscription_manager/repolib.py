@@ -26,7 +26,7 @@ import subscription_manager.injection as inj
 from subscription_manager.cache import OverrideStatusCache, WrittenOverrideCache
 from subscription_manager import model
 from subscription_manager.model import ent_cert
-from subscription_manager.repofile import Repo, manage_repos_enabled, get_repo_files
+from subscription_manager.repofile import Repo, manage_repos_enabled, get_repo_file_classes
 from subscription_manager.repofile import YumRepoFile
 
 from rhsm.config import initConfig, in_container
@@ -231,7 +231,8 @@ class RepoActionInvoker(BaseActionInvoker):
 
     @classmethod
     def delete_repo_file(cls):
-        for repo_file, _dummy in get_repo_files():
+        for repo_class, _dummy in get_repo_file_classes():
+            repo_file = repo_class()
             if os.path.exists(repo_file.path):
                 os.unlink(repo_file.path)
         # When the repo is removed, also remove the override tracker
@@ -399,15 +400,25 @@ class RepoUpdateActionCommand(object):
         # redhat.repo file:
         if not self.manage_repos:
             log.debug("manage_repos is 0, skipping generation of repo files")
-            for repo_file, _dummy in get_repo_files():
+            for repo_class, _dummy in get_repo_file_classes():
+                repo_file = repo_class()
                 if repo_file.exists():
                     log.info("Removing %s due to manage_repos configuration." %
                             repo_file.path)
             RepoActionInvoker.delete_repo_file()
             return 0
 
-        for repo_file, server_val_repo_file in get_repo_files():
-            # Load the RepoFile from disk, this contains all our managed yum repo sections:
+        repo_pairs = []
+        for repo_class, server_val_repo_class in get_repo_file_classes():
+            # Load the RepoFile from disk, this contains all our managed yum repo sections.
+            # We want to instantiate late because having a long-lived instance creates the possibility
+            # of reading the file twice.  Despite it's name, the RepoFile object corresponds more to a
+            # dictionary of config settings than a single file.  Doing a double read can result in comments
+            # getting loaded twice.  A feedback loop can result causing the repo file to grow at O(n^2).
+            # See BZ 1658409
+            repo_pairs.append((repo_class(), server_val_repo_class()))
+
+        for repo_file, server_val_repo_file in repo_pairs:
             repo_file.read()
             server_val_repo_file.read()
         valid = set()
@@ -417,7 +428,7 @@ class RepoUpdateActionCommand(object):
         for cont in self.get_unique_content():
             valid.add(cont.id)
 
-            for repo_file, server_value_repo_file in get_repo_files():
+            for repo_file, server_value_repo_file in repo_pairs:
                 if cont.content_type in repo_file.CONTENT_TYPES:
                     fixed_cont = repo_file.fix_content(cont)
                     existing = repo_file.section(fixed_cont.id)
@@ -435,7 +446,7 @@ class RepoUpdateActionCommand(object):
                         server_value_repo_file.update(server_value_repo)
                         self.report_update(existing)
 
-        for repo_file, server_value_repo_file in get_repo_files():
+        for repo_file, server_value_repo_file in repo_pairs:
             for section in server_value_repo_file.sections():
                 if section not in valid:
                     self.report_delete(section)

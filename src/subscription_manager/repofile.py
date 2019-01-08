@@ -579,20 +579,20 @@ class ZypperRepoFile(YumRepoFile):
         return cls('var/lib/rhsm/repo_server_val/', 'zypper_{}'.format(cls.NAME))
 
 
-def init_repo_files():
+def init_repo_file_classes():
     repo_file_classes = [YumRepoFile, ZypperRepoFile]
     if HAS_DEB822:
         repo_file_classes.append(AptRepoFile)
     repo_files = [
-        (RepoFile(), RepoFile.server_value_repo_file())
+        (RepoFile, RepoFile.server_value_repo_file)
         for RepoFile in repo_file_classes
         if RepoFile.installed()
     ]
     return repo_files
 
 
-def get_repo_files():
+def get_repo_file_classes():
     global repo_files
     if not repo_files:
-        repo_files = init_repo_files()
+        repo_files = init_repo_file_classes()
     return repo_files
