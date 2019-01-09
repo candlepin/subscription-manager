@@ -576,7 +576,9 @@ desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-c
 %endif
 
 %find_lang rhsm
-
+%if 0%{?include_syspurpose}
+%find_lang syspurpose
+%endif
 
 # fake out the redhat.repo file
 %if %{use_yum} || %{use_dnf}
@@ -944,7 +946,7 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %endif
 
 %if %{with python3}
-%files -n %{py_package_prefix}-syspurpose
+%files -n %{py_package_prefix}-syspurpose -f syspurpose.lang
 %defattr(-,root,root,-)
 %dir %{python3_sitelib}/syspurpose*.egg-info
 %{python3_sitelib}/syspurpose*.egg-info/*

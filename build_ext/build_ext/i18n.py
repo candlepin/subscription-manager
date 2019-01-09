@@ -30,6 +30,7 @@ class BuildTrans(BaseCommand):
     ]
 
     boolean_options = ['lint']
+    app_name = "rhsm"
 
     def initialize_options(self):
         self.build_base = None
@@ -58,7 +59,7 @@ class BuildTrans(BaseCommand):
         for po_file in Utils.find_files_of_type('po', '*.po'):
             lang = os.path.basename(po_file)[:-3]
             dest_path = os.path.join(self.build_base, 'locale', lang, 'LC_MESSAGES')
-            dest = os.path.join(dest_path, 'rhsm.mo')
+            dest = os.path.join(dest_path, self.app_name + '.mo')
             Utils.run_if_new(po_file, dest, self.compile)
 
         for desktop_file in Utils.find_files_of_type('etc-conf', '*.desktop.in'):

@@ -26,8 +26,46 @@ build_ext_home = os.path.abspath(os.path.join(os.path.dirname(__file__), "../bui
 sys.path.append(build_ext_home)
 from build_ext import i18n, utils
 
+from distutils.command.build import build as _build
+from distutils.command.install_data import install_data as _install_data
+
+
+class install_data(_install_data):
+    def join(self, *args):
+        return os.path.normpath(os.path.join(*args))
+
+    def add_messages(self):
+        for lang in os.listdir(self.join('build', 'locale')):
+            lang_dir = self.join('share', 'locale', lang, 'LC_MESSAGES')
+            lang_file = self.join('build', 'locale', lang, 'LC_MESSAGES', 'syspurpose.mo')
+            self.data_files.append((lang_dir, [lang_file]))
+
+    def run(self):
+        self.add_messages()
+        _install_data.run(self)
+
+
+class build(_build):
+
+    def has_po_files(self):
+        try:
+            next(utils.Utils.find_files_of_type('po', '*.po'))
+            return True
+        except StopIteration:
+            return False
+    # Based on the po extensions for subscription-manager
+    # adding items to this class attribute allow these commands to be run along with this command
+    sub_commands = _build.sub_commands + [('build_trans', has_po_files)]
+
+
+class BuildTrans(i18n.BuildTrans):
+    app_name = "syspurpose"
+
+
 cmdclass = {
-    'build_trans': i18n.BuildTrans,
+    'build_trans': BuildTrans,
+    'build': build,
+    'install_data': install_data,
     'update_trans': i18n.UpdateTrans,
     'uniq_trans': i18n.UniqTrans,
     'gettext': i18n.Gettext,
