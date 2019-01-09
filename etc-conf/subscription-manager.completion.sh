@@ -33,6 +33,25 @@ _subscription_manager_attach()
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
+_subscription_manager_role()
+{
+  local opts="${_subscription_manager_common_opts} --set --unset"
+  COMPREPLY=($(compgen -W "${opts}" -- ${1}))
+}
+
+_subscription_manager_usage()
+{
+  local opts="${_subscription_manager_common_opts} --set --unset"
+  COMPREPLY=($(compgen -W "${opts}" -- ${1}))
+}
+
+_subscription_manager_addons()
+{
+  local opts="${_subscription_manager_common_opts} --add --remove --unset"
+  COMPREPLY=($(compgen -W "${opts}" -- ${1}))
+}
+
+
 _subscription_manager_unregister()
 {
   local opts="${_subscription_manager_common_opts}"
