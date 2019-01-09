@@ -215,7 +215,8 @@ install-plugins:
 		install -d $(DESTDIR)/$(DNF_PLUGIN_PYTHON_SITELIB)/dnf-plugins/ ; \
 		install -d $(DESTDIR)/etc/dnf/plugins/ ; \
 		install -m 644 -p src/dnf-plugins/*.py $(DESTDIR)/$(DNF_PLUGIN_PYTHON_SITELIB)/dnf-plugins/ ; \
-		install -m 644 etc-conf/plugin/*.conf $(DESTDIR)/etc/dnf/plugins/ ; \
+		install -m 644 etc-conf/plugin/product-id.conf $(DESTDIR)/etc/dnf/plugins/ ; \
+		install -m 644 etc-conf/plugin/subscription-manager.conf $(DESTDIR)/etc/dnf/plugins/ ; \
 	fi;
 
 	# ostree stuff

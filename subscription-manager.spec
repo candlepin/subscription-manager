@@ -700,7 +700,6 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
     # remove the repo file when we are deleted
     %config(noreplace) %attr(644,root,root) %{_sysconfdir}/dnf/plugins/subscription-manager.conf
     %config(noreplace) %attr(644,root,root) %{_sysconfdir}/dnf/plugins/product-id.conf
-    %config(noreplace) %attr(644,root,root) %{_sysconfdir}/dnf/plugins/search-disabled-repos.conf
 %endif
 
 # misc system config
