@@ -1336,9 +1336,8 @@ class RegisterCommand(UserPassCommand):
                     usage=syspurpose.get('usage')
                 )
 
-                store = syspurposelib.SyncedStore
+                store = syspurposelib.get_sys_purpose_store()
                 if store:
-                    store = store(admin_cp, consumer_uuid=consumer['uuid'])
                     store.sync()
         except (connection.RestlibException, exceptions.ServiceError) as re:
             log.exception(re)
@@ -2892,6 +2891,10 @@ class StatusCommand(CliCommand):
             for message in reasons[name]:
                 print('- %s' % format_name(message, 2, columns))
             print('')
+
+        store = syspurposelib.get_sys_purpose_store()
+        if store:
+            store.sync()
 
         syspurpose_cache = inj.require(inj.SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE)
         syspurpose_cache.load_status(self.cp, self.identity.uuid)
