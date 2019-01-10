@@ -46,6 +46,19 @@ from subscription_manager import repofile
 from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_TYPE
 
 
+class ConfigFromString(config.Config):
+    def __init__(self, config_string):
+        parser = RhsmConfigParserFromString(config_string)
+        super(ConfigFromString, self).__init__(parser)
+
+
+class RhsmConfigParserFromString(RhsmConfigParser):
+    def __init__(self, config_string):
+        SafeConfigParser.__init__(self)
+        self.stringio = six.StringIO(config_string)
+        self.readfp(self.stringio)
+
+
 class TestRepoActionInvoker(fixture.SubManFixture):
     def _stub_content(self, include_content_access=False):
         stub_prod = StubProduct('stub_product',
@@ -105,6 +118,25 @@ class TestRepoActionInvoker(fixture.SubManFixture):
         self.assertNotEqual(certpath, self.stub_content_access_cert.path)
 
 
+PROXY_NO_PROTOCOL = """
+[server]
+proxy_hostname = fake.server.com
+proxy_port = 3129
+"""
+
+PROXY_HTTP_PROTOCOL = """
+[server]
+proxy_hostname = http://fake.server.com
+proxy_port = 3129
+"""
+
+PROXY_HTTPS_PROTOCOL = """
+[server]
+proxy_hostname = https://fake.server.com
+proxy_port = 3129
+"""
+
+
 class RepoTests(unittest.TestCase):
     """
     Tests for the repolib Repo class
@@ -145,6 +177,24 @@ class RepoTests(unittest.TestCase):
         existing_repo = Repo('testrepo')
         existing_repo['fake_prop'] = 'fake'
         self.assertTrue(('fake_prop', 'fake') in list(existing_repo.items()))
+
+    @patch.object(repofile, 'conf', ConfigFromString(config_string=PROXY_NO_PROTOCOL))
+    def test_http_by_default(self):
+        repo = Repo('testrepo')
+        r = Repo._set_proxy_info(repo)
+        self.assertEqual(r['proxy'], "http://fake.server.com:3129")
+
+    @patch.object(repofile, 'conf', ConfigFromString(config_string=PROXY_HTTP_PROTOCOL))
+    def test_http(self):
+        repo = Repo('testrepo')
+        r = Repo._set_proxy_info(repo)
+        self.assertEqual(r['proxy'], "http://fake.server.com:3129")
+
+    @patch.object(repofile, 'conf', ConfigFromString(config_string=PROXY_HTTPS_PROTOCOL))
+    def test_https(self):
+        repo = Repo('testrepo')
+        r = Repo._set_proxy_info(repo)
+        self.assertEqual(r['proxy'], "https://fake.server.com:3129")
 
 
 class RepoActionReportTests(fixture.SubManFixture):
@@ -824,20 +874,6 @@ manage_repos =
 [rhsmcertd]
 certCheckInterval = 240
 """
-
-
-class ConfigFromString(config.Config):
-    def __init__(self, config_string):
-        parser = RhsmConfigParserFromString(config_string)
-        super(ConfigFromString, self).__init__(parser)
-
-
-class RhsmConfigParserFromString(RhsmConfigParser):
-    def __init__(self, config_string):
-        SafeConfigParser.__init__(self)
-        self.stringio = six.StringIO(config_string)
-        self.readfp(self.stringio)
-
 
 unset_config = """[server]
 hostname = server.example.conf
