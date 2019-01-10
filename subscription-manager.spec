@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 12%{?dist}
+Release: 13%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1133,6 +1133,15 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Jan 10 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-13
+- 1656598: Treat false as disabled when listing repos (csnyder@redhat.com)
+- 1591399: Stop throwing exception on timeout to avoid stacktrace
+  (wpoteat@redhat.com)
+- 1658409: Stop redhat.repo from growing exponentially (awood@redhat.com)
+- 1661219: Do not delete product certs for disabled repos
+  (jhnidek@redhat.com)
+- 1618901: Module name unknown (wpoteat@redhat.com)
+
 * Thu Jan 03 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-12
 - 1660224: Allow setting and unsetting of addons and service level
   (csnyder@redhat.com)
