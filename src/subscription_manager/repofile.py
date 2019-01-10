@@ -160,7 +160,11 @@ class Repo(dict):
         # proxy_port as string is fine here
         proxy_port = conf['server']['proxy_port']
         if proxy_host != "":
-            proxy = "https://%s" % proxy_host
+            if proxy_host.startswith('http://') or proxy_host.startswith('HTTP://') or \
+                proxy_host.startswith('https://') or proxy_host.startswith('HTTPS://'):
+                proxy = proxy_host
+            else:
+                proxy = "http://%s" % proxy_host
             if proxy_port != "":
                 proxy = "%s:%s" % (proxy, proxy_port)
 
