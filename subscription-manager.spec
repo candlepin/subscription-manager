@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 13%{?dist}
+Release: 14%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1134,6 +1134,13 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Jan 11 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-14
+- 1632394: Supplement initial-setup-gui with our addon (csnyder@redhat.com)
+- 1624859: Simplify syspurpose bash completion (csnyder@redhat.com)
+- 1663254: Remove "Red Hat Enterprise Linux Client/Desktop" role option
+  (csnyder@redhat.com)
+- 1655083: Sync syspurpose on status command (csnyder@redhat.com)
+
 * Thu Jan 10 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-13
 - 1656598: Treat false as disabled when listing repos (csnyder@redhat.com)
 - 1591399: Stop throwing exception on timeout to avoid stacktrace
