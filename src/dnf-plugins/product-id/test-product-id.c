@@ -375,6 +375,49 @@ void testInstalledPackages(installedPackageFixture *fixture, gconstpointer testD
     GPtrArray *installedPackages = getInstalledPackages(fixture->rpmDbSack);
     // We expect that the length of the list will be bigger than zero :-)
     g_assert_cmpint(installedPackages->len, >, 0);
+    g_object_unref(installedPackages);
+}
+
+typedef struct {
+    ProductDb *oldProductDb;
+    GPtrArray *disabledRepos;
+    DnfRepo *repo;
+    DnfContext *dnfContext;
+} protectedProductFixture;
+
+void setupProtectedProduct(protectedProductFixture *fixture, gconstpointer testData) {
+    (void) testData;
+    // Set up fake existing dabatase with product-ids and repos
+    fixture->oldProductDb = initProductDb();
+    fixture->oldProductDb->path = "/path/to/testing.json";
+    addRepoId(fixture->oldProductDb, "69", "rhel");
+    addRepoId(fixture->oldProductDb, "69", "rhel-testing");
+    addRepoId(fixture->oldProductDb, "71", "jboss");
+    // Set up fake list of disabled repos
+    fixture->disabledRepos = g_ptr_array_sized_new(1);
+    fixture->dnfContext = dnf_context_new();
+    fixture->repo = dnf_repo_new(fixture->dnfContext);
+    dnf_repo_set_id(fixture->repo, "jboss");
+    g_ptr_array_add(fixture->disabledRepos, fixture->repo);
+}
+
+void teardownProtectedProduct(protectedProductFixture *fixture, gconstpointer testData) {
+    (void)testData;
+    g_ptr_array_unref(fixture->disabledRepos);
+    freeProductDb(fixture->oldProductDb);
+    g_object_unref(fixture->repo);
+    g_object_unref(fixture->dnfContext);
+}
+
+void testProtectedProduct(protectedProductFixture *fixture, gconstpointer testData) {
+    (void)testData;
+    ProductDb *productDb = initProductDb();
+    productDb->path = "/path/to/testing.json";
+    protectProductWithDisabledRepos(fixture->disabledRepos, fixture->oldProductDb, productDb);
+    gpointer repoIdList = g_hash_table_lookup(productDb->repoMap, "71");
+    guint listLength = g_slist_length((GSList *) repoIdList);
+    g_assert_cmpint(1, ==, listLength);
+    freeProductDb(productDb);
 }
 
 int main(int argc, char **argv) {
@@ -395,5 +438,6 @@ int main(int argc, char **argv) {
     g_test_add("/set2/test getting enabled repos", enabledReposFixture, NULL, setupEnabledRepos, testGetEnabledRepos, teardownEnabledRepos);
     g_test_add("/set2/test getting active repos", activeReposFixture, NULL, setupActiveRepos, testGetActiveRepos, teardownActiveRepos);
     g_test_add("/set2/test installed packages", installedPackageFixture, NULL, setupInstalledPackages, testInstalledPackages, teardownInstalledPackages);
+    g_test_add("/set2/test protect disabled repos", protectedProductFixture, NULL, setupProtectedProduct, testProtectedProduct, teardownProtectedProduct);
     return g_test_run();
 }

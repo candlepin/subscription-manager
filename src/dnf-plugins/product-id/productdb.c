@@ -271,7 +271,7 @@ gboolean hasRepoId(ProductDb *productDb, const char *productId, const char *repo
  */
 void printProductIdHashTable(gpointer key, gpointer value, gpointer data) {
     // data is a pointer to a GString
-    g_string_append_printf(data, "\t%s:", (char *) key);
+    g_string_append_printf(data, "\t%s: ", (char *) key);
 
     GSList *iterator = NULL;
     for (iterator = value; iterator; iterator = iterator->next) {
