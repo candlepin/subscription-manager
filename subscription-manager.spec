@@ -406,7 +406,9 @@ Group: System Environment/Base
 Requires: rhsm-gtk = %{version}-%{release}
 Requires: initial-setup-gui >= 0.3.9.24-1
 Obsoletes: subscription-manager-firstboot < 1.15.3-1
+%if (0%{?fedora} >= 24 || 0%{?rhel} >= 8)
 Supplements: initial-setup-gui
+%endif
 
 %description -n subscription-manager-initial-setup-addon
 This package contains the initial-setup screens for subscription-manager.
