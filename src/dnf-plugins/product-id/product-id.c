@@ -169,6 +169,35 @@ void freeRepoProductId(RepoProductId *repoProductId) {
 }
 
 /**
+ * This function tries to protect product certificates
+ * @param repos Array of repositories.
+ * @param productDb Pointer at ProductDb struct.
+ */
+void protectProductWithDisabledRepos(GPtrArray *disabledRepos, ProductDb *oldProductDb, ProductDb *productDb) {
+
+    // Try to find active, but disabled repositories
+    for (guint i = 0; i < disabledRepos->len; i++) {
+        DnfRepo *repo = g_ptr_array_index(disabledRepos, i);
+        debug("Disabled: %s", dnf_repo_get_id(repo));
+        GHashTableIter iter;
+        gpointer key, value;
+
+        g_hash_table_iter_init (&iter, oldProductDb->repoMap);
+        while (g_hash_table_iter_next (&iter, &key, &value)) {
+            GSList *iterator = NULL;
+            for (iterator = value; iterator; iterator = iterator->next) {
+                if (g_strcmp0((char *)iterator->data, dnf_repo_get_id(repo)) == 0) {
+                    debug("Protecting disabled repository: %s", (char *)iterator->data);
+                    // When repository has been added to the product database in the past
+                    // and it is disabled now, then keep it in database
+                    addRepoId(productDb, key, dnf_repo_get_id(repo));
+                }
+            }
+        }
+    }
+}
+
+/**
  * Callback function. This method is executed for every libdnf hook. This callback
  * is called several times during transaction, but we are interested only in one situation.
  *
@@ -214,6 +243,8 @@ int pluginHook(PluginHandle *handle, PluginHookId id, DnfPluginHookData *hookDat
         GPtrArray *enabledRepos = g_ptr_array_sized_new(repos->len);
         // Enabled repositories with product id certificate
         GPtrArray *repoAndProductIds = g_ptr_array_sized_new(repos->len);
+        // List of disabled repositories
+        GPtrArray *disabledRepos = g_ptr_array_sized_new(repos->len);
         // Enabled repositories with prouctid cert that are actively used
         GPtrArray *activeRepoAndProductIds = g_ptr_array_sized_new(repos->len);
 
@@ -222,6 +253,19 @@ int pluginHook(PluginHandle *handle, PluginHookId id, DnfPluginHookData *hookDat
         // TODO: read product DB here, when cache-only mode is supported
 
         getEnabled(repos, enabledRepos);
+
+        // Read existing db of product certificates and repositories
+        ProductDb *oldProductDb = initProductDb();
+        oldProductDb->path = PRODUCTDB_FILE;
+        GError *err = NULL;
+        readProductDb(oldProductDb, &err);
+        if(err != NULL) {
+            printError("Unable to read producDB", err);
+        } else {
+            debug("Old productDb: %s", productDbToString(oldProductDb));
+            getDisabled(repos, disabledRepos);
+            protectProductWithDisabledRepos(disabledRepos, oldProductDb, productDb);
+        }
 
         for (guint i = 0; i < enabledRepos->len; i++) {
             DnfRepo *repo = g_ptr_array_index(enabledRepos, i);
@@ -282,8 +326,10 @@ int pluginHook(PluginHandle *handle, PluginHookId id, DnfPluginHookData *hookDat
         }
 
         freeProductDb(productDb);
+        freeProductDb(oldProductDb);
         g_ptr_array_unref(repos);
         g_ptr_array_unref(enabledRepos);
+        g_ptr_array_unref(disabledRepos);
         g_ptr_array_unref(repoAndProductIds);
         g_ptr_array_unref(activeRepoAndProductIds);
     }
@@ -311,6 +357,21 @@ void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos) {
         bool enabled = (dnf_repo_get_enabled(repo) & DNF_REPO_ENABLED_PACKAGES) > 0;
         if (enabled) {
             g_ptr_array_add(enabledRepos, repo);
+        }
+    }
+}
+
+/**
+ * Find the list of repos that are actually disabled
+ * @param repos all available repos
+ * @param disabledRepos the list of disabled repos
+ */
+void getDisabled(const GPtrArray *repos, GPtrArray *disabledRepos) {
+    for (guint i = 0; i < repos->len; i++) {
+        DnfRepo* repo = g_ptr_array_index(repos, i);
+        bool enabled = (dnf_repo_get_enabled(repo) & DNF_REPO_ENABLED_PACKAGES) > 0;
+        if (!enabled) {
+            g_ptr_array_add(disabledRepos, repo);
         }
     }
 }
@@ -425,12 +486,16 @@ void getActive(DnfPluginHookData *hookData, const GPtrArray *repoAndProductIds, 
     // of installed packages. Quering dnfSack would not include just installed RPM
     // package(s) or it would still include just removed package(s).
     DnfSack *rpmDbSack = dnf_sack_new();
-    if(rpmDbSack == NULL) {
+    if (rpmDbSack == NULL) {
         error("Unable to create new sack object for quering rpmdb");
         return;
     }
 
+    // Get list of all packages installed in the system
     GPtrArray *installedPackages = getInstalledPackages(rpmDbSack);
+    if (installedPackages == NULL) {
+        return;
+    }
 
     for (guint i = 0; i < repoAndProductIds->len; i++) {
         RepoProductId *repoProductId = g_ptr_array_index(repoAndProductIds, i);

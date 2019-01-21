@@ -68,6 +68,7 @@ RepoProductId *initRepoProductId();
 void freeRepoProductId(RepoProductId *repoProductId);
 void printError(const char *msg, GError *err);
 void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos);
+void getDisabled(const GPtrArray *repos, GPtrArray *disabledRepos);
 GPtrArray *getAvailPackageList(DnfSack *dnfSack, DnfRepo *repo);
 GPtrArray *getInstalledPackages(DnfSack *rpmDbSack);
 void getActive(DnfPluginHookData *hookData, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds);
@@ -75,6 +76,7 @@ int decompress(gzFile input, GString *output) ;
 int findProductId(GString *certContent, GString *result);
 int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId);
 int installProductId(RepoProductId *repoProductId, ProductDb *productDb, const char *product_cert_dir);
-void writeRepoMap(ProductDb *productDb) ;
+void writeRepoMap(ProductDb *productDb);
+void protectProductWithDisabledRepos(GPtrArray *disabledRepos, ProductDb *oldProductDb, ProductDb *productDb);
 
 #endif //PRODUCT_ID_PRODUCT_ID_H
