@@ -17,7 +17,6 @@ from __future__ import print_function, division, absolute_import
 import locale
 import logging
 
-from rhsmlib.facts import hwprobe
 from rhsmlib.facts import cleanup
 from rhsmlib.facts import virt
 from rhsmlib.facts import firmware_info
@@ -48,11 +47,6 @@ class HostCollector(collector.FactsCollector):
 
     def get_all(self):
         host_facts = {}
-        hardware_collector = hwprobe.HardwareCollector(
-            prefix=self.prefix,
-            testing=self.testing
-        )
-        hardware_info = hardware_collector.get_all()
 
         firmware_collector = firmware_info.FirmwareCollector(
             prefix=self.prefix,
@@ -67,7 +61,6 @@ class HostCollector(collector.FactsCollector):
         )
         virt_collector_info = virt_collector.get_all()
 
-        host_facts.update(hardware_info)
         host_facts.update(virt_collector_info)
         host_facts.update(firmware_info_dict)
 
