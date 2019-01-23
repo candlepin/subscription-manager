@@ -21,8 +21,8 @@ from subscription_manager import injection as inj
 from subscription_manager.i18n import ugettext as _
 
 
-STATUS_MAP = {'valid': _('Valid'),
-        'invalid': _('Invalid'),
+STATUS_MAP = {'valid': _('Matched'),
+        'invalid': _('Mismatched'),
         'partial': _('Partial'),
         'matched': _('Matched'),
         'mismatched': _('Mismatched'),

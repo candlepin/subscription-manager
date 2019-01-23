@@ -338,7 +338,7 @@ class TestStatusCommand(SubManFixture):
         self.cc.options.on_date = None
         with Capture() as cap:
             self.cc._do_command()
-        self.assertTrue('System Purpose Status: Valid' in cap.out)
+        self.assertTrue('System Purpose Status: Matched' in cap.out)
 
     def test_purpose_status_consumer_lack(self):
         self.cc.consumerIdentity = StubConsumerIdentity
