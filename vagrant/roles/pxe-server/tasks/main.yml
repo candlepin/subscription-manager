@@ -6,17 +6,10 @@
   become: yes
   with_items: "{{required_rpms}}"
 
-- name: create configuration file for eth1
-  template:
-    src: ifcfg-eth1.j2
-    dest: /etc/sysconfig/network-scripts/ifcfg-eth1
+- name: set static ip with network manager
+  shell: |
+    nmcli dev mod eth1 ipv4.method manual ipv4.addr "{{pxe_server_ip_addr}}"
   become: yes
-
-- name: restart network
-  service:
-    name: network
-    state: restarted
-  become: true
 
 - name: modify configuration file of dhcp server
   template:
@@ -36,6 +29,13 @@
     name: tftp.socket
     enabled: yes
     state: started
+  become: true
+
+- lineinfile:
+    path: /etc/vsftpd/vsftpd.conf
+    state: present
+    regexp: '^anonymous_enable'
+    line: 'anonymous_enable=YES'
   become: true
 
 - name: start and enable vsftpd service

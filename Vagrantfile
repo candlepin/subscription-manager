@@ -135,7 +135,12 @@ Vagrant.configure("2") do |config|
   # PXE server
   config.vm.define 'pxe-server', autostart: false do |host|
     host.vm.hostname = 'pxe-server'
-    host.vm.box = 'fedora/27-cloud-base'
+    host.vm.box = 'fedora/29-cloud-base'
+
+    # dnf requires more memory on fedora 29
+    host.vm.provider :libvirt do |domain|
+      domain.memory = 1024
+    end
 
     host.vm.provision "ansible", run: "always" do |ansible|
       ansible.playbook = "vagrant/vagrant_pxe_server.yml"
