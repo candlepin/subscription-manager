@@ -703,8 +703,6 @@ class BaseRestLib(object):
                                                        ("Unable to make a connection using SSL client certificate."
                                                         "Please review proxy configuration and connectivity."),
                                                        response.get('headers'))
-                    else:
-                        raise UnauthorizedException(response['status'], request_type=request_type, handler=handler)
 
                 # FIXME: we can get here with a valid json response that
                 # could be anything, we don't verify it anymore
