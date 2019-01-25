@@ -1111,6 +1111,10 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
                     self.show_service_level()
             except UnauthorizedException as uex:
                 handle_exception(_(str(uex)), uex)
+            except connection.RestlibException as re:
+                log.exception(re)
+                log.error(u"Error: Unable to retrieve service levels: %s" % re)
+                system_exit(os.EX_SOFTWARE, re.msg)
 
     def set(self):
         if self.cp.has_capability("syspurpose"):
