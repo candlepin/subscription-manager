@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 14%{?dist}
+Release: 15%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1133,6 +1133,22 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Jan 25 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-15
+- 1661414: No message display when set service level by subscription
+  manager[ENT-1106] (ojanus@redhat.com)
+- 1656279: show syspurpose status Unknown when cache missing - When the server
+  is unreachable and the syspurpose status cache   is missing, then don't
+  traceback, but show status as 'Unknown'. - Also, when the server is
+  reachable, but the system is unregisted,   show the 'Unknown' syspurpose
+  status, but don't cache it. (nmoumoul@redhat.com)
+- 1660520: Modify spec file to require right version of libdnf.
+  (jhnidek@redhat.com)
+- 1661400: Incorrect handling of response message (wpoteat@redhat.com)
+- 1666373: Do not delete product certs for disabled repos; ENT-1034
+  (jhnidek@redhat.com)
+- 1634033: do not install conf file for non-existant dnf plugin
+  (csnyder@redhat.com)
+
 * Fri Jan 11 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-14
 - 1632394: Supplement initial-setup-gui with our addon (csnyder@redhat.com)
 - 1624859: Simplify syspurpose bash completion (csnyder@redhat.com)
