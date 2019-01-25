@@ -1121,12 +1121,14 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
             super(ServiceLevelCommand, self).set()
         else:
             self.update_service_level(self.options.set)
+            print(_("Service level set to: \"{val}\".".format(val=self.options.set)))
 
     def unset(self):
         if self.cp.has_capability("syspurpose"):
             super(ServiceLevelCommand, self).unset()
         else:
             self.update_service_level("")
+            print(_("Service level preference has been unset"))
 
     def update_service_level(self, service_level):
         consumer = self.cp.getConsumer(self.identity.uuid)
