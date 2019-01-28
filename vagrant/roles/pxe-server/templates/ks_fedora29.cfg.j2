@@ -47,3 +47,8 @@ pwpolicy root --minlen=6 --minquality=1 --notstrict --nochanges --emptyok
 pwpolicy user --minlen=6 --minquality=1 --notstrict --nochanges --emptyok
 pwpolicy luks --minlen=6 --minquality=1 --notstrict --nochanges --emptyok
 %end
+
+%post --nochroot --log=/mnt/sysimage/root/ks-post.log
+cp /var/log/rhsm/rhsm.log /mnt/sysimage/root/rhsm.log
+
+%end

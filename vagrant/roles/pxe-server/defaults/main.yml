@@ -1,6 +1,9 @@
 ---
 required_rpms:
-  - dhcp
+  - dhcp-compat
+  - dhcp-devel
+  - dhcp-relay
+  - dhcp-server
   - tftp
   - tftp-server
   - syslinux
@@ -35,16 +38,16 @@ required_rpms:
 # # http://ftp.cvut.cz/centos/7/isos/x86_64/sha256sum.txt
 # iso_img_checksum: "sha256:bba314624956961a2ea31dd460cd860a77911c1e0a56e4820a12b9c5dad363f5"
 
-##### Fedora 27 #####
+##### Fedora 29 #####
 
 distro_name: "fedora"
-distro_version: "27"
+distro_version: "29"
 # Newer version is available e.g. here: https://download.fedoraproject.org/pub/fedora/linux/releases/
-iso_img_server: "https://download.fedoraproject.org/pub/fedora/linux/releases/27/Server/x86_64/iso"
-iso_img_file: "Fedora-Server-dvd-x86_64-27-1.6.iso"
+iso_img_server: "https://download.fedoraproject.org/pub/fedora/linux/releases/29/Server/x86_64/iso"
+iso_img_file: "Fedora-Server-dvd-x86_64-29-1.2.iso"
 # Fresh sha256 checksums of Fedora images can be found here:
-# https://download.fedoraproject.org/pub/fedora/linux/releases/27/Server/x86_64/iso/Fedora-Server-27-1.6-x86_64-CHECKSUM
-iso_img_checksum: "sha256:e383dd414bb57231b20cbed11c4953cac71785f7d4f5990b0df5ad534a0ba95c"
+# https://download.fedoraproject.org/pub/fedora/linux/releases/29/Server/x86_64/iso/Fedora-Server-29-1.2-x86_64-CHECKSUM
+iso_img_checksum: "sha256:129d131a55e5bd518f593f0eacdce095f7c795fe7ccbef1f3f6aeb2ff9f99f35"
 
 iso_img_url: "{{iso_img_server}}/{{iso_img_file}}"
 iso_img_mount_path: "/mnt/iso_img"
