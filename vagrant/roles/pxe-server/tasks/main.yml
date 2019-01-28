@@ -116,6 +116,18 @@
   with_items: "{{kernel_files}}"
   become: true
 
+- name: create service for automatic building of updates.img
+  copy:
+    src: autobuild_updates_img.service
+    dest: "{{systemd_service_dir}}"
+  become: yes
+
+- name: stop service for automatic building of updates.img
+  service:
+    name: autobuild_updates_img
+    state: stopped
+  become: true
+
 - name: create updates.img file
   command: "./scripts/build_updates_img.sh --python python3"
   args:
@@ -127,12 +139,6 @@
     remote_src: yes
     dest: /var/ftp/pub/updates.img
   become: true
-
-- name: create service for automatic building of updates.img
-  copy:
-    src: autobuild_updates_img.service
-    dest: "{{systemd_service_dir}}"
-  become: yes
 
 - name: enable and start service for automatic building of updates.img
   service:
