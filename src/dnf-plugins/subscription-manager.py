@@ -132,7 +132,7 @@ class SubscriptionManager(dnf.Plugin):
         try:
             identity = inj.require(inj.IDENTITY)
             ent_dir = inj.require(inj.ENT_DIR)
-            # Don't warn people to register if we see entitelements, but no identity:
+            # Don't warn people to register if we see entitlements, but no identity:
             if not identity.is_valid() and len(ent_dir.list_valid()) == 0:
                 msg = not_registered_warning
             elif len(ent_dir.list_valid()) == 0:
@@ -142,14 +142,21 @@ class SubscriptionManager(dnf.Plugin):
             if msg:
                 logger.info(msg)
 
+    def sack(self):
+        # If command demands resolving, it should run transaction. This cannot
+        # be run in a Plugin.config hook as currently the Plugin.config is
+        # called before Command.configure.
+        if not self.cli.demands.resolving:
+            self._package_profile()
+
     def transaction(self):
+        self._package_profile()
+
+    def _package_profile(self):
         """
         Call Package Profile
         """
         cfg = config.initConfig()
-        if '1' == cfg.get('rhsm', 'package_profile_on_trans'):
+        if '1' == cfg.get('rhsm', 'package_profile_after_command'):
             package_profile_client = ProfileActionClient()
             package_profile_client.update()
-        else:
-            # do nothing
-            return

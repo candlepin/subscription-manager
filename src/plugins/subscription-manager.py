@@ -21,6 +21,7 @@ import os
 from yum.plugins import TYPE_CORE
 
 from subscription_manager import injection as inj
+from subscription_manager.action_client import ProfileActionClient
 from subscription_manager.repolib import RepoActionInvoker
 from subscription_manager.entcertlib import EntCertActionInvoker
 from rhsmlib.facts.hwprobe import ClassicCheck
@@ -183,3 +184,13 @@ def postconfig_hook(conduit):
         warnExpired(conduit)
     except Exception as e:
         conduit.error(2, str(e))
+
+
+def close_hook(conduit):
+    """
+    Call Package Profile
+    """
+    cfg = config.initConfig()
+    if '1' == cfg.get('rhsm', 'package_profile_after_command'):
+        package_profile_client = ProfileActionClient()
+        package_profile_client.update()
