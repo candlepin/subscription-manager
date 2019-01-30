@@ -26,7 +26,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include <zlib.h>
 #include <errno.h>
 
 #include "util.h"
@@ -198,6 +197,26 @@ void protectProductWithDisabledRepos(GPtrArray *disabledRepos, ProductDb *oldPro
 }
 
 /**
+ * Try to request productid metadata from all enabled repositories
+ *
+ * @param dnfContext Pointer on dnf context
+ */
+void requestProductIdMetadata(DnfContext *dnfContext) {
+    debug("Requesting additional product id metadata from all repositories");
+
+    // List of all repositories
+    GPtrArray *repos = dnf_context_get_repos(dnfContext);
+
+    for (guint i = 0; i < repos->len; i++) {
+        DnfRepo* repo = g_ptr_array_index(repos, i);
+        bool enabled = (dnf_repo_get_enabled(repo) & DNF_REPO_ENABLED_PACKAGES) > 0;
+        if (enabled) {
+            dnf_repo_add_metadata_type_to_download(repo, "productid");
+        }
+    }
+}
+
+/**
  * Callback function. This method is executed for every libdnf hook. This callback
  * is called several times during transaction, but we are interested only in one situation.
  *
@@ -218,6 +237,17 @@ int pluginHook(PluginHandle *handle, PluginHookId id, DnfPluginHookData *hookDat
 
     debug("%s v%s, running hook_id: %s on DNF version %d",
             pinfo.name, pinfo.version, strHookId(id), handle->version);
+
+    if (id == PLUGIN_HOOK_ID_CONTEXT_CONF) {
+        // Get DNF context
+        DnfContext *dnfContext = handle->context;
+        if (dnfContext == NULL) {
+            error("Unable to get dnf context");
+            return 1;
+        }
+
+        requestProductIdMetadata(dnfContext);
+    }
 
     if (id == PLUGIN_HOOK_ID_CONTEXT_TRANSACTION) {
         // Get DNF context
@@ -514,117 +544,87 @@ void getActive(DnfPluginHookData *hookData, const GPtrArray *repoAndProductIds, 
     g_object_unref(rpmDbSack);
 }
 
-static void copy_lr_val(LrVar *lr_val, LrUrlVars **newVarSubst) {
-    *newVarSubst = lr_urlvars_set(*newVarSubst, lr_val->var, lr_val->val);
+
+/**
+ * Try to get content of productid certificate from DnfRepo structure. Note downloading of productid
+ * has to be requested during PLUGIN_HOOK_ID_CONTEXT_CONF hook using dnf_repo_add_metadata_type_to_download
+ *
+ * @param repo Pointer at DnfRepo structure
+ * @return Pointer at char buffer containing certificate. It has to be freed using g_free() later.
+ */
+gpointer getProductIdContent(DnfRepo *repo) {
+    if (repo == NULL) {
+        return NULL;
+    }
+
+    GError *tmp_err = NULL;
+    gpointer content;
+    gsize length;
+    gboolean productid_downloaded;
+    productid_downloaded = dnf_repo_get_metadata_content(repo, "productid", &content, &length, &tmp_err);
+    if (productid_downloaded) {
+        return content;
+    } else {
+        printError("Unable to get productid certificate from DnfRepo structure", tmp_err);
+        return NULL;
+    }
 }
+
 
 int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
     int ret = 0;
+
+    const gchar *path = dnf_repo_get_filename_md(repo, "productid");
+
+    repoProductId->repo = repo;
+    repoProductId->productIdPath = path;
+    if (path) {
+        debug("Product id cert downloaded metadata from repo %s to %s",
+              dnf_repo_get_id(repo),
+              repoProductId->productIdPath);
+        ret = 1;
+    } else {
+        info("Repository %s does not contain any productid certificate",
+             dnf_repo_get_id(repo));
+    }
+
+    return ret;
+}
+
+/**
+ * This function tries to find product id certificate in /etc/pki/product-default.
+ *
+ * @param productId Pointer at buffer with product ID
+ * @return Returns 1, when product certificate with same ID is already installed in /etc/pki/product-default.
+ * Returns 0 otherwise.
+ */
+int isProductIdInstalledInDefault(const gchar *productId) {
+    int ret = 0;
+    // "Open" directory with product certificates
     GError *tmp_err = NULL;
-    LrHandle *lrHandle = dnf_repo_get_lr_handle(repo);
-    LrResult *lrResult = dnf_repo_get_lr_result(repo);
-
-    // getinfo uses the LRI* constants while setopt uses LRO*
-    char *destdir;
-    lr_handle_getinfo(lrHandle, &tmp_err, LRI_DESTDIR, &destdir);
-    if (tmp_err) {
-        printError("Unable to get information about destination folder", tmp_err);
-    } else {
-        if (destdir) {
-            debug("Destination folder: %s", destdir);
-        } else {
-            error("Destination folder not set");
-        }
-    }
-
-    char **urls = NULL;
-    lr_handle_getinfo(lrHandle, &tmp_err, LRI_URLS, &urls);
-    if (tmp_err) {
-        printError("Unable to get information about URLs", tmp_err);
-    } else {
-        if (!urls) {
-            error("No repository URL set");
-        }
-    }
-
-    // Getting information about variable substitution
-    LrUrlVars *varSubst = NULL;
-    lr_handle_getinfo(lrHandle, &tmp_err, LRI_VARSUB, &varSubst);
-    if (tmp_err) {
-        printError("Unable to get variable substitution for URL", tmp_err);
-    } else {
-        if (varSubst) {
-            for (LrUrlVars *elem = varSubst; elem; elem = g_slist_next(elem)) {
-                LrVar *var_val = elem->data;
-                if (var_val) {
-                    debug("URL substitution: %s = %s", var_val->var, var_val->val);
+    GDir* defaultProductDir = g_dir_open(DEFAULT_PRODUCT_CERT_DIR, 0, &tmp_err);
+    if (defaultProductDir != NULL) {
+        const gchar *file_name = NULL;
+        do {
+            // Read all files in the directory. When file_name is NULL, then
+            // it usually means that there is no more file.
+            file_name = g_dir_read_name(defaultProductDir);
+            if(file_name != NULL) {
+                const gchar *defaultProductId = g_strndup(file_name, strlen(file_name) - 4);
+                if (g_strcmp0(productId, defaultProductId) == 0) {
+                    debug("Productid certificate: %s.pem already installed in %s",
+                            productId, DEFAULT_PRODUCT_CERT_DIR);
+                    ret = 1;
+                    break;
                 }
+            } else if (errno != 0 && errno != ENODATA && errno != EEXIST) {
+                error("Unable to read content of %s directory, %d, %s", PRODUCT_CERT_DIR, errno, strerror(errno));
             }
-        } else {
-            debug("No URL substitution set");
-        }
-    }
-
-    // It is necessary to create copy of list of URL variables to avoid memory leaks
-    // Two handles cannot share same GSList
-    LrUrlVars *newVarSubst = NULL;
-    g_slist_foreach(varSubst, (GFunc)copy_lr_val, &newVarSubst);
-
-    /* Set information on our LrHandle instance.  The LRO_UPDATE option is to tell the LrResult to update the
-     * repo (i.e. download missing information) rather than attempt to replace it.
-     *
-     * FIXME: The internals of this are unclear.  Do we need to create our own LrHandle instance or could we
-     * use the one provided and just modify the download list?  Is reusing the LrResult going to cause
-     * problems?
-     */
-    char *downloadList[] = {"productid", NULL};
-    LrHandle *h = lr_handle_init();
-    lr_handle_setopt(h, NULL, LRO_YUMDLIST, downloadList);
-    lr_handle_setopt(h, NULL, LRO_URLS, urls);
-    lr_handle_setopt(h, NULL, LRO_REPOTYPE, LR_YUMREPO);
-    lr_handle_setopt(h, NULL, LRO_DESTDIR, destdir);
-    lr_handle_setopt(h, NULL, LRO_VARSUB, newVarSubst);
-    lr_handle_setopt(h, NULL, LRO_UPDATE, TRUE);
-
-    if(urls != NULL) {
-        int url_id = 0;
-        do {
-            debug("Downloading metadata from: %s to %s", urls[url_id], destdir);
-            url_id++;
-        } while(urls[url_id] != NULL);
-    }
-    gboolean handleSuccess = lr_handle_perform(h, lrResult, &tmp_err);
-    if (handleSuccess) {
-        LrYumRepo *lrYumRepo = lr_yum_repo_init();
-        if (lrYumRepo != NULL) {
-            lr_result_getinfo(lrResult, &tmp_err, LRR_YUM_REPO, &lrYumRepo);
-            if (tmp_err) {
-                printError("Unable to get information about repository", tmp_err);
-            } else {
-                repoProductId->repo = repo;
-                repoProductId->productIdPath = lr_yum_repo_path(lrYumRepo, "productid");
-                debug("Product id cert downloaded metadata from repo %s to %s",
-                     dnf_repo_get_id(repo),
-                     repoProductId->productIdPath);
-                ret = 1;
-            }
-        } else {
-            error("Unable to initialize LrYumRepo");
-        }
+        } while (file_name != NULL);
+        g_dir_close(defaultProductDir);
     } else {
-        printError("Unable to download product certificate", tmp_err);
+        printError("Unable to open directory with default product certificates", tmp_err);
     }
-
-    if(urls) {
-        int url_id = 0;
-        do {
-            free(urls[url_id]);
-            url_id++;
-        } while(urls[url_id] != NULL);
-        free(urls);
-        urls = NULL;
-    }
-    lr_handle_free(h);
     return ret;
 }
 
@@ -644,19 +644,15 @@ int installProductId(RepoProductId *repoProductId, ProductDb *productDb, const c
         return 0;
     }
 
-    const char *productIdPath = repoProductId->productIdPath;
-    gzFile input = gzopen(productIdPath, "r");
+    if (repoProductId->productIdPath != NULL) {
+        gchar *content = getProductIdContent(repoProductId->repo);
 
-    if (input != NULL) {
-        GString *pemOutput = g_string_new("");
-        GString *outname = g_string_new("");
-
-        debug("Decompressing product certificate");
-        int decompressSuccess = decompress(input, pemOutput);
-        if (decompressSuccess == FALSE) {
-            goto out;
+        if (content == NULL) {
+            return 0;
         }
-        debug("Decompressing of certificate finished with status: %d", ret);
+        GString *pemOutput = g_string_new(content);
+        g_free(content);
+        GString *outname = g_string_new("");
         debug("Content of product cert:\n%s", pemOutput->str);
 
         int productIdFound = findProductId(pemOutput, outname);
@@ -664,19 +660,22 @@ int installProductId(RepoProductId *repoProductId, ProductDb *productDb, const c
             gint ret_val = g_mkdir_with_parents(product_cert_dir, 0775);
             if (ret_val == 0) {
                 gchar *productId = g_strdup(outname->str);
-                g_string_prepend(outname, product_cert_dir);
-                g_string_append(outname, ".pem");
-                // TODO switch to using GFile methods to remain consistent with using GLib stuff when possible
-                FILE *fileOutput = fopen(outname->str, "w+");
-                if (fileOutput != NULL) {
-                    info("Product certificate installed to: %s", outname->str);
-                    fprintf(fileOutput, "%s", pemOutput->str);
-                    fclose(fileOutput);
+                int already_installed = isProductIdInstalledInDefault(productId);
+                if (already_installed == 0) {
+                    g_string_prepend(outname, product_cert_dir);
+                    g_string_append(outname, ".pem");
+                    // TODO switch to using GFile methods to remain consistent with using GLib stuff when possible
+                    FILE *fileOutput = fopen(outname->str, "w+");
+                    if (fileOutput != NULL) {
+                        info("Product certificate installed to: %s", outname->str);
+                        fprintf(fileOutput, "%s", pemOutput->str);
+                        fclose(fileOutput);
 
-                    addRepoId(productDb, productId, dnf_repo_get_id(repoProductId->repo));
-                    ret = 1;
-                } else {
-                    error("Unable write to file with certificate file :%s", outname->str);
+                        addRepoId(productDb, productId, dnf_repo_get_id(repoProductId->repo));
+                        ret = 1;
+                    } else {
+                        error("Unable write to file with certificate file :%s", outname->str);
+                    }
                 }
                 g_free(productId);
             } else {
@@ -684,15 +683,8 @@ int installProductId(RepoProductId *repoProductId, ProductDb *productDb, const c
             }
         }
 
-        out:
         g_string_free(outname, TRUE);
         g_string_free(pemOutput, TRUE);
-    } else {
-        debug("Unable to open compressed product certificate: %s", productIdPath);
-    }
-
-    if(input != NULL) {
-        gzclose(input);
     }
 
     return ret;
@@ -767,39 +759,4 @@ int findProductId(GString *certContent, GString *result) {
     X509_free(x509);
 
     return ret_val;
-}
-
-/**
- * Decompress product certificate
- *
- * @param input This is pointer at input compressed file
- * @param output Pointer at string, where content of certificate will be stored
- * @return Return TRUE, when decompression was successful. Otherwise return FALSE.
- */
-int decompress(gzFile input, GString *output) {
-    // TODO: This method will be useless soon. See: https://bugzilla.redhat.com/show_bug.cgi?id=1640220
-    int ret = TRUE;
-    while (1) {
-        int err;
-        int bytes_read;
-        unsigned char buffer[CHUNK];
-        bytes_read = gzread(input, buffer, CHUNK - 1);
-        buffer[bytes_read] = '\0';
-        g_string_printf(output, "%s", buffer);
-        if (bytes_read < CHUNK - 1) {
-            if (gzeof (input)) {
-                break;
-            }
-            else {
-                const char * error_string;
-                error_string = gzerror(input, & err);
-                if (err) {
-                    error("Decompressing failed with error: %s.", error_string);
-                    ret = FALSE;
-                    break;
-                }
-            }
-        }
-    }
-    return ret;
 }
