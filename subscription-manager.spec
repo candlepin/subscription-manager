@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 16%{?dist}
+Release: 17%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1135,6 +1135,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Jan 31 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-17
+- 1658383: Ensure syspurpose has translations (csnyder@redhat.com)
+- 1652870: handle new syspurpose status states (nmoumoul@redhat.com)
+
 * Fri Jan 25 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-16
 - 1654531: Make default repolist proxy to http protocol when not specified
   (wpoteat@redhat.com)
