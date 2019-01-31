@@ -52,6 +52,8 @@ from subscription_manager.gui.autobind import DryRunResult, \
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.gui.networkConfig import reset_resolver
 
+from subscription_manager import syspurposelib
+
 from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
@@ -2033,11 +2035,18 @@ class AsyncBackend(object):
             self.plugin_manager.run("pre_register_consumer", name=name,
                                     facts=facts_dict)
 
+            syspurpose = syspurposelib.read_syspurpose()
+
             cp = self.backend.cp_provider.get_basic_auth_cp()
             retval = cp.registerConsumer(name=name, facts=facts_dict,
                                          owner=owner, environment=env,
                                          keys=activation_keys,
-                                         installed_products=installed_mgr.format_for_server())
+                                         installed_products=installed_mgr.format_for_server(),
+                                         role=syspurpose.get('role'),
+                                         addons=syspurpose.get('addons') or [],
+                                         service_level=syspurpose.get('service_level_agreement') or '',
+                                         usage=syspurpose.get('usage')
+                                         )
 
             self.plugin_manager.run("post_register_consumer", consumer=retval,
                                     facts=facts_dict)
