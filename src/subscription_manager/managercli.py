@@ -37,7 +37,7 @@ from rhsm.https import ssl
 
 import rhsm.config
 import rhsm.connection as connection
-from rhsm.connection import ProxyException, UnauthorizedException
+from rhsm.connection import ProxyException, UnauthorizedException, ConnectionException
 from rhsm.utils import remove_scheme, ServerUrlParseError
 
 from subscription_manager import identity
@@ -2901,9 +2901,12 @@ class StatusCommand(CliCommand):
                 print('- %s' % format_name(message, 2, columns))
             print('')
 
-        store = syspurposelib.get_sys_purpose_store()
-        if store:
-            store.sync()
+        try:
+            store = syspurposelib.get_sys_purpose_store()
+            if store:
+                store.sync()
+        except (OSError, ConnectionException) as ne:
+            log.exception(ne)
 
         syspurpose_cache = inj.require(inj.SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE)
         syspurpose_cache.load_status(self.cp, self.identity.uuid)
