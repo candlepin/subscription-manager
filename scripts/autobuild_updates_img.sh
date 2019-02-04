@@ -74,10 +74,10 @@ fi
 while inotifywait -r "${SRC_DIR}"; do
 	pushd "${SRC_DIR}"
 	echo "Building new updates.img ..."
-	${0%/*}/build_updates_img.sh --python ${PYTHON_BIN}
+	sudo -u vagrant ${0%/*}/build_updates_img.sh --python ${PYTHON_BIN}
 	echo "Done"
 	if [ $? -eq 0 ]; then
-		mv updates.img "${DEST_DIR}"
+		cp updates.img "${DEST_DIR}"
 	fi
 	popd
 	# Wait 10 seconds.
