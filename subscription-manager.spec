@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 17%{?dist}
+Release: 18%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1135,6 +1135,11 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Feb 05 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-18
+- 1668152: take into account syspurpose during initial-setup - Registering
+  through initial-setup will now persist & use the syspurpose values that were
+  set during the anaconda installation process. (nmoumoul@redhat.com)
+
 * Thu Jan 31 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-17
 - 1658383: Ensure syspurpose has translations (csnyder@redhat.com)
 - 1652870: handle new syspurpose status states (nmoumoul@redhat.com)
