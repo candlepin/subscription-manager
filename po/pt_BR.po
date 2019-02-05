@@ -2,6 +2,7 @@
 # Chris Snyder <csnyder@redhat.com>, 2018. #zanata
 # John Sefler <jsefler@redhat.com>, 2018. #zanata
 # ljanda <ljanda@redhat.com>, 2018. #zanata
+# John Sefler <jsefler@redhat.com>, 2019. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -10,8 +11,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2018-12-12 10:43+0000\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
+"PO-Revision-Date: 2019-01-16 10:39+0000\n"
+"Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Portuguese (Brazil)\n"
 "Language: pt_BR\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -6325,9 +6326,9 @@ msgid ""
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
 "Os plugins do yum / dnf: %s foram ativados automaticamente para o benefício "
-"do Red Hat Subscription Management. Se não desejar, use \"subscribe-manager "
-"config --rhsm.auto_enable_yum_plugins = 0\" para bloquear este comportamento."
-""
+"do Red Hat Subscription Management. Se não desejar, use \"subscription-"
+"manager config --rhsm.auto_enable_yum_plugins=0\" para bloquear este "
+"comportamento."
 
 #: src/subscription_manager/repolib.py:715
 msgid "Repo updates"
