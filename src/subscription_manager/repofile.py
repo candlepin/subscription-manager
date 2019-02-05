@@ -62,6 +62,7 @@ class Repo(dict):
             'sslclientkey': (0, None),
             'sslclientcert': (0, None),
             'metadata_expire': (1, None),
+            'enable_metadata': (1, '0'),
             'proxy': (0, None),
             'proxy_username': (0, None),
             'proxy_password': (0, None),
@@ -112,8 +113,10 @@ class Repo(dict):
 
         if content.enabled:
             repo['enabled'] = "1"
+            repo['enable_metadata'] = "1"
         else:
             repo['enabled'] = "0"
+            repo['enable_metadata'] = "0"
 
         expanded_url_path = Repo._expand_releasever(release_source, content.url)
         repo['baseurl'] = utils.url_base_join(baseurl, expanded_url_path)

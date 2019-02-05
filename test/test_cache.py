@@ -145,7 +145,7 @@ class TestProfileManager(unittest.TestCase):
         self.profile_mgr.has_changed = Mock(return_value=True)
         self.profile_mgr.write_cache = Mock()
 
-        self.profile_mgr.update_check(uep, uuid)
+        self.profile_mgr.update_check(uep, uuid, True)
 
         uep.updatePackageProfile.assert_called_with(uuid,
                 FACT_MATCHER)
@@ -159,7 +159,7 @@ class TestProfileManager(unittest.TestCase):
         self.profile_mgr.has_changed = Mock(return_value=True)
         self.profile_mgr.write_cache = Mock()
 
-        self.profile_mgr.update_check(uep, uuid)
+        self.profile_mgr.update_check(uep, uuid, True)
 
         uep.updateCombinedProfile.assert_called_with(uuid,
                 FACT_MATCHER)
@@ -236,7 +236,7 @@ class TestProfileManager(unittest.TestCase):
         # Throw an exception when trying to upload:
         uep.updatePackageProfile = Mock(side_effect=Exception('BOOM!'))
 
-        self.assertRaises(Exception, self.profile_mgr.update_check, uep, uuid)
+        self.assertRaises(Exception, self.profile_mgr.update_check, uep, uuid, True)
         uep.updatePackageProfile.assert_called_with(uuid,
                 FACT_MATCHER)
         self.assertEqual(0, self.profile_mgr.write_cache.call_count)
@@ -251,7 +251,7 @@ class TestProfileManager(unittest.TestCase):
         # Throw an exception when trying to upload:
         uep.updateCombinedProfile = Mock(side_effect=Exception('BOOM!'))
 
-        self.assertRaises(Exception, self.profile_mgr.update_check, uep, uuid)
+        self.assertRaises(Exception, self.profile_mgr.update_check, uep, uuid, True)
         uep.updateCombinedProfile.assert_called_with(uuid,
                 FACT_MATCHER)
         self.assertEqual(0, self.profile_mgr.write_cache.call_count)
@@ -492,7 +492,7 @@ class TestInstalledProductsCache(SubManFixture):
         self.mgr.has_changed = Mock(return_value=True)
         self.mgr.write_cache = Mock()
 
-        self.mgr.update_check(uep, uuid)
+        self.mgr.update_check(uep, uuid, True)
 
         expected = ["product", "product-a", "product-b", "product-c"]
         uep.updateConsumer.assert_called_with(uuid,
@@ -509,7 +509,7 @@ class TestInstalledProductsCache(SubManFixture):
         # Throw an exception when trying to upload:
         uep.updateConsumer = Mock(side_effect=Exception('BOOM!'))
 
-        self.assertRaises(Exception, self.mgr.update_check, uep, uuid)
+        self.assertRaises(Exception, self.mgr.update_check, uep, uuid, True)
         expected = ["product", "product-a", "product-b", "product-c"]
         uep.updateConsumer.assert_called_with(uuid,
                 content_tags=set(expected),
