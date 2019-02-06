@@ -720,14 +720,14 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %attr(750,root,root) %dir %{_var}/lib/rhsm/cache
 %attr(750,root,root) %dir %{_var}/lib/rhsm/repo_server_val
 
-%{_sysconfdir}/bash_completion.d/subscription-manager
-%{_sysconfdir}/bash_completion.d/rct
-%{_sysconfdir}/bash_completion.d/rhsm-debug
-%{_sysconfdir}/bash_completion.d/rhn-migrate-classic-to-rhsm
-%{_sysconfdir}/bash_completion.d/rhsmcertd
+%{_prefix}/bash-completion/completions/subscription-manager
+%{_prefix}/bash-completion/completions/rct
+%{_prefix}/bash-completion/completions/rhsm-debug
+%{_prefix}/bash-completion/completions/rhn-migrate-classic-to-rhsm
+%{_prefix}/bash-completion/completions/rhsmcertd
 
 %if %use_subman_gui
-%{_sysconfdir}/bash_completion.d/rhsm-icon
+%{_prefix}/bash-completion/completions/rhsm-icon
 %endif
 
 %dir %{python_sitearch}/subscription_manager
@@ -900,7 +900,7 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %{_sysconfdir}/security/console.apps/subscription-manager-gui
 %endif
 
-%{_sysconfdir}/bash_completion.d/subscription-manager-gui
+%{_prefix}/bash-completion/completions/subscription-manager-gui
 
 %doc
 %{_mandir}/man8/subscription-manager-gui.8*
@@ -960,7 +960,7 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 
 %attr(755, root, root) %{_sbindir}/syspurpose
 %attr(644,root,root) %{_sysconfdir}/rhsm/syspurpose/valid_fields.json
-%attr(644,root,root) %{_sysconfdir}/bash_completion.d/syspurpose
+%attr(644,root,root) %{_prefix}/bash-completion/completions/syspurpose
 %endif
 
 %files -n subscription-manager-plugin-container
