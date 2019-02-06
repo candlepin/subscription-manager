@@ -1017,8 +1017,9 @@ class TestReposCommand(TestCliCommand):
         self.cc.use_overrides = True
         self.cc._set_repo_status(repos, repolib_instance, items)
 
-        expected_overrides = [{'contentLabel': i, 'name': 'enabled', 'value':
-            '0'} for (_action, i) in items]
+        expected_overrides = [{'contentLabel': i, 'name': 'enabled', 'value': '0'} for (_action, i) in items]
+        metadata_overrides = [{'contentLabel': i, 'name': 'enable_metadata', 'value': '0'} for (_action, i) in items]
+        expected_overrides.extend(metadata_overrides)
 
         # The list of overrides sent to setContentOverrides is really a set of
         # dictionaries (since we don't know the order of the overrides).
@@ -1040,11 +1041,11 @@ class TestReposCommand(TestCliCommand):
         self.cc.use_overrides = True
         self.cc._set_repo_status(repos, repolib_instance, items)
 
-        expected_overrides = [{'contentLabel': i.id, 'name': 'enabled', 'value':
-            '0'} for i in repos]
+        expected_overrides = [{'contentLabel': i.id, 'name': 'enabled', 'value': '0'} for i in repos]
+        metadata_overrides = [{'contentLabel': i.id, 'name': 'enable_metadata', 'value': '0'} for i in repos]
+        expected_overrides.extend(metadata_overrides)
         match_dict_list = Matcher(self.assert_items_equals, expected_overrides)
-        self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
-                match_dict_list)
+        self.cc.cp.setContentOverrides.assert_called_once_with('fake_id', match_dict_list)
         self.assertTrue(repolib_instance.update.called)
 
     @patch("subscription_manager.managercli.RepoActionInvoker")
@@ -1060,8 +1061,11 @@ class TestReposCommand(TestCliCommand):
 
         expected_overrides = [
             {'contentLabel': 'zebra', 'name': 'enabled', 'value': '0'},
+            {'contentLabel': 'zebra', 'name': 'enable_metadata', 'value': '0'},
             {'contentLabel': 'zoo', 'name': 'enabled', 'value': '1'},
-            {'contentLabel': 'zip', 'name': 'enabled', 'value': '1'}
+            {'contentLabel': 'zoo', 'name': 'enable_metadata', 'value': '1'},
+            {'contentLabel': 'zip', 'name': 'enabled', 'value': '1'},
+            {'contentLabel': 'zip', 'name': 'enable_metadata', 'value': '1'}
         ]
         match_dict_list = Matcher(self.assert_items_equals, expected_overrides)
         self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
@@ -1081,8 +1085,11 @@ class TestReposCommand(TestCliCommand):
 
         expected_overrides = [
             {'contentLabel': 'zebra', 'name': 'enabled', 'value': '1'},
+            {'contentLabel': 'zebra', 'name': 'enable_metadata', 'value': '1'},
             {'contentLabel': 'zoo', 'name': 'enabled', 'value': '0'},
-            {'contentLabel': 'zip', 'name': 'enabled', 'value': '0'}
+            {'contentLabel': 'zoo', 'name': 'enable_metadata', 'value': '0'},
+            {'contentLabel': 'zip', 'name': 'enabled', 'value': '0'},
+            {'contentLabel': 'zip', 'name': 'enable_metadata', 'value': '0'}
         ]
         match_dict_list = Matcher(self.assert_items_equals, expected_overrides)
         self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
@@ -1101,8 +1108,11 @@ class TestReposCommand(TestCliCommand):
 
         expected_overrides = [
             {'contentLabel': 'zebra', 'name': 'enabled', 'value': '0'},
+            {'contentLabel': 'zebra', 'name': 'enable_metadata', 'value': '0'},
             {'contentLabel': 'zoo', 'name': 'enabled', 'value': '0'},
-            {'contentLabel': 'zip', 'name': 'enabled', 'value': '0'}
+            {'contentLabel': 'zoo', 'name': 'enable_metadata', 'value': '0'},
+            {'contentLabel': 'zip', 'name': 'enabled', 'value': '0'},
+            {'contentLabel': 'zip', 'name': 'enable_metadata', 'value': '0'}
         ]
         match_dict_list = Matcher(self.assert_items_equals, expected_overrides)
         self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
