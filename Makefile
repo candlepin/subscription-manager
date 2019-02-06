@@ -153,7 +153,7 @@ dbus-common-install:
 	install -d $(DESTDIR)/etc/dbus-1/system.d
 	install -d $(DESTDIR)/$(INSTALL_DIR)/dbus-1/system-services
 	install -d $(DESTDIR)/$(LIBEXEC_DIR)
-	install -d $(DESTDIR)/etc/bash_completion.d
+	install -d $(DESTDIR)/$(INSTALL_DIR)/bash-completion/completions/
 
 dbus-rhsmd-service-install: dbus-common-install
 	install -m 644 etc-conf/dbus/system.d/com.redhat.SubscriptionManager.conf $(DESTDIR)/etc/dbus-1/system.d
@@ -169,7 +169,8 @@ dbus-install: dbus-facts-service-install dbus-rhsmd-service-install dbus-main-se
 
 .PHONY: install-conf
 install-conf:
-	install -d $(DESTDIR)/etc/{cron.daily,logrotate.d,pam.d,bash_completion.d,rhsm}
+	install -d $(DESTDIR)/etc/{cron.daily,logrotate.d,pam.d,rhsm}
+	install -d $(DESTDIR)/$(INSTALL_DIR)/bash-completion/completions/
 	install -d $(DESTDIR)/etc/rc.d/init.d
 	install -d $(DESTDIR)/etc/init.d
 	install -d $(DESTDIR)/etc/rhsm/{facts,syspurpose}
@@ -177,11 +178,11 @@ install-conf:
 	install -m 644 etc-conf/rhsm.conf $(DESTDIR)/etc/rhsm/
 	install -T etc-conf/logging.conf $(DESTDIR)/etc/rhsm/logging.conf
 	install -m 644 etc-conf/logrotate.conf $(DESTDIR)/etc/logrotate.d/subscription-manager
-	install -m 644 etc-conf/subscription-manager.completion.sh $(DESTDIR)/etc/bash_completion.d/subscription-manager
-	install -m 644 etc-conf/rct.completion.sh $(DESTDIR)/etc/bash_completion.d/rct
-	install -m 644 etc-conf/rhsm-debug.completion.sh $(DESTDIR)/etc/bash_completion.d/rhsm-debug
-	install -m 644 etc-conf/rhn-migrate-classic-to-rhsm.completion.sh $(DESTDIR)/etc/bash_completion.d/rhn-migrate-classic-to-rhsm
-	install -m 644 etc-conf/rhsmcertd.completion.sh $(DESTDIR)/etc/bash_completion.d/rhsmcertd
+	install -m 644 etc-conf/subscription-manager.completion.sh $(DESTDIR)/$(INSTALL_DIR)/bash-completion/completions/subscription-manager
+	install -m 644 etc-conf/rct.completion.sh $(DESTDIR)/$(INSTALL_DIR)/bash-completion/completions/rct
+	install -m 644 etc-conf/rhsm-debug.completion.sh $(DESTDIR)/$(INSTALL_DIR)/bash-completion/completions/rhsm-debug
+	install -m 644 etc-conf/rhn-migrate-classic-to-rhsm.completion.sh $(DESTDIR)/$(INSTALL_DIR)/bash-completion/completions/rhn-migrate-classic-to-rhsm
+	install -m 644 etc-conf/rhsmcertd.completion.sh $(DESTDIR)/$(INSTALL_DIR)/bash-completion/completions/rhsmcertd
 	install -d $(DESTDIR)/$(PREFIX)/share/appdata
 	install -d $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
 	install -m 644 etc-conf/dbus/polkit/com.redhat.RHSM1.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
@@ -193,8 +194,8 @@ install-conf:
 	fi;
 	if [[ "$(WITH_SUBMAN_GUI)" == "true" ]]; then \
 		install -m 644 etc-conf/subscription-manager-gui.appdata.xml $(DESTDIR)/$(INSTALL_DIR)/appdata/subscription-manager-gui.appdata.xml; \
-		install -m 644 etc-conf/subscription-manager-gui.completion.sh $(DESTDIR)/etc/bash_completion.d/subscription-manager-gui; \
-		install -m 644 etc-conf/rhsm-icon.completion.sh $(DESTDIR)/etc/bash_completion.d/rhsm-icon; \
+		install -m 644 etc-conf/subscription-manager-gui.completion.sh $(DESTDIR)/$(INSTALL_DIR)/bash-completion/completions/subscription-manager-gui; \
+		install -m 644 etc-conf/rhsm-icon.completion.sh $(DESTDIR)/$(INSTALL_DIR)/bash-completion/completions/rhsm-icon; \
 	fi;
 
 .PHONY: install-plugins
