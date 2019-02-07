@@ -453,11 +453,13 @@ class ProfileManager(CacheManager):
             log.info("Server does not support packages, skipping profile upload.")
             return 0
 
-        if not force or not self.report_package_profile:
+        if force or self.report_package_profile:
+            return CacheManager.update_check(self, uep, consumer_uuid, force)
+        elif not self.report_package_profile:
             log.info("Skipping package profile upload due to report_package_profile setting.")
             return 0
-
-        return CacheManager.update_check(self, uep, consumer_uuid, force)
+        else:
+            return 0
 
     def has_changed(self):
         if not self._cache_exists():
