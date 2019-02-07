@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 19%{?dist}
+Release: 20%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1135,6 +1135,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Feb 07 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-20
+- 1633216: Use new libdnf API to reuse connection to repo; ENT-1111
+  (jhnidek@redhat.com)
+
 * Wed Feb 06 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-19
 - 1668947: set enable_metadata to 0 for disabled repos; ENT-1146
   (jhnidek@redhat.com)
