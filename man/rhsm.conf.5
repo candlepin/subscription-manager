@@ -69,7 +69,16 @@ proxy_hostname
 .RS 4
 Set this to a non\-blank value if
 \fBsubscription\-manager\fR
-should use a reverse proxy to access the subscription service\&. This sets the host for the reverse proxy\&. Overrides hostname from \fBHTTP_PROXY\fR and \fBHTTPS_PROXY\fR environment variables\&.
+should use a reverse proxy to access the subscription service\&. This sets the host for the reverse proxy\&. Overrides hostname from \fBHTTP_PROXY\fR and \fBHTTPS_PROXY\fR environment variables\&. This value
+.B should not
+contain the scheme to be used with the proxy (e.g. http or https)\&. To specify that use the
+.B proxy_scheme
+option\&.
+.RE
+.PP
+proxy_scheme
+.RS 4
+This sets the scheme for the reverse proxy when writing out the proxy to repo definitions\&. Set this to a non\-blank value if you want to specify the scheme used by your package manager for subscription\-manager managed repos\&. This defaults to "http"\&.
 .RE
 .PP
 proxy_port
@@ -78,7 +87,7 @@ Set this to a non\-blank value if
 \fBsubscription\-manager\fR
 should use a reverse proxy to access the subscription service\&. This sets the port for the reverse proxy\&. Overrides port from \fBHTTP_PROXY\fR and \fBHTTPS_PROXY\fR environment variables\&.
 
-Please note that setting this to any value other than 3128 (depending on your selinux configuration) will require an update to that policy.
+Please note that setting this to any value other than 3128 (depending on your SELinux configuration) will require an update to that policy.
 
 To add a local policy:
 

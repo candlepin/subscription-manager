@@ -126,13 +126,22 @@ proxy_port = 3129
 
 PROXY_HTTP_PROTOCOL = """
 [server]
-proxy_hostname = http://fake.server.com
+proxy_hostname = fake.server.com
+proxy_scheme = http
 proxy_port = 3129
 """
 
 PROXY_HTTPS_PROTOCOL = """
 [server]
-proxy_hostname = https://fake.server.com
+proxy_hostname = fake.server.com
+proxy_scheme = https
+proxy_port = 3129
+"""
+
+PROXY_EXTRA_SCHEME = """
+[server]
+proxy_hostname = fake.server.com
+proxy_scheme = https://
 proxy_port = 3129
 """
 
@@ -192,6 +201,12 @@ class RepoTests(unittest.TestCase):
 
     @patch.object(repofile, 'conf', ConfigFromString(config_string=PROXY_HTTPS_PROTOCOL))
     def test_https(self):
+        repo = Repo('testrepo')
+        r = Repo._set_proxy_info(repo)
+        self.assertEqual(r['proxy'], "https://fake.server.com:3129")
+
+    @patch.object(repofile, 'conf', ConfigFromString(config_string=PROXY_EXTRA_SCHEME))
+    def test_extra_chars_in_scheme(self):
         repo = Repo('testrepo')
         r = Repo._set_proxy_info(repo)
         self.assertEqual(r['proxy'], "https://fake.server.com:3129")
