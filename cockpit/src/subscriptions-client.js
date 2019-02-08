@@ -592,8 +592,16 @@ client.init = () => {
     entitlementService.addEventListener("EntitlementChanged", requestSubscriptionStatusUpdate);
     productsService.addEventListener("InstalledProductsChanged", requestSubscriptionStatusUpdate);
     consumerService.addEventListener("ConsumerChanged", requestSubscriptionStatusUpdate);
+
     configService.addEventListener("ConfigChanged", updateConfig);
     syspurposeService.addEventListener("SyspurposeChanged", requestSyspurposeUpdate);
+
+    // We want to get notified if syspurpose status of the system changes (when either the syspurpose.json changed,
+    // or our subscriptions changed, or we registered/unregistered).
+    syspurposeService.addEventListener("SyspurposeChanged", requestSyspurposeStatusUpdate);
+    entitlementService.addEventListener("EntitlementChanged", requestSyspurposeStatusUpdate);
+    consumerService.addEventListener("ConsumerChanged", requestSyspurposeStatusUpdate);
+
     // get initial status
     requestSubscriptionStatusUpdate();
     requestSyspurposeUpdate();
