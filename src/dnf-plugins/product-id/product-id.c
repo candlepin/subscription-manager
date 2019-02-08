@@ -563,6 +563,9 @@ gpointer getProductIdContent(DnfRepo *repo) {
     gboolean productid_downloaded;
     productid_downloaded = dnf_repo_get_metadata_content(repo, "productid", &content, &length, &tmp_err);
     if (productid_downloaded) {
+        // Make sure that end of string contains trailing character: '\0'. Library libdnf cannot do that
+        // because the library doesn't know anything about content of downloaded metadata
+        ((char*)content)[length] = '\0';
         return content;
     } else {
         printError("Unable to get productid certificate from DnfRepo structure", tmp_err);
