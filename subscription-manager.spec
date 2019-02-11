@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 23%{?dist}
+Release: 24%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1135,6 +1135,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Feb 11 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-24
+- Sync translations (including fix for zh_TW) (csnyder@redhat.com)
+
 * Sun Feb 10 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-23
 - Sync Translations (csnyder@redhat.com)
 
