@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 25%{?dist}
+Release: 26%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1135,6 +1135,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Feb 11 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-26
+- 1654531: Add proxy_scheme to rhsm.conf (csnyder@redhat.com)
+- 1665409: Update syspurpose status in cockpit addon (nmoumoul@redhat.com)
+
 * Mon Feb 11 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-25
 - 1673838: Set trailing character '\0' at the end of cert content
   (jhnidek@redhat.com)
