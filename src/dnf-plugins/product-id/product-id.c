@@ -211,6 +211,7 @@ void requestProductIdMetadata(DnfContext *dnfContext) {
         DnfRepo* repo = g_ptr_array_index(repos, i);
         bool enabled = (dnf_repo_get_enabled(repo) & DNF_REPO_ENABLED_PACKAGES) > 0;
         if (enabled) {
+            debug("Requesting downloading productid cert from repo: %s", dnf_repo_get_id(repo));
             dnf_repo_add_metadata_type_to_download(repo, "productid");
         }
     }
@@ -238,6 +239,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, DnfPluginHookData *hookDat
     debug("%s v%s, running hook_id: %s on DNF version %d",
             pinfo.name, pinfo.version, strHookId(id), handle->version);
 
+
     if (id == PLUGIN_HOOK_ID_CONTEXT_CONF) {
         // Get DNF context
         DnfContext *dnfContext = handle->context;
@@ -248,6 +250,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, DnfPluginHookData *hookDat
 
         requestProductIdMetadata(dnfContext);
     }
+
 
     if (id == PLUGIN_HOOK_ID_CONTEXT_TRANSACTION) {
         // Get DNF context
@@ -263,12 +266,15 @@ int pluginHook(PluginHandle *handle, PluginHookId id, DnfPluginHookData *hookDat
             error("Unable to create %s directory, %s", PRODUCTDB_DIR, strerror(errno));
             return 1;
         }
+
         // List of all repositories
         GPtrArray *repos = dnf_context_get_repos(dnfContext);
         // When there are no repositories, then we can't do anything
         if(repos == NULL) {
+            info("No repositories. Nothing to do.");
             return 1;
         }
+
         // List of enabled repositories
         GPtrArray *enabledRepos = g_ptr_array_sized_new(repos->len);
         // Enabled repositories with product id certificate
@@ -308,24 +314,13 @@ int pluginHook(PluginHandle *handle, PluginHookId id, DnfPluginHookData *hookDat
             if (tmp_err) {
                 printError("Unable to get information about repository", tmp_err);
             } else if (repoMd != NULL) {
-                LrYumRepoMdRecord *repoMdRecord = lr_yum_repomd_get_record(repoMd, "productid");
-                if (repoMdRecord) {
+                RepoProductId *repoProductId = initRepoProductId();
+                int fetchSuccess = isProductIdDownloaded(repo, repoProductId);
+                if (fetchSuccess) {
                     debug("Repository %s has a productid", dnf_repo_get_id(repo));
-                    RepoProductId *repoProductId = initRepoProductId();
-                    // TODO: do not fetch productid certificate, when dnf context is set to cache-only mode
-                    // Microdnf nor PackageKit do not support this feature ATM
-                    gboolean cache_only = dnf_context_get_cache_only(dnfContext);
-                    if (cache_only == TRUE) {
-                        debug("DNF context is set to: cache-only");
-                    } else {
-                        debug("DNF context is NOT set to: cache-only");
-                    }
-                    int fetchSuccess = fetchProductId(repo, repoProductId);
-                    if(fetchSuccess == 1) {
-                        g_ptr_array_add(repoAndProductIds, repoProductId);
-                    } else {
-                        free(repoProductId);
-                    }
+                    g_ptr_array_add(repoAndProductIds, repoProductId);
+                } else {
+                    free(repoProductId);
                 }
             } else {
                 error("Unable to get valid information about repository");
@@ -355,9 +350,8 @@ int pluginHook(PluginHandle *handle, PluginHookId id, DnfPluginHookData *hookDat
             free(repoProductId);
         }
 
-        freeProductDb(productDb);
         freeProductDb(oldProductDb);
-        g_ptr_array_unref(repos);
+        freeProductDb(productDb);
         g_ptr_array_unref(enabledRepos);
         g_ptr_array_unref(disabledRepos);
         g_ptr_array_unref(repoAndProductIds);
@@ -565,7 +559,7 @@ gpointer getProductIdContent(DnfRepo *repo) {
     if (productid_downloaded) {
         // Make sure that end of string contains trailing character: '\0'. Library libdnf cannot do that
         // because the library doesn't know anything about content of downloaded metadata
-        ((char*)content)[length] = '\0';
+        ((char*)content)[length-1] = '\0';
         return content;
     } else {
         printError("Unable to get productid certificate from DnfRepo structure", tmp_err);
@@ -573,8 +567,14 @@ gpointer getProductIdContent(DnfRepo *repo) {
     }
 }
 
-
-int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
+/**
+ * This function checks if product-id certificate was downloaded for given repository
+ *
+ * @param repo Pointer at structure holding information about repository
+ * @param repoProductId Pointer at our internal structure
+ * @return
+ */
+int isProductIdDownloaded(DnfRepo *repo, RepoProductId *repoProductId) {
     int ret = 0;
 
     const gchar *path = dnf_repo_get_filename_md(repo, "productid");
@@ -582,7 +582,7 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
     repoProductId->repo = repo;
     repoProductId->productIdPath = path;
     if (path) {
-        debug("Product id cert downloaded metadata from repo %s to %s",
+        debug("Productid certificate downloaded from repo %s to %s",
               dnf_repo_get_id(repo),
               repoProductId->productIdPath);
         ret = 1;

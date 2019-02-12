@@ -73,7 +73,7 @@ GPtrArray *getAvailPackageList(DnfSack *dnfSack, DnfRepo *repo);
 GPtrArray *getInstalledPackages(DnfSack *rpmDbSack);
 void getActive(DnfPluginHookData *hookData, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds);
 int findProductId(GString *certContent, GString *result);
-int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId);
+int isProductIdDownloaded(DnfRepo *repo, RepoProductId *repoProductId);
 int installProductId(RepoProductId *repoProductId, ProductDb *productDb, const char *product_cert_dir);
 void writeRepoMap(ProductDb *productDb);
 void protectProductWithDisabledRepos(GPtrArray *disabledRepos, ProductDb *oldProductDb, ProductDb *productDb);

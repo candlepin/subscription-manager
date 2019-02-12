@@ -226,8 +226,8 @@ void testFetchingProductId(productFixture *fixture, gconstpointer testData) {
     DnfContext *dnfContext = dnf_context_new();
     DnfRepo *repo = dnf_repo_new(dnfContext);
 
-    int ret = fetchProductId(repo, fixture->repoProductId);
-    printf("result of fetchProductId: %d\n", ret);
+    int ret = isProductIdDownloaded(repo, fixture->repoProductId);
+    printf("result of isProductIdDownloaded: %d\n", ret);
     g_assert_cmpint(ret, ==, 0);
 
     g_object_unref(repo);
