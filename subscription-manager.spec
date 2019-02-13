@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 26%{?dist}
+Release: 27%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1135,6 +1135,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Feb 13 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-27
+- 1654531: Add default for proxy_scheme in rhsm.conf (csnyder@redhat.com)
+
 * Mon Feb 11 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-26
 - 1654531: Add proxy_scheme to rhsm.conf (csnyder@redhat.com)
 - 1665409: Update syspurpose status in cockpit addon (nmoumoul@redhat.com)
