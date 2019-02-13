@@ -131,7 +131,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.2
+Version: 1.24.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1137,6 +1137,214 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Feb 13 2019 Christopher Snyder <csnyder@redhat.com> 1.24.3-1
+- Add rhel 7.7 releaser (csnyder@redhat.com)
+- 1654531: Add proxy_scheme to rhsm.conf (csnyder@redhat.com)
+- 1665409: Update syspurpose status in cockpit addon (nmoumoul@redhat.com)
+- 1673838: Set trailing character '\0' at the end of cert content
+  (jhnidek@redhat.com)
+- 1666516: Allow reporting of profile info on dnf transactions
+  (csnyder@redhat.com)
+- 1633216: Use new libdnf API to reuse connection to repo; ENT-1111
+  (jhnidek@redhat.com)
+- 1668947: set enable_metadata to 0 for disabled repos; ENT-1146
+  (jhnidek@redhat.com)
+- 1666512: Add some details on dnf uploadprofile to rhsm.conf man page
+  (csnyder@redhat.com)
+- More reliable PXE server and PXE client (jhnidek@redhat.com)
+- 1666516: Don't send package list, when report_package_profile=0; ENT-1097
+  (jhnidek@redhat.com)
+- 1671734: Dont traceback on status syspurpose sync - Do not show an error or
+  traceback when running the status command and the server is unreachable
+  during syncing of syspurpose data. (nmoumoul@redhat.com)
+- 1668152: take into account syspurpose during initial-setup - Registering
+  through initial-setup will now persist & use the syspurpose values that were
+  set during the anaconda installation process. (nmoumoul@redhat.com)
+- 1661414: No message display when set service level by subscription
+  manager[ENT-1106] (ojanus@redhat.com)
+- 1661400: Incorrect handling of response message (wpoteat@redhat.com)
+- 1652870: Stay consistent with Katello list (wpoteat@redhat.com)
+- ENT-978: Upgrade pxe-server/client to fedora29 - Also, now the RHSM spoke in
+  anaconda initializes and logs in the rhsm.log. (nmoumoul@redhat.com)
+- 1660520: Modify spec file to require right version of libdnf.
+  (jhnidek@redhat.com)
+- 1582317: Do not collect hardware facts twice; ENT-653 (jhnidek@redhat.com)
+- 1666373: Do not delete product certs for disabled repos; ENT-1034
+  (jhnidek@redhat.com)
+- Supplements keyword is not available on rhel7 or centos7.
+  (jhnidek@redhat.com)
+- 1634033: do not install conf file for non-existant dnf plugin
+  (csnyder@redhat.com)
+- 1652870: handle new syspurpose status states - Now, the new syspurpose
+  statuses 'matched', 'mismatched' and 'not specified' returned by the server
+  will also be handled and shown. - In addition, for backwards compatibility,
+  if the server returns one of 'valid', 'invalid' or 'partial' status, those
+  will still be handled and shown too by subscription-manager.
+  (nmoumoul@redhat.com)
+- 1632394: Supplement initial-setup-gui with our addon (csnyder@redhat.com)
+- 1654531: Make default repolist proxy to http protocol when not specified
+  (wpoteat@redhat.com)
+- 1655083: Sync syspurpose on status command (csnyder@redhat.com)
+- 1658383: Ensure syspurpose has translations (csnyder@redhat.com)
+- 1624859: Simplify syspurpose bash completion (csnyder@redhat.com)
+- 1656598: Treat false as disabled when listing repos (csnyder@redhat.com)
+- 1663254: Remove "Red Hat Enterprise Linux Client/Desktop" role option
+  (csnyder@redhat.com)
+- 1591399: Stop throwing exception on timeout to avoid stacktrace
+  (wpoteat@redhat.com)
+- 1658409: Stop redhat.repo from growing exponentially (awood@redhat.com)
+- 1661219: Do not delete product certs for disabled repos; ENT-1034
+  (jhnidek@redhat.com)
+- 1660224: Allow setting and unsetting of addons and service level
+  (csnyder@redhat.com)
+- 1618901: Module name unknown (wpoteat@redhat.com)
+- 1643128: Do not execute subscription-manager dnf plugin twice; ENT-987
+  (jhnidek@redhat.com)
+- 1660224: Use the result from SyncResult objects for showing syspurpose
+  (csnyder@redhat.com)
+- Added several unit tests and refactoring of code to libdnf product ID plugin
+  (jhnidek@redhat.com)
+- 1633277: syspurpose tool will now log in rhsm.log - The syspurpose tool will
+  now log all communication with the server   in the rhsm.log - Added a lot of
+  log statements in the key actions of the syspurpose   tool itself, to help
+  with debugging. (nmoumoul@redhat.com)
+- 1636852 & 1646384: better auth handling when listing service-levels - When
+  running service-level --list with invalid credentials,   dont traceback, but
+  show the proper error to the user. - This is handled when either the
+  --serverurl, or --username   and --password options are used.
+  (nmoumoul@redhat.com)
+- 1654491: Use new API of DNF (jhnidek@redhat.com)
+- 1633264: Ensure we sync syspurpose on register (csnyder@redhat.com)
+- 1625214: send ConfigChanged event when file replaced - Now, the ConfigChanged
+  event will be sent not only when a monitored   file is edited in place, but
+  also when the whole file is replaced   with another who is moved/renamed to
+  the same location & name. (nmoumoul@redhat.com)
+- 1654873: Add man entry for rhsmcertd.disable (csnyder@redhat.com)
+- 1654868: Add man page docs of the package_profile_on_trans option
+  (csnyder@redhat.com)
+- 1638153: Restore service-level command for older servers (csnyder@redhat.com)
+- 1624859: Add bash completion for syspurpose aspects (csnyder@redhat.com)
+- 1633380: show syspurpose status Unknown when cache missing - When the server
+  is unreachable and the syspurpose status cache   is missing, then don't
+  traceback, but show status as 'Unknown'. - Also, when the server is
+  reachable, but the system is unregisted,   show the 'Unknown' syspurpose
+  status, but don't cache it. (nmoumoul@redhat.com)
+- 1642888: Add semanage advice on setting non-default proxy_port
+  (csnyder@redhat.com)
+- 1651621: use cockpit-desktop to launch cockpit based gui (csnyder@redhat.com)
+- Bug fix: include debuginfo in RPM with debuginfo information
+  (jhnidek@redhat.com)
+- Sync changes with Entitlement Server from both subman and syspurpose
+  (csnyder@redhat.com)
+- 1618372: Print accessible content paths from X509 extension using rct
+  (awood@redhat.com)
+- 1650323: dnf subcommand for profile uploads; ENT-984 (jhnidek@redhat.com)
+- 1599801: fix Python2 and Python3 incompatibility; ENT-776
+  (jhnidek@redhat.com)
+- 1649125: setuptools naming change (wpoteat@redhat.com)
+- 1618498: cockpit will notify activation keys require org - When trying to
+  register with activation keys in cockpit, now the proper message   will be
+  displayed to the user when he doesn't also provide an organisation.
+  (nmoumoul@redhat.com)
+- 1651669: Remove dbus-python from egg requirements (khowell@redhat.com)
+- Fix issue with Python 3.7 on Fedora 29. (jhnidek@redhat.com)
+- Fix several issues with os.errno (jhnidek@redhat.com)
+- 1650941: Fix value of Self-Support SLA in valid_fields.json
+  (csnyder@redhat.com)
+- Fix builds of product-id plugin (khowell@redhat.com)
+- Fixed bug that caused crashes of PackageKit daemon. (jhnidek@redhat.com)
+- Small fixes of libdnf product-id plugin (jhnidek@redhat.com)
+- Disable rhsmcertd by config entry (wpoteat@redhat.com)
+- Typo fixes (khowell@redhat.com)
+- Add fixes from @kahowell (dellweg@atix.de)
+- Add dpkg-post-invoke hook deb_package_profile_upload (dellweg@atix.de)
+- Add apt-transport-katello (dellweg@atix.de)
+- Fall back to python package version (dellweg@atix.de)
+- Make AptRepoFile dependent on the existence of python-deb822
+  (dellweg@atix.de)
+- Add dependencies (dellweg@atix.de)
+- Multiplex server_value_repo_logic for all packet managers (dellweg@atix.de)
+- Factor out repofile.py from repolib.py (dellweg@atix.de)
+- Make apt, yum and zypper equal siblings in repolib (dellweg@atix.de)
+- Add AptRepoFile (dellweg@atix.de)
+- Rename modules to use underscore instead of hyphen. (awood@redhat.com)
+- Remove zypper productid tests (for now) (khowell@redhat.com)
+- Fix service name in zypper tests (khowell@redhat.com)
+- Do not build libdnf plugin on RHEL 7 or Fedora 28. (awood@redhat.com)
+- Uniquify the module list (paji@redhat.com)
+- ENT-949: run the package profile reporting on the post_trans_hook for each
+  transaction (wpoteat@redhat.com)
+- Add module that can be invoked to force package profile upload.
+  (awood@redhat.com)
+- Polished libdnf product-id plugin accorind feedback from PR.
+  (jhnidek@redhat.com)
+- 1632394 Fix error caused by changes in pyanaconda API. ENT-906
+  (jhnidek@redhat.com)
+- Package product-id plugin (awood@redhat.com)
+- Remove macro forms of system executables (awood@redhat.com)
+- Change in-source build message to a warning. (awood@redhat.com)
+- Correct a few issues from code review. (awood@redhat.com)
+- Remove "hello world" plugin (awood@redhat.com)
+- Fixed almost all memory leaks from product-id plugin (jhnidek@redhat.com)
+- Make "Debug" default built type. (jhnidek@redhat.com)
+- Solve some warnings. (awood@redhat.com)
+- Added documentation about product-id plugin. (jhnidek@redhat.com)
+- Add docs. Deduplicate repo IDs. (awood@redhat.com)
+- Added some unit tests for reading product certificate. (jhnidek@redhat.com)
+- Get rid of remaining compile warnings. (jhnidek@redhat.com)
+- Incorporate productDB code. (awood@redhat.com)
+- Add option to make production ready code, added some more strict gcc options.
+  (jhnidek@redhat.com)
+- Added more unit tests and fixed one bug. (jhnidek@redhat.com)
+- Added some basic test for creating handle and hook. (jhnidek@redhat.com)
+- Add incomplete method to write database. (awood@redhat.com)
+- Added basic support for testing product-id.c (jhnidek@redhat.com)
+- Fixed some memory leaks from productdb and unit tests. (jhnidek@redhat.com)
+- Additional product db work (awood@redhat.com)
+- Fix memory leaks and logging messages. (jhnidek@redhat.com)
+- Fixed issue with list of installed packages and small changes
+  (jhnidek@redhat.com)
+- More productdb functions and tests. (awood@redhat.com)
+- Removing of unused product certs and productdb (jhnidek@redhat.com)
+- Code and tests for product-db. (awood@redhat.com)
+- Basic refactoring, add unit framework. (awood@redhat.com)
+- Fixed issue with variable substitution. (jhnidek@redhat.com)
+- Removed more memory leaks and improved printError(). (jhnidek@redhat.com)
+- Write the map of product ID to repos into JSON. (awood@redhat.com)
+- Added support for JSON-C into CMakeLists.txt. (jhnidek@redhat.com)
+- Fixed several memory leaks using Valgrind (jhnidek@redhat.com)
+- Rename method to denote it actually installs a cert. (awood@redhat.com)
+- Move hook method up to be with its friends. (awood@redhat.com)
+- Only install product certs from active repos. (awood@redhat.com)
+- Switch to CMake for product-id plugin by removing Makefile.
+  (awood@redhat.com)
+- Make reading of product certificate more robust. (jhnidek@redhat.com)
+- Loging of productid plugin and put decompressed cert to /etc/pki/product
+  (jhnidek@redhat.com)
+- Figure out what file name to use for the product cert. (awood@redhat.com)
+- Link product-id.so with zlib, libcrypto and libssl libraries.
+  (jhnidek@redhat.com)
+- Gunzip the product certificate. (awood@redhat.com)
+- Find active packages (awood@redhat.com)
+- Faster method of fetching active repos. (jhnidek@redhat.com)
+- Look for active packages (awood@redhat.com)
+- Fetch productid file. (awood@redhat.com)
+- Ignore cmake build directories (awood@redhat.com)
+- Rename using hyphen (awood@redhat.com)
+- Add CMake file (awood@redhat.com)
+- Makefile and trivial version of product id plugin (awood@redhat.com)
+- Add note about using a local build. (awood@redhat.com)
+- Added debug printing to log file (testing of pkcon). (jhnidek@redhat.com)
+- Added more notes to README.md. (jhnidek@redhat.com)
+- Added README.md; fixed bug in plugin and added some \n to printf.
+  (jhnidek@redhat.com)
+- Added initial test/example libdnf plugin (crog@redhat.com)
+- Clean up temp files after unit tests. (awood@redhat.com)
+- Add an environment variable to disable package profile reporting
+  (awood@redhat.com)
+- 1642271: Do not set a None lang (csnyder@redhat.com)
+- Detect sles11 via /etc/SuSE-release (khowell@redhat.com)
+
 * Mon Nov 05 2018 Christopher Snyder <csnyder@redhat.com> 1.24.2-1
 - 1645205: Do not update ent certs inside containers (csnyder@redhat.com)
 - 1633304: Disable zypper product-id plugin. (awood@redhat.com)
