@@ -88,10 +88,11 @@ def show_contents(args, syspurposestore):
     :param syspurposestore:
     :return:
     """
-
-    contents = syspurposestore.sync().result
+    sync_result = syspurposestore.sync()
+    contents = sync_result.result
     contents = {key: contents[key] for key in contents if contents[key]}
     print(json.dumps(contents, indent=2, ensure_ascii=False, sort_keys=True))
+    return sync_result
 
 
 def setup_arg_parser():
@@ -100,25 +101,25 @@ def setup_arg_parser():
     :return: An argparse.ArgumentParser ready to use to parse_args
     """
     parser = argparse.ArgumentParser(prog="syspurpose", description="System Syspurpose Management Tool")
-    parser.set_defaults(func=None, requires_write=False)
+    parser.set_defaults(func=None, requires_sync=False)
 
     subparsers = parser.add_subparsers(help="sub-command help")
 
     # Arguments shared by subcommands
     add_options = argparse.ArgumentParser(add_help=False)
     add_options.add_argument("values", help="The value(s) to add", nargs='+')
-    add_options.set_defaults(func=add_command, requires_write=True)
+    add_options.set_defaults(func=add_command, requires_sync=True)
 
     remove_options = argparse.ArgumentParser(add_help=False)
     remove_options.add_argument("values", help="The value(s) to remove", nargs='+')
-    remove_options.set_defaults(func=remove_command, requires_write=True)
+    remove_options.set_defaults(func=remove_command, requires_sync=True)
 
     set_options = argparse.ArgumentParser(add_help=False)
     set_options.add_argument("value", help="The value to set", action="store")
-    set_options.set_defaults(func=set_command, requires_write=True)
+    set_options.set_defaults(func=set_command, requires_sync=True)
 
     unset_options = argparse.ArgumentParser(add_help=False)
-    unset_options.set_defaults(func=unset_command, requires_write=True)
+    unset_options.set_defaults(func=unset_command, requires_sync=True)
 
     # Generic assignments
     # Set ################
@@ -134,7 +135,7 @@ def setup_arg_parser():
         help=_("The value to set"),
         action="store")
 
-    generic_set_parser.set_defaults(func=set_command, requires_write=True)
+    generic_set_parser.set_defaults(func=set_command, requires_sync=True)
 
     # Unset ##############
     generic_unset_parser = subparsers.add_parser("unset",
@@ -160,7 +161,7 @@ def setup_arg_parser():
         action="store",
         nargs="+")
 
-    generic_add_parser.set_defaults(func=add_command, requires_write=True)
+    generic_add_parser.set_defaults(func=add_command, requires_sync=True)
 
     # Remove #############
     generic_remove_parser = subparsers.add_parser("remove",
@@ -176,8 +177,7 @@ def setup_arg_parser():
         action="store",
         nargs="+")
 
-    generic_remove_parser.set_defaults(func=remove_command, requires_write=True)
-
+    generic_remove_parser.set_defaults(func=remove_command, requires_sync=True)
     # Targeted commands
     # Roles ##########
     set_role_parser = subparsers.add_parser("set-role",
@@ -235,7 +235,7 @@ def setup_arg_parser():
     # Pretty Print Json contents of default syspurpose file
     show_parser = subparsers.add_parser("show",
         help=_("Show the current system syspurpose"))
-    show_parser.set_defaults(func=show_contents, requires_write=False)
+    show_parser.set_defaults(func=show_contents, requires_sync=False)
 
     return parser
 
@@ -269,11 +269,12 @@ def main():
 
     syspurposestore = SyncedStore(uep=uep, consumer_uuid=uuid)
     if args.func is not None:
-        args.func(args, syspurposestore)
+        result = args.func(args, syspurposestore)
     else:
         parser.print_help()
         return 0
-    result = syspurposestore.sync()
+    if args.requires_sync:
+        result = syspurposestore.sync()
     if result:
         if result.remote_changed:
             print(_("System purpose successfully sent to subscription management server."))
