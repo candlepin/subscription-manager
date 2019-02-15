@@ -61,17 +61,6 @@ class DryRunResult(object):
                       self.service_level)
             return False
 
-    def get_pool_quantities(self):
-        """
-        Returns a list of tuples, each of which is a pool ID and a quantity
-        to consume. Used when we actually decide to bind to this pool.
-        """
-        tuples = []
-        for pool_quantity in self.json:
-            tuples.append((pool_quantity['pool']['id'],
-                pool_quantity['quantity']))
-        return tuples
-
 
 class ServiceLevelNotSupportedException(Exception):
     """
