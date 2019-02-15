@@ -1350,8 +1350,11 @@ class UEPConnection(object):
 
         Return will be a dict containing a "quantity" and a "pool".
         """
-        method = "/consumers/%s/entitlements/dry-run?service_level=%s" % \
-                (self.sanitize(consumer_uuid), self.sanitize(service_level))
+        if service_level is None:
+            method = "/consumers/%s/entitlements/dry-run" % self.sanitize(consumer_uuid)
+        else:
+            method = "/consumers/%s/entitlements/dry-run?service_level=%s" % \
+                    (self.sanitize(consumer_uuid), self.sanitize(service_level))
         return self.conn.request_get(method)
 
     def unbindBySerial(self, consumerId, serial):
