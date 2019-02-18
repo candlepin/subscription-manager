@@ -56,6 +56,9 @@ from subscription_manager import syspurposelib
 
 from subscription_manager.i18n import ugettext as _
 
+from subscription_manager import logutil
+
+logutil.init_logger()
 log = logging.getLogger(__name__)
 
 from rhsmlib.services import config, attach
@@ -79,7 +82,7 @@ OWNER_SELECT_PAGE = 5
 ENVIRONMENT_SELECT_PAGE = 6
 PERFORM_REGISTER_PAGE = 7
 UPLOAD_PACKAGE_PROFILE_PAGE = 8
-SELECT_SLA_PAGE = 9
+FIND_SUBSCRIPTIONS = 9
 CONFIRM_SUBS_PAGE = 10
 PERFORM_SUBSCRIBE_PAGE = 11
 REFRESH_SUBSCRIPTIONS_PAGE = 12
@@ -295,7 +298,7 @@ class RegisterWidget(widgets.SubmanBaseWidget):
                           CredentialsScreen, PerformUnregisterScreen,
                           OrganizationScreen, EnvironmentScreen,
                           PerformRegisterScreen,
-                          PerformPackageProfileSyncScreen, SelectSLAScreen,
+                          PerformPackageProfileSyncScreen, FindSuitableSubscriptions,
                           ConfirmSubscriptionsScreen, PerformSubscribeScreen,
                           RefreshSubscriptionsScreen, InfoScreen,
                           DoneScreen]
@@ -441,7 +444,7 @@ class RegisterWidget(widgets.SubmanBaseWidget):
             # to subscriptions" is clicked in the gui)
             if self.info.get_property('skip-auto-bind'):
                 self.emit('finished')
-            self.current_screen.emit('move-to-screen', SELECT_SLA_PAGE)
+            self.current_screen.emit('move-to-screen', FIND_SUBSCRIPTIONS)
             self.register_widget.show_all()
             return False
         msg = _("This system is currently not registered.")
@@ -809,7 +812,7 @@ class RegisterDialog(widgets.SubmanBaseWidget):
 class AutoBindWidget(RegisterWidget):
     __gtype_name__ = "AutobindWidget"
 
-    initial_screen = SELECT_SLA_PAGE
+    initial_screen = FIND_SUBSCRIPTIONS
 
     def __init__(self, backend, reg_info=None,
                  parent_window=None):
@@ -817,7 +820,7 @@ class AutoBindWidget(RegisterWidget):
                                              parent_window)
 
     def choose_initial_screen(self):
-        self.current_screen.emit('move-to-screen', SELECT_SLA_PAGE)
+        self.current_screen.emit('move-to-screen', FIND_SUBSCRIPTIONS)
         self.register_widget.show_all()
         return False
 
@@ -1101,7 +1104,7 @@ class PerformPackageProfileSyncScreen(NoGuiScreen):
                       error)
 
             # Allow failure on package profile uploads
-            self.emit('move-to-screen', SELECT_SLA_PAGE)
+            self.emit('move-to-screen', FIND_SUBSCRIPTIONS)
             self.pre_done()
             return
 
@@ -1115,7 +1118,7 @@ class PerformPackageProfileSyncScreen(NoGuiScreen):
             # Or more likely, the server doesn't support package profile updates
             # so we got a result of 0 and no error
             else:
-                self.emit('move-to-screen', SELECT_SLA_PAGE)
+                self.emit('move-to-screen', FIND_SUBSCRIPTIONS)
         except Exception as e:
             self.emit('register-error', REGISTER_ERROR, e)
 
@@ -1160,8 +1163,7 @@ class PerformSubscribeScreen(NoGuiScreen):
 class ConfirmSubscriptionsScreen(Screen):
     """ Confirm Subscriptions GUI Window """
     screen_enum = CONFIRM_SUBS_PAGE
-    widget_names = Screen.widget_names + ['subs_treeview', 'back_button',
-                                          'sla_label']
+    widget_names = Screen.widget_names + ['subs_treeview', 'back_button']
 
     gui_file = "confirmsubs"
 
@@ -1204,9 +1206,6 @@ class ConfirmSubscriptionsScreen(Screen):
         if not dry_run_result:
             return
 
-        self.sla_label.set_markup("<b>" + dry_run_result.service_level +
-                                  "</b>")
-
         for pool_quantity in dry_run_result.json:
             self.store.append([pool_quantity['pool']['productName'],
                               PoolWrapper(pool_quantity['pool']).is_virt_only(),
@@ -1218,73 +1217,21 @@ class ConfirmSubscriptionsScreen(Screen):
         return False
 
 
-class SelectSLAScreen(Screen):
+class FindSuitableSubscriptions(NoGuiScreen):
     """
-    An wizard screen that displays the available
-    SLAs that are provided by the installed products.
+    A brief panel that finds suitable subscriptions based on the specified SLA.
     """
-    screen_enum = SELECT_SLA_PAGE
-    widget_names = Screen.widget_names + ['product_list_label',
-                                          'sla_combobox',
-                                          'owner_treeview']
-    gui_file = "selectsla"
+    screen_enum = FIND_SUBSCRIPTIONS
 
     def __init__(self, reg_info, async_backend, parent_window):
-        super(SelectSLAScreen, self).__init__(reg_info, async_backend, parent_window)
-
-        self.pre_message = _("Finding suitable service levels")
-        self.button_label = _("_Next")
-
-        self.list_store = ga_Gtk.ListStore(str, ga_GObject.TYPE_PYOBJECT)
-        self.sla_combobox.set_model(self.list_store)
-
-        self.sla_combobox.connect('changed', self._on_sla_combobox_changed)
-
-        renderer_text = ga_Gtk.CellRendererText()
-        self.sla_combobox.pack_start(renderer_text, True)
-        self.sla_combobox.add_attribute(renderer_text, 'text', 0)
-
-    def _on_sla_combobox_changed(self, combobox):
-        tree_iter = combobox.get_active_iter()
-        if tree_iter is not None:
-            model = combobox.get_model()
-            sla, sla_data_map = (model[tree_iter][0],
-                                 model[tree_iter][1])
-            self.info.set_property('dry-run-result',
-                                   sla_data_map[sla])
-
-    def set_model(self, unentitled_prod_certs, sla_data_map):
-        self.product_list_label.set_text(
-                self._format_prods(unentitled_prod_certs))
-
-        self.list_store.clear()
-        for sla in reversed(list(sla_data_map.keys())):
-            self.list_store.append([sla, sla_data_map])
-
-        self.sla_combobox.set_model(self.list_store)
-        self.sla_combobox.set_active(0)
+        super(FindSuitableSubscriptions, self).__init__(reg_info, async_backend, parent_window)
+        self.pre_message = _("Finding suitable subscriptions")
 
     def apply(self):
         self.emit('move-to-screen', CONFIRM_SUBS_PAGE)
         return True
 
-    def clear(self):
-        self.list_store.clear()
-        self.sla_combobox.set_model(self.list_store)
-
-    def _format_prods(self, prod_certs):
-        prod_str = ""
-        for i, cert in enumerate(prod_certs):
-            log.debug(cert)
-            prod_str = "%s%s" % (prod_str, cert.products[0].name)
-            if i + 1 < len(prod_certs):
-                prod_str += ", "
-        return prod_str
-
-    # so much for service level simplifying things
-    # FIXME: this could be split into 'on_get_all_service_levels_cb' and
-    #        and 'on_get_service_levels_cb'
-    def _on_get_service_levels_cb(self, result, error=None):
+    def _on_find_subscriptions_cb(self, result, error=None):
         if error is not None:
             if isinstance(error[1], ServiceLevelNotSupportedException):
                 msg = _("Unable to auto-attach, server does not support service levels.")
@@ -1341,17 +1288,16 @@ class SelectSLAScreen(Screen):
         # info.preferred_sla is a ks info provided SLA that we should use if
         #  available.
 
-        (current_sla, unentitled_products, sla_data_map) = result
+        (current_sla, unentitled_products, dry_run_data) = result
 
         self.info.set_property('current-sla', current_sla)
 
-        if len(sla_data_map) == 1:
+        if dry_run_data is not None:
             # If system already had a service level, we can hit this point
             # when we cannot fix any unentitled products:
-            if current_sla is not None and \
-                    not self._can_add_more_subs(current_sla, sla_data_map):
+            if current_sla is not None and not self._can_add_more_subs(current_sla, dry_run_data):
                 # Provide different messages for initial-setup and
-                # subscription-managaer-gui
+                # subscription-manager-gui
                 if self.parent_window.__class__.__name__ == 'SpokeWindow':
                     msg = _("You will need to use Red Hat Subscription "
                             "Manager to manually attach subscriptions to this "
@@ -1368,18 +1314,13 @@ class SelectSLAScreen(Screen):
                 self.pre_done()
                 return
 
-            self.info.set_property('dry-run-result',
-                                   list(sla_data_map.values())[0])
+            self.info.set_property('dry-run-result', dry_run_data)
+
             self.emit('move-to-screen', CONFIRM_SUBS_PAGE)
             self.pre_done()
             return
-        elif len(sla_data_map) > 1:
-            self.set_model(unentitled_products, sla_data_map)
-            self.stay()
-            self.pre_done()
-            return
         else:
-            log.info("No suitable service levels found.")
+            log.info("No suitable subscriptions found.")
             if self.parent_window.__class__.__name__ == 'SpokeWindow':
                 msg = _("You will need to use Red Hat Subscription "
                         "Manager to manually attach subscriptions to this "
@@ -1400,18 +1341,18 @@ class SelectSLAScreen(Screen):
         self.info.set_property('register-state', RegisterState.SUBSCRIBING)
         self.info.identity.reload()
 
-        self.async_backend.find_service_levels(self.info.identity.uuid,
-                                               self._on_get_service_levels_cb)
+        self.async_backend.find_subscriptions(self.info.identity.uuid,
+                                              self._on_find_subscriptions_cb)
         return True
 
-    def _can_add_more_subs(self, current_sla, sla_data_map):
+    @staticmethod
+    def _can_add_more_subs(current_sla, dry_run_data):
         """
         Check if a system that already has a selected sla can get more
         entitlements at their sla level
         """
         if current_sla is not None:
-            result = sla_data_map[current_sla]
-            return len(result.json) > 0
+            return len(dry_run_data.json) > 0
         return False
 
 
@@ -2070,7 +2011,7 @@ class AsyncBackend(object):
             # Force all the cert dir backends to update, but mostly
             # force the identity cert monitor to run, which will
             # also update Backend. It also blocks until the new
-            # identity is reloaded, so we don't start the selectSLA
+            # identity is reloaded, so we don't start the findsubscriptions
             # screen before it.
             self.backend.cs.force_cert_check()
 
@@ -2096,12 +2037,6 @@ class AsyncBackend(object):
         Subscribe to the selected pools.
         """
         try:
-            if not current_sla:
-                log.debug("Saving selected service level for this system.")
-
-                self.backend.cp_provider.get_consumer_auth_cp().updateConsumer(uuid,
-                        service_level=dry_run_result.service_level)
-
             log.info("Binding to subscriptions at service level: %s" %
                     dry_run_result.service_level)
             expected_pool_ids = set()
@@ -2147,15 +2082,13 @@ class AsyncBackend(object):
     # in the main thread with just the network stuff threaded?
 
     # get_consumer
-    # get_service_level_list
     # update_consumer
     #  action_client
     #    update_installed_products
     #    update_facts
     #    update_other_action_client_stuff
-    # for sla in available_slas:
-    #   get_dry_run_bind for sla
-    def _find_suitable_service_levels(self, consumer_uuid):
+    # get_dry_run_bind for sla
+    def _find_suitable_subscriptions(self, consumer_uuid):
 
         # FIXME:
         self.backend.update()
@@ -2165,8 +2098,6 @@ class AsyncBackend(object):
 
         if 'serviceLevel' not in consumer_json:
             raise ServiceLevelNotSupportedException()
-
-        owner_key = consumer_json['owner']['key']
 
         # This is often "", set to None in that case:
         current_sla = consumer_json['serviceLevel'] or None
@@ -2178,49 +2109,45 @@ class AsyncBackend(object):
                 len(self.backend.cs.partial_stacks) == 0 and self.backend.cs.system_status != 'partial':
             raise AllProductsCoveredException()
 
-        if current_sla:
-            available_slas = [current_sla]
-            log.debug("Using system's current service level: %s" %
-                    current_sla)
-        else:
-            available_slas = self.backend.cp_provider.get_consumer_auth_cp().getServiceLevelList(owner_key)
-            log.debug("Available service levels: %s" % available_slas)
-
-        # Will map service level (string) to the results of the dry-run
-        # autobind results for each SLA that covers all installed products:
-        suitable_slas = {}
+        dry_run_response = None
 
         # eek, in a thread
         action_client = ActionClient()
         action_client.update()
 
-        for sla in available_slas:
-
+        if current_sla:
+            log.debug("Using system's current service level: %s" % current_sla)
             # TODO: what kind of madness would happen if we did a couple of
             # these in parallel in seperate threads?
-            dry_run_json = self.backend.cp_provider.get_consumer_auth_cp().dryRunBind(consumer_uuid, sla)
+            dry_run_json = self.backend.cp_provider.get_consumer_auth_cp().dryRunBind(consumer_uuid, current_sla)
 
             # FIXME: are we modifying cert_sorter (self.backend.cs) state here?
             # FIXME: it's only to get the unentitled products list, can pass
             #        that in
-            dry_run = DryRunResult(sla, dry_run_json, self.backend.cs)
+            dry_run = DryRunResult(current_sla, dry_run_json, self.backend.cs)
 
             # If we have a current SLA for this system, we do not need
             # all products to be covered by the SLA to proceed through
             # this wizard:
-            if current_sla or dry_run.covers_required_products():
-                suitable_slas[sla] = dry_run
+            dry_run_response = dry_run
+        else:
+            log.debug("No service level was specified")
+            dry_run_json = self.backend.cp_provider.get_consumer_auth_cp().dryRunBind(consumer_uuid, None)
+            dry_run = DryRunResult(None, dry_run_json, self.backend.cs)
+
+            if dry_run.covers_required_products():
+                dry_run_response = dry_run
 
         # why do we call cert_sorter stuff in the return?
-        return (current_sla, list(self.backend.cs.unentitled_products.values()), suitable_slas)
+        return current_sla, list(self.backend.cs.unentitled_products.values()), dry_run_response
 
-    def _find_service_levels(self, consumer_uuid, callback):
+    def _find_subscriptions(self, consumer_uuid, callback):
         """
         method run in the worker thread.
         """
         try:
-            suitable_slas = self._find_suitable_service_levels(consumer_uuid)
-            self.queue.put((callback, suitable_slas, None))
+            suitable_subscriptions = self._find_suitable_subscriptions(consumer_uuid)
+            self.queue.put((callback, suitable_subscriptions, None))
         except Exception:
             self.queue.put((callback, None, sys.exc_info()))
 
@@ -2297,11 +2224,11 @@ class AsyncBackend(object):
             name="SubscribeThread",
             args=(uuid, current_sla, dry_run_result, callback)))
 
-    def find_service_levels(self, consumer_uuid, callback):
+    def find_subscriptions(self, consumer_uuid, callback):
         ga_GObject.idle_add(self._watch_thread)
         self._start_thread(threading.Thread(
-            target=self._find_service_levels,
-            name="FindServiceLevelsThread",
+            target=self._find_subscriptions,
+            name="FindSubscriptionsThread",
             args=(consumer_uuid, callback)))
 
     def refresh(self, callback):
