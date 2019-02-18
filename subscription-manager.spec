@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 27%{?dist}
+Release: 28%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1135,6 +1135,12 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Feb 18 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-28
+- 1668152: Remove the Select SLA screen from initial-setup
+  (nmoumoul@redhat.com)
+- 1676982: Do not make duplicate sync calls on syspurpose show
+  (csnyder@redhat.com)
+
 * Wed Feb 13 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-27
 - 1654531: Add default for proxy_scheme in rhsm.conf (csnyder@redhat.com)
 
