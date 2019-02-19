@@ -431,7 +431,14 @@ class MigrationEngine(object):
         f = open('/etc/redhat-release')
         lines = f.readlines()
         f.close()
-        release = "RHEL-" + str(lines).split(' ')[6].split('.')[0]
+        try:
+            major_version = re.search("[0-9]+(?=\.[0-9]+)*", str(lines)).group(0)
+        except AttributeError:
+            log.error("Could not determine RHEL release from /etc/redhat-release")
+            # Leaving no message to stdout/stderr as it's past string freeze
+            system_exit(1, "")
+        else:
+            release = "RHEL-" + major_version
         return release
 
     def read_channel_cert_mapping(self, mappingfile):
