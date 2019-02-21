@@ -99,6 +99,17 @@ void testRemoveRepoId(dbFixture *fixture, gconstpointer ignored) {
     g_assert_false(hasRepoId(db, "69", "notPresentRepoId"));
 }
 
+void testGetRepoIds(dbFixture *fixture, gconstpointer ignored) {
+    (void)ignored;
+    ProductDb *db = fixture->db;
+    db->path = "testing";
+    addRepoId(db, "69", "rhel");
+    addRepoId(db, "69", "jboss");
+    GSList *list = getRepoIds(db, "69");
+    g_assert_cmpint(g_slist_length(list), ==, 2);
+
+}
+
 void testReadMissingFile(dbFixture *fixture, gconstpointer ignored) {
     (void)ignored;
     ProductDb *db = fixture->db;
@@ -170,6 +181,7 @@ int main(int argc, char **argv) {
     g_test_add("/set1/test remove product id", dbFixture, NULL, setup, testRemoveProductId, teardown);
     g_test_add("/set1/test has repo id", dbFixture, NULL, setup, testHasRepoId, teardown);
     g_test_add("/set1/test remove repo id", dbFixture, NULL, setup, testRemoveRepoId, teardown);
+    g_test_add("/set1/test get repo ids", dbFixture, NULL, setup, testGetRepoIds, teardown);
     g_test_add("/set1/test read missing file", dbFixture, NULL, setup, testReadMissingFile, teardown);
     g_test_add("/set1/test read file", dbFixture, NULL, setup, testReadFile, teardown);
     g_test_add("/set1/test write file", dbFixture, NULL, setup, testWriteFile, teardown);

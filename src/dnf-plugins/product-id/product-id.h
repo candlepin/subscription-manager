@@ -19,11 +19,14 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wvariadic-macros"
 #include <libdnf/libdnf.h>
+#include <zlib.h>
 #pragma GCC diagnostic pop
 
 #define PRODUCTDB_FILE "/var/lib/rhsm/productid.js"
 #define PRODUCT_CERT_DIR "/etc/pki/product/"
 #define DEFAULT_PRODUCT_CERT_DIR "/etc/pki/product-default/"
+
+#define AVAIL_PKGS_CACHE_FILE "/var/lib/rhsm/cache/package_repo_mapping.json"
 
 #define SUPPORTED_LIBDNF_PLUGIN_API_VERSION 1
 
@@ -57,11 +60,12 @@ typedef struct _PluginHandle {
 
 /**
  * Internal structure for holding information about product-id certificate
- * ins specific repository
+ * in specific repository
  */
 typedef struct {
     DnfRepo *repo;
-    const char *productIdPath;
+    char *productIdPath;
+    bool isInstalled;
 } RepoProductId;
 
 RepoProductId *initRepoProductId();
@@ -71,7 +75,9 @@ void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos);
 void getDisabled(const GPtrArray *repos, GPtrArray *disabledRepos);
 GPtrArray *getAvailPackageList(DnfSack *dnfSack, DnfRepo *repo);
 GPtrArray *getInstalledPackages(DnfSack *rpmDbSack);
-void getActive(DnfPluginHookData *hookData, const GPtrArray *repoAndProductIds, GPtrArray *activeRepoAndProductIds);
+int getInstalledProductCerts(gchar *certDir, GPtrArray *repos, GPtrArray *enabledRepoProductId, ProductDb *productDb);
+void getActive(DnfContext *dnfContext, DnfPluginHookData *hookData, const GPtrArray *enabledRepoAndProductIds, GPtrArray *activeRepoAndProductIds);
+int decompress(gzFile input, GString *output);
 int findProductId(GString *certContent, GString *result);
 int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId);
 int installProductId(RepoProductId *repoProductId, ProductDb *productDb, const char *product_cert_dir);
