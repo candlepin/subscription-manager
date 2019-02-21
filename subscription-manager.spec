@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 28%{?dist}
+Release: 29%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1135,6 +1135,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Feb 21 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-29
+- 1655778: Increase RHEL major version detection reliability
+  (csnyder@redhat.com)
+
 * Mon Feb 18 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-28
 - 1668152: Remove the Select SLA screen from initial-setup
   (nmoumoul@redhat.com)
