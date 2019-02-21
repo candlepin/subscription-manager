@@ -31,6 +31,7 @@ void freeProductDb(ProductDb *productDb);
 void readProductDb(ProductDb *productDb, GError **err);
 void writeProductDb(ProductDb *productDb, GError **err);
 void addRepoId(ProductDb *productDb, const char *productId, const char *repoId);
+GSList *getRepoIds(ProductDb *productDb, const char *productId);
 gboolean removeProductId(ProductDb *productDb, const char *productId);
 gboolean removeRepoId(ProductDb *productDb, const char *productId, const char *repoId);
 gboolean hasProductId(ProductDb *productDb, const char *productId);
