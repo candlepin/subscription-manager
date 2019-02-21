@@ -195,6 +195,17 @@ void addRepoId(ProductDb *productDb, const char *productId, const char *repoId) 
 }
 
 /**
+ * Return list of repo IDs for given product ID
+ *
+ * @param productDb Pointer at ProductDb
+ * @param productId String with representation of product ID
+ * @return Return pointer at list of Repo IDs or NULL
+ */
+GSList *getRepoIds(ProductDb *productDb, const char *productId) {
+    return (GSList*)g_hash_table_lookup(productDb->repoMap, productId);
+}
+
+/**
  * Remove of a product ID from the product DB.
  * @param productDb ProductDb to update
  * @param productId ID to remove
