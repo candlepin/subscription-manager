@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 30%{?dist}
+Release: 31%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1135,6 +1135,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Feb 22 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-31
+- 1673973: Read syspurpose on register using cockpit (csnyder@redhat.com)
+
 * Fri Feb 22 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-30
 - 1673934, 1673931: Increase stability of libdnf product-id plugin
   (jhnidek@redhat.com)
