@@ -49,7 +49,7 @@ class AttachDBusObject(base_object.BaseObject):
     @util.dbus_handle_exceptions
     def AutoAttach(self, service_level, proxy_options, locale, sender=None):
         self.ensure_registered()
-        service_level = dbus_utils.dbus_to_python(service_level, expected_type=str)
+        service_level = dbus_utils.dbus_to_python(service_level, expected_type=str) or None
         proxy_options = dbus_utils.dbus_to_python(proxy_options, expected_type=dict)
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
         Locale.set(locale)
