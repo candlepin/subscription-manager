@@ -96,7 +96,10 @@ class RegisterService(object):
 
         # Now that we are registered, load the new identity
         self.identity.reload()
-        store = syspurposelib.get_sys_purpose_store()
+        # We want a new SyncedStore every time as we otherwise can hold onto bad state in
+        # long-lived services in dbus
+        uep = inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()
+        store = syspurposelib.SyncedStore(uep, consumer_uuid=self.identity.uuid)
         if store:
             store.sync()
         return consumer
