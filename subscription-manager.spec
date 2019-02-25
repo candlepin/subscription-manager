@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 31%{?dist}
+Release: 32%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1135,6 +1135,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Feb 25 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-32
+- 1673973: Do not override sla on auto-attach (csnyder@redhat.com)
+
 * Fri Feb 22 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-31
 - 1673973: Read syspurpose on register using cockpit (csnyder@redhat.com)
 
