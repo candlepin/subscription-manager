@@ -719,8 +719,8 @@ class TestSyncedStore(SyspurposeTestBase):
         self.assert_equal_dict(expected_local, local_result)
         self.assert_equal_dict(expected_cache, cache_result)
         self.uep.updateConsumer.assert_called_once_with(consumer_uuid,
-                                                        role="",
-                                                        usage="",
+                                                        role=None,
+                                                        usage=None,
                                                         service_level=u"",
                                                         addons=[])
 
