@@ -140,10 +140,10 @@ class RegisterServiceTest(InjectionMockingTest):
             installed_products=[],
             content_tags=[],
             type="system",
-            role=None,
+            role="",
             addons=[],
-            service_level='',
-            usage=None)
+            service_level="",
+            usage="")
         self.mock_installed_products.write_cache.assert_called()
 
         mock_persist_consumer.assert_called_once_with(expected_consumer)
@@ -176,10 +176,10 @@ class RegisterServiceTest(InjectionMockingTest):
             installed_products=[],
             content_tags=[],
             type="system",
-            role=None,
+            role="",
             addons=[],
-            service_level='',
-            usage=None
+            service_level="",
+            usage=""
         )
         self.mock_installed_products.write_cache.assert_called()
 
