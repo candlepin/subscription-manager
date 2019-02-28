@@ -45,9 +45,9 @@ class RegisterService(object):
             raise exceptions.ValidationError(_("Unknown arguments: %s") % kwargs.keys())
 
         syspurpose = syspurposelib.read_syspurpose()
-        role = role or syspurpose.get('role')
+        role = role or syspurpose.get('role', '')
         addons = addons or syspurpose.get('addons', [])
-        usage = usage or syspurpose.get('usage')
+        usage = usage or syspurpose.get('usage', '')
         service_level = service_level or syspurpose.get('service_level_agreement', '')
 
         type = type or "system"
