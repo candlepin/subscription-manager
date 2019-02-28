@@ -373,10 +373,10 @@ class SyncedStore(object):
         addons = data.get(ADDONS)
         self.uep.updateConsumer(
                 self.consumer_uuid,
-                role=data.get(ROLE),
+                role=data.get(ROLE) or "",
                 addons=addons if addons is not None else [],
                 service_level=data.get(SERVICE_LEVEL) or "",
-                usage=data.get(USAGE)
+                usage=data.get(USAGE) or ""
         )
         log.debug('Successfully updated remote syspurpose on the server.')
         return True
