@@ -634,6 +634,9 @@ void getActive(DnfContext *dnfContext, DnfPluginHookData *hookData, const GPtrAr
         for (guint k = 0; k < installedPackages->len; k++) {
             DnfPackage *instPkg = g_ptr_array_index(installedPackages, k);
             gchar *repo_name = dnf_package_get_origin(instPkg);
+            if (!repo_name) {
+                continue;
+            }
             if (g_hash_table_contains(activeRepos, repo_name) == FALSE) {
                 g_hash_table_add(activeRepos, repo_name);
                 for (guint i = 0; i < enabledRepoAndProductIds->len; i++) {
