@@ -132,7 +132,7 @@
 
 Name: subscription-manager
 Version: 1.23.8
-Release: 34%{?dist}
+Release: 35%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1135,6 +1135,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Mar 06 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-35
+- 1685037: Ignore null repos when running using packagekit (csnyder@redhat.com)
+
 * Fri Mar 01 2019 Christopher Snyder <csnyder@redhat.com> 1.23.8-34
 - 1666845: Always submit empty string for reset (csnyder@redhat.com)
 - 1666845: Always submit empty string for reset (csnyder@redhat.com)
