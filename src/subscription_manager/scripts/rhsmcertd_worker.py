@@ -68,7 +68,7 @@ def _main(options, log):
 
     cp_provider = inj.require(inj.CP_PROVIDER)
     correlation_id = generate_correlation_id()
-    log.info('X-Correlation-ID: %s', correlation_id)
+    log.debug('X-Correlation-ID: %s', correlation_id)
     cp_provider.set_correlation_id(correlation_id)
     cfg = config.initConfig()
 

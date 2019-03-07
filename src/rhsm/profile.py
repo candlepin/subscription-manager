@@ -78,7 +78,7 @@ class ModulesProfile(object):
             try:
                 modules = base._moduleContainer
             except AttributeError:
-                log.info("DNF does not provide modulemd functionality")
+                log.warn("DNF does not provide modulemd functionality")
                 return []
             all_module_list = modules.getModulePackages()
 

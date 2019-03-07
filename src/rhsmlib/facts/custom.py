@@ -84,7 +84,7 @@ class CustomFactsDirectory(object):
 
     def fact_file_iterator(self, fact_file_path_iterator):
         for fact_file_path in fact_file_path_iterator:
-            log.info("Loading custom facts from: %s" % fact_file_path)
+            log.debug("Loading custom facts from: %s" % fact_file_path)
             yield CustomFactsFile(fact_file_path)
 
     def __iter__(self):

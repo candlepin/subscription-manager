@@ -97,7 +97,7 @@ class SystemCommand(CliCommand):
                 raise InvalidCLIOptionError(msg)
         # In case folks are using this in a script
         if self.options.placeholder_for_subscriptions_option:
-            log.info("The rhsm-debug options '--subscriptions' and '--no-subscriptions' have no effect now.")
+            log.debug("The rhsm-debug options '--subscriptions' and '--no-subscriptions' have no effect now.")
 
     def _dirs_on_same_device(self, dir1, dir2):
         return os.stat(dir1).st_dev == os.stat(dir2).st_dev

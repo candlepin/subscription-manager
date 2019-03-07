@@ -69,7 +69,7 @@ def persist_consumer_cert(consumerinfo):
         os.mkdir(cert_dir)
     consumer = identity.ConsumerIdentity(consumerinfo['idCert']['key'], consumerinfo['idCert']['cert'])
     consumer.write()
-    log.info("Consumer created: %s (%s)" % (consumer.getConsumerName(), consumer.getConsumerId()))
+    log.debug("Consumer created: %s (%s)" % (consumer.getConsumerName(), consumer.getConsumerId()))
     system_log("Registered system with identity: %s" % consumer.getConsumerId())
 
 
@@ -874,7 +874,7 @@ def clean_all_data(backup=True):
     require(RELEASE_STATUS_CACHE).delete_cache()
 
     RepoActionInvoker.delete_repo_file()
-    log.info("Cleaned local data")
+    log.debug("Cleaned local data")
 
 
 def valid_quantity(quantity):

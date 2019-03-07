@@ -64,7 +64,7 @@ def test_proxy_reachability(proxy_server, proxy_port):
         sock.settimeout(10)
         result = sock.connect_ex((proxy_server, proxy_port))
     except socket.error as e:
-        log.info("Attempted bad proxy: %s" % e)
+        log.error("Attempted bad proxy: %s" % e)
     finally:
         sock.close()
 

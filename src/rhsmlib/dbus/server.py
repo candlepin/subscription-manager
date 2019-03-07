@@ -185,7 +185,7 @@ class DomainSocketServer(object):
         object_list.append(service_class(conn=conn))
         with domain_socket_server.lock:
             domain_socket_server.connection_count += 1
-        log.info("New connection: %s", conn)
+        log.debug("New connection: %s", conn)
 
     @staticmethod
     def connection_removed(domain_socket_server, conn):

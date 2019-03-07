@@ -62,7 +62,7 @@ class rpm_version_release_build_py(_build_py):
         )
 
     def run(self):
-        log.info("Building with GTK_VERSION=%s, RPM_VERSION=%s" %
+        log.debug("Building with GTK_VERSION=%s, RPM_VERSION=%s" %
                  (self.gtk_version, self.rpm_version))
         _build_py.run(self)
         # create a "version.py" that includes the rpm version

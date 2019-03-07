@@ -186,12 +186,12 @@ class PreferencesDialog(widgets.SubmanBaseWidget):
             active = combobox.get_active()
             accessible = combobox.get_accessible()
             if active < 0:
-                log.info("SLA changed but nothing selected? Ignoring.")
+                log.debug("SLA changed but nothing selected? Ignoring.")
                 return
 
             new_sla = model[active][1]
             accessible.set_name(accessible.get_name().partition('|')[0] + '|' + new_sla)
-            log.info("SLA changed to: %s" % new_sla)
+            log.debug("SLA changed to: %s" % new_sla)
             update = utils.WidgetUpdate(combobox)
             method = self.backend.cp_provider.get_consumer_auth_cp().updateConsumer
             self.async_updater.update(update, method, args=[self.identity.uuid], kwargs={'service_level': new_sla})
@@ -202,12 +202,12 @@ class PreferencesDialog(widgets.SubmanBaseWidget):
             active = combobox.get_active()
             accessible = combobox.get_accessible()
             if active < 0:
-                log.info("release changed but nothing selected? Ignoring.")
+                log.debug("release changed but nothing selected? Ignoring.")
                 return
 
             new_release = model[active][1]
             accessible.set_name(accessible.get_name().partition('|')[0] + '|' + new_release)
-            log.info("release changed to: %s" % new_release)
+            log.debug("release changed to: %s" % new_release)
             update = utils.WidgetUpdate(combobox)
             method = self.backend.cp_provider.get_consumer_auth_cp().updateConsumer
             self.async_updater.update(update, method, args=[self.identity.uuid], kwargs={'release': new_release})
@@ -225,7 +225,7 @@ class PreferencesDialog(widgets.SubmanBaseWidget):
 
     def _on_autoheal_checkbox_toggled(self, checkbox):
         if self.allow_callbacks:
-            log.info("Auto-attach preference changed to: %s" % checkbox.get_active())
+            log.debug("Auto-attach preference changed to: %s" % checkbox.get_active())
             update = utils.WidgetUpdate(checkbox, self.autoheal_label)
             method = self.backend.cp_provider.get_consumer_auth_cp().updateConsumer
             self.async_updater.update(update, method, args=[self.identity.uuid], kwargs={'autoheal': checkbox.get_active()})

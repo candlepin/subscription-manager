@@ -450,13 +450,13 @@ class ProfileManager(CacheManager):
 
         # If the server doesn't support packages, don't try to send the profile:
         if not uep.supports_resource(PACKAGES_RESOURCE):
-            log.info("Server does not support packages, skipping profile upload.")
+            log.warn("Server does not support packages, skipping profile upload.")
             return 0
 
         if force or self.report_package_profile:
             return CacheManager.update_check(self, uep, consumer_uuid, force)
         elif not self.report_package_profile:
-            log.info("Skipping package profile upload due to report_package_profile setting.")
+            log.warn("Skipping package profile upload due to report_package_profile setting.")
             return 0
         else:
             return 0
@@ -697,7 +697,7 @@ class ContentAccessCache(object):
             return
         with open(cert.path, "w") as output:
             updated_cert = "".join(data["contentListing"][str(cert.serial)])
-            log.info("Updating certificate %s with new content" % cert.serial)
+            log.debug("Updating certificate %s with new content" % cert.serial)
             output.write(updated_cert)
 
     def _update_cache(self, data):

@@ -42,7 +42,7 @@ class BuildTemplate(BaseCommand):
         self.set_undefined_options('build', ('build_base', 'build_base'))
 
     def template(self, src, dest):
-        log.info("Templating file %s" % dest)
+        log.debug("Templating file %s" % dest)
 
         with open(src, 'r') as template_file:
             template_text = template_file.read()
