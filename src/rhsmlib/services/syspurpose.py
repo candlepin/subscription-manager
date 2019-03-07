@@ -27,6 +27,7 @@ STATUS_MAP = {'valid': _('Matched'),
         'matched': _('Matched'),
         'mismatched': _('Mismatched'),
         'not specified': _('Not Specified'),
+        'disabled': _('Disabled'),
         'unknown': _('Unknown')}
 
 
