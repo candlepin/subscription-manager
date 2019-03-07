@@ -28,7 +28,7 @@ class ProductInstallPlugin(SubManPlugin):
         Args:
             conduit: A ProductConduit()
         """
-        conduit.log.info("post product id install called")
+        conduit.log.debug("post product id install called")
 
         # we need to know what product/product cert
         products = conduit.product_list
@@ -41,4 +41,4 @@ class ProductInstallPlugin(SubManPlugin):
         Args:
             conduit: A ProductConduit()
         """
-        conduit.log.info("pre product id install called")
+        conduit.log.debug("pre product id install called")

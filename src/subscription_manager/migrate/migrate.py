@@ -223,7 +223,7 @@ class MigrationEngine(object):
                 self.proxy_user = self.rhncfg['proxyUser']
                 self.proxy_pass = self.rhncfg['proxyPassword']
 
-            log.info("Using proxy %s:%s" % (self.proxy_host, self.proxy_port))
+            log.debug("Using proxy %s:%s" % (self.proxy_host, self.proxy_port))
             if self.options.noproxy:
                 # If the user doesn't want to use a proxy to connect to their subscription
                 # management server, then remove any proxy information that may have crept in.
@@ -359,7 +359,7 @@ class MigrationEngine(object):
         try:
             if self.rhncfg['enableProxy']:
                 proxy = "%s:%s" % (self.proxy_host, self.proxy_port)
-                log.info("Using proxy %s for legacy API methods" % (proxy))
+                log.debug("Using proxy %s for legacy API methods" % (proxy))
                 if self.rhncfg['enableProxyAuth']:
                     proxy = "@".join(["%s:%s" % (self.proxy_user, self.proxy_pass), proxy])
             else:
@@ -477,7 +477,7 @@ class MigrationEngine(object):
     def deploy_prod_certificates(self, subscribed_channels):
         release = self.get_release()
         mappingfile = "/usr/share/rhsm/product/" + release + "/channel-cert-mapping.txt"
-        log.info("Using mapping file %s", mappingfile)
+        log.debug("Using mapping file %s", mappingfile)
 
         try:
             dic_data = self.read_channel_cert_mapping(mappingfile)
@@ -498,13 +498,13 @@ class MigrationEngine(object):
                 if dic_data[channel] != 'none':
                     valid_rhsm_channels.append(channel)
                     cert = dic_data[channel]
-                    log.info("Mapping found for: %s = %s", channel, cert)
+                    log.debug("Mapping found for: %s = %s", channel, cert)
                     prod_id = cert.split('-')[-1].split('.pem')[0]
                     cert_to_channels = applicable_certs.setdefault(prod_id, {})
                     cert_to_channels.setdefault(cert, []).append(channel)
                 else:
                     invalid_rhsm_channels.append(channel)
-                    log.info("%s is not mapped to any certificates", channel)
+                    log.warn("%s is not mapped to any certificates", channel)
             except Exception:
                 unrecognized_channels.append(channel)
 
@@ -531,7 +531,7 @@ class MigrationEngine(object):
         # collision and must abort.
         self.handle_collisions(applicable_certs)
 
-        log.info("Certs to be installed: %s", applicable_certs)
+        log.debug("Certs to be installed: %s", applicable_certs)
 
         self.print_banner(_("Installing product certificates for these legacy channels:"))
         for i in valid_rhsm_channels:
@@ -548,7 +548,7 @@ class MigrationEngine(object):
             source_path = os.path.join("/usr/share/rhsm/product", release, cert)
             truncated_cert_name = cert.split('-')[-1]
             destination_path = os.path.join(product_dir.path, truncated_cert_name)
-            log.info("Copying %s to %s ", source_path, destination_path)
+            log.debug("Copying %s to %s ", source_path, destination_path)
             shutil.copy2(source_path, destination_path)
 
             # See BZ #972883. Add an entry to the repo db telling subscription-manager
@@ -574,7 +574,7 @@ class MigrationEngine(object):
                 self.db.write()
                 log.info("Removed 68.pem due to existence of 71.pem")
             except OSError as e:
-                log.info(e)
+                log.error(e)
 
         # Hack to address double mapping for 180.pem and 17{6|8}.pem
         is_double_mapped = [x for x in subscribed_channels if re.match(DOUBLE_MAPPED, x)]
@@ -587,7 +587,7 @@ class MigrationEngine(object):
                 self.db.write()
                 log.info("Removed 180.pem")
             except OSError as e:
-                log.info(e)
+                log.error(e)
 
     def get_system_id(self, content):
         p = libxml2.parseDoc(content)
@@ -656,7 +656,7 @@ class MigrationEngine(object):
             return
 
         if result:
-            log.info("System %s deleted.  Removing system id file and disabling rhnplugin.conf", self.system_id)
+            log.debug("System %s deleted.  Removing system id file and disabling rhnplugin.conf", self.system_id)
             os.remove(system_id_path)
             try:
                 self.disable_yum_rhn_plugin()
@@ -791,7 +791,7 @@ class MigrationEngine(object):
                 if ((extra_channels['supplementary'] and re.search('supplementary$', rhsmChannel)) or
                 (extra_channels['optional'] and re.search('optional-rpms$', rhsmChannel)) or
                 (extra_channels['productivity'] and re.search('productivity-rpms$', rhsmChannel))):
-                    log.info("Enabling extra channel '%s'" % rhsmChannel)
+                    log.debug("Enabling extra channel '%s'" % rhsmChannel)
                     repofile.set(rhsmChannel, 'enabled', '1')
             repofile.write()
         except Exception:
@@ -817,7 +817,7 @@ class MigrationEngine(object):
 
     def handle_legacy_daemons(self, using_systemd):
         print(_("Stopping and disabling legacy services..."))
-        log.info("Attempting to stop and disable legacy services: %s" % " ".join(LEGACY_DAEMONS))
+        log.debug("Attempting to stop and disable legacy services: %s" % " ".join(LEGACY_DAEMONS))
         for daemon in LEGACY_DAEMONS:
             if self.is_daemon_installed(daemon, using_systemd):
                 self.disable_daemon(daemon, using_systemd)
@@ -838,7 +838,7 @@ class MigrationEngine(object):
 
     def remove_legacy_packages(self):
         print(_("Removing legacy packages..."))
-        log.info("Attempting to remove legacy packages: %s" % " ".join(LEGACY_PACKAGES))
+        log.debug("Attempting to remove legacy packages: %s" % " ".join(LEGACY_PACKAGES))
         subprocess.call(["yum", "remove", "-q", "-y"] + LEGACY_PACKAGES)
 
     def main(self, args=None):

@@ -152,7 +152,7 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
                 else:
                     environment_name = _("None")
 
-                log.info("Environment is %s" % environment_name)
+                log.debug("Environment is %s" % environment_name)
                 self.environment_label.set_text(environment_name)
                 self.environment_label.show()
                 self.environment_title.show()

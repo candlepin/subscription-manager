@@ -50,7 +50,7 @@ class ActionReport(object):
         """log report entries"""
 
         # assuming a useful repr
-        log.info(self)
+        log.debug(self)
 
     def format_exceptions(self):
         buf = ''

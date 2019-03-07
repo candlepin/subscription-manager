@@ -405,7 +405,7 @@ class moduleClass(module.Module, object):
         pass
 
     def finish_registration(self, failed=False):
-        log.info("Finishing registration, failed=%s" % failed)
+        log.debug("Finishing registration, failed=%s" % failed)
         if failed:
             self._set_navigation_sensitive(True)
             self._set_initial_screen()

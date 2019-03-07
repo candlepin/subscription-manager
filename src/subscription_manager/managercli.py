@@ -208,7 +208,7 @@ def show_autosubscribe_output(uep):
         print(_("No products installed."))
         return 0
 
-    log.info("Attempted to auto-attach/heal the system.")
+    log.debug("Attempted to auto-attach/heal the system.")
     print(_("Installed Product Current Status:"))
     subscribed = 1
     all_subscribed = True
@@ -275,7 +275,7 @@ class CliCommand(AbstractCLICommand):
                 int(self.proxy_port or conf["server"]["proxy_port"] or rhsm.config.DEFAULT_PROXY_PORT)
             ))
         except Exception as e:
-            log.info("Attempted bad proxy: %s" % e)
+            log.error("Attempted bad proxy: %s" % e)
             return False
         finally:
             s.close()
@@ -324,7 +324,7 @@ class CliCommand(AbstractCLICommand):
 
     def is_registered(self):
         self.identity = inj.require(inj.IDENTITY)
-        log.info('%s', self.identity)
+        log.debug('%s', self.identity)
         return self.identity.is_valid()
 
     def persist_server_options(self):
@@ -348,7 +348,7 @@ class CliCommand(AbstractCLICommand):
 
     def log_client_version(self):
         self.client_versions = get_client_versions()
-        log.info("Client Versions: %s" % self.client_versions)
+        log.debug("Client Versions: %s" % self.client_versions)
 
     def log_server_version(self):
         # can't check the server version without a connection
@@ -359,7 +359,7 @@ class CliCommand(AbstractCLICommand):
         # get_server_versions needs to handle any exceptions
         # and return the server dict
         self.server_versions = get_server_versions(self.no_auth_cp, exception_on_timeout=False)
-        log.info("Server Versions: %s" % self.server_versions)
+        log.debug("Server Versions: %s" % self.server_versions)
 
     def main(self, args=None):
 
@@ -459,7 +459,7 @@ class CliCommand(AbstractCLICommand):
 
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.cp_provider.set_connection_info(**connection_info)
-        self.log.info("X-Correlation-ID: %s", self.correlation_id)
+        self.log.debug("X-Correlation-ID: %s", self.correlation_id)
         self.cp_provider.set_correlation_id(self.correlation_id)
 
         self.log_client_version()
@@ -824,7 +824,7 @@ class RefreshCommand(CliCommand):
 
             self.entcertlib.update()
 
-            log.info("Refreshed local data")
+            log.debug("Refreshed local data")
             print(_("All local data refreshed"))
         except connection.RestlibException as re:
             log.error(re)
@@ -903,7 +903,7 @@ class IdentityCommand(UserPassCommand):
 
                 print(_("Identity certificate has been regenerated."))
 
-                log.info("Successfully generated a new identity from server.")
+                log.debug("Successfully generated a new identity from server.")
         except connection.RestlibException as re:
             log.exception(re)
             log.error(u"Error: Unable to generate a new identity for the system: %s" % re)
@@ -928,7 +928,7 @@ class OwnersCommand(UserPassCommand):
             self.cp_provider.set_user_pass(self.username, self.password)
             self.cp = self.cp_provider.get_basic_auth_cp()
             owners = self.cp.getOwnerList(self.username)
-            log.info("Successfully retrieved org list from server.")
+            log.debug("Successfully retrieved org list from server.")
             if len(owners):
                 print("+-------------------------------------------+")
                 print("          %s %s" % (self.username, _("Organizations")))
@@ -981,7 +981,7 @@ class EnvironmentsCommand(OrgCommand):
             else:
                 system_exit(os.EX_UNAVAILABLE, _("Error: Server does not support environments."))
 
-            log.info("Successfully retrieved environment list from server.")
+            log.debug("Successfully retrieved environment list from server.")
         except connection.RestlibException as re:
             log.exception(re)
             log.error(u"Error: Unable to retrieve environment list from server: %s" % re)
@@ -1283,7 +1283,7 @@ class RegisterCommand(UserPassCommand):
                 unregister.UnregisterService(self.cp).unregister()
                 self.entitlement_dir.__init__()
                 self.product_dir.__init__()
-                log.info("--force specified, unregistered old consumer: %s" % old_uuid)
+                log.debug("--force specified, unregistered old consumer: %s" % old_uuid)
                 print(_("The system with UUID %s has been unregistered") % old_uuid)
             except ssl.SSLError as e:
                 # since the user can override serverurl for register, a common use case is to try to switch servers
@@ -1317,7 +1317,7 @@ class RegisterCommand(UserPassCommand):
             service = register.RegisterService(admin_cp)
 
             if self.options.consumerid:
-                log.info("Registering as existing consumer: %s" % self.options.consumerid)
+                log.debug("Registering as existing consumer: %s" % self.options.consumerid)
                 consumer = service.register(None, consumerid=self.options.consumerid)
             else:
                 owner_key = self._determine_owner_key(admin_cp)
@@ -1356,7 +1356,7 @@ class RegisterCommand(UserPassCommand):
         # FactsLib (or a FactsManager?)
         # Must update facts to clear out the old ones:
         if self.options.consumerid:
-            log.info("Updating facts")
+            log.debug("Updating facts")
             #
             # FIXME: Need a ConsumerFacts.sync or update or something
             # TODO: We register, with facts, then update facts again...?
@@ -1394,7 +1394,7 @@ class RegisterCommand(UserPassCommand):
                     print(_("Service level set to: %s") % self.options.service_level)
 
         if self.options.consumerid or self.options.activation_keys or self.autoattach or self.cp.has_capability(CONTENT_ACCESS_CERT_CAPABILITY):
-            log.info("System registered, updating entitlements if needed")
+            log.debug("System registered, updating entitlements if needed")
             # update certs, repos, and caches.
             # FIXME: aside from the overhead, should this be cert_action_client.update?
             self.entcertlib.update()
@@ -1785,7 +1785,7 @@ class AttachCommand(CliCommand):
                         for ent in ents:
                             pool_json = ent['pool']
                             print(_("Successfully attached a subscription for: %s") % pool_json['productName'])
-                            log.info("Attached a subscription for %s (%s)" % (pool_json['productName'], pool))
+                            log.debug("Attached a subscription for %s (%s)" % (pool_json['productName'], pool))
                             subscribed = True
                     except connection.RestlibException as re:
                         log.exception(re)
@@ -2059,7 +2059,7 @@ class FactsCommand(CliCommand):
             except connection.RestlibException as re:
                 log.exception(re)
                 system_exit(os.EX_SOFTWARE, re.msg)
-            log.info("Succesfully updated the system facts.")
+            log.debug("Succesfully updated the system facts.")
             print(_("Successfully updated the system facts."))
 
 

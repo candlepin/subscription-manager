@@ -151,7 +151,7 @@ class CurrentBrand(Brand):
         try:
             brand_info = self.brand_file.read()
         except IOError:
-            log.info("No brand info file found (%s) " % self.brand_file)
+            log.error("No brand info file found (%s) " % self.brand_file)
             return
 
         self.name = self.unformat_brand(brand_info)

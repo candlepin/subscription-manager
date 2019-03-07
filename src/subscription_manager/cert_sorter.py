@@ -196,7 +196,7 @@ class ComplianceManager(object):
     def log_products(self):
         fj = utils.friendly_join
 
-        log.info("Product status: valid_products=%s partial_products=%s expired_products=%s"
+        log.debug("Product status: valid_products=%s partial_products=%s expired_products=%s"
                  " unentitled_producs=%s future_products=%s valid_until=%s",
                  fj(list(self.valid_products.keys())),
                  fj(list(self.partially_valid_products.keys())),

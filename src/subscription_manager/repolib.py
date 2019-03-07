@@ -120,7 +120,7 @@ class YumPluginManager(object):
                 continue
 
             if len(result) == 0:
-                log.info('Configuration file of %s plugin: "%s" cannot be read' %
+                log.warn('Configuration file of %s plugin: "%s" cannot be read' %
                          (pkg_mgr_name, plugin_file_name))
                 continue
 
@@ -168,7 +168,7 @@ class YumPluginManager(object):
 
         # When user doesn't want to automatically enable yum plugins, then return empty list
         if cls.is_auto_enable_enabled() is False:
-            log.info('The rhsm.auto_enable_yum_plugins is disabled. Skipping the enablement of yum plugins.')
+            log.debug('The rhsm.auto_enable_yum_plugins is disabled. Skipping the enablement of yum plugins.')
             return []
 
         log.debug('The rhsm.auto_enable_yum_plugins is enabled')

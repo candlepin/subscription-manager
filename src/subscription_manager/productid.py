@@ -483,7 +483,7 @@ class ProductManager(object):
             # the write if so:
             if self._is_desktop(p):
                 if self._workstation_cert_exists():
-                    log.info("skipping obsolete desktop cert")
+                    log.debug("skipping obsolete desktop cert")
                     continue
 
             # See if the product cert already exists
@@ -716,7 +716,7 @@ class ProductManager(object):
 
         # TODO: plugin hook for pre_product_id_delete
         for product, cert in certs_to_delete:
-            log.info("None of the repos for %s are active: %s",
+            log.debug("None of the repos for %s are active: %s",
                      product.id,
                      self.db.find_repos(product.id))
             log.info("product cert %s for %s is being deleted" % (product.id, product.id))

@@ -104,7 +104,7 @@ class ZypperProductManager(ProductManager):
                 repo_id = repo.alias()
                 filename = self.retrieve_cert(repo)
                 if filename is None:
-                    log.info("Repo %s has no productid.", repo.alias())
+                    log.debug("Repo %s has no productid.", repo.alias())
                     continue
                 cert = self._get_cert(filename)
                 if cert is None:
