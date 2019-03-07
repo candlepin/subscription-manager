@@ -44,6 +44,7 @@ RAM_FACT = 'memory.memtotal'
 STATUS_MAP = {'valid': _('Current'),
         'partial': _('Insufficient'),
         'invalid': _('Invalid'),
+        'disabled': _('Disabled'),
         'unknown': _('Unknown')}
 
 RHSM_VALID = 0
@@ -257,7 +258,7 @@ class ComplianceManager(object):
         Return true if the results of this cert sort indicate our
         entitlements are completely valid.
         """
-        return self.system_status == 'valid'
+        return self.system_status == 'valid' or self.system_status == 'disabled'
 
     def is_registered(self):
         return inj.require(inj.IDENTITY).is_valid()
