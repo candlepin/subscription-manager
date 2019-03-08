@@ -15,6 +15,8 @@ lang en_US.UTF-8
 
 # Network information
 network  --bootproto=dhcp --device=ens6 --ipv6=auto --activate
+# Allow the anaconda installer to communicate over the vagrant default network
+network  --bootproto=dhcp --device=ens7 --ipv6=auto --activate
 network  --hostname=pxe-client.localdomain
 
 # Root password
