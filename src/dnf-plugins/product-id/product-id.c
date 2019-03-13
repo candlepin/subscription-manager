@@ -13,6 +13,7 @@
  * in this software or its documentation.
  */
 #include <libdnf/plugin/plugin.h>
+#include <libdnf/dnf-db.h>
 
 #include <glib/gstdio.h>
 
@@ -31,6 +32,9 @@
 
 #include "util.h"
 #include "product-id.h"
+
+static int enabledReposWithProductCert(GSList *repoIds, const GPtrArray *repos,
+                                       GPtrArray *enabledRepoProductId, const gchar *abs_file_name);
 
 const PluginInfo *pluginGetInfo() {
     return &pinfo;
@@ -258,26 +262,8 @@ int getInstalledProductCerts(gchar *certDir, GPtrArray *repos, GPtrArray *enable
                     else if (hasProductId(productDb, product_id)) {
                         gchar *abs_file_name = g_strconcat(certDir, file_name, NULL);
                         GSList *repoIds = getRepoIds(productDb, product_id);
-                        if (repoIds != NULL) {
-                            debug("Existing product ID: %s has following repos:", product_id);
-                            GSList *iterator = NULL;
-                            // The list usually contains only one record
-                            for (iterator = repoIds; iterator; iterator = iterator->next) {
-                                debug("\tRepo: %s", iterator->data);
-                                for (guint i = 0; i < repos->len; i++) {
-                                    DnfRepo *repo = g_ptr_array_index(repos, i);
-                                    if (g_strcmp0(dnf_repo_get_id(repo), iterator->data) == 0) {
-                                        debug("Existing product certificate: %s", abs_file_name);
-                                        RepoProductId *repoProductId = initRepoProductId();
-                                        repoProductId->productIdPath = g_strdup(abs_file_name);
-                                        repoProductId->repo = repo;
-                                        repoProductId->isInstalled = TRUE;
-                                        g_ptr_array_add(enabledRepoProductId, repoProductId);
-                                        ret = 1;
-                                    }
-                                }
-                            }
-                        }
+                        debug("Existing product ID: %s provides following repos:", abs_file_name);
+                        ret = enabledReposWithProductCert(repoIds, repos, enabledRepoProductId, abs_file_name);
                         g_free(abs_file_name);
                     }
                     g_free(product_id);
@@ -289,6 +275,40 @@ int getInstalledProductCerts(gchar *certDir, GPtrArray *repos, GPtrArray *enable
         g_dir_close(productDir);
     } else {
         printError("Unable to open directory with product certificates", tmp_err);
+    }
+    return ret;
+}
+
+/**
+ * This function tries to find common list of repositories associated with installed product certificate
+ * and list of enabled repositories. Common repositories are added to array enabledRepoProductId.
+ *
+ * @param repoIds List of repository IDs for given productid (listen in abs_file_name)
+ * @param repos List of all enabled repos
+ * @param enabledRepoProductId Array of enabled repos with productid certtificate
+ * @param abs_file_name Absolute path to installed productid certificate
+ * @return
+ */
+static int enabledReposWithProductCert(GSList *repoIds, const GPtrArray *repos,
+                                       GPtrArray *enabledRepoProductId, const gchar *abs_file_name) {
+    int ret = 0;
+    if (repoIds != NULL) {
+        GSList *iterator = NULL;
+        // The list usually contains only one record
+        for (iterator = repoIds; iterator; iterator = iterator->next) {
+            debug("\tRepository: %s", iterator->data);
+            for (guint i = 0; i < repos->len; i++) {
+                DnfRepo *repo = g_ptr_array_index(repos, i);
+                if (g_strcmp0(dnf_repo_get_id(repo), iterator->data) == 0) {
+                    RepoProductId *repoProductId = initRepoProductId();
+                    repoProductId->productIdPath = g_strdup(abs_file_name);
+                    repoProductId->repo = repo;
+                    repoProductId->isInstalled = TRUE;
+                    g_ptr_array_add(enabledRepoProductId, repoProductId);
+                    ret = 1;
+                }
+            }
+        }
     }
     return ret;
 }
@@ -624,37 +644,70 @@ void getActive(DnfContext *dnfContext, DnfPluginHookData *hookData, const GPtrAr
     }
 
     // Try to use different (and slower) approach, when no active repo was found.
-    // This is used, when pkcon remove triggered the hook
+    // This is used, when pkcon remove triggered libdnf hook
     if (activeRepoAndProductIds->len == 0) {
-        GHashTable *activeRepos = g_hash_table_new(g_str_hash, NULL);
-        DnfTransaction *transaction = dnf_transaction_new(dnfContext);
-        DnfDb *db = dnf_transaction_get_db(transaction);
-        dnf_db_ensure_origin_pkglist(db, installedPackages);
-        debug("No active repo found. Trying different approach.");
-        for (guint k = 0; k < installedPackages->len; k++) {
-            DnfPackage *instPkg = g_ptr_array_index(installedPackages, k);
-            gchar *repo_name = dnf_package_get_origin(instPkg);
-            if (!repo_name) {
-                continue;
-            }
-            if (g_hash_table_contains(activeRepos, repo_name) == FALSE) {
-                g_hash_table_add(activeRepos, repo_name);
-                for (guint i = 0; i < enabledRepoAndProductIds->len; i++) {
-                    RepoProductId *repoProductId = g_ptr_array_index(enabledRepoAndProductIds, i);
-                    if (g_strcmp0(dnf_repo_get_id(repoProductId->repo), repo_name) == 0) {
-                        debug("Repo \"%s\" marked as active", dnf_repo_get_id(repoProductId->repo));
-                        g_ptr_array_add(activeRepoAndProductIds, repoProductId);
-                        break;
-                    }
-                }
-            }
-        }
+        getActiveReposFromInstalledPkgs(dnfContext, enabledRepoAndProductIds, activeRepoAndProductIds,
+                                        installedPackages);
+
     }
 
     debug("Number of active repositories: %d", activeRepoAndProductIds->len);
 
     g_ptr_array_unref(installedPackages);
     g_object_unref(rpmDbSack);
+}
+
+/**
+ * This function tries to extend array of active repos
+ * @param dnfContext
+ * @param enabledRepoAndProductIds
+ * @param activeRepoAndProductIds
+ * @param installedPackages
+ */
+void getActiveReposFromInstalledPkgs(DnfContext *dnfContext, const GPtrArray *enabledRepoAndProductIds,
+                                     GPtrArray *activeRepoAndProductIds, GPtrArray *installedPackages) {
+    debug("No active repo found. Trying different approach.");
+
+    if (installedPackages == NULL) {
+        return;
+    }
+
+    DnfTransaction *transaction = dnf_transaction_new(dnfContext);
+    if (transaction == NULL) {
+        return;
+    }
+
+    DnfDb *db = dnf_transaction_get_db(transaction);
+    if (db == NULL) {
+        return;
+    }
+
+    // Make sure that every DnfPackage contains it's origin (repository id)
+    dnf_db_ensure_origin_pkglist(db, installedPackages);
+
+    GHashTable *tmpActiveRepos = g_hash_table_new(g_str_hash, NULL);
+
+    // Go through all installed packages and get their repository IDs. Use hash table
+    // activeRepos to get unique list of active repositories with productid
+    for (guint k = 0; k < installedPackages->len; k++) {
+        DnfPackage *instPkg = g_ptr_array_index(installedPackages, k);
+        const gchar *repoId = dnf_package_get_origin(instPkg);
+        // When repository with ID is already in hash table, then skip it
+        if (g_hash_table_contains(tmpActiveRepos, repoId) == FALSE) {
+            g_hash_table_add(tmpActiveRepos, (gpointer)repoId);
+            // Go through the list of repositories with installed productid cert, because we are
+            // not interested in repositories without productid certificate
+            for (guint i = 0; i < enabledRepoAndProductIds->len; i++) {
+                RepoProductId *repoProductId = g_ptr_array_index(enabledRepoAndProductIds, i);
+                if (g_strcmp0(dnf_repo_get_id(repoProductId->repo), repoId) == 0) {
+                    debug("Repo \"%s\" marked as active", dnf_repo_get_id(repoProductId->repo));
+                    g_ptr_array_add(activeRepoAndProductIds, repoProductId);
+                    break;
+                }
+            }
+        }
+    }
+    g_hash_table_destroy(tmpActiveRepos);
 }
 
 
