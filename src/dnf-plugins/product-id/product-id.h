@@ -76,7 +76,10 @@ void getDisabled(const GPtrArray *repos, GPtrArray *disabledRepos);
 GPtrArray *getAvailPackageList(DnfSack *dnfSack, DnfRepo *repo);
 GPtrArray *getInstalledPackages(DnfSack *rpmDbSack);
 int getInstalledProductCerts(gchar *certDir, GPtrArray *repos, GPtrArray *enabledRepoProductId, ProductDb *productDb);
-void getActive(DnfContext *dnfContext, DnfPluginHookData *hookData, const GPtrArray *enabledRepoAndProductIds, GPtrArray *activeRepoAndProductIds);
+void getActiveReposFromInstalledPkgs(DnfContext *dnfContext, const GPtrArray *enabledRepoAndProductIds,
+                                     GPtrArray *activeRepoAndProductIds, GPtrArray *installedPackages);
+void getActive(DnfContext *dnfContext, DnfPluginHookData *hookData, const GPtrArray *enabledRepoAndProductIds,
+        GPtrArray *activeRepoAndProductIds);
 int decompress(gzFile input, GString *output);
 int findProductId(GString *certContent, GString *result);
 int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId);
