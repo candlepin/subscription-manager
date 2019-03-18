@@ -147,7 +147,9 @@ URL:     http://www.candlepinproject.org/
 Source0: %{name}-%{version}.tar.gz
 # this is a little different from the Source0, because of limitations in tito,
 # namely that tito expects only one source tarball
+%if %{use_cockpit}
 Source1: %{name}-cockpit-%{version}.tar.gz
+%endif
 %if 0%{?suse_version}
 Source2: subscription-manager-rpmlintrc
 %endif
@@ -1088,7 +1090,7 @@ if [ -x /bin/dbus-send ] ; then
 fi
 
 %if !%use_systemd
-if [ "$1" -eq "2" ] ; then
+if [ "$1" = "2" ] ; then
     /sbin/service rhsmcertd condrestart >/dev/null 2>&1 || :
 fi
 %endif

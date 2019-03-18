@@ -1,7 +1,5 @@
 import os
-import shutil
 import subprocess
-import sys
 
 from tito.builder.main import Builder
 from tito.common import info_out
@@ -36,11 +34,23 @@ class ScriptBuilder(Builder):
         os.chdir(self.rpmbuild_gitcopy)
         if not os.path.exists(self.script):
             return retval
-        try:
-            output = subprocess.check_output(self.script, shell=True).decode('utf-8')
-        except subprocess.CalledProcessError as e:
-            print(e.output.decode('utf-8'))
-            raise
+
+        if hasattr(subprocess, 'check_output'):
+            try:
+                output = subprocess.check_output(self.script, shell=True).decode('utf-8')
+            except subprocess.CalledProcessError as e:
+                print(e.output.decode('utf-8'))
+                raise
+        else:
+            print("Running script_builder_script ...")
+            # Run command in subprocess
+            process = subprocess.Popen(self.script, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            # Print output of command
+            output = ""
+            for line in process.stdout.readlines():
+                output += line
+            retval = process.wait()
+
         print(output)
         additional_tgz = []
         for line in output.split('\n'):
