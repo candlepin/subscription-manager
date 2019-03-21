@@ -214,6 +214,10 @@ void requestProductIdMetadata(DnfContext *dnfContext) {
     // List of all repositories
     GPtrArray *repos = dnf_context_get_repos(dnfContext);
 
+    if (repos == NULL) {
+        return;
+    }
+
     for (guint i = 0; i < repos->len; i++) {
         DnfRepo* repo = g_ptr_array_index(repos, i);
         bool enabled = (dnf_repo_get_enabled(repo) & DNF_REPO_ENABLED_PACKAGES) > 0;
@@ -385,7 +389,12 @@ int pluginHook(PluginHandle *handle, PluginHookId id, DnfPluginHookData *hookDat
 
         for (guint i = 0; i < enabledRepos->len; i++) {
             DnfRepo *repo = g_ptr_array_index(enabledRepos, i);
+
             LrResult *lrResult = dnf_repo_get_lr_result(repo);
+            if (lrResult == NULL) {
+                continue;
+            }
+
             LrYumRepoMd *repoMd = NULL;
             GError *tmp_err = NULL;
 
@@ -692,6 +701,9 @@ void getActiveReposFromInstalledPkgs(DnfContext *dnfContext, const GPtrArray *en
     for (guint k = 0; k < installedPackages->len; k++) {
         DnfPackage *instPkg = g_ptr_array_index(installedPackages, k);
         const gchar *repoId = dnf_package_get_origin(instPkg);
+        if (repoId == NULL) {
+            continue;
+        }
         // When repository with ID is already in hash table, then skip it
         if (g_hash_table_contains(tmpActiveRepos, repoId) == FALSE) {
             g_hash_table_add(tmpActiveRepos, (gpointer)repoId);
@@ -718,8 +730,16 @@ static void copy_lr_val(LrVar *lr_val, LrUrlVars **newVarSubst) {
 int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
     int ret = 0;
     GError *tmp_err = NULL;
+
     LrHandle *lrHandle = dnf_repo_get_lr_handle(repo);
+    if (lrHandle == NULL) {
+        return ret;
+    }
+
     LrResult *lrResult = dnf_repo_get_lr_result(repo);
+    if (lrResult == NULL) {
+        return ret;
+    }
 
     // getinfo uses the LRI* constants while setopt uses LRO*
     char *destdir;
@@ -816,16 +836,20 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
      * problems?
      */
     char *downloadList[] = {"productid", NULL};
-    LrHandle *h = lr_handle_init();
-    lr_handle_setopt(h, NULL, LRO_YUMDLIST, downloadList);
-    lr_handle_setopt(h, NULL, LRO_URLS, urls);
-    lr_handle_setopt(h, NULL, LRO_REPOTYPE, LR_YUMREPO);
-    lr_handle_setopt(h, NULL, LRO_DESTDIR, destdir);
-    lr_handle_setopt(h, NULL, LRO_VARSUB, newVarSubst);
-    lr_handle_setopt(h, NULL, LRO_SSLCLIENTKEY, client_key);
-    lr_handle_setopt(h, NULL, LRO_SSLCLIENTCERT, client_cert);
-    lr_handle_setopt(h, NULL, LRO_SSLCACERT, ca_cert);
-    lr_handle_setopt(h, NULL, LRO_UPDATE, TRUE);
+    LrHandle *handle = lr_handle_init();
+    if (handle == NULL) {
+        return ret;
+    }
+
+    lr_handle_setopt(handle, NULL, LRO_YUMDLIST, downloadList);
+    lr_handle_setopt(handle, NULL, LRO_URLS, urls);
+    lr_handle_setopt(handle, NULL, LRO_REPOTYPE, LR_YUMREPO);
+    lr_handle_setopt(handle, NULL, LRO_DESTDIR, destdir);
+    lr_handle_setopt(handle, NULL, LRO_VARSUB, newVarSubst);
+    lr_handle_setopt(handle, NULL, LRO_SSLCLIENTKEY, client_key);
+    lr_handle_setopt(handle, NULL, LRO_SSLCLIENTCERT, client_cert);
+    lr_handle_setopt(handle, NULL, LRO_SSLCACERT, ca_cert);
+    lr_handle_setopt(handle, NULL, LRO_UPDATE, TRUE);
 
     if(urls != NULL) {
         int url_id = 0;
@@ -833,7 +857,7 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
             debug("Downloading metadata from: %s to %s", urls[url_id], destdir);
             url_id++;
         } while(urls[url_id] != NULL);
-        gboolean handleSuccess = lr_handle_perform(h, lrResult, &tmp_err);
+        gboolean handleSuccess = lr_handle_perform(handle, lrResult, &tmp_err);
         if (handleSuccess) {
             LrYumRepo *lrYumRepo = lr_yum_repo_init();
             if (lrYumRepo != NULL) {
@@ -865,7 +889,7 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
         debug("No URL provided");
     }
 
-    lr_handle_free(h);
+    lr_handle_free(handle);
     return ret;
 }
 
