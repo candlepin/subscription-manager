@@ -2899,7 +2899,7 @@ class StatusCommand(CliCommand):
             log.exception(ne)
 
         syspurpose_cache = inj.require(inj.SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE)
-        syspurpose_cache.load_status(self.cp, self.identity.uuid)
+        syspurpose_cache.load_status(self.cp, self.identity.uuid, on_date)
         print(_("System Purpose Status: %s\n") % syspurpose_cache.get_overall_status())
 
         return result
