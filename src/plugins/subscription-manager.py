@@ -159,6 +159,23 @@ def warnOrGiveUsageMessage(conduit):
             conduit.info(2, msg)
 
 
+def init_hook(conduit):
+    """ Hook for disabling system repositories (= repositories which are
+        not mangaged by subscription-manager will NOT be used) """
+
+    disable_system_repos = conduit.confBool('main', 'disable_system_repos', default=False)
+
+    if disable_system_repos:
+        disable_count = 0
+        repo_storage = conduit.getRepos()
+        for repo in repo_storage.repos.values():
+            if os.path.basename(repo.repofile) != "redhat.repo" and repo.enabled is True:
+                conduit.info(2, 'Disabling system repository "%s" in file "%s"' % (repo.id, repo.repofile))
+                repo_storage.disableRepo(repo.id)
+                disable_count += 1
+        conduit.info(2, 'subscription-manager plugin disabled "%d" system repositories with respect of configuration in /etc/yum/pluginconf.d/subscription-manager.conf' % (disable_count))
+
+
 def postconfig_hook(conduit):
     """ update """
     # register rpm name for yum history recording"
