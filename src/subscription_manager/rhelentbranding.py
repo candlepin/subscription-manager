@@ -42,7 +42,7 @@ class RHELBrandInstaller(entbranding.BrandInstaller):
         return RHELCurrentBrand()
 
     def _install(self, brand):
-        log.info("Updating product branding info for: %s" % brand.name)
+        log.debug("Updating product branding info for: %s" % brand.name)
         brand.save()
 
 
@@ -113,7 +113,7 @@ class RHELBrandPicker(entbranding.BrandPicker):
             if len(installed_branded_products) > 1:
                 log.warning("More than one installed product with RHEL brand information is installed")
                 for installed_branded_product in installed_branded_products:
-                    log.info("Entitlement cert %s is providing brand info for product %s" %
+                    log.debug("Entitlement cert %s is providing brand info for product %s" %
                              (cert, installed_branded_product))
                 continue
             else:

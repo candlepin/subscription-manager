@@ -635,7 +635,7 @@ class BaseRestLib(object):
                     response.getheader('x-candlepin-request-uuid'))
         response_log = "%s, request=\"%s %s\"" % (response_log,
             request_type, handler)
-        log.info(response_log)
+        log.debug(response_log)
 
         # Look for server drift, and log a warning
         if drift_check(response.getheader('date')):
@@ -921,7 +921,7 @@ class UEPConnection(object):
             connection_description += proxy_description
         connection_description += "host=%s port=%s handler=%s %s" % (self.host, self.ssl_port,
                                                                      self.handler, auth_description)
-        log.info("Connection built: %s", connection_description)
+        log.debug("Connection built: %s", connection_description)
 
     def _load_supported_resources(self):
         """
@@ -979,7 +979,7 @@ class UEPConnection(object):
 
     def shutDown(self):
         self.conn.close()
-        log.info("remote connection closed")
+        log.debug("remote connection closed")
 
     def ping(self, username=None, password=None):
         return self.conn.request_get("/status/")

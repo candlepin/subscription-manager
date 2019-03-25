@@ -32,7 +32,7 @@ class FactsPlugin(SubManPlugin):
         Args:
             conduit: A FactsConduit()
         """
-        conduit.log.info("post_facts_collection called")
+        conduit.log.debug("post_facts_collection called")
         facts = conduit.facts
 
         # FIXME: remove this

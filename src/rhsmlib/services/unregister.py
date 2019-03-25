@@ -58,7 +58,7 @@ class UnregisterService(object):
             self.cp_provider.clean()
         except connection.GoneException as ge:
             if ge.deleted_id == self.identity.uuid:
-                log.info(
+                log.debug(
                     "This consumer's profile has been deleted from the server. Local certificates and "
                     "cache will be cleaned now."
                 )

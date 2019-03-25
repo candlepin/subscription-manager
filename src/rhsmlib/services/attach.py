@@ -29,7 +29,7 @@ class AttachService(object):
 
         if service_level is not None:
             self.cp.updateConsumer(self.identity.uuid, service_level=service_level)
-            log.info("Service level set to: %s" % service_level)
+            log.debug("Service level set to: %s" % service_level)
 
         self.plugin_manager.run(
             "pre_auto_attach",

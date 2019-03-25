@@ -499,7 +499,7 @@ class MainWindow(widgets.SubmanBaseWidget):
         if not response:
             log.debug("unregister prompt not confirmed. cancelling")
             return
-        log.info("Proceeding with un-registration: %s", self.identity.uuid)
+        log.debug("Proceeding with un-registration: %s", self.identity.uuid)
         self._perform_unregister()
 
     def _perform_unregister(self):
@@ -524,7 +524,7 @@ class MainWindow(widgets.SubmanBaseWidget):
         self.backend.cs.force_cert_check()
 
     def _unregister_item_clicked(self, widget):
-        log.info("Unregister button pressed, asking for confirmation.")
+        log.debug("Unregister button pressed, asking for confirmation.")
         prompt = messageWindow.YesNoDialog(
                 _("<b>Are you sure you want to unregister?</b>"),
                 self._get_window())

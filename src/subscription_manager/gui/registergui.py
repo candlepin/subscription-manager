@@ -1320,7 +1320,7 @@ class FindSuitableSubscriptions(NoGuiScreen):
             self.pre_done()
             return
         else:
-            log.info("No suitable subscriptions found.")
+            log.debug("No suitable subscriptions found.")
             if self.parent_window.__class__.__name__ == 'SpokeWindow':
                 msg = _("You will need to use Red Hat Subscription "
                         "Manager to manually attach subscriptions to this "
@@ -1918,7 +1918,7 @@ class AsyncBackend(object):
             retval = None
             # If environments aren't supported, don't bother trying to list:
             if self.backend.cp_provider.get_basic_auth_cp().supports_resource('environments'):
-                log.info("Server supports environments, checking for "
+                log.debug("Server supports environments, checking for "
                          "environment to register with.")
                 retval = []
                 for env in self.backend.cp_provider.get_basic_auth_cp().getEnvironmentList(owner_key):
@@ -2037,7 +2037,7 @@ class AsyncBackend(object):
         Subscribe to the selected pools.
         """
         try:
-            log.info("Binding to subscriptions at service level: %s" %
+            log.debug("Binding to subscriptions at service level: %s" %
                     dry_run_result.service_level)
             expected_pool_ids = set()
             for pool_quantity in dry_run_result.json:
@@ -2072,7 +2072,7 @@ class AsyncBackend(object):
             try:
                 managerlib.fetch_certificates(self.backend.certlib)
             except Exception as cert_update_ex:
-                log.info("Error updating certificates after error:")
+                log.error("Error updating certificates after error:")
                 log.exception(cert_update_ex)
             self.queue.put((callback, None, sys.exc_info()))
             return
