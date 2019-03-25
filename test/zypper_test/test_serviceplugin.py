@@ -20,7 +20,7 @@ class TestServicePlugin(TestCase):
             raise EnvironmentError('Missing {0} environment variables'.format(str(missing)))
 
         # start in a non-registered state
-        subprocess.call('subscription-manager unregister', shell=True)
+        subprocess.call('subscription-manager unregister; subscription-manager clean', shell=True)
 
     def has_subman_repos(self):
         repos = configparser.ConfigParser()
