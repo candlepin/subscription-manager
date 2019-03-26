@@ -329,7 +329,7 @@ class SyspurposeComplianceStatusCache(StatusCache):
 
     def _sync_with_server(self, uep, uuid, on_date=None, *args, **kwargs):
         self.syspurpose_service = syspurpose.Syspurpose(uep)
-        self.server_status = self.syspurpose_service.get_syspurpose_status()
+        self.server_status = self.syspurpose_service.get_syspurpose_status(on_date)
 
     def write_cache(self):
         if self.server_status is not None and self.server_status['status'] != 'unknown':

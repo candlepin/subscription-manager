@@ -38,9 +38,9 @@ class Syspurpose(object):
         self.identity = inj.require(inj.IDENTITY)
         self.purpose_status = {'status': 'unknown'}
 
-    def get_syspurpose_status(self):
+    def get_syspurpose_status(self, on_date=None):
         if self.identity.is_valid() and self.cp.has_capability("syspurpose"):
-            self.purpose_status = self.cp.getSyspurposeCompliance(self.identity.uuid)
+            self.purpose_status = self.cp.getSyspurposeCompliance(self.identity.uuid, on_date)
         return self.purpose_status
 
     def get_overall_status(self, status):
