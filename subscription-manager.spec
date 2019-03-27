@@ -19,7 +19,7 @@
 %bcond_without python3
 %endif
 
-%if !(0%{?fedora} && %{with python3})
+%if !(0%{?fedora} < 30 && %{with python3})
 %bcond_with python2_rhsm
 %else
 %bcond_without python2_rhsm
@@ -1349,6 +1349,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
   (awood@redhat.com)
 - 1642271: Do not set a None lang (csnyder@redhat.com)
 - Detect sles11 via /etc/SuSE-release (khowell@redhat.com)
+
+* Thu Jan 10 2019 Miro Hrončok <mhroncok@redhat.com> - 1.24.2-2
+- 1650203: Remove Python 2 subpackage from Fedora 30+ (mhroncok@redhat.com)
 
 * Mon Nov 05 2018 Christopher Snyder <csnyder@redhat.com> 1.24.2-1
 - 1645205: Do not update ent certs inside containers (csnyder@redhat.com)
