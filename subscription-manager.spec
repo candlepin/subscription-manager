@@ -151,7 +151,7 @@ Source1: %{name}-cockpit-%{version}.tar.gz
 Source2: subscription-manager-rpmlintrc
 %endif
 
-%if 0%{?suse_version} < 1200
+%if (0%{?suse_version} && 0%{?suse_version} < 1200)
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 %endif
 
