@@ -1125,15 +1125,21 @@ fi
 %if %{use_subman_gui}
 %postun -n subscription-manager-gui
 if [ $1 -eq 0 ] ; then
+    %if (0%{?fedora} < 30 || 0%{?rhel} < 8)
     touch --no-create %{_datadir}/icons/hicolor &>/dev/null
     gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+    %endif
+
     %if !0%{?suse_version}
     scrollkeeper-update -q || :
     %endif
 fi
 %posttrans -n subscription-manager-gui
+%if (0%{?fedora} < 30 || 0%{?rhel} < 8)
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
+%endif
+
 %endif
 
 %changelog
