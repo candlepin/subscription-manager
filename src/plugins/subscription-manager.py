@@ -150,6 +150,25 @@ def warnOrGiveUsageMessage(conduit):
         if not identity.is_valid() and len(ent_dir.list_valid()) == 0:
             msg = not_registered_warning
         elif len(ent_dir.list_valid()) == 0:
+            # XXX: Importing inline as you must be root to read the config file
+            from subscription_manager.identity import ConsumerIdentity
+
+            cert_file = ConsumerIdentity.certpath()
+            key_file = ConsumerIdentity.keypath()
+
+            # In containers we have no identity, but we may have entitlements inherited
+            # from the host, which need to generate a redhat.repo.
+            if identity.is_valid():
+                try:
+                    uep = connection.UEPConnection(cert_file=cert_file, key_file=key_file)
+                # FIXME: catchall exception
+                except Exception:
+                    pass
+                else:
+                    owner = uep.getOwner(identity.uuid)
+                    if owner['contentAccessMode'] != "org_environment":
+                        return
+
             msg = no_subs_warning
         if config.in_container() and len(ent_dir.list_valid()) == 0:
             msg = no_subs_container_warning
