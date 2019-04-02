@@ -152,6 +152,76 @@ void testReadFile(dbFixture *fixture, gconstpointer ignored) {
     g_object_unref(testJsonFile);
 }
 
+void testReadCorruptedFile(dbFixture *fixture, gconstpointer ignored) {
+    (void)ignored;
+    ProductDb *db = fixture->db;
+    GError *err = NULL;
+
+    GFileIOStream *ioStream;
+
+    GFile *testJsonFile = g_file_new_tmp("productidTest-XXXXXX", &ioStream, &err);
+
+    if (err) {
+        g_test_fail();
+    }
+
+    gchar *testJson = "{'69: ['rhel' '81': 'jboss', ceph']}\n";
+    GOutputStream *outStream = g_io_stream_get_output_stream((GIOStream*) ioStream);
+    g_output_stream_write_all(outStream, testJson, strlen(testJson), NULL, NULL, &err);
+    g_io_stream_close((GIOStream*) ioStream, NULL, &err);
+    gchar *path = g_file_get_path(testJsonFile);
+    db->path = path;
+
+    readProductDb(db, &err);
+
+    g_assert_nonnull(err);
+    g_error_free(err);
+    g_assert_cmpint(g_hash_table_size(db->repoMap), ==, 0);
+}
+
+void testReadFileWrongData(dbFixture *fixture, gconstpointer ignored) {
+    (void)ignored;
+    ProductDb *db = fixture->db;
+    GError *err = NULL;
+
+    GFileIOStream *ioStream;
+
+    GFile *testJsonFile = g_file_new_tmp("productidTest-XXXXXX", &ioStream, &err);
+    gchar *path = g_file_get_path(testJsonFile);
+    db->path = path;
+
+    if (err) {
+        g_test_fail();
+    }
+
+    GOutputStream *outStream;
+    // Value is not array. Right content would be: "{'69': ['rhel']}\n"
+    gchar *testJson01 = "{'69': 'rhel'}\n";
+    outStream = g_io_stream_get_output_stream((GIOStream*) ioStream);
+    g_output_stream_write_all(outStream, testJson01, strlen(testJson01), NULL, NULL, &err);
+    readProductDb(db, &err);
+    g_assert_nonnull(err);
+    g_error_free(err);
+
+    // Key is not string, but it is integer
+    gchar *testJson02 = "{69: ['rhel']}\n";
+    outStream = g_io_stream_get_output_stream((GIOStream*) ioStream);
+    g_output_stream_write_all(outStream, testJson02, strlen(testJson02), NULL, NULL, &err);
+    readProductDb(db, &err);
+    g_assert_nonnull(err);
+    g_error_free(err);
+
+    // Value in array is not string, but it is integer
+    gchar *testJson03 = "{'69': [100]}\n";
+    outStream = g_io_stream_get_output_stream((GIOStream*) ioStream);
+    g_output_stream_write_all(outStream, testJson03, strlen(testJson03), NULL, NULL, &err);
+    readProductDb(db, &err);
+    g_assert_nonnull(err);
+    g_error_free(err);
+
+    g_io_stream_close((GIOStream*) ioStream, NULL, &err);
+}
+
 void testWriteFile(dbFixture *fixture, gconstpointer ignored) {
     (void)ignored;
     ProductDb *db = fixture->db;
@@ -183,6 +253,8 @@ int main(int argc, char **argv) {
     g_test_add("/set1/test remove repo id", dbFixture, NULL, setup, testRemoveRepoId, teardown);
     g_test_add("/set1/test get repo ids", dbFixture, NULL, setup, testGetRepoIds, teardown);
     g_test_add("/set1/test read missing file", dbFixture, NULL, setup, testReadMissingFile, teardown);
+    g_test_add("/set1/test read corrupted file", dbFixture, NULL, setup, testReadCorruptedFile, teardown);
+    g_test_add("/set1/test read wrong data file", dbFixture, NULL, setup, testReadFileWrongData, teardown);
     g_test_add("/set1/test read file", dbFixture, NULL, setup, testReadFile, teardown);
     g_test_add("/set1/test write file", dbFixture, NULL, setup, testWriteFile, teardown);
     return g_test_run();
