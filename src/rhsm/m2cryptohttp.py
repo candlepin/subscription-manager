@@ -16,6 +16,12 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 #
 
+"""
+This is wrapper providing https connection on RHEL6. It is not used on higher versions
+of RHEL. It also is not used on Fedora (since version 23).
+NOTE: using environment variable RHSM_USE_M2CRYPTO does not work with Python3.
+"""
+
 import six.moves.http_client
 from M2Crypto import httpslib, SSL
 from M2Crypto.SSL import timeout
@@ -128,7 +134,6 @@ class _RhsmProxyHTTPSConnection(httpslib.ProxyHTTPSConnection):
         except Exception:
             port = None
         msg = "CONNECT %s:%d HTTP/1.1\r\n" % (self._real_host, port)
-        msg += "Host: %s:%d\r\n" % (self._real_host, port)
         if self.proxy_headers:
             for key, value in list(self.proxy_headers.items()):
                 msg += "%s: %s\r\n" % (key, value)
