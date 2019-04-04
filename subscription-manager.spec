@@ -1058,6 +1058,7 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %{_datadir}/cockpit/subscription-manager/index.html
 %{_datadir}/cockpit/subscription-manager/index.min.js.gz
 %{_datadir}/cockpit/subscription-manager/subscriptions.css
+%{_datadir}/cockpit/subscription-manager/index.css
 %{_datadir}/cockpit/subscription-manager/manifest.json
 %{_datadir}/cockpit/subscription-manager/po.*.js
 %{_datadir}/cockpit/subscription-manager/po.js
