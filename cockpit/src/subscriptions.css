@@ -60,33 +60,14 @@
     vertical-align: sub;
 }
 
-.form-table-ct .form-inline {
+.ct-form-layout .ct-form-layout {
     background: #f4f4f4;
     border-width: 1px;
     border-style: solid;
     border-color: #bababa;
     padding: 4px;
-}
-
-.form-group-ct {
-    background: #f4f4f4;
-    border-width: 1px;
-    border-style: solid;
-    border-color: #bababa;
-    padding: 4px;
+    padding-top: 10px;
     width: 100%;
-}
-
-.form-group-ct tr td:last-child {
-    padding-right: 4px;
-}
-
-.form-group-ct tr:first-child td:last-child {
-    padding-top: 6px;
-}
-
-.form-group-ct tr:last-child td:last-child {
-    padding-bottom: 6px;
 }
 
 /* Make a dialog visible */
