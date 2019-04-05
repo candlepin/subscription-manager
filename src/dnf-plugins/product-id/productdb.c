@@ -62,8 +62,11 @@ void freeProductDb(ProductDb *productDb) {
  */
 void readProductDb(ProductDb *productDb, GError **err) {
     GFile *dbFile = g_file_new_for_path(productDb->path);
-    gchar *fileContents;
+    if (dbFile == NULL) {
+        return;
+    }
 
+    gchar *fileContents;
     GError *internalErr = NULL;
     gboolean loadedFileSuccess = g_file_load_contents(dbFile, NULL, &fileContents, NULL, NULL, &internalErr);
     g_object_unref(dbFile);
@@ -75,31 +78,53 @@ void readProductDb(ProductDb *productDb, GError **err) {
     }
 
     json_object *dbJson = json_tokener_parse(fileContents);
+    g_free(fileContents);
+
+    const gchar *error_string = "Content of /var/lib/rhsm/productid.js file is corrupted";
+    GQuark quark = g_quark_from_string(error_string);
+
+    if (dbJson == NULL) {
+        *err = g_error_new(quark, 0, error_string);
+        return;
+    }
 
     GHashTable *repoMap = productDb->repoMap;
     struct json_object_iterator it = json_object_iter_begin(dbJson);
     struct json_object_iterator itEnd = json_object_iter_end(dbJson);
     while (!json_object_iter_equal(&it, &itEnd)) {
         gchar *productId = g_strdup(json_object_iter_peek_name(&it));
-        json_object *repoIds = json_object_iter_peek_value(&it);
-        GSList *repoList = NULL;
+        if (productId) {
+            json_object *repoIds = json_object_iter_peek_value(&it);
+            if (repoIds == NULL) {
+                *err = g_error_new(quark, 0, error_string);
+                return;
+            }
+            GSList *repoList = NULL;
 
-        array_list *idArray = json_object_get_array(repoIds);
-        int len = array_list_length(idArray);
+            array_list *idArray = json_object_get_array(repoIds);
+            if (idArray == NULL) {
+                *err = g_error_new(quark, 0, error_string);
+                return;
+            }
+            int len = array_list_length(idArray);
 
-        for (int i=0; i<len; i++) {
-            json_object *o = array_list_get_idx(idArray, i);
-            gchar *repoId = g_strdup(json_object_get_string(o));
-            repoList = g_slist_prepend(repoList, (gpointer) repoId);
+            for (int i = 0; i < len; i++) {
+                json_object *o = array_list_get_idx(idArray, i);
+                gchar *repoId = g_strdup(json_object_get_string(o));
+                if (repoId == NULL) {
+                    *err = g_error_new(quark, 0, error_string);
+                    return;
+                }
+                repoList = g_slist_prepend(repoList, (gpointer) repoId);
+            }
+
+            g_hash_table_insert(repoMap, productId, repoList);
         }
-
-        g_hash_table_insert(repoMap, productId, repoList);
         json_object_iter_next(&it);
     }
 
     // Free productIdDb.  JSON-C has a confusing method name for this
     json_object_put(dbJson);
-    g_free(fileContents);
 }
 
 /**
