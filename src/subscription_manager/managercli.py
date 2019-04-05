@@ -2328,7 +2328,7 @@ class ReposCommand(CliCommand):
 
             if self.is_registered() and self.use_overrides:
                 overrides = [{'contentLabel': repo.id, 'name': 'enabled', 'value': repos_to_modify[repo]} for repo in repos_to_modify]
-                metadata_overrides = [{'contentLabel': repo.id, 'name': 'enable_metadata', 'value': repos_to_modify[repo]} for repo in repos_to_modify]
+                metadata_overrides = [{'contentLabel': repo.id, 'name': 'enabled_metadata', 'value': repos_to_modify[repo]} for repo in repos_to_modify]
                 overrides.extend(metadata_overrides)
                 results = self.cp.setContentOverrides(self.identity.uuid, overrides)
 
@@ -2344,7 +2344,7 @@ class ReposCommand(CliCommand):
                 changed_repos = [repo for repo in matches if repo['enabled'] != status]
                 for repo in changed_repos:
                     repo['enabled'] = status
-                    repo['enable_metadata'] = status
+                    repo['enabled_metadata'] = status
                 if changed_repos:
                     repo_file = YumRepoFile()
                     repo_file.read()
