@@ -17,7 +17,9 @@ from __future__ import print_function, division, absolute_import
 
 import argparse
 import logging
+import os
 from subscription_manager import logutil
+from subscription_manager.cli import system_exit
 from syspurpose.files import SyncedStore
 from syspurpose.utils import in_container, make_utf8
 from syspurpose.i18n import ugettext as _
@@ -25,6 +27,10 @@ import json
 
 logutil.init_logger()
 log = logging.getLogger(__name__)
+
+SP_CONFLICT_MESSAGE = _("Due to a conflicting change made at the server the "
+                        "{attr} has not been set.\n{advice}")
+SP_ADVICE = _("If you'd like to overwrite the server side change please run: {command}")
 
 
 def add_command(args, syspurposestore):
@@ -41,6 +47,19 @@ def add_command(args, syspurposestore):
             print(_("Added {} to {}.").format(make_utf8(value), make_utf8(args.prop_name)))
         else:
             print(_("Not adding value {} to {}; it already exists.").format(make_utf8(value), make_utf8(args.prop_name)))
+            return
+
+    success_msg = _("{attr} updated.").format(attr=make_utf8(args.prop_name))
+    to_add = "".join(args.values)
+    command = "syspurpose add-{name} ".format(name=args.prop_name) + to_add
+    check_result(
+        syspurposestore,
+        expectation=lambda res: all(x in res.get('addons', []) for x in args.values),
+        success_msg=success_msg,
+        command=command,
+        attr=args.prop_name
+    )
+
 
 def remove_command(args, syspurposestore):
     """
@@ -56,6 +75,19 @@ def remove_command(args, syspurposestore):
             print(_("Removed {} from {}.").format(make_utf8(value), make_utf8(args.prop_name)))
         else:
             print(_("Not removing value {} from {}; it was not there.").format(make_utf8(value), make_utf8(args.prop_name)))
+            return
+
+    success_msg = _("{attr} updated.").format(attr=make_utf8(args.prop_name))
+    to_remove = "".join(args.values)
+    command = "syspurpose remove-{name} ".format(name=args.prop_name) + to_remove
+    check_result(
+        syspurposestore,
+        expectation=lambda res: all(x not in res.get('addons', []) for x in args.values),
+        success_msg=success_msg,
+        command=command,
+        attr=args.prop_name
+    )
+
 
 def set_command(args, syspurposestore):
     """
@@ -67,7 +99,16 @@ def set_command(args, syspurposestore):
     :return: None
     """
     syspurposestore.set(args.prop_name, args.value)
-    print(_("{} set to {}").format(make_utf8(args.prop_name), make_utf8(args.value)))
+
+    success_msg = _("{attr} set to \"{val}\".").format(attr=make_utf8(args.prop_name), val=make_utf8(args.value))
+    check_result(
+        syspurposestore,
+        expectation=lambda res: res.get(args.prop_name) == args.value,
+        success_msg=success_msg,
+        command="syspurpose set {name} {val}".format(name=args.prop_name,
+                                                                 val=args.value),
+        attr=args.prop_name
+    )
 
 
 def unset_command(args, syspurposestore):
@@ -79,7 +120,15 @@ def unset_command(args, syspurposestore):
     :return: None
     """
     syspurposestore.unset(args.prop_name)
-    print(_("{} unset").format(make_utf8(args.prop_name)))
+
+    success_msg = _("{attr} unset.").format(attr=make_utf8(args.prop_name))
+    check_result(
+        syspurposestore,
+        expectation=lambda res: res.get(args.prop_name) in ["", None, []],
+        success_msg=success_msg,
+        command="syspurpose unset {name}".format(args.prop_name),
+        attr=args.prop_name
+)
 
 
 def show_contents(args, syspurposestore):
@@ -273,12 +322,18 @@ def main():
     else:
         parser.print_help()
         return 0
-    if args.requires_sync:
-        result = syspurposestore.sync()
-    if result:
-        if result.remote_changed:
-            print(_("System purpose successfully sent to subscription management server."))
-        else:
-            print(_("Unable to send system purpose to subscription management server"))
 
     return 0
+
+
+def check_result(syspurposestore, expectation, success_msg, command, attr):
+    if syspurposestore:
+        syspurposestore.sync()
+        result = syspurposestore.get_cached_contents()
+    else:
+        result = {}
+    if result and not expectation(result):
+        advice = SP_ADVICE.format(command=command)
+        system_exit(os.EX_SOFTWARE, msgs=_(SP_CONFLICT_MESSAGE.format(attr=attr, advice=advice)))
+    else:
+        print(_(success_msg))
