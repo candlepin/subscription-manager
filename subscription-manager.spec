@@ -62,11 +62,12 @@
 %global __python %__python3
 %global py_package_prefix python%{python3_pkgversion}
 %global rhsm_package_name %{py_package_prefix}-subscription-manager-rhsm
-%global include_syspurpose 1
 %else
 %global py_package_prefix python
 %global rhsm_package_name subscription-manager-rhsm
 %endif
+
+%global include_syspurpose 1
 
 %global _hardened_build 1
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
@@ -174,6 +175,7 @@ Requires:  virt-what
 Requires:  %{rhsm_package_name} = %{version}
 Requires:  %{py_package_prefix}-six
 Requires:  %{py_package_prefix}-dateutil
+Requires: %{py_package_prefix}-syspurpose
 
 # rhel 8 has different naming for setuptools going forward
 %if (0%{?rhel} && 0%{?rhel} >= 8)
@@ -184,7 +186,6 @@ Requires:  %{py_package_prefix}-setuptools
 
 %if %{with python3}
 Requires: python3-dbus
-Requires: python3-syspurpose
 %else
 Requires: %{?suse_version:dbus-1-python} %{!?suse_version:dbus-python}
 %endif
@@ -266,7 +267,7 @@ The Subscription Manager package provides programs and libraries to allow users
 to manage subscriptions and yum repositories from the Red Hat entitlement
 platform.
 
-%if %{with python3}
+
 %package -n %{py_package_prefix}-syspurpose
 Summary: A commandline utility for declaring system syspurpose
 Group: System Environment/Base
@@ -274,7 +275,6 @@ Group: System Environment/Base
 %description -n %{py_package_prefix}-syspurpose
 Provides the syspurpose commandline utility. This utility manages the
 system syspurpose.
-%endif
 
 
 %package -n subscription-manager-plugin-container
@@ -947,21 +947,22 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %doc README.Fedora
 %endif
 
-%if %{with python3}
 %files -n %{py_package_prefix}-syspurpose -f syspurpose.lang
 %defattr(-,root,root,-)
-%dir %{python3_sitelib}/syspurpose*.egg-info
-%{python3_sitelib}/syspurpose*.egg-info/*
+%dir %{python_sitelib}/syspurpose*.egg-info
+%{python_sitelib}/syspurpose*.egg-info/*
 %dir %{_sysconfdir}/rhsm/syspurpose
-%dir %{python3_sitelib}/syspurpose
-%{python3_sitelib}/syspurpose/{*.py*,__pycache__/*}
+%dir %{python_sitelib}/syspurpose
+%{python_sitelib}/syspurpose/*.py*
+%if %{with python3}
+%{python_sitelib}/syspurpose/__pycache__
+%endif
 %doc %{_mandir}/man8/syspurpose.8.*
 %doc LICENSE
 
 %attr(755, root, root) %{_sbindir}/syspurpose
 %attr(644,root,root) %{_sysconfdir}/rhsm/syspurpose/valid_fields.json
 %attr(644,root,root) %{_sysconfdir}/bash_completion.d/syspurpose
-%endif
 
 %files -n subscription-manager-plugin-container
 %defattr(-,root,root,-)

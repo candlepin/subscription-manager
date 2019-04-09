@@ -100,7 +100,6 @@ def setup_arg_parser():
     :return: An argparse.ArgumentParser ready to use to parse_args
     """
     parser = argparse.ArgumentParser(prog="syspurpose", description="System Syspurpose Management Tool")
-    parser.set_defaults(func=None, requires_write=False)
 
     subparsers = parser.add_subparsers(help="sub-command help")
 
@@ -268,8 +267,8 @@ def main():
                 " subscription_manager module is not available."))
 
     syspurposestore = SyncedStore(uep=uep, consumer_uuid=uuid)
-    if args.func is not None:
-        args.func(args, syspurposestore)
+    if getattr(args, 'func', None) is not None:
+        result = args.func(args, syspurposestore)
     else:
         parser.print_help()
         return 0
