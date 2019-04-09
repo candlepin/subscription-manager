@@ -199,7 +199,7 @@ def handle_exception(msg, ex):
         system_exit(os.EX_SOFTWARE, ex)
 
 
-def show_autosubscribe_output(uep):
+def show_autosubscribe_output(uep, identity):
     installed_products = products.InstalledProducts(uep).list()
 
     if not installed_products:
@@ -220,7 +220,11 @@ def show_autosubscribe_output(uep):
             all_subscribed = False
         print(columnize(PRODUCT_STATUS, echo_columnize_callback, product[0], status) + "\n")
     if not all_subscribed:
-        print(_("Unable to find available subscriptions for all your installed products."))
+        owner = uep.getOwner(identity.uuid)
+        if owner['contentAccessMode'] == "org_environment":
+            subscribed = 0
+        else:
+            print(_("Unable to find available subscriptions for all your installed products."))
     return subscribed
 
 
@@ -1404,7 +1408,7 @@ class RegisterCommand(UserPassCommand):
             # update with latest cert info
             self.sorter = inj.require(inj.CERT_SORTER)
             self.sorter.force_cert_check()
-            subscribed = show_autosubscribe_output(self.cp)
+            subscribed = show_autosubscribe_output(self.cp, self.identity)
 
         self._request_validity_check()
         return subscribed
@@ -1842,7 +1846,7 @@ class AttachCommand(CliCommand):
                 else:
                     self.sorter.force_cert_check()
                     # run this after entcertlib update, so we have the new entitlements
-                    return_code = show_autosubscribe_output(self.cp)
+                    return_code = show_autosubscribe_output(self.cp, self.identity)
 
         except Exception as e:
             handle_exception("Unable to attach: %s" % e, e)
@@ -2876,7 +2880,7 @@ class StatusCommand(CliCommand):
         else:
             try:
                 owner = self.cp.getOwner(self.identity.uuid)
-                if (owner['contentAccessMode'] == "org_environment"):
+                if owner['contentAccessMode'] == "org_environment":
                     ca_message = has_cert
             except Exception as e:
                 log.debug("Unable to check the orgs content access mode: %s" % e)
