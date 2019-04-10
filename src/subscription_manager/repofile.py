@@ -411,9 +411,9 @@ if HAS_DEB822:
             self.repos822[:] = [repo822 if repo822['id'] != repo.id else Deb822(repo_dict) for repo822 in self.repos822]
 
         def section(self, repo_id):
-            result = [Repo(repo822) for repo822 in self.repos822 if repo822['id'] == repo_id]
+            result = [repo822 for repo822 in self.repos822 if repo822['id'] == repo_id]
             if len(result) > 0:
-                return result[0]
+                return Repo(result[0]['id'], result[0].items())
             else:
                 return None
 
