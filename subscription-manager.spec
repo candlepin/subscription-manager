@@ -133,7 +133,7 @@
 
 Name: subscription-manager
 Version: 1.24.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1138,6 +1138,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Apr 11 2019 Christopher Snyder <csnyder@redhat.com> 1.24.3-2
+- 1694107: Begin packaging syspurpose for python 2 systems (csnyder@redhat.com)
+
 * Wed Feb 13 2019 Christopher Snyder <csnyder@redhat.com> 1.24.3-1
 - Add rhel 7.7 releaser (csnyder@redhat.com)
 - 1654531: Add proxy_scheme to rhsm.conf (csnyder@redhat.com)
