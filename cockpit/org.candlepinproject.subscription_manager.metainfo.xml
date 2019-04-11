@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="addon">
+  <id>org.candlepinproject.subscription_manager</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <name>Subscription Manager</name>
+  <summary>Subscription Manager in Cockpit</summary>
+  <description>
+    <p>
+      Manage subscriptions to a Candlepin backend, such as for Red Hat products.
+    </p>
+  </description>
+  <extends>org.cockpit_project.cockpit</extends>
+  <launchable type="cockpit-manifest">subscription-manager-cockpit</launchable>
+  <url type="homepage">https://candlepinproject.org/</url>
+  <update_contact>candlepin_AT_lists.fedorahosted.org</update_contact>
+</component>
