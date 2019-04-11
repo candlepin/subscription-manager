@@ -1051,7 +1051,7 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %{_datadir}/cockpit/subscription-manager/po.*.js
 %{_datadir}/cockpit/subscription-manager/po.js
 %{_datadir}/cockpit/subscription-manager/node_modules/*
-%{_datadir}/metainfo/org.cockpit-project.subscription-manager.metainfo.xml
+%{_datadir}/metainfo/org.candlepinproject.subscription_manager.metainfo.xml
 %if ! %use_subman_gui
 %{_datadir}/applications/subscription-manager-cockpit.desktop
 %{_datadir}/icons/hicolor/16x16/apps/*.png
