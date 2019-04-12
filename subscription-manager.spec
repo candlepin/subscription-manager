@@ -31,6 +31,12 @@
 %global use_subman_gui 1
 %endif
 
+%if 0%{?suse_version} && 0%{?suse_version} < 1200
+%global completion_dir %{_sysconfdir}/bash_completion.d
+%else
+%global completion_dir %{_datadir}/bash-completion/completions
+%endif
+
 %global rhsm_plugins_dir  /usr/share/rhsm-plugins
 # on recent Fedora and RHEL 7, let's not use m2crypto
 %global use_m2crypto (0%{?fedora} < 23 && 0%{?rhel} < 7)
@@ -543,6 +549,7 @@ make -f Makefile install VERSION=%{version}-%{release} \
     PYTHON=%{__python} PREFIX=%{_prefix} \
     DESTDIR=%{buildroot} PYTHON_SITELIB=%{python_sitearch} \
     OS_VERSION=%{?fedora}%{?rhel}%{?suse_version} OS_DIST=%{dist} \
+    COMPLETION_DIR=%{completion_dir} \
     %{?install_ostree} %{?post_boot_tool} %{?gtk_version} \
     %{?install_yum_plugins} %{?install_dnf_plugins} \
     %{?install_zypper_plugins} \
@@ -722,14 +729,14 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %attr(750,root,root) %dir %{_var}/lib/rhsm/cache
 %attr(750,root,root) %dir %{_var}/lib/rhsm/repo_server_val
 
-%{_sysconfdir}/bash_completion.d/subscription-manager
-%{_sysconfdir}/bash_completion.d/rct
-%{_sysconfdir}/bash_completion.d/rhsm-debug
-%{_sysconfdir}/bash_completion.d/rhn-migrate-classic-to-rhsm
-%{_sysconfdir}/bash_completion.d/rhsmcertd
+%{completion_dir}/subscription-manager
+%{completion_dir}/rct
+%{completion_dir}/rhsm-debug
+%{completion_dir}/rhn-migrate-classic-to-rhsm
+%{completion_dir}/rhsmcertd
 
 %if %use_subman_gui
-%{_sysconfdir}/bash_completion.d/rhsm-icon
+%{completion_dir}/rhsm-icon
 %endif
 
 %dir %{python_sitearch}/subscription_manager
@@ -902,7 +909,7 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %{_sysconfdir}/security/console.apps/subscription-manager-gui
 %endif
 
-%{_sysconfdir}/bash_completion.d/subscription-manager-gui
+%{completion_dir}/subscription-manager-gui
 
 %doc
 %{_mandir}/man8/subscription-manager-gui.8*
@@ -964,7 +971,8 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 
 %attr(755, root, root) %{_sbindir}/syspurpose
 %attr(644,root,root) %{_sysconfdir}/rhsm/syspurpose/valid_fields.json
-%attr(644,root,root) %{_sysconfdir}/bash_completion.d/syspurpose
+%attr(644,root,root) %{completion_dir}/syspurpose
+
 
 %files -n subscription-manager-plugin-container
 %defattr(-,root,root,-)
