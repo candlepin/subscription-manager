@@ -381,7 +381,11 @@ Requires: python3-dnf-plugins-core
 Requires: python3-librepo
 %else
 Requires: python2-dnf-plugins-core
+%if (0%{?rhel} == 7)
+Requires: python-librepo
+%else
 Requires: python2-librepo
+%endif
 %endif
 Requires: dnf >= 1.0.0
 
