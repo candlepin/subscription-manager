@@ -40,7 +40,7 @@ class BuildTrans(BaseCommand):
         self.set_undefined_options('build', ('build_base', 'build_base'))
 
     def compile(self, src, dest):
-        log.info("Compiling %s" % src)
+        log.debug("Compiling %s" % src)
         if self.lint:
             dest = '/dev/null'
 
@@ -48,7 +48,7 @@ class BuildTrans(BaseCommand):
         spawn(cmd)
 
     def merge_desktop(self, src, dest):
-        log.info("Merging desktop file %s" % src)
+        log.debug("Merging desktop file %s" % src)
         if self.lint:
             dest = '/dev/null'
 
@@ -82,7 +82,7 @@ class UpdateTrans(BaseCommand):
         self.key_file = os.path.join(os.curdir, 'po', 'keys.pot')
 
     def merge(self, po_file, key_file):
-        log.info("Updating %s" % po_file)
+        log.debug("Updating %s" % po_file)
         cmd = ['msgmerge', '-N', '--backup=none', '-U', po_file, self.key_file]
         spawn(cmd)
 

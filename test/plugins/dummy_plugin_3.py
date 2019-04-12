@@ -17,5 +17,5 @@ class DummyPlugin3(SubManPlugin):
         conduit.product_list.append("Not a product actually")
 
     def update_content_hook(self, conduit):
-        conduit.log.info("Hellow new content!")
+        conduit.log.debug("Hellow new content!")
         conduit.reports.add("Not really a report")

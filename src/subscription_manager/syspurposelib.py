@@ -67,7 +67,7 @@ def save_sla_to_syspurpose_metadata(service_level):
 
         store.set("service_level_agreement", service_level)
         store.finish()
-        log.info("Syspurpose SLA value successfully saved locally.")
+        log.debug("Syspurpose SLA value successfully saved locally.")
     else:
         log.error("SyspurposeStore could not be imported. Syspurpose SLA value not saved locally.")
 

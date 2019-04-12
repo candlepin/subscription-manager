@@ -329,7 +329,7 @@ class SyspurposeComplianceStatusCache(StatusCache):
 
     def _sync_with_server(self, uep, uuid, on_date=None, *args, **kwargs):
         self.syspurpose_service = syspurpose.Syspurpose(uep)
-        self.server_status = self.syspurpose_service.get_syspurpose_status()
+        self.server_status = self.syspurpose_service.get_syspurpose_status(on_date)
 
     def write_cache(self):
         if self.server_status is not None and self.server_status['status'] != 'unknown':
@@ -450,14 +450,16 @@ class ProfileManager(CacheManager):
 
         # If the server doesn't support packages, don't try to send the profile:
         if not uep.supports_resource(PACKAGES_RESOURCE):
-            log.info("Server does not support packages, skipping profile upload.")
+            log.warn("Server does not support packages, skipping profile upload.")
             return 0
 
-        if not force and not self.report_package_profile:
-            log.info("Skipping package profile upload due to report_package_profile setting.")
+        if force or self.report_package_profile:
+            return CacheManager.update_check(self, uep, consumer_uuid, force)
+        elif not self.report_package_profile:
+            log.warn("Skipping package profile upload due to report_package_profile setting.")
             return 0
-
-        return CacheManager.update_check(self, uep, consumer_uuid, force)
+        else:
+            return 0
 
     def has_changed(self):
         if not self._cache_exists():
@@ -695,7 +697,7 @@ class ContentAccessCache(object):
             return
         with open(cert.path, "w") as output:
             updated_cert = "".join(data["contentListing"][str(cert.serial)])
-            log.info("Updating certificate %s with new content" % cert.serial)
+            log.debug("Updating certificate %s with new content" % cert.serial)
             output.write(updated_cert)
 
     def _update_cache(self, data):

@@ -62,6 +62,7 @@ class Repo(dict):
             'sslclientkey': (0, None),
             'sslclientcert': (0, None),
             'metadata_expire': (1, None),
+            'enabled_metadata': (1, '0'),
             'proxy': (0, None),
             'proxy_username': (0, None),
             'proxy_password': (0, None),
@@ -112,8 +113,10 @@ class Repo(dict):
 
         if content.enabled:
             repo['enabled'] = "1"
+            repo['enabled_metadata'] = "1"
         else:
             repo['enabled'] = "0"
+            repo['enabled_metadata'] = "0"
 
         expanded_url_path = Repo._expand_releasever(release_source, content.url)
         repo['baseurl'] = utils.url_base_join(baseurl, expanded_url_path)
@@ -154,19 +157,22 @@ class Repo(dict):
     def _set_proxy_info(repo):
         proxy = ""
 
+        proxy_scheme = conf['server']['proxy_scheme']
+
+        if proxy_scheme.endswith("://"):
+            proxy_scheme = proxy_scheme[:-3]
+
         # Worth passing in proxy config info to from_ent_cert_content()?
         # That would decouple Repo some
         proxy_host = conf['server']['proxy_hostname']
+
         # proxy_port as string is fine here
         proxy_port = conf['server']['proxy_port']
+
         if proxy_host != "":
-            if proxy_host.startswith('http://') or proxy_host.startswith('HTTP://') or \
-                proxy_host.startswith('https://') or proxy_host.startswith('HTTPS://'):
-                proxy = proxy_host
-            else:
-                proxy = "http://%s" % proxy_host
-            if proxy_port != "":
-                proxy = "%s:%s" % (proxy, proxy_port)
+            if proxy_port:
+                proxy_host = proxy_host + ":" + proxy_port
+            proxy = proxy_scheme + "://" + proxy_host
 
         # These could be empty string, in which case they will not be
         # set in the yum repo file:

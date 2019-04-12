@@ -270,14 +270,14 @@ def parse_force_signal(cli_arg):
 def log_syslog(level, msg):
     syslog.openlog("rhsmd")
     syslog.syslog(level, msg)
-    log.info("rhsmd: %s" % msg)
+    log.debug("rhsmd: %s" % msg)
     if enable_debug:
         print(msg)
 
 
 def main():
 
-    log.info("rhsmd started")
+    log.debug("rhsmd started")
     parser = OptionParser(usage=USAGE,
                           formatter=WrappedIndentedHelpFormatter())
     parser.add_option("-d", "--debug", dest="debug",
@@ -308,7 +308,7 @@ def main():
 
     # short-circuit dbus initialization
     if options.syslog:
-        log.info("logging subscription status to syslog")
+        log.debug("logging subscription status to syslog")
         status = check_status(force_signal)
         if status == RHSM_EXPIRED:
             log_syslog(syslog.LOG_NOTICE,

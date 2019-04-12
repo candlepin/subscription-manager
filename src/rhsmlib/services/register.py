@@ -19,6 +19,7 @@ from rhsmlib.services import exceptions
 
 from subscription_manager import injection as inj
 from subscription_manager import managerlib
+from subscription_manager import syspurposelib
 from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
@@ -42,6 +43,12 @@ class RegisterService(object):
         # signature we want to consider that an error.
         if kwargs:
             raise exceptions.ValidationError(_("Unknown arguments: %s") % kwargs.keys())
+
+        syspurpose = syspurposelib.read_syspurpose()
+        role = role or syspurpose.get('role', '')
+        addons = addons or syspurpose.get('addons', [])
+        usage = usage or syspurpose.get('usage', '')
+        service_level = service_level or syspurpose.get('service_level_agreement', '')
 
         type = type or "system"
 
@@ -89,6 +96,12 @@ class RegisterService(object):
 
         # Now that we are registered, load the new identity
         self.identity.reload()
+        # We want a new SyncedStore every time as we otherwise can hold onto bad state in
+        # long-lived services in dbus
+        uep = inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()
+        store = syspurposelib.SyncedStore(uep, consumer_uuid=self.identity.uuid)
+        if store:
+            store.sync()
         return consumer
 
     def validate_options(self, options):

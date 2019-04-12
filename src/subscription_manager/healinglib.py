@@ -77,7 +77,7 @@ class HealingUpdateAction(object):
         consumer = self.uep.getConsumer(uuid)
 
         if 'autoheal' not in consumer or not consumer['autoheal']:
-            log.info("Auto-heal disabled on server, skipping.")
+            log.warn("Auto-heal disabled on server, skipping.")
             return 0
 
         try:
@@ -130,7 +130,7 @@ class HealingUpdateAction(object):
                 msg += " are valid today %s" % today
                 if valid_tomorrow:
                     msg += " and tomorrow %s" % tomorrow
-            log.info(msg)
+            log.debug(msg)
 
         except Exception as e:
             log.error("Error attempting to auto-heal:")

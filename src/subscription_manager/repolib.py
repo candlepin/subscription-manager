@@ -120,7 +120,7 @@ class YumPluginManager(object):
                 continue
 
             if len(result) == 0:
-                log.info('Configuration file of %s plugin: "%s" cannot be read' %
+                log.warn('Configuration file of %s plugin: "%s" cannot be read' %
                          (pkg_mgr_name, plugin_file_name))
                 continue
 
@@ -168,7 +168,7 @@ class YumPluginManager(object):
 
         # When user doesn't want to automatically enable yum plugins, then return empty list
         if cls.is_auto_enable_enabled() is False:
-            log.info('The rhsm.auto_enable_yum_plugins is disabled. Skipping the enablement of yum plugins.')
+            log.debug('The rhsm.auto_enable_yum_plugins is disabled. Skipping the enablement of yum plugins.')
             return []
 
         log.debug('The rhsm.auto_enable_yum_plugins is enabled')
@@ -261,7 +261,6 @@ class YumReleaseverSource(object):
 
         self.identity = inj.require(inj.IDENTITY)
         self.cp_provider = inj.require(inj.CP_PROVIDER)
-        self.uep = self.cp_provider.get_consumer_auth_cp()
 
     # FIXME: these guys are really more of model helpers for the object
     #        represent a release.
@@ -298,8 +297,8 @@ class YumReleaseverSource(object):
         # access to content as the host they run on.)
         result = None
         if not in_container():
-            result = self.release_status_cache.read_status(self.uep,
-                                                           self.identity.uuid)
+            uep = self.cp_provider.get_consumer_auth_cp()
+            result = self.release_status_cache.read_status(uep, self.identity.uuid)
 
         # status cache returned None, which points to a failure.
         # Since we only have one value, use the default there and cache it
@@ -343,7 +342,6 @@ class RepoUpdateActionCommand(object):
         self.ent_source = ent_cert.EntitlementDirEntitlementSource()
 
         self.cp_provider = inj.require(inj.CP_PROVIDER)
-        self.uep = self.cp_provider.get_consumer_auth_cp()
 
         self.manage_repos = 1
         self.apply_overrides = apply_overrides
@@ -352,12 +350,16 @@ class RepoUpdateActionCommand(object):
         self.release = None
         self.overrides = {}
         self.override_supported = False
-        try:
-            self.override_supported = bool(self.identity.is_valid() and self.uep and self.uep.supports_resource('content_overrides'))
-        except (socket.error, connection.ConnectionException) as e:
-            # swallow the error to fix bz 1298327
-            log.exception(e)
-            pass
+        if not cache_only:
+            self.uep = self.cp_provider.get_consumer_auth_cp()
+            try:
+                self.override_supported = bool(self.identity.is_valid() and self.uep and self.uep.supports_resource('content_overrides'))
+            except (socket.error, connection.ConnectionException) as e:
+                # swallow the error to fix bz 1298327
+                log.exception(e)
+                pass
+        else:
+            self.uep = None
 
         self.written_overrides = WrittenOverrideCache()
 

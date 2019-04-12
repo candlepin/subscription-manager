@@ -41,9 +41,9 @@ class ContainerContentPlugin(base_plugin.SubManPlugin):
         Args:
             conduit: An UpdateContentConduit
         """
-        conduit.log.info("Updating container content.")
+        conduit.log.debug("Updating container content.")
         registry_hostnames = conduit.conf_string('main', 'registry_hostnames')
-        conduit.log.info("registry hostnames = %s" % registry_hostnames)
+        conduit.log.debug("registry hostnames = %s" % registry_hostnames)
         cmd = ContainerContentUpdateActionCommand(
             ent_source=conduit.ent_source,
             registry_hostnames=registry_hostnames.split(','),

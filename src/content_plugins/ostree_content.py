@@ -33,7 +33,7 @@ class OstreeContentPlugin(base_plugin.SubManPlugin):
         Args:
             conduit: A UpdateContentConduit
         """
-        conduit.log.info("ostree update_content_hook plugin.")
+        conduit.log.debug("ostree update_content_hook plugin.")
 
         report = action_invoker.OstreeContentUpdateActionCommand(ent_source=conduit.ent_source).perform()
         conduit.reports.add(report)

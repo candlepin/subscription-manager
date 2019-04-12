@@ -54,6 +54,7 @@ SERVER_DEFAULTS = {
         'insecure': '0',
         'ssl_verify_depth': '3',
         'proxy_hostname': '',
+        'proxy_scheme': 'http',
         'proxy_user': '',
         'proxy_port': '',
         'proxy_password': '',

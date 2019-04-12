@@ -222,29 +222,29 @@ void testProductNullPointers(productFixture *fixture, gconstpointer testData) {
 
 void testWrongPathToCompressedProductCert(productFixture *fixture, gconstpointer testData) {
     (void)testData;
-    fixture->repoProductId->productIdPath = "/path/to/non-existing-compressed-cert.gz";
+    fixture->repoProductId->productIdPath = g_strdup("/path/to/non-existing-compressed-cert.gz");
     int ret = installProductId(fixture->repoProductId, fixture->productDb, "/tmp");
     g_assert_cmpint(ret, ==, 0);
 }
 
 void testCorruptedCompressedProductCert(productFixture *fixture, gconstpointer testData) {
     (void)testData;
-    fixture->repoProductId->productIdPath = "./test_data/corrupted_compressed_productid.pem.gz";
+    fixture->repoProductId->productIdPath = g_strdup("./test_data/corrupted_compressed_productid.pem.gz");
     int ret = installProductId(fixture->repoProductId, fixture->productDb, "/tmp");
     g_assert_cmpint(ret, ==, 0);
 }
 
 void testInstallingCompressedProductCert(productFixture *fixture, gconstpointer testData) {
-    (void)testData;
+    (void) testData;
     // Set path to correct productid certificate
-    fixture->repoProductId->productIdPath = "./test_data/59803427316a729fb1d67fd08e7d0c8ccd2a4a5377729b747b76345851bdba6c-productid.gz";
+    fixture->repoProductId->productIdPath = g_strdup("./test_data/59803427316a729fb1d67fd08e7d0c8ccd2a4a5377729b747b76345851bdba6c-productid.gz");
     // Create dummy repository
     DnfContext *dnfContext = dnf_context_new();
     fixture->repoProductId->repo = dnf_repo_new(dnfContext);
     int ret = installProductId(fixture->repoProductId, fixture->productDb, "./");
     g_object_unref(fixture->repoProductId->repo);
     g_object_unref(dnfContext);
-    g_assert_cmpint(ret, ==, 1);
+    g_assert_cmpint(ret, == , 1);
 }
 
 void testFetchingProductId(productFixture *fixture, gconstpointer testData) {
@@ -349,7 +349,7 @@ void teardownActiveRepos(activeReposFixture *fixture, gconstpointer testData) {
 
 void testGetActiveRepos(activeReposFixture *fixture, gconstpointer testData) {
     (void)testData;
-    getActive(fixture->hookData, fixture->repoAndProductIds, fixture->activeRepoAndProductIds);
+    getActive(fixture->dnfContext, fixture->hookData, fixture->repoAndProductIds, fixture->activeRepoAndProductIds);
     // TODO: improve this unit test to get at least one active repository
     g_assert_cmpint(fixture->activeRepoAndProductIds->len, ==, 0);
 }
@@ -375,7 +375,7 @@ void testInstalledPackages(installedPackageFixture *fixture, gconstpointer testD
     GPtrArray *installedPackages = getInstalledPackages(fixture->rpmDbSack);
     // We expect that the length of the list will be bigger than zero :-)
     g_assert_cmpint(installedPackages->len, >, 0);
-    g_object_unref(installedPackages);
+    g_ptr_array_unref(installedPackages);
 }
 
 typedef struct {
@@ -420,6 +420,114 @@ void testProtectedProduct(protectedProductFixture *fixture, gconstpointer testDa
     freeProductDb(productDb);
 }
 
+typedef struct {
+    GPtrArray *repos;
+    GPtrArray *enabledRepoProductId;
+    ProductDb *productDb;
+    DnfContext *dnfContext;
+} installedProductCertsFixture;
+
+void setupInstalledProduct(installedProductCertsFixture *fixture, gconstpointer testData) {
+    (void) testData;
+    fixture->dnfContext = dnf_context_new();
+
+    fixture->repos = g_ptr_array_sized_new(2);
+    // First repo
+    DnfRepo *repo1 = dnf_repo_new(fixture->dnfContext);
+    dnf_repo_set_id(repo1, "rhel");
+    g_ptr_array_add(fixture->repos, repo1);
+    // Second repo
+    DnfRepo *repo2 = dnf_repo_new(fixture->dnfContext);
+    dnf_repo_set_id(repo2, "rhel-testing");
+    g_ptr_array_add(fixture->repos, repo2);
+
+    fixture->enabledRepoProductId = g_ptr_array_sized_new(2);
+
+    fixture->productDb = initProductDb();
+    addRepoId(fixture->productDb, "71", "rhel");
+    addRepoId(fixture->productDb, "71", "rhel-testing");
+}
+
+void teardownInstalledProduct(installedProductCertsFixture *fixture, gconstpointer testData) {
+    (void)testData;
+
+    freeProductDb(fixture->productDb);
+    for (guint i = 0; i < fixture->repos->len; i++) {
+        DnfRepo *repo = g_ptr_array_index(fixture->repos, i);
+        g_object_unref(repo);
+    }
+    g_ptr_array_unref(fixture->repos);
+    for (guint i = 0; i < fixture->enabledRepoProductId->len; i++) {
+        RepoProductId *repoProductId = g_ptr_array_index(fixture->enabledRepoProductId, i);
+        freeRepoProductId(repoProductId);
+    }
+    g_ptr_array_unref(fixture->enabledRepoProductId);
+    g_object_unref(fixture->dnfContext);
+}
+
+void testInstalledProduct(installedProductCertsFixture *fixture, gconstpointer testData) {
+    (void)testData;
+
+    int ret = getInstalledProductCerts("./test_data/cert_dir/", fixture->repos, fixture->enabledRepoProductId, fixture->productDb);
+    g_assert_cmpint(1, ==, ret);
+}
+
+typedef struct {
+    DnfContext *dnfContext;
+    DnfSack *rpmDbSack;
+    GPtrArray *repos;
+    GPtrArray *enabledRepoAndProductIds;
+    GPtrArray *activeRepoAndProductIds;
+    GPtrArray *installedPackages;
+} packageRepoFixture;
+
+void setupPackageRepo(packageRepoFixture *fixture, gconstpointer testData) {
+    (void) testData;
+    fixture->dnfContext = dnf_context_new();
+    fixture->repos = g_ptr_array_sized_new(2);
+    // First repo
+    DnfRepo *repo1 = dnf_repo_new(fixture->dnfContext);
+    dnf_repo_set_id(repo1, "foo-bar");
+    g_ptr_array_add(fixture->repos, repo1);
+    // Second repo
+    DnfRepo *repo2 = dnf_repo_new(fixture->dnfContext);
+    dnf_repo_set_id(repo2, "foo-bar-testing");
+    g_ptr_array_add(fixture->repos, repo2);
+    fixture->enabledRepoAndProductIds = g_ptr_array_sized_new(fixture->repos->len);
+    fixture->activeRepoAndProductIds = g_ptr_array_sized_new(fixture->repos->len);
+    fixture->rpmDbSack = dnf_sack_new();
+    fixture->installedPackages = getInstalledPackages(fixture->rpmDbSack);
+}
+
+void teardownPackageRepo(packageRepoFixture *fixture, gconstpointer testData) {
+    (void)testData;
+    for (guint i = 0; i < fixture->repos->len; i++) {
+        DnfRepo *repo = g_ptr_array_index(fixture->repos, i);
+        g_object_unref(repo);
+    }
+    g_ptr_array_unref(fixture->repos);
+    for (guint i = 0; i < fixture->enabledRepoAndProductIds->len; i++) {
+        RepoProductId *repoProductId = g_ptr_array_index(fixture->enabledRepoAndProductIds, i);
+        freeRepoProductId(repoProductId);
+    }
+    g_ptr_array_unref(fixture->enabledRepoAndProductIds);
+    for (guint i = 0; i < fixture->activeRepoAndProductIds->len; i++) {
+        RepoProductId *repoProductId = g_ptr_array_index(fixture->activeRepoAndProductIds, i);
+        freeRepoProductId(repoProductId);
+    }
+    g_ptr_array_unref(fixture->activeRepoAndProductIds);
+    g_object_unref(fixture->dnfContext);
+    g_object_unref(fixture->rpmDbSack);
+}
+
+void testPackageRepo(packageRepoFixture *fixture, gconstpointer testData) {
+    (void)testData;
+
+    getActiveReposFromInstalledPkgs(fixture->dnfContext, fixture->enabledRepoAndProductIds,
+                                         fixture->activeRepoAndProductIds, fixture->installedPackages);
+    g_assert_cmpint(0, ==, fixture->activeRepoAndProductIds->len);
+}
+
 int main(int argc, char **argv) {
     g_test_init(&argc, &argv, NULL);
     g_test_add("/set2/test plugin handle created", handleFixture, NULL, setup, testHandleCreated, teardown);
@@ -439,5 +547,7 @@ int main(int argc, char **argv) {
     g_test_add("/set2/test getting active repos", activeReposFixture, NULL, setupActiveRepos, testGetActiveRepos, teardownActiveRepos);
     g_test_add("/set2/test installed packages", installedPackageFixture, NULL, setupInstalledPackages, testInstalledPackages, teardownInstalledPackages);
     g_test_add("/set2/test protect disabled repos", protectedProductFixture, NULL, setupProtectedProduct, testProtectedProduct, teardownProtectedProduct);
+    g_test_add("/set2/test installed product cert", installedProductCertsFixture, NULL, setupInstalledProduct, testInstalledProduct, teardownInstalledProduct);
+    g_test_add("/set2/test package with repo id", packageRepoFixture, NULL, setupPackageRepo, testPackageRepo, teardownPackageRepo);
     return g_test_run();
 }

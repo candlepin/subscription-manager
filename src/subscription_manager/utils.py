@@ -267,7 +267,7 @@ def get_server_versions(cp, exception_on_timeout=False):
             # otherwise, ignore the timeout exception
         except Exception as e:
             if isinstance(e, GoneException):
-                log.info("Server Versions: Error: consumer has been deleted, unable to check server version")
+                log.warn("Server Versions: Error: consumer has been deleted, unable to check server version")
             else:
                 # a more useful error would be handy here
                 log.error("Error while checking server version: %s" % e)

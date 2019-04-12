@@ -114,7 +114,7 @@ class OstreeContentUpdateActionCommand(object):
         try:
             ostree_config.load()
         except configparser.Error:
-            log.info("No ostree content config file found at: %s. Not loading ostree config.",
+            log.warn("No ostree content config file found at: %s. Not loading ostree config.",
                      ostree_config.repo_file_path)
 
 

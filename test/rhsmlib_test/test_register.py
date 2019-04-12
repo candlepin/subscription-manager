@@ -30,6 +30,8 @@ from subscription_manager.facts import Facts
 from subscription_manager.identity import Identity
 from subscription_manager.plugins import PluginManager
 
+from ..fixture import set_up_mock_sp_store
+
 from test.rhsmlib_test.base import DBusObjectTest, InjectionMockingTest
 
 from rhsm import connection
@@ -84,11 +86,25 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_cp.username = "username"
         self.mock_cp.password = "password"
 
+        # Add a mock cp_provider
+        self.mock_cp_provider = mock.Mock(spec=CPProvider, name="CPProvider")
+
+        # For the tests in which it's used, the consumer_auth cp and basic_auth cp can be the same
+        self.mock_cp_provider.get_consumer_auth_cp.return_value = self.mock_cp
+        self.mock_cp_provider.get_basic_auth_cp.return_value = self.mock_cp
+
         self.mock_pm = mock.Mock(spec=PluginManager, name="PluginManager")
         self.mock_installed_products = mock.Mock(spec=InstalledProductsManager,
             name="InstalledProductsManager")
         self.mock_facts = mock.Mock(spec=Facts, name="Facts")
         self.mock_facts.get_facts.return_value = {}
+
+        syspurpose_patch = mock.patch('subscription_manager.syspurposelib.SyncedStore')
+        self.mock_sp_store = syspurpose_patch.start()
+        self.mock_sp_store, self.mock_sp_store_contents = set_up_mock_sp_store(self.mock_sp_store)
+        self.addCleanup(syspurpose_patch.stop)
+
+        self.mock_syspurpose = mock.Mock()
 
     def injection_definitions(self, *args, **kwargs):
         if args[0] == inj.IDENTITY:
@@ -99,6 +115,8 @@ class RegisterServiceTest(InjectionMockingTest):
             return self.mock_installed_products
         elif args[0] == inj.FACTS:
             return self.mock_facts
+        elif args[0] == inj.CP_PROVIDER:
+            return self.mock_cp_provider
         else:
             return None
 
@@ -122,10 +140,10 @@ class RegisterServiceTest(InjectionMockingTest):
             installed_products=[],
             content_tags=[],
             type="system",
-            role=None,
-            addons=None,
-            service_level=None,
-            usage=None)
+            role="",
+            addons=[],
+            service_level="",
+            usage="")
         self.mock_installed_products.write_cache.assert_called()
 
         mock_persist_consumer.assert_called_once_with(expected_consumer)
@@ -158,10 +176,10 @@ class RegisterServiceTest(InjectionMockingTest):
             installed_products=[],
             content_tags=[],
             type="system",
-            role=None,
-            addons=None,
-            service_level=None,
-            usage=None
+            role="",
+            addons=[],
+            service_level="",
+            usage=""
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -213,6 +231,36 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_identity.is_valid.return_value = True
         options = self._build_options(force=True)
         register.RegisterService(self.mock_cp).validate_options(options)
+
+    @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
+    def test_reads_syspurpose(self, mock_persist_consumer):
+        self.mock_installed_products.format_for_server.return_value = []
+        self.mock_installed_products.tags = []
+        self.mock_identity.is_valid.return_value = False
+        self.mock_sp_store_contents["role"] = "test_role"
+        self.mock_sp_store_contents["service_level_agreement"] = "test_sla"
+        self.mock_sp_store_contents["addons"] = ["addon1"]
+        self.mock_sp_store_contents["usage"] = "test_usage"
+
+        expected_consumer = json.loads(CONTENT_JSON)
+        self.mock_cp.registerConsumer.return_value = expected_consumer
+
+        register_service = register.RegisterService(self.mock_cp)
+        register_service.register("org", name="name")
+
+        self.mock_cp.registerConsumer.assert_called_once_with(
+            addons=["addon1"],
+            content_tags=[],
+            environment=None,
+            facts={},
+            installed_products=[],
+            keys=None,
+            name="name",
+            owner="org",
+            role="test_role",
+            service_level="test_sla",
+            type="system",
+            usage="test_usage")
 
     def test_does_not_require_basic_auth_with_activation_keys(self):
         self.mock_cp.username = None

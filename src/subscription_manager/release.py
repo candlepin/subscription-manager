@@ -109,7 +109,7 @@ class CdnReleaseVersionProvider(object):
                     certificates.add(product_cert)
 
         if len(release_products) == 0:
-            log.info("No products with RHEL product tags found")
+            log.debug("No products with RHEL product tags found")
             return []
         elif len(release_products) > 1:
             raise MultipleReleaseProductsError(certificates=certificates)

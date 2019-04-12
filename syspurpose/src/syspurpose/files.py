@@ -271,8 +271,12 @@ class SyncedStore(object):
 
     def sync(self):
         log.debug('Attempting to sync syspurpose content...')
-        if self.uep and not self.uep.has_capability('syspurpose'):
-            log.debug('Server does not support syspurpose, syncing only locally.')
+        try:
+            if self.uep and not self.uep.has_capability('syspurpose'):
+                log.debug('Server does not support syspurpose, syncing only locally.')
+                return self._sync_local_only()
+        except:
+            log.debug('Failed to detect whether the server has syspurpose capability')
             return self._sync_local_only()
 
         remote_contents = self.get_remote_contents()

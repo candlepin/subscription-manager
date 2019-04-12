@@ -44,6 +44,7 @@ RAM_FACT = 'memory.memtotal'
 STATUS_MAP = {'valid': _('Current'),
         'partial': _('Insufficient'),
         'invalid': _('Invalid'),
+        'disabled': _('Disabled'),
         'unknown': _('Unknown')}
 
 RHSM_VALID = 0
@@ -195,7 +196,7 @@ class ComplianceManager(object):
     def log_products(self):
         fj = utils.friendly_join
 
-        log.info("Product status: valid_products=%s partial_products=%s expired_products=%s"
+        log.debug("Product status: valid_products=%s partial_products=%s expired_products=%s"
                  " unentitled_producs=%s future_products=%s valid_until=%s",
                  fj(list(self.valid_products.keys())),
                  fj(list(self.partially_valid_products.keys())),
@@ -257,7 +258,7 @@ class ComplianceManager(object):
         Return true if the results of this cert sort indicate our
         entitlements are completely valid.
         """
-        return self.system_status == 'valid'
+        return self.system_status == 'valid' or self.system_status == 'disabled'
 
     def is_registered(self):
         return inj.require(inj.IDENTITY).is_valid()
