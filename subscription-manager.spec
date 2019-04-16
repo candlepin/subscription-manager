@@ -133,7 +133,7 @@
 
 Name: subscription-manager
 Version: 1.24.3
-Release: 2%{?dist}
+Release: 4%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1142,6 +1142,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Apr 16 2019 Kevin Howell <khowell@redhat.com> 1.24.3-4
+- 1698468: require python-librepo for rhel 7 (csnyder@redhat.com)
+
 * Thu Apr 11 2019 Christopher Snyder <csnyder@redhat.com> 1.24.3-2
 - 1694107: Begin packaging syspurpose for python 2 systems (csnyder@redhat.com)
 
