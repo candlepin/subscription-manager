@@ -132,8 +132,8 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.3
-Release: 4%{?dist}
+Version: 1.24.4
+Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1142,6 +1142,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Apr 16 2019 Kevin Howell <khowell@redhat.com> 1.24.4-1
+- Bump release to simply build/release (khowell@redhat.com)
+
 * Tue Apr 16 2019 Kevin Howell <khowell@redhat.com> 1.24.3-4
 - 1698468: require python-librepo for rhel 7 (csnyder@redhat.com)
 
