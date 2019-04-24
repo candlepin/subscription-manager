@@ -19,7 +19,7 @@
 %bcond_without python3
 %endif
 
-%if !(0%{?fedora} < 30 && %{with python3})
+%if !(0%{?fedora} < 30 && %{with python3}) || 0%{?rhel} >= 8
 %bcond_with python2_rhsm
 %else
 %bcond_without python2_rhsm
