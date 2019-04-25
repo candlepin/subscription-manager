@@ -2311,6 +2311,10 @@ class ReposCommand(CliCommand):
         # arguments in order.
         repos_to_modify = {}
 
+        if not len(repos):
+            print (_("This system has no repositories available through subscriptions."))
+            return 1
+
         for (status, repoid) in repo_actions:
             matches = set([repo for repo in repos if fnmatch.fnmatch(repo.id, repoid)])
             if not matches:
