@@ -330,6 +330,7 @@ static int enabledReposWithProductCert(GSList *repoIds, const GPtrArray *repos,
 int pluginHook(PluginHandle *handle, PluginHookId id, DnfPluginHookData *hookData, DnfPluginError *error) {
     // We do not need this for anything
     (void)error;
+    (void)hookData;
 
     if (!handle) {
         // We must have failed to allocate our handle during init; don't do anything.
@@ -435,7 +436,7 @@ int pluginHook(PluginHandle *handle, PluginHookId id, DnfPluginHookData *hookDat
 
         debug("Number of enabled repos with productid cert: %d", enabledRepoAndProductIds->len);
 
-        getActive(dnfContext, hookData, enabledRepoAndProductIds, activeRepoAndProductIds);
+        getActive(dnfContext, enabledRepoAndProductIds, activeRepoAndProductIds);
 
         for (guint i = 0; i < activeRepoAndProductIds->len; i++) {
             RepoProductId *activeRepoProductId = g_ptr_array_index(activeRepoAndProductIds, i);
@@ -597,24 +598,8 @@ gboolean isAvailPackageInInstalledPackages(GPtrArray *installedPackages, GPtrArr
  * @param repos all available repos
  * @param activeRepoAndProductIds the list of repos providing active
  */
-void getActive(DnfContext *dnfContext, DnfPluginHookData *hookData, const GPtrArray *enabledRepoAndProductIds,
+void getActive(DnfContext *dnfContext, const GPtrArray *enabledRepoAndProductIds,
         GPtrArray *activeRepoAndProductIds) {
-    if (hookData == NULL) {
-        error("Hook data cannot be NULL");
-        return;
-    }
-
-    HyGoal goal = hookContextTransactionGetGoal(hookData);
-    if (goal == NULL) {
-        error("Unable to get transaction goal");
-        return;
-    }
-
-    DnfSack *dnfSack = hy_goal_get_sack(goal);
-    if (dnfSack == NULL) {
-        error("Unable to get dnf sack from dnf context");
-        return;
-    }
 
     // Create special sack object only for quering current rpmdb to get fresh list
     // of installed packages. Quering dnfSack would not include just installed RPM
@@ -634,31 +619,10 @@ void getActive(DnfContext *dnfContext, DnfPluginHookData *hookData, const GPtrAr
 
     debug("Number of installed packages: %d", installedPackages->len);
 
-    for (guint i = 0; i < enabledRepoAndProductIds->len; i++) {
-        RepoProductId *repoProductId = g_ptr_array_index(enabledRepoAndProductIds, i);
-        GPtrArray *availPackageList = getAvailPackageList(dnfSack, repoProductId->repo);
-
-        debug("Repo %s: contains %d packages", dnf_repo_get_id(repoProductId->repo), availPackageList->len);
-
-        gboolean ret = isAvailPackageInInstalledPackages(installedPackages, availPackageList);
-        if (ret == TRUE) {
-            debug("Repo \"%s\" marked as active", dnf_repo_get_id(repoProductId->repo));
-            g_ptr_array_add(activeRepoAndProductIds, repoProductId);
-        } else {
-            debug("Repo \"%s\" NOT marked as active (no rpm installed from this repo)",
-                  dnf_repo_get_id(repoProductId->repo));
-        }
-
-        g_ptr_array_unref(availPackageList);
-    }
-
-    // Try to use different (and slower) approach, when no active repo was found.
-    // This is used, when pkcon remove triggered libdnf hook
-    if (activeRepoAndProductIds->len == 0) {
-        getActiveReposFromInstalledPkgs(dnfContext, enabledRepoAndProductIds, activeRepoAndProductIds,
+    // Try to use get list of active repositories (also containing product certificates) from the list of
+    // installed packages
+    getActiveReposFromInstalledPkgs(dnfContext, enabledRepoAndProductIds, activeRepoAndProductIds,
                                         installedPackages);
-
-    }
 
     debug("Number of active repositories: %d", activeRepoAndProductIds->len);
 
@@ -675,8 +639,6 @@ void getActive(DnfContext *dnfContext, DnfPluginHookData *hookData, const GPtrAr
  */
 void getActiveReposFromInstalledPkgs(DnfContext *dnfContext, const GPtrArray *enabledRepoAndProductIds,
                                      GPtrArray *activeRepoAndProductIds, GPtrArray *installedPackages) {
-    debug("No active repo found. Trying different approach.");
-
     if (installedPackages == NULL) {
         return;
     }

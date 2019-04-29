@@ -78,7 +78,7 @@ GPtrArray *getInstalledPackages(DnfSack *rpmDbSack);
 int getInstalledProductCerts(gchar *certDir, GPtrArray *repos, GPtrArray *enabledRepoProductId, ProductDb *productDb);
 void getActiveReposFromInstalledPkgs(DnfContext *dnfContext, const GPtrArray *enabledRepoAndProductIds,
                                      GPtrArray *activeRepoAndProductIds, GPtrArray *installedPackages);
-void getActive(DnfContext *dnfContext, DnfPluginHookData *hookData, const GPtrArray *enabledRepoAndProductIds,
+void getActive(DnfContext *dnfContext, const GPtrArray *enabledRepoAndProductIds,
         GPtrArray *activeRepoAndProductIds);
 int decompress(gzFile input, GString *output);
 int findProductId(GString *certContent, GString *result);
