@@ -591,6 +591,11 @@ desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-c
 %endif
 %endif
 
+# libexec directory does not exist on sles based distros
+%if 0%{?suse_version}
+sed -i 's/libexec/lib/g' %{buildroot}/%{_sysconfdir}/cron.daily/rhsmd
+%endif
+
 %find_lang rhsm
 %if 0%{?include_syspurpose}
 %find_lang syspurpose
@@ -682,6 +687,7 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 
 %attr(755,root,root) %{_libexecdir}/rhsmcertd-worker
 %attr(755,root,root) %{_libexecdir}/rhsmd
+
 
 # our config dirs and files
 %attr(755,root,root) %dir %{_sysconfdir}/pki/consumer
