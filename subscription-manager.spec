@@ -133,7 +133,7 @@
 
 Name: subscription-manager
 Version: 1.24.4
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1142,6 +1142,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu May 02 2019 Christopher Snyder <csnyder@redhat.com> 1.24.4-3
+- Fix malformed cherry-pick (csnyder@redhat.com)
+
 * Thu May 02 2019 Christopher Snyder <csnyder@redhat.com> 1.24.4-2
 - 1685037: Ignore null repos when running using packagekit (csnyder@redhat.com)
 - 1666845: Always submit empty string for reset (csnyder@redhat.com)
