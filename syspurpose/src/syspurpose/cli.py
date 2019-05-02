@@ -101,10 +101,7 @@ def setup_arg_parser():
     :return: An argparse.ArgumentParser ready to use to parse_args
     """
     parser = argparse.ArgumentParser(prog="syspurpose", description="System Syspurpose Management Tool")
-<<<<<<< HEAD
-=======
     parser.set_defaults(func=None, requires_sync=False)
->>>>>>> 7eb3c68d... 1676982: Do not make duplicate sync calls on syspurpose show
 
     subparsers = parser.add_subparsers(help="sub-command help")
 
