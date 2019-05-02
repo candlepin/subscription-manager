@@ -133,7 +133,7 @@
 
 Name: subscription-manager
 Version: 1.24.4
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1142,6 +1142,21 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu May 02 2019 Christopher Snyder <csnyder@redhat.com> 1.24.4-2
+- 1685037: Ignore null repos when running using packagekit (csnyder@redhat.com)
+- 1666845: Always submit empty string for reset (csnyder@redhat.com)
+- 1666845: Always submit empty string for reset (csnyder@redhat.com)
+- 1666845: Do not set role or usage to the empty string (csnyder@redhat.com)
+- 1673973: Do not override sla on auto-attach (csnyder@redhat.com)
+- 1673973: Read syspurpose on register using cockpit (csnyder@redhat.com)
+- 1673934, 1673931: Two bug fixes of productid libdnf plugin; ENT-1165
+  (jhnidek@redhat.com)
+- 1655778: Increase RHEL major version detection reliability
+  (csnyder@redhat.com)
+- 1676982: Do not make duplicate sync calls on syspurpose show
+  (csnyder@redhat.com)
+- 1654531: Add default for proxy_scheme in rhsm.conf (csnyder@redhat.com)
+
 * Tue Apr 16 2019 Kevin Howell <khowell@redhat.com> 1.24.4-1
 - Bump release to simply build/release (khowell@redhat.com)
 
