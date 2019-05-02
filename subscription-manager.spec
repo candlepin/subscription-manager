@@ -138,7 +138,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.25.1
+Version: 1.25.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1165,6 +1165,136 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu May 02 2019 Christopher Snyder <csnyder@redhat.com> 1.25.3-1
+- 1701406: Do not build subman-rhsm with python2 on later versions of rhel
+  (csnyder@redhat.com)
+- cockpit plugin: Fix alignment and layout issues in register dialog
+  (anilsson@redhat.com)
+- 1660883: Better feedback for repo commands when not registered
+  (wpoteat@redhat.com)
+- 1657173: Install cron service properly on SLES; ENT-1250 (jhnidek@redhat.com)
+- 1698468: require python-librepo for rhel 7 (csnyder@redhat.com)
+- 1694107: Begin packaging syspurpose for python 2 systems (csnyder@redhat.com)
+- Fix subscription-manager-cockpit AppStream data (martin@piware.de)
+- 1698645: Ensure we use local syspurpose when there are network issues
+  (csnyder@redhat.com)
+- Fix broken AptRepoFile section function (pamp@atix.de)
+- 1696428: use enabled_metadata = 0 for disabled repositories
+  (jhnidek@redhat.com)
+- 1665022: Syspurpose client to have the same behavior as SubMan when in
+  conflict with server (wpoteat@redhat.com)
+- 1637090: Do not send Host header twice, when m2crypto is used; ENT-1100
+  (jhnidek@redhat.com)
+- 1681171: Install only one prod cert, when RPM is available in more repos.
+  (jhnidek@redhat.com)
+- 1591315: Fewer warning messages when golden ticket is used; ENT-671
+  (jhnidek@redhat.com)
+- Make reading of productdb more robust and reliable. (jhnidek@redhat.com)
+- Correct SLES version detection conditional (awood@redhat.com)
+- Remove Python 2 subpackage from Fedora 30+ (awood@redhat.com)
+- Remove obsolete scriptlets in more recent distributions. (awood@redhat.com)
+- Use different completion directory for SLES 11 (awood@redhat.com)
+- 1520383: Use more appropriate log levels instead of info (wpoteat@redhat.com)
+- 1669994: Use on_date on syspurpose status if specified (nmoumoul@redhat.com)
+- 1621275: Less communication with candlepin server from sub-man plugin;
+  ENT-923 (jhnidek@redhat.com)
+- Allow subman yum plugin to disable all system repo (suttner@atix.de)
+- 1657171: Bug fix of .spec file specific for SuSE; ENT-1056
+  (jhnidek@redhat.com)
+- Restore bug fix of product-id lost during solving merge conflict.
+  (jhnidek@redhat.com)
+- Refactoring of libdnf productid plugin. (jhnidek@redhat.com)
+- 1591704: Handle disabled status when golden ticket is in play
+  (wpoteat@redhat.com)
+- 1685037: Ignore null repos when running using packagekit (csnyder@redhat.com)
+- 1666845: Always submit empty string for reset (csnyder@redhat.com)
+- 1666845: Do not set role or usage to the empty string (csnyder@redhat.com)
+- 1673973: Do not override sla on auto-attach (csnyder@redhat.com)
+- 1673934, 1673931: Two bug fixes of productid libdnf plugin; ENT-1165
+  (jhnidek@redhat.com)
+- 1673973: Read syspurpose on register using cockpit (csnyder@redhat.com)
+- 1655778: Increase RHEL major version detection reliability
+  (csnyder@redhat.com)
+- 1668152: Remove the Select SLA screen from initial-setup
+  (nmoumoul@redhat.com)
+- 1676982: Do not make duplicate sync calls on syspurpose show
+  (csnyder@redhat.com)
+- 1654531: Add default for proxy_scheme in rhsm.conf (csnyder@redhat.com)
+- syspurpose bash-completion file path is now correct (p.seiler@linuxmail.org)
+- spec file used wrong macro. %%{_datadir} is the macro for the correct
+  filesystem path (p.seiler@linuxmail.org)
+- changed destination path of bash-completion files to fit corrected path from
+  commit 3a5263e55 (p.seiler@linuxmail.org)
+- correct destination path for bash completion files "/etc/bash_completion.d/"
+  is used for user deployed files Check output from rpm -ql bash-completion for
+  more details (p.seiler@linuxmail.org)
+- allow offline repo management (code@james.cassell.me)
+
+* Thu May 02 2019 Christopher Snyder <csnyder@redhat.com>
+- 1701406: Do not build subman-rhsm with python2 on later versions of rhel
+  (csnyder@redhat.com)
+- cockpit plugin: Fix alignment and layout issues in register dialog
+  (anilsson@redhat.com)
+- 1660883: Better feedback for repo commands when not registered
+  (wpoteat@redhat.com)
+- 1657173: Install cron service properly on SLES; ENT-1250 (jhnidek@redhat.com)
+- 1698468: require python-librepo for rhel 7 (csnyder@redhat.com)
+- 1694107: Begin packaging syspurpose for python 2 systems (csnyder@redhat.com)
+- Fix subscription-manager-cockpit AppStream data (martin@piware.de)
+- 1698645: Ensure we use local syspurpose when there are network issues
+  (csnyder@redhat.com)
+- Fix broken AptRepoFile section function (pamp@atix.de)
+- 1696428: use enabled_metadata = 0 for disabled repositories
+  (jhnidek@redhat.com)
+- 1665022: Syspurpose client to have the same behavior as SubMan when in
+  conflict with server (wpoteat@redhat.com)
+- 1637090: Do not send Host header twice, when m2crypto is used; ENT-1100
+  (jhnidek@redhat.com)
+- 1681171: Install only one prod cert, when RPM is available in more repos.
+  (jhnidek@redhat.com)
+- 1591315: Fewer warning messages when golden ticket is used; ENT-671
+  (jhnidek@redhat.com)
+- Make reading of productdb more robust and reliable. (jhnidek@redhat.com)
+- Correct SLES version detection conditional (awood@redhat.com)
+- Remove Python 2 subpackage from Fedora 30+ (awood@redhat.com)
+- Remove obsolete scriptlets in more recent distributions. (awood@redhat.com)
+- Use different completion directory for SLES 11 (awood@redhat.com)
+- 1520383: Use more appropriate log levels instead of info (wpoteat@redhat.com)
+- 1669994: Use on_date on syspurpose status if specified (nmoumoul@redhat.com)
+- 1621275: Less communication with candlepin server from sub-man plugin;
+  ENT-923 (jhnidek@redhat.com)
+- Allow subman yum plugin to disable all system repo (suttner@atix.de)
+- 1657171: Bug fix of .spec file specific for SuSE; ENT-1056
+  (jhnidek@redhat.com)
+- Restore bug fix of product-id lost during solving merge conflict.
+  (jhnidek@redhat.com)
+- Refactoring of libdnf productid plugin. (jhnidek@redhat.com)
+- 1591704: Handle disabled status when golden ticket is in play
+  (wpoteat@redhat.com)
+- 1685037: Ignore null repos when running using packagekit (csnyder@redhat.com)
+- 1666845: Always submit empty string for reset (csnyder@redhat.com)
+- 1666845: Do not set role or usage to the empty string (csnyder@redhat.com)
+- 1673973: Do not override sla on auto-attach (csnyder@redhat.com)
+- 1673934, 1673931: Two bug fixes of productid libdnf plugin; ENT-1165
+  (jhnidek@redhat.com)
+- 1673973: Read syspurpose on register using cockpit (csnyder@redhat.com)
+- 1655778: Increase RHEL major version detection reliability
+  (csnyder@redhat.com)
+- 1668152: Remove the Select SLA screen from initial-setup
+  (nmoumoul@redhat.com)
+- 1676982: Do not make duplicate sync calls on syspurpose show
+  (csnyder@redhat.com)
+- 1654531: Add default for proxy_scheme in rhsm.conf (csnyder@redhat.com)
+- syspurpose bash-completion file path is now correct (p.seiler@linuxmail.org)
+- spec file used wrong macro. %%{_datadir} is the macro for the correct
+  filesystem path (p.seiler@linuxmail.org)
+- changed destination path of bash-completion files to fit corrected path from
+  commit 3a5263e55 (p.seiler@linuxmail.org)
+- correct destination path for bash completion files "/etc/bash_completion.d/"
+  is used for user deployed files Check output from rpm -ql bash-completion for
+  more details (p.seiler@linuxmail.org)
+- allow offline repo management (code@james.cassell.me)
+
 * Wed Feb 13 2019 Christopher Snyder <csnyder@redhat.com> 1.25.1-1
 - 1654531: Add proxy_scheme to rhsm.conf (csnyder@redhat.com)
 - 1665409: Update syspurpose status in cockpit addon (nmoumoul@redhat.com)
