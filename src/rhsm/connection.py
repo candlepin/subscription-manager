@@ -951,6 +951,14 @@ class UEPConnection(object):
 
         return resource_name in self.resources
 
+    def get_supported_resources(self):
+        """
+        Get the list (dictionary) of supported resources
+        :return: dictionary of supported resources
+        """
+        self._load_supported_resources()
+        return self.resources
+
     def _load_manager_capabilities(self):
         """
         Loads manager capabilities by doing a GET on the status
