@@ -138,7 +138,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.25.3
+Version: 1.25.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1165,6 +1165,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon May 06 2019 Christopher Snyder <csnyder@redhat.com> 1.25.4-1
+- Do another tag for the benefit of downstream
+
 * Thu May 02 2019 Christopher Snyder <csnyder@redhat.com> 1.25.3-1
 - 1701406: Do not build subman-rhsm with python2 on later versions of rhel
   (csnyder@redhat.com)
