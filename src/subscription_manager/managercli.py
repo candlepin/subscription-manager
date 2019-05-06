@@ -1282,7 +1282,7 @@ class RegisterCommand(UserPassCommand):
             old_uuid = self.identity.uuid
 
             print(_("Unregistering from: %s:%s%s") %
-                 (conf["server"]["hostname"], conf["server"]["port"], conf["server"]["prefix"]))
+                  (conf["server"]["hostname"], conf["server"]["port"], conf["server"]["prefix"]))
             try:
                 unregister.UnregisterService(self.cp).unregister()
                 self.entitlement_dir.__init__()
