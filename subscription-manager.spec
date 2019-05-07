@@ -138,7 +138,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.25.4
+Version: 1.25.5
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1165,6 +1165,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue May 07 2019 Christopher Snyder <csnyder@redhat.com> 1.25.5-1
+- 1700445: Do not disabled repos in redhat.repo; ENT-1261 (jhnidek@redhat.com)
+
 * Mon May 06 2019 Christopher Snyder <csnyder@redhat.com> 1.25.4-1
 - Do another tag for the benefit of downstream
 
