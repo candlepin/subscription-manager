@@ -421,6 +421,7 @@ class StubUEP(object):
         self.called_unbind_pool_id = []
         self.username = username
         self.password = password
+        self._resources = []
         self._capabilities = []
 
     def reset(self):
@@ -433,7 +434,10 @@ class StubUEP(object):
         return capability in self._capabilities
 
     def supports_resource(self, resource):
-        return False
+        return resource in self._resources
+
+    def get_supported_resources(self):
+        return self._resources
 
     def registerConsumer(self, name, type, facts, owner, environment, keys,
                          installed_products, content_tags):
