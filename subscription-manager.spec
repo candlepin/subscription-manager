@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.5
+Version: 1.24.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1142,6 +1142,11 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu May 09 2019 Christopher Snyder <csnyder@redhat.com> 1.24.6-1
+- 1700445: Do not disabled repos in redhat.repo; ENT-1261 (jhnidek@redhat.com)
+- 1591704: Handle disabled status when golden ticket is in play
+  (wpoteat@redhat.com)
+
 * Thu May 02 2019 Christopher Snyder <csnyder@redhat.com> 1.24.5-1
 - Do a new release
 
