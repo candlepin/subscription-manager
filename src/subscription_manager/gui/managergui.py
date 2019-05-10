@@ -41,8 +41,9 @@ from subscription_manager.entcertlib import EntCertActionInvoker
 from subscription_manager.repolib import YumPluginManager
 from rhsmlib.facts.hwprobe import ClassicCheck
 from rhsmlib.services import unregister
-from subscription_manager.utils import get_client_versions, get_server_versions, parse_baseurl_info, restart_virt_who
-from subscription_manager.utils import print_error
+from subscription_manager.utils import get_client_versions, get_server_versions, parse_baseurl_info, restart_virt_who, print_error
+
+from rhsm import utils as rhsm_utils
 
 from subscription_manager.gui import factsgui
 from subscription_manager.gui import messageWindow
@@ -98,7 +99,7 @@ class Backend(object):
     the UEP connection it contains can be modified/recreated and all
     components will have the updated connection.
 
-    This also serves as a common wrapper for certifcate directories and methods
+    This also serves as a common wrapper for certificate directories and methods
     to monitor those directories for changes.
     """
 
@@ -207,7 +208,16 @@ class MainWindow(widgets.SubmanBaseWidget):
         self.backend = backend or Backend()
         cp = self.backend.cp_provider.get_consumer_auth_cp()
 
-        if proxy_server:
+        # allow specifying no_proxy via api or config
+        no_proxy = rhsm_cfg.get('server', 'no_proxy')
+        if no_proxy:
+            os.environ['no_proxy'] = no_proxy
+
+        rhsm_utils.fix_no_proxy()
+        log.debug('Environment variable NO_PROXY=%s will be used' % no_proxy)
+
+        # Don't check the proxy server if the hostname we aim to connect to is covered by no_proxy
+        if proxy_server and not urllib.request.proxy_bypass(rhsm_cfg.get('server', 'hostname')):
             if not utils.test_proxy_reachability(proxy_server, proxy_port):
                 show_proxy_error_dialog()
                 return

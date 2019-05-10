@@ -246,27 +246,6 @@ def _encode_auth(username, password):
     return 'Basic %s' % encoded
 
 
-def _fix_no_proxy():
-    """
-    This fixes no_proxy/NO_PROXY environment to not include leading
-    asterisk, because there is some imperfection in proxy_bypass_environment.
-    """
-
-    # This fixes BZ: 1443164, because proxy_bypass_environment() from urllib does
-    # not support no_proxy with items containing asterisk (e.g.: *.redhat.com)
-
-    no_proxy = os.environ.get('no_proxy') or os.environ.get('NO_PROXY')
-    if no_proxy is not None:
-        if no_proxy != '*':
-            # Remove all leading white spaces and asterisks from items of no_proxy
-            # except item containing only "*" (urllib supports alone asterisk).
-            no_proxy = ','.join([item.lstrip(' *') for item in no_proxy.split(',')])
-            # Save no_proxy back to 'no_proxy' and 'NO_PROXY'
-            os.environ['no_proxy'] = no_proxy
-            os.environ['NO_PROXY'] = no_proxy
-        log.debug('Environment variable NO_PROXY=%s will be used' % no_proxy)
-
-
 # FIXME: this is terrible, we need to refactor
 # Restlib to be Restlib based on a https client class
 class ContentConnection(object):
@@ -297,7 +276,8 @@ class ContentConnection(object):
         if no_proxy_override:
             os.environ['no_proxy'] = no_proxy_override
 
-        _fix_no_proxy()
+        utils.fix_no_proxy()
+        log.debug('Environment variable NO_PROXY=%s will be used' % no_proxy_override)
 
         # honor no_proxy environment variable
         if proxy_bypass(self.host):
@@ -824,7 +804,8 @@ class UEPConnection(object):
         if no_proxy_override:
             os.environ['no_proxy'] = no_proxy_override
 
-        _fix_no_proxy()
+        utils.fix_no_proxy()
+        log.debug('Environment variable NO_PROXY=%s will be used' % no_proxy_override)
 
         # honor no_proxy environment variable
         if proxy_bypass(self.host):
