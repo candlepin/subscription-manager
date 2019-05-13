@@ -278,6 +278,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                         for product in cert.products]
 
         reasons = []
+        self.backend.cs.load()
         if self.backend.cs.are_reasons_supported():
             reasons = self.backend.cs.reasons.get_subscription_reasons(cert.subject['CN'])
             if not reasons:
