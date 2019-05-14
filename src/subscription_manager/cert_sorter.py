@@ -357,7 +357,8 @@ class CertSorter(ComplianceManager):
                 pass
 
     def force_cert_check(self):
-        self.cert_monitor.update()
+        if self.cert_monitor.update():
+            self.notify()
 
     def notify(self):
         for callback in copy(self.callbacks):
