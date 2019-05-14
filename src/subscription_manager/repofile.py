@@ -162,6 +162,11 @@ class Repo(dict):
         if proxy_scheme.endswith("://"):
             proxy_scheme = proxy_scheme[:-3]
 
+        # Proxy scheme can be empty: 1704662
+        if proxy_scheme == "":
+            defaults = conf.defaults()
+            proxy_scheme = defaults.get('proxy_scheme', 'http')
+
         # Worth passing in proxy config info to from_ent_cert_content()?
         # That would decouple Repo some
         proxy_host = conf['server']['proxy_hostname']
