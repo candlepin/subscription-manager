@@ -30,6 +30,7 @@ import time
 import socket
 
 import rhsm.config as config
+from rhsm import connection
 
 from six.moves import urllib
 
@@ -217,9 +218,9 @@ class MainWindow(widgets.SubmanBaseWidget):
                 # This result will be used for getting version of Candlepin server.
                 # See self.log_server_version.
                 cp.supports_resource("status")
-            except socket.error as err:
+            except (socket.error, connection.ProxyException) as err:
                 # See https://tools.ietf.org/html/rfc7235#section-4.3
-                if "407 Proxy Authentication Required" in err.message:
+                if "407 Proxy Authentication Required" in str(err.message):
                     show_proxy_error_dialog(proxy_auth_required=True)
                     return
 

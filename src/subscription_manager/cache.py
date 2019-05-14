@@ -231,8 +231,7 @@ class StatusCache(CacheManager):
         # all of the abover are subclasses of ConnectionException that
         # get handled first
         except (connection.ConnectionException, connection.RateLimitExceededException,
-                socket.error) as ex:
-
+                socket.error, connection.ProxyException) as ex:
             log.error(ex)
             self.last_error = ex
             if not self._cache_exists():
