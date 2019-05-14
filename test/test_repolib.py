@@ -130,6 +130,13 @@ proxy_hostname = fake.server.com
 proxy_port = 3129
 """
 
+PROXY_EMPTY_PROTOCOL = """
+[server]
+proxy_hostname = fake.server.com
+proxy_port = 3129
+proxy_scheme =
+"""
+
 PROXY_HTTP_PROTOCOL = """
 [server]
 proxy_hostname = fake.server.com
@@ -195,6 +202,12 @@ class RepoTests(unittest.TestCase):
 
     @patch.object(repofile, 'conf', ConfigFromString(config_string=PROXY_NO_PROTOCOL))
     def test_http_by_default(self):
+        repo = Repo('testrepo')
+        r = Repo._set_proxy_info(repo)
+        self.assertEqual(r['proxy'], "http://fake.server.com:3129")
+
+    @patch.object(repofile, 'conf', ConfigFromString(config_string=PROXY_EMPTY_PROTOCOL))
+    def test_http_by_empty(self):
         repo = Repo('testrepo')
         r = Repo._set_proxy_info(repo)
         self.assertEqual(r['proxy'], "http://fake.server.com:3129")
