@@ -17,6 +17,7 @@ from __future__ import print_function, division, absolute_import
 
 import os
 import re
+import sys
 
 import six.moves.urllib.parse
 
@@ -274,3 +275,19 @@ def fix_no_proxy():
             # Save no_proxy back to 'no_proxy' and 'NO_PROXY'
             os.environ['no_proxy'] = no_proxy
             os.environ['NO_PROXY'] = no_proxy
+
+
+def suppress_output(func):
+    def wrapper(*args, **kwargs):
+        try:
+            devnull = open(os.devnull, 'w')
+            stdout = sys.stdout
+            stderr = sys.stderr
+            sys.stdout = devnull
+            sys.stderr = devnull
+            return func(*args, **kwargs)
+        finally:
+            sys.stdout = stdout
+            sys.stderr = stderr
+            devnull.close()
+    return wrapper
