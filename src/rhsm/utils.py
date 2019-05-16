@@ -17,6 +17,7 @@ from __future__ import print_function, division, absolute_import
 
 import os
 import re
+import sys
 
 import six.moves.urllib.parse
 
@@ -254,3 +255,39 @@ def cmd_name(argv):
         cmd_name_string = "initial-setup"
 
     return cmd_name_string
+
+
+def fix_no_proxy():
+    """
+    This fixes no_proxy/NO_PROXY environment to not include leading
+    asterisk, because there is some imperfection in proxy_bypass_environment.
+    """
+
+    # This fixes BZ: 1443164, because proxy_bypass_environment() from urllib does
+    # not support no_proxy with items containing asterisk (e.g.: *.redhat.com)
+
+    no_proxy = os.environ.get('no_proxy') or os.environ.get('NO_PROXY')
+    if no_proxy is not None:
+        if no_proxy != '*':
+            # Remove all leading white spaces and asterisks from items of no_proxy
+            # except item containing only "*" (urllib supports alone asterisk).
+            no_proxy = ','.join([item.lstrip(' *') for item in no_proxy.split(',')])
+            # Save no_proxy back to 'no_proxy' and 'NO_PROXY'
+            os.environ['no_proxy'] = no_proxy
+            os.environ['NO_PROXY'] = no_proxy
+
+
+def suppress_output(func):
+    def wrapper(*args, **kwargs):
+        try:
+            devnull = open(os.devnull, 'w')
+            stdout = sys.stdout
+            stderr = sys.stderr
+            sys.stdout = devnull
+            sys.stderr = devnull
+            return func(*args, **kwargs)
+        finally:
+            sys.stdout = stdout
+            sys.stderr = stderr
+            devnull.close()
+    return wrapper
