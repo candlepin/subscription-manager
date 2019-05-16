@@ -563,7 +563,7 @@ class Key(object):
         f.write(self.content)
         self.path = pem_path
         f.close()
-        os.chmod(pem_path, 0o600)
+        os.chmod(pem_path, 0o644)
         return self
 
     def delete(self):
