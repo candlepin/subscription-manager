@@ -100,85 +100,46 @@ When plugin is compiled from source code, then you can install plugin to the sys
 Testing of product-id plugin
 ----------------------------
 
-You will need to install following package on your VM running Fedora:
-
-    $ sudo dnf install -y createrepo
-
-Then you will need to create some RPM package. You can create simple
-RPM package following steps in this tutorial:
-
-https://fedoraproject.org/wiki/How_to_create_a_GNU_Hello_RPM_package
-
-    $ sudo createrepo /share/Fedora/28/local/x86_64/
-
-When the RPM file `hello-2.10-1.x86_64.rpm` is created, then copy this
-file to directory: `/share/Fedora/28/local/x86_64/RPMS/`.
-
-You will need to get some product certificate from RHEL system. It can be file
-`/etc/pki/product-default/69.pem`. Copy this file to your home directory to
-the repository.
-
-You need to get SHA 256 checksum of this file:
-
-    $ sha256sum 69.pem
-    a900c579e05771523d0d5b8cabc68d6fd1009b5b11d78cfe64471932df957b62
-
-You will have to created gzipped version of product certificate
-
-    $ gzip 69.pem
-
-Then you will have to compute SHA 256 checksum of compressed product
-certificate:
-
-    $ sha256sum 69.pem.gz
-    6b69794e1a028d437e351f1d852ea9f539d6be175907a43d7e4f35b24288367d
-
-You can copy compressed product certificate to repository now:
-
-    $ cp 69.pem.gz /share/Fedora/28/local/x86_64/repodata/6b69794e1a028d437e351f1d852ea9f539d6be175907a43d7e4f35b24288367d-productid.gz
-
-> Note: in case you created your product certificate from different file,
-then checksum will be different. In this case modify following steps accordingly.
-
-Get timestamp of compressed product certificate:
-
-    $ stat -c %Y 6b69794e1a028d437e351f1d852ea9f539d6be175907a43d7e4f35b24288367d-productid.gz
-    1539956983
-
-Then you will have to add following text to XML file:
-`/share/Fedora/28/local/x86_64/repodata/repomd.xml`
-
-```xml
-<data type="productid">
-  <checksum type="sha256">6b69794e1a028d437e351f1d852ea9f539d6be175907a43d7e4f35b24288367d</checksum>
-  <open-checksum type="sha256">a900c579e05771523d0d5b8cabc68d6fd1009b5b11d78cfe64471932df957b62</open-checksum>
-  <location href="repodata/6b69794e1a028d437e351f1d852ea9f539d6be175907a43d7e4f35b24288367d-productid.gz"/>
-  <timestamp>1539956983</timestamp>
-  <size>1713</size>
-  <open-size>2167</open-size>
-</data>
-```
-
-You can create your repo file `/etc/yum.repos.d/local.repo`:
+You can test libdnf product-id plugin with candlepin server (e.g. in VM created
+using vagrant). You have to deploy candlepin server with option `-r` like this:
 
 ```
-[local]
-name=Fedora-$releasever - local packages for $basearch
-baseurl=http://localhost:8000/Fedora/$releasever/local/$basearch
-enabled=1
-gpgcheck=0
+[root@candlepin /vagrant] ./server/bin/deploy -gtar
 ```
 
-Final step is to start simple http server in `/share` directory:
+To use testing repository you have to do several steps:
 
-    $ sudo python -mSimpleHTTPServer
+* Register
 
-You can test libdnf product-id plugin:
+  ```
+  subscription-manager register --username admin --password admin --org admin
+  ```
 
-    sudo ./dnf/microdnf install hello
-    sudo ./dnf/microdnf remove hello
+* Attach some subscription:
+
+  ```
+  subscription-manager attach --pool <pool_id>
+  ```
+
+* Choose some repository from output of `subscription-manager repos --list` and
+  enable the repository:
+  
+  ```
+  subscription-manager repos --enable <repository_id>
+  ```
+
+* List RPMs in the repository:
+
+  ```
+  dnf list | grep <repository_id>
+  ```
+
+* Install RPM from given repository using `microdnf` or `pkcon`.
 
 You should see some messages in log file: `/var/log/rhsm/productid.log`
+
+> Note: It is important to test libdnf plugin in `microdnf` as well in `pkcon`,
+  because both applications triggers libdnf plugin hooks in different ways.
 
 Unit Tests
 ----------
