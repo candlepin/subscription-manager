@@ -18,6 +18,7 @@ import rpm
 import six
 import os.path
 from rhsm import ourjson as json
+from rhsm.utils import suppress_output
 from iniparse import SafeConfigParser
 
 try:
@@ -68,6 +69,7 @@ class ModulesProfile(object):
         return list(ret.values())
 
     @staticmethod
+    @suppress_output
     def __generate():
         module_list = []
         if dnf is not None and libdnf is not None:
@@ -154,6 +156,7 @@ class EnabledRepos(object):
         mappings = self._obtain_mappings()
         return repo_url.replace('$releasever', mappings['releasever']).replace('$basearch', mappings['basearch'])
 
+    @suppress_output
     def _obtain_mappings(self):
         """
         returns a hash with "basearch" and "releasever" set. This will try dnf first, and them yum if dnf is
