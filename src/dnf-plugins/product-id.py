@@ -80,11 +80,6 @@ log = logging.getLogger('rhsm-app.' + __name__)
 
 
 class DnfProductManager(ProductManager):
-
-    # Json file containing dictionary. Key is id of repository and
-    # value is list of available packages in corresponding repository
-    AVAIL_PKGS_CACHE_FILE = "/var/lib/rhsm/cache/package_repo_mapping.json"
-
     # Json file containing dictionary. Key is id of repository and
     # value is content of productid certificate of corresponding repository
     PRODUCTID_CACHE_FILE = "/var/lib/rhsm/cache/productid_repo_mapping.json"
@@ -203,53 +198,27 @@ class DnfProductManager(ProductManager):
             pass
         return None
 
-    def write_avail_pkgs_cache(self, avail_pkgs):
-        self.__write_cache_file(avail_pkgs, self.AVAIL_PKGS_CACHE_FILE)
-
-    def read_avail_pkgs_cache(self):
-        return self.__read_cache_file(self.AVAIL_PKGS_CACHE_FILE)
-
     def write_productid_cache(self, product_ids):
         self.__write_cache_file(product_ids, self.PRODUCTID_CACHE_FILE)
 
     def read_productid_cache(self):
         return self.__read_cache_file(self.PRODUCTID_CACHE_FILE)
 
-    # find the list of repo's that provide packages that
-    # are actually installed.
     def get_active(self):
-        """find repos that have packages installed"""
+        """
+        Find the list of repos that provide packages that are actually installed.
+        """
 
         # Create new sack to get fresh list of installed packages
         rpmdb_sack = dnf.sack._rpmdb_sack(self.base)
         q_installed = rpmdb_sack.query().installed()
-        if hasattr(q_installed, "_na_dict"):
-            # dnf 2.0
-            installed_na = q_installed._na_dict()
-        else:
-            # dnf 1.0
-            installed_na = q_installed.na_dict()
-
-        available = self.base.sack.query().available()
-
-        avail_pkgs = None
-        if len(available) == 0:
-            # When dnf does not provide list of available packages, then
-            # try to get this list from cache
-            avail_pkgs = self.read_avail_pkgs_cache()
-
-            # When there is no cache, then try to force get this list from repositories
-            if avail_pkgs is None:
-                available = self._get_available()
-
-        if avail_pkgs is None:
-            avail_pkgs = available.filter(name=[k[0] for k in list(installed_na.keys())])
-            avail_pkgs = [(p.name, p.arch, p.repoid) for p in avail_pkgs]
-            self.write_avail_pkgs_cache(avail_pkgs)
 
         active = set()
-        for p in avail_pkgs:
-            if (p[0], p[1]) in installed_na:
-                active.add(p[2])
+        for pkg in q_installed:
+            # FIXME: this protected attribute should be replaced with something from public DNF API in the future.
+            # The public API doesn't provide anything ATM.
+            repo_name = pkg._from_repo
+            # The repository name includes '@' at the beginning of the string
+            active.add(repo_name[1:])
 
         return active

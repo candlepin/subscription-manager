@@ -144,7 +144,7 @@ class TestYumProductManager(fixture.SubManFixture):
         prod_dir.certs.append(cert)
         inj.provide(inj.PROD_DIR, prod_dir)
 
-        self.mock_yb.pkgSack.returnPackages.return_value = []
+        self.mock_yb.rpmdb.returnPackages.return_value = []
         pm = yum_product_id.YumProductManager(self.mock_yb)
 
         active = pm.get_active()
@@ -152,39 +152,48 @@ class TestYumProductManager(fixture.SubManFixture):
 
     def test_get_active_with_active_packages(self):
         mock_package = mock.Mock(spec=yum.rpmsack.RPMInstalledPackage)
-        mock_package.repoid = 'this-is-not-a-rh-repo'
+        mock_package.repoid = 'installed'
+        mock_package.yumdb_info = mock.MagicMock()
+        mock_package.yumdb_info.from_repo = 'this-is-not-a-rh-repo'
         mock_package.name = 'some-cool-package'
         mock_package.arch = 'noarch'
 
-        self.mock_yb.pkgSack.returnPackages.return_value = [mock_package]
+        self.mock_yb.rpmdb.returnPackages.return_value = [mock_package]
 
         pm = yum_product_id.YumProductManager(self.mock_yb)
         active = pm.get_active()
-        self.assertEqual(set([mock_package.repoid]), active)
+        self.assertEqual({'this-is-not-a-rh-repo'}, active)
 
-    def test_get_active_without_active_packages(self):
+    def test_get_active_with_local_packages(self):
         mock_package = mock.Mock(spec=yum.rpmsack.RPMInstalledPackage)
-        mock_package.repoid = 'this-is-not-a-rh-repo'
+        mock_package.repoid = 'installed'
+        mock_package.yumdb_info = mock.MagicMock()
+        mock_package.yumdb_info.from_repo = '/some_local_file.rpm'
         mock_package.name = 'some-cool-package'
         mock_package.arch = 'noarch'
 
-        self.mock_yb.pkgSack.returnPackages.return_value = [mock_package]
-
-        # No packages in the enabled repo 'this-is-not-a-rh-repo' are installed.
-        self.mock_yb.rpmdb.searchNevra.return_value = False
+        self.mock_yb.rpmdb.returnPackages.return_value = [mock_package]
 
         pm = yum_product_id.YumProductManager(self.mock_yb)
         active = pm.get_active()
         self.assertEqual(set([]), active)
 
-    def test_get_active_with_active_packages_rhel57_installed_repo(self):
-        """rhel5.7 says every package is in 'installed' repo"""
+    def test_get_active_with_local_packages_old_behavior(self):
         mock_package = mock.Mock(spec=yum.rpmsack.RPMInstalledPackage)
         mock_package.repoid = 'installed'
+        # simulate that yumdb_info doesn't have attribute from_repo
+        mock_package.yumdb_info = mock.MagicMock(spec=object)
         mock_package.name = 'some-cool-package'
         mock_package.arch = 'noarch'
 
-        self.mock_yb.pkgSack.returnPackages.return_value = [mock_package]
+        self.mock_yb.rpmdb.returnPackages.return_value = [mock_package]
+
+        pm = yum_product_id.YumProductManager(self.mock_yb)
+        active = pm.get_active()
+        self.assertEqual(set([]), active)
+
+    def test_get_active_without_active_packages(self):
+        self.mock_yb.rpmdb.returnPackages.return_value = []
 
         pm = yum_product_id.YumProductManager(self.mock_yb)
         active = pm.get_active()

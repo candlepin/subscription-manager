@@ -32,7 +32,7 @@ plugin_type = (TYPE_CORE,)
 log = logging.getLogger('rhsm-app.' + __name__)
 
 
-def posttrans_hook(conduit):
+def postverifytrans_hook(conduit):
     """
     Update product ID certificates.
     """
@@ -96,54 +96,36 @@ class YumProductManager(ProductManager):
                       self.meta_data_errors)
         return lst
 
-    # find the list of repo's that provide packages that
-    # are actually installed.
     def get_active(self):
-        """find yum repos that have packages installed"""
+        """
+        find the list of repo's that provide packages that are actually installed
+        """
 
         active = set([])
 
-        # If a package is in a enabled and 'protected' repo
-
-        # This searches all the package sacks in this yum instances
-        # package sack, aka all the enabled repos
-        packages = self.base.pkgSack.returnPackages()
-
-        for p in packages:
-            repo = p.repoid
-            # if a pkg is in multiple repo's, this will consider
-            # all the repo's with the pkg "active".
-            # NOTE: if a package is from a disabled repo, we won't
-            # find it with this, because 'packages' won't include it.
-            db_pkg = self.base.rpmdb.searchNevra(name=p.name, arch=p.arch)
-            # that pkg is not actually installed
-            if not db_pkg:
-                # Effect of this is that a package that is only
-                # available from disabled repos, it is not considered
-                # an active package.
-                # If none of the packages from a repo are active, then
-                # the repo will not be considered active.
-                #
-                # Note however that packages that are installed, but
-                # from an disabled repo, but that are also available
-                # from another enabled repo will mark both repos as
-                # active. This is why add on repos that include base
-                # os packages almost never get marked for product cert
-                # deletion. Anything that could have possible come from
-                # that repo or be updated with makes the repo 'active'.
-                continue
-
-            # The pkg is installed, so the repo it was installed
-            # from is considered 'active'
-            # yum on 5.7 list everything as "installed" instead
-            # of the repo it came from
-            if repo in (None, "installed"):
-                continue
-            active.add(repo)
+        installed_packages = self.base.rpmdb.returnPackages()
+        for pkg in installed_packages:
+            try:
+                # pkg.repoid contains only "installed" string not valid origin
+                # of repository
+                repo = pkg.yumdb_info.from_repo
+            except AttributeError:
+                # When package is installed from local RPM and not from repository
+                # then yumdb_info doesn't have from_source attribute in some case
+                log.debug('Unable to get repo for package: %s' % pkg.name)
+            else:
+                # When repo name begins with '/', then it means that RPM was installed
+                # from local .rpm file. Thus productid certificate cannot exist for such
+                # origin of RPM
+                if repo[0] == '/':
+                    log.debug('Not adding local source of RPM: %s to set of active repos' % repo)
+                    continue
+                active.add(repo)
 
         return active
 
-    def check_version_tracks_repos(self):
+    @staticmethod
+    def check_version_tracks_repos():
         major, minor, micro = yum.__version_info__
         yum_version = RpmVersion(version="%s.%s.%s" % (major, minor, micro))
         needed_version = RpmVersion(version="3.2.28")
