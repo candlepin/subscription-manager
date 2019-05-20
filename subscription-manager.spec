@@ -138,7 +138,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.25.5
+Version: 1.25.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1165,6 +1165,22 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon May 20 2019 Christopher Snyder <csnyder@redhat.com> 1.25.6-1
+- 1710564: Make entitlement certs and keys world-readable (csnyder@redhat.com)
+- 1697563: Suppress output when collecting profile (khowell@redhat.com)
+- Updated documentation about libdnf (testing section). (jhnidek@redhat.com)
+- 1698443: Proper callbacks in cert sorter (wpoteat@redhat.com)
+- 1704662: Do not create corrupted redhat.repo (wrong scheme); ENT-1306
+  (jhnidek@redhat.com)
+- 1709728: Dialog with proxy conf didn't pop-up; ENT-1333 (jhnidek@redhat.com)
+- 1699345: Do not perform proxy check under some circumstances.
+  (awood@redhat.com)
+- 1703768: Display 'Status Details' correctly in GUI; ENT-1305
+  (jhnidek@redhat.com)
+- Update Fedora releases (wpoteat@redhat.com)
+- 1703054: Do not crash sub-man during unregistering; ENT-1288
+  (jhnidek@redhat.com)
+
 * Tue May 07 2019 Christopher Snyder <csnyder@redhat.com> 1.25.5-1
 - 1700445: Do not disabled repos in redhat.repo; ENT-1261 (jhnidek@redhat.com)
 
