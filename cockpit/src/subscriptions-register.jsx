@@ -24,6 +24,8 @@ var React = require("react");
 import Select from "./Select/Select.jsx";
 import '../lib/form-layout.less';
 
+import * as Insights from './insights.jsx';
+
 /* Subscriptions: registration dialog body
  * Expected props:
  *   - onChange  callback to signal when the data has changed
@@ -65,6 +67,26 @@ class PatternDialogBody extends React.Component {
                 </form>
             );
         }
+        let insights;
+        if (this.props.insights_available) {
+            insights = [
+                <label key="0" className="control-label" htmlFor="subscription-insights">
+                    {_("Insights")}
+                </label>,
+                <label key="1" className="checkbox-inline">
+                    <input id="subscription-insights" type="checkbox" checked={this.props.insights}
+                           onChange={value => this.props.onChange('insights', value)}/>
+                    <span>
+                    { Insights.arrfmt(_("Connect this system to $0."),
+                                      <a href="https://www.redhat.com/en/technologies/management/insights"
+                                         target="_blank" rel="noopener">
+                                        Red Hat Insights <i className="fa fa-external-link"/>
+                                      </a>) }
+                    </span>
+                </label>
+            ];
+        }
+
         const urlEntries = {
             'default': _("Default"),
             'custom': _("Custom URL"),
@@ -115,6 +137,7 @@ class PatternDialogBody extends React.Component {
                     <input id="subscription-register-org" className="form-control" type="text"
                            value={this.props.org}
                            onChange={value => this.props.onChange('org', value)}/>
+                    {insights}
                 </form>
             </div>
         );
