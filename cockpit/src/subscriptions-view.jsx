@@ -23,6 +23,7 @@ import createFragment from 'react-addons-create-fragment';
 import subscriptionsClient from './subscriptions-client';
 import { ListView, ListViewItem, ListViewIcon } from 'patternfly-react';
 import { Row, Col } from 'react-bootstrap';
+import { InsightsStatus } from './insights.jsx';
 
 let _ = cockpit.gettext;
 
@@ -175,6 +176,7 @@ class SubscriptionStatus extends React.Component {
 
         let label;
         let action;
+        let insights;
         let note;
         let syspurpose;
         let sla;
@@ -265,6 +267,8 @@ class SubscriptionStatus extends React.Component {
                     </div>
                 );
             }
+            if (this.props.insights_available)
+                insights = <InsightsStatus />;
         }
         return (
             <div className="subscription-status-ct">
@@ -272,6 +276,7 @@ class SubscriptionStatus extends React.Component {
                 {errorMessage}
                 {label}
                 {action}
+                {insights}
                 {syspurpose}
                 {note}
             </div>

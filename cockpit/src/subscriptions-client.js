@@ -61,6 +61,8 @@ client.syspurposeStatus = {
     status : null,
 };
 
+client.insightsAvailable = false;
+
 const RHSM_DEFAULTS = { // TODO get these from a d-bus service instead
     hostname: 'subscription.rhsm.redhat.com',
     port: '443',
@@ -609,9 +611,23 @@ client.toArray = obj => {
         }
     };
 
+const detectInsights = () => {
+    return cockpit.spawn([ "which", "insights-client" ], { err: "ignore" }).then(
+        () => client.insightsAvailable = true,
+        () => client.insightsAvailable = false);
+};
+
 const updateConfig = () => {
-        return client.readConfig().then(needRender);
+    return client.readConfig().then(detectInsights).then(needRender);
+};
+
+client.setError = (severity, message) => {
+    client.subscriptionStatus.error = {
+        severity: severity,
+        msg: message
     };
+    needRender();
+};
 
 client.init = () => {
     /* we want to get notified if subscription status of the system changes */
