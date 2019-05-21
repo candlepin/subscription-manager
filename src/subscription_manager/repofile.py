@@ -25,6 +25,7 @@ import logging
 import os
 import re
 import string
+import sys
 
 try:
     from debian.deb822 import Deb822
@@ -47,6 +48,9 @@ log = logging.getLogger(__name__)
 conf = config.Config(initConfig())
 
 repo_files = []
+
+# detect if running with yum, otherwise it's dnf
+HAS_YUM = "yum" in sys.modules
 
 
 class Repo(dict):
@@ -124,7 +128,7 @@ class Repo(dict):
         # Extract the variables from the url
         repo_parts = repo['baseurl'].split("/")
         repoid_vars = [part[1:] for part in repo_parts if part.startswith("$")]
-        if repoid_vars:
+        if HAS_YUM and repoid_vars:
             repo['ui_repoid_vars'] = " ".join(repoid_vars)
 
         # If no GPG key URL is specified, turn gpgcheck off:

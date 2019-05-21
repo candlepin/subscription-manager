@@ -46,6 +46,10 @@ from subscription_manager import repofile
 from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_TYPE
 
 
+# always pretend to run tests with yum in order to have 'ui_repoid_vars' available
+repofile.HAS_YUM = True
+
+
 class ConfigFromString(config.Config):
     def __init__(self, config_string):
         parser = RhsmConfigParserFromString(config_string)
