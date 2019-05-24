@@ -82,6 +82,7 @@ Vagrant.configure("2") do |config|
         domain.graphics_type = "spice"
         domain.video_type = "qxl"
         domain.memory = 1024
+        domain.qemu_use_session = false
       end
       host.vm.provider :virtualbox do |domain, override|
         override.vm.network "forwarded_port", guest: 9090, host: 9090  # allow VirtualBox to serve cockpit over 9090
@@ -140,6 +141,7 @@ Vagrant.configure("2") do |config|
     # dnf requires more memory on fedora 29
     host.vm.provider :libvirt do |domain|
       domain.memory = 1024
+      domain.qemu_use_session = false
     end
 
     host.vm.provision "ansible", run: "always" do |ansible|
@@ -168,6 +170,7 @@ Vagrant.configure("2") do |config|
       domain.memory = 2048
       domain.storage :file, :size => '20G', :type => 'qcow2'
       domain.boot boot_network
+      domain.qemu_use_session = false
     end
   end
 end
@@ -184,6 +187,9 @@ Vagrant.configure("2") do |config|
     config.hostmanager.manage_host = true
     config.hostmanager.manage_guest = true
     config.hostmanager.ignore_private_ip = true
+  end
+  config.vm.provider :libvirt do |domain|
+    domain.qemu_use_session = false
   end
   config.vm.provision "ansible", run: "always" do |ansible|
     ansible.playbook = "vagrant/vagrant_proxy_server.yml"
