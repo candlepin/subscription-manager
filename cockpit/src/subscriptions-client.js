@@ -18,6 +18,8 @@
  */
 
 const cockpit = require("cockpit");
+const service = require("../lib/service.js");
+
 const _ = cockpit.gettext;
 
 function createProxy(name) {
@@ -45,6 +47,7 @@ client.subscriptionStatus = {
     status: undefined,
     products: [],
     error: undefined,
+    expect_disconnect: false
 };
 
 client.config = {
@@ -60,6 +63,14 @@ client.syspurposeStatus = {
     },
     status : null,
 };
+
+const rhsm_service = service.proxy("rhsm");
+
+function restart_rhsm() {
+    console.debug('restarting rhsm');
+    client.expect_disconnect = true;
+    return rhsm_service.restart().always(() => { client.expect_disconnect = false; });
+}
 
 const RHSM_DEFAULTS = { // TODO get these from a d-bus service instead
     hostname: 'subscription.rhsm.redhat.com',
@@ -145,7 +156,8 @@ function getSubscriptionDetails() {
             client.subscriptionStatus.products = parseProducts(result);
         })
         .catch(ex => {
-            client.subscriptionStatus.error = ex;
+            if (!(ex.name == "org.freedesktop.DBus.Error.NoReply" && client.expect_disconnect))
+                client.subscriptionStatus.error = ex;
         })
         .then(() => {
             gettingDetails = false;
@@ -165,6 +177,16 @@ function dbus_str(value) {
 }
 
 client.closeRegisterDialog = false;
+
+function async_seq(funcs) {
+    function step(i) {
+        if (i < funcs.length)
+            return cockpit.when(funcs[i](), () => { return step(i+1); });
+        else
+            return cockpit.when();
+    }
+    return step(0);
+}
 
 /* Overall flow is as follows:
 
@@ -346,48 +368,55 @@ client.registerSystem = subscriptionDetails => {
                         'proxy_password': 'proxy_password',
                     };
                     // for (let key in dict) {
-                    Object.keys(dict).forEach(function (key) {
-                        // Is config option in dialog different from  rhsm.conf
-                        if (client.config[key] !== connection_options[dict[key]].v) {
-                            console.debug('saving: server.' + key, connection_options[dict[key]]);
-                            configService.Set('server.' + key, connection_options[dict[key]], userLang)
-                                .catch(error => {
-                                    console.error('unable to save server.' + key, error);
-                                });
-                        }
+                    let any_config_changed = false;
+                    return async_seq(Object.keys(dict).map(function (key) {
+                        return () => {
+                            // Is config option in dialog different from  rhsm.conf
+                            if (client.config[key] !== connection_options[dict[key]].v) {
+                                any_config_changed = true;
+                                console.debug('saving: server.' + key, connection_options[dict[key]]);
+                                return configService.Set('server.' + key, connection_options[dict[key]], userLang)
+                                    .catch(error => {
+                                        console.error('unable to save server.' + key, error);
+                                    });
+                            }
+                        };
+                    })).then(() => {
+                        return (any_config_changed ? restart_rhsm() : cockpit.when())
+                            .then(() => {
+                                // When system is registered and config options are saved,
+                                // then we can try to auto-attach
+                                console.debug('auto-attaching');
+                                if (connection_options.proxy_hostname.v) {
+                                    let proxy_options = {};
+                                    proxy_options.proxy_hostname = connection_options.proxy_hostname;
+                                    if (connection_options.proxy_port.v) {
+                                        // FIXME: change D-Bus implementation to be able to use string too
+                                        proxy_options.proxy_port = {
+                                            't': 'i',
+                                            'v': Number(connection_options.proxy_port.v)
+                                        };
+                                    }
+                                    if (connection_options.proxy_user.v) {
+                                        proxy_options.proxy_user = connection_options.proxy_user;
+                                    }
+                                    if (connection_options.proxy_password.v) {
+                                        proxy_options.proxy_password = connection_options.proxy_password;
+                                    }
+                                    return attachService.AutoAttach('', proxy_options, userLang)
+                                        .catch(error => {
+                                            console.error('error during autoattach', error);
+                                            dfd.reject(parseErrorMessage(error));
+                                        });
+                                } else {
+                                    return attachService.AutoAttach('', {}, userLang)
+                                        .catch(error => {
+                                            console.error('error during autoattach', error);
+                                            dfd.reject(parseErrorMessage(error));
+                                        });
+                                }
+                            });
                     });
-
-                    // When system is registered and config options are saved,
-                    // then we can try to auto-attach
-                    console.debug('auto-attaching');
-                    if (connection_options.proxy_hostname.v) {
-                        let proxy_options = {};
-                        proxy_options.proxy_hostname = connection_options.proxy_hostname;
-                        if (connection_options.proxy_port.v) {
-                            // FIXME: change D-Bus implementation to be able to use string too
-                            proxy_options.proxy_port = {
-                                't': 'i',
-                                'v': Number(connection_options.proxy_port.v)
-                            };
-                        }
-                        if (connection_options.proxy_user.v) {
-                            proxy_options.proxy_user = connection_options.proxy_user;
-                        }
-                        if (connection_options.proxy_password.v) {
-                            proxy_options.proxy_password = connection_options.proxy_password;
-                        }
-                        return attachService.AutoAttach('', proxy_options, userLang)
-                            .catch(error => {
-                                console.error('error during autoattach', error);
-                                dfd.reject(parseErrorMessage(error));
-                            });
-                    } else {
-                        return attachService.AutoAttach('', {}, userLang)
-                            .catch(error => {
-                                console.error('error during autoattach', error);
-                                dfd.reject(parseErrorMessage(error));
-                            });
-                    }
                 }
             })
             .catch(error => {
