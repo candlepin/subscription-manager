@@ -28,7 +28,7 @@ from subscription_manager import model
 from subscription_manager.model import ent_cert
 from subscription_manager.repofile import Repo, manage_repos_enabled, get_repo_file_classes
 from subscription_manager.repofile import YumRepoFile
-	from subscription_manager.capabilities import ServerCache
+from subscription_manager.capabilities import ServerCache
 
 from rhsm.config import initConfig, in_container
 from rhsm import connection
