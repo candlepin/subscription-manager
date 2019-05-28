@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.6
+Version: 1.24.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1150,6 +1150,34 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue May 28 2019 Christopher Snyder <csnyder@redhat.com> 1.24.7-1
+- 1704662: Do not create corrupted redhat.repo (wrong scheme); ENT-1306
+  (jhnidek@redhat.com)
+- 1703768: Display 'Status Details' correctly in GUI; ENT-1305
+  (jhnidek@redhat.com)
+- 1699345: Do not perform proxy check under some circumstances.
+  (awood@redhat.com)
+- 1698645: Ensure we use local syspurpose when there are network issues
+  (csnyder@redhat.com)
+- 1698443: Proper callbacks in cert sorter (wpoteat@redhat.com)
+- 1697563: Suppress output when collecting profile (khowell@redhat.com)
+- 1696428: use enabled_metadata = 0 for disabled repositories
+  (jhnidek@redhat.com)
+- 1669994: Use on_date on syspurpose status if specified (nmoumoul@redhat.com)
+- 1668152: Remove the Select SLA screen from initial-setup
+  (nmoumoul@redhat.com)
+- 1660883: Better feedback for repo commands when not registered
+  (wpoteat@redhat.com)
+- 1657173: Install cron service properly on SLES; ENT-1250 (jhnidek@redhat.com)
+- 1657171: Bug fix of .spec file specific for SuSE; ENT-1056
+  (jhnidek@redhat.com)
+- 1637090: Do not send Host header twice, when m2crypto is used; ENT-1100
+  (jhnidek@redhat.com)
+- 1621275: Less communication with candlepin server from sub-man plugin;
+  ENT-923 (jhnidek@redhat.com)
+- 1708722: Only show syspurpose usage when necessary (csnyder@redhat.com)
+- 1688221: Update translations (csnyder@redhat.com)
+
 * Thu May 09 2019 Christopher Snyder <csnyder@redhat.com> 1.24.6-1
 - 1700445: Do not disabled repos in redhat.repo; ENT-1261 (jhnidek@redhat.com)
 - 1591704: Handle disabled status when golden ticket is in play
