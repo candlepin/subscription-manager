@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.7
+Version: 1.24.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1150,6 +1150,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue May 28 2019 Christopher Snyder <csnyder@redhat.com> 1.24.8-1
+- fix bad cherry-pick (removes uninitentional tab) (csnyder@redhat.com)
+
 * Tue May 28 2019 Christopher Snyder <csnyder@redhat.com> 1.24.7-1
 - 1704662: Do not create corrupted redhat.repo (wrong scheme); ENT-1306
   (jhnidek@redhat.com)
