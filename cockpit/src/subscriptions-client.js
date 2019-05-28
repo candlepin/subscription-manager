@@ -360,20 +360,20 @@ client.registerSystem = subscriptionDetails => {
                     // When system is registered and config options are saved,
                     // then we can try to auto-attach
                     console.debug('auto-attaching');
-                    if (connection_options.proxy_hostname) {
+                    if (connection_options.proxy_hostname.v) {
                         let proxy_options = {};
                         proxy_options.proxy_hostname = connection_options.proxy_hostname;
-                        if (connection_options.proxy_port) {
+                        if (connection_options.proxy_port.v) {
                             // FIXME: change D-Bus implementation to be able to use string too
                             proxy_options.proxy_port = {
                                 't': 'i',
                                 'v': Number(connection_options.proxy_port.v)
                             };
                         }
-                        if (connection_options.proxy_user) {
+                        if (connection_options.proxy_user.v) {
                             proxy_options.proxy_user = connection_options.proxy_user;
                         }
-                        if (connection_options.proxy_password) {
+                        if (connection_options.proxy_password.v) {
                             proxy_options.proxy_password = connection_options.proxy_password;
                         }
                         return attachService.AutoAttach('', proxy_options, userLang)
