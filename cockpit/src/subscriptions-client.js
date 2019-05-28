@@ -462,14 +462,14 @@ function requestSyspurposeUpdate() {
 
 /* get subscription summary */
 client.getSubscriptionStatus = function() {
-    this.dfd = cockpit.defer();
+    let dfd = cockpit.defer();
 
     safeDBusCall(entitlementService, () => {
         entitlementService.GetStatus('', userLang)
         .then(result => {
             const status = JSON.parse(result);
             client.subscriptionStatus.status = status.status;
-            this.dfd.resolve();
+            dfd.resolve();
             if (client.closeRegisterDialog) {
                 client.closeRegisterDialog = false;
             }
@@ -483,7 +483,7 @@ client.getSubscriptionStatus = function() {
             needRender();
         });
     });
-    return this.dfd.promise();
+    return dfd.promise();
 };
 
 client.getSyspurposeStatus = () => {
@@ -501,13 +501,13 @@ client.getSyspurposeStatus = () => {
 };
 
 client.getSyspurpose = function() {
-    this.dfd = cockpit.defer();
+    let dfd = cockpit.defer();
 
     safeDBusCall(syspurposeService, () => {
         syspurposeService.GetSyspurpose(userLang)
         .then(result => {
             client.syspurposeStatus.info = JSON.parse(result);
-            this.dfd.resolve();
+            dfd.resolve();
         })
         .catch(ex => {
             console.debug(ex);
@@ -516,7 +516,7 @@ client.getSyspurpose = function() {
         .then(needRender);
     });
 
-    return this.dfd.promise();
+    return dfd.promise();
 };
 
 client.readConfig = () => {
