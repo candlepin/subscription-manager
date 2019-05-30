@@ -16,6 +16,7 @@ from __future__ import print_function, division, absolute_import
 #
 
 import os
+import six
 
 from subscription_manager import injection as inj
 from subscription_manager.action_client import ProfileActionClient
@@ -30,6 +31,11 @@ from rhsm import config
 
 from dnfpluginscore import _, logger
 import dnf
+
+if six.PY3:
+    from configparser import ConfigParser
+else:
+    from ConfigParser import ConfigParser
 
 expired_warning = _("""
 *** WARNING ***
@@ -76,6 +82,29 @@ class SubscriptionManager(dnf.Plugin):
             self._warnExpired()
         except Exception as e:
             logger.error(str(e))
+
+    def config(self):
+        super(SubscriptionManager, self).config()
+        config_path = self.base.conf.pluginconfpath[0]
+
+        default_config_file = os.path.join(config_path, self.name + ".conf")
+
+        if os.path.isfile(default_config_file):
+            plugin_config = ConfigParser()
+            plugin_config.read(default_config_file)
+
+            if plugin_config.has_option('main', 'disable_system_repos'):
+                disable_system_repos = plugin_config.get('main', 'disable_system_repos')
+                if disable_system_repos:
+                    disable_count = 0
+                    for repo in self.base.repos.iter_enabled():
+                        if os.path.basename(repo.repofile) != 'redhat.repo':
+                            repo.disable()
+                            disable_count += 1
+                    print(_('subscription-manager plugin disabled %d system repositories with respect of configuration in /etc/dnf/plugins/subscription-manager.conf') % (
+                                     disable_count))
+        else:
+            logger.debug('Configuration file %s does not exist.' % default_config_file)
 
     def _update(self, cache_only):
         """ update entitlement certificates """
