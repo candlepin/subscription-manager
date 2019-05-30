@@ -651,6 +651,8 @@ class ProductManager(object):
         log.debug("Checking for product certs to remove. Active include: %s",
                   active)
 
+        log.debug('Temporary disabled repos: %s' % temp_disabled_repos)
+
         disabled_repos = self.find_disabled_repos()
 
         for cert in self.pdir.list():
@@ -682,31 +684,33 @@ class ProductManager(object):
                 # we could be very confused here, so do not
                 # delete anything. see bz #736424
                 if repo in self.meta_data_errors:
-                    log.debug("%s has meta-data errors.  Not deleting product cert %s.", repo, prod_hash)
+                    log.debug("%s has meta-data errors. Not deleting product cert %s.", repo, prod_hash)
                     delete_product_cert = False
+                    continue
+
+                # If product id maps to a repo that we know is disabled, don't delete it.
+                if repo in disabled_repos and repo in active:
+                    log.info("%s is disabled, but RPMs from this repo are installed. Not deleting product cert %s",
+                             repo, prod_hash)
+                    delete_product_cert = False
+                    continue
 
                 # do not delete a product cert if the repo[a] associated with it's prod_hash
                 # has packages installed.
                 if repo in active:
                     log.debug("%s is an active repo. Not deleting product cert %s", repo, prod_hash)
                     delete_product_cert = False
+                    continue
 
                 # If product id maps to a repo that we know is only temporarily
                 # disabled, don't delete it.
                 if repo in temp_disabled_repos:
                     log.warning("%s is disabled via yum cmdline. Not deleting product cert %s", repo, prod_hash)
                     delete_product_cert = False
-
-                # If product id maps to a repo that we know is disabled, don't delete it.
-                if repo in disabled_repos:
-                    log.info("%s is disabled. Not deleting product cert %s", repo, prod_hash)
-                    delete_product_cert = False
-
-                # is the repo we find here actually active? try harder to find active?
+                    continue
 
             # for this prod cert/hash, we know what repo[a] it's for, but nothing
             # appears to be installed from the repo[s]
-            #
             if delete_product_cert:
                 certs_to_delete.append((product, cert))
 
