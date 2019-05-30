@@ -25,6 +25,7 @@ import re
 import socket
 import sys
 
+from datetime import datetime, timedelta
 from rhsmlib.facts import cpuinfo
 from rhsmlib.facts import collector
 
@@ -106,6 +107,7 @@ class HardwareCollector(collector.FactsCollector):
             self.get_uname_info,
             self.get_release_info,
             self.get_mem_info,
+            self.get_last_boot,
             self.get_proc_cpuinfo,
             self.get_proc_stat,
             self.get_cpu_info,
@@ -218,6 +220,23 @@ class HardwareCollector(collector.FactsCollector):
         except Exception as e:
             log.warning("Error reading system memory information: %s", e)
         return meminfo
+
+    def get_last_boot(self):
+        last_boot = "unknown"
+
+        # Use a date for uptime instead of the actual uptime since that
+        # would force a refresh for every run. This was inspired by the
+        # spacewalk client at https://github.com/spacewalkproject/
+        # spacewalk/blob/master/client/rhel/rhn-client-tools/src/bin/rhn_check.py
+        try:
+            uptime = float(open("/proc/uptime", "r").read().split()[0])
+            uptime_delta = timedelta(seconds=uptime)
+            now = datetime.utcnow()
+            last_boot_date = now - uptime_delta
+            last_boot = last_boot_date.strftime("%Y-%m-%d %H:%M:%S")
+        except Exception as e:
+            log.warning("Error reading uptime information %s", e)
+        return {"last_boot": last_boot}
 
     def count_cpumask_entries(self, cpu, field):
         try:
