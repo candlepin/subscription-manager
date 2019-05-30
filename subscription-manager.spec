@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.8
+Version: 1.24.9
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1150,6 +1150,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu May 30 2019 Christopher Snyder <csnyder@redhat.com> 1.24.9-1
+- 1703607: Remove productid cert, when it is not needed; ENT-1300
+  (jhnidek@redhat.com)
+
 * Tue May 28 2019 Christopher Snyder <csnyder@redhat.com> 1.24.8-1
 - fix bad cherry-pick (removes uninitentional tab) (csnyder@redhat.com)
 
