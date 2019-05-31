@@ -1052,6 +1052,24 @@ class UEPConnection(object):
             res = self.conn.request_post(url, host_guest_mapping)
         return res
 
+    def hypervisorHeartbeat(self, owner, options=None):
+        """
+        Sends the reporter id to candlepin
+        to update the hypervisors it has previously reported.
+        This method can raise the following exception:
+            - RateLimitExceededException: This means that too many requests
+            have been made in the given time period.
+        """
+        # Return None early if the connected UEP does not support hypervisors_heartbeat or if there is no reporter_id provided.
+        if not self.has_capability("hypervisors_heartbeat") or not (options and options.reporter_id and len(options.reporter_id) > 0):
+            return
+
+        params = {}
+        params['reporter_id'] = options.reporter_id
+        query_params = urlencode(params)
+        url = "/hypervisors/%s/heartbeat?%s" % (owner, query_params)
+        return self.conn.request_put(url)
+
     def updateConsumerFacts(self, consumer_uuid, facts={}):
         """
         Update a consumers facts on candlepin server
