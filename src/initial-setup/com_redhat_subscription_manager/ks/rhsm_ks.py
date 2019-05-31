@@ -147,21 +147,35 @@ class RHSMAddonData(AddonData):
     def __str__(self):
         return "%%addon %s %s\n%s%%end\n" % (self.name, self.header_args, self.content)
 
-    def setup(self, storage, ksdata, instclass, payload):
+    def setup(self, *args, **kwargs):
         """Make the changes to the install system.
 
            This method is called before the installation
            is started and directly from spokes. It must be possible
            to call it multiple times without breaking the environment."""
+        # we use the signature we do because anaconda before commit
+        # 78fd1e82 passes (storage, ksdata, instClass, payload)
+        # but anaconda after 78fd1e82 passes only
+        # (storage, ksdata, payload). If this method did anything,
+        # we would have to figure out which args we got and handle
+        # them appropriately. However, it does nothing, so we don't
+        # have to bother with that.
         pass
 
-    def execute(self, storage, ksdata, instClass, users, payload):
+    def execute(self, *args, **kwargs):
 
         """Make the changes to the underlying system.
 
            This method is called only once in the post-install
            setup phase.
         """
+        # we use the signature we do because anaconda before commit
+        # 78fd1e82 passes (storage, ksdata, instClass, users, payload)
+        # but anaconda after 78fd1e82 passes only
+        # (storage, ksdata, users, payload). If this method did
+        # anything, we would have to figure out which args we got and
+        # handle them appropriately. However, it does nothing beyond
+        # logging a message, so we don't have to bother with that.
         log.debug("Read RHSM ks info, but non gui ks is currently not implemented.")
 
     def handle_header(self, lineno, args):
