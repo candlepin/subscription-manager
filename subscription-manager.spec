@@ -138,7 +138,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.25.7
+Version: 1.25.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1165,6 +1165,12 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Jun 03 2019 Christopher Snyder <csnyder@redhat.com> 1.25.8-1
+- Revert "1621275: Less communication with candlepin server from sub-man
+  plugin; ENT-923" (csnyder@redhat.com)
+- Revert "1700445: Do not disabled repos in redhat.repo; ENT-1261"
+  (cnsnyder@users.noreply.github.com)
+
 * Mon Jun 03 2019 Christopher Snyder <csnyder@redhat.com> 1.25.7-1
 - 1652549: Connection method for hypervisor heartbeat (wpoteat@redhat.com)
 - Report insights id as fact, when insights is installed; ENT-1356
