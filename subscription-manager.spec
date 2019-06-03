@@ -138,7 +138,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.25.6
+Version: 1.25.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1165,6 +1165,23 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Jun 03 2019 Christopher Snyder <csnyder@redhat.com> 1.25.7-1
+- 1652549: Connection method for hypervisor heartbeat (wpoteat@redhat.com)
+- Report insights id as fact, when insights is installed; ENT-1356
+  (jhnidek@redhat.com)
+- Anaconda addon: setup() and execute() no longer get instclass
+  (awilliam@redhat.com)
+- 1478892: Add in a last_boot fact for parity with spacewalk facts
+  (bryan.kearney@gmail.com)
+- 1703607: Remove productid cert, when it is not needed; ENT-1300
+  (jhnidek@redhat.com)
+- Bump tar from 2.2.1 to 2.2.2 in /cockpit
+  (dependabot[bot]@users.noreply.github.com)
+- 1713626: Option disable_system_repos didn't work with DNF; ENT-1350
+  (jhnidek@redhat.com)
+- Modify Vagrantfile to force qemu:///system (khowell@redhat.com)
+- 1702239: Fix traceback for syspurpose on rhel7; ENT-1286 (jhnidek@redhat.com)
+
 * Mon May 20 2019 Christopher Snyder <csnyder@redhat.com> 1.25.6-1
 - 1710564: Make entitlement certs and keys world-readable (csnyder@redhat.com)
 - 1697563: Suppress output when collecting profile (khowell@redhat.com)
