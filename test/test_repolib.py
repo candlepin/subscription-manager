@@ -85,9 +85,7 @@ class TestRepoActionInvoker(fixture.SubManFixture):
         inj.provide(inj.ENT_DIR, stub_ent_dir)
         inj.provide(inj.PROD_DIR, stub_prod_dir)
 
-    @patch('subscription_manager.repolib.ServerCache')
-    def test_is_managed(self, mock_server_cache):
-        mock_server_cache._write_cache_file = MagicMock()
+    def test_is_managed(self):
         self._stub_content()
         repo_action_invoker = RepoActionInvoker()
         repo_label = 'a_test_repo'
@@ -102,17 +100,13 @@ class TestRepoActionInvoker(fixture.SubManFixture):
         repo_file = repo_action_invoker.get_repo_file()
         self.assertFalse(repo_file is None)
 
-    @patch('subscription_manager.repolib.ServerCache')
-    def test_get_repos_empty_dirs(self, mock_server_cache):
-        mock_server_cache._write_cache_file = MagicMock()
+    def test_get_repos_empty_dirs(self):
         repo_action_invoker = RepoActionInvoker()
         repos = repo_action_invoker.get_repos()
         if repos:
             self.fail("get_repos() should have returned an empty set but did not.")
 
-    @patch('subscription_manager.repolib.ServerCache')
-    def test_get_repos(self, mock_server_cache):
-        mock_server_cache._write_cache_file = MagicMock()
+    def test_get_repos(self):
         self._stub_content(include_content_access=True)
         repo_action_invoker = RepoActionInvoker()
         repos = repo_action_invoker.get_repos()
@@ -297,13 +291,6 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         inj.provide(inj.ENT_DIR, ent_dir)
 
         repolib.ConsumerIdentity = StubConsumerIdentity
-        self.patcher = patch('subscription_manager.repolib.ServerCache')
-        self.mock_server_cache = self.patcher.start()
-        self.mock_server_cache._write_cache_file = MagicMock()
-
-    def tearDown(self):
-        super(RepoUpdateActionTests, self).tearDown()
-        self.patcher.stop()
 
     def _find_content(self, content_list, name):
         """
