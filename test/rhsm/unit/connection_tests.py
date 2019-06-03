@@ -36,6 +36,7 @@ from mock import Mock, patch
 from datetime import date
 from time import strftime, gmtime
 from rhsm import ourjson as json
+from collections import namedtuple
 
 
 class ConnectionTests(unittest.TestCase):
@@ -358,6 +359,31 @@ class ConnectionTests(unittest.TestCase):
         restlib.ca_dir = self.temp_ent_dir
         with self.assertRaises(BadCertificateException):
             restlib._load_ca_certificates(ssl.SSLContext(ssl.PROTOCOL_SSLv23))
+
+    def test_hypervisor_check_in_capability_and_reporter(self):
+            self.cp.conn = Mock()
+            self.cp.has_capability = Mock(return_value=True)
+            Options = namedtuple('Options', 'reporter_id')
+            options = Options('tester')
+            self.cp.hypervisorHeartbeat("owner", options=options)
+            self.cp.conn.request_put.assert_called_with(
+                    "/hypervisors/owner/heartbeat?reporter_id=tester")
+
+    def test_hypervisor_check_in_no_capability(self):
+            self.cp.conn = Mock()
+            self.cp.has_capability = Mock(return_value=False)
+            Options = namedtuple('Options', 'reporter_id')
+            options = Options('tester')
+            self.cp.hypervisorHeartbeat("owner", options=options)
+            self.cp.conn.request_put.assert_not_called
+
+    def test_hypervisor_check_in_no_reporter(self):
+            self.cp.conn = Mock()
+            self.cp.has_capability = Mock(return_value=True)
+            Options = namedtuple('Options', 'reporter_id')
+            options = Options('')
+            self.cp.hypervisorHeartbeat("owner", options=options)
+            self.cp.conn.request_put.assert_not_called
 
 
 class RestlibValidateResponseTests(unittest.TestCase):
