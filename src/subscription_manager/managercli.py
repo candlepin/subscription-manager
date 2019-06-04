@@ -2907,7 +2907,15 @@ class StatusCommand(CliCommand):
 
         syspurpose_cache = inj.require(inj.SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE)
         syspurpose_cache.load_status(self.cp, self.identity.uuid, on_date)
-        print(_("System Purpose Status: %s\n") % syspurpose_cache.get_overall_status())
+        print(_("System Purpose Status: %s") % syspurpose_cache.get_overall_status())
+
+        syspurpose_status_code = syspurpose_cache.get_overall_status_code()
+        if syspurpose_status_code != 'matched':
+            reasons = syspurpose_cache.get_status_reasons()
+            if reasons is not None:
+                for reason in reasons:
+                    print("- %s" % reason)
+        print('')
 
         return result
 
