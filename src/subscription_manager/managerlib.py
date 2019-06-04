@@ -310,10 +310,13 @@ def get_available_entitlements(get_all=False, active_on=None, overlapping=False,
         'productName',
         'providedProducts',
         'productId',
+        'roles',
         'attributes',
         'pool_type',
         'service_level',
         'service_type',
+        'usage',
+        'addons',
         'suggested',
         'contractNumber',
         'management_enabled'
@@ -332,9 +335,15 @@ def get_available_entitlements(get_all=False, active_on=None, overlapping=False,
             pool['multi-entitlement'] = "No"
 
         support_attrs = pool_wrapper.get_product_attributes("support_level",
-                                                            "support_type")
+                                                            "support_type",
+                                                            "roles",
+                                                            "usage",
+                                                            "addons")
         pool['service_level'] = support_attrs['support_level']
         pool['service_type'] = support_attrs['support_type']
+        pool['roles'] = support_attrs['roles']
+        pool['usage'] = support_attrs['usage']
+        pool['addons'] = support_attrs['addons']
         pool['suggested'] = pool_wrapper.get_suggested_quantity()
         pool['pool_type'] = pool_wrapper.get_pool_type()
         pool['management_enabled'] = pool_wrapper.management_enabled()

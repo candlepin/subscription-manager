@@ -77,8 +77,11 @@ class OrderPrinter(object):
         s.append("\t%s: %s" % (_("SKU"), xstr(order.sku)))
         s.append("\t%s: %s" % (_("Contract"), xstr(order.contract)))
         s.append("\t%s: %s" % (_("Account"), xstr(order.account)))
-        s.append("\t%s: %s" % (_("Service Level"), xstr(order.service_level)))
         s.append("\t%s: %s" % (_("Service Type"), xstr(order.service_type)))
+        s.append("\t%s: %s" % (_("Roles"), xstr(order.roles)))
+        s.append("\t%s: %s" % (_("Service Level"), xstr(order.service_level)))
+        s.append("\t%s: %s" % (_("Usage"), xstr(order.usage)))
+        s.append("\t%s: %s" % (_("Add-ons"), xstr(order.addons)))
         quantity = xstr(order.quantity)
         if quantity == '-1':
             quantity = _('Unlimited')
