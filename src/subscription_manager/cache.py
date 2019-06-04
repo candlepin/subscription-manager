@@ -340,6 +340,18 @@ class SyspurposeComplianceStatusCache(StatusCache):
         else:
             return self.syspurpose_service.get_overall_status('unknown')
 
+    def get_overall_status_code(self):
+        if self.server_status is not None:
+            return self.server_status
+        else:
+            return 'unknown'
+
+    def get_status_reasons(self):
+        if self.server_status is not None and 'reasons' in self.server_status:
+            return self.server_status['reasons']
+        else:
+            return None
+
 
 class ProductStatusCache(StatusCache):
     """
