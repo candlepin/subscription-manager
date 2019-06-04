@@ -110,8 +110,11 @@ AVAILABLE_SUBS_LIST = [
     _("Provides Management:"),
     _("Available:"),
     _("Suggested:"),
-    _("Service Level:"),
     _("Service Type:"),
+    _("Roles:"),
+    _("Service Level:"),
+    _("Usage:"),
+    _("Add-ons:"),
     _("Subscription Type:"),
     _("Starts:"),
     _("Ends:"),
@@ -148,6 +151,26 @@ ORG_LIST = [
     _("Key:")
 ]
 
+OLD_CONSUMED_LIST = [
+    _("Subscription Name:"),
+    _("Provides:"),
+    _("SKU:"),
+    _("Contract:"),
+    _("Account:"),
+    _("Serial:"),
+    _("Pool ID:"),
+    _("Provides Management:"),
+    _("Active:"),
+    _("Quantity Used:"),
+    _("Service Type:"),
+    _("Service Level:"),
+    _("Status Details:"),
+    _("Subscription Type:"),
+    _("Starts:"),
+    _("Ends:"),
+    _("System Type:")
+]
+
 CONSUMED_LIST = [
     _("Subscription Name:"),
     _("Provides:"),
@@ -159,8 +182,11 @@ CONSUMED_LIST = [
     _("Provides Management:"),
     _("Active:"),
     _("Quantity Used:"),
-    _("Service Level:"),
     _("Service Type:"),
+    _("Roles:"),
+    _("Service Level:"),
+    _("Usage:"),
+    _("Add-ons:"),
     _("Status Details:"),
     _("Subscription Type:"),
     _("Starts:"),
@@ -2613,8 +2639,11 @@ class ListCommand(CliCommand):
                                 data['management_enabled'],
                                 data['quantity'],
                                 data['suggested'],
-                                data['service_level'] or "",
                                 data['service_type'] or "",
+                                data['roles'] or "",
+                                data['service_level'] or "",
+                                data['usage'] or "",
+                                data['addons'] or "",
                                 data['pool_type'],
                                 data['startDate'],
                                 data['endDate'],
@@ -2663,8 +2692,12 @@ class ListCommand(CliCommand):
                     kwargs = {"filter_string": filter_string,
                               "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
                               "is_atty": sys.stdout.isatty()}
-                    print(columnize(CONSUMED_LIST, highlight_by_filter_string_columnize_cb, *cert, **kwargs) +
-                        "\n")
+                    if hasattr(cert, 'roles') and hasattr(cert, 'usage') and hasattr(cert, 'addons'):
+                        print(columnize(CONSUMED_LIST, highlight_by_filter_string_columnize_cb, *cert, **kwargs) +
+                              "\n")
+                    else:
+                        print(columnize(OLD_CONSUMED_LIST, highlight_by_filter_string_columnize_cb, *cert, **kwargs) +
+                              "\n")
         elif not pid_only:
             if filter_string and service_level:
                 print(
