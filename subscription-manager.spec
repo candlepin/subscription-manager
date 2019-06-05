@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.9
+Version: 1.24.10
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1150,6 +1150,13 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Jun 04 2019 Christopher Snyder <csnyder@redhat.com> 1.24.10-1
+- 1688221: update translations (csnyder@redhat.com)
+- Revert "1700445: Do not disabled repos in redhat.repo; ENT-1261"
+  (csnyder@redhat.com)
+- Revert "1621275: Less communication with candlepin server from sub-man
+  plugin; ENT-923" (csnyder@redhat.com)
+
 * Thu May 30 2019 Christopher Snyder <csnyder@redhat.com> 1.24.9-1
 - 1703607: Remove productid cert, when it is not needed; ENT-1300
   (jhnidek@redhat.com)
