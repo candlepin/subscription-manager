@@ -21,7 +21,6 @@ from __future__ import print_function, division, absolute_import
 from iniparse import RawConfigParser as ConfigParser
 import logging
 import os
-import socket
 import subscription_manager.injection as inj
 from subscription_manager.cache import OverrideStatusCache, WrittenOverrideCache
 from subscription_manager import model
@@ -31,7 +30,6 @@ from subscription_manager.repofile import YumRepoFile
 from subscription_manager.capabilities import ServerCache
 
 from rhsm.config import initConfig, in_container
-from rhsm import connection
 import six
 from six.moves import configparser
 
@@ -262,6 +260,7 @@ class YumReleaseverSource(object):
 
         self.identity = inj.require(inj.IDENTITY)
         self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.uep = self.cp_provider.get_consumer_auth_cp()
 
     # FIXME: these guys are really more of model helpers for the object
     #        represent a release.
@@ -298,8 +297,8 @@ class YumReleaseverSource(object):
         # access to content as the host they run on.)
         result = None
         if not in_container():
-            uep = self.cp_provider.get_consumer_auth_cp()
-            result = self.release_status_cache.read_status(uep, self.identity.uuid)
+            result = self.release_status_cache.read_status(self.uep,
+                                                           self.identity.uuid)
 
         # status cache returned None, which points to a failure.
         # Since we only have one value, use the default there and cache it
@@ -334,6 +333,10 @@ class RepoUpdateActionCommand(object):
     Returns an RepoActionReport.
     """
     def __init__(self, cache_only=False, apply_overrides=True):
+
+        log.debug("Updating repo triggered with following attributes: cache_only=%s, apply_overrides=%s" %
+                  (str(cache_only), str(apply_overrides)))
+
         self.identity = inj.require(inj.IDENTITY)
 
         # These should probably move closer their use
@@ -343,6 +346,7 @@ class RepoUpdateActionCommand(object):
         self.ent_source = ent_cert.EntitlementDirEntitlementSource()
 
         self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.uep = self.cp_provider.get_consumer_auth_cp()
 
         self.manage_repos = 1
         self.apply_overrides = apply_overrides
@@ -351,16 +355,15 @@ class RepoUpdateActionCommand(object):
         self.release = None
         self.overrides = {}
         self.override_supported = False
+
         if not cache_only:
             self.uep = self.cp_provider.get_consumer_auth_cp()
-            try:
-                self.override_supported = bool(self.identity.is_valid() and self.uep and self.uep.supports_resource('content_overrides'))
-            except (socket.error, connection.ConnectionException) as e:
-                # swallow the error to fix bz 1298327
-                log.exception(e)
-                pass
         else:
             self.uep = None
+
+        if self.identity.is_valid():
+            supported_resources = ServerCache.get_supported_resources(self.identity.uuid, self.uep)
+            self.override_supported = 'content_overrides' in supported_resources
 
         self.written_overrides = WrittenOverrideCache()
 
@@ -371,6 +374,7 @@ class RepoUpdateActionCommand(object):
         # If we are not registered, skip trying to refresh the
         # data from the server
         if not self.identity.is_valid():
+            log.debug("The system is not registered. Skipping refreshing data from server.")
             return
 
         # NOTE: if anything in the RepoActionInvoker init blocks, and it
