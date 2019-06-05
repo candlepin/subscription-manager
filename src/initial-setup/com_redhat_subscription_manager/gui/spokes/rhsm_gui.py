@@ -80,8 +80,14 @@ class RHSMSpoke(NormalSpoke):
         """Run this spoke for Anaconda and InitialSetup"""
         return True
 
-    def __init__(self, data, storage, payload, instclass):
-        NormalSpoke.__init__(self, data, storage, payload, instclass)
+    def __init__(self, data, storage, payload, instclass=None):
+        # Before 78fd1e82 , anaconda passes us instclass, and
+        # NormalSpoke accepts it. After 78fd1e82, it doesn't. So we
+        # handle both cases.
+        if instclass:
+            NormalSpoke.__init__(self, data, storage, payload, instclass)
+        else:
+            NormalSpoke.__init__(self, data, storage, payload)
         self._done = False
         self._addon_data = self.data.addons.com_redhat_subscription_manager
 
