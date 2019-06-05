@@ -362,6 +362,18 @@ class TestStatusCommand(SubManFixture):
             self.cc._do_command()
         self.assertTrue('System Purpose Status: Unknown' in cap.out)
 
+    def test_purpose_status_mismatch(self):
+        self.cc.consumerIdentity = StubConsumerIdentity
+        self.cc.cp = StubUEP()
+        self.cc.cp.setSyspurposeCompliance({'status': 'mismatched', 'reasons': ['unsatisfied usage: Production']})
+        self.cc.cp._capabilities = ["syspurpose"]
+        self.cc.options = Mock()
+        self.cc.options.on_date = None
+        with Capture() as cap:
+            self.cc._do_command()
+        self.assertTrue('System Purpose Status: Mismatched' in cap.out)
+        self.assertTrue('unsatisfied usage: Production' in cap.out)
+
 
 # for command classes that expect proxy related cli args
 class TestCliProxyCommand(TestCliCommand):
