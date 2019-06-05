@@ -21,15 +21,16 @@ from __future__ import print_function, division, absolute_import
 from iniparse import RawConfigParser as ConfigParser
 import logging
 import os
+import socket
 import subscription_manager.injection as inj
 from subscription_manager.cache import OverrideStatusCache, WrittenOverrideCache
 from subscription_manager import model
 from subscription_manager.model import ent_cert
 from subscription_manager.repofile import Repo, manage_repos_enabled, get_repo_file_classes
 from subscription_manager.repofile import YumRepoFile
-from subscription_manager.capabilities import ServerCache
 
 from rhsm.config import initConfig, in_container
+from rhsm import connection
 import six
 from six.moves import configparser
 
@@ -333,10 +334,6 @@ class RepoUpdateActionCommand(object):
     Returns an RepoActionReport.
     """
     def __init__(self, cache_only=False, apply_overrides=True):
-
-        log.debug("Updating repo triggered with following attributes: cache_only=%s, apply_overrides=%s" %
-                  (str(cache_only), str(apply_overrides)))
-
         self.identity = inj.require(inj.IDENTITY)
 
         # These should probably move closer their use
@@ -355,15 +352,12 @@ class RepoUpdateActionCommand(object):
         self.release = None
         self.overrides = {}
         self.override_supported = False
-
-        if not cache_only:
-            self.uep = self.cp_provider.get_consumer_auth_cp()
-        else:
-            self.uep = None
-
-        if self.identity.is_valid():
-            supported_resources = ServerCache.get_supported_resources(self.identity.uuid, self.uep)
-            self.override_supported = 'content_overrides' in supported_resources
+        try:
+            self.override_supported = bool(self.identity.is_valid() and self.uep and self.uep.supports_resource('content_overrides'))
+        except (socket.error, connection.ConnectionException) as e:
+            # swallow the error to fix bz 1298327
+            log.exception(e)
+            pass
 
         self.written_overrides = WrittenOverrideCache()
 
@@ -374,7 +368,6 @@ class RepoUpdateActionCommand(object):
         # If we are not registered, skip trying to refresh the
         # data from the server
         if not self.identity.is_valid():
-            log.debug("The system is not registered. Skipping refreshing data from server.")
             return
 
         # NOTE: if anything in the RepoActionInvoker init blocks, and it
@@ -590,7 +583,7 @@ class RepoUpdateActionCommand(object):
                 old_repo[key] = new_val
                 changes_made += 1
 
-            if mutable and new_val is not None:
+            if (mutable and new_val is not None):
                 server_value_repo[key] = new_val
 
         return changes_made

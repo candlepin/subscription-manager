@@ -870,10 +870,6 @@ class TestReposCommand(TestCliCommand):
         self.mock_sp_store = syspurpose_patch.start()
         self.mock_sp_store, self.mock_sp_store_contents = set_up_mock_sp_store(self.mock_sp_store)
         self.addCleanup(syspurpose_patch.stop)
-        server_cache_patcher = patch('subscription_manager.repolib.ServerCache')
-        self.mock_server_cache = server_cache_patcher.start()
-        self.mock_server_cache._write_cache_file = MagicMock()
-        self.addCleanup(server_cache_patcher.stop)
 
     def check_output_for_repos(self, output, repos):
         """

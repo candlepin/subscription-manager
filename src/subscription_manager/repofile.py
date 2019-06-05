@@ -598,12 +598,12 @@ def init_repo_file_classes():
     repo_file_classes = [YumRepoFile, ZypperRepoFile]
     if HAS_DEB822:
         repo_file_classes.append(AptRepoFile)
-    _repo_files = [
+    repo_files = [
         (RepoFile, RepoFile.server_value_repo_file)
         for RepoFile in repo_file_classes
         if RepoFile.installed()
     ]
-    return _repo_files
+    return repo_files
 
 
 def get_repo_file_classes():
