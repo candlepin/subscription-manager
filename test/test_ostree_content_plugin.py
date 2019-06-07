@@ -461,9 +461,7 @@ gpg-verify = true
 class TestOstreeRepofileConfigParserNotAValidFile(BaseOstreeRepoFileTest):
     repo_cfg = """
 id=inrozxa width=100% height=100%>
-  <param name=movie value="welcom
-ಇದು ಮಾನ್ಯ ಸಂರಚನಾ ಕಡತದ ಅಲ್ಲ. ನಾನು ಮಾಡಲು ಪ್ರಯತ್ನಿಸುತ್ತಿರುವ ಖಚಿತವಿಲ್ಲ, ಆದರೆ ನಾವು ಈ
-ಪಾರ್ಸ್ ಹೇಗೆ ಕಲ್ಪನೆಯೂ ಇಲ್ಲ. ನೀವು ಡಾಕ್ಸ್ ಓದಲು ಬಯಸಬಹುದು.
+  <param name=movie value="welcome
 """
 
     def test_init(self):
