@@ -95,7 +95,7 @@ class SubscriptionManager(dnf.Plugin):
 
             if plugin_config.has_option('main', 'disable_system_repos'):
                 disable_system_repos = plugin_config.get('main', 'disable_system_repos')
-                if disable_system_repos:
+                if disable_system_repos == '1':
                     disable_count = 0
                     for repo in self.base.repos.iter_enabled():
                         if os.path.basename(repo.repofile) != 'redhat.repo':
