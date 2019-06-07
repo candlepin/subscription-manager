@@ -44,9 +44,11 @@ def add_command(args, syspurposestore):
     """
     for value in args.values:
         if syspurposestore.add(args.prop_name, value):
-            print(_("Added {} to {}.").format(make_utf8(value), make_utf8(args.prop_name)))
+            print(_("Added {value} to {prop_name}.").format(
+                value=make_utf8(value), prop_name=make_utf8(args.prop_name)))
         else:
-            print(_("Not adding value {} to {}; it already exists.").format(make_utf8(value), make_utf8(args.prop_name)))
+            print(_("Not adding value {value} to {prop_name}; it already exists.").format(
+                value=make_utf8(value), prop_name=make_utf8(args.prop_name)))
             return
 
     success_msg = _("{attr} updated.").format(attr=make_utf8(args.prop_name))
@@ -126,7 +128,7 @@ def unset_command(args, syspurposestore):
         syspurposestore,
         expectation=lambda res: res.get(args.prop_name) in ["", None, []],
         success_msg=success_msg,
-        command="syspurpose unset {name}".format(args.prop_name),
+        command="syspurpose unset {name}".format(name=args.prop_name),
         attr=args.prop_name
 )
 
@@ -317,7 +319,7 @@ def main():
 
     syspurposestore = SyncedStore(uep=uep, consumer_uuid=uuid)
     if getattr(args, 'func', None) is not None:
-        result = args.func(args, syspurposestore)
+        args.func(args, syspurposestore)
     else:
         parser.print_help()
         return 0
