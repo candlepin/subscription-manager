@@ -115,7 +115,7 @@ AVAILABLE_SUBS_LIST = [
     _("Subscription Type:"),
     _("Starts:"),
     _("Ends:"),
-    _("System Type:")
+    _("Entitlement Type:")
 ]
 
 AVAILABLE_SUBS_MATCH_COLUMNS = [
@@ -165,7 +165,7 @@ CONSUMED_LIST = [
     _("Subscription Type:"),
     _("Starts:"),
     _("Ends:"),
-    _("System Type:")
+    _("Entitlement Type:")
 ]
 
 SP_CONFLICT_MESSAGE = _("Due to a conflicting change made at the server the "
@@ -2595,9 +2595,9 @@ class ListCommand(CliCommand):
 
                     for data in epools:
                         if PoolWrapper(data).is_virt_only():
-                            machine_type = _("Virtual")
+                            entitlement_type = _("Virtual")
                         else:
-                            machine_type = _("Physical")
+                            entitlement_type = _("Physical")
 
                         if 'management_enabled' in data and data['management_enabled']:
                             data['management_enabled'] = _("Yes")
@@ -2621,7 +2621,7 @@ class ListCommand(CliCommand):
                                 data['pool_type'],
                                 data['startDate'],
                                 data['endDate'],
-                                machine_type, **kwargs) + "\n")
+                                entitlement_type, **kwargs) + "\n")
             elif not self.options.pid_only:
                 if self.options.filter_string and self.options.service_level:
                     print(
