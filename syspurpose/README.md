@@ -12,3 +12,13 @@ The recommended workflow is as follows:
 
 From inside this virtual env you can freely install the syspurpose tool and test it as you like.
 Just run `python ./setup.py install` to install and `python ./setup.py test` to run the tests.
+
+## Testing of code
+
+When you want to debug code, then pipenv can be too complicated. When your system contains all required
+modules. then you can run syspurpose using following command from root directory of subscription-manager
+source code:
+
+```bash
+sudo PYTHONPATH=./src:./syspurpose/src python -m syspurpose.main show
+```

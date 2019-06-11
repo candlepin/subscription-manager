@@ -55,7 +55,6 @@ ATTRIBUTES = [ROLE, ADDONS, SERVICE_LEVEL, USAGE]
 UNSUPPORTED = "unsupported"
 
 
-
 log = logging.getLogger(__name__)
 
 
@@ -324,7 +323,7 @@ class SyncedStore(object):
                         'Cannot read local syspurpose, trying to update from server only'
                 )
             log.debug('Unable to read local system purpose at  \'%s\'\nUsing the server values.'
-                      % USER_SYSPURPOSE)
+                      % self.path)
             self.update_local({})
             self.local_contents = {}
             return self.local_contents
@@ -355,7 +354,7 @@ class SyncedStore(object):
                 self.cache_contents = json.load(io.open(self.cache_path, 'r', encoding='utf-8'))
                 log.debug('Successfully read cached syspurpose contents.')
             except (ValueError, os.error, IOError):
-                log.debug('Unable to read cached syspurpose contents at \'%s\'.' % USER_SYSPURPOSE)
+                log.debug('Unable to read cached syspurpose contents at \'%s\'.' % self.path)
                 self.cache_contents = {}
                 self.update_cache({})
         return self.cache_contents
