@@ -138,7 +138,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.25.8
+Version: 1.25.9
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1165,6 +1165,23 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Jun 12 2019 Christopher Snyder <csnyder@redhat.com> 1.25.9-1
+- 1717147: Updating from System Type to Entitlement Type (waldirio@gmail.com)
+- Updated from System Type to Entitlement Type (waldirio@gmail.com)
+- 1708105: Fixed unsetting syspurpose attributes; ENT-1330 (jhnidek@redhat.com)
+- spec: Don't supplement initial-setup-gui on Fedora (awilliam@redhat.com)
+- 1713626: Only disable system repos if the disable_system_repos is "1"
+  (csnyder@redhat.com)
+- 1673662: Print reasons, why syspurpose status is mismatch; ENT-1247
+  (jhnidek@redhat.com)
+- Bump sshpk from 1.13.1 to 1.16.1 in /cockpit
+  (dependabot[bot]@users.noreply.github.com)
+- Also handle anaconda removal of install classes in rhsm_gui.py
+  (awilliam@redhat.com)
+- 1652549: Addition of tests for heartbeat method (wpoteat@redhat.com)
+- Try to fix ostree unit test. (jhnidek@redhat.com)
+- Set LANG to run subscription-manager and get proper output (suttner@atix.de)
+
 * Mon Jun 03 2019 Christopher Snyder <csnyder@redhat.com> 1.25.8-1
 - Revert "1621275: Less communication with candlepin server from sub-man
   plugin; ENT-923" (csnyder@redhat.com)
