@@ -75,7 +75,11 @@ class ModulesProfile(object):
         if dnf is not None and libdnf is not None:
             base = dnf.Base()
             base.read_all_repos()
-            base.fill_sack()
+            try:
+                base.fill_sack()
+            except dnf.exceptions.RepoError as err:
+                log.error("Unable to create sack object: %s" % str(err))
+                return []
             # FIXME: DNF doesn't provide public API for modulemd
             try:
                 modules = base._moduleContainer
