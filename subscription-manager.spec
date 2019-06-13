@@ -138,7 +138,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.25.9
+Version: 1.25.10
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1165,6 +1165,19 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Jun 13 2019 Christopher Snyder <csnyder@redhat.com> 1.25.10-1
+- 1665167: Print roles and usage in list of subscriptions; ENT-1315
+  (jhnidek@redhat.com)
+- Try to fix stylish warning introduced in #2111 (jhnidek@redhat.com)
+- Bump macaddress from 0.2.8 to 0.2.9 in /cockpit
+  (dependabot[bot]@users.noreply.github.com)
+- Bump is-my-json-valid from 2.16.0 to 2.20.0 in /cockpit
+  (dependabot[bot]@users.noreply.github.com)
+- 1708438: Don't print traceback during list --available; ENT-1331
+  (jhnidek@redhat.com)
+- 1719697: cockpit - Fix detection of proxy while attaching
+  (mvollmer@redhat.com)
+
 * Wed Jun 12 2019 Christopher Snyder <csnyder@redhat.com> 1.25.9-1
 - 1717147: Updating from System Type to Entitlement Type (waldirio@gmail.com)
 - Updated from System Type to Entitlement Type (waldirio@gmail.com)
