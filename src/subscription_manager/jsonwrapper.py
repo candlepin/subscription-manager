@@ -56,7 +56,7 @@ class PoolWrapper(object):
         if 'productAttributes' not in self.data:
             return attrs
 
-        #Initialize all requested attribute names to have a value
+        # Initialize all requested attribute names to have a value
         # of None
         for attr_name in attribute_names:
             attrs[attr_name] = None

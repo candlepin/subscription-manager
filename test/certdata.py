@@ -337,8 +337,11 @@ Order:
 \tSKU: awesomeos-server
 \tContract: 359
 \tAccount: 12331131231
-\tService Level: Premium
 \tService Type: Level 3
+\tRoles: 
+\tService Level: Premium
+\tUsage: 
+\tAdd-ons: 
 \tQuantity: 10
 \tQuantity Used: 1
 \tSocket Limit: 2
@@ -458,8 +461,11 @@ Order:
 \tSKU: awesomeos-x86_64
 \tContract: 67
 \tAccount: 12331131231
-\tService Level:%(space)s
 \tService Type:%(space)s
+\tRoles: 
+\tService Level:%(space)s
+\tUsage: 
+\tAdd-ons: 
 \tQuantity: 10
 \tQuantity Used: 2
 \tSocket Limit: 1
@@ -563,8 +569,11 @@ Order:
 \tSKU: ram2-multiattr
 \tContract: 0
 \tAccount: 12331131231
-\tService Level: Premium
 \tService Type: Level 3
+\tRoles: 
+\tService Level: Premium
+\tUsage: 
+\tAdd-ons: 
 \tQuantity: 5
 \tQuantity Used: 5
 \tSocket Limit:%(space)s

@@ -219,6 +219,7 @@ class _CertFactory(object):
 
     def _parse_v1_order(self, extensions):
         order_extensions = extensions.branch(ORDER_NAMESPACE)
+        # TODO: implement reading syspurpose attributes: usage, roles and addons, when they are implemented
         order_data = {
             'name': order_extensions.get('1'),
             'number': order_extensions.get('2'),
@@ -738,7 +739,8 @@ class Order(object):
             contract=None, quantity_used=None, warning_period=None,
             account=None, provides_management=None, service_level=None,
             service_type=None, stacking_id=None, virt_only=None,
-            ram_limit=None, core_limit=None):
+            ram_limit=None, core_limit=None, roles=None, usage=None,
+            addons=None):
 
         self.name = name
         self.number = number  # order number
@@ -766,6 +768,9 @@ class Order(object):
 
         self.service_level = service_level
         self.service_type = service_type
+        self.usage = usage
+        self.roles = roles
+        self.addons = addons
 
         self.virt_only = virt_only or False
 
