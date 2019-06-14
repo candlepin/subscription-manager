@@ -672,6 +672,39 @@ class TestListCommand(TestCliProxyCommand):
             list_command.main(['--available'])
         self.assertTrue('888888888888' in cap.out)
 
+    @patch('subscription_manager.managerlib.get_available_entitlements')
+    def test_available_syspurpose_attr(self, mget_ents):
+        list_command = managercli.ListCommand()
+
+        def create_pool_list(*args, **kwargs):
+            return [{'productName': 'dummy-name',
+                     'productId': 'dummy-id',
+                     'providedProducts': [],
+                     'id': '888888888888',
+                     'management_enabled': True,
+                     'attributes': [{'name': 'is_virt_only',
+                                     'value': 'false'}],
+                     'pool_type': 'Some Type',
+                     'quantity': '4',
+                     'service_type': '',
+                     'roles': 'Awesome Server, Cool Server',
+                     'service_level': 'Premium',
+                     'usage': 'Production',
+                     'addons': 'ADDON1,ADDON2',
+                     'contractNumber': '5',
+                     'multi-entitlement': 'false',
+                     'startDate': '',
+                     'endDate': '',
+                     'suggested': '2'}]
+        mget_ents.return_value = create_pool_list()
+
+        with Capture() as cap:
+            list_command.main(['--available'])
+        self.assertTrue('ADDON1\n' in cap.out)
+        self.assertTrue('Awesome Server\n' in cap.out)
+        self.assertTrue('Production' in cap.out)
+        self.assertTrue('Premium' in cap.out)
+
     def test_print_consumed_no_ents(self):
         with Capture() as captured:
             self.cc.print_consumed()
@@ -865,6 +898,54 @@ class TestListCommand(TestCliProxyCommand):
         for cert in consumed:
             self.assertFalse(cert.order.name in captured.out)
             self.assertTrue(cert.pool.id in captured.out)
+
+    def test_list_consumed_syspurpose_attr_version34(self):
+        """
+        When version of entitlement certificate is 3.4, then subscription-manager should print syspurpose
+        attributes from the certificate.
+        """
+        product = StubProduct("product1")
+        ent_cert = StubEntitlementCertificate(product)
+        ent_cert.order.usage = "Development"
+        ent_cert.order.roles = [u"SP Server", u"SP Starter"]
+        ent_cert.order.addons = [u"ADDON1", u"ADDON2"]
+        ent_cert.version = MagicMock()
+        ent_cert.version.major = 3
+        ent_cert.version.minor = 4
+        self.ent_dir.certs.append(ent_cert)
+        self.cc.sorter = Mock()
+        self.cc.sorter.get_subscription_reasons_map = Mock()
+        self.cc.sorter.get_subscription_reasons_map.return_value = {}
+        with Capture() as captured:
+            self.cc.print_consumed()
+            self.assertTrue("Add-ons:" in captured.out)
+            self.assertTrue("ADDON1" in captured.out)
+            self.assertTrue("ADDON2" in captured.out)
+            self.assertTrue("Usage:" in captured.out)
+            self.assertTrue("Development" in captured.out)
+            self.assertTrue("Roles:" in captured.out)
+            self.assertTrue("SP Server" in captured.out)
+            self.assertTrue("SP Starter" in captured.out)
+
+    def test_list_consumed_no_syspurpose_attr_version33(self):
+        """
+        When the version of certificate is older then 3.4, then do not print syspurpose attributes, because
+        there cannot be any.
+        """
+        product = StubProduct("product1")
+        ent_cert = StubEntitlementCertificate(product)
+        ent_cert.version = MagicMock()
+        ent_cert.version.major = 3
+        ent_cert.version.minor = 3
+        self.ent_dir.certs.append(ent_cert)
+        self.cc.sorter = Mock()
+        self.cc.sorter.get_subscription_reasons_map = Mock()
+        self.cc.sorter.get_subscription_reasons_map.return_value = {}
+        with Capture() as captured:
+            self.cc.print_consumed()
+            self.assertFalse("Add-ons:" in captured.out)
+            self.assertFalse("Usage:" in captured.out)
+            self.assertFalse("Roles:" in captured.out)
 
 
 class TestUnRegisterCommand(TestCliProxyCommand):
