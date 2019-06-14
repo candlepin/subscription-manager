@@ -126,7 +126,6 @@ function safeDBusCall(serviceProxy, delegateMethod) {
         .then(delegateMethod)
         .fail(ex => {
             console.debug(ex);
-            delegateMethod();
         });
 }
 
@@ -423,7 +422,7 @@ client.unregisterSystem = () => {
 
 function statusUpdateFailed(reason) {
     console.warn("Subscription status update failed:", reason);
-    client.subscriptionStatus.status = "not-found";
+    client.subscriptionStatus.status = (reason && reason.problem) || "not-found";
     needRender();
 }
 

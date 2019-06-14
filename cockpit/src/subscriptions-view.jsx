@@ -269,7 +269,7 @@ class SubscriptionsPage extends React.Component {
                 "and try reloading the page. Additionally, make sure that you have checked the " +
                 "'Reuse my password for privileged tasks' checkbox on the login page.");
             description = _("Unable to the reach the rhsm service.");
-        } else if (this.props.status === undefined || !subscriptionsClient.config.loaded) {
+        } else if (this.props.status === undefined && !subscriptionsClient.config.loaded) {
             icon = <div className="spinner spinner-lg" />;
             message = _("Updating");
             description = _("Retrieving subscription status...");
