@@ -214,10 +214,15 @@ class EntitlementService(object):
 
             if order:
                 service_type = order.service_type or ""
-                roles = order.roles
                 service_level = order.service_level or ""
-                usage = order.usage
-                addons = order.addons
+                if cert.version.major >= 3 and cert.version.minor >= 4:
+                    roles = order.roles or ""
+                    usage = order.usage or ""
+                    addons = order.addons or ""
+                else:
+                    roles = None
+                    usage = None
+                    addons = None
                 name = order.name
                 sku = order.sku
                 contract = order.contract or ""

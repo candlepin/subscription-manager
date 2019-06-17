@@ -32,6 +32,8 @@ from subscription_manager.i18n import ugettext as _
 def xstr(value):
     if value is None:
         return ''
+    elif isinstance(value, list):
+        return ", ".join([xstr(val) for val in value])
     elif isinstance(value, six.text_type) and six.PY2:
         return value.encode('utf-8')
     else:

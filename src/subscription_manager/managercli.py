@@ -2566,6 +2566,18 @@ class ListCommand(CliCommand):
             system_exit(os.EX_DATAERR,
                         msg.format(dateexample=dateexample))
 
+    def _split_mulit_value_field(self, values):
+        """
+        REST API returns multi-value fields in string, where values are separated with comma, but
+        each value of multi-value field should be printed on new line. It is done automatically, when
+        values are in list
+        :param values: String containing multi-value string, where values are separated with comma
+        :return: list of values
+        """
+        if values is None:
+            return ""
+        return [item.strip() for item in values.split(",")]
+
     def _do_command(self):
         """
         Executes the command.
@@ -2643,10 +2655,10 @@ class ListCommand(CliCommand):
                                 data['quantity'],
                                 data['suggested'],
                                 data['service_type'] or "",
-                                data['roles'] or "",
+                                self._split_mulit_value_field(data['roles']),
                                 data['service_level'] or "",
                                 data['usage'] or "",
-                                data['addons'] or "",
+                                self._split_mulit_value_field(data['addons']),
                                 data['pool_type'],
                                 data['startDate'],
                                 data['endDate'],

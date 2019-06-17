@@ -270,6 +270,8 @@ class StubEntitlementCertificate(EntitlementCertificate):
         path = "/tmp/fake_ent_cert.pem"
         self.is_deleted = False
 
+        version = Version("3.0")
+
         # might as well make this a big num since live serials #'s are already > maxint
         self.serial = random.randint(1000000000000000000, 10000000000000000000000)
         # write these to tmp, could we abuse PATH thing in certs for tests?
@@ -277,7 +279,7 @@ class StubEntitlementCertificate(EntitlementCertificate):
         path = "/tmp/fake_ent_cert-%s.pem" % self.serial
         super(StubEntitlementCertificate, self).__init__(path=path, products=products, order=order,
                                                          content=content, pool=pool, start=start_date,
-                                                         end=end_date, serial=self.serial)
+                                                         end=end_date, serial=self.serial, version=version)
         if ent_id:
             self.subject = {'CN': ent_id}
 
