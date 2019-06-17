@@ -138,7 +138,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.25.10
+Version: 1.25.11
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1165,6 +1165,13 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Jun 17 2019 Christopher Snyder <csnyder@redhat.com> 1.25.11-1
+- 1665167: syspurpose attributes in list --consumed; ENT-1315
+  (jhnidek@redhat.com)
+- 1719709: cockpit - Improve behavior when connection to D-Bus fails
+  (mvollmer@redhat.com)
+- 1719702: cockpit - Fix overlapping update requests (mvollmer@redhat.com)
+
 * Thu Jun 13 2019 Christopher Snyder <csnyder@redhat.com> 1.25.10-1
 - 1665167: Print roles and usage in list of subscriptions; ENT-1315
   (jhnidek@redhat.com)
