@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.10
+Version: 1.24.11
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1150,6 +1150,12 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Jun 18 2019 Christopher Snyder <csnyder@redhat.com> 1.24.11-1
+- 1709728: Dialog with proxy conf didn't pop-up; ENT-1333 (jhnidek@redhat.com)
+- 1704421: Install only one prod cert, when RPM is available in more repos.
+  (jhnidek@redhat.com)
+- 1710564: Make entitlement certs and keys world-readable (csnyder@redhat.com)
+
 * Tue Jun 04 2019 Christopher Snyder <csnyder@redhat.com> 1.24.10-1
 - 1688221: update translations (csnyder@redhat.com)
 - Revert "1700445: Do not disabled repos in redhat.repo; ENT-1261"
