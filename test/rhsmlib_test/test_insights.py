@@ -54,3 +54,10 @@ class TestInsightsCollector(unittest.TestCase):
         consts.machine_id_file = "/not/existing/file/machine_id"
         fact = self.collector.get_all()
         self.assertEqual(fact, {})
+
+    @patch('rhsmlib.facts.insights.insights_constants', spec=['InsightsConstants'])
+    def test_old_insights_api(self, consts):
+        # Try to mimic old version of insights client without consts.machine_id_file
+        self.assertFalse(hasattr(consts, 'machine_id_file'))
+        fact = self.collector.get_all()
+        self.assertEqual(fact, {})
