@@ -56,7 +56,7 @@ class InsightsCollector(collector.FactsCollector):
         """
         insights_id = {}
 
-        if insights_constants is not None:
+        if insights_constants is not None and hasattr(insights_constants, 'machine_id_file'):
             machine_id_filepath = insights_constants.machine_id_file
         else:
             machine_id_filepath = self.DEFAULT_INSIGHTS_MACHINE_ID
