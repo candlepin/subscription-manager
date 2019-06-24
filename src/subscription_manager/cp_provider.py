@@ -36,6 +36,7 @@ class CPProvider(object):
     basic_auth_cp = None
     no_auth_cp = None
     content_connection = None
+    keycloak_auth_cp = None
 
     # Initialize with default connection info from the config file
     def __init__(self):
@@ -79,6 +80,10 @@ class CPProvider(object):
         self.password = password
         self.basic_auth_cp = None
 
+    def set_token(self, token=None):
+        self.token = token
+        self.keycloak_auth_cp = None
+
     # set up info for the connection to the cdn for finding release versions
     def set_content_connection_info(self, cdn_hostname=None, cdn_port=None):
         self.cdn_hostname = cdn_hostname
@@ -93,6 +98,7 @@ class CPProvider(object):
         self.consumer_auth_cp = None
         self.basic_auth_cp = None
         self.no_auth_cp = None
+        self.keycloak_auth_cp = None
 
     def get_consumer_auth_cp(self):
         if not self.consumer_auth_cp:
@@ -109,6 +115,25 @@ class CPProvider(object):
                     no_proxy=self.no_proxy,
                     restlib_class=self.restlib_class)
         return self.consumer_auth_cp
+
+    def get_keycloak_auth_cp(self):
+        if not self.keycloak_auth_cp:
+            self.keycloak_auth_cp = connection.UEPConnection(
+                    host=self.server_hostname,
+                    ssl_port=self.server_port,
+                    handler=self.server_prefix,
+                    proxy_hostname=self.proxy_hostname,
+                    proxy_port=self.proxy_port,
+                    proxy_user=self.proxy_user,
+                    proxy_password=self.proxy_password,
+                    username=None,
+                    password=None,
+                    correlation_id=self.correlation_id,
+                    no_proxy=self.no_proxy,
+                    restlib_class=self.restlib_class,
+                    token=self.token
+                    )
+        return self.keycloak_auth_cp
 
     def get_basic_auth_cp(self):
         if not self.basic_auth_cp:

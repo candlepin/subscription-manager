@@ -127,9 +127,130 @@ class BadCertificateException(ConnectionException):
         return "Bad certificate at %s" % self.cert_path
 
 
+class KeycloakConnection(object):
+    """
+      Keycloak Based Authentication
+    """
+
+    def __init__(self, realm, auth_url, resource, host=None,
+                 ssl_port=None,
+                 handler=None,
+                 proxy_hostname=None,
+                 proxy_port=None,
+                 proxy_user=None,
+                 proxy_password=None,
+                 username=None, password=None,
+                 cert_file=None, key_file=None,
+                 insecure=None,
+                 timeout=None,
+                 restlib_class=None,
+                 correlation_id=None,
+                 no_proxy=None,
+                 token=None):
+        self.realm = realm
+        self.auth_url = auth_url
+        self.resource = resource
+        self.correlation_id = correlation_id
+        self.token = token
+        self.host = host
+        self.insecure = insecure
+        self.proxy_hostname = proxy_hostname
+        self.proxy_port = proxy_port
+        self.timeout = timeout
+        self.proxy_user = proxy_user
+        self.handler = handler
+        self.restlib_class = restlib_class
+        self.proxy_password = proxy_password
+        self.ssl_port = ssl_port
+
+    def get_access_token_through_refresh(self, refreshtoken):
+        """
+        Get parameters from status endpoint
+        """
+        restlib_class = None
+        restlib_class = restlib_class or Restlib
+        self.host = self.auth_url
+        self.timeout = safe_int(config.get('server', 'server_timeout'))
+        proxy_hostname = None
+        proxy_port = None
+        proxy_user = None
+        proxy_password = None
+        insecure = None
+        self.insecure = insecure
+        if insecure is None:
+            self.insecure = False
+            config_insecure = safe_int(config.get('server', 'insecure'))
+            if config_insecure:
+                self.insecure = True
+
+        self.ca_cert_dir = config.get('rhsm', 'ca_cert_dir')
+        self.ssl_verify_depth = safe_int(config.get('server', 'ssl_verify_depth'))
+
+        # allow specifying no_proxy via api or config
+        no_proxy_override = config.get('server', 'no_proxy')
+        if no_proxy_override:
+            os.environ['no_proxy'] = no_proxy_override
+
+        utils.fix_no_proxy()
+        log.debug('Environment variable NO_PROXY=%s will be used' % no_proxy_override)
+
+        # honor no_proxy environment variable
+        if proxy_bypass(self.host):
+            self.proxy_hostname = None
+            self.proxy_port = None
+            self.proxy_user = None
+            self.proxy_password = None
+        else:
+            info = utils.get_env_proxy_info()
+
+            self.proxy_hostname = proxy_hostname or \
+                                  config.get('server', 'proxy_hostname') or \
+                                  info['proxy_hostname']
+            self.proxy_port = proxy_port or \
+                              config.get('server', 'proxy_port') or \
+                              info['proxy_port']
+            self.proxy_user = proxy_user or \
+                              config.get('server', 'proxy_user') or \
+                              info['proxy_username']
+            self.proxy_password = proxy_password or \
+                                  config.get('server', 'proxy_password') or \
+                                  info['proxy_password']
+
+        url_access_token = self.auth_url + "/realms/" + self.realm + "/protocol/openid-connect/token"
+        self.host = six.moves.urllib.parse.urlparse(url_access_token).hostname or ''
+        url = six.moves.urllib.parse.urlparse(url_access_token).path
+        port = six.moves.urllib.parse.urlparse(url_access_token).port
+        if port:
+            self.ssl_port = port
+        else:
+            self.ssl_port = 443
+        self.handler = ""
+
+        self.conn = restlib_class(self.host, self.ssl_port, self.handler,
+                                  proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
+                                  proxy_user=self.proxy_user, proxy_password=self.proxy_password,
+                                  ca_dir=self.ca_cert_dir, insecure=self.insecure,
+                                  ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
+                                  correlation_id=self.correlation_id, token=self.token)
+
+        # Get access token in exchange for refresh token
+        params = {"client_id": self.resource, "grant_type": "refresh_token"}
+        headers = {}
+        params['refresh_token'] = refreshtoken
+        headers['Content-type'] = 'application/x-www-form-urlencoded'
+        try:
+            data = self.conn.request_post(url, params, headers)
+            return data['access_token']
+        except Exception as e:
+            if e.code == 400:
+                sys.exit("Invalid Input or Refresh Token Expired")
+            else:
+                print(e)
+
+
 class RestlibException(ConnectionException):
     """
-    Raised when a response with a valid json body is received along with a status code
+    Raised when a response with a valid json body is received along wit h a status code
     that is not in [200, 202, 204, 410, 429]
     See RestLib.validateResponse to see when this and other exceptions are raised.
     """
@@ -289,17 +410,17 @@ class ContentConnection(object):
             info = utils.get_env_proxy_info()
 
             self.proxy_hostname = proxy_hostname or \
-                config.get('server', 'proxy_hostname') or \
-                info['proxy_hostname']
+                                  config.get('server', 'proxy_hostname') or \
+                                  info['proxy_hostname']
             self.proxy_port = proxy_port or \
-                config.get('server', 'proxy_port') or \
-                info['proxy_port']
+                              config.get('server', 'proxy_port') or \
+                              info['proxy_port']
             self.proxy_user = proxy_user or \
-                config.get('server', 'proxy_user') or \
-                info['proxy_username']
+                              config.get('server', 'proxy_user') or \
+                              info['proxy_username']
             self.proxy_password = proxy_password or \
-                config.get('server', 'proxy_password') or \
-                info['proxy_password']
+                                  config.get('server', 'proxy_password') or \
+                                  info['proxy_password']
 
     @property
     def user_agent(self):
@@ -447,13 +568,14 @@ class BaseRestLib(object):
     to make rest calls easy and expose the details of
     responses
     """
+
     def __init__(self, host, ssl_port, apihandler,
-            username=None, password=None,
-            proxy_hostname=None, proxy_port=None,
-            proxy_user=None, proxy_password=None,
-            cert_file=None, key_file=None,
-            ca_dir=None, insecure=False, ssl_verify_depth=1, timeout=None,
-            correlation_id=None):
+                 username=None, password=None,
+                 proxy_hostname=None, proxy_port=None,
+                 proxy_user=None, proxy_password=None,
+                 cert_file=None, key_file=None,
+                 ca_dir=None, insecure=False, ssl_verify_depth=1, timeout=None,
+                 correlation_id=None, token=None):
         self.host = host
         self.ssl_port = ssl_port
         self.apihandler = apihandler
@@ -498,12 +620,15 @@ class BaseRestLib(object):
         self.proxy_port = proxy_port
         self.proxy_user = proxy_user
         self.proxy_password = proxy_password
-
+        self.token = token
         # Setup basic authentication if specified:
         if username and password:
             self.headers['Authorization'] = _encode_auth(username, password)
+        elif token:
+            self.headers['Authorization'] = 'Bearer ' + token
 
     def _load_ca_certificates(self, context):
+
         loaded_ca_certs = []
         cert_path = ''
         try:
@@ -563,7 +688,9 @@ class BaseRestLib(object):
         else:
             conn = httplib.HTTPSConnection(self.host, self.ssl_port, context=context, timeout=self.timeout)
 
-        if info is not None:
+        if headers is not None and headers['Content-type'] == 'application/x-www-form-urlencoded':
+            body = six.moves.urllib.parse.urlencode(info).encode('utf-8')
+        elif info is not None:
             body = json.dumps(info, default=json.encode)
         else:
             body = None
@@ -749,7 +876,7 @@ class Restlib(BaseRestLib):
 
     def _request(self, request_type, method, info=None, headers=None):
         result = super(Restlib, self)._request(request_type, method,
-            info=info, headers=headers)
+                                               info=info, headers=headers)
 
         # Handle 204s
         if not len(result['content']):
@@ -767,20 +894,21 @@ class UEPConnection(object):
     """
 
     def __init__(self,
-            host=None,
-            ssl_port=None,
-            handler=None,
-            proxy_hostname=None,
-            proxy_port=None,
-            proxy_user=None,
-            proxy_password=None,
-            username=None, password=None,
-            cert_file=None, key_file=None,
-            insecure=None,
-            timeout=None,
-            restlib_class=None,
-            correlation_id=None,
-            no_proxy=None):
+                 host=None,
+                 ssl_port=None,
+                 handler=None,
+                 proxy_hostname=None,
+                 proxy_port=None,
+                 proxy_user=None,
+                 proxy_password=None,
+                 username=None, password=None,
+                 cert_file=None, key_file=None,
+                 insecure=None,
+                 timeout=None,
+                 restlib_class=None,
+                 correlation_id=None,
+                 no_proxy=None,
+                 token=None):
         """
         Two ways to authenticate:
             - username/password for HTTP basic authentication. (owner admin role)
@@ -817,22 +945,23 @@ class UEPConnection(object):
             info = utils.get_env_proxy_info()
 
             self.proxy_hostname = proxy_hostname or \
-                config.get('server', 'proxy_hostname') or \
-                info['proxy_hostname']
+                                  config.get('server', 'proxy_hostname') or \
+                                  info['proxy_hostname']
             self.proxy_port = proxy_port or \
-                config.get('server', 'proxy_port') or \
-                info['proxy_port']
+                              config.get('server', 'proxy_port') or \
+                              info['proxy_port']
             self.proxy_user = proxy_user or \
-                config.get('server', 'proxy_user') or \
-                info['proxy_username']
+                              config.get('server', 'proxy_user') or \
+                              info['proxy_username']
             self.proxy_password = proxy_password or \
-                config.get('server', 'proxy_password') or \
-                info['proxy_password']
+                                  config.get('server', 'proxy_password') or \
+                                  info['proxy_password']
 
         self.cert_file = cert_file
         self.key_file = key_file
         self.username = username
         self.password = password
+        self.token = token
 
         self.ca_cert_dir = config.get('rhsm', 'ca_cert_dir')
         self.ssl_verify_depth = safe_int(config.get('server', 'ssl_verify_depth'))
@@ -846,51 +975,63 @@ class UEPConnection(object):
 
         using_basic_auth = False
         using_id_cert_auth = False
+        using_keycloak_auth = False
 
         if username and password:
             using_basic_auth = True
         elif cert_file and key_file:
             using_id_cert_auth = True
+        elif token:
+            using_keycloak_auth = True
 
         if using_basic_auth and using_id_cert_auth:
             raise Exception("Cannot specify both username/password and "
-                    "cert_file/key_file")
+                            "cert_file/key_file")
         # if not (using_basic_auth or using_id_cert_auth):
         #     raise Exception("Must specify either username/password or "
         #         "cert_file/key_file")
 
         proxy_description = None
         if self.proxy_hostname and self.proxy_port:
-            proxy_description = "http_proxy=%s:%s " %\
+            proxy_description = "http_proxy=%s:%s " % \
                                 (normalized_host(self.proxy_hostname),
                                  safe_int(self.proxy_port))
         auth_description = None
         # initialize connection
-        if using_basic_auth:
+
+        if using_keycloak_auth:
             self.conn = restlib_class(self.host, self.ssl_port, self.handler,
-                    username=self.username, password=self.password,
-                    proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
-                    proxy_user=self.proxy_user, proxy_password=self.proxy_password,
-                    ca_dir=self.ca_cert_dir, insecure=self.insecure,
-                    ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
-                    correlation_id=correlation_id)
+                                      proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
+                                      proxy_user=self.proxy_user, proxy_password=self.proxy_password,
+                                      ca_dir=self.ca_cert_dir, insecure=self.insecure,
+                                      ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
+                                      correlation_id=correlation_id, token=self.token)
+            auth_description = "auth=bearer %s" % token
+        elif using_basic_auth:
+            self.conn = restlib_class(self.host, self.ssl_port, self.handler,
+                                      username=self.username, password=self.password,
+                                      proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
+                                      proxy_user=self.proxy_user, proxy_password=self.proxy_password,
+                                      ca_dir=self.ca_cert_dir, insecure=self.insecure,
+                                      ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
+                                      correlation_id=correlation_id)
             auth_description = "auth=basic username=%s" % username
         elif using_id_cert_auth:
             self.conn = restlib_class(self.host, self.ssl_port, self.handler,
-                                cert_file=self.cert_file, key_file=self.key_file,
-                                proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
-                                proxy_user=self.proxy_user, proxy_password=self.proxy_password,
-                                ca_dir=self.ca_cert_dir, insecure=self.insecure,
-                                ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
-                                correlation_id=correlation_id)
+                                      cert_file=self.cert_file, key_file=self.key_file,
+                                      proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
+                                      proxy_user=self.proxy_user, proxy_password=self.proxy_password,
+                                      ca_dir=self.ca_cert_dir, insecure=self.insecure,
+                                      ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
+                                      correlation_id=correlation_id)
             auth_description = "auth=identity_cert ca_dir=%s insecure=%s" % (self.ca_cert_dir, self.insecure)
         else:
             self.conn = restlib_class(self.host, self.ssl_port, self.handler,
-                    proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
-                    proxy_user=self.proxy_user, proxy_password=self.proxy_password,
-                    ca_dir=self.ca_cert_dir, insecure=self.insecure,
-                    ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
-                    correlation_id=correlation_id)
+                                      proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
+                                      proxy_user=self.proxy_user, proxy_password=self.proxy_password,
+                                      ca_dir=self.ca_cert_dir, insecure=self.insecure,
+                                      ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
+                                      correlation_id=correlation_id)
             auth_description = "auth=none"
 
         self.conn.user_agent = "RHSM/1.0 (cmd=%s)" % utils.cmd_name(sys.argv)
