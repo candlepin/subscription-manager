@@ -21,6 +21,7 @@ from rhsm.https import ssl, httplib
 
 from rhsm import connection, utils
 
+from subscription_manager.cp_provider import TokenAuthUnsupportedException
 from subscription_manager.entcertlib import Disconnected
 
 from subscription_manager.i18n import ugettext as _
@@ -30,6 +31,7 @@ SOCKET_MESSAGE = _('Network error, unable to connect to server. Please see /var/
 NETWORK_MESSAGE = _('Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.')
 PROXY_MESSAGE = _("Proxy error, unable to connect to proxy server.")
 UNAUTHORIZED_MESSAGE = _("Unauthorized: Invalid credentials for request.")
+TOKEN_AUTH_UNSUPPORTED_MESSAGE = _("Token authentication not supported by the entitlement server")
 FORBIDDEN_MESSAGE = _("Forbidden: Invalid credentials for request.")
 REMOTE_SERVER_MESSAGE = _("Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.")
 BAD_CA_CERT_MESSAGE = _("Bad CA certificate: %s")
@@ -72,6 +74,7 @@ class ExceptionMapper(object):
             connection.RestlibException: (RESTLIB_MESSAGE, self.format_restlib_exception),
             connection.RateLimitExceededException: (None, self.format_rate_limit_exception),
             httplib.BadStatusLine: (REMOTE_SERVER_MESSAGE, self.format_default),
+            TokenAuthUnsupportedException: (TOKEN_AUTH_UNSUPPORTED_MESSAGE, self.format_default),
         }
 
     def format_default(self, e, message):

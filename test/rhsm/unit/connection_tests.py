@@ -28,9 +28,9 @@ from nose.plugins.skip import SkipTest
 
 from rhsm import connection
 from rhsm.connection import UEPConnection, Restlib, ConnectionException, ConnectionSetupException, \
-        BadCertificateException, RestlibException, GoneException, NetworkException, \
-        RemoteServerException, drift_check, ExpiredIdentityCertException, UnauthorizedException, \
-        ForbiddenException, AuthenticationException, RateLimitExceededException, ContentConnection
+    BadCertificateException, RestlibException, GoneException, NetworkException, \
+    RemoteServerException, drift_check, ExpiredIdentityCertException, UnauthorizedException, \
+    ForbiddenException, AuthenticationException, RateLimitExceededException, ContentConnection, NoValidEntitlement
 
 from mock import Mock, mock, patch
 from datetime import date
@@ -127,7 +127,7 @@ class ConnectionTests(unittest.TestCase):
         self.cp.conn.request_post.assert_called_with("/consumers/abcd/entitlements")
 
     def test_clean_up_prefix(self):
-        self.assertTrue(self.cp.handler == "/Test")
+        self.assertTrue(self.cp.handler == "/Test/")
 
     def test_https_proxy_info_allcaps(self):
         with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host:4444'}):
@@ -368,14 +368,9 @@ class ConnectionTests(unittest.TestCase):
             cert.write('xxxxxx\n')
         with open(os.path.join(self.temp_ent_dir, "foo-key.pem"), 'w+') as key:
             key.write('xxxxxx\n')
-        cont_conn = ContentConnection(host="foobar", username="dummy", password="dummy", insecure=True)
-        cont_conn.ent_dir = self.temp_ent_dir
-        with self.assertRaises(BadCertificateException):
-            cont_conn._load_ca_certificate(
-                ssl.SSLContext(ssl.PROTOCOL_SSLv23),
-                self.temp_ent_dir + '/foo.pem',
-                self.temp_ent_dir + '/foo-key.pem'
-            )
+        with self.assertRaises(NoValidEntitlement):
+            cont_conn = ContentConnection(host="foobar", username="dummy", password="dummy", insecure=True, cert_dir=self.temp_ent_dir)
+            cont_conn.get_versions('/')
         restlib = Restlib("somehost", "123", "somehandler")
         restlib.ca_dir = self.temp_ent_dir
         with self.assertRaises(BadCertificateException):

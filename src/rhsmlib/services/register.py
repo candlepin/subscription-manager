@@ -130,4 +130,5 @@ class RegisterService(object):
                 raise exceptions.ValidationError(_("Error: Activation keys do not allow environments to be"
                     " specified."))
         elif not getattr(self.cp, 'username', None) or not getattr(self.cp, 'password', None):
-            raise exceptions.ValidationError(_("Error: Missing username or password."))
+            if not getattr(self.cp, 'token', None):
+                raise exceptions.ValidationError(_("Error: Missing username or password."))
