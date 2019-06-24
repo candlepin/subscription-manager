@@ -1247,6 +1247,8 @@ class RegisterCommand(UserPassCommand):
                                help=_("activation key to use for registration (can be specified more than once)"))
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("system preference used when subscribing automatically, requires --auto-attach"))
+        self.parser.add_option("--token", action='append', dest="token",
+                               help=_("token for offline authentication"))
 
     def _validate_options(self):
         self.autoattach = self.options.autosubscribe or self.options.autoattach
@@ -2526,6 +2528,10 @@ class ListCommand(CliCommand):
                                help=_("lists only the pool IDs for applicable available or consumed subscriptions; only used with --available and --consumed"))
         self.parser.add_option('--afterdate', dest="after_date",
                 help=(_("show pools that are active on or after the given date; only used with --available (example: %s)") % strftime("%Y-%m-%d", localtime())))
+        self.parser.add_option("--token", dest="pid_only", action="store_true",
+                               help=_(
+                                   "Generate offline token for user"))
+
 
     def _validate_options(self):
         if self.options.all and not self.options.available:
@@ -2964,6 +2970,16 @@ class StatusCommand(CliCommand):
 
         return result
 
+class TokenCommand(CliCommand):
+
+    def __init__(self):
+        shortdesc = _("Generate an offline token for authentication")
+        super(TokenCommand, self).__init__("token", shortdesc, False)
+
+    def _do_command(self):
+        keycloak=connection.KeycloakConnection()
+        token = keycloak.restCall()
+        print("Token is",token)
 
 class ManagerCLI(CLI):
 
@@ -2974,7 +2990,7 @@ class ManagerCLI(CLI):
                     RedeemCommand, ReposCommand, ReleaseCommand, StatusCommand,
                     EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand,
                     VersionCommand, RemoveCommand, AttachCommand, PluginsCommand,
-                    AutohealCommand, OverrideCommand, RoleCommand, UsageCommand]
+                    AutohealCommand, OverrideCommand, RoleCommand, UsageCommand,TokenCommand]
         CLI.__init__(self, command_classes=commands)
 
     def main(self):

@@ -28,6 +28,7 @@ import socket
 import sys
 import time
 from email.utils import formatdate
+from urllib import request, parse
 
 from rhsm.https import httplib, ssl
 
@@ -125,6 +126,22 @@ class BadCertificateException(ConnectionException):
 
     def __str__(self):
         return "Bad certificate at %s" % self.cert_path
+
+class KeycloakConnection(object):
+    def __init__(self):
+        pass
+
+    def restCall(self):
+        url = "http://localhost:8181/auth/realms/demo2/protocol/openid-connect/token"
+        params = {"client_id":12345 ,"username":"test","password":"test","grant_type":"password","client_secret":"259ec29e-9cc4-43f1-8948-a2c7d235ec6c"}
+        data = parse.urlencode(params).encode()
+        req = request.Request(url, data = data)
+        resp = request.urlopen(req)
+        raw_data = resp.read()
+        encoding = resp.info().get_content_charset('utf8')
+        data = json.loads(raw_data.decode(encoding))
+        return data['refresh_token']
+
 
 
 class RestlibException(ConnectionException):
