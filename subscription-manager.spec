@@ -83,7 +83,7 @@
 
 Name: subscription-manager
 Version: 1.20.10
-Release: 7%{?dist}
+Release: 8%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -880,6 +880,10 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Tue Jun 25 2019 Christopher Snyder <csnyder@redhat.com> 1.20.10-8
+- 1637090: Do not send Host header twice, when m2crypto is used;
+  (jhnidek@redhat.com)
+
 * Wed May 09 2018 Christopher Snyder <csnyder@redhat.com> 1.20.10-7
 - 1574529: Fix rhsmcertd integer overflow on i386 & i686 (csnyder@redhat.com)
 
