@@ -138,7 +138,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.25.11
+Version: 1.26.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1166,6 +1166,17 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Jun 25 2019 Christopher Snyder <csnyder@redhat.com> 1.26.1-1
+- 1722055: cockpit package has additional dependency (wpoteat@redhat.com)
+- 1705017: Show in man page that --installed is the default for the list
+  command (wpoteat@redhat.com)
+- 1689974: Update translations for 8.1 (csnyder@redhat.com)
+- Bump eslint from 3.19.0 to 4.18.2 in /cockpit
+  (49699333+dependabot[bot]@users.noreply.github.com)
+- 1722238: Fix reporting insights id in facts on RHEL7 (jhnidek@redhat.com)
+- Bump stringstream from 0.0.5 to 0.0.6 in /cockpit
+  (49699333+dependabot[bot]@users.noreply.github.com)
+
 * Mon Jun 17 2019 Christopher Snyder <csnyder@redhat.com> 1.25.11-1
 - 1665167: syspurpose attributes in list --consumed; ENT-1315
   (jhnidek@redhat.com)
