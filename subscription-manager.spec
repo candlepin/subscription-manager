@@ -523,6 +523,7 @@ BuildArch: noarch
 Requires: subscription-manager
 Requires: cockpit-bridge
 Requires: cockpit-shell
+Requires: cockpit-ws
 
 %description -n subscription-manager-cockpit
 Subscription Manager Cockpit UI
