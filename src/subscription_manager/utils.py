@@ -161,6 +161,36 @@ def is_valid_server_info(conn):
         return False
 
 
+def is_owner_using_golden_ticket(uep=None, identity=None, owner=None):
+    """
+    This function return True, when current owner uses contentAccessMode equal to org_environment. This
+    function has three optional arguments that can be reused for getting required information.
+    :param uep: connection to candlepin server
+    :param identity: reference on current identity
+    :param owner: reference on current owner
+    :return: True, when current owner uses contentAccesMode equal to org_environment. False otherwise.
+    """
+
+    if uep is None:
+        cp_provider = inj.require(inj.CP_PROVIDER)
+        uep = cp_provider.get_consumer_auth_cp()
+
+    if identity is None:
+        identity = inj.require(inj.IDENTITY)
+
+    if owner is None:
+        try:
+            owner = uep.getOwner(identity.uuid)
+        except Exception as err:
+            log.debug("Unable to get owner: %s" % str(err))
+            return False
+
+    if owner['contentAccessMode'] == "org_environment":
+        return True
+
+    return False
+
+
 def get_version(versions, package_name):
     """
     Return a string containing the version (and release if available).
