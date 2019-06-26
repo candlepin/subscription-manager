@@ -22,6 +22,7 @@ import os
 from iniparse import SafeConfigParser
 from iniparse.compat import NoOptionError, InterpolationMissingOptionError, NoSectionError
 import re
+import tempfile
 
 CONFIG_ENV_VAR = "RHSM_CONFIG"
 
@@ -120,8 +121,10 @@ class RhsmConfigParser(SafeConfigParser):
 
     def save(self, config_file=None):
         """Writes config file to storage."""
-        fo = open(self.config_file, "w")
-        self.write(fo)
+        with tempfile.NamedTemporaryFile(mode="w", dir=os.path.dirname(self.config_file), delete=False) as fo:
+            self.write(fo)
+            fo.flush()
+            os.rename(fo.name, self.config_file)
 
     def get(self, section, prop):
         """Get a value from rhsm config.
