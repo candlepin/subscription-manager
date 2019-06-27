@@ -446,7 +446,7 @@ class RegisterWidget(widgets.SubmanBaseWidget):
                 self.emit('finished')
             # When golden ticket mode is used, then skit auto-bind too
             if is_owner_using_golden_ticket():
-                log.debug('Skipping auto-bind, because contentAccessMode is equal to organization')
+                log.debug('Skipping auto-bind, because contentAccessMode is equal to org_environment')
                 self.emit('finished')
             self.current_screen.emit('move-to-screen', FIND_SUBSCRIPTIONS)
             self.register_widget.show_all()
