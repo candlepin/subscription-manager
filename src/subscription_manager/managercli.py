@@ -1393,10 +1393,6 @@ class RegisterCommand(UserPassCommand):
             #       Are we trying to sync potential new or dynamic facts?
             facts.update_check(self.cp, consumer['uuid'], force=True)
 
-        profile_mgr = inj.require(inj.PROFILE_MANAGER)
-        # 767265: always force an upload of the packages when registering
-        profile_mgr.update_check(self.cp, consumer['uuid'], True)
-
         # Facts and installed products went out with the registration request,
         # manually write caches to disk:
         # facts service job now(soon)
@@ -1428,6 +1424,10 @@ class RegisterCommand(UserPassCommand):
             # update certs, repos, and caches.
             # FIXME: aside from the overhead, should this be cert_action_client.update?
             self.entcertlib.update()
+
+        profile_mgr = inj.require(inj.PROFILE_MANAGER)
+        # 767265: always force an upload of the packages when registering
+        profile_mgr.update_check(self.cp, consumer['uuid'], True)
 
         subscribed = 0
         if self.options.activation_keys or self.autoattach:
