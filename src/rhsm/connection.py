@@ -28,7 +28,6 @@ import socket
 import sys
 import time
 from email.utils import formatdate
-import ssl
 
 from rhsm.https import httplib, ssl
 
@@ -125,6 +124,7 @@ class BadCertificateException(ConnectionException):
 
     def __str__(self):
         return "Bad certificate at %s" % self.cert_path
+
 
 class KeycloakConnection(object):
     """
@@ -534,12 +534,12 @@ class BaseRestLib(object):
         self.proxy_user = proxy_user
         self.proxy_password = proxy_password
         self.token = token
-
         # Setup basic authentication if specified:
         if username and password:
             self.headers['Authorization'] = _encode_auth(username, password)
         elif token:
             self.headers['Authorization'] = 'Bearer ' + token
+
     def _load_ca_certificates(self, context):
 
         loaded_ca_certs = []

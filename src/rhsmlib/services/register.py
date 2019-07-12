@@ -49,9 +49,10 @@ class RegisterService(object):
         addons = addons or syspurpose.get('addons', [])
         usage = usage or syspurpose.get('usage', '')
         service_level = service_level or syspurpose.get('service_level_agreement', '')
+        if token:
+            refreshToken = token[0]
 
         type = type or "system"
-
         options = {
             'activation_keys': activation_keys,
             'environment': environment,
@@ -59,7 +60,7 @@ class RegisterService(object):
             'name': name,
             'consumerid': consumerid,
             'type': type,
-            'token': token[0],
+            'token': refreshToken,
         }
         self.validate_options(options)
 
@@ -90,7 +91,7 @@ class RegisterService(object):
                 addons=addons,
                 service_level=service_level,
                 usage=usage,
-                token=token[0],
+                token=refreshToken,
             )
         self.installed_mgr.write_cache()
         self.plugin_manager.run("post_register_consumer", consumer=consumer, facts=facts_dict)

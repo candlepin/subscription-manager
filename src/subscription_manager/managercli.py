@@ -2993,6 +2993,7 @@ class StatusCommand(CliCommand):
 
         return result
 
+
 class TokenCommand(CliCommand):
     """
         Token Option with register command
