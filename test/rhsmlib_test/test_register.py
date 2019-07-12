@@ -300,7 +300,7 @@ class RegisterServiceTest(InjectionMockingTest):
 
         self.mock_identity.is_valid.return_value = False
         options = self._build_options(consumerid='consumerid')
-        with self.assertRaisesRegexp(exceptions.ValidationError, r'.*Missing username.*'):
+        with self.assertRaisesRegexp(exceptions.ValidationError, r'.*Missing token for registration or username/password.*'):
             register.RegisterService(self.mock_cp).validate_options(options)
 
 

@@ -43,7 +43,7 @@ class RegisterService(object):
         # signature we want to consider that an error.
         if kwargs:
             raise exceptions.ValidationError(_("Unknown arguments: %s") % kwargs.keys())
-
+        refreshToken = None
         syspurpose = syspurposelib.read_syspurpose()
         role = role or syspurpose.get('role', '')
         addons = addons or syspurpose.get('addons', [])
