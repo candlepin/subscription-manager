@@ -34,7 +34,7 @@ class RegisterService(object):
         self.cp = cp
 
     def register(self, org, activation_keys=None, environment=None, force=None, name=None, consumerid=None,
-            type=None, role=None, addons=None, service_level=None, usage=None, **kwargs):
+            type=None, role=None, addons=None, service_level=None, usage=None, token=None, **kwargs):
         # We accept a kwargs argument so that the DBus object can pass the options dictionary it
         # receives transparently to the service via dictionary unpacking.  This strategy allows the
         # DBus object to be more independent of the service implementation.
@@ -58,7 +58,8 @@ class RegisterService(object):
             'force': force,
             'name': name,
             'consumerid': consumerid,
-            'type': type
+            'type': type,
+            'token':token[0],
         }
         self.validate_options(options)
 
@@ -88,7 +89,8 @@ class RegisterService(object):
                 role=role,
                 addons=addons,
                 service_level=service_level,
-                usage=usage
+                usage=usage,
+                token=token[0],
             )
         self.installed_mgr.write_cache()
         self.plugin_manager.run("post_register_consumer", consumer=consumer, facts=facts_dict)
@@ -129,4 +131,6 @@ class RegisterService(object):
                 raise exceptions.ValidationError(_("Error: Activation keys do not allow environments to be"
                     " specified."))
         elif not getattr(self.cp, 'username', None) or not getattr(self.cp, 'password', None):
-            raise exceptions.ValidationError(_("Error: Missing username or password."))
+            if not getattr(self.cp,'token',None):
+                raise exceptions.ValidationError(_("Error: Missing token for registration or username/password."))
+

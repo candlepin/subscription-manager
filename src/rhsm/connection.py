@@ -29,6 +29,7 @@ import sys
 import time
 from email.utils import formatdate
 from urllib import request, parse
+import ssl
 
 from rhsm.https import httplib, ssl
 
@@ -131,17 +132,32 @@ class KeycloakConnection(object):
     def __init__(self):
         pass
 
-    def restCall(self):
-        url = "http://localhost:8181/auth/realms/demo2/protocol/openid-connect/token"
-        params = {"client_id":12345 ,"username":"test","password":"test","grant_type":"password","client_secret":"259ec29e-9cc4-43f1-8948-a2c7d235ec6c"}
+    def getAccessTokenThroughRefresh(self,refreshtoken):
+        # Get parameters from status endpoint
+        url = "https://localhost:8443/candlepin/status"
+        # Added sslcontext to avoid certification issue in localhost
+        req = request.Request(url)
+        gcontext = ssl.SSLContext()
+        resp = request.urlopen(req, context=gcontext)
+        raw_data = resp.read()
+        encoding = resp.info().get_content_charset('utf8')
+        data = json.loads(raw_data.decode(encoding))
+
+        realm = data['realm']
+        clientid = data['resource']
+        hostname = data['authUrl']
+
+        #Get access token in exchange for refresh token
+        urlAccessToken = hostname+"/realms/"+realm+"/protocol/openid-connect/token"
+        params = {"client_id":clientid,"grant_type":"refresh_token"}
+        params['refresh_token'] = refreshtoken
         data = parse.urlencode(params).encode()
-        req = request.Request(url, data = data)
+        req = request.Request(urlAccessToken, data=data)
         resp = request.urlopen(req)
         raw_data = resp.read()
         encoding = resp.info().get_content_charset('utf8')
         data = json.loads(raw_data.decode(encoding))
-        return data['refresh_token']
-
+        return data['access_token']
 
 
 class RestlibException(ConnectionException):
@@ -470,7 +486,7 @@ class BaseRestLib(object):
             proxy_user=None, proxy_password=None,
             cert_file=None, key_file=None,
             ca_dir=None, insecure=False, ssl_verify_depth=1, timeout=None,
-            correlation_id=None):
+            correlation_id=None, token=None):
         self.host = host
         self.ssl_port = ssl_port
         self.apihandler = apihandler
@@ -515,11 +531,13 @@ class BaseRestLib(object):
         self.proxy_port = proxy_port
         self.proxy_user = proxy_user
         self.proxy_password = proxy_password
+        self.token = token
 
         # Setup basic authentication if specified:
         if username and password:
             self.headers['Authorization'] = _encode_auth(username, password)
-
+        elif token:
+            self.headers['Authorization'] = 'Bearer '+token
     def _load_ca_certificates(self, context):
         loaded_ca_certs = []
         cert_path = ''
@@ -797,7 +815,8 @@ class UEPConnection(object):
             timeout=None,
             restlib_class=None,
             correlation_id=None,
-            no_proxy=None):
+            no_proxy=None,
+            token=None):
         """
         Two ways to authenticate:
             - username/password for HTTP basic authentication. (owner admin role)
@@ -850,6 +869,7 @@ class UEPConnection(object):
         self.key_file = key_file
         self.username = username
         self.password = password
+        self.token = token
 
         self.ca_cert_dir = config.get('rhsm', 'ca_cert_dir')
         self.ssl_verify_depth = safe_int(config.get('server', 'ssl_verify_depth'))
@@ -863,11 +883,14 @@ class UEPConnection(object):
 
         using_basic_auth = False
         using_id_cert_auth = False
+        using_keycloak_auth = False
 
         if username and password:
             using_basic_auth = True
         elif cert_file and key_file:
             using_id_cert_auth = True
+        elif token:
+            using_keycloak_auth = True
 
         if using_basic_auth and using_id_cert_auth:
             raise Exception("Cannot specify both username/password and "
@@ -883,7 +906,16 @@ class UEPConnection(object):
                                  safe_int(self.proxy_port))
         auth_description = None
         # initialize connection
-        if using_basic_auth:
+
+        if using_keycloak_auth:
+            self.conn = restlib_class(self.host, self.ssl_port, self.handler,
+                    proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
+                    proxy_user=self.proxy_user, proxy_password=self.proxy_password,
+                    ca_dir=self.ca_cert_dir, insecure=self.insecure,
+                    ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
+                    correlation_id=correlation_id,token=self.token)
+            auth_description = "auth=bearer %s" % token
+        elif using_basic_auth:
             self.conn = restlib_class(self.host, self.ssl_port, self.handler,
                     username=self.username, password=self.password,
                     proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
@@ -985,7 +1017,7 @@ class UEPConnection(object):
     def registerConsumer(self, name="unknown", type="system", facts={},
             owner=None, environment=None, keys=None,
             installed_products=None, uuid=None, hypervisor_id=None,
-            content_tags=None, role=None, addons=None, service_level=None, usage=None):
+            content_tags=None, role=None, addons=None, service_level=None, usage=None,token=None):
         """
         Creates a consumer on candlepin server
         """

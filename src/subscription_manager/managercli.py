@@ -30,7 +30,9 @@ import socket
 import six.moves
 import sys
 from time import localtime, strftime, strptime
-
+import jwt
+import json
+import base64
 from rhsm.certificate import CertificateException
 from rhsm.certificate2 import CONTENT_ACCESS_CERT_TYPE
 from rhsm.https import ssl
@@ -266,6 +268,7 @@ class CliCommand(AbstractCLICommand):
             self._add_proxy_options()
 
         self.server_url = None
+        self.token = None
 
         # TODO
         self.server_hostname = None
@@ -746,6 +749,7 @@ class UserPassCommand(CliCommand):
         super(UserPassCommand, self).__init__(name, shortdesc, primary)
         self._username = None
         self._password = None
+        self._token = None
 
         self.parser.add_option("--username", dest="username",
                                help=_("username to use when authorizing against the server"))
@@ -921,9 +925,13 @@ class IdentityCommand(UserPassCommand):
                     print(_('environment name: %s') % environment_name)
             else:
                 if self.options.force:
-                    # get an UEP with basic auth
-                    self.cp_provider.set_user_pass(self.username, self.password)
-                    self.cp = self.cp_provider.get_basic_auth_cp()
+                    # get an UEP with basic auth or keycloak auth
+                    if self.token:
+                        self.cp_provider.set_token(self.token)
+                        self.cp_ = self.cp_provider.get_keycloak_auth_cp()
+                    else:
+                        self.cp_provider.set_user_pass(self.username, self.password)
+                        self.cp = self.cp_provider.get_basic_auth_cp()
                 consumer = self.cp.regenIdCertificate(consumerid)
                 managerlib.persist_consumer_cert(consumer)
 
@@ -1331,7 +1339,24 @@ class RegisterCommand(UserPassCommand):
 
         # Proceed with new registration:
         try:
-            if not self.options.activation_keys:
+            if self.options.token:
+                keycloak_instance = connection.KeycloakConnection()
+                access_token = keycloak_instance.getAccessTokenThroughRefresh(self.options.token[0])
+                hostname = conf["server"]["hostname"]
+                if ":" in hostname:
+                    normalized_hostname = "[%s]" % hostname
+                else:
+                    normalized_hostname = hostname
+                print(_("Registering to: %s:%s%s") %
+                    (normalized_hostname, conf["server"]["port"], conf["server"]["prefix"]))
+                self.cp_provider.set_token(access_token)
+                payload = access_token.split(".")
+                payload[1] += "=" * ((4 - len(payload[1]) % 4) % 4)
+                data = base64.b64decode(payload[1])
+                data_username = json.loads(data)
+                preferred_username = data_username['preferred_username']
+                admin_cp = self.cp_provider.get_keycloak_auth_cp()
+            elif not self.options.activation_keys:
                 hostname = conf["server"]["hostname"]
                 if ":" in hostname:
                     normalized_hostname = "[%s]" % hostname
@@ -1342,26 +1367,25 @@ class RegisterCommand(UserPassCommand):
                 self.cp_provider.set_user_pass(self.username, self.password)
                 admin_cp = self.cp_provider.get_basic_auth_cp()
             else:
-                admin_cp = self.cp_provider.get_no_auth_cp()
+                admin_cp = self.cp_provider.get_no_auth_cp
 
             # This is blocking and not async, which aside from blocking here, also
             # means things like following name owner changes gets weird.
             service = register.RegisterService(admin_cp)
-
             if self.options.consumerid:
                 log.debug("Registering as existing consumer: %s" % self.options.consumerid)
                 consumer = service.register(None, consumerid=self.options.consumerid)
             else:
-                owner_key = self._determine_owner_key(admin_cp)
+                owner_key = self._determine_owner_key(admin_cp, preferred_username)
                 environment_id = self._get_environment_id(admin_cp, owner_key, self.options.environment)
-
                 consumer = service.register(
                     owner_key,
                     activation_keys=self.options.activation_keys,
                     environment=environment_id,
                     force=self.options.force,
                     name=self.options.consumername,
-                    type=self.options.consumertype
+                    type=self.options.consumertype,
+                    token=access_token
                 )
         except (connection.RestlibException, exceptions.ServiceError) as re:
             log.exception(re)
@@ -1425,14 +1449,14 @@ class RegisterCommand(UserPassCommand):
                     save_sla_to_syspurpose_metadata(self.options.service_level)
                     print(_("Service level set to: %s") % self.options.service_level)
 
-        if self.options.consumerid or self.options.activation_keys or self.autoattach or self.cp.has_capability(CONTENT_ACCESS_CERT_CAPABILITY):
+        if self.options.consumerid or self.options.activation_keys or self.autoattach or self.options.token or self.cp.has_capability(CONTENT_ACCESS_CERT_CAPABILITY):
             log.debug("System registered, updating entitlements if needed")
             # update certs, repos, and caches.
             # FIXME: aside from the overhead, should this be cert_action_client.update?
             self.entcertlib.update()
 
         subscribed = 0
-        if self.options.activation_keys or self.autoattach:
+        if self.options.activation_keys or self.options.token or self.autoattach:
             # update with latest cert info
             self.sorter = inj.require(inj.CERT_SORTER)
             self.sorter.force_cert_check()
@@ -1491,7 +1515,7 @@ class RegisterCommand(UserPassCommand):
             system_exit(os.EX_DATAERR, _("No such environment: %s") % environment_name)
         return env['id']
 
-    def _determine_owner_key(self, cp):
+    def _determine_owner_key(self, cp, pref):
         """
         If given an owner in the options, use it. Otherwise ask the server
         for all the owners this user has access too. If there is just one,
@@ -1499,8 +1523,10 @@ class RegisterCommand(UserPassCommand):
         """
         if self.options.org:
             return self.options.org
-
-        owners = cp.getOwnerList(self.username)
+        if self.options.token:
+            owners = cp.getOwnerList(pref)
+        else:
+            owners = cp.getOwnerList(self.username)
 
         if len(owners) == 0:
             system_exit(1, _("%s cannot register with any organizations.") % self.username)
@@ -2976,10 +3002,6 @@ class TokenCommand(CliCommand):
         shortdesc = _("Generate an offline token for authentication")
         super(TokenCommand, self).__init__("token", shortdesc, False)
 
-    def _do_command(self):
-        keycloak=connection.KeycloakConnection()
-        token = keycloak.restCall()
-        print("Token is",token)
 
 class ManagerCLI(CLI):
 

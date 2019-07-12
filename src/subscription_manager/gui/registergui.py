@@ -1885,6 +1885,10 @@ class AsyncBackend(object):
         self.backend.cp_provider.set_user_pass(username, password)
         self.backend.update()
 
+    def set_token(self, token=None):
+        self.backend.cp_provider.set_token(token)
+        self.backend.update()
+
     def _watch_thread(self):
         """
         glib idle method to watch for thread completion.
