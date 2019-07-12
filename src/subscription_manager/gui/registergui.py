@@ -43,7 +43,7 @@ from subscription_manager.injection import IDENTITY, PLUGIN_MANAGER, require, \
         INSTALLED_PRODUCTS_MANAGER, PROFILE_MANAGER, FACTS, ENT_DIR
 from subscription_manager import managerlib
 from subscription_manager.utils import is_valid_server_info, MissingCaCertException, \
-        parse_server_info, restart_virt_who
+        parse_server_info, restart_virt_who, is_owner_using_golden_ticket
 
 from subscription_manager.gui import utils as gui_utils
 from subscription_manager.gui.autobind import DryRunResult, \
@@ -444,6 +444,10 @@ class RegisterWidget(widgets.SubmanBaseWidget):
             # to subscriptions" is clicked in the gui)
             if self.info.get_property('skip-auto-bind'):
                 self.emit('finished')
+            # When golden ticket mode is used, then skit auto-bind too
+            if is_owner_using_golden_ticket():
+                log.debug('Skipping auto-bind, because contentAccessMode is equal to org_environment')
+                self.emit('finished')
             self.current_screen.emit('move-to-screen', FIND_SUBSCRIPTIONS)
             self.register_widget.show_all()
             return False
@@ -820,6 +824,9 @@ class AutoBindWidget(RegisterWidget):
                                              parent_window)
 
     def choose_initial_screen(self):
+        if is_owner_using_golden_ticket():
+            log.debug('Skipping auto-bind, because contentAccessMode is equal to organization')
+            self.emit('finished')
         self.current_screen.emit('move-to-screen', FIND_SUBSCRIPTIONS)
         self.register_widget.show_all()
         return False
@@ -1115,6 +1122,10 @@ class PerformPackageProfileSyncScreen(NoGuiScreen):
             # ie, detecting when we are 'done' registering
             elif self.info.get_property('skip-auto-bind'):
                 pass
+            elif is_owner_using_golden_ticket():
+                log.debug('Skipping auto-bind, because contentAccessMode is equal to org_environment')
+                # self.emit('register-finished')
+                self.emit('move-to-screen', REFRESH_SUBSCRIPTIONS_PAGE)
             # Or more likely, the server doesn't support package profile updates
             # so we got a result of 0 and no error
             else:
@@ -2057,7 +2068,7 @@ class AsyncBackend(object):
             # FIXME: this should be a different asyncBackend task
             managerlib.fetch_certificates(self.backend.certlib)
 
-            attached_pool_ids = [ent.pool.id for ent in self.ent_dir.list_with_content_access()]
+            attached_pool_ids = [ent.pool.id for ent in self.ent_dir.list()]
             for pool_id in expected_pool_ids:
                 if pool_id not in attached_pool_ids:
                     raise Exception(_("Not all expected subscriptions were attached, see /var/log/rhsm/rhsm.log for more details."))

@@ -775,3 +775,28 @@ class WrittenOverrideCache(CacheManager):
             # ignore json file parse errors, we are going to generate
             # a new as if it didn't exist
             pass
+
+
+class ContentAccessModeCache(CacheManager):
+    """
+    Cache the content access mode that is used for current identity.
+    """
+
+    CACHE_FILE = "/var/lib/rhsm/cache/content_access_mode.json"
+
+    def __init__(self, content_access_mode=None):
+        self.content_access_mode = content_access_mode or {}
+
+    def to_dict(self):
+        return self.content_access_mode
+
+    def _load_data(self, open_file):
+        try:
+            self.content_access_mode = json.loads(open_file.read()) or {}
+            return self.content_access_mode
+        except IOError as err:
+            log.error("Unable to read cache: %s" % self.CACHE_FILE)
+            log.exception(err)
+        except ValueError:
+            # Ignore json file parse error
+            pass

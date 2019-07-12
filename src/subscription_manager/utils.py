@@ -161,6 +161,59 @@ def is_valid_server_info(conn):
         return False
 
 
+def is_owner_using_golden_ticket(uep=None, identity=None, owner=None):
+    """
+    This function return True, when current owner uses contentAccessMode equal to org_environment. This
+    function has three optional arguments that can be reused for getting required information.
+    :param uep: connection to candlepin server
+    :param identity: reference on current identity
+    :param owner: reference on current owner
+    :return: True, when current owner uses contentAccesMode equal to org_environment. False otherwise.
+    """
+
+    if uep is None:
+        cp_provider = inj.require(inj.CP_PROVIDER)
+        uep = cp_provider.get_consumer_auth_cp()
+
+    if identity is None:
+        identity = inj.require(inj.IDENTITY)
+
+    # When identity is not known, then system is not registered
+    if identity.uuid is None:
+        return False
+
+    content_access_mode = None
+
+    # We have to load it here, because we don't want to add another class to dependency injection
+
+    # Try to use cached data to minimize numbers of REST API calls
+    cache = inj.require(inj.CONTENT_ACCESS_MODE_CACHE)
+    data = cache.read_cache_only()
+    if data is not None:
+        if identity.uuid in data:
+            content_access_mode = data[identity.uuid]
+
+    if content_access_mode is None:
+        if owner is None:
+            try:
+                owner = uep.getOwner(identity.uuid)
+            except Exception as err:
+                log.debug("Unable to get owner: %s" % str(err))
+                return False
+        if 'contentAccessMode' in owner:
+            content_access_mode = owner['contentAccessMode']
+
+        # Write cache to file
+        data = {identity.uuid: content_access_mode}
+        cache.content_access_mode = data
+        cache.write_cache(debug=False)
+
+    if content_access_mode == "org_environment":
+        return True
+
+    return False
+
+
 def get_version(versions, package_name):
     """
     Return a string containing the version (and release if available).
