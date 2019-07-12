@@ -28,14 +28,12 @@ import socket
 import sys
 import time
 from email.utils import formatdate
-from urllib import request, parse
 import ssl
 
 from rhsm.https import httplib, ssl
 
 from six.moves.urllib.request import proxy_bypass
 from six.moves.urllib.parse import urlencode, quote, quote_plus
-
 from rhsm.config import initConfig
 from rhsm import ourjson as json
 from rhsm import utils
@@ -129,16 +127,20 @@ class BadCertificateException(ConnectionException):
         return "Bad certificate at %s" % self.cert_path
 
 class KeycloakConnection(object):
+    """
+      Keycloak Based Authentication
+    """
+
     def __init__(self):
         pass
 
-    def getAccessTokenThroughRefresh(self,refreshtoken):
+    def getAccessTokenThroughRefresh(self, refreshtoken):
         # Get parameters from status endpoint
         url = "https://localhost:8443/candlepin/status"
         # Added sslcontext to avoid certification issue in localhost
-        req = request.Request(url)
+        req = six.moves.urllib.request.Request(url)
         gcontext = ssl.SSLContext()
-        resp = request.urlopen(req, context=gcontext)
+        resp = six.moves.urllib.request.urlopen(req, context=gcontext)
         raw_data = resp.read()
         encoding = resp.info().get_content_charset('utf8')
         data = json.loads(raw_data.decode(encoding))
@@ -148,12 +150,12 @@ class KeycloakConnection(object):
         hostname = data['authUrl']
 
         #Get access token in exchange for refresh token
-        urlAccessToken = hostname+"/realms/"+realm+"/protocol/openid-connect/token"
-        params = {"client_id":clientid,"grant_type":"refresh_token"}
+        urlAccessToken = hostname + "/realms/" + realm + "/protocol/openid-connect/token"
+        params = {"client_id": clientid, "grant_type": "refresh_token"}
         params['refresh_token'] = refreshtoken
-        data = parse.urlencode(params).encode()
-        req = request.Request(urlAccessToken, data=data)
-        resp = request.urlopen(req)
+        data = six.moves.urllib.parse.urlencode(params).encode()
+        req = six.moves.urllib.request.Request(urlAccessToken, data=data)
+        resp = six.moves.urllib.request.urlopen(req)
         raw_data = resp.read()
         encoding = resp.info().get_content_charset('utf8')
         data = json.loads(raw_data.decode(encoding))
@@ -537,8 +539,9 @@ class BaseRestLib(object):
         if username and password:
             self.headers['Authorization'] = _encode_auth(username, password)
         elif token:
-            self.headers['Authorization'] = 'Bearer '+token
+            self.headers['Authorization'] = 'Bearer ' + token
     def _load_ca_certificates(self, context):
+
         loaded_ca_certs = []
         cert_path = ''
         try:
@@ -913,7 +916,7 @@ class UEPConnection(object):
                     proxy_user=self.proxy_user, proxy_password=self.proxy_password,
                     ca_dir=self.ca_cert_dir, insecure=self.insecure,
                     ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
-                    correlation_id=correlation_id,token=self.token)
+                    correlation_id=correlation_id, token=self.token)
             auth_description = "auth=bearer %s" % token
         elif using_basic_auth:
             self.conn = restlib_class(self.host, self.ssl_port, self.handler,
@@ -1017,7 +1020,7 @@ class UEPConnection(object):
     def registerConsumer(self, name="unknown", type="system", facts={},
             owner=None, environment=None, keys=None,
             installed_products=None, uuid=None, hypervisor_id=None,
-            content_tags=None, role=None, addons=None, service_level=None, usage=None,token=None):
+            content_tags=None, role=None, addons=None, service_level=None, usage=None, token=None):
         """
         Creates a consumer on candlepin server
         """

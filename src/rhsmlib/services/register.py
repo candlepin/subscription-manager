@@ -59,7 +59,7 @@ class RegisterService(object):
             'name': name,
             'consumerid': consumerid,
             'type': type,
-            'token':token[0],
+            'token': token[0],
         }
         self.validate_options(options)
 
@@ -131,6 +131,5 @@ class RegisterService(object):
                 raise exceptions.ValidationError(_("Error: Activation keys do not allow environments to be"
                     " specified."))
         elif not getattr(self.cp, 'username', None) or not getattr(self.cp, 'password', None):
-            if not getattr(self.cp,'token',None):
+            if not getattr(self.cp, 'token', None):
                 raise exceptions.ValidationError(_("Error: Missing token for registration or username/password."))
-

@@ -30,7 +30,6 @@ import socket
 import six.moves
 import sys
 from time import localtime, strftime, strptime
-import jwt
 import json
 import base64
 from rhsm.certificate import CertificateException
@@ -928,7 +927,7 @@ class IdentityCommand(UserPassCommand):
                     # get an UEP with basic auth or keycloak auth
                     if self.token:
                         self.cp_provider.set_token(self.token)
-                        self.cp_ = self.cp_provider.get_keycloak_auth_cp()
+                        self.cp = self.cp_provider.get_keycloak_auth_cp()
                     else:
                         self.cp_provider.set_user_pass(self.username, self.password)
                         self.cp = self.cp_provider.get_basic_auth_cp()
@@ -2555,9 +2554,7 @@ class ListCommand(CliCommand):
         self.parser.add_option('--afterdate', dest="after_date",
                 help=(_("show pools that are active on or after the given date; only used with --available (example: %s)") % strftime("%Y-%m-%d", localtime())))
         self.parser.add_option("--token", dest="pid_only", action="store_true",
-                               help=_(
-                                   "Generate offline token for user"))
-
+                               help=_("Generate offline token for user"))
 
     def _validate_options(self):
         if self.options.all and not self.options.available:
@@ -2997,6 +2994,9 @@ class StatusCommand(CliCommand):
         return result
 
 class TokenCommand(CliCommand):
+    """
+        Token Option with register command
+    """
 
     def __init__(self):
         shortdesc = _("Generate an offline token for authentication")
@@ -3012,7 +3012,7 @@ class ManagerCLI(CLI):
                     RedeemCommand, ReposCommand, ReleaseCommand, StatusCommand,
                     EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand,
                     VersionCommand, RemoveCommand, AttachCommand, PluginsCommand,
-                    AutohealCommand, OverrideCommand, RoleCommand, UsageCommand,TokenCommand]
+                    AutohealCommand, OverrideCommand, RoleCommand, UsageCommand, TokenCommand]
         CLI.__init__(self, command_classes=commands)
 
     def main(self):
