@@ -138,7 +138,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.25.11
+Version: 1.25.12
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1166,6 +1166,11 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Jul 12 2019 Christopher Snyder <csnyder@redhat.com> 1.25.12-1
+- 1722055: cockpit package has additional dependency (wpoteat@redhat.com)
+- Add rhel 8.1 tito releaser (csnyder@redhat.com)
+- 1689974: Update translations for 8.1 (csnyder@redhat.com)
+
 * Mon Jun 17 2019 Christopher Snyder <csnyder@redhat.com> 1.25.11-1
 - 1665167: syspurpose attributes in list --consumed; ENT-1315
   (jhnidek@redhat.com)
