@@ -41,7 +41,7 @@ class PatternDialogBody extends React.Component {
         let proxy;
         if (this.props.proxy) {
             proxy = (
-                <form className="ct-form-layout">
+                <form className="ct-form-layout" id="subscription-register-proxy-form">
                     <label className="control-label" htmlFor="subscription-proxy-server">
                         {_("Proxy Location")}
                     </label>
