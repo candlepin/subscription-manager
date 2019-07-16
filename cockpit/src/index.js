@@ -84,6 +84,7 @@ function openRegisterDialog() {
         registerDialogDetails.onChange = updatedData;
 
         let dialogProps = {
+              'id': 'register_dialog',
               'title': _("Register System"),
               'body': React.createElement(subscriptionsRegister.dialogBody, registerDialogDetails),
           };

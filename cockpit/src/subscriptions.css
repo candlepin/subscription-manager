@@ -31,10 +31,23 @@
     margin-left: 12px;
 }
 
+.subscription-status-ct .value {
+    font-weight: 400;
+    margin-left: 4px;
+}
+
+#register_dialog .modal-footer .alert{
+    text-align: left;
+    padding-left: 20px;
+}
+
+#register_dialog .modal-footer .alert .fa-exclamation-triangle {
+    margin-right: 4px;
+}
+
 .container-fluid.alert {
     margin: 20px;
 }
-
 
 #subscription-register-url {
     margin-bottom: 3px;
@@ -58,6 +71,10 @@
 
 #subscription-proxy-use {
     vertical-align: sub;
+}
+
+#subscription-register-proxy-form {
+    margin-bottom: 4px;
 }
 
 .ct-form-layout .ct-form-layout {
