@@ -32,7 +32,7 @@ from email.utils import formatdate
 from rhsm.https import httplib, ssl
 
 from six.moves.urllib.request import proxy_bypass
-from six.moves.urllib.parse import urlencode, quote, quote_plus
+from six.moves.urllib.parse import urlencode, quote, quote_plus, urlparse
 from rhsm.config import initConfig
 from rhsm import ourjson as json
 from rhsm import utils
@@ -131,40 +131,119 @@ class KeycloakConnection(object):
       Keycloak Based Authentication
     """
 
-    def __init__(self):
-        pass
+    def __init__(self, realm, auth_url, resource, host=None,
+            ssl_port=None,
+            handler=None,
+            proxy_hostname=None,
+            proxy_port=None,
+            proxy_user=None,
+            proxy_password=None,
+            username=None, password=None,
+            cert_file=None, key_file=None,
+            insecure=None,
+            timeout=None,
+            restlib_class=None,
+            correlation_id=None,
+            no_proxy=None,
+            token=None):
+        self.realm = realm
+        self.auth_url = auth_url
+        self.resource = resource
+        self.correlation_id = correlation_id
+        self.token = token
+        self.host = host
+        self.insecure = insecure
+        self.proxy_hostname = proxy_hostname
+        self.proxy_port = proxy_port
+        self.timeout = timeout
+        self.proxy_user = proxy_user
+        self.handler = handler
+        self.restlib_class = restlib_class
+        self.proxy_password = proxy_password
+        self.ssl_port = ssl_port
 
-    def getAccessTokenThroughRefresh(self, refreshtoken):
-        # Get parameters from status endpoint
-        url = "https://localhost:8443/candlepin/status"
-        # Added sslcontext to avoid certification issue in localhost
-        req = six.moves.urllib.request.Request(url)
-        gcontext = ssl.SSLContext()
-        resp = six.moves.urllib.request.urlopen(req, context=gcontext)
-        raw_data = resp.read()
-        encoding = resp.info().get_content_charset('utf8')
-        data = json.loads(raw_data.decode(encoding))
+    def get_access_token_through_refresh(self, refreshtoken):
+        """
+        Get parameters from status endpoint
+        """
+        restlib_class = None
+        restlib_class = restlib_class or Restlib
+        self.host = self.auth_url
+        self.timeout = safe_int(config.get('server', 'server_timeout'))
+        proxy_hostname = None
+        proxy_port = None
+        proxy_user = None
+        proxy_password = None
+        insecure = None
+        self.insecure = insecure
+        if insecure is None:
+            self.insecure = False
+            config_insecure = safe_int(config.get('server', 'insecure'))
+            if config_insecure:
+                self.insecure = True
 
-        realm = data['realm']
-        clientid = data['resource']
-        hostname = data['authUrl']
+        self.ca_cert_dir = config.get('rhsm', 'ca_cert_dir')
+        self.ssl_verify_depth = safe_int(config.get('server', 'ssl_verify_depth'))
+
+        # allow specifying no_proxy via api or config
+        no_proxy_override = config.get('server', 'no_proxy')
+        if no_proxy_override:
+            os.environ['no_proxy'] = no_proxy_override
+
+        utils.fix_no_proxy()
+        log.debug('Environment variable NO_PROXY=%s will be used' % no_proxy_override)
+
+        # honor no_proxy environment variable
+        if proxy_bypass(self.host):
+            self.proxy_hostname = None
+            self.proxy_port = None
+            self.proxy_user = None
+            self.proxy_password = None
+        else:
+            info = utils.get_env_proxy_info()
+
+            self.proxy_hostname = proxy_hostname or \
+                config.get('server', 'proxy_hostname') or \
+                info['proxy_hostname']
+            self.proxy_port = proxy_port or \
+                config.get('server', 'proxy_port') or \
+                info['proxy_port']
+            self.proxy_user = proxy_user or \
+                config.get('server', 'proxy_user') or \
+                info['proxy_username']
+            self.proxy_password = proxy_password or \
+                config.get('server', 'proxy_password') or \
+                info['proxy_password']
+
+        url_access_token = self.auth_url + "/realms/" + self.realm + "/protocol/openid-connect/token"
+        self.host = six.moves.urllib.parse.urlparse(url_access_token).hostname or ''
+        url = six.moves.urllib.parse.urlparse(url_access_token).path
+        port = six.moves.urllib.parse.urlparse(url_access_token).port
+        if port:
+            self.ssl_port = port
+        else:
+            self.ssl_port = 443
+        self.handler = ""
+
+        self.conn = restlib_class(self.host, self.ssl_port, self.handler,
+                                  proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
+                                  proxy_user=self.proxy_user, proxy_password=self.proxy_password,
+                                  ca_dir=self.ca_cert_dir, insecure=self.insecure,
+                                  ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
+                                  correlation_id=self.correlation_id, token=self.token)
 
         #Get access token in exchange for refresh token
-        urlAccessToken = hostname + "/realms/" + realm + "/protocol/openid-connect/token"
-        params = {"client_id": clientid, "grant_type": "refresh_token"}
+        params = {"client_id": self.resource, "grant_type": "refresh_token"}
+        headers = {}
         params['refresh_token'] = refreshtoken
-        data = six.moves.urllib.parse.urlencode(params).encode()
-        req = six.moves.urllib.request.Request(urlAccessToken, data=data)
-        resp = six.moves.urllib.request.urlopen(req)
-        raw_data = resp.read()
-        encoding = resp.info().get_content_charset('utf8')
-        data = json.loads(raw_data.decode(encoding))
+        headers['Content-type'] = 'application/x-www-form-urlencoded'
+        data = self.conn.request_post(url, params, headers)
         return data['access_token']
 
 
 class RestlibException(ConnectionException):
     """
-    Raised when a response with a valid json body is received along with a status code
+    Raised when a response with a valid json body is received along wit h a status code
     that is not in [200, 202, 204, 410, 429]
     See RestLib.validateResponse to see when this and other exceptions are raised.
     """
@@ -601,7 +680,9 @@ class BaseRestLib(object):
         else:
             conn = httplib.HTTPSConnection(self.host, self.ssl_port, context=context, timeout=self.timeout)
 
-        if info is not None:
+        if headers is not None and headers['Content-type'] == 'application/x-www-form-urlencoded':
+            body = six.moves.urllib.parse.urlencode(info).encode('utf-8')
+        elif info is not None:
             body = json.dumps(info, default=json.encode)
         else:
             body = None

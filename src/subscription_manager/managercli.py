@@ -1309,6 +1309,8 @@ class RegisterCommand(UserPassCommand):
         self.installed_mgr = inj.require(inj.INSTALLED_PRODUCTS_MANAGER)
 
         previously_registered = False
+        preferred_username = None
+        access_token = None
         if self.is_registered() and self.options.force:
             previously_registered = True
             # First let's try to un-register previous consumer; if this fails
@@ -1339,8 +1341,13 @@ class RegisterCommand(UserPassCommand):
         # Proceed with new registration:
         try:
             if self.options.token:
-                keycloak_instance = connection.KeycloakConnection()
-                access_token = keycloak_instance.getAccessTokenThroughRefresh(self.options.token[0])
+                uep = self.cp_provider.get_no_auth_cp()
+                status = uep.getStatus()
+                auth_url = status['authUrl']
+                realm = status['realm']
+                resource = status['resource']
+                keycloak_instance = connection.KeycloakConnection(realm, auth_url, resource)
+                access_token = keycloak_instance.get_access_token_through_refresh(self.options.token[0])
                 hostname = conf["server"]["hostname"]
                 if ":" in hostname:
                     normalized_hostname = "[%s]" % hostname
@@ -2994,16 +3001,6 @@ class StatusCommand(CliCommand):
         return result
 
 
-class TokenCommand(CliCommand):
-    """
-        Token Option with register command
-    """
-
-    def __init__(self):
-        shortdesc = _("Generate an offline token for authentication")
-        super(TokenCommand, self).__init__("token", shortdesc, False)
-
-
 class ManagerCLI(CLI):
 
     def __init__(self):
@@ -3013,7 +3010,7 @@ class ManagerCLI(CLI):
                     RedeemCommand, ReposCommand, ReleaseCommand, StatusCommand,
                     EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand,
                     VersionCommand, RemoveCommand, AttachCommand, PluginsCommand,
-                    AutohealCommand, OverrideCommand, RoleCommand, UsageCommand, TokenCommand]
+                    AutohealCommand, OverrideCommand, RoleCommand, UsageCommand]
         CLI.__init__(self, command_classes=commands)
 
     def main(self):

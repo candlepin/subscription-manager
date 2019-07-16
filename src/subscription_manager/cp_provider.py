@@ -137,7 +137,6 @@ class CPProvider(object):
 
     def get_basic_auth_cp(self):
         if not self.basic_auth_cp:
-            print("inside basic auth")
             self.basic_auth_cp = connection.UEPConnection(
                 host=self.server_hostname,
                 ssl_port=self.server_port,
