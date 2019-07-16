@@ -32,7 +32,7 @@ from email.utils import formatdate
 from rhsm.https import httplib, ssl
 
 from six.moves.urllib.request import proxy_bypass
-from six.moves.urllib.parse import urlencode, quote, quote_plus, urlparse
+from six.moves.urllib.parse import urlencode, quote, quote_plus
 from rhsm.config import initConfig
 from rhsm import ourjson as json
 from rhsm import utils
