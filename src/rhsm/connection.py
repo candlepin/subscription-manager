@@ -92,6 +92,7 @@ class NullHandler(logging.Handler):
     def emit(self, record):
         pass
 
+
 h = NullHandler()
 logging.getLogger("rhsm").addHandler(h)
 
@@ -132,20 +133,20 @@ class KeycloakConnection(object):
     """
 
     def __init__(self, realm, auth_url, resource, host=None,
-            ssl_port=None,
-            handler=None,
-            proxy_hostname=None,
-            proxy_port=None,
-            proxy_user=None,
-            proxy_password=None,
-            username=None, password=None,
-            cert_file=None, key_file=None,
-            insecure=None,
-            timeout=None,
-            restlib_class=None,
-            correlation_id=None,
-            no_proxy=None,
-            token=None):
+                 ssl_port=None,
+                 handler=None,
+                 proxy_hostname=None,
+                 proxy_port=None,
+                 proxy_user=None,
+                 proxy_password=None,
+                 username=None, password=None,
+                 cert_file=None, key_file=None,
+                 insecure=None,
+                 timeout=None,
+                 restlib_class=None,
+                 correlation_id=None,
+                 no_proxy=None,
+                 token=None):
         self.realm = realm
         self.auth_url = auth_url
         self.resource = resource
@@ -203,17 +204,17 @@ class KeycloakConnection(object):
             info = utils.get_env_proxy_info()
 
             self.proxy_hostname = proxy_hostname or \
-                config.get('server', 'proxy_hostname') or \
-                info['proxy_hostname']
+                                  config.get('server', 'proxy_hostname') or \
+                                  info['proxy_hostname']
             self.proxy_port = proxy_port or \
-                config.get('server', 'proxy_port') or \
-                info['proxy_port']
+                              config.get('server', 'proxy_port') or \
+                              info['proxy_port']
             self.proxy_user = proxy_user or \
-                config.get('server', 'proxy_user') or \
-                info['proxy_username']
+                              config.get('server', 'proxy_user') or \
+                              info['proxy_username']
             self.proxy_password = proxy_password or \
-                config.get('server', 'proxy_password') or \
-                info['proxy_password']
+                                  config.get('server', 'proxy_password') or \
+                                  info['proxy_password']
 
         url_access_token = self.auth_url + "/realms/" + self.realm + "/protocol/openid-connect/token"
         self.host = six.moves.urllib.parse.urlparse(url_access_token).hostname or ''
@@ -232,13 +233,19 @@ class KeycloakConnection(object):
                                   ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
                                   correlation_id=self.correlation_id, token=self.token)
 
-        #Get access token in exchange for refresh token
+        # Get access token in exchange for refresh token
         params = {"client_id": self.resource, "grant_type": "refresh_token"}
         headers = {}
         params['refresh_token'] = refreshtoken
         headers['Content-type'] = 'application/x-www-form-urlencoded'
-        data = self.conn.request_post(url, params, headers)
-        return data['access_token']
+        try:
+            data = self.conn.request_post(url, params, headers)
+            return data['access_token']
+        except Exception as e:
+            if e.code == 400:
+                sys.exit("Refresh Token Expired")
+            else:
+                print(e)
 
 
 class RestlibException(ConnectionException):
@@ -270,6 +277,7 @@ class GoneException(RestlibException):
     front of it, or it's app server, or an injected response) from causing
     accidental consumer cert deletion.
     """
+
     def __init__(self, code, msg, deleted_id):
         # Exception doesn't inherit from object on el5 python version
         RestlibException.__init__(self, code, msg)
@@ -296,6 +304,7 @@ class RemoteServerException(ConnectionException):
     Thrown when the response to a request has no valid json content and
     one of these http status codes: [404, 410, 500, 502, 503, 504]
     """
+
     def __init__(self, code,
                  request_type=None,
                  handler=None):
@@ -328,6 +337,7 @@ class RateLimitExceededException(RestlibException):
     The retry_after attribute is an int of seconds to retry the request after.
     The retry_after attribute may not be included in the response.
     """
+
     def __init__(self, code, msg=None, headers=None):
         super(RateLimitExceededException, self).__init__(code, msg)
         self.headers = headers or {}
@@ -403,17 +413,17 @@ class ContentConnection(object):
             info = utils.get_env_proxy_info()
 
             self.proxy_hostname = proxy_hostname or \
-                config.get('server', 'proxy_hostname') or \
-                info['proxy_hostname']
+                                  config.get('server', 'proxy_hostname') or \
+                                  info['proxy_hostname']
             self.proxy_port = proxy_port or \
-                config.get('server', 'proxy_port') or \
-                info['proxy_port']
+                              config.get('server', 'proxy_port') or \
+                              info['proxy_port']
             self.proxy_user = proxy_user or \
-                config.get('server', 'proxy_user') or \
-                info['proxy_username']
+                              config.get('server', 'proxy_user') or \
+                              info['proxy_username']
             self.proxy_password = proxy_password or \
-                config.get('server', 'proxy_password') or \
-                info['proxy_password']
+                                  config.get('server', 'proxy_password') or \
+                                  info['proxy_password']
 
     @property
     def user_agent(self):
@@ -561,13 +571,14 @@ class BaseRestLib(object):
     to make rest calls easy and expose the details of
     responses
     """
+
     def __init__(self, host, ssl_port, apihandler,
-            username=None, password=None,
-            proxy_hostname=None, proxy_port=None,
-            proxy_user=None, proxy_password=None,
-            cert_file=None, key_file=None,
-            ca_dir=None, insecure=False, ssl_verify_depth=1, timeout=None,
-            correlation_id=None, token=None):
+                 username=None, password=None,
+                 proxy_hostname=None, proxy_port=None,
+                 proxy_user=None, proxy_password=None,
+                 cert_file=None, key_file=None,
+                 ca_dir=None, insecure=False, ssl_verify_depth=1, timeout=None,
+                 correlation_id=None, token=None):
         self.host = host
         self.ssl_port = ssl_port
         self.apihandler = apihandler
@@ -731,9 +742,9 @@ class BaseRestLib(object):
         response_log = 'Response: status=' + str(result['status'])
         if response.getheader('x-candlepin-request-uuid'):
             response_log = "%s, requestUuid=%s" % (response_log,
-                    response.getheader('x-candlepin-request-uuid'))
+                                                   response.getheader('x-candlepin-request-uuid'))
         response_log = "%s, request=\"%s %s\"" % (response_log,
-            request_type, handler)
+                                                  request_type, handler)
         log.debug(response_log)
 
         # Look for server drift, and log a warning
@@ -868,7 +879,7 @@ class Restlib(BaseRestLib):
 
     def _request(self, request_type, method, info=None, headers=None):
         result = super(Restlib, self)._request(request_type, method,
-            info=info, headers=headers)
+                                               info=info, headers=headers)
 
         # Handle 204s
         if not len(result['content']):
@@ -886,21 +897,21 @@ class UEPConnection(object):
     """
 
     def __init__(self,
-            host=None,
-            ssl_port=None,
-            handler=None,
-            proxy_hostname=None,
-            proxy_port=None,
-            proxy_user=None,
-            proxy_password=None,
-            username=None, password=None,
-            cert_file=None, key_file=None,
-            insecure=None,
-            timeout=None,
-            restlib_class=None,
-            correlation_id=None,
-            no_proxy=None,
-            token=None):
+                 host=None,
+                 ssl_port=None,
+                 handler=None,
+                 proxy_hostname=None,
+                 proxy_port=None,
+                 proxy_user=None,
+                 proxy_password=None,
+                 username=None, password=None,
+                 cert_file=None, key_file=None,
+                 insecure=None,
+                 timeout=None,
+                 restlib_class=None,
+                 correlation_id=None,
+                 no_proxy=None,
+                 token=None):
         """
         Two ways to authenticate:
             - username/password for HTTP basic authentication. (owner admin role)
@@ -937,17 +948,17 @@ class UEPConnection(object):
             info = utils.get_env_proxy_info()
 
             self.proxy_hostname = proxy_hostname or \
-                config.get('server', 'proxy_hostname') or \
-                info['proxy_hostname']
+                                  config.get('server', 'proxy_hostname') or \
+                                  info['proxy_hostname']
             self.proxy_port = proxy_port or \
-                config.get('server', 'proxy_port') or \
-                info['proxy_port']
+                              config.get('server', 'proxy_port') or \
+                              info['proxy_port']
             self.proxy_user = proxy_user or \
-                config.get('server', 'proxy_user') or \
-                info['proxy_username']
+                              config.get('server', 'proxy_user') or \
+                              info['proxy_username']
             self.proxy_password = proxy_password or \
-                config.get('server', 'proxy_password') or \
-                info['proxy_password']
+                                  config.get('server', 'proxy_password') or \
+                                  info['proxy_password']
 
         self.cert_file = cert_file
         self.key_file = key_file
@@ -978,14 +989,14 @@ class UEPConnection(object):
 
         if using_basic_auth and using_id_cert_auth:
             raise Exception("Cannot specify both username/password and "
-                    "cert_file/key_file")
+                            "cert_file/key_file")
         # if not (using_basic_auth or using_id_cert_auth):
         #     raise Exception("Must specify either username/password or "
         #         "cert_file/key_file")
 
         proxy_description = None
         if self.proxy_hostname and self.proxy_port:
-            proxy_description = "http_proxy=%s:%s " %\
+            proxy_description = "http_proxy=%s:%s " % \
                                 (normalized_host(self.proxy_hostname),
                                  safe_int(self.proxy_port))
         auth_description = None
@@ -993,37 +1004,37 @@ class UEPConnection(object):
 
         if using_keycloak_auth:
             self.conn = restlib_class(self.host, self.ssl_port, self.handler,
-                    proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
-                    proxy_user=self.proxy_user, proxy_password=self.proxy_password,
-                    ca_dir=self.ca_cert_dir, insecure=self.insecure,
-                    ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
-                    correlation_id=correlation_id, token=self.token)
+                                      proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
+                                      proxy_user=self.proxy_user, proxy_password=self.proxy_password,
+                                      ca_dir=self.ca_cert_dir, insecure=self.insecure,
+                                      ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
+                                      correlation_id=correlation_id, token=self.token)
             auth_description = "auth=bearer %s" % token
         elif using_basic_auth:
             self.conn = restlib_class(self.host, self.ssl_port, self.handler,
-                    username=self.username, password=self.password,
-                    proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
-                    proxy_user=self.proxy_user, proxy_password=self.proxy_password,
-                    ca_dir=self.ca_cert_dir, insecure=self.insecure,
-                    ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
-                    correlation_id=correlation_id)
+                                      username=self.username, password=self.password,
+                                      proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
+                                      proxy_user=self.proxy_user, proxy_password=self.proxy_password,
+                                      ca_dir=self.ca_cert_dir, insecure=self.insecure,
+                                      ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
+                                      correlation_id=correlation_id)
             auth_description = "auth=basic username=%s" % username
         elif using_id_cert_auth:
             self.conn = restlib_class(self.host, self.ssl_port, self.handler,
-                                cert_file=self.cert_file, key_file=self.key_file,
-                                proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
-                                proxy_user=self.proxy_user, proxy_password=self.proxy_password,
-                                ca_dir=self.ca_cert_dir, insecure=self.insecure,
-                                ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
-                                correlation_id=correlation_id)
+                                      cert_file=self.cert_file, key_file=self.key_file,
+                                      proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
+                                      proxy_user=self.proxy_user, proxy_password=self.proxy_password,
+                                      ca_dir=self.ca_cert_dir, insecure=self.insecure,
+                                      ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
+                                      correlation_id=correlation_id)
             auth_description = "auth=identity_cert ca_dir=%s insecure=%s" % (self.ca_cert_dir, self.insecure)
         else:
             self.conn = restlib_class(self.host, self.ssl_port, self.handler,
-                    proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
-                    proxy_user=self.proxy_user, proxy_password=self.proxy_password,
-                    ca_dir=self.ca_cert_dir, insecure=self.insecure,
-                    ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
-                    correlation_id=correlation_id)
+                                      proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
+                                      proxy_user=self.proxy_user, proxy_password=self.proxy_password,
+                                      ca_dir=self.ca_cert_dir, insecure=self.insecure,
+                                      ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
+                                      correlation_id=correlation_id)
             auth_description = "auth=none"
 
         self.conn.user_agent = "RHSM/1.0 (cmd=%s)" % utils.cmd_name(sys.argv)
@@ -1099,9 +1110,9 @@ class UEPConnection(object):
         return self.conn.request_get("/status/")
 
     def registerConsumer(self, name="unknown", type="system", facts={},
-            owner=None, environment=None, keys=None,
-            installed_products=None, uuid=None, hypervisor_id=None,
-            content_tags=None, role=None, addons=None, service_level=None, usage=None, token=None):
+                         owner=None, environment=None, keys=None,
+                         installed_products=None, uuid=None, hypervisor_id=None,
+                         content_tags=None, role=None, addons=None, service_level=None, usage=None):
         """
         Creates a consumer on candlepin server
         """
@@ -1186,7 +1197,8 @@ class UEPConnection(object):
             have been made in the given time period.
         """
         # Return None early if the connected UEP does not support hypervisors_heartbeat or if there is no reporter_id provided.
-        if not self.has_capability("hypervisors_heartbeat") or not (options and options.reporter_id and len(options.reporter_id) > 0):
+        if not self.has_capability("hypervisors_heartbeat") or not (
+                options and options.reporter_id and len(options.reporter_id) > 0):
             return
 
         params = {}
@@ -1202,9 +1214,9 @@ class UEPConnection(object):
         return self.updateConsumer(consumer_uuid, facts=facts)
 
     def updateConsumer(self, uuid, facts=None, installed_products=None,
-            guest_uuids=None, service_level=None, release=None,
-            autoheal=None, hypervisor_id=None, content_tags=None, role=None, addons=None,
-            usage=None):
+                       guest_uuids=None, service_level=None, release=None,
+                       autoheal=None, hypervisor_id=None, content_tags=None, role=None, addons=None,
+                       usage=None):
         """
         Update a consumer on the server.
 
@@ -1334,7 +1346,7 @@ class UEPConnection(object):
         method = '/consumers/%s/compliance' % self.sanitize(uuid)
         if on_date:
             method = "%s?on_date=%s" % (method,
-                    self.sanitize(on_date.isoformat(), plus=True))
+                                        self.sanitize(on_date.isoformat(), plus=True))
         return self.conn.request_get(method)
 
     def getSyspurposeCompliance(self, uuid, on_date=None):
@@ -1469,7 +1481,7 @@ class UEPConnection(object):
         # add the optional date to the url
         if entitle_date:
             method = "%s?entitle_date=%s" % (method,
-                    self.sanitize(entitle_date.isoformat(), plus=True))
+                                             self.sanitize(entitle_date.isoformat(), plus=True))
 
         return self.conn.request_post(method)
 
@@ -1486,7 +1498,7 @@ class UEPConnection(object):
             method = "/consumers/%s/entitlements/dry-run" % self.sanitize(consumer_uuid)
         else:
             method = "/consumers/%s/entitlements/dry-run?service_level=%s" % \
-                    (self.sanitize(consumer_uuid), self.sanitize(service_level))
+                     (self.sanitize(consumer_uuid), self.sanitize(service_level))
         return self.conn.request_get(method)
 
     def unbindBySerial(self, consumerId, serial):
@@ -1506,11 +1518,12 @@ class UEPConnection(object):
         # add the optional date to the url
         if checkin_date:
             method = "%s?checkin_date=%s" % (method,
-                    self.sanitize(checkin_date.isoformat(), plus=True))
+                                             self.sanitize(checkin_date.isoformat(), plus=True))
 
         return self.conn.request_put(method)
 
-    def getPoolsList(self, consumer=None, listAll=False, active_on=None, owner=None, filter_string=None, future=None, after_date=None):
+    def getPoolsList(self, consumer=None, listAll=False, active_on=None, owner=None, filter_string=None, future=None,
+                     after_date=None):
         """
         List pools for a given consumer or owner.
 
@@ -1537,10 +1550,10 @@ class UEPConnection(object):
             method = "%s&%s_future=true" % (method, future)
         if after_date:
             method = "%s&after=%s" % (method,
-                    self.sanitize(after_date.isoformat(), plus=True))
+                                      self.sanitize(after_date.isoformat(), plus=True))
         if active_on and not after_date:
             method = "%s&activeon=%s" % (method,
-                    self.sanitize(active_on.isoformat(), plus=True))
+                                         self.sanitize(active_on.isoformat(), plus=True))
         if filter_string:
             method = "%s&matches=%s" % (method, self.sanitize(filter_string, plus=True))
         results = self.conn.request_get(method)
@@ -1614,7 +1627,7 @@ class UEPConnection(object):
         """
         if name and not owner_key:
             raise Exception("Must specify owner key to query environment "
-                    "by name")
+                            "by name")
 
         query_param = urlencode({"name": name})
         url = "/owners/%s/environments?%s" % (self.sanitize(owner_key), query_param)
@@ -1662,7 +1675,8 @@ class UEPConnection(object):
         Regenerates the specified entitlement for the given consumer
         """
 
-        method = "/consumers/%s/certificates?entitlement=%s" % (self.sanitize(consumer_id), self.sanitize(entitlement_id))
+        method = "/consumers/%s/certificates?entitlement=%s" % (
+            self.sanitize(consumer_id), self.sanitize(entitlement_id))
 
         if lazy_regen:
             method += "&lazy_regen=true"

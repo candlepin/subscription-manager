@@ -1346,22 +1346,25 @@ class RegisterCommand(UserPassCommand):
                 auth_url = status['authUrl']
                 realm = status['realm']
                 resource = status['resource']
-                keycloak_instance = connection.KeycloakConnection(realm, auth_url, resource)
-                access_token = keycloak_instance.get_access_token_through_refresh(self.options.token[0])
-                hostname = conf["server"]["hostname"]
-                if ":" in hostname:
-                    normalized_hostname = "[%s]" % hostname
+                if auth_url == None or realm == None or resource == None:
+                    return print("Token option is disabled")
                 else:
-                    normalized_hostname = hostname
-                print(_("Registering to: %s:%s%s") %
-                    (normalized_hostname, conf["server"]["port"], conf["server"]["prefix"]))
-                self.cp_provider.set_token(access_token)
-                payload = access_token.split(".")
-                payload[1] += "=" * ((4 - len(payload[1]) % 4) % 4)
-                data = base64.b64decode(payload[1])
-                data_username = json.loads(data)
-                preferred_username = data_username['preferred_username']
-                admin_cp = self.cp_provider.get_keycloak_auth_cp()
+                    keycloak_instance = connection.KeycloakConnection(realm, auth_url, resource)
+                    access_token = keycloak_instance.get_access_token_through_refresh(self.options.token[0])
+                    hostname = conf["server"]["hostname"]
+                    if ":" in hostname:
+                        normalized_hostname = "[%s]" % hostname
+                    else:
+                        normalized_hostname = hostname
+                    print(_("Registering to: %s:%s%s") %
+                        (normalized_hostname, conf["server"]["port"], conf["server"]["prefix"]))
+                    self.cp_provider.set_token(access_token)
+                    payload = access_token.split(".")
+                    payload[1] += "=" * ((4 - len(payload[1]) % 4) % 4)
+                    data = base64.b64decode(payload[1])
+                    data_username = json.loads(data)
+                    preferred_username = data_username['preferred_username']
+                    admin_cp = self.cp_provider.get_keycloak_auth_cp()
             elif not self.options.activation_keys:
                 hostname = conf["server"]["hostname"]
                 if ":" in hostname:

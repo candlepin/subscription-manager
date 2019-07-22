@@ -143,7 +143,6 @@ class RegisterServiceTest(InjectionMockingTest):
             role="",
             addons=[],
             service_level="",
-            token=None,
             usage="")
         self.mock_installed_products.write_cache.assert_called()
 
@@ -180,7 +179,6 @@ class RegisterServiceTest(InjectionMockingTest):
             role="",
             addons=[],
             service_level="",
-            token=None,
             usage=""
         )
         self.mock_installed_products.write_cache.assert_called()
@@ -261,7 +259,6 @@ class RegisterServiceTest(InjectionMockingTest):
             owner="org",
             role="test_role",
             service_level="test_sla",
-            token=None,
             type="system",
             usage="test_usage")
 

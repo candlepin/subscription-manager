@@ -43,14 +43,14 @@ class RegisterService(object):
         # signature we want to consider that an error.
         if kwargs:
             raise exceptions.ValidationError(_("Unknown arguments: %s") % kwargs.keys())
-        refreshToken = None
+        refresh_token = None
         syspurpose = syspurposelib.read_syspurpose()
         role = role or syspurpose.get('role', '')
         addons = addons or syspurpose.get('addons', [])
         usage = usage or syspurpose.get('usage', '')
         service_level = service_level or syspurpose.get('service_level_agreement', '')
-        if token:
-            refreshToken = token[0]
+        if token and len(token) > 0:
+            refresh_token = token[0]
 
         type = type or "system"
         options = {
@@ -60,7 +60,7 @@ class RegisterService(object):
             'name': name,
             'consumerid': consumerid,
             'type': type,
-            'token': refreshToken,
+            'token': refresh_token,
         }
         self.validate_options(options)
 
@@ -91,7 +91,6 @@ class RegisterService(object):
                 addons=addons,
                 service_level=service_level,
                 usage=usage,
-                token=refreshToken,
             )
         self.installed_mgr.write_cache()
         self.plugin_manager.run("post_register_consumer", consumer=consumer, facts=facts_dict)
