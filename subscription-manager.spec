@@ -138,7 +138,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.25.12
+Version: 1.25.13
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1166,6 +1166,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Jul 23 2019 Christopher Snyder <csnyder@redhat.com> 1.25.13-1
+- 1708700: Generate 'ui_repoid_vars' only when running with YUM.
+  (dmach@redhat.com)
+
 * Fri Jul 12 2019 Christopher Snyder <csnyder@redhat.com> 1.25.12-1
 - 1722055: cockpit package has additional dependency (wpoteat@redhat.com)
 - Add rhel 8.1 tito releaser (csnyder@redhat.com)
