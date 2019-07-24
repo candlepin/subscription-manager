@@ -1346,7 +1346,7 @@ class RegisterCommand(UserPassCommand):
                 auth_url = status['authUrl']
                 realm = status['realm']
                 resource = status['resource']
-                if auth_url == None or realm == None or resource == None:
+                if auth_url is None or realm is None or resource is None:
                     return print("Token option is disabled")
                 else:
                     keycloak_instance = connection.KeycloakConnection(realm, auth_url, resource)

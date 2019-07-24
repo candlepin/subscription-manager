@@ -243,7 +243,7 @@ class KeycloakConnection(object):
             return data['access_token']
         except Exception as e:
             if e.code == 400:
-                sys.exit("Refresh Token Expired")
+                sys.exit("Invalid Input or Refresh Token Expired")
             else:
                 print(e)
 
