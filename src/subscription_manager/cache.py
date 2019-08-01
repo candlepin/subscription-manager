@@ -37,7 +37,7 @@ from rhsm.https import ssl
 
 from rhsm.config import get_config_parser
 import rhsm.connection as connection
-from rhsm.profile import get_profile
+from rhsm.profile import get_profile, PROFILE_MAP
 import subscription_manager.injection as inj
 from subscription_manager.jsonwrapper import PoolWrapper
 from rhsm import ourjson as json
@@ -503,13 +503,9 @@ class ProfileManager(CacheManager):
     @property
     def current_profile(self) -> Dict[str, List[Dict]]:
         if not self._current_profile:
-            rpm_profile: List[Dict] = get_profile("rpm").collect()
-            enabled_repos: List[Dict] = get_profile("enabled_repos").collect()
-            module_profile: List[Dict] = get_profile("modulemd").collect()
-            combined_profile: Dict[str, List[Dict]] = self._assembly_profile(
-                rpm_profile, enabled_repos, module_profile
-            )
-            self._current_profile = combined_profile
+            self._current_profile: Dict[str, List[Dict]] = {
+                key: get_profile(key).collect() for key in PROFILE_MAP.keys()
+            }
         return self._current_profile
 
     @current_profile.setter
@@ -562,9 +558,11 @@ class ProfileManager(CacheManager):
         combined_profile: Dict = self.current_profile
         if uep.has_capability("combined_reporting"):
             _combined_profile: List[Dict] = [
-                {"content_type": "rpm", "profile": combined_profile["rpm"]},
-                {"content_type": "enabled_repos", "profile": combined_profile["enabled_repos"]},
-                {"content_type": "modulemd", "profile": combined_profile["modulemd"]},
+                {
+                    "content_type": key,
+                    "profile": value
+                }
+                for key, value in combined_profile.items()
             ]
             uep.updateCombinedProfile(consumer_uuid, _combined_profile)
         else:
