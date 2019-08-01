@@ -26,7 +26,7 @@ from rhsm.https import ssl
 
 from rhsm.config import get_config_parser
 import rhsm.connection as connection
-from rhsm.profile import get_profile
+from rhsm.profile import get_profile, PROFILE_MAP
 import subscription_manager.injection as inj
 from subscription_manager.jsonwrapper import PoolWrapper
 from rhsm import ourjson as json
@@ -437,23 +437,10 @@ class ProfileManager(CacheManager):
     def _get_profile(self, profile_type):
         return get_profile(profile_type)
 
-    @staticmethod
-    def _assembly_profile(rpm_profile, enabled_repos_profile, module_profile):
-        combined_profile = {
-            'rpm': rpm_profile,
-            'enabled_repos': enabled_repos_profile,
-            'modulemd': module_profile
-        }
-        return combined_profile
-
     @property
     def current_profile(self):
         if not self._current_profile:
-            rpm_profile = get_profile('rpm').collect()
-            enabled_repos = get_profile('enabled_repos').collect()
-            module_profile = get_profile('modulemd').collect()
-            combined_profile = self._assembly_profile(rpm_profile, enabled_repos, module_profile)
-            self._current_profile = combined_profile
+            self._current_profile = {key: get_profile(key).collect() for key in PROFILE_MAP.keys()}
         return self._current_profile
 
     @current_profile.setter
@@ -503,23 +490,16 @@ class ProfileManager(CacheManager):
         if uep.has_capability("combined_reporting"):
             _combined_profile = [
                 {
-                    "content_type": "rpm",
-                    "profile": combined_profile["rpm"]
-                },
-                {
-                    "content_type": "enabled_repos",
-                    "profile": combined_profile["enabled_repos"]
-                },
-                {
-                    "content_type": "modulemd",
-                    "profile": combined_profile["modulemd"]
-                },
+                    "content_type": key,
+                    "profile": value
+                }
+                for key, value in combined_profile.items()
             ]
             uep.updateCombinedProfile(
                 consumer_uuid,
                 _combined_profile
             )
-        else:
+        elif "rpm" in combined_profile:
             uep.updatePackageProfile(
                 consumer_uuid,
                 combined_profile["rpm"]

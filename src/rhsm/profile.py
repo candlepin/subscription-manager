@@ -40,6 +40,11 @@ try:
 except ImportError:
     use_zypper = False
 
+try:
+    import apt
+except ImportError:
+    apt = None
+
 if use_zypper:
     REPOSITORY_PATH = "/etc/rhsm/zypper.repos.d/redhat.repo"
 else:
@@ -430,6 +435,30 @@ class RPMProfile(object):
         return True
 
 
+class DebProfile(object):
+    def __init__(self):
+        cache = apt.Cache()
+        self._deb_profile = [
+            {
+                'name': package.name,
+                'version': package.installed.version,
+                'architecture': package.installed.architecture
+            } for package in cache if package.installed is not None
+        ]
+
+    def __eq__(self, other):
+        """
+        Compare one profile to another to determine if anything has changed.
+        """
+        if not isinstance(self, type(other)):
+            return False
+
+        return self._deb_profile == other._deb_profile
+
+    def collect(self):
+        return self._deb_profile
+
+
 def get_profile(profile_type):
     """
     Returns an instance of a Profile object
@@ -445,7 +474,12 @@ def get_profile(profile_type):
 
 # Profile types we support:
 PROFILE_MAP = {
-    "rpm": RPMProfile,
     "enabled_repos": EnabledReposProfile,
-    "modulemd": ModulesProfile
 }
+
+if dnf is not None or yum is not None:
+    PROFILE_MAP["rpm"] = RPMProfile
+    PROFILE_MAP["modulemd"] = ModulesProfile
+
+if apt is not None:
+    PROFILE_MAP["deb"] = DebProfile
