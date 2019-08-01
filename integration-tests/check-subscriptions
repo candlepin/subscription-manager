@@ -1,0 +1,248 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
+# This file is part of Cockpit.
+#
+# Copyright (C) 2016 Red Hat, Inc.
+#
+# Cockpit is free software; you can redistribute it and/or modify it
+# under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation; either version 2.1 of the License, or
+# (at your option) any later version.
+#
+# Cockpit is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with Cockpit; If not, see <http://www.gnu.org/licenses/>.
+
+import os
+import sys
+
+# import Cockpit's machinery for test VMs and its browser test API
+TEST_DIR = os.path.dirname(__file__)
+sys.path.append(os.path.join(TEST_DIR, "common"))
+sys.path.append(os.path.join(os.path.dirname(TEST_DIR), "bots/machine"))
+from testlib import *
+
+# The candlepin image has a lot of demo data preloaded
+# useful info/commands:
+#    Login: doc      password: password
+#    org:   snowwhite
+#
+#    Login: admin    password: admin
+#    org:   admin
+#
+# if you download product files onto the test machine, these will show up as installed products
+# local directory: /etc/pki/product
+# sample products used in the tests (different subscription results for doc and admin):
+# /home/admin/candlepin/generated_certs/6050.pem
+# /home/admin/candlepin/generated_certs/88888.pem
+#
+# to use the candlepin image on a test machine, either add the certificate or
+# allow insecure connections (/etc/rhsm/rhsm.conf -> "insecure = 1")
+#
+# $IP is the ip of the candlepin machine
+#
+# add an activation key to a pool:
+# curl --insecure --request POST --user admin:admin https://$IP:8443/candlepin/activation_keys/ff80808155ca50b10155ca50cd280010/pools/ff80808155ca50b10155ca51f04607e5
+# register with: activation key "awesome_os_pool" and org "admin"
+# or: subscription-manager register --activationkey awesome_os_pool --org admin --serverurl https://$IP:8443/candlepin
+#
+# in order to get the right ids for the activation key and pool, see ACTIVATION_KEY_COMMAND and POOL_COMMAND
+
+WAIT_SCRIPT = """
+import sys
+import time
+import requests
+
+for i in range(1,200):
+  try:
+     sys.stderr.write("Waiting for %s\\n" % sys.argv[1])
+     sys.stderr.flush()
+     res = requests.get(sys.argv[1], verify=False)
+     break
+  except:
+     time.sleep(1)
+"""
+
+ACTIVATION_KEY_SCRIPT = """
+import sys
+import json
+import requests
+
+data = requests.get(sys.argv[1] + "/activation_keys", auth=("admin","admin"), verify=False).json()
+key = [e['id'] for e in data if e['name'] == 'awesome_os_pool' and e['owner']['displayName'] == 'Admin Owner'][0]
+
+data = requests.get(sys.argv[1] + "/pools", auth=("admin","admin"), verify=False).json()
+pool = [ e['id'] for e in data if e['owner']['key'] == 'admin' and e['contractNumber'] == '0' and [p for p in e['providedProducts'] if p['productId'] == '88888'] ][0]
+
+key_url = sys.argv[1] + "/activation_keys/{key}/pools/{pool}".format(key=key, pool=pool)
+requests.post(key_url, auth=("admin","admin"), verify=False)
+"""
+
+CLIENT_ADDR = "10.111.113.1"
+CANDLEPIN_ADDR = "10.111.113.5"
+CANDLEPIN_URL = "https://%s:8443/candlepin" % CANDLEPIN_ADDR
+
+PRODUCT_SNOWY = {
+    "id": "6050",
+    "name": "Snowy OS Premium Architecture Bits"
+}
+
+PRODUCT_SHARED = {
+    "id": "88888",
+    "name": "Shared File System Bits"
+}
+
+def shell_escape(s):
+    return "'" + s.replace("'", "'\\''") + "'"
+
+def machine_python(machine, script, arg = ""):
+    return machine.execute("python3 -c %s %s" % (shell_escape(script), shell_escape(arg)))
+
+class TestSubscriptions(MachineCase):
+    provision = {
+        "0": {"address": CLIENT_ADDR + "/20"},
+        "candlepin": {"image": "candlepin", "address": CANDLEPIN_ADDR + "/20"}
+    }
+
+    def setUp(self):
+        MachineCase.setUp(self)
+        self.candlepin = self.machines['candlepin']
+        m = self.machine
+
+        # wait for candlepin to be active and verify
+        self.candlepin.execute("systemctl start tomcat")
+
+        # download product info from the candlepin machine
+        def download_product(product):
+            id = product["id"]
+            f = os.path.join(self.tmpdir, "%s.pem" % id)
+            self.candlepin.download("/home/admin/candlepin/generated_certs/%s.pem" % id, f)
+            m.upload([ f ], "/etc/pki/product")
+
+        download_product(PRODUCT_SNOWY)
+        download_product(PRODUCT_SHARED)
+
+        # make sure that rhsm skips certificate checks for the server
+        m.execute("sed -i -e 's/insecure = 0/insecure = 1/g' /etc/rhsm/rhsm.conf")
+
+        # Apply some extra cleanups on rhel-atomic.  These cleanups
+        # are necessary because all changes to /etc after a "atomic
+        # host upgrade" and before the next boot are lost.
+        if m.image == "rhel-atomic":
+            m.execute("rm -f /etc/pki/consumer/* /etc/pki/entitlement/*")
+
+        # Wait for the web service to be accessible
+        machine_python(self.machine, WAIT_SCRIPT, CANDLEPIN_URL)
+
+    def wait_subscription(self, product, is_subscribed):
+        b = self.browser
+        product_selector = ".list-group-item-heading:contains('%s')" % product["name"]
+        # expand
+        b.click(product_selector)
+        details_selector = ".list-group-item-container:contains('%s')" % product["name"]
+        b.wait_in_text(details_selector, product["id"])
+        if is_subscribed:
+            b.wait_not_in_text(details_selector, "Not Subscribed")
+        else:
+            b.wait_in_text(details_selector, "Not Subscribed")
+        # collapse again
+        b.click(product_selector)
+
+    def testRegister(self):
+        b = self.browser
+
+        self.login_and_go("/subscriptions")
+
+        # wait until we can open the registration dialog
+        register_button_sel = "button.btn-primary:contains('Register')"
+        b.click(register_button_sel)
+
+        b.wait_visible("#subscription-register-url")
+
+        # enter server and incorrect login data
+        b.set_val("#subscription-register-url", "custom")
+        b.set_input_text("#subscription-register-url-custom", CANDLEPIN_URL)
+        b.set_input_text("#subscription-register-username", "doc")
+        b.set_input_text("#subscription-register-password", "wrongpass")
+
+        # try to register
+        dialog_register_button_sel = "div.modal-footer .btn-primary"
+        b.click(dialog_register_button_sel)
+
+        # wait for message that we used wrong credentials
+        self.allow_browser_errors("error registering")
+        b.wait_in_text("body", "Invalid Credentials")
+
+        # enter correct login data and try again, old error should disappear
+        b.set_input_text("#subscription-register-password", "password")
+        b.click(dialog_register_button_sel)
+
+        b.wait_not_in_text("body", "Invalid credentials")
+
+        # wait for message that we need to specify our org
+        b.wait_in_text("body", "You must specify an organization for new units.")
+
+        # now specify the org
+        b.set_input_text("#subscription-register-org", "snowwhite")
+
+        # try to register again
+        b.click(dialog_register_button_sel)
+
+        # old error should disappear
+        b.wait_not_in_text("body", "You must specify an organization for new units.")
+
+        # dialog should disappear
+        b.wait_not_present(dialog_register_button_sel)
+
+        # make sure this product is subscribed
+        self.wait_subscription(PRODUCT_SNOWY, True)
+
+        # unregister
+        unregister_button_sel = "button.btn-primary:contains('Unregister')"
+        b.click(unregister_button_sel)
+
+    def testRegisterWithKey(self):
+        b = self.browser
+
+        self.login_and_go("/subscriptions")
+
+        # wait until we can open the registration dialog
+        register_button_sel = "button.btn-primary:contains('Register')"
+        b.click(register_button_sel)
+
+        # enter server data
+        b.wait_visible("#subscription-register-url")
+        b.set_val("#subscription-register-url", "custom")
+        b.set_input_text("#subscription-register-url-custom", CANDLEPIN_URL)
+
+        # make sure we have an activation key on the target machine
+        machine_python(self.machine, ACTIVATION_KEY_SCRIPT, CANDLEPIN_URL)
+        b.set_input_text("#subscription-register-key", "awesome_os_pool")
+        b.set_input_text("#subscription-register-org", "admin")
+
+        dialog_register_button_sel = "div.modal-footer .btn-primary"
+        b.click(dialog_register_button_sel)
+
+        # dialog should disappear
+        b.wait_not_present(dialog_register_button_sel)
+
+        # make sure this product isn't subscribed
+        self.wait_subscription(PRODUCT_SNOWY, False)
+
+        # find another one that is subscribed
+        self.wait_subscription(PRODUCT_SHARED, True)
+
+    def testUnpriv(self):
+        self.machine.execute("useradd junior; echo junior:foobar | chpasswd")
+        self.login_and_go("/subscriptions", user="junior")
+        self.browser.wait_in_text(".curtains-ct h1", "current user isn't allowed to access system subscription")
+        self.allow_authorize_journal_messages()
+
+
+if __name__ == '__main__':
+    test_main()
