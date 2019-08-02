@@ -1,0 +1,35 @@
+---
+- hosts: clients
+  vars:
+    default_candlepin_hostname: "192.168.111.1"
+    # It is possible to configure custom candlepin hostname using:
+    # ansible-playbook ./configure_package_manager.yml --extra-vars="candlepin_hostname=svice"
+  remote_user: root
+  tasks:
+    - name: get current hostname of candlepin server
+      shell: 'subscription-manager config | grep "^[ \t]*hostname" | sed -e "s/^[ \t]*hostname =[ \t]*\(.*\)$/\1/g"'
+      register: cmd_output
+
+    - set_fact:
+        candlepin_hostname: "{{ default_candlepin_hostname }}"
+        when: candlepin_hostname == ""
+
+    - set_fact:
+        existing_candlepin_hostname: "{{ cmd_output | json_query('stdout_lines[0]')}}"
+
+    - debug:
+        msg: "candlepin hostname: {{ candlepin_hostname }}"
+
+    - name: configure candlepin hostname
+      shell: "subscription-manager config --server.hostname {{ candlepin_hostname }}"
+      when: existing_candlepin_hostname != candlepin_hostname
+
+    # We assume that testing repository is on the same machine as candlepin server
+    - name: configure baseurl of repository
+      shell: "subscription-manager config --rhsm.baseurl=http://{{ candlepin_hostname }}:8080"
+
+    # We assume that GPG key is in the root of testing repository
+    - name: download GPG key used for verification of RPMs
+      get_url:
+        url: "http://{{ candlepin_hostname }}:8080/RPM-GPG-KEY-candlepin"
+        dest: "/etc/pki/rpm-gpg/RPM-GPG-KEY-candlepin"
