@@ -613,6 +613,14 @@ const updateConfig = () => {
         return client.readConfig().then(needRender);
     };
 
+client.setError = (severity, message) => {
+    client.subscriptionStatus.error = {
+        severity: severity,
+        msg: message
+    };
+    needRender();
+};
+
 client.init = () => {
     /* we want to get notified if subscription status of the system changes */
     entitlementService.addEventListener("EntitlementChanged", requestSubscriptionStatusUpdate);
