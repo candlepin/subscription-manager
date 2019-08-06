@@ -195,8 +195,8 @@ CONSUMED_LIST = [
     _("Entitlement Type:")
 ]
 
-SP_CONFLICT_MESSAGE = _("Due to a conflicting change made at the server the "
-                        "{attr} has not been set.\n{advice}")
+SP_CONFLICT_MESSAGE = _("Warning: A {attr} of \"{download_value}\" was recently set for this system "
+                        "by the entitlement server administrator.\n{advice}")
 SP_ADVICE = _("If you'd like to overwrite the server side change please run: {command}")
 
 
@@ -623,11 +623,11 @@ class SyspurposeCommand(CliCommand):
 
     def set(self):
         self._set(self.options.set)
-        success_msg = "{attr} set to \"{val}\".".format(attr=self.attr, val=self.options.set)
+        success_msg = '{attr} set to "{val}".'.format(attr=self.attr, val=self.options.set)
         self._check_result(
             expectation=lambda res: res.get(self.attr) == self.options.set,
             success_msg=success_msg,
-            command="subscription-manager {name} --set {val}".format(name=self.name,
+            command='subscription-manager {name} --set "{val}"'.format(name=self.name,
                                                                      val=self.options.set),
             attr=self.attr
         )
@@ -642,7 +642,7 @@ class SyspurposeCommand(CliCommand):
         self._check_result(
             expectation=lambda res: res.get(self.attr) in ["", None, []],
             success_msg=success_msg,
-            command="subscription-manager {name} --unset".format(name=self.name),
+            command='subscription-manager {name} --unset'.format(name=self.name),
             attr=self.attr
         )
 
@@ -653,7 +653,10 @@ class SyspurposeCommand(CliCommand):
     def add(self):
         self._add(self.options.to_add)
         success_msg = _("{attr} updated.").format(attr=self.name)
-        to_add = "--add " + " --add ".join(self.options.to_add)
+        # When there is several options to add, then format of command is following
+        # subscription-manager command --add opt1 --add opt2
+        options = ['"' + option + '"' for option in self.options.to_add]
+        to_add = "--add " + " --add ".join(options)
         command = "subscription-manager {name} ".format(name=self.name) + to_add
         self._check_result(
             expectation=lambda res: all(x in res.get('addons', []) for x in self.options.to_add),
@@ -673,7 +676,10 @@ class SyspurposeCommand(CliCommand):
     def remove(self):
         self._remove(self.options.to_remove)
         success_msg = _("{attr} updated.").format(attr=self.name.capitalize())
-        to_remove = "--remove " + "--remove ".join(self.options.to_remove)
+        options = ['"' + option + '"' for option in self.options.to_remove]
+        # When there is several options to remove, then format of command is following
+        # subscription-manager command --remove opt1 --remove opt2
+        to_remove = "--remove " + " --remove ".join(options)
         command = "subscription-manager {name} ".format(name=self.name) + to_remove
         self._check_result(
             expectation=lambda res: all(x not in res.get('addons', []) for x in self.options.to_remove),
@@ -732,7 +738,9 @@ class SyspurposeCommand(CliCommand):
             result = {}
         if result and not expectation(result):
             advice = SP_ADVICE.format(command=command)
-            system_exit(os.EX_SOFTWARE, msgs=_(SP_CONFLICT_MESSAGE.format(attr=attr, advice=advice)))
+            value = result[attr]
+            msg = _(SP_CONFLICT_MESSAGE.format(attr=attr, download_value=value, advice=advice))
+            system_exit(os.EX_SOFTWARE, msgs=msg)
         else:
             print(_(success_msg))
 

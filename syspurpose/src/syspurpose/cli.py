@@ -28,8 +28,8 @@ import json
 logutil.init_logger()
 log = logging.getLogger(__name__)
 
-SP_CONFLICT_MESSAGE = _("Due to a conflicting change made at the server the "
-                        "{attr} has not been set.\n{advice}")
+SP_CONFLICT_MESSAGE = _("Warning: A {attr} of \"{download_value}\" was recently set for this system "
+                        "by the entitlement server administrator.\n{advice}")
 SP_ADVICE = _("If you'd like to overwrite the server side change please run: {command}")
 
 
@@ -74,9 +74,10 @@ def remove_command(args, syspurposestore):
     """
     for value in args.values:
         if syspurposestore.remove(args.prop_name, value):
-            print(_("Removed {} from {}.").format(make_utf8(value), make_utf8(args.prop_name)))
+            print(_("Removed \"{val}\" from {name}.").format(val=make_utf8(value), name=make_utf8(args.prop_name)))
         else:
-            print(_("Not removing value {} from {}; it was not there.").format(make_utf8(value), make_utf8(args.prop_name)))
+            print(_("Not removing value \"{val}\" from {name}; it was not there.").format(
+                val=make_utf8(value), name=make_utf8(args.prop_name)))
             return
 
     success_msg = _("{attr} updated.").format(attr=make_utf8(args.prop_name))
@@ -107,8 +108,8 @@ def set_command(args, syspurposestore):
         syspurposestore,
         expectation=lambda res: res.get(args.prop_name) == args.value,
         success_msg=success_msg,
-        command="syspurpose set {name} {val}".format(name=args.prop_name,
-                                                                 val=args.value),
+        command="syspurpose set {name} \"{val}\"".format(
+            name=args.prop_name, val=args.value),
         attr=args.prop_name
     )
 
@@ -130,7 +131,7 @@ def unset_command(args, syspurposestore):
         success_msg=success_msg,
         command="syspurpose unset {name}".format(name=args.prop_name),
         attr=args.prop_name
-)
+    )
 
 
 def show_contents(args, syspurposestore):
@@ -258,7 +259,6 @@ def setup_arg_parser():
         parents=[unset_options])
     unset_role_parser.set_defaults(prop_name="addons")
 
-
     # SLA ################
     set_sla_parser = subparsers.add_parser("set-sla",
         help=_("Set the system sla"),
@@ -335,6 +335,7 @@ def check_result(syspurposestore, expectation, success_msg, command, attr):
         result = {}
     if result and not expectation(result):
         advice = SP_ADVICE.format(command=command)
-        system_exit(os.EX_SOFTWARE, msgs=_(SP_CONFLICT_MESSAGE.format(attr=attr, advice=advice)))
+        value = result[attr]
+        system_exit(os.EX_SOFTWARE, msgs=_(SP_CONFLICT_MESSAGE.format(attr=attr, download_value=value, advice=advice)))
     else:
         print(_(success_msg))
