@@ -81,7 +81,7 @@ class SyspurposeCliTests(SyspurposeTestBase):
 
     def test_add_command_more_values(self):
         """
-        A smoke test to ensure nothing bizarre happens when we try to add value to addons attribute
+        A smoke test to ensure nothing bizarre happens when we try to add more addons attribute
         """
         args = MagicMock()
         args.prop_name = "addons"
@@ -90,6 +90,51 @@ class SyspurposeCliTests(SyspurposeTestBase):
             cli.add_command(args, self.syspurposestore)
             self.assertTrue('Added ADDON1 to addons' in captured.out)
             self.assertTrue('Added ADDON2 to addons' in captured.out)
+            self.assertTrue('addons updated.' in captured.out)
+
+    def test_add_command_existing_values(self):
+        """
+        A smoke test to ensure nothing bizarre happens when we try to add existing addons attribute
+        """
+        args = MagicMock()
+        args.prop_name = "addons"
+        args.values = ["ADDON1", "ADDON2"]
+        with Capture() as captured:
+            cli.add_command(args, self.syspurposestore)
+            self.assertTrue('Added ADDON1 to addons' in captured.out)
+            self.assertTrue('Added ADDON2 to addons' in captured.out)
+            self.assertTrue('addons updated.' in captured.out)
+        # Try to add same addons once again
+        args.prop_name = "addons"
+        args.values = ["ADDON1", "ADDON2"]
+        with Capture() as captured:
+            cli.add_command(args, self.syspurposestore)
+            self.assertTrue('Not adding value ADDON1 to addons; it already exists.' in captured.out)
+            self.assertTrue('Not adding value ADDON2 to addons; it already exists.' in captured.out)
+            self.assertFalse('addons updated.' in captured.out)
+
+    def test_add_command_existing_values_and_one_new(self):
+        """
+        A smoke test to ensure nothing bizarre happens when we try to add existing addons attribute
+        and also try to add one new value
+        """
+        args = MagicMock()
+        args.prop_name = "addons"
+        args.values = ["ADDON1", "ADDON2"]
+        with Capture() as captured:
+            cli.add_command(args, self.syspurposestore)
+            self.assertTrue('Added ADDON1 to addons' in captured.out)
+            self.assertTrue('Added ADDON2 to addons' in captured.out)
+            self.assertTrue('addons updated.' in captured.out)
+        # Try to add same addons once again
+        args.prop_name = "addons"
+        args.values = ["ADDON1", "ADDON2", "ADDON3"]
+        with Capture() as captured:
+            cli.add_command(args, self.syspurposestore)
+            self.assertTrue('Not adding value ADDON1 to addons; it already exists.' in captured.out)
+            self.assertTrue('Not adding value ADDON2 to addons; it already exists.' in captured.out)
+            self.assertTrue('Added ADDON3 to addons' in captured.out)
+            self.assertTrue('addons updated.' in captured.out)
 
     def test_remove_command(self):
         """

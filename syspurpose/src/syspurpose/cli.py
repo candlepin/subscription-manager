@@ -42,14 +42,18 @@ def add_command(args, syspurposestore):
     :param syspurposestore: An SyspurposeStore object to manipulate
     :return: None
     """
+    any_addon_added = False
     for value in args.values:
         if syspurposestore.add(args.prop_name, value):
+            any_addon_added = True
             print(_("Added {value} to {prop_name}.").format(
                 value=make_utf8(value), prop_name=make_utf8(args.prop_name)))
         else:
             print(_("Not adding value {value} to {prop_name}; it already exists.").format(
                 value=make_utf8(value), prop_name=make_utf8(args.prop_name)))
-            return
+
+    if any_addon_added is False:
+        return
 
     success_msg = _("{attr} updated.").format(attr=make_utf8(args.prop_name))
     to_add = "".join(args.values)
