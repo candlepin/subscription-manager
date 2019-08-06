@@ -135,7 +135,7 @@ class DialogFooter extends React.Component {
             cancel_style = "cancel";
         cancel_style = "btn btn-default " + cancel_style;
 
-        // If an action is in progress, show the spinner with its message and disable all actions except cancel
+        // If an action is in progress, show the spinner with its message and disable all actions
         let wait_element;
         let actions_disabled;
         if (this.state.action_in_progress) {
@@ -189,6 +189,7 @@ class DialogFooter extends React.Component {
                 <button
                     className={ cancel_style }
                     onClick={event => this.cancel_click(event)}
+                    disabled={ actions_disabled?"disabled":"" }
                 >{ cancel_caption }</button>
                 { action_buttons }
             </div>
