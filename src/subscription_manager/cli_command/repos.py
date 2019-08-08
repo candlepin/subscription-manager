@@ -25,7 +25,7 @@ from subscription_manager.cli_command.list import REPOS_LIST
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.packageprofilelib import PackageProfileActionInvoker
 from subscription_manager.printing_utils import columnize, echo_columnize_callback
-from subscription_manager.repofile import manage_repos_enabled, YumRepoFile
+from rhsm.repofile import manage_repos_enabled, YumRepoFile
 from subscription_manager.repolib import RepoActionInvoker
 from subscription_manager.utils import get_supported_resources
 
