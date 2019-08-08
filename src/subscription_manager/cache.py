@@ -491,18 +491,18 @@ class ProfileManager(CacheManager):
             _combined_profile = [
                 {
                     "content_type": key,
-                    "profile": value
+                    "profile": value,
                 }
                 for key, value in combined_profile.items()
             ]
             uep.updateCombinedProfile(
                 consumer_uuid,
-                _combined_profile
+                _combined_profile,
             )
         elif "rpm" in combined_profile:
             uep.updatePackageProfile(
                 consumer_uuid,
-                combined_profile["rpm"]
+                combined_profile["rpm"],
             )
 
 

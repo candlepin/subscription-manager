@@ -21,13 +21,33 @@ import logging
 import os
 import re
 import string
-import sys
 
 try:
-    from debian.deb822 import Deb822
-    HAS_DEB822 = True
+    import apt
+    from debian import deb822
+except ImportError as e:
+    apt = None
+    deb822 = None
+
+try:
+    import dnf
 except ImportError:
-    HAS_DEB822 = False
+    dnf = None
+
+try:
+    import libdnf
+except ImportError:
+    libdnf = None
+
+try:
+    import yum
+except ImportError:
+    yum = None
+
+try:
+    import zypp
+except ImportError:
+    zypp = None
 
 from subscription_manager import utils
 from subscription_manager.certdirectory import Path
@@ -35,6 +55,7 @@ import configparser
 from urllib.parse import parse_qs, urlparse, urlunparse, urlencode
 
 from rhsm.config import get_config_parser
+from rhsm.utils import suppress_output
 
 from rhsmlib.services import config
 
@@ -43,9 +64,6 @@ log = logging.getLogger(__name__)
 conf = config.Config(get_config_parser())
 
 repo_files = []
-
-# detect if running with yum, otherwise it's dnf
-HAS_YUM = "yum" in sys.modules
 
 
 class Repo(dict):
@@ -68,7 +86,7 @@ class Repo(dict):
         'ui_repoid_vars': (0, None)}
 
     def __init__(self, repo_id, existing_values=None):
-        if HAS_DEB822 is True:
+        if deb822:
             self.PROPERTIES['arches'] = (1, None)
 
         # existing_values is a list of 2-tuples
@@ -126,7 +144,7 @@ class Repo(dict):
         # Extract the variables from the url
         repo_parts = repo['baseurl'].split("/")
         repoid_vars = [part[1:] for part in repo_parts if part.startswith("$")]
-        if HAS_YUM and repoid_vars:
+        if yum and repoid_vars:
             repo['ui_repoid_vars'] = " ".join(repoid_vars)
 
         # If no GPG key URL is specified, turn gpgcheck off:
@@ -378,6 +396,9 @@ class RepoFileBase(object):
     def fix_content(self, content):
         return content
 
+    def enabled_repos(self):
+        raise NotImplementedError("'enabled_repos' is not implemented for this repo_file.")
+
     @classmethod
     def installed(cls):
         return os.path.exists(Path.abs(cls.PATH))
@@ -387,7 +408,7 @@ class RepoFileBase(object):
         return cls('var/lib/rhsm/repo_server_val/')
 
 
-if HAS_DEB822:
+if apt and deb822:
     class AptRepoFile(RepoFileBase):
 
         PATH = 'etc/apt/sources.list.d'
@@ -417,7 +438,7 @@ if HAS_DEB822:
                           self.path)
                 return
             with open(self.path, 'r') as f:
-                for repo822 in Deb822.iter_paragraphs(f, shared_storage=False):
+                for repo822 in deb822.Deb822.iter_paragraphs(f, shared_storage=False):
                     self.repos822.append(repo822)
 
         def write(self):
@@ -434,7 +455,7 @@ if HAS_DEB822:
         def add(self, repo):
             repo_dict = dict([(str(k), str(v)) for (k, v) in repo.items()])
             repo_dict['id'] = repo.id
-            self.repos822.append(Deb822(repo_dict))
+            self.repos822.append(deb822.Deb822(repo_dict))
 
         def delete(self, repo_id):
             self.repos822[:] = [repo822 for repo822 in self.repos822 if repo822['id'] != repo_id]
@@ -442,7 +463,7 @@ if HAS_DEB822:
         def update(self, repo):
             repo_dict = dict([(str(k), str(v)) for (k, v) in repo.items()])
             repo_dict['id'] = repo.id
-            self.repos822[:] = [repo822 if repo822['id'] != repo.id else Deb822(repo_dict) for repo822 in self.repos822]
+            self.repos822[:] = [repo822 if repo822['id'] != repo.id else deb822.Deb822(repo_dict) for repo822 in self.repos822]
 
         def section(self, repo_id):
             result = [repo822 for repo822 in self.repos822 if repo822['id'] == repo_id]
@@ -480,6 +501,22 @@ if HAS_DEB822:
 
             return apt_cont
 
+        def enabled_repos(self):
+            enabled_repos = [repo for repo in self.repos822 if self._getboolean(repo, "enabled")]
+            return [
+                {'repositoryid': repo822['id'], 'baseurl': [repo822['baseurl']]}
+                for repo822 in enabled_repos
+            ]
+
+        _boolean_states = {'1': True, 'yes': True, 'true': True, 'on': True,
+                           '0': False, 'no': False, 'false': False, 'off': False}
+
+        def _getboolean(self, repo, option):
+            v = repo.get(option)
+            if v.lower() not in self._boolean_states:
+                raise ValueError('Not a boolean: %s' % v)
+            return self._boolean_states[v.lower()]
+
 
 class YumRepoFile(RepoFileBase, ConfigParser):
 
@@ -501,6 +538,10 @@ class YumRepoFile(RepoFileBase, ConfigParser):
     def __init__(self, path=None, name=None):
         ConfigParser.__init__(self)
         RepoFileBase.__init__(self, path, name)
+        if dnf is not None:
+            self.db = dnf.dnf.Base()
+        elif yum is not None:
+            self.yb = yum.YumBase()
 
     def read(self):
         ConfigParser.read(self, self.path)
@@ -556,6 +597,51 @@ class YumRepoFile(RepoFileBase, ConfigParser):
     def section(self, section):
         if self.has_section(section):
             return Repo(section, self.items(section))
+
+    def enabled_repos(self):
+        result = []
+        try:
+            enabled_sections = [section for section in self.sections() if config.getboolean(section, "enabled")]
+            for section in enabled_sections:
+                result.append(
+                    {
+                        "repositoryid": section,
+                        "baseurl": [self._replace_vars(self.get(section, "baseurl"))]
+                    }
+                )
+        except ImportError:
+            pass
+        return result
+
+    def _replace_vars(self, repo_url):
+        """
+        returns a string with "$basearch" and "$releasever" replaced.
+
+        :param repo_url: a repo URL that you want to replace $basearch and $releasever in.
+        :type path: str
+        """
+        mappings = self._obtain_mappings()
+        return repo_url.replace('$releasever', mappings['releasever']).replace('$basearch', mappings['basearch'])
+
+    @suppress_output
+    def _obtain_mappings(self):
+        """
+        returns a hash with "basearch" and "releasever" set. This will try dnf first, and then yum if dnf is
+        not installed.
+        """
+        if dnf is not None:
+            return self._obtain_mappings_dnf()
+        elif yum is not None:
+            return self._obtain_mappings_yum()
+        else:
+            log.error('Unable to load module for any supported package manager (dnf, yum).')
+            raise ImportError
+
+    def _obtain_mappings_dnf(self):
+        return {'releasever': self.db.conf.substitutions['releasever'], 'basearch': self.db.conf.substitutions['basearch']}
+
+    def _obtain_mappings_yum(self):
+        return {'releasever': self.yb.conf.yumvar['releasever'], 'basearch': self.yb.conf.yumvar['basearch']}
 
 
 class ZypperRepoFile(YumRepoFile):
@@ -685,11 +771,19 @@ class ZypperRepoFile(YumRepoFile):
     def server_value_repo_file(cls):
         return cls('var/lib/rhsm/repo_server_val/', 'zypper_{}'.format(cls.NAME))
 
+    def _obtain_mappings(self):
+        db = zypp.ZConfig.instance()
+        return {'$basearch': str(db.systemArchitecture())}
+
 
 def init_repo_file_classes():
-    repo_file_classes = [YumRepoFile, ZypperRepoFile]
-    if HAS_DEB822:
+    repo_file_classes = []
+    if apt and deb822:
         repo_file_classes.append(AptRepoFile)
+    if dnf or yum:
+        repo_file_classes.append(YumRepoFile)
+    if zypp:
+        repo_file_classes.append(ZypperRepoFile)
     _repo_files = [
         (RepoFile, RepoFile.server_value_repo_file)
         for RepoFile in repo_file_classes

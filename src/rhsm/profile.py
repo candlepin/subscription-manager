@@ -14,25 +14,14 @@ import logging
 import imp
 import rpm
 import os.path
+import six
 from rhsm import ourjson as json
 from rhsm.utils import suppress_output
 from iniparse import SafeConfigParser, ConfigParser
 from cloud_what import provider
 
-try:
-    import dnf
-except ImportError:
-    dnf = None
-
-try:
-    import libdnf
-except ImportError:
-    libdnf = None
-
-try:
-    import yum
-except ImportError:
-    yum = None
+from rhsm.repofile import apt, dnf, libdnf, yum
+from rhsm.repofile import get_repo_file_classes
 
 try:
     imp.find_module('zypp_plugin')
@@ -40,10 +29,6 @@ try:
 except ImportError:
     use_zypper = False
 
-try:
-    import apt
-except ImportError:
-    apt = None
 
 if use_zypper:
     REPOSITORY_PATH = "/etc/rhsm/zypper.repos.d/redhat.repo"
@@ -189,110 +174,28 @@ class ModulesProfile(object):
         return self.content
 
 
-class EnabledRepos(object):
-    def __generate(self):
-        if not os.path.exists(self.repofile):
-            return []
-
-        # Unfortuantely, we can not use the SafeConfigParser for zypper repo
-        # files because the repository urls contains strings which the
-        # SafeConfigParser don't like. It would crash with
-        # ConfigParser.InterpolationSyntaxError: '%' must be followed by '%' or '('
-        if use_zypper:
-            config = ConfigParser()
-        else:
-            config = SafeConfigParser()
-        config.read(self.repofile)
-        enabled_sections = [section for section in config.sections() if config.getboolean(section, "enabled")]
-        enabled_repos = []
-        for section in enabled_sections:
-            try:
-                enabled_repos.append(
-                    {
-                        "repositoryid": section,
-                        "baseurl": [self._format_baseurl(config.get(section, "baseurl"))]
-                    }
-                )
-            except ImportError:
-                break
-        return enabled_repos
-
-    def __init__(self, repo_file):
-        """
-        :param path: A .repo file path used to filter the report.
-        :type path: str
-        """
-        if dnf is not None:
-            self.db = dnf.dnf.Base()
-        elif yum is not None:
-            self.yb = yum.YumBase()
-
-        self.repofile = repo_file
-        self.content = self.__generate()
-
-    def __str__(self):
-        return str(self.content)
-
-    def _format_baseurl(self, repo_url):
-        """
-        returns a well formatted baseurl string
-
-        :param repo_url: a repo URL that you want to format
-        :type path: str
-        """
-        if use_zypper:
-            return self._cut_question_mark(repo_url)
-        else:
-            mappings = self._obtain_mappings()
-            return repo_url.replace('$releasever', mappings['releasever']).replace('$basearch', mappings['basearch'])
-
-    def _cut_question_mark(self, repo_url):
-        """
-        returns a string where everything after the first occurence of ? is truncated
-
-        :param repo_url: a repo URL that you want to modify
-        :type path: str
-        """
-        return repo_url[:repo_url.find('?')]
-
-    @suppress_output
-    def _obtain_mappings(self):
-        """
-        returns a hash with "basearch" and "releasever" set. This will try dnf first, and them yum if dnf is
-        not installed.
-        """
-        if dnf is not None:
-            return self._obtain_mappings_dnf()
-        elif yum is not None:
-            return self._obtain_mappings_yum()
-        else:
-            log.error('Unable to load module for any supported package manager (dnf, yum).')
-            raise ImportError
-
-    def _obtain_mappings_dnf(self):
-        return {'releasever': self.db.conf.substitutions['releasever'], 'basearch': self.db.conf.substitutions['basearch']}
-
-    def _obtain_mappings_yum(self):
-        return {'releasever': self.yb.conf.yumvar['releasever'], 'basearch': self.yb.conf.yumvar['basearch']}
-
-
 class EnabledReposProfile(object):
     """
     Collect information about enabled repositories
     """
 
-    def __init__(self, repo_file=REPOSITORY_PATH):
-        self._enabled_repos = EnabledRepos(repo_file)
+    def __init__(self):
+        self._content = []
+        for repo_file_cls, _ in get_repo_file_classes():
+            repo_file = repo_file_cls()
+            repo_file.read()
+            self._content.extend(repo_file.enabled_repos())
+        self._content.sort(key=lambda x: x['baseurl'])
 
     def __eq__(self, other):
-        return self._enabled_repos.content == other._enabled_repos.content
+        return self._content == other._content
 
     def collect(self):
         """
         Gather list of enabled repositories
         :return: List of enabled repositories
         """
-        return self._enabled_repos.content
+        return self._content
 
 
 class Package(object):
