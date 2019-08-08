@@ -22,10 +22,10 @@ import subscription_manager.injection as inj
 from subscription_manager.cache import OverrideStatusCache, WrittenOverrideCache
 from subscription_manager import model
 from subscription_manager.model import ent_cert
-from subscription_manager.repofile import Repo, manage_repos_enabled, get_repo_file_classes
-from subscription_manager.repofile import YumRepoFile
 from subscription_manager.utils import get_supported_resources
 
+from rhsm.repofile import Repo, manage_repos_enabled, get_repo_file_classes
+from rhsm.repofile import YumRepoFile
 import rhsm.config
 import configparser
 from rhsmlib.facts.hwprobe import HardwareCollector
