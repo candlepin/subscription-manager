@@ -317,7 +317,7 @@ class TestReposCommand(TestCliCommand):
         self.cc.cp.setContentOverrides.assert_called_once_with("fake_id", match_dict_list)
         self.assertTrue(repolib_instance.update.called)
 
-    @patch("subscription_manager.repofile.RepoFileBase.path_exists")
+    @patch("rhsm.repofile.RepoFileBase.path_exists")
     @patch("subscription_manager.cli_command.repos.YumRepoFile")
     def test_set_repo_status_when_disconnected(self, mock_repofile, mock_path_exists):
         mock_path_exists.return_value = True

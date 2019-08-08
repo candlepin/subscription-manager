@@ -26,10 +26,28 @@ import sys
 
 try:
     from debian.deb822 import Deb822
-
-    HAS_DEB822 = True
 except ImportError:
-    HAS_DEB822 = False
+    apt = None
+
+try:
+    import dnf
+except ImportError:
+    dnf = None
+
+try:
+    import libdnf
+except ImportError:
+    libdnf = None
+
+try:
+    import yum
+except ImportError:
+    yum = None
+
+try:
+    import zypp
+except ImportError:
+    zypp = None
 
 from subscription_manager import utils
 from subscription_manager.certdirectory import Path
@@ -52,6 +70,9 @@ repo_files = []
 
 # detect if running with yum, otherwise it's dnf
 HAS_YUM = "yum" in sys.modules
+
+# detect if running with apt
+HAS_DEB822 = apt is not None
 
 
 class Repo(dict):
@@ -139,7 +160,6 @@ class Repo(dict):
         repoid_vars = [part[1:] for part in repo_parts if part.startswith("$")]
         if HAS_YUM and repoid_vars:
             repo["ui_repoid_vars"] = " ".join(repoid_vars)
-
         # If no GPG key URL is specified, turn gpgcheck off:
         gpg_url = content.gpg
         if not gpg_url:
@@ -383,6 +403,9 @@ class RepoFileBase:
     def fix_content(self, content: str) -> str:
         return content
 
+    def enabled_repos(self):
+        raise NotImplementedError("'enabled_repos' is not implemented for this repo_file.")
+
     @classmethod
     def installed(cls) -> bool:
         return os.path.exists(Path.abs(cls.PATH))
@@ -485,6 +508,12 @@ if HAS_DEB822:
 
             return apt_cont
 
+        def enabled_repos(self):
+            return [
+                {'repositoryid': repo822['id'], 'baseurl': [repo822['baseurl']]}
+                for repo822 in self.repos822
+            ]
+
 
 class YumRepoFile(RepoFileBase, ConfigParser):
     PATH = "etc/yum.repos.d/"
@@ -559,6 +588,54 @@ class YumRepoFile(RepoFileBase, ConfigParser):
     def section(self, section: str) -> "Repo":
         if self.has_section(section):
             return Repo(section, self.items(section))
+
+    def enabled_repos(self):
+        result = []
+        try:
+            enabled_sections = [section for section in self.sections() if config.getboolean(section, "enabled")]
+            for section in enabled_sections:
+                result.append(
+                    {
+                        "repositoryid": section,
+                        "baseurl": [self._replace_vars(self.get(section, "baseurl"))]
+                    }
+                )
+        except ImportError:
+            pass
+        return result
+
+    def _replace_vars(self, repo_url):
+        """
+        returns a string with "$basearch" and "$releasever" replaced.
+
+        :param repo_url: a repo URL that you want to replace $basearch and $releasever in.
+        :type path: str
+        """
+        mappings = self._obtain_mappings()
+        for key, value in mappings.items():
+            repo_url = repo_url.replace(key, value)
+        return repo_url
+
+    def _obtain_mappings(self):
+        """
+        returns a hash with "basearch" and "releasever" set. This will try dnf first, and then yum if dnf is
+        not installed.
+        """
+        if dnf is not None:
+            return self._obtain_mappings_dnf()
+        elif yum is not None:
+            return self._obtain_mappings_yum()
+        else:
+            log.error('Unable to load module for any supported package manager (dnf, yum).')
+            raise ImportError
+
+    def _obtain_mappings_dnf(self):
+        db = dnf.dnf.Base()
+        return {'$releasever': db.conf.substitutions['releasever'], '$basearch': db.conf.substitutions['basearch']}
+
+    def _obtain_mappings_yum(self):
+        yb = yum.YumBase()
+        return {'$releasever': yb.conf.yumvar['releasever'], '$basearch': yb.conf.yumvar['basearch']}
 
 
 class ZypperRepoFile(YumRepoFile):
@@ -689,6 +766,10 @@ class ZypperRepoFile(YumRepoFile):
     @classmethod
     def server_value_repo_file(cls) -> "ZypperRepoFile":
         return cls("var/lib/rhsm/repo_server_val/", "zypper_{}".format(cls.NAME))
+
+    def _obtain_mappings(self):
+        db = zypp.ZConfig.instance()
+        return {'$basearch': str(db.systemArchitecture())}
 
 
 def init_repo_file_classes() -> List[Tuple[type(RepoFileBase), str]]:
