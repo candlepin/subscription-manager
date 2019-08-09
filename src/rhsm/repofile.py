@@ -21,6 +21,7 @@ import logging
 import os
 import re
 import string
+import sys
 
 try:
     import apt

@@ -32,6 +32,7 @@ from subscription_manager.cache import ProfileManager, InstalledProductsManager,
     ContentAccessModeCache
 
 from rhsm.profile import Package, RPMProfile, EnabledReposProfile, ModulesProfile
+from rhsm.repofile import YumRepoFile
 
 from rhsm.connection import RestlibException, UnauthorizedException, \
     RateLimitExceededException
@@ -526,7 +527,9 @@ class TestProfileManager(unittest.TestCase):
 
         mock_rpm_profile = RPMProfile(from_file=mock_file)
 
-        mock_enabled_repos_profile = EnabledReposProfile(repo_file=repo_file)
+        mock_repofile_classes = [YumRepoFile(os.path.dirname(repo_file), os.path.basename(repo_file))]
+        with patch('rhsm.repofile.get_repo_file_classes', mock_repofile_classes):
+            mock_enabled_repos_profile = EnabledReposProfile()
 
         mock_module_profile = ModulesProfile()
         mock_module_profile.collect = Mock(return_value=enabled_modules)
