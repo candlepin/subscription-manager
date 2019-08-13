@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.13
+Version: 1.24.14
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1150,6 +1150,36 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Aug 13 2019 Christopher Snyder <csnyder@redhat.com> 1.24.14-1
+- 1739706: Proper messaging of syspurpose add-addons
+  (jhnidek@redhat.com)
+- 1739707: GUI: Do not auto-attach, when golden ticket is used
+  (jhnidek@redhat.com)
+- 1705017: Show in man page that --installed is the default for the list
+  command (wpoteat@redhat.com)
+- 1737894: syspurpose attributes in list --consumed
+  (jhnidek@redhat.com)
+- 1737894: Print roles and usage in list of subscriptions
+  (jhnidek@redhat.com)
+- 1739705: Don't print traceback during list --available
+  (jhnidek@redhat.com)
+- 1724712: Updating from System Type to Entitlement Type (waldirio@gmail.com)
+- 1739699: Fixed unsetting syspurpose attributes (jhnidek@redhat.com)
+- 1723803: Print reasons, why syspurpose status is mismatch
+  (jhnidek@redhat.com)
+- 1652549: Addition of tests for heartbeat method (wpoteat@redhat.com)
+- 1652549: Connection method for hypervisor heartbeat (wpoteat@redhat.com)
+- 1739695: Add in a last_boot fact for parity with spacewalk facts
+  (bryan.kearney@gmail.com)
+- 1702239: Fix traceback for syspurpose on rhel7 (jhnidek@redhat.com)
+- 1703054: Do not crash sub-man during unregistering
+  (jhnidek@redhat.com)
+- 1739697: Syspurpose client to have the same behavior as SubMan when in
+  conflict with server (wpoteat@redhat.com)
+- 1591315: Fewer warning messages when golden ticket is used
+  (jhnidek@redhat.com)
+- 1520383: Use more appropriate log levels instead of info (wpoteat@redhat.com)
+
 * Fri Jun 21 2019 Christopher Snyder <csnyder@redhat.com> 1.24.13-1
 - 1722238: Fix reporting insights id in facts on RHEL7 (jhnidek@redhat.com)
 
