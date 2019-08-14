@@ -38,6 +38,7 @@ let registerDialogDetails = {
     proxy_server: '',
     proxy_user: '',
     proxy_password: '',
+    token: '',
 };
 
 function dismissStatusError() {
@@ -65,6 +66,7 @@ function openRegisterDialog() {
         password: '',
         activation_keys: '',
         org: '',
+        token: getCookie('Keycloak_Token'),
     });
     // show dialog to register
     let renderDialog;
@@ -94,6 +96,12 @@ function openRegisterDialog() {
             renderDialog = Dialog.show_modal_dialog(dialogProps, footerProps);
     };
     updatedData();
+}
+
+function getCookie(name) {
+    function escape(s) { return s.replace(/([.*+?\^${}()|\[\]\/\\])/g, '\\$1'); };
+    var match = document.cookie.match(RegExp('(?:^|;\\s*)' + escape(name) + '=([^;]*)'));
+    return match ? match[1] : null;
 }
 
 function unregisterSystem() {

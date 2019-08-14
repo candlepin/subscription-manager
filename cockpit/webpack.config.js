@@ -32,6 +32,8 @@ var info = {
         "index.html",
         "manifest.json",
         "po.js",
+        "keycloak.js",
+        "token.js"
     ],
 };
 

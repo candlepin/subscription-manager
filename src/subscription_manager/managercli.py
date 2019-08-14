@@ -1376,7 +1376,7 @@ class RegisterCommand(UserPassCommand):
                 self.cp_provider.set_user_pass(self.username, self.password)
                 admin_cp = self.cp_provider.get_basic_auth_cp()
             else:
-                admin_cp = self.cp_provider.get_no_auth_cp
+                admin_cp = self.cp_provider.get_no_auth_cp()
 
             # This is blocking and not async, which aside from blocking here, also
             # means things like following name owner changes gets weird.

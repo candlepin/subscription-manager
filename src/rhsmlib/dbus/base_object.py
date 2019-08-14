@@ -94,6 +94,9 @@ class BaseObject(dbus.service.Object):
         elif 'username' in options and 'password' in options:
             cp_provider.set_user_pass(options['username'], options['password'])
             return cp_provider.get_basic_auth_cp()
+        elif 'token' in options:
+            cp_provider.set_token(options['token'])
+            return cp_provider.get_keycloak_auth_cp()
         else:
             return cp_provider.get_no_auth_cp()
 

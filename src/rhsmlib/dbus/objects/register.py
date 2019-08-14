@@ -144,3 +144,27 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         register_service = RegisterService(cp)
         consumer = register_service.register(org, **options)
         return json.dumps(consumer)
+
+    @dbus.service.method(
+        dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
+        in_signature='sa{sv}a{sv}s',
+        out_signature='s')
+    @util.dbus_handle_exceptions
+    def RegisterWithToken(self, token, options, connection_options, locale):
+        """
+        Note this method is registration ONLY.  Auto-attach is a separate process.
+        """
+        connection_options = dbus_utils.dbus_to_python(connection_options, expected_type=dict)
+        options = dbus_utils.dbus_to_python(options, expected_type=dict)
+        connection_options['token'] = dbus_utils.dbus_to_python(token, expected_type=str)
+        locale = dbus_utils.dbus_to_python(locale, expected_type=str)
+        Locale.set(locale)
+        cp = self.build_uep(connection_options)
+        org = 'admin'
+        register_service = RegisterService(cp)
+        options['token'] = dbus_utils.dbus_to_python(token, expected_type=str)
+        consumer = register_service.register(org, **options)
+        return json.dumps(consumer)
+
+
+

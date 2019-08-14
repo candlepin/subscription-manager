@@ -49,8 +49,10 @@ class RegisterService(object):
         addons = addons or syspurpose.get('addons', [])
         usage = usage or syspurpose.get('usage', '')
         service_level = service_level or syspurpose.get('service_level_agreement', '')
-        if token and len(token) > 0:
+        if token and len(token) > 0 and isinstance(token, list):
             refresh_token = token[0]
+        elif token and isinstance(token, str):
+            refresh_token = token
 
         type = type or "system"
         options = {
@@ -131,5 +133,5 @@ class RegisterService(object):
                 raise exceptions.ValidationError(_("Error: Activation keys do not allow environments to be"
                     " specified."))
         elif not getattr(self.cp, 'username', None) or not getattr(self.cp, 'password', None):
-            if not getattr(self.cp, 'token', None):
+            if not options['token']:
                 raise exceptions.ValidationError(_("Error: Missing token for registration or username/password."))

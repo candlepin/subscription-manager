@@ -1116,6 +1116,7 @@ class UEPConnection(object):
         """
         Creates a consumer on candlepin server
         """
+        log.debug("inside reg consummmerr")
         params = {"type": type,
                   "name": name,
                   "facts": facts}

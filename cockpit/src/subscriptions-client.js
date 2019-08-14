@@ -300,6 +300,20 @@ client.registerSystem = subscriptionDetails => {
                     registered = true;
                     return result;
                 }
+                else if (subscriptionDetails.token) {
+                    console.log("Registering with token");
+                    let result = registerService.call(
+                        'RegisterWithToken',
+                        [
+                            subscriptionDetails.token,
+                            {},
+                            connection_options,
+                            userLang
+                        ]
+                    );
+                    registered = true;
+                    return result;
+                }
                 else {
                     console.debug('registering using username and password');
                     let result = registerService.call(

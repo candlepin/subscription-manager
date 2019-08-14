@@ -1,6 +1,7 @@
 {
     "version": "0.1",
     "name": "subscriptions",
+    "content-security-policy": "frame-src *; default-src *; connect-src *",
     "requires": {
         "cockpit": "137"
     },
