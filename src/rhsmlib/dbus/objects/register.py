@@ -165,6 +165,3 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         options['token'] = dbus_utils.dbus_to_python(token, expected_type=str)
         consumer = register_service.register(org, **options)
         return json.dumps(consumer)
-
-
-

@@ -212,13 +212,14 @@ class RegisterServiceTest(InjectionMockingTest):
         ]
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
 
-    def _build_options(self, activation_keys=None, environment=None, force=None, name=None, consumerid=None):
+    def _build_options(self, activation_keys=None, environment=None, force=None, name=None, consumerid=None, token=None):
         return {
             'activation_keys': activation_keys,
             'environment': environment,
             'force': force,
             'name': name,
-            'consumerid': consumerid
+            'consumerid': consumerid,
+            'token': token
         }
 
     def test_fails_when_previously_registered(self):
@@ -297,7 +298,6 @@ class RegisterServiceTest(InjectionMockingTest):
     def test_requires_basic_auth_for_normal_registration(self):
         self.mock_cp.username = None
         self.mock_cp.password = None
-
         self.mock_identity.is_valid.return_value = False
         options = self._build_options(consumerid='consumerid')
         with self.assertRaisesRegexp(exceptions.ValidationError, r'.*Missing token for registration or username/password.*'):
