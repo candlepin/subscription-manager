@@ -1070,6 +1070,8 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %{_datadir}/cockpit/subscription-manager/manifest.json
 %{_datadir}/cockpit/subscription-manager/po.*.js
 %{_datadir}/cockpit/subscription-manager/po.js
+%{_datadir}/cockpit/subscription-manager/token.js
+%{_datadir}/cockpit/subscription-manager/keycloak.js
 %{_datadir}/cockpit/subscription-manager/node_modules/*
 %{_datadir}/metainfo/org.candlepinproject.subscription_manager.metainfo.xml
 %if ! %use_subman_gui
