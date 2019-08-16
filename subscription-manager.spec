@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.14
+Version: 1.24.15
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1150,6 +1150,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Aug 16 2019 Christopher Snyder <csnyder@redhat.com> 1.24.15-1
+- 1742208: Send package profile on yum transactions (csnyder@redhat.com)
+
 * Tue Aug 13 2019 Christopher Snyder <csnyder@redhat.com> 1.24.14-1
 - 1739706: Proper messaging of syspurpose add-addons
   (jhnidek@redhat.com)
