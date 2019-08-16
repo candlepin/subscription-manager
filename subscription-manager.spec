@@ -138,7 +138,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.25.13
+Version: 1.25.14
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1166,6 +1166,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Aug 16 2019 Christopher Snyder <csnyder@redhat.com> 1.25.14-1
+- 1708494: Proper messaging of syspurpose add-addons; ENT-1332
+  (jhnidek@redhat.com)
+
 * Tue Jul 23 2019 Christopher Snyder <csnyder@redhat.com> 1.25.13-1
 - 1708700: Generate 'ui_repoid_vars' only when running with YUM.
   (dmach@redhat.com)
