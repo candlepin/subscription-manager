@@ -32,7 +32,7 @@ from rhsm.connection import UEPConnection, Restlib, ConnectionException, Connect
         RemoteServerException, drift_check, ExpiredIdentityCertException, UnauthorizedException, \
         ForbiddenException, AuthenticationException, RateLimitExceededException, ContentConnection
 
-from mock import Mock, patch
+from mock import Mock, mock, patch
 from datetime import date
 from time import strftime, gmtime
 from rhsm import ourjson as json
@@ -84,6 +84,18 @@ class ConnectionTests(unittest.TestCase):
 
     def test_get_environment_by_name_requires_owner(self):
         self.assertRaises(Exception, self.cp.getEnvironment, None, {"name": "env name"})
+
+    @mock.patch('locale.getlocale')
+    def test_has_proper_language_header_utf8(self, mock_locale):
+        mock_locale.return_value = ('ja_JP', 'UTF-8')
+        self.cp = UEPConnection()
+        self.assertEqual(self.cp.conn.headers['Accept-Language'], 'ja-jp')
+
+    @mock.patch('locale.getlocale')
+    def test_has_proper_language_header_not_utf8(self, mock_locale):
+        mock_locale.return_value = ('ja_JP', '')
+        self.cp = UEPConnection()
+        self.assertEqual(self.cp.conn.headers['Accept-Language'], 'ja-jp')
 
     def test_get_environment_urlencoding(self):
         self.cp.conn = Mock()
