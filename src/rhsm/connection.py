@@ -481,7 +481,7 @@ class BaseRestLib(object):
                         "x-subscription-manager-version": subman_version}
 
         if lc:
-            self.headers["Accept-Language"] = lc.lower().replace('_', '-')
+            self.headers["Accept-Language"] = lc.lower().replace('_', '-').split('.', 1)[0]
 
         if correlation_id:
             self.headers["X-Correlation-ID"] = correlation_id
