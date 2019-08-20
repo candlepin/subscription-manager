@@ -368,7 +368,7 @@ Requires: libdnf >= 0.22.5
 %endif
 # See BZ 1581410 - avoid a circular dependency
 %if (0%{?rhel} < 8)
-Requires: %{name} = %{version}-%{release}
+Requires: %{name} >= %{version}-%{release}
 %endif
 %if %{with python3}
 Requires: python3-dnf-plugins-core
