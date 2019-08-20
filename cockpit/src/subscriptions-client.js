@@ -429,7 +429,7 @@ client.registerSystem = subscriptionDetails => {
 };
 
 client.unregisterSystem = () => {
-    client.subscriptionStatus.status = "Unregistering";
+    client.subscriptionStatus.status = _("Unregistering");
     needRender();
     unregisterService.wait(() => {
         unregisterService.Unregister({}, userLang) // FIXME: use proxy settings
@@ -502,7 +502,7 @@ client.getSubscriptionStatus = function() {
         })
         .catch(ex => {
             console.debug(ex);
-            client.subscriptionStatus.status = 'Unknown';
+            client.subscriptionStatus.status = _("Unknown");
         })
         .then(() => {
             getSubscriptionDetails();
