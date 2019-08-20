@@ -133,7 +133,7 @@
 
 Name: subscription-manager
 Version: 1.24.13
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1150,6 +1150,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Aug 20 2019 Christopher Snyder <csnyder@redhat.com> 1.24.13-3
+- 1743860: Update dnf-plugin dependencies for RHEL 7 (csnyder@redhat.com)
+
 * Mon Aug 19 2019 Christopher Snyder <csnyder@redhat.com> 1.24.13-2
 - 1743120: Send package profile on yum transactions (csnyder@redhat.com)
 
