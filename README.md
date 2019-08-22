@@ -40,10 +40,19 @@ Vagrant
 -------
 
 The setup that most developers are using is `vagrant-libvirt` with
-`vagrant-hostmanager` installed on Fedora via:
+`vagrant-hostmanager` and `vagrant-sshfs` installed on Fedora via:
 
 ```bash
-dnf install vagrant-libvirt vagrant-hostmanager
+dnf install vagrant-libvirt vagrant-hostmanager vagrant-sshfs
+```
+
+If you are testing on RHEL CentOS you can install vagrant from https://www.vagrantup.com/downloads.html
+and then install the plugins using: 
+
+```bash
+vagrant plugin install vagrant-hostmanager
+vagrant plugin install vagrant-libvirt
+vagrant plugin install vagrant-sshfs
 ```
 
 We are avoiding coupling to libvirt, but use of VirtualBox is less tested.
@@ -67,10 +76,9 @@ There are two links added in the cockpit interface: one for the
 subscription-manager cockpit plugin itself, and then one which runs integration
 tests for the D-Bus interface.
 
-Currently, the source is set up as a vagrant shared folder using rsync. This
-means that it is necessary to use `vagrant rsync` to sync changes with the
-host if desired. `vagrant rsync-auto` can be used to monitor the directory for
-changes and then sync when appropriate.
+Currently, the source is set up as a vagrant shared folder using sshfs. This
+means that it is necessary to install the `vagrant-sshfs` plugin to sync changes
+ from the host to the guest.
 
 The ansible role that provisions the VMs tries to find the IP address of
 candlepin.example.com, so if the candlepin vagrant image is started first,
@@ -120,6 +128,15 @@ The current info about proxy
 url | proxy-server.subman.example.com:3128
 username | proxyuser
 password | password
+
+Development of the Subscription-Manager Deployment Ansible role
+---------------------------------------------------------------
+The Ansible role that is used for deploying subscription-manager can be found at 
+https://github.com/candlepin/ansible-role-subman-devel. In order to test 
+changes for this Ansible role you will need to check it out locally. 
+Edit the `vagrant/requirements.yml` file and change the src property to 
+`- src: git+file:///your/development/path/to/ansible-role-subman-devel`. 
+This will pull the latest commit from this path and use it for deployment. 
 
 D-Bus Development
 -----------------
