@@ -1119,6 +1119,9 @@ scrollkeeper-update -q -o %{_datadir}/omf/%{name} || :
 %endif
 %endif
 
+%pre
+killall rhsmd > /dev/null 2>&1
+
 %post -n subscription-manager-plugin-container
 %{__python} %{rhsm_plugins_dir}/container_content.py || :
 
