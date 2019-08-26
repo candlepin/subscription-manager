@@ -230,7 +230,7 @@ class DomainSocketServer(object):
 
     def run(self):
         try:
-            self._server = dbus.server.Server("unix:tmpdir=/var/run")
+            self._server = dbus.server.Server("unix:tmpdir=/run/rhsm")
 
             for clazz in self.object_classes:
                 self._server.on_connection_added.append(

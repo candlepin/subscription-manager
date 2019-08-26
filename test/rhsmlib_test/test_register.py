@@ -335,7 +335,7 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
 
         def assertions(*args):
             result = args[0]
-            six.assertRegex(self, result, r'/var/run/dbus.*')
+            six.assertRegex(self, result, r'/run/rhsm/dbus.*')
 
         self.dbus_request(assertions, self.interface.Start, dbus_method_args)
 
@@ -346,7 +346,7 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
             # Assign the result as an attribute to this function.
             # See http://stackoverflow.com/a/27910553/6124862
             assertions.result = args[0]
-            six.assertRegex(self, assertions.result, r'/var/run/dbus.*')
+            six.assertRegex(self, assertions.result, r'/run/rhsm/dbus.*')
 
         self.dbus_request(assertions, self.interface.Start, dbus_method_args)
 

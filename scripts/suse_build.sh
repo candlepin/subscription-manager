@@ -11,4 +11,4 @@ fi
 prepare_obs "$project_name"
 cd "$OBS_DIR/$project_name/$package_name"
 
-osc build "$@"
+osc build --clean "$@"

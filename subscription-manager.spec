@@ -733,7 +733,7 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 
 %attr(755,root,root) %dir %{_var}/log/rhsm
 %attr(755,root,root) %dir %{_var}/spool/rhsm/debug
-%attr(755,root,root) %dir %{_var}/run/rhsm
+%attr(755,root,root) %dir /run/rhsm
 %attr(750,root,root) %dir %{_var}/lib/rhsm
 %attr(750,root,root) %dir %{_var}/lib/rhsm/facts
 %attr(750,root,root) %dir %{_var}/lib/rhsm/packages
@@ -1089,8 +1089,11 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %post
 %if %use_systemd
     %if 0%{?suse_version}
+#        %%tmpfiles_create %_tmpfilesdir/subscription-manager.conf
+        [ -x /usr/bin/systemd-tmpfiles ] && /usr/bin/systemd-tmpfiles --create %{_tmpfilesdir}/subscription-manager.conf > /dev/null 2>&1 || :
         %service_add_post rhsmcertd.service
     %else
+        systemd-tmpfiles --create %{_tmpfilesdir}/subscription-manager.conf
         %systemd_post rhsmcertd.service
     %endif
 %else

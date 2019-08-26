@@ -338,7 +338,7 @@ def restart_virt_who():
     Send a SIGHUP signal to virt-who if it running on the same machine.
     """
     try:
-        pidfile = open('/var/run/virt-who.pid', 'r')
+        pidfile = open('/run/virt-who.pid', 'r')
         pid = int(pidfile.read())
         os.kill(pid, signal.SIGHUP)
         log.debug("Restarted virt-who")
