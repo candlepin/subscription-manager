@@ -44,6 +44,12 @@
 %global completion_dir %{_datadir}/bash-completion/completions
 %endif
 
+%if 0%{?suse_version} > 1110
+%global run_dir /run
+%else
+%global run_dir /var/run
+%endif
+
 %global rhsm_plugins_dir  /usr/share/rhsm-plugins
 # on recent Fedora and RHEL 7, let's not use m2crypto
 %global use_m2crypto (0%{?fedora} < 23 && 0%{?rhel} < 7)
@@ -76,7 +82,11 @@
 %global py_package_prefix python%{python3_pkgversion}
 %global rhsm_package_name %{py_package_prefix}-subscription-manager-rhsm
 %else
+%if 0%{?suse_version} >= 1500
+%global py_package_prefix python2
+%else
 %global py_package_prefix python
+%endif
 %global rhsm_package_name subscription-manager-rhsm
 %endif
 
@@ -154,8 +164,13 @@ Name: subscription-manager
 Version: 1.26.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
+%if 0%{?suse_version}
+Group:   Productivity/Networking/System
+License: GPL-2.0
+%else
 Group:   System Environment/Base
 License: GPLv2
+%endif
 URL:     http://www.candlepinproject.org/
 
 # How to create the source tarball:
@@ -193,6 +208,10 @@ Requires:  %{py_package_prefix}-ethtool
 Requires:  %{py_package_prefix}-iniparse
 Requires:  %{py_package_prefix}-decorator
 Requires:  virt-what
+%if 0%{?suse_version}
+Requires:  logrotate
+Requires:  cron
+%endif
 Requires:  %{rhsm_package_name} = %{version}
 Requires:  %{py_package_prefix}-six
 Requires:  %{py_package_prefix}-dateutil
@@ -264,7 +283,11 @@ BuildRequires: desktop-file-utils
 %endif
 
 BuildRequires: %{?suse_version:dbus-1-glib-devel} %{!?suse_version:dbus-glib-devel}
+%if 0%{?suse_version} <= 1110
+BuildRequires: %{?suse_version:sles-release} %{!?suse_version:system-release}
+%else
 BuildRequires: %{?suse_version:distribution-release} %{!?suse_version:system-release}
+%endif
 BuildRequires: %{?suse_version:gconf2-devel} %{!?suse_version:GConf2-devel}
 BuildRequires: %{?suse_version:update-desktop-files} %{!?suse_version:scrollkeeper}
 
@@ -291,8 +314,11 @@ platform.
 
 %package -n %{py_package_prefix}-syspurpose
 Summary: A commandline utility for declaring system syspurpose
+%if 0%{?suse_version}
+Group: Productivity/Networking/System
+%else
 Group: System Environment/Base
-
+%endif
 %description -n %{py_package_prefix}-syspurpose
 Provides the syspurpose commandline utility. This utility manages the
 system syspurpose.
@@ -301,7 +327,11 @@ system syspurpose.
 %if %{use_container_plugin}
 %package -n subscription-manager-plugin-container
 Summary: A plugin for handling container content
+%if 0%{?suse_version}
+Group: Productivity/Networking/System
+%else
 Group: System Environment/Base
+%endif
 Requires: %{name} = %{version}-%{release}
 
 %description -n subscription-manager-plugin-container
@@ -312,7 +342,11 @@ from the server. Populates /etc/docker/certs.d appropriately.
 %if %{use_rhsm_gtk}
 %package -n rhsm-gtk
 Summary: GTK+ widgets used by subscription-manager-gui and initial_setup
+%if 0%{?suse_version}
+Group: Productivity/Networking/System
+%else
 Group: System Environment/Base
+%endif
 Requires: %{?gtk3:%{py_package_prefix}-gobject, gtk3} %{!?gtk3:pygtk2, pygtk2-libglade}
 Requires: usermode-gtk
 # Fedora can figure this out automatically, but RHEL cannot:
@@ -339,7 +373,11 @@ and RHSM initial_setup module for Anaconda.
 %if %{use_subman_gui}
 %package -n subscription-manager-gui
 Summary: A GUI interface to manage Red Hat product subscriptions
+%if 0%{?suse_version}
+Group: Productivity/Networking/System
+%else
 Group: System Environment/Base
+%endif
 Requires: %{name} = %{version}-%{release}
 Requires: gnome-icon-theme
 
@@ -359,7 +397,11 @@ subscriptions.
 
 %package -n subscription-manager-migration
 Summary: Migration scripts for moving to certificate based subscriptions
+%if 0%{?suse_version}
+Group: Productivity/Networking/System
+%else
 Group: System Environment/Base
+%endif
 Requires: %{name} = %{version}-%{release}
 Requires: rhnlib
 
@@ -377,7 +419,11 @@ subscriptions
 %if %use_dnf
 %package -n dnf-plugin-subscription-manager
 Summary: Subscription Manager plugins for DNF
+%if 0%{?suse_version}
+Group: Productivity/Networking/System
+%else
 Group: System Environment/Base
+%endif
 %if (0%{?fedora} >= 29 || 0%{?rhel} >= 8)
 BuildRequires: cmake
 BuildRequires: gcc
@@ -413,7 +459,11 @@ product-id plugins.
 %if %use_firstboot
 %package -n subscription-manager-firstboot
 Summary: Firstboot screens for subscription manager
+%if 0%{?suse_version}
+Group: Productivity/Networking/System
+%else
 Group: System Environment/Base
+%endif
 Requires: rhsm-gtk = %{version}-%{release}
 Requires: rhn-setup-gnome
 
@@ -428,7 +478,11 @@ This package contains the firstboot screens for subscription-manager.
 %if %use_initial_setup
 %package -n subscription-manager-initial-setup-addon
 Summary: initial-setup screens for subscription-manager
+%if 0%{?suse_version}
+Group: Productivity/Networking/System
+%else
 Group: System Environment/Base
+%endif
 Requires: rhsm-gtk = %{version}-%{release}
 Requires: initial-setup-gui >= 0.3.9.24-1
 Obsoletes: subscription-manager-firstboot < 1.15.3-1
@@ -444,7 +498,11 @@ This package contains the initial-setup screens for subscription-manager.
 %if %has_ostree
 %package -n subscription-manager-plugin-ostree
 Summary: A plugin for handling OSTree content.
+%if 0%{?suse_version}
+Group: Productivity/Networking/System
+%else
 Group: System Environment/Base
+%endif
 
 Requires: %{py_package_prefix}-gobject-base
 # plugin needs a slightly newer version of python-iniparse for 'tidy'
@@ -460,7 +518,11 @@ the remote in the currently deployed .origin file.
 
 %package -n %{rhsm_package_name}
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
+%if 0%{?suse_version}
+Group: Development/Libraries/Python
+%else
 Group: Development/Libraries
+%endif
 
 %if %use_m2crypto
 Requires: %{?suse_version:python-m2crypto} %{!?suse_version:m2crypto}
@@ -493,7 +555,11 @@ entitlements, certificates, and access to content.
 %if %{with python2_rhsm}
 %package -n python2-subscription-manager-rhsm
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
+%if 0%{?suse_version}
+Group: Development/Libraries/Python
+%else
 Group: Development/Libraries
+%endif
 
 BuildRequires: python2-devel
 
@@ -519,7 +585,11 @@ entitlements, certificates, and access to content.
 
 %package -n subscription-manager-rhsm-certificates
 Summary: Certificates required to communicate with a Red Hat Unified Entitlement Platform
+%if 0%{?suse_version}
+Group: Development/Libraries/Python
+%else
 Group: Development/Libraries
+%endif
 Provides: python-rhsm-certificates = %{version}-%{release}
 Obsoletes: python-rhsm-certificates <= 1.20.3-1
 
@@ -569,6 +639,7 @@ make -f Makefile install VERSION=%{version}-%{release} \
     DESTDIR=%{buildroot} PYTHON_SITELIB=%{python_sitearch} \
     OS_VERSION=%{?fedora}%{?rhel}%{?suse_version} OS_DIST=%{dist} \
     COMPLETION_DIR=%{completion_dir} \
+    RUN_DIR=%{run_dir} \
     %{?install_ostree} %{?install_container} %{?post_boot_tool} %{?gtk_version} \
     %{?install_yum_plugins} %{?install_dnf_plugins} \
     %{?install_zypper_plugins} \
@@ -646,6 +717,17 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %if %{with python3}
 %py_byte_compile %{__python3} %{buildroot}%{rhsm_plugins_dir}/
 %py_byte_compile %{__python3} %{buildroot}%{_datadir}/anaconda/addons/com_redhat_subscription_manager/
+%endif
+
+# symlink services to /usr/sbin/ when building for SUSE distributions
+%if 0%{?suse_version}
+    %if %{use_systemd}
+        ln -s %{_sbindir}/service %{buildroot}/%{_sbindir}/rcrhsm
+        ln -s %{_sbindir}/service %{buildroot}/%{_sbindir}/rcrhsm-facts
+        ln -s %{_sbindir}/service %{buildroot}/%{_sbindir}/rcrhsmcertd
+    %else
+       ln -s %{_initrddir}/rhsmcertd %{buildroot}%{_sbindir}/rcrhsmcertd
+    %endif
 %endif
 
 # base/cli tools use the gettext domain 'rhsm', while the
@@ -747,7 +829,7 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 
 %attr(755,root,root) %dir %{_var}/log/rhsm
 %attr(755,root,root) %dir %{_var}/spool/rhsm/debug
-%attr(755,root,root) %dir %{_var}/run/rhsm
+%ghost %attr(755,root,root) %dir %{run_dir}/rhsm
 %attr(750,root,root) %dir %{_var}/lib/rhsm
 %attr(750,root,root) %dir %{_var}/lib/rhsm/facts
 %attr(750,root,root) %dir %{_var}/lib/rhsm/packages
@@ -845,8 +927,16 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %if %use_systemd
     %attr(644,root,root) %{_unitdir}/*.service
     %attr(644,root,root) %{_tmpfilesdir}/%{name}.conf
+    %if 0%{?suse_version}
+        %{_sbindir}/rcrhsm
+        %{_sbindir}/rcrhsm-facts
+    %endif
 %else
     %attr(755,root,root) %{_initrddir}/rhsmcertd
+%endif
+
+%if 0%{?suse_version}
+    %{_sbindir}/rcrhsmcertd
 %endif
 
 # Incude rt CLI tool
@@ -919,8 +1009,8 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %endif
 %{_bindir}/rhsm-icon
 
-%{_datadir}/gnome/help/subscription-manager/C/figures/*.png
-%{_datadir}/gnome/help/subscription-manager/C/*.xml
+%doc %{_datadir}/gnome/help/subscription-manager/C/figures/*.png
+%doc %{_datadir}/gnome/help/subscription-manager/C/*.xml
 %{_datadir}/omf/subscription-manager/subscription-manager-C.omf
 
 %{_datadir}/applications/subscription-manager-gui.desktop
@@ -1099,10 +1189,22 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %endif
 %endif
 
+%if %use_systemd
+    %if 0%{?suse_version}
+%pre
+        %service_add_pre rhsm.service
+        %service_add_pre rhsm-facts.service
+        %service_add_pre rhsmcertd.service
+    %endif
+%endif
+
 %post
 %if %use_systemd
     %if 0%{?suse_version}
         %service_add_post rhsmcertd.service
+        %service_add_post rhsm.service
+        %service_add_post rhsm-facts.service
+        %tmpfiles_create /usr/lib/tmpfiles.d/subscription-manager.conf
     %else
         %systemd_post rhsmcertd.service
     %endif
@@ -1140,10 +1242,20 @@ scrollkeeper-update -q -o %{_datadir}/omf/%{name} || :
 %preun
 if [ $1 -eq 0 ] ; then
     %if %use_systemd
-        %systemd_preun rhsmcertd.service
+        %if 0%{?suse_version}
+            %service_del_preun rhsm.service
+            %service_del_preun rhsm-facts.service
+            %service_del_preun rhsmcertd.service
+        %else
+            %systemd_preun rhsmcertd.service
+        %endif
     %else
-        /sbin/service rhsmcertd stop >/dev/null 2>&1
-        /sbin/chkconfig --del rhsmcertd
+        %if 0%{?suse_version}
+            %stop_on_removal %{_initrddir}/rhsmcertd
+        %else
+            /sbin/service rhsmcertd stop >/dev/null 2>&1
+            /sbin/chkconfig --del rhsmcertd
+        %endif
     %endif
 
     if [ -x /bin/dbus-send ] ; then
@@ -1155,8 +1267,14 @@ fi
 %if %use_systemd
     %if 0%{?suse_version}
         %service_del_postun rhsmcertd.service
+        %service_del_postun rhsm.service
+        %service_del_postun rhsm-facts.service
     %else
         %systemd_postun_with_restart rhsmcertd.service
+    %endif
+%else
+    %if 0%{?suse_version}
+        %insserv_cleanup %{_initrddir}/rhsmcertd
     %endif
 %endif
 
