@@ -2,4 +2,17 @@
 # nightly run of rhsmd to log entitlement expiration/validity errors to syslog
 # this is a cron job because it doesn't need to 'phone home'. should that
 # change, look into calling the dbus interface from rhsmcertd instead.
-/usr/libexec/rhsmd -s
+config=$(grep -E "^processTimeout" /etc/rhsm/rhsm.conf | grep -Po "[0-9]+")
+if [ -n $config ]; then
+  rhsmd_timeout=$config
+else
+  rhsmd_timeout=300
+fi
+
+/usr/libexec/rhsmd -s &
+sleep $rhsmd_timeout;
+
+if ps h -C rhsmd; then
+  pkill rhsmd
+  logger -t rhsmd -p user.warn "rhsmd process exceeded runtime and was killed."
+fi
