@@ -297,12 +297,11 @@ BuildRequires: %{?gtk3:gtk3-devel} %{!?gtk3:gtk2-devel}
 BuildRequires: libzypp
 %endif
 
+%if %use_systemd
+# We need the systemd RPM macros
 %if 0%{?suse_version} >= 1210
 BuildRequires: systemd-rpm-macros
 %endif
-
-%if %use_systemd
-# We need the systemd RPM macros
 BuildRequires: systemd
 %endif
 
@@ -1204,7 +1203,7 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
         %service_add_post rhsmcertd.service
         %service_add_post rhsm.service
         %service_add_post rhsm-facts.service
-        %tmpfiles_create /usr/lib/tmpfiles.d/subscription-manager.conf
+        %tmpfiles_create %{_tmpfilesdir}/subscription-manager.conf
     %else
         %systemd_post rhsmcertd.service
     %endif
