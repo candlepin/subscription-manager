@@ -54,6 +54,10 @@ SUBPACKAGES ?= $(shell ls -d syspurpose)
 # override from spec file for rhel6
 INSTALL_OSTREE_PLUGIN ?= true
 
+# Container plugin should not be installed since RHEL 8. It is override
+# from spec file
+INSTALL_CONTAINER_PLUGIN ?= true
+
 WITH_SYSTEMD ?= true
 WITH_SUBMAN_GUI ?= true
 WITH_COCKPIT ?= true
@@ -241,10 +245,13 @@ install-plugins:
 	fi;
 
 	# container stuff
-	install -m 644 -p \
-		$(CONTENT_PLUGINS_SRC_DIR)/container_content.ContainerContentPlugin.conf \
-		$(DESTDIR)/$(RHSM_PLUGIN_CONF_DIR)
-	install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/container_content.py $(DESTDIR)/$(RHSM_PLUGIN_DIR)
+	if [ "$(INSTALL_CONTAINER_PLUGIN)" = "true" ] ; then \
+		echo "Installing container plugins" ; \
+		install -m 644 -p \
+			$(CONTENT_PLUGINS_SRC_DIR)/container_content.ContainerContentPlugin.conf \
+			$(DESTDIR)/$(RHSM_PLUGIN_CONF_DIR) ; \
+		install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/container_content.py $(DESTDIR)/$(RHSM_PLUGIN_DIR) ;\
+	fi;
 
 .PHONY: install-ga
 ifeq ($(GTK_VERSION),2)
