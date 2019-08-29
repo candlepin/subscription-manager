@@ -8,6 +8,13 @@
 %global use_inotify 1
 %global py2_package_prefix python2
 
+# Plugin for container (docker, podman) is not supported on RHEL 8 and higher
+%if (0%{?rhel} && 0%{?rhel} >= 8)
+%global use_container_plugin 0
+%else
+%global use_container_plugin 1
+%endif
+
 %if (0%{?rhel} >= 7 || 0%{?fedora})
 %global dmidecode_version >= 3.12.2-2
 %endif
@@ -82,6 +89,12 @@
 %global install_ostree INSTALL_OSTREE_PLUGIN=true
 %else
 %global install_ostree INSTALL_OSTREE_PLUGIN=false
+%endif
+
+%if %{use_container_plugin}
+%global install_container INSTALL_CONTAINER_PLUGIN=true
+%else
+%global install_container INSTALL_CONTAINER_PLUGIN=false
 %endif
 
 # makefile will guess, but be specific.
@@ -285,6 +298,7 @@ Provides the syspurpose commandline utility. This utility manages the
 system syspurpose.
 
 
+%if %{use_container_plugin}
 %package -n subscription-manager-plugin-container
 Summary: A plugin for handling container content
 Group: System Environment/Base
@@ -293,7 +307,7 @@ Requires: %{name} = %{version}-%{release}
 %description -n subscription-manager-plugin-container
 Enables handling of content of type 'containerImage' in any certificates
 from the server. Populates /etc/docker/certs.d appropriately.
-
+%endif
 
 %if %{use_rhsm_gtk}
 %package -n rhsm-gtk
@@ -555,7 +569,7 @@ make -f Makefile install VERSION=%{version}-%{release} \
     DESTDIR=%{buildroot} PYTHON_SITELIB=%{python_sitearch} \
     OS_VERSION=%{?fedora}%{?rhel}%{?suse_version} OS_DIST=%{dist} \
     COMPLETION_DIR=%{completion_dir} \
-    %{?install_ostree} %{?post_boot_tool} %{?gtk_version} \
+    %{?install_ostree} %{?install_container} %{?post_boot_tool} %{?gtk_version} \
     %{?install_yum_plugins} %{?install_dnf_plugins} \
     %{?install_zypper_plugins} \
     %{?with_systemd} \
@@ -883,7 +897,6 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 
 
 %if %{use_subman_gui}
-#%files -n subscription-manager-gui -f subscription-manager.lang
 %files -n subscription-manager-gui
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_sbindir}/subscription-manager-gui
@@ -984,7 +997,7 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %attr(644,root,root) %{_sysconfdir}/rhsm/syspurpose/valid_fields.json
 %attr(644,root,root) %{completion_dir}/syspurpose
 
-
+%if %{use_container_plugin}
 %files -n subscription-manager-plugin-container
 %defattr(-,root,root,-)
 %if 0%{?suse_version}
@@ -1004,7 +1017,7 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %attr(755,root,root) %dir %{_sysconfdir}/docker/certs.d/cdn.redhat.com
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/redhat-entitlement-authority.pem
 %attr(644,root,root) %{_sysconfdir}/docker/certs.d/cdn.redhat.com/redhat-entitlement-authority.crt
-
+%endif
 
 %if %has_ostree
 %files -n subscription-manager-plugin-ostree
@@ -1119,8 +1132,10 @@ scrollkeeper-update -q -o %{_datadir}/omf/%{name} || :
 %endif
 %endif
 
+%if %{use_container_plugin}
 %post -n subscription-manager-plugin-container
 %{__python} %{rhsm_plugins_dir}/container_content.py || :
+%endif
 
 %preun
 if [ $1 -eq 0 ] ; then
