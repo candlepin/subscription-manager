@@ -23,6 +23,7 @@ import moment from "moment";
 
 import { show_modal_dialog } from "./cockpit-components-dialog.jsx";
 import * as service from "../lib/service.js";
+import { page_status } from "../lib/notifications.js";
 
 import subscriptionsClient from './subscriptions-client';
 
@@ -335,8 +336,10 @@ export class InsightsStatus extends React.Component {
                     </a>
                 </div>
             );
+            page_status.set_own(null);
         } else {
-            status = <a onClick={left(show_connect_dialog)}>{_("Not connected")}</a>
+            status = <a onClick={left(show_connect_dialog)}>{_("Not connected")}</a>;
+            page_status.set_own({ type: "warning", title: _("Not connected to Insights") });
         }
 
         return <div><label>Insights: {status}</label></div>;

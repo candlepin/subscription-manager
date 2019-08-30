@@ -24,6 +24,7 @@ import subscriptionsClient from './subscriptions-client';
 import { ListView, ListViewItem, ListViewIcon } from 'patternfly-react';
 import { Row, Col } from 'react-bootstrap';
 import { InsightsStatus } from './insights.jsx';
+import { page_status } from "../lib/notifications.js";
 
 let _ = cockpit.gettext;
 
@@ -254,6 +255,10 @@ class SubscriptionStatus extends React.Component {
             action = (<button className="btn btn-primary"
                               onClick={this.handleRegisterSystem}>{_("Register")}</button>
             );
+            if (this.props.insights_available)
+                page_status.set_own({ type: "warning", title: _("Not connected to Insights") });
+            else
+                page_status.set_own(null);
         } else {
             label = <label>{ `${_("Status")}: ${this.props.status}` }</label>;
             action = (<button className="btn btn-primary" disabled={isUnregistering}
@@ -269,6 +274,8 @@ class SubscriptionStatus extends React.Component {
             }
             if (this.props.insights_available)
                 insights = <InsightsStatus />;
+            else
+                page_status.set_own(null);
         }
         return (
             <div className="subscription-status-ct">
