@@ -61,13 +61,16 @@ manage_repos =
 [rhsmcertd]
 certCheckInterval = 245
 
+[rhsmd]
+processTimeout = 300
+
 [logging]
 default_log_level = DEBUG
 """
 
 
 class BaseConfigTest(unittest.TestCase, TestUtilsMixin):
-    expected_sections = ['foo', 'server', 'rhsm', 'rhsmcertd', 'logging']
+    expected_sections = ['foo', 'server', 'rhsm', 'rhsmcertd', 'rhsmd', 'logging']
 
     def setUp(self):
         super(BaseConfigTest, self).setUp()

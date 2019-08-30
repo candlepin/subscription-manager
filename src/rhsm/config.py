@@ -86,6 +86,10 @@ RHSMCERTD_DEFAULTS = {
         'disable': '0'
         }
 
+RHSMD_DEFAULTS = {
+        'processtimeout': '300'
+        }
+
 LOGGING_DEFAULTS = {
         'default_log_level': 'INFO'
         }
@@ -95,6 +99,7 @@ DEFAULTS = {
         'server': SERVER_DEFAULTS,
         'rhsm': RHSM_DEFAULTS,
         'rhsmcertd': RHSMCERTD_DEFAULTS,
+        'rhsmd': RHSMD_DEFAULTS,
         'logging': LOGGING_DEFAULTS
         }
 
