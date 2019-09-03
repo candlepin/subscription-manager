@@ -26,7 +26,7 @@ from rhsm import config
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.cache import EntitlementStatusCache, ProductStatusCache, \
         OverrideStatusCache, ProfileManager, InstalledProductsManager, ReleaseStatusCache, \
-        PoolStatusCache, ContentAccessModeCache
+        PoolStatusCache, ContentAccessModeCache, SupportedResourcesCache
 from subscription_manager.facts import Facts
 from subscription_manager.lock import ActionLock
 from rhsm.certificate import GMT
@@ -437,6 +437,9 @@ class StubUEP(object):
     def supports_resource(self, resource):
         return False
 
+    def get_supported_resources(self):
+        return []
+
     def registerConsumer(self, name, type, facts, owner, environment, keys,
                          installed_products, content_tags):
         return self.registered_consumer_info
@@ -701,6 +704,15 @@ class StubReleaseStatusCache(ReleaseStatusCache):
 
 
 class StubContentAccessModeCache(ContentAccessModeCache):
+
+    def write_cache(self, debug=False):
+        pass
+
+    def delete_cache(self):
+        self.server_status = None
+
+
+class SubSupportedResourcesCache(SupportedResourcesCache):
 
     def write_cache(self, debug=False):
         pass
