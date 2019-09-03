@@ -161,7 +161,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.26.1
+Version: 1.26.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1298,6 +1298,44 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Sep 03 2019 Christopher Snyder <csnyder@redhat.com> 1.26.2-1
+- 1621275: YUM plugin - less API calls; ENT-923 (jhnidek@redhat.com)
+- small spec file improvements (p.seiler@linuxmail.org)
+- better SUSE distributions integration (p.seiler@linuxmail.org)
+- 1643189: Updated defaults to include rhsmd.processtimeout (crag@redhat.com)
+- 1643189: Added timeout for rhsmd cron job (crag@redhat.com)
+- 1728054: Do not install container plugin on RHEL8; ENT-1488
+  (jhnidek@redhat.com)
+- cockpit: Use less-loader 5.0.0 or later (mvollmer@redhat.com)
+- cockpit: Make sure node_modules directory exists (mvollmer@redhat.com)
+- cockpit: Put "root: true" into eslintrc (mvollmer@redhat.com)
+- 1689974: Mark several strings for translation; ENT-1246 (jhnidek@redhat.com)
+- 1743729: Update dnf-plugin dependencies for RHEL 7 (csnyder@redhat.com)
+- 1657384: locale sent on request does not allow '.UTF-8' suffix
+  (wpoteat@redhat.com)
+- 1742208: Send package profile on yum transactions (csnyder@redhat.com)
+- Updated man pages (redeem command does not have --org option)
+  (jhnidek@redhat.com)
+- 1700039: Cockpit - Disable cancel button on register dialog action
+  (wpoteat@redhat.com)
+- Require the python2 version of Sphinx when necessary (csnyder@redhat.com)
+- 1708494: Proper messaging of syspurpose add-addons; ENT-1332
+  (jhnidek@redhat.com)
+- Bump jquery from 3.2.1 to 3.4.0 in /cockpit
+  (49699333+dependabot[bot]@users.noreply.github.com)
+- test: Add check-subscriptions to test the Cockpit UI (mvollmer@redhat.com)
+- 1703148: Fix cockpit plugin, when golden ticket is used; ENT-1287
+  (jhnidek@redhat.com)
+- Generate 'ui_repoid_vars' only when running with YUM. (dmach@redhat.com)
+- * Added chaching mechanism to function is_owner_using_golden_ticket   to
+  minimize number of REST API call * Added several unit tests * Fixed some
+  typos (jhnidek@redhat.com)
+- Send package profiles after updating repositories (yamato@redhat.com)
+- 1710923: GUI: Do not auto-attach, when golden ticket is used; ENT-1309
+  (jhnidek@redhat.com)
+- 1719725: rhsm - Write config file atomically (mvollmer@redhat.com)
+- Adding debian / ubuntu package build instructions (suttner@atix.de)
+
 * Tue Jun 25 2019 Christopher Snyder <csnyder@redhat.com> 1.26.1-1
 - 1722055: cockpit package has additional dependency (wpoteat@redhat.com)
 - 1705017: Show in man page that --installed is the default for the list
