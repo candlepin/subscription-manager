@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.17
+Version: 1.24.18
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1150,6 +1150,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Sep 03 2019 Christopher Snyder <csnyder@redhat.com> 1.24.18-1
+- 1621275: YUM plugin - less API calls; ENT-923 (jhnidek@redhat.com)
+
 * Tue Sep 03 2019 Christopher Snyder <csnyder@redhat.com> 1.24.17-1
 - 1643189: Added timeout for rhsmd cron job (crag@redhat.com)
 
