@@ -775,3 +775,56 @@ class WrittenOverrideCache(CacheManager):
             # ignore json file parse errors, we are going to generate
             # a new as if it didn't exist
             pass
+<<<<<<< HEAD
+=======
+
+
+class ContentAccessModeCache(CacheManager):
+    """
+    Cache the content access mode that is used for current identity.
+    """
+
+    CACHE_FILE = "/var/lib/rhsm/cache/content_access_mode.json"
+
+    def __init__(self, content_access_mode=None):
+        self.content_access_mode = content_access_mode or {}
+
+    def to_dict(self):
+        return self.content_access_mode
+
+    def _load_data(self, open_file):
+        try:
+            self.content_access_mode = json.loads(open_file.read()) or {}
+            return self.content_access_mode
+        except IOError as err:
+            log.error("Unable to read cache: %s" % self.CACHE_FILE)
+            log.exception(err)
+        except ValueError:
+            # Ignore json file parse error
+            pass
+
+
+class SupportedResourcesCache(CacheManager):
+    """
+    Cache supported resources of candlepin server for current identity
+    """
+
+    CACHE_FILE = "/var/lib/rhsm/cache/supported_resources.json"
+
+    def __init__(self, supported_resources=None):
+        self.supported_resources = supported_resources or {}
+
+    def to_dict(self):
+        return self.supported_resources
+
+    def _load_data(self, open_file):
+        try:
+            self.supported_resources = json.loads(open_file.read()) or {}
+            return self.supported_resources
+        except IOError as err:
+            log.error("Unable to read cache: %s" % self.CACHE_FILE)
+            log.exception(err)
+        except ValueError:
+            # Ignore json file parse error
+            pass
+>>>>>>> c737200c... 1621275: YUM plugin - less API calls; ENT-923

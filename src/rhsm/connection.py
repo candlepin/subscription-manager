@@ -921,6 +921,16 @@ class UEPConnection(object):
         log.debug("Server supports the following resources: %s",
                   self.resources)
 
+    def get_supported_resources(self):
+        """
+        Get list of supported resources.
+        :return: list of supported resources
+        """
+        if self.resources is None:
+            self._load_supported_resources()
+
+        return self.resources
+
     def supports_resource(self, resource_name):
         """
         Check if the server we're connecting too supports a particular

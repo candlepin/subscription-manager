@@ -28,6 +28,7 @@ from subscription_manager import model
 from subscription_manager.model import ent_cert
 from subscription_manager.repofile import Repo, manage_repos_enabled, get_repo_file_classes
 from subscription_manager.repofile import YumRepoFile
+from subscription_manager.utils import get_supported_resources
 
 from rhsm.config import initConfig, in_container
 from rhsm import connection
@@ -261,7 +262,6 @@ class YumReleaseverSource(object):
 
         self.identity = inj.require(inj.IDENTITY)
         self.cp_provider = inj.require(inj.CP_PROVIDER)
-        self.uep = self.cp_provider.get_consumer_auth_cp()
 
     # FIXME: these guys are really more of model helpers for the object
     #        represent a release.
@@ -298,8 +298,8 @@ class YumReleaseverSource(object):
         # access to content as the host they run on.)
         result = None
         if not in_container():
-            result = self.release_status_cache.read_status(self.uep,
-                                                           self.identity.uuid)
+            uep = self.cp_provider.get_consumer_auth_cp()
+            result = self.release_status_cache.read_status(uep, self.identity.uuid)
 
         # status cache returned None, which points to a failure.
         # Since we only have one value, use the default there and cache it
@@ -343,7 +343,6 @@ class RepoUpdateActionCommand(object):
         self.ent_source = ent_cert.EntitlementDirEntitlementSource()
 
         self.cp_provider = inj.require(inj.CP_PROVIDER)
-        self.uep = self.cp_provider.get_consumer_auth_cp()
 
         self.manage_repos = 1
         self.apply_overrides = apply_overrides
@@ -352,8 +351,9 @@ class RepoUpdateActionCommand(object):
         self.release = None
         self.overrides = {}
         self.override_supported = False
+
         try:
-            self.override_supported = bool(self.identity.is_valid() and self.uep and self.uep.supports_resource('content_overrides'))
+            self.override_supported = 'content_overrides' in get_supported_resources(uep=None, identity=self.identity)
         except (socket.error, connection.ConnectionException) as e:
             # swallow the error to fix bz 1298327
             log.exception(e)
@@ -387,6 +387,7 @@ class RepoUpdateActionCommand(object):
             if cache_only:
                 status = override_cache.read_cache_only()
             else:
+                self.uep = self.cp_provider.get_consumer_auth_cp()
                 status = override_cache.load_status(self.uep, self.identity.uuid)
 
             for item in status or []:
@@ -446,6 +447,7 @@ class RepoUpdateActionCommand(object):
                         server_value_repo_file.update(server_value_repo)
                         self.report_update(existing)
 
+        # TODO: do not write new repo file and cache written_overrides, when nothing changed
         for repo_file, server_value_repo_file in repo_pairs:
             for section in server_value_repo_file.sections():
                 if section not in valid:

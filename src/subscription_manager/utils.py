@@ -171,24 +171,87 @@ def is_owner_using_golden_ticket(uep=None, identity=None, owner=None):
     :return: True, when current owner uses contentAccesMode equal to org_environment. False otherwise.
     """
 
-    if uep is None:
-        cp_provider = inj.require(inj.CP_PROVIDER)
-        uep = cp_provider.get_consumer_auth_cp()
+    if identity is None:
+        identity = inj.require(inj.IDENTITY)
+
+    # When identity is not known, then system is not registered
+    if identity.uuid is None:
+        return False
+
+    content_access_mode = None
+
+    # We have to load it here, because we don't want to add another class to dependency injection
+
+    # Try to use cached data to minimize numbers of REST API calls
+    cache = inj.require(inj.CONTENT_ACCESS_MODE_CACHE)
+    data = cache.read_cache_only()
+    if data is not None:
+        if identity.uuid in data:
+            content_access_mode = data[identity.uuid]
+
+    if content_access_mode is None:
+        if uep is None:
+            cp_provider = inj.require(inj.CP_PROVIDER)
+            uep = cp_provider.get_consumer_auth_cp()
+
+        if owner is None:
+            try:
+                owner = uep.getOwner(identity.uuid)
+            except Exception as err:
+                log.debug("Unable to get owner: %s" % str(err))
+                return False
+        if 'contentAccessMode' in owner:
+            content_access_mode = owner['contentAccessMode']
+
+        # Write cache to file
+        data = {identity.uuid: content_access_mode}
+        cache.content_access_mode = data
+        cache.write_cache(debug=False)
+
+    if content_access_mode == "org_environment":
+        return True
+
+    return False
+
+
+def get_supported_resources(uep=None, identity=None):
+    """
+    This function tries to get list of supported resources. It uses cache file. It is preferred to use
+    this function instead of connection.get_supported_resources
+    :param uep: connection of candlepin server
+    :param identity: current identity of registered system
+    :return: list fo supported resources
+    """
+    supported_resources = []
 
     if identity is None:
         identity = inj.require(inj.IDENTITY)
 
-    if owner is None:
-        try:
-            owner = uep.getOwner(identity.uuid)
-        except Exception as err:
-            log.debug("Unable to get owner: %s" % str(err))
-            return False
+    # When identity is not known, then system is not registered
+    if identity.uuid is None:
+        return supported_resources
 
-    if owner['contentAccessMode'] == "org_environment":
-        return True
+    # Try to read supported resources from cache file
+    cache = inj.require(inj.SUPPORTED_RESOURCES_CACHE)
+    data = cache.read_cache_only()
+    if data is not None:
+        if identity.uuid in data:
+            supported_resources = data[identity.uuid]
 
-    return False
+    # When valid data are not in cache, then try to load it from candlepin server
+    if len(supported_resources) == 0:
+        if uep is None:
+            cp_provider = inj.require(inj.CP_PROVIDER)
+            uep = cp_provider.get_consumer_auth_cp()
+
+        supported_resources = uep.get_supported_resources()
+
+        # Write data to cache
+        data = {identity.uuid: supported_resources}
+        cache.supported_resources = data
+        cache.write_cache(debug=False)
+
+    return supported_resources
 
 
 def get_version(versions, package_name):

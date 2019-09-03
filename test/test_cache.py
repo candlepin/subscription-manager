@@ -37,7 +37,7 @@ from rhsm import ourjson as json
 from subscription_manager.cache import ProfileManager, \
     InstalledProductsManager, EntitlementStatusCache, \
     PoolTypeCache, ReleaseStatusCache, ContentAccessCache, \
-    PoolStatusCache
+    PoolStatusCache, ContentAccessModeCache, SupportedResourcesCache
 
 from rhsm.profile import Package, RPMProfile, EnabledReposProfile, ModulesProfile
 
@@ -904,3 +904,49 @@ after
         self.mock_uep.getAccessibleContent = Mock(side_effect=RestlibException(404))
         self.cache.check_for_update()
         # getting this far means we did not raise an exception :-)
+
+
+class TestContentAccessModeCache(SubManFixture):
+
+    MOCK_CACHE_FILE_CONTENT = '{"7f85da06-5c35-44ba-931d-f11f6e581f89": "entitlement"}'
+
+    def setUp(self):
+        super(TestContentAccessModeCache, self).setUp()
+        self.cache = ContentAccessModeCache()
+
+    def test_reading_nonexisting_cache(self):
+        data = self.cache.read_cache_only()
+        self.assertIsNone(data)
+
+    def test_reading_existing_cache(self):
+        temp_cache_dir = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, temp_cache_dir)
+        self.cache.CACHE_FILE = os.path.join(temp_cache_dir, 'content_access_mode.json')
+        with open(self.cache.CACHE_FILE, 'w') as cache_file:
+            cache_file.write(self.MOCK_CACHE_FILE_CONTENT)
+        data = self.cache.read_cache_only()
+        self.assertTrue("7f85da06-5c35-44ba-931d-f11f6e581f89" in data)
+        self.assertEqual(data["7f85da06-5c35-44ba-931d-f11f6e581f89"], "entitlement")
+
+
+class TestSupportedResourcesCache(SubManFixture):
+
+    MOCK_CACHE_FILE_CONTENT = '{"a3f43883-315b-4cc4-bfb5-5771946d56d7": {"": "/", "cdn": "/cdn"}}'
+
+    def setUp(self):
+        super(TestSupportedResourcesCache, self).setUp()
+        self.cache = SupportedResourcesCache()
+
+    def test_reading_nonexisting_cache(self):
+        data = self.cache.read_cache_only()
+        self.assertIsNone(data)
+
+    def test_reading_existing_cache(self):
+        temp_cache_dir = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, temp_cache_dir)
+        self.cache.CACHE_FILE = os.path.join(temp_cache_dir, 'supported_resources.json')
+        with open(self.cache.CACHE_FILE, 'w') as cache_file:
+            cache_file.write(self.MOCK_CACHE_FILE_CONTENT)
+        data = self.cache.read_cache_only()
+        self.assertTrue("a3f43883-315b-4cc4-bfb5-5771946d56d7" in data)
+        self.assertEqual(data["a3f43883-315b-4cc4-bfb5-5771946d56d7"], {"": "/", "cdn": "/cdn"})
