@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.16
+Version: 1.24.17
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1150,6 +1150,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Sep 03 2019 Christopher Snyder <csnyder@redhat.com> 1.24.17-1
+- 1643189: Added timeout for rhsmd cron job (crag@redhat.com)
+
 * Tue Aug 20 2019 Christopher Snyder <csnyder@redhat.com> 1.24.16-1
 - 1743729: Update dnf-plugin dependencies for RHEL 7 (csnyder@redhat.com)
 
