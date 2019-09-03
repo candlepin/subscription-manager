@@ -311,6 +311,7 @@ class RepoUpdateActionTests(fixture.SubManFixture):
 
         mock_uep = Mock()
         mock_uep.supports_resource = Mock(return_value=False)
+        mock_uep.get_supported_resources = Mock(return_value=[])
         mock_uep.getCertificates = Mock(return_value=[])
         mock_uep.getCertificateSerials = Mock(return_value=[])
         mock_uep.getRelease = Mock(return_value={'releaseVer': "dummyrelease"})

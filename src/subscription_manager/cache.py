@@ -800,3 +800,28 @@ class ContentAccessModeCache(CacheManager):
         except ValueError:
             # Ignore json file parse error
             pass
+
+
+class SupportedResourcesCache(CacheManager):
+    """
+    Cache supported resources of candlepin server for current identity
+    """
+
+    CACHE_FILE = "/var/lib/rhsm/cache/supported_resources.json"
+
+    def __init__(self, supported_resources=None):
+        self.supported_resources = supported_resources or {}
+
+    def to_dict(self):
+        return self.supported_resources
+
+    def _load_data(self, open_file):
+        try:
+            self.supported_resources = json.loads(open_file.read()) or {}
+            return self.supported_resources
+        except IOError as err:
+            log.error("Unable to read cache: %s" % self.CACHE_FILE)
+            log.exception(err)
+        except ValueError:
+            # Ignore json file parse error
+            pass
