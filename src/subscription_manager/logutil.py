@@ -18,7 +18,9 @@ import os
 import sys
 import rhsm.config
 
-LOGFILE_PATH = "/var/log/rhsm/rhsm.log"
+LOGFILE_DIR = "/var/log/rhsm/"
+
+LOGFILE_PATH = os.path.join(LOGFILE_DIR, "rhsm.log")
 
 LOG_FORMAT = u'%(asctime)s [%(levelname)s] %(cmd_name)s:%(process)d:' \
              u'%(threadName)s @%(filename)s:%(lineno)d - %(message)s'
@@ -68,9 +70,15 @@ def RHSMLogHandler(*args, **kwargs):
     """Factory for Logging Handler for /var/log/rhsm/rhsm.log"""
     try:
         result = logging.handlers.RotatingFileHandler(*args, **kwargs)
-    # fallback to stdout if we can't open our logger
     except Exception:
-        result = logging.StreamHandler()
+        # Try to create log directory and try to set handle once again
+        try:
+            os.makedirs(LOGFILE_DIR)
+            result = logging.handlers.RotatingFileHandler(*args, **kwargs)
+        except Exception as error:
+            # When it wasn't possible to create log directory, then fallback to stderr
+            logging.error("{error} - Further output will be written to stderr".format(error=error))
+            result = logging.StreamHandler()
     result.addFilter(ContextLoggingFilter(name=""))
     return result
 

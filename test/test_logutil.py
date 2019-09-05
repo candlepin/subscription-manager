@@ -3,6 +3,8 @@ from __future__ import print_function, division, absolute_import
 import logging
 
 import mock
+import tempfile
+import os
 
 from . import fixture
 
@@ -109,3 +111,35 @@ class TestLogutil(fixture.SubManFixture):
         logutil.init_logger()
 
         self.assertNotEqual(test_logger.getEffectiveLevel(), config_level)
+
+    def test_missing_log_directory(self):
+        """
+        Test creating directory for log directory
+        """
+        temp_dir_path = tempfile.mkdtemp()
+
+        old_dir_path = logutil.LOGFILE_DIR
+        old_file_path = logutil.LOGFILE_PATH
+
+        # Set logutil to uninitialized state
+        logutil._rhsm_log_handler = None
+        logutil._subman_debug_handler = None
+        logutil.LOGFILE_DIR = temp_dir_path
+        logutil.LOGFILE_PATH = os.path.join(temp_dir_path, "rhsm.log")
+
+        self.assertTrue(os.path.exists(temp_dir_path))
+
+        # Simulate deleting of directory /var/log/rhsm
+        os.rmdir(temp_dir_path)
+
+        logutil.init_logger()
+
+        # init_logger should automatically create directory /var/log/rhsm,
+        # when it doesn't exist
+        self.assertTrue(os.path.exists(temp_dir_path))
+
+        os.remove(logutil.LOGFILE_PATH)
+        os.rmdir(logutil.LOGFILE_DIR)
+
+        logutil.LOGFILE_DIR = old_dir_path
+        logutil.LOGFILE_PATH = old_file_path
