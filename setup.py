@@ -281,7 +281,7 @@ class install_data(_install_data):
         icon_source_root = self.join('src', 'subscription_manager', 'gui', 'data', 'icons', 'hicolor')
         for d in os.listdir(icon_source_root):
             icon_dir = self.join('share', 'icons', 'hicolor', d, 'apps')
-            icon_source_files = glob(self.join(icon_source_root, d, 'apps', 'subscription-manager.*'))
+            icon_source_files = glob(self.join(icon_source_root, d, 'apps', 'subscription-manager*.*'))
 
             self.data_files.append((icon_dir, icon_source_files))
 
