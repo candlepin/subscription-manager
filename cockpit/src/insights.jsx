@@ -292,12 +292,15 @@ export class InsightsStatus extends React.Component {
         insights_timer.addEventListener("changed", this.on_changed);
         insights_service.addEventListener("changed", this.on_changed);
         last_upload_monitor.addEventListener("changed", this.on_changed);
+        this.status_file = cockpit.file("/var/lib/insights/status.json", { syntax: JSON });
+        this.status_file.watch(data => { this.setState({ upload_status: data }); });
     }
 
     componentWillUnmount() {
         insights_timer.removeEventListener("changed", this.on_changed);
         insights_service.removeEventListener("changed", this.on_changed);
         last_upload_monitor.removeEventListener("changed", this.on_changed);
+        this.status_file.close();
     }
 
     render() {
@@ -311,14 +314,26 @@ export class InsightsStatus extends React.Component {
                         insights_service.unit.ActiveExitTimestamp &&
                         insights_service.unit.ActiveExitTimestamp / 1e6 > last_upload_monitor.timestamp);
 
+            let result_link = "http://cloud.redhat.com/insights";
+            if (this.state.upload_status && this.state.upload_status.insights_url)
+                result_link = this.state.upload_status.insights_url;
+
+            let rule_hits = null;
+            if (this.state.upload_status && this.state.upload_status.reports)
+                rule_hits = cockpit.format(cockpit.ngettext("($0 rule hit)", "($0 rule hits)",
+                                                            this.state.upload_status.reports.length),
+                                           this.state.upload_status.reports.length);
+
             status = (
                     <div style={{display: "inline-block", verticalAlign: "top" }}>
                     <a onClick={left(show_status_dialog)}>{_("Connected to Insights")}</a>
                     { warn && [ " ", <i className="pficon pficon-warning-triangle-o"/> ] }
                     <br/>
-                    <a href="http://cloud.redhat.com/insights" target="_blank" rel="noopener">
+                    <a href={result_link} target="_blank" rel="noopener">
                     View your Insights results <i className="fa fa-external-link"/>
                     </a>
+                    { rule_hits && <br/> }
+                    { rule_hits }
                 </div>
             );
         } else {
