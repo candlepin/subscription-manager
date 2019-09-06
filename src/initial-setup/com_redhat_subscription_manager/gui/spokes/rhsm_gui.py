@@ -72,7 +72,7 @@ class RHSMSpoke(NormalSpoke):
         category = UserSettingsCategory
     else:
         category = SystemCategory
-    icon = "subscription-manager"
+    icon = "subscription-manager-symbolic"
     title = "_Subscription Manager"
 
     @classmethod
