@@ -34,7 +34,7 @@ class RegisterService(object):
         self.cp = cp
 
     def register(self, org, activation_keys=None, environment=None, force=None, name=None, consumerid=None,
-            type=None, role=None, addons=None, service_level=None, usage=None, token=None, **kwargs):
+            type=None, role=None, addons=None, service_level=None, usage=None, **kwargs):
         # We accept a kwargs argument so that the DBus object can pass the options dictionary it
         # receives transparently to the service via dictionary unpacking.  This strategy allows the
         # DBus object to be more independent of the service implementation.
@@ -43,24 +43,22 @@ class RegisterService(object):
         # signature we want to consider that an error.
         if kwargs:
             raise exceptions.ValidationError(_("Unknown arguments: %s") % kwargs.keys())
-        refresh_token = None
+
         syspurpose = syspurposelib.read_syspurpose()
         role = role or syspurpose.get('role', '')
         addons = addons or syspurpose.get('addons', [])
         usage = usage or syspurpose.get('usage', '')
         service_level = service_level or syspurpose.get('service_level_agreement', '')
-        if token and len(token) > 0:
-            refresh_token = token[0]
 
         type = type or "system"
+
         options = {
             'activation_keys': activation_keys,
             'environment': environment,
             'force': force,
             'name': name,
             'consumerid': consumerid,
-            'type': type,
-            'token': refresh_token,
+            'type': type
         }
         self.validate_options(options)
 

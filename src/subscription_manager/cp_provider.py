@@ -13,9 +13,15 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+import base64
+import json
 
 from subscription_manager.identity import ConsumerIdentity
 import rhsm.connection as connection
+
+
+class TokenAuthUnsupportedException(Exception):
+    pass
 
 
 class CPProvider(object):
@@ -42,6 +48,8 @@ class CPProvider(object):
     def __init__(self):
         self.set_connection_info()
         self.correlation_id = None
+        self.token = None
+        self.token_username = None
 
     # Reread the config file and prefer arguments over config values
     # then recreate connections
@@ -80,8 +88,17 @@ class CPProvider(object):
         self.password = password
         self.basic_auth_cp = None
 
+    def _parse_token(self, token):
+        _header, payload, _signature = token.split(".")
+        payload += "=" * (4 - (len(payload) % 4))  # pad to the appropriate length
+        return json.loads(base64.b64decode(payload))
+
     def set_token(self, token=None):
         self.token = token
+        if token:
+            self.token_username = self._parse_token(token)['preferred_username']
+        else:
+            self.token_username = None
         self.keycloak_auth_cp = None
 
     # set up info for the connection to the cdn for finding release versions
@@ -116,23 +133,45 @@ class CPProvider(object):
                     restlib_class=self.restlib_class)
         return self.consumer_auth_cp
 
-    def get_keycloak_auth_cp(self):
-        if not self.keycloak_auth_cp:
-            self.keycloak_auth_cp = connection.UEPConnection(
-                    host=self.server_hostname,
-                    ssl_port=self.server_port,
-                    handler=self.server_prefix,
-                    proxy_hostname=self.proxy_hostname,
-                    proxy_port=self.proxy_port,
-                    proxy_user=self.proxy_user,
-                    proxy_password=self.proxy_password,
-                    username=None,
-                    password=None,
-                    correlation_id=self.correlation_id,
-                    no_proxy=self.no_proxy,
-                    restlib_class=self.restlib_class,
-                    token=self.token
-                    )
+    def get_keycloak_auth_cp(self, token):
+        if self.keycloak_auth_cp:
+            return self.keycloak_auth_cp
+
+        uep = self.get_no_auth_cp()
+
+        if not uep.has_capability('keycloak_auth'):
+            raise TokenAuthUnsupportedException
+
+        # check type
+        token_type = self._parse_token(token)['typ']
+        if token_type.lower() == 'bearer':
+            access_token = token
+        else:
+            status = uep.getStatus()
+            auth_url = status['keycloakAuthUrl']
+            realm = status['keycloakRealm']
+            resource = status['keycloakResource']
+            keycloak_instance = connection.KeycloakConnection(realm, auth_url, resource)
+
+            access_token = keycloak_instance.get_access_token_through_refresh(token)
+
+        self.set_token(access_token)
+
+        self.keycloak_auth_cp = connection.UEPConnection(
+                host=self.server_hostname,
+                ssl_port=self.server_port,
+                handler=self.server_prefix,
+                proxy_hostname=self.proxy_hostname,
+                proxy_port=self.proxy_port,
+                proxy_user=self.proxy_user,
+                proxy_password=self.proxy_password,
+                username=None,
+                password=None,
+                correlation_id=self.correlation_id,
+                no_proxy=self.no_proxy,
+                restlib_class=self.restlib_class,
+                token=self.token
+                )
         return self.keycloak_auth_cp
 
     def get_basic_auth_cp(self):
