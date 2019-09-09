@@ -1666,7 +1666,7 @@ class TestRoleCommand(TestCliCommand):
 
     @patch("subscription_manager.syspurposelib.SyncedStore")
     def test_main_no_args(self, mock_syspurpose):
-        """It is necessary to mock SyspurposeStore for test function of parent class"""
+        # It is necessary to mock SyspurposeStore for test function of parent class
         mock_syspurpose.read = Mock()
         mock_syspurpose.read.return_value = Mock()
         instance_syspurpose_store = mock_syspurpose.read.return_value
@@ -1677,7 +1677,7 @@ class TestRoleCommand(TestCliCommand):
 
     @patch("subscription_manager.syspurposelib.SyncedStore")
     def test_main_empty_args(self, mock_syspurpose):
-        """It is necessary to mock SyspurposeStore for test function of parent class"""
+        # It is necessary to mock SyspurposeStore for test function of parent class
         mock_syspurpose.read = Mock()
         mock_syspurpose.read.return_value = Mock()
         instance_syspurpose_store = mock_syspurpose.read.return_value
@@ -1766,6 +1766,45 @@ class TestRoleCommand(TestCliCommand):
         self.assertIn('role set to "Foo"', cap.out)
         instance_syspurpose_store.set.assert_called_once_with('role', 'Foo')
         instance_syspurpose_store.sync.assert_called_once()
+
+    @patch("subscription_manager.syspurposelib.SyncedStore")
+    @patch("subscription_manager.syspurposelib.SyspurposeSyncActionCommand")
+    def test_setting_conflicting_syspurpose_role(self, mock_syspurpose_sync, mock_syspurpose):
+        """
+        Test the case, when there is conflict with value set by adminstrator on server
+        """
+        mock_syspurpose.read = Mock()
+        mock_syspurpose.read.return_value = Mock()
+        instance_syspurpose_store = mock_syspurpose.read.return_value
+        instance_syspurpose_store.contents = {}
+        instance_syspurpose_store.set = MagicMock(return_value=True)
+        instance_syspurpose_store.write = MagicMock(return_value=None)
+        instance_syspurpose_store.get_cached_contents = Mock(return_value={"role": "Foo"})
+
+        mock_syspurpose_sync.return_value = Mock()
+        mock_syspurpose.return_value = instance_syspurpose_store
+        instance_mock_syspurpose_sync = mock_syspurpose_sync.return_value
+        instance_mock_syspurpose_sync.perform = Mock(return_value=({}, {"role": "Foo"}))
+
+        self.cc.options = Mock(spec=['set', 'unset'])
+        self.cc.options.set = 'Bar'
+        self.cc.options.unset = False
+        # Effectively mock out the store used, force it to be our mock here.
+        self.cc.store = instance_syspurpose_store
+
+        with Capture() as cap:
+            with self.assertRaises(SystemExit) as cm:
+                self.cc._do_command()
+            self.assertEqual(cm.exception.code, 70)
+
+        self.assertIn(
+            'Warning: A role of "Foo" was recently set for this system by the entitlement server administrator.',
+            cap.err
+        )
+        self.assertIn(
+            'If you\'d like to overwrite the server side change please run: subscription-manager role --set "Bar"',
+            cap.err
+        )
 
     @patch("subscription_manager.syspurposelib.SyncedStore")
     @patch("subscription_manager.syspurposelib.SyspurposeSyncActionCommand")

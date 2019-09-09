@@ -150,7 +150,7 @@ class SyspurposeCliTests(SyspurposeTestBase):
         # Now we can try to remove value
         with Capture() as captured:
             cli.remove_command(args, self.syspurposestore)
-            self.assertTrue('Removed ADDON1 from addons' in captured.out)
+            self.assertTrue('Removed "ADDON1" from addons' in captured.out)
 
     def test_show_command(self):
         """
