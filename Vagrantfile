@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
     "centos7" => "candlepin/subscription-manager-centos7",
     "centos6" => "centos/6",
     "debian9" => "debian/stretch64",
-    "fedora25" => "fedora/25-cloud-base",
+    "fedora30" => "fedora/30-cloud-base",
     "opensuse42.2" => "opensuse/openSUSE-42.2-x86_64",
   }
 
@@ -25,6 +25,9 @@ Vagrant.configure("2") do |config|
     "centos7" => {
       "needs_provision" => false,
     },
+    "fedora30" => {
+        "ansible_python_interpreter" => "/usr/bin/python3",
+    }
   }
 
   # allows us to share base boxes with Katello/forklift

@@ -3,7 +3,7 @@
   gather_facts: no
   tasks:
     - name: install libs so we can use ansible (fedora only)
-      raw: sudo yum install -y python python2-dnf
+      raw: sudo dnf install -y python3 python3-dnf
 
 - hosts: "subman-devel"
   roles:
