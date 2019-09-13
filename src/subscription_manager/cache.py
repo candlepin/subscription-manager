@@ -775,8 +775,6 @@ class WrittenOverrideCache(CacheManager):
             # ignore json file parse errors, we are going to generate
             # a new as if it didn't exist
             pass
-<<<<<<< HEAD
-=======
 
 
 class ContentAccessModeCache(CacheManager):
@@ -827,4 +825,3 @@ class SupportedResourcesCache(CacheManager):
         except ValueError:
             # Ignore json file parse error
             pass
->>>>>>> c737200c... 1621275: YUM plugin - less API calls; ENT-923
