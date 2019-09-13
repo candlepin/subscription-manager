@@ -12,7 +12,8 @@ fi
 /usr/libexec/rhsmd -s &
 sleep $rhsmd_timeout;
 
-if ps h -C rhsmd; then
-  pkill rhsmd
-  logger -t rhsmd -p user.warn "rhsmd process exceeded runtime and was killed."
+ps_check=$(pgrep -f '/usr/libexec/rhsmd')
+if [ -n "$ps_check" ]; then
+  pkill -f '/usr/libexec/rhsmd' >/dev/null 2>&1
+  logger -t rhsmd -p user.warn "rhsmd process exceeded runtime and was killed." >/dev/null 2>&1
 fi
