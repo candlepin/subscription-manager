@@ -69,7 +69,7 @@ def persist_consumer_cert(consumerinfo):
         os.mkdir(cert_dir)
     consumer = identity.ConsumerIdentity(consumerinfo['idCert']['key'], consumerinfo['idCert']['cert'])
     consumer.write()
-    log.debug("Consumer created: %s (%s)" % (consumer.getConsumerName(), consumer.getConsumerId()))
+    log.info("Consumer created: %s (%s)" % (consumer.getConsumerName(), consumer.getConsumerId()))
     system_log("Registered system with identity: %s" % consumer.getConsumerId())
 
 
