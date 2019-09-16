@@ -902,7 +902,7 @@ class UEPConnection(object):
             connection_description += proxy_description
         connection_description += "host=%s port=%s handler=%s %s" % (self.host, self.ssl_port,
                                                                      self.handler, auth_description)
-        log.debug("Connection built: %s", connection_description)
+        log.info("Connection built: %s", connection_description)
 
     def _load_supported_resources(self):
         """
