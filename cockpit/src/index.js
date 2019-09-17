@@ -24,6 +24,7 @@ import ReactDOM from 'react-dom';
 import subscriptionsClient from './subscriptions-client';
 import subscriptionsRegister from './subscriptions-register.jsx';
 import subscriptionsView from './subscriptions-view.jsx';
+import * as Insights from './insights.jsx';
 import Dialog from './cockpit-components-dialog.jsx';
 
 let _ = cockpit.gettext;
@@ -38,6 +39,7 @@ let registerDialogDetails = {
     proxy_server: '',
     proxy_user: '',
     proxy_password: '',
+    insights: false
 };
 
 function dismissStatusError() {
@@ -46,7 +48,10 @@ function dismissStatusError() {
 }
 
 function registerSystem () {
-    return subscriptionsClient.registerSystem(registerDialogDetails);
+    return subscriptionsClient.registerSystem(registerDialogDetails).then(() => {
+        if (registerDialogDetails.insights)
+            return Insights.register();
+    });
 }
 
 let footerProps = {
@@ -65,6 +70,8 @@ function openRegisterDialog() {
         password: '',
         activation_keys: '',
         org: '',
+        insights: false,
+        insights_available: subscriptionsClient.insightsAvailable
     });
     // show dialog to register
     let renderDialog;
@@ -98,7 +105,7 @@ function openRegisterDialog() {
 }
 
 function unregisterSystem() {
-    subscriptionsClient.unregisterSystem();
+    Insights.unregister().catch(error => true).then(subscriptionsClient.unregisterSystem);
 }
 
 function initStore(rootElement) {
@@ -117,6 +124,7 @@ function initStore(rootElement) {
                 error: subscriptionsClient.subscriptionStatus.error,
                 syspurpose: subscriptionsClient.syspurposeStatus.info,
                 syspurpose_status: subscriptionsClient.syspurposeStatus.status,
+                insights_available: subscriptionsClient.insightsAvailable,
                 dismissError: dismissStatusError,
                 register: openRegisterDialog,
                 unregister: unregisterSystem,
