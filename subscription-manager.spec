@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.19
+Version: 1.24.20
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1150,6 +1150,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Sep 18 2019 Christopher Snyder <csnyder@redhat.com> 1.24.20-1
+- 1520383: Update to logging levels (wpoteat@redhat.com)
+
 * Fri Sep 13 2019 Christopher Snyder <csnyder@redhat.com> 1.24.19-1
 - 1752059: corrected cron receving stdout mail for rhsmd run (crag@redhat.com)
 - 1733992: Update translations (csnyder@redhat.com)
