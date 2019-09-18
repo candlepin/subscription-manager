@@ -1321,7 +1321,7 @@ class RegisterCommand(UserPassCommand):
                 unregister.UnregisterService(self.cp).unregister()
                 self.entitlement_dir.__init__()
                 self.product_dir.__init__()
-                log.debug("--force specified, unregistered old consumer: %s" % old_uuid)
+                log.info("--force specified, unregistered old consumer: %s" % old_uuid)
                 print(_("The system with UUID %s has been unregistered") % old_uuid)
             except ssl.SSLError as e:
                 # since the user can override serverurl for register, a common use case is to try to switch servers

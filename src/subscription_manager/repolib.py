@@ -463,7 +463,7 @@ class RepoUpdateActionCommand(object):
             # Update with the values we just wrote
             self.written_overrides.overrides = self.overrides
             self.written_overrides.write_cache()
-        log.info("repos updated: %s" % self.report)
+        log.debug("repos updated: %s" % self.report)
         return self.report
 
     def get_unique_content(self):
