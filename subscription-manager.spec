@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.20
+Version: 1.24.21
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1150,6 +1150,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Sep 19 2019 Christopher Snyder <csnyder@redhat.com> 1.24.21-1
+- 1724712: Updated from System Type to Entitlement Type (waldirio@gmail.com)
+
 * Wed Sep 18 2019 Christopher Snyder <csnyder@redhat.com> 1.24.20-1
 - 1520383: Update to logging levels (wpoteat@redhat.com)
 
