@@ -214,7 +214,11 @@ Requires:  cron
 %endif
 Requires:  %{rhsm_package_name} = %{version}
 Requires:  %{py_package_prefix}-six
-Requires:  %{py_package_prefix}-dateutil
+%if 0%{?suse_version} >= 1500
+Requires:  %{py_package_prefix}-python-dateutil
+%else
+Requires: %{py_package_prefix}-dateutil
+%endif
 Requires: %{py_package_prefix}-syspurpose
 
 # rhel 8 has different naming for setuptools going forward
