@@ -1,0 +1,126 @@
+---
+- hosts: clients
+  vars:
+    repos: ['100000000000002-awesomeos-x86_64', '100000000000002-awesomeos', '213412341237-awesomeos-x86_64-i386-content']
+    packages: ['awesome-sheep', 'awesome-rabbit', 'awesome-cow']
+    # List of all packages from all testing repositories
+    all_packages: ['awesome-sheep', 'awesome-rabbit', 'awesome-cow', 'awesome-chicken', 'slow-eagle', 'tricky-frog', 'white-lion']
+    all_repos: ['213412341237-awesomeos-x86_64-i386-content', '100000000000002-never-enabled-content', '100000000000002-awesomeos', '213412341237-never-enabled-content', '100000000000002-awesomeos-x86_64']
+    prod_certs: ['100000000000002.pem', '213412341237.pem']
+  remote_user: root
+
+  tasks:
+    - name: disable all testing repositories
+      shell: subscription-manager repos --disable "{{ item }}"
+      with_items: "{{ all_repos }}"
+
+    - name: enable repositories
+      shell: subscription-manager repos --enable "{{ item }}"
+      with_items: "{{ repos }}"
+
+    # We use options --disablerepo=* --enablerepo=<list_of_repos> to speed up installing testing repositories
+    # but only in few cases, because we work with disable repositories
+    - name: create a concacenated string of enabled repos
+      set_fact:
+        enabled_repos: "{{ repos | join(',') }}"
+
+    - name: remove all testing packages first (CentOS - yum)
+      shell: yum --disablerepo=* --enablerepo="{{ enabled_repos }}" remove -y "{{ item }}"
+      args:
+        warn: false
+      with_items: "{{ all_packages }}"
+      when:
+      - ansible_facts['distribution'] == "CentOS"
+
+    - name: remove all testing packages first (Fedora - dnf)
+      shell: dnf --disablerepo=* --enablerepo="{{ enabled_repos }}" remove -y "{{ item }}"
+      args:
+        warn: false
+      with_items: "{{ all_packages }}"
+      when:
+      - ansible_facts['distribution'] == "Fedora"
+
+    - name: make sure testing product certificates are removed
+      shell: rm -f /etc/pki/product/"{{ item }}"
+      with_items: "{{ prod_certs }}"
+
+    - name: install packages (CentOS - yum)
+      shell: yum --disablerepo=* --enablerepo="{{ enabled_repos }}" install -y "{{ item }}"
+      args:
+        warn: false
+      with_items: "{{ packages }}"
+      when:
+      - ansible_facts['distribution'] == "CentOS"
+
+    - name: install packages (Fedora - dnf)
+      shell: dnf --disablerepo=* --enablerepo="{{ enabled_repos }}" install -y "{{ item }}"
+      args:
+        warn: false
+      with_items: "{{ packages }}"
+      when:
+      - ansible_facts['distribution'] == "Fedora"
+
+    - name: disable 213412341237-awesomeos-x86_64-i386-content repository
+      shell: subscription-manager repos --disable 213412341237-awesomeos-x86_64-i386-content
+
+    - name: remove package awesome-rabbit (CentOS - yum)
+      shell: yum remove -y awesome-rabbit
+      args:
+        warn: false
+      when:
+      - ansible_facts['distribution'] == "CentOS"
+
+    - name: remove package awesome-rabbit (Fedora - dnf)
+      shell: dnf remove -y awesome-rabbit
+      args:
+        warn: false
+      when:
+      - ansible_facts['distribution'] == "Fedora"
+
+    - name: test 100000000000002.pem product cert is still installed
+      shell: test -f /etc/pki/product/100000000000002.pem
+
+    # Product certificate cannot be removed now, because package awesome-cow
+    # is still installed
+    - name: test 213412341237.pem product cert is still installed
+      shell: test -f /etc/pki/product/213412341237.pem
+
+    - name: remove package awesome-cow (CentOS - yum)
+      shell: yum remove -y awesome-cow
+      args:
+        warn: false
+      when:
+      - ansible_facts['distribution'] == "CentOS"
+
+    - name: remove package awesome-cow (Fedora - dnf)
+      shell: dnf remove -y awesome-cow
+      args:
+        warn: false
+      when:
+      - ansible_facts['distribution'] == "Fedora"
+
+    # Product certificate should be removed now, because all packages
+    # from disabled repositories are removed now
+    - name: test 213412341237.pem product cert was
+      shell: test ! -f /etc/pki/product/213412341237.pem
+
+    # End of testing remove all testing packages and disable all testing repositories
+    - name: remove all testing packages (CentOS - yum)
+      shell: yum remove -y "{{ item }}"
+      args:
+        warn: false
+      with_items: "{{ packages }}"
+      when:
+      - ansible_facts['distribution'] == "CentOS"
+
+    - name: install all testing packages (Fedora - dnf)
+      shell: dnf remove -y "{{ item }}"
+      args:
+        warn: false
+      with_items: "{{ packages }}"
+      when:
+      - ansible_facts['distribution'] == "Fedora"
+
+    - name: disable repositories
+      shell: subscription-manager repos --disable {{ item }}
+      with_items: "{{ repos }}"

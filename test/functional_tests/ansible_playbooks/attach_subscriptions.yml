@@ -1,0 +1,23 @@
+---
+- hosts: clients
+  vars:
+    subscription_skus: ['awesomeos-x86_64', 'awesomeos-all-x86-cont']
+  remote_user: root
+  tasks:
+
+    # Try to find pool ids
+    - name: try to find pool ids
+      shell: subscription-manager list --available --matches={{ item }} | gawk '/Pool ID:/{ print $3; exit }'
+      register: cmd_output
+      with_items: "{{ subscription_skus }}"
+
+    - set_fact:
+        pool_ids: "{{ cmd_output | json_query('results[*].stdout_lines[0]') }}"
+
+    - debug:
+        msg: "{{ pool_ids }}"
+
+    - name: attach pools
+      shell: subscription-manager attach --pool {{ item }}
+      with_items: "{{ pool_ids }}"
+

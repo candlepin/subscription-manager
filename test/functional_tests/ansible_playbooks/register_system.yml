@@ -1,0 +1,27 @@
+---
+- hosts: clients
+  vars:
+    rhsm_user: admin
+    rhsm_pass: admin
+    rhsm_org: admin
+  remote_user: root
+  tasks:
+    # Unregister system first (ignore the case, when unregistration failed)
+    - name: unregister system
+      shell: "subscription-manager unregister || true"
+
+    # Clean system in case the candlepin server was deployed
+    # and new database was created
+    - name: clean system
+      shell: "subscription-manager clean"
+
+    # Try to remove obsoleted product certificates from previous
+    # testing, because we don't want to affect new testing
+    - name: remove obsolete product certificates
+      file:
+        path: /etc/pki/product/*.pem
+        state: absent
+
+    # Try to register system to candlepin server
+    - name: register system
+      shell: "subscription-manager register --user {{ rhsm_user }} --password {{ rhsm_pass }} --org {{ rhsm_org }}"
