@@ -714,13 +714,13 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-uep.pem %{buildroot}/
     tar --strip-components=1 -xzf %{SOURCE1} -C %{buildroot}
 %endif
 
-# fix timestamps on our byte compiled files so they match across arches
-find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
-
 %if %{with python3}
 %py_byte_compile %{__python3} %{buildroot}%{rhsm_plugins_dir}/
 %py_byte_compile %{__python3} %{buildroot}%{_datadir}/anaconda/addons/com_redhat_subscription_manager/
 %endif
+
+# fix timestamps on our byte compiled files so they match across arches
+find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
 # symlink services to /usr/sbin/ when building for SUSE distributions
 %if 0%{?suse_version}
@@ -1096,7 +1096,7 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %{_sysconfdir}/rhsm/pluginconf.d/container_content.ContainerContentPlugin.conf
 %{rhsm_plugins_dir}/container_content.py*
 %if %{with python3}
-%{rhsm_plugins_dir}/__pycache__
+%{rhsm_plugins_dir}/__pycache__/*container*
 %endif
 %{python_sitearch}/subscription_manager/plugin/container.py*
 
@@ -1114,6 +1114,7 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/subscription_manager/plugin/ostree/*.py*
 %if %{with python3}
 %{python_sitearch}/subscription_manager/plugin/ostree/__pycache__
+%{rhsm_plugins_dir}/__pycache__/*ostree*
 %endif
 %endif
 
