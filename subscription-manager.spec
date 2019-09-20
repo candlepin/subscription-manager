@@ -19,6 +19,19 @@
 %global dmidecode_version >= 3.12.2-2
 %endif
 
+# We use the tmpfiles_create macro from systemd-rpm-macros rpm.
+# Because of an incorrect version labelling of that rpm in SLES 12 which
+# contains the necessary macro definition, we are not able to simply require
+# a certain version of systemd-rpm-macros which will definitely contain this
+# macro. To keep our SLES builds working we define the macro here for ourselves.
+%if !0%{?tmpfiles_create:1}
+%define tmpfiles_create() \
+[ -x /usr/bin/systemd-tmpfiles ] && \
+       /usr/bin/systemd-tmpfiles --create %{?*} >/dev/null 2>&1 || : \
+%{nil}
+%endif
+
+
 # borrowed from dnf spec file & tweaked
 %if (0%{?rhel} && 0%{?rhel} <= 7) || 0%{?suse_version}
 %bcond_with python3
@@ -32,7 +45,7 @@
 %bcond_without python2_rhsm
 %endif
 
-%if %{with python3}
+%if %{with python3} || 0%{?suse_version}
 %global use_subman_gui 0
 %else
 %global use_subman_gui 1
@@ -59,13 +72,20 @@
 %global gtk3 1
 %endif
 
-%if 0%{?rhel} == 6 || 0%{?suse_version}
+%if 0%{?rhel} == 6
 %global use_initial_setup 0
 %global use_firstboot 1
 %global use_inotify 0
 %endif
 
-%if %{use_subman_gui} || %{use_initial_setup} || %{use_firstboot}
+%if 0%{?suse_version}
+%global use_initial_setup 0
+%global use_firstboot 0
+%global use_subman_gui 0
+%global use_container_plugin 0
+%endif
+
+%if (%{use_subman_gui} || %{use_initial_setup} || %{use_firstboot})
 %global use_rhsm_gtk 1
 %else
 %global use_rhsm_gtk 0
@@ -122,6 +142,7 @@
 
 %if 0%{?suse_version}
 %global install_zypper_plugins INSTALL_ZYPPER_PLUGINS=true
+%global post_boot_tool INSTALL_INITIAL_SETUP=false INSTALL_FIRSTBOOT=false
 %else
 %global install_zypper_plugins INSTALL_ZYPPER_PLUGINS=false
 %endif
@@ -159,6 +180,40 @@
 %endif
 
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
+
+# Build a list of python package to exclude from the build.
+# This is necessary because we have multiple rpms which may or may not
+# need to be built depending on the distro which are all in one source tree.
+# Because the contents of these optional rpms is often a python package in the
+# same source tree, if we choose not to build that package and don't tell
+# setup.py to exclude those packages, we end up with files that get installed
+# in the buildroot which are not packaged. This fails various
+# rpm build / verify post steps, which in certain build systems causes the
+# entire build to be considered a failure.
+# The implementation of building a list iteratively in a spec file looks a bit
+# weird. As we want the final value of the global named "exclude_packages" to
+# be an environment variable definition it needs to begin with the following
+# (less the single quotes): 'EXCLUDE_PACKAGES="'
+# After that we can then make all of our checks to see whether certain items
+# should be added to the comma separated list or not.
+# In setup.py we are parsing the value of the env var as a string separated
+# by commas ignoring empty values. That makes the comma at the end of
+# each conditional addition to the list still valid.
+%global exclude_packages EXCLUDE_PACKAGES="
+
+# add new exclude packages items after me
+
+%if !%{use_rhsm_gtk}
+%global exclude_packages %{exclude_packages}subscription_manager.gui,
+%endif
+
+%if !%{use_container_plugin}
+%global exclude_packages %{exclude_packages}*.plugin.container,}
+%endif
+
+# add new exclude_packages items before me
+
+%global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
 Version: 1.26.2
@@ -215,8 +270,10 @@ Requires:  cron
 Requires:  %{rhsm_package_name} = %{version}
 Requires:  %{py_package_prefix}-six
 %if 0%{?suse_version} >= 1500
+BuildRequires:  %{py_package_prefix}-python-dateutil
 Requires:  %{py_package_prefix}-python-dateutil
 %else
+BuildRequires: %{py_package_prefix}-dateutil
 Requires: %{py_package_prefix}-dateutil
 %endif
 Requires: %{py_package_prefix}-syspurpose
@@ -365,6 +422,7 @@ Requires: %{?suse_version:dejavu} %{!?suse_version:dejavu-sans-fonts}
 %if !0%{?suse_version}
 Requires(post): scrollkeeper
 Requires(postun): scrollkeeper
+%else
 %endif
 
 %description -n rhsm-gtk
@@ -622,7 +680,8 @@ Subscription Manager Cockpit UI
 %build
 make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
     LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" \
-    %{?gtk_version} %{?subpackages} %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"}
+    %{?gtk_version} %{?subpackages} %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"} \
+    %{exclude_packages}
 
 %if %{with python2_rhsm}
 python2 ./setup.py build --quiet --gtk-version=%{?gtk3:3}%{?!gtk3:2} --rpm-version=%{version}-%{release}
@@ -650,7 +709,8 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?with_subman_gui} \
     %{?with_cockpit} \
     %{?subpackages} \
-    %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"}
+    %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"} \
+    %{?exclude_packages}
 
 %if (%{use_dnf} && (0%{?fedora} >= 29 || 0%{?rhel} >= 8))
 pushd src/dnf-plugins/product-id
@@ -700,10 +760,12 @@ sed -i 's/libexec/lib/g' %{buildroot}/%{_sysconfdir}/cron.daily/rhsmd
 mkdir -p %{buildroot}%{_sysconfdir}/pki/consumer
 mkdir -p %{buildroot}%{_sysconfdir}/pki/entitlement
 
+%if %{use_container_plugin}
 # Setup cert directories for the container plugin:
 mkdir -p %{buildroot}%{_sysconfdir}/docker/certs.d/
 mkdir %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com
 install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-entitlement-authority.pem %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com/redhat-entitlement-authority.crt
+%endif
 
 mkdir -p %{buildroot}%{_sysconfdir}/etc/rhsm/ca
 install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-entitlement-authority.pem %{buildroot}/%{_sysconfdir}/rhsm/ca/redhat-entitlement-authority.pem
@@ -1098,11 +1160,11 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %if %{with python3}
 %{rhsm_plugins_dir}/__pycache__
 %endif
-%{python_sitearch}/subscription_manager/plugin/container.py*
+%{python_sitearch}/subscription_manager/plugin/container/*.py*
+%{python_sitearch}/subscription_manager/plugin/container/__pycache__
 
 # Copying Red Hat CA cert into each directory:
 %attr(755,root,root) %dir %{_sysconfdir}/docker/certs.d/cdn.redhat.com
-%attr(644,root,root) %{_sysconfdir}/rhsm/ca/redhat-entitlement-authority.pem
 %attr(644,root,root) %{_sysconfdir}/docker/certs.d/cdn.redhat.com/redhat-entitlement-authority.crt
 %endif
 
@@ -1158,6 +1220,7 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm/ca
 
+%attr(644,root,root) %{_sysconfdir}/rhsm/ca/redhat-entitlement-authority.pem
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/redhat-uep.pem
 
 %if %use_cockpit
@@ -1225,9 +1288,11 @@ scrollkeeper-update -q -o %{_datadir}/omf/%{name} || :
 %endif
 %endif
 
+%if !0%{?suse_version}
 %if %{use_container_plugin}
 %post -n subscription-manager-plugin-container
 %{__python} %{rhsm_plugins_dir}/container_content.py || :
+%endif
 %endif
 
 %preun
