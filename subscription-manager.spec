@@ -161,7 +161,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.26.2
+Version: 1.26.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1291,6 +1291,27 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Sep 24 2019 Christopher Snyder <csnyder@redhat.com> 1.26.3-1
+- Include only container_content __pycache__ for container_content plugin
+  (csnyder@redhat.com)
+- Do not use importlib unless available (csnyder@redhat.com)
+- On sles15+ require python2-python-dateutil (csnyder@redhat.com)
+- 1750546: Fix minor product-id issues (csnyder@redhat.com)
+- cockpit: Add support for Red Hat Insights (mvollmer@redhat.com)
+- Functional tests of yum/dnf plugins (jhnidek@redhat.com)
+- 1520383: Update to logging levels (wpoteat@redhat.com)
+- 1752059: corrected cron receving stdout mail for rhsmd run (crag@redhat.com)
+- Update Vagrantfile to use sshfs instead of rsync. (bcourt@redhat.com)
+- Add fedora30 vagrant box (csnyder@redhat.com)
+- Align RHSM spoke to center (jhnidek@redhat.com)
+- 1698606: Better advice message for syspurpose conflict; ENT-1341
+  (jhnidek@redhat.com)
+- Fix RHSM addon spoke header background (mkolman@redhat.com)
+- Use symbolic icon in Anaconda (jhnidek@redhat.com)
+- icons: update app icon (jimmac@gmail.com)
+- 1663432: Updated keys.pot for syspurpose CLI; ENT-1246 (jhnidek@redhat.com)
+- 1687523: Try to create /var/log/rhsm directory; ENT-1406 (jhnidek@redhat.com)
+
 * Tue Sep 03 2019 Christopher Snyder <csnyder@redhat.com> 1.26.2-1
 - 1621275: YUM plugin - less API calls; ENT-923 (jhnidek@redhat.com)
 - small spec file improvements (p.seiler@linuxmail.org)
