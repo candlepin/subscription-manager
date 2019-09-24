@@ -28,6 +28,7 @@ import dnf
 import dnf.base
 import dnf.sack
 import dnf.exceptions
+import errno
 import librepo
 import os
 from rhsm import ourjson as json
@@ -56,7 +57,7 @@ class ProductId(dnf.Plugin):
         """
         Update product ID certificates.
         """
-        if len(self.base.transaction) == 0:
+        if self.base.transaction is None or len(self.base.transaction) == 0:
             # nothing to update after empty transaction
             return
 
@@ -190,8 +191,10 @@ class DnfProductManager(ProductManager):
                 data = json.loads(json_str)
             return data
         except IOError as err:
-            log.error("Unable to read cache: %s" % file_name)
-            log.exception(err)
+            # if the file does not exist we'll create it later
+            if err.errno != errno.ENOENT:
+                log.error("Unable to read cache: %s" % file_name)
+                log.exception(err)
         except ValueError:
             # ignore json file parse errors, we are going to generate
             # a new as if it didn't exist
