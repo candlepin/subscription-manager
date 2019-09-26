@@ -138,7 +138,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.25.16
+Version: 1.25.17
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1167,6 +1167,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Sep 26 2019 Christopher Snyder <csnyder@redhat.com> 1.25.17-1
+- 1754082: Fix our TPS tests (csnyder@redhat.com)
+
 * Fri Sep 20 2019 Christopher Snyder <csnyder@redhat.com> 1.25.16-1
 - Include only container_content __pycache__ for container_content plugin
   (csnyder@redhat.com)
