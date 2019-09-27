@@ -427,7 +427,7 @@ def _get_locale():
     l = None
     try:
         l = locale.getlocale()
-    except locale.Error:
+    except (locale.Error, ValueError):
         try:
             l = locale.getdefaultlocale()
         except locale.Error:
