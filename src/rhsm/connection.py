@@ -559,6 +559,83 @@ class BaseRestLib(object):
                 proxy_headers['Proxy-Authorization'] = _encode_auth(self.proxy_user, self.proxy_password)
             conn = httplib.HTTPSConnection(self.proxy_hostname, self.proxy_port, context=context, timeout=self.timeout)
             conn.set_tunnel(self.host, safe_int(self.ssl_port), proxy_headers)
+            conn.sock = socket.create_connection((self.proxy_hostname, self.proxy_port))
+            conn.sock = ssl.SSLContext().wrap_socket(conn.sock)
+            conn._tunnel()
+
+            from io import BufferedIOBase
+
+            class BioSocketFile(BufferedIOBase):
+                def __init__(self, bio: ssl.MemoryBIO, socket: socket.socket, sslobj):
+                    self.bio = bio
+                    self.socket = socket
+                    self.sslobj = sslobj
+
+                def fileno(self):
+                    raise NotImplementedError
+
+                def seek(self, *args, **kwargs):
+                    raise NotImplementedError
+
+                def truncate(self, *args, **kwargs):
+                    raise NotImplementedError
+
+                def detach(self):
+                    raise NotImplementedError
+
+                def read(self, size=-1):
+                    while True:
+                        try:
+                            return self.sslobj.read(size)
+                        except ssl.SSLWantReadError:
+                            self.bio.write(self.socket.recv(4096))
+
+                def read1(self, size=-1):
+                    return self.read(size)
+
+                def write(self, b):
+                    raise NotImplementedError
+
+                def close(self):
+                    self.bio.write_eof()
+
+                @property
+                def closed(self):
+                    return self.bio.eof
+
+            class FakeSock(object):
+                def __init__(self, socket, context: ssl.SSLContext):
+                    self.socket = socket
+                    self.bio_in = ssl.MemoryBIO()
+                    self.bio_out = ssl.MemoryBIO()
+                    self.sslobj = context.wrap_bio(self.bio_in, self.bio_out)
+                    while True:
+                        try:
+                            self.sslobj.do_handshake()
+                            break
+                        except ssl.SSLWantReadError:
+                            if self.bio_out.pending:
+                                self.socket.sendall(self.bio_out.read())
+                            self.bio_in.write(self.socket.recv(4096))
+                        except ssl.SSLWantWriteError:
+                            self.socket.sendall(self.bio_out.read())
+
+                def makefile(self, *args, **kwargs):
+                    return BioSocketFile(self.bio_in, self.socket, self.sslobj)
+
+                def sendall(self, bytes, **kwargs):
+                    to_write = len(bytes)
+                    offset = 0
+                    while to_write > 0:
+                        written = self.sslobj.write(bytes[offset:])
+                        self.socket.sendall(self.bio_out.read())
+                        offset += written
+                        to_write -= written
+
+                def close(self):
+                    self.socket.close()
+            log.debug('creating fake sock!')
+            conn.sock = FakeSock(conn.sock, context)
             self.headers['Host'] = '%s:%s' % (normalized_host(self.host), safe_int(self.ssl_port))
         else:
             conn = httplib.HTTPSConnection(self.host, self.ssl_port, context=context, timeout=self.timeout)
