@@ -4,10 +4,11 @@ import subprocess
 from tito.builder.main import Builder
 from tito.common import info_out
 
+
 class ScriptBuilder(Builder):
     """Builder that also runs a script to produce one or more additional tarballs.
 
-    This Builder looks for lines ending in '.tar.gz' in the output of the script, and treats
+    This Builder looks for lines ending in '.tar.gz' or '.tar' in the output of the script, and treats
     those as artifacts of the script.
     """
     def __init__(self, config=None, *args, **kwargs):
@@ -18,12 +19,23 @@ class ScriptBuilder(Builder):
         self.tarballs_from_script = []
 
     def normalize_tarball(self, path):
+        print('Normalizing tarball: %s (%s)' % (path, self.display_version))
         destination_file = os.path.join(self.rpmbuild_sourcedir, path)
-        if not path.endswith('%s.tar.gz' % self.display_version):
+        # Compressed tar files
+        if path.endswith('.tar.gz') and not path.endswith('%s.tar.gz' % self.display_version):
             basename = os.path.basename(path.split('.tar.gz')[0])
             fixed_name = '%s-%s.tar.gz' % (basename, self.display_version)
             destination_file = os.path.join(self.rpmbuild_sourcedir, fixed_name)
-            subprocess.check_call('mv %s %s' % (path, destination_file), shell=True)
+            print('Copying file %s to %s' % (path, destination_file))
+            subprocess.check_call('cp %s %s' % (path, destination_file), shell=True)
+        # Uncompressed tar files
+        if path.endswith('.tar') and not path.endswith('%s.tar' % self.display_version):
+            basename = os.path.basename(path.split('.tar')[0])
+            fixed_name = '%s-%s.tar' % (basename, self.display_version)
+            destination_file = os.path.join(self.rpmbuild_sourcedir, fixed_name)
+            print('Copying file %s to %s' % (path, destination_file))
+            subprocess.check_call('cp %s %s' % (path, destination_file), shell=True)
+        print('Copying file %s to %s' % (destination_file, self.rpmbuild_basedir))
         subprocess.check_call("cp %s %s/" % (destination_file, self.rpmbuild_basedir), shell=True)
         info_out('Wrote: %s/%s' % (self.rpmbuild_basedir, os.path.basename(destination_file)))
         self.tarballs_from_script.append(destination_file)
@@ -31,6 +43,7 @@ class ScriptBuilder(Builder):
 
     def tgz(self):
         retval = Builder.tgz(self)
+        print("Changing directory to: %s" % self.rpmbuild_gitcopy)
         os.chdir(self.rpmbuild_gitcopy)
         if not os.path.exists(self.script):
             return retval
@@ -54,7 +67,7 @@ class ScriptBuilder(Builder):
         print(output)
         additional_tgz = []
         for line in output.split('\n'):
-            if line.endswith('.tar.gz'):
+            if line.endswith('.tar.gz') or line.endswith('.tar'):
                 additional_tgz.append(line.strip())
         additional_tgz = [self.normalize_tarball(tgz) for tgz in additional_tgz]
         self.sources += additional_tgz
@@ -62,7 +75,10 @@ class ScriptBuilder(Builder):
         return retval
 
     def _setup_test_specfile(self):
-        """Augment parent behavior, also munge Source1 through SourceN where N is the number of tarballs produced by the script."""
+        """
+        Augment parent behavior, also munge Source1 through SourceN where
+        N is the number of tarballs produced by the script.
+        """
         Builder._setup_test_specfile(self)
         if self.test:
             for i, tarball_from_script in enumerate(self.tarballs_from_script):

@@ -17,8 +17,6 @@ dist-gzip: clean all
 	mkdir -p _install/usr/share/metainfo/
 	cp *.metainfo.xml _install/usr/share/metainfo/
 	(cd _install; find -type f) | tar -C _install/ --mtime "$(stat -c '%Y' package.json)" --owner root --group root -cf subscription-manager-cockpit.tar -T -
-	gzip -n subscription-manager-cockpit.tar
-	rm -rf _install
 
 srpm: dist-gzip
 	rpmbuild -bs \

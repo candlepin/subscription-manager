@@ -189,7 +189,7 @@ class SubscriptionStatus extends React.Component {
             sla = (
                 <div>
                     <label>
-                        { _("Service Level:  ") }
+                        { _("Service Level: ") }
                         <span className="value">{ _(String(this.props.syspurpose["service_level_agreement"])) }</span>
                     </label>
                 </div>
@@ -199,7 +199,7 @@ class SubscriptionStatus extends React.Component {
             usage = (
                 <div>
                     <label>
-                        { _("Usage:  ") }
+                        { _("Usage: ") }
                         <span className="value">{ _(String(this.props.syspurpose["usage"])) }</span>
                     </label>
                 </div>
@@ -209,7 +209,7 @@ class SubscriptionStatus extends React.Component {
             role = (
                 <div>
                     <label>
-                        { _("Role:  ") }
+                        { _("Role: ") }
                         <span className="value">{ _(String(this.props.syspurpose["role"])) }</span>
                     </label>
                 </div>
@@ -219,7 +219,7 @@ class SubscriptionStatus extends React.Component {
             add_ons = (
                 <div>
                     <label>
-                        { _("Addons:  ") }
+                        { _("Addons: ") }
                         <span className="value">
                             { _(String(subscriptionsClient.toArray(this.props.syspurpose["addons"]).join(", "))) }
                         </span>

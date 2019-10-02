@@ -1,7 +1,7 @@
 import os
 import six
 from tito.tagger.main import VersionTagger
-from tito.common import info_out, debug, replace_version, run_command
+from tito.common import debug, replace_version, run_command
 
 
 class MultiPythonPackageVersionTagger(VersionTagger):
@@ -12,7 +12,6 @@ class MultiPythonPackageVersionTagger(VersionTagger):
             self.subpackages = config.get('tagconfig', 'python_subpackages').split(',')
         else:
             self.subpackages = []
-
 
     def _update_setup_py_in_dir(self, new_version, package_dir=None):
         """

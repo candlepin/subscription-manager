@@ -182,7 +182,7 @@ Source0: %{name}-%{version}.tar.gz
 # this is a little different from the Source0, because of limitations in tito,
 # namely that tito expects only one source tarball
 %if %{use_cockpit}
-Source1: %{name}-cockpit-%{version}.tar.gz
+Source1: %{name}-cockpit-%{version}.tar
 %endif
 %if 0%{?suse_version}
 Source2: subscription-manager-rpmlintrc
@@ -711,7 +711,7 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-uep.pem %{buildroot}/
 
 %if %use_cockpit
     # install cockpit dist targz
-    tar --strip-components=1 -xzf %{SOURCE1} -C %{buildroot}
+    tar --strip-components=1 -xf %{SOURCE1} -C %{buildroot}
 %endif
 
 %if %{with python3}
