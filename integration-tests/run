@@ -17,7 +17,7 @@
 # for more information about the Cockpit integration test machinery.
 
 ifeq ($(TEST_OS),)
-TEST_OS = rhel-8-0
+TEST_OS = rhel-8-1
 endif
 export TEST_OS
 VM_IMAGE=$(CURDIR)/integration-tests/images/$(TEST_OS).qcow2
