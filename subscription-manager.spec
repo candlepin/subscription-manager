@@ -83,6 +83,7 @@
 %global use_firstboot 0
 %global use_subman_gui 0
 %global use_container_plugin 0
+%global use_inotify 0
 %endif
 
 %if (%{use_subman_gui} || %{use_initial_setup} || %{use_firstboot})
