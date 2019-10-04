@@ -216,7 +216,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.26.3
+Version: 1.26.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1356,6 +1356,11 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Oct 04 2019 Christopher Snyder <csnyder@redhat.com> 1.26.4-1
+- No longer build subman gui for sles (csnyder@redhat.com)
+- cockpit: Update bots target for moved GitHub project
+  (sanne.raymaekers@gmail.com)
+
 * Tue Sep 24 2019 Christopher Snyder <csnyder@redhat.com> 1.26.3-1
 - Include only container_content __pycache__ for container_content plugin
   (csnyder@redhat.com)
