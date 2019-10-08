@@ -241,8 +241,8 @@ def prereposetup_hook(conduit):
         conduit.registerPackageName("subscription-manager")
     try:
         update(conduit, cache_only)
-        warnOrGiveUsageMessage(conduit)
-        warnExpired(conduit)
+        warn_or_usage_message(conduit)
+        warn_expired_entitlements(conduit)
     except Exception as e:
         conduit.error(2, str(e))
 
