@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.21
+Version: 1.24.22
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1150,6 +1150,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Oct 08 2019 Christopher Snyder <csnyder@redhat.com> 1.24.22-1
+- 1756491: Remove usage of deprecated method in yum plugins
+  (csnyder@redhat.com)
+
 * Thu Sep 19 2019 Christopher Snyder <csnyder@redhat.com> 1.24.21-1
 - 1724712: Updated from System Type to Entitlement Type (waldirio@gmail.com)
 
