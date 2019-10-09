@@ -452,7 +452,11 @@ Group: Development/Libraries
 %if %use_m2crypto
 Requires: %{?suse_version:python-m2crypto} %{!?suse_version:m2crypto}
 %endif
+%if 0%{?suse_version} >= 1500
+Requires:  %{py_package_prefix}-python-dateutil
+%else
 Requires: %{py_package_prefix}-dateutil
+%endif
 Requires: %{py_package_prefix}-iniparse
 # rpm-python is an old name for python2-rpm but RHEL6 uses the old name
 Requires: %{py_package_prefix}-six
