@@ -147,6 +147,7 @@ function safeDBusCall(serviceProxy, delegateMethod) {
 let gettingDetails = false;
 let getDetailsRequested = false;
 function getSubscriptionDetails() {
+    if (isRegistering) { return; }
     if (gettingDetails) {
         getDetailsRequested = true;
         return;
@@ -182,6 +183,7 @@ function dbus_str(value) {
 }
 
 client.closeRegisterDialog = false;
+let isRegistering = false;
 
 /* Overall flow is as follows:
 
@@ -285,6 +287,7 @@ client.registerSystem = subscriptionDetails => {
     }
 
     console.debug('connection_options:', connection_options);
+    isRegistering = true;
 
     registerServer.wait(() => {
         let registered = false;
@@ -337,6 +340,7 @@ client.registerSystem = subscriptionDetails => {
             })
             .catch(error => {
                 console.error('error registering', error);
+                isRegistering = false;
                 registered = false;
                 dfd.reject(parseErrorMessage(error));
             })
@@ -346,6 +350,7 @@ client.registerSystem = subscriptionDetails => {
             })
             .catch(error => {
                 console.error('error stopping registration bus', error);
+                isRegistering = false;
                 dfd.reject(parseErrorMessage(error));
             })
             .then(() => {
@@ -417,12 +422,17 @@ client.registerSystem = subscriptionDetails => {
             })
             .catch(error => {
                 console.error('error during auto-attach', error);
+                isRegistering = false;
                 dfd.reject(parseErrorMessage(error));
             })
             .then(() => {
                 console.debug('requesting update');
                 client.closeRegisterDialog = true;
+                isRegistering = false;
                 requestSubscriptionStatusUpdate().always(() => {
+                    dfd.resolve();
+                });
+                requestSyspurposeStatusUpdate().always(() => {
                     dfd.resolve();
                 });
             });
@@ -515,6 +525,8 @@ client.getSubscriptionStatus = function() {
 };
 
 client.getSyspurposeStatus = () => {
+    let dfd = cockpit.defer();
+    if (isRegistering) { return dfd.promise(); }
     return safeDBusCall(syspurposeService, () => {
         syspurposeService.GetSyspurposeStatus()
         .then(result => {

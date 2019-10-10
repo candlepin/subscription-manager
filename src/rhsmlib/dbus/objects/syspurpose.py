@@ -26,7 +26,6 @@ import logging
 from rhsmlib.dbus import constants, base_object, util, dbus_utils
 from rhsmlib.services import syspurpose
 from syspurpose.files import SyspurposeStore
-from subscription_manager import injection as inj
 
 from subscription_manager.injectioninit import init_dep_injection
 from subscription_manager.i18n import Locale
@@ -80,7 +79,7 @@ class SyspurposeDBusObject(base_object.BaseObject):
     )
     @util.dbus_handle_exceptions
     def GetSyspurposeStatus(self, sender=None):
-        cp = inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()
+        cp = self.build_uep({})
         systempurpose = syspurpose.Syspurpose(cp)
         syspurpose_status = systempurpose.get_syspurpose_status()['status']
         return systempurpose.get_overall_status(syspurpose_status)
