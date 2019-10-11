@@ -153,8 +153,17 @@ class ZypperService(object):
         except OSError:
             pass
         for filename in filenames:
+            # RHBZ 1760533 Zypper does not update the state of repos
+            # as returned from services unless they are entirely removed.
+            # Due to this peculiarity, we remove any repo definitions
+            # which are not enabled.
             with open(os.path.join(ZYPPER_REPO_DIR, filename)) as repo:
-                print(repo.read())
+                repo_cp = SafeConfigParser()
+                repo_cp.readfp(repo)
+                for section in repo_cp.sections():
+                    if repo_cp.get(section, 'enabled') == '0':
+                        repo_cp.remove_section(section)
+                repo_cp.write(sys.stdout)
 
 if __name__ == '__main__':
     service = ZypperService()
