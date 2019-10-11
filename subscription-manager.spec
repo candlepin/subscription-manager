@@ -83,7 +83,7 @@
 
 Name: subscription-manager
 Version: 1.20.10
-Release: 9%{?dist}
+Release: 10%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -880,6 +880,10 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Fri Oct 11 2019 Christopher Snyder <csnyder@redhat.com> 1.20.10-10
+- 1760533: Use iniparse in subscription-manager zypper plugin
+  (csnyder@redhat.com)
+
 * Fri Oct 11 2019 Christopher Snyder <csnyder@redhat.com> 1.20.10-9
 - 1760533: Do not output disabled repos in our zypper service
   (csnyder@redhat.com)
