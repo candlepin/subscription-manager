@@ -25,6 +25,7 @@ from subscription_manager.injectioninit import init_dep_injection
 from subscription_manager import logutil
 from rhsm import connection
 from rhsm import config
+from iniparse import SafeConfigParser
 
 c_rehash = '/usr/bin/c_rehash'
 
