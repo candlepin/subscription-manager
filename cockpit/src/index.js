@@ -120,7 +120,9 @@ function initStore(rootElement) {
             subscriptionsView.page,
             {
                 status: subscriptionsClient.subscriptionStatus.status,
-                products:subscriptionsClient.subscriptionStatus.products,
+                products: subscriptionsClient.subscriptionStatus.products,
+                consumedEntitlements: subscriptionsClient.subscriptionStatus.consumedEntitlements,
+                availableEntitlements: subscriptionsClient.subscriptionStatus.availableEntitlements,
                 error: subscriptionsClient.subscriptionStatus.error,
                 syspurpose: subscriptionsClient.syspurposeStatus.info,
                 syspurpose_status: subscriptionsClient.syspurposeStatus.status,

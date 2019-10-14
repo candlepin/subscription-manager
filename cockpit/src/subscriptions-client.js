@@ -44,6 +44,8 @@ cockpit.event_target(client);
 client.subscriptionStatus = {
     status: undefined,
     products: [],
+    consumedEntitlements: [],
+    availableEntitlements: [],
     error: undefined,
 };
 
@@ -97,6 +99,20 @@ function parseProducts(text) {
     });
 }
 
+function parseConsumedEntitlements(text) {
+    const entitlements = JSON.parse(text);
+    return entitlements.consumed.map(function(entitlement) {
+        return entitlement;
+    });
+}
+
+function parseAvailableEntitlements(text) {
+    const entitlements = JSON.parse(text);
+    return entitlements.available.map(function(entitlement) {
+        return entitlement;
+    });
+}
+
 // Error message produced by D-Bus API should be string containing
 // regular JSON with following format:
 // {"exception": "NameOfException", "message": "Some error message"}
@@ -144,15 +160,15 @@ function safeDBusCall(serviceProxy, delegateMethod) {
         });
 }
 
-let gettingDetails = false;
-let getDetailsRequested = false;
+let gettingProductDetails = false;
+let getProductDetailsRequested = false;
 function getSubscriptionDetails() {
-    if (gettingDetails) {
-        getDetailsRequested = true;
+    if (gettingProductDetails) {
+        getProductDetailsRequested = true;
         return;
     }
-    getDetailsRequested = false;
-    gettingDetails = true;
+    getProductDetailsRequested = false;
+    gettingProductDetails = true;
     safeDBusCall(productsService, () => {
         productsService.ListInstalledProducts('', {}, userLang) // FIXME: use proxy settings
         .then(result => {
@@ -165,11 +181,100 @@ function getSubscriptionDetails() {
                                 };
         })
         .then(() => {
-            gettingDetails = false;
-            if (getDetailsRequested)
+            gettingProductDetails = false;
+            if (getProductDetailsRequested)
                 getSubscriptionDetails();
             needRender();
         });
+    });
+}
+
+let gettingConsumedEntilementDetails = false;
+let getConsumedEntitlementDetailsRequested = false;
+function getConsumedEntitlementDetails() {
+    if(gettingConsumedEntilementDetails) {
+        getConsumedEntitlementDetailsRequested = true;
+        return;
+    }
+    getConsumedEntitlementDetailsRequested = false;
+    gettingConsumedEntilementDetails = true;
+    safeDBusCall(entitlementService, () => {
+        entitlementService.GetPools({pool_subsets: dbus_str('consumed')}, {}, userLang)
+            .then(result => {
+                client.subscriptionStatus.consumedEntitlements = parseConsumedEntitlements(result);
+            })
+            .catch(error => {
+                console.debug(error);
+                client.subscriptionStatus.error = {
+                    'severity': parseErrorSeverity(error),
+                    'msg': parseErrorMessage(error)
+                };
+            })
+            .then(() => {
+                gettingConsumedEntilementDetails = false;
+                if (getConsumedEntitlementDetailsRequested) {
+                    getConsumedEntitlementDetails();
+                }
+                needRender();
+            });
+    });
+}
+
+client.attachPool = function(poolId) {
+    safeDBusCall(attachService, () => {
+        attachService.PoolAttach([poolId], 1, {}, userLang)
+            .then(result => {
+                console.debug(result);
+                needRender();
+            })
+            .catch(error => {
+                console.debug(error);
+            });
+    });
+};
+
+client.removePool = function(serialId) {
+    safeDBusCall(entitlementService, () => {
+        let serial = serialId.toString();
+        entitlementService.RemoveEntitlementsBySerials([serial], {}, userLang)
+            .then(result => {
+                console.debug(result);
+                needRender();
+            })
+            .catch(error => {
+                console.debug(error);
+            });
+    });
+};
+
+let gettingAvailableEntilementDetails = false;
+let getAvailableEntitlementDetailsRequested = false;
+function getAvailableEntitlementDetails() {
+    if(gettingAvailableEntilementDetails) {
+        getAvailableEntitlementDetailsRequested = true;
+        return;
+    }
+    getAvailableEntitlementDetailsRequested = false;
+    gettingAvailableEntilementDetails = true;
+    safeDBusCall(entitlementService, () => {
+        entitlementService.GetPools({pool_subsets: dbus_str('available')}, {}, userLang)
+            .then(result => {
+                client.subscriptionStatus.availableEntitlements = parseAvailableEntitlements(result);
+            })
+            .catch(error => {
+                console.debug(error);
+                client.subscriptionStatus.error = {
+                    'severity': parseErrorSeverity(error),
+                    'msg': parseErrorMessage(error)
+                };
+            })
+            .then(() => {
+                gettingAvailableEntilementDetails = false;
+                if (getAvailableEntitlementDetailsRequested) {
+                    getAvailableEntitlementDetails();
+                }
+                needRender();
+            });
     });
 }
 
@@ -508,7 +613,21 @@ client.getSubscriptionStatus = function() {
         })
         .then(() => {
             getSubscriptionDetails();
-            needRender();
+        })
+        .catch(ex => {
+            console.debug(ex);
+        })
+        .then(() => {
+            getConsumedEntitlementDetails();
+        })
+        .catch(ex => {
+            console.debug(ex);
+        })
+        .then(() => {
+            getAvailableEntitlementDetails();
+        })
+        .catch(ex => {
+            console.debug(ex);
         });
     });
     return dfd.promise();

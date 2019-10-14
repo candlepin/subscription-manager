@@ -22,6 +22,7 @@ import React from 'react';
 import createFragment from 'react-addons-create-fragment';
 import subscriptionsClient from './subscriptions-client';
 import { ListView, ListViewItem, ListViewIcon } from 'patternfly-react';
+import { Button } from "react-bootstrap";
 import { Row, Col } from 'react-bootstrap';
 import { InsightsStatus } from './insights.jsx';
 
@@ -284,6 +285,315 @@ class SubscriptionStatus extends React.Component {
     }
 }
 
+
+/* Element used for representation of consumed subscription (entitlement). The element
+ * has following properties:
+ * state.enabled: true/false
+ * remove_label: "Remove/Removing..."
+ */
+class ConsumedEntitlement extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { disabled: false };
+        this.remove_label = _("Remove");
+        this.props.consumedEntitlements[this.props.entitlement.pool_id] = this;
+    }
+
+    /**
+     * Remove selected consumed subcrition and enable corresponding available subscription
+     * @param event
+     */
+    removePool(event) {
+        console.debug("removePool", event, this.props.entitlement.serial);
+        if (event && event.button !== 0) {
+            return;
+        }
+        console.debug("Button clicked");
+        this.state.disabled = true;
+        this.remove_label = _("Removing...");
+        subscriptionsClient.removePool(this.props.entitlement.serial);
+        this.props.parent.availableEntitlementComps[this.props.entitlement.pool_id].setState(
+            {
+                attached: false,
+                attach_label: _("Attach")
+            }
+        );
+    }
+
+    renderActions() {
+        return (
+            <div>
+                <Button
+                    key={ "button-" + this.props.entitlement.serial }
+                    id={ "button-" + this.props.entitlement.serial }
+                    disabled={ this.state.disabled }
+                    onClick={ event => this.removePool(event) }
+                >{ this.remove_label }</Button>
+            </div>
+        )
+    }
+
+    /**
+     * Render element representing consumed subscription
+     */
+    render() {
+        let icon_name;
+
+        // TODO: unplugged icon for not used subscriptions (consumed but no product installed
+        //       from given entitlement)
+        icon_name = "fa pficon-plugged";
+
+        let products = this.props.entitlement.provides.map((product) =>
+            <li key={product}>{ product }</li>
+        );
+
+        const renderActions = () => (
+            <div>
+                <Button
+                    key={ this.props.entitlement.serial }
+                    id={ this.props.entitlement.serial }
+                    disabled={ this.state.disabled }
+                    onClick={ event => this.removePool(event) }
+                >{ this.remove_label }</Button>
+            </div>
+        );
+
+        return (
+            <ListViewItem
+                leftContent={<ListViewIcon icon={ icon_name } />}
+                heading={ this.props.entitlement.subscription_name }
+                key={ this.props.entitlement.pool_id }
+                id={ this.props.entitlement.pool_id }
+                actions={renderActions()}
+            >
+                <Row>
+                    <Col sm={11}>
+                        <div className="col-md-11">
+                            <dl className="dl-horizontal">
+                                <dt>{ _("Subscription") }</dt>
+                                <dd>{ this.props.entitlement.subscription_name }</dd>
+                                <dt>{ _("Pool ID") }</dt>
+                                <dd>{ this.props.entitlement.pool_id }</dd>
+                                <dt>{ _("Serial")}</dt>
+                                <dd>{ this.props.entitlement.serial }</dd>
+                                <dt>{ _("SKU") }</dt>
+                                <dd>{ this.props.entitlement.sku }</dd>
+                                <dt>{ _("Service Level") }</dt>
+                                <dd>{ this.props.entitlement.service_level }</dd>
+                                <dt>{ _("Service Type") }</dt>
+                                <dd>{ this.props.entitlement.service_type }</dd>
+                                <dt>{ _("Roles") }</dt>
+                                <dd>{ this.props.entitlement.roles }</dd>
+                                <dt>{ _("Usage") }</dt>
+                                <dd>{ this.props.entitlement.usage }</dd>
+                                <dt>{ _("Add-ons") }</dt>
+                                <dd>{ this.props.entitlement.addons }</dd>
+                                <dt>{ _("Contract") }</dt>
+                                <dd>{ this.props.entitlement.contract }</dd>
+                                <dt>{ _("Account") }</dt>
+                                <dd>{ this.props.entitlement.account }</dd>
+                                <dt>{ _("Provides Management") }</dt>
+                                <dd>{ this.props.entitlement.provides_management }</dd>
+                                <dt>{ _("Quantity Used") }</dt>
+                                <dd>{ this.props.entitlement.quantity_used }</dd>
+                                <dt>{ _("Entitlement Type") }</dt>
+                                <dd>{ this.props.entitlement.system_type }</dd>
+                                <dt>{ _("Statud Setails") }</dt>
+                                <dd>{ this.props.entitlement.status_details }</dd>
+                                <dt>{ _("Provides") }</dt>
+                                <dd><ul className="product-list">{ products }</ul></dd>
+                                <dt>{ _("Starts") }</dt>
+                                <dd>{ this.props.entitlement.starts }</dd>
+                                <dt>{ _("Ends") }</dt>
+                                <dd>{ this.props.entitlement.ends }</dd>
+                            </dl>
+                        </div>
+                    </Col>
+                </Row>
+            </ListViewItem>
+        );
+    }
+}
+
+
+/* Element used for representation of available subscription (entitlement). The element has following
+ * properties:
+ * state.attached: true/false
+ * attach_label: "Attach/Attaching.../Attached
+ */
+class AvailableEntitlement extends React.Component {
+    constructor(props) {
+        super(props);
+        this.attachPool = this.attachPool.bind(this);
+        this.renderActions = this.renderActions.bind(this);
+        this.props.availableEntitlements[this.props.entitlement.id] = this;
+        if (this.props.entitlement.id in this.props.parent.consumedEntitlementComps) {
+            this.state = {
+                attached: true,
+                attach_label: _("Attached")
+            };
+        } else {
+            this.state = {
+                attached: false,
+                attach_label: _("Attach")
+            };
+        }
+    }
+
+    /**
+     * Thit method is used fot attaching selected subscription
+     * @param event
+     */
+    attachPool(event) {
+        console.debug("attachPool", event, this.props.entitlement.id);
+        if (event && event.button !== 0) {
+            return;
+        }
+        console.debug("Button clicked", this.props.entitlement.id);
+        this.setState({ attached: true, attach_label: _("Attaching...")});
+        subscriptionsClient.attachPool(this.props.entitlement.id);
+        this.setState({ attach_label: _("Attached")});
+    }
+
+    /**
+     * This method is used for rendering actions for list item representing
+     * available subscription
+     * @returns {*}
+     */
+    renderActions() {
+        return (
+            <div>
+                <Button
+                    key={ "button-" + this.props.entitlement.id }
+                    id={ "button-" + this.props.entitlement.id }
+                    disabled={ this.state.attached }
+                    onClick={ event => this.attachPool(event) }
+                >{ this.state.attach_label }</Button>
+            </div>
+        )
+    }
+
+    /**
+     * Render item representing one available subscription
+     * @returns {*}
+     */
+    render() {
+        let icon_name;
+
+        if (this.state.attached === true) {
+            icon_name = "fa pficon-plugged";
+        } else {
+            icon_name = "fa pficon-unplugged";
+        }
+
+        let products = this.props.entitlement.providedProducts.map((product) =>
+            <li key={product}>{ product }</li>
+        );
+
+        return (
+            <ListViewItem
+                leftContent={<ListViewIcon icon={ icon_name } />}
+                heading={ this.props.entitlement.productName }
+                key={ this.props.entitlement.id }
+                id={ this.props.entitlement.id }
+                actions={ this.renderActions() }
+            >
+                <Row>
+                    <Col sm={11}>
+                        <div className="col-md-11">
+                            <dl className="dl-horizontal">
+                                <dt>{ _("Subscription") }</dt>
+                                <dd>{ this.props.entitlement.productName }</dd>
+                                <dt>{ _("Provides") }</dt>
+                                <dd><ul className="product-list">{ products }</ul></dd>
+                                <dt>{ _("Pool ID") }</dt>
+                                <dd>{ this.props.entitlement.id }</dd>
+                                <dt>{ _("SKU") }</dt>
+                                <dd>{ this.props.entitlement.productId }</dd>
+                                <dt>{ _("Contract") }</dt>
+                                <dd>{ this.props.entitlement.contractNumber }</dd>
+                                <dt>{ _("Provides Management") }</dt>
+                                <dd>{ this.props.entitlement.management_enabled }</dd>
+                                <dt>{ _("Available") }</dt>
+                                <dd>{ this.props.entitlement.quantity }</dd>
+                                <dt>{ _("Service Type") }</dt>
+                                <dd>{ this.props.entitlement.service_type }</dd>
+                                <dt>{ _("Roles") }</dt>
+                                <dd>{ this.props.entitlement.roles }</dd>
+                                <dt>{ _("Service Level") }</dt>
+                                <dd>{ this.props.entitlement.service_level }</dd>
+                                <dt>{ _("Usage") }</dt>
+                                <dd>{ this.props.entitlement.usage }</dd>
+                                <dt>{ _("Add-ons") }</dt>
+                                <dd>{ this.props.entitlement.addons }</dd>
+                                <dt>{ _("Subscription Type") }</dt>
+                                <dd>{ this.props.entitlement.pool_type }</dd>
+                                <dt>{ _("Starts") }</dt>
+                                <dd>{ this.props.entitlement.startDate }</dd>
+                                <dt>{ _("Ends") }</dt>
+                                <dd>{ this.props.entitlement.endDate }</dd>
+                            </dl>
+                        </div>
+                    </Col>
+                </Row>
+            </ListViewItem>
+        );
+    }
+}
+
+class InstalledProduct extends React.Component {
+    constructor() {
+        super();
+    }
+
+    render() {
+        let icon_name;
+        let status_text;
+
+        if (this.props.product.status === 'subscribed') {
+            icon_name = "fa pficon-ok";
+            status_text = _("Subscribed");
+        } else {
+            icon_name = "fa pficon-error-circle-o";
+            status_text = _("Not Subscribed (Not supported by a valid subscription.)");
+        }
+
+        return (
+            <ListViewItem
+                leftContent={<ListViewIcon icon={ icon_name } />}
+                heading={ this.props.product.productName }
+                key={ this.props.product.productId }
+                // Id has to be productName and not productId, because consumed subscription can reference
+                // to the installed product only using productName
+                id={ this.props.product.productName }
+            >
+                <Row>
+                    <Col sm={11}>
+                        <div className="col-md-11">
+                            <dl className="dl-horizontal">
+                                <dt>{ _("Product Name") }</dt>
+                                <dd>{ this.props.product.productName }</dd>
+                                <dt>{ _("Product ID") }</dt>
+                                <dd>{ this.props.product.productId }</dd>
+                                <dt>{ _("Version") }</dt>
+                                <dd>{ this.props.product.version }</dd>
+                                <dt>{ _("Arch") }</dt>
+                                <dd>{ this.props.product.arch }</dd>
+                                <dt>{ _("Status") }</dt>
+                                <dd>{ status_text }</dd>
+                                <dt>{ _("Starts") }</dt>
+                                <dd>{ this.props.product.starts }</dd>
+                                <dt>{ _("Ends") }</dt>
+                                <dd>{ this.props.product.ends }</dd>
+                            </dl>
+                        </div>
+                    </Col>
+                </Row>
+            </ListViewItem>
+        );
+    }
+}
+
 /* Show subscriptions status of the system and registered products, offer to register/unregister the system
  * Expected properties:
  * status       subscription status
@@ -294,6 +604,19 @@ class SubscriptionStatus extends React.Component {
  * unregister   callback, triggered when user clicks on unregister
  */
 class SubscriptionsPage extends React.Component {
+    constructor() {
+        super();
+        // this.intalledProductComps = {};
+        this.consumedEntitlementComps = {};
+        this.availableEntitlementComps = {};
+
+        // this.consumedEntitlementRemoved = this.consumedEntitlementRemoved.bind(this)
+    }
+
+    // consumedEntitlementRemoved(poolId) {
+    //
+    // }
+
     renderCurtains() {
         let icon;
         let description;
@@ -324,48 +647,32 @@ class SubscriptionsPage extends React.Component {
                 message={message} />
         );
     }
+
     renderSubscriptions() {
-        let entries = this.props.products.map(function (itm) {
-            let icon_name;
-            let status_text;
-
-            if (itm.status === 'subscribed') {
-                icon_name = "fa pficon-ok";
-                status_text = _("Subscribed");
-            } else {
-                icon_name = "fa pficon-error-circle-o";
-                status_text = _("Not Subscribed (Not supported by a valid subscription.)");
-            }
-
+        // let productEntries = this.props.products.map(this.renderProduct);
+        let productEntries = this.props.products.map((item) => {
             return (
-                <ListViewItem
-                    leftContent={<ListViewIcon icon={ icon_name } />}
-                    heading={ itm.productName }
-                    key={itm.productId}
-                >
-                    <Row>
-                        <Col sm={11}>
-                            <div className="col-md-11">
-                                <dl className="dl-horizontal">
-                                    <dt>{ _("Product Name") }</dt>
-                                    <dd>{ itm.productName }</dd>
-                                    <dt>{ _("Product ID") }</dt>
-                                    <dd>{ itm.productId }</dd>
-                                    <dt>{ _("Version") }</dt>
-                                    <dd>{ itm.version }</dd>
-                                    <dt>{ _("Arch") }</dt>
-                                    <dd>{ itm.arch }</dd>
-                                    <dt>{ _("Status") }</dt>
-                                    <dd>{ status_text }</dd>
-                                    <dt>{ _("Starts") }</dt>
-                                    <dd>{ itm.starts }</dd>
-                                    <dt>{ _("Ends") }</dt>
-                                    <dd>{ itm.ends }</dd>
-                                </dl>
-                            </div>
-                        </Col>
-                    </Row>
-                </ListViewItem>
+                <InstalledProduct key={ item.productId } product={ item }/>
+            );
+        });
+        let consumedEntitlementEntries = this.props.consumedEntitlements.map((item) => {
+            return (
+                <ConsumedEntitlement
+                    key={ item.serial }
+                    entitlement={ item }
+                    consumedEntitlements={ this.consumedEntitlementComps }
+                    parent={ this }
+                />
+            );
+        });
+        let availableEntitlementEntries = this.props.availableEntitlements.map((item) => {
+            return (
+                <AvailableEntitlement
+                    key={ item.id }
+                    entitlement={ item }
+                    availableEntitlements={ this.availableEntitlementComps }
+                    parent={ this }
+                />
             );
         });
 
@@ -377,7 +684,23 @@ class SubscriptionsPage extends React.Component {
                     emptyCaption={ _("No installed products detected.") }
                     >
                 <ListView className="installed-products">
-                {entries}
+                    { productEntries }
+                </ListView>
+            </Listing>
+            <Listing
+                title={ _("Consumed subscriptions") }
+                emptyCaption={ _("No consumed subscriptions detected.")}
+            >
+                <ListView className="consumed-subscriptions">
+                    { consumedEntitlementEntries }
+                </ListView>
+            </Listing>
+            <Listing
+                title={ _("Available subscriptions") }
+                emptyCaption={ _("No available subscriptions detected.")}
+            >
+                <ListView className="available-subscriptions">
+                    { availableEntitlementEntries }
                 </ListView>
             </Listing>
             </div>
