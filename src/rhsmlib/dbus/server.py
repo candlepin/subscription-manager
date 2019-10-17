@@ -29,6 +29,9 @@ from rhsmlib.services import config
 from rhsm.config import initConfig
 from rhsmlib.file_monitor import create_filesystem_watcher, DirectoryWatch
 from subscription_manager import injection as inj
+from subscription_manager.logutil import init_logger
+
+init_logger()
 
 log = logging.getLogger(__name__)
 
