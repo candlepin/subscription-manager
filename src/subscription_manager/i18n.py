@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from __future__ import print_function, division, absolute_import
 
 # Copyright (c) 2011 Red Hat, Inc.
@@ -34,6 +36,8 @@ LOCALE = local()
 LOCALE.language = None
 LOCALE.lang = None
 
+BLACKLISTED_LOCALES = ['turkish', 'tr_TR', 'tr_CY', 'ku_TR']
+
 log = logging.getLogger(__name__)
 
 
@@ -43,12 +47,26 @@ def configure_i18n():
     called once per invocation. (once for CLI, once for GUI)
     """
     import locale
+    current_locale = None
     try:
-        locale.setlocale(locale.LC_ALL, '')
+        current_locale = locale.setlocale(locale.LC_ALL, '')
     except locale.Error:
         print("You are attempting to use a locale that is not installed.")
         os.environ['LC_ALL'] = 'C'
         locale.setlocale(locale.LC_ALL, 'C')
+
+    # We have to set locale to C for blacklisted locales, because result of str.lower() and str.upper()
+    # methods is influenced by locale. E.g. character 'I' is not converted to 'i' by lower() for Turkish
+    # language, but it is converted to 'ı'. Character 'i' is converted to 'İ' by upper(). There other
+    # strange cases, when tr_TR
+    # See this BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1703054#c10
+    if six.PY2 and current_locale is not None:
+        base_current_locale = current_locale.split('.')[0]
+        if base_current_locale in BLACKLISTED_LOCALES:
+            print("You are attempting to use blacklisted locale: %s" % current_locale)
+            os.environ['LC_ALL'] = 'C'
+            locale.setlocale(locale.LC_ALL, 'C')
+
     configure_gettext()
     # RHBZ 1642271  Don't set a None lang
     lang = os.environ.get("LANG")
