@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.22
+Version: 1.24.23
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1150,6 +1150,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Oct 17 2019 Christopher Snyder <csnyder@redhat.com> 1.24.23-1
+- 1703054: Blacklist some locales for Python2.x; ENT-1288 (jhnidek@redhat.com)
+
 * Tue Oct 08 2019 Christopher Snyder <csnyder@redhat.com> 1.24.22-1
 - 1756491: Remove usage of deprecated method in yum plugins
   (csnyder@redhat.com)
