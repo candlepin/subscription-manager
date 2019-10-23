@@ -944,7 +944,6 @@ class TestThreeWayMerge(SyspurposeTestBase):
     def test_merge(self):
         """
         Shows that a change in only one place does not consitute a conflict.
-        :return:
         """
         base = {"C": "base"}
         remote = {"A": "remote", "C": "remote"}
@@ -963,7 +962,6 @@ class TestThreeWayMerge(SyspurposeTestBase):
         """
         This test shows that remote wins by default in the case of concurrent modification of
         a shared key. It also shows that the on_conflict kwarg can override this.
-        :return:
         """
         shared_key = "C"
         base = {shared_key: "base"}
@@ -986,7 +984,6 @@ class TestThreeWayMerge(SyspurposeTestBase):
         This test shows that remote wins by default in the case of concurrent modification of
         a shared key even when the shared key is not in the base.
         It also shows that the on_conflict kwarg can override this.
-        :return:
         """
         shared_key = "C"
         base = {}
@@ -1007,7 +1004,6 @@ class TestThreeWayMerge(SyspurposeTestBase):
     def test_merge_conflicting_lists(self):
         """
         This test shows that lists are treated atomically (as in we do not merge differing lists).
-        :return:
         """
         shared_key = "C"
         base = {shared_key: ["base"]}
@@ -1031,13 +1027,38 @@ class TestThreeWayMerge(SyspurposeTestBase):
     def test_merge_remote_missing_field(self):
         """
         Shows that if the server does not support a field, local gets to modify it.
-        :return:
         """
         base = {"B": None}
         remote = {}
         local = {"B": "local"}
 
         expected = {"B": "local"}
+
+        result = three_way_merge(local=local, base=base, remote=remote)
+        self.assert_equal_dict(expected, result)
+
+    def test_merge_remote_empty_field(self):
+        """
+        Shows that if the server has field with empty string, local gets to modify it.
+        """
+        base = {"B": None}
+        remote = {"B": ""}
+        local = {"B": "local"}
+
+        expected = {"B": "local"}
+
+        result = three_way_merge(local=local, base=base, remote=remote)
+        self.assert_equal_dict(expected, result)
+
+    def test_merge_missing_remote_list(self):
+        """
+        Shows that if the server does not have list, local can add it.
+        """
+        base = {"B": None}
+        remote = {}
+        local = {"B": ["local"]}
+
+        expected = {"B": ["local"]}
 
         result = three_way_merge(local=local, base=base, remote=remote)
         self.assert_equal_dict(expected, result)

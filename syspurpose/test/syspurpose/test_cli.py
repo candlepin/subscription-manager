@@ -79,6 +79,17 @@ class SyspurposeCliTests(SyspurposeTestBase):
             cli.add_command(args, self.syspurposestore)
             self.assertTrue('Added ADDON1 to addons' in captured.out)
 
+    def test_add_generic_command_one_value(self):
+        """
+        A smoke test to ensure nothing bizarre happens when we try to add some attribute (not addons)
+        """
+        args = MagicMock()
+        args.prop_name = "foo"
+        args.values = ["BAR1"]
+        with Capture() as captured:
+            cli.add_command(args, self.syspurposestore)
+            self.assertTrue('Added BAR1 to foo' in captured.out)
+
     def test_add_command_more_values(self):
         """
         A smoke test to ensure nothing bizarre happens when we try to add more addons attribute
@@ -91,6 +102,19 @@ class SyspurposeCliTests(SyspurposeTestBase):
             self.assertTrue('Added ADDON1 to addons' in captured.out)
             self.assertTrue('Added ADDON2 to addons' in captured.out)
             self.assertTrue('addons updated.' in captured.out)
+
+    def test_add_generic_command_more_value(self):
+        """
+        A smoke test to ensure nothing bizarre happens when we try to add more generic list attribute
+        """
+        args = MagicMock()
+        args.prop_name = "foo"
+        args.values = ["BAR1", "BAR2"]
+        with Capture() as captured:
+            cli.add_command(args, self.syspurposestore)
+            self.assertTrue('Added BAR1 to foo' in captured.out)
+            self.assertTrue('Added BAR2 to foo' in captured.out)
+            self.assertTrue('foo updated.' in captured.out)
 
     def test_add_command_existing_values(self):
         """
@@ -151,6 +175,22 @@ class SyspurposeCliTests(SyspurposeTestBase):
         with Capture() as captured:
             cli.remove_command(args, self.syspurposestore)
             self.assertTrue('Removed "ADDON1" from addons' in captured.out)
+
+    def test_generic_remove_command(self):
+        """
+        A smoke test to ensure nothing bizarre happens when we try to remove one value from generic list
+        """
+        args = MagicMock()
+
+        # Add value first
+        args.prop_name = "foo"
+        args.values = ["BAR1"]
+        cli.add_command(args, self.syspurposestore)
+
+        # Now we can try to remove value
+        with Capture() as captured:
+            cli.remove_command(args, self.syspurposestore)
+            self.assertTrue('Removed "BAR1" from foo' in captured.out)
 
     def test_show_command(self):
         """
