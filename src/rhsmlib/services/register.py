@@ -91,8 +91,8 @@ class RegisterService(object):
                 usage=usage
             )
         self.installed_mgr.write_cache()
-        self.plugin_manager.run("post_register_consumer", consumer=consumer, facts=facts_dict)
         managerlib.persist_consumer_cert(consumer)
+        self.plugin_manager.run("post_register_consumer", consumer=consumer, facts=facts_dict)
 
         # Now that we are registered, load the new identity
         self.identity.reload()

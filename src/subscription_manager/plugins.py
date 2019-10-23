@@ -44,7 +44,7 @@ from subscription_manager.base_plugin import SubManPlugin
 # API, the major version number must be incremented and the minor version number
 # reset to 0. If a change is made that doesn't break backwards compatibility,
 # then the minor number must be incremented.
-API_VERSION = "1.1"
+API_VERSION = "1.2"
 
 DEFAULT_SEARCH_PATH = "/usr/share/rhsm-plugins/"
 DEFAULT_CONF_PATH = "/etc/rhsm/pluginconf.d/"
@@ -289,6 +289,21 @@ class PostRegistrationConduit(BaseConduit):
         super(PostRegistrationConduit, self).__init__(clazz)
         self.consumer = consumer
         self.facts = facts
+
+
+class PostUnregistrationConduit(BaseConduit):
+    """Conduit for use with post unregistration."""
+    slots = ['post_unregister_consumer']
+
+    def __init__(self, clazz):
+        """init for PostRegistrationConduit
+
+        Args:
+            consumer: an object representing the
+                    registered consumer
+            facts: a dictionary of system facts
+        """
+        super(PostUnregistrationConduit, self).__init__(clazz)
 
 
 class ProductConduit(BaseConduit):
@@ -884,7 +899,7 @@ class PluginManager(BasePluginManager):
         return [
             BaseConduit, ProductConduit, ProductUpdateConduit,
             RegistrationConduit, PostRegistrationConduit,
-            FactsConduit, SubscriptionConduit,
+            PostUnregistrationConduit, FactsConduit, SubscriptionConduit,
             UpdateContentConduit,
             PostSubscriptionConduit,
             AutoAttachConduit, PostAutoAttachConduit,

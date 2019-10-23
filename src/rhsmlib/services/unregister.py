@@ -42,6 +42,7 @@ class UnregisterService(object):
         """
         self.identity = inj.require(inj.IDENTITY)
         self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
         self.uep = uep
 
     def unregister(self):
@@ -56,6 +57,7 @@ class UnregisterService(object):
             managerlib.system_log("Unregistered machine with identity: %s" % self.identity.uuid)
             managerlib.clean_all_data(backup=False)
             self.cp_provider.clean()
+            self.plugin_manager.run("post_unregister_consumer")
         except connection.GoneException as ge:
             if ge.deleted_id == self.identity.uuid:
                 log.debug(
