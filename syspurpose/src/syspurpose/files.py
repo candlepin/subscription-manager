@@ -81,14 +81,15 @@ class SyspurposeStore(object):
         except ValueError:
             # Malformed JSON or empty file. Let's not error out on an empty file
             if os.path.getsize(self.path):
-                system_exit(os.EX_CONFIG,
-                    _("Error: Malformed data in file {}; please review and correct.").format(self.path))
+                system_exit(
+                    os.EX_CONFIG,
+                    _("Error: Malformed data in file {}; please review and correct.").format(self.path)
+                )
 
             return False
         except OSError as e:
             if e.errno == errno.EACCES and not self.raise_on_error:
-                system_exit(os.EX_NOPERM,
-                    _('Cannot read syspurpose file {}\nAre you root?').format(self.path))
+                system_exit(os.EX_NOPERM, _('Cannot read syspurpose file {}\nAre you root?').format(self.path))
 
             if self.raise_on_error:
                 raise e
@@ -288,9 +289,12 @@ class SyncedStore(object):
 
         local_result = {key: result[key] for key in result if result[key]}
 
-        sync_result = SyncResult(result, self.update_remote(result),
-                          self.update_local(local_result),
-                          self.update_cache(result), self.report)
+        sync_result = SyncResult(
+            result,
+            self.update_remote(result),
+            self.update_local(local_result),
+            self.update_cache(result), self.report
+        )
 
         log.debug('Successfully synced system purpose.')
 
@@ -307,8 +311,12 @@ class SyncedStore(object):
         return SyncResult(self.local_contents, False, local_updated, False, self.report)
 
     def merge(self, local=None, remote=None, base=None):
-        result = three_way_merge(local=local, base=base, remote=remote,
-                                     on_change=self.on_changed)
+        result = three_way_merge(
+            local=local,
+            base=base,
+            remote=remote,
+            on_change=self.on_changed
+        )
         return result
 
     def get_local_contents(self):
@@ -320,7 +328,7 @@ class SyncedStore(object):
         except (os.error, ValueError, IOError):
             if self.report is not None:
                 self.report._exceptions.append(
-                        'Cannot read local syspurpose, trying to update from server only'
+                    'Cannot read local syspurpose, trying to update from server only'
                 )
             log.debug('Unable to read local system purpose at  \'%s\'\nUsing the server values.'
                       % self.path)
@@ -532,7 +540,10 @@ def read_syspurpose(raise_on_error=False):
 
 # A simple container class used to hold the values representing a change detected
 # during three_way_merge
-DiffChange = collections.namedtuple('DiffChange', ['key', 'previous_value', 'new_value', 'source', 'in_base', 'in_result'])
+DiffChange = collections.namedtuple(
+    'DiffChange',
+    ['key', 'previous_value', 'new_value', 'source', 'in_base', 'in_result']
+)
 
 
 def three_way_merge(local, base, remote, on_conflict="remote", on_change=None):
@@ -574,7 +585,7 @@ def three_way_merge(local, base, remote, on_conflict="remote", on_change=None):
         source = 'base'
 
         if local_changed == remote_changed:
-            if local_changed == True:
+            if local_changed is True:
                 log.debug('Three way merge conflict: both local and remote values changed for key \'%s\'.' % key)
             source = on_conflict
             if key in winner:
@@ -585,7 +596,7 @@ def three_way_merge(local, base, remote, on_conflict="remote", on_change=None):
             if key in remote:
                 result[key] = remote[key]
         elif local_changed or remote_changed == UNSUPPORTED:
-            if local_changed == True:
+            if local_changed is True:
                 log.debug('Three way merge: local value was changed for key \'%s\'.' % key)
             source = 'local'
             if key in local:
@@ -630,5 +641,11 @@ def detect_changed(base, other, key, source="server"):
     # Handle "addons" (the lists might be out of order from the server)
     if type(base_val) == list and type(other_val) == list:
         return sorted(base_val) != sorted(other_val)
+
+    # When value is removed from server, then it is set to empty string, but
+    # it is completely removed from local syspurpose.json.
+    # See: https://bugzilla.redhat.com/show_bug.cgi?id=1738764
+    if source == "server" and base_val is None and other_val == '':
+        return False
 
     return base_val != other_val

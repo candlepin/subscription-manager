@@ -42,17 +42,17 @@ def add_command(args, syspurposestore):
     :param syspurposestore: An SyspurposeStore object to manipulate
     :return: None
     """
-    any_addon_added = False
+    any_prop_added = False
     for value in args.values:
         if syspurposestore.add(args.prop_name, value):
-            any_addon_added = True
+            any_prop_added = True
             print(_("Added {value} to {prop_name}.").format(
                 value=make_utf8(value), prop_name=make_utf8(args.prop_name)))
         else:
             print(_("Not adding value {value} to {prop_name}; it already exists.").format(
                 value=make_utf8(value), prop_name=make_utf8(args.prop_name)))
 
-    if any_addon_added is False:
+    if any_prop_added is False:
         return
 
     success_msg = _("{attr} updated.").format(attr=make_utf8(args.prop_name))
@@ -60,7 +60,7 @@ def add_command(args, syspurposestore):
     command = "syspurpose add-{name} ".format(name=args.prop_name) + to_add
     check_result(
         syspurposestore,
-        expectation=lambda res: all(x in res.get('addons', []) for x in args.values),
+        expectation=lambda res: all(x in res.get(args.prop_name, []) for x in args.values),
         success_msg=success_msg,
         command=command,
         attr=args.prop_name
@@ -178,117 +178,159 @@ def setup_arg_parser():
 
     # Generic assignments
     # Set ################
-    generic_set_parser = subparsers.add_parser("set",
-        help=_("Sets the value for the given property"))
+    generic_set_parser = subparsers.add_parser(
+        "set",
+        help=_("Sets the value for the given property")
+    )
 
-    generic_set_parser.add_argument("prop_name",
+    generic_set_parser.add_argument(
+        "prop_name",
         metavar="property",
         help=_("The name of the property to set/update"),
-        action="store")
+        action="store"
+    )
 
-    generic_set_parser.add_argument("value",
+    generic_set_parser.add_argument(
+        "value",
         help=_("The value to set"),
-        action="store")
+        action="store"
+    )
 
     generic_set_parser.set_defaults(func=set_command, requires_sync=True)
 
     # Unset ##############
-    generic_unset_parser = subparsers.add_parser("unset",
+    generic_unset_parser = subparsers.add_parser(
+        "unset",
         help=_("Unsets (clears) the value for the given property"),
-        parents=[unset_options])
+        parents=[unset_options]
+    )
 
-    generic_unset_parser.add_argument("prop_name",
+    generic_unset_parser.add_argument(
+        "prop_name",
         metavar="property",
         help=_("The name of the property to set/update"),
-        action="store")
+        action="store"
+    )
 
     # Add ################
-    generic_add_parser = subparsers.add_parser("add",
-        help=_("Adds the value(s) to the given property"))
+    generic_add_parser = subparsers.add_parser(
+        "add",
+        help=_("Adds the value(s) to the given property")
+    )
 
-    generic_add_parser.add_argument("prop_name",
+    generic_add_parser.add_argument(
+        "prop_name",
         metavar="property",
         help=_("The name of the property to update"),
-        action="store")
+        action="store"
+    )
 
-    generic_add_parser.add_argument("values",
+    generic_add_parser.add_argument(
+        "values",
         help=_("The value(s) to add"),
         action="store",
-        nargs="+")
+        nargs="+"
+    )
 
     generic_add_parser.set_defaults(func=add_command, requires_sync=True)
 
     # Remove #############
-    generic_remove_parser = subparsers.add_parser("remove",
-        help=_("Removes the value(s) from the given property"))
+    generic_remove_parser = subparsers.add_parser(
+        "remove",
+        help=_("Removes the value(s) from the given property")
+    )
 
-    generic_remove_parser.add_argument("prop_name",
+    generic_remove_parser.add_argument(
+        "prop_name",
         metavar="property",
         help=_("The name of the property to update"),
-        action="store")
+        action="store"
+    )
 
-    generic_remove_parser.add_argument("values",
+    generic_remove_parser.add_argument(
+        "values",
         help=_("The value(s) to remove"),
         action="store",
-        nargs="+")
+        nargs="+"
+    )
 
     generic_remove_parser.set_defaults(func=remove_command, requires_sync=True)
     # Targeted commands
     # Roles ##########
-    set_role_parser = subparsers.add_parser("set-role",
+    set_role_parser = subparsers.add_parser(
+        "set-role",
         help=_("Set the system role to the system syspurpose"),
-        parents=[set_options])
+        parents=[set_options]
+    )
     # TODO: Set prop_name from schema file
     set_role_parser.set_defaults(prop_name="role")
 
-    unset_role_parser = subparsers.add_parser("unset-role",
+    unset_role_parser = subparsers.add_parser(
+        "unset-role",
         help=_("Clear set role"),
-        parents=[unset_options])
+        parents=[unset_options]
+    )
     unset_role_parser.set_defaults(prop_name="role")
 
     # ADDONS #############
-    add_addons_parser = subparsers.add_parser("add-addons",
+    add_addons_parser = subparsers.add_parser(
+        "add-addons",
         help=_("Add addons to the system syspurpose"),
-        parents=[add_options])
+        parents=[add_options]
+    )
     # TODO: Set prop_name from schema file
     add_addons_parser.set_defaults(prop_name="addons")
 
-    remove_addons_parser = subparsers.add_parser("remove-addons",
+    remove_addons_parser = subparsers.add_parser(
+        "remove-addons",
         help=_("Remove addons from the system syspurpose"),
-        parents=[remove_options])
+        parents=[remove_options]
+    )
     remove_addons_parser.set_defaults(prop_name="addons")
 
-    unset_role_parser = subparsers.add_parser("unset-addons",
+    unset_role_parser = subparsers.add_parser(
+        "unset-addons",
         help=_("Clear set addons"),
-        parents=[unset_options])
+        parents=[unset_options]
+    )
     unset_role_parser.set_defaults(prop_name="addons")
 
     # SLA ################
-    set_sla_parser = subparsers.add_parser("set-sla",
+    set_sla_parser = subparsers.add_parser(
+        "set-sla",
         help=_("Set the system sla"),
-        parents=[set_options])
+        parents=[set_options]
+    )
     set_sla_parser.set_defaults(prop_name="service_level_agreement")
 
-    unset_sla_parser = subparsers.add_parser("unset-sla",
+    unset_sla_parser = subparsers.add_parser(
+        "unset-sla",
         help=_("Clear set sla"),
-        parents=[unset_options])
+        parents=[unset_options]
+    )
     unset_sla_parser.set_defaults(prop_name="service_level_agreement")
 
     # USAGE ##############
-    set_usage_parser = subparsers.add_parser("set-usage",
-       help=_("Set the system usage"),
-       parents=[set_options])
+    set_usage_parser = subparsers.add_parser(
+        "set-usage",
+        help=_("Set the system usage"),
+        parents=[set_options]
+    )
 
     set_usage_parser.set_defaults(prop_name="usage")
 
-    unset_usage_parser = subparsers.add_parser("unset-usage",
+    unset_usage_parser = subparsers.add_parser(
+        "unset-usage",
         help=_("Clear set usage"),
-        parents=[unset_options])
+        parents=[unset_options]
+    )
     unset_usage_parser.set_defaults(prop_name="usage")
 
     # Pretty Print Json contents of default syspurpose file
-    show_parser = subparsers.add_parser("show",
-        help=_("Show the current system syspurpose"))
+    show_parser = subparsers.add_parser(
+        "show",
+        help=_("Show the current system syspurpose")
+    )
     show_parser.set_defaults(func=show_contents, requires_sync=False)
 
     return parser
