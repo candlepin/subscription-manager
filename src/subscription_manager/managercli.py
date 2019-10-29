@@ -2353,9 +2353,12 @@ class ReposCommand(CliCommand):
             matches = set([repo for repo in repos if fnmatch.fnmatch(repo.id, repoid)])
             if not matches:
                 rc = 1
-                print(_("Error: '%s' does not match a valid repository ID. "
-                        "Use \"subscription-manager repos --list\" to see valid repositories.") % repoid)
-                log.warning("'%s' does not match a valid repository ID." % repoid)
+                repo_id_encoded = (
+                   "Error: '%s' does not match a valid repository ID. "
+                   "Use \"subscription-manager repos --list\" to see valid repositories."
+                ) % repoid.encode("utf-8")
+                print(_(repo_id_encoded))
+                log.warning("'%s' does not match a valid repository ID." % repo_id_encoded)
 
             # Overwrite repo if it's already in the dict, we want the last
             # match to be the one sent to server.
@@ -2396,9 +2399,9 @@ class ReposCommand(CliCommand):
         for repo in repos_to_modify:
             # Watchout for string comparison here:
             if repos_to_modify[repo] == "1":
-                print(_("Repository '%s' is enabled for this system.") % repo.id)
+                print(_("Repository '%s' is enabled for this system.") % repo.id.encode('utf-8'))
             else:
-                print(_("Repository '%s' is disabled for this system.") % repo.id)
+                print(_("Repository '%s' is disabled for this system.") % repo.id.encode('utf-8'))
         return rc
 
 
