@@ -222,14 +222,14 @@ function show_status_dialog() {
                             </tbody>
                           </table>
                           <br/>
-                          { insights_timer.state == "failed" &&
+                          { insights_timer.state === "failed" &&
                           <div className="alert alert-warning">
                             <span className="pficon pficon-warning-triangle-o"/>
                               {_("Next Insights data upload could not be scheduled.")}{" "}
                               <a onClick={left(jump_to_timer)}>{_("Details")}</a>
                           </div>
                           }
-                          { insights_service.state == "failed" && failed_text &&
+                          { insights_service.state === "failed" && failed_text &&
                           <div className="alert alert-warning">
                             <span className="pficon pficon-warning-triangle-o"/>
                               {failed_text}{" "}
@@ -307,7 +307,7 @@ export class InsightsStatus extends React.Component {
             return null;
 
         if (insights_timer.enabled) {
-            let warn = (insights_service.state == "failed" &&
+            let warn = (insights_service.state === "failed" &&
                         insights_service.unit.ActiveExitTimestamp &&
                         insights_service.unit.ActiveExitTimestamp / 1e6 > last_upload_monitor.timestamp);
 

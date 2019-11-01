@@ -134,58 +134,16 @@ class DismissableError extends React.Component {
     }
 }
 
-/* Show subscriptions status of the system, offer to register/unregister the system
- * Expected properties:
- * status       subscription status
- * error        error message to show (in Curtains if not connected, as a dismissable alert otherwise)
- * dismissError callback, triggered for the dismissable error in connected state
- * register     callback, triggered when user clicks on register
- * unregister   callback, triggered when user clicks on unregister
- */
-class SubscriptionStatus extends React.Component {
+class SystemPurposeStatusCard extends React.Component {
     constructor(props) {
         super(props);
-        // React components using ES6 classes no longer autobind this to non React
-        // methods.
-        this.handleRegisterSystem = this.handleRegisterSystem.bind(this);
-        this.handleUnregisterSystem = this.handleUnregisterSystem.bind(this);
-    }
-    handleRegisterSystem(err) {
-        // only consider primary mouse button
-        if (!err || err.button !== 0)
-            return;
-        if (this.props.register)
-            this.props.register();
-        err.stopPropagation();
-    }
-    handleUnregisterSystem(e) {
-        // only consider primary mouse button
-        if (!e || e.button !== 0)
-            return;
-        if (this.props.unregister)
-            this.props.unregister();
-        e.stopPropagation();
     }
     render() {
-        let errorMessage;
-        if (this.props.error) {
-            let error_msg = createFragment(this.props.error);
-            errorMessage = (
-                <DismissableError dismissError={this.props.dismissError}>{error_msg}</DismissableError>
-            );
-        }
-
-        let label;
-        let action;
-        let insights;
-        let note;
-        let syspurpose;
         let sla;
         let usage;
         let role;
         let add_ons;
         let syspurpose_status;
-        let isUnregistering = (this.props.status === "unregistering");
         if (this.props.syspurpose["service_level_agreement"]) {
             sla = (
                 <div>
@@ -238,10 +196,14 @@ class SubscriptionStatus extends React.Component {
                 </div>
             );
         }
-        syspurpose = (
-            <div>
-                <h2>{_("System Purpose")}</h2>
-                <div className="dl-horizontal">
+        return (
+            <div className="card-pf">
+                <div className="card-pf-heading">
+                    <h2 className="card-pf-title">
+                        { _("System Purpose") }
+                    </h2>
+                </div>
+                <div className="card-pf-body">
                     {syspurpose_status}
                     {sla}
                     {usage}
@@ -250,6 +212,45 @@ class SubscriptionStatus extends React.Component {
                 </div>
             </div>
         );
+    }
+}
+
+class InsightsStatusCard extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        let insights;
+        if (this.props.insights_available) {
+            insights = <InsightsStatus/>;
+        } else {
+            insights = <p>Insights client is not installed.</p>
+        }
+        return (
+            <div className="card-pf">
+                <div className="card-pf-heading">
+                    <h2 className="card-pf-title">
+                        { _("Insights") }
+                    </h2>
+                </div>
+                <div className="card-pf-body">
+                    { insights }
+                </div>
+            </div>
+        );
+    }
+}
+
+class SystemStatusCard extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        let label;
+        let action;
+        let note;
+        let isUnregistering = (this.props.status === "unregistering");
+
         if (this.props.status === 'Unknown') {
             label = <label>{ `${_("Status")}: ${_("This system is currently not registered.")}` }</label>;
             action = (<button className="btn btn-primary"
@@ -268,18 +269,77 @@ class SubscriptionStatus extends React.Component {
                     </div>
                 );
             }
-            if (this.props.insights_available)
-                insights = <InsightsStatus />;
         }
         return (
+            <div className="card-pf">
+                <div className="card-pf-heading">
+                    <h2 className="card-pf-title">
+                        { _("Subscriptions") }
+                    </h2>
+                </div>
+                <div className="card-pf-body">
+                    { label }
+                    { action }
+                    { note }
+                </div>
+            </div>
+        );
+    }
+}
+
+/* Show subscriptions status of the system, offer to register/unregister the system
+ * Expected properties:
+ * status       subscription status
+ * error        error message to show (in Curtains if not connected, as a dismissable alert otherwise)
+ * dismissError callback, triggered for the dismissable error in connected state
+ * register     callback, triggered when user clicks on register
+ * unregister   callback, triggered when user clicks on unregister
+ */
+class SubscriptionStatus extends React.Component {
+    constructor(props) {
+        super(props);
+        // React components using ES6 classes no longer autobind this to non React
+        // methods.
+        this.handleRegisterSystem = this.handleRegisterSystem.bind(this);
+        this.handleUnregisterSystem = this.handleUnregisterSystem.bind(this);
+    }
+    handleRegisterSystem(err) {
+        // only consider primary mouse button
+        if (!err || err.button !== 0)
+            return;
+        if (this.props.register)
+            this.props.register();
+        err.stopPropagation();
+    }
+    handleUnregisterSystem(e) {
+        // only consider primary mouse button
+        if (!e || e.button !== 0)
+            return;
+        if (this.props.unregister)
+            this.props.unregister();
+        e.stopPropagation();
+    }
+    render() {
+        let errorMessage;
+        if (this.props.error) {
+            let error_msg = createFragment(this.props.error);
+            errorMessage = (
+                <DismissableError dismissError={this.props.dismissError}>{error_msg}</DismissableError>
+            );
+        }
+
+        return (
             <div className="subscription-status-ct">
-                <h2>{_("Subscriptions")}</h2>
                 {errorMessage}
-                {label}
-                {action}
-                {insights}
-                {syspurpose}
-                {note}
+                <div className="container-fluid container-cards-pf">
+                    <div className="card-pf card-pf-view">
+                        <div className="col-xs-6 col-sm-4 col-md-4">
+                            <SystemStatusCard {...this.props } />
+                            <SystemPurposeStatusCard {...this.props } />
+                            <InsightsStatusCard {...this.props } />
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -609,13 +669,7 @@ class SubscriptionsPage extends React.Component {
         // this.intalledProductComps = {};
         this.consumedEntitlementComps = {};
         this.availableEntitlementComps = {};
-
-        // this.consumedEntitlementRemoved = this.consumedEntitlementRemoved.bind(this)
     }
-
-    // consumedEntitlementRemoved(poolId) {
-    //
-    // }
 
     renderCurtains() {
         let icon;
@@ -678,31 +732,31 @@ class SubscriptionsPage extends React.Component {
 
         return (
             <div className="container-fluid">
-            <SubscriptionStatus {...this.props }/>
-            <Listing
-                    title={ _("Installed products") }
-                    emptyCaption={ _("No installed products detected.") }
-                    >
-                <ListView className="installed-products">
-                    { productEntries }
-                </ListView>
-            </Listing>
-            <Listing
-                title={ _("Consumed subscriptions") }
-                emptyCaption={ _("No consumed subscriptions detected.")}
-            >
-                <ListView className="consumed-subscriptions">
-                    { consumedEntitlementEntries }
-                </ListView>
-            </Listing>
-            <Listing
-                title={ _("Available subscriptions") }
-                emptyCaption={ _("No available subscriptions detected.")}
-            >
-                <ListView className="available-subscriptions">
-                    { availableEntitlementEntries }
-                </ListView>
-            </Listing>
+                <SubscriptionStatus {...this.props }/>
+                <Listing
+                        title={ _("Installed products") }
+                        emptyCaption={ _("No installed products detected.") }
+                        >
+                    <ListView className="installed-products">
+                        { productEntries }
+                    </ListView>
+                </Listing>
+                <Listing
+                    title={ _("Consumed subscriptions") }
+                    emptyCaption={ _("No consumed subscriptions detected.")}
+                >
+                    <ListView className="consumed-subscriptions">
+                        { consumedEntitlementEntries }
+                    </ListView>
+                </Listing>
+                <Listing
+                    title={ _("Available subscriptions") }
+                    emptyCaption={ _("No available subscriptions detected.")}
+                >
+                    <ListView className="available-subscriptions">
+                        { availableEntitlementEntries }
+                    </ListView>
+                </Listing>
             </div>
         );
     }
