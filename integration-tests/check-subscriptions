@@ -27,7 +27,7 @@ sys.path.append(os.path.join(TEST_DIR, "common"))
 sys.path.append(os.path.join(os.path.dirname(TEST_DIR), "bots/machine"))
 from testlib import *
 
-# The candlepin image has a lot of demo data preloaded
+# candlepin on the services image has a lot of demo data preloaded
 # useful info/commands:
 #    Login: doc      password: password
 #    org:   snowwhite
@@ -83,8 +83,8 @@ key_url = sys.argv[1] + "/activation_keys/{key}/pools/{pool}".format(key=key, po
 requests.post(key_url, auth=("admin","admin"), verify=False)
 """
 
-CLIENT_ADDR = "10.111.113.1"
-CANDLEPIN_ADDR = "10.111.113.5"
+CLIENT_ADDR = "10.111.112.1"
+CANDLEPIN_ADDR = "10.111.112.100"
 CANDLEPIN_URL = "https://%s:8443/candlepin" % CANDLEPIN_ADDR
 
 PRODUCT_SNOWY = {
@@ -106,12 +106,12 @@ def machine_python(machine, script, arg = ""):
 class TestSubscriptions(MachineCase):
     provision = {
         "0": {"address": CLIENT_ADDR + "/20"},
-        "candlepin": {"image": "candlepin", "address": CANDLEPIN_ADDR + "/20"}
+        "services": {"image": "services"}
     }
 
     def setUp(self):
         MachineCase.setUp(self)
-        self.candlepin = self.machines['candlepin']
+        self.candlepin = self.machines['services']
         m = self.machine
 
         # wait for candlepin to be active and verify
@@ -268,7 +268,7 @@ insecure_connection=True
         b.wait_visible("#subscription-register-url")
 
         b.set_val("#subscription-register-url", "custom")
-        b.set_input_text("#subscription-register-url-custom", "10.111.113.5:8443/candlepin")
+        b.set_input_text("#subscription-register-url-custom", CANDLEPIN_ADDR + ":8443/candlepin")
         b.set_input_text("#subscription-register-username", "admin")
         b.set_input_text("#subscription-register-password", "admin")
         b.set_input_text("#subscription-register-org", "admin")
@@ -301,7 +301,7 @@ insecure_connection=True
         b.wait_visible("#subscription-register-url")
 
         b.set_val("#subscription-register-url", "custom")
-        b.set_input_text("#subscription-register-url-custom", "10.111.113.5:8443/candlepin")
+        b.set_input_text("#subscription-register-url-custom", CANDLEPIN_ADDR + ":8443/candlepin")
         b.set_input_text("#subscription-register-username", "admin")
         b.set_input_text("#subscription-register-password", "admin")
         b.set_input_text("#subscription-register-org", "admin")
