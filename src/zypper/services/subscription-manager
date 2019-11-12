@@ -81,7 +81,11 @@ class ZypperService(object):
         self.ca_cert_dir = cfg.get('rhsm', 'ca_cert_dir')
 
     def main(self):
-        self.update()
+        try:
+            self.update()
+        except connection.RestlibException as e:
+            sys.stderr.write('Error while syncing: %s; repos will not be updated.' % e.msg)
+            sys.stderr.write('\n')
         self.warn_or_give_usage_message()
         self.warn_expired()
         self.print_zypper_repos()
