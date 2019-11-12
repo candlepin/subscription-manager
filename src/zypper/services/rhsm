@@ -167,6 +167,11 @@ class ZypperService(object):
 
 
 if __name__ == '__main__':
+    if 'ZYPP_RHSM_PLUGIN_DISABLE' in os.environ:
+        sys.stderr.write('ZYPP_RHSM_PLUGIN_DISABLE environment variable is set - plugin disabled')
+        sys.stderr.write('\n')
+        sys.exit(0)
+
     service = ZypperService()
     service.main()
 
