@@ -28,6 +28,9 @@ from subscription_manager import logutil
 from rhsm import connection
 from rhsm import config
 
+from six.moves.configparser import ConfigParser
+
+
 c_rehash = '/usr/bin/c_rehash'
 
 expired_warning = \
@@ -72,16 +75,42 @@ class RepoLocker(Locker):
 
 
 class ZypperService(object):
+
+    ZYPP_RHSM_PLUGIN_CONFIG_FILE = '/etc/rhsm/zypper.conf'
+
     def __init__(self):
         logutil.init_logger()
         init_dep_injection()
         self.is_root = os.getuid() == 0
-        # Read subscription-manager config
+        self.full_refresh_on_yum = None
+        self.ca_cert_dir = None
+        self.gpgcheck = False
+        self.plugin_enabled = True
+
+    def read_rhsm_conf(self):
+        """
+        Read rhsm configuration file
+        :return: None
+        """
         cfg = config.initConfig()
         self.full_refresh_on_yum = bool(cfg.get_int('rhsm', 'full_refresh_on_yum'))
         self.ca_cert_dir = cfg.get('rhsm', 'ca_cert_dir')
 
+    def read_zypp_conf(self):
+        """
+        Read configuration file specific for zypper
+        :return: None
+        """
+        zypp_cfg = ConfigParser()
+        zypp_cfg.read(self.ZYPP_RHSM_PLUGIN_CONFIG_FILE)
+        if zypp_cfg.has_option('rhsm-plugin', 'enabled'):
+            self.plugin_enabled = zypp_cfg.getboolean('rhsm-plugin', 'enabled')
+
     def main(self):
+        """
+        Main plugin method
+        :return:
+        """
         try:
             self.update()
         except connection.RestlibException as e:
@@ -92,7 +121,9 @@ class ZypperService(object):
         self.print_zypper_repos()
 
     def update(self):
-        """ update entitlement certificates """
+        """
+        Update entitlement certificates
+        """
         if not self.is_root:
             sys.stderr.write('Not root, Subscription Management repositories not updated')
             sys.stderr.write("\n")
@@ -123,8 +154,11 @@ class ZypperService(object):
         else:
             sys.stderr.write("WARNING: c_rehash could not be found!\n")
 
-    def warn_expired(self):
-        """ display warning for expired entitlements """
+    @staticmethod
+    def warn_expired():
+        """
+        Display warning for expired entitlements
+        """
         ent_dir = inj.require(inj.ENT_DIR)
         products = set()
         for cert in ent_dir.list_expired():
@@ -137,7 +171,9 @@ class ZypperService(object):
             sys.stderr.write("\n")
 
     def warn_or_give_usage_message(self):
-        """ either output a warning, or a usage message """
+        """
+        Either output a warning, or a usage message
+        """
         msg = ""
         if not self.is_root:
             return
@@ -157,7 +193,8 @@ class ZypperService(object):
                 sys.stderr.write(msg)
                 sys.stderr.write("\n")
 
-    def print_zypper_repos(self):
+    @staticmethod
+    def print_zypper_repos():
         try:
             repo_file = ZypperRepoFile()
             with open(repo_file.path) as repo:
@@ -173,6 +210,17 @@ if __name__ == '__main__':
         sys.exit(0)
 
     service = ZypperService()
+    service.read_rhsm_conf()
+    service.read_zypp_conf()
+
+    if service.plugin_enabled is False:
+        sys.stderr.write('plugin disabled in configuration file: %s' % service.ZYPP_RHSM_PLUGIN_CONFIG_FILE)
+        sys.stderr.write('\n')
+        sys.exit(0)
+    else:
+        sys.stderr.write('plugin enabled in configuration file: %s' % service.ZYPP_RHSM_PLUGIN_CONFIG_FILE)
+        sys.stderr.write('\n')
+
     service.main()
 
     # suppress python-dmidecode warnings
