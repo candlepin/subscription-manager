@@ -701,6 +701,10 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %attr(644,root,root) %config(noreplace) %{_sysconfdir}/rhsm/rhsm.conf
 %config %attr(644,root,root) %{_sysconfdir}/rhsm/logging.conf
 
+%if 0%{?suse_version}
+    %attr(644,root,root) %config(noreplace) %{_sysconfdir}/rhsm/zypper.conf
+%endif
+
 # PAM config
 %if !0%{?suse_version}
 %{_sysconfdir}/pam.d/subscription-manager
