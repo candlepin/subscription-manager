@@ -472,6 +472,8 @@ class RepoUpdateActionCommand(object):
         return self.report
 
     def _zypper_content(self, content):
+        zypper_repo_file = ZypperRepoFile()
+        zypper_repo_file.read_zypp_conf()
         zypper_cont = content.copy()
         sslverify = zypper_cont['sslverify']
         sslcacert = zypper_cont['sslcacert']
@@ -493,6 +495,10 @@ class RepoUpdateActionCommand(object):
         # clean up data for zypper
         if zypper_cont['gpgkey'] in ['https://', 'http://']:
             del zypper_cont['gpgkey']
+
+        # See BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1764265
+        if zypper_repo_file.gpgcheck is False:
+            zypper_cont['gpgcheck'] = '0'
 
         baseurl = zypper_cont['baseurl']
         parsed = urlparse(baseurl)
@@ -1039,7 +1045,11 @@ class YumRepoFile(RepoFileBase, ConfigParser):
 
 
 class ZypperRepoFile(YumRepoFile):
+    """
+    Class for manipulation of repo file on systems using Zypper (SuSE, OpenSuse).
+    """
 
+    ZYPP_RHSM_PLUGIN_CONFIG_FILE = '/etc/rhsm/zypper.conf'
     PATH = 'etc/rhsm/zypper.repos.d'
     NAME = 'redhat.repo'
     REPOFILE_HEADER = """#
@@ -1056,3 +1066,14 @@ class ZypperRepoFile(YumRepoFile):
 
     def __init__(self, path=None, name=None):
         super(ZypperRepoFile, self).__init__(path, name)
+        self.gpgcheck = False
+
+    def read_zypp_conf(self):
+        """
+        Read configuration file for zypper plugin
+        :return: None
+        """
+        zypp_cfg = configparser.ConfigParser()
+        zypp_cfg.read(self.ZYPP_RHSM_PLUGIN_CONFIG_FILE)
+        if zypp_cfg.has_option('rhsm-plugin', 'gpgcheck'):
+            self.gpgcheck = zypp_cfg.getboolean('rhsm-plugin', 'gpgcheck')

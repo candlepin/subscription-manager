@@ -27,6 +27,9 @@ from rhsm import connection
 from rhsm import config
 from iniparse import SafeConfigParser
 
+from six.moves.configparser import ConfigParser
+
+
 c_rehash = '/usr/bin/c_rehash'
 
 expired_warning = \
@@ -71,14 +74,36 @@ class RepoLocker(Locker):
 
 
 class ZypperService(object):
+
+    ZYPP_RHSM_PLUGIN_CONFIG_FILE = '/etc/rhsm/zypper.conf'
+
     def __init__(self):
         logutil.init_logger()
         init_dep_injection()
         self.is_root = os.getuid() == 0
-        # Read subscription-manager config
+        self.full_refresh_on_yum = None
+        self.ca_cert_dir = None
+        self.gpgcheck = False
+        self.plugin_enabled = True
+
+    def read_rhsm_conf(self):
+        """
+        Read rhsm configuration file
+        :return: None
+        """
         cfg = config.initConfig()
         self.full_refresh_on_yum = bool(cfg.get_int('rhsm', 'full_refresh_on_yum'))
         self.ca_cert_dir = cfg.get('rhsm', 'ca_cert_dir')
+
+    def read_zypp_conf(self):
+        """
+        Read configuration file specific for zypper
+        :return: None
+        """
+        zypp_cfg = ConfigParser()
+        zypp_cfg.read(self.ZYPP_RHSM_PLUGIN_CONFIG_FILE)
+        if zypp_cfg.has_option('rhsm-plugin', 'enabled'):
+            self.plugin_enabled = zypp_cfg.getboolean('rhsm-plugin', 'enabled')
 
     def main(self):
         try:
@@ -177,6 +202,17 @@ if __name__ == '__main__':
         sys.exit(0)
 
     service = ZypperService()
+    service.read_rhsm_conf()
+    service.read_zypp_conf()
+
+    if service.plugin_enabled is False:
+        sys.stderr.write('plugin disabled in configuration file: %s' % service.ZYPP_RHSM_PLUGIN_CONFIG_FILE)
+        sys.stderr.write('\n')
+        sys.exit(0)
+    else:
+        sys.stderr.write('plugin enabled in configuration file: %s' % service.ZYPP_RHSM_PLUGIN_CONFIG_FILE)
+        sys.stderr.write('\n')
+
     service.main()
 
     # suppress python-dmidecode warnings
