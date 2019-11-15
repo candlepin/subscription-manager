@@ -202,7 +202,7 @@ install-conf:
 		install -m 644 etc-conf/subscription-manager-gui.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/subscription-manager-gui; \
 		install -m 644 etc-conf/rhsm-icon.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/rhsm-icon; \
 	fi;
-	if [[ -f /etc/SuSE-release ]]; then \
+	if [ "$(INSTALL_ZYPPER_PLUGINS)" = "true" ] ; then \
 	    install -m 644 etc-conf/zypper.conf $(DESTDIR)/etc/rhsm/; \
 	fi;
 
