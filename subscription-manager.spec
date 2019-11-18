@@ -83,7 +83,7 @@
 
 Name: subscription-manager
 Version: 1.20.10
-Release: 10%{?dist}
+Release: 11%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -879,6 +879,12 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Mon Nov 18 2019 Christopher Snyder <csnyder@redhat.com> 1.20.10-11
+- 1764340: Handle RestlibException in zypper plugin (khowell@redhat.com)
+- 1760837: Disable zypper plugin via ZYPP_RHSM_PLUGIN_DISABLE
+  (khowell@redhat.com)
+- 1633304: Disable zypper product-id plugin. (csnyder@redhat.com)
+
 * Fri Oct 11 2019 Christopher Snyder <csnyder@redhat.com> 1.20.10-10
 - 1760533: Use iniparse in subscription-manager zypper plugin
   (csnyder@redhat.com)
