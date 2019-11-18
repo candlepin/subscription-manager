@@ -597,7 +597,6 @@ rm -rf %{buildroot}
 # zypper plugins
 %if 0%{?suse_version}
 %{_prefix}/lib/zypp/plugins/services/subscription-manager
-%{_prefix}/lib/zypp/plugins/commit/product-id
 %endif
 
 # rhsmlib
