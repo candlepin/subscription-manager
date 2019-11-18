@@ -217,7 +217,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.26.4
+Version: 1.27.0
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1361,6 +1361,19 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Nov 18 2019 Christopher Snyder <csnyder@redhat.com> 1.27.0-1
+- 1738764: Fix issue with syspurpose three-way merge; ENT-1564
+  (jhnidek@redhat.com)
+- 1703054: Blacklist some locales for Python2.x; ENT-1288 (jhnidek@redhat.com)
+- 1752400: Ensure that configuration is recorded before data sync processes
+  (wpoteat@redhat.com)
+- fixed wrong package name for dependency (p.seiler@linuxmail.org)
+- cockpit: Bump test API to 204 (martin@piware.de)
+- cockpit: Move default TESTS_OS to rhel-8-1 (martin@piware.de)
+- cockpit: Support CI testing against a bots project PR (martin@piware.de)
+- No need for inotify on suse (csnyder@redhat.com)
+- cockpit: Don't clobber an existing bots checkout (martin@piware.de)
+
 * Fri Oct 04 2019 Christopher Snyder <csnyder@redhat.com> 1.26.4-1
 - No longer build subman gui for sles (csnyder@redhat.com)
 - cockpit: Update bots target for moved GitHub project
