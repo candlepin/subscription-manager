@@ -138,7 +138,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.25.11
+Version: 1.25.18
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1169,6 +1169,54 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Nov 18 2019 Kevin Howell <khowell@redhat.com> 1.25.18-1
+- Make Makefile SLE15 compatible (khowell@redhat.com)
+- 1764265: Set gpgcheck to 0, when zypper is used; ENT-1758
+  (jhnidek@redhat.com)
+- 1760837: Disable zypper plugin via ZYPP_RHSM_PLUGIN_DISABLE
+  (khowell@redhat.com)
+- 1764340: Handle RestlibException in zypper plugin (khowell@redhat.com)
+
+* Mon Nov 18 2019 Kevin Howell <khowell@redhat.com>
+- Make Makefile SLE15 compatible (khowell@redhat.com)
+- 1764265: Set gpgcheck to 0, when zypper is used; ENT-1758
+  (jhnidek@redhat.com)
+- 1760837: Disable zypper plugin via ZYPP_RHSM_PLUGIN_DISABLE
+  (khowell@redhat.com)
+- 1764340: Handle RestlibException in zypper plugin (khowell@redhat.com)
+
+* Mon Nov 18 2019 Kevin Howell <khowell@redhat.com>
+- Make Makefile SLE15 compatible (khowell@redhat.com)
+- 1764265: Set gpgcheck to 0, when zypper is used; ENT-1758
+  (jhnidek@redhat.com)
+- 1760837: Disable zypper plugin via ZYPP_RHSM_PLUGIN_DISABLE
+  (khowell@redhat.com)
+- 1764340: Handle RestlibException in zypper plugin (khowell@redhat.com)
+
+* Mon Nov 18 2019 Kevin Howell <khowell@redhat.com>
+- Make Makefile SLE15 compatible (khowell@redhat.com)
+- 1764265: Set gpgcheck to 0, when zypper is used; ENT-1758
+  (jhnidek@redhat.com)
+- 1760837: Disable zypper plugin via ZYPP_RHSM_PLUGIN_DISABLE
+  (khowell@redhat.com)
+- 1764340: Handle RestlibException in zypper plugin (khowell@redhat.com)
+
+* Mon Nov 18 2019 Kevin Howell <khowell@redhat.com>
+- Make Makefile SLE15 compatible (khowell@redhat.com)
+- 1764265: Set gpgcheck to 0, when zypper is used; ENT-1758
+  (jhnidek@redhat.com)
+- 1760837: Disable zypper plugin via ZYPP_RHSM_PLUGIN_DISABLE
+  (khowell@redhat.com)
+- 1764340: Handle RestlibException in zypper plugin (khowell@redhat.com)
+
+* Mon Nov 18 2019 Kevin Howell <khowell@redhat.com>
+- Make Makefile SLE15 compatible (khowell@redhat.com)
+- 1764265: Set gpgcheck to 0, when zypper is used; ENT-1758
+  (jhnidek@redhat.com)
+- 1760837: Disable zypper plugin via ZYPP_RHSM_PLUGIN_DISABLE
+  (khowell@redhat.com)
+- 1764340: Handle RestlibException in zypper plugin (khowell@redhat.com)
+
 * Mon Jun 17 2019 Christopher Snyder <csnyder@redhat.com> 1.25.11-1
 - 1665167: syspurpose attributes in list --consumed; ENT-1315
   (jhnidek@redhat.com)
