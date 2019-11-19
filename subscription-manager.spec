@@ -216,6 +216,11 @@
 
 %global exclude_packages %{exclude_packages}"
 
+# Moving our shared icon dependancies to their own package
+# Both our cockpit plugin and the rhsm-gtk package require an overlapping
+# set of icons.
+%global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
+
 Name: subscription-manager
 Version: 1.27.0
 Release: 1%{?dist}
@@ -417,6 +422,7 @@ Requires: usermode-gtk
 # Fedora can figure this out automatically, but RHEL cannot:
 # See #987071
 Requires: librsvg2%{?_isa}
+Requires: rhsm-icons
 
 %if 0%{?gtk3}
 Requires: font(cantarell)
@@ -678,9 +684,22 @@ Requires: subscription-manager
 Requires: cockpit-bridge
 Requires: cockpit-shell
 Requires: cockpit-ws
+Requires: rhsm-icons
 
 %description -n subscription-manager-cockpit
 Subscription Manager Cockpit UI
+%endif
+
+%if %{use_rhsm_icons}
+%package -n rhsm-icons
+Summary: Icons for Red Hat Subscription Management client tools
+License: GPLv2
+BuildArch: noarch
+
+%description -n rhsm-icons
+This package contains the desktop icons for the graphical interfaces provided for management
+of Red Hat subscriptions. There are many such interfaces, subscription-manager-gui,
+subscription-manager-initial-setup-addon, and subscription-manager-cockpit-plugin primarily.
 %endif
 
 %prep
@@ -1050,8 +1069,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/subscription_manager/gui/data/ui/*.ui
 %{python_sitearch}/subscription_manager/gui/data/glade/*.glade
 %{python_sitearch}/subscription_manager/gui/data/icons/*.svg
-%{_datadir}/icons/hicolor/scalable/apps/*.svg
-%{_datadir}/icons/hicolor/symbolic/apps/*.svg
 %if %{with python3}
 %{python_sitearch}/subscription_manager/gui/__pycache__
 %endif
@@ -1252,9 +1269,14 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{_datadir}/metainfo/org.candlepinproject.subscription_manager.metainfo.xml
 %if ! %use_subman_gui
 %{_datadir}/applications/subscription-manager-cockpit.desktop
+%endif
+%endif
+
+%if %use_rhsm_icons
+%files -n rhsm-icons
+%defattr(-,root,root,-)
 %{_datadir}/icons/hicolor/scalable/apps/*.svg
 %{_datadir}/icons/hicolor/symbolic/apps/*.svg
-%endif
 %endif
 
 %if %use_systemd
