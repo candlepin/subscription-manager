@@ -24,6 +24,7 @@ var React = require("react");
 import Select from "./Select/Select.jsx";
 import '../lib/form-layout.less';
 
+import subscriptionsClient from './subscriptions-client';
 import * as Insights from './insights.jsx';
 
 /* Subscriptions: registration dialog body
@@ -79,7 +80,8 @@ class PatternDialogBody extends React.Component {
                     <span>
                     { Insights.arrfmt(_("Connect this system to $0."), Insights.link) }
                     </span>
-                </label>
+                </label>,
+                (this.props.insights && !this.props.insights_detected) && <p>{ Insights.arrfmt(_("The $0 package will be installed."), <strong>{subscriptionsClient.insightsPackage}</strong>)}</p>
             ];
         }
 

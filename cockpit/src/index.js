@@ -47,10 +47,10 @@ function dismissStatusError() {
     dataStore.render();
 }
 
-function registerSystem () {
-    return subscriptionsClient.registerSystem(registerDialogDetails).then(() => {
+function registerSystem (update_progress) {
+    return subscriptionsClient.registerSystem(registerDialogDetails, update_progress).then(() => {
         if (registerDialogDetails.insights)
-            return Insights.register();
+            return Insights.register(update_progress).catch(Insights.catch_error);
     });
 }
 
@@ -71,37 +71,43 @@ function openRegisterDialog() {
         activation_keys: '',
         org: '',
         insights: false,
-        insights_available: subscriptionsClient.insightsAvailable
+        insights_available: subscriptionsClient.insightsAvailable,
+        insights_detected: false
     });
-    // show dialog to register
-    let renderDialog;
-    let updatedData = function(prop, data) {
-        if (prop) {
-            if (data.target) {
-                if (data.target.type === "checkbox") {
-                    registerDialogDetails[prop] = data.target.checked;
+
+    Insights.detect().then(installed => {
+        registerDialogDetails.insights_detected = installed;
+
+        // show dialog to register
+        let renderDialog;
+        let updatedData = function(prop, data) {
+            if (prop) {
+                if (data.target) {
+                    if (data.target.type === "checkbox") {
+                        registerDialogDetails[prop] = data.target.checked;
+                    } else {
+                        registerDialogDetails[prop] = data.target.value;
+                    }
                 } else {
-                    registerDialogDetails[prop] = data.target.value;
+                    registerDialogDetails[prop] = data;
                 }
-            } else {
-                registerDialogDetails[prop] = data;
             }
-        }
 
-        registerDialogDetails.onChange = updatedData;
+            registerDialogDetails.onChange = updatedData;
 
-        let dialogProps = {
-              'id': 'register_dialog',
-              'title': _("Register System"),
-              'body': React.createElement(subscriptionsRegister.dialogBody, registerDialogDetails),
-          };
+            let dialogProps = {
+                'id': 'register_dialog',
+                'title': _("Register System"),
+                'body': React.createElement(subscriptionsRegister.dialogBody, registerDialogDetails),
+            };
 
-        if (renderDialog)
-            renderDialog.setProps(dialogProps);
-        else
-            renderDialog = Dialog.show_modal_dialog(dialogProps, footerProps);
-    };
-    updatedData();
+            if (renderDialog)
+                renderDialog.setProps(dialogProps);
+            else
+                renderDialog = Dialog.show_modal_dialog(dialogProps, footerProps);
+        };
+        updatedData();
+    });
 }
 
 function unregisterSystem() {
