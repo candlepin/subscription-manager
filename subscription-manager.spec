@@ -367,6 +367,10 @@ BuildRequires: systemd-rpm-macros
 BuildRequires: systemd
 %endif
 
+%if !%{use_container_plugin}
+Obsoletes: subscription-manager-plugin-container
+%endif
+
 %description
 The Subscription Manager package provides programs and libraries to allow users
 to manage subscriptions and yum repositories from the Red Hat entitlement
