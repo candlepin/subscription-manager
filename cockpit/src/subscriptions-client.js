@@ -18,6 +18,8 @@
  */
 
 const cockpit = require("cockpit");
+import * as PK from "../lib/packagekit";
+
 const _ = cockpit.gettext;
 
 function createProxy(name) {
@@ -61,6 +63,7 @@ client.syspurposeStatus = {
     status : null,
 };
 
+client.insightsPackage = "insights-client";
 client.insightsAvailable = false;
 
 const RHSM_DEFAULTS = { // TODO get these from a d-bus service instead
@@ -195,7 +198,7 @@ Preconditions:
 2. connection_options is updated by subscriptionDetails; if an option isn't specified, it remains the default.
 3. if an option is different than what's in the config, we set the config option
  */
-client.registerSystem = subscriptionDetails => {
+client.registerSystem = (subscriptionDetails, update_progress) => {
     const dfd = cockpit.defer();
     // Note: when values are not specified we force use of default
     // values. Otherwise old and obsolete values from rhsm.conf could be used.
@@ -290,6 +293,9 @@ client.registerSystem = subscriptionDetails => {
     isRegistering = true;
 
     registerServer.wait(() => {
+        if (update_progress)
+            update_progress(_("Registering"), null);
+
         let registered = false;
         registerServer.Start(userLang)
             .then(socket => {
@@ -382,6 +388,9 @@ client.registerSystem = subscriptionDetails => {
                     // When system is registered and config options are saved,
                     // then we can try to auto-attach
                     console.debug('auto-attaching');
+                    if (update_progress)
+                        update_progress(_("Attaching subscriptions"), null);
+
                     if (connection_options.proxy_hostname.v) {
                         let proxy_options = {};
                         proxy_options.proxy_hostname = connection_options.proxy_hostname;
@@ -626,7 +635,11 @@ client.toArray = obj => {
 const detectInsights = () => {
     return cockpit.spawn([ "which", "insights-client" ], { err: "ignore" }).then(
         () => client.insightsAvailable = true,
-        () => client.insightsAvailable = false);
+        () => {
+            PK.detect().then(pk_available => {
+                client.insightsAvailable = pk_available && client.insightsPackage;
+            });
+        });
 };
 
 const updateConfig = () => {
