@@ -217,7 +217,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.26.5
+Version: 1.26.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1369,6 +1369,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Nov 19 2019 Christopher Snyder <csnyder@redhat.com> 1.26.6-1
+- 1728054: Obsolete sm-plugin-container on RHEL 8 (csnyder@redhat.com)
+
 * Mon Nov 18 2019 Christopher Snyder <csnyder@redhat.com> 1.26.5-1
 - Add RHEL 8.2 releaser (csnyder@redhat.com)
 - Make Makefile SLE15 compatible (khowell@redhat.com)
