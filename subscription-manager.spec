@@ -696,6 +696,15 @@ Summary: Icons for Red Hat Subscription Management client tools
 License: GPLv2
 BuildArch: noarch
 
+# As these two packages previously contained the icons now contained in
+# rhsm-icons package, we need to specify the logical complement to a
+# "Requires", which is "Conflicts". With any luck the underlying
+# depsolver will cause the removal of this package if the request
+# is to downgrade either of the following to a version below these
+# requirements.
+Conflicts: rhsm-gtk < 1.26.7
+Conflicts: subscription-manager-cockpit < 1.26.7
+
 %description -n rhsm-icons
 This package contains the desktop icons for the graphical interfaces provided for management
 of Red Hat subscriptions. There are many such interfaces, subscription-manager-gui,
