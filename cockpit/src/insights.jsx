@@ -21,7 +21,7 @@ import cockpit from "cockpit";
 import React from "react";
 import moment from "moment";
 
-import { show_modal_dialog } from "./cockpit-components-dialog.jsx";
+import { show_modal_dialog } from "../lib/cockpit-components-dialog.jsx";
 import * as service from "../lib/service.js";
 import * as PK from "../lib/packagekit";
 
