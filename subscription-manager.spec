@@ -222,7 +222,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.26.6
+Version: 1.26.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1391,6 +1391,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Nov 20 2019 Christopher Snyder <csnyder@redhat.com> 1.26.7-1
+- Add rhsm-icons package to contain all icons required by gui interfaces
+  (csnyder@redhat.com)
+
 * Tue Nov 19 2019 Christopher Snyder <csnyder@redhat.com> 1.26.6-1
 - 1728054: Obsolete sm-plugin-container on RHEL 8 (csnyder@redhat.com)
 
