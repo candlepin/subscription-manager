@@ -242,7 +242,7 @@ class EntitlementService(object):
             if hasattr(cert.pool, "id"):
                 pool_id = cert.pool.id
 
-            product_names = [p.name for p in cert.products]
+            provided_products = {p.id: p.name for p in cert.products}
 
             reasons = []
             pool_type = ''
@@ -268,7 +268,7 @@ class EntitlementService(object):
             if roles is None and usage is None and addons is None:
                 consumed_statuses.append(OldConsumedStatus(
                     name,
-                    product_names,
+                    provided_products,
                     sku,
                     contract,
                     account,
@@ -287,7 +287,7 @@ class EntitlementService(object):
             else:
                 consumed_statuses.append(ConsumedStatus(
                     name,
-                    product_names,
+                    provided_products,
                     sku,
                     contract,
                     account,
