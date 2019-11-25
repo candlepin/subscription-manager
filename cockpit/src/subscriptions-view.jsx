@@ -19,7 +19,6 @@
 
 import cockpit from 'cockpit';
 import React from 'react';
-import createFragment from 'react-addons-create-fragment';
 import subscriptionsClient from './subscriptions-client';
 import { ListView, ListViewItem, ListViewIcon } from 'patternfly-react';
 import { Row, Col } from 'react-bootstrap';
@@ -106,17 +105,17 @@ class DismissableError extends React.Component {
         let classes_div = "alert alert-danger alert-dismissable alert-ct-top";
         let classes_icon = "pficon pficon-error-circle-o";
 
-        console.debug(this.props.children.severity);
+        console.debug(this.props.severity);
 
-        if (this.props.children[0] === "error") {
+        if (this.props.severity === "error") {
             classes_div = "alert alert-danger alert-dismissable alert-ct-top";
             classes_icon = "pficon pficon-error-circle-o";
         }
-        if (this.props.children[0] === "warning") {
+        if (this.props.severity === "warning") {
             classes_div = "alert alert-warning alert-dismissable alert-ct-top";
             classes_icon = "pficon pficon-warning-triangle-o"
         }
-        if (this.props.children[0] === "info") {
+        if (this.props.severity === "info") {
             classes_div = "alert alert-info alert-dismissable alert-ct-top";
             classes_icon = "pficon pficon-info"
         }
@@ -124,7 +123,7 @@ class DismissableError extends React.Component {
         return (
             <div className={classes_div}>
                 <span className={classes_icon} />
-                <span>{this.props.children[1]}</span>
+                <span>{this.props.children}</span>
                 <button type="button" className="close" aria-hidden="true" onClick={this.handleDismissError}>
                     <span className="pficon pficon-close"/>
                 </button>
@@ -168,9 +167,11 @@ class SubscriptionStatus extends React.Component {
     render() {
         let errorMessage;
         if (this.props.error) {
-            let error_msg = createFragment(this.props.error);
             errorMessage = (
-                <DismissableError dismissError={this.props.dismissError}>{error_msg}</DismissableError>
+                <DismissableError dismissError={this.props.dismissError}
+                                  severity={this.props.error.severity}>
+                    {this.props.error.msg.toString()}
+                </DismissableError>
             );
         }
 
