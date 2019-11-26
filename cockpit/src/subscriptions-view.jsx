@@ -27,11 +27,60 @@ import { InsightsStatus } from './insights.jsx';
 let _ = cockpit.gettext;
 
 class Listing extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            attaching_in_progress: false,
+            attach_button_text: _("Auto-attach")
+        };
+        this.handleAutoAttach = this.handleAutoAttach.bind(this);
+        this.updateProgress = this.updateProgress.bind(this);
+    }
+    updateProgress(msg) {
+        this.setState({ attaching_message: msg });
+    }
+    handleAutoAttach(event) {
+        // only consider primary mouse button
+        if (!event || event.button !== 0)
+            return;
+        if (this.props.autoAttach) {
+            let self = this;
+            this.setState({
+                attaching_in_progress: true,
+                attach_button_text: _("Auto-attaching ...")
+            });
+            this.props.autoAttach()
+                .done(function () {
+                    self.setState({
+                        attaching_in_progress: false,
+                        attach_button_text: _("Auto-attach")
+                    });
+                })
+                .fail(function () {
+                    self.setState({
+                        attaching_in_progress: false,
+                        attach_button_text: _("Auto-attach")
+                    });
+                })
+                .progress((message) => {
+                    this.updateProgress(message);
+                });
+        }
+    }
     render() {
         if (this.props.children) {
+            let auto_attach_btn_disabled;
+            auto_attach_btn_disabled = this.state.attaching_in_progress || this.props.status === 'Unknown';
             return (
                 <div>
-                    <h2>{this.props.title}</h2>
+                    <div className="installed-products-line">
+                        <h2 className="installed-products-title">{this.props.title}</h2>
+                        <button className="btn btn-default auto-attach-btn"
+                                disabled={ auto_attach_btn_disabled }
+                                onClick={ event => this.handleAutoAttach(event) }>
+                            { this.state.attach_button_text }
+                        </button>
+                    </div>
                     {this.props.children}
                 </div>
             );
@@ -373,7 +422,7 @@ class SubscriptionsPage extends React.Component {
         return (
             <div className="container-fluid">
             <SubscriptionStatus {...this.props }/>
-            <Listing
+            <Listing {...this.props}
                     title={ _("Installed products") }
                     emptyCaption={ _("No installed products detected.") }
                     >

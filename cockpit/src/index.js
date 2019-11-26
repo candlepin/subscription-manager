@@ -72,7 +72,9 @@ function openRegisterDialog() {
         org: '',
         insights: false,
         insights_available: subscriptionsClient.insightsAvailable,
-        insights_detected: false
+        insights_detected: false,
+        register_method: 'account',
+        auto_attach: true
     });
 
     Insights.detect().then(installed => {
@@ -131,6 +133,7 @@ function initStore(rootElement) {
                 syspurpose: subscriptionsClient.syspurposeStatus.info,
                 syspurpose_status: subscriptionsClient.syspurposeStatus.status,
                 insights_available: subscriptionsClient.insightsAvailable,
+                autoAttach: subscriptionsClient.autoAttach,
                 dismissError: dismissStatusError,
                 register: openRegisterDialog,
                 unregister: unregisterSystem,

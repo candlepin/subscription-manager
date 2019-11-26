@@ -85,7 +85,7 @@ class Server(object):
             self.objects.append(clazz_instance)
             self.object_map[str(clazz.__name__)] = clazz_instance
 
-        consumer_dir_list = [self.identity.reload]
+        consumer_dir_list = []
         entitlement_dir_list = []
         config_dir_list = []
         products_dir_list = []
