@@ -197,18 +197,20 @@ class SystemPurposeStatusCard extends React.Component {
             );
         }
         return (
-            <div className="card-pf card-pf-accented card-pf-aggregate-status">
-                <h2 className="card-pf-title">
-                    { _("System Purpose") }
-                </h2>
-                <div className="card-pf-body">
-                    <p className="card-pf-aggregate-status-notifications">
-                        {syspurpose_status}
-                        {sla}
-                        {usage}
-                        {role}
-                        {add_ons}
-                    </p>
+            <div className="col-xs-6 col-sm-4 col-md-4">
+                <div className="card-pf card-pf-accented card-pf-aggregate-status">
+                    <div className="card-pf-heading">
+                        <h2 className="card-pf-title">
+                            { _("System Purpose") }
+                        </h2>
+                    </div>
+                    <div className="card-pf-body">
+                        { syspurpose_status }
+                        { sla }
+                        { usage }
+                        { role }
+                        { add_ons }
+                    </div>
                 </div>
             </div>
         );
@@ -227,14 +229,16 @@ class InsightsStatusCard extends React.Component {
             insights = _("Insights client is not installed.");
         }
         return (
-            <div className="card-pf card-pf-accented card-pf-aggregate-status">
-                <h2 className="card-pf-title">
-                    { _("Insights") }
-                </h2>
-                <div className="card-pf-body">
-                    <p className="card-pf-aggregate-status-notifications">
+            <div className="col-xs-6 col-sm-4 col-md-4">
+                <div className="card-pf card-pf-accented card-pf-aggregate-status">
+                    <div className="card-pf-heading">
+                        <h2 className="card-pf-title">
+                            { _("Insights") }
+                        </h2>
+                    </div>
+                    <div className="card-pf-body">
                         { insights }
-                    </p>
+                    </div>
                 </div>
             </div>
         );
@@ -244,6 +248,26 @@ class InsightsStatusCard extends React.Component {
 class SystemStatusCard extends React.Component {
     constructor(props) {
         super(props);
+        // React components using ES6 classes no longer autobind this to non React
+        // methods.
+        this.handleRegisterSystem = this.handleRegisterSystem.bind(this);
+        this.handleUnregisterSystem = this.handleUnregisterSystem.bind(this);
+    }
+    handleRegisterSystem(err) {
+        // only consider primary mouse button
+        if (!err || err.button !== 0)
+            return;
+        if (this.props.register)
+            this.props.register();
+        err.stopPropagation();
+    }
+    handleUnregisterSystem(e) {
+        // only consider primary mouse button
+        if (!e || e.button !== 0)
+            return;
+        if (this.props.unregister)
+            this.props.unregister();
+        e.stopPropagation();
     }
     render() {
         let label;
@@ -271,16 +295,18 @@ class SystemStatusCard extends React.Component {
             }
         }
         return (
-            <div className="card-pf card-pf-accented card-pf-aggregate-status">
-                <h2 className="card-pf-title">
-                    { _("Subscriptions") }
-                </h2>
-                <div className="card-pf-body">
-                    <p className="card-pf-aggregate-status-notifications">
+            <div className="col-xs-6 col-sm-4 col-md-4">
+                <div className="card-pf card-pf-accented card-pf-aggregate-status">
+                    <div className="card-pf-heading">
+                        <h2 className="card-pf-title">
+                            { _("Subscriptions") }
+                        </h2>
+                    </div>
+                    <div className="card-pf-body">
                         { label }
-                        { action }
                         { note }
-                    </p>
+                        { action }
+                    </div>
                 </div>
             </div>
         );
@@ -298,26 +324,6 @@ class SystemStatusCard extends React.Component {
 class SubscriptionStatus extends React.Component {
     constructor(props) {
         super(props);
-        // React components using ES6 classes no longer autobind this to non React
-        // methods.
-        this.handleRegisterSystem = this.handleRegisterSystem.bind(this);
-        this.handleUnregisterSystem = this.handleUnregisterSystem.bind(this);
-    }
-    handleRegisterSystem(err) {
-        // only consider primary mouse button
-        if (!err || err.button !== 0)
-            return;
-        if (this.props.register)
-            this.props.register();
-        err.stopPropagation();
-    }
-    handleUnregisterSystem(e) {
-        // only consider primary mouse button
-        if (!e || e.button !== 0)
-            return;
-        if (this.props.unregister)
-            this.props.unregister();
-        e.stopPropagation();
     }
     render() {
         let errorMessage;
@@ -331,9 +337,9 @@ class SubscriptionStatus extends React.Component {
         return (
             <div className="subscription-status-ct">
                 {errorMessage}
-                <div className="container-fluid container-cards-pf">
-                    <div className="row row-cards-pf">
-                        <div className="col-xs-6 col-sm-4 col-md-4">
+                <div className="cards-pf">
+                    <div className="container-fluid container-cards-pf">
+                        <div className="row row-cards-pf">
                             <SystemStatusCard {...this.props } />
                             <SystemPurposeStatusCard {...this.props } />
                             <InsightsStatusCard {...this.props } />
