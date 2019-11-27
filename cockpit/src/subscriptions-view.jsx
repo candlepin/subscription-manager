@@ -197,18 +197,18 @@ class SystemPurposeStatusCard extends React.Component {
             );
         }
         return (
-            <div className="card-pf">
-                <div className="card-pf-heading">
-                    <h2 className="card-pf-title">
-                        { _("System Purpose") }
-                    </h2>
-                </div>
+            <div className="card-pf card-pf-accented card-pf-aggregate-status">
+                <h2 className="card-pf-title">
+                    { _("System Purpose") }
+                </h2>
                 <div className="card-pf-body">
-                    {syspurpose_status}
-                    {sla}
-                    {usage}
-                    {role}
-                    {add_ons}
+                    <p className="card-pf-aggregate-status-notifications">
+                        {syspurpose_status}
+                        {sla}
+                        {usage}
+                        {role}
+                        {add_ons}
+                    </p>
                 </div>
             </div>
         );
@@ -224,17 +224,17 @@ class InsightsStatusCard extends React.Component {
         if (this.props.insights_available) {
             insights = <InsightsStatus/>;
         } else {
-            insights = <p>Insights client is not installed.</p>
+            insights = _("Insights client is not installed.");
         }
         return (
-            <div className="card-pf">
-                <div className="card-pf-heading">
-                    <h2 className="card-pf-title">
-                        { _("Insights") }
-                    </h2>
-                </div>
+            <div className="card-pf card-pf-accented card-pf-aggregate-status">
+                <h2 className="card-pf-title">
+                    { _("Insights") }
+                </h2>
                 <div className="card-pf-body">
-                    { insights }
+                    <p className="card-pf-aggregate-status-notifications">
+                        { insights }
+                    </p>
                 </div>
             </div>
         );
@@ -271,16 +271,16 @@ class SystemStatusCard extends React.Component {
             }
         }
         return (
-            <div className="card-pf">
-                <div className="card-pf-heading">
-                    <h2 className="card-pf-title">
-                        { _("Subscriptions") }
-                    </h2>
-                </div>
+            <div className="card-pf card-pf-accented card-pf-aggregate-status">
+                <h2 className="card-pf-title">
+                    { _("Subscriptions") }
+                </h2>
                 <div className="card-pf-body">
-                    { label }
-                    { action }
-                    { note }
+                    <p className="card-pf-aggregate-status-notifications">
+                        { label }
+                        { action }
+                        { note }
+                    </p>
                 </div>
             </div>
         );
@@ -332,7 +332,7 @@ class SubscriptionStatus extends React.Component {
             <div className="subscription-status-ct">
                 {errorMessage}
                 <div className="container-fluid container-cards-pf">
-                    <div className="card-pf card-pf-view">
+                    <div className="row row-cards-pf">
                         <div className="col-xs-6 col-sm-4 col-md-4">
                             <SystemStatusCard {...this.props } />
                             <SystemPurposeStatusCard {...this.props } />
@@ -340,8 +340,7 @@ class SubscriptionStatus extends React.Component {
                         </div>
                     </div>
                 </div>
-            </div>
-        );
+            </div>);
     }
 }
 
