@@ -162,7 +162,7 @@ function safeDBusCall(serviceProxy, delegateMethod) {
 
 let gettingProductDetails = false;
 let getProductDetailsRequested = false;
-function getSubscriptionDetails() {
+function getInstalledProducts() {
     if (gettingProductDetails) {
         getProductDetailsRequested = true;
         return;
@@ -183,7 +183,7 @@ function getSubscriptionDetails() {
         .then(() => {
             gettingProductDetails = false;
             if (getProductDetailsRequested)
-                getSubscriptionDetails();
+                getInstalledProducts();
             needRender();
         });
     });
@@ -199,6 +199,7 @@ function getConsumedEntitlementDetails() {
     getConsumedEntitlementDetailsRequested = false;
     gettingConsumedEntilementDetails = true;
     safeDBusCall(entitlementService, () => {
+        console.debug("GetPools(consumed)");
         entitlementService.GetPools({pool_subsets: dbus_str('consumed')}, {}, userLang)
             .then(result => {
                 client.subscriptionStatus.consumedEntitlements = parseConsumedEntitlements(result);
@@ -612,19 +613,23 @@ client.getSubscriptionStatus = function() {
             client.subscriptionStatus.status = _("Unknown");
         })
         .then(() => {
-            getSubscriptionDetails();
+            getInstalledProducts();
         })
         .catch(ex => {
             console.debug(ex);
         })
         .then(() => {
-            getConsumedEntitlementDetails();
+            if (client.subscriptionStatus.status !== _("Unknown")) {
+                getConsumedEntitlementDetails();
+            }
         })
         .catch(ex => {
             console.debug(ex);
         })
         .then(() => {
-            getAvailableEntitlementDetails();
+            if (client.subscriptionStatus.status !== _("Unknown")) {
+                getAvailableEntitlementDetails();
+            }
         })
         .catch(ex => {
             console.debug(ex);

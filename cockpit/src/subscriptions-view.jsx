@@ -146,70 +146,80 @@ class SystemPurposeStatusCard extends React.Component {
         let syspurpose_status;
         if (this.props.syspurpose["service_level_agreement"]) {
             sla = (
-                <div>
-                    <label>
-                        { _("Service Level:  ") }
-                        <span className="value">{ _(String(this.props.syspurpose["service_level_agreement"])) }</span>
-                    </label>
+                <div className="row">
+                    <dt className="col-xs-5 col-sm-5 syspurpose-attr">
+                        { _("Service Level") }
+                    </dt>
+                    <dd className="col-xs-7 col-sm-7 syspurpose-val">
+                        { _(String(this.props.syspurpose["service_level_agreement"])) }
+                    </dd>
                 </div>
             );
         }
         if (this.props.syspurpose["usage"]) {
             usage = (
-                <div>
-                    <label>
-                        { _("Usage:  ") }
-                        <span className="value">{ _(String(this.props.syspurpose["usage"])) }</span>
-                    </label>
+                <div className="row">
+                    <dt className="col-xs-5 col-sm-5 syspurpose-attr">
+                        { _("Usage") }
+                    </dt>
+                    <dd className="col-xs-7 col-sm-7 syspurpose-val">
+                        { _(String(this.props.syspurpose["usage"])) }
+                    </dd>
                 </div>
         );
         }
         if (this.props.syspurpose["role"]) {
             role = (
-                <div>
-                    <label>
-                        { _("Role:  ") }
-                        <span className="value">{ _(String(this.props.syspurpose["role"])) }</span>
-                    </label>
+                <div className="row">
+                    <dt className="col-xs-5 col-sm-5 syspurpose-attr">
+                        { _("Role") }
+                    </dt>
+                    <dd className="col-xs-7 col-sm-7 syspurpose-val">
+                        { _(String(this.props.syspurpose["role"])) }
+                    </dd>
                 </div>
             );
         }
         if (this.props.syspurpose["addons"]) {
             add_ons = (
-                <div>
-                    <label>
-                        { _("Addons:  ") }
-                        <span className="value">
+                <div className="row">
+                    <dt className="col-xs-5 col-sm-5 syspurpose-attr">
+                        { _("Addons") }
+                    </dt>
+                    <dd className="col-xs-7 col-sm-7 syspurpose-val">
                             { _(String(subscriptionsClient.toArray(this.props.syspurpose["addons"]).join(", "))) }
-                        </span>
-                    </label>
+                    </dd>
                 </div>
             );
         }
         if (this.props.syspurpose_status) {
             syspurpose_status = (
-                <div>
-                    <label>
-                        { _("Status: ") }
-                        <span className="value">{ _(String(this.props.syspurpose_status)) }</span>
-                    </label>
+                <div className="row">
+                    <dt className="col-xs-5 col-sm-5 syspurpose-attr">
+                        { _("Status") }
+                    </dt>
+                    <dd className="col-xs-7 col-sm-7 syspurpose-val">
+                        { _(String(this.props.syspurpose_status)) }
+                    </dd>
                 </div>
             );
         }
         return (
             <div className="col-xs-6 col-sm-4 col-md-4">
-                <div className="card-pf card-pf-accented card-pf-aggregate-status">
+                <div className="sub-man-card card-pf card-pf-accented card-pf-aggregate-status">
                     <div className="card-pf-heading">
                         <h2 className="card-pf-title">
                             { _("System Purpose") }
                         </h2>
                     </div>
                     <div className="card-pf-body">
-                        { syspurpose_status }
-                        { sla }
-                        { usage }
-                        { role }
-                        { add_ons }
+                        <dl className="container-fluid">
+                            { syspurpose_status }
+                            { sla }
+                            { usage }
+                            { role }
+                            { add_ons }
+                        </dl>
                     </div>
                 </div>
             </div>
@@ -230,7 +240,7 @@ class InsightsStatusCard extends React.Component {
         }
         return (
             <div className="col-xs-6 col-sm-4 col-md-4">
-                <div className="card-pf card-pf-accented card-pf-aggregate-status">
+                <div className="sub-man-card card-pf card-pf-accented card-pf-aggregate-status">
                     <div className="card-pf-heading">
                         <h2 className="card-pf-title">
                             { _("Insights") }
@@ -296,7 +306,7 @@ class SystemStatusCard extends React.Component {
         }
         return (
             <div className="col-xs-6 col-sm-4 col-md-4">
-                <div className="card-pf card-pf-accented card-pf-aggregate-status">
+                <div className="sub-man-card card-pf card-pf-accented card-pf-aggregate-status">
                     <div className="card-pf-heading">
                         <h2 className="card-pf-title">
                             { _("Subscriptions") }
@@ -359,9 +369,22 @@ class SubscriptionStatus extends React.Component {
 class ConsumedEntitlement extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { disabled: false };
-        this.remove_label = _("Remove");
-        this.props.consumedEntitlements[this.props.entitlement.pool_id] = this;
+        this.state = {
+            disabled: false,
+            remove_label: _("Remove")
+        };
+
+        let pool_id = this.props.entitlement.pool_id;
+
+        this.props.consumedEntitlements[pool_id] = this;
+        if (pool_id in this.props.parent.availableEntitlementComps) {
+            this.props.parent.availableEntitlementComps[pool_id].setState(
+                {
+                    attaching: false,
+                    attach_label: _("Attach")
+                }
+            );
+        }
     }
 
     /**
@@ -373,16 +396,11 @@ class ConsumedEntitlement extends React.Component {
         if (event && event.button !== 0) {
             return;
         }
-        console.debug("Button clicked");
-        this.state.disabled = true;
-        this.remove_label = _("Removing...");
+        this.setState({
+            disabled: true,
+            remove_label: _("Removing...")
+        });
         subscriptionsClient.removePool(this.props.entitlement.serial);
-        this.props.parent.availableEntitlementComps[this.props.entitlement.pool_id].setState(
-            {
-                attached: false,
-                attach_label: _("Attach")
-            }
-        );
     }
 
     renderActions() {
@@ -393,7 +411,7 @@ class ConsumedEntitlement extends React.Component {
                     id={ "button-" + this.props.entitlement.serial }
                     disabled={ this.state.disabled }
                     onClick={ event => this.removePool(event) }
-                >{ this.remove_label }</Button>
+                >{ this.state.remove_label }</Button>
             </div>
         )
     }
@@ -419,7 +437,7 @@ class ConsumedEntitlement extends React.Component {
                     id={ this.props.entitlement.serial }
                     disabled={ this.state.disabled }
                     onClick={ event => this.removePool(event) }
-                >{ this.remove_label }</Button>
+                >{ this.state.remove_label }</Button>
             </div>
         );
 
@@ -492,17 +510,10 @@ class AvailableEntitlement extends React.Component {
         this.attachPool = this.attachPool.bind(this);
         this.renderActions = this.renderActions.bind(this);
         this.props.availableEntitlements[this.props.entitlement.id] = this;
-        if (this.props.entitlement.id in this.props.parent.consumedEntitlementComps) {
-            this.state = {
-                attached: true,
-                attach_label: _("Attached")
-            };
-        } else {
-            this.state = {
-                attached: false,
-                attach_label: _("Attach")
-            };
-        }
+        this.state = {
+            attaching: false,
+            attach_label: _("Attach")
+        };
     }
 
     /**
@@ -514,10 +525,8 @@ class AvailableEntitlement extends React.Component {
         if (event && event.button !== 0) {
             return;
         }
-        console.debug("Button clicked", this.props.entitlement.id);
-        this.setState({ attached: true, attach_label: _("Attaching...")});
+        this.setState({attaching: true, attach_label: _("Attaching...")});
         subscriptionsClient.attachPool(this.props.entitlement.id);
-        this.setState({ attach_label: _("Attached")});
     }
 
     /**
@@ -531,8 +540,8 @@ class AvailableEntitlement extends React.Component {
                 <Button
                     key={ "button-" + this.props.entitlement.id }
                     id={ "button-" + this.props.entitlement.id }
-                    disabled={ this.state.attached }
                     onClick={ event => this.attachPool(event) }
+                    disabled={ this.state.attaching }
                 >{ this.state.attach_label }</Button>
             </div>
         )
@@ -545,7 +554,8 @@ class AvailableEntitlement extends React.Component {
     render() {
         let icon_name;
 
-        if (this.state.attached === true) {
+        // TODO: use better icon for pool type
+        if (this.props.entitlement.pool_type === 'Standard') {
             icon_name = "fa pficon-plugged";
         } else {
             icon_name = "fa pficon-unplugged";
@@ -708,7 +718,6 @@ class SubscriptionsPage extends React.Component {
     }
 
     renderSubscriptions() {
-        // let productEntries = this.props.products.map(this.renderProduct);
         let productEntries = this.props.products.map((item) => {
             return (
                 <InstalledProduct key={ item.productId } product={ item }/>
@@ -735,9 +744,20 @@ class SubscriptionsPage extends React.Component {
             );
         });
 
-        return (
-            <div className="container-fluid">
-                <SubscriptionStatus {...this.props }/>
+        let subscriptions;
+        if (this.props.status === 'Unknown') {
+            subscriptions = <div>
+                <Listing
+                        title={ _("Installed products") }
+                        emptyCaption={ _("No installed products detected.") }
+                        >
+                    <ListView className="installed-products">
+                        { productEntries }
+                    </ListView>
+                </Listing>
+            </div>;
+        } else {
+            subscriptions = <div>
                 <Listing
                         title={ _("Installed products") }
                         emptyCaption={ _("No installed products detected.") }
@@ -762,6 +782,13 @@ class SubscriptionsPage extends React.Component {
                         { availableEntitlementEntries }
                     </ListView>
                 </Listing>
+            </div>;
+        }
+
+        return (
+            <div className="container-fluid">
+                <SubscriptionStatus {...this.props }/>
+                { subscriptions }
             </div>
         );
     }
