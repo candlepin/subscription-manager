@@ -138,7 +138,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.25.19
+Version: 1.25.20
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1166,6 +1166,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Sun Dec 01 2019 Christopher Snyder <csnyder@redhat.com> 1.25.20-1
+- Remove rpmlintrc for SLE builds (csnyder@redhat.com)
+
 * Fri Nov 22 2019 Christopher Snyder <csnyder@redhat.com> 1.25.19-1
 - Fix up changelog (csnyder@redhat.com)
 
