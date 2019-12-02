@@ -24,6 +24,7 @@ import logging
 import os
 import socket
 import threading
+import time
 from rhsm.https import ssl
 
 from rhsm.config import initConfig
@@ -819,6 +820,76 @@ class SupportedResourcesCache(CacheManager):
         try:
             self.supported_resources = json.loads(open_file.read()) or {}
             return self.supported_resources
+        except IOError as err:
+            log.error("Unable to read cache: %s" % self.CACHE_FILE)
+            log.exception(err)
+        except ValueError:
+            # Ignore json file parse error
+            pass
+
+
+class AvailableEntitlementsCache(CacheManager):
+    """
+    Cache of available entitlements
+    """
+
+    # Coefficient used for computing timeout of cache
+    BETA = 2.0
+    # Lower bound of cache timeout (seconds)
+    LBOUND = 5.0
+    # Upper bound of cache timeout (seconds)
+    UBOUND = 10.0
+
+    CACHE_FILE = "/var/lib/rhsm/cache/available_entitlements.json"
+
+    def __init__(self, available_entitlements=None):
+        self.available_entitlements = available_entitlements or {}
+
+    def to_dict(self):
+        return self.available_entitlements
+
+    def timeout(self):
+        """
+        Compute timeout of cache. Computation of timeout is based on SRT (smoothed response time)
+        of connection to candlepin server. This algorithm is inspired by retransmission timeout used
+        by TCP connection (see: RFC 793)
+        """
+        uep = inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()
+
+        if uep.conn.smoothed_rt is not None:
+            smoothed_rt = uep.conn.smoothed_rt
+        else:
+            smoothed_rt = 0.0
+        return min(self.UBOUND, max(self.LBOUND, self.BETA * smoothed_rt))
+
+    def get_not_obsolete_data(self, identity, filter_options):
+        """
+        Try to get not obsolete cached data
+        :param identity: identity with UUID
+        :param filter_options: dictionary with filter option
+        :return: When data are not obsoleted, then return cached dictionary of available entitlements.
+        Otherwise return empty dictionary.
+        """
+        data = self.read_cache_only()
+        available_pools = {}
+        if data is not None:
+            if identity.uuid in data:
+                cached_data = data[identity.uuid]
+                if cached_data['filter_options'] == filter_options:
+                    log.debug('timeout: %s, current time: %s' % (cached_data['timeout'], time.time()))
+                    if cached_data['timeout'] > time.time():
+                        log.debug('Using cached list of available entitlements')
+                        available_pools = cached_data['pools']
+                    else:
+                        log.debug('Cache of available entitlements timed-out')
+                else:
+                    log.debug('Cache of available entitlements does not contain given filter options')
+        return available_pools
+
+    def _load_data(self, open_file):
+        try:
+            self.available_entitlements = json.loads(open_file.read()) or {}
+            return self.available_entitlements
         except IOError as err:
             log.error("Unable to read cache: %s" % self.CACHE_FILE)
             log.exception(err)

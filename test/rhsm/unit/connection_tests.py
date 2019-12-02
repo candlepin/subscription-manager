@@ -82,6 +82,15 @@ class ConnectionTests(unittest.TestCase):
         self.assertEqual([], self.cp._load_manager_capabilities())
         self.cp.getStatus = original_getStatus
 
+    def test_update_smoothed_response_time(self):
+        self.assertIsNone(self.cp.conn.smoothed_rt)
+        self.cp.conn._update_smoothed_response_time(1.0)
+        self.assertEqual(self.cp.conn.smoothed_rt, 1.0)
+        self.cp.conn._update_smoothed_response_time(1.0)
+        self.assertEqual(self.cp.conn.smoothed_rt, 1.0)
+        self.cp.conn._update_smoothed_response_time(1.5)
+        self.assertEqual(self.cp.conn.smoothed_rt, 1.05)
+
     def test_get_environment_by_name_requires_owner(self):
         self.assertRaises(Exception, self.cp.getEnvironment, None, {"name": "env name"})
 

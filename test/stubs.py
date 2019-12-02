@@ -26,7 +26,7 @@ from rhsm import config
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.cache import EntitlementStatusCache, ProductStatusCache, \
         OverrideStatusCache, ProfileManager, InstalledProductsManager, ReleaseStatusCache, \
-        PoolStatusCache, ContentAccessModeCache, SupportedResourcesCache
+        PoolStatusCache, ContentAccessModeCache, SupportedResourcesCache, AvailableEntitlementsCache
 from subscription_manager.facts import Facts
 from subscription_manager.lock import ActionLock
 from rhsm.certificate import GMT
@@ -424,6 +424,9 @@ class StubUEP(object):
         self.username = username
         self.password = password
         self._capabilities = []
+        self.conn = mock.MagicMock()
+        self.conn.ALPHA = 0.9
+        self.conn.smoothed_rt = 1.1
 
     def reset(self):
         self.called_unregister_uuid = None
@@ -660,7 +663,7 @@ class StubCPProvider(object):
 
 class StubEntitlementStatusCache(EntitlementStatusCache):
 
-    def write_cache(self):
+    def write_cache(self, debug=False):
         pass
 
     def delete_cache(self):
@@ -669,7 +672,7 @@ class StubEntitlementStatusCache(EntitlementStatusCache):
 
 class StubPoolStatusCache(PoolStatusCache):
 
-    def write_cache(self):
+    def write_cache(self, debug=False):
         pass
 
     def delete_cache(self):
@@ -678,7 +681,7 @@ class StubPoolStatusCache(PoolStatusCache):
 
 class StubProductStatusCache(ProductStatusCache):
 
-    def write_cache(self):
+    def write_cache(self, debug=False):
         pass
 
     def delete_cache(self):
@@ -687,7 +690,7 @@ class StubProductStatusCache(ProductStatusCache):
 
 class StubOverrideStatusCache(OverrideStatusCache):
 
-    def write_cache(self):
+    def write_cache(self, debug=False):
         pass
 
     def delete_cache(self):
@@ -696,7 +699,16 @@ class StubOverrideStatusCache(OverrideStatusCache):
 
 class StubReleaseStatusCache(ReleaseStatusCache):
 
-    def write_cache(self):
+    def write_cache(self, debug=False):
+        pass
+
+    def delete_cache(self):
+        self.server_status = None
+
+
+class StubAvailableEntitlementsCache(AvailableEntitlementsCache):
+
+    def write_cache(self, debug=False):
         pass
 
     def delete_cache(self):

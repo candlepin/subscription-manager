@@ -253,7 +253,7 @@ class PoolFilter(object):
 
 
 def list_pools(uep, consumer_uuid, list_all=False, active_on=None, filter_string=None, future=None,
-               after_date=None):
+               after_date=None, page=0, items_per_page=0):
     """
     Wrapper around the UEP call to fetch pools, which forces a facts update
     if anything has changed before making the request. This ensures the
@@ -284,9 +284,17 @@ def list_pools(uep, consumer_uuid, list_all=False, active_on=None, filter_string
     owner = uep.getOwner(consumer_uuid)
     ownerid = owner['key']
 
-    return uep.getPoolsList(consumer=consumer_uuid, listAll=list_all,
-            active_on=active_on, owner=ownerid, filter_string=filter_string, future=future,
-                            after_date=after_date)
+    return uep.getPoolsList(
+        consumer=consumer_uuid,
+        listAll=list_all,
+        active_on=active_on,
+        owner=ownerid,
+        filter_string=filter_string,
+        future=future,
+        after_date=after_date,
+        page=page,
+        items_per_page=items_per_page
+    )
 
 
 # TODO: This method is morphing the actual pool json and returning a new
@@ -294,7 +302,7 @@ def list_pools(uep, consumer_uuid, list_all=False, active_on=None, filter_string
 # necessary. Also some "view" specific things going on in here.
 def get_available_entitlements(get_all=False, active_on=None, overlapping=False,
                                uninstalled=False, text=None, filter_string=None,
-                               future=None, after_date=None):
+                               future=None, after_date=None, page=0, items_per_page=0):
     """
     Returns a list of entitlement pools from the server.
 
@@ -323,8 +331,18 @@ def get_available_entitlements(get_all=False, active_on=None, overlapping=False,
     ]
 
     pool_stash = PoolStash()
-    dlist = pool_stash.get_filtered_pools_list(active_on, not get_all,
-           overlapping, uninstalled, text, filter_string, future=future, after_date=after_date)
+    dlist = pool_stash.get_filtered_pools_list(
+        active_on,
+        not get_all,
+        overlapping,
+        uninstalled,
+        text,
+        filter_string,
+        future=future,
+        after_date=after_date,
+        page=page,
+        items_per_page=items_per_page
+    )
 
     for pool in dlist:
         pool_wrapper = PoolWrapper(pool)
@@ -520,8 +538,8 @@ class PoolStash(object):
         log.debug("   %s incompatible" % len(self.incompatible_pools))
         log.debug("   %s already subscribed" % len(self.subscribed_pool_ids))
 
-    def get_filtered_pools_list(self, active_on, incompatible,
-            overlapping, uninstalled, text, filter_string, future=None, after_date=None):
+    def get_filtered_pools_list(self, active_on, incompatible, overlapping, uninstalled, text, filter_string,
+                                future=None, after_date=None, page=0, items_per_page=0):
         """
         Used for CLI --available filtering
         cuts down on api calls
@@ -534,14 +552,31 @@ class PoolStash(object):
             self.sorter = require(CERT_SORTER)
 
         if incompatible:
-            for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
-                self.identity.uuid, active_on=active_on,
-                filter_string=filter_string, future=future, after_date=after_date):
+            pools = list_pools(
+                require(CP_PROVIDER).get_consumer_auth_cp(),
+                self.identity.uuid,
+                active_on=active_on,
+                filter_string=filter_string,
+                future=future,
+                after_date=after_date,
+                page=page,
+                items_per_page=items_per_page
+            )
+            for pool in pools:
                 self.compatible_pools[pool['id']] = pool
         else:  # --all has been used
-            for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
-                self.identity.uuid, list_all=True, active_on=active_on,
-                filter_string=filter_string, future=future, after_date=after_date):
+            pools = list_pools(
+                require(CP_PROVIDER).get_consumer_auth_cp(),
+                self.identity.uuid,
+                list_all=True,
+                active_on=active_on,
+                filter_string=filter_string,
+                future=future,
+                after_date=after_date,
+                page=page,
+                items_per_page=items_per_page
+            )
+            for pool in pools:
                 self.all_pools[pool['id']] = pool
 
         return self._filter_pools(incompatible, overlapping, uninstalled, False, text)
@@ -596,8 +631,8 @@ class PoolStash(object):
             log.debug("\tRemoved %d pools that we're already subscribed to" %
                       (prev_length - len(pools)))
 
-        log.debug("\t%d pools to display, %d filtered out" % (len(pools),
-            len(self.all_pools) - len(pools)))
+        log.debug("\t%d pools to display, %d filtered out" %
+                  (len(pools), max(0, len(self.all_pools) - len(pools))))
 
         return pools
 
