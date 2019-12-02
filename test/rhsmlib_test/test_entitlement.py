@@ -205,6 +205,60 @@ class TestEntitlementService(InjectionMockingTest):
         self.assertEqual("Level2", filtered[0]['service_level'])
 
     @mock.patch('rhsmlib.services.entitlement.managerlib')
+    def test_pagged_result(self, mock_managerlib):
+        service = EntitlementService()
+        pools = [{'id': 'ff8080816ea20fb9016ea21283ab02e0'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e1'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e2'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e3'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e4'}]
+        mock_managerlib.get_available_entitlements.return_value = pools
+
+        filtered = service.get_available_pools(page=1, items_per_page=3)
+
+        self.assertEqual(2, len(filtered))
+        self.assertEqual("ff8080816ea20fb9016ea21283ab02e3", filtered[0]['id'])
+        self.assertEqual(1, filtered[0]['page'])
+        self.assertEqual(2, filtered[0]['pages'])
+        self.assertEqual(3, filtered[0]['items_per_page'])
+
+    @mock.patch('rhsmlib.services.entitlement.managerlib')
+    def test_no_pagged_result(self, mock_managerlib):
+        service = EntitlementService()
+        pools = [{'id': 'ff8080816ea20fb9016ea21283ab02e0'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e1'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e2'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e3'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e4'}]
+        mock_managerlib.get_available_entitlements.return_value = pools
+
+        filtered = service.get_available_pools(page=0, items_per_page=0)
+
+        self.assertEqual(5, len(filtered))
+        self.assertEqual("ff8080816ea20fb9016ea21283ab02e0", filtered[0]['id'])
+        self.assertNotIn('page', filtered[0])
+        self.assertNotIn('pages', filtered[0])
+        self.assertNotIn('items_per_page', filtered[0])
+
+    @mock.patch('rhsmlib.services.entitlement.managerlib')
+    def test_pagged_result_too_big_page_value(self, mock_managerlib):
+        service = EntitlementService()
+        pools = [{'id': 'ff8080816ea20fb9016ea21283ab02e0'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e1'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e2'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e3'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e4'}]
+        mock_managerlib.get_available_entitlements.return_value = pools
+
+        filtered = service.get_available_pools(page=10, items_per_page=3)
+
+        self.assertEqual(2, len(filtered))
+        self.assertEqual("ff8080816ea20fb9016ea21283ab02e3", filtered[0]['id'])
+        self.assertEqual(1, filtered[0]['page'])
+        self.assertEqual(2, filtered[0]['pages'])
+        self.assertEqual(3, filtered[0]['items_per_page'])
+
+    @mock.patch('rhsmlib.services.entitlement.managerlib')
     def test_no_pool_with_specified_filter(self, mock_managerlib):
         service = EntitlementService()
         pools = [{'service_level': 'Level1'}]
