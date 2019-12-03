@@ -11,6 +11,9 @@ from nose.plugins.attrib import attr
 
 @attr('zypper')
 class TestServicePlugin(TestCase):
+
+    SUB_MAN = "python -m subscription_manager.scripts.subscription_manager"
+
     def setUp(self):
         missing = []
         for name in ['RHSM_USER', 'RHSM_PASSWORD', 'RHSM_URL', 'RHSM_POOL', 'RHSM_TEST_REPO', 'RHSM_TEST_PACKAGE']:
@@ -20,7 +23,7 @@ class TestServicePlugin(TestCase):
             raise EnvironmentError('Missing {0} environment variables'.format(str(missing)))
 
         # start in a non-registered state
-        subprocess.call('subscription-manager unregister', shell=True)
+        subprocess.call('{sub_man} unregister'.format(sub_man=self.SUB_MAN), shell=True)
 
     def has_subman_repos(self):
         repos = configparser.ConfigParser()
@@ -38,14 +41,14 @@ class TestServicePlugin(TestCase):
         self.assertFalse(self.has_subman_repos())
 
     def test_provides_subman_repos_if_registered_and_subscribed(self):
-        subprocess.call('subscription-manager register --username={RHSM_USER} --password={RHSM_PASSWORD} --serverurl={RHSM_URL}'.format(**os.environ), shell=True)
-        subprocess.call('subscription-manager attach --pool={RHSM_POOL}'.format(**os.environ), shell=True)
+        subprocess.call('{sub_man} register --username={RHSM_USER} --password={RHSM_PASSWORD} --serverurl={RHSM_URL}'.format(sub_man=self.SUB_MAN, **os.environ), shell=True)
+        subprocess.call('{sub_man} attach --pool={RHSM_POOL}'.format(sub_man=self.SUB_MAN, **os.environ), shell=True)
         self.assertTrue(self.has_subman_repos())
 
     def test_can_download_rpm(self):
-        subprocess.check_call('subscription-manager register --username={RHSM_USER} --password={RHSM_PASSWORD} --serverurl={RHSM_URL}'.format(**os.environ), shell=True)
-        subprocess.check_call('subscription-manager attach --pool={RHSM_POOL}'.format(**os.environ), shell=True)
-        subprocess.check_call('subscription-manager repos --enable={RHSM_TEST_REPO}'.format(**os.environ), shell=True)
+        subprocess.check_call('{sub_man} register --username={RHSM_USER} --password={RHSM_PASSWORD} --serverurl={RHSM_URL}'.format(sub_man=self.SUB_MAN, **os.environ), shell=True)
+        subprocess.check_call('{sub_man} attach --pool={RHSM_POOL}'.format(sub_man=self.SUB_MAN, **os.environ), shell=True)
+        subprocess.check_call('{sub_man} repos --enable={RHSM_TEST_REPO}'.format(sub_man=self.SUB_MAN, **os.environ), shell=True)
 
         # remove cached subman packages
         subprocess.call('rm -rf /var/cache/zypp/packages/subscription-manager*', shell=True)
