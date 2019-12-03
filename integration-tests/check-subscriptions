@@ -25,6 +25,7 @@ import sys
 TEST_DIR = os.path.dirname(__file__)
 sys.path.append(os.path.join(TEST_DIR, "common"))
 sys.path.append(os.path.join(os.path.dirname(TEST_DIR), "bots/machine"))
+from packagelib import *
 from testlib import *
 
 # candlepin on the services image has a lot of demo data preloaded
@@ -103,14 +104,14 @@ def shell_escape(s):
 def machine_python(machine, script, arg = ""):
     return machine.execute("python3 -c %s %s" % (shell_escape(script), shell_escape(arg)))
 
-class TestSubscriptions(MachineCase):
+class SubscriptionsCase(MachineCase):
     provision = {
         "0": {"address": CLIENT_ADDR + "/20"},
         "services": {"image": "services"}
     }
 
     def setUp(self):
-        MachineCase.setUp(self)
+        super(SubscriptionsCase, self).setUp()
         self.candlepin = self.machines['services']
         m = self.machine
 
@@ -167,6 +168,7 @@ insecure_connection=True
         # collapse again
         b.click(product_selector)
 
+class TestSubscriptions(SubscriptionsCase):
     def testRegister(self):
         b = self.browser
 
@@ -337,6 +339,54 @@ insecure_connection=True
         b.click("label:contains('Status') + button:contains('Unregister')")
         b.wait_not_present("label:contains('Insights')")
         m.execute("test -f /etc/insights-client/.unregistered")
+
+class TestSubscriptionsPackages(SubscriptionsCase, PackageCase):
+    def testMissingPackages(self):
+        m = self.machine
+        b = self.browser
+
+        m.execute("pkcon remove -y insights-client")
+
+        self.createPackage("insights-client", "999", "1")
+        self.enableRepo()
+        m.execute("pkcon refresh")
+
+        self.login_and_go("/subscriptions")
+
+        b.click("label:contains('Status') + button:contains('Register')")
+        b.wait_visible("#subscription-register-url")
+
+        b.set_val("#subscription-register-url", "custom")
+        b.set_input_text("#subscription-register-url-custom", "10.111.112.100:8443/candlepin")
+        b.set_input_text("#subscription-register-username", "admin")
+        b.set_input_text("#subscription-register-password", "admin")
+        b.set_input_text("#subscription-register-org", "admin")
+        b.set_checked("#subscription-insights", True)
+        b.wait_present('.modal-body:contains("The insights-client package will be installed")')
+        b.click('.modal-footer button.apply')
+        with b.wait_timeout(360):
+            b.wait_not_present(".modal-dialog")
+
+        # Connecting to Insights will not have worked because the
+        # insights-client binary is not actually there.
+
+        b.wait_present(".alert-danger:contains('not-found')")
+
+        # Try again with the connection dialog.
+
+        m.execute("test -f /stamp-insights-client-999-1")
+        m.execute("pkcon remove -y insights-client")
+        m.execute("pkcon refresh")
+
+        b.click("label:contains('Insights') a:contains('Not connected')")
+        b.wait_present('.modal-body:contains("This system is not connected")')
+        b.wait_present('.modal-body:contains("The insights-client package will be installed")')
+        b.click('.modal-footer button.apply')
+        with b.wait_timeout(360):
+            b.wait_present('.modal-footer:contains("not-found")')
+        b.click('.modal-footer button.cancel')
+
+        m.execute("test -f /stamp-insights-client-999-1")
 
 if __name__ == '__main__':
     test_main()
