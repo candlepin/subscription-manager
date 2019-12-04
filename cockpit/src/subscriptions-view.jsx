@@ -28,6 +28,103 @@ import { InsightsStatus } from './insights.jsx';
 
 let _ = cockpit.gettext;
 
+
+class ListingAvailableSubscriptions extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleButtonPressed = this.handleButtonPressed.bind(this);
+        this.handleChangeFilter = this.handleChangeFilter.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
+        this.handleChangePage = this.handleChangePage.bind(this);
+        this.state = {
+            filter: ""
+        }
+    }
+
+    handleButtonPressed(event) {
+        // only consider primary mouse button
+        if (!event || event.button !== 0)
+            return;
+        console.debug('button pressed', this.state.filter);
+        subscriptionsClient.getPools(this.state.filter);
+        event.stopPropagation();
+    }
+
+    handleChangeFilter(event) {
+        console.debug("new event", event);
+        this.setState({filter: event.target.value});
+        console.debug("form changed", this.state.filter);
+    }
+
+    handleKeyDown(event) {
+        if (event.key === 'Enter') {
+            console.debug('enter pressed', this.state.filter);
+            subscriptionsClient.getPools(this.state.filter);
+        }
+    }
+
+    handleChangePage(event) {
+        // only consider primary mouse button
+        if (!event || event.button !== 0)
+            return;
+        console.debug('button pressed', event.target.value);
+        event.stopPropagation();
+    }
+
+    render() {
+        if (this.props.children) {
+            return (
+                <div>
+                    <h2>{this.props.title}</h2>
+                    <form className="form-horizontal">
+                        <div className="btn-group col-sm-2">
+                            <button type="button" className="btn btn-default" value="1" onClick={this.handleChangePage}>
+                                1
+                            </button>
+                            <button type="button" className="btn btn-default" value="2" onClick={this.handleChangePage}>
+                                2
+                            </button>
+                            <button type="button" className="btn btn-default" value="3" onClick={this.handleChangePage}>
+                                3
+                            </button>
+                            <button type="button" className="btn btn-default" value="4" onClick={this.handleChangePage}>
+                                4
+                            </button>
+                            <button type="button" className="btn btn-default" value="5" onClick={this.handleChangePage}>
+                                5
+                            </button>
+                            <button type="button" className="btn btn-default" value="6" onClick={this.handleChangePage}>
+                                6
+                            </button>
+                        </div>
+                        <div className="col-sm-8">
+                            <input
+                                type="text"
+                                id="available-subs-search"
+                                className="form-control"
+                                value={this.state.filter}
+                                placeholder="Identifier of subscription with wildchars (*?)"
+                                onChange={value => this.handleChangeFilter(value)}
+                                onKeyDown={this.handleKeyDown}
+                            />
+                        </div>
+                        <button className="btn btn-default" type="button" onClick={this.handleButtonPressed}>
+                            Search
+                        </button>
+                    </form>
+                    {this.props.children}
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    <h2>{this.props.emptyCaption}</h2>
+                </div>
+            );
+        }
+    }
+}
+
 class Listing extends React.Component {
     render() {
         if (this.props.children) {
@@ -679,11 +776,12 @@ class InstalledProduct extends React.Component {
  * unregister   callback, triggered when user clicks on unregister
  */
 class SubscriptionsPage extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         // this.intalledProductComps = {};
         this.consumedEntitlementComps = {};
         this.availableEntitlementComps = {};
+        this.filterSubscriptions = "";
     }
 
     renderCurtains() {
@@ -774,14 +872,15 @@ class SubscriptionsPage extends React.Component {
                         { consumedEntitlementEntries }
                     </ListView>
                 </Listing>
-                <Listing
+                <ListingAvailableSubscriptions
                     title={ _("Available subscriptions") }
-                    emptyCaption={ _("No available subscriptions detected.")}
+                    emptyCaption={ _("No available subscriptions detected.") }
+                    parent={ this }
                 >
                     <ListView className="available-subscriptions">
                         { availableEntitlementEntries }
                     </ListView>
-                </Listing>
+                </ListingAvailableSubscriptions>
             </div>;
         }
 

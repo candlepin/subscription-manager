@@ -123,6 +123,7 @@ function initStore(rootElement) {
                 products: subscriptionsClient.subscriptionStatus.products,
                 consumedEntitlements: subscriptionsClient.subscriptionStatus.consumedEntitlements,
                 availableEntitlements: subscriptionsClient.subscriptionStatus.availableEntitlements,
+                filterSubscriptions: subscriptionsClient.subscriptionStatus.filterSubscriptions,
                 error: subscriptionsClient.subscriptionStatus.error,
                 syspurpose: subscriptionsClient.syspurposeStatus.info,
                 syspurpose_status: subscriptionsClient.syspurposeStatus.status,
