@@ -1198,9 +1198,9 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{rhsm_plugins_dir}/container_content.py*
 %if %{with python3}
 %{rhsm_plugins_dir}/__pycache__/*container*
+%{python_sitearch}/subscription_manager/plugin/container/__pycache__
 %endif
 %{python_sitearch}/subscription_manager/plugin/container/*.py*
-%{python_sitearch}/subscription_manager/plugin/container/__pycache__
 
 # Copying Red Hat CA cert into each directory:
 %attr(755,root,root) %dir %{_sysconfdir}/docker/certs.d/cdn.redhat.com
