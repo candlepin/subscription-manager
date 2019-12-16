@@ -46,6 +46,7 @@ def system_exit(code, msgs=None):
             sys.stderr.write(str(msg) + '\n')
     sys.exit(code)
 
+
 # quick check to see if you are a super-user.
 if os.getuid() != 0:
     sys.stderr.write('Error: this command requires root access to execute\n')

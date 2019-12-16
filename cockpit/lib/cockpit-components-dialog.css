@@ -1,0 +1,17 @@
+#cockpit_modal_dialog .modal-body.scroll {
+    max-height: calc(75vh - 10rem);
+    overflow: auto;
+}
+
+.dialog-wait-ct {
+    margin-top: 3px;
+}
+
+.dialog-wait-ct .spinner {
+    display: inline-block;
+}
+
+.dialog-wait-ct span {
+    vertical-align: 4px;
+    padding-left: 10px;
+}

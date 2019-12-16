@@ -19,6 +19,19 @@
 %global dmidecode_version >= 3.12.2-2
 %endif
 
+# We use the tmpfiles_create macro from systemd-rpm-macros rpm.
+# Because of an incorrect version labelling of that rpm in SLES 12 which
+# contains the necessary macro definition, we are not able to simply require
+# a certain version of systemd-rpm-macros which will definitely contain this
+# macro. To keep our SLES builds working we define the macro here for ourselves.
+%if !0%{?tmpfiles_create:1}
+%define tmpfiles_create() \
+[ -x /usr/bin/systemd-tmpfiles ] && \
+       /usr/bin/systemd-tmpfiles --create %{?*} >/dev/null 2>&1 || : \
+%{nil}
+%endif
+
+
 # borrowed from dnf spec file & tweaked
 %if (0%{?rhel} && 0%{?rhel} <= 7) || 0%{?suse_version}
 %bcond_with python3
@@ -32,7 +45,7 @@
 %bcond_without python2_rhsm
 %endif
 
-%if %{with python3}
+%if %{with python3} || 0%{?suse_version}
 %global use_subman_gui 0
 %else
 %global use_subman_gui 1
@@ -59,13 +72,21 @@
 %global gtk3 1
 %endif
 
-%if 0%{?rhel} == 6 || 0%{?suse_version}
+%if 0%{?rhel} == 6
 %global use_initial_setup 0
 %global use_firstboot 1
 %global use_inotify 0
 %endif
 
-%if %{use_subman_gui} || %{use_initial_setup} || %{use_firstboot}
+%if 0%{?suse_version}
+%global use_initial_setup 0
+%global use_firstboot 0
+%global use_subman_gui 0
+%global use_container_plugin 0
+%global use_inotify 0
+%endif
+
+%if (%{use_subman_gui} || %{use_initial_setup} || %{use_firstboot})
 %global use_rhsm_gtk 1
 %else
 %global use_rhsm_gtk 0
@@ -122,6 +143,7 @@
 
 %if 0%{?suse_version}
 %global install_zypper_plugins INSTALL_ZYPPER_PLUGINS=true
+%global post_boot_tool INSTALL_INITIAL_SETUP=false INSTALL_FIRSTBOOT=false
 %else
 %global install_zypper_plugins INSTALL_ZYPPER_PLUGINS=false
 %endif
@@ -160,8 +182,47 @@
 
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
+# Build a list of python package to exclude from the build.
+# This is necessary because we have multiple rpms which may or may not
+# need to be built depending on the distro which are all in one source tree.
+# Because the contents of these optional rpms is often a python package in the
+# same source tree, if we choose not to build that package and don't tell
+# setup.py to exclude those packages, we end up with files that get installed
+# in the buildroot which are not packaged. This fails various
+# rpm build / verify post steps, which in certain build systems causes the
+# entire build to be considered a failure.
+# The implementation of building a list iteratively in a spec file looks a bit
+# weird. As we want the final value of the global named "exclude_packages" to
+# be an environment variable definition it needs to begin with the following
+# (less the single quotes): 'EXCLUDE_PACKAGES="'
+# After that we can then make all of our checks to see whether certain items
+# should be added to the comma separated list or not.
+# In setup.py we are parsing the value of the env var as a string separated
+# by commas ignoring empty values. That makes the comma at the end of
+# each conditional addition to the list still valid.
+%global exclude_packages EXCLUDE_PACKAGES="
+
+# add new exclude packages items after me
+
+%if !%{use_rhsm_gtk}
+%global exclude_packages %{exclude_packages}subscription_manager.gui,
+%endif
+
+%if !%{use_container_plugin}
+%global exclude_packages %{exclude_packages}*.plugin.container,}
+%endif
+
+# add new exclude_packages items before me
+
+%global exclude_packages %{exclude_packages}"
+
+# Moving our shared icon dependancies to their own package
+# Both our cockpit plugin and the rhsm-gtk package require an overlapping
+# set of icons.
+%global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
+
 Name: subscription-manager
-Version: 1.26.3
+Version: 1.27.0
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -215,8 +276,10 @@ Requires:  cron
 Requires:  %{rhsm_package_name} = %{version}
 Requires:  %{py_package_prefix}-six
 %if 0%{?suse_version} >= 1500
+BuildRequires:  %{py_package_prefix}-python-dateutil
 Requires:  %{py_package_prefix}-python-dateutil
 %else
+BuildRequires: %{py_package_prefix}-dateutil
 Requires: %{py_package_prefix}-dateutil
 %endif
 Requires: %{py_package_prefix}-syspurpose
@@ -309,6 +372,10 @@ BuildRequires: systemd-rpm-macros
 BuildRequires: systemd
 %endif
 
+%if !%{use_container_plugin}
+Obsoletes: subscription-manager-plugin-container
+%endif
+
 %description
 The Subscription Manager package provides programs and libraries to allow users
 to manage subscriptions and yum repositories from the Red Hat entitlement
@@ -355,6 +422,7 @@ Requires: usermode-gtk
 # Fedora can figure this out automatically, but RHEL cannot:
 # See #987071
 Requires: librsvg2%{?_isa}
+Requires: rhsm-icons
 
 %if 0%{?gtk3}
 Requires: font(cantarell)
@@ -365,6 +433,7 @@ Requires: %{?suse_version:dejavu} %{!?suse_version:dejavu-sans-fonts}
 %if !0%{?suse_version}
 Requires(post): scrollkeeper
 Requires(postun): scrollkeeper
+%else
 %endif
 
 %description -n rhsm-gtk
@@ -530,7 +599,11 @@ Group: Development/Libraries
 %if %use_m2crypto
 Requires: %{?suse_version:python-m2crypto} %{!?suse_version:m2crypto}
 %endif
+%if 0%{?suse_version} >= 1500
+Requires:  %{py_package_prefix}-python-dateutil
+%else
 Requires: %{py_package_prefix}-dateutil
+%endif
 Requires: %{py_package_prefix}-iniparse
 # rpm-python is an old name for python2-rpm but RHEL6 uses the old name
 Requires: %{py_package_prefix}-six
@@ -611,9 +684,31 @@ Requires: subscription-manager
 Requires: cockpit-bridge
 Requires: cockpit-shell
 Requires: cockpit-ws
+Requires: rhsm-icons
 
 %description -n subscription-manager-cockpit
 Subscription Manager Cockpit UI
+%endif
+
+%if %{use_rhsm_icons}
+%package -n rhsm-icons
+Summary: Icons for Red Hat Subscription Management client tools
+License: GPLv2
+BuildArch: noarch
+
+# As these two packages previously contained the icons now contained in
+# rhsm-icons package, we need to specify the logical complement to a
+# "Requires", which is "Conflicts". With any luck the underlying
+# depsolver will cause the removal of this package if the request
+# is to downgrade either of the following to a version below these
+# requirements.
+Conflicts: rhsm-gtk < 1.26.7
+Conflicts: subscription-manager-cockpit < 1.26.7
+
+%description -n rhsm-icons
+This package contains the desktop icons for the graphical interfaces provided for management
+of Red Hat subscriptions. There are many such interfaces, subscription-manager-gui,
+subscription-manager-initial-setup-addon, and subscription-manager-cockpit-plugin primarily.
 %endif
 
 %prep
@@ -622,7 +717,8 @@ Subscription Manager Cockpit UI
 %build
 make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
     LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" \
-    %{?gtk_version} %{?subpackages} %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"}
+    %{?gtk_version} %{?subpackages} %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"} \
+    %{exclude_packages}
 
 %if %{with python2_rhsm}
 python2 ./setup.py build --quiet --gtk-version=%{?gtk3:3}%{?!gtk3:2} --rpm-version=%{version}-%{release}
@@ -650,7 +746,8 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?with_subman_gui} \
     %{?with_cockpit} \
     %{?subpackages} \
-    %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"}
+    %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"} \
+    %{?exclude_packages}
 
 %if (%{use_dnf} && (0%{?fedora} >= 29 || 0%{?rhel} >= 8))
 pushd src/dnf-plugins/product-id
@@ -700,10 +797,12 @@ sed -i 's/libexec/lib/g' %{buildroot}/%{_sysconfdir}/cron.daily/rhsmd
 mkdir -p %{buildroot}%{_sysconfdir}/pki/consumer
 mkdir -p %{buildroot}%{_sysconfdir}/pki/entitlement
 
+%if %{use_container_plugin}
 # Setup cert directories for the container plugin:
 mkdir -p %{buildroot}%{_sysconfdir}/docker/certs.d/
 mkdir %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com
 install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-entitlement-authority.pem %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com/redhat-entitlement-authority.crt
+%endif
 
 mkdir -p %{buildroot}%{_sysconfdir}/etc/rhsm/ca
 install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-entitlement-authority.pem %{buildroot}/%{_sysconfdir}/rhsm/ca/redhat-entitlement-authority.pem
@@ -800,6 +899,10 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
 %attr(644,root,root) %config(noreplace) %{_sysconfdir}/rhsm/rhsm.conf
 %config %attr(644,root,root) %{_sysconfdir}/rhsm/logging.conf
+
+%if 0%{?suse_version}
+    %attr(644,root,root) %config(noreplace) %{_sysconfdir}/rhsm/zypper.conf
+%endif
 
 # PAM config
 %if !0%{?suse_version}
@@ -975,8 +1078,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/subscription_manager/gui/data/ui/*.ui
 %{python_sitearch}/subscription_manager/gui/data/glade/*.glade
 %{python_sitearch}/subscription_manager/gui/data/icons/*.svg
-%{_datadir}/icons/hicolor/scalable/apps/*.svg
-%{_datadir}/icons/hicolor/symbolic/apps/*.svg
 %if %{with python3}
 %{python_sitearch}/subscription_manager/gui/__pycache__
 %endif
@@ -1098,11 +1199,11 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %if %{with python3}
 %{rhsm_plugins_dir}/__pycache__/*container*
 %endif
-%{python_sitearch}/subscription_manager/plugin/container.py*
+%{python_sitearch}/subscription_manager/plugin/container/*.py*
+%{python_sitearch}/subscription_manager/plugin/container/__pycache__
 
 # Copying Red Hat CA cert into each directory:
 %attr(755,root,root) %dir %{_sysconfdir}/docker/certs.d/cdn.redhat.com
-%attr(644,root,root) %{_sysconfdir}/rhsm/ca/redhat-entitlement-authority.pem
 %attr(644,root,root) %{_sysconfdir}/docker/certs.d/cdn.redhat.com/redhat-entitlement-authority.crt
 %endif
 
@@ -1159,6 +1260,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm/ca
 
+%attr(644,root,root) %{_sysconfdir}/rhsm/ca/redhat-entitlement-authority.pem
 %attr(644,root,root) %{_sysconfdir}/rhsm/ca/redhat-uep.pem
 
 %if %use_cockpit
@@ -1176,9 +1278,14 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{_datadir}/metainfo/org.candlepinproject.subscription_manager.metainfo.xml
 %if ! %use_subman_gui
 %{_datadir}/applications/subscription-manager-cockpit.desktop
+%endif
+%endif
+
+%if %use_rhsm_icons
+%files -n rhsm-icons
+%defattr(-,root,root,-)
 %{_datadir}/icons/hicolor/scalable/apps/*.svg
 %{_datadir}/icons/hicolor/symbolic/apps/*.svg
-%endif
 %endif
 
 %if %use_systemd
@@ -1226,9 +1333,11 @@ scrollkeeper-update -q -o %{_datadir}/omf/%{name} || :
 %endif
 %endif
 
+%if !0%{?suse_version}
 %if %{use_container_plugin}
 %post -n subscription-manager-plugin-container
 %{__python} %{rhsm_plugins_dir}/container_content.py || :
+%endif
 %endif
 
 %preun
@@ -1291,6 +1400,51 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Nov 18 2019 Christopher Snyder <csnyder@redhat.com> 1.27.0-1
+- Make Makefile SLE15 compatible (khowell@redhat.com)
+- 1764265: Set gpgcheck to 0, when zypper is used; ENT-1758
+  (jhnidek@redhat.com)
+- 1760837: Disable zypper plugin via ZYPP_RHSM_PLUGIN_DISABLE
+  (khowell@redhat.com)
+- 1764340: Handle RestlibException in zypper plugin (khowell@redhat.com)
+- cockpit: Use new services image instead of candlepin (martin@piware.de)
+- 1738764: Fix issue with syspurpose three-way merge; ENT-1564
+  (jhnidek@redhat.com)
+- 1703054: Blacklist some locales for Python2.x; ENT-1288 (jhnidek@redhat.com)
+- 1752400: Ensure that configuration is recorded before data sync processes
+  (wpoteat@redhat.com)
+- fixed wrong package name for dependency (p.seiler@linuxmail.org)
+- cockpit: Bump test API to 204 (martin@piware.de)
+- cockpit: Move default TESTS_OS to rhel-8-1 (martin@piware.de)
+- cockpit: Support CI testing against a bots project PR (martin@piware.de)
+- No need for inotify on suse (csnyder@redhat.com)
+- cockpit: Don't clobber an existing bots checkout (martin@piware.de)
+
+* Mon Nov 18 2019 Christopher Snyder <csnyder@redhat.com>
+- Make Makefile SLE15 compatible (khowell@redhat.com)
+- 1764265: Set gpgcheck to 0, when zypper is used; ENT-1758
+  (jhnidek@redhat.com)
+- 1760837: Disable zypper plugin via ZYPP_RHSM_PLUGIN_DISABLE
+  (khowell@redhat.com)
+- 1764340: Handle RestlibException in zypper plugin (khowell@redhat.com)
+- cockpit: Use new services image instead of candlepin (martin@piware.de)
+- 1738764: Fix issue with syspurpose three-way merge; ENT-1564
+  (jhnidek@redhat.com)
+- 1703054: Blacklist some locales for Python2.x; ENT-1288 (jhnidek@redhat.com)
+- 1752400: Ensure that configuration is recorded before data sync processes
+  (wpoteat@redhat.com)
+- fixed wrong package name for dependency (p.seiler@linuxmail.org)
+- cockpit: Bump test API to 204 (martin@piware.de)
+- cockpit: Move default TESTS_OS to rhel-8-1 (martin@piware.de)
+- cockpit: Support CI testing against a bots project PR (martin@piware.de)
+- No need for inotify on suse (csnyder@redhat.com)
+- cockpit: Don't clobber an existing bots checkout (martin@piware.de)
+
+* Fri Oct 04 2019 Christopher Snyder <csnyder@redhat.com> 1.26.4-1
+- No longer build subman gui for sles (csnyder@redhat.com)
+- cockpit: Update bots target for moved GitHub project
+  (sanne.raymaekers@gmail.com)
+
 * Tue Sep 24 2019 Christopher Snyder <csnyder@redhat.com> 1.26.3-1
 - Include only container_content __pycache__ for container_content plugin
   (csnyder@redhat.com)

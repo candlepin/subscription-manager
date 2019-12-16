@@ -125,8 +125,8 @@ build-subpackages:
 build: rhsmcertd rhsm-icon build-subpackages
 # Install doesn't perform a build if it doesn't have too.  Best to clean out
 # any cruft so developers don't end up install old builds.
-	$(PYTHON) ./setup.py clean --all
-	$(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
+	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py clean --all
+	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
 
 # we never "remake" this makefile, so add a target so
 # we stop searching for implicit rules on how to remake it
@@ -202,6 +202,9 @@ install-conf:
 		install -m 644 etc-conf/subscription-manager-gui.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/subscription-manager-gui; \
 		install -m 644 etc-conf/rhsm-icon.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/rhsm-icon; \
 	fi;
+	if [ "$(INSTALL_ZYPPER_PLUGINS)" = "true" ] ; then \
+	    install -m 644 etc-conf/zypper.conf $(DESTDIR)/etc/rhsm/; \
+	fi;
 
 .PHONY: install-plugins
 install-plugins:
@@ -242,6 +245,7 @@ install-plugins:
 		$(DESTDIR)/$(RHSM_PLUGIN_CONF_DIR) ; \
 		install -d $(DESTDIR)/$(PYTHON_INST_DIR)/plugin/ostree ; \
 		install -m 644 -p $(SRC_DIR)/plugin/ostree/*.py $(DESTDIR)/$(PYTHON_INST_DIR)/plugin/ostree ; \
+		install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/ostree_content.py $(DESTDIR)/$(RHSM_PLUGIN_DIR) ; \
 	fi;
 
 	# container stuff
@@ -290,7 +294,6 @@ endif
 ifeq ($(INSTALL_INITIAL_SETUP),true)
 install-initial-setup:
 	$(info Installing initial-setup to $(INITIAL_SETUP_INST_DIR))
-	install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/ostree_content.py $(DESTDIR)/$(RHSM_PLUGIN_DIR)
 	install -d $(DESTDIR)/$(ANACONDA_ADDON_INST_DIR)
 	install -d $(DESTDIR)/$(INITIAL_SETUP_INST_DIR)/gui/spokes
 	install -d $(DESTDIR)/$(INITIAL_SETUP_INST_DIR)/{categories,ks}
@@ -310,7 +313,7 @@ install-post-boot: install-firstboot install-initial-setup
 
 .PHONY: install-via-setup
 install-via-setup: install-subpackages-via-setup
-	$(PYTHON) ./setup.py install --root $(DESTDIR) --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION) --prefix=$(PREFIX) \
+	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py install --root $(DESTDIR) --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION) --prefix=$(PREFIX) \
 	--with-systemd=$(WITH_SYSTEMD) --with-subman-gui=${WITH_SUBMAN_GUI} --with-cockpit-desktop-entry=${WITH_COCKPIT} \
 	$(SETUP_PY_INSTALL_PARAMS)
 	mkdir -p $(DESTDIR)/$(PREFIX)/sbin/

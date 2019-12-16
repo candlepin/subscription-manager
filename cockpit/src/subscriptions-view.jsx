@@ -46,7 +46,7 @@ class ListingAvailableSubscriptions extends React.Component {
         if (!event || event.button !== 0)
             return;
         console.debug('button pressed', this.state.filter);
-        subscriptionsClient.getPools(this.state.filter);
+        subscriptionsClient.getPools(this.state.filter, "0");
         event.stopPropagation();
     }
 
@@ -59,7 +59,7 @@ class ListingAvailableSubscriptions extends React.Component {
     handleKeyDown(event) {
         if (event.key === 'Enter') {
             console.debug('enter pressed', this.state.filter);
-            subscriptionsClient.getPools(this.state.filter);
+            subscriptionsClient.getPools(this.state.filter, "0");
         }
     }
 
@@ -68,6 +68,7 @@ class ListingAvailableSubscriptions extends React.Component {
         if (!event || event.button !== 0)
             return;
         console.debug('button pressed', event.target.value);
+        subscriptionsClient.getPools(this.state.filter, event.target.value);
         event.stopPropagation();
     }
 
@@ -523,9 +524,11 @@ class ConsumedEntitlement extends React.Component {
         //       from given entitlement)
         icon_name = "fa pficon-plugged";
 
-        let products = this.props.entitlement.provides.map((product) =>
-            <li key={product}>{ product }</li>
-        );
+        // let products = this.props.entitlement.provides.map((product) =>
+        //     <li key={product}>{ product }</li>
+        // );
+
+        let products = <li key="foo">Foo</li>;
 
         const renderActions = () => (
             <div>
@@ -658,9 +661,11 @@ class AvailableEntitlement extends React.Component {
             icon_name = "fa pficon-unplugged";
         }
 
-        let products = this.props.entitlement.providedProducts.map((product) =>
-            <li key={product}>{ product }</li>
-        );
+        // let products = this.props.entitlement.providedProducts.map((product) =>
+        //     <li key={product}>{ product }</li>
+        // );
+
+        let products = <li key="foo">Foo</li>;
 
         return (
             <ListViewItem

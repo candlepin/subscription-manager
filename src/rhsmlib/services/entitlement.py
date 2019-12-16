@@ -78,7 +78,7 @@ class EntitlementService(object):
 
     def get_pools(self, pool_subsets=None, matches=None, pool_only=None, match_installed=None,
                   no_overlap=None, service_level=None, show_all=None, on_date=None, future=None,
-                  after_date=None, **kwargs):
+                  after_date=None, page=0, items_per_page=0, **kwargs):
         # We accept a **kwargs argument so that the DBus object can pass whatever dictionary it receives
         # via keyword expansion.
         if kwargs:
@@ -124,6 +124,8 @@ class EntitlementService(object):
                 service_level=service_level,
                 future=future,
                 after_date=after_date,
+                page=int(page),
+                items_per_page=int(items_per_page)
             )
             if pool_only:
                 results['available'] = [x['id'] for x in available]
@@ -242,7 +244,7 @@ class EntitlementService(object):
             if hasattr(cert.pool, "id"):
                 pool_id = cert.pool.id
 
-            product_names = [p.name for p in cert.products]
+            provided_products = {p.id: p.name for p in cert.products}
 
             reasons = []
             pool_type = ''
@@ -268,7 +270,7 @@ class EntitlementService(object):
             if roles is None and usage is None and addons is None:
                 consumed_statuses.append(OldConsumedStatus(
                     name,
-                    product_names,
+                    provided_products,
                     sku,
                     contract,
                     account,
@@ -287,7 +289,7 @@ class EntitlementService(object):
             else:
                 consumed_statuses.append(ConsumedStatus(
                     name,
-                    product_names,
+                    provided_products,
                     sku,
                     contract,
                     account,
@@ -310,7 +312,7 @@ class EntitlementService(object):
 
     def get_available_pools(self, show_all=None, on_date=None, no_overlap=None,
                             match_installed=None, matches=None, service_level=None, future=None,
-                            after_date=None):
+                            after_date=None, page=0, items_per_page=0):
         available_pools = managerlib.get_available_entitlements(
             get_all=show_all,
             active_on=on_date,
@@ -329,6 +331,21 @@ class EntitlementService(object):
 
         if service_level is not None:
             available_pools = list(filter(filter_pool_by_service_level, available_pools))
+
+        # When pagination result of available pools is requested, then reduce too long list
+        if items_per_page > 0:
+            last_page = int(len(available_pools) / items_per_page)
+            # When requested page is too big, then return last page with some pools
+            if page * items_per_page > len(available_pools):
+                page = last_page
+            # Reduce too long list to requested "page"
+            available_pools = available_pools[page * items_per_page:(page + 1) * items_per_page]
+            # Add requested page and number of items per page in the result too
+            for item in available_pools:
+                item["page"] = page
+                # pages are numbered from zero
+                item["pages"] = last_page + 1
+                item["items_per_page"] = items_per_page
 
         return available_pools
 

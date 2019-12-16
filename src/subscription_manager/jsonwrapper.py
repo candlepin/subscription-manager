@@ -91,4 +91,4 @@ class PoolWrapper(object):
 
     def get_provided_products(self):
         products = self.data.get('providedProducts', [])
-        return [prod.get('productName') for prod in products]
+        return {prod.get('productId'): prod.get('productName') for prod in products}

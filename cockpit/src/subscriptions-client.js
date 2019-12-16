@@ -47,6 +47,7 @@ client.subscriptionStatus = {
     consumedEntitlements: [],
     availableEntitlements: [],
     filterSubscriptions: "",
+    page: "0",
     error: undefined,
 };
 
@@ -251,7 +252,7 @@ client.removePool = function(serialId) {
 
 let gettingAvailableEntilementDetails = false;
 let getAvailableEntitlementDetailsRequested = false;
-function getAvailableEntitlementDetails(filter) {
+function getAvailableEntitlementDetails(filter, page) {
     if(gettingAvailableEntilementDetails) {
         getAvailableEntitlementDetailsRequested = true;
         return;
@@ -259,12 +260,15 @@ function getAvailableEntitlementDetails(filter) {
     getAvailableEntitlementDetailsRequested = false;
     gettingAvailableEntilementDetails = true;
     client.subscriptionStatus.filterSubscriptions = filter;
+    client.subscriptionStatus.page = page;
     safeDBusCall(entitlementService, () => {
         console.debug("Getpool() with filter: ", dbus_str(filter));
         entitlementService.GetPools(
             {
                 pool_subsets: dbus_str('available'),
-                matches: dbus_str(filter)
+                matches: dbus_str(filter),
+                page: dbus_str(page),
+                items_per_page: dbus_str("20")
             },
             {},
             userLang
@@ -282,7 +286,7 @@ function getAvailableEntitlementDetails(filter) {
             .then(() => {
                 gettingAvailableEntilementDetails = false;
                 if (getAvailableEntitlementDetailsRequested) {
-                    getAvailableEntitlementDetails(filter);
+                    getAvailableEntitlementDetails(filter, page);
                 }
                 needRender();
             });
@@ -640,7 +644,10 @@ client.getSubscriptionStatus = function() {
         })
         .then(() => {
             if (client.subscriptionStatus.status !== _("Unknown")) {
-                getAvailableEntitlementDetails(client.subscriptionStatus.filterSubscriptions);
+                getAvailableEntitlementDetails(
+                    client.subscriptionStatus.filterSubscriptions,
+                    client.subscriptionStatus.page
+                );
             }
         })
         .catch(ex => {

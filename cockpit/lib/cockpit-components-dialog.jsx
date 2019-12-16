@@ -17,12 +17,14 @@
  * along with Cockpit; If not, see <http://www.gnu.org/licenses/>.
  */
 
-import cockpit from 'cockpit';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
+import cockpit from "cockpit";
+import React from "react";
+import ReactDOM from "react-dom";
+import PropTypes from "prop-types";
 
-let _ = cockpit.gettext;
+import "../lib/cockpit-components-dialog.css";
+
+const _ = cockpit.gettext;
 
 /*
  * React template for a Cockpit dialog footer
@@ -45,86 +47,111 @@ let _ = cockpit.gettext;
  *  - idle_message optional, always show this message on the last row when idle
  *  - dialog_done optional, callback when dialog is finished (param true if success, false on cancel)
  */
-class DialogFooter extends React.Component {
+export class DialogFooter extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             action_in_progress: false,
             action_in_progress_promise: null,
             action_progress_message: '',
+            action_progress_cancel: null,
             action_canceled: false,
             error_message: null,
         };
+        this.keyUpHandler = this.keyUpHandler.bind(this);
+        this.update_progress = this.update_progress.bind(this);
+        this.cancel_click = this.cancel_click.bind(this);
     }
+
     keyUpHandler(e) {
-        if (e.keyCode === 27) {
+        if (e.keyCode == 27) {
             this.cancel_click();
             e.stopPropagation();
         }
     }
+
     componentDidMount() {
         document.body.classList.add("modal-in");
-        document.addEventListener('keyup', event => this.keyUpHandler(event));
+        document.addEventListener('keyup', this.keyUpHandler);
     }
+
     componentWillUnmount() {
         document.body.classList.remove("modal-in");
-        document.removeEventListener('keyup', event => this.keyUpHandler(event));
+        document.removeEventListener('keyup', this.keyUpHandler);
     }
-    update_progress(msg) {
-        this.setState({ action_progress_message: msg });
+
+    update_progress(msg, cancel) {
+        this.setState({ action_progress_message: msg, action_progress_cancel: cancel });
     }
-    action_click(handler, event) {
+
+    action_click(handler, e) {
         // only consider clicks with the primary button
-        if (event && event.button !== 0)
+        if (e && e.button !== 0)
             return;
-        let self = this;
+        var self = this;
         this.setState({
             error_message: null,
             action_progress_message: '',
             action_in_progress: true,
             action_canceled: false,
         });
-        this.state.action_in_progress_promise = handler(message => this.update_progress(message))
-            .done(function() {
-                self.setState({ action_in_progress: false, error_message: null });
-                if (self.props.dialog_done)
-                    self.props.dialog_done(true);
-            })
-            .fail(function(error) {
-                if (self.state.action_canceled) {
+
+        var p = handler(this.update_progress)
+                .then(function() {
+                    self.setState({ action_in_progress: false, error_message: null });
                     if (self.props.dialog_done)
-                        self.props.dialog_done(false);
-                }
+                        self.props.dialog_done(true);
+                })
+                .catch(function(error) {
+                    if (self.state.action_canceled) {
+                        if (self.props.dialog_done)
+                            self.props.dialog_done(false);
+                    }
 
-                /* Always log global dialog errors for easier debugging */
-                console.warn(error);
+                    /* Always log global dialog errors for easier debugging */
+                    if (error)
+                        console.warn(error.message || error.toString());
 
-                self.setState({ action_in_progress: false, error_message: String(error) });
-            })
-            .progress(message => this.update_progress(message));
-        if (event)
-            event.stopPropagation();
+                    self.setState({ action_in_progress: false, error_message: error });
+                });
+
+        if (p.progress)
+            p.progress(this.update_progress);
+
+        this.setState({ action_in_progress_promise: p });
+
+        if (e)
+            e.stopPropagation();
     }
-    cancel_click(event) {
+
+    cancel_click(e) {
         // only consider clicks with the primary button
-        if (event && event.button !== 0)
+        if (e && e.button !== 0)
             return;
 
-        this.setState({action_canceled: true});
+        this.setState({ action_canceled: true });
+
         if (this.props.cancel_clicked)
             this.props.cancel_clicked();
+
         // an action might be in progress, let that handler decide what to do if they added a cancel function
+        if (this.state.action_in_progress && this.state.action_progress_cancel) {
+            this.state.action_progress_cancel();
+            return;
+        }
         if (this.state.action_in_progress && 'cancel' in this.state.action_in_progress_promise) {
             this.state.action_in_progress_promise.cancel();
             return;
         }
+
         if (this.props.dialog_done)
             this.props.dialog_done(false);
-        if (event)
-            event.stopPropagation();
+        if (e)
+            e.stopPropagation();
     }
+
     render() {
-        let cancel_caption, cancel_style;
+        var cancel_caption, cancel_style;
         if ('cancel_caption' in this.props)
             cancel_caption = this.props.cancel_caption;
         else
@@ -136,13 +163,19 @@ class DialogFooter extends React.Component {
             cancel_style = "cancel";
         cancel_style = "btn btn-default " + cancel_style;
 
-        // If an action is in progress, show the spinner with its message and disable all actions
-        let wait_element;
-        let actions_disabled;
+        // If an action is in progress, show the spinner with its message and disable all actions.
+        // Cancel is only enabled when the action promise has a cancel method, or we get one
+        // via the progress reporting.
+
+        var wait_element;
+        var actions_disabled;
+        var cancel_disabled;
         if (this.state.action_in_progress) {
             actions_disabled = 'disabled';
+            if (!(this.state.action_in_progress_promise && this.state.action_in_progress_promise.cancel) && !this.state.action_progress_cancel)
+                cancel_disabled = 'disabled';
             wait_element = <div className="dialog-wait-ct pull-left">
-                <div className="spinner spinner-sm"/>
+                <div className="spinner spinner-sm" />
                 <span>{ this.state.action_progress_message }</span>
             </div>;
         } else if (this.props.idle_message) {
@@ -151,50 +184,51 @@ class DialogFooter extends React.Component {
             </div>;
         }
 
-        let self = this;
-        let action_buttons = this.props.actions.map(function(action) {
-            let caption;
+        var self = this;
+        var action_buttons = this.props.actions.map(function(action) {
+            var caption;
             if ('caption' in action)
                 caption = action.caption;
             else
                 caption = _("Ok");
 
-            let button_style = "btn-default";
-            let button_style_mapping = { 'primary': 'btn-primary', 'danger': 'btn-danger' };
+            var button_style = "btn-default";
+            var button_style_mapping = { 'primary': 'btn-primary', 'danger': 'btn-danger' };
             if ('style' in action && action.style in button_style_mapping)
                 button_style = button_style_mapping[action.style];
             button_style = "btn " + button_style + " apply";
-            let action_disabled = actions_disabled || ('disabled' in action && action.disabled);
+            var action_disabled = actions_disabled || ('disabled' in action && action.disabled);
             return (<button
-                    key={ caption }
-                    className={ button_style }
-                    onClick={event => self.action_click(action.clicked, event)}
-                    disabled={ action_disabled }
-                >{ caption }</button>
+                key={ caption }
+                className={ button_style }
+                onClick={ self.action_click.bind(self, action.clicked) }
+                disabled={ action_disabled }
+            >{ caption }</button>
             );
         });
 
         // If we have an error message, display the error
-        let error_element;
-        let error_message;
+        var error_element;
+        var error_message;
         if (this.props.static_error !== undefined && this.props.static_error !== null)
             error_message = this.props.static_error;
         else
             error_message = this.state.error_message;
         if (error_message) {
             error_element = <div className="alert alert-danger dialog-error">
-                <span className="fa fa-exclamation-triangle"/>
-                <span>{ error_message }</span>
+                <span className="fa fa-exclamation-triangle" />
+                <span>{ React.isValidElement(error_message) ? error_message : error_message.toString() }</span>
             </div>;
         }
         return (
             <div className="modal-footer">
                 { error_element }
+                { this.props.extra_element }
                 { wait_element }
                 <button
                     className={ cancel_style }
-                    onClick={event => this.cancel_click(event)}
-                    disabled={ actions_disabled?"disabled":"" }
+                    onClick={ this.cancel_click }
+                    disabled={ cancel_disabled }
                 >{ cancel_caption }</button>
                 { action_buttons }
             </div>
@@ -205,8 +239,7 @@ class DialogFooter extends React.Component {
 DialogFooter.propTypes = {
     cancel_clicked: PropTypes.func,
     cancel_caption: PropTypes.string,
-    cancel_style: PropTypes.string,
-    actions: PropTypes.array,
+    actions: PropTypes.array.isRequired,
     static_error: PropTypes.string,
     dialog_done: PropTypes.func,
 };
@@ -226,16 +259,17 @@ DialogFooter.propTypes = {
  *  - footer (react element, top element should be of class modal-footer)
  *  - id optional, id that is assigned to the top level dialog node, but not the backdrop
  */
-class Dialog extends React.Component{
-    static componentDidMount() {
+export class Dialog extends React.Component {
+    componentDidMount() {
         // if we used a button to open this, make sure it's not focused anymore
         if (document.activeElement)
             document.activeElement.blur();
     }
+
     render() {
-        let backdrop;
+        var backdrop;
         if (!this.props.no_backdrop) {
-            backdrop = <div className="modal-backdrop fade in"/>;
+            backdrop = <div className="modal-backdrop fade in" />;
         }
         return (
             <div>
@@ -255,13 +289,13 @@ class Dialog extends React.Component{
         );
     }
 }
-
 Dialog.propTypes = {
-    title: PropTypes.string.isRequired,
+    // TODO: fix following by refactoring the logic showing modal dialog (recently show_modal_dialog())
+    title: PropTypes.string, // is effectively required, but show_modal_dialog() provides initially no props and resets them later.
     no_backdrop: PropTypes.bool,
-    body: PropTypes.element.isRequired,
-    footer: PropTypes.element.isRequired,
-    id: PropTypes.string,
+    body: PropTypes.element, // is effectively required, see above
+    footer: PropTypes.element, // is effectively required, see above
+    id: PropTypes.string
 };
 
 /* Create and show a dialog
@@ -272,33 +306,39 @@ Dialog.propTypes = {
  *     - render         render again using the stored props
  * The DOM node and React metadata are freed once the dialog has closed
  */
-let show_modal_dialog = function(props, footerProps) {
-    let dialogName = 'cockpit_modal_dialog';
-    // don't allow nested dialogs
-    if (document.getElementById(dialogName)) {
-        console.warn('Unable to create nested dialog');
-        return;
+export function show_modal_dialog(props, footerProps) {
+    var dialogName = 'cockpit_modal_dialog';
+    // don't allow nested dialogs, just close whatever is open
+    var curElement = document.getElementById(dialogName);
+    if (curElement) {
+        ReactDOM.unmountComponentAtNode(curElement);
+        curElement.remove();
     }
     // create an element to render into
-    let rootElement = document.createElement("div");
+    var rootElement = document.createElement("div");
     rootElement.id = dialogName;
     document.body.appendChild(rootElement);
 
     // register our own on-close callback
-    let origCallback;
-    let closeCallback = function() {
+    var origCallback;
+    var closeCallback = function() {
         if (origCallback)
             origCallback.apply(this, arguments);
         ReactDOM.unmountComponentAtNode(rootElement);
         rootElement.remove();
     };
 
-    let dialogObj = { };
+    var dialogObj = { };
     dialogObj.props = null;
     dialogObj.footerProps = null;
     dialogObj.render = function() {
         dialogObj.props.footer = <DialogFooter {...dialogObj.footerProps} />;
-        ReactDOM.render(<Dialog {...dialogObj.props} />, rootElement);
+        // Don't render if we are no longer part of the document.
+        // This would be mostly harmless except that it will remove
+        // the input focus from whatever element has it, which is
+        // unpleasant and also disrupts the tests.
+        if (rootElement.offsetParent)
+            ReactDOM.render(<Dialog {...dialogObj.props} />, rootElement);
     };
     function updateFooterAndRender() {
         if (dialogObj.props === null || dialogObj.props === undefined)
@@ -311,9 +351,7 @@ let show_modal_dialog = function(props, footerProps) {
         if (footerProps.static_error)
             console.warn(footerProps.static_error);
         dialogObj.footerProps = footerProps;
-        if (dialogObj.footerProps === null || dialogObj.footerProps === undefined)
-            dialogObj.footerProps = { };
-        if (dialogObj.footerProps.dialog_done !== closeCallback) {
+        if (dialogObj.footerProps.dialog_done != closeCallback) {
             origCallback = dialogObj.footerProps.dialog_done;
             dialogObj.footerProps.dialog_done = closeCallback;
         }
@@ -330,10 +368,4 @@ let show_modal_dialog = function(props, footerProps) {
     dialogObj.render();
 
     return dialogObj;
-};
-
-module.exports = {
-    Dialog: Dialog,
-    DialogFooter: DialogFooter,
-    show_modal_dialog: show_modal_dialog,
-};
+}

@@ -25,7 +25,7 @@ import subscriptionsClient from './subscriptions-client';
 import subscriptionsRegister from './subscriptions-register.jsx';
 import subscriptionsView from './subscriptions-view.jsx';
 import * as Insights from './insights.jsx';
-import Dialog from './cockpit-components-dialog.jsx';
+import * as Dialog from '../lib/cockpit-components-dialog.jsx';
 
 let _ = cockpit.gettext;
 

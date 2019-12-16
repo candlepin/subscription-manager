@@ -2415,8 +2415,10 @@ class ConfigCommand(CliCommand):
         for s in list(conf.keys()):
             section = conf[s]
             for name, _value in list(section.items()):
-                self.parser.add_option("--" + s + "." + name, dest=(s + "." + name),
-                    help=_("Section: %s, Name: %s") % (s, name))
+                # Allow adding CLI options only for sections and names listed in defaults
+                if s in rhsm.config.DEFAULTS and name in rhsm.config.DEFAULTS[s]:
+                    self.parser.add_option("--" + s + "." + name, dest=(s + "." + name),
+                                           help=_("Section: %s, Name: %s") % (s, name))
 
     def _validate_options(self):
         if self.options.list:
@@ -2427,9 +2429,13 @@ class ConfigCommand(CliCommand):
                 for s in list(conf.keys()):
                     section = conf[s]
                     for name, _value in list(section.items()):
-                        if getattr(self.options, s + "." + name):
-                            too_many = True
-                            break
+                        # Ignore sections and names that are not supported by subscription-manager
+                        if hasattr(self.options, s + "." + name):
+                            if getattr(self.options, s + "." + name):
+                                too_many = True
+                                break
+                        else:
+                            pass
             if too_many:
                 system_exit(os.EX_USAGE, _("Error: --list should not be used with any other options for setting or removing configurations."))
 
@@ -2438,7 +2444,10 @@ class ConfigCommand(CliCommand):
             for s in list(conf.keys()):
                 section = conf[s]
                 for name, _value in list(section.items()):
-                    test = "%s" % getattr(self.options, s + "." + name)
+                    if hasattr(self.options, s + "." + name):
+                        test = "%s" % getattr(self.options, s + "." + name)
+                    else:
+                        test = None
                     has = has or (test != 'None')
             if not has:
                 # if no options are given, default to --list
@@ -2446,7 +2455,7 @@ class ConfigCommand(CliCommand):
 
         if self.options.remove:
             for r in self.options.remove:
-                if not "." in r:  # pragma: noqa
+                if "." not in r:
                     system_exit(os.EX_USAGE, _("Error: configuration entry designation for removal must be of format [section.name]"))
 
                 section = r.split('.')[0]
@@ -2496,9 +2505,10 @@ class ConfigCommand(CliCommand):
             for s in list(conf.keys()):
                 section = conf[s]
                 for name, value in list(section.items()):
-                    value = "%s" % getattr(self.options, s + "." + name)
-                    if not value == 'None':
-                        section[name] = value
+                    if hasattr(self.options, s + "." + name):
+                        value = "%s" % getattr(self.options, s + "." + name)
+                        if not value == 'None':
+                            section[name] = value
             conf.persist()
 
     def require_connection(self):

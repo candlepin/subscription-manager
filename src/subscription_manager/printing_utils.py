@@ -64,6 +64,8 @@ def columnize(caption_list, callback, *args, **kwargs):
     output = []
     for (caption, value) in lines:
         kwargs['caption'] = caption
+        if isinstance(value, dict):
+            value = [val for val in value.values()]
         if isinstance(value, list):
             if value:
                 # Put the first value on the same line as the caption
