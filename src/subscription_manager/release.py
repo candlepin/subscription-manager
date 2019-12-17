@@ -23,6 +23,8 @@ import socket
 import six
 
 import six.moves.http_client
+from subscription_manager.identity import Identity
+
 from rhsm.https import ssl
 from rhsm.connection import NoValidEntitlement
 
@@ -72,7 +74,7 @@ class ApiReleaseVersionProvider(object):
 
     def __init__(self):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = Identity.getInstance()
 
     def api_supported(self):
         return self._conn().supports_resource("available_releases")

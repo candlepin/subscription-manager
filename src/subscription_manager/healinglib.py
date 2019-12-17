@@ -18,6 +18,8 @@ from __future__ import print_function, division, absolute_import
 import datetime
 import logging
 
+from subscription_manager.identity import Identity
+
 from rhsm import certificate
 
 from subscription_manager import certlib
@@ -72,7 +74,7 @@ class HealingUpdateAction(object):
 
     def perform(self):
         # inject
-        identity = inj.require(inj.IDENTITY)
+        identity = Identity.getInstance()
         uuid = identity.uuid
         consumer = self.uep.getConsumer(uuid)
 

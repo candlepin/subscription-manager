@@ -16,6 +16,7 @@ from __future__ import print_function, division, absolute_import
 import logging
 import six
 import dbus.service
+from subscription_manager.identity import Identity
 
 from rhsmlib.dbus import constants, exceptions, util
 
@@ -58,7 +59,7 @@ class BaseObject(dbus.service.Object):
         return proxy_options
 
     def is_registered(self):
-        return inj.require(inj.IDENTITY).is_valid()
+        return Identity.getInstance().is_valid()
 
     def ensure_registered(self):
         if not self.is_registered():

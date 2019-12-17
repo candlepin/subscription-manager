@@ -17,6 +17,7 @@ from __future__ import print_function, division, absolute_import
 
 import logging
 
+from subscription_manager.identity import Identity
 
 from subscription_manager import certlib
 from subscription_manager import injection as inj
@@ -50,7 +51,7 @@ class IdentityUpdateAction(object):
         self.report = certlib.ActionReport()
 
     def perform(self):
-        identity = inj.require(inj.IDENTITY)
+        identity = Identity.getInstance()
 
         if not identity.is_valid():
             # we could in theory try to update the id in the

@@ -14,6 +14,8 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+from subscription_manager.identity import Identity
+
 import subscription_manager.injection as inj
 from subscription_manager import managerlib
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, \
@@ -69,7 +71,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         self.tab_icon = tab_icon
 
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = Identity.getInstance()
         self.entitlement_dir = ent_dir
 
         self.backend = backend

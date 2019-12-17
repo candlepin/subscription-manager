@@ -14,6 +14,8 @@ from __future__ import print_function, division, absolute_import
 #
 import fnmatch
 
+from subscription_manager.identity import Identity
+
 import subscription_manager.injection as inj
 
 from subscription_manager.api import request_injection
@@ -35,7 +37,7 @@ def _set_enable_for_yum_repositories(setting, *repo_ids):
 
     # The cache should be primed at this point by the invoker.get_repos()
     cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
-    identity = inj.require(inj.IDENTITY)
+    identity = Identity.getInstance()
     cp_provider = inj.require(inj.CP_PROVIDER)
 
     if identity.is_valid() and cp_provider.get_consumer_auth_cp().supports_resource('content_overrides'):

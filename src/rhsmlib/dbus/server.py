@@ -19,6 +19,8 @@ import dbus.server
 import dbus.mainloop.glib
 import threading
 
+from subscription_manager.identity import Identity
+
 from rhsmlib.dbus import constants
 
 from subscription_manager import ga_loader
@@ -28,7 +30,6 @@ from functools import partial
 from rhsmlib.services import config
 from rhsm.config import initConfig
 from rhsmlib.file_monitor import create_filesystem_watcher, DirectoryWatch
-from subscription_manager import injection as inj
 from subscription_manager.logutil import init_logger
 
 init_logger()
@@ -65,7 +66,7 @@ class Server(object):
         except dbus.exceptions.DBusException:
             log.exception("Could not create bus class")
             raise
-        self.identity = inj.require(inj.IDENTITY)  # gives us consumer path
+        self.identity = Identity.getInstance()  # gives us consumer path
         config_cert_dir_path = "/etc/rhsm/rhsm.conf"
         products_cert_dir_path = conf['rhsm']['productCertDir']
         entitlement_cert_dir_path = conf['rhsm']['entitlementCertDir']

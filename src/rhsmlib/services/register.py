@@ -15,6 +15,8 @@ from __future__ import print_function, division, absolute_import
 import logging
 import socket
 
+from subscription_manager.identity import Identity
+
 from rhsmlib.services import exceptions
 
 from subscription_manager import injection as inj
@@ -30,7 +32,7 @@ class RegisterService(object):
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
         self.installed_mgr = inj.require(inj.INSTALLED_PRODUCTS_MANAGER)
         self.facts = inj.require(inj.FACTS)
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = Identity.getInstance()
         self.cp = cp
 
     def register(self, org, activation_keys=None, environment=None, force=None, name=None, consumerid=None,

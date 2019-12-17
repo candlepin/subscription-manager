@@ -17,6 +17,8 @@ from __future__ import print_function, division, absolute_import
 import logging
 import socket
 
+from subscription_manager.identity import Identity
+
 from rhsm.certificate import Key, create_from_pem
 from rhsm.certificate2 import CONTENT_ACCESS_CERT_TYPE
 
@@ -24,7 +26,6 @@ from subscription_manager.certdirectory import Writer
 from subscription_manager import certlib
 from subscription_manager import content_action_client
 from subscription_manager import utils
-from subscription_manager.injection import IDENTITY, require
 from subscription_manager import rhelentbranding
 import subscription_manager.injection as inj
 
@@ -107,7 +108,7 @@ class EntCertUpdateAction(object):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = self.cp_provider.get_consumer_auth_cp()
         self.ent_dir = inj.require(inj.ENT_DIR)
-        self.identity = require(IDENTITY)
+        self.identity = Identity.getInstance()
         self.report = EntCertUpdateReport()
         self.content_access_cache = inj.require(inj.CONTENT_ACCESS_CACHE)
 
@@ -262,7 +263,7 @@ class EntCertUpdateAction(object):
         if self.uep is None:
             return results
 
-        identity = inj.require(inj.IDENTITY)
+        identity = Identity.getInstance()
         if not identity.is_valid():
             # We can get here on unregister, with no id or ent certs or repos,
             # but don't want to raise an exception that would be logged. So

@@ -18,6 +18,8 @@ from __future__ import print_function, division, absolute_import
 #
 import logging
 
+from subscription_manager.identity import Identity
+
 from .certlib import Locker, ActionReport
 from subscription_manager import injection as inj
 
@@ -90,7 +92,7 @@ class FactsActionCommand(object):
             fact_updates = self.facts.get_facts()
             self.report.fact_updates = fact_updates
 
-            consumer_identity = inj.require(inj.IDENTITY)
+            consumer_identity = Identity.getInstance()
             if not consumer_identity.is_valid():
                 return self.report
 

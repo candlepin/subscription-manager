@@ -328,9 +328,7 @@ class TestProductsDBusObject(DBusObjectTest, InjectionMockingTest):
         self.mock_identity.uuid = "id"
 
     def injection_definitions(self, *args, **kwargs):
-        if args[0] == inj.IDENTITY:
-            return self.mock_identity
-        elif args[0] == inj.CP_PROVIDER:
+        if args[0] == inj.CP_PROVIDER:
             provider = mock.Mock(spec=CPProvider, name="CPProvider")
             provider.get_consumer_auth_cp.return_value = mock.Mock(name="MockCP")
             return provider

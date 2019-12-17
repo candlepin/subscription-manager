@@ -12,12 +12,12 @@ from __future__ import print_function, division, absolute_import
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
+from subscription_manager.identity import Identity
 
 """
 This module provides service for system purpose identity.
 """
 
-from subscription_manager import injection as inj
 from subscription_manager.i18n import ugettext as _
 
 
@@ -35,7 +35,7 @@ class Syspurpose(object):
 
     def __init__(self, cp):
         self.cp = cp
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = Identity.getInstance()
         self.purpose_status = {'status': 'unknown'}
 
     def get_syspurpose_status(self, on_date=None):

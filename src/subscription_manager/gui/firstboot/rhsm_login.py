@@ -3,6 +3,7 @@ from __future__ import print_function, division, absolute_import
 import sys
 import logging
 import dbus.mainloop.glib
+from subscription_manager.identity import Identity
 
 from subscription_manager import ga_loader
 ga_loader.init_ga()
@@ -213,7 +214,7 @@ class moduleClass(module.Module, object):
         we want to skip over this screen if there is already an identity
         certificate on the machine (most likely laid down in a kickstart).
         """
-        identity = inj.require(inj.IDENTITY)
+        identity = Identity.getInstance()
         return not identity.is_valid()
 
     def on_register_message(self, obj, msg, message_type=None):

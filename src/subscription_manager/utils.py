@@ -29,6 +29,8 @@ import uuid
 import pkg_resources
 
 from six.moves import urllib
+from subscription_manager.identity import Identity
+
 from rhsm.https import ssl
 import six
 
@@ -172,7 +174,7 @@ def is_owner_using_golden_ticket(uep=None, identity=None, owner=None):
     """
 
     if identity is None:
-        identity = inj.require(inj.IDENTITY)
+        identity = Identity.getInstance()
 
     # When identity is not known, then system is not registered
     if identity.uuid is None:
@@ -225,7 +227,7 @@ def get_supported_resources(uep=None, identity=None):
     supported_resources = []
 
     if identity is None:
-        identity = inj.require(inj.IDENTITY)
+        identity = Identity.getInstance()
 
     # When identity is not known, then system is not registered
     if identity.uuid is None:
@@ -329,7 +331,7 @@ def get_server_versions(cp, exception_on_timeout=False):
     server_type = _("This system is currently not registered.")
     rules_version = _("Unknown")
 
-    identity = inj.require(inj.IDENTITY)
+    identity = Identity.getInstance()
 
     # check for Classic before doing anything else
     if ClassicCheck().is_registered_with_classic():

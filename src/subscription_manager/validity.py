@@ -17,6 +17,8 @@ from __future__ import print_function, division, absolute_import
 
 import logging
 
+from subscription_manager.identity import Identity
+
 from rhsm.certificate import DateRange
 import subscription_manager.injection as inj
 from subscription_manager.isodate import parse_date
@@ -28,7 +30,7 @@ class ValidProductDateRangeCalculator(object):
 
     def __init__(self, uep=None):
         uep = uep or inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = Identity.getInstance()
         if self.identity.is_valid():
             self.prod_status_cache = inj.require(inj.PROD_STATUS_CACHE)
             self.prod_status = self.prod_status_cache.load_status(

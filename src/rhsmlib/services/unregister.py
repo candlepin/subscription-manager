@@ -14,6 +14,7 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+from subscription_manager.identity import Identity
 
 """
 This module includes class used for unregistering system from candlepin
@@ -40,7 +41,7 @@ class UnregisterService(object):
         """
         Initialization of Unregister instance
         """
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = Identity.getInstance()
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = uep
 

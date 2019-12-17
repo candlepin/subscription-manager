@@ -14,6 +14,8 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 import logging
 
+from subscription_manager.identity import Identity
+
 from subscription_manager import injection as inj
 
 log = logging.getLogger(__name__)
@@ -22,7 +24,7 @@ log = logging.getLogger(__name__)
 class AttachService(object):
     def __init__(self, cp):
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = Identity.getInstance()
         self.cp = cp
 
     def attach_auto(self, service_level):

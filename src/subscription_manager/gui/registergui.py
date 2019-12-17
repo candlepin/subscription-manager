@@ -23,6 +23,7 @@ import sys
 import threading
 
 from six.moves import queue
+from subscription_manager.identity import Identity
 
 from subscription_manager import ga_loader
 ga_loader.init_ga()
@@ -39,7 +40,7 @@ from subscription_manager.branding import get_branding
 from subscription_manager.action_client import ActionClient
 from subscription_manager.gui import networkConfig
 from subscription_manager.gui import widgets
-from subscription_manager.injection import IDENTITY, PLUGIN_MANAGER, require, \
+from subscription_manager.injection import PLUGIN_MANAGER, require, \
         INSTALLED_PRODUCTS_MANAGER, PROFILE_MANAGER, FACTS, ENT_DIR
 from subscription_manager import managerlib
 from subscription_manager.utils import is_valid_server_info, MissingCaCertException, \
@@ -192,7 +193,7 @@ class RegisterInfo(ga_GObject.GObject):
     # TODO: make a gobj prop as well, with custom set/get, so we can be notified
     @property
     def identity(self):
-        id = require(IDENTITY)
+        id = Identity.getInstance()
         return id
 
     def __init__(self):
@@ -2004,7 +2005,7 @@ class AsyncBackend(object):
                                     facts=facts_dict)
 
             # TODO: split persisting info into it's own thread
-            require(IDENTITY).reload()
+            Identity.getInstance().reload()
 
             # Facts and installed products went out with the registration
             # request, manually write caches to disk:

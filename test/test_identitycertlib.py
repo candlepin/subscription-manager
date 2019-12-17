@@ -14,12 +14,12 @@ from __future__ import print_function, division, absolute_import
 #
 
 import mock
+from subscription_manager.identity import Identity
 
 from . import fixture
 
 from subscription_manager import identity
 from subscription_manager import identitycertlib
-from subscription_manager import injection as inj
 
 CONSUMER_DATA = {'releaseVer': {'id': 1, 'releaseVer': '123123'},
                  'serviceLevel': "Pro Turbo HD Plus Ultra",
@@ -34,7 +34,7 @@ mock_consumer_identity.getConsumerId.return_value = "11111-00000-11111-0000"
 
 
 # Identities to inject for testing
-class StubIdentity(identity.Identity):
+class StubIdentity(identity.BaseIdentity):
     _consumer = None
 
     def _get_consumer_identity(self):
@@ -73,7 +73,7 @@ class TestIdentityUpdateAction(fixture.SubManFixture):
     def test_idcertlib_persists_cert(self, mock_persist):
         id_update_action = identitycertlib.IdentityUpdateAction()
 
-        inj.provide(inj.IDENTITY, DifferentValidConsumerIdentity())
+        Identity.getInstance = staticmethod(lambda: DifferentValidConsumerIdentity())
         id_update_action.perform()
         mock_persist.assert_called_once_with(CONSUMER_DATA)
 
@@ -83,13 +83,13 @@ class TestIdentityUpdateAction(fixture.SubManFixture):
         #certlib.ConsumerIdentity = stubs.StubConsumerIdentity
         #certlib.ConsumerIdentity.getSerialNumber = getSerialNumber
 
-        inj.provide(inj.IDENTITY, InvalidIdentity())
+        Identity.getInstance = staticmethod(lambda: InvalidIdentity())
 
         id_update_action.perform()
         self.assertFalse(mock_persist.called)
 
     def test_idcertlib_no_id_cert(self):
-        inj.provide(inj.IDENTITY, InvalidIdentity())
+        Identity.getInstance = staticmethod(lambda: InvalidIdentity())
         id_update_action = identitycertlib.IdentityUpdateAction()
         report = id_update_action.perform()
         self.assertEqual(report._status, 0)

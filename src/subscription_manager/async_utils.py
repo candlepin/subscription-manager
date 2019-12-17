@@ -23,10 +23,11 @@ import sys
 from six.moves import queue
 
 from subscription_manager.ga import GObject as ga_GObject
+from subscription_manager.identity import Identity
+
 from subscription_manager.entcertlib import Disconnected
 from subscription_manager.managerlib import fetch_certificates
-from subscription_manager.injection import IDENTITY, \
-        PLUGIN_MANAGER, CP_PROVIDER, require
+from subscription_manager.injection import PLUGIN_MANAGER, CP_PROVIDER, require
 
 from rhsmlib.services import attach, entitlement
 
@@ -72,7 +73,7 @@ class AsyncBind(object):
 
     def __init__(self, certlib):
         self.cp_provider = require(CP_PROVIDER)
-        self.identity = require(IDENTITY)
+        self.identity = Identity.getInstance()
         self.plugin_manager = require(PLUGIN_MANAGER)
         self.certlib = certlib
 
@@ -118,7 +119,7 @@ class AsyncRepoOverridesUpdate(object):
 
     def __init__(self, overrides_api):
         self.overrides_api = overrides_api
-        self.identity = require(IDENTITY)
+        self.identity = Identity.getInstance()
 
     def _load_data(self, success_callback, except_callback):
         try:

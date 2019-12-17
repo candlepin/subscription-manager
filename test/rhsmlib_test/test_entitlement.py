@@ -39,14 +39,13 @@ class TestEntitlementService(InjectionMockingTest):
     def setUp(self):
         super(TestEntitlementService, self).setUp()
         self.mock_identity = mock.Mock(spec=Identity, name="Identity").return_value
+        Identity.getInstance = staticmethod(lambda: self.mock_identity)
         self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection").return_value
         self.mock_sorter_class = mock.Mock(spec=CertSorter, name="CertSorter")
         self.mock_ent_dir = mock.Mock(spec=EntitlementDirectory, name="EntitlementDirectory").return_value
 
     def injection_definitions(self, *args, **kwargs):
-        if args[0] == inj.IDENTITY:
-            return self.mock_identity
-        elif args[0] == inj.CERT_SORTER:
+        if args[0] == inj.CERT_SORTER:
             # This sleight of hand is needed because we want to check the arguments given
             # when the cert sorter is instantiated.
             instance = self.mock_sorter_class(*args[1:])
@@ -429,9 +428,7 @@ class TestEntitlementDBusObject(DBusObjectTest, InjectionMockingTest):
         self.mock_ent_dir = mock.Mock(spec=EntitlementDirectory, name="EntitlementDirectory").return_value
 
     def injection_definitions(self, *args, **kwargs):
-        if args[0] == inj.IDENTITY:
-            return self.mock_identity
-        elif args[0] == inj.CERT_SORTER:
+        if args[0] == inj.CERT_SORTER:
             # This sleight of hand is needed because we want to check the arguments given
             # when the cert sorter is instantiated.
             instance = self.mock_sorter_class(*args[1:])

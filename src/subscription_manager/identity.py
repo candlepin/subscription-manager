@@ -124,7 +124,7 @@ class ConsumerIdentity(object):
              self.getConsumerId())
 
 
-class Identity(object):
+class BaseIdentity(object):
     """Wrapper for sharing consumer identity without constant reloading."""
     def __init__(self):
         self.consumer = None
@@ -198,3 +198,21 @@ class Identity(object):
 
     def __str__(self):
         return "Consumer Identity name=%s uuid=%s" % (self.name, self.uuid)
+
+
+class Identity(BaseIdentity):
+    def __init__(self):
+        BaseIdentity.__init__(self)
+        if Identity.__instance is not None:
+            raise Exception("This class is a singleton!")
+        else:
+            Identity.__instance = self
+
+    __instance = None
+
+    @staticmethod
+    def getInstance():
+        """ Static access method. """
+        if Identity.__instance is None:
+            Identity()
+        return Identity.__instance

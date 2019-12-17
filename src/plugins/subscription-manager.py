@@ -18,6 +18,8 @@ from __future__ import print_function, division, absolute_import
 #
 
 import os
+
+from subscription_manager.identity import Identity
 from yum.plugins import TYPE_CORE
 
 from subscription_manager import injection as inj
@@ -92,7 +94,7 @@ def update(conduit, cache_only):
         return
     conduit.info(3, 'Updating Subscription Management repositories.')
 
-    identity = inj.require(inj.IDENTITY)
+    identity = Identity.getInstance()
 
     if not identity.is_valid():
         conduit.info(3, "Unable to read consumer identity")
@@ -139,7 +141,7 @@ def warn_or_usage_message(conduit):
 
     msg = ""
     try:
-        identity = inj.require(inj.IDENTITY)
+        identity = Identity.getInstance()
         ent_dir = inj.require(inj.ENT_DIR)
         # Don't warn people to register if we see entitlements, but no identity:
         if not identity.is_valid() and len(ent_dir.list_valid()) == 0:

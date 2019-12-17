@@ -31,7 +31,7 @@ import subscription_manager.cache as cache
 from subscription_manager.cert_sorter import StackingGroupSorter, ComplianceManager
 from subscription_manager import identity
 from subscription_manager.injection import require, CERT_SORTER, \
-        IDENTITY, ENTITLEMENT_STATUS_CACHE, SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE, \
+        ENTITLEMENT_STATUS_CACHE, SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE, \
         PROD_STATUS_CACHE, ENT_DIR, PROD_DIR, CP_PROVIDER, OVERRIDE_STATUS_CACHE, \
         POOLTYPE_CACHE, RELEASE_STATUS_CACHE, FACTS, POOL_STATUS_CACHE
 from subscription_manager import isodate
@@ -41,7 +41,7 @@ from subscription_manager.syspurposelib import SyncedStore
 from subscription_manager import utils
 
 # FIXME FIXME
-from subscription_manager.identity import ConsumerIdentity
+from subscription_manager.identity import ConsumerIdentity, Identity
 from dateutil.tz import tzlocal
 
 from subscription_manager.i18n import ugettext as _
@@ -465,7 +465,7 @@ class PoolStash(object):
     incompatible, and installed lists. Also does filtering based on name.
     """
     def __init__(self):
-        self.identity = require(IDENTITY)
+        self.identity = Identity.getInstance()
         self.sorter = None
 
         # Pools which passed rules server side for this consumer:
@@ -849,7 +849,7 @@ def clean_all_data(backup=True):
             log.debug("Removing identity cert: %s" % path)
             os.remove(path)
 
-    require(IDENTITY).reload()
+    Identity.getInstance().reload()
 
     # Delete all entitlement certs rather than the directory itself:
     ent_cert_dir = cfg.get('rhsm', 'entitlementCertDir')

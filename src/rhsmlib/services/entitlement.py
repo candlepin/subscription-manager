@@ -19,6 +19,8 @@ import logging
 import six
 import time
 
+from subscription_manager.identity import Identity
+
 from subscription_manager import injection as inj
 from subscription_manager.i18n import ugettext as _
 from subscription_manager import managerlib, utils
@@ -34,7 +36,7 @@ log = logging.getLogger(__name__)
 class EntitlementService(object):
     def __init__(self, cp=None):
         self.cp = cp
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = Identity.getInstance()
         self.product_dir = inj.require(inj.PROD_DIR)
         self.entitlement_dir = inj.require(inj.ENT_DIR)
         self.entcertlib = EntCertActionInvoker()

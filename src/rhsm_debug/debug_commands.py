@@ -24,7 +24,8 @@ import tarfile
 from datetime import datetime
 from shutil import ignore_patterns
 
-import subscription_manager.injection as inj
+from subscription_manager.identity import Identity
+
 import subscription_manager.managercli as managercli
 from subscription_manager.managercli import CliCommand
 from subscription_manager.cli import InvalidCLIOptionError, system_exit
@@ -105,7 +106,7 @@ class SystemCommand(CliCommand):
     def _do_command(self):
         self.options.destination = os.path.expanduser(self.options.destination)
         self._validate_options()
-        consumer = inj.require(inj.IDENTITY)
+        consumer = Identity.getInstance()
         if not consumer.is_valid():
             system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
 

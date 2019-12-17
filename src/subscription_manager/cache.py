@@ -12,6 +12,7 @@ from __future__ import print_function, division, absolute_import
 # have received a copy of GPLv2 along with this software; if not, see
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
+from subscription_manager.identity import Identity
 
 """
 Module for managing the cached information about a system.
@@ -621,7 +622,7 @@ class PoolTypeCache(object):
     """
 
     def __init__(self):
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = Identity.getInstance()
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.ent_dir = inj.require(inj.ENT_DIR)
         self.pool_cache = inj.require(inj.POOL_STATUS_CACHE)
@@ -670,7 +671,7 @@ class ContentAccessCache(object):
 
     def __init__(self):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = Identity.getInstance()
 
     def _query_for_update(self, if_modified_since=None):
         uep = self.cp_provider.get_consumer_auth_cp()

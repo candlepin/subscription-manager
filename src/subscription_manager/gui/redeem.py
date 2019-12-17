@@ -16,9 +16,10 @@ from __future__ import print_function, division, absolute_import
 #
 import logging
 
+from subscription_manager.identity import Identity
+
 from subscription_manager.gui.utils import handle_gui_exception
 from subscription_manager.gui import widgets
-from subscription_manager.injection import IDENTITY, require
 
 from subscription_manager.i18n import ugettext as _
 
@@ -42,7 +43,7 @@ class RedeemDialog(widgets.SubmanBaseWidget):
         })
 
         self.backend = backend
-        self.identity = require(IDENTITY)
+        self.identity = Identity.getInstance()
 
     def _redeem(self, button):
         email = self.email_entry.get_text()

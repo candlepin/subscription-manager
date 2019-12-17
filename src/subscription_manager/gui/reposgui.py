@@ -20,6 +20,7 @@ from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.ga import gtk_compat
 from subscription_manager.ga import GObject as ga_GObject
 from subscription_manager.ga import GdkPixbuf as ga_GdkPixbuf
+from subscription_manager.identity import Identity
 
 import rhsm.config
 from subscription_manager.gui.utils import handle_gui_exception
@@ -27,7 +28,7 @@ from subscription_manager.gui import widgets
 from subscription_manager.gui import progress
 
 from subscription_manager.async_utils import AsyncRepoOverridesUpdate
-from subscription_manager.injection import IDENTITY, ENT_DIR, require
+from subscription_manager.injection import ENT_DIR, require
 from subscription_manager.gui.storage import MappedListStore
 from subscription_manager.gui.widgets import TextTreeViewColumn, CheckBoxColumn,\
     SelectionWrapper, HasSortableWidget, OverridesTable
@@ -88,7 +89,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
         #        changing out from under us.
         self.backend = backend
         self.async_update = AsyncRepoOverridesUpdate(self.backend.overrides)
-        self.identity = require(IDENTITY)
+        self.identity = Identity.getInstance()
         self.ent_dir = require(ENT_DIR)
 
         self.connect_signals({"on_dialog_delete_event": self._on_close,

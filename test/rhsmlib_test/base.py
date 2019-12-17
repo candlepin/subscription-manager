@@ -89,6 +89,7 @@ class DBusObjectTest(unittest.TestCase):
         self.handler_complete_event = threading.Event()
         # This is up a level because it needs to be defined before the server is instantiated
         self.mock_identity = mock.Mock(spec=Identity, name="Identity").return_value
+        Identity.getInstance = staticmethod(lambda: self.mock_identity)
         self.mock_identity.cert_dir_path = "path.txt"  # must be a string, otherwise it is set as a mock object
         # and os.path throws type error, causing tests to hang
 

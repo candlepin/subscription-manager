@@ -16,14 +16,12 @@ from __future__ import print_function, division, absolute_import
 #
 
 import mock
-
+from subscription_manager.identity import Identity
 
 from test import stubs
 
 from test.fixture import SubManFixture
 from subscription_manager.ga import Gdk as ga_Gdk
-
-from subscription_manager.injection import require, IDENTITY
 
 from subscription_manager.gui import preferences
 from nose.plugins.attrib import attr
@@ -50,7 +48,7 @@ class TestPreferencesDialog(SubManFixture):
     def testAutohealChanged(self, MockUep):
         self._getPrefDialog()
         self.preferences_dialog.show()
-        identity = require(IDENTITY)
+        identity = Identity.getInstance()
         event = ga_Gdk.Event(ga_Gdk.EventType.BUTTON_PRESS)
 
         self.preferences_dialog.autoheal_event.emit("button-press-event", event)
@@ -113,7 +111,7 @@ class TestPreferencesDialog(SubManFixture):
         # slightly odd, we inject self.id_mock as the identity, but
         # something in mock doesn't like to equate that to the injected
         # one, so we just get a ref to the injected one and verify
-        identity = require(IDENTITY)
+        identity = Identity.getInstance()
         MockUep.assert_called_with(identity.uuid, service_level="Pro")
 
     def testSlaUnset(self):
@@ -147,7 +145,7 @@ class TestPreferencesDialog(SubManFixture):
         self.preferences_dialog.release_backend.get_releases = get_releases
         self.preferences_dialog.show()
         self.preferences_dialog.release_combobox.set_active(5)
-        identity = require(IDENTITY)
+        identity = Identity.getInstance()
         MockUep.assert_called_with(identity.uuid, release="blippy")
 
     def testReleaseUnset(self):

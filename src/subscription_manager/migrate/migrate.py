@@ -26,6 +26,9 @@ import subprocess
 import sys
 
 from datetime import datetime
+
+from subscription_manager.identity import Identity
+
 from rhsm.https import ssl
 
 from rhn import rpclib
@@ -274,7 +277,7 @@ class MigrationEngine(object):
 
     def check_ok_to_proceed(self):
         # check if this machine is already registered to Certicate-based RHN
-        identity = inj.require(inj.IDENTITY)
+        identity = Identity.getInstance()
         if identity.is_valid():
             if self.options.five_to_six:
                 msgs = [_("This system appears to already be registered to Satellite 6.")]
@@ -722,7 +725,7 @@ class MigrationEngine(object):
 
         subprocess.call(cmd)
 
-        identity = inj.require(inj.IDENTITY)
+        identity = Identity.getInstance()
         identity.reload()
 
         if not identity.is_valid():

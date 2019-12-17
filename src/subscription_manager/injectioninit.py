@@ -28,7 +28,6 @@ from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.certdirectory import EntitlementDirectory
 from subscription_manager.certdirectory import ProductDirectory
 from subscription_manager.facts import Facts
-from subscription_manager.identity import Identity
 from subscription_manager.validity import ValidProductDateRangeCalculator
 from subscription_manager.cp_provider import CPProvider
 from subscription_manager.plugins import PluginManager
@@ -44,7 +43,7 @@ def init_dep_injection():
     # Set up consumer identity as a singleton so we don't constantly re-load
     # it from disk. Call reload when anything changes and all references will be
     # updated.
-    inj.provide(inj.IDENTITY, Identity, singleton=True)
+    inj.provide(inj.IDENTITY, None)
 
     inj.provide(inj.PRODUCT_DATE_RANGE_CALCULATOR,
             ValidProductDateRangeCalculator)

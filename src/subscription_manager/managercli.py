@@ -31,6 +31,8 @@ import six.moves
 import sys
 from time import localtime, strftime, strptime
 
+from subscription_manager.identity import Identity
+
 from rhsm.certificate import CertificateException
 from rhsm.certificate2 import CONTENT_ACCESS_CERT_TYPE
 from rhsm.https import ssl
@@ -287,7 +289,7 @@ class CliCommand(AbstractCLICommand):
 
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
 
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = Identity.getInstance()
 
         self.correlation_id = generate_correlation_id()
 
@@ -349,11 +351,11 @@ class CliCommand(AbstractCLICommand):
             ))
 
     def is_consumer_cert_present(self):
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = Identity.getInstance()
         return self.identity.is_present()
 
     def is_registered(self):
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = Identity.getInstance()
         log.debug('%s', self.identity)
         return self.identity.is_valid()
 
@@ -847,7 +849,7 @@ class RefreshCommand(CliCommand):
         self.assert_should_be_registered()
         try:
             # get current consumer identity
-            identity = inj.require(inj.IDENTITY)
+            identity = Identity.getInstance()
 
             # remove content_access cache, ensuring we get it fresh
             content_access = inj.require(inj.CONTENT_ACCESS_CACHE)
@@ -894,7 +896,7 @@ class IdentityCommand(UserPassCommand):
 
     def _do_command(self):
         # get current consumer identity
-        identity = inj.require(inj.IDENTITY)
+        identity = Identity.getInstance()
 
         # check for Classic before doing anything else
         if ClassicCheck().is_registered_with_classic():
@@ -1031,7 +1033,7 @@ class EnvironmentsCommand(OrgCommand):
 class AutohealCommand(CliCommand):
 
     def __init__(self):
-        self.uuid = inj.require(inj.IDENTITY).uuid
+        self.uuid = Identity.getInstance().uuid
 
         shortdesc = _("Set if subscriptions are attached on a schedule (default of daily)")
         self._org_help_text = _("specify whether to enable or disable auto-attaching of subscriptions")
@@ -1090,7 +1092,7 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
             help=_("list all service levels available")
         )
 
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = Identity.getInstance()
 
     def _validate_options(self):
 
@@ -2091,7 +2093,7 @@ class FactsCommand(CliCommand):
                 print("%s: %s" % (key, value))
 
         if self.options.update:
-            identity = inj.require(inj.IDENTITY)
+            identity = Identity.getInstance()
             try:
                 facts.update_check(self.cp, identity.uuid, force=True)
             except connection.RestlibException as re:

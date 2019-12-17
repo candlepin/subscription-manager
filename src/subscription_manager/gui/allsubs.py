@@ -19,6 +19,7 @@ import logging
 
 from subscription_manager.ga import Gtk as ga_Gtk
 from subscription_manager.ga import GObject as ga_GObject
+from subscription_manager.identity import Identity
 
 from subscription_manager import async_utils
 from subscription_manager.gui.contract_selection import ContractSelectionWindow
@@ -27,7 +28,6 @@ from subscription_manager.gui import progress
 from subscription_manager.gui.storage import MappedTreeStore
 from subscription_manager.gui.utils import apply_highlight, show_error_window, handle_gui_exception
 from subscription_manager.gui import widgets
-from subscription_manager.injection import IDENTITY, require
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
 from subscription_manager.managerlib import allows_multi_entitlement, valid_quantity
@@ -58,7 +58,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         self.parent_win = parent_win
         self.backend = backend
-        self.identity = require(IDENTITY)
+        self.identity = Identity.getInstance()
 
         # Progress bar
         self.pb = None

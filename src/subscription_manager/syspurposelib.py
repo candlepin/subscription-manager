@@ -16,6 +16,7 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+from subscription_manager.identity import Identity
 
 """
 This module is an interface to syspurpose's SyncedStore class from subscription-manager.
@@ -82,7 +83,7 @@ def get_sys_purpose_store():
         return store
     elif SyncedStore is not None:
         uep = inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()
-        uuid = inj.require(inj.IDENTITY).uuid
+        uuid = Identity.getInstance().uuid
         store = SyncedStore(uep, consumer_uuid=uuid)
     return store
 
@@ -189,7 +190,7 @@ class SyspurposeSyncActionCommand(object):
         :return:
         """
         result = {}
-        consumer_uuid = inj.require(inj.IDENTITY).uuid
+        consumer_uuid = Identity.getInstance().uuid
 
         try:
             store = SyncedStore(uep=self.uep,

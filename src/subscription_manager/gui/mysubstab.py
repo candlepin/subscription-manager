@@ -17,6 +17,8 @@ from __future__ import print_function, division, absolute_import
 import os
 from datetime import datetime
 
+from subscription_manager.identity import Identity
+
 from rhsm.certificate import GMT
 
 from subscription_manager.ga import Gtk as ga_Gtk
@@ -55,7 +57,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         """
         super(MySubscriptionsTab, self).__init__()
         self.backend = backend
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = Identity.getInstance()
         self.parent_win = parent_win
         self.entitlement_dir = ent_dir
         self.product_dir = prod_dir

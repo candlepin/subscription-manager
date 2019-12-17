@@ -22,6 +22,9 @@ from iniparse import RawConfigParser as ConfigParser
 import logging
 import os
 import socket
+
+from subscription_manager.identity import Identity
+
 import subscription_manager.injection as inj
 from subscription_manager.cache import OverrideStatusCache, WrittenOverrideCache
 from subscription_manager import model
@@ -188,7 +191,7 @@ class RepoActionInvoker(BaseActionInvoker):
     def __init__(self, cache_only=False, locker=None):
         super(RepoActionInvoker, self).__init__(locker=locker)
         self.cache_only = cache_only
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = Identity.getInstance()
 
     def _do_update(self):
         action = RepoUpdateActionCommand(cache_only=self.cache_only)
@@ -260,7 +263,7 @@ class YumReleaseverSource(object):
         self.release_status_cache = inj.require(inj.RELEASE_STATUS_CACHE)
         self._expansion = None
 
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = Identity.getInstance()
         self.cp_provider = inj.require(inj.CP_PROVIDER)
 
     # FIXME: these guys are really more of model helpers for the object
@@ -334,7 +337,7 @@ class RepoUpdateActionCommand(object):
     Returns an RepoActionReport.
     """
     def __init__(self, cache_only=False, apply_overrides=True):
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = Identity.getInstance()
 
         # These should probably move closer their use
         self.ent_dir = inj.require(inj.ENT_DIR)

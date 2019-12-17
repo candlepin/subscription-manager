@@ -17,10 +17,11 @@ from __future__ import print_function, division, absolute_import
 import logging
 
 from subscription_manager.ga import Gtk as ga_Gtk
+from subscription_manager.identity import Identity
+
 from subscription_manager.gui import messageWindow
 from subscription_manager.gui import widgets
 from subscription_manager.gui import utils
-from subscription_manager import injection as inj
 from subscription_manager import release
 
 from subscription_manager.i18n import ugettext as _
@@ -46,7 +47,7 @@ class PreferencesDialog(widgets.SubmanBaseWidget):
         super(PreferencesDialog, self).__init__()
         self.backend = backend
         self.allow_callbacks = False
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = Identity.getInstance()
         self.async_updater = utils.AsyncWidgetUpdater(self.dialog)
         self.release_backend = release.ReleaseBackend()
 

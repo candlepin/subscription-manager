@@ -8,6 +8,8 @@ import six
 import sys
 import tempfile
 
+from subscription_manager.identity import Identity
+
 try:
     import unittest2 as unittest
 except ImportError:
@@ -177,7 +179,7 @@ class SubManFixture(unittest.TestCase):
         mock_repofile_path_exists = self.mock_repofile_path_exists_patcher.start()
         mock_repofile_path_exists.return_value = True
 
-        inj.provide(inj.IDENTITY, id_mock)
+        Identity.getInstance = staticmethod(lambda: id_mock)
         inj.provide(inj.PRODUCT_DATE_RANGE_CALCULATOR, self.mock_calc)
 
         inj.provide(inj.ENTITLEMENT_STATUS_CACHE, stubs.StubEntitlementStatusCache())
@@ -290,7 +292,7 @@ class SubManFixture(unittest.TestCase):
         identity.uuid = uuid or "VALIDCONSUMERUUID"
         identity.is_valid = Mock(return_value=True)
         identity.cert_dir_path = "/not/a/real/path/to/pki/consumer/"
-        inj.provide(inj.IDENTITY, identity)
+        Identity.getInstance = staticmethod(lambda: identity)
         return identity
 
     def _inject_mock_invalid_consumer(self, uuid=None):
@@ -302,7 +304,7 @@ class SubManFixture(unittest.TestCase):
         invalid_identity.is_valid = Mock(return_value=False)
         invalid_identity.uuid = uuid or "INVALIDCONSUMERUUID"
         invalid_identity.cert_dir_path = "/not/a/real/path/to/pki/consumer/"
-        inj.provide(inj.IDENTITY, invalid_identity)
+        Identity.getInstance = staticmethod(lambda: invalid_identity)
         return invalid_identity
 
     # use our naming convention here to make it clear

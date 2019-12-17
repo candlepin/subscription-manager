@@ -17,6 +17,7 @@ from __future__ import print_function, division, absolute_import
 import logging
 
 from subscription_manager.ga import Gtk as ga_Gtk
+from subscription_manager.identity import Identity
 
 from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import handle_gui_exception, linkify
@@ -44,7 +45,7 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
 
         #self.consumer = consumer
         self.update_callback = update_callback
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = Identity.getInstance()
         self.cp_provider = inj.require(inj.CP_PROVIDER)
 
         self.facts = inj.require(inj.FACTS)
@@ -119,7 +120,7 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
                 value = _("Unknown")
             self.facts_store.append(parent, [str(fact), str(value)])
 
-        identity = inj.require(inj.IDENTITY)
+        identity = Identity.getInstance()
         self._display_system_id(identity)
 
         # TODO: could stand to check if registered before trying to do this:
@@ -167,7 +168,7 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
     def update_facts(self):
         """Sends the current system facts to the UEP server."""
 
-        identity = inj.require(inj.IDENTITY)
+        identity = Identity.getInstance()
 
         try:
             self.facts.update_check(self.cp_provider.get_consumer_auth_cp(), identity.uuid, force=True)

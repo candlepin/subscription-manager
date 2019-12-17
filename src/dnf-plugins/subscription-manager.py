@@ -17,6 +17,7 @@ from __future__ import print_function, division, absolute_import
 
 import os
 import six
+from subscription_manager.identity import Identity
 
 from subscription_manager import injection as inj
 from subscription_manager.action_client import ProfileActionClient
@@ -116,7 +117,7 @@ class SubscriptionManager(dnf.Plugin):
         cert_file = str(ConsumerIdentity.certpath())
         key_file = str(ConsumerIdentity.keypath())
 
-        identity = inj.require(inj.IDENTITY)
+        identity = Identity.getInstance()
 
         # In containers we have no identity, but we may have entitlements inherited
         # from the host, which need to generate a redhat.repo.
@@ -159,7 +160,7 @@ class SubscriptionManager(dnf.Plugin):
         if ClassicCheck().is_registered_with_classic():
             return
         try:
-            identity = inj.require(inj.IDENTITY)
+            identity = Identity.getInstance()
             ent_dir = inj.require(inj.ENT_DIR)
             # Don't warn people to register if we see entitelements, but no identity:
             if not identity.is_valid() and len(ent_dir.list_valid()) == 0:

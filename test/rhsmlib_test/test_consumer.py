@@ -20,7 +20,6 @@ from rhsmlib.services import consumer
 from rhsmlib.dbus import constants
 from rhsmlib.dbus.objects.consumer import ConsumerDBusObject
 
-from subscription_manager import injection as inj
 from subscription_manager.identity import Identity
 from test.rhsmlib_test.base import InjectionMockingTest, DBusObjectTest
 
@@ -29,14 +28,12 @@ class TestConsumerService(InjectionMockingTest):
     def setUp(self):
         super(TestConsumerService, self).setUp()
         self.mock_identity = mock.Mock(spec=Identity, name="Identity").return_value
+        Identity.getInstance = staticmethod(lambda: self.mock_identity)
         self.mock_identity.is_valid.return_value = True
         self.mock_identity.uuid = "43b30b32-86cf-459e-9310-cb4182c23c4a"
 
     def injection_definitions(self, *args, **kwargs):
-        if args[0] == inj.IDENTITY:
-            return self.mock_identity
-        else:
-            return None
+        return None
 
     def test_get_consumer_uuid(self):
         """
@@ -70,16 +67,12 @@ class TestConsumerDBusObject(DBusObjectTest, InjectionMockingTest):
 
     def _create_mock_identity(self):
         self.mock_identity = mock.Mock(spec=Identity, name="Identity").return_value
+        Identity.getInstance = staticmethod(lambda: self.mock_identity)
         self.mock_identity.is_valid.return_value = True
         self.mock_identity.uuid = "43b30b32-86cf-459e-9310-cb4182c23c4a"
 
     def injection_definitions(self, *args, **kwargs):
-        if args[0] == inj.IDENTITY:
-            if not hasattr(self, 'mock_identity'):
-                self._create_mock_identity()
-            return self.mock_identity
-        else:
-            return None
+        return None
 
     def dbus_objects(self):
         return [ConsumerDBusObject]

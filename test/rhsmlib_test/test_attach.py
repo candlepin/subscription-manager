@@ -105,13 +105,12 @@ class TestAttachService(InjectionMockingTest):
     def setUp(self):
         super(TestAttachService, self).setUp()
         self.mock_identity = mock.Mock(spec=Identity, name="Identity").return_value
+        Identity.getInstance = staticmethod(lambda: self.mock_identity)
         self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection").return_value
         self.mock_pm = mock.Mock(spec=PluginManager, name="PluginManager").return_value
 
     def injection_definitions(self, *args, **kwargs):
-        if args[0] == inj.IDENTITY:
-            return self.mock_identity
-        elif args[0] == inj.PLUGIN_MANAGER:
+        if args[0] == inj.PLUGIN_MANAGER:
             return self.mock_pm
         else:
             return None
@@ -181,9 +180,7 @@ class TestAttachDBusObject(DBusObjectTest, InjectionMockingTest):
         self.mock_identity.uuid = "id"
 
     def injection_definitions(self, *args, **kwargs):
-        if args[0] == inj.IDENTITY:
-            return self.mock_identity
-        elif args[0] == inj.CP_PROVIDER:
+        if args[0] == inj.CP_PROVIDER:
             provider = mock.Mock(spec=CPProvider, name="CPProvider").return_value
             provider.get_consumer_auth_cp.return_value = mock.Mock(name="MockCP")
             return provider

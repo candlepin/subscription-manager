@@ -18,7 +18,9 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-from subscription_manager.injection import require, IDENTITY, CERT_SORTER, CP_PROVIDER
+from subscription_manager.identity import Identity
+
+from subscription_manager.injection import require, CERT_SORTER, CP_PROVIDER
 import subscription_manager.injection as inj
 
 import locale
@@ -105,7 +107,7 @@ class Backend(object):
     """
 
     def __init__(self):
-        self.identity = require(IDENTITY)
+        self.identity = Identity.getInstance()
         self.cp_provider = require(CP_PROVIDER)
 
         self.update()
@@ -234,7 +236,7 @@ class MainWindow(widgets.SubmanBaseWidget):
                     show_proxy_error_dialog(proxy_auth_required=True)
                     return
 
-        self.identity = require(IDENTITY)
+        self.identity = Identity.getInstance()
         log.debug("Client Versions: %s " % get_client_versions())
         ga_GLib.idle_add(self.log_server_version, cp)
 

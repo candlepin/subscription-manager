@@ -18,6 +18,8 @@ from __future__ import print_function, division, absolute_import
 from mock import Mock, NonCallableMock
 from datetime import datetime
 
+from subscription_manager.identity import Identity
+
 from .fixture import SubManFixture
 from subscription_manager.validity import ValidProductDateRangeCalculator
 from rhsm import ourjson as json
@@ -109,7 +111,7 @@ class ValidProductDateRangeCalculatorTests(SubManFixture):
     def test_unregistered(self):
         id_mock = NonCallableMock()
         id_mock.is_valid.return_value = False
-        inj.provide(inj.IDENTITY, id_mock)
+        Identity.getInstance = staticmethod(lambda: id_mock)
         self.calculator = ValidProductDateRangeCalculator(None)
         for pid in (INST_PID_1, INST_PID_2, INST_PID_3):
             self.assertTrue(self.calculator.calculate(pid) is None)

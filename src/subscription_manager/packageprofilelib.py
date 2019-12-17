@@ -12,6 +12,7 @@ from __future__ import print_function, division, absolute_import
 # have received a copy of GPLv2 along with this software; if not, see
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
+from subscription_manager.identity import Identity
 
 from subscription_manager import injection as inj
 from subscription_manager import certlib
@@ -38,7 +39,7 @@ class PackageProfileActionCommand(object):
 
     def perform(self, force_upload=False):
         profile_mgr = inj.require(inj.PROFILE_MANAGER)
-        consumer_identity = inj.require(inj.IDENTITY)
+        consumer_identity = Identity.getInstance()
         ret = profile_mgr.update_check(self.uep, consumer_identity.uuid, force=force_upload)
         self.report._status = ret
         return self.report

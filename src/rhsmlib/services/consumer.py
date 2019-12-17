@@ -12,13 +12,11 @@ from __future__ import print_function, division, absolute_import
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
+from subscription_manager.identity import Identity
 
 """
 This module provides service for consumer identity.
 """
-
-
-from subscription_manager import injection as inj
 
 
 class Consumer(object):
@@ -34,7 +32,7 @@ class Consumer(object):
         :return: string representing UUID
         """
 
-        identity = inj.require(inj.IDENTITY)
+        identity = Identity.getInstance()
 
         if identity.uuid is None:
             return ""

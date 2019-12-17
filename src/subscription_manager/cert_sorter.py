@@ -17,6 +17,8 @@ from copy import copy
 from datetime import datetime
 import logging
 
+from subscription_manager.identity import Identity
+
 from rhsm.certificate import GMT
 from rhsm.connection import RestlibException
 import subscription_manager.injection as inj
@@ -61,7 +63,7 @@ class ComplianceManager(object):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.product_dir = inj.require(inj.PROD_DIR)
         self.entitlement_dir = inj.require(inj.ENT_DIR)
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity = Identity.getInstance()
         self.on_date = on_date
         self.load()
 
@@ -261,7 +263,7 @@ class ComplianceManager(object):
         return self.system_status == 'valid' or self.system_status == 'disabled'
 
     def is_registered(self):
-        return inj.require(inj.IDENTITY).is_valid()
+        return Identity.getInstance().is_valid()
 
     def get_status(self, product_id):
         """Return the status of a given product"""
@@ -330,7 +332,7 @@ class CertSorter(ComplianceManager):
                                                          [self.on_prod_dir_changed, self.load]),
                              file_monitor.DirectoryWatch(inj.require(inj.ENT_DIR).path,
                                                          [self.on_ent_dir_changed, self.load]),
-                             file_monitor.DirectoryWatch(inj.require(inj.IDENTITY).cert_dir_path,
+                             file_monitor.DirectoryWatch(Identity.getInstance().cert_dir_path,
                                                          [self.on_identity_changed, self.load])]
 
         # Note: no timer is setup to poll file_monitor by cert_sorter itself,
@@ -348,7 +350,7 @@ class CertSorter(ComplianceManager):
     def update_product_manager(self):
         if self.is_registered():
             cp_provider = inj.require(inj.CP_PROVIDER)
-            consumer_identity = inj.require(inj.IDENTITY)
+            consumer_identity = Identity.getInstance()
             try:
                 self.installed_mgr.update_check(cp_provider.get_consumer_auth_cp(),
                                                 consumer_identity.uuid)

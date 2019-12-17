@@ -23,6 +23,9 @@ from __future__ import print_function, division, absolute_import
 # See http://stackoverflow.com/a/29832646/6124862 for more details
 import six
 import sys
+
+from subscription_manager.identity import Identity
+
 if six.PY2:
     reload(sys)
     sys.setdefaultencoding('utf-8')
@@ -81,7 +84,7 @@ from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()
 
 from subscription_manager.branding import get_branding
-from subscription_manager.injection import require, IDENTITY, CERT_SORTER, RHSM_ICON_CACHE
+from subscription_manager.injection import require, CERT_SORTER, RHSM_ICON_CACHE
 from rhsmlib.facts.hwprobe import ClassicCheck
 from subscription_manager.i18n_optparse import OptionParser, \
     WrappedIndentedHelpFormatter, USAGE
@@ -121,7 +124,7 @@ def pre_check_status(force_signal):
         debug("System is already registered to another entitlement system")
         return RHN_CLASSIC
 
-    identity = require(IDENTITY)
+    identity = Identity.getInstance()
     sorter = require(CERT_SORTER)
 
     if not identity.is_valid() and not sorter.has_entitlements():

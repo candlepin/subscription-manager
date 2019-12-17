@@ -354,7 +354,7 @@ def main():
     try:
         from subscription_manager.identity import Identity
         from subscription_manager.cp_provider import CPProvider
-        identity = Identity()
+        identity = Identity.getInstance()
         uuid = identity.uuid
         uep = CPProvider().get_consumer_auth_cp()
     except ImportError:

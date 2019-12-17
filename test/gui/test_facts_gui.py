@@ -1,8 +1,9 @@
 from __future__ import print_function, division, absolute_import
 
+from subscription_manager.identity import Identity
+
 from test.fixture import SubManFixture
 
-from subscription_manager.injection import provide, IDENTITY
 from test.stubs import StubUEP, StubFacts
 from subscription_manager.gui import factsgui
 from mock import NonCallableMock, patch
@@ -76,7 +77,7 @@ class FactDialogTests(SubManFixture):
 
         def new_identity():
             return id_mock
-        provide(IDENTITY, new_identity)
+        Identity.getInstance = staticmethod(lambda: id_mock)
 
         dialog = factsgui.SystemFactsDialog()
         dialog.show()

@@ -80,6 +80,7 @@ class RegisterServiceTest(InjectionMockingTest):
     def setUp(self):
         super(RegisterServiceTest, self).setUp()
         self.mock_identity = mock.Mock(spec=Identity, name="Identity")
+        Identity.getInstance = staticmethod(lambda: self.mock_identity)
         self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection")
 
         # Mock a basic auth connection
@@ -107,9 +108,7 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_syspurpose = mock.Mock()
 
     def injection_definitions(self, *args, **kwargs):
-        if args[0] == inj.IDENTITY:
-            return self.mock_identity
-        elif args[0] == inj.PLUGIN_MANAGER:
+        if args[0] == inj.PLUGIN_MANAGER:
             return self.mock_pm
         elif args[0] == inj.INSTALLED_PRODUCTS_MANAGER:
             return self.mock_installed_products
@@ -323,9 +322,7 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
         self.addCleanup(register_patcher.stop)
 
     def injection_definitions(self, *args, **kwargs):
-        if args[0] == inj.IDENTITY:
-            return self.mock_identity
-        elif args[0] == inj.CP_PROVIDER:
+        if args[0] == inj.CP_PROVIDER:
             return self.mock_cp_provider
         else:
             return None

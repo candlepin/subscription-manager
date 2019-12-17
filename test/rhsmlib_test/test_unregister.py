@@ -37,14 +37,14 @@ class TestUnregisterService(InjectionMockingTest):
         super(TestUnregisterService, self).setUp()
         self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection")
         self.mock_identity = mock.Mock(spec=Identity, name="Identity").return_value
+        Identity.getInstance = staticmethod(lambda: self.mock_identity)
+
         self.mock_identity.uuid = mock.Mock(return_value='7a002098-c167-41f2-91b3-d0c71e808142')
         self.mock_provider = mock.Mock(spec=CPProvider, name="CPProvider")
         self.mock_provider.get_consumer_auth_cp.return_value = mock.Mock(name="MockCP")
 
     def injection_definitions(self, *args, **kwargs):
-        if args[0] == inj.IDENTITY:
-            return self.mock_identity
-        elif args[0] == inj.CP_PROVIDER:
+        if args[0] == inj.CP_PROVIDER:
             return self.mock_provider
         else:
             return None
@@ -75,9 +75,7 @@ class TestUnregisterDBusObject(DBusObjectTest, InjectionMockingTest):
         self.mock_provider.get_consumer_auth_cp.return_value = mock.Mock(name="MockCP")
 
     def injection_definitions(self, *args, **kwargs):
-        if args[0] == inj.IDENTITY:
-            return self.mock_identity
-        elif args[0] == inj.CP_PROVIDER:
+        if args[0] == inj.CP_PROVIDER:
             return self.mock_provider
         else:
             return None
