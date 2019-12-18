@@ -83,7 +83,7 @@
 
 Name: subscription-manager
 Version: 1.20.10
-Release: 11%{?dist}
+Release: 12%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -883,6 +883,11 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Wed Dec 18 2019 Christopher Snyder <csnyder@redhat.com> 1.20.10-12
+- 1764265: Set gpgcheck to 0, when zypper is used; ENT-1758
+  (jhnidek@redhat.com)
+- Rename zypper plugin to rhsm (khowell@redhat.com)
+
 * Mon Nov 18 2019 Christopher Snyder <csnyder@redhat.com> 1.20.10-11
 - 1764340: Handle RestlibException in zypper plugin (khowell@redhat.com)
 - 1760837: Disable zypper plugin via ZYPP_RHSM_PLUGIN_DISABLE
