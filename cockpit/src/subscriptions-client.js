@@ -357,7 +357,7 @@ client.registerSystem = (subscriptionDetails, update_progress) => {
             })
             .then(() => {
         if (update_progress)
-            update_progress(_("Stoping registration service ..."), null);
+            update_progress(_("Stopping registration service ..."), null);
                 console.debug('stopping registration server');
                 return registerServer.Stop(userLang);
             })

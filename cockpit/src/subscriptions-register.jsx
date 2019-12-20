@@ -33,9 +33,6 @@ import * as Insights from './insights.jsx';
  *   - properties as in defaultRegisterDialogSettings()
  */
 class PatternDialogBody extends React.Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         let customURL;
         if (this.props.url === 'custom') {
@@ -74,19 +71,28 @@ class PatternDialogBody extends React.Component {
             );
         }
         let insights;
+        let insights_checkbox_disabled = true;
+        if (this.props.insights_available === true) {
+            insights_checkbox_disabled = false;
+        } else {
+            if (this.props.auto_attach === true) {
+                insights_checkbox_disabled = false;
+            }
+        }
         insights = [
             <label key="0" className="control-label" htmlFor="subscription-insights">
                 {_("Insights")}
             </label>,
             <label key="1" className="checkbox-inline">
                 <input id="subscription-insights" type="checkbox" checked={this.props.insights}
-                       onChange={value => this.props.onChange('insights', value)}/>
+                       disabled={ insights_checkbox_disabled } onChange={value => this.props.onChange('insights', value)}/>
                 <span>
                 { Insights.arrfmt(_("Connect this system to $0."), Insights.link) }
                 </span>
             </label>,
             (this.props.insights && !this.props.insights_detected) && <p>{ Insights.arrfmt(_("The $0 package will be installed."), <strong>{subscriptionsClient.insightsPackage}</strong>)}</p>
         ];
+
 
         let credentials;
         if (this.props.register_method === "account") {

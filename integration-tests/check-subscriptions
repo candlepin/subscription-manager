@@ -267,6 +267,15 @@ class TestSubscriptions(SubscriptionsCase):
         # unregister
         b.click(unregister_button_sel)
 
+        # dialog should disappear
+        b.wait_not_present(unregister_button_sel)
+
+        # make sure this product isn't subscribed
+        self.wait_subscription(PRODUCT_SNOWY, False)
+
+        # find another one that isn't subscribed too
+        self.wait_subscription(PRODUCT_SHARED, False)
+
     def testRegisterWithoutAutoAttach(self):
         b = self.browser
 
@@ -278,7 +287,7 @@ class TestSubscriptions(SubscriptionsCase):
 
         b.wait_visible("#subscription-register-url")
 
-        # enter server and incorrect login data
+        # enter server and correct login data
         b.set_val("#subscription-register-url", "custom")
         b.set_input_text("#subscription-register-url-custom", CANDLEPIN_URL)
         b.set_input_text("#subscription-register-username", "doc")

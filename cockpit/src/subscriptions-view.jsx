@@ -34,10 +34,6 @@ class Listing extends React.Component {
             attach_button_text: _("Auto-attach")
         };
         this.handleAutoAttach = this.handleAutoAttach.bind(this);
-        this.updateProgress = this.updateProgress.bind(this);
-    }
-    updateProgress(msg) {
-        this.setState({ attaching_message: msg });
     }
     handleAutoAttach(event) {
         // only consider primary mouse button
@@ -62,9 +58,6 @@ class Listing extends React.Component {
                         attach_button_text: _("Auto-attach")
                     });
                 })
-                .progress((message) => {
-                    this.updateProgress(message);
-                });
         }
     }
     render() {
