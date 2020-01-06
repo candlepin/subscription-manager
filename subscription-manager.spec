@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.23
+Version: 1.24.24
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1150,6 +1150,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Jan 06 2020 William Poteat <wpoteat@redhat.com> 1.24.24-1
+- 1733992: Update to translations (wpoteat@redhat.com)
+
 * Thu Oct 17 2019 Christopher Snyder <csnyder@redhat.com> 1.24.23-1
 - 1703054: Blacklist some locales for Python2.x; ENT-1288 (jhnidek@redhat.com)
 
