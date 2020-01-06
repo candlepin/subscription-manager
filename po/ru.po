@@ -1,18 +1,15 @@
-# ljanda <ljanda@redhat.com>, 2017. #zanata
-# Chris Snyder <csnyder@redhat.com>, 2018. #zanata
-# khowell <khowell@redhat.com>, 2018. #zanata
-# ljanda <ljanda@redhat.com>, 2019. #zanata
+# Ondřej Januš <ojanus@redhat.com>, 2019. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-11 16:15-0500\n"
+"POT-Creation-Date: 2018-09-14 12:00-0400\n"
+"PO-Revision-Date: 2019-10-04 11:38+0000\n"
+"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
+"Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2019-05-17 09:17+0000\n"
-"Last-Translator: ljanda <ljanda@redhat.com>\n"
-"Language-Team: Russian\n"
 "Language: ru\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
@@ -90,13 +87,15 @@ msgid "%prog [options]"
 msgstr "%prog [параметры]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python2.7/optparse.py:1499 /usr/lib64/python2.7/optparse.py:1538
+#: /usr/lib64/python2.7/optparse.py:1499
+#: /usr/lib64/python2.7/optparse.py:1538
 #, python-format
 msgid "%s option requires an argument"
 msgstr "Параметр %s требует указания аргумента"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python2.7/optparse.py:1501 /usr/lib64/python2.7/optparse.py:1540
+#: /usr/lib64/python2.7/optparse.py:1501
+#: /usr/lib64/python2.7/optparse.py:1540
 #, python-format
 msgid "%s option requires %d arguments"
 msgstr "Параметр %s требует указания аргументов (%d)"
@@ -113,7 +112,8 @@ msgid "Options"
 msgstr "Параметры"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: bin/rct:57 bin/rhsm-debug:75
+#: bin/rct:57
+#: bin/rhsm-debug:75
 msgid "User interrupted process."
 msgstr "Пользователь прервал процесс."
 
@@ -140,7 +140,8 @@ msgid "Ok"
 msgstr "ОК"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: cockpit/src/index.js:52 cockpit/src/subscriptions-view.jsx:147
+#: cockpit/src/index.js:52
+#: cockpit/src/subscriptions-view.jsx:147
 #: src/subscription_manager/gui/data/glade/installed.glade:86
 #: src/subscription_manager/gui/data/ui/installed.ui:93
 #: src/subscription_manager/gui/registergui.py:244
@@ -175,7 +176,8 @@ msgid "Custom URL"
 msgstr "Настраиваемый URL-адрес"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: cockpit/src/subscriptions-register.jsx:96 src/rct/printing.py:106
+#: cockpit/src/subscriptions-register.jsx:96
+#: src/rct/printing.py:106
 msgid "URL"
 msgstr "URL-адрес"
 
@@ -208,7 +210,7 @@ msgstr "Организация"
 #: cockpit/src/subscriptions-view.jsx:145
 #: cockpit/src/subscriptions-view.jsx:150
 msgid "Status: $0"
-msgstr "Статус: $0"
+msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:145
@@ -235,12 +237,11 @@ msgstr "Подписки"
 
 #: cockpit/src/subscriptions-view.jsx:195
 msgid "Access denied"
-msgstr "Доступ запрещен"
+msgstr ""
 
 #: cockpit/src/subscriptions-view.jsx:196
 msgid "The current user isn't allowed to access system subscription status."
 msgstr ""
-"Текущему пользователю не разрешен доступ к системному состоянию подписки."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:221
@@ -262,13 +263,16 @@ msgid "Product ID"
 msgstr "ID"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: cockpit/src/subscriptions-view.jsx:240 src/rct/printing.py:46
-#: src/rct/printing.py:125 src/subscription_manager/gui/installedtab.py:91
+#: cockpit/src/subscriptions-view.jsx:240
+#: src/rct/printing.py:46
+#: src/rct/printing.py:125
+#: src/subscription_manager/gui/installedtab.py:91
 msgid "Version"
 msgstr "Версия"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: cockpit/src/subscriptions-view.jsx:242 src/rct/printing.py:47
+#: cockpit/src/subscriptions-view.jsx:242
+#: src/rct/printing.py:47
 msgid "Arch"
 msgstr "Арх."
 
@@ -302,7 +306,8 @@ msgid "Updating entitlement certificates & repositories"
 msgstr "Обновление сертификатов и репозиториев..."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd-worker.py:95 src/subscription_manager/exceptions.py:35
+#: src/daemons/rhsmcertd-worker.py:95
+#: src/subscription_manager/exceptions.py:35
 msgid "Your identity certificate has expired"
 msgstr "Срок действия сертификата истек."
 
@@ -337,7 +342,8 @@ msgid "run the initial checks immediately, with no delay"
 msgstr "сразу выполнять первую проверку"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:102 src/rhsm_icon/rhsm_icon.c:81
+#: src/daemons/rhsmcertd.c:102
+#: src/rhsm_icon/rhsm_icon.c:81
 msgid "show debug messages"
 msgstr "Показать сообщения отладки"
 
@@ -471,7 +477,8 @@ msgid "%%prog %s [OPTIONS] CERT_FILE"
 msgstr "%%prog %s [ПАРАМЕТРЫ] СЕРТИФИКАТ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/cert_commands.py:46 src/rct/manifest_commands.py:268
+#: src/rct/cert_commands.py:46
+#: src/rct/manifest_commands.py:268
 #, python-format
 msgid "Unable to read certificate file '%s': %s"
 msgstr "Ошибка чтения файла сертификата «%s»: %s"
@@ -609,8 +616,11 @@ msgid "General:"
 msgstr "Общие:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/manifest_commands.py:208 src/rct/manifest_commands.py:237
-#: src/rct/printing.py:45 src/rct/printing.py:73 src/rct/printing.py:103
+#: src/rct/manifest_commands.py:208
+#: src/rct/manifest_commands.py:237
+#: src/rct/printing.py:45
+#: src/rct/printing.py:73
+#: src/rct/printing.py:103
 #: src/subscription_manager/gui/widgets.py:377
 msgid "Name"
 msgstr "Имя"
@@ -625,7 +635,8 @@ msgid "Content Access Mode"
 msgstr "Режим доступа к содержимому"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/manifest_commands.py:215 src/rct/printing.py:102
+#: src/rct/manifest_commands.py:215
+#: src/rct/printing.py:102
 #: src/subscription_manager/gui/widgets.py:866
 msgid "Type"
 msgstr "Тип"
@@ -641,7 +652,8 @@ msgid "Subscriptions:"
 msgstr "Подписки:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/manifest_commands.py:238 src/rct/printing.py:83
+#: src/rct/manifest_commands.py:238
+#: src/rct/printing.py:83
 #: src/subscription_manager/gui/allsubs.py:94
 #: src/subscription_manager/gui/contract_selection.py:122
 #: src/subscription_manager/gui/mysubstab.py:108
@@ -655,14 +667,16 @@ msgid "Created"
 msgstr "Создан"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/manifest_commands.py:240 src/rct/printing.py:127
+#: src/rct/manifest_commands.py:240
+#: src/rct/printing.py:127
 #: src/subscription_manager/gui/contract_selection.py:104
 #: src/subscription_manager/gui/installedtab.py:97
 msgid "Start Date"
 msgstr "Дата начала"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/manifest_commands.py:241 src/rct/printing.py:128
+#: src/rct/manifest_commands.py:241
+#: src/rct/printing.py:128
 #: src/subscription_manager/gui/contract_selection.py:113
 #: src/subscription_manager/gui/installedtab.py:100
 #: src/subscription_manager/gui/mysubstab.py:105
@@ -670,12 +684,14 @@ msgid "End Date"
 msgstr "Срок действия"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/manifest_commands.py:242 src/rct/printing.py:78
+#: src/rct/manifest_commands.py:242
+#: src/rct/printing.py:78
 msgid "Service Level"
 msgstr "Уровень обслуживания"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/manifest_commands.py:243 src/rct/printing.py:79
+#: src/rct/manifest_commands.py:243
+#: src/rct/printing.py:79
 msgid "Service Type"
 msgstr "Тип обслуживания"
 
@@ -685,23 +701,27 @@ msgid "Architectures"
 msgstr "Архитектуры"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/manifest_commands.py:245 src/rct/printing.py:75
+#: src/rct/manifest_commands.py:245
+#: src/rct/printing.py:75
 msgid "SKU"
 msgstr "Артикул"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/manifest_commands.py:246 src/rct/printing.py:76
+#: src/rct/manifest_commands.py:246
+#: src/rct/printing.py:76
 #: src/subscription_manager/gui/contract_selection.py:81
 msgid "Contract"
 msgstr "Контракт"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/manifest_commands.py:247 src/rct/printing.py:72
+#: src/rct/manifest_commands.py:247
+#: src/rct/printing.py:72
 msgid "Order"
 msgstr "Порядок"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/manifest_commands.py:248 src/rct/printing.py:77
+#: src/rct/manifest_commands.py:248
+#: src/rct/printing.py:77
 msgid "Account"
 msgstr "Учетная запись"
 
@@ -790,7 +810,8 @@ msgid "The manifest has been dumped to the current directory"
 msgstr "Манифест сохранен в текущий каталог"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/printing.py:43 src/subscription_manager/gui/installedtab.py:80
+#: src/rct/printing.py:43
+#: src/subscription_manager/gui/installedtab.py:80
 #: src/subscription_manager/gui/widgets.py:408
 msgid "Product"
 msgstr "Компонент"
@@ -821,7 +842,8 @@ msgid "Number"
 msgstr "Число"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author ypoyarko
-#: src/rct/printing.py:82 src/subscription_manager/gui/allsubs.py:231
+#: src/rct/printing.py:82
+#: src/subscription_manager/gui/allsubs.py:231
 #: src/subscription_manager/gui/contract_selection.py:139
 #: src/subscription_manager/managerlib.py:344
 msgid "Unlimited"
@@ -888,7 +910,8 @@ msgid "GPG"
 msgstr "GPG"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/printing.py:108 src/subscription_manager/gui/reposgui.py:127
+#: src/rct/printing.py:108
+#: src/subscription_manager/gui/reposgui.py:127
 msgid "Enabled"
 msgstr "Включен"
 
@@ -938,7 +961,8 @@ msgid "Alt Name"
 msgstr "Доп. имя"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/printing.py:214 src/rhsmlib/services/entitlement.py:173
+#: src/rct/printing.py:214
+#: src/rhsmlib/services/entitlement.py:173
 msgid "Not Available"
 msgstr "Недоступно"
 
@@ -1003,10 +1027,9 @@ msgstr "будут собраны только данные, которые не
 msgid "%%prog %s [OPTIONS] "
 msgstr "%%prog %s [ПАРАМЕТРЫ] "
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm_debug/debug_commands.py:90
 msgid "The destination directory for the archive must already exist."
-msgstr "Необходимо создать каталог для размещения архива."
+msgstr ""
 
 #: src/rhsm_debug/debug_commands.py:94
 #, python-format
@@ -1018,7 +1041,8 @@ msgstr ""
 "той же файловой системе что и «%s»"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm_debug/debug_commands.py:191 src/rhsm_debug/debug_commands.py:205
+#: src/rhsm_debug/debug_commands.py:191
+#: src/rhsm_debug/debug_commands.py:205
 #, python-format
 msgid "Wrote: %s"
 msgstr "Записано: %s"
@@ -1112,7 +1136,8 @@ msgid "Unknown argument to force-icon: %s\n"
 msgstr "Неизвестный аргумент force-icon: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm_icon/rhsm_icon.c:384 src/rhsm_icon/rhsm_icon.c:495
+#: src/rhsm_icon/rhsm_icon.c:384
+#: src/rhsm_icon/rhsm_icon.c:495
 #, c-format
 msgid "Failed to open connection to bus: %s\n"
 msgstr "Не удалось подключиться к шине: %s\n"
@@ -1124,7 +1149,8 @@ msgid "option parsing failed: %s\n"
 msgstr "не удалось обработать параметр: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/facts/dmiinfo.py:90 src/rhsmlib/facts/dmiinfo.py:129
+#: src/rhsmlib/facts/dmiinfo.py:90
+#: src/rhsmlib/facts/dmiinfo.py:129
 #, python-format
 msgid "Error reading system DMI information: %s"
 msgstr "Ошибка чтения информации DMI: %s"
@@ -1135,7 +1161,8 @@ msgstr "Ошибка чтения информации DMI: %s"
 msgid "Error reading system DMI information with %s: %s"
 msgstr "Ошибка чтения информации DMI с помощью %s: %s"
 
-#: src/rhsmlib/services/entitlement.py:56 src/rhsmlib/services/register.py:44
+#: src/rhsmlib/services/entitlement.py:56
+#: src/rhsmlib/services/register.py:44
 #, python-format
 msgid "Unknown arguments: %s"
 msgstr "Неизвестные аргументы: %s"
@@ -1472,10 +1499,14 @@ msgstr "Недействительные"
 #: src/subscription_manager/managercli.py:336
 #: src/subscription_manager/managercli.py:337
 #: src/subscription_manager/managercli.py:1819
-#: src/subscription_manager/reasons.py:94 src/subscription_manager/utils.py:219
-#: src/subscription_manager/utils.py:231 src/subscription_manager/utils.py:233
-#: src/subscription_manager/utils.py:251 src/subscription_manager/utils.py:252
-#: src/subscription_manager/utils.py:253 src/subscription_manager/utils.py:272
+#: src/subscription_manager/reasons.py:94
+#: src/subscription_manager/utils.py:219
+#: src/subscription_manager/utils.py:231
+#: src/subscription_manager/utils.py:233
+#: src/subscription_manager/utils.py:251
+#: src/subscription_manager/utils.py:252
+#: src/subscription_manager/utils.py:253
+#: src/subscription_manager/utils.py:272
 msgid "Unknown"
 msgstr "Неизвестно"
 
@@ -4516,15 +4547,13 @@ msgstr "показать текущий уровень обслуживания"
 msgid "list all service levels available"
 msgstr "показать уровни обслуживания"
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:854
 msgid "service level to apply to this system"
-msgstr "уровень обслуживания для системы"
+msgstr ""
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:857
 msgid "unset the service level for this system"
-msgstr "отменить выбор уровня обслуживания"
+msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:864
@@ -4562,10 +4591,9 @@ msgstr "Ошибка. Не удалось получить уровни обсл
 msgid "Service level set to: %s"
 msgstr "Уровень обслуживания: %s"
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:931
 msgid "Service level preference has been unset"
-msgstr "Предпочитаемый уровень обслуживания удален."
+msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:939
@@ -5614,7 +5642,7 @@ msgstr "Состояние системы"
 #: src/subscription_manager/managercli.py:2596
 #, python-format
 msgid "Overall Status: %s\n"
-msgstr "Общий статус: %s\n"
+msgstr ""
 
 #: src/subscription_manager/migrate/migrate.py:55
 #: src/subscription_manager/migrate/migrate.py:57
@@ -6062,10 +6090,6 @@ msgid ""
 "Subscription Management. If not desired, use \"subscription-manager config --"
 "rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
-"Плагины yum: %s были автоматически включены для использования Red Hat "
-"Subscription Management. Если это нежелательно, используйте \"subscription-"
-"manager config --rhsm.auto_enable_yum_plugins=0\" для блокировки этого "
-"поведения."
 
 #: src/subscription_manager/repolib.py:691
 msgid "Repo updates"
