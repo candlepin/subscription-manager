@@ -13,6 +13,18 @@ code is edited.
 
 Development Outside of Vagrant
 ------------------------------
+> An important note for Red Hat developers: If you develop the cockpit
+plugin outside of the Red Hat office, no changes to the configuration file are
+needed . If you are Red Hat developer working in the Red Hat office, then please use
+our internal cache of the nmpjs repository called Nexus. You need to change the
+symbolic link: `rm -f yarn.lock; ln -s yarn.lock.nexus yarn.lock`. There are
+two lock files: `yarn.lock.npmjs` (for community users) and `yarn.lock.nexus` (for
+Red Hat developers). If you make a big change in `yarn.lock.npmjs` and you
+want to have similar change in `yarn.lock.nexus`, then you should use following
+regular expression:
+
+`%s/registry.yarnpkg.com/repository.engineering.redhat.com\/nexus\/repository\/registry.npmjs.org/g`
+
  - `nvm` is recommended but not required (https://github.com/creationix/nvm).
  - `yarn` needs to be installed globally (`npm install -g yarn`).
  - `yarn install` needs to be run from the `cockpit` subdirectory.
@@ -29,6 +41,11 @@ The most common commands are:
    necessary.
 
 (See https://yarnpkg.com for more details on using yarn).
+
+> When using our Nexus repository and you add a dependency using
+`yarn add <package>`, also update the `yarn.lock.npmjs` file. Conversely,
+when you are community contributor and add a package, please update
+`yarn.lock.nexus` as well.
 
 NPM Scripts
 -----------
