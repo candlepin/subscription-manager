@@ -200,29 +200,18 @@ def postconfig_hook(conduit):
     # Note: conduit.getConf() is available in postconfig_hook
     chroot(conduit.getConf().installroot)
 
-    # It is save to display following warning messages for all yum commands, because following functions
-    # does not communicate with candlepin server. See: https://bugzilla.redhat.com/show_bug.cgi?id=1621275
-    try:
-        warn_or_usage_message(conduit)
-        warn_expired_entitlements(conduit)
-    except Exception as e:
-        conduit.error(2, str(e))
-
-
-def prereposetup_hook(conduit):
-    """
-    Try to update configuration of redhat.repo, before yum tries to load configuration of repositories.
-    :param conduit: Reference on conduit object used by yum plugin API
-    :return: None
-    """
-
     cfg = config.initConfig()
     cache_only = not bool(cfg.get_int('rhsm', 'full_refresh_on_yum'))
 
     if hasattr(conduit, 'registerPackageName'):
         conduit.registerPackageName("subscription-manager")
+
+    # It is save to display following warning messages for all yum commands, because following functions
+    # does not communicate with candlepin server. See: https://bugzilla.redhat.com/show_bug.cgi?id=1621275
     try:
         update(conduit, cache_only)
+        warn_or_usage_message(conduit)
+        warn_expired_entitlements(conduit)
     except Exception as e:
         conduit.error(2, str(e))
 
