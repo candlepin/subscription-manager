@@ -173,24 +173,6 @@ def init_hook(conduit):
         conduit.info(2, 'subscription-manager plugin disabled "%d" system repositories with respect of configuration in /etc/yum/pluginconf.d/subscription-manager.conf' % (disable_count))
 
 
-def postconfig_hook(conduit):
-    """ update """
-    # register rpm name for yum history recording"
-    # yum on 5.7 doesn't have this method, so check for it
-
-    disable_system_repos = conduit.confBool('main', 'disable_system_repos', default=False)
-
-    if disable_system_repos:
-        disable_count = 0
-        repo_storage = conduit.getRepos()
-        for repo in repo_storage.repos.values():
-            if os.path.basename(repo.repofile) != "redhat.repo" and repo.enabled is True:
-                conduit.info(2, 'Disabling system repository "%s" in file "%s"' % (repo.id, repo.repofile))
-                repo_storage.disableRepo(repo.id)
-                disable_count += 1
-        conduit.info(2, 'subscription-manager plugin disabled "%d" system repositories with respect of configuration in /etc/yum/pluginconf.d/subscription-manager.conf' % (disable_count))
-
-
 def config_hook(conduit):
     """
     This is the first hook of this yum plugin that is triggered by yum. So we do initialization
@@ -241,8 +223,6 @@ def prereposetup_hook(conduit):
         conduit.registerPackageName("subscription-manager")
     try:
         update(conduit, cache_only)
-        warn_or_usage_message(conduit)
-        warn_expired_entitlements(conduit)
     except Exception as e:
         conduit.error(2, str(e))
 
