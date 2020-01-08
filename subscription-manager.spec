@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.24
+Version: 1.24.25
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1150,6 +1150,14 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Jan 08 2020 Christopher Snyder <csnyder@redhat.com> 1.24.25-1
+- 1786236: Update repos quickly enough to allow yum install -y $package
+  immediately in containers (csnyder@redhat.com)
+- 1788293: Update repos in postconfig_hook to see new repos immediately
+  (csnyder@redhat.com)
+- 1788297: Duplicate messages are being reported by the yum plugin for
+  subscription-manager (wpoteat@redhat.com)
+
 * Mon Jan 06 2020 William Poteat <wpoteat@redhat.com> 1.24.24-1
 - 1733992: Update to translations (wpoteat@redhat.com)
 
