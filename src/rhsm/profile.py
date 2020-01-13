@@ -144,6 +144,11 @@ class EnabledRepos(object):
         :param path: A .repo file path used to filter the report.
         :type path: str
         """
+        if dnf is not None:
+            self.db = dnf.dnf.Base()
+        elif yum is not None:
+            self.yb = yum.YumBase()
+
         self.repofile = repo_file
         self.content = self.__generate()
 
@@ -175,12 +180,10 @@ class EnabledRepos(object):
             raise ImportError
 
     def _obtain_mappings_dnf(self):
-        db = dnf.dnf.Base()
-        return {'releasever': db.conf.substitutions['releasever'], 'basearch': db.conf.substitutions['basearch']}
+        return {'releasever': self.db.conf.substitutions['releasever'], 'basearch': self.db.conf.substitutions['basearch']}
 
     def _obtain_mappings_yum(self):
-        yb = yum.YumBase()
-        return {'releasever': yb.conf.yumvar['releasever'], 'basearch': yb.conf.yumvar['basearch']}
+        return {'releasever': self.yb.conf.yumvar['releasever'], 'basearch': self.yb.conf.yumvar['basearch']}
 
 
 class EnabledReposProfile(object):
