@@ -55,5 +55,7 @@ class TestServicePlugin(TestCase):
         # remove test package if installed
         subprocess.call('zypper --non-interactive rm {RHSM_TEST_PACKAGE}'.format(**os.environ), shell=True)
         subprocess.call('zypper --non-interactive --no-gpg-checks in --download-only {RHSM_TEST_PACKAGE}'.format(**os.environ), shell=True)
-
+        
+        print ("RHSM_TEST_PACKAGE: %s" % {RHSM_TEST_PACKAGE})
+        subprocess.check_call('ll /var/cache/zypp/packages/')
         subprocess.check_call('test "$(find /var/cache/zypp/packages/ -name \'{RHSM_TEST_PACKAGE}*.rpm\' | wc -l)" -gt 0'.format(**os.environ), shell=True)
