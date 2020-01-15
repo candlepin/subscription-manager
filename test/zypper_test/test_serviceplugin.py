@@ -57,7 +57,7 @@ class TestServicePlugin(TestCase):
         subprocess.call('zypper --non-interactive --no-gpg-checks in --download-only {RHSM_TEST_PACKAGE}'.format(**os.environ), shell=True)
 
         print ("RHSM_TEST_PACKAGE: %s" % os.environ['RHSM_TEST_PACKAGE'])
-        subprocess.call('ll /var/cache/')
-        subprocess.call('ll /var/cache/zypp/')
-        subprocess.call('ll /var/cache/zypp/packages/')
+        subprocess.call('ll /var/cache/'.format(**os.environ), shell=True))
+        subprocess.call('ll /var/cache/zypp/'.format(**os.environ), shell=True))
+        subprocess.call('ll /var/cache/zypp/packages/'.format(**os.environ), shell=True))
         subprocess.check_call('test "$(find /var/cache/zypp/packages/ -name \'{RHSM_TEST_PACKAGE}*.rpm\' | wc -l)" -gt 0'.format(**os.environ), shell=True)
