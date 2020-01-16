@@ -336,6 +336,12 @@ class IdentityCertTests(unittest.TestCase):
         self.assertTrue(isinstance(id_cert, IdentityCertificate))
         self.assertEqual('1.0', str(id_cert.version))
 
+    def test_asn1_generalized_time(self):
+        id_cert = create_from_pem(certdata.ASN1_GENERALIZEDTIME_CERT)
+        self.assertTrue(isinstance(id_cert, IdentityCertificate))
+        self.assertEqual(2016, id_cert.start.year)
+        self.assertEqual(2116, id_cert.end.year)
+
 
 class ContentTests(unittest.TestCase):
 
