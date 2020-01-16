@@ -17,6 +17,7 @@ from rhsmlib.facts import custom
 from rhsmlib.facts import host_collector
 from rhsmlib.facts import hwprobe
 from rhsmlib.facts import insights
+from rhsmlib.facts import kpatch
 
 
 class AllFactsCollector(collector.FactsCollector):
@@ -26,7 +27,8 @@ class AllFactsCollector(collector.FactsCollector):
             host_collector.HostCollector(),
             hwprobe.HardwareCollector(),
             custom.CustomFactsCollector(),
-            insights.InsightsCollector()
+            insights.InsightsCollector(),
+            kpatch.KPatchCollector()
         ]
 
     def get_all(self):

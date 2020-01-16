@@ -67,6 +67,29 @@ class UnsupportedOperationException(Exception):
     pass
 
 
+def which(program):
+    """
+    Function returning path of program (it could be path to executable file or command)
+    :param program: string with command
+    :return: Path to command, when some executable exists in system. Otherwise it returns None.
+    """
+
+    def is_exe(_fpath):
+        return os.path.isfile(_fpath) and os.access(_fpath, os.X_OK)
+
+    fpath, fname = os.path.split(program)
+    if fpath:
+        if is_exe(program):
+            return program
+    else:
+        for path in os.environ["PATH"].split(os.pathsep):
+            exe_file = os.path.join(path, program)
+            if is_exe(exe_file):
+                return exe_file
+
+    return None
+
+
 def has_bad_scheme(url):
     """Check a url for an invalid or unuseful schema.
 
