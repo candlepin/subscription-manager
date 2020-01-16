@@ -978,7 +978,7 @@ class UEPConnection(object):
     def registerConsumer(self, name="unknown", type="system", facts={},
             owner=None, environment=None, keys=None,
             installed_products=None, uuid=None, hypervisor_id=None,
-            content_tags=None, role=None, addons=None, service_level=None, usage=None):
+            content_tags=None, role=None, addons=None, service_level=None, usage=None, autoheal=None):
         """
         Creates a consumer on candlepin server
         """
@@ -1004,6 +1004,8 @@ class UEPConnection(object):
             params['usage'] = usage
         if service_level is not None:
             params['serviceLevel'] = service_level
+        if autoheal is not None:
+            params['autoheal'] = autoheal
 
         url = "/consumers"
         if environment:

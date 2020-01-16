@@ -1249,6 +1249,9 @@ class RegisterCommand(UserPassCommand):
                                help=_("Deprecated, see --auto-attach"))
         self.parser.add_option("--auto-attach", action='store_true', dest="autoattach",
                                help=_("automatically attach compatible subscriptions to this system"))
+        self.parser.add_option("--disable-auto-attach", action='store_true', dest="disable_autoattach",
+                               help=_("do not automatically attach compatible subscriptions to this system, "
+                                      "when activation key is used"))
         self.parser.add_option("--force", action='store_true',
                                help=_("register the system even if it is already registered"))
         self.parser.add_option("--activationkey", action='append', dest="activation_keys",
@@ -1270,6 +1273,16 @@ class RegisterCommand(UserPassCommand):
             system_exit(os.EX_USAGE, _("Error: Activation keys do not allow environments to be specified."))
         elif self.autoattach and self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Activation keys cannot be used with --auto-attach."))
+        elif self.autoattach and self.options.disable_autoattach:
+            system_exit(
+                os.EX_USAGE,
+                _("Error: The --disable-auto-attach option cannot be used with the --auto-attach option'.")
+            )
+        elif not self.options.activation_keys and self.options.disable_autoattach:
+            system_exit(
+                os.EX_USAGE,
+                _("Error: The --disable-auto-attach option cannot be used without activation keys'.")
+            )
         # 746259: Don't allow the user to pass in an empty string as an activation key
         elif self.options.activation_keys and '' in self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Must specify an activation key"))
@@ -1278,7 +1291,11 @@ class RegisterCommand(UserPassCommand):
         elif self.options.activation_keys and not self.options.org:
             system_exit(os.EX_USAGE, _("Error: Must provide --org with activation keys."))
         elif self.options.force and self.options.consumerid:
-            system_exit(os.EX_USAGE, _("Error: Can not force registration while attempting to recover registration with consumerid. Please use --force without --consumerid to re-register or use the clean command and try again without --force."))
+            system_exit(
+                os.EX_USAGE,
+                _("Error: Can not force registration while attempting to recover registration with consumerid. "
+                  "Please use --force without --consumerid to re-register or use the clean command and "
+                  "try again without --force."))
         # 1485008: allow registration, when --type=RHUI (many of KBase articles describe using RHUI not rhui)
         elif self.options.consumertype and not \
                 (self.options.consumertype.lower() == 'rhui' or self.options.consumertype == 'system'):
@@ -1354,6 +1371,10 @@ class RegisterCommand(UserPassCommand):
             # means things like following name owner changes gets weird.
             service = register.RegisterService(admin_cp)
 
+            autoheal = True
+            if self.options.disable_autoattach is True:
+                autoheal = False
+
             if self.options.consumerid:
                 log.debug("Registering as existing consumer: %s" % self.options.consumerid)
                 consumer = service.register(None, consumerid=self.options.consumerid)
@@ -1367,7 +1388,8 @@ class RegisterCommand(UserPassCommand):
                     environment=environment_id,
                     force=self.options.force,
                     name=self.options.consumername,
-                    type=self.options.consumertype
+                    type=self.options.consumertype,
+                    autoheal=autoheal
                 )
         except (connection.RestlibException, exceptions.ServiceError) as re:
             log.exception(re)
@@ -1409,7 +1431,7 @@ class RegisterCommand(UserPassCommand):
 
         if self.options.release:
             # TODO: grab the list of valid options, and check
-            self.cp.updateConsumer(consumer['uuid'], release=self.options.release)
+            self.cp.updateConsumer(consumer['uuid'], release=self.options.release, autoheal=autoheal)
 
         if self.autoattach:
             if 'serviceLevel' not in consumer and self.options.service_level:
@@ -1427,7 +1449,10 @@ class RegisterCommand(UserPassCommand):
                     save_sla_to_syspurpose_metadata(self.options.service_level)
                     print(_("Service level set to: %s") % self.options.service_level)
 
-        if self.options.consumerid or self.options.activation_keys or self.autoattach or self.cp.has_capability(CONTENT_ACCESS_CERT_CAPABILITY):
+        if self.options.consumerid or \
+                (self.options.activation_keys and not self.options.disable_autoattach) or \
+                self.autoattach or \
+                self.cp.has_capability(CONTENT_ACCESS_CERT_CAPABILITY):
             log.debug("System registered, updating entitlements if needed")
             # update certs, repos, and caches.
             # FIXME: aside from the overhead, should this be cert_action_client.update?
@@ -1438,7 +1463,9 @@ class RegisterCommand(UserPassCommand):
         profile_mgr.update_check(self.cp, consumer['uuid'], True)
 
         subscribed = 0
-        if self.options.activation_keys or self.autoattach:
+        if self.options.disable_autoattach:
+            print(_("Auto-attach disabled using CLI option"))
+        elif self.options.activation_keys or self.autoattach:
             # update with latest cert info
             self.sorter = inj.require(inj.CERT_SORTER)
             self.sorter.force_cert_check()

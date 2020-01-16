@@ -472,6 +472,12 @@ class TestRegisterCommand(TestCliProxyCommand):
     def test_key_and_org(self):
         self._test_no_exception(["--activationkey", "key", "--org", "org"])
 
+    def test_key_and_disable_auto_attach(self):
+        self._test_no_exception(["--activationkey", "key", "--org", "org", "--disable-auto-attach"])
+
+    def test_auto_attach_and_disable_auto_attach(self):
+        self._test_exception(["--auto-attach", "--disable-auto-attach"])
+
     def test_key_and_no_org(self):
         self._test_exception(["--activationkey", "key"])
 
