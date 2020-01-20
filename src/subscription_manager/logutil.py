@@ -68,19 +68,22 @@ class SubmanDebugLoggingFilter(object):
 
 def RHSMLogHandler(*args, **kwargs):
     """Factory for Logging Handler for /var/log/rhsm/rhsm.log"""
+    err = None
     try:
         result = logging.handlers.RotatingFileHandler(*args, **kwargs)
-    except Exception:
+    except Exception as error:
+        result = logging.StreamHandler()
         # Try to create log directory and try to set handle once again
-        try:
-            os.makedirs(LOGFILE_DIR)
-            result = logging.handlers.RotatingFileHandler(*args, **kwargs)
-        except Exception as error:
-            # When it wasn't possible to create log directory, then fallback to stderr
-            logging.error("{error} - Further output will be written to stderr".format(error=error))
-            result = logging.StreamHandler()
+        if not os.path.exists(LOGFILE_DIR):
+            try:
+                os.makedirs(LOGFILE_DIR)
+                result = logging.handlers.RotatingFileHandler(*args, **kwargs)
+            except Exception as error:
+                err = "{error} - Further logging output will be written to stderr".format(error=error)
+        else:
+            err = "{error} - Further logging output will be written to stderr".format(error=error)
     result.addFilter(ContextLoggingFilter(name=""))
-    return result
+    return result, err
 
 
 class SubmanDebugHandler(logging.StreamHandler, object):
@@ -126,10 +129,11 @@ class PyWarningsLogger(logging.getLoggerClass()):
 
 def _get_default_rhsm_log_handler():
     global _rhsm_log_handler
+    error = None
     if not _rhsm_log_handler:
-        _rhsm_log_handler = RHSMLogHandler(LOGFILE_PATH)
+        _rhsm_log_handler, error = RHSMLogHandler(LOGFILE_PATH)
         _rhsm_log_handler.setFormatter(logging.Formatter(LOG_FORMAT))
-    return _rhsm_log_handler
+    return _rhsm_log_handler, error
 
 
 def _get_default_subman_debug_handler():
@@ -152,10 +156,14 @@ def init_logger():
     config = rhsm.config.initConfig()
 
     default_log_level = config.get('logging', 'default_log_level')
+    pending_error_messages = []
 
     for root_namespace in ROOT_NAMESPACES:
         logger = logging.getLogger(root_namespace)
-        logger.addHandler(_get_default_rhsm_log_handler())
+        rhsm_handler, error = _get_default_rhsm_log_handler()
+        if error:
+            pending_error_messages.append(error)
+        logger.addHandler(rhsm_handler)
         logger.addHandler(_get_default_subman_debug_handler())
         logger.setLevel(getattr(logging, default_log_level.strip()))
 
@@ -172,6 +180,17 @@ def init_logger():
 
     if not log:
         log = logging.getLogger(__name__)
+
+    # RHBZ#1782910 Previously to handle the case of not being able to create
+    # the /var/log/rhsm/rhsm.log file to log to, we were logging an error level message
+    # by doing `logging.error("Our error message here"). Doing that at a point where
+    # there is nothing configured for the root logger causes a StreamHandler to be added to
+    # the root logger. That then caused all dnf python logging to be written to stderr.
+    # To be able to output the log messages which happen during set up, we queue the errors
+    # and log them using our resulting logger which has been setup (after adding our own
+    # StreamHandler but not to the root logger).
+    for error_message in pending_error_messages:
+        log.error(error_message)
 
 
 def init_logger_for_yum():
