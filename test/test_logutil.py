@@ -143,3 +143,73 @@ class TestLogutil(fixture.SubManFixture):
 
         logutil.LOGFILE_DIR = old_dir_path
         logutil.LOGFILE_PATH = old_file_path
+
+    def test_not_possible_to_create_log_dir_due_to_access_perm(self):
+        """
+        Test that it is not possible to create log directory due to access permission
+        """
+        temp_dir_path = tempfile.mkdtemp()
+        os.chmod(temp_dir_path, 444)
+
+        old_dir_path = logutil.LOGFILE_DIR
+        old_file_path = logutil.LOGFILE_PATH
+
+        # Set logutil to uninitialized state
+        logutil._rhsm_log_handler = None
+        logutil._subman_debug_handler = None
+        logutil.LOGFILE_DIR = os.path.join(temp_dir_path, "rhsm")
+        logutil.LOGFILE_PATH = os.path.join(logutil.LOGFILE_DIR, "rhsm.log")
+
+        self.assertTrue(os.path.exists(temp_dir_path))
+
+        with fixture.Capture() as cap:
+            logutil.init_logger()
+
+        self.assertTrue("Further logging output will be written to stderr" in cap.err)
+
+        # init_logger should not be able to automatically create directory /var/log/rhsm,
+        # when user does not have access permission for that
+        self.assertFalse(os.path.exists(logutil.LOGFILE_DIR))
+
+        os.chmod(temp_dir_path, 744)
+        os.rmdir(temp_dir_path)
+
+        logutil.LOGFILE_DIR = old_dir_path
+        logutil.LOGFILE_PATH = old_file_path
+
+    def test_wrong_rhsm_log_priv(self):
+        """
+        Test that error messages are not printed to stderr, when it is not possible
+        to print error messages to rhsm.log during initialization of logger
+        """
+        # Create temporary log directory
+        temp_dir_path = tempfile.mkdtemp()
+        # Create temporary log file
+        temp_log_file = os.path.join(temp_dir_path, "rhsm.log")
+        with open(temp_log_file, "w") as fp:
+            fp.write("")
+        # Change permission to directory /var/log/rhsm and log file
+        os.chmod(temp_log_file, 444)
+        os.chmod(temp_dir_path, 444)
+
+        old_dir_path = logutil.LOGFILE_DIR
+        old_file_path = logutil.LOGFILE_PATH
+
+        # Set logutil to uninitialized state
+        logutil._rhsm_log_handler = None
+        logutil._subman_debug_handler = None
+        logutil.LOGFILE_DIR = temp_dir_path
+        logutil.LOGFILE_PATH = os.path.join(temp_log_file)
+
+        with fixture.Capture() as cap:
+            logutil.init_logger()
+
+        self.assertTrue("Further logging output will be written to stderr" in cap.err)
+
+        os.chmod(temp_dir_path, 744)
+        os.chmod(temp_log_file, 744)
+        os.remove(logutil.LOGFILE_PATH)
+        os.rmdir(logutil.LOGFILE_DIR)
+
+        logutil.LOGFILE_DIR = old_dir_path
+        logutil.LOGFILE_PATH = old_file_path
