@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.25
+Version: 1.24.26
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1150,6 +1150,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Jan 22 2020 William Poteat <wpoteat@redhat.com> 1.24.26-1
+- 1741183: Yum loaded subscription-manager plugin multiple times
+  (hyu@redhat.com)
+
 * Wed Jan 08 2020 Christopher Snyder <csnyder@redhat.com> 1.24.25-1
 - 1786236: Update repos quickly enough to allow yum install -y $package
   immediately in containers (csnyder@redhat.com)
