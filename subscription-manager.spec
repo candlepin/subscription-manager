@@ -222,7 +222,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.26.9
+Version: 1.26.10
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1400,6 +1400,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Jan 24 2020 Christopher Snyder <csnyder@redhat.com> 1.26.10-1
+- 1782910: Log errors in logging set up after set up completes; ENT-1890
+  (jhnidek@redhat.com)
+
 * Fri Dec 13 2019 Christopher Snyder <csnyder@redhat.com> 1.26.9-1
 - Make sure to set the mtime of the py files before creating pyc
   (csnyder@redhat.com)
