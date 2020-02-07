@@ -40,7 +40,9 @@ expired_warning = """
 *** WARNING ***
 The subscription for following product(s) has expired:
 %s
-You no longer have access to the repositories that provide these products.  It is important that you apply an active subscription in order to resume access to security and other critical updates. If you don't have other active subscriptions, you can renew the expired subscription.
+You no longer have access to the repositories that provide these products.  It is important that you apply an active "
+"subscription in order to resume access to security and other critical updates. If you don't have other active "
+"subscriptions, you can renew the expired subscription.
 """
 
 not_registered_warning = """
@@ -48,7 +50,8 @@ This system is not registered with an entitlement server. You can use subscripti
 """
 
 no_subs_warning = """
-This system is registered with an entitlement server, but is not receiving updates. You can use subscription-manager to assign subscriptions.
+This system is registered with an entitlement server, but is not receiving updates. You can use subscription-manager "
+"to assign subscriptions.
 """
 
 no_subs_container_warning = """
@@ -106,8 +109,9 @@ def update(conduit, cache_only):
         cert_action_invoker = EntCertActionInvoker(locker=YumRepoLocker(conduit=conduit))
         cert_action_invoker.update()
 
-    repo_action_invoker = RepoActionInvoker(cache_only=cache_only, locker=YumRepoLocker(conduit=conduit))
-    repo_action_invoker.update()
+    if cache_only or config.in_container():
+        repo_action_invoker = RepoActionInvoker(cache_only=cache_only, locker=YumRepoLocker(conduit=conduit))
+        repo_action_invoker.update()
 
 
 def warn_expired_entitlements(conduit):
@@ -156,7 +160,7 @@ def warn_or_usage_message(conduit):
 def init_hook(conduit):
     """
     Hook for disabling system repositories (repositories which are
-    not mangaged by subscription-manager will NOT be used)
+    not managed by subscription-manager will NOT be used)
     """
 
     disable_system_repos = conduit.confBool('main', 'disable_system_repos', default=False)
@@ -169,7 +173,11 @@ def init_hook(conduit):
                 conduit.info(2, 'Disabling system repository "%s" in file "%s"' % (repo.id, repo.repofile))
                 repo_storage.disableRepo(repo.id)
                 disable_count += 1
-        conduit.info(2, 'subscription-manager plugin disabled "%d" system repositories with respect of configuration in /etc/yum/pluginconf.d/subscription-manager.conf' % (disable_count))
+        conduit.info(
+            2,
+            'subscription-manager plugin disabled "%d" system repositories with respect of configuration in '
+            '/etc/yum/pluginconf.d/subscription-manager.conf' % disable_count
+        )
 
 
 def config_hook(conduit):

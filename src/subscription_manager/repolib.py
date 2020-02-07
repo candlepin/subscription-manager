@@ -184,7 +184,7 @@ class YumPluginManager(object):
 
 
 class RepoActionInvoker(BaseActionInvoker):
-    """Invoker for yum repo updating related actions."""
+    """Invoker for yum/dnf repo updating related actions."""
     def __init__(self, cache_only=False, locker=None):
         super(RepoActionInvoker, self).__init__(locker=locker)
         self.cache_only = cache_only
@@ -200,8 +200,7 @@ class RepoActionInvoker(BaseActionInvoker):
         return repo in [c.label for c in action.matching_content()]
 
     def get_repos(self, apply_overrides=True):
-        action = RepoUpdateActionCommand(cache_only=self.cache_only,
-                                  apply_overrides=apply_overrides)
+        action = RepoUpdateActionCommand(cache_only=self.cache_only, apply_overrides=apply_overrides)
         repos = action.get_unique_content()
 
         current = set()
@@ -377,8 +376,6 @@ class RepoUpdateActionCommand(object):
         # Only attempt to update the overrides if they are supported
         # by the server.
         if self.override_supported:
-            self.written_overrides.read_cache_only()
-
             try:
                 override_cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
             except KeyError:

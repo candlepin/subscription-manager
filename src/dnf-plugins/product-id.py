@@ -33,6 +33,8 @@ import librepo
 import os
 from rhsm import ourjson as json
 
+log = logging.getLogger('rhsm-app.' + __name__)
+
 
 class ProductId(dnf.Plugin):
     name = 'product-id'
@@ -64,7 +66,7 @@ class ProductId(dnf.Plugin):
         try:
             init_dep_injection()
         except ImportError as e:
-            logger.error(str(e))
+            log.error(str(e))
             return
 
         logutil.init_logger_for_yum()
@@ -74,10 +76,7 @@ class ProductId(dnf.Plugin):
             pm.update_all(self._enabled_repos)
             logger.info(_('Installed products updated.'))
         except Exception as e:
-            logger.error(str(e))
-
-
-log = logging.getLogger('rhsm-app.' + __name__)
+            log.error(str(e))
 
 
 class DnfProductManager(ProductManager):
