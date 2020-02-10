@@ -548,6 +548,7 @@ class ZypperRepoFile(YumRepoFile):
     def __init__(self, path=None, name=None):
         super(ZypperRepoFile, self).__init__(path, name)
         self.gpgcheck = False
+        self.autorefresh = False
 
     def read_zypp_conf(self):
         """
@@ -558,6 +559,8 @@ class ZypperRepoFile(YumRepoFile):
         zypp_cfg.read(self.ZYPP_RHSM_PLUGIN_CONFIG_FILE)
         if zypp_cfg.has_option('rhsm-plugin', 'gpgcheck'):
             self.gpgcheck = zypp_cfg.getboolean('rhsm-plugin', 'gpgcheck')
+        if zypp_cfg.has_option('rhsm-plugin', 'autorefresh'):
+            self.autorefresh = zypp_cfg.getboolean('rhsm-plugin', 'autorefresh')
 
     def fix_content(self, content):
         self.read_zypp_conf()
@@ -586,6 +589,12 @@ class ZypperRepoFile(YumRepoFile):
         # See BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1764265
         if self.gpgcheck is False:
             zypper_cont['gpgcheck'] = '0'
+
+        # See BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1797386
+        if self.autorefresh is True:
+            zypper_cont['autorefresh'] = '1'
+        else:
+            zypper_cont['autorefresh'] = '0'
 
         baseurl = zypper_cont['baseurl']
         parsed = urlparse(baseurl)
