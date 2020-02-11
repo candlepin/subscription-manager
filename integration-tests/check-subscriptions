@@ -48,7 +48,8 @@ from testlib import *
 # $IP is the ip of the candlepin machine
 #
 # add an activation key to a pool:
-# curl --insecure --request POST --user admin:admin https://$IP:8443/candlepin/activation_keys/ff80808155ca50b10155ca50cd280010/pools/ff80808155ca50b10155ca51f04607e5
+# curl --insecure --request POST --user admin:admin \
+# https://$IP:8443/candlepin/activation_keys/ff80808155ca50b10155ca50cd280010/pools/ff80808155ca50b10155ca51f04607e5
 # register with: activation key "awesome_os_pool" and org "admin"
 # or: subscription-manager register --activationkey awesome_os_pool --org admin --serverurl https://$IP:8443/candlepin
 #
@@ -98,11 +99,14 @@ PRODUCT_SHARED = {
     "name": "Shared File System Bits"
 }
 
+
 def shell_escape(s):
     return "'" + s.replace("'", "'\\''") + "'"
 
-def machine_python(machine, script, arg = ""):
+
+def machine_python(machine, script, arg=""):
     return machine.execute("python3 -c %s %s" % (shell_escape(script), shell_escape(arg)))
+
 
 class SubscriptionsCase(MachineCase):
     provision = {
@@ -120,10 +124,10 @@ class SubscriptionsCase(MachineCase):
 
         # download product info from the candlepin machine
         def download_product(product):
-            id = product["id"]
-            f = os.path.join(self.tmpdir, "%s.pem" % id)
-            self.candlepin.download("/home/admin/candlepin/generated_certs/%s.pem" % id, f)
-            m.upload([ f ], "/etc/pki/product")
+            prod_id = product["id"]
+            filename = os.path.join(self.tmpdir, "%s.pem" % prod_id)
+            self.candlepin.download("/home/admin/candlepin/generated_certs/%s.pem" % prod_id, filename)
+            m.upload([filename], "/etc/pki/product")
 
         download_product(PRODUCT_SNOWY)
         download_product(PRODUCT_SHARED)
@@ -151,7 +155,7 @@ password=foobar
 insecure_connection=True
 """)
 
-        m.upload([ "files/mock-insights" ], "/var/tmp")
+        m.upload(["files/mock-insights"], "/var/tmp")
         m.spawn("/var/tmp/mock-insights", "mock-insights")
 
     def wait_subscription(self, product, is_subscribed):
@@ -167,6 +171,7 @@ insecure_connection=True
             b.wait_in_text(details_selector, "Not Subscribed")
         # collapse again
         b.click(product_selector)
+
 
 class TestSubscriptions(SubscriptionsCase):
     def testRegister(self):
@@ -230,12 +235,17 @@ class TestSubscriptions(SubscriptionsCase):
 
         # wait until we can open the registration dialog
         register_button_sel = "button.btn-primary:contains('Register')"
+        unregister_button_sel = "label:contains('Status') + button:contains('Unregister')"
         b.click(register_button_sel)
 
         # enter server data
         b.wait_visible("#subscription-register-url")
         b.set_val("#subscription-register-url", "custom")
         b.set_input_text("#subscription-register-url-custom", CANDLEPIN_URL)
+
+        # select registration method "activation key"
+        activation_key_checkbox = "#subscription-register-activation-key-method"
+        b.click(activation_key_checkbox)
 
         # make sure we have an activation key on the target machine
         machine_python(self.machine, ACTIVATION_KEY_SCRIPT, CANDLEPIN_URL)
@@ -250,6 +260,54 @@ class TestSubscriptions(SubscriptionsCase):
 
         # make sure this product isn't subscribed
         self.wait_subscription(PRODUCT_SNOWY, False)
+
+        # find another one that is subscribed
+        self.wait_subscription(PRODUCT_SHARED, True)
+
+        # unregister
+        b.click(unregister_button_sel)
+
+        # dialog should disappear
+        b.wait_not_present(unregister_button_sel)
+
+        # make sure this product isn't subscribed
+        self.wait_subscription(PRODUCT_SNOWY, False)
+
+        # find another one that isn't subscribed too
+        self.wait_subscription(PRODUCT_SHARED, False)
+
+    def testRegisterWithoutAutoAttach(self):
+        b = self.browser
+
+        self.login_and_go("/subscriptions")
+
+        # wait until we can open the registration dialog
+        register_button_sel = "button.btn-primary:contains('Register')"
+        b.click(register_button_sel)
+
+        b.wait_visible("#subscription-register-url")
+
+        # enter server and correct login data
+        b.set_val("#subscription-register-url", "custom")
+        b.set_input_text("#subscription-register-url-custom", CANDLEPIN_URL)
+        b.set_input_text("#subscription-register-username", "doc")
+        b.set_input_text("#subscription-register-password", "password")
+        b.set_input_text("#subscription-register-org", "snowwhite")
+
+        checkbox_attach_automatically = "#subscription-auto-attach-use"
+        b.click(checkbox_attach_automatically)
+
+        dialog_register_button_sel = "div.modal-footer .btn-primary"
+        b.click(dialog_register_button_sel)
+
+        # dialog should disappear
+        b.wait_not_present(dialog_register_button_sel)
+
+        # this product should not be subscribed ATM, because auto-attach was skipped
+        self.wait_subscription(PRODUCT_SHARED, False)
+
+        auto_attach_button = "button.auto-attach-btn"
+        b.click(auto_attach_button)
 
         # find another one that is subscribed
         self.wait_subscription(PRODUCT_SHARED, True)
@@ -340,6 +398,7 @@ class TestSubscriptions(SubscriptionsCase):
         b.wait_not_present("label:contains('Insights')")
         m.execute("test -f /etc/insights-client/.unregistered")
 
+
 class TestSubscriptionsPackages(SubscriptionsCase, PackageCase):
     def testMissingPackages(self):
         m = self.machine
@@ -387,6 +446,7 @@ class TestSubscriptionsPackages(SubscriptionsCase, PackageCase):
         b.click('.modal-footer button.cancel')
 
         m.execute("test -f /stamp-insights-client-999-1")
+
 
 if __name__ == '__main__':
     test_main()

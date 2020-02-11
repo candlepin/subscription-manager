@@ -64,17 +64,21 @@ class EntitlementService(object):
         # injection doesn't do it automatically).
         if sorter.on_date != on_date:
             sorter.on_date = on_date
-            # Force reload status from the server to be sure that we get valid status for new date.
-            # It is necessary to do it for rhsm.service, because it can run for very long time without
-            # restart.
-            sorter.load()
+        # Force reload status from the server to be sure that we get valid status for new date.
+        # It is necessary to do it for rhsm.service, because it can run for very long time without
+        # restart.
+        sorter.load()
         if self.identity.is_valid():
             overall_status = sorter.get_system_status()
             reasons = sorter.reasons.get_name_message_map()
             valid = sorter.is_valid()
-            return {'status': overall_status, 'reasons': reasons, 'valid': valid}
+            status = {'status': overall_status, 'reasons': reasons, 'valid': valid}
+            log.debug('entitlement status: %s' % str(status))
+            return status
         else:
-            return {'status': 'Unknown', 'reasons': {}, 'valid': False}
+            status = {'status': 'Unknown', 'reasons': {}, 'valid': False}
+            log.debug('entitlement status: %s' % str(status))
+            return status
 
     def get_pools(self, pool_subsets=None, matches=None, pool_only=None, match_installed=None,
                   no_overlap=None, service_level=None, show_all=None, on_date=None, future=None,

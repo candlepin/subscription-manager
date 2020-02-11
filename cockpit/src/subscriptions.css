@@ -23,6 +23,19 @@
     border: none;
 }
 
+.installed-products-line {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.auto-attach-btn {
+    float: right;
+}
+
+.installed-products-title {
+    display: inline;
+}
+
 .subscription-status-ct label {
     font-size: 13px;
 }
@@ -34,6 +47,16 @@
 .subscription-status-ct .value {
     font-weight: 400;
     margin-left: 4px;
+}
+
+#register_dialog .modal-footer .alert{
+    text-align: left;
+    padding-left: 37px;
+}
+
+
+#register_dialog .modal-footer .alert .fa-exclamation-triangle {
+    margin-right: 4px;
 }
 
 .container-fluid.alert {
@@ -68,17 +91,28 @@
     margin-bottom: 4px;
 }
 
-.ct-form-layout .ct-form-layout {
+.proxy-settings-form .ct-form-layout {
     background: #f4f4f4;
     border-width: 1px;
     border-style: solid;
     border-color: #bababa;
-    padding: 4px;
-    padding-top: 10px;
+    padding: 10px 4px 4px 4px;
     width: 100%;
 }
 
 /* Make a dialog visible */
 .dialog-ct-visible {
     display: block;
+}
+
+.rhsm-register-method #subscription-register-activation-key-method {
+    margin-left: 10px;
+}
+
+.rhsm-register-method input {
+    margin: 5px 5px 5px 0px;
+}
+
+.register-method-value {
+    vertical-align: text-bottom;
 }
