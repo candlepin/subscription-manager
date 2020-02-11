@@ -1033,17 +1033,19 @@ class AutohealCommand(CliCommand):
     def __init__(self):
         self.uuid = inj.require(inj.IDENTITY).uuid
 
-        shortdesc = _("Set if subscriptions are attached on a schedule (default of daily)")
-        self._org_help_text = _("specify whether to enable or disable auto-attaching of subscriptions")
-        super(AutohealCommand, self).__init__("auto-attach", shortdesc,
-                                                False)
+        self._org_help_text = _("specify whether to enable or disable auto-healing of subscriptions")
+        super(AutohealCommand, self).__init__(
+            self._command_name(),
+            self._short_description(),
+            self._primary()
+        )
 
         self.parser.add_option("--enable", dest="enable", action='store_true',
-                help=_("try to attach subscriptions for uncovered products each check-in"))
+                help=_("try to heal subscriptions for uncovered products each check-in"))
         self.parser.add_option("--disable", dest="disable", action='store_true',
-                help=_("do not try to automatically attach subscriptions each check-in"))
+                help=_("do not try to automatically heal subscriptions each check-in"))
         self.parser.add_option("--show", dest="show", action='store_true',
-                help=_("show the current auto-attach preference"))
+                help=_("show the current auto-heal preference"))
 
     def _toggle(self, autoheal):
         self.cp.updateConsumer(self.uuid, autoheal=autoheal)
@@ -1055,9 +1057,9 @@ class AutohealCommand(CliCommand):
 
     def _show(self, autoheal):
         if autoheal:
-            print(_("Auto-attach preference: enabled"))
+            print(_("Auto-heal preference: enabled"))
         else:
-            print(_("Auto-attach preference: disabled"))
+            print(_("Auto-heal preference: disabled"))
 
     def _do_command(self):
         self._validate_options()
@@ -1066,6 +1068,34 @@ class AutohealCommand(CliCommand):
             self._show(self.cp.getConsumer(self.uuid)['autoheal'])
         else:
             self._toggle(self.options.enable or False)
+
+    def _short_description(self):
+        return _("Set if subscriptions are healed on a schedule (default of daily)")
+
+    def _command_name(self):
+        return "auto-heal"
+
+    def _primary(self):
+        return False
+
+
+class AutoattachCommand(AutohealCommand):
+    """
+    Deprecated command, because --auto-attach is CLI option for register command
+    and auto-heal better describes purpose of this command
+    """
+
+    def __init__(self):
+        super(AutoattachCommand, self).__init__()
+
+    def _short_description(self):
+        return _("Deprecated, see auto-heal")
+
+    def _command_name(self):
+        return "auto-attach"
+
+    def _primary(self):
+        return False
 
 
 class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
@@ -1249,9 +1279,8 @@ class RegisterCommand(UserPassCommand):
                                help=_("Deprecated, see --auto-attach"))
         self.parser.add_option("--auto-attach", action='store_true', dest="autoattach",
                                help=_("automatically attach compatible subscriptions to this system"))
-        self.parser.add_option("--disable-auto-attach", action='store_true', dest="disable_autoattach",
-                               help=_("do not automatically attach compatible subscriptions to this system, "
-                                      "when activation key is used"))
+        self.parser.add_option("--disable-auto-heal", action='store_true', dest="disable_auto_heal",
+                               help=_("disable auto-heal option for consumer"))
         self.parser.add_option("--force", action='store_true',
                                help=_("register the system even if it is already registered"))
         self.parser.add_option("--activationkey", action='append', dest="activation_keys",
@@ -1273,16 +1302,6 @@ class RegisterCommand(UserPassCommand):
             system_exit(os.EX_USAGE, _("Error: Activation keys do not allow environments to be specified."))
         elif self.autoattach and self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Activation keys cannot be used with --auto-attach."))
-        elif self.autoattach and self.options.disable_autoattach:
-            system_exit(
-                os.EX_USAGE,
-                _("Error: The --disable-auto-attach option cannot be used with the --auto-attach option'.")
-            )
-        elif not self.options.activation_keys and self.options.disable_autoattach:
-            system_exit(
-                os.EX_USAGE,
-                _("Error: The --disable-auto-attach option cannot be used without activation keys'.")
-            )
         # 746259: Don't allow the user to pass in an empty string as an activation key
         elif self.options.activation_keys and '' in self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Must specify an activation key"))
@@ -1372,7 +1391,7 @@ class RegisterCommand(UserPassCommand):
             service = register.RegisterService(admin_cp)
 
             autoheal = True
-            if self.options.disable_autoattach is True:
+            if self.options.disable_auto_heal is True:
                 autoheal = False
 
             if self.options.consumerid:
@@ -1450,7 +1469,7 @@ class RegisterCommand(UserPassCommand):
                     print(_("Service level set to: %s") % self.options.service_level)
 
         if self.options.consumerid or \
-                (self.options.activation_keys and not self.options.disable_autoattach) or \
+                self.options.activation_keys or \
                 self.autoattach or \
                 self.cp.has_capability(CONTENT_ACCESS_CERT_CAPABILITY):
             log.debug("System registered, updating entitlements if needed")
@@ -1463,7 +1482,7 @@ class RegisterCommand(UserPassCommand):
         profile_mgr.update_check(self.cp, consumer['uuid'], True)
 
         subscribed = 0
-        if self.options.disable_autoattach:
+        if self.options.disable_auto_heal:
             print(_("Auto-attach disabled using CLI option"))
         elif self.options.activation_keys or self.autoattach:
             # update with latest cert info
@@ -3015,7 +3034,7 @@ class ManagerCLI(CLI):
                     RedeemCommand, ReposCommand, ReleaseCommand, StatusCommand,
                     EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand,
                     VersionCommand, RemoveCommand, AttachCommand, PluginsCommand,
-                    AutohealCommand, OverrideCommand, RoleCommand, UsageCommand]
+                    AutohealCommand, AutoattachCommand, OverrideCommand, RoleCommand, UsageCommand]
         CLI.__init__(self, command_classes=commands)
 
     def main(self):
