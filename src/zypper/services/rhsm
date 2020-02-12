@@ -84,6 +84,7 @@ class ZypperService(object):
         self.full_refresh_on_yum = None
         self.ca_cert_dir = None
         self.gpgcheck = False
+        self.autorefresh = False
         self.plugin_enabled = True
 
     def read_rhsm_conf(self):
