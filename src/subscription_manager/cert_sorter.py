@@ -63,6 +63,18 @@ class ComplianceManager(object):
         self.entitlement_dir = inj.require(inj.ENT_DIR)
         self.identity = inj.require(inj.IDENTITY)
         self.on_date = on_date
+        self.installed_products = None
+        self.unentitled_products = None
+        self.expired_products = None
+        self.partially_valid_products = None
+        self.valid_products = None
+        self.partial_stacks = None
+        self.future_products = None
+        self.reasons = None
+        self.supports_reasons = False
+        self.system_status = None
+        self.valid_entitlement_certs = None
+        self.status = None
         self.load()
 
     def load(self):
@@ -128,27 +140,28 @@ class ComplianceManager(object):
             return
 
         # Override get_status
-        status = self.get_compliance_status()
-        if status is None:
-            return
+        if self.status is None:
+            self.status = self.get_compliance_status()
+            if self.status is None:
+                return
 
         # TODO: we're now mapping product IDs to entitlement cert JSON,
         # previously we mapped to actual entitlement cert objects. However,
         # nothing seems to actually use these, so it may not matter for now.
-        self.valid_products = status['compliantProducts']
+        self.valid_products = self.status['compliantProducts']
 
-        self.partially_valid_products = status['partiallyCompliantProducts']
+        self.partially_valid_products = self.status['partiallyCompliantProducts']
 
-        self.partial_stacks = status['partialStacks']
+        self.partial_stacks = self.status['partialStacks']
 
-        if 'reasons' in status:
+        if 'reasons' in self.status:
             self.supports_reasons = True
-            self.reasons = Reasons(status['reasons'], self)
+            self.reasons = Reasons(self.status['reasons'], self)
 
-        if 'status' in status and len(status['status']):
-            self.system_status = status['status']
+        if 'status' in self.status and len(self.status['status']):
+            self.system_status = self.status['status']
         # Some old candlepin versions do not return 'status' with information
-        elif status['nonCompliantProducts']:
+        elif self.status['nonCompliantProducts']:
             self.system_status = 'invalid'
         elif self.partially_valid_products or self.partial_stacks or \
                 self.reasons.reasons:
@@ -163,12 +176,12 @@ class ComplianceManager(object):
         # invalid from midnight to midnight.
         self.compliant_until = None
 
-        if status['compliantUntil'] is not None:
-            self.compliant_until = parse_date(status['compliantUntil'])
+        if self.status['compliantUntil'] is not None:
+            self.compliant_until = parse_date(self.status['compliantUntil'])
 
         # Lookup product certs for each unentitled product returned by
         # the server:
-        unentitled_pids = status['nonCompliantProducts']
+        unentitled_pids = self.status['nonCompliantProducts']
         # Add in any installed products not in the server response. This
         # could happen if something changes before the certd runs. Log
         # a warning if it does, and treat it like an unentitled product.
@@ -197,13 +210,13 @@ class ComplianceManager(object):
         fj = utils.friendly_join
 
         log.debug("Product status: valid_products=%s partial_products=%s expired_products=%s"
-                 " unentitled_producs=%s future_products=%s valid_until=%s",
-                 fj(list(self.valid_products.keys())),
-                 fj(list(self.partially_valid_products.keys())),
-                 fj(list(self.expired_products.keys())),
-                 fj(list(self.unentitled_products.keys())),
-                 fj(list(self.future_products.keys())),
-                 self.compliant_until)
+                  " unentitled_producs=%s future_products=%s valid_until=%s",
+                  fj(list(self.valid_products.keys())),
+                  fj(list(self.partially_valid_products.keys())),
+                  fj(list(self.expired_products.keys())),
+                  fj(list(self.unentitled_products.keys())),
+                  fj(list(self.future_products.keys())),
+                  self.compliant_until)
 
         log.debug("partial stacks: %s" % list(self.partial_stacks.keys()))
 
@@ -357,7 +370,8 @@ class CertSorter(ComplianceManager):
                 pass
 
     def force_cert_check(self):
-        if self.cert_monitor.update():
+        updated = self.cert_monitor.update()
+        if updated:
             self.notify()
 
     def notify(self):
