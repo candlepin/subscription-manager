@@ -166,7 +166,8 @@ _subscription_manager_redeem()
 
 _subscription_manager_refresh()
 {
-  local opts="${_subscription_manager_common_opts}"
+  local opts="--force
+              ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 

@@ -324,7 +324,8 @@ class CliCommand(AbstractCLICommand):
         self.parser.add_option("--serverurl", dest="server_url",
                                default=None, help=_("server URL in the form of https://hostname:port/prefix"))
         self.parser.add_option("--insecure", action="store_true",
-                                default=False, help=_("do not check the entitlement server SSL certificate against available certificate authorities"))
+                                default=False, help=_("do not check the entitlement server SSL certificate against "
+                                                      "available certificate authorities"))
 
     def _add_proxy_options(self):
         """ Add proxy options that apply to sub-commands that require network connections. """
@@ -835,22 +836,22 @@ class RefreshCommand(CliCommand):
 
         super(RefreshCommand, self).__init__("refresh", shortdesc, True)
 
+        self.parser.add_option("--force", action='store_true', help=_("force certificate regeneration"))
+
     def _do_command(self):
         self.assert_should_be_registered()
         try:
-            # get current consumer identity
-            identity = inj.require(inj.IDENTITY)
-
             # remove content_access cache, ensuring we get it fresh
             content_access = inj.require(inj.CONTENT_ACCESS_CACHE)
             if content_access.exists():
                 content_access.remove()
 
-            # Force a regen of the entitlement certs for this consumer
-            # TODO: Eventually migrate this to capability recognition. Currently it will silently return
-            #   false if an error occurs
-            if not self.cp.regenEntitlementCertificates(identity.uuid, True):
-                log.debug("Warning: Unable to refresh entitlement certificates; service likely unavailable")
+            if self.options.force is True:
+                # get current consumer identity
+                consumer_identity = inj.require(inj.IDENTITY)
+                # Force a regen of the entitlement certs for this consumer
+                if not self.cp.regenEntitlementCertificates(consumer_identity.uuid, True):
+                    log.debug("Warning: Unable to refresh entitlement certificates; service likely unavailable")
 
             self.entcertlib.update()
 
@@ -875,7 +876,8 @@ class IdentityCommand(UserPassCommand):
         self.parser.add_option("--regenerate", action='store_true',
                                help=_("request a new certificate be generated"))
         self.parser.add_option("--force", action='store_true',
-                               help=_("force certificate regeneration (requires username and password); Only used with --regenerate"))
+                               help=_("force certificate regeneration (requires username and password); "
+                                      "Only used with --regenerate"))
 
     def _validate_options(self):
         self.assert_should_be_registered()
