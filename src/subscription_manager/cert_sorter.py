@@ -63,6 +63,18 @@ class ComplianceManager(object):
         self.entitlement_dir = inj.require(inj.ENT_DIR)
         self.identity = inj.require(inj.IDENTITY)
         self.on_date = on_date
+        self.installed_products = None
+        self.unentitled_products = None
+        self.expired_products = None
+        self.partially_valid_products = None
+        self.valid_products = None
+        self.partial_stacks = None
+        self.future_products = None
+        self.reasons = None
+        self.supports_reasons = False
+        self.system_status = None
+        self.valid_entitlement_certs = None
+        self.status = None
         self.load()
 
     def load(self):
@@ -113,12 +125,14 @@ class ComplianceManager(object):
 
     def get_compliance_status(self):
         # Defaults to now
-        try:
-            return self.cp_provider.get_consumer_auth_cp().getCompliance(self.identity.uuid, self.on_date)
-        except Exception as e:
-            log.warn("Failed to get compliance data from the server")
-            log.exception(e)
-            return None
+        if self.status is None:
+            try:
+                self.status = self.cp_provider.get_consumer_auth_cp().getCompliance(self.identity.uuid, self.on_date)
+            except Exception as e:
+                log.warn("Failed to get compliance data from the server")
+                log.exception(e)
+                self.status = None
+        return self.status
 
     def _parse_server_status(self):
         """ Fetch entitlement status info from server and parse. """
@@ -197,13 +211,13 @@ class ComplianceManager(object):
         fj = utils.friendly_join
 
         log.debug("Product status: valid_products=%s partial_products=%s expired_products=%s"
-                 " unentitled_producs=%s future_products=%s valid_until=%s",
-                 fj(list(self.valid_products.keys())),
-                 fj(list(self.partially_valid_products.keys())),
-                 fj(list(self.expired_products.keys())),
-                 fj(list(self.unentitled_products.keys())),
-                 fj(list(self.future_products.keys())),
-                 self.compliant_until)
+                  " unentitled_producs=%s future_products=%s valid_until=%s",
+                  fj(list(self.valid_products.keys())),
+                  fj(list(self.partially_valid_products.keys())),
+                  fj(list(self.expired_products.keys())),
+                  fj(list(self.unentitled_products.keys())),
+                  fj(list(self.future_products.keys())),
+                  self.compliant_until)
 
         log.debug("partial stacks: %s" % list(self.partial_stacks.keys()))
 
@@ -326,12 +340,20 @@ class CertSorter(ComplianceManager):
         super(CertSorter, self).__init__(on_date)
         self.callbacks = set()
 
-        cert_dir_monitors = [file_monitor.DirectoryWatch(inj.require(inj.PROD_DIR).path,
-                                                         [self.on_prod_dir_changed, self.load]),
-                             file_monitor.DirectoryWatch(inj.require(inj.ENT_DIR).path,
-                                                         [self.on_ent_dir_changed, self.load]),
-                             file_monitor.DirectoryWatch(inj.require(inj.IDENTITY).cert_dir_path,
-                                                         [self.on_identity_changed, self.load])]
+        cert_dir_monitors = [
+            file_monitor.DirectoryWatch(
+                inj.require(inj.PROD_DIR).path,
+                [self.on_prod_dir_changed, self.load]
+            ),
+            file_monitor.DirectoryWatch(
+                inj.require(inj.ENT_DIR).path,
+                [self.on_ent_dir_changed, self.load]
+            ),
+            file_monitor.DirectoryWatch(
+                inj.require(inj.IDENTITY).cert_dir_path,
+                [self.on_identity_changed, self.load]
+            )
+        ]
 
         # Note: no timer is setup to poll file_monitor by cert_sorter itself,
         # the gui can add one.
@@ -339,7 +361,7 @@ class CertSorter(ComplianceManager):
 
     def get_compliance_status(self):
         status_cache = inj.require(inj.ENTITLEMENT_STATUS_CACHE)
-        return status_cache.load_status(
+        return status_cache.read_status(
             self.cp_provider.get_consumer_auth_cp(),
             self.identity.uuid,
             self.on_date
@@ -350,14 +372,17 @@ class CertSorter(ComplianceManager):
             cp_provider = inj.require(inj.CP_PROVIDER)
             consumer_identity = inj.require(inj.IDENTITY)
             try:
-                self.installed_mgr.update_check(cp_provider.get_consumer_auth_cp(),
-                                                consumer_identity.uuid)
+                self.installed_mgr.update_check(
+                    cp_provider.get_consumer_auth_cp(),
+                    consumer_identity.uuid
+                )
             except RestlibException:
                 # Invalid consumer certificate
                 pass
 
     def force_cert_check(self):
-        if self.cert_monitor.update():
+        updated = self.cert_monitor.update()
+        if updated:
             self.notify()
 
     def notify(self):
@@ -383,13 +408,22 @@ class CertSorter(ComplianceManager):
         self.on_change()
 
     def on_prod_dir_changed(self):
+        """
+        Callback method, when content of directory with product certificates has been changed
+        """
         self.product_dir.refresh()
         self.update_product_manager()
 
     def on_ent_dir_changed(self):
+        """
+        Callback method, when content of directory with entitlement certificates has been changed
+        """
         self.entitlement_dir.refresh()
 
     def on_identity_changed(self):
+        """
+        Callback method, when content of directory with consumer certificate has been changed
+        """
         self.identity.reload()
         self.cp_provider.clean()
 

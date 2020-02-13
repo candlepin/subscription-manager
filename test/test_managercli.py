@@ -405,6 +405,9 @@ class TestCleanCommand(TestCliCommand):
 class TestRefreshCommand(TestCliProxyCommand):
     command_class = managercli.RefreshCommand
 
+    def test_force_option(self):
+        self.cc.main(["--force"])
+
 
 class TestIdentityCommand(TestCliProxyCommand):
 
