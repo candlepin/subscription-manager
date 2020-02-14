@@ -82,7 +82,7 @@ class EntitlementService(object):
 
     def get_pools(self, pool_subsets=None, matches=None, pool_only=None, match_installed=None,
                   no_overlap=None, service_level=None, show_all=None, on_date=None, future=None,
-                  after_date=None, **kwargs):
+                  after_date=None, page=0, items_per_page=0, **kwargs):
         # We accept a **kwargs argument so that the DBus object can pass whatever dictionary it receives
         # via keyword expansion.
         if kwargs:
@@ -128,6 +128,8 @@ class EntitlementService(object):
                 service_level=service_level,
                 future=future,
                 after_date=after_date,
+                page=int(page),
+                items_per_page=int(items_per_page)
             )
             if pool_only:
                 results['available'] = [x['id'] for x in available]
@@ -314,16 +316,75 @@ class EntitlementService(object):
 
     def get_available_pools(self, show_all=None, on_date=None, no_overlap=None,
                             match_installed=None, matches=None, service_level=None, future=None,
-                            after_date=None):
-        available_pools = managerlib.get_available_entitlements(
-            get_all=show_all,
-            active_on=on_date,
-            overlapping=no_overlap,
-            uninstalled=match_installed,
-            filter_string=matches,
-            future=future,
-            after_date=after_date,
-        )
+                            after_date=None, page=0, items_per_page=0):
+        """
+        Get list of available pools
+        :param show_all:
+        :param on_date:
+        :param no_overlap:
+        :param match_installed:
+        :param matches:
+        :param service_level:
+        :param future:
+        :param after_date:
+        :param page:
+        :param items_per_page:
+        :return:
+        """
+
+        # Values used for REST API calls and caching are bigger, because it makes using of cache and
+        # API more efficient
+        if show_all is not True:
+            _page = int(page / 4)
+            _items_per_page = 4 * items_per_page
+        else:
+            page = items_per_page = 0
+            _page = _items_per_page = 0
+
+        filter_options = {
+            "show_all": show_all,
+            "on_date": on_date,
+            "no_overlap": no_overlap,
+            "match_installed": match_installed,
+            "matches": matches,
+            "service_level": service_level,
+            "future": future,
+            "after_date": after_date,
+            "page": _page,
+            "items_per_page": _items_per_page
+        }
+
+        # Try to get identity
+        identity = inj.require(inj.IDENTITY)
+
+        # Try to get available pools from cache
+        cache = inj.require(inj.AVAILABLE_ENTITLEMENT_CACHE)
+        available_pools = cache.get_not_obsolete_data(identity, filter_options)
+
+        if len(available_pools) == 0:
+            available_pools = managerlib.get_available_entitlements(
+                get_all=show_all,
+                active_on=on_date,
+                overlapping=no_overlap,
+                uninstalled=match_installed,
+                filter_string=matches,
+                future=future,
+                after_date=after_date,
+                page=_page,
+                items_per_page=_items_per_page
+            )
+
+            timeout = cache.timeout()
+
+            data = {
+                identity.uuid: {
+                    'filter_options': filter_options,
+                    'pools': available_pools,
+                    'timeout': time.time() + timeout
+                }
+            }
+            cache.available_entitlements = data
+            cache.write_cache()
 
         def filter_pool_by_service_level(pool_data):
             pool_level = ""
@@ -333,6 +394,22 @@ class EntitlementService(object):
 
         if service_level is not None:
             available_pools = list(filter(filter_pool_by_service_level, available_pools))
+
+        # When pagination result of available pools is requested, then reduce too long list
+        if items_per_page > 0:
+            # Reduce too long list to requested "page"
+            lo_idx = (page * items_per_page) % _items_per_page
+            hi_idx = ((page + 1) * items_per_page) % _items_per_page
+            if hi_idx == 0:
+                hi_idx = _items_per_page
+
+            # Own filtering of the list
+            available_pools = available_pools[lo_idx:hi_idx]
+
+            # Add requested page and number of items per page to the result too
+            for item in available_pools:
+                item["page"] = page
+                item["items_per_page"] = items_per_page
 
         return available_pools
 

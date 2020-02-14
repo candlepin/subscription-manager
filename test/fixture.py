@@ -187,6 +187,7 @@ class SubManFixture(unittest.TestCase):
         inj.provide(inj.SUPPORTED_RESOURCES_CACHE, stubs.SubSupportedResourcesCache())
         inj.provide(inj.OVERRIDE_STATUS_CACHE, stubs.StubOverrideStatusCache())
         inj.provide(inj.RELEASE_STATUS_CACHE, stubs.StubReleaseStatusCache())
+        inj.provide(inj.AVAILABLE_ENTITLEMENT_CACHE, stubs.StubAvailableEntitlementsCache())
         inj.provide(inj.PROFILE_MANAGER, stubs.StubProfileManager())
         # By default set up an empty stub entitlement and product dir.
         # Tests need to modify or create their own but nothing should hit

@@ -37,7 +37,8 @@ from rhsm import ourjson as json
 from subscription_manager.cache import ProfileManager, \
     InstalledProductsManager, EntitlementStatusCache, \
     PoolTypeCache, ReleaseStatusCache, ContentAccessCache, \
-    PoolStatusCache, ContentAccessModeCache, SupportedResourcesCache
+    PoolStatusCache, ContentAccessModeCache, SupportedResourcesCache, \
+    AvailableEntitlementsCache
 
 from rhsm.profile import Package, RPMProfile, EnabledReposProfile, ModulesProfile
 
@@ -950,3 +951,109 @@ class TestSupportedResourcesCache(SubManFixture):
         data = self.cache.read_cache_only()
         self.assertTrue("a3f43883-315b-4cc4-bfb5-5771946d56d7" in data)
         self.assertEqual(data["a3f43883-315b-4cc4-bfb5-5771946d56d7"], {"": "/", "cdn": "/cdn"})
+
+
+class TestAvailableEntitlementsCache(SubManFixture):
+
+    MOCK_CACHE_FILE_CONTENT = '''{
+    "b1002709-6d67-443e-808b-a7afcbe5b47e": {
+        "filter_options": {
+            "after_date": null,
+            "future": null,
+            "match_installed": null,
+            "matches": "*fakeos*",
+            "no_overlap": null,
+            "on_date": null,
+            "service_level": null,
+            "show_all": null
+        },
+        "pools": [
+            {
+                "addons": null,
+                "attributes": [],
+                "contractNumber": "0",
+                "endDate": "01/16/2021",
+                "id": "ff8080816fb38f78016fb392d26f0267",
+                "management_enabled": false,
+                "pool_type": "Standard",
+                "productId": "fakeos-bits",
+                "productName": "Fake OS Bits",
+                "providedProducts": {
+                    "38072": "Fake OS Bits"
+                },
+                "quantity": "5",
+                "roles": null,
+                "service_level": null,
+                "service_type": null,
+                "startDate": "01/17/2020",
+                "suggested": 1,
+                "usage": null
+            }
+        ],
+        "timeout": 1579613054.079684
+    }
+}
+'''
+
+    def setUp(self):
+        super(TestAvailableEntitlementsCache, self).setUp()
+        self.cache = AvailableEntitlementsCache()
+
+    def test_reading_nonexisting_cache(self):
+        """
+        Test reading cache, when there is no cache file yet
+        """
+        data = self.cache.read_cache_only()
+        self.assertIsNone(data)
+
+    def test_reading_existing_cache(self):
+        """
+        Test reading cache from file
+        """
+        temp_cache_dir = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, temp_cache_dir)
+        self.cache.CACHE_FILE = os.path.join(temp_cache_dir, 'available_entitlements.json')
+        with open(self.cache.CACHE_FILE, 'w') as cache_file:
+            cache_file.write(self.MOCK_CACHE_FILE_CONTENT)
+        data = self.cache.read_cache_only()
+        self.assertTrue("b1002709-6d67-443e-808b-a7afcbe5b47e" in data)
+        self.assertEqual(data["b1002709-6d67-443e-808b-a7afcbe5b47e"]["timeout"], 1579613054.079684)
+        self.assertEqual(data["b1002709-6d67-443e-808b-a7afcbe5b47e"]["filter_options"]["matches"], "*fakeos*")
+        self.assertEqual(len(data["b1002709-6d67-443e-808b-a7afcbe5b47e"]["pools"]), 1)
+
+    def test_timeout(self):
+        """
+        Test computing timeout of cache based on smoothed response time (SRT)
+        """
+        uep = inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()
+        uep.conn.smoothed_rt = 3.0
+        timeout = self.cache.timeout()
+        self.assertTrue(timeout >= self.cache.LBOUND)
+        self.assertTrue(timeout <= self.cache.UBOUND)
+
+    def test_timeout_no_srt(self):
+        """
+        Test computing timeout, when there is no SRT yet
+        """
+        uep = inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()
+        uep.conn.smoothed_rt = None
+        timeout = self.cache.timeout()
+        self.assertEqual(timeout, self.cache.LBOUND)
+
+    def test_min_timeout(self):
+        """
+        Test computing timout, when SRT is smaller than lower bound
+        """
+        uep = inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()
+        uep.conn.smoothed_rt = 0.01
+        timeout = self.cache.timeout()
+        self.assertEqual(timeout, self.cache.LBOUND)
+
+    def test_max_timeout(self):
+        """
+        Test computing timout, when SRT is bigger than upper bound
+        """
+        uep = inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()
+        uep.conn.smoothed_rt = 20.0
+        timeout = self.cache.timeout()
+        self.assertEqual(timeout, self.cache.UBOUND)

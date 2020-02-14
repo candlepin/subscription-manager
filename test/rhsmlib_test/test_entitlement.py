@@ -25,6 +25,7 @@ from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.reasons import Reasons
 from subscription_manager.certdirectory import EntitlementDirectory
 from subscription_manager.cp_provider import CPProvider
+from subscription_manager.cache import AvailableEntitlementsCache
 
 from rhsm import connection
 
@@ -42,6 +43,11 @@ class TestEntitlementService(InjectionMockingTest):
         self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection").return_value
         self.mock_sorter_class = mock.Mock(spec=CertSorter, name="CertSorter")
         self.mock_ent_dir = mock.Mock(spec=EntitlementDirectory, name="EntitlementDirectory").return_value
+        self.mock_cache_avail_ent = mock.Mock(spec=AvailableEntitlementsCache, name="AvailableEntitlements").return_value
+        self.mock_cache_avail_ent.get_not_obsolete_data = mock.Mock(return_value=[])
+        self.mock_cache_avail_ent.timeout = mock.Mock(return_value=10.0)
+        self.mock_provider = mock.Mock(spec=CPProvider, name="CPProvider")
+        self.mock_provider.get_consumer_auth_cp.return_value = mock.Mock(name="MockCP")
 
     def injection_definitions(self, *args, **kwargs):
         if args[0] == inj.IDENTITY:
@@ -54,6 +60,10 @@ class TestEntitlementService(InjectionMockingTest):
             return instance
         elif args[0] == inj.ENT_DIR:
             return self.mock_ent_dir
+        elif args[0] == inj.AVAILABLE_ENTITLEMENT_CACHE:
+            return self.mock_cache_avail_ent
+        elif args[0] == inj.CP_PROVIDER:
+            return self.mock_provider
         else:
             return None
 
@@ -203,6 +213,54 @@ class TestEntitlementService(InjectionMockingTest):
 
         self.assertEqual(1, len(filtered))
         self.assertEqual("Level2", filtered[0]['service_level'])
+
+    @mock.patch('rhsmlib.services.entitlement.managerlib')
+    def test_pagged_result(self, mock_managerlib):
+        service = EntitlementService()
+        pools = [{'id': 'ff8080816ea20fb9016ea21283ab02e0'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e1'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e2'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e3'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e4'}]
+        mock_managerlib.get_available_entitlements.return_value = pools
+
+        filtered = service.get_available_pools(page=1, items_per_page=3)
+
+        self.assertEqual(2, len(filtered))
+        self.assertEqual("ff8080816ea20fb9016ea21283ab02e3", filtered[0]['id'])
+        self.assertEqual(1, filtered[0]['page'])
+        self.assertEqual(3, filtered[0]['items_per_page'])
+
+    @mock.patch('rhsmlib.services.entitlement.managerlib')
+    def test_no_pagged_result(self, mock_managerlib):
+        service = EntitlementService()
+        pools = [{'id': 'ff8080816ea20fb9016ea21283ab02e0'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e1'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e2'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e3'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e4'}]
+        mock_managerlib.get_available_entitlements.return_value = pools
+
+        filtered = service.get_available_pools(page=0, items_per_page=0)
+
+        self.assertEqual(5, len(filtered))
+        self.assertEqual("ff8080816ea20fb9016ea21283ab02e0", filtered[0]['id'])
+        self.assertNotIn('page', filtered[0])
+        self.assertNotIn('items_per_page', filtered[0])
+
+    @mock.patch('rhsmlib.services.entitlement.managerlib')
+    def test_pagged_result_too_big_page_value(self, mock_managerlib):
+        service = EntitlementService()
+        pools = [{'id': 'ff8080816ea20fb9016ea21283ab02e0'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e1'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e2'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e3'},
+                 {'id': 'ff8080816ea20fb9016ea21283ab02e4'}]
+        mock_managerlib.get_available_entitlements.return_value = pools
+
+        filtered = service.get_available_pools(page=10, items_per_page=3)
+
+        self.assertEqual(0, len(filtered))
 
     @mock.patch('rhsmlib.services.entitlement.managerlib')
     def test_no_pool_with_specified_filter(self, mock_managerlib):

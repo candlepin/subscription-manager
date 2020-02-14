@@ -447,6 +447,9 @@ class BaseRestLib(object):
     to make rest calls easy and expose the details of
     responses
     """
+
+    ALPHA = 0.9
+
     def __init__(self, host, ssl_port, apihandler,
             username=None, password=None,
             proxy_hostname=None, proxy_port=None,
@@ -498,6 +501,7 @@ class BaseRestLib(object):
         self.proxy_port = proxy_port
         self.proxy_user = proxy_user
         self.proxy_password = proxy_password
+        self.smoothed_rt = None
 
         # Setup basic authentication if specified:
         if username and password:
@@ -580,7 +584,9 @@ class BaseRestLib(object):
             final_headers.update(headers)
 
         try:
+            ts_start = time.time()
             conn.request(request_type, handler, body=body, headers=final_headers)
+            ts_end = time.time()
         except ssl.SSLError:
             if self.cert_file:
                 id_cert = certificate.create_from_file(self.cert_file)
@@ -602,6 +608,9 @@ class BaseRestLib(object):
             if str(code) in str(err):
                 raise ProxyException(err)
             raise
+
+        self._update_smoothed_response_time(ts_end - ts_start)
+
         response = conn.getresponse()
         result = {
             "content": response.read().decode('utf-8'),
@@ -627,6 +636,18 @@ class BaseRestLib(object):
         self.validateResponse(result, request_type, handler)
 
         return result
+
+    def _update_smoothed_response_time(self, response_time):
+        """
+        Method for computing smoothed time of response. It is based on computing SRTT (See RFC 793).
+        :param response_time: response time of the latest http request
+        :return: None
+        """
+        if self.smoothed_rt is None:
+            self.smoothed_rt = response_time
+        else:
+            self.smoothed_rt = (self.ALPHA * self.smoothed_rt) + ((1 - self.ALPHA) * response_time)
+        log.debug("Response time: %s, Smoothed response time: %s" % (response_time, self.smoothed_rt))
 
     def validateResponse(self, response, request_type=None, handler=None):
 
@@ -1389,7 +1410,8 @@ class UEPConnection(object):
 
         return self.conn.request_put(method)
 
-    def getPoolsList(self, consumer=None, listAll=False, active_on=None, owner=None, filter_string=None, future=None, after_date=None):
+    def getPoolsList(self, consumer=None, listAll=False, active_on=None, owner=None, filter_string=None, future=None,
+                     after_date=None, page=0, items_per_page=0):
         """
         List pools for a given consumer or owner.
 
@@ -1415,13 +1437,16 @@ class UEPConnection(object):
         if future in ('add', 'only'):
             method = "%s&%s_future=true" % (method, future)
         if after_date:
-            method = "%s&after=%s" % (method,
-                    self.sanitize(after_date.isoformat(), plus=True))
+            method = "%s&after=%s" % (method, self.sanitize(after_date.isoformat(), plus=True))
         if active_on and not after_date:
-            method = "%s&activeon=%s" % (method,
-                    self.sanitize(active_on.isoformat(), plus=True))
+            method = "%s&activeon=%s" % (method, self.sanitize(active_on.isoformat(), plus=True))
         if filter_string:
             method = "%s&matches=%s" % (method, self.sanitize(filter_string, plus=True))
+        if page != 0:
+            method = "%s&page=%s" % (method, self.sanitize(page))
+        if items_per_page != 0:
+            method = "%s&per_page=%s" % (method, self.sanitize(items_per_page))
+
         results = self.conn.request_get(method)
         return results
 
