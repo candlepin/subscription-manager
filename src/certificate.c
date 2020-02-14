@@ -610,7 +610,11 @@ init_certificate (void)
 
 	certificate_x509_type.tp_new = PyType_GenericNew;
 	if (PyType_Ready (&certificate_x509_type) < 0) {
+	#if PY_MAJOR_VERSION >= 3
+		return NULL;
+	#else
 		return;
+	#endif
 	}
 
 	Py_INCREF (&certificate_x509_type);
@@ -619,7 +623,11 @@ init_certificate (void)
 
     private_key_type.tp_new = PyType_GenericNew;
 	if (PyType_Ready (&private_key_type) < 0) {
+	#if PY_MAJOR_VERSION >= 3
+		return NULL;
+	#else
 		return;
+	#endif
 	}
 
 	Py_INCREF (&private_key_type);
