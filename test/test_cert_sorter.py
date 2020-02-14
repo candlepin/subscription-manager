@@ -107,6 +107,7 @@ class CertSorterTests(SubManFixture):
     def test_no_usable_status(self, mock_update):
         self.status_mgr.load_status = Mock(
                 return_value=None)
+        self.status_mgr.server_status = None
         sorter = CertSorter()
         sorter.is_registered = Mock(return_value=True)
         self.assertEqual(UNKNOWN, sorter.get_status(INST_PID_1))
@@ -116,6 +117,7 @@ class CertSorterTests(SubManFixture):
     def test_deleted_consumer_status(self, mock_update):
         self.status_mgr.load_status = Mock(
                 return_value=None)
+        self.status_mgr.server_status = None
         sorter = CertSorter()
         sorter.is_registered = Mock(return_value=True)
         expected = subscription_manager.cert_sorter.STATUS_MAP['unknown']
@@ -125,6 +127,7 @@ class CertSorterTests(SubManFixture):
     def test_unregistered_system_status(self, mock_update):
         self.status_mgr.load_status = Mock(
                 return_value=None)
+        self.status_mgr.server_status = None
         sorter = CertSorter()
         sorter.is_registered = Mock(return_value=False)
         expected = subscription_manager.cert_sorter.STATUS_MAP['unknown']

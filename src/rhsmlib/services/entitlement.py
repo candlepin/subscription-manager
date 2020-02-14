@@ -439,4 +439,7 @@ class EntitlementService(object):
 
     def reload(self):
         sorter = inj.require(inj.CERT_SORTER, on_date=None)
+        status_cache = inj.require(inj.ENTITLEMENT_STATUS_CACHE)
+        log.debug('Clearing in-memory cache of file %s' % status_cache.CACHE_FILE)
+        status_cache.server_status = None
         sorter.load()

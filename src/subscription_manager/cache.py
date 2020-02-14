@@ -181,7 +181,7 @@ class CacheManager(object):
                 log.error("Error updating system data on the server")
                 log.exception(e)
                 raise Exception(_("Error updating system data on the server, see /var/log/rhsm/rhsm.log "
-                        "for more details."))
+                                  "for more details."))
         else:
             log.debug("No changes.")
             return 0  # No updates performed.
@@ -260,7 +260,10 @@ class StatusCache(CacheManager):
         the disk cache to the in-memory cache to avoid reading again.
         """
         if self.server_status is None:
+            log.debug('Trying to read status from %s file' % self.CACHE_FILE)
             self.server_status = super(StatusCache, self)._read_cache()
+        else:
+            log.debug('Reading status from in-memory cache of %s file' % self.CACHE_FILE)
         return self.server_status
 
     def _cache_exists(self):
@@ -268,11 +271,11 @@ class StatusCache(CacheManager):
         If a cache exists in memory, we have written it to the disk
         No need for unnecessary disk io here.
         """
-        if not self.server_status is None:
+        if self.server_status is not None:
             return True
         return super(StatusCache, self)._cache_exists()
 
-    def read_status(self, uep, uuid):
+    def read_status(self, uep, uuid, on_date=None):
         """
         Return status, from cache if it exists, otherwise load_status
         and write cache and return it.
@@ -287,7 +290,9 @@ class StatusCache(CacheManager):
         """
 
         if self.server_status is None:
-            self.server_status = self.load_status(uep, uuid)
+            self.server_status = self.load_status(uep, uuid, on_date)
+        else:
+            log.debug('Reading status from in-memory cache of %s file' % self.CACHE_FILE)
         return self.server_status
 
     def write_cache(self):

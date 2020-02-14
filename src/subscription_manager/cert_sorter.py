@@ -125,12 +125,14 @@ class ComplianceManager(object):
 
     def get_compliance_status(self):
         # Defaults to now
-        try:
-            return self.cp_provider.get_consumer_auth_cp().getCompliance(self.identity.uuid, self.on_date)
-        except Exception as e:
-            log.warn("Failed to get compliance data from the server")
-            log.exception(e)
-            return None
+        if self.status is None:
+            try:
+                self.status = self.cp_provider.get_consumer_auth_cp().getCompliance(self.identity.uuid, self.on_date)
+            except Exception as e:
+                log.warn("Failed to get compliance data from the server")
+                log.exception(e)
+                self.status = None
+        return self.status
 
     def _parse_server_status(self):
         """ Fetch entitlement status info from server and parse. """
@@ -140,28 +142,27 @@ class ComplianceManager(object):
             return
 
         # Override get_status
-        if self.status is None:
-            self.status = self.get_compliance_status()
-            if self.status is None:
-                return
+        status = self.get_compliance_status()
+        if status is None:
+            return
 
         # TODO: we're now mapping product IDs to entitlement cert JSON,
         # previously we mapped to actual entitlement cert objects. However,
         # nothing seems to actually use these, so it may not matter for now.
-        self.valid_products = self.status['compliantProducts']
+        self.valid_products = status['compliantProducts']
 
-        self.partially_valid_products = self.status['partiallyCompliantProducts']
+        self.partially_valid_products = status['partiallyCompliantProducts']
 
-        self.partial_stacks = self.status['partialStacks']
+        self.partial_stacks = status['partialStacks']
 
-        if 'reasons' in self.status:
+        if 'reasons' in status:
             self.supports_reasons = True
-            self.reasons = Reasons(self.status['reasons'], self)
+            self.reasons = Reasons(status['reasons'], self)
 
-        if 'status' in self.status and len(self.status['status']):
-            self.system_status = self.status['status']
+        if 'status' in status and len(status['status']):
+            self.system_status = status['status']
         # Some old candlepin versions do not return 'status' with information
-        elif self.status['nonCompliantProducts']:
+        elif status['nonCompliantProducts']:
             self.system_status = 'invalid'
         elif self.partially_valid_products or self.partial_stacks or \
                 self.reasons.reasons:
@@ -176,12 +177,12 @@ class ComplianceManager(object):
         # invalid from midnight to midnight.
         self.compliant_until = None
 
-        if self.status['compliantUntil'] is not None:
-            self.compliant_until = parse_date(self.status['compliantUntil'])
+        if status['compliantUntil'] is not None:
+            self.compliant_until = parse_date(status['compliantUntil'])
 
         # Lookup product certs for each unentitled product returned by
         # the server:
-        unentitled_pids = self.status['nonCompliantProducts']
+        unentitled_pids = status['nonCompliantProducts']
         # Add in any installed products not in the server response. This
         # could happen if something changes before the certd runs. Log
         # a warning if it does, and treat it like an unentitled product.
@@ -339,12 +340,20 @@ class CertSorter(ComplianceManager):
         super(CertSorter, self).__init__(on_date)
         self.callbacks = set()
 
-        cert_dir_monitors = [file_monitor.DirectoryWatch(inj.require(inj.PROD_DIR).path,
-                                                         [self.on_prod_dir_changed, self.load]),
-                             file_monitor.DirectoryWatch(inj.require(inj.ENT_DIR).path,
-                                                         [self.on_ent_dir_changed, self.load]),
-                             file_monitor.DirectoryWatch(inj.require(inj.IDENTITY).cert_dir_path,
-                                                         [self.on_identity_changed, self.load])]
+        cert_dir_monitors = [
+            file_monitor.DirectoryWatch(
+                inj.require(inj.PROD_DIR).path,
+                [self.on_prod_dir_changed, self.load]
+            ),
+            file_monitor.DirectoryWatch(
+                inj.require(inj.ENT_DIR).path,
+                [self.on_ent_dir_changed, self.load]
+            ),
+            file_monitor.DirectoryWatch(
+                inj.require(inj.IDENTITY).cert_dir_path,
+                [self.on_identity_changed, self.load]
+            )
+        ]
 
         # Note: no timer is setup to poll file_monitor by cert_sorter itself,
         # the gui can add one.
@@ -352,7 +361,7 @@ class CertSorter(ComplianceManager):
 
     def get_compliance_status(self):
         status_cache = inj.require(inj.ENTITLEMENT_STATUS_CACHE)
-        return status_cache.load_status(
+        return status_cache.read_status(
             self.cp_provider.get_consumer_auth_cp(),
             self.identity.uuid,
             self.on_date
@@ -363,8 +372,10 @@ class CertSorter(ComplianceManager):
             cp_provider = inj.require(inj.CP_PROVIDER)
             consumer_identity = inj.require(inj.IDENTITY)
             try:
-                self.installed_mgr.update_check(cp_provider.get_consumer_auth_cp(),
-                                                consumer_identity.uuid)
+                self.installed_mgr.update_check(
+                    cp_provider.get_consumer_auth_cp(),
+                    consumer_identity.uuid
+                )
             except RestlibException:
                 # Invalid consumer certificate
                 pass
@@ -397,13 +408,22 @@ class CertSorter(ComplianceManager):
         self.on_change()
 
     def on_prod_dir_changed(self):
+        """
+        Callback method, when content of directory with product certificates has been changed
+        """
         self.product_dir.refresh()
         self.update_product_manager()
 
     def on_ent_dir_changed(self):
+        """
+        Callback method, when content of directory with entitlement certificates has been changed
+        """
         self.entitlement_dir.refresh()
 
     def on_identity_changed(self):
+        """
+        Callback method, when content of directory with consumer certificate has been changed
+        """
         self.identity.reload()
         self.cp_provider.clean()
 
