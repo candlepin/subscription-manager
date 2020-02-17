@@ -1065,7 +1065,7 @@ int findProductId(GString *certContent, GString *result) {
                 debug("ID of product certificate: %s", components[9]);
                 g_string_assign(result, components[9]);
             } else {
-                error("Product certificate does not contain required ID");
+                error("Product certificate does not contain required ID (wrong number of ext. comps.: %d)", comp_id);
                 ret_val = -1;
             }
             g_strfreev(components);
