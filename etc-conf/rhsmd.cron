@@ -3,7 +3,7 @@
 # this is a cron job because it doesn't need to 'phone home'. should that
 # change, look into calling the dbus interface from rhsmcertd instead.
 config=$(grep -E "^processTimeout" /etc/rhsm/rhsm.conf | grep -Po "[0-9]+")
-if [ -n $config ]; then
+if [ -n "$config" ]; then
   rhsmd_timeout=$config
 else
   rhsmd_timeout=300
