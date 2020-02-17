@@ -222,7 +222,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.26.10
+Version: 1.26.11
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1400,6 +1400,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Feb 17 2020 Christopher Snyder <csnyder@redhat.com> 1.26.11-1
+- 1794653: corrected missing quotes for config check; ENT-2010
+  (crag@redhat.com)
+
 * Fri Jan 24 2020 Christopher Snyder <csnyder@redhat.com> 1.26.10-1
 - 1782910: Log errors in logging set up after set up completes; ENT-1890
   (jhnidek@redhat.com)
