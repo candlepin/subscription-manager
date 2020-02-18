@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED (VERSION 3.11.2)
+CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
 
 project(product-id C)
 
@@ -34,7 +34,7 @@ if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif ()
 
 if (CMAKE_COMPILER_IS_GNUCC)
-    set (CMAKE_C_FLAGS "-Wall -fPIC -Wextra -pedantic -Wno-long-long")
+    set (CMAKE_C_FLAGS "-Wall -fPIC -Wextra -pedantic -Wno-long-long -std=c99")
     if (CMAKE_BUILD_TYPE STREQUAL "Debug")
         set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ggdb -O0 --coverage")
     elseif( CMAKE_BUILD_TYPE STREQUAL "Release" )
