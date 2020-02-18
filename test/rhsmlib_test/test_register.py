@@ -41,7 +41,7 @@ from rhsmlib.dbus.objects import RegisterDBusObject
 
 from rhsmlib.services import register, exceptions
 
-CONTENT_JSON = '''{"hypervisorId": null,
+CONSUMER_CONTENT_JSON = '''{"hypervisorId": null,
         "serviceLevel": "",
         "autoheal": true,
         "idCert": {
@@ -74,6 +74,64 @@ CONTENT_JSON = '''{"hypervisorId": null,
         {"releaseVer": null}, "entitlementStatus": "valid", "name":
         "test.example.com", "created": "2016-06-02T15:16:51+0000",
         "contentTags": null, "dev": false}'''
+
+OWNERS_CONTENT_JSON = '''[
+    {
+        "autobindDisabled": false,
+        "autobindHypervisorDisabled": false,
+        "contentAccessMode": "entitlement",
+        "contentAccessModeList": "entitlement",
+        "contentPrefix": null,
+        "created": "2020-02-17T08:21:47+0000",
+        "defaultServiceLevel": null,
+        "displayName": "Donald Duck",
+        "href": "/owners/donaldduck",
+        "id": "ff80808170523d030170523d34890003",
+        "key": "donaldduck",
+        "lastRefreshed": null,
+        "logLevel": null,
+        "parentOwner": null,
+        "updated": "2020-02-17T08:21:47+0000",
+        "upstreamConsumer": null
+    },
+    {
+        "autobindDisabled": false,
+        "autobindHypervisorDisabled": false,
+        "contentAccessMode": "entitlement",
+        "contentAccessModeList": "entitlement",
+        "contentPrefix": null,
+        "created": "2020-02-17T08:21:47+0000",
+        "defaultServiceLevel": null,
+        "displayName": "Admin Owner",
+        "href": "/owners/admin",
+        "id": "ff80808170523d030170523d347c0002",
+        "key": "admin",
+        "lastRefreshed": null,
+        "logLevel": null,
+        "parentOwner": null,
+        "updated": "2020-02-17T08:21:47+0000",
+        "upstreamConsumer": null
+    },
+    {
+        "autobindDisabled": false,
+        "autobindHypervisorDisabled": false,
+        "contentAccessMode": "entitlement",
+        "contentAccessModeList": "entitlement,org_environment",
+        "contentPrefix": null,
+        "created": "2020-02-17T08:21:47+0000",
+        "defaultServiceLevel": null,
+        "displayName": "Snow White",
+        "href": "/owners/snowwhite",
+        "id": "ff80808170523d030170523d348a0004",
+        "key": "snowwhite",
+        "lastRefreshed": null,
+        "logLevel": null,
+        "parentOwner": null,
+        "updated": "2020-02-17T08:21:47+0000",
+        "upstreamConsumer": null
+    }
+]
+'''
 
 
 class RegisterServiceTest(InjectionMockingTest):
@@ -125,7 +183,7 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_identity.is_valid.return_value = False
         self.mock_installed_products.format_for_server.return_value = []
         self.mock_installed_products.tags = []
-        expected_consumer = json.loads(CONTENT_JSON)
+        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
         self.mock_cp.registerConsumer.return_value = expected_consumer
 
         register_service = register.RegisterService(self.mock_cp)
@@ -163,7 +221,7 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_installed_products.format_for_server.return_value = []
         self.mock_installed_products.tags = []
 
-        expected_consumer = json.loads(CONTENT_JSON)
+        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
         self.mock_cp.registerConsumer.return_value = expected_consumer
 
         register_service = register.RegisterService(self.mock_cp)
@@ -201,7 +259,7 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_installed_products.format_for_server.return_value = []
         self.mock_installed_products.tags = []
 
-        expected_consumer = json.loads(CONTENT_JSON)
+        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
         self.mock_cp.registerConsumer.return_value = expected_consumer
 
         register_service = register.RegisterService(self.mock_cp)
@@ -237,8 +295,8 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_installed_products.format_for_server.return_value = []
         self.mock_installed_products.tags = []
 
-        expected_consumer = json.loads(CONTENT_JSON)
-        self.mock_cp.getConsumer.return_value = json.loads(CONTENT_JSON)
+        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
+        self.mock_cp.getConsumer.return_value = json.loads(CONSUMER_CONTENT_JSON)
 
         register_service = register.RegisterService(self.mock_cp)
         register_service.register("org", name="name", consumerid="consumerid")
@@ -283,7 +341,7 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_sp_store_contents["addons"] = ["addon1"]
         self.mock_sp_store_contents["usage"] = "test_usage"
 
-        expected_consumer = json.loads(CONTENT_JSON)
+        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
         self.mock_cp.registerConsumer.return_value = expected_consumer
 
         register_service = register.RegisterService(self.mock_cp)
@@ -360,6 +418,18 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
         self.mock_identity.is_valid.return_value = True
 
         self.mock_cp_provider = mock.Mock(spec=CPProvider, name="CPProvider")
+        self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection")
+
+        # Mock a basic auth connection
+        self.mock_cp.username = "username"
+        self.mock_cp.password = "password"
+
+        self.mock_cp.getOwnerList = mock.Mock()
+        self.mock_cp.getOwnerList.return_value = json.loads(OWNERS_CONTENT_JSON)
+
+        # For the tests in which it's used, the consumer_auth cp and basic_auth cp can be the same
+        self.mock_cp_provider.get_consumer_auth_cp.return_value = self.mock_cp
+        self.mock_cp_provider.get_basic_auth_cp.return_value = self.mock_cp
 
         register_patcher = mock.patch('rhsmlib.dbus.objects.register.RegisterService', autospec=True)
         self.mock_register = register_patcher.start().return_value
@@ -452,7 +522,7 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
         return dbus.Interface(socket_proxy, constants.PRIVATE_REGISTER_INTERFACE)
 
     def test_can_register_over_domain_socket(self):
-        expected_consumer = json.loads(CONTENT_JSON)
+        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
 
         def assertions(*args):
             # Be sure we are persisting the consumer cert
@@ -466,8 +536,24 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
         dbus_method_args = ['admin', 'admin', 'admin', {}, {}, '']
         self.dbus_request(assertions, self._build_interface().Register, dbus_method_args)
 
+    def test_can_get_orgs_over_domain_socket(self):
+        expected_owners = json.loads(OWNERS_CONTENT_JSON)
+        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
+
+        def assertions(*args):
+            # Be sure we are persisting the consumer cert
+            self.assertEqual(json.loads(args[0]), expected_owners)
+
+        self.mock_identity.is_valid.return_value = False
+        self.mock_identity.uuid = 'INVALIDCONSUMERUUID'
+
+        self.mock_register.register.return_value = expected_consumer
+
+        dbus_method_args = ['admin', 'admin', {}, '']
+        self.dbus_request(assertions, self._build_interface().GetOrgs, dbus_method_args)
+
     def test_can_register_over_domain_socket_with_activation_keys(self):
-        expected_consumer = json.loads(CONTENT_JSON)
+        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
 
         def assertions(*args):
             # Be sure we are persisting the consumer cert
