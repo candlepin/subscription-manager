@@ -222,7 +222,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.26.11
+Version: 1.26.12
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1400,6 +1400,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Feb 19 2020 Christopher Snyder <csnyder@redhat.com> 1.26.12-1
+- 1803858: Install insights-client package on demand (mvollmer@redhat.com)
+
 * Mon Feb 17 2020 Christopher Snyder <csnyder@redhat.com> 1.26.11-1
 - 1794653: corrected missing quotes for config check; ENT-2010
   (crag@redhat.com)
