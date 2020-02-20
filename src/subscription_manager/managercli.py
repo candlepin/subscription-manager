@@ -1542,6 +1542,11 @@ class RegisterCommand(UserPassCommand):
         if len(owners) == 1:
             return owners[0]['key']
 
+        if len(owners) > 1:
+            org_keys = [owner['key'] for owner in owners]
+            print(_('Hint: User "%s" is member of following organizations: %s') %
+                  (self.username, ', '.join(org_keys)))
+
         owner_key = None
         while not owner_key:
             owner_key = six.moves.input(_("Organization: "))
