@@ -19,6 +19,7 @@
 
 import cockpit from 'cockpit';
 import React from 'react';
+import createFragment from 'react-addons-create-fragment';
 import subscriptionsClient from './subscriptions-client';
 import { ListView, ListViewItem, ListViewIcon } from 'patternfly-react';
 import { Row, Col } from 'react-bootstrap';
@@ -84,19 +85,45 @@ class Curtains extends React.Component {
  * dismissError callback function triggered when the close button is pressed
  */
 class DismissableError extends React.Component {
+    constructor(props) {
+        super(props);
+        // This binding is necessary to make `this` work in the callback
+        this.handleDismissError = this.handleDismissError.bind(this);
+    }
     handleDismissError(err) {
         // only consider primary mouse button
         if (!err || err.button !== 0)
             return;
-        if (this.props.dismissError)
+        if (this.props.dismissError) {
             this.props.dismissError();
+        }
         err.stopPropagation();
     }
     render() {
+        let debug_str = JSON.stringify(this.props.children);
+        console.debug(debug_str);
+        let classes_div = "alert alert-danger alert-dismissable alert-ct-top";
+        let classes_icon = "pficon pficon-error-circle-o";
+
+        console.debug(this.props.children.severity);
+
+        if (this.props.children[0] === "error") {
+            classes_div = "alert alert-danger alert-dismissable alert-ct-top";
+            classes_icon = "pficon pficon-error-circle-o";
+        }
+        if (this.props.children[0] === "warning") {
+            classes_div = "alert alert-warning alert-dismissable alert-ct-top";
+            classes_icon = "pficon pficon-warning-triangle-o"
+        }
+        if (this.props.children[0] === "info") {
+            classes_div = "alert alert-info alert-dismissable alert-ct-top";
+            classes_icon = "pficon pficon-info"
+        }
+
         return (
-            <div className="alert alert-danger alert-dismissable alert-ct-top">
-                <span className="pficon pficon-error-circle-o" />
-                <span>{this.props.children}</span>
+            <div className={classes_div}>
+                <span className={classes_icon} />
+                <span>{this.props.children[1]}</span>
                 <button type="button" className="close" aria-hidden="true" onClick={this.handleDismissError}>
                     <span className="pficon pficon-close"/>
                 </button>
@@ -108,7 +135,7 @@ class DismissableError extends React.Component {
 /* Show subscriptions status of the system, offer to register/unregister the system
  * Expected properties:
  * status       subscription status
- * error        error message to show (in Curtains if not connected, as a dismissable alert otherwise
+ * error        error message to show (in Curtains if not connected, as a dismissable alert otherwise)
  * dismissError callback, triggered for the dismissable error in connected state
  * register     callback, triggered when user clicks on register
  * unregister   callback, triggered when user clicks on unregister
@@ -140,8 +167,9 @@ class SubscriptionStatus extends React.Component {
     render() {
         let errorMessage;
         if (this.props.error) {
+            let error_msg = createFragment(this.props.error);
             errorMessage = (
-                <DismissableError dismissError={this.props.dismissError}>{String(this.props.error)}</DismissableError>
+                <DismissableError dismissError={this.props.dismissError}>{error_msg}</DismissableError>
             );
         }
 
@@ -160,7 +188,7 @@ class SubscriptionStatus extends React.Component {
                 <div>
                     <label>
                         { _("Service Level:  ") }
-                        { _(String(this.props.syspurpose["service_level_agreement"])) }
+                        <span className="value">{ _(String(this.props.syspurpose["service_level_agreement"])) }</span>
                     </label>
                 </div>
             );
@@ -170,7 +198,7 @@ class SubscriptionStatus extends React.Component {
                 <div>
                     <label>
                         { _("Usage:  ") }
-                        { _(String(this.props.syspurpose["usage"])) }
+                        <span className="value">{ _(String(this.props.syspurpose["usage"])) }</span>
                     </label>
                 </div>
         );
@@ -180,7 +208,7 @@ class SubscriptionStatus extends React.Component {
                 <div>
                     <label>
                         { _("Role:  ") }
-                        { _(String(this.props.syspurpose["role"])) }
+                        <span className="value">{ _(String(this.props.syspurpose["role"])) }</span>
                     </label>
                 </div>
             );
@@ -190,7 +218,9 @@ class SubscriptionStatus extends React.Component {
                 <div>
                     <label>
                         { _("Addons:  ") }
-                        { _(String(subscriptionsClient.toArray(this.props.syspurpose["addons"]).join(", "))) }
+                        <span className="value">
+                            { _(String(subscriptionsClient.toArray(this.props.syspurpose["addons"]).join(", "))) }
+                        </span>
                     </label>
                 </div>
             );
@@ -200,7 +230,7 @@ class SubscriptionStatus extends React.Component {
                 <div>
                     <label>
                         { _("Status: ") }
-                        { _(String(this.props.syspurpose_status)) }
+                        <span className="value">{ _(String(this.props.syspurpose_status)) }</span>
                     </label>
                 </div>
             );
@@ -269,7 +299,7 @@ class SubscriptionsPage extends React.Component {
                 "and try reloading the page. Additionally, make sure that you have checked the " +
                 "'Reuse my password for privileged tasks' checkbox on the login page.");
             description = _("Unable to the reach the rhsm service.");
-        } else if (this.props.status === undefined || !subscriptionsClient.config.loaded) {
+        } else if (this.props.status === undefined && !subscriptionsClient.config.loaded) {
             icon = <div className="spinner spinner-lg" />;
             message = _("Updating");
             description = _("Retrieving subscription status...");
@@ -296,13 +326,9 @@ class SubscriptionsPage extends React.Component {
 
             if (itm.status === 'subscribed') {
                 icon_name = "fa pficon-ok";
-            } else {
-                icon_name = "fa pficon-error-circle-o";
-            }
-
-            if (itm.status === 'subscribed') {
                 status_text = _("Subscribed");
             } else {
+                icon_name = "fa pficon-error-circle-o";
                 status_text = _("Not Subscribed (Not supported by a valid subscription.)");
             }
 

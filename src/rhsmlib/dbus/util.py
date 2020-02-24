@@ -18,6 +18,7 @@ import six
 import decorator
 import dbus.service
 import json
+import re
 
 from rhsmlib.dbus import exceptions
 
@@ -36,17 +37,23 @@ def dbus_handle_exceptions(func, *args, **kwargs):
     try:
         ret = func(*args, **kwargs)
         return ret
-    except dbus.DBusException as e:
-        log.exception(e)
-        raise
     except Exception as err:
         log.exception(err)
         trace = sys.exc_info()[2]
+
+        severity = "error"
+        # Remove "HTTP error (...): " string from the messages:
+        pattern = '^HTTP error \x28.*\x29: '
+        err_msg = re.sub(pattern, '', str(err))
+        # Modify severity of some exception here
+        if "Ignoring request to auto-attach. It is disabled for org" in err_msg:
+            severity = "warning"
         # Raise exception string as JSON string. Thus it can be parsed and printed properly.
         error_msg = json.dumps(
             {
                 "exception": type(err).__name__,
-                "message": str(err)
+                "severity": severity,
+                "message": err_msg
             }
         )
         six.reraise(exceptions.RHSM1DBusException, exceptions.RHSM1DBusException(error_msg), trace)
