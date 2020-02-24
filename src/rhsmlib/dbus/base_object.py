@@ -66,7 +66,7 @@ class BaseObject(dbus.service.Object):
                 "This object requires the consumer to be registered before it can be used."
             )
 
-    def build_uep(self, options, proxy_only=False):
+    def build_uep(self, options, proxy_only=False, basic_auth_method=False):
         conf = config.Config(rhsm.config.initConfig())
         # Some commands/services only allow manipulation of the proxy information for a connection
         cp_provider = inj.require(inj.CP_PROVIDER)
@@ -89,7 +89,7 @@ class BaseObject(dbus.service.Object):
         cp_provider.set_connection_info(**connection_info)
         cp_provider.set_correlation_id(utils.generate_correlation_id())
 
-        if self.is_registered():
+        if self.is_registered() and basic_auth_method is False:
             return cp_provider.get_consumer_auth_cp()
         elif 'username' in options and 'password' in options:
             cp_provider.set_user_pass(options['username'], options['password'])

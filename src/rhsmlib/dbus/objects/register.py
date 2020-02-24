@@ -91,6 +91,35 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
 
     @dbus.service.method(
         dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
+        in_signature='ssa{sv}s',
+        out_signature='s'
+    )
+    @util.dbus_handle_exceptions
+    def GetOrgs(self, username, password, connection_options, locale):
+        """
+        This method tries to return list of organization user belongs to. This method also uses
+        basic authentication method (using username and password).
+
+        :param username: string with username used for connection to candlepin server
+        :param password: string with password
+        :param connection_options: dictionary with connection options
+        :param locale: string with locale
+        :return: string with json returned by candlepin server
+        """
+        connection_options = dbus_utils.dbus_to_python(connection_options, expected_type=dict)
+        connection_options['username'] = dbus_utils.dbus_to_python(username, expected_type=str)
+        connection_options['password'] = dbus_utils.dbus_to_python(password, expected_type=str)
+        locale = dbus_utils.dbus_to_python(locale, expected_type=str)
+
+        Locale.set(locale)
+        cp = self.build_uep(connection_options, basic_auth_method=True)
+
+        owners = cp.getOwnerList(connection_options['username'])
+
+        return json.dumps(owners)
+
+    @dbus.service.method(
+        dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
         in_signature='sssa{sv}a{sv}s',
         out_signature='s'
     )
