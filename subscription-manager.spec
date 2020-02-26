@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.26
+Version: 1.24.27
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1151,6 +1151,35 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Feb 26 2020 William Poteat <wpoteat@redhat.com> 1.24.27-1
+- 1796088: Added option --force for command refresh; ENT-2033
+  (jhnidek@redhat.com)
+- Update releasers for new release (wpoteat@redhat.com)
+- 1702753: Fix cockpit plugin, when golden ticket is used; ENT-1287
+  (jhnidek@redhat.com)
+- Bump sshpk from 1.13.1 to 1.16.1 in /cockpit
+  (dependabot[bot]@users.noreply.github.com)
+- Bump eslint from 3.19.0 to 4.18.2 in /cockpit
+  (49699333+dependabot[bot]@users.noreply.github.com)
+- Bump stringstream from 0.0.5 to 0.0.6 in /cockpit
+  (49699333+dependabot[bot]@users.noreply.github.com)
+- Bump macaddress from 0.2.8 to 0.2.9 in /cockpit
+  (dependabot[bot]@users.noreply.github.com)
+- Bump is-my-json-valid from 2.16.0 to 2.20.0 in /cockpit
+  (dependabot[bot]@users.noreply.github.com)
+- 1719709: cockpit - Improve behavior when connection to D-Bus fails
+  (mvollmer@redhat.com)
+- 1719702: cockpit - Fix overlapping update requests (mvollmer@redhat.com)
+- 1719697: cockpit - Fix detection of proxy while attaching
+  (mvollmer@redhat.com)
+- Bump sshpk from 1.13.1 to 1.16.1 in /cockpit
+  (dependabot[bot]@users.noreply.github.com)
+- Bump tar from 2.2.1 to 2.2.2 in /cockpit
+  (dependabot[bot]@users.noreply.github.com)
+- cockpit plugin: Fix alignment and layout issues in register dialog
+  (anilsson@redhat.com)
+- Fix subscription-manager-cockpit AppStream data (martin@piware.de)
+
 * Wed Jan 22 2020 William Poteat <wpoteat@redhat.com> 1.24.26-1
 - 1741183: Yum loaded subscription-manager plugin multiple times
   (hyu@redhat.com)
