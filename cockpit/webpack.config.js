@@ -121,6 +121,7 @@ var plugins = [
     }),
     new ExtractTextPlugin("subscriptions.css"),
     new Po2JSONPlugin(),
+    new ExtractTextPlugin("[name].css")
 ];
 
 if (!production) {
@@ -230,6 +231,10 @@ module.exports = {
                     name: '[path][name].[ext]'
                 },
                 loader: 'file-loader',
+            },
+            {
+                test: /\.less$/,
+                loader: ExtractTextPlugin.extract("css-loader?sourceMap&minimize=!less-loader?sourceMap&compress=false")
             },
         ]
     },

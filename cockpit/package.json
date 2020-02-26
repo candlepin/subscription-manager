@@ -19,10 +19,12 @@
     "babel-loader": "^7.0.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-env": "^1.5.2",
+    "bootstrap": "^4.1.1",
+    "bootstrap-less": "^3.3.8",
     "compression-webpack-plugin": "~1.0.0",
     "copy-webpack-plugin": "~3.0.1",
     "css-loader": "^0.28.4",
-    "eslint": "^3.0.0",
+    "eslint": "^4.18.2",
     "eslint-loader": "~1.6.1",
     "eslint-plugin-react": "~6.9.0",
     "extract-text-webpack-plugin": "2.1.2",
@@ -32,14 +34,19 @@
     "jquery": "^3.2.1",
     "jshint": "~2.9.1",
     "jshint-loader": "~0.8.3",
+    "less": "^3.8.0",
+    "less-loader": "^4.1.0",
     "patternfly": "^3.27.4",
     "patternfly-react": "^0.8.0",
     "po2json": "^0.4.5",
+    "popper.js": "^1.14.7",
     "react": "^15.6.1",
     "react-bootstrap": "^0.31.5",
     "react-dom": "^15.6.1",
     "style-loader": "^0.18.2",
     "webpack": "^2.6.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "react-addons-create-fragment": "^15.6.2"
+  }
 }

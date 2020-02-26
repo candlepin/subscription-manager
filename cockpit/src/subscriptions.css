@@ -31,10 +31,23 @@
     margin-left: 12px;
 }
 
+.subscription-status-ct .value {
+    font-weight: 400;
+    margin-left: 4px;
+}
+
+#register_dialog .modal-footer .alert{
+    text-align: left;
+    padding-left: 20px;
+}
+
+#register_dialog .modal-footer .alert .fa-exclamation-triangle {
+    margin-right: 4px;
+}
+
 .container-fluid.alert {
     margin: 20px;
 }
-
 
 #subscription-register-url {
     margin-bottom: 3px;
@@ -60,33 +73,18 @@
     vertical-align: sub;
 }
 
-.form-table-ct .form-inline {
-    background: #f4f4f4;
-    border-width: 1px;
-    border-style: solid;
-    border-color: #bababa;
-    padding: 4px;
+#subscription-register-proxy-form {
+    margin-bottom: 4px;
 }
 
-.form-group-ct {
+.ct-form-layout .ct-form-layout {
     background: #f4f4f4;
     border-width: 1px;
     border-style: solid;
     border-color: #bababa;
     padding: 4px;
+    padding-top: 10px;
     width: 100%;
-}
-
-.form-group-ct tr td:last-child {
-    padding-right: 4px;
-}
-
-.form-group-ct tr:first-child td:last-child {
-    padding-top: 6px;
-}
-
-.form-group-ct tr:last-child td:last-child {
-    padding-bottom: 6px;
 }
 
 /* Make a dialog visible */

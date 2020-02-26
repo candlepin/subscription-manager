@@ -71,5 +71,5 @@ def main(argv=sys.argv, object_classes=None, default_bus_name=None):
     except dbus.exceptions.DBusException as e:
         if e._dbus_error_name == "org.freedesktop.DBus.Error.AccessDenied":
             print("Access to DBus denied.  You need to edit /etc/dbus-1/system.conf to allow %s or run with "
-                "dbus-daemon and a custom config file." % options.bus_name)
+                  "dbus-daemon and a custom config file." % options.bus_name)
     return 0

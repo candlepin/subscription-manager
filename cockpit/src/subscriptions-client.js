@@ -100,15 +100,28 @@ function parseProducts(text) {
 // {"exception": "NameOfException", "message": "Some error message"}
 // Only message should be reported to user.
 function parseErrorMessage(error) {
-    let err;
+    let err_msg;
     try {
-        err = JSON.parse(error).message;
+        err_msg = JSON.parse(error).message;
     } catch (parse_err) {
         console.log('Error parsing D-Bus error message: ', parse_err.message);
         console.log('Returning original error message: ', error);
-        err = error;
+        err_msg = error;
     }
-    return err;
+    return err_msg;
+}
+
+// Parse error severity
+function parseErrorSeverity(error) {
+    let severity;
+    try {
+        severity = JSON.parse(error).severity;
+    } catch (parse_err) {
+        console.log('Error parsing D-Bus error message: ', parse_err.message);
+        console.log('Returning default error severity: error');
+        severity = "error";
+    }
+    return severity;
 }
 
 /**
@@ -126,7 +139,6 @@ function safeDBusCall(serviceProxy, delegateMethod) {
         .then(delegateMethod)
         .fail(ex => {
             console.debug(ex);
-            delegateMethod();
         });
 }
 
@@ -144,8 +156,11 @@ function getSubscriptionDetails() {
         .then(result => {
             client.subscriptionStatus.products = parseProducts(result);
         })
-        .catch(ex => {
-            client.subscriptionStatus.error = ex;
+        .catch(error => {
+            client.subscriptionStatus.error = {
+                                    'severity': parseErrorSeverity(error),
+                                    'msg': parseErrorMessage(error)
+                                };
         })
         .then(() => {
             gettingDetails = false;
@@ -191,7 +206,7 @@ client.registerSystem = subscriptionDetails => {
     };
 
     if (subscriptionDetails.activation_keys && !subscriptionDetails.org) {
-        var error = new Error("'Organization' is required when using activation keys...");
+        const error = new Error("'Organization' is required when using activation keys...");
         dfd.reject(error);
         return dfd.promise();
     }
@@ -360,38 +375,46 @@ client.registerSystem = subscriptionDetails => {
                     // When system is registered and config options are saved,
                     // then we can try to auto-attach
                     console.debug('auto-attaching');
-                    if (connection_options.proxy_hostname) {
+                    if (connection_options.proxy_hostname.v) {
                         let proxy_options = {};
                         proxy_options.proxy_hostname = connection_options.proxy_hostname;
-                        if (connection_options.proxy_port) {
+                        if (connection_options.proxy_port.v) {
                             // FIXME: change D-Bus implementation to be able to use string too
                             proxy_options.proxy_port = {
                                 't': 'i',
                                 'v': Number(connection_options.proxy_port.v)
                             };
                         }
-                        if (connection_options.proxy_user) {
+                        if (connection_options.proxy_user.v) {
                             proxy_options.proxy_user = connection_options.proxy_user;
                         }
-                        if (connection_options.proxy_password) {
+                        if (connection_options.proxy_password.v) {
                             proxy_options.proxy_password = connection_options.proxy_password;
                         }
                         return attachService.AutoAttach('', proxy_options, userLang)
                             .catch(error => {
-                                console.error('error during autoattach', error);
-                                dfd.reject(parseErrorMessage(error));
+                                console.error('error during auto-attach (using proxy)', error);
+                                client.subscriptionStatus.error = {
+                                    'severity': parseErrorSeverity(error),
+                                    'msg': parseErrorMessage(error)
+                                };
+                                dfd.resolve();
                             });
                     } else {
                         return attachService.AutoAttach('', {}, userLang)
                             .catch(error => {
-                                console.error('error during autoattach', error);
-                                dfd.reject(parseErrorMessage(error));
+                                console.error('error during auto-attach', error);
+                                client.subscriptionStatus.error = {
+                                    'severity': parseErrorSeverity(error),
+                                    'msg': parseErrorMessage(error)
+                                };
+                                dfd.resolve();
                             });
                     }
                 }
             })
             .catch(error => {
-                console.error('error during autoattach', error);
+                console.error('error during auto-attach', error);
                 dfd.reject(parseErrorMessage(error));
             })
             .then(() => {
@@ -412,7 +435,10 @@ client.unregisterSystem = () => {
         unregisterService.Unregister({}, userLang) // FIXME: use proxy settings
             .catch(error => {
                 console.error('error unregistering system', error);
-                client.subscriptionStatus.error = parseErrorMessage(error);
+                client.subscriptionStatus.error = {
+                                    'severity': parseErrorSeverity(error),
+                                    'msg': parseErrorMessage(error)
+                                };
             })
             .always(() => {
                 console.debug('requesting update');
@@ -423,7 +449,7 @@ client.unregisterSystem = () => {
 
 function statusUpdateFailed(reason) {
     console.warn("Subscription status update failed:", reason);
-    client.subscriptionStatus.status = "not-found";
+    client.subscriptionStatus.status = (reason && reason.problem) || "not-found";
     needRender();
 }
 
@@ -462,14 +488,14 @@ function requestSyspurposeUpdate() {
 
 /* get subscription summary */
 client.getSubscriptionStatus = function() {
-    this.dfd = cockpit.defer();
+    let dfd = cockpit.defer();
 
     safeDBusCall(entitlementService, () => {
         entitlementService.GetStatus('', userLang)
         .then(result => {
             const status = JSON.parse(result);
             client.subscriptionStatus.status = status.status;
-            this.dfd.resolve();
+            dfd.resolve();
             if (client.closeRegisterDialog) {
                 client.closeRegisterDialog = false;
             }
@@ -483,7 +509,7 @@ client.getSubscriptionStatus = function() {
             needRender();
         });
     });
-    return this.dfd.promise();
+    return dfd.promise();
 };
 
 client.getSyspurposeStatus = () => {
@@ -501,13 +527,13 @@ client.getSyspurposeStatus = () => {
 };
 
 client.getSyspurpose = function() {
-    this.dfd = cockpit.defer();
+    let dfd = cockpit.defer();
 
     safeDBusCall(syspurposeService, () => {
         syspurposeService.GetSyspurpose(userLang)
         .then(result => {
             client.syspurposeStatus.info = JSON.parse(result);
-            this.dfd.resolve();
+            dfd.resolve();
         })
         .catch(ex => {
             console.debug(ex);
@@ -516,7 +542,7 @@ client.getSyspurpose = function() {
         .then(needRender);
     });
 
-    return this.dfd.promise();
+    return dfd.promise();
 };
 
 client.readConfig = () => {
