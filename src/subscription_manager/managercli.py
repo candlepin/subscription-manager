@@ -1507,6 +1507,10 @@ class RegisterCommand(UserPassCommand):
                     log.debug('Using the only available environment: "%s"' % env_list[0]['name'])
                     return env_list[0]['id']
 
+                env_name_list = [env['name'] for env in env_list]
+                print(_('Hint: Organization "%s" contains following environments: %s') %
+                      (owner_key, ", ".join(env_name_list)))
+
                 environment_name = self._prompt_for_environment()
 
                 # Should only ever be len 0 or 1
