@@ -17,6 +17,7 @@ from __future__ import print_function, division, absolute_import
 
 import os
 import six
+import logging
 
 from subscription_manager import injection as inj
 from subscription_manager.action_client import ProfileActionClient
@@ -26,7 +27,6 @@ from rhsmlib.facts.hwprobe import ClassicCheck
 from subscription_manager.utils import chroot
 from subscription_manager.injectioninit import init_dep_injection
 from subscription_manager import logutil
-from rhsm import connection
 from rhsm import config
 
 from dnfpluginscore import _, logger
@@ -41,16 +41,21 @@ expired_warning = _("""
 *** WARNING ***
 The subscription for following product(s) has expired:
 %s
-You no longer have access to the repositories that provide these products.  It is important that you apply an active subscription in order to resume access to security and other critical updates. If you don't have other active subscriptions, you can renew the expired subscription.  """
+You no longer have access to the repositories that provide these products.  It is important that you apply an active "
+"subscription in order to resume access to security and other critical updates. If you don't have other active "
+"subscriptions, you can renew the expired subscription.  """
 )
 
 not_registered_warning = _(
-"This system is not registered to Red Hat Subscription Management. You can use subscription-manager to register."
+    "This system is not registered to Red Hat Subscription Management. You can use subscription-manager to register."
 )
 
 no_subs_warning = _(
-"This system is registered to Red Hat Subscription Management, but is not receiving updates. You can use subscription-manager to assign subscriptions."
+    "This system is registered to Red Hat Subscription Management, but is not receiving updates. You can use "
+    "subscription-manager to assign subscriptions."
 )
+
+log = logging.getLogger('rhsm-app.' + __name__)
 
 
 class SubscriptionManager(dnf.Plugin):
@@ -75,15 +80,19 @@ class SubscriptionManager(dnf.Plugin):
 
         try:
             if os.getuid() == 0:
+                # Try to update entitlement certificates and redhat.repo file
                 self._update(cache_only)
-                self._warnOrGiveUsageMessage()
             else:
                 logger.info(_('Not root, Subscription Management repositories not updated'))
-            self._warnExpired()
+            self._warn_or_give_usage_message()
+            self._warn_expired()
         except Exception as e:
-            logger.error(str(e))
+            log.error(str(e))
 
     def config(self):
+        """
+        Read other configuration options (not enabled) from configuration file of this plugin
+        """
         super(SubscriptionManager, self).config()
         config_path = self.base.conf.pluginconfpath[0]
 
@@ -101,48 +110,50 @@ class SubscriptionManager(dnf.Plugin):
                         if os.path.basename(repo.repofile) != 'redhat.repo':
                             repo.disable()
                             disable_count += 1
-                    print(_('subscription-manager plugin disabled %d system repositories with respect of configuration in /etc/dnf/plugins/subscription-manager.conf') % (
-                                     disable_count))
+                    logger.info(
+                        _('subscription-manager plugin disabled %d system repositories with respect of configuration '
+                          'in /etc/dnf/plugins/subscription-manager.conf') % disable_count
+                    )
         else:
             logger.debug('Configuration file %s does not exist.' % default_config_file)
 
-    def _update(self, cache_only):
-        """ update entitlement certificates """
+    @staticmethod
+    def _update(cache_only):
+        """
+        Update entitlement certificates and redhat.repo
+        :param cache_only: is True, when rhsm.full_refresh_on_yum is set to 0 in rhsm.conf
+        """
+
         logger.info(_('Updating Subscription Management repositories.'))
-
-        # XXX: Importing inline as you must be root to read the config file
-        from subscription_manager.identity import ConsumerIdentity
-
-        cert_file = str(ConsumerIdentity.certpath())
-        key_file = str(ConsumerIdentity.keypath())
 
         identity = inj.require(inj.IDENTITY)
 
-        # In containers we have no identity, but we may have entitlements inherited
-        # from the host, which need to generate a redhat.repo.
-        if identity.is_valid():
-            try:
-                connection.UEPConnection(cert_file=cert_file, key_file=key_file)
-            # FIXME: catchall exception
-            except Exception:
-                # log
-                logger.info(_("Unable to connect to Subscription Management Service"))
-                return
-        else:
+        if not identity.is_valid():
             logger.info(_("Unable to read consumer identity"))
 
         if config.in_container():
             logger.info(_("Subscription Manager is operating in container mode."))
 
+        if cache_only is True:
+            log.debug('DNF subscription-manager operates in cache-only mode')
+
         if not cache_only and not config.in_container():
+            log.debug('Trying to update entitlement certificates and redhat.repo')
             cert_action_invoker = EntCertActionInvoker()
             cert_action_invoker.update()
+        else:
+            log.debug('Skipping updating of entitlement certificates')
 
-        repo_action_invoker = RepoActionInvoker(cache_only=cache_only)
-        repo_action_invoker.update()
+        if cache_only or config.in_container():
+            log.debug('Generating redhat.repo only from installed entitlement certificates and cache files')
+            repo_action_invoker = RepoActionInvoker(cache_only=cache_only)
+            repo_action_invoker.update()
 
-    def _warnExpired(self):
-        """ display warning for expired entitlements """
+    @staticmethod
+    def _warn_expired():
+        """
+        Display warning for expired entitlements
+        """
         ent_dir = inj.require(inj.ENT_DIR)
         products = set()
         for cert in ent_dir.list_expired():
@@ -153,20 +164,22 @@ class SubscriptionManager(dnf.Plugin):
             msg = expired_warning % '\n'.join(sorted(products))
             logger.info(msg)
 
-    def _warnOrGiveUsageMessage(self):
-        """ either output a warning, or a usage message """
+    @staticmethod
+    def _warn_or_give_usage_message():
+        """
+        Either output a warning, or a usage message
+        """
         msg = ""
         if ClassicCheck().is_registered_with_classic():
             return
         try:
             identity = inj.require(inj.IDENTITY)
             ent_dir = inj.require(inj.ENT_DIR)
-            # Don't warn people to register if we see entitelements, but no identity:
+            # Don't warn people to register if we see entitlements, but no identity:
             if not identity.is_valid() and len(ent_dir.list_valid()) == 0:
                 msg = not_registered_warning
             elif len(ent_dir.list_valid()) == 0:
                 msg = no_subs_warning
-
         finally:
             if msg:
                 logger.info(msg)
@@ -177,8 +190,8 @@ class SubscriptionManager(dnf.Plugin):
         """
         cfg = config.initConfig()
         if '1' == cfg.get('rhsm', 'package_profile_on_trans'):
+            log.debug('Uploading package profile')
             package_profile_client = ProfileActionClient()
             package_profile_client.update()
         else:
-            # do nothing
-            return
+            log.debug('Uploading package profile disabled in configuration file')
