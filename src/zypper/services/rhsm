@@ -24,8 +24,7 @@ from subscription_manager.repolib import RepoActionInvoker
 from subscription_manager.entcertlib import EntCertActionInvoker
 from subscription_manager.certlib import Locker
 from subscription_manager.injectioninit import init_dep_injection
-from subscription_manager import logutil
-from rhsm import connection
+from rhsm import connection, logutil
 from rhsm import config
 
 from six.moves.configparser import ConfigParser

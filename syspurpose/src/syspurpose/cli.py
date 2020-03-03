@@ -16,17 +16,15 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 
 import argparse
-import logging
 import os
-from subscription_manager import logutil
-from subscription_manager.cli import system_exit
+import sys
+import six
+
 from syspurpose.files import SyncedStore
 from syspurpose.utils import in_container, make_utf8
 from syspurpose.i18n import ugettext as _
 import json
 
-logutil.init_logger()
-log = logging.getLogger(__name__)
 
 SP_CONFLICT_MESSAGE = _("Warning: A {attr} of \"{download_value}\" was recently set for this system "
                         "by the entitlement server administrator.\n{advice}")
@@ -341,7 +339,6 @@ def main():
     Run the cli (Do the syspurpose tool thing!!)
     :return: 0
     """
-    log.debug("Running the syspurpose utility...")
 
     parser = setup_arg_parser()
     args = parser.parse_args()
@@ -373,6 +370,36 @@ def main():
     return 0
 
 
+def system_exit(code, msgs=None):
+    """
+    Exit with a code and optional message(s). Saved a few lines of code.
+    Note: this method was copied from subscription_manager, because syspurpose should be independent
+    on subscription_manager module as much as possible.
+    """
+
+    if msgs:
+        if type(msgs) not in [type([]), type(())]:
+            msgs = (msgs, )
+        for msg in msgs:
+            if isinstance(msg, Exception):
+                msg = "%s" % msg
+
+            if isinstance(msg, six.text_type) and six.PY2:
+                sys.stderr.write(msg.encode("utf8"))
+                sys.stderr.write("\n")
+            else:
+                sys.stderr.write(msg)
+                sys.stderr.write("\n")
+
+    try:
+        sys.stdout.flush()
+        sys.stderr.flush()
+    except IOError:
+        pass
+
+    sys.exit(code)
+
+
 def check_result(syspurposestore, expectation, success_msg, command, attr):
     if syspurposestore:
         syspurposestore.sync()
@@ -382,6 +409,13 @@ def check_result(syspurposestore, expectation, success_msg, command, attr):
     if result and not expectation(result):
         advice = SP_ADVICE.format(command=command)
         value = result[attr]
-        system_exit(os.EX_SOFTWARE, msgs=_(SP_CONFLICT_MESSAGE.format(attr=attr, download_value=value, advice=advice)))
+        system_exit(
+            os.EX_SOFTWARE,
+            msgs=_(SP_CONFLICT_MESSAGE.format(
+                attr=attr,
+                download_value=value,
+                advice=advice
+            ))
+        )
     else:
         print(_(success_msg))

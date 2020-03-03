@@ -26,7 +26,7 @@ from subscription_manager.entcertlib import EntCertActionInvoker
 from rhsmlib.facts.hwprobe import ClassicCheck
 from subscription_manager.utils import chroot
 from subscription_manager.injectioninit import init_dep_injection
-from subscription_manager import logutil
+from rhsm import logutil
 from rhsm import config
 
 from dnfpluginscore import _, logger

@@ -515,6 +515,11 @@ class EntitlementService(object):
         return removed_serials, unremoved_serials
 
     def reload(self):
+        """
+        This callback function is called, when there is detected any change in directory with entitlement
+        certificates (e.g. certificate is installed or removed)
+        :return:
+        """
         sorter = inj.require(inj.CERT_SORTER, on_date=None)
         status_cache = inj.require(inj.ENTITLEMENT_STATUS_CACHE)
         log.debug('Clearing in-memory cache of file %s' % status_cache.CACHE_FILE)
