@@ -31,10 +31,9 @@ import signal
 import logging
 import dbus.mainloop.glib
 
-from subscription_manager import logutil
 import subscription_manager.injection as inj
 
-from rhsm import connection, config
+from rhsm import connection, config, logutil
 
 from subscription_manager import ga_loader
 ga_loader.init_ga()

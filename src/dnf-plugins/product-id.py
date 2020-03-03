@@ -17,7 +17,6 @@ from __future__ import print_function, division, absolute_import
 
 import logging
 
-from subscription_manager import logutil
 from subscription_manager.productid import ProductManager
 from subscription_manager.utils import chroot
 from subscription_manager.injectioninit import init_dep_injection
@@ -31,7 +30,9 @@ import dnf.exceptions
 import errno
 import librepo
 import os
-from rhsm import ourjson as json
+from rhsm import ourjson as json, logutil
+
+log = logging.getLogger('rhsm-app.' + __name__)
 
 log = logging.getLogger('rhsm-app.' + __name__)
 

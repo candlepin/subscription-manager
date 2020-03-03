@@ -59,7 +59,8 @@ ga_loader.init_ga()
 # from gi.repository import GObject
 log = logging.getLogger("rhsm-app.rhsmd")
 
-from subscription_manager import logutil
+from rhsm import logutil
+
 logutil.init_logger()
 
 

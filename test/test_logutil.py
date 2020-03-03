@@ -10,7 +10,7 @@ from . import fixture
 
 from . import stubs
 
-from subscription_manager import logutil
+from rhsm import logutil
 
 
 # no NullHandler in 2.6, include our own

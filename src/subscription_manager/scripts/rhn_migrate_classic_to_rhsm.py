@@ -53,7 +53,8 @@ try:
     from subscription_manager.i18n import configure_i18n
     configure_i18n()
 
-    from subscription_manager import logutil
+    from rhsm import logutil
+
     logutil.init_logger()
 
     from subscription_manager.injectioninit import init_dep_injection

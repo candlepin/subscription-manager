@@ -28,17 +28,34 @@ from functools import partial
 from rhsmlib.services import config
 from rhsm.config import initConfig
 from rhsmlib.file_monitor import create_filesystem_watcher, DirectoryWatch
+from rhsmlib.file_monitor import CONSUMER_WATCHER, ENTITLEMENT_WATCHER, CONFIG_WATCHER, PRODUCT_WATCHER, \
+    SYSPURPOSE_WATCHER
 from subscription_manager import injection as inj
-from subscription_manager.logutil import init_logger
+from rhsm.logutil import init_logger
 
-init_logger()
 
 log = logging.getLogger(__name__)
 
-conf = config.Config(initConfig())
+parser = initConfig()
+conf = config.Config(parser)
+
+init_logger(parser)
 
 
 class Server(object):
+    """
+    Class used for rhsm.service providing D-Bus API
+    """
+
+    INSTANCE = None
+
+    def __new__(cls, *args, **kwargs):
+        """
+        Function called, when new instance of Server is requested
+        """
+        cls.INSTANCE = object.__new__(cls)
+        return cls.INSTANCE
+
     def __init__(self, bus_class=None, bus_name=None, object_classes=None, bus_kwargs=None):
         """
         Create a connection to a bus defined by bus_class and bus_kwargs; instantiate objects in
@@ -106,19 +123,34 @@ class Server(object):
         if "SyspurposeDBusObject" in self.object_map:
             syspurpose_dir_list.append(self.object_map["SyspurposeDBusObject"].SyspurposeChanged)
 
-        consumer_dir_watch = DirectoryWatch(self.identity.cert_dir_path, consumer_dir_list)
-        entitlement_dir_watch = DirectoryWatch(entitlement_cert_dir_path, entitlement_dir_list)
-        config_dir_watch = DirectoryWatch(config_cert_dir_path, config_dir_list)
-        products_dir_watch = DirectoryWatch(products_cert_dir_path, products_dir_list)
-        syspurpose_dir_watch = DirectoryWatch(syspurpose_cert_dir_path, syspurpose_dir_list)
+        consumer_dir_watch = DirectoryWatch(
+            self.identity.cert_dir_path,
+            consumer_dir_list
+        )
+        entitlement_dir_watch = DirectoryWatch(
+            entitlement_cert_dir_path,
+            entitlement_dir_list
+        )
+        config_dir_watch = DirectoryWatch(
+            config_cert_dir_path,
+            config_dir_list
+        )
+        products_dir_watch = DirectoryWatch(
+            products_cert_dir_path,
+            products_dir_list
+        )
+        syspurpose_dir_watch = DirectoryWatch(
+            syspurpose_cert_dir_path,
+            syspurpose_dir_list
+        )
 
-        self.filesystem_watcher = create_filesystem_watcher([
-            consumer_dir_watch,
-            entitlement_dir_watch,
-            config_dir_watch,
-            products_dir_watch,
-            syspurpose_dir_watch,
-        ])
+        self.filesystem_watcher = create_filesystem_watcher({
+            CONSUMER_WATCHER: consumer_dir_watch,
+            ENTITLEMENT_WATCHER: entitlement_dir_watch,
+            CONFIG_WATCHER: config_dir_watch,
+            PRODUCT_WATCHER: products_dir_watch,
+            SYSPURPOSE_WATCHER: syspurpose_dir_watch,
+        })
         self._thread = threading.Thread(target=self.filesystem_watcher.loop)
         self._thread.start()
 
@@ -217,6 +249,7 @@ class DomainSocketServer(object):
         """
         self.object_classes = object_classes or []
         self.objects = []
+        self._server = None
 
         self.lock = threading.Lock()
         with self.lock:

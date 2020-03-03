@@ -15,7 +15,8 @@ gtk_compat.threads_init()
 import rhsm
 
 # enable logging for firstboot
-from subscription_manager import logutil
+from rhsm import logutil
+
 logutil.init_logger()
 
 log = logging.getLogger(__name__)

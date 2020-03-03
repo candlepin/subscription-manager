@@ -28,8 +28,7 @@ from rhsmlib.facts.hwprobe import ClassicCheck
 from subscription_manager.certlib import Locker
 from subscription_manager.utils import chroot
 from subscription_manager.injectioninit import init_dep_injection
-from subscription_manager import logutil
-from rhsm import config
+from rhsm import config, logutil
 
 requires_api_version = '2.5'
 plugin_type = (TYPE_CORE,)

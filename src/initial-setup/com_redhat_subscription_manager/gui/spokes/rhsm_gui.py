@@ -31,7 +31,7 @@ try:
 except ImportError:
     from pyanaconda.core.constants import ANACONDA_ENVIRON
 
-from subscription_manager import logutil
+from rhsm import logutil
 
 logutil.init_logger()
 log = logging.getLogger(__name__)

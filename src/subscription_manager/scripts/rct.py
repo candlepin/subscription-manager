@@ -29,7 +29,8 @@ if six.PY2:
 from subscription_manager.i18n import configure_i18n, ugettext as _
 configure_i18n()
 
-from subscription_manager import logutil
+from rhsm import logutil
+
 logutil.init_logger()
 
 from rct.cli import RctCLI
