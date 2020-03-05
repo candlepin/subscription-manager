@@ -144,7 +144,7 @@ def _get_default_subman_debug_handler():
     return _subman_debug_handler
 
 
-def init_logger():
+def init_logger(config=None):
     """Load logging config file and setup logging.
 
     Only needs to be called once per process."""
@@ -153,7 +153,7 @@ def init_logger():
     if log:
         log.warning("logging already initialized")
 
-    config = rhsm.config.initConfig()
+    config = config or rhsm.config.initConfig()
 
     default_log_level = config.get('logging', 'default_log_level')
     pending_error_messages = []
