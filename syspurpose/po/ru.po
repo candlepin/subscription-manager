@@ -1,19 +1,19 @@
-# ljanda <ljanda@redhat.com>, 2018. #zanata
+# Ondřej Januš <ojanus@redhat.com>, 2019. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-12 17:15+0200\n"
-"PO-Revision-Date: 2018-11-21 02:38+0000\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
-"Language-Team: \n"
-"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2019-10-04 11:10+0000\n"
+"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
 "X-Generator: Zanata 4.6.2\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 
 #: src/syspurpose/cli.py:31
 #, python-brace-format
@@ -24,7 +24,8 @@ msgstr ""
 
 #: src/syspurpose/cli.py:33
 #, python-brace-format
-msgid "If you'd like to overwrite the server side change please run: {command}"
+msgid ""
+"If you'd like to overwrite the server side change please run: {command}"
 msgstr ""
 
 #: src/syspurpose/cli.py:49
@@ -155,11 +156,9 @@ msgid "Error: Malformed data in file {}; please review and correct."
 msgstr ""
 
 #: src/syspurpose/files.py:91
-msgid ""
-"Cannot read syspurpose file {}\n"
+msgid "Cannot read syspurpose file {}\n"
 "Are you root?"
-msgstr ""
-"Не удается прочитать файл syspurpose {}. \n"
+msgstr "Не удается прочитать файл syspurpose {}. \n"
 "Вы root?"
 
 #: src/syspurpose/main.py:32
@@ -167,39 +166,12 @@ msgid "User interrupted process"
 msgstr "Пользователь прервал процесс"
 
 #: src/syspurpose/utils.py:59
-msgid ""
-"Cannot create directory {}\n"
+msgid "Cannot create directory {}\n"
 "Are you root?"
-msgstr ""
-"Не удается создать каталог. \n"
+msgstr "Не удается создать каталог. \n"
 "{} Вы root?"
 
 #: src/syspurpose/utils.py:80
-msgid ""
-"Cannot create file {}\n"
+msgid "Cannot create file {}\n"
 "Are you root?"
 msgstr "Невозможно создать файл {} Вы root?"
-
-#~ msgid "Added {} to {}"
-#~ msgstr "Добавлено {} в {}"
-
-#~ msgid "Removed {} from {}"
-#~ msgstr "Удалено {} из {}"
-
-#~ msgid "{} set to {}"
-#~ msgstr "{} установлен в {}"
-
-#~ msgid "{} unset"
-#~ msgstr "{} отключить"
-
-#~ msgid "Add one or more offerings to the system syspurpose."
-#~ msgstr "Добавьте одно или несколько предложений в систему syspurpose."
-
-#~ msgid "Remove one or more offerings."
-#~ msgstr "Удалите одно или несколько предложений."
-
-#~ msgid "Unset all offerings."
-#~ msgstr "Отменить все предложения."
-
-#~ msgid "Clear set usage/"
-#~ msgstr "Четкое использование /"

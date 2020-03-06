@@ -1,18 +1,18 @@
-# ljanda <ljanda@redhat.com>, 2018. #zanata
+# Ondřej Januš <ojanus@redhat.com>, 2019. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-12 17:15+0200\n"
-"PO-Revision-Date: 2018-11-21 02:38+0000\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
-"Language-Team: \n"
-"Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2019-10-04 11:10+0000\n"
+"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
+"Language-Team: Chinese (Taiwan)\n"
+"Language: zh_TW\n"
 "X-Generator: Zanata 4.6.2\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 
 #: src/syspurpose/cli.py:31
 #, python-brace-format
@@ -23,7 +23,8 @@ msgstr ""
 
 #: src/syspurpose/cli.py:33
 #, python-brace-format
-msgid "If you'd like to overwrite the server side change please run: {command}"
+msgid ""
+"If you'd like to overwrite the server side change please run: {command}"
 msgstr ""
 
 #: src/syspurpose/cli.py:49
@@ -152,8 +153,7 @@ msgid "Error: Malformed data in file {}; please review and correct."
 msgstr ""
 
 #: src/syspurpose/files.py:91
-msgid ""
-"Cannot read syspurpose file {}\n"
+msgid "Cannot read syspurpose file {}\n"
 "Are you root?"
 msgstr "無法讀取syspurpose文件{}你是root用戶嗎？"
 
@@ -162,37 +162,11 @@ msgid "User interrupted process"
 msgstr "用戶中斷過程"
 
 #: src/syspurpose/utils.py:59
-msgid ""
-"Cannot create directory {}\n"
+msgid "Cannot create directory {}\n"
 "Are you root?"
 msgstr "無法創建目錄{}你是root用戶嗎？"
 
 #: src/syspurpose/utils.py:80
-msgid ""
-"Cannot create file {}\n"
+msgid "Cannot create file {}\n"
 "Are you root?"
 msgstr "無法創建文件{}你是root用戶嗎？"
-
-#~ msgid "Added {} to {}"
-#~ msgstr "添加到 {}"
-
-#~ msgid "Removed {} from {}"
-#~ msgstr "已經從...刪除 {}"
-
-#~ msgid "{} set to {}"
-#~ msgstr "{} 調成 {}"
-
-#~ msgid "{} unset"
-#~ msgstr "{}未設置"
-
-#~ msgid "Add one or more offerings to the system syspurpose."
-#~ msgstr "將一個或多個產品添加到系統syspurpose。"
-
-#~ msgid "Remove one or more offerings."
-#~ msgstr "刪除一個或多個產品。"
-
-#~ msgid "Unset all offerings."
-#~ msgstr "取消所有產品。"
-
-#~ msgid "Clear set usage/"
-#~ msgstr "清除設置用法/"

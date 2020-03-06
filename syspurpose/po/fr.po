@@ -1,16 +1,17 @@
-# croe <croe@redhat.com>, 2018. #zanata
+# Ondřej Januš <ojanus@redhat.com>, 2019. #zanata
+# Ludek Janda <ljanda@redhat.com>, 2020. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-12 17:15+0200\n"
-"PO-Revision-Date: 2018-09-12 02:32+0000\n"
-"Last-Translator: croe <croe@redhat.com>\n"
-"Language-Team: French\n"
-"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2020-02-26 07:41+0000\n"
+"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
+"Language-Team: French\n"
+"Language: fr\n"
 "X-Generator: Zanata 4.6.2\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
@@ -20,44 +21,49 @@ msgid ""
 "Due to a conflicting change made at the server the {attr} has not been set.\n"
 "{advice}"
 msgstr ""
+"En raison d'une modification conflictuelle effectuée au niveau du serveur, "
+"le {attr}paramètre n'a pas été défini.{advice}"
 
 #: src/syspurpose/cli.py:33
 #, python-brace-format
-msgid "If you'd like to overwrite the server side change please run: {command}"
+msgid ""
+"If you'd like to overwrite the server side change please run: {command}"
 msgstr ""
+"Si vous souhaitez écraser le changement côté du serveur, veuillez exécuter : "
+"{command}"
 
 #: src/syspurpose/cli.py:49
 #, python-brace-format
 msgid "Added {value} to {prop_name}."
-msgstr ""
+msgstr "{value} ajouté à {prop_name}."
 
 #: src/syspurpose/cli.py:52
 #, python-brace-format
 msgid "Not adding value {value} to {prop_name}; it already exists."
-msgstr ""
+msgstr "Ne pas ajouter {value} à {prop_name}; il existe déjà."
 
 #: src/syspurpose/cli.py:58 src/syspurpose/cli.py:86
 #, python-brace-format
 msgid "{attr} updated."
-msgstr ""
+msgstr "{attr} mis à jour."
 
 #: src/syspurpose/cli.py:81
 msgid "Removed {} from {}."
-msgstr ""
+msgstr "{} retiré de {}."
 
 #: src/syspurpose/cli.py:83
 msgid "Not removing value {} from {}; it was not there."
-msgstr ""
+msgstr "{} non retiré de {}; déjà présent."
 
 #: src/syspurpose/cli.py:109
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
-msgstr ""
+msgstr "{attr} défini à \"{val}\"."
 
 #: src/syspurpose/cli.py:130
 #, python-brace-format
 msgid "{attr} unset."
-msgstr ""
+msgstr "{attr} non défini."
 
 #: src/syspurpose/cli.py:181
 msgid "Sets the value for the given property"
@@ -97,23 +103,23 @@ msgstr "La ou les valeur(s) à supprimer"
 
 #: src/syspurpose/cli.py:238
 msgid "Set the system role to the system syspurpose"
-msgstr ""
+msgstr "Définir le rôle du système en fonction du syspurpose"
 
 #: src/syspurpose/cli.py:244
 msgid "Clear set role"
-msgstr ""
+msgstr "Supprimer le rôle défini"
 
 #: src/syspurpose/cli.py:250
 msgid "Add addons to the system syspurpose"
-msgstr ""
+msgstr "Ajout d'extensions au système syspurpose"
 
 #: src/syspurpose/cli.py:256
 msgid "Remove addons from the system syspurpose"
-msgstr ""
+msgstr "Ajout d'extensions en provenance du système syspurpose"
 
 #: src/syspurpose/cli.py:261
 msgid "Clear set addons"
-msgstr ""
+msgstr "Supprimer les extensions définies"
 
 #: src/syspurpose/cli.py:268
 msgid "Set the system sla"
@@ -129,7 +135,7 @@ msgstr "Définir utilisation système"
 
 #: src/syspurpose/cli.py:285
 msgid "Clear set usage"
-msgstr ""
+msgstr "Supprimer utilisation définie"
 
 #: src/syspurpose/cli.py:291
 msgid "Show the current system syspurpose"
@@ -140,22 +146,26 @@ msgid ""
 "WARNING: Setting syspurpose in containers has no effect.Please run "
 "syspurpose on the host.\n"
 msgstr ""
-"ATTENTION : l'installation de syspurpose dans les conteneurs n'a aucun "
-"effet. Veuillez exécuter syspurpose sur l'hôte.\n"
+"ATTENTION : l'installation de syspurpose dans les conteneurs n'a aucun effet."
+" Veuillez exécuter syspurpose sur l'hôte.\n"
 
 #: src/syspurpose/cli.py:321
 msgid ""
 "Warning: Unable to sync system purpose with subscription management server: "
 "subscription_manager module is not available."
 msgstr ""
+"Avertissement : impossible de synchroniser syspurpose avec le serveur de "
+"gestion des abonnements : le module subscription_manager n'est pas "
+"disponible."
 
 #: src/syspurpose/files.py:85
 msgid "Error: Malformed data in file {}; please review and correct."
 msgstr ""
+"Erreur : données malformées dans le fichier {} ; veuillez les vérifier et "
+"les corriger."
 
 #: src/syspurpose/files.py:91
-msgid ""
-"Cannot read syspurpose file {}\n"
+msgid "Cannot read syspurpose file {}\n"
 "Are you root?"
 msgstr ""
 "Impossible de lire le fichier syspurpose {}\n"
@@ -166,41 +176,15 @@ msgid "User interrupted process"
 msgstr "Processus interrompu par l'utlisateur"
 
 #: src/syspurpose/utils.py:59
-msgid ""
-"Cannot create directory {}\n"
+msgid "Cannot create directory {}\n"
 "Are you root?"
 msgstr ""
 "N'a pas pu créer le répertoire {}\n"
 "Possédez-vous un accès superutilisateur ?"
 
 #: src/syspurpose/utils.py:80
-msgid ""
-"Cannot create file {}\n"
+msgid "Cannot create file {}\n"
 "Are you root?"
 msgstr ""
 "N'a pas pu créer le fichier {}\n"
 "Possédez-vous un accès superutilisateur ?"
-
-#~ msgid "Added {} to {}"
-#~ msgstr "A ajouté {} à {}"
-
-#~ msgid "Removed {} from {}"
-#~ msgstr "A supprimé {} de {}"
-
-#~ msgid "{} set to {}"
-#~ msgstr "{} défini à {}"
-
-#~ msgid "{} unset"
-#~ msgstr "{} non défini"
-
-#~ msgid "Add one or more offerings to the system syspurpose."
-#~ msgstr "Ajouter une ou plusieurs choix au système syspurpose."
-
-#~ msgid "Remove one or more offerings."
-#~ msgstr "Supprimer un ou plusieurs choix."
-
-#~ msgid "Unset all offerings."
-#~ msgstr "Supprimer tous les choix."
-
-#~ msgid "Clear set usage/"
-#~ msgstr "Supprimer usage/ défini"
