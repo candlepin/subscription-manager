@@ -222,7 +222,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.26.13
+Version: 1.26.14
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1400,6 +1400,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Mar 06 2020 Christopher Snyder <csnyder@redhat.com> 1.26.14-1
+- 1754952: Update translations for syspurpose (csnyder@redhat.com)
+
 * Mon Feb 24 2020 Christopher Snyder <csnyder@redhat.com> 1.26.13-1
 - 1754952: Update translations (csnyder@redhat.com)
 - cockpit: CSS fixes for dialog error messages (mvollmer@redhat.com)
