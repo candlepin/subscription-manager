@@ -27,7 +27,7 @@ else:
 from iniparse import SafeConfigParser
 from iniparse.compat import NoSectionError, NoOptionError
 
-from rhsm.config import initConfig
+from rhsm.config import get_config_parser
 from subscription_manager.base_plugin import SubManPlugin
 
 # The API_VERSION constant defines the current plugin API version. It is used
@@ -49,7 +49,7 @@ API_VERSION = "1.1"
 DEFAULT_SEARCH_PATH = "/usr/share/rhsm-plugins/"
 DEFAULT_CONF_PATH = "/etc/rhsm/pluginconf.d/"
 
-cfg = initConfig()
+cfg = get_config_parser()
 
 log = logging.getLogger(__name__)
 

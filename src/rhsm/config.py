@@ -124,6 +124,17 @@ class RhsmConfigParser(SafeConfigParser):
         SafeConfigParser.__init__(self)
         self.read(self.config_file)
 
+    def read(self, file_names=None):
+        """
+        Read configuration files. When configuration files are not specified, then read self.config_file
+        :param file_names: list of configuration files
+        :return: number of configuration files read
+        """
+        if file_names is None:
+            return super(RhsmConfigParser, self).read(self.config_file)
+        else:
+            return super(RhsmConfigParser, self).read(file_names)
+
     def save(self, config_file=None):
         """Writes config file to storage."""
         with tempfile.NamedTemporaryFile(mode="w", dir=os.path.dirname(self.config_file), delete=False) as fo:
@@ -304,29 +315,22 @@ class RhsmHostConfigParser(RhsmConfigParser):
             self.set('rhsm', 'entitlementcertdir', ent_cert_dir)
 
 
-def initConfig(config_file=None):
+def get_config_parser():
     """
     Get an :class:`RhsmConfig` instance
 
     Will use the first config file defined in the following list:
-
-    - argument to this method if provided (only for tests)
     - /etc/rhsm-host/rhsm.conf if it exists (only in containers)
     - /etc/rhsm/rhsm.conf
     """
     global CFG
-    # If a config file was specified, assume we should overwrite the global config
-    # to use it. This should only be used in testing. Could be switch to env var?
-    if config_file:
-        CFG = RhsmConfigParser(config_file=config_file)
-        return CFG
 
     try:
         CFG = CFG
     except NameError:
         CFG = None
-    if CFG is None:
 
+    if CFG is None:
         # Load alternate config file implementation if we detect that we're
         # running in a container.
         if in_container():

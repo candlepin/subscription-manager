@@ -290,7 +290,7 @@ class moduleClass(module.Module, object):
         # Read and store rhn-setup's proxy settings, as they have been set
         # on the prior screen (which is owned by rhn-setup)
         up2date_cfg = rhn_config.initUp2dateConfig()
-        cfg = rhsm.config.initConfig()
+        cfg = rhsm.config.get_config_parser()
 
         # Track if we have changed this in the gui proxy dialog, if
         # we have changed it to disabled, then we apply "null", otherwise

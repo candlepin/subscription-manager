@@ -221,7 +221,7 @@ def prereposetup_hook(conduit):
     :return: None
     """
 
-    cfg = config.initConfig()
+    cfg = config.get_config_parser()
     cache_only = not bool(cfg.get_int('rhsm', 'full_refresh_on_yum'))
 
     try:
@@ -236,7 +236,7 @@ def posttrans_hook(conduit):
     :param conduit:
     :return: None
     """
-    cfg = config.initConfig()
+    cfg = config.get_config_parser()
     if '1' == cfg.get('rhsm', 'package_profile_on_trans'):
         conduit.info(3, "Updating package profile")
         package_profile_client = ProfileActionClient()

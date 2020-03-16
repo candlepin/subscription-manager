@@ -25,7 +25,7 @@ class TestLogutil(fixture.SubManFixture):
         self.rhsm_config = stubs.StubConfig()
         rhsm_patcher = mock.patch('rhsm.config')
         self.rhsm_config_mock = rhsm_patcher.start()
-        self.rhsm_config_mock.initConfig.return_value = self.rhsm_config
+        self.rhsm_config_mock.get_config_parser.return_value = self.rhsm_config
         self.addCleanup(rhsm_patcher.stop)
 
     def tearDown(self):

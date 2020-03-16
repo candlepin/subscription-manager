@@ -173,10 +173,17 @@ class ConfigDBusObject(base_object.BaseObject):
         This callback method is called, when i-notify or periodical directory polling detects
         any change of rhsm.conf file. Thus configuration file is reloaded and new values are used.
         """
-        parser = rhsm.config.initConfig()
+        parser = rhsm.config.get_config_parser()
+
+        # We have to read parser again to get fresh data from the file
+        files_read = parser.read()
+
         self.config = Config(parser)
         rhsm.logutil.init_logger(parser)
-        log.debug("configuration file reloaded: %s" % str(self.config))
+        if files_read > 0:
+            log.debug("Configuration file: %s reloaded: %s" % (parser.config_file, str(self.config)))
+        else:
+            log.warning("Unable to read configuration file: %s" % parser.config_file)
 
 
 def temporary_disable_dir_watcher():

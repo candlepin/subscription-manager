@@ -36,7 +36,7 @@ import rhsm
 from rhsm.certificate import create_from_pem, DateRange, GMT
 from mock import Mock, patch
 
-cfg = rhsm.config.initConfig()
+cfg = rhsm.config.get_config_parser()
 ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
 
 #[-]*BEGIN [\w\ ]*[-]* - Find all begin lines

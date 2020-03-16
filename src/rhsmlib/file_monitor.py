@@ -13,7 +13,7 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
-from rhsm.config import initConfig
+from rhsm.config import get_config_parser
 from rhsmlib.services import config
 from six.moves import configparser
 import logging
@@ -28,7 +28,7 @@ except ImportError:
 
 
 log = logging.getLogger(__name__)
-conf = config.Config(initConfig())
+conf = config.Config(get_config_parser())
 
 
 CONSUMER_WATCHER = "CONSUMER_WATCHER"

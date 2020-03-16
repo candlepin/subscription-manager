@@ -26,7 +26,7 @@ ga_loader.init_ga()
 from subscription_manager.ga import GLib
 from functools import partial
 from rhsmlib.services import config
-from rhsm.config import initConfig
+from rhsm.config import get_config_parser
 from rhsmlib.file_monitor import create_filesystem_watcher, DirectoryWatch
 from rhsmlib.file_monitor import CONSUMER_WATCHER, ENTITLEMENT_WATCHER, CONFIG_WATCHER, PRODUCT_WATCHER, \
     SYSPURPOSE_WATCHER
@@ -36,7 +36,7 @@ from rhsm.logutil import init_logger
 
 log = logging.getLogger(__name__)
 
-parser = initConfig()
+parser = get_config_parser()
 conf = config.Config(parser)
 
 init_logger(parser)

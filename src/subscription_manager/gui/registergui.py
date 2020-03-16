@@ -62,7 +62,7 @@ logutil.init_logger()
 log = logging.getLogger(__name__)
 
 from rhsmlib.services import config, attach
-conf = config.Config(base_config.initConfig())
+conf = config.Config(base_config.get_config_parser())
 
 
 class RegisterState(object):

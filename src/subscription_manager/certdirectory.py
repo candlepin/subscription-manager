@@ -20,7 +20,7 @@ import logging
 import os
 
 from rhsm.certificate import Key, create_from_file
-from rhsm.config import initConfig
+from rhsm.config import get_config_parser
 from subscription_manager.injection import require, ENT_DIR
 
 from rhsmlib.services import config
@@ -28,7 +28,7 @@ from rhsm.certificate2 import CONTENT_ACCESS_CERT_TYPE
 
 log = logging.getLogger(__name__)
 
-conf = config.Config(initConfig())
+conf = config.Config(get_config_parser())
 
 DEFAULT_PRODUCT_CERT_DIR = "/etc/pki/product-default"
 

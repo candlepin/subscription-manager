@@ -92,7 +92,7 @@ class ZypperService(object):
         Read rhsm configuration file
         :return: None
         """
-        cfg = config.initConfig()
+        cfg = config.get_config_parser()
         self.full_refresh_on_yum = bool(cfg.get_int('rhsm', 'full_refresh_on_yum'))
         self.ca_cert_dir = cfg.get('rhsm', 'ca_cert_dir')
 

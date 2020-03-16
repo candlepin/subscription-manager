@@ -75,7 +75,7 @@ from rhsmlib.services import config, attach, products, unregister, entitlement, 
 from rhsmlib.services import exceptions
 from subscription_manager import syspurposelib
 
-conf = config.Config(rhsm.config.initConfig())
+conf = config.Config(rhsm.config.get_config_parser())
 
 SM = "subscription-manager"
 ERR_NOT_REGISTERED_MSG = _("This system is not yet registered. Try 'subscription-manager register --help' for more information.")

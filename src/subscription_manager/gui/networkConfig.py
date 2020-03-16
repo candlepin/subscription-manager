@@ -88,7 +88,7 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
         self.org_timeout = socket.getdefaulttimeout()
         self.progress_bar = None
 
-        self.cfg = rhsm.config.initConfig()
+        self.cfg = rhsm.config.get_config_parser()
         self.cp_provider = inj.require(inj.CP_PROVIDER)
 
         # Need to load values before connecting signals because when the dialog

@@ -154,7 +154,7 @@ def init_logger(config=None):
         log.warning("logging already initialized")
 
     if config is None:
-        config = rhsm.config.initConfig()
+        config = rhsm.config.get_config_parser()
 
     default_log_level = config.get('logging', 'default_log_level')
     pending_error_messages = []
