@@ -16,6 +16,8 @@ from __future__ import print_function, division, absolute_import
 import dbus
 import logging
 import six
+from iniparse import ini
+
 import rhsm
 import rhsm.config
 import rhsm.logutil
@@ -175,12 +177,17 @@ class ConfigDBusObject(base_object.BaseObject):
         """
         parser = rhsm.config.get_config_parser()
 
+        # We are going to read configuration file again, but we have to clean all data in parser object
+        # this way, because iniparse module doesn't provide better method to do that.
+        parser.data = ini.INIConfig(None, optionxformsource=parser)
+
         # We have to read parser again to get fresh data from the file
         files_read = parser.read()
 
-        self.config = Config(parser)
-        rhsm.logutil.init_logger(parser)
-        if files_read > 0:
+        if len(files_read) > 0:
+            log.debug('files read: %s' % str(files_read))
+            self.config = Config(parser)
+            rhsm.logutil.init_logger(parser)
             log.debug("Configuration file: %s reloaded: %s" % (parser.config_file, str(self.config)))
         else:
             log.warning("Unable to read configuration file: %s" % parser.config_file)
