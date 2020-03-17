@@ -446,7 +446,6 @@ function show_status_dialog() {
     get_monotonic_start.then(show).catch(err => { console.warn(err); show(null) });
 }
 
-
 export class InsightsStatus extends React.Component {
     constructor() {
         super();
@@ -458,12 +457,20 @@ export class InsightsStatus extends React.Component {
         insights_timer.addEventListener("changed", this.on_changed);
         insights_service.addEventListener("changed", this.on_changed);
         last_upload_monitor.addEventListener("changed", this.on_changed);
+
+        this.hosts_details_file = cockpit.file("/var/lib/insights/host-details.json", { syntax: JSON });
+        this.hosts_details_file.watch(data => this.setState({ host_details: data }));
+        this.insights_details_file = cockpit.file("/var/lib/insights/insights-details.json", { syntax: JSON });
+        this.insights_details_file.watch(data => this.setState({ insights_details: data }));
     }
 
     componentWillUnmount() {
         insights_timer.removeEventListener("changed", this.on_changed);
         insights_service.removeEventListener("changed", this.on_changed);
         last_upload_monitor.removeEventListener("changed", this.on_changed);
+
+        this.hosts_details_file.close();
+        this.insights_details_file.close();
     }
 
     render() {
@@ -474,13 +481,63 @@ export class InsightsStatus extends React.Component {
                         insights_service.unit.ActiveExitTimestamp &&
                         insights_service.unit.ActiveExitTimestamp / 1e6 > last_upload_monitor.timestamp);
 
+            let url;
+            try {
+                url = "http://cloud.redhat.com/insights/inventory/" + this.state.host_details.results[0].id;
+            } catch (err) {
+                url = "http://cloud.redhat.com/insights";
+            }
+
+            let text;
+            try {
+                let n_rule_hits = this.state.insights_details.length;
+                if (n_rule_hits == 0) {
+                    text = _("No rule hits");
+                } else {
+                    try {
+                        let max_risk = Math.max(...this.state.insights_details.map(h => h.rule.total_risk));
+                        // We do this all explicitly and in a long
+                        // winded way so that the translation
+                        // machinery gets to see all the strings.
+                        if (max_risk >= 4) {
+                            text = cockpit.format(cockpit.ngettext("$0 critical hit",
+                                                                   "$0 hits, including critical",
+                                                                   n_rule_hits),
+                                                  n_rule_hits);
+                        } else if (max_risk >= 3) {
+                            text = cockpit.format(cockpit.ngettext("$0 important hit",
+                                                                   "$0 hits, including important",
+                                                                   n_rule_hits),
+                                                  n_rule_hits);
+                        } else if (max_risk >= 2) {
+                            text = cockpit.format(cockpit.ngettext("$0 moderate hit",
+                                                                   "$0 hits, including moderate",
+                                                                   n_rule_hits),
+                                                  n_rule_hits);
+                        } else {
+                            text = cockpit.format(cockpit.ngettext("$0 low severity hit",
+                                                                   "$0 low severity hits",
+                                                                   n_rule_hits),
+                                                  n_rule_hits);
+                        }
+                    } catch (err) {
+                        text = cockpit.format(cockpit.ngettext("$0 hit",
+                                                               "$0 hits",
+                                                               n_rule_hits),
+                                              n_rule_hits);
+                    }
+                }
+            } catch (err) {
+                text = _("View your Insights results");
+            }
+
             status = (
                     <div style={{display: "inline-block", verticalAlign: "top" }}>
                     <a onClick={left(show_status_dialog)}>{_("Connected to Insights")}</a>
                     { warn && [ " ", <i className="pficon pficon-warning-triangle-o"/> ] }
                     <br/>
-                    <a href="http://cloud.redhat.com/insights" target="_blank" rel="noopener">
-                    View your Insights results <i className="fa fa-external-link"/>
+                    <a href={url} target="_blank" rel="noopener">
+                    {text} <i className="fa fa-external-link"/>
                     </a>
                 </div>
             );

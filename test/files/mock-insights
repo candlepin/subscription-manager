@@ -5,6 +5,7 @@
 #
 #   insights-client --register
 #   insights-client --status
+#   insights-client --check-results
 #   insights-client --unregister
 #
 # You need these in your insights-client.conf:
@@ -66,6 +67,28 @@ class handler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.end_headers()
             self.wfile.write(b'{ "remote_branch": -1, "remote_leaf": -1 }\n')
+            return
+
+        m = self.match("/r/insights/platform/inventory/v1/hosts\\?insights_id=(.*)")
+        if m:
+            machine_id = m[1]
+            self.send_response(200)
+            self.end_headers()
+            if machine_id in systems:
+                self.wfile.write(b'{ "total": 1, "results": [ { "id": "123-nice-id" } ] }\n')
+            else:
+                self.wfile.write(b'{ "total": 0, "results": [ ] }\n')
+            return
+
+        m = self.match("/r/insights/platform/insights/v1/system/([^/]+)/reports/")
+        if m:
+            platform_id = m[1]
+            self.send_response(200)
+            self.end_headers()
+            if platform_id == "123-nice-id":
+                self.wfile.write(b'[ { "rule": { "total_risk": 3 } }, { "rule": { "total_risk": 2 } }, { "rule": { "total_risk": 1 } }]\n')
+            else:
+                self.wfile.write(b'[ ]\n')
             return
 
         self.send_response(404)
