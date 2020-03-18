@@ -167,6 +167,10 @@ Gives the username for the account which is registering the system; this user ac
 Gives the user account password.
 
 .TP
+.B --token=TOKEN
+Token to use when authorizing against the server.
+
+.TP
 .B --serverurl=SERVER_HOSTNAME
 Passes the name of the subscription service with which to register the system. The default value, if this is not given, is the Customer Portal Subscription Management service,
 .B subscription.rhsm.redhat.com.
@@ -377,6 +381,10 @@ for products installed on the system. For example, if the service-level preferen
 Server URL in the form of https://hostname:port/prefix
 
 .TP
+.B --token=TOKEN
+Token to use when authorizing against the server.
+
+.TP
 .B --insecure
 Do not check the server SSL certificate against available certificate authorities
 
@@ -387,6 +395,18 @@ Shows the system's current service-level preference. If a service level is not s
 .TP
 .B --list
 Lists the available service levels.
+
+.TP
+.B --username=USERNAME
+Gives the username for the account to use to connect to the organization account [Use with --list when unregistered].
+
+.TP
+.B --password=PASSWORD
+Gives the user account password [Use with --list when unregistered].
+
+.TP
+.B --token=TOKEN
+Token to use when authorizing against the server [Use with --list when unregistered].
 
 .TP
 .B --set=SERVICE_LEVEL
@@ -504,6 +524,10 @@ Gives the username for the account to use to connect to the organization account
 Gives the user account password.
 
 .TP
+.B --token=TOKEN
+Token to use when authorizing against the server.
+
+.TP
 .B --org=ORG
 Identifies the organization for which to list the configured environments.
 
@@ -546,6 +570,10 @@ Gives the username for the account to use to connect to the organization account
 .TP
 .B --password=PASSWORD
 Gives the user account password.
+
+.TP
+.B --token=TOKEN
+Token to use when authorizing against the server.
 
 .TP
 .B --serverurl=SERVER_HOSTNAME
@@ -631,14 +659,18 @@ Gives the username for the account which is registering the system; this user ac
 Gives the user account password. Optional, for user-based authentication.
 
 .TP
+.B --token=TOKEN
+Token to use when authorizing against the server.
+
+.TP
 .B --force
-Regenerates the identity certificate for the system using username/password authentication. This is used with the
+Regenerates the identity certificate for the system using username/password or token authentication. This is used with the
 .B --regenerate
 option.
 .B --regenerate
 alone will use an existing identity certificate to authenticate to the subscription management service. If the certificate is missing or corrupted or in other circumstances, then it may be better to use user authentication rather than certificate-based authentication. In that case, the
 .B --force
-option requires the username or password to be given either as an argument or in response to a prompt.
+option requires the username or password or token to be given either as an argument or in response to a prompt.
 
 
 .SS FACTS OPTIONS
@@ -835,16 +867,16 @@ If a system has never been registered (not even during firstboot), then the
 .B register
 command will register the system with whatever subscription management service is configured in the
 .B /etc/rhsm/rhsm.conf
-file. This command requires, at a minimum, the username and password for an account to connect to the subscription management service. If the credentials aren't passed with the command, then
+file. This command requires, at a minimum, the username and password or token for an account to connect to the subscription management service. If the credentials aren't passed with the command, then
 .B subscription-manager
 prompts for the username and password interactively.
 
 .PP
-When there is a single organization or when using the Customer Portal Subscription Management service, all that is required is the username/password set. For example:
+When there is a single organization or when using the Customer Portal Subscription Management service, all that is required is the username/password set or the token is used. For example:
 
 .RS
 .nf
-subscription-manager register --username=admin --password=secret
+subscription-manager register --username=admin --password=secret or subscription-manager register --token=eyJhbGciOiJSUzI1NiIsI ... stGc_2bFDQC8CENEOo
 .fi
 .RE
 
@@ -1123,8 +1155,17 @@ subscription-manager repos --list
 subscription-manager environments --username=jsmith
 --password=secret --org=prod
 
+ or
+
+ subscription-manager environments --token=eyJhbGciOiJSUzI1NiIsI ... stGc_2bFDQC8CENEOo --org=prod
+
+
 subscription-manager orgs --username=jsmith
 --password=secret
+
+or
+
+subscription-manager orgs --token=eyJhbGciOiJSUzI1NiIsI ... stGc_2bFDQC8CENEOo
 .fi
 .RE
 

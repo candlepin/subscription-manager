@@ -760,6 +760,8 @@ class UserPassCommand(CliCommand):
                                help=_("username to use when authorizing against the server"))
         self.parser.add_option("--password", dest="password",
                                help=_("password to use when authorizing against the server"))
+        self.parser.add_option("--token", dest="token",
+                               help=_("token to use when authorizing against the server"))
 
     @staticmethod
     def _get_username_and_password(username, password):
@@ -781,13 +783,16 @@ class UserPassCommand(CliCommand):
     @property
     def username(self):
         if not self._username:
+            if self.options.token:
+                self._username = self.cp_provider.token_username
+                return self._username
             (self._username, self._password) = self._get_username_and_password(
                     self.options.username, self.options.password)
         return self._username
 
     @property
     def password(self):
-        if not self._password:
+        if not self._password and not self.options.token:
             (self._username, self._password) = self._get_username_and_password(
                     self.options.username, self.options.password)
         return self._password
@@ -893,6 +898,8 @@ class IdentityCommand(UserPassCommand):
             system_exit(os.EX_USAGE, _("--force can only be used with --regenerate"))
         if (self.options.username or self.options.password) and not self.options.force:
             system_exit(os.EX_USAGE, _("--username and --password can only be used with --force"))
+        if self.options.token and not self.options.force:
+            system_exit(os.EX_USAGE, _("--token can only be used with --force"))
 
     def _do_command(self):
         # get current consumer identity
@@ -931,9 +938,12 @@ class IdentityCommand(UserPassCommand):
                     print(_('environment name: %s') % environment_name)
             else:
                 if self.options.force:
-                    # get an UEP with basic auth
-                    self.cp_provider.set_user_pass(self.username, self.password)
-                    self.cp = self.cp_provider.get_basic_auth_cp()
+                    # get an UEP with basic auth or keycloak auth
+                    if self.options.token:
+                        self.cp = self.cp_provider.get_keycloak_auth_cp(self.options.token)
+                    else:
+                        self.cp_provider.set_user_pass(self.username, self.password)
+                        self.cp = self.cp_provider.get_basic_auth_cp()
                 consumer = self.cp.regenIdCertificate(consumerid)
                 managerlib.persist_consumer_cert(consumer)
 
@@ -965,8 +975,11 @@ class OwnersCommand(UserPassCommand):
 
         try:
             # get a UEP
-            self.cp_provider.set_user_pass(self.username, self.password)
-            self.cp = self.cp_provider.get_basic_auth_cp()
+            if self.options.token:
+                self.cp = self.cp_provider.get_keycloak_auth_cp(self.options.token)
+            else:
+                self.cp_provider.set_user_pass(self.username, self.password)
+                self.cp = self.cp_provider.get_basic_auth_cp()
             owners = self.cp.getOwnerList(self.username)
             log.debug("Successfully retrieved org list from server.")
             if len(owners):
@@ -1004,8 +1017,11 @@ class EnvironmentsCommand(OrgCommand):
     def _do_command(self):
         self._validate_options()
         try:
-            self.cp_provider.set_user_pass(self.username, self.password)
-            self.cp = self.cp_provider.get_basic_auth_cp()
+            if self.options.token:
+                self.cp = self.cp_provider.get_keycloak_auth_cp(self.options.token)
+            else:
+                self.cp_provider.set_user_pass(self.username, self.password)
+                self.cp = self.cp_provider.get_basic_auth_cp()
             if self.cp.supports_resource('environments'):
                 environments = self._get_environments(self.org)
 
@@ -1112,7 +1128,7 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
 
         if not self.is_registered():
             if self.options.list:
-                if not (self.options.username and self.options.password):
+                if not (self.options.username and self.options.password) and not self.options.token:
                     system_exit(os.EX_USAGE, _("Error: you must register or specify --username and --password to list service levels"))
             elif self.options.unset or self.options.set:
                 pass  # RHBZ 1632248 : User should be able to set/unset while not registered.
@@ -1125,7 +1141,9 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
             # If we have a username/password, we're going to use that, otherwise
             # we'll use the identity certificate. We already know one or the other
             # exists:
-            if self.options.username and self.options.password:
+            if self.options.token:
+                self.cp = self.cp_provider.get_keycloak_auth_cp(self.options.token)
+            elif self.options.username and self.options.password:
                 self.cp_provider.set_user_pass(self.username, self.password)
                 self.cp = self.cp_provider.get_basic_auth_cp()
             else:
@@ -1267,7 +1285,7 @@ class RegisterCommand(UserPassCommand):
             system_exit(os.EX_USAGE, _("This system is already registered. Use --force to override"))
         elif self.options.consumername == '':
             system_exit(os.EX_USAGE, _("Error: system name can not be empty."))
-        elif self.options.username and self.options.activation_keys:
+        elif (self.options.username or self.options.token) and self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Activation keys do not require user credentials."))
         elif self.options.consumerid and self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Activation keys can not be used with previously registered IDs."))
@@ -1356,7 +1374,9 @@ class RegisterCommand(UserPassCommand):
 
         # Proceed with new registration:
         try:
-            if not self.options.activation_keys:
+            if self.options.token:
+                admin_cp = self.cp_provider.get_keycloak_auth_cp(self.options.token)
+            elif not self.options.activation_keys:
                 hostname = conf["server"]["hostname"]
                 if ":" in hostname:
                     normalized_hostname = "[%s]" % hostname

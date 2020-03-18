@@ -96,7 +96,7 @@ _subscription_manager_config()
 
 _subscription_manager_environments()
 {
-  local opts="--org --password --username
+  local opts="--org --password --username --token
               ${_subscription_manager_common_url_opts}
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
@@ -111,7 +111,7 @@ _subscription_manager_facts()
 
 _subscription_manager_identity()
 {
-  local opts="--force --password --regenerate --username
+  local opts="--force --password --regenerate --username --token
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
@@ -137,7 +137,7 @@ _subscription_manager_list()
 
 _subscription_manager_orgs()
 {
-  local opts="--password --username
+  local opts="--password --username --token
               ${_subscription_manager_common_url_opts}
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
@@ -176,7 +176,7 @@ _subscription_manager_register()
 {
   local opts="--activationkey --auto-attach --autosubscribe --baseurl --consumerid
               --environment --force --name --org --password --release
-              --servicelevel --username
+              --servicelevel --username --token
               ${_subscription_manager_common_url_opts}
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
@@ -201,7 +201,7 @@ _subscription_manager_repos()
 _subscription_manager_service_level()
 {
     local opts="--list --org --set --show
-                --unset --username --password
+                --unset --username --password --token
                 ${_subscription_manager_common_url_opts}
                 ${_subscription_manager_common_opts}"
     COMPREPLY=($(compgen -W "${opts}" -- ${1}))

@@ -416,6 +416,12 @@ class TestIdentityCommand(TestCliProxyCommand):
     def test_regenerate_no_force(self):
         self.cc.main(["--regenerate"])
 
+    def test_token_no_force(self):
+        self._test_exception(["--token", "eyJhbGciOiJSUzI1NiIsInR5cCIg"])
+
+    def test_token_with_force(self):
+        self._test_no_exception(["--regenerate", "--token", "eyJhbGciOiJSUzI1NiIsInR5cCIg", "--force"])
+
 
 # re, orgs
 class TestOwnersCommand(TestCliProxyCommand):
@@ -427,6 +433,9 @@ class TestOwnersCommand(TestCliProxyCommand):
 
     def test_insecure(self):
         self.cc.main(["--insecure"])
+
+    def test_token_(self):
+        self.cc.main(["--token", "eyJhbGciOiJSUzI1NiIsInR5cCIg"])
 
 
 class TestEnvironmentsCommand(TestCliProxyCommand):
@@ -515,6 +524,9 @@ class TestRegisterCommand(TestCliProxyCommand):
         with patch.object(self.mock_cfg_parser, "save") as mock_save:
             self._test_no_exception(["--insecure"])
             mock_save.assert_called_with()
+
+    def test_token(self):
+        self._test_no_exception(["--token", "eyJhbGciOiJSUzI1NiIsInR5cCIg"])
 
 
 class TestAddonsCommand(TestCliCommand):
