@@ -129,6 +129,84 @@ url | proxy-server.subman.example.com:3128
 username | proxyuser
 password | password
 
+Pipenv
+------
+
+There is experimental support for installation of subscription-manager using
+Pipenv. We tested installing subscription-manager using Pipenv only on following
+operating systems:
+
+* Fedora 30
+* RHEL/CentOS 7
+* RHEL/CentOS 8
+
+We tested pipenv with Python 2 and Python 3. It is necessary to install following
+packages to your system, because binary module have to be compiled in virtual
+environment:
+
+### Python 2
+
+```bash
+dnf install -y pipenv gcc make python2-devel \
+    openssl-devel intltool libnl3-devel
+```
+
+### Python 3
+
+```bash
+dnf install -y pipenv gcc make python3-devel \
+    openssl-devel intltool libnl3-devel
+```
+
+You can create virtual environment using following steps:
+
+1. Create virtual environment using Python 2 or Python 3 and it is necessary to
+   use `--site-packages` argument, because virtual environment has to
+   use `rpm` Python package installed in your system. It is not possible
+   to install `rpm` Python package to virtual environment using pip/pipenv.
+
+   Python 2:
+
+   ```bash
+   pipenv --site-packages --two
+   ```
+
+   Python 3:
+
+   ```bash
+   pipenv --site-packages --three
+   ```
+
+2. Install required Python packages defined in `Pipfile` into virtual environment:
+
+   ```bash
+   pipevn install
+   ```
+
+3. Start virtual environment:
+
+   ```bash
+   pipenv shell
+   ```
+
+4. Build binary modules in virtual environment:
+
+   ```bash
+   python ./setup.py build
+   ```
+
+5. Install subscription-manager into virtual environment:
+
+   ```bash
+   python ./setup.py install
+   ```
+
+6. It should be possible to run subscription-manager in virtual environment
+
+   ```bash
+   sudo subscription-manager version
+   ```
+
 Development of the Subscription-Manager Deployment Ansible role
 ---------------------------------------------------------------
 The Ansible role that is used for deploying subscription-manager can be found at 

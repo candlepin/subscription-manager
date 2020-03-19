@@ -90,6 +90,8 @@ class DefaultBranding(object):
                 _("Please enter your account information:")
         self.GUI_FORGOT_LOGIN_TIP = \
                 _("Contact your system administrator if you have forgotten your login or password")
+        self.REGISTERED_TO_SUBSCRIPTION_MANAGEMENT_SUMMARY = \
+                _("Red Hat Subscription Management")
 
 
 class EmptyBranding(object):
