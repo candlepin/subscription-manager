@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.27
+Version: 1.24.28
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1151,6 +1151,13 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Mar 20 2020 William Poteat <wpoteat@redhat.com> 1.24.28-1
+- 1794653: corrected missing quotes for config check; ENT-2010
+  (crag@redhat.com)
+- Update to releasers (wpoteat@redhat.com)
+- 1803783: Added copytruncate option to logrotate conf file; ENT-2114
+  (jhnidek@redhat.com)
+
 * Wed Feb 26 2020 William Poteat <wpoteat@redhat.com> 1.24.27-1
 - 1796088: Added option --force for command refresh; ENT-2033
   (jhnidek@redhat.com)
