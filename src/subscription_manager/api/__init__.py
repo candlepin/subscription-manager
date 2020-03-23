@@ -19,7 +19,7 @@ external applications.
 All reasonable efforts will be made to maintain compatibility.
 """
 from functools import wraps
-from subscription_manager import logutil
+from rhsm import logutil
 
 injected = False
 

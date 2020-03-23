@@ -128,7 +128,7 @@ def stubInitConfig():
 
 # create a global CFG object,then replace it with our own that candlepin
 # read from a stringio
-config.initConfig(config_file="test/rhsm.conf")
+#config.get_config_parser(config_file="test/rhsm.conf")
 config.CFG = StubConfig()
 
 # we are not actually reading test/rhsm.conf, it's just a placeholder

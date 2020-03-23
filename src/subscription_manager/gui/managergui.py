@@ -70,7 +70,7 @@ from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
 
-cfg = config.initConfig()
+cfg = config.get_config_parser()
 
 ONLINE_DOC_URL_TEMPLATE = "https://access.redhat.com/documentation/%s/red_hat_subscription_management/"
 ONLINE_DOC_FALLBACK_URL = "https://access.redhat.com/documentation/en-us/red_hat_subscription_management/"
@@ -178,7 +178,7 @@ class MainWindow(widgets.SubmanBaseWidget):
                  auto_launch_registration=False):
         super(MainWindow, self).__init__()
 
-        rhsm_cfg = config.initConfig()
+        rhsm_cfg = config.get_config_parser()
         proxy_server = rhsm_cfg.get("server", "proxy_hostname")
         proxy_port = int(rhsm_cfg.get("server", "proxy_port") or config.DEFAULT_PROXY_PORT)
 

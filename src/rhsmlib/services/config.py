@@ -23,7 +23,7 @@ class Config(collections.MutableMapping):
         if parser:
             self._parser = parser
         else:
-            self._parser = rhsm.config.initConfig()
+            self._parser = rhsm.config.get_config_parser()
 
         self.auto_persist = auto_persist
 

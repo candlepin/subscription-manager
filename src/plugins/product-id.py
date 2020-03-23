@@ -21,7 +21,7 @@ import logging
 import yum
 from yum.plugins import TYPE_CORE
 
-from subscription_manager import logutil
+from rhsm import logutil
 from subscription_manager.productid import ProductManager, RpmVersion
 from subscription_manager.utils import chroot
 from subscription_manager.injectioninit import init_dep_injection

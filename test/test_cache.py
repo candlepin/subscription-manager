@@ -121,6 +121,16 @@ class TestProfileManager(unittest.TestCase):
         repo_file_name = os.path.join(temp_repo_dir, 'awesome.repo')
         with open(repo_file_name, 'w') as repo_file:
             repo_file.write(CONTENT_REPO_FILE)
+
+        patcher = patch('rhsm.profile.dnf')
+        self.addCleanup(patcher.stop)
+        dnf_mock = patcher.start()
+        dnf_mock.dnf = Mock()
+        mock_db = Mock()
+        mock_db.conf = Mock()
+        mock_db.conf.substitutions = {'releasever': '1', 'basearch': 'x86_64'}
+        dnf_mock.dnf.Base = Mock(return_value=mock_db)
+
         self.current_profile = self._mock_pkg_profile(current_pkgs, repo_file_name, ENABLED_MODULES)
         self.profile_mgr = ProfileManager()
         self.profile_mgr.current_profile = self.current_profile

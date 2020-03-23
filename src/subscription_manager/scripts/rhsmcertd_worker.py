@@ -31,10 +31,9 @@ import signal
 import logging
 import dbus.mainloop.glib
 
-from subscription_manager import logutil
 import subscription_manager.injection as inj
 
-from rhsm import connection, config
+from rhsm import connection, config, logutil
 
 from subscription_manager import ga_loader
 ga_loader.init_ga()
@@ -70,7 +69,7 @@ def _main(options, log):
     correlation_id = generate_correlation_id()
     log.debug('X-Correlation-ID: %s', correlation_id)
     cp_provider.set_correlation_id(correlation_id)
-    cfg = config.initConfig()
+    cfg = config.get_config_parser()
 
     log.debug('check for rhsmcertd disable')
     if '1' == cfg.get('rhsmcertd', 'disable') and not options.force:
