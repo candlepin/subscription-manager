@@ -822,7 +822,8 @@ if __name__ == '__main__':
     if _LIBPATH not in sys.path:
         sys.path.append(_LIBPATH)
 
-    from subscription_manager import logutil
+    from rhsm import logutil
+
     logutil.init_logger()
 
     hw = HardwareCollector(prefix=sys.argv[1], testing=True)

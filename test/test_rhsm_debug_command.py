@@ -27,11 +27,11 @@ import six
 
 from rhsm_debug import debug_commands
 from rhsm_debug import cli
-from rhsm.config import initConfig
+from rhsm.config import get_config_parser
 from subscription_manager.cli import InvalidCLIOptionError
 
 
-cfg = initConfig()
+cfg = get_config_parser()
 
 log = logging.getLogger(__name__)
 

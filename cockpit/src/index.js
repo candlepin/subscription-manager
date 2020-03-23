@@ -64,49 +64,54 @@ let footerProps = {
 };
 
 function openRegisterDialog() {
-    // set config to what was loaded and clean previous credential information
-    Object.assign(registerDialogDetails, subscriptionsClient.config, {
-        user: '',
-        password: '',
-        activation_keys: '',
-        org: '',
-        insights: false,
-        insights_available: subscriptionsClient.insightsAvailable,
-        insights_detected: false
-    });
+    // Read configuration file before opening register dialog
+    subscriptionsClient.readConfig().then(() => {
+        // set config to what was loaded and clean previous credential information
+        Object.assign(registerDialogDetails, subscriptionsClient.config, {
+            user: '',
+            password: '',
+            activation_keys: '',
+            org: '',
+            insights: false,
+            insights_available: subscriptionsClient.insightsAvailable,
+            insights_detected: false,
+            register_method: 'account',
+            auto_attach: true
+        });
 
-    Insights.detect().then(installed => {
-        registerDialogDetails.insights_detected = installed;
+        Insights.detect().then(installed => {
+            registerDialogDetails.insights_detected = installed;
 
-        // show dialog to register
-        let renderDialog;
-        let updatedData = function(prop, data) {
-            if (prop) {
-                if (data.target) {
-                    if (data.target.type === "checkbox") {
-                        registerDialogDetails[prop] = data.target.checked;
+            // show dialog to register
+            let renderDialog;
+            let updatedData = function(prop, data) {
+                if (prop) {
+                    if (data.target) {
+                        if (data.target.type === "checkbox") {
+                            registerDialogDetails[prop] = data.target.checked;
+                        } else {
+                            registerDialogDetails[prop] = data.target.value;
+                        }
                     } else {
-                        registerDialogDetails[prop] = data.target.value;
+                        registerDialogDetails[prop] = data;
                     }
-                } else {
-                    registerDialogDetails[prop] = data;
                 }
-            }
 
-            registerDialogDetails.onChange = updatedData;
+                registerDialogDetails.onChange = updatedData;
 
-            let dialogProps = {
-                'id': 'register_dialog',
-                'title': _("Register System"),
-                'body': React.createElement(subscriptionsRegister.dialogBody, registerDialogDetails),
+                let dialogProps = {
+                    'id': 'register_dialog',
+                    'title': _("Register System"),
+                    'body': React.createElement(subscriptionsRegister.dialogBody, registerDialogDetails),
+                };
+
+                if (renderDialog)
+                    renderDialog.setProps(dialogProps);
+                else
+                    renderDialog = Dialog.show_modal_dialog(dialogProps, footerProps);
             };
-
-            if (renderDialog)
-                renderDialog.setProps(dialogProps);
-            else
-                renderDialog = Dialog.show_modal_dialog(dialogProps, footerProps);
-        };
-        updatedData();
+            updatedData();
+        });
     });
 }
 
@@ -131,6 +136,7 @@ function initStore(rootElement) {
                 syspurpose: subscriptionsClient.syspurposeStatus.info,
                 syspurpose_status: subscriptionsClient.syspurposeStatus.status,
                 insights_available: subscriptionsClient.insightsAvailable,
+                autoAttach: subscriptionsClient.autoAttach,
                 dismissError: dismissStatusError,
                 register: openRegisterDialog,
                 unregister: unregisterSystem,

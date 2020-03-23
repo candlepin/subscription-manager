@@ -24,7 +24,7 @@ import shutil
 import stat
 import syslog
 
-from rhsm.config import initConfig
+from rhsm.config import get_config_parser
 from rhsm.certificate import Key, CertificateException, create_from_pem
 
 import subscription_manager.cache as cache
@@ -48,7 +48,7 @@ from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
 
-cfg = initConfig()
+cfg = get_config_parser()
 ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
 
 # Expected permissions for identity certificates:

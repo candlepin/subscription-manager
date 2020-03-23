@@ -568,8 +568,11 @@ client.getSyspurpose = function() {
     return dfd.promise();
 };
 
-client.readConfig = () => {
-    return safeDBusCall(configService, () => {
+client.readConfig = function() {
+    let dfd = cockpit.defer();
+
+    safeDBusCall(configService, () => {
+        console.debug('Reading configuration file');
         configService.GetAll(userLang).then(config => {
             const hostname = config.server.v.hostname;
             const port = config.server.v.port;
@@ -611,8 +614,13 @@ client.readConfig = () => {
                 loaded: true,
             });
             console.debug('loaded client config', client.config);
+            dfd.resolve();
+        }).catch(ex => {
+            console.debug(ex);
         });
     });
+
+    return dfd.promise();
 };
 
 client.toArray = obj => {

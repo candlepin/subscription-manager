@@ -33,7 +33,7 @@ class TestFilesystemWatcher(fixture.SubManFixture):
         self.dw1 = file_monitor.DirectoryWatch(self.testpath1, [], is_glob=True)
         self.dw2 = file_monitor.DirectoryWatch(self.testpath2, [], is_glob=False)
         self.dw3 = file_monitor.DirectoryWatch(self.testpath2, [self.mock_cb1, self.mock_cb2], is_glob=False)
-        self.dir_list = [self.dw1, self.dw2, self.dw3]
+        self.dir_list = {"DW1": self.dw1, "DW2": self.dw2, "DW3": self.dw3}
         self.fsw1 = file_monitor.FilesystemWatcher(self.dir_list)
         self.fsw2 = file_monitor.InotifyFilesystemWatcher(self.dir_list)
 
@@ -237,13 +237,13 @@ class TestDirectoryWatch(fixture.SubManFixture):
     @patch("pyinotify.Event")
     def test_file_modified(self, mock_event):
         mock_event.mask = 1
-        self.assertFalse(self.dw3.file_modified(mock_event.mask))
+        self.assertFalse(self.dw3.is_file_modified(mock_event.mask))
         mock_event.mask = self.dw3.IN_MODIFY
-        self.assertTrue(self.dw3.file_modified(mock_event.mask))
+        self.assertTrue(self.dw3.is_file_modified(mock_event.mask))
         mock_event.mask = self.dw3.IN_DELETE
-        self.assertTrue(self.dw3.file_modified(mock_event.mask))
+        self.assertTrue(self.dw3.is_file_modified(mock_event.mask))
         mock_event.mask = self.dw3.IN_MOVED_TO
-        self.assertTrue(self.dw3.file_modified(mock_event.mask))
+        self.assertTrue(self.dw3.is_file_modified(mock_event.mask))
 
 
 class TestLoop:

@@ -26,7 +26,7 @@ import socket
 import threading
 from rhsm.https import ssl
 
-from rhsm.config import initConfig
+from rhsm.config import get_config_parser
 import rhsm.connection as connection
 from rhsm.profile import get_profile
 import subscription_manager.injection as inj
@@ -42,7 +42,7 @@ log = logging.getLogger(__name__)
 
 PACKAGES_RESOURCE = "packages"
 
-conf = config.Config(initConfig())
+conf = config.Config(get_config_parser())
 
 
 class CacheManager(object):

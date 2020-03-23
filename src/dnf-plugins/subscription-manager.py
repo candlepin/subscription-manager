@@ -25,8 +25,8 @@ from subscription_manager.entcertlib import EntCertActionInvoker
 from rhsmlib.facts.hwprobe import ClassicCheck
 from subscription_manager.utils import chroot
 from subscription_manager.injectioninit import init_dep_injection
-from subscription_manager import logutil
 from rhsm import connection
+from rhsm import logutil
 from rhsm import config
 
 from dnfpluginscore import _, logger
@@ -70,7 +70,7 @@ class SubscriptionManager(dnf.Plugin):
 
         chroot(self.base.conf.installroot)
 
-        cfg = config.initConfig()
+        cfg = config.get_config_parser()
         cache_only = not bool(cfg.get_int('rhsm', 'full_refresh_on_yum'))
 
         try:
@@ -175,7 +175,7 @@ class SubscriptionManager(dnf.Plugin):
         """
         Call Package Profile
         """
-        cfg = config.initConfig()
+        cfg = config.get_config_parser()
         if '1' == cfg.get('rhsm', 'package_profile_on_trans'):
             package_profile_client = ProfileActionClient()
             package_profile_client.update()

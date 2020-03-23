@@ -38,13 +38,13 @@ from subscription_manager.certdirectory import Path
 from six.moves import configparser
 from six.moves.urllib.parse import parse_qs, urlparse, urlunparse, urlencode
 
-from rhsm.config import initConfig
+from rhsm.config import get_config_parser
 
 from rhsmlib.services import config
 
 log = logging.getLogger(__name__)
 
-conf = config.Config(initConfig())
+conf = config.Config(get_config_parser())
 
 repo_files = []
 

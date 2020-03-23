@@ -22,13 +22,13 @@ import threading
 import six
 
 from rhsm.certificate import create_from_pem
-from rhsm.config import initConfig
+from rhsm.config import get_config_parser
 from subscription_manager.certdirectory import Path
 
 from rhsmlib.services import config
 from rhsm.certificate import CertificateException
 
-conf = config.Config(initConfig())
+conf = config.Config(get_config_parser())
 log = logging.getLogger(__name__)
 
 

@@ -18,7 +18,7 @@ from __future__ import print_function, division, absolute_import
 import logging
 import os
 
-from rhsm.config import initConfig, RhsmConfigParser
+from rhsm.config import get_config_parser, RhsmConfigParser
 from rhsm.config import NoSectionError  # noqa: F401 Imported so we can catch elsewhere
 from subscription_manager import utils
 from rhsmlib.services import config
@@ -33,7 +33,7 @@ except ImportError:
 
 log = logging.getLogger(__name__)
 
-conf = config.Config(initConfig())
+conf = config.Config(get_config_parser())
 
 """Ostree has two config files, both based on the freedesktop.org
 Desktop Entry spec. This defines a file format based on "ini" style
