@@ -909,16 +909,11 @@ class TestMigration(SubManFixture):
         }
 
         with Capture() as cap:
-            try:
-                self.engine.handle_collisions(cmap)
-            except SystemExit as e:
-                self.assertEqual(e.code, 1)
-            else:
-                self.fail("No exception raised")
+            self.engine.handle_collisions(cmap)
             output = cap.out.strip()
-            self.assertTrue(re.search("chan1\s*chan2\s*chan3", output))
-            self.assertFalse(re.search("chan4", output))
-            self.assertTrue(re.search("chanA\s*chanB", output))
+            self.assertTrue(re.search("1*cert-a-1.pem", output))
+            self.assertFalse(re.search("cert-x-2.pem", output))
+            self.assertTrue(re.search("3*cert-m-3.pem", output))
 
     def test_accept_channels_mapping_to_same_cert(self):
         cmap = {'1': {'cert-a-1.pem': ['channel1', 'channel2']},
@@ -929,23 +924,22 @@ class TestMigration(SubManFixture):
         except SystemExit:
             self.fail("Exception raised unexpectedly")
 
-    def test_detects_collisions(self):
-        def stub_read_channel_cert_mapping(mappingfile):
-            return {"a": "a-1.pem", "b": "b-1.pem"}
+    # test case from BZ 1569491
+    def test_pick_first_sorted_cert(self):
+        cmap = {'71': {'Workstation-Workstation-x86_64-e2e5f826adb1-71.pem': ['rhel-x86_64-workstation-7'],
+                       'Workstation-Workstation-x86_64-30b4e57a8843-71.pem': ['rhel-x86_64-workstation-extras-7'],
+                       'Workstation-Workstation-x86_64-06b84075cc00-71.pem': ['rhel-x86_64-workstation-supplementary-7',
+                                                                              'rhn-tools-rhel-x86_64-workstation-7',
+                                                                              'rhel-x86_64-workstation-optional-7']},
 
-        def stub_get_release():
-            return "RHEL-6"
-
-        subscribed_channels = ["a", "b"]
-        self.engine.read_channel_cert_mapping = stub_read_channel_cert_mapping
-        self.engine.get_release = stub_get_release
-
-        try:
-            self.engine.deploy_prod_certificates(subscribed_channels)
-        except SystemExit as e:
-            self.assertEqual(e.code, 1)
-        else:
-            self.fail("No exception raised")
+                '2': {'cert-x-2.pem': ['channel3']}}
+        self.engine.handle_collisions(cmap)
+        self.assertTrue(len(cmap['71'].items()) == 1)
+        self.assertTrue(cmap['71'] == {'Workstation-Workstation-x86_64-06b84075cc00-71.pem':
+                                        ['rhel-x86_64-workstation-supplementary-7',
+                                        'rhn-tools-rhel-x86_64-workstation-7',
+                                        'rhel-x86_64-workstation-optional-7']}
+        )
 
     def test_require_force(self):
         def stub_read_channel_cert_mapping(mappingfile):
