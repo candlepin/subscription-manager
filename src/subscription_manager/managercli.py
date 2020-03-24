@@ -226,6 +226,16 @@ def handle_exception(msg, ex):
 
 
 def show_autosubscribe_output(uep, identity):
+    """
+    Try to show auto-attach output
+    :param uep: object with connection to candlepin
+    :param identity: object with identity
+    :return: return 1, when all installed products are subscribed, otherwise return 0
+    """
+
+    if is_owner_using_golden_ticket(uep=uep, identity=identity):
+        return 0
+
     installed_products = products.InstalledProducts(uep).list()
 
     if not installed_products:

@@ -375,7 +375,7 @@ class ConnectionTests(unittest.TestCase):
             Options = namedtuple('Options', 'reporter_id')
             options = Options('tester')
             self.cp.hypervisorHeartbeat("owner", options=options)
-            self.cp.conn.request_put.assert_not_called
+            self.cp.conn.request_put.assert_not_called()
 
     def test_hypervisor_check_in_no_reporter(self):
             self.cp.conn = Mock()
@@ -383,7 +383,7 @@ class ConnectionTests(unittest.TestCase):
             Options = namedtuple('Options', 'reporter_id')
             options = Options('')
             self.cp.hypervisorHeartbeat("owner", options=options)
-            self.cp.conn.request_put.assert_not_called
+            self.cp.conn.request_put.assert_not_called()
 
 
 class RestlibValidateResponseTests(unittest.TestCase):

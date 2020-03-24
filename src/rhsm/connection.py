@@ -563,7 +563,21 @@ class BaseRestLib(object):
         else:
             conn = httplib.HTTPSConnection(self.host, self.ssl_port, context=context, timeout=self.timeout)
 
-        if info is not None:
+        return conn
+
+    # FIXME: can method be empty?
+    def _request(self, request_type, method, info=None, headers=None, cert_key_pairs=None):
+        handler = self.apihandler + method
+
+        # Load certificates from cert dir if specified
+        if cert_key_pairs is None or len(cert_key_pairs) == 0:
+            cert_key_pairs = self._get_cert_key_list()
+
+        if headers is not None and \
+                'Content-type' in headers and \
+                headers['Content-type'] == 'application/x-www-form-urlencoded':
+            body = six.moves.urllib.parse.urlencode(info).encode('utf-8')
+        elif info is not None:
             body = json.dumps(info, default=json.encode)
         else:
             body = None
