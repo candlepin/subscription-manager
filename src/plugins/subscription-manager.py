@@ -28,8 +28,7 @@ from rhsmlib.facts.hwprobe import ClassicCheck
 from subscription_manager.certlib import Locker
 from subscription_manager.utils import chroot
 from subscription_manager.injectioninit import init_dep_injection
-from subscription_manager import logutil
-from rhsm import config
+from rhsm import config, logutil
 
 requires_api_version = '2.5'
 plugin_type = (TYPE_CORE,)
@@ -222,7 +221,7 @@ def prereposetup_hook(conduit):
     :return: None
     """
 
-    cfg = config.initConfig()
+    cfg = config.get_config_parser()
     cache_only = not bool(cfg.get_int('rhsm', 'full_refresh_on_yum'))
 
     try:
@@ -237,7 +236,7 @@ def posttrans_hook(conduit):
     :param conduit:
     :return: None
     """
-    cfg = config.initConfig()
+    cfg = config.get_config_parser()
     if '1' == cfg.get('rhsm', 'package_profile_on_trans'):
         conduit.info(3, "Updating package profile")
         package_profile_client = ProfileActionClient()

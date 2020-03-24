@@ -34,7 +34,7 @@ from rhsm.https import httplib, ssl
 from six.moves.urllib.request import proxy_bypass
 from six.moves.urllib.parse import urlencode, quote, quote_plus
 
-from rhsm.config import initConfig
+from rhsm.config import get_config_parser
 from rhsm import ourjson as json
 from rhsm import utils
 
@@ -44,7 +44,7 @@ try:
 except ImportError:
     subman_version = "unknown"
 
-config = initConfig()
+config = get_config_parser()
 
 
 def safe_int(value, safe_value=None):

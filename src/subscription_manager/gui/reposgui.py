@@ -38,7 +38,7 @@ from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
 
-cfg = rhsm.config.initConfig()
+cfg = rhsm.config.get_config_parser()
 
 
 class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):

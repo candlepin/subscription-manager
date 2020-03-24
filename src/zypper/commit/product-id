@@ -19,14 +19,13 @@ from xml.etree import ElementTree
 import logging
 import os
 import os.path
-import sys
 import time
 
 from zypp import RepoType
 from zypp_plugin import Plugin
 import zypp
 
-from subscription_manager import logutil
+from rhsm import logutil
 from subscription_manager.productid import ProductManager
 from subscription_manager.injectioninit import init_dep_injection
 

@@ -67,7 +67,7 @@ class BaseObject(dbus.service.Object):
             )
 
     def build_uep(self, options, proxy_only=False, basic_auth_method=False):
-        conf = config.Config(rhsm.config.initConfig())
+        conf = config.Config(rhsm.config.get_config_parser())
         # Some commands/services only allow manipulation of the proxy information for a connection
         cp_provider = inj.require(inj.CP_PROVIDER)
         if proxy_only:

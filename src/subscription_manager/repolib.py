@@ -30,7 +30,7 @@ from subscription_manager.repofile import Repo, manage_repos_enabled, get_repo_f
 from subscription_manager.repofile import YumRepoFile
 from subscription_manager.utils import get_supported_resources
 
-from rhsm.config import initConfig, in_container
+from rhsm.config import get_config_parser, in_container
 from rhsm import connection
 import six
 from six.moves import configparser
@@ -44,7 +44,7 @@ from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
 
-conf = config.Config(initConfig())
+conf = config.Config(get_config_parser())
 
 ALLOWED_CONTENT_TYPES = ["yum", "deb"]
 
