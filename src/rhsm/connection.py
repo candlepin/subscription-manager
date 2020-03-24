@@ -608,7 +608,9 @@ class BaseRestLib(object):
         if cert_key_pairs is None or len(cert_key_pairs) == 0:
             cert_key_pairs = self._get_cert_key_list()
 
-        if headers is not None and headers['Content-type'] == 'application/x-www-form-urlencoded':
+        if headers is not None and \
+                'Content-type' in headers and \
+                headers['Content-type'] == 'application/x-www-form-urlencoded':
             body = six.moves.urllib.parse.urlencode(info).encode('utf-8')
         elif info is not None:
             body = json.dumps(info, default=json.encode)
