@@ -456,23 +456,16 @@ class MigrationEngine(object):
         return dic_data
 
     def handle_collisions(self, applicable_certs):
-        # if we have the same product IDs mapping to multiple certificates, we must abort.
+        # if we have the same product ID mapping to multiple certificates, we must map to one only.
         collisions = dict((prod_id, mappings) for prod_id, mappings in list(applicable_certs.items()) if len(mappings) > 1)
         if not collisions:
             return
 
-        log.error("Aborting. Detected the following product ID collisions: %s", collisions)
-        self.print_banner(_("Unable to continue migration!"))
         print(_("You are subscribed to channels that have conflicting product certificates."))
         for prod_id, mappings in list(collisions.items()):
-            # Flatten the list of lists
-            colliding_channels = [item for sublist in list(mappings.values()) for item in sublist]
-            print(_("The following channels map to product ID %s:") % prod_id)
-            for c in sorted(colliding_channels):
-                print("\t%s" % c)
-        print(_("Reduce the number of channels per product ID to 1 and run migration again."))
-        print(_("To remove a channel, use 'rhn-channel --remove --channel=<conflicting_channel>'."))
-        sys.exit(1)
+            single_key = sorted(mappings.keys())[0]
+            applicable_certs[prod_id] = {single_key: mappings[single_key]}
+            print(_("Mapping product '%s' to certificate '%s'." % (prod_id, single_key)))
 
     def deploy_prod_certificates(self, subscribed_channels):
         release = self.get_release()
