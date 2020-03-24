@@ -22,7 +22,7 @@ override_dh_auto_build:
 
 override_dh_auto_install:
 	make -f Makefile install GTK_VERSION=2 OS_DIST=debian PREFIX=/usr DESTDIR=debian/python-subscription-manager
-	sed -i -e '/dbus-python/d' debian/python-subscription-manager/usr/lib/python2.7/site-packages/subscription_manager-1.25.1-py2.7.egg-info/requires.txt
+	sed -i -e '/dbus-python/d' debian/python-subscription-manager/usr/lib/python2.7/site-packages/subscription_manager-*.egg-info/requires.txt
 	sed -i 's/libexec/lib\/$(DEB_HOST_MULTIARCH)/g' debian/python-subscription-manager/etc/cron.daily/rhsmd
 
 override_dh_auto_test:
