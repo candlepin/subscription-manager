@@ -17,6 +17,8 @@ more consistent and easy experience.
 In order to build, develop, and test locally, please follow
 [instructions at candlepinproject.org](http://www.candlepinproject.org/docs/subscription-manager/installation.html#installation-of-upstream-from-source-code).
 
+For instructions on building the debian-packages of this project, see instructions in contrib/debian/README.source.
+
 Due to unintuitive behavior with `sys.path`
 (see https://github.com/asottile/scratch/wiki/PythonPathSadness),
 `python src/subscription_manager/scripts/subscription_manager.py` does not work

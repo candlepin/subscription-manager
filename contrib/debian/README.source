@@ -1,10 +1,51 @@
 subscription-manager for Debian
 ------------------------------
 
-<this file describes information about the source package, see Debian policy
-manual section 4.14. You WILL either need to modify or delete this file>
+Required packages for build
+---------------------------
+
+* build-essentials
+* devscripts (for dch)
+* equivs (for mk-build-deps)
 
 
+Steps before build
+------------------
 
- -- Matthias Dellweg <dellweg@atix.de>  Wed, 06 Dec 2017 13:49:53 +0100
+Copy debian-directory into the source root
+
+    cp -r contrib/debian .
+
+Adapt package-version (new version)..
+
+    dch -v <new-version>
+
+..or just increase release-number
+
+    dch -i
+
+
+Install dependencies
+--------------------
+
+Create and install meta-package that pulls in the required build-dependencies:
+
+    mk-build-deps debian/control
+    apt install ./subscription-manager-build-deps-*.deb
+
+The apt is able to install local deb-packages starting with version 1.1
+
+
+Build package
+-------------
+
+Build the binary package (the resulting package files can be found in the parent-directory of the source-root-directory):
+
+    dpkg-buildpackage -b
+
+For additional information about debian package building please refer to the debian developer manuals (https://www.debian.org/doc/devel-manuals).
+
+Debian packaging manuals can also be installed locally through debian packages (e.g. 'debian-policy')
+
+ -- Markus Bucher <bucher@atix.de> Tue, 24 Mar 2020 14:37:36 +0100
 
