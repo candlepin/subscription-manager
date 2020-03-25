@@ -24,7 +24,11 @@ OS_DIST ?= $(shell rpm --eval='%dist')
 
 PYTHON_VER ?= $(shell $(PYTHON) -c 'import sys; print("python%s.%s" % sys.version_info[:2])')
 
-PYTHON_SITELIB ?= $(PREFIX)/lib64/$(PYTHON_VER)/site-packages
+ifeq ($(OS_DIST), debian)
+  PYTHON_SITELIB ?= $(PREFIX)/lib/$(PYTHON_VER)/site-packages
+else
+  PYTHON_SITELIB ?= $(PREFIX)/lib64/$(PYTHON_VER)/site-packages
+endif
 DNF_PLUGIN_PYTHON_SITELIB ?= $(PREFIX)/lib/$(PYTHON_VER)/site-packages
 # Note the underscore used instead of a hyphen
 PYTHON_INST_DIR = $(PYTHON_SITELIB)/subscription_manager
@@ -117,8 +121,8 @@ build-subpackages:
 	for subpackage in $(SUBPACKAGES); \
 	do \
 	    pushd $$subpackage; \
-	    $(PYTHON) ./setup.py clean --all \
-	    $(PYTHON) ./setup.py build --root=$(DESTDIR) --prefix=$(PREFIX); \
+	    $(PYTHON) ./setup.py clean --all; \
+	    $(PYTHON) ./setup.py build; \
 	    popd; \
 	done;
 

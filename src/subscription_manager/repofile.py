@@ -403,7 +403,7 @@ if HAS_DEB822:
                 f.write(self.REPOFILE_HEADER)
                 for repo822 in self.repos822:
                     f.write('\n')
-                    repo822.dump(f)
+                    repo822.dump(f, text_mode=True)
 
         def add(self, repo):
             repo_dict = dict([(str(k), str(v)) for (k, v) in repo.items()])
