@@ -2282,7 +2282,10 @@ class ReposCommand(CliCommand):
             cert_action_client.update()
             self._request_validity_check()
 
-        self.use_overrides = self.cp.supports_resource('content_overrides')
+        if self.is_registered():
+            self.use_overrides = self.cp.supports_resource('content_overrides')
+        else:
+            self.use_overrides = False
 
         # specifically, yum repos, for now.
         rl = RepoActionInvoker()
