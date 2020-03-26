@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.28
+Version: 1.24.29
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1151,6 +1151,11 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Mar 26 2020 Christopher Snyder <csnyder@redhat.com> 1.24.29-1
+- 1569491: rhn-migrate-classic-to-rhsm should try to resolve product ID
+  collisions (wpoteat@redhat.com)
+- 1688702: allow offline repo management (code@james.cassell.me)
+
 * Fri Mar 20 2020 William Poteat <wpoteat@redhat.com> 1.24.28-1
 - 1794653: corrected missing quotes for config check; ENT-2010
   (crag@redhat.com)
