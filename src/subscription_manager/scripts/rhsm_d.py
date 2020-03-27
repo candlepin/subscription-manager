@@ -52,6 +52,7 @@ import dbus.glib
 import decorator
 import logging
 import traceback
+import psutil
 
 from subscription_manager import ga_loader
 ga_loader.init_ga()
@@ -175,6 +176,28 @@ def ensure_exit(func, *args, **kwargs):
                           "a main loop?")
 
 
+def is_rhsm_icon_running():
+    """
+    This function checks if rhsm-icon process is running.
+    :return: It returns True, when rhsm-icon is running. Otherwise return False.
+    """
+    debug('Checking if rhsm-icon process is running')
+    process_names = []
+    for proc in psutil.process_iter():
+        try:
+            name = proc.name()
+        except psutil.AccessDenied as err:
+            debug('Unable to get process name: %s' % str(err))
+        else:
+            process_names.append(name)
+    ret = 'rhsm-icon' in process_names
+    if ret is True:
+        debug('Process rhsm-icon is running')
+    else:
+        debug('Process rhsm-icon is not running')
+    return ret
+
+
 class StatusChecker(dbus.service.Object):
     # NOTE: All methods of this class that need to exit the main loop
     # will need the annotation @ensure_exit. To avoid issues with the
@@ -278,7 +301,7 @@ def log_syslog(level, msg):
 
 def main():
 
-    log.debug("rhsmd started")
+    debug("rhsmd started")
     parser = OptionParser(usage=USAGE,
                           formatter=WrappedIndentedHelpFormatter())
     parser.add_option("-d", "--debug", dest="debug",
@@ -314,7 +337,7 @@ def main():
         if status == RHSM_EXPIRED:
             log_syslog(syslog.LOG_NOTICE,
                        "This system is missing one or more subscriptions. " +
-                        "Please run subscription-manager for more information.")
+                       "Please run subscription-manager for more information.")
         elif status == RHSM_PARTIALLY_VALID:
             log_syslog(syslog.LOG_NOTICE,
                        "This system is missing one or more subscriptions " +
@@ -350,6 +373,11 @@ def main():
 
     if options.immediate:
         checker.entitlement_status_changed(force_signal)
+
+    if not is_rhsm_icon_running() and not options.keep_alive:
+        status = check_status(force_signal)
+        debug('Exiting rhsmd')
+        return status
 
     loop.run()
 

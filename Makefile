@@ -126,11 +126,17 @@ build-subpackages:
 	    popd; \
 	done;
 
-build: rhsmcertd rhsm-icon build-subpackages
 # Install doesn't perform a build if it doesn't have too.  Best to clean out
 # any cruft so developers don't end up install old builds.
-	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py clean --all
-	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
+ifeq ($(WITH_SUBMAN_GUI),true)
+    build: rhsmcertd rhsm-icon build-subpackages
+        EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py clean --all
+        EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
+else
+    build: rhsmcertd build-subpackages
+        EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py clean --all
+        EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
+endif
 
 # we never "remake" this makefile, so add a target so
 # we stop searching for implicit rules on how to remake it
@@ -151,8 +157,10 @@ mkdir-bin:
 rhsmcertd: mkdir-bin $(DAEMONS_SRC_DIR)/rhsmcertd.c
 	$(CC) $(CFLAGS) $(RHSMCERTD_CFLAGS) -DLIBEXECDIR='"$(LIBEXEC_DIR)"' $(DAEMONS_SRC_DIR)/rhsmcertd.c -o bin/rhsmcertd $(LDFLAGS) $(RHSMCERTD_LDFLAGS)
 
-rhsm-icon: mkdir-bin $(RHSM_ICON_SRC_DIR)/rhsm_icon.c
-	$(CC) $(CFLAGS) $(ICON_CFLAGS) $(RHSM_ICON_SRC_DIR)/rhsm_icon.c -o bin/rhsm-icon $(LDFLAGS) $(ICON_LDFLAGS)
+ifeq ($(WITH_SUBMAN_GUI),true)
+    rhsm-icon: mkdir-bin $(RHSM_ICON_SRC_DIR)/rhsm_icon.c
+	    $(CC) $(CFLAGS) $(ICON_CFLAGS) $(RHSM_ICON_SRC_DIR)/rhsm_icon.c -o bin/rhsm-icon $(LDFLAGS) $(ICON_LDFLAGS)
+endif
 
 .PHONY: check-syntax
 check-syntax:
@@ -164,8 +172,10 @@ dbus-common-install:
 	install -d $(DESTDIR)/$(LIBEXEC_DIR)
 	install -d $(DESTDIR)/$(COMPLETION_DIR)
 
-dbus-rhsmd-service-install: dbus-common-install
-	install -m 644 etc-conf/dbus/system.d/com.redhat.SubscriptionManager.conf $(DESTDIR)/etc/dbus-1/system.d
+ifeq ($(WITH_SUBMAN_GUI),true)
+    dbus-rhsmd-service-install: dbus-common-install
+	    install -m 644 etc-conf/dbus/system.d/com.redhat.SubscriptionManager.conf $(DESTDIR)/etc/dbus-1/system.d
+endif
 
 dbus-facts-service-install: dbus-common-install
 	install -m 644 etc-conf/dbus/system.d/com.redhat.RHSM1.Facts.conf $(DESTDIR)/etc/dbus-1/system.d
@@ -174,7 +184,11 @@ dbus-main-service-install: dbus-common-install
 	install -m 644 etc-conf/dbus/system.d/com.redhat.RHSM1.conf $(DESTDIR)/etc/dbus-1/system.d
 
 .PHONY: dbus-install
-dbus-install: dbus-facts-service-install dbus-rhsmd-service-install dbus-main-service-install
+ifeq ($(WITH_SUBMAN_GUI),true)
+    dbus-install: dbus-facts-service-install dbus-rhsmd-service-install dbus-main-service-install
+else
+    dbus-install: dbus-facts-service-install dbus-main-service-install
+endif
 
 .PHONY: install-conf
 install-conf:
@@ -196,12 +210,12 @@ install-conf:
 	install -d $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
 	install -m 644 etc-conf/dbus/polkit/com.redhat.RHSM1.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
 	install -m 644 etc-conf/dbus/polkit/com.redhat.RHSM1.Facts.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
-	install -m 644 etc-conf/dbus/polkit/com.redhat.SubscriptionManager.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
 	if [[ "$(INCLUDE_SYSPURPOSE)" = "1" ]]; then \
 		install -m 644 etc-conf/syspurpose/valid_fields.json $(DESTDIR)/etc/rhsm/syspurpose/valid_fields.json; \
 		install -m 644 etc-conf/syspurpose.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/syspurpose; \
 	fi;
 	if [[ "$(WITH_SUBMAN_GUI)" == "true" ]]; then \
+	    install -m 644 etc-conf/dbus/polkit/com.redhat.SubscriptionManager.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR); \
 		install -m 644 etc-conf/subscription-manager-gui.appdata.xml $(DESTDIR)/$(INSTALL_DIR)/appdata/subscription-manager-gui.appdata.xml; \
 		install -m 644 etc-conf/subscription-manager-gui.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/subscription-manager-gui; \
 		install -m 644 etc-conf/rhsm-icon.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/rhsm-icon; \
@@ -327,11 +341,12 @@ install-via-setup: install-subpackages-via-setup
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsmcertd-worker $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-service $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-facts-service $(DESTDIR)/$(LIBEXEC_DIR)/
-	mv $(DESTDIR)/$(PREFIX)/bin/rhsmd $(DESTDIR)/$(LIBEXEC_DIR)/
 	if [[ "$(WITH_SUBMAN_GUI)" == "true" ]]; then \
 		mv $(DESTDIR)/$(PREFIX)/bin/subscription-manager-gui $(DESTDIR)/$(PREFIX)/sbin/; \
+		mv $(DESTDIR)/$(PREFIX)/bin/rhsmd $(DESTDIR)/$(LIBEXEC_DIR)/; \
 	else \
 		rm $(DESTDIR)/$(PREFIX)/bin/subscription-manager-gui; \
+		rm $(DESTDIR)/$(PREFIX)/bin/rhsmd; \
 	fi; \
 	if [[ "$(INCLUDE_SYSPURPOSE)" = "1" ]]; then \
 		mv $(DESTDIR)/$(PREFIX)/bin/syspurpose $(DESTDIR)/$(PREFIX)/sbin/; \
@@ -377,8 +392,6 @@ install-files: dbus-install install-conf install-plugins install-post-boot insta
 			$(DESTDIR)/etc/init.d/rhsmcertd; \
 	fi;
 
-	install -m 700 etc-conf/rhsmd.cron $(DESTDIR)/etc/cron.daily/rhsmd
-
 	# SUSE Linux does not make use of consolehelper
 	if [ -f /etc/redhat-release ]; then \
 		ln -sf /usr/bin/consolehelper $(DESTDIR)/$(PREFIX)/bin/subscription-manager; \
@@ -393,6 +406,7 @@ install-files: dbus-install install-conf install-plugins install-post-boot insta
 
 	if [[ "$(WITH_SUBMAN_GUI)" == "true" ]]; then \
 		install -m 755 bin/rhsm-icon $(DESTDIR)/$(PREFIX)/bin/rhsm-icon; \
+		install -m 700 etc-conf/rhsmd.cron $(DESTDIR)/etc/cron.daily/rhsmd; \
 	fi; \
 
 	install -m 755 bin/rhsmcertd $(DESTDIR)/$(PREFIX)/bin/rhsmcertd
