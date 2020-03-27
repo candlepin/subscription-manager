@@ -20,8 +20,6 @@ import dbus.mainloop
 import dbus.mainloop.glib
 
 import inspect
-import traceback
-import sys
 import logging
 import subscription_manager.injection as inj
 
@@ -52,9 +50,9 @@ class DbusIface(object):
         except dbus.DBusException:
             # we can't connect to dbus. it's not running, likely from a minimal
             # install. we can't do anything here, so just ignore it.
-            log.debug("Unable to connect to dbus")
-            # BZ 1600694 We should print the dbus traceback at the debug level
-            log.debug(''.join(traceback.format_tb(sys.exc_info()[2])))
+            # When subscription-manager-gui is not installed, then rhsmd is not installed too.
+            # Then com.redhat.SubscriptionManager is not available.
+            log.debug("Unable to connect to D-Bus service: %s" % self.service_name)
 
     def update(self):
         pass
