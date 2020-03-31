@@ -19,7 +19,7 @@ import six
 import os.path
 from rhsm import ourjson as json
 from rhsm.utils import suppress_output
-from iniparse import SafeConfigParser
+from iniparse import SafeConfigParser, ConfigParser
 
 try:
     import dnf
@@ -36,8 +36,16 @@ try:
 except ImportError:
     yum = None
 
+try:
+    import zypp_plugin  # noqa: F401
+    use_zypper = True
+except ImportError:
+    use_zypper = False
 
-REPOSITORY_PATH = "/etc/yum.repos.d/redhat.repo"
+if use_zypper:
+    REPOSITORY_PATH = "/etc/rhsm/zypper.repos.d/redhat.repo"
+else:
+    REPOSITORY_PATH = "/etc/yum.repos.d/redhat.repo"
 
 log = logging.getLogger(__name__)
 
@@ -123,7 +131,14 @@ class EnabledRepos(object):
         if not os.path.exists(self.repofile):
             return []
 
-        config = SafeConfigParser()
+        # Unfortuantely, we can not use the SafeConfigParser for zypper repo
+        # files because the repository urls contains strings which the
+        # SafeConfigParser don't like. It would crash with
+        # ConfigParser.InterpolationSyntaxError: '%' must be followed by '%' or '('
+        if use_zypper:
+            config = ConfigParser()
+        else:
+            config = SafeConfigParser()
         config.read(self.repofile)
         enabled_sections = [section for section in config.sections() if config.getboolean(section, "enabled")]
         enabled_repos = []
@@ -132,7 +147,7 @@ class EnabledRepos(object):
                 enabled_repos.append(
                     {
                         "repositoryid": section,
-                        "baseurl": [self._replace_vars(config.get(section, "baseurl"))]
+                        "baseurl": [self._format_baseurl(config.get(section, "baseurl"))]
                     }
                 )
             except ImportError:
@@ -155,15 +170,27 @@ class EnabledRepos(object):
     def __str__(self):
         return str(self.content)
 
-    def _replace_vars(self, repo_url):
+    def _format_baseurl(self, repo_url):
         """
-        returns a string with "$basearch" and "$releasever" replaced.
+        returns a well formatted baseurl string
 
-        :param repo_url: a repo URL that you want to replace $basearch and $releasever in.
+        :param repo_url: a repo URL that you want to format
         :type path: str
         """
-        mappings = self._obtain_mappings()
-        return repo_url.replace('$releasever', mappings['releasever']).replace('$basearch', mappings['basearch'])
+        if use_zypper:
+            return self._cut_question_mark(repo_url)
+        else:
+            mappings = self._obtain_mappings()
+            return repo_url.replace('$releasever', mappings['releasever']).replace('$basearch', mappings['basearch'])
+
+    def _cut_question_mark(self, repo_url):
+        """
+        returns a string where everything after the first occurence of ? is truncated
+
+        :param repo_url: a repo URL that you want to modify
+        :type path: str
+        """
+        return repo_url[:repo_url.find('?')]
 
     @suppress_output
     def _obtain_mappings(self):
