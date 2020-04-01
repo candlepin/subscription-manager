@@ -772,14 +772,18 @@ cp %{buildroot}%{python_sitearch}/rhsm/*.py %{buildroot}%{python2_sitearch}/rhsm
 desktop-file-validate %{buildroot}/etc/xdg/autostart/rhsm-icon.desktop
 desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-gui.desktop
 %else
+
 %if %use_cockpit
 desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-cockpit.desktop
 %endif
+
 %endif
 
 # libexec directory does not exist on sles based distros
 %if 0%{?suse_version}
-sed -i 's/libexec/lib/g' %{buildroot}/%{_sysconfdir}/cron.daily/rhsmd
+%if %use_subman_gui
+    sed -i 's/libexec/lib/g' %{buildroot}/%{_sysconfdir}/cron.daily/rhsmd
+%endif
 %endif
 
 %find_lang rhsm
@@ -885,7 +889,10 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %attr(755,root,root) %{_bindir}/rhsmcertd
 
 %attr(755,root,root) %{_libexecdir}/rhsmcertd-worker
-%attr(755,root,root) %{_libexecdir}/rhsmd
+
+%if %{use_subman_gui}
+    %attr(755,root,root) %{_libexecdir}/rhsmd
+%endif
 
 
 # our config dirs and files
@@ -931,7 +938,9 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
 # misc system config
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/logrotate.d/subscription-manager
-%attr(700,root,root) %{_sysconfdir}/cron.daily/rhsmd
+%if %{use_subman_gui}
+    %attr(700,root,root) %{_sysconfdir}/cron.daily/rhsmd
+%endif
 
 %attr(755,root,root) %dir %{_var}/log/rhsm
 %attr(755,root,root) %dir %{_var}/spool/rhsm/debug
@@ -1105,6 +1114,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 # symlink to console-helper
 %{_bindir}/subscription-manager-gui
 %endif
+
 %{_bindir}/rhsm-icon
 
 %doc %{_datadir}/gnome/help/subscription-manager/C/figures/*.png
