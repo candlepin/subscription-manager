@@ -81,6 +81,11 @@ class ConfigDBusObject(base_object.BaseObject):
 
         self.config[section][property_name] = new_value
 
+        if section == 'logging':
+            logging_changed = True
+        else:
+            logging_changed = False
+
         # Try to temporary disable dir watcher, because 'self.config.persist()' writes configuration
         # file and it would trigger file system monitor callback function and saved values would be
         # read again. It can cause race conditions, when Set() is called multiple times
@@ -88,6 +93,12 @@ class ConfigDBusObject(base_object.BaseObject):
 
         # Write new config value to configuration file
         self.config.persist()
+
+        # When anything in logging section was just chnaged, then we have to re-initialize logger
+        if logging_changed is True:
+            parser = rhsm.config.get_config_parser()
+            self.config = Config(parser)
+            rhsm.logutil.init_logger(parser)
 
     @util.dbus_service_method(
         constants.CONFIG_INTERFACE,
@@ -108,6 +119,8 @@ class ConfigDBusObject(base_object.BaseObject):
 
         log.debug('Setting new configuration values: %s' % str(configuration))
 
+        logging_changed = False
+
         for property_name, new_value in configuration.items():
             section_name, _dot, property_name = property_name.partition('.')
 
@@ -116,6 +129,9 @@ class ConfigDBusObject(base_object.BaseObject):
 
             self.config[section_name][property_name] = new_value
 
+            if section_name == 'logging':
+                logging_changed = True
+
         # Try to temporary disable dir watcher, because 'self.config.persist()' writes configuration
         # file and it would trigger file system monitor callback function and saved values would be
         # read again. It can cause race conditions, when SetAll() is called multiple times
@@ -123,6 +139,12 @@ class ConfigDBusObject(base_object.BaseObject):
 
         # Write new config value to configuration file
         self.config.persist()
+
+        # When anything in logging section was just chnaged, then we have to re-initialize logger
+        if logging_changed is True:
+            parser = rhsm.config.get_config_parser()
+            self.config = Config(parser)
+            rhsm.logutil.init_logger(parser)
 
     @util.dbus_service_method(
         constants.CONFIG_INTERFACE,
