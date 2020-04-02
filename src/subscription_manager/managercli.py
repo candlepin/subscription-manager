@@ -1866,11 +1866,14 @@ class AttachCommand(CliCommand):
         if self.options.pool or self.options.file:
             self.auto_attach = False
 
+        installed_products_num = 0
+        return_code = 0
+        report = None
+
         # TODO: change to if self.auto_attach: else: pool/file stuff
         try:
             cert_action_client = ActionClient()
             cert_action_client.update()
-            return_code = 0
             cert_update = True
 
             attach_service = attach.AttachService(self.cp)
@@ -1931,7 +1934,6 @@ class AttachCommand(CliCommand):
                         save_sla_to_syspurpose_metadata(self.options.service_level)
                         print(_("Service level set to: %s") % self.options.service_level)
 
-            report = None
             if cert_update:
                 report = self.entcertlib.update()
 
@@ -1944,6 +1946,14 @@ class AttachCommand(CliCommand):
                     return_code = 1
                 else:
                     self.sorter.force_cert_check()
+                    # Make sure that we get fresh status of installed products
+                    status_cache = inj.require(inj.ENTITLEMENT_STATUS_CACHE)
+                    status_cache.load_status(
+                        self.sorter.cp_provider.get_consumer_auth_cp(),
+                        self.sorter.identity.uuid,
+                        self.sorter.on_date
+                    )
+                    self.sorter.load()
                     # run this after entcertlib update, so we have the new entitlements
                     return_code = show_autosubscribe_output(self.cp, self.identity)
 
@@ -1953,6 +1963,7 @@ class AttachCommand(CliCommand):
         # it is okay to call this no matter what happens above,
         # it's just a notification to perform a check
         self._request_validity_check()
+
         return return_code
 
 
