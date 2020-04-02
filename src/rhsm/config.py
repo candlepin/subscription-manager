@@ -340,3 +340,8 @@ def get_config_parser():
             CFG = RhsmConfigParser(config_file=DEFAULT_CONFIG_PATH)
 
     return CFG
+
+
+# Deprecated but still in use by other applications
+def initConfig(configFile=None):
+    return get_config_parser()
