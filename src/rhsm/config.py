@@ -341,6 +341,7 @@ def get_config_parser():
 
     return CFG
 
-# Added for compatability, at the time of writing insights-client
-# utilized the previous name of the get_config_parser method "initConfig"
-initConfig = get_config_parser
+
+# Deprecated but still in use by other applications
+def initConfig(configFile=None):
+    return get_config_parser()
