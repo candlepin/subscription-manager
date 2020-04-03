@@ -302,12 +302,10 @@ const get_monotonic_start = cockpit.spawn(
 
 function calc_next_elapse(monotonic_start, timer) {
     let next_mono = Infinity, next_real = Infinity;
-    if (monotonic_start) {
-        if (timer.NextElapseUSecMonotonic)
-            next_mono = timer.NextElapseUSecMonotonic / 1e6 + monotonic_start;
-        if (timer.NextElapseUSecRealtime)
-            next_real = timer.NextElapseUSecRealtime / 1e6;
-    }
+    if (timer.NextElapseUSecMonotonic && monotonic_start)
+        next_mono = timer.NextElapseUSecMonotonic / 1e6 + monotonic_start;
+    if (timer.NextElapseUSecRealtime)
+        next_real = timer.NextElapseUSecRealtime / 1e6;
     let next = Math.min(next_mono, next_real);
     if (next !== Infinity)
         return moment(next * 1000).calendar();
