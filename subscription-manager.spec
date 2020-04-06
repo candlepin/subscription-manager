@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.29
+Version: 1.24.30
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1161,6 +1161,13 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Apr 06 2020 William Poteat <wpoteat@redhat.com> 1.24.30-1
+- 1816926: Fix "attach --auto" command; ENT-2242 (jhnidek@redhat.com)
+- 1775714: Do not install rhsmd and rhsm-icon on rhel8; ENT-1959
+  (jhnidek@redhat.com)
+- 1763271: Golden ticket: do not print list of products; ENT-2017
+  (jhnidek@redhat.com)
+
 * Thu Mar 26 2020 Christopher Snyder <csnyder@redhat.com> 1.24.29-1
 - 1569491: rhn-migrate-classic-to-rhsm should try to resolve product ID
   collisions (wpoteat@redhat.com)
