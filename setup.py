@@ -397,6 +397,6 @@ setup(
     install_requires=install_requires,
     tests_require=test_require,
     ext_modules=[Extension('rhsm._certificate', ['src/certificate.c'],
-                           libraries=['ssl', 'crypto'])],
+                           libraries=['ssl', 'crypto'], extra_link_args=['-Wl,-z,now,-z,relro'])],
     test_suite='nose.collector',
 )
