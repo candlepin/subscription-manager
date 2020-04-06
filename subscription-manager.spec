@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.30
+Version: 1.24.31
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1161,6 +1161,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Apr 06 2020 William Poteat <wpoteat@redhat.com> 1.24.31-1
+- Flags for build [relro] (wpoteat@redhat.com)
+
 * Mon Apr 06 2020 William Poteat <wpoteat@redhat.com> 1.24.30-1
 - 1816926: Fix "attach --auto" command; ENT-2242 (jhnidek@redhat.com)
 - 1775714: Do not install rhsmd and rhsm-icon on rhel8; ENT-1959
