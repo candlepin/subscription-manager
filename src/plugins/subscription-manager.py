@@ -29,7 +29,6 @@ from subscription_manager.certlib import Locker
 from subscription_manager.utils import chroot
 from subscription_manager.injectioninit import init_dep_injection
 from subscription_manager import logutil
-from rhsm import connection
 from rhsm import config
 
 requires_api_version = '2.5'
