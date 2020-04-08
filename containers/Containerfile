@@ -1,0 +1,73 @@
+FROM fedora:31
+
+RUN yum install --disablerepo=updates -y \
+    gettext \
+    git \
+    jss \
+    openssl \
+    bind-utils \
+    dbus-glib \
+    dbus-glib-devel \
+    gcc \
+    git \
+    m2crypto \
+    postfix \
+    python2-pip \
+    python2-virtualenv \
+    python3-pip \
+    python3-virtualenv \
+    sudo \
+    vim \
+    wget \
+    zsh \
+    cmake \
+    dbus-daemon \
+    desktop-file-utils \
+    GConf2-devel \
+    gtk3-devel \
+    intltool \
+    json-c-devel \
+    libdnf-devel \
+    libnotify-devel \
+    make \
+    openssl-devel \
+    python27 \
+    rarian-compat \
+    rpmlint \
+    xorg-x11-server-Xvfb \
+    zanata-client \
+    python2-decorator \
+    python3-decorator \
+    python2-six \
+    python3-six \
+    python2-dateutil \
+    python3-dateutil \
+    python2-iniparse \
+    python3-iniparse \
+    python2-nose \
+    python3-nose \
+    python2-coverage \
+    python3-coverage \
+    python2-polib \
+    python3-polib \
+    python2-decorator \
+    python3-decorator \
+    python2-inotify \
+    python3-inotify \
+    python2-simplejson \
+    python3-simplejson \
+    python2-sphinx \
+    python3-sphinx \
+    python2-unittest2 \
+    python3-unittest2 \
+    python2-rpm \
+    python3-rpm \
+    python2-gobject-base \
+    python3-gobject-base \
+    python2-ethtool \
+    python3-ethtool \
+    && yum clean all
+
+COPY reqirements.txt dev-reqirements.txt test-reqirements.txt /root/
+RUN pip2 install -r reqirements.txt -r dev-reqirements.txt -r test-reqirements.txt
+RUN pip3 install -r reqirements.txt -r dev-reqirements.txt -r test-reqirements.txt
