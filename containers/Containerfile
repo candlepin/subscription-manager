@@ -1,4 +1,4 @@
-FROM fedora:31
+FROM fedora:30
 
 RUN yum install --disablerepo=updates -y \
     gettext \
@@ -13,9 +13,7 @@ RUN yum install --disablerepo=updates -y \
     m2crypto \
     postfix \
     python2-pip \
-    python2-virtualenv \
     python3-pip \
-    python3-virtualenv \
     sudo \
     vim \
     wget \
@@ -68,6 +66,6 @@ RUN yum install --disablerepo=updates -y \
     python3-ethtool \
     && yum clean all
 
-COPY reqirements.txt dev-reqirements.txt test-reqirements.txt /root/
-RUN pip2 install -r reqirements.txt -r dev-reqirements.txt -r test-reqirements.txt
-RUN pip3 install -r reqirements.txt -r dev-reqirements.txt -r test-reqirements.txt
+COPY requirements.txt dev-requirements.txt test-requirements.txt /root/
+RUN pip2 install -r requirements.txt -r dev-requirements.txt -r test-requirements.txt
+RUN pip3 install -r requirements.txt -r dev-requirements.txt -r test-requirements.txt
