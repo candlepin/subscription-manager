@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.31
+Version: 1.24.32
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1161,6 +1161,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Apr 08 2020 William Poteat <wpoteat@redhat.com> 1.24.32-1
+- 1821830: Registration fails with a message "Restlib' object has no attribute
+  '_get_cert_key_list' (wpoteat@redhat.com)
+
 * Mon Apr 06 2020 William Poteat <wpoteat@redhat.com> 1.24.31-1
 - Flags for build [relro] (wpoteat@redhat.com)
 
