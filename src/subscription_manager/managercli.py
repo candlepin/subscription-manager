@@ -58,7 +58,8 @@ from subscription_manager.repolib import RepoActionInvoker, YumRepoFile, YumPlug
 from subscription_manager.utils import parse_server_info, \
         parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
-        restart_virt_who, get_terminal_width, print_error, unique_list_items
+        restart_virt_who, get_terminal_width, print_error, unique_list_items, \
+        is_owner_using_golden_ticket
 from subscription_manager.overrides import Overrides, Override
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, \
@@ -3028,4 +3029,3 @@ class ManagerCLI(CLI):
 
 if __name__ == "__main__":
     ManagerCLI().main()
-
