@@ -29,9 +29,11 @@ from syspurpose.utils import system_exit, create_dir, create_file, make_utf8, wr
 from syspurpose.i18n import ugettext as _
 
 # Constants for locations of the two system syspurpose files
-USER_SYSPURPOSE = "/etc/rhsm/syspurpose/syspurpose.json"
-VALID_FIELDS = "/etc/rhsm/syspurpose/valid_fields.json"  # Will be used for future validation
-CACHED_SYSPURPOSE = "/var/lib/rhsm/cache/syspurpose.json"  # Stores cached values
+USER_SYSPURPOSE_DIR = "/etc/rhsm/syspurpose"
+USER_SYSPURPOSE = os.path.join(USER_SYSPURPOSE_DIR, "syspurpose.json")
+VALID_FIELDS = os.path.join(USER_SYSPURPOSE_DIR, "valid_fields.json")  # Will be used for future validation
+CACHE_DIR = "/var/lib/rhsm/cache"
+CACHED_SYSPURPOSE = os.path.join(CACHE_DIR, "syspurpose.json")  # Stores cached values
 
 # All names that represent syspurpose values locally
 ROLE = 'role'
@@ -499,6 +501,19 @@ class SyncedStore(object):
         :param data: The data to write to the file
         :return: None
         """
+
+        # Check if /etc/rhsm/syspurpose directory exists
+        if not os.path.isdir(USER_SYSPURPOSE_DIR):
+            # If not create the file
+            log.debug('Creating directory: %s' % USER_SYSPURPOSE_DIR)
+            os.mkdir(USER_SYSPURPOSE_DIR)
+
+        # Check if /var/lib/rhsm/cache/ directory exists
+        if not os.path.isdir(CACHE_DIR):
+            log.debug('Creating directory: %s' % CACHE_DIR)
+            os.mkdir(CACHE_DIR)
+
+        # Then we can try to create syspurpose.json file
         modes = ['w+']
         for mode in modes:
             try:

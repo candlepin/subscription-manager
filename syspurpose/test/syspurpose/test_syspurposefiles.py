@@ -40,10 +40,10 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Can the SyspurposeStore.read_file method handle attempting to read a file which does not exist?
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
-        self.assertFalse(os.path.exists(temp_dir))
+        temp_file = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        self.assertFalse(os.path.exists(temp_file))
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_file)
         res = self.assertRaisesNothing(syspurpose_store.read_file)
         self.assertFalse(bool(res))
 
@@ -463,8 +463,19 @@ class TestSyncedStore(SyspurposeTestBase):
 
     def setUp(self):
         self.temp_dir = self._mktmp()
+        self.temp_cache_dir = self._mktmp()
+        # For these tests we want to make sure that the paths that are used are our mock files
+
+        user_syspurpose_dir_patch = mock.patch('syspurpose.files.USER_SYSPURPOSE_DIR', self.temp_dir)
+        user_syspurpose_dir_patch.start()
+        self.addCleanup(user_syspurpose_dir_patch.stop)
+
+        cache_dir_patch = mock.patch('syspurpose.files.CACHE_DIR', self.temp_cache_dir)
+        cache_dir_patch.start()
+        self.addCleanup(cache_dir_patch.stop)
+
         self.local_syspurpose_file = os.path.join(self.temp_dir, 'syspurpose.json')
-        self.cache_syspurpose_file = os.path.join(self.temp_dir, 'cache.json')
+        self.cache_syspurpose_file = os.path.join(self.temp_cache_dir, 'cache.json')
 
         # For these tests we want to make sure that the paths that are used are our mock files
         synced_store_local_patch = mock.patch('syspurpose.files.SyncedStore.PATH',
@@ -482,7 +493,6 @@ class TestSyncedStore(SyspurposeTestBase):
 
         # Fake that the connected server supports syspurpose
         self.uep.has_capability = mock.Mock(side_effect=lambda x: x in ['syspurpose'])
-
 
     def test_falsey_values_removed_from_local_empty_local(self):
         # The falsey values ([], "", {}, None) should never end up after a SyncedStore.sync in
@@ -724,8 +734,39 @@ class TestSyncedStore(SyspurposeTestBase):
                                                         service_level=u"",
                                                         addons=[])
 
+    def test_read_file_non_existent_directory(self):
+        """
+        Test the SyspurposeStore.read_file can resurrect from situation, when directory /etc/rhsm/syspurpose
+        does not exist
+        """
+        # Delete the temporary directory
+        os.rmdir(self.temp_dir)
 
+        consumer_uuid = "something"
+        synced_store = SyncedStore(self.uep, consumer_uuid=consumer_uuid)
+        local_content = self.assertRaisesNothing(synced_store.get_local_contents)
+        self.assertEqual(local_content, {})
 
+        # Make sure that the directory was created
+        res = os.path.isdir(self.temp_dir)
+        self.assertTrue(res)
+
+    def test_read_file_non_existent_cache_directory(self):
+        """
+        Test the SyspurposeStore.read_file can resurrect from situation, when directory /var/lib/rhsm/cache
+        does not exist
+        """
+        # Delete the temporary directory
+        os.rmdir(self.temp_cache_dir)
+
+        consumer_uuid = "something"
+        synced_store = SyncedStore(self.uep, consumer_uuid=consumer_uuid)
+        local_content = self.assertRaisesNothing(synced_store.get_local_contents)
+        self.assertEqual(local_content, {})
+
+        # Make sure that the directory was created
+        res = os.path.isdir(self.temp_dir)
+        self.assertTrue(res)
 
 
 class TestDetectChange(SyspurposeTestBase):

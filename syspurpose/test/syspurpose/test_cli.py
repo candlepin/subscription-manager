@@ -34,11 +34,20 @@ class SyspurposeCliTests(SyspurposeTestBase):
         self.OLD_PATH = files.SyncedStore.PATH
         self.OLD_CACHE_PATH = files.SyncedStore.CACHE_PATH
         self.tmp_dir = self._mktmp()
-        os.makedirs(self.tmp_dir + '/cache')
-        files.SyncedStore.PATH = self.tmp_dir + '/syspurpose.json'
+        self.tmp_cache_dir = self._mktmp()
+
+        user_syspurpose_dir_patch = patch('syspurpose.files.USER_SYSPURPOSE_DIR', self.tmp_dir)
+        user_syspurpose_dir_patch.start()
+        self.addCleanup(user_syspurpose_dir_patch.stop)
+
+        cache_dir_patch = patch('syspurpose.files.CACHE_DIR', self.tmp_cache_dir)
+        cache_dir_patch.start()
+        self.addCleanup(cache_dir_patch.stop)
+
+        files.SyncedStore.PATH = os.path.join(self.tmp_dir, 'syspurpose.json')
         with open(files.SyncedStore.PATH, "w") as fp:
             fp.write("{}")
-        files.SyncedStore.CACHE_PATH = self.tmp_dir + '/cache/syspurpose.json'
+        files.SyncedStore.CACHE_PATH = os.path.join(self.tmp_cache_dir, 'syspurpose.json')
         with open(files.SyncedStore.CACHE_PATH, "w") as fp:
             fp.write("{}")
         self.syspurposestore = files.SyncedStore(uep=None, consumer_uuid=None)
