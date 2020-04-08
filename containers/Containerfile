@@ -66,6 +66,8 @@ RUN yum install --disablerepo=updates -y \
     python3-ethtool \
     && yum clean all
 
-COPY requirements.txt dev-requirements.txt test-requirements.txt /root/
-RUN pip2 install -r /root/requirements.txt -r /root/dev-requirements.txt -r /root/test-requirements.txt
-RUN pip3 install -r /root/requirements.txt -r /root/dev-requirements.txt -r /root/test-requirements.txt
+RUN mkdir /build
+COPY requirements.txt dev-requirements.txt /build
+WORKDIR /build
+RUN pip2 install -r dev-requirements.txt 
+RUN pip3 install -r dev-requirements.txt
