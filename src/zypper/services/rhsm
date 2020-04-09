@@ -17,6 +17,7 @@
 
 import os
 import sys
+import logging
 
 from subscription_manager import injection as inj
 from subscription_manager.repofile import ZypperRepoFile
@@ -28,6 +29,9 @@ from rhsm import connection, logutil
 from rhsm import config
 
 from six.moves.configparser import ConfigParser
+
+log = logging.getLogger("rhsm-app.zypper")
+logutil.init_logger()
 
 
 c_rehash = '/usr/bin/c_rehash'
@@ -64,7 +68,9 @@ class RepoLocker(Locker):
         nonblocking = self.lock.acquire(blocking=False)
         if nonblocking is False:
             # Could try to grab the pid for the log message, but it's a bit of a race.
-            sys.stderr.write("Another process has the cert lock. We will not attempt to update certs or repos.")
+            err_msg = "Another process has the cert lock. We will not attempt to update certs or repos."
+            log.error(err_msg)
+            sys.stderr.write(err_msg)
             sys.stderr.write("\n")
             return 0
         try:
@@ -105,6 +111,10 @@ class ZypperService(object):
         zypp_cfg.read(self.ZYPP_RHSM_PLUGIN_CONFIG_FILE)
         if zypp_cfg.has_option('rhsm-plugin', 'enabled'):
             self.plugin_enabled = zypp_cfg.getboolean('rhsm-plugin', 'enabled')
+            if self.plugin_enabled:
+                log.debug('Zypper rhsm service plugin enabled')
+            else:
+                log.debug('Zypper rhsm service plugin disabled')
 
     def main(self):
         """
@@ -114,7 +124,9 @@ class ZypperService(object):
         try:
             self.update()
         except connection.RestlibException as e:
-            sys.stderr.write('Error while syncing: %s; repos will not be updated.' % e.msg)
+            err_msg = 'Error while syncing: %s; repos will not be updated.' % e.msg
+            log.error(err_msg)
+            sys.stderr.write(err_msg)
             sys.stderr.write('\n')
         self.warn_or_give_usage_message()
         self.warn_expired()
@@ -125,10 +137,14 @@ class ZypperService(object):
         Update entitlement certificates
         """
         if not self.is_root:
-            sys.stderr.write('Not root, Subscription Management repositories not updated')
+            err_msg = 'Not root, Subscription Management repositories not updated'
+            log.error(err_msg)
+            sys.stderr.write(err_msg)
             sys.stderr.write("\n")
             return
-        sys.stderr.write('Updating Subscription Management repositories.')
+        info_msg = 'Updating Subscription Management repositories.'
+        log.info(info_msg)
+        sys.stderr.write(info_msg)
         sys.stderr.write("\n")
 
         # XXX: Importing inline as you must be root to read the config file
