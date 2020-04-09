@@ -901,7 +901,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm/facts
 %if 0%{?suse_version}
-%attr(755,root,root) %dir %{_sysconfdir}/rhsm/zypper.repos.d
+%attr(755,root,root) %dir %{_sysconfdir}/zypp/repos.d
 %endif
 
 %attr(644,root,root) %config(noreplace) %{_sysconfdir}/rhsm/rhsm.conf

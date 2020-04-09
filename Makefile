@@ -241,7 +241,7 @@ install-plugins:
 
 	if [ "$(INSTALL_ZYPPER_PLUGINS)" = "true" ] ; then \
 	  echo "Installing zypper plugins" ; \
-		install -d $(DESTDIR)/etc/rhsm/zypper.repos.d ; \
+		install -d $(DESTDIR)/etc/zypp/repos.d ; \
 		install -d $(DESTDIR)/$(PREFIX)/lib/zypp/plugins/services ; \
 		install -m 755 -p src/zypper/services/* $(DESTDIR)/$(PREFIX)/lib/zypp/plugins/services ; \
 	fi;
