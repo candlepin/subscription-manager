@@ -531,7 +531,7 @@ class ZypperRepoFile(YumRepoFile):
     """
 
     ZYPP_RHSM_PLUGIN_CONFIG_FILE = '/etc/rhsm/zypper.conf'
-    PATH = 'etc/rhsm/zypper.repos.d'
+    PATH = 'etc/zypp/repos.d/'
     NAME = 'redhat.repo'
     REPOFILE_HEADER = """#
 # Certificate-Based Repositories
