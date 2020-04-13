@@ -161,10 +161,10 @@ def is_valid_server_info(conn):
         return False
 
 
-def is_owner_using_golden_ticket(uep=None, identity=None, owner=None):
+def is_simple_content_access(uep=None, identity=None, owner=None):
     """
-    This function return True, when current owner uses contentAccessMode equal to org_environment. This
-    function has three optional arguments that can be reused for getting required information.
+    This function returns True, when current owner uses contentAccessMode equal to Simple Content Access.
+    This function has three optional arguments that can be reused for getting required information.
     :param uep: connection to candlepin server
     :param identity: reference on current identity
     :param owner: reference on current owner

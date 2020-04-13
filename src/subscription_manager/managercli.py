@@ -59,7 +59,7 @@ from subscription_manager.utils import parse_server_info, \
         parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
         restart_virt_who, get_terminal_width, print_error, unique_list_items, \
-        is_owner_using_golden_ticket
+        is_simple_content_access
 from subscription_manager.overrides import Overrides, Override
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, \
@@ -234,7 +234,7 @@ def show_autosubscribe_output(uep, identity):
     :return: return 1, when all installed products are subscribed, otherwise return 0
     """
 
-    if is_owner_using_golden_ticket(uep=uep, identity=identity):
+    if is_simple_content_access(uep=uep, identity=identity):
         return 0
 
     installed_products = products.InstalledProducts(uep).list()
@@ -3014,14 +3014,14 @@ class StatusCommand(CliCommand):
 
         ca_message = ""
         has_cert = (_(
-                "Content Access Mode is set to Organization/Environment Access. This host has access to content, regardless of subscription status.\n"))
+                "Content Access Mode is set to Simple Content Access. This host has access to content, regardless of subscription status.\n"))
 
         certs = self.entitlement_dir.list_with_content_access()
         ca_certs = [cert for cert in certs if cert.entitlement_type == CONTENT_ACCESS_CERT_TYPE]
         if ca_certs:
             ca_message = has_cert
         else:
-            if is_owner_using_golden_ticket(uep=self.cp, identity=self.identity):
+            if is_simple_content_access(uep=self.cp, identity=self.identity):
                 ca_message = has_cert
 
         print(_("Overall Status: %s\n%s") % (service_status['status'], ca_message))
