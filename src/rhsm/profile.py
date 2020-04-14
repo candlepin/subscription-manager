@@ -14,6 +14,7 @@ from __future__ import print_function, division, absolute_import
 #
 import logging
 
+import imp
 import rpm
 import six
 import os.path
@@ -37,7 +38,7 @@ except ImportError:
     yum = None
 
 try:
-    import zypp_plugin  # noqa: F401
+    imp.find_module('zypp_plugin')
     use_zypper = True
 except ImportError:
     use_zypper = False
