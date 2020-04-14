@@ -222,7 +222,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.27.0
+Version: 1.27.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1410,6 +1410,88 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Apr 14 2020 Christopher Snyder <csnyder@redhat.com> 1.27.1-1
+- Fix broken zypepr repo print (suttner@atix.de)
+- Fix apt-plugin for subscription-manager (bucher@atix.de)
+- Support to upload zypper repository profile (suttner@atix.de)
+- 1816926: Fix "attach --auto" command; ENT-2242 (jhnidek@redhat.com)
+- 1820001: initConfig method needs to be reinstated (wpoteat@redhat.com)
+- 1774187: Reinitialize logger, when necessary; ENT-1960 (jhnidek@redhat.com)
+- 1796833: New keys.pot with new strings; ENT-2058 (jhnidek@redhat.com)
+- 1775714: Do not install rhsmd and rhsm-icon on rhel8; ENT-1959
+  (jhnidek@redhat.com)
+- Various fixes for debian building and packaging (bucher@atix.de)
+- Fix gcc warnings and clang build failures (tstellar@redhat.com)
+- 1569491: rhn-migrate-classic-to-rhsm should try to resolve product ID
+  collisions (wpoteat@redhat.com)
+- Remove yum for suse (suttner@atix.de)
+- Add basic build-instructions for debian packages (bucher@atix.de)
+- Make debian build more versatile (bucher@atix.de)
+- Add missing debian-build-dependency for libssl-dev (bucher@atix.de)
+- 1763271: Golden ticket: do not print list of products; ENT-2017
+  (jhnidek@redhat.com)
+- Added basic support for Pipenv for subscription-manager; ENT-1755
+  (jhnidek@redhat.com)
+- Implement --token option in subscription-manager (shwethakraman57@gmail.com)
+- Fixed saving and reading configuration file from cockpit plugin.
+  (jhnidek@redhat.com)
+- cockpit: Be more robust when showing the time for next Insights upload
+  (mvollmer@redhat.com)
+- Fixed few issues with initConfig() (jhnidek@redhat.com)
+- 1803783: Added copytruncate option to logrotate conf file; ENT-2114
+  (jhnidek@redhat.com)
+- 1804114: New D-Bus method SetAll; ENT-2124 (jhnidek@redhat.com)
+- 1796986: Collect AWS instance id when available (wpoteat@redhat.com)
+- Hint is printed by subscription-manager during registration.
+  (jhnidek@redhat.com)
+- Implementation of getting organization using D-Bus API; ENT-1760
+  (jhnidek@redhat.com)
+- List user's organization during registration process on CLI
+  (jhnidek@redhat.com)
+- Enable building of libdnf product-id plugin on RHEL 7. (jhnidek@redhat.com)
+- Refactoring of DNF subscription-manager plugin; ENT-1906 (jhnidek@redhat.com)
+- 1794826: Added option --force for command refresh; ENT-2033
+  (jhnidek@redhat.com)
+- 1794653: corrected missing quotes for config check; ENT-2010
+  (crag@redhat.com)
+- Ensure serial existence before comparison (csnyder@redhat.com)
+- D-Bus API: support for pagged list of available subscriptions; ENT-1762
+  (jhnidek@redhat.com)
+- 1797386: Allow service plugin for zypper (SLES) to set autorefresh
+  (darinlively@gmail.com)
+- 1782910: Log errors in logging set up after set up completes; ENT-1890
+  (jhnidek@redhat.com)
+- Add unit test for ASN1 generalized time (khowell@redhat.com)
+- 1667792: added --disable-auto-attach option to register command; ENT-1684
+  (jhnidek@redhat.com)
+- ENT-1620: Add option to use our cache of npmjs repository (Nexus)
+  (jhnidek@redhat.com)
+- cockpit: Sync with current Cockpit test API (martin@piware.de)
+- Make x509 date parsing handle dates after 2049 (khowell@redhat.com)
+- cockpit: Add 'doc' and 'keywords' into manifest (mmarusak@redhat.com)
+- 1741183: Yum loaded subscription-manager plugin multiple times
+  (hyu@redhat.com)
+- 1761566: include kpatch in facts; ENT-1700 (jhnidek@redhat.com)
+- Fixed several issues based on PR review. (jhnidek@redhat.com)
+- 1751200: Cockpit plugin: select registration method; ENT-1651
+  (jhnidek@redhat.com)
+- ENT-1682: Update build process to use Fedora Zanata (ojanus@redhat.com)
+- Do not include pycache for container plugin on python2 (csnyder@redhat.com)
+- Make sure to set the mtime of the py files before creating pyc
+  (csnyder@redhat.com)
+- cockpit: Install insights-client package on demand (mvollmer@redhat.com)
+- cockpit: CSS fixes for dialog error messages (mvollmer@redhat.com)
+- Fixed unit test and build process specific for suse (jhnidek@redhat.com)
+- cockpit: Update cockpit-component-dialog (mvollmer@redhat.com)
+- Fix downgradability due to conflicts with rhsm-icons (csnyder@redhat.com)
+- Add rhsm-icons package to contain all icons required by gui interfaces
+  (csnyder@redhat.com)
+- 1728054: Obsolete sm-plugin-container on RHEL 8 (csnyder@redhat.com)
+- cockpit: Don't use objects as React children for error details
+  (mvollmer@redhat.com)
+- Security upgrades of javascript packages (jhnidek@redhat.com)
+- D-BUS API: Better listing of provided products (jhnidek@redhat.com)
+
 * Mon Nov 18 2019 Christopher Snyder <csnyder@redhat.com> 1.27.0-1
 - Make Makefile SLE15 compatible (khowell@redhat.com)
 - 1764265: Set gpgcheck to 0, when zypper is used; ENT-1758
