@@ -210,7 +210,7 @@ class CatManifestCommand(RCTManifestCommand):
         # contentAccessMode is entitlement if null, blank or non-present
         contentAccessMode = 'entitlement'
         if "contentAccessMode" in data and data["contentAccessMode"] == 'org_environment':
-            contentAccessMode = 'org_environment'
+            contentAccessMode = 'Simple Content Access'
         to_print.append((_("Content Access Mode"), contentAccessMode))
         to_print.append((_("Type"), get_value(data, "type.label")))
         to_print.append((_("API URL"), get_value(data, "urlApi")))

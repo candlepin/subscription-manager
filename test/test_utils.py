@@ -12,7 +12,7 @@ from subscription_manager.utils import parse_server_info, \
     get_version, get_client_versions, unique_list_items, \
     get_server_versions, friendly_join, is_true_value, url_base_join,\
     ProductCertificateFilter, EntitlementCertificateFilter,\
-    is_owner_using_golden_ticket
+    is_simple_content_access
 from .stubs import StubProductCertificate, StubProduct, StubEntitlementCertificate
 from .fixture import SubManFixture
 
@@ -756,16 +756,16 @@ class TestEntitlementCertificateFilter(fixture.SubManFixture):
             self.assertEqual(result, data[3], "EntitlementCertificateFilter.match failed with data set %i.\nActual:   %s\nExpected: %s" % (index, result, data[3]))
 
 
-class TestIsOwnerUsingGoldenTicket(fixture.SubManFixture):
+class TestIsOwnerUsingSimpleContentAccess(fixture.SubManFixture):
     """
-    Class used for testing function is_owner_using_golden_ticket
+    Class used for testing function is_simple_content_access
     """
 
     MOCK_ENTITLEMENT_OWNER = {"contentAccessMode": "entitlement"}
     MOCK_ORG_ENVIRONMENT_OWNER = {"contentAccessMode": "org_environment"}
 
     def setUp(self):
-        super(TestIsOwnerUsingGoldenTicket, self).setUp()
+        super(TestIsOwnerUsingSimpleContentAccess, self).setUp()
         self.cp_provider = Mock()
         self.mock_uep = Mock()
         self.mock_uep.getOwner = Mock(return_value=self.MOCK_ENTITLEMENT_OWNER)
@@ -774,10 +774,10 @@ class TestIsOwnerUsingGoldenTicket(fixture.SubManFixture):
         self.identity.uuid = Mock(return_value="7f85da06-5c35-44ba-931d-f11f6e581f89")
 
     def test_get_entitlement_owner(self):
-        ret = is_owner_using_golden_ticket(uep=self.mock_uep, identity=self.identity)
+        ret = is_simple_content_access(uep=self.mock_uep, identity=self.identity)
         self.assertFalse(ret)
 
     def test_get_org_environment_owner(self):
         self.mock_uep.getOwner = Mock(return_value=self.MOCK_ORG_ENVIRONMENT_OWNER)
-        ret = is_owner_using_golden_ticket(uep=self.mock_uep, identity=self.identity)
+        ret = is_simple_content_access(uep=self.mock_uep, identity=self.identity)
         self.assertTrue(ret)

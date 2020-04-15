@@ -43,7 +43,7 @@ from subscription_manager.injection import IDENTITY, PLUGIN_MANAGER, require, \
         INSTALLED_PRODUCTS_MANAGER, PROFILE_MANAGER, FACTS, ENT_DIR
 from subscription_manager import managerlib
 from subscription_manager.utils import is_valid_server_info, MissingCaCertException, \
-        parse_server_info, restart_virt_who, is_owner_using_golden_ticket
+        parse_server_info, restart_virt_who, is_simple_content_access
 
 from subscription_manager.gui import utils as gui_utils
 from subscription_manager.gui.autobind import DryRunResult, \
@@ -444,9 +444,9 @@ class RegisterWidget(widgets.SubmanBaseWidget):
             # to subscriptions" is clicked in the gui)
             if self.info.get_property('skip-auto-bind'):
                 self.emit('finished')
-            # When golden ticket mode is used, then skit auto-bind too
-            if is_owner_using_golden_ticket():
-                log.debug('Skipping auto-bind, because contentAccessMode is equal to org_environment')
+            # When simple content access mode is used, then skip auto-bind too
+            if is_simple_content_access():
+                log.debug('Skipping auto-bind, because Simple Content Access is in use.')
                 self.emit('finished')
             self.current_screen.emit('move-to-screen', FIND_SUBSCRIPTIONS)
             self.register_widget.show_all()
@@ -824,8 +824,8 @@ class AutoBindWidget(RegisterWidget):
                                              parent_window)
 
     def choose_initial_screen(self):
-        if is_owner_using_golden_ticket():
-            log.debug('Skipping auto-bind, because contentAccessMode is equal to organization')
+        if is_simple_content_access():
+            log.debug('Skipping auto-bind, because content access mode is set to Simple Content Access.')
             self.emit('finished')
         self.current_screen.emit('move-to-screen', FIND_SUBSCRIPTIONS)
         self.register_widget.show_all()
@@ -1122,8 +1122,8 @@ class PerformPackageProfileSyncScreen(NoGuiScreen):
             # ie, detecting when we are 'done' registering
             elif self.info.get_property('skip-auto-bind'):
                 pass
-            elif is_owner_using_golden_ticket():
-                log.debug('Skipping auto-bind, because contentAccessMode is equal to org_environment')
+            elif is_simple_content_access():
+                log.debug('Skipping auto-bind, because Simple Content Access is in use.')
                 # self.emit('register-finished')
                 self.emit('move-to-screen', REFRESH_SUBSCRIPTIONS_PAGE)
             # Or more likely, the server doesn't support package profile updates
