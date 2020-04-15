@@ -222,7 +222,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.27.1
+Version: 1.27.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1410,6 +1410,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Apr 15 2020 William Poteat <wpoteat@redhat.com> 1.27.2-1
+- Update releasers for 8.3 (wpoteat@redhat.com)
+- 1821747: Automatically create /etc/rhsm/syspurpose (jhnidek@redhat.com)
+
 * Tue Apr 14 2020 Christopher Snyder <csnyder@redhat.com> 1.27.1-1
 - Fix broken zypepr repo print (suttner@atix.de)
 - Fix apt-plugin for subscription-manager (bucher@atix.de)
