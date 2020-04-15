@@ -1346,7 +1346,8 @@ class UEPConnection(BaseConnection):
 
         return self.conn.request_put(method)
 
-    def getPoolsList(self, consumer=None, listAll=False, active_on=None, owner=None, filter_string=None, future=None, after_date=None):
+    def getPoolsList(self, consumer=None, listAll=False, active_on=None, owner=None, filter_string=None, future=None,
+                     after_date=None, page=0, items_per_page=0):
         """
         List pools for a given consumer or owner.
 
@@ -1372,13 +1373,16 @@ class UEPConnection(BaseConnection):
         if future in ('add', 'only'):
             method = "%s&%s_future=true" % (method, future)
         if after_date:
-            method = "%s&after=%s" % (method,
-                    self.sanitize(after_date.isoformat(), plus=True))
+            method = "%s&after=%s" % (method, self.sanitize(after_date.isoformat(), plus=True))
         if active_on and not after_date:
-            method = "%s&activeon=%s" % (method,
-                    self.sanitize(active_on.isoformat(), plus=True))
+            method = "%s&activeon=%s" % (method, self.sanitize(active_on.isoformat(), plus=True))
         if filter_string:
             method = "%s&matches=%s" % (method, self.sanitize(filter_string, plus=True))
+        if page != 0:
+            method = "%s&page=%s" % (method, self.sanitize(page))
+        if items_per_page != 0:
+            method = "%s&per_page=%s" % (method, self.sanitize(items_per_page))
+
         results = self.conn.request_get(method)
         return results
 
