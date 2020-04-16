@@ -2414,6 +2414,10 @@ class ReposCommand(CliCommand):
 
                 repo_action_invoker.update()
             else:
+                # When subscription-manager is in offline mode, then we have to generate redhat.repo from
+                # entitlement certificates
+                rl = RepoActionInvoker()
+                rl.update()
                 # In the disconnected case we must modify the repo file directly.
                 changed_repos = [repo for repo in matches if repo['enabled'] != status]
                 for repo in changed_repos:
