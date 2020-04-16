@@ -59,7 +59,7 @@ from subscription_manager.utils import parse_server_info, \
         parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
         restart_virt_who, get_terminal_width, print_error, unique_list_items, \
-        is_owner_using_golden_ticket
+        is_simple_content_access
 from subscription_manager.overrides import Overrides, Override
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, \
@@ -195,8 +195,8 @@ CONSUMED_LIST = [
     _("Entitlement Type:")
 ]
 
-SP_CONFLICT_MESSAGE = _("Due to a conflicting change made at the server the "
-                        "{attr} has not been set.\n{advice}")
+SP_CONFLICT_MESSAGE = _("Warning: A {attr} of \"{download_value}\" was recently set for this system "
+                        "by the entitlement server administrator.\n{advice}")
 SP_ADVICE = _("If you'd like to overwrite the server side change please run: {command}")
 
 
@@ -234,7 +234,7 @@ def show_autosubscribe_output(uep, identity):
     :return: return 1, when all installed products are subscribed, otherwise return 0
     """
 
-    if is_owner_using_golden_ticket(uep=uep, identity=identity):
+    if is_simple_content_access(uep=uep, identity=identity):
         return 0
 
     installed_products = products.InstalledProducts(uep).list()
@@ -257,11 +257,7 @@ def show_autosubscribe_output(uep, identity):
             all_subscribed = False
         print(columnize(PRODUCT_STATUS, echo_columnize_callback, product[0], status) + "\n")
     if not all_subscribed:
-        owner = uep.getOwner(identity.uuid)
-        if owner['contentAccessMode'] == "org_environment":
-            subscribed = 0
-        else:
-            print(_("Unable to find available subscriptions for all your installed products."))
+        print(_("Unable to find available subscriptions for all your installed products."))
     return subscribed
 
 
@@ -635,11 +631,11 @@ class SyspurposeCommand(CliCommand):
 
     def set(self):
         self._set(self.options.set)
-        success_msg = "{attr} set to \"{val}\".".format(attr=self.attr, val=self.options.set)
+        success_msg = '{attr} set to "{val}".'.format(attr=self.attr, val=self.options.set)
         self._check_result(
             expectation=lambda res: res.get(self.attr) == self.options.set,
             success_msg=success_msg,
-            command="subscription-manager {name} --set {val}".format(name=self.name,
+            command='subscription-manager {name} --set "{val}"'.format(name=self.name,
                                                                      val=self.options.set),
             attr=self.attr
         )
@@ -654,7 +650,7 @@ class SyspurposeCommand(CliCommand):
         self._check_result(
             expectation=lambda res: res.get(self.attr) in ["", None, []],
             success_msg=success_msg,
-            command="subscription-manager {name} --unset".format(name=self.name),
+            command='subscription-manager {name} --unset'.format(name=self.name),
             attr=self.attr
         )
 
@@ -665,7 +661,10 @@ class SyspurposeCommand(CliCommand):
     def add(self):
         self._add(self.options.to_add)
         success_msg = _("{attr} updated.").format(attr=self.name)
-        to_add = "--add " + " --add ".join(self.options.to_add)
+        # When there is several options to add, then format of command is following
+        # subscription-manager command --add opt1 --add opt2
+        options = ['"' + option + '"' for option in self.options.to_add]
+        to_add = "--add " + " --add ".join(options)
         command = "subscription-manager {name} ".format(name=self.name) + to_add
         self._check_result(
             expectation=lambda res: all(x in res.get('addons', []) for x in self.options.to_add),
@@ -685,7 +684,10 @@ class SyspurposeCommand(CliCommand):
     def remove(self):
         self._remove(self.options.to_remove)
         success_msg = _("{attr} updated.").format(attr=self.name.capitalize())
-        to_remove = "--remove " + "--remove ".join(self.options.to_remove)
+        options = ['"' + option + '"' for option in self.options.to_remove]
+        # When there is several options to remove, then format of command is following
+        # subscription-manager command --remove opt1 --remove opt2
+        to_remove = "--remove " + " --remove ".join(options)
         command = "subscription-manager {name} ".format(name=self.name) + to_remove
         self._check_result(
             expectation=lambda res: all(x not in res.get('addons', []) for x in self.options.to_remove),
@@ -744,7 +746,9 @@ class SyspurposeCommand(CliCommand):
             result = {}
         if result and not expectation(result):
             advice = SP_ADVICE.format(command=command)
-            system_exit(os.EX_SOFTWARE, msgs=_(SP_CONFLICT_MESSAGE.format(attr=attr, advice=advice)))
+            value = result[attr]
+            msg = _(SP_CONFLICT_MESSAGE.format(attr=attr, download_value=value, advice=advice))
+            system_exit(os.EX_SOFTWARE, msgs=msg)
         else:
             print(_(success_msg))
 
@@ -1283,7 +1287,11 @@ class RegisterCommand(UserPassCommand):
         elif self.options.activation_keys and not self.options.org:
             system_exit(os.EX_USAGE, _("Error: Must provide --org with activation keys."))
         elif self.options.force and self.options.consumerid:
-            system_exit(os.EX_USAGE, _("Error: Can not force registration while attempting to recover registration with consumerid. Please use --force without --consumerid to re-register or use the clean command and try again without --force."))
+            system_exit(
+                os.EX_USAGE,
+                _("Error: Can not force registration while attempting to recover registration with consumerid. "
+                  "Please use --force without --consumerid to re-register or use the clean command and "
+                  "try again without --force."))
         # 1485008: allow registration, when --type=RHUI (many of KBase articles describe using RHUI not rhui)
         elif self.options.consumertype and not \
                 (self.options.consumertype.lower() == 'rhui' or self.options.consumertype == 'system'):
@@ -1406,10 +1414,6 @@ class RegisterCommand(UserPassCommand):
             #       Are we trying to sync potential new or dynamic facts?
             facts.update_check(self.cp, consumer['uuid'], force=True)
 
-        profile_mgr = inj.require(inj.PROFILE_MANAGER)
-        # 767265: always force an upload of the packages when registering
-        profile_mgr.update_check(self.cp, consumer['uuid'], True)
-
         # Facts and installed products went out with the registration request,
         # manually write caches to disk:
         # facts service job now(soon)
@@ -1441,6 +1445,10 @@ class RegisterCommand(UserPassCommand):
             # update certs, repos, and caches.
             # FIXME: aside from the overhead, should this be cert_action_client.update?
             self.entcertlib.update()
+
+        profile_mgr = inj.require(inj.PROFILE_MANAGER)
+        # 767265: always force an upload of the packages when registering
+        profile_mgr.update_check(self.cp, consumer['uuid'], True)
 
         subscribed = 0
         if self.options.activation_keys or self.autoattach:
@@ -1483,6 +1491,10 @@ class RegisterCommand(UserPassCommand):
                     log.debug('Using the only available environment: "%s"' % env_list[0]['name'])
                     return env_list[0]['id']
 
+                env_name_list = [env['name'] for env in env_list]
+                print(_('Hint: Organization "%s" contains following environments: %s') %
+                      (owner_key, ", ".join(env_name_list)))
+
                 environment_name = self._prompt_for_environment()
 
                 # Should only ever be len 0 or 1
@@ -1517,6 +1529,11 @@ class RegisterCommand(UserPassCommand):
             system_exit(1, _("%s cannot register with any organizations.") % self.username)
         if len(owners) == 1:
             return owners[0]['key']
+
+        if len(owners) > 1:
+            org_keys = [owner['key'] for owner in owners]
+            print(_('Hint: User "%s" is member of following organizations: %s') %
+                  (self.username, ', '.join(org_keys)))
 
         owner_key = None
         while not owner_key:
@@ -2954,19 +2971,15 @@ class StatusCommand(CliCommand):
 
         ca_message = ""
         has_cert = (_(
-                "Content Access Mode is set to Organization/Environment Access. This host has access to content, regardless of subscription status.\n"))
+                "Content Access Mode is set to Simple Content Access. This host has access to content, regardless of subscription status.\n"))
 
         certs = self.entitlement_dir.list_with_content_access()
         ca_certs = [cert for cert in certs if cert.entitlement_type == CONTENT_ACCESS_CERT_TYPE]
         if ca_certs:
             ca_message = has_cert
         else:
-            try:
-                owner = self.cp.getOwner(self.identity.uuid)
-                if owner['contentAccessMode'] == "org_environment":
-                    ca_message = has_cert
-            except Exception as e:
-                log.debug("Unable to check the orgs content access mode: %s" % e)
+            if is_simple_content_access(uep=self.cp, identity=self.identity):
+                ca_message = has_cert
 
         print(_("Overall Status: %s\n%s") % (service_status['status'], ca_message))
 

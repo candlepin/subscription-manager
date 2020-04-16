@@ -21,7 +21,7 @@ from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, \
 from subscription_manager.branding import get_branding
 from subscription_manager.gui import widgets
 from rhsmlib.facts.hwprobe import ClassicCheck
-from subscription_manager.utils import friendly_join, is_owner_using_golden_ticket
+from subscription_manager.utils import friendly_join, is_simple_content_access
 
 import logging
 from subscription_manager.ga import GObject as ga_GObject
@@ -102,7 +102,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
 
         self.set_sorts(self.store, cols)
 
-        if is_owner_using_golden_ticket():
+        if is_simple_content_access():
             self.update_certificates_button.set_property("visible", False)
 
         self.connect_signals({
@@ -354,7 +354,7 @@ class InstalledProductsTab(widgets.SubscriptionManagerTab):
                 _("Keep your system up to date by registering."))
 
     def set_registered(self, is_registered):
-        if is_owner_using_golden_ticket():
+        if is_simple_content_access():
             self.update_certificates_button.set_property("visible", False)
         else:
             self.update_certificates_button.set_property('visible', is_registered)
