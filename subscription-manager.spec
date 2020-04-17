@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.33
+Version: 1.24.34
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1161,6 +1161,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Apr 17 2020 William Poteat <wpoteat@redhat.com> 1.24.34-1
+- 1796986: Collect AWS instance id when available (wpoteat@redhat.com)
+
 * Thu Apr 16 2020 William Poteat <wpoteat@redhat.com> 1.24.33-1
 - 1796833: RHEL 7.9 Tier 0 Localization (wpoteat@redhat.com)
 - 1818932: Using 'Simple Content Access' for access mode
