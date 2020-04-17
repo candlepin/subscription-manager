@@ -1,0 +1,20 @@
+FROM registry.access.redhat.com/ubi8/ubi-init
+
+RUN dnf copr enable -y @cockpit/cockpit-preview
+RUN dnf install -y cockpit \
+  hostname \
+  sudo
+
+RUN echo foobar | passwd --stdin root
+# create admin:foobar
+RUN getent passwd admin >/dev/null || useradd -c Administrator -G wheel admin
+RUN echo foobar | passwd --stdin admin
+
+RUN printf "[WebService]\nAllowUnencrypted=true\n" > /etc/cockpit/cockpit.conf \
+ && systemctl enable cockpit.socket
+
+RUN systemctl disable kdump.service \
+ && systemctl disable NetworkManager-wait-online.service
+
+EXPOSE 9090
+EXPOSE 9091
