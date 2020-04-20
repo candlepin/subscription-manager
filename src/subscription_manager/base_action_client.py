@@ -29,12 +29,13 @@ class BaseActionClient(object):
     An object used to update the certficates, yum repos, and facts for the system.
     """
 
-    def __init__(self):
+    def __init__(self, skips=None):
 
         self._libset = self._get_libset()
         self.lock = inj.require(inj.ACTION_LOCK)
         self.report = None
         self.update_reports = []
+        self.skips = skips or []
 
     def _get_libset(self):
         return []
@@ -81,6 +82,9 @@ class BaseActionClient(object):
         update_reports = []
 
         for lib in self._libset:
+            if type(lib) in self.skips:
+                continue
+
             log.debug("running lib: %s" % lib)
             update_report = self._run_update(lib)
 
