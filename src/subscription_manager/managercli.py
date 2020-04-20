@@ -43,7 +43,7 @@ from rhsm.utils import remove_scheme, ServerUrlParseError
 from subscription_manager import identity
 from subscription_manager.branding import get_branding
 from subscription_manager.entcertlib import EntCertActionInvoker, CONTENT_ACCESS_CERT_CAPABILITY
-from subscription_manager.action_client import ActionClient, UnregisterActionClient
+from subscription_manager.action_client import ActionClient, UnregisterActionClient, ProfileActionClient
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, \
         SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from subscription_manager.cli import AbstractCLICommand, CLI, system_exit
@@ -66,6 +66,7 @@ from subscription_manager.printing_utils import columnize, format_name, \
         none_wrap_columnize_callback, echo_columnize_callback, highlight_by_filter_string_columnize_cb
 from subscription_manager.utils import generate_correlation_id
 from subscription_manager.syspurposelib import save_sla_to_syspurpose_metadata
+from subscription_manager.packageprofilelib import PackageProfileActionInvoker
 
 from subscription_manager.i18n import ungettext, ugettext as _
 
@@ -1872,7 +1873,7 @@ class AttachCommand(CliCommand):
 
         # TODO: change to if self.auto_attach: else: pool/file stuff
         try:
-            cert_action_client = ActionClient()
+            cert_action_client = ActionClient(skips=[PackageProfileActionInvoker])
             cert_action_client.update()
             cert_update = True
 
@@ -1936,6 +1937,9 @@ class AttachCommand(CliCommand):
 
             if cert_update:
                 report = self.entcertlib.update()
+
+            profile_action_client = ProfileActionClient()
+            profile_action_client.update()
 
             if report and report.exceptions():
                 print(_('Entitlement Certificate(s) update failed due to the following reasons:'))
@@ -2360,7 +2364,7 @@ class ReposCommand(CliCommand):
 
         # Pull down any new entitlements and refresh the entitlements directory
         if self.identity.is_valid():
-            cert_action_client = ActionClient()
+            cert_action_client = ActionClient(skips=[PackageProfileActionInvoker])
             cert_action_client.update()
             self._request_validity_check()
 
@@ -2375,6 +2379,10 @@ class ReposCommand(CliCommand):
 
         if hasattr(self.options, 'repo_actions'):
             rc = self._set_repo_status(repos, rl, self.options.repo_actions)
+
+        if self.identity.is_valid():
+            profile_action_client = ProfileActionClient()
+            profile_action_client.update()
 
         if self.options.list:
             if len(repos):
