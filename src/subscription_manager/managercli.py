@@ -1467,9 +1467,11 @@ class RegisterCommand(UserPassCommand):
                 system_exit(os.EX_UNAVAILABLE, _("Error: The --servicelevel option is not supported "
                                  "by the server. Did not complete your request."))
             try:
-                attach.AttachService(self.cp).attach_auto(self.options.service_level)
-            except connection.RestlibException as re:
-                print_error(re.msg)
+                # We don't call auto_attach with self.option.service_level, because it has been already
+                # set during service.register() call
+                attach.AttachService(self.cp).attach_auto(service_level=None)
+            except connection.RestlibException as rest_lib_err:
+                print_error(rest_lib_err.msg)
             except Exception:
                 log.exception("Auto-attach failed")
                 raise

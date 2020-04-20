@@ -45,10 +45,28 @@ class RegisterService(object):
             raise exceptions.ValidationError(_("Unknown arguments: %s") % kwargs.keys())
 
         syspurpose = syspurposelib.read_syspurpose()
-        role = role or syspurpose.get('role', '')
-        addons = addons or syspurpose.get('addons', [])
-        usage = usage or syspurpose.get('usage', '')
-        service_level = service_level or syspurpose.get('service_level_agreement', '')
+
+        save_syspurpose = False
+
+        # First set new syspurpose values, if there is any
+        if role is not None:
+            syspurpose['role'] = role
+            save_syspurpose = True
+        if addons is not None:
+            syspurpose['addons'] = addons
+            save_syspurpose = True
+        if service_level is not None:
+            syspurpose['service_level_agreement'] = service_level
+            save_syspurpose = True
+        if usage is not None:
+            syspurpose['usage'] = usage
+            save_syspurpose = True
+
+        # Then try to get all syspurpose values
+        role = syspurpose.get('role', '')
+        addons = syspurpose.get('addons', [])
+        usage = syspurpose.get('usage', '')
+        service_level = syspurpose.get('service_level_agreement', '')
 
         type = type or "system"
 
@@ -97,12 +115,11 @@ class RegisterService(object):
 
         # Now that we are registered, load the new identity
         self.identity.reload()
-        # We want a new SyncedStore every time as we otherwise can hold onto bad state in
-        # long-lived services in dbus
-        uep = inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()
-        store = syspurposelib.SyncedStore(uep, consumer_uuid=self.identity.uuid)
-        if store:
-            store.sync()
+
+        # If new syspurpose values were given as arguments, then save these values to syspurpose.json now
+        if save_syspurpose is True:
+            syspurposelib.write_syspurpose(syspurpose)
+
         return consumer
 
     def validate_options(self, options):

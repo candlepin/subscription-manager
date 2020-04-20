@@ -27,6 +27,9 @@ import six
 import socket
 import sys
 import time
+import traceback
+import tempfile
+
 from email.utils import formatdate
 
 from rhsm.https import httplib, ssl
@@ -600,6 +603,59 @@ class BaseRestLib(object):
 
         return conn
 
+    @staticmethod
+    def _print_debug_info_about_request(request_type, handler, final_headers, body):
+        """
+        This method can print debug information about sent http request. We do not use
+        httplib.HTTPConnection.debuglevel = 1, because it doesn't provide control about displayed information.
+        The debug print is printed to stdout, when environment variable SUBMAN_DEBUG_PRINT_REQUEST is set.
+        Output can be modified with following environment variables:
+         * SUBMAN_DEBUG_PRINT_REQUEST_HEADER
+         * SUBMAN_DEBUG_PRINT_REQUEST_BODY
+        :param request_type: (GET, POST, PUT, ...)
+        :param handler: e.g. /candlepin/status
+        :param final_headers: HTTP header used by request
+        :param body: request can contain body
+        :return: None
+        """
+
+        if 'SUBMAN_DEBUG_PRINT_REQUEST' in os.environ:
+            yellow_col = '\033[93m'
+            blue_col = '\033[94m'
+            green_col = '\033[92m'
+            red_col = '\033[91m'
+            end_col = '\033[0m'
+            msg = blue_col + "Making request:" + end_col
+            msg += red_col + " %s %s" % (request_type, handler) + end_col
+            if 'SUBMAN_DEBUG_PRINT_REQUEST_HEADER' in os.environ:
+                msg += blue_col + " %s" % final_headers + end_col
+            if 'SUBMAN_DEBUG_PRINT_REQUEST_BODY' in os.environ and body is not None:
+                msg += yellow_col + " %s" % body + end_col
+            print()
+            print(msg)
+            print()
+            if os.path.isdir('/tmp/sub-man') is False:
+                os.mkdir('/tmp/sub-man')
+            with tempfile.NamedTemporaryFile(dir='/tmp/sub-man', prefix='traceback-', delete=False) as tmp_file:
+                traceback.print_stack(file=tmp_file)
+                print(green_col + '    traceback saved in: %s' % tmp_file.name + end_col)
+                # print(dir(tmp_file))
+                print()
+
+    @staticmethod
+    def _print_debug_info_about_response(result):
+        """
+        This method can print result of HTTP request to stdout, when environment variable SUBMAN_DEBUG_PRINT_RESPONSE
+        is set.
+        :param result: response from candlepin server
+        :return: None
+        """
+
+        if 'SUBMAN_DEBUG_PRINT_RESPONSE' in os.environ:
+            print('%s %s' % (result['status'], result['headers']))
+            print(result['content'])
+            print()
+
     # FIXME: can method be empty?
     def _request(self, request_type, method, info=None, headers=None, cert_key_pairs=None):
         handler = self.apihandler + method
@@ -628,6 +684,10 @@ class BaseRestLib(object):
         if headers:
             final_headers.update(headers)
 
+        self._print_debug_info_about_request(request_type, handler, final_headers, body)
+
+        response = None
+        result = None
         for cert_file, key_file in cert_key_pairs:
             try:
                 conn = self._create_connection(cert_file=cert_file, key_file=key_file)
@@ -678,12 +738,12 @@ class BaseRestLib(object):
                     (self.host, cert_key_pairs)
                 )
 
+        self._print_debug_info_about_response(result)
+
         response_log = 'Response: status=' + str(result['status'])
         if response.getheader('x-candlepin-request-uuid'):
-            response_log = "%s, requestUuid=%s" % (response_log,
-                    response.getheader('x-candlepin-request-uuid'))
-        response_log = "%s, request=\"%s %s\"" % (response_log,
-            request_type, handler)
+            response_log = "%s, requestUuid=%s" % (response_log, response.getheader('x-candlepin-request-uuid'))
+        response_log = "%s, request=\"%s %s\"" % (response_log, request_type, handler)
         log.debug(response_log)
 
         # Look for server drift, and log a warning
