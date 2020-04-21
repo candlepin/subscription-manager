@@ -363,6 +363,48 @@ class RegisterServiceTest(InjectionMockingTest):
             autoheal=None
         )
 
+    @mock.patch('subscription_manager.syspurposelib.write_syspurpose')
+    @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
+    def test_writes_syspurpose(self, mock_persist_consumer, mock_write_syspurpose):
+        self.mock_installed_products.format_for_server.return_value = []
+        self.mock_installed_products.tags = []
+        self.mock_identity.is_valid.return_value = False
+        self.mock_sp_store_contents["role"] = "test_role"
+        self.mock_sp_store_contents["service_level_agreement"] = "test_sla"
+        self.mock_sp_store_contents["addons"] = ["addon1"]
+        self.mock_sp_store_contents["usage"] = "test_usage"
+
+        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
+        self.mock_cp.registerConsumer.return_value = expected_consumer
+
+        register_service = register.RegisterService(self.mock_cp)
+        register_service.register("org", name="name", service_level="another_sla")
+
+        self.mock_cp.registerConsumer.assert_called_once_with(
+            addons=["addon1"],
+            content_tags=[],
+            environment=None,
+            facts={},
+            installed_products=[],
+            keys=None,
+            name="name",
+            owner="org",
+            role="test_role",
+            service_level="another_sla",
+            type="system",
+            usage="test_usage",
+            autoheal=None
+        )
+
+        mock_write_syspurpose.assert_called_once_with(
+            {
+                'usage': 'test_usage',
+                'service_level_agreement': 'another_sla',
+                'addons': ['addon1'],
+                'role': 'test_role'
+            }
+        )
+
     def test_does_not_require_basic_auth_with_activation_keys(self):
         self.mock_cp.username = None
         self.mock_cp.password = None
