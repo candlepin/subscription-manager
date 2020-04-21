@@ -52,7 +52,6 @@ import dbus.glib
 import decorator
 import logging
 import traceback
-import psutil
 
 from subscription_manager import ga_loader
 ga_loader.init_ga()
@@ -90,7 +89,7 @@ from subscription_manager.i18n_optparse import OptionParser, \
 from subscription_manager.cert_sorter import RHSM_VALID, \
         RHSM_EXPIRED, RHSM_WARNING, RHSM_PARTIALLY_VALID, \
         RHN_CLASSIC, RHSM_REGISTRATION_REQUIRED
-from subscription_manager.utils import print_error
+from subscription_manager.utils import print_error, is_process_running
 
 from rhsm.config import get_config_parser
 from rhsmlib.services import config
@@ -182,16 +181,8 @@ def is_rhsm_icon_running():
     :return: It returns True, when rhsm-icon is running. Otherwise return False.
     """
     debug('Checking if rhsm-icon process is running')
-    process_names = []
-    for proc in psutil.process_iter():
-        try:
-            name = proc.name()
-        except psutil.AccessDenied as err:
-            debug('Unable to get process name: %s' % str(err))
-        else:
-            process_names.append(name)
-    ret = 'rhsm-icon' in process_names
-    if ret is True:
+    ret = is_process_running('rhsm-icon')
+    if ret:
         debug('Process rhsm-icon is running')
     else:
         debug('Process rhsm-icon is not running')

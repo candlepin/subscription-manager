@@ -1,7 +1,11 @@
 from __future__ import print_function, division, absolute_import
 
+import os
+import random
 from . import fixture
 from . import stubs
+
+from tempfile import mkdtemp
 
 from mock import Mock, patch
 from rhsm.utils import ServerUrlParseErrorEmpty, \
@@ -12,7 +16,7 @@ from subscription_manager.utils import parse_server_info, \
     get_version, get_client_versions, unique_list_items, \
     get_server_versions, friendly_join, is_true_value, url_base_join,\
     ProductCertificateFilter, EntitlementCertificateFilter,\
-    is_simple_content_access
+    is_simple_content_access, is_process_running, get_process_names
 from .stubs import StubProductCertificate, StubProduct, StubEntitlementCertificate
 from .fixture import SubManFixture
 
@@ -781,3 +785,200 @@ class TestIsOwnerUsingSimpleContentAccess(fixture.SubManFixture):
         self.mock_uep.getOwner = Mock(return_value=self.MOCK_ORG_ENVIRONMENT_OWNER)
         ret = is_simple_content_access(uep=self.mock_uep, identity=self.identity)
         self.assertTrue(ret)
+
+
+PROCESS_STATUS_FILE = \
+"""Umask:	0000
+State:	S (sleeping)
+Tgid:	1
+Ngid:	0
+Pid:	1
+PPid:	0
+TracerPid:	0
+Uid:	0	0	0	0
+Gid:	0	0	0	0
+FDSize:	512
+Groups:
+NStgid:	1
+NSpid:	1
+NSpgid:	1
+NSsid:	1
+VmPeak:	  237396 kB
+VmSize:	  180056 kB
+VmLck:	       0 kB
+VmPin:	       0 kB
+VmHWM:	   16216 kB
+VmRSS:	    7800 kB
+RssAnon:	    3768 kB
+RssFile:	    4032 kB
+RssShmem:	       0 kB
+VmData:	   29584 kB
+VmStk:	     132 kB
+VmExe:	     912 kB
+VmLib:	    9380 kB
+VmPTE:	     108 kB
+VmSwap:	    1564 kB
+HugetlbPages:	       0 kB
+CoreDumping:	0
+THP_enabled:	1
+Threads:	1
+SigQ:	1/63421
+SigPnd:	0000000000000000
+ShdPnd:	0000000000000000
+SigBlk:	7be3c0fe28014a03
+SigIgn:	0000000000001000
+SigCgt:	00000001800004ec
+CapInh:	0000000000000000
+CapPrm:	0000003fffffffff
+CapEff:	0000003fffffffff
+CapBnd:	0000003fffffffff
+CapAmb:	0000000000000000
+NoNewPrivs:	0
+Seccomp:	0
+Speculation_Store_Bypass:	thread vulnerable
+Cpus_allowed:	f
+Cpus_allowed_list:	0-3
+Mems_allowed:	00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000001
+Mems_allowed_list:	0
+voluntary_ctxt_switches:	4002321
+nonvoluntary_ctxt_switches:	16572
+"""
+
+PROCESS_STATUS_FILE_LINES = PROCESS_STATUS_FILE.split('\n')
+
+original_open = open
+
+
+class TestGetProcessNamesAndIsProcessRunning(fixture.SubManFixture):
+    """
+    Class used for testing get_process_names and is_process_running functions
+    """
+
+    def setUp(self):
+        super(TestGetProcessNamesAndIsProcessRunning, self).setUp()
+        self.root_dir = mkdtemp()
+        self.proc_root = os.path.join(self.root_dir, 'proc')
+        os.mkdir(self.proc_root)
+        # self.addCleanup(rmtree, self.root_dir)
+        self.fake_pids = set()
+
+    def create_fake_process_status(self, name=None, randomize_name_location=False):
+        """
+        Given a name of a fake process, create a directory representing
+        the kernel-provided info relevant to our use for that fake process.
+        """
+        # The kernel gets to decide the actual largest PID
+        # but for our purposes it just needs to be a number
+        fake_pid = random.randint(0, 123456789)
+        while fake_pid in self.fake_pids:
+            fake_pid = random.randint(0, 123456789)
+
+        pid_dir = os.path.join(self.proc_root, str(fake_pid))
+        os.mkdir(pid_dir)
+
+        process_status_contents = PROCESS_STATUS_FILE_LINES
+        if name:
+            if randomize_name_location:
+                location = random.randint(1, len(process_status_contents) - 1)
+            else:
+                location = 0
+            process_status_contents.insert(location, "Name:\t{name}")
+
+        with open(os.path.join(pid_dir, 'status'), 'w') as status:
+            process_status_contents = "\n".join(process_status_contents)
+            status.write(process_status_contents.format(name=name))
+
+    @staticmethod
+    def redirect_open(new_root):
+        """
+        Construct a suitable side_effect for a mock of the open builtin
+        function, such that any path that is opened is transformed to
+        {new_root}/{original_path}
+        """
+        def new_open(*args, **kwargs):
+            original_path = args[0]
+            if original_path.startswith(os.path.sep):
+                original_path = original_path[1:]
+            corrected_path = os.path.join(new_root, original_path)
+            print(corrected_path)
+            return original_open(corrected_path, *args[1:], **kwargs)
+        return new_open
+
+    def run_with_mock_proc(self, func, *args, **kwargs):
+        """
+        Mock out access to various os functions and to open from the same
+        mock root directory. Should we need to expand our fake chroot,
+        this would be the place to do it
+        """
+        mock_proc_dirs = os.listdir(self.proc_root)
+        new_open = self.redirect_open(self.root_dir)
+        os_patch = patch('subscription_manager.utils.os.listdir')
+        m = os_patch.start()
+        m.return_value = mock_proc_dirs
+        open_patch = patch(fixture.OPEN_FUNCTION)
+        mopen = open_patch.start()
+        mopen.side_effect = new_open
+        try:
+            res = func(*args, **kwargs)
+        finally:
+            open_patch.stop()
+            os_patch.stop()
+        return res
+
+    def test_is_process_running(self):
+        """
+        Test if process is running
+        """
+        made_up_process_name = "magic_process"
+        res = self.run_with_mock_proc(is_process_running, made_up_process_name)
+        self.assertFalse(res)
+
+        self.create_fake_process_status(made_up_process_name)
+        # Now we should be able to read that magic_process's status
+
+        res = self.run_with_mock_proc(is_process_running, made_up_process_name)
+        self.assertTrue(res)
+
+    def test_is_process_running_missing_name(self):
+        """
+        Test if the status file we are reading from /proc has no "Name: thing" like line.
+        """
+        made_up_process_name = "magic_process"
+        res = self.run_with_mock_proc(is_process_running, made_up_process_name)
+        self.assertFalse(res)
+
+        self.create_fake_process_status(name=None)
+
+        res = self.run_with_mock_proc(is_process_running, made_up_process_name)
+        self.assertFalse(res)
+
+    def test_is_process_running_weird_name_location(self):
+        """
+        Test if process is running when the "Name: thing" line is not the first line
+        """
+        made_up_process_name = "magic_process"
+        res = self.run_with_mock_proc(is_process_running, made_up_process_name)
+        self.assertFalse(res)
+
+        self.create_fake_process_status(name=made_up_process_name, randomize_name_location=True)
+
+        res = self.run_with_mock_proc(is_process_running, made_up_process_name)
+        self.assertTrue(res)
+
+    def test_get_process_names(self):
+        """
+        Test getting list of processes
+        """
+        fake_process_name = "magic_process"
+        self.create_fake_process_status(name=fake_process_name)
+        ld = os.listdir(self.proc_root)
+        new_open = self.redirect_open(self.root_dir)
+        os_patch = patch('subscription_manager.utils.os.listdir')
+        m = os_patch.start()
+        m.return_value = ld
+        open_patch = patch(fixture.OPEN_FUNCTION)
+        mopen = open_patch.start()
+        mopen.side_effect = new_open
+        res = get_process_names()
+        res = list(res)
+        self.assertEquals(res, [fake_process_name], "Expected an empty list, Actual: %s" % res)
