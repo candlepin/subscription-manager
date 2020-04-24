@@ -351,7 +351,7 @@ cmdclass = {
 
 setup(
     name="subscription-manager",
-    version='1.24.34',
+    version='1.24.35',
     url="http://www.candlepinproject.org",
     description="Manage subscriptions for Red Hat products.",
     license="GPLv2",

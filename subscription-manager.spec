@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.34
+Version: 1.24.35
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1161,6 +1161,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Apr 24 2020 William Poteat <wpoteat@redhat.com> 1.24.35-1
+- 1827711: Make rhsmd cron read 'processTimeout' case-insensitive
+  (csnyder@redhat.com)
+
 * Fri Apr 17 2020 William Poteat <wpoteat@redhat.com> 1.24.34-1
 - 1796986: Collect AWS instance id when available (wpoteat@redhat.com)
 
