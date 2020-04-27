@@ -222,7 +222,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.27.2
+Version: 1.27.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1410,6 +1410,21 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Apr 27 2020 William Poteat <wpoteat@redhat.com> 1.27.3-1
+- 1771921: Package profiles sends too early when registering a client
+  (wpoteat@redhat.com)
+- 1827708: Make rhsmd cron read 'processTimeout' case-
+  insensitive (csnyder@redhat.com)
+- Reduced REST API calls during register, when SLA is set; ENT-2229
+  (jhnidek@redhat.com)
+- cockpit: Show more Insights details (mvollmer@redhat.com)
+- integration-test: Update mock-insights to use regexp routing
+  (mvollmer@redhat.com)
+- 1688702: Generate redhat.repo in off-line mode; ENT-2302 (jhnidek@redhat.com)
+- Fix issue with getPoolsList (jhnidek@redhat.com)
+- 1818932: 1820267: Using 'Simple Content Access' for access mode
+  (wpoteat@redhat.com)
+
 * Wed Apr 15 2020 William Poteat <wpoteat@redhat.com> 1.27.2-1
 - Update releasers for 8.3 (wpoteat@redhat.com)
 - 1821747: Automatically create /etc/rhsm/syspurpose (jhnidek@redhat.com)
