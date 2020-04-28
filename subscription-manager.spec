@@ -222,7 +222,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.26.16
+Version: 1.26.17
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1400,6 +1400,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Apr 28 2020 William Poteat <wpoteat@redhat.com> 1.26.17-1
+- 1828657: Make rhsmd cron read 'processTimeout' case-insensitive
+  (csnyder@redhat.com)
+
 * Thu Apr 02 2020 Christopher Snyder <csnyder@redhat.com> 1.26.16-1
 - 1820001: initConfig method needs to be reinstated (wpoteat@redhat.com)
 
