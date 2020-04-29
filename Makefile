@@ -134,8 +134,8 @@ ifeq ($(WITH_SUBMAN_GUI),true)
         EXCLUDE_PACKAGES:="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
 else
     build: rhsmcertd build-subpackages
-        EXCLUDE_PACKAGES := $(EXCLUDE_PACKAGES) $(PYTHON) ./setup.py clean --all
-        EXCLUDE_PACKAGES := $(EXCLUDE_PACKAGES) $(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
+        EXCLUDE_PACKAGES:="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py clean --all
+        EXCLUDE_PACKAGES:="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
 endif
 
 # we never "remake" this makefile, so add a target so
