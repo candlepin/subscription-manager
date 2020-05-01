@@ -26,7 +26,7 @@ from subscription_manager.repolib import RepoActionInvoker
 from subscription_manager.entcertlib import EntCertActionInvoker
 from rhsmlib.facts.hwprobe import ClassicCheck
 from subscription_manager.certlib import Locker
-from subscription_manager.utils import chroot
+from subscription_manager.utils import chroot, is_simple_content_access
 from subscription_manager.injectioninit import init_dep_injection
 from subscription_manager import logutil
 from rhsm import config
@@ -144,7 +144,7 @@ def warn_or_usage_message(conduit):
         # Don't warn people to register if we see entitlements, but no identity:
         if not identity.is_valid() and len(ent_dir.list_valid()) == 0:
             msg = not_registered_warning
-        elif len(ent_dir.list_valid()) == 0:
+        elif len(ent_dir.list_valid()) == 0 and not is_simple_content_access(identity=identity):
             msg = no_subs_warning
         if config.in_container() and len(ent_dir.list_valid()) == 0:
             msg = no_subs_container_warning
