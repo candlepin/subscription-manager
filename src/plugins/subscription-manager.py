@@ -39,9 +39,9 @@ expired_warning = """
 *** WARNING ***
 The subscription for following product(s) has expired:
 %s
-You no longer have access to the repositories that provide these products.  It is important that you apply an active "
-"subscription in order to resume access to security and other critical updates. If you don't have other active "
-"subscriptions, you can renew the expired subscription.
+You no longer have access to the repositories that provide these products.  It is important that you apply an active \
+subscription in order to resume access to security and other critical updates. If you don't have other active \
+subscriptions, you can renew the expired subscription.
 """
 
 not_registered_warning = """
@@ -49,8 +49,8 @@ This system is not registered with an entitlement server. You can use subscripti
 """
 
 no_subs_warning = """
-This system is registered with an entitlement server, but is not receiving updates. You can use subscription-manager "
-"to assign subscriptions.
+This system is registered with an entitlement server, but is not receiving updates. You can use subscription-manager \
+to assign subscriptions.
 """
 
 no_subs_container_warning = """
