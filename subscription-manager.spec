@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.35
+Version: 1.24.36
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1161,6 +1161,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue May 05 2020 William Poteat <wpoteat@redhat.com> 1.24.36-1
+- 1831104: When in Simple Content Access mode, subscription-manager should not
+  complain that subscriptions aren't attached (wpoteat@redhat.com)
+
 * Fri Apr 24 2020 William Poteat <wpoteat@redhat.com> 1.24.35-1
 - 1827711: Make rhsmd cron read 'processTimeout' case-insensitive
   (csnyder@redhat.com)
