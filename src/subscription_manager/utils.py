@@ -617,3 +617,30 @@ def unique_list_items(l, hash_function=lambda x: x):
 
 def generate_correlation_id():
     return str(uuid.uuid4()).replace('-', '')  # FIXME cp should accept -
+
+
+def get_process_names():
+    """
+    Returns a list of "Name" values for all processes running on the system.
+    This assumes an accessible and standard procfs at "/proc/".
+    It will only work on unix-like systems.
+    """
+    proc_name_expr = "[Nn][Aa][Mm][Ee]:?[\s]*(?P<proc_name>.*)"
+    for subdir in os.listdir('/proc'):
+        if re.match('[0-9]+', subdir):
+            process_status_file_path = os.path.join(os.path.sep, 'proc', subdir, 'status')
+            with open(process_status_file_path) as status:
+                lines = "".join(status.readlines())
+                # Find first value of something that looks like "Name: THING"
+                match = re.search(proc_name_expr, lines)
+                if match:
+                    proc_name = match.groupdict().get('proc_name')
+                    if proc_name:
+                        yield proc_name
+
+
+def is_process_running(process_to_find):
+    for process_name in get_process_names():
+        if process_to_find == process_name:
+            return True
+    return False
