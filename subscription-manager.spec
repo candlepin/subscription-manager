@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.36
+Version: 1.24.37
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1161,6 +1161,13 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri May 08 2020 William Poteat <wpoteat@redhat.com> 1.24.37-1
+- 1830994: Fix warning messages in dnf/yum (jhnidek@redhat.com)
+- 1823523: Detect rhsm-icon running without psutil (csnyder@redhat.com)
+- 1771921: Package profiles sends too early when registering a client
+  (wpoteat@redhat.com)
+- 1688702: Generate redhat.repo in off-line mode; ENT-2302 (jhnidek@redhat.com)
+
 * Tue May 05 2020 William Poteat <wpoteat@redhat.com> 1.24.36-1
 - 1831104: When in Simple Content Access mode, subscription-manager should not
   complain that subscriptions aren't attached (wpoteat@redhat.com)
