@@ -1355,9 +1355,9 @@ class RegisterCommand(UserPassCommand):
         previously_registered = False
         if self.is_registered() and self.options.force:
             previously_registered = True
-            # First let's try to un-register previous consumer; if this fails
-            # we'll let the error bubble up, so that we don't blindly re-register.
-            # managerlib.unregister handles the special case that the consumer has already been removed.
+            # First let's try to un-register previous consumer; if this fails we'll let the error
+            # bubble up, so that we don't blindly re-register. managerlib.unregister handles the
+            # special case that the consumer has already been removed.
             old_uuid = self.identity.uuid
 
             print(_("Unregistering from: %s:%s%s") %
@@ -1369,9 +1369,9 @@ class RegisterCommand(UserPassCommand):
                 log.info("--force specified, unregistered old consumer: %s" % old_uuid)
                 print(_("The system with UUID %s has been unregistered") % old_uuid)
             except ssl.SSLError as e:
-                # since the user can override serverurl for register, a common use case is to try to switch servers
-                # using register --force... However, this normally cannot successfully unregister since the servers
-                # are different.
+                # since the user can override serverurl for register, a common use case is to try
+                # to switch servers using register --force... However, this normally cannot
+                # successfully unregister since the servers are different.
                 handle_exception("Unregister failed: %s", e)
             except Exception as e:
                 handle_exception("Unregister failed", e)
@@ -1468,18 +1468,14 @@ class RegisterCommand(UserPassCommand):
                 system_exit(os.EX_UNAVAILABLE, _("Error: The --servicelevel option is not supported "
                                  "by the server. Did not complete your request."))
             try:
-                # We don't call auto_attach with self.option.service_level, because it has been already
-                # set during service.register() call
+                # We don't call auto_attach with self.option.service_level, because it has been
+                # already set during service.register() call
                 attach.AttachService(self.cp).attach_auto(service_level=None)
             except connection.RestlibException as rest_lib_err:
                 print_error(rest_lib_err.msg)
             except Exception:
                 log.exception("Auto-attach failed")
                 raise
-            else:
-                if self.options.service_level is not None:
-                    save_sla_to_syspurpose_metadata(self.options.service_level)
-                    print(_("Service level set to: %s") % self.options.service_level)
 
         if self.options.consumerid or \
                 (self.options.activation_keys and not self.options.disable_autoattach) or \
