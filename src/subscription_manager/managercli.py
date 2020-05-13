@@ -1478,7 +1478,15 @@ class RegisterCommand(UserPassCommand):
                 raise
             else:
                 if self.options.service_level is not None:
-                    save_sla_to_syspurpose_metadata(self.options.service_level)
+                    # uep and consumer_uuid are None, because the service_level was sent to candlepin server
+                    # during registration and it is not necessary to send it twice. It is only necessary to
+                    # save it to syspurpose.json file
+                    save_sla_to_syspurpose_metadata(
+                        uep=None,
+                        consumer_uuid=None,
+                        service_level=self.options.service_level
+                    )
+                    log.debug('>>>>> syspurpose SLA value saved')
                     print(_("Service level set to: %s") % self.options.service_level)
 
         if self.options.consumerid or \
@@ -1933,8 +1941,13 @@ class AttachCommand(CliCommand):
                     attach_service.attach_auto(self.options.service_level)
                     if self.options.service_level is not None:
                         #  RHBZ 1632797 we should only save the sla if the sla was actually
-                        #  specified
-                        save_sla_to_syspurpose_metadata(self.options.service_level)
+                        #  specified. The uep and consumer_uuid are None, because service_level was sent
+                        # to candlepin server using attach_service.attach_auto()
+                        save_sla_to_syspurpose_metadata(
+                            uep=None,
+                            consumer_uuid=None,
+                            service_level=self.options.service_level
+                        )
                         print(_("Service level set to: %s") % self.options.service_level)
 
             if cert_update:
