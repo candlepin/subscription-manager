@@ -1419,7 +1419,8 @@ class RegisterCommand(UserPassCommand):
                     force=self.options.force,
                     name=self.options.consumername,
                     type=self.options.consumertype,
-                    autoheal=autoheal
+                    autoheal=autoheal,
+                    service_level=self.options.service_level,
                 )
         except (connection.RestlibException, exceptions.ServiceError) as re:
             log.exception(re)
@@ -1430,6 +1431,8 @@ class RegisterCommand(UserPassCommand):
             consumer_info = identity.ConsumerIdentity(consumer['idCert']['key'], consumer['idCert']['cert'])
             print(_("The system has been registered with ID: %s") % consumer_info.getConsumerId())
             print(_("The registered system name is: %s") % consumer_info.getConsumerName())
+            if self.options.service_level:
+                print(_("Service level set to: %s") % self.options.service_level)
 
         # We have new credentials, restart virt-who
         restart_virt_who()
@@ -1464,9 +1467,6 @@ class RegisterCommand(UserPassCommand):
             self.cp.updateConsumer(consumer['uuid'], release=self.options.release, autoheal=autoheal)
 
         if self.autoattach:
-            if 'serviceLevel' not in consumer and self.options.service_level:
-                system_exit(os.EX_UNAVAILABLE, _("Error: The --servicelevel option is not supported "
-                                 "by the server. Did not complete your request."))
             try:
                 # We don't call auto_attach with self.option.service_level, because it has been already
                 # set during service.register() call
@@ -1476,18 +1476,6 @@ class RegisterCommand(UserPassCommand):
             except Exception:
                 log.exception("Auto-attach failed")
                 raise
-            else:
-                if self.options.service_level is not None:
-                    # uep and consumer_uuid are None, because the service_level was sent to candlepin server
-                    # during registration and it is not necessary to send it twice. It is only necessary to
-                    # save it to syspurpose.json file
-                    save_sla_to_syspurpose_metadata(
-                        uep=None,
-                        consumer_uuid=None,
-                        service_level=self.options.service_level
-                    )
-                    log.debug('>>>>> syspurpose SLA value saved')
-                    print(_("Service level set to: %s") % self.options.service_level)
 
         if self.options.consumerid or \
                 (self.options.activation_keys and not self.options.disable_autoattach) or \
