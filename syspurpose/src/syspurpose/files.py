@@ -29,10 +29,12 @@ from syspurpose.utils import system_exit, create_dir, create_file, make_utf8, wr
 from syspurpose.i18n import ugettext as _
 
 # Constants for locations of the two system syspurpose files
-USER_SYSPURPOSE_DIR = "/etc/rhsm/syspurpose"
+RHSM_CONF_DIR = "/etc/rhsm"
+USER_SYSPURPOSE_DIR = os.path.join(RHSM_CONF_DIR, "syspurpose")
 USER_SYSPURPOSE = os.path.join(USER_SYSPURPOSE_DIR, "syspurpose.json")
 VALID_FIELDS = os.path.join(USER_SYSPURPOSE_DIR, "valid_fields.json")  # Will be used for future validation
-CACHE_DIR = "/var/lib/rhsm/cache"
+RHSM_LIB_DIR = "/var/lib/rhsm/"
+CACHE_DIR = os.path.join(RHSM_LIB_DIR, "cache")
 CACHED_SYSPURPOSE = os.path.join(CACHE_DIR, "syspurpose.json")  # Stores cached values
 
 # All names that represent syspurpose values locally
@@ -506,10 +508,16 @@ class SyncedStore(object):
         if not os.path.isdir(USER_SYSPURPOSE_DIR):
             # If not create the file
             log.debug('Creating directory: %s' % USER_SYSPURPOSE_DIR)
+            if not os.path.isdir(RHSM_CONF_DIR):
+                log.debug('Creating directory: %s' % RHSM_CONF_DIR)
+                os.mkdir(RHSM_CONF_DIR)
             os.mkdir(USER_SYSPURPOSE_DIR)
 
         # Check if /var/lib/rhsm/cache/ directory exists
         if not os.path.isdir(CACHE_DIR):
+            if not os.path.isdir(RHSM_LIB_DIR):
+                log.debug('Creating directory: %s' % RHSM_LIB_DIR)
+                os.mkdir(RHSM_LIB_DIR)
             log.debug('Creating directory: %s' % CACHE_DIR)
             os.mkdir(CACHE_DIR)
 
