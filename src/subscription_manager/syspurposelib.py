@@ -49,24 +49,27 @@ store = None
 syspurpose = None
 
 
-def save_sla_to_syspurpose_metadata(service_level):
+def save_sla_to_syspurpose_metadata(uep, consumer_uuid, service_level):
     """
     Saves the provided service-level value to the local Syspurpose Metadata (syspurpose.json) file.
     If the service level provided is null or empty, the sla value to the local syspurpose file is set to null.
+    when uep and consumer_uuid is not None, then service_level is also synced with candlepin server
 
+    :param uep: The object with uep connection (connection to candlepin server)
+    :param consumer_uuid: Consumer UUID
     :param service_level: The service-level value to be saved in the syspurpose file.
     :type service_level: str
     """
 
     if 'SyncedStore' in globals() and SyncedStore is not None:
-        store = SyncedStore(None)
+        synced_store = SyncedStore(uep=uep, consumer_uuid=consumer_uuid)
 
         # if empty, set it to null
         if service_level is None or service_level == "":
             service_level = None
 
-        store.set("service_level_agreement", service_level)
-        store.finish()
+        synced_store.set("service_level_agreement", service_level)
+        synced_store.finish()
         log.debug("Syspurpose SLA value successfully saved locally.")
     else:
         log.error("SyspurposeStore could not be imported. Syspurpose SLA value not saved locally.")

@@ -92,7 +92,7 @@ class SyspurposeStoreInterfaceTests(unittest.TestCase):
         Tests that the syspurpose sla is set through the syspurposestore interface
         when the syspurpose module is available for import.
         """
-        self.syspurposelib.save_sla_to_syspurpose_metadata("Freemium")
+        self.syspurposelib.save_sla_to_syspurpose_metadata(None, None, "Freemium")
 
         contents = self.syspurposelib.read_syspurpose()
         self.assertEqual(contents.get("service_level_agreement"), "Freemium")
@@ -102,7 +102,7 @@ class SyspurposeStoreInterfaceTests(unittest.TestCase):
         Tests that the syspurpose sla is not set through the syspurposestore interface
         when None is passed to save_sla_to_syspurpose_metadata method.
         """
-        self.syspurposelib.save_sla_to_syspurpose_metadata(None)
+        self.syspurposelib.save_sla_to_syspurpose_metadata(None, None, None)
 
         contents = self.syspurposelib.read_syspurpose()
         self.assertEqual(contents.get("service_level_agreement"), None)
@@ -112,7 +112,7 @@ class SyspurposeStoreInterfaceTests(unittest.TestCase):
         Tests that the syspurpose sla is not set through the syspurposestore interface
         when an empty string is passed to save_sla_to_syspurpose_metadata method.
         """
-        self.syspurposelib.save_sla_to_syspurpose_metadata("")
+        self.syspurposelib.save_sla_to_syspurpose_metadata(None, None, "")
 
         contents = self.syspurposelib.read_syspurpose()
         self.assertEqual(contents.get("service_level_agreement"), None)
@@ -129,7 +129,7 @@ class SyspurposeStoreInterfaceTests(unittest.TestCase):
         del self.syspurposelib.SyncedStore
         del self.syspurposelib.USER_SYSPURPOSE
 
-        self.syspurposelib.save_sla_to_syspurpose_metadata("Freemium")
+        self.syspurposelib.save_sla_to_syspurpose_metadata(None, None, "Freemium")
 
         # Add SyspurposeStore and USER_SYSPURPOSE back to syspurposestore_interface's scope
         self.syspurposelib.SyncedStore = tmp_syspurpose_store
