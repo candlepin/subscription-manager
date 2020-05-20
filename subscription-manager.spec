@@ -222,7 +222,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.27.3
+Version: 1.27.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1410,6 +1410,18 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed May 20 2020 Christopher Snyder <csnyder@redhat.com> 1.27.4-1
+- Fix unit test of getting release information (jhnidek@redhat.com)
+- Send Service-level during registration only once (csnyder@redhat.com)
+- Refactoring of save_sla_to_syspurpose_metadata; ENT-2228 (jhnidek@redhat.com)
+- 1823523: Detect rhsm-icon running without psutil (csnyder@redhat.com)
+- 1830994: Fix warning messages in dnf/yum (jhnidek@redhat.com)
+- 1815624: When in Simple Content Access mode, subscription-manager should not
+  complain that subscriptions aren't attached (wpoteat@redhat.com)
+- Bump jquery from 3.4.1 to 3.5.0 in /cockpit
+  (49699333+dependabot[bot]@users.noreply.github.com)
+- Bug fix of Makefile for Debian (63191606+mallmaluss@users.noreply.github.com)
+
 * Mon Apr 27 2020 William Poteat <wpoteat@redhat.com> 1.27.3-1
 - 1771921: Package profiles sends too early when registering a client
   (wpoteat@redhat.com)
