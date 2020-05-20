@@ -261,15 +261,76 @@ class HardwareProbeTest(test.fixture.SubManFixture):
             self.assertEqual(hw.get_release_info(), expected)
 
     @patch("os.path.exists")
-    @patch(OPEN_FUNCTION, mock_open(read_data="Awesome OS release 42 Mega (Go4It)"))  # TODO figure out why necessary...
-    def test_distro_with_platform(self, MockExists):
-        MockExists.return_value = False
+    @patch(OPEN_FUNCTION, mock_open(read_data="Awesome OS release 42 Mega (Go4It)"))
+    def test_distro_with_redhat_release(self, mock_exists):
+        """
+        Test reading release information from /etc/redhat-release
+        """
+
+        def mock_os_path_exists(path):
+            """
+            This method mock missing /etc/os-release
+            :param path: of this file
+            :return: False for /etc/os-release and True for any other file
+            """
+            if path == '/etc/os-release':
+                return False
+            else:
+                return True
+
+        mock_exists.side_effect = mock_os_path_exists
         hw = hwprobe.HardwareCollector()
         expected = {
             'distribution.version': '42',
             'distribution.name': 'Awesome OS',
             'distribution.id': 'Go4It',
-            'distribution.version.modifier': 'Unknown'
+            'distribution.version.modifier': 'mega'
+        }
+        self.assertEqual(hw.get_release_info(), expected)
+
+    @patch("os.path.exists")
+    @patch(OPEN_FUNCTION, mock_open(read_data="""
+NAME=Awesome OS
+VERSION="42 (Go4It)"
+ID=awesome
+VERSION_ID=42
+VERSION_CODENAME=""
+PLATFORM_ID="platform:a42"
+PRETTY_NAME="Awesome OS 42 (Go4It)"
+ANSI_COLOR="0;34"
+LOGO=awesome-logo-icon
+CPE_NAME="cpe:/o:awesomeproject:awesome:32"
+HOME_URL="https://awesomeproject.org/"
+DOCUMENTATION_URL="https://docs.awesomeproject.org/en-US/awesome/a42/system-administrators-guide/"
+SUPPORT_URL="https://awesomeproject.org/wiki/Communicating_and_getting_help"
+BUG_REPORT_URL="https://bugzilla.awesomeproject.org/"
+PRIVACY_POLICY_URL="https://awesomeproject.org/wiki/Legal:PrivacyPolicy"
+VARIANT="Go4It"
+VARIANT_ID=server
+    """))
+    def test_distro_with_os_release(self, mock_exists):
+        """
+        Test reading release information from /etc/os-release
+        """
+
+        def mock_os_path_exists(path):
+            """
+            This method mock missing /etc/redhat-release
+            :param path: of this file
+            :return: False for /etc/redhat-release and True for any other file
+            """
+            if path == '/etc/redhat-release':
+                return False
+            else:
+                return True
+
+        mock_exists.side_effect = mock_os_path_exists
+        hw = hwprobe.HardwareCollector()
+        expected = {
+            'distribution.version': '42',
+            'distribution.name': 'Awesome OS',
+            'distribution.id': 'Go4It',
+            'distribution.version.modifier': ''
         }
         self.assertEqual(hw.get_release_info(), expected)
 
