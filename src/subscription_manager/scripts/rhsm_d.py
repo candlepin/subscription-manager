@@ -95,17 +95,26 @@ from rhsmlib.services import config
 
 conf = config.Config(initConfig())
 
-enable_debug = False
-
 
 def debug(msg):
+    """
+    Print debug messages to console or rhsm.log
+    :param msg:
+    :return:
+    """
     if enable_debug:
         log.debug(msg)
         print(msg)
+    else:
+        log.debug(msg)
 
 
 def in_warning_period(sorter):
-
+    """
+    Is any entitlement certificate expired?
+    :param sorter:
+    :return:
+    """
     for entitlement in sorter.valid_entitlement_certs:
         if entitlement.is_expiring():
             return True
@@ -113,6 +122,11 @@ def in_warning_period(sorter):
 
 
 def pre_check_status(force_signal):
+    """
+    Pre check status of the system. Is it registered against classic. Is it registered?
+    :param force_signal: When this is not None, then this value is returned
+    :return: Specified force_signal or RHN_CLASSIC or RHSM_REGISTRATION_REQUIRED or None
+    """
     if force_signal is not None:
         debug("forcing status signal from cli arg")
         return force_signal
@@ -131,6 +145,12 @@ def pre_check_status(force_signal):
 
 
 def check_status(force_signal):
+    """
+    When pre_check_status does not return anything, then status is retrieved from candlepin server
+    using ComplianceManager
+    :param force_signal: When force_signal is not None, then this signal will be returned
+    :return: Some signal
+    """
     pre_result = pre_check_status(force_signal)
     if pre_result is not None:
         return pre_result
@@ -141,11 +161,37 @@ def check_status(force_signal):
 
 
 def check_if_ran_once(checker, loop):
+    """
+    Callback function used for checking if the d-bus has been called at least once
+    :param checker: instance of StatusChecker
+    :param loop: instance GObject.Mainloop
+    :return:
+    """
     if checker.has_run:
         msg = "D-Bus com.redhat.SubscriptionManager.EntitlementStatus.check_status called once, exiting"
         debug(msg)
         loop.quit()
     return True
+
+
+def timeout_cb(loop, checker):
+    """
+    Timeout callback method is called only after timeout defined in StatusChecker
+    :param loop: instance of GObject.MainLoop
+    :param checker: instance of StatusChecker
+    :return: None
+    """
+    debug("Timeout reached. Checking reason to continue ...")
+    if checker.keep_alive:
+        debug("Not terminating rhsmd, because CLI option --keep-alive was set")
+        return
+
+    if is_rhsm_icon_running():
+        debug("Not terminating rhsmd, because rhsm-icon is running")
+        return
+
+    debug("No reason found. Terminating")
+    loop.quit()
 
 
 @decorator.decorator
@@ -194,6 +240,9 @@ class StatusChecker(dbus.service.Object):
     # dbus.service.method annotation, add annotations earlier in the
     # annotation stack.
 
+    # Timeout in seconds (same default value as is used for rhsmd.processTimeout)
+    TIMEOUT = 300
+
     def __init__(self, bus, keep_alive, force_signal, loop):
         name = dbus.service.BusName("com.redhat.SubscriptionManager", bus)
         dbus.service.Object.__init__(self, name, "/EntitlementStatus")
@@ -203,6 +252,27 @@ class StatusChecker(dbus.service.Object):
         self.keep_alive = keep_alive
         self.force_signal = force_signal
         self.loop = loop
+        # Read process timeout from configuration file
+        self.read_rhsm_config()
+        # the callback function will try to terminate main loop after timout is reached
+        ga_GObject.timeout_add_seconds(self.TIMEOUT, timeout_cb, loop, self)
+
+    def read_rhsm_config(self):
+        """
+        Try to read specific option: rhsmd.processTimeout from configuration file rhm.conf.
+        :return: None
+        """
+        debug('Trying to get processTimeout option from rhsm.conf')
+        if 'rhsmd' in conf and 'processTimeout' in conf['rhsmd']:
+            timeout = conf['rhsmd']['processTimeout']
+            try:
+                self.TIMEOUT = int(timeout)
+            except ValueError:
+                debug('Unable to convert "%s" into number; using default value: %d' % (timeout, self.TIMEOUT))
+            else:
+                debug('New timeout is set according rhsmd.processTimeout: %s' % self.TIMEOUT)
+        else:
+            debug('Unable to read rhsmd.processTimeout from rhsm.conf; using default value: %d' % self.TIMEOUT)
 
     @dbus.service.signal(
         dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus',
@@ -211,9 +281,12 @@ class StatusChecker(dbus.service.Object):
         log.debug("D-Bus signal com.redhat.SubscriptionManager.EntitlementStatus.entitlement_status_changed emitted")
         debug("signal fired! code is " + str(status_code))
 
-    # this is so we can guarantee exit after the dbus stuff is done, since
-    # certain parts of that are async
     def watchdog(self):
+        """
+        This is so we can guarantee exit after the D-Bus stuff is done, since
+        certain parts of that are async
+        :return: None
+        """
         if not self.keep_alive:
             ga_GObject.idle_add(check_if_ran_once, self, self.loop)
 
@@ -259,6 +332,11 @@ class StatusChecker(dbus.service.Object):
 
 
 def parse_force_signal(cli_arg):
+    """
+    Try to validate provided signal on CLI
+    :param cli_arg: string with signal
+    :return: Code of signal or None
+    """
     if cli_arg is None:
         return None
 
@@ -282,6 +360,12 @@ def parse_force_signal(cli_arg):
 
 
 def log_syslog(level, msg):
+    """
+    Log message to syslog
+    :param level: Level of debug print
+    :param msg: String with message
+    :return: None
+    """
     syslog.openlog("rhsmd")
     syslog.syslog(level, msg)
     log.debug("rhsmd: %s" % msg)
@@ -290,8 +374,14 @@ def log_syslog(level, msg):
 
 
 def main():
-
+    """
+    Main method of rhsmd providing D-Bus API com.redhat.SubscriptionManager
+    :return: None
+    """
     debug("rhsmd started")
+    log.info("D-Bus API: com.redhat.SubscriptionManager provided by rhsmd is deprecated")
+    log.info("Consider using D-Bus API: com.redhat.RHSM1 provided by rhsm.service")
+
     parser = OptionParser(usage=USAGE,
                           formatter=WrappedIndentedHelpFormatter())
     parser.add_option("-d", "--debug", dest="debug",
@@ -363,11 +453,6 @@ def main():
 
     if options.immediate:
         checker.entitlement_status_changed(force_signal)
-
-    if not is_rhsm_icon_running() and not options.keep_alive:
-        status = check_status(force_signal)
-        debug('Exiting rhsmd')
-        return status
 
     loop.run()
 
