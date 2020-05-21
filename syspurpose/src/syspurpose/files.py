@@ -291,9 +291,10 @@ class SyncedStore(object):
 
         sync_result = SyncResult(
             result,
-            self.update_remote(result),
-            self.update_local(local_result),
-            self.update_cache(result), self.report
+            (remote_contents == result) or self.update_remote(result),
+            (local_contents == result) or self.update_local(local_result),
+            (cached_contents == result) or self.update_cache(result),
+            self.report
         )
 
         log.debug('Successfully synced system purpose.')
