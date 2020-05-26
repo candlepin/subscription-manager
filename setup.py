@@ -209,6 +209,8 @@ class install_data(_install_data):
             if self.with_subman_gui == 'true':
                 self.with_subman_gui = True
                 self.with_icons = True
+            else:
+                self.with_subman_gui = False
         # Enable creating desktop entry for cockpit plugin only in case that subman gui will not be
         # installed
         if self.with_subman_gui is False:
@@ -218,6 +220,8 @@ class install_data(_install_data):
                 if self.with_cockpit_desktop_entry == 'true':
                     self.with_cockpit_desktop_entry = True
                     self.with_icons = True
+                else:
+                    self.with_cockpit_desktop_entry = False
         else:
             self.with_cockpit_desktop_entry = False
         # Icons can be also required by initial-setup
