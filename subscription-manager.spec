@@ -183,7 +183,6 @@
 %endif
 
 %global with_cockpit WITH_COCKPIT=false
-%global with_cockpit WITH_COCKPIT=false
 
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
@@ -760,6 +759,7 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?with_systemd} \
     %{?with_subman_gui} \
     %{?with_cockpit} \
+    %{?with_icons}
     %{?subpackages} \
     %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"} \
     %{?exclude_packages}

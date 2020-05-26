@@ -220,6 +220,7 @@ class install_data(_install_data):
                     self.with_icons = True
         else:
             self.with_cockpit_desktop_entry = False
+        # Icons can be also required by initial-setup
         if self.with_icons is None:
             self.with_icons = False
         else:
@@ -309,6 +310,9 @@ class install_data(_install_data):
             self.data_files.append((systemd_install_directory, [self.join(source_dir, file)]))
 
     def add_icons(self):
+        """
+        Add icons for subscription-manager
+        """
         icon_source_root = self.join('src', 'subscription_manager', 'gui', 'data', 'icons', 'hicolor')
         for d in os.listdir(icon_source_root):
             icon_dir = self.join('share', 'icons', 'hicolor', d, 'apps')
