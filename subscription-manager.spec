@@ -3,7 +3,7 @@
 # For optional building of ostree-plugin sub package. Unrelated to systemd
 # but the same versions apply at the moment.
 %global has_ostree %use_systemd && 0%{?suse_version} == 0
-%global use_initial_setup 1
+%global use_initial_setup 0
 %global use_firstboot 0
 %global use_inotify 1
 %global py2_package_prefix python2
