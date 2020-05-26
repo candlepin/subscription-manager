@@ -181,6 +181,7 @@
 %endif
 
 %global with_cockpit WITH_COCKPIT=false
+%global with_cockpit WITH_COCKPIT=false
 
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
@@ -245,7 +246,7 @@ Source0: %{name}-%{version}.tar.gz
 # this is a little different from the Source0, because of limitations in tito,
 # namely that tito expects only one source tarball
 %if %{use_cockpit}
-Source1: %{name}-cockpit-%{version}.tar.gz
+#Source1: %{name}-cockpit-%{version}.tar.gz
 %endif
 %if 0%{?suse_version}
 Source2: subscription-manager-rpmlintrc
