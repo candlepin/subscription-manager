@@ -94,7 +94,6 @@
 
 %global use_dnf (%{with python3} && (0%{?fedora} || (0%{?rhel}))) || (0%{?rhel} >= 7)
 %global use_yum (0%{?rhel} && 0%{?rhel} <= 7)
-# %global use_cockpit 0%{?fedora} || 0%{?rhel} >= 7
 
 %if %{with python3}
 %global python_sitearch %python3_sitearch
@@ -246,7 +245,7 @@ Source0: %{name}-%{version}.tar.gz
 # this is a little different from the Source0, because of limitations in tito,
 # namely that tito expects only one source tarball
 %if %{use_cockpit}
-# Source1: %{name}-cockpit-%{version}.tar.gz
+Source1: %{name}-cockpit-%{version}.tar.gz
 %endif
 %if 0%{?suse_version}
 Source2: subscription-manager-rpmlintrc
