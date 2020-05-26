@@ -352,6 +352,7 @@ BuildRequires: %{py_package_prefix}-six
 BuildRequires: desktop-file-utils
 %endif
 
+%if 0%{?suse_version}
 BuildRequires: %{?suse_version:dbus-1-glib-devel} %{!?suse_version:dbus-glib-devel}
 %if 0%{?suse_version} <= 1110
 BuildRequires: %{?suse_version:sles-release} %{!?suse_version:system-release}
@@ -360,8 +361,11 @@ BuildRequires: %{?suse_version:distribution-release} %{!?suse_version:system-rel
 %endif
 BuildRequires: %{?suse_version:gconf2-devel} %{!?suse_version:GConf2-devel}
 BuildRequires: %{?suse_version:update-desktop-files} %{!?suse_version:scrollkeeper}
+%endif
 
+%if %{use_subman_gui}
 BuildRequires: %{?gtk3:gtk3-devel} %{!?gtk3:gtk2-devel}
+%endif
 
 %if 0%{?suse_version}
 BuildRequires: libzypp
