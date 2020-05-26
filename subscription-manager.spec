@@ -725,7 +725,7 @@ subscription-manager-initial-setup-addon, and subscription-manager-cockpit-plugi
 make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
     LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" \
     %{?gtk_version} %{?subpackages} %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"} \
-    %{exclude_packages}
+    %{exclude_packages} %{?with_subman_gui}
 
 %if %{with python2_rhsm}
 python2 ./setup.py build --quiet --gtk-version=%{?gtk3:3}%{?!gtk3:2} --rpm-version=%{version}-%{release}
