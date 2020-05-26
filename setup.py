@@ -225,6 +225,8 @@ class install_data(_install_data):
             self.with_icons = False
         else:
             self.with_icons = self.with_icons == 'true'
+        print(">>> finalize options: with_subman_gui: %s, with_cockpit_desktop_entry: %s, with_icons: %s" %
+              (self.with_subman_gui, self.with_cockpit_desktop_entry, self.with_icons))
 
     def run(self):
         self.add_messages()
