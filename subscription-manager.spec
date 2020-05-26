@@ -180,6 +180,8 @@
 %global with_cockpit WITH_COCKPIT=false
 %endif
 
+%global with_cockpit WITH_COCKPIT=false
+
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 # Build a list of python package to exclude from the build.

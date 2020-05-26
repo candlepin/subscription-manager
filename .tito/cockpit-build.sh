@@ -7,6 +7,9 @@ if [ -n "${USE_SUSE}" ] ; then
   exit 0
 fi
 
+echo "Skipping building of cockpit"
+exit 0
+
 echo "Generating cockpit dist-gzip..."
 if [ ! $(which yarn) ] ; then
   echo "Unable to build cockpit, yarn not installed (see README)"
