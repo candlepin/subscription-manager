@@ -8,6 +8,7 @@
 %global use_inotify 1
 %global py2_package_prefix python2
 %global use_cockpit 0
+%global use_rhsm_icons 0
 
 # Plugin for container (docker, podman) is not supported on RHEL 8 and higher
 %if (0%{?rhel} && 0%{?rhel} >= 8)
