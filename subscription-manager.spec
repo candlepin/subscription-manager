@@ -759,7 +759,7 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?with_systemd} \
     %{?with_subman_gui} \
     %{?with_cockpit} \
-    %{?with_icons}
+    %{?with_icons} \
     %{?subpackages} \
     %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"} \
     %{?exclude_packages}
