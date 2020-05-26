@@ -140,7 +140,7 @@
 %if %{use_initial_setup}
 %global post_boot_tool INSTALL_INITIAL_SETUP=true INSTALL_FIRSTBOOT=false
 %else
-%global post_boot_tool INSTALL_INITIAL_SETUP=false INSTALL_FIRSTBOOT=true
+%global post_boot_tool INSTALL_INITIAL_SETUP=false
 %endif
 
 %if 0%{?suse_version}
