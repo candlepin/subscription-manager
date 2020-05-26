@@ -8,6 +8,7 @@
 %global use_inotify 1
 %global py2_package_prefix python2
 %global use_cockpit 0
+%global use_rhsm_gtk 0
 %global use_rhsm_icons 0
 
 # Plugin for container (docker, podman) is not supported on RHEL 8 and higher
@@ -224,6 +225,12 @@
 # Both our cockpit plugin and the rhsm-gtk package require an overlapping
 # set of icons.
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
+
+%if %{use_rhsm_icons}
+%global with_icons WITH_ICONS=true
+%else
+%global with_icons WITH_ICONS=false
+%endif
 
 Name: subscription-manager
 Version: 1.27.4
@@ -726,7 +733,7 @@ subscription-manager-initial-setup-addon, and subscription-manager-cockpit-plugi
 make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
     LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" \
     %{?gtk_version} %{?subpackages} %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"} \
-    %{exclude_packages} %{?with_subman_gui}
+    %{exclude_packages} %{?with_subman_gui} %{?with_icons}
 
 %if %{with python2_rhsm}
 python2 ./setup.py build --quiet --gtk-version=%{?gtk3:3}%{?!gtk3:2} --rpm-version=%{version}-%{release}

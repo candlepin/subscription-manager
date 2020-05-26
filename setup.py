@@ -100,6 +100,7 @@ class install(_install):
         ('with-systemd=', None, 'whether to install w/ systemd support or not'),
         ('with-subman-gui=', None, 'whether to install subman GUI or not'),
         ('with-cockpit-desktop-entry=', None, 'whether to install desktop entry for subman cockpit plugin or not'),
+        ('with-icons=', None, 'whether to install icons or not')
         ]
 
     def initialize_options(self):
@@ -109,6 +110,7 @@ class install(_install):
         self.with_systemd = None
         self.with_subman_gui = None
         self.with_cockpit_desktop_entry = None
+        self.with_icons = None
 
     def finalize_options(self):
         _install.finalize_options(self)
@@ -180,6 +182,7 @@ class install_data(_install_data):
         ('with-systemd=', None, 'whether to install w/ systemd support or not'),
         ('with-subman-gui=', None, 'whether to install subman GUI or not'),
         ('with-cockpit-desktop-entry=', None, 'whether to install desktop entry for subman cockpit plugin or not'),
+        ('with-icons=', None, 'whether to install icons or not')
         ]
 
     def initialize_options(self):
@@ -187,6 +190,7 @@ class install_data(_install_data):
         self.with_systemd = None
         self.with_subman_gui = None
         self.with_cockpit_desktop_entry = None
+        self.with_icons = None
         # Can't use super() because Command isn't a new-style class.
 
     def finalize_options(self):
@@ -194,6 +198,7 @@ class install_data(_install_data):
         self.set_undefined_options('install', ('with_systemd', 'with_systemd'))
         self.set_undefined_options('install', ('with_subman_gui', 'with_subman_gui'))
         self.set_undefined_options('install', ('with_cockpit_desktop_entry', 'with_cockpit_desktop_entry'))
+        self.set_undefined_options('install', ('with_icons', 'with_icons'))
         if self.with_systemd is None:
             self.with_systemd = True  # default to True
         else:
@@ -201,25 +206,33 @@ class install_data(_install_data):
         if self.with_subman_gui is None:
             self.with_subman_gui = False  # default to False
         else:
-            self.with_subman_gui = self.with_subman_gui == 'true'
+            if self.with_subman_gui == 'true':
+                self.with_subman_gui = True
+                self.with_icons = True
         # Enable creating desktop entry for cockpit plugin only in case that subman gui will not be
         # installed
         if self.with_subman_gui is False:
             if self.with_cockpit_desktop_entry is None:
                 self.with_cockpit_desktop_entry = True  # default to True
             else:
-                self.with_cockpit_desktop_entry = self.with_cockpit_desktop_entry == 'true'
+                if self.with_cockpit_desktop_entry == 'true':
+                    self.with_cockpit_desktop_entry = True
+                    self.with_icons = True
         else:
             self.with_cockpit_desktop_entry = False
+        if self.with_icons is None:
+            self.with_icons = False
+        else:
+            self.with_icons = self.with_icons == 'true'
 
     def run(self):
         self.add_messages()
         if self.with_subman_gui:
             self.add_desktop_files()
-            self.add_icons()
             self.add_gui_doc_files()
         if self.with_cockpit_desktop_entry:
             self.add_cockpit_desktop_entry()
+        if self.with_icons:
             self.add_icons()
         self.add_dbus_service_files()
         self.add_systemd_services()

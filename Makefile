@@ -65,6 +65,7 @@ INSTALL_CONTAINER_PLUGIN ?= true
 WITH_SYSTEMD ?= true
 WITH_SUBMAN_GUI ?= true
 WITH_COCKPIT ?= true
+WITH_ICONS ?= true
 
 # if OS is empty string, we're on el6 or sles11
 ifeq ($(OS),)
@@ -331,7 +332,8 @@ install-post-boot: install-firstboot install-initial-setup
 
 .PHONY: install-via-setup
 install-via-setup: install-subpackages-via-setup
-	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py install --root $(DESTDIR) --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION) --prefix=$(PREFIX) \
+	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py install --root $(DESTDIR) --gtk-version=$(GTK_VERSION) \
+	--rpm-version=$(VERSION) --prefix=$(PREFIX) --with-icons=${WITH_ICONS} \
 	--with-systemd=$(WITH_SYSTEMD) --with-subman-gui=${WITH_SUBMAN_GUI} --with-cockpit-desktop-entry=${WITH_COCKPIT} \
 	$(SETUP_PY_INSTALL_PARAMS)
 	mkdir -p $(DESTDIR)/$(PREFIX)/sbin/
