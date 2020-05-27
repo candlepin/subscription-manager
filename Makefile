@@ -123,7 +123,7 @@ build-subpackages:
 	do \
 	    pushd $$subpackage; \
 	    $(PYTHON) ./setup.py clean --all; \
-	    $(PYTHON) ./setup.py build; \
+	    $(PYTHON) ./setup.py build --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION); \
 	    popd; \
 	done;
 
@@ -361,7 +361,7 @@ install-subpackages-via-setup:
 	for subpackage in $(SUBPACKAGES); \
 	do \
 	    pushd $$subpackage; \
-	    $(PYTHON) ./setup.py install --root=$(DESTDIR) --prefix=$(PREFIX); \
+	    $(PYTHON) ./setup.py install --root=$(DESTDIR) --prefix=$(PREFIX) --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION); \
 		popd; \
 	done;
 
