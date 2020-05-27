@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.37
+Version: 1.24.38
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1161,6 +1161,11 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed May 27 2020 William Poteat <wpoteat@redhat.com> 1.24.38-1
+- 1837244: Fix wrong version provided by subscription-manager version; ENT-2388
+  (jhnidek@redhat.com)
+- 1834792: Try to terminate rhsmd after timeout; ENT-2368 (jhnidek@redhat.com)
+
 * Fri May 08 2020 William Poteat <wpoteat@redhat.com> 1.24.37-1
 - 1830994: Fix warning messages in dnf/yum (jhnidek@redhat.com)
 - 1823523: Detect rhsm-icon running without psutil (csnyder@redhat.com)
