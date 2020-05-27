@@ -69,28 +69,38 @@ class rpm_version_release_build_py(_build_py):
         )
 
     def run(self):
+        print("Building with GTK_VERSION=%s, RPM_VERSION=%s" %
+                 (self.gtk_version, self.rpm_version))
         log.debug("Building with GTK_VERSION=%s, RPM_VERSION=%s" %
                  (self.gtk_version, self.rpm_version))
         _build_py.run(self)
         # create a "version.py" that includes the rpm version
         # info passed to our new build_py args
         if not self.dry_run:
+            print(">>> Trying set version.py")
             for package in self.versioned_packages:
                 version_dir = os.path.join(self.build_lib, package)
                 version_file = os.path.join(version_dir, 'version.py')
+                print(">>>>> For package: %s (version_file: %s)" % (package, version_file))
                 try:
                     lines = []
+                    print('>>>>>>>> Reading version.py file...')
                     with open(version_file, 'r') as f:
                         for l in f.readlines():
                             l = l.replace("RPM_VERSION", str(self.rpm_version))
                             l = l.replace("GTK_VERSION", str(self.gtk_version))
                             lines.append(l)
+                    print('>>>>>>>> Content of version file')
+                    print(lines)
 
+                    print('>>>>>>>> Writing new version.py file into: %s' % version_file)
                     with open(version_file, 'w') as f:
                         for l in lines:
                             f.write(l)
                 except EnvironmentError:
                     raise
+        else:
+            print(">>> NOT trying set version.py")
 
 
 class install(_install):
