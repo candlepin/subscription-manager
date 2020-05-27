@@ -45,6 +45,10 @@ exclude_packages = [x.strip() for x in os.environ.get('EXCLUDE_PACKAGES', '').sp
 exclude_packages.extend(['subscription_manager.gui.firstboot.*', '*.ga_impls', '*.ga_impls.*', '*.plugin.ostree', '*.services.examples', 'syspurpose*'])
 
 
+RPM_VERSION = None
+GTK_VERSION = None
+
+
 # subclass build_py so we can generate
 # version.py based on either args passed
 # in (--rpm-version, --gtk-version) or
@@ -61,6 +65,12 @@ class rpm_version_release_build_py(_build_py):
         self.versioned_packages = []
 
     def finalize_options(self):
+        # When --gtk-version and --rpm-version was provided ac command line
+        # option of install command, then get these values from global variables
+        if self.rpm_version is None and RPM_VERSION is not None:
+            self.rpm_version = RPM_VERSION
+        if self.gtk_version is None and GTK_VERSION is not None:
+            self.gtk_version = GTK_VERSION
         _build_py.finalize_options(self)
         self.set_undefined_options(
             'build',
@@ -111,6 +121,11 @@ class install(_install):
         self.with_cockpit_desktop_entry = None
 
     def finalize_options(self):
+        global RPM_VERSION, GTK_VERSION
+        if self.rpm_version is not None:
+            RPM_VERSION = self.rpm_version
+        if self.gtk_version is not None:
+            GTK_VERSION = self.gtk_version
         _install.finalize_options(self)
         self.set_undefined_options(
             'build',
@@ -132,10 +147,19 @@ class build(_build):
         self.git_tag_prefix = "subscription-manager-"
 
     def finalize_options(self):
+        # When --gtk-version and --rpm-version was provided as command line
+        # option of install command, then get these values from global variables
+        if self.rpm_version is None and RPM_VERSION is not None:
+            self.rpm_version = RPM_VERSION
+        if self.gtk_version is None and GTK_VERSION is not None:
+            self.gtk_version = GTK_VERSION
+
         _build.finalize_options(self)
+
+        # When the gtk/rpm-version were not provided as command line options,
+        # then try to get such information from .git or rpm
         if not self.rpm_version:
             self.rpm_version = self.get_git_describe()
-
         if not self.gtk_version:
             self.gtk_version = self.get_gtk_version()
 
