@@ -73,7 +73,7 @@ ifeq ($(OS),)
    INSTALL_INITIAL_SETUP?=false
 else
    GTK_VERSION?=3
-   INSTALL_FIRSTBOOT?=true
+   INSTALL_FIRSTBOOT?=false
    INSTALL_INITIAL_SETUP?=true
 endif
 
