@@ -1277,9 +1277,6 @@ class RegisterCommand(UserPassCommand):
                                help=_("Deprecated, see --auto-attach"))
         self.parser.add_option("--auto-attach", action='store_true', dest="autoattach",
                                help=_("automatically attach compatible subscriptions to this system"))
-        self.parser.add_option("--disable-auto-attach", action='store_true', dest="disable_autoattach",
-                               help=_("do not automatically attach compatible subscriptions to this system, "
-                                      "when activation key is used"))
         self.parser.add_option("--force", action='store_true',
                                help=_("register the system even if it is already registered"))
         self.parser.add_option("--activationkey", action='append', dest="activation_keys",
@@ -1301,16 +1298,6 @@ class RegisterCommand(UserPassCommand):
             system_exit(os.EX_USAGE, _("Error: Activation keys do not allow environments to be specified."))
         elif self.autoattach and self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Activation keys cannot be used with --auto-attach."))
-        elif self.autoattach and self.options.disable_autoattach:
-            system_exit(
-                os.EX_USAGE,
-                _("Error: The --disable-auto-attach option cannot be used with the --auto-attach option'.")
-            )
-        elif not self.options.activation_keys and self.options.disable_autoattach:
-            system_exit(
-                os.EX_USAGE,
-                _("Error: The --disable-auto-attach option cannot be used without activation keys'.")
-            )
         # 746259: Don't allow the user to pass in an empty string as an activation key
         elif self.options.activation_keys and '' in self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Must specify an activation key"))
@@ -1401,10 +1388,6 @@ class RegisterCommand(UserPassCommand):
             # means things like following name owner changes gets weird.
             service = register.RegisterService(admin_cp)
 
-            autoheal = True
-            if self.options.disable_autoattach is True:
-                autoheal = False
-
             if self.options.consumerid:
                 log.debug("Registering as existing consumer: %s" % self.options.consumerid)
                 consumer = service.register(None, consumerid=self.options.consumerid)
@@ -1419,7 +1402,6 @@ class RegisterCommand(UserPassCommand):
                     force=self.options.force,
                     name=self.options.consumername,
                     type=self.options.consumertype,
-                    autoheal=autoheal,
                     service_level=self.options.service_level,
                 )
         except (connection.RestlibException, exceptions.ServiceError) as re:
@@ -1464,9 +1446,12 @@ class RegisterCommand(UserPassCommand):
 
         if self.options.release:
             # TODO: grab the list of valid options, and check
-            self.cp.updateConsumer(consumer['uuid'], release=self.options.release, autoheal=autoheal)
+            self.cp.updateConsumer(consumer['uuid'], release=self.options.release)
 
         if self.autoattach:
+            if 'serviceLevel' not in consumer and self.options.service_level:
+                system_exit(os.EX_UNAVAILABLE, _("Error: The --servicelevel option is not supported "
+                                 "by the server. Did not complete your request."))
             try:
                 # We don't call auto_attach with self.option.service_level, because it has been already
                 # set during service.register() call
@@ -1478,7 +1463,7 @@ class RegisterCommand(UserPassCommand):
                 raise
 
         if self.options.consumerid or \
-                (self.options.activation_keys and not self.options.disable_autoattach) or \
+                self.options.activation_keys or \
                 self.autoattach or \
                 self.cp.has_capability(CONTENT_ACCESS_CERT_CAPABILITY):
             log.debug("System registered, updating entitlements if needed")
@@ -1491,9 +1476,7 @@ class RegisterCommand(UserPassCommand):
         profile_mgr.update_check(self.cp, consumer['uuid'], True)
 
         subscribed = 0
-        if self.options.disable_autoattach:
-            print(_("Auto-attach disabled using CLI option"))
-        elif self.options.activation_keys or self.autoattach:
+        if self.options.activation_keys or self.autoattach:
             # update with latest cert info
             self.sorter = inj.require(inj.CERT_SORTER)
             self.sorter.force_cert_check()

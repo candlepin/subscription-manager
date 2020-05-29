@@ -201,9 +201,7 @@ class RegisterServiceTest(InjectionMockingTest):
             role="",
             addons=[],
             service_level="",
-            usage="",
-            autoheal=None
-        )
+            usage="")
         self.mock_installed_products.write_cache.assert_called()
 
         mock_persist_consumer.assert_called_once_with(expected_consumer)
@@ -239,46 +237,7 @@ class RegisterServiceTest(InjectionMockingTest):
             role="",
             addons=[],
             service_level="",
-            usage="",
-            autoheal=None
-        )
-        self.mock_installed_products.write_cache.assert_called()
-
-        mock_persist_consumer.assert_called_once_with(expected_consumer)
-        expected_plugin_calls = [
-            mock.call('pre_register_consumer', name='name', facts={}),
-            mock.call('post_register_consumer', consumer=expected_consumer, facts={})
-        ]
-        self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
-
-    @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
-    def test_register_with_activation_keys_autoattach_disabled(self, mock_persist_consumer):
-        self.mock_cp.username = None
-        self.mock_cp.password = None
-        self.mock_identity.is_valid.return_value = False
-        self.mock_installed_products.format_for_server.return_value = []
-        self.mock_installed_products.tags = []
-
-        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
-        self.mock_cp.registerConsumer.return_value = expected_consumer
-
-        register_service = register.RegisterService(self.mock_cp)
-        register_service.register("org", name="name", activation_keys=[1], autoheal=False)
-
-        self.mock_cp.registerConsumer.assert_called_once_with(
-            name="name",
-            facts={},
-            owner="org",
-            environment=None,
-            keys=[1],
-            installed_products=[],
-            content_tags=[],
-            type="system",
-            role="",
-            addons=[],
-            service_level="",
-            usage="",
-            autoheal=False
+            usage=""
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -359,51 +318,7 @@ class RegisterServiceTest(InjectionMockingTest):
             role="test_role",
             service_level="test_sla",
             type="system",
-            usage="test_usage",
-            autoheal=None
-        )
-
-    @mock.patch('subscription_manager.syspurposelib.write_syspurpose')
-    @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
-    def test_writes_syspurpose(self, mock_persist_consumer, mock_write_syspurpose):
-        self.mock_installed_products.format_for_server.return_value = []
-        self.mock_installed_products.tags = []
-        self.mock_identity.is_valid.return_value = False
-        self.mock_sp_store_contents["role"] = "test_role"
-        self.mock_sp_store_contents["service_level_agreement"] = "test_sla"
-        self.mock_sp_store_contents["addons"] = ["addon1"]
-        self.mock_sp_store_contents["usage"] = "test_usage"
-
-        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
-        self.mock_cp.registerConsumer.return_value = expected_consumer
-
-        register_service = register.RegisterService(self.mock_cp)
-        register_service.register("org", name="name", service_level="another_sla")
-
-        self.mock_cp.registerConsumer.assert_called_once_with(
-            addons=["addon1"],
-            content_tags=[],
-            environment=None,
-            facts={},
-            installed_products=[],
-            keys=None,
-            name="name",
-            owner="org",
-            role="test_role",
-            service_level="another_sla",
-            type="system",
-            usage="test_usage",
-            autoheal=None
-        )
-
-        mock_write_syspurpose.assert_called_once_with(
-            {
-                'usage': 'test_usage',
-                'service_level_agreement': 'another_sla',
-                'addons': ['addon1'],
-                'role': 'test_role'
-            }
-        )
+            usage="test_usage")
 
     def test_does_not_require_basic_auth_with_activation_keys(self):
         self.mock_cp.username = None
