@@ -222,7 +222,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.27.4
+Version: 1.27.5
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1410,6 +1410,14 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Sun May 31 2020 Christopher Snyder <csnyder@redhat.com> 1.27.5-1
+- Revert "1667792: added --disable-auto-attach option to register command;
+  ENT-1684" (csnyder@redhat.com)
+- 1834792: Try to terminate rhsmd after timeout; ENT-2368 (jhnidek@redhat.com)
+- 1837244: Fix wrong version provided by subscription-manager version; ENT-2388
+  (jhnidek@redhat.com)
+- 1838012: prevent redundant remote syspurpose sync (pmoravec@redhat.com)
+
 * Wed May 20 2020 Christopher Snyder <csnyder@redhat.com> 1.27.4-1
 - Fix unit test of getting release information (jhnidek@redhat.com)
 - Send Service-level during registration only once (csnyder@redhat.com)
