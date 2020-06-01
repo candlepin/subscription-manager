@@ -1,13 +1,15 @@
 # Ondřej Januš <ojanus@redhat.com>, 2019. #zanata
 # corina roe <croe@redhat.com>, 2019. #zanata
+# Christopher Snyder <csnyder@redhat.com>, 2020. #zanata
+# John Sefler <jsefler@redhat.com>, 2020. #zanata
 # Ludek Janda <ljanda@redhat.com>, 2020. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-16 15:59-0400\n"
-"PO-Revision-Date: 2020-05-12 08:18+0000\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
+"PO-Revision-Date: 2020-06-01 06:34+0000\n"
+"Last-Translator: Christopher Snyder <csnyder@redhat.com>\n"
 "Language-Team: French\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -711,7 +713,7 @@ msgstr "Ensembles de contenu :"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rct/manifest_commands.py:300
 msgid "\tManifest"
-msgstr "\\tManifeste"
+msgstr "\tManifeste"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rct/manifest_commands.py:312
@@ -4252,7 +4254,8 @@ msgid ""
 "{advice}"
 msgstr ""
 "Avertissement : L'administrateur du serveur de droits d’accès a récemment "
-"défini un  de \"{download_value}\" pour ce système.\n"
+"défini un {attr} de \"{download_value}\" pour ce système.\n"
+"{advice}"
 
 #: src/subscription_manager/managercli.py:200
 #, python-brace-format
@@ -4911,7 +4914,7 @@ msgstr "Environnement : "
 #: src/subscription_manager/managercli.py:1495
 #, python-format
 msgid "Hint: Organization \"%s\" contains following environments: %s"
-msgstr "Indice : Organisation \"%s\" contient les environnements suivants : "
+msgstr "Indice : Organisation \"%s\" contient les environnements suivants : %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/managercli.py:1504
@@ -4923,7 +4926,8 @@ msgstr "Pas de tel environnement : %s"
 #: src/subscription_manager/managercli.py:1535
 #, python-format
 msgid "Hint: User \"%s\" is member of following organizations: %s"
-msgstr "Indice : l'utilisateur \"%s\" est membre des organisations suivantes : "
+msgstr ""
+"Indice : l'utilisateur \"%s\" est membre des organisations suivantes : %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/managercli.py:1585
@@ -6364,7 +6368,7 @@ msgstr "Processus interrompu par l'utilisateur."
 #: src/subscription_manager/scripts/package_profile_upload.py:64
 #, python-format
 msgid "Error uploading package profile: %s\n"
-msgstr "Erreur de téléchargement du profil du paquet : %s"
+msgstr "Erreur de téléchargement du profil du paquet : %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:84
