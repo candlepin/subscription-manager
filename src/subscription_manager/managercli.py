@@ -577,14 +577,14 @@ class SyspurposeCommand(CliCommand):
             self.parser.add_option(
                 "--set",
                 dest="set",
-                help=(_("Set {attr} of system purpose".format(attr=attr)))
+                help=(_("Set {attr} of system purpose").format(attr=attr))
             )
         if 'unset' in commands:
             self.parser.add_option(
                 "--unset",
                 dest="unset",
                 action="store_true",
-                help=(_("Unset {attr} of system purpose".format(attr=attr)))
+                help=(_("Unset {attr} of system purpose").format(attr=attr))
             )
         if 'add' in commands:
             self.parser.add_option(
@@ -592,7 +592,7 @@ class SyspurposeCommand(CliCommand):
                 dest="to_add",
                 action="append",
                 default=[],
-                help=_("Add an item to the list ({attr}).".format(attr=attr))
+                help=_("Add an item to the list ({attr}).").format(attr=attr)
             )
         if 'remove' in commands:
             self.parser.add_option(
@@ -600,7 +600,7 @@ class SyspurposeCommand(CliCommand):
                 dest="to_remove",
                 action="append",
                 default=[],
-                help=_("Remove an item from the list ({attr}).".format(attr=attr))
+                help=_("Remove an item from the list ({attr}).").format(attr=attr)
             )
 
     def _get_synced_store(self):
@@ -632,7 +632,7 @@ class SyspurposeCommand(CliCommand):
 
     def set(self):
         self._set(self.options.set)
-        success_msg = '{attr} set to "{val}".'.format(attr=self.attr, val=self.options.set)
+        success_msg = _('{attr} set to "{val}".').format(attr=self.attr, val=self.options.set)
         self._check_result(
             expectation=lambda res: res.get(self.attr) == self.options.set,
             success_msg=success_msg,
@@ -716,7 +716,7 @@ class SyspurposeCommand(CliCommand):
             print(_("Current {name}: {val}".format(name=self.name.capitalize(),
                                                    val=values)))
         else:
-            print(_("{name} not set.".format(name=self.name.capitalize())))
+            print(_("{name} not set.").format(name=self.name.capitalize()))
 
     def sync(self):
         return syspurposelib.SyspurposeSyncActionCommand().perform(include_result=True)[1]
@@ -751,7 +751,7 @@ class SyspurposeCommand(CliCommand):
             msg = _(SP_CONFLICT_MESSAGE.format(attr=attr, download_value=value, advice=advice))
             system_exit(os.EX_SOFTWARE, msgs=msg)
         else:
-            print(_(success_msg))
+            print(success_msg)
 
 
 class UserPassCommand(CliCommand):
@@ -1187,7 +1187,7 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
             super(ServiceLevelCommand, self).set()
         else:
             self.update_service_level(self.options.set)
-            print(_("Service level set to: \"{val}\".".format(val=self.options.set)))
+            print(_("Service level set to: \"{val}\".").format(val=self.options.set))
 
     def unset(self):
         if self.cp.has_capability("syspurpose"):
