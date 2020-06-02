@@ -172,6 +172,17 @@ class SyspurposeSyncActionReport(certlib.ActionReport):
         if msg:
             self._updates.append(msg)
 
+    """
+    The base method formatting does not fit the massages we are seeing here
+    BZ #1789457
+    """
+    def format_exceptions(self):
+        buf = ''
+        for e in self._exceptions:
+            buf += str(e).strip()
+            buf += '\n'
+        return buf
+
 
 class SyspurposeSyncActionCommand(object):
     """
