@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.39
+Version: 1.24.40
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1161,6 +1161,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Jun 02 2020 Christopher Snyder <csnyder@redhat.com> 1.24.40-1
+- 1725525: Update keys for translations (csnyder@redhat.com)
+
 * Tue Jun 02 2020 Christopher Snyder <csnyder@redhat.com> 1.24.39-1
 - 1789457: Syspurpose exception message parsing (wpoteat@redhat.com)
 - 1725525: Mark one string for translation; ENT-1680 (jhnidek@redhat.com)
