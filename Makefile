@@ -65,6 +65,7 @@ INSTALL_CONTAINER_PLUGIN ?= true
 WITH_SYSTEMD ?= true
 WITH_SUBMAN_GUI ?= true
 WITH_COCKPIT ?= true
+WITH_SUBMAN_MIGRATION ?= true
 
 # if OS is empty string, we're on el6 or sles11
 ifeq ($(OS),)
@@ -109,9 +110,12 @@ ICON_LDFLAGS=`pkg-config --libs "gtk+-$(GTK_VERSION).0 libnotify gconf-2.0 dbus-
 
 PYFILES := `find src/ test/ -name "*.py"`
 BIN_FILES := bin/subscription-manager \
-			 bin/rhn-migrate-classic-to-rhsm \
 			 bin/rct \
 			 bin/rhsm-debug
+
+ifeq ($(WITH_SUBMAN_MIGRATION),true)
+    BIN_FILES := bin/rhn-migrate-classic-to-rhsm
+endif
 
 STYLEFILES=$(PYFILES) $(BIN_FILES)
 
@@ -204,7 +208,6 @@ install-conf:
 	install -m 644 etc-conf/subscription-manager.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/subscription-manager
 	install -m 644 etc-conf/rct.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/rct
 	install -m 644 etc-conf/rhsm-debug.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/rhsm-debug
-	install -m 644 etc-conf/rhn-migrate-classic-to-rhsm.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/rhn-migrate-classic-to-rhsm
 	install -m 644 etc-conf/rhsmcertd.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/rhsmcertd
 	install -d $(DESTDIR)/$(PREFIX)/share/appdata
 	install -d $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
@@ -219,6 +222,9 @@ install-conf:
 		install -m 644 etc-conf/subscription-manager-gui.appdata.xml $(DESTDIR)/$(INSTALL_DIR)/appdata/subscription-manager-gui.appdata.xml; \
 		install -m 644 etc-conf/subscription-manager-gui.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/subscription-manager-gui; \
 		install -m 644 etc-conf/rhsm-icon.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/rhsm-icon; \
+	fi;
+	if [[ "$(WITH_SUBMAN_MIGRATION)" == "true" ]]; then \
+	    install -m 644 etc-conf/rhn-migrate-classic-to-rhsm.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/rhn-migrate-classic-to-rhsm; \
 	fi;
 	if [ "$(INSTALL_ZYPPER_PLUGINS)" = "true" ] ; then \
 	    install -m 644 etc-conf/zypper.conf $(DESTDIR)/etc/rhsm/; \
@@ -333,11 +339,10 @@ install-post-boot: install-firstboot install-initial-setup
 install-via-setup: install-subpackages-via-setup
 	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py install --root $(DESTDIR) --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION) --prefix=$(PREFIX) \
 	--with-systemd=$(WITH_SYSTEMD) --with-subman-gui=${WITH_SUBMAN_GUI} --with-cockpit-desktop-entry=${WITH_COCKPIT} \
-	$(SETUP_PY_INSTALL_PARAMS)
+	--with-subman-migration=${WITH_SUBMAN_MIGRATION} $(SETUP_PY_INSTALL_PARAMS)
 	mkdir -p $(DESTDIR)/$(PREFIX)/sbin/
 	mkdir -p $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/subscription-manager $(DESTDIR)/$(PREFIX)/sbin/
-	mv $(DESTDIR)/$(PREFIX)/bin/rhn-migrate-classic-to-rhsm $(DESTDIR)/$(PREFIX)/sbin/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsmcertd-worker $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-service $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-facts-service $(DESTDIR)/$(LIBEXEC_DIR)/
@@ -348,6 +353,11 @@ install-via-setup: install-subpackages-via-setup
 		rm $(DESTDIR)/$(PREFIX)/bin/subscription-manager-gui; \
 		rm $(DESTDIR)/$(PREFIX)/bin/rhsmd; \
 	fi; \
+	if [[ "$(WITH_SUBMAN_MIGRATION)" == "true" ]]; then \
+	    mv $(DESTDIR)/$(PREFIX)/bin/rhn-migrate-classic-to-rhsm $(DESTDIR)/$(PREFIX)/sbin/; \
+	else \
+	    rm $(DESTDIR)/$(PREFIX)/bin/rhn-migrate-classic-to-rhsm; \
+	fi;
 	if [[ "$(INCLUDE_SYSPURPOSE)" = "1" ]]; then \
 		mv $(DESTDIR)/$(PREFIX)/bin/syspurpose $(DESTDIR)/$(PREFIX)/sbin/; \
 	fi;

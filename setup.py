@@ -42,7 +42,16 @@ from build_ext import i18n, lint, template, utils
 # This is used to deal with the fact that we have multiple packages which
 # might be built optionally all tracked / installed via one setup.
 exclude_packages = [x.strip() for x in os.environ.get('EXCLUDE_PACKAGES', '').split(',') if x != '']
-exclude_packages.extend(['subscription_manager.gui.firstboot.*', '*.ga_impls', '*.ga_impls.*', '*.plugin.ostree', '*.services.examples', 'syspurpose*'])
+exclude_packages.extend(
+    [
+        'subscription_manager.gui.firstboot.*',
+        '*.ga_impls',
+        '*.ga_impls.*',
+        '*.plugin.ostree',
+        '*.services.examples',
+        'syspurpose*'
+    ]
+)
 
 
 RPM_VERSION = None
@@ -109,6 +118,7 @@ class install(_install):
         ('rpm-version=', None, 'version and release of the RPM this is built for'),
         ('with-systemd=', None, 'whether to install w/ systemd support or not'),
         ('with-subman-gui=', None, 'whether to install subman GUI or not'),
+        ('with-subman-migration=', None, 'whether to install subman migration or not'),
         ('with-cockpit-desktop-entry=', None, 'whether to install desktop entry for subman cockpit plugin or not'),
         ]
 
@@ -118,6 +128,7 @@ class install(_install):
         self.gtk_version = None
         self.with_systemd = None
         self.with_subman_gui = None
+        self.with_subman_migration = None
         self.with_cockpit_desktop_entry = None
 
     def finalize_options(self):
@@ -203,6 +214,7 @@ class install_data(_install_data):
     user_options = _install_data.user_options + [
         ('with-systemd=', None, 'whether to install w/ systemd support or not'),
         ('with-subman-gui=', None, 'whether to install subman GUI or not'),
+        ('with-subman-migration=', None, 'whether to install subman migration or not'),
         ('with-cockpit-desktop-entry=', None, 'whether to install desktop entry for subman cockpit plugin or not'),
         ]
 
@@ -210,6 +222,7 @@ class install_data(_install_data):
         _install_data.initialize_options(self)
         self.with_systemd = None
         self.with_subman_gui = None
+        self.with_subman_migration = None
         self.with_cockpit_desktop_entry = None
         # Can't use super() because Command isn't a new-style class.
 
@@ -217,6 +230,7 @@ class install_data(_install_data):
         _install_data.finalize_options(self)
         self.set_undefined_options('install', ('with_systemd', 'with_systemd'))
         self.set_undefined_options('install', ('with_subman_gui', 'with_subman_gui'))
+        self.set_undefined_options('install', ('with_subman_migration', 'with_subman_migration'))
         self.set_undefined_options('install', ('with_cockpit_desktop_entry', 'with_cockpit_desktop_entry'))
         if self.with_systemd is None:
             self.with_systemd = True  # default to True
@@ -226,6 +240,8 @@ class install_data(_install_data):
             self.with_subman_gui = False  # default to False
         else:
             self.with_subman_gui = self.with_subman_gui == 'true'
+        # Set self.with_subman_migration to True, when self.with_subman_migration is equal to 'true'
+        self.with_subman_migration = self.with_subman_migration == 'true'
         # Enable creating desktop entry for cockpit plugin only in case that subman gui will not be
         # installed
         if self.with_subman_gui is False:
@@ -245,6 +261,8 @@ class install_data(_install_data):
         if self.with_cockpit_desktop_entry:
             self.add_cockpit_desktop_entry()
             self.add_icons()
+        if self.with_subman_migration:
+            self.add_migration_doc_files()
         self.add_dbus_service_files()
         self.add_systemd_services()
         _install_data.run(self)
@@ -276,6 +294,16 @@ class install_data(_install_data):
         autostart_dir = self.join('/etc', 'xdg', 'autostart')
         autostart_file = self.join('build', 'autostart', 'rhsm-icon.desktop')
         self.data_files.append((autostart_dir, [autostart_file]))
+
+    def add_migration_doc_files(self):
+        """
+        Add documentation for subscription-manager-migration
+        """
+        data_files = dict(self.data_files)
+        man8_pages = data_files['share/man/man8']
+        man8_pages = man8_pages.union(set(['man/rhn-migrate-classic-to-rhsm.8']))
+        data_files['share/man/man8'] = man8_pages
+        self.data_files = [(item, value) for item, value in data_files.items()]
 
     def add_gui_doc_files(self):
         """
@@ -412,7 +440,13 @@ setup(
     data_files=[
         # sat5to6 is packaged separately
         # man pages for gui are added in add_gui_doc_files(), when GUI package is created
-        ('share/man/man8', set(glob('man/*.8')) - set(['man/sat5to6.8']) - set(['man/subscription-manager-gui.8', 'man/rhsm-icon.8'])),
+        (
+            'share/man/man8',
+            set(glob('man/*.8')) - \
+                set(['man/sat5to6.8']) - \
+                set(['man/subscription-manager-gui.8', 'man/rhsm-icon.8']) - \
+                set(['man/rhn-migrate-classic-to-rhsm.8'])
+        ),
         ('share/man/man5', glob('man/*.5')),
     ],
     command_options={
