@@ -20,8 +20,13 @@ import logging
 
 from rhsmlib.facts import dmiinfo
 from rhsmlib.facts import collector
+from uuid import UUID
 
 ARCHES_WITHOUT_DMI = ["ppc64", "ppc64le", "s390x"]
+ARCHES_WITH_ALTERNATE_UUID_LOC = ["aarch64"]
+ARCH_UUID_LOCATION = {
+    "aarch64": "/sys/devices/virtual/dmi/id/product_uuid"
+}
 
 log = logging.getLogger(__name__)
 
@@ -37,6 +42,35 @@ class NullFirmwareInfoCollector(object):
 
     def get_all(self):
         return self.info
+
+
+class UuidFirmwareInfoCollector(collector.FactsCollector):
+    """
+    If we are on an arch where dmi.system.uuid is not collected
+    but is available in a directory, we will collect it here.
+    """
+
+    def __init__(self, prefix=None, testing=None, collected_hw_info=None):
+        super(UuidFirmwareInfoCollector, self).__init__(
+            prefix=prefix,
+            testing=testing,
+            collected_hw_info=collected_hw_info
+        )
+
+    def get_all(self):
+        uuidinfo = {}
+        try:
+            with open(ARCH_UUID_LOCATION[self.arch], 'r') as uuid_file:
+                uuid = uuid_file.read().strip()
+            if uuid:
+                UUID(uuid)
+                uuidinfo['dmi.system.uuid'] = uuid
+        except ValueError as err:
+            log.error('Wrong UUID value: %s read from: %s, error: %s' %
+                (uuid, ARCH_UUID_LOCATION[self.arch], err))
+        except Exception as e:
+            log.warning("Error reading system uuid information: %s", e, exc_info=True)
+        return uuidinfo
 
 
 class FirmwareCollector(collector.FactsCollector):
@@ -92,6 +126,9 @@ def get_firmware_collector(arch, prefix=None, testing=None,
     if arch in ARCHES_WITHOUT_DMI:
         log.debug("Not looking for DMI info since it is not available on '%s'" % arch)
         firmware_provider_class = NullFirmwareInfoCollector
+    elif arch in ARCHES_WITH_ALTERNATE_UUID_LOC:
+        log.debug("Looking in file structure for UUID for arch '%s'" % arch)
+        firmware_provider_class = UuidFirmwareInfoCollector
     else:
         try:
             import dmidecode  # noqa
