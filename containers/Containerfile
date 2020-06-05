@@ -1,5 +1,7 @@
 FROM fedora:30
 
+MAINTAINER "Candlepin Team" <candlepin@redhat.com>
+
 RUN yum install --disablerepo=updates -y \
     gettext \
     git \
@@ -34,6 +36,8 @@ RUN yum install --disablerepo=updates -y \
     rpmlint \
     xorg-x11-server-Xvfb \
     zanata-client \
+    python2-devel \
+    python3-devel \
     python2-decorator \
     python3-decorator \
     python2-six \
@@ -64,6 +68,7 @@ RUN yum install --disablerepo=updates -y \
     python3-gobject-base \
     python2-ethtool \
     python3-ethtool \
+    redhat-rpm-config \
     && yum clean all
 
 RUN mkdir /build
@@ -71,3 +76,7 @@ COPY requirements.txt dev-requirements.txt /build
 WORKDIR /build
 RUN pip2 install -r dev-requirements.txt 
 RUN pip3 install -r dev-requirements.txt
+RUN git clone https://github.com/candlepin/subscription-manager.git
+WORKDIR /build/subscription-manager
+RUN python3 ./setup.py build
+RUN python3 ./setup.py build_ext --inplace
