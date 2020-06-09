@@ -771,7 +771,9 @@ cp %{buildroot}%{python_sitearch}/rhsm/*.py %{buildroot}%{python2_sitearch}/rhsm
 %endif
 
 %if 0%{?suse_version}
+%if %use_subman_gui
 %suse_update_desktop_file -n -r subscription-manager-gui Settings PackageManager
+%endif
 %endif
 
 %if %use_subman_gui
