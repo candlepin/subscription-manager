@@ -621,6 +621,54 @@ class TestSyncedStore(SyspurposeTestBase):
         self.assert_equal_dict(expected_local, local_result)
         self.assert_equal_dict(expected_cache, cache_result)
 
+    def test_same_values_not_synced_with_server(self):
+        cache_contents = {
+            u'role': u'initial_role',
+            u'usage': u'initial_usage',
+            u'service_level_agreement': u'initial_sla'
+        }
+        local_contents = {
+            u'role': u'initial_role',
+            u'usage': u'initial_usage',
+            u'service_level_agreement': u'initial_sla'
+        }
+        remote_contents = {
+            u'role': u'initial_role',
+            u'usage': u'initial_usage',
+            u'serviceLevel': u'initial_sla'
+        }
+
+        self.uep.getConsumer.return_value = remote_contents
+        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), cache_contents)
+        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), local_contents)
+
+        synced_store = SyncedStore(self.uep, consumer_uuid="something")
+        result = self.assertRaisesNothing(synced_store.sync)
+
+        self.assertTrue(isinstance(result, SyncResult))
+
+        # When values are still the same, then client should not try to sync
+        # same values with server
+        self.uep.updateConsumer.assert_not_called()
+
+        local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
+        cache_result = json.load(io.open(self.cache_syspurpose_file, 'r'))
+
+        expected_local = {
+            u'role': u'initial_role',
+            u'usage': u'initial_usage',
+            u'service_level_agreement': u'initial_sla'
+        }
+        expected_cache = {
+            u'role': u'initial_role',
+            u'usage': u'initial_usage',
+            u'service_level_agreement': u'initial_sla',
+            u'addons': None
+        }
+
+        self.assert_equal_dict(expected_cache, cache_result)
+        self.assert_equal_dict(expected_local, local_result)
+
     def test_server_does_not_support_syspurpose(self):
         # This is how we detect if we have syspurpose support
         self.uep.has_capability = mock.Mock(side_effect=lambda x: x in [])
