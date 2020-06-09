@@ -138,7 +138,11 @@
 %if %{use_initial_setup}
 %global post_boot_tool INSTALL_INITIAL_SETUP=true INSTALL_FIRSTBOOT=false
 %else
+%if %{use_firstboot}
 %global post_boot_tool INSTALL_INITIAL_SETUP=false INSTALL_FIRSTBOOT=true
+%else
+%global post_boot_tool INSTALL_INITIAL_SETUP=false INSTALL_FIRSTBOOT=false
+%endif
 %endif
 
 %if 0%{?suse_version}
@@ -349,19 +353,21 @@ BuildRequires: %{py_package_prefix}-six
 BuildRequires: desktop-file-utils
 %endif
 
-BuildRequires: %{?suse_version:dbus-1-glib-devel} %{!?suse_version:dbus-glib-devel}
 %if 0%{?suse_version} <= 1110
 BuildRequires: %{?suse_version:sles-release} %{!?suse_version:system-release}
 %else
 BuildRequires: %{?suse_version:distribution-release} %{!?suse_version:system-release}
 %endif
-BuildRequires: %{?suse_version:gconf2-devel} %{!?suse_version:GConf2-devel}
-BuildRequires: %{?suse_version:update-desktop-files} %{!?suse_version:scrollkeeper}
-
-BuildRequires: %{?gtk3:gtk3-devel} %{!?gtk3:gtk2-devel}
 
 %if 0%{?suse_version}
 BuildRequires: libzypp
+%endif
+
+%if %{use_subman_gui}
+BuildRequires: %{?suse_version:gconf2-devel} %{!?suse_version:GConf2-devel}
+BuildRequires: %{?suse_version:update-desktop-files} %{!?suse_version:scrollkeeper}
+BuildRequires: %{?suse_version:dbus-1-glib-devel} %{!?suse_version:dbus-glib-devel}
+BuildRequires: %{?gtk3:gtk3-devel} %{!?gtk3:gtk2-devel}
 %endif
 
 %if %use_systemd
@@ -718,7 +724,7 @@ subscription-manager-initial-setup-addon, and subscription-manager-cockpit-plugi
 make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
     LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" \
     %{?gtk_version} %{?subpackages} %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"} \
-    %{exclude_packages}
+    %{exclude_packages} %{?with_subman_gui}
 
 %if %{with python2_rhsm}
 python2 ./setup.py build --quiet --gtk-version=%{?gtk3:3}%{?!gtk3:2} --rpm-version=%{version}-%{release}
@@ -765,7 +771,9 @@ cp %{buildroot}%{python_sitearch}/rhsm/*.py %{buildroot}%{python2_sitearch}/rhsm
 %endif
 
 %if 0%{?suse_version}
+%if %use_subman_gui
 %suse_update_desktop_file -n -r subscription-manager-gui Settings PackageManager
+%endif
 %endif
 
 %if %use_subman_gui
