@@ -550,11 +550,12 @@ class BaseRestLib(object):
         :param context: SSL context
         :return: None
         """
+        if not os.path.isdir(self.ca_dir):
+            log.warning('Directory "%s" with CA certificates is missing' % self.ca_dir)
+            return None
+
         loaded_ca_certs = []
         cert_path = ''
-        if not os.path.isdir(self.ca_dir):
-            log.debug("Creating directory: %s" % self.ca_dir)
-            os.mkdir(self.ca_dir)
         try:
             for cert_file in os.listdir(self.ca_dir):
                 if cert_file.endswith(".pem"):
