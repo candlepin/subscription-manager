@@ -226,7 +226,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.27.5
+Version: 1.27.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1418,6 +1418,17 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Jun 11 2020 Christopher Snyder <csnyder@redhat.com> 1.27.6-1
+- 1804454: collect uuid on aarch64 system (wpoteat@redhat.com)
+- WIP: Try to fix build of rpms on suse. (jhnidek@redhat.com)
+- 1842474: Update local and cache file during sync(); ENT-2433
+  (jhnidek@redhat.com)
+- 1725525: Mark one string for translation; ENT-1680 (jhnidek@redhat.com)
+- 1789457: Syspurpose exception message parsing (wpoteat@redhat.com)
+- Fix building sub-man on Fedora 32 (jhnidek@redhat.com)
+- cockpit: Call run-tests from common to run cockpit integration tests
+  (sanne.raymaekers@gmail.com)
+
 * Sun May 31 2020 Christopher Snyder <csnyder@redhat.com> 1.27.5-1
 - Revert "1667792: added --disable-auto-attach option to register command;
   ENT-1684" (csnyder@redhat.com)
