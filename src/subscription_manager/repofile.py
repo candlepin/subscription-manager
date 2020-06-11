@@ -321,6 +321,13 @@ class TidyWriter(object):
 
 
 class RepoFileBase(object):
+    """
+    Base class for managing repository.
+    """
+
+    PATH = None
+    NAME = None
+    REPOFILE_HEADER = None
 
     def __init__(self, path=None, name=None):
         # note PATH get's expanded with chroot info, etc
@@ -329,25 +336,39 @@ class RepoFileBase(object):
         self.path = Path.join(path, name)
         self.repos_dir = Path.abs(path)
         self.manage_repos = manage_repos_enabled()
-        # Simulate manage repos turned off if no repos directory exists.
-        # This indicates the corresponding package manager is not installed so
-        # clearly no need for us to manage repos.
-        if not self.path_exists(self.repos_dir):
-            log.warn("%s does not exist, turning manage_repos off." %
-                    self.repos_dir)
-            self.manage_repos = False
-        else:
+        if self.manage_repos is True:
             self.create()
 
     # Easier than trying to mock/patch os.path.exists
     def path_exists(self, path):
-        "wrapper around os.path.exists"
+        """
+        Wrapper around os.path.exists
+        """
         return os.path.exists(path)
 
     def exists(self):
         return self.path_exists(self.path)
 
+    def create_dir_path(self):
+        """
+        Try to create directory for .repo files
+        :return: None
+        """
+        if not self.path_exists(self.repos_dir):
+            log.debug('The directory %s does not exist. Trying to create it' % self.PATH)
+            try:
+                os.makedirs(name=self.repos_dir, mode=0o755, exist_ok=True)
+            except Exception as err:
+                log.warning('Unable to create directory: %s, error: %s' % (self.repos_dir, err))
+        else:
+            log.debug('The directory %s already exists' % self.repos_dir)
+
     def create(self):
+        """
+        Try to create new repo file.
+        :return: None
+        """
+        self.create_dir_path()
         if self.path_exists(self.path) or not self.manage_repos:
             return
         with open(self.path, 'w') as f:
@@ -483,9 +504,9 @@ class YumRepoFile(RepoFileBase, ConfigParser):
         return True
 
     def _has_changed(self):
-        '''
+        """
         Check if the version on disk is different from what we have loaded
-        '''
+        """
         on_disk = ConfigParser()
         on_disk.read(self.path)
         return not self._configparsers_equal(on_disk)
@@ -496,11 +517,10 @@ class YumRepoFile(RepoFileBase, ConfigParser):
                     self.path)
             return
         if self._has_changed():
-            f = open(self.path, 'w')
-            tidy_writer = TidyWriter(f)
-            ConfigParser.write(self, tidy_writer)
-            tidy_writer.close()
-            f.close()
+            with open(self.path, 'w') as f:
+                tidy_writer = TidyWriter(f)
+                ConfigParser.write(self, tidy_writer)
+                tidy_writer.close()
 
     def add(self, repo):
         self.add_section(repo.id)
