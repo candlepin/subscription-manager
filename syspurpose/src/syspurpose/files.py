@@ -505,13 +505,19 @@ class SyncedStore(object):
         # Check if /etc/rhsm/syspurpose directory exists
         if not os.path.isdir(USER_SYSPURPOSE_DIR):
             # If not create the file
-            log.debug('Creating directory: %s' % USER_SYSPURPOSE_DIR)
-            os.mkdir(USER_SYSPURPOSE_DIR)
+            log.debug('Trying to create directory: %s' % USER_SYSPURPOSE_DIR)
+            try:
+                os.makedirs(USER_SYSPURPOSE_DIR, mode=0o755, exist_ok=True)
+            except Exception as err:
+                log.warning('Unable to create directory: %s, error: %s' % (USER_SYSPURPOSE_DIR, err))
 
         # Check if /var/lib/rhsm/cache/ directory exists
         if not os.path.isdir(CACHE_DIR):
             log.debug('Creating directory: %s' % CACHE_DIR)
-            os.mkdir(CACHE_DIR)
+            try:
+                os.makedirs(CACHE_DIR, mode=0o755, exist_ok=True)
+            except Exception as err:
+                log.warning('Unable to create directory: %s, error: %s' % (CACHE_DIR, err))
 
         # Then we can try to create syspurpose.json file
         modes = ['w+']
