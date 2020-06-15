@@ -1458,6 +1458,8 @@ class RegisterCommand(UserPassCommand):
                                help=_("activation key to use for registration (can be specified more than once)"))
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("system preference used when subscribing automatically, requires --auto-attach"))
+        self.parser.add_option("--no-insights", action='store_true',
+                               help=_("stop insights from automatically registering using the system identity"))
 
     def _validate_options(self):
         self.autoattach = self.options.autosubscribe or self.options.autoattach
@@ -1578,6 +1580,7 @@ class RegisterCommand(UserPassCommand):
                     name=self.options.consumername,
                     type=self.options.consumertype,
                     service_level=self.options.service_level,
+                    no_insights=self.options.no_insights
                 )
         except (connection.RestlibException, exceptions.ServiceError) as re:
             log.exception(re)
