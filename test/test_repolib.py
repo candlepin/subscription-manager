@@ -552,6 +552,18 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         # otherwise left alone.
         self.assertTrue("metadata_expire" in list(existing_repo.keys()))
 
+    def test_set_custom_property_removed(self):
+        self._inject_mock_invalid_consumer()
+        update_action = RepoUpdateActionCommand()
+        existing_repo = Repo('testrepo')
+        existing_repo['exclude'] = "1"
+        # 'exclude' is not in the updated repo listing.
+        # this is how an override delete is passed into
+        # the update method
+        incoming_repo = Repo('testrepo')
+        update_action.update_repo(existing_repo, incoming_repo, existing_repo)
+        self.assertFalse('exclude' in list(existing_repo.keys()))
+
     def test_set_immutable_property_now_empty_value(self):
         self._inject_mock_invalid_consumer()
         update_action = RepoUpdateActionCommand()
