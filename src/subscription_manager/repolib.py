@@ -558,11 +558,14 @@ class RepoUpdateActionCommand(object):
             # value.
             if mutable and not self._is_overridden(old_repo, key) \
                     and not self._was_overridden(old_repo, key, old_repo.get(key)):
-                if (new_val is not None) and (not old_repo.get(key) or
-                        old_repo.get(key) == server_value_repo.get(key)):
+                if not old_repo.get(key) or \
+                        old_repo.get(key) == server_value_repo.get(key):
                     if old_repo.get(key) == new_val:
                         continue
-                    old_repo[key] = new_val
+                    if new_val is None:
+                        old_repo.pop(key, None)
+                    else:
+                        old_repo[key] = new_val
                     changes_made += 1
 
             # Immutable properties should be always be added/updated,
