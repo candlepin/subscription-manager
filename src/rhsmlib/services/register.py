@@ -14,6 +14,7 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 import logging
 import socket
+import subprocess
 
 from rhsmlib.services import exceptions
 
@@ -34,7 +35,7 @@ class RegisterService(object):
         self.cp = cp
 
     def register(self, org, activation_keys=None, environment=None, force=None, name=None, consumerid=None,
-            type=None, role=None, addons=None, service_level=None, usage=None, **kwargs):
+            type=None, role=None, addons=None, service_level=None, usage=None, no_insights=None, **kwargs):
         # We accept a kwargs argument so that the DBus object can pass the options dictionary it
         # receives transparently to the service via dictionary unpacking.  This strategy allows the
         # DBus object to be more independent of the service implementation.
@@ -43,6 +44,16 @@ class RegisterService(object):
         # signature we want to consider that an error.
         if kwargs:
             raise exceptions.ValidationError(_("Unknown arguments: %s") % kwargs.keys())
+
+        if no_insights is True:
+            try:
+                with open('/dev/null', 'w') as devnull:
+                    subprocess.call(['/usr/bin/systemctl', 'mask', '--now', 'insights-register.path'], stdout=devnull,
+                                    stderr=devnull)
+            except:
+                # ignore failures here in case we're running in a container, or some other issue prevents disabling
+                # insights auto-register
+                log.warn("Failed to disable automatic insights registration")
 
         syspurpose = syspurposelib.read_syspurpose()
 
