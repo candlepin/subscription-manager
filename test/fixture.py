@@ -278,7 +278,7 @@ class SubManFixture(unittest.TestCase):
 
     # The ContentConnection used for reading release versions from
     # the cdn. The injected one uses this.
-    def _get_release_versions(self, listing_path, ent_cert_key_pairs):
+    def _get_release_versions(self, listing_path):
         return self._release_versions
 
     # For changing injection consumer id to one that fails "is_valid"

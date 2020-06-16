@@ -145,7 +145,7 @@ class CdnReleaseVersionProvider(object):
         listings = sorted(set(listings))
         for listing_path in listings:
             try:
-                data = self.content_connection.get_versions(listing_path, list(ent_cert_key_pairs))
+                data = self.content_connection.get_versions(listing_path)
             except (socket.error,
                     six.moves.http_client.HTTPException,
                     ssl.SSLError,
