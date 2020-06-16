@@ -226,7 +226,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.27.6
+Version: 1.27.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1418,6 +1418,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Jun 16 2020 Christopher Snyder <csnyder@redhat.com> 1.27.7-1
+- 1840859: Custom repo parameters are not deletable (wpoteat@redhat.com)
+
 * Thu Jun 11 2020 Christopher Snyder <csnyder@redhat.com> 1.27.6-1
 - 1804454: collect uuid on aarch64 system (wpoteat@redhat.com)
 - WIP: Try to fix build of rpms on suse. (jhnidek@redhat.com)
