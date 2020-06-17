@@ -1333,6 +1333,9 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
     %endif
 %endif
 
+# Make all entitlement certificates and keys files readable by group and other
+chmod go+r /etc/pki/entitlement/*.pem || true
+
 if [ -x /bin/dbus-send ] ; then
     dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig > /dev/null 2>&1 || :
 fi

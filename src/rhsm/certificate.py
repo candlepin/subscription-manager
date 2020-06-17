@@ -122,6 +122,7 @@ class Certificate(object):
         :type content: str
         """
         self._update(content)
+        self.path = None
 
     def _update(self, content):
         if content:
@@ -523,7 +524,7 @@ class Key(object):
         Read the key.
 
         :param pem_path: The path to the .pem file.
-        :type path: str
+        :type pem_path: str
         """
         f = open(pem_path)
         content = f.read()
@@ -538,6 +539,7 @@ class Key(object):
         :type content: str
         """
         self.content = content
+        self.path = None
 
     def bogus(self):
         bogus = []
@@ -555,8 +557,8 @@ class Key(object):
         """
         Write the key.
 
-        :param path: The path to the .pem file.
-        :type path: str
+        :param pem_path: The path to the .pem file.
+        :type pem_path: str
         :return: self
         """
         f = open(pem_path, 'w')
