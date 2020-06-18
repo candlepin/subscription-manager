@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.40
+Version: 1.24.41
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1161,6 +1161,11 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Jun 18 2020 William Poteat <wpoteat@redhat.com> 1.24.41-1
+- 1842474: Update local and cache file during sync(); ENT-2433
+  (jhnidek@redhat.com)
+- 1838012: prevent redundant remote syspurpose sync (pmoravec@redhat.com)
+
 * Tue Jun 02 2020 Christopher Snyder <csnyder@redhat.com> 1.24.40-1
 - 1725525: Update keys for translations (csnyder@redhat.com)
 
