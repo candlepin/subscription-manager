@@ -411,6 +411,10 @@ if HAS_DEB822:
             self.repos822 = []
 
         def read(self):
+            if not self.manage_repos:
+                log.debug("Skipping read due to manage_repos setting: %s" %
+                        self.path)
+                return
             with open(self.path, 'r') as f:
                 for repo822 in Deb822.iter_paragraphs(f, shared_storage=False):
                     self.repos822.append(repo822)
