@@ -640,6 +640,11 @@ def get_process_names():
 
 
 def is_process_running(process_to_find):
+    """
+    Check if process with given name is running
+    :param process_to_find: string with process name
+    :return: True, when at least one process is running; Otherwise returns False
+    """
     for process_name in get_process_names():
         if process_to_find == process_name:
             return True

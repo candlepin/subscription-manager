@@ -545,6 +545,15 @@ class BaseRestLib(object):
         return cert_key_pairs
 
     def _load_ca_certificates(self, context):
+        """
+        Tries to load CA certificates to SSL context
+        :param context: SSL context
+        :return: None
+        """
+        if not os.path.isdir(self.ca_dir):
+            log.warning('Directory "%s" with CA certificates is missing' % self.ca_dir)
+            return None
+
         loaded_ca_certs = []
         cert_path = ''
         try:
@@ -562,6 +571,8 @@ class BaseRestLib(object):
 
         if loaded_ca_certs:
             log.debug("Loaded CA certificates from %s: %s" % (self.ca_dir, ', '.join(loaded_ca_certs)))
+        else:
+            log.warning("Unable to load any CA certificate from: %s" % self.ca_dir)
 
     def _create_connection(self, cert_file=None, key_file=None):
         # See M2Crypto/SSL/Context.py in m2crypto source and
