@@ -1,104 +1,112 @@
 # Ondřej Januš <ojanus@redhat.com>, 2019. #zanata
-# Tony Fu <tfu@redhat.com>, 2019. #zanata
+# John Sefler <jsefler@redhat.com>, 2020. #zanata
 # Ludek Janda <ljanda@redhat.com>, 2020. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-16 15:59-0400\n"
-"PO-Revision-Date: 2020-05-12 08:18+0000\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
-"Language-Team: Chinese (Simplified, China)\n"
-"Language: zh_CN\n"
+"POT-Creation-Date: 2020-06-02 13:53-0400\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2020-06-15 09:35+0000\n"
+"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"Language-Team: Chinese (Simplified, China)\n"
+"Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 "X-Generator: Zanata 4.6.2\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.7/optparse.py:146
+#: /usr/lib64/python2.7/optparse.py:140
 #, python-format
 msgid "no such option: %s"
 msgstr "没有此选项：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.7/optparse.py:157
+#: /usr/lib64/python2.7/optparse.py:151
 #, python-format
 msgid "ambiguous option: %s (%s?)"
 msgstr "模糊选项：%s (%s?)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.7/optparse.py:381
+#: /usr/lib64/python2.7/optparse.py:375
 #: src/subscription_manager/i18n_optparse.py:130
 #, python-format
 msgid "Usage: %s\n"
 msgstr "使用：%s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.7/optparse.py:400
-#: src/rct/printing.py:85
+#: /usr/lib64/python2.7/optparse.py:394 src/rct/printing.py:85
 msgid "Usage"
 msgstr "使用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.7/optparse.py:422
-#: /usr/lib64/python3.7/optparse.py:423
+#: /usr/lib64/python2.7/optparse.py:419
 msgid "integer"
 msgstr "整数"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.7/optparse.py:424
+#: /usr/lib64/python2.7/optparse.py:420
+msgid "long integer"
+msgstr "长整数"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: /usr/lib64/python2.7/optparse.py:421
 msgid "floating-point"
 msgstr "浮点"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.7/optparse.py:425
+#: /usr/lib64/python2.7/optparse.py:422
 msgid "complex"
 msgstr "结合的"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.7/optparse.py:433
+#: /usr/lib64/python2.7/optparse.py:430
 #, python-format
 msgid "option %s: invalid %s value: %r"
 msgstr "选项 %s：无效值 %s：%r"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.7/optparse.py:441
+#: /usr/lib64/python2.7/optparse.py:438
 #, python-format
 msgid "option %s: invalid choice: %r (choose from %s)"
 msgstr "选项 %s：无效选择：%r（在 %s 中选择）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.7/optparse.py:1238
+#: /usr/lib64/python2.7/optparse.py:1251
 msgid "show this help message and exit"
 msgstr "显示此帮助信息并退出"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.7/optparse.py:1243
+#: /usr/lib64/python2.7/optparse.py:1256
 msgid "show program's version number and exit"
 msgstr "显示程序版本数并退出"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.7/optparse.py:1266
+#: /usr/lib64/python2.7/optparse.py:1279
 msgid "%prog [options]"
 msgstr "%prog [选项]"
 
-#: /usr/lib64/python3.7/optparse.py:1486
-#: /usr/lib64/python3.7/optparse.py:1524
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: /usr/lib64/python2.7/optparse.py:1499 /usr/lib64/python2.7/optparse.py:1538
 #, python-format
-msgid "%(option)s option requires %(number)d argument"
-msgid_plural "%(option)s option requires %(number)d arguments"
-msgstr[0] "%(option)s 选项需要 %(number)d 参数"
+msgid "%s option requires an argument"
+msgstr "%s 选项需要一个参数"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.7/optparse.py:1496
+#: /usr/lib64/python2.7/optparse.py:1501 /usr/lib64/python2.7/optparse.py:1540
+#, python-format
+msgid "%s option requires %d arguments"
+msgstr "%s 选项需要 %d 参数"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: /usr/lib64/python2.7/optparse.py:1510
 #, python-format
 msgid "%s option does not take a value"
 msgstr "%s 选项没有数值"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.7/optparse.py:1612
+#: /usr/lib64/python2.7/optparse.py:1627
 msgid "Options"
 msgstr "选项"
 
@@ -114,7 +122,7 @@ msgid "Ok"
 msgstr "确定"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: cockpit/src/index.js:55
+#: cockpit/src/index.js:55 cockpit/src/subscriptions-view.jsx:253
 #: src/subscription_manager/gui/data/glade/installed.glade:86
 #: src/subscription_manager/gui/data/ui/installed.ui:93
 #: src/subscription_manager/gui/registergui.py:249
@@ -149,8 +157,7 @@ msgid "Custom URL"
 msgstr "自定义 URL"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: cockpit/src/subscriptions-register.jsx:76
-#: src/rct/printing.py:113
+#: cockpit/src/subscriptions-register.jsx:76 src/rct/printing.py:113
 msgid "URL"
 msgstr "URL"
 
@@ -182,15 +189,15 @@ msgstr "机构"
 
 #: cockpit/src/subscriptions-view.jsx:190
 msgid "Service Level:  "
-msgstr "服务等级："
+msgstr "服务等级： "
 
 #: cockpit/src/subscriptions-view.jsx:200
 msgid "Usage:  "
-msgstr "使用方法："
+msgstr "使用方法： "
 
 #: cockpit/src/subscriptions-view.jsx:210
 msgid "Role:  "
-msgstr "角色 :"
+msgstr "角色 :  "
 
 #: cockpit/src/subscriptions-view.jsx:220
 msgid "Addons:  "
@@ -198,7 +205,7 @@ msgstr "插件：  "
 
 #: cockpit/src/subscriptions-view.jsx:232
 msgid "Status: "
-msgstr "状态："
+msgstr "状态： "
 
 #: cockpit/src/subscriptions-view.jsx:240
 msgid "System Purpose"
@@ -207,6 +214,7 @@ msgstr "系统目的"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:251
 #: cockpit/src/subscriptions-view.jsx:256
+#: cockpit/src/subscriptions-view.jsx:353
 #: src/subscription_manager/gui/installedtab.py:94
 msgid "Status"
 msgstr "状态"
@@ -216,10 +224,84 @@ msgstr "状态"
 #: src/subscription_manager/gui/registergui.py:210
 #: src/subscription_manager/gui/registergui.py:454
 #: src/subscription_manager/gui/registergui.py:1579
-#: src/subscription_manager/managercli.py:1557
+#: src/subscription_manager/managercli.py:1558
 #: src/subscription_manager/utils.py:329
 msgid "This system is currently not registered."
 msgstr "这个系统目前没有注册。"
+
+#: cockpit/src/subscriptions-view.jsx:258
+msgid "Unregister"
+msgstr "取消注册"
+
+#: cockpit/src/subscriptions-view.jsx:271
+msgid "Subscriptions"
+msgstr "订阅"
+
+#: cockpit/src/subscriptions-view.jsx:304
+msgid "Updating"
+msgstr "更新"
+
+#: cockpit/src/subscriptions-view.jsx:305
+msgid "Retrieving subscription status..."
+msgstr "获取订阅状态..."
+
+#: cockpit/src/subscriptions-view.jsx:312
+msgid "Unable to connect"
+msgstr "无法连接"
+
+#: cockpit/src/subscriptions-view.jsx:313
+msgid ""
+"Couldn't get system subscription status. Please ensure subscription-manager "
+"is installed."
+msgstr "无法获取系统订阅状态。请确保已安装了 subscription-manager。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/subscriptions-view.jsx:329
+#: src/subscription_manager/gui/installedtab.py:222
+#: src/subscription_manager/managercli.py:88
+msgid "Subscribed"
+msgstr "已订阅"
+
+#: cockpit/src/subscriptions-view.jsx:332
+msgid "Not Subscribed (Not supported by a valid subscription.)"
+msgstr "没有订阅（不被一个有效的订阅支持）"
+
+#: cockpit/src/subscriptions-view.jsx:345
+msgid "Product Name"
+msgstr "产品名称"
+
+#: cockpit/src/subscriptions-view.jsx:347
+msgid "Product ID"
+msgstr "产品 ID"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/subscriptions-view.jsx:349 src/rct/printing.py:50
+#: src/rct/printing.py:132 src/subscription_manager/gui/installedtab.py:91
+msgid "Version"
+msgstr "版本"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/subscriptions-view.jsx:351 src/rct/printing.py:51
+msgid "Arch"
+msgstr "构架"
+
+#: cockpit/src/subscriptions-view.jsx:355
+msgid "Starts"
+msgstr "开始"
+
+#: cockpit/src/subscriptions-view.jsx:357
+msgid "Ends"
+msgstr "结束"
+
+#: cockpit/src/subscriptions-view.jsx:371
+msgid "Installed products"
+msgstr "安装的产品"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: cockpit/src/subscriptions-view.jsx:372
+#: src/subscription_manager/gui/installedtab.py:324
+msgid "No installed products detected."
+msgstr "没有探测到安装的产品。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/daemons/rhsmcertd.c:87
@@ -247,8 +329,7 @@ msgid "run the initial checks immediately, with no delay"
 msgstr "立即运行初始检查，没有延迟。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:103
-#: src/rhsm_icon/rhsm_icon.c:81
+#: src/daemons/rhsmcertd.c:103 src/rhsm_icon/rhsm_icon.c:81
 msgid "show debug messages"
 msgstr "显示调试信息"
 
@@ -312,38 +393,43 @@ msgstr ""
 "%s\n"
 " 您不能访问提供这些产品的软件仓库。您必须申请活跃订阅方可继续访问安全及其他重要更新。如果您没有其他活跃订阅，则可以续订已过期订阅。  "
 
-#: src/dnf-plugins/subscription-manager.py:42
+#: src/dnf-plugins/subscription-manager.py:43
 msgid ""
+"\n"
 "This system is not registered to Red Hat Subscription Management. You can "
-"use subscription-manager to register."
+"use subscription-manager to register.\n"
 msgstr ""
-"本系统尚未在 Red Hat Subscription Management 中注册。可使用 subscription-manager 注册。"
+"\n"
+"本系统尚未在 Red Hat Subscription Management 中注册。可使用 subscription-manager 进行注册。\n"
 
-#: src/dnf-plugins/subscription-manager.py:46
+#: src/dnf-plugins/subscription-manager.py:47
 msgid ""
+"\n"
 "This system is registered to Red Hat Subscription Management, but is not "
 "receiving updates. You can use subscription-manager to assign subscriptions."
+"\n"
 msgstr ""
+"\n"
 "本系统已在 Red Hat Subscription Management 中注册，但没有接收更新。可使用 subscription-manager "
-"分配订阅。"
+"分配订阅。\n"
 
-#: src/dnf-plugins/subscription-manager.py:75
+#: src/dnf-plugins/subscription-manager.py:78
 msgid "Not root, Subscription Management repositories not updated"
 msgstr "不是 root 用户，未更新 Subscription Management 软件仓库。"
 
-#: src/dnf-plugins/subscription-manager.py:82
+#: src/dnf-plugins/subscription-manager.py:85
 msgid "Updating Subscription Management repositories."
 msgstr "正在更新 Subscription Management 软件仓库。"
 
-#: src/dnf-plugins/subscription-manager.py:100
+#: src/dnf-plugins/subscription-manager.py:103
 msgid "Unable to connect to Subscription Management Service"
 msgstr "无法连接到订阅 管理服务"
 
-#: src/dnf-plugins/subscription-manager.py:103
+#: src/dnf-plugins/subscription-manager.py:106
 msgid "Unable to read consumer identity"
 msgstr "无法读取客户身份"
 
-#: src/dnf-plugins/subscription-manager.py:106
+#: src/dnf-plugins/subscription-manager.py:109
 msgid "Subscription Manager is operating in container mode."
 msgstr "订阅管理器在容器模式中运行。"
 
@@ -392,8 +478,7 @@ msgid "%%prog %s [OPTIONS] CERT_FILE"
 msgstr "%%prog %s [选项] CERT_FILE"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/cert_commands.py:46
-#: src/rct/manifest_commands.py:270
+#: src/rct/cert_commands.py:46 src/rct/manifest_commands.py:270
 #, python-format
 msgid "Unable to read certificate file '%s': %s"
 msgstr "无法读取证书文件 '%s': %s"
@@ -530,11 +615,8 @@ msgid "General:"
 msgstr "常规："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/manifest_commands.py:208
-#: src/rct/manifest_commands.py:239
-#: src/rct/printing.py:49
-#: src/rct/printing.py:77
-#: src/rct/printing.py:110
+#: src/rct/manifest_commands.py:208 src/rct/manifest_commands.py:239
+#: src/rct/printing.py:49 src/rct/printing.py:77 src/rct/printing.py:110
 #: src/subscription_manager/gui/widgets.py:377
 msgid "Name"
 msgstr "名称"
@@ -549,8 +631,7 @@ msgid "Content Access Mode"
 msgstr "内容访问模式"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/manifest_commands.py:215
-#: src/rct/printing.py:109
+#: src/rct/manifest_commands.py:215 src/rct/printing.py:109
 #: src/subscription_manager/gui/widgets.py:866
 msgid "Type"
 msgstr "类型"
@@ -574,8 +655,7 @@ msgid "Subscriptions:"
 msgstr "订阅："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/manifest_commands.py:240
-#: src/rct/printing.py:90
+#: src/rct/manifest_commands.py:240 src/rct/printing.py:90
 #: src/subscription_manager/gui/allsubs.py:94
 #: src/subscription_manager/gui/contract_selection.py:122
 #: src/subscription_manager/gui/mysubstab.py:108
@@ -589,16 +669,14 @@ msgid "Created"
 msgstr "已创建"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/manifest_commands.py:242
-#: src/rct/printing.py:134
+#: src/rct/manifest_commands.py:242 src/rct/printing.py:134
 #: src/subscription_manager/gui/contract_selection.py:104
 #: src/subscription_manager/gui/installedtab.py:97
 msgid "Start Date"
 msgstr "起始日期"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/manifest_commands.py:243
-#: src/rct/printing.py:135
+#: src/rct/manifest_commands.py:243 src/rct/printing.py:135
 #: src/subscription_manager/gui/contract_selection.py:113
 #: src/subscription_manager/gui/installedtab.py:100
 #: src/subscription_manager/gui/mysubstab.py:105
@@ -606,14 +684,12 @@ msgid "End Date"
 msgstr "终止日期"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/manifest_commands.py:244
-#: src/rct/printing.py:84
+#: src/rct/manifest_commands.py:244 src/rct/printing.py:84
 msgid "Service Level"
 msgstr "服务等级"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/manifest_commands.py:245
-#: src/rct/printing.py:82
+#: src/rct/manifest_commands.py:245 src/rct/printing.py:82
 msgid "Service Type"
 msgstr "服务类型"
 
@@ -623,27 +699,23 @@ msgid "Architectures"
 msgstr "架构"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/manifest_commands.py:247
-#: src/rct/printing.py:79
+#: src/rct/manifest_commands.py:247 src/rct/printing.py:79
 msgid "SKU"
 msgstr "SKU"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/manifest_commands.py:248
-#: src/rct/printing.py:80
+#: src/rct/manifest_commands.py:248 src/rct/printing.py:80
 #: src/subscription_manager/gui/contract_selection.py:81
 msgid "Contract"
 msgstr "合同"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/manifest_commands.py:249
-#: src/rct/printing.py:76
+#: src/rct/manifest_commands.py:249 src/rct/printing.py:76
 msgid "Order"
 msgstr "订单"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/manifest_commands.py:250
-#: src/rct/printing.py:81
+#: src/rct/manifest_commands.py:250 src/rct/printing.py:81
 msgid "Account"
 msgstr "帐户"
 
@@ -691,7 +763,7 @@ msgstr "内容组："
 
 #: src/rct/manifest_commands.py:300
 msgid "\tManifest"
-msgstr "\\t清单"
+msgstr "\t清单"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:312
@@ -731,8 +803,7 @@ msgid "The manifest has been dumped to the current directory"
 msgstr "已将该清单转储至当前目录"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/printing.py:47
-#: src/subscription_manager/gui/installedtab.py:80
+#: src/rct/printing.py:47 src/subscription_manager/gui/installedtab.py:80
 #: src/subscription_manager/gui/widgets.py:408
 msgid "Product"
 msgstr "产品"
@@ -741,18 +812,6 @@ msgstr "产品"
 #: src/rct/printing.py:48
 msgid "ID"
 msgstr "ID"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/printing.py:50
-#: src/rct/printing.py:132
-#: src/subscription_manager/gui/installedtab.py:91
-msgid "Version"
-msgstr "版本"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/printing.py:51
-msgid "Arch"
-msgstr "构架"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/printing.py:52
@@ -783,8 +842,7 @@ msgid "Add-ons"
 msgstr "附加组件"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/printing.py:89
-#: src/subscription_manager/gui/allsubs.py:231
+#: src/rct/printing.py:89 src/subscription_manager/gui/allsubs.py:231
 #: src/subscription_manager/gui/contract_selection.py:139
 #: src/subscription_manager/managerlib.py:358
 msgid "Unlimited"
@@ -851,8 +909,7 @@ msgid "GPG"
 msgstr "GPG"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/printing.py:115
-#: src/subscription_manager/gui/reposgui.py:127
+#: src/rct/printing.py:115 src/subscription_manager/gui/reposgui.py:127
 msgid "Enabled"
 msgstr "已启用"
 
@@ -902,8 +959,7 @@ msgid "Alt Name"
 msgstr "Alt 名称"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rct/printing.py:228
-#: src/rhsmlib/services/entitlement.py:241
+#: src/rct/printing.py:228 src/rhsmlib/services/entitlement.py:241
 msgid "Not Available"
 msgstr "不可用"
 
@@ -938,7 +994,7 @@ msgstr "未知证书类型"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm_debug/debug_commands.py:42
-#: src/subscription_manager/managercli.py:81
+#: src/subscription_manager/managercli.py:82
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register --"
 "help' for more information."
@@ -982,8 +1038,7 @@ msgid ""
 msgstr "要使用 no-archive 选项，则必须在同一文件系统中有目的目录 '%s' 作为数据组合目录 '%s'。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm_debug/debug_commands.py:191
-#: src/rhsm_debug/debug_commands.py:205
+#: src/rhsm_debug/debug_commands.py:191 src/rhsm_debug/debug_commands.py:205
 #, python-format
 msgid "Wrote: %s"
 msgstr "写入：%s"
@@ -1076,8 +1131,7 @@ msgid "Unknown argument to force-icon: %s\n"
 msgstr "force-icon 的未知参数：%s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm_icon/rhsm_icon.c:384
-#: src/rhsm_icon/rhsm_icon.c:495
+#: src/rhsm_icon/rhsm_icon.c:384 src/rhsm_icon/rhsm_icon.c:495
 #, c-format
 msgid "Failed to open connection to bus: %s\n"
 msgstr "打开到总线的连接失败：%s\n"
@@ -1089,8 +1143,7 @@ msgid "option parsing failed: %s\n"
 msgstr "选项解析失败：%s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/facts/dmiinfo.py:91
-#: src/rhsmlib/facts/dmiinfo.py:130
+#: src/rhsmlib/facts/dmiinfo.py:91 src/rhsmlib/facts/dmiinfo.py:130
 #, python-format
 msgid "Error reading system DMI information: %s"
 msgstr "读取系统 DMI 信息出错：%s"
@@ -1112,8 +1165,7 @@ msgstr "输入的日期无效。日期格式应为 YYYY-MM-DD（例如： "
 msgid "Past dates are not allowed"
 msgstr "不允许使用过去的日期"
 
-#: src/rhsmlib/services/entitlement.py:85
-#: src/rhsmlib/services/register.py:45
+#: src/rhsmlib/services/entitlement.py:85 src/rhsmlib/services/register.py:45
 #, python-format
 msgid "Unknown arguments: %s"
 msgstr "未知的参数：%s"
@@ -1122,7 +1174,7 @@ msgstr "未知的参数：%s"
 #: src/rhsmlib/services/entitlement.py:232
 #: src/subscription_manager/gui/mysubstab.py:300
 #: src/subscription_manager/gui/widgets.py:862
-#: src/subscription_manager/managercli.py:2687
+#: src/subscription_manager/managercli.py:2699
 msgid "Virtual"
 msgstr "虚拟的"
 
@@ -1130,21 +1182,21 @@ msgstr "虚拟的"
 #: src/rhsmlib/services/entitlement.py:234
 #: src/subscription_manager/gui/mysubstab.py:302
 #: src/subscription_manager/gui/widgets.py:861
-#: src/subscription_manager/managercli.py:2689
+#: src/subscription_manager/managercli.py:2701
 msgid "Physical"
 msgstr "物理的"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:237
 #: src/subscription_manager/gui/mysubstab.py:305
-#: src/subscription_manager/managercli.py:2692
+#: src/subscription_manager/managercli.py:2704
 msgid "Yes"
 msgstr "是"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:239
 #: src/subscription_manager/gui/mysubstab.py:307
-#: src/subscription_manager/managercli.py:2694
+#: src/subscription_manager/managercli.py:2706
 msgid "No"
 msgstr "否"
 
@@ -1174,37 +1226,37 @@ msgstr "错误：无效的列出类型。只允许 \"installed\"、\"consumed\" 
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:343
-#: src/subscription_manager/managercli.py:2583
+#: src/subscription_manager/managercli.py:2595
 msgid "Error: --all is only applicable with --available"
 msgstr "错误：--all 只能与 --available 合用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:347
-#: src/subscription_manager/managercli.py:2585
+#: src/subscription_manager/managercli.py:2597
 msgid "Error: --ondate is only applicable with --available"
 msgstr "错误：--ondate 只能与 --available 合用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:352
-#: src/subscription_manager/managercli.py:2587
+#: src/subscription_manager/managercli.py:2599
 msgid ""
 "Error: --servicelevel is only applicable with --available or --consumed"
 msgstr "错误：--servicelevel 只能与 --available 或者 --consumed 合用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:356
-#: src/subscription_manager/managercli.py:2591
+#: src/subscription_manager/managercli.py:2603
 msgid "Error: --match-installed is only applicable with --available"
 msgstr "错误：--match-installed 只能与 --available 合用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:360
-#: src/subscription_manager/managercli.py:2593
+#: src/subscription_manager/managercli.py:2605
 msgid "Error: --no-overlap is only applicable with --available"
 msgstr "错误：--no-overlap 只能与 --available 合用"
 
 #: src/rhsmlib/services/entitlement.py:365
-#: src/subscription_manager/managercli.py:2595
+#: src/subscription_manager/managercli.py:2607
 msgid ""
 "Error: --pool-only is only applicable with --available and/or --consumed"
 msgstr "错误：--pool-only 只能与 --available 和（/或者） --consumed 合用"
@@ -1219,12 +1271,12 @@ msgstr "这个系统已经注册。使用 force 选项覆盖。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/register.py:112
-#: src/subscription_manager/managercli.py:1273
+#: src/subscription_manager/managercli.py:1274
 msgid "Error: system name can not be empty."
 msgstr "错误：系统名称不能为空。"
 
 #: src/rhsmlib/services/register.py:114
-#: src/subscription_manager/managercli.py:1292
+#: src/subscription_manager/managercli.py:1293
 msgid ""
 "Error: Can not force registration while attempting to recover registration "
 "with consumerid. Please use --force without --consumerid to re-register or "
@@ -1235,25 +1287,25 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/register.py:122
-#: src/subscription_manager/managercli.py:1284
+#: src/subscription_manager/managercli.py:1285
 msgid "Error: Must specify an activation key"
 msgstr "错误：必须指定激活码"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/register.py:124
-#: src/subscription_manager/managercli.py:1275
+#: src/subscription_manager/managercli.py:1276
 msgid "Error: Activation keys do not require user credentials."
 msgstr "错误：激活码不需要用户证书。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/register.py:126
-#: src/subscription_manager/managercli.py:1277
+#: src/subscription_manager/managercli.py:1278
 msgid "Error: Activation keys can not be used with previously registered IDs."
 msgstr "错误：激活码不能用于之前注册的 ID。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/register.py:129
-#: src/subscription_manager/managercli.py:1279
+#: src/subscription_manager/managercli.py:1280
 msgid "Error: Activation keys do not allow environments to be specified."
 msgstr "错误：激活码不允许指定环境。"
 
@@ -1261,13 +1313,11 @@ msgstr "错误：激活码不允许指定环境。"
 msgid "Error: Missing username or password."
 msgstr "错误：缺失用户名或密码"
 
-#: src/rhsmlib/services/syspurpose.py:24
-#: src/rhsmlib/services/syspurpose.py:27
+#: src/rhsmlib/services/syspurpose.py:24 src/rhsmlib/services/syspurpose.py:27
 msgid "Matched"
 msgstr "匹配"
 
-#: src/rhsmlib/services/syspurpose.py:25
-#: src/rhsmlib/services/syspurpose.py:28
+#: src/rhsmlib/services/syspurpose.py:25 src/rhsmlib/services/syspurpose.py:28
 msgid "Mismatched"
 msgstr "不匹配"
 
@@ -1290,20 +1340,16 @@ msgstr "禁用"
 #: src/subscription_manager/gui/factsgui.py:94
 #: src/subscription_manager/gui/factsgui.py:119
 #: src/subscription_manager/gui/installedtab.py:214
-#: src/subscription_manager/managercli.py:91
-#: src/subscription_manager/managercli.py:380
-#: src/subscription_manager/managercli.py:383
+#: src/subscription_manager/managercli.py:92
+#: src/subscription_manager/managercli.py:381
 #: src/subscription_manager/managercli.py:384
 #: src/subscription_manager/managercli.py:385
-#: src/subscription_manager/managercli.py:2123
-#: src/subscription_manager/reasons.py:94
-#: src/subscription_manager/utils.py:314
-#: src/subscription_manager/utils.py:328
-#: src/subscription_manager/utils.py:330
-#: src/subscription_manager/utils.py:348
-#: src/subscription_manager/utils.py:349
-#: src/subscription_manager/utils.py:350
-#: src/subscription_manager/utils.py:369
+#: src/subscription_manager/managercli.py:386
+#: src/subscription_manager/managercli.py:2127
+#: src/subscription_manager/reasons.py:94 src/subscription_manager/utils.py:314
+#: src/subscription_manager/utils.py:328 src/subscription_manager/utils.py:330
+#: src/subscription_manager/utils.py:348 src/subscription_manager/utils.py:349
+#: src/subscription_manager/utils.py:350 src/subscription_manager/utils.py:369
 msgid "Unknown"
 msgstr "未知的"
 
@@ -1325,7 +1371,7 @@ msgstr "在 spacewalk 中注册这个系统"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/__init__.py:85
 #: src/subscription_manager/branding/redhat_branding.py:12
-#: src/subscription_manager/managercli.py:3033
+#: src/subscription_manager/managercli.py:3045
 #: src/subscription_manager/migrate/migrate.py:999
 msgid "WARNING"
 msgstr "警告"
@@ -3229,7 +3275,7 @@ msgstr "错误：不正确的 uuid: %s"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/factsgui.py:153
 #: src/subscription_manager/gui/widgets.py:514
-#: src/subscription_manager/managercli.py:937
+#: src/subscription_manager/managercli.py:938
 #: src/subscription_manager/printing_utils.py:165
 #: src/subscription_manager/printing_utils.py:184
 msgid "None"
@@ -3294,7 +3340,7 @@ msgstr "证书导入成功。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/installedtab.py:193
-#: src/subscription_manager/managercli.py:86
+#: src/subscription_manager/managercli.py:87
 msgid "Future Subscription"
 msgstr "未来订阅"
 
@@ -3305,7 +3351,7 @@ msgstr "未来订阅的"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/installedtab.py:197
-#: src/subscription_manager/managercli.py:89
+#: src/subscription_manager/managercli.py:90
 msgid "Expired"
 msgstr "已过期"
 
@@ -3318,7 +3364,7 @@ msgstr "订阅 %s 已过期"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/installedtab.py:210
 #: src/subscription_manager/gui/installedtab.py:211
-#: src/subscription_manager/managercli.py:90
+#: src/subscription_manager/managercli.py:91
 msgid "Partially Subscribed"
 msgstr "部分已订阅"
 
@@ -3333,12 +3379,6 @@ msgid "Entitlement server is unreachable."
 msgstr "无法连接授权服务器。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/gui/installedtab.py:222
-#: src/subscription_manager/managercli.py:87
-msgid "Subscribed"
-msgstr "已订阅"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/installedtab.py:224
 #, python-format
 msgid "Covered by contract %s through %s"
@@ -3348,7 +3388,7 @@ msgstr[0] "合同 %s，有效期 到 %s"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/installedtab.py:231
 #: src/subscription_manager/gui/installedtab.py:232
-#: src/subscription_manager/managercli.py:88
+#: src/subscription_manager/managercli.py:89
 msgid "Not Subscribed"
 msgstr "未订阅的"
 
@@ -3356,11 +3396,6 @@ msgstr "未订阅的"
 #: src/subscription_manager/gui/installedtab.py:291
 msgid "My Installed Products"
 msgstr "我已安装的产品"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/gui/installedtab.py:324
-msgid "No installed products detected."
-msgstr "没有探测到安装的产品。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/installedtab.py:328
@@ -3408,8 +3443,8 @@ msgstr "需要对代理服务器进行身份验证，请检查您的设置。"
 
 #: src/subscription_manager/gui/managergui.py:199
 #: src/subscription_manager/gui/registergui.py:1829
-#: src/subscription_manager/managercli.py:522
-#: src/subscription_manager/managercli.py:536
+#: src/subscription_manager/managercli.py:523
+#: src/subscription_manager/managercli.py:537
 msgid "Proxy connection failed, please check your settings."
 msgstr "代理服务器连接失败，请检查您的设置。"
 
@@ -3739,7 +3774,7 @@ msgstr "验证服务器时出错：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/registergui.py:1839
-#: src/subscription_manager/managercli.py:526
+#: src/subscription_manager/managercli.py:527
 #, python-format
 msgid "Unable to reach the server at %s:%s%s"
 msgstr "无法在 %s:%s%s 连接该服务器"
@@ -3771,8 +3806,8 @@ msgstr "没有附加订阅就没有软件仓库可用。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/reposgui.py:56
-#: src/subscription_manager/managercli.py:2315
-#: src/subscription_manager/managercli.py:2852
+#: src/subscription_manager/managercli.py:2319
+#: src/subscription_manager/managercli.py:2864
 msgid "Repositories disabled by configuration."
 msgstr "配置中禁用的软件仓库。"
 
@@ -3889,218 +3924,218 @@ msgid "%s: error: %s"
 msgstr "%s：错误：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:95
-#: src/subscription_manager/managercli.py:141
+#: src/subscription_manager/managercli.py:96
+#: src/subscription_manager/managercli.py:142
 msgid "Product Name:"
 msgstr "产品名称："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:96
+#: src/subscription_manager/managercli.py:97
 msgid "Product ID:"
 msgstr "产品 ID："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:97
+#: src/subscription_manager/managercli.py:98
 msgid "Version:"
 msgstr "版本："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:98
+#: src/subscription_manager/managercli.py:99
 msgid "Arch:"
 msgstr "构架："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:99
-#: src/subscription_manager/managercli.py:142
+#: src/subscription_manager/managercli.py:100
+#: src/subscription_manager/managercli.py:143
 msgid "Status:"
 msgstr "状态："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:100
-#: src/subscription_manager/managercli.py:168
-#: src/subscription_manager/managercli.py:191
+#: src/subscription_manager/managercli.py:101
+#: src/subscription_manager/managercli.py:169
+#: src/subscription_manager/managercli.py:192
 msgid "Status Details:"
 msgstr "状态详情："
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:101
-#: src/subscription_manager/managercli.py:120
-#: src/subscription_manager/managercli.py:170
-#: src/subscription_manager/managercli.py:193
-msgid "Starts:"
-msgstr "开始："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:102
 #: src/subscription_manager/managercli.py:121
 #: src/subscription_manager/managercli.py:171
 #: src/subscription_manager/managercli.py:194
-msgid "Ends:"
-msgstr "结束："
+msgid "Starts:"
+msgstr "开始："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:106
-#: src/subscription_manager/managercli.py:126
-#: src/subscription_manager/managercli.py:156
-#: src/subscription_manager/managercli.py:176
-msgid "Subscription Name:"
-msgstr "订阅名称："
+#: src/subscription_manager/managercli.py:103
+#: src/subscription_manager/managercli.py:122
+#: src/subscription_manager/managercli.py:172
+#: src/subscription_manager/managercli.py:195
+msgid "Ends:"
+msgstr "结束："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:107
 #: src/subscription_manager/managercli.py:127
 #: src/subscription_manager/managercli.py:157
 #: src/subscription_manager/managercli.py:177
-msgid "Provides:"
-msgstr "提供："
+msgid "Subscription Name:"
+msgstr "订阅名称："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:108
 #: src/subscription_manager/managercli.py:128
 #: src/subscription_manager/managercli.py:158
 #: src/subscription_manager/managercli.py:178
-msgid "SKU:"
-msgstr "SKU："
+msgid "Provides:"
+msgstr "提供："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:109
 #: src/subscription_manager/managercli.py:129
 #: src/subscription_manager/managercli.py:159
 #: src/subscription_manager/managercli.py:179
+msgid "SKU:"
+msgstr "SKU："
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: src/subscription_manager/managercli.py:110
+#: src/subscription_manager/managercli.py:130
+#: src/subscription_manager/managercli.py:160
+#: src/subscription_manager/managercli.py:180
 msgid "Contract:"
 msgstr "合同："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:110
-#: src/subscription_manager/managercli.py:162
-#: src/subscription_manager/managercli.py:182
-msgid "Pool ID:"
-msgstr "池子 Id："
-
 #: src/subscription_manager/managercli.py:111
 #: src/subscription_manager/managercli.py:163
 #: src/subscription_manager/managercli.py:183
+msgid "Pool ID:"
+msgstr "池子 Id："
+
+#: src/subscription_manager/managercli.py:112
+#: src/subscription_manager/managercli.py:164
+#: src/subscription_manager/managercli.py:184
 msgid "Provides Management:"
 msgstr "提供管理："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:112
+#: src/subscription_manager/managercli.py:113
 msgid "Available:"
 msgstr "可用："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:113
+#: src/subscription_manager/managercli.py:114
 msgid "Suggested:"
 msgstr "推荐的："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:114
-#: src/subscription_manager/managercli.py:166
-#: src/subscription_manager/managercli.py:186
+#: src/subscription_manager/managercli.py:115
+#: src/subscription_manager/managercli.py:167
+#: src/subscription_manager/managercli.py:187
 msgid "Service Type:"
 msgstr "服务类型："
 
-#: src/subscription_manager/managercli.py:115
-#: src/subscription_manager/managercli.py:187
+#: src/subscription_manager/managercli.py:116
+#: src/subscription_manager/managercli.py:188
 msgid "Roles:"
 msgstr "角色："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:116
-#: src/subscription_manager/managercli.py:130
-#: src/subscription_manager/managercli.py:167
-#: src/subscription_manager/managercli.py:188
+#: src/subscription_manager/managercli.py:117
+#: src/subscription_manager/managercli.py:131
+#: src/subscription_manager/managercli.py:168
+#: src/subscription_manager/managercli.py:189
 msgid "Service Level:"
 msgstr "服务等级："
 
-#: src/subscription_manager/managercli.py:117
-#: src/subscription_manager/managercli.py:189
+#: src/subscription_manager/managercli.py:118
+#: src/subscription_manager/managercli.py:190
 msgid "Usage:"
 msgstr "使用方法："
 
-#: src/subscription_manager/managercli.py:118
-#: src/subscription_manager/managercli.py:190
+#: src/subscription_manager/managercli.py:119
+#: src/subscription_manager/managercli.py:191
 msgid "Add-ons:"
 msgstr "附加组件："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:119
-#: src/subscription_manager/managercli.py:169
-#: src/subscription_manager/managercli.py:192
+#: src/subscription_manager/managercli.py:120
+#: src/subscription_manager/managercli.py:170
+#: src/subscription_manager/managercli.py:193
 msgid "Subscription Type:"
 msgstr "订阅类型："
 
-#: src/subscription_manager/managercli.py:122
-#: src/subscription_manager/managercli.py:195
+#: src/subscription_manager/managercli.py:123
+#: src/subscription_manager/managercli.py:196
 msgid "Entitlement Type:"
 msgstr "权利类型："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:134
+#: src/subscription_manager/managercli.py:135
 msgid "Repo ID:"
 msgstr "软件仓库 ID:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:135
+#: src/subscription_manager/managercli.py:136
 msgid "Repo Name:"
 msgstr "软件仓库名称："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:136
+#: src/subscription_manager/managercli.py:137
 msgid "Repo URL:"
 msgstr "软件仓库 Url："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:137
+#: src/subscription_manager/managercli.py:138
 msgid "Enabled:"
 msgstr "已启用："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:146
-#: src/subscription_manager/managercli.py:151
+#: src/subscription_manager/managercli.py:147
+#: src/subscription_manager/managercli.py:152
 msgid "Name:"
 msgstr "名称："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:147
+#: src/subscription_manager/managercli.py:148
 msgid "Description:"
 msgstr "描述："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:152
+#: src/subscription_manager/managercli.py:153
 msgid "Key:"
 msgstr "密钥："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:160
-#: src/subscription_manager/managercli.py:180
+#: src/subscription_manager/managercli.py:161
+#: src/subscription_manager/managercli.py:181
 msgid "Account:"
 msgstr "帐户："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:161
-#: src/subscription_manager/managercli.py:181
+#: src/subscription_manager/managercli.py:162
+#: src/subscription_manager/managercli.py:182
 msgid "Serial:"
 msgstr "序列号："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:164
-#: src/subscription_manager/managercli.py:184
+#: src/subscription_manager/managercli.py:165
+#: src/subscription_manager/managercli.py:185
 msgid "Active:"
 msgstr "活动："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:165
-#: src/subscription_manager/managercli.py:185
+#: src/subscription_manager/managercli.py:166
+#: src/subscription_manager/managercli.py:186
 msgid "Quantity Used:"
 msgstr "已使用的量："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:172
+#: src/subscription_manager/managercli.py:173
 msgid "System Type:"
 msgstr "系统类型："
 
-#: src/subscription_manager/managercli.py:198
+#: src/subscription_manager/managercli.py:199
 #, python-brace-format
 msgid ""
 "Warning: A {attr} of \"{download_value}\" was recently set for this system "
@@ -4109,151 +4144,156 @@ msgid ""
 msgstr "警告：\"{download_value}\"  的 {attr} 当前已由权利服务器管理员为这个系统设置。\n"
 "{advice}"
 
-#: src/subscription_manager/managercli.py:200
+#: src/subscription_manager/managercli.py:201
 #, python-brace-format
 msgid ""
 "If you'd like to overwrite the server side change please run: {command}"
 msgstr "如果您想覆盖服务器端的更改，请运行：{command}"
 
 # translation auto-copied from project subscription-manager, version 1.13.X, document keys
-#: src/subscription_manager/managercli.py:245
+#: src/subscription_manager/managercli.py:246
 msgid "No products installed."
 msgstr "没有安装产品。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:249
+#: src/subscription_manager/managercli.py:250
 msgid "Installed Product Current Status:"
 msgstr "已安装的产品的当前状态"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author leahliu
-#: src/subscription_manager/managercli.py:260
+#: src/subscription_manager/managercli.py:261
 msgid ""
 "Unable to find available subscriptions for all your installed products."
 msgstr "无法为所有安装的产品找到可用订阅。"
 
-#: src/subscription_manager/managercli.py:332
+#: src/subscription_manager/managercli.py:333
 msgid "server URL in the form of https://hostname:port/prefix"
 msgstr "服务器 URL格式为 https://hostname:port/prefix"
 
-#: src/subscription_manager/managercli.py:334
+#: src/subscription_manager/managercli.py:335
 msgid ""
 "do not check the entitlement server SSL certificate against available "
 "certificate authorities"
 msgstr "不需要根据有效证书授权机构检查权利服务器 SSL 证书"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:340
+#: src/subscription_manager/managercli.py:341
 msgid "proxy URL in the form of proxy_hostname:proxy_port"
 msgstr "代理服务器 URL 的格式为 proxy_hostname:proxy_port"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:342
+#: src/subscription_manager/managercli.py:343
 msgid "user for HTTP proxy with basic authentication"
 msgstr "使用基本验证的 HTTP 代理服务器的用户"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:344
+#: src/subscription_manager/managercli.py:345
 msgid "password for HTTP proxy with basic authentication"
 msgstr "使用基本验证的 HTTP 代理服务器的密码"
 
-#: src/subscription_manager/managercli.py:346
+#: src/subscription_manager/managercli.py:347
 msgid "host suffixes that should bypass HTTP proxy"
 msgstr "跳过 HTTP 代理的主机后缀"
 
-#: src/subscription_manager/managercli.py:356
+#: src/subscription_manager/managercli.py:357
 msgid ""
 "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr "消费者 ID 不存在或已被破坏。请尝试 register --help"
 
-#: src/subscription_manager/managercli.py:406
+#: src/subscription_manager/managercli.py:407
 msgid ""
 "subscription-manager is disabled when running inside a container. Please "
 "refer to your host system for subscription management.\n"
 msgstr "在容器内运行时禁用 subscription-manager。请参考主机系统进行订阅管理。\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:421
+#: src/subscription_manager/managercli.py:422
 #, python-format
 msgid "cannot parse argument: %s"
 msgstr "无法解析参数：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:434
+#: src/subscription_manager/managercli.py:435
 msgid "Error parsing serverurl:"
 msgstr "解析 serverurl 出错："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:450
+#: src/subscription_manager/managercli.py:451
 msgid "Error parsing baseurl:"
 msgstr "解析 baseurl 出错："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:534
+#: src/subscription_manager/managercli.py:535
 msgid "Error: CA certificate for subscription service has not been installed."
 msgstr "错误：没有安装订阅服务的 CA 证书。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:554
+#: src/subscription_manager/managercli.py:555
 msgid "System certificates corrupted. Please reregister."
 msgstr "系统证书崩溃。请重新注册。"
 
-#: src/subscription_manager/managercli.py:558
+#: src/subscription_manager/managercli.py:559
 #, python-format
 msgid ""
 "Consumer profile \"%s\" has been deleted from the server. You can use "
 "command clean or unregister to remove local profile."
 msgstr "已将用户配置文件 \"%s\" 从服务器中删除。您可以使用 clean 或 unregister 命令删除本地配置文件。"
 
-#: src/subscription_manager/managercli.py:579
+#: src/subscription_manager/managercli.py:580
 #, python-brace-format
 msgid "Set {attr} of system purpose"
 msgstr "设置系统目的 {attr}"
 
-#: src/subscription_manager/managercli.py:586
+#: src/subscription_manager/managercli.py:587
 #, python-brace-format
 msgid "Unset {attr} of system purpose"
 msgstr "取消设置系统目的 {attr}"
 
-#: src/subscription_manager/managercli.py:594
+#: src/subscription_manager/managercli.py:595
 #, python-brace-format
 msgid "Add an item to the list ({attr})."
 msgstr "将一个项添加到列表中（{attr}）。"
 
-#: src/subscription_manager/managercli.py:602
+#: src/subscription_manager/managercli.py:603
 #, python-brace-format
 msgid "Remove an item from the list ({attr})."
 msgstr "从列表中删除一个项（{attr}）。"
 
-#: src/subscription_manager/managercli.py:628
+#: src/subscription_manager/managercli.py:629
 msgid "--unset cannot be used with --set, --add, or --remove"
 msgstr "--unset 不能与 --set，-add 或 --remove 一起使用"
 
-#: src/subscription_manager/managercli.py:630
+#: src/subscription_manager/managercli.py:631
 msgid "--add cannot be used with --remove"
 msgstr "--add 不能与 --remove 一起使用"
 
-#: src/subscription_manager/managercli.py:649
+#: src/subscription_manager/managercli.py:635
+#, python-brace-format
+msgid "{attr} set to \"{val}\"."
+msgstr "{attr} 设置为 \"{val}\"。"
+
+#: src/subscription_manager/managercli.py:650
 #, python-brace-format
 msgid "{attr} unset."
 msgstr "{attr} 取消设置。"
 
-#: src/subscription_manager/managercli.py:663
-#: src/subscription_manager/managercli.py:686
+#: src/subscription_manager/managercli.py:664
+#: src/subscription_manager/managercli.py:687
 #, python-brace-format
 msgid "{attr} updated."
 msgstr "{attr} 已更新。"
 
-#: src/subscription_manager/managercli.py:715
+#: src/subscription_manager/managercli.py:716
 #, python-brace-format
 msgid "Current {name}: {val}"
 msgstr "当前 {name}: {val}"
 
-#: src/subscription_manager/managercli.py:718
+#: src/subscription_manager/managercli.py:719
 #, python-brace-format
 msgid "{name} not set."
 msgstr "{name} 未设置。"
 
-#: src/subscription_manager/managercli.py:739
+#: src/subscription_manager/managercli.py:740
 #, python-brace-format
 msgid ""
 "Note: The currently configured entitlement server does not support System "
@@ -4261,925 +4301,925 @@ msgid ""
 msgstr "请注意：当前配置的权利服务器不支持系统目的 {attr}。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:767
+#: src/subscription_manager/managercli.py:768
 msgid "username to use when authorizing against the server"
 msgstr "在服务器中进行验证时使用的用户名"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:769
+#: src/subscription_manager/managercli.py:770
 msgid "password to use when authorizing against the server"
 msgstr "在服务器中进行验证时使用的密码"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:779
+#: src/subscription_manager/managercli.py:780
 msgid "Username: "
 msgstr "用户名： "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:782
+#: src/subscription_manager/managercli.py:783
 msgid "Password: "
 msgstr "密码： "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:811
+#: src/subscription_manager/managercli.py:812
 msgid "specify organization"
 msgstr "指定机构"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:818
-#: src/subscription_manager/managercli.py:1540
+#: src/subscription_manager/managercli.py:819
+#: src/subscription_manager/managercli.py:1541
 msgid "Organization: "
 msgstr "机构： "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:831
+#: src/subscription_manager/managercli.py:832
 msgid ""
 "Remove all local system and subscription data without affecting the server"
 msgstr "删除所有本地系统和订阅数据（不会影响到服务器）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:837
-#: src/subscription_manager/managercli.py:1349
+#: src/subscription_manager/managercli.py:838
+#: src/subscription_manager/managercli.py:1350
 msgid "All local data removed"
 msgstr "已删除所有本地数据"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:850
+#: src/subscription_manager/managercli.py:851
 msgid "Pull the latest subscription data from the server"
 msgstr "从该服务器中提取最新订阅数据"
 
-#: src/subscription_manager/managercli.py:854
+#: src/subscription_manager/managercli.py:855
 msgid "force certificate regeneration"
 msgstr "强制证书重新产生"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:874
+#: src/subscription_manager/managercli.py:875
 msgid "All local data refreshed"
 msgstr "已刷新所有本地数据"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:879
+#: src/subscription_manager/managercli.py:880
 #, python-format
 msgid "Unable to perform refresh due to the following exception: %s"
 msgstr "因为以下例外无法执行刷新：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:886
+#: src/subscription_manager/managercli.py:887
 msgid "Display the identity certificate for this system or request a new one"
 msgstr "为这个系统显示 ID 证书或者申请一个新的证书"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:892
+#: src/subscription_manager/managercli.py:893
 msgid "request a new certificate be generated"
 msgstr "申请生成一个新证书"
 
-#: src/subscription_manager/managercli.py:894
+#: src/subscription_manager/managercli.py:895
 msgid ""
 "force certificate regeneration (requires username and password); Only used "
 "with --regenerate"
 msgstr "强制重新生成证书（需要用户名和密码）；只能与 --regenerate 一同使用。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:900
+#: src/subscription_manager/managercli.py:901
 msgid "--force can only be used with --regenerate"
 msgstr "--force 只能与 --regenerate 合用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:902
+#: src/subscription_manager/managercli.py:903
 msgid "--username and --password can only be used with --force"
 msgstr "--username 和 --password 只能与 --force 合用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:911
-#: src/subscription_manager/managercli.py:914
-#: src/subscription_manager/managercli.py:2936
+#: src/subscription_manager/managercli.py:912
+#: src/subscription_manager/managercli.py:915
+#: src/subscription_manager/managercli.py:2948
 #, python-format
 msgid "server type: %s"
 msgstr "服务器类型：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:926
+#: src/subscription_manager/managercli.py:927
 #, python-format
 msgid "system identity: %s"
 msgstr "系统身份：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:927
+#: src/subscription_manager/managercli.py:928
 #, python-format
 msgid "name: %s"
 msgstr "名称：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:928
+#: src/subscription_manager/managercli.py:929
 #, python-format
 msgid "org name: %s"
 msgstr "机构名称：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:929
+#: src/subscription_manager/managercli.py:930
 #, python-format
 msgid "org ID: %s"
 msgstr "机构 ID: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:938
+#: src/subscription_manager/managercli.py:939
 #, python-format
 msgid "environment name: %s"
 msgstr "环境名称： %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:951
+#: src/subscription_manager/managercli.py:952
 msgid "Identity certificate has been regenerated."
 msgstr "ID 证书已经重新生成了。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:959
+#: src/subscription_manager/managercli.py:960
 msgid "Error: Unable to generate a new identity for the system"
 msgstr "错误：无法为该系统生成新身份"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:965
+#: src/subscription_manager/managercli.py:966
 msgid "Display the organizations against which a user can register a system"
 msgstr "显示用户可以用来注册系统的机构"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:981
+#: src/subscription_manager/managercli.py:982
 msgid "Organizations"
 msgstr "机构"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:988
-#: src/subscription_manager/managercli.py:1529
+#: src/subscription_manager/managercli.py:989
+#: src/subscription_manager/managercli.py:1530
 #: src/subscription_manager/migrate/migrate.py:303
 #, python-format
 msgid "%s cannot register with any organizations."
 msgstr "%s 无法注册到任何机构。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:995
+#: src/subscription_manager/managercli.py:996
 msgid "Error: Unable to retrieve org list from server"
 msgstr "错误：无法从服务器中搜索机构列表"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1001
+#: src/subscription_manager/managercli.py:1002
 msgid "Display the environments available for a user"
 msgstr "显示用户可用的环境"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1002
+#: src/subscription_manager/managercli.py:1003
 msgid "specify organization for environment list, using organization key"
 msgstr "为环境列表指定机构，使用机构密钥"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1021
+#: src/subscription_manager/managercli.py:1022
 msgid "Environments"
 msgstr "环境"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1027
+#: src/subscription_manager/managercli.py:1028
 msgid "This org does not have any environments."
 msgstr "这个机构没有任何环境。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1029
-#: src/subscription_manager/managercli.py:1510
+#: src/subscription_manager/managercli.py:1030
+#: src/subscription_manager/managercli.py:1511
 msgid "Error: Server does not support environments."
 msgstr "错误：服务器不支持环境。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1037
+#: src/subscription_manager/managercli.py:1038
 msgid "Error: Unable to retrieve environment list from server"
 msgstr "错误：无法从服务器中搜索环境列表"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1045
+#: src/subscription_manager/managercli.py:1046
 msgid "Set if subscriptions are attached on a schedule (default of daily)"
 msgstr "是否在调度中附加订阅（默认为每日）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1046
+#: src/subscription_manager/managercli.py:1047
 msgid "specify whether to enable or disable auto-attaching of subscriptions"
 msgstr "指定是否启用或者禁用订阅的自动附加功能"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1051
+#: src/subscription_manager/managercli.py:1052
 msgid "try to attach subscriptions for uncovered products each check-in"
 msgstr "每次登录时都尝试为没有覆盖的产品附加订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1053
+#: src/subscription_manager/managercli.py:1054
 msgid "do not try to automatically attach subscriptions each check-in"
 msgstr "每次登录时不尝试自动附加订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1055
+#: src/subscription_manager/managercli.py:1056
 msgid "show the current auto-attach preference"
 msgstr "显示当前 auto-attach 属性"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1067
+#: src/subscription_manager/managercli.py:1068
 msgid "Auto-attach preference: enabled"
 msgstr "Auro-attach 属性：启用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1069
+#: src/subscription_manager/managercli.py:1070
 msgid "Auto-attach preference: disabled"
 msgstr "Auro-attach 属性：禁用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1084
+#: src/subscription_manager/managercli.py:1085
 msgid "Manage service levels for this system"
 msgstr "这个系统的管理服务等级"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1085
+#: src/subscription_manager/managercli.py:1086
 msgid ""
 "specify an organization when listing available service levels using the "
 "organization key, only used with --list"
 msgstr "在列出可用服务等级时，使用机构密钥指定一个机构。只能与 --list 合用。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1093
+#: src/subscription_manager/managercli.py:1094
 msgid "show this system's current service level"
 msgstr "显示这个系统的当前服务等级"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1099
+#: src/subscription_manager/managercli.py:1100
 msgid "list all service levels available"
 msgstr "列出所有可用服务等级"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1118
+#: src/subscription_manager/managercli.py:1119
 msgid "Error: --org is only supported with the --list option"
 msgstr "错误：只有 --list 选项支持 --org"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1123
+#: src/subscription_manager/managercli.py:1124
 msgid ""
 "Error: you must register or specify --username and --password to list "
 "service levels"
 msgstr "错误：您必须注册或指定 --username 和 --password 方可列出服务等级"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1146
+#: src/subscription_manager/managercli.py:1147
 msgid "Error: Unable to retrieve service levels."
 msgstr "错误：无法检索服务等级。"
 
-#: src/subscription_manager/managercli.py:1171
+#: src/subscription_manager/managercli.py:1172
 #, python-brace-format
 msgid "Service level set to: \"{val}\"."
 msgstr "服务等级设定为：“{val}”"
 
-#: src/subscription_manager/managercli.py:1178
+#: src/subscription_manager/managercli.py:1179
 msgid "Service level preference has been unset"
 msgstr "已取消设置服务等级属性"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1184
-#: src/subscription_manager/managercli.py:1190
-#: src/subscription_manager/managercli.py:1218
-#: src/subscription_manager/managercli.py:1221
+#: src/subscription_manager/managercli.py:1185
+#: src/subscription_manager/managercli.py:1191
+#: src/subscription_manager/managercli.py:1219
+#: src/subscription_manager/managercli.py:1222
 #: src/subscription_manager/migrate/migrate.py:728
 msgid "Error: The service-level command is not supported by the server."
 msgstr "错误：该服务器不支持  service-level 命令。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1193
+#: src/subscription_manager/managercli.py:1194
 #, python-format
 msgid "Current service level: %s"
 msgstr "当前服务等级：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1195
+#: src/subscription_manager/managercli.py:1196
 msgid "Service level preference not set"
 msgstr "没有设置服务等级属性"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1209
+#: src/subscription_manager/managercli.py:1210
 msgid "Available Service Levels"
 msgstr "可用服务等级"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1214
+#: src/subscription_manager/managercli.py:1215
 msgid "This org does not have any subscriptions with service levels."
 msgstr "这个机构没有任何使用服务等级的订阅。"
 
-#: src/subscription_manager/managercli.py:1231
+#: src/subscription_manager/managercli.py:1232
 msgid "Manage usage setting for this system"
 msgstr "管理此系统的使用设置"
 
-#: src/subscription_manager/managercli.py:1232
+#: src/subscription_manager/managercli.py:1233
 msgid "use set and unset to define the value for this field"
 msgstr "使用 set 和 unset 定义此字段的值"
 
-#: src/subscription_manager/managercli.py:1244
+#: src/subscription_manager/managercli.py:1245
 msgid "base URL for content in form of https://hostname:port/prefix"
 msgstr "内容的基本 URL 格式为 https://hostname:port/prefix"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1248
+#: src/subscription_manager/managercli.py:1249
 msgid "name of the system to register, defaults to the hostname"
 msgstr "要注册系统的名称，默认为主机名"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1250
+#: src/subscription_manager/managercli.py:1251
 msgid "the existing system data is pulled from the server"
 msgstr "从服务器中获取的已有系统数据"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1252
+#: src/subscription_manager/managercli.py:1253
 msgid ""
 "register with one of multiple organizations for the user, using organization "
 "key"
 msgstr "使用机构码为用户在一个机构中注册，"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1254
+#: src/subscription_manager/managercli.py:1255
 msgid "register with a specific environment in the destination org"
 msgstr "在目标机构的特定环境中注册"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1256
+#: src/subscription_manager/managercli.py:1257
 msgid "set a release version"
 msgstr "指定发行版本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1258
+#: src/subscription_manager/managercli.py:1259
 msgid "Deprecated, see --auto-attach"
 msgstr "已弃用，请查看 --auto-attach"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1260
+#: src/subscription_manager/managercli.py:1261
 msgid "automatically attach compatible subscriptions to this system"
 msgstr "自动在这个系统中附加兼容的订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1262
+#: src/subscription_manager/managercli.py:1263
 msgid "register the system even if it is already registered"
 msgstr "即使该系统已经注册也要注册"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1264
+#: src/subscription_manager/managercli.py:1265
 #: src/subscription_manager/migrate/migrate.py:924
 msgid ""
 "activation key to use for registration (can be specified more than once)"
 msgstr "注册时使用的激活码（可指定一次以上）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1266
+#: src/subscription_manager/managercli.py:1267
 msgid ""
 "system preference used when subscribing automatically, requires --auto-"
 "attach"
 msgstr "自动订阅时使用的系统首选设置，需要和 --auto-attach 一起使用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1271
+#: src/subscription_manager/managercli.py:1272
 msgid "This system is already registered. Use --force to override"
 msgstr "这个系统已经注册。使用 --force 覆盖"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1281
+#: src/subscription_manager/managercli.py:1282
 msgid "Error: Activation keys cannot be used with --auto-attach."
 msgstr "错误：激活码不能与 --auto-attach 一同使用。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1286
+#: src/subscription_manager/managercli.py:1287
 msgid "Error: Must use --auto-attach with --servicelevel."
 msgstr "错误：必须与 --servicelevel 一同使用 --auto-attach。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1288
+#: src/subscription_manager/managercli.py:1289
 msgid "Error: Must provide --org with activation keys."
 msgstr "错误：必须在提供激活码时提供 --org。"
 
-#: src/subscription_manager/managercli.py:1298
+#: src/subscription_manager/managercli.py:1299
 msgid "Error: The --type option has been deprecated and may not be used."
 msgstr "错误: --type 参数已过时，可能无法使用。"
 
-#: src/subscription_manager/managercli.py:1331
-#: src/subscription_manager/managercli.py:1559
+#: src/subscription_manager/managercli.py:1332
+#: src/subscription_manager/managercli.py:1560
 #, python-format
 msgid "Unregistering from: %s:%s%s"
 msgstr "取消注册：%s:%s%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1338
+#: src/subscription_manager/managercli.py:1339
 #, python-format
 msgid "The system with UUID %s has been unregistered"
 msgstr "UUID 为 %s 的系统已经被取消注册"
 
-#: src/subscription_manager/managercli.py:1359
+#: src/subscription_manager/managercli.py:1360
 #, python-format
 msgid "Registering to: %s:%s%s"
 msgstr "正在注册到：%s:%s%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1389
+#: src/subscription_manager/managercli.py:1390
 #, python-format
 msgid "Error during registration: %s"
 msgstr "注册时出错：%s"
 
-#: src/subscription_manager/managercli.py:1392
+#: src/subscription_manager/managercli.py:1393
 #, python-format
 msgid "The system has been registered with ID: %s"
 msgstr "这个系统已使用 ID %s 进行了注册"
 
-#: src/subscription_manager/managercli.py:1393
+#: src/subscription_manager/managercli.py:1394
 #, python-format
 msgid "The registered system name is: %s"
 msgstr "注册的系统名是：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1429
-#: src/subscription_manager/managercli.py:1883
+#: src/subscription_manager/managercli.py:1430
+#: src/subscription_manager/managercli.py:1884
 msgid ""
 "Error: The --servicelevel option is not supported by the server. Did not "
 "complete your request."
 msgstr "错误：该服务器不支持 --servicelevel 选项。未完成您的请求。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1441
-#: src/subscription_manager/managercli.py:1892
+#: src/subscription_manager/managercli.py:1442
+#: src/subscription_manager/managercli.py:1893
 #, python-format
 msgid "Service level set to: %s"
 msgstr "将服务等级设定为：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1467
+#: src/subscription_manager/managercli.py:1468
 #: src/subscription_manager/migrate/migrate.py:340
 msgid "Environment: "
 msgstr "环境： "
 
-#: src/subscription_manager/managercli.py:1495
+#: src/subscription_manager/managercli.py:1496
 #, python-format
 msgid "Hint: Organization \"%s\" contains following environments: %s"
 msgstr "提示：组织“%s”包含以下环境： “%s”"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1504
-#: src/subscription_manager/managercli.py:1514
+#: src/subscription_manager/managercli.py:1505
+#: src/subscription_manager/managercli.py:1515
 #, python-format
 msgid "No such environment: %s"
 msgstr "没有这个环境：%s"
 
-#: src/subscription_manager/managercli.py:1535
+#: src/subscription_manager/managercli.py:1536
 #, python-format
 msgid "Hint: User \"%s\" is member of following organizations: %s"
 msgstr "提示：用户 \"%s\" 是以下机构的成员：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1585
+#: src/subscription_manager/managercli.py:1586
 msgid "System has been unregistered."
 msgstr "系统已经被取消注册。"
 
-#: src/subscription_manager/managercli.py:1591
+#: src/subscription_manager/managercli.py:1592
 msgid "Modify or view the addons attribute of the system purpose"
 msgstr "修改或查看系统目的的插件属性"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1599
+#: src/subscription_manager/managercli.py:1600
 msgid "Attempt to redeem a subscription for a preconfigured system"
 msgstr "尝试为预先配置的系统兑现订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1603
+#: src/subscription_manager/managercli.py:1604
 msgid "email address to notify when subscription redemption is complete"
 msgstr "订阅兑换完成时接收通知的电子邮件。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1606
+#: src/subscription_manager/managercli.py:1607
 msgid ""
 "optional language to use for email notification when subscription redemption "
 "is complete (Examples: en-us, de-de)"
 msgstr "当订阅兑换完成时接收电子邮件通知的语言。（例如：en-us、de-de）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1612
+#: src/subscription_manager/managercli.py:1613
 msgid ""
 "Error: This command requires that you specify an email address with --email."
 msgstr "错误：这个命令要求您使用 --email 指定一个电子邮件地址。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1652
+#: src/subscription_manager/managercli.py:1653
 msgid "Configure which operating system release to use"
 msgstr "使用的操作系统发行版本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1656
+#: src/subscription_manager/managercli.py:1657
 msgid "shows current release setting; default command"
 msgstr "显示当前发行版本设置。默认命令。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1658
+#: src/subscription_manager/managercli.py:1659
 msgid "list available releases"
 msgstr "列出可用发行版本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1661
+#: src/subscription_manager/managercli.py:1662
 msgid "set the release for this system"
 msgstr "为这个系统设置发行版本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1664
+#: src/subscription_manager/managercli.py:1665
 msgid "unset the release for this system"
 msgstr "取消为这个系统设置的发行版本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1667
+#: src/subscription_manager/managercli.py:1668
 msgid "Error: The 'release' command is not supported by the server."
 msgstr "错误：该完全不支持 'release' 命令。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1676
+#: src/subscription_manager/managercli.py:1677
 #, python-format
 msgid "Release: %s"
 msgstr "发行版本：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1678
+#: src/subscription_manager/managercli.py:1679
 msgid "Release not set"
 msgstr "没有设定发行版本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1698
+#: src/subscription_manager/managercli.py:1699
 msgid "Release preference has been unset"
 msgstr "已取消发行版本属性设置"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1714
+#: src/subscription_manager/managercli.py:1715
 #, python-format
 msgid "No releases match '%s'.  Consult 'release --list' for a full listing."
 msgstr "没有与 '%s' 映射的发行版本。查询 'release --list' 给出的完整列表。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1718
+#: src/subscription_manager/managercli.py:1719
 #, python-format
 msgid "Release set to: %s"
 msgstr "将发行版本设定为：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1728
+#: src/subscription_manager/managercli.py:1729
 msgid "No release versions available, please check subscriptions."
 msgstr "没有发行版本版本可用，请检查订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1731
+#: src/subscription_manager/managercli.py:1732
 msgid "Available Releases"
 msgstr "可用发行版本"
 
-#: src/subscription_manager/managercli.py:1752
+#: src/subscription_manager/managercli.py:1753
 msgid "The ID of the pool to attach (can be specified more than once)"
 msgstr "要添加的池 ID（可指定一个以上）"
 
-#: src/subscription_manager/managercli.py:1754
+#: src/subscription_manager/managercli.py:1755
 msgid ""
 "Number of subscriptions to attach. May not be used with an auto-attach."
 msgstr "要添加的订阅数。不能与 auto-attach 一同使用。"
 
-#: src/subscription_manager/managercli.py:1756
+#: src/subscription_manager/managercli.py:1757
 msgid ""
 "Automatically attach compatible subscriptions to this system. This is the "
 "default action."
 msgstr "自动在这个系统中附加兼容订阅。这是默认动作。"
 
-#: src/subscription_manager/managercli.py:1758
+#: src/subscription_manager/managercli.py:1759
 msgid ""
 "Automatically attach only subscriptions matching the specified service "
 "level; only used with --auto"
 msgstr "只自动添加与指定服务等级匹配的订阅；只能与 --auto 配合使用"
 
-#: src/subscription_manager/managercli.py:1760
+#: src/subscription_manager/managercli.py:1761
 msgid ""
 "A file from which to read pool IDs. If a hyphen is provided, pool IDs will "
 "be read from stdin."
 msgstr "读取池 ID 的文件。如果是小横线，则从 stdin 中读取池 ID。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1763
+#: src/subscription_manager/managercli.py:1764
 msgid "All installed products are covered by valid entitlements."
 msgstr "有效授权涵盖所有安装的产品。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1764
+#: src/subscription_manager/managercli.py:1765
 msgid "No need to update subscriptions at this time."
 msgstr "这次不需要更新订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1775
+#: src/subscription_manager/managercli.py:1776
 msgid "Attach a specified subscription to the registered system"
 msgstr "在注册的系统中附加指定的订阅"
 
-#: src/subscription_manager/managercli.py:1786
+#: src/subscription_manager/managercli.py:1787
 msgid "Error: --auto may not be used when specifying pools."
 msgstr "错误：不能在指定池时使用 --auto。"
 
-#: src/subscription_manager/managercli.py:1788
+#: src/subscription_manager/managercli.py:1789
 msgid "Error: The --servicelevel option cannot be used when specifying pools."
 msgstr "错误：不能在指定池时使用 --servicelevel 选项。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1795
+#: src/subscription_manager/managercli.py:1796
 msgid "Error: Quantity must be a positive integer."
 msgstr "错误：数量必须是正整数。"
 
-#: src/subscription_manager/managercli.py:1797
+#: src/subscription_manager/managercli.py:1798
 msgid "Error: --quantity may not be used with an auto-attach"
 msgstr "错误：--quantity 不能与 auto-attach 一同使用"
 
-#: src/subscription_manager/managercli.py:1809
+#: src/subscription_manager/managercli.py:1810
 msgid "Error: Received data does not contain any pool IDs."
 msgstr "错误：收到的数据不包含任何池 ID。"
 
-#: src/subscription_manager/managercli.py:1811
+#: src/subscription_manager/managercli.py:1812
 #, python-format
 msgid "Error: The file \"%s\" does not contain any pool IDs."
 msgstr "错误：文件 \"%s\" 不包含任何池 ID。"
 
-#: src/subscription_manager/managercli.py:1813
+#: src/subscription_manager/managercli.py:1814
 #, python-format
 msgid "Error: The file \"%s\" does not exist or cannot be read."
 msgstr "错误：文件 \"%s\" 不存在或者无法读取"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1843
+#: src/subscription_manager/managercli.py:1844
 msgid "Please enter a valid numeric pool ID."
 msgstr "请输入有效数字池 ID。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1850
+#: src/subscription_manager/managercli.py:1851
 #, python-format
 msgid "Successfully attached a subscription for: %s"
 msgstr "成功附加一个订阅：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1871
+#: src/subscription_manager/managercli.py:1872
 msgid "No Installed products on system. No need to attach subscriptions."
 msgstr "系统中没有安装的产品。不需要附加订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1874
+#: src/subscription_manager/managercli.py:1875
 msgid ""
 "All installed products are covered by valid entitlements. No need to update "
 "subscriptions at this time."
 msgstr "有效授权涵盖所有安装的产品。这次不需要更新订阅。"
 
-#: src/subscription_manager/managercli.py:1898
+#: src/subscription_manager/managercli.py:1902
 msgid "Entitlement Certificate(s) update failed due to the following reasons:"
 msgstr "授权证书更新失败，原因如下："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1932
+#: src/subscription_manager/managercli.py:1936
 msgid "Deprecated, see attach"
 msgstr "已弃用，请查看 attach"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1950
+#: src/subscription_manager/managercli.py:1954
 msgid "certificate serial number to remove (can be specified more than once)"
 msgstr "要删除的证书序列号（可指定一个以上）"
 
-#: src/subscription_manager/managercli.py:1952
+#: src/subscription_manager/managercli.py:1956
 msgid "the ID of the pool to remove (can be specified more than once)"
 msgstr "要删除的池 ID（可指定一个以上）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1954
+#: src/subscription_manager/managercli.py:1958
 msgid "remove all subscriptions from this system"
 msgstr "从这个系统中删除所有订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1957
+#: src/subscription_manager/managercli.py:1961
 msgid "Remove all or specific subscriptions from this system"
 msgstr "从这个系统中删除所有订阅或指定订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:1970
+#: src/subscription_manager/managercli.py:1974
 #, python-format
 msgid "Error: '%s' is not a valid serial number"
 msgstr "错误： '%s' 为无效序列号"
 
-#: src/subscription_manager/managercli.py:1976
+#: src/subscription_manager/managercli.py:1980
 msgid ""
 "Error: The registered entitlement server does not support remove --pool.\n"
 "Instead, use the remove --serial option."
 msgstr "错误：注册的权利服务器不支持 remove --pool。\n"
 "应使用 remove --serial 选项。"
 
-#: src/subscription_manager/managercli.py:1979
+#: src/subscription_manager/managercli.py:1983
 msgid ""
 "Error: This command requires that you specify one of --serial, --pool or --"
 "all."
 msgstr "错误：这个命令要求指定选项 --serial、--pool 或者 --all 中的一个。"
 
-#: src/subscription_manager/managercli.py:1984
+#: src/subscription_manager/managercli.py:1988
 msgid "The entitlement server successfully removed these pools:"
 msgstr "成功从这些池中删除权利服务器："
 
-#: src/subscription_manager/managercli.py:1986
+#: src/subscription_manager/managercli.py:1990
 msgid "The entitlement server successfully removed these serial numbers:"
 msgstr "成功从权利服务器中删除这些序列号："
 
-#: src/subscription_manager/managercli.py:1988
+#: src/subscription_manager/managercli.py:1992
 msgid "The entitlement server successfully removed these IDs:"
 msgstr "成功从权利服务器中删除这些 ID："
 
-#: src/subscription_manager/managercli.py:1993
+#: src/subscription_manager/managercli.py:1997
 msgid "The entitlement server failed to remove these pools:"
 msgstr "从权利服务器中删除这些池失败："
 
-#: src/subscription_manager/managercli.py:1995
+#: src/subscription_manager/managercli.py:1999
 msgid "The entitlement server failed to remove these serial numbers:"
 msgstr "从权利服务器中删除这些序列号失败："
 
-#: src/subscription_manager/managercli.py:1997
+#: src/subscription_manager/managercli.py:2001
 msgid "The entitlement server failed to remove these IDs:"
 msgstr "从权利服务器中删除这些 ID 失败："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2015
+#: src/subscription_manager/managercli.py:2019
 msgid "All subscriptions have been removed at the server."
 msgstr "所有在给服务器中删除的订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2018
+#: src/subscription_manager/managercli.py:2022
 #, python-format
 msgid "%s subscription removed at the server."
 msgid_plural "%s subscriptions removed at the server."
 msgstr[0] "已从该服务器删除 %s 个订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2046
-#: src/subscription_manager/managercli.py:2070
+#: src/subscription_manager/managercli.py:2050
+#: src/subscription_manager/managercli.py:2074
 #, python-format
 msgid "Unable to perform remove due to the following exception: %s"
 msgstr "因为以下例外无法执行删除：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2055
+#: src/subscription_manager/managercli.py:2059
 #, python-format
 msgid "%s subscriptions removed from this system."
 msgstr "从这个系统中删除 %s 订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2065
+#: src/subscription_manager/managercli.py:2069
 #, python-format
 msgid "Subscription with serial number %s removed from this system"
 msgstr "从这个系统中删除的序列号为 %s 的订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2083
+#: src/subscription_manager/managercli.py:2087
 msgid "Deprecated, see remove"
 msgstr "已弃用，请查看 remove"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2095
+#: src/subscription_manager/managercli.py:2099
 msgid "View or update the detected system information"
 msgstr "查看或更新探测到的系统信息"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2099
+#: src/subscription_manager/managercli.py:2103
 msgid "list known facts for this system"
 msgstr "列出这个系统的已知详情"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2101
+#: src/subscription_manager/managercli.py:2105
 msgid "update the system facts"
 msgstr "更新系统详情"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2134
+#: src/subscription_manager/managercli.py:2138
 msgid "Successfully updated the system facts."
 msgstr "成功地更新的系统信息。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2139
+#: src/subscription_manager/managercli.py:2143
 msgid "Import certificates which were provided outside of the tool"
 msgstr "导入不是由此工具提供的证书"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2143
+#: src/subscription_manager/managercli.py:2147
 msgid "certificate file to import (can be specified more than once)"
 msgstr "要导入的证书文件（可指定一个以上）"
 
-#: src/subscription_manager/managercli.py:2147
+#: src/subscription_manager/managercli.py:2151
 msgid ""
 "Error: You may not import certificates into a system that is registered to a "
 "subscription management service."
 msgstr "错误：不能将证书导入在订阅管理服务中注册的系统。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2149
+#: src/subscription_manager/managercli.py:2153
 msgid ""
 "Error: This command requires that you specify a certificate with --"
 "certificate."
 msgstr "错误：这个命令要求您使用 --certificate 指定一个证书。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2164
+#: src/subscription_manager/managercli.py:2168
 #, python-format
 msgid "Successfully imported certificate %s"
 msgstr "成功地导入了证书 %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2170
+#: src/subscription_manager/managercli.py:2174
 #, python-format
 msgid "%s is not a valid certificate file. Please use a valid certificate."
 msgstr "%s 不是有效的证书文件。请使用有效的证书。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2176
+#: src/subscription_manager/managercli.py:2180
 msgid ""
 "An error occurred while importing the certificate. Please check log file for "
 "more information."
 msgstr "导入该证书时出错。详情请检查日志文件。"
 
-#: src/subscription_manager/managercli.py:2180
+#: src/subscription_manager/managercli.py:2184
 #, python-format
 msgid "%s: file not found."
 msgstr "%s：未找到文件。"
 
-#: src/subscription_manager/managercli.py:2203
+#: src/subscription_manager/managercli.py:2207
 msgid "View and configure with 'subscription-manager plugins'"
 msgstr "使用 'subscription-manager plugins' 查看和配置"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author leahliu
-#: src/subscription_manager/managercli.py:2207
+#: src/subscription_manager/managercli.py:2211
 #, python-format
 msgid "list %s plugins"
 msgstr "列出 %s 插件"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author leahliu
-#: src/subscription_manager/managercli.py:2209
+#: src/subscription_manager/managercli.py:2213
 #, python-format
 msgid "list %s plugin slots"
 msgstr "列出 %s 插件插槽"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author leahliu
-#: src/subscription_manager/managercli.py:2211
+#: src/subscription_manager/managercli.py:2215
 #, python-format
 msgid "list %s plugin hooks"
 msgstr "列出 %s 插件钩"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2214
+#: src/subscription_manager/managercli.py:2218
 msgid "show verbose plugin info"
 msgstr "显示详细插件信息"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2228
+#: src/subscription_manager/managercli.py:2232
 msgid "disabled"
 msgstr "已禁用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2230
+#: src/subscription_manager/managercli.py:2234
 msgid "enabled"
 msgstr "已启用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2257
+#: src/subscription_manager/managercli.py:2261
 msgid "List the repositories which this system is entitled to use"
 msgstr "列出为这个系统授权使用的软件仓库"
 
-#: src/subscription_manager/managercli.py:2291
+#: src/subscription_manager/managercli.py:2295
 msgid "list all known repositories for this system"
 msgstr "列出这个系统的所有已知软件仓库"
 
-#: src/subscription_manager/managercli.py:2294
+#: src/subscription_manager/managercli.py:2298
 msgid "list known, enabled repositories for this system"
 msgstr "列出这个系统的已知且已启用的软件仓库"
 
-#: src/subscription_manager/managercli.py:2297
+#: src/subscription_manager/managercli.py:2301
 msgid "list known, disabled repositories for this system"
 msgstr "列出这个系统的已知且已禁用的软件仓库"
 
-#: src/subscription_manager/managercli.py:2300
+#: src/subscription_manager/managercli.py:2304
 msgid ""
 "repository to enable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
 msgstr "要启用的软件仓库（一次可指定多个）。支持通配符（* 和 ?）。"
 
-#: src/subscription_manager/managercli.py:2303
+#: src/subscription_manager/managercli.py:2307
 msgid ""
 "repository to disable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
 msgstr "要禁用的软件仓库（一次可指定多个）。支持通配符（* 和 ?）。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2351
+#: src/subscription_manager/managercli.py:2359
 #, python-format
 msgid "    Available Repositories in %s"
 msgstr "    %s 中的可用软件仓库"
 
-#: src/subscription_manager/managercli.py:2361
+#: src/subscription_manager/managercli.py:2369
 msgid "There were no available repositories matching the specified criteria."
 msgstr "没有符合指定标准的软件仓库。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2363
-#: src/subscription_manager/managercli.py:2382
+#: src/subscription_manager/managercli.py:2371
+#: src/subscription_manager/managercli.py:2390
 msgid "This system has no repositories available through subscriptions."
 msgstr "这个系统没有可通过订阅使用的库。"
 
-#: src/subscription_manager/managercli.py:2389
+#: src/subscription_manager/managercli.py:2397
 #, python-format
 msgid ""
 "Error: '%s' does not match a valid repository ID. Use \"subscription-manager "
@@ -5187,104 +5227,104 @@ msgid ""
 msgstr ""
 "错误：'%s' 与有效软件仓库 ID 不匹配。请使用 \"subscription-manager repos --list\" 查看有效软件仓库。"
 
-#: src/subscription_manager/managercli.py:2432
+#: src/subscription_manager/managercli.py:2444
 #, python-format
 msgid "Repository '%s' is enabled for this system."
 msgstr "为这个系统启用软件仓库 '%s'。"
 
-#: src/subscription_manager/managercli.py:2434
+#: src/subscription_manager/managercli.py:2446
 #, python-format
 msgid "Repository '%s' is disabled for this system."
 msgstr "为这个系统禁用软件仓库 '%s'。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2441
+#: src/subscription_manager/managercli.py:2453
 msgid ""
 "List, set, or remove the configuration parameters in use by this system"
 msgstr "列出、设置或删除这个系统使用的配置参数。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2445
+#: src/subscription_manager/managercli.py:2457
 msgid "list the configuration for this system"
 msgstr "列出这个系统的配置"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2447
+#: src/subscription_manager/managercli.py:2459
 msgid "remove configuration entry by section.name"
 msgstr "根据 section.name 删除配置条目"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2454
+#: src/subscription_manager/managercli.py:2466
 #, python-format
 msgid "Section: %s, Name: %s"
 msgstr "Section: %s, Name: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2473
+#: src/subscription_manager/managercli.py:2485
 msgid ""
 "Error: --list should not be used with any other options for setting or "
 "removing configurations."
 msgstr "错误：--list 不应该和设置或删除配置的其他选项一起使用。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2492
+#: src/subscription_manager/managercli.py:2504
 msgid ""
 "Error: configuration entry designation for removal must be of format "
 "[section.name]"
 msgstr "错误：用于删除的配置条目必须具有如下格式 [section.name]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2502
+#: src/subscription_manager/managercli.py:2514
 #, python-format
 msgid "Error: Section %s and name %s does not exist."
 msgstr "错误：Section %s 和 name %s 不存在"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2520
+#: src/subscription_manager/managercli.py:2532
 msgid "[] - Default value in use"
 msgstr "[] -- 使用默认值"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2529
-#: src/subscription_manager/managercli.py:2532
+#: src/subscription_manager/managercli.py:2541
+#: src/subscription_manager/managercli.py:2544
 #, python-format
 msgid "You have removed the value for section %s and name %s."
 msgstr "您已经删除 section %s 和 name %s 的值。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2533
+#: src/subscription_manager/managercli.py:2545
 #, python-format
 msgid "The default value for %s will now be used."
 msgstr "现在将使用 %s 的缺省值。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2535
+#: src/subscription_manager/managercli.py:2547
 #, python-format
 msgid "Section %s and name %s cannot be removed."
 msgstr "Section %s 和 name %s 无法被删除。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2554
+#: src/subscription_manager/managercli.py:2566
 msgid "List subscription and product information for this system"
 msgstr "为这个系统列出订阅和产品信息。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2558
+#: src/subscription_manager/managercli.py:2570
 msgid "list shows those products which are installed (default)"
 msgstr "显示已安装的产品（默认）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2560
+#: src/subscription_manager/managercli.py:2572
 msgid "show those subscriptions which are available"
 msgstr "显示可用的订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2562
+#: src/subscription_manager/managercli.py:2574
 msgid "used with --available to ensure all subscriptions are returned"
 msgstr "和 --available 一起使用以确保返回所有订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2564
+#: src/subscription_manager/managercli.py:2576
 #, python-format
 msgid ""
 "date to search on, defaults to today's date, only used with --available "
@@ -5292,60 +5332,60 @@ msgid ""
 msgstr "要搜索的日期，默认为当天日期，只能与 --available 一同使用（例如：%s）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2567
+#: src/subscription_manager/managercli.py:2579
 msgid "show the subscriptions being consumed by this system"
 msgstr "显示这个系统消耗的订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2569
+#: src/subscription_manager/managercli.py:2581
 msgid ""
 "shows only subscriptions matching the specified service level; only used "
 "with --available and --consumed"
 msgstr "只显示与指定服务等级相匹配的订阅。只能与 --available 和 --consumed 合用。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2571
+#: src/subscription_manager/managercli.py:2583
 msgid ""
 "shows pools which provide products that are not already covered; only used "
 "with --available"
 msgstr "显示可提供未覆盖产品的池；只可与 --available 一同使用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2573
+#: src/subscription_manager/managercli.py:2585
 msgid ""
 "shows only subscriptions matching products that are currently installed; "
 "only used with --available"
 msgstr "只显示与目前安装产品相匹配的订阅，只能与 --available 合用。"
 
-#: src/subscription_manager/managercli.py:2575
+#: src/subscription_manager/managercli.py:2587
 msgid ""
 "lists only subscriptions or products containing the specified expression in "
 "the subscription or product information, varying with the list requested and "
 "the server version (case-insensitive)."
 msgstr "只列出在订阅或产品信息中包含指定表达式的订阅或产品（区分大小写）。"
 
-#: src/subscription_manager/managercli.py:2577
+#: src/subscription_manager/managercli.py:2589
 msgid ""
 "lists only the pool IDs for applicable available or consumed subscriptions; "
 "only used with --available and --consumed"
 msgstr "只列出可用或者已消耗订阅的池 ID，只能与 --available 及 --consumed 合用。"
 
-#: src/subscription_manager/managercli.py:2579
+#: src/subscription_manager/managercli.py:2591
 #, python-format
 msgid ""
 "show pools that are active on or after the given date; only used with --"
 "available (example: %s)"
 msgstr "显示在给定日期或之后激活的池；仅与 --available 一起使用（示例： %s ）"
 
-#: src/subscription_manager/managercli.py:2597
+#: src/subscription_manager/managercli.py:2609
 msgid "Error: --afterdate is only applicable with --available"
 msgstr "错误：--afterdate 只适用于带有 --available"
 
-#: src/subscription_manager/managercli.py:2599
+#: src/subscription_manager/managercli.py:2611
 msgid "Error: --afterdate cannot be used with --ondate"
 msgstr "错误：--afterdate 不能与 --ondate 一起使用"
 
-#: src/subscription_manager/managercli.py:2614
+#: src/subscription_manager/managercli.py:2626
 #, python-brace-format
 msgid ""
 "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
@@ -5353,39 +5393,39 @@ msgid ""
 msgstr "输入的日期无效。日期格式应为 YYYY-MM-DD（例如：{dateexample}）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2643
+#: src/subscription_manager/managercli.py:2655
 msgid "    Installed Product Status"
 msgstr "    安装的产品状态"
 
-#: src/subscription_manager/managercli.py:2653
+#: src/subscription_manager/managercli.py:2665
 #, python-format
 msgid "No installed products were found matching the expression \"%s\"."
 msgstr "未找到符合表达式 \"%s\" 的已安装产品。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2655
+#: src/subscription_manager/managercli.py:2667
 msgid "No installed products to list"
 msgstr "无安装的产品"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2682
+#: src/subscription_manager/managercli.py:2694
 msgid "Available Subscriptions"
 msgstr "可用订阅"
 
-#: src/subscription_manager/managercli.py:2720
+#: src/subscription_manager/managercli.py:2732
 #, python-format
 msgid ""
 "No available subscription pools were found matching the expression \"%s\" "
 "and the service level \"%s\"."
 msgstr "未找到符合表达式 \"%s\" 以及服务等级 \"%s\" 的可用订阅池。"
 
-#: src/subscription_manager/managercli.py:2725
+#: src/subscription_manager/managercli.py:2737
 #, python-format
 msgid ""
 "No available subscription pools were found matching the expression \"%s\"."
 msgstr "未找到符合表达式 \"%s\" 的可用订阅池。"
 
-#: src/subscription_manager/managercli.py:2730
+#: src/subscription_manager/managercli.py:2742
 #, python-format
 msgid ""
 "No available subscription pools were found matching the service level \"%s\"."
@@ -5393,192 +5433,192 @@ msgid ""
 msgstr "未找到符合服务等级 \"%s\" 的可用订阅池。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2734
+#: src/subscription_manager/managercli.py:2746
 msgid "No available subscription pools to list"
 msgstr "无可用的订阅池"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2754
+#: src/subscription_manager/managercli.py:2766
 msgid "Consumed Subscriptions"
 msgstr "消耗的订阅"
 
-#: src/subscription_manager/managercli.py:2770
+#: src/subscription_manager/managercli.py:2782
 #, python-format
 msgid ""
 "No consumed subscription pools were found matching the expression \"%s\" and "
 "the service level \"%s\"."
 msgstr "未找到符合表达式 \"%s\" 以及服务等级 \"%s\" 的已消耗订阅池。"
 
-#: src/subscription_manager/managercli.py:2775
+#: src/subscription_manager/managercli.py:2787
 #, python-format
 msgid ""
 "No consumed subscription pools were found matching the expression \"%s\"."
 msgstr "未找到符合表达式 \"%s\" 的已消耗订阅池。"
 
-#: src/subscription_manager/managercli.py:2780
+#: src/subscription_manager/managercli.py:2792
 #, python-format
 msgid ""
 "No consumed subscription pools were found matching the service level \"%s\"."
 msgstr "未找到符合服务等级 \"%s\" 的已消耗订阅池。"
 
-#: src/subscription_manager/managercli.py:2784
+#: src/subscription_manager/managercli.py:2796
 msgid "No consumed subscription pools were found."
 msgstr "没有找到消耗的订阅池。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2789
+#: src/subscription_manager/managercli.py:2801
 msgid "Manage custom content repository settings"
 msgstr "管理自定义内容软件仓库设置"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2792
+#: src/subscription_manager/managercli.py:2804
 msgid "repository to modify (can be specified more than once)"
 msgstr "要修改的软件仓库（可指定一次以上）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2794
+#: src/subscription_manager/managercli.py:2806
 msgid ""
 "name of the override to remove (can be specified more than once); used with -"
 "-repo option."
 msgstr "要删除的覆盖名称（可指定一次以上）；与 --repo 选项合用。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2797
+#: src/subscription_manager/managercli.py:2809
 msgid ""
 "name and value of the option to override separated by a colon (can be "
 "specified more than once); used with --repo option."
 msgstr "要覆盖的选项名称和数值，用冒号分开（可指定一次以上）；与 --repo 合用。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2799
+#: src/subscription_manager/managercli.py:2811
 msgid ""
 "remove all overrides; can be specific to a repository by providing --repo"
 msgstr "删除所有覆盖；可使用 --repo 指定具体软件仓库"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2801
+#: src/subscription_manager/managercli.py:2813
 msgid ""
 "list all overrides; can be specific to a repository by providing --repo"
 msgstr "列出所有覆盖；可通过提供 --repo 指定具体软件仓库"
 
-#: src/subscription_manager/managercli.py:2807
+#: src/subscription_manager/managercli.py:2819
 msgid "You must specify an override in the form of \"name:value\" with --add."
 msgstr "必须使用 --add 指定格式为 \"name:value\" 的覆盖。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2811
+#: src/subscription_manager/managercli.py:2823
 msgid "--add arguments should be in the form of \"name:value\""
 msgstr "--add 参数格式应为 \"name:value\""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2818
+#: src/subscription_manager/managercli.py:2830
 msgid "Error: You must specify a repository to modify"
 msgstr "错误：您必须指定要修改的软件仓库"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2820
+#: src/subscription_manager/managercli.py:2832
 msgid "Error: You may not use --add or --remove with --remove-all and --list"
 msgstr "错误：您不能将 --add 或者 --remove 与 --remove-all 和 --list 合用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2822
+#: src/subscription_manager/managercli.py:2834
 msgid "Error: You may not use --list with --remove-all"
 msgstr "错误：您不能将 --list 与 --remove-all 合用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2825
+#: src/subscription_manager/managercli.py:2837
 msgid ""
 "Error: The --repo option must be used with --list or --add or --remove."
 msgstr "错误：--repo 选项必须与 --list 或者 --add 或者 --remove 合用。"
 
-#: src/subscription_manager/managercli.py:2829
+#: src/subscription_manager/managercli.py:2841
 msgid "Error: You must specify an override name with --remove."
 msgstr "错误：必须指定 --remove 指定覆盖名称。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2841
+#: src/subscription_manager/managercli.py:2853
 msgid "Error: The 'repo-override' command is not supported by the server."
 msgstr "错误：该服务器不支持 'repo-override' 命令。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2859
+#: src/subscription_manager/managercli.py:2871
 msgid "This system does not have any content overrides applied to it."
 msgstr "这个系统没有可用于它的内容覆盖。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2878
+#: src/subscription_manager/managercli.py:2890
 #, python-format
 msgid ""
 "Repository '%s' does not currently exist, but the override has been added."
 msgstr "软件仓库 '%s' 目前不存在，但已添加该覆盖。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2902
+#: src/subscription_manager/managercli.py:2914
 #, python-format
 msgid "Nothing is known about '%s'"
 msgstr "对 '%s' 一无所知"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2907
+#: src/subscription_manager/managercli.py:2919
 #, python-format
 msgid "Repository: %s"
 msgstr "软件仓库：%s"
 
-#: src/subscription_manager/managercli.py:2917
+#: src/subscription_manager/managercli.py:2929
 msgid "Modify system purpose role"
 msgstr "修改系统目的角色"
 
-#: src/subscription_manager/managercli.py:2924
+#: src/subscription_manager/managercli.py:2936
 msgid ""
 "Error: Options --set and --unset of role subcommand are mutually exclusive."
 msgstr "错误：role 子命令的选项 --set 和 --unset 是相互排斥的。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2930
+#: src/subscription_manager/managercli.py:2942
 msgid "Print version information"
 msgstr "输出版本信息"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2937
+#: src/subscription_manager/managercli.py:2949
 #, python-format
 msgid "subscription management server: %s"
 msgstr "订阅管理服务器：%s"
 
-#: src/subscription_manager/managercli.py:2938
+#: src/subscription_manager/managercli.py:2950
 #, python-format
 msgid "subscription management rules: %s"
 msgstr "订阅管理规则：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2945
+#: src/subscription_manager/managercli.py:2957
 msgid "Show status information for this system's subscriptions and products"
 msgstr "显示这个系统的订阅和产品状态信息"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2948
+#: src/subscription_manager/managercli.py:2960
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
 msgstr "查看将来某天的状态。如果没有使用这个参数，则默认查看今天的状态（例如：%s）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/managercli.py:2961
+#: src/subscription_manager/managercli.py:2973
 msgid "System Status Details"
 msgstr "系统状态详情"
 
-#: src/subscription_manager/managercli.py:2974
+#: src/subscription_manager/managercli.py:2986
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status.\n"
 msgstr "内容访问模式设置为简单内容访问。无论订阅状态如何，该主机都可以访问内容。\n"
 
-#: src/subscription_manager/managercli.py:2984
+#: src/subscription_manager/managercli.py:2996
 #, python-format
 msgid "Overall Status: %s\n"
 "%s"
 msgstr "总体状态：%s\n"
 "%s"
 
-#: src/subscription_manager/managercli.py:3002
+#: src/subscription_manager/managercli.py:3014
 #, python-format
 msgid "System Purpose Status: %s"
 msgstr "系统目的状态：%s"
