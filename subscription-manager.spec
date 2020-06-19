@@ -226,7 +226,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.27.7
+Version: 1.27.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1418,6 +1418,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Jun 19 2020 William Poteat <wpoteat@redhat.com> 1.27.8-1
+- 1838423: Correct method call signature for release (wpoteat@redhat.com)
+
 * Tue Jun 16 2020 Christopher Snyder <csnyder@redhat.com> 1.27.7-1
 - 1840859: Custom repo parameters are not deletable (wpoteat@redhat.com)
 
