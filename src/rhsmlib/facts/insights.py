@@ -34,8 +34,6 @@ class InsightsCollector(collector.FactsCollector):
     Class used for collecting facts related to Red Hat Access Insights
     """
 
-    DEFAULT_INSIGHTS_MACHINE_ID = "/etc/redhat-access-insights/machine-id"
-
     def __init__(self, arch=None, prefix=None, testing=None, collected_hw_info=None):
         super(InsightsCollector, self).__init__(
             arch=arch,
@@ -55,20 +53,23 @@ class InsightsCollector(collector.FactsCollector):
         Otherwise empty dictionary is returned.
         """
         insights_id = {}
-
+        paths_to_check = [
+            "/etc/insights-client/machine-id",  # should be the current known location
+            "/etc/redhat-access-insights/machine-id",  # location prior to 3.0.13 of insights-client
+        ]
         if insights_constants is not None and hasattr(insights_constants, 'machine_id_file'):
-            machine_id_filepath = insights_constants.machine_id_file
-        else:
-            machine_id_filepath = self.DEFAULT_INSIGHTS_MACHINE_ID
+            paths_to_check.insert(0, insights_constants.machine_id_file)
 
-        try:
-            with open(machine_id_filepath, "r") as fd:
-                machine_id = fd.read()
-        except IOError as err:
-            log.debug("Unable to read insights machine_id file: %s, error: %s" % (machine_id_filepath, err))
-        else:
-            insights_id = {
-                "insights_id": machine_id
-            }
+        for filepath in paths_to_check:
+            try:
+                with open(filepath, "r") as fd:
+                    machine_id = fd.read()
+            except IOError as err:
+                log.debug("Unable to read insights machine_id file: %s, error: %s" % (filepath, err))
+            else:
+                insights_id = {
+                    "insights_id": machine_id
+                }
+                break
 
         return insights_id
