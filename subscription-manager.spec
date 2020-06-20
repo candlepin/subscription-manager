@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.41
+Version: 1.24.42
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1161,6 +1161,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Jun 19 2020 Christopher Snyder <csnyder@redhat.com> 1.24.42-1
+- 1848636, 1849074: Update insights machine-id path (csnyder@redhat.com)
+- 1796833: Update translations (csnyder@redhat.com)
+
 * Thu Jun 18 2020 William Poteat <wpoteat@redhat.com> 1.24.41-1
 - 1842474: Update local and cache file during sync(); ENT-2433
   (jhnidek@redhat.com)
