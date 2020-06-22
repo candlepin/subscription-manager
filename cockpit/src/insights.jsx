@@ -35,7 +35,9 @@ const insights_timer = service.proxy("insights-client.timer", "Timer");
 const insights_service = service.proxy("insights-client.service", "Service");
 
 export function detect() {
-    return cockpit.spawn([ "which", "insights-client" ], { err: "ignore" }).then(() => true, () => false);
+    return new Promise(resolve => {
+        cockpit.spawn([ "which", "insights-client" ], { err: "ignore" }).then(() => resolve(true), () => resolve(false));
+    });
 }
 
 export function catch_error(err) {
@@ -45,7 +47,7 @@ export function catch_error(err) {
     // readable by wrapping the text in <pre>.
     if (msg.indexOf("\n") > 0)
         msg = <pre>{msg}</pre>;
-    subscriptionsClient.setError("error", msg);
+    subscriptionsClient.setError("warning", msg);
 }
 
 function ensure_installed(update_progress) {
@@ -60,6 +62,9 @@ function ensure_installed(update_progress) {
                             return Promise.reject(cockpit.format(_("The system could not be connected to Insights because installing the $0 package requires the unexpected removal of other packages."),
                                                                  subscriptionsClient.insightsPackage));
                         return PK.install_missing_packages(data, update_install_progress(update_progress));
+                    }, error => {
+                        console.error('Error while trying to install insights-client', error);
+                        return Promise.reject(cockpit.format(_("The $0 package could not be installed."), subscriptionsClient.insightsPackage));
                     });
         else
             return Promise.resolve();
