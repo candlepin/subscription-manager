@@ -34,6 +34,8 @@ import subscription_manager.injection as inj
 from subscription_manager.jsonwrapper import PoolWrapper
 from rhsm import ourjson as json
 from subscription_manager.isodate import parse_date
+from subscription_manager.utils import get_supported_resources
+from subscription_manager.syspurposelib import post_process_received_data
 
 from rhsmlib.services import config, syspurpose
 
@@ -369,7 +371,7 @@ class ProductStatusCache(StatusCache):
         consumer_data = uep.getConsumer(uuid)
 
         if 'installedProducts' not in consumer_data:
-            log.warn("Server does not support product date ranges.")
+            log.warning("Server does not support product date ranges.")
         else:
             self.server_status = consumer_data['installedProducts']
 
@@ -466,14 +468,15 @@ class ProfileManager(CacheManager):
         """
 
         # If the server doesn't support packages, don't try to send the profile:
-        if not uep.supports_resource(PACKAGES_RESOURCE):
-            log.warn("Server does not support packages, skipping profile upload.")
+        supported_resources = get_supported_resources()
+        if PACKAGES_RESOURCE not in supported_resources:
+            log.warning("Server does not support packages, skipping profile upload.")
             return 0
 
         if force or self.report_package_profile:
             return CacheManager.update_check(self, uep, consumer_uuid, force)
         elif not self.report_package_profile:
-            log.warn("Skipping package profile upload due to report_package_profile setting.")
+            log.warning("Skipping package profile upload due to report_package_profile setting.")
             return 0
         else:
             return 0
@@ -783,6 +786,150 @@ class WrittenOverrideCache(CacheManager):
             pass
 
 
+class ConsumerCache(CacheManager):
+    """
+    Base class for caching data that gets automatically obsoleted, when consumer uuid
+    is changed (when system is unregistered or system is force register). This cache
+    is intended for caching information that we try to get from server. This cache should
+    avoid calling REST API with same arguments and getting same result.
+    """
+
+    # File, when the cache will be saved
+    CACHE_FILE = None
+
+    # Default value could be dictionary, list or anything else
+    DEFAULT_VALUE = {}
+
+    # Some data should have some timeout of validity, because data can be changed over time
+    # on the server, because server could be updated and it can start provide new functionality.
+    # E.g. supported resources or available capabilities. Value of timeout is in seconds.
+    TIMEOUT = None
+
+    def __init__(self, data=None):
+        self.data = data or {}
+
+    def to_dict(self):
+        return self.data
+
+    def _load_data(self, open_file):
+        try:
+            self.data = json.loads(open_file.read()) or {}
+            return self.data
+        except IOError as err:
+            log.error("Unable to read cache: %s" % self.CACHE_FILE)
+            log.exception(err)
+        except ValueError:
+            # Ignore json file parse error
+            pass
+
+    def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
+        """
+        This method has to be implemented in sub-classes of this class
+        :param uep: object representing connection to candlepin server
+        :param consumer_uuid: consumer UUID object
+        :param args: other position arguments
+        :param kwargs: other keyed arguments
+        :return: Subclass method has to return the content that was returned by candlepin server.
+        """
+        raise NotImplementedError
+
+    def _is_cache_obsoleted(self, *args, **kwargs):
+        """
+        Another method for checking if cached file is obsoleted
+        :param args: positional arguments
+        :param kwargs: keyed arguments
+        :return: True if the cache is obsoleted; otherwise return False
+        """
+        return False
+
+    def read_data(self, uep=None, identity=None):
+        """
+        This function tries to get data from cache or server
+        :param uep: connection to candlepin server
+        :param identity: current identity of registered system
+        :return: information about current owner
+        """
+
+        current_data = self.DEFAULT_VALUE
+
+        if identity is None:
+            identity = inj.require(inj.IDENTITY)
+
+        # When identity is not known, then system is not registered and
+        # data are obsoleted
+        if identity.uuid is None:
+            self.delete_cache()
+            return current_data
+
+        # Try to use class specific test if the cache file is obsoleted
+        cache_file_obsoleted = self._is_cache_obsoleted()
+
+        # When timeout for cache is defined, then check if the cache file is not
+        # too old. In that case content of the cache file will be overwritten with
+        # new content from the server.
+        if self.TIMEOUT is not None:
+            if os.path.exists(self.CACHE_FILE):
+                mod_time = os.path.getmtime(self.CACHE_FILE)
+                cur_time = time.time()
+                diff = cur_time - mod_time
+                if diff > self.TIMEOUT:
+                    log.debug('Validity of cache file %s timed out (%d)' % (self.CACHE_FILE, self.TIMEOUT))
+                    cache_file_obsoleted = True
+
+        if cache_file_obsoleted is False:
+            # Try to read data from cache first
+            log.debug('Trying to read %s from cache file %s' % (self.__class__.__name__, self.CACHE_FILE))
+            data = self.read_cache_only()
+            if data is not None:
+                if identity.uuid in data:
+                    current_data = data[identity.uuid]
+                else:
+                    log.debug("Identity of system has changed. The cache file: %s is obsolete" % self.CACHE_FILE)
+
+        # When valid data are not in cached, then try to load it from candlepin server
+        if len(current_data) != 0:
+            log.debug('Data loaded from cache file: %s' % self.CACHE_FILE)
+        else:
+            if uep is None:
+                cp_provider = inj.require(inj.CP_PROVIDER)
+                uep = cp_provider.get_consumer_auth_cp()
+
+            log.debug('Getting data from server for %s' % self.__class__)
+            try:
+                current_data = self._sync_with_server(uep=uep, consumer_uuid=identity.uuid)
+            except connection.RestlibException as rest_err:
+                log.warning("Unable to get data for %s using REST API: %s" % (self.__class__, rest_err))
+                log.debug("Deleting cache file: %s", self.CACHE_FILE)
+                self.delete_cache()
+            else:
+                # Write data to cache
+                data = {identity.uuid: current_data}
+                self.data = data
+                self.write_cache(debug=True)
+
+        return current_data
+
+
+class SyspurposeValidFieldsCache(ConsumerCache):
+    """
+    Cache the valid syspurpose fields for current owner
+    """
+
+    CACHE_FILE = "/var/lib/rhsm/cache/valid_fields.json"
+
+    def __init__(self, data=None):
+        super(SyspurposeValidFieldsCache, self).__init__(data=data)
+
+    def _sync_with_server(self, uep, *args, **kwargs):
+        cache = inj.require(inj.CURRENT_OWNER_CACHE)
+        owner = cache.read_data(uep)
+        if 'key' in owner:
+            data = uep.getOwnerSyspurposeValidFields(owner['key'])
+            return post_process_received_data(data)
+        else:
+            return self.DEFAULT_VALUE
+
+
 class ContentAccessModeCache(CacheManager):
     """
     Cache the content access mode that is used for current identity.
@@ -808,29 +955,37 @@ class ContentAccessModeCache(CacheManager):
             pass
 
 
-class SupportedResourcesCache(CacheManager):
+class CurrentOwnerCache(ConsumerCache):
+    """
+    Cache information about current owner (organization)
+    """
+
+    CACHE_FILE = "/var/lib/rhsm/cache/current_owner.json"
+
+    def __init__(self, data=None):
+        super(CurrentOwnerCache, self).__init__(data=data)
+
+    def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
+        return uep.getOwner(consumer_uuid)
+
+
+class SupportedResourcesCache(ConsumerCache):
     """
     Cache supported resources of candlepin server for current identity
     """
 
     CACHE_FILE = "/var/lib/rhsm/cache/supported_resources.json"
 
-    def __init__(self, supported_resources=None):
-        self.supported_resources = supported_resources or {}
+    DEFAULT_VALUE = []
 
-    def to_dict(self):
-        return self.supported_resources
+    # We will try to get new list of supported resources at leas once a day
+    TIMEOUT = 60 * 60 * 24
 
-    def _load_data(self, open_file):
-        try:
-            self.supported_resources = json.loads(open_file.read()) or {}
-            return self.supported_resources
-        except IOError as err:
-            log.error("Unable to read cache: %s" % self.CACHE_FILE)
-            log.exception(err)
-        except ValueError:
-            # Ignore json file parse error
-            pass
+    def __init__(self, data=None):
+        super(SupportedResourcesCache, self).__init__(data=data)
+
+    def _sync_with_server(self, uep, *args, **kwargs):
+        return uep.get_supported_resources()
 
 
 class AvailableEntitlementsCache(CacheManager):

@@ -40,6 +40,11 @@ class CliRegistrationTests(SubManFixture):
         self.mock_register.register.return_value = MagicMock(name="MockConsumer")
         self.addCleanup(register_patcher.stop)
 
+        get_supported_resources_patcher = patch('subscription_manager.managercli.get_supported_resources')
+        self.mock_get_resources = get_supported_resources_patcher.start()
+        self.mock_get_resources.return_value = ['environments']
+        self.addCleanup(self.mock_get_resources.stop)
+
         identity_patcher = patch('subscription_manager.managercli.identity.ConsumerIdentity',
             spec=ConsumerIdentity)
         self.mock_consumer_identity = identity_patcher.start().return_value

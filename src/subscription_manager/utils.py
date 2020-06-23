@@ -214,44 +214,37 @@ def is_simple_content_access(uep=None, identity=None, owner=None):
     return False
 
 
+def get_current_owner(uep=None, identity=None):
+    """
+    This function tries to get information about current owner. It uses cache file.
+    :param uep: connection to candlepin server
+    :param identity: current identity of registered system
+    :return: information about current owner
+    """
+
+    cache = inj.require(inj.CURRENT_OWNER_CACHE)
+    return cache.read_data(uep, identity)
+
+
 def get_supported_resources(uep=None, identity=None):
     """
-    This function tries to get list of supported resources. It uses cache file. It is preferred to use
-    this function instead of connection.get_supported_resources
+    This function tries to get list of supported resources. It tries to uses cache file.
+    When the system is not registered, then it tries to get version directly using REST API.
+    It is preferred to use this function instead of connection.get_supported_resources.
     :param uep: connection of candlepin server
     :param identity: current identity of registered system
-    :return: list fo supported resources
+    :return: list of supported resources
     """
-    supported_resources = []
-
-    if identity is None:
-        identity = inj.require(inj.IDENTITY)
-
-    # When identity is not known, then system is not registered
-    if identity.uuid is None:
-        return supported_resources
 
     # Try to read supported resources from cache file
-    cache = inj.require(inj.SUPPORTED_RESOURCES_CACHE)
-    data = cache.read_cache_only()
-    if data is not None:
-        if identity.uuid in data:
-            supported_resources = data[identity.uuid]
-
-    # When valid data are not in cache, then try to load it from candlepin server
-    if len(supported_resources) == 0:
+    if identity is not None:
+        cache = inj.require(inj.SUPPORTED_RESOURCES_CACHE)
+        return cache.read_data(uep, identity)
+    else:
         if uep is None:
             cp_provider = inj.require(inj.CP_PROVIDER)
             uep = cp_provider.get_consumer_auth_cp()
-
-        supported_resources = uep.get_supported_resources()
-
-        # Write data to cache
-        data = {identity.uuid: supported_resources}
-        cache.supported_resources = data
-        cache.write_cache(debug=False)
-
-    return supported_resources
+        return uep.get_supported_resources()
 
 
 def get_version(versions, package_name):
@@ -343,7 +336,8 @@ def get_server_versions(cp, exception_on_timeout=False):
 
     if cp:
         try:
-            if cp.supports_resource("status"):
+            supported_resources = get_supported_resources()
+            if "status" in supported_resources:
                 status = cp.getStatus()
                 cp_version = '-'.join([status.get('version', _("Unknown")),
                                        status.get('release', _("Unknown"))])

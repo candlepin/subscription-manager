@@ -15,7 +15,7 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
-from .base import SyspurposeTestBase, write_to_file_utf8
+from .base import SyspurposeTestBase, write_to_file_utf8, Capture
 import io
 import json
 import os
@@ -455,11 +455,12 @@ class TestSyncedStore(SyspurposeTestBase):
     """
 
     # These are the values we typically expect the server will return when no syspurpose is set.
-    default_remote_values = {"role": None,
-                             "usage": None,
-                             "addOns": [],
-                             "serviceLevel": u""
-                             }
+    default_remote_values = {
+        "role": None,
+        "usage": None,
+        "addOns": [],
+        "serviceLevel": u""
+    }
 
     def setUp(self):
         self.temp_dir = self._mktmp()
@@ -493,6 +494,57 @@ class TestSyncedStore(SyspurposeTestBase):
 
         # Fake that the connected server supports syspurpose
         self.uep.has_capability = mock.Mock(side_effect=lambda x: x in ['syspurpose'])
+
+        self.uep.getOwner.return_value = {
+            "created": "2020-06-22T13:57:27+0000",
+            "updated": "2020-06-22T13:57:27+0000",
+            "id": "ff80808172dc51a10172dc51cb3e0004",
+            "key": "admin",
+            "displayName": "Admin Owner",
+            "parentOwner": None,
+            "contentPrefix": None,
+            "defaultServiceLevel": None,
+            "upstreamConsumer": None,
+            "logLevel": None,
+            "autobindDisabled": None,
+            "autobindHypervisorDisabled": None,
+            "contentAccessMode": "entitlement",
+            "contentAccessModeList": "entitlement",
+            "lastRefreshed": None,
+            "href": "/owners/admin"
+        }
+
+        self.uep.getOwnerSyspurposeValidFields.return_value = {
+            "owner": {
+                "id": "ff80808172dc51a10172dc51cb3e0004",
+                "key": "admin",
+                "displayName": "Admin Owner",
+                "href": "/owners/admin"
+            },
+            "systemPurposeAttributes": {
+                "addons": [
+                    "ADDON1",
+                    "ADDON3",
+                    "ADDON2"
+                ],
+                "usage": [
+                    "Production",
+                    "Development"
+                ],
+                "roles": [
+                    "SP Starter",
+                    "SP Server"
+                ],
+                "support_level": [
+                    "Full-Service",
+                    "Super",
+                    "Layered",
+                    "Standard",
+                    "Premium",
+                    "None"
+                ]
+            }
+        }
 
     def test_falsey_values_removed_from_local_empty_local(self):
         # The falsey values ([], "", {}, None) should never end up after a SyncedStore.sync in
@@ -701,6 +753,32 @@ class TestSyncedStore(SyspurposeTestBase):
         self.assert_equal_dict({u'role': u'new_role'}, local_result)
 
         self.uep.updateConsumer.assert_not_called()
+
+    def test_server_setting_unsupported_value(self):
+        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {u'role': u''})
+        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
+
+        synced_store = SyncedStore(self.uep, consumer_uuid="something", use_valid_fields=True)
+
+        with Capture() as captured:
+            synced_store.set(u'role', u'new_role')
+            self.assertTrue('Warning: Provided value "new_role" is not included in the list of valid values for attribute role' in captured.out)
+            self.assertTrue("SP Starter" in captured.out)
+            self.assertTrue("SP Server" in captured.out)
+
+    def test_server_setting_unsupported_key(self):
+        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {u'role': u''})
+        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
+
+        synced_store = SyncedStore(self.uep, consumer_uuid="something", use_valid_fields=True)
+
+        with Capture() as captured:
+            synced_store.set(u'foo', u'bar')
+            self.assertTrue('Warning: Provided key "foo" is not included in the list of valid keys' in captured.out)
+            self.assertTrue("addons" in captured.out)
+            self.assertTrue("usage" in captured.out)
+            self.assertTrue("role" in captured.out)
+            self.assertTrue("service_level_agreement" in captured.out)
 
     def test_server_upgraded_to_support_syspurpose(self):
         # This one attempts to show that if a server does not support syspurpose and then does

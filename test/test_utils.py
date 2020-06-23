@@ -374,6 +374,12 @@ NOT_COLLECTED = "non-collected-package"
 
 class TestGetServerVersions(fixture.SubManFixture):
 
+    def setUp(self):
+        get_supported_resources_patcher = patch('subscription_manager.utils.get_supported_resources')
+        self.mock_get_resources = get_supported_resources_patcher.start()
+        self.mock_get_resources.return_value = ['status']
+        self.addCleanup(self.mock_get_resources.stop)
+
     @patch('subscription_manager.utils.ClassicCheck')
     def test_get_server_versions_classic(self, MockClassicCheck):
         self._inject_mock_invalid_consumer()
@@ -483,9 +489,10 @@ class TestGetServerVersions(fixture.SubManFixture):
         instance = mock_classic.return_value
         instance.is_registered_with_classic.return_value = False
         self._inject_mock_valid_consumer()
-        MockUep.supports_resource.side_effect = raise_exception
+        self.mock_get_resources.side_effect = raise_exception
         MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
         sv = get_server_versions(MockUep)
+        print(sv)
         self.assertEqual(sv['server-type'], "Red Hat Subscription Management")
         self.assertEqual(sv['candlepin'], "Unknown")
 
@@ -497,7 +504,7 @@ class TestGetServerVersions(fixture.SubManFixture):
         instance = mock_classic.return_value
         instance.is_registered_with_classic.return_value = True
         self._inject_mock_invalid_consumer()
-        MockUep.supports_resource.side_effect = raise_exception
+        self.mock_get_resources.side_effect = raise_exception
         MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
         sv = get_server_versions(MockUep)
         self.assertEqual(sv['server-type'], "RHN Classic")

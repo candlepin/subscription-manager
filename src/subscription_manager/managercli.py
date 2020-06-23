@@ -59,13 +59,14 @@ from subscription_manager.utils import parse_server_info, \
         parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
         restart_virt_who, get_terminal_width, print_error, unique_list_items, \
-        is_simple_content_access
+        is_simple_content_access, get_supported_resources, get_current_owner
 from subscription_manager.overrides import Overrides, Override
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, \
         none_wrap_columnize_callback, echo_columnize_callback, highlight_by_filter_string_columnize_cb
 from subscription_manager.utils import generate_correlation_id
-from subscription_manager.syspurposelib import save_sla_to_syspurpose_metadata
+from subscription_manager.syspurposelib import save_sla_to_syspurpose_metadata, \
+        get_syspurpose_valid_fields, post_process_received_data
 from subscription_manager.packageprofilelib import PackageProfileActionInvoker
 
 from subscription_manager.i18n import ungettext, ugettext as _
@@ -566,25 +567,25 @@ class SyspurposeCommand(CliCommand):
     Abstract command for manipulating an attribute of system purpose.
     """
 
-    def __init__(self, name, shortdesc=None, primary=False, attr=None, commands=('set', 'unset')):
+    def __init__(self, name, shortdesc=None, primary=False, attr=None, commands=('set', 'unset', 'show', 'list')):
         super(SyspurposeCommand, self).__init__(name, shortdesc=shortdesc, primary=primary)
         self.commands = commands
         self.attr = attr
 
-        self.store = self._get_synced_store()
+        self.store = None
 
         if 'set' in commands:
             self.parser.add_option(
                 "--set",
                 dest="set",
-                help=(_("Set {attr} of system purpose").format(attr=attr))
+                help=(_("set {attr} of system purpose").format(attr=attr))
             )
         if 'unset' in commands:
             self.parser.add_option(
                 "--unset",
                 dest="unset",
                 action="store_true",
-                help=(_("Unset {attr} of system purpose").format(attr=attr))
+                help=(_("unset {attr} of system purpose").format(attr=attr))
             )
         if 'add' in commands:
             self.parser.add_option(
@@ -592,7 +593,7 @@ class SyspurposeCommand(CliCommand):
                 dest="to_add",
                 action="append",
                 default=[],
-                help=_("Add an item to the list ({attr}).").format(attr=attr)
+                help=_("add an item to the list ({attr}).").format(attr=attr)
             )
         if 'remove' in commands:
             self.parser.add_option(
@@ -600,38 +601,139 @@ class SyspurposeCommand(CliCommand):
                 dest="to_remove",
                 action="append",
                 default=[],
-                help=_("Remove an item from the list ({attr}).").format(attr=attr)
+                help=_("remove an item from the list ({attr}).").format(attr=attr)
+            )
+        if 'show' in commands:
+            self.parser.add_option(
+                "--show",
+                dest="show",
+                action='store_true',
+                help=_("how this system's current {attr}").format(attr=attr)
+            )
+        if 'list' in commands:
+            self.parser.add_option(
+                "--list",
+                dest="list",
+                action='store_true',
+                help=_("list all {attr} available").format(attr=attr)
             )
 
     def _get_synced_store(self):
         try:
             from syspurpose.files import SyncedStore
-            uep = inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()
-            return SyncedStore(uep=uep, consumer_uuid=self.identity.uuid)
+            return SyncedStore(uep=self.cp, consumer_uuid=self.identity.uuid)
         except ImportError:
             return None
 
     def _validate_options(self):
-        set = getattr(self.options, 'set', None)
-        unset = getattr(self.options, 'unset', None)
+        to_set = getattr(self.options, 'set', None)
+        to_unset = getattr(self.options, 'unset', None)
         to_add = getattr(self.options, 'to_add', None)
         to_remove = getattr(self.options, 'to_remove', None)
 
-        if set:
+        if to_set:
             self.options.set = self.options.set.strip()
         if to_add:
             self.options.to_add = [x.strip() for x in self.options.to_add if isinstance(x, str)]
         if to_remove:
             self.options.to_remove = [x.strip() for x in self.options.to_remove
                                       if isinstance(x, str)]
-
-        if (set or to_add or to_remove) and unset:
+        if (to_set or to_add or to_remove) and to_unset:
             system_exit(os.EX_USAGE, _("--unset cannot be used with --set, --add, or --remove"))
         if to_add and to_remove:
             system_exit(os.EX_USAGE, _("--add cannot be used with --remove"))
 
+        if not self.is_registered():
+            if self.options.list:
+                if self.options.token and not self.options.username:
+                    pass
+                elif self.options.token and self.options.username:
+                    system_exit(
+                        os.EX_USAGE,
+                        _("Error: you can specify --username or --token not both")
+                    )
+                elif not self.options.username or not self.options.password:
+                    system_exit(
+                        os.EX_USAGE,
+                        _("Error: you must register or specify --username and --password to list {attr}").format(
+                            attr=self.attr
+                        )
+                    )
+            elif to_unset or to_set or to_add or to_remove:
+                pass
+            else:
+                system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
+
+    def _get_valid_fields(self):
+        """
+        Try to get valid fields from server
+        :return: Dictionary with valid fields
+        """
+        valid_fields = {}
+        if self.is_registered():
+            # When system is registered, then try to get valid fields from cache file
+            valid_fields = get_syspurpose_valid_fields(uep=self.cp, identity=self.identity)
+        elif self.cp is not None:
+            # Try to get current organization key. It is property of OrgCommand.
+            # Every Syspurpose command has to be subclass of OrgCommand too
+            org_key = self.org
+            try:
+                server_response = self.cp.getOwnerSyspurposeValidFields(org_key)
+            except connection.RestlibException as rest_err:
+                log.warning("Unable to get list of valid fields using REST API: %s" % rest_err)
+            else:
+                if 'systemPurposeAttributes' in server_response:
+                    server_response = post_process_received_data(server_response)
+                    valid_fields = server_response['systemPurposeAttributes']
+        return valid_fields
+
+    def _is_provided_value_valid(self, value):
+        """
+        Try to validate provided value. Check if the value is included in valid fields.
+        If the value is not provided in the valid fields and we can connect candlepin server,
+        then print some warning.
+        :param value: provided value on CLI
+        :return: True if the value is valid; otherwise return False
+        """
+
+        # First check if the the value is in the valid_fields
+        ret = False
+        valid_fields = self._get_valid_fields()
+        if self.attr in valid_fields:
+            if value in valid_fields[self.attr]:
+                ret = True
+
+        # When provided value is not in the valid fields, then try to print some warning,
+        # when the system is registered or username & password was provided as CLI option.
+        # When the system is not registered and no username & password was provided, then
+        # value will be set silently.
+        if ret is False:
+            if self.is_registered() or \
+                    (self.options.username and self.options.password) or \
+                    self.options.token:
+                if self.attr in valid_fields:
+                    if len(valid_fields[self.attr]) > 0:
+                        print(_('Warning: Provided value "{val}" is not included in the list of valid values').format(
+                            val=value
+                        ))
+                        self._prit_valid_valus(valid_fields)
+                    else:
+                        print(_('Warning: the list of valid values for attribute "{attr}" is empty.').format(
+                            attr=self.attr
+                        ))
+                else:
+                    print(_('Warning: No valid values provided for attribute "{attr}"').format(
+                        attr=self.attr
+                    ))
+
+        return ret
+
     def set(self):
+        """
+        Try to set new syspurpose attribute
+        """
         self._set(self.options.set)
+        self._is_provided_value_valid(self.options.set)
         success_msg = _('{attr} set to "{val}".').format(attr=self.attr, val=self.options.set)
         self._check_result(
             expectation=lambda res: res.get(self.attr) == self.options.set,
@@ -718,11 +820,71 @@ class SyspurposeCommand(CliCommand):
         else:
             print(_("{name} not set.").format(name=self.name.capitalize()))
 
+    def _prit_valid_valus(self, valid_fields):
+        """
+        Print list of valid valus for current syspurpose attribute
+        :param valid_fields:
+        :return:
+        """
+        for valid_value in valid_fields[self.attr]:
+            print(' - %s' % valid_value)
+
+    def list(self):
+        valid_fields = self._get_valid_fields()
+        if self.attr in valid_fields:
+            if len(valid_fields[self.attr]) > 0:
+                line = '+-------------------------------------------+'
+                print(line)
+                translated_string = _('Available {syspurpose_attr}').format(syspurpose_attr=self.attr)
+                # Print translated string (the length could be different) in the center of the line
+                line_len = len(line)
+                trans_str_len = len(translated_string)
+                empty_space_len = int((line_len - trans_str_len) / 2)
+                print(empty_space_len * ' ' + translated_string)
+                print(line)
+                # Print values
+                self._prit_valid_valus(valid_fields)
+            else:
+                print(_('No valid values provided for "{syspurpose_attr}"').format(syspurpose_attr=self.attr))
+        else:
+            print(_('Unable to get list of valid values for "{syspurpose_attr}"').format(syspurpose_attr=self.attr))
+
     def sync(self):
         return syspurposelib.SyspurposeSyncActionCommand().perform(include_result=True)[1]
 
     def _do_command(self):
         self._validate_options()
+
+        self.cp = None
+        try:
+            # If we have a username/password, we're going to use that, otherwise
+            # we'll use the identity certificate. We already know one or the other
+            # exists:
+            if self.options.token:
+                try:
+                    self.cp = self.cp_provider.get_keycloak_auth_cp(self.options.token)
+                except Exception as err:
+                    log.error('unable to connect to candlepin server using token: "%s", err: %s' %
+                              (self.options.token, err))
+                    print(_("Unable to connect to server using token"))
+            elif self.options.username and self.options.password:
+                self.cp_provider.set_user_pass(self.options.username, self.options.password)
+                self.cp = self.cp_provider.get_basic_auth_cp()
+            else:
+                # get an UEP as consumer
+                if self.is_registered():
+                    self.cp = self.cp_provider.get_consumer_auth_cp()
+        except connection.RestlibException as err:
+            log.exception(re)
+            if getattr(self.options, 'list', None):
+                log.error("Error: Unable to retrieve %s from server: %s" % (self.attr, err))
+                system_exit(os.EX_SOFTWARE, err.msg)
+            else:
+                log.debug("Error: Unable to retrieve %s from server: %s" % (self.attr, err))
+        except Exception as err:
+            log.debug("Error: Unable to retrieve %s from server: %s" % (self.attr, err))
+
+        self.store = self._get_synced_store()
 
         if getattr(self.options, 'unset', None):
             self.unset()
@@ -732,6 +894,10 @@ class SyspurposeCommand(CliCommand):
             self.add()
         elif hasattr(self.options, 'to_remove') and len(self.options.to_remove) > 0:
             self.remove()
+        elif getattr(self.options, 'list', None):
+            self.list()
+        elif getattr(self.options, 'show', None):
+            self.show()
         else:
             self.show()
 
@@ -783,7 +949,7 @@ class UserPassCommand(CliCommand):
             readline.clear_history()
         while not password:
             password = getpass.getpass(_("Password: "))
-        return (username.strip(), password.strip())
+        return username.strip(), password.strip()
 
     # lazy load the username and password, prompting for them if they weren't
     # given as options. this lets us not prompt if another option fails,
@@ -927,7 +1093,7 @@ class IdentityCommand(UserPassCommand):
             consumerid = self.identity.uuid
             consumer_name = self.identity.name
             if not self.options.regenerate:
-                owner = self.cp.getOwner(consumerid)
+                owner = get_current_owner(self.cp, self.identity)
                 ownername = owner['displayName']
                 ownerid = owner['key']
 
@@ -936,7 +1102,8 @@ class IdentityCommand(UserPassCommand):
                 print(_('org name: %s') % ownername)
                 print(_('org ID: %s') % ownerid)
 
-                if self.cp.supports_resource('environments'):
+                supported_resources = get_supported_resources(self.cp, self.identity)
+                if 'environments' in supported_resources:
                     consumer = self.cp.getConsumer(consumerid)
                     environment = consumer['environment']
                     if environment:
@@ -1030,7 +1197,8 @@ class EnvironmentsCommand(OrgCommand):
             else:
                 self.cp_provider.set_user_pass(self.username, self.password)
                 self.cp = self.cp_provider.get_basic_auth_cp()
-            if self.cp.supports_resource('environments'):
+            supported_resources = get_supported_resources()
+            if 'environments' in supported_resources:
                 environments = self._get_environments(self.org)
 
                 if len(environments):
@@ -1100,21 +1268,14 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
 
         shortdesc = _("Manage service levels for this system")
         self._org_help_text = _("specify an organization when listing available service levels using the organization key, only used with --list")
-        super(ServiceLevelCommand, self).__init__("service-level", shortdesc,
-                                                  False, attr="service_level_agreement")
+        super(ServiceLevelCommand, self).__init__(
+            "service-level",
+            shortdesc,
+            False,
+            attr="service_level_agreement",
+            commands=['set', 'unset', 'show', 'list']
+        )
         self._add_url_options()
-        self.parser.add_option(
-            "--show",
-            dest="show",
-            action='store_true',
-            help=_("show this system's current service level")
-        )
-        self.parser.add_option(
-            "--list",
-            dest="list",
-            action='store_true',
-            help=_("list all service levels available")
-        )
 
         self.identity = inj.require(inj.IDENTITY)
 
@@ -1225,7 +1386,7 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
             slas = self.cp.getServiceLevelList(org_key)
             if len(slas):
                 print("+-------------------------------------------+")
-                print("               %s" % (_("Available Service Levels")))
+                print("           %s" % (_("Available Service Levels")))
                 print("+-------------------------------------------+")
                 for sla in slas:
                     print(sla)
@@ -1244,12 +1405,18 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
                 raise e
 
 
-class UsageCommand(SyspurposeCommand):
+class UsageCommand(SyspurposeCommand, OrgCommand):
 
     def __init__(self):
         shortdesc = _("Manage usage setting for this system")
         self._org_help_text = _("use set and unset to define the value for this field")
-        super(UsageCommand, self).__init__("usage", shortdesc, False, attr='usage', commands=('set', 'unset'))
+        super(UsageCommand, self).__init__(
+            "usage",
+            shortdesc,
+            False,
+            attr='usage',
+            commands=('set', 'unset', 'show', 'list')
+        )
 
 
 class RegisterCommand(UserPassCommand):
@@ -1502,7 +1669,8 @@ class RegisterCommand(UserPassCommand):
         if self.options.activation_keys:
             return None
 
-        supports_environments = cp.supports_resource('environments')
+        supported_resources = get_supported_resources()
+        supports_environments = 'environments' in supported_resources
         if not environment_name:
             if supports_environments:
                 env_list = cp.getEnvironmentList(owner_key)
@@ -1610,12 +1778,17 @@ class UnRegisterCommand(CliCommand):
         print(_("System has been unregistered."))
 
 
-class AddonsCommand(SyspurposeCommand):
+class AddonsCommand(SyspurposeCommand, OrgCommand):
 
     def __init__(self):
         shortdesc = _("Modify or view the addons attribute of the system purpose")
-        super(AddonsCommand, self).__init__("addons", shortdesc=shortdesc, primary=False,
-                                            attr='addons', commands=['unset', 'add', 'remove'])
+        super(AddonsCommand, self).__init__(
+            "addons",
+            shortdesc=shortdesc,
+            primary=False,
+            attr='addons',
+            commands=['unset', 'add', 'remove', 'show', 'list']
+        )
 
 
 class RedeemCommand(CliCommand):
@@ -2355,7 +2528,8 @@ class ReposCommand(CliCommand):
             self._request_validity_check()
 
         if self.is_registered():
-            self.use_overrides = self.cp.supports_resource('content_overrides')
+            supported_resources = get_supported_resources()
+            self.use_overrides = 'content_overrides' in supported_resources
         else:
             self.use_overrides = False
 
@@ -2878,7 +3052,8 @@ class OverrideCommand(CliCommand):
         # Abort if not registered
         self.assert_should_be_registered()
 
-        if not self.cp.supports_resource('content_overrides'):
+        supported_resources = get_supported_resources()
+        if 'content_overrides' in supported_resources:
             system_exit(os.EX_UNAVAILABLE, _("Error: The 'repo-override' command is not supported by the server."))
 
         # update entitlement certificates if necessary. If we do have new entitlements
@@ -2953,16 +3128,16 @@ class OverrideCommand(CliCommand):
             print(columnize(names, echo_columnize_callback, *values, indent=2) + "\n")
 
 
-class RoleCommand(SyspurposeCommand):
+class RoleCommand(SyspurposeCommand, OrgCommand):
     def __init__(self):
         shortdesc = _("Modify system purpose role")
-        super(RoleCommand, self).__init__("role", shortdesc, primary=False, attr='role',
-                                          commands=['set', 'unset'])
-
-    def _validate_options(self):
-        self.check_syspurpose_support('role')
-        if self.options.set and self.options.unset:
-            system_exit(os.EX_USAGE, _("Error: Options --set and --unset of role subcommand are mutually exclusive."))
+        super(RoleCommand, self).__init__(
+            "role",
+            shortdesc,
+            primary=False,
+            attr='role',
+            commands=['set', 'unset', 'show', 'list']
+        )
 
 
 class VersionCommand(CliCommand):

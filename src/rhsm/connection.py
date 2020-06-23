@@ -636,11 +636,12 @@ class BaseRestLib(object):
             print()
             if os.path.isdir('/tmp/sub-man') is False:
                 os.mkdir('/tmp/sub-man')
-            with tempfile.NamedTemporaryFile(dir='/tmp/sub-man', prefix='traceback-', delete=False) as tmp_file:
-                traceback.print_stack(file=tmp_file)
-                print(green_col + '    traceback saved in: %s' % tmp_file.name + end_col)
-                # print(dir(tmp_file))
-                print()
+            if 'SUBMAN_DEBUG_SAVE_TRACEBACKS' in os.environ:
+                with tempfile.NamedTemporaryFile(dir='/tmp/sub-man', prefix='traceback-', delete=False) as tmp_file:
+                    traceback.print_stack(file=tmp_file)
+                    print(green_col + '    traceback saved in: %s' % tmp_file.name + end_col)
+                    # print(dir(tmp_file))
+                    print()
 
     @staticmethod
     def _print_debug_info_about_response(result):
@@ -1239,6 +1240,13 @@ class UEPConnection(BaseConnection):
         if on_date:
             method = "%s?on_date=%s" % (method,
                                         self.sanitize(on_date.isoformat(), plus=True))
+        return self.conn.request_get(method)
+
+    def getOwnerSyspurposeValidFields(self, owner_key):
+        """
+        Retrieves the system purpose settings available to an owner
+        """
+        method = '/owners/%s/system_purpose' % self.sanitize(owner_key)
         return self.conn.request_get(method)
 
     def createOwner(self, ownerKey, ownerDisplayName=None):
