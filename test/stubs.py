@@ -26,7 +26,8 @@ from rhsm import config
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.cache import EntitlementStatusCache, ProductStatusCache, \
         OverrideStatusCache, ProfileManager, InstalledProductsManager, ReleaseStatusCache, \
-        PoolStatusCache, ContentAccessModeCache, SupportedResourcesCache, AvailableEntitlementsCache
+        PoolStatusCache, ContentAccessModeCache, SupportedResourcesCache, AvailableEntitlementsCache, \
+        SyspurposeValidFieldsCache, CurrentOwnerCache
 from subscription_manager.facts import Facts
 from subscription_manager.lock import ActionLock
 from rhsm.certificate import GMT
@@ -522,6 +523,16 @@ class StubUEP(object):
     def getContentOverrides(self, uuid):
         return []
 
+    def getOwnerSyspurposeValidFields(self, owner_key):
+        return {
+            "owner": {
+                "key": "ff80808172dc51a10172dc51cb3e000"
+            },
+            "systemPurposeAttributes": {
+                "addons": [], "usage": [], "support_level": [], "roles": []
+            }
+        }
+
 
 class StubBackend(object):
     def __init__(self, uep=None):
@@ -724,7 +735,25 @@ class StubContentAccessModeCache(ContentAccessModeCache):
         self.server_status = None
 
 
-class SubSupportedResourcesCache(SupportedResourcesCache):
+class StubSupportedResourcesCache(SupportedResourcesCache):
+
+    def write_cache(self, debug=False):
+        pass
+
+    def delete_cache(self):
+        self.server_status = None
+
+
+class StubSyspurposeValidFieldsCache(SyspurposeValidFieldsCache):
+
+    def write_cache(self, debug=False):
+        pass
+
+    def delete_cache(self):
+        self.server_status = None
+
+
+class StubCurrentOwnerCache(CurrentOwnerCache):
 
     def write_cache(self, debug=False):
         pass

@@ -37,11 +37,35 @@ class Syspurpose(object):
         self.cp = cp
         self.identity = inj.require(inj.IDENTITY)
         self.purpose_status = {'status': 'unknown'}
+        self.owner = None
+        self.valid_fields = None
 
     def get_syspurpose_status(self, on_date=None):
+        """
+        Get syspurpose status from candlepin server
+        :param on_date: Date of the statatus
+        :return: string code with status
+        """
         if self.identity.is_valid() and self.cp.has_capability("syspurpose"):
             self.purpose_status = self.cp.getSyspurposeCompliance(self.identity.uuid, on_date)
         return self.purpose_status
 
-    def get_overall_status(self, status):
+    def get_owner_syspurpose_valid_fields(self):
+        """
+        Get valid syspurpose fields from candlepin server for current owner
+        :return: Dictionary with valid syspurpose fields
+        """
+        if self.identity.is_valid() and self.cp.has_capability("syspurpose"):
+            self.owner = inj.require(inj.CURRENT_OWNER_CACHE)
+            cache = inj.require(inj.SYSPURPOSE_VALID_FIELDS_CACHE)
+            self.valid_fields = cache.read_cache()
+        return self.valid_fields
+
+    @staticmethod
+    def get_overall_status(status):
+        """
+        Return translated string representation syspurpose status
+        :param status: syspurpose status
+        :return: Translated sttring with status
+        """
         return STATUS_MAP.get(status, STATUS_MAP['unknown'])
