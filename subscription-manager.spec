@@ -1333,6 +1333,15 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
     %endif
 %endif
 
+# When subscription-manager is upgraded on RHEL 8 (from RHEL 8.2 to RHEL 8.3), then kill
+# instance of rhsmd, because it is not necessary anymore and it can cause issues.
+# See: https://bugzilla.redhat.com/show_bug.cgi?id=1840364
+%if ( 0%{?rhel} >= 8 || 0%{?fedora} )
+if [ "$1" = "2" ] ; then
+    killall rhsmd 2> /dev/null || true
+fi
+%endif
+
 if [ -x /bin/dbus-send ] ; then
     dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig > /dev/null 2>&1 || :
 fi
@@ -1418,13 +1427,7 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
-* Fri Jun 19 2020 William Poteat <wpoteat@redhat.com> 1.27.8-1
-- 1838423: Correct method call signature for release (wpoteat@redhat.com)
-
-* Tue Jun 16 2020 Christopher Snyder <csnyder@redhat.com> 1.27.7-1
-- 1840859: Custom repo parameters are not deletable (wpoteat@redhat.com)
-
-* Thu Jun 11 2020 Christopher Snyder <csnyder@redhat.com> 1.27.6-1
+* Thu Jun 11 2020 Christopher Snyder <csnyder@redhat.com> 1.28.0-1
 - 1804454: collect uuid on aarch64 system (wpoteat@redhat.com)
 - WIP: Try to fix build of rpms on suse. (jhnidek@redhat.com)
 - 1842474: Update local and cache file during sync(); ENT-2433
