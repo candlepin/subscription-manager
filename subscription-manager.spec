@@ -51,6 +51,13 @@
 %global use_subman_gui 1
 %endif
 
+# Install subscription-manager-migration only for rhel8 and lower
+%if 0%{?rhel} && 0%{?rhel} <= 8
+%global use_subscription_manager_migration 1
+%else
+%global use_subscription_manager_migration 0
+%endif
+
 %if 0%{?suse_version} && 0%{?suse_version} < 1200
 %global completion_dir %{_sysconfdir}/bash_completion.d
 %else
@@ -178,6 +185,12 @@
 %global with_subman_gui WITH_SUBMAN_GUI=false
 %endif
 
+%if %{use_subscription_manager_migration}
+%global with_subman_migration WITH_SUBMAN_MIGRATION=true
+%else
+%global with_subman_migration WITH_SUBMAN_MIGRATION=false
+%endif
+
 %if %{use_cockpit} && !0%{use_subman_gui}
 %global with_cockpit WITH_COCKPIT=true
 %else
@@ -213,7 +226,11 @@
 %endif
 
 %if !%{use_container_plugin}
-%global exclude_packages %{exclude_packages}*.plugin.container,}
+%global exclude_packages %{exclude_packages}*.plugin.container,
+%endif
+
+%if !%{use_subscription_manager_migration}
+%global exclude_packages %{exclude_packages}subscription_manager.migrate,
 %endif
 
 # add new exclude_packages items before me
@@ -473,6 +490,7 @@ subscriptions.
 %endif
 
 
+%if %{use_subscription_manager_migration}
 %package -n subscription-manager-migration
 Summary: Migration scripts for moving to certificate based subscriptions
 %if 0%{?suse_version}
@@ -492,6 +510,7 @@ Requires: subscription-manager-migration-data
 %description -n subscription-manager-migration
 This package contains scripts that aid in moving to certificate based
 subscriptions
+%endif
 
 
 %if %use_dnf
@@ -724,7 +743,7 @@ subscription-manager-initial-setup-addon, and subscription-manager-cockpit-plugi
 make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
     LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" \
     %{?gtk_version} %{?subpackages} %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"} \
-    %{exclude_packages} %{?with_subman_gui}
+    %{exclude_packages} %{?with_subman_gui} %{?with_subman_migration}
 
 %if %{with python2_rhsm}
 python2 ./setup.py build --quiet --gtk-version=%{?gtk3:3}%{?!gtk3:2} --rpm-version=%{version}-%{release}
@@ -750,6 +769,7 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?install_zypper_plugins} \
     %{?with_systemd} \
     %{?with_subman_gui} \
+    %{?with_subman_migration} \
     %{?with_cockpit} \
     %{?subpackages} \
     %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"} \
@@ -962,8 +982,11 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{completion_dir}/subscription-manager
 %{completion_dir}/rct
 %{completion_dir}/rhsm-debug
-%{completion_dir}/rhn-migrate-classic-to-rhsm
 %{completion_dir}/rhsmcertd
+
+%if %{use_subscription_manager_migration}
+%{completion_dir}/rhn-migrate-classic-to-rhsm
+%endif
 
 %if %use_subman_gui
 %{completion_dir}/rhsm-icon
@@ -1169,7 +1192,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
 %endif
 
-
+%if 0%{?use_subscription_manager_migration}
 %files -n subscription-manager-migration
 %defattr(-,root,root,-)
 %dir %{python_sitearch}/subscription_manager/migrate
@@ -1184,6 +1207,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %doc LICENSE
 %if 0%{?fedora}
 %doc README.Fedora
+%endif
 %endif
 
 %files -n %{py_package_prefix}-syspurpose -f syspurpose.lang
