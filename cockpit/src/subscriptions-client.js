@@ -504,24 +504,6 @@ function statusUpdateFailed(reason) {
     needRender();
 }
 
-/* request update via DBus
- * possible status values: https://github.com/candlepin/subscription-manager/blob/30c3b52320c3e73ebd7435b4fc8b0b6319985d19/src/rhsm_icon/rhsm_icon.c#L98
- * [ RHSM_VALID, RHSM_EXPIRED, RHSM_WARNING, RHN_CLASSIC, RHSM_PARTIALLY_VALID, RHSM_REGISTRATION_REQUIRED ]
- */
-const subscriptionStatusValues = [
-    'RHSM_VALID',
-    'RHSM_EXPIRED',
-    'RHSM_WARNING',
-    'RHN_CLASSIC',
-    'RHSM_PARTIALLY_VALID',
-    'RHSM_REGISTRATION_REQUIRED'
-];
-
-function requestUpdate(callback) {
-    return callback()
-        .catch(ex => statusUpdateFailed(ex));
-}
-
 function requestSubscriptionStatusUpdate() {
     return client.getSubscriptionStatus()
         .catch(ex => statusUpdateFailed(ex));

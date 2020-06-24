@@ -12,7 +12,9 @@
     "po2json": "po2json",
     "vagrant-watch": "webpack --watch & vagrant rsync-auto",
     "watch": "webpack --watch",
-    "clean": "cd ./dist && rm -rf *"
+    "clean": "cd ./dist && rm -rf *",
+    "eslint": "eslint --ext .jsx --ext .js src/ lib/",
+    "eslint:fix": "eslint --fix --ext .jsx --ext .js src/ lib/"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
@@ -22,20 +24,18 @@
     "bootstrap": "^4.1.1",
     "bootstrap-less": "^3.3.8",
     "compression-webpack-plugin": "~1.0.0",
-    "copy-webpack-plugin": "~3.0.1",
-    "css-loader": "^0.28.4",
-    "eslint": "^4.18.2",
-    "eslint-loader": "~1.6.1",
-    "eslint-plugin-react": "~6.9.0",
-    "extract-text-webpack-plugin": "2.1.2",
+    "copy-webpack-plugin": "^4.5.2",
+    "css-loader": "^3.2.0",
+    "eslint": "^7.3.1",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-react": "^7.20.0",
     "file-loader": "^1.1.5",
     "glob": "^7.1.2",
     "jasmine": "^2.7.0",
     "jquery": "^3.5.0",
-    "jshint": "~2.9.1",
-    "jshint-loader": "~0.8.3",
     "less": "^3.8.0",
     "less-loader": "^5.0.0",
+    "mini-css-extract-plugin": "^0.9.0",
     "patternfly": "^3.27.4",
     "patternfly-react": "^0.8.0",
     "po2json": "^0.4.5",
@@ -43,8 +43,10 @@
     "react": "^15.6.1",
     "react-bootstrap": "^0.31.5",
     "react-dom": "^15.6.1",
+    "strict-loader": "^1.2.0",
     "style-loader": "^0.18.2",
-    "webpack": "^2.6.1"
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.12"
   },
   "dependencies": {
     "react-addons-create-fragment": "^15.6.2"

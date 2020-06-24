@@ -209,7 +209,7 @@ export function proxy(name, kind) {
         refresh_interface(details.path, "org.freedesktop.systemd1." + kind);
     }
 
-    function on_job_new_removed_refresh(event, number, path, unit_id, result) {
+    function on_job_new_removed_refresh(event, number, path, unit_id) {
         if (unit_id == name)
             refresh();
     }

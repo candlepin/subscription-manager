@@ -3,7 +3,7 @@ const copy = require("copy-webpack-plugin");
 const fs = require("fs");
 const webpack = require("webpack");
 const CompressionPlugin = require("compression-webpack-plugin");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+var miniCssExtractPlugin = require('mini-css-extract-plugin');
 const glob = require("glob");
 const po2json = require("po2json");
 
@@ -119,9 +119,9 @@ var plugins = [
         '$': 'jquery',
         'jQuery': 'jquery',
     }),
-    new ExtractTextPlugin("subscriptions.css"),
+    new miniCssExtractPlugin("subscriptions.css"),
     new Po2JSONPlugin(),
-    new ExtractTextPlugin("[name].css")
+    new miniCssExtractPlugin("[name].css"),
 ];
 
 if (!production) {
@@ -175,6 +175,7 @@ if (production) {
 }
 
 module.exports = {
+    mode: production ? 'production' : 'development',
     entry: info.entries,
     externals: externals,
     output: output,
@@ -183,21 +184,14 @@ module.exports = {
         rules: [
             {
                 enforce: 'pre',
-                exclude: /node_modules/,
-                loader: 'jshint-loader',
-                test: /\.js$/
+                test: /\.(js|jsx)$/,
+                exclude: /\/node_modules\/.*\//, // exclude external dependencies
+                loader: "eslint-loader"
             },
             {
-                enforce: 'pre',
-                exclude: /node_modules/,
-                loader: 'eslint-loader',
-                test: /\.jsx$/
-            },
-            {
-                enforce: 'pre',
-                exclude: /node_modules/,
-                loader: 'jshint-loader',
-                test: /\.es6$/
+                test: /\.js$/,
+                exclude: /\/node_modules\/.*\//, // exclude external dependencies
+                loader: 'strict-loader' // Adds "use strict"
             },
             {
                 exclude: /node_modules/,
@@ -216,13 +210,16 @@ module.exports = {
             },
             {
                 exclude: /node_modules/,
-                use: ExtractTextPlugin.extract({
-                    fallback: "style-loader",
-                    use: {
-                        loader: "css-loader",
-                        options: { minimize: production },
+                use: [
+                    miniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: true,
+                            url: false,
+                        },
                     },
-                }),
+                ],
                 test: /\.css$/
             },
             {
@@ -233,8 +230,19 @@ module.exports = {
                 loader: 'file-loader',
             },
             {
-                test: /\.less$/,
-                loader: ExtractTextPlugin.extract("css-loader?sourceMap&minimize=!less-loader?sourceMap&compress=false")
+                exclude: /node_modules/,
+                use: [
+                    miniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: true,
+                            url: false,
+                        },
+                    },
+                    'less-loader',
+                ],
+                test: /\.less$/
             },
         ]
     },

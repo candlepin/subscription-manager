@@ -116,7 +116,7 @@ function openRegisterDialog() {
 }
 
 function unregisterSystem() {
-    Insights.unregister().catch(error => true).then(subscriptionsClient.unregisterSystem);
+    Insights.unregister().catch(() => true).then(subscriptionsClient.unregisterSystem);
 }
 
 function initStore(rootElement) {
