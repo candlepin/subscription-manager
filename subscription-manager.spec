@@ -226,7 +226,7 @@
 %endif
 
 %if !%{use_container_plugin}
-%global exclude_packages %{exclude_packages}*.plugin.container,}
+%global exclude_packages %{exclude_packages}*.plugin.container,
 %endif
 
 %if !%{use_subscription_manager_migration}
