@@ -28,6 +28,7 @@ import re
 import readline
 import socket
 import six.moves
+import subprocess
 import sys
 from time import localtime, strftime, strptime
 
@@ -1283,6 +1284,8 @@ class RegisterCommand(UserPassCommand):
                                help=_("activation key to use for registration (can be specified more than once)"))
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("system preference used when subscribing automatically, requires --auto-attach"))
+        self.parser.add_option("--no-insights", action='store_true',
+                               help=_("stop insights from automatically registering using the system identity"))
 
     def _validate_options(self):
         self.autoattach = self.options.autosubscribe or self.options.autoattach
@@ -1403,6 +1406,7 @@ class RegisterCommand(UserPassCommand):
                     name=self.options.consumername,
                     type=self.options.consumertype,
                     service_level=self.options.service_level,
+                    no_insights=self.options.no_insights
                 )
         except (connection.RestlibException, exceptions.ServiceError) as re:
             log.exception(re)
@@ -1483,6 +1487,21 @@ class RegisterCommand(UserPassCommand):
             subscribed = show_autosubscribe_output(self.cp, self.identity)
 
         self._request_validity_check()
+
+        if self.options.no_insights:
+            print(_('Red Hat Insights registration disabled.'))
+            if self._is_insights_installed():
+                print(_('To opt into Red Hat Insights, run "insights-client --register".'))
+            else:
+                print(_('To opt into Red Hat Insights, install the insights-client package '
+                        'and run "insights-client --register".'))
+        else:
+            print(_('Red Hat Insights registration enabled.'))
+            if not self._is_insights_installed():
+                print(_('To use Red Hat Insights, install the insights-client package.'))
+            print(_('To opt out of Red Hat Insights, run "insights-client --unregister" '
+                    'or reregister with "--no-insights".'))
+
         return subscribed
 
     def _prompt_for_environment(self):
@@ -1565,6 +1584,11 @@ class RegisterCommand(UserPassCommand):
             owner_key = six.moves.input(_("Organization: "))
             readline.clear_history()
         return owner_key
+
+    def _is_insights_installed(self):
+        with open('/dev/null', 'w') as devnull:
+            returncode = subprocess.call('which insights-client', stdout=devnull, stderr=devnull, shell=True)
+        return returncode == 0
 
 
 class UnRegisterCommand(CliCommand):
