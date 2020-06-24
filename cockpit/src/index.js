@@ -39,7 +39,7 @@ let registerDialogDetails = {
     proxy_server: '',
     proxy_user: '',
     proxy_password: '',
-    insights: false
+    insights: true,
 };
 
 function dismissStatusError() {
@@ -50,7 +50,7 @@ function dismissStatusError() {
 function registerSystem (update_progress) {
     return subscriptionsClient.registerSystem(registerDialogDetails, update_progress).then(() => {
         if (registerDialogDetails.insights)
-            return Insights.register(update_progress).catch(Insights.catch_error);
+            Insights.register(update_progress).catch(Insights.catch_error);
     });
 }
 
@@ -72,7 +72,7 @@ function openRegisterDialog() {
             password: '',
             activation_keys: '',
             org: '',
-            insights: false,
+            insights: true,
             insights_available: subscriptionsClient.insightsAvailable,
             insights_detected: false,
             register_method: 'account',
