@@ -1309,15 +1309,12 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %files -n subscription-manager-cockpit
 %defattr(-,root,root,-)
 %dir %{_datadir}/cockpit/subscription-manager
-%dir %{_datadir}/cockpit/subscription-manager/node_modules
 %{_datadir}/cockpit/subscription-manager/index.html
 %{_datadir}/cockpit/subscription-manager/index.min.js.gz
-%{_datadir}/cockpit/subscription-manager/subscriptions.css
 %{_datadir}/cockpit/subscription-manager/index.css
 %{_datadir}/cockpit/subscription-manager/manifest.json
 %{_datadir}/cockpit/subscription-manager/po.*.js
 %{_datadir}/cockpit/subscription-manager/po.js
-%{_datadir}/cockpit/subscription-manager/node_modules/*
 %{_datadir}/metainfo/org.candlepinproject.subscription_manager.metainfo.xml
 %if ! %use_subman_gui
 %{_datadir}/applications/subscription-manager-cockpit.desktop

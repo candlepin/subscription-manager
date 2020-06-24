@@ -1,9 +1,12 @@
 const path = require("path");
 const copy = require("copy-webpack-plugin");
 const fs = require("fs");
+const TerserJSPlugin = require('terser-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require("webpack");
 const CompressionPlugin = require("compression-webpack-plugin");
-var miniCssExtractPlugin = require('mini-css-extract-plugin');
+const extract = require("mini-css-extract-plugin");
 const glob = require("glob");
 const po2json = require("po2json");
 
@@ -25,7 +28,6 @@ var info = {
     entries: {
         "index": [
             "./index.js",
-            "./subscriptions.css",
         ],
     },
     files: [
@@ -119,9 +121,9 @@ var plugins = [
         '$': 'jquery',
         'jQuery': 'jquery',
     }),
-    new miniCssExtractPlugin("subscriptions.css"),
     new Po2JSONPlugin(),
-    new miniCssExtractPlugin("[name].css"),
+    new extract("[name].css"),
+    new Po2JSONPlugin(),
 ];
 
 if (!production) {
@@ -156,13 +158,6 @@ if (!production) {
 
 /* Only minimize when in production mode */
 if (production) {
-    plugins.unshift(new webpack.optimize.UglifyJsPlugin({
-        beautify: true,
-        compress: {
-            warnings: false
-        },
-    }));
-
     /* Rename output files when minimizing */
     output.filename = "[name].min.js";
 
@@ -177,6 +172,20 @@ if (production) {
 module.exports = {
     mode: production ? 'production' : 'development',
     entry: info.entries,
+    resolve: {
+        alias: { 'font-awesome': path.resolve(nodedir, 'font-awesome-sass/assets/stylesheets') },
+    },
+    optimization: {
+        minimize: production,
+        minimizer: [
+            new UglifyJsPlugin({
+                uglifyOptions: {
+                    beautify: true,
+                    warnings: false
+                }
+            }),
+            new OptimizeCSSAssetsPlugin({})],
+    },
     externals: externals,
     output: output,
     devtool: production ? false : "source-map",
@@ -209,20 +218,6 @@ module.exports = {
                 test: /\.es6$/
             },
             {
-                exclude: /node_modules/,
-                use: [
-                    miniCssExtractPlugin.loader,
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            sourceMap: true,
-                            url: false,
-                        },
-                    },
-                ],
-                test: /\.css$/
-            },
-            {
                 test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|eot|ttf|wav|mp3)$/,
                 options: {
                     name: '[path][name].[ext]'
@@ -232,7 +227,7 @@ module.exports = {
             {
                 exclude: /node_modules/,
                 use: [
-                    miniCssExtractPlugin.loader,
+                    extract.loader,
                     {
                         loader: 'css-loader',
                         options: {
@@ -243,6 +238,88 @@ module.exports = {
                     'less-loader',
                 ],
                 test: /\.less$/
+            },
+            /* HACK: remove unwanted fonts from PatternFly's css */
+            /* The following rule will bundle the patternfly-cockpit.scss file included from index.js */
+            /* Since Patternfly 4 includes more fonts than we are interested in do some fonts filtering here */
+            {
+                test: /patternfly-cockpit.scss$/,
+                use: [
+                    extract.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: true,
+                            url: false,
+                        },
+                    },
+                    {
+                        loader: 'string-replace-loader',
+                        options: {
+                            multiple: [
+                                {
+                                    search: /src:url[(]"patternfly-icons-fake-path\/glyphicons-halflings-regular[^}]*/g,
+                                    replace: 'font-display:block; src:url("../base1/fonts/glyphicons.woff") format("woff");',
+                                },
+                                {
+                                    search: /src:url[(]"patternfly-fonts-fake-path\/PatternFlyIcons[^}]*/g,
+                                    replace: 'src:url("../base1/fonts/patternfly.woff") format("woff");',
+                                },
+                                {
+                                    search: /src:url[(]"patternfly-fonts-fake-path\/fontawesome[^}]*/,
+                                    replace: 'font-display:block; src:url("../base1/fonts/fontawesome.woff?v=4.2.0") format("woff");',
+                                },
+                                {
+                                    search: /src:url\("patternfly-icons-fake-path\/pficon[^}]*/g,
+                                    replace: 'src:url("../base1/fonts/patternfly.woff") format("woff");',
+                                },
+                                {
+                                    search: /@font-face[^}]*patternfly-fonts-fake-path[^}]*}/g,
+                                    replace: '',
+                                },
+                            ]
+                        },
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sassOptions: {
+                                includePaths: [
+                                    // Teach webpack to resolve these references in order to build PF3 scss
+                                    path.resolve(nodedir, 'font-awesome-sass', 'assets', 'stylesheets'),
+                                    path.resolve(nodedir, 'patternfly', 'dist', 'sass'),
+                                    path.resolve(nodedir, 'bootstrap-sass', 'assets', 'stylesheets'),
+                                ],
+                                outputStyle: 'compressed',
+                            },
+                            sourceMap: true,
+                        },
+                    },
+                ]
+            },
+            /* This rule will handle scss and css stylesheets apart from pattenrfly-cockpit.scss which is handled just above */
+            {
+                test: /\.s?css$/,
+                exclude: /patternfly-cockpit.scss/,
+                use: [
+                    extract.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: true,
+                            url: false
+                        }
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: true,
+                            sassOptions: {
+                                outputStyle: 'compressed',
+                            }
+                        }
+                    },
+                ]
             },
         ]
     },
