@@ -18,6 +18,7 @@ DESTDIR ?= /
 PREFIX ?= /usr/local
 SYSCONF ?= etc
 INSTALL_DIR = $(PREFIX)/share
+RUN_DIR ?= /run
 
 OS = $(shell test -f /etc/os-release && source /etc/os-release; echo $$ID)
 OS_DIST ?= $(shell rpm --eval='%dist')
@@ -371,7 +372,7 @@ install: install-via-setup install-files
 install-files: dbus-install install-conf install-plugins install-post-boot install-ga
 	install -d $(DESTDIR)/var/log/rhsm
 	install -d $(DESTDIR)/var/spool/rhsm/debug
-	install -d $(DESTDIR)/var/run/rhsm
+	install -d $(DESTDIR)${RUN_DIR}/rhsm
 	install -d -m 750 $(DESTDIR)/var/lib/rhsm/{cache,facts,packages,repo_server_val}
 
 	# Set up rhsmcertd daemon. Installation location depends on distro...
