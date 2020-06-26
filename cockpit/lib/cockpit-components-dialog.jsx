@@ -161,7 +161,7 @@ export class DialogFooter extends React.Component {
             cancel_style = this.props.cancel_style;
         else
             cancel_style = "cancel";
-        cancel_style = "btn btn-default " + cancel_style;
+        cancel_style = "btn btn-link " + cancel_style;
 
         // If an action is in progress, show the spinner with its message and disable all actions.
         // Cancel is only enabled when the action promise has a cancel method, or we get one
@@ -174,12 +174,12 @@ export class DialogFooter extends React.Component {
             actions_disabled = 'disabled';
             if (!(this.state.action_in_progress_promise && this.state.action_in_progress_promise.cancel) && !this.state.action_progress_cancel)
                 cancel_disabled = 'disabled';
-            wait_element = <div className="dialog-wait-ct pull-left">
+            wait_element = <div className="dialog-wait-ct pull-right">
                 <div className="spinner spinner-sm" />
                 <span>{ this.state.action_progress_message }</span>
             </div>;
         } else if (this.props.idle_message) {
-            wait_element = <div className="dialog-wait-ct pull-left">
+            wait_element = <div className="dialog-wait-ct pull-right">
                 { this.props.idle_message }
             </div>;
         }
@@ -224,13 +224,13 @@ export class DialogFooter extends React.Component {
             <div className="modal-footer">
                 { error_element }
                 { this.props.extra_element }
-                { wait_element }
+                { action_buttons }
                 <button
                     className={ cancel_style }
                     onClick={ this.cancel_click }
                     disabled={ cancel_disabled }
                 >{ cancel_caption }</button>
-                { action_buttons }
+                { wait_element }
             </div>
         );
     }
