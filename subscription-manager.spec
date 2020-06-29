@@ -1309,6 +1309,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %files -n subscription-manager-cockpit
 %defattr(-,root,root,-)
 %dir %{_datadir}/cockpit/subscription-manager
+%dir %{_datadir}/cockpit/subscription-manager/node_modules
 %{_datadir}/cockpit/subscription-manager/index.html
 %{_datadir}/cockpit/subscription-manager/index.min.js.gz
 %{_datadir}/cockpit/subscription-manager/subscriptions.css
