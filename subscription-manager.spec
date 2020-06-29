@@ -226,7 +226,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.27.8
+Version: 1.27.9
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1427,6 +1427,12 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Sun Jun 28 2020 Christopher Snyder <csnyder@redhat.com> 1.27.9-1
+- 1840364: Kill rhsmd during post-install on rhel8
+  (jhnidek@redhat.com)
+- 1848636, 1849074: Update insights machine-id path (csnyder@redhat.com)
+- 1700441: Create directories, when missing (jhnidek@redhat.com)
+
 * Thu Jun 11 2020 Christopher Snyder <csnyder@redhat.com> 1.28.0-1
 - 1804454: collect uuid on aarch64 system (wpoteat@redhat.com)
 - WIP: Try to fix build of rpms on suse. (jhnidek@redhat.com)
