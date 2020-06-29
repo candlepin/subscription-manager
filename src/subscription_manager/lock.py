@@ -215,7 +215,7 @@ class Lock(object):
 
 class ActionLock(Lock):
 
-    PATH = '/var/run/rhsm/cert.pid'
+    PATH = '/run/rhsm/cert.pid'
 
     def __init__(self):
         super(ActionLock, self).__init__(self.PATH)

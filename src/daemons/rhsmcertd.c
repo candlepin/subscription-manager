@@ -35,9 +35,9 @@
 
 #define LOGFILE "/var/log/rhsm/rhsmcertd.log"
 #define LOCKFILE "/var/lock/subsys/rhsmcertd"
-#define UPDATEFILE "/var/run/rhsm/update"
-#define NEXT_CERT_UPDATE_FILE "/var/run/rhsm/next_cert_check_update"
-#define NEXT_AUTO_ATTACH_UPDATE_FILE "/var/run/rhsm/next_auto_attach_update"
+#define UPDATEFILE "/run/rhsm/update"
+#define NEXT_CERT_UPDATE_FILE "/run/rhsm/next_cert_check_update"
+#define NEXT_AUTO_ATTACH_UPDATE_FILE "/run/rhsm/next_auto_attach_update"
 #define WORKER LIBEXECDIR"/rhsmcertd-worker"
 #define WORKER_NAME WORKER
 #define INITIAL_DELAY_SECONDS 120

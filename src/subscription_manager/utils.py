@@ -53,6 +53,9 @@ from subscription_manager.i18n import ugettext as _
 log = logging.getLogger(__name__)
 
 
+VIRT_WHO_PID_FILES = ['/var/run/virt-who.pid', '/run/virt-who.pid']
+
+
 class DefaultDict(collections.defaultdict):
     """defaultdict wrapper that pretty prints"""
 
@@ -375,22 +378,35 @@ def get_server_versions(cp, exception_on_timeout=False):
 
 def restart_virt_who():
     """
-    Send a SIGHUP signal to virt-who if it running on the same machine.
+    Send a SIGHUP signal to virt-who if it is running on the same machine.
     """
+
+    # virt-who PID file can be in /var/run or /run directory
+    virt_who_pid_file_name = None
+    for pid_file_name in VIRT_WHO_PID_FILES:
+        if os.path.isfile(pid_file_name):
+            virt_who_pid_file_name = pid_file_name
+
+    if virt_who_pid_file_name is None:
+        log.debug("No virt-who pid file, not attempting to restart")
+        return
+
     try:
-        pidfile = open('/var/run/virt-who.pid', 'r')
-        pid = int(pidfile.read())
-        os.kill(pid, signal.SIGHUP)
+        with open(virt_who_pid_file_name, 'r') as pid_file:
+            pid = int(pid_file.read())
         log.debug("Restarted virt-who")
     except IOError:
         # The file was not found, this is ok
-        log.debug("No virt-who pid file, not attempting to restart")
-    except OSError:
-        # The file is referencing an old pid, record this and move on
-        log.error("The virt-who pid file references a non-existent pid")
+        log.debug("Unable to read virt-who pid file, not attempting to restart")
     except ValueError:
         # The file has non numeric data in it
         log.error("The virt-who pid file contains non numeric data")
+    else:
+        try:
+            os.kill(pid, signal.SIGHUP)
+        except OSError:
+            # The file is referencing an old pid, record this and move on
+            log.error("The virt-who pid file references a non-existent pid: %s", pid)
 
 
 def friendly_join(items):

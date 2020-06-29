@@ -64,7 +64,7 @@
 %global completion_dir %{_datadir}/bash-completion/completions
 %endif
 
-%if 0%{?suse_version} > 1110
+%if 0%{?suse_version} > 1110 || 0%{?rhel} >= 7 || 0%{?fedora}
 %global run_dir /run
 %else
 %global run_dir /var/run

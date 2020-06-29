@@ -35,8 +35,8 @@ LICENSE = _("\nThis software is licensed to you under the GNU General Public Lic
             "granted to use or replicate Red Hat trademarks that are incorporated "
             "in this software or its documentation.\n")
 
-AUTO_ATTACH_UPDATE_FILE = '/var/run/rhsm/next_auto_attach_update'
-CERT_CHECK_UPDATE_FILE = '/var/run/rhsm/next_cert_check_update'
+AUTO_ATTACH_UPDATE_FILE = '/run/rhsm/next_auto_attach_update'
+CERT_CHECK_UPDATE_FILE = '/run/rhsm/next_cert_check_update'
 
 prefix = os.path.dirname(__file__)
 
