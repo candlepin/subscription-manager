@@ -829,3 +829,9 @@ class StubRpmProfile(profile.RPMProfile):
         mock_file.read = mock.Mock(return_value=json.dumps(dict_list))
 
         return mock_file
+
+
+class StubDeb822(dict):
+
+    def __init__(self, init_dict):
+        pass

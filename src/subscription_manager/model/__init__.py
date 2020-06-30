@@ -32,7 +32,7 @@ class Content(object):
     """
     def __init__(self, content_type, name, label,
                  url=None, gpg=None, tags=None, cert=None,
-                 enabled=None, metadata_expire=None):
+                 enabled=None, metadata_expire=None, arches=None):
         self.content_type = content_type
         self.name = name
         self.label = label
@@ -43,6 +43,7 @@ class Content(object):
         self.cert = cert
         self.enabled = enabled
         self.metadata_expire = metadata_expire
+        self.arches = arches
 
 
 class Entitlement(object):
