@@ -27,8 +27,9 @@
 import sys
 import re
 import hashlib
-
 import requests
+from six.moves.urllib.parse import quote
+from six.moves.configparser import SafeConfigParser
 
 
 class pkg_acquire_method:
@@ -132,6 +133,49 @@ class katello_method(pkg_acquire_method):
             protocol = 'http://'
         return protocol + result.group('url')
 
+    def __get_rhsm_proxy(self):
+        """
+        Return the proxy server config from /etc/rhsm/rhsm.conf as dict
+        Adapted from https://github.com/Katello/katello-client-bootstrap/blob/master/bootstrap.py
+        """
+        rhsmconfig = SafeConfigParser()
+        rhsmconfig.read('/etc/rhsm/rhsm.conf')
+
+        proxy_options = [option for option in rhsmconfig.options('server') if option.startswith('proxy')]
+        proxy_config = {}
+        for option in proxy_options:
+            value = rhsmconfig.get('server', option)
+            if value:
+                proxy_config[option] = value
+
+        proxies = {}
+        if 'proxy_hostname' in proxy_config:
+            protocol = 'http'
+
+            if 'proxy_scheme' in proxy_config:
+                protocol = proxy_config['proxy_scheme']
+
+            authpass = ''
+            if 'proxy_user' in proxy_config and 'proxy_password' in proxy_config:
+                authpass = '{proxy_user}:{proxy_password}@'.format(
+                    proxy_user=quote(str(proxy_config['proxy_user'])),
+                    proxy_password=quote(str(proxy_config['proxy_password']))
+                )
+
+            proxy = '{protocol}://{authpass}{proxy_hostname}'.format(
+                protocol=protocol,
+                authpass=authpass,
+                proxy_hostname=proxy_config['proxy_hostname']
+            )
+
+            if 'proxy_port' in proxy_config:
+                proxy = '{proxy}:{proxy_port}'.format(
+                    proxy=proxy,
+                    proxy_port=proxy_config['proxy_port']
+                )
+            proxies[protocol] = proxy
+        return proxies
+
     def fetch(self, msg):
         """
         Fetch the content from pulp server to the file.
@@ -150,7 +194,8 @@ class katello_method(pkg_acquire_method):
             ssl_options['verify'] = self.ssl_cacert
             ssl_options['cert'] = (self.ssl_cert, self.ssl_key)
 
-        req = requests.get(self.url, stream=True, **ssl_options)
+        proxies = self.__get_rhsm_proxy()
+        req = requests.get(self.url, stream=True, proxies=proxies, **ssl_options)
         try:
             if req.status_code != 200:
                 self.uri_failure({'URI': self.uri,
