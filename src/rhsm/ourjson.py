@@ -24,9 +24,12 @@ try:
     from simplejson import *  # NOQA
 except ImportError:
     from json import *  # NOQA
+import datetime
 
 
 def encode(obj):
+    if isinstance(obj, datetime.datetime):
+        return obj.__str__()
     if isinstance(obj, set):
         return list(obj)
     raise TypeError(repr(obj) + " is not JSON serializable")
