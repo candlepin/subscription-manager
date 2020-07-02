@@ -16,6 +16,7 @@ from __future__ import print_function, division, absolute_import
 
 import unittest
 from rhsm import ourjson as json
+from datetime import datetime
 
 
 class JsonTests(unittest.TestCase):
@@ -25,4 +26,10 @@ class JsonTests(unittest.TestCase):
         # Python prints lists with single quotes, JSON with double quotes
         # so we need to convert to do a string comparison.
         expected = "[%s]" % ", ".join(['"%s"' % x for x in s])
+        self.assertEqual(expected, result)
+
+    def test_test_encoding_datetime(self):
+        date = datetime(2020, 1, 1)
+        result = json.dumps(date, default=json.encode)
+        expected = '"2020-01-01 00:00:00"'
         self.assertEqual(expected, result)
