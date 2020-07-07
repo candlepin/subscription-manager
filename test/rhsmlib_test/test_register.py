@@ -465,6 +465,10 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
         self.mock_register = register_patcher.start().return_value
         self.addCleanup(register_patcher.stop)
 
+        cert_invoker_patcher = mock.patch('rhsmlib.dbus.objects.register.EntCertActionInvoker', autospec=True)
+        self.mock_cert_invoker = cert_invoker_patcher.start().return_value
+        self.addCleanup(cert_invoker_patcher.stop)
+
     def injection_definitions(self, *args, **kwargs):
         if args[0] == inj.IDENTITY:
             return self.mock_identity
