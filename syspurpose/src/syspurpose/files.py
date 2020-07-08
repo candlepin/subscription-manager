@@ -60,6 +60,24 @@ UNSUPPORTED = "unsupported"
 log = logging.getLogger(__name__)
 
 
+def post_process_received_data(data):
+    """
+    Try to solve conflicts in keys
+     - Server returns key "roles", but it should be "role"
+     - Server returns key "support_level", but service_level_agreement is used in syspurpose.json
+    :return: modified dictionary
+    """
+    if 'systemPurposeAttributes' in data:
+        # Fix
+        if 'roles' in data['systemPurposeAttributes']:
+            data['systemPurposeAttributes']['role'] = data['systemPurposeAttributes']['roles']
+            del data['systemPurposeAttributes']['roles']
+        if 'support_level' in data['systemPurposeAttributes']:
+            data['systemPurposeAttributes']['service_level_agreement'] = data['systemPurposeAttributes']['support_level']
+            del data['systemPurposeAttributes']['support_level']
+    return data
+
+
 class SyspurposeStore(object):
     """
     Represents and maintains a json syspurpose file
@@ -243,7 +261,7 @@ class SyncedStore(object):
     PATH = USER_SYSPURPOSE
     CACHE_PATH = CACHED_SYSPURPOSE
 
-    def __init__(self, uep, on_changed=None, consumer_uuid=None, report=None):
+    def __init__(self, uep, on_changed=None, consumer_uuid=None, report=None, use_valid_fields=False):
         self.uep = uep
         self.filename = self.PATH.split('/')[-1]
         self.path = self.PATH
@@ -258,6 +276,10 @@ class SyncedStore(object):
         self.changed = False
         self.on_changed = on_changed
         self.consumer_uuid = consumer_uuid
+        if use_valid_fields is True:
+            self.valid_fields = self.get_valid_fields()
+        else:
+            self.valid_fields = None
 
     def __enter__(self):
         return self
@@ -395,6 +417,29 @@ class SyncedStore(object):
         log.debug('Successfully updated remote syspurpose on the server.')
         return True
 
+    def _check_key_value_validity(self, key, value):
+        """
+        Check validity of provided key and value of it is included in valid fields
+        :param key: provided key
+        :param value: provided value
+        :return: None
+        """
+        if self.valid_fields is not None:
+            if key in self.valid_fields:
+                if value not in self.valid_fields[key]:
+                    print(_('Warning: Provided value "{val}" is not included in the list of valid values for attribute {attr}:').format(
+                        val=value,
+                        attr=key
+                    ))
+                    for valid_value in self.valid_fields[key]:
+                        print(" - %s" % valid_value)
+            else:
+                print(_('Warning: Provided key "{key}" is not included in the list of valid keys:').format(
+                    key=key
+                ))
+                for valid_key in self.valid_fields.keys():
+                    print(" - %s" % valid_key)
+
     def add(self, key, value):
         """
         Add a value to a list of values specified by key. If the current value specified by the key is scalar/non-list,
@@ -420,6 +465,9 @@ class SyncedStore(object):
                 return False
         except (AttributeError, KeyError):
             self.local_contents[key] = [value]
+
+        self._check_key_value_validity(key, value)
+
         self.changed = True
         log.debug('Adding value \'%s\' to key \'%s\'.' % (value, key))
         return True
@@ -484,14 +532,16 @@ class SyncedStore(object):
         """
         value = make_utf8(value)
         key = make_utf8(key)
-        org = make_utf8(self.local_contents.get(key, None))
+        current_value = make_utf8(self.local_contents.get(key, None))
         self.local_contents[key] = value
 
-        if org != value or org is None:
+        if current_value != value or current_value is None:
+            self._check_key_value_validity(key, value)
+
             self.changed = True
             log.debug('Setting value \'%s\' to key \'%s\'.' % (value, key))
 
-        return org != value or org is None
+        return current_value != value or current_value is None
 
     @staticmethod
     def update_file(path, data):
@@ -536,6 +586,27 @@ class SyncedStore(object):
                 return True
         log.debug('Failed to update syspurpose values at \'%s\'.' % path)
         return False
+
+    def get_valid_fields(self):
+        """
+        Try to get valid fields from server using current owner (organization)
+        :return: Dictionary with valid fields
+        """
+        valid_fields = None
+
+        if self.uep is not None and self.consumer_uuid is not None:
+            current_owner = self.uep.getOwner(self.consumer_uuid)
+            if 'key' in current_owner:
+                owner_key = current_owner['key']
+                try:
+                    response = self.uep.getOwnerSyspurposeValidFields(owner_key)
+                except Exception as err:
+                    log.debug("Unable to get valid fields from server: %s" % err)
+                else:
+                    if 'systemPurposeAttributes' in response:
+                        response = post_process_received_data(response)
+                        valid_fields = response['systemPurposeAttributes']
+        return valid_fields
 
 
 def read_syspurpose(raise_on_error=False):

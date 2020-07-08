@@ -77,55 +77,64 @@ has specific options available for each command, depending on what operation is 
 6. release
 
 .IP
-7. service-level
+7. addons
 
 .IP
-8. import
+8. role
 
 .IP
-9. redeem
+9. service-level
 
 .IP
-10. list
+10. usage
 
 .IP
-11. refresh
+11. import
 
 .IP
-12. environments
+12. redeem
 
 .IP
-13. repos
+13. list
 
 .IP
-14. orgs
+14. refresh
 
 .IP
-15. plugins
+15. environments
 
 .IP
-16. identity
+16. repos
 
 .IP
-17. facts
+17. orgs
 
 .IP
-18. clean
+18. plugins
 
 .IP
-19. config
+19. identity
 
 .IP
-20. version
+20. facts
 
 .IP
-21. status
+21. clean
 
 .IP
-22. deprecated commands: subscribe, unsubscribe, and activate
+22. config
 
 .IP
-23. repo-override
+23. version
+
+.IP
+24. status
+
+.IP
+25. deprecated commands: subscribe, unsubscribe, and activate
+
+.IP
+26. repo-override
 
 
 .SS COMMON OPTIONS
@@ -370,6 +379,82 @@ Sets the minor (Y-stream) release version to use, such as 6.3.
 Removes any previously set release version preference.
 
 
+.SS ADDONS OPTIONS
+The
+.B addons
+command displays the current configured addons system purpose attribute
+.I preference
+for products installed on the system. For example, if the addons preference is ADDON1, then a subscription with a ADDON1 addon is selected when auto-attaching subscriptions to the system.
+
+.TP
+.B --show
+Shows the system's current addons preference. If a addons is not set, then there is a message saying it is not set.
+
+.TP
+.B --list
+Lists the available addons system purpose values.
+
+.TP
+.B --username=USERNAME
+Gives the username for the account to use to connect to the organization account [Use with --list when unregistered].
+
+.TP
+.B --password=PASSWORD
+Gives the user account password [Use with --list when unregistered].
+
+.TP
+.B --token=TOKEN
+Token to use when authorizing against the server [Use with --list when unregistered].
+
+.TP
+.B --add=ADDON
+Addon to add to the list of requested addons for this system
+
+.TP
+.B --remove=ADDON
+Remove the addon from the list of requested addons.
+
+.TP
+.B --unset
+Removes all addons from the list of requested addons.
+
+
+.SS ROLE OPTIONS
+The
+.B role
+command displays the current configured role
+.I preference
+for products installed on the system. For example, if the role preference is "Red Hat Enterprise Linux Server", then a subscription with a "Red Hat Enterprise Linux Server" role is selected when auto-attaching subscriptions to the system.
+
+.TP
+.B --show
+Shows the system's current role preference. If a role is not set, then there is a message saying it is not set.
+
+.TP
+.B --list
+Lists the available role system purpose values.
+
+.TP
+.B --username=USERNAME
+Gives the username for the account to use to connect to the organization account [Use with --list when unregistered].
+
+.TP
+.B --password=PASSWORD
+Gives the user account password [Use with --list when unregistered].
+
+.TP
+.B --token=TOKEN
+Token to use when authorizing against the server [Use with --list when unregistered].
+
+.TP
+.B --set=ROLE
+Role to apply to this system
+
+.TP
+.B --unset
+Removes any previously set role preference.
+
+
 .SS SERVICE-LEVEL OPTIONS
 The
 .B service-level
@@ -380,10 +465,6 @@ for products installed on the system. For example, if the service-level preferen
 .TP
 .B --serverurl=SERVER_URL
 Server URL in the form of https://hostname:port/prefix
-
-.TP
-.B --token=TOKEN
-Token to use when authorizing against the server.
 
 .TP
 .B --insecure
@@ -416,6 +497,42 @@ Service level to apply to this system
 .TP
 .B --unset
 Removes any previously set service-level preference.
+
+
+.SS USAGE OPTIONS
+The
+.B usage
+command displays the current configured usage
+.I preference
+for products installed on the system. For example, if the usage preference is "Production", then a subscription with a "Production" usage is selected when auto-attaching subscriptions to the system.
+
+.TP
+.B --show
+Shows the system's current usage preference. If a usage is not set, then there is a message saying it is not set.
+
+.TP
+.B --list
+Lists the available usage system purpose values.
+
+.TP
+.B --username=USERNAME
+Gives the username for the account to use to connect to the organization account [Use with --list when unregistered].
+
+.TP
+.B --password=PASSWORD
+Gives the user account password [Use with --list when unregistered].
+
+.TP
+.B --token=TOKEN
+Token to use when authorizing against the server [Use with --list when unregistered].
+
+.TP
+.B --set=USAGE
+Usage to apply to this system
+
+.TP
+.B --unset
+Removes any previously set usage preference.
 
 
 .SS IMPORT OPTIONS

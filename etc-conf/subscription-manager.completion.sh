@@ -35,19 +35,25 @@ _subscription_manager_attach()
 
 _subscription_manager_role()
 {
-  local opts="${_subscription_manager_common_opts} --set --unset"
+  local opts="--list --org --set --show
+            --unset --username --password --token
+            ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
 _subscription_manager_usage()
 {
-  local opts="${_subscription_manager_common_opts} --set --unset"
+  local opts="--list --org --set --show
+            --unset --username --password --token
+            ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
 _subscription_manager_addons()
 {
-  local opts="${_subscription_manager_common_opts} --add --remove --unset"
+  local opts="--list --org --show --add --remove
+            --unset --username --password --token
+            ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 

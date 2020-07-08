@@ -1658,7 +1658,7 @@ class TestReleaseCommand(TestCliProxyCommand):
                 mock_repo_invoker.update.assert_called_with()
 
 
-class TestRoleCommand(TestCliCommand):
+class TestRoleCommand(TestCliProxyCommand):
     command_class = managercli.RoleCommand
 
     def setUp(self):
@@ -1671,12 +1671,54 @@ class TestRoleCommand(TestCliCommand):
         self.cc.cp.registered_consumer_info['role'] = None
         self.cc.cp._capabilities = ["syspurpose"]
 
+    def test_org_requires_list_good(self):
+        self.cc.main(["--org", "one", "--list"])
+
+    def test_list_username_password_org(self):
+        self.cc.main(["--username", "admin", "--password", "secret", "--org", "one", "--list"])
+
+    def test_list_username_password(self):
+        self.cc.main(["--username", "admin", "--password", "secret", "--list"])
+
+    def test_list_only_username(self):
+        self.cc.options = Mock()
+        self.cc.is_registered = Mock(return_value=False)
+        self.cc.options.set = False
+        self.cc.options.unset = False
+        self.cc.options.to_add = False
+        self.cc.options.to_remove = False
+        self.cc.options.list = True
+        self.cc.options.token = None
+        self.cc.options.username = "admin"
+        self.cc.options.password = None
+        try:
+            self.cc._validate_options()
+        except SystemExit as e:
+            self.assertEqual(e.code, os.EX_USAGE)
+
+    def test_list_username_and_token(self):
+        self.cc.options = Mock()
+        self.cc.is_registered = Mock(return_value=False)
+        self.cc.options.set = False
+        self.cc.options.unset = False
+        self.cc.options.to_add = False
+        self.cc.options.to_remove = False
+        self.cc.options.list = True
+        self.cc.options.token = "TOKEN"
+        self.cc.options.username = "admin"
+        self.cc.options.password = "secret"
+        try:
+            self.cc._validate_options()
+        except SystemExit as e:
+            self.assertEqual(e.code, os.EX_USAGE)
+
     def test_wrong_options_syspurpose_role(self):
         """It is possible to use --set or --unset options. It's not possible to use both of them together."""
         self.cc.options = Mock()
         self.cc.options.set = "Foo"
         self.cc.options.unset = True
         self.cc.options.to_add = False
+        self.cc.options.to_remove = False
         try:
             self.cc._validate_options()
         except SystemExit as e:
@@ -1766,6 +1808,7 @@ class TestRoleCommand(TestCliCommand):
         instance_syspurpose_store.set = MagicMock(return_value=True)
         instance_syspurpose_store.write = MagicMock(return_value=None)
         instance_syspurpose_store.get_cached_contents = Mock(return_value={"role": "Foo"})
+        self.cc._get_synced_store = MagicMock(return_value=instance_syspurpose_store)
 
         mock_syspurpose_sync.return_value = Mock()
         mock_syspurpose.return_value = instance_syspurpose_store
@@ -1804,6 +1847,7 @@ class TestRoleCommand(TestCliCommand):
         instance_mock_syspurpose_sync = mock_syspurpose_sync.return_value
         instance_mock_syspurpose_sync.perform = Mock(return_value=({}, {"role": "Foo"}))
 
+        self.cc._get_synced_store = MagicMock(return_value=instance_syspurpose_store)
         self.cc.options = Mock(spec=['set', 'unset'])
         self.cc.options.set = 'Bar'
         self.cc.options.unset = False
@@ -1839,6 +1883,7 @@ class TestRoleCommand(TestCliCommand):
         instance_mock_syspurpose_sync = mock_syspurpose_sync.return_value
         instance_mock_syspurpose_sync.perform = Mock(return_value=({}, {"role": ""}))
 
+        self.cc._get_synced_store = MagicMock(return_value=instance_syspurpose_store)
         self.cc.store = instance_syspurpose_store
         self.cc.options = Mock(spec=['set', 'unset'])
         self.cc.options.set = None

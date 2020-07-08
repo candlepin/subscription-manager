@@ -39,11 +39,14 @@ except ImportError:
         return read_syspurpose()
 
 try:
-    from syspurpose.files import SyncedStore, USER_SYSPURPOSE
+    from syspurpose.files import SyncedStore, USER_SYSPURPOSE, post_process_received_data
 except ImportError:
     log.debug("Could not import from module syspurpose.")
     SyncedStore = None
     USER_SYSPURPOSE = "/etc/rhsm/syspurpose/syspurpose.json"
+
+    def post_process_received_data(data):
+        return data
 
 store = None
 syspurpose = None
@@ -131,6 +134,21 @@ def write_syspurpose(values):
     return True
 
 
+def get_syspurpose_valid_fields(uep=None, identity=None):
+    """
+    Try to get valid syspurpose fields provided by candlepin server
+    :param uep: connection of candlepin server
+    :param identity: current identity of registered system
+    :return: dictionary with valid fields
+    """
+    valid_fields = {}
+    cache = inj.require(inj.SYSPURPOSE_VALID_FIELDS_CACHE)
+    syspurpose_valid_fields = cache.read_data(uep, identity)
+    if 'systemPurposeAttributes' in syspurpose_valid_fields:
+        valid_fields = syspurpose_valid_fields['systemPurposeAttributes']
+    return valid_fields
+
+
 class SyspurposeSyncActionInvoker(certlib.BaseActionInvoker):
     """
     Used by rhsmcertd to sync the syspurpose values locally with those from the Server.
@@ -206,10 +224,12 @@ class SyspurposeSyncActionCommand(object):
         consumer_uuid = inj.require(inj.IDENTITY).uuid
 
         try:
-            store = SyncedStore(uep=self.uep,
-                                        consumer_uuid=consumer_uuid,
-                                        report=self.report,
-                                        on_changed=self.report.record_change)
+            store = SyncedStore(
+                uep=self.uep,
+                consumer_uuid=consumer_uuid,
+                report=self.report,
+                on_changed=self.report.record_change
+            )
             result = store.sync()
         except ConnectionException as e:
             self.report._exceptions.append('Unable to sync syspurpose with server: %s' % str(e))

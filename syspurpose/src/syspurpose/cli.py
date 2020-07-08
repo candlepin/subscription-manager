@@ -360,7 +360,7 @@ def main():
         print(_("Warning: Unable to sync system purpose with subscription management server:"
                 " subscription_manager module is not available."))
 
-    syspurposestore = SyncedStore(uep=uep, consumer_uuid=uuid)
+    syspurposestore = SyncedStore(uep=uep, consumer_uuid=uuid, use_valid_fields=True)
     if getattr(args, 'func', None) is not None:
         args.func(args, syspurposestore)
     else:
