@@ -53,8 +53,7 @@ Vagrant.configure("2") do |config|
   config.ssh.forward_x11 = true
 
   # setup shared folder
-  config.vm.synced_folder ".", "/vagrant", type: "sshfs",
-                          sshfs_opts_append: "-o nonempty"
+  config.vm.synced_folder ".", "/vagrant"
 
   # Set up the hostmanager plugin to automatically configure host & guest hostnames
   if Vagrant.has_plugin?("vagrant-hostmanager")
@@ -133,7 +132,7 @@ Vagrant.configure("2") do |config|
   # PXE server
   config.vm.define 'pxe-server', autostart: false do |host|
     host.vm.hostname = 'pxe-server'
-    host.vm.box = 'fedora/29-cloud-base'
+    host.vm.box = 'fedora/32-cloud-base'
 
     # dnf requires more memory on fedora 29
     host.vm.provider :libvirt do |domain|
@@ -160,7 +159,7 @@ Vagrant.configure("2") do |config|
 
   # PXE client
   config.vm.define 'pxe-client', autostart: false do |host|
-    host.vm.hostname = 'pxe-client'
+    # host.vm.hostname = 'pxe-client'
     host.ssh.username = 'root'
     host.vm.provider :libvirt do |domain|
       boot_network = {'network' => 'pxe-server0'}
@@ -174,7 +173,7 @@ end
 
 ## VM for proxy server
 Vagrant.configure("2") do |config|
-  config.vm.hostname = 'proxy-server.subman.example.com'
+  # config.vm.hostname = 'proxy-server.subman.example.com'
   config.vm.box = 'centos/7'
   config.vm.define 'proxy-server', autostart: false
 
