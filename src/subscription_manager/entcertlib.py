@@ -306,8 +306,8 @@ class EntCertUpdateAction(object):
         # entitlement directory before we go to delete expired certs.
         rogue_count = len(self.report.rogue)
         if rogue_count > 0:
-            print(ungettext("%s local certificate has been deleted.",
-                            "%s local certificates have been deleted.",
+            print(ungettext("%d local certificate has been deleted.",
+                            "%d local certificates have been deleted.",
                             rogue_count) % rogue_count)
             self.ent_dir.refresh()
 
