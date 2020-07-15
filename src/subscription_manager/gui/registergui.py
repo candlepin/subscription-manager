@@ -2193,7 +2193,7 @@ class AsyncBackend(object):
         except Exception as e:
             log.warn("Error from reset_resolver: %s", e)
         try:
-            conn = UEPConnection(hostname, int(port), prefix)
+            conn = UEPConnection(host=hostname, ssl_port=int(port), handler=prefix)
             is_valid = is_valid_server_info(conn)
             self.queue.put((callback, (hostname, port, prefix, is_valid), None))
         except (MissingCaCertException, ProxyException):
