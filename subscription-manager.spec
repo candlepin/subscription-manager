@@ -226,7 +226,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.27.9
+Version: 1.27.10
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1427,6 +1427,16 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Jul 16 2020 William Poteat <wpoteat@redhat.com> 1.27.10-1
+- 1847636: error when registering in intial-setup-graphical
+  (wpoteat@redhat.com)
+- Added unit test for this case. (jhnidek@redhat.com)
+- 1845399: List available subscription ondate options failed
+  (wpoteat@redhat.com)
+- 1657269: Do not use /var/run, but use /run; ENT-1086 (jhnidek@redhat.com)
+- cockpit: change button order to conform with patternfly guidelines
+  (anilsson@redhat.com)
+
 * Sun Jun 28 2020 Christopher Snyder <csnyder@redhat.com> 1.27.9-1
 - 1840364: Kill rhsmd during post-install on rhel8
   (jhnidek@redhat.com)
