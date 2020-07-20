@@ -717,7 +717,7 @@ class SyspurposeCommand(CliCommand):
                         print(_('Warning: Provided value "{val}" is not included in the list of valid values').format(
                             val=value
                         ))
-                        self._prit_valid_valus(valid_fields)
+                        self._print_valid_values(valid_fields)
                     else:
                         print(_('Warning: the list of valid values for attribute "{attr}" is empty.').format(
                             attr=self.attr
@@ -821,14 +821,15 @@ class SyspurposeCommand(CliCommand):
         else:
             print(_("{name} not set.").format(name=self.name.capitalize()))
 
-    def _prit_valid_valus(self, valid_fields):
+    def _print_valid_values(self, valid_fields):
         """
-        Print list of valid valus for current syspurpose attribute
+        Print list of valid values for current syspurpose attribute
         :param valid_fields:
-        :return:
+        :return: None
         """
         for valid_value in valid_fields[self.attr]:
-            print(' - %s' % valid_value)
+            if len(valid_value) > 0:
+                print(' - %s' % valid_value)
 
     def list(self):
         valid_fields = self._get_valid_fields()
@@ -844,7 +845,7 @@ class SyspurposeCommand(CliCommand):
                 print(empty_space_len * ' ' + translated_string)
                 print(line)
                 # Print values
-                self._prit_valid_valus(valid_fields)
+                self._print_valid_values(valid_fields)
             else:
                 print(_('No valid values provided for "{syspurpose_attr}"').format(syspurpose_attr=self.attr))
         else:
