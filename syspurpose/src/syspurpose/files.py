@@ -432,7 +432,8 @@ class SyncedStore(object):
                         attr=key
                     ))
                     for valid_value in self.valid_fields[key]:
-                        print(" - %s" % valid_value)
+                        if len(valid_value) > 0:
+                            print(" - %s" % valid_value)
             else:
                 print(_('Warning: Provided key "{key}" is not included in the list of valid keys:').format(
                     key=key
