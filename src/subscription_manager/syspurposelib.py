@@ -39,11 +39,12 @@ except ImportError:
         return read_syspurpose()
 
 try:
-    from syspurpose.files import SyncedStore, USER_SYSPURPOSE, post_process_received_data
+    from syspurpose.files import SyncedStore, USER_SYSPURPOSE, post_process_received_data, CACHED_SYSPURPOSE
 except ImportError:
     log.debug("Could not import from module syspurpose.")
     SyncedStore = None
     USER_SYSPURPOSE = "/etc/rhsm/syspurpose/syspurpose.json"
+    CACHED_SYSPURPOSE = "/var/lib/rhsm/cache/syspurpose.json"
 
     def post_process_received_data(data):
         return data
@@ -131,6 +132,21 @@ def write_syspurpose(values):
         except OSError:
             log.warning('Could not write syspurpose to %s' % USER_SYSPURPOSE)
             return False
+    return True
+
+
+def write_syspurpose_cache(values):
+    """
+    Write to the syspurpose cache on the file system.
+    :param values:
+    :return:
+    """
+    try:
+        print ("CACHED_SYSPURPOSE: %s" % CACHED_SYSPURPOSE)
+        json.dump(values, open(CACHED_SYSPURPOSE, 'w'), ensure_ascii=True, indent=2)
+    except OSError:
+        log.warning('Could not write to syspurpose cache %s' % CACHED_SYSPURPOSE)
+        return False
     return True
 
 
