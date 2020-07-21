@@ -29,6 +29,8 @@ from rhsm import config
 
 from six.moves.configparser import ConfigParser
 
+reload(sys)
+sys.setdefaultencoding('UTF8')
 
 c_rehash = '/usr/bin/c_rehash'
 
@@ -111,6 +113,11 @@ class ZypperService(object):
         Main plugin method
         :return:
         """
+        # the zypper plugin expects the repo data to be printed.
+        # The printed output should not include sub-man warnings etc.
+        sendback = sys.stdout
+        sys.stdout = sys.stderr
+
         try:
             self.update()
         except connection.RestlibException as e:
@@ -118,6 +125,9 @@ class ZypperService(object):
             sys.stderr.write('\n')
         self.warn_or_give_usage_message()
         self.warn_expired()
+
+        # Switch back to stdout before printing the repo
+        sys.stdout = sendback
         self.print_zypper_repos()
 
     def update(self):
