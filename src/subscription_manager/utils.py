@@ -20,12 +20,15 @@ import logging
 import os
 import pprint
 import re
+import subprocess
 import sys
 
 import signal
 import socket
 import syslog
 import uuid
+from subprocess import CalledProcessError
+
 import pkg_resources
 
 from six.moves import urllib
@@ -429,6 +432,70 @@ def friendly_join(items):
 def is_true_value(test_string):
     val = str(test_string).lower()
     return val == "1" or val == "true" or val == "yes"
+
+
+def call_subprocess(cmd):
+    """
+    A wrapper around subprocess.check_output to gather the output and returncode, while redirecting
+    stderr to devnull. Useful to grab the results of some shell command without failing.
+    :param cmd: The shell command to execute, do not provide a user specified string here.
+    :type cmd: str
+    :return: the output of the command, the returncode of the command
+    """
+    with open('/dev/null', 'w') as devnull:
+        try:
+            output = subprocess.check_output(cmd, stderr=devnull, shell=True)
+            returncode = 0
+        except CalledProcessError as e:
+            returncode = e.returncode
+            output = e.output
+    return output, returncode
+
+
+def check_output(cmd):
+    """
+    A convenience wrapper around call_subprocess, it returns just the output of the command
+    :param cmd: The shell command to execute, do not provide a user specified string here.
+    :type cmd: str
+    :return: The output of the command as a string
+    """
+    return call_subprocess(cmd)[0]
+
+
+def check_returncode(cmd):
+    """
+    A convenience wrapper around call_subprocess, it returns just the returncode of the command
+    :param cmd: The shell command to execute, do not provide a user specified string here.
+    :type cmd: str
+    :return: The returncode of the command as an int
+    """
+    return call_subprocess(cmd)[1]
+
+
+def is_insights_installed():
+    """
+    Check whether or not insights-client appears to be installed using which.
+    :return: A boolean indicating whether insights-client is installed
+    """
+    return check_returncode('which insights-client') == 0
+
+
+def is_insights_register_enabled():
+    """
+    Check whether or not the insights-client path unit which performs registration appears to be
+    enabled using systemctl.
+    :return: A boolean indicating whether insights-client is installed
+    """
+    return check_returncode('systemctl is-enabled insights-register.path') == 0
+
+
+def is_insights_unregister_enabled():
+    """
+    Check whether or not the insights-client path unit which performs unregistration appears to be
+    enabled using systemctl.
+    :return: A boolean indicating whether insights-client is installed
+    """
+    return check_returncode('systemctl is-enabled insights-unregister.path') == 0
 
 
 def system_log(message, priority=syslog.LOG_NOTICE):
