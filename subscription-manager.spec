@@ -222,7 +222,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.26.17
+Version: 1.26.18
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1400,6 +1400,11 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Jul 21 2020 William Poteat <wpoteat@redhat.com> 1.26.18-1
+- 1842474: Update local and cache file during sync(); ENT-2433
+  (jhnidek@redhat.com)
+- 1849572: prevent redundant remote syspurpose sync (pmoravec@redhat.com)
+
 * Tue Apr 28 2020 William Poteat <wpoteat@redhat.com> 1.26.17-1
 - 1828657: Make rhsmd cron read 'processTimeout' case-insensitive
   (csnyder@redhat.com)
