@@ -429,10 +429,7 @@ class ContentConnection(BaseConnection):
         handler = "%s/%s" % (self.handler, path)
         result = self.conn.request_get(handler)
 
-        if result['status'] == 200:
-            return result['content']
-
-        return ''
+        return result
 
     def _get_versions_for_product(self, product_id):
         pass
@@ -760,7 +757,7 @@ class BaseRestLib(object):
 
         # Look for server drift, and log a warning
         if drift_check(response.getheader('date')):
-            log.warn("Clock skew detected, please check your system time")
+            log.warning("Clock skew detected, please check your system time")
 
         # FIXME: we should probably do this in a wrapper method
         # so we can use the request method for normal http
@@ -911,7 +908,13 @@ class Restlib(BaseRestLib):
         # Handle 204s
         if not len(result['content']):
             return None
-        return json.loads(result['content'])
+
+        try:
+            return json.loads(result['content'])
+        except json.JSONDecodeError:
+            # This is primarily intended for getting releases from CDN, because
+            # the file containing releases is plaintext and not json.
+            return result['content']
 
 
 class UEPConnection(BaseConnection):
