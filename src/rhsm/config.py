@@ -140,7 +140,9 @@ class RhsmConfigParser(SafeConfigParser):
         with tempfile.NamedTemporaryFile(mode="w", dir=os.path.dirname(self.config_file), delete=False) as fo:
             self.write(fo)
             fo.flush()
+            mode = os.stat(self.config_file).st_mode
             os.rename(fo.name, self.config_file)
+            os.chmod(self.config_file, mode)
 
     def get(self, section, prop):
         """Get a value from rhsm config.
