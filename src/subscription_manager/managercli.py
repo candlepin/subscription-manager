@@ -673,7 +673,10 @@ class SyspurposeCommand(CliCommand):
         valid_fields = {}
         if self.is_registered():
             # When system is registered, then try to get valid fields from cache file
-            valid_fields = get_syspurpose_valid_fields(uep=self.cp, identity=self.identity)
+            try:
+                valid_fields = get_syspurpose_valid_fields(uep=self.cp, identity=self.identity)
+            except ProxyException:
+                system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
         elif self.cp is not None:
             # Try to get current organization key. It is property of OrgCommand.
             # Every Syspurpose command has to be subclass of OrgCommand too
@@ -1340,10 +1343,12 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
                     self.show_service_level()
             except UnauthorizedException as uex:
                 handle_exception(_(str(uex)), uex)
-            except connection.RestlibException as re:
-                log.exception(re)
-                log.error(u"Error: Unable to retrieve service levels: %s" % re)
-                system_exit(os.EX_SOFTWARE, re.msg)
+            except connection.RestlibException as re_err:
+                log.exception(re_err)
+                log.error(u"Error: Unable to retrieve service levels: %s" % re_err)
+                system_exit(os.EX_SOFTWARE, re_err.msg)
+            except ProxyException:
+                system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
 
     def set(self):
         if self.cp.has_capability("syspurpose"):
