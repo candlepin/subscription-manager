@@ -137,10 +137,19 @@ class RhsmConfigParser(SafeConfigParser):
 
     def save(self, config_file=None):
         """Writes config file to storage."""
-        with tempfile.NamedTemporaryFile(mode="w", dir=os.path.dirname(self.config_file), delete=False) as fo:
+        rhsm_conf_dir = os.path.dirname(self.config_file)
+
+        # When /etc/rhsm does not exist, then try to create it
+        if os.path.isdir(rhsm_conf_dir) is False:
+            os.makedirs(rhsm_conf_dir)
+
+        with tempfile.NamedTemporaryFile(mode="w", dir=rhsm_conf_dir, delete=False) as fo:
             self.write(fo)
             fo.flush()
-            mode = os.stat(self.config_file).st_mode
+            try:
+                mode = os.stat(self.config_file).st_mode
+            except IOError:
+                mode = 0o644
             os.rename(fo.name, self.config_file)
             os.chmod(self.config_file, mode)
 
