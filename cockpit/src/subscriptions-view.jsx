@@ -24,6 +24,8 @@ import { ListView, ListViewItem, ListViewIcon } from 'patternfly-react';
 import { Row, Col } from 'react-bootstrap';
 import { InsightsStatus } from './insights.jsx';
 
+import './subscriptions-view.scss';
+
 let _ = cockpit.gettext;
 
 class Listing extends React.Component {

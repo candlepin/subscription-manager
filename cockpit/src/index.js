@@ -21,11 +21,15 @@ import cockpit from 'cockpit';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import '../lib/patternfly/patternfly-cockpit.scss';
+
 import subscriptionsClient from './subscriptions-client';
 import subscriptionsRegister from './subscriptions-register.jsx';
 import subscriptionsView from './subscriptions-view.jsx';
 import * as Insights from './insights.jsx';
 import * as Dialog from '../lib/cockpit-components-dialog.jsx';
+
+import './subscriptions.css';
 
 let _ = cockpit.gettext;
 
@@ -116,7 +120,7 @@ function openRegisterDialog() {
 }
 
 function unregisterSystem() {
-    Insights.unregister().catch(error => true).then(subscriptionsClient.unregisterSystem);
+    Insights.unregister().catch(() => true).then(subscriptionsClient.unregisterSystem);
 }
 
 function initStore(rootElement) {
