@@ -248,16 +248,11 @@ were set to 3 minutes, the initial cert check would begin somewhere between 2 mi
 disable
 .RS 4
 set to 1 to disable rhsmcertd operation entirely.
-.SH "[RHSMD] OPTIONS"
-.PP
-processTimeout
-.RS 4
-The time in seconds we will allow the rhsmd cron job to run before terminating the process.
 .SH "[LOGGING] OPTIONS"
 .PP
 default_log_level
 .RS 4
-The default log level for all loggers in subscription-manager, python-rhsm, rhsmd, and rhsmcertd.
+The default log level for all loggers in subscription-manager, python-rhsm, and rhsmcertd.
 Note: Other keys in this section will override this value for the specified logger.
 .RE
 .PP

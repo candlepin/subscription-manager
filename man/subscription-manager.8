@@ -1422,8 +1422,6 @@ Although
 .B subscription-manager
 respects environment variables for proxy configuration, this should be avoided in favor of the configuration file, because the daemons (ex.
 .B rhsmcertd
-and
-.B rhsmd
 ) do not provide ways to modify their environments.
 
 Each option of the proxy configuration (hostname, port, host/domain pattern blacklist, username, password) is read independently, with precedence being command-line over configuration over environment, and then the resulting set of options is used to configure the proxy configuration.
