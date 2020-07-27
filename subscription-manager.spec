@@ -864,6 +864,13 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
     %endif
 %endif
 
+# prevent build errors on systems without %{use_subscription_manager_migration} set to true. F.e. SUSE distributions
+%if !%{use_subscription_manager_migration}
+    rm %{buildroot}%{completion_dir}/rhn-migrate-classic-to-rhsm
+    rm %{buildroot}%{_sbindir}/rhn-migrate-classic-to-rhsm
+    rm %{buildroot}%{_mandir}/man8/rhn-migrate-classic-to-rhsm.8*
+%endif
+
 # base/cli tools use the gettext domain 'rhsm', while the
 # gnome-help tools use domain 'subscription-manager'
 %files -f rhsm.lang
