@@ -684,6 +684,8 @@ class SyspurposeCommand(CliCommand):
                 server_response = self.cp.getOwnerSyspurposeValidFields(org_key)
             except connection.RestlibException as rest_err:
                 log.warning("Unable to get list of valid fields using REST API: %s" % rest_err)
+            except ProxyException:
+                system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
             else:
                 if 'systemPurposeAttributes' in server_response:
                     server_response = post_process_received_data(server_response)
