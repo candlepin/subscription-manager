@@ -46,7 +46,7 @@ from subscription_manager.entcertlib import EntCertActionInvoker, CONTENT_ACCESS
 from subscription_manager.action_client import ActionClient, UnregisterActionClient, ProfileActionClient
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, \
         SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
-from subscription_manager.cli import AbstractCLICommand, CLI, system_exit
+from subscription_manager.cli import AbstractCLICommand, CLI, system_exit, InvalidCLIOptionError
 from subscription_manager import rhelentbranding
 from rhsmlib.facts.hwprobe import ClassicCheck
 import subscription_manager.injection as inj
@@ -561,6 +561,11 @@ class CliCommand(AbstractCLICommand):
                 system_exit(os.EX_UNAVAILABLE, _("Consumer profile \"%s\" has been deleted from the server. You can use command clean or unregister to remove local profile.") % self.identity.uuid)
             else:
                 raise ge
+        except InvalidCLIOptionError as err:
+            # This exception is handled in cli module
+            raise err
+        except Exception as err:
+            handle_exception("exception caught in subscription-manager", err)
 
 
 class SyspurposeCommand(CliCommand):
