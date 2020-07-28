@@ -226,7 +226,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.27.10
+Version: 1.27.11
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1427,6 +1427,17 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Jul 28 2020 William Poteat <wpoteat@redhat.com> 1.27.11-1
+- 1780028: Remove man page entries for rhsmd (wpoteat@redhat.com)
+- 1838423: Fix getting list of releases from CDN; (jhnidek@redhat.com)
+- 1838670: set permissions on rhsm.conf (jbastian@redhat.com)
+- cockpit: Fix AppStream launchable metainfo (martin@piware.de)
+- 1838967: Sync syspurpose cache on registration (wpoteat@redhat.com)
+- 1859532: Role --list handle wrong proxy conf (unregistered case) (jhnidek@redhat.com)
+- 1859532: No traceback, when wrong proxy conf is used (jhnidek@redhat.com)
+- 1857100: Do not print empty string as valid value (jhnidek@redhat.com)
+- 1634023: Use list of valid syspurpose values provided by candlepin server (jhnidek@redhat.com)
+
 * Thu Jul 16 2020 William Poteat <wpoteat@redhat.com> 1.27.10-1
 - 1847636: error when registering in intial-setup-graphical
   (wpoteat@redhat.com)
