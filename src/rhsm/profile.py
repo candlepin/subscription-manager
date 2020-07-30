@@ -93,7 +93,7 @@ class ModulesProfile(object):
             try:
                 modules = base._moduleContainer
             except AttributeError:
-                log.warn("DNF does not provide modulemd functionality")
+                log.warning("DNF does not provide modulemd functionality")
                 return []
             all_module_list = modules.getModulePackages()
 
@@ -105,7 +105,9 @@ class ModulesProfile(object):
                     status = "disabled"
                 installed_profiles = []
                 if status == "enabled":
-                    installed_profiles = modules.getInstalledProfiles(module_pkg.getName())
+                    # It has to be list, because we compare this with cached json document and
+                    # JSON does not support anything like a tuple :-)
+                    installed_profiles = list(modules.getInstalledProfiles(module_pkg.getName()))
                 module_list.append({
                     "name": module_pkg.getName(),
                     "stream": module_pkg.getStream(),

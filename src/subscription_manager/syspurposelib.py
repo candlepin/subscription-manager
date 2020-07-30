@@ -142,7 +142,6 @@ def write_syspurpose_cache(values):
     :return:
     """
     try:
-        print ("CACHED_SYSPURPOSE: %s" % CACHED_SYSPURPOSE)
         json.dump(values, open(CACHED_SYSPURPOSE, 'w'), ensure_ascii=True, indent=2)
     except OSError:
         log.warning('Could not write to syspurpose cache %s' % CACHED_SYSPURPOSE)
