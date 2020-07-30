@@ -226,7 +226,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.27.11
+Version: 1.27.12
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1427,6 +1427,11 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Jul 30 2020 Christopher Snyder <csnyder@redhat.com> 1.27.12-1
+- 1832990: Add rhsm.no_insights config option, improve messaging
+  (csnyder@redhat.com)
+- Add --no-insights option; ENT-2471 (khowell@redhat.com)
+
 * Tue Jul 28 2020 William Poteat <wpoteat@redhat.com> 1.27.11-1
 - 1780028: Remove man page entries for rhsmd (wpoteat@redhat.com)
 - 1838423: Fix getting list of releases from CDN; (jhnidek@redhat.com)
