@@ -128,6 +128,35 @@ def write_syspurpose(values):
     return True
 
 
+def write_syspurpose_cache(values):
+    """
+    Write to the syspurpose cache on the file system.
+    :param values:
+    :return:
+    """
+    try:
+        json.dump(values, open(CACHED_SYSPURPOSE, 'w'), ensure_ascii=True, indent=2)
+    except OSError:
+        log.warning('Could not write to syspurpose cache %s' % CACHED_SYSPURPOSE)
+        return False
+    return True
+
+
+def get_syspurpose_valid_fields(uep=None, identity=None):
+    """
+    Try to get valid syspurpose fields provided by candlepin server
+    :param uep: connection of candlepin server
+    :param identity: current identity of registered system
+    :return: dictionary with valid fields
+    """
+    valid_fields = {}
+    cache = inj.require(inj.SYSPURPOSE_VALID_FIELDS_CACHE)
+    syspurpose_valid_fields = cache.read_data(uep, identity)
+    if 'systemPurposeAttributes' in syspurpose_valid_fields:
+        valid_fields = syspurpose_valid_fields['systemPurposeAttributes']
+    return valid_fields
+
+
 class SyspurposeSyncActionInvoker(certlib.BaseActionInvoker):
     """
     Used by rhsmcertd to sync the syspurpose values locally with those from the Server.
