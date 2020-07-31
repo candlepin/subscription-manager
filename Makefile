@@ -101,8 +101,8 @@ INCLUDE_SYSPURPOSE ?= 0
 VERSION ?= $(shell git describe | awk ' { sub(/subscription-manager-/,"")};1' )
 
 # inherit from env if set so rpm can override
-CFLAGS ?= -g -Wall
-LDFLAGS ?=
+CFLAGS ?= -g -Wall -flto
+LDFLAGS ?= -flto
 
 RHSMCERTD_CFLAGS = `pkg-config --cflags glib-2.0`
 RHSMCERTD_LDFLAGS = `pkg-config --libs glib-2.0`

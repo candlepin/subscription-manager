@@ -467,7 +467,14 @@ setup(
     setup_requires=setup_requires,
     install_requires=install_requires,
     tests_require=test_require,
-    ext_modules=[Extension('rhsm._certificate', ['src/certificate.c'],
-                           libraries=['ssl', 'crypto'])],
+    ext_modules=[
+        Extension(
+            'rhsm._certificate',
+            ['src/certificate.c'],
+            libraries=['ssl', 'crypto'],
+            extra_compile_args=["-flto"],
+            extra_link_args=["-flto"]
+        )
+    ],
     test_suite='nose.collector',
 )
