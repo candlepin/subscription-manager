@@ -3084,7 +3084,7 @@ class OverrideCommand(CliCommand):
         self.assert_should_be_registered()
 
         supported_resources = get_supported_resources()
-        if 'content_overrides' in supported_resources:
+        if 'content_overrides' not in supported_resources:
             system_exit(os.EX_UNAVAILABLE, _("Error: The 'repo-override' command is not supported by the server."))
 
         # update entitlement certificates if necessary. If we do have new entitlements
