@@ -1602,20 +1602,38 @@ class TestServiceLevelCommand(TestCliProxyCommand):
 
     def test_service_level_creates_syspurpose_dir_and_file(self):
         # create a mock /etc/rhsm/ directory, and set the value of a mock USER_SYSPURPOSE under that
+        old_capabilities = self.cc.cp._capabilities
+        self.cc.cp._capabilities = ['syspurpose']
+        self.cc.store = self.mock_sp_store()
+        self.cc.store.get_cached_contents = Mock(return_value={})
+        self.cc._get_synced_store = MagicMock(return_value=self.cc.store)
         mock_etc_rhsm_dir = tempfile.mkdtemp()
         self.addCleanup(shutil.rmtree, mock_etc_rhsm_dir)
         mock_syspurpose_file = os.path.join(mock_etc_rhsm_dir, "syspurpose/syspurpose.json")
         syspurposelib.USER_SYSPURPOSE = mock_syspurpose_file
 
         self.cc.store = self.mock_sp_store()
-        self.cc.cp.setConsumer({'serviceLevel': 'Jarjar'})
-        self.cc._set('JRJAR')
+        self.cc.options = Mock()
+        self.cc.options.set = 'JRJAR'
+        self.cc.set()
 
         self.cc.store.set.assert_has_calls([call("service_level_agreement", "JRJAR")])
 
         # make sure the sla has been persisted in syspurpose.json:
         contents = self.cc.store.get_local_contents()
         self.assertEqual(contents.get("service_level_agreement"), "JRJAR")
+        self.cc.cp._capabilities = old_capabilities
+
+    def test_old_service_level(self):
+        self.cc.options = Mock()
+        self.cc.cp.getConsumer = Mock(return_value={'serviceLevel': 'foo'})
+        self.cc.options.set = 'JRJAR'
+        self.cc.cp.updateConsumer = Mock()
+        # 'syspurpose' is not in capabilities of server
+        self.cc.set()
+        self.cc.cp.updateConsumer.assert_has_calls(
+            [call('fixture_identity_mock_uuid', service_level='JRJAR')]
+        )
 
 
 class TestReleaseCommand(TestCliProxyCommand):
