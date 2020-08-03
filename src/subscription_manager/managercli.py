@@ -752,6 +752,8 @@ class SyspurposeCommand(CliCommand):
     def _set(self, to_set):
         if self.store:
             self.store.set(self.attr, to_set)
+        else:
+            log.debug('Not setting syspurpose attribute %s (store not set)' % self.attr)
 
     def unset(self):
         self._unset()
@@ -766,6 +768,8 @@ class SyspurposeCommand(CliCommand):
     def _unset(self):
         if self.store:
             self.store.unset(self.attr)
+        else:
+            log.debug('Not unsetting syspurpose attribute %s (store not set)' % self.attr)
 
     def add(self):
         self._add(self.options.to_add)
@@ -1354,6 +1358,7 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
 
     def set(self):
         if self.cp.has_capability("syspurpose"):
+            self.store = self._get_synced_store()
             super(ServiceLevelCommand, self).set()
         else:
             self.update_service_level(self.options.set)
@@ -1361,6 +1366,7 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
 
     def unset(self):
         if self.cp.has_capability("syspurpose"):
+            self.store = self._get_synced_store()
             super(ServiceLevelCommand, self).unset()
         else:
             self.update_service_level("")

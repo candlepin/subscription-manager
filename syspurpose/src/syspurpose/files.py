@@ -541,6 +541,8 @@ class SyncedStore(object):
 
             self.changed = True
             log.debug('Setting value \'%s\' to key \'%s\'.' % (value, key))
+        else:
+            log.debug('NOT Setting value \'%s\' to key \'%s\'.')
 
         return current_value != value or current_value is None
 
