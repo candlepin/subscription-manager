@@ -266,7 +266,7 @@ Source0: %{name}-%{version}.tar.gz
 %if %{use_cockpit}
 Source1: %{name}-cockpit-%{version}.tar.gz
 %endif
-%if 0%{?suse_version}
+%if (0%{?suse_version} && 0%{?suse_version} < 1500)
 Source2: subscription-manager-rpmlintrc
 %endif
 

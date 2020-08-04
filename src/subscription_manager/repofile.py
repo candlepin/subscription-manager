@@ -357,7 +357,7 @@ class RepoFileBase(object):
         if not self.path_exists(self.repos_dir):
             log.debug('The directory %s does not exist. Trying to create it' % self.PATH)
             try:
-                os.makedirs(name=self.repos_dir, mode=0o755, exist_ok=True)
+                os.makedirs(name=self.repos_dir, mode=0o755)
             except Exception as err:
                 log.warning('Unable to create directory: %s, error: %s' % (self.repos_dir, err))
         else:
