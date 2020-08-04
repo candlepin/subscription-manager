@@ -583,6 +583,8 @@ class ZypperRepoFile(YumRepoFile):
         zypp_cfg.read(self.ZYPP_RHSM_PLUGIN_CONFIG_FILE)
         if zypp_cfg.has_option('rhsm-plugin', 'gpgcheck'):
             self.gpgcheck = zypp_cfg.getboolean('rhsm-plugin', 'gpgcheck')
+        if zypp_cfg.has_option('rhsm-plugin', 'repo_gpgcheck'):
+            self.gpgcheck = zypp_cfg.getboolean('rhsm-plugin', 'repo_gpgcheck')
         if zypp_cfg.has_option('rhsm-plugin', 'autorefresh'):
             self.autorefresh = zypp_cfg.getboolean('rhsm-plugin', 'autorefresh')
 
@@ -613,6 +615,12 @@ class ZypperRepoFile(YumRepoFile):
         # See BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1764265
         if self.gpgcheck is False:
             zypper_cont['gpgcheck'] = '0'
+
+        # add support to disable repository gpgcheck
+        if self.gpgcheck is True:
+            zypper_cont['repo_gpgcheck'] = '1'
+        else:
+            zypper_cont['repo_gpgcheck'] = '0'
 
         # See BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1797386
         if self.autorefresh is True:
