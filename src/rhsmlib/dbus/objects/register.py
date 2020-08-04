@@ -22,6 +22,7 @@ from rhsmlib.dbus import constants, exceptions, dbus_utils, base_object, server,
 from rhsmlib.services.register import RegisterService
 
 from subscription_manager.i18n import Locale
+from subscription_manager.entcertlib import EntCertActionInvoker
 
 log = logging.getLogger(__name__)
 
@@ -172,4 +173,9 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
 
         register_service = RegisterService(cp)
         consumer = register_service.register(org, **options)
+
+        log.debug("System registered, updating entitlements if needed")
+        entcertlib = EntCertActionInvoker()
+        entcertlib.update()
+
         return json.dumps(consumer)
