@@ -617,7 +617,7 @@ class ZypperRepoFile(YumRepoFile):
             zypper_cont['gpgcheck'] = '0'
 
         # add support to disable repository gpgcheck
-        if self.gpgcheck is True:
+        if self.repo_epgcheck is True:
             zypper_cont['repo_gpgcheck'] = '1'
         else:
             zypper_cont['repo_gpgcheck'] = '0'
