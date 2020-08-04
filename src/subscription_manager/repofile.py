@@ -614,6 +614,9 @@ class ZypperRepoFile(YumRepoFile):
         if self.gpgcheck is False:
             zypper_cont['gpgcheck'] = '0'
 
+        # See BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1858231
+        zypper_cont['repo_gpgcheck'] = '0'
+
         # See BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1797386
         if self.autorefresh is True:
             zypper_cont['autorefresh'] = '1'
