@@ -83,7 +83,7 @@
 
 Name: subscription-manager
 Version: 1.20.10
-Release: 12%{?dist}
+Release: 13%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -883,6 +883,10 @@ touch --no-create %{_datadir}/icons/hicolor &>/dev/null
 gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 
 %changelog
+* Wed Aug 05 2020 Christopher Snyder <csnyder@redhat.com> 1.20.10-13
+- 1797386: Allow service plugin for zypper (SLES 11 only) to set autorefresh
+  (darinlively@gmail.com)
+
 * Wed Dec 18 2019 Christopher Snyder <csnyder@redhat.com> 1.20.10-12
 - 1764265: Set gpgcheck to 0, when zypper is used; ENT-1758
   (jhnidek@redhat.com)
