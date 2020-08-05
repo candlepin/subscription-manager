@@ -138,7 +138,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.25.20
+Version: 1.25.21
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1174,6 +1174,13 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Aug 05 2020 Christopher Snyder <csnyder@redhat.com> 1.25.21-1
+- 1797386: Allow service plugin for zypper (SLES) to set autorefresh
+  (darinlively@gmail.com)
+- fixed wrong package name for dependency (p.seiler@linuxmail.org)
+- On sles15+ require python2-python-dateutil (csnyder@redhat.com)
+- Add sat-tools 6.5 releaser (csnyder@redhat.com)
+
 * Sun Dec 01 2019 Christopher Snyder <csnyder@redhat.com> 1.25.20-1
 - Remove rpmlintrc for SLE builds (csnyder@redhat.com)
 
