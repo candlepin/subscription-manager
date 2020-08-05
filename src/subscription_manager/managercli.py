@@ -1145,6 +1145,10 @@ class IdentityCommand(UserPassCommand):
                 print(_("Identity certificate has been regenerated."))
 
                 log.debug("Successfully generated a new identity from server.")
+        except connection.GoneException as ge:
+            # Gone exception is catched in CliCommand and consistent message is printed there
+            # for all commands
+            raise ge
         except connection.RestlibException as re:
             log.exception(re)
             log.error(u"Error: Unable to generate a new identity for the system: %s" % re)
@@ -1354,6 +1358,8 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
                     self.show_service_level()
             except UnauthorizedException as uex:
                 handle_exception(_(str(uex)), uex)
+            except connection.GoneException as ge:
+                raise ge
             except connection.RestlibException as re_err:
                 log.exception(re_err)
                 log.error(u"Error: Unable to retrieve service levels: %s" % re_err)
@@ -1416,6 +1422,8 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
             raise e
         except connection.RemoteServerException as e:
             system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
+        except connection.GoneException as ge:
+            raise ge
         except connection.RestlibException as e:
             if e.code == 404 and e.msg.find('/servicelevels') > 0:
                 system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
@@ -1871,7 +1879,8 @@ class RedeemCommand(CliCommand):
             response = self.cp.activateMachine(self.identity.uuid, self.options.email, self.options.locale)
             if response and response.get('displayMessage'):
                 system_exit(0, response.get('displayMessage'))
-
+        except connection.GoneException as ge:
+            raise ge
         except connection.RestlibException as e:
             #candlepin throws an exception during activateMachine, even for
             #200's. We need to look at the code in the RestlibException and proceed
@@ -2287,6 +2296,8 @@ class RemoveCommand(CliCommand):
                             return_code = 1
                     # Print final result of removing pools
                     self._print_unbind_ids_result(removed_serials, unremoved_serials, "serial numbers")
+            except connection.GoneException as ge:
+                raise ge
             except connection.RestlibException as err:
                 log.error(err)
                 system_exit(os.EX_SOFTWARE, err.msg)
@@ -2375,6 +2386,8 @@ class FactsCommand(CliCommand):
             identity = inj.require(inj.IDENTITY)
             try:
                 facts.update_check(self.cp, identity.uuid, force=True)
+            except connection.GoneException as ge:
+                raise ge
             except connection.RestlibException as re:
                 log.exception(re)
                 system_exit(os.EX_SOFTWARE, re.msg)

@@ -901,6 +901,8 @@ class ConsumerCache(CacheManager):
                 log.warning("Unable to get data for %s using REST API: %s" % (self.__class__, rest_err))
                 log.debug("Deleting cache file: %s", self.CACHE_FILE)
                 self.delete_cache()
+                # Raise exception again to be able to display error message in exception
+                raise rest_err
             else:
                 # Write data to cache
                 data = {identity.uuid: current_data}
