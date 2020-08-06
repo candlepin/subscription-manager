@@ -144,10 +144,9 @@ class SubscriptionManager(dnf.Plugin):
         else:
             log.debug('Skipping updating of entitlement certificates')
 
-        if cache_only or config.in_container():
-            log.debug('Generating redhat.repo only from installed entitlement certificates and cache files')
-            repo_action_invoker = RepoActionInvoker(cache_only=cache_only)
-            repo_action_invoker.update()
+        log.debug('Generating redhat.repo')
+        repo_action_invoker = RepoActionInvoker(cache_only=cache_only)
+        repo_action_invoker.update()
 
     @staticmethod
     def _warn_expired():
