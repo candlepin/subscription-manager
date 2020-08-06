@@ -226,7 +226,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.27.12
+Version: 1.27.13
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1427,6 +1427,17 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Aug 06 2020 William Poteat <wpoteat@redhat.com> 1.27.13-1
+- 1663116: 1663390: 1663402: 1663408: Update translations (wpoteat@redhat.com)
+- 1862425: Fix setting service-level (jhnidek@redhat.com)
+- 1862419: Make repo-override working again (jhnidek@redhat.com)
+- 1858296: Do not print unchanged profile (jhnidek@redhat.com)
+- 1861255: Catch all exception and print traceback to rhsm.log
+  (jhnidek@redhat.com)
+- 1841600: D-Bus - update ent. cert., when act. key is used
+  (jhnidek@redhat.com)
+- Support Insights registration by default in cockpit (khowell@redhat.com)
+
 * Thu Jul 30 2020 Christopher Snyder <csnyder@redhat.com> 1.27.12-1
 - 1832990: Add rhsm.no_insights config option, improve messaging
   (csnyder@redhat.com)
