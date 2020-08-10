@@ -135,7 +135,11 @@
 %global with_cockpit WITH_COCKPIT=false
 %endif
 
-%global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
+%if 0%{include_syspurpose}
+%global subpackages SUBPACKAGES="syspurpose"
+%else
+%global subpackages SUBPACKAGES=""
+%endif
 
 Name: subscription-manager
 Version: 1.25.21
@@ -184,7 +188,10 @@ Requires:  %{py_package_prefix}-python-dateutil
 %else
 Requires: %{py_package_prefix}-dateutil
 %endif
+
+%if 0%{?include_syspurpose}
 Requires: %{py_package_prefix}-syspurpose
+%endif
 
 # rhel 8 has different naming for setuptools going forward
 %if (0%{?rhel} && 0%{?rhel} >= 8)
@@ -539,7 +546,7 @@ Subscription Manager Cockpit UI
 %build
 make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
     LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" \
-    %{?gtk_version} %{?subpackages} %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"}
+    %{?gtk_version} %{?subpackages} INCLUDE_SYSPURPOSE="%{include_syspurpose}"
 
 %if %{with python2_rhsm}
 python2 ./setup.py build --quiet --gtk-version=%{?gtk3:3}%{?!gtk3:2} --rpm-version=%{version}-%{release}
@@ -566,7 +573,7 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?with_subman_gui} \
     %{?with_cockpit} \
     %{?subpackages} \
-    %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"}
+    INCLUDE_SYSPURPOSE="%{include_syspurpose}"
 
 %if (%{use_dnf} && (0%{?fedora} >= 29 || 0%{?rhel} >= 8))
 pushd src/dnf-plugins/product-id
@@ -975,6 +982,7 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %doc README.Fedora
 %endif
 
+%if 0%{?include_syspurpose}
 %files -n %{py_package_prefix}-syspurpose -f syspurpose.lang
 %defattr(-,root,root,-)
 %dir %{python_sitelib}/syspurpose*.egg-info
@@ -991,7 +999,7 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
 %attr(755, root, root) %{_sbindir}/syspurpose
 %attr(644,root,root) %{_sysconfdir}/rhsm/syspurpose/valid_fields.json
 %attr(644,root,root) %{completion_dir}/syspurpose
-
+%endif
 
 %files -n subscription-manager-plugin-container
 %defattr(-,root,root,-)
