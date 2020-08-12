@@ -47,17 +47,13 @@ class RegisterService(object):
 
         if no_insights is True:
             try:
-                # insights-client implements a systemd path unit to trigger insights registration whenever the consumer
-                # certificate changes. By masking this unit, we disable this automatic insights registration mechanism.
-                # See: https://www.freedesktop.org/software/systemd/man/systemd.path.html
-                log.debug("Disabling automatic insights registration by masking insights-register.path")
                 with open('/dev/null', 'w') as devnull:
                     subprocess.call(['/usr/bin/systemctl', 'mask', '--now', 'insights-register.path'], stdout=devnull,
                                     stderr=devnull)
-            except Exception as e:
+            except:
                 # ignore failures here in case we're running in a container, or some other issue prevents disabling
                 # insights auto-register
-                log.warning("Failed to disable automatic insights registration: %s", e, exc_info=True)
+                log.warn("Failed to disable automatic insights registration")
 
         syspurpose = syspurposelib.read_syspurpose()
 
