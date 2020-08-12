@@ -226,7 +226,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.27.13
+Version: 1.27.14
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1427,6 +1427,26 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Aug 12 2020 Christopher Snyder <csnyder@redhat.com> 1.27.14-1
+- 1862415: Print proper message, when consumer is deleted; ENT-2709
+  (jhnidek@redhat.com)
+- 1855893: Generate redhat.repo properly; ENT-2636 (jhnidek@redhat.com)
+- Revert "Add --no-insights option; ENT-2471" (csnyder@redhat.com)
+- Revert "Add insights-client messaging on registration" (csnyder@redhat.com)
+- Revert "Address review feedback" (csnyder@redhat.com)
+- Revert "1832990: Add rhsm.no_insights config option, improve messaging"
+  (csnyder@redhat.com)
+- Automatic commit of package [subscription-manager] release [1.27.13-1].
+  (wpoteat@redhat.com)
+- 1663116: 1663390: 1663402: 1663408: Update translations (wpoteat@redhat.com)
+- 1862425: Fix setting service-level; ENT-1862425 (jhnidek@redhat.com)
+- 1862419: Make repo-override working again; ENT-2710 (jhnidek@redhat.com)
+- 1858296: Do not print unchanged profile; ENT-2639 (jhnidek@redhat.com)
+- 1861255: Catch all exception and print traceback to rhsm.log
+  (jhnidek@redhat.com)
+- 1841600: D-Bus - update ent. cert., when act. key is used; ENT-2453
+  (jhnidek@redhat.com)
+
 * Thu Aug 06 2020 William Poteat <wpoteat@redhat.com> 1.27.13-1
 - 1663116: 1663390: 1663402: 1663408: Update translations (wpoteat@redhat.com)
 - 1862425: Fix setting service-level (jhnidek@redhat.com)
