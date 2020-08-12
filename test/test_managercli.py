@@ -499,9 +499,6 @@ class TestRegisterCommand(TestCliProxyCommand):
     def test_env_and_org(self):
         self._test_no_exception(["--env", "env", "--org", "org"])
 
-    def test_no_insights(self):
-        self._test_no_exception(['--activationkey', 'key', '--org', 'org', '--no-insights'])
-
     def test_no_commands(self):
         self._test_no_exception([])
 

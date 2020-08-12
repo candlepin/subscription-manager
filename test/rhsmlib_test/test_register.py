@@ -217,7 +217,7 @@ class RegisterServiceTest(InjectionMockingTest):
     @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
     @mock.patch("subprocess.call")
     @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
-    def test_register_with_no_insights(self, mock_persist_consumer, mock_subprocess_call):
+    def test_register_with_no_insights(self, mock_persist_consumer, mock_subprocess_call, mock_write_cache):
         self.mock_identity.is_valid.return_value = False
         self.mock_installed_products.format_for_server.return_value = []
         self.mock_installed_products.tags = []
