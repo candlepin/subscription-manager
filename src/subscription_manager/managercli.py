@@ -28,6 +28,7 @@ import re
 import readline
 import socket
 import six.moves
+import subprocess
 import sys
 from time import localtime, strftime, strptime
 
@@ -64,8 +65,7 @@ from subscription_manager.overrides import Overrides, Override
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, \
         none_wrap_columnize_callback, echo_columnize_callback, highlight_by_filter_string_columnize_cb
-from subscription_manager.utils import generate_correlation_id, is_insights_installed, \
-    is_insights_register_enabled, is_insights_unregister_enabled, is_true_value
+from subscription_manager.utils import generate_correlation_id
 from subscription_manager.syspurposelib import save_sla_to_syspurpose_metadata, \
         get_syspurpose_valid_fields, post_process_received_data
 from subscription_manager.packageprofilelib import PackageProfileActionInvoker
@@ -1583,8 +1583,7 @@ class RegisterCommand(UserPassCommand):
             else:
                 owner_key = self._determine_owner_key(admin_cp)
                 environment_id = self._get_environment_id(admin_cp, owner_key, self.options.environment)
-                if is_true_value(conf["rhsm"]["no_insights"]):
-                    self.options.no_insights = True
+
                 consumer = service.register(
                     owner_key,
                     activation_keys=self.options.activation_keys,
@@ -1677,16 +1676,15 @@ class RegisterCommand(UserPassCommand):
 
         if self.options.no_insights:
             print(_('Red Hat Insights registration disabled.'))
-            if is_insights_installed():
+            if self._is_insights_installed():
                 print(_('To opt into Red Hat Insights, run "insights-client --register".'))
             else:
                 print(_('To opt into Red Hat Insights, install the insights-client package '
                         'and run "insights-client --register".'))
         else:
-            if not is_insights_installed():
+            print(_('Red Hat Insights registration enabled.'))
+            if not self._is_insights_installed():
                 print(_('To use Red Hat Insights, install the insights-client package.'))
-            elif is_insights_register_enabled():
-                print(_('Red Hat Insights registration enabled.'))
             print(_('To opt out of Red Hat Insights, run "insights-client --unregister" '
                     'or reregister with "--no-insights".'))
 
@@ -1774,6 +1772,11 @@ class RegisterCommand(UserPassCommand):
             readline.clear_history()
         return owner_key
 
+    def _is_insights_installed(self):
+        with open('/dev/null', 'w') as devnull:
+            returncode = subprocess.call('which insights-client', stdout=devnull, stderr=devnull, shell=True)
+        return returncode == 0
+
 
 class UnRegisterCommand(CliCommand):
 
@@ -1816,8 +1819,6 @@ class UnRegisterCommand(CliCommand):
         restart_virt_who()
 
         print(_("System has been unregistered."))
-        if is_insights_installed() and is_insights_unregister_enabled():
-            print(_("Red Hat Insights will also unregister."))
 
 
 class AddonsCommand(SyspurposeCommand, OrgCommand):
