@@ -313,12 +313,6 @@ client.registerSystem = (subscriptionDetails, update_progress) => {
                     'com.redhat.RHSM1.Register',
                     '/com/redhat/RHSM1/Register'
                 );
-                const options = {
-                    'no_insights': {
-                        't': 'b',
-                        'v': !subscriptionDetails.insights,
-                    }
-                };
                 if (subscriptionDetails.activation_keys) {
                     if (update_progress)
                         update_progress(_("Registering using activation key ..."), null);
@@ -328,7 +322,7 @@ client.registerSystem = (subscriptionDetails, update_progress) => {
                         [
                             subscriptionDetails.org,
                             subscriptionDetails.activation_keys.split(','),
-                            options,
+                            {},
                             connection_options,
                             userLang
                         ]
@@ -346,7 +340,7 @@ client.registerSystem = (subscriptionDetails, update_progress) => {
                             subscriptionDetails.org,
                             subscriptionDetails.user,
                             subscriptionDetails.password,
-                            options,
+                            {},
                             connection_options,
                             userLang
                         ]
