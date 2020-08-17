@@ -202,10 +202,6 @@ run_rct () {
     run_tool "${RCT}" "$@"
 }
 
-run_rhsmd () {
-    run_tool "${RHSMD}" "$@"
-}
-
 run_rhsm_debug () {
     run_tool "${RHSM_DEBUG}" "$@"
 }
@@ -289,8 +285,6 @@ run_rhsmcertd "0" -n
 
 run_rhsmcertd_worker "0"
 run_rhsmcertd_worker "0" --autoheal
-
-run_rhsmd "0" -s
 
 # too slow
 # run_rhsm_debug "0" system

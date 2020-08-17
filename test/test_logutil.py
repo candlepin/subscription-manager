@@ -84,8 +84,7 @@ class TestLogutil(fixture.SubManFixture):
         logging_conf = [
             ('subscription_manager.managercli', "ERROR"),
             ('rhsm', "WARNING"),
-            ('rhsm-app', "CRITICAL"),
-            ('rhsm-app.rhsmd', "DEBUG")
+            ('rhsm-app', "CRITICAL")
         ]
 
         for logger_name, log_level in logging_conf:

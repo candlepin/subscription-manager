@@ -326,7 +326,7 @@ class MainWindow(widgets.SubmanBaseWidget):
 
         # managergui needs cert_sort.cert_monitor.run_check() to run
         # on a timer to detect cert changes from outside the gui
-        # (via rhsmdd for example, or manually provisioned).
+        # (via manual provisioning).
         cert_monitor_thread = threading.Thread(target=self._cert_check_timer, name="CertMonitorThread")
         cert_monitor_thread.daemon = True
         cert_monitor_thread.start()
