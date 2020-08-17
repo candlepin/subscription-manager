@@ -751,13 +751,16 @@ python2 ./setup.py build --quiet --gtk-version=%{?gtk3:3}%{?!gtk3:2} --rpm-versi
 
 %if (%{use_dnf} && (0%{?fedora} >= 29 || 0%{?rhel} >= 8))
 pushd src/dnf-plugins/product-id
-%cmake -DCMAKE_BUILD_TYPE="Release" .
+%cmake -DCMAKE_BUILD_TYPE="Release"
+%if (0%{?rhel})
 %make_build
+%else
+%cmake_build
+%endif
 popd
 %endif
 
 %install
-rm -rf %{buildroot}
 make -f Makefile install VERSION=%{version}-%{release} \
     PYTHON=%{__python} PREFIX=%{_prefix} \
     DESTDIR=%{buildroot} PYTHON_SITELIB=%{python_sitearch} \
@@ -778,7 +781,11 @@ make -f Makefile install VERSION=%{version}-%{release} \
 %if (%{use_dnf} && (0%{?fedora} >= 29 || 0%{?rhel} >= 8))
 pushd src/dnf-plugins/product-id
 mkdir -p %{buildroot}%{_libdir}/libdnf/plugins
+%if (0%{?rhel})
 %make_install
+%else
+%cmake_install
+%endif
 popd
 %endif
 
@@ -1512,6 +1519,13 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
   (jhnidek@redhat.com)
 - Ignore missing repo if manage_repo is false (suttner@atix.de)
 
+* Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.27.1-5
+- Second attempt - Rebuilt for
+  https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
+* Wed Jul 29 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.27.1-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
 * Thu Jun 11 2020 Christopher Snyder <csnyder@redhat.com> 1.28.0-1
 - 1804454: collect uuid on aarch64 system (wpoteat@redhat.com)
 - WIP: Try to fix build of rpms on suse. (jhnidek@redhat.com)
@@ -1530,6 +1544,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 - 1837244: Fix wrong version provided by subscription-manager version; ENT-2388
   (jhnidek@redhat.com)
 - 1838012: prevent redundant remote syspurpose sync (pmoravec@redhat.com)
+
+* Tue May 26 2020 Miro Hrončok <mhroncok@redhat.com> - 1.27.1-3
+- Rebuilt for Python 3.9
 
 * Wed May 20 2020 Christopher Snyder <csnyder@redhat.com> 1.27.4-1
 - Fix unit test of getting release information (jhnidek@redhat.com)
@@ -1557,6 +1574,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 - Fix issue with getPoolsList (jhnidek@redhat.com)
 - 1818932: 1820267: Using 'Simple Content Access' for access mode
   (wpoteat@redhat.com)
+
+* Tue Apr 21 2020 Björn Esser <besser82@fedoraproject.org> - 1.27.1-2
+- Rebuild (json-c)
 
 * Wed Apr 15 2020 William Poteat <wpoteat@redhat.com> 1.27.2-1
 - Update releasers for 8.3 (wpoteat@redhat.com)
