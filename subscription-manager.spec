@@ -243,7 +243,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.0
+Version: 1.28.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1452,6 +1452,66 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Aug 17 2020 Christopher Snyder <csnyder@redhat.com> 1.28.1-1
+- 1832990: Only register insights when server supports "insights_auto_register"
+  (csnyder@redhat.com)
+- 1855893: Generate redhat.repo properly; ENT-2636 (jhnidek@redhat.com)
+- 1862415: Print proper message, when consumer is deleted; ENT-2709
+  (jhnidek@redhat.com)
+- 1841600: D-Bus - update ent. cert., when act. key is used; ENT-2453
+  (jhnidek@redhat.com)
+- 1862419: Make repo-override working again; ENT-2710 (jhnidek@redhat.com)
+- 1858231: Disable repository metadata gpg validation (suttner@atix.de)
+- 1862425: Fix setting service-level; ENT-1862425 (jhnidek@redhat.com)
+- 1832990: Add rhsm.no_insights config option, improve messaging
+  (csnyder@redhat.com)
+- 1858296: Do not print unchanged profile; ENT-2639 (jhnidek@redhat.com)
+- 1860434: Create rhsm.conf, when config command is used; ENT-2698
+  (jhnidek@redhat.com)
+- 1861255: Catch all exception and print traceback to rhsm.log
+  (jhnidek@redhat.com)
+- 1780028: Remove man page entries for rhsmd (wpoteat@redhat.com)
+- 1859532: Role --list handle wrong proxy conf (unregistered case)
+  (jhnidek@redhat.com)
+- cockpit: Stop importing cockpit's base1/patternfly.css (kkoukiou@redhat.com)
+- cockpit: Bump up webpack to 4 and adjust the config as needed
+  (kkoukiou@redhat.com)
+- 1838423: Fix getting list of releases from CDN; ENT-2601 (jhnidek@redhat.com)
+- 1859532: No traceback, when wrong proxy conf is used; ENT-2654
+  (jhnidek@redhat.com)
+- set permissions on rhsm.conf (jbastian@redhat.com)
+- 1857100: Do not print empty string as valid value; ENT-2634
+  (jhnidek@redhat.com)
+- Fix zypper ascii issue (suttner@atix.de)
+- 1847636: error when registering in intial-setup-graphical
+  (wpoteat@redhat.com)
+- 1838967: Sync syspurpose cache on registration (wpoteat@redhat.com)
+- cockpit: Fix AppStream launchable metainfo (martin@piware.de)
+- Use list of valid syspurpose values provided by candlepin server; ENT-2371
+  (jhnidek@redhat.com)
+- Added unit test for this case. (jhnidek@redhat.com)
+- 1845399: List available subscription ondate options failed
+  (wpoteat@redhat.com)
+- Mark node_modules as part of rpm package. (jhnidek@redhat.com)
+- cockpit: change button order to conform with patternfly guidelines
+  (anilsson@redhat.com)
+- 1657269: Do not use /var/run, but use /run; ENT-1086 (jhnidek@redhat.com)
+- WIP: remove useless closing bracket. (jhnidek@redhat.com)
+- 1840364: Kill rhsmd during post-install on rhel8; ENT-2449
+  (jhnidek@redhat.com)
+- 1848636, 1849074: Update insights machine-id path (csnyder@redhat.com)
+- Address review feedback (khowell@redhat.com)
+- Add insights-client messaging on registration (khowell@redhat.com)
+- 1741364: Make existing ent. cert/keys readable by others; ENT-1593
+  (jhnidek@redhat.com)
+- 1838423: Correct method call signature for release (wpoteat@redhat.com)
+- 1840859: Custom repo parameters are not deletable (wpoteat@redhat.com)
+- Add --no-insights option; ENT-2471 (khowell@redhat.com)
+- 1700441: Create directories, when missing; ENT-2461 (jhnidek@redhat.com)
+- 1770864: Do not create sub-man-migration rpm for Fedora; ENT-1961
+  (jhnidek@redhat.com)
+- Ignore missing repo if manage_repo is false (suttner@atix.de)
+
 * Thu Jun 11 2020 Christopher Snyder <csnyder@redhat.com> 1.28.0-1
 - 1804454: collect uuid on aarch64 system (wpoteat@redhat.com)
 - WIP: Try to fix build of rpms on suse. (jhnidek@redhat.com)
