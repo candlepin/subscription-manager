@@ -490,6 +490,9 @@ def set_up_mock_sp_store(mock_sp_store):
     def get_local_contents():
         return contents
 
+    def get_cached_contents():
+        return contents
+
     def update_local(data):
         global contents
         contents = data
@@ -502,5 +505,6 @@ def set_up_mock_sp_store(mock_sp_store):
     mock_sp_store.return_value.local_contents = mock_sp_store_contents
     mock_sp_store.return_value.get_local_contents = Mock(side_effect=get_local_contents)
     mock_sp_store.return_value.update_local = Mock(side_effect=update_local)
+    mock_sp_store.return_value.get_cached_contents = Mock(side_effect=get_cached_contents)
 
     return mock_sp_store, mock_sp_store_contents
