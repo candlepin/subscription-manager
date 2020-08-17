@@ -1,4 +1,4 @@
-# Because our project includes some C artifacts like rhsmd and rhsm_icon, the standard
+# Because our project includes some C artifacts like rhsm_icon, the standard
 # Python setup.py doesn't cover all our bases.  Additionally, setuptools does not like
 # to install files outside of /usr (see http://stackoverflow.com/a/13476594/6124862).
 #
@@ -173,11 +173,6 @@ dbus-common-install:
 	install -d $(DESTDIR)/$(LIBEXEC_DIR)
 	install -d $(DESTDIR)/$(COMPLETION_DIR)
 
-ifeq ($(WITH_SUBMAN_GUI),true)
-    dbus-rhsmd-service-install: dbus-common-install
-	    install -m 644 etc-conf/dbus/system.d/com.redhat.SubscriptionManager.conf $(DESTDIR)/etc/dbus-1/system.d
-endif
-
 dbus-facts-service-install: dbus-common-install
 	install -m 644 etc-conf/dbus/system.d/com.redhat.RHSM1.Facts.conf $(DESTDIR)/etc/dbus-1/system.d
 
@@ -185,11 +180,7 @@ dbus-main-service-install: dbus-common-install
 	install -m 644 etc-conf/dbus/system.d/com.redhat.RHSM1.conf $(DESTDIR)/etc/dbus-1/system.d
 
 .PHONY: dbus-install
-ifeq ($(WITH_SUBMAN_GUI),true)
-    dbus-install: dbus-facts-service-install dbus-rhsmd-service-install dbus-main-service-install
-else
-    dbus-install: dbus-facts-service-install dbus-main-service-install
-endif
+dbus-install: dbus-facts-service-install dbus-main-service-install
 
 .PHONY: install-conf
 install-conf:
@@ -344,10 +335,8 @@ install-via-setup: install-subpackages-via-setup
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-facts-service $(DESTDIR)/$(LIBEXEC_DIR)/
 	if [[ "$(WITH_SUBMAN_GUI)" == "true" ]]; then \
 		mv $(DESTDIR)/$(PREFIX)/bin/subscription-manager-gui $(DESTDIR)/$(PREFIX)/sbin/; \
-		mv $(DESTDIR)/$(PREFIX)/bin/rhsmd $(DESTDIR)/$(LIBEXEC_DIR)/; \
 	else \
 		rm $(DESTDIR)/$(PREFIX)/bin/subscription-manager-gui; \
-		rm $(DESTDIR)/$(PREFIX)/bin/rhsmd; \
 	fi; \
 	if [[ "$(INCLUDE_SYSPURPOSE)" = "1" ]]; then \
 		mv $(DESTDIR)/$(PREFIX)/bin/syspurpose $(DESTDIR)/$(PREFIX)/sbin/; \
@@ -407,7 +396,6 @@ install-files: dbus-install install-conf install-plugins install-post-boot insta
 
 	if [[ "$(WITH_SUBMAN_GUI)" == "true" ]]; then \
 		install -m 755 bin/rhsm-icon $(DESTDIR)/$(PREFIX)/bin/rhsm-icon; \
-		install -m 700 etc-conf/rhsmd.cron $(DESTDIR)/etc/cron.daily/rhsmd; \
 	fi; \
 
 	install -m 755 bin/rhsmcertd $(DESTDIR)/$(PREFIX)/bin/rhsmcertd

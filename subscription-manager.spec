@@ -787,13 +787,6 @@ desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-c
 
 %endif
 
-# libexec directory does not exist on sles based distros
-%if 0%{?suse_version}
-%if %use_subman_gui
-    sed -i 's/libexec/lib/g' %{buildroot}/%{_sysconfdir}/cron.daily/rhsmd
-%endif
-%endif
-
 %find_lang rhsm
 %if 0%{?include_syspurpose}
 %find_lang syspurpose
@@ -898,10 +891,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
 %attr(755,root,root) %{_libexecdir}/rhsmcertd-worker
 
-%if %{use_subman_gui}
-    %attr(755,root,root) %{_libexecdir}/rhsmd
-%endif
-
 
 # our config dirs and files
 %attr(755,root,root) %dir %{_sysconfdir}/pki/consumer
@@ -946,9 +935,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
 # misc system config
 %config(noreplace) %attr(644,root,root) %{_sysconfdir}/logrotate.d/subscription-manager
-%if %{use_subman_gui}
-    %attr(700,root,root) %{_sysconfdir}/cron.daily/rhsmd
-%endif
 
 %attr(755,root,root) %dir %{_var}/log/rhsm
 %attr(755,root,root) %dir %{_var}/spool/rhsm/debug

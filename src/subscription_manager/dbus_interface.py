@@ -50,8 +50,6 @@ class DbusIface(object):
         except dbus.DBusException:
             # we can't connect to dbus. it's not running, likely from a minimal
             # install. we can't do anything here, so just ignore it.
-            # When subscription-manager-gui is not installed, then rhsmd is not installed too.
-            # Then com.redhat.SubscriptionManager is not available.
             log.debug("Unable to connect to D-Bus service: %s" % self.service_name)
 
     def update(self):
@@ -64,7 +62,7 @@ class DbusIface(object):
                     ignore_reply=self.has_main_loop)
         except dbus.DBusException as e:
             # Should be unreachable in the gui
-            log.debug("Failed to update rhsmd")
+            log.debug("Failed to update")
             log.exception(e)
 
     # RHEL5 doesn't support 'follow_name_owner_changes'
