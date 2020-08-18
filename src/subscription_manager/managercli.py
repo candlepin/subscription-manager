@@ -37,7 +37,7 @@ from rhsm.https import ssl
 
 import rhsm.config
 import rhsm.connection as connection
-from rhsm.connection import ProxyException, UnauthorizedException, ConnectionException
+from rhsm.connection import ProxyException, UnauthorizedException, ConnectionException, RemoteServerException
 from rhsm.utils import remove_scheme, ServerUrlParseError
 
 from subscription_manager import identity
@@ -1672,9 +1672,14 @@ class RegisterCommand(UserPassCommand):
             # FIXME: aside from the overhead, should this be cert_action_client.update?
             self.entcertlib.update()
 
-        profile_mgr = inj.require(inj.PROFILE_MANAGER)
-        # 767265: always force an upload of the packages when registering
-        profile_mgr.update_check(self.cp, consumer['uuid'], True)
+        try:
+            profile_mgr = inj.require(inj.PROFILE_MANAGER)
+            # 767265: always force an upload of the packages when registering
+            profile_mgr.update_check(self.cp, consumer['uuid'], True)
+        except RemoteServerException as err:
+            # When it is not possible to upload profile ATM, then print only error about this
+            # to rhsm.log. The rhsmcertd will try to upload it next time.
+            log.error("Unable to upload profile: %s" % str(err))
 
         subscribed = 0
         if self.options.activation_keys or self.autoattach:

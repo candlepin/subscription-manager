@@ -61,11 +61,29 @@ class CliRegistrationTests(SubManFixture):
         self.mock_sp_store, self.mock_sp_store_contents = set_up_mock_sp_store(self.mock_sp_store)
         self.addCleanup(syspurpose_patch.stop)
 
+        _syspurpose_patch = patch('subscription_manager.managerlib.SyncedStore')
+        self._mock_sp_store = _syspurpose_patch.start()
+        self._mock_sp_store, self.mock_sp_store_contents = set_up_mock_sp_store(self._mock_sp_store)
+        self.addCleanup(_syspurpose_patch.stop)
+
+        clean_all_data_patch = patch('subscription_manager.managerlib.clean_all_data')
+        self.mock_clean_all_data = clean_all_data_patch.start()
+        self.addCleanup(clean_all_data_patch.stop)
+
     def _inject_ipm(self):
         mock_ipm = NonCallableMock(spec=cache.InstalledProductsManager)
         mock_ipm.tags = None
         inj.provide(inj.INSTALLED_PRODUCTS_MANAGER, mock_ipm)
         return mock_ipm
+
+    def test_registration(self):
+        """
+        Test normal registration (test of proper patching)
+        """
+        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+            self.stub_cp_provider.basic_auth_cp = mock_uep
+            cmd = RegisterCommand()
+            cmd.main(['register', '--force', '--username', 'admin', '--password', 'admin', '--org', 'admin'])
 
     @patch('subscription_manager.managercli.EntCertActionInvoker')
     def test_activation_keys_updates_certs_and_repos(self, mock_entcertlib):
@@ -188,6 +206,29 @@ class CliRegistrationTests(SubManFixture):
             with Capture(silent=True):
                 with self.assertRaises(SystemExit):
                     rc._get_environment_id(mock_uep, 'owner', None)
+
+    def test_registration_with_failed_profile_upload(self):
+
+        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+            profile_mgr = inj.require(inj.PROFILE_MANAGER)
+
+            def raise_remote_server_exception(*args, **kwargs):
+                """Raise remote server exception (uploading of profile failed)"""
+                from rhsm.connection import RemoteServerException
+                raise RemoteServerException(
+                    502,
+                    request_type="PUT",
+                    handler="/subscription/consumers/xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/profiles"
+                )
+
+            profile_mgr.update_check = Mock(side_effect=raise_remote_server_exception)
+            self.stub_cp_provider.basic_auth_cp = mock_uep
+            cmd = RegisterCommand()
+            with Capture() as cap:
+                cmd.main(['register', '--force', '--username', 'admin', '--password', 'admin', '--org', 'admin'])
+                output = cap.out
+                self.assertTrue("The system has been registered with ID" in output)
+                self.assertTrue("The registered system name is:" in output)
 
     def test_deprecate_consumer_type(self):
         with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
