@@ -54,7 +54,7 @@ class HealingUpdateAction(object):
 
     Attemps to avoid gaps in entitlement coverage.
 
-    Used by rhsmd and subscription-manager if the "autoheal" options
+    Used by subscription-manager if the "autoheal" options
     are enabled.
 
     Returns an EntCertUpdateReport with information about any ent

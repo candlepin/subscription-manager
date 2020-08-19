@@ -431,7 +431,6 @@ setup(
             'rhsm-facts-service = subscription_manager.scripts.rhsm_facts_service:main',
             'rhsm-service = subscription_manager.scripts.rhsm_service:main',
             'rhsmcertd-worker = subscription_manager.scripts.rhsmcertd_worker:main',
-            'rhsmd = subscription_manager.scripts.rhsm_d:main',
         ],
         'gui_scripts': [
             'subscription-manager-gui = subscription_manager.scripts.subscription_manager_gui:main',

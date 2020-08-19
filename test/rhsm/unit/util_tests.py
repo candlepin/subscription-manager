@@ -418,10 +418,6 @@ class TestCmdName(unittest.TestCase):
         argv = ['/usr/share/virt-who/virtwho.py']
         self.assertEqual("virtwho.py", cmd_name(argv))
 
-    def test_rhsmd(self):
-        argv = ['/usr/libexec/rhsmd', '-i', '-f', 'valid']
-        self.assertEqual("rhsmd", cmd_name(argv))
-
 
 class TestWhich(unittest.TestCase):
     def test_which_python(self):
