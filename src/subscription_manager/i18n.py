@@ -49,11 +49,21 @@ def configure_i18n():
     import locale
     current_locale = None
     try:
-        current_locale = locale.setlocale(locale.LC_ALL, '')
+        current_locale = locale.setlocale(category=locale.LC_ALL, locale='')
     except locale.Error:
-        print("You are attempting to use a locale that is not installed.")
-        os.environ['LC_ALL'] = 'C'
-        locale.setlocale(locale.LC_ALL, 'C')
+        # Following message could be little bit confusing. Why? When environment variable
+        # LANG is set to e.g. es_ES.UTF-8, then we can show localized message for this language,
+        # but this language could not be fully supported by the system. It means that en_ES is not
+        # listed in the list of 'locale -a'
+        _locale = None
+        if 'LANG' in os.environ:
+            _locale = os.environ['LANG']
+        elif 'LC_ALL' in os.environ:
+            _locale = os.environ['LC_ALL']
+        if _locale is not None and Locale.is_locale_supported(_locale):
+            print('You are attempting to use a locale: "%s" that is not fully supported by this system.' % _locale)
+        os.environ['LC_ALL'] = 'C.UTF-8'
+        locale.setlocale(locale.LC_ALL, 'C.UTF-8')
 
     # We have to set locale to C for blacklisted locales, because result of str.lower() and str.upper()
     # methods is influenced by locale. E.g. character 'I' is not converted to 'i' by lower() for Turkish
@@ -63,9 +73,9 @@ def configure_i18n():
     if six.PY2 and current_locale is not None:
         base_current_locale = current_locale.split('.')[0]
         if base_current_locale in BLACKLISTED_LOCALES:
-            print("You are attempting to use blacklisted locale: %s" % current_locale)
-            os.environ['LC_ALL'] = 'C'
-            locale.setlocale(locale.LC_ALL, 'C')
+            print("You are attempting to use forbidden locale: %s. Resetting to default locale." % current_locale)
+            os.environ['LC_ALL'] = 'C.UTF-8'
+            locale.setlocale(locale.LC_ALL, 'C.UTF-8')
 
     configure_gettext()
     # RHBZ 1642271  Don't set a None lang
@@ -121,6 +131,23 @@ class Locale(object):
     """
 
     translations = {}
+
+    @classmethod
+    def is_locale_supported(cls, language):
+        """
+        Is translation for given locale supported?
+        :param language: String with locale code e.g. de_DE, de_DE.UTF-8
+        :return: True if the locale is supported by rhsm. Otherwise return False
+        """
+        try:
+            lang = gettext.translation(APP, DIR, languages=[language])
+        except IOError:
+            lang, language = cls._find_lang_alternative(language)
+
+        if lang is not None:
+            return True
+        else:
+            return False
 
     @classmethod
     def _find_lang_alternative(cls, language):
