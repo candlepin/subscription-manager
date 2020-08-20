@@ -113,6 +113,117 @@ from subscription_manager import base_plugin
 #   multiple invocations of get_plugin_manager returnt he same PluginManager object
 #   can we test that get_plugin_manager is not imported into a local namespace?
 
+from subscription_manager.managercli import PluginsCommand
+from .stubs import StubUEP
+from .fixture import SubManFixture, Capture
+
+
+class CliPluginsTests(SubManFixture):
+    class ConduitPluginManager(plugins.BasePluginManager):
+        _conduit_list = []
+
+        def _get_conduits(self):
+            return self._conduit_list
+
+    def setUp(self):
+        super(CliPluginsTests, self).setUp()
+        plugin_class_names = [str(x) for x in range(0, 10)]
+        self.plugin_classes = []
+
+        def test_hook(*arg, **kwargs):
+            pass
+
+        conduit_classes = []
+        plugin_classes = []
+        for plugin_class_name in plugin_class_names:
+            plugin_class = type(
+                'PluginClass%s' % plugin_class_name,
+                (base_plugin.SubManPlugin,),
+                {'test_%s_hook' % plugin_class_name: test_hook}
+            )
+            conduit_class = type(
+                'Conduit%s' % plugin_class_name,
+                (plugins.BaseConduit,),
+                {'slots': ['test_%s' % plugin_class_name]}
+            )
+            plugin_classes.append(plugin_class)
+            conduit_classes.append(conduit_class)
+
+        # Lets add another class to the first hook, because
+        # wee need one hook with more plugins to test BZ: 1615429
+        plugin_classes[1].test_0_hook = test_hook
+
+        for plugin_class in plugin_classes:
+            self.plugin_classes.append(plugin_class)
+
+        self.ConduitPluginManager._conduit_list = conduit_classes
+        self.manager = self.ConduitPluginManager()
+
+        plugin_to_config_map = {}
+        for plugin_class in self.plugin_classes:
+            plugin_config = PluginConfigForTest(
+                plugin_class.get_plugin_key(),
+                enabled='1'
+            )
+            plugin_to_config_map[plugin_class.get_plugin_key()] = plugin_config
+
+        for plugin_class in self.plugin_classes:
+            self.manager.add_plugin_class(
+                plugin_class,
+                plugin_to_config_map=plugin_to_config_map
+            )
+
+    def test_list_plugins(self):
+        self.stub_cp_provider.basic_auth_cp = mock.Mock(spec=StubUEP, new_callable=StubUEP)
+
+        cmd = PluginsCommand()
+        cmd.plugin_manager = self.manager
+
+        with Capture() as cap:
+            cmd.main(['plugins', '--list'])
+            output = cap.out
+            self.assertTrue("PluginClass0" in output)
+            self.assertTrue("PluginClass9" in output)
+
+    def test_list_hooks(self):
+        self.stub_cp_provider.basic_auth_cp = mock.Mock(spec=StubUEP, new_callable=StubUEP)
+
+        cmd = PluginsCommand()
+        cmd.plugin_manager = self.manager
+
+        with Capture() as cap:
+            cmd.main(['plugins', '--listhooks'])
+            output = cap.out
+            self.assertTrue("test_0" in output)
+            self.assertTrue("test.test_plugins.PluginClass0.test_hook" in output)
+            self.assertTrue("test_9" in output)
+            self.assertTrue("test.test_plugins.PluginClass9.test_hook" in output)
+
+    def test_list_slots(self):
+        self.stub_cp_provider.basic_auth_cp = mock.Mock(spec=StubUEP, new_callable=StubUEP)
+
+        cmd = PluginsCommand()
+        cmd.plugin_manager = self.manager
+
+        with Capture() as cap:
+            cmd.main(['plugins', '--listslots'])
+            output = cap.out
+            self.assertTrue("test_0" in output)
+            self.assertTrue("test_9" in output)
+
+    def test_list_verbose(self):
+        self.stub_cp_provider.basic_auth_cp = mock.Mock(spec=StubUEP, new_callable=StubUEP)
+
+        cmd = PluginsCommand()
+        cmd.plugin_manager = self.manager
+
+        with Capture() as cap:
+            cmd.main(['plugins', '--verbose'])
+            output = cap.out
+            self.assertTrue("plugin_key: test.test_plugins.PluginClass0" in output)
+            self.assertTrue("test.test_plugins.PluginClass0: enabled" in output)
+            self.assertTrue("enabled = 1" in output)
+
 
 # this test class heavily uses mock to simulate the "default" case
 # through PluginManager. The main issue being that PluginConfigs
@@ -638,7 +749,6 @@ class TestPluginManagerReporting(unittest.TestCase):
             return self._conduit_list
 
     def setUp(self):
-        #plugin_class_names = ['Plugin1', 'Plugin2', 'Plugin3']
         plugin_class_names = [str(x) for x in range(0, 10)]
         self.plugin_classes = []
 
