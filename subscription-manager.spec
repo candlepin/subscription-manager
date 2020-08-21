@@ -142,7 +142,7 @@
 %endif
 
 Name: subscription-manager
-Version: 1.25.21
+Version: 1.25.22
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1182,6 +1182,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Aug 21 2020 Christopher Snyder <csnyder@redhat.com> 1.25.22-1
+- Do not produce syspurpose artifacts without include_syspurpose=1
+  (csnyder@redhat.com)
+
 * Wed Aug 05 2020 Christopher Snyder <csnyder@redhat.com> 1.25.21-1
 - 1797386: Allow service plugin for zypper (SLES) to set autorefresh
   (darinlively@gmail.com)
