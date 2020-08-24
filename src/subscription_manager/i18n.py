@@ -185,6 +185,7 @@ class Locale(object):
         :param language: String representing locale
                 (e.g. de, de_DE, de_DE.utf-8, de_DE.UTF-8)
         """
+        global LOCALE
         lang = None
 
         if language != '':
@@ -194,6 +195,7 @@ class Locale(object):
             else:
                 # Try to find given language
                 try:
+                    log.debug('Trying to use locale: %s' % language)
                     lang = gettext.translation(APP, DIR, languages=[language])
                 except IOError as err:
                     log.info('Could not import locale for %s: %s' % (language, err))

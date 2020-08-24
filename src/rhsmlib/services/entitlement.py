@@ -57,28 +57,48 @@ class EntitlementService(object):
             raise ValueError(_("Past dates are not allowed"))
         return on_date
 
-    def get_status(self, on_date=None):
+    def get_status(self, on_date=None, force=False):
         sorter = inj.require(inj.CERT_SORTER, on_date)
         # When singleton CertSorter was created with different argument on_date, then
         # it is necessary to update corresponding attribute in object (dependency
         # injection doesn't do it automatically).
         if sorter.on_date != on_date:
             sorter.on_date = on_date
+
         # Force reload status from the server to be sure that we get valid status for new date.
         # It is necessary to do it for rhsm.service, because it can run for very long time without
         # restart.
+        if force is True:
+            log.debug('Deleting cache entitlement status cache')
+            status_cache = inj.require(inj.ENTITLEMENT_STATUS_CACHE)
+            status_cache.server_status = None
+            status_cache.delete_cache()
+
         sorter.load()
+
         if self.identity.is_valid():
             overall_status = sorter.get_system_status()
+            overall_status_id = sorter.get_system_status_id()
             reasons = sorter.reasons.get_name_message_map()
+            reason_ids = sorter.reasons.get_reason_ids_map()
             valid = sorter.is_valid()
-            status = {'status': overall_status, 'reasons': reasons, 'valid': valid}
-            log.debug('entitlement status: %s' % str(status))
-            return status
+            status = {
+                'status': overall_status,
+                'status_id': overall_status_id,
+                'reasons': reasons,
+                'reason_ids': reason_ids,
+                'valid': valid
+            }
         else:
-            status = {'status': 'Unknown', 'reasons': {}, 'valid': False}
-            log.debug('entitlement status: %s' % str(status))
-            return status
+            status = {
+                'status': _('Unknown'),
+                'status_id': 'unknown',
+                'reasons': {},
+                'reason_ids': {},
+                'valid': False
+            }
+        log.debug('entitlement status: %s' % str(status))
+        return status
 
     def get_pools(self, pool_subsets=None, matches=None, pool_only=None, match_installed=None,
                   no_overlap=None, service_level=None, show_all=None, on_date=None, future=None,

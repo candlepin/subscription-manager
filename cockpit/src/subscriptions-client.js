@@ -45,6 +45,7 @@ cockpit.event_target(client);
 
 client.subscriptionStatus = {
     status: undefined,
+    status_msg: _('Unknown'),
     products: [],
     error: undefined,
 };
@@ -415,7 +416,7 @@ client.registerSystem = (subscriptionDetails, update_progress) => {
                             if (connection_options.proxy_password.v) {
                                 proxy_options.proxy_password = connection_options.proxy_password;
                             }
-                            return attachService.AutoAttach('', proxy_options, userLang)
+                            attachService.AutoAttach('', proxy_options, userLang)
                                 .catch(error => {
                                     console.error('error during auto-attach (using proxy)', error);
                                     client.subscriptionStatus.error = {
@@ -425,7 +426,7 @@ client.registerSystem = (subscriptionDetails, update_progress) => {
                                     dfd.resolve();
                                 });
                         } else {
-                            return attachService.AutoAttach('', {}, userLang)
+                            attachService.AutoAttach('', {}, userLang)
                                 .catch(error => {
                                     console.error('error during auto-attach', error);
                                     client.subscriptionStatus.error = {
@@ -462,7 +463,8 @@ client.registerSystem = (subscriptionDetails, update_progress) => {
 };
 
 client.unregisterSystem = () => {
-    client.subscriptionStatus.status = _("Unregistering");
+    client.subscriptionStatus.status = "unregistering";
+    client.subscriptionStatus.status_msg = _("Unregistering");
     needRender();
     unregisterService.wait(() => {
         unregisterService.Unregister({}, userLang) // FIXME: use proxy settings
@@ -501,6 +503,7 @@ client.autoAttach = () => {
 function statusUpdateFailed(reason) {
     console.warn("Subscription status update failed:", reason);
     client.subscriptionStatus.status = (reason && reason.problem) || "not-found";
+    client.subscriptionStatus.status_msg = (reason && reason.problem) || _("not-found");
     needRender();
 }
 
@@ -522,20 +525,33 @@ function requestSyspurposeUpdate() {
 /* get subscription summary */
 client.getSubscriptionStatus = function() {
     let dfd = cockpit.defer();
-
     safeDBusCall(entitlementService, () => {
         entitlementService.GetStatus('', userLang)
         .then(result => {
-            const status = JSON.parse(result);
-            client.subscriptionStatus.status = status.status;
-            dfd.resolve();
-            if (client.closeRegisterDialog) {
-                client.closeRegisterDialog = false;
+            let parsed = false;
+            let system_status;
+            try {
+                system_status = JSON.parse(result);
+                parsed = true;
+            } catch (err) {
+                client.subscriptionStatus.status = "unknown";
+                client.subscriptionStatus.status_msg = _("Corrupted JSON with status");
+            }
+            if (parsed === true) {
+                /* status contains ID of status */
+                client.subscriptionStatus.status = system_status.status_id;
+                /* status contains string that can be localized */
+                client.subscriptionStatus.status_msg = system_status.status;
+                if (client.closeRegisterDialog) {
+                    client.closeRegisterDialog = false;
+                }
+                dfd.resolve();
             }
         })
         .catch(ex => {
             console.debug(ex);
-            client.subscriptionStatus.status = _("Unknown");
+            client.subscriptionStatus.status = "unknown";
+            client.subscriptionStatus.status_msg = _("Unknown");
         })
         .then(() => {
             getSubscriptionDetails();

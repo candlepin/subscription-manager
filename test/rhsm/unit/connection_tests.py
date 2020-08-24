@@ -96,14 +96,23 @@ class ConnectionTests(unittest.TestCase):
 
     @mock.patch('locale.getlocale')
     def test_has_proper_language_header_utf8(self, mock_locale):
+        # First test it with Japanese
         mock_locale.return_value = ('ja_JP', 'UTF-8')
-        self.cp = UEPConnection()
+        self.cp.conn.headers = {}
+        self.cp.conn._set_accept_language_in_header()
         self.assertEqual(self.cp.conn.headers['Accept-Language'], 'ja-jp')
+
+        # Test that another rest api call would be called with different locale
+        mock_locale.return_value = ('es_ES', 'UTF-8')
+        self.cp.conn.headers = {}
+        self.cp.conn._set_accept_language_in_header()
+        self.assertEqual(self.cp.conn.headers['Accept-Language'], 'es-es')
 
     @mock.patch('locale.getlocale')
     def test_has_proper_language_header_not_utf8(self, mock_locale):
         mock_locale.return_value = ('ja_JP', '')
-        self.cp = UEPConnection()
+        self.cp.conn.headers = {}
+        self.cp.conn._set_accept_language_in_header()
         self.assertEqual(self.cp.conn.headers['Accept-Language'], 'ja-jp')
 
     def test_get_environment_urlencoding(self):

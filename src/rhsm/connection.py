@@ -473,30 +473,12 @@ class BaseRestLib(object):
         self.ssl_port = ssl_port
         self.apihandler = apihandler
 
-        # We try to import it here to get fresh value
-        try:
-            import subscription_manager.i18n
-            try:
-                language = subscription_manager.i18n.LOCALE.language
-            except AttributeError:
-                language = None
-        except ImportError:
-            language = None
-
-        if language is None:
-            lc = _get_locale()
-        else:
-            lc = language
-
         # Default, updated by UepConnection
         self.user_agent = user_agent or "python-rhsm-user-agent"
 
         self.headers = {"Content-type": "application/json",
                         "Accept": "application/json",
                         "x-subscription-manager-version": subman_version}
-
-        if lc:
-            self.headers["Accept-Language"] = lc.lower().replace('_', '-').split('.', 1)[0]
 
         if correlation_id:
             self.headers["X-Correlation-ID"] = correlation_id
@@ -665,9 +647,36 @@ class BaseRestLib(object):
             print(result['content'])
             print()
 
+    def _set_accept_language_in_header(self):
+        """
+        Set accept language in http header according current settings or environment variable
+        :return: None
+        """
+        try:
+            import subscription_manager.i18n
+            try:
+                language = subscription_manager.i18n.LOCALE.language
+            except AttributeError:
+                language = None
+        except ImportError:
+            language = None
+
+        if language is None:
+            lc = _get_locale()
+        else:
+            lc = language
+
+        if lc:
+            self.headers["Accept-Language"] = lc.lower().replace('_', '-').split('.', 1)[0]
+
     # FIXME: can method be empty?
     def _request(self, request_type, method, info=None, headers=None, cert_key_pairs=None):
         handler = self.apihandler + method
+
+        # We try to import it here to get fresh value, because rhsm.service can receive
+        # several D-BUS API calls with different locale argument (every request have to have
+        # different locale)
+        self._set_accept_language_in_header()
 
         # Load certificates from cert dir if specified
         if cert_key_pairs is None or len(cert_key_pairs) == 0:

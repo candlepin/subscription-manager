@@ -135,6 +135,7 @@ function initStore(rootElement) {
             subscriptionsView.page,
             {
                 status: subscriptionsClient.subscriptionStatus.status,
+                status_msg: subscriptionsClient.subscriptionStatus.status_msg,
                 products:subscriptionsClient.subscriptionStatus.products,
                 error: subscriptionsClient.subscriptionStatus.error,
                 syspurpose: subscriptionsClient.syspurposeStatus.info,

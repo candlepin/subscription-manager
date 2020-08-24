@@ -59,13 +59,13 @@ class Listing extends React.Component {
                         attaching_in_progress: false,
                         attach_button_text: _("Auto-attach")
                     });
-                })
+                });
         }
     }
     render() {
         if (this.props.children) {
             let auto_attach_btn_disabled;
-            auto_attach_btn_disabled = this.state.attaching_in_progress || this.props.status === 'Unknown';
+            auto_attach_btn_disabled = this.state.attaching_in_progress || this.props.status === 'unknown';
             return (
                 <div>
                     <div className="installed-products-line">
@@ -178,8 +178,11 @@ class DismissableError extends React.Component {
 
 /* Show subscriptions status of the system, offer to register/unregister the system
  * Expected properties:
- * status       subscription status
+ * status       subscription status ID
+ * status_msg   subscription status message
  * error        error message to show (in Curtains if not connected, as a dismissable alert otherwise)
+ * syspurpose
+ * syspurpose_status
  * dismissError callback, triggered for the dismissable error in connected state
  * register     callback, triggered when user clicks on register
  * unregister   callback, triggered when user clicks on unregister
@@ -294,13 +297,13 @@ class SubscriptionStatus extends React.Component {
                 </div>
             </div>
         );
-        if (this.props.status === 'Unknown') {
+        if (this.props.status === 'unknown') {
             label = <label>{ `${_("Status")}: ${_("This system is currently not registered.")}` }</label>;
             action = (<button className="btn btn-primary"
                               onClick={this.handleRegisterSystem}>{_("Register")}</button>
             );
         } else {
-            label = <label>{ `${_("Status")}: ${this.props.status}` }</label>;
+            label = <label>{ `${_("Status")}: ${this.props.status_msg}` }</label>;
             action = (<button className="btn btn-primary" disabled={isUnregistering}
                               onClick={this.handleUnregisterSystem}>{_("Unregister")}</button>
             );
@@ -331,7 +334,8 @@ class SubscriptionStatus extends React.Component {
 
 /* Show subscriptions status of the system and registered products, offer to register/unregister the system
  * Expected properties:
- * status       subscription status
+ * status       subscription status ID
+ * status_msg   subscription status message
  * error        error message to show (in Curtains if not connected, as a dismissable alert otherwise
  * dismissError callback, triggered for the dismissable error in connected state
  * products     subscribed products (properties as in subscriptions-client)
@@ -343,6 +347,7 @@ class SubscriptionsPage extends React.Component {
         let icon;
         let description;
         let message;
+
         if (this.props.status === "service-unavailable") {
             icon = <div className="fa fa-exclamation-circle"/>;
             message = _("The rhsm service is unavailable. Make sure subscription-manager is installed " +

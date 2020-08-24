@@ -72,6 +72,21 @@ class Reasons(object):
             result[reason_name].append(reason['message'])
         return result
 
+    def get_reason_ids_map(self):
+        result = {}
+        for reason in self.reasons:
+            if 'attributes' in reason and 'product_id' in reason['attributes']:
+                reason_id = reason['attributes']['product_id']
+                if reason_id not in result:
+                    result[reason_id] = []
+                if reason['key'] in [res['key'] for res in result[reason_id]]:
+                    continue
+                result[reason_id].append({
+                    'key': reason['key'],
+                    'product_name': reason['attributes']['name']
+                })
+        return result
+
     def get_stack_subscriptions(self, stack_id):
         result = set([])
         for s in self.sorter.valid_entitlement_certs:

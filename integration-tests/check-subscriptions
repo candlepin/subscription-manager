@@ -226,7 +226,8 @@ class TestSubscriptions(SubscriptionsCase):
         self.wait_subscription(PRODUCT_SNOWY, True)
 
         # unregister
-        b.click(unregister_button_sel)
+        with b.wait_timeout(360):
+            b.click(unregister_button_sel)
 
     def testRegisterWithKey(self):
         b = self.browser
