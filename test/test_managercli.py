@@ -523,11 +523,15 @@ class TestRefreshCommandWithDoCommand(SubManFixture):
         mock_content_access_mode_cache = Mock(spec=ContentAccessModeCache)
         mock_content_access_mode_cache.return_value.exists.return_value = True
         provide(CONTENT_ACCESS_MODE_CACHE, mock_content_access_mode_cache)
+
         self.cc.main([""])
-        mock_content_access_cache.return_value.remove.assert_called_once()
-        mock_content_access_mode_cache.return_value.delete_cache.assert_called_once()
-        mock_content_access_cache.return_value.exists.assert_called_once()
+
+        # This cache should not be deleted to be able to use HTTP header 'If-Modified-Since'
+        mock_content_access_cache.return_value.remove.assert_not_called()
+        # Cache about content access mode should be deleted, because content access mode
+        # can be changed from SCA to entitlement and vice versa
         mock_content_access_mode_cache.return_value.exists.assert_called_once()
+        mock_content_access_mode_cache.return_value.delete_cache.assert_called_once()
 
 
 class TestIdentityCommand(TestCliProxyCommand):

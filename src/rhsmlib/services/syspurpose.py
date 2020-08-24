@@ -21,16 +21,6 @@ from subscription_manager import injection as inj
 from subscription_manager.i18n import ugettext as _
 
 
-STATUS_MAP = {'valid': _('Matched'),
-        'invalid': _('Mismatched'),
-        'partial': _('Partial'),
-        'matched': _('Matched'),
-        'mismatched': _('Mismatched'),
-        'not specified': _('Not Specified'),
-        'disabled': _('Disabled'),
-        'unknown': _('Unknown')}
-
-
 class Syspurpose(object):
 
     def __init__(self, cp):
@@ -44,4 +34,17 @@ class Syspurpose(object):
         return self.purpose_status
 
     def get_overall_status(self, status):
-        return STATUS_MAP.get(status, STATUS_MAP['unknown'])
+        # Status map has to be here, because we have to translate strings
+        # when function is called (not during start of application) due to
+        # rhsm.service which can run for very long time
+        status_map = {
+            'valid': _('Matched'),
+            'invalid': _('Mismatched'),
+            'partial': _('Partial'),
+            'matched': _('Matched'),
+            'mismatched': _('Mismatched'),
+            'not specified': _('Not Specified'),
+            'disabled': _('Disabled'),
+            'unknown': _('Unknown')
+        }
+        return status_map.get(status, status_map['unknown'])
