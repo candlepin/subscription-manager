@@ -1590,7 +1590,14 @@ class RegisterCommand(UserPassCommand):
                 log.debug("Registering as existing consumer: %s" % self.options.consumerid)
                 consumer = service.register(None, consumerid=self.options.consumerid)
             else:
-                owner_key = self._determine_owner_key(admin_cp)
+                if self.options.org:
+                    owner_key = self.options.org
+                else:
+                    owner_key = service.determine_owner_key(
+                        username=self.username,
+                        get_owner_cb=self._get_owner_cb,
+                        no_owner_cb=self._no_owner_cb
+                    )
                 environment_id = self._get_environment_id(admin_cp, owner_key, self.options.environment)
                 if not admin_cp.has_capability("insights_auto_register") or \
                         is_true_value(conf["rhsm"]["no_insights"]):
@@ -1762,32 +1769,31 @@ class RegisterCommand(UserPassCommand):
             system_exit(os.EX_DATAERR, _("No such environment: %s") % environment_name)
         return env['id']
 
-    def _determine_owner_key(self, cp):
+    @staticmethod
+    def _no_owner_cb(username):
         """
-        If given an owner in the options, use it. Otherwise ask the server
-        for all the owners this user has access too. If there is just one,
-        use its key. If multiple, ask the user.
+        Method called, when there it no owner in the list of owners for given user
+        :return: None
         """
-        if self.options.org:
-            return self.options.org
+        system_exit(1, _("%s cannot register with any organizations.") % username)
 
-        owners = cp.getOwnerList(self.username)
+    def _get_owner_cb(self, owners):
+        """
+        Callback method used, when it is necessary to specify owner (organization)
+        during registration
+        :param owners: list of owners (organizations)
+        :return:
+        """
+        # Print list of owners to the console
+        org_keys = [owner['key'] for owner in owners]
+        print(_('Hint: User "%s" is member of following organizations: %s') %
+              (self.username, ', '.join(org_keys)))
 
-        if len(owners) == 0:
-            system_exit(1, _("%s cannot register with any organizations.") % self.username)
-        if len(owners) == 1:
-            return owners[0]['key']
-
-        if len(owners) > 1:
-            org_keys = [owner['key'] for owner in owners]
-            print(_('Hint: User "%s" is member of following organizations: %s') %
-                  (self.username, ', '.join(org_keys)))
-
+        # Read the owner key from stdin
         owner_key = None
         while not owner_key:
             owner_key = six.moves.input(_("Organization: "))
             readline.clear_history()
-        return owner_key
 
 
 class UnRegisterCommand(CliCommand):

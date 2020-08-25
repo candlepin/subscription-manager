@@ -169,3 +169,29 @@ class RegisterService(object):
         elif not getattr(self.cp, 'username', None) or not getattr(self.cp, 'password', None):
             if not getattr(self.cp, 'token', None):
                 raise exceptions.ValidationError(_("Error: Missing username or password."))
+
+    def determine_owner_key(self, username, get_owner_cb, no_owner_cb):
+        """
+        Method used for specification of owner key during registration. When there is more than
+        one owners and it is necessary to specify one, then get_owner_cb is called with the list
+        of owners as the argument. When user is not member of any group, then no_owner_cb is called.
+        :param username: Username
+        :param get_owner_cb: Callback method called, when it is necessary determine wanted owner (org)
+        :param no_owner_cb: Callback method called, when user is not member of any owner (org)
+        :return: Owner key (organization)
+        """
+
+        owners = self.cp.getOwnerList(username)
+
+        # When there is no organization, then call callback method for this case
+        if len(owners) == 0:
+            no_owner_cb(username)
+
+        # When there is only one owner, then return key of the owner
+        if len(owners) == 1:
+            return owners[0]['key']
+
+        # When there is more owner, then call callback method for this case
+        owner_key = get_owner_cb(owners)
+
+        return owner_key
