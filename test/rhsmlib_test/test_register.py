@@ -215,6 +215,81 @@ class RegisterServiceTest(InjectionMockingTest):
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
 
     @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
+    @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
+    def test_register_normally_with_no_org_specified(self, mock_persist_consumer, mock_write_cache):
+        """
+        This test is intended for the case, when no organization is specified, but user is member
+        only of one organization and thus it can be automatically selected
+        """
+        self.mock_cp.getOwnerList = mock.Mock()
+        self.mock_cp.getOwnerList.return_value = [
+            {
+                "created": "2020-08-18T07:57:47+0000",
+                "updated": "2020-08-18T07:57:47+0000",
+                "id": "ff808081740092cd01740092fe540002",
+                "key": "snowwhite",
+                "displayName": "Snow White",
+                "parentOwner": None,
+                "contentPrefix": None,
+                "defaultServiceLevel": None,
+                "upstreamConsumer": None,
+                "logLevel": None,
+                "autobindDisabled": False,
+                "autobindHypervisorDisabled": False,
+                "contentAccessMode": "entitlement",
+                "contentAccessModeList": "entitlement,org_environment",
+                "lastRefreshed": None,
+                "href": "/owners/snowwhite"
+            }
+        ]
+        self.mock_identity.is_valid.return_value = False
+        self.mock_installed_products.format_for_server.return_value = []
+        self.mock_installed_products.tags = []
+        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
+        self.mock_cp.registerConsumer.return_value = expected_consumer
+
+        register_service = register.RegisterService(self.mock_cp)
+
+        def _get_owner_cb(orgs):
+            pass
+
+        def _no_owner_cb(username):
+            pass
+
+        org = register_service.determine_owner_key(
+            username=self.mock_cp.username,
+            get_owner_cb=_get_owner_cb,
+            no_owner_cb=_no_owner_cb
+        )
+
+        self.assertIsNotNone(org)
+
+        register_service.register(org, name="name", environment="environment")
+
+        self.mock_cp.registerConsumer.assert_called_once_with(
+            name="name",
+            facts={},
+            owner="snowwhite",
+            environment="environment",
+            keys=None,
+            installed_products=[],
+            content_tags=[],
+            type="system",
+            role="",
+            addons=[],
+            service_level="",
+            usage="")
+        self.mock_installed_products.write_cache.assert_called()
+
+        mock_persist_consumer.assert_called_once_with(expected_consumer)
+        mock_write_cache.assert_called_once()
+        expected_plugin_calls = [
+            mock.call('pre_register_consumer', name='name', facts={}),
+            mock.call('post_register_consumer', consumer=expected_consumer, facts={})
+        ]
+        self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
+
+    @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
     @mock.patch("subprocess.call")
     @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
     def test_register_with_no_insights(self, mock_persist_consumer, mock_subprocess_call, mock_write_cache):

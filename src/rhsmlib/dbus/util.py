@@ -48,6 +48,8 @@ def dbus_handle_exceptions(func, *args, **kwargs):
         # Modify severity of some exception here
         if "Ignoring request to auto-attach. It is disabled for org" in err_msg:
             severity = "warning"
+        if hasattr(err, 'severity'):
+            severity = err.severity
         # Raise exception string as JSON string. Thus it can be parsed and printed properly.
         error_msg = json.dumps(
             {

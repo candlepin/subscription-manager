@@ -76,7 +76,6 @@ class ConsumerDBusObject(base_object.BaseObject):
     def ConsumerChanged(self):
         """
         Signal fired, when consumer is created/deleted/changed
-        :param sender:
         :return: None
         """
         log.debug("D-Bus signal %s emitted" % constants.CONSUMER_INTERFACE)
