@@ -573,6 +573,11 @@ class ZypperRepoFile(YumRepoFile):
         super(ZypperRepoFile, self).__init__(path, name)
         self.gpgcheck = False
         self.autorefresh = False
+        # According to
+        # https://github.com/openSUSE/libzypp/blob/67f55b474d67f77c1868955da8542a7acfa70a9f/zypp/media/MediaManager.h#L394
+        #   the following values are valid: "yes", "no", "host", "peer"
+        self.gpgkey_ssl_verify = None
+        self.repo_ssl_verify = None
 
     def read_zypp_conf(self):
         """
@@ -585,6 +590,10 @@ class ZypperRepoFile(YumRepoFile):
             self.gpgcheck = zypp_cfg.getboolean('rhsm-plugin', 'gpgcheck')
         if zypp_cfg.has_option('rhsm-plugin', 'autorefresh'):
             self.autorefresh = zypp_cfg.getboolean('rhsm-plugin', 'autorefresh')
+        if zypp_cfg.has_option('rhsm-plugin', 'gpgkey-ssl-verify'):
+            self.gpgkey_ssl_verify = zypp_cfg.get('rhsm-plugin', 'gpgkey-ssl-verify')
+        if zypp_cfg.has_option('rhsm-plugin', 'repo-ssl-verify'):
+            self.repo_ssl_verify = zypp_cfg.get('rhsm-plugin', 'repo-ssl-verify')
 
     def fix_content(self, content):
         self.read_zypp_conf()
@@ -610,6 +619,10 @@ class ZypperRepoFile(YumRepoFile):
         if zypper_cont['gpgkey'] in ['https://', 'http://']:
             del zypper_cont['gpgkey']
 
+        # make sure gpg key download doesn't fail because of private certs
+        if zypper_cont['gpgkey'] and self.gpgkey_ssl_verify:
+            zypper_cont['gpgkey'] += "?ssl_verify=%s" % self.gpgkey_ssl_verify
+
         # See BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1764265
         if self.gpgcheck is False:
             zypper_cont['gpgcheck'] = '0'
@@ -626,8 +639,13 @@ class ZypperRepoFile(YumRepoFile):
         baseurl = zypper_cont['baseurl']
         parsed = urlparse(baseurl)
         zypper_query_args = parse_qs(parsed.query)
+
         if sslverify and sslverify in ['1']:
-            zypper_query_args['ssl_verify'] = 'host'
+            if self.repo_ssl_verify:
+                zypper_query_args['ssl_verify'] = self.repo_ssl_verify
+            else:
+                zypper_query_args['ssl_verify'] = 'host'
+
         if sslcacert:
             zypper_query_args['ssl_capath'] = os.path.dirname(sslcacert)
         if sslclientkey:
