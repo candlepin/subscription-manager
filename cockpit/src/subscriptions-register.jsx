@@ -33,6 +33,12 @@ import * as Insights from './insights.jsx';
  *   - properties as in defaultRegisterDialogSettings()
  */
 class PatternDialogBody extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            show_orgs: false
+        };
+    }
     render() {
         let customURL;
         if (this.props.url === 'custom') {
@@ -95,7 +101,31 @@ class PatternDialogBody extends React.Component {
 
 
         let credentials;
+        let organizations;
         if (this.props.register_method === "account") {
+            if (subscriptionsClient.showOrgList === true) {
+                let items = [];
+                let org;
+                console.debug(subscriptionsClient.OrgList.length);
+                for (let i = 0; i < subscriptionsClient.OrgList.length; i++) {
+                    console.debug(i);
+                    org = subscriptionsClient.OrgList[i];
+                    console.debug(org);
+                    items.push(<option key={ org.key } value={ org.key }> { org.displayName } </option>);
+                }
+                organizations = (
+                    <div className="ct-form-layout" id="subscription-credentials">
+                        <label className="control-label" htmlFor="subscription-register-org">                        {_("Organization")}
+                        </label>
+                        <select value={this.props.org} onChange={value => this.props.onChange('org', value)}>
+                            { items }
+                        </select>
+                        {/*<input id="subscription-register-org" className="form-control" type="text"*/}
+                        {/*       value={this.props.org}*/}
+                        {/*       onChange={value => this.props.onChange('org', value)}/>*/}
+                    </div>
+                );
+            }
             credentials = (
                 <div className="ct-form-layout" id="subscription-credentials">
                     <label className="control-label" htmlFor="subscription-register-username">
@@ -110,12 +140,6 @@ class PatternDialogBody extends React.Component {
                     <input id="subscription-register-password" className="form-control" type="password"
                            value={this.props.password}
                            onChange={value => this.props.onChange('password', value)}/>
-                    <label className="control-label" htmlFor="subscription-register-org">
-                        {_("Organization")}
-                    </label>
-                    <input id="subscription-register-org" className="form-control" type="text"
-                           value={this.props.org}
-                           onChange={value => this.props.onChange('org', value)}/>
                 </div>
             );
         } else {
@@ -185,6 +209,7 @@ class PatternDialogBody extends React.Component {
                         </div>
                     </label>
                     { credentials }
+                    { organizations }
                     <label className="control-label">
                         {_("Subscriptions")}
                     </label>

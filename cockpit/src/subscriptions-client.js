@@ -64,6 +64,8 @@ client.syspurposeStatus = {
 };
 
 client.insightsAvailable = false;
+client.showOrgList = false;
+client.OrgList = [];
 client.insightsPackage = "insights-client";
 
 const RHSM_DEFAULTS = { // TODO get these from a d-bus service instead
@@ -313,6 +315,16 @@ client.registerSystem = (subscriptionDetails, update_progress) => {
                     'com.redhat.RHSM1.Register',
                     '/com/redhat/RHSM1/Register'
                 );
+                function selectingOrgsRequired(orgs) {
+                    client.showOrgList = true;
+                    // console.debug(orgs);
+                    console.debug(orgs.detail);
+                    const org_list = JSON.parse(orgs.detail);
+                    console.debug(org_list);
+                    client.OrgList = org_list;
+                    needRender();
+                }
+                registerService.addEventListener("UserMemberOfOrgs", selectingOrgsRequired);
                 if (subscriptionDetails.activation_keys) {
                     if (update_progress)
                         update_progress(_("Registering using activation key ..."), null);
@@ -679,6 +691,8 @@ client.init = () => {
     entitlementService.addEventListener("EntitlementChanged", requestSubscriptionStatusUpdate);
     productsService.addEventListener("InstalledProductsChanged", requestSubscriptionStatusUpdate);
     consumerService.addEventListener("ConsumerChanged", requestSubscriptionStatusUpdate);
+
+
 
     configService.addEventListener("ConfigChanged", updateConfig);
     syspurposeService.addEventListener("SyspurposeChanged", requestSyspurposeUpdate);
