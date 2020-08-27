@@ -306,7 +306,7 @@ Requires: %{py_package_prefix}-dateutil
 Requires: %{py_package_prefix}-syspurpose
 
 # rhel 8 has different naming for setuptools going forward
-%if (0%{?rhel} && 0%{?rhel} >= 8)
+%if (0%{?rhel} && 0%{?rhel} == 8)
 Requires:  platform-python-setuptools
 %else
 Requires:  %{py_package_prefix}-setuptools
@@ -752,7 +752,7 @@ python2 ./setup.py build --quiet --gtk-version=%{?gtk3:3}%{?!gtk3:2} --rpm-versi
 %if (%{use_dnf} && (0%{?fedora} >= 29 || 0%{?rhel} >= 8))
 pushd src/dnf-plugins/product-id
 %cmake -DCMAKE_BUILD_TYPE="Release"
-%if (0%{?rhel})
+%if (0%{?rhel} && 0%{?rhel} <= 8)
 %make_build
 %else
 %cmake_build
@@ -781,7 +781,7 @@ make -f Makefile install VERSION=%{version}-%{release} \
 %if (%{use_dnf} && (0%{?fedora} >= 29 || 0%{?rhel} >= 8))
 pushd src/dnf-plugins/product-id
 mkdir -p %{buildroot}%{_libdir}/libdnf/plugins
-%if (0%{?rhel})
+%if (0%{?rhel} && 0%{?rhel} <= 8)
 %make_install
 %else
 %cmake_install
