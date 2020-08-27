@@ -572,6 +572,7 @@ class ZypperRepoFile(YumRepoFile):
     def __init__(self, path=None, name=None):
         super(ZypperRepoFile, self).__init__(path, name)
         self.gpgcheck = False
+        self.repo_gpgcheck = False
         self.autorefresh = False
 
     def read_zypp_conf(self):
@@ -583,6 +584,8 @@ class ZypperRepoFile(YumRepoFile):
         zypp_cfg.read(self.ZYPP_RHSM_PLUGIN_CONFIG_FILE)
         if zypp_cfg.has_option('rhsm-plugin', 'gpgcheck'):
             self.gpgcheck = zypp_cfg.getboolean('rhsm-plugin', 'gpgcheck')
+        if zypp_cfg.has_option('rhsm-plugin', 'repo_gpgcheck'):
+            self.repo_gpgcheck = zypp_cfg.getboolean('rhsm-plugin', 'repo_gpgcheck')
         if zypp_cfg.has_option('rhsm-plugin', 'autorefresh'):
             self.autorefresh = zypp_cfg.getboolean('rhsm-plugin', 'autorefresh')
 
@@ -615,7 +618,10 @@ class ZypperRepoFile(YumRepoFile):
             zypper_cont['gpgcheck'] = '0'
 
         # See BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1858231
-        zypper_cont['repo_gpgcheck'] = '0'
+        if self.repo_gpgcheck is True:
+            zypper_cont['repo_gpgcheck'] = '1'
+        else:
+            zypper_cont['repo_gpgcheck'] = '0'
 
         # See BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1797386
         if self.autorefresh is True:
