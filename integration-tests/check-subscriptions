@@ -208,7 +208,7 @@ class TestSubscriptions(SubscriptionsCase):
         b.wait_not_in_text("body", "Invalid credentials")
 
         # wait for message that we need to specify our org
-        b.wait_in_text("body", "You must specify an organization for new units.")
+        b.wait_in_text("body", "User doc is member of more organizations, but no organization was selected")
 
         # now specify the org
         b.set_input_text("#subscription-register-org", "snowwhite")
@@ -217,7 +217,7 @@ class TestSubscriptions(SubscriptionsCase):
         b.click(dialog_register_button_sel)
 
         # old error should disappear
-        b.wait_not_in_text("body", "You must specify an organization for new units.")
+        b.wait_not_in_text("body", "User doc is member of more organizations, but no organization was selected")
 
         # dialog should disappear
         b.wait_not_present(dialog_register_button_sel)

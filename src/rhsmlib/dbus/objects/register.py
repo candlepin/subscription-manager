@@ -16,12 +16,14 @@ from __future__ import print_function, division, absolute_import
 import json
 import logging
 import threading
+import dbus
 import dbus.service
 
 from rhsmlib.dbus import constants, exceptions, dbus_utils, base_object, server, util
 from rhsmlib.services.register import RegisterService
 
 from subscription_manager.i18n import Locale
+from subscription_manager.i18n import ugettext as _
 from subscription_manager.entcertlib import EntCertActionInvoker
 
 log = logging.getLogger(__name__)
@@ -77,6 +79,37 @@ class RegisterDBusObject(base_object.BaseObject):
                 raise exceptions.Failed("No domain socket server is running")
 
 
+class OrgNotSpecifiedException(dbus.DBusException):
+    """
+    This exception is intended for signaling that user is member of more
+    organizations and no organization was specified
+    """
+    _dbus_error_name = "%s.Error" % constants.REGISTER_INTERFACE
+    include_traceback = False
+    severity = "info"
+
+    def __init__(self, username):
+        self.username = username
+
+    def __str__(self):
+        return _("User %s is member of more organizations, but no organization was selected") % self.username
+
+
+class NoOrganizationException(dbus.DBusException):
+    """
+    This exception is intended for signaling that user is not member of any
+    organization and such user cannot register to candlepin server.
+    """
+    _dbus_error_name = "%s.Error" % constants.REGISTER_INTERFACE
+    include_traceback = False
+
+    def __init__(self, username):
+        self.username = username
+
+    def __str__(self):
+        return _("User %s is not member of any organization") % self.username
+
+
 class DomainSocketRegisterDBusObject(base_object.BaseObject):
     interface_name = constants.PRIVATE_REGISTER_INTERFACE
     default_dbus_path = constants.PRIVATE_REGISTER_DBUS_PATH
@@ -119,6 +152,48 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
 
         return json.dumps(owners)
 
+    @util.dbus_service_signal(
+        constants.PRIVATE_REGISTER_INTERFACE,
+        signature='s'
+    )
+    @util.dbus_handle_exceptions
+    def UserMemberOfOrgs(self, orgs):
+        """
+        Signal triggered, when user tries to register, no organization is specified, but
+        user is member of more than one organization and it will be necessary to select
+        one organization in client application consuming this D-Bus API
+        :param orgs: string with json.dump of org dictionary (key: org_id, value: org_name)
+        :return: None
+        """
+        log.debug("D-Bus signal UserMemberOfOrgs emitted on the interface %s with arg: %s" %
+                  (constants.PRIVATE_REGISTER_INTERFACE, orgs))
+        return None
+
+    def _no_owner_cb(self, username):
+        """
+        Callback method that is triggered, when given user is not member of any organization.
+        In this case exception is raised.
+        :return: None
+        """
+        raise NoOrganizationException(username=username)
+
+    def _get_owner_cb(self, owners):
+        """
+        When there is necessary to select one organization by user, then signal is triggered.
+        :param owners: The list of owner objects
+        :return: None
+        """
+        # We use string of json.dumped dictionary, because D-Bus API does not work
+        # properly with dictionaries
+        orgs = json.dumps(owners)
+
+        # NOTE: use only position argument. Do not change it to keyed argument, because
+        # D-Bus wrapper does NOT work with keyed argument
+        self.UserMemberOfOrgs(orgs)
+
+        # We return None here, because we cannot know what will be selected by user
+        return None
+
     @dbus.service.method(
         dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
         in_signature='sssa{sv}a{sv}s',
@@ -150,7 +225,23 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         cp = self.build_uep(connection_options)
 
         register_service = RegisterService(cp)
+
+        # Try to get organization from the list available organizations, when the list contains
+        # only one item, then register_service.determine_owner_key will return this organization
+        if not org:
+            org = register_service.determine_owner_key(
+                username=connection_options['username'],
+                get_owner_cb=self._get_owner_cb,
+                no_owner_cb=self._no_owner_cb
+            )
+
+        # When there is more organizations, then signal was triggered in callback method
+        # _get_owner_cb, but some exception has to be raised here to not try registration process
+        if not org:
+            raise OrgNotSpecifiedException(username=connection_options['username'])
+
         consumer = register_service.register(org, **options)
+
         return json.dumps(consumer)
 
     @dbus.service.method(
