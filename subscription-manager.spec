@@ -243,7 +243,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.2
+Version: 1.28.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1445,6 +1445,14 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Sep 02 2020 William Poteat <wpoteat@redhat.com> 1.28.3-1
+- 1753236: D-Bus Register properly, when org not specified; ENT-2096
+  (jhnidek@redhat.com)
+- Additional updates for fedora (wpoteat@redhat.com)
+- added default for repo_gpgcheck (p.seiler@linuxmail.org)
+- support to disable repo_gpgcheck for zypper repositories
+  (p.seiler@linuxmail.org)
+
 * Fri Aug 21 2020 William Poteat <wpoteat@redhat.com> 1.28.2-1
 - Sync spec with fedora spec (csnyder@redhat.com)
 - 1841601: Set default encoding properly; ENT-2499 (jhnidek@redhat.com)
