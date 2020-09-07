@@ -134,10 +134,18 @@ class RegisterService(object):
         if save_syspurpose is True:
             syspurposelib.write_syspurpose(syspurpose)
 
-        syspurpose_dict = {'service_level_agreement': consumer['serviceLevel'] if 'serviceLevel' in list(consumer.keys()) else '',
-                          'role': consumer['role'] if 'role' in list(consumer.keys()) else '',
-                          'usage': consumer['usage'] if 'usage' in list(consumer.keys()) else '',
-                          'addons': consumer['addOns'] if 'addOns' in list(consumer.keys()) else []}
+        syspurpose_dict = {
+            'service_level_agreement': consumer['serviceLevel'] if 'serviceLevel' in list(consumer.keys()) else '',
+            'role': consumer['role'] if 'role' in list(consumer.keys()) else '',
+            'usage': consumer['usage'] if 'usage' in list(consumer.keys()) else '',
+            'addons': consumer['addOns'] if 'addOns' in list(consumer.keys()) else []
+        }
+
+        # Try to do three-way merge and then save result to syspurpose.json file
+        local_result = syspurposelib.merge_syspurpose_values(remote=syspurpose_dict, base={})
+        syspurposelib.write_syspurpose(local_result)
+
+        # Save syspurpose attributes from consumer to cache file
         syspurposelib.write_syspurpose_cache(syspurpose_dict)
 
         return consumer

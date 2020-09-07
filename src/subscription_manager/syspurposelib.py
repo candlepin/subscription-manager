@@ -164,6 +164,38 @@ def get_syspurpose_valid_fields(uep=None, identity=None):
     return valid_fields
 
 
+def merge_syspurpose_values(local=None, remote=None, base=None):
+    """
+    Try to do three-way merge of local, remote and base dictionaries.
+    Note: when remote is None, then this method will call REST API.
+    :param local: dictionary with local values
+    :param remote: dictionary with remote values
+    :param base: dictionary with cached values
+    :return: Dictionary with local result
+    """
+
+    if SyncedStore is None:
+        return {}
+
+    synced_store = SyncedStore(uep=None)
+
+    if local is None:
+        local = synced_store.get_local_contents()
+    if remote is None:
+        remote = synced_store.get_remote_contents()
+    if base is None:
+        base = synced_store.get_cached_contents()
+
+    result = synced_store.merge(
+        local=local,
+        remote=remote,
+        base=base
+    )
+    local_result = {key: result[key] for key in result if result[key]}
+    log.debug('local result: %s ' % local_result)
+    return local_result
+
+
 class SyspurposeSyncActionInvoker(certlib.BaseActionInvoker):
     """
     Used by rhsmcertd to sync the syspurpose values locally with those from the Server.
