@@ -74,17 +74,33 @@ class TestEntitlementService(InjectionMockingTest):
         self.mock_identity.is_valid.return_value = True
 
         mock_reasons = mock.Mock(spec=Reasons, name="Reasons").return_value
-        mock_reasons.get_name_message_map.return_value = {"RHEL": ["Not supported by a valid subscription"]}
+        mock_reasons.get_name_message_map.return_value = {
+            "RHEL": ["Not supported by a valid subscription"]
+        }
+        mock_reasons.get_reason_ids_map.return_value = {
+            '69': {
+                'key': 'NOTCOVERED',
+                'product_name': 'RHEL'
+            }
+        }
 
         mock_sorter = self.mock_sorter_class.return_value
         mock_sorter.get_system_status.return_value = "Invalid"
+        mock_sorter.get_system_status_id.return_value = 'invalid'
         mock_sorter.reasons = mock_reasons
         mock_sorter.is_valid.return_value = False
 
         expected_value = {
             'status': 'Invalid',
+            'status_id': 'invalid',
             'reasons': {
                 'RHEL': ['Not supported by a valid subscription']
+            },
+            'reason_ids': {
+                '69': {
+                    'key': 'NOTCOVERED',
+                    'product_name': 'RHEL'
+                }
             },
             'valid': False
         }
@@ -102,15 +118,29 @@ class TestEntitlementService(InjectionMockingTest):
 
         mock_reasons = mock.Mock(spec=Reasons, name="Reasons").return_value
         mock_reasons.get_name_message_map.return_value = {"RHEL": ["Not supported by a valid subscription"]}
+        mock_reasons.get_reason_ids_map.return_value = {
+            '69': {
+                'key': 'NOTCOVERED',
+                'product_name': 'RHEL'
+            }
+        }
 
         mock_sorter.get_system_status.return_value = "Invalid"
+        mock_sorter.get_system_status_id.return_value = 'invalid'
         mock_sorter.reasons = mock_reasons
         mock_sorter.is_valid.return_value = False
 
         expected_value = {
             'status': 'Invalid',
+            'status_id': 'invalid',
             'reasons': {
                 'RHEL': ['Not supported by a valid subscription']
+            },
+            'reason_ids': {
+                '69': {
+                    'key': 'NOTCOVERED',
+                    'product_name': 'RHEL'
+                }
             },
             'valid': False
         }
@@ -136,7 +166,13 @@ class TestEntitlementService(InjectionMockingTest):
         service = EntitlementService()
 
         self.mock_identity.is_valid.return_value = False
-        expected_value = {'status': 'Unknown', 'reasons': {}, 'valid': False}
+        expected_value = {
+            'status': 'Unknown',
+            'status_id': 'unknown',
+            'reasons': {},
+            'reason_ids': {},
+            'valid': False
+        }
         self.assertEqual(expected_value, service.get_status())
 
     def test_only_accepts_correct_pool_subsets(self):

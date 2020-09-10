@@ -29,23 +29,26 @@ from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
 
+# Strings used for status of products
 FUTURE_SUBSCRIBED = "future_subscribed"
 SUBSCRIBED = "subscribed"
 NOT_SUBSCRIBED = "not_subscribed"
 EXPIRED = "expired"
 PARTIALLY_SUBSCRIBED = "partially_subscribed"
 
-# Used when we are unregistered, or offline for a long period of time:
+# Strings used fot status of system
+# Warning: Do not change following strings, because these strings
+# are in D-Bus API. The API is used by other applications (Anaconda,
+# Cockpit, GNOME, ...)
+VALID = 'valid'
+INVALID = 'invalid'
+PARTIAL = 'partial'
+DISABLED = 'disabled'
 UNKNOWN = "unknown"
+
 
 SOCKET_FACT = 'cpu.cpu_socket(s)'
 RAM_FACT = 'memory.memtotal'
-
-STATUS_MAP = {'valid': _('Current'),
-        'partial': _('Insufficient'),
-        'invalid': _('Invalid'),
-        'disabled': _('Disabled'),
-        'unknown': _('Unknown')}
 
 RHSM_VALID = 0
 RHSM_EXPIRED = 1
@@ -117,7 +120,7 @@ class ComplianceManager(object):
         self.reasons = Reasons([], self)
         self.supports_reasons = False
 
-        self.system_status = 'unknown'
+        self.system_status = UNKNOWN
 
         self.valid_entitlement_certs = []
 
@@ -129,7 +132,7 @@ class ComplianceManager(object):
             try:
                 self.status = self.cp_provider.get_consumer_auth_cp().getCompliance(self.identity.uuid, self.on_date)
             except Exception as e:
-                log.warn("Failed to get compliance data from the server")
+                log.warning("Failed to get compliance data from the server")
                 log.exception(e)
                 self.status = None
         return self.status
@@ -163,12 +166,12 @@ class ComplianceManager(object):
             self.system_status = status['status']
         # Some old candlepin versions do not return 'status' with information
         elif status['nonCompliantProducts']:
-            self.system_status = 'invalid'
+            self.system_status = INVALID
         elif self.partially_valid_products or self.partial_stacks or \
                 self.reasons.reasons:
-            self.system_status = 'partial'
+            self.system_status = PARTIAL
         else:
-            self.system_status = 'unknown'
+            self.system_status = UNKNOWN
 
         # For backward compatability with old find first invalid date,
         # we drop one second from the compliant until from server (as
@@ -190,7 +193,7 @@ class ComplianceManager(object):
             if pid not in self.valid_products and pid not in \
                     self.partially_valid_products and pid not in \
                     unentitled_pids:
-                log.warn("Installed product %s not present in response from "
+                log.warning("Installed product %s not present in response from "
                          "server." % pid)
                 unentitled_pids.append(pid)
 
@@ -198,7 +201,7 @@ class ComplianceManager(object):
             prod_cert = self.product_dir.find_by_product(unentitled_pid)
             # Ignore anything server thinks we have but we don't.
             if prod_cert is None:
-                log.warn("Server reported installed product not on system: %s" %
+                log.warning("Server reported installed product not on system: %s" %
                          unentitled_pid)
                 continue
             self.unentitled_products[unentitled_pid] = prod_cert
@@ -259,8 +262,30 @@ class ComplianceManager(object):
 
                     product_dict.setdefault(product.id, []).append(ent_cert)
 
+    def get_system_status_id(self):
+        return self.system_status
+
+    @staticmethod
+    def get_status_map():
+        """
+        Get status map
+        :return: status map
+        """
+        # Status map has to be here, because we have to translate strings
+        # when function is called (not during start of application) due to
+        # rhsm.service which can run for very long time
+        status_map = {
+            VALID: _('Current'),
+            PARTIAL: _('Insufficient'),
+            INVALID: _('Invalid'),
+            DISABLED: _('Disabled'),
+            UNKNOWN: _('Unknown')
+        }
+        return status_map
+
     def get_system_status(self):
-        return STATUS_MAP.get(self.system_status, STATUS_MAP['unknown'])
+        status_map = self.get_status_map()
+        return status_map.get(self.system_status, status_map[UNKNOWN])
 
     def are_reasons_supported(self):
         # Check if the candlepin in use supports status
@@ -272,7 +297,7 @@ class ComplianceManager(object):
         Return true if the results of this cert sort indicate our
         entitlements are completely valid.
         """
-        return self.system_status == 'valid' or self.system_status == 'disabled'
+        return self.system_status == VALID or self.system_status == DISABLED
 
     def is_registered(self):
         return inj.require(inj.IDENTITY).is_valid()
