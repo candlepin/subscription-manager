@@ -547,7 +547,22 @@ class SyncedStore(object):
         return current_value != value or current_value is None
 
     @staticmethod
-    def update_file(path, data):
+    def _create_missing_dir(dir_path):
+        """
+        Try to create missing directory
+        :param dir_path: path to directory
+        :return: None
+        """
+        # Check if the directory exists
+        if not os.path.isdir(dir_path):
+            log.debug('Trying to create directory: %s' % dir_path)
+            try:
+                os.makedirs(dir_path, mode=0o755, exist_ok=True)
+            except Exception as err:
+                log.warning('Unable to create directory: %s, error: %s' % (dir_path, err))
+
+    @classmethod
+    def update_file(cls, path, data):
         """
         Write the contents of data to file in the first mode we can (effectively to create or update
         the file)
@@ -557,21 +572,9 @@ class SyncedStore(object):
         """
 
         # Check if /etc/rhsm/syspurpose directory exists
-        if not os.path.isdir(USER_SYSPURPOSE_DIR):
-            # If not create the file
-            log.debug('Trying to create directory: %s' % USER_SYSPURPOSE_DIR)
-            try:
-                os.makedirs(USER_SYSPURPOSE_DIR, mode=0o755, exist_ok=True)
-            except Exception as err:
-                log.warning('Unable to create directory: %s, error: %s' % (USER_SYSPURPOSE_DIR, err))
-
+        cls._create_missing_dir(USER_SYSPURPOSE_DIR)
         # Check if /var/lib/rhsm/cache/ directory exists
-        if not os.path.isdir(CACHE_DIR):
-            log.debug('Creating directory: %s' % CACHE_DIR)
-            try:
-                os.makedirs(CACHE_DIR, mode=0o755, exist_ok=True)
-            except Exception as err:
-                log.warning('Unable to create directory: %s, error: %s' % (CACHE_DIR, err))
+        cls._create_missing_dir(CACHE_DIR)
 
         # Then we can try to create syspurpose.json file
         modes = ['w+']
