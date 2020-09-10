@@ -412,6 +412,7 @@ Group: Productivity/Networking/System
 %else
 Group: System Environment/Base
 %endif
+Requires: %{name} = %{version}-%{release}
 %description -n %{py_package_prefix}-syspurpose
 Provides the syspurpose commandline utility. This utility manages the
 system syspurpose.
