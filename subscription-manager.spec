@@ -226,7 +226,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.27.15
+Version: 1.27.16
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1413,6 +1413,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Sep 10 2020 Christopher Snyder <csnyder@redhat.com> 1.27.16-1
+- 1868734: Fix issue with syspurpose attrs. set in act. key
+  (jhnidek@redhat.com)
+
 * Thu Aug 20 2020 Christopher Snyder <csnyder@redhat.com> 1.27.15-1
 - 1615429: Fix sorting of plugin hooks (csnyder@redhat.com)
 - 1820534: Update translations (csnyder@redhat.com)
