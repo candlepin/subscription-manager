@@ -1266,6 +1266,17 @@ class TestConfigCommand(TestCliCommand):
         self.cc.main(["--list"])
         self.cc._validate_options()
 
+    def test_list_default(self):
+        hostname = managercli.conf['server']['hostname']
+        # BZ 1862431
+        managercli.conf['rhsmd'] = {}
+        managercli.conf['rhsmd']['processtimeout'] = '300'
+        with Capture() as cap:
+            self.cc._do_command = self._orig_do_command
+            self.cc.main([""])
+            self.cc._validate_options()
+        self.assertTrue(hostname in cap.out)
+
     def test_remove(self):
         self.cc.main(["--remove", "server.hostname", "--remove", "server.port"])
         self.cc._validate_options()

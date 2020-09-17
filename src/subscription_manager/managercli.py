@@ -2767,7 +2767,7 @@ class ConfigCommand(CliCommand):
                     if hasattr(self.options, s + "." + name):
                         test = "%s" % getattr(self.options, s + "." + name)
                     else:
-                        test = None
+                        test = 'None'
                     has = has or (test != 'None')
             if not has:
                 # if no options are given, default to --list

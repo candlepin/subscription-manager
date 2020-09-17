@@ -41,13 +41,14 @@ class TestI18N(unittest.TestCase):
         Ensure the method i18n does not pass a None from the environment to Locale
         :return:
         """
-        new_lang = 'en-US.UTF-8'
+        # This should be something that is listed in result of 'locale -a'
+        new_lang = 'en_US.UTF-8'
 
         with patch.dict(os.environ, {'LANG': new_lang}):
             try:
                 configure_i18n()
-            except:
-                self.fail()
+            except Exception as err:
+                self.fail(err)
 
         locale.set.assert_called_with(new_lang)
 
