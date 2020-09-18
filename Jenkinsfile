@@ -24,7 +24,7 @@ pipeline {
         stage('opensuse42') {
           agent { label 'opensuse42' }
           stages {
-            stage('build') {
+            stage('build') {   // TODO: try this with a matrix {} since all the builds happen on opensuse42 anyway...
               steps {
                 sh "scripts/suse_build.sh 'home:kahowell' 'openSUSE_Leap_42.2'"
                 sh """
@@ -34,7 +34,7 @@ pipeline {
                   cd ..
                 fi
                 """
-                sh readFile(file: 'jenkins/createrepo.sh')
+                sh readFile(file: 'jenkins/createrepo.sh')  // TODO: ask why we need this?
               }
             }
             stage('nose') {steps { sh readFile(file: 'jenkins/suse-tests.sh') }}
@@ -56,7 +56,7 @@ pipeline {
                 sh readFile(file: 'jenkins/createrepo.sh')
               }
             }
-            // FIXME sles11 can't be tested due missing python deps (incl. nose)
+            // FIXME: sles11 can't be tested due missing python deps (incl. nose)
             // stage('nose') {
             // agent { label 'sles12' }
             // steps { sh readFile(file: 'jenkins/suse-tests.sh') }}
