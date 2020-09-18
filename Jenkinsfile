@@ -1,7 +1,7 @@
 pipeline {
   agent { label 'subman' }
   stages {
-    stage('prepare') {steps {echo 'prepare'}}
+    // stage('prepare') {steps {echo 'prepare'}}
     stage('test') {
       parallel {
         stage('stylish') {
@@ -16,32 +16,85 @@ pipeline {
           agent { label 'subman-centos7' }
           steps { sh readFile(file: 'jenkins/nose-tests.sh') }
         }
-        stage('RHEL8 unit') {steps {echo 'nose'}}
+        // TODO: figure if this is needed and implement
+        // stage('RHEL8 unit') {steps {echo 'nose'}}
         stage('Fedora unit') {
           steps { sh readFile(file: 'jenkins/python3-tests.sh') }
         }
         stage('opensuse42') {
+          agent { label 'opensuse42' }
           stages {
-            stage('build') {steps {echo 'tito'}}
-            stage('nose') {steps {echo 'nose'}}
+            stage('build') {
+              steps {
+                sh "scripts/suse_build.sh 'home:kahowell' 'openSUSE_Leap_42.2'"
+                sh """
+                if [ -d python-rhsm ]; then
+                  cd python-rhsm
+                  ../scripts/suse_build.sh 'home:kahowell' 'openSUSE_Leap_42.2' -k \$WORKSPACE
+                  cd ..
+                fi
+                """
+                sh readFile(file: 'jenkins/createrepo.sh')
+              }
+            }
+            stage('nose') {steps { sh readFile(file: 'jenkins/suse-tests.sh') }}
+          }
+        }
+        stage('sles11') {
+          stages {
+            stage('build') {
+              agent { label 'opensuse42' }
+              steps {
+                sh "scripts/suse_build.sh 'home:kahowell' 'SLE_11_SP4'"
+                sh """
+                if [ -d python-rhsm ]; then
+                  cd python-rhsm
+                  ../scripts/suse_build.sh 'home:kahowell' 'SLE_11_SP4' -k \$WORKSPACE
+                  cd ..
+                fi
+                """
+                sh readFile(file: 'jenkins/createrepo.sh')
+              }
+            }
+            // FIXME sles11 can't be tested due missing python deps (incl. nose)
+            // stage('nose') {
+            // agent { label 'sles12' }
+            // steps { sh readFile(file: 'jenkins/suse-tests.sh') }}
           }
         }
         stage('sles12') {
           stages {
-            stage('build') {steps {echo 'tito'}}
-            stage('nose') {steps {echo 'nose'}}
+            stage('build') {
+              agent { label 'opensuse42' }
+              steps {
+                sh "scripts/suse_build.sh 'home:kahowell' 'SLE_12_SP1'"
+                sh """
+                if [ -d python-rhsm ]; then
+                  cd python-rhsm
+                  ../scripts/suse_build.sh 'home:kahowell' 'SLE_12_SP1' -k \$WORKSPACE
+                  cd ..
+                fi
+                """
+                sh readFile(file: 'jenkins/createrepo.sh')
+              }
+            }
+            stage('nose') {
+              agent { label 'sles12' }
+              steps { sh readFile(file: 'jenkins/suse-tests.sh') }
+            }
           }
         }
-        stage('Functional') {
-          stages{
-            stage('Build RPM') {steps {echo 'Build RPM'}}
-            stage('Prepare') {steps {echo 'Prepare'}}
-            stage('Provision') {steps {echo 'Provisioning'}}
-            stage('Tier 1') {steps {echo 'Tier 1'}}
-          }
-        }
+        // TODO: add after QE creates pipeline
+        // stage('Functional') {
+        //   stages{
+        //     stage('Build RPM') {steps {echo 'Build RPM'}}
+        //     stage('Prepare') {steps {echo 'Prepare'}}
+        //     stage('Provision') {steps {echo 'Provisioning'}}
+        //     stage('Tier 1') {steps {echo 'Tier 1'}}
+        //   }
+        // }
       }
     }
-  stage('cleanup') {steps {echo 'cleanup'}}
+  // stage('cleanup') {steps {echo 'cleanup'}}
   }
 }
