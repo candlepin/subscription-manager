@@ -1,5 +1,5 @@
 pipeline {
-  agent {label 'subman' }
+  agent { label 'subman' }
   stages {
     stage('prepare') {steps {echo 'prepare'}}
     stage('test') {
@@ -8,6 +8,7 @@ pipeline {
           steps { sh readFile(file: 'jenkins/stylish-tests.sh') }
         }
         stage('tito') {
+          agent { label 'rpmbuild' }
           steps { sh readFile(file: 'jenkins/tito-tests.sh') }
         }
         stage('RHEL7 unit') {
