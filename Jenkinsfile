@@ -5,6 +5,7 @@ pipeline {
     stage('test') {
       parallel {
         stage('stylish') {
+          agent { label 'subman-centos7' }
           steps { sh readFile(file: 'jenkins/stylish-tests.sh') }
         }
         stage('tito') {

@@ -7,7 +7,7 @@ pushd "${WORKSPACE}"
 
 mkdir tito/
 
-sudo yum-builddep subscription-manager.spec -y
+sudo yum-builddep subscription-manager.spec -y || true
 
 # Get exit status from 'tito' not 'tee'
 ( set -o pipefail; tito build --output=tito/ --test --rpm | tee tito_results.txt )
