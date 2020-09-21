@@ -23,66 +23,14 @@ pipeline {
         }
         stage('opensuse42') {
           agent { label 'opensuse42' }
-          stages {
-            stage('build') {   // TODO: try this with a matrix {} since all the builds happen on opensuse42 anyway...
-              steps {
-                sh "scripts/suse_build.sh 'home:kahowell' 'openSUSE_Leap_42.2'"
-                sh """
-                if [ -d python-rhsm ]; then
-                  cd python-rhsm
-                  ../scripts/suse_build.sh 'home:kahowell' 'openSUSE_Leap_42.2' -k \$WORKSPACE
-                  cd ..
-                fi
-                """
-                sh readFile(file: 'jenkins/createrepo.sh')  // TODO: ask why we need this?
-              }
-            }
-            stage('nose') {steps { sh readFile(file: 'jenkins/suse-tests.sh') }}
-          }
+          steps { sh readFile(file: 'jenkins/suse-tests.sh') }
         }
-        stage('sles11') {
-          stages {
-            stage('build') {
-              agent { label 'opensuse42' }
-              steps {
-                sh "scripts/suse_build.sh 'home:kahowell' 'SLE_11_SP4'"
-                sh """
-                if [ -d python-rhsm ]; then
-                  cd python-rhsm
-                  ../scripts/suse_build.sh 'home:kahowell' 'SLE_11_SP4' -k \$WORKSPACE
-                  cd ..
-                fi
-                """
-                sh readFile(file: 'jenkins/createrepo.sh')
-              }
-            }
-            // FIXME: sles11 can't be tested due missing python deps (incl. nose)
-            // stage('nose') {
-            // agent { label 'sles12' }
-            // steps { sh readFile(file: 'jenkins/suse-tests.sh') }}
-          }
-        }
+        // stage('sles11') {
+        //   // FIXME:  sles11 can't be tested due missing python deps (incl. nose)
+        // }
         stage('sles12') {
-          stages {
-            stage('build') {
-              agent { label 'opensuse42' }
-              steps {
-                sh "scripts/suse_build.sh 'home:kahowell' 'SLE_12_SP1'"
-                sh """
-                if [ -d python-rhsm ]; then
-                  cd python-rhsm
-                  ../scripts/suse_build.sh 'home:kahowell' 'SLE_12_SP1' -k \$WORKSPACE
-                  cd ..
-                fi
-                """
-                sh readFile(file: 'jenkins/createrepo.sh')
-              }
-            }
-            stage('nose') {
-              agent { label 'sles12' }
-              steps { sh readFile(file: 'jenkins/suse-tests.sh') }
-            }
-          }
+          agent { label 'sles12' }
+          steps { sh readFile(file: 'jenkins/suse-tests.sh') }
         }
         // TODO: add after QE creates pipeline
         // stage('Functional') {
@@ -93,6 +41,38 @@ pipeline {
         //     stage('Tier 1') {steps {echo 'Tier 1'}}
         //   }
         // }
+      }
+    }
+    stage('SUSE Builds') {
+      matrix {
+        axes {
+          axis {
+            name 'PLATFORM'
+            values 'openSUSE_Leap_42.2', 'SLE_12_SP1', 'SLE_11_SP4'
+          }
+        }
+        stages {
+          stage('Build') {
+            agent { label 'opensuse42' }
+            steps {
+              sh "scripts/suse_build.sh 'home:kahowell' ${PLATFORM}"
+              sh """
+              if [ -d python-rhsm ]; then
+                cd python-rhsm
+                ../scripts/suse_build.sh 'home:kahowell' ${PLATFORM} -k \$WORKSPACE
+                cd ..
+              fi
+              """
+              // figure out why you need this..
+              // sh readFile(file: 'jenkins/createrepo.sh')
+            }
+          }
+          // RUNNING in above parallel test step to speed things up...
+          // stage('nose') {
+          //   agent { label 'sles12' }
+          //   steps { sh readFile(file: 'jenkins/suse-tests.sh') }
+          // }
+        }
       }
     }
   // stage('cleanup') {steps {echo 'cleanup'}}
