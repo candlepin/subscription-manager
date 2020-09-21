@@ -27,7 +27,7 @@ pipeline {
           steps {
             sh readFile(file: 'jenkins/python3-tests.sh')
             junit('nosetests.xml')
-            // publishCoverage('coverage.xml')
+            publishCoverage('coverage.xml')
           }
         }
         stage('opensuse42') {
@@ -65,22 +65,15 @@ pipeline {
             agent { label 'opensuse42' }
             steps {
               sh "scripts/suse_build.sh 'home:kahowell' ${PLATFORM}"
-              sh """
-              if [ -d python-rhsm ]; then
-                cd python-rhsm
-                ../scripts/suse_build.sh 'home:kahowell' ${PLATFORM} -k \$WORKSPACE
-                cd ..
-              fi
-              """
-              // figure out why you need this..
-              // sh readFile(file: 'jenkins/createrepo.sh')
+              // sh """
+              // if [ -d python-rhsm ]; then
+              //   cd python-rhsm
+              //   ../scripts/suse_build.sh 'home:kahowell' ${PLATFORM} -k \$WORKSPACE
+              //   cd ..
+              // fi
+              // """
             }
           }
-          // RUNNING in above parallel test step to speed things up...
-          // stage('nose') {
-          //   agent { label 'sles12' }
-          //   steps { sh readFile(file: 'jenkins/suse-tests.sh') }
-          // }
         }
       }
     }
