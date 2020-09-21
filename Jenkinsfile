@@ -15,8 +15,8 @@ pipeline {
         stage('RHEL7 unit') {
           agent { label 'subman-centos7' }
           steps {
-            echo "skipping for debug..."
-            // sh readFile(file: 'jenkins/nose-tests.sh')
+            // echo "skipping for debug..."
+            sh readFile(file: 'jenkins/nose-tests.sh')
             junit('nosetests.xml')
             // publishCoverage('coverage.xml')
             }
@@ -27,7 +27,10 @@ pipeline {
           steps {
             sh readFile(file: 'jenkins/python3-tests.sh')
             junit('nosetests.xml')
-            publishCoverage('coverage.xml')
+            // TODO: find the correct adapter or generate coverage tests that can be
+            //       parsed by an existing adapter:
+            //       https://plugins.jenkins.io/code-coverage-api/
+            // publishCoverage adapters: [jacocoAdapter('coverage.xml')]
           }
         }
         stage('opensuse42') {
