@@ -2,7 +2,7 @@ pipeline {
   agent { label 'subman' }
   stages {
     // stage('prepare') {steps {echo 'prepare'}}
-    stage('test') {
+    stage('Test') {
       parallel {
         stage('stylish') {
           agent { label 'subman-centos7' }
@@ -14,7 +14,10 @@ pipeline {
         }
         stage('RHEL7 unit') {
           agent { label 'subman-centos7' }
-          steps { sh readFile(file: 'jenkins/nose-tests.sh') }
+          steps {
+            echo "skipping for debug..."
+            // sh readFile(file: 'jenkins/nose-tests.sh')
+            }
         }
         // TODO: figure if this is needed and implement
         // stage('RHEL8 unit') {steps {echo 'nose'}}
