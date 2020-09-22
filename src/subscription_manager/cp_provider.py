@@ -17,6 +17,7 @@ import base64
 import json
 
 from subscription_manager.identity import ConsumerIdentity
+from subscription_manager import utils
 import rhsm.connection as connection
 
 
@@ -48,8 +49,23 @@ class CPProvider(object):
     def __init__(self):
         self.set_connection_info()
         self.correlation_id = None
+        self.username = None
+        self.password = None
         self.token = None
         self.token_username = None
+        self.cdn_hostname = None
+        self.cdn_port = None
+        self.cert_file = None
+        self.key_file = None
+        self.server_hostname = None
+        self.server_port = None
+        self.server_prefix = None
+        self.proxy_hostname = None
+        self.proxy_port = None
+        self.proxy_user = None
+        self.proxy_password = None
+        self.no_proxy = None
+        self.restlib_class = None
 
     # Reread the config file and prefer arguments over config values
     # then recreate connections
@@ -117,6 +133,13 @@ class CPProvider(object):
         self.no_auth_cp = None
         self.keycloak_auth_cp = None
 
+    def get_client_version(self):
+        """
+        Try to get version of subscription manager
+        :return: string with version of subscription-manager
+        """
+        return " subscription-manager/%s" % utils.get_client_versions()['subscription-manager']
+
     def get_consumer_auth_cp(self):
         if not self.consumer_auth_cp:
             self.consumer_auth_cp = connection.UEPConnection(
@@ -130,7 +153,9 @@ class CPProvider(object):
                     cert_file=self.cert_file, key_file=self.key_file,
                     correlation_id=self.correlation_id,
                     no_proxy=self.no_proxy,
-                    restlib_class=self.restlib_class)
+                    restlib_class=self.restlib_class,
+                    client_version=self.get_client_version()
+            )
         return self.consumer_auth_cp
 
     def get_keycloak_auth_cp(self, token):
@@ -170,8 +195,9 @@ class CPProvider(object):
                 correlation_id=self.correlation_id,
                 no_proxy=self.no_proxy,
                 restlib_class=self.restlib_class,
-                token=self.token
-                )
+                token=self.token,
+                client_version=self.get_client_version()
+        )
         return self.keycloak_auth_cp
 
     def get_basic_auth_cp(self):
@@ -188,7 +214,9 @@ class CPProvider(object):
                     password=self.password,
                     correlation_id=self.correlation_id,
                     no_proxy=self.no_proxy,
-                    restlib_class=self.restlib_class)
+                    restlib_class=self.restlib_class,
+                    client_version=self.get_client_version()
+            )
         return self.basic_auth_cp
 
     def get_no_auth_cp(self):
@@ -203,16 +231,21 @@ class CPProvider(object):
                     proxy_password=self.proxy_password,
                     correlation_id=self.correlation_id,
                     no_proxy=self.no_proxy,
-                    restlib_class=self.restlib_class)
+                    restlib_class=self.restlib_class,
+                    client_version=self.get_client_version()
+            )
         return self.no_auth_cp
 
     def get_content_connection(self):
         if not self.content_connection:
-            self.content_connection = connection.ContentConnection(host=self.cdn_hostname,
-                                                                   ssl_port=self.cdn_port,
-                                                                   proxy_hostname=self.proxy_hostname,
-                                                                   proxy_port=self.proxy_port,
-                                                                   proxy_user=self.proxy_user,
-                                                                   proxy_password=self.proxy_password,
-                                                                   no_proxy=self.no_proxy)
+            self.content_connection = connection.ContentConnection(
+                host=self.cdn_hostname,
+                ssl_port=self.cdn_port,
+                proxy_hostname=self.proxy_hostname,
+                proxy_port=self.proxy_port,
+                proxy_user=self.proxy_user,
+                proxy_password=self.proxy_password,
+                no_proxy=self.no_proxy,
+                client_version=self.get_client_version()
+            )
         return self.content_connection

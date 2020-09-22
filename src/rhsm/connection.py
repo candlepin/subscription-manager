@@ -152,7 +152,9 @@ class BaseConnection(object):
             token=None,
             user_agent=None,
             correlation_id=None,
-            timeout=None):
+            timeout=None,
+            **kwargs
+    ):
 
         restlib_class = restlib_class or Restlib
         self.host = host or config.get('server', 'hostname')
@@ -421,6 +423,8 @@ class ContentConnection(BaseConnection):
     def __init__(self, cert_dir=None, **kwargs):
         log.debug("ContentConnection")
         user_agent = "RHSM-content/1.0 (cmd=%s)" % utils.cmd_name(sys.argv)
+        if 'client_version' in kwargs:
+            user_agent += kwargs['client_version']
         cert_dir = cert_dir or '/etc/pki/entitlement'
         super(ContentConnection, self).__init__(handler='/', cert_dir=cert_dir, user_agent=user_agent,
                                                 **kwargs)
@@ -943,6 +947,8 @@ class UEPConnection(BaseConnection):
         Must specify only one method of authentication.
         """
         user_agent = "RHSM/1.0 (cmd=%s)" % utils.cmd_name(sys.argv)
+        if 'client_version' in kwargs:
+            user_agent += kwargs['client_version']
         super(UEPConnection, self).__init__(user_agent=user_agent, **kwargs)
 
     def _load_supported_resources(self):
