@@ -1829,6 +1829,23 @@ class AttachCommand(CliCommand):
         if self.options.pool or self.options.file:
             self.auto_attach = False
 
+        # Do not try to do auto-attach, when simple content access mode is used
+        # BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1826300
+        if self.auto_attach is True:
+            if is_simple_content_access(uep=self.cp, identity=self.identity):
+                owner_name = ""
+                try:
+                    owner = self.cp.getOwner(self.identity.uuid)
+                except Exception as err:
+                    handle_exception(_("Error: Unable to retrieve org list from server"), err)
+                else:
+                    owner_name = owner['displayName']
+                # We could also display owner ID: `owner_id = owner['key']` (not sure)
+                print(_('Ignoring request to auto-attach. '
+                        'It is disabled for organization: "%s", because Simple Content Access is in use.')
+                      % owner_name)
+                return 0
+
         installed_products_num = 0
         return_code = 0
         report = None
