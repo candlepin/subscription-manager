@@ -224,11 +224,6 @@ inotify
 .RS 4
 Inotify is used for monitoring changes in directories with certificates. Currently only the /etc/pki/consumer directory is monitored by the rhsm.service. When this directory is mounted using a network file system without inotify notification support (e.g. NFS), then disabling inotify is strongly recommended. When inotify is disabled, periodical directory polling is used instead.
 .RE
-.PP
-no_insights
-.RS 4
-When this option is enabled (set to 1), insights-client will not automatically register the system to Red Hat Insights after successful registration using "subscription-manager register" regardless of the usage of the "--no-insights" command-line option. When this option is disabled (set to 0), insights-client, if installed, will automatically register the system to Red Hat Insights after a successful registration using "subscription-manager register" so long as the "--no-insights" option is not provided.
-.RE
 .SH "[RHSMCERTD] OPTIONS"
 .PP
 certCheckInterval
