@@ -7,18 +7,16 @@ from . import stubs
 
 from tempfile import mkdtemp
 
-from mock import Mock, patch, ANY
+from mock import Mock, patch
 from rhsm.utils import ServerUrlParseErrorEmpty, \
     ServerUrlParseErrorNone, ServerUrlParseErrorPort, \
     ServerUrlParseErrorScheme, ServerUrlParseErrorJustScheme
 from subscription_manager.utils import parse_server_info, \
     parse_baseurl_info, format_baseurl, \
     get_version, get_client_versions, unique_list_items, \
-    get_server_versions, friendly_join, is_true_value, url_base_join, \
-    ProductCertificateFilter, EntitlementCertificateFilter, \
-    is_simple_content_access, is_process_running, get_process_names, is_insights_register_enabled, \
-    is_insights_installed, check_returncode, check_output, call_subprocess
-from subprocess import CalledProcessError
+    get_server_versions, friendly_join, is_true_value, url_base_join,\
+    ProductCertificateFilter, EntitlementCertificateFilter,\
+    is_simple_content_access, is_process_running, get_process_names
 from .stubs import StubProductCertificate, StubProduct, StubEntitlementCertificate
 from .fixture import SubManFixture
 
@@ -991,118 +989,3 @@ class TestGetProcessNamesAndIsProcessRunning(fixture.SubManFixture):
         res = get_process_names()
         res = list(res)
         self.assertEquals(res, [fake_process_name], "Expected an empty list, Actual: %s" % res)
-
-
-class TestIsInsightsRegisterEnabled(fixture.SubManFixture):
-    """
-    This is a group of tests for the is_insights_register_enabled method.
-    As the method depends on "check_returncode", it does not test the functionality of that.
-    """
-    def setUp(self):
-        check_returncode_patch = patch('subscription_manager.utils.check_returncode')
-        self.check_returncode_mock = check_returncode_patch.start()
-        self.addCleanup(check_returncode_patch.stop)
-
-    def test_is_insights_register_enabled(self):
-        self.check_returncode_mock.return_value = 0
-        self.assertTrue(is_insights_register_enabled())
-        self._assert_called_correct_cmd()
-
-    def test_is_insights_register_disabled(self):
-        self.check_returncode_mock.return_value = 1
-        self.assertFalse(is_insights_register_enabled())
-        self._assert_called_correct_cmd()
-
-    def _assert_called_correct_cmd(self):
-        self.check_returncode_mock.assert_called_with('systemctl is-enabled insights-register.path')
-
-
-class TestIsInsightsInstalled(fixture.SubManFixture):
-    """
-    This is a group of tests for the is_insights_installed method.
-    As the method depends on "check_returncode", it does not test the functionality of that.
-    """
-
-    def setUp(self):
-        check_returncode_patch = patch('subscription_manager.utils.check_returncode')
-        self.check_returncode_mock = check_returncode_patch.start()
-        self.addCleanup(check_returncode_patch.stop)
-
-    def test_is_insights_client_installed(self):
-        self.check_returncode_mock.return_value = 0
-        self.assertTrue(is_insights_installed())
-        self._assert_called_correct_cmd()
-
-    def test_is_insights_client_not_installed(self):
-        self.check_returncode_mock.return_value = 1
-        self.assertFalse(is_insights_installed())
-        self._assert_called_correct_cmd()
-
-    def _assert_called_correct_cmd(self):
-        self.check_returncode_mock.assert_called_with('which insights-client')
-
-
-class TestCheckReturnCode(fixture.SubManFixture):
-    """
-    This is a group of tests for the check_returncode method.
-    As the method depends on "call_subprocess", it does not test the functionality of that.
-    """
-
-    def setUp(self):
-        call_subprocess_patch = patch('subscription_manager.utils.call_subprocess')
-        self.call_subprocess_mock = call_subprocess_patch.start()
-        self.addCleanup(call_subprocess_patch.stop)
-
-    def test_check_returncode(self):
-        call_subprocess_result = ('output', 0)
-        cmd = 'which which'  # Could be anything
-        self.call_subprocess_mock.return_value = call_subprocess_result
-        self.assertEqual(check_returncode(cmd), call_subprocess_result[1])
-        self.call_subprocess_mock.assert_called_with(cmd)
-
-
-class TestCheckOutput(fixture.SubManFixture):
-    """
-    This is a group of tests for the check_output method.
-    As the method depends on "call_subprocess", it does not test the functionality of that.
-    """
-
-    def setUp(self):
-        call_subprocess_patch = patch('subscription_manager.utils.call_subprocess')
-        self.call_subprocess_mock = call_subprocess_patch.start()
-        self.addCleanup(call_subprocess_patch.stop)
-
-    def test_check_output(self):
-        call_subprocess_result = ('output', 0)
-        cmd = 'which which'  # Could be anything
-        self.call_subprocess_mock.return_value = call_subprocess_result
-        self.assertEqual(check_output(cmd), call_subprocess_result[0])
-        self.call_subprocess_mock.assert_called_with(cmd)
-
-
-class TestCallSubprocess(fixture.SubManFixture):
-    """
-    This is a group of tests for the check_output method.
-    As the method depends on "call_subprocess", it does not test the functionality of that.
-    """
-
-    def setUp(self):
-        check_output_patch = patch('subprocess.check_output')
-        self.check_output_mock = check_output_patch.start()
-        self.addCleanup(check_output_patch.stop)
-
-    def test_call_subprocess(self):
-        call_subprocess_result = 'output'
-        cmd = 'which which'  # Could be anything
-        self.check_output_mock.return_value = call_subprocess_result
-        self.assertEqual(call_subprocess(cmd), (call_subprocess_result, 0))
-        self.check_output_mock.assert_called_with(cmd, stderr=ANY, shell=True)
-
-    def test_call_subprocess_error(self):
-        call_subprocess_result = 'output'
-        cmd = 'which which'  # Could be anything
-        to_raise = CalledProcessError(1, cmd, call_subprocess_result)
-        self.check_output_mock.return_value = call_subprocess_result
-        self.check_output_mock.side_effect = to_raise
-        self.assertEqual(call_subprocess(cmd), (call_subprocess_result, to_raise.returncode))
-        self.check_output_mock.assert_called_with(cmd, stderr=ANY, shell=True)

@@ -16,7 +16,7 @@ from __future__ import print_function, division, absolute_import
 #
 import os
 
-from mock import Mock, NonCallableMock, patch, MagicMock, ANY
+from mock import Mock, NonCallableMock, patch, MagicMock
 
 from .stubs import StubUEP
 
@@ -35,19 +35,18 @@ class CliRegistrationTests(SubManFixture):
     def setUp(self):
         super(CliRegistrationTests, self).setUp()
         register_patcher = patch('subscription_manager.managercli.register.RegisterService',
-                                 spec=RegisterService)
+            spec=RegisterService)
         self.mock_register = register_patcher.start().return_value
         self.mock_register.register.return_value = MagicMock(name="MockConsumer")
         self.addCleanup(register_patcher.stop)
 
-        get_supported_resources_patcher = patch(
-            'subscription_manager.managercli.get_supported_resources')
+        get_supported_resources_patcher = patch('subscription_manager.managercli.get_supported_resources')
         self.mock_get_resources = get_supported_resources_patcher.start()
         self.mock_get_resources.return_value = ['environments']
         self.addCleanup(self.mock_get_resources.stop)
 
         identity_patcher = patch('subscription_manager.managercli.identity.ConsumerIdentity',
-                                 spec=ConsumerIdentity)
+            spec=ConsumerIdentity)
         self.mock_consumer_identity = identity_patcher.start().return_value
         self.addCleanup(identity_patcher.stop)
 
@@ -87,7 +86,7 @@ class CliRegistrationTests(SubManFixture):
 
     @patch('subscription_manager.managercli.EntCertActionInvoker')
     def test_activation_keys_updates_certs_and_repos(self, mock_entcertlib):
-        self.stub_cp_provider.basic_auth_cp = Mock(spec=StubUEP, new_callable=StubUEP)
+        self.stub_cp_provider.basic_auth_cp = Mock('rhsm.connection.UEPConnection', new_callable=StubUEP)
         self._inject_mock_invalid_consumer()
 
         cmd = RegisterCommand()
@@ -100,20 +99,19 @@ class CliRegistrationTests(SubManFixture):
 
     @patch('subscription_manager.managercli.EntCertActionInvoker')
     def test_consumerid_updates_certs_and_repos(self, mock_entcertlib):
-        self.stub_cp_provider.basic_auth_cp = Mock(spec=StubUEP, new_callable=StubUEP)
+        self.stub_cp_provider.basic_auth_cp = Mock('rhsm.connection.UEPConnection', new_callable=StubUEP)
         self._inject_mock_invalid_consumer()
 
         cmd = RegisterCommand()
         mock_entcertlib = mock_entcertlib.return_value
         self._inject_ipm()
 
-        cmd.main(['register', '--consumerid=123456', '--username=testuser1', '--password=password',
-                  '--org=test_org'])
+        cmd.main(['register', '--consumerid=123456', '--username=testuser1', '--password=password', '--org=test_org'])
         self.mock_register.register.assert_called_once_with(None, consumerid='123456')
         mock_entcertlib.update.assert_called_once()
 
     def test_consumerid_with_distributor_id(self):
-        self.stub_cp_provider.basic_auth_cp = Mock(spec=StubUEP, new_callable=StubUEP)
+        self.stub_cp_provider.basic_auth_cp = Mock('rhsm.connection.UEPConnection', new_callable=StubUEP)
 
         self._inject_mock_invalid_consumer()
         cmd = RegisterCommand()
@@ -122,8 +120,7 @@ class CliRegistrationTests(SubManFixture):
 
         with Capture(silent=True):
             with self.assertRaises(SystemExit) as e:
-                cmd.main(['register', '--consumerid=TaylorSwift', '--username=testuser1',
-                          '--password=password', '--org=test_org'])
+                cmd.main(['register', '--consumerid=TaylorSwift', '--username=testuser1', '--password=password', '--org=test_org'])
                 self.assertEqual(e.code, os.EX_USAGE)
 
     def test_strip_username_and_password(self):
@@ -241,49 +238,3 @@ class CliRegistrationTests(SubManFixture):
                 with self.assertRaises(SystemExit) as e:
                     cmd.main(['register', '--type=candlepin'])
                     self.assertEqual(e.code, os.EX_USAGE)
-
-    def test_no_insights_missing_capability(self):
-        self.stub_cp_provider.basic_auth_cp = StubUEP()
-        self._assert_no_insights_is(True)
-
-    def test_no_insights_missing_capability_cli_option(self):
-        self.stub_cp_provider.basic_auth_cp = StubUEP()
-        self._assert_no_insights_is(True, ['--no-insights'])
-
-    def test_no_insights_with_capability(self):
-        self.stub_cp_provider.basic_auth_cp = StubUEP()
-        self.stub_cp_provider.basic_auth_cp._capabilities = ['insights_auto_register']
-        self._assert_no_insights_is(False)
-
-    def test_no_insights_with_capability_cli_option(self):
-        self.stub_cp_provider.basic_auth_cp = StubUEP()
-        self.stub_cp_provider.basic_auth_cp._capabilities = ['insights_auto_register']
-        self._assert_no_insights_is(True, ['--no-insights'])
-
-    def _assert_no_insights_is(self, expected_no_insights, extra_cli_args=None):
-        self._inject_mock_invalid_consumer()
-        cmd = RegisterCommand()
-        self._inject_ipm()
-        owner_key = 'test_org'
-
-        with Capture(silent=True):
-            cli_args_list = [
-                'register',
-                '--username=testuser1',
-                '--password=password',
-                '--org=%s' % owner_key
-            ]
-            if extra_cli_args is not None:
-                cli_args_list.extend(extra_cli_args)
-            cmd.main(cli_args_list)
-
-        self.mock_register.register.assert_called_once_with(
-                owner_key,
-                activation_keys=ANY,
-                environment=ANY,
-                force=ANY,
-                name=ANY,
-                type=ANY,
-                service_level=ANY,
-                no_insights=expected_no_insights
-        )

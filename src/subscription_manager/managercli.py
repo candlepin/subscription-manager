@@ -64,8 +64,7 @@ from subscription_manager.overrides import Overrides, Override
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, \
         none_wrap_columnize_callback, echo_columnize_callback, highlight_by_filter_string_columnize_cb
-from subscription_manager.utils import generate_correlation_id, is_insights_installed, \
-    is_insights_register_enabled, is_insights_unregister_enabled, is_true_value
+from subscription_manager.utils import generate_correlation_id
 from subscription_manager.syspurposelib import save_sla_to_syspurpose_metadata, \
         get_syspurpose_valid_fields, post_process_received_data
 from subscription_manager.packageprofilelib import PackageProfileActionInvoker
@@ -1146,8 +1145,8 @@ class IdentityCommand(UserPassCommand):
 
                 log.debug("Successfully generated a new identity from server.")
         except connection.GoneException as ge:
-            # Gone exception is catched in CliCommand and consistent message is printed there
-            # for all commands
+            # Gone exception is caught in CliCommand and a consistent message
+            # is printed there for all commands
             raise ge
         except connection.RestlibException as re:
             log.exception(re)
@@ -1478,9 +1477,6 @@ class RegisterCommand(UserPassCommand):
                                help=_("activation key to use for registration (can be specified more than once)"))
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("system preference used when subscribing automatically, requires --auto-attach"))
-        self.parser.add_option("--no-insights", action='store_true',
-                               help=_("stop insights from automatically registering using the system identity"),
-                               default=False)
 
     def _validate_options(self):
         self.autoattach = self.options.autosubscribe or self.options.autoattach
@@ -1599,9 +1595,6 @@ class RegisterCommand(UserPassCommand):
                         no_owner_cb=self._no_owner_cb
                     )
                 environment_id = self._get_environment_id(admin_cp, owner_key, self.options.environment)
-                if not admin_cp.has_capability("insights_auto_register") or \
-                        is_true_value(conf["rhsm"]["no_insights"]):
-                    self.options.no_insights = True
                 consumer = service.register(
                     owner_key,
                     activation_keys=self.options.activation_keys,
@@ -1610,7 +1603,6 @@ class RegisterCommand(UserPassCommand):
                     name=self.options.consumername,
                     type=self.options.consumertype,
                     service_level=self.options.service_level,
-                    no_insights=self.options.no_insights
                 )
         except (connection.RestlibException, exceptions.ServiceError) as re:
             log.exception(re)
@@ -1696,22 +1688,6 @@ class RegisterCommand(UserPassCommand):
             subscribed = show_autosubscribe_output(self.cp, self.identity)
 
         self._request_validity_check()
-
-        if self.options.no_insights and admin_cp.has_capability("insights_auto_register"):
-            print(_('Red Hat Insights registration disabled.'))
-            if is_insights_installed():
-                print(_('To opt into Red Hat Insights, run "insights-client --register".'))
-            else:
-                print(_('To opt into Red Hat Insights, install the insights-client package '
-                        'and run "insights-client --register".'))
-        elif admin_cp.has_capability("insights_auto_register"):
-            if not is_insights_installed():
-                print(_('To use Red Hat Insights, install the insights-client package.'))
-            elif is_insights_register_enabled():
-                print(_('Red Hat Insights registration enabled.'))
-            print(_('To opt out of Red Hat Insights, run "insights-client --unregister" '
-                    'and run "subscription-manager register --force --no-insights"'))
-
         return subscribed
 
     def _prompt_for_environment(self):
@@ -1794,6 +1770,7 @@ class RegisterCommand(UserPassCommand):
         while not owner_key:
             owner_key = six.moves.input(_("Organization: "))
             readline.clear_history()
+        return owner_key
 
 
 class UnRegisterCommand(CliCommand):
@@ -1809,8 +1786,6 @@ class UnRegisterCommand(CliCommand):
         if not self.is_registered():
             # TODO: Should this use the standard NOT_REGISTERED message?
             system_exit(ERR_NOT_REGISTERED_CODE, _("This system is currently not registered."))
-
-        supports_insights_auto_register = self.cp.has_capability("insights_auto_register")
 
         print(_("Unregistering from: %s:%s%s") %
              (conf["server"]["hostname"], conf["server"]["port"], conf["server"]["prefix"]))
@@ -1839,9 +1814,6 @@ class UnRegisterCommand(CliCommand):
         restart_virt_who()
 
         print(_("System has been unregistered."))
-        if is_insights_installed() and is_insights_unregister_enabled() and \
-                supports_insights_auto_register:
-            print(_("Red Hat Insights will also unregister."))
 
 
 class AddonsCommand(SyspurposeCommand, OrgCommand):

@@ -49,38 +49,13 @@ class TestUnregisterService(InjectionMockingTest):
         else:
             return None
 
-    @mock.patch('os.path.exists')
     @mock.patch('subscription_manager.managerlib.clean_all_data')
-    def test_unregister(self, clean_all_data, mock_path_exists):
+    def test_unregister(self, clean_all_data):
         """
         Testing normal unregistration process
         """
-        mock_path_exists.return_value = False  # this short-circuits --no-insights path mask check
         result = unregister.UnregisterService(self.mock_cp).unregister()
         self.assertIsNone(result)
-
-    @mock.patch('subprocess.call')
-    @mock.patch('os.path.islink')
-    @mock.patch('os.readlink')
-    @mock.patch('os.path.exists')
-    @mock.patch('subscription_manager.managerlib.clean_all_data')
-    def test_unregister_insights_register_unmask(self, clean_all_data, mock_path_exists, mock_readlink, mock_islink,
-                                                 mock_subprocess_call):
-        """
-        Testing normal unregistration process
-        """
-        mock_path_exists.return_value = True
-        mock_readlink.return_value = '/dev/null'
-        mock_islink.return_value = True
-
-        mock_open = mock.mock_open()
-        with mock.patch('rhsmlib.services.unregister.open', mock_open, create=True):
-            result = unregister.UnregisterService(self.mock_cp).unregister()
-        self.assertIsNone(result)
-        mock_subprocess_call.assert_called_once_with(
-            ['/usr/bin/systemctl', 'unmask', 'insights-register.path'],
-            stdout=mock_open(), stderr=mock_open()
-        )
 
 
 class TestUnregisterDBusObject(DBusObjectTest, InjectionMockingTest):

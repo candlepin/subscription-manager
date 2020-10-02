@@ -21,15 +21,11 @@ server.
 """
 
 import logging
-import os
-import subprocess
 
 from subscription_manager import injection as inj
 from subscription_manager import managerlib
 from rhsm import connection
 
-
-INSIGHTS_REGISTER_UNIT_PATH = '/etc/systemd/system/insights-register.path'
 
 log = logging.getLogger(__name__)
 
@@ -69,12 +65,3 @@ class UnregisterService(object):
                 managerlib.clean_all_data(backup=False)
             else:
                 raise ge
-        finally:
-            try:
-                if os.path.exists(INSIGHTS_REGISTER_UNIT_PATH) and os.path.islink(INSIGHTS_REGISTER_UNIT_PATH) and \
-                        os.readlink(INSIGHTS_REGISTER_UNIT_PATH) == '/dev/null':
-                    with open('/dev/null', 'w') as devnull:
-                        subprocess.call(['/usr/bin/systemctl', 'unmask', 'insights-register.path'], stdout=devnull,
-                                        stderr=devnull)
-            except:
-                log.warn("Failed to ensure insights automatic registration enabled")
