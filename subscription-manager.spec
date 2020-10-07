@@ -244,7 +244,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.3
+Version: 1.28.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1441,6 +1441,24 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Oct 07 2020 Christopher Snyder <csnyder@redhat.com> 1.28.4-1
+- Revert the --no-insights feature (csnyder@redhat.com)
+- adding Jenkinsfile and CI test scripts (jmolet@redhat.com)
+- 1847910: DNF plugins are part of sub-man RPM, libdnf RPM; ENT-2536
+  (jhnidek@redhat.com)
+- 1826300: Ignore auto-attach, when SCA mode is used; ENT-2341
+  (jhnidek@redhat.com)
+- 1862431: option validation error from unexpected config entry; ENT-2712
+  (wpoteat@redhat.com)
+- 1844508: sub-man sends version in the User-Agent header; ENT-2486
+  (wpoteat@redhat.com)
+- 1855437: syspurpose CLI should require sub-man rpm; ENT-2602
+  (jhnidek@redhat.com)
+- 1870567: Fix issue with locale and D-Bus method GetStatus; ENT-2772
+  (jhnidek@redhat.com)
+- 1868734: Fix issue with syspurpose attrs. set in act. key; ENT-2851
+  (jhnidek@redhat.com)
+
 * Wed Sep 02 2020 William Poteat <wpoteat@redhat.com> 1.28.3-1
 - 1753236: D-Bus Register properly, when org not specified; ENT-2096
   (jhnidek@redhat.com)
