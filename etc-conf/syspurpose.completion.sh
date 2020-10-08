@@ -19,7 +19,7 @@ _syspurpose()
   prev="${COMP_WORDS[COMP_CWORD-1]}"
 
   # top-level commands and options
-  opts="set unset add remove set-role unset-role set-usage unset-usage add-addons remove-addons
+  opts="set unset add remove set-role unset-role set-usage unset-usage unset-addons add-addons remove-addons
   set-sla unset-sla show -h --help"
 
   COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
