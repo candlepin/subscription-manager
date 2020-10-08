@@ -1601,6 +1601,10 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         except SystemExit as e:
             self.assertEqual(e.code, os.EX_USAGE)
 
+    def test_set_allows_list_good(self):
+        self.cc.main(["--set", "two","--org","test"])
+        self.cc._validate_options()
+
     def test_org_requires_list_good(self):
         self.cc.main(["--org", "one", "--list"])
 
