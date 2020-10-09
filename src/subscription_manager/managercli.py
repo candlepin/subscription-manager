@@ -681,9 +681,10 @@ class SyspurposeCommand(CliCommand):
                 valid_fields = get_syspurpose_valid_fields(uep=self.cp, identity=self.identity)
             except ProxyException:
                 system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
-        elif self.cp is not None:
+        elif self.options.username and self.options.password and self.cp is not None:
             # Try to get current organization key. It is property of OrgCommand.
             # Every Syspurpose command has to be subclass of OrgCommand too
+            # must have used credentials in command if not registered to proceed
             org_key = self.org
             try:
                 server_response = self.cp.getOwnerSyspurposeValidFields(org_key)
@@ -1311,8 +1312,8 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
            not self.options.unset:
             self.options.show = True
 
-        if self.options.org and not self.options.list:
-            system_exit(os.EX_USAGE, _("Error: --org is only supported with the --list option"))
+        if self.options.org and not self.options.list and not self.options.set:
+            system_exit(os.EX_USAGE, _("Error: --org is only supported with the --list or --set option"))
 
         if not self.is_registered():
             if self.options.list:
