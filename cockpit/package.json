@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "a plugin for cockpit to manage subscriptions",
   "main": "index.js",
-  "repository": "git@github.com:rarebreed/subscription-manager.git",
+  "repository": "git@github.com:candlepin/subscription-manager.git",
   "author": "",
   "license": "LGPL-2.1",
   "scripts": {
@@ -67,5 +67,8 @@
     "hoek": "^4.2.1",
     "moment": "^2.19.3",
     "lodash": "^4.17.13"
+  },
+  "engines": {
+    "npm": "*"
   }
 }

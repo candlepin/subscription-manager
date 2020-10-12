@@ -16,36 +16,25 @@ Development Outside of Vagrant
 > An important note for Red Hat developers: If you develop the cockpit
 plugin outside of the Red Hat office, no changes to the configuration file are
 needed . If you are Red Hat developer working in the Red Hat office, then please use
-our internal cache of the nmpjs repository called Nexus. You need to change the
-symbolic link: `rm -f yarn.lock; ln -s yarn.lock.nexus yarn.lock`. There are
-two lock files: `yarn.lock.npmjs` (for community users) and `yarn.lock.nexus` (for
-Red Hat developers). If you make a big change in `yarn.lock.npmjs` and you
-want to have similar change in `yarn.lock.nexus`, then you should use following
-regular expression:
+our internal cache of the nmpjs repository called Nexus. Configure
+npm with:
 
-`%s/registry.yarnpkg.com/repository.engineering.redhat.com\/nexus\/repository\/registry.npmjs.org/g`
+`npm config set registry https://repository.engineering.redhat.com/nexus/repository/registry.npmjs.org`
 
  - `nvm` is recommended but not required (https://github.com/creationix/nvm).
- - `yarn` needs to be installed globally (`npm install -g yarn`).
- - `yarn install` needs to be run from the `cockpit` subdirectory.
+ - `npm install` needs to be run from the `cockpit` subdirectory.
 
 With these steps, the cockpit plugin code can be built from the host.
 
-Yarn
+NPM
 ----
-Yarn is used to install, remove, and update NPM packages for the plugin.
+NPM is used to install, remove, and update js packages for the plugin.
 
 The most common commands are:
- - `yarn add <package> --dev`: Add a JavaScript dependency.
- - `yarn install`: Install JavaScript dependencies and update the lockfile if
+ - `npm add <package> --dev`: Add a JavaScript dependency.
+ - `npm install`: Install JavaScript dependencies and update the lockfile if
    necessary.
-
-(See https://yarnpkg.com for more details on using yarn).
-
-> When using our Nexus repository and you add a dependency using
-`yarn add <package>`, also update the `yarn.lock.npmjs` file. Conversely,
-when you are community contributor and add a package, please update
-`yarn.lock.nexus` as well.
+ - `npm shrinkwrap`: Lock the current dependencies into lockfile.
 
 NPM Scripts
 -----------
