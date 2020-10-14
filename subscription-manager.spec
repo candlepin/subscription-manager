@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.42
+Version: 1.24.43
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1161,6 +1161,14 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Oct 14 2020 Christopher Snyder <csnyder@redhat.com> 1.24.43-1
+- 1826300: Ignore auto-attach, when SCA mode is used
+  (jhnidek@redhat.com)
+- 1850919: False positive log "rhsmd process exceeded runtime and was killed."
+  (wpoteat@redhat.com)
+- 1868936: Do not print traceback, when profile upload failed
+  (wpoteat@redhat.com)
+
 * Fri Jun 19 2020 Christopher Snyder <csnyder@redhat.com> 1.24.42-1
 - 1848636, 1849074: Update insights machine-id path (csnyder@redhat.com)
 - 1796833: Update translations (csnyder@redhat.com)
