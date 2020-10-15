@@ -55,6 +55,7 @@ class ProductsDBusObject(base_object.BaseObject):
         constants.PRODUCTS_INTERFACE,
         in_signature='sa{sv}s',
         out_signature='s')
+    @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def ListInstalledProducts(self, filter_string, proxy_options, locale, sender=None):
 

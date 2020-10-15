@@ -38,7 +38,8 @@ def command_of_pid(pid):
     try:
         with open("/proc/%d/cmdline" % pid, "r") as f:
             cmd = f.readlines()[0].replace('\0', " ").strip()
-    except:
+    except Exception as err:
+        log.warning('Unable to get cmdline of PID: %s, error: %s' % (pid, err))
         return None
     return cmd
 

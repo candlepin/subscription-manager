@@ -47,6 +47,7 @@ class AttachDBusObject(base_object.BaseObject):
         constants.ATTACH_INTERFACE,
         in_signature='sa{sv}s',
         out_signature='s')
+    @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def AutoAttach(self, service_level, proxy_options, locale, sender=None):
         self.ensure_registered()
@@ -81,6 +82,7 @@ class AttachDBusObject(base_object.BaseObject):
         constants.ATTACH_INTERFACE,
         in_signature='asia{sv}s',
         out_signature='as')
+    @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def PoolAttach(self, pools, quantity, proxy_options, locale, sender=None):
         self.ensure_registered()
