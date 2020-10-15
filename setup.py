@@ -20,7 +20,7 @@ import re
 import subprocess
 
 from glob import glob
-from setuptools import setup, find_packages, Extension
+from setuptools import setup, find_packages
 from setuptools.command.install import install as _install
 
 
@@ -199,7 +199,7 @@ class build(_build):
 
     def has_po_files(self):
         try:
-            next(utils.Utils.find_files_of_type('po', '*.po'))
+            next(utils.Utils.find_files_of_type('po', ['*.po']))
             return True
         except StopIteration:
             return False
@@ -466,7 +466,5 @@ setup(
     setup_requires=setup_requires,
     install_requires=install_requires,
     tests_require=test_require,
-    ext_modules=[Extension('rhsm._certificate', ['src/certificate.c'],
-                           libraries=['ssl', 'crypto'])],
     test_suite='nose.collector',
 )

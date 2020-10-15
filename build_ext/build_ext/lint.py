@@ -25,12 +25,13 @@ from build_ext.utils import Utils, BaseCommand, memoize
 # These dependencies aren't available in build environments.  We won't need any
 # linting functionality there though, so just create a dummy class so we can proceed.
 try:
-    # These dependencies aren't available in build environments.  We won't need any
-    # linting functionality there though, so just create a dummy class so we can proceed.
     import pep8
+except ImportError:
+    pep8 = None
+try:
     import pkg_resources
 except ImportError:
-    pass
+    pkg_resources = None
 
 try:
     from flake8.main.setuptools_command import Flake8
@@ -56,14 +57,14 @@ class Lint(BaseCommand):
 
     def has_glade_files(self):
         try:
-            next(Utils.find_files_of_type('src', '*.glade'))
+            next(Utils.find_files_of_type('src', ['*.glade']))
             return True
         except StopIteration:
             return False
 
     def has_spec_file(self):
         try:
-            next(Utils.find_files_of_type('.', '*.spec'))
+            next(Utils.find_files_of_type('.', ['*.spec']))
             return True
         except StopIteration:
             return False
@@ -84,7 +85,7 @@ class RpmLint(BaseCommand):
     description = "run rpmlint on spec files"
 
     def run(self):
-        for f in Utils.find_files_of_type('.', '*.spec'):
+        for f in Utils.find_files_of_type('.', ['*.spec'], exclude_dirs=['cockpit/node_modules']):
             spawn(['rpmlint', '--file=rpmlint.config', f])
 
 
@@ -130,7 +131,7 @@ class GladeLint(FileLint):
     description = "check Glade files for common errors"
 
     def run(self):
-        for f in Utils.find_files_of_type('src', '*.glade'):
+        for f in Utils.find_files_of_type('src', ['*.glade']):
             self.scan_xml(f, [".//property[@name='orientation']", ".//*[@swapped='no']"])
 
 
@@ -324,7 +325,7 @@ class AstChecker(object):
 
         widgets = []
         handlers = []
-        for f in Utils.find_files_of_type('src', '*.glade', '*.ui'):
+        for f in Utils.find_files_of_type('src', ['*.glade', '*.ui']):
             # Note that we are sending in the file name rather than a file handle.  By using
             # the file name, we can take advantage of memoizing on the name instead of on an
             # instance of a file handle

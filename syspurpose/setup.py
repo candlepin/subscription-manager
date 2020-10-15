@@ -49,7 +49,7 @@ class build(_build):
 
     def has_po_files(self):
         try:
-            next(utils.Utils.find_files_of_type('po', '*.po'))
+            next(utils.Utils.find_files_of_type('po', ['*.po']))
             return True
         except StopIteration:
             return False

@@ -53,7 +53,7 @@ INITIAL_SETUP_INST_DIR := $(ANACONDA_ADDON_INST_DIR)/$(ANACONDA_ADDON_NAME)
 POLKIT_ACTIONS_INST_DIR := $(INSTALL_DIR)/polkit-1/actions
 COMPLETION_DIR ?= $(INSTALL_DIR)/bash-completion/completions/
 LIBEXEC_DIR ?= $(shell rpm --eval='%_libexecdir')
-SUBPACKAGES ?= $(shell ls -d syspurpose)
+SUBPACKAGES ?= "syspurpose rhsm"
 
 # If we skip install ostree plugin, unset by default
 # override from spec file for rhel6

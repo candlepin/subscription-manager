@@ -56,13 +56,13 @@ class BuildTrans(BaseCommand):
         spawn(cmd)
 
     def run(self):
-        for po_file in Utils.find_files_of_type('po', '*.po'):
+        for po_file in Utils.find_files_of_type('po', ['*.po']):
             lang = os.path.basename(po_file)[:-3]
             dest_path = os.path.join(self.build_base, 'locale', lang, 'LC_MESSAGES')
             dest = os.path.join(dest_path, self.app_name + '.mo')
             Utils.run_if_new(po_file, dest, self.compile)
 
-        for desktop_file in Utils.find_files_of_type('etc-conf', '*.desktop.in'):
+        for desktop_file in Utils.find_files_of_type('etc-conf', ['*.desktop.in']):
             output_file = os.path.basename("%s" % os.path.splitext(desktop_file)[0])
 
             dest_path = os.path.join(self.build_base, 'applications')
@@ -87,7 +87,7 @@ class UpdateTrans(BaseCommand):
         spawn(cmd)
 
     def run(self):
-        for po_file in Utils.find_files_of_type('po', '*.po'):
+        for po_file in Utils.find_files_of_type('po', ['*.po']):
             self.merge(po_file, self.key_file)
 
 
@@ -95,7 +95,7 @@ class UniqTrans(BaseCommand):
     description = 'Unify duplicate translations with msguniq'
 
     def run(self):
-        for po_file in Utils.find_files_of_type('po', '*.po'):
+        for po_file in Utils.find_files_of_type('po', ['*.po']):
             cmd = ['msguniq', po_file, '-o', po_file]
             spawn(cmd)
 
@@ -125,34 +125,34 @@ class Gettext(BaseCommand):
 
         for src in self.src_dirs.values():
             print(src)
-            files.extend(list(Utils.find_files_of_type(src, '*.py')))
+            files.extend(list(Utils.find_files_of_type(src, ['*.py'])))
 
-        files.extend(list(Utils.find_files_of_type('bin', '*')))
+        files.extend(list(Utils.find_files_of_type('bin', ['*'])))
         return files
 
     def find_c(self):
         files = []
 
         for src in self.src_dirs.values():
-            files.extend(list(Utils.find_files_of_type(src, '*.c', '*.h')))
+            files.extend(list(Utils.find_files_of_type(src, ['*.c', '*.h'])))
 
-        files.extend(list(Utils.find_files_of_type('tmp', '*.h')))
+        files.extend(list(Utils.find_files_of_type('tmp', ['*.h'])))
         return files
 
     def find_glade(self):
         files = []
         for src in self.src_dirs.values():
-            files.extend(list(Utils.find_files_of_type(src, '*.ui', '*.glade')))
+            files.extend(list(Utils.find_files_of_type(src, ['*.ui', '*.glade'])))
         return files
 
     def find_js(self):
         files = []
-        files.extend(list(Utils.find_files_of_type('cockpit/src', '*.js', '*.jsx')))
+        files.extend(list(Utils.find_files_of_type('cockpit/src', ['*.js', '*.jsx'])))
         return files
 
     def find_desktop(self):
         files = []
-        files.extend(list(Utils.find_files_of_type('etc-conf', '*.desktop.in')))
+        files.extend(list(Utils.find_files_of_type('etc-conf', ['*.desktop.in'])))
         return files
 
     def _write_sources(self, manifest_file, find_function):
@@ -173,7 +173,7 @@ class Gettext(BaseCommand):
         # Create xgettext friendly header files from the desktop files.
         # See http://stackoverflow.com/a/23643848/6124862
         cmd = ['intltool-extract', '-l', '--type=gettext/ini']
-        for desktop_file in Utils.find_files_of_type('etc-conf', '*.desktop.in'):
+        for desktop_file in Utils.find_files_of_type('etc-conf', ['*.desktop.in']):
             spawn(cmd + [desktop_file])
 
         cmd = ['xgettext', '--from-code=utf-8', '--add-comments=TRANSLATORS:', '--sort-by-file', '-o', tmp_key_file]

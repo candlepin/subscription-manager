@@ -16,6 +16,8 @@
 
 echo "GIT_COMMIT:" "${GIT_COMMIT}"
 
+cd $WORKSPACE
+
 sudo yum clean expire-cache
 sudo yum-builddep -y subscription-manager.spec || true # ensure we install any missing rpm deps
 virtualenv env -p python3 --system-site-packages || virtualenv-3 env --system-site-packages || true
@@ -26,8 +28,20 @@ pip install -I -r test-requirements.txt
 #TMPFILE=`mktemp`|| exit 1; $(make stylish | tee $TMPFILE); if [ -s $TMPFILE ] ; then echo "FAILED"; cat $TMPFILE; exit 1; fi
 
 # build the c modules
-python3 setup.py build
-python3 setup.py build_ext --inplace
+# build rhsm package
+if [ -d $WORKSPACE/rhsm ]; then
+  pushd $WORKSPACE/rhsm
+  python3 setup.py build
+  python3 setup.py build_ext --inplace
+  PYTHON_RHSM=$(pwd)
+  export PYTHONPATH="$PYTHON_RHSM"/src
+  pushd $WORKSPACE
+fi
+
+echo
+echo "PYTHONPATH=$PYTHONPATH"
+echo "PATH=$PATH"
+echo
 
 # not using "setup.py nosetests" yet
 # since they need a running candlepin

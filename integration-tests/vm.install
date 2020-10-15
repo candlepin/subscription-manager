@@ -10,9 +10,24 @@ dnf install -y python3-devel openssl-devel intltool
 cd /var/tmp
 
 rm -rf /usr/share/cockpit/subscriptions
-tar -C / -xzf subscription-manager-cockpit.tar.gz
+tar -C / -xvzf subscription-manager-cockpit.tar.gz
 
-tar -xzf subscription-manager.tar.gz --transform 's,[^/]*,/sm,'
+# uninstall existing rhsm rpm package
+rm -rf /usr/lib64/python3.6/site-packages/rhsm
+
+# Install rhsm python package
+tar -xvzf rhsm.tar.gz
+# We have to change this to something more generic, but tar --transform didn't work
+rm -rf rhsm
+mv rhsm-1.19.4 rhsm
+cd rhsm
+pwd
+ls -l
+python3 ./setup.py build
+python3 ./setup.py install --prefix /usr
+cd -
+
+tar -xvzf subscription-manager.tar.gz --transform 's,[^/]*,/sm,'
 cd sm
 tar xzf ../subscription-manager-build-extra.tar.gz
 python3 ./setup.py build

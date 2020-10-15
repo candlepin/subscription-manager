@@ -57,7 +57,7 @@ class BuildTemplate(BaseCommand):
             output.write(output_text)
 
     def run(self):
-        for template in Utils.find_files_of_type('etc-conf', '*.template'):
+        for template in Utils.find_files_of_type('etc-conf', ['*.template']):
             dest_rel_path = os.path.relpath("%s" % os.path.splitext(template)[0], 'etc-conf')
             dest = os.path.join(self.build_base, dest_rel_path)
             Utils.run_if_new(template, dest, self.template)

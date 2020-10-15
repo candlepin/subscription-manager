@@ -88,11 +88,17 @@ class Utils(object):
             callback(src, dest)
 
     @staticmethod
-    def find_files_of_type(directory, *globs):
+    def find_files_of_type(directory, globs, exclude_dirs=None):
         if not os.path.isabs(directory):
             directory = os.path.join(os.curdir, directory)
-        for path, dirnames, filenames in os.walk(directory):
-            for f in filenames:
-                for g in globs:
-                    if fnmatch.fnmatch(f, g):
-                        yield os.path.normpath(os.path.join(path, f))
+        for path, dir_names, file_names in os.walk(directory):
+            skip = False
+            if exclude_dirs is not None and len(exclude_dirs) > 0:
+                for exclude_dir in exclude_dirs:
+                    if exclude_dir in path:
+                        skip = True
+            if skip is False:
+                for f in file_names:
+                    for g in globs:
+                        if fnmatch.fnmatch(f, g):
+                            yield os.path.normpath(os.path.join(path, f))

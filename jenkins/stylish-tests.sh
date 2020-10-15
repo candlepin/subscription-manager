@@ -24,23 +24,21 @@ source env/bin/activate
 
 make install-pip-requirements
 
-# build/test python-rhsm
-if [ -d $WORKSPACE/python-rhsm ]; then
-  pushd $WORKSPACE/python-rhsm
+# build rhsm package
+if [ -d $WORKSPACE/rhsm ]; then
+  pushd $WORKSPACE/rhsm
+  # build the C modules
+  python setup.py build
+  python setup.py build_ext --inplace
+  PYTHON_RHSM=$(pwd)
+  export PYTHONPATH="$PYTHON_RHSM"/src
+  pushd $WORKSPACE
 fi
-PYTHON_RHSM=$(pwd)
 
-# build the c modules
-python setup.py build
-python setup.py build_ext --inplace
-
-# not using "setup.py nosetests" yet
-# since they need a running candlepin
-# yeah, kind of ugly...
-cp build/lib.linux-*/rhsm/_certificate.so src/rhsm/
-
-pushd $WORKSPACE
-export PYTHONPATH="$PYTHON_RHSM"/src
+echo
+echo "PYTHONPATH=$PYTHONPATH"
+echo "PATH=$PATH"
+echo
 
 make set-versions
 # capture exit status of 'make stylish' and not 'tee'

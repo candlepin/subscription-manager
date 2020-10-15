@@ -25,14 +25,14 @@ Due to unintuitive behavior with `sys.path`
 as expected. One can run the script like this instead:
 
 ```bash
-PYTHONPATH=./src:./syspurpose/src python -m subscription_manager.scripts.subscription_manager
+PYTHONPATH=./src:./syspurpose/src:./rhsm/src python -m subscription_manager.scripts.subscription_manager
 ```
 
 Similar for other bin scripts:
 
 ```bash
-PYTHONPATH=./src python -m subscription_manager.scripts.rct
-PYTHONPATH=./src python -m subscription_manager.scripts.rhn_migrate_classic_to_rhsm
+PYTHONPATH=./src:./syspurpose/src:./rhsm/src python -m subscription_manager.scripts.rct
+PYTHONPATH=./src:./syspurpose/src:./rhsm/src python -m subscription_manager.scripts.rhn_migrate_classic_to_rhsm
 # ... etc.
 ```
 
