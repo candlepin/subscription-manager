@@ -90,6 +90,7 @@ class SyspurposeDBusObject(base_object.BaseObject):
         constants.SYSPURPOSE_INTERFACE,
         in_signature='s',
         out_signature='s')
+    @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def GetSyspurpose(self, locale, sender=None):
         """
@@ -168,6 +169,7 @@ class SyspurposeDBusObject(base_object.BaseObject):
         in_signature='a{sv}s',
         out_signature='s'
     )
+    @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def SetSyspurpose(self, syspurpose_values, locale, sender):
         """

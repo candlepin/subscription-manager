@@ -48,6 +48,7 @@ class ConsumerDBusObject(base_object.BaseObject):
         constants.CONSUMER_INTERFACE,
         in_signature='s',
         out_signature='s')
+    @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def GetUuid(self, locale, sender=None):
         """

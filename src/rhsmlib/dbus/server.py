@@ -217,7 +217,13 @@ class DomainSocketServer(object):
     the register command (with the credentials) to the server on the domain socket."""
     @staticmethod
     def connection_added(domain_socket_server, service_class, object_list, conn):
-        object_list.append(service_class(conn=conn))
+        obj = service_class(
+            conn=conn,
+            sender=domain_socket_server.sender,
+            cmd_line=domain_socket_server.cmd_line
+        )
+        log.debug('Instance: %s of %s created' % (obj, service_class))
+        object_list.append(obj)
         with domain_socket_server.lock:
             domain_socket_server.connection_count += 1
         log.debug("New connection: %s", conn)
@@ -230,7 +236,10 @@ class DomainSocketServer(object):
             if domain_socket_server.connection_count == 0:
                 log.debug('No connections remain')
             else:
-                log.debug('Server still has connections')
+                if domain_socket_server.connection_count == 1:
+                    log.debug('Server still has one connection')
+                else:
+                    log.debug('Server still has %d connections' % domain_socket_server.connection_count)
 
     @property
     def address(self):
@@ -239,7 +248,7 @@ class DomainSocketServer(object):
         else:
             return None
 
-    def __init__(self, object_classes=None):
+    def __init__(self, object_classes=None, sender=None, cmd_line=None):
         """Create a connection to a bus defined by bus_class and bus_kwargs; instantiate objects in
         object_classes; expose them under bus_name and enter a GLib mainloop.  bus_kwargs are generally
         only necessary if you're using dbus.bus.BusConnection
@@ -250,6 +259,8 @@ class DomainSocketServer(object):
         self.object_classes = object_classes or []
         self.objects = []
         self._server = None
+        self.sender = sender
+        self.cmd_line = cmd_line
 
         self.lock = threading.Lock()
         with self.lock:
@@ -263,6 +274,8 @@ class DomainSocketServer(object):
         # Allow self.objects and self._server to get GCed
         self.objects = None
         self._server = None
+        self.sender = None
+        self.cmd_line = None
 
     def run(self):
         try:

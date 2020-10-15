@@ -973,6 +973,8 @@ class UEPConnection(BaseConnection):
         user_agent = "RHSM/1.0 (cmd=%s)" % utils.cmd_name(sys.argv)
         if 'client_version' in kwargs:
             user_agent += kwargs['client_version']
+        if 'dbus_sender' in kwargs:
+            user_agent += kwargs['dbus_sender']
         super(UEPConnection, self).__init__(user_agent=user_agent, **kwargs)
 
     def _load_supported_resources(self):

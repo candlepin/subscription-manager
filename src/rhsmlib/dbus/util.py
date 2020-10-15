@@ -12,6 +12,7 @@ from __future__ import print_function, division, absolute_import
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
+
 import logging
 import sys
 import six
@@ -21,22 +22,55 @@ import json
 import re
 
 from rhsmlib.dbus import exceptions
+from rhsmlib.client_info import DBusSender
 
 log = logging.getLogger(__name__)
 
 __all__ = [
     'dbus_handle_exceptions',
+    'dbus_handle_sender',
     'dbus_service_method',
     'dbus_service_signal'
 ]
 
 
 @decorator.decorator
+def dbus_handle_sender(func, *args, **kwargs):
+    """
+    Decorator to handle sender argument
+    :param func: method with implementation of own logic of D-Bus method
+    :param args: arguments of D-Bus method
+    :param kwargs: keyed arguments of D-Bus method
+    :return: result of D-Bus method
+    """
+
+    sender = None
+    # Get sender from arguments
+    if 'sender' in kwargs:
+        sender = kwargs['sender']
+    elif len(args) > 0:
+        sender = args[-1]
+
+    with DBusSender() as dbus_sender:
+        if sender is not None:
+            dbus_sender.set_cmd_line(sender)
+
+        try:
+            return func(*args, **kwargs)
+        finally:
+            if sender is not None:
+                # When sender was specified, then reset it
+                dbus_sender.reset_cmd_line()
+
+
+@decorator.decorator
 def dbus_handle_exceptions(func, *args, **kwargs):
-    """Decorator to handle exceptions, log them, and wrap them if necessary"""
+    """
+    Decorator to handle exceptions, log them, and wrap them if necessary.
+    """
+
     try:
-        ret = func(*args, **kwargs)
-        return ret
+        return func(*args, **kwargs)
     except Exception as err:
         log.exception(err)
         trace = sys.exc_info()[2]
