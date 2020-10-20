@@ -418,9 +418,6 @@ Requires: libdnf-plugin-subscription-manager = %{version}
 # The dnf plugin is now part of subscription-manager
 Obsoletes: dnf-plugin-subscription-manager < 1.29.0
 %endif
-%endif
-
-Obsoletes: %{py_package_prefix}-syspurpose
 
 %description
 The Subscription Manager package provides programs and libraries to allow users
