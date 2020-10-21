@@ -41,6 +41,18 @@ class CPProviderTests(unittest.TestCase):
         """
         self.assertIsNotNone(self.cp_provider)
 
+    def test_cert_file_is_not_none(self):
+        """
+        Test that cp_provider is not created without default cert file
+        """
+        self.assertEqual(self.cp_provider.cert_file, '/etc/pki/consumer/cert.pem')
+
+    def test_key_file_is_not_none(self):
+        """
+        Test that cp_provider is not created without default key file
+        """
+        self.assertEqual(self.cp_provider.key_file, '/etc/pki/consumer/key.pem')
+
     def test_get_consumer_auth_cp(self):
         """
         Test of getting connection to candlepin server using consumer certificate

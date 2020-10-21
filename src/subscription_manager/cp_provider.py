@@ -47,7 +47,6 @@ class CPProvider(object):
 
     # Initialize with default connection info from the config file
     def __init__(self):
-        self.set_connection_info()
         self.correlation_id = None
         self.username = None
         self.password = None
@@ -55,8 +54,8 @@ class CPProvider(object):
         self.token_username = None
         self.cdn_hostname = None
         self.cdn_port = None
-        self.cert_file = None
-        self.key_file = None
+        self.cert_file = ConsumerIdentity.certpath()
+        self.key_file = ConsumerIdentity.keypath()
         self.server_hostname = None
         self.server_port = None
         self.server_prefix = None
