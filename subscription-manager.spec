@@ -243,7 +243,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.4
+Version: 1.28.5
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1446,6 +1446,15 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Oct 22 2020 Christopher Snyder <csnyder@redhat.com> 1.28.5-1
+- removing yarn (jmolet@redhat.com)
+- Revert "1847910: DNF plugins are part of sub-man RPM, libdnf RPM; ENT-2536"
+  (csnyder@redhat.com)
+- 1886745: Fix __init__ of CPProvider; ENT-3147 (jhnidek@redhat.com)
+- 1833316: unset-addons argument is missing in the bash completion of
+  syspurpose (wpoteat@redhat.com)
+- 1875595: Service-Level set issues (wpoteat@redhat.com)
+
 * Wed Oct 07 2020 Christopher Snyder <csnyder@redhat.com> 1.28.4-1
 - Revert the --no-insights feature (csnyder@redhat.com)
 - adding Jenkinsfile and CI test scripts (jmolet@redhat.com)
