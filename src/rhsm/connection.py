@@ -631,10 +631,13 @@ class BaseRestLib(object):
             if os.path.isdir('/tmp/sub-man') is False:
                 os.mkdir('/tmp/sub-man')
             if 'SUBMAN_DEBUG_SAVE_TRACEBACKS' in os.environ:
-                with tempfile.NamedTemporaryFile(dir='/tmp/sub-man', prefix='traceback-', delete=False) as tmp_file:
-                    traceback.print_stack(file=tmp_file)
+                with tempfile.NamedTemporaryFile(
+                        dir='/tmp/sub-man',
+                        mode='w',
+                        prefix='traceback-',
+                        delete=False) as tmp_file:
+                    traceback.print_stack(file=tmp_file.file)
                     print(green_col + '    traceback saved in: %s' % tmp_file.name + end_col)
-                    # print(dir(tmp_file))
                     print()
 
     @staticmethod
