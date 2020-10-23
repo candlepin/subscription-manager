@@ -29,6 +29,7 @@ import readline
 import socket
 import six.moves
 import sys
+import json
 from time import localtime, strftime, strptime
 
 from rhsm.certificate import CertificateException
@@ -581,13 +582,13 @@ class CliCommand(AbstractCLICommand):
             handle_exception("exception caught in subscription-manager", err)
 
 
-class SyspurposeCommand(CliCommand):
+class AbstractSyspurposeCommand(CliCommand):
     """
     Abstract command for manipulating an attribute of system purpose.
     """
 
     def __init__(self, name, shortdesc=None, primary=False, attr=None, commands=('set', 'unset', 'show', 'list')):
-        super(SyspurposeCommand, self).__init__(name, shortdesc=shortdesc, primary=primary)
+        super(AbstractSyspurposeCommand, self).__init__(name, shortdesc=shortdesc, primary=primary)
         self.commands = commands
         self.attr = attr
 
@@ -649,6 +650,7 @@ class SyspurposeCommand(CliCommand):
         to_unset = getattr(self.options, 'unset', None)
         to_add = getattr(self.options, 'to_add', None)
         to_remove = getattr(self.options, 'to_remove', None)
+        to_show = getattr(self.options, 'show', None)
 
         if to_set:
             self.options.set = self.options.set.strip()
@@ -678,7 +680,7 @@ class SyspurposeCommand(CliCommand):
                             attr=self.attr
                         )
                     )
-            elif to_unset or to_set or to_add or to_remove:
+            elif to_unset or to_set or to_add or to_remove or to_show:
                 pass
             else:
                 system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
@@ -1043,8 +1045,12 @@ class OrgCommand(UserPassCommand):
         self._org = None
         if not hasattr(self, "_org_help_text"):
             self._org_help_text = _("specify an organization")
-        self.parser.add_option("--org", dest="org", metavar="ORG_KEY",
-            help=self._org_help_text)
+        self.parser.add_option(
+            "--org",
+            dest="org",
+            metavar="ORG_KEY",
+            help=self._org_help_text
+        )
 
     @staticmethod
     def _get_org(org):
@@ -1062,6 +1068,82 @@ class OrgCommand(UserPassCommand):
             else:
                 self._org = self._get_org(self.options.org)
         return self._org
+
+
+class SyspurposeCommand(CliCommand):
+    """
+    Syspurpose command for generic actions. This command will be used for all
+    syspurpose actions in the future and it will replace addons, role,
+    service-level and usage commands. It will be possible to set service-type
+    using this command.
+
+    Note: when the system is not registered, then it doesn't make any sense to
+    synchronize syspurpose values with candlepin server, because consumer
+    does not exist.
+    """
+
+    def __init__(self):
+        """
+        Initialize the syspurpose command
+        """
+        short_desc = _("Generic system purpose command")
+        super(SyspurposeCommand, self).__init__(
+            "syspurpose",
+            short_desc,
+            primary=False
+        )
+        self.parser.add_option(
+            "--show",
+            action="store_true",
+            help=_("show current system purpose")
+        )
+
+    def _get_synced_store(self):
+        """
+        Try to get SyncedStore.
+        TODO: refactor (remove) this, when AbstractSyspurposeCommand is merged to SyspurposeCommand
+        :return: Instance of SyncedStore or None
+        """
+        try:
+            from syspurpose.files import SyncedStore
+            return SyncedStore(uep=self.cp, consumer_uuid=self.identity.uuid)
+        except ImportError:
+            return None
+
+    def _validate_options(self):
+        """
+        Validate provided options
+        :return: None
+        """
+        # When no CLI options are provided, then show current syspurpose values
+        if self.options.show is not True:
+            self.options.show = True
+
+    def _do_command(self):
+        """
+        Own implementation of all actions
+        :return: None
+        """
+        self._validate_options()
+
+        content = {}
+        if self.options.show is True:
+            if self.is_registered():
+                try:
+                    self.cp = self.cp_provider.get_consumer_auth_cp()
+                except connection.RestlibException as err:
+                    log.exception(re)
+                    log.debug("Error: Unable to retrieve system purpose from server")
+                except Exception as err:
+                    log.debug("Error: Unable to retrieve system purpose from server: %s" % err)
+                else:
+                    self.store = self._get_synced_store()
+                    if self.store is not None:
+                        sync_result = self.store.sync()
+                        content = sync_result.result
+            else:
+                content = syspurposelib.read_syspurpose()
+            print(json.dumps(content, indent=2, ensure_ascii=False, sort_keys=True))
 
 
 class CleanCommand(CliCommand):
@@ -1341,7 +1423,7 @@ class AutohealCommand(CliCommand):
             self._toggle(self.options.enable or False)
 
 
-class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
+class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
 
     def __init__(self):
 
@@ -1376,9 +1458,14 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
         if not self.is_registered():
             if self.options.list:
                 if not (self.options.username and self.options.password) and not self.options.token:
-                    system_exit(os.EX_USAGE, _("Error: you must register or specify --username and --password to list service levels"))
+                    system_exit(
+                        os.EX_USAGE,
+                        _("Error: you must register or specify --username and --password to list service levels")
+                    )
             elif self.options.unset or self.options.set:
                 pass  # RHBZ 1632248 : User should be able to set/unset while not registered.
+            elif self.options.show:
+                pass  # When system is not registered, then user should have ability to display current value
             else:
                 system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
 
@@ -1404,6 +1491,8 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
             elif self.options.username and self.options.password:
                 self.cp_provider.set_user_pass(self.username, self.password)
                 self.cp = self.cp_provider.get_basic_auth_cp()
+            elif not self.is_registered() and self.options.show:
+                pass
             else:
                 # get an UEP as consumer
                 self.cp = self.cp_provider.get_consumer_auth_cp()
@@ -1462,14 +1551,17 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
         self.cp.updateConsumer(self.identity.uuid, service_level=service_level)
 
     def show_service_level(self):
-        consumer = self.cp.getConsumer(self.identity.uuid)
-        if 'serviceLevel' not in consumer:
-            system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
-        service_level = consumer['serviceLevel'] or ""
-        if service_level:
-            print(_("Current service level: %s") % service_level)
+        if self.is_registered():
+            consumer = self.cp.getConsumer(self.identity.uuid)
+            if 'serviceLevel' not in consumer:
+                system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
+            service_level = consumer['serviceLevel'] or ""
+            if service_level:
+                print(_("Current service level: %s") % service_level)
+            else:
+                print(_("Service level preference not set"))
         else:
-            print(_("Service level preference not set"))
+            super(ServiceLevelCommand, self).show()
 
     def list_service_levels(self):
         org_key = self.options.org
@@ -1507,7 +1599,7 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
                 raise e
 
 
-class UsageCommand(SyspurposeCommand, OrgCommand):
+class UsageCommand(AbstractSyspurposeCommand, OrgCommand):
 
     def __init__(self):
         shortdesc = _("Manage usage setting for this system")
@@ -1911,7 +2003,7 @@ class UnRegisterCommand(CliCommand):
         print(_("System has been unregistered."))
 
 
-class AddonsCommand(SyspurposeCommand, OrgCommand):
+class AddonsCommand(AbstractSyspurposeCommand, OrgCommand):
 
     def __init__(self):
         shortdesc = _("Modify or view the addons attribute of the system purpose")
@@ -3278,7 +3370,7 @@ class OverrideCommand(CliCommand):
             print(columnize(names, echo_columnize_callback, *values, indent=2) + "\n")
 
 
-class RoleCommand(SyspurposeCommand, OrgCommand):
+class RoleCommand(AbstractSyspurposeCommand, OrgCommand):
     def __init__(self):
         shortdesc = _("Modify system purpose role")
         super(RoleCommand, self).__init__(
@@ -3387,7 +3479,8 @@ class ManagerCLI(CLI):
                     RedeemCommand, ReposCommand, ReleaseCommand, StatusCommand,
                     EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand,
                     VersionCommand, RemoveCommand, AttachCommand, PluginsCommand,
-                    AutohealCommand, OverrideCommand, RoleCommand, UsageCommand]
+                    AutohealCommand, OverrideCommand, RoleCommand, UsageCommand,
+                    SyspurposeCommand]
         CLI.__init__(self, command_classes=commands)
 
     def main(self):

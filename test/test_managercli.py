@@ -1807,6 +1807,23 @@ class TestReleaseCommand(TestCliProxyCommand):
                 mock_repo_invoker.update.assert_called_with()
 
 
+class TestSyspurposeCommand(TestCliProxyCommand):
+    command_class = managercli.RoleCommand
+
+    def setUp(self):
+        syspurpose_patch = patch('syspurpose.files.SyncedStore')
+        sp_patch = syspurpose_patch.start()
+        self.addCleanup(sp_patch.stop)
+        super(TestSyspurposeCommand, self).setUp(False)
+        self.cc = self.command_class()
+        self.cc.cp = StubUEP()
+        self.cc.cp.registered_consumer_info['role'] = None
+        self.cc.cp._capabilities = ["syspurpose"]
+
+    def test_show_option(self):
+        self.cc.main(["--show"])
+
+
 class TestRoleCommand(TestCliProxyCommand):
     command_class = managercli.RoleCommand
 
@@ -1880,7 +1897,7 @@ class TestRoleCommand(TestCliProxyCommand):
         instance_syspurpose_store = mock_syspurpose.read.return_value
         instance_syspurpose_store.local_contents = {'role': 'Foo'}
 
-        with patch.object(managercli.SyspurposeCommand, 'check_syspurpose_support', Mock(return_value=None)):
+        with patch.object(managercli.AbstractSyspurposeCommand, 'check_syspurpose_support', Mock(return_value=None)):
             super(TestRoleCommand, self).test_main_no_args()
 
     @patch("subscription_manager.syspurposelib.SyncedStore")
@@ -1891,7 +1908,7 @@ class TestRoleCommand(TestCliProxyCommand):
         instance_syspurpose_store = mock_syspurpose.read.return_value
         instance_syspurpose_store.local_contents = {'role': 'Foo'}
 
-        with patch.object(managercli.SyspurposeCommand, 'check_syspurpose_support', Mock(return_value=None)):
+        with patch.object(managercli.AbstractSyspurposeCommand, 'check_syspurpose_support', Mock(return_value=None)):
             super(TestRoleCommand, self).test_main_empty_args()
 
     @patch("subscription_manager.syspurposelib.SyncedStore")
@@ -2044,7 +2061,7 @@ class TestRoleCommand(TestCliProxyCommand):
         instance_syspurpose_store.sync.assert_called_once()
 
     def test_is_provided_value_valid(self):
-        self.cc = managercli.SyspurposeCommand("role", shortdesc="role", primary=False, attr="role")
+        self.cc = managercli.AbstractSyspurposeCommand("role", shortdesc="role", primary=False, attr="role")
         self.cc._get_valid_fields = Mock()
         self.cc._get_valid_fields.return_value = {"role": ["Welcome to the Machine"]}
         res = self.cc._is_provided_value_valid("wElcOme To The mAChiNE")
