@@ -2066,11 +2066,15 @@ class AttachCommand(CliCommand):
         if self.auto_attach is True:
             if is_simple_content_access(uep=self.cp, identity=self.identity):
                 owner = get_current_owner(self.cp, self.identity)
-                owner_name = owner['displayName']
-                # We could also display owner ID: `owner_id = owner['key']` (not sure)
-                print(_('Ignoring request to auto-attach. '
-                        'It is disabled for organization: "%s", because Simple Content Access is in use.')
-                      % owner_name)
+                # We displayed Owner name: `owner_name = owner['displayName']`, but such behavior
+                # was not consistent with rest of subscription-manager
+                # Look at this comment: https://bugzilla.redhat.com/show_bug.cgi?id=1826300#c8
+                owner_id = owner['key']
+                print(_(
+                        'Ignoring request to auto-attach. '
+                        'It is disabled for org "{owner_id}" because of the content access mode setting.'
+                        ).format(owner_id=owner_id)
+                      )
                 return 0
 
         installed_products_num = 0

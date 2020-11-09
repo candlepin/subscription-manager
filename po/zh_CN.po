@@ -4878,6 +4878,14 @@ msgstr "错误：文件 \"%s\" 不存在或者无法读取"
 msgid "Please enter a valid numeric pool ID."
 msgstr "请输入有效数字池 ID。"
 
+# translation manually copied from candlepin
+#: src/subscription_manager/managercli.py:2166
+#, python-format
+msgid ""
+"Ignoring request to auto-attach. It is disabled for org \"{owner_id}\" because of "
+"the content access mode setting."
+msgstr "忽略自动附加的请求。 因为内容访问模式的设置 ，组织“ {owner_id}”禁用了这个功能。"
+
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1766
 #, python-format
