@@ -5100,6 +5100,17 @@ msgstr "Erreur : le fichier « %s » n'existe pas ou ne peut pas être lu."
 msgid "Please enter a valid numeric pool ID."
 msgstr "Veuillez saisir un ID de pool numérique valide."
 
+# translation manually copied from candlepin
+#: src/subscription_manager/managercli.py:2166
+#, python-format
+msgid ""
+"Ignoring request to auto-attach. It is disabled for org \"{owner_id}\" because of "
+"the content access mode setting."
+msgstr ""
+"Requête auto-attach ignorée. L'organisation \"{owner_id}\" a déjà la fonction auto-"
+"attach désactivée à cause de la configuration de mode d'accès au contenu."
+
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1766
 #, python-format
