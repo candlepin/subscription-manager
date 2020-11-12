@@ -702,8 +702,15 @@ class ContentAccessCache(object):
 
     def check_for_update(self):
         if self.exists():
-            data = json.loads(self.read())
-            last_update = parse_date(data["lastUpdate"])
+            try:
+                data = json.loads(self.read())
+                last_update = parse_date(data["lastUpdate"])
+            except (ValueError, KeyError) as err:
+                log.debug("Cache file {file} is corrupted: {err}".format(
+                    file=self.CACHE_FILE,
+                    err=err
+                ))
+                last_update = None
         else:
             last_update = None
         return self._query_for_update(if_modified_since=last_update)
