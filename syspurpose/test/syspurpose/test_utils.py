@@ -77,7 +77,7 @@ class UtilsTests(SyspurposeTestBase):
         self.assertTrue(os.path.exists(to_create))
 
         with io.open(to_create, 'r', encoding='utf-8') as fp:
-            actual_contents = json.load(fp, encoding='utf-8')
+            actual_contents = json.load(fp)
 
         self.assertDictEqual(actual_contents, test_data)
 
