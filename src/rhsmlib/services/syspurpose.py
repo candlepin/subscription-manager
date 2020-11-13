@@ -14,11 +14,19 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 
 """
-This module provides service for system purpose identity.
+This module provides service for system purpose
 """
+
+import logging
 
 from subscription_manager import injection as inj
 from subscription_manager.i18n import ugettext as _
+from subscription_manager.syspurposelib import merge_syspurpose_values, write_syspurpose, get_sys_purpose_store
+
+from rhsmlib.file_monitor import SYSPURPOSE_WATCHER
+from rhsmlib.dbus.server import Server
+
+log = logging.getLogger(__name__)
 
 
 class Syspurpose(object):
@@ -48,15 +56,39 @@ class Syspurpose(object):
         if self.identity.is_valid() and self.cp.has_capability("syspurpose"):
             self.owner = inj.require(inj.CURRENT_OWNER_CACHE)
             cache = inj.require(inj.SYSPURPOSE_VALID_FIELDS_CACHE)
-            self.valid_fields = cache.read_cache()
+            self.valid_fields = cache.read_data(uep=self.cp, identity=self.identity)
         return self.valid_fields
+
+    def set_syspurpose_values(self, syspurpose_values):
+        """
+        Try to set system purpose values
+        :param syspurpose_values: Dictionary with system purpose values
+        :return: Dictionary with local result
+        """
+        if self.identity.is_valid() and self.cp.has_capability("syspurpose"):
+            temporary_disable_dir_watcher()
+            local_result = merge_syspurpose_values(
+                local=syspurpose_values,
+                uep=self.cp,
+                consumer_uuid=self.identity.uuid
+            )
+            write_syspurpose(local_result)
+            synced_store = get_sys_purpose_store()
+            sync_result = synced_store.sync()
+            result = sync_result.result
+        else:
+            local_result = merge_syspurpose_values(local=syspurpose_values, remote={}, base={})
+            write_syspurpose(local_result)
+            result = local_result
+
+        return result
 
     @staticmethod
     def get_overall_status(status):
         """
         Return translated string representation syspurpose status
         :param status: syspurpose status
-        :return: Translated sttring with status
+        :return: Translated string with status
         """
         # Status map has to be here, because we have to translate strings
         # when function is called (not during start of application) due to
@@ -72,3 +104,14 @@ class Syspurpose(object):
             'unknown': _('Unknown')
         }
         return status_map.get(status, status_map['unknown'])
+
+
+def temporary_disable_dir_watcher():
+    """
+    This method temporary disables file system directory watcher for syspurpose.json
+    """
+
+    if Server.INSTANCE is not None:
+        server = Server.INSTANCE
+        dir_watcher = server.filesystem_watcher.dir_watches[SYSPURPOSE_WATCHER]
+        dir_watcher.temporary_disable()

@@ -96,7 +96,7 @@ class SyspurposeStore(object):
         """
         try:
             with io.open(self.path, 'r', encoding='utf-8') as f:
-                self.contents = json.load(f, encoding='utf-8')
+                self.contents = json.load(f)
                 return True
         except ValueError:
             # Malformed JSON or empty file. Let's not error out on an empty file
@@ -110,14 +110,11 @@ class SyspurposeStore(object):
         except OSError as e:
             if e.errno == errno.EACCES and not self.raise_on_error:
                 system_exit(os.EX_NOPERM, _('Cannot read syspurpose file {}\nAre you root?').format(self.path))
-
-            if self.raise_on_error:
-                raise e
-        except IOError as ioerr:
-            if ioerr.errno == errno.ENOENT:
+            if e.errno == errno.ENOENT and not self.raise_on_error:
+                log.error('Unable to read file {file}: {error}'.format(file=self.path, error=e))
                 return False
             if self.raise_on_error:
-                raise ioerr
+                raise e
 
     def create(self):
         """
@@ -245,12 +242,11 @@ class SyncResult(object):
     A container class for the results of a sync operation performed by a SyncedStore class.
     """
 
-    def __init__(self, result, remote_changed, local_changed, cached_changed, report):
+    def __init__(self, result, remote_changed, local_changed, cached_changed):
         self.result = result
         self.remote_changed = remote_changed
         self.local_changed = local_changed
         self.cached_changed = cached_changed
-        self.report = report
 
 
 class SyncedStore(object):
@@ -261,17 +257,21 @@ class SyncedStore(object):
     PATH = USER_SYSPURPOSE
     CACHE_PATH = CACHED_SYSPURPOSE
 
-    def __init__(self, uep, on_changed=None, consumer_uuid=None, report=None, use_valid_fields=False):
+    def __init__(self, uep, on_changed=None, consumer_uuid=None, use_valid_fields=False):
+        """
+        Initialization of SyncedStore
+        :param uep: object representing connection to candlepin server
+        :param on_changed: optional callback method called, during three-way merge
+        :param consumer_uuid: UUID of consumer
+        :param use_valid_fields: if valid fields are considered
+        """
         self.uep = uep
         self.filename = self.PATH.split('/')[-1]
         self.path = self.PATH
         self.cache_path = self.CACHE_PATH
-        self.report = report
         self.local_file = None
-        self.local_contents = None
         self.local_contents = self.get_local_contents()
         self.cache_file = None
-        self.cache_contents = None
         self.cache_contents = self.get_cached_contents()
         self.changed = False
         self.on_changed = on_changed
@@ -288,19 +288,29 @@ class SyncedStore(object):
         self.finish()
 
     def finish(self):
+        """
+        When local content was changed, then try to synchronize local content with remote server
+        :return:
+        """
         if self.changed:
             self.sync()
-            return True
-        return False
 
     def sync(self):
+        """
+        Try to synchronize local content with remote server
+        :return: instance of SyncResult holding result of synchronization
+        """
         log.debug('Attempting to sync syspurpose content...')
         try:
             if self.uep and not self.uep.has_capability('syspurpose'):
                 log.debug('Server does not support syspurpose, syncing only locally.')
                 return self._sync_local_only()
-        except:
-            log.debug('Failed to detect whether the server has syspurpose capability')
+        except Exception as err:
+            log.debug(
+                'Failed to detect whether the server has syspurpose capability: {err}'.format(
+                    err=err
+                )
+            )
             return self._sync_local_only()
 
         remote_contents = self.get_remote_contents()
@@ -318,7 +328,6 @@ class SyncedStore(object):
             (remote_contents == result) or self.update_remote(result),
             self.update_local(local_result),
             self.update_cache(result),
-            self.report
         )
 
         log.debug('Successfully synced system purpose.')
@@ -326,16 +335,20 @@ class SyncedStore(object):
         # Reset the changed attribute as all items should be synced if we've gotten to this point
         self.changed = False
 
-        if self.report is not None:
-            self.report._status = 'Successfully synced system purpose'
-
         return sync_result
 
     def _sync_local_only(self):
         local_updated = self.update_local(self.get_local_contents())
-        return SyncResult(self.local_contents, False, local_updated, False, self.report)
+        return SyncResult(self.local_contents, False, local_updated, False)
 
     def merge(self, local=None, remote=None, base=None):
+        """
+        Do three-way merge
+        :param local: dictionary with local values (syspyrpose.json)
+        :param remote: dictionary with values from server
+        :param base:
+        :return:
+        """
         result = three_way_merge(
             local=local,
             base=base,
@@ -345,23 +358,23 @@ class SyncedStore(object):
         return result
 
     def get_local_contents(self):
+        """
+        Try to load local content from file
+        :return: dictionary with system purpose values
+        """
         try:
-            if self.local_contents is None:
-                self.local_contents = json.load(io.open(self.path, 'r', encoding='utf-8'))
-                log.debug('Successfully read local syspurpose contents.')
-            return self.local_contents
+            self.local_contents = json.load(io.open(self.path, 'r', encoding='utf-8'))
         except (os.error, ValueError, IOError):
-            if self.report is not None:
-                self.report._exceptions.append(
-                    'Cannot read local syspurpose, trying to update from server only'
-                )
-            log.debug('Unable to read local system purpose at  \'%s\'\nUsing the server values.'
-                      % self.path)
+            log.debug('Unable to read local system purpose at "%s"' % self.path)
             self.update_local({})
             self.local_contents = {}
-            return self.local_contents
+        return self.local_contents
 
     def get_remote_contents(self):
+        """
+        Try to get remote content from server
+        :return: dictionary with system purpose values
+        """
         if self.uep is None or self.consumer_uuid is None:
             log.debug('Failed to read remote syspurpose from server: no available connection, '
                       'or the consumer is not registered.')
@@ -382,23 +395,45 @@ class SyncedStore(object):
         return result
 
     def get_cached_contents(self):
-        if not self.cache_contents:
-            try:
-                self.cache_contents = json.load(io.open(self.cache_path, 'r', encoding='utf-8'))
-                log.debug('Successfully read cached syspurpose contents.')
-            except (ValueError, os.error, IOError):
-                log.debug('Unable to read cached syspurpose contents at \'%s\'.' % self.path)
-                self.cache_contents = {}
-                self.update_cache({})
+        """
+        Try to load cached server response from the file
+        :return: dictionary with system purpose values
+        """
+        try:
+            self.cache_contents = json.load(io.open(self.cache_path, 'r', encoding='utf-8'))
+            log.debug('Successfully read cached syspurpose contents.')
+        except (ValueError, os.error, IOError):
+            log.debug('Unable to read cached syspurpose contents at \'%s\'.' % self.path)
+            self.cache_contents = {}
+            self.update_cache({})
         return self.cache_contents
 
     def update_local(self, data):
+        """
+        Rewrite local content with new data and write data to file syspurpose.json
+        :param data: new dictionary with local data
+        :return: None
+        """
         self.local_contents = data
-        return self.update_file(self.path, data)
+        self._write_local()
+
+    def _write_local(self):
+        """
+        Write local data to the file
+        :return: None
+        """
+        self._update_file(self.path, self.local_contents)
 
     def update_cache(self, data):
         self.cache_contents = data
-        return self.update_file(self.cache_path, data)
+        self._write_cache()
+
+    def _write_cache(self):
+        """
+        Write cache to file
+        :return: None
+        """
+        self._update_file(self.cache_path, self.cache_contents)
 
     def update_remote(self, data):
         if self.uep is None or self.consumer_uuid is None:
@@ -427,10 +462,10 @@ class SyncedStore(object):
         if self.valid_fields is not None:
             if key in self.valid_fields:
                 if value not in self.valid_fields[key]:
-                    print(_('Warning: Provided value "{val}" is not included in the list of valid values for attribute {attr}:').format(
-                        val=value,
-                        attr=key
-                    ))
+                    print(
+                        _('Warning: Provided value "{val}" is not included in the list '
+                          'of valid values for attribute {attr}:').format(val=value, attr=key)
+                    )
                     for valid_value in self.valid_fields[key]:
                         if len(valid_value) > 0:
                             print(" - %s" % valid_value)
@@ -452,10 +487,15 @@ class SyncedStore(object):
         value = make_utf8(value)
         key = make_utf8(key)
         try:
+            # When existing value was set using set() method, then the
+            # existing valus is not list, but simple value. We have to convert
+            # it first
             current_value = self.local_contents[key]
             if current_value is not None and not isinstance(current_value, list):
                 self.local_contents[key] = [current_value]
 
+            # When existing value is None, then first covert to empty list to be
+            # able to call append method. It is very theoretical case.
             if self.local_contents[key] is None:
                 self.local_contents[key] = []
 
@@ -463,7 +503,8 @@ class SyncedStore(object):
                 self.local_contents[key].append(value)
             else:
                 log.debug('Will not add value \'%s\' to key \'%s\'.' % (value, key))
-                return False
+                self.changed = False
+                return self.changed
         except (AttributeError, KeyError):
             self.local_contents[key] = [value]
 
@@ -471,7 +512,12 @@ class SyncedStore(object):
 
         self.changed = True
         log.debug('Adding value \'%s\' to key \'%s\'.' % (value, key))
-        return True
+
+        # Write changes to the syspurpose.json file
+        if self.changed is True:
+            self._write_local()
+
+        return self.changed
 
     def remove(self, key, value):
         """
@@ -484,20 +530,28 @@ class SyncedStore(object):
         value = make_utf8(value)
         key = make_utf8(key)
         try:
-            current_value = self.local_contents[key]
-            if current_value is not None and not isinstance(current_value, list) and current_value == value:
+            current_values = self.local_contents[key]
+            if current_values is not None and not isinstance(current_values, list) and current_values == value:
                 return self.unset(key)
 
-            if value in current_value:
+            if value in current_values:
                 self.local_contents[key].remove(value)
+                self.changed = True
+                log.debug('Removing value \'%s\' from key \'%s\'.' % (value, key))
             else:
-                return False
-            self.changed = True
-            log.debug('Removing value \'%s\' from key \'%s\'.' % (value, key))
-            return True
+                self.changed = False
+                log.debug('Will not remove value \'%s\' from key \'%s\'.' % (value, key))
+                return self.changed
+
         except (AttributeError, KeyError, ValueError):
             log.debug('Will not remove value \'%s\' from key \'%s\'.' % (value, key))
-            return False
+            self.changed = False
+
+        # Write changes to the syspurpose.json file
+        if self.changed is True:
+            self._write_local()
+
+        return self.changed
 
     def unset(self, key):
         """
@@ -520,7 +574,13 @@ class SyncedStore(object):
         self.changed = True
         log.debug('Unsetting value \'%s\' of key \'%s\'.' % (value, key))
 
-        return value is not None
+        self.changed = value is not None
+
+        # Write changes to the syspurpose.json file
+        if self.changed is True:
+            self._write_local()
+
+        return self.changed
 
     def set(self, key, value):
         """
@@ -544,7 +604,13 @@ class SyncedStore(object):
         else:
             log.debug('NOT Setting value \'%s\' to key \'%s\'.')
 
-        return current_value != value or current_value is None
+        self.changed = current_value != value or current_value is None
+
+        # Write changes to the syspurpose.json file
+        if self.changed is True:
+            self._write_local()
+
+        return self.changed
 
     @staticmethod
     def _create_missing_dir(dir_path):
@@ -562,7 +628,7 @@ class SyncedStore(object):
                 log.warning('Unable to create directory: %s, error: %s' % (dir_path, err))
 
     @classmethod
-    def update_file(cls, path, data):
+    def _update_file(cls, path, data):
         """
         Write the contents of data to file in the first mode we can (effectively to create or update
         the file)
@@ -577,21 +643,17 @@ class SyncedStore(object):
         cls._create_missing_dir(CACHE_DIR)
 
         # Then we can try to create syspurpose.json file
-        modes = ['w+']
-        for mode in modes:
-            try:
-                f = io.open(path, mode, encoding='utf-8')
-            except OSError as e:
-                if e.errno != 17:
-                    raise
-            else:
-                write_to_file_utf8(f, data)
-                f.flush()
-                f.close()
-                log.debug('Successfully updated syspurpose values at \'%s\'.' % path)
-                return True
+        try:
+            f = io.open(path, 'w+', encoding='utf-8')
+        except OSError as e:
+            if e.errno != 17:
+                raise
+        else:
+            write_to_file_utf8(f, data)
+            f.flush()
+            f.close()
+            log.debug('Successfully updated syspurpose values at \'%s\'.' % path)
         log.debug('Failed to update syspurpose values at \'%s\'.' % path)
-        return False
 
     def get_valid_fields(self):
         """
@@ -613,28 +675,6 @@ class SyncedStore(object):
                         response = post_process_received_data(response)
                         valid_fields = response['systemPurposeAttributes']
         return valid_fields
-
-
-def read_syspurpose(raise_on_error=False):
-    """
-    Reads the system purpose from the correct location on the file system.
-    Makes an attempt to use a SyspurposeStore if available falls back to reading the json directly.
-    :return: A dictionary containing the total syspurpose.
-    """
-    if SyspurposeStore is not None:
-        try:
-            syspurpose = SyspurposeStore(None).get_local_contents()
-        except (OSError, IOError):
-            syspurpose = {}
-    else:
-        try:
-            syspurpose = json.load(open(USER_SYSPURPOSE))
-        except (os.error, ValueError, IOError):
-            # In the event this file could not be read treat it as empty
-            if raise_on_error:
-                raise
-            syspurpose = {}
-    return syspurpose
 
 
 # A simple container class used to hold the values representing a change detected

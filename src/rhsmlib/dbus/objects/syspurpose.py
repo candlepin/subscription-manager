@@ -28,11 +28,58 @@ from rhsmlib.services import syspurpose
 from syspurpose.files import SyspurposeStore
 
 from subscription_manager.injectioninit import init_dep_injection
+from subscription_manager.i18n import ugettext as _
 from subscription_manager.i18n import Locale
 
 init_dep_injection()
 
 log = logging.getLogger(__name__)
+
+
+class ThreeWayMergeConflict(dbus.DBusException):
+    """
+    Raise this exception, when client application tries to
+    """
+    _dbus_error_name = "%s.Error" % constants.SYSPURPOSE_INTERFACE
+    include_traceback = False
+    severity = "warn"
+
+    def __init__(self, conflict_fields):
+        """
+        Initialize this exception
+        :param conflict_fields: dictionary with conflicted attributes.
+            The key is attribute and value is current value set on server.
+        """
+        self.conflict_fields = conflict_fields
+
+    def __str__(self):
+        """
+        Text representation of exception
+        :return: string of exception
+        """
+        conflicts = []
+        for key, value in self.conflict_fields.items():
+            conflicts.append(
+                '{conflict_attr} of "{existing_value}"'.format(
+                    conflict_attr=key,
+                    existing_value=value
+                )
+            )
+        conflict_msg = ", ".join(conflicts)
+        if len(conflicts) == 1:
+            return _(
+                'Warning: A {conflict_msg} was recently set '
+                'for this system by the entitlement server administrator.'.format(
+                    conflict_msg=conflict_msg
+                )
+            )
+        else:
+            return _(
+                'Warning: A {conflict_msg} were recently set '
+                'for this system by the entitlement server administrator.'.format(
+                    conflict_msg=conflict_msg
+                )
+            )
 
 
 class SyspurposeDBusObject(base_object.BaseObject):
@@ -74,15 +121,86 @@ class SyspurposeDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.SYSPURPOSE_INTERFACE,
-        in_signature='',
+        in_signature='s',
         out_signature='s'
     )
     @util.dbus_handle_exceptions
-    def GetSyspurposeStatus(self, sender=None):
+    def GetSyspurposeStatus(self, locale, sender=None):
+        """
+        D-Bus method for getting system purpose status
+        :param locale: string representing locale
+        :param sender: object representing application which called this method
+        :return:
+        """
+        locale = dbus_utils.dbus_to_python(locale, expected_type=str)
+        Locale.set(locale)
         cp = self.build_uep({})
-        systempurpose = syspurpose.Syspurpose(cp)
-        syspurpose_status = systempurpose.get_syspurpose_status()['status']
-        return systempurpose.get_overall_status(syspurpose_status)
+        system_purpose = syspurpose.Syspurpose(cp)
+        syspurpose_status = system_purpose.get_syspurpose_status()['status']
+        return system_purpose.get_overall_status(syspurpose_status)
+
+    @util.dbus_service_method(
+        constants.SYSPURPOSE_INTERFACE,
+        in_signature='s',
+        out_signature='s'
+    )
+    @util.dbus_handle_exceptions
+    def GetValidFields(self, locale, sender=None):
+        """
+        Method for getting valid syspurpose attributes and values
+        :param locale: string with locale
+        :param sender: object representing application which called this method
+        :return: string representing dictionary with valid fields
+        """
+        locale = dbus_utils.dbus_to_python(locale, expected_type=str)
+        Locale.set(locale)
+        cp = self.build_uep({})
+        system_purpose = syspurpose.Syspurpose(cp)
+        valid_fields = system_purpose.get_owner_syspurpose_valid_fields()
+        if valid_fields is None:
+            # When it is not possible to get valid fields, then raise exception
+            if self.is_registered() is False:
+                raise dbus.DBusException(
+                    "Unable to get system purpose valid fields. System is not registered.",
+                )
+            else:
+                raise dbus.DBusException(
+                    "Unable to get system purpose valid fields.",
+                )
+        else:
+            return json.dumps(valid_fields)
+
+    @util.dbus_service_method(
+        constants.SYSPURPOSE_INTERFACE,
+        in_signature='a{sv}s',
+        out_signature='s'
+    )
+    @util.dbus_handle_exceptions
+    def SetSyspurpose(self, syspurpose_values, locale, sender):
+        """
+        Set syspurpose values
+        :param syspurpose_values: Dictionary with all syspurpose values
+        :param locale: String with locale
+        :param sender: Object representing client application that called this method
+        :return: String with successfully set syspurpose values
+        """
+        syspurpose_values = dbus_utils.dbus_to_python(syspurpose_values, expected_type=dict)
+        locale = dbus_utils.dbus_to_python(locale, expected_type=str)
+        Locale.set(locale)
+
+        cp = self.build_uep({})
+        system_purpose = syspurpose.Syspurpose(cp)
+        new_syspurpose_values = system_purpose.set_syspurpose_values(syspurpose_values)
+
+        # Check if there was any conflict during three-way merge
+        conflicts = {}
+        for key, value in new_syspurpose_values.items():
+            if key in syspurpose_values and syspurpose_values[key] != value:
+                conflicts[key] = value
+        if len(conflicts) > 0:
+            raise ThreeWayMergeConflict(conflict_fields=conflicts)
+
+        return json.dumps(new_syspurpose_values)
 
     @util.dbus_service_signal(
         constants.SYSPURPOSE_INTERFACE,
