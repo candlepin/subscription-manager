@@ -565,7 +565,7 @@ client.getSyspurposeStatus = () => {
     let dfd = cockpit.defer();
     if (isRegistering) { return dfd.promise(); }
     return safeDBusCall(syspurposeService, () => {
-        syspurposeService.GetSyspurposeStatus()
+        syspurposeService.GetSyspurposeStatus(userLang)
         .then(result => {
             client.syspurposeStatus.status = result;
         })

@@ -32,13 +32,6 @@ import os
 log = logging.getLogger(__name__)
 
 try:
-    from syspurpose.sync import sync
-except ImportError:
-    def sync(uep, consumer_uuid, command=None, report=None):
-        log.debug("Syspurpose module unavailable, not syncing")
-        return read_syspurpose()
-
-try:
     from syspurpose.files import SyncedStore, USER_SYSPURPOSE, post_process_received_data, CACHED_SYSPURPOSE
 except ImportError:
     log.debug("Could not import from module syspurpose.")
@@ -164,20 +157,22 @@ def get_syspurpose_valid_fields(uep=None, identity=None):
     return valid_fields
 
 
-def merge_syspurpose_values(local=None, remote=None, base=None):
+def merge_syspurpose_values(local=None, remote=None, base=None, uep=None, consumer_uuid=None):
     """
     Try to do three-way merge of local, remote and base dictionaries.
     Note: when remote is None, then this method will call REST API.
     :param local: dictionary with local values
     :param remote: dictionary with remote values
     :param base: dictionary with cached values
+    :param uep: object representing connection to canlepin server
+    :param consumer_uuid: UUID of consumer
     :return: Dictionary with local result
     """
 
     if SyncedStore is None:
         return {}
 
-    synced_store = SyncedStore(uep=None)
+    synced_store = SyncedStore(uep=uep, consumer_uuid=consumer_uuid)
 
     if local is None:
         local = synced_store.get_local_contents()
@@ -274,7 +269,6 @@ class SyspurposeSyncActionCommand(object):
             store = SyncedStore(
                 uep=self.uep,
                 consumer_uuid=consumer_uuid,
-                report=self.report,
                 on_changed=self.report.record_change
             )
             result = store.sync()
