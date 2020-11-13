@@ -875,6 +875,10 @@ after
 
     MOCK_OPEN_EMPTY = mock_open()
 
+    MOCK_OPEN_CORRUPTED_CACHE = mock_open(read_data="[{]}")
+
+    MOCK_OPEN_NOT_VALID_CACHE = mock_open(read_data="{}")
+
     MOCK_OPEN_CACHE = mock_open(read_data=json.dumps(MOCK_CONTENT))
 
     def setUp(self):
@@ -890,6 +894,39 @@ after
     @patch('subscription_manager.cache.open', MOCK_OPEN_EMPTY)
     def test_empty_cache(self):
         self.assertFalse(self.cache.exists())
+
+    @patch('subscription_manager.cache.open', MOCK_OPEN_EMPTY)
+    def test_read_empty_cache(self):
+        self.cache.exists = Mock(return_value=True)
+        empty_cache = self.cache.read()
+        self.assertEqual(empty_cache, "")
+        result = self.cache.check_for_update()
+        self.mock_uep.getAccessibleContent.assert_called_once()
+        self.assertEqual(result, self.MOCK_CONTENT)
+
+    @patch('subscription_manager.cache.open', MOCK_OPEN_CORRUPTED_CACHE)
+    def test_read_corrupted_cache(self):
+        """
+        This is intended for testing reading corrupted cache
+        """
+        self.cache.exists = Mock(return_value=True)
+        empty_cache = self.cache.read()
+        self.assertEqual(empty_cache, "[{]}")
+        result = self.cache.check_for_update()
+        self.mock_uep.getAccessibleContent.assert_called_once()
+        self.assertEqual(result, self.MOCK_CONTENT)
+
+    @patch('subscription_manager.cache.open', MOCK_OPEN_NOT_VALID_CACHE)
+    def test_read_not_valid_cache(self):
+        """
+        This is intended for testing of reading json file without valid data
+        """
+        self.cache.exists = Mock(return_value=True)
+        empty_cache = self.cache.read()
+        self.assertEqual(empty_cache, "{}")
+        result = self.cache.check_for_update()
+        self.mock_uep.getAccessibleContent.assert_called_once()
+        self.assertEqual(result, self.MOCK_CONTENT)
 
     @patch('subscription_manager.cache.open', MOCK_OPEN_EMPTY)
     def test_writes_to_cache_after_read(self):
