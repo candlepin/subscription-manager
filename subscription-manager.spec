@@ -243,7 +243,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.6
+Version: 1.29.0
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1446,6 +1446,16 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Nov 16 2020 Christopher Snyder <csnyder@redhat.com> 1.29.0-1
+- 1850624: Uncaught JSONDecodeError when content_access.json is empty and
+  registering to Satellite6 (wpoteat@redhat.com)
+- Automatic commit of package [subscription-manager] release [1.28.6-1].
+  (csnyder@redhat.com)
+- 1826300: Better messages for attach --auto for SCA mode; ENT-3175
+  (jhnidek@redhat.com)
+- Removed some obsoleted files. (jhnidek@redhat.com)
+- Added new syspurpose command; ENT-3060 (jhnidek@redhat.com)
+
 * Tue Nov 10 2020 Christopher Snyder <csnyder@redhat.com> 1.28.6-1
 - Added new syspurpose command; ENT-3060 (jhnidek@redhat.com)
 
