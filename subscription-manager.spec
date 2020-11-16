@@ -243,7 +243,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.5
+Version: 1.28.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1446,6 +1446,12 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Nov 16 2020 Christopher Snyder <csnyder@redhat.com> 1.28.6-1
+- 1850624: Uncaught JSONDecodeError when content_access.json is empty and
+  registering to Satellite6 (wpoteat@redhat.com)
+- 1831082: Better messages for attach --auto for SCA mode; ENT-3175
+  (jhnidek@redhat.com)
+
 * Thu Oct 22 2020 Christopher Snyder <csnyder@redhat.com> 1.28.5-1
 - removing yarn (jmolet@redhat.com)
 - Revert "1847910: DNF plugins are part of sub-man RPM, libdnf RPM; ENT-2536"
