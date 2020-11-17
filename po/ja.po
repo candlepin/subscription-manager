@@ -4913,6 +4913,14 @@ msgstr "エラー: \"%s\" ファイルが存在せず、読み取りできませ
 msgid "Please enter a valid numeric pool ID."
 msgstr "有効なプール ID (数値) を入力してください。"
 
+# translation manually copied from candlepin
+#: src/subscription_manager/managercli.py:2166
+#, python-format
+msgid ""
+"Ignoring request to auto-attach. It is disabled for org \"{owner_id}\" because of "
+"the content access mode setting."
+msgstr "自動割り当ての要求を無視します。これは、コンテンツアクセスモードの設定により、組織 \"{owner_id}\" に対して無効となっています。"
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1851
 #, python-format

@@ -4967,6 +4967,14 @@ msgstr "오류: 파일 \"%s\"은 존재하지 않거나 읽을 수 없습니다.
 msgid "Please enter a valid numeric pool ID."
 msgstr "유효한 숫자 풀 ID를 입력하십시오."
 
+# translation manually copied from candlepin
+#: src/subscription_manager/managercli.py:2166
+#, python-format
+msgid ""
+"Ignoring request to auto-attach. It is disabled for org \"{owner_id}\" because of "
+"the content access mode setting."
+msgstr "자동 첨부 요청을 무시합니다. 콘텐츠 액세스 모드 설정으로 인해 \"{owner_id}\" 조직에 대해 비활성화되어 있습니다."
+
 #: src/subscription_manager/managercli.py:1851
 #, python-format
 msgid "Successfully attached a subscription for: %s"
