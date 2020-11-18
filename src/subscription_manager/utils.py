@@ -639,14 +639,33 @@ def get_process_names():
     for subdir in os.listdir('/proc'):
         if re.match('[0-9]+', subdir):
             process_status_file_path = os.path.join(os.path.sep, 'proc', subdir, 'status')
-            with open(process_status_file_path) as status:
-                lines = "".join(status.readlines())
-                # Find first value of something that looks like "Name: THING"
-                match = re.search(proc_name_expr, lines)
-                if match:
-                    proc_name = match.groupdict().get('proc_name')
-                    if proc_name:
-                        yield proc_name
+            status_file = None
+            lines = ""
+            try:
+                status_file = open(process_status_file_path)
+                lines = "".join(status_file.readlines())
+            except IOError as e:
+                # See https://bugzilla.redhat.com/show_bug.cgi?id=1890080
+                # Sometimes when processes are killed after we have listed the
+                # /proc dir content we can end up trying to open a file which no
+                # longer exists.
+                log.debug("A process has likely ended before it's status could be read for"
+                          " {subdir} : {ex}".format(subdir=subdir, ex=e))
+                continue
+            except Exception as e:
+                log.debug("Unexpected exception while trying to read process names from /proc for"
+                          " {subdir} : {ex}".format(subdir=subdir, ex=e))
+                continue
+            finally:
+                if status_file is not None:
+                    status_file.close()
+
+            # Find first value of something that looks like "Name: THING"
+            match = re.search(proc_name_expr, lines)
+            if match:
+                proc_name = match.groupdict().get('proc_name')
+                if proc_name:
+                    yield proc_name
 
 
 def is_process_running(process_to_find):
