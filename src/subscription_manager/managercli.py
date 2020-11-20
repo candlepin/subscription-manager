@@ -2083,7 +2083,7 @@ class AttachCommand(CliCommand):
         self.parser.add_option("--quantity", dest="quantity",
             help=_("Number of subscriptions to attach. May not be used with an auto-attach."))
         self.parser.add_option("--auto", action='store_true',
-            help=_("Automatically attach compatible subscriptions to this system. This is the default action."))
+            help=_("Automatically attach the best-matched compatible subscriptions to this system. This is the default action."))
         self.parser.add_option("--servicelevel", dest="service_level",
                                help=_("Automatically attach only subscriptions matching the specified service level; only used with --auto"))
         self.parser.add_option("--file", dest="file",
