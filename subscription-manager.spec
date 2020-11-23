@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.43
+Version: 1.24.44
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1161,6 +1161,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Nov 23 2020 William Poteat <wpoteat@redhat.com> 1.24.44-1
+- 1826300: Better messages for attach --auto for SCA mode; ENT-3175
+  (jhnidek@redhat.com)
+
 * Wed Oct 14 2020 Christopher Snyder <csnyder@redhat.com> 1.24.43-1
 - 1826300: Ignore auto-attach, when SCA mode is used
   (jhnidek@redhat.com)
