@@ -12,7 +12,7 @@ from nose.plugins.attrib import attr
 @attr('zypper')
 class TestServicePlugin(TestCase):
 
-    SUB_MAN = "python -m subscription_manager.scripts.subscription_manager"
+    SUB_MAN = "PYTHONPATH=./src:./syspurpose/src python -m subscription_manager.scripts.subscription_manager"
 
     def setUp(self):
         missing = []
@@ -53,7 +53,7 @@ class TestServicePlugin(TestCase):
         # remove cached subman packages
         subprocess.call('rm -rf /var/cache/zypp/packages/subscription-manager*', shell=True)
         # remove test package if installed
-        subprocess.call('zypper --non-interactive rm {RHSM_TEST_PACKAGE}'.format(**os.environ), shell=True)
-        subprocess.call('zypper --non-interactive --no-gpg-checks in --download-only {RHSM_TEST_PACKAGE}'.format(**os.environ), shell=True)
+        subprocess.call('PYTHONPATH=./src:./syspurpose/src zypper --non-interactive rm {RHSM_TEST_PACKAGE}'.format(**os.environ), shell=True)
+        subprocess.call('PYTHONPATH=./src:./syspurpose/src zypper --non-interactive --no-gpg-checks in --download-only {RHSM_TEST_PACKAGE}'.format(**os.environ), shell=True)
 
         subprocess.check_call('test "$(find /var/cache/zypp/packages/ -name \'{RHSM_TEST_PACKAGE}*.rpm\' | wc -l)" -gt 0'.format(**os.environ), shell=True)
