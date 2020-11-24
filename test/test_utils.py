@@ -889,18 +889,25 @@ class TestGetProcessNamesAndIsProcessRunning(fixture.SubManFixture):
             status.write(process_status_contents.format(name=name))
 
     @staticmethod
-    def redirect_open(new_root):
+    def redirect_open(new_root, path_to_error=None):
         """
         Construct a suitable side_effect for a mock of the open builtin
         function, such that any path that is opened is transformed to
         {new_root}/{original_path}
         """
+        if path_to_error is None:
+            path_to_error = {}
+
         def new_open(*args, **kwargs):
             original_path = args[0]
             if original_path.startswith(os.path.sep):
                 original_path = original_path[1:]
+            # Allow our mock open function to be made to raise errors selectively
+            for path in path_to_error.keys():
+                if path in original_path:
+                    print("raise the roof")
+                    raise path_to_error.get(original_path)
             corrected_path = os.path.join(new_root, original_path)
-            print(corrected_path)
             return original_open(corrected_path, *args[1:], **kwargs)
         return new_open
 
@@ -973,6 +980,30 @@ class TestGetProcessNamesAndIsProcessRunning(fixture.SubManFixture):
         self.create_fake_process_status(name=fake_process_name)
         ld = os.listdir(self.proc_root)
         new_open = self.redirect_open(self.root_dir)
+        os_patch = patch('subscription_manager.utils.os.listdir')
+        m = os_patch.start()
+        m.return_value = ld
+        open_patch = patch(fixture.OPEN_FUNCTION)
+        mopen = open_patch.start()
+        mopen.side_effect = new_open
+        res = get_process_names()
+        res = list(res)
+        self.assertEquals(res, [fake_process_name],
+                          "Expected a list containing '%s', Actual: %s" % (fake_process_name, res))
+
+    def test_get_process_names_ioerror(self):
+        """
+        Test getting list of processes when unable to read one or more of the files
+        """
+        fake_process_name = "magic_process"
+        self.create_fake_process_status(name=fake_process_name)
+        ld = os.listdir(self.proc_root)
+        errors = {
+            "1337": IOError("Cannot access bad_path"),
+            "8675309": Exception("AHHHH")
+        }
+        ld.extend(errors.keys())
+        new_open = self.redirect_open(self.root_dir, path_to_error=errors)
         os_patch = patch('subscription_manager.utils.os.listdir')
         m = os_patch.start()
         m.return_value = ld
