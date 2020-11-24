@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.44
+Version: 1.24.45
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1161,6 +1161,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Nov 24 2020 William Poteat <wpoteat@redhat.com> 1.24.45-1
+- 1890080: Handle IOErrors and Exceptions when looking for process names
+  (csnyder@redhat.com)
+
 * Mon Nov 23 2020 William Poteat <wpoteat@redhat.com> 1.24.44-1
 - 1826300: Better messages for attach --auto for SCA mode; ENT-3175
   (jhnidek@redhat.com)
