@@ -19,6 +19,8 @@
 #include <linux/version.h>
 #include <sys/file.h>
 #include <sys/syscall.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <stdlib.h>
 #include <signal.h>
 #include <stdio.h>
@@ -33,7 +35,8 @@
 #include <libintl.h>
 #include <locale.h>
 
-#define LOGFILE "/var/log/rhsm/rhsmcertd.log"
+#define LOGDIR "/var/log/rhsm"
+#define LOGFILE LOGDIR"/rhsmcertd.log"
 #define LOCKFILE "/var/lock/subsys/rhsmcertd"
 #define UPDATEFILE "/run/rhsm/update"
 #define NEXT_CERT_UPDATE_FILE "/run/rhsm/next_cert_check_update"
@@ -142,7 +145,14 @@ r_log (const char *level, const char *message, ...)
 {
     bool use_stdout = false;
     va_list argp;
-    FILE *log_file = fopen (LOGFILE, "a");
+    FILE *log_file = NULL;
+    struct stat log_dir_stat;
+
+    /* When log directory does not exist, then try to create this directory */
+    if (stat(LOGDIR, &log_dir_stat) != 0) {
+        mkdir(LOGDIR, 0755);
+    }
+    log_file = fopen (LOGFILE, "a");
     if (!log_file) {
         // redirect message to stdout
         log_file = stdout;
