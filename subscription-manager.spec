@@ -303,7 +303,7 @@ Requires:  %{py_package_prefix}-python-dateutil
 BuildRequires: %{py_package_prefix}-dateutil
 Requires: %{py_package_prefix}-dateutil
 %endif
-Requires: %{py_package_prefix}-syspurpose
+Requires: %{py_package_prefix}-syspurpose = %{version}-%{release}
 
 # rhel 8 has different naming for setuptools going forward
 %if (0%{?rhel} && 0%{?rhel} == 8)
@@ -412,7 +412,6 @@ Group: Productivity/Networking/System
 %else
 Group: System Environment/Base
 %endif
-Requires: %{name} = %{version}-%{release}
 %description -n %{py_package_prefix}-syspurpose
 Provides the syspurpose commandline utility. This utility manages the
 system syspurpose.
