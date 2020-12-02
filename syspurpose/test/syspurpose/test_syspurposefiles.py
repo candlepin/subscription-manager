@@ -412,7 +412,7 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         self.assertRaisesNothing(syspurpose_store.write)
 
         with io.open(temp_dir, 'r', encoding='utf-8') as f:
-            actual_contents = self.assertRaisesNothing(json.load, f, encoding='utf-8')
+            actual_contents = self.assertRaisesNothing(json.load, f)
 
         self.assertDictEqual(actual_contents, test_data)
 
@@ -428,7 +428,7 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         self.assertRaisesNothing(syspurpose_store.write)
 
         with io.open(temp_dir, 'r', encoding='utf-8') as f:
-            actual_contents = self.assertRaisesNothing(json.load, f, encoding='utf-8')
+            actual_contents = self.assertRaisesNothing(json.load, f)
 
         self.assertDictEqual(actual_contents, test_data)
 
@@ -545,6 +545,190 @@ class TestSyncedStore(SyspurposeTestBase):
                 ]
             }
         }
+
+    @mock.patch('syspurpose.files.SyncedStore.sync')
+    def test_enter_exit_methods_set(self, mock_sync):
+        """
+        Test that synced store is automatically synced, when set method is used
+        in block of with statement
+        """
+        with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
+            synced_store.set('foo', 'bar')
+        mock_sync.assert_called_once()
+
+    @mock.patch('syspurpose.files.SyncedStore.sync')
+    def test_enter_exit_methods_not_used(self, mock_sync):
+        """
+        Test that synced store is automatically synced, when set method is used
+        in block of with statement
+        """
+        with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
+            pass
+        mock_sync.assert_not_called()
+
+    @mock.patch('syspurpose.files.SyncedStore.sync')
+    def test_enter_exit_methods_unset(self, mock_sync):
+        """
+        Test that synced store is automatically synced, when unset method is used
+        in block of with statement
+        """
+        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': 'bar'})
+        with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
+            self.assertFalse(synced_store.changed)
+            synced_store.unset('foo')
+            self.assertTrue(synced_store.changed)
+        mock_sync.assert_called_once()
+
+    @mock.patch('syspurpose.files.SyncedStore.sync')
+    def test_enter_exit_methods_add(self, mock_sync):
+        """
+        Test that synced store is automatically synced, when add method is used
+        in block of with statement
+        """
+        with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
+            self.assertFalse(synced_store.changed)
+            synced_store.add('foo', 'bar')
+            synced_store.add('foo', 'boo')
+            self.assertTrue(synced_store.changed)
+        mock_sync.assert_called_once()
+
+    @mock.patch('syspurpose.files.SyncedStore.sync')
+    def test_add_method_existing_value_not_list(self, mock_sync):
+        """
+        Test add method for the case, when existing value is not list, but
+        it is simple value. Final value should be list.
+        """
+
+        # First set value using set() method
+        with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
+            synced_store.set('foo', 'bar')
+        local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
+        self.assertTrue('foo' in local_result)
+        self.assertEqual(local_result['foo'], 'bar')
+
+        # Then try to extend this attribute using add() method. Final value should be
+        # list not single value
+        with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
+            synced_store.add('foo', 'boo')
+        local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
+        self.assertTrue('foo' in local_result)
+        self.assertEqual(local_result['foo'], ['bar', 'boo'])
+
+    @mock.patch('syspurpose.files.SyncedStore.sync')
+    def test_add_method_none_value(self, mock_sync):
+        """
+        Test add method for the case, when existing value is not list, but
+        it is None value. Final value should be list.
+        """
+
+        # First set value using set() method
+        with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
+            synced_store.set('foo', None)
+        local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
+        self.assertTrue('foo' in local_result)
+        self.assertEqual(local_result['foo'], None)
+
+        # Then try to extend this attribute using add() method. Final value should be
+        # list not single value
+        with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
+            synced_store.add('foo', 'boo')
+        local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
+        self.assertTrue('foo' in local_result)
+        self.assertEqual(local_result['foo'], ['boo'])
+
+    @mock.patch('syspurpose.files.SyncedStore.sync')
+    def test_enter_exit_methods_remove(self, mock_sync):
+        """
+        Test that synced store is automatically synced, when remove method is used
+        in block of with statement
+        """
+        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': ['bar'], 'cool': 'shark'})
+        with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
+            self.assertFalse(synced_store.changed)
+            synced_store.remove('foo', 'bar')
+            self.assertTrue(synced_store.changed)
+        mock_sync.assert_called_once()
+        local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
+        print(local_result)
+        self.assertTrue('cool' in local_result)
+        self.assertEqual(local_result['cool'], 'shark')
+        self.assertTrue('foo' in local_result)
+        self.assertEqual(local_result['foo'], [])
+
+    @mock.patch('syspurpose.files.SyncedStore.sync')
+    def test_enter_exit_methods_remove_one_value(self, mock_sync):
+        """
+        Test that synced store is automatically synced, when remove method is used
+        in block of with statement. Test the case, when value is not list.
+        """
+        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': 'bar'})
+        with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
+            self.assertFalse(synced_store.changed)
+            synced_store.remove('foo', 'bar')
+            self.assertTrue(synced_store.changed)
+        mock_sync.assert_called_once()
+
+    @mock.patch('syspurpose.files.SyncedStore.sync')
+    def test_remove_non_existent_value(self, mock_sync):
+        """
+        Test that removing non-existent value will not mark synced store as changed
+        """
+        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': ['bar']})
+        with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
+            self.assertFalse(synced_store.changed)
+            synced_store.remove('foo', 'boooo')
+            self.assertFalse(synced_store.changed)
+        mock_sync.assert_not_called()
+
+    @mock.patch('syspurpose.files.SyncedStore.sync')
+    def test_remove_non_existent_key(self, mock_sync):
+        """
+        Test that removing non-existent key will not mark synced store as changed
+        """
+        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': ['bar']})
+        with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
+            self.assertFalse(synced_store.changed)
+            synced_store.remove('non-existent', 'foo_bar')
+            self.assertFalse(synced_store.changed)
+        mock_sync.assert_not_called()
+
+    @mock.patch('syspurpose.files.SyncedStore._sync_local_only')
+    def test_sync_localy_when_server_is_not_responding(self, mock_sync_local_only):
+        """
+        Test that only local syncing is triggered, when we are not able to detect
+        if candlepin server has syspurpose capability
+        """
+        def has_capability(*args, **kwargs):
+            raise TypeError('Exception for testing')
+        self.uep.has_capability = mock.Mock(side_effect=has_capability)
+        with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
+            synced_store.set('foo', 'bar')
+        mock_sync_local_only.assert_called_once()
+
+    @mock.patch('syspurpose.files.SyncedStore._sync_local_only')
+    def test_sync_local_only(self, mock_sync_local_only):
+        """
+        Test that only local syncing is triggered, when server is down or
+        the system is not registered
+        """
+        self.uep.has_capability = mock.Mock(side_effect=lambda x: False)
+        with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
+            synced_store.set('foo', 'bar')
+        mock_sync_local_only.assert_called_once()
+
+    def test_sync_local_only_extend_existing_values(self):
+        """
+        Test that local syncing does not overwrite existing values
+        """
+        self.uep.has_capability = mock.Mock(side_effect=lambda x: False)
+        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': 'bar'})
+        with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
+            synced_store.set('cool', 'dear')
+        local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
+        self.assertTrue('foo' in local_result)
+        self.assertEqual(local_result['foo'], 'bar')
+        self.assertTrue('cool' in local_result)
+        self.assertEqual(local_result['cool'], 'dear')
 
     def test_falsey_values_removed_from_local_empty_local(self):
         # The falsey values ([], "", {}, None) should never end up after a SyncedStore.sync in
@@ -739,6 +923,9 @@ class TestSyncedStore(SyspurposeTestBase):
         write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
+
+        remote_content = synced_store.get_remote_contents()
+        self.assertEqual(remote_content, {})
 
         self.assertRaisesNothing(synced_store.set, u'role', u'new_role')
         result = self.assertRaisesNothing(synced_store.sync)
