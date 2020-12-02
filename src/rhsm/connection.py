@@ -235,7 +235,6 @@ class BaseConnection(object):
             proxy_description = "http_proxy=%s:%s " % \
                                 (normalized_host(self.proxy_hostname),
                                  safe_int(self.proxy_port))
-        auth_description = None
         # initialize connection
         self.conn = restlib_class(self.host, self.ssl_port, self.handler,
                                   username=self.username, password=self.password,
@@ -502,6 +501,9 @@ class BaseRestLib(object):
         self.proxy_password = proxy_password
         self.smoothed_rt = None
         self.token = token
+        # We set this to None, because we don't know the truth unless we get
+        # first response from the server using cert/key connection
+        self.is_consumer_cert_key_valid = None
 
         # Setup basic authentication if specified:
         if username and password:
@@ -728,6 +730,7 @@ class BaseRestLib(object):
                      "headers": dict(response.getheaders())
                 }
                 if response.status == 200:
+                    self.is_consumer_cert_key_valid = True
                     break  # this client cert worked, no need to try more
                 elif self.cert_dir:
                     log.debug("Unable to get valid response: %s from CDN: %s" %
@@ -737,6 +740,7 @@ class BaseRestLib(object):
                 if self.cert_file and not self.cert_dir:
                     id_cert = certificate.create_from_file(self.cert_file)
                     if not id_cert.is_valid():
+                        self.is_consumer_cert_key_valid = False
                         raise ExpiredIdentityCertException()
                 if not self.cert_dir:
                     raise

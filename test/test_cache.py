@@ -30,7 +30,7 @@ from mock import Mock, patch, mock_open
 
 # used to get a user readable cfg class for test cases
 from .stubs import StubProduct, StubProductCertificate, StubCertificateDirectory, \
-    StubEntitlementCertificate, StubPool, StubEntitlementDirectory
+    StubEntitlementCertificate, StubPool, StubEntitlementDirectory, StubUEP
 from .fixture import SubManFixture
 
 from rhsm import ourjson as json
@@ -38,7 +38,7 @@ from subscription_manager.cache import ProfileManager, \
     InstalledProductsManager, EntitlementStatusCache, \
     PoolTypeCache, ReleaseStatusCache, ContentAccessCache, \
     PoolStatusCache, ContentAccessModeCache, SupportedResourcesCache, \
-    AvailableEntitlementsCache
+    AvailableEntitlementsCache, CurrentOwnerCache
 
 from rhsm.profile import Package, RPMProfile, EnabledReposProfile, ModulesProfile
 
@@ -109,6 +109,89 @@ ENABLED_MODULES = [
         "status": "unknown"
     }
 ]
+
+
+class TestCurrentOwnerCache(unittest.TestCase):
+    """
+    Test case for class CurrentOwnerCache
+    """
+
+    CACHE_FILE_CONTENT = {
+        "e068d900-ee2a-4d16-a8b7-709a8f1e8b79": {
+            "created": "2020-11-24T09:44:43+0000",
+            "updated": "2020-11-24T09:44:43+0000",
+            "id": "ff80808175f9a3e90175f9a41dff0004",
+            "key": "admin",
+            "displayName": "Admin Owner",
+            "parentOwner": None,
+            "contentPrefix": None,
+            "defaultServiceLevel": None,
+            "upstreamConsumer": None,
+            "logLevel": None,
+            "autobindDisabled": False,
+            "autobindHypervisorDisabled": False,
+            "contentAccessMode": "entitlement",
+            "contentAccessModeList": "entitlement",
+            "lastRefreshed": None,
+            "href": "/owners/admin"
+        }
+    }
+
+    def setUp(self):
+        self.uep = StubUEP()
+        self.current_owner_cache = CurrentOwnerCache()
+        self.identity = Mock()
+        self.identity.uuid = 'e068d900-ee2a-4d16-a8b7-709a8f1e8b79'
+
+    def test_cache_status_unknown(self):
+        """
+        Test that cache is not used, when validity of consumer cert/key is unknown
+        """
+        self.uep.conn.is_consumer_cert_key_valid = None
+        self.uep.getOwner = Mock(return_value={'key': 'dummy_owner'})
+        self.assertEqual(self.uep.getOwner.call_count, 0)
+        owner = self.current_owner_cache.read_data(uep=self.uep, identity=self.identity)
+        self.uep.getOwner.assert_called_once()
+        self.assertEqual(owner, {'key': 'dummy_owner'})
+
+    def test_cache_status_not_valid(self):
+        """
+        Test that cache is not used, when validity of consumer cert/key is false
+        """
+        self.uep.conn.is_consumer_cert_key_valid = False
+        self.uep.getOwner = Mock(return_value={'key': 'another_owner'})
+        self.assertEqual(self.uep.getOwner.call_count, 0)
+        owner = self.current_owner_cache.read_data(uep=self.uep, identity=self.identity)
+        self.uep.getOwner.assert_called_once()
+        self.assertEqual(owner, {'key': 'another_owner'})
+
+    def test_cache_status_valid(self):
+        """
+        Test that owner information is read from cache, when validity of consumer cert/key is unknown
+        """
+        # Mock that consumer cert/key was used for communication with candlepin server
+        # with successful result
+        self.uep.conn.is_consumer_cert_key_valid = True
+        self.uep.getOwner = Mock(return_value={'key': 'dummy_owner'})
+        self.current_owner_cache.read_cache_only = Mock(return_value=self.CACHE_FILE_CONTENT)
+        owner = self.current_owner_cache.read_data(uep=self.uep, identity=self.identity)
+        self.assertEqual(self.uep.getOwner.call_count, 0)
+        self.assertTrue(self.identity.uuid in self.CACHE_FILE_CONTENT)
+        self.assertEqual(owner, self.CACHE_FILE_CONTENT[self.identity.uuid])
+
+    def test_cache_obsoleted(self):
+        """
+        Test that owner information is read from server, when uuid of consumer is different from cache file
+        """
+        self.uep.conn.is_consumer_cert_key_valid = True
+        # Mock that uuid of consumer has changed
+        self.identity.uuid = 'e068d900-f000-f000-f000-709a8f1e8b79'
+        self.uep.getOwner = Mock(return_value={'key': 'foo_owner'})
+        self.current_owner_cache.read_cache_only = Mock(return_value=self.CACHE_FILE_CONTENT)
+        self.current_owner_cache.write_cache = Mock()
+        owner = self.current_owner_cache.read_data(uep=self.uep, identity=self.identity)
+        self.uep.getOwner.assert_called_once()
+        self.assertEqual(owner, {'key': 'foo_owner'})
 
 
 class TestProfileManager(unittest.TestCase):
