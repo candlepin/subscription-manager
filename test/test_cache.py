@@ -150,6 +150,7 @@ class TestCurrentOwnerCache(unittest.TestCase):
         self.uep.conn.is_consumer_cert_key_valid = None
         self.uep.getOwner = Mock(return_value={'key': 'dummy_owner'})
         self.assertEqual(self.uep.getOwner.call_count, 0)
+        self.current_owner_cache.write_cache = Mock()
         owner = self.current_owner_cache.read_data(uep=self.uep, identity=self.identity)
         self.uep.getOwner.assert_called_once()
         self.assertEqual(owner, {'key': 'dummy_owner'})
@@ -160,6 +161,7 @@ class TestCurrentOwnerCache(unittest.TestCase):
         """
         self.uep.conn.is_consumer_cert_key_valid = False
         self.uep.getOwner = Mock(return_value={'key': 'another_owner'})
+        self.current_owner_cache.write_cache = Mock()
         self.assertEqual(self.uep.getOwner.call_count, 0)
         owner = self.current_owner_cache.read_data(uep=self.uep, identity=self.identity)
         self.uep.getOwner.assert_called_once()
@@ -174,6 +176,7 @@ class TestCurrentOwnerCache(unittest.TestCase):
         self.uep.conn.is_consumer_cert_key_valid = True
         self.uep.getOwner = Mock(return_value={'key': 'dummy_owner'})
         self.current_owner_cache.read_cache_only = Mock(return_value=self.CACHE_FILE_CONTENT)
+        self.current_owner_cache.write_cache = Mock()
         owner = self.current_owner_cache.read_data(uep=self.uep, identity=self.identity)
         self.assertEqual(self.uep.getOwner.call_count, 0)
         self.assertTrue(self.identity.uuid in self.CACHE_FILE_CONTENT)
