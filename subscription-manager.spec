@@ -244,7 +244,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.29.0
+Version: 1.29.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1499,6 +1499,19 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Dec 03 2020 Christopher Snyder <csnyder@redhat.com> 1.29.1-1
+- 1894450: Fix issue with identity command; ENT-3235 (#2362)
+  (jhnidek@redhat.com)
+- Extended D-Bus API - syspurpose methods; ENT-2373 (jhnidek@redhat.com)
+- 1855437: Fixed rpm dependency of subscription-manager; ENT-3250
+  (jhnidek@redhat.com)
+- Fix building libdnf-plugin RPM; ENT-3192 (jhnidek@redhat.com)
+- Create log dir by rhsmcertd, when log dir does not exist (jhnidek@redhat.com)
+- Try to fix Suse tests. (jhnidek@redhat.com)
+- improve the help message for attach --auto (ondrej@budai.cz)
+- 1890080: Handle IOErrors and Exceptions when looking for process names
+  (csnyder@redhat.com)
+
 * Mon Nov 16 2020 Christopher Snyder <csnyder@redhat.com> 1.29.0-1
 - 1850624: Uncaught JSONDecodeError when content_access.json is empty and
   registering to Satellite6 (wpoteat@redhat.com)
