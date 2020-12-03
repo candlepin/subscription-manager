@@ -243,7 +243,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.6
+Version: 1.28.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1445,6 +1445,12 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Dec 03 2020 Christopher Snyder <csnyder@redhat.com> 1.28.7-1
+- 1855437: Fixed rpm dependency of subscription-manager; ENT-3250 (#2365)
+  (jhnidek@redhat.com)
+- 1894450: Fix issue with identity command; ENT-3235 (#2364)
+  (jhnidek@redhat.com)
+
 * Mon Nov 16 2020 Christopher Snyder <csnyder@redhat.com> 1.28.6-1
 - 1850624: Uncaught JSONDecodeError when content_access.json is empty and
   registering to Satellite6 (wpoteat@redhat.com)
