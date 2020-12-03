@@ -840,7 +840,7 @@ class ConsumerCache(CacheManager):
         """
         raise NotImplementedError
 
-    def _is_cache_obsoleted(self, *args, **kwargs):
+    def _is_cache_obsoleted(self, uep, identity, *args, **kwargs):
         """
         Another method for checking if cached file is obsoleted
         :param args: positional arguments
@@ -869,7 +869,7 @@ class ConsumerCache(CacheManager):
             return current_data
 
         # Try to use class specific test if the cache file is obsoleted
-        cache_file_obsoleted = self._is_cache_obsoleted()
+        cache_file_obsoleted = self._is_cache_obsoleted(uep, identity)
 
         # When timeout for cache is defined, then check if the cache file is not
         # too old. In that case content of the cache file will be overwritten with
@@ -976,6 +976,23 @@ class CurrentOwnerCache(ConsumerCache):
 
     def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
         return uep.getOwner(consumer_uuid)
+
+    def _is_cache_obsoleted(self, uep, identity, *args, **kwargs):
+        """
+        We don't know if the cache is valid until we get valid response
+        :param uep: object representing connection to candlepin server
+        :param identity: consumer identity
+        :param args: other arguments
+        :param kwargs: other keyed arguments
+        :return: True, when cache is obsoleted or validity of cache is unknown.
+        """
+        if uep is None:
+            cp_provider = inj.require(inj.CP_PROVIDER)
+            uep = cp_provider.get_consumer_auth_cp()
+        if hasattr(uep.conn, 'is_consumer_cert_key_valid') and uep.conn.is_consumer_cert_key_valid is True:
+            return False
+        else:
+            return True
 
 
 class SupportedResourcesCache(ConsumerCache):
