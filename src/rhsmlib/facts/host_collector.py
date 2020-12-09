@@ -62,14 +62,6 @@ class HostCollector(collector.FactsCollector):
         )
         virt_collector_info = virt_collector.get_all()
 
-        cloud_collector = cloud_facts.CloudFactsCollector(
-            prefix=self.prefix,
-            testing=self.testing,
-            collected_hw_info=firmware_info_dict
-        )
-        cloud_facts_info = cloud_collector.get_all()
-
-        host_facts.update(cloud_facts_info)
         host_facts.update(virt_collector_info)
         host_facts.update(firmware_info_dict)
 
