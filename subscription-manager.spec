@@ -471,17 +471,11 @@ Requires: font(cantarell)
 Requires: %{?suse_version:dejavu} %{!?suse_version:dejavu-sans-fonts}
 %endif
 
-%if !0%{?suse_version}
-Requires(post): scrollkeeper
-Requires(postun): scrollkeeper
-%else
-%endif
 
 %description -n rhsm-gtk
 This package contains GUI and widgets used by subscription-manager-gui
 and RHSM initial_setup module for Anaconda.
 %endif
-
 
 %if %{use_subman_gui}
 %package -n subscription-manager-gui
@@ -500,6 +494,12 @@ Requires: rhsm-gtk = %{version}-%{release}
 # Renamed from -gnome, so obsolete it properly
 Obsoletes: %{name}-gnome < 1.0.3-1
 Provides: %{name}-gnome = %{version}-%{release}
+
+%if !0%{?suse_version}
+Requires(post): scrollkeeper
+Requires(postun): scrollkeeper
+%else
+%endif
 
 %description -n subscription-manager-gui
 This package contains a GTK+ graphical interface for configuring and
