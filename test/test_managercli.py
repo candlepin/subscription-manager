@@ -1608,6 +1608,12 @@ class TestServiceLevelCommand(TestCliProxyCommand):
     def test_org_requires_list_good(self):
         self.cc.main(["--org", "one", "--list"])
 
+    def test_list_with_one_org_no_prompt(self):
+        owner_list = self.cc.cp.getOwnerList
+        self.cc.cp.getOwnerList = Mock(return_value='test_org')
+        self.cc.main(["--list"])
+        self.cc.cp.getOwnerList = owner_list
+
     def test_service_level_supported(self):
         self.cc.cp.setConsumer({'serviceLevel': 'Jarjar'})
         self.cc._set('JRJAR')
