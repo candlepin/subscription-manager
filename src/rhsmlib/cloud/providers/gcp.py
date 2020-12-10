@@ -30,7 +30,7 @@ class GCPCloudDetector(CloudDetector):
 
     def __init__(self, hw_info):
         """
-        Initialize instance of AWSCloudDetector
+        Initialize instance of GCPCloudDetector
         """
         super(GCPCloudDetector, self).__init__(hw_info)
 
@@ -45,7 +45,7 @@ class GCPCloudDetector(CloudDetector):
         """
         Try to guess if cloud provider is GCP using collected hardware information (output of dmidecode,
         virt-what, etc.)
-        :return: True, when we detected sign of AWS in hardware information; Otherwise return False
+        :return: True, when we detected sign of GCP in hardware information; Otherwise return False
         """
 
         # The system has to be VM
@@ -71,13 +71,11 @@ class GCPCloudDetector(CloudDetector):
         if self.is_vm() is False:
             return 0.0
 
-        # We know that Azure uses only HyperV
-        if 'virt.host_type' in self.hw_info:
-            # It seems that KVM is used more ofter
-            if 'kvm' in self.hw_info['virt.host_type']:
-                probability += 0.3
+        # We know that GCP uses only KVM at the end of 2020
+        if 'virt.host_type' in self.hw_info and 'kvm' in self.hw_info['virt.host_type']:
+            probability += 0.3
 
-        # Try to find "Amazon EC2", "Amazon" or "AWS" keywords in output of dmidecode
+        # Try to find "Google" or "gcp" keywords in output of dmidecode
         found_google = False
         found_gcp = False
         for hw_item in self.hw_info.values():

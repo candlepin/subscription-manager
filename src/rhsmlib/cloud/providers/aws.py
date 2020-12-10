@@ -78,11 +78,16 @@ class AWSCloudDetector(CloudDetector):
 
         # We know that AWS uses mostly KVM and it uses Xen in some cases
         if 'virt.host_type' in self.hw_info:
-            # It seems that KVM is used more ofter
+            # It seems that KVM is used more often
             if 'kvm' in self.hw_info['virt.host_type']:
                 probability += 0.3
             elif 'xen' in self.hw_info['virt.host_type']:
                 probability += 0.2
+
+        # Every system UUID of VM running on AWS EC2 starts with EC2 string. Not strong sign, but
+        # it can increase probability a little
+        if 'dmi.system.uuid' in self.hw_info and self.hw_info['dmi.system.uuid'].lower().startswith('ec2'):
+            probability += 0.1
 
         # Try to find "Amazon EC2", "Amazon" or "AWS" keywords in output of dmidecode
         found_amazon = False

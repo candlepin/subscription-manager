@@ -99,7 +99,7 @@ class TestAWSDetector(unittest.TestCase):
 
     def test_vm_without_dmi_bios_info(self):
         """
-        Test for the case, when MS BIOS does not provide any useful information for our code
+        Test for the case, when SM BIOS does not provide any useful information for our code
         """
         # We will mock facts using simple dictionary
         facts = {}
@@ -108,6 +108,22 @@ class TestAWSDetector(unittest.TestCase):
         self.assertFalse(is_vm)
         is_aws_vm = aws_detector.is_running_on_cloud()
         self.assertFalse(is_aws_vm)
+
+    def test_vm_system_uuid_starts_with_ec2(self):
+        """
+        Test for the case, when system UUID starts with EC2 string as it is described here:
+        https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/identify_ec2_instances.html
+        """
+        # We will mock facts using simple dictionary
+        facts = {
+            'virt.is_guest': True,
+            'dmi.system.uuid': 'EC2263F8-15F3-4A34-B186-FAD8AB963431'
+        }
+        aws_detector = aws.AWSCloudDetector(facts)
+        is_vm = aws_detector.is_vm()
+        self.assertTrue(is_vm)
+        probability = aws_detector.is_likely_running_on_cloud()
+        self.assertEqual(probability, 0.1)
 
 
 class TestAzureDetector(unittest.TestCase):

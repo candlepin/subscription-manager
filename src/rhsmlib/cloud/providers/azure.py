@@ -73,7 +73,6 @@ class AzureCloudDetector(CloudDetector):
 
         # We know that Azure uses only HyperV
         if 'virt.host_type' in self.hw_info:
-            # It seems that KVM is used more ofter
             if 'hyperv' in self.hw_info['virt.host_type']:
                 probability += 0.3
 

@@ -15,7 +15,7 @@
 #
 
 """
-This module implement base class for detecting cloud provider
+This module implements the base class for detecting cloud provider
 """
 
 
