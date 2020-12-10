@@ -243,7 +243,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.7
+Version: 1.28.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1445,6 +1445,12 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Dec 10 2020 Christopher Snyder <csnyder@redhat.com> 1.28.8-1
+- 1904541: subscription-manager should not prompt for "Organization" when only
+  one organization (#2372) (wpoteat@redhat.com)
+- 1801570: drop scrollkeeper/rarian as a dependency from rhsm-gtk
+  (csnyder@redhat.com)
+
 * Thu Dec 03 2020 Christopher Snyder <csnyder@redhat.com> 1.28.7-1
 - 1855437: Fixed rpm dependency of subscription-manager; ENT-3250 (#2365)
   (jhnidek@redhat.com)
