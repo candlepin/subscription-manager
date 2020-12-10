@@ -21,7 +21,6 @@ from rhsmlib.facts import cleanup
 from rhsmlib.facts import virt
 from rhsmlib.facts import firmware_info
 from rhsmlib.facts import collector
-from rhsmlib.facts import cloud_facts
 
 log = logging.getLogger(__name__)
 

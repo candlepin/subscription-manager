@@ -57,7 +57,7 @@ class CloudCollector(object):
     # (e.g. /var/lib/rhsm/cache/cool_cloud_metadata.json)
     METADATA_CACHE_FILE = None
 
-    # Default value of path to  holding signature of metadata
+    # Default value of path to holding signature of metadata
     # (e.g. /var/lib/rhsm/cache/cool_cloud_signature.json)
     SIGNATURE_CACHE_FILE = None
 
@@ -115,12 +115,4 @@ class CloudCollector(object):
         Public method for getting metadata (cache file or server)
         :return:
         """
-        raise NotImplementedError
-
-    def is_running_on_cloud(self):
-        """
-        Return True, when server can really server providing metadata information
-        :return: True if the system is running on AWS cloud
-        """
-        # TODO: not sure about this method
         raise NotImplementedError

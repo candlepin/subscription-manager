@@ -108,4 +108,3 @@ if __name__ == '__main__':
     _result = _gcp_cloud_detector.is_running_on_cloud()
     _probability = _gcp_cloud_detector.is_likely_running_on_cloud()
     print('>>> debug <<< result: %s, %6.3f' % (_result, _probability))
-
