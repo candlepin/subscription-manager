@@ -1010,7 +1010,11 @@ class OrgCommand(UserPassCommand):
     @property
     def org(self):
         if not self._org:
-            self._org = self._get_org(self.options.org)
+            owners = self.cp.getOwnerList(self.options.username)
+            if len(owners) == 1:
+                self._org = owners[0]['key']
+            else:
+                self._org = self._get_org(self.options.org)
         return self._org
 
 
