@@ -244,7 +244,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.29.2
+Version: 1.29.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1498,6 +1498,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Dec 10 2020 Christopher Snyder <csnyder@redhat.com> 1.29.3-1
+- 1847910: Do not include dnf plugins in libdnf RPM. (#2370)
+  (jhnidek@redhat.com)
+
 * Thu Dec 10 2020 Christopher Snyder <csnyder@redhat.com> 1.29.2-1
 - 1801570: drop scrollkeeper/rarian as a dependency from rhsm-gtk
   (csnyder@redhat.com)
