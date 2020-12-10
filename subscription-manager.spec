@@ -1321,7 +1321,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %if %{create_libdnf_rpm}
 %files -n libdnf-plugin-subscription-manager
 %defattr(-,root,root,-)
-%{python_sitelib}/dnf-plugins/*
 %{_libdir}/libdnf/plugins/product-id.so
 %else
 # DNF RPM
