@@ -244,7 +244,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.29.1
+Version: 1.29.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1499,6 +1499,11 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Dec 10 2020 Christopher Snyder <csnyder@redhat.com> 1.29.2-1
+- 1801570: drop scrollkeeper/rarian as a dependency from rhsm-gtk
+  (csnyder@redhat.com)
+- Stop releasing to f31 (f31 is no longer supported) (csnyder@redhat.com)
+
 * Thu Dec 03 2020 Christopher Snyder <csnyder@redhat.com> 1.29.1-1
 - 1894450: Fix issue with identity command; ENT-3235 (#2362)
   (jhnidek@redhat.com)
