@@ -244,7 +244,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.29.3
+Version: 1.29.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1498,6 +1498,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Dec 10 2020 Christopher Snyder <csnyder@redhat.com> 1.29.4-1
+- 1904541: subscription-manager should not prompt for "Organization" when only
+  one organization (#2371) (wpoteat@redhat.com)
+
 * Thu Dec 10 2020 Christopher Snyder <csnyder@redhat.com> 1.29.3-1
 - 1847910: Do not include dnf plugins in libdnf RPM. (#2370)
   (jhnidek@redhat.com)
