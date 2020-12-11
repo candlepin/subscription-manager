@@ -687,8 +687,8 @@ class AbstractSyspurposeCommand(CliCommand):
             # Try to get current organization key. It is property of OrgCommand.
             # Every Syspurpose command has to be subclass of OrgCommand too
             # must have used credentials in command if not registered to proceed
-            org_key = self.org
             try:
+                org_key = self.org
                 server_response = self.cp.getOwnerSyspurposeValidFields(org_key)
             except connection.RestlibException as rest_err:
                 log.warning("Unable to get list of valid fields using REST API: %s" % rest_err)
