@@ -83,7 +83,7 @@ def detect_cloud_provider():
 
 
 # Some temporary smoke testing code. You can test this module using:
-# sudo PYTHONPATH=./src:./syspurse/src python3 -m rhsmlib.cloud.aws
+# sudo PYTHONPATH=./src:./syspurse/src python3 -m rhsmlib.cloud.utils
 if __name__ == '__main__':
     _result = detect_cloud_provider()
     print('>>> debug <<< result: %s' % _result)

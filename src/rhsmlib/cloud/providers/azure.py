@@ -30,7 +30,7 @@ class AzureCloudDetector(CloudDetector):
 
     def __init__(self, hw_info):
         """
-        Initialize instance of AWSCloudDetector
+        Initialize instance of AzureCloudDetector
         """
         super(AzureCloudDetector, self).__init__(hw_info)
 
@@ -45,7 +45,7 @@ class AzureCloudDetector(CloudDetector):
         """
         Try to guess if cloud provider is Azure using collected hardware information (output of dmidecode,
         virt-what, etc.)
-        :return: True, when we detected sign of AWS in hardware information; Otherwise return False
+        :return: True, when we detected sign of Azure in hardware information; Otherwise return False
         """
 
         # The system has to be VM
@@ -60,7 +60,7 @@ class AzureCloudDetector(CloudDetector):
 
     def is_likely_running_on_cloud(self):
         """
-        Return non-zero value, when the machine is virtual machine and it is running on hyperv and
+        Return non-zero value, when the machine is virtual machine and it is running on Hyper-V and
         some Microsoft string can be found in output of dmidecode
         :return: Float value representing probability that vm is running on Azure
         """
@@ -76,7 +76,7 @@ class AzureCloudDetector(CloudDetector):
             if 'hyperv' in self.hw_info['virt.host_type']:
                 probability += 0.3
 
-        # Try to find "Amazon EC2", "Amazon" or "AWS" keywords in output of dmidecode
+        # Try to find "Azure" or "Microsoft" keywords in output of dmidecode
         found_microsoft = False
         found_azure = False
         for hw_item in self.hw_info.values():
