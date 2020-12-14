@@ -1040,7 +1040,7 @@ class SyspurposeCommand(CliCommand):
         """
         Initialize the syspurpose command
         """
-        short_desc = _("Generic system purpose command")
+        short_desc = _("Convenient module for managing all system purpose settings")
         super(SyspurposeCommand, self).__init__(
             "syspurpose",
             short_desc,
@@ -1372,7 +1372,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
 
     def __init__(self):
 
-        shortdesc = _("Manage service levels for this system")
+        shortdesc = _("Show or modify the system purpose service-level setting")
         self._org_help_text = _("specify an organization when listing available service levels using the organization key, only used with --list")
         super(ServiceLevelCommand, self).__init__(
             "service-level",
@@ -1532,7 +1532,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
 class UsageCommand(AbstractSyspurposeCommand, OrgCommand):
 
     def __init__(self):
-        shortdesc = _("Manage usage setting for this system")
+        shortdesc = _("Show or modify the system purpose usage setting")
         self._org_help_text = _("use set and unset to define the value for this field")
         super(UsageCommand, self).__init__(
             "usage",
@@ -1916,7 +1916,7 @@ class UnRegisterCommand(CliCommand):
 class AddonsCommand(AbstractSyspurposeCommand, OrgCommand):
 
     def __init__(self):
-        shortdesc = _("Modify or view the addons attribute of the system purpose")
+        shortdesc = _("Show or modify the system purpose addons setting")
         super(AddonsCommand, self).__init__(
             "addons",
             shortdesc=shortdesc,
@@ -3287,7 +3287,7 @@ class OverrideCommand(CliCommand):
 
 class RoleCommand(AbstractSyspurposeCommand, OrgCommand):
     def __init__(self):
-        shortdesc = _("Modify system purpose role")
+        shortdesc = _("Show or modify the system purpose role setting")
         super(RoleCommand, self).__init__(
             "role",
             shortdesc,
