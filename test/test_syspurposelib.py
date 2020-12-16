@@ -116,4 +116,4 @@ class SyspurposeSyncActionCommandTests(SubManFixture):
         with mock.patch('subscription_manager.syspurposelib.SyncedStore') as store:
             result = self.command.perform()
             store.return_value.sync.assert_called_once()
-            self.assertTrue(isinstance(result, SyspurposeSyncActionReport))
+            self.assertFalse(isinstance(result, SyspurposeSyncActionReport))
