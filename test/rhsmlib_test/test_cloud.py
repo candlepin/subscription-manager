@@ -371,3 +371,25 @@ class TestCloudUtils(unittest.TestCase):
         self.hw_fact_collector_instance.get_all.return_value = hw_facts
         detected_clouds = detect_cloud_provider()
         self.assertEqual(detected_clouds, ['azure', 'gcp', 'aws'])
+
+    def test_conclict_in_strong_signs(self):
+        """
+        Test the case, when cloud providers change strong signs and there is conflict (two providers
+        are detected using strong signs). In such case result using strong signs should be dropped
+        and heuristics should be used, because strong signs do not work with probability and original
+        order is influenced by the order of classes in 'constant' CLOUD_DETECTORS.
+        """
+        host_facts = {
+            'virt.is_guest': True,
+            'virt.host_type': 'kvm',
+        }
+        hw_facts = {
+            'dmi.bios.vendor': 'Google',
+            'dmi.bios.version': 'Google',
+            'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77',
+            'dmi.chassis.manufacturer': 'Microsoft'
+        }
+        self.host_fact_collector_instance.get_all.return_value = host_facts
+        self.hw_fact_collector_instance.get_all.return_value = hw_facts
+        detected_clouds = detect_cloud_provider()
+        self.assertEqual(detected_clouds, ['gcp', 'azure', 'aws'])

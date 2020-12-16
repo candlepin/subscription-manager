@@ -57,12 +57,23 @@ def detect_cloud_provider():
     log.debug('Trying to detect cloud provider')
 
     # First try to detect cloud providers using strong signs
+    cloud_list = []
     for cloud_detector in cloud_detectors:
         cloud_detected = cloud_detector.is_running_on_cloud()
         if cloud_detected is True:
-            return [cloud_detector.ID]
+            cloud_list.append(cloud_detector.ID)
 
-    log.error('No cloud provider detected using strong signs')
+    # When only one cloud provider was detected, then return the list with
+    # one cloud provider. Print error in other cases and try to detect cloud providers
+    # using heuristics methods
+    if len(cloud_list) == 1:
+        return cloud_list
+    elif len(cloud_list) == 0:
+        log.error('No cloud provider detected using strong signs')
+    elif len(cloud_list) > 1:
+        log.error('More than one cloud provider detected using strong signs ({providers})'.format(
+            providers=", ".join(cloud_list)
+        ))
 
     # When no cloud provider detected using strong signs, because behavior of cloud providers
     # has changed, then try to detect cloud provider using some heuristics
@@ -73,7 +84,7 @@ def detect_cloud_provider():
             cloud_list.append((probability, cloud_detector.ID))
     # Sort list according probability (provider with highest probability first)
     cloud_list.sort(reverse=True)
-    # We care only about order, not probability in the result
+    # We care only about order, not probability in the result (filter probability out)
     cloud_list = [item[1] for item in cloud_list]
 
     if len(cloud_list) == 0:
