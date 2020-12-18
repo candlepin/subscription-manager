@@ -20,6 +20,7 @@ Classes here track various information last sent to the server, compare
 this with the current state, and perform an update on the server if
 necessary.
 """
+import copy
 import logging
 import os
 import socket
@@ -188,6 +189,86 @@ class CacheManager(object):
         else:
             log.debug("No changes.")
             return 0  # No updates performed.
+
+
+class InMemoryCache(object):
+    """
+    Store, in-memory only, some values in a thread-safe way.
+    """
+
+    def __init__(self):
+        self._cache = {}
+        self._lock = threading.RLock()
+
+    def __enter__(self):
+        """
+        Allow this cache object to be used as a context manager.
+        This only acquires the lock. The lock will be released in __exit__.
+        :return:
+        """
+        self._lock.acquire()
+        log.debug("{self}: lock acquired".format(self=self))
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """
+        Release the lock on exit
+        :param exc_type:
+        :param exc_val:
+        :param exc_tb:
+        :return:
+        """
+        self._lock.release()
+        log.debug("{self}: lock released".format(self=self))
+
+    def write_cache(self, key, data):
+        """
+        Overwrite the contents of the cache with data.
+        :param data: the contents
+        :return:
+        """
+        self._lock.acquire()
+        self._cache[key] = copy.deepcopy(data)
+        self._lock.release()
+        return copy.deepcopy(self._safe_get(key))
+
+    def read_cache_only(self, key=None):
+        """
+        Return the contents of the cache
+        :return:
+        """
+        self._lock.acquire()
+        if key is not None:
+            data = copy.deepcopy(self._safe_get(key))
+        else:
+            data = copy.deepcopy(self._cache)
+        self._lock.release()
+        return data
+
+    def _safe_get(self, key):
+        """
+        Try to read the key from the _cache dict, this could fail if the _cache is some how
+        modified to something that doesn't have a "get" method
+        :param key:
+        :return:
+        """
+        try:
+            data = self._cache.get(key, None)
+            return data
+        except AttributeError:
+            log.debug('Looks like the _cache was modified by something else, it was not a dict')
+            return None
+
+
+class ReadThroughInMemoryCache(InMemoryCache):
+    """
+    A thread-safe in-memory cache that will retrieve values from an underlying source on a cache
+    miss
+    """
+    def read(self, key, on_cache_miss):
+        data = self.read_cache_only(key=key)
+        if data is None:
+            data = self.write_cache(key, on_cache_miss())
+        return data
 
 
 class StatusCache(CacheManager):
@@ -937,31 +1018,6 @@ class SyspurposeValidFieldsCache(ConsumerCache):
             return post_process_received_data(data)
         else:
             return self.DEFAULT_VALUE
-
-
-class ContentAccessModeCache(CacheManager):
-    """
-    Cache the content access mode that is used for current identity.
-    """
-
-    CACHE_FILE = "/var/lib/rhsm/cache/content_access_mode.json"
-
-    def __init__(self, content_access_mode=None):
-        self.content_access_mode = content_access_mode or {}
-
-    def to_dict(self):
-        return self.content_access_mode
-
-    def _load_data(self, open_file):
-        try:
-            self.content_access_mode = json.loads(open_file.read()) or {}
-            return self.content_access_mode
-        except IOError as err:
-            log.error("Unable to read cache: %s" % self.CACHE_FILE)
-            log.exception(err)
-        except ValueError:
-            # Ignore json file parse error
-            pass
 
 
 class CurrentOwnerCache(ConsumerCache):

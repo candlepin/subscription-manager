@@ -50,6 +50,7 @@ from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
 
 from subscription_manager.i18n import ugettext as _
 
+
 log = logging.getLogger(__name__)
 
 
@@ -173,7 +174,6 @@ def is_simple_content_access(uep=None, identity=None, owner=None):
     :param owner: reference on current owner
     :return: True, when current owner uses contentAccesMode equal to org_environment. False otherwise.
     """
-
     if identity is None:
         identity = inj.require(inj.IDENTITY)
 
@@ -181,40 +181,43 @@ def is_simple_content_access(uep=None, identity=None, owner=None):
     if identity.uuid is None:
         return False
 
-    content_access_mode = None
-
     # We have to load it here, because we don't want to add another class to dependency injection
-
-    # Try to use cached data to minimize numbers of REST API calls
     cache = inj.require(inj.CONTENT_ACCESS_MODE_CACHE)
-    data = cache.read_cache_only()
-    if data is not None:
-        if identity.uuid in data:
-            content_access_mode = data[identity.uuid]
-
-    if content_access_mode is None:
-        if uep is None:
-            cp_provider = inj.require(inj.CP_PROVIDER)
-            uep = cp_provider.get_consumer_auth_cp()
-
-        if owner is None:
-            try:
-                owner = uep.getOwner(identity.uuid)
-            except Exception as err:
-                log.debug("Unable to get owner: %s" % str(err))
-                return False
-        if 'contentAccessMode' in owner:
-            content_access_mode = owner['contentAccessMode']
-
-        # Write cache to file
-        data = {identity.uuid: content_access_mode}
-        cache.content_access_mode = data
-        cache.write_cache(debug=False)
-
+    content_access_mode = cache.read(
+        key=identity.uuid,
+        on_cache_miss=lambda: get_content_access_mode(uep=uep,
+                                                      identity=identity,
+                                                      owner=owner))
     if content_access_mode == "org_environment":
         return True
 
     return False
+
+
+def get_content_access_mode(uep=None, identity=None, owner=None):
+    """
+    Return the content access mode of the current owner
+    :param uep: connection to candlepin server
+    :param identity: reference on current identity
+    :param owner: reference on current owner
+    :return:
+    """
+    if identity is None:
+        identity = inj.require(inj.IDENTITY)
+
+    if uep is None:
+        cp_provider = inj.require(inj.CP_PROVIDER)
+        uep = cp_provider.get_consumer_auth_cp()
+
+    if owner is None:
+        try:
+            owner = uep.getOwner(identity.uuid)
+        except Exception as err:
+            log.debug("Unable to get owner: %s" % str(err))
+            return False
+    if 'contentAccessMode' in owner:
+        return owner['contentAccessMode']
+    return None
 
 
 def get_current_owner(uep=None, identity=None):
