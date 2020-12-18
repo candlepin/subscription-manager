@@ -375,6 +375,18 @@ Sets the minor (Y-stream) release version to use, such as 6.3.
 Removes any previously set release version preference.
 
 
+.SS SYSPURPOSE OPTIONS
+The
+.B syspurpose
+command displays the current configured syspurpose
+.I preferences
+for the system.
+
+.TP
+.B --show
+Shows the system's current set of syspurpose preference. This is output in the form of a blob of json. Single-valued entries for which there is no value will be included in the output with a value of "". List entries which have no value will be included in the output with a value of "[]" (less the quotes).
+
+
 .SS ADDONS OPTIONS
 The
 .B addons

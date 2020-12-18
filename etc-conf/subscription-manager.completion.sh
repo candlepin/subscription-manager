@@ -33,6 +33,13 @@ _subscription_manager_attach()
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
+_subscription_manager_syspurpose()
+{
+  local opts="--show ${_subscription_manager_common_opts}"
+  COMPREPLY=($(compgen -W "${opts}" -- ${1}))
+}
+
+
 _subscription_manager_role()
 {
   local opts="--list --org --set --show
@@ -258,6 +265,7 @@ _subscription_manager()
       repos|\
       role|\
       status|\
+      syspurpose|\
       unregister|\
       usage|\
       version)
