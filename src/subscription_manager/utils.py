@@ -53,6 +53,9 @@ from subscription_manager.i18n import ugettext as _
 log = logging.getLogger(__name__)
 
 
+VIRT_WHO_PID_FILES = ['/var/run/virt-who.pid', '/run/virt-who.pid']
+
+
 class DefaultDict(collections.defaultdict):
     """defaultdict wrapper that pretty prints"""
 
@@ -184,74 +187,62 @@ def is_simple_content_access(uep=None, identity=None, owner=None):
 
     # Try to use cached data to minimize numbers of REST API calls
     cache = inj.require(inj.CONTENT_ACCESS_MODE_CACHE)
-    data = cache.read_cache_only()
-    if data is not None:
-        if identity.uuid in data:
-            content_access_mode = data[identity.uuid]
-
-    if content_access_mode is None:
-        if uep is None:
-            cp_provider = inj.require(inj.CP_PROVIDER)
-            uep = cp_provider.get_consumer_auth_cp()
-
-        if owner is None:
-            try:
-                owner = uep.getOwner(identity.uuid)
-            except Exception as err:
-                log.debug("Unable to get owner: %s" % str(err))
-                return False
-        if 'contentAccessMode' in owner:
-            content_access_mode = owner['contentAccessMode']
-
-        # Write cache to file
-        data = {identity.uuid: content_access_mode}
-        cache.content_access_mode = data
-        cache.write_cache(debug=False)
-
+    content_access_mode = cache.read(
+        key=identity.uuid,
+        on_cache_miss=lambda: get_content_access_mode(uep=uep,
+                                                      identity=identity,
+                                                      owner=owner))
     if content_access_mode == "org_environment":
         return True
 
     return False
 
 
-def get_supported_resources(uep=None, identity=None):
+def get_content_access_mode(uep=None, identity=None, owner=None):
     """
-    This function tries to get list of supported resources. It uses cache file. It is preferred to use
-    this function instead of connection.get_supported_resources
-    :param uep: connection of candlepin server
-    :param identity: current identity of registered system
-    :return: list fo supported resources
+    Return the content access mode of the current owner
+    :param uep: connection to candlepin server
+    :param identity: reference on current identity
+    :param owner: reference on current owner
+    :return:
     """
-    supported_resources = []
-
     if identity is None:
         identity = inj.require(inj.IDENTITY)
 
-    # When identity is not known, then system is not registered
-    if identity.uuid is None:
-        return supported_resources
+    if uep is None:
+        cp_provider = inj.require(inj.CP_PROVIDER)
+        uep = cp_provider.get_consumer_auth_cp()
+
+    if owner is None:
+        try:
+            owner = uep.getOwner(identity.uuid)
+        except Exception as err:
+            log.debug("Unable to get owner: %s" % str(err))
+            return False
+    if 'contentAccessMode' in owner:
+        return owner['contentAccessMode']
+    return None
+
+
+def get_supported_resources(uep=None, identity=None):
+    """
+    This function tries to get list of supported resources. It tries to uses cache file.
+    When the system is not registered, then it tries to get version directly using REST API.
+    It is preferred to use this function instead of connection.get_supported_resources.
+    :param uep: connection of candlepin server
+    :param identity: current identity of registered system
+    :return: list of supported resources
+    """
 
     # Try to read supported resources from cache file
-    cache = inj.require(inj.SUPPORTED_RESOURCES_CACHE)
-    data = cache.read_cache_only()
-    if data is not None:
-        if identity.uuid in data:
-            supported_resources = data[identity.uuid]
-
-    # When valid data are not in cache, then try to load it from candlepin server
-    if len(supported_resources) == 0:
+    if identity is not None:
+        cache = inj.require(inj.SUPPORTED_RESOURCES_CACHE)
+        return cache.read_data(uep, identity)
+    else:
         if uep is None:
             cp_provider = inj.require(inj.CP_PROVIDER)
             uep = cp_provider.get_consumer_auth_cp()
-
-        supported_resources = uep.get_supported_resources()
-
-        # Write data to cache
-        data = {identity.uuid: supported_resources}
-        cache.supported_resources = data
-        cache.write_cache(debug=False)
-
-    return supported_resources
+        return uep.get_supported_resources()
 
 
 def get_version(versions, package_name):
@@ -343,7 +334,8 @@ def get_server_versions(cp, exception_on_timeout=False):
 
     if cp:
         try:
-            if cp.supports_resource("status"):
+            supported_resources = get_supported_resources(uep=cp)
+            if "status" in supported_resources:
                 status = cp.getStatus()
                 cp_version = '-'.join([status.get('version', _("Unknown")),
                                        status.get('release', _("Unknown"))])
@@ -375,22 +367,35 @@ def get_server_versions(cp, exception_on_timeout=False):
 
 def restart_virt_who():
     """
-    Send a SIGHUP signal to virt-who if it running on the same machine.
+    Send a SIGHUP signal to virt-who if it is running on the same machine.
     """
+
+    # virt-who PID file can be in /var/run or /run directory
+    virt_who_pid_file_name = None
+    for pid_file_name in VIRT_WHO_PID_FILES:
+        if os.path.isfile(pid_file_name):
+            virt_who_pid_file_name = pid_file_name
+
+    if virt_who_pid_file_name is None:
+        log.debug("No virt-who pid file, not attempting to restart")
+        return
+
     try:
-        pidfile = open('/var/run/virt-who.pid', 'r')
-        pid = int(pidfile.read())
-        os.kill(pid, signal.SIGHUP)
+        with open(virt_who_pid_file_name, 'r') as pid_file:
+            pid = int(pid_file.read())
         log.debug("Restarted virt-who")
     except IOError:
         # The file was not found, this is ok
-        log.debug("No virt-who pid file, not attempting to restart")
-    except OSError:
-        # The file is referencing an old pid, record this and move on
-        log.error("The virt-who pid file references a non-existent pid")
+        log.debug("Unable to read virt-who pid file, not attempting to restart")
     except ValueError:
         # The file has non numeric data in it
         log.error("The virt-who pid file contains non numeric data")
+    else:
+        try:
+            os.kill(pid, signal.SIGHUP)
+        except OSError:
+            # The file is referencing an old pid, record this and move on
+            log.error("The virt-who pid file references a non-existent pid: %s", pid)
 
 
 def friendly_join(items):
@@ -659,6 +664,11 @@ def get_process_names():
 
 
 def is_process_running(process_to_find):
+    """
+    Check if process with given name is running
+    :param process_to_find: string with process name
+    :return: True, when at least one process is running; Otherwise returns False
+    """
     for process_name in get_process_names():
         if process_to_find == process_name:
             return True

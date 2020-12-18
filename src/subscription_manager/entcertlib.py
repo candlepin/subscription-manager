@@ -153,14 +153,13 @@ class EntCertUpdateAction(object):
             content_access_certs = self._find_content_access_certs()
             update_data = None
             if len(content_access_certs) > 0:
-                # This address BZ: 1448855, 1450862
-                if len(expected) < len(content_access_certs):
-                    obsolete_certs = []
-                    for cont_access_cert in content_access_certs:
-                        if cont_access_cert.serial not in expected:
-                            obsolete_certs.append(cont_access_cert)
-                    log.info('Deleting obsolete content access certificate')
-                    self.delete(obsolete_certs)
+                # This addresses BZs: 1448855, 1450862
+                obsolete_certs = []
+                for cont_access_cert in content_access_certs:
+                    if cont_access_cert.serial not in expected:
+                        obsolete_certs.append(cont_access_cert)
+                log.info('Deleting obsolete content access certificate')
+                self.delete(obsolete_certs)
                 update_data = self.content_access_cache.check_for_update()
                 for content_access_cert in content_access_certs:
                     self.content_access_cache.update_cert(content_access_cert, update_data)

@@ -26,7 +26,8 @@ from rhsm import config
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.cache import EntitlementStatusCache, ProductStatusCache, \
         OverrideStatusCache, ProfileManager, InstalledProductsManager, ReleaseStatusCache, \
-        PoolStatusCache, ContentAccessModeCache, SupportedResourcesCache
+        PoolStatusCache, ContentAccessModeCache, SupportedResourcesCache, \
+        ReadThroughInMemoryCache
 from subscription_manager.facts import Facts
 from subscription_manager.lock import ActionLock
 from rhsm.certificate import GMT
@@ -128,7 +129,7 @@ def stubInitConfig():
 
 # create a global CFG object,then replace it with our own that candlepin
 # read from a stringio
-config.initConfig(config_file="test/rhsm.conf")
+#config.initConfig(config_file="test/rhsm.conf")
 config.CFG = StubConfig()
 
 # we are not actually reading test/rhsm.conf, it's just a placeholder
@@ -424,6 +425,9 @@ class StubUEP(object):
         self.username = username
         self.password = password
         self._capabilities = []
+        self.conn = mock.MagicMock()
+        self.conn.ALPHA = 0.9
+        self.conn.smoothed_rt = 1.1
 
     def reset(self):
         self.called_unregister_uuid = None
@@ -518,6 +522,16 @@ class StubUEP(object):
 
     def getContentOverrides(self, uuid):
         return []
+
+    def getOwnerSyspurposeValidFields(self, owner_key):
+        return {
+            "owner": {
+                "key": "ff80808172dc51a10172dc51cb3e000"
+            },
+            "systemPurposeAttributes": {
+                "addons": [], "usage": [], "support_level": [], "roles": []
+            }
+        }
 
 
 class StubBackend(object):
@@ -660,7 +674,7 @@ class StubCPProvider(object):
 
 class StubEntitlementStatusCache(EntitlementStatusCache):
 
-    def write_cache(self):
+    def write_cache(self, debug=False):
         pass
 
     def delete_cache(self):
@@ -669,7 +683,7 @@ class StubEntitlementStatusCache(EntitlementStatusCache):
 
 class StubPoolStatusCache(PoolStatusCache):
 
-    def write_cache(self):
+    def write_cache(self, debug=False):
         pass
 
     def delete_cache(self):
@@ -678,7 +692,7 @@ class StubPoolStatusCache(PoolStatusCache):
 
 class StubProductStatusCache(ProductStatusCache):
 
-    def write_cache(self):
+    def write_cache(self, debug=False):
         pass
 
     def delete_cache(self):
@@ -687,7 +701,7 @@ class StubProductStatusCache(ProductStatusCache):
 
 class StubOverrideStatusCache(OverrideStatusCache):
 
-    def write_cache(self):
+    def write_cache(self, debug=False):
         pass
 
     def delete_cache(self):
@@ -696,7 +710,7 @@ class StubOverrideStatusCache(OverrideStatusCache):
 
 class StubReleaseStatusCache(ReleaseStatusCache):
 
-    def write_cache(self):
+    def write_cache(self, debug=False):
         pass
 
     def delete_cache(self):
@@ -712,13 +726,21 @@ class StubContentAccessModeCache(ContentAccessModeCache):
         self.server_status = None
 
 
-class SubSupportedResourcesCache(SupportedResourcesCache):
+class StubSupportedResourcesCache(SupportedResourcesCache):
 
     def write_cache(self, debug=False):
         pass
 
     def delete_cache(self):
         self.server_status = None
+
+
+class StubReadThroughInMemoryCache(ReadThroughInMemoryCache):
+
+    def __init__(self):
+        super(ReadThroughInMemoryCache, self).__init__()
+        # Remove the lock, so as not to block tests run in parallel
+        self._lock = mock.Mock()
 
 
 class StubPool(object):
