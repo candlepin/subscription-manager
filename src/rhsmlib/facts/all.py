@@ -18,21 +18,24 @@ from rhsmlib.facts import host_collector
 from rhsmlib.facts import hwprobe
 from rhsmlib.facts import insights
 from rhsmlib.facts import kpatch
+from rhsmlib.facts import cloud_facts
 
 
 class AllFactsCollector(collector.FactsCollector):
     def __init__(self):
         self.collectors = [
-            collector.StaticFactsCollector(),
-            host_collector.HostCollector(),
-            hwprobe.HardwareCollector(),
-            custom.CustomFactsCollector(),
-            insights.InsightsCollector(),
-            kpatch.KPatchCollector()
+            collector.StaticFactsCollector,
+            host_collector.HostCollector,
+            hwprobe.HardwareCollector,
+            custom.CustomFactsCollector,
+            insights.InsightsCollector,
+            kpatch.KPatchCollector,
+            cloud_facts.CloudFactsCollector
         ]
 
     def get_all(self):
         results = {}
-        for fact_collector in self.collectors:
+        for fact_collector_cls in self.collectors:
+            fact_collector = fact_collector_cls(collected_hw_info=results)
             results.update(fact_collector.get_all())
         return results

@@ -888,6 +888,8 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %endif
 
 %dir %{python_sitearch}/rhsmlib/candlepin
+%dir %{python_sitearch}/rhsmlib/cloud
+%dir %{python_sitearch}/rhsmlib/cloud/providers
 %dir %{python_sitearch}/rhsmlib/compat
 %dir %{python_sitearch}/rhsmlib/dbus
 %dir %{python_sitearch}/rhsmlib/dbus/facts
@@ -1040,6 +1042,8 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %dir %{python_sitearch}/rhsmlib
 %{python_sitearch}/rhsmlib/*.py*
 %{python_sitearch}/rhsmlib/candlepin/*.py*
+%{python_sitearch}/rhsmlib/cloud/*.py*
+%{python_sitearch}/rhsmlib/cloud/providers/*.py*
 %{python_sitearch}/rhsmlib/compat/*.py*
 %{python_sitearch}/rhsmlib/facts/*.py*
 %{python_sitearch}/rhsmlib/services/*.py*
@@ -1049,6 +1053,8 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %if %{with python3}
 %{python_sitearch}/rhsmlib/__pycache__
 %{python_sitearch}/rhsmlib/candlepin/__pycache__
+%{python_sitearch}/rhsmlib/cloud/__pycache__
+%{python_sitearch}/rhsmlib/cloud/providers/__pycache__
 %{python_sitearch}/rhsmlib/compat/__pycache__
 %{python_sitearch}/rhsmlib/dbus/__pycache__
 %{python_sitearch}/rhsmlib/dbus/facts/__pycache__
