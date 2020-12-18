@@ -17,20 +17,28 @@ pipeline {
           steps {
             // echo "skipping for debug..."
             sh readFile(file: 'jenkins/nose-tests.sh')
-            junit('nosetests.xml')
-            // publishCoverage('coverage.xml')
+          }
+          post {
+            always {
+              junit('nosetests.xml')
+              // publishCoverage('coverage.xml')
             }
+          }
         }
         // TODO: figure if this is needed and implement
         // stage('RHEL8 unit') {steps {echo 'nose'}}
         stage('Fedora unit') {
           steps {
             sh readFile(file: 'jenkins/python3-tests.sh')
-            junit('nosetests.xml')
-            // TODO: find the correct adapter or generate coverage tests that can be
-            //       parsed by an existing adapter:
-            //       https://plugins.jenkins.io/code-coverage-api/
-            // publishCoverage adapters: [jacocoAdapter('coverage.xml')]
+          }
+          post {
+            always {
+              junit('nosetests.xml')
+              // TODO: find the correct adapter or generate coverage tests that can be
+              //       parsed by an existing adapter:
+              //       https://plugins.jenkins.io/code-coverage-api/
+              // publishCoverage adapters: [jacocoAdapter('coverage.xml')]
+            }
           }
         }
         stage('opensuse42') {
