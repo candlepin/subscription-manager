@@ -26,8 +26,8 @@ from rhsm import config
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.cache import EntitlementStatusCache, ProductStatusCache, \
         OverrideStatusCache, ProfileManager, InstalledProductsManager, ReleaseStatusCache, \
-        PoolStatusCache, ContentAccessModeCache, SupportedResourcesCache, AvailableEntitlementsCache, \
-        SyspurposeValidFieldsCache, CurrentOwnerCache
+        PoolStatusCache, ContentAccessModeCache, SupportedResourcesCache, ReadThroughInMemoryCache, \
+        SyspurposeValidFieldsCache, CurrentOwnerCache, AvailableEntitlementsCache
 from subscription_manager.facts import Facts
 from subscription_manager.lock import ActionLock
 from rhsm.certificate import GMT
@@ -129,7 +129,7 @@ def stubInitConfig():
 
 # create a global CFG object,then replace it with our own that candlepin
 # read from a stringio
-#config.get_config_parser(config_file="test/rhsm.conf")
+#config.initConfig(config_file="test/rhsm.conf")
 config.CFG = StubConfig()
 
 # we are not actually reading test/rhsm.conf, it's just a placeholder
@@ -721,15 +721,6 @@ class StubReleaseStatusCache(ReleaseStatusCache):
         self.server_status = None
 
 
-class StubAvailableEntitlementsCache(AvailableEntitlementsCache):
-
-    def write_cache(self, debug=False):
-        pass
-
-    def delete_cache(self):
-        self.server_status = None
-
-
 class StubContentAccessModeCache(ContentAccessModeCache):
 
     def write_cache(self, debug=False):
@@ -746,6 +737,23 @@ class StubSupportedResourcesCache(SupportedResourcesCache):
 
     def delete_cache(self):
         self.server_status = None
+
+
+class StubAvailableEntitlementsCache(AvailableEntitlementsCache):
+
+    def write_cache(self, debug=False):
+        pass
+
+    def delete_cache(self):
+        self.server_status = None
+
+
+class StubReadThroughInMemoryCache(ReadThroughInMemoryCache):
+
+    def __init__(self):
+        super(ReadThroughInMemoryCache, self).__init__()
+        # Remove the lock, so as not to block tests run in parallel
+        self._lock = mock.Mock()
 
 
 class StubSyspurposeValidFieldsCache(SyspurposeValidFieldsCache):

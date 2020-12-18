@@ -187,30 +187,11 @@ def is_simple_content_access(uep=None, identity=None, owner=None):
 
     # Try to use cached data to minimize numbers of REST API calls
     cache = inj.require(inj.CONTENT_ACCESS_MODE_CACHE)
-    data = cache.read_cache_only()
-    if data is not None:
-        if identity.uuid in data:
-            content_access_mode = data[identity.uuid]
-
-    if content_access_mode is None:
-        if uep is None:
-            cp_provider = inj.require(inj.CP_PROVIDER)
-            uep = cp_provider.get_consumer_auth_cp()
-
-        if owner is None:
-            try:
-                owner = uep.getOwner(identity.uuid)
-            except Exception as err:
-                log.debug("Unable to get owner: %s" % str(err))
-                return False
-        if 'contentAccessMode' in owner:
-            content_access_mode = owner['contentAccessMode']
-
-        # Write cache to file
-        data = {identity.uuid: content_access_mode}
-        cache.content_access_mode = data
-        cache.write_cache(debug=False)
-
+    content_access_mode = cache.read(
+        key=identity.uuid,
+        on_cache_miss=lambda: get_content_access_mode(uep=uep,
+                                                      identity=identity,
+                                                      owner=owner))
     if content_access_mode == "org_environment":
         return True
 
@@ -227,6 +208,32 @@ def get_current_owner(uep=None, identity=None):
 
     cache = inj.require(inj.CURRENT_OWNER_CACHE)
     return cache.read_data(uep, identity)
+
+
+def get_content_access_mode(uep=None, identity=None, owner=None):
+    """
+    Return the content access mode of the current owner
+    :param uep: connection to candlepin server
+    :param identity: reference on current identity
+    :param owner: reference on current owner
+    :return:
+    """
+    if identity is None:
+        identity = inj.require(inj.IDENTITY)
+
+    if uep is None:
+        cp_provider = inj.require(inj.CP_PROVIDER)
+        uep = cp_provider.get_consumer_auth_cp()
+
+    if owner is None:
+        try:
+            owner = uep.getOwner(identity.uuid)
+        except Exception as err:
+            log.debug("Unable to get owner: %s" % str(err))
+            return False
+    if 'contentAccessMode' in owner:
+        return owner['contentAccessMode']
+    return None
 
 
 def get_supported_resources(uep=None, identity=None):
@@ -339,7 +346,7 @@ def get_server_versions(cp, exception_on_timeout=False):
 
     if cp:
         try:
-            supported_resources = get_supported_resources()
+            supported_resources = get_supported_resources(uep=cp)
             if "status" in supported_resources:
                 status = cp.getStatus()
                 cp_version = '-'.join([status.get('version', _("Unknown")),

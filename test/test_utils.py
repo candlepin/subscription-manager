@@ -408,6 +408,7 @@ class TestGetServerVersions(fixture.SubManFixture):
         instance.is_registered_with_classic.return_value = False
         self._inject_mock_valid_consumer()
         MockUep.supports_resource.return_value = True
+        MockUep.get_supported_resources.return_value = {"status": "/status"}
         MockUep.getStatus.return_value = {'version': '101', 'release': '23423c', 'rulesVersion': '6.1'}
         sv = get_server_versions(MockUep)
         self.assertEqual(sv['server-type'], 'Red Hat Subscription Management')
@@ -421,6 +422,7 @@ class TestGetServerVersions(fixture.SubManFixture):
         instance.is_registered_with_classic.return_value = False
         self._inject_mock_valid_consumer()
         MockUep.supports_resource.return_value = True
+        MockUep.get_supported_resources.return_value = {"status": "/status"}
         MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
         sv = get_server_versions(MockUep)
         self.assertEqual(sv['server-type'], 'Red Hat Subscription Management')
@@ -434,6 +436,7 @@ class TestGetServerVersions(fixture.SubManFixture):
         instance.is_registered_with_classic.return_value = False
         self._inject_mock_valid_consumer()
         MockUep.supports_resource.return_value = True
+        MockUep.get_supported_resources.return_value = {"status": "/status"}
         MockUep.getStatus.return_value = {}
         sv = get_server_versions(MockUep)
         self.assertEqual(sv['server-type'], 'Red Hat Subscription Management')
@@ -447,6 +450,7 @@ class TestGetServerVersions(fixture.SubManFixture):
         instance.is_registered_with_classic.return_value = False
         self._inject_mock_valid_consumer()
         MockUep.supports_resource.return_value = True
+        MockUep.get_supported_resources.return_value = {"status": "/status"}
 
         dataset = [
             {'version': None, 'release': '123'},
@@ -475,6 +479,7 @@ class TestGetServerVersions(fixture.SubManFixture):
         instance.is_registered_with_classic.return_value = True
         self._inject_mock_valid_consumer()
         MockUep.supports_resource.return_value = True
+        MockUep.get_supported_resources.return_value = {"status": "/status"}
         MockUep.getStatus.return_value = {'version': '101', 'release': '23423c', 'rulesVersion': '6.1'}
         sv = get_server_versions(MockUep)
         self.assertEqual(sv['server-type'], 'RHN Classic and Red Hat Subscription Management')

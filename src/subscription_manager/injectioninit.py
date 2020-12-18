@@ -21,10 +21,9 @@ from subscription_manager.cache import ProductStatusCache, \
     EntitlementStatusCache, OverrideStatusCache, ProfileManager, \
     InstalledProductsManager, PoolTypeCache, ReleaseStatusCache, \
     RhsmIconCache, ContentAccessCache, PoolStatusCache, \
-    SyspurposeComplianceStatusCache, ContentAccessModeCache, \
-    SupportedResourcesCache, AvailableEntitlementsCache, \
-    CurrentOwnerCache, SyspurposeValidFieldsCache
-
+    SyspurposeComplianceStatusCache, SupportedResourcesCache, \
+    AvailableEntitlementsCache, CurrentOwnerCache, SyspurposeValidFieldsCache, \
+    ReadThroughInMemoryCache
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.certdirectory import EntitlementDirectory
 from subscription_manager.certdirectory import ProductDirectory
@@ -59,7 +58,7 @@ def init_dep_injection():
     inj.provide(inj.ENTITLEMENT_STATUS_CACHE, EntitlementStatusCache, singleton=True)
     inj.provide(inj.SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE, SyspurposeComplianceStatusCache, singleton=True)
     inj.provide(inj.RHSM_ICON_CACHE, RhsmIconCache, singleton=True)
-    inj.provide(inj.CONTENT_ACCESS_MODE_CACHE, ContentAccessModeCache, singleton=True)
+    inj.provide(inj.CONTENT_ACCESS_MODE_CACHE, ReadThroughInMemoryCache, singleton=True)
     inj.provide(inj.CURRENT_OWNER_CACHE, CurrentOwnerCache, singleton=True)
     inj.provide(inj.SYSPURPOSE_VALID_FIELDS_CACHE, SyspurposeValidFieldsCache)
     inj.provide(inj.SUPPORTED_RESOURCES_CACHE, SupportedResourcesCache, singleton=True)
