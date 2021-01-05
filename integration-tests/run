@@ -39,8 +39,8 @@ $(COCKPIT_TAR): cockpit/node_modules
 	make -C cockpit dist-gzip
 
 $(SUBMAN_TAR):
-	fn=$$(python ./setup.py --fullname); \
-	python ./setup.py sdist && \
+	fn=$$(python3 ./setup.py --fullname); \
+	python3 ./setup.py sdist && \
         mv dist/$$fn.tar.gz $(SUBMAN_TAR)
 
 $(SMBEXT_TAR):
