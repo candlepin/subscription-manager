@@ -5,7 +5,7 @@
 # To run the tests manually and individually, you can do something
 # like this:
 #
-# $ export TEST_OS=rhel-8-0
+# $ export TEST_OS=rhel-8-4
 # $ ./integration-tests/run prepare
 # $ ./integration-tests/check-subscriptions -v -j1 -t
 #
@@ -17,7 +17,7 @@
 # for more information about the Cockpit integration test machinery.
 
 ifeq ($(TEST_OS),)
-TEST_OS = rhel-8-1
+TEST_OS = rhel-8-3
 endif
 export TEST_OS
 VM_IMAGE=$(CURDIR)/integration-tests/images/$(TEST_OS).qcow2
@@ -39,8 +39,8 @@ $(COCKPIT_TAR): cockpit/node_modules
 	make -C cockpit dist-gzip
 
 $(SUBMAN_TAR):
-	fn=$$(python ./setup.py --fullname); \
-	python ./setup.py sdist && \
+	fn=$$(python3 ./setup.py --fullname); \
+	python3 ./setup.py sdist && \
         mv dist/$$fn.tar.gz $(SUBMAN_TAR)
 
 $(SMBEXT_TAR):
