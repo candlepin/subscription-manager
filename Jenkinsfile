@@ -24,14 +24,7 @@ pipeline {
           }
         }
         stage('opensuse42') {
-          agent { label 'opensuse42' }
-          steps { sh readFile(file: 'jenkins/suse-tests.sh') }
-        }
-        // stage('sles11') {
-        //   // FIXME:  sles11 can't be tested due missing python deps (incl. nose)
-        // }
-        stage('sles12') {
-          agent { label 'sles12' }
+          agent { label 'opensuse15' }
           steps { sh readFile(file: 'jenkins/suse-tests.sh') }
         }
         // TODO: add after QE creates pipeline
@@ -50,12 +43,12 @@ pipeline {
         axes {
           axis {
             name 'PLATFORM'
-            values 'openSUSE_Leap_42.2', 'SLE_12_SP1'
+            values 'openSUSE_Leap_15.2'
           }
         }
         stages {
           stage('Build') {
-            agent { label 'opensuse42' }
+            agent { label 'opensuse15' }
             steps {
               sh "scripts/suse_build.sh 'home:kahowell' ${PLATFORM}"
               // sh """

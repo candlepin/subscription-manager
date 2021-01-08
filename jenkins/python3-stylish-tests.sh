@@ -34,13 +34,8 @@ PYTHON_RHSM=$(pwd)
 python3 setup.py build
 python3 setup.py build_ext --inplace
 
-# not using "setup.py nosetests" yet
-# since they need a running candlepin
-# yeah, kind of ugly...
-cp build/lib.linux-*/rhsm/_certificate.so src/rhsm/
-
 pushd $WORKSPACE
-export PYTHONPATH="$PYTHON_RHSM"/src
+export PYTHONPATH="$PYTHON_RHSM"/src:"$PYTHON_RHSM"/syspurpose/src
 
 make set-versions
 # capture exit status of 'make stylish' and not 'tee'
