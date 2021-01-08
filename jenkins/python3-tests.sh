@@ -16,6 +16,8 @@
 
 echo "GIT_COMMIT:" "${GIT_COMMIT}"
 
+cd $WORKSPACE
+
 sudo yum clean expire-cache
 sudo yum-builddep -y subscription-manager.spec || true # ensure we install any missing rpm deps
 virtualenv env -p python3 --system-site-packages || virtualenv env --system-site-packages || true

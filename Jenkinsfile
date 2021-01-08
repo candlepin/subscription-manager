@@ -4,10 +4,12 @@ pipeline {
     // stage('prepare') {steps {echo 'prepare'}}
     stage('Test') {
       parallel {
-        stage('stylish') {
-          steps { sh readFile(file: 'jenkins/python3-stylish-tests.sh') }
+        stage('Python 3 stylish') {
+          steps {
+            sh readFile(file: 'jenkins/python3-stylish-tests.sh')
+          }
         }
-        stage('tito') {
+        stage('Fedora tito') {
           agent { label 'rpmbuild' }
           steps { sh readFile(file: 'jenkins/tito-tests.sh') }
         }
@@ -23,10 +25,10 @@ pipeline {
             // publishCoverage adapters: [jacocoAdapter('coverage.xml')]
           }
         }
-        stage('opensuse42') {
-          agent { label 'opensuse15' }
-          steps { sh readFile(file: 'jenkins/suse-tests.sh') }
-        }
+//         stage('OpenSuSE 15') {
+//           agent { label 'opensuse15' }
+//           steps { sh readFile(file: 'jenkins/suse-tests.sh') }
+//         }
         // TODO: add after QE creates pipeline
         // stage('Functional') {
         //   stages{
@@ -38,31 +40,24 @@ pipeline {
         // }
       }
     }
-    stage('SUSE Builds') {
-      matrix {
-        axes {
-          axis {
-            name 'PLATFORM'
-            values 'openSUSE_Leap_15.2'
-          }
-        }
-        stages {
-          stage('Build') {
-            agent { label 'opensuse15' }
-            steps {
-              sh "scripts/suse_build.sh 'home:kahowell' ${PLATFORM}"
-              // sh """
-              // if [ -d python-rhsm ]; then
-              //   cd python-rhsm
-              //   ../scripts/suse_build.sh 'home:kahowell' ${PLATFORM} -k \$WORKSPACE
-              //   cd ..
-              // fi
-              // """
-            }
-          }
-        }
-      }
-    }
+//     stage('SUSE Builds') {
+//       matrix {
+//         axes {
+//           axis {
+//             name 'PLATFORM'
+//             values 'openSUSE_Leap_15.2'
+//           }
+//         }
+//         stages {
+//           stage('Build') {
+//             agent { label 'opensuse15' }
+//             steps {
+//               sh "scripts/suse_build.sh 'home:kahowell' ${PLATFORM}"
+//             }
+//           }
+//         }
+//       }
+//     }
   // stage('cleanup') {steps {echo 'cleanup'}}
   }
 }
