@@ -5,21 +5,11 @@ pipeline {
     stage('Test') {
       parallel {
         stage('stylish') {
-          agent { label 'subman-centos7' }
-          steps { sh readFile(file: 'jenkins/stylish-tests.sh') }
+          steps { sh readFile(file: 'jenkins/python3-stylish-tests.sh') }
         }
         stage('tito') {
           agent { label 'rpmbuild' }
           steps { sh readFile(file: 'jenkins/tito-tests.sh') }
-        }
-        stage('RHEL7 unit') {
-          agent { label 'subman-centos7' }
-          steps {
-            // echo "skipping for debug..."
-            sh readFile(file: 'jenkins/nose-tests.sh')
-            junit('nosetests.xml')
-            // publishCoverage('coverage.xml')
-            }
         }
         // TODO: figure if this is needed and implement
         // stage('RHEL8 unit') {steps {echo 'nose'}}
@@ -60,7 +50,7 @@ pipeline {
         axes {
           axis {
             name 'PLATFORM'
-            values 'openSUSE_Leap_42.2', 'SLE_12_SP1', 'SLE_11_SP4'
+            values 'openSUSE_Leap_42.2', 'SLE_12_SP1'
           }
         }
         stages {
