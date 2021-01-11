@@ -441,10 +441,16 @@ gettext:
 	# the string marked for translation beginning with "translators" will be
 	# included in the pot file.
 	$(PYTHON) ./setup.py gettext
+	pushd ./syspurpose
+	${PYTHON} ./syspurpose/setup.py gettext
+	popd
 
 .PHONY: update-po
 update-po:
 	$(PYTHON) ./setup.py update_trans
+	pushd ./syspurpose
+	$(PYTHON) ./syspurpose/setup.py update_trans
+	popd
 
 .PHONY: uniq-po
 uniq-po:
@@ -459,24 +465,9 @@ polint:
 just-strings:
 	-@ scripts/just_strings.py po/keys.pot
 
-.PHONY: zanata-pull
-zanata-pull:
-	pushd po && zanata pull --transdir . && popd
-
-.PHONY: zanata-push
-zanata-push:
-	pushd po; \
-	ls -al; \
-	if [ -z $(shell find -name "*.pot" | grep -v keys.pot) ] ; then \
-		zanata push ; \
-	else 	\
-		echo "po/ has more than one *.pot file, please clean up" ; \
-	fi; \
-	popd
-
-# do all the zanata bits
-.PHONY: zanata
-zanata: gettext zanata-push zanata-pull update-po
+# do all the bits to find new strings to translate
+.PHONY: translations
+translations: gettext update-po
 	echo "# pofiles should be ready to commit and push"
 
 # generate a en_US.po with long strings for testing
