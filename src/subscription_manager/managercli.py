@@ -1145,7 +1145,7 @@ class RefreshCommand(CliCommand):
             self.entcertlib.update()
 
             log.debug("Refreshed local data")
-            print(_("All local data refreshed"))
+            print(_("All local data refreshed and now we can test this thing in weblate."))
         except connection.RestlibException as re:
             log.error(re)
             system_exit(os.EX_SOFTWARE, re.msg)
