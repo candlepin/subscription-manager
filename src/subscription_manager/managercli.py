@@ -1517,6 +1517,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
         except UnauthorizedException as e:
             raise e
         except connection.RemoteServerException as e:
+            logging.error("This is not what I expected.")
             system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
         except connection.GoneException as ge:
             raise ge
