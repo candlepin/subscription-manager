@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-12 14:18-0500\n"
+"POT-Creation-Date: 2021-01-12 14:44-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,76 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: /usr/lib64/python3.8/optparse.py:146
+#, python-format
+msgid "no such option: %s"
+msgstr ""
+
+#: /usr/lib64/python3.8/optparse.py:157
+#, python-format
+msgid "ambiguous option: %s (%s?)"
+msgstr ""
+
+#: /usr/lib64/python3.8/optparse.py:381
+#: src/subscription_manager/i18n_optparse.py:130
+#, python-format
+msgid "Usage: %s\n"
+msgstr ""
+
+#: /usr/lib64/python3.8/optparse.py:400 src/rct/printing.py:85
+msgid "Usage"
+msgstr ""
+
+#: /usr/lib64/python3.8/optparse.py:422 /usr/lib64/python3.8/optparse.py:423
+msgid "integer"
+msgstr ""
+
+#: /usr/lib64/python3.8/optparse.py:424
+msgid "floating-point"
+msgstr ""
+
+#: /usr/lib64/python3.8/optparse.py:425
+msgid "complex"
+msgstr ""
+
+#: /usr/lib64/python3.8/optparse.py:433
+#, python-format
+msgid "option %s: invalid %s value: %r"
+msgstr ""
+
+#: /usr/lib64/python3.8/optparse.py:441
+#, python-format
+msgid "option %s: invalid choice: %r (choose from %s)"
+msgstr ""
+
+#: /usr/lib64/python3.8/optparse.py:1238
+msgid "show this help message and exit"
+msgstr ""
+
+#: /usr/lib64/python3.8/optparse.py:1243
+msgid "show program's version number and exit"
+msgstr ""
+
+#: /usr/lib64/python3.8/optparse.py:1266
+msgid "%prog [options]"
+msgstr ""
+
+#: /usr/lib64/python3.8/optparse.py:1486 /usr/lib64/python3.8/optparse.py:1524
+#, python-format
+msgid "%(option)s option requires %(number)d argument"
+msgid_plural "%(option)s option requires %(number)d arguments"
+msgstr[0] ""
+msgstr[1] ""
+
+#: /usr/lib64/python3.8/optparse.py:1496
+#, python-format
+msgid "%s option does not take a value"
+msgstr ""
+
+#: /usr/lib64/python3.8/optparse.py:1612
+msgid "Options"
+msgstr ""
 
 #: cockpit/src/index.js:64
 #: src/subscription_manager/gui/data/glade/installed.glade:86
@@ -851,10 +921,6 @@ msgstr ""
 
 #: src/rct/printing.py:83
 msgid "Roles"
-msgstr ""
-
-#: src/rct/printing.py:85
-msgid "Usage"
 msgstr ""
 
 #: src/rct/printing.py:86
@@ -3493,11 +3559,6 @@ msgstr ""
 
 #: src/subscription_manager/i18n_optparse.py:40
 msgid "%prog [OPTIONS]"
-msgstr ""
-
-#: src/subscription_manager/i18n_optparse.py:130
-#, python-format
-msgid "Usage: %s\n"
 msgstr ""
 
 #: src/subscription_manager/i18n_optparse.py:146
