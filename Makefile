@@ -431,15 +431,15 @@ gettext:
 	# the string marked for translation beginning with "translators" will be
 	# included in the pot file.
 	$(PYTHON) ./setup.py gettext
-	pushd ./syspurpose
-	${PYTHON} ./syspurpose/setup.py gettext
+	pushd ./syspurpose; \
+	${PYTHON} ./setup.py gettext; \
 	popd
 
 .PHONY: update-po
 update-po:
 	$(PYTHON) ./setup.py update_trans
-	pushd ./syspurpose
-	$(PYTHON) ./syspurpose/setup.py update_trans
+	pushd ./syspurpose; \
+	$(PYTHON) ./setup.py update_trans; \
 	popd
 
 .PHONY: uniq-po
