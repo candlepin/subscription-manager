@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-12 17:15+0200\n"
+"POT-Creation-Date: 2021-01-13 14:00-0500\n"
 "PO-Revision-Date: 2018-11-21 02:38+0000\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: \n"
@@ -14,47 +14,50 @@ msgstr ""
 "X-Generator: Zanata 4.6.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: src/syspurpose/cli.py:31
+#: src/syspurpose/cli.py:29
 #, python-brace-format
 msgid ""
-"Due to a conflicting change made at the server the {attr} has not been set.\n"
+"Warning: A {attr} of \"{download_value}\" was recently set for this system "
+"by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
 
-#: src/syspurpose/cli.py:33
+#: src/syspurpose/cli.py:31
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
 msgstr ""
 
-#: src/syspurpose/cli.py:49
+#: src/syspurpose/cli.py:47
 #, python-brace-format
 msgid "Added {value} to {prop_name}."
 msgstr ""
 
-#: src/syspurpose/cli.py:52
+#: src/syspurpose/cli.py:50
 #, python-brace-format
 msgid "Not adding value {value} to {prop_name}; it already exists."
 msgstr ""
 
-#: src/syspurpose/cli.py:58 src/syspurpose/cli.py:86
+#: src/syspurpose/cli.py:56 src/syspurpose/cli.py:85
 #, python-brace-format
 msgid "{attr} updated."
 msgstr ""
 
+#: src/syspurpose/cli.py:79
+#, python-brace-format
+msgid "Removed \"{val}\" from {name}."
+msgstr ""
+
 #: src/syspurpose/cli.py:81
-msgid "Removed {} from {}."
+#, python-brace-format
+msgid "Not removing value \"{val}\" from {name}; it was not there."
 msgstr ""
 
-#: src/syspurpose/cli.py:83
-msgid "Not removing value {} from {}; it was not there."
-msgstr ""
-
-#: src/syspurpose/cli.py:109
+#: src/syspurpose/cli.py:108
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
 msgstr ""
 
-#: src/syspurpose/cli.py:130
+#: src/syspurpose/cli.py:129
 #, python-brace-format
 msgid "{attr} unset."
 msgstr ""
@@ -63,99 +66,112 @@ msgstr ""
 msgid "Sets the value for the given property"
 msgstr "設置給定屬性的值"
 
-#: src/syspurpose/cli.py:185 src/syspurpose/cli.py:201
+#: src/syspurpose/cli.py:187 src/syspurpose/cli.py:209
 msgid "The name of the property to set/update"
 msgstr "要設置/更新的屬性的名稱"
 
-#: src/syspurpose/cli.py:189
+#: src/syspurpose/cli.py:193
 msgid "The value to set"
 msgstr "要設置的值"
 
-#: src/syspurpose/cli.py:196
+#: src/syspurpose/cli.py:202
 msgid "Unsets (clears) the value for the given property"
 msgstr "取消（清除）給定屬性的值"
 
-#: src/syspurpose/cli.py:206
+#: src/syspurpose/cli.py:216
 msgid "Adds the value(s) to the given property"
 msgstr "將值添加到給定屬性"
 
-#: src/syspurpose/cli.py:210 src/syspurpose/cli.py:226
+#: src/syspurpose/cli.py:222 src/syspurpose/cli.py:244
 msgid "The name of the property to update"
 msgstr "要更新的屬性的名稱"
 
-#: src/syspurpose/cli.py:214
+#: src/syspurpose/cli.py:228
 msgid "The value(s) to add"
 msgstr "要添加的值"
 
-#: src/syspurpose/cli.py:222
+#: src/syspurpose/cli.py:238
 msgid "Removes the value(s) from the given property"
 msgstr "從給定屬性中刪除值"
 
-#: src/syspurpose/cli.py:230
+#: src/syspurpose/cli.py:250
 msgid "The value(s) to remove"
 msgstr "要刪除的值"
 
-#: src/syspurpose/cli.py:238
+#: src/syspurpose/cli.py:260
 msgid "Set the system role to the system syspurpose"
 msgstr ""
 
-#: src/syspurpose/cli.py:244
+#: src/syspurpose/cli.py:268
 msgid "Clear set role"
 msgstr ""
 
-#: src/syspurpose/cli.py:250
+#: src/syspurpose/cli.py:276
 msgid "Add addons to the system syspurpose"
 msgstr ""
 
-#: src/syspurpose/cli.py:256
+#: src/syspurpose/cli.py:284
 msgid "Remove addons from the system syspurpose"
 msgstr ""
 
-#: src/syspurpose/cli.py:261
+#: src/syspurpose/cli.py:291
 msgid "Clear set addons"
 msgstr ""
 
-#: src/syspurpose/cli.py:268
+#: src/syspurpose/cli.py:299
 msgid "Set the system sla"
 msgstr "設置系統sla"
 
-#: src/syspurpose/cli.py:273
+#: src/syspurpose/cli.py:306
 msgid "Clear set sla"
 msgstr "清除設置sla"
 
-#: src/syspurpose/cli.py:279
+#: src/syspurpose/cli.py:314
 msgid "Set the system usage"
 msgstr "設置系統使用情況"
 
-#: src/syspurpose/cli.py:285
+#: src/syspurpose/cli.py:322
 msgid "Clear set usage"
 msgstr ""
 
-#: src/syspurpose/cli.py:291
+#: src/syspurpose/cli.py:330
 msgid "Show the current system syspurpose"
 msgstr "顯示當前系統syspurpose"
 
-#: src/syspurpose/cli.py:309
+#: src/syspurpose/cli.py:348
 msgid ""
 "WARNING: Setting syspurpose in containers has no effect.Please run "
 "syspurpose on the host.\n"
 msgstr "警告：在容器中設置syspurpose無效。請在主機上運行syspurpose。\n"
 
-#: src/syspurpose/cli.py:321
+#: src/syspurpose/cli.py:360
 msgid ""
 "Warning: Unable to sync system purpose with subscription management server: "
 "subscription_manager module is not available."
 msgstr ""
 
-#: src/syspurpose/files.py:85
+#: src/syspurpose/files.py:106
 msgid "Error: Malformed data in file {}; please review and correct."
 msgstr ""
 
-#: src/syspurpose/files.py:91
+#: src/syspurpose/files.py:112
 msgid ""
 "Cannot read syspurpose file {}\n"
 "Are you root?"
 msgstr "無法讀取syspurpose文件{}你是root用戶嗎？"
+
+#: src/syspurpose/files.py:466
+#, python-brace-format
+msgid ""
+"Warning: Provided value \"{val}\" is not included in the list of valid "
+"values for attribute {attr}:"
+msgstr ""
+
+#: src/syspurpose/files.py:473
+#, python-brace-format
+msgid ""
+"Warning: Provided key \"{key}\" is not included in the list of valid keys:"
+msgstr ""
 
 #: src/syspurpose/main.py:32
 msgid "User interrupted process"
