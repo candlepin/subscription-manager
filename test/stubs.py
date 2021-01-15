@@ -26,8 +26,7 @@ from rhsm import config
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.cache import EntitlementStatusCache, ProductStatusCache, \
         OverrideStatusCache, ProfileManager, InstalledProductsManager, ReleaseStatusCache, \
-        PoolStatusCache, ContentAccessModeCache, SupportedResourcesCache, \
-        ReadThroughInMemoryCache
+        PoolStatusCache, ContentAccessModeCache, SupportedResourcesCache
 from subscription_manager.facts import Facts
 from subscription_manager.lock import ActionLock
 from rhsm.certificate import GMT
@@ -733,14 +732,6 @@ class StubSupportedResourcesCache(SupportedResourcesCache):
 
     def delete_cache(self):
         self.server_status = None
-
-
-class StubReadThroughInMemoryCache(ReadThroughInMemoryCache):
-
-    def __init__(self):
-        super(ReadThroughInMemoryCache, self).__init__()
-        # Remove the lock, so as not to block tests run in parallel
-        self._lock = mock.Mock()
 
 
 class StubPool(object):

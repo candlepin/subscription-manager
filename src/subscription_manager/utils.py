@@ -164,7 +164,7 @@ def is_valid_server_info(conn):
         return False
 
 
-def is_simple_content_access(uep=None, identity=None, owner=None):
+def is_simple_content_access(uep=None, identity=None):
     """
     This function returns True, when current owner uses contentAccessMode equal to Simple Content Access.
     This function has three optional arguments that can be reused for getting required information.
@@ -173,29 +173,14 @@ def is_simple_content_access(uep=None, identity=None, owner=None):
     :param owner: reference on current owner
     :return: True, when current owner uses contentAccesMode equal to org_environment. False otherwise.
     """
-
     if identity is None:
         identity = inj.require(inj.IDENTITY)
 
     # When identity is not known, then system is not registered
     if identity.uuid is None:
         return False
-
-    content_access_mode = None
-
-    # We have to load it here, because we don't want to add another class to dependency injection
-
-    # Try to use cached data to minimize numbers of REST API calls
-    cache = inj.require(inj.CONTENT_ACCESS_MODE_CACHE)
-    content_access_mode = cache.read(
-        key=identity.uuid,
-        on_cache_miss=lambda: get_content_access_mode(uep=uep,
-                                                      identity=identity,
-                                                      owner=owner))
-    if content_access_mode == "org_environment":
-        return True
-
-    return False
+    content_access_mode = inj.require(inj.CONTENT_ACCESS_MODE_CACHE).read_data(uep=uep)
+    return content_access_mode == "org_environment"
 
 
 def get_content_access_mode(uep=None, identity=None, owner=None):
