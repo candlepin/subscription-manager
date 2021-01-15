@@ -223,7 +223,7 @@ class SubManFixture(unittest.TestCase):
         inj.provide(inj.ENTITLEMENT_STATUS_CACHE, stubs.StubEntitlementStatusCache())
         inj.provide(inj.POOL_STATUS_CACHE, stubs.StubPoolStatusCache())
         inj.provide(inj.PROD_STATUS_CACHE, stubs.StubProductStatusCache())
-        inj.provide(inj.CONTENT_ACCESS_MODE_CACHE, stubs.StubReadThroughInMemoryCache())
+        inj.provide(inj.CONTENT_ACCESS_MODE_CACHE, stubs.StubContentAccessModeCache())
         inj.provide(inj.SUPPORTED_RESOURCES_CACHE, stubs.StubSupportedResourcesCache())
         inj.provide(inj.SYSPURPOSE_VALID_FIELDS_CACHE, stubs.StubSyspurposeValidFieldsCache())
         inj.provide(inj.CURRENT_OWNER_CACHE, stubs.StubCurrentOwnerCache)

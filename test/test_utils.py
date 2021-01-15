@@ -14,8 +14,8 @@ from rhsm.utils import ServerUrlParseErrorEmpty, \
 from subscription_manager.utils import parse_server_info, \
     parse_baseurl_info, format_baseurl, \
     get_version, get_client_versions, unique_list_items, \
-    get_server_versions, friendly_join, is_true_value, url_base_join,\
-    ProductCertificateFilter, EntitlementCertificateFilter,\
+    get_server_versions, friendly_join, is_true_value, url_base_join, \
+    ProductCertificateFilter, EntitlementCertificateFilter, \
     is_simple_content_access, is_process_running, get_process_names
 from .stubs import StubProductCertificate, StubProduct, StubEntitlementCertificate
 from .fixture import SubManFixture
