@@ -20,7 +20,6 @@ Classes here track various information last sent to the server, compare
 this with the current state, and perform an update on the server if
 necessary.
 """
-import copy
 import logging
 import os
 import socket
@@ -189,86 +188,6 @@ class CacheManager(object):
         else:
             log.debug("No changes.")
             return 0  # No updates performed.
-
-
-class InMemoryCache(object):
-    """
-    Store, in-memory only, some values in a thread-safe way.
-    """
-
-    def __init__(self):
-        self._cache = {}
-        self._lock = threading.RLock()
-
-    def __enter__(self):
-        """
-        Allow this cache object to be used as a context manager.
-        This only acquires the lock. The lock will be released in __exit__.
-        :return:
-        """
-        self._lock.acquire()
-        log.debug("{self}: lock acquired".format(self=self))
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        """
-        Release the lock on exit
-        :param exc_type:
-        :param exc_val:
-        :param exc_tb:
-        :return:
-        """
-        self._lock.release()
-        log.debug("{self}: lock released".format(self=self))
-
-    def write_cache(self, key, data):
-        """
-        Overwrite the contents of the cache with data.
-        :param data: the contents
-        :return:
-        """
-        self._lock.acquire()
-        self._cache[key] = copy.deepcopy(data)
-        self._lock.release()
-        return copy.deepcopy(self._safe_get(key))
-
-    def read_cache_only(self, key=None):
-        """
-        Return the contents of the cache
-        :return:
-        """
-        self._lock.acquire()
-        if key is not None:
-            data = copy.deepcopy(self._safe_get(key))
-        else:
-            data = copy.deepcopy(self._cache)
-        self._lock.release()
-        return data
-
-    def _safe_get(self, key):
-        """
-        Try to read the key from the _cache dict, this could fail if the _cache is some how
-        modified to something that doesn't have a "get" method
-        :param key:
-        :return:
-        """
-        try:
-            data = self._cache.get(key, None)
-            return data
-        except AttributeError:
-            log.debug('Looks like the _cache was modified by something else, it was not a dict')
-            return None
-
-
-class ReadThroughInMemoryCache(InMemoryCache):
-    """
-    A thread-safe in-memory cache that will retrieve values from an underlying source on a cache
-    miss
-    """
-    def read(self, key, on_cache_miss):
-        data = self.read_cache_only(key=key)
-        if data is None:
-            data = self.write_cache(key, on_cache_miss())
-        return data
 
 
 class StatusCache(CacheManager):
@@ -1025,6 +944,9 @@ class CurrentOwnerCache(ConsumerCache):
     Cache information about current owner (organization)
     """
 
+    # Grab the current owner at most once per day
+    TIMEOUT = 60 * 60 * 24
+
     CACHE_FILE = "/var/lib/rhsm/cache/current_owner.json"
 
     def __init__(self, data=None):
@@ -1032,6 +954,54 @@ class CurrentOwnerCache(ConsumerCache):
 
     def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
         return uep.getOwner(consumer_uuid)
+
+    def _is_cache_obsoleted(self, uep, identity, *args, **kwargs):
+        """
+        We don't know if the cache is valid until we get valid response
+        :param uep: object representing connection to candlepin server
+        :param identity: consumer identity
+        :param args: other arguments
+        :param kwargs: other keyed arguments
+        :return: True, when cache is obsoleted or validity of cache is unknown.
+        """
+        if uep is None:
+            cp_provider = inj.require(inj.CP_PROVIDER)
+            uep = cp_provider.get_consumer_auth_cp()
+        if hasattr(uep.conn, 'is_consumer_cert_key_valid') and uep.conn.is_consumer_cert_key_valid is True:
+            return False
+        else:
+            return True
+
+
+class ContentAccessModeCache(ConsumerCache):
+    """
+    Cache information about current owner (organization), specifically, the content access mode.
+    This value is used independently.
+    """
+
+    # Grab the current owner (and hence the content_access_mode of that owner) at most, once per
+    # 4 hours
+    TIMEOUT = 60 * 60 * 4
+
+    CACHE_FILE = "/var/lib/rhsm/cache/content_access_mode.json"
+
+    def __init__(self, data=None):
+        super(ContentAccessModeCache, self).__init__(data=data)
+
+    def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
+        try:
+            current_owner = uep.getOwner(consumer_uuid)
+        except Exception:
+            log.debug("Error checking for content access mode,"
+                      "defaulting to assuming not in Simple Content Access mode")
+        else:
+            if "contentAccessMode" in current_owner:
+                return current_owner["contentAccessMode"]
+            else:
+                log.debug("The owner returned from the server did not contain a "
+                          "'content_access_mode'. Perhaps the connected Entitlement Server doesn't"
+                          "support 'content_access_mode'?")
+        return "unknown"
 
     def _is_cache_obsoleted(self, uep, identity, *args, **kwargs):
         """

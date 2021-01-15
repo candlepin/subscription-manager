@@ -165,7 +165,7 @@ def is_valid_server_info(conn):
         return False
 
 
-def is_simple_content_access(uep=None, identity=None, owner=None):
+def is_simple_content_access(uep=None, identity=None):
     """
     This function returns True, when current owner uses contentAccessMode equal to Simple Content Access.
     This function has three optional arguments that can be reused for getting required information.
@@ -180,44 +180,8 @@ def is_simple_content_access(uep=None, identity=None, owner=None):
     # When identity is not known, then system is not registered
     if identity.uuid is None:
         return False
-
-    # We have to load it here, because we don't want to add another class to dependency injection
-    cache = inj.require(inj.CONTENT_ACCESS_MODE_CACHE)
-    content_access_mode = cache.read(
-        key=identity.uuid,
-        on_cache_miss=lambda: get_content_access_mode(uep=uep,
-                                                      identity=identity,
-                                                      owner=owner))
-    if content_access_mode == "org_environment":
-        return True
-
-    return False
-
-
-def get_content_access_mode(uep=None, identity=None, owner=None):
-    """
-    Return the content access mode of the current owner
-    :param uep: connection to candlepin server
-    :param identity: reference on current identity
-    :param owner: reference on current owner
-    :return:
-    """
-    if identity is None:
-        identity = inj.require(inj.IDENTITY)
-
-    if uep is None:
-        cp_provider = inj.require(inj.CP_PROVIDER)
-        uep = cp_provider.get_consumer_auth_cp()
-
-    if owner is None:
-        try:
-            owner = uep.getOwner(identity.uuid)
-        except Exception as err:
-            log.debug("Unable to get owner: %s" % str(err))
-            return False
-    if 'contentAccessMode' in owner:
-        return owner['contentAccessMode']
-    return None
+    content_access_mode = inj.require(inj.CONTENT_ACCESS_MODE_CACHE).read_data(uep=uep)
+    return content_access_mode == "org_environment"
 
 
 def get_current_owner(uep=None, identity=None):

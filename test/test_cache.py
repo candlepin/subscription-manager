@@ -37,7 +37,7 @@ from rhsm import ourjson as json
 from subscription_manager.cache import ProfileManager, InstalledProductsManager,\
     EntitlementStatusCache, PoolTypeCache, ReleaseStatusCache, ContentAccessCache, \
     PoolStatusCache, SupportedResourcesCache, AvailableEntitlementsCache, CurrentOwnerCache, \
-    InMemoryCache, ReadThroughInMemoryCache
+    ContentAccessModeCache
 
 from rhsm.profile import Package, RPMProfile, EnabledReposProfile, ModulesProfile
 
@@ -1216,72 +1216,24 @@ class TestAvailableEntitlementsCache(SubManFixture):
         self.assertEqual(timeout, self.cache.UBOUND)
 
 
-class TestInMemoryCache(SubManFixture):
+class TestContentAccessModeCache(SubManFixture):
+
+    MOCK_CACHE_FILE_CONTENT = '{"7f85da06-5c35-44ba-931d-f11f6e581f89": "entitlement"}'
 
     def setUp(self):
-        rlock_patch = patch('subscription_manager.cache.threading.RLock')
-        self.mock_lock = rlock_patch.start()
-        self.addCleanup(rlock_patch.stop)
-        self.cache = InMemoryCache()
+        super(TestContentAccessModeCache, self).setUp()
+        self.cache = ContentAccessModeCache()
 
-    def test_write_cache(self):
-        self.cache.write_cache("test", "value")
-        self.assertEqual(self.cache._cache["test"], "value")
+    def test_reading_nonexisting_cache(self):
+        data = self.cache.read_cache_only()
+        self.assertIsNone(data)
 
-    def test_read_cache_only(self):
-        self.cache._cache["test"] = "value"
-        self.assertEqual(self.cache.read_cache_only("test"), "value")
-
-    def test_safe_get(self):
-        # Break the internal storage of the cache somehow
-        self.cache._cache = None
-        try:
-            res = self.cache._safe_get('item')
-        except Exception:
-            self.fail("Expected the _safe_get method to returh None without raising an exception")
-        else:
-            self.assertEqual(res, None, 'Expected _safe_get to return "None" for missing keys')
-
-
-class TestReadThroughInMemoryCache(SubManFixture):
-
-    def setUp(self):
-        rlock_patch = patch('subscription_manager.cache.threading.RLock')
-        self.mock_lock = rlock_patch.start()
-        self.addCleanup(rlock_patch.stop)
-        self.cache = ReadThroughInMemoryCache()
-
-    def test_read_on_cache_miss(self):
-        key = "item"
-        mock_expensive_function = Mock()
-        mock_expensive_function.return_value = {"thing": "another_thing"}
-        result = self.cache.read(key=key, on_cache_miss=mock_expensive_function)
-        self.assertEqual(result, mock_expensive_function.return_value,
-                         "The result should be equivalent to the return_value of the"
-                         "cache miss function")
-        self.assertNotEqual(id(result), id(mock_expensive_function.return_value),
-                            "The returned value should be a copy of the stored value (to keep the"
-                            "cache thread-safe via immutablity, please note that using any"
-                            "immutable type as the return result from the mock function will cause"
-                            "this to fail such as using strings)")
-        mock_expensive_function.assert_called_once()
-        mock_expensive_function.reset_mock()
-
-        # Now what happens when we ask for the result a second time?
-        second_result = self.cache.read(key=key, on_cache_miss=mock_expensive_function)
-        self.assertEqual(second_result, mock_expensive_function.return_value,
-                         "The result should be equivalent to the return_value of the"
-                         "cache miss function")
-        self.assertNotEqual(id(result), id(second_result))
-        self.assertNotEqual(id(second_result), id(mock_expensive_function.return_value))
-        mock_expensive_function.assert_not_called()
-
-    def test_read(self):
-        key = "item"
-        current_result = "haha"
-        self.cache._cache[key] = current_result
-        mock_expensive_function = Mock()
-        mock_expensive_function.return_value = "expensive_result"
-        result = self.cache.read(key=key, on_cache_miss=mock_expensive_function)
-        self.assertEqual(result, current_result)
-        mock_expensive_function.assert_not_called()
+    def test_reading_existing_cache(self):
+        temp_cache_dir = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, temp_cache_dir)
+        self.cache.CACHE_FILE = os.path.join(temp_cache_dir, 'content_access_mode.json')
+        with open(self.cache.CACHE_FILE, 'w') as cache_file:
+            cache_file.write(self.MOCK_CACHE_FILE_CONTENT)
+        data = self.cache.read_cache_only()
+        self.assertTrue("7f85da06-5c35-44ba-931d-f11f6e581f89" in data)
+        self.assertEqual(data["7f85da06-5c35-44ba-931d-f11f6e581f89"], "entitlement")
