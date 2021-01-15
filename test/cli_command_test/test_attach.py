@@ -182,9 +182,3 @@ class TestAttachCommand(TestCliProxyCommand):
             self.assertEqual(e.code, os.EX_DATAERR)
         else:
             self.fail("No Exception Raised")
-
-
-# Test Attach and Subscribe are the same
-class TestSubscribeCommand(TestAttachCommand):
-    command_class = managercli.SubscribeCommand
-

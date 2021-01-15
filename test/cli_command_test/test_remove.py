@@ -37,7 +37,3 @@ class TestRemoveCommand(TestCliProxyCommand):
             self.cc._validate_options()
         except SystemExit as e:
             self.assertEqual(e.code, 69)
-
-
-class TestUnSubscribeCommand(TestRemoveCommand):
-    command_class = managercli.UnSubscribeCommand

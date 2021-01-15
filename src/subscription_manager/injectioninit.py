@@ -17,11 +17,13 @@ from __future__ import print_function, division, absolute_import
 import subscription_manager.injection as inj
 
 
-from subscription_manager.cache import ProductStatusCache, EntitlementStatusCache, \
-    OverrideStatusCache, ProfileManager, InstalledProductsManager, PoolTypeCache, \
-    ReleaseStatusCache, RhsmIconCache, ContentAccessCache, PoolStatusCache, \
-    SyspurposeComplianceStatusCache, SupportedResourcesCache, AvailableEntitlementsCache, \
-    CurrentOwnerCache, SyspurposeValidFieldsCache, ContentAccessModeCache
+from subscription_manager.cache import ProductStatusCache, \
+    EntitlementStatusCache, OverrideStatusCache, ProfileManager, \
+    InstalledProductsManager, PoolTypeCache, ReleaseStatusCache, \
+    RhsmIconCache, ContentAccessCache, PoolStatusCache, \
+    SyspurposeComplianceStatusCache, SupportedResourcesCache, \
+    ContentAccessModeCache, CurrentOwnerCache, SyspurposeValidFieldsCache, \
+    AvailableEntitlementsCache
 
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.certdirectory import EntitlementDirectory
