@@ -20,7 +20,7 @@ cd $WORKSPACE
 
 sudo yum clean expire-cache
 sudo yum-builddep -y subscription-manager.spec || true # ensure we install any missing rpm deps
-virtualenv env -p python3 --system-site-packages || virtualenv env --system-site-packages || true
+virtualenv env -p python3 --system-site-packages --always-copy || virtualenv env --system-site-packages --always-copy || true
 source env/bin/activate
 pip install -I -r test-requirements.txt
 
