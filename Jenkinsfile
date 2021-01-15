@@ -4,11 +4,11 @@ pipeline {
     // stage('prepare') {steps {echo 'prepare'}}
     stage('Test') {
       parallel {
-        stage('Python 3 stylish') {
-          steps {
-            sh readFile(file: 'jenkins/python3-stylish-tests.sh')
-          }
-        }
+       // stage('Python 3 stylish') {
+       //   steps {
+       //     sh readFile(file: 'jenkins/python3-stylish-tests.sh')
+       //   }
+       // }
         stage('Fedora tito') {
           agent { label 'rpmbuild' }
           steps { sh readFile(file: 'jenkins/tito-tests.sh') }
