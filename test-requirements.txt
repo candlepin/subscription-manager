@@ -18,5 +18,5 @@ pep8
 flake8
 Sphinx==1.8.5;python_version<="2.7"
 Sphinx>=1.8.5;python_version>="3.0"
-git+https://github.com/alikins/pyqver.git#egg=pyqver
+git+https://github.com/cnsnyder/pyqver.git@make_flake8_plugin_work_with_py3#egg=pyqver
 git+https://github.com/awood/nose-xvfb.git#egg=nose-xvfb
