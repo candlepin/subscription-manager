@@ -35,21 +35,21 @@ class CloudDetector(object):
         """
         self.hw_info = hw_info
 
-    def is_vm(self):
+    def is_vm(self) -> bool:
         """
         Is current system virtual machine?
         :return: Return True, when it is virtual machine; otherwise return False
         """
         return 'virt.is_guest' in self.hw_info and self.hw_info['virt.is_guest'] is True
 
-    def is_running_on_cloud(self):
+    def is_running_on_cloud(self) -> bool:
         """
         Try to guess cloud provider using collected hardware information (output of dmidecode, virt-what, etc.)
         :return: True, when we detected sign of cloud provider in hw info; Otherwise return False
         """
         raise NotImplementedError
 
-    def is_likely_running_on_cloud(self):
+    def is_likely_running_on_cloud(self) -> float:
         """
         When all subclasses cannot detect cloud provider using method is_running_on_cloud, because cloud provider
         started to provide something else in output of dmidecode, then try to use this heuristics method

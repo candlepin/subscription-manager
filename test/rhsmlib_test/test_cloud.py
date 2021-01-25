@@ -26,9 +26,10 @@ except ImportError:
 from mock import patch, Mock
 import tempfile
 import time
+import base64
 
 from rhsmlib.cloud.providers import aws, azure, gcp
-from rhsmlib.cloud.utils import detect_cloud_provider
+from rhsmlib.cloud.utils import detect_cloud_provider, collect_cloud_info
 
 
 class TestAWSDetector(unittest.TestCase):
@@ -246,6 +247,67 @@ class TestGCPDetector(unittest.TestCase):
         self.assertFalse(is_gcp_vm)
 
 
+def get_only_imds_v2_is_supported(url, headers, *args, **kwargs):
+    """
+    Mock result, when we try to get metadata using GET method against
+    AWS metadata provider. This mock is for the case, when only IMDSv2
+    is supported by instance.
+    :param url: URL
+    :param headers: HTTP headers
+    :param args: other position argument
+    :param kwargs: other keyed argument
+    :return: Mock with result
+    """
+    if 'X-aws-ec2-metadata-token' in headers.keys():
+        if headers['X-aws-ec2-metadata-token'] == AWS_TOKEN:
+            if url == aws.AWSCloudCollector.CLOUD_PROVIDER_METADATA_URL:
+                mock_result = Mock()
+                mock_result.status_code = 200
+                mock_result.text = AWS_METADATA
+            elif url == aws.AWSCloudCollector.CLOUD_PROVIDER_SIGNATURE_URL:
+                mock_result = Mock()
+                mock_result.status_code = 200
+                mock_result.text = AWS_SIGNATURE
+            else:
+                mock_result = Mock()
+                mock_result.status_code = 400
+                mock_result.text = 'Error: Invalid URL'
+        else:
+            mock_result = Mock()
+            mock_result.status_code = 400
+            mock_result.text = 'Error: Invalid metadata token provided'
+    else:
+        mock_result = Mock()
+        mock_result.status_code = 400
+        mock_result.text = 'Error: IMDSv1 is not supported on this instance'
+    return mock_result
+
+
+def put_imds_v2_token(url, headers, *args, **kwargs):
+    """
+    Mock getting metadata token using PUT method against AWS metadata provider
+    :param url: URL
+    :param headers: HTTP header
+    :param args: other position arguments
+    :param kwargs: other keyed arguments
+    :return: Mock with response
+    """
+    if url == aws.AWSCloudCollector.CLOUD_PROVIDER_TOKEN_URL:
+        if 'X-aws-ec2-metadata-token-ttl-seconds' in headers:
+            mock_result = Mock()
+            mock_result.status_code = 200
+            mock_result.text = AWS_TOKEN
+        else:
+            mock_result = Mock()
+            mock_result.status_code = 400
+            mock_result.text = 'Error: TTL for token not specified'
+    else:
+        mock_result = Mock()
+        mock_result.status_code = 400
+        mock_result.text = 'Error: Invalid URL'
+    return mock_result
+
+
 AWS_METADATA = """
 {
   "accountId" : "012345678900",
@@ -302,67 +364,6 @@ class TestAWSCollector(unittest.TestCase):
         self.requests_mock = requests_patcher.start()
         self.addCleanup(requests_patcher.stop)
 
-    @staticmethod
-    def get_only_imds_v2_is_supported(url, headers, *args, **kwargs):
-        """
-        Mock result, when we try to get metadata using GET method against
-        AWS metadata provider. This mock is for the case, when only IMDSv2
-        is supported by instance.
-        :param url: URL
-        :param headers: HTTP headers
-        :param args: other position argument
-        :param kwargs: other keyed argument
-        :return: Mock with result
-        """
-        if 'X-aws-ec2-metadata-token' in headers.keys():
-            if headers['X-aws-ec2-metadata-token'] == AWS_TOKEN:
-                if url == aws.AWSCloudCollector.CLOUD_PROVIDER_METADATA_URL:
-                    mock_result = Mock()
-                    mock_result.status_code = 200
-                    mock_result.text = AWS_METADATA
-                elif url == aws.AWSCloudCollector.CLOUD_PROVIDER_SIGNATURE_URL:
-                    mock_result = Mock()
-                    mock_result.status_code = 200
-                    mock_result.text = AWS_SIGNATURE
-                else:
-                    mock_result = Mock()
-                    mock_result.status_code = 400
-                    mock_result.text = 'Error: Invalid URL'
-            else:
-                mock_result = Mock()
-                mock_result.status_code = 400
-                mock_result.text = 'Error: Invalid metadata token provided'
-        else:
-            mock_result = Mock()
-            mock_result.status_code = 400
-            mock_result.text = 'Error: IMDSv1 is not supported on this instance'
-        return mock_result
-
-    @staticmethod
-    def put_imds_v2_token(url, headers, *args, **kwargs):
-        """
-        Mock getting metadata token using PUT method against AWS metadata provider
-        :param url: URL
-        :param headers: HTTP header
-        :param args: other position arguments
-        :param kwargs: other keyed arguments
-        :return: Mock with response
-        """
-        if url == aws.AWSCloudCollector.CLOUD_PROVIDER_TOKEN_URL:
-            if 'X-aws-ec2-metadata-token-ttl-seconds' in headers:
-                mock_result = Mock()
-                mock_result.status_code = 200
-                mock_result.text = AWS_TOKEN
-            else:
-                mock_result = Mock()
-                mock_result.status_code = 400
-                mock_result.text = 'Error: TTL for token not specified'
-        else:
-            mock_result = Mock()
-            mock_result.status_code = 400
-            mock_result.text = 'Error: Invalid URL'
-        return mock_result
-
     def test_get_metadata_from_server_imds_v1(self):
         """
         Test the case, when metadata are obtained from server using IMDSv1
@@ -396,8 +397,8 @@ class TestAWSCollector(unittest.TestCase):
         """
         Test the case, when metadata are obtained from server using IMDSv2
         """
-        self.requests_mock.get = self.get_only_imds_v2_is_supported
-        self.requests_mock.put = self.put_imds_v2_token
+        self.requests_mock.get = get_only_imds_v2_is_supported
+        self.requests_mock.put = put_imds_v2_token
 
         aws_collector = aws.AWSCloudCollector()
         # Mock that no metadata cache exists
@@ -414,8 +415,8 @@ class TestAWSCollector(unittest.TestCase):
         """
         Test the case, when signature is obtained from server using IMDSv2
         """
-        self.requests_mock.get = self.get_only_imds_v2_is_supported
-        self.requests_mock.put = self.put_imds_v2_token
+        self.requests_mock.get = get_only_imds_v2_is_supported
+        self.requests_mock.put = put_imds_v2_token
 
         aws_collector = aws.AWSCloudCollector()
         # Mock that no metadata cache exists
@@ -775,6 +776,17 @@ class TestCloudUtils(unittest.TestCase):
         self.hardware_collector_mock.return_value = self.hw_fact_collector_instance
         self.addCleanup(hardware_collector_patcher.stop)
 
+        aws_requests_patcher = patch('rhsmlib.cloud.providers.aws.requests')
+        self.aws_requests_mock = aws_requests_patcher.start()
+        self.addCleanup(aws_requests_patcher.stop)
+        write_cache_patcher = patch('rhsmlib.cloud.providers.aws.AWSCloudCollector._write_token_to_cache_file')
+        self.write_cache_mock = write_cache_patcher.start()
+        self.addCleanup(write_cache_patcher.stop)
+
+        azure_requests_patcher = patch('rhsmlib.cloud.collector.requests')
+        self.azure_requests_mock = azure_requests_patcher.start()
+        self.addCleanup(azure_requests_patcher.stop)
+
     def test_detect_cloud_provider_aws(self):
         """
         Test the case, when detecting of aws works as expected
@@ -904,3 +916,67 @@ class TestCloudUtils(unittest.TestCase):
         self.hw_fact_collector_instance.get_all.return_value = hw_facts
         detected_clouds = detect_cloud_provider()
         self.assertEqual(detected_clouds, ['gcp', 'azure', 'aws'])
+
+    def test_collect_cloud_info_one_cloud_provider_detected(self):
+        """
+        Test the case, when we try to collect cloud info only for
+        one detected cloud provider
+        """
+        self.aws_requests_mock.get = get_only_imds_v2_is_supported
+        self.aws_requests_mock.put = put_imds_v2_token
+
+        cloud_list = ['aws']
+        cloud_info = collect_cloud_info(cloud_list)
+
+        self.assertIsNotNone(cloud_info)
+        self.assertTrue(len(cloud_info) > 0)
+        self.assertTrue('cloud_id' in cloud_info)
+        self.assertEqual(cloud_info['cloud_id'], 'aws')
+        # Test metadata
+        self.assertTrue('metadata' in cloud_info)
+        b64_metadata = cloud_info['metadata']
+        metadata = base64.b64decode(b64_metadata).decode('utf-8')
+        self.assertEqual(metadata, AWS_METADATA)
+        # Test signature
+        self.assertTrue('signature' in cloud_info)
+        b64_signature = cloud_info['signature']
+        signature = base64.b64decode(b64_signature).decode('utf-8')
+        self.assertEqual(
+            signature,
+            '-----BEGIN PKCS7-----\n' + AWS_SIGNATURE + '\n-----END PKCS7-----'
+        )
+
+    def test_collect_cloud_info_more_cloud_providers_detected(self):
+        """
+        Test the case, when we try to collect cloud info only for
+        more than one cloud providers, because more than one cloud
+        providers were detected
+        """
+        mock_result = Mock()
+        mock_result.status_code = 400
+        mock_result.text = 'Not Found 400'
+        self.azure_requests_mock.get = Mock(return_value=mock_result)
+
+        self.aws_requests_mock.get = get_only_imds_v2_is_supported
+        self.aws_requests_mock.put = put_imds_v2_token
+
+        cloud_list = ['azure', 'aws']
+        cloud_info = collect_cloud_info(cloud_list)
+
+        self.assertIsNotNone(cloud_info)
+        self.assertTrue(len(cloud_info) > 0)
+        self.assertTrue('cloud_id' in cloud_info)
+        self.assertEqual(cloud_info['cloud_id'], 'aws')
+        # Test metadata
+        self.assertTrue('metadata' in cloud_info)
+        b64_metadata = cloud_info['metadata']
+        metadata = base64.b64decode(b64_metadata).decode('utf-8')
+        self.assertEqual(metadata, AWS_METADATA)
+        # Test signature
+        self.assertTrue('signature' in cloud_info)
+        b64_signature = cloud_info['signature']
+        signature = base64.b64decode(b64_signature).decode('utf-8')
+        self.assertEqual(
+            signature,
+            '-----BEGIN PKCS7-----\n' + AWS_SIGNATURE + '\n-----END PKCS7-----'
+        )
