@@ -338,7 +338,7 @@ class TestSubscriptions(SubscriptionsCase):
         b.wait_not_present(dialog_register_button_sel)
 
         b.click("label:contains('Insights') a:contains('Not connected')")
-        b.wait_present('.modal-body:contains("This system is not connected")')
+        b.wait_visible('.modal-body:contains("This system is not connected")')
         b.click('.modal-footer button.apply')
         with b.wait_timeout(360):
             b.wait_not_present('.modal-dialog')
@@ -346,17 +346,17 @@ class TestSubscriptions(SubscriptionsCase):
         # HACK - this should eventually not be necessary
         m.execute("insights-client --check-results")
 
-        b.wait_present("label:contains('Insights') a[href='http://cloud.redhat.com/insights/inventory/123-nice-id']")
-        b.wait_present("label:contains('Insights') a:contains('3 hits, including important')")
+        b.wait_visible("label:contains('Insights') a[href='http://cloud.redhat.com/insights/inventory/123-nice-id']")
+        b.wait_visible("label:contains('Insights') a:contains('3 hits, including important')")
 
         b.click("label:contains('Insights') a:contains('Connected to Insights')")
-        b.wait_present('.modal-body:contains("Next Insights data upload")')
-        b.wait_present('.modal-body:contains("Last Insights data upload")')
+        b.wait_visible('.modal-body:contains("Next Insights data upload")')
+        b.wait_visible('.modal-body:contains("Last Insights data upload")')
         b.click("a:contains('Disconnect from Insights')")
         b.click("button:contains('Disconnect from Insights')")
         b.wait_not_present('.modal-dialog')
 
-        b.wait_present("label:contains('Insights') a:contains('Not connected')")
+        b.wait_visible("label:contains('Insights') a:contains('Not connected')")
 
     def testSubAndInAndFail(self):
         m = self.machine
@@ -378,16 +378,16 @@ class TestSubscriptions(SubscriptionsCase):
         with b.wait_timeout(360):
             b.wait_not_present(dialog_register_button_sel)
 
-        b.wait_present("label:contains('Insights') a:contains('Connected to Insights')")
+        b.wait_visible("label:contains('Insights') a:contains('Connected to Insights')")
 
         # Break the next upload and expect the warning triangle to tell us about it
         m.execute("mv /etc/insights-client/machine-id /etc/insights-client/machine-id.lost")
         m.execute("systemctl start insights-client")
 
-        b.wait_present("label:contains('Insights') i.pficon-warning-triangle-o")
+        b.wait_visible("label:contains('Insights') i.pficon-warning-triangle-o")
 
         b.click("label:contains('Insights') a:contains('Connected to Insights')")
-        b.wait_present('.modal-body:contains("The last Insights data upload has failed")')
+        b.wait_visible('.modal-body:contains("The last Insights data upload has failed")')
         b.click("button.cancel")
 
         # Unbreak it and retry.
@@ -428,7 +428,7 @@ class TestSubscriptionsPackages(SubscriptionsCase, PackageCase):
         b.set_input_text("#subscription-register-password", "admin")
         b.set_input_text("#subscription-register-org", "admin")
         b.set_checked("#subscription-insights", True)
-        b.wait_present('.modal-body:contains("The insights-client package will be installed")')
+        b.wait_visible('.modal-body:contains("The insights-client package will be installed")')
         b.click('.modal-footer button.apply')
         with b.wait_timeout(360):
             b.wait_not_present(".modal-dialog")
@@ -436,7 +436,7 @@ class TestSubscriptionsPackages(SubscriptionsCase, PackageCase):
         # Connecting to Insights will not have worked because the
         # insights-client binary is not actually there.
 
-        b.wait_present(".alert-danger:contains('not-found')")
+        b.wait_visible(".alert-danger:contains('not-found')")
 
         # Try again with the connection dialog.
 
@@ -445,11 +445,11 @@ class TestSubscriptionsPackages(SubscriptionsCase, PackageCase):
         m.execute("pkcon refresh")
 
         b.click("label:contains('Insights') a:contains('Not connected')")
-        b.wait_present('.modal-body:contains("This system is not connected")')
-        b.wait_present('.modal-body:contains("The insights-client package will be installed")')
+        b.wait_visible('.modal-body:contains("This system is not connected")')
+        b.wait_visible('.modal-body:contains("The insights-client package will be installed")')
         b.click('.modal-footer button.apply')
         with b.wait_timeout(360):
-            b.wait_present('.modal-footer:contains("not-found")')
+            b.wait_visible('.modal-footer:contains("not-found")')
         b.click('.modal-footer button.cancel')
 
         m.execute("test -f /stamp-insights-client-999-1")
