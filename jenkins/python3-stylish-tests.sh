@@ -18,12 +18,11 @@ echo "GIT_COMMIT:" "${GIT_COMMIT}"
 cd $WORKSPACE
 
 sudo yum clean expire-cache
-sudo yum-builddep -y subscription-manager.spec  || true # ensure we install any missing rpm deps
-virtualenv env --system-site-packages -p python2 || true
+sudo yum-builddep -y subscription-manager.spec || true  # ensure we install any missing rpm deps
+virtualenv env -p python3
 source env/bin/activate
 
 make install-pip-requirements
-pip install --user -r ./test-requirements.txt
 
 # build/test python-rhsm
 if [ -d $WORKSPACE/python-rhsm ]; then
@@ -32,19 +31,13 @@ fi
 PYTHON_RHSM=$(pwd)
 
 # build the c modules
-python setup.py build
-python setup.py build_ext --inplace
+python3 setup.py build
+python3 setup.py build_ext --inplace
 
-# not using "setup.py nosetests" yet
-# since they need a running candlepin
-# yeah, kind of ugly...
 pushd $WORKSPACE
 export PYTHONPATH="$PYTHON_RHSM"/src
+# export PYTHONPATH="$PYTHON_RHSM"/src:"$PYTHON_RHSM"/syspurpose/src
 
-echo
-echo "PYTHONPATH=$PYTHONPATH"
-echo "PATH=$PATH"
-echo
-
-make build
-make coverage
+# make set-versions
+# capture exit status of 'make stylish' and not 'tee'
+( set -o pipefail; make stylish | tee stylish_results.txt )

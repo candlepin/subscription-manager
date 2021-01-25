@@ -14,6 +14,9 @@
 # in this software or its documentation.
 #
 
+# TODO: test Python3 syntax using flake8
+# flake8: noqa
+
 """
 This module contains several utils used for VMs running on clouds
 """
