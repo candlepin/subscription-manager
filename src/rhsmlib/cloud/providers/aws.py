@@ -48,14 +48,14 @@ class AWSCloudDetector(CloudDetector):
         """
         super(AWSCloudDetector, self).__init__(hw_info)
 
-    def is_vm(self):
+    def is_vm(self) -> bool:
         """
         Is system running on virtual machine or not
         :return: True, when machine is running on VM; otherwise return False
         """
         return super(AWSCloudDetector, self).is_vm()
 
-    def is_running_on_cloud(self):
+    def is_running_on_cloud(self) -> bool:
         """
         Try to guess if cloud provider is AWS using collected hardware information (output of dmidecode,
         virt-what, etc.)
@@ -77,7 +77,7 @@ class AWSCloudDetector(CloudDetector):
         # In other cases return False
         return False
 
-    def is_likely_running_on_cloud(self):
+    def is_likely_running_on_cloud(self) -> float:
         """
         Return non-zero value, when the machine is virtual machine and it is running on kvm/xen and
         some Amazon string can be found in output of dmidecode
