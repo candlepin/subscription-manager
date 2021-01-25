@@ -87,6 +87,10 @@ class AzureCloudDetector(CloudDetector):
             if 'hyperv' in self.hw_info['virt.host_type']:
                 probability += 0.3
 
+        if 'dmi.chassis.asset_tag' in self.hw_info and \
+                self.hw_info['dmi.chassis.asset_tag'] == '7783-7084-3265-9085-8269-3286-77':
+            probability += 0.3
+
         # Try to find "Azure" or "Microsoft" keywords in output of dmidecode
         found_microsoft = False
         found_azure = False
@@ -109,6 +113,8 @@ class AzureCloudCollector(CloudCollector):
     """
     Collector of Azure metadata
     """
+
+    CLOUD_PROVIDER_ID = "azure"
 
     # Microsoft adds new API versions very often, but old versions are supported
     # for very long time. It would be good to update the version from time to time,

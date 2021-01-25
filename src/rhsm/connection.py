@@ -599,8 +599,7 @@ class BaseRestLib(object):
 
         return conn
 
-    @staticmethod
-    def _print_debug_info_about_request(request_type, handler, final_headers, body):
+    def _print_debug_info_about_request(self, request_type, handler, final_headers, body):
         """
         This method can print debug information about sent http request. We do not use
         httplib.HTTPConnection.debuglevel = 1, because it doesn't provide control about displayed information.
@@ -621,8 +620,11 @@ class BaseRestLib(object):
             green_col = '\033[92m'
             red_col = '\033[91m'
             end_col = '\033[0m'
-            msg = blue_col + "Making request:" + end_col
-            msg += red_col + " %s %s" % (request_type, handler) + end_col
+            if self.insecure is True:
+                msg = blue_col + "Making insecure request:" + end_col
+            else:
+                msg = blue_col + "Making request:" + end_col
+            msg += red_col + " %s:%s %s %s" % (self.host, self.ssl_port, request_type, handler) + end_col
             if 'SUBMAN_DEBUG_PRINT_REQUEST_HEADER' in os.environ:
                 msg += blue_col + " %s" % final_headers + end_col
             if 'SUBMAN_DEBUG_PRINT_REQUEST_BODY' in os.environ and body is not None:
@@ -1029,10 +1031,39 @@ class UEPConnection(BaseConnection):
     def ping(self, username=None, password=None):
         return self.conn.request_get("/status/")
 
+    def getJWToken(self, cloud_id, metadata, signature):
+        """
+        When automatic registration is enabled in rhsm.conf and it was possible
+        to gather cloud metadata, then it is possible to try to get JSON Web Token
+        for automatic registration. When candlepin does not provide automatic
+        registration, then raise exception.
+        :param cloud_id: ID of cloud provider, e.g. "aws", "azure", "gcp"
+        :param metadata: string with base64 encoded metadata
+        :param signature: string with base64 encoded signature
+        :return: string with JWT
+        """
+        params = {
+            "type": cloud_id,
+            "payload": metadata,
+            "signature": signature
+        }
+        # "Accept" http header has to be text/plain, because candlepin return
+        # token as simple text and it is not wrapped in json document
+        headers = {
+            "Content-type": "application/json",
+            "Accept": "text/plain"
+        }
+        return self.conn.request_post(
+            method="/cloud/authorize",
+            params=params,
+            headers=headers
+        )
+
     def registerConsumer(self, name="unknown", type="system", facts={},
             owner=None, environment=None, keys=None,
             installed_products=None, uuid=None, hypervisor_id=None,
-            content_tags=None, role=None, addons=None, service_level=None, usage=None):
+            content_tags=None, role=None, addons=None, service_level=None, usage=None,
+            jwt_token=None):
         """
         Creates a consumer on candlepin server
         """
@@ -1059,6 +1090,10 @@ class UEPConnection(BaseConnection):
         if service_level is not None:
             params['serviceLevel'] = service_level
 
+        headers = {}
+        if jwt_token:
+            headers['Authorization'] = 'Bearer {jwt_token}'.format(jwt_token=jwt_token)
+
         url = "/consumers"
         if environment:
             url = "/environments/%s/consumers" % self.sanitize(environment)
@@ -1072,7 +1107,7 @@ class UEPConnection(BaseConnection):
                     url = url + prepend + self.sanitize(key)
                     prepend = ","
 
-        return self.conn.request_post(url, params)
+        return self.conn.request_post(url, params, headers=headers)
 
     def hypervisorCheckIn(self, owner, env, host_guest_mapping, options=None):
         """

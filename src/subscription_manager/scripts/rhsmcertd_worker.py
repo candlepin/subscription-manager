@@ -41,7 +41,7 @@ ga_loader.init_ga()
 from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()
 
-from subscription_manager import action_client
+from subscription_manager.action_client import HealingActionClient, ActionClient
 from subscription_manager import managerlib
 from subscription_manager.identity import ConsumerIdentity
 from subscription_manager.i18n_optparse import OptionParser, \
@@ -51,9 +51,70 @@ from subscription_manager.utils import generate_correlation_id
 
 from subscription_manager.i18n import ugettext as _
 
+from rhsmlib.cloud.utils import detect_cloud_provider, collect_cloud_info
+from rhsmlib.services.register import RegisterService
+
 
 def exit_on_signal(_signumber, _stackframe):
     sys.exit(0)
+
+
+def _auto_register(cp_provider, log):
+    """
+    Try to perform auto-registration
+    :param cp_provider: provider of connection to candlepin server
+    :param log: logging object
+    :return: None
+    """
+    log.debug("Trying to do auto-registration of this system")
+
+    identity = inj.require(inj.IDENTITY)
+    if identity.is_valid() is True:
+        log.debug('System already registered. Skipping auto-registration')
+        return
+
+    log.debug('Trying to detect cloud provider')
+
+    # Try to detect cloud provider first
+    cloud_list = detect_cloud_provider()
+    if len(cloud_list) == 0:
+        log.warning('This system does not run on any supported cloud provider. Skipping auto-registration')
+        sys.exit(-1)
+
+    # When some cloud provider(s) was detected, then try to collect metadata
+    # and signature
+    cloud_info = collect_cloud_info(cloud_list)
+    if len(cloud_info) == 0:
+        log.warning('It was not possible to collect any cloud metadata. Unable to perform auto-registration')
+        sys.exit(-1)
+
+    # Get connection not using any authentication
+    cp = cp_provider.get_no_auth_cp()
+
+    # Try to get JWT token from candlepin (cloud registration adapter)
+    try:
+        jwt_token = cp.getJWToken(
+            cloud_id=cloud_info['cloud_id'],
+            metadata=cloud_info['metadata'],
+            signature=cloud_info['signature']
+        )
+    except Exception as err:
+        log.error('Unable to get JWT token: {err}'.format(err=str(err)))
+        log.warning('Canceling auto-registration')
+        sys.exit(-1)
+
+    # Try to register using JWT token
+    register_service = RegisterService(cp=cp)
+    # Organization ID is set to None, because organization ID is
+    # included in JWT token
+    try:
+        register_service.register(org=None, jwt_token=jwt_token)
+    except Exception as err:
+        log.error("Unable to auto-register: {err}".format(err=err))
+        sys.exit(-1)
+    else:
+        log.debug("Auto-registration performed successfully")
+        sys.exit(0)
 
 
 def _main(options, log):
@@ -76,6 +137,10 @@ def _main(options, log):
         log.warning('The rhsmcertd process has been disabled by configuration.')
         sys.exit(-1)
 
+    # Was script exectured with --auto-register option
+    if options.auto_register is True:
+        _auto_register(cp_provider, log)
+
     if not ConsumerIdentity.existsAndValid():
         log.error('Either the consumer is not registered or the certificates' +
                   ' are corrupted. Certificate update using daemon failed.')
@@ -87,13 +152,13 @@ def _main(options, log):
 
     try:
         if options.autoheal:
-            actionclient = action_client.HealingActionClient()
+            action_client = HealingActionClient()
         else:
-            actionclient = action_client.ActionClient()
+            action_client = ActionClient()
 
-        actionclient.update(options.autoheal)
+        action_client.update(options.autoheal)
 
-        for update_report in actionclient.update_reports:
+        for update_report in action_client.update_reports:
             # FIXME: make sure we don't get None reports
             if update_report:
                 print(update_report)
@@ -142,6 +207,11 @@ def main():
             default=False, help="perform an autoheal check")
     parser.add_option("--force", dest="force", action="store_true",
             default=False, help=SUPPRESS_HELP)
+    parser.add_option(
+            "--auto-register", dest="auto_register", action="store_true",
+            default=False, help="perform auto-registration"
+    )
+
     (options, args) = parser.parse_args()
     try:
         _main(options, log)

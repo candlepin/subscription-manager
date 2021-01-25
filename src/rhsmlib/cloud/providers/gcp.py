@@ -191,11 +191,12 @@ class GCPCloudCollector(CloudCollector):
         """
         return None
 
-    def get_signature(self) -> None:
+    def get_signature(self) -> str:
         """
-        Google returns everything in one file. No need to try to get signature
+        Google returns everything in one file. No need to try to get signature.
+        :return Empty string
         """
-        return None
+        return ""
 
     def get_metadata(self) -> Union[str, None]:
         """

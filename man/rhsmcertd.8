@@ -3,7 +3,7 @@
 rhsmcertd \- Periodically scans and updates the entitlement certificates on a registered system.
 
 .SH SYNOPSIS
-rhsmcertd [--cert-check-interval=MINUTES] [--auto-attach-interval=MINUTES] [--no-splay] [--now] [--debug] [--help]
+rhsmcertd [--cert-check-interval=MINUTES] [--auto-attach-interval=MINUTES] [--auto-registration-interval] [--no-splay] [--now] [--auto-registration] [--debug] [--help]
 
 .PP
 .I Deprecated usage
@@ -22,6 +22,9 @@ process runs periodically to check for changes in the subscriptions available to
 
 .PP
 At a defined interval, the process checks with the subscription management service to see if any new subscriptions are available to the system. If there are, it pulls in the associated subscription certificates. If any subscriptions have expired and new subscriptions are available, then the \fBrhsmcertd\fP process will automatically request those subscriptions. By default, the initial auto-attach is delayed by a random amount of seconds from zero to the \fBautoAttachInterval\fP. The initial cert check is delayed by a random amount of seconds from zero to \fBcertCheckInterval\fP.
+
+.PP
+This \fbrhsmcertd\fP process can also perform automatic registration, when VM is running in the public cloud. Three public cloud providers are supported: AWS, Azure and GCP. When it is desired to perform automatic registration by rhsmcertd, then it is also necessary to configure mapping of "Cloud ID" to "RHSM organization ID" on https://cloud.redhat.com.
 
 .PP
 This \fBrhsmcertd\fP process invokes the
@@ -62,10 +65,22 @@ Resets the interval for checking for and replacing expired subscriptions. This v
 file are used (unless the argument is passed again).
 
 .TP
+.B -r, --auto-registration-interval=MINUTES
+Resets the interval for automatic registration. This value is in minutes. The default is 60, or 1 hour. This interval is in effect until the daemon restarts, and then the values in the
+.B /etc/rhsm/rhsm.conf
+file are used (unless the argument is passed again).
+
+.TP
 .B -s, --no-splay
 If present this option disables the splay feature entirely. When not present the value of "splay" from the
 .B /etc/rhsm/rhsm.conf
 file is used to determine whether the splay feature is on ("1") or off ("0").
+
+.TP
+.B -a, --auto-registration
+If present this option enable automatic registration. When not present the value of "auto_registration" from the
+.B /etc/rhsm/rhsm.conf
+file is used to determine whether the automatic registration feature is on ("1") or off ("0").
 
 .SH USAGE EXAMPLES
 .TP
