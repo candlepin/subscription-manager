@@ -49,7 +49,7 @@
 #define DEFAULT_HEAL_INTERVAL_SECONDS 86400    /* 24 hours */
 #define DEFAULT_SPLAY_ENABLED true
 #define DEFAULT_AUTO_REGISTRATION false
-#define DEFAULT_DISABLE_AUTO_ATTACH true
+#define DEFAULT_DISABLE_AUTO_ATTACH false
 #define BUF_MAX 256
 #define RHSM_CONFIG_FILE "/etc/rhsm/rhsm.conf"
 
@@ -88,7 +88,6 @@ struct CertCheckData {
     int interval_seconds;
     bool heal;
     char *next_update_file;
-    bool disable_auto_attach;
 };
 
 static GOptionEntry entries[] = {
@@ -277,7 +276,7 @@ get_lock ()
 static gboolean
 auto_register(gpointer data)
 {
-    struct CertCheckData *cert_data = data;
+    (void)data;
     int status = 0;
 
     int pid = fork ();
@@ -287,14 +286,8 @@ auto_register(gpointer data)
     }
     if (pid == 0) {
         if (auto_register_attempt < MAX_AUTO_REGISTER_ATTEMPTS) {
-            if (cert_data->disable_auto_attach == true) {
-                debug ("(Auto-registration) executing: %s --auto-register --disable-auto-attach",
-            WORKER);
-                execl (WORKER, WORKER_NAME, "--auto-register", "--disable-auto-attach", NULL);
-            } else {
-                debug ("(Auto-registration) executing: %s --auto-register", WORKER);
-                execl (WORKER, WORKER_NAME, "--auto-register", NULL);
-            }
+            debug ("(Auto-registration) executing: %s --auto-register", WORKER);
+            execl (WORKER, WORKER_NAME, "--auto-register", NULL);
         } else {
             warn ("(Auto-registration) the number of attempts reached the max limit: %d", MAX_AUTO_REGISTER_ATTEMPTS);
             // Return False to not repeat this again
@@ -653,7 +646,7 @@ main (int argc, char *argv[])
     int heal_interval_seconds = config->heal_interval_seconds;
     bool splay_enabled = config->splay;
     bool auto_reg_enabled = config->auto_registration;
-    bool disable_auto_attach_enabled = config->disable_auto_attach;
+    bool disable_auto_attach = config->disable_auto_attach;
     free (config);
 
     if (daemon (0, 0) == -1)
@@ -669,10 +662,15 @@ main (int argc, char *argv[])
         info ("Auto-registration interval: %.1f minutes [%d seconds]",
               auto_reg_interval_seconds / 60.0, auto_reg_interval_seconds);
     } else {
-        debug ("Auto-registration disabled");
+        info ("Auto-registration disabled");
     }
-    info ("Auto-attach interval: %.1f minutes [%d seconds]",
-          heal_interval_seconds / 60.0, heal_interval_seconds);
+    if (disable_auto_attach == false) {
+        info ("Auto-attach interval: %.1f minutes [%d seconds]",
+              heal_interval_seconds / 60.0, heal_interval_seconds);
+    } else {
+        info ("Auto-attach disabled");
+    }
+
     info ("Cert check interval: %.1f minutes [%d seconds]",
           cert_interval_seconds / 60.0, cert_interval_seconds);
 
@@ -738,9 +736,13 @@ main (int argc, char *argv[])
             info ("Waiting %.1f minutes plus %d splay seconds [%d seconds total] before performing first auto-register",
                   INITIAL_DELAY_SECONDS / 60.0, auto_reg_offset, auto_reg_initial_delay);
         }
-        auto_attach_initial_delay = INITIAL_DELAY_SECONDS + auto_attach_offset;
-        info ("Waiting %.1f minutes plus %d splay seconds [%d seconds total] before performing first auto-attach.",
-                INITIAL_DELAY_SECONDS / 60.0, auto_attach_offset, auto_attach_initial_delay);
+
+        if (disable_auto_attach == false) {
+            auto_attach_initial_delay = INITIAL_DELAY_SECONDS + auto_attach_offset;
+            info ("Waiting %.1f minutes plus %d splay seconds [%d seconds total] before performing first auto-attach.",
+                  INITIAL_DELAY_SECONDS / 60.0, auto_attach_offset, auto_attach_initial_delay);
+        }
+
         cert_check_initial_delay = INITIAL_DELAY_SECONDS + cert_check_offset;
         info ("Waiting %.1f minutes plus %d splay seconds [%d seconds total] before performing first cert check.",
                 INITIAL_DELAY_SECONDS / 60.0, cert_check_offset, cert_check_initial_delay);
@@ -750,7 +752,6 @@ main (int argc, char *argv[])
     auto_register_data.interval_seconds = cert_interval_seconds;
     auto_register_data.heal = false;
     auto_register_data.next_update_file = NEXT_AUTO_REGISTER_UPDATE_FILE;
-    auto_register_data.disable_auto_attach = disable_auto_attach_enabled;
 
     struct CertCheckData cert_check_data;
     cert_check_data.interval_seconds = cert_interval_seconds;
@@ -766,10 +767,14 @@ main (int argc, char *argv[])
         g_timeout_add(auto_reg_initial_delay * 1000,
                       (GSourceFunc) initial_auto_register, (gpointer) &auto_register_data);
     }
+
     g_timeout_add (cert_check_initial_delay * 1000,
                (GSourceFunc) initial_cert_check, (gpointer) &cert_check_data);
-    g_timeout_add (auto_attach_initial_delay * 1000,
-               (GSourceFunc) initial_cert_check, (gpointer) &auto_attach_data);
+
+    if (disable_auto_attach == false) {
+        g_timeout_add(auto_attach_initial_delay * 1000,
+                      (GSourceFunc) initial_cert_check, (gpointer) & auto_attach_data);
+    }
 
     // NB: we only use cert_interval_seconds when calculating the next update
     // time. This works for most users, since the cert_interval aligns with
@@ -778,7 +783,9 @@ main (int argc, char *argv[])
         log_update (auto_reg_initial_delay, NEXT_AUTO_REGISTER_UPDATE_FILE);
     }
     log_update (cert_check_initial_delay, NEXT_CERT_UPDATE_FILE);
-    log_update (auto_attach_initial_delay, NEXT_AUTO_ATTACH_UPDATE_FILE);
+    if (disable_auto_attach == false) {
+        log_update(auto_attach_initial_delay, NEXT_AUTO_ATTACH_UPDATE_FILE);
+    }
 
     GMainLoop *main_loop = g_main_loop_new (NULL, FALSE);
     g_main_loop_run (main_loop);

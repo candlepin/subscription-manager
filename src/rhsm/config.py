@@ -86,7 +86,7 @@ RHSMCERTD_DEFAULTS = {
         'disable': '0',
         'auto_registration': '0',
         'auto_registration_interval': '60',
-        'disable_auto_attach': '1'
+        'disable_auto_attach': '0'
         }
 
 LOGGING_DEFAULTS = {
