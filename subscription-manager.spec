@@ -319,6 +319,8 @@ Requires: python3-dbus
 Requires: %{?suse_version:dbus-1-python} %{!?suse_version:dbus-python}
 %endif
 
+Requires: python-requests
+
 %if %{use_yum}
 Requires: %{?suse_version:yum} %{!?suse_version:yum >= 3.2.29-73}
 %endif
