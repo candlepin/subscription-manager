@@ -289,9 +289,7 @@ auto_register(gpointer data)
             debug ("(Auto-registration) executing: %s --auto-register", WORKER);
             execl (WORKER, WORKER_NAME, "--auto-register", NULL);
         } else {
-            warn ("(Auto-registration) the number of attempts reached the max limit: %d", MAX_AUTO_REGISTER_ATTEMPTS);
-            // Return False to not repeat this again
-            return false;
+            debug ("(Auto-registration) the number of attempts reached the max limit: %d", MAX_AUTO_REGISTER_ATTEMPTS);
         }
     }
 
@@ -303,8 +301,15 @@ auto_register(gpointer data)
         // No need to repeat this action again
         return false;
     } else {
-        warn ("(Auto-registration) failed (%d), retry will occur on next run.", status);
         auto_register_attempt++;
+        if (auto_register_attempt < MAX_AUTO_REGISTER_ATTEMPTS) {
+            warn ("(Auto-registration) failed (%d), retry will occur on next run.", status);
+        } else {
+            warn ("(Auto-registration) failed (%d), the number of attempts reached the max limit: %d",
+                  status, MAX_AUTO_REGISTER_ATTEMPTS);
+            // Return False to not repeat this again
+            return false;
+        }
         return TRUE;
     }
 }
