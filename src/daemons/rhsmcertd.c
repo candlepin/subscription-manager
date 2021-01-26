@@ -49,6 +49,7 @@
 #define DEFAULT_HEAL_INTERVAL_SECONDS 86400    /* 24 hours */
 #define DEFAULT_SPLAY_ENABLED true
 #define DEFAULT_AUTO_REGISTRATION false
+#define DEFAULT_DISABLE_AUTO_ATTACH true
 #define BUF_MAX 256
 #define RHSM_CONFIG_FILE "/etc/rhsm/rhsm.conf"
 
@@ -87,6 +88,7 @@ struct CertCheckData {
     int interval_seconds;
     bool heal;
     char *next_update_file;
+    bool disable_auto_attach;
 };
 
 static GOptionEntry entries[] = {
@@ -107,6 +109,9 @@ static GOptionEntry entries[] = {
     {"auto-registration-interval", 'r', 0, G_OPTION_ARG_INT, &arg_reg_interval_minutes,
             N_("interval to run auto-registration (in minutes)"),
             "MINUTES"},
+    {"disable-auto-attach", 'x', 0, G_OPTION_ARG_NONE, &arg_reg_interval_minutes,
+            N_("Disable auto attach on successful auto registration (requires -a)."),
+            NULL},
     {"now", 'n', 0, G_OPTION_ARG_NONE, &run_now,
      N_("run the initial checks immediately, with no delay"),
      NULL},
@@ -127,6 +132,7 @@ typedef struct _Config {
     int cert_interval_seconds;
     bool splay;
     bool auto_registration;
+    bool disable_auto_attach;
 } Config;
 
 const char *
@@ -271,7 +277,7 @@ get_lock ()
 static gboolean
 auto_register(gpointer data)
 {
-    (void)data;
+    struct CertCheckData *cert_data = data;
     int status = 0;
 
     int pid = fork ();
@@ -281,8 +287,14 @@ auto_register(gpointer data)
     }
     if (pid == 0) {
         if (auto_register_attempt < MAX_AUTO_REGISTER_ATTEMPTS) {
-            debug ("(Auto-registration) executing: %s --auto-register", WORKER);
-            execl (WORKER, WORKER_NAME, "--auto-register", NULL);
+            if (cert_data->disable_auto_attach == true) {
+                debug ("(Auto-registration) executing: %s --auto-register --disable-auto-attach",
+            WORKER);
+                execl (WORKER, WORKER_NAME, "--auto-register", "--disable-auto-attach", NULL);
+            } else {
+                debug ("(Auto-registration) executing: %s --auto-register", WORKER);
+                execl (WORKER, WORKER_NAME, "--auto-register", NULL);
+            }
         } else {
             warn ("(Auto-registration) the number of attempts reached the max limit: %d", MAX_AUTO_REGISTER_ATTEMPTS);
             // Return False to not repeat this again
@@ -488,6 +500,13 @@ key_file_init_config (Config * config, GKeyFile * key_file)
             DEFAULT_AUTO_REGISTRATION
             );
     config->auto_registration = auto_registration_enabled;
+    bool disable_auto_attach_enabled = get_bool_from_config_file (
+            key_file,
+            "rhsmcertd",
+            "disable_auto_attach",
+            DEFAULT_DISABLE_AUTO_ATTACH
+            );
+    config->disable_auto_attach = disable_auto_attach_enabled;
 }
 
 void
@@ -548,6 +567,7 @@ get_config (int argc, char *argv[])
     config->heal_interval_seconds = DEFAULT_HEAL_INTERVAL_SECONDS;
     config->splay = DEFAULT_SPLAY_ENABLED;
     config->auto_registration = DEFAULT_AUTO_REGISTRATION;
+    config->disable_auto_attach = DEFAULT_DISABLE_AUTO_ATTACH;
 
     // Load configuration values from the configuration file
     // which, if defined, will overwrite the current defaults.
@@ -633,6 +653,7 @@ main (int argc, char *argv[])
     int heal_interval_seconds = config->heal_interval_seconds;
     bool splay_enabled = config->splay;
     bool auto_reg_enabled = config->auto_registration;
+    bool disable_auto_attach_enabled = config->disable_auto_attach;
     free (config);
 
     if (daemon (0, 0) == -1)
@@ -729,6 +750,7 @@ main (int argc, char *argv[])
     auto_register_data.interval_seconds = cert_interval_seconds;
     auto_register_data.heal = false;
     auto_register_data.next_update_file = NEXT_AUTO_REGISTER_UPDATE_FILE;
+    auto_register_data.disable_auto_attach = disable_auto_attach_enabled;
 
     struct CertCheckData cert_check_data;
     cert_check_data.interval_seconds = cert_interval_seconds;

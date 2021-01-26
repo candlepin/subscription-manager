@@ -137,7 +137,7 @@ def _main(options, log):
         log.warning('The rhsmcertd process has been disabled by configuration.')
         sys.exit(-1)
 
-    # Was script exectured with --auto-register option
+    # Was script executed with --auto-register option
     if options.auto_register is True:
         _auto_register(cp_provider, log)
 
@@ -149,6 +149,10 @@ def _main(options, log):
 
     cp = cp_provider.get_consumer_auth_cp()
     cp.supports_resource(None)  # pre-load supported resources; serves as a way of failing before locking the repos
+
+    if options.auto_register is True and options.disable_auto_attach is True:
+        # We only want to disable auto-attach if we've just auto registered
+        cp.updateConsumer(inj.require(inj.IDENTITY).uuid, autoheal=False)
 
     try:
         if options.autoheal:
@@ -209,6 +213,10 @@ def main():
             default=False, help=SUPPRESS_HELP)
     parser.add_option(
             "--auto-register", dest="auto_register", action="store_true",
+            default=False, help="perform auto-registration"
+    )
+    parser.add_option(
+            "--disable-auto-attach", dest="disable_auto_attach", action="store_true",
             default=False, help="perform auto-registration"
     )
 
