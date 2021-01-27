@@ -244,7 +244,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.29.5
+Version: 1.29.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1506,6 +1506,30 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Jan 27 2021 Christopher Snyder <csnyder@redhat.com> 1.29.6-1
+- Improved loggin of rhsmcertd and spec file updated (#2415)
+  (jhnidek@redhat.com)
+- Change the label for metadata from "payload" to "metadata"
+  (csnyder@redhat.com)
+- ENT-3289: automatic registration on public cloud (#2407) (jhnidek@redhat.com)
+- ENT-3191: Collect metadata of cloud providers (#2381) (jhnidek@redhat.com)
+- cockpit: Update test API to 236 (martin@piware.de)
+- cockpit: Replace obsolete wait_present() with wait_visible()
+  (martin@piware.de)
+- 1886772: Cache the content_access_mode for at most 4 hours independently of
+  the owner/organization. (csnyder@redhat.com)
+- Extract of strings for translations (#2397) (wpoteat@redhat.com)
+- Syntax update to translation commands (#2394) (wpoteat@redhat.com)
+- Update project to use Weblate for translations (#2383) (wpoteat@redhat.com)
+- Bump lxml from 4.2.5 to 4.6.2 in /syspurpose (#2382)
+  (49699333+dependabot[bot]@users.noreply.github.com)
+- cockpit: Invoke setup.py with python3 (martin@piware.de)
+- cockpit: Move default TEST_OS to rhel-8-3 (martin@piware.de)
+- 1886772: Add in memory read through cache, delete SCA cert when not needed
+  (csnyder@redhat.com)
+- Detecting of cloud providers; ENT-3288 (#2367) (jhnidek@redhat.com)
+- Fixup syspurpose module help text / bash completion (csnyder@redhat.com)
+
 * Fri Dec 11 2020 Christopher Snyder <csnyder@redhat.com> 1.29.5-1
 - 1904541: Catch ProxyException when checking available orgs
   (csnyder@redhat.com)
