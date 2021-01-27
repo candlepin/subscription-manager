@@ -137,7 +137,7 @@ def _main(options, log):
         log.warning('The rhsmcertd process has been disabled by configuration.')
         sys.exit(-1)
 
-    # Was script exectured with --auto-register option
+    # Was script executed with --auto-register option
     if options.auto_register is True:
         _auto_register(cp_provider, log)
 
