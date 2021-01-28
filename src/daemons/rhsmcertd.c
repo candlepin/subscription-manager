@@ -733,7 +733,7 @@ main (int argc, char *argv[])
     }
 
     struct CertCheckData auto_register_data;
-    auto_register_data.interval_seconds = cert_interval_seconds;
+    auto_register_data.interval_seconds = auto_reg_interval_seconds;
     auto_register_data.heal = false;
     auto_register_data.next_update_file = NEXT_AUTO_REGISTER_UPDATE_FILE;
 
