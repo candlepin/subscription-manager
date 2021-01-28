@@ -28,9 +28,13 @@ try:
     # These dependencies aren't available in build environments.  We won't need any
     # linting functionality there though, so just create a dummy class so we can proceed.
     import pep8
+except ImportError:
+    pep8 = None
+
+try:
     import pkg_resources
 except ImportError:
-    pass
+    pkg_resources = None
 
 try:
     from flake8.main.setuptools_command import Flake8

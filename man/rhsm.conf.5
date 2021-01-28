@@ -247,7 +247,17 @@ were set to 3 minutes, the initial cert check would begin somewhere between 2 mi
 .PP
 disable
 .RS 4
-set to 1 to disable rhsmcertd operation entirely.
+Set to 1 to disable rhsmcertd operation entirely.
+.RE
+.PP
+auto_registration
+.RS 4
+Set to 1 to enabled automatic registration. Automatic registration can only work on virtual machines running in the public cloud. Currently three public cloud providers are supported: AWS, Azure and GCP. In order for rhsmcertd to perform automatic registration, please link your "Cloud ID" from your cloud provider to your "RHSM Organization ID" using https://cloud.redhat.com.
+.RE
+.PP
+auto_registration_interval
+.RS 4
+The number of minutes between attempts to run auto\-registration on this system
 .SH "[LOGGING] OPTIONS"
 .PP
 default_log_level

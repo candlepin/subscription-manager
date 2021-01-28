@@ -198,83 +198,7 @@ class RegisterServiceTest(InjectionMockingTest):
             environment="environment",
             keys=None,
             installed_products=[],
-            content_tags=[],
-            type="system",
-            role="",
-            addons=[],
-            service_level="",
-            usage="")
-        self.mock_installed_products.write_cache.assert_called()
-
-        mock_persist_consumer.assert_called_once_with(expected_consumer)
-        mock_write_cache.assert_called_once()
-        expected_plugin_calls = [
-            mock.call('pre_register_consumer', name='name', facts={}),
-            mock.call('post_register_consumer', consumer=expected_consumer, facts={})
-        ]
-        self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
-
-    @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
-    @mock.patch("subprocess.call")
-    @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
-    def test_register_with_no_insights(self, mock_persist_consumer, mock_subprocess_call, mock_write_cache):
-        self.mock_identity.is_valid.return_value = False
-        self.mock_installed_products.format_for_server.return_value = []
-        self.mock_installed_products.tags = []
-        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
-        self.mock_cp.registerConsumer.return_value = expected_consumer
-
-        register_service = register.RegisterService(self.mock_cp)
-        mock_open = mock.mock_open()
-        with mock.patch('rhsmlib.services.register.open', mock_open, create=True):
-            register_service.register("org", name="name", environment="environment", no_insights=True)
-
-        self.mock_cp.registerConsumer.assert_called_once_with(
-            name="name",
-            facts={},
-            owner="org",
-            environment="environment",
-            keys=None,
-            installed_products=[],
-            content_tags=[],
-            type="system",
-            role="",
-            addons=[],
-            service_level="",
-            usage="")
-        self.mock_installed_products.write_cache.assert_called()
-
-        mock_persist_consumer.assert_called_once_with(expected_consumer)
-        mock_write_cache.assert_called_once()
-        mock_subprocess_call.assert_called_once_with(['/usr/bin/systemctl', 'mask', '--now', 'insights-register.path'],
-                                                     stdout=mock_open(), stderr=mock_open())
-        expected_plugin_calls = [
-            mock.call('pre_register_consumer', name='name', facts={}),
-            mock.call('post_register_consumer', consumer=expected_consumer, facts={})
-        ]
-        self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
-
-    @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
-    @mock.patch("subprocess.call")
-    @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
-    def test_register_with_no_insights_with_systemctl_failure(self, mock_persist_consumer, mock_subprocess_call, mock_write_cache):
-        self.mock_identity.is_valid.return_value = False
-        self.mock_installed_products.format_for_server.return_value = []
-        self.mock_installed_products.tags = []
-        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
-        self.mock_cp.registerConsumer.return_value = expected_consumer
-        mock_subprocess_call.side_effect = Exception
-
-        register_service = register.RegisterService(self.mock_cp)
-        register_service.register("org", name="name", environment="environment", no_insights=True)
-
-        self.mock_cp.registerConsumer.assert_called_once_with(
-            name="name",
-            facts={},
-            owner="org",
-            environment="environment",
-            keys=None,
-            installed_products=[],
+            jwt_token=None,
             content_tags=[],
             type="system",
             role="",
@@ -313,6 +237,7 @@ class RegisterServiceTest(InjectionMockingTest):
             environment=None,
             keys=[1],
             installed_products=[],
+            jwt_token=None,
             content_tags=[],
             type="system",
             role="",
@@ -397,6 +322,7 @@ class RegisterServiceTest(InjectionMockingTest):
             environment=None,
             facts={},
             installed_products=[],
+            jwt_token=None,
             keys=None,
             name="name",
             owner="org",
