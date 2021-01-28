@@ -105,7 +105,7 @@ class FactsCollector(object):
 
 class StaticFactsCollector(FactsCollector):
     def __init__(self, static_facts=None, **kwargs):
-        super(FactsCollector, self).__init__(**kwargs)
+        super(StaticFactsCollector, self).__init__(**kwargs)
         if static_facts is None:
             static_facts = {}
         self.static_facts = static_facts

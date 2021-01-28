@@ -42,7 +42,12 @@ class TestInsightsCollector(unittest.TestCase):
 
     @patch('rhsm.https.httplib.HTTPConnection')
     def test_get_instance_id(self, MockConn):
-        self.collector = cloud_facts.CloudFactsCollector(collected_hw_info={"dmi.bios.version": "4.2.amazon"})
+        self.collector = cloud_facts.CloudFactsCollector(
+            collected_hw_info={
+                "virt.is_guest": True,
+                "dmi.bios.version": "4.2.amazon"
+            }
+        )
         self.mock_facts.return_value.read_cache_only.return_value = {}
         MockConn.return_value.getresponse.return_value.read.return_value = \
             '{"privateIp": "10.158.112.84", \
@@ -54,7 +59,12 @@ class TestInsightsCollector(unittest.TestCase):
 
     @patch('rhsm.https.httplib.HTTPConnection')
     def test_get_not_aws_instance(self, MockConn):
-        self.collector = cloud_facts.CloudFactsCollector(collected_hw_info={"dmi.bios.version": "1.0.cloud"})
+        self.collector = cloud_facts.CloudFactsCollector(
+            collected_hw_info={
+                "virt.is_guest": True,
+                "dmi.bios.version": "1.0.cloud"
+            }
+        )
         self.mock_facts.return_value.read_cache_only.return_value = {}
         MockConn.return_value.getresponse.return_value.read.return_value = \
             "{'privateIp' : '10.158.112.84', \
@@ -65,7 +75,12 @@ class TestInsightsCollector(unittest.TestCase):
 
     @patch('rhsm.https.httplib.HTTPConnection')
     def test_get_not_instance_id(self, MockConn):
-        self.collector = cloud_facts.CloudFactsCollector(collected_hw_info={"dmi.bios.version": "4.2.amazon"})
+        self.collector = cloud_facts.CloudFactsCollector(
+            collected_hw_info={
+                "virt.is_guest": True,
+                "dmi.bios.version": "4.2.amazon"
+            }
+        )
         self.mock_facts.return_value.read_cache_only.return_value = {}
         MockConn.return_value.getresponse.return_value.read.return_value = \
             "{'privateIp' : '10.158.112.84', \
@@ -76,7 +91,12 @@ class TestInsightsCollector(unittest.TestCase):
     # test ensures that exception is captured and does not impede
     @patch('rhsm.https.httplib.HTTPConnection')
     def test_get_bad_json(self, MockConn):
-        self.collector = cloud_facts.CloudFactsCollector(collected_hw_info={"dmi.bios.version": "4.2.amazon"})
+        self.collector = cloud_facts.CloudFactsCollector(
+            collected_hw_info={
+                "virt.is_guest": True,
+                "dmi.bios.version": "4.2.amazon"
+            }
+        )
         self.mock_facts.return_value.read_cache_only.return_value = {}
         MockConn.return_value.getresponse.return_value.read.return_value = \
             "other text stuff"
@@ -86,7 +106,12 @@ class TestInsightsCollector(unittest.TestCase):
     # test ensures that exception is captured and does not impede
     @patch('rhsm.https.httplib.HTTPConnection')
     def test_get_timeout(self, MockConn):
-        self.collector = cloud_facts.CloudFactsCollector(collected_hw_info={"dmi.bios.version": "4.2.amazon"})
+        self.collector = cloud_facts.CloudFactsCollector(
+            collected_hw_info={
+                "virt.is_guest": True,
+                "dmi.bios.version": "4.2.amazon"
+            }
+        )
         self.mock_facts.return_value.read_cache_only.return_value = {}
         MockConn.return_value.getresponse.side_effect = socket.timeout
         facts = self.collector.get_all()
@@ -95,7 +120,12 @@ class TestInsightsCollector(unittest.TestCase):
     # test ensures that exception is captured and does not impede
     @patch('rhsm.https.httplib.HTTPConnection')
     def test_get_http_error(self, MockConn):
-        self.collector = cloud_facts.CloudFactsCollector(collected_hw_info={"dmi.bios.version": "4.2.amazon"})
+        self.collector = cloud_facts.CloudFactsCollector(
+            collected_hw_info={
+                "virt.is_guest": True,
+                "dmi.bios.version": "4.2.amazon"
+            }
+        )
         self.mock_facts.return_value.read_cache_only.return_value = {}
         MockConn.return_value.getresponse.side_effect = httplib.HTTPException(mock.Mock(return_value={'status': 500}), 'error')
         facts = self.collector.get_all()
@@ -103,7 +133,12 @@ class TestInsightsCollector(unittest.TestCase):
 
     @patch('rhsm.https.httplib.HTTPConnection')
     def test_get_instance_id_from_cache(self, MockConn):
-        self.collector = cloud_facts.CloudFactsCollector(collected_hw_info={"dmi.bios.version": "4.2.amazon"})
+        self.collector = cloud_facts.CloudFactsCollector(
+            collected_hw_info={
+                "virt.is_guest": True,
+                "dmi.bios.version": "4.2.amazon"
+            }
+        )
         self.mock_facts.return_value.read_cache_only.return_value = {"aws_instance_id": CACHED_AWS_INSTANCE_ID}
         # does not get read if in cache already
         MockConn.return_value.getresponse.return_value.read.return_value = \
