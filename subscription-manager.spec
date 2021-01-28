@@ -243,7 +243,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.9
+Version: 1.28.10
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1453,6 +1453,15 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Jan 28 2021 William Poteat <wpoteat@redhat.com> 1.28.10-1
+- Use python3-requests and not python-requests. (jhnidek@redhat.com)
+- ENT-3289: automatic registration on public cloud (#2407) (jhnidek@redhat.com)
+- ENT-3191: Collect metadata of cloud providers (#2381) (jhnidek@redhat.com)
+- Detecting of cloud providers; ENT-3288 (#2367) (jhnidek@redhat.com)
+- 1899677: Extract of strings for translations (#2399) (wpoteat@redhat.com)
+- Syntax update to translation commands (#2395) (wpoteat@redhat.com)
+- Update project to use Weblate for translations (#2388) (wpoteat@redhat.com)
+
 * Fri Dec 11 2020 Christopher Snyder <csnyder@redhat.com> 1.28.9-1
 - 1904541: Catch ProxyException when checking available orgs
   (csnyder@redhat.com)
