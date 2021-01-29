@@ -154,7 +154,9 @@ def setup_arg_parser():
     Sets up argument parsing for the syspurpose tool.
     :return: An argparse.ArgumentParser ready to use to parse_args
     """
-    parser = argparse.ArgumentParser(prog="syspurpose", description="System Syspurpose Management Tool")
+    parser = argparse.ArgumentParser(prog="syspurpose", description="System Syspurpose Management Tool",
+                                     epilog=_("The 'syspurpose' command is deprecated and will be removed in a future major release."
+                                                " Please use the 'subscription-manager syspurpose' command going forward."))
 
     subparsers = parser.add_subparsers(help="sub-command help")
 
@@ -348,6 +350,8 @@ def main():
         print(_("WARNING: Setting syspurpose in containers has no effect."
               "Please run syspurpose on the host.\n"))
 
+    print(_("The 'syspurpose' command is deprecated and will be removed in a future major release."
+        " Please use the 'subscription-manager syspurpose' command going forward."), file=sys.stderr)
     try:
         from subscription_manager.identity import Identity
         from subscription_manager.cp_provider import CPProvider
