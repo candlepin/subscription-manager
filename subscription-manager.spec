@@ -226,7 +226,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.27.16
+Version: 1.27.17
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1421,6 +1421,14 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Jan 29 2021 William Poteat <wpoteat@redhat.com> 1.27.17-1
+- Use python3-requests and not python-requests. (jhnidek@redhat.com)
+- ENT-3289: automatic registration on public cloud (#2407) (jhnidek@redhat.com)
+- ENT-3191: Collect metadata of cloud providers (#2381) (jhnidek@redhat.com)
+- Detecting of cloud providers; ENT-3288 (#2367) (jhnidek@redhat.com)
+- Syntax update to translation commands (#2396) (wpoteat@redhat.com)
+- Update project to use Weblate for translations (#2389) (wpoteat@redhat.com)
+
 * Thu Sep 10 2020 Christopher Snyder <csnyder@redhat.com> 1.27.16-1
 - 1868734: Fix issue with syspurpose attrs. set in act. key
   (jhnidek@redhat.com)
