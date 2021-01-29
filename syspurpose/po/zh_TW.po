@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-13 14:00-0500\n"
+"POT-Creation-Date: 2021-01-29 16:42-0500\n"
 "PO-Revision-Date: 2018-11-21 02:38+0000\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: \n"
@@ -62,89 +62,96 @@ msgstr ""
 msgid "{attr} unset."
 msgstr ""
 
-#: src/syspurpose/cli.py:181
+#: src/syspurpose/cli.py:158 src/syspurpose/cli.py:353
+msgid ""
+"The 'syspurpose' command is deprecated and will be removed in a future major "
+"release. Please use the 'subscription-manager syspurpose' command going "
+"forward."
+msgstr ""
+
+#: src/syspurpose/cli.py:183
 msgid "Sets the value for the given property"
 msgstr "設置給定屬性的值"
 
-#: src/syspurpose/cli.py:187 src/syspurpose/cli.py:209
+#: src/syspurpose/cli.py:189 src/syspurpose/cli.py:211
 msgid "The name of the property to set/update"
 msgstr "要設置/更新的屬性的名稱"
 
-#: src/syspurpose/cli.py:193
+#: src/syspurpose/cli.py:195
 msgid "The value to set"
 msgstr "要設置的值"
 
-#: src/syspurpose/cli.py:202
+#: src/syspurpose/cli.py:204
 msgid "Unsets (clears) the value for the given property"
 msgstr "取消（清除）給定屬性的值"
 
-#: src/syspurpose/cli.py:216
+#: src/syspurpose/cli.py:218
 msgid "Adds the value(s) to the given property"
 msgstr "將值添加到給定屬性"
 
-#: src/syspurpose/cli.py:222 src/syspurpose/cli.py:244
+#: src/syspurpose/cli.py:224 src/syspurpose/cli.py:246
 msgid "The name of the property to update"
 msgstr "要更新的屬性的名稱"
 
-#: src/syspurpose/cli.py:228
+#: src/syspurpose/cli.py:230
 msgid "The value(s) to add"
 msgstr "要添加的值"
 
-#: src/syspurpose/cli.py:238
+#: src/syspurpose/cli.py:240
 msgid "Removes the value(s) from the given property"
 msgstr "從給定屬性中刪除值"
 
-#: src/syspurpose/cli.py:250
+#: src/syspurpose/cli.py:252
 msgid "The value(s) to remove"
 msgstr "要刪除的值"
 
-#: src/syspurpose/cli.py:260
+#: src/syspurpose/cli.py:262
 msgid "Set the system role to the system syspurpose"
 msgstr ""
 
-#: src/syspurpose/cli.py:268
+#: src/syspurpose/cli.py:270
 msgid "Clear set role"
 msgstr ""
 
-#: src/syspurpose/cli.py:276
+#: src/syspurpose/cli.py:278
 msgid "Add addons to the system syspurpose"
 msgstr ""
 
-#: src/syspurpose/cli.py:284
+#: src/syspurpose/cli.py:286
 msgid "Remove addons from the system syspurpose"
 msgstr ""
 
-#: src/syspurpose/cli.py:291
+#: src/syspurpose/cli.py:293
 msgid "Clear set addons"
 msgstr ""
 
-#: src/syspurpose/cli.py:299
+#: src/syspurpose/cli.py:301
 msgid "Set the system sla"
 msgstr "設置系統sla"
 
-#: src/syspurpose/cli.py:306
+#: src/syspurpose/cli.py:308
 msgid "Clear set sla"
 msgstr "清除設置sla"
 
-#: src/syspurpose/cli.py:314
+#: src/syspurpose/cli.py:316
 msgid "Set the system usage"
 msgstr "設置系統使用情況"
 
-#: src/syspurpose/cli.py:322
+#: src/syspurpose/cli.py:324
 msgid "Clear set usage"
 msgstr ""
 
-#: src/syspurpose/cli.py:330
+#: src/syspurpose/cli.py:332
 msgid "Show the current system syspurpose"
 msgstr "顯示當前系統syspurpose"
 
-#: src/syspurpose/cli.py:348
+#: src/syspurpose/cli.py:350
 msgid ""
 "WARNING: Setting syspurpose in containers has no effect.Please run "
 "syspurpose on the host.\n"
 msgstr "警告：在容器中設置syspurpose無效。請在主機上運行syspurpose。\n"
 
-#: src/syspurpose/cli.py:360
+#: src/syspurpose/cli.py:364
 msgid ""
 "Warning: Unable to sync system purpose with subscription management server: "
 "subscription_manager module is not available."
