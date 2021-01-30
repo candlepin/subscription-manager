@@ -342,13 +342,20 @@ static gboolean
 initial_auto_register (gpointer data)
 {
     struct CertCheckData *cert_data = data;
-    auto_register(cert_data);
-    // Add the timeout to begin waiting on interval but offset by the initial
-    // delay.
-    g_timeout_add (cert_data->interval_seconds * 1000,
-                   (GSourceFunc) auto_register, cert_data);
-    // Update timestamp
-    log_update(cert_data->interval_seconds, cert_data->next_update_file);
+    gboolean repeat_attempts;
+
+    repeat_attempts = auto_register(cert_data);
+
+    // When first attempt was not successful, then try to do other
+    // auto-registration attempts
+    if (repeat_attempts == true) {
+        // Add the timeout to begin waiting on interval but offset by the initial
+        // delay.
+        g_timeout_add(cert_data->interval_seconds * 1000,
+                      (GSourceFunc) auto_register, cert_data);
+        // Update timestamp
+        log_update(cert_data->interval_seconds, cert_data->next_update_file);
+    }
     // Return false so that the timer does
     // not run this again.
     return false;
