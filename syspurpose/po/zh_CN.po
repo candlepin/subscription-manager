@@ -1,18 +1,20 @@
 # tfu <tfu@redhat.com>, 2018. #zanata
+# Sundeep Anand <suanand@redhat.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-13 14:02-0500\n"
-"PO-Revision-Date: 2018-09-11 12:52+0000\n"
-"Last-Translator: tfu <tfu@redhat.com>\n"
-"Language-Team: Chinese (Simplified)\n"
-"Language: zh_Hans\n"
+"PO-Revision-Date: 2021-01-30 16:40+0000\n"
+"Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
+"Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
+"projects/subscription-manager/syspurpose-1-28/zh_CN/>\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Zanata 4.6.2\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #: src/syspurpose/cli.py:29
 #, python-brace-format
@@ -21,46 +23,48 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
+"警告：\"{download_value}\" 的 {attr} 当前已由权利服务器管理员为这个系统设置。\n"
+"{advice}"
 
 #: src/syspurpose/cli.py:31
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
-msgstr ""
+msgstr "如果您想覆盖服务器端的更改，请运行：{command}"
 
 #: src/syspurpose/cli.py:47
 #, python-brace-format
 msgid "Added {value} to {prop_name}."
-msgstr ""
+msgstr "把 {value} 添加到 {prop_name}。"
 
 #: src/syspurpose/cli.py:50
 #, python-brace-format
 msgid "Not adding value {value} to {prop_name}; it already exists."
-msgstr ""
+msgstr "没有把值 {value} 添加到 {prop_name}。它已存在。"
 
 #: src/syspurpose/cli.py:56 src/syspurpose/cli.py:85
 #, python-brace-format
 msgid "{attr} updated."
-msgstr ""
+msgstr "{attr} 已更新。"
 
 #: src/syspurpose/cli.py:79
 #, python-brace-format
 msgid "Removed \"{val}\" from {name}."
-msgstr ""
+msgstr "从 {name} 删除 \"{val}\"。"
 
 #: src/syspurpose/cli.py:81
 #, python-brace-format
 msgid "Not removing value \"{val}\" from {name}; it was not there."
-msgstr ""
+msgstr "没有从{name} 中删除值 \"{val}\"，它没有存在于那里。"
 
 #: src/syspurpose/cli.py:108
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
-msgstr ""
+msgstr "{attr} 设置为 \"{val}\"。"
 
 #: src/syspurpose/cli.py:129
 #, python-brace-format
 msgid "{attr} unset."
-msgstr ""
+msgstr "{attr} 取消设置。"
 
 #: src/syspurpose/cli.py:181
 msgid "Sets the value for the given property"
@@ -100,23 +104,23 @@ msgstr "要删除的值"
 
 #: src/syspurpose/cli.py:260
 msgid "Set the system role to the system syspurpose"
-msgstr ""
+msgstr "将系统角色设置为系统 syspurpose"
 
 #: src/syspurpose/cli.py:268
 msgid "Clear set role"
-msgstr ""
+msgstr "取消设置角色"
 
 #: src/syspurpose/cli.py:276
 msgid "Add addons to the system syspurpose"
-msgstr ""
+msgstr "将 addons 添加到系统 syspurpose"
 
 #: src/syspurpose/cli.py:284
 msgid "Remove addons from the system syspurpose"
-msgstr ""
+msgstr "将 addons 从系统 syspurpose 中删除"
 
 #: src/syspurpose/cli.py:291
 msgid "Clear set addons"
-msgstr ""
+msgstr "取消设置 addons"
 
 #: src/syspurpose/cli.py:299
 msgid "Set the system sla"
@@ -132,7 +136,7 @@ msgstr "设置系统的使用"
 
 #: src/syspurpose/cli.py:322
 msgid "Clear set usage"
-msgstr ""
+msgstr "取消设置 usage"
 
 #: src/syspurpose/cli.py:330
 msgid "Show the current system syspurpose"
@@ -149,11 +153,11 @@ msgstr ""
 msgid ""
 "Warning: Unable to sync system purpose with subscription management server: "
 "subscription_manager module is not available."
-msgstr ""
+msgstr "警告：无法与订阅管理服务器同步系统用途：subscription_manager 模块不可用。"
 
 #: src/syspurpose/files.py:106
 msgid "Error: Malformed data in file {}; please review and correct."
-msgstr ""
+msgstr "错误：文件 {} 中的数据格式错误；请查看并更正。"
 
 #: src/syspurpose/files.py:112
 msgid ""
@@ -168,13 +172,13 @@ msgstr ""
 msgid ""
 "Warning: Provided value \"{val}\" is not included in the list of valid "
 "values for attribute {attr}:"
-msgstr ""
+msgstr "警告：提供的值 \"{val}\" 没有包括在属性{attr} 的有效值列表中："
 
 #: src/syspurpose/files.py:438
 #, python-brace-format
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
-msgstr ""
+msgstr "警告：提供的键 \"{key}\" 没有包括在有效键列表中。"
 
 #: src/syspurpose/main.py:32
 msgid "User interrupted process"
