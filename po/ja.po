@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-13 14:00-0500\n"
+"POT-Creation-Date: 2021-01-29 16:42-0500\n"
 "PO-Revision-Date: 2018-12-12 10:40+0000\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Japanese\n"
@@ -304,10 +304,10 @@ msgstr ""
 #: src/subscription_manager/managercli.py:388
 #: src/subscription_manager/managercli.py:2483
 #: src/subscription_manager/reasons.py:109
-#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:327
-#: src/subscription_manager/utils.py:329 src/subscription_manager/utils.py:348
-#: src/subscription_manager/utils.py:349 src/subscription_manager/utils.py:350
-#: src/subscription_manager/utils.py:369
+#: src/subscription_manager/utils.py:277 src/subscription_manager/utils.py:291
+#: src/subscription_manager/utils.py:293 src/subscription_manager/utils.py:312
+#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:314
+#: src/subscription_manager/utils.py:333
 msgid "Unknown"
 msgstr "不明"
 
@@ -481,74 +481,82 @@ msgstr "状態"
 #: src/subscription_manager/gui/registergui.py:454
 #: src/subscription_manager/gui/registergui.py:1579
 #: src/subscription_manager/managercli.py:1885
-#: src/subscription_manager/utils.py:328
+#: src/subscription_manager/utils.py:292
 msgid "This system is currently not registered."
 msgstr "このシステムは現在登録されていません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
-#: src/daemons/rhsmcertd.c:90
+#: src/daemons/rhsmcertd.c:95
 msgid "deprecated, see --cert-check-interval"
 msgstr "廃止予定。--cert-check-interval を参照してください。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:93
+#: src/daemons/rhsmcertd.c:98
 msgid "interval to run cert check (in minutes)"
 msgstr "証明書チェックを実行する間隔 (分単位)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
-#: src/daemons/rhsmcertd.c:97
+#: src/daemons/rhsmcertd.c:102
 msgid "deprecated, see --auto-attach-interval"
 msgstr "廃止予定。--auto-attach-interval を参照してください。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:100
+#: src/daemons/rhsmcertd.c:105
 msgid "interval to run auto-attach (in minutes)"
 msgstr "自動割り当てを実行する間隔 (分単位)"
 
+#: src/daemons/rhsmcertd.c:108
+msgid "interval to run auto-registration (in minutes)"
+msgstr ""
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:103
+#: src/daemons/rhsmcertd.c:111
 msgid "run the initial checks immediately, with no delay"
 msgstr "初回チェックを、遅延なしで直ちに実行"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:106 src/rhsm_icon/rhsm_icon.c:81
+#: src/daemons/rhsmcertd.c:114 src/rhsm_icon/rhsm_icon.c:81
 msgid "show debug messages"
 msgstr "デバッグメッセージの表示"
 
-#: src/daemons/rhsmcertd.c:108
+#: src/daemons/rhsmcertd.c:116
 msgid "do not add an offset to the initial checks."
 msgstr "オフセットを初回チェックに追加しないでください。"
 
+#: src/daemons/rhsmcertd.c:119
+msgid "try to perform auto-registration."
+msgstr ""
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:372
+#: src/daemons/rhsmcertd.c:445
 #, c-format
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "詳しい情報を参照するには、rhsmcertd --help を実行してください\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:415
+#: src/daemons/rhsmcertd.c:505
 msgid "Wrong number of arguments specified.\n"
 msgstr "無効な引数番号が指定されています。\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:479
+#: src/daemons/rhsmcertd.c:581
 msgid "Invalid argument specified.\n"
 msgstr "無効な引数が指定されています。\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:485
+#: src/daemons/rhsmcertd.c:587
 #, c-format
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "警告: 非推奨の CLI 引数が使用されています。\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:500
+#: src/daemons/rhsmcertd.c:602
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "無効なオプション: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:514
+#: src/daemons/rhsmcertd.c:616
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "無効な引数が指定されています: %s\n"
@@ -1489,18 +1497,18 @@ msgstr ""
 msgid "Error: this system is not registered"
 msgstr "エラー: このシステムは登録されていません"
 
-#: src/rhsmlib/services/register.py:140
+#: src/rhsmlib/services/register.py:142
 msgid "This system is already registered. Add force to options to override."
 msgstr ""
 "このシステムは登録済みです。上書きするには、オプションに force を追加します。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsmlib/services/register.py:143
+#: src/rhsmlib/services/register.py:145
 #: src/subscription_manager/managercli.py:1583
 msgid "Error: system name can not be empty."
 msgstr "エラー: システム名は、空白のままにはできません。"
 
-#: src/rhsmlib/services/register.py:145
+#: src/rhsmlib/services/register.py:147
 #: src/subscription_manager/managercli.py:1602
 msgid ""
 "Error: Can not force registration while attempting to recover registration "
@@ -1512,31 +1520,31 @@ msgstr ""
 "force を 使わないでやり直してみてください。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsmlib/services/register.py:153
+#: src/rhsmlib/services/register.py:155
 #: src/subscription_manager/managercli.py:1594
 msgid "Error: Must specify an activation key"
 msgstr "エラー: アクティベーションキーを指定する必要があります。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsmlib/services/register.py:155
+#: src/rhsmlib/services/register.py:157
 #: src/subscription_manager/managercli.py:1585
 msgid "Error: Activation keys do not require user credentials."
 msgstr ""
 "エラー: アクティベーションキーには、ユーザーの認証情報は必要ありません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
-#: src/rhsmlib/services/register.py:157
+#: src/rhsmlib/services/register.py:159
 #: src/subscription_manager/managercli.py:1587
 msgid "Error: Activation keys can not be used with previously registered IDs."
 msgstr "エラー: アクティベーションキーは、以前登録した ID には使用できません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsmlib/services/register.py:160
+#: src/rhsmlib/services/register.py:162
 #: src/subscription_manager/managercli.py:1589
 msgid "Error: Activation keys do not allow environments to be specified."
 msgstr "エラー: アクティベーションキーでは、環境を指定できません。"
 
-#: src/rhsmlib/services/register.py:164
+#: src/rhsmlib/services/register.py:169
 msgid "Error: Missing username or password."
 msgstr "エラー: ユーザー名またはパスワードがありません。"
 
@@ -1703,7 +1711,7 @@ msgstr ""
 "ヒント: ログインまたはパスワードをお忘れの場合は、https://redhat.com/"
 "forgot_password で確認してください。"
 
-#: src/subscription_manager/cache.py:162
+#: src/subscription_manager/cache.py:161
 #, python-format
 msgid ""
 "consumer_uuid=%s is not a valid consumer_uuid. Not attempting to sync %s "
@@ -1713,7 +1721,7 @@ msgstr ""
 "バーの同期は試行していません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/cache.py:187
+#: src/subscription_manager/cache.py:186
 msgid ""
 "Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
 "more details."
@@ -1845,7 +1853,7 @@ msgstr "不正な CA 証明書です: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/exceptions.py:38
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:102
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:167
 msgid "Your identity certificate has expired"
 msgstr "ユーザーの識別証明書は期限が切れています"
 
@@ -6498,12 +6506,12 @@ msgid "Error uploading package profile: %s\n"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:83
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:148
 msgid "Updating entitlement certificates & repositories"
 msgstr "エンタイトルメント証明書とリポジトリーを更新中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:157
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "エンタイトルメント証明書とリポジトリーを更新できません"
 
@@ -6519,7 +6527,7 @@ msgid "launches the registration dialog on startup"
 msgstr "起動時に登録のダイアログを開始する"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
-#: src/subscription_manager/utils.py:429
+#: src/subscription_manager/utils.py:393
 msgid "and"
 msgstr "および"
 

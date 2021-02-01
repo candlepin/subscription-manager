@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-13 14:00-0500\n"
+"POT-Creation-Date: 2021-01-29 16:42-0500\n"
 "PO-Revision-Date: 2015-09-25 03:35-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -327,10 +327,10 @@ msgstr ""
 #: src/subscription_manager/managercli.py:388
 #: src/subscription_manager/managercli.py:2483
 #: src/subscription_manager/reasons.py:109
-#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:327
-#: src/subscription_manager/utils.py:329 src/subscription_manager/utils.py:348
-#: src/subscription_manager/utils.py:349 src/subscription_manager/utils.py:350
-#: src/subscription_manager/utils.py:369
+#: src/subscription_manager/utils.py:277 src/subscription_manager/utils.py:291
+#: src/subscription_manager/utils.py:293 src/subscription_manager/utils.py:312
+#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:314
+#: src/subscription_manager/utils.py:333
 msgid "Unknown"
 msgstr "தெரியாத"
 
@@ -510,86 +510,94 @@ msgstr "நிலை"
 #: src/subscription_manager/gui/registergui.py:454
 #: src/subscription_manager/gui/registergui.py:1579
 #: src/subscription_manager/managercli.py:1885
-#: src/subscription_manager/utils.py:328
+#: src/subscription_manager/utils.py:292
 msgid "This system is currently not registered."
 msgstr "இந்த கணினி தற்போது பதிவுசெய்யப்படவில்லை."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:90
+#: src/daemons/rhsmcertd.c:95
 msgid "deprecated, see --cert-check-interval"
 msgstr "வழக்கழிந்தது, --cert-check-interval ஐப் பார்க்கவும்"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:93
+#: src/daemons/rhsmcertd.c:98
 msgid "interval to run cert check (in minutes)"
 msgstr "சான்றிதழ் சோதித்தலை இயக்குவதற்கான இடைவெளி (நிமிடங்களில்)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:97
+#: src/daemons/rhsmcertd.c:102
 msgid "deprecated, see --auto-attach-interval"
 msgstr "வழக்கழிந்தது, --auto-attach-interval ஐக் காணவும்"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:100
+#: src/daemons/rhsmcertd.c:105
 msgid "interval to run auto-attach (in minutes)"
 msgstr "தானியக்க இணைப்பை இயக்குவதற்கான இடைவெளி (நிமிடங்காளில்)"
 
+#: src/daemons/rhsmcertd.c:108
+msgid "interval to run auto-registration (in minutes)"
+msgstr ""
+
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:103
+#: src/daemons/rhsmcertd.c:111
 msgid "run the initial checks immediately, with no delay"
 msgstr "தொடக்க சோதனைகளை உடனடியாக இயக்கு, தாமதிக்க வேண்டாம்"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:106 src/rhsm_icon/rhsm_icon.c:81
+#: src/daemons/rhsmcertd.c:114 src/rhsm_icon/rhsm_icon.c:81
 msgid "show debug messages"
 msgstr "வழுநீக்கல் செய்திகளை காட்டு"
 
-#: src/daemons/rhsmcertd.c:108
+#: src/daemons/rhsmcertd.c:116
 msgid "do not add an offset to the initial checks."
+msgstr ""
+
+#: src/daemons/rhsmcertd.c:119
+msgid "try to perform auto-registration."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:372
+#: src/daemons/rhsmcertd.c:445
 #, c-format
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "மேலும் தகவலுக்கு இந்தக் கட்டளையை இயக்கவும்: rhsmcertd --help\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:415
+#: src/daemons/rhsmcertd.c:505
 msgid "Wrong number of arguments specified.\n"
 msgstr "குறிப்பிடப்பட்ட அளவுருக்களின் எண்ணிக்கை தவறு.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:479
+#: src/daemons/rhsmcertd.c:581
 msgid "Invalid argument specified.\n"
 msgstr "தவறான அளவுரு குறிப்பிடப்பட்டது.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:485
+#: src/daemons/rhsmcertd.c:587
 #, c-format
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "எச்சரிக்கை: வழக்கொழிந்த CLI அளவுருக்கள் பயன்படுத்தப்படுகின்றன.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:500
+#: src/daemons/rhsmcertd.c:602
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "தவறான விருப்பம்: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:514
+#: src/daemons/rhsmcertd.c:616
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "தவறான அளவுரு குறிப்பிடப்பட்டது: %s\n"
@@ -1651,18 +1659,18 @@ msgstr ""
 msgid "Error: this system is not registered"
 msgstr ""
 
-#: src/rhsmlib/services/register.py:140
+#: src/rhsmlib/services/register.py:142
 msgid "This system is already registered. Add force to options to override."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:143
+#: src/rhsmlib/services/register.py:145
 #: src/subscription_manager/managercli.py:1583
 msgid "Error: system name can not be empty."
 msgstr "பிழை: கணினி பெயர் காலியாக இருக்க முடியாது."
 
-#: src/rhsmlib/services/register.py:145
+#: src/rhsmlib/services/register.py:147
 #: src/subscription_manager/managercli.py:1602
 msgid ""
 "Error: Can not force registration while attempting to recover registration "
@@ -1672,21 +1680,21 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:153
+#: src/rhsmlib/services/register.py:155
 #: src/subscription_manager/managercli.py:1594
 msgid "Error: Must specify an activation key"
 msgstr "பிழை: செயல்பாட்டு விசையை குறிப்பிட வேண்டும்."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:155
+#: src/rhsmlib/services/register.py:157
 #: src/subscription_manager/managercli.py:1585
 msgid "Error: Activation keys do not require user credentials."
 msgstr "பிழை: செயல்பாட்டு விசைகளுக்கு பயனர் சான்றுகள் தேவைப்படவில்லை."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:157
+#: src/rhsmlib/services/register.py:159
 #: src/subscription_manager/managercli.py:1587
 msgid "Error: Activation keys can not be used with previously registered IDs."
 msgstr ""
@@ -1694,12 +1702,12 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:160
+#: src/rhsmlib/services/register.py:162
 #: src/subscription_manager/managercli.py:1589
 msgid "Error: Activation keys do not allow environments to be specified."
 msgstr "பிழை: செயல்பாட்டு விசைகளுக்கு சூழல்களைக் குறிப்பிட முடியாது."
 
-#: src/rhsmlib/services/register.py:164
+#: src/rhsmlib/services/register.py:169
 msgid "Error: Missing username or password."
 msgstr ""
 
@@ -1884,7 +1892,7 @@ msgid ""
 "forgot_password"
 msgstr ""
 
-#: src/subscription_manager/cache.py:162
+#: src/subscription_manager/cache.py:161
 #, python-format
 msgid ""
 "consumer_uuid=%s is not a valid consumer_uuid. Not attempting to sync %s "
@@ -1893,7 +1901,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cache.py:187
+#: src/subscription_manager/cache.py:186
 msgid ""
 "Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
 "more details."
@@ -2048,7 +2056,7 @@ msgstr "மோசமான CA சான்றிதழ்: %s"
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/exceptions.py:38
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:102
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:167
 msgid "Your identity certificate has expired"
 msgstr "உங்கள் அடையாள சான்றிதழ் காலாவதியாகிவிட்டது"
 
@@ -7251,13 +7259,13 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:83
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:148
 msgid "Updating entitlement certificates & repositories"
 msgstr "உரிம சான்றிதழ்களையும் தொகுப்பதிவகங்களையும் புதுப்பிக்கிறது"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:157
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "உரிம சான்றிதழ்களையும் தொகுப்பதிவகங்களையும் புதுப்பிக்க முடியவில்லை"
 
@@ -7276,7 +7284,7 @@ msgstr "தொடக்கத்தில் பதிவுசெய்தல�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/utils.py:429
+#: src/subscription_manager/utils.py:393
 msgid "and"
 msgstr "மற்றும்"
 

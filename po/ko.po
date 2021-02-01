@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-13 14:00-0500\n"
+"POT-Creation-Date: 2021-01-29 16:42-0500\n"
 "PO-Revision-Date: 2018-12-12 10:40+0000\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Korean\n"
@@ -303,10 +303,10 @@ msgstr ""
 #: src/subscription_manager/managercli.py:388
 #: src/subscription_manager/managercli.py:2483
 #: src/subscription_manager/reasons.py:109
-#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:327
-#: src/subscription_manager/utils.py:329 src/subscription_manager/utils.py:348
-#: src/subscription_manager/utils.py:349 src/subscription_manager/utils.py:350
-#: src/subscription_manager/utils.py:369
+#: src/subscription_manager/utils.py:277 src/subscription_manager/utils.py:291
+#: src/subscription_manager/utils.py:293 src/subscription_manager/utils.py:312
+#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:314
+#: src/subscription_manager/utils.py:333
 msgid "Unknown"
 msgstr "알 수 없음"
 
@@ -480,74 +480,82 @@ msgstr "상태"
 #: src/subscription_manager/gui/registergui.py:454
 #: src/subscription_manager/gui/registergui.py:1579
 #: src/subscription_manager/managercli.py:1885
-#: src/subscription_manager/utils.py:328
+#: src/subscription_manager/utils.py:292
 msgid "This system is currently not registered."
 msgstr "현재 시스템은 등록되어 있지 않습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:90
+#: src/daemons/rhsmcertd.c:95
 msgid "deprecated, see --cert-check-interval"
 msgstr "폐지 예정, --cert-check-interval 참조"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:93
+#: src/daemons/rhsmcertd.c:98
 msgid "interval to run cert check (in minutes)"
 msgstr "인증서 확인을 실행하는 간격 (분 단위)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:97
+#: src/daemons/rhsmcertd.c:102
 msgid "deprecated, see --auto-attach-interval"
 msgstr "폐지 예정, --auto-attach-interval 참조"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:100
+#: src/daemons/rhsmcertd.c:105
 msgid "interval to run auto-attach (in minutes)"
 msgstr "자동 첨부를 실행하는 간격 (분 단위)"
 
+#: src/daemons/rhsmcertd.c:108
+msgid "interval to run auto-registration (in minutes)"
+msgstr ""
+
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:103
+#: src/daemons/rhsmcertd.c:111
 msgid "run the initial checks immediately, with no delay"
 msgstr "지연 없이 즉시 초기 검사를 실행합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:106 src/rhsm_icon/rhsm_icon.c:81
+#: src/daemons/rhsmcertd.c:114 src/rhsm_icon/rhsm_icon.c:81
 msgid "show debug messages"
 msgstr "디버그 메세지 보기"
 
-#: src/daemons/rhsmcertd.c:108
+#: src/daemons/rhsmcertd.c:116
 msgid "do not add an offset to the initial checks."
 msgstr "오프셋을 처음 확인에 추가하지 마십시오."
 
+#: src/daemons/rhsmcertd.c:119
+msgid "try to perform auto-registration."
+msgstr ""
+
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:372
+#: src/daemons/rhsmcertd.c:445
 #, c-format
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "자세한 정보를 보려면 rhsmcertd --help를 실행하십시오\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:415
+#: src/daemons/rhsmcertd.c:505
 msgid "Wrong number of arguments specified.\n"
 msgstr "잘못된 인수 번호가 지정되어 있습니다.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:479
+#: src/daemons/rhsmcertd.c:581
 msgid "Invalid argument specified.\n"
 msgstr "잘못된 인수가 지정되어 있습니다.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:485
+#: src/daemons/rhsmcertd.c:587
 #, c-format
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "경고: 사용권장되지 않는 CLI 인수가 사용되고 있습니다.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:500
+#: src/daemons/rhsmcertd.c:602
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "잘못된 옵션: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:514
+#: src/daemons/rhsmcertd.c:616
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "잘못된 인수가 지정됨: %s\n"
@@ -1484,18 +1492,18 @@ msgstr "오류: --pool-only는  --available 또는 --consumed와만 사용 가�
 msgid "Error: this system is not registered"
 msgstr "오류: 이 시스템은 등록되어 있지 않습니다"
 
-#: src/rhsmlib/services/register.py:140
+#: src/rhsmlib/services/register.py:142
 msgid "This system is already registered. Add force to options to override."
 msgstr ""
 "이 시스템은 이미 등록되어 있습니다. 덮어쓰기하려면 옵션에 force를 추가합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:143
+#: src/rhsmlib/services/register.py:145
 #: src/subscription_manager/managercli.py:1583
 msgid "Error: system name can not be empty."
 msgstr "오류: 시스템 이름은 비워둘 수 없습니다."
 
-#: src/rhsmlib/services/register.py:145
+#: src/rhsmlib/services/register.py:147
 #: src/subscription_manager/managercli.py:1602
 msgid ""
 "Error: Can not force registration while attempting to recover registration "
@@ -1507,30 +1515,30 @@ msgstr ""
 "이 다시 실행합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:153
+#: src/rhsmlib/services/register.py:155
 #: src/subscription_manager/managercli.py:1594
 msgid "Error: Must specify an activation key"
 msgstr "오류: 활성키를 지정해야 합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:155
+#: src/rhsmlib/services/register.py:157
 #: src/subscription_manager/managercli.py:1585
 msgid "Error: Activation keys do not require user credentials."
 msgstr "오류: 활성키는 사용자 인증을 필요로 하지 않습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:157
+#: src/rhsmlib/services/register.py:159
 #: src/subscription_manager/managercli.py:1587
 msgid "Error: Activation keys can not be used with previously registered IDs."
 msgstr "오류: 활성키는 이전에 등록된 ID와 함께 사용할 수 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:160
+#: src/rhsmlib/services/register.py:162
 #: src/subscription_manager/managercli.py:1589
 msgid "Error: Activation keys do not allow environments to be specified."
 msgstr "오류: 활성키로 환경을 지정할 수 없습니다."
 
-#: src/rhsmlib/services/register.py:164
+#: src/rhsmlib/services/register.py:169
 msgid "Error: Missing username or password."
 msgstr "오류: 사용자 이름 또는 암호가 없습니다."
 
@@ -1690,7 +1698,7 @@ msgstr ""
 "정보: 로그인 또는 암호를 잊어버리셨습니까? https://redhat.com/"
 "forgot_password 에서 찾아보십시오"
 
-#: src/subscription_manager/cache.py:162
+#: src/subscription_manager/cache.py:161
 #, python-format
 msgid ""
 "consumer_uuid=%s is not a valid consumer_uuid. Not attempting to sync %s "
@@ -1700,7 +1708,7 @@ msgstr ""
 "려고 시도하지 않습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cache.py:187
+#: src/subscription_manager/cache.py:186
 msgid ""
 "Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
 "more details."
@@ -1829,7 +1837,7 @@ msgstr "잘못된 CA 인증서: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:38
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:102
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:167
 msgid "Your identity certificate has expired"
 msgstr "ID 인증서가 만료되었습니다"
 
@@ -6469,12 +6477,12 @@ msgid "Error uploading package profile: %s\n"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:83
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:148
 msgid "Updating entitlement certificates & repositories"
 msgstr "인타이틀먼트 인증서 & 리포지터리 업데이트하기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:157
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "인타이틀먼트 인증서 및 리포지터리를 업데이트할 수 없음"
 
@@ -6490,7 +6498,7 @@ msgid "launches the registration dialog on startup"
 msgstr "시작 시 등록 대화 상자를 실행"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/utils.py:429
+#: src/subscription_manager/utils.py:393
 msgid "and"
 msgstr "및"
 

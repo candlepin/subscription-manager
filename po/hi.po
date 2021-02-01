@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-13 14:00-0500\n"
+"POT-Creation-Date: 2021-01-29 16:42-0500\n"
 "PO-Revision-Date: 2015-09-25 02:52-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Hindi <kde-i18n-doc@kde.org>\n"
@@ -328,10 +328,10 @@ msgstr ""
 #: src/subscription_manager/managercli.py:388
 #: src/subscription_manager/managercli.py:2483
 #: src/subscription_manager/reasons.py:109
-#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:327
-#: src/subscription_manager/utils.py:329 src/subscription_manager/utils.py:348
-#: src/subscription_manager/utils.py:349 src/subscription_manager/utils.py:350
-#: src/subscription_manager/utils.py:369
+#: src/subscription_manager/utils.py:277 src/subscription_manager/utils.py:291
+#: src/subscription_manager/utils.py:293 src/subscription_manager/utils.py:312
+#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:314
+#: src/subscription_manager/utils.py:333
 msgid "Unknown"
 msgstr "अज्ञात"
 
@@ -511,86 +511,94 @@ msgstr "प्रस्थिति"
 #: src/subscription_manager/gui/registergui.py:454
 #: src/subscription_manager/gui/registergui.py:1579
 #: src/subscription_manager/managercli.py:1885
-#: src/subscription_manager/utils.py:328
+#: src/subscription_manager/utils.py:292
 msgid "This system is currently not registered."
 msgstr "यह तंत्र अभी पंजीकृत नहीं है."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/daemons/rhsmcertd.c:90
+#: src/daemons/rhsmcertd.c:95
 msgid "deprecated, see --cert-check-interval"
 msgstr "पदावनत, --cert-check-interval देखें"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:93
+#: src/daemons/rhsmcertd.c:98
 msgid "interval to run cert check (in minutes)"
 msgstr "प्रमाणपत्र जाँच  (मिनट में)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/daemons/rhsmcertd.c:97
+#: src/daemons/rhsmcertd.c:102
 msgid "deprecated, see --auto-attach-interval"
 msgstr "पदावनत, --auto-attach-interval देखें"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:100
+#: src/daemons/rhsmcertd.c:105
 msgid "interval to run auto-attach (in minutes)"
 msgstr "auto-attach (मिनट में) को चलाने की जरूरत"
 
+#: src/daemons/rhsmcertd.c:108
+msgid "interval to run auto-registration (in minutes)"
+msgstr ""
+
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:103
+#: src/daemons/rhsmcertd.c:111
 msgid "run the initial checks immediately, with no delay"
 msgstr "आरंभिक जाँच तत्काल चलाएँ, बिना किसी विलंब के"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:106 src/rhsm_icon/rhsm_icon.c:81
+#: src/daemons/rhsmcertd.c:114 src/rhsm_icon/rhsm_icon.c:81
 msgid "show debug messages"
 msgstr "डिबग संदेश दिखाएँ"
 
-#: src/daemons/rhsmcertd.c:108
+#: src/daemons/rhsmcertd.c:116
 msgid "do not add an offset to the initial checks."
+msgstr ""
+
+#: src/daemons/rhsmcertd.c:119
+msgid "try to perform auto-registration."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:372
+#: src/daemons/rhsmcertd.c:445
 #, c-format
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "अधिक जानकारी के लिए चलाएँ: rhsmcertd --help\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:415
+#: src/daemons/rhsmcertd.c:505
 msgid "Wrong number of arguments specified.\n"
 msgstr "निर्दिष्ट वितर्क की गलत संख्या.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:479
+#: src/daemons/rhsmcertd.c:581
 msgid "Invalid argument specified.\n"
 msgstr "अवैध वितर्क निर्दिष्ट.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:485
+#: src/daemons/rhsmcertd.c:587
 #, c-format
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "चेतावनी: पदावनत CLI वितर्क का प्रयोग हो रहा है.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:500
+#: src/daemons/rhsmcertd.c:602
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "अवैध विकल्प: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/daemons/rhsmcertd.c:514
+#: src/daemons/rhsmcertd.c:616
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "अवैध वितर्क निर्दिष्ट: %s\n"
@@ -1628,18 +1636,18 @@ msgstr "त्रुटि: --available और/या --consumed के सा�
 msgid "Error: this system is not registered"
 msgstr ""
 
-#: src/rhsmlib/services/register.py:140
+#: src/rhsmlib/services/register.py:142
 msgid "This system is already registered. Add force to options to override."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsmlib/services/register.py:143
+#: src/rhsmlib/services/register.py:145
 #: src/subscription_manager/managercli.py:1583
 msgid "Error: system name can not be empty."
 msgstr "त्रुटि: तंत्र नाम खाली नहीं हो सकता है."
 
-#: src/rhsmlib/services/register.py:145
+#: src/rhsmlib/services/register.py:147
 #: src/subscription_manager/managercli.py:1602
 msgid ""
 "Error: Can not force registration while attempting to recover registration "
@@ -1649,33 +1657,33 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/rhsmlib/services/register.py:153
+#: src/rhsmlib/services/register.py:155
 #: src/subscription_manager/managercli.py:1594
 msgid "Error: Must specify an activation key"
 msgstr "त्रुटि: किसी सक्रियकरण कुंजी के साथ जरूर निर्दिष्ट करें."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsmlib/services/register.py:155
+#: src/rhsmlib/services/register.py:157
 #: src/subscription_manager/managercli.py:1585
 msgid "Error: Activation keys do not require user credentials."
 msgstr "त्रुटि: सक्रिय करण कुंजी के लिए उपयोक्ता श्रेय की जरूरत नहीं होती है."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/rhsmlib/services/register.py:157
+#: src/rhsmlib/services/register.py:159
 #: src/subscription_manager/managercli.py:1587
 msgid "Error: Activation keys can not be used with previously registered IDs."
 msgstr "त्रुटि: सक्रियकरण कुंजी पहले से प्रतिबंधित आईडी के साथ प्रयोग नहीं किया जा सकता है."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsmlib/services/register.py:160
+#: src/rhsmlib/services/register.py:162
 #: src/subscription_manager/managercli.py:1589
 msgid "Error: Activation keys do not allow environments to be specified."
 msgstr "त्रुटि: सक्रियकरण कुँजी निर्दिष्ट करने के लिए वातावरण को अनुमति नहीं देता है."
 
-#: src/rhsmlib/services/register.py:164
+#: src/rhsmlib/services/register.py:169
 msgid "Error: Missing username or password."
 msgstr ""
 
@@ -1850,7 +1858,7 @@ msgid ""
 "forgot_password"
 msgstr ""
 
-#: src/subscription_manager/cache.py:162
+#: src/subscription_manager/cache.py:161
 #, python-format
 msgid ""
 "consumer_uuid=%s is not a valid consumer_uuid. Not attempting to sync %s "
@@ -1859,7 +1867,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cache.py:187
+#: src/subscription_manager/cache.py:186
 msgid ""
 "Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
 "more details."
@@ -2010,7 +2018,7 @@ msgstr "खराब CA प्रमाणपत्र: %s"
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
 #: src/subscription_manager/exceptions.py:38
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:102
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:167
 msgid "Your identity certificate has expired"
 msgstr "आपके पहचाम प्रमाणपत्र का समय समाप्त हो गया है"
 
@@ -6989,13 +6997,13 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:83
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:148
 msgid "Updating entitlement certificates & repositories"
 msgstr "एंटाइटेलमेंट प्रमाणपत्र व रिपोजिटरी अद्यतन कर रहा है"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:157
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "एंटाइटेलमेंट प्रमाणपत्र और रिपोजिटरी अद्यतन करने में असमर्थ"
 
@@ -7014,7 +7022,7 @@ msgstr "आरंभ पर पंजीयन संवाद लॉन्च �
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/subscription_manager/utils.py:429
+#: src/subscription_manager/utils.py:393
 msgid "and"
 msgstr "और"
 
