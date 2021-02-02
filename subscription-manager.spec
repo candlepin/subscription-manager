@@ -244,7 +244,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.29.6
+Version: 1.29.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1506,6 +1506,13 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Feb 02 2021 Christopher Snyder <csnyder@redhat.com> 1.29.7-1
+- 1878133: Deprecation message for syspurpose (#2421) (wpoteat@redhat.com)
+- 1922173: Repeat auto-register only, when first attempt fail (#2420)
+  (jhnidek@redhat.com)
+- Use python3-requests and not python-requests. (#2419) (jhnidek@redhat.com)
+- Fix issue with auto-registration interval. (jhnidek@redhat.com)
+
 * Wed Jan 27 2021 Christopher Snyder <csnyder@redhat.com> 1.29.6-1
 - Improved loggin of rhsmcertd and spec file updated (#2415)
   (jhnidek@redhat.com)
