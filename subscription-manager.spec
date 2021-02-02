@@ -243,7 +243,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.10
+Version: 1.28.11
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1453,6 +1453,12 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Feb 02 2021 Christopher Snyder <csnyder@redhat.com> 1.28.11-1
+- Translated using Weblate (Japanese) (suanand@redhat.com)
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (suanand@redhat.com)
+- 1922173: Repeat auto-register only, when first attempt fail (#2420)
+  (jhnidek@redhat.com)
+
 * Thu Jan 28 2021 William Poteat <wpoteat@redhat.com> 1.28.10-1
 - Use python3-requests and not python-requests. (jhnidek@redhat.com)
 - ENT-3289: automatic registration on public cloud (#2407) (jhnidek@redhat.com)
