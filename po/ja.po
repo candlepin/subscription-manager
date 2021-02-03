@@ -4,13 +4,14 @@
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # myamamot <myamamot@redhat.com>, 2018. #zanata
 # Ludek Janda <ljanda@redhat.com>, 2021.
+# Sundeep Anand <suanand@redhat.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-13 14:00-0500\n"
-"PO-Revision-Date: 2021-02-02 09:36+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"PO-Revision-Date: 2021-02-03 09:40+0000\n"
+"Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-master/ja/>\n"
 "Language: ja\n"
@@ -4551,7 +4552,7 @@ msgstr "エラー: --username または --token のどちらかを指定する�
 #, python-brace-format
 msgid ""
 "Error: you must register or specify --username and --password to list {attr}"
-msgstr "エラー: サービスレベルを表示するには、--username と --password を指定するか、登録する必要があります"
+msgstr "エラー: リスト {attr} に、--username と --password を指定または登録する必要があります"
 
 #: src/subscription_manager/managercli.py:729
 #, python-brace-format
