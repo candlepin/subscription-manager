@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-29 16:42-0500\n"
+"POT-Creation-Date: 2021-02-03 14:20-0500\n"
 "PO-Revision-Date: 2021-02-03 09:40+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
@@ -138,7 +138,8 @@ msgid ""
 "availability, and stability with Red Hat Insights — with predictive "
 "analytics, avoid problems and unplanned downtime in your Red Hat environment."
 msgstr ""
-"使用 Red Hat Insights 主动识别和补救对安全、性能、可用性和稳定性的威胁 -- 通过预测分析，避免在红帽环境中出现问题和计划外的停机。"
+"使用 Red Hat Insights 主动识别和补救对安全、性能、可用性和稳定性的威胁 -- 通"
+"过预测分析，避免在红帽环境中出现问题和计划外的停机。"
 
 #: cockpit/src/insights.jsx:122 cockpit/src/subscriptions-register.jsx:93
 msgid "The $0 package will be installed."
@@ -230,7 +231,9 @@ msgstr "与 Insights 断开"
 msgid ""
 "If you disconnect this system from Insights, it will no longer report it's "
 "Insights status in Red Hat Cloud or Satellite."
-msgstr "如果把这个系统与 Insights 断开，它将不再在 Red Hat Cloud 或 Satellite 中报告它的 Insights 状态。"
+msgstr ""
+"如果把这个系统与 Insights 断开，它将不再在 Red Hat Cloud 或 Satellite 中报告"
+"它的 Insights 状态。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/insights.jsx:417 cockpit/src/insights.jsx:436
@@ -531,35 +534,35 @@ msgid "try to perform auto-registration."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:445
+#: src/daemons/rhsmcertd.c:452
 #, c-format
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "有关详情请运行：rhsmcertd --help\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:505
+#: src/daemons/rhsmcertd.c:512
 msgid "Wrong number of arguments specified.\n"
 msgstr "指定的参数数目错误。\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:581
+#: src/daemons/rhsmcertd.c:588
 msgid "Invalid argument specified.\n"
 msgstr "指定无效参数。\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:587
+#: src/daemons/rhsmcertd.c:594
 #, c-format
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "警告：使用过时的 CLI 参数。\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:602
+#: src/daemons/rhsmcertd.c:609
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "无效选项：%s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:616
+#: src/daemons/rhsmcertd.c:623
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "指定参数无效：%s\n"
@@ -594,7 +597,8 @@ msgid ""
 "use subscription-manager to register.\n"
 msgstr ""
 "\n"
-"本系统尚未在 Red Hat Subscription Management 中注册。可使用 subscription-manager 进行注册。\n"
+"本系统尚未在 Red Hat Subscription Management 中注册。可使用 subscription-"
+"manager 进行注册。\n"
 
 #: src/dnf-plugins/subscription-manager.py:53
 msgid ""
@@ -604,8 +608,8 @@ msgid ""
 "subscriptions.\n"
 msgstr ""
 "\n"
-"本系统已在 Red Hat Subscription Management 中注册，但没有接收更新。可使用 subscription-manager "
-"分配订阅。\n"
+"本系统已在 Red Hat Subscription Management 中注册，但没有接收更新。可使用 "
+"subscription-manager 分配订阅。\n"
 
 #: src/dnf-plugins/subscription-manager.py:86
 msgid "Not root, Subscription Management repositories not updated"
@@ -636,7 +640,9 @@ msgstr "订阅管理器在容器模式中运行。"
 msgid ""
 "Upload combined profile to Satellite server (list of installed rpms, enabled "
 "repositories and modules"
-msgstr "将组合的配置文件上传到 Satellite 服务器（已安装的rpm、已启用的仓库和模块的列表）"
+msgstr ""
+"将组合的配置文件上传到 Satellite 服务器（已安装的rpm、已启用的仓库和模块的列"
+"表）"
 
 #: src/dnf-plugins/upload-profile.py:43
 #: src/subscription_manager/scripts/package_profile_upload.py:39
@@ -4380,7 +4386,8 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
-"警告：\"{download_value}\" 的 {attr} 当前已由权利服务器管理员为这个系统设置。\n"
+"警告：\"{download_value}\" 的 {attr} 当前已由权利服务器管理员为这个系统设"
+"置。\n"
 "{advice}"
 
 #: src/subscription_manager/managercli.py:203
@@ -4501,8 +4508,8 @@ msgstr "从列表中删除一个项（{attr}）。"
 
 #: src/subscription_manager/managercli.py:617
 #, python-brace-format
-msgid "how this system's current {attr}"
-msgstr "本系统目前的 {attr}"
+msgid "show this system's current {attr}"
+msgstr ""
 
 #: src/subscription_manager/managercli.py:624
 #, python-brace-format
@@ -5649,7 +5656,8 @@ msgstr "显示这个系统消耗的订阅"
 msgid ""
 "shows only subscriptions matching the specified service level; only used "
 "with --available and --consumed"
-msgstr "只显示与指定服务等级相匹配的订阅。只能与 --available 和 --consumed 合用"
+msgstr ""
+"只显示与指定服务等级相匹配的订阅。只能与 --available 和 --consumed 合用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:2943
@@ -5910,7 +5918,8 @@ msgstr "系统状态详情"
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status.\n"
-msgstr "内容访问模式设置为简单内容访问。无论订阅状态如何，该主机都可以访问内容。\n"
+msgstr ""
+"内容访问模式设置为简单内容访问。无论订阅状态如何，该主机都可以访问内容。\n"
 
 #: src/subscription_manager/managercli.py:3357
 #, python-format
@@ -6209,7 +6218,8 @@ msgstr "使用 Subscription Manager 注册时请不要执行 auto-attach 选项"
 msgid ""
 "service level to follow when attaching subscriptions, for no service level "
 "use --servicelevel=\"\""
-msgstr "附加订阅时遵守的服务等级。如果没有服务等级，请使用 --service-level=\"\""
+msgstr ""
+"附加订阅时遵守的服务等级。如果没有服务等级，请使用 --service-level=\"\""
 
 #: src/subscription_manager/migrate/migrate.py:900
 msgid "remove legacy packages"
@@ -6412,6 +6422,10 @@ msgstr "红帽订阅有效性程序（Red Hat Subscription Validity Applet）"
 #: tmp/subscription-manager-gui.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
 msgstr "Red Hat Subscription Manager"
+
+#, python-brace-format
+#~ msgid "how this system's current {attr}"
+#~ msgstr "本系统目前的 {attr}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #~ msgid "long integer"
