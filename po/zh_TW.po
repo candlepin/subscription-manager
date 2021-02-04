@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-13 14:02-0500\n"
+"POT-Creation-Date: 2021-02-04 14:55-0500\n"
 "PO-Revision-Date: 2021-02-04 18:25+0000\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
@@ -486,69 +486,77 @@ msgid "This system is currently not registered."
 msgstr "這部系統目前尚未註冊。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:87
+#: src/daemons/rhsmcertd.c:92
 msgid "deprecated, see --cert-check-interval"
 msgstr "已淘汰，請查看 --cert-check-interval"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:90
+#: src/daemons/rhsmcertd.c:95
 msgid "interval to run cert check (in minutes)"
 msgstr "執行憑證檢查的時間間隔（分鐘）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:94
+#: src/daemons/rhsmcertd.c:99
 msgid "deprecated, see --auto-attach-interval"
 msgstr "已淘汰，請查看 --auto-attach-interval"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:97
+#: src/daemons/rhsmcertd.c:102
 msgid "interval to run auto-attach (in minutes)"
 msgstr "執行自動執行的時間間隔（分鐘）"
 
+#: src/daemons/rhsmcertd.c:105
+msgid "interval to run auto-registration (in minutes)"
+msgstr ""
+
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:100
+#: src/daemons/rhsmcertd.c:108
 msgid "run the initial checks immediately, with no delay"
 msgstr "即刻執行初始檢查，不延緩"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:103 src/rhsm_icon/rhsm_icon.c:81
+#: src/daemons/rhsmcertd.c:111 src/rhsm_icon/rhsm_icon.c:81
 msgid "show debug messages"
 msgstr "顯示除錯訊息"
 
-#: src/daemons/rhsmcertd.c:105
+#: src/daemons/rhsmcertd.c:113
 msgid "do not add an offset to the initial checks."
 msgstr "不能將偏移量添加到初始檢查中。"
 
+#: src/daemons/rhsmcertd.c:116
+msgid "try to perform auto-registration."
+msgstr ""
+
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:362
+#: src/daemons/rhsmcertd.c:442
 #, c-format
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "欲取得更多資訊，請執行：rhsmcertd --help\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:405
+#: src/daemons/rhsmcertd.c:502
 msgid "Wrong number of arguments specified.\n"
 msgstr "指定了錯誤的引數數量。\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:469
+#: src/daemons/rhsmcertd.c:578
 msgid "Invalid argument specified.\n"
 msgstr "指定了無效的引數。\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:475
+#: src/daemons/rhsmcertd.c:584
 #, c-format
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "警告：使用了已淘汰的 CLI 引數。\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:490
+#: src/daemons/rhsmcertd.c:599
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "無效的選項：%s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:504
+#: src/daemons/rhsmcertd.c:613
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "指定了無效的引數：%s\n"
@@ -1467,17 +1475,17 @@ msgstr "錯誤：--pool-only 只能與 --available 與（或）--consumed 合用
 msgid "Error: this system is not registered"
 msgstr "錯誤：這部系統尚未註冊"
 
-#: src/rhsmlib/services/register.py:140
+#: src/rhsmlib/services/register.py:142
 msgid "This system is already registered. Add force to options to override."
 msgstr "此系統已經註冊。將力添加到選項重寫。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:143
+#: src/rhsmlib/services/register.py:145
 #: src/subscription_manager/managercli.py:1491
 msgid "Error: system name can not be empty."
 msgstr "錯誤：系統名稱不能是空白的。"
 
-#: src/rhsmlib/services/register.py:145
+#: src/rhsmlib/services/register.py:147
 #: src/subscription_manager/managercli.py:1510
 msgid ""
 "Error: Can not force registration while attempting to recover registration "
@@ -1488,30 +1496,30 @@ msgstr ""
 "--consumerid 以重新註冊，或使用 clean 指令而不加上 --force。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:153
+#: src/rhsmlib/services/register.py:155
 #: src/subscription_manager/managercli.py:1502
 msgid "Error: Must specify an activation key"
 msgstr "錯誤：必須指定一組啟動金鑰。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:155
+#: src/rhsmlib/services/register.py:157
 #: src/subscription_manager/managercli.py:1493
 msgid "Error: Activation keys do not require user credentials."
 msgstr "錯誤：啟動金鑰不需要使用者憑證資訊。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:157
+#: src/rhsmlib/services/register.py:159
 #: src/subscription_manager/managercli.py:1495
 msgid "Error: Activation keys can not be used with previously registered IDs."
 msgstr "錯誤：啟動金鑰無法與先前註冊的 ID 搭配使用。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:160
+#: src/rhsmlib/services/register.py:162
 #: src/subscription_manager/managercli.py:1497
 msgid "Error: Activation keys do not allow environments to be specified."
 msgstr "錯誤：啟動金鑰不允許指定環境。"
 
-#: src/rhsmlib/services/register.py:164
+#: src/rhsmlib/services/register.py:169
 msgid "Error: Missing username or password."
 msgstr "錯誤： 缺少使用者名或密碼。"
 
@@ -1806,7 +1814,7 @@ msgstr "錯誤的 CA 憑證：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:38
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:102
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:167
 msgid "Your identity certificate has expired"
 msgstr "您的身份憑證已過期"
 
@@ -4476,7 +4484,7 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:616
 #, python-brace-format
-msgid "how this system's current {attr}"
+msgid "show this system's current {attr}"
 msgstr ""
 
 #: src/subscription_manager/managercli.py:623
@@ -6313,8 +6321,9 @@ msgid ""
 "Hat Subscription Management. If not desired, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
-"yum / dnf插件：%s自動啟用以獲得Red Hat訂閱管理。 如果不需要，請使用“subscription-manager config "
-"--rhsm.auto_enable_yum_plugins=0”來阻止此行為。"
+"yum / dnf插件：%s自動啟用以獲得Red Hat訂閱管理。 如果不需要，請使"
+"用“subscription-manager config --rhsm.auto_enable_yum_plugins=0”來阻止此行"
+"為。"
 
 #: src/subscription_manager/repolib.py:643
 msgid "Repo updates"
@@ -6350,12 +6359,12 @@ msgid "Error uploading package profile: %s\n"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:83
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:148
 msgid "Updating entitlement certificates & repositories"
 msgstr "更新權利憑證與軟體庫"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:157
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "無法更新權利憑證與軟體庫"
 

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-13 14:02-0500\n"
+"POT-Creation-Date: 2021-02-04 14:55-0500\n"
 "PO-Revision-Date: 2015-09-25 02:52-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Oriya\n"
@@ -515,80 +515,88 @@ msgstr "ତନ୍ତ୍ରଟି ବର୍ତ୍ତମାନ ପଞ୍ଜିକ�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:87
+#: src/daemons/rhsmcertd.c:92
 msgid "deprecated, see --cert-check-interval"
 msgstr "ପୁରୁଣା ହୋଇଛି, see --cert-check-interval"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:90
+#: src/daemons/rhsmcertd.c:95
 msgid "interval to run cert check (in minutes)"
 msgstr "ପ୍ରମାଣପତ୍ର ଯାଞ୍ଚକୁ ଚଲାଇବା ପାଇଁ ଅନ୍ତରାଳ (ମିନଟରେ)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:94
+#: src/daemons/rhsmcertd.c:99
 msgid "deprecated, see --auto-attach-interval"
 msgstr "ପୁରୁଣା ହୋଇଛି, --auto-attach-interval କୁ ଦେଖନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:97
+#: src/daemons/rhsmcertd.c:102
 msgid "interval to run auto-attach (in minutes)"
 msgstr "ସ୍ୱୟଂ-ସଂଲଗ୍ନକୁ ଚଲାଇବା ପାଇଁ ଅନ୍ତରାଳ (ମିନଟରେ)"
 
+#: src/daemons/rhsmcertd.c:105
+msgid "interval to run auto-registration (in minutes)"
+msgstr ""
+
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:100
+#: src/daemons/rhsmcertd.c:108
 msgid "run the initial checks immediately, with no delay"
 msgstr "ବିଳମ୍ବ ନକରି ସଙ୍ଗେ ସଙ୍ଗେ ପ୍ରରମ୍ଭିକ ଯାଞ୍ଚ ଚଲାନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:103 src/rhsm_icon/rhsm_icon.c:81
+#: src/daemons/rhsmcertd.c:111 src/rhsm_icon/rhsm_icon.c:81
 msgid "show debug messages"
 msgstr "ତ୍ରୁଟିନିବାରଣ ସନ୍ଦେଶଗୁଡ଼ିକୁ ଦର୍ଶାନ୍ତୁ"
 
-#: src/daemons/rhsmcertd.c:105
+#: src/daemons/rhsmcertd.c:113
 msgid "do not add an offset to the initial checks."
+msgstr ""
+
+#: src/daemons/rhsmcertd.c:116
+msgid "try to perform auto-registration."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:362
+#: src/daemons/rhsmcertd.c:442
 #, c-format
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "ଅଧିକ ସୂଚନା ପାଇଁ: rhsmcertd --help କୁ ଚଲାନ୍ତୁ\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:405
+#: src/daemons/rhsmcertd.c:502
 msgid "Wrong number of arguments specified.\n"
 msgstr "ଭୁଲ ସଂଖ୍ୟକ ସ୍ୱତନ୍ତ୍ରଚରଗୁଡ଼ିକୁ ଉଲ୍ଲେଖ କରାଯାଇଛି।\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:469
+#: src/daemons/rhsmcertd.c:578
 msgid "Invalid argument specified.\n"
 msgstr "ଅବୈଧ ସ୍ୱତନ୍ତ୍ରଚର ଉଲ୍ଲେଖ ହୋଇଛି।\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:475
+#: src/daemons/rhsmcertd.c:584
 #, c-format
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "ଚେତାବନୀ: ପୁରୁଣା CLI ସ୍ୱତନ୍ତ୍ରଚରଗୁଡ଼ିକ ବ୍ୟବହାର ହେଉଅଛି।\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:490
+#: src/daemons/rhsmcertd.c:599
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "ଅବୈଧ ବିକଳ୍ପ: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:504
+#: src/daemons/rhsmcertd.c:613
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "ଅବୈଧ ସ୍ୱତନ୍ତ୍ରଚର ଉଲ୍ଲେଖ ହୋଇଛି: %s\n"
@@ -1632,18 +1640,18 @@ msgstr "ତ୍ରୁଟି: --pool-only ଟି କେବଳ --available ଏବ�
 msgid "Error: this system is not registered"
 msgstr ""
 
-#: src/rhsmlib/services/register.py:140
+#: src/rhsmlib/services/register.py:142
 msgid "This system is already registered. Add force to options to override."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:143
+#: src/rhsmlib/services/register.py:145
 #: src/subscription_manager/managercli.py:1491
 msgid "Error: system name can not be empty."
 msgstr "ତ୍ରୁଟି: ତନ୍ତ୍ର ନାମକୁ ଖାଲି ରଖିପାରିବେ ନାହିଁ।"
 
-#: src/rhsmlib/services/register.py:145
+#: src/rhsmlib/services/register.py:147
 #: src/subscription_manager/managercli.py:1510
 msgid ""
 "Error: Can not force registration while attempting to recover registration "
@@ -1653,33 +1661,33 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:153
+#: src/rhsmlib/services/register.py:155
 #: src/subscription_manager/managercli.py:1502
 msgid "Error: Must specify an activation key"
 msgstr "ତ୍ରୁଟି: ଗୋଟିଏ ସକ୍ରିୟଣ କି ଉଲ୍ଲେଖ କରିବା ଆବଶ୍ୟକ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:155
+#: src/rhsmlib/services/register.py:157
 #: src/subscription_manager/managercli.py:1493
 msgid "Error: Activation keys do not require user credentials."
 msgstr "ତ୍ରୁଟି: ସକ୍ରିୟଣ କି ଚାଳକ ଅଧିକାର ଆବଶ୍ୟକ କରିନଥାଏ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:157
+#: src/rhsmlib/services/register.py:159
 #: src/subscription_manager/managercli.py:1495
 msgid "Error: Activation keys can not be used with previously registered IDs."
 msgstr "ତ୍ରୁଟି: ସକ୍ରିୟଣ କି କୁ ପୂର୍ବରୁ ପଞ୍ଜିକୃତ ID ଗୁଡ଼ିକ ସହିତ ବ୍ୟବହାର କରିହେବ ନାହିଁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:160
+#: src/rhsmlib/services/register.py:162
 #: src/subscription_manager/managercli.py:1497
 msgid "Error: Activation keys do not allow environments to be specified."
 msgstr "ତ୍ରୁଟି: ସକ୍ରିୟଣ କିଗୁଡ଼ିକ ପରିବେଶମାନଙ୍କୁ ଉଲ୍ଲେଖ କରିବା ପାଇଁ ଅନୁମତି ଦେଇନଥାଏ।"
 
-#: src/rhsmlib/services/register.py:164
+#: src/rhsmlib/services/register.py:169
 msgid "Error: Missing username or password."
 msgstr ""
 
@@ -2021,7 +2029,7 @@ msgstr "ଖରାପ CA ପ୍ରମାଣପତ୍ର: %s"
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/exceptions.py:38
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:102
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:167
 msgid "Your identity certificate has expired"
 msgstr "ଆପଣଙ୍କର ପରିଚୟ ପ୍ରମାଣପତ୍ରର ଅବଧି ସମାପ୍ତ ହୋଇଛି"
 
@@ -5053,7 +5061,7 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:616
 #, python-brace-format
-msgid "how this system's current {attr}"
+msgid "show this system's current {attr}"
 msgstr ""
 
 #: src/subscription_manager/managercli.py:623
@@ -7164,13 +7172,13 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:83
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:148
 msgid "Updating entitlement certificates & repositories"
 msgstr "ଅଧିକାର ପ୍ରମାଣପତ୍ର ଏବଂ ରେପୋଜିଟୋରୀଗୁଡ଼ିକୁ ଅଦ୍ୟତନ କରୁଅଛି"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:157
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "ଅଧିକାର ପ୍ରମାଣପତ୍ର ଏବଂ ରେପୋଜିଟୋରୀଗୁଡ଼ିକୁ ଅଦ୍ୟତନ କରିବାରେ ବିଫଳ"
 
