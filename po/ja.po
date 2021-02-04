@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-13 14:00-0500\n"
+"POT-Creation-Date: 2021-02-03 14:20-0500\n"
 "PO-Revision-Date: 2021-02-03 09:40+0000\n"
 "Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
@@ -127,7 +127,9 @@ msgstr "$0 パッケージは、あらゆるリポジトリーから利用でき
 msgid ""
 "The system could not be connected to Insights because installing the $0 "
 "package requires the unexpected removal of other packages."
-msgstr "$0 パッケージをインストールすると、他のパッケージの予期せぬ削除が必要になるため、システムが Insights に接続できませんでした。"
+msgstr ""
+"$0 パッケージをインストールすると、他のパッケージの予期せぬ削除が必要になるた"
+"め、システムが Insights に接続できませんでした。"
 
 #: cockpit/src/insights.jsx:73
 msgid "Connecting to Insights"
@@ -139,9 +141,9 @@ msgid ""
 "availability, and stability with Red Hat Insights — with predictive "
 "analytics, avoid problems and unplanned downtime in your Red Hat environment."
 msgstr ""
-"Red Hat Insights "
-"を使用することで、セキュリティ、パフォーマンス、可用性、安定性に対する脅威を積極的に特定し、修正することができます。予測分析により、Red Hat "
-"環境における問題や計画外のダウンタイムを回避します。"
+"Red Hat Insights を使用することで、セキュリティ、パフォーマンス、可用性、安定"
+"性に対する脅威を積極的に特定し、修正することができます。予測分析により、Red "
+"Hat 環境における問題や計画外のダウンタイムを回避します。"
 
 #: cockpit/src/insights.jsx:122 cockpit/src/subscriptions-register.jsx:93
 msgid "The $0 package will be installed."
@@ -234,8 +236,8 @@ msgid ""
 "If you disconnect this system from Insights, it will no longer report it's "
 "Insights status in Red Hat Cloud or Satellite."
 msgstr ""
-"このシステムを Insights から切断すると、Red Hat Cloud または Satellite に Insights "
-"のステータスが報告されなくなります。"
+"このシステムを Insights から切断すると、Red Hat Cloud または Satellite に "
+"Insights のステータスが報告されなくなります。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/insights.jsx:417 cockpit/src/insights.jsx:436
@@ -536,35 +538,35 @@ msgid "try to perform auto-registration."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:445
+#: src/daemons/rhsmcertd.c:452
 #, c-format
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "詳しい情報を参照するには、rhsmcertd --help を実行してください\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:505
+#: src/daemons/rhsmcertd.c:512
 msgid "Wrong number of arguments specified.\n"
 msgstr "無効な引数番号が指定されています。\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:581
+#: src/daemons/rhsmcertd.c:588
 msgid "Invalid argument specified.\n"
 msgstr "無効な引数が指定されています。\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:587
+#: src/daemons/rhsmcertd.c:594
 #, c-format
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "警告: 非推奨の CLI 引数が使用されています。\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:602
+#: src/daemons/rhsmcertd.c:609
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "無効なオプション: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:616
+#: src/daemons/rhsmcertd.c:623
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "無効な引数が指定されています: %s\n"
@@ -601,7 +603,8 @@ msgid ""
 "use subscription-manager to register.\n"
 msgstr ""
 "\n"
-"このシステムは、Red Hat サブスクリプション管理に登録されていません。subscription-manager で登録できます。\n"
+"このシステムは、Red Hat サブスクリプション管理に登録されていません。"
+"subscription-manager で登録できます。\n"
 
 #: src/dnf-plugins/subscription-manager.py:53
 msgid ""
@@ -611,12 +614,14 @@ msgid ""
 "subscriptions.\n"
 msgstr ""
 "\n"
-"このシステムは、Red Hat サブスクリプション管理に登録されていますが、更新は受信していません。subscription-manager "
-"でサブスクリプションを割り当てることができます。\n"
+"このシステムは、Red Hat サブスクリプション管理に登録されていますが、更新は受"
+"信していません。subscription-manager でサブスクリプションを割り当てることがで"
+"きます。\n"
 
 #: src/dnf-plugins/subscription-manager.py:86
 msgid "Not root, Subscription Management repositories not updated"
-msgstr "root ではありません。サブスクリプション管理リポジトリーは更新されていません"
+msgstr ""
+"root ではありません。サブスクリプション管理リポジトリーは更新されていません"
 
 #: src/dnf-plugins/subscription-manager.py:114
 #, python-format
@@ -644,7 +649,8 @@ msgid ""
 "Upload combined profile to Satellite server (list of installed rpms, enabled "
 "repositories and modules"
 msgstr ""
-"結合されたプロファイルを Satellite サーバーにアップロードします (インストール済みの RPM、有効なリポジトリーとモジュールのリスト)"
+"結合されたプロファイルを Satellite サーバーにアップロードします (インストール"
+"済みの RPM、有効なリポジトリーとモジュールのリスト)"
 
 #: src/dnf-plugins/upload-profile.py:43
 #: src/subscription_manager/scripts/package_profile_upload.py:39
@@ -654,7 +660,9 @@ msgstr "パッケージプロファイルのアップロードを強制します
 #: src/dnf-plugins/upload-profile.py:59
 #: src/subscription_manager/scripts/package_profile_upload.py:46
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
-msgstr "実行された更新はありません。詳細は /var/log/rhsm/rhsm.log を参照してください。"
+msgstr ""
+"実行された更新はありません。詳細は /var/log/rhsm/rhsm.log を参照してくださ"
+"い。"
 
 #: src/initial-setup/com_redhat_subscription_manager/gui/spokes/rhsm_gui.ui:8
 msgid "RHEL"
@@ -1365,7 +1373,8 @@ msgstr "オプションの構文解析失敗: %s\n"
 #, python-format
 msgid ""
 "User %s is member of more organizations, but no organization was selected"
-msgstr "ユーザー %s はより多くの組織に所属していますが、選択された組織はありません"
+msgstr ""
+"ユーザー %s はより多くの組織に所属していますが、選択された組織はありません"
 
 #: src/rhsmlib/dbus/objects/register.py:110
 #, python-format
@@ -1467,7 +1476,8 @@ msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
 msgstr ""
-"エラー: 無効な一覧表示タイプが指定されました。\"installed\"、\"consumed\"、\"available\" だけが利用できます"
+"エラー: 無効な一覧表示タイプが指定されました。\"installed\"、\"consumed"
+"\"、\"available\" だけが利用できます"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsmlib/services/entitlement.py:444
@@ -1709,8 +1719,8 @@ msgid ""
 "To learn more about RHN registration and technologies please consult this "
 "Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
-"RHN の登録と技術に関する詳細は、ナレッジベースの記事 https://access.redhat.com/kb/docs/DOC-45563 "
-"を参照してください"
+"RHN の登録と技術に関する詳細は、ナレッジベースの記事 https://access.redhat."
+"com/kb/docs/DOC-45563 を参照してください"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:29
@@ -1721,7 +1731,9 @@ msgstr "RHN Classic と Red Hat サブスクリプション管理"
 msgid ""
 "Tip: Forgot your login or password? Look it up at https://redhat.com/"
 "forgot_password"
-msgstr "ヒント: ログインまたはパスワードをお忘れの場合は、https://redhat.com/forgot_password で確認してください"
+msgstr ""
+"ヒント: ログインまたはパスワードをお忘れの場合は、https://redhat.com/"
+"forgot_password で確認してください"
 
 #: src/subscription_manager/cache.py:161
 #, python-format
@@ -1819,7 +1831,9 @@ msgstr "削除済み (不正):"
 msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
 "log for more information."
-msgstr "ネットワークエラーでサーバーに接続できません。詳細は /var/log/rhsm/rhsm.log をご覧ください。"
+msgstr ""
+"ネットワークエラーでサーバーに接続できません。詳細は /var/log/rhsm/rhsm.log "
+"をご覧ください。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/exceptions.py:31
@@ -1851,7 +1865,9 @@ msgstr "禁止: 要求に対して無効な認証情報です。"
 msgid ""
 "Remote server error. Please check the connection details, or see /var/log/"
 "rhsm/rhsm.log for more information."
-msgstr "リモートサーバーエラーです。接続詳細を確認するか、/var/log/rhsm/rhsm.log をご覧ください。"
+msgstr ""
+"リモートサーバーエラーです。接続詳細を確認するか、/var/log/rhsm/rhsm.log をご"
+"覧ください。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/exceptions.py:37
@@ -3072,8 +3088,8 @@ msgid ""
 "with Red Hat to receive software updates and other benefits. You will need "
 "the following to register:"
 msgstr ""
-"ソフトウェア更新などのサービスをご利用頂くため、お使いのシステムを Red Hat "
-"に登録する手順を案内していきます。登録するには次のものが必要となります:"
+"ソフトウェア更新などのサービスをご利用頂くため、お使いのシステムを Red Hat に"
+"登録する手順を案内していきます。登録するには次のものが必要となります:"
 
 #: src/subscription_manager/gui/data/glade/registration_info.glade:53
 #: src/subscription_manager/gui/data/ui/registration_info.ui:89
@@ -3440,8 +3456,8 @@ msgid ""
 "<small>Tip: Forgot your login or password? Look it up at https://redhat.com/"
 "forgot_password</small>"
 msgstr ""
-"<small>ヒント: ログインまたはパスワードを忘れてしまった場合は、https://redhat.com/forgot_password "
-"で確認してください</small>"
+"<small>ヒント: ログインまたはパスワードを忘れてしまった場合は、https://"
+"redhat.com/forgot_password で確認してください</small>"
 
 #: src/subscription_manager/gui/data/ui/credentials.ui:199
 msgid "credentials_grid"
@@ -4404,7 +4420,8 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
-"警告: \"{download_value}\" の {attr} は最近、エンタイトルメントサーバー管理者によってこのシステムに設定されました。\n"
+"警告: \"{download_value}\" の {attr} は最近、エンタイトルメントサーバー管理者"
+"によってこのシステムに設定されました。\n"
 "{advice}"
 
 #: src/subscription_manager/managercli.py:203
@@ -4462,7 +4479,9 @@ msgstr "HTTP プロキシーを迂回するホストのサフィックス"
 #: src/subscription_manager/managercli.py:359
 msgid ""
 "Consumer identity either does not exist or is corrupted. Try register --help"
-msgstr "コンシューマー識別子が存在しないか、破損しています。register --help を試してください"
+msgstr ""
+"コンシューマー識別子が存在しないか、破損しています。register --help を試して"
+"ください"
 
 #: src/subscription_manager/managercli.py:409
 msgid ""
@@ -4528,8 +4547,8 @@ msgstr "一覧 ({attr}) からアイテムを削除します。"
 
 #: src/subscription_manager/managercli.py:617
 #, python-brace-format
-msgid "how this system's current {attr}"
-msgstr "このシステムの現在がどのように {attr}"
+msgid "show this system's current {attr}"
+msgstr ""
 
 #: src/subscription_manager/managercli.py:624
 #, python-brace-format
@@ -4546,13 +4565,17 @@ msgstr "--add は --remove と併用できません"
 
 #: src/subscription_manager/managercli.py:660
 msgid "Error: you can specify --username or --token not both"
-msgstr "エラー: --username または --token のどちらかを指定することができますが、両方ではありません"
+msgstr ""
+"エラー: --username または --token のどちらかを指定することができますが、両方"
+"ではありません"
 
 #: src/subscription_manager/managercli.py:665
 #, python-brace-format
 msgid ""
 "Error: you must register or specify --username and --password to list {attr}"
-msgstr "エラー: リスト {attr} に、--username と --password を指定または登録する必要があります"
+msgstr ""
+"エラー: リスト {attr} に、--username と --password を指定または登録する必要が"
+"あります"
 
 #: src/subscription_manager/managercli.py:729
 #, python-brace-format
@@ -4888,7 +4911,9 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:1402
 msgid "Error: --org is only supported with the --list or --set option"
-msgstr "エラー: --org は、 --list または --set オプションとの併用でのみサポートされます"
+msgstr ""
+"エラー: --org は、 --list または --set オプションとの併用でのみサポートされま"
+"す"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/managercli.py:1409
@@ -5015,12 +5040,15 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1581
 msgid "This system is already registered. Use --force to override"
-msgstr "このシステムはすでに登録されています。上書きするには --force を使用します"
+msgstr ""
+"このシステムはすでに登録されています。上書きするには --force を使用します"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1591
 msgid "Error: Activation keys cannot be used with --auto-attach."
-msgstr "エラー: --auto-attach を指定する場合は、アクティブキーを使用することができません。"
+msgstr ""
+"エラー: --auto-attach を指定する場合は、アクティブキーを使用することができま"
+"せん。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1596
@@ -5032,7 +5060,9 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1598
 msgid "Error: Must provide --org with activation keys."
-msgstr "エラー: --org を指定する場合は、アクティベーションキーを指定する必要があります。"
+msgstr ""
+"エラー: --org を指定する場合は、アクティベーションキーを指定する必要がありま"
+"す。"
 
 #: src/subscription_manager/managercli.py:1608
 msgid "Error: The --type option has been deprecated and may not be used."
@@ -5898,7 +5928,8 @@ msgstr "変更するリポジトリー (複数回の指定が可能)"
 msgid ""
 "name of the override to remove (can be specified more than once); used with "
 "--repo option."
-msgstr "削除する上書きの名前 (複数回の指定が可能)。--repo オプションと併用します。"
+msgstr ""
+"削除する上書きの名前 (複数回の指定が可能)。--repo オプションと併用します。"
 
 #: src/subscription_manager/managercli.py:3169
 msgid ""
@@ -6014,8 +6045,9 @@ msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status.\n"
 msgstr ""
-"コンテンツアクセスモードは、シンプルコンテンツアクセスに設定されています。このホストは、サブスクリプションのステータスに関係なく、コンテンツにアクセスでき"
-"ます。\n"
+"コンテンツアクセスモードは、シンプルコンテンツアクセスに設定されています。こ"
+"のホストは、サブスクリプションのステータスに関係なく、コンテンツにアクセスで"
+"きます。\n"
 
 #: src/subscription_manager/managercli.py:3357
 #, python-format
@@ -6291,7 +6323,9 @@ msgstr ""
 msgid ""
 "Please ensure system has subscriptions attached, and see '%s' to enable "
 "additional repositories"
-msgstr "システムにサブスクリプションが割り当てられていることを確認してください。追加リポジトリーを有効にする方法は '%s' をご覧ください"
+msgstr ""
+"システムにサブスクリプションが割り当てられていることを確認してください。追加"
+"リポジトリーを有効にする方法は '%s' をご覧ください"
 
 #: src/subscription_manager/migrate/migrate.py:812
 msgid "Stopping and disabling legacy services..."
@@ -6398,7 +6432,9 @@ msgstr ""
 
 #: src/subscription_manager/migrate/migrate.py:951
 msgid "The --activation-key option requires that a --org be given."
-msgstr "--activation-key オプションを使用する場合は、--org オプションを指定する必要があります。"
+msgstr ""
+"--activation-key オプションを使用する場合は、--org オプションを指定する必要が"
+"あります。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/migrate/migrate.py:955
@@ -6540,6 +6576,10 @@ msgstr "Red Hat サブスクリプション有効性アプレット"
 #: tmp/subscription-manager-gui.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
 msgstr "Red Hat サブスクリプションマネージャー"
+
+#, python-brace-format
+#~ msgid "how this system's current {attr}"
+#~ msgstr "このシステムの現在がどのように {attr}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #~ msgid "long integer"

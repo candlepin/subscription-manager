@@ -614,7 +614,7 @@ class AbstractSyspurposeCommand(CliCommand):
                 "--show",
                 dest="show",
                 action='store_true',
-                help=_("how this system's current {attr}").format(attr=attr)
+                help=_("show this system's current {attr}").format(attr=attr)
             )
         if 'list' in commands:
             self.parser.add_option(

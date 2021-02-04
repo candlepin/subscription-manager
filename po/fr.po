@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-29 16:42-0500\n"
+"POT-Creation-Date: 2021-02-03 14:20-0500\n"
 "PO-Revision-Date: 2021-02-03 09:40+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
@@ -129,8 +129,8 @@ msgid ""
 "The system could not be connected to Insights because installing the $0 "
 "package requires the unexpected removal of other packages."
 msgstr ""
-"Le système n'a pas pu être connecté à Insights car l'installation du paquet $"
-"0 nécessite la suppression inattendue d'autres paquets."
+"Le système n'a pas pu être connecté à Insights car l'installation du paquet "
+"$0 nécessite la suppression inattendue d'autres paquets."
 
 #: cockpit/src/insights.jsx:73
 msgid "Connecting to Insights"
@@ -546,7 +546,7 @@ msgid "try to perform auto-registration."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:445
+#: src/daemons/rhsmcertd.c:452
 #, c-format
 msgid "For more information run: rhsmcertd --help\n"
 msgstr ""
@@ -554,29 +554,29 @@ msgstr ""
 "--help\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:505
+#: src/daemons/rhsmcertd.c:512
 msgid "Wrong number of arguments specified.\n"
 msgstr "Mauvaise quantité d'arguments spécifiée.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:581
+#: src/daemons/rhsmcertd.c:588
 msgid "Invalid argument specified.\n"
 msgstr "Argument invalide spécifié.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:587
+#: src/daemons/rhsmcertd.c:594
 #, c-format
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "AVERTISSEMENT : Des arguments CLI sont utilisés.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:602
+#: src/daemons/rhsmcertd.c:609
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "Option invalide : %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:616
+#: src/daemons/rhsmcertd.c:623
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "Argument invalide spécifié : %s\n"
@@ -1499,8 +1499,9 @@ msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
 msgstr ""
-"Erreur : type de listing non valide. Valeurs autorisées: « installés » "
-"(installed) « consommés » (consumed) ou « disponibles » (available)"
+"Erreur : type de listing non valide. Valeurs autorisées: « "
+"installés » (installed) « consommés » (consumed) ou "
+"« disponibles » (available)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsmlib/services/entitlement.py:444
@@ -4633,8 +4634,8 @@ msgstr "supprimer un élément de la liste ({attr})."
 
 #: src/subscription_manager/managercli.py:617
 #, python-brace-format
-msgid "how this system's current {attr}"
-msgstr "comment le {attr} du système tel qu’il est"
+msgid "show this system's current {attr}"
+msgstr ""
 
 #: src/subscription_manager/managercli.py:624
 #, python-brace-format
@@ -5523,8 +5524,8 @@ msgid ""
 "Error: This command requires that you specify one of --serial, --pool or --"
 "all."
 msgstr ""
-"Erreur : cette commande requiert que vous spécifiez --serial, --pool ou "
-"--all."
+"Erreur : cette commande requiert que vous spécifiez --serial, --pool ou --"
+"all."
 
 #: src/subscription_manager/managercli.py:2342
 msgid "The entitlement server successfully removed these pools:"
@@ -6717,6 +6718,10 @@ msgstr "Applet de validité des abonnements Red Hat"
 #: tmp/subscription-manager-gui.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
 msgstr "Gestionnaire des abonnements Red Hat"
+
+#, python-brace-format
+#~ msgid "how this system's current {attr}"
+#~ msgstr "comment le {attr} du système tel qu’il est"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #~ msgid "long integer"
