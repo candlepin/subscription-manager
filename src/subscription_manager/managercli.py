@@ -41,6 +41,8 @@ import rhsm.connection as connection
 from rhsm.connection import ProxyException, UnauthorizedException, ConnectionException, RemoteServerException
 from rhsm.utils import remove_scheme, ServerUrlParseError
 
+from syspurpose.files import SyncedStore, post_process_received_data
+
 from subscription_manager import identity
 from subscription_manager.branding import get_branding
 from subscription_manager.entcertlib import EntCertActionInvoker, CONTENT_ACCESS_CERT_CAPABILITY
@@ -67,7 +69,7 @@ from subscription_manager.printing_utils import columnize, format_name, \
         none_wrap_columnize_callback, echo_columnize_callback, highlight_by_filter_string_columnize_cb
 from subscription_manager.utils import generate_correlation_id
 from subscription_manager.syspurposelib import save_sla_to_syspurpose_metadata, \
-        get_syspurpose_valid_fields, post_process_received_data
+        get_syspurpose_valid_fields
 from subscription_manager.packageprofilelib import PackageProfileActionInvoker
 
 from subscription_manager.i18n import ungettext, ugettext as _
@@ -624,13 +626,6 @@ class AbstractSyspurposeCommand(CliCommand):
                 help=_("list all {attr} available").format(attr=attr)
             )
 
-    def _get_synced_store(self):
-        try:
-            from syspurpose.files import SyncedStore
-            return SyncedStore(uep=self.cp, consumer_uuid=self.identity.uuid)
-        except ImportError:
-            return None
-
     def _validate_options(self):
         to_set = getattr(self.options, 'set', None)
         to_unset = getattr(self.options, 'unset', None)
@@ -902,7 +897,7 @@ class AbstractSyspurposeCommand(CliCommand):
         except Exception as err:
             log.debug("Error: Unable to retrieve %s from server: %s" % (self.attr, err))
 
-        self.store = self._get_synced_store()
+        self.store = SyncedStore(uep=self.cp, consumer_uuid=self.identity.uuid)
 
         if getattr(self.options, 'unset', None):
             self.unset()
@@ -1052,18 +1047,6 @@ class SyspurposeCommand(CliCommand):
             help=_("show current system purpose")
         )
 
-    def _get_synced_store(self):
-        """
-        Try to get SyncedStore.
-        TODO: refactor (remove) this, when AbstractSyspurposeCommand is merged to SyspurposeCommand
-        :return: Instance of SyncedStore or None
-        """
-        try:
-            from syspurpose.files import SyncedStore
-            return SyncedStore(uep=self.cp, consumer_uuid=self.identity.uuid)
-        except ImportError:
-            return None
-
     def _validate_options(self):
         """
         Validate provided options
@@ -1091,10 +1074,9 @@ class SyspurposeCommand(CliCommand):
                 except Exception as err:
                     log.debug("Error: Unable to retrieve system purpose from server: %s" % err)
                 else:
-                    self.store = self._get_synced_store()
-                    if self.store is not None:
-                        sync_result = self.store.sync()
-                        content = sync_result.result
+                    self.store = SyncedStore(uep=self.cp, consumer_uuid=self.identity.uuid)
+                    sync_result = self.store.sync()
+                    content = sync_result.result
             else:
                 content = syspurposelib.read_syspurpose()
             print(json.dumps(content, indent=2, ensure_ascii=False, sort_keys=True))
@@ -1462,7 +1444,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
 
     def set(self):
         if self.cp.has_capability("syspurpose"):
-            self.store = self._get_synced_store()
+            self.store = SyncedStore(uep=self.cp, consumer_uuid=self.identity.uuid)
             super(ServiceLevelCommand, self).set()
         else:
             self.update_service_level(self.options.set)
@@ -1470,7 +1452,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
 
     def unset(self):
         if self.cp.has_capability("syspurpose"):
-            self.store = self._get_synced_store()
+            self.store = SyncedStore(uep=self.cp, consumer_uuid=self.identity.uuid)
             super(ServiceLevelCommand, self).unset()
         else:
             self.update_service_level("")

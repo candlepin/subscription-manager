@@ -25,8 +25,9 @@ import json
 import os
 import errno
 import io
-from syspurpose.utils import system_exit, create_dir, create_file, make_utf8, write_to_file_utf8
-from syspurpose.i18n import ugettext as _
+
+from syspurpose.utils import create_dir, create_file, make_utf8, write_to_file_utf8
+from subscription_manager.i18n import ugettext as _
 
 # Constants for locations of the two system syspurpose files
 USER_SYSPURPOSE_DIR = "/etc/rhsm/syspurpose"
@@ -101,15 +102,12 @@ class SyspurposeStore(object):
         except ValueError:
             # Malformed JSON or empty file. Let's not error out on an empty file
             if os.path.getsize(self.path):
-                system_exit(
-                    os.EX_CONFIG,
-                    _("Error: Malformed data in file {}; please review and correct.").format(self.path)
-                )
-
+                log.error("Malformed data in file {}".format(self.path))
             return False
         except OSError as e:
             if e.errno == errno.EACCES and not self.raise_on_error:
-                system_exit(os.EX_NOPERM, _('Cannot read syspurpose file {}\nAre you root?').format(self.path))
+                log.error('Cannot read syspurpose file {}\n'.format(self.path))
+                return False
             if e.errno == errno.ENOENT and not self.raise_on_error:
                 log.error('Unable to read file {file}: {error}'.format(file=self.path, error=e))
                 return False
@@ -459,6 +457,7 @@ class SyncedStore(object):
         :param value: provided value
         :return: None
         """
+        # FIXME: it is not good idea to print something in this package
         if self.valid_fields is not None:
             if key in self.valid_fields:
                 if value not in self.valid_fields[key]:

@@ -32,8 +32,7 @@ class UtilsTests(SyspurposeTestBase):
     def tearDown(self):
         utils.HOST_CONFIG_DIR = "/etc/rhsm-host/"
 
-    @mock.patch('syspurpose.utils.system_exit')
-    def test_create_dir(self, mock_system_exit):
+    def test_create_dir(self):
         """
         Verify that the create_dir utility method creates directories as we expect.
         :return:
@@ -62,11 +61,8 @@ class UtilsTests(SyspurposeTestBase):
 
         self.assertRaisesNothing(utils.create_dir, impossible_sub_dir)
         self.assertFalse(os.path.exists(impossible_sub_dir))
-        # Should try to exit when the directory could not be created due to bad permissions
-        mock_system_exit.assert_called_once()
 
-    @mock.patch('syspurpose.utils.system_exit')
-    def test_create_file(self, mock_system_exit):
+    def test_create_file(self):
         temp_dir = self._mktmp()
         to_create = os.path.join(temp_dir, "my_cool_file.json")
 
@@ -102,20 +98,3 @@ class UtilsTests(SyspurposeTestBase):
 
             self.assertRaises(OSError, utils.create_file, to_create, test_data)
             self.assertFalse(os.path.exists(to_create))
-
-    def test_in_container_host_config_dir_exists(self):
-        """
-        Verify that in_container returns true when utils.HOST_CONFIG_DIR dir exists.
-        :return:
-        """
-        temp_dir = self._mktmp()
-        utils.HOST_CONFIG_DIR = temp_dir
-        self.assertTrue(utils.in_container())
-
-    def test_in_container_host_config_dir_does_not_exist(self):
-        """
-        Verify that in_container returns false when utils.HOST_CONFIG_DIR dir does not exist.
-        :return:
-        """
-        utils.HOST_CONFIG_DIR = "/does/not/exist/"
-        self.assertFalse(utils.in_container())

@@ -23,23 +23,10 @@ import io
 import json
 import os
 import errno
-import sys
+import logging
 import six
-from syspurpose.i18n import ugettext as _
 
-HOST_CONFIG_DIR = "/etc/rhsm-host/"  # symlink inside docker containers
-
-
-# Borrowed from the subscription-manager cli script
-def system_exit(code, msgs=None):
-    """Exit with a code and optional message(s). Saved a few lines of code."""
-
-    if msgs:
-        if type(msgs) not in [type([]), type(())]:
-            msgs = (msgs, )
-        for msg in msgs:
-            sys.stderr.write(str(msg) + '\n')
-    sys.exit(code)
+log = logging.getLogger(__name__)
 
 
 def create_dir(path):
@@ -55,8 +42,7 @@ def create_dir(path):
             # If the directory exists no changes necessary
             return False
         if e.errno == errno.EACCES:
-            system_exit(os.EX_NOPERM,
-                        _('Cannot create directory {}\nAre you root?').format(path))
+            log.error('Cannot create directory {}'.format(path))
     return True
 
 
@@ -77,23 +63,10 @@ def create_file(path, contents):
             # If the file exists no changes necessary
             return False
         if e.errno == errno.EACCES:
-            system_exit(os.EX_NOPERM, _("Cannot create file {}\nAre you root?").format(path))
+            log.error("Cannot create file {}".format(path))
         else:
             raise
     return True
-
-
-# Borrowed from the subscription-manager config module
-def in_container():
-    """
-    Are we running in a docker container or not?
-
-    Assumes that if we see host rhsm configuration shared with us, we must
-    be running in a container.
-    """
-    if os.path.exists(HOST_CONFIG_DIR):
-        return True
-    return False
 
 
 def make_utf8(obj):
@@ -105,7 +78,7 @@ def make_utf8(obj):
     if six.PY3:
         return obj
     elif obj is not None and isinstance(obj, str) and not isinstance(obj, unicode):
-        obj =  obj.decode('utf-8')
+        obj = obj.decode('utf-8')
         return obj
     else:
         return obj

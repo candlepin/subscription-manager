@@ -119,8 +119,6 @@
 %global rhsm_package_name subscription-manager-rhsm
 %endif
 
-%global include_syspurpose 1
-
 %global _hardened_build 1
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
@@ -197,8 +195,6 @@
 %else
 %global with_cockpit WITH_COCKPIT=false
 %endif
-
-%global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 # Build a list of python package to exclude from the build.
 # This is necessary because we have multiple rpms which may or may not
@@ -304,7 +300,6 @@ Requires:  %{py_package_prefix}-python-dateutil
 BuildRequires: %{py_package_prefix}-dateutil
 Requires: %{py_package_prefix}-dateutil
 %endif
-Requires: %{py_package_prefix}-syspurpose = %{version}-%{release}
 
 # rhel 8 has different naming for setuptools going forward
 %if (0%{?rhel} && 0%{?rhel} == 8)
@@ -419,22 +414,12 @@ Obsoletes: dnf-plugin-subscription-manager
 %endif
 %endif
 
+Obsoletes: %{py_package_prefix}-syspurpose
+
 %description
 The Subscription Manager package provides programs and libraries to allow users
 to manage subscriptions and yum repositories from the Red Hat entitlement
 platform.
-
-
-%package -n %{py_package_prefix}-syspurpose
-Summary: A commandline utility for declaring system syspurpose
-%if 0%{?suse_version}
-Group: Productivity/Networking/System
-%else
-Group: System Environment/Base
-%endif
-%description -n %{py_package_prefix}-syspurpose
-Provides the syspurpose commandline utility. This utility manages the
-system syspurpose.
 
 
 %if %{use_container_plugin}
@@ -786,7 +771,7 @@ subscription-manager-initial-setup-addon, and subscription-manager-cockpit-plugi
 %build
 make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
     LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" \
-    %{?gtk_version} %{?subpackages} %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"} \
+    %{?gtk_version} %{?subpackages} \
     %{exclude_packages} %{?with_subman_gui} %{?with_subman_migration}
 
 %if %{with python2_rhsm}
@@ -819,7 +804,6 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?with_subman_migration} \
     %{?with_cockpit} \
     %{?subpackages} \
-    %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"} \
     %{?exclude_packages}
 
 %if %{use_dnf}
@@ -859,9 +843,6 @@ desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-c
 %endif
 
 %find_lang rhsm
-%if 0%{?include_syspurpose}
-%find_lang syspurpose
-%endif
 
 # fake out the redhat.repo file
 %if %{use_yum} || %{use_dnf}
@@ -961,14 +942,15 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %dir %{_prefix}/share/locale/ta_IN
 %dir %{_prefix}/share/locale/ta_IN/LC_MESSAGES
 %endif
+
 %attr(755,root,root) %{_sbindir}/subscription-manager
 
 # symlink to console-helper
 %if !0%{?suse_version}
 %{_bindir}/subscription-manager
 %endif
-%attr(755,root,root) %{_bindir}/rhsmcertd
 
+%attr(755,root,root) %{_bindir}/rhsmcertd
 %attr(755,root,root) %{_libexecdir}/rhsmcertd-worker
 
 
@@ -977,6 +959,10 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %attr(755,root,root) %dir %{_sysconfdir}/pki/entitlement
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm/facts
+
+%attr(755,root,root) %dir %{_sysconfdir}/rhsm/syspurpose
+%attr(644,root,root) %{_sysconfdir}/rhsm/syspurpose/valid_fields.json
+
 %if 0%{?suse_version}
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm/zypper.repos.d
 %endif
@@ -1117,6 +1103,13 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/rhsmlib/dbus/objects/__pycache__
 %{python_sitearch}/rhsmlib/facts/__pycache__
 %{python_sitearch}/rhsmlib/services/__pycache__
+%endif
+
+# syspurpose
+%dir %{python_sitearch}/syspurpose
+%{python_sitearch}/syspurpose/*.py
+%if %{with python3}
+%{python_sitearch}/syspurpose/__pycache__
 %endif
 
 %{_datadir}/polkit-1/actions/com.redhat.*.policy
@@ -1264,23 +1257,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %doc README.Fedora
 %endif
 %endif
-
-%files -n %{py_package_prefix}-syspurpose -f syspurpose.lang
-%defattr(-,root,root,-)
-%dir %{python_sitelib}/syspurpose*.egg-info
-%{python_sitelib}/syspurpose*.egg-info/*
-%dir %{_sysconfdir}/rhsm/syspurpose
-%dir %{python_sitelib}/syspurpose
-%{python_sitelib}/syspurpose/*.py*
-%if %{with python3}
-%{python_sitelib}/syspurpose/__pycache__
-%endif
-%doc %{_mandir}/man8/syspurpose.8.*
-%doc LICENSE
-
-%attr(755, root, root) %{_sbindir}/syspurpose
-%attr(644,root,root) %{_sysconfdir}/rhsm/syspurpose/valid_fields.json
-%attr(644,root,root) %{completion_dir}/syspurpose
 
 %if %{use_container_plugin}
 %files -n subscription-manager-plugin-container
