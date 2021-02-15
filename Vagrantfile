@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
     "centos7" => "candlepin/subscription-manager-centos7",
     "centos6" => "centos/6",
     "debian9" => "debian/stretch64",
-    "fedora30" => "fedora/30-cloud-base",
+    "fedora32" => "fedora/32-cloud-base",
     "opensuse42.2" => "opensuse/openSUSE-42.2-x86_64",
   }
 
@@ -45,7 +45,7 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  primary_vm = "centos7"
+  primary_vm = "fedora32"
 
   config.vm.provider "libvirt"  # prefer libvirt
 
@@ -53,8 +53,7 @@ Vagrant.configure("2") do |config|
   config.ssh.forward_x11 = true
 
   # setup shared folder
-  config.vm.synced_folder ".", "/vagrant", type: "sshfs",
-                          sshfs_opts_append: "-o nonempty"
+  config.vm.synced_folder ".", "/vagrant", type: "sshfs"
 
   # Set up the hostmanager plugin to automatically configure host & guest hostnames
   if Vagrant.has_plugin?("vagrant-hostmanager")
@@ -157,6 +156,7 @@ Vagrant.configure("2") do |config|
       }
     end
   end
+
 
   # PXE client
   config.vm.define 'pxe-client', autostart: false do |host|
