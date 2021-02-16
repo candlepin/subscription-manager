@@ -4,13 +4,14 @@
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # tfu <tfu@redhat.com>, 2018. #zanata
 # Ludek Janda <ljanda@redhat.com>, 2021.
+# Sundeep Anand <suanand@redhat.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-03 14:20-0500\n"
-"PO-Revision-Date: 2021-02-10 17:40+0000\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2021-02-16 16:39+0000\n"
+"Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-master/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -513,7 +514,7 @@ msgstr "运行自动附加的时间间隔（以分钟为单位）"
 
 #: src/daemons/rhsmcertd.c:108
 msgid "interval to run auto-registration (in minutes)"
-msgstr ""
+msgstr "运行自动注册的时间间隔（以分钟为单位）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/daemons/rhsmcertd.c:111
@@ -531,7 +532,7 @@ msgstr "不要在初始检查中加偏移。"
 
 #: src/daemons/rhsmcertd.c:119
 msgid "try to perform auto-registration."
-msgstr ""
+msgstr "尝试进行自动注册。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/daemons/rhsmcertd.c:452
@@ -963,7 +964,7 @@ msgstr "内容组："
 
 #: src/rct/manifest_commands.py:300
 msgid "\tManifest"
-msgstr "\t\\t清单"
+msgstr "\t清单"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:312
@@ -4509,7 +4510,7 @@ msgstr "从列表中删除一个项（{attr}）。"
 #: src/subscription_manager/managercli.py:617
 #, python-brace-format
 msgid "show this system's current {attr}"
-msgstr ""
+msgstr "显示本系统目前的 {attr}"
 
 #: src/subscription_manager/managercli.py:624
 #, python-brace-format

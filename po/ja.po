@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-03 14:20-0500\n"
-"PO-Revision-Date: 2021-02-03 09:40+0000\n"
+"PO-Revision-Date: 2021-02-15 14:40+0000\n"
 "Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-master/ja/>\n"
@@ -517,7 +517,7 @@ msgstr "自動割り当てを実行する間隔 (分単位)"
 
 #: src/daemons/rhsmcertd.c:108
 msgid "interval to run auto-registration (in minutes)"
-msgstr ""
+msgstr "自動登録を実行する間隔 (分単位)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/daemons/rhsmcertd.c:111
@@ -535,7 +535,7 @@ msgstr "オフセットを初回チェックに追加しないでください。
 
 #: src/daemons/rhsmcertd.c:119
 msgid "try to perform auto-registration."
-msgstr ""
+msgstr "自動登録を実行してみてください。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/daemons/rhsmcertd.c:452
@@ -976,7 +976,7 @@ msgstr "コンテンツセット:"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/rct/manifest_commands.py:300
 msgid "\tManifest"
-msgstr "\t\\tマニフェスト"
+msgstr "\tマニフェスト"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/rct/manifest_commands.py:312
@@ -4548,7 +4548,7 @@ msgstr "一覧 ({attr}) からアイテムを削除します。"
 #: src/subscription_manager/managercli.py:617
 #, python-brace-format
 msgid "show this system's current {attr}"
-msgstr ""
+msgstr "このシステムの現在の {attr} を表示します"
 
 #: src/subscription_manager/managercli.py:624
 #, python-brace-format
