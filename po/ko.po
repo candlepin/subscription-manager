@@ -4,13 +4,14 @@
 # eukim <eukim@redhat.com>, 2018. #zanata
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # Ludek Janda <ljanda@redhat.com>, 2021.
+# Sundeep Anand <suanand@redhat.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-03 14:20-0500\n"
-"PO-Revision-Date: 2021-02-03 11:20+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"PO-Revision-Date: 2021-02-15 14:40+0000\n"
+"Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-master/ko/>\n"
 "Language: ko\n"
@@ -515,7 +516,7 @@ msgstr "자동 첨부를 실행하는 간격 (분 단위)"
 
 #: src/daemons/rhsmcertd.c:108
 msgid "interval to run auto-registration (in minutes)"
-msgstr ""
+msgstr "자동 등록을 실행하는 간격(분 단위)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/daemons/rhsmcertd.c:111
@@ -533,7 +534,7 @@ msgstr "오프셋을 처음 확인에 추가하지 마십시오."
 
 #: src/daemons/rhsmcertd.c:119
 msgid "try to perform auto-registration."
-msgstr ""
+msgstr "자동 등록을 실행하십시오."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/daemons/rhsmcertd.c:452
@@ -967,7 +968,7 @@ msgstr "컨텐츠 모음:"
 
 #: src/rct/manifest_commands.py:300
 msgid "\tManifest"
-msgstr "\t\\t매니페스트"
+msgstr "\t매니페스트"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:312
@@ -4558,7 +4559,7 @@ msgstr "목록({attr})에서 항목을 제거하십시오."
 #: src/subscription_manager/managercli.py:617
 #, python-brace-format
 msgid "show this system's current {attr}"
-msgstr ""
+msgstr "이 시스템의 현재 {attr} 표시"
 
 #: src/subscription_manager/managercli.py:624
 #, python-brace-format
