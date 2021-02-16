@@ -912,23 +912,32 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 # gnome-help tools use domain 'subscription-manager'
 %files -f rhsm.lang
 %defattr(-,root,root,-)
+
+# Make some unusual directories for suse part of subscription-manager
 %if 0%{?suse_version}
 %dir %{_sysconfdir}/pki
+%dir %{_prefix}/share/polkit-1
+%dir %{_prefix}/share/polkit-1/actions
 
+# Suse specific
 %if %{use_yum}
     %dir %{_sysconfdir}/yum
     %dir %{_sysconfdir}/yum/pluginconf.d
     %dir %{_prefix}/lib/yum-plugins/
 %endif
 
+# Suse specific
 %if %{use_dnf}
     %dir %{_sysconfdir}/dnf
     %dir %{_sysconfdir}/dnf/plugins
     %dir %{_prefix}/lib/dnf-plugins/
 %endif
 
+# Suse specific
 %if %{use_yum} || %{use_dnf}
     %dir %{_sysconfdir}/yum.repos.d
+%endif
+
 %endif
 
 %dir %{python_sitearch}/rhsmlib/candlepin
@@ -947,9 +956,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %dir %{python_sitearch}/subscription_manager/plugin
 %dir %{python_sitearch}/subscription_manager/scripts
 %dir %{_var}/spool/rhsm
-%dir %{_prefix}/share/polkit-1
-%dir %{_prefix}/share/polkit-1/actions
-%endif
+
 %if 0%{?suse_version} && 0%{?suse_version} < 1315
 %dir %{_prefix}/share/locale/ta_IN
 %dir %{_prefix}/share/locale/ta_IN/LC_MESSAGES
@@ -1382,9 +1389,14 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{_datadir}/icons/hicolor/symbolic/apps/*.svg
 %endif
 
+%pre
+
+# Remove old *.egg-info empty directories not removed be previous versions of RPMs
+# due to this BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1927245
+rmdir %{python_sitearch}/subscription_manager-*-*.egg-info 2> /dev/null || true
+
 %if %use_systemd
     %if 0%{?suse_version}
-%pre
         %service_add_pre rhsm.service
         %service_add_pre rhsm-facts.service
         %service_add_pre rhsmcertd.service
