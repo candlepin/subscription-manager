@@ -243,7 +243,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.12
+Version: 1.28.13
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1453,6 +1453,11 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Feb 18 2021 Christopher Snyder <csnyder@redhat.com> 1.28.13-1
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (suanand@redhat.com)
+- Translated using Weblate (Chinese (Traditional) (zh_TW)) (jsefler@redhat.com)
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (jsefler@redhat.com)
+
 * Thu Feb 04 2021 Christopher Snyder <csnyder@redhat.com> 1.28.12-1
 - 1922210: Typo in help text [1.28] (#2428) (wpoteat@redhat.com)
 
