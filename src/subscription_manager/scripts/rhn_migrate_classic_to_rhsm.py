@@ -61,7 +61,7 @@ try:
     init_dep_injection()
 
     from subscription_manager.migrate import migrate
-    from subscription_manager.managercli import handle_exception
+    from subscription_manager.cli_command.cli import handle_exception
 except KeyboardInterrupt:
     system_exit(0, "\nUser interrupted process.")
 except ImportError as err:

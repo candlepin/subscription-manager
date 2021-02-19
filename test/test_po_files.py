@@ -8,7 +8,7 @@ except ImportError:
 from . import fixture
 import six
 
-from subscription_manager import managercli
+from subscription_manager.cli import system_exit
 from subscription_manager.printing_utils import to_unicode_or_bust
 
 import gettext
@@ -67,7 +67,7 @@ class TestUnicodeGettext(TestLocale):
         with fixture.locale_context('ja_JP.UTF-8'):
             try:
                 with fixture.Capture(silent=True):
-                    managercli.system_exit(1, _("'%s' is not a valid serial number") % "123123")
+                    system_exit(1, _("'%s' is not a valid serial number") % "123123")
             except SystemExit:
                 # tis okay, we are looking for unicode errors on the string encode
                 pass

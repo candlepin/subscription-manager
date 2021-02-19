@@ -20,7 +20,7 @@ from mock import Mock, NonCallableMock, patch, MagicMock
 
 from .stubs import StubUEP
 
-from subscription_manager.managercli import RegisterCommand
+from subscription_manager.cli_command.register import RegisterCommand
 from subscription_manager import injection as inj
 from subscription_manager import cache
 from subscription_manager.identity import ConsumerIdentity
@@ -34,18 +34,18 @@ from rhsmlib.services import exceptions
 class CliRegistrationTests(SubManFixture):
     def setUp(self):
         super(CliRegistrationTests, self).setUp()
-        register_patcher = patch('subscription_manager.managercli.register.RegisterService',
+        register_patcher = patch('subscription_manager.cli_command.register.register.RegisterService',
             spec=RegisterService)
         self.mock_register = register_patcher.start().return_value
         self.mock_register.register.return_value = MagicMock(name="MockConsumer")
         self.addCleanup(register_patcher.stop)
 
-        get_supported_resources_patcher = patch('subscription_manager.managercli.get_supported_resources')
+        get_supported_resources_patcher = patch('subscription_manager.cli_command.register.get_supported_resources')
         self.mock_get_resources = get_supported_resources_patcher.start()
         self.mock_get_resources.return_value = ['environments']
         self.addCleanup(self.mock_get_resources.stop)
 
-        identity_patcher = patch('subscription_manager.managercli.identity.ConsumerIdentity',
+        identity_patcher = patch('subscription_manager.cli_command.register.identity.ConsumerIdentity',
             spec=ConsumerIdentity)
         self.mock_consumer_identity = identity_patcher.start().return_value
         self.addCleanup(identity_patcher.stop)
@@ -84,7 +84,7 @@ class CliRegistrationTests(SubManFixture):
             cmd = RegisterCommand()
             cmd.main(['register', '--force', '--username', 'admin', '--password', 'admin', '--org', 'admin'])
 
-    @patch('subscription_manager.managercli.EntCertActionInvoker')
+    @patch('subscription_manager.cli_command.cli.EntCertActionInvoker')
     def test_activation_keys_updates_certs_and_repos(self, mock_entcertlib):
         self.stub_cp_provider.basic_auth_cp = Mock('rhsm.connection.UEPConnection', new_callable=StubUEP)
         self._inject_mock_invalid_consumer()
@@ -97,7 +97,7 @@ class CliRegistrationTests(SubManFixture):
         self.mock_register.register.assert_called_once()
         mock_entcertlib.update.assert_called_once()
 
-    @patch('subscription_manager.managercli.EntCertActionInvoker')
+    @patch('subscription_manager.cli_command.cli.EntCertActionInvoker')
     def test_consumerid_updates_certs_and_repos(self, mock_entcertlib):
         self.stub_cp_provider.basic_auth_cp = Mock('rhsm.connection.UEPConnection', new_callable=StubUEP)
         self._inject_mock_invalid_consumer()
