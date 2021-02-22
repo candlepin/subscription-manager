@@ -18,6 +18,7 @@ import mock
 import six.moves.http_client
 import socket
 from rhsm.https import ssl
+from rhsm import certificate2
 
 from . import stubs
 from . import fixture
@@ -164,8 +165,12 @@ class TestCdnReleaseVerionProvider(fixture.SubManFixture):
                                            gpg=None, enabled="0")
 
         stub_product = stubs.StubProduct("rhel-6")
-        stub_entitlement_certs = [stubs.StubEntitlementCertificate(stub_product,
-                                                                   content=[stub_content_6])]
+        stub_entitlement_certs = [
+            stubs.StubEntitlementCertificate(
+                stub_product,
+                content=[stub_content_6]
+            )
+        ]
 
         self.ent_dir = stubs.StubEntitlementDirectory(stub_entitlement_certs)
 
@@ -173,6 +178,31 @@ class TestCdnReleaseVerionProvider(fixture.SubManFixture):
 
         releases = cdn_rv_provider.get_releases()
         self.assertEqual([], releases)
+
+    def test_get_releases_rhel_from_sca_ent_cert(self):
+
+        stub_content_6 = stubs.StubContent(
+            "c6",
+            required_tags="rhel-6",
+            gpg=None,
+            enabled="1"
+        )
+
+        stub_product = stubs.StubProduct("rhel-6")
+        stub_entitlement_certs = [
+            stubs.StubEntitlementCertificate(
+                stub_product,
+                content=[stub_content_6],
+                entitlement_type=certificate2.CONTENT_ACCESS_CERT_TYPE
+            )
+        ]
+
+        self.ent_dir = stubs.StubEntitlementDirectory(stub_entitlement_certs)
+
+        cdn_rv_provider = self._get_cdn_rv_provider()
+
+        releases = cdn_rv_provider.get_releases()
+        self.assertNotEqual([], releases)
 
     def test_get_releases_throws_exception(self):
         cdn_rv_provider = self._get_cdn_rv_provider()
