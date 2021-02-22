@@ -296,11 +296,27 @@ class EntitlementDirectory(CertificateDirectory):
         return [x for x in self.list_with_content_access() if self._check_key(x) and x.is_valid()]
 
     def list(self):
+        """
+        List entitlement certificates that do not have SCA type
+        :return: list of entitlement certs
+        """
         certs = super(EntitlementDirectory, self).list()
         return [cert for cert in certs if cert.entitlement_type != CONTENT_ACCESS_CERT_TYPE]
 
     def list_with_content_access(self):
+        """
+        List all entitlement certificates
+        :return: list of entitlement certs
+        """
         return super(EntitlementDirectory, self).list()
+
+    def list_with_sca_mode(self):
+        """
+        List only entitlement certificates that do have SCA type
+        :return:
+        """
+        certs = super(EntitlementDirectory, self).list()
+        return [cert for cert in certs if cert.entitlement_type == CONTENT_ACCESS_CERT_TYPE]
 
     def list_for_product(self, product_id):
         """

@@ -344,6 +344,10 @@ class StubEntitlementDirectory(StubCertificateDirectory):
     def list_with_content_access(self):
         return super(StubEntitlementDirectory, self).list()
 
+    def list_with_sca_mode(self):
+        certs = super(StubEntitlementDirectory, self).list()
+        return [cert for cert in certs if cert.entitlement_type == CONTENT_ACCESS_CERT_TYPE]
+
 
 class StubProductDirectory(StubCertificateDirectory, ProductDirectory):
     """
