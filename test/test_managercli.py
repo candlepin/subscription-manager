@@ -1618,13 +1618,18 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         self.cc.cp.setConsumer({'serviceLevel': 'Jarjar'})
         self.cc._set('JRJAR')
 
-    def test_service_level_creates_syspurpose_dir_and_file(self):
+    @patch("subscription_manager.managercli.SyncedStore")
+    def test_service_level_creates_syspurpose_dir_and_file(self, mock_syspurpose):
         # create a mock /etc/rhsm/ directory, and set the value of a mock USER_SYSPURPOSE under that
         old_capabilities = self.cc.cp._capabilities
         self.cc.cp._capabilities = ['syspurpose']
         self.cc.store = self.mock_sp_store()
         self.cc.store.get_cached_contents = Mock(return_value={})
-        self.cc._get_synced_store = MagicMock(return_value=self.cc.store)
+
+        mock_syspurpose.read = Mock()
+        mock_syspurpose.read.return_value = Mock()
+        mock_syspurpose.return_value = self.mock_sp_store()
+
         mock_etc_rhsm_dir = tempfile.mkdtemp()
         self.addCleanup(shutil.rmtree, mock_etc_rhsm_dir)
         mock_syspurpose_file = os.path.join(mock_etc_rhsm_dir, "syspurpose/syspurpose.json")
@@ -1698,6 +1703,9 @@ class TestSyspurposeCommand(TestCliProxyCommand):
     command_class = managercli.RoleCommand
 
     def setUp(self):
+        synced_store_patch = patch('subscription_manager.managercli.SyncedStore')
+        self.synced_store_mock = synced_store_patch.start()
+        self.addCleanup(self.synced_store_mock)
         syspurpose_patch = patch('syspurpose.files.SyncedStore')
         sp_patch = syspurpose_patch.start()
         self.addCleanup(sp_patch.stop)
@@ -1715,6 +1723,9 @@ class TestRoleCommand(TestCliProxyCommand):
     command_class = managercli.RoleCommand
 
     def setUp(self):
+        synced_store_patch = patch('subscription_manager.managercli.SyncedStore')
+        self.synced_store_mock = synced_store_patch.start()
+        self.addCleanup(self.synced_store_mock)
         syspurpose_patch = patch('syspurpose.files.SyncedStore')
         sp_patch = syspurpose_patch.start()
         self.addCleanup(sp_patch.stop)
@@ -1851,7 +1862,7 @@ class TestRoleCommand(TestCliProxyCommand):
             self.cc._do_command()
         self.assertIn("Role not set.", cap.out)
 
-    @patch("subscription_manager.syspurposelib.SyncedStore")
+    @patch("subscription_manager.managercli.SyncedStore")
     @patch("subscription_manager.syspurposelib.SyspurposeSyncActionCommand")
     def test_setting_syspurpose_role(self, mock_syspurpose_sync, mock_syspurpose):
         mock_syspurpose.read = Mock()
@@ -1861,18 +1872,15 @@ class TestRoleCommand(TestCliProxyCommand):
         instance_syspurpose_store.set = MagicMock(return_value=True)
         instance_syspurpose_store.write = MagicMock(return_value=None)
         instance_syspurpose_store.get_cached_contents = Mock(return_value={"role": "Foo"})
-        self.cc._get_synced_store = MagicMock(return_value=instance_syspurpose_store)
+        mock_syspurpose.return_value = instance_syspurpose_store
 
         mock_syspurpose_sync.return_value = Mock()
-        mock_syspurpose.return_value = instance_syspurpose_store
         instance_mock_syspurpose_sync = mock_syspurpose_sync.return_value
         instance_mock_syspurpose_sync.perform = Mock(return_value=({}, {"role": "Foo"}))
 
         self.cc.options = Mock(spec=['set', 'unset'])
         self.cc.options.set = 'Foo'
         self.cc.options.unset = False
-        # Effectively mock out the store used, force it to be our mock here.
-        self.cc.store = instance_syspurpose_store
 
         with Capture() as cap:
             self.cc._do_command()
@@ -1881,11 +1889,11 @@ class TestRoleCommand(TestCliProxyCommand):
         instance_syspurpose_store.set.assert_called_once_with('role', 'Foo')
         instance_syspurpose_store.sync.assert_called_once()
 
-    @patch("subscription_manager.syspurposelib.SyncedStore")
+    @patch("subscription_manager.managercli.SyncedStore")
     @patch("subscription_manager.syspurposelib.SyspurposeSyncActionCommand")
     def test_setting_conflicting_syspurpose_role(self, mock_syspurpose_sync, mock_syspurpose):
         """
-        Test the case, when there is conflict with value set by adminstrator on server
+        Test the case, when there is conflict with value set by administrator on server
         """
         mock_syspurpose.read = Mock()
         mock_syspurpose.read.return_value = Mock()
@@ -1894,18 +1902,15 @@ class TestRoleCommand(TestCliProxyCommand):
         instance_syspurpose_store.set = MagicMock(return_value=True)
         instance_syspurpose_store.write = MagicMock(return_value=None)
         instance_syspurpose_store.get_cached_contents = Mock(return_value={"role": "Foo"})
+        mock_syspurpose.return_value = instance_syspurpose_store
 
         mock_syspurpose_sync.return_value = Mock()
-        mock_syspurpose.return_value = instance_syspurpose_store
         instance_mock_syspurpose_sync = mock_syspurpose_sync.return_value
         instance_mock_syspurpose_sync.perform = Mock(return_value=({}, {"role": "Foo"}))
 
-        self.cc._get_synced_store = MagicMock(return_value=instance_syspurpose_store)
         self.cc.options = Mock(spec=['set', 'unset'])
         self.cc.options.set = 'Bar'
         self.cc.options.unset = False
-        # Effectively mock out the store used, force it to be our mock here.
-        self.cc.store = instance_syspurpose_store
 
         with Capture() as cap:
             with self.assertRaises(SystemExit) as cm:
@@ -1921,7 +1926,7 @@ class TestRoleCommand(TestCliProxyCommand):
             cap.err
         )
 
-    @patch("subscription_manager.syspurposelib.SyncedStore")
+    @patch("subscription_manager.managercli.SyncedStore")
     @patch("subscription_manager.syspurposelib.SyspurposeSyncActionCommand")
     def test_unsetting_syspurpose_role(self, mock_syspurpose_sync, mock_syspurpose):
         mock_syspurpose.read = Mock()
@@ -1930,14 +1935,13 @@ class TestRoleCommand(TestCliProxyCommand):
         instance_syspurpose_store.contents = {'role': 'Foo'}
         instance_syspurpose_store.unset = MagicMock(return_value=True)
         instance_syspurpose_store.write = MagicMock(return_value=None)
-        instance_syspurpose_store.get_cached_contents = Mock(return_value={})
+        instance_syspurpose_store.get_cached_contents = MagicMock(return_value={})
+        mock_syspurpose.return_value = instance_syspurpose_store
 
         mock_syspurpose_sync.return_value = Mock()
         instance_mock_syspurpose_sync = mock_syspurpose_sync.return_value
         instance_mock_syspurpose_sync.perform = Mock(return_value=({}, {"role": ""}))
 
-        self.cc._get_synced_store = MagicMock(return_value=instance_syspurpose_store)
-        self.cc.store = instance_syspurpose_store
         self.cc.options = Mock(spec=['set', 'unset'])
         self.cc.options.set = None
         self.cc.options.unset = True

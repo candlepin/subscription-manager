@@ -25,22 +25,13 @@ It contains methods for accessing/manipulating the local syspurpose.json metadat
 from rhsm.connection import ConnectionException
 from subscription_manager import certlib
 from subscription_manager import injection as inj
+from syspurpose.files import SyncedStore, USER_SYSPURPOSE, CACHED_SYSPURPOSE
 
 import logging
 import json
 import os
+
 log = logging.getLogger(__name__)
-
-try:
-    from syspurpose.files import SyncedStore, USER_SYSPURPOSE, post_process_received_data, CACHED_SYSPURPOSE
-except ImportError:
-    log.debug("Could not import from module syspurpose.")
-    SyncedStore = None
-    USER_SYSPURPOSE = "/etc/rhsm/syspurpose/syspurpose.json"
-    CACHED_SYSPURPOSE = "/var/lib/rhsm/cache/syspurpose.json"
-
-    def post_process_received_data(data):
-        return data
 
 store = None
 syspurpose = None

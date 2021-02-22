@@ -25,7 +25,7 @@ Due to unintuitive behavior with `sys.path`
 as expected. One can run the script like this instead:
 
 ```bash
-PYTHONPATH=./src:./syspurpose/src python -m subscription_manager.scripts.subscription_manager
+PYTHONPATH=./src python -m subscription_manager.scripts.subscription_manager
 ```
 
 Similar for other bin scripts:

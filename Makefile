@@ -53,7 +53,6 @@ INITIAL_SETUP_INST_DIR := $(ANACONDA_ADDON_INST_DIR)/$(ANACONDA_ADDON_NAME)
 POLKIT_ACTIONS_INST_DIR := $(INSTALL_DIR)/polkit-1/actions
 COMPLETION_DIR ?= $(INSTALL_DIR)/bash-completion/completions/
 LIBEXEC_DIR ?= $(shell rpm --eval='%_libexecdir')
-SUBPACKAGES ?= $(shell ls -d syspurpose)
 
 # If we skip install ostree plugin, unset by default
 # override from spec file for rhel6
@@ -95,7 +94,6 @@ INSTALL_DNF_PLUGINS ?= false
 DNF_PLUGINS_SRC_DIR := src/plugins
 
 INSTALL_ZYPPER_PLUGINS ?= false
-INCLUDE_SYSPURPOSE ?= 0
 
 # sets a version that is more or less latest tag plus commit sha
 VERSION ?= $(shell git describe | awk ' { sub(/subscription-manager-/,"")};1' )
@@ -122,23 +120,14 @@ STYLEFILES=$(PYFILES) $(BIN_FILES)
 
 .DEFAULT_GOAL := build
 
-build-subpackages:
-	for subpackage in $(SUBPACKAGES); \
-	do \
-	    pushd $$subpackage; \
-	    $(PYTHON) ./setup.py clean --all; \
-	    $(PYTHON) ./setup.py build; \
-	    popd; \
-	done;
-
 # Install doesn't perform a build if it doesn't have too.  Best to clean out
 # any cruft so developers don't end up install old builds.
 ifeq ($(WITH_SUBMAN_GUI),true)
-    build: rhsmcertd rhsm-icon build-subpackages
+    build: rhsmcertd rhsm-icon
         EXCLUDE_PACKAGES:="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py clean --all
         EXCLUDE_PACKAGES:="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
 else
-    build: rhsmcertd build-subpackages
+    build: rhsmcertd
         EXCLUDE_PACKAGES:="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py clean --all
         EXCLUDE_PACKAGES:="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
 endif
@@ -205,10 +194,7 @@ install-conf:
 	install -d $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
 	install -m 644 etc-conf/dbus/polkit/com.redhat.RHSM1.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
 	install -m 644 etc-conf/dbus/polkit/com.redhat.RHSM1.Facts.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
-	if [[ "$(INCLUDE_SYSPURPOSE)" = "1" ]]; then \
-		install -m 644 etc-conf/syspurpose/valid_fields.json $(DESTDIR)/etc/rhsm/syspurpose/valid_fields.json; \
-		install -m 644 etc-conf/syspurpose.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/syspurpose; \
-	fi;
+	install -m 644 etc-conf/syspurpose/valid_fields.json $(DESTDIR)/etc/rhsm/syspurpose/valid_fields.json; \
 	if [[ "$(WITH_SUBMAN_GUI)" == "true" ]]; then \
 	    install -m 644 etc-conf/dbus/polkit/com.redhat.SubscriptionManager.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR); \
 		install -m 644 etc-conf/subscription-manager-gui.appdata.xml $(DESTDIR)/$(INSTALL_DIR)/appdata/subscription-manager-gui.appdata.xml; \
@@ -348,9 +334,6 @@ install-via-setup: install-subpackages-via-setup
 	else \
 	    rm $(DESTDIR)/$(PREFIX)/bin/rhn-migrate-classic-to-rhsm; \
 	fi;
-	if [[ "$(INCLUDE_SYSPURPOSE)" = "1" ]]; then \
-		mv $(DESTDIR)/$(PREFIX)/bin/syspurpose $(DESTDIR)/$(PREFIX)/sbin/; \
-	fi;
 	find $(DESTDIR)/$(PYTHON_SITELIB) -name requires.txt -exec sed -i '/dbus-python/d' {} \;
 
 
@@ -441,16 +424,10 @@ gettext:
 	# the string marked for translation beginning with "translators" will be
 	# included in the pot file.
 	$(PYTHON) ./setup.py gettext
-	pushd ./syspurpose; \
-	${PYTHON} ./setup.py gettext; \
-	popd
 
 .PHONY: update-po
 update-po:
 	$(PYTHON) ./setup.py update_trans
-	pushd ./syspurpose; \
-	$(PYTHON) ./setup.py update_trans; \
-	popd
 
 .PHONY: uniq-po
 uniq-po:
