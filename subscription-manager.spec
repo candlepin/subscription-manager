@@ -415,7 +415,7 @@ Obsoletes: subscription-manager-plugin-container
 # certs would not work as expected without libdnf plugin
 Requires: libdnf-plugin-subscription-manager = %{version}
 # The dnf plugin is now part of subscription-manager
-Obsoletes: dnf-plugin-subscription-manager
+Obsoletes: dnf-plugin-subscription-manager < 1.29.0
 %endif
 %endif
 
@@ -533,7 +533,8 @@ subscriptions
 %endif
 
 %if %{use_dnf}
-# RPM containing DNF plugin
+
+# RPM containing libdnf plugin
 %if %{create_libdnf_rpm}
 %package -n libdnf-plugin-subscription-manager
 Summary: Subscription Manager plugin for libdnf
@@ -542,36 +543,24 @@ Group: Productivity/Networking/System
 %else
 Group: System Environment/Base
 %endif
-%if (0%{?fedora} >= 29 || 0%{?rhel} >= 8)
+
 BuildRequires: cmake
 BuildRequires: gcc
 BuildRequires: json-c-devel
 BuildRequires: libdnf-devel >= 0.22.5
 Requires: json-c
 Requires: libdnf >= 0.22.5
-%endif
-# See BZ 1581410 - avoid a circular dependency
-%if (0%{?rhel} < 8)
-Requires: %{name} >= %{version}-%{release}
-%endif
-%if %{with python3}
-Requires: python3-dnf-plugins-core
-Requires: python3-librepo
-%else
-Requires: python2-dnf-plugins-core
-%if (0%{?rhel} == 7)
-Requires: python-librepo
-%else
-Requires: python2-librepo
-%endif
-%endif
 Requires: dnf >= 1.0.0
+
+Obsoletes: dnf-plugin-subscription-manager < 1.29.0
 
 %description -n libdnf-plugin-subscription-manager
 This package provides a plugin to interact with repositories from the Red Hat
 entitlement platform; contains only one product-id binary plugin used by
 e.g. microdnf.
+
 %else
+
 # RPM containing DNF plugin
 %package -n dnf-plugin-subscription-manager
 Summary: Subscription Manager plugins for DNF
@@ -580,20 +569,57 @@ Group: Productivity/Networking/System
 %else
 Group: System Environment/Base
 %endif
+
+%if (0%{?fedora} >= 29 || 0%{?rhel} >= 8)
 BuildRequires: cmake
 BuildRequires: gcc
 BuildRequires: json-c-devel
 BuildRequires: libdnf-devel >= 0.22.5
 Requires: json-c
 Requires: libdnf >= 0.22.5
+%endif
+
+# See BZ 1581410 - avoid a circular dependency
+%if (0%{?rhel} < 8 || 0%{?fedora} < 29)
+Requires: %{name} >= %{version}-%{release}
+%endif
+
+%if %{with python3}
+
 Requires: python3-dnf-plugins-core
 Requires: python3-librepo
+
+%else
+
+Requires: python2-dnf-plugins-core
+%if (0%{?rhel} == 7)
+Requires: python-librepo
+%else
+Requires: python2-librepo
+%endif
+
+%endif
+
 Requires: dnf >= 1.0.0
 %description -n dnf-plugin-subscription-manager
 This package provides plugins to interact with repositories and subscriptions
 from the Red Hat entitlement platform; contains subscription-manager and
 product-id plugins.
 %endif
+
+# This redefinition of debuginfo package has to be here, because we
+# need to solve the issue described in this BZ:
+# https://bugzilla.redhat.com/show_bug.cgi?id=1920568
+# We need to obsolete old dnf-sub-man-plugin-debuginfo RPM
+%package -n libdnf-plugin-subscription-manager-debuginfo
+Summary: Debug information for package libdnf-plugin-subscription-manager
+Group: Development/Debug
+Obsoletes: dnf-plugin-subscription-manager-debuginfo < 1.29.0
+%description -n libdnf-plugin-subscription-manager-debuginfo
+This package provides debug information for package libdnf-plugin-subscription-manager.
+Debug information is useful when developing applications that use this
+package or when debugging this package.
+
 %endif
 
 
