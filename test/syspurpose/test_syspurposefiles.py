@@ -559,10 +559,10 @@ class TestSyncedStore(SyspurposeTestBase):
     @mock.patch('syspurpose.files.SyncedStore.sync')
     def test_enter_exit_methods_not_used(self, mock_sync):
         """
-        Test that synced store is automatically synced, when set method is used
-        in block of with statement
+        Test that synced store is not automatically synced, when set method is
+        not used in the block of with statement
         """
-        with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
+        with SyncedStore(self.uep, consumer_uuid="something"):
             pass
         mock_sync.assert_not_called()
 
@@ -794,7 +794,7 @@ class TestSyncedStore(SyspurposeTestBase):
 
         self.assertSetEqual(set(result.result['addons']), set(local_result['addons']),
                             'Expected local file to have the same set of addons as the result')
-        self.assertSetEqual(set(result.result['addons']),  set(cache_result['addons']),
+        self.assertSetEqual(set(result.result['addons']), set(cache_result['addons']),
                             'Expected cache file to have the same set of addons as the result')
 
     def test_server_side_falsey_removes_value_locally(self):
@@ -1030,7 +1030,7 @@ class TestSyncedStore(SyspurposeTestBase):
         # one is equivalent to removing an existing one.
 
         synced_store = SyncedStore(self.uep, consumer_uuid=consumer_uuid)
-        result = self.assertRaisesNothing(synced_store.sync)
+        self.assertRaisesNothing(synced_store.sync)
 
         expected_cache = {u'service_level_agreement': u'',
                           u'addons': []}

@@ -48,8 +48,7 @@ exclude_packages.extend(
         '*.ga_impls',
         '*.ga_impls.*',
         '*.plugin.ostree',
-        '*.services.examples',
-        'syspurpose*'
+        '*.services.examples'
     ]
 )
 

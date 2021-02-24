@@ -35,7 +35,7 @@ from subscription_manager.jsonwrapper import PoolWrapper
 from rhsm import ourjson as json
 from subscription_manager.isodate import parse_date
 from subscription_manager.utils import get_supported_resources
-from subscription_manager.syspurposelib import post_process_received_data
+from syspurpose.files import post_process_received_data
 
 from rhsmlib.services import config, syspurpose
 
