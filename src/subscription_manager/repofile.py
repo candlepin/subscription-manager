@@ -115,8 +115,6 @@ class Repo(dict):
 
         repo['name'] = content.name
 
-        log.debug('>>>> content: {content}'.format(content=dir(content)))
-
         if content.enabled:
             repo['enabled'] = "1"
             repo['enabled_metadata'] = "1"

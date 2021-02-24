@@ -376,9 +376,9 @@ class _CertFactory(object):
         content = []
         for product in payload['products']:
             for c in product['content']:
-                log.debug(f'>>> product content: {c}')
                 content.append(Content(
                     content_type=c['type'],
+                    content_id=c['id'],
                     name=c['name'],
                     label=c['label'],
                     vendor=c.get('vendor', None),
