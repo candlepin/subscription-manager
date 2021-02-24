@@ -32,8 +32,10 @@ class Content(object):
     """
     def __init__(self, content_type, name, label,
                  url=None, gpg=None, tags=None, cert=None,
-                 enabled=None, metadata_expire=None):
+                 enabled=None, metadata_expire=None,
+                 content_id=None):
         self.content_type = content_type
+        self.content_id = content_id
         self.name = name
         self.label = label
 

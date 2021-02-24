@@ -30,6 +30,7 @@ class EntitlementCertContent(Content):
         from one), we have to pass this in separately.
         """
         return cls(content_type=ent_cert_content.content_type,
+            content_id=ent_cert_content.content_id,
             name=ent_cert_content.name, label=ent_cert_content.label,
             url=ent_cert_content.url, gpg=ent_cert_content.gpg,
             tags=ent_cert_content.required_tags, cert=cert,

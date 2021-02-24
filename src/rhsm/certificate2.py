@@ -376,6 +376,7 @@ class _CertFactory(object):
         content = []
         for product in payload['products']:
             for c in product['content']:
+                log.debug(f'>>> product content: {c}')
                 content.append(Content(
                     content_type=c['type'],
                     name=c['name'],
@@ -787,13 +788,14 @@ class Order(object):
 
 class Content(object):
 
-    def __init__(self, content_type=None, name=None, label=None, vendor=None, url=None,
+    def __init__(self, content_type=None, content_id=None, name=None, label=None, vendor=None, url=None,
             gpg=None, enabled=None, metadata_expire=None, required_tags=None, arches=None):
 
         if (name is None) or (label is None):
             raise CertificateException("Content missing name/label")
 
         self.content_type = content_type
+        self.content_id = content_id
         self.name = name
         self.label = label
         self.vendor = vendor
@@ -803,7 +805,7 @@ class Content(object):
         if not content_type:
             raise CertificateException("Content does not have a type set.")
 
-        if (enabled not in (None, 0, 1, "0", "1")):
+        if enabled not in (None, 0, 1, "0", "1"):
             raise CertificateException("Invalid content enabled setting: %s"
                 % enabled)
 

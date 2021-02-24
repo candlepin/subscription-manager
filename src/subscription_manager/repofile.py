@@ -56,6 +56,7 @@ class Repo(dict):
     # (name, mutable, default) - The mutability information is only used in disconnected cases
     PROPERTIES = {
             'name': (0, None),
+            'content_id': (0, None),
             'baseurl': (0, None),
             'enabled': (1, '1'),
             'gpgcheck': (1, '1'),
@@ -114,12 +115,17 @@ class Repo(dict):
 
         repo['name'] = content.name
 
+        log.debug('>>>> content: {content}'.format(content=dir(content)))
+
         if content.enabled:
             repo['enabled'] = "1"
             repo['enabled_metadata'] = "1"
         else:
             repo['enabled'] = "0"
             repo['enabled_metadata'] = "0"
+
+        if content.content_id is not None:
+            repo['content_id'] = content.content_id
 
         expanded_url_path = Repo._expand_releasever(release_source, content.url)
         repo['baseurl'] = utils.url_base_join(baseurl, expanded_url_path)
