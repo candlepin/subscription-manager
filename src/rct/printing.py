@@ -108,6 +108,7 @@ class ContentPrinter(object):
         # content-type is required, no need to xstr
         s.append("\t%s: %s" % (_("Type"), content.content_type))
         s.append("\t%s: %s" % (_("Name"), xstr(content.name)))
+        s.append("\t%s: %s" % (_("Content ID"), xstr(content.content_id)))
         s.append("\t%s: %s" % (_("Label"), xstr(content.label)))
         s.append("\t%s: %s" % (_("Vendor"), xstr(content.vendor)))
         s.append("\t%s: %s" % (_("URL"), xstr(content.url)))
