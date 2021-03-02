@@ -240,7 +240,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.29.7
+Version: 1.29.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1520,6 +1520,28 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Mar 02 2021 Christopher Snyder <csnyder@redhat.com> 1.29.8-1
+- 1920568: Solve dependency between debuginfo packages (jhnidek@redhat.com)
+- ENT-3276: Merge syspurpose with subscription-manager (#2436)
+  (jhnidek@redhat.com)
+- Revert "cockpit: Enable subscription-manager in dnf in tests (#2447)" (#2448)
+  (martinpitt@users.noreply.github.com)
+- Update webpack and require webpack-cli as a dev dep (csnyder@redhat.com)
+- Release to fedora main branch instead of master (csnyder@redhat.com)
+- Add f34 target to the fedora releaser (csnyder@redhat.com)
+- cockpit: Enable subscription-manager in dnf in tests (#2447)
+  (martinpitt@users.noreply.github.com)
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (suanand@redhat.com)
+- 1927245: Mark several dir as part of RPM; ENT-3555 (jhnidek@redhat.com)
+- Update our fedora target to fedora32, default to f32 (csnyder@redhat.com)
+- Translated using Weblate (Chinese (Traditional) (zh_TW)) (jsefler@redhat.com)
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (jsefler@redhat.com)
+- Translated using Weblate (Chinese (Traditional) (zh_TW)) (jsefler@redhat.com)
+-  1922210: Typo in help text [master] (#2427) (wpoteat@redhat.com)
+- Translated using Weblate (Korean) (suanand@redhat.com)
+- Translated using Weblate (Japanese) (suanand@redhat.com)
+- Translated using Weblate (Korean) (ljanda@redhat.com)
+
 * Tue Feb 02 2021 Christopher Snyder <csnyder@redhat.com> 1.29.7-1
 - 1878133: Deprecation message for syspurpose (#2421) (wpoteat@redhat.com)
 - 1922173: Repeat auto-register only, when first attempt fail (#2420)
