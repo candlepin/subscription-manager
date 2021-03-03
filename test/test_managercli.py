@@ -18,15 +18,21 @@ import contextlib
 
 import six
 
+from rhsmlib.services import config
+
 from subscription_manager import syspurposelib
 from subscription_manager import managercli, managerlib
 from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_TYPE
 from subscription_manager.injection import provide, \
         CERT_SORTER, PROD_DIR
 from rhsmlib.services.products import InstalledProducts
-from subscription_manager.managercli import AVAILABLE_SUBS_MATCH_COLUMNS
-from subscription_manager.printing_utils import format_name, columnize, \
-        echo_columnize_callback, none_wrap_columnize_callback, highlight_by_filter_string_columnize_cb, FONT_BOLD, FONT_RED, FONT_NORMAL
+from subscription_manager.cli_command.abstract_syspurpose import AbstractSyspurposeCommand
+from subscription_manager.cli_command.cli import handle_exception, system_exit
+from subscription_manager.cli_command.list import AVAILABLE_SUBS_MATCH_COLUMNS
+from subscription_manager.cli_command import cli, status, release
+from subscription_manager.cli_command import config as config_command
+from subscription_manager.printing_utils import format_name, columnize, echo_columnize_callback, \
+        none_wrap_columnize_callback, highlight_by_filter_string_columnize_cb, FONT_BOLD, FONT_RED, FONT_NORMAL
 from subscription_manager.repolib import Repo
 from subscription_manager.overrides import Override
 
@@ -205,7 +211,7 @@ class TestCli(SubManFixture):
 
 
 class TestCliCommand(SubManFixture):
-    command_class = managercli.CliCommand
+    command_class = cli.CliCommand
 
     def setUp(self, hide_do=True):
         super(TestCliCommand, self).setUp()
@@ -259,7 +265,7 @@ class TestCliCommand(SubManFixture):
         self._main_help(["--help"])
 
     # docker error message should output to stderr
-    @patch('subscription_manager.managercli.rhsm.config.in_container')
+    @patch('subscription_manager.cli_command.cli.rhsm.config.in_container')
     def test_cli_in_container_error_message(self, mock_in_container):
         with patch.object(sys, 'argv', ['subscription-manager', 'version']):
             mock_in_container.return_value = True
@@ -315,8 +321,8 @@ class TestProxyConnection(SubManFixture):
         sock_instance.connect_ex = MagicMock(return_value=0)
         sock_instance.close = MagicMock()
 
-        cli = managercli.CliCommand()
-        cli.test_proxy_connection()
+        the_cli = cli.CliCommand()
+        the_cli.test_proxy_connection()
 
         # Expected values are from fake configuration file (see stub.py)
         sock_instance.connect_ex.assert_called_once_with(('notaproxy.grimlock.usersys.redhat.com', 4567))
@@ -999,7 +1005,7 @@ class TestReposCommand(TestCliCommand):
 
         return tuple(searches)
 
-    @patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.cli_command.repos.RepoActionInvoker")
     def test_default(self, mock_invoker):
         self.cc.main()
         self.cc._validate_options()
@@ -1013,7 +1019,7 @@ class TestReposCommand(TestCliCommand):
         result = self.check_output_for_repos(cap.out, repos)
         self.assertEqual((True, True, True), result)
 
-    @patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.cli_command.repos.RepoActionInvoker")
     def test_list(self, mock_invoker):
         self.cc.main(["--list"])
         self.cc._validate_options()
@@ -1027,7 +1033,7 @@ class TestReposCommand(TestCliCommand):
         result = self.check_output_for_repos(cap.out, repos)
         self.assertEqual((True, True, True), result)
 
-    @patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.cli_command.repos.RepoActionInvoker")
     def test_list_with_enabled(self, mock_invoker):
         self.cc.main(["--list", "--list-enabled"])
         self.cc._validate_options()
@@ -1041,7 +1047,7 @@ class TestReposCommand(TestCliCommand):
         result = self.check_output_for_repos(cap.out, repos)
         self.assertEqual((True, True, True), result)
 
-    @patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.cli_command.repos.RepoActionInvoker")
     def test_list_with_disabled(self, mock_invoker):
         self.cc.main(["--list", "--list-disabled"])
         self.cc._validate_options()
@@ -1055,7 +1061,7 @@ class TestReposCommand(TestCliCommand):
         result = self.check_output_for_repos(cap.out, repos)
         self.assertEqual((True, True, True), result)
 
-    @patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.cli_command.repos.RepoActionInvoker")
     def test_list_with_enabled_and_disabled(self, mock_invoker):
         self.cc.main(["--list", "--list-disabled", "--list-disabled"])
         self.cc._validate_options()
@@ -1069,7 +1075,7 @@ class TestReposCommand(TestCliCommand):
         result = self.check_output_for_repos(cap.out, repos)
         self.assertEqual((True, True, True), result)
 
-    @patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.cli_command.repos.RepoActionInvoker")
     def test_list_enabled(self, mock_invoker):
         self.cc.main(["--list-enabled"])
         self.cc._validate_options()
@@ -1085,7 +1091,7 @@ class TestReposCommand(TestCliCommand):
         result = self.check_output_for_repos(cap.out, repos)
         self.assertEqual((True, False, False, False, False, True), result)
 
-    @patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.cli_command.repos.RepoActionInvoker")
     def test_list_disabled(self, mock_invoker):
         self.cc.main(["--list-disabled"])
         self.cc._validate_options()
@@ -1099,7 +1105,7 @@ class TestReposCommand(TestCliCommand):
         result = self.check_output_for_repos(cap.out, repos)
         self.assertEqual((False, True, True), result)
 
-    @patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.cli_command.repos.RepoActionInvoker")
     def test_list_enabled_and_disabled(self, mock_invoker):
         self.cc.main(["--list-enabled", "--list-disabled"])
         self.cc._validate_options()
@@ -1121,7 +1127,7 @@ class TestReposCommand(TestCliCommand):
         self.cc.main(["--disable", "one", "--disable", "two"])
         self.cc._validate_options()
 
-    @patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.cli_command.repos.RepoActionInvoker")
     def test_set_repo_status(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
         self._inject_mock_valid_consumer('fake_id')
@@ -1145,7 +1151,7 @@ class TestReposCommand(TestCliCommand):
                 match_dict_list)
         self.assertTrue(repolib_instance.update.called)
 
-    @patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.cli_command.repos.RepoActionInvoker")
     def test_set_repo_status_with_wildcards(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
         self._inject_mock_valid_consumer('fake_id')
@@ -1162,7 +1168,7 @@ class TestReposCommand(TestCliCommand):
         self.cc.cp.setContentOverrides.assert_called_once_with('fake_id', match_dict_list)
         self.assertTrue(repolib_instance.update.called)
 
-    @patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.cli_command.repos.RepoActionInvoker")
     def test_set_repo_status_disable_all_enable_some(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
         self._inject_mock_valid_consumer('fake_id')
@@ -1186,7 +1192,7 @@ class TestReposCommand(TestCliCommand):
                 match_dict_list)
         self.assertTrue(repolib_instance.update.called)
 
-    @patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.cli_command.repos.RepoActionInvoker")
     def test_set_repo_status_enable_all_disable_some(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
         self._inject_mock_valid_consumer('fake_id')
@@ -1210,7 +1216,7 @@ class TestReposCommand(TestCliCommand):
                 match_dict_list)
         self.assertTrue(repolib_instance.update.called)
 
-    @patch("subscription_manager.managercli.RepoActionInvoker")
+    @patch("subscription_manager.cli_command.repos.RepoActionInvoker")
     def test_set_repo_status_enable_all_disable_all(self, mock_repolib):
         repolib_instance = mock_repolib.return_value
         self._inject_mock_valid_consumer('fake_id')
@@ -1233,7 +1239,7 @@ class TestReposCommand(TestCliCommand):
                 match_dict_list)
         self.assertTrue(repolib_instance.update.called)
 
-    @patch("subscription_manager.managercli.YumRepoFile")
+    @patch("subscription_manager.cli_command.repos.YumRepoFile")
     def test_set_repo_status_when_disconnected(self, mock_repofile):
         self._inject_mock_invalid_consumer()
         mock_repofile_inst = mock_repofile.return_value
@@ -1259,15 +1265,24 @@ class TestReposCommand(TestCliCommand):
 class TestConfigCommand(TestCliCommand):
     command_class = managercli.ConfigCommand
 
+    def setUp(self):
+        super(TestConfigCommand, self).setUp()
+        self.original_conf = config_command.conf
+        config_command.conf = config.Config(self.mock_cfg_parser)
+
+    def tearDown(self):
+        super(TestConfigCommand, self).tearDown()
+        config_command.conf = self.original_conf
+
     def test_list(self):
         self.cc.main(["--list"])
         self.cc._validate_options()
 
     def test_list_default(self):
-        hostname = managercli.conf['server']['hostname']
+        hostname = config_command.conf['server']['hostname']
         # BZ 1862431
-        managercli.conf['rhsmd'] = {}
-        managercli.conf['rhsmd']['processtimeout'] = '300'
+        config_command.conf['rhsmd'] = {}
+        config_command.conf['rhsmd']['processtimeout'] = '300'
         with Capture() as cap:
             self.cc._do_command = self._orig_do_command
             self.cc.main([""])
@@ -1293,7 +1308,7 @@ class TestConfigCommand(TestCliCommand):
 
         baseurl = 'https://someserver.example.com/foo'
         self.cc.main(['--rhsm.baseurl', baseurl])
-        self.assertEqual(managercli.conf['rhsm']['baseurl'], baseurl)
+        self.assertEqual(config_command.conf['rhsm']['baseurl'], baseurl)
 
     def test_remove_config_default(self):
         with Capture() as cap:
@@ -1475,11 +1490,6 @@ class TestAttachCommand(TestCliProxyCommand):
             self.fail("No Exception Raised")
 
 
-# Test Attach and Subscribe are the same
-class TestSubscribeCommand(TestAttachCommand):
-    command_class = managercli.SubscribeCommand
-
-
 class TestRemoveCommand(TestCliProxyCommand):
     command_class = managercli.RemoveCommand
 
@@ -1511,10 +1521,6 @@ class TestRemoveCommand(TestCliProxyCommand):
             self.cc._validate_options()
         except SystemExit as e:
             self.assertEqual(e.code, 69)
-
-
-class TestUnSubscribeCommand(TestRemoveCommand):
-    command_class = managercli.UnSubscribeCommand
 
 
 class TestFactsCommand(TestCliProxyCommand):
@@ -1578,7 +1584,7 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         self.syspurposelib = syspurposelib
         self.syspurposelib.USER_SYSPURPOSE = self.write_tempfile("{}").name
 
-        syspurpose_patch = patch('subscription_manager.syspurposelib.SyncedStore')
+        syspurpose_patch = patch('subscription_manager.cli_command.abstract_syspurpose.SyncedStore')
         self.mock_sp_store = syspurpose_patch.start()
         self.mock_sp_store, self.mock_sp_store_contents = set_up_mock_sp_store(self.mock_sp_store)
         self.addCleanup(syspurpose_patch.stop)
@@ -1618,7 +1624,7 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         self.cc.cp.setConsumer({'serviceLevel': 'Jarjar'})
         self.cc._set('JRJAR')
 
-    @patch("subscription_manager.managercli.SyncedStore")
+    @patch("subscription_manager.cli_command.service_level.SyncedStore")
     def test_service_level_creates_syspurpose_dir_and_file(self, mock_syspurpose):
         # create a mock /etc/rhsm/ directory, and set the value of a mock USER_SYSPURPOSE under that
         old_capabilities = self.cc.cp._capabilities
@@ -1681,8 +1687,8 @@ class TestReleaseCommand(TestCliProxyCommand):
 
     def test_release_set_updates_repos(self):
         mock_repo_invoker = Mock()
-        with patch.object(managercli, 'RepoActionInvoker', Mock(return_value=mock_repo_invoker)):
-            with patch.object(managercli.ReleaseBackend, 'get_releases', Mock(return_value=['7.2'])):
+        with patch.object(release, 'RepoActionInvoker', Mock(return_value=mock_repo_invoker)):
+            with patch.object(release.ReleaseBackend, 'get_releases', Mock(return_value=['7.2'])):
                 with patch.object(managercli.ReleaseCommand, '_get_consumer_release'):
                     self.cc.main(['--set=7.2'])
                     self._orig_do_command()
@@ -1691,7 +1697,7 @@ class TestReleaseCommand(TestCliProxyCommand):
 
     def test_release_unset_updates_repos(self):
         mock_repo_invoker = Mock()
-        with patch.object(managercli, 'RepoActionInvoker', Mock(return_value=mock_repo_invoker)):
+        with patch.object(release, 'RepoActionInvoker', Mock(return_value=mock_repo_invoker)):
             with patch.object(managercli.ReleaseCommand, '_get_consumer_release'):
                 self.cc.main(['--unset'])
                 self._orig_do_command()
@@ -1703,7 +1709,7 @@ class TestSyspurposeCommand(TestCliProxyCommand):
     command_class = managercli.RoleCommand
 
     def setUp(self):
-        synced_store_patch = patch('subscription_manager.managercli.SyncedStore')
+        synced_store_patch = patch('subscription_manager.cli_command.abstract_syspurpose.SyncedStore')
         self.synced_store_mock = synced_store_patch.start()
         self.addCleanup(self.synced_store_mock)
         syspurpose_patch = patch('syspurpose.files.SyncedStore')
@@ -1723,7 +1729,7 @@ class TestRoleCommand(TestCliProxyCommand):
     command_class = managercli.RoleCommand
 
     def setUp(self):
-        synced_store_patch = patch('subscription_manager.managercli.SyncedStore')
+        synced_store_patch = patch('subscription_manager.cli_command.abstract_syspurpose.SyncedStore')
         self.synced_store_mock = synced_store_patch.start()
         self.addCleanup(self.synced_store_mock)
         syspurpose_patch = patch('syspurpose.files.SyncedStore')
@@ -1788,7 +1794,7 @@ class TestRoleCommand(TestCliProxyCommand):
         except SystemExit as e:
             self.assertEqual(e.code, os.EX_USAGE)
 
-    @patch("subscription_manager.syspurposelib.SyncedStore")
+    @patch("subscription_manager.cli_command.abstract_syspurpose.SyncedStore")
     def test_main_no_args(self, mock_syspurpose):
         # It is necessary to mock SyspurposeStore for test function of parent class
         mock_syspurpose.read = Mock()
@@ -1796,10 +1802,10 @@ class TestRoleCommand(TestCliProxyCommand):
         instance_syspurpose_store = mock_syspurpose.read.return_value
         instance_syspurpose_store.local_contents = {'role': 'Foo'}
 
-        with patch.object(managercli.AbstractSyspurposeCommand, 'check_syspurpose_support', Mock(return_value=None)):
+        with patch.object(AbstractSyspurposeCommand, 'check_syspurpose_support', Mock(return_value=None)):
             super(TestRoleCommand, self).test_main_no_args()
 
-    @patch("subscription_manager.syspurposelib.SyncedStore")
+    @patch("subscription_manager.cli_command.abstract_syspurpose.SyncedStore")
     def test_main_empty_args(self, mock_syspurpose):
         # It is necessary to mock SyspurposeStore for test function of parent class
         mock_syspurpose.read = Mock()
@@ -1807,10 +1813,10 @@ class TestRoleCommand(TestCliProxyCommand):
         instance_syspurpose_store = mock_syspurpose.read.return_value
         instance_syspurpose_store.local_contents = {'role': 'Foo'}
 
-        with patch.object(managercli.AbstractSyspurposeCommand, 'check_syspurpose_support', Mock(return_value=None)):
+        with patch.object(AbstractSyspurposeCommand, 'check_syspurpose_support', Mock(return_value=None)):
             super(TestRoleCommand, self).test_main_empty_args()
 
-    @patch("subscription_manager.syspurposelib.SyncedStore")
+    @patch("subscription_manager.cli_command.abstract_syspurpose.SyncedStore")
     @patch("subscription_manager.syspurposelib.SyspurposeSyncActionCommand")
     def test_display_valid_syspurpose_role(self, mock_syspurpose_sync, mock_syspurpose):
         mock_syspurpose.read = Mock()
@@ -1833,7 +1839,7 @@ class TestRoleCommand(TestCliProxyCommand):
             self.cc._do_command()
         self.assertIn("Current Role: Foo", cap.out)
 
-    @patch("subscription_manager.syspurposelib.SyncedStore")
+    @patch("subscription_manager.cli_command.abstract_syspurpose.SyncedStore")
     def test_display_none_syspurpose_role(self, mock_syspurpose):
         mock_syspurpose.read = Mock()
         mock_syspurpose.read.return_value = Mock()
@@ -1847,7 +1853,7 @@ class TestRoleCommand(TestCliProxyCommand):
             self.cc._do_command()
         self.assertIn("Role not set", cap.out)
 
-    @patch("subscription_manager.syspurposelib.SyncedStore")
+    @patch("subscription_manager.cli_command.abstract_syspurpose.SyncedStore")
     def test_display_nonexisting_syspurpose_role(self, mock_syspurpose):
         mock_syspurpose.read = Mock()
         mock_syspurpose.read.return_value = Mock()
@@ -1862,7 +1868,7 @@ class TestRoleCommand(TestCliProxyCommand):
             self.cc._do_command()
         self.assertIn("Role not set.", cap.out)
 
-    @patch("subscription_manager.managercli.SyncedStore")
+    @patch("subscription_manager.cli_command.abstract_syspurpose.SyncedStore")
     @patch("subscription_manager.syspurposelib.SyspurposeSyncActionCommand")
     def test_setting_syspurpose_role(self, mock_syspurpose_sync, mock_syspurpose):
         mock_syspurpose.read = Mock()
@@ -1889,7 +1895,7 @@ class TestRoleCommand(TestCliProxyCommand):
         instance_syspurpose_store.set.assert_called_once_with('role', 'Foo')
         instance_syspurpose_store.sync.assert_called_once()
 
-    @patch("subscription_manager.managercli.SyncedStore")
+    @patch("subscription_manager.cli_command.abstract_syspurpose.SyncedStore")
     @patch("subscription_manager.syspurposelib.SyspurposeSyncActionCommand")
     def test_setting_conflicting_syspurpose_role(self, mock_syspurpose_sync, mock_syspurpose):
         """
@@ -1926,7 +1932,7 @@ class TestRoleCommand(TestCliProxyCommand):
             cap.err
         )
 
-    @patch("subscription_manager.managercli.SyncedStore")
+    @patch("subscription_manager.cli_command.abstract_syspurpose.SyncedStore")
     @patch("subscription_manager.syspurposelib.SyspurposeSyncActionCommand")
     def test_unsetting_syspurpose_role(self, mock_syspurpose_sync, mock_syspurpose):
         mock_syspurpose.read = Mock()
@@ -2089,7 +2095,7 @@ class TestSystemExit(unittest.TestCase):
         msg = "some message"
         with Capture() as cap:
             try:
-                managercli.system_exit(1, msg)
+                system_exit(1, msg)
             except SystemExit:
                 pass
         self.assertEqual("%s\n" % msg, cap.err)
@@ -2098,7 +2104,7 @@ class TestSystemExit(unittest.TestCase):
         msgs = ["a", "b", "c"]
         with Capture() as cap:
             try:
-                managercli.system_exit(1, msgs)
+                system_exit(1, msgs)
             except SystemExit:
                 pass
         self.assertEqual("%s\n" % ("\n".join(msgs)), cap.err)
@@ -2107,7 +2113,7 @@ class TestSystemExit(unittest.TestCase):
         msgs = ["a", ValueError()]
         with Capture() as cap:
             try:
-                managercli.system_exit(1, msgs)
+                system_exit(1, msgs)
             except SystemExit:
                 pass
         self.assertEqual("%s\n\n" % msgs[0], cap.err)
@@ -2119,7 +2125,7 @@ class TestSystemExit(unittest.TestCase):
         msgs = ["a", NoStrException()]
         with Capture() as cap:
             try:
-                managercli.system_exit(1, msgs)
+                system_exit(1, msgs)
             except SystemExit:
                 pass
         self.assertEqual("%s\n\n" % msgs[0], cap.err)
@@ -2128,7 +2134,7 @@ class TestSystemExit(unittest.TestCase):
         msgs = [u"\u2620 \u2603 \u203D"]
         with Capture() as cap:
             try:
-                managercli.system_exit(1, msgs)
+                system_exit(1, msgs)
             except SystemExit:
                 pass
         if six.PY2:
@@ -2149,7 +2155,7 @@ class TestSystemExit(unittest.TestCase):
         msgs = ["a", StrException(msg)]
         with Capture() as cap:
             try:
-                managercli.system_exit(1, msgs)
+                system_exit(1, msgs)
             except SystemExit:
                 pass
         self.assertEqual("%s\n%s\n" % ("a", msg), cap.err)
@@ -2163,7 +2169,7 @@ class HandleExceptionTests(unittest.TestCase):
     def test_he(self):
         e = FakeException()
         try:
-            managercli.handle_exception(self.msg, e)
+            handle_exception(self.msg, e)
         except SystemExit as e:
             self.assertEqual(e.code, os.EX_SOFTWARE)
 
@@ -2171,7 +2177,7 @@ class HandleExceptionTests(unittest.TestCase):
         e = Exception("Ошибка при обновлении системных данных (см. /var/log/rhsm/rhsm.log")
     #    e = FakeException(msg="Ошибка при обновлении системных данных (см. /var/log/rhsm/rhsm.log")
         try:
-            managercli.handle_exception("a: %s" % e, e)
+            handle_exception("a: %s" % e, e)
         except SystemExit as e:
             self.assertEqual(e.code, os.EX_SOFTWARE)
 
@@ -2182,7 +2188,7 @@ class HandleExceptionTests(unittest.TestCase):
         expected_msg = 'Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.'
         managercli.log.set_expected_msg(expected_msg)
         try:
-            managercli.handle_exception(self.msg, socket.error())
+            handle_exception(self.msg, socket.error())
         except SystemExit as e:
             self.assertEqual(e.code, os.EX_SOFTWARE)
         self.assertEqual(managercli.log.expected_msg, expected_msg)
@@ -2190,7 +2196,7 @@ class HandleExceptionTests(unittest.TestCase):
     def test_he_restlib_exception(self):
         e = connection.RestlibException(404, "this is a msg")
         try:
-            managercli.handle_exception("huh", e)
+            handle_exception("huh", e)
         except SystemExit as e:
             self.assertEqual(e.code, os.EX_SOFTWARE)
 
@@ -2198,35 +2204,35 @@ class HandleExceptionTests(unittest.TestCase):
         e = connection.RestlibException(404,
             "Ошибка при обновлении системных данных (см. /var/log/rhsm/rhsm.log")
         try:
-            managercli.handle_exception("обновлении", e)
+            handle_exception("обновлении", e)
         except SystemExit as e:
             self.assertEqual(e.code, os.EX_SOFTWARE)
 
     def test_he_bad_certificate(self):
         e = connection.BadCertificateException("/road/to/nowhwere")
         try:
-            managercli.handle_exception("huh", e)
+            handle_exception("huh", e)
         except SystemExit as e:
             self.assertEqual(e.code, os.EX_SOFTWARE)
 
     def test_he_remote_server_exception(self):
         e = connection.RemoteServerException(1984)
         try:
-            managercli.handle_exception("huh", e)
+            handle_exception("huh", e)
         except SystemExit as e:
             self.assertEqual(e.code, os.EX_SOFTWARE)
 
     def test_he_network_exception(self):
         e = connection.NetworkException(1337)
         try:
-            managercli.handle_exception("huh", e)
+            handle_exception("huh", e)
         except SystemExit as e:
             self.assertEqual(e.code, os.EX_SOFTWARE)
 
     def test_he_ssl_error(self):
         e = ssl.SSLError()
         try:
-            managercli.handle_exception("huh", e)
+            handle_exception("huh", e)
         except SystemExit as e:
             self.assertEqual(e.code, os.EX_SOFTWARE)
 
@@ -2237,7 +2243,7 @@ class HandleExceptionTests(unittest.TestCase):
                                    "actualHost.example.com",
                                    "subjectAltName")
         try:
-            managercli.handle_exception("huh", e)
+            handle_exception("huh", e)
         except SystemExit as e:
             self.assertEqual(e.code, os.EX_SOFTWARE)
 
@@ -2336,11 +2342,11 @@ class TestNoneWrap(unittest.TestCase):
 
 class TestColumnize(unittest.TestCase):
     def setUp(self):
-        self.old_method = managercli.get_terminal_width
-        managercli.get_terminal_width = Mock(return_value=500)
+        self.old_method = status.get_terminal_width
+        status.get_terminal_width = Mock(return_value=500)
 
     def tearDown(self):
-        managercli.get_terminal_width = self.old_method
+        status.get_terminal_width = self.old_method
 
     def test_columnize(self):
         result = columnize(["Hello:", "Foo:"], echo_columnize_callback, "world", "bar")

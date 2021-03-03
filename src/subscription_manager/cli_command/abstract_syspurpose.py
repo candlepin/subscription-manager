@@ -1,0 +1,399 @@
+#
+# Subscription manager command line utility.
+#
+# Copyright (c) 2021 Red Hat, Inc.
+#
+# This software is licensed to you under the GNU General Public License,
+# version 2 (GPLv2). There is NO WARRANTY for this software, express or
+# implied, including the implied warranties of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. You should have received a copy of GPLv2
+# along with this software; if not, see
+# http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
+#
+# Red Hat trademarks are not licensed under GPLv2. No permission is
+# granted to use or replicate Red Hat trademarks that are incorporated
+# in this software or its documentation.
+#
+import logging
+import os
+import re
+
+from rhsm import connection
+from rhsm.connection import ProxyException
+
+from subscription_manager import syspurposelib
+from subscription_manager.cli import system_exit
+from subscription_manager.cli_command.cli import CliCommand, ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG
+from subscription_manager.i18n import ugettext as _
+from subscription_manager.syspurposelib import get_syspurpose_valid_fields
+
+from syspurpose.files import SyncedStore, post_process_received_data
+
+log = logging.getLogger(__name__)
+
+SP_CONFLICT_MESSAGE = _("Warning: A {attr} of \"{download_value}\" was recently set for this system "
+                        "by the entitlement server administrator.\n{advice}")
+SP_ADVICE = _("If you'd like to overwrite the server side change please run: {command}")
+
+
+class AbstractSyspurposeCommand(CliCommand):
+    """
+    Abstract command for manipulating an attribute of system purpose.
+    """
+
+    def __init__(self, name, shortdesc=None, primary=False, attr=None, commands=('set', 'unset', 'show', 'list')):
+        super(AbstractSyspurposeCommand, self).__init__(name, shortdesc=shortdesc, primary=primary)
+        self.commands = commands
+        self.attr = attr
+
+        self.store = None
+
+        if 'set' in commands:
+            self.parser.add_option(
+                "--set",
+                dest="set",
+                help=(_("set {attr} of system purpose").format(attr=attr))
+            )
+        if 'unset' in commands:
+            self.parser.add_option(
+                "--unset",
+                dest="unset",
+                action="store_true",
+                help=(_("unset {attr} of system purpose").format(attr=attr))
+            )
+        if 'add' in commands:
+            self.parser.add_option(
+                "--add",
+                dest="to_add",
+                action="append",
+                default=[],
+                help=_("add an item to the list ({attr}).").format(attr=attr)
+            )
+        if 'remove' in commands:
+            self.parser.add_option(
+                "--remove",
+                dest="to_remove",
+                action="append",
+                default=[],
+                help=_("remove an item from the list ({attr}).").format(attr=attr)
+            )
+        if 'show' in commands:
+            self.parser.add_option(
+                "--show",
+                dest="show",
+                action='store_true',
+                help=_("show this system's current {attr}").format(attr=attr)
+            )
+        if 'list' in commands:
+            self.parser.add_option(
+                "--list",
+                dest="list",
+                action='store_true',
+                help=_("list all {attr} available").format(attr=attr)
+            )
+
+    def _validate_options(self):
+        to_set = getattr(self.options, 'set', None)
+        to_unset = getattr(self.options, 'unset', None)
+        to_add = getattr(self.options, 'to_add', None)
+        to_remove = getattr(self.options, 'to_remove', None)
+        to_show = getattr(self.options, 'show', None)
+
+        if to_set:
+            self.options.set = self.options.set.strip()
+        if to_add:
+            self.options.to_add = [x.strip() for x in self.options.to_add if isinstance(x, str)]
+        if to_remove:
+            self.options.to_remove = [x.strip() for x in self.options.to_remove
+                                      if isinstance(x, str)]
+        if (to_set or to_add or to_remove) and to_unset:
+            system_exit(os.EX_USAGE, _("--unset cannot be used with --set, --add, or --remove"))
+        if to_add and to_remove:
+            system_exit(os.EX_USAGE, _("--add cannot be used with --remove"))
+
+        if not self.is_registered():
+            if self.options.list:
+                if self.options.token and not self.options.username:
+                    pass
+                elif self.options.token and self.options.username:
+                    system_exit(
+                        os.EX_USAGE,
+                        _("Error: you can specify --username or --token not both")
+                    )
+                elif not self.options.username or not self.options.password:
+                    system_exit(
+                        os.EX_USAGE,
+                        _("Error: you must register or specify --username and --password to list {attr}").format(
+                            attr=self.attr
+                        )
+                    )
+            elif to_unset or to_set or to_add or to_remove or to_show:
+                pass
+            else:
+                system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
+
+    def _get_valid_fields(self):
+        """
+        Try to get valid fields from server
+        :return: Dictionary with valid fields
+        """
+        valid_fields = {}
+        if self.is_registered():
+            # When system is registered, then try to get valid fields from cache file
+            try:
+                valid_fields = get_syspurpose_valid_fields(uep=self.cp, identity=self.identity)
+            except ProxyException:
+                system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
+        elif self.options.username and self.options.password and self.cp is not None:
+            # Try to get current organization key. It is property of OrgCommand.
+            # Every Syspurpose command has to be subclass of OrgCommand too
+            # must have used credentials in command if not registered to proceed
+            try:
+                org_key = self.org
+                server_response = self.cp.getOwnerSyspurposeValidFields(org_key)
+            except connection.RestlibException as rest_err:
+                log.warning("Unable to get list of valid fields using REST API: {rest_err}".format(rest_err=rest_err))
+            except ProxyException:
+                system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
+            else:
+                if 'systemPurposeAttributes' in server_response:
+                    server_response = post_process_received_data(server_response)
+                    valid_fields = server_response['systemPurposeAttributes']
+        return valid_fields
+
+    def _is_provided_value_valid(self, value):
+        """
+        Try to validate provided value. Check if the value is included in valid fields.
+        If the value is not provided in the valid fields and we can connect candlepin server,
+        then print some warning.
+        :param value: provided value on CLI
+        :return: True if the value is valid; otherwise return False
+        """
+
+        # First check if the the value is in the valid_fields
+        ret = False
+        valid_fields = self._get_valid_fields()
+        if self.attr in valid_fields:
+            if value in valid_fields[self.attr]:
+                ret = True
+
+        # When provided value is not in the valid fields, then try to print some warning,
+        # when the system is registered or username & password was provided as CLI option.
+        # When the system is not registered and no username & password was provided, then
+        # value will be set silently.
+        if ret is False:
+            if self.is_registered() or \
+                    (self.options.username and self.options.password) or \
+                    self.options.token:
+                if self.attr in valid_fields:
+                    if len(valid_fields[self.attr]) > 0:
+                        print(_('Warning: Provided value "{val}" is not included in the list of valid values').format(
+                            val=value
+                        ))
+                        self._print_valid_values(valid_fields)
+                    else:
+                        print(_('Warning: the list of valid values for attribute "{attr}" is empty.').format(
+                            attr=self.attr
+                        ))
+                else:
+                    print(_('Warning: No valid values provided for attribute "{attr}"').format(
+                        attr=self.attr
+                    ))
+
+        return ret
+
+    def set(self):
+        """
+        Try to set new syspurpose attribute
+        """
+        self._set(self.options.set)
+        self._is_provided_value_valid(self.options.set)
+        success_msg = _('{attr} set to "{val}".').format(attr=self.attr, val=self.options.set)
+        self._check_result(
+            expectation=lambda res: res.get(self.attr) == self.options.set,
+            success_msg=success_msg,
+            command='subscription-manager {name} --set "{val}"'.format(name=self.name,
+                                                                       val=self.options.set),
+            attr=self.attr
+        )
+
+    def _set(self, to_set):
+        if self.store:
+            self.store.set(self.attr, to_set)
+        else:
+            log.debug("Not setting syspurpose attribute {attr} (store not set)".format(attr=self.attr))
+
+    def unset(self):
+        self._unset()
+        success_msg = _("{attr} unset.").format(attr=self.attr)
+        self._check_result(
+            expectation=lambda res: res.get(self.attr) in ["", None, []],
+            success_msg=success_msg,
+            command='subscription-manager {name} --unset'.format(name=self.name),
+            attr=self.attr
+        )
+
+    def _unset(self):
+        if self.store:
+            self.store.unset(self.attr)
+        else:
+            log.debug('Not unsetting syspurpose attribute  (store not set)' % self.attr)
+
+    def add(self):
+        self._add(self.options.to_add)
+        success_msg = _("{attr} updated.").format(attr=self.name)
+        # When there is several options to add, then format of command is following
+        # subscription-manager command --add opt1 --add opt2
+        options = ['"' + option + '"' for option in self.options.to_add]
+        to_add = "--add " + " --add ".join(options)
+        command = "subscription-manager {name} ".format(name=self.name) + to_add
+        self._check_result(
+            expectation=lambda res: all(x in res.get('addons', []) for x in self.options.to_add),
+            success_msg=success_msg,
+            command=command,
+            attr=self.attr
+        )
+
+    def _add(self, to_add):
+        if not isinstance(to_add, list):
+            to_add = [to_add]
+
+        if self.store:
+            for item in to_add:
+                self.store.add(self.attr, item)
+
+    def remove(self):
+        self._remove(self.options.to_remove)
+        success_msg = _("{attr} updated.").format(attr=self.name.capitalize())
+        options = ['"' + option + '"' for option in self.options.to_remove]
+        # When there is several options to remove, then format of command is following
+        # subscription-manager command --remove opt1 --remove opt2
+        to_remove = "--remove " + " --remove ".join(options)
+        command = "subscription-manager {name} ".format(name=self.name) + to_remove
+        self._check_result(
+            expectation=lambda res: all(x not in res.get('addons', []) for x in self.options.to_remove),
+            success_msg=success_msg,
+            command=command,
+            attr=self.attr
+        )
+
+    def _remove(self, to_remove):
+        if not isinstance(to_remove, list):
+            to_remove = [to_remove]
+
+        if self.store:
+            for item in to_remove:
+                self.store.remove(self.attr, item)
+
+    def show(self):
+        if self.is_registered():
+            syspurpose = self.sync().result
+        else:
+            syspurpose = syspurposelib.read_syspurpose()
+        if syspurpose is not None and self.attr in syspurpose and syspurpose[self.attr]:
+            val = syspurpose[self.attr]
+            values = val if not isinstance(val, list) else ", ".join(val)
+            print(_("Current {name}: {val}".format(name=self.name.capitalize(),
+                                                   val=values)))
+        else:
+            print(_("{name} not set.").format(name=self.name.capitalize()))
+
+    def _print_valid_values(self, valid_fields):
+        """
+        Print list of valid values for current syspurpose attribute
+        :param valid_fields:
+        :return: None
+        """
+        for valid_value in valid_fields[self.attr]:
+            if len(valid_value) > 0:
+                print(" - {value}".format(value=valid_value))
+
+    def list(self):
+        valid_fields = self._get_valid_fields()
+        if self.attr in valid_fields:
+            if len(valid_fields[self.attr]) > 0:
+                line = '+-------------------------------------------+'
+                print(line)
+                translated_string = _('Available {syspurpose_attr}').format(syspurpose_attr=self.attr)
+                # Print translated string (the length could be different) in the center of the line
+                line_len = len(line)
+                trans_str_len = len(translated_string)
+                empty_space_len = int((line_len - trans_str_len) / 2)
+                print(empty_space_len * ' ' + translated_string)
+                print(line)
+                # Print values
+                self._print_valid_values(valid_fields)
+            else:
+                print(_('No valid values provided for "{syspurpose_attr}"').format(syspurpose_attr=self.attr))
+        else:
+            print(_('Unable to get list of valid values for "{syspurpose_attr}"').format(syspurpose_attr=self.attr))
+
+    def sync(self):
+        return syspurposelib.SyspurposeSyncActionCommand().perform(include_result=True)[1]
+
+    def _do_command(self):
+        self._validate_options()
+
+        self.cp = None
+        try:
+            # If we have a username/password, we're going to use that, otherwise
+            # we'll use the identity certificate. We already know one or the other
+            # exists:
+            if self.options.token:
+                try:
+                    self.cp = self.cp_provider.get_keycloak_auth_cp(self.options.token)
+                except Exception as err:
+                    log.error("unable to connect to candlepin server using token: \"{token}\", err: {err}".format(token=self.options.token, err=err))
+                    print(_("Unable to connect to server using token"))
+            elif self.options.username and self.options.password:
+                self.cp_provider.set_user_pass(self.options.username, self.options.password)
+                self.cp = self.cp_provider.get_basic_auth_cp()
+            else:
+                # get an UEP as consumer
+                if self.is_registered():
+                    self.cp = self.cp_provider.get_consumer_auth_cp()
+        except connection.RestlibException as err:
+            log.exception(re)
+            if getattr(self.options, 'list', None):
+                log.error("Error: Unable to retrieve {attr} from server: {err}".format(attr=self.attr, err=err))
+                system_exit(os.EX_SOFTWARE, str(err))
+            else:
+                log.debug("Error: Unable to retrieve {attr} from server: {err}".format(attr=self.attr, err=err))
+        except Exception as err:
+            log.debug("Error: Unable to retrieve {attr} from server: {err}".format(attr=self.attr, err=err))
+
+        self.store = SyncedStore(uep=self.cp, consumer_uuid=self.identity.uuid)
+
+        if getattr(self.options, 'unset', None):
+            self.unset()
+        elif getattr(self.options, 'set', None):
+            self.set()
+        elif hasattr(self.options, 'to_add') and len(self.options.to_add) > 0:
+            self.add()
+        elif hasattr(self.options, 'to_remove') and len(self.options.to_remove) > 0:
+            self.remove()
+        elif getattr(self.options, 'list', None):
+            self.list()
+        elif getattr(self.options, 'show', None):
+            self.show()
+        else:
+            self.show()
+
+    def check_syspurpose_support(self, attr):
+        if self.is_registered() and not self.cp.has_capability('syspurpose'):
+            print(_("Note: The currently configured entitlement server does not support System Purpose {attr}.".format(
+                attr=attr)))
+
+    def _check_result(self, expectation, success_msg, command, attr):
+        if self.store:
+            self.store.sync()
+            result = self.store.get_cached_contents()
+        else:
+            result = {}
+        if result and not expectation(result):
+            advice = SP_ADVICE.format(command=command)
+            value = result[attr]
+            msg = _(SP_CONFLICT_MESSAGE.format(attr=attr, download_value=value, advice=advice))
+            system_exit(os.EX_SOFTWARE, msgs=msg)
+        else:
+            print(success_msg)

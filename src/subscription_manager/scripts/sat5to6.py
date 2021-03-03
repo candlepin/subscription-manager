@@ -61,12 +61,11 @@ try:
         # Allow us to run from the sub-man repo
         from subscription_manager.migrate import migrate
 
-    from subscription_manager.managercli import handle_exception
+    from subscription_manager.cli_command.cli import handle_exception
 except KeyboardInterrupt:
     system_exit(0, "\nUser interrupted process.")
 except ImportError as err:
-    system_exit(2, "Unable to find Subscription Manager module.\n"
-                   "Error: %s" % err)
+    system_exit(2, "Unable to find Subscription Manager module.\nError:", str(err))
 
 
 def main():

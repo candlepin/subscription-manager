@@ -25,8 +25,7 @@ from datetime import datetime
 from shutil import ignore_patterns
 
 import subscription_manager.injection as inj
-import subscription_manager.managercli as managercli
-from subscription_manager.managercli import CliCommand
+from subscription_manager.cli_command.cli import CliCommand, handle_exception
 from subscription_manager.cli import InvalidCLIOptionError, system_exit
 from subscription_manager.certdirectory import DEFAULT_PRODUCT_CERT_DIR
 from rhsm import ourjson as json
@@ -205,7 +204,7 @@ class SystemCommand(CliCommand):
                 print(_("Wrote: %s") % dest_dir_name)
 
         except Exception as e:
-            managercli.handle_exception(_("Unable to create zip file of system information: %s") % e, e)
+            handle_exception(_("Unable to create zip file of system information: %s") % e, e)
             sys.exit(os.EX_SOFTWARE)
         finally:
             if content_path and os.path.isdir(content_path):

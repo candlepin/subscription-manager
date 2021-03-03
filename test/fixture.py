@@ -27,7 +27,7 @@ from contextlib import contextmanager
 
 from . import stubs
 import subscription_manager.injection as inj
-import subscription_manager.managercli
+from subscription_manager.cli_command import cli
 from rhsmlib.services import config
 
 # use instead of the normal pid file based ActionLock
@@ -183,15 +183,15 @@ class SubManFixture(unittest.TestCase):
 
         self.mock_cfg_parser = stubs.StubConfig()
 
-        original_conf = subscription_manager.managercli.conf
+        original_conf = cli.conf
 
         def unstub_conf():
-            subscription_manager.managercli.conf = original_conf
+            cli.conf = original_conf
 
         # Mock makes it damn near impossible to mock a module attribute (which we shouldn't be using
         # in the first place because it's terrible) so we monkey-patch it ourselves.
         # TODO Fix this idiocy by not reading the damn config on module import
-        subscription_manager.managercli.conf = config.Config(self.mock_cfg_parser)
+        cli.conf = config.Config(self.mock_cfg_parser)
         self.addCleanup(unstub_conf)
 
         facts_host_patcher = patch('rhsmlib.dbus.facts.FactsClient', auto_spec=True)
@@ -266,20 +266,20 @@ class SubManFixture(unittest.TestCase):
         content_access_cache_mock = MagicMock(name='ContentAccessCacheMock')
         inj.provide(inj.CONTENT_ACCESS_CACHE, content_access_cache_mock)
 
-        self.dbus_patcher = patch('subscription_manager.managercli.CliCommand._request_validity_check')
+        self.dbus_patcher = patch('subscription_manager.cli_command.cli.CliCommand._request_validity_check')
         self.dbus_patcher.start()
 
         # No tests should be trying to connect to any configure or test server
         # so really, everything needs this mock. May need to be in __init__, or
         # better, all test classes need to use SubManFixture
-        self.is_valid_server_patcher = patch("subscription_manager.managercli.is_valid_server_info")
+        self.is_valid_server_patcher = patch("subscription_manager.cli_command.cli.is_valid_server_info")
         is_valid_server_mock = self.is_valid_server_patcher.start()
         is_valid_server_mock.return_value = True
 
         # No tests should be trying to test the proxy connection
         # so really, everything needs this mock. May need to be in __init__, or
         # better, all test classes need to use SubManFixture
-        self.test_proxy_connection_patcher = patch("subscription_manager.managercli.CliCommand.test_proxy_connection")
+        self.test_proxy_connection_patcher = patch("subscription_manager.cli_command.cli.CliCommand.test_proxy_connection")
         test_proxy_connection_mock = self.test_proxy_connection_patcher.start()
         test_proxy_connection_mock.return_value = True
 

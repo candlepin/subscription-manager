@@ -959,6 +959,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %dir %{python_sitearch}/subscription_manager-%{version}-*.egg-info
 %dir %{python_sitearch}/subscription_manager/api
 %dir %{python_sitearch}/subscription_manager/branding
+%dir %{python_sitearch}/subscription_manager/cli_command
 %dir %{python_sitearch}/subscription_manager/model
 %dir %{python_sitearch}/subscription_manager/plugin
 %dir %{python_sitearch}/subscription_manager/scripts
@@ -1057,6 +1058,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/subscription_manager/*.py*
 %{python_sitearch}/subscription_manager/api/*.py*
 %{python_sitearch}/subscription_manager/branding/*.py*
+%{python_sitearch}/subscription_manager/cli_command/*.py*
 %{python_sitearch}/subscription_manager/model/*.py*
 %{python_sitearch}/subscription_manager/plugin/__init__.py*
 %{python_sitearch}/subscription_manager/scripts/*.py*
@@ -1064,6 +1066,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/subscription_manager/__pycache__
 %{python_sitearch}/subscription_manager/api/__pycache__
 %{python_sitearch}/subscription_manager/branding/__pycache__
+%{python_sitearch}/subscription_manager/cli_command/__pycache__
 %{python_sitearch}/subscription_manager/model/__pycache__
 %{python_sitearch}/subscription_manager/plugin/__pycache__
 %{python_sitearch}/subscription_manager/scripts/__pycache__

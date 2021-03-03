@@ -26,7 +26,6 @@ from subscription_manager.utils import print_error
 
 from subscription_manager.i18n import ugettext as _
 
-
 log = logging.getLogger(__name__)
 
 
