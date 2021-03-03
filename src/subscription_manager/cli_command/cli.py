@@ -35,7 +35,8 @@ from subscription_manager.entcertlib import EntCertActionInvoker
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.utils import generate_correlation_id, get_client_versions, get_server_versions, \
-    parse_server_info, parse_baseurl_info, format_baseurl, is_valid_server_info, MissingCaCertException
+    parse_server_info, parse_baseurl_info, format_baseurl, is_valid_server_info, MissingCaCertException, \
+    get_current_owner
 
 ERR_NOT_REGISTERED_MSG = _(
     "This system is not yet registered. Try 'subscription-manager register --help' for more information.")
@@ -106,6 +107,24 @@ class CliCommand(AbstractCLICommand):
         self.identity = inj.require(inj.IDENTITY)
 
         self.correlation_id = generate_correlation_id()
+
+    def _print_ignore_auto_attach_mesage(self):
+        """
+        This message is shared by attach command and register command, because
+        both commands can do auto-attach.
+        :return: None
+        """
+        owner = get_current_owner(self.cp, self.identity)
+        # We displayed Owner name: `owner_name = owner['displayName']`, but such behavior
+        # was not consistent with rest of subscription-manager
+        # Look at this comment: https://bugzilla.redhat.com/show_bug.cgi?id=1826300#c8
+        owner_id = owner['key']
+        print(
+            _(
+                'Ignoring request to auto-attach. '
+                'It is disabled for org "{owner_id}" because of the content access mode setting.'
+            ).format(owner_id=owner_id)
+        )
 
     def _get_logger(self):
         return logging.getLogger("rhsm-app.{module}.{name}".format(module=self.__module__, name=self.__class__.__name__))

@@ -38,7 +38,8 @@ from subscription_manager.cli_command.list import show_autosubscribe_output
 from subscription_manager.cli_command.user_pass import UserPassCommand
 from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_CAPABILITY
 from subscription_manager.i18n import ugettext as _
-from subscription_manager.utils import restart_virt_who, print_error, get_supported_resources
+from subscription_manager.utils import restart_virt_who, print_error, get_supported_resources, \
+    is_simple_content_access
 
 log = logging.getLogger(__name__)
 
@@ -114,6 +115,36 @@ class RegisterCommand(UserPassCommand):
         to the config file so that future commands will use the value.
         """
         return True
+
+    def _do_auto_attach(self, consumer):
+        """
+        Try to do auto-attach, when it was requested using --auto-attach CLI option
+        :return: None
+        """
+
+        # Do not try to do auto-attach, when simple content access mode is used
+        # Only print info message to stdout
+        if is_simple_content_access(uep=self.cp, identity=self.identity):
+            self._print_ignore_auto_attach_mesage()
+            return
+
+        if 'serviceLevel' not in consumer and self.options.service_level:
+            system_exit(
+                os.EX_UNAVAILABLE,
+                _(
+                    "Error: The --servicelevel option is not supported "
+                    "by the server. Did not complete your request."
+                )
+            )
+        try:
+            # We don't call auto_attach with self.option.service_level, because it has been already
+            # set during service.register() call
+            attach.AttachService(self.cp).attach_auto(service_level=None)
+        except connection.RestlibException as rest_lib_err:
+            print_error(rest_lib_err.msg)
+        except Exception:
+            log.exception("Auto-attach failed")
+            raise
 
     def _do_command(self):
         """
@@ -247,18 +278,7 @@ class RegisterCommand(UserPassCommand):
             self.cp.updateConsumer(consumer['uuid'], release=self.options.release)
 
         if self.autoattach:
-            if 'serviceLevel' not in consumer and self.options.service_level:
-                system_exit(os.EX_UNAVAILABLE, _("Error: The --servicelevel option is not supported "
-                                                 "by the server. Did not complete your request."))
-            try:
-                # We don't call auto_attach with self.option.service_level, because it has been already
-                # set during service.register() call
-                attach.AttachService(self.cp).attach_auto(service_level=None)
-            except connection.RestlibException as rest_lib_err:
-                print_error(str(rest_lib_err))
-            except Exception:
-                log.exception("Auto-attach failed")
-                raise
+            self._do_auto_attach(consumer)
 
         if self.options.consumerid or \
                 self.options.activation_keys or \
