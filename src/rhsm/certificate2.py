@@ -520,6 +520,7 @@ class Certificate(object):
         else:
             f.write(self.x509.as_pem())
         f.close()
+        os.chmod(path, 0o644)
         self.path = path
 
     def delete(self):
