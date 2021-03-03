@@ -32,7 +32,7 @@ from subscription_manager.i18n import ugettext as _
 from subscription_manager.managerlib import valid_quantity
 from subscription_manager.packageprofilelib import PackageProfileActionInvoker
 from subscription_manager.syspurposelib import save_sla_to_syspurpose_metadata
-from subscription_manager.utils import get_current_owner, is_simple_content_access
+from subscription_manager.utils import is_simple_content_access
 
 log = logging.getLogger(__name__)
 
@@ -132,16 +132,7 @@ class AttachCommand(CliCommand):
         # BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1826300
         if self.auto_attach is True:
             if is_simple_content_access(uep=self.cp, identity=self.identity):
-                owner = get_current_owner(self.cp, self.identity)
-                # We displayed Owner name: `owner_name = owner['displayName']`, but such behavior
-                # was not consistent with rest of subscription-manager
-                # Look at this comment: https://bugzilla.redhat.com/show_bug.cgi?id=1826300#c8
-                owner_id = owner['key']
-                print(_(
-                    'Ignoring request to auto-attach. '
-                    'It is disabled for org "{owner_id}" because of the content access mode setting.'
-                ).format(owner_id=owner_id)
-                      )
+                self._print_ignore_auto_attach_mesage()
                 return 0
 
         installed_products_num = 0
