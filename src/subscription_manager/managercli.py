@@ -3007,18 +3007,17 @@ class StatusCommand(CliCommand):
             result = 1
 
         ca_message = ""
-        has_cert = (_(
-                "Content Access Mode is set to Simple Content Access. This host has access to content, regardless of subscription status.\n"))
 
         certs = self.entitlement_dir.list_with_content_access()
-        ca_certs = [cert for cert in certs if cert.entitlement_type == CONTENT_ACCESS_CERT_TYPE]
-        if ca_certs:
-            ca_message = has_cert
-        else:
-            if is_simple_content_access(uep=self.cp, identity=self.identity):
-                ca_message = has_cert
+        if is_simple_content_access(uep=self.cp, identity=self.identity):
+            ca_message = _(
+                "Content Access Mode is set to Simple Content Access. This host has access to content, regardless of subscription status.\n")
+            ca_certs = [cert for cert in certs if cert.entitlement_type == CONTENT_ACCESS_CERT_TYPE]
+            if not ca_certs:
+                ca_message = ca_message + _("The Simple Content Access certificate is not yet on this system.\n"
+                        "Either execute the refresh command or wait for the rhsmcertd process to run before accessing content.\n")
 
-        print(_("Overall Status: %s\n%s") % (service_status['status'], ca_message))
+        print (_("Overall Status: {service_status}\n{ca_message}").format(service_status=service_status['status'], ca_message=ca_message))
 
         columns = get_terminal_width()
         for name in reasons:
