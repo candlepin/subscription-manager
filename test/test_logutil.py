@@ -84,7 +84,6 @@ class TestLogutil(fixture.SubManFixture):
             logging.INFO == rhsm_effective or
             logging._levelNames[rhsm_effective] == logging.INFO)
 
-
     def test_init_logger_for_yum(self):
         logutil.init_logger_for_yum()
         sm_logger = logging.getLogger("subscription_manager")
