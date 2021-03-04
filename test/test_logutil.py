@@ -68,6 +68,23 @@ class TestLogutil(fixture.SubManFixture):
             logging.WARNING == rhsm_effective or
             logging._levelNames[rhsm_effective] == logging.WARNING)
 
+    def test_log_init_invalid_default_log_level(self):
+        self.rhsm_config.set("logging", "default_log_level", "FOO")
+
+        logutil.init_logger()
+        sm_logger = logging.getLogger("subscription_manager")
+        rhsm_logger = logging.getLogger("rhsm-app")
+        sm_effective = sm_logger.getEffectiveLevel()
+        rhsm_effective = rhsm_logger.getEffectiveLevel()
+        # Fun hack for 2.6/2.7 interoperability
+        self.assertTrue(
+            logging.INFO == sm_effective or
+            logging._levelNames[sm_effective] == logging.INFO)
+        self.assertTrue(
+            logging.INFO == rhsm_effective or
+            logging._levelNames[rhsm_effective] == logging.INFO)
+
+
     def test_init_logger_for_yum(self):
         logutil.init_logger_for_yum()
         sm_logger = logging.getLogger("subscription_manager")
