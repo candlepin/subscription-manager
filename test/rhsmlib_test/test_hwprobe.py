@@ -124,6 +124,7 @@ REDHAT_SUPPORT_PRODUCT_VERSION=42.0"""
 
 UPTIME = "1273.88 1133.34"
 
+
 class TestParseRange(unittest.TestCase):
     def test_single(self):
         r = '1'
@@ -134,6 +135,7 @@ class TestParseRange(unittest.TestCase):
         r = '1-4'
         r_list = hwprobe.parse_range(r)
         self.assertEqual([1, 2, 3, 4], r_list)
+
 
 class TestGatherEntries(unittest.TestCase):
     def test_single(self):
