@@ -294,7 +294,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
     @patch(OPEN_FUNCTION, mock_open(read_data="1273.88 1133.34"))
     def test_last_boot(self, mock_exists):
         """
-        Test reading release information from /etc/redhat-release
+        Test reading release information from /proc/uptime
         """
 
         def mock_os_path_exists(path):
