@@ -848,6 +848,7 @@ class BaseRestLib(object):
                         if self.cert_file:
                             id_cert = certificate.create_from_file(self.cert_file)
                             if id_cert.is_valid():
+                                # accidentally made the change in the branch subscription-manager-1.28 as well
                                 raise RestlibException(response['status'],
                                                        ("Unable to make a connection using SSL client certificate. "
                                                         "Please review proxy configuration and connectivity."),
