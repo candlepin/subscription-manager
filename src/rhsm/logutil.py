@@ -157,6 +157,12 @@ def init_logger(config=None):
         config = rhsm.config.get_config_parser()
 
     default_log_level = config.get('logging', 'default_log_level')
+    if default_log_level not in ['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG', 'NOSET']:
+        # This is not a valid logging level, set to INFO
+        print("Invalid Log Level: {lvl}, setting to INFO.".format(lvl=default_log_level), file=sys.stderr)
+        print("Use:  subscription-manager config --logging.default_log_level=<Log Level> to set the default_log_level.", file=sys.stderr)
+        default_log_level = 'INFO'
+
     pending_error_messages = []
 
     for root_namespace in ROOT_NAMESPACES:
