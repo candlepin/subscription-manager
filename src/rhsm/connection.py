@@ -849,7 +849,7 @@ class BaseRestLib(object):
                             id_cert = certificate.create_from_file(self.cert_file)
                             if id_cert.is_valid():
                                 raise RestlibException(response['status'],
-                                                       ("Unable to make a connection using SSL client certificate."
+                                                       ("Unable to make a connection using SSL client certificate. "
                                                         "Please review proxy configuration and connectivity."),
                                                        response.get('headers'))
 
