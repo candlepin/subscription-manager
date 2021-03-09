@@ -233,7 +233,7 @@ class HardwareCollector(collector.FactsCollector):
             uptime_delta = timedelta(seconds=uptime)
             now = datetime.utcnow()
             last_boot_date = now - uptime_delta
-            last_boot = last_boot_date.strftime("%Y-%m-%d %H:%M:%S")
+            last_boot = last_boot_date.strftime("%Y-%m-%d %H:%M:%S") + " UTC"
         except Exception as e:
             log.warning("Error reading uptime information %s", e)
         return {"last_boot": last_boot}

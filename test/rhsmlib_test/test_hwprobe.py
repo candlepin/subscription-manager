@@ -122,6 +122,8 @@ REDHAT_BUGZILLA_PRODUCT_VERSION=42.0
 REDHAT_SUPPORT_PRODUCT="AwesomeOS Enterprise"
 REDHAT_SUPPORT_PRODUCT_VERSION=42.0"""
 
+UPTIME = "1273.88 1133.34"
+
 
 class TestParseRange(unittest.TestCase):
     def test_single(self):
@@ -287,6 +289,30 @@ class HardwareProbeTest(test.fixture.SubManFixture):
             'distribution.version.modifier': 'mega'
         }
         self.assertEqual(hw.get_release_info(), expected)
+
+    @patch("os.path.exists")
+    @patch(OPEN_FUNCTION, mock_open(read_data="1273.88 1133.34"))
+    def test_last_boot(self, mock_exists):
+        """
+        Test reading release information from /proc/uptime
+        """
+
+        def mock_os_path_exists(path):
+            """
+            This method mock missing /proc/uptime
+            :param path: of this file
+            :return: False for /proc/uptime and True for any other file
+            """
+            if path == '/proc/uptime':
+                return False
+            else:
+                return True
+
+        mock_exists.side_effect = mock_os_path_exists
+        hw = hwprobe.HardwareCollector()
+        last_boot_dict = hw.get_last_boot()
+        last_boot = last_boot_dict["last_boot"]
+        self.assertTrue(last_boot.endswith(" UTC"))
 
     @patch("os.path.exists")
     @patch(OPEN_FUNCTION, mock_open(read_data="""
