@@ -345,7 +345,7 @@ def main():
 
     # Syspurpose is not intended to be used in containers for the time being (could change later).
     if in_container():
-        print(_("WARNING: Setting syspurpose in containers has no effect."
+        print(_("WARNING: Setting syspurpose in containers has no effect.\n"
               "Please run syspurpose on the host.\n"))
 
     try:
