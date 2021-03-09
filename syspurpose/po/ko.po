@@ -1,12 +1,13 @@
 # eukim <eukim@redhat.com>, 2018. #zanata
 # Sundeep Anand <suanand@redhat.com>, 2021.
+# simmon <simmon@nplob.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-13 14:02-0500\n"
-"PO-Revision-Date: 2021-02-04 11:40+0000\n"
-"Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
+"PO-Revision-Date: 2021-03-07 13:01+0000\n"
+"Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/syspurpose-1-28/ko/>\n"
 "Language: ko\n"
@@ -14,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.5.1\n"
 
 #: src/syspurpose/cli.py:29
 #, python-brace-format
@@ -23,7 +24,7 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
-"경고: 최근 인타이틀먼트 서버 관리자가 \"{download_value}\"의 {attr}를 이 시스템에 설정했습니다.\n"
+"경고: 자격 서버 관리자가 최근 \"{download_value}\"의 {attr}를 이 시스템에 설정했습니다.\n"
 "{advice}"
 
 #: src/syspurpose/cli.py:31
@@ -59,7 +60,7 @@ msgstr "{name}에서 \"{val}\" 값을 제거하지 못했습니다. 값이 존�
 #: src/syspurpose/cli.py:108
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
-msgstr "{attr}이(가) \"{val}\"(으)로 설정되었습니다."
+msgstr "{attr}가 \"{val}\"으로 설정 되었습니다."
 
 #: src/syspurpose/cli.py:129
 #, python-brace-format
