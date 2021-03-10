@@ -428,9 +428,16 @@ class ContentConnection(BaseConnection):
         super(ContentConnection, self).__init__(handler='/', cert_dir=cert_dir, user_agent=user_agent,
                                                 **kwargs)
 
-    def get_versions(self, path):
+    def get_versions(self, path, cert_key_pairs=None):
+        """
+        Get list of available release versions from the given path
+        :param path: path, where is simple text file containing supported release versions
+        :param cert_key_pairs: optional argument including list of supported cert and keys
+            to reduce number of failed http requests.
+        :return:
+        """
         handler = "%s/%s" % (self.handler, path)
-        result = self.conn.request_get(handler)
+        result = self.conn.request_get(handler, cert_key_pairs=cert_key_pairs)
 
         return result
 

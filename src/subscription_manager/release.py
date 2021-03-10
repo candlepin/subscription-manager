@@ -118,6 +118,11 @@ class CdnReleaseVersionProvider(object):
         release_product = release_products[0]
         entitlements = self.entitlement_dir.list_for_product(release_product.id)
 
+        # When there is SCA entitlement certificate, then add this cert to
+        # the list too. See: https://bugzilla.redhat.com/show_bug.cgi?id=1924921
+        sca_entitlements = self.entitlement_dir.list_with_sca_mode()
+        entitlements.extend(sca_entitlements)
+
         listings = []
         ent_cert_key_pairs = set()
         for entitlement in entitlements:
@@ -145,7 +150,10 @@ class CdnReleaseVersionProvider(object):
         listings = sorted(set(listings))
         for listing_path in listings:
             try:
-                data = self.content_connection.get_versions(listing_path)
+                data = self.content_connection.get_versions(
+                    path=listing_path,
+                    cert_key_pairs=ent_cert_key_pairs
+                )
             except (socket.error,
                     six.moves.http_client.HTTPException,
                     ssl.SSLError,
@@ -161,7 +169,7 @@ class CdnReleaseVersionProvider(object):
             if not data:
                 continue
 
-            ver_listing = listing.ListingFile(data=data)
+            ver_listing = listing.ListingFile(data=str(data))
 
             # ver_listing.releases can be empty
             releases = releases + ver_listing.get_releases()
