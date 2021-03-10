@@ -33,9 +33,9 @@ class FactsCommand(CliCommand):
         shortdesc = _("View or update the detected system information")
         super(FactsCommand, self).__init__("facts", shortdesc, False)
 
-        self.parser.add_option("--list", action="store_true",
+        self.parser.add_argument("--list", action="store_true",
                                help=_("list known facts for this system"))
-        self.parser.add_option("--update", action="store_true",
+        self.parser.add_argument("--update", action="store_true",
                                help=_("update the system facts"))
 
     def _validate_options(self):

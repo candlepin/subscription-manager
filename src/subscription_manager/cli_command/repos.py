@@ -37,61 +37,52 @@ class ReposCommand(CliCommand):
         shortdesc = _("List the repositories which this system is entitled to use")
         super(ReposCommand, self).__init__("repos", shortdesc, False)
 
-        def repo_callback(option, opt, repoid, parser):
-            """
-            Store our repos to enable and disable in a combined, ordered list of
-            tuples. (enabled, repoid)
+        self.parser.add_argument("--list", action='store_true', dest="list",
+                                 help=_("list all known repositories for this system"))
+        self.parser.add_argument("--list-enabled", action='store_true', dest="list_enabled",
+                                 help=_("list known, enabled repositories for this system"))
+        self.parser.add_argument("--list-disabled", action='store_true', dest="list_disabled",
+                                 help=_("list known, disabled repositories for this system"))
+        self.parser.add_argument("--enable", dest="enable", action='append', metavar="REPOID",
+                                 help=_(
+                                     "repository to enable (can be specified more than once). Wildcards (* and ?) are supported."))
+        self.parser.add_argument("--disable", dest="disable", action='append', metavar="REPOID",
+                                 help=_(
+                                     "repository to disable (can be specified more than once). Wildcards (* and ?) are supported."))
 
-            This allows us to have our expected behaviour when we do things like
-            --disable="*" --enable="1" --enable="2".
-            """
-            status = '0'
-            if opt == '--enable':
-                status = '1'
-            vars(parser.values).setdefault('repo_actions',
-                                           []).append((status, repoid))
+    def _reconcile_list_options(self):
+        """
+        Handles setting both enabled/disabled filter options when the --list argument is
+        provided.
 
-        def list_callback(option, opt, repoid, parser):
-            """
-            Handles setting both enabled/disabled filter options when the --list argument is
-            provided.
+        Allows for --list to perform identically to --list-enabled --list-disabled
+        """
+        # covers the default case if no list options are specified
+        default_list = not(self.options.list or self.options.list_enabled or self.options.list_disabled)
+        repo_actions = hasattr(self.options, 'repo_actions')
+        self.list_enabled = (self.options.list or self.options.list_enabled or default_list) and not repo_actions
+        self.list_disabled = (self.options.list or self.options.list_disabled or default_list) and not repo_actions
+        self.list = (self.options.list or self.options.list_enabled or self.options.list_disabled or default_list) and not repo_actions
 
-            Allows for --list to perform identically to --list-enabled --list-disabled
-            """
-            parser.values.list = True
+    def _compile_repo_changes(self):
+        """
+        Store our repos to enable and disable in a combined, ordered list of
+        tuples. (enabled, repoid)
 
-            if opt in ("--list", "--list-enabled"):
-                parser.values.list_enabled = True
-
-            if opt in ("--list", "--list-disabled"):
-                parser.values.list_disabled = True
-
-        self.parser.add_option("--list",
-                               action="callback", callback=list_callback, dest="list", default=False,
-                               help=_("list all known repositories for this system"))
-        self.parser.add_option("--list-enabled",
-                               action="callback", callback=list_callback, dest="list_enabled", default=False,
-                               help=_("list known, enabled repositories for this system"))
-        self.parser.add_option("--list-disabled",
-                               action="callback", callback=list_callback, dest="list_disabled", default=False,
-                               help=_("list known, disabled repositories for this system"))
-        self.parser.add_option("--enable", dest="enable", type="str",
-                               action='callback', callback=repo_callback, metavar="REPOID",
-                               help=_(
-                                   "repository to enable (can be specified more than once). Wildcards (* and ?) are supported."))
-        self.parser.add_option("--disable", dest="disable", type="str",
-                               action='callback', callback=repo_callback, metavar="REPOID",
-                               help=_(
-                                   "repository to disable (can be specified more than once). Wildcards (* and ?) are supported."))
-
-    def _validate_options(self):
-        if not (self.options.list or hasattr(self.options, 'repo_actions')):
-            self.options.list = True
-            self.options.list_enabled = True
-            self.options.list_disabled = True
+        This allows us to have our expected behaviour when we do things like
+        --disable="*" --enable="1" --enable="2".
+        """
+        if not self.options.enable and not self.options.disable:
+            return
+        self.options.repo_actions = []
+        for repo in self.options.enable or []:
+            self.options.repo_actions.append(('1', repo))
+        for repo in self.options.disable or []:
+            self.options.repo_actions.append(('0', repo))
 
     def _do_command(self):
-        self._validate_options()
+        self._compile_repo_changes()
+        self._reconcile_list_options()
         rc = 0
         if not manage_repos_enabled():
             print(_("Repositories disabled by configuration."))
@@ -120,14 +111,14 @@ class ReposCommand(CliCommand):
             profile_action_client = ProfileActionClient()
             profile_action_client.update()
 
-        if self.options.list:
+        if self.list:
             if len(repos):
                 # TODO: Perhaps this should be abstracted out as well...?
                 def filter_repos(repo):
                     disabled_values = ['false', '0']
                     repo_enabled = repo['enabled'].lower()
-                    show_enabled = (self.options.list_enabled and repo_enabled not in disabled_values)
-                    show_disabled = (self.options.list_disabled and repo_enabled in disabled_values)
+                    show_enabled = (self.list_enabled and repo_enabled not in disabled_values)
+                    show_disabled = (self.list_disabled and repo_enabled in disabled_values)
 
                     return show_enabled or show_disabled
 

@@ -50,20 +50,20 @@ class AbstractSyspurposeCommand(CliCommand):
         self.store = None
 
         if 'set' in commands:
-            self.parser.add_option(
+            self.parser.add_argument(
                 "--set",
                 dest="set",
-                help=(_("set {attr} of system purpose").format(attr=attr))
+                help=_("set {attr} of system purpose").format(attr=attr)
             )
         if 'unset' in commands:
-            self.parser.add_option(
+            self.parser.add_argument(
                 "--unset",
                 dest="unset",
                 action="store_true",
-                help=(_("unset {attr} of system purpose").format(attr=attr))
+                help=_("unset {attr} of system purpose").format(attr=attr)
             )
         if 'add' in commands:
-            self.parser.add_option(
+            self.parser.add_argument(
                 "--add",
                 dest="to_add",
                 action="append",
@@ -71,7 +71,7 @@ class AbstractSyspurposeCommand(CliCommand):
                 help=_("add an item to the list ({attr}).").format(attr=attr)
             )
         if 'remove' in commands:
-            self.parser.add_option(
+            self.parser.add_argument(
                 "--remove",
                 dest="to_remove",
                 action="append",
@@ -79,14 +79,14 @@ class AbstractSyspurposeCommand(CliCommand):
                 help=_("remove an item from the list ({attr}).").format(attr=attr)
             )
         if 'show' in commands:
-            self.parser.add_option(
+            self.parser.add_argument(
                 "--show",
                 dest="show",
                 action='store_true',
                 help=_("show this system's current {attr}").format(attr=attr)
             )
         if 'list' in commands:
-            self.parser.add_option(
+            self.parser.add_argument(
                 "--list",
                 dest="list",
                 action='store_true',

@@ -30,10 +30,10 @@ class RedeemCommand(CliCommand):
         shortdesc = _("Attempt to redeem a subscription for a preconfigured system")
         super(RedeemCommand, self).__init__("redeem", shortdesc, False)
 
-        self.parser.add_option("--email", dest="email", action='store',
+        self.parser.add_argument("--email", dest="email", action='store',
                                help=_("email address to notify when "
                                       "subscription redemption is complete"))
-        self.parser.add_option("--locale", dest="locale", action='store',
+        self.parser.add_argument("--locale", dest="locale", action='store',
                                help=_("optional language to use for email "
                                       "notification when subscription redemption is "
                                       "complete (Examples: en-us, de-de)"))

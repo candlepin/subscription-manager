@@ -27,13 +27,13 @@ class PluginsCommand(CliCommand):
         shortdesc = _("View and configure with 'subscription-manager plugins'")
         super(PluginsCommand, self).__init__("plugins", shortdesc, False)
 
-        self.parser.add_option("--list", action="store_true",
+        self.parser.add_argument("--list", action="store_true",
                                help=_("list {SM} plugins").format(SM=SM))
-        self.parser.add_option("--listslots", action="store_true",
+        self.parser.add_argument("--listslots", action="store_true",
                                help=_("list {SM} plugin slots").format(SM=SM))
-        self.parser.add_option("--listhooks", action="store_true",
+        self.parser.add_argument("--listhooks", action="store_true",
                                help=_("list {SM} plugin hooks").format(SM=SM))
-        self.parser.add_option("--verbose", action="store_true",
+        self.parser.add_argument("--verbose", action="store_true",
                                default=False,
                                help=_("show verbose plugin info"))
 

@@ -39,9 +39,9 @@ class StatusCommand(CliCommand):
     def __init__(self):
         shortdesc = _("Show status information for this system's subscriptions and products")
         super(StatusCommand, self).__init__("status", shortdesc, True)
-        self.parser.add_option("--ondate", dest="on_date",
-                               help=(_("future date to check status on, defaults to today's date (example: {example})").format(
-                                     example=strftime("%Y-%m-%d", localtime()))))
+        self.parser.add_argument("--ondate", dest="on_date",
+                               help=_("future date to check status on, defaults to today's date (example: {example})").format(
+                                     example=strftime("%Y-%m-%d", localtime())))
 
     def _do_command(self):
         # list status and all reasons it is not valid

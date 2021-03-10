@@ -22,7 +22,7 @@ import six.moves
 import rhsm.connection as connection
 import subscription_manager.injection as inj
 
-from optparse import SUPPRESS_HELP
+from argparse import SUPPRESS
 
 from rhsm.connection import RemoteServerException
 from rhsm.https import ssl
@@ -51,30 +51,30 @@ class RegisterCommand(UserPassCommand):
         super(RegisterCommand, self).__init__("register", shortdesc, True)
 
         self._add_url_options()
-        self.parser.add_option("--baseurl", dest="base_url",
+        self.parser.add_argument("--baseurl", dest="base_url",
                                default=None, help=_("base URL for content in form of https://hostname:port/prefix"))
-        self.parser.add_option("--type", dest="consumertype", default="system", metavar="UNITTYPE",
-                               help=SUPPRESS_HELP)
-        self.parser.add_option("--name", dest="consumername", metavar="SYSTEMNAME",
+        self.parser.add_argument("--type", dest="consumertype", default="system", metavar="UNITTYPE",
+                               help=SUPPRESS)
+        self.parser.add_argument("--name", dest="consumername", metavar="SYSTEMNAME",
                                help=_("name of the system to register, defaults to the hostname"))
-        self.parser.add_option("--consumerid", dest="consumerid", metavar="SYSTEMID",
+        self.parser.add_argument("--consumerid", dest="consumerid", metavar="SYSTEMID",
                                help=_("the existing system data is pulled from the server"))
-        self.parser.add_option("--org", dest="org", metavar="ORG_KEY",
+        self.parser.add_argument("--org", dest="org", metavar="ORG_KEY",
                                help=_(
                                    "register with one of multiple organizations for the user, using organization key"))
-        self.parser.add_option("--environment", dest="environment",
+        self.parser.add_argument("--environment", dest="environment",
                                help=_("register with a specific environment in the destination org"))
-        self.parser.add_option("--release", dest="release",
+        self.parser.add_argument("--release", dest="release",
                                help=_("set a release version"))
-        self.parser.add_option("--autosubscribe", action='store_true',
+        self.parser.add_argument("--autosubscribe", action='store_true',
                                help=_("Deprecated, see --auto-attach"))
-        self.parser.add_option("--auto-attach", action='store_true', dest="autoattach",
+        self.parser.add_argument("--auto-attach", action='store_true', dest="autoattach",
                                help=_("automatically attach compatible subscriptions to this system"))
-        self.parser.add_option("--force", action='store_true',
+        self.parser.add_argument("--force", action='store_true',
                                help=_("register the system even if it is already registered"))
-        self.parser.add_option("--activationkey", action='append', dest="activation_keys",
+        self.parser.add_argument("--activationkey", action='append', dest="activation_keys",
                                help=_("activation key to use for registration (can be specified more than once)"))
-        self.parser.add_option("--servicelevel", dest="service_level",
+        self.parser.add_argument("--servicelevel", dest="service_level",
                                help=_("system preference used when subscribing automatically, requires --auto-attach"))
 
     def _validate_options(self):

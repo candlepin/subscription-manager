@@ -28,7 +28,7 @@ import tempfile
 import zipfile
 from zipfile import ZipFile
 
-from subscription_manager.i18n_optparse import OptionParser
+from subscription_manager.i18n_argparse import ArgumentParser
 
 from . import manifestdata
 from rct.manifest_commands import CatManifestCommand
@@ -72,9 +72,9 @@ class RCTManifestCommandTests(SubManFixture):
 
     def test_cat_manifest(self):
         catman = CatManifestCommand()
-        parser = OptionParser()
-        parser.add_option("--no-content")
-        (options, args) = parser.parse_args([])
+        parser = ArgumentParser()
+        parser.add_argument("--no-content")
+        (options, args) = parser.parse_known_args([])
         catman.options = options
         catman.args = [_build_valid_manifest()]
 
