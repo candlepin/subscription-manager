@@ -33,7 +33,7 @@ class RCTCliCommand(AbstractCLICommand):
             # Skip the program name and the command name.
             args = sys.argv[2:]
 
-        (self.options, self.args) = self.parser.parse_args(args)
+        (self.options, self.args) = self.parser.parse_known_args(args)
 
         self._validate_options()
         return_code = self._do_command()
