@@ -60,7 +60,7 @@ from subscription_manager.utils import parse_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
         restart_virt_who, get_terminal_width, print_error, unique_list_items, \
         is_simple_content_access, get_supported_resources, get_current_owner, \
-        generate_correlation_id
+        generate_correlation_id, friendly_join
 from subscription_manager.overrides import Overrides, Override
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, \
@@ -724,26 +724,45 @@ class SyspurposeCommand(CliCommand):
         :param value: provided value on CLI
         :return: True if the value is valid; otherwise return False
         """
+        invalid_values = self._are_provided_values_valid([value])
+        return len(invalid_values) == 0
+
+    def _are_provided_values_valid(self, values):
+        """
+        Try to validate the provided values. Check if all the values are included in valid fields.
+        If any of the values is not provided in the valid fields and we can connect candlepin
+        server, then print some warning.
+        :param values: provided values on CLI
+        :return: list of invalid values
+        """
 
         # First check if the the value is in the valid_fields
-        ret = False
+        invalid_values = []
         valid_fields = self._get_valid_fields()
         if self.attr in valid_fields:
-            if value in valid_fields[self.attr]:
-                ret = True
+            for value in values:
+                if value not in valid_fields[self.attr]:
+                    invalid_values.append(value)
+        invalid_values_len = len(invalid_values)
 
-        # When provided value is not in the valid fields, then try to print some warning,
+        # When there are values not in the valid fields, then try to print some warning,
         # when the system is registered or username & password was provided as CLI option.
         # When the system is not registered and no username & password was provided, then
-        # value will be set silently.
-        if ret is False:
+        # these values will be set silently.
+        if invalid_values_len > 0:
             if self.is_registered() or \
                     (self.options.username and self.options.password) or \
                     self.options.token:
                 if self.attr in valid_fields:
                     if len(valid_fields[self.attr]) > 0:
-                        print(_('Warning: Provided value "{val}" is not included in the list of valid values').format(
-                            val=value
+                        # TRANSLATORS: this is used to quote a string
+                        quoted_values = [_("\"{value}\"").format(value=value)
+                                         for value in invalid_values]
+                        printable_values = friendly_join(quoted_values)
+                        print(ungettext('Warning: Provided value {vals} is not included in the list of valid values',
+                                        'Warning: Provided values {vals} are not included in the list of valid values',
+                                        invalid_values_len).format(
+                            vals=printable_values
                         ))
                         self._print_valid_values(valid_fields)
                     else:
@@ -755,7 +774,7 @@ class SyspurposeCommand(CliCommand):
                         attr=self.attr
                     ))
 
-        return ret
+        return invalid_values
 
     def set(self):
         """
