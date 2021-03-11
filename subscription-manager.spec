@@ -240,7 +240,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.29.8
+Version: 1.29.9
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1523,6 +1523,19 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Mar 11 2021 Christopher Snyder <csnyder@redhat.com> 1.29.9-1
+- 1682943: add space to message to separate 2 sentences
+  (tmerry@localhost.localdomain)
+- 1928667: Added UTC to the last_boot fact (ENT-3566) (#2456)
+  (31166354+tlhmerry9@users.noreply.github.com)
+- 1608820: Check the Log Level to make sure it is valid, if not set it to INFO
+  (#2468) (31166354+tlhmerry9@users.noreply.github.com)
+- Add nikos' auto assigner (csnyder@redhat.com)
+- Added translation using Weblate (Sinhala) (r45xveza@pm.me)
+- 1928072: Print warning message and don't do auto-attach (jhnidek@redhat.com)
+- Refactor managercli (#2453) (wpoteat@redhat.com)
+- 1924921: Fix getting releases, when SCA is used (jhnidek@redhat.com)
+
 * Tue Mar 02 2021 Christopher Snyder <csnyder@redhat.com> 1.29.8-1
 - 1920568: Solve dependency between debuginfo packages (jhnidek@redhat.com)
 - ENT-3276: Merge syspurpose with subscription-manager (#2436)
