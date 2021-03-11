@@ -261,6 +261,7 @@ class AbstractSyspurposeCommand(CliCommand):
 
     def add(self):
         self._add(self.options.to_add)
+        self._are_provided_values_valid(self.options.to_add)
         success_msg = _("{attr} updated.").format(attr=self.name)
         # When there is several options to add, then format of command is following
         # subscription-manager command --add opt1 --add opt2
