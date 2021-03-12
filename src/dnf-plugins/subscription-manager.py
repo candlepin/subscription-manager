@@ -47,11 +47,11 @@ subscriptions, you can renew the expired subscription.  """
 )
 
 not_registered_warning = _("""
-This system is not registered to Red Hat Subscription Management. You can use subscription-manager to register.
+This system is not registered with an entitlement server. You can use subscription-manager to register.
 """)
 
 no_subs_warning = _("""
-This system is registered to Red Hat Subscription Management, but is not receiving updates. You can use \
+This system is registered with and entitlement server, but is not receiving updates. You can use \
 subscription-manager to assign subscriptions.
 """)
 
