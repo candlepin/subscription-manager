@@ -244,7 +244,7 @@
 
 Name: subscription-manager
 Version: 1.28.13
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
 Group:   Productivity/Networking/System
@@ -1453,6 +1453,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Mar 15 2021 Christopher Snyder <csnyder@redhat.com> 1.28.13-2
+- 1924921: Fix getting releases, when SCA is used (jhnidek@redhat.com)
+
 * Thu Feb 18 2021 Christopher Snyder <csnyder@redhat.com> 1.28.13-1
 - Translated using Weblate (Chinese (Simplified) (zh_CN)) (suanand@redhat.com)
 - Translated using Weblate (Chinese (Traditional) (zh_TW)) (jsefler@redhat.com)
