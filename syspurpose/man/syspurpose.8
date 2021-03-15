@@ -48,6 +48,9 @@ Add values to the add-ons property
 \fBsyspurpose remove-addons \fIVALUE\fP...\fP
 Remove values from the add-ons property
 .TP
+\fBsyspurpose unset-addons \fIVALUE\fP...\fP
+Clear set add-ons property
+.TP
 \fBsyspurpose show \fIVALUE\fP\fP
 Show the current system purpose properties
 .SS Generic Commands
@@ -68,6 +71,10 @@ bar\fP is identical to \fBsyspurpose add-addons foo bar\fP.
 \fBsyspurpose remove \fIPROPERTY\fP \fIVALUE\fP\fP
 Clear a value from a specific list property. E.g. \fBsyspurpose remove addons
 foo bar\fP is identical to \fBsyspurpose remove-addons foo bar\fP.
+.TP
+\fBsyspurpose unset \fIPROPERTY\fP \fIVALUE\fP\fP
+Clear set addons. E.g. \fBsyspurpose unset addons
+foo bar\fP is identical to \fBsyspurpose unset-addons foo bar\fP.
 
 Only "addons" acts as a list property.  The other properties only accept a
 single value.
