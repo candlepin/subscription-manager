@@ -574,6 +574,22 @@ class TestAddonsCommand(TestCliCommand):
     def test_unset_and_add_and_remove(self):
         self._test_exception(['--add', 'test', '--remove', 'item', '--unset'])
 
+    def test_add_valid_value(self):
+        with patch.object(self.cc, '_get_valid_fields') as mock_get_valid_fields:
+            mock_get_valid_fields.return_value = {'addons': ['ADDON1', 'ADDON3', 'ADDON2']}
+            self.assertTrue(self.cc._is_provided_value_valid('ADDON1'))
+            with Capture() as cap:
+                self.assertEqual(self.cc._are_provided_values_valid(['ADDON1']), [])
+            self.assertNotIn('Warning: Provided value', cap.out)
+
+    def test_add_invalid_value(self):
+        with patch.object(self.cc, '_get_valid_fields') as mock_get_valid_fields:
+            mock_get_valid_fields.return_value = {'addons': ['ADDON1', 'ADDON3', 'ADDON2']}
+            self.assertFalse(self.cc._is_provided_value_valid('test'))
+            with Capture() as cap:
+                self.assertEqual(self.cc._are_provided_values_valid(['test']), ['test'])
+            self.assertIn('Warning: Provided value', cap.out)
+
 
 class TestListCommand(TestCliProxyCommand):
     command_class = managercli.ListCommand
