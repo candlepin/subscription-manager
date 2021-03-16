@@ -127,7 +127,9 @@ msgstr "$0 꾸러미는 어떤 저장소에서도 사용 할 수 없습니다."
 msgid ""
 "The system could not be connected to Insights because installing the $0 "
 "package requires the unexpected removal of other packages."
-msgstr "시스템은 $0 꾸러미 설치가 다른 꾸러미를 예기치 않게 제거 해야 할 수 있으므로 Insights에 연결할 수 없습니다."
+msgstr ""
+"시스템은 $0 꾸러미 설치가 다른 꾸러미를 예기치 않게 제거 해야 할 수 있으므로 "
+"Insights에 연결할 수 없습니다."
 
 #: cockpit/src/insights.jsx:73
 msgid "Connecting to Insights"
@@ -139,8 +141,9 @@ msgid ""
 "availability, and stability with Red Hat Insights — with predictive "
 "analytics, avoid problems and unplanned downtime in your Red Hat environment."
 msgstr ""
-"Red Hat Insights를 사용하여 보안, 성능, 가용성, 안정성에 대한 위협을 사전에 식별하여 조치하고, 예측 분석을 통해, "
-"Red Hat 환경에서 문제와 계획되지 않은 다운 타임을 방지합니다."
+"Red Hat Insights를 사용하여 보안, 성능, 가용성, 안정성에 대한 위협을 사전에 "
+"식별하여 조치하고, 예측 분석을 통해, Red Hat 환경에서 문제와 계획되지 않은 다"
+"운 타임을 방지합니다."
 
 #: cockpit/src/insights.jsx:122 cockpit/src/subscriptions-register.jsx:93
 msgid "The $0 package will be installed."
@@ -233,8 +236,8 @@ msgid ""
 "If you disconnect this system from Insights, it will no longer report it's "
 "Insights status in Red Hat Cloud or Satellite."
 msgstr ""
-"이 시스템을 Insights 에서 연결 해제 한 경우, Red Hat Cloud 또는 Satellite에서 Insights 더 이상 "
-"상태를 보고하지 않습니다."
+"이 시스템을 Insights 에서 연결 해제 한 경우, Red Hat Cloud 또는 Satellite에"
+"서 Insights 더 이상 상태를 보고하지 않습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/insights.jsx:417 cockpit/src/insights.jsx:436
@@ -599,7 +602,8 @@ msgid ""
 "use subscription-manager to register.\n"
 msgstr ""
 "\n"
-"이 시스템은 Red Hat 구독 관리에 등록되어 있지 않습니다. subscription-manager를 사용하여 등록 할 수 있습니다.\n"
+"이 시스템은 Red Hat 구독 관리에 등록되어 있지 않습니다. subscription-manager"
+"를 사용하여 등록 할 수 있습니다.\n"
 
 #: src/dnf-plugins/subscription-manager.py:53
 msgid ""
@@ -609,8 +613,8 @@ msgid ""
 "subscriptions.\n"
 msgstr ""
 "\n"
-"이 시스템은 Red Hat 구독 관리에 등록되어 있지 않아서, 최신화 할 수 없습니다. subscription-manager를 사용하여 "
-"구독을 할당 할 수 있습니다.\n"
+"이 시스템은 Red Hat 구독 관리에 등록되어 있지 않아서, 최신화 할 수 없습니다. "
+"subscription-manager를 사용하여 구독을 할당 할 수 있습니다.\n"
 
 #: src/dnf-plugins/subscription-manager.py:86
 msgid "Not root, Subscription Management repositories not updated"
@@ -622,8 +626,8 @@ msgid ""
 "subscription-manager plugin disabled %d system repositories with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
 msgstr ""
-"subscription-manager 플러그인은 /etc/dnf/plugins/subscription-manager.conf에 구성과 "
-"관련된 %d 시스템 저장소를 비활성화하였습니다"
+"subscription-manager 플러그인은 /etc/dnf/plugins/subscription-manager.conf에 "
+"구성과 관련된 %d 시스템 저장소를 비활성화하였습니다"
 
 #: src/dnf-plugins/subscription-manager.py:127
 msgid "Updating Subscription Management repositories."
@@ -641,7 +645,9 @@ msgstr "서비스크립션 관리자는 컨테이너 모드에서 작동하고 �
 msgid ""
 "Upload combined profile to Satellite server (list of installed rpms, enabled "
 "repositories and modules"
-msgstr "Satellite 서버에 결합된 프로파일(설치된 rpm, 활성화된 저장소 및 모듈 목록)을 업로드합니다"
+msgstr ""
+"Satellite 서버에 결합된 프로파일(설치된 rpm, 활성화된 저장소 및 모듈 목록)을 "
+"업로드합니다"
 
 #: src/dnf-plugins/upload-profile.py:43
 #: src/subscription_manager/scripts/package_profile_upload.py:39
@@ -651,7 +657,9 @@ msgstr "꾸러미 프로필 업로드를 강제로 진행합니다"
 #: src/dnf-plugins/upload-profile.py:59
 #: src/subscription_manager/scripts/package_profile_upload.py:46
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
-msgstr "최신화 하지 않았습니다. 보다 자세한 정보는 /var/log/rhsm/rhsm.log에서 참조하세요."
+msgstr ""
+"최신화 하지 않았습니다. 보다 자세한 정보는 /var/log/rhsm/rhsm.log에서 참조하"
+"세요."
 
 #: src/initial-setup/com_redhat_subscription_manager/gui/spokes/rhsm_gui.ui:8
 msgid "RHEL"
@@ -1373,14 +1381,18 @@ msgstr "사용자 %s는 어떤 조직의 구성원도 아닙니다"
 msgid ""
 "Warning: A {conflict_msg} was recently set for this system by the "
 "entitlement server administrator."
-msgstr "경고: 권한 부여 서버 관리자에 의해 {conflict_msg}는시스템을 위해 최신화 설정 됩니다."
+msgstr ""
+"경고: 권한 부여 서버 관리자에 의해 {conflict_msg}는시스템을 위해 최신화 설정 "
+"됩니다."
 
 #: src/rhsmlib/dbus/objects/syspurpose.py:78
 #, python-brace-format
 msgid ""
 "Warning: A {conflict_msg} were recently set for this system by the "
 "entitlement server administrator."
-msgstr "경고: 권한 부여 서버관리자에 의해 {conflict_msg}는 시스템을 위해 최신화 설정됩니다."
+msgstr ""
+"경고: 권한 부여 서버관리자에 의해 {conflict_msg}는 시스템을 위해 최신화 설정"
+"됩니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/facts/dmiinfo.py:91 src/rhsmlib/facts/dmiinfo.py:130
@@ -1664,8 +1676,8 @@ msgid ""
 "To learn how to unregister from either service please consult this Knowledge "
 "Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
-"서비스로 부터 등록 해제하는 방법을 습득하려면 Knowledge Base 문서를 참조하십시오: https://access.redhat."
-"com/kb/docs/DOC-45563"
+"서비스로 부터 등록 해제하는 방법을 습득하려면 Knowledge Base 문서를 참조하십"
+"시오: https://access.redhat.com/kb/docs/DOC-45563"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:19
@@ -1925,14 +1937,16 @@ msgid ""
 "or its documentation.\n"
 msgstr ""
 "\n"
-"이 소프트웨어는 GNU 일반 공공 라이센스, 버전 2 (GPLv2)에 의해 사용이 허가되었습니다.이는 소프트웨어, 표시되거나 "
-"암묵적이거나, 상품성 또는 특정 목적에의 적합성에 대한 묵시적인 보증을 포함한 보증은 없습니다. 이 소프트웨어와 함께 GPLv2의 사본을 "
-"받았을 것입니다.; 그렇지 않은 경우에 참고하세요:\n"
+"이 소프트웨어는 GNU 일반 공공 라이센스, 버전 2 (GPLv2)에 의해 사용이 허가되었"
+"습니다.이는 소프트웨어, 표시되거나 암묵적이거나, 상품성 또는 특정 목적에의 적"
+"합성에 대한 묵시적인 보증을 포함한 보증은 없습니다. 이 소프트웨어와 함께 "
+"GPLv2의 사본을 받았을 것입니다.; 그렇지 않은 경우에 참고하세요:\n"
 "\n"
 "http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt\n"
 "\n"
-"Red Hat 상표는 GPLv2에 따라 라이센스가 부여되지 않습니다. 이 소프트웨어 또는 설명서에 포함된 Red Hat 상표를 사용하거나 "
-"복제 할 수 있는 권한은 부여되지 않습니다.\n"
+"Red Hat 상표는 GPLv2에 따라 라이센스가 부여되지 않습니다. 이 소프트웨어 또는 "
+"설명서에 포함된 Red Hat 상표를 사용하거나 복제 할 수 있는 권한은 부여되지 않"
+"습니다.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/about.py:55
@@ -2947,7 +2961,9 @@ msgstr "sla_selection_combobox"
 msgid ""
 "<small>Your system's service level preference is followed when subscribing "
 "automatically.</small>"
-msgstr "<small>자동으로 등록할 때 시스템의 서비스 레벨 환경 설정은 다음과 같습니다</small>"
+msgstr ""
+"<small>자동으로 등록할 때 시스템의 서비스 레벨 환경 설정은 다음과 같습니다</"
+"small>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/progress.glade:8
@@ -4422,7 +4438,8 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
-"경고: 자격 서버 관리자가 최근 \"{download_value}\"의 {attr}를 이 시스템에 설정했습니다.\n"
+"경고: 자격 서버 관리자가 최근 \"{download_value}\"의 {attr}를 이 시스템에 설"
+"정했습니다.\n"
 "{advice}"
 
 #: src/subscription_manager/managercli.py:203
@@ -4569,7 +4586,8 @@ msgstr "오류: --username 또는 --token를 지정 할 수 있습니다"
 #, python-brace-format
 msgid ""
 "Error: you must register or specify --username and --password to list {attr}"
-msgstr "오류: 항목 {attr} 에 --username 와 --password를 등록하거나 지정 해야 합니다"
+msgstr ""
+"오류: 항목 {attr} 에 --username 와 --password를 등록하거나 지정 해야 합니다"
 
 #: src/subscription_manager/managercli.py:729
 #, python-brace-format
@@ -4637,7 +4655,8 @@ msgstr "토큰을 사용해 서버에 연결 할 수 없습니다"
 msgid ""
 "Note: The currently configured entitlement server does not support System "
 "Purpose {attr}."
-msgstr "참고: 현재 설정되어 있는 자격 서버는 시스템 용도 {attr}를 지원하지 않습니다."
+msgstr ""
+"참고: 현재 설정되어 있는 자격 서버는 시스템 용도 {attr}를 지원하지 않습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:952
@@ -5304,7 +5323,9 @@ msgstr "오류: 파일 \"%s\"은 존재하지 않거나 읽을 수 없습니다.
 msgid ""
 "Ignoring request to auto-attach. It is disabled for org \"{owner_id}\" "
 "because of the content access mode setting."
-msgstr "자동 첨부 요청을 무시합니다. 내용 접근 방법 설정으로 인해 {owner_id}\" 조직에 대해 비활성화되어 있습니다."
+msgstr ""
+"자동 첨부 요청을 무시합니다. 내용 접근 방법 설정으로 인해 {owner_id}\" 조직"
+"에 대해 비활성화되어 있습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:2193
@@ -6006,7 +6027,9 @@ msgstr "시스템 상태 정보"
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status.\n"
-msgstr "내용 접근 방식은 간단한 내용 접근으로 설정되어 있습니다. 이 호스트는 구독 상태가 없더래도 내용에 접근 할 수 있습니다.\n"
+msgstr ""
+"내용 접근 방식은 간단한 내용 접근으로 설정되어 있습니다. 이 호스트는 구독 상"
+"태가 없더래도 내용에 접근 할 수 있습니다.\n"
 
 #: src/subscription_manager/managercli.py:3357
 #, python-format
@@ -6028,8 +6051,8 @@ msgid ""
 "Could not find up2date_client.config module! Perhaps this script was already "
 "executed with --remove-rhn-packages?"
 msgstr ""
-"up2date_client.config 모듈을 찾을 수 없습니다! 이 스크립트는 --remove-rhn-packages로 이미 실행되고 "
-"있을 수 있습니다?"
+"up2date_client.config 모듈을 찾을 수 없습니다! 이 스크립트는 --remove-rhn-"
+"packages로 이미 실행되고 있을 수 있습니다?"
 
 #: src/subscription_manager/migrate/migrate.py:74
 msgid "See /var/log/rhsm/rhsm.log for more details."
@@ -6447,8 +6470,9 @@ msgid ""
 "Hat Subscription Management. If not desired, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
-"yum 플러그인: %s가 Red Hat 구독 관리를 통해 자동으로 활성화되었습니다. 원하지 않을 경우 \"subscription-"
-"manager config --rhsm.auto_enable_yum_plugins=0\"을 사용하여 이 동작을 차단하십시오."
+"yum 플러그인: %s가 Red Hat 구독 관리를 통해 자동으로 활성화되었습니다. 원하"
+"지 않을 경우 \"subscription-manager config --rhsm."
+"auto_enable_yum_plugins=0\"을 사용하여 이 동작을 차단하십시오."
 
 #: src/subscription_manager/repolib.py:643
 msgid "Repo updates"
@@ -6520,7 +6544,6 @@ msgstr "Red Hat 서브스크립션 유효 애플릿"
 msgid "Red Hat Subscription Manager"
 msgstr "Red Hat 서브스크립션 관리자"
 
-#, python-brace-format
 #~ msgid "how this system's current {attr}"
 #~ msgstr "이 시스템의 현재 {attr} 방식"
 
@@ -6529,12 +6552,10 @@ msgstr "Red Hat 서브스크립션 관리자"
 #~ msgstr "긴 정수"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#, python-format
 #~ msgid "%s option requires an argument"
 #~ msgstr "%s 옵션에는 인수가 필요함"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#, python-format
 #~ msgid "%s option requires %d arguments"
 #~ msgstr "%s 옵션에는 %d 인수가 필요함"
 
@@ -6648,7 +6669,6 @@ msgstr "Red Hat 서브스크립션 관리자"
 #~ msgid "Finding suitable service levels"
 #~ msgstr "적합한 서비스 레벨 검색 중"
 
-#, python-brace-format
 #~ msgid ""
 #~ "Due to a conflicting change made at the server the {attr} has not been "
 #~ "set.\n"
@@ -6657,19 +6677,15 @@ msgstr "Red Hat 서브스크립션 관리자"
 #~ "서버에서 변경 사항의 충돌로 인해 {attr}이/가 설정되지 않았습니다.\n"
 #~ "{advice}"
 
-#, python-brace-format
 #~ msgid "Set {attr} of system purpose"
 #~ msgstr "시스템 용도 {attr}을/를 설정합니다."
 
-#, python-brace-format
 #~ msgid "Unset {attr} of system purpose"
 #~ msgstr "시스템 용도 {attr}을/를 설정 해제합니다."
 
-#, python-brace-format
 #~ msgid "Add an item to the list ({attr})."
 #~ msgstr "목록 ({attr})에 항목을 추가합니다."
 
-#, python-brace-format
 #~ msgid "Remove an item from the list ({attr})."
 #~ msgstr "목록 ({attr})에서 항목을 제거합니다."
 
@@ -6718,7 +6734,6 @@ msgstr "Red Hat 서브스크립션 관리자"
 #~ "컨텐츠 액세스 모드가 조직/환경 액세스로 설정되어 있습니다. 서브스크립션 상"
 #~ "태에 관계없이 호스트는 컨텐츠에 액세스할 수 있습니다.\n"
 
-#, python-format
 #~ msgid "System Purpose Status: %s\n"
 #~ msgstr "시스템 용도 상태: %s\n"
 
@@ -6727,7 +6742,6 @@ msgstr "Red Hat 서브스크립션 관리자"
 #~ msgstr "마이그레이션을 계속 진행할 수 없습니다!"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#, python-format
 #~ msgid "The following channels map to product ID %s:"
 #~ msgstr "다음과 같은 채널이 제품 ID %s에 매핑되어 있습니다:"
 
