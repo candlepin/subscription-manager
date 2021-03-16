@@ -212,11 +212,11 @@ class AbstractSyspurposeCommand(CliCommand):
                         ))
                         self._print_valid_values(valid_fields)
                     else:
-                        print(_('Warning: the list of valid values for attribute "{attr}" is empty.').format(
+                        print(_('Warning: This org does not have any subscriptions with an available "{attr}" is empty.').format(
                             attr=self.attr
                         ))
                 else:
-                    print(_('Warning: No valid values provided for attribute "{attr}"').format(
+                    print(_('Warning: This org does not have any subscriptions with an available "{attr}"').format(
                         attr=self.attr
                     ))
 
@@ -345,9 +345,9 @@ class AbstractSyspurposeCommand(CliCommand):
                 # Print values
                 self._print_valid_values(valid_fields)
             else:
-                print(_('No valid values provided for "{syspurpose_attr}"').format(syspurpose_attr=self.attr))
+                print(_('This org does not have any subscriptions with an available "{syspurpose_attr}"').format(syspurpose_attr=self.attr))
         else:
-            print(_('Unable to get list of valid values for "{syspurpose_attr}"').format(syspurpose_attr=self.attr))
+            print(_('This org does not have any subscriptions with an available "{syspurpose_attr}"').format(syspurpose_attr=self.attr))
 
     def sync(self):
         return syspurposelib.SyspurposeSyncActionCommand().perform(include_result=True)[1]
