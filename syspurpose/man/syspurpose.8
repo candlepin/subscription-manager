@@ -1,4 +1,4 @@
-.TH SYSPURPOSE 8
+.TH SYSPURPOSE 8 "" "" "Subscription Management"
 .SH NAME
 syspurpose \- Set the intended purpose for this system
 .SH SYNOPSIS
@@ -17,7 +17,7 @@ specified system purpose. Satisfying system purpose properties depends greatly
 on the quantity, availability, and subscription SKU offerings that have been
 purchased for the organization that the system is registered to.
 .PP
-The \fIset\fP, \fIunset\fP, \fIadd\fP, and \fIremove\fP subcommands modify the
+The \fIset\fP, \fIunset\fP, \fIadd\fP, and \fIremove\fP commands modify the
 local system purpose, and when possible will report the updated settings to the
 Red Hat subscription management entitlement server (Customer Portal or Satellite
 6).  The \fIshow\fP command displays the current system purpose.
@@ -57,16 +57,16 @@ Show the current system purpose properties
 The following generic commands can be used as well
 .TP
 \fBsyspurpose set \fIPROPERTY\fP \fIVALUE\fP\fP
-Set the value for a specific property. E.g. \fBsyspurpose set usage foo\fP is
-functionally identical to \fBsyspurpose set-usage foo\fP.
+Set the value for a specific property. E.g. \fB"syspurpose set usage foo"\fP is
+functionally identical to \fB"syspurpose set-usage foo"\fP.
 .TP
 \fBsyspurpose unset \fIPROPERTY\fP\fP
-Clears the value for a specific property. E.g. \fBsyspurpose unset foo\fP is
-functionally identical to \fBsyspurpose unset-usage\fP.
+Clears the value for a specific property. E.g. \fB"syspurpose unset usage"\fP is
+functionally identical to \fB"syspurpose unset-usage"\fP.
 .TP
 \fBsyspurpose add \fIPROPERTY\fP \fIVALUE\fP\fP
-Add a value to a specific list property. E.g. \fBsyspurpose add addons foo
-bar\fP is identical to \fBsyspurpose add-addons foo bar\fP.
+Add a value to a specific list property. E.g. \fB"syspurpose add addons foo
+bar"\fP is identical to \fB"syspurpose add-addons foo bar"\fP.
 .TP
 \fBsyspurpose remove \fIPROPERTY\fP \fIVALUE\fP\fP
 Clear a value from a specific list property. E.g. \fBsyspurpose remove addons
