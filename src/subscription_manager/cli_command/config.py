@@ -39,7 +39,7 @@ class ConfigCommand(CliCommand):
                 # Allow adding CLI options only for sections and names listed in defaults
                 if s in rhsm.config.DEFAULTS and name in rhsm.config.DEFAULTS[s]:
                     self.parser.add_option("--" + s + "." + name, dest=(s + "." + name),
-                                           help=_("Section: {s}, Name: %{name}").format(s=s, name=name))
+                                           help=_("Section: {s}, Name: {name}").format(s=s, name=name))
 
     def _validate_options(self):
         if self.options.list:
