@@ -120,7 +120,8 @@ class SubscriptionsCase(MachineCase):
         m = self.machine
 
         # wait for candlepin to be active and verify
-        self.candlepin.execute("systemctl start tomcat")
+        # this changed in https://github.com/cockpit-project/bots/pull/1768
+        self.candlepin.execute("if [ -x /root/run-candlepin ]; then /root/run-candlepin; else systemctl start tomcat; fi")
 
         # download product info from the candlepin machine
         def download_product(product):
