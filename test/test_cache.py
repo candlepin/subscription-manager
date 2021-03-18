@@ -972,6 +972,7 @@ after
 class TestContentAccessModeCache(SubManFixture):
 
     MOCK_CACHE_FILE_CONTENT = '{"7f85da06-5c35-44ba-931d-f11f6e581f89": "entitlement"}'
+    MOCK_OWNER_RESPONSE = '{"contentAccessMode": "org_environment"}'
 
     def setUp(self):
         super(TestContentAccessModeCache, self).setUp()
@@ -981,15 +982,26 @@ class TestContentAccessModeCache(SubManFixture):
         data = self.cache.read_cache_only()
         self.assertIsNone(data)
 
-    def test_reading_existing_cache(self):
+    def setup_temp_cache(self):
         temp_cache_dir = tempfile.mkdtemp()
         self.addCleanup(shutil.rmtree, temp_cache_dir)
         self.cache.CACHE_FILE = os.path.join(temp_cache_dir, 'content_access_mode.json')
         with open(self.cache.CACHE_FILE, 'w') as cache_file:
             cache_file.write(self.MOCK_CACHE_FILE_CONTENT)
+
+    def test_reading_existing_cache(self):
+        self.setup_temp_cache()
         data = self.cache.read_cache_only()
         self.assertTrue("7f85da06-5c35-44ba-931d-f11f6e581f89" in data)
         self.assertEqual(data["7f85da06-5c35-44ba-931d-f11f6e581f89"], "entitlement")
+
+    def test_cache_used_when_not_expired(self):
+        # This tests that we don't make unnecessary calls
+        self.setup_temp_cache()
+        mock_uep = Mock()
+        mock_uep.getOwner.return_value = self.MOCK_OWNER_RESPONSE
+        self.cache.read_data()
+        mock_uep.getOwner.assert_not_called()
 
 
 class TestSupportedResourcesCache(SubManFixture):

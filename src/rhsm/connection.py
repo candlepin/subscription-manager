@@ -498,6 +498,7 @@ class BaseRestLib(object):
         self.proxy_port = proxy_port
         self.proxy_user = proxy_user
         self.proxy_password = proxy_password
+        self.is_consumer_cert_key_valid = None
 
         # Setup basic authentication if specified:
         if username and password:
@@ -581,10 +582,12 @@ class BaseRestLib(object):
 
         try:
             conn.request(request_type, handler, body=body, headers=final_headers)
+            self.is_consumer_cert_key_valid = True
         except ssl.SSLError:
             if self.cert_file:
                 id_cert = certificate.create_from_file(self.cert_file)
                 if not id_cert.is_valid():
+                    self.is_consumer_cert_key_valid = False
                     raise ExpiredIdentityCertException()
             raise
         except socket.gaierror as err:
