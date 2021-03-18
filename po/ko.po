@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-16 15:43-0400\n"
-"PO-Revision-Date: 2021-03-17 11:01+0000\n"
+"PO-Revision-Date: 2021-03-18 07:01+0000\n"
 "Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-master/ko/>\n"
@@ -1126,7 +1126,7 @@ msgstr "GPG"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/printing.py:115 src/subscription_manager/gui/reposgui.py:127
 msgid "Enabled"
-msgstr "활성화됨"
+msgstr "활성화되었습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/printing.py:116
@@ -1260,7 +1260,7 @@ msgstr ""
 #: src/rhsm_debug/debug_commands.py:190 src/rhsm_debug/debug_commands.py:204
 #, python-format
 msgid "Wrote: %s"
-msgstr "작성됨: %s"
+msgstr "작성되었습니다: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm_debug/debug_commands.py:207
@@ -1275,7 +1275,7 @@ msgstr "유효성 검사 빈도 (초 단위: 기본값은 1일임)"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm_icon/rhsm_icon.c:83
 msgid "force display of the icon (expired, partial or warning)"
-msgstr "아이콘을 강제로 표시 (만료됨, 부분적 또는 경고)"
+msgstr "아이콘을 강제로 표시 (만료되었습니다, 부분적 또는 경고)"
 
 #: src/rhsm_icon/rhsm_icon.c:86
 msgid "run the first status check without delay (otherwise wait 4 minutes)"
@@ -1469,9 +1469,7 @@ msgstr "서브스크립션 관리 서비스가 상태 정보를 지원하지 않
 msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
-msgstr ""
-"오류: 잘못된 목록 유형이 제공되었습니다. \"설치됨\", \"소비됨\", \"사용 가능"
-"\"만 허용됩니다"
+msgstr "오류: 잘못된 목록 유형이 제공되었습니다. \"설치되었습니다\", \"소비되었습니다\", \"사용 가능합니다\"만 허용됩니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:444
@@ -1953,9 +1951,7 @@ msgstr "이 시스템에 가장 잘 맞는 호환 구독을 자동으로 덧 붙
 msgid ""
 "Automatically attach only subscriptions matching the specified service "
 "level; only used with --auto"
-msgstr ""
-"지정된 서비스 수준에 일치하는 서브스크립션만 자동으로 할당합니다; --auto와만 "
-"함께 사용됨"
+msgstr "지정된 서비스 수준에 일치하는 구독만 자동으로 할당합니다; --auto만 함께 사용되었습니다"
 
 #: src/subscription_manager/cli_command/attach.py:63
 msgid ""
@@ -2085,12 +2081,12 @@ msgstr "현재 자동 첨부 설정 상태를 표시합니다"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/autoheal.py:50
 msgid "Auto-attach preference: enabled"
-msgstr "자동 첨부 설정: 활성화됨"
+msgstr "자동 첨부 설정: 활성화되었습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/autoheal.py:52
 msgid "Auto-attach preference: disabled"
-msgstr "자동 첨부 설정: 비활성화됨"
+msgstr "자동 첨부 설정: 비활성화되었습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/clean.py:25
@@ -2313,7 +2309,7 @@ msgstr "시스템 정보 업데이트"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/facts.py:74
 msgid "Successfully updated the system facts."
-msgstr "시스템 정보가 성공적으로 업데이트됨."
+msgstr "시스템 정보가 성공적으로 최신화되었습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/identity.py:38
@@ -2461,7 +2457,7 @@ msgstr "차후 서브스크립션"
 #: src/subscription_manager/cli_command/list.py:40
 #: src/subscription_manager/gui/installedtab.py:222
 msgid "Subscribed"
-msgstr "등록됨"
+msgstr "등록되었습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:41
@@ -2474,14 +2470,14 @@ msgstr "등록되지 않음"
 #: src/subscription_manager/cli_command/list.py:42
 #: src/subscription_manager/gui/installedtab.py:197
 msgid "Expired"
-msgstr "만료됨"
+msgstr "만료되었습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:43
 #: src/subscription_manager/gui/installedtab.py:210
 #: src/subscription_manager/gui/installedtab.py:211
 msgid "Partially Subscribed"
-msgstr "부분적으로 등록됨"
+msgstr "부분적으로 등록되었습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:48
@@ -2648,7 +2644,7 @@ msgstr "리포지터리 URL:"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:90
 msgid "Enabled:"
-msgstr "활성화됨:"
+msgstr "활성화되었습니다:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:99
@@ -3060,12 +3056,12 @@ msgstr "상세 플러그인 정보 보기"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/plugins.py:52
 msgid "disabled"
-msgstr "비활성화됨"
+msgstr "비활성화되었습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/plugins.py:54
 msgid "enabled"
-msgstr "활성화됨"
+msgstr "활성화되었습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/redeem.py:30
@@ -3694,12 +3690,12 @@ msgstr "예상 (UEP) 일련 번호# %s"
 #: src/subscription_manager/entcertlib.py:465
 #: src/subscription_manager/repolib.py:647
 msgid "Added (new)"
-msgstr "추가됨 (신규)"
+msgstr "추가되었습니다 (신규)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/entcertlib.py:466
 msgid "Deleted (rogue):"
-msgstr "삭제됨 (결함이 있음):"
+msgstr "삭제되었습니다 (결함이 있음):"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:30
@@ -3946,12 +3942,12 @@ msgstr "서브스크립션을 첨부하고 있습니다. 잠시만 기다려 주
 #: src/subscription_manager/gui/allsubs.py:424
 #, python-format
 msgid "%s applied"
-msgstr "%s 적용됨"
+msgstr "%s 적용되었습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/contract_selection.py:98
 msgid "Used / Total"
-msgstr "사용됨 / 합계"
+msgstr "사용되었습니다 / 합계"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/activation_key.glade:13
@@ -5489,12 +5485,12 @@ msgstr "성공적으로 인증서를 가져왔습니다."
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/installedtab.py:194
 msgid "Future Subscribed"
-msgstr "차후 등록됨"
+msgstr "차후 등록되었습니다"
 
 #: src/subscription_manager/gui/installedtab.py:207
 #, python-format
 msgid "Subscription %s is expired"
-msgstr "%s 서브스크립션이 만료됨"
+msgstr "%s 구독이 만료됩니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/installedtab.py:216
@@ -5949,7 +5945,7 @@ msgstr "리포지터리 ID"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/reposgui.py:142
 msgid "Modified"
-msgstr "수정됨"
+msgstr "수정되었습니다"
 
 #: src/subscription_manager/gui/reposgui.py:166
 msgid "Loading Repository Data"
@@ -6008,7 +6004,7 @@ msgstr "변경 사항 저장"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/widgets.py:412
 msgid "Installed"
-msgstr "설치됨"
+msgstr "설치되었습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/widgets.py:714
@@ -6433,11 +6429,11 @@ msgstr ""
 #: src/subscription_manager/plugin/container/__init__.py:234
 #: src/subscription_manager/plugin/ostree/action_invoker.py:147
 msgid "Added:"
-msgstr "추가됨:"
+msgstr "추가되었습니다:"
 
 #: src/subscription_manager/plugin/container/__init__.py:236
 msgid "Removed:"
-msgstr "삭제됨:"
+msgstr "삭제되었습니다:"
 
 #: src/subscription_manager/plugin/ostree/action_invoker.py:145
 msgid "Updates:"
@@ -6445,7 +6441,7 @@ msgstr "업데이트:"
 
 #: src/subscription_manager/plugin/ostree/action_invoker.py:149
 msgid "Deleted:"
-msgstr "삭제됨:"
+msgstr "삭제되었습니다:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/reasons.py:101
@@ -6492,11 +6488,11 @@ msgstr "총 리포지터리 업데이트: %d"
 
 #: src/subscription_manager/repolib.py:645
 msgid "Updated"
-msgstr "업데이트됨"
+msgstr "최신화되었습니다"
 
 #: src/subscription_manager/repolib.py:649
 msgid "Deleted"
-msgstr "삭제됨"
+msgstr "삭제되었습니다"
 
 #: src/subscription_manager/scripts/package_profile_upload.py:38
 msgid "Upload a package profile"
