@@ -50,7 +50,7 @@ from subscription_manager.utils import generate_correlation_id
 
 from subscription_manager.i18n import ugettext as _
 
-from rhsmlib.cloud.utils import detect_cloud_provider, collect_cloud_info
+from rhsmlib.cloud.provider import detect_cloud_provider, collect_cloud_info
 from rhsmlib.services.register import RegisterService
 
 
@@ -74,8 +74,10 @@ def _auto_register(cp_provider, log):
 
     log.debug('Trying to detect cloud provider')
 
-    # Try to detect cloud provider first
-    cloud_list = detect_cloud_provider()
+    # Try to detect cloud provider first. Use lower threshold in this case,
+    # because we want to have more sensitive detection in this case
+    # (automatic registration is more important than reporting of facts)
+    cloud_list = detect_cloud_provider(threshold=0.3)
     if len(cloud_list) == 0:
         log.warning('This system does not run on any supported cloud provider. Skipping auto-registration')
         sys.exit(-1)
