@@ -51,7 +51,7 @@ from subscription_manager.utils import generate_correlation_id
 
 from subscription_manager.i18n import ugettext as _
 
-from rhsmlib.cloud.utils import detect_cloud_provider, collect_cloud_info
+from rhsmlib.cloud.provider import detect_cloud_provider, collect_cloud_info
 from rhsmlib.services.register import RegisterService
 
 

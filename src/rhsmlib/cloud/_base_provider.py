@@ -18,7 +18,8 @@
 # flake8: noqa
 
 """
-This module implements base class for collecting metadata from cloud provider.
+This module contains base class for generic cloud provider. This module
+should not be imported outside this package.
 """
 
 import requests
@@ -32,10 +33,12 @@ from typing import Union
 log = logging.getLogger(__name__)
 
 
-class CloudCollector(object):
+class BaseCloudProvider(object):
     """
-    Base class for collecting metadata and signature of metadata from cloud
-    provider. The most of logic is implemented in this class. Subclasses
+    Base class of cloud provider. This class is used for cloud detecting
+    and collecting metadata/signature.
+
+    The most of logic is implemented in this class. Subclasses
     for concrete cloud providers usually contains only default values in
     class attributes. Logic of gathering metadata/signature will be implemented
     in this base class and subclasses will need to set only class attributes.
@@ -81,16 +84,66 @@ class CloudCollector(object):
     # When a token is supported by cloud provider, then this value is in seconds
     CLOUD_PROVIDER_TOKEN_TTL = None
 
-    def __init__(self) -> None:
+    # Time to live of in-memory cache for metadata and signature (value is in seconds)
+    IN_MEMORY_CACHE_TTL = 10.0
+
+    def __init__(self, hw_info: dict = None):
         """
-        Initialize instance of CloudCollector.
+        Initialize cloud provider
+        :param hw_info: Dictionary with hardware information.
         """
+        # In-memory cache of metadata
+        self._cached_metadata: str = None
+        # Time, when metadata was received. The value is in seconds (unix time)
+        self._cached_metadata_ctime: float = None
+        # In-memory cache of signature
+        self._cached_signature: str = None
+        # Time, when signature was received. The value is in seconds (unix time)
+        self._cached_signature_ctime: float = None
+
+        # Dictionary with hardware information
+        if hw_info is None:
+            self.hw_info: dict = self.collect_hw_facts()
+        else:
+            self.hw_info: dict = hw_info
+
         # In-memory cache of token. The token is simple string
-        self._token = None
+        self._token: str = None
         # Time, when token was received. The value is in seconds (unix time)
-        self._token_ctime = None
+        self._token_ctime: float = None
         # Time to Live of token
-        self._token_ttl = None
+        self._token_ttl: float = None
+
+    @staticmethod
+    def collect_hw_facts() -> dict:
+        """
+        Try to collect hardware facts
+        :return: Dictionary with hardware facts
+        """
+        # TODO: implement some minimalistic hardware collector
+        return {}
+
+    def is_vm(self) -> bool:
+        """
+        Is current system virtual machine?
+        :return: Return True, when it is virtual machine; otherwise return False
+        """
+        return 'virt.is_guest' in self.hw_info and self.hw_info['virt.is_guest'] is True
+
+    def is_running_on_cloud(self) -> bool:
+        """
+        Try to guess cloud provider using collected hardware information (output of dmidecode, virt-what, etc.)
+        :return: True, when we detected sign of cloud provider in hw info; Otherwise return False
+        """
+        raise NotImplementedError
+
+    def is_likely_running_on_cloud(self) -> float:
+        """
+        When all subclasses cannot detect cloud provider using method is_running_on_cloud, because cloud provider
+        started to provide something else in output of dmidecode, then try to use this heuristics method
+        :return: Float value representing probability that vm is running using specific cloud provider
+        """
+        raise NotImplementedError
 
     def _write_token_to_cache_file(self) -> None:
         """
@@ -115,19 +168,34 @@ class CloudCollector(object):
         # Only owner (root) should be able to read the token file
         os.chmod(self.TOKEN_CACHE_FILE, 0o600)
 
+    @staticmethod
+    def _is_in_memory_cache_valid(cache, ctime: float, ttl: float) -> bool:
+        """
+        Check if in-memory cache is still valid
+        :param cache: cache object
+        :param ctime: time, when cache was created
+        :param ttl: time to live of cache
+        :return: Return True, when cache is still valid. Otherwise return False.
+        """
+        if cache is None or ctime is None:
+            return False
+
+        current_time = time.time()
+        if current_time < ctime + ttl:
+            return True
+        else:
+            return False
+
     def _is_in_memory_cached_token_valid(self) -> bool:
         """
         Check if cached token is still valid
         :return: True, when cached token is valid; otherwise return False
         """
-        if self._token is None or self._token_ctime is None:
-            return False
-
-        current_time = time.time()
-        if current_time < self._token_ctime + self.CLOUD_PROVIDER_TOKEN_TTL:
-            return True
-        else:
-            return False
+        return self._is_in_memory_cache_valid(
+            self._token,
+            self._token_ctime,
+            self.CLOUD_PROVIDER_TOKEN_TTL
+        )
 
     def _get_token_from_cache_file(self) -> Union[str, None]:
         """
@@ -192,6 +260,22 @@ class CloudCollector(object):
             log.debug(f'Cache file with {self.CLOUD_PROVIDER_ID} token file: {self.TOKEN_CACHE_FILE} timed out')
             return None
 
+    def _get_metadata_from_in_memory_cache(self) -> Union[str, None]:
+        """
+        Method for getting metadata from in-memory cache
+        :return: String, when cache is valid. Otherwise return None
+        """
+        valid = self._is_in_memory_cache_valid(
+            self._cached_metadata,
+            self._cached_metadata_ctime,
+            self.IN_MEMORY_CACHE_TTL
+        )
+
+        if valid is True:
+            return self._cached_metadata
+        else:
+            return None
+
     def _get_metadata_from_cache(self) -> Union[str, None]:
         """
         Method for gathering metadata from cache file
@@ -223,7 +307,26 @@ class CloudCollector(object):
         Method for gathering metadata from server
         :return: String containing metadata or None
         """
-        return self._get_data_from_server("metadata", self.CLOUD_PROVIDER_METADATA_URL)
+        self._cached_metadata = self._get_data_from_server("metadata", self.CLOUD_PROVIDER_METADATA_URL)
+        if self._cached_metadata is not None:
+            self._cached_metadata_ctime = time.time()
+        return self._cached_metadata
+
+    def _get_signature_from_in_memory_cache(self) -> Union[str, None]:
+        """
+        Method for getting signature from in-memory cache
+        :return: String, when cache is valid. Otherwise return None
+        """
+        valid = self._is_in_memory_cache_valid(
+            self._cached_signature,
+            self._cached_signature_ctime,
+            self.IN_MEMORY_CACHE_TTL
+        )
+
+        if valid is True:
+            return self._cached_signature
+        else:
+            return None
 
     def _get_signature_from_cache_file(self) -> Union[str, None]:
         """
@@ -237,27 +340,36 @@ class CloudCollector(object):
         Method for gathering signature of metadata from server
         :return: String containing signature or None
         """
-        return self._get_data_from_server("signature", self.CLOUD_PROVIDER_SIGNATURE_URL)
+        self._cached_signature = self._get_data_from_server("signature", self.CLOUD_PROVIDER_SIGNATURE_URL)
+        if self._cached_signature is not None:
+            self._cached_signature_ctime = time.time()
+        return self._cached_signature
 
     def get_signature(self) -> Union[str, None]:
         """
         Public method for getting signature (cache file or server)
         :return: String containing signature or None
         """
+        signature = self._get_signature_from_in_memory_cache()
+        if signature is not None:
+            return signature
+
         signature = self._get_signature_from_cache_file()
+        if signature is not None:
+            return signature
 
-        if signature is None:
-            signature = self._get_signature_from_server()
-
-        return signature
+        return self._get_signature_from_server()
 
     def get_metadata(self) -> Union[str, None]:
         """
         Public method for getting metadata (cache file or server)
         :return: String containing signature or None
         """
-        metadata = self._get_metadata_from_cache()
+        metadata = self._get_metadata_from_in_memory_cache()
+        if metadata is not None:
+            return metadata
 
+        metadata = self._get_metadata_from_cache()
         if metadata is not None:
             return metadata
 
