@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
-"PO-Revision-Date: 2023-05-06 12:20+0000\n"
+"PO-Revision-Date: 2023-05-10 05:37+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/it/>\n"
@@ -360,8 +360,8 @@ msgstr "Forza l'invio del profilo di pacchetti"
 #: src/subscription_manager/scripts/package_profile_upload.py:37
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
 msgstr ""
-"Non è stato effettuato alcun aggiornamento. Consultare /var/log/rhsm/rhsm."
-"log per ulteriori informazioni."
+"Non è stato effettuato alcun aggiornamento. Consultare /var/log/rhsm/"
+"rhsm.log per ulteriori informazioni."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/rct/cert_commands.py:33
@@ -2000,8 +2000,8 @@ msgstr ""
 msgid ""
 "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
-"L'identità del consumatore non esiste o è danneggiata. Prova con: register --"
-"help"
+"L'identità del consumatore non esiste o è danneggiata. Prova con: register "
+"--help"
 
 #: src/subscription_manager/cli_command/cli.py:267
 msgid ""
@@ -2349,8 +2349,8 @@ msgid ""
 "Error: This command requires that you specify a certificate with --"
 "certificate."
 msgstr ""
-"Errore: con questo comando è necessario specificare un certificato con --"
-"certificate."
+"Errore: con questo comando è necessario specificare un certificato con "
+"--certificate."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/import_cert.py:69
@@ -2754,8 +2754,8 @@ msgstr "    Stato prodotti installati"
 #, python-brace-format
 msgid "No installed products were found matching the expression \"{filter}\"."
 msgstr ""
-"Nessun prodotto installato trovato che corrisponde all'espressione "
-"\"{filter}\"."
+"Nessun prodotto installato trovato che corrisponde all'espressione \"{filter}"
+"\"."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/list.py:396
@@ -2773,8 +2773,8 @@ msgid ""
 "No available subscription pools were found matching the expression "
 "\"{filter}\" and the service level \"{level}\"."
 msgstr ""
-"Nessun pool di sottoscrizione trovato corrisponde all'espressione "
-"\"{filter}\" e al livello di servizio \"{level}\"."
+"Nessun pool di sottoscrizione trovato corrisponde all'espressione \"{filter}"
+"\" e al livello di servizio \"{level}\"."
 
 #: src/subscription_manager/cli_command/list.py:478
 #, python-brace-format
@@ -2782,8 +2782,8 @@ msgid ""
 "No available subscription pools were found matching the expression "
 "\"{filter}\"."
 msgstr ""
-"Nessun pool di sottoscrizione trovato corrisponde all'espressione "
-"\"{filter}\"."
+"Nessun pool di sottoscrizione trovato corrisponde all'espressione \"{filter}"
+"\"."
 
 #: src/subscription_manager/cli_command/list.py:484
 #, python-brace-format
@@ -2791,8 +2791,8 @@ msgid ""
 "No available subscription pools were found matching the service level "
 "\"{level}\"."
 msgstr ""
-"Nessun pool di sottoscrizione trovato corrisponde al livello di servizio "
-"\"{level}\"."
+"Nessun pool di sottoscrizione trovato corrisponde al livello di servizio \""
+"{level}\"."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/list.py:488
@@ -2977,14 +2977,12 @@ msgstr "Organizzazioni"
 #: src/subscription_manager/cli_command/owners.py:61
 #, python-brace-format
 msgid "{username} cannot register with any organizations."
-msgstr ""
-"{username} non può eseguire la registrazione con alcuna organizzazione."
+msgstr "{username} non può eseguire la registrazione con alcuna organizzazione."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/owners.py:69
 msgid "Error: Unable to retrieve org list from server"
-msgstr ""
-"Errore: impossibile recuperare l'elenco delle organizzazioni dal server"
+msgstr "Errore: impossibile recuperare l'elenco delle organizzazioni dal server"
 
 #: src/subscription_manager/cli_command/plugins.py:25
 msgid "View and configure with 'subscription-manager plugins'"
@@ -3026,8 +3024,7 @@ msgstr "abilitato"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/redeem.py:29
 msgid "Attempt to redeem a subscription for a preconfigured system"
-msgstr ""
-"Tentativo di redimere una sottoscrizione per un sistema pre-configurato"
+msgstr "Tentativo di redimere una sottoscrizione per un sistema pre-configurato"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/redeem.py:36
@@ -3147,8 +3144,8 @@ msgstr ""
 msgid ""
 "system preference used when subscribing automatically, requires --auto-attach"
 msgstr ""
-"preferenze del sistema usate con la sottoscrizione automatica, richiede --"
-"auto-attach"
+"preferenze del sistema usate con la sottoscrizione automatica, richiede "
+"--auto-attach"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:140
@@ -3767,8 +3764,8 @@ msgid ""
 "Unknown server reply (HTTP error code {code}: {title}):\n"
 "{content}"
 msgstr ""
-"Risposta HTTP sconosciuta del server (codice d'errore HTTP {code}: "
-"{title}):\n"
+"Risposta HTTP sconosciuta del server (codice d'errore HTTP {code}: {title}):"
+"\n"
 "{content}"
 
 #: src/subscription_manager/exceptions.py:37
