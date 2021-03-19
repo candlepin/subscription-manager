@@ -96,7 +96,7 @@ class FactsCollector(object):
             try:
                 info_dict = hardware_method()
             except Exception as e:
-                log.warn("Hardware detection [%s] failed: %s" % (hardware_method.__name__, e))
+                log.warning("Hardware detection [%s] failed: %s" % (hardware_method.__name__, e))
 
             all_hw_info.update(info_dict)
 

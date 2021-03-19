@@ -14,43 +14,56 @@
 # in this software or its documentation.
 #
 
-# TODO: test Python3 syntax using flake8
-# flake8: noqa
 
 """
 This is module implementing detector and metadata collector of virtual machine running on Azure
 """
 
 import logging
-
 from typing import Union
 
-from rhsmlib.cloud.detector import CloudDetector
-from rhsmlib.cloud.collector import CloudCollector
+from rhsmlib.cloud._base_provider import BaseCloudProvider
 
 
 log = logging.getLogger(__name__)
 
 
-class AzureCloudDetector(CloudDetector):
+class AzureCloudProvider(BaseCloudProvider):
     """
-    Detector of cloud machine
+    Base class for Azure cloud provider
     """
 
-    ID = 'azure'
+    CLOUD_PROVIDER_ID = "azure"
+
+    # Microsoft adds new API versions very often, but old versions are supported
+    # for very long time. It would be good to update the version from time to time,
+    # because old versions (three years) are deprecated. It would be good to update
+    # the API version with every minor version of RHEL
+    API_VERSION = "2020-09-01"
+
+    CLOUD_PROVIDER_METADATA_URL = "http://169.254.169.254/metadata/instance?api-version=" + API_VERSION
+
+    CLOUD_PROVIDER_METADATA_TYPE = "application/json"
+
+    CLOUD_PROVIDER_SIGNATURE_URL = "http://169.254.169.254/metadata/attested/document?api-version=" + API_VERSION
+
+    CLOUD_PROVIDER_SIGNATURE_TYPE = "application/json"
+
+    METADATA_CACHE_FILE = None
+
+    SIGNATURE_CACHE_FILE = None
+
+    # HTTP header "Metadata" has to be equal to "true" to be able to get metadata
+    HTTP_HEADERS = {
+        'user-agent': 'RHSM/1.0',
+        "Metadata": "true"
+    }
 
     def __init__(self, hw_info):
         """
         Initialize instance of AzureCloudDetector
         """
-        super(AzureCloudDetector, self).__init__(hw_info)
-
-    def is_vm(self):
-        """
-        Is system running on virtual machine or not
-        :return: True, when machine is running on VM; otherwise return False
-        """
-        return super(AzureCloudDetector, self).is_vm()
+        super(AzureCloudProvider, self).__init__(hw_info)
 
     def is_running_on_cloud(self):
         """
@@ -108,44 +121,6 @@ class AzureCloudDetector(CloudDetector):
 
         return probability
 
-
-class AzureCloudCollector(CloudCollector):
-    """
-    Collector of Azure metadata
-    """
-
-    CLOUD_PROVIDER_ID = "azure"
-
-    # Microsoft adds new API versions very often, but old versions are supported
-    # for very long time. It would be good to update the version from time to time,
-    # because old versions (three years) are deprecated. It would be good to update
-    # the API version with every minor version of RHEL
-    API_VERSION = "2020-09-01"
-
-    CLOUD_PROVIDER_METADATA_URL = "http://169.254.169.254/metadata/instance?api-version=" + API_VERSION
-
-    CLOUD_PROVIDER_METADATA_TYPE = "application/json"
-
-    CLOUD_PROVIDER_SIGNATURE_URL = "http://169.254.169.254/metadata/attested/document?api-version=" + API_VERSION
-
-    CLOUD_PROVIDER_SIGNATURE_TYPE = "application/json"
-
-    METADATA_CACHE_FILE = None
-
-    SIGNATURE_CACHE_FILE = None
-
-    # HTTP header "Metadata" has to be equal to "true" to be able to get metadata
-    HTTP_HEADERS = {
-        'user-agent': 'RHSM/1.0',
-        "Metadata": "true"
-    }
-
-    def __init__(self):
-        """
-        Initialization of azure cloud collector
-        """
-        super(AzureCloudCollector, self).__init__()
-
     def _get_metadata_from_cache(self) -> Union[str, None]:
         """
         It is not safe to use cache of metadata for Azure cloud provider
@@ -160,14 +135,14 @@ class AzureCloudCollector(CloudCollector):
         :param url: URL of GET request
         :return: String of body, when request was successful; otherwise return None
         """
-        return super(AzureCloudCollector, self)._get_data_from_server(data_type, url)
+        return super(AzureCloudProvider, self)._get_data_from_server(data_type, url)
 
     def _get_metadata_from_server(self) -> Union[str, None]:
         """
         Try to get metadata from server
         :return: String with metadata or None
         """
-        return super(AzureCloudCollector, self)._get_metadata_from_server()
+        return super(AzureCloudProvider, self)._get_metadata_from_server()
 
     def _get_signature_from_cache_file(self) -> Union[str, None]:
         """
@@ -181,21 +156,21 @@ class AzureCloudCollector(CloudCollector):
         Method for gathering signature of metadata from server
         :return: String containing signature or None
         """
-        return super(AzureCloudCollector, self)._get_signature_from_server()
+        return super(AzureCloudProvider, self)._get_signature_from_server()
 
     def get_signature(self) -> Union[str, None]:
         """
         Public method for getting signature (cache file or server)
         :return: String containing signature or None
         """
-        return super(AzureCloudCollector, self).get_signature()
+        return super(AzureCloudProvider, self).get_signature()
 
     def get_metadata(self) -> Union[str, None]:
         """
         Public method for getting metadata (cache file or server)
         :return: String containing metadata or None
         """
-        return super(AzureCloudCollector, self).get_metadata()
+        return super(AzureCloudProvider, self).get_metadata()
 
 
 def _smoke_tests():
@@ -221,20 +196,19 @@ def _smoke_tests():
     facts = {}
     facts.update(HostCollector().get_all())
     facts.update(HardwareCollector().get_all())
-    azure_cloud_detector = AzureCloudDetector(facts)
-    result = azure_cloud_detector.is_running_on_cloud()
-    probability = azure_cloud_detector.is_likely_running_on_cloud()
+    azure_cloud_provider = AzureCloudProvider(facts)
+    result = azure_cloud_provider.is_running_on_cloud()
+    probability = azure_cloud_provider.is_likely_running_on_cloud()
     print('>>> debug <<< result: %s, %6.3f' % (result, probability))
 
     if result is True:
-        azure_cloud_collector = AzureCloudCollector()
-        metadata = azure_cloud_collector.get_metadata()
-        signature = azure_cloud_collector.get_signature()
+        metadata = azure_cloud_provider.get_metadata()
+        signature = azure_cloud_provider.get_signature()
         print(f'>>> debug <<< metadata: {metadata}')
         print(f'>>> debug <<< signature: {signature}')
 
 
 # Some temporary smoke testing code. You can test this module using:
-# sudo PYTHONPATH=./src:./syspurpose/src python3 -m rhsmlib.cloud.providers.azure
+# sudo PYTHONPATH=./src python3 -m rhsmlib.cloud.providers.azure
 if __name__ == '__main__':
     _smoke_tests()
