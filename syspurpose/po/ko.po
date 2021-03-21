@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-29 13:05-0400\n"
-"PO-Revision-Date: 2021-03-07 13:01+0000\n"
+"PO-Revision-Date: 2021-03-21 13:01+0000\n"
 "Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/syspurpose-1-27/ko/>\n"
@@ -31,37 +31,37 @@ msgstr ""
 #, python-brace-format
 msgid ""
 "If you'd like to overwrite the server side change please run: {command}"
-msgstr "서버 측 변경 사항을 덮어 쓰려면 다음을 실행: {command}"
+msgstr "서버 측 변경 사항을 덮어 쓰려면 다음을 실행하세요: {command}"
 
 #: src/syspurpose/cli.py:47
 #, python-brace-format
 msgid "Added {value} to {prop_name}."
-msgstr "{value}이(가) {prop_name}에 추가되었습니다."
+msgstr "{value} 값을 {prop_name}에 추가했습니다."
 
 #: src/syspurpose/cli.py:50
 #, python-brace-format
 msgid "Not adding value {value} to {prop_name}; it already exists."
-msgstr "{value} 값이 {prop_name}에 추가되지 않았습니다. 이미 존재합니다."
+msgstr "{value} 값을 {prop_name}에 추가하지 않습니다; 이미 존재합니다."
 
 #: src/syspurpose/cli.py:56 src/syspurpose/cli.py:85
 #, python-brace-format
 msgid "{attr} updated."
-msgstr "{attr}이(가) 업데이트되었습니다."
+msgstr "{attr}가 최신화되었습니다."
 
 #: src/syspurpose/cli.py:79
 #, python-brace-format
 msgid "Removed \"{val}\" from {name}."
-msgstr "{name}에서 \"{val}\"이(가) 제거되었습니다."
+msgstr "{name}에서 \"{val}\"를 제거합니다."
 
 #: src/syspurpose/cli.py:81
 #, python-brace-format
 msgid "Not removing value \"{val}\" from {name}; it was not there."
-msgstr "{name}에서 \"{val}\" 값을 제거하지 못했습니다. 값이 존재하지 않습니다."
+msgstr "{name}에서 \"{val}\" 값을 제거하지 않습니다; 값이 존재하지 않습니다."
 
 #: src/syspurpose/cli.py:108
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
-msgstr "{attr}가 \"{val}\"으로 설정 되었습니다."
+msgstr "{attr}가 \"{val}\"로 설정되었습니다."
 
 #: src/syspurpose/cli.py:129
 #, python-brace-format
@@ -155,11 +155,11 @@ msgid ""
 "Warning: Unable to sync system purpose with subscription management server: "
 "subscription_manager module is not available."
 msgstr ""
-"경고: 서브스크립션 관리 서버와 syspurpose를 동기화할 수 없음: subscription_manager 모듈을 사용할 수 없습니다."
+"경고: 시스템 목적을 구독 관리 서버와 동기화 할 수 없습니다: subscription_manager 모듈을 사용 할 수 없습니다."
 
 #: src/syspurpose/files.py:88
 msgid "Error: Malformed data in file {}; please review and correct."
-msgstr "오류: 파일 {}의 데이터 형식이 잘못되었습니다. 확인 후 수정하십시오."
+msgstr "오류: 파일 {}의 잘못된 자료입니다; 확인 후 수정하십시오."
 
 #: src/syspurpose/files.py:94
 msgid "Cannot read syspurpose file {}\n"
