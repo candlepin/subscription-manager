@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 14:55-0500\n"
-"PO-Revision-Date: 2021-03-18 07:01+0000\n"
+"PO-Revision-Date: 2021-03-21 14:01+0000\n"
 "Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ko/>\n"
@@ -2078,7 +2078,7 @@ msgstr "조직_항목"
 msgid ""
 "Multiple Activation Keys can be entered by separating them with a comma or a "
 "space."
-msgstr "여러 개의 활성키는 콤마나 공백으로 구분하여 입력할 수 있습니다."
+msgstr "여러 개의 활성 키는 쉼표나 공백으로 구분하여 입력할 수 있습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/activation_key.glade:100
@@ -2792,7 +2792,7 @@ msgstr "호스트 이름/도메인 무시 목록 (_H):"
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:338
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:367
 msgid "comma-separated list of hostnames/domains"
-msgstr "콤마로 구분된 호스트이름/도메인 목록"
+msgstr "쉼표로 구분된 호스트이름/도메인 목록"
 
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:342
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:371
@@ -4410,7 +4410,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:202
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
-msgstr "서버 측 변경 사항을 덮어 쓰려면 다음을 실행: {command}"
+msgstr "서버 측 변경 사항을 덮어 쓰려면 다음을 실행하세요: {command}"
 
 # translation auto-copied from project subscription-manager, version 1.13.X, document keys
 #: src/subscription_manager/managercli.py:247
@@ -4572,7 +4572,7 @@ msgstr "경고: 속성 \"{attr}\"을 위하여 유효한 값이 제공되지 않
 #: src/subscription_manager/managercli.py:748
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
-msgstr "{attr}가 \"{val}\"으로 설정 되었습니다."
+msgstr "{attr}가 \"{val}\"로 설정되었습니다."
 
 #: src/subscription_manager/managercli.py:765
 #, python-brace-format
@@ -4583,7 +4583,7 @@ msgstr "{attr} 설정이 해제되었습니다."
 #: src/subscription_manager/managercli.py:804
 #, python-brace-format
 msgid "{attr} updated."
-msgstr "{attr}이(가) 업데이트되었습니다."
+msgstr "{attr}가 최신화되었습니다."
 
 #: src/subscription_manager/managercli.py:833
 #, python-brace-format
@@ -6411,8 +6411,7 @@ msgstr "스택 "
 msgid ""
 "Error: More than one release product certificate installed. Certificate "
 "paths: %s"
-msgstr ""
-"오류: 릴리스 제품 인증서가 두 개 이상 설치되어 있습니다. 인증서 경로: : %s"
+msgstr "오류: 출시 제품 인증서가 두 개 이상 설치되어 있습니다. 인증서 경로: : %s"
 
 #: src/subscription_manager/repolib.py:89
 #, python-format
