@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-16 16:13+0100\n"
-"PO-Revision-Date: 2021-03-19 03:01+0000\n"
+"PO-Revision-Date: 2021-03-22 10:01+0000\n"
 "Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subsrption-manager-commit-test/ko/>\n"
@@ -1779,14 +1779,13 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
-"경고 : 최근 인타이틀먼트 서버 관리자가 \"{download_value}\"의 {attr}를 이 시"
-"스템에 설정했습니다.\n"
+"경고: 자격 서버 관리자가 최근 \"{download_value}\"의 {attr}를 이 시스템에 설정했습니다.\n"
 "{advice}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:37
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
-msgstr "서버 측 변경 사항을 덮어 쓰려면 다음 명령을 실행하십시오: {command}"
+msgstr "서버 측 변경 사항을 덮어 쓰려면 다음을 실행하세요: {command}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:56
 #, python-brace-format
@@ -1875,7 +1874,7 @@ msgstr "경고: “{attr}” 속성에 유효한 값이 입력되지 않았습�
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:231
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
-msgstr "{attr}이/가 \"{val}\"로 설정되었습니다."
+msgstr "{attr}가 \"{val}\"로 설정되었습니다."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:248
 #, python-brace-format
@@ -1886,7 +1885,7 @@ msgstr "{attr} 설정이 해제되었습니다."
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:288
 #, python-brace-format
 msgid "{attr} updated."
-msgstr "{attr}이/가 업데이트되었습니다."
+msgstr "{attr}가 최신화되었습니다."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:317
 #, python-brace-format
@@ -1942,7 +1941,7 @@ msgstr "할당할 서브스크립션 수입니다. auto-attach와 함께 사용�
 msgid ""
 "Automatically attach the best-matched compatible subscriptions to this "
 "system. This is the default action."
-msgstr "이 시스템에 가장 잘 맞는 호환 구독을 자동으로 덧 붙여줍니다. 이는 기본 동작입니다."
+msgstr "이 시스템에 가장 잘 맞는 호환 구독을 자동으로 연결합니다. 이는 기본 동작입니다."
 
 #: src/subscription_manager/cli_command/attach.py:60
 msgid ""
@@ -2042,7 +2041,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/attach.py:209
 msgid "Service level set to: {}"
-msgstr "서비스 레벨 설정: {}"
+msgstr "서비스 수준 설정: {}"
 
 #: src/subscription_manager/cli_command/attach.py:218
 msgid "Entitlement Certificate(s) update failed due to the following reasons:"
@@ -2154,7 +2153,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:249
 msgid "cannot parse argument: {}"
-msgstr "인수를 해석 할 수 없음: {}"
+msgstr "인수를구문 분석 할 수 없음: {}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:262
@@ -2188,7 +2187,7 @@ msgid ""
 "Consumer profile \"{uuid}\" has been deleted from the server. You can use "
 "command clean or unregister to remove local profile."
 msgstr ""
-"소비자 프로파일 \"{uuid}\"가 서버에서 삭제되었습니다. 로컬 프로파일을 삭제하려면 clean 또는 unregister 명령을 "
+"소비자 프로파일 \"{uuid}\"이 서버에서 삭제되었습니다. 로컬 프로파일을 삭제하려면 clean 또는 unregister 명령을 "
 "사용합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -2428,7 +2427,7 @@ msgstr "인증서 {file} 을 성공적으로 가져왔습니다"
 #: src/subscription_manager/cli_command/import_cert.py:62
 #, python-brace-format
 msgid "{file} is not a valid certificate file. Please use a valid certificate."
-msgstr "{file} 은 유효한 인증서 파일이 아닙니다. 유효한 인증서를 사용하십시오."
+msgstr "{file}은 유효한 인증서 파일이 아닙니다. 유효한 인증서를 사용하십시오."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/import_cert.py:68
@@ -3016,7 +3015,7 @@ msgstr "조직"
 #: src/subscription_manager/cli_command/owners.py:61
 #, python-brace-format
 msgid "{username} cannot register with any organizations."
-msgstr "{username}는 어떤 조직에도 등록 할 수 없습니다."
+msgstr "{username}은 어떤 조직에도 등록 할 수 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/owners.py:68
@@ -3043,7 +3042,7 @@ msgstr "{SM} 플러그인 슬롯 나열"
 #: src/subscription_manager/cli_command/plugins.py:35
 #, python-brace-format
 msgid "list {SM} plugin hooks"
-msgstr "{SM} 플러그인 연결 나열"
+msgstr "{SM} 플러그인 후크 나열"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/plugins.py:38
@@ -3596,7 +3595,7 @@ msgstr ""
 #: src/subscription_manager/cli_command/status.py:97
 #, python-brace-format
 msgid "System Purpose Status: {status}"
-msgstr "시스템 용도 상태: {status}"
+msgstr "시스템 목적 상태: {status}"
 
 #: src/subscription_manager/cli_command/syspurpose.py:47
 msgid "Convenient module for managing all system purpose settings"
@@ -3990,7 +3989,7 @@ msgstr "organization_entry"
 msgid ""
 "Multiple Activation Keys can be entered by separating them with a comma or a "
 "space."
-msgstr "여러 개의 활성키는 콤마나 공백으로 구분하여 입력할 수 있습니다."
+msgstr "여러 개의 활성 키는 쉼표나 공백으로 구분하여 입력할 수 있습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/activation_key.glade:100
@@ -4704,7 +4703,7 @@ msgstr "호스트 이름/도메인 무시 목록 (_H):"
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:338
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:367
 msgid "comma-separated list of hostnames/domains"
-msgstr "콤마로 구분된 호스트이름/도메인 목록"
+msgstr "쉼표로 구분된 호스트이름/도메인 목록"
 
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:342
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:371
@@ -6461,8 +6460,7 @@ msgstr "스택 "
 msgid ""
 "Error: More than one release product certificate installed. Certificate "
 "paths: %s"
-msgstr ""
-"오류: 릴리스 제품 인증서가 두 개 이상 설치되어 있습니다. 인증서 경로: : %s"
+msgstr "오류: 출시 제품 인증서가 두 개 이상 설치되어 있습니다. 인증서 경로: : %s"
 
 #: src/subscription_manager/repolib.py:89
 #, python-format
