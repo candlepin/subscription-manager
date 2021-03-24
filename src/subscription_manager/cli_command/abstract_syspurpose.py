@@ -16,7 +16,6 @@
 #
 import logging
 import os
-import re
 
 from rhsm import connection
 from rhsm.connection import ProxyException
@@ -374,7 +373,7 @@ class AbstractSyspurposeCommand(CliCommand):
                 if self.is_registered():
                     self.cp = self.cp_provider.get_consumer_auth_cp()
         except connection.RestlibException as err:
-            log.exception(re)
+            log.exception(err)
             if getattr(self.options, 'list', None):
                 log.error("Error: Unable to retrieve {attr} from server: {err}".format(attr=self.attr, err=err))
                 system_exit(os.EX_SOFTWARE, str(err))
