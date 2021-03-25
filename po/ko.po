@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 14:55-0500\n"
-"PO-Revision-Date: 2021-03-21 14:01+0000\n"
+"PO-Revision-Date: 2021-03-24 08:01+0000\n"
 "Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ko/>\n"
@@ -2907,9 +2907,7 @@ msgstr "release_selection_combobox"
 msgid ""
 "<small>Your system's release preference is followed when installing and "
 "updating packages.</small>"
-msgstr ""
-"<small>패키지를 설치 및 업데이트할 때 시스템의 릴리즈 환경 설정은 다음과 같습"
-"니다.</small>"
+msgstr "<small>꾸러미를 설치 및 업데이트할 때 시스템의 출시 환경 설정은 다음과 같습니다.</small>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/preferences.glade:232
@@ -3143,7 +3141,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/registration_info.glade:357
 #: src/subscription_manager/gui/data/ui/registration_info.ui:452
 msgid "<b>Downloads &amp; Upgrades:</b>"
-msgstr "<b>다운로드 &amp; 업그레이드:</b>"
+msgstr "<b>내려받기 &amp; 업그레이드:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/registration_info.glade:395
@@ -3151,9 +3149,7 @@ msgstr "<b>다운로드 &amp; 업그레이드:</b>"
 msgid ""
 "Download installation images for Red Hat Enterprise Linux releases, "
 "including new releases."
-msgstr ""
-"새로운 출시 버전을 포함하는 Red Hat Enterprise Linux 출시 버전에 대한 설치 이"
-"미지를 다운로드합니다."
+msgstr "새로운 출시 버전을 포함하는 Red Hat Enterprise Linux 출시 버전에 대한 설치 이미지를 내려받기 합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/registration_info.glade:419
@@ -3889,7 +3885,7 @@ msgstr "등록을 해제할 수 없습니다"
 
 #: src/subscription_manager/gui/registergui.py:1105
 msgid "Uploading package profile"
-msgstr "패키지 프로파일을 업로드하고 있습니다"
+msgstr "꾸러미 프로파일을 적재하고 있습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/registergui.py:1150
@@ -6133,7 +6129,7 @@ msgid ""
 "Please check that you have the %(package)s package installed."
 msgstr ""
 "맵핑 파일을 읽을 수 없음: %(mappingfile)s.\n"
-"%(package)s 패키지가 설치되어 있는지 확인하십시오."
+"%(package)s 꾸러미가 설치되어 있는지 확인하십시오."
 
 #: src/subscription_manager/migrate/migrate.py:505
 #, python-format
@@ -6258,7 +6254,7 @@ msgstr "기존 서비스를 중지 및 비활성화하고 있습니다..."
 
 #: src/subscription_manager/migrate/migrate.py:833
 msgid "Removing legacy packages..."
-msgstr "기존 패키지 삭제 중..."
+msgstr "기존 꾸러미 삭제 중..."
 
 #: src/subscription_manager/migrate/migrate.py:860
 msgid "Retrieving existing legacy subscription information..."
@@ -6292,7 +6288,7 @@ msgstr ""
 
 #: src/subscription_manager/migrate/migrate.py:900
 msgid "remove legacy packages"
-msgstr "기존 패키지 삭제"
+msgstr "기존 꾸러미 삭제"
 
 #: src/subscription_manager/migrate/migrate.py:903
 msgid "don't use legacy proxy settings with destination server"
