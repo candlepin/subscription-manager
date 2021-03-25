@@ -40,9 +40,9 @@ class IdentityCommand(UserPassCommand):
 
         super(IdentityCommand, self).__init__("identity", shortdesc, False)
 
-        self.parser.add_option("--regenerate", action='store_true',
+        self.parser.add_argument("--regenerate", action='store_true',
                                help=_("request a new certificate be generated"))
-        self.parser.add_option("--force", action='store_true',
+        self.parser.add_argument("--force", action='store_true',
                                help=_("force certificate regeneration (requires username and password); "
                                       "Only used with --regenerate"))
 

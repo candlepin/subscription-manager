@@ -44,9 +44,8 @@ init_dep_injection()
 from subscription_manager.action_client import HealingActionClient, ActionClient
 from subscription_manager import managerlib
 from subscription_manager.identity import ConsumerIdentity
-from subscription_manager.i18n_optparse import OptionParser, \
-    WrappedIndentedHelpFormatter, USAGE
-from optparse import SUPPRESS_HELP
+from subscription_manager.i18n_argparse import ArgumentParser, USAGE
+from argparse import SUPPRESS
 from subscription_manager.utils import generate_correlation_id
 
 from subscription_manager.i18n import ugettext as _
@@ -201,18 +200,17 @@ def main():
     logutil.init_logger()
     log = logging.getLogger('rhsm-app.' + __name__)
 
-    parser = OptionParser(usage=USAGE,
-                          formatter=WrappedIndentedHelpFormatter())
-    parser.add_option("--autoheal", dest="autoheal", action="store_true",
+    parser = ArgumentParser(usage=USAGE)
+    parser.add_argument("--autoheal", dest="autoheal", action="store_true",
             default=False, help="perform an autoheal check")
-    parser.add_option("--force", dest="force", action="store_true",
-            default=False, help=SUPPRESS_HELP)
-    parser.add_option(
+    parser.add_argument("--force", dest="force", action="store_true",
+            default=False, help=SUPPRESS)
+    parser.add_argument(
             "--auto-register", dest="auto_register", action="store_true",
             default=False, help="perform auto-registration"
     )
 
-    (options, args) = parser.parse_args()
+    (options, args) = parser.parse_known_args()
     try:
         _main(options, log)
     except SystemExit as se:

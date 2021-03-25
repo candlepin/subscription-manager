@@ -12,33 +12,38 @@ from __future__ import print_function, division, absolute_import
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
+import os
 import sys
-import optparse
+import argparse
 import dbus
 import dbus.mainloop.glib
 import rhsmlib
 import logging
 
 from rhsmlib.dbus import server
+from subscription_manager.i18n import ugettext as _
+from subscription_manager.cli import system_exit
 
 log = logging.getLogger(__name__)
 
 
-def load_bus_class(option, opt_str, value, parser):
-    """OptionParser callback method to load a class from a string"""
-    clazz = rhsmlib.import_class(value)
-    parser.values.bus = clazz
-
-
 def parse_argv(argv, default_dbus_name):
-    parser = optparse.OptionParser(usage="usage: %prog [options] [class name]")
-    parser.add_option("-b", "--bus",
-        action="callback", callback=load_bus_class,
-        type="string", default=dbus.SystemBus,
+    parser = argparse.ArgumentParser(usage="usage: %(prog)s [options] [class name]")
+    parser.add_argument("-b", "--bus",
+        action="store", dest="bus",
         help="Bus to use (defaults to dbus.SystemBus)")
-    parser.add_option("-n", "--bus-name", default=default_dbus_name)
-    parser.add_option("-v", "--verbose", action="store_true")
-    (opts, args) = parser.parse_args(argv[1:])
+    parser.add_argument("-n", "--bus-name", default=default_dbus_name)
+    parser.add_argument("-v", "--verbose", action="store_true")
+    (opts, args) = parser.parse_known_args(argv[1:])
+
+    try:
+        if hasattr(opts, "bus") and opts.bus:
+            opts.bus = rhsmlib.import_class(opts.bus)
+        else:
+            opts.bus = dbus.SystemBus
+    except (AttributeError, ValueError):
+        system_exit(os.EX_USAGE, _("Error: Unable to load bus '{name}'").format(name=opts.bus))
+
     return opts, args
 
 

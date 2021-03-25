@@ -30,7 +30,7 @@ class OrgCommand(UserPassCommand):
         self._org = None
         if not hasattr(self, "_org_help_text"):
             self._org_help_text = _("specify organization")
-        self.parser.add_option(
+        self.parser.add_argument(
             "--org",
             dest="org",
             metavar="ORG_KEY",

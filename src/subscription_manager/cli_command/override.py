@@ -18,8 +18,6 @@ import os
 
 import rhsm.connection as connection
 
-from optparse import OptionValueError
-
 from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.cli import CliCommand
 from subscription_manager.i18n import ugettext as _
@@ -33,33 +31,37 @@ class OverrideCommand(CliCommand):
     def __init__(self):
         shortdesc = _("Manage custom content repository settings")
         super(OverrideCommand, self).__init__("repo-override", shortdesc, False)
-        self.parser.add_option("--repo", dest="repos", action="append", metavar="REPOID",
+        self.parser.add_argument("--repo", dest="repos", action="append", metavar="REPOID",
                                help=_("repository to modify (can be specified more than once)"))
-        self.parser.add_option("--remove", dest="removals", action="append", metavar="NAME",
+        self.parser.add_argument("--remove", dest="removals", action="append", metavar="NAME",
                                help=_(
                                    "name of the override to remove (can be specified more than once); used with --repo option."))
-        self.parser.add_option("--add", dest="additions", action="callback", callback=self._colon_split,
-                               type="string", metavar="NAME:VALUE",
+        self.parser.add_argument("--add", dest="additions", action='append', metavar="NAME:VALUE",
                                help=_(
                                    "name and value of the option to override separated by a colon (can be specified more than once); used with --repo option."))
-        self.parser.add_option("--remove-all", action="store_true",
+        self.parser.add_argument("--remove-all", action="store_true",
                                help=_("remove all overrides; can be specific to a repository by providing --repo"))
-        self.parser.add_option("--list", action="store_true",
+        self.parser.add_argument("--list", action="store_true",
                                help=_("list all overrides; can be specific to a repository by providing --repo"))
 
-    def _colon_split(self, option, opt_str, value, parser):
-        if parser.values.additions is None:
-            parser.values.additions = {}
-        if value.strip() == '':
-            raise OptionValueError(_("You must specify an override in the form of \"name:value\" with --add."))
+    def _additions_colon_split(self):
+        additions = {}
+        for value in self.options.additions or {}:
+            if value.strip() == '':
+                system_exit(os.EX_USAGE, _(
+                    "You must specify an override in the form of \"name:value\" with --add."))
 
-        k, _colon, v = value.partition(':')
-        if not v or not k:
-            raise OptionValueError(_("--add arguments should be in the form of \"name:value\""))
+            k, _colon, v = value.partition(':')
+            if not v or not k:
+                system_exit(os.EX_USAGE, _(
+                    "--add arguments should be in the form of \"name:value\""))
 
-        parser.values.additions[k] = v
+            additions[k] = v
+        self.options.additions = additions
 
     def _validate_options(self):
+        if self.options.additions:
+            self._additions_colon_split()
         if self.options.additions or self.options.removals:
             if not self.options.repos:
                 system_exit(os.EX_USAGE, _("Error: You must specify a repository to modify"))

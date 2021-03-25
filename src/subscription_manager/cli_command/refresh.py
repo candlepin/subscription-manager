@@ -33,7 +33,7 @@ class RefreshCommand(CliCommand):
 
         super(RefreshCommand, self).__init__("refresh", shortdesc, True)
 
-        self.parser.add_option("--force", action='store_true', help=_("force certificate regeneration"))
+        self.parser.add_argument("--force", action='store_true', help=_("force certificate regeneration"))
 
     def _do_command(self):
         self.assert_should_be_registered()

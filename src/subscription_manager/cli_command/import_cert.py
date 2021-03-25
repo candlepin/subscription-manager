@@ -30,7 +30,7 @@ class ImportCertCommand(CliCommand):
         shortdesc = _("Import certificates which were provided outside of the tool")
         super(ImportCertCommand, self).__init__("import", shortdesc, False)
 
-        self.parser.add_option("--certificate", action="append", dest="certificate_file",
+        self.parser.add_argument("--certificate", action="append", dest="certificate_file",
                                help=_("certificate file to import (can be specified more than once)"))
 
     def _validate_options(self):

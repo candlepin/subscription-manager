@@ -193,37 +193,37 @@ class ListCommand(CliCommand):
         super(ListCommand, self).__init__("list", shortdesc, True)
         self.available = None
         self.consumed = None
-        self.parser.add_option("--installed", action='store_true',
+        self.parser.add_argument("--installed", action='store_true',
                                help=_("list shows those products which are installed (default)"))
-        self.parser.add_option("--available", action='store_true',
+        self.parser.add_argument("--available", action='store_true',
                                help=_("show those subscriptions which are available"))
-        self.parser.add_option("--all", action='store_true',
+        self.parser.add_argument("--all", action='store_true',
                                help=_("used with --available to ensure all subscriptions are returned"))
-        self.parser.add_option("--ondate", dest="on_date",
-                               help=(_(
+        self.parser.add_argument("--ondate", dest="on_date",
+                               help=_(
                                    "date to search on, defaults to today's date, only used with --available (example: {example})").format(
-                                     example=strftime("%Y-%m-%d", localtime()))))
-        self.parser.add_option("--consumed", action='store_true',
+                                     example=strftime("%Y-%m-%d", localtime())))
+        self.parser.add_argument("--consumed", action='store_true',
                                help=_("show the subscriptions being consumed by this system"))
-        self.parser.add_option("--servicelevel", dest="service_level",
+        self.parser.add_argument("--servicelevel", dest="service_level",
                                help=_(
                                    "shows only subscriptions matching the specified service level; only used with --available and --consumed"))
-        self.parser.add_option("--no-overlap", action='store_true',
+        self.parser.add_argument("--no-overlap", action='store_true',
                                help=_(
                                    "shows pools which provide products that are not already covered; only used with --available"))
-        self.parser.add_option("--match-installed", action="store_true",
+        self.parser.add_argument("--match-installed", action="store_true",
                                help=_(
                                    "shows only subscriptions matching products that are currently installed; only used with --available"))
-        self.parser.add_option("--matches", dest="filter_string",
+        self.parser.add_argument("--matches", dest="filter_string",
                                help=_(
                                    "lists only subscriptions or products containing the specified expression in the subscription or product information, varying with the list requested and the server version (case-insensitive)."))
-        self.parser.add_option("--pool-only", dest="pid_only", action="store_true",
+        self.parser.add_argument("--pool-only", dest="pid_only", action="store_true",
                                help=_(
                                    "lists only the pool IDs for applicable available or consumed subscriptions; only used with --available and --consumed"))
-        self.parser.add_option('--afterdate', dest="after_date",
-                               help=(_(
+        self.parser.add_argument('--afterdate', dest="after_date",
+                               help=_(
                                    "show pools that are active on or after the given date; only used with --available (example: {example})").format(
-                                   example=strftime("%Y-%m-%d", localtime()))))
+                                   example=strftime("%Y-%m-%d", localtime())))
 
     def _validate_options(self):
         if self.options.all and not self.options.available:

@@ -1413,7 +1413,13 @@ class TestAttachCommand(TestCliProxyCommand):
         self._test_quantity_exception("-1")
 
     def test_text_quantity(self):
-        self._test_quantity_exception("JarJarBinks")
+        try:
+            self.cc.main(["--quantity", "JarJarBinks"])
+            self.cc._validate_options()
+        except SystemExit as e:
+            self.assertEqual(e.code, 2)
+        else:
+            self.fail("No Exception Raised")
 
     def test_positive_quantity(self):
         self.cc.main(["--pool", "test-pool-id", "--quantity", "1"])
@@ -1424,7 +1430,13 @@ class TestAttachCommand(TestCliProxyCommand):
         self.cc._validate_options()
 
     def test_positive_quantity_as_float(self):
-        self._test_quantity_exception("2.0")
+        try:
+            self.cc.main(["--quantity", "2.0"])
+            self.cc._validate_options()
+        except SystemExit as e:
+            self.assertEqual(e.code, 2)
+        else:
+            self.fail("No Exception Raised")
 
     def _test_pool_file_processing(self, f, expected):
         self.cc.main(["--file", f])
@@ -1998,8 +2010,8 @@ class TestOverrideCommand(TestCliProxyCommand):
         self.assertRaises(SystemExit, self.cc._validate_options)
 
     def test_bad_add_format(self):
-        self.assertRaises(SystemExit, self.cc.main, ["--add", "hello"])
-        self.assertRaises(SystemExit, self.cc.main, ["--add", "hello:"])
+        self._test_exception(["--add", "hello"])
+        self._test_exception(["--add", "hello:"])
 
     def test_add_and_remove_with_no_repo(self):
         self._test_exception(["--add", "hello:world"])
@@ -2049,13 +2061,13 @@ class TestOverrideCommand(TestCliProxyCommand):
         self._test_exception(["--repo", "x", "--remove", "foo", "--remove", ""])
 
     def test_add_empty_arg(self):
-        self.assertRaises(SystemExit, self.cc.main, ["--repo", "x", "--add", ""])
+        self._test_exception(["--repo", "x", "--add", ""])
 
     def test_add_empty_name(self):
-        self.assertRaises(SystemExit, self.cc.main, ["--repo", "x", "--add", ":foo"])
+        self._test_exception(["--repo", "x", "--add", ":foo"])
 
     def test_add_multiple_args_empty_arg(self):
-        self.assertRaises(SystemExit, self.cc.main, ["--repo", "x", "--add", "foo:bar", "--add", ""])
+        self._test_exception(["--repo", "x", "--add", "foo:bar", "--add", ""])
 
     def test_list_and_remove_all_work_with_repos(self):
         self.cc.main(["--repo", "x", "--list"])

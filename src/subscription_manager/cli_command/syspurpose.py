@@ -50,7 +50,7 @@ class SyspurposeCommand(CliCommand):
             short_desc,
             primary=False
         )
-        self.parser.add_option(
+        self.parser.add_argument(
             "--show",
             action="store_true",
             help=_("show current system purpose")

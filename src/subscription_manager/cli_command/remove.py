@@ -37,11 +37,11 @@ class RemoveCommand(CliCommand):
             self._short_description(),
             self._primary())
 
-        self.parser.add_option("--serial", action='append', dest="serials", metavar="SERIAL",
+        self.parser.add_argument("--serial", action='append', dest="serials", metavar="SERIAL",
                                help=_("certificate serial number to remove (can be specified more than once)"))
-        self.parser.add_option("--pool", action='append', dest="pool_ids", metavar="POOL_ID",
+        self.parser.add_argument("--pool", action='append', dest="pool_ids", metavar="POOL_ID",
                                help=_("the ID of the pool to remove (can be specified more than once)"))
-        self.parser.add_option("--all", dest="all", action="store_true",
+        self.parser.add_argument("--all", dest="all", action="store_true",
                                help=_("remove all subscriptions from this system"))
 
     def _short_description(self):

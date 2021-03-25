@@ -37,8 +37,7 @@ from subscription_manager.i18n import ugettext as _
 
 from subscription_manager import injection as inj
 from subscription_manager.cli import system_exit
-from subscription_manager.i18n_optparse import OptionParser, \
-        USAGE, WrappedIndentedHelpFormatter
+from subscription_manager.i18n_argparse import ArgumentParser, USAGE
 from subscription_manager.productid import ProductDatabase
 from subscription_manager import repolib
 from rhsm.utils import parse_url
@@ -891,53 +890,53 @@ class MigrationEngine(object):
 
 def add_parser_options(parser, five_to_six_script=False):
     # Careful, the option is --no-auto but we are storing the opposite of its value.
-    parser.add_option("-n", "--no-auto", action="store_false", default=True, dest="auto",
+    parser.add_argument("-n", "--no-auto", action="store_false", default=True, dest="auto",
         help=_("don't execute the auto-attach option while registering with subscription manager"))
-    parser.add_option("-s", "--servicelevel", dest="service_level",
+    parser.add_argument("-s", "--servicelevel", dest="service_level",
         help=_("service level to follow when attaching subscriptions, for no service "
             "level use --servicelevel=\"\""))
-    parser.add_option("--remove-rhn-packages", action="store_true", default=False, dest="remove_legacy_packages",
+    parser.add_argument("--remove-rhn-packages", action="store_true", default=False, dest="remove_legacy_packages",
                       help=_("remove legacy packages"))
     # See BZ 915847 - some users want to connect to RHN with a proxy but to RHSM without a proxy
-    parser.add_option("--no-proxy", action="store_true", dest='noproxy',
+    parser.add_argument("--no-proxy", action="store_true", dest='noproxy',
         help=_("don't use legacy proxy settings with destination server"))
 
     if five_to_six_script:
         default_registration_state = "unentitle"
         valid_states = ["keep", "unentitle", "purge"]
 
-        parser.add_option("--registration-state", type="choice",
-            choices=valid_states, metavar=",".join(valid_states), default=default_registration_state,
+        parser.add_argument("--registration-state", choices=valid_states,
+            metavar=",".join(valid_states), default=default_registration_state,
             help=_("state to leave system in on legacy server (default is '%s')") % default_registration_state)
 
     else:
         # The consumerid provides these
-        parser.add_option("--org", dest='org',
+        parser.add_argument("--org", dest='org',
             help=_("organization to register to"))
-        parser.add_option("--environment", dest='environment',
+        parser.add_argument("--environment", dest='environment',
             help=_("environment to register to"))
-        parser.add_option("-f", "--force", action="store_true", default=False,
+        parser.add_argument("-f", "--force", action="store_true", default=False,
             help=_("ignore channels not available on destination server"))
         # Activation keys can't be used with previously registered IDs so no point in even
         # offering the option for 5to6
-        parser.add_option("--activation-key", action="append", dest="activation_keys",
+        parser.add_argument("--activation-key", action="append", dest="activation_keys",
             help=_("activation key to use for registration (can be specified more than once)"))
         # RHN Hosted doesn't allow the "unentitle" option, so instead of
         # using --registration-state with just two options, we'll use a
         # boolean-like option: --keep.
-        parser.add_option("--keep", action="store_const", const="keep",
+        parser.add_argument("--keep", action="store_const", const="keep",
             dest="registration_state", default="purge",
             help=_("leave system registered in legacy environment"))
 
-    parser.add_option("--legacy-user",
+    parser.add_argument("--legacy-user",
         help=_("specify the user name on the legacy server"))
-    parser.add_option("--legacy-password",
+    parser.add_argument("--legacy-password",
         help=_("specify the password on the legacy server"))
-    parser.add_option("--destination-url",
+    parser.add_argument("--destination-url",
         help=_("specify the subscription management server to migrate to"))
-    parser.add_option("--destination-user",
+    parser.add_argument("--destination-user",
         help=_("specify the user name on the destination server"))
-    parser.add_option("--destination-password",
+    parser.add_argument("--destination-password",
         help=_("specify the password on the destination server"))
 
 
@@ -981,7 +980,7 @@ def set_defaults(options, five_to_six_script):
 
 
 def main(args=None, five_to_six_script=False):
-    parser = OptionParser(usage=USAGE, formatter=WrappedIndentedHelpFormatter())
+    parser = ArgumentParser(usage=USAGE)
     add_parser_options(parser, five_to_six_script)
 
     # In testing we sometimes specify args, otherwise use the default:
