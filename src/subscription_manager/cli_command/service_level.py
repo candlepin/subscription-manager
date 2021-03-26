@@ -179,7 +179,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
                 for sla in slas:
                     print(sla)
             else:
-                print(_("This org does not have any subscriptions with service levels."))
+                print(_('This org does not have any subscriptions with an available "service level".'))
         except UnauthorizedException as e:
             raise e
         except connection.RemoteServerException as e:
