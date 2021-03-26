@@ -180,11 +180,12 @@ class CacheManager(object):
                 return 1
             except connection.RestlibException as re:
                 raise re
+            except connection.ProxyException as pe:
+                raise pe
             except Exception as e:
                 log.error("Error updating system data on the server")
                 log.exception(e)
-                raise Exception(_("Error updating system data on the server, see /var/log/rhsm/rhsm.log "
-                                  "for more details."))
+                raise e
         else:
             log.debug("No changes.")
             return 0  # No updates performed.
