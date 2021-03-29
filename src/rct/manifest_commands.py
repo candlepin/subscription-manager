@@ -82,7 +82,7 @@ class ZipExtractAll(ZipFile):
                     raise KeyError
                 result = self._get_inner_zip()._read_file(file_path, True)
             except KeyError:
-                raise Exception(_('Unable to find file "%s" in manifest.') % file_path)
+                raise Exception(_('Unable to find file "{file_path}" in manifest.').format(file_path=file_path))
         return result
 
     def _get_entitlements(self):
@@ -267,8 +267,8 @@ class CatManifestCommand(RCTManifestCommand):
                 cert = certificate.create_from_pem(zip_archive._read_file(cert_file).decode('utf-8'))
             except certificate.CertificateException as ce:
                 raise certificate.CertificateException(
-                        _("Unable to read certificate file '%s': %s") % (cert_file,
-                        ce))
+                        _("Unable to read certificate file '{certificate_file}': {exception}").format(
+                            certificate_file=cert_file, exception=ce))
             to_print.append((_("Certificate Version"), cert.version))
 
             self._print_section(_("Subscription:"), to_print, 1, False)
@@ -325,7 +325,7 @@ class DumpManifestCommand(RCTManifestCommand):
             # IOError/OSError base class
             if e.errno == errno.EEXIST:
                 # useful error for file already exists
-                print(_('File "%s" exists. Use -f to force overwriting the file.') % e.filename)
+                print(_('File {filename} exists. Use -f to force overwriting the file.').format(filename=e.filename))
             else:
                 # generic error for everything else
                 print(_("Manifest could not be written:"))
@@ -341,7 +341,8 @@ class DumpManifestCommand(RCTManifestCommand):
         """
         if self.options.destination:
             if self._extract(self.options.destination, self.options.overwrite_files):
-                print(_("The manifest has been dumped to the %s directory") % self.options.destination)
+                print(_("The manifest has been dumped to the {destination} directory").format(
+                    destination=self.options.destination))
         else:
             if self._extract(os.getcwd(), self.options.overwrite_files):
                 print(_("The manifest has been dumped to the current directory"))

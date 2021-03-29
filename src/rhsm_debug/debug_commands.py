@@ -90,9 +90,10 @@ class SystemCommand(CliCommand):
         # no archive, check if we can safely copy to dest.
         if not self.options.archive:
             if not self._dirs_on_same_device(self.assemble_path, self.options.destination):
-                msg = _("To use the no-archive option, the destination directory '%s' "
+                msg = _("To use the no-archive option, the destination directory '{destination}' "
                         "must exist on the same file system as the "
-                        "data assembly directory '%s'.") % (self.options.destination, self.assemble_path)
+                        "data assembly directory '{assembly}'.").format(destination=self.options.destination,
+                                                                       assembly=self.assemble_path)
                 raise InvalidCLIOptionError(msg)
         # In case folks are using this in a script
         if self.options.placeholder_for_subscriptions_option:
@@ -187,7 +188,7 @@ class SystemCommand(CliCommand):
 
                 sfm = SaferFileMove()
                 sfm.move(tar_file_path, final_path)
-                print(_("Wrote: %s") % final_path)
+                print(_("Wrote: {final_path}").format(final_path=final_path))
             else:
                 # NOTE: this will fail across filesystems. We could add a force
                 # flag to for creation of a specific name with approriate
@@ -201,10 +202,10 @@ class SystemCommand(CliCommand):
                 # rename only works on the same filesystem, but it is atomic.
                 os.rename(content_path, dest_dir_name)
 
-                print(_("Wrote: %s") % dest_dir_name)
+                print(_("Wrote: {destination_dir_name}").format(destination_dir_name=dest_dir_name))
 
         except Exception as e:
-            handle_exception(_("Unable to create zip file of system information: %s") % e, e)
+            handle_exception(_("Unable to create zip file of system information: {error}").format(error=e), e)
             sys.exit(os.EX_SOFTWARE)
         finally:
             if content_path and os.path.isdir(content_path):
