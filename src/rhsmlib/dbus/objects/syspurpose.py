@@ -28,7 +28,7 @@ from rhsmlib.services import syspurpose
 from syspurpose.files import SyspurposeStore
 
 from subscription_manager.injectioninit import init_dep_injection
-from subscription_manager.i18n import ugettext as _
+from subscription_manager.i18n import ungettext
 from subscription_manager.i18n import Locale
 
 init_dep_injection()
@@ -66,20 +66,11 @@ class ThreeWayMergeConflict(dbus.DBusException):
                 )
             )
         conflict_msg = ", ".join(conflicts)
-        if len(conflicts) == 1:
-            return _(
-                'Warning: A {conflict_msg} was recently set '
-                'for this system by the entitlement server administrator.'.format(
-                    conflict_msg=conflict_msg
-                )
-            )
-        else:
-            return _(
-                'Warning: A {conflict_msg} were recently set '
-                'for this system by the entitlement server administrator.'.format(
-                    conflict_msg=conflict_msg
-                )
-            )
+        return ungettext('Warning: A {conflict_msg} was recently set '
+                         'for this system by the entitlement server administrator.',
+                         'Warning: A {conflict_msg} were recently set '
+                         'for this system by the entitlement server administrator.',
+                         len(conflicts)).format(conflict_msg=conflict_msg)
 
 
 class SyspurposeDBusObject(base_object.BaseObject):
