@@ -71,7 +71,7 @@ class RegisterCommand(UserPassCommand):
         self.parser.add_argument("--auto-attach", action='store_true', dest="autoattach",
                                help=_("automatically attach compatible subscriptions to this system"))
         self.parser.add_argument("--force", action='store_true',
-                               help=_("register the system even if it is already registered"))
+                               help=_("include an implicit attempt to unregister before registering a new system identity"))
         self.parser.add_argument("--activationkey", action='append', dest="activation_keys",
                                help=_("activation key to use for registration (can be specified more than once)"))
         self.parser.add_argument("--servicelevel", dest="service_level",
