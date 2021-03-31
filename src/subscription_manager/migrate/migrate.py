@@ -279,7 +279,8 @@ class MigrationEngine(object):
                 msgs = [_("This system appears to already be registered to Satellite 6.")]
             else:
                 msgs = [_("This system appears to already be registered to Red Hat Subscription Management.")]
-                msgs.append(_("Please visit https://access.redhat.com/management/consumers/%s to view the profile details.") % identity.uuid)
+                msgs.append(_("Please visit https://access.redhat.com/management/consumers/{identity_uuid} to view the "
+                              " profile details.").format(identity_uuid=identity.uuid))
             system_exit(1, msgs)
 
         try:
@@ -299,7 +300,7 @@ class MigrationEngine(object):
             system_exit(os.EX_SOFTWARE, CONNECTION_FAILURE % e)
 
         if len(owner_list) == 0:
-            system_exit(1, _("%s cannot register with any organizations.") % username)
+            system_exit(1, _("{username} cannot register with any organizations.").format(username=username))
         else:
             if self.options.org:
                 org_input = self.options.org
@@ -390,7 +391,7 @@ class MigrationEngine(object):
             rpc_session.system.getDetails(session_key, self.system_id)
         except Exception as e:
             log.exception(e)
-            system_exit(1, _("You do not have access to system %s.  ") % self.system_id + SEE_LOG_FILE)
+            system_exit(1, _("You do not have access to system {system_id}.  ").format(system_id=self.system_id) + SEE_LOG_FILE)
 
     def resolve_base_channel(self, label, rpc_session, session_key):
         try:
@@ -464,7 +465,8 @@ class MigrationEngine(object):
         for prod_id, mappings in list(collisions.items()):
             single_key = sorted(mappings.keys())[0]
             applicable_certs[prod_id] = {single_key: mappings[single_key]}
-            print(_("Mapping product '%s' to certificate '%s'." % (prod_id, single_key)))
+            print(_("Mapping product '{product_id}' to certificate '{certificate}'.").format(product_id=prod_id,
+                                                                                             certificate=single_key))
 
     def deploy_prod_certificates(self, subscribed_channels):
         release = self.get_release()
@@ -501,7 +503,7 @@ class MigrationEngine(object):
                 unrecognized_channels.append(channel)
 
         if invalid_rhsm_channels:
-            self.print_banner(_("Channels not available on %s:") % self.options.destination_url)
+            self.print_banner(_("Channels not available on {url}:").format(url=self.options.destination_url))
             for i in invalid_rhsm_channels:
                 print(i)
 
@@ -553,7 +555,7 @@ class MigrationEngine(object):
 
         if db_modified:
             self.db.write()
-        print(_("\nProduct certificates installed successfully to %s.") % product_dir.path)
+        print(_("\nProduct certificates installed successfully to {path}.").format(path=product_dir.path))
 
     def clean_up(self, subscribed_channels):
         # Hack to address BZ 853233
@@ -641,7 +643,8 @@ class MigrationEngine(object):
             log.exception("Could not delete system %s from legacy server" % self.system_id)
             # If we time out or get a network error, log it and keep going.
             shutil.move(system_id_path, system_id_path + ".save")
-            print(_("Did not receive a completed unregistration message from legacy server for system %s.") % self.system_id)
+            print(_("Did not receive a completed un-registration message from legacy server for system {system_id}.")
+                  .format(system_id=self.system_id))
 
             if self.is_hosted:
                 print(_("Please investigate on the Customer Portal at https://access.redhat.com."))
@@ -673,7 +676,7 @@ class MigrationEngine(object):
             return True
         except Exception as e:
             log.exception(e)
-            print(_("Consumer %s doesn't exist.  Creating new consumer.") % consumer_id)
+            print(_("Consumer {consumer_id} doesn't exist.  Creating new consumer.").format(consumer_id=consumer_id))
             return False
 
     def register(self, credentials, org, environment):
@@ -720,7 +723,7 @@ class MigrationEngine(object):
         if not identity.is_valid():
             system_exit(2, _("\nUnable to register.\nFor further assistance, please contact Red Hat Global Support Services."))
 
-        print(_("System '%s' successfully registered.\n") % identity.name)
+        print(_("System '{identity_name}' successfully registered.\n").format(identity_name=identity.name))
         return identity
 
     def select_service_level(self, org, servicelevel):
@@ -749,7 +752,7 @@ class MigrationEngine(object):
         if servicelevel is None or \
             servicelevel.upper() not in (level.upper() for level in levels):
             if servicelevel is not None:
-                print(_("\nService level \"%s\" is not available.") % servicelevel)
+                print(_("\nService level \"{service_level}\" is not available.").format(service_level=servicelevel))
             menu = Menu(slas, _("Please select a service level agreement for this system."))
             servicelevel = menu.choose()
         return servicelevel
@@ -789,7 +792,8 @@ class MigrationEngine(object):
         except Exception:
             print(_("\nCouldn't enable extra repositories."))
             command = "subscription-manager repos --help"
-            print(_("Please ensure system has subscriptions attached, and see '%s' to enable additional repositories") % command)
+            print(_("Please ensure system has subscriptions attached, and see '{command}' to enable additional repositories")
+                  .format(command=command))
 
     def is_using_systemd(self):
         release_number = int(self.get_release().partition('-')[-1])
@@ -907,7 +911,8 @@ def add_parser_options(parser, five_to_six_script=False):
 
         parser.add_argument("--registration-state", choices=valid_states,
             metavar=",".join(valid_states), default=default_registration_state,
-            help=_("state to leave system in on legacy server (default is '%s')") % default_registration_state)
+            help=_("state to leave system in on legacy server (default is '{default_state}')").format(
+                default_state=default_registration_state))
 
     else:
         # The consumerid provides these

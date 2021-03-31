@@ -130,8 +130,9 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
     def _handle_unbind_exception(self, e, selection):
         self._clear_progress_bar()
-        handle_gui_exception(e, _("There was an error removing %s with serial number %s") %
-                (selection['subscription'], selection['serial']), self.parent_win, format_msg=False)
+        handle_gui_exception(e, _("There was an error removing {subscription} with serial number {serial_number}")
+                             .format(subscription=selection['subscription'], serial_number=selection['serial']),
+                             self.parent_win, format_msg=False)
 
     def _unsubscribe_callback(self):
         self.backend.cs.force_cert_check()
@@ -165,8 +166,8 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         # remove all markup, see rh bz#982286
         subscription_text = ga_GObject.markup_escape_text(selection['subscription'])
 
-        prompt = messageWindow.YesNoDialog(_("Are you sure you want to remove %s?") % subscription_text,
-                self.content.get_toplevel())
+        prompt = messageWindow.YesNoDialog(_("Are you sure you want to remove {subscription_text}?")
+                                           .format(subscription_text=subscription_text), self.content.get_toplevel())
         prompt.connect('response', self._on_unsubscribe_prompt_response, selection)
 
     def update_subscriptions(self, update_dbus=True, update_gui=True):
@@ -196,12 +197,12 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         if group.name and len(group.entitlements) > 1:
             unique = self.find_unique_name_count(group.entitlements)
             if unique - 1 > 1:
-                name_string = _("Stack of %s and %s others") % \
-                        (group.name, str(unique - 1))
+                name_string = _("Stack of {group_name} and {unique} others").format(group_name=group.name,
+                                                                          unique=str(unique - 1))
             elif unique - 1 == 1:
-                name_string = _("Stack of %s and 1 other") % (group.name)
+                name_string = _("Stack of {group_name} and 1 other").format(group_name=group.name)
             else:
-                name_string = _("Stack of %s") % (group.name)
+                name_string = _("Stack of {group_name}").format(group_name=group.name)
             tree_iter = self.store.add_map(tree_iter, self._create_stacking_header_entry(name_string))
 
         new_parent_image = None

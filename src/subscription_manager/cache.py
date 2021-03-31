@@ -158,9 +158,9 @@ class CacheManager(object):
         # end up calling this with consumer_uuid=None if the system
         # is unregistered.
         if not consumer_uuid:
-            msg = _("consumer_uuid=%s is not a valid consumer_uuid. "
-                    "Not attempting to sync %s cache with server.") % \
-                (consumer_uuid, self.__class__.__name__)
+            msg = _("consumer_uuid={consumer_uuid} is not a valid consumer_uuid. "
+                    "Not attempting to sync {class_name} cache with server.").format(
+                    consumer_uuid=consumer_uuid, class_name=self.__class__.__name__)
             log.debug(msg)
 
             # Raising an exception here would be better, but that is just

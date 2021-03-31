@@ -43,8 +43,8 @@ class RCTCertCommand(RCTCliCommand):
             return certificate.create_from_file(cert_file)
         except certificate.CertificateException as ce:
             raise InvalidCLIOptionError(
-                    _("Unable to read certificate file '%s': %s") % (cert_file,
-                        ce))
+                    _("Unable to read certificate file '{certificate}': {exception}").format(
+                        certificate=cert_file, exception=ce))
 
     def _validate_options(self):
         cert_file = self._get_file_from_args()
@@ -86,19 +86,19 @@ class StatCertCommand(RCTCertCommand):
     def _do_command(self):
         cert = self._create_cert()
         pem = self._get_pem(self._get_file_from_args())
-        print(_("Type: %s") % type_to_string(cert))
-        print(_("Version: %s") % cert.version)
-        print(_("DER size: %db") % self._get_der_size(pem))
+        print(_("Type: {certificate_type}").format(certificate_type=type_to_string(cert)))
+        print(_("Version: {certificate_version}").format(certificate_version=cert.version))
+        print(_("DER size: {size}b").format(size=self._get_der_size(pem)))
 
         subject_key_id = self._get_subject_key_id(pem)
         if subject_key_id is not None:
-            print(_("Subject Key ID size: %db") % len(subject_key_id))
+            print(_("Subject Key ID size: {len_subject_key_id}b").format(len_subject_key_id=len(subject_key_id)))
 
         if isinstance(cert, EntitlementCertificate):
             content_len = 0
             if cert.content:
                 content_len = len(cert.content)
-            print(_("Content sets: %s") % content_len)
+            print(_("Content sets: {content_length}").format(content_length=content_len))
 
     def _get_pem(self, filename):
         return open(filename, 'r',).read()
