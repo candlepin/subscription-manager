@@ -410,6 +410,21 @@ class ConnectionTests(unittest.TestCase):
             self.cp.hypervisorHeartbeat("owner", options=options)
             self.cp.conn.request_put.assert_not_called()
 
+    def test_orgs_user_none_org(self):
+            self.cp.conn = Mock()
+            # observed return value when user has no org
+            self.cp.conn.request_get = Mock(return_value=[None])
+            self.assertEqual([], self.cp.getOwnerList(username="test"))
+            # return value when list has None and actual value
+            self.cp.conn.request_get = Mock(return_value=[None, 'Fred'])
+            self.assertEqual(['Fred'], self.cp.getOwnerList(username="test"))
+            # return value of None
+            self.cp.conn.request_get = Mock(return_value=None)
+            self.assertEqual([], self.cp.getOwnerList(username="test"))
+            # return value of empty list
+            self.cp.conn.request_get = Mock(return_value=[])
+            self.assertEqual([], self.cp.getOwnerList(username="test"))
+
 
 class RestlibValidateResponseTests(unittest.TestCase):
     def setUp(self):
