@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-29 13:05-0400\n"
-"PO-Revision-Date: 2021-03-31 14:01+0000\n"
-"Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
+"PO-Revision-Date: 2021-04-01 13:01+0000\n"
+"Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/syspurpose-1-27/ko/>\n"
 "Language: ko\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5.2\n"
+"X-Generator: Weblate 4.5.3\n"
 
 #: src/syspurpose/cli.py:29
 #, python-brace-format
@@ -47,7 +47,7 @@ msgstr "{value} 값이 {prop_name}에 추가되지 않았습니다. 이미 존�
 #: src/syspurpose/cli.py:56 src/syspurpose/cli.py:85
 #, python-brace-format
 msgid "{attr} updated."
-msgstr "{attr}이(가) 업데이트되었습니다."
+msgstr "{attr}가 최신화되었습니다."
 
 #: src/syspurpose/cli.py:79
 #, python-brace-format
@@ -62,7 +62,7 @@ msgstr "{name}에서 \"{val}\" 값을 제거하지 못했습니다. 값이 존�
 #: src/syspurpose/cli.py:108
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
-msgstr "{attr}이(가) \"{val}\"(으)로 설정되었습니다."
+msgstr "{attr}이 \"{val}\"로 설정되었습니다."
 
 #: src/syspurpose/cli.py:129
 #, python-brace-format
@@ -165,7 +165,8 @@ msgstr "오류: 파일 {}의 데이터 형식이 잘못되었습니다. 확인 �
 #: src/syspurpose/files.py:94
 msgid "Cannot read syspurpose file {}\n"
 "Are you root?"
-msgstr "syspurpose 파일 {}을/를 읽을 수 없습니다.\n"
+msgstr ""
+"syspurpose 파일 {}을 읽을 수 없습니다.\n"
 "root 사용자입니까?"
 
 #: src/syspurpose/main.py:32
@@ -175,11 +176,13 @@ msgstr "사용자 중단 프로세스"
 #: src/syspurpose/utils.py:59
 msgid "Cannot create directory {}\n"
 "Are you root?"
-msgstr "디렉토리 {}을/를 만들 수 없습니다.\n"
+msgstr ""
+"디렉토리 {}을 만들 수 없습니다.\n"
 "root 사용자입니까?"
 
 #: src/syspurpose/utils.py:80
 msgid "Cannot create file {}\n"
 "Are you root?"
-msgstr "파일 {}을/를 만들 수 없습니다.\n"
+msgstr ""
+"파일 {}을 만들 수 없습니다.\n"
 "root 사용자입니까?"
