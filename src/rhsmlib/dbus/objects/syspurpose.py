@@ -66,10 +66,12 @@ class ThreeWayMergeConflict(dbus.DBusException):
                 )
             )
         conflict_msg = ", ".join(conflicts)
-        return ungettext('Warning: A {conflict_msg} was recently set '
-                         'for this system by the entitlement server administrator.',
-                         'Warning: A {conflict_msg} were recently set '
-                         'for this system by the entitlement server administrator.',
+        return ungettext('Warning: The following field was recently set '
+                         'for this system by the entitlement server '
+                         'administrator: {conflict_msg}',
+                         'Warning: The following fields were recently set '
+                         'for this system by the entitlement server '
+                         'administrator: {conflict_msg}',
                          len(conflicts)).format(conflict_msg=conflict_msg)
 
 
