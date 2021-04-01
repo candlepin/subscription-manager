@@ -1364,7 +1364,12 @@ class UEPConnection(BaseConnection):
         Returns an owner objects with pem/key for existing consumers
         """
         method = '/users/%s/owners' % self.sanitize(username)
-        return self.conn.request_get(method)
+        owners = self.conn.request_get(method)
+        # BZ 1749395 When a user has no orgs, the return value
+        #  is an array with a single None element.
+        # Ensures the value is the same for a simple None value
+        owners = [x for x in (owners or []) if x is not None]
+        return owners
 
     def getOwnerHypervisors(self, owner_key, hypervisor_ids=None):
         """
