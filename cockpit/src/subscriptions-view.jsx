@@ -267,7 +267,7 @@ class SubscriptionStatus extends React.Component {
             add_ons = (
                 <div>
                     <label>
-                        { _("Addons:  ") }
+                        { _("Add-ons:  ") }
                         <span className="value">
                             { _(String(subscriptionsClient.toArray(this.props.syspurpose["addons"]).join(", "))) }
                         </span>
