@@ -34,7 +34,7 @@ from subscription_manager.gui import widgets
 from subscription_manager.gui.utils import handle_gui_exception
 from subscription_manager.utils import is_true_value
 
-from subscription_manager.i18n import ugettext as _
+from subscription_manager.i18n import ungettext, ugettext as _
 
 
 prefix = os.path.dirname(__file__)
@@ -196,13 +196,13 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         tree_iter = None
         if group.name and len(group.entitlements) > 1:
             unique = self.find_unique_name_count(group.entitlements)
-            if unique - 1 > 1:
-                name_string = _("Stack of {group_name} and {unique} others").format(group_name=group.name,
-                                                                          unique=str(unique - 1))
-            elif unique - 1 == 1:
-                name_string = _("Stack of {group_name} and 1 other").format(group_name=group.name)
+            if unique - 1 > 0:
+                name_string = ungettext("Stack of {group_name} and 1 other",
+                                        "Stack of {group_name} and {unique} others",
+                                        unique - 1)
             else:
-                name_string = _("Stack of {group_name}").format(group_name=group.name)
+                name_string = _("Stack of {group_name}")
+            name_string = name_string.format(group_name=group.name, unique=(unique - 1))
             tree_iter = self.store.add_map(tree_iter, self._create_stacking_header_entry(name_string))
 
         new_parent_image = None

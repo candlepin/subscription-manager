@@ -121,16 +121,16 @@ function install_data_summary(data) {
     if (data.extra_names.length == 0)
         summary = arrfmt(_("The $0 package will be installed."), <strong>{data.missing_names[0]}</strong>);
     else
-        summary = arrfmt(cockpit.ngettext(_("The $0 package and $1 other package will be installed."),
-                                          _("The $0 package and $1 other packages will be installed."),
+        summary = arrfmt(cockpit.ngettext("The $0 package and $1 other package will be installed.",
+                                          "The $0 package and $1 other packages will be installed.",
                                           data.extra_names.length), <strong>{data.missing_names[0]}</strong>, data.extra_names.length);
     if (data.remove_names.length > 0) {
         summary = [
             {summary},
             <br />,
             <span className="pficon pficon-warning-triangle-o" />, "\n",
-            cockpit.format(cockpit.ngettext(_("$0 package needs to be removed."),
-                                            _("$0 packages need to be removed."),
+            cockpit.format(cockpit.ngettext("$0 package needs to be removed.",
+                                            "$0 packages need to be removed.",
                                             data.remove_names.length),
                            data.remove_names.length)
         ];
