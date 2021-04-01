@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 14:55-0500\n"
-"PO-Revision-Date: 2021-03-31 00:01+0000\n"
+"PO-Revision-Date: 2021-04-01 13:01+0000\n"
 "Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ko/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5.2\n"
+"X-Generator: Weblate 4.5.3\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.8/optparse.py:146
@@ -4475,8 +4475,7 @@ msgid ""
 "Consumer profile \"%s\" has been deleted from the server. You can use "
 "command clean or unregister to remove local profile."
 msgstr ""
-"소비자 프로파일 \"%s\"이/가 서버에서 삭제되었습니다. 로컬 프로파일을 삭제하려면 clean 또는 unregister 명령을 "
-"사용합니다."
+"소비자 프로파일 \"%s\"가 서버에서 삭제되었습니다. 로컬 프로파일을 삭제하려면 clean 또는 unregister 명령을 사용합니다."
 
 #: src/subscription_manager/managercli.py:586
 #, python-brace-format
@@ -4545,7 +4544,7 @@ msgstr "경고: “{attr}” 속성에 유효한 값이 입력되지 않았습�
 #: src/subscription_manager/managercli.py:748
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
-msgstr "{attr}이/가 \"{val}\"로 설정되었습니다."
+msgstr "{attr}이 \"{val}\"로 설정되었습니다."
 
 #: src/subscription_manager/managercli.py:765
 #, python-brace-format
@@ -4556,7 +4555,7 @@ msgstr "{attr} 설정이 해제되었습니다."
 #: src/subscription_manager/managercli.py:804
 #, python-brace-format
 msgid "{attr} updated."
-msgstr "{attr}이/가 업데이트되었습니다."
+msgstr "{attr}가 최신화되었습니다."
 
 #: src/subscription_manager/managercli.py:833
 #, python-brace-format
@@ -4566,7 +4565,7 @@ msgstr "현재 {name}: {val}"
 #: src/subscription_manager/managercli.py:836
 #, python-brace-format
 msgid "{name} not set."
-msgstr "{name}이/가 설정되어 있지 않습니다."
+msgstr "{name}가 설정되어 있지 않습니다."
 
 #: src/subscription_manager/managercli.py:854
 #, python-brace-format
@@ -5543,12 +5542,12 @@ msgstr ""
 #: src/subscription_manager/managercli.py:2712
 #, python-format
 msgid "Repository '%s' is enabled for this system."
-msgstr "리포지터리 '%s'이/가 이 시스템에 대해 활성화되어 있습니다."
+msgstr "저장소 '%s'가 이 시스템에 대해 활성화되어 있습니다."
 
 #: src/subscription_manager/managercli.py:2714
 #, python-format
 msgid "Repository '%s' is disabled for this system."
-msgstr "리포지터리 '%s'이/가 이 시스템에 대해 비활성화되어 있습니다."
+msgstr "저장소 '%s'가 이 시스템에 대해 비활성화되어 있습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:2721
@@ -6147,7 +6146,7 @@ msgstr "기존 서버에서 시스템 마이그레이션 데이터를 가져올 
 #: src/subscription_manager/migrate/migrate.py:677
 #, python-format
 msgid "Consumer %s doesn't exist.  Creating new consumer."
-msgstr "소비자 %s이/가 존재하지 않습니다. 새 소비자를 생성하고 있습니다."
+msgstr "소비자 %s가 존재하지 않습니다. 새 소비자를 생성하고 있습니다."
 
 #: src/subscription_manager/migrate/migrate.py:684
 msgid "Attempting to register system to destination server..."
@@ -6363,8 +6362,8 @@ msgid ""
 "Hat Subscription Management. If not desired, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
-"yum 플러그인: %s이/가 Red Hat 서브스크립션 관리를 통해 자동으로 활성화되었습니다. 원하지 않을 경우 \"subscription"
-"-manager config --rhsm.auto_enable_yum_plugins=0\"을 사용하여 이 동작을 차단하십시오."
+"yum 플러그인: %s이 Red Hat 서브스크립션 관리를 통해 자동으로 활성화되었습니다. 원하지 않을 경우 \"subscription-"
+"manager config --rhsm.auto_enable_yum_plugins=0\"을 사용하여 이 동작을 차단하십시오."
 
 #: src/subscription_manager/repolib.py:643
 msgid "Repo updates"
