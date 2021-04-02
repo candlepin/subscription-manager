@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-13 14:02-0500\n"
-"PO-Revision-Date: 2021-03-20 04:01+0000\n"
+"PO-Revision-Date: 2021-04-02 11:02+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/syspurpose-1-28/it/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5.1\n"
+"X-Generator: Weblate 4.5.3\n"
 
 #: src/syspurpose/cli.py:29
 #, python-brace-format
@@ -28,32 +28,32 @@ msgstr ""
 #: src/syspurpose/cli.py:31
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
-msgstr ""
+msgstr "Se desideri sovrascrivere sul server esegui: {command}"
 
 #: src/syspurpose/cli.py:47
 #, python-brace-format
 msgid "Added {value} to {prop_name}."
-msgstr ""
+msgstr "Aggunto \"{value}\" a \"{prop_name}\"."
 
 #: src/syspurpose/cli.py:50
 #, python-brace-format
 msgid "Not adding value {value} to {prop_name}; it already exists."
-msgstr ""
+msgstr "Non viene aggiunto \"{value}\" a \"{prop_name}\": esiste già."
 
 #: src/syspurpose/cli.py:56 src/syspurpose/cli.py:85
 #, python-brace-format
 msgid "{attr} updated."
-msgstr ""
+msgstr "{attr} aggiornato."
 
 #: src/syspurpose/cli.py:79
 #, python-brace-format
 msgid "Removed \"{val}\" from {name}."
-msgstr ""
+msgstr "Rimosso \"{val}\" da {name}."
 
 #: src/syspurpose/cli.py:81
 #, python-brace-format
 msgid "Not removing value \"{val}\" from {name}; it was not there."
-msgstr ""
+msgstr "Non viene rimosso \"{val}\" da {name}; non era presente."
 
 #: src/syspurpose/cli.py:108
 #, python-brace-format
@@ -71,7 +71,7 @@ msgstr "Imposta il valore per la proprietà data"
 
 #: src/syspurpose/cli.py:187 src/syspurpose/cli.py:209
 msgid "The name of the property to set/update"
-msgstr "Il nome della proprietà da impostare / aggiornare"
+msgstr "Il nome della proprietà da impostare/aggiornare"
 
 #: src/syspurpose/cli.py:193
 msgid "The value to set"
@@ -83,7 +83,7 @@ msgstr "Annulla (cancella) il valore per la proprietà data"
 
 #: src/syspurpose/cli.py:216
 msgid "Adds the value(s) to the given property"
-msgstr "Aggiunge il valore (s) alla proprietà data"
+msgstr "Aggiunge valori alla proprietà data"
 
 #: src/syspurpose/cli.py:222 src/syspurpose/cli.py:244
 msgid "The name of the property to update"
@@ -91,15 +91,15 @@ msgstr "Il nome della proprietà da aggiornare"
 
 #: src/syspurpose/cli.py:228
 msgid "The value(s) to add"
-msgstr "Il valore (s) da aggiungere"
+msgstr "Il valori da aggiungere"
 
 #: src/syspurpose/cli.py:238
 msgid "Removes the value(s) from the given property"
-msgstr "Rimuove il valore (s) dalla proprietà data"
+msgstr "Rimuove i valori dalla proprietà data"
 
 #: src/syspurpose/cli.py:250
 msgid "The value(s) to remove"
-msgstr "Il valore (s) da rimuovere"
+msgstr "I valori da rimuovere"
 
 #: src/syspurpose/cli.py:260
 msgid "Set the system role to the system syspurpose"
@@ -123,11 +123,11 @@ msgstr ""
 
 #: src/syspurpose/cli.py:299
 msgid "Set the system sla"
-msgstr "Imposta il sistema sla"
+msgstr "Imposta SLA di sistema"
 
 #: src/syspurpose/cli.py:306
 msgid "Clear set sla"
-msgstr "Cancella set sla"
+msgstr "Cancella SLA impostata"
 
 #: src/syspurpose/cli.py:314
 msgid "Set the system usage"
@@ -146,7 +146,7 @@ msgid ""
 "WARNING: Setting syspurpose in containers has no effect.Please run "
 "syspurpose on the host.\n"
 msgstr ""
-"AVVISO: l'impostazione di syspurpose nei contenitori non ha alcun effetto. "
+"AVVISO: l'impostazione di syspurpose nei container non ha alcun effetto. "
 "Eseguire syspurpose sull'host.\n"
 
 #: src/syspurpose/cli.py:360
@@ -154,10 +154,15 @@ msgid ""
 "Warning: Unable to sync system purpose with subscription management server: "
 "subscription_manager module is not available."
 msgstr ""
+"Avviso: non è possibile sincronizzare lo scopo del sistema con il server di "
+"gestione delle sottoscrizioni: il modulo subscription_manager non è "
+"disponibile."
 
 #: src/syspurpose/files.py:106
 msgid "Error: Malformed data in file {}; please review and correct."
 msgstr ""
+"Errore: dati in formato non valido nel file {}; per favore controllare e "
+"correggere."
 
 #: src/syspurpose/files.py:112
 msgid ""
