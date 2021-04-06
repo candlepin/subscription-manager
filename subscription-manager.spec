@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.45
+Version: 1.24.46
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1161,6 +1161,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Apr 06 2021 Christopher Snyder <csnyder@redhat.com> 1.24.46-1
+- 1896715: Set proper read permissions on certs (#2466) (wpoteat@redhat.com)
+- 1935592: Fix getting releases, when SCA is used (jhnidek@redhat.com)
+
 * Tue Nov 24 2020 William Poteat <wpoteat@redhat.com> 1.24.45-1
 - 1890080: Handle IOErrors and Exceptions when looking for process names
   (csnyder@redhat.com)
