@@ -130,10 +130,11 @@ class EntitlementService(object):
         self.validate_options(options)
         results = {}
         if 'installed' in pool_subsets:
-            installed = products.InstalledProducts(self.cp).list(matches)
+            installed = products.InstalledProducts(self.cp).list(matches, iso_dates=True)
             results['installed'] = [x._asdict() for x in installed]
         if 'consumed' in pool_subsets:
-            consumed = self.get_consumed_product_pools(service_level=service_level, matches=matches)
+            consumed = self.get_consumed_product_pools(service_level=service_level, matches=matches,
+                                                       iso_dates=True)
             if pool_only:
                 results['consumed'] = [x._asdict()['pool_id'] for x in consumed]
             else:
@@ -149,7 +150,8 @@ class EntitlementService(object):
                 future=future,
                 after_date=after_date,
                 page=int(page),
-                items_per_page=int(items_per_page)
+                items_per_page=int(items_per_page),
+                iso_dates=True
             )
             if pool_only:
                 results['available'] = [x['id'] for x in available]
@@ -158,7 +160,7 @@ class EntitlementService(object):
 
         return results
 
-    def get_consumed_product_pools(self, service_level=None, matches=None):
+    def get_consumed_product_pools(self, service_level=None, matches=None, iso_dates=False):
         # Use a named tuple so that the result can be unpacked into other functions
         OldConsumedStatus = collections.namedtuple('OldConsumedStatus', [
             'subscription_name',
@@ -216,6 +218,11 @@ class EntitlementService(object):
 
         if service_level is not None or matches is not None:
             certs = list(filter(cert_filter.match, certs))
+
+        if iso_dates:
+            date_formatter = managerlib.format_iso8601_date
+        else:
+            date_formatter = managerlib.format_date
 
         # Now we need to transform the EntitlementCertificate object into
         # something JSON-like for consumption
@@ -307,8 +314,8 @@ class EntitlementService(object):
                     service_level,
                     reasons,
                     pool_type,
-                    managerlib.format_date(cert.valid_range.begin()),
-                    managerlib.format_date(cert.valid_range.end()),
+                    date_formatter(cert.valid_range.begin()),
+                    date_formatter(cert.valid_range.end()),
                     system_type))
             else:
                 consumed_statuses.append(ConsumedStatus(
@@ -329,14 +336,14 @@ class EntitlementService(object):
                     addons,
                     reasons,
                     pool_type,
-                    managerlib.format_date(cert.valid_range.begin()),
-                    managerlib.format_date(cert.valid_range.end()),
+                    date_formatter(cert.valid_range.begin()),
+                    date_formatter(cert.valid_range.end()),
                     system_type))
         return consumed_statuses
 
     def get_available_pools(self, show_all=None, on_date=None, no_overlap=None,
                             match_installed=None, matches=None, service_level=None, future=None,
-                            after_date=None, page=0, items_per_page=0):
+                            after_date=None, page=0, items_per_page=0, iso_dates=False):
         """
         Get list of available pools
         :param show_all:
@@ -349,6 +356,7 @@ class EntitlementService(object):
         :param after_date:
         :param page:
         :param items_per_page:
+        :param iso_dates:
         :return:
         """
 
@@ -391,7 +399,8 @@ class EntitlementService(object):
                 future=future,
                 after_date=after_date,
                 page=_page,
-                items_per_page=_items_per_page
+                items_per_page=_items_per_page,
+                iso_dates=iso_dates
             )
 
             timeout = cache.timeout()
