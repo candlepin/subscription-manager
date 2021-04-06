@@ -840,6 +840,17 @@ def format_date(dt):
         return ""
 
 
+def format_iso8601_date(dateobj):
+    """
+    Format the specified datetime.date dateobj as ISO 8601, i.e. YYYY-MM-DD.
+
+    Return an empty string for an invalid object.
+    """
+    if dateobj:
+        return dateobj.strftime("%Y-%m-%d")
+    return ""
+
+
 # FIXME: move me to identity.py
 def check_identity_cert_perms():
     """
