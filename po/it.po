@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-04 14:55-0500\n"
-"PO-Revision-Date: 2021-03-20 04:01+0000\n"
+"PO-Revision-Date: 2021-04-02 19:01+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/it/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5.1\n"
+"X-Generator: Weblate 4.5.3\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.8/optparse.py:146
@@ -354,15 +354,15 @@ msgstr "Annullamento registrazione"
 
 #: cockpit/src/subscriptions-client.js:506
 msgid "not-found"
-msgstr ""
+msgstr "not-found"
 
 #: cockpit/src/subscriptions-client.js:538
 msgid "Corrupted JSON with status"
-msgstr ""
+msgstr "JSON non valido con lo stato"
 
 #: cockpit/src/subscriptions-register.jsx:50
 msgid "Proxy Location"
-msgstr "Posizione Proxy"
+msgstr "Posizione del proxy"
 
 #: cockpit/src/subscriptions-register.jsx:57
 msgid "Proxy Username"
@@ -515,7 +515,7 @@ msgstr "intervallo per l'esecuzione di auto-attach (in minuti)"
 
 #: src/daemons/rhsmcertd.c:105
 msgid "interval to run auto-registration (in minutes)"
-msgstr ""
+msgstr "intervallo in cui eseguire la registrazione automatica (in minuti)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/daemons/rhsmcertd.c:108
@@ -533,7 +533,7 @@ msgstr "non aggiungere un offset per i controlli iniziali."
 
 #: src/daemons/rhsmcertd.c:116
 msgid "try to perform auto-registration."
-msgstr ""
+msgstr "prova a effettuare la registrazione automatica."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/daemons/rhsmcertd.c:442
@@ -612,18 +612,21 @@ msgstr ""
 
 #: src/dnf-plugins/subscription-manager.py:86
 msgid "Not root, Subscription Management repositories not updated"
-msgstr "Repository Subscription Management non root non aggiornati"
+msgstr ""
+"Non si è root, i repository di Subscription Management non vengono aggiornati"
 
 #: src/dnf-plugins/subscription-manager.py:114
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repositories with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
 msgstr ""
+"il plugin subscription-manager ha disabilitato %d repository di sistema "
+"seguendo la configurazione in /etc/dnf/plugins/subscription-manager.conf"
 
 #: src/dnf-plugins/subscription-manager.py:127
 msgid "Updating Subscription Management repositories."
-msgstr "Aggiornamento repository Subscription Management."
+msgstr "Aggiornamento repository di Subscription Management."
 
 #: src/dnf-plugins/subscription-manager.py:132
 msgid "Unable to read consumer identity"
@@ -631,7 +634,7 @@ msgstr "Impossibile leggere l'identità dell'utente"
 
 #: src/dnf-plugins/subscription-manager.py:135
 msgid "Subscription Manager is operating in container mode."
-msgstr "Subscription Manager sta funzionando in modalità contenitore."
+msgstr "Subscription Manager sta funzionando in modalità per container."
 
 #: src/dnf-plugins/upload-profile.py:35
 msgid ""
@@ -1051,7 +1054,7 @@ msgstr "Ruoli"
 
 #: src/rct/printing.py:86
 msgid "Add-ons"
-msgstr ""
+msgstr "Add-on"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/printing.py:89 src/subscription_manager/gui/allsubs.py:231
@@ -1296,12 +1299,12 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm_icon/rhsm_icon.c:216
 msgid "Invalid or Missing Subscriptions"
-msgstr "Sottoscrizioni mancanti o non valide"
+msgstr "Sottoscrizioni non valide o mancanti"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm_icon/rhsm_icon.c:219
 msgid "This system is missing one or more subscriptions."
-msgstr "Una o più sottoscrizioni risultano mancanti su questo sistema."
+msgstr "Una o più sottoscrizioni risultano mancanti in questo sistema."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/rhsm_icon/rhsm_icon.c:222
@@ -1313,18 +1316,18 @@ msgstr "Sottoscrizioni con entitlement parziali"
 msgid ""
 "This system is missing one or more subscriptions to fully cover its products."
 msgstr ""
-"Uno o più sottoscrizioni risultano mancanti per questo sistema per poter "
+"Uno o più sottoscrizioni risultano mancanti in questo sistema per poter "
 "includere tutti i suoi prodotti."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm_icon/rhsm_icon.c:229
 msgid "This System's Subscriptions Are About to Expire"
-msgstr "Le sottoscrizioni di questo sistema sono quasi scadute"
+msgstr "Le sottoscrizioni di questo sistema stanno per scadere"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm_icon/rhsm_icon.c:232
 msgid "One or more of this system's subscriptions are about to expire."
-msgstr "Alcune delle sottoscrizioni del sistema stanno quasi per scadere."
+msgstr "Alcune delle sottoscrizioni di questo sistema stanno per scadere."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm_icon/rhsm_icon.c:251
@@ -2054,7 +2057,7 @@ msgstr "Associazione"
 
 #: src/subscription_manager/gui/allsubs.py:406
 msgid "Attaching subscription. Please wait."
-msgstr "Associazione sottoscrizione. Attendere prego."
+msgstr "Associazione sottoscrizione, attendere prego."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/allsubs.py:424
@@ -2535,7 +2538,7 @@ msgstr "Corrispondi a quello installato"
 msgid ""
 "Only show subscriptions that: provide products that are not already covered"
 msgstr ""
-"Mostra solo le sottoscrizioni che: forniscono i prodotti non ancora inclusi"
+"Mostra solo le sottoscrizioni che: forniscono prodotti non ancora inclusi"
 
 #: src/subscription_manager/gui/data/glade/filters.glade:77
 #: src/subscription_manager/gui/data/ui/filters.ui:76
@@ -3773,7 +3776,7 @@ msgstr "Prodotti installati"
 #, python-format
 msgid "There was an error removing %s with serial number %s"
 msgstr ""
-"Si è verificato un errore durante la rimozione di %s con un numero seriale %s"
+"Si è verificato un errore durante la rimozione di %s con il numero seriale %s"
 
 #: src/subscription_manager/gui/mysubstab.py:147
 msgid "Removing"
@@ -3781,7 +3784,7 @@ msgstr "Rimozione"
 
 #: src/subscription_manager/gui/mysubstab.py:148
 msgid "Removing subscription. Please wait."
-msgstr "Rimozione sottoscrizione. Attendere prego."
+msgstr "Rimozione sottoscrizione, attendere prego."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/mysubstab.py:168
@@ -3799,7 +3802,7 @@ msgstr "Stack di %s e altri %s"
 #: src/subscription_manager/gui/mysubstab.py:202
 #, python-format
 msgid "Stack of %s and 1 other"
-msgstr "Stack di %s e 1 altro"
+msgstr "Stack di %s e un altro"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/mysubstab.py:204
@@ -3900,7 +3903,7 @@ msgstr "Allegato sottoscrizione"
 #: src/subscription_manager/gui/registergui.py:1039
 #, python-format
 msgid "Registering to owner: %s environment: %s"
-msgstr "Registrazione al proprietario: ambiente %s: %s"
+msgstr "Registrazione al proprietario: %s, ambiente: %s"
 
 #: src/subscription_manager/gui/registergui.py:1063
 msgid "Unable to unregister"
@@ -3929,8 +3932,9 @@ msgid "_Attach"
 msgstr "_Associa"
 
 #: src/subscription_manager/gui/registergui.py:1239
+#, fuzzy
 msgid "Finding suitable subscriptions"
-msgstr ""
+msgstr "Ricerca di sottoscrizioni adatte"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/registergui.py:1248
@@ -4343,7 +4347,7 @@ msgstr "Utilizzo:"
 #: src/subscription_manager/managercli.py:120
 #: src/subscription_manager/managercli.py:192
 msgid "Add-ons:"
-msgstr ""
+msgstr "Add-on:"
 
 #: src/subscription_manager/managercli.py:121
 #: src/subscription_manager/managercli.py:171
@@ -4432,8 +4436,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:202
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
-msgstr ""
-"Se desideri sovrascrivere la modifica del lato server, esegui: {command}"
+msgstr "Se desideri sovrascrivere sul server esegui: {command}"
 
 # translation auto-copied from project subscription-manager, version 1.13.X, document keys
 #: src/subscription_manager/managercli.py:247
@@ -4497,7 +4500,7 @@ msgid ""
 "refer to your host system for subscription management.\n"
 msgstr ""
 "Se eseguito all'interno di un container subscription-manager risulterà "
-"disabilitato . Per la gestione delle sottoscrizioni usare il sistema host.\n"
+"disabilitato. Per la gestione delle sottoscrizioni usare il sistema host.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:423
@@ -4538,32 +4541,32 @@ msgstr ""
 #: src/subscription_manager/managercli.py:586
 #, python-brace-format
 msgid "set {attr} of system purpose"
-msgstr ""
+msgstr "impostato \"{attr}\" dello scopo di sistema"
 
 #: src/subscription_manager/managercli.py:593
 #, python-brace-format
 msgid "unset {attr} of system purpose"
-msgstr ""
+msgstr "rimosso \"{attr}\" dallo scopo di sistema"
 
 #: src/subscription_manager/managercli.py:601
 #, python-brace-format
 msgid "add an item to the list ({attr})."
-msgstr ""
+msgstr "aggiungi un elemento alla lista ({attr})."
 
 #: src/subscription_manager/managercli.py:609
 #, python-brace-format
 msgid "remove an item from the list ({attr})."
-msgstr ""
+msgstr "rimuovi un elemento dalla lista ({attr})."
 
 #: src/subscription_manager/managercli.py:616
 #, python-brace-format
 msgid "show this system's current {attr}"
-msgstr ""
+msgstr "mostra il valore corrente di \"{attr}\" di questo sistema"
 
 #: src/subscription_manager/managercli.py:623
 #, python-brace-format
 msgid "list all {attr} available"
-msgstr ""
+msgstr "elenca tutti i valori di \"{attr}\" disponibili"
 
 #: src/subscription_manager/managercli.py:647
 msgid "--unset cannot be used with --set, --add, or --remove"
@@ -5177,8 +5180,7 @@ msgid ""
 "is complete (Examples: en-us, de-de)"
 msgstr ""
 "lingua facoltativa da usare per la notifica via posta elettronica quando "
-"l'acquisizione della sottoscrizione è stata completata. (Esempi: en-us, de-"
-"de)"
+"l'acquisizione della sottoscrizione è stata completata (esempi: en-us, de-de)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:1853
@@ -5261,7 +5263,7 @@ msgstr "Rilasci disponibili"
 
 #: src/subscription_manager/managercli.py:1994
 msgid "The ID of the pool to attach (can be specified more than once)"
-msgstr "L' ID del pool a collegare (può essere specificato più di una volta)"
+msgstr "L'ID del pool a collegare (può essere specificato più di una volta)"
 
 #: src/subscription_manager/managercli.py:1996
 msgid "Number of subscriptions to attach. May not be used with an auto-attach."
@@ -5372,7 +5374,7 @@ msgid ""
 "All installed products are covered by valid entitlements. No need to update "
 "subscriptions at this time."
 msgstr ""
-"Tutti i prodotti installati presentano entitlement validi. Nessun bisogno di "
+"Tutti i prodotti installati presentano entitlement validi. Non è necessario "
 "aggiornare le sottoscrizioni."
 
 #: src/subscription_manager/managercli.py:2164
@@ -5904,7 +5906,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:3014
 msgid "No available subscription pools to list"
-msgstr "Nessun gruppo di sottoscrizione disponibile da elencare"
+msgstr "Nessun pool di sottoscrizione disponibile da elencare"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:3034
@@ -5937,7 +5939,7 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:3064
 msgid "No consumed subscription pools were found."
-msgstr "Nessun pool di abbonamento consumato è stato trovato."
+msgstr "Nessun pool di sottoscrizione consumato è stato trovato."
 
 #: src/subscription_manager/managercli.py:3069
 msgid "Manage custom content repository settings"
@@ -6451,7 +6453,7 @@ msgstr "specificare la password sul server preesistente"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/migrate/migrate.py:937
 msgid "specify the subscription management server to migrate to"
-msgstr "specificare il Subscription Management Server sul quale migrare"
+msgstr "specificare il server di gestione delle sottoscrizioni a cui migrare"
 
 #: src/subscription_manager/migrate/migrate.py:939
 msgid "specify the user name on the destination server"
