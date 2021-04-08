@@ -129,6 +129,7 @@ class SubscriptionsCase(MachineCase):
             self.candlepin.download("/home/admin/candlepin/generated_certs/%s.pem" % prod_id, filename)
             m.upload([filename], "/etc/pki/product")
 
+        m.execute("mkdir -p /etc/pki/product")
         download_product(PRODUCT_SNOWY)
         download_product(PRODUCT_SHARED)
 
