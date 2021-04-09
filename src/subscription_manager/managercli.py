@@ -1091,6 +1091,11 @@ class RefreshCommand(CliCommand):
             if content_access.exists():
                 content_access.remove()
 
+            # Also remove the content access mode cache to be sure we display
+            # SCA or regular mode correctly
+            content_access_mode = inj.require(inj.CONTENT_ACCESS_MODE_CACHE)
+            if content_access_mode.exists():
+                content_access_mode.delete_cache()
             if self.options.force is True:
                 # get current consumer identity
                 consumer_identity = inj.require(inj.IDENTITY)

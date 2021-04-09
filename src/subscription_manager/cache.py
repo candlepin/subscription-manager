@@ -97,6 +97,9 @@ class CacheManager(object):
     def _cache_exists(self):
         return os.path.exists(self.CACHE_FILE)
 
+    def exists(self):
+        return self._cache_exists()
+
     def write_cache(self, debug=True):
         """
         Write the current cache to disk. Should only be done after
