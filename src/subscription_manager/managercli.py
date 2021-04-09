@@ -19,9 +19,18 @@ from __future__ import print_function, division, absolute_import
 #
 import logging
 import sys
+import os
+import rhsm.config
+from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, \
+        SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
+import rhsm.connection as connection
+from subscription_manager.utils import is_simple_content_access
+from subscription_manager.exceptions import ExceptionMapper
+from subscription_manager.printing_utils import columnize, echo_columnize_callback
+from rhsmlib.services import config, products
 
 from subscription_manager import managerlib
-from subscription_manager.cli import CLI
+from subscription_manager.cli import CLI, system_exit
 from subscription_manager.cli_command.addons import AddonsCommand
 from subscription_manager.cli_command.attach import AttachCommand
 from subscription_manager.cli_command.autoheal import AutohealCommand
@@ -34,6 +43,7 @@ from subscription_manager.cli_command.import_cert import ImportCertCommand
 from subscription_manager.cli_command.list import ListCommand
 from subscription_manager.cli_command.override import OverrideCommand
 from subscription_manager.cli_command.owners import OwnersCommand
+from subscription_manager.cli_command.org import OrgCommand
 from subscription_manager.cli_command.plugins import PluginsCommand
 from subscription_manager.cli_command.redeem import RedeemCommand
 from subscription_manager.cli_command.refresh import RefreshCommand
@@ -47,11 +57,44 @@ from subscription_manager.cli_command.status import StatusCommand
 from subscription_manager.cli_command.syspurpose import SyspurposeCommand
 from subscription_manager.cli_command.unregister import UnRegisterCommand
 from subscription_manager.cli_command.usage import UsageCommand
+from subscription_manager.cli_command.user_pass import UserPassCommand
 from subscription_manager.cli_command.version import VersionCommand
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.repolib import YumPluginManager
 
 log = logging.getLogger(__name__)
+
+conf = config.Config(rhsm.config.initConfig())
+
+SM = "subscription-manager"
+
+
+class SubscribeCommand(AttachCommand):
+    def __init__(self):
+        super(SubscribeCommand, self).__init__()
+
+    def _short_description(self):
+        return _("Deprecated, see attach")
+
+    def _command_name(self):
+        return "subscribe"
+
+    def _primary(self):
+        return False
+
+
+class UnSubscribeCommand(RemoveCommand):
+    def __init__(self):
+        super(UnSubscribeCommand, self).__init__()
+
+    def _short_description(self):
+        return _("Deprecated, see remove")
+
+    def _command_name(self):
+        return "unsubscribe"
+
+    def _primary(self):
+        return False
 
 
 class ManagerCLI(CLI):
@@ -63,7 +106,7 @@ class ManagerCLI(CLI):
                     EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand,
                     VersionCommand, RemoveCommand, AttachCommand, PluginsCommand,
                     AutohealCommand, OverrideCommand, RoleCommand, UsageCommand,
-                    FactsCommand, SyspurposeCommand]
+                    FactsCommand, SyspurposeCommand, OrgCommand, UserPassCommand]
         CLI.__init__(self, command_classes=commands)
 
     def main(self):

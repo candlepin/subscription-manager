@@ -15,8 +15,7 @@ import six
 
 from subscription_manager import syspurposelib
 from subscription_manager import managercli, managerlib
-from subscription_manager.injection import provide, \
-        CERT_SORTER, PROD_DIR
+from subscription_manager.injection import provide, CERT_SORTER, PROD_DIR
 from rhsmlib.services.products import InstalledProducts
 from subscription_manager.cli_command.cli import handle_exception, system_exit
 from subscription_manager.cli_command import cli
