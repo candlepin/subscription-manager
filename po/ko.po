@@ -9,13 +9,14 @@
 # Pino Toscano <ptoscano@redhat.com>, 2021.
 # Kim InSoo <simmon@nplob.com>, 2022.
 # 김인수 <simmon@nplob.com>, 2022, 2023.
+# Transtats <suanand@redhat.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
 "PO-Revision-Date: 2023-05-10 05:37+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Transtats <suanand@redhat.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ko/>\n"
 "Language: ko\n"
@@ -1229,9 +1230,8 @@ msgstr "서브스크립션 관리 서비스가 상태 정보를 지원하지 않
 msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
-msgstr ""
-"오류: 잘못된 목록 유형이 제공되었습니다. \"설치됨\", \"소비됨\", \"사용 가능"
-"\"만 허용됩니다"
+msgstr "오류: 잘못된 목록 유형이 제공되었습니다. \"설치됨\", \"소비됨\", \"사용 "
+"가능\"만 허용됩니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:497
@@ -1404,8 +1404,7 @@ msgstr "이 시스템을 고객 포털이나 다른 서브스크립션 관리 �
 msgid ""
 "Unregister this system from the Customer Portal or another subscription "
 "management service"
-msgstr ""
-"이 시스템을 고객 포털이나 다른 서브스크립션 관리 서비스에서 등록 해제합니다"
+msgstr "이 시스템을 고객 포털이나 다른 서브스크립션 관리 서비스에서 등록 해제합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:12
@@ -1423,8 +1422,8 @@ msgid ""
 "Your system is being registered again using Red Hat Subscription Management. "
 "Red Hat recommends that customers only register once."
 msgstr ""
-"시스템이 Red Hat 서브스크립션 관리를 사용하여 다시 등록하려고 합니다. Red Hat"
-"은 고객이 한 번만 등록할 것을 권장합니다."
+"시스템이 Red Hat 서브스크립션 관리를 사용하여 다시 등록하려고 합니다. Red "
+"Hat은 고객이 한 번만 등록할 것을 권장합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:24
@@ -1450,8 +1449,7 @@ msgstr "Red Hat 계정 정보를 입력하십시오:"
 msgid ""
 "This system is registered using both RHN Classic and Red Hat Subscription "
 "Management."
-msgstr ""
-"이 시스템은 RHN Classic과 Red Hat 서브스크립션 관리를 모두 사용하여 등록되어 "
+msgstr "이 시스템은 RHN Classic과 Red Hat 서브스크립션 관리를 모두 사용하여 등록되어 "
 "있습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -1594,8 +1592,7 @@ msgstr "오류: --username 또는 --token을 둘 다 지정할 수 없습니다"
 #, python-brace-format
 msgid ""
 "Error: you must register or specify --username and --password to list {attr}"
-msgstr ""
-"오류: {attr}을(를) 나열하려면 --username 및 --password를 등록하거나 지정해야 "
+msgstr "오류: {attr}을(를) 나열하려면 --username 및 --password를 등록하거나 지정해야 "
 "합니다"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:173
@@ -1618,8 +1615,7 @@ msgid ""
 "Warning: Provided value {vals} is not included in the list of valid values"
 msgid_plural ""
 "Warning: Provided values {vals} are not included in the list of valid values"
-msgstr[0] ""
-"경고: 제공된 값 {vals}은(는) 유효한 값 목록에 포함되어 있지 않습니다"
+msgstr[0] "경고: 제공된 값 {vals}은(는) 유효한 값 목록에 포함되어 있지 않습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:264
@@ -1716,16 +1712,14 @@ msgstr "할당 할 서브스크립션 수입니다. auto-attach와 함께 사용
 msgid ""
 "Automatically attach the best-matched compatible subscriptions to this "
 "system. This is the default action."
-msgstr ""
-"이 시스템에 가장 적합한 호환 가능 서브스크립션을 자동 첨부합니다. 이는 기본 "
+msgstr "이 시스템에 가장 적합한 호환 가능 서브스크립션을 자동 첨부합니다. 이는 기본 "
 "동작입니다."
 
 #: src/subscription_manager/cli_command/attach.py:71
 msgid ""
 "Automatically attach only subscriptions matching the specified service "
 "level; only used with --auto"
-msgstr ""
-"지정된 서비스 수준에 일치하는 서브스크립션만 자동으로 할당합니다; --auto와만 "
+msgstr "지정된 서비스 수준에 일치하는 서브스크립션만 자동으로 할당합니다; --auto와만 "
 "함께 사용됨"
 
 #: src/subscription_manager/cli_command/attach.py:79
@@ -1846,14 +1840,12 @@ msgstr "일정에 따라 (기본적으로 매일) 서브스크립션을 첨부 �
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/autoheal.py:28
 msgid "specify whether to enable or disable auto-attaching of subscriptions"
-msgstr ""
-"서브스크립션의 자동 첨부를 활성화 또는 비활성화할 지에 대한 여부를 지정합니다"
+msgstr "서브스크립션의 자동 첨부를 활성화 또는 비활성화할 지에 대한 여부를 지정합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/autoheal.py:35
 msgid "try to attach subscriptions for uncovered products each check-in"
-msgstr ""
-"각 체크인 마다 적용되지 않은 제품에 대해 서브스크립션을 첨부 시도합니다"
+msgstr "각 체크인 마다 적용되지 않은 제품에 대해 서브스크립션을 첨부 시도합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/autoheal.py:41
@@ -1879,8 +1871,7 @@ msgstr "자동 첨부 설정: 비활성화됨"
 #: src/subscription_manager/cli_command/clean.py:25
 msgid ""
 "Remove all local system and subscription data without affecting the server"
-msgstr ""
-"서버에 영향을 주지 않고 모든 로컬 시스템과 서브스크립션 데이터를 제거합니다"
+msgstr "서버에 영향을 주지 않고 모든 로컬 시스템과 서브스크립션 데이터를 제거합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/clean.py:31
@@ -1982,8 +1973,8 @@ msgid ""
 "Consumer profile \"{uuid}\" has been deleted from the server. You can use "
 "command clean or unregister to remove local profile."
 msgstr ""
-"소비자 프로파일 \"{uuid}\"이/가 서버에서 삭제되었습니다. 로컬 프로파일을 삭제"
-"하려면 clean 또는 unregister 명령을 사용합니다."
+"소비자 프로파일 \"{uuid}\"이/가 서버에서 삭제되었습니다. 로컬 프로파일을 "
+"삭제하려면 clean 또는 unregister 명령을 사용합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:28
@@ -2252,9 +2243,8 @@ msgstr "불러올 인증서 파일 (하나 이상을 지정할 수 있음)"
 msgid ""
 "Error: You may not import certificates into a system that is registered to a "
 "subscription management service."
-msgstr ""
-"오류: 서브스크립션 관리 서비스에 등록된 시스템으로 인증서를 불러올 수 없습니"
-"다."
+msgstr "오류: 서브스크립션 관리 서비스에 등록된 시스템으로 인증서를 불러올 수 "
+"없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/import_cert.py:52
@@ -2273,8 +2263,7 @@ msgstr "인증서 {file}을(를) 성공적으로 가져왔습니다"
 #: src/subscription_manager/cli_command/import_cert.py:81
 #, python-brace-format
 msgid "{file} is not a valid certificate file. Please use a valid certificate."
-msgstr ""
-"{file}은(는) 유효한 인증서 파일이 아닙니다. 유효한 인증서를 사용하십시오."
+msgstr "{file}은(는) 유효한 인증서 파일이 아닙니다. 유효한 인증서를 사용하십시오."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/import_cert.py:90
@@ -2571,8 +2560,7 @@ msgstr "모든 서브스크립션이 반환되었는지 확인하려면 --availa
 msgid ""
 "date to search on, defaults to today's date, only used with --available "
 "(example: {example})"
-msgstr ""
-"검색일, 기본값은 오늘로 되어 있으며, --available과 함께 사용해야 합니다 (예: "
+msgstr "검색일, 기본값은 오늘로 되어 있으며, --available과 함께 사용해야 합니다 (예: "
 "{example})"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -2585,26 +2573,23 @@ msgstr "이 시스템에서 사용되고 있는 서브스크립션을 보여줍�
 msgid ""
 "shows only subscriptions matching the specified service level; only used "
 "with --available and --consumed"
-msgstr ""
-"--available과 --consumed만을 사용하여 지정된 서비스 레벨에 일치하는 서브스크"
-"립션만을 보여줍니다"
+msgstr "--available과 --consumed만을 사용하여 지정된 서비스 레벨에 일치하는 "
+"서브스크립션만을 보여줍니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:251
 msgid ""
 "shows pools which provide products that are not already covered; only used "
 "with --available"
-msgstr ""
-"아직 서브스크립션이 적용되지 않은 제품이 포함된 풀을 표시합니다; --available"
-"과만 함께 사용 가능합니다"
+msgstr "아직 서브스크립션이 적용되지 않은 제품이 포함된 풀을 표시합니다; --"
+"available과만 함께 사용 가능합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:259
 msgid ""
 "shows only subscriptions matching products that are currently installed; "
 "only used with --available"
-msgstr ""
-"현재 설치된 제품과 일치하는 서브스크립션만 표시합니다; --available과만 함께 "
+msgstr "현재 설치된 제품과 일치하는 서브스크립션만 표시합니다; --available과만 함께 "
 "사용합니다"
 
 #: src/subscription_manager/cli_command/list.py:267
@@ -2613,15 +2598,14 @@ msgid ""
 "the subscription or product information, varying with the list requested and "
 "the server version (case-insensitive)."
 msgstr ""
-"서브스크립션 또는 제품 정보에 지정된 표현식을 포함하는 서브스크립션 또는 제품"
-"만 나열합니다. 요청 목록 및 서버 버전에 따라 달라집니다. (대소문자 구분)."
+"서브스크립션 또는 제품 정보에 지정된 표현식을 포함하는 서브스크립션 또는 "
+"제품만 나열합니다. 요청 목록 및 서버 버전에 따라 달라집니다. (대소문자 구분)."
 
 #: src/subscription_manager/cli_command/list.py:277
 msgid ""
 "lists only the pool IDs for applicable available or consumed subscriptions; "
 "only used with --available and --consumed"
-msgstr ""
-"적용 가능한 또는 사용된 서브스크립션의 풀 ID만 나열합니다; --available 및 --"
+msgstr "적용 가능한 또는 사용된 서브스크립션의 풀 ID만 나열합니다; --available 및 --"
 "consumed와만 사용"
 
 #: src/subscription_manager/cli_command/list.py:285
@@ -2629,9 +2613,8 @@ msgstr ""
 msgid ""
 "show pools that are active on or after the given date; only used with --"
 "available (example: {example})"
-msgstr ""
-"지정된 날짜 이후에 활성화된 풀을 표시합니다. --available과 함께 만 사용 "
-"(예 : {example})"
+msgstr "지정된 날짜 이후에 활성화된 풀을 표시합니다. --available과 함께 만 사용 (예 :"
+" {example})"
 
 #: src/subscription_manager/cli_command/list.py:310
 msgid "Error: --afterdate is only applicable with --available"
@@ -2674,27 +2657,24 @@ msgstr "사용 가능한 서브스크립션"
 msgid ""
 "No available subscription pools were found matching the expression "
 "\"{filter}\" and the service level \"{level}\"."
-msgstr ""
-"\"{filter}\" 표현식 및 \"{level}\" 서비스 레벨에 일치하는 사용 가능한 서브스"
-"크립션 풀을 찾을 수 없습니다."
+msgstr "\"{filter}\" 표현식 및 \"{level}\" 서비스 레벨에 일치하는 사용 가능한 "
+"서브스크립션 풀을 찾을 수 없습니다."
 
 #: src/subscription_manager/cli_command/list.py:478
 #, python-brace-format
 msgid ""
 "No available subscription pools were found matching the expression "
 "\"{filter}\"."
-msgstr ""
-"\"{filter}\" 표현식에 일치하는 사용 가능한 서브스크립션 풀을 찾을 수 없습니"
-"다."
+msgstr "\"{filter}\" 표현식에 일치하는 사용 가능한 서브스크립션 풀을 찾을 수 "
+"없습니다."
 
 #: src/subscription_manager/cli_command/list.py:484
 #, python-brace-format
 msgid ""
 "No available subscription pools were found matching the service level "
 "\"{level}\"."
-msgstr ""
-"\"{level}\" 서비스 레벨에 일치하는 사용 가능한 서브스크립션 풀을 찾을 수 없습"
-"니다."
+msgstr "\"{level}\" 서비스 레벨에 일치하는 사용 가능한 서브스크립션 풀을 찾을 수 "
+"없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:488
@@ -2711,25 +2691,22 @@ msgstr "소비된 서브스크립션"
 msgid ""
 "No consumed subscription pools were found matching the expression "
 "\"{filter}\" and the service level \"{level}\"."
-msgstr ""
-"\"{filter}\" 표현식 및 \"{level}\" 서비스 레벨에 일치하는 사용된 서브스크립"
-"션 풀을 찾을 수 없습니다."
+msgstr "\"{filter}\" 표현식 및 \"{level}\" 서비스 레벨에 일치하는 사용된 "
+"서브스크립션 풀을 찾을 수 없습니다."
 
 #: src/subscription_manager/cli_command/list.py:541
 #, python-brace-format
 msgid ""
 "No consumed subscription pools were found matching the expression "
 "\"{filter}\"."
-msgstr ""
-"\"{filter}\" 표현식에 일치하는 사용된 서브스크립션 풀을 찾을 수 없습니다."
+msgstr "\"{filter}\" 표현식에 일치하는 사용된 서브스크립션 풀을 찾을 수 없습니다."
 
 #: src/subscription_manager/cli_command/list.py:548
 #, python-brace-format
 msgid ""
 "No consumed subscription pools were found matching the service level "
 "\"{level}\"."
-msgstr ""
-"\"{level}\" 서비스 레벨에 일치하는 사용된 서브스크립션 풀을 찾을 수 없습니다."
+msgstr "\"{level}\" 서비스 레벨에 일치하는 사용된 서브스크립션 풀을 찾을 수 없습니다."
 
 #: src/subscription_manager/cli_command/list.py:552
 msgid "No consumed subscription pools were found."
@@ -3188,9 +3165,8 @@ msgstr "릴리즈 환경 설정이 해제되었습니다"
 #, python-brace-format
 msgid ""
 "No releases match '{release}'.  Consult 'release --list' for a full listing."
-msgstr ""
-"'{release}'와 일치하는 릴리즈가 없습니다. 전체 목록은 'release --list'로 확인"
-"합니다."
+msgstr "'{release}'와 일치하는 릴리즈가 없습니다. 전체 목록은 'release --list'로 "
+"확인합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/release.py:113
