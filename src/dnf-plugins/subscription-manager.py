@@ -26,10 +26,11 @@ from subscription_manager.entcertlib import EntCertActionInvoker
 from rhsmlib.facts.hwprobe import ClassicCheck
 from subscription_manager.utils import chroot, is_simple_content_access
 from subscription_manager.injectioninit import init_dep_injection
+from subscription_manager.i18n import ugettext as _
 from rhsm import logutil
 from rhsm import config
 
-from dnfpluginscore import _, logger
+from dnfpluginscore import logger
 import dnf
 
 if six.PY3:
