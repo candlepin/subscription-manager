@@ -313,8 +313,8 @@ class AbstractSyspurposeCommand(CliCommand):
         if syspurpose is not None and self.attr in syspurpose and syspurpose[self.attr]:
             val = syspurpose[self.attr]
             values = val if not isinstance(val, list) else ", ".join(val)
-            print(_("Current {name}: {val}".format(name=self.name.capitalize(),
-                                                   val=values)))
+            print(_("Current {name}: {val}").format(name=self.name.capitalize(),
+                                                    val=values))
         else:
             print(_("{name} not set.").format(name=self.name.capitalize()))
 
