@@ -240,7 +240,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.29.9
+Version: 1.29.10
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1523,6 +1523,68 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Apr 13 2021 William Poteat <wpoteat@redhat.com> 1.29.10-1
+- Switch dates returned by D-Bus ListInstalledProducts to ISO 8601
+  (ptoscano@redhat.com)
+- 1793501: switch dates returned by D-Bus GetPool to ISO 8601
+  (ptoscano@redhat.com)
+- Add format_iso8601_date.format_iso8601_date() (ptoscano@redhat.com)
+- Make sure, re-register works for deb repos (suttner@atix.de)
+- 1863039: Fix issue with dnf/yum variables (jhnidek@redhat.com)
+- 1879856: suppress the warning message when setting syspurpose values
+  (tmerry@redhat.com)
+- ENT-2779: call format() on translated string (ptoscano@redhat.com)
+- 1930037: cockpit: ensure /etc/pki/product exist (ptoscano@redhat.com)
+- 1886772: Clear content access mode cache on refresh (csnyder@redhat.com)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- Reword ambiguous message (ptoscano@redhat.com)
+- Properly use ungettext for plural forms (ptoscano@redhat.com)
+- cockpit: fix extraction of plural messages (ptoscano@redhat.com)
+- 1672805: 'Addons' is failing spell check and should be changed to 'Add-ons'
+  to match documentation (tmerry@redhat.com)
+- 1731109: improve man page & help for registering with --force option
+  (tmerry@redhat.com)
+- 1749395: Proper handling when a user does not have an org
+  (wpoteat@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- 1916540: Negative proxy tests occasionally encounter the wrong exception
+  handling (tmerry@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Korean) (suanand@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- ENT-3711: Fix a couple of typos (tmerry@redhat.com)
+- ENT-2468: Use format strings with named arguments for translator context
+  (tmerry@redhat.com)
+- ENT-3276: refactor test_managercli.py by modules (ptoscano@redhat.com)
+- 1897767: what does 'No Valid values provided for usage' mean to the user
+  (tmerry@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Replace optparse with argparse (wpoteat@redhat.com)
+- Fix variable for RestlibException exception (ptoscano@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Italian) (toscano.pino@tiscali.it)
+- Correction for condition that was breaking 3 nosetests (wpoteat@redhat.com)
+- maybe this time? (tmerry@localhost.localdomain)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Remove extra '%%' in string (ptoscano@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- cockpit: Adjust for changed services image (martin@piware.de)
+- Update translation files (noreply@weblate.org)
+- New extraction for translatable strings (wpoteat@redhat.com)
+- Update translation files (noreply@weblate.org)
+- 1897767: what does 'No valid values provided for usage' mean to the user
+  (tmerry@localhost.localdomain)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- 1856832: add --org=ORG to the ROLE OPTIONS, USAGE OPTIONS and ADDONS OPTIONS
+  (tmerry@localhost.localdomain)
+- 1880920: check for invalid addons (ptoscano@redhat.com)
+- Add AbstractSyspurposeCommand._are_provided_values_valid helper
+  (ptoscano@redhat.com)
+- 1924166: improve man text of syspurpose --show (ptoscano@redhat.com)
+- 1646718 debrand a message so that it doesn't say Red Hat Subscription Manager
+  but instead an entitlement server (tmerry@localhost.localdomain)
+
 * Thu Mar 11 2021 Christopher Snyder <csnyder@redhat.com> 1.29.9-1
 - 1682943: add space to message to separate 2 sentences
   (tmerry@localhost.localdomain)
