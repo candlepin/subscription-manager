@@ -349,8 +349,8 @@ class TestProductsDBusObject(DBusObjectTest, InjectionMockingTest):
                 u'x86_64',
                 'subscribed',
                 [],
-                '{d.day}.{d.month}.{d.year}'.format(d=START_DATE),
-                '{d.day}.{d.month}.{d.year}'.format(d=END_DATE)
+                START_DATE.strftime("%Y-%m-%d"),
+                END_DATE.strftime("%Y-%m-%d")
             ),
             (
                 u'Red Hat Enterprise Linux Server - Extended Update Support',
@@ -359,8 +359,8 @@ class TestProductsDBusObject(DBusObjectTest, InjectionMockingTest):
                 u'x86_64',
                 'subscribed',
                 [],
-                '{d.day}.{d.month}.{d.year}'.format(d=START_DATE),
-                '{d.day}.{d.month}.{d.year}'.format(d=END_DATE)
+                START_DATE.strftime("%Y-%m-%d"),
+                END_DATE.strftime("%Y-%m-%d")
             ),
         ]
 
