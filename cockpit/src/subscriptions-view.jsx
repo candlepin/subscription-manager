@@ -378,6 +378,8 @@ class SubscriptionsPage extends React.Component {
         let entries = this.props.products.map(function (itm) {
             let icon_name;
             let status_text;
+            let start_date_text;
+            let end_date_text;
 
             if (itm.status === 'subscribed') {
                 icon_name = "fa pficon-ok";
@@ -385,6 +387,18 @@ class SubscriptionsPage extends React.Component {
             } else {
                 icon_name = "fa pficon-error-circle-o";
                 status_text = _("Not Subscribed (Not supported by a valid subscription.)");
+            }
+
+            if (itm.starts.length === 0) {
+                start_date_text = _("Unknown");
+            } else {
+                start_date_text = new Date(Date.parse(itm.starts)).toLocaleDateString();
+            }
+
+            if (itm.ends.length === 0) {
+                end_date_text = _("Unknown");
+            } else {
+                end_date_text = new Date(Date.parse(itm.ends)).toLocaleDateString();
             }
 
             return (
@@ -408,9 +422,9 @@ class SubscriptionsPage extends React.Component {
                                     <dt>{ _("Status") }</dt>
                                     <dd>{ status_text }</dd>
                                     <dt>{ _("Starts") }</dt>
-                                    <dd>{ itm.starts }</dd>
+                                    <dd>{ start_date_text }</dd>
                                     <dt>{ _("Ends") }</dt>
-                                    <dd>{ itm.ends }</dd>
+                                    <dd>{ end_date_text }</dd>
                                 </dl>
                             </div>
                         </Col>

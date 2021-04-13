@@ -76,7 +76,7 @@ class ProductsDBusObject(base_object.BaseObject):
         installed_products = InstalledProducts(cp)
 
         try:
-            response = installed_products.list(filter_string)
+            response = installed_products.list(filter_string, iso_dates=True)
         except Exception as err:
             raise dbus.DBusException(str(err))
 
