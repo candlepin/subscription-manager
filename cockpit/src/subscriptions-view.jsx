@@ -222,6 +222,7 @@ class SubscriptionStatus extends React.Component {
             );
         }
 
+        let text;
         let label;
         let action;
         let insights;
@@ -298,12 +299,14 @@ class SubscriptionStatus extends React.Component {
             </div>
         );
         if (this.props.status === 'unknown') {
-            label = <label>{ `${_("Status")}: ${_("This system is currently not registered.")}` }</label>;
+            text = _("Status: This system is currently not registered.");
+            label = <label>{text}</label>;
             action = (<button className="btn btn-primary"
                               onClick={this.handleRegisterSystem}>{_("Register")}</button>
             );
         } else {
-            label = <label>{ `${_("Status")}: ${this.props.status_msg}` }</label>;
+            text = cockpit.format(_("Status: $0"), this.props.status_msg);
+            label = <label>{text}</label>;
             action = (<button className="btn btn-primary" disabled={isUnregistering}
                               onClick={this.handleUnregisterSystem}>{_("Unregister")}</button>
             );
