@@ -83,6 +83,9 @@ class ModulesProfile(object):
         module_list = []
         if dnf is not None and libdnf is not None:
             base = dnf.Base()
+            # Read yum/dnf variables from <install_root>/etc/yum/vars and <install_root>/etc/dnf/vars
+            # See: https://bugzilla.redhat.com/show_bug.cgi?id=1863039
+            base.conf.substitutions.update_from_etc(base.conf.installroot)
             base.read_all_repos()
             try:
                 base.fill_sack()
