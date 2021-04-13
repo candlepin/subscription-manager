@@ -181,12 +181,12 @@ class AbstractSyspurposeCommand(CliCommand):
         :return: list of invalid values
         """
 
-        # First check if the the value is in the valid_fields
+        # First check if the the value is in the valid_fields.  Comparison is case insensitive.
         invalid_values = []
         valid_fields = self._get_valid_fields()
         if self.attr in valid_fields:
             for value in values:
-                if not any([x.casefold() == value.casefold() for x in valid_fields[self.attr]]):
+                if all([x.casefold() != value.casefold() for x in valid_fields[self.attr]]):
                     invalid_values.append(value)
         invalid_values_len = len(invalid_values)
 
