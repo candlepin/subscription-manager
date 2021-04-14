@@ -645,7 +645,7 @@ class SyncedStore(object):
         try:
             f = io.open(path, 'w+', encoding='utf-8')
         except OSError as e:
-            if e.errno != 17:
+            if e.errno != errno.EEXIST:
                 raise
         else:
             write_to_file_utf8(f, data)
