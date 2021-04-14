@@ -21,11 +21,12 @@ packages, enabled repositories, modules).
 """
 
 
-from dnfpluginscore import _, logger
+from dnfpluginscore import logger
 import dnf.cli
 
 from subscription_manager import packageprofilelib
 from subscription_manager.injectioninit import init_dep_injection
+from subscription_manager.i18n import ugettext as _
 
 
 @dnf.plugin.register_command
