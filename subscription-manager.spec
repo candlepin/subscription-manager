@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.47
+Version: 1.24.48
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1161,6 +1161,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Apr 15 2021 Christopher Snyder <csnyder@redhat.com> 1.24.48-1
+- 1886772: check is_consumer_cert_key_valid (csnyder@redhat.com)
+
 * Wed Apr 14 2021 Christopher Snyder <csnyder@redhat.com> 1.24.47-1
 - 1886772: Clear content access mode cache on refresh (csnyder@redhat.com)
 
