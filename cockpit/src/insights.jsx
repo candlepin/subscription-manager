@@ -374,12 +374,12 @@ function show_status_dialog() {
                           <table>
                             <tbody>
                               <tr>
-                                <th style={{ textAlign: "right", paddingRight: "1em" }}>Next Insights data upload</th>
+                                <th style={{ textAlign: "right", paddingRight: "1em" }}>{_("Next Insights data upload")}</th>
                                 <td>{next_elapse}</td>
                               </tr>
                               { lastupload ?
                               <tr>
-                                <th style={{ textAlign: "right", paddingRight: "1em" }}>Last Insights data upload</th>
+                                <th style={{ textAlign: "right", paddingRight: "1em" }}>{_("Last Insights data upload")}</th>
                                 <td>{moment(lastupload * 1000).calendar()}</td>
                                </tr> : null
                               }
@@ -543,6 +543,7 @@ export class InsightsStatus extends React.Component {
             status = <a onClick={left(show_connect_dialog)}>{_("Not connected")}</a>;
         }
 
-        return <div><label>Insights: {status}</label></div>;
+        let status_string = arrfmt(_("Insights: $0"), status);
+        return <div><label>{status_string}</label></div>;
     }
 }
