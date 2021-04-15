@@ -290,6 +290,13 @@ client.registerSystem = (subscriptionDetails, update_progress) => {
         if (subscriptionDetails.proxy_password) {
             connection_options.proxy_password = dbus_str(subscriptionDetails.proxy_password);
         }
+    } else {
+        // When user decide to not use proxy settings (checkbox "Use proxy server" is not checked),
+        // then set empty strings to all proxy options and do not use values from configuration file
+        connection_options.proxy_hostname = dbus_str('');
+        connection_options.proxy_port = dbus_str('');
+        connection_options.proxy_user = dbus_str('');
+        connection_options.proxy_password = dbus_str('');
     }
 
     console.debug('connection_options:', connection_options);

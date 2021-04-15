@@ -138,43 +138,139 @@ class ConnectionTests(unittest.TestCase):
     def test_clean_up_prefix(self):
         self.assertTrue(self.cp.handler == "/Test/")
 
+    @staticmethod
+    def mock_config_without_proxy_settings(section, name):
+        """
+        Mock configuration file (rhsm.conf) not including any proxy setting. Without this
+        mock conf some unit tests for environment variable will not work for situation, when
+        rhsm.conf on the system contains some proxy settings.
+        :param section: name of ini file section
+        :param name: name of ini option
+        :return: value for given section and option
+        """
+        if (section, name) == ('server', 'no_proxy'):
+            return ''
+        if (section, name) == ('server', 'proxy_hostname'):
+            return ''
+        if (section, name) == ('server', 'proxy_port'):
+            return ''
+        if (section, name) == ('server', 'proxy_user'):
+            return ''
+        if (section, name) == ('server', 'proxy_password'):
+            return ''
+        return None
+
     def test_https_proxy_info_allcaps(self):
         with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host:4444'}):
-            uep = UEPConnection(username="dummy", password="dummy",
-                 handler="/Test/", insecure=True)
-            self.assertEqual("u", uep.proxy_user)
-            self.assertEqual("p", uep.proxy_password)
-            self.assertEqual("host", uep.proxy_hostname)
-            self.assertEqual(int("4444"), uep.proxy_port)
+            with patch.object(connection.config, 'get', self.mock_config_without_proxy_settings):
+                uep = UEPConnection(username="dummy", password="dummy",
+                     handler="/Test/", insecure=True)
+                self.assertEqual("u", uep.proxy_user)
+                self.assertEqual("p", uep.proxy_password)
+                self.assertEqual("host", uep.proxy_hostname)
+                self.assertEqual(int("4444"), uep.proxy_port)
 
     def test_order(self):
         # should follow the order: HTTPS, https, HTTP, http
         with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host:4444',
                                        'http_proxy': 'http://notme:orme@host:2222'}):
-            uep = UEPConnection(username="dummy", password="dummy",
-                 handler="/Test/", insecure=True)
-            self.assertEqual("u", uep.proxy_user)
-            self.assertEqual("p", uep.proxy_password)
-            self.assertEqual("host", uep.proxy_hostname)
-            self.assertEqual(int("4444"), uep.proxy_port)
+            with patch.object(connection.config, 'get', self.mock_config_without_proxy_settings):
+                uep = UEPConnection(username="dummy", password="dummy",
+                     handler="/Test/", insecure=True)
+                self.assertEqual("u", uep.proxy_user)
+                self.assertEqual("p", uep.proxy_password)
+                self.assertEqual("host", uep.proxy_hostname)
+                self.assertEqual(int("4444"), uep.proxy_port)
 
     def test_no_port(self):
         with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host'}):
-            uep = UEPConnection(username="dummy", password="dummy",
-                 handler="/Test/", insecure=True)
-            self.assertEqual("u", uep.proxy_user)
-            self.assertEqual("p", uep.proxy_password)
-            self.assertEqual("host", uep.proxy_hostname)
-            self.assertEqual(3128, uep.proxy_port)
+            with patch.object(connection.config, 'get', self.mock_config_without_proxy_settings):
+                uep = UEPConnection(username="dummy", password="dummy",
+                     handler="/Test/", insecure=True)
+                self.assertEqual("u", uep.proxy_user)
+                self.assertEqual("p", uep.proxy_password)
+                self.assertEqual("host", uep.proxy_hostname)
+                self.assertEqual(3128, uep.proxy_port)
 
     def test_no_user_or_password(self):
         with patch.dict('os.environ', {'HTTPS_PROXY': 'http://host:1111'}):
-            uep = UEPConnection(username="dummy", password="dummy",
-                 handler="/Test/", insecure=True)
-            self.assertEqual(None, uep.proxy_user)
-            self.assertEqual(None, uep.proxy_password)
-            self.assertEqual("host", uep.proxy_hostname)
-            self.assertEqual(int("1111"), uep.proxy_port)
+            with patch.object(connection.config, 'get', self.mock_config_without_proxy_settings):
+                uep = UEPConnection(username="dummy", password="dummy",
+                     handler="/Test/", insecure=True)
+                self.assertEqual(None, uep.proxy_user)
+                self.assertEqual(None, uep.proxy_password)
+                self.assertEqual("host", uep.proxy_hostname)
+                self.assertEqual(int("1111"), uep.proxy_port)
+
+    def test_proxy_via_api(self):
+        """
+        Test that API trumps env var and config.
+        """
+        host = self.cp.host
+        port = self.cp.ssl_port
+
+        # Mock some proxy values in configuration file
+        def mock_config(section, name):
+            if (section, name) == ('server', 'hostname'):
+                return host
+            if (section, name) == ('server', 'port'):
+                return port
+            if (section, name) == ('server', 'proxy_hostname'):
+                return 'foo.example.com'
+            if (section, name) == ('server', 'proxy_port'):
+                return '3311'
+            if (section, name) == ('server', 'proxy_user'):
+                return 'proxyuser'
+            if (section, name) == ('server', 'proxy_password'):
+                return 'proxypassword'
+            return None
+
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
+                                       'NO_PROXY': 'foo.example.com'}):
+            with patch.object(connection.config, 'get', mock_config):
+                uep = UEPConnection(username='dummy', password='dummy',
+                                    handler='/test', insecure=True,
+                                    proxy_hostname='proxy.example.org', proxy_port='3030',
+                                    proxy_user='foo_user', proxy_password='secret')
+                self.assertEqual(uep.proxy_hostname, 'proxy.example.org')
+                self.assertEqual(uep.proxy_port, '3030')
+                self.assertEqual(uep.proxy_user, 'foo_user')
+                self.assertEqual(uep.proxy_password, 'secret')
+
+    def test_empty_proxy_via_api(self):
+        """
+        Test that API trumps env var and config despite API uses empty strings.
+        """
+        host = self.cp.host
+        port = self.cp.ssl_port
+
+        # Mock some proxy values in configuration file
+        def mock_config(section, name):
+            if (section, name) == ('server', 'hostname'):
+                return host
+            if (section, name) == ('server', 'port'):
+                return port
+            if (section, name) == ('server', 'proxy_hostname'):
+                return 'foo.example.com'
+            if (section, name) == ('server', 'proxy_port'):
+                return '3311'
+            if (section, name) == ('server', 'proxy_user'):
+                return 'proxyuser'
+            if (section, name) == ('server', 'proxy_password'):
+                return 'proxypassword'
+            return None
+
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
+                                       'NO_PROXY': 'foo.example.com'}):
+            with patch.object(connection.config, 'get', mock_config):
+                uep = UEPConnection(username='dummy', password='dummy',
+                                    handler='/test', insecure=True,
+                                    proxy_hostname='', proxy_port='',
+                                    proxy_user='', proxy_password='')
+                self.assertEqual(uep.proxy_hostname, '')
+                self.assertEqual(uep.proxy_port, '')
+                self.assertEqual(uep.proxy_user, '')
+                self.assertEqual(uep.proxy_password, '')
 
     def test_no_proxy_via_api(self):
         """Test that API trumps env var and config."""
