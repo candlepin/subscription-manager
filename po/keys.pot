@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-01 21:07+0200\n"
+"POT-Creation-Date: 2021-04-15 18:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -87,7 +87,7 @@ msgstr ""
 msgid "Options"
 msgstr ""
 
-#: cockpit/src/index.js:64
+#: cockpit/src/index.js:64 cockpit/src/subscriptions-view.jsx:305
 #: src/subscription_manager/gui/data/glade/installed.glade:86
 #: src/subscription_manager/gui/data/ui/installed.ui:93
 #: src/subscription_manager/gui/registergui.py:249
@@ -195,6 +195,14 @@ msgstr ""
 msgid "Connected to Red Hat Insights"
 msgstr ""
 
+#: cockpit/src/insights.jsx:377
+msgid "Next Insights data upload"
+msgstr ""
+
+#: cockpit/src/insights.jsx:382
+msgid "Last Insights data upload"
+msgstr ""
+
 #: cockpit/src/insights.jsx:392
 msgid "Next Insights data upload could not be scheduled."
 msgstr ""
@@ -271,8 +279,14 @@ msgstr ""
 msgid "Not connected"
 msgstr ""
 
+#: cockpit/src/insights.jsx:546
+msgid "Insights: $0"
+msgstr ""
+
 #: cockpit/src/subscriptions-client.js:48
 #: cockpit/src/subscriptions-client.js:554
+#: cockpit/src/subscriptions-view.jsx:396
+#: cockpit/src/subscriptions-view.jsx:402
 #: src/rhsmlib/services/entitlement.py:94
 #: src/rhsmlib/services/syspurpose.py:104
 #: src/subscription_manager/cert_sorter.py:282
@@ -322,6 +336,7 @@ msgid "Updating status ..."
 msgstr ""
 
 #: cockpit/src/subscriptions-client.js:467
+#: cockpit/src/subscriptions-view.jsx:317
 #: src/subscription_manager/gui/registergui.py:1075
 msgid "Unregistering"
 msgstr ""
@@ -402,6 +417,7 @@ msgid "Activation key"
 msgstr ""
 
 #: cockpit/src/subscriptions-register.jsx:189
+#: cockpit/src/subscriptions-view.jsx:326
 msgid "Subscriptions"
 msgstr ""
 
@@ -422,43 +438,126 @@ msgstr ""
 msgid "Auto-attaching ..."
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:240
+#: cockpit/src/subscriptions-view.jsx:241
 msgid "Service Level:  "
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:250
+#: cockpit/src/subscriptions-view.jsx:251
 msgid "Usage:  "
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:260
+#: cockpit/src/subscriptions-view.jsx:261
 msgid "Role:  "
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:270
+#: cockpit/src/subscriptions-view.jsx:271
 msgid "Add-ons:  "
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:282
+#: cockpit/src/subscriptions-view.jsx:283
 msgid "Status: "
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:290
+#: cockpit/src/subscriptions-view.jsx:291
 msgid "System Purpose"
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:301
-#: cockpit/src/subscriptions-view.jsx:306
+#: cockpit/src/subscriptions-view.jsx:302
+msgid "Status: This system is currently not registered."
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:308
+msgid "Status: $0"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:311
+msgid "Unregister"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:356
+msgid ""
+"The rhsm service is unavailable. Make sure subscription-manager is installed "
+"and try reloading the page. Additionally, make sure that you have checked "
+"the 'Reuse my password for privileged tasks' checkbox on the login page."
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:359
+msgid "Unable to the reach the rhsm service."
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:362
+msgid "Updating"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:363
+msgid "Retrieving subscription status..."
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:366
+msgid "Access denied"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:367
+msgid "The current user isn't allowed to access system subscription status."
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:370
+msgid "Unable to connect"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:371
+msgid ""
+"Couldn't get system subscription status. Please ensure subscription-manager "
+"is installed."
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:389
+#: src/subscription_manager/cli_command/list.py:40
+#: src/subscription_manager/gui/installedtab.py:222
+msgid "Subscribed"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:392
+msgid "Not Subscribed (Not supported by a valid subscription.)"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:417
+msgid "Product Name"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:419
+msgid "Product ID"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:421 src/rct/printing.py:50
+#: src/rct/printing.py:132 src/subscription_manager/gui/installedtab.py:91
+msgid "Version"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:423 src/rct/printing.py:51
+msgid "Arch"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:425
 #: src/subscription_manager/gui/installedtab.py:94
 msgid "Status"
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:301
-#: src/subscription_manager/cli_command/unregister.py:39
-#: src/subscription_manager/gui/registergui.py:210
-#: src/subscription_manager/gui/registergui.py:454
-#: src/subscription_manager/gui/registergui.py:1579
-#: src/subscription_manager/utils.py:292
-msgid "This system is currently not registered."
+#: cockpit/src/subscriptions-view.jsx:427
+msgid "Starts"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:429
+msgid "Ends"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:443
+msgid "Installed products"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:444
+#: src/subscription_manager/gui/installedtab.py:324
+msgid "No installed products detected."
 msgstr ""
 
 #: src/daemons/rhsmcertd.c:95
@@ -525,11 +624,11 @@ msgstr ""
 msgid "Invalid argument specified: %s\n"
 msgstr ""
 
-#: src/dnf-plugins/product-id.py:78
+#: src/dnf-plugins/product-id.py:79
 msgid "Installed products updated."
 msgstr ""
 
-#: src/dnf-plugins/subscription-manager.py:40
+#: src/dnf-plugins/subscription-manager.py:41
 #, python-format
 msgid ""
 "\n"
@@ -542,55 +641,55 @@ msgid ""
 "active subscriptions, you can renew the expired subscription.  "
 msgstr ""
 
-#: src/dnf-plugins/subscription-manager.py:49
+#: src/dnf-plugins/subscription-manager.py:50
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "subscription-manager to register.\n"
 msgstr ""
 
-#: src/dnf-plugins/subscription-manager.py:53
+#: src/dnf-plugins/subscription-manager.py:54
 msgid ""
 "\n"
 "This system is registered with and entitlement server, but is not receiving "
 "updates. You can use subscription-manager to assign subscriptions.\n"
 msgstr ""
 
-#: src/dnf-plugins/subscription-manager.py:86
+#: src/dnf-plugins/subscription-manager.py:87
 msgid "Not root, Subscription Management repositories not updated"
 msgstr ""
 
-#: src/dnf-plugins/subscription-manager.py:114
+#: src/dnf-plugins/subscription-manager.py:115
 #, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repositories with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
 msgstr ""
 
-#: src/dnf-plugins/subscription-manager.py:127
+#: src/dnf-plugins/subscription-manager.py:128
 msgid "Updating Subscription Management repositories."
 msgstr ""
 
-#: src/dnf-plugins/subscription-manager.py:132
+#: src/dnf-plugins/subscription-manager.py:133
 msgid "Unable to read consumer identity"
 msgstr ""
 
-#: src/dnf-plugins/subscription-manager.py:135
+#: src/dnf-plugins/subscription-manager.py:136
 msgid "Subscription Manager is operating in container mode."
 msgstr ""
 
-#: src/dnf-plugins/upload-profile.py:35
+#: src/dnf-plugins/upload-profile.py:36
 msgid ""
 "Upload combined profile to Satellite server (list of installed rpms, enabled "
 "repositories and modules"
 msgstr ""
 
-#: src/dnf-plugins/upload-profile.py:43
+#: src/dnf-plugins/upload-profile.py:44
 #: src/subscription_manager/scripts/package_profile_upload.py:39
 msgid "Force package profile upload"
 msgstr ""
 
-#: src/dnf-plugins/upload-profile.py:59
+#: src/dnf-plugins/upload-profile.py:60
 #: src/subscription_manager/scripts/package_profile_upload.py:46
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
 msgstr ""
@@ -901,15 +1000,6 @@ msgstr ""
 msgid "ID"
 msgstr ""
 
-#: src/rct/printing.py:50 src/rct/printing.py:132
-#: src/subscription_manager/gui/installedtab.py:91
-msgid "Version"
-msgstr ""
-
-#: src/rct/printing.py:51
-msgid "Arch"
-msgstr ""
-
 #: src/rct/printing.py:52
 msgid "Tags"
 msgstr ""
@@ -936,7 +1026,7 @@ msgstr ""
 
 #: src/rct/printing.py:89 src/subscription_manager/gui/allsubs.py:231
 #: src/subscription_manager/gui/contract_selection.py:139
-#: src/subscription_manager/managerlib.py:376
+#: src/subscription_manager/managerlib.py:382
 msgid "Unlimited"
 msgstr ""
 
@@ -1028,7 +1118,7 @@ msgstr ""
 msgid "Alt Name"
 msgstr ""
 
-#: src/rct/printing.py:228 src/rhsmlib/services/entitlement.py:267
+#: src/rct/printing.py:228 src/rhsmlib/services/entitlement.py:274
 msgid "Not Available"
 msgstr ""
 
@@ -1240,87 +1330,87 @@ msgstr ""
 msgid "Unknown arguments: %s"
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:258
+#: src/rhsmlib/services/entitlement.py:265
 #: src/subscription_manager/cli_command/list.py:335
 #: src/subscription_manager/gui/mysubstab.py:301
 #: src/subscription_manager/gui/widgets.py:862
 msgid "Virtual"
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:260
+#: src/rhsmlib/services/entitlement.py:267
 #: src/subscription_manager/cli_command/list.py:337
 #: src/subscription_manager/gui/mysubstab.py:303
 #: src/subscription_manager/gui/widgets.py:861
 msgid "Physical"
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:263
+#: src/rhsmlib/services/entitlement.py:270
 #: src/subscription_manager/cli_command/list.py:340
 #: src/subscription_manager/gui/mysubstab.py:306
 msgid "Yes"
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:265
+#: src/rhsmlib/services/entitlement.py:272
 #: src/subscription_manager/cli_command/list.py:342
 #: src/subscription_manager/gui/mysubstab.py:308
 msgid "No"
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:285
+#: src/rhsmlib/services/entitlement.py:292
 msgid "Subscription is current"
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:288
+#: src/rhsmlib/services/entitlement.py:295
 msgid "Subscription is expired"
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:290
+#: src/rhsmlib/services/entitlement.py:297
 msgid "Subscription has not begun"
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:292
+#: src/rhsmlib/services/entitlement.py:299
 #: src/subscription_manager/gui/mysubstab.py:294
 msgid "Subscription management service doesn't support Status Details."
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:439
+#: src/rhsmlib/services/entitlement.py:448
 msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:444
+#: src/rhsmlib/services/entitlement.py:453
 #: src/subscription_manager/cli_command/list.py:230
 msgid "Error: --all is only applicable with --available"
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:448
+#: src/rhsmlib/services/entitlement.py:457
 #: src/subscription_manager/cli_command/list.py:232
 msgid "Error: --ondate is only applicable with --available"
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:453
+#: src/rhsmlib/services/entitlement.py:462
 #: src/subscription_manager/cli_command/list.py:234
 msgid "Error: --servicelevel is only applicable with --available or --consumed"
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:457
+#: src/rhsmlib/services/entitlement.py:466
 #: src/subscription_manager/cli_command/list.py:238
 msgid "Error: --match-installed is only applicable with --available"
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:461
+#: src/rhsmlib/services/entitlement.py:470
 #: src/subscription_manager/cli_command/list.py:240
 msgid "Error: --no-overlap is only applicable with --available"
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:466
+#: src/rhsmlib/services/entitlement.py:475
 #: src/subscription_manager/cli_command/list.py:242
 msgid ""
 "Error: --pool-only is only applicable with --available and/or --consumed"
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:469
+#: src/rhsmlib/services/entitlement.py:478
 msgid "Error: this system is not registered"
 msgstr ""
 
@@ -1490,17 +1580,11 @@ msgid ""
 "forgot_password"
 msgstr ""
 
-#: src/subscription_manager/cache.py:161
+#: src/subscription_manager/cache.py:164
 #, python-brace-format
 msgid ""
 "consumer_uuid={consumer_uuid} is not a valid consumer_uuid. Not attempting "
 "to sync {class_name} cache with server."
-msgstr ""
-
-#: src/subscription_manager/cache.py:186
-msgid ""
-"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
-"more details."
 msgstr ""
 
 #: src/subscription_manager/cert_sorter.py:278
@@ -2118,11 +2202,6 @@ msgstr ""
 msgid "Future Subscription"
 msgstr ""
 
-#: src/subscription_manager/cli_command/list.py:40
-#: src/subscription_manager/gui/installedtab.py:222
-msgid "Subscribed"
-msgstr ""
-
 #: src/subscription_manager/cli_command/list.py:41
 #: src/subscription_manager/gui/installedtab.py:231
 #: src/subscription_manager/gui/installedtab.py:232
@@ -2658,11 +2737,11 @@ msgstr ""
 msgid "force certificate regeneration"
 msgstr ""
 
-#: src/subscription_manager/cli_command/refresh.py:56
+#: src/subscription_manager/cli_command/refresh.py:61
 msgid "All local data refreshed"
 msgstr ""
 
-#: src/subscription_manager/cli_command/refresh.py:61
+#: src/subscription_manager/cli_command/refresh.py:66
 #, python-brace-format
 msgid "Unable to perform refresh due to the following exception: {e}"
 msgstr ""
@@ -2702,7 +2781,9 @@ msgid "automatically attach compatible subscriptions to this system"
 msgstr ""
 
 #: src/subscription_manager/cli_command/register.py:74
-msgid "register the system even if it is already registered"
+msgid ""
+"include an implicit attempt to unregister before registering a new system "
+"identity"
 msgstr ""
 
 #: src/subscription_manager/cli_command/register.py:76
@@ -3098,6 +3179,14 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/syspurpose.py:56
 msgid "show current system purpose"
+msgstr ""
+
+#: src/subscription_manager/cli_command/unregister.py:39
+#: src/subscription_manager/gui/registergui.py:210
+#: src/subscription_manager/gui/registergui.py:454
+#: src/subscription_manager/gui/registergui.py:1579
+#: src/subscription_manager/utils.py:292
+msgid "This system is currently not registered."
 msgstr ""
 
 #: src/subscription_manager/cli_command/unregister.py:67
@@ -4699,10 +4788,6 @@ msgstr[1] ""
 
 #: src/subscription_manager/gui/installedtab.py:291
 msgid "My Installed Products"
-msgstr ""
-
-#: src/subscription_manager/gui/installedtab.py:324
-msgid "No installed products detected."
 msgstr ""
 
 #: src/subscription_manager/gui/installedtab.py:328
