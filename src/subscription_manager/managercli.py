@@ -59,12 +59,12 @@ from subscription_manager.utils import parse_server_info, \
         parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
         restart_virt_who, get_terminal_width, print_error, unique_list_items, \
-        is_simple_content_access, get_supported_resources, get_current_owner
+        is_simple_content_access, get_supported_resources, get_current_owner, \
+        generate_correlation_id
 from subscription_manager.overrides import Overrides, Override
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, \
         none_wrap_columnize_callback, echo_columnize_callback, highlight_by_filter_string_columnize_cb
-from subscription_manager.utils import generate_correlation_id
 from subscription_manager.syspurposelib import save_sla_to_syspurpose_metadata, \
         get_syspurpose_valid_fields, post_process_received_data
 from subscription_manager.packageprofilelib import PackageProfileActionInvoker
@@ -299,6 +299,24 @@ class CliCommand(AbstractCLICommand):
         self.identity = inj.require(inj.IDENTITY)
 
         self.correlation_id = generate_correlation_id()
+
+    def _print_ignore_auto_attach_mesage(self):
+        """
+        This message is shared by attach command and register command, because
+        both commands can do auto-attach.
+        :return: None
+        """
+        owner = get_current_owner(self.cp, self.identity)
+        # We displayed Owner name: `owner_name = owner['displayName']`, but such behavior
+        # was not consistent with rest of subscription-manager
+        # Look at this comment: https://bugzilla.redhat.com/show_bug.cgi?id=1826300#c8
+        owner_id = owner['key']
+        print(
+            _(
+                'Ignoring request to auto-attach. '
+                'It is disabled for org "{owner_id}" because of the content access mode setting.'
+            ).format(owner_id=owner_id)
+        )
 
     def _get_logger(self):
         return logging.getLogger('rhsm-app.%s.%s' % (self.__module__, self.__class__.__name__))
@@ -1522,6 +1540,36 @@ class RegisterCommand(UserPassCommand):
         """
         return True
 
+    def _do_auto_attach(self, consumer):
+        """
+        Try to do auto-attach, when it was requested using --auto-attach CLI option
+        :return: None
+        """
+
+        # Do not try to do auto-attach, when simple content access mode is used
+        # Only print info message to stdout
+        if is_simple_content_access(uep=self.cp, identity=self.identity):
+            self._print_ignore_auto_attach_mesage()
+            return
+
+        if 'serviceLevel' not in consumer and self.options.service_level:
+            system_exit(
+                os.EX_UNAVAILABLE,
+                _(
+                    "Error: The --servicelevel option is not supported "
+                    "by the server. Did not complete your request."
+                )
+            )
+        try:
+            # We don't call auto_attach with self.option.service_level, because it has been already
+            # set during service.register() call
+            attach.AttachService(self.cp).attach_auto(service_level=None)
+        except connection.RestlibException as rest_lib_err:
+            print_error(rest_lib_err.msg)
+        except Exception:
+            log.exception("Auto-attach failed")
+            raise
+
     def _do_command(self):
         """
         Executes the command.
@@ -1654,18 +1702,7 @@ class RegisterCommand(UserPassCommand):
             self.cp.updateConsumer(consumer['uuid'], release=self.options.release)
 
         if self.autoattach:
-            if 'serviceLevel' not in consumer and self.options.service_level:
-                system_exit(os.EX_UNAVAILABLE, _("Error: The --servicelevel option is not supported "
-                                 "by the server. Did not complete your request."))
-            try:
-                # We don't call auto_attach with self.option.service_level, because it has been already
-                # set during service.register() call
-                attach.AttachService(self.cp).attach_auto(service_level=None)
-            except connection.RestlibException as rest_lib_err:
-                print_error(rest_lib_err.msg)
-            except Exception:
-                log.exception("Auto-attach failed")
-                raise
+            self._do_auto_attach(consumer)
 
         if self.options.consumerid or \
                 self.options.activation_keys or \
@@ -2069,16 +2106,7 @@ class AttachCommand(CliCommand):
         # BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1826300
         if self.auto_attach is True:
             if is_simple_content_access(uep=self.cp, identity=self.identity):
-                owner = get_current_owner(self.cp, self.identity)
-                # We displayed Owner name: `owner_name = owner['displayName']`, but such behavior
-                # was not consistent with rest of subscription-manager
-                # Look at this comment: https://bugzilla.redhat.com/show_bug.cgi?id=1826300#c8
-                owner_id = owner['key']
-                print(_(
-                        'Ignoring request to auto-attach. '
-                        'It is disabled for org "{owner_id}" because of the content access mode setting.'
-                        ).format(owner_id=owner_id)
-                      )
+                self._print_ignore_auto_attach_mesage()
                 return 0
 
         installed_products_num = 0
