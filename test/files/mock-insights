@@ -20,8 +20,10 @@
 from http.server import *
 import json
 import re
+import ssl
 
-systems = { }
+systems = {}
+
 
 class handler(BaseHTTPRequestHandler):
     def match(self, p):
@@ -134,7 +136,11 @@ class handler(BaseHTTPRequestHandler):
         self.send_response(404)
         self.end_headers()
 
+
 def insights_server(port):
-    HTTPServer(('', port), handler).serve_forever()
+    httpd = HTTPServer(('', port), handler)
+    httpd.socket = ssl.wrap_socket(httpd.socket, certfile='/etc/cockpit/ws-certs.d/0-self-signed.cert', server_side=True)
+    httpd.serve_forever()
+
 
 insights_server(8888)
