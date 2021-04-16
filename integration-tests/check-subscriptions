@@ -151,13 +151,15 @@ class SubscriptionsCase(MachineCase):
 [insights-client]
 gpg=False
 auto_config=False
-base_url=127.0.0.1:8888/r/insights
+base_url=localhost:8888/r/insights
+cert_verify=False
 username=admin
 password=foobar
-insecure_connection=True
 """)
 
         m.upload(["files/mock-insights"], "/var/tmp")
+        # this re-uses cockpit ws certificate, so ensure that it exists
+        m.execute("systemctl start cockpit")
         m.spawn("/var/tmp/mock-insights", "mock-insights")
 
     def wait_subscription(self, product, is_subscribed):
