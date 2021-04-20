@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-29 12:56-0400\n"
-"PO-Revision-Date: 2021-04-02 19:01+0000\n"
+"PO-Revision-Date: 2021-04-19 12:02+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-27/it/>\n"
@@ -175,7 +175,7 @@ msgstr "Pacchetti aggiuntivi:"
 
 #: cockpit/src/insights.jsx:154
 msgid "Removals:"
-msgstr ""
+msgstr "Da rimuovere:"
 
 #: cockpit/src/insights.jsx:160
 msgid "Details"
@@ -212,7 +212,7 @@ msgstr "Questo sistema non è connesso a $0."
 
 #: cockpit/src/insights.jsx:220
 msgid "Connect"
-msgstr ""
+msgstr "Connetti"
 
 #: cockpit/src/insights.jsx:313
 msgid "unknown"
@@ -220,7 +220,7 @@ msgstr "sconosciuto"
 
 #: cockpit/src/insights.jsx:366
 msgid "The last Insights data upload has failed."
-msgstr ""
+msgstr "L'ultimo invio dei dati di Insights è fallito."
 
 #: cockpit/src/insights.jsx:371
 msgid "Connected to Red Hat Insights"
@@ -469,7 +469,7 @@ msgstr "Stato: "
 
 #: cockpit/src/subscriptions-view.jsx:285
 msgid "System Purpose"
-msgstr ""
+msgstr "Scopo del sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:296
@@ -495,21 +495,23 @@ msgstr "Rimuovi-registrazione"
 
 #: cockpit/src/subscriptions-view.jsx:352
 msgid "Updating"
-msgstr ""
+msgstr "In aggiornamento"
 
 #: cockpit/src/subscriptions-view.jsx:353
 msgid "Retrieving subscription status..."
-msgstr ""
+msgstr "Recupero dello stato della sottoscrizione ..."
 
 #: cockpit/src/subscriptions-view.jsx:360
 msgid "Unable to connect"
-msgstr ""
+msgstr "Impossibile collegarsi"
 
 #: cockpit/src/subscriptions-view.jsx:361
 msgid ""
 "Couldn't get system subscription status. Please ensure subscription-manager "
 "is installed."
 msgstr ""
+"Impossibile ottenere lo stato della sottoscrizione del sistema. Assicurati "
+"che subscription-manager sia installato."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:377
@@ -1962,7 +1964,7 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:50
 #, python-format
 msgid "HTTP error code %s: %s"
-msgstr ""
+msgstr "Codice di errore HTTP %s: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/gui/about.py:28
@@ -4131,9 +4133,8 @@ msgstr "Nessun repository è disponibile senza una sottoscrizione associata."
 #: src/subscription_manager/gui/reposgui.py:56
 #: src/subscription_manager/managercli.py:2348
 #: src/subscription_manager/managercli.py:2893
-#, fuzzy
 msgid "Repositories disabled by configuration."
-msgstr "Repository consumati per configurazione."
+msgstr "Repository disabilitati dalla configurazione."
 
 #: src/subscription_manager/gui/reposgui.py:131
 msgid "Gpgcheck"
@@ -4590,11 +4591,11 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:629
 msgid "--unset cannot be used with --set, --add, or --remove"
-msgstr ""
+msgstr "--unset non può essere usato con --set, --add o --remove"
 
 #: src/subscription_manager/managercli.py:631
 msgid "--add cannot be used with --remove"
-msgstr ""
+msgstr "--add non può essere usato con --remove"
 
 #: src/subscription_manager/managercli.py:635
 #, python-brace-format
@@ -4615,12 +4616,12 @@ msgstr "{attr} aggiornato."
 #: src/subscription_manager/managercli.py:716
 #, python-brace-format
 msgid "Current {name}: {val}"
-msgstr ""
+msgstr "{name} attuale: {val}"
 
 #: src/subscription_manager/managercli.py:719
 #, python-brace-format
 msgid "{name} not set."
-msgstr ""
+msgstr "{name} non impostato."
 
 #: src/subscription_manager/managercli.py:740
 #, python-brace-format
@@ -4966,7 +4967,7 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:1251
 msgid "use set and unset to define the value for this field"
-msgstr ""
+msgstr "usa set e unset per definire il valore per questo campo"
 
 #: src/subscription_manager/managercli.py:1263
 msgid "base URL for content in form of https://hostname:port/prefix"
@@ -5121,6 +5122,7 @@ msgstr "Ambiente: "
 #, python-format
 msgid "Hint: Organization \"%s\" contains following environments: %s"
 msgstr ""
+"Suggerimento: l'organizzazione \"%s\" contiene gli ambienti seguenti: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:1529
@@ -5133,6 +5135,7 @@ msgstr "Ambiente non trovato: %s"
 #, python-format
 msgid "Hint: User \"%s\" is member of following organizations: %s"
 msgstr ""
+"Suggerimento: l'utente \"%s\" è membro delle seguenti organizzazioni: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:1610
@@ -5624,7 +5627,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:2388
 #, python-format
 msgid "    Available Repositories in %s"
-msgstr "    Repositori disponibili in %s"
+msgstr "    Repository disponibili in %s"
 
 #: src/subscription_manager/managercli.py:2398
 msgid "There were no available repositories matching the specified criteria."
@@ -5651,12 +5654,12 @@ msgstr ""
 #: src/subscription_manager/managercli.py:2473
 #, python-format
 msgid "Repository '%s' is enabled for this system."
-msgstr "Il repositorio '%s' è abilitato per questo sistema."
+msgstr "Il repository '%s' è abilitato per questo sistema."
 
 #: src/subscription_manager/managercli.py:2475
 #, python-format
 msgid "Repository '%s' is disabled for this system."
-msgstr "Il repositorio '%s' è disabilitato per questo sistema."
+msgstr "Il repository '%s' è disabilitato per questo sistema."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:2482
@@ -5822,7 +5825,7 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:2638
 msgid "Error: --afterdate is only applicable with --available"
-msgstr ""
+msgstr "Errore: --afterdate è applicabile solo con --available"
 
 #: src/subscription_manager/managercli.py:2640
 msgid "Error: --afterdate cannot be used with --ondate"
@@ -6003,7 +6006,7 @@ msgstr "Questo sistema non possiede alcun override del contenuto."
 msgid ""
 "Repository '%s' does not currently exist, but the override has been added."
 msgstr ""
-"Il repositorio '%s' non è attualmente esistente ma è stato aggiunto "
+"Il repository '%s' non è attualmente esistente ma è stato aggiunto "
 "l'override."
 
 #: src/subscription_manager/managercli.py:2943
@@ -6014,7 +6017,7 @@ msgstr "Niene è conosciuto di '%s'"
 #: src/subscription_manager/managercli.py:2948
 #, python-format
 msgid "Repository: %s"
-msgstr "Repositorio: %s"
+msgstr "Repository: %s"
 
 #: src/subscription_manager/managercli.py:2958
 msgid "Modify system purpose role"
