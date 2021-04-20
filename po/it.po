@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-16 11:53-0400\n"
-"PO-Revision-Date: 2021-04-16 12:02+0000\n"
+"PO-Revision-Date: 2021-04-19 12:02+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/it/>\n"
@@ -147,16 +147,14 @@ msgstr "Sarà installato il pacchetto $0."
 #: cockpit/src/insights.jsx:124
 msgid "The $0 package and $1 other package will be installed."
 msgid_plural "The $0 package and $1 other packages will be installed."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sarà installato il pacchetto $0 e un altro pacchetto."
+msgstr[1] "Sarà installato il pacchetto $0 e altri $1 pacchetti."
 
 #: cockpit/src/insights.jsx:132
-#, fuzzy
-#| msgid "$0 package needs to be removed."
 msgid "$0 package needs to be removed."
 msgid_plural "$0 packages need to be removed."
-msgstr[0] "Il pacchetto $0 deve essere rimosso."
-msgstr[1] "Il pacchetto $0 deve essere rimosso."
+msgstr[0] "Un pacchetto deve essere rimosso."
+msgstr[1] "$0 pacchetti devono essere rimossi."
 
 #: cockpit/src/insights.jsx:146
 msgid "Additional packages:"
@@ -201,7 +199,7 @@ msgstr "Questo sistema non è connesso a $0."
 
 #: cockpit/src/insights.jsx:220
 msgid "Connect"
-msgstr ""
+msgstr "Connetti"
 
 #: cockpit/src/insights.jsx:313
 msgid "unknown"
@@ -216,16 +214,12 @@ msgid "Connected to Red Hat Insights"
 msgstr "Connesso a Red Hat Insights"
 
 #: cockpit/src/insights.jsx:377
-#, fuzzy
-#| msgid "The last Insights data upload has failed."
 msgid "Next Insights data upload"
-msgstr "L'ultimo invio dei dati di Insights è fallito."
+msgstr "Prossimo invio dei dati di Insights"
 
 #: cockpit/src/insights.jsx:382
-#, fuzzy
-#| msgid "The last Insights data upload has failed."
 msgid "Last Insights data upload"
-msgstr "L'ultimo invio dei dati di Insights è fallito."
+msgstr "Ultimo invio dei dati di Insights"
 
 #: cockpit/src/insights.jsx:403 cockpit/src/insights.jsx:409
 msgid "Disconnect from Insights"
@@ -302,10 +296,8 @@ msgid "Not connected"
 msgstr "Non connesso"
 
 #: cockpit/src/insights.jsx:546
-#, fuzzy
-#| msgid "Insights"
 msgid "Insights: $0"
-msgstr "Insights"
+msgstr "Insights: $0"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: cockpit/src/subscriptions-client.js:48
@@ -492,16 +484,12 @@ msgstr "Scopo del sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:302
-#, fuzzy
-#| msgid "This system is currently not registered."
 msgid "Status: This system is currently not registered."
-msgstr "Questo sistema è attualmente non registrato."
+msgstr "Stato: questo sistema è attualmente non registrato."
 
 #: cockpit/src/subscriptions-view.jsx:308
-#, fuzzy
-#| msgid "Status: "
 msgid "Status: $0"
-msgstr "Stato: "
+msgstr "Stato: $0"
 
 #: cockpit/src/subscriptions-view.jsx:311
 msgid "Unregister"
@@ -524,8 +512,8 @@ msgid ""
 "Couldn't get system subscription status. Please ensure subscription-manager "
 "is installed."
 msgstr ""
-"Impossibile ottenere lo stato dell'abbonamento di sistema. Assicurati che "
-"sia installato subscription-manager."
+"Impossibile ottenere lo stato della sottoscrizione del sistema. Assicurati "
+"che subscription-manager sia installato."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:389
@@ -4194,9 +4182,8 @@ msgstr "Nessun repository è disponibile senza una sottoscrizione associata."
 #: src/subscription_manager/gui/reposgui.py:56
 #: src/subscription_manager/managercli.py:2614
 #: src/subscription_manager/managercli.py:3161
-#, fuzzy
 msgid "Repositories disabled by configuration."
-msgstr "Repository consumati per configurazione."
+msgstr "Repository disabilitati dalla configurazione."
 
 #: src/subscription_manager/gui/reposgui.py:131
 msgid "Gpgcheck"
@@ -4691,16 +4678,18 @@ msgstr ""
 msgid ""
 "Warning: Provided value \"{val}\" is not included in the list of valid values"
 msgstr ""
+"Avviso: il valore fornito \"{val}\" non è incluso nella lista dei valori "
+"validi"
 
 #: src/subscription_manager/managercli.py:750
 #, python-brace-format
 msgid "Warning: the list of valid values for attribute \"{attr}\" is empty."
-msgstr ""
+msgstr "Avviso: la lista dei valori validi per l'attributo \"{attr}\" è vuota."
 
 #: src/subscription_manager/managercli.py:754
 #, python-brace-format
 msgid "Warning: No valid values provided for attribute \"{attr}\""
-msgstr ""
+msgstr "Avviso: nessun valore valido fornito per l'attributo \"{attr}\""
 
 #: src/subscription_manager/managercli.py:766
 #, python-brace-format
@@ -4721,7 +4710,7 @@ msgstr "{attr} aggiornato."
 #: src/subscription_manager/managercli.py:851
 #, python-brace-format
 msgid "Current {name}: {val}"
-msgstr "attuale {name}: {val}"
+msgstr "{name} attuale: {val}"
 
 #: src/subscription_manager/managercli.py:854
 #, python-brace-format
@@ -5236,6 +5225,7 @@ msgstr "Ambiente: "
 #, python-format
 msgid "Hint: Organization \"%s\" contains following environments: %s"
 msgstr ""
+"Suggerimento: l'organizzazione \"%s\" contiene gli ambienti seguenti: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:1777
@@ -5248,6 +5238,7 @@ msgstr "Ambiente non trovato: %s"
 #, python-format
 msgid "Hint: User \"%s\" is member of following organizations: %s"
 msgstr ""
+"Suggerimento: l'utente \"%s\" è membro delle seguenti organizzazioni: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:1858
@@ -5737,7 +5728,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:2655
 #, python-format
 msgid "    Available Repositories in %s"
-msgstr "    Repositori disponibili in %s"
+msgstr "    Repository disponibili in %s"
 
 #: src/subscription_manager/managercli.py:2665
 msgid "There were no available repositories matching the specified criteria."
@@ -5764,12 +5755,12 @@ msgstr ""
 #: src/subscription_manager/managercli.py:2740
 #, python-format
 msgid "Repository '%s' is enabled for this system."
-msgstr "Il repositorio '%s' è abilitato per questo sistema."
+msgstr "Il repository '%s' è abilitato per questo sistema."
 
 #: src/subscription_manager/managercli.py:2742
 #, python-format
 msgid "Repository '%s' is disabled for this system."
-msgstr "Il repositorio '%s' è disabilitato per questo sistema."
+msgstr "Il repository '%s' è disabilitato per questo sistema."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:2749
@@ -6114,7 +6105,7 @@ msgstr "Questo sistema non possiede alcun override del contenuto."
 msgid ""
 "Repository '%s' does not currently exist, but the override has been added."
 msgstr ""
-"Il repositorio '%s' non è attualmente esistente ma è stato aggiunto "
+"Il repository '%s' non è attualmente esistente ma è stato aggiunto "
 "l'override."
 
 #: src/subscription_manager/managercli.py:3211
@@ -6125,7 +6116,7 @@ msgstr "Niene è conosciuto di '%s'"
 #: src/subscription_manager/managercli.py:3216
 #, python-format
 msgid "Repository: %s"
-msgstr "Repositorio: %s"
+msgstr "Repository: %s"
 
 #: src/subscription_manager/managercli.py:3226
 msgid "Modify system purpose role"
