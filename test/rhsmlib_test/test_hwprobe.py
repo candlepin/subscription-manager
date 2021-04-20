@@ -425,8 +425,26 @@ VARIANT_ID=server
 
         net_int = hw.get_network_interfaces()
 
-        self.assertEqual(net_int['net.interface.eth0.ipv4_address'], '10.0.0.2')
+        self.assertEqual(net_int['net.interface.eth0.ipv4_address'], '10.0.0.1')
         self.assertEqual(net_int['net.interface.eth0.ipv4_address_list'], '10.0.0.1, 10.0.0.2')
+
+    @patch("ethtool.get_devices")
+    @patch("ethtool.get_interfaces_info")
+    def test_network_interfaces_multiple_ipv6(self, MockGetInterfacesInfo, MockGetDevices):
+        hw = hwprobe.HardwareCollector()
+
+        MockGetDevices.return_value = ['eth0']
+        mock_info = Mock(mac_address="00:00:00:00:00:00", device="eth0")
+        mock_info.get_ipv4_addresses.return_value = []
+        mock_ipv6s = [Mock(address="::1", netmask="/128", scope="link"),
+                      Mock(address="fe80::f00d:f00d:f00d:f00d", netmask="/64", scope="link")]
+        mock_info.get_ipv6_addresses = Mock(return_value=mock_ipv6s)
+        MockGetInterfacesInfo.return_value = [mock_info]
+
+        net_int = hw.get_network_interfaces()
+
+        self.assertEqual(net_int['net.interface.eth0.ipv6_address.link'], '::1')
+        self.assertEqual(net_int['net.interface.eth0.ipv6_address.link_list'], '::1, fe80::f00d:f00d:f00d:f00d')
 
     @patch("ethtool.get_devices")
     @patch("ethtool.get_interfaces_info")
