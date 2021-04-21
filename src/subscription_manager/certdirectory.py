@@ -330,6 +330,23 @@ class EntitlementDirectory(CertificateDirectory):
                     entitlements.append(cert)
         return entitlements
 
+    def list_for_product_name(self, product_name, case_sensitive=True):
+        """
+        Returns all entitlement certificates providing access to the given
+        product by name.
+        """
+        entitlements = []
+        for cert in self.list():
+            for cert_product in cert.products:
+                if case_sensitive is True:
+                    if product_name == cert_product.name:
+                        entitlements.append(cert)
+                else:
+                    if product_name.casefold() == cert_product.name.casefold():
+                        entitlements.append(cert)
+
+        return entitlements
+
     def list_for_pool_id(self, pool_id):
         """
         Returns all entitlement certificates provided by the given

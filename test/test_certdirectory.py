@@ -207,6 +207,7 @@ class EntitlementDirectoryWithCertsTest(DirectoryWithCertsTest):
 
         mock_product = MagicMock()
         mock_product.id = '123456789'
+        mock_product.name = 'product1'
 
         self.mock_cert = MagicMock()
         self.mock_cert.serial = '37'
@@ -260,6 +261,14 @@ class EntitlementDirectoryWithCertsTest(DirectoryWithCertsTest):
     def test_list_for_product_match(self):
         res = self.d.list_for_product('123456789')
         self.assertTrue(isinstance(res, list))
+
+    def test_list_for_product_name(self):
+        res = self.d.list_for_product_name('product1')
+        self.assertIsInstance(res, list)
+
+    def test_list_for_product_name_case(self):
+        res = self.d.list_for_product_name('proDUCT1', case_sensitive=False)
+        self.assertIsInstance(res, list)
 
 
 class ProductCertificateDirectoryTest(DirectoryTest):
