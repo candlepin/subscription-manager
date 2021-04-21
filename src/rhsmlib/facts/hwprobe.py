@@ -25,6 +25,7 @@ import re
 import socket
 import sys
 
+from collections import defaultdict
 from datetime import datetime, timedelta
 from rhsmlib.facts import cpuinfo
 from rhsmlib.facts import collector
@@ -711,6 +712,8 @@ class HardwareCollector(collector.FactsCollector):
                     key = '.'.join(['net.interface', device, 'mac_address'])
                     netinfdict[key] = mac_address
 
+                # collect the IPv6 information by device, and by scope
+                ipv6_values = defaultdict(lambda: defaultdict(list))
                 # all of our supported versions of python-ethtool support
                 # get_ipv6_addresses
                 for addr in info.get_ipv6_addresses():
@@ -722,16 +725,18 @@ class HardwareCollector(collector.FactsCollector):
                         scope = 'global'
 
                     for mkey in ipv6_metakeys:
-                        key = '.'.join(['net.interface', info.device, 'ipv6_%s' % (mkey), scope])
-                        list_key = "%s_list" % key
                         # we could specify a default here... that could hide
                         # api breakage though and unit testing hw detect is... meh
                         attr = getattr(addr, mkey) or 'Unknown'
-                        netinfdict[key] = attr
-                        if not netinfdict.get(list_key, None):
-                            netinfdict[list_key] = str(attr)
-                        else:
-                            netinfdict[list_key] += ', %s' % str(attr)
+                        ipv6_values[mkey][scope].append(str(attr))
+                for meta_key, mapping_values in ipv6_values.items():
+                    for scope, values in mapping_values.items():
+                        key = 'net.interface.{device}.ipv6_{key}.{scope}'.format(
+                            device=info.device, key=meta_key, scope=scope
+                        )
+                        list_key = key + "_list"
+                        netinfdict[key] = values[0]
+                        netinfdict[list_key] = ', '.join(values)
 
                 # However, old version of python-ethtool do not support
                 # get_ipv4_address
@@ -749,18 +754,21 @@ class HardwareCollector(collector.FactsCollector):
                 # python-ethtool only showed one ip address per interface. To
                 # accomdate the finer grained info, the api changed...
                 if hasattr(info, 'get_ipv4_addresses'):
+                    # collect the IPv4 information by device
+                    ipv4_values = defaultdict(list)
                     for addr in info.get_ipv4_addresses():
                         for mkey in ipv4_metakeys:
-                            # append 'ipv4_' to match the older interface and keeps facts
-                            # consistent
-                            key = '.'.join(['net.interface', info.device, 'ipv4_%s' % (mkey)])
-                            list_key = "%s_list" % key
                             attr = getattr(addr, mkey) or 'Unknown'
-                            netinfdict[key] = attr
-                            if not netinfdict.get(list_key, None):
-                                netinfdict[list_key] = str(attr)
-                            else:
-                                netinfdict[list_key] += ', %s' % str(attr)
+                            ipv4_values[mkey].append(str(attr))
+                    for meta_key, values in ipv4_values.items():
+                        # append 'ipv4_' to match the older interface and keeps facts
+                        # consistent
+                        key = 'net.interface.{device}.ipv4_{key}'.format(
+                            device=info.device, key=meta_key
+                        )
+                        list_key = key + "_list"
+                        netinfdict[key] = values[0]
+                        netinfdict[list_key] = ', '.join(values)
                 # check to see if we are actually an ipv4 interface
                 elif hasattr(info, 'ipv4_address'):
                     for mkey in old_ipv4_metakeys:
