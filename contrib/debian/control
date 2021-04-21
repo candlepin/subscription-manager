@@ -14,7 +14,7 @@ X-Python3-Version: >= 3.2
 
 Package: python-subscription-manager
 Architecture: amd64
-Depends: ${python:Depends}, ${misc:Depends}, python-dbus, python-rpm, virt-what, python-debian, python-gobject, python-decorator
+Depends: ${python:Depends}, ${misc:Depends}, python-dbus, python-rpm, virt-what, python-debian, python-gobject, python-decorator, apt-transport-katello (>= ${source:Version})
 Suggests: python-subscription-manager-doc
 Description: RHSM subscription-manager (Python 2)
  .
