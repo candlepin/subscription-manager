@@ -115,7 +115,7 @@ class IdentityCommand(UserPassCommand):
             raise ge
         except connection.RestlibException as re:
             log.exception(re)
-            log.error(u"Error: Unable to generate a new identity for the system: {re}").format(re=re)
+            log.error("Error: Unable to generate a new identity for the system: {re}".format(re=re))
             system_exit(os.EX_SOFTWARE, str(re))
         except Exception as e:
             handle_exception(_("Error: Unable to generate a new identity for the system"), e)
