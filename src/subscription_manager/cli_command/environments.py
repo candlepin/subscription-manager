@@ -70,7 +70,7 @@ class EnvironmentsCommand(OrgCommand):
             log.debug("Successfully retrieved environment list from server.")
         except connection.RestlibException as re:
             log.exception(re)
-            log.error(u"Error: Unable to retrieve environment list from server: {re}").format(re=re)
+            log.error("Error: Unable to retrieve environment list from server: {re}".format(re=re))
             system_exit(os.EX_SOFTWARE, str(re))
         except Exception as e:
             handle_exception(_("Error: Unable to retrieve environment list from server"), e)

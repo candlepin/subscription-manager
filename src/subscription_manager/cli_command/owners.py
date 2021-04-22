@@ -62,7 +62,7 @@ class OwnersCommand(UserPassCommand):
 
         except connection.RestlibException as re:
             log.exception(re)
-            log.error(u"Error: Unable to retrieve org list from server: {re}").format(re=re)
+            log.error("Error: Unable to retrieve org list from server: {re}".format(re=re))
             system_exit(os.EX_SOFTWARE, str(re))
         except Exception as e:
             handle_exception(_("Error: Unable to retrieve org list from server"), e)
