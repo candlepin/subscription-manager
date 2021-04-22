@@ -240,7 +240,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.29.10
+Version: 1.29.11
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1523,6 +1523,18 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Apr 22 2021 William Poteat <wpoteat@redhat.com> 1.29.11-1
+- Add subscription-manager dependency to apt-katello-transport (kolb@atix.de)
+- 1898552: refactor/fix collection of IP v4/v6 address info
+  (ptoscano@redhat.com)
+- cockpit: Enable TLS for mock insights server (martin@piware.de)
+- adding timoeout to jenkins pipeline (#2585) (jmolet@redhat.com)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- 1819555: cockpit: translate untranslatable messages (ptoscano@redhat.com)
+- Replace hardcoded errno value with constant (ptoscano@redhat.com)
+- 1940658: bash: complete also the syspurpose subcommand (ptoscano@redhat.com)
+- 1878736: use our i18n functions instead of dnf ones (ptoscano@redhat.com)
+
 * Tue Apr 13 2021 William Poteat <wpoteat@redhat.com> 1.29.10-1
 - Switch dates returned by D-Bus ListInstalledProducts to ISO 8601
   (ptoscano@redhat.com)
