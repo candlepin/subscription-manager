@@ -243,7 +243,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.15
+Version: 1.28.16
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1465,6 +1465,18 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Apr 23 2021 Christopher Snyder <csnyder@redhat.com> 1.28.16-1
+- New upstream release:
+  - Updated translations for the following langugages: Korean, Italian
+  - Various updates to keep subscription-manager-cockpit compatible with
+    the current version of cockpit including additional translations.
+  - 1793501: Update date format used when returned by DBus GetPool and
+    ListInstalledProducts methods to ISO 8601 standard.
+  - Updated the man page formatting.
+  - 1880920: Check all provided values for syspurpose commands (including addons)
+  - Various other bugs fixed (details at bugzilla.redhat.com): 1916540, 1637083,
+    1898552, 1636950, 1928072, 1878133, 1819555, 1863039, 1878736, 1930037,
+    1749395
 * Tue Mar 30 2021 Christopher Snyder <csnyder@redhat.com> 1.28.15-1
 - 1944093: Translated using Weblate (Korean) (simmon@nplob.com)
 - 1944093: Translated using Weblate (Korean) (simmon@nplob.com)
