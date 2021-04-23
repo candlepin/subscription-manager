@@ -741,7 +741,7 @@ class SyspurposeCommand(CliCommand):
         valid_fields = self._get_valid_fields()
         if self.attr in valid_fields:
             for value in values:
-                if value not in valid_fields[self.attr]:
+                if all([x.casefold() != value.casefold() for x in valid_fields[self.attr]]):
                     invalid_values.append(value)
         invalid_values_len = len(invalid_values)
 
