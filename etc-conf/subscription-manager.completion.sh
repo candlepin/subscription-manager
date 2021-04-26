@@ -245,7 +245,7 @@ _subscription_manager()
   # top-level commands and options
   opts="addons attach auto-attach clean config environments facts identity import list orgs
         repo-override plugins redeem refresh register release remove repos role service-level status
-        syspurpose subscribe unregister unsubscribe usage version ${_subscription_manager_help_opts}"
+        syspurpose unregister usage version ${_subscription_manager_help_opts}"
 
   case "${first}" in
       addons|\
@@ -276,11 +276,11 @@ _subscription_manager()
       "_subscription_manager_service_level" "${cur}" "${prev}"
       return 0
       ;;
-      attach|subscribe)
+      attach)
       "_subscription_manager_attach" "${cur}" "${prev}"
       return 0
       ;;
-      remove|unsubscribe)
+      remove)
       "_subscription_manager_remove" "${cur}" "${prev}"
       return 0
       ;;
