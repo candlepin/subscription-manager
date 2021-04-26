@@ -243,7 +243,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.15
+Version: 1.28.16
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1465,6 +1465,39 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Apr 26 2021 Christopher Snyder <csnyder@redhat.com> 1.28.16-1
+- 1950015: fix typos in syspurpose(8) (#2604) (ptoscano@redhat.com)
+- Updated translations for Korean and Italian from weblate (simmon@nplob.com)
+- 1916540: Negative proxy tests occasionally encounter the wrong exception
+  handling (tmerry@redhat.com)
+- 1880920: check for invalid addons (ptoscano@redhat.com)
+- 1637083: Removed the parameters to the unset-addons subcommand
+  (tmerry@redhat.com)
+- 1898552: refactor/fix collection of IP v4/v6 address info
+  (ptoscano@redhat.com)
+- 1636950: modify description in the man page for syspurpose for the generic
+  commands (tmerry@redhat.com)
+- cockpit: Enable TLS for mock insights server (martin@piware.de)
+- cockpit: Update test API to 236 (martin@piware.de)
+- cockpit: Replace obsolete wait_present() with wait_visible()
+  (martin@piware.de)
+- cockpit: Adjust for changed services image (martin@piware.de)
+- 1928072: Print warning message and don't do auto-attach (jhnidek@redhat.com)
+- 1878133: Deprecation message for syspurpose (#2421) (wpoteat@redhat.com)
+- 1819555: cockpit: translate untranslatable messages (ptoscano@redhat.com)
+- cockpit: fix extraction of plural messages (ptoscano@redhat.com)
+- 1863039: Fix issue with dnf/yum variables (jhnidek@redhat.com)
+- 1878736: use our i18n functions instead of dnf ones (ptoscano@redhat.com)
+- Switch dates returned by D-Bus ListInstalledProducts to ISO 8601
+  (ptoscano@redhat.com)
+- 1793501: switch dates returned by D-Bus GetPool to ISO 8601
+  (ptoscano@redhat.com)
+- ENT-2779: call format() on translated string (ptoscano@redhat.com)
+- 1930037: cockpit: ensure /etc/pki/product exist (ptoscano@redhat.com)
+- 1749395: Proper handling when a user does not have an org
+  (wpoteat@redhat.com)
+- Add RHEL 8.5 releaser (csnyder@redhat.com)
+
 * Tue Mar 30 2021 Christopher Snyder <csnyder@redhat.com> 1.28.15-1
 - 1944093: Translated using Weblate (Korean) (simmon@nplob.com)
 - 1944093: Translated using Weblate (Korean) (simmon@nplob.com)
