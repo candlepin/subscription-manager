@@ -100,7 +100,7 @@ _subscription_manager_clean()
 _subscription_manager_config()
 {
   # TODO: we could probably generate the options from the help
-  CONFIG_OPTS=$(LANG=C subscription-manager config --help | sed -ne "s|\s*\(\-\-.*\..*\)\=.*\..*|\1|p")
+  CONFIG_OPTS=$(LANG=C subscription-manager config --help | sed -ne "s|\s*\(\-\-.*\..*\)\s.*|\1|p")
   local opts="--list --remove
               ${CONFIG_OPTS}
               -h --help"
