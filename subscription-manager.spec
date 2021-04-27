@@ -1396,9 +1396,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
 %pre
 
-# Remove old *.egg-info empty directories not removed be previous versions of RPMs
-# due to this BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1927245
-rmdir %{python_sitearch}/subscription_manager-*-*.egg-info 2> /dev/null || true
 
 %if %use_systemd
     %if 0%{?suse_version}
@@ -1501,6 +1498,11 @@ fi
         %insserv_cleanup %{_initrddir}/rhsmcertd
     %endif
 %endif
+
+%posttrans
+# Remove old *.egg-info empty directories not removed be previous versions of RPMs
+# due to this BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1927245
+rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-empty
 
 %if %{use_subman_gui}
 %postun -n subscription-manager-gui
