@@ -240,7 +240,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.29.11
+Version: 1.29.12
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1525,6 +1525,13 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Apr 27 2021 Christopher Snyder <csnyder@redhat.com> 1.29.12-1
+- 1953069: bash: fix listing of config options (#2609) (ptoscano@redhat.com)
+- Cleanup old *.egg-info dirs in %%post (csnyder@redhat.com)
+- 1953047: bash: drop completion for subscribe & unsubscribe
+  (ptoscano@redhat.com)
+- 1952228: fix formatting of log error messages (ptoscano@redhat.com)
+
 * Thu Apr 22 2021 William Poteat <wpoteat@redhat.com> 1.29.11-1
 - Add subscription-manager dependency to apt-katello-transport (kolb@atix.de)
 - 1898552: refactor/fix collection of IP v4/v6 address info
