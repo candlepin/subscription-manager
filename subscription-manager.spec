@@ -1155,6 +1155,11 @@ fi
     %endif
 %endif
 
+%posttrans
+# Remove old *.egg-info empty directories not removed be previous versions of RPMs
+# due to this BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1927245
+rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-empty
+
 %if %{use_subman_gui}
 %postun -n subscription-manager-gui
 if [ $1 -eq 0 ] ; then
