@@ -105,16 +105,21 @@ DEFAULTS = {
 def in_container():
     """
     Are we running in a docker container or not?
-
-    Assumes that if we see host rhsm configuration shared with us, we must
-    be running in a container.
     """
     # For development in containers we must be able to turn container detection
     # off
     if os.environ.get('SMDEV_CONTAINER_OFF', False):
         return False
-    if os.path.exists(HOST_CONFIG_DIR):
-        return True
+    # Known locations to check for as an easy way to detect whether
+    # we are running in a container
+    locations = [
+        # The host rhsm configuration was shared with us, so assume
+        # we must be running in a container
+        HOST_CONFIG_DIR,
+    ]
+    for fn in locations:
+        if os.path.exists(fn):
+            return True
     return False
 
 
