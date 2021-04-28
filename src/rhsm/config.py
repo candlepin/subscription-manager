@@ -113,6 +113,13 @@ def in_container():
     # Known locations to check for as an easy way to detect whether
     # we are running in a container
     locations = [
+        # podman:
+        # https://github.com/containers/podman/issues/6192
+        # https://github.com/containers/podman/issues/3586#issuecomment-661918679
+        '/run/.containerenv',
+        # docker:
+        # https://github.com/moby/moby/issues/18355
+        '/.dockerenv',
         # The host rhsm configuration was shared with us, so assume
         # we must be running in a container
         HOST_CONFIG_DIR,
