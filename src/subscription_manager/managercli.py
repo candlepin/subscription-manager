@@ -899,7 +899,7 @@ class SyspurposeCommand(CliCommand):
                 # Print values
                 self._print_valid_values(valid_fields)
             else:
-                print(_('No valid values provided for "{syspurpose_attr}"').format(syspurpose_attr=self.attr))
+                print(_('This org does not have any subscriptions with an available "{syspurpose_attr}".').format(syspurpose_attr=self.attr))
         else:
             print(_('Unable to get list of valid values for "{syspurpose_attr}"').format(syspurpose_attr=self.attr))
 
@@ -1459,7 +1459,7 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
                 for sla in slas:
                     print(sla)
             else:
-                print(_("This org does not have any subscriptions with service levels."))
+                print(_('This org does not have any subscriptions with an available "service-level".'))
         except UnauthorizedException as e:
             raise e
         except connection.RemoteServerException as e:
