@@ -44,10 +44,10 @@ def add_command(args, syspurposestore):
     for value in args.values:
         if syspurposestore.add(args.prop_name, value):
             any_prop_added = True
-            print(_("Added {value} to {prop_name}.").format(
+            print(_("Added \"{value}\" to {prop_name}.").format(
                 value=make_utf8(value), prop_name=make_utf8(args.prop_name)))
         else:
-            print(_("Not adding value {value} to {prop_name}; it already exists.").format(
+            print(_("Not adding value \"{value}\" to {prop_name}; it already exists.").format(
                 value=make_utf8(value), prop_name=make_utf8(args.prop_name)))
 
     if any_prop_added is False:
