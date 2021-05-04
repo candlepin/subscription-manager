@@ -1499,20 +1499,20 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 - Add RHEL 8.5 releaser (csnyder@redhat.com)
 
 * Tue Mar 30 2021 Christopher Snyder <csnyder@redhat.com> 1.28.15-1
-- 1944093: Translated using Weblate (Korean) (simmon@nplob.com)
-- 1944093: Translated using Weblate (Korean) (simmon@nplob.com)
-- 1636950: make value possibly plural for addons in syspurpose man page
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- make value possibly plural for addons in syspurpose man page
   (tmerry@localhost.localdomain)
-- 1944093: Translated using Weblate (Korean) (simmon@nplob.com)
-- 1944093: Translated using Weblate (Italian) (toscano.pino@tiscali.it)
-- 1944093: Translated using Weblate (Korean) (simmon@nplob.com)
-- 1944093: Translated using Weblate (Italian) (toscano.pino@tiscali.it)
-- 1944093: Translated using Weblate (Korean) (simmon@nplob.com)
-- 1944093: Translated using Weblate (Korean) (simmon@nplob.com)
-- 1944093: Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Italian) (toscano.pino@tiscali.it)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Italian) (toscano.pino@tiscali.it)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
 - update language of REPOS OPTIONS in subscription-manager man page
   (tmerry@localhost.localdomain)
-- 1944093: Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
 - change add-ons to addons (tmerry@localhost.localdomain)
 - 1634780: typo in syspurpose man page (tmerry@localhost.localdomain)
 - 1856832: add --org=ORG to the ROLE OPTIONS, USAGE OPTIONS and ADDONS OPTIONS
@@ -1529,45 +1529,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 - 1920020: Set default_log_level to INFO when an invalid value is passed on the
   command line (#2481) (31166354+tlhmerry9@users.noreply.github.com)
 - 1924921: Fix getting releases, when SCA is used (jhnidek@redhat.com)
-- 1944093: Translated using Weblate (Korean) (simmon@nplob.com)
-- 1944093: Added translation using Weblate (Sinhala) (r45xveza@pm.me)
-- 1944093: Added translation using Weblate (Sinhala) (r45xveza@pm.me)
-- 1927245: Mark several dir as part of RPM (jhnidek@redhat.com)
-
-* Tue Mar 30 2021 Christopher Snyder <csnyder@redhat.com>
-- 1944093: Translated using Weblate (Korean) (simmon@nplob.com)
-- 1944093: Translated using Weblate (Korean) (simmon@nplob.com)
-- 1636950: make value possibly plural for addons in syspurpose man page
-  (tmerry@localhost.localdomain)
-- 1944093: Translated using Weblate (Korean) (simmon@nplob.com)
-- 1944093: Translated using Weblate (Italian) (toscano.pino@tiscali.it)
-- 1944093: Translated using Weblate (Korean) (simmon@nplob.com)
-- 1944093: Translated using Weblate (Italian) (toscano.pino@tiscali.it)
-- 1944093: Translated using Weblate (Korean) (simmon@nplob.com)
-- 1944093: Translated using Weblate (Korean) (simmon@nplob.com)
-- 1944093: Translated using Weblate (Korean) (simmon@nplob.com)
-- update language of REPOS OPTIONS in subscription-manager man page
-  (tmerry@localhost.localdomain)
-- 1944093: Translated using Weblate (Korean) (simmon@nplob.com)
-- change add-ons to addons (tmerry@localhost.localdomain)
-- 1634780: typo in syspurpose man page (tmerry@localhost.localdomain)
-- 1856832: add --org=ORG to the ROLE OPTIONS, USAGE OPTIONS and ADDONS OPTIONS
-  of the subscription-manager man pages (tmerry@localhost.localdomain)
-- 1637083: add unset sections (tmerry@localhost.localdomain)
-- 1920017: Remove a sentence from the subscription-manager man page.
-  (tmerry@localhost.localdomain)
-- 1646718: Debrand message to not include Red Hat Subscription Manager but
-  instead with an entitlement server (tmerry@localhost.localdomain)
-- 1682943: put a blank space back into a comment to separate two sentences
-  (tmerry@localhost.localdomain)
-- 1857491: Add newline character to split a message into 2 lines
-  (tmerry@localhost.localdomain)
-- 1920020: Set default_log_level to INFO when an invalid value is passed on the
-  command line (#2481) (31166354+tlhmerry9@users.noreply.github.com)
-- 1924921: Fix getting releases, when SCA is used (jhnidek@redhat.com)
-- 1944093: Translated using Weblate (Korean) (simmon@nplob.com)
-- 1944093: Added translation using Weblate (Sinhala) (r45xveza@pm.me)
-- 1944093: Added translation using Weblate (Sinhala) (r45xveza@pm.me)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Added translation using Weblate (Sinhala) (r45xveza@pm.me)
+- Added translation using Weblate (Sinhala) (r45xveza@pm.me)
 - 1927245: Mark several dir as part of RPM (jhnidek@redhat.com)
 
 * Thu Feb 18 2021 Christopher Snyder <csnyder@redhat.com> 1.28.13-1
