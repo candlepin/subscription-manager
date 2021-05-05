@@ -2,6 +2,7 @@
 _Name=Red Hat Subscription Manager
 Icon=subscription-manager
 Type=Application
+TryExec=/usr/libexec/cockpit-desktop
 Exec=/usr/libexec/cockpit-desktop /cockpit/@localhost/subscriptions/index.html
 Terminal=false
 Categories=System;X-Red-Hat-Base;
