@@ -22,7 +22,8 @@ This is module implementing detector and metadata collector of virtual machine r
 """
 
 import logging
-from typing import Union
+import json
+from typing import Union, List
 
 from rhsmlib.cloud._base_provider import BaseCloudProvider
 
@@ -43,13 +44,19 @@ class AzureCloudProvider(BaseCloudProvider):
     # the API version with every minor version of RHEL
     API_VERSION = "2020-09-01"
 
-    CLOUD_PROVIDER_METADATA_URL = "http://169.254.169.254/metadata/instance?api-version=" + API_VERSION
+    BASE_CLOUD_PROVIDER_METADATA_URL = "http://169.254.169.254/metadata/instance?api-version="
+
+    CLOUD_PROVIDER_METADATA_URL = BASE_CLOUD_PROVIDER_METADATA_URL + API_VERSION
 
     CLOUD_PROVIDER_METADATA_TYPE = "application/json"
 
-    CLOUD_PROVIDER_SIGNATURE_URL = "http://169.254.169.254/metadata/attested/document?api-version=" + API_VERSION
+    BASE_CLOUD_PROVIDER_SIGNATURE_URL = "http://169.254.169.254/metadata/attested/document?api-version="
+
+    CLOUD_PROVIDER_SIGNATURE_URL = BASE_CLOUD_PROVIDER_SIGNATURE_URL + API_VERSION
 
     CLOUD_PROVIDER_SIGNATURE_TYPE = "application/json"
+
+    AZURE_API_VERSIONS_URL = "http://169.254.169.254/metadata/versions"
 
     METADATA_CACHE_FILE = None
 
@@ -57,7 +64,7 @@ class AzureCloudProvider(BaseCloudProvider):
 
     # HTTP header "Metadata" has to be equal to "true" to be able to get metadata
     HTTP_HEADERS = {
-        'user-agent': 'RHSM/1.0',
+        'User-Agent': 'RHSM/1.0',
         "Metadata": "true"
     }
 
@@ -130,6 +137,46 @@ class AzureCloudProvider(BaseCloudProvider):
 
         return probability
 
+    def get_api_versions(self) -> Union[List[str], None]:
+        """
+        This method tries to get list of API versions currently supported by Azure cloud provider
+        :return: list of API versions or None
+        """
+        api_versions_str = self._get_data_from_server("api_versions", self.AZURE_API_VERSIONS_URL)
+        api_versions = None
+        try:
+            api_versions_dict = json.loads(api_versions_str)
+        except TypeError as err:
+            log.error(f'Unable to decode Azure API versions: {err}')
+        else:
+            if 'apiVersions' in api_versions_dict:
+                api_versions = api_versions_dict['apiVersions']
+        return api_versions
+
+    def _fix_supported_api_version(self) -> Union[str, None]:
+        """
+        Try to get list of supported API versions and set the oldest
+        :return:
+        """
+        api_versions = self.get_api_versions()
+        if api_versions is not None and len(api_versions) > 0:
+            if self.API_VERSION not in api_versions:
+                log.warning(
+                    f'Current Azure IMDS API version {self.API_VERSION} not included in the list of '
+                    f'supported API versions: {api_versions}'
+                )
+            else:
+                log.warning(f'Current Azure IMDS API version {self.API_VERSION} not fully supported')
+            # Get newest version
+            api_version = api_versions[-1]
+            log.warning(f'Changing Azure IMDS API version to: {api_version}')
+            self.API_VERSION = api_version
+            # Fix URL for gathering metadata and signature
+            self.CLOUD_PROVIDER_METADATA_URL = self.BASE_CLOUD_PROVIDER_METADATA_URL + api_version
+            self.CLOUD_PROVIDER_SIGNATURE_URL = self.BASE_CLOUD_PROVIDER_SIGNATURE_URL + api_version
+            return api_version
+        return None
+
     def _get_metadata_from_cache(self) -> Union[str, None]:
         """
         It is not safe to use cache of metadata for Azure cloud provider
@@ -151,7 +198,14 @@ class AzureCloudProvider(BaseCloudProvider):
         Try to get metadata from server
         :return: String with metadata or None
         """
-        return super(AzureCloudProvider, self)._get_metadata_from_server()
+        metadata = super(AzureCloudProvider, self)._get_metadata_from_server()
+        # When it wasn't possible to get metadata with current API version, then try to get list of
+        # supported API versions and select the newest version and try to get metadata once again
+        if metadata is None:
+            api_version = self._fix_supported_api_version()
+            if api_version is not None:
+                metadata = super(AzureCloudProvider, self)._get_metadata_from_server()
+        return metadata
 
     def _get_signature_from_cache_file(self) -> Union[str, None]:
         """
@@ -165,7 +219,12 @@ class AzureCloudProvider(BaseCloudProvider):
         Method for gathering signature of metadata from server
         :return: String containing signature or None
         """
-        return super(AzureCloudProvider, self)._get_signature_from_server()
+        signature = super(AzureCloudProvider, self)._get_signature_from_server()
+        if signature is None:
+            api_version = self._fix_supported_api_version()
+            if api_version is not None:
+                signature = super(AzureCloudProvider, self)._get_signature_from_server()
+        return signature
 
     def get_signature(self) -> Union[str, None]:
         """
@@ -214,6 +273,22 @@ def _smoke_tests():
         metadata = azure_cloud_provider.get_metadata()
         signature = azure_cloud_provider.get_signature()
         print(f'>>> debug <<< metadata: {metadata}')
+        print(f'>>> debug <<< signature: {signature}')
+        api_versions = azure_cloud_provider.get_api_versions()
+        print(f'>>> debug <<< api_versions: {api_versions}')
+
+        # Test getting metadata and signature with too old API version
+        AzureCloudProvider.API_VERSION = '2011-01-01'
+        AzureCloudProvider.CLOUD_PROVIDER_METADATA_URL = \
+            "http://169.254.169.254/metadata/instance?api-version=2011-01-01"
+        AzureCloudProvider.CLOUD_PROVIDER_SIGNATURE_URL = \
+            "http://169.254.169.254/metadata/attested/document?api-version=2011-01-01"
+        azure_cloud_provider = AzureCloudProvider({})
+        azure_cloud_provider._cached_metadata = None
+        azure_cloud_provider._cached_signature = None
+        metadata = azure_cloud_provider.get_metadata()
+        print(f'>>> debug <<< metadata: {metadata}')
+        signature = azure_cloud_provider.get_signature()
         print(f'>>> debug <<< signature: {signature}')
 
 

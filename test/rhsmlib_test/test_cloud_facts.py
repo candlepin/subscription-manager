@@ -16,7 +16,7 @@ from __future__ import print_function, division, absolute_import
 
 import unittest
 import mock
-from mock import patch
+from mock import patch, Mock
 
 import socket
 import requests
@@ -117,17 +117,23 @@ class TestCloudCollector(unittest.TestCase):
         """
         Test getting Azure facts instance ID (vmId) from metadata provided by Azure cloud provider
         """
+        self.requests_mock.Request = Mock(name="mock_Request")
+        mock_result = Mock(name="mock_result")
+        mock_result.status_code = 200
+        mock_result.text = AZURE_METADATA
+        mock_session = Mock(name="mock_session")
+        mock_session.send = Mock(return_value=mock_result, name="mock_send")
+        mock_session.prepare_request = Mock(name="mock_prepare_request")
+        self.requests_mock.Session = Mock(return_value=mock_session, name="mock_Session")
+
         self.collector = cloud_facts.CloudFactsCollector(
             collected_hw_info={
                 "virt.is_guest": True,
                 "dmi.chassis.asset_tag": "7783-7084-3265-9085-8269-3286-77"
             }
         )
-        mock_result = mock.Mock()
-        mock_result.status_code = 200
-        mock_result.text = AZURE_METADATA
-        self.requests_mock.get = mock.Mock(return_value=mock_result)
         facts = self.collector.get_all()
+
         # azure_instance_id should be included in the facts
         self.assertIn("azure_instance_id", facts)
         self.assertEqual(facts["azure_instance_id"], AZURE_INSTANCE_ID)
@@ -143,19 +149,26 @@ class TestCloudCollector(unittest.TestCase):
         """
         Test getting GCP instance ID from metadata provided by GCP cloud provider
         """
+        self.requests_mock.Request = Mock(name="mock_Request")
+        mock_result = Mock(name="mock_result")
+        mock_result.status_code = 200
+        mock_result.text = GCP_JWT_TOKEN
+        mock_session = Mock(name="mock_session")
+        mock_session.send = Mock(return_value=mock_result, name="mock_send")
+        mock_session.prepare_request = Mock(name="mock_prepare_request")
+        self.requests_mock.Session = Mock(return_value=mock_session, name="mock_Session")
+
+        mock_get_metadata_from_cache.return_value = None
+        mock_write_token_to_cache_file.return_value = None
+
         self.collector = cloud_facts.CloudFactsCollector(
             collected_hw_info={
                 "virt.is_guest": True,
                 "dmi.bios.vendor": "google"
             }
         )
-        mock_result = mock.Mock()
-        mock_result.status_code = 200
-        mock_result.text = GCP_JWT_TOKEN
-        self.requests_mock.get = mock.Mock(return_value=mock_result)
-        mock_get_metadata_from_cache.return_value = None
-        mock_write_token_to_cache_file.return_value = None
         facts = self.collector.get_all()
+
         self.assertIn("gcp_instance_id", facts)
         self.assertEqual(facts["gcp_instance_id"], "2589221140676718026")
 

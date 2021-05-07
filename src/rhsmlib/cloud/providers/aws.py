@@ -58,7 +58,7 @@ class AWSCloudProvider(BaseCloudProvider):
     TOKEN_CACHE_FILE = "/var/lib/rhsm/cache/aws_token.json"
 
     HTTP_HEADERS = {
-        'user-agent': 'RHSM/1.0'
+        'User-Agent': 'RHSM/1.0'
     }
 
     def __init__(self, hw_info):
@@ -66,6 +66,8 @@ class AWSCloudProvider(BaseCloudProvider):
         Initialize instance of AWSCloudDetector
         """
         super(AWSCloudProvider, self).__init__(hw_info)
+        # AWS IMDS server does not support keeping connection alive
+        self._session = None
 
     def is_vm(self) -> bool:
         """

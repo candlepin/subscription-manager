@@ -107,6 +107,9 @@ class BaseCloudProvider(object):
         else:
             self.hw_info: dict = hw_info
 
+        # HTTP Session
+        self._session = requests.Session()
+
         # In-memory cache of token. The token is simple string
         self._token: str = None
         # Time, when token was received. The value is in seconds (unix time)
@@ -283,20 +286,61 @@ class BaseCloudProvider(object):
         """
         raise NotImplementedError
 
-    def _get_data_from_server(self, data_type, url) -> Union[str, None]:
+    @staticmethod
+    def debug_print_http_request(request) -> None:
+        """
+        Print HTTP request that will be sent using requests Python package
+        :param request: prepared HTTP request
+        :return: None
+        """
+        yellow_col = '\033[93m'
+        blue_col = '\033[94m'
+        red_col = '\033[91m'
+        end_col = '\033[0m'
+        msg = blue_col + "Making request: " + end_col
+        msg += red_col + request.method + ' ' + request.url + end_col
+        if 'SUBMAN_DEBUG_PRINT_REQUEST_HEADER' in os.environ:
+            headers = ', '.join('{}: {}'.format(k, v) for k, v in request.headers.items())
+            msg += blue_col + "{{{headers}}}".format(headers=headers) + end_col
+        if 'SUBMAN_DEBUG_PRINT_REQUEST_BODY' in os.environ and request.body is not None:
+            msg += yellow_col + f" {request.body}" + end_col
+        print()
+        print(msg)
+        print()
+
+    @staticmethod
+    def debug_print_http_response(response) -> None:
+        """
+        Print HTTP request that was received using requests Python package
+        :param response: received HTTP response
+        :return: None
+        """
+        print('\n{code} {{{headers}}}\n{body}\n'.format(
+            code=response.status_code,
+            headers=', '.join('{key}: {value}'.format(key=k, value=v) for k, v in response.headers.items()),
+            body=response.text,
+        ))
+
+    def _get_data_from_server(self, data_type: str, url: str) -> Union[str, None]:
         """
         Try to get some data from server using method GET
-        :data_type: string representing data type (metadata, signature, token)
+        :param data_type: string representing data type (metadata, signature, token, etc.)
         :param url: URL of the GET request
         :return: String representing body, when status code is 200; Otherwise return None
         """
         log.debug(f'Trying to get {data_type} from {url}')
 
         try:
-            response = requests.get(url, headers=self.HTTP_HEADERS)
+            http_req = requests.Request(method='GET', url=url, headers=self.HTTP_HEADERS)
+            prepared_http_req = self._session.prepare_request(http_req)
+            if 'SUBMAN_DEBUG_PRINT_REQUEST' in os.environ:
+                self.debug_print_http_request(prepared_http_req)
+            response = self._session.send(prepared_http_req)
         except requests.ConnectionError as err:
             log.debug(f'Unable to get {self.CLOUD_PROVIDER_ID} {data_type}: {err}')
         else:
+            if 'SUBMAN_DEBUG_PRINT_RESPONSE' in os.environ:
+                self.debug_print_http_response(response)
             if response.status_code == 200:
                 return response.text
             else:

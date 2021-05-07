@@ -66,7 +66,7 @@ class GCPCloudProvider(BaseCloudProvider):
     CLOUD_PROVIDER_SIGNATURE_TYPE = None
 
     HTTP_HEADERS = {
-        'user-agent': 'RHSM/1.0',
+        'User-Agent': 'RHSM/1.0',
         'Metadata-Flavor': 'Google'
     }
 
