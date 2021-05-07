@@ -26,7 +26,7 @@ import os
 
 from typing import Union
 
-from rhsmlib.cloud._base_provider import BaseCloudProvider
+from cloud_what._base_provider import BaseCloudProvider
 
 
 log = logging.getLogger(__name__)
@@ -51,12 +51,10 @@ class AWSCloudProvider(BaseCloudProvider):
 
     CLOUD_PROVIDER_SIGNATURE_TYPE = "text/plain"
 
-    COLLECTOR_CONF_FILE = "/etc/rhsm/cloud/providers/aws.conf"
-
-    TOKEN_CACHE_FILE = "/var/lib/rhsm/cache/aws_token.json"
+    TOKEN_CACHE_FILE = "/var/cache/cloud-what/aws_token.json"
 
     HTTP_HEADERS = {
-        'User-Agent': 'RHSM/1.0'
+        'User-Agent': 'cloud-what/1.0'
     }
 
     def __init__(self, hw_info):
@@ -351,7 +349,6 @@ def _smoke_tests():
     """
     # Gather only information about hardware and virtualization
     from rhsmlib.facts.host_collector import HostCollector
-    from rhsmlib.facts.hwprobe import HardwareCollector
     import sys
 
     root = logging.getLogger()
@@ -365,7 +362,6 @@ def _smoke_tests():
 
     facts = {}
     facts.update(HostCollector().get_all())
-    facts.update(HardwareCollector().get_all())
     aws_cloud_provider = AWSCloudProvider(facts)
     result = aws_cloud_provider.is_running_on_cloud()
     probability = aws_cloud_provider.is_likely_running_on_cloud()
@@ -384,6 +380,6 @@ def _smoke_tests():
 
 
 # Some temporary smoke testing code. You can test this module using:
-# sudo PYTHONPATH=./src python3 -m rhsmlib.cloud.providers.aws
+# sudo PYTHONPATH=./src python3 -m cloud_what.providers.aws
 if __name__ == '__main__':
     _smoke_tests()

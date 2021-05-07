@@ -15,22 +15,30 @@
 #
 
 """
-Module for testing Python all modules from Python package rhsmlib.cloud
+Module for testing Python all modules from Python package cloud_what
 """
 
 import unittest
 from mock import patch, Mock, call
 import tempfile
 import time
-import base64
 import json
 
 import requests
+<<<<<<< HEAD:test/cloud_what/test_cloud_what.py
+=======
 
 from rhsmlib.cloud.providers import aws, azure, gcp
 from rhsmlib.cloud.provider import detect_cloud_provider, collect_cloud_info, get_cloud_provider
+>>>>>>> main:test/rhsmlib_test/test_cloud.py
 
+from cloud_what.providers import aws, azure, gcp
+from cloud_what.provider import detect_cloud_provider, get_cloud_provider
 
+<<<<<<< HEAD:test/cloud_what/test_cloud_what.py
+
+=======
+>>>>>>> main:test/rhsmlib_test/test_cloud.py
 def send_only_imds_v2_is_supported(request, *args, **kwargs):
     """
     Mock result, when we try to get metadata using GET method against
@@ -228,7 +236,11 @@ class TestAWSCloudProvider(unittest.TestCase):
         probability = aws_detector.is_likely_running_on_cloud()
         self.assertEqual(probability, 0.1)
 
+<<<<<<< HEAD:test/cloud_what/test_cloud_what.py
+    @patch('cloud_what._base_provider.requests.Session')
+=======
     @patch('rhsmlib.cloud._base_provider.requests.Session')
+>>>>>>> main:test/rhsmlib_test/test_cloud.py
     def test_get_metadata_from_server_imds_v1(self, mock_session_class):
         """
         Test the case, when metadata are obtained from server using IMDSv1
@@ -247,7 +259,11 @@ class TestAWSCloudProvider(unittest.TestCase):
         metadata = aws_collector.get_metadata()
         self.assertEqual(metadata, AWS_METADATA)
 
+<<<<<<< HEAD:test/cloud_what/test_cloud_what.py
+    @patch('cloud_what._base_provider.requests.Session')
+=======
     @patch('rhsmlib.cloud._base_provider.requests.Session')
+>>>>>>> main:test/rhsmlib_test/test_cloud.py
     def test_get_signature_from_server_imds_v1(self, mock_session_class):
         """
         Test the case, when metadata are obtained from server using IMDSv1
@@ -268,7 +284,11 @@ class TestAWSCloudProvider(unittest.TestCase):
         signature = '-----BEGIN PKCS7-----\n' + AWS_SIGNATURE + '\n-----END PKCS7-----'
         self.assertEqual(signature, test_signature)
 
+<<<<<<< HEAD:test/cloud_what/test_cloud_what.py
+    @patch('cloud_what._base_provider.requests.Session')
+=======
     @patch('rhsmlib.cloud._base_provider.requests.Session')
+>>>>>>> main:test/rhsmlib_test/test_cloud.py
     def test_get_metadata_from_server_imds_v2(self, mock_session_class):
         """
         Test the case, when metadata are obtained from server using IMDSv2
@@ -292,7 +312,11 @@ class TestAWSCloudProvider(unittest.TestCase):
         metadata = aws_provider.get_metadata()
         self.assertEqual(metadata, AWS_METADATA)
 
+<<<<<<< HEAD:test/cloud_what/test_cloud_what.py
+    @patch('cloud_what._base_provider.requests.Session')
+=======
     @patch('rhsmlib.cloud._base_provider.requests.Session')
+>>>>>>> main:test/rhsmlib_test/test_cloud.py
     def test_get_signature_from_server_imds_v2(self, mock_session_class):
         """
         Test the case, when signature is obtained from server using IMDSv2
@@ -544,7 +568,7 @@ class TestAzureCloudProvider(unittest.TestCase):
         """
         Patch communication with metadata provider
         """
-        requests_patcher = patch('rhsmlib.cloud._base_provider.requests')
+        requests_patcher = patch('cloud_what._base_provider.requests')
         self.requests_mock = requests_patcher.start()
         self.addCleanup(requests_patcher.stop)
 
@@ -634,7 +658,11 @@ class TestAzureCloudProvider(unittest.TestCase):
             method="GET",
             url=f"http://169.254.169.254/metadata/instance?api-version={azure.AzureCloudProvider.API_VERSION}",
             headers={
+<<<<<<< HEAD:test/cloud_what/test_cloud_what.py
+                'User-Agent': 'cloud-what/1.0',
+=======
                 'User-Agent': 'RHSM/1.0',
+>>>>>>> main:test/rhsmlib_test/test_cloud.py
                 "Metadata": "true"
             }
         )
@@ -660,7 +688,11 @@ class TestAzureCloudProvider(unittest.TestCase):
             method="GET",
             url="http://169.254.169.254/metadata/versions",
             headers={
+<<<<<<< HEAD:test/cloud_what/test_cloud_what.py
+                'User-Agent': 'cloud-what/1.0',
+=======
                 'User-Agent': 'RHSM/1.0',
+>>>>>>> main:test/rhsmlib_test/test_cloud.py
                 "Metadata": "true"
             }
         )
@@ -686,7 +718,11 @@ class TestAzureCloudProvider(unittest.TestCase):
             method="GET",
             url=f"http://169.254.169.254/metadata/attested/document?api-version={azure.AzureCloudProvider.API_VERSION}",
             headers={
+<<<<<<< HEAD:test/cloud_what/test_cloud_what.py
+                'User-Agent': 'cloud-what/1.0',
+=======
                 'User-Agent': 'RHSM/1.0',
+>>>>>>> main:test/rhsmlib_test/test_cloud.py
                 "Metadata": "true"
             }
         )
@@ -718,7 +754,11 @@ class TestAzureCloudProvider(unittest.TestCase):
 
         return mock_result
 
+<<<<<<< HEAD:test/cloud_what/test_cloud_what.py
+    @patch('cloud_what.providers.azure.AzureCloudProvider.get_api_versions')
+=======
     @patch('rhsmlib.cloud.providers.azure.AzureCloudProvider.get_api_versions')
+>>>>>>> main:test/rhsmlib_test/test_cloud.py
     def test_get_metadata_from_server_outdated_api_version(self, mock_get_api_versions):
         """
         Test getting metadata from server using outdated API version that is not supported
@@ -745,12 +785,20 @@ class TestAzureCloudProvider(unittest.TestCase):
         request_calls = [
             call(
                 method='GET',
+<<<<<<< HEAD:test/cloud_what/test_cloud_what.py
+                headers={'User-Agent': 'cloud-what/1.0', 'Metadata': 'true'},
+=======
                 headers={'User-Agent': 'RHSM/1.0', 'Metadata': 'true'},
+>>>>>>> main:test/rhsmlib_test/test_cloud.py
                 url=f'http://169.254.169.254/metadata/instance?api-version={azure.AzureCloudProvider.API_VERSION}'
             ),
             call(
                 method='GET',
+<<<<<<< HEAD:test/cloud_what/test_cloud_what.py
+                headers={'User-Agent': 'cloud-what/1.0', 'Metadata': 'true'},
+=======
                 headers={'User-Agent': 'RHSM/1.0', 'Metadata': 'true'},
+>>>>>>> main:test/rhsmlib_test/test_cloud.py
                 url=f'http://169.254.169.254/metadata/instance?api-version={SUPPORTED_AZURE_VERSIONS[-1]}'
             )
         ]
@@ -779,7 +827,7 @@ class TestGCPCloudProvider(unittest.TestCase):
         """
         Patch communication with metadata provider
         """
-        requests_patcher = patch('rhsmlib.cloud._base_provider.requests')
+        requests_patcher = patch('cloud_what._base_provider.requests')
         self.requests_mock = requests_patcher.start()
         self.addCleanup(requests_patcher.stop)
 
@@ -861,7 +909,11 @@ class TestGCPCloudProvider(unittest.TestCase):
             url='http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?'
                 'audience=https://subscription.rhsm.redhat.com:443/subscription&format=full',
             headers={
+<<<<<<< HEAD:test/cloud_what/test_cloud_what.py
+                'User-Agent': 'cloud-what/1.0',
+=======
                 'User-Agent': 'RHSM/1.0',
+>>>>>>> main:test/rhsmlib_test/test_cloud.py
                 'Metadata-Flavor': 'Google'
             }
         )
@@ -889,7 +941,11 @@ class TestGCPCloudProvider(unittest.TestCase):
             url='http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?'
                 'audience=https://example.com:8443/rhsm&format=full',
             headers={
+<<<<<<< HEAD:test/cloud_what/test_cloud_what.py
+                'User-Agent': 'cloud-what/1.0',
+=======
                 'User-Agent': 'RHSM/1.0',
+>>>>>>> main:test/rhsmlib_test/test_cloud.py
                 'Metadata-Flavor': 'Google'
             }
         )
@@ -951,29 +1007,37 @@ class TestGCPCloudProvider(unittest.TestCase):
 
 class TestCloudProvider(unittest.TestCase):
     """
-    Class for testing rhsmlib.cloud.utils module
+    Class for testing cloud_what.utils module
     """
     def setUp(self):
         """
         Set up two mocks that are used in all tests
         """
-        host_collector_patcher = patch('rhsmlib.cloud.provider.HostCollector')
+        host_collector_patcher = patch('cloud_what.provider.HostCollector')
         self.host_collector_mock = host_collector_patcher.start()
         self.host_fact_collector_instance = Mock()
         self.host_collector_mock.return_value = self.host_fact_collector_instance
         self.addCleanup(host_collector_patcher.stop)
 
-        hardware_collector_patcher = patch('rhsmlib.cloud.provider.HardwareCollector')
-        self.hardware_collector_mock = hardware_collector_patcher.start()
-        self.hw_fact_collector_instance = Mock()
-        self.hardware_collector_mock.return_value = self.hw_fact_collector_instance
-        self.addCleanup(hardware_collector_patcher.stop)
+        # hardware_collector_patcher = patch('cloud_what.provider.HardwareCollector')
+        # self.hardware_collector_mock = hardware_collector_patcher.start()
+        # self.hw_fact_collector_instance = Mock()
+        # self.hardware_collector_mock.return_value = self.hw_fact_collector_instance
+        # self.addCleanup(hardware_collector_patcher.stop)
 
+<<<<<<< HEAD:test/cloud_what/test_cloud_what.py
+        write_cache_patcher = patch('cloud_what.providers.aws.AWSCloudProvider._write_token_to_cache_file')
+        self.write_cache_mock = write_cache_patcher.start()
+        self.addCleanup(write_cache_patcher.stop)
+
+        self.requests_patcher = patch('cloud_what._base_provider.requests')
+=======
         write_cache_patcher = patch('rhsmlib.cloud.providers.aws.AWSCloudProvider._write_token_to_cache_file')
         self.write_cache_mock = write_cache_patcher.start()
         self.addCleanup(write_cache_patcher.stop)
 
         self.requests_patcher = patch('rhsmlib.cloud._base_provider.requests')
+>>>>>>> main:test/rhsmlib_test/test_cloud.py
         self.azure_requests_mock = self.requests_patcher.start()
         self.addCleanup(self.requests_patcher.stop)
 
@@ -983,13 +1047,10 @@ class TestCloudProvider(unittest.TestCase):
         """
         host_facts = {
             'virt.is_guest': True,
-            'virt.host_type': 'kvm'
-        }
-        hw_facts = {
+            'virt.host_type': 'kvm',
             'dmi.bios.vendor': 'Amazon EC2'
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
-        self.hw_fact_collector_instance.get_all.return_value = hw_facts
         detected_clouds = detect_cloud_provider()
         self.assertEqual(detected_clouds, ['aws'])
 
@@ -1000,15 +1061,12 @@ class TestCloudProvider(unittest.TestCase):
         """
         host_facts = {
             'virt.is_guest': True,
-            'virt.host_type': 'kvm'
-        }
-        hw_facts = {
+            'virt.host_type': 'kvm',
             'dmi.bios.vendor': 'AWS',
             'dmi.bios.version': '1.0',
             'dmi.system.manufacturer': 'Amazon'
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
-        self.hw_fact_collector_instance.get_all.return_value = hw_facts
         detected_clouds = detect_cloud_provider()
         self.assertEqual(detected_clouds, ['aws'])
 
@@ -1018,14 +1076,11 @@ class TestCloudProvider(unittest.TestCase):
         """
         host_facts = {
             'virt.is_guest': True,
-            'virt.host_type': 'kvm'
-        }
-        hw_facts = {
+            'virt.host_type': 'kvm',
             'dmi.bios.vendor': 'Google',
             'dmi.bios.version': 'Google'
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
-        self.hw_fact_collector_instance.get_all.return_value = hw_facts
         detected_clouds = detect_cloud_provider()
         self.assertEqual(detected_clouds, ['gcp'])
 
@@ -1036,15 +1091,12 @@ class TestCloudProvider(unittest.TestCase):
         """
         host_facts = {
             'virt.is_guest': True,
-            'virt.host_type': 'kvm'
-        }
-        hw_facts = {
+            'virt.host_type': 'kvm',
             'dmi.bios.vendor': 'Foo Company',
             'dmi.bios.version': '1.0',
             'dmi.chassis.asset_tag': 'Google Cloud',
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
-        self.hw_fact_collector_instance.get_all.return_value = hw_facts
         detected_clouds = detect_cloud_provider()
         self.assertEqual(detected_clouds, ['gcp'])
 
@@ -1055,14 +1107,11 @@ class TestCloudProvider(unittest.TestCase):
         host_facts = {
             'virt.is_guest': True,
             'virt.host_type': 'hyperv',
-        }
-        hw_facts = {
             'dmi.bios.vendor': 'Foo company',
             'dmi.bios.version': '1.0',
             'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77'
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
-        self.hw_fact_collector_instance.get_all.return_value = hw_facts
         detected_clouds = detect_cloud_provider()
         self.assertEqual(detected_clouds, ['azure'])
 
@@ -1074,15 +1123,12 @@ class TestCloudProvider(unittest.TestCase):
         host_facts = {
             'virt.is_guest': True,
             'virt.host_type': 'hyperv',
-        }
-        hw_facts = {
             'dmi.bios.vendor': 'Microsoft',
             'dmi.bios.version': '1.0',
             'dmi.system.manufacturer': 'Google',
             'dmi.chassis.manufacturer': 'Amazon'
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
-        self.hw_fact_collector_instance.get_all.return_value = hw_facts
         detected_clouds = detect_cloud_provider()
         self.assertEqual(detected_clouds, ['azure'])
 
@@ -1096,15 +1142,12 @@ class TestCloudProvider(unittest.TestCase):
         host_facts = {
             'virt.is_guest': True,
             'virt.host_type': 'kvm',
-        }
-        hw_facts = {
             'dmi.bios.vendor': 'Google',
             'dmi.bios.version': 'Amazon EC2',
             'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77',
             'dmi.chassis.manufacturer': 'Microsoft'
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
-        self.hw_fact_collector_instance.get_all.return_value = hw_facts
         detected_clouds = detect_cloud_provider()
         detected_clouds.sort()
         self.assertEqual(detected_clouds, ['aws', 'azure', 'gcp'])
@@ -1117,16 +1160,13 @@ class TestCloudProvider(unittest.TestCase):
         host_facts = {
             'virt.is_guest': True,
             'virt.host_type': 'kvm',
-        }
-        hw_facts = {
             'dmi.system.manufacturer': 'Google',
             'dmi.chassis.manufacturer': 'Amazon EC2',
         }
-        facts = {**host_facts, **hw_facts}
 
-        aws_cloud_provider = aws.AWSCloudProvider(facts)
-        azure_cloud_provider = azure.AzureCloudProvider(facts)
-        gcp_cloud_provider = gcp.GCPCloudProvider(facts)
+        aws_cloud_provider = aws.AWSCloudProvider(host_facts)
+        azure_cloud_provider = azure.AzureCloudProvider(host_facts)
+        gcp_cloud_provider = gcp.GCPCloudProvider(host_facts)
 
         probability_aws = aws_cloud_provider.is_likely_running_on_cloud()
         self.assertEqual(probability_aws, 0.6)
@@ -1136,11 +1176,12 @@ class TestCloudProvider(unittest.TestCase):
         self.assertEqual(probability_gcp, 0.6)
 
         self.host_fact_collector_instance.get_all.return_value = host_facts
-        self.hw_fact_collector_instance.get_all.return_value = hw_facts
         detected_clouds = detect_cloud_provider()
         detected_clouds.sort()
         self.assertEqual(detected_clouds, ['aws', 'gcp'])
 
+<<<<<<< HEAD:test/cloud_what/test_cloud_what.py
+=======
     @patch('rhsmlib.cloud.providers.aws.requests.Session')
     def test_collect_cloud_info_one_cloud_provider_detected(self, mock_session_class):
         """
@@ -1216,6 +1257,7 @@ class TestCloudProvider(unittest.TestCase):
             '-----BEGIN PKCS7-----\n' + AWS_SIGNATURE + '\n-----END PKCS7-----'
         )
 
+>>>>>>> main:test/rhsmlib_test/test_cloud.py
     def test_get_cloud_provider(self):
         """
         Test getting instance of cloud provider
@@ -1223,13 +1265,10 @@ class TestCloudProvider(unittest.TestCase):
         host_facts = {
             'virt.is_guest': True,
             'virt.host_type': 'hyperv',
-        }
-        hw_facts = {
             'dmi.bios.vendor': 'Microsoft',
             'dmi.bios.version': '1.0',
             'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77'
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
-        self.hw_fact_collector_instance.get_all.return_value = hw_facts
         cloud_provider = get_cloud_provider()
         self.assertIsInstance(cloud_provider, azure.AzureCloudProvider)
