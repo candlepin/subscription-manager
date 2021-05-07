@@ -64,6 +64,8 @@ class FooCloudProvider(BaseCloudProvider):
         'user-agent': 'RHSM/1.0',
     }
 
+    TIMEOUT = 1.0
+
     def __init__(self, hw_info):
         """
         Initialize instance of FooCloudDetector
@@ -136,14 +138,14 @@ class FooCloudProvider(BaseCloudProvider):
         """
         raise NotImplementedError
 
-    def _get_data_from_server(self, data_type, url):
+    def _get_data_from_server(self, data_type, url, headers):
         """
         This method tries to get data from server using GET method
         :param data_type: string representation of data type used in log messages (e.g. "metadata", "signature")
         :param url: URL of GET request
         :return: String of body, when request was successful; otherwise return None
         """
-        return super(FooCloudProvider, self)._get_data_from_server(data_type, url)
+        return super(FooCloudProvider, self)._get_data_from_server(data_type, url, headers)
 
     def _get_metadata_from_server(self) -> Union[str, None]:
         """

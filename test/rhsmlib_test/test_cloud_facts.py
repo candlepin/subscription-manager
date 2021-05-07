@@ -16,7 +16,7 @@ from __future__ import print_function, division, absolute_import
 
 import unittest
 import mock
-from mock import patch
+from mock import patch, Mock
 
 import socket
 import requests
@@ -38,35 +38,49 @@ AZURE_SKU = "8.1-ci"
 AZURE_OFFER = "RHEL"
 
 
+def mock_prepare_request(request):
+    return request
+
+
 class TestCloudCollector(unittest.TestCase):
     def setUp(self):
         super(TestCloudCollector, self).setUp()
         self.mock_facts = mock.Mock()
         inj.provide(inj.FACTS, self.mock_facts)
-        # Create special patch of requests for AWS
-        aws_requests_patcher = patch('rhsmlib.cloud.providers.aws.requests')
-        self.aws_requests_mock = aws_requests_patcher.start()
-        self.addCleanup(aws_requests_patcher.stop)
         # Azure and GCP
-        requests_patcher = patch('rhsmlib.cloud._base_provider.requests')
-        self.requests_mock = requests_patcher.start()
-        self.addCleanup(requests_patcher.stop)
+        self.requests_patcher = patch('rhsmlib.cloud._base_provider.requests')
+        self.requests_mock = self.requests_patcher.start()
+        self.addCleanup(self.requests_patcher.stop)
 
-    def test_get_aws_facts(self):
+    @patch('rhsmlib.cloud.providers.aws.requests.Session', name='test_get_aws_facts.mock_session_class')
+    def test_get_aws_facts(self, mock_session_class):
         """
         Test getting AWS facts (instance ID, accountID and billingProducts)
         """
+        mock_result = Mock(name="_test_get_aws_facts.mock_result")
+        mock_result.status_code = 200
+        mock_result.text = AWS_METADATA
+        mock_session = Mock(name="_test_get_aws_facts.mock_session")
+        mock_session.send = Mock(
+            return_value=mock_result,
+            name="_test_get_aws_facts.mock_session.send"
+        )
+        mock_session.prepare_request = mock_prepare_request
+        mock_session.hooks = {'response': []}
+        mock_session_class.return_value = mock_session
+
+        # We need to patch only Session in this case
+        self.requests_patcher.stop()
+
         self.collector = cloud_facts.CloudFactsCollector(
             collected_hw_info={
                 "virt.is_guest": True,
                 "dmi.bios.version": "4.2.amazon"
             }
         )
-        mock_result = mock.Mock()
-        mock_result.status_code = 200
-        mock_result.text = AWS_METADATA
-        self.aws_requests_mock.get = mock.Mock(return_value=mock_result)
+
         facts = self.collector.get_all()
+
         self.assertIn("aws_instance_id", facts)
         self.assertEqual(facts["aws_instance_id"], AWS_INSTANCE_ID)
         self.assertIn("aws_account_id", facts)
@@ -74,20 +88,14 @@ class TestCloudCollector(unittest.TestCase):
         self.assertIn("aws_billing_products", facts)
         self.assertEqual(facts["aws_billing_products"], AWS_BILLING_PRODUCTS)
         self.assertIn("aws_marketplace_product_codes", facts)
-        self.assertIsNone(facts["aws_marketplace_product_codes"])
+        self.assertEqual(facts["aws_marketplace_product_codes"], None)
 
-    def test_get_aws_facts_with_null_billing_products(self):
+    @patch('rhsmlib.cloud.providers.aws.requests.Session', name='mock_session_class')
+    def test_get_aws_facts_with_null_billing_products(self, mock_session_class):
         """
-        Billing products could be null in some cases (not RHEL systems
-        or systems installed from custom installation images)
+        Billing products could be null in some cases (not RHEL)
         """
-        self.collector = cloud_facts.CloudFactsCollector(
-            collected_hw_info={
-                "virt.is_guest": True,
-                "dmi.bios.version": "4.2.amazon"
-            }
-        )
-        mock_result = mock.Mock()
+        mock_result = Mock(name="mock_result")
         mock_result.status_code = 200
         mock_result.text = """
 {
@@ -108,8 +116,24 @@ class TestCloudCollector(unittest.TestCase):
   "version" : "2017-09-30"
 }
         """
+        mock_session = Mock(name="mock_session")
+        mock_session.send = Mock(
+            return_value=mock_result,
+            name="mock_session.send"
+        )
+        mock_session.prepare_request = mock_prepare_request
+        mock_session.hooks = {'response': []}
+        mock_session_class.return_value = mock_session
 
-        self.aws_requests_mock.get = mock.Mock(return_value=mock_result)
+        # We need to patch only Session in this case
+        self.requests_patcher.stop()
+
+        self.collector = cloud_facts.CloudFactsCollector(
+            collected_hw_info={
+                "virt.is_guest": True,
+                "dmi.bios.version": "4.2.amazon"
+            }
+        )
         facts = self.collector.get_all()
 
         self.assertIn("aws_instance_id", facts)
@@ -117,25 +141,32 @@ class TestCloudCollector(unittest.TestCase):
         self.assertIn("aws_account_id", facts)
         self.assertEqual(facts["aws_account_id"], AWS_ACCOUNT_ID)
         self.assertIn("aws_billing_products", facts)
-        self.assertIsNone(facts["aws_billing_products"])
+        self.assertEqual(facts["aws_billing_products"], None)
         self.assertIn("aws_marketplace_product_codes", facts)
-        self.assertIsNone(facts["aws_marketplace_product_codes"])
+        self.assertEqual(facts["aws_marketplace_product_codes"], None)
 
     def test_get_azure_facts(self):
         """
         Test getting Azure facts instance ID (vmId) from metadata provided by Azure cloud provider
         """
+        self.requests_mock.Request = Mock(name="mock_Request")
+        mock_result = Mock(name="mock_result")
+        mock_result.status_code = 200
+        mock_result.text = AZURE_METADATA
+        mock_session = Mock(name="mock_session")
+        mock_session.send = Mock(return_value=mock_result, name="mock_send")
+        mock_session.prepare_request = Mock(name="mock_prepare_request")
+        mock_session.hooks = {'response': []}
+        self.requests_mock.Session = Mock(return_value=mock_session, name="mock_Session")
+
         self.collector = cloud_facts.CloudFactsCollector(
             collected_hw_info={
                 "virt.is_guest": True,
                 "dmi.chassis.asset_tag": "7783-7084-3265-9085-8269-3286-77"
             }
         )
-        mock_result = mock.Mock()
-        mock_result.status_code = 200
-        mock_result.text = AZURE_METADATA
-        self.requests_mock.get = mock.Mock(return_value=mock_result)
         facts = self.collector.get_all()
+
         # azure_instance_id should be included in the facts
         self.assertIn("azure_instance_id", facts)
         self.assertEqual(facts["azure_instance_id"], AZURE_INSTANCE_ID)
@@ -151,88 +182,144 @@ class TestCloudCollector(unittest.TestCase):
         """
         Test getting GCP instance ID from metadata provided by GCP cloud provider
         """
+        self.requests_mock.Request = Mock(name="mock_Request")
+        mock_result = Mock(name="mock_result")
+        mock_result.status_code = 200
+        mock_result.text = GCP_JWT_TOKEN
+        mock_session = Mock(name="mock_session")
+        mock_session.send = Mock(return_value=mock_result, name="mock_send")
+        mock_session.prepare_request = Mock(name="mock_prepare_request")
+        mock_session.hooks = {'response': []}
+        self.requests_mock.Session = Mock(return_value=mock_session, name="mock_Session")
+
+        mock_get_metadata_from_cache.return_value = None
+        mock_write_token_to_cache_file.return_value = None
+
         self.collector = cloud_facts.CloudFactsCollector(
             collected_hw_info={
                 "virt.is_guest": True,
                 "dmi.bios.vendor": "google"
             }
         )
-        mock_result = mock.Mock()
-        mock_result.status_code = 200
-        mock_result.text = GCP_JWT_TOKEN
-        self.requests_mock.get = mock.Mock(return_value=mock_result)
-        mock_get_metadata_from_cache.return_value = None
-        mock_write_token_to_cache_file.return_value = None
         facts = self.collector.get_all()
+
         self.assertIn("gcp_instance_id", facts)
         self.assertEqual(facts["gcp_instance_id"], "2589221140676718026")
 
-    def test_get_not_aws_instance(self):
+    @patch('rhsmlib.cloud.providers.aws.requests.Session', name='mock_session_class')
+    def test_get_not_aws_instance(self, mock_session_class):
         """
         Test that AWS instance ID is not included in facts, when VM is not running on the AWS public cloud
         """
+        mock_result = mock.Mock(name="mock_result")
+        mock_result.status_code = 200
+        mock_result.text = '{"foo": "bar"}'
+        mock_session = Mock(name="mock_session")
+        mock_session.send = Mock(
+            return_value=mock_result,
+            name="mock_session.send"
+        )
+        mock_session.prepare_request = mock_prepare_request
+        mock_session.hooks = {'response': []}
+        mock_session_class.return_value = mock_session
+        # We need to patch only Session in this case
+        self.requests_patcher.stop()
+
         self.collector = cloud_facts.CloudFactsCollector(
             collected_hw_info={
                 "virt.is_guest": True,
                 "dmi.bios.version": "Foo"
             }
         )
-        mock_result = mock.Mock()
-        mock_result.status_code = 200
-        mock_result.text = '{"foo": "bar"}'
-        self.aws_requests_mock.get = mock.Mock(return_value=mock_result)
         facts = self.collector.get_all()
+
         self.assertNotIn("aws_instance_id", facts)
 
-    def test_get_bad_json(self):
+    @patch('rhsmlib.cloud.providers.aws.requests.Session', name='mock_session_class')
+    def test_get_bad_json(self, mock_session_class):
         """
         Test parsing some string that is not Json document
         """
+        mock_result = mock.Mock(name="mock_result")
+        mock_result.status_code = 200
+        mock_result.text = "not json document"
+        mock_session = Mock(name="mock_session")
+        mock_session.send = Mock(
+            return_value=mock_result,
+            name="mock_session.send"
+        )
+        mock_session.prepare_request = mock_prepare_request
+        mock_session.hooks = {'response': []}
+        mock_session_class.return_value = mock_session
+        # We need to patch only Session in this case
+        self.requests_patcher.stop()
+
         self.collector = cloud_facts.CloudFactsCollector(
             collected_hw_info={
                 "virt.is_guest": True,
                 "dmi.bios.version": "4.2.amazon"
             }
         )
-        mock_result = mock.Mock()
-        mock_result.status_code = 200
-        mock_result.text = "not json document"
-        self.aws_requests_mock.get = mock.Mock(return_value=mock_result)
         facts = self.collector.get_all()
+
         self.assertNotIn("aws_instance_id", facts)
 
-    def test_get_timeout(self):
+    @patch('rhsmlib.cloud.providers.aws.requests.Session', name='mock_session_class')
+    def test_get_timeout(self, mock_session_class):
         """
         Test ensures that exception is captured and does not impede
         """
+        mock_result = mock.Mock(name="mock_result")
+        mock_result.status_code = 200
+        mock_result.text = AWS_METADATA
+        mock_session = Mock(name="mock_session")
+        mock_session.send = Mock(
+            return_value=mock_result,
+            name="mock_session.send"
+        )
+        mock_session.send.side_effect = socket.timeout
+        mock_session.prepare_request = mock_prepare_request
+        mock_session.hooks = {'response': []}
+        mock_session_class.return_value = mock_session
+        # We need to patch only Session in this case
+        self.requests_patcher.stop()
+
         self.collector = cloud_facts.CloudFactsCollector(
             collected_hw_info={
                 "virt.is_guest": True,
                 "dmi.bios.version": "4.2.amazon"
             }
         )
-        mock_result = mock.Mock()
-        mock_result.status_code = 200
-        mock_result.text = AWS_METADATA
-        self.aws_requests_mock.get = mock.Mock(return_value=mock_result)
-        self.aws_requests_mock.get.side_effect = socket.timeout
         facts = self.collector.get_all()
+
         self.assertNotIn("aws_instance_id", facts)
 
-    def test_get_http_error(self):
+    @patch('rhsmlib.cloud.providers.aws.requests.Session', name='mock_session_class')
+    def test_get_http_error(self, mock_session_class):
         """
         test ensures that exception is captured and does not impede
         """
+        mock_result = mock.Mock(name="mock_result")
+        mock_result.status_code = 500
+        mock_result.text = "error"
+        mock_session = Mock(name="mock_session")
+        mock_session.send = Mock(
+            return_value=mock_result,
+            name="mock_session.send"
+        )
+        mock_session.side_effect = requests.exceptions.HTTPError()
+        mock_session.prepare_request = mock_prepare_request
+        mock_session.hooks = {'response': []}
+        mock_session_class.return_value = mock_session
+        # We need to patch only Session in this case
+        self.requests_patcher.stop()
+
         self.collector = cloud_facts.CloudFactsCollector(
             collected_hw_info={
                 "virt.is_guest": True,
                 "dmi.bios.version": "4.2.amazon"
             }
         )
-        mock_result = mock.Mock()
-        mock_result.status_code = 500
-        mock_result.text = "error"
-        self.aws_requests_mock.get = mock.Mock(return_value=mock_result)
-        self.aws_requests_mock.get.side_effect = requests.exceptions.HTTPError()
         facts = self.collector.get_all()
+
         self.assertNotIn("aws_instance_id", facts)

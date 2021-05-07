@@ -66,9 +66,9 @@ class CloudFactsCollector(collector.FactsCollector):
 
         metadata_str = self.cloud_provider.get_metadata()
 
+        facts = {}
         if metadata_str is not None:
             values = self.parse_json_content(metadata_str)
-            facts = {}
 
             # Add these three attributes to system facts
             if 'instanceId' in values:
@@ -98,7 +98,7 @@ class CloudFactsCollector(collector.FactsCollector):
                 else:
                     log.debug('AWS metadata attribute marketplaceProductCodes has to be list or null')
 
-            return facts
+        return facts
 
     def get_azure_facts(self):
         """
@@ -114,20 +114,17 @@ class CloudFactsCollector(collector.FactsCollector):
 
         metadata_str = self.cloud_provider.get_metadata()
 
+        facts = {}
         if metadata_str is not None:
             values = self.parse_json_content(metadata_str)
             if 'compute' in values:
-                ret = {}
                 if 'vmId' in values['compute']:
-                    ret["azure_instance_id"] = values['compute']['vmId']
+                    facts["azure_instance_id"] = values['compute']['vmId']
                 if 'sku' in values['compute']:
-                    ret['azure_sku'] = values['compute']['sku']
+                    facts['azure_sku'] = values['compute']['sku']
                 if 'offer' in values['compute']:
-                    ret['azure_offer'] = values['compute']['offer']
-                return ret
-            else:
-                return {}
-        return {}
+                    facts['azure_offer'] = values['compute']['offer']
+        return facts
 
     def get_gcp_facts(self):
         """
@@ -137,6 +134,8 @@ class CloudFactsCollector(collector.FactsCollector):
         """
 
         encoded_jwt_token = self.cloud_provider.get_metadata()
+
+        facts = {}
         if encoded_jwt_token is not None:
             jose_header, metadata, signature = self.cloud_provider.decode_jwt(encoded_jwt_token)
             if metadata is not None:
@@ -144,8 +143,12 @@ class CloudFactsCollector(collector.FactsCollector):
                 if 'google' in values and \
                         'compute_engine' in values['google'] and \
                         'instance_id' in values['google']['compute_engine']:
-                    return {"gcp_instance_id": values['google']['compute_engine']['instance_id']}
-        return {}
+                    facts = {
+                        "gcp_instance_id": values['google']['compute_engine']['instance_id']
+                    }
+                else:
+                    log.debug('GCP instance_id not found in JWT token')
+        return facts
 
     @staticmethod
     def parse_json_content(content):
