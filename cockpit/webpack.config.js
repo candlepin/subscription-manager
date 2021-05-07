@@ -213,11 +213,6 @@ module.exports = {
                 test: /\.jsx$/
             },
             {
-                exclude: /node_modules/,
-                loader: 'babel-loader',
-                test: /\.es6$/
-            },
-            {
                 test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|eot|ttf|wav|mp3)$/,
                 options: {
                     name: '[path][name].[ext]'
