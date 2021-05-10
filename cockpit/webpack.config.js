@@ -3,7 +3,6 @@ const copy = require("copy-webpack-plugin");
 const fs = require("fs");
 const TerserJSPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require("webpack");
 const CompressionPlugin = require("compression-webpack-plugin");
 const ESLintPlugin = require('eslint-webpack-plugin');
@@ -176,17 +175,6 @@ module.exports = {
     entry: info.entries,
     resolve: {
         alias: { 'font-awesome': path.resolve(nodedir, 'font-awesome-sass/assets/stylesheets') },
-    },
-    optimization: {
-        minimize: production,
-        minimizer: [
-            new UglifyJsPlugin({
-                uglifyOptions: {
-                    beautify: true,
-                    warnings: false
-                }
-            }),
-            new OptimizeCSSAssetsPlugin({})],
     },
     externals: externals,
     output: output,
