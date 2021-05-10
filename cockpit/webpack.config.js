@@ -6,6 +6,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require("webpack");
 const CompressionPlugin = require("compression-webpack-plugin");
+const ESLintPlugin = require('eslint-webpack-plugin');
 const extract = require("mini-css-extract-plugin");
 const glob = require("glob");
 const po2json = require("po2json");
@@ -124,6 +125,7 @@ var plugins = [
     new Po2JSONPlugin(),
     new extract("[name].css"),
     new Po2JSONPlugin(),
+    new ESLintPlugin({ extensions: ["js", "jsx"], exclude: ["spec", "node_modules"] }),
 ];
 
 if (!production) {
@@ -191,12 +193,6 @@ module.exports = {
     devtool: production ? false : "source-map",
     module: {
         rules: [
-            {
-                enforce: 'pre',
-                test: /\.(js|jsx)$/,
-                exclude: /\/node_modules\/.*\//, // exclude external dependencies
-                loader: "eslint-loader"
-            },
             {
                 test: /\.js$/,
                 exclude: /\/node_modules\/.*\//, // exclude external dependencies

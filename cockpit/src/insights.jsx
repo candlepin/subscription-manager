@@ -78,7 +78,7 @@ export function register(update_progress) {
 export function unregister() {
     if (insights_timer.enabled) {
         return cockpit.spawn([ "insights-client", "--unregister" ], { superuser: true, err: "message" })
-            .catch(catch_error);
+                .catch(catch_error);
     } else {
         return cockpit.resolve();
     }
@@ -111,7 +111,7 @@ export const blurb =
     _("Proactively identify and remediate threats to security, performance, availability, and stability with Red Hat Insights \u2014 with predictive analytics, avoid problems and unplanned downtime in your Red Hat environment.");
 
 export const link =
-    <a href="https://www.redhat.com/en/technologies/management/insights" target="_blank" rel="noopener noreferrer">Red Hat Insights <i className="fa fa-external-link"/></a>;
+    <a href="https://www.redhat.com/en/technologies/management/insights" target="_blank" rel="noopener noreferrer">Red Hat Insights <i className="fa fa-external-link" /></a>;
 
 function install_data_summary(data) {
     if (!data || data.missing_names.length == 0)
@@ -157,8 +157,8 @@ function install_data_summary(data) {
             );
 
         summary = [ <p>{summary}</p>,
-                    <Revealer summary={_("Details")}>{extra_details}{remove_details}</Revealer>
-                  ];
+            <Revealer summary={_("Details")}>{extra_details}{remove_details}</Revealer>
+        ];
     }
 
     return summary;
@@ -284,9 +284,9 @@ class Revealer extends React.Component {
         return (
             <div>
                 <a onClick={event => { if (event.button == 0) this.setState({ revealed: !this.state.revealed }); }}>
-                   {this.props.summary}
-                </a> <i className={this.state.revealed ? "fa fa-angle-down" : "fa fa-angle-right"}/>
-                <br/>
+                    {this.props.summary}
+                </a> <i className={this.state.revealed ? "fa fa-angle-down" : "fa fa-angle-right"} />
+                <br />
                 {this.state.revealed && this.props.children}
             </div>
         );
@@ -295,10 +295,10 @@ class Revealer extends React.Component {
 
 const get_monotonic_start = cockpit.spawn(
     [ "/usr/libexec/platform-python", "-c",
-      "import time; print(time.clock_gettime(time.CLOCK_REALTIME) - time.clock_gettime(time.CLOCK_MONOTONIC))"
+        "import time; print(time.clock_gettime(time.CLOCK_REALTIME) - time.clock_gettime(time.CLOCK_MONOTONIC))"
     ]).then(data => {
-        return parseFloat(data);
-    });
+    return parseFloat(data);
+});
 
 function calc_next_elapse(monotonic_start, timer) {
     let next_mono = Infinity, next_real = Infinity;
@@ -335,14 +335,14 @@ function monitor_last_upload() {
     results_file.watch(data => {
         self.results = data;
         cockpit.spawn([ "stat", "-c", "%Y", "/etc/insights-client/.last-upload.results" ], { err: "message" })
-            .then(ts => {
-                self.timestamp = parseInt(ts);
-                self.dispatchEvent("changed");
-            })
-            .catch(() => {
-                self.timestamp = 0;
-                self.dispatchEvent("changed");
-            });
+                .then(ts => {
+                    self.timestamp = parseInt(ts);
+                    self.dispatchEvent("changed");
+                })
+                .catch(() => {
+                    self.timestamp = 0;
+                    self.dispatchEvent("changed");
+                });
     });
 
     function close() {
@@ -370,47 +370,47 @@ function show_status_dialog() {
             {
                 title: _("Connected to Red Hat Insights"),
                 body: (
-                        <div className="modal-body">
-                          <table>
+                    <div className="modal-body">
+                        <table>
                             <tbody>
-                              <tr>
-                                <th style={{ textAlign: "right", paddingRight: "1em" }}>{_("Next Insights data upload")}</th>
-                                <td>{next_elapse}</td>
-                              </tr>
-                              { lastupload ?
-                              <tr>
-                                <th style={{ textAlign: "right", paddingRight: "1em" }}>{_("Last Insights data upload")}</th>
-                                <td>{moment(lastupload * 1000).calendar()}</td>
-                               </tr> : null
-                              }
+                                <tr>
+                                    <th style={{ textAlign: "right", paddingRight: "1em" }}>{_("Next Insights data upload")}</th>
+                                    <td>{next_elapse}</td>
+                                </tr>
+                                { lastupload ?
+                                    <tr>
+                                        <th style={{ textAlign: "right", paddingRight: "1em" }}>{_("Last Insights data upload")}</th>
+                                        <td>{moment(lastupload * 1000).calendar()}</td>
+                                    </tr> : null
+                                }
                             </tbody>
-                          </table>
-                          <br/>
-                          { insights_timer.state == "failed" &&
-                          <div className="alert alert-warning">
-                            <span className="pficon pficon-warning-triangle-o"/>
-                              {_("Next Insights data upload could not be scheduled.")}{" "}
-                              <a onClick={left(jump_to_timer)}>{_("Details")}</a>
-                          </div>
-                          }
-                          { insights_service.state == "failed" && failed_text &&
-                          <div className="alert alert-warning">
-                            <span className="pficon pficon-warning-triangle-o"/>
-                              {failed_text}{" "}
-                              <a onClick={left(jump_to_service)}>{_("Details")}</a>
-                          </div>
-                          }
-                          <Revealer summary={_("Disconnect from Insights")}>
+                        </table>
+                        <br />
+                        { insights_timer.state == "failed" &&
+                        <div className="alert alert-warning">
+                            <span className="pficon pficon-warning-triangle-o" />
+                            {_("Next Insights data upload could not be scheduled.")}{" "}
+                            <a onClick={left(jump_to_timer)}>{_("Details")}</a>
+                        </div>
+                        }
+                        { insights_service.state == "failed" && failed_text &&
+                        <div className="alert alert-warning">
+                            <span className="pficon pficon-warning-triangle-o" />
+                            {failed_text}{" "}
+                            <a onClick={left(jump_to_service)}>{_("Details")}</a>
+                        </div>
+                        }
+                        <Revealer summary={_("Disconnect from Insights")}>
                             <div className="alert alert-warning"
                                  style={{ "padding": "14px", "marginTop": "1ex", "marginBottom": "0px" }}>
-                              <p>{_("If you disconnect this system from Insights, it will no longer report it's Insights status in Red Hat Cloud or Satellite.")}</p>
-                              <br/>
-                              <button className="btn btn-danger" onClick={left(disconnect)}>
-                                {_("Disconnect from Insights")}
-                              </button>
+                                <p>{_("If you disconnect this system from Insights, it will no longer report it's Insights status in Red Hat Cloud or Satellite.")}</p>
+                                <br />
+                                <button className="btn btn-danger" onClick={left(disconnect)}>
+                                    {_("Disconnect from Insights")}
+                                </button>
                             </div>
-                          </Revealer>
-                        </div>
+                        </Revealer>
+                    </div>
                 )
             },
             {
@@ -424,7 +424,7 @@ function show_status_dialog() {
                 {
                     cancel_caption: _("Cancel"),
                     actions: [ ],
-                    idle_message: <div className="spinner spinner-sm"/>
+                    idle_message: <div className="spinner spinner-sm" />
                 });
             unregister().then(
                 () => {
@@ -530,12 +530,12 @@ export class InsightsStatus extends React.Component {
             }
 
             status = (
-                    <div style={{display: "inline-block", verticalAlign: "top" }}>
+                <div style={{display: "inline-block", verticalAlign: "top" }}>
                     <a onClick={left(show_status_dialog)}>{_("Connected to Insights")}</a>
-                    { warn && [ " ", <i className="pficon pficon-warning-triangle-o"/> ] }
-                    <br/>
+                    { warn && [ " ", <i className="pficon pficon-warning-triangle-o" /> ] }
+                    <br />
                     <a href={url} target="_blank" rel="noopener noreferrer">
-                    {text} <i className="fa fa-external-link"/>
+                        {text} <i className="fa fa-external-link" />
                     </a>
                 </div>
             );

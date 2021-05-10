@@ -48,18 +48,18 @@ class Listing extends React.Component {
                 attach_button_text: _("Auto-attaching ...")
             });
             this.props.autoAttach()
-                .done(function () {
-                    self.setState({
-                        attaching_in_progress: false,
-                        attach_button_text: _("Auto-attach")
+                    .done(function () {
+                        self.setState({
+                            attaching_in_progress: false,
+                            attach_button_text: _("Auto-attach")
+                        });
+                    })
+                    .fail(function () {
+                        self.setState({
+                            attaching_in_progress: false,
+                            attach_button_text: _("Auto-attach")
+                        });
                     });
-                })
-                .fail(function () {
-                    self.setState({
-                        attaching_in_progress: false,
-                        attach_button_text: _("Auto-attach")
-                    });
-                });
         }
     }
     render() {
@@ -109,9 +109,9 @@ class Curtains extends React.Component {
 
         let icon = this.props.icon;
         if (icon === 'waiting')
-            icon = <div className="spinner spinner-lg"/>;
+            icon = <div className="spinner spinner-lg" />;
         else if (icon === 'error')
-            icon = <div className="pficon pficon-error-circle-o"/>;
+            icon = <div className="pficon pficon-error-circle-o" />;
 
         return (
             <div className={ curtains + " blank-slate-pf" }>
@@ -169,7 +169,7 @@ class DismissableError extends React.Component {
                 <span className={classes_icon} />
                 <span>{this.props.children}</span>
                 <button type="button" className="close" aria-hidden="true" onClick={this.handleDismissError}>
-                    <span className="pficon pficon-close"/>
+                    <span className="pficon pficon-close" />
                 </button>
             </div>
         );
@@ -252,7 +252,7 @@ class SubscriptionStatus extends React.Component {
                         <span className="value">{ _(String(this.props.syspurpose["usage"])) }</span>
                     </label>
                 </div>
-        );
+            );
         }
         if (this.props.syspurpose["role"]) {
             role = (
@@ -301,19 +301,21 @@ class SubscriptionStatus extends React.Component {
         if (this.props.status === 'unknown') {
             text = _("Status: This system is currently not registered.");
             label = <label>{text}</label>;
-            action = (<button className="btn btn-primary"
+            action = (
+                <button className="btn btn-primary"
                               onClick={this.handleRegisterSystem}>{_("Register")}</button>
             );
         } else {
             text = cockpit.format(_("Status: $0"), this.props.status_msg);
             label = <label>{text}</label>;
-            action = (<button className="btn btn-primary" disabled={isUnregistering}
+            action = (
+                <button className="btn btn-primary" disabled={isUnregistering}
                               onClick={this.handleUnregisterSystem}>{_("Unregister")}</button>
             );
             if (isUnregistering) {
                 note = (
                     <div className="dialog-wait-ct">
-                        <div className="spinner spinner-sm"/>
+                        <div className="spinner spinner-sm" />
                         <span>{ _("Unregistering") }</span>
                     </div>
                 );
@@ -352,7 +354,7 @@ class SubscriptionsPage extends React.Component {
         let message;
 
         if (this.props.status === "service-unavailable") {
-            icon = <div className="fa fa-exclamation-circle"/>;
+            icon = <div className="fa fa-exclamation-circle" />;
             message = _("The rhsm service is unavailable. Make sure subscription-manager is installed " +
                 "and try reloading the page. Additionally, make sure that you have checked the " +
                 "'Reuse my password for privileged tasks' checkbox on the login page.");
@@ -438,15 +440,15 @@ class SubscriptionsPage extends React.Component {
 
         return (
             <div className="container-fluid">
-            <SubscriptionStatus {...this.props }/>
-            <Listing {...this.props}
+                <SubscriptionStatus {...this.props } />
+                <Listing {...this.props}
                     title={ _("Installed products") }
                     emptyCaption={ _("No installed products detected.") }
-                    >
-                <ListView className="installed-products">
-                {entries}
-                </ListView>
-            </Listing>
+                >
+                    <ListView className="installed-products">
+                        {entries}
+                    </ListView>
+                </Listing>
             </div>
         );
     }
