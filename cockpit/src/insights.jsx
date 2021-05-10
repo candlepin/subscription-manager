@@ -111,7 +111,7 @@ export const blurb =
     _("Proactively identify and remediate threats to security, performance, availability, and stability with Red Hat Insights \u2014 with predictive analytics, avoid problems and unplanned downtime in your Red Hat environment.");
 
 export const link =
-    <a href="https://www.redhat.com/en/technologies/management/insights" target="_blank" rel="noopener">Red Hat Insights <i className="fa fa-external-link"/></a>;
+    <a href="https://www.redhat.com/en/technologies/management/insights" target="_blank" rel="noopener noreferrer">Red Hat Insights <i className="fa fa-external-link"/></a>;
 
 function install_data_summary(data) {
     if (!data || data.missing_names.length == 0)
@@ -534,7 +534,7 @@ export class InsightsStatus extends React.Component {
                     <a onClick={left(show_status_dialog)}>{_("Connected to Insights")}</a>
                     { warn && [ " ", <i className="pficon pficon-warning-triangle-o"/> ] }
                     <br/>
-                    <a href={url} target="_blank" rel="noopener">
+                    <a href={url} target="_blank" rel="noopener noreferrer">
                     {text} <i className="fa fa-external-link"/>
                     </a>
                 </div>
