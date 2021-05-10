@@ -118,7 +118,7 @@ class TestParseServerInfo(unittest.TestCase):
         # throw an error, especially if it's not a valid hostname
         local_url = "a"
         (username, password, hostname, port, prefix) = parse_url(local_url,
-               default_port=DEFAULT_PORT, default_prefix=DEFAULT_PREFIX)
+            default_port=DEFAULT_PORT, default_prefix=DEFAULT_PREFIX)
         self.assertEqual("a", hostname)
         self.assertEqual(DEFAULT_PORT, port)
         self.assertEqual(DEFAULT_PREFIX, prefix)

@@ -96,7 +96,7 @@ class HealingUpdateAction(object):
             cert_updater = entcertlib.EntCertActionInvoker()
             if not cs.is_valid():
                 log.warn("Found invalid entitlements for today: %s" %
-                        today)
+                         today)
                 self.plugin_manager.run("pre_auto_attach", consumer_uuid=uuid)
                 ents = self.uep.bind(uuid, today)
                 self.plugin_manager.run("post_auto_attach", consumer_uuid=uuid,
@@ -116,7 +116,7 @@ class HealingUpdateAction(object):
                     log.warn("Got valid status from server but no valid until date.")
                 elif tomorrow > cs.compliant_until:
                     log.warn("Entitlements will be invalid by tomorrow: %s" %
-                            tomorrow)
+                             tomorrow)
                     self.plugin_manager.run("pre_auto_attach", consumer_uuid=uuid)
                     ents = self.uep.bind(uuid, tomorrow)
                     self.plugin_manager.run("post_auto_attach", consumer_uuid=uuid,

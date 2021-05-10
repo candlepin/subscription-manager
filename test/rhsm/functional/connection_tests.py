@@ -73,7 +73,7 @@ class ConnectionTests(unittest.TestCase):
     def test_create_consumer_sets_hypervisor_id(self):
         testing_hypervisor_id = random_string("someId")
         consumerInfo = self.cp.registerConsumer("other-test-consumer",
-                "system", owner="admin", hypervisor_id=testing_hypervisor_id)
+                                                "system", owner="admin", hypervisor_id=testing_hypervisor_id)
         # Unregister before making assertions, that way it should always happen
         self.cp.unregisterConsumer(consumerInfo['uuid'])
         # Hypervisor ID should be set and lower case
@@ -295,7 +295,7 @@ class HypervisorCheckinTests(unittest.TestCase):
 
     def setUp(self):
         self.cp = UEPConnection(username="admin", password="admin",
-                insecure=True)
+                                insecure=True)
 
     def test_hypervisor_checkin_can_pass_empty_map_and_updates_nothing(self):
         response = self.cp.hypervisorCheckIn("admin", "", {})

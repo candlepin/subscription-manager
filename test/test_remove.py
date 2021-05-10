@@ -19,7 +19,7 @@ from subscription_manager import managercli
 from subscription_manager import injection as inj
 
 from .stubs import StubEntitlementDirectory, StubProductDirectory, StubEntActionInvoker, \
-        StubEntitlementCertificate, StubProduct, StubPool
+    StubEntitlementCertificate, StubProduct, StubPool
 from . import fixture
 
 

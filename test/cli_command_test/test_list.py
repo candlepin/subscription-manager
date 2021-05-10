@@ -9,7 +9,7 @@ from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_TYPE
 from subscription_manager.injection import provide, CERT_SORTER
 
 from ..stubs import StubProductCertificate, StubEntitlementCertificate, \
-        StubProduct, StubCertSorter, StubPool
+    StubProduct, StubCertSorter, StubPool
 from ..fixture import Capture
 
 from mock import patch, Mock, MagicMock
@@ -38,8 +38,8 @@ class TestListCommand(TestCliProxyCommand):
                 method()
             except SystemExit as e:
                 self.assertEqual(e.code, expected_exit_code,
-                    """Cli should have exited with code '{}', got '{}'""".format(expected_exit_code,
-                        e.code))
+                                 """Cli should have exited with code '{}', got '{}'""".format(expected_exit_code,
+                                                                                              e.code))
                 fail = False
             except Exception as e:
                 fail = True
@@ -73,7 +73,7 @@ class TestListCommand(TestCliProxyCommand):
 
     def test_afterdate_option_with_ondate(self):
         argv = ['subscription-manager', 'list', '--afterdate', self.valid_date, '--ondate',
-            self.valid_date]
+                self.valid_date]
         self._test_afterdate_option(argv, self.cc.main, expected_exit_code=os.EX_USAGE)
 
     @patch('subscription_manager.managerlib.get_available_entitlements')

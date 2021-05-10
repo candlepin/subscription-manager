@@ -71,7 +71,7 @@ class PluginImportException(PluginException):
 
     def __str__(self):
         repr_msg = "Plugin \"%s\" can't be imported from file %s" % \
-                    (self.module_name, self.module_file)
+                   (self.module_name, self.module_file)
         return self._add_message(repr_msg)
 
 
@@ -84,7 +84,7 @@ class PluginModuleImportApiVersionMissingException(PluginImportException):
     def __str__(self):
         repr_msg = """Plugin module "%s" in %s has no API version.
                    'requires_api_version' should be set.""" % \
-                    (self.module_name, self.module_file)
+                   (self.module_name, self.module_file)
         return self._add_message(repr_msg)
 
 
@@ -593,7 +593,7 @@ class BasePluginManager(object):
         for module in modules:
             try:
                 self.add_plugins_from_module(module,
-                                            plugin_to_config_map=plugin_to_config_map)
+                                             plugin_to_config_map=plugin_to_config_map)
             except PluginException as e:
                 log.exception(e)
                 log.error(e)
@@ -876,7 +876,7 @@ class PluginManager(BasePluginManager):
             or self.default_conf_path
 
         super(PluginManager, self).__init__(search_path=init_search_path,
-                                        plugin_conf_path=init_plugin_conf_path)
+                                            plugin_conf_path=init_plugin_conf_path)
 
     def _get_conduits(self):
         """get subscription-manager specific plugin conduits."""

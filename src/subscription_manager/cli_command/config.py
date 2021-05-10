@@ -30,16 +30,16 @@ class ConfigCommand(CliCommand):
         super(ConfigCommand, self).__init__("config", shortdesc, False)
 
         self.parser.add_argument("--list", action="store_true",
-                               help=_("list the configuration for this system"))
+                                 help=_("list the configuration for this system"))
         self.parser.add_argument("--remove", dest="remove", action="append",
-                               help=_("remove configuration entry by section.name"))
+                                 help=_("remove configuration entry by section.name"))
         for s in list(conf.keys()):
             section = conf[s]
             for name, _value in list(section.items()):
                 # Allow adding CLI options only for sections and names listed in defaults
                 if s in rhsm.config.DEFAULTS and name in rhsm.config.DEFAULTS[s]:
                     self.parser.add_argument("--" + s + "." + name, dest=(s + "." + name),
-                                           help=_("Section: {s}, Name: {name}").format(s=s, name=name))
+                                             help=_("Section: {s}, Name: {name}").format(s=s, name=name))
 
     def _validate_options(self):
         if self.options.list:
@@ -106,10 +106,10 @@ class ConfigCommand(CliCommand):
                         indicator1 = '['
                         indicator2 = ']'
                     print("   {name} = {indicator1}{value}{indicator2}".format(
-                       name=name,
-                       indicator1=indicator1,
-                       value=value,
-                       indicator2=indicator2
+                        name=name,
+                        indicator1=indicator1,
+                        value=value,
+                        indicator2=indicator2
                     ))
                 print()
             print(_("[] - Default value in use"))

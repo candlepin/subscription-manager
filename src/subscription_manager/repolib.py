@@ -405,7 +405,7 @@ class RepoUpdateActionCommand(object):
                 repo_file = repo_class()
                 if repo_file.exists():
                     log.info("Removing %s due to manage_repos configuration." %
-                            repo_file.path)
+                             repo_file.path)
             RepoActionInvoker.delete_repo_file()
             return 0
 

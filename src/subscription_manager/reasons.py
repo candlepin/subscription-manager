@@ -148,5 +148,5 @@ class Reasons(object):
         the product.
         """
         results = [valid_ent for valid_ent in self.sorter.valid_entitlement_certs
-                if prod in valid_ent.products]
+                   if prod in valid_ent.products]
         return results

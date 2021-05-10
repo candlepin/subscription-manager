@@ -63,7 +63,7 @@ class ContainerContentUpdateActionCommand(object):
 
     def _find_content(self):
         return find_content(self.ent_source,
-            content_type=CONTAINER_CONTENT_TYPE)
+                            content_type=CONTAINER_CONTENT_TYPE)
 
     def _get_unique_paths(self, content_sets):
         """
@@ -98,8 +98,8 @@ class KeyPair(object):
 
     def __eq__(self, other):
         return (isinstance(other, self.__class__) and
-            self.cert_path == other.cert_path and
-            self.key_path == other.key_path)
+                self.cert_path == other.cert_path and
+                self.key_path == other.key_path)
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -151,9 +151,9 @@ class ContainerCertDir(object):
 
         for keypair in expected_keypairs:
             full_cert_path = os.path.join(self.path,
-                keypair.dest_cert_filename)
+                                          keypair.dest_cert_filename)
             full_key_path = os.path.join(self.path,
-                keypair.dest_key_filename)
+                                         keypair.dest_key_filename)
             expected_files.append(keypair.dest_cert_filename)
             expected_files.append(keypair.dest_key_filename)
             # WARNING: We assume that matching filenames must be the same
@@ -161,13 +161,13 @@ class ContainerCertDir(object):
             # should be safe.
             if not os.path.exists(full_cert_path):
                 log.info("Copying: %s -> %s" %
-                    (keypair.cert_path, full_cert_path))
+                         (keypair.cert_path, full_cert_path))
                 shutil.copyfile(keypair.cert_path, full_cert_path)
                 shutil.copymode(keypair.cert_path, full_cert_path)
                 self.report.added.append(full_cert_path)
             if not os.path.exists(full_key_path):
                 log.info("Copying: %s -> %s" %
-                    (keypair.key_path, full_key_path))
+                         (keypair.key_path, full_key_path))
                 shutil.copyfile(keypair.key_path, full_key_path)
                 shutil.copymode(keypair.key_path, full_key_path)
                 self.report.added.append(full_key_path)

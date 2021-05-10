@@ -135,10 +135,10 @@ def dbus_to_python(obj, expected_type=None):
         #python_obj = {dbus_to_python(k): dbus_to_python(v) for k, v in obj.items()}
         python_obj = dict([dbus_to_python(k), dbus_to_python(v)] for k, v in list(obj.items()))
     elif isinstance(obj, bool) or \
-         isinstance(obj, str) or isinstance(obj, bytes) or \
-         isinstance(obj, int) or isinstance(obj, float) or \
-         isinstance(obj, list) or isinstance(obj, tuple) or \
-         isinstance(obj, dict):
+        isinstance(obj, str) or isinstance(obj, bytes) or \
+        isinstance(obj, int) or isinstance(obj, float) or \
+        isinstance(obj, list) or isinstance(obj, tuple) or \
+        isinstance(obj, dict):
         python_obj = obj
     else:
         raise TypeError("Unhandled %s" % obj)

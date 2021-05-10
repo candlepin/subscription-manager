@@ -71,27 +71,27 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
     pool_id = md5sum(product_id)
 
     to_return = {
-            'productName': product_name,
-            'productId': product_id,
-            'quantity': quantity,
-            'consumed': consumed,
-            'id': pool_id,
-            'subscriptionId': '402881062bc9a379012bc9a3d7380050',
-            'startDate': start_date.isoformat(),
-            'endDate': end_date.isoformat(),
-            'updated': start_date.isoformat(),
-            'created': start_date.isoformat(),
-            'activeSubscription': True,
-            'providedProducts': provided,
-            'sourceEntitlement': None,
-            'href': '/pools/%s' % pool_id,
-            'restrictedToUsername': None,
-            'owner': {
-                'href': '/owners/admin',
-                'id': '402881062bc9a379012bc9a393fe0005'},
-            'attributes': attributes,
-            'productAttributes': productAttributes,
-        }
+        'productName': product_name,
+        'productId': product_id,
+        'quantity': quantity,
+        'consumed': consumed,
+        'id': pool_id,
+        'subscriptionId': '402881062bc9a379012bc9a3d7380050',
+        'startDate': start_date.isoformat(),
+        'endDate': end_date.isoformat(),
+        'updated': start_date.isoformat(),
+        'created': start_date.isoformat(),
+        'activeSubscription': True,
+        'providedProducts': provided,
+        'sourceEntitlement': None,
+        'href': '/pools/%s' % pool_id,
+        'restrictedToUsername': None,
+        'owner': {
+            'href': '/owners/admin',
+            'id': '402881062bc9a379012bc9a393fe0005'},
+        'attributes': attributes,
+        'productAttributes': productAttributes,
+    }
 
     if calculatedAttributes is not None:
         to_return['calculatedAttributes'] = calculatedAttributes

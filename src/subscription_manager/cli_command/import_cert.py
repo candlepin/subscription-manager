@@ -31,7 +31,7 @@ class ImportCertCommand(CliCommand):
         super(ImportCertCommand, self).__init__("import", shortdesc, False)
 
         self.parser.add_argument("--certificate", action="append", dest="certificate_file",
-                               help=_("certificate file to import (can be specified more than once)"))
+                                 help=_("certificate file to import (can be specified more than once)"))
 
     def _validate_options(self):
         if self.is_registered():

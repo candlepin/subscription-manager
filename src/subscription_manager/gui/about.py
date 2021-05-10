@@ -76,7 +76,7 @@ class AboutDialog(object):
         sub_man_version_label.set_markup(_("<b>{name} version:</b> {version}").format(
             name="subscription manager", version=client_versions['subscription-manager']))
         backend_version_label.set_markup(_("<b>subscription management service version:</b> {version}").format(
-                                           version=server_versions['candlepin']))
+                                         version=server_versions['candlepin']))
 
         self.dialog.connect("response", self._handle_response)
         self.dialog.show_all()

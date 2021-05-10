@@ -32,7 +32,7 @@ class DefaultStubInstalledProduct(StubProduct):
                  brand_type=None, brand_name=None):
 
         super(DefaultStubInstalledProduct, self).__init__(id=id, name=name, brand_type=brand_type,
-                                                 brand_name=brand_name)
+                                                          brand_name=brand_name)
 
 
 class BaseBrandFixture(fixture.SubManFixture):
@@ -41,12 +41,12 @@ class BaseBrandFixture(fixture.SubManFixture):
     def setUp(self):
         super(BaseBrandFixture, self).setUp()
         self.brand_file_write_patcher = mock.patch("subscription_manager.entbranding.BrandFile.write",
-                                              name="MockBrandFile.write")
+                                                   name="MockBrandFile.write")
         self.mock_write = self.brand_file_write_patcher.start()
 
         self.brand_file_read_patcher = mock.patch("subscription_manager.entbranding.BrandFile.read",
-                                             return_value="%s\n" % self.current_brand,
-                                             name="MockBrandFile.read")
+                                                  return_value="%s\n" % self.current_brand,
+                                                  name="MockBrandFile.read")
         self.mock_brand_read = self.brand_file_read_patcher.start()
 
         self.mock_install_patcher = mock.patch("subscription_manager.rhelentbranding.RHELBrandInstaller._install",

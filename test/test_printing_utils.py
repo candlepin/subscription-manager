@@ -5,7 +5,7 @@ import unittest
 from subscription_manager.cli_command.list import AVAILABLE_SUBS_MATCH_COLUMNS
 from subscription_manager.cli_command import status
 from subscription_manager.printing_utils import format_name, columnize, echo_columnize_callback, \
-        none_wrap_columnize_callback, highlight_by_filter_string_columnize_cb, FONT_BOLD, FONT_RED, FONT_NORMAL
+    none_wrap_columnize_callback, highlight_by_filter_string_columnize_cb, FONT_BOLD, FONT_RED, FONT_NORMAL
 
 from mock import patch, Mock
 
@@ -126,14 +126,14 @@ class TestColumnize(unittest.TestCase):
     def test_columnize_with_small_term(self, term_width_mock):
         term_width_mock.return_value = None
         result = columnize(["Hello Hello Hello Hello:", "Foo Foo Foo Foo:"],
-                echo_columnize_callback, "This is a testing string", "This_is_another_testing_string")
+                           echo_columnize_callback, "This is a testing string", "This_is_another_testing_string")
         expected = 'Hello\nHello\nHello\nHello\n:     This\n      is a\n      ' \
-                'testin\n      g\n      string\nFoo\nFoo\nFoo\nFoo:  ' \
-                'This_i\n      s_anot\n      her_te\n      sting_\n      string'
+                   'testin\n      g\n      string\nFoo\nFoo\nFoo\nFoo:  ' \
+                   'This_i\n      s_anot\n      her_te\n      sting_\n      string'
         self.assertNotEqual(result, expected)
         term_width_mock.return_value = 12
         result = columnize(["Hello Hello Hello Hello:", "Foo Foo Foo Foo:"],
-                echo_columnize_callback, "This is a testing string", "This_is_another_testing_string")
+                           echo_columnize_callback, "This is a testing string", "This_is_another_testing_string")
         self.assertEqual(result, expected)
 
     def test_format_name_no_break_no_indent(self):

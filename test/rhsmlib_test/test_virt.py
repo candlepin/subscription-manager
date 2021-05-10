@@ -96,8 +96,8 @@ class VirtUuidCollectorTest(unittest.TestCase):
     def test_default_virt_uuid_guest_no_uuid(self):
         """Check that virt guest systems dont set an 'Unknown' virt.uuid if not found."""
         collected = {
-           'virt.host_type': 'kvm',
-           'virt.is_guest': True
+            'virt.host_type': 'kvm',
+            'virt.is_guest': True
         }
         result = virt.VirtUuidCollector(collected_hw_info=collected).get_all()
         self.assertFalse('virt.uuid' in result)

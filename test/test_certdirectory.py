@@ -57,16 +57,16 @@ class PathTests(unittest.TestCase):
     def test_modified_root(self):
         Path.ROOT = '/mnt/sysimage/'
         self.assertEqual('/mnt/sysimage/etc/pki/consumer/',
-                Path.abs('/etc/pki/consumer/'))
+                         Path.abs('/etc/pki/consumer/'))
         self.assertEqual('/mnt/sysimage/etc/pki/consumer/',
-                Path.abs('etc/pki/consumer/'))
+                         Path.abs('etc/pki/consumer/'))
 
     def test_modified_root_no_trailing_slash(self):
         Path.ROOT = '/mnt/sysimage'
         self.assertEqual('/mnt/sysimage/etc/pki/consumer/',
-                Path.abs('/etc/pki/consumer/'))
+                         Path.abs('/etc/pki/consumer/'))
         self.assertEqual('/mnt/sysimage/etc/pki/consumer/',
-                Path.abs('etc/pki/consumer/'))
+                         Path.abs('etc/pki/consumer/'))
 
     def test_repo_file(self):
         # Fake that the redhat.repo exists:
@@ -79,18 +79,18 @@ class PathTests(unittest.TestCase):
         Path.ROOT = '/mnt/sysimage'
         prod_db = ProductDatabase()
         self.assertEqual('/mnt/sysimage/var/lib/rhsm/productid.js',
-                prod_db.dir.abspath('productid.js'))
+                         prod_db.dir.abspath('productid.js'))
 
     def test_sysimage_pathjoin(self):
         Path.ROOT = '/mnt/sysimage'
         ed = EntitlementDirectory()
         self.assertEqual('/mnt/sysimage/etc/pki/entitlement/1-key.pem',
-                Path.join(ed.productpath(), '1-key.pem'))
+                         Path.join(ed.productpath(), '1-key.pem'))
 
     def test_normal_pathjoin(self):
         ed = EntitlementDirectory()
         self.assertEqual('/etc/pki/entitlement/1-key.pem',
-                Path.join(ed.productpath(), "1-key.pem"))
+                         Path.join(ed.productpath(), "1-key.pem"))
 
 
 # make sure _check_key returns the right value

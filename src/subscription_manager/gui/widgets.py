@@ -309,7 +309,7 @@ class SubscriptionManagerTab(SubmanBaseWidget, HasSortableWidget):
 
         if 'background' in self.store:
             column.add_attribute(text_renderer, 'cell-background',
-                                self.store['background'])
+                                 self.store['background'])
 
         self.top_view.append_column(column)
         return column
@@ -406,12 +406,12 @@ class ProductsTable(object):
         self.product_dir = product_dir
 
         name_column = ga_Gtk.TreeViewColumn(_("Product"),
-                                         ga_Gtk.CellRendererText(),
-                                         markup=0)
+                                            ga_Gtk.CellRendererText(),
+                                            markup=0)
         name_column.set_expand(True)
         installed_column = ga_Gtk.TreeViewColumn(_("Installed"),
-                                              ga_Gtk.CellRendererPixbuf(),
-                                              pixbuf=1)
+                                                 ga_Gtk.CellRendererPixbuf(),
+                                                 pixbuf=1)
 
         table_widget.append_column(name_column)
         table_widget.append_column(installed_column)
@@ -459,9 +459,9 @@ class SubDetailsWidget(SubmanBaseWidget):
         self._set_accessibility_names()
 
     def show(self, name, contract=None, start=None, end=None, account=None,
-            management=None, support_level="", support_type="",
-            virt_only=None, products=None, highlight=None, sku=None,
-            reasons=[], expiring=False, pool_type=""):
+             management=None, support_level="", support_type="",
+             virt_only=None, products=None, highlight=None, sku=None,
+             reasons=[], expiring=False, pool_type=""):
         """
         Show subscription details.
 
@@ -477,7 +477,7 @@ class SubDetailsWidget(SubmanBaseWidget):
 
         for index in utils.find_text(name, highlight):
             buf.apply_tag(tag, buf.get_iter_at_offset(index),
-                    buf.get_iter_at_offset(index + len(highlight)))
+                          buf.get_iter_at_offset(index + len(highlight)))
 
         self._set(self.sku_text, sku)
         self._set(self.pool_type_text, pool_type)
@@ -500,12 +500,12 @@ class SubDetailsWidget(SubmanBaseWidget):
         self.bundled_products.clear()
         for product in products:
             self.bundled_products.add_product(utils.apply_highlight(product[0],
-                highlight), product[1])
+                                                                    highlight), product[1])
 
     def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
-                           management=None, support_level="", support_type="",
-                           virt_only=None, products=None, highlight=None, sku=None,
-                           reasons=[], expiring=False):
+                            management=None, support_level="", support_type="",
+                            virt_only=None, products=None, highlight=None, sku=None,
+                            reasons=[], expiring=False):
         pass
 
     def _set(self, text_view, text):
@@ -544,26 +544,26 @@ class SubDetailsWidget(SubmanBaseWidget):
         # See BZ 803374.
 
         self.subscription_text.get_accessible().set_name(
-                "All Available Subscription Text")
+            "All Available Subscription Text")
         self.sku_text.get_accessible().set_name(
-                "All Available SKU Text")
+            "All Available SKU Text")
         self.support_level_and_type_text.get_accessible().set_name(
-                "All Available Support Level And Type Text")
+            "All Available Support Level And Type Text")
         self.bundled_products.set_accessibility_name(
-                "All Available Bundled Product Table")
+            "All Available Bundled Product Table")
         self.pool_type_text.get_accessible().set_name(
-                "All Available Subscription Type Text")
+            "All Available Subscription Type Text")
 
 
 # also show contract info on this details widget
 class ContractSubDetailsWidget(SubDetailsWidget):
     widget_names = SubDetailsWidget.widget_names + \
-                    ["contract_number_text",
-                     "start_end_date_text",
-                     "account_text",
-                     "provides_management_text",
-                     "virt_only_text",
-                     "details_view"]
+        ["contract_number_text",
+         "start_end_date_text",
+         "account_text",
+         "provides_management_text",
+         "virt_only_text",
+         "details_view"]
 
     gui_file = "subdetailscontract"
 
@@ -571,9 +571,9 @@ class ContractSubDetailsWidget(SubDetailsWidget):
         super(ContractSubDetailsWidget, self).__init__(product_dir)
 
     def _show_other_details(self, name, contract=None, start=None, end=None, account=None,
-                           management=None, support_level="", support_type="",
-                           virt_only=None, products=None, highlight=None, sku=None,
-                           reasons=[], expiring=False):
+                            management=None, support_level="", support_type="",
+                            virt_only=None, products=None, highlight=None, sku=None,
+                            reasons=[], expiring=False):
         products = products or []
         reasons = reasons or []
 
@@ -581,14 +581,14 @@ class ContractSubDetailsWidget(SubDetailsWidget):
 
         # set background for GTK2
         self.start_end_date_text.modify_base(ga_Gtk.StateType.NORMAL,
-                self._get_date_bg(end, expiring))
+                                             self._get_date_bg(end, expiring))
         # set background for GTK3
         self.start_end_date_text.modify_bg(ga_Gtk.StateType.NORMAL,
-                self._get_date_bg(end, expiring))
+                                           self._get_date_bg(end, expiring))
 
         self._set(self.contract_number_text, contract)
         self._set(self.start_end_date_text, "%s - %s" % (
-                    managerlib.format_date(start), managerlib.format_date(end)))
+                                            managerlib.format_date(start), managerlib.format_date(end)))
         self._set(self.account_text, account)
         self._set(self.provides_management_text, management)
         self._set(self.virt_only_text, virt_only)
@@ -624,8 +624,8 @@ class CellRendererDate(ga_Gtk.CellRendererText):
     """
 
     __gproperties__ = {
-            'date': (ga_GObject.TYPE_PYOBJECT, 'date', 'date displayed',
-                ga_GObject.PARAM_READWRITE)
+        'date': (ga_GObject.TYPE_PYOBJECT, 'date', 'date displayed',
+                 ga_GObject.PARAM_READWRITE)
     }
 
     #def __init__(self):
@@ -649,8 +649,8 @@ class CellRendererDate(ga_Gtk.CellRendererText):
 class DatePicker(ga_Gtk.HBox):
 
     __gsignals__ = {
-            'date-picked-cal': (ga_GObject.SignalFlags.RUN_LAST, None, tuple()),
-            'date-picked-text': (ga_GObject.SignalFlags.RUN_LAST, None, tuple())
+        'date-picked-cal': (ga_GObject.SignalFlags.RUN_LAST, None, tuple()),
+        'date-picked-text': (ga_GObject.SignalFlags.RUN_LAST, None, tuple())
     }
 
     def __init__(self, date):
@@ -665,7 +665,7 @@ class DatePicker(ga_Gtk.HBox):
 
         # set the timezone so we can sent it to the server
         self._date = datetime.datetime(date.year, date.month, date.day,
-                tzinfo=tzlocal())
+                                       tzinfo=tzlocal())
         self._date_entry = ga_Gtk.Entry()
         self._date_entry.set_width_chars(10)
 
@@ -711,16 +711,16 @@ class DatePicker(ga_Gtk.HBox):
         except ValueError:
             today = datetime.date.today()
             messageWindow.ErrorDialog(messageWindow.wrap_text(
-                                "%s %s" % (_("Invalid date format. Please re-enter a valid date. Example: "), today.isoformat())))
+                "%s %s" % (_("Invalid date format. Please re-enter a valid date. Example: "), today.isoformat())))
             return False
 
     def _date_validate(self, date_str):
         # try this as a iso8601 date format, aka, 2012-12-25
         try:
             date = datetime.datetime(
-                    *(time.strptime(date_str, '%Y-%m-%d')[0:6]))
+                *(time.strptime(date_str, '%Y-%m-%d')[0:6]))
             self._date = datetime.datetime(date.year, date.month, date.day,
-                    tzinfo=tzlocal())
+                                           tzinfo=tzlocal())
         except ValueError:
             raise
 
@@ -739,7 +739,7 @@ class DatePicker(ga_Gtk.HBox):
         except ValueError:
             today = datetime.date.today()
             self._date = datetime.datetime(today.year, today.month, today.day,
-                tzinfo=tzlocal())
+                                           tzinfo=tzlocal())
 
         self._calendar.select_month(self._date.month - 1, self._date.year)
         self._calendar.select_day(self._date.day)
@@ -772,7 +772,7 @@ class DatePicker(ga_Gtk.HBox):
         self._calendar_window.show_all()
 
         self._calendar.connect("day-selected-double-click",
-                self._calendar_clicked)
+                               self._calendar_clicked)
 
     def _destroy(self):
         self._calendar_window.destroy()
@@ -780,14 +780,14 @@ class DatePicker(ga_Gtk.HBox):
     def _calendar_clicked(self, calendar):
         (year, month, day) = self._calendar.get_date()
         self._date = datetime.datetime(year, month + 1, day,
-                tzinfo=tzlocal())
+                                       tzinfo=tzlocal())
         self.emit('date-picked-cal')
         self._destroy()
 
     def _today_clicked(self, button):
         day = datetime.date.today()
         self._date = datetime.datetime(day.year, day.month, day.day,
-                tzinfo=tzlocal())
+                                       tzinfo=tzlocal())
         self.emit('date-picked-cal')
         self._destroy()
 
@@ -888,7 +888,7 @@ class QuantitySelectionColumn(ga_Gtk.TreeViewColumn):
         self.quantity_renderer = ga_Gtk.CellRendererSpin()
         self.quantity_renderer.set_property("xalign", 0)
         self.quantity_renderer.set_property("adjustment",
-            ga_Gtk.Adjustment(lower=1, upper=100, step_incr=1))
+                                            ga_Gtk.Adjustment(lower=1, upper=100, step_incr=1))
         self.quantity_renderer.set_property("editable", editable)
         self.quantity_renderer.connect("edited", self._on_edit, tree_model)
         self.quantity_renderer.connect("editing-started", self._setup_editor)
@@ -993,10 +993,10 @@ class QuantitySelectionColumn(ga_Gtk.TreeViewColumn):
             if available:
                 if available != -1:
                     cell_renderer.set_property("adjustment",
-                        ga_Gtk.Adjustment(lower=int(increment), upper=int(available), step_incr=int(increment)))
+                                               ga_Gtk.Adjustment(lower=int(increment), upper=int(available), step_incr=int(increment)))
                 else:
                     cell_renderer.set_property("adjustment",
-                        ga_Gtk.Adjustment(lower=int(increment), upper=100, step_incr=int(increment)))
+                                               ga_Gtk.Adjustment(lower=int(increment), upper=100, step_incr=int(increment)))
 
 
 class TextTreeViewColumn(ga_Gtk.TreeViewColumn):
@@ -1022,7 +1022,7 @@ class TextTreeViewColumn(ga_Gtk.TreeViewColumn):
 
         if 'background' in store:
             self.add_attribute(self.text_renderer, 'cell-background',
-                                store['background'])
+                               store['background'])
 
 
 class WidgetSwitcher(object):

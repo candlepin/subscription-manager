@@ -282,7 +282,7 @@ class OstreeConfigFileStore(object):
 
     def __init__(self, config_file_path=None):
         self.config_file_path = config_file_path or \
-                                self.default_config_file_path
+            self.default_config_file_path
         self.config_file = None
 
     def load(self):

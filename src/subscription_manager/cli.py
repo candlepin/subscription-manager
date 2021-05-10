@@ -131,8 +131,8 @@ class CLI(object):
                 items_other.append(("  " + name, cmd.shortdesc))
 
         all_items = [(_("Primary Modules:"), '\n')] + \
-                items_primary + [('\n' + _("Other Modules:"), '\n')] + \
-                items_other
+            items_primary + [('\n' + _("Other Modules:"), '\n')] + \
+            items_other
         self._do_columnize(all_items)
 
     def _do_columnize(self, items_list):

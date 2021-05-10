@@ -269,7 +269,7 @@ class MainWindow(widgets.SubmanBaseWidget):
 
         self.installed_tab_icon = ga_Gtk.Image()
         self.installed_tab_icon.set_from_stock(ga_Gtk.STOCK_YES,
-                ga_Gtk.IconSize.MENU)
+                                               ga_Gtk.IconSize.MENU)
 
         self.installed_tab = InstalledProductsTab(self.backend,
                                                   self.installed_tab_icon,
@@ -384,7 +384,7 @@ class MainWindow(widgets.SubmanBaseWidget):
         # Show the All Subscriptions tab if registered, hide it otherwise:
         if self.registered() and self.notebook.get_n_pages() == 2:
             self.notebook.append_page(self.all_subs_tab.get_content(),
-                    ga_Gtk.Label(self.all_subs_tab.get_label()))
+                                      ga_Gtk.Label(self.all_subs_tab.get_label()))
         elif not self.registered() and self.notebook.get_n_pages() == 3:
             self.notebook.set_current_page(0)
             self.notebook.remove_page(2)
@@ -520,11 +520,11 @@ class MainWindow(widgets.SubmanBaseWidget):
         except Exception as e:
             log.error("Error unregistering system with entitlement platform.")
             handle_gui_exception(e, _("<b>Errors were encountered during unregister.</b>") +
-                                      "\n%s\n" +
-                                      _("Please see /var/log/rhsm/rhsm.log for more information."),
-                                self.main_window,
-                                log_msg="Consumer may need to be manually cleaned up: %s" %
-                                self.identity.uuid)
+                                 "\n%s\n" +
+                                 _("Please see /var/log/rhsm/rhsm.log for more information."),
+                                 self.main_window,
+                                 log_msg="Consumer may need to be manually cleaned up: %s" %
+                                 self.identity.uuid)
         # managerlib.unregister removes product and entitlement directories
         self.backend.product_dir.__init__()
         self.backend.entitlement_dir.__init__()
@@ -537,8 +537,8 @@ class MainWindow(widgets.SubmanBaseWidget):
     def _unregister_item_clicked(self, widget):
         log.debug("Unregister button pressed, asking for confirmation.")
         prompt = messageWindow.YesNoDialog(
-                _("<b>Are you sure you want to unregister?</b>"),
-                self._get_window())
+            _("<b>Are you sure you want to unregister?</b>"),
+            self._get_window())
         prompt.connect('response', self._on_unregister_prompt_response)
 
     def _proxy_config_item_clicked(self, widget):
@@ -609,8 +609,8 @@ class MainWindow(widgets.SubmanBaseWidget):
     def _check_rhn_classic(self):
         if ClassicCheck().is_registered_with_classic():
             prompt = messageWindow.ContinueDialog(
-                    linkify(get_branding().REGISTERED_TO_OTHER_WARNING),
-                    self.main_window, _("System Already Registered"))
+                linkify(get_branding().REGISTERED_TO_OTHER_WARNING),
+                self.main_window, _("System Already Registered"))
             prompt.connect('response', self._on_rhn_classic_response)
 
     def _on_rhn_classic_response(self, dialog, response):

@@ -49,7 +49,7 @@ class EntCertActionInvoker(certlib.BaseActionInvoker):
 class EntCertDeleteLib(object):
     """Invoker for entitlement certificate delete actions."""
     def __init__(self, serial_numbers=None,
-                ent_dir=None):
+                 ent_dir=None):
         self.locker = certlib.Locker()
         self.ent_dir = ent_dir
 
@@ -58,7 +58,7 @@ class EntCertDeleteLib(object):
 
     def _do_delete(self):
         action = EntCertDeleteAction(ent_dir=self.ent_dir,
-                                    serial_numbers=self.serial_numbers)
+                                     serial_numbers=self.serial_numbers)
         return action.perform()
 
 
@@ -282,7 +282,7 @@ class EntCertUpdateAction(object):
             # NOTE: use injected IDENTITY, need to validate this
             # handles disconnected errors properly
             reply = self.uep.getCertificates(self.identity.uuid,
-                                              serials=sn_list)
+                                             serials=sn_list)
             for cert in reply:
                 result.append(cert)
         return result

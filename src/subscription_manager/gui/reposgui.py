@@ -79,7 +79,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
         self.overrides_treeview.get_accessible().set_name("Repository View")
         self.no_repos_label, self.no_repos_label_viewport = widgets.get_scrollable_label()
         self.widget_switcher = widgets.WidgetSwitcher(self.scrolledwindow,
-                self.no_repos_label_viewport, self.overrides_treeview)
+                                                      self.no_repos_label_viewport, self.overrides_treeview)
 
         # We require the backend here so that we can always use its version
         # of Overrides which will guarantee that the CP UEPConnection is up
@@ -125,11 +125,11 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
 
         sortable_cols = []
         enabled_col = CheckBoxColumn(_("Enabled"), self.overrides_store, 'enabled',
-            self._on_enable_repo_toggle)
+                                     self._on_enable_repo_toggle)
         self.overrides_treeview.append_column(enabled_col)
 
         gpgcheck_col = CheckBoxColumn(_("Gpgcheck"), self.overrides_store, 'gpgcheck',
-            self._on_gpgcheck_toggle_changed)
+                                      self._on_gpgcheck_toggle_changed)
         self.overrides_treeview.append_column(gpgcheck_col)
 
         repo_id_col = TextTreeViewColumn(self.overrides_store,
@@ -140,7 +140,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
         sortable_cols.append((repo_id_col, 'text', 'repo_id'))
 
         modified_col = ga_Gtk.TreeViewColumn(_("Modified"), ga_Gtk.CellRendererPixbuf(),
-                                          pixbuf=self.overrides_store['modified-icon'])
+                                             pixbuf=self.overrides_store['modified-icon'])
         self.overrides_treeview.append_column(modified_col)
         sortable_cols.append((modified_col, 'text', 'modified'))
 
@@ -176,7 +176,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
     def _on_async_load_data_failure(self, e):
         self._clear_progress_bar()
         handle_gui_exception(e, _("Unable to load repository data."),
-                     self._get_dialog_widget())
+                             self._get_dialog_widget())
 
     def _refresh(self, current_overrides, current_repos, repo_id_to_select=None):
         # Current overrides from server
@@ -310,7 +310,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
             return
 
         confirm = YesNoDialog(_("Are you sure you want to remove all overrides for <b>%s</b>?") % selection['repo_id'],
-                                 self._get_dialog_widget(), _("Confirm Remove All Overrides"))
+                              self._get_dialog_widget(), _("Confirm Remove All Overrides"))
         confirm.connect("response", self._on_reset_repo_response)
 
     def _on_reset_repo_response(self, dialog, response):
@@ -327,7 +327,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
 
         self._show_progress_bar(_("Removing Repository Overrides"), _("Removing all overrides for repository <b>%s</b>") % repo_id)
         self.async_update.remove_all_overrides([repo_id], self._on_async_delete_all_overrides_success,
-                                          self._on_async_delete_all_overrides_failure)
+                                               self._on_async_delete_all_overrides_failure)
 
     def _on_async_delete_all_overrides_success(self, current_overrides, current_repos):
         selection = SelectionWrapper(self.overrides_treeview.get_selection(),
@@ -360,7 +360,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
     def _on_async_delete_all_overrides_failure(self, e):
         self._clear_progress_bar()
         handle_gui_exception(e, _("Unable to reset repository overrides."),
-                     self._get_dialog_widget())
+                             self._get_dialog_widget())
 
     def _on_selection(self, tree_selection):
         selection = SelectionWrapper(tree_selection, self.overrides_store)
@@ -397,7 +397,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
     def _apply_override_changes(self, override_mapping, success_handler):
         self._show_progress_bar(_("Updating Repository Overrides"), _("Applying override changes to repositories."))
         self.async_update.update_overrides(override_mapping['to_add'], override_mapping['to_remove'],
-                                      success_handler, self._on_update_failure)
+                                           success_handler, self._on_update_failure)
 
     def _on_update_success(self, current_overrides, current_repos):
         self._refresh(current_overrides, current_repos, self._get_selected_repo_id())
@@ -415,7 +415,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
 
         # There are changes pending, check if the user would like to save changes.
         confirm = YesNoDialog(_("Repositories have changes. Save changes?"),
-                                 self._get_dialog_widget(), _("Save Changes"))
+                              self._get_dialog_widget(), _("Save Changes"))
         confirm.connect("response", self._on_apply_changes_on_close_response, override_mapping)
 
     def _on_apply_changes_on_close_response(self, dialog, response, override_mapping):
@@ -458,7 +458,7 @@ class RepositoriesDialog(widgets.SubmanBaseWidget, HasSortableWidget):
         repo = self.overrides_store.get_value(override_model_iter,
                                               self.overrides_store['repo_data'])
         overrides = self.overrides_store.get_value(override_model_iter,
-                                              self.overrides_store['override_data'])
+                                                   self.overrides_store['override_data'])
 
         current_gpg_check = self._get_boolean(self.overrides_store.get_value(override_model_iter,
                                                                              self.overrides_store['gpgcheck']))

@@ -78,8 +78,8 @@ class ContentTests(unittest.TestCase):
 
     def test_compare(self):
         ext1 = {'1': 'mycontent',
-               '2': 'mycontent',
-               '8': True}
+                '2': 'mycontent',
+                '8': True}
         c = Content(ext1)
         ext2 = {'1': 'othercontent',
                 '2': 'othercontent'}

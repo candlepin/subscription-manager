@@ -53,8 +53,8 @@ class RedeemDialog(widgets.SubmanBaseWidget):
             self.hide()
         except Exception as e:
             handle_gui_exception(e,
-                _("Error redeeming subscription: %s"),
-                self.redeem_dialog)
+                                 _("Error redeeming subscription: %s"),
+                                 self.redeem_dialog)
 
     # Pulled from facts dialog - TODO:  Refactor!
     def show(self):

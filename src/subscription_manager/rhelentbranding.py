@@ -95,8 +95,8 @@ class RHELBrandPicker(entbranding.BrandPicker):
             log.warning("More than one entitlement provided branded name information for an installed RHEL product")
             for branded_cert in branded_certs:
                 log.debug("Entitlement cert %s (%s) provided branded name information for (%s, %s)" %
-                            (branded_cert[0].serial, branded_cert[0].order.name,
-                            branded_cert[1].id, branded_cert[1].brand_name))
+                          (branded_cert[0].serial, branded_cert[0].order.name,
+                           branded_cert[1].id, branded_cert[1].brand_name))
             return None
 
     def _get_branded_cert_products(self):
@@ -114,7 +114,7 @@ class RHELBrandPicker(entbranding.BrandPicker):
                 log.warning("More than one installed product with RHEL brand information is installed")
                 for installed_branded_product in installed_branded_products:
                     log.debug("Entitlement cert %s is providing brand info for product %s" %
-                             (cert, installed_branded_product))
+                              (cert, installed_branded_product))
                 continue
             else:
                 installed_branded_product = installed_branded_products[0]

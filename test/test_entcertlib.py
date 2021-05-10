@@ -73,8 +73,8 @@ class UpdateActionTests(fixture.SubManFixture):
     def test_expired_are_not_ignored_when_installing_certs(self, write_mock, build_cert_mock):
         valid_ent = StubEntitlementCertificate(StubProduct("PValid"))
         expired_ent = StubEntitlementCertificate(StubProduct("PExpired"),
-                start_date=datetime.now() - timedelta(days=365),
-                end_date=datetime.now() - timedelta(days=10))
+                                                 start_date=datetime.now() - timedelta(days=365),
+                                                 end_date=datetime.now() - timedelta(days=10))
 
         cp_certificates = [valid_ent, expired_ent]
         # get certificates actually returns cert bundles

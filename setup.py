@@ -88,7 +88,7 @@ class rpm_version_release_build_py(_build_py):
 
     def run(self):
         log.debug("Building with GTK_VERSION=%s, RPM_VERSION=%s" %
-                 (self.gtk_version, self.rpm_version))
+                  (self.gtk_version, self.rpm_version))
         _build_py.run(self)
         # create a "version.py" that includes the rpm version
         # info passed to our new build_py args
@@ -119,7 +119,7 @@ class install(_install):
         ('with-subman-gui=', None, 'whether to install subman GUI or not'),
         ('with-subman-migration=', None, 'whether to install subman migration or not'),
         ('with-cockpit-desktop-entry=', None, 'whether to install desktop entry for subman cockpit plugin or not'),
-        ]
+    ]
 
     def initialize_options(self):
         _install.initialize_options(self)
@@ -215,7 +215,7 @@ class install_data(_install_data):
         ('with-subman-gui=', None, 'whether to install subman GUI or not'),
         ('with-subman-migration=', None, 'whether to install subman migration or not'),
         ('with-cockpit-desktop-entry=', None, 'whether to install desktop entry for subman cockpit plugin or not'),
-        ]
+    ]
 
     def initialize_options(self):
         _install_data.initialize_options(self)
@@ -372,23 +372,23 @@ class GettextWithArgparse(i18n.Gettext):
 setup_requires = []
 
 install_requires = [
-        'six',
-        'iniparse',
-        'python-dateutil',
-        'ethtool',
-        'dbus-python',
-    ]
+    'six',
+    'iniparse',
+    'python-dateutil',
+    'ethtool',
+    'dbus-python',
+]
 
 test_require = [
-      'mock',
-      'nose',
-      'nose-capturestderr',
-      'nose-randomly',
-      'coverage',
-      'polib',
-      'flake8',
-      'lxml',
-    ] + install_requires + setup_requires
+    'mock',
+    'nose',
+    'nose-capturestderr',
+    'nose-randomly',
+    'coverage',
+    'polib',
+    'flake8',
+    'lxml',
+] + install_requires + setup_requires
 
 cmdclass = {
     'clean': utils.clean,

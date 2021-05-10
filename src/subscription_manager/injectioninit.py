@@ -46,7 +46,7 @@ def init_dep_injection():
     inj.provide(inj.IDENTITY, Identity, singleton=True)
 
     inj.provide(inj.PRODUCT_DATE_RANGE_CALCULATOR,
-            ValidProductDateRangeCalculator)
+                ValidProductDateRangeCalculator)
 
     inj.provide(inj.ENT_DIR, EntitlementDirectory, singleton=True)
     inj.provide(inj.PROD_DIR, ProductDirectory, singleton=True)

@@ -32,7 +32,7 @@ class ValidProductDateRangeCalculator(object):
         if self.identity.is_valid():
             self.prod_status_cache = inj.require(inj.PROD_STATUS_CACHE)
             self.prod_status = self.prod_status_cache.load_status(
-                    uep, self.identity.uuid)
+                uep, self.identity.uuid)
 
     def calculate(self, product_hash):
         """
@@ -65,7 +65,7 @@ class ValidProductDateRangeCalculator(object):
                     return None
 
                 return DateRange(parse_date(prod['startDate']),
-                    parse_date(prod['endDate']))
+                                 parse_date(prod['endDate']))
             else:
                 # If startDate / endDate not supported
                 log.warn("Server does not support product date ranges.")
@@ -76,5 +76,5 @@ class ValidProductDateRangeCalculator(object):
         # about it yet. This is extremely weird and should be unlikely,
         # but we will log and handle gracefully:
         log.error("Requested status for installed product server does not "
-                "know about: %s" % product_hash)
+                  "know about: %s" % product_hash)
         return None

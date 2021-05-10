@@ -297,17 +297,17 @@ class TestUrlBaseJoinEmptyBase(fixture.SubManFixture):
 
     def test_blank_base_blank_url(self):
         self.assertEqual("",
-                          url_base_join("", ""))
+                         url_base_join("", ""))
 
     def test_blank_base_url(self):
         url = "http://foo.notreal/"
         self.assertEqual(url,
-                          url_base_join("", url))
+                         url_base_join("", url))
 
     def test_blank_base_url_fragment(self):
         url = "baz"
         self.assertEqual(url,
-                          url_base_join("", url))
+                         url_base_join("", url))
 
 # Not sure this makes sense.
 #    def test_blank_base_url_fragment_slash(self):
@@ -322,31 +322,31 @@ class TestUrlBaseJoin(fixture.SubManFixture):
     def test_file_url(self):
         # File urls should be preserved
         self.assertEqual("file://this/is/a/file",
-            url_base_join(self.base, "file://this/is/a/file"))
+                         url_base_join(self.base, "file://this/is/a/file"))
 
     def test_http_url(self):
         # Http locations should be preserved
         self.assertEqual("http://this/is/a/url",
-            url_base_join(self.base, "http://this/is/a/url"))
+                         url_base_join(self.base, "http://this/is/a/url"))
 
     def test_blank_url(self):
         # Blank should remain blank
         self.assertEqual("",
-            url_base_join(self.base, ""))
+                         url_base_join(self.base, ""))
 
     def test_url_fragments(self):
         # Url Fragments should work
         self.assertEqual(self.base + "/baz",
-            url_base_join(self.base, "baz"))
+                         url_base_join(self.base, "baz"))
         self.assertEqual(self.base + "/baz",
-            url_base_join(self.base, "/baz"))
+                         url_base_join(self.base, "/baz"))
 
     def test_base_slash(self):
         base = self.base + '/'
         self.assertEqual(self.base + "/baz",
-            url_base_join(base, "baz"))
+                         url_base_join(base, "baz"))
         self.assertEqual(self.base + "/baz",
-            url_base_join(base, "/baz"))
+                         url_base_join(base, "/baz"))
 
 
 class TestUrlBaseJoinFileUrl(TestUrlBaseJoin):
@@ -561,7 +561,7 @@ class TestFriendlyJoin(fixture.SubManFixture):
         self.assertTrue(res in ["One and Two", "Two and One"])
 
         self.assertEqual("1, 2, 3, 4, 5, 6, and fish",
-                          friendly_join([1, 2, u"3", 4, "5", 6, "fish"]))
+                         friendly_join([1, 2, u"3", 4, "5", 6, "fish"]))
 
 
 class TestTrueValue(fixture.SubManFixture):
@@ -711,10 +711,10 @@ class TestEntitlementCertificateFilter(fixture.SubManFixture):
 
     def test_match(self):
         ent_cert = StubEntitlementCertificate(product=StubProduct(name="test*entitlement?", product_id="123456789"), service_level="Premium", provided_products=[
-                "test product b",
-                "beta product 1",
-                "shared product",
-                "back\\slash"
+            "test product b",
+            "beta product 1",
+            "shared product",
+            "back\\slash"
         ])
         # Order information is hard-coded in the stub, so we've to modify it
         # separately:

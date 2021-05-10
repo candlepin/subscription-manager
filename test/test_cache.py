@@ -248,7 +248,7 @@ class TestProfileManager(unittest.TestCase):
         self.profile_mgr.update_check(uep, uuid, True)
 
         uep.updatePackageProfile.assert_called_with(uuid,
-                FACT_MATCHER)
+                                                    FACT_MATCHER)
         self.assertEqual(1, self.profile_mgr.write_cache.call_count)
 
     @patch('subscription_manager.cache.get_supported_resources')
@@ -264,7 +264,7 @@ class TestProfileManager(unittest.TestCase):
         self.profile_mgr.update_check(uep, uuid, True)
 
         uep.updateCombinedProfile.assert_called_with(uuid,
-                FACT_MATCHER)
+                                                     FACT_MATCHER)
         self.assertEqual(1, self.profile_mgr.write_cache.call_count)
 
     @patch('subscription_manager.cache.get_supported_resources')
@@ -346,7 +346,7 @@ class TestProfileManager(unittest.TestCase):
 
         self.assertRaises(Exception, self.profile_mgr.update_check, uep, uuid, True)
         uep.updatePackageProfile.assert_called_with(uuid,
-                FACT_MATCHER)
+                                                    FACT_MATCHER)
         self.assertEqual(0, self.profile_mgr.write_cache.call_count)
 
     @patch('subscription_manager.cache.get_supported_resources')
@@ -363,7 +363,7 @@ class TestProfileManager(unittest.TestCase):
 
         self.assertRaises(Exception, self.profile_mgr.update_check, uep, uuid, True)
         uep.updateCombinedProfile.assert_called_with(uuid,
-                FACT_MATCHER)
+                                                     FACT_MATCHER)
         self.assertEqual(0, self.profile_mgr.write_cache.call_count)
 
     def test_has_changed_no_cache(self):
@@ -372,8 +372,8 @@ class TestProfileManager(unittest.TestCase):
 
     def test_has_changed_no_changes(self):
         cached_pkgs = [
-                Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
-                Package(name="package2", version="2.0.0", release=2, arch="x86_64")
+            Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
+            Package(name="package2", version="2.0.0", release=2, arch="x86_64")
         ]
         temp_repo_dir = tempfile.mkdtemp()
         self.addCleanup(shutil.rmtree, temp_repo_dir)
@@ -390,8 +390,8 @@ class TestProfileManager(unittest.TestCase):
 
     def test_has_changed(self):
         cached_pkgs = [
-                Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
-                Package(name="package3", version="3.0.0", release=3, arch="x86_64")
+            Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
+            Package(name="package3", version="3.0.0", release=3, arch="x86_64")
         ]
         cached_profile = self._mock_pkg_profile(cached_pkgs, "/non/existing/path/to/repo/file", [])
 
@@ -517,11 +517,11 @@ class TestInstalledProductsCache(SubManFixture):
 
     def test_load_data(self):
         cached = {
-                'products': {
-                    'prod1': 'Product 1',
-                    'prod2': 'Product 2'
-                },
-                'tags': ['p1', 'p2']
+            'products': {
+                'prod1': 'Product 1',
+                'prod2': 'Product 2'
+            },
+            'tags': ['p1', 'p2']
         }
         mock_file = Mock()
         mock_file.read = Mock(return_value=json.dumps(cached))
@@ -531,11 +531,11 @@ class TestInstalledProductsCache(SubManFixture):
 
     def test_has_changed(self):
         cached = {
-                'products': {
-                   'prod1': 'Product 1',
-                   'prod2': 'Product 2'
-                },
-                'tags': ['p1', 'p2']
+            'products': {
+                'prod1': 'Product 1',
+                'prod2': 'Product 2'
+            },
+            'tags': ['p1', 'p2']
         }
 
         self.mgr._read_cache = Mock(return_value=cached)
@@ -545,12 +545,12 @@ class TestInstalledProductsCache(SubManFixture):
 
     def test_has_changed_with_tags_only(self):
         cached = {
-                'products': {
-                    'a-product': {'productName': 'Product A', 'productId': 'a-product', 'version': '1.0', 'arch': 'x86_64'},
-                    'b-product': {'productName': 'Product B', 'productId': 'b-product', 'version': '1.0', 'arch': 'x86_64'},
-                    'c-product': {'productName': 'Product C', 'productId': 'c-product', 'version': '1.0', 'arch': 'x86_64'}
-                },
-                'tags': ['different']
+            'products': {
+                'a-product': {'productName': 'Product A', 'productId': 'a-product', 'version': '1.0', 'arch': 'x86_64'},
+                'b-product': {'productName': 'Product B', 'productId': 'b-product', 'version': '1.0', 'arch': 'x86_64'},
+                'c-product': {'productName': 'Product C', 'productId': 'c-product', 'version': '1.0', 'arch': 'x86_64'}
+            },
+            'tags': ['different']
         }
 
         self.mgr._read_cache = Mock(return_value=cached)
@@ -560,10 +560,10 @@ class TestInstalledProductsCache(SubManFixture):
 
     def test_old_format_seen_as_invalid(self):
         cached = {
-                'a-product': {'productName': 'Product A', 'productId': 'a-product', 'version': '1.0', 'arch': 'x86_64'},
-                'b-product': {'productName': 'Product B', 'productId': 'b-product', 'version': '1.0', 'arch': 'x86_64'},
-                'c-product': {'productName': 'Product C', 'productId': 'c-product', 'version': '1.0', 'arch': 'x86_64'}
-    }
+            'a-product': {'productName': 'Product A', 'productId': 'a-product', 'version': '1.0', 'arch': 'x86_64'},
+            'b-product': {'productName': 'Product B', 'productId': 'b-product', 'version': '1.0', 'arch': 'x86_64'},
+            'c-product': {'productName': 'Product C', 'productId': 'c-product', 'version': '1.0', 'arch': 'x86_64'}
+        }
 
         self.mgr._read_cache = Mock(return_value=cached)
         self.mgr._cache_exists = Mock(return_value=True)
@@ -572,12 +572,12 @@ class TestInstalledProductsCache(SubManFixture):
 
     def test_has_not_changed(self):
         cached = {
-                'products': {
-                    'a-product': {'productName': 'Product A', 'productId': 'a-product', 'version': '1.0', 'arch': 'x86_64'},
-                    'b-product': {'productName': 'Product B', 'productId': 'b-product', 'version': '1.0', 'arch': 'x86_64'},
-                    'c-product': {'productName': 'Product C', 'productId': 'c-product', 'version': '1.0', 'arch': 'x86_64'}
-                },
-                'tags': ['product-a', 'product-b', 'product-c', 'product']
+            'products': {
+                'a-product': {'productName': 'Product A', 'productId': 'a-product', 'version': '1.0', 'arch': 'x86_64'},
+                'b-product': {'productName': 'Product B', 'productId': 'b-product', 'version': '1.0', 'arch': 'x86_64'},
+                'c-product': {'productName': 'Product C', 'productId': 'c-product', 'version': '1.0', 'arch': 'x86_64'}
+            },
+            'tags': ['product-a', 'product-b', 'product-c', 'product']
         }
 
         self.mgr._read_cache = Mock(return_value=cached)
@@ -608,8 +608,8 @@ class TestInstalledProductsCache(SubManFixture):
 
         expected = ["product", "product-a", "product-b", "product-c"]
         uep.updateConsumer.assert_called_with(uuid,
-                content_tags=set(expected),
-                installed_products=self.mgr.format_for_server())
+                                              content_tags=set(expected),
+                                              installed_products=self.mgr.format_for_server())
         self.assertEqual(1, self.mgr.write_cache.call_count)
 
     def test_update_check_error_uploading(self):
@@ -624,8 +624,8 @@ class TestInstalledProductsCache(SubManFixture):
         self.assertRaises(Exception, self.mgr.update_check, uep, uuid, True)
         expected = ["product", "product-a", "product-b", "product-c"]
         uep.updateConsumer.assert_called_with(uuid,
-                content_tags=set(expected),
-                installed_products=self.mgr.format_for_server())
+                                              content_tags=set(expected),
+                                              installed_products=self.mgr.format_for_server())
         self.assertEqual(0, self.mgr.write_cache.call_count)
 
 
@@ -812,11 +812,11 @@ class TestPoolStatusCache(SubManFixture):
 
     def test_load_data(self):
         cached = {
-                'pools': {
-                    'pool1': 'Pool 1',
-                    'pool2': 'Pool 2'
-                },
-                'tags': ['p1', 'p2']
+            'pools': {
+                'pool1': 'Pool 1',
+                'pool2': 'Pool 2'
+            },
+            'tags': ['p1', 'p2']
         }
         mock_file = Mock()
         mock_file.read = Mock(return_value=json.dumps(cached))
@@ -827,11 +827,11 @@ class TestPoolStatusCache(SubManFixture):
     def test_load_from_server(self):
         uep = Mock()
         dummy_pools = {
-                'pools': {
-                    'pool1': 'Pool 1',
-                    'pool2': 'Pool 2'
-                },
-                'tags': ['p1', 'p2']
+            'pools': {
+                'pool1': 'Pool 1',
+                'pool2': 'Pool 2'
+            },
+            'tags': ['p1', 'p2']
         }
         uep.getEntitlementList = Mock(return_value=dummy_pools)
 
@@ -883,8 +883,8 @@ class TestPoolTypeCache(SubManFixture):
         pooltype_cache = PoolTypeCache()
         pooltype_cache.ent_dir = self.ent_dir
         self.cp.getEntitlementList.return_value = [
-                self._build_ent_json('poolid', 'some type'),
-                self._build_ent_json('poolid2', 'some other type')]
+            self._build_ent_json('poolid', 'some type'),
+            self._build_ent_json('poolid2', 'some other type')]
 
         # requires_update should be true, and should allow this method
         # to generate a correct mapping

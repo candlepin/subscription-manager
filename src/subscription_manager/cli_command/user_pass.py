@@ -33,11 +33,11 @@ class UserPassCommand(CliCommand):
         self._password = None
 
         self.parser.add_argument("--username", dest="username",
-                               help=_("username to use when authorizing against the server"))
+                                 help=_("username to use when authorizing against the server"))
         self.parser.add_argument("--password", dest="password",
-                               help=_("password to use when authorizing against the server"))
+                                 help=_("password to use when authorizing against the server"))
         self.parser.add_argument("--token", dest="token",
-                               help=_("token to use when authorizing against the server"))
+                                 help=_("token to use when authorizing against the server"))
 
     @staticmethod
     def _get_username_and_password(username, password):

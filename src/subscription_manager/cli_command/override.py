@@ -32,17 +32,17 @@ class OverrideCommand(CliCommand):
         shortdesc = _("Manage custom content repository settings")
         super(OverrideCommand, self).__init__("repo-override", shortdesc, False)
         self.parser.add_argument("--repo", dest="repos", action="append", metavar="REPOID",
-                               help=_("repository to modify (can be specified more than once)"))
+                                 help=_("repository to modify (can be specified more than once)"))
         self.parser.add_argument("--remove", dest="removals", action="append", metavar="NAME",
-                               help=_(
-                                   "name of the override to remove (can be specified more than once); used with --repo option."))
+                                 help=_(
+                                     "name of the override to remove (can be specified more than once); used with --repo option."))
         self.parser.add_argument("--add", dest="additions", action='append', metavar="NAME:VALUE",
-                               help=_(
-                                   "name and value of the option to override separated by a colon (can be specified more than once); used with --repo option."))
+                                 help=_(
+                                     "name and value of the option to override separated by a colon (can be specified more than once); used with --repo option."))
         self.parser.add_argument("--remove-all", action="store_true",
-                               help=_("remove all overrides; can be specific to a repository by providing --repo"))
+                                 help=_("remove all overrides; can be specific to a repository by providing --repo"))
         self.parser.add_argument("--list", action="store_true",
-                               help=_("list all overrides; can be specific to a repository by providing --repo"))
+                                 help=_("list all overrides; can be specific to a repository by providing --repo"))
 
     def _additions_colon_split(self):
         additions = {}

@@ -34,15 +34,15 @@ class ReleaseCommand(CliCommand):
         super(ReleaseCommand, self).__init__("release", shortdesc, True)
 
         self.parser.add_argument("--show", dest="show", action="store_true",
-                               help=_("shows current release setting; default command"))
+                                 help=_("shows current release setting; default command"))
         self.parser.add_argument("--list", dest="list", action="store_true",
-                               help=_("list available releases"))
+                                 help=_("list available releases"))
         self.parser.add_argument("--set", dest="release", action="store",
-                               default=None,
-                               help=_("set the release for this system"))
+                                 default=None,
+                                 help=_("set the release for this system"))
         self.parser.add_argument("--unset", dest="unset",
-                               action='store_true',
-                               help=_("unset the release for this system"))
+                                 action='store_true',
+                                 help=_("unset the release for this system"))
 
     def _get_consumer_release(self):
         err_msg = _("Error: The 'release' command is not supported by the server.")
@@ -94,7 +94,7 @@ class ReleaseCommand(CliCommand):
                 system_exit(os.EX_DATAERR, _(
                     "No releases match '{release}'.  "
                     "Consult 'release --list' for a full listing.").format(
-                            release=self.options.release))
+                        release=self.options.release))
             repo_action_invoker.update()
             print(_("Release set to: {release}").format(release=self.options.release))
         elif self.options.list:

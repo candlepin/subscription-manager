@@ -32,7 +32,7 @@ class TestI18N(unittest.TestCase):
                     expected = kitchen_textual_width(line)
                     actual = textual_width(line)
                     self.assertEqual(actual, expected, msg='mismatch on line {} of file {}, {} vs. {}'.format(
-                         number, po_file, expected, actual
+                        number, po_file, expected, actual
                     ))
 
     @patch('subscription_manager.i18n.Locale')

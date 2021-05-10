@@ -50,10 +50,10 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
         self.facts = inj.require(inj.FACTS)
 
         self.connect_signals({
-                "on_system_facts_dialog_delete_event": self._hide_callback,
-                "on_close_button_clicked": self._hide_callback,
-                "on_facts_update_button_clicked": self._update_facts_callback
-                })
+            "on_system_facts_dialog_delete_event": self._hide_callback,
+            "on_close_button_clicked": self._hide_callback,
+            "on_facts_update_button_clicked": self._update_facts_callback
+        })
 
         # Set up the model
         self.facts_store = ga_Gtk.TreeStore(str, str)
@@ -65,7 +65,7 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
 
         # set up the signals from the view
         self.facts_view.connect("row_activated",
-                        widgets.expand_collapse_on_row_activated_callback)
+                                widgets.expand_collapse_on_row_activated_callback)
 
     def show(self):
         """Make this dialog visible."""
@@ -129,7 +129,7 @@ class SystemFactsDialog(widgets.SubmanBaseWidget):
         try:
             owner = self.cp_provider.get_consumer_auth_cp().getOwner(identity.uuid)
             self.owner_label.set_text("%s (%s)" %
-                    (owner['displayName'], owner['key']))
+                                      (owner['displayName'], owner['key']))
             self.owner_label.show()
             self.owner_title.show()
         # very broad exception

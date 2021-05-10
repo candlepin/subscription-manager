@@ -31,11 +31,11 @@ class AutohealCommand(CliCommand):
                                               False)
 
         self.parser.add_argument("--enable", dest="enable", action='store_true',
-                               help=_("try to attach subscriptions for uncovered products each check-in"))
+                                 help=_("try to attach subscriptions for uncovered products each check-in"))
         self.parser.add_argument("--disable", dest="disable", action='store_true',
-                               help=_("do not try to automatically attach subscriptions each check-in"))
+                                 help=_("do not try to automatically attach subscriptions each check-in"))
         self.parser.add_argument("--show", dest="show", action='store_true',
-                               help=_("show the current auto-attach preference"))
+                                 help=_("show the current auto-attach preference"))
 
     def _toggle(self, autoheal):
         self.cp.updateConsumer(self.uuid, autoheal=autoheal)

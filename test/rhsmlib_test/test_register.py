@@ -154,7 +154,7 @@ class RegisterServiceTest(InjectionMockingTest):
 
         self.mock_pm = mock.Mock(spec=PluginManager, name="PluginManager")
         self.mock_installed_products = mock.Mock(spec=InstalledProductsManager,
-            name="InstalledProductsManager")
+                                                 name="InstalledProductsManager")
         self.mock_facts = mock.Mock(spec=Facts, name="Facts")
         self.mock_facts.get_facts.return_value = {}
 

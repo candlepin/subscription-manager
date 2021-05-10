@@ -25,9 +25,9 @@ import tempfile
 from rhsm import config
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.cache import EntitlementStatusCache, ProductStatusCache, \
-        OverrideStatusCache, ProfileManager, InstalledProductsManager, ReleaseStatusCache, \
-        PoolStatusCache, SupportedResourcesCache, AvailableEntitlementsCache, \
-        SyspurposeValidFieldsCache, CurrentOwnerCache, ContentAccessModeCache
+    OverrideStatusCache, ProfileManager, InstalledProductsManager, ReleaseStatusCache, \
+    PoolStatusCache, SupportedResourcesCache, AvailableEntitlementsCache, \
+    SyspurposeValidFieldsCache, CurrentOwnerCache, ContentAccessModeCache
 from subscription_manager.facts import Facts
 from subscription_manager.lock import ActionLock
 from rhsm.certificate import GMT
@@ -37,7 +37,7 @@ from subscription_manager.certdirectory import EntitlementDirectory, ProductDire
 
 from rhsm.certificate import parse_tags
 from rhsm.certificate2 import EntitlementCertificate, ProductCertificate, \
-        Product, Content, Order
+    Product, Content, Order
 from rhsm import profile
 from rhsm import ourjson as json
 from rhsm.certificate2 import CONTENT_ACCESS_CERT_TYPE
@@ -169,8 +169,8 @@ class StubProduct(Product):
 class StubContent(Content):
 
     def __init__(self, label, name=None, vendor="",
-            url="", gpg="", enabled=1, metadata_expire=None, required_tags="",
-            content_type="yum"):
+                 url="", gpg="", enabled=1, metadata_expire=None, required_tags="",
+                 content_type="yum"):
         name = label
         if name:
             name = name
@@ -185,7 +185,7 @@ class StubContent(Content):
 class StubProductCertificate(ProductCertificate):
 
     def __init__(self, product, provided_products=None, start_date=None,
-            end_date=None, provided_tags=None):
+                 end_date=None, provided_tags=None):
 
         products = [product]
         if provided_products:
@@ -230,8 +230,8 @@ class StubProductCertificate(ProductCertificate):
 class StubEntitlementCertificate(EntitlementCertificate):
 
     def __init__(self, product, provided_products=None, start_date=None, end_date=None,
-            content=None, quantity=1, stacking_id=None, sockets=2, service_level=None,
-            ram=None, pool=None, ent_id=None, entitlement_type=None):
+                 content=None, quantity=1, stacking_id=None, sockets=2, service_level=None,
+                 ram=None, pool=None, ent_id=None, entitlement_type=None):
 
         # If we're given strings, create stub products for them:
         if isinstance(product, str):
@@ -260,9 +260,9 @@ class StubEntitlementCertificate(EntitlementCertificate):
             sku = product.id
             name = product.name
         order = Order(name=name, number="592837", sku=sku,
-                    stacking_id=stacking_id, socket_limit=sockets,
-                    service_level=service_level, quantity_used=quantity,
-                    ram_limit=ram)
+                      stacking_id=stacking_id, socket_limit=sockets,
+                      service_level=service_level, quantity_used=quantity,
+                      ram_limit=ram)
         order.warning_period = 42
 
         if content is None:
@@ -636,18 +636,18 @@ class StubCPProvider(object):
         self.content_connection = StubContentConnection()
 
     def set_connection_info(self,
-        host=None,
-        ssl_port=None,
-        handler=None,
-        cert_file=None,
-        key_file=None,
-        proxy_hostname_arg=None,
-        proxy_port_arg=None,
-        proxy_user_arg=None,
-        proxy_password_arg=None,
-        no_proxy_arg=None,
-        correlation_id=None,
-        restlib_class=None):
+                            host=None,
+                            ssl_port=None,
+                            handler=None,
+                            cert_file=None,
+                            key_file=None,
+                            proxy_hostname_arg=None,
+                            proxy_port_arg=None,
+                            proxy_user_arg=None,
+                            proxy_password_arg=None,
+                            no_proxy_arg=None,
+                            correlation_id=None,
+                            restlib_class=None):
         pass
 
     def set_content_connection_info(self, cdn_hostname=None, cdn_port=None):
@@ -804,8 +804,8 @@ class StubProfileManager(ProfileManager):
 
     def _get_current_profile(self):
         mock_packages = [
-                  profile.Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
-                  profile.Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
+            profile.Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
+            profile.Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
         self._current_profile = StubRpmProfile(mock_packages=mock_packages)
         return self._current_profile
 

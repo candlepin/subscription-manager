@@ -207,7 +207,7 @@ class TestFindContent(fixture.SubManFixture):
 
     def test_product_tags_and_content_tags_no_match(self):
         content1 = create_mock_content(tags=['awesomeos-ostree-23'],
-                                      content_type="ostree")
+                                       content_type="ostree")
         content2 = create_mock_content(name="more-test-content",
                                        tags=['awesomeos-ostree-24'],
                                        content_type="ostree")
@@ -224,7 +224,7 @@ class TestFindContent(fixture.SubManFixture):
 
     def test_product_tags_and_content_tags_no_match_no_product_tags(self):
         content1 = create_mock_content(tags=['awesomeos-ostree-23'],
-                                      content_type="ostree")
+                                       content_type="ostree")
         content2 = create_mock_content(name="more-test-content",
                                        tags=['awesomeos-ostree-24'],
                                        content_type="ostree")
@@ -240,7 +240,7 @@ class TestFindContent(fixture.SubManFixture):
 
     def test_product_tags_and_content_tags_no_match_empty_product_tags(self):
         content1 = create_mock_content(tags=['awesomeos-ostree-23'],
-                                      content_type="ostree")
+                                       content_type="ostree")
         content2 = create_mock_content(name="more-test-content",
                                        tags=['awesomeos-ostree-24'],
                                        content_type="ostree")
@@ -257,7 +257,7 @@ class TestFindContent(fixture.SubManFixture):
 
     def test_product_tags_and_content_tags_multiple_content_one_match(self):
         content1 = create_mock_content(tags=['awesomeos-ostree-23'],
-                                      content_type="ostree")
+                                       content_type="ostree")
         content2 = create_mock_content(name="more-test-content",
                                        tags=['awesomeos-ostree-1'],
                                        content_type="ostree")
@@ -298,7 +298,7 @@ class TestFindContent(fixture.SubManFixture):
         ent_src.product_tags = ["awesomeos-1"]
 
         cont_list = model.find_content(ent_src,
-            content_type='containerImage')
+                                       content_type='containerImage')
         self.assertEqual(1, len(cont_list))
         self.assertEqual('container_content', cont_list[0].name)
 
@@ -399,7 +399,7 @@ class TestFindContent(fixture.SubManFixture):
         self.assertEqual('yum_content', yum_list[0].name)
 
         cont_list = model.find_content(ent_src,
-            content_type='containerImage')
+                                       content_type='containerImage')
         self.assertEqual(1, len(cont_list))
         self.assertEqual('container_content', cont_list[0].name)
 

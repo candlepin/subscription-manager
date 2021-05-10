@@ -35,7 +35,7 @@ class CliRegistrationTests(SubManFixture):
     def setUp(self):
         super(CliRegistrationTests, self).setUp()
         register_patcher = patch('subscription_manager.cli_command.register.register.RegisterService',
-            spec=RegisterService)
+                                 spec=RegisterService)
         self.mock_register = register_patcher.start().return_value
         self.mock_register.register.return_value = MagicMock(name="MockConsumer")
         self.addCleanup(register_patcher.stop)
@@ -46,7 +46,7 @@ class CliRegistrationTests(SubManFixture):
         self.addCleanup(self.mock_get_resources.stop)
 
         identity_patcher = patch('subscription_manager.cli_command.register.identity.ConsumerIdentity',
-            spec=ConsumerIdentity)
+                                 spec=ConsumerIdentity)
         self.mock_consumer_identity = identity_patcher.start().return_value
         self.addCleanup(identity_patcher.stop)
 

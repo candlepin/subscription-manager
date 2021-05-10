@@ -26,7 +26,7 @@ from subscription_manager.ga import GObject as ga_GObject
 from subscription_manager.entcertlib import Disconnected
 from subscription_manager.managerlib import fetch_certificates
 from subscription_manager.injection import IDENTITY, \
-        PLUGIN_MANAGER, CP_PROVIDER, require
+    PLUGIN_MANAGER, CP_PROVIDER, require
 
 from rhsmlib.services import attach, entitlement
 
@@ -65,7 +65,7 @@ class AsyncPool(object):
         """
         ga_GObject.idle_add(self._watch_thread)
         threading.Thread(target=self._run_refresh, name="AsyncPoolRefreshThread",
-                args=(active_on, callback, data)).start()
+                         args=(active_on, callback, data)).start()
 
 
 class AsyncBind(object):
@@ -107,11 +107,11 @@ class AsyncBind(object):
 
     def bind(self, pool, quantity, except_callback, bind_callback=None, cert_callback=None):
         threading.Thread(target=self._run_bind, name="AsyncBindBindThread",
-                args=(pool, quantity, bind_callback, cert_callback, except_callback)).start()
+                         args=(pool, quantity, bind_callback, cert_callback, except_callback)).start()
 
     def unbind(self, serial, selection, callback, except_callback):
         threading.Thread(target=self._run_unbind, name="AsyncBindUnbindThread",
-                args=(serial, selection, callback, except_callback)).start()
+                         args=(serial, selection, callback, except_callback)).start()
 
 
 class AsyncRepoOverridesUpdate(object):

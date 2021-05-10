@@ -46,8 +46,8 @@ def wrap_text(txt):
 class MessageWindow(ga_GObject.GObject):
 
     __gsignals__ = {
-            'response': (ga_GObject.SignalFlags.RUN_LAST, None,
-                (ga_GObject.TYPE_BOOLEAN,))
+        'response': (ga_GObject.SignalFlags.RUN_LAST, None,
+                     (ga_GObject.TYPE_BOOLEAN,))
     }
 
     def __init__(self, text, parent=None, title=None):

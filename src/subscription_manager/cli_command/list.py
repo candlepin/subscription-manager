@@ -24,7 +24,7 @@ from time import localtime, strftime, strptime
 from rhsmlib.services import products, entitlement
 
 from subscription_manager.cert_sorter import FUTURE_SUBSCRIBED, \
-        SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
+    SUBSCRIBED, NOT_SUBSCRIBED, EXPIRED, PARTIALLY_SUBSCRIBED, UNKNOWN
 from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.cli import CliCommand
 from subscription_manager.i18n import ugettext as _
@@ -194,36 +194,36 @@ class ListCommand(CliCommand):
         self.available = None
         self.consumed = None
         self.parser.add_argument("--installed", action='store_true',
-                               help=_("list shows those products which are installed (default)"))
+                                 help=_("list shows those products which are installed (default)"))
         self.parser.add_argument("--available", action='store_true',
-                               help=_("show those subscriptions which are available"))
+                                 help=_("show those subscriptions which are available"))
         self.parser.add_argument("--all", action='store_true',
-                               help=_("used with --available to ensure all subscriptions are returned"))
+                                 help=_("used with --available to ensure all subscriptions are returned"))
         self.parser.add_argument("--ondate", dest="on_date",
-                               help=_(
-                                   "date to search on, defaults to today's date, only used with --available (example: {example})").format(
-                                     example=strftime("%Y-%m-%d", localtime())))
+                                 help=_(
+                                     "date to search on, defaults to today's date, only used with --available (example: {example})").format(
+                                         example=strftime("%Y-%m-%d", localtime())))
         self.parser.add_argument("--consumed", action='store_true',
-                               help=_("show the subscriptions being consumed by this system"))
+                                 help=_("show the subscriptions being consumed by this system"))
         self.parser.add_argument("--servicelevel", dest="service_level",
-                               help=_(
-                                   "shows only subscriptions matching the specified service level; only used with --available and --consumed"))
+                                 help=_(
+                                     "shows only subscriptions matching the specified service level; only used with --available and --consumed"))
         self.parser.add_argument("--no-overlap", action='store_true',
-                               help=_(
-                                   "shows pools which provide products that are not already covered; only used with --available"))
+                                 help=_(
+                                     "shows pools which provide products that are not already covered; only used with --available"))
         self.parser.add_argument("--match-installed", action="store_true",
-                               help=_(
-                                   "shows only subscriptions matching products that are currently installed; only used with --available"))
+                                 help=_(
+                                     "shows only subscriptions matching products that are currently installed; only used with --available"))
         self.parser.add_argument("--matches", dest="filter_string",
-                               help=_(
-                                   "lists only subscriptions or products containing the specified expression in the subscription or product information, varying with the list requested and the server version (case-insensitive)."))
+                                 help=_(
+                                     "lists only subscriptions or products containing the specified expression in the subscription or product information, varying with the list requested and the server version (case-insensitive)."))
         self.parser.add_argument("--pool-only", dest="pid_only", action="store_true",
-                               help=_(
-                                   "lists only the pool IDs for applicable available or consumed subscriptions; only used with --available and --consumed"))
+                                 help=_(
+                                     "lists only the pool IDs for applicable available or consumed subscriptions; only used with --available and --consumed"))
         self.parser.add_argument('--afterdate', dest="after_date",
-                               help=_(
-                                   "show pools that are active on or after the given date; only used with --available (example: {example})").format(
-                                   example=strftime("%Y-%m-%d", localtime())))
+                                 help=_(
+                                     "show pools that are active on or after the given date; only used with --available (example: {example})").format(
+                                     example=strftime("%Y-%m-%d", localtime())))
 
     def _validate_options(self):
         if self.options.all and not self.options.available:
@@ -367,17 +367,17 @@ class ListCommand(CliCommand):
                     print(
                         _(
                             "No available subscription pools were found matching the expression \"{filter}\" and the service level \"{level}\".").format(
-                        filter=self.options.filter_string, level=self.options.service_level)
+                                filter=self.options.filter_string, level=self.options.service_level)
                     )
                 elif self.options.filter_string:
                     print(
                         _("No available subscription pools were found matching the expression \"{filter}\".").format(
-                        filter=self.options.filter_string)
+                            filter=self.options.filter_string)
                     )
                 elif self.options.service_level:
                     print(
                         _("No available subscription pools were found matching the service level \"{level}\".").format(
-                        level=self.options.service_level)
+                            level=self.options.service_level)
                     )
                 else:
                     print(_("No available subscription pools to list"))
@@ -419,17 +419,17 @@ class ListCommand(CliCommand):
                 print(
                     _(
                         "No consumed subscription pools were found matching the expression \"{filter}\" and the service level \"{level}\".").format(
-                    filter=filter_string, level=service_level)
+                            filter=filter_string, level=service_level)
                 )
             elif filter_string:
                 print(
                     _("No consumed subscription pools were found matching the expression \"{filter}\".").format(
-                    filter=filter_string)
+                        filter=filter_string)
                 )
             elif service_level:
                 print(
                     _("No consumed subscription pools were found matching the service level \"{level}\".").format(
-                    level=service_level)
+                        level=service_level)
                 )
             else:
                 print(_("No consumed subscription pools were found."))

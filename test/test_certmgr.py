@@ -109,7 +109,7 @@ class ActionClientTestBase(SubManFixture):
 
         self.mock_uep = mock.Mock()
         self.mock_uep.getCertificateSerials = mock.Mock(return_value=[{'serial': self.stub_ent1.serial},
-                                                                        {'serial': self.stub_ent2.serial}])
+                                                                      {'serial': self.stub_ent2.serial}])
         self.mock_uep.getConsumer = mock.Mock(return_value=CONSUMER_DATA)
         self.set_consumer_auth_cp(self.mock_uep)
 
@@ -249,7 +249,7 @@ class TestActionClient(ActionClientTestBase):
         # this makes the stub_ent_dir report all ents as being expired
         # so we fetch new ones
         self.stub_ent_dir.list_expired = mock.Mock(
-                return_value=self.stub_ent_dir.list())
+            return_value=self.stub_ent_dir.list())
 
         # we don't want to find replacements, so this forces a delete
         self.mock_uep.getCertificateSerials = mock.Mock(return_value=[])
@@ -286,7 +286,7 @@ class TestHealingActionClient(TestActionClient):
     def test_healing_no_heal(self):
         self.mock_cert_sorter.is_valid = mock.Mock(return_value=True)
         self.mock_cert_sorter.compliant_until = datetime.now() + \
-                timedelta(days=15)
+            timedelta(days=15)
         actionclient = action_client.HealingActionClient()
         actionclient.update(autoheal=True)
         self.assertFalse(self.mock_uep.bind.called)
@@ -304,9 +304,9 @@ class TestHealingActionClient(TestActionClient):
         # Valid today, but not valid 24h from now:
         self.mock_cert_sorter.is_valid = mock.Mock(return_value=True)
         self.mock_cert_sorter.compliant_until = datetime.now(GMT()) + \
-                timedelta(hours=6)
+            timedelta(hours=6)
         cert_build_mock.return_value = (mock.Mock(),
-                self.stub_ent_expires_tomorrow)
+                                        self.stub_ent_expires_tomorrow)
 
         self._stub_certificate_calls([self.stub_ent_expires_tomorrow])
         actionclient = action_client.HealingActionClient()

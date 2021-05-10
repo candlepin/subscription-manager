@@ -45,7 +45,7 @@ EXPIRED_IMG = os.path.join(prefix, "data/icons/invalid.svg")
 
 class MySubscriptionsTab(widgets.SubscriptionManagerTab):
     widget_names = widgets.SubscriptionManagerTab.widget_names + \
-                    ['details_box', 'unsubscribe_button']
+        ['details_box', 'unsubscribe_button']
     gui_file = "mysubs"
 
     def __init__(self, backend, parent_win,
@@ -81,9 +81,9 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         column.add_attribute(image_renderer, 'pixbuf', self.store['image'])
         column.add_attribute(text_renderer, 'text', self.store['subscription'])
         column.add_attribute(text_renderer, 'cell-background',
-                            self.store['background'])
+                             self.store['background'])
         column.add_attribute(image_renderer, 'cell-background',
-                            self.store['background'])
+                             self.store['background'])
         column.set_sizing(ga_Gtk.TreeViewColumnSizing.AUTOSIZE)
 
         self.top_view.append_column(column)
@@ -92,11 +92,11 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         progress_renderer = ga_Gtk.CellRendererProgress()
         products_column = ga_Gtk.TreeViewColumn(_("Installed Products"),
-                                             progress_renderer,
-                                             value=self.store['installed_value'],
-                                             text=self.store['installed_text'])
+                                                progress_renderer,
+                                                value=self.store['installed_value'],
+                                                text=self.store['installed_text'])
         products_column.add_attribute(progress_renderer, 'cell-background',
-                            self.store['background'])
+                                      self.store['background'])
         self.empty_progress_renderer = ga_Gtk.CellRendererText()
         products_column.pack_end(self.empty_progress_renderer, True)
         products_column.set_cell_data_func(progress_renderer, self._update_progress_renderer)
@@ -146,7 +146,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         if self.identity.is_valid():
             self.pb = progress.Progress(_("Removing"),
-                    _("Removing subscription. Please wait."))
+                                        _("Removing subscription. Please wait."))
             self.timer = ga_GObject.timeout_add(100, self.pb.pulse)
             self.pb.set_transient_for(self.parent_win)
             self.async_bind.unbind(serial, selection, self._unsubscribe_callback, self._handle_unbind_exception)
@@ -219,7 +219,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         # Update the parent image if required.
         if new_parent_image and tree_iter:
             self.store.set_value(tree_iter, self.store['image'],
-                    ga_GdkPixbuf.Pixbuf.new_from_file_at_size(new_parent_image, 13, 13))
+                                 ga_GdkPixbuf.Pixbuf.new_from_file_at_size(new_parent_image, 13, 13))
 
     def find_unique_name_count(self, entitlements):
         result = dict()
@@ -276,7 +276,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
 
         order = cert.order
         products = [(product.name, product.id)
-                        for product in cert.products]
+                    for product in cert.products]
 
         reasons = []
         self.backend.cs.load()

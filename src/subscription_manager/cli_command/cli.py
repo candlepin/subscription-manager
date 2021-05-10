@@ -157,21 +157,21 @@ class CliCommand(AbstractCLICommand):
     def _add_url_options(self):
         """ Add options that allow the setting of the server URL."""
         self.parser.add_argument("--serverurl", dest="server_url",
-                               default=None, help=_("server URL in the form of https://hostname:port/prefix"))
+                                 default=None, help=_("server URL in the form of https://hostname:port/prefix"))
         self.parser.add_argument("--insecure", action="store_true",
-                                default=False, help=_("do not check the entitlement server SSL certificate against "
-                                                      "available certificate authorities"))
+                                 default=False, help=_("do not check the entitlement server SSL certificate against "
+                                                       "available certificate authorities"))
 
     def _add_proxy_options(self):
         """ Add proxy options that apply to sub-commands that require network connections. """
         self.parser.add_argument("--proxy", dest="proxy_url",
-                               default=None, help=_("proxy URL in the form of hostname:port"))
+                                 default=None, help=_("proxy URL in the form of hostname:port"))
         self.parser.add_argument("--proxyuser", dest="proxy_user",
-                                default=None, help=_("user for HTTP proxy with basic authentication"))
+                                 default=None, help=_("user for HTTP proxy with basic authentication"))
         self.parser.add_argument("--proxypassword", dest="proxy_password",
-                                default=None, help=_("password for HTTP proxy with basic authentication"))
+                                 default=None, help=_("password for HTTP proxy with basic authentication"))
         self.parser.add_argument('--noproxy', dest='no_proxy',
-                               default=None, help=_("host suffixes that should bypass HTTP proxy"))
+                                 default=None, help=_("host suffixes that should bypass HTTP proxy"))
 
     def _do_command(self):
         pass
