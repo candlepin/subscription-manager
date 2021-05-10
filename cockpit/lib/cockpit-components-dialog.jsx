@@ -174,14 +174,18 @@ export class DialogFooter extends React.Component {
             actions_disabled = 'disabled';
             if (!(this.state.action_in_progress_promise && this.state.action_in_progress_promise.cancel) && !this.state.action_progress_cancel)
                 cancel_disabled = 'disabled';
-            wait_element = <div className="dialog-wait-ct pull-right">
-                <div className="spinner spinner-sm" />
-                <span>{ this.state.action_progress_message }</span>
-            </div>;
+            wait_element = (
+                <div className="dialog-wait-ct pull-right">
+                    <div className="spinner spinner-sm" />
+                    <span>{ this.state.action_progress_message }</span>
+                </div>
+            );
         } else if (this.props.idle_message) {
-            wait_element = <div className="dialog-wait-ct pull-right">
-                { this.props.idle_message }
-            </div>;
+            wait_element = (
+                <div className="dialog-wait-ct pull-right">
+                    { this.props.idle_message }
+                </div>
+            );
         }
 
         var self = this;
@@ -198,12 +202,13 @@ export class DialogFooter extends React.Component {
                 button_style = button_style_mapping[action.style];
             button_style = "btn " + button_style + " apply";
             var action_disabled = actions_disabled || ('disabled' in action && action.disabled);
-            return (<button
+            return (
+                <button
                 key={ caption }
                 className={ button_style }
                 onClick={ self.action_click.bind(self, action.clicked) }
                 disabled={ action_disabled }
-            >{ caption }</button>
+                >{ caption }</button>
             );
         });
 
@@ -215,10 +220,12 @@ export class DialogFooter extends React.Component {
         else
             error_message = this.state.error_message;
         if (error_message) {
-            error_element = <div className="alert alert-danger dialog-error">
-                <span className="fa fa-exclamation-triangle" />
-                <span>{ React.isValidElement(error_message) ? error_message : error_message.toString() }</span>
-            </div>;
+            error_element = (
+                <div className="alert alert-danger dialog-error">
+                    <span className="fa fa-exclamation-triangle" />
+                    <span>{ React.isValidElement(error_message) ? error_message : error_message.toString() }</span>
+                </div>
+            );
         }
         return (
             <div className="modal-footer">
