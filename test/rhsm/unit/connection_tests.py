@@ -386,44 +386,44 @@ class ConnectionTests(unittest.TestCase):
             restlib._load_ca_certificates(ssl.SSLContext(ssl.PROTOCOL_SSLv23))
 
     def test_hypervisor_check_in_capability_and_reporter(self):
-            self.cp.conn = Mock()
-            self.cp.has_capability = Mock(return_value=True)
-            Options = namedtuple('Options', 'reporter_id')
-            options = Options('tester')
-            self.cp.hypervisorHeartbeat("owner", options=options)
-            self.cp.conn.request_put.assert_called_with(
-                    "/hypervisors/owner/heartbeat?reporter_id=tester")
+        self.cp.conn = Mock()
+        self.cp.has_capability = Mock(return_value=True)
+        Options = namedtuple('Options', 'reporter_id')
+        options = Options('tester')
+        self.cp.hypervisorHeartbeat("owner", options=options)
+        self.cp.conn.request_put.assert_called_with(
+                "/hypervisors/owner/heartbeat?reporter_id=tester")
 
     def test_hypervisor_check_in_no_capability(self):
-            self.cp.conn = Mock()
-            self.cp.has_capability = Mock(return_value=False)
-            Options = namedtuple('Options', 'reporter_id')
-            options = Options('tester')
-            self.cp.hypervisorHeartbeat("owner", options=options)
-            self.cp.conn.request_put.assert_not_called()
+        self.cp.conn = Mock()
+        self.cp.has_capability = Mock(return_value=False)
+        Options = namedtuple('Options', 'reporter_id')
+        options = Options('tester')
+        self.cp.hypervisorHeartbeat("owner", options=options)
+        self.cp.conn.request_put.assert_not_called()
 
     def test_hypervisor_check_in_no_reporter(self):
-            self.cp.conn = Mock()
-            self.cp.has_capability = Mock(return_value=True)
-            Options = namedtuple('Options', 'reporter_id')
-            options = Options('')
-            self.cp.hypervisorHeartbeat("owner", options=options)
-            self.cp.conn.request_put.assert_not_called()
+        self.cp.conn = Mock()
+        self.cp.has_capability = Mock(return_value=True)
+        Options = namedtuple('Options', 'reporter_id')
+        options = Options('')
+        self.cp.hypervisorHeartbeat("owner", options=options)
+        self.cp.conn.request_put.assert_not_called()
 
     def test_orgs_user_none_org(self):
-            self.cp.conn = Mock()
-            # observed return value when user has no org
-            self.cp.conn.request_get = Mock(return_value=[None])
-            self.assertEqual([], self.cp.getOwnerList(username="test"))
-            # return value when list has None and actual value
-            self.cp.conn.request_get = Mock(return_value=[None, 'Fred'])
-            self.assertEqual(['Fred'], self.cp.getOwnerList(username="test"))
-            # return value of None
-            self.cp.conn.request_get = Mock(return_value=None)
-            self.assertEqual([], self.cp.getOwnerList(username="test"))
-            # return value of empty list
-            self.cp.conn.request_get = Mock(return_value=[])
-            self.assertEqual([], self.cp.getOwnerList(username="test"))
+        self.cp.conn = Mock()
+        # observed return value when user has no org
+        self.cp.conn.request_get = Mock(return_value=[None])
+        self.assertEqual([], self.cp.getOwnerList(username="test"))
+        # return value when list has None and actual value
+        self.cp.conn.request_get = Mock(return_value=[None, 'Fred'])
+        self.assertEqual(['Fred'], self.cp.getOwnerList(username="test"))
+        # return value of None
+        self.cp.conn.request_get = Mock(return_value=None)
+        self.assertEqual([], self.cp.getOwnerList(username="test"))
+        # return value of empty list
+        self.cp.conn.request_get = Mock(return_value=[])
+        self.assertEqual([], self.cp.getOwnerList(username="test"))
 
 
 class RestlibValidateResponseTests(unittest.TestCase):
