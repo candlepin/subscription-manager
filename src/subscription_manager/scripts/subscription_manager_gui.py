@@ -106,6 +106,7 @@ def system_exit(code, msgs=None):
             sys.stderr.write(str(msg) + '\n')
     sys.exit(code)
 
+
 BUS_NAME = "com.redhat.SubscriptionManagerGUI"
 BUS_PATH = "/gui"
 
@@ -229,6 +230,7 @@ def main():
     except Exception as e:
         log.exception(e)
         system_exit(1, e)
+
 
 if __name__ == '__main__':
     main()

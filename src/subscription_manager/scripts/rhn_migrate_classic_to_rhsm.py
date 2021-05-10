@@ -38,6 +38,7 @@ def system_exit(code, msgs=None):
             sys.stderr.write(six.text_type(msg) + '\n')
     sys.exit(code)
 
+
 _LIBPATH = "/usr/share/rhsm"
 # add to the path if need be
 if _LIBPATH not in sys.path:
