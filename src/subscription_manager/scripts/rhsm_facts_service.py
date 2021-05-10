@@ -39,5 +39,6 @@ def main():
     except Exception:
         log.exception("DBus service startup failed")
 
+
 if __name__ == "__main__":
     main()
