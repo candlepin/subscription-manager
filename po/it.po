@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-01 21:07+0200\n"
+"POT-Creation-Date: 2021-04-15 18:07+0200\n"
 "PO-Revision-Date: 2021-04-02 19:01+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
@@ -102,7 +102,7 @@ msgid "Options"
 msgstr "Opzioni"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: cockpit/src/index.js:64
+#: cockpit/src/index.js:64 cockpit/src/subscriptions-view.jsx:305
 #: src/subscription_manager/gui/data/glade/installed.glade:86
 #: src/subscription_manager/gui/data/ui/installed.ui:93
 #: src/subscription_manager/gui/registergui.py:249
@@ -213,6 +213,14 @@ msgstr ""
 msgid "Connected to Red Hat Insights"
 msgstr "Connesso a Red Hat Insights"
 
+#: cockpit/src/insights.jsx:377
+msgid "Next Insights data upload"
+msgstr ""
+
+#: cockpit/src/insights.jsx:382
+msgid "Last Insights data upload"
+msgstr ""
+
 #: cockpit/src/insights.jsx:392
 msgid "Next Insights data upload could not be scheduled."
 msgstr ""
@@ -291,9 +299,17 @@ msgstr "Connesso a Insights"
 msgid "Not connected"
 msgstr "Non connesso"
 
+#: cockpit/src/insights.jsx:546
+#, fuzzy
+#| msgid "Insights"
+msgid "Insights: $0"
+msgstr "Insights"
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: cockpit/src/subscriptions-client.js:48
 #: cockpit/src/subscriptions-client.js:554
+#: cockpit/src/subscriptions-view.jsx:396
+#: cockpit/src/subscriptions-view.jsx:402
 #: src/rhsmlib/services/entitlement.py:94
 #: src/rhsmlib/services/syspurpose.py:104
 #: src/subscription_manager/cert_sorter.py:282
@@ -344,6 +360,7 @@ msgid "Updating status ..."
 msgstr "Aggiornamento dello stato..."
 
 #: cockpit/src/subscriptions-client.js:467
+#: cockpit/src/subscriptions-view.jsx:317
 #: src/subscription_manager/gui/registergui.py:1075
 msgid "Unregistering"
 msgstr "Annullamento registrazione"
@@ -427,6 +444,7 @@ msgid "Activation key"
 msgstr "Chiave di attivazione"
 
 #: cockpit/src/subscriptions-register.jsx:189
+#: cockpit/src/subscriptions-view.jsx:326
 msgid "Subscriptions"
 msgstr "Sottoscrizioni"
 
@@ -448,46 +466,142 @@ msgstr "Connessione automatica"
 msgid "Auto-attaching ..."
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:240
+#: cockpit/src/subscriptions-view.jsx:241
 msgid "Service Level:  "
 msgstr "Livello del servizio:  "
 
-#: cockpit/src/subscriptions-view.jsx:250
+#: cockpit/src/subscriptions-view.jsx:251
 msgid "Usage:  "
 msgstr "Uso:  "
 
-#: cockpit/src/subscriptions-view.jsx:260
+#: cockpit/src/subscriptions-view.jsx:261
 msgid "Role:  "
 msgstr "Ruolo:  "
 
-#: cockpit/src/subscriptions-view.jsx:270
+#: cockpit/src/subscriptions-view.jsx:271
 msgid "Add-ons:  "
 msgstr "Add-on:  "
 
-#: cockpit/src/subscriptions-view.jsx:282
+#: cockpit/src/subscriptions-view.jsx:283
 msgid "Status: "
 msgstr "Stato: "
 
-#: cockpit/src/subscriptions-view.jsx:290
+#: cockpit/src/subscriptions-view.jsx:291
 msgid "System Purpose"
 msgstr "Scopo del sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: cockpit/src/subscriptions-view.jsx:301
-#: cockpit/src/subscriptions-view.jsx:306
+#: cockpit/src/subscriptions-view.jsx:302
+#, fuzzy
+#| msgid "This system is currently not registered."
+msgid "Status: This system is currently not registered."
+msgstr "Questo sistema è attualmente non registrato."
+
+#: cockpit/src/subscriptions-view.jsx:308
+#, fuzzy
+#| msgid "Status: "
+msgid "Status: $0"
+msgstr "Stato: "
+
+#: cockpit/src/subscriptions-view.jsx:311
+msgid "Unregister"
+msgstr "Rimuovi-registrazione"
+
+#: cockpit/src/subscriptions-view.jsx:356
+msgid ""
+"The rhsm service is unavailable. Make sure subscription-manager is installed "
+"and try reloading the page. Additionally, make sure that you have checked "
+"the 'Reuse my password for privileged tasks' checkbox on the login page."
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
+#: cockpit/src/subscriptions-view.jsx:359
+#, fuzzy
+#| msgid "Unable to reach the server at %s:%s%s"
+msgid "Unable to the reach the rhsm service."
+msgstr "Impossibile raggiungere il server su %s:%s%s"
+
+#: cockpit/src/subscriptions-view.jsx:362
+msgid "Updating"
+msgstr "In aggiornamento"
+
+#: cockpit/src/subscriptions-view.jsx:363
+msgid "Retrieving subscription status..."
+msgstr "Recupero dello stato della sottoscrizione ..."
+
+#: cockpit/src/subscriptions-view.jsx:366
+msgid "Access denied"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:367
+msgid "The current user isn't allowed to access system subscription status."
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:370
+msgid "Unable to connect"
+msgstr "Impossibile collegarsi"
+
+#: cockpit/src/subscriptions-view.jsx:371
+msgid ""
+"Couldn't get system subscription status. Please ensure subscription-manager "
+"is installed."
+msgstr ""
+"Impossibile ottenere lo stato dell'abbonamento di sistema. Assicurati che "
+"sia installato subscription-manager."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: cockpit/src/subscriptions-view.jsx:389
+#: src/subscription_manager/cli_command/list.py:40
+#: src/subscription_manager/gui/installedtab.py:222
+msgid "Subscribed"
+msgstr "Sottoscritte"
+
+#: cockpit/src/subscriptions-view.jsx:392
+msgid "Not Subscribed (Not supported by a valid subscription.)"
+msgstr "Non sottoscritto (non supportato da una sottoscrizione valida)."
+
+#: cockpit/src/subscriptions-view.jsx:417
+msgid "Product Name"
+msgstr "Nome prodotto"
+
+#: cockpit/src/subscriptions-view.jsx:419
+msgid "Product ID"
+msgstr "ID del prodotto"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: cockpit/src/subscriptions-view.jsx:421 src/rct/printing.py:50
+#: src/rct/printing.py:132 src/subscription_manager/gui/installedtab.py:91
+msgid "Version"
+msgstr "Versione"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
+#: cockpit/src/subscriptions-view.jsx:423 src/rct/printing.py:51
+msgid "Arch"
+msgstr "Arch"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: cockpit/src/subscriptions-view.jsx:425
 #: src/subscription_manager/gui/installedtab.py:94
 msgid "Status"
 msgstr "Stato"
 
+#: cockpit/src/subscriptions-view.jsx:427
+msgid "Starts"
+msgstr "Inizia"
+
+#: cockpit/src/subscriptions-view.jsx:429
+msgid "Ends"
+msgstr "Finisce"
+
+#: cockpit/src/subscriptions-view.jsx:443
+msgid "Installed products"
+msgstr "Prodotti installati"
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: cockpit/src/subscriptions-view.jsx:301
-#: src/subscription_manager/cli_command/unregister.py:39
-#: src/subscription_manager/gui/registergui.py:210
-#: src/subscription_manager/gui/registergui.py:454
-#: src/subscription_manager/gui/registergui.py:1579
-#: src/subscription_manager/utils.py:292
-msgid "This system is currently not registered."
-msgstr "Questo sistema è attualmente non registrato."
+#: cockpit/src/subscriptions-view.jsx:444
+#: src/subscription_manager/gui/installedtab.py:324
+msgid "No installed products detected."
+msgstr "Non è stato rilevato alcun prodotto installato."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/daemons/rhsmcertd.c:95
@@ -565,11 +679,11 @@ msgstr "Opzione non valida: %s\n"
 msgid "Invalid argument specified: %s\n"
 msgstr "Argomento non valido specificato: %s\n"
 
-#: src/dnf-plugins/product-id.py:78
+#: src/dnf-plugins/product-id.py:79
 msgid "Installed products updated."
 msgstr "Prodotti installati aggiornati."
 
-#: src/dnf-plugins/subscription-manager.py:40
+#: src/dnf-plugins/subscription-manager.py:41
 #, python-format
 msgid ""
 "\n"
@@ -591,7 +705,7 @@ msgstr ""
 "non si dispone di altre sottoscrizioni attive è possibile rinnovare la "
 "sottoscrizione scaduta.  "
 
-#: src/dnf-plugins/subscription-manager.py:49
+#: src/dnf-plugins/subscription-manager.py:50
 #, fuzzy
 #| msgid ""
 #| "This system is not registered to Red Hat Subscription Management. You can "
@@ -605,7 +719,7 @@ msgstr ""
 "Questo sistema non è registrato a Red Hat Subscription Management. È "
 "possibile utilizzare subscription-manager per effettuare la registrazione.\n"
 
-#: src/dnf-plugins/subscription-manager.py:53
+#: src/dnf-plugins/subscription-manager.py:54
 #, fuzzy
 #| msgid ""
 #| "This system is registered to Red Hat Subscription Management, but is not "
@@ -621,12 +735,12 @@ msgstr ""
 "ricevendo gli aggiornamenti. È possibile utilizzare subscription-manager per "
 "assegnare le sottoscrizioni.\n"
 
-#: src/dnf-plugins/subscription-manager.py:86
+#: src/dnf-plugins/subscription-manager.py:87
 msgid "Not root, Subscription Management repositories not updated"
 msgstr ""
 "Non si è root, i repository di Subscription Management non vengono aggiornati"
 
-#: src/dnf-plugins/subscription-manager.py:114
+#: src/dnf-plugins/subscription-manager.py:115
 #, fuzzy, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repositories with respect of "
@@ -635,30 +749,30 @@ msgstr ""
 "il plugin subscription-manager ha disabilitato %d repository di sistema "
 "seguendo la configurazione in /etc/dnf/plugins/subscription-manager.conf"
 
-#: src/dnf-plugins/subscription-manager.py:127
+#: src/dnf-plugins/subscription-manager.py:128
 msgid "Updating Subscription Management repositories."
 msgstr "Aggiornamento repository di Subscription Management."
 
-#: src/dnf-plugins/subscription-manager.py:132
+#: src/dnf-plugins/subscription-manager.py:133
 msgid "Unable to read consumer identity"
 msgstr "Impossibile leggere l'identità dell'utente"
 
-#: src/dnf-plugins/subscription-manager.py:135
+#: src/dnf-plugins/subscription-manager.py:136
 msgid "Subscription Manager is operating in container mode."
 msgstr "Subscription Manager sta funzionando in modalità per container."
 
-#: src/dnf-plugins/upload-profile.py:35
+#: src/dnf-plugins/upload-profile.py:36
 msgid ""
 "Upload combined profile to Satellite server (list of installed rpms, enabled "
 "repositories and modules"
 msgstr ""
 
-#: src/dnf-plugins/upload-profile.py:43
+#: src/dnf-plugins/upload-profile.py:44
 #: src/subscription_manager/scripts/package_profile_upload.py:39
 msgid "Force package profile upload"
 msgstr ""
 
-#: src/dnf-plugins/upload-profile.py:59
+#: src/dnf-plugins/upload-profile.py:60
 #: src/subscription_manager/scripts/package_profile_upload.py:46
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
 msgstr ""
@@ -689,7 +803,7 @@ msgstr "_Registra"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/rct/cert_commands.py:38
-#, python-brace-format, python-format
+#, python-format, python-brace-format
 msgid "%(prog)s {name} [OPTIONS] CERT_FILE"
 msgstr "%(prog)s {name} [OPZIONI] FILE_CERTIFICATO"
 
@@ -786,7 +900,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/rct/manifest_commands.py:141
-#, python-brace-format, python-format
+#, python-format, python-brace-format
 msgid "%(prog)s {name} [OPTIONS] MANIFEST_FILE"
 msgstr "%(prog)s {name} [OPZIONI] FILE_MANIFESTO"
 
@@ -1038,17 +1152,6 @@ msgid "ID"
 msgstr "ID"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rct/printing.py:50 src/rct/printing.py:132
-#: src/subscription_manager/gui/installedtab.py:91
-msgid "Version"
-msgstr "Versione"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#: src/rct/printing.py:51
-msgid "Arch"
-msgstr "Arch"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/printing.py:52
 msgid "Tags"
 msgstr "Tag"
@@ -1078,7 +1181,7 @@ msgstr "Add-on"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/printing.py:89 src/subscription_manager/gui/allsubs.py:231
 #: src/subscription_manager/gui/contract_selection.py:139
-#: src/subscription_manager/managerlib.py:376
+#: src/subscription_manager/managerlib.py:382
 msgid "Unlimited"
 msgstr "Illimitato"
 
@@ -1193,7 +1296,7 @@ msgid "Alt Name"
 msgstr "Nome alt."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#: src/rct/printing.py:228 src/rhsmlib/services/entitlement.py:267
+#: src/rct/printing.py:228 src/rhsmlib/services/entitlement.py:274
 msgid "Not Available"
 msgstr "Non disponibile"
 
@@ -1254,7 +1357,7 @@ msgid "only data not already included in sos report will be collected"
 msgstr "verranno raccolti solo i dati non inclusi nel riporto sos"
 
 #: src/rhsm_debug/debug_commands.py:85
-#, python-brace-format, python-format
+#, python-format, python-brace-format
 msgid "%(prog)s {name} [OPTIONS] "
 msgstr "%(prog)s {name} [OPZIONI] "
 
@@ -1455,7 +1558,7 @@ msgid "Unknown arguments: %s"
 msgstr "Argomenti sconosciuti: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsmlib/services/entitlement.py:258
+#: src/rhsmlib/services/entitlement.py:265
 #: src/subscription_manager/cli_command/list.py:335
 #: src/subscription_manager/gui/mysubstab.py:301
 #: src/subscription_manager/gui/widgets.py:862
@@ -1463,7 +1566,7 @@ msgid "Virtual"
 msgstr "Virtuale"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsmlib/services/entitlement.py:260
+#: src/rhsmlib/services/entitlement.py:267
 #: src/subscription_manager/cli_command/list.py:337
 #: src/subscription_manager/gui/mysubstab.py:303
 #: src/subscription_manager/gui/widgets.py:861
@@ -1471,40 +1574,40 @@ msgid "Physical"
 msgstr "Fisico"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#: src/rhsmlib/services/entitlement.py:263
+#: src/rhsmlib/services/entitlement.py:270
 #: src/subscription_manager/cli_command/list.py:340
 #: src/subscription_manager/gui/mysubstab.py:306
 msgid "Yes"
 msgstr "Sì"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#: src/rhsmlib/services/entitlement.py:265
+#: src/rhsmlib/services/entitlement.py:272
 #: src/subscription_manager/cli_command/list.py:342
 #: src/subscription_manager/gui/mysubstab.py:308
 msgid "No"
 msgstr "No"
 
-#: src/rhsmlib/services/entitlement.py:285
+#: src/rhsmlib/services/entitlement.py:292
 msgid "Subscription is current"
 msgstr "La sottoscrizione è corrente"
 
-#: src/rhsmlib/services/entitlement.py:288
+#: src/rhsmlib/services/entitlement.py:295
 msgid "Subscription is expired"
 msgstr "La sottoscrizione è scaduta"
 
-#: src/rhsmlib/services/entitlement.py:290
+#: src/rhsmlib/services/entitlement.py:297
 msgid "Subscription has not begun"
 msgstr "La sottoscrizione non è iniziata"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#: src/rhsmlib/services/entitlement.py:292
+#: src/rhsmlib/services/entitlement.py:299
 #: src/subscription_manager/gui/mysubstab.py:294
 msgid "Subscription management service doesn't support Status Details."
 msgstr ""
 "Il servizio di gestione della sottoscrizione non supporta i dettagli sullo "
 "stato."
 
-#: src/rhsmlib/services/entitlement.py:439
+#: src/rhsmlib/services/entitlement.py:448
 msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
@@ -1513,40 +1616,40 @@ msgstr ""
 "\"consumati\" o \"disponibili\""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsmlib/services/entitlement.py:444
+#: src/rhsmlib/services/entitlement.py:453
 #: src/subscription_manager/cli_command/list.py:230
 msgid "Error: --all is only applicable with --available"
 msgstr "Errore: --all è applicabile solo con --available"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsmlib/services/entitlement.py:448
+#: src/rhsmlib/services/entitlement.py:457
 #: src/subscription_manager/cli_command/list.py:232
 msgid "Error: --ondate is only applicable with --available"
 msgstr "Errore: --ondate è applicabile solo con --available"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#: src/rhsmlib/services/entitlement.py:453
+#: src/rhsmlib/services/entitlement.py:462
 #: src/subscription_manager/cli_command/list.py:234
 msgid "Error: --servicelevel is only applicable with --available or --consumed"
 msgstr "Errore: --servicelevel è solo applicabile con --available o --consumed"
 
-#: src/rhsmlib/services/entitlement.py:457
+#: src/rhsmlib/services/entitlement.py:466
 #: src/subscription_manager/cli_command/list.py:238
 msgid "Error: --match-installed is only applicable with --available"
 msgstr "Errore: --match-installed è applicabile solo con --available"
 
-#: src/rhsmlib/services/entitlement.py:461
+#: src/rhsmlib/services/entitlement.py:470
 #: src/subscription_manager/cli_command/list.py:240
 msgid "Error: --no-overlap is only applicable with --available"
 msgstr "Errore: --no-overlap è applicabile solo con --available"
 
-#: src/rhsmlib/services/entitlement.py:466
+#: src/rhsmlib/services/entitlement.py:475
 #: src/subscription_manager/cli_command/list.py:242
 msgid ""
 "Error: --pool-only is only applicable with --available and/or --consumed"
 msgstr "Errore: --pool-only è solo applicabile con --available e/o --consumed"
 
-#: src/rhsmlib/services/entitlement.py:469
+#: src/rhsmlib/services/entitlement.py:478
 msgid "Error: this system is not registered"
 msgstr "Errore: questo sistema non è registrato"
 
@@ -1771,7 +1874,7 @@ msgstr ""
 "Suggerimento: login o password dimenticati? Consulta https://redhat.com/"
 "forgot_password"
 
-#: src/subscription_manager/cache.py:161
+#: src/subscription_manager/cache.py:164
 #, python-brace-format
 msgid ""
 "consumer_uuid={consumer_uuid} is not a valid consumer_uuid. Not attempting "
@@ -1779,15 +1882,6 @@ msgid ""
 msgstr ""
 "consumer_uuid={consumer_uuid} non è un consumer_uuid valido. Nessun "
 "tentativo di sincronizzare la cache {class_name} con il server."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/cache.py:186
-msgid ""
-"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
-"more details."
-msgstr ""
-"Errore durante l'aggiornamento dei dati del sistema sul server, consultare /"
-"var/log/rhsm/rhsm.log per maggiori informazioni."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cert_sorter.py:278
@@ -1806,7 +1900,7 @@ msgstr "Non valido"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli.py:81
-#, python-brace-format, python-format
+#, python-format, python-brace-format
 msgid "%(prog)s {name} [OPTIONS]"
 msgstr "%(prog)s {name} [OPZIONI]"
 
@@ -2544,12 +2638,6 @@ msgid "Future Subscription"
 msgstr "Sottoscrizioni future"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/cli_command/list.py:40
-#: src/subscription_manager/gui/installedtab.py:222
-msgid "Subscribed"
-msgstr "Sottoscritte"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/list.py:41
 #: src/subscription_manager/gui/installedtab.py:231
 #: src/subscription_manager/gui/installedtab.py:232
@@ -2953,8 +3041,8 @@ msgid ""
 "No available subscription pools were found matching the service level "
 "\"{level}\"."
 msgstr ""
-"Nessun pool di sottoscrizione trovato corrisponde al livello di servizio \""
-"{level}\"."
+"Nessun pool di sottoscrizione trovato corrisponde al livello di servizio "
+"\"{level}\"."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/list.py:383
@@ -3218,12 +3306,12 @@ msgid "force certificate regeneration"
 msgstr "forza la rigenerazione del certificato"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/cli_command/refresh.py:56
+#: src/subscription_manager/cli_command/refresh.py:61
 msgid "All local data refreshed"
 msgstr "Tutti i dati locali aggiornati"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/cli_command/refresh.py:61
+#: src/subscription_manager/cli_command/refresh.py:66
 #, python-brace-format
 msgid "Unable to perform refresh due to the following exception: {e}"
 msgstr ""
@@ -3274,10 +3362,11 @@ msgid "automatically attach compatible subscriptions to this system"
 msgstr ""
 "associare automaticamente a questo sistema le sottoscrizioni compatibili"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:74
-msgid "register the system even if it is already registered"
-msgstr "registra il sistema anche se già registrato"
+msgid ""
+"include an implicit attempt to unregister before registering a new system "
+"identity"
+msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:76
@@ -3765,6 +3854,15 @@ msgstr ""
 #: src/subscription_manager/cli_command/syspurpose.py:56
 msgid "show current system purpose"
 msgstr "mostra lo scopo di sistema corrente"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: src/subscription_manager/cli_command/unregister.py:39
+#: src/subscription_manager/gui/registergui.py:210
+#: src/subscription_manager/gui/registergui.py:454
+#: src/subscription_manager/gui/registergui.py:1579
+#: src/subscription_manager/utils.py:292
+msgid "This system is currently not registered."
+msgstr "Questo sistema è attualmente non registrato."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/unregister.py:67
@@ -5667,11 +5765,6 @@ msgid "My Installed Products"
 msgstr "I miei prodotti installati"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/gui/installedtab.py:324
-msgid "No installed products detected."
-msgstr "Non è stato rilevato alcun prodotto installato."
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/installedtab.py:328
 #, python-format
 msgid "System is properly subscribed through %s."
@@ -6531,8 +6624,8 @@ msgstr ""
 msgid ""
 "state to leave system in on legacy server (default is '{default_state}')"
 msgstr ""
-"stato con il quale lasciare il sistema sul server preesistente ("
-"l'impostazione predefinita è '{default_state}')"
+"stato con il quale lasciare il sistema sul server preesistente "
+"(l'impostazione predefinita è '{default_state}')"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/migrate/migrate.py:920
@@ -6750,6 +6843,18 @@ msgid "Red Hat Subscription Manager"
 msgstr "Red Hat Subscription Manager"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#~ msgid ""
+#~ "Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
+#~ "more details."
+#~ msgstr ""
+#~ "Errore durante l'aggiornamento dei dati del sistema sul server, "
+#~ "consultare /var/log/rhsm/rhsm.log per maggiori informazioni."
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#~ msgid "register the system even if it is already registered"
+#~ msgstr "registra il sistema anche se già registrato"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #~ msgid "Type: %s"
 #~ msgstr "Tipo: %s"
 
@@ -6771,10 +6876,6 @@ msgstr "Red Hat Subscription Manager"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #~ msgid "Stack of %s"
 #~ msgstr "Stack di %s"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#~ msgid "Unable to reach the server at %s:%s%s"
-#~ msgstr "Impossibile raggiungere il server su %s:%s%s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #~ msgid "%s cannot register with any organizations."
@@ -6822,43 +6923,6 @@ msgstr "Red Hat Subscription Manager"
 
 #~ msgid "Login"
 #~ msgstr "Login"
-
-#~ msgid "Unregister"
-#~ msgstr "Rimuovi-registrazione"
-
-#~ msgid "Updating"
-#~ msgstr "In aggiornamento"
-
-#~ msgid "Retrieving subscription status..."
-#~ msgstr "Recupero dello stato della sottoscrizione ..."
-
-#~ msgid "Unable to connect"
-#~ msgstr "Impossibile collegarsi"
-
-#~ msgid ""
-#~ "Couldn't get system subscription status. Please ensure subscription-"
-#~ "manager is installed."
-#~ msgstr ""
-#~ "Impossibile ottenere lo stato dell'abbonamento di sistema. Assicurati che "
-#~ "sia installato subscription-manager."
-
-#~ msgid "Not Subscribed (Not supported by a valid subscription.)"
-#~ msgstr "Non sottoscritto (non supportato da una sottoscrizione valida)."
-
-#~ msgid "Product Name"
-#~ msgstr "Nome prodotto"
-
-#~ msgid "Product ID"
-#~ msgstr "ID del prodotto"
-
-#~ msgid "Starts"
-#~ msgstr "Inizia"
-
-#~ msgid "Ends"
-#~ msgstr "Finisce"
-
-#~ msgid "Installed products"
-#~ msgstr "Prodotti installati"
 
 #~ msgid "Unable to connect to Subscription Management Service"
 #~ msgstr "Impossibile connettersi al servizio Subscription Management"

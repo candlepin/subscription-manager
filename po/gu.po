@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-01 21:07+0200\n"
+"POT-Creation-Date: 2021-04-15 18:07+0200\n"
 "PO-Revision-Date: 2015-09-25 02:52-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Gujarati\n"
@@ -115,7 +115,7 @@ msgstr "વિકલ્પો"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: cockpit/src/index.js:64
+#: cockpit/src/index.js:64 cockpit/src/subscriptions-view.jsx:305
 #: src/subscription_manager/gui/data/glade/installed.glade:86
 #: src/subscription_manager/gui/data/ui/installed.ui:93
 #: src/subscription_manager/gui/registergui.py:249
@@ -225,6 +225,14 @@ msgstr ""
 msgid "Connected to Red Hat Insights"
 msgstr ""
 
+#: cockpit/src/insights.jsx:377
+msgid "Next Insights data upload"
+msgstr ""
+
+#: cockpit/src/insights.jsx:382
+msgid "Last Insights data upload"
+msgstr ""
+
 #: cockpit/src/insights.jsx:392
 msgid "Next Insights data upload could not be scheduled."
 msgstr ""
@@ -305,10 +313,16 @@ msgstr ""
 msgid "Not connected"
 msgstr ""
 
+#: cockpit/src/insights.jsx:546
+msgid "Insights: $0"
+msgstr ""
+
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
 #: cockpit/src/subscriptions-client.js:48
 #: cockpit/src/subscriptions-client.js:554
+#: cockpit/src/subscriptions-view.jsx:396
+#: cockpit/src/subscriptions-view.jsx:402
 #: src/rhsmlib/services/entitlement.py:94
 #: src/rhsmlib/services/syspurpose.py:104
 #: src/subscription_manager/cert_sorter.py:282
@@ -358,6 +372,7 @@ msgid "Updating status ..."
 msgstr ""
 
 #: cockpit/src/subscriptions-client.js:467
+#: cockpit/src/subscriptions-view.jsx:317
 #: src/subscription_manager/gui/registergui.py:1075
 msgid "Unregistering"
 msgstr ""
@@ -444,6 +459,7 @@ msgid "Activation key"
 msgstr ""
 
 #: cockpit/src/subscriptions-register.jsx:189
+#: cockpit/src/subscriptions-view.jsx:326
 msgid "Subscriptions"
 msgstr ""
 
@@ -466,48 +482,185 @@ msgstr "સ્વયં જોડાવ"
 msgid "Auto-attaching ..."
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:240
+#: cockpit/src/subscriptions-view.jsx:241
 msgid "Service Level:  "
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:250
+#: cockpit/src/subscriptions-view.jsx:251
 msgid "Usage:  "
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:260
+#: cockpit/src/subscriptions-view.jsx:261
 msgid "Role:  "
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:270
+#: cockpit/src/subscriptions-view.jsx:271
 msgid "Add-ons:  "
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:282
+#: cockpit/src/subscriptions-view.jsx:283
 msgid "Status: "
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:290
+#: cockpit/src/subscriptions-view.jsx:291
 msgid "System Purpose"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: cockpit/src/subscriptions-view.jsx:301
-#: cockpit/src/subscriptions-view.jsx:306
+#: cockpit/src/subscriptions-view.jsx:302
+#, fuzzy
+#| msgid "This system is currently not registered."
+msgid "Status: This system is currently not registered."
+msgstr "આ સિસ્ટમ હાલમાં રજીસ્ટર થયેલ નથી."
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author swkothar
+#: cockpit/src/subscriptions-view.jsx:308
+#, fuzzy
+#| msgid "Status:"
+msgid "Status: $0"
+msgstr "પરિસ્થિતિ:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author swkothar
+#: cockpit/src/subscriptions-view.jsx:311
+#, fuzzy
+#| msgid "_Unregister"
+msgid "Unregister"
+msgstr "રજીસ્ટર હટાવી દો (_U)"
+
+#: cockpit/src/subscriptions-view.jsx:356
+msgid ""
+"The rhsm service is unavailable. Make sure subscription-manager is installed "
+"and try reloading the page. Additionally, make sure that you have checked "
+"the 'Reuse my password for privileged tasks' checkbox on the login page."
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author swkothar
+#: cockpit/src/subscriptions-view.jsx:359
+#, fuzzy
+#| msgid "Unable to reach the server at %s:%s%s"
+msgid "Unable to the reach the rhsm service."
+msgstr "%s:%s%s પર સર્વર સુધી પહોંચવાનુ અસમર્થ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#: cockpit/src/subscriptions-view.jsx:362
+#, fuzzy
+#| msgid "Update"
+msgid "Updating"
+msgstr "સુધારો"
+
+#: cockpit/src/subscriptions-view.jsx:363
+#, fuzzy
+#| msgid "Removing subscription. Please wait."
+msgid "Retrieving subscription status..."
+msgstr "ઉમેદવારી દૂર કરી રહ્યા છીએ. મહેરબાની કરીને રાહ જુઓ."
+
+#: cockpit/src/subscriptions-view.jsx:366
+msgid "Access denied"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:367
+msgid "The current user isn't allowed to access system subscription status."
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:370
+#, fuzzy
+#| msgid "Unable to continue migration!"
+msgid "Unable to connect"
+msgstr "સ્થળાંતર ચાલુ કરવાનું અસમર્થ!"
+
+#: cockpit/src/subscriptions-view.jsx:371
+msgid ""
+"Couldn't get system subscription status. Please ensure subscription-manager "
+"is installed."
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#: cockpit/src/subscriptions-view.jsx:389
+#: src/subscription_manager/cli_command/list.py:40
+#: src/subscription_manager/gui/installedtab.py:222
+msgid "Subscribed"
+msgstr "ઉમેદવારી થયેલ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#: cockpit/src/subscriptions-view.jsx:392
+#, fuzzy
+#| msgid "1 installed product does not have a valid subscription."
+msgid "Not Subscribed (Not supported by a valid subscription.)"
+msgstr "1 સ્થાપિત થયેલ પ્રોડક્ટ પાસે યોગ્ય ઉમેદવારી નથી."
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author swkothar
+#: cockpit/src/subscriptions-view.jsx:417
+#, fuzzy
+#| msgid "Product Name:"
+msgid "Product Name"
+msgstr "પ્રોડક્ટ નામ:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author swkothar
+#: cockpit/src/subscriptions-view.jsx:419
+#, fuzzy
+#| msgid "Product ID:"
+msgid "Product ID"
+msgstr "પ્રોડક્ટ ID:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#: cockpit/src/subscriptions-view.jsx:421 src/rct/printing.py:50
+#: src/rct/printing.py:132 src/subscription_manager/gui/installedtab.py:91
+msgid "Version"
+msgstr "આવૃત્તિ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author swkothar
+#: cockpit/src/subscriptions-view.jsx:423 src/rct/printing.py:51
+msgid "Arch"
+msgstr "આર્કિટેક્ચર"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#: cockpit/src/subscriptions-view.jsx:425
 #: src/subscription_manager/gui/installedtab.py:94
 msgid "Status"
 msgstr "પરિસ્થિતિ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author swkothar
+#: cockpit/src/subscriptions-view.jsx:427
+#, fuzzy
+#| msgid "Starts:"
+msgid "Starts"
+msgstr "શરૂઆત:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author swkothar
+#: cockpit/src/subscriptions-view.jsx:429
+#, fuzzy
+#| msgid "Ends:"
+msgid "Ends"
+msgstr "અંત:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: cockpit/src/subscriptions-view.jsx:301
-#: src/subscription_manager/cli_command/unregister.py:39
-#: src/subscription_manager/gui/registergui.py:210
-#: src/subscription_manager/gui/registergui.py:454
-#: src/subscription_manager/gui/registergui.py:1579
-#: src/subscription_manager/utils.py:292
-msgid "This system is currently not registered."
-msgstr "આ સિસ્ટમ હાલમાં રજીસ્ટર થયેલ નથી."
+#: cockpit/src/subscriptions-view.jsx:443
+#, fuzzy
+#| msgid "Installed Products"
+msgid "Installed products"
+msgstr "સ્થાપિત થયેલ પ્રોડક્ટો"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#: cockpit/src/subscriptions-view.jsx:444
+#: src/subscription_manager/gui/installedtab.py:324
+msgid "No installed products detected."
+msgstr "સ્થાપિત થયેલ પ્રોડક્ટ મળી નથી."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
@@ -597,11 +750,11 @@ msgstr "અયોગ્ય વિકલ્પ: %s\n"
 msgid "Invalid argument specified: %s\n"
 msgstr "સ્પષ્ટ થયેલ અયોગ્ય દલીલ: %s\n"
 
-#: src/dnf-plugins/product-id.py:78
+#: src/dnf-plugins/product-id.py:79
 msgid "Installed products updated."
 msgstr ""
 
-#: src/dnf-plugins/subscription-manager.py:40
+#: src/dnf-plugins/subscription-manager.py:41
 #, python-format
 msgid ""
 "\n"
@@ -616,7 +769,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/dnf-plugins/subscription-manager.py:49
+#: src/dnf-plugins/subscription-manager.py:50
 #, fuzzy
 #| msgid ""
 #| "This system is registered using both RHN Classic and Red Hat Subscription "
@@ -627,48 +780,48 @@ msgid ""
 "subscription-manager to register.\n"
 msgstr "આ સિસ્ટમ બંને RHN Classic અને Red Hat ઉમેદવારી સંચાલનની મદદથી રજીસ્ટર થયેલ છે."
 
-#: src/dnf-plugins/subscription-manager.py:53
+#: src/dnf-plugins/subscription-manager.py:54
 msgid ""
 "\n"
 "This system is registered with and entitlement server, but is not receiving "
 "updates. You can use subscription-manager to assign subscriptions.\n"
 msgstr ""
 
-#: src/dnf-plugins/subscription-manager.py:86
+#: src/dnf-plugins/subscription-manager.py:87
 msgid "Not root, Subscription Management repositories not updated"
 msgstr ""
 
-#: src/dnf-plugins/subscription-manager.py:114
+#: src/dnf-plugins/subscription-manager.py:115
 #, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repositories with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
 msgstr ""
 
-#: src/dnf-plugins/subscription-manager.py:127
+#: src/dnf-plugins/subscription-manager.py:128
 msgid "Updating Subscription Management repositories."
 msgstr ""
 
-#: src/dnf-plugins/subscription-manager.py:132
+#: src/dnf-plugins/subscription-manager.py:133
 msgid "Unable to read consumer identity"
 msgstr ""
 
-#: src/dnf-plugins/subscription-manager.py:135
+#: src/dnf-plugins/subscription-manager.py:136
 msgid "Subscription Manager is operating in container mode."
 msgstr ""
 
-#: src/dnf-plugins/upload-profile.py:35
+#: src/dnf-plugins/upload-profile.py:36
 msgid ""
 "Upload combined profile to Satellite server (list of installed rpms, enabled "
 "repositories and modules"
 msgstr ""
 
-#: src/dnf-plugins/upload-profile.py:43
+#: src/dnf-plugins/upload-profile.py:44
 #: src/subscription_manager/scripts/package_profile_upload.py:39
 msgid "Force package profile upload"
 msgstr ""
 
-#: src/dnf-plugins/upload-profile.py:59
+#: src/dnf-plugins/upload-profile.py:60
 #: src/subscription_manager/scripts/package_profile_upload.py:46
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
 msgstr ""
@@ -1110,19 +1263,6 @@ msgstr "ID"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:50 src/rct/printing.py:132
-#: src/subscription_manager/gui/installedtab.py:91
-msgid "Version"
-msgstr "આવૃત્તિ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys, author swkothar
-#: src/rct/printing.py:51
-msgid "Arch"
-msgstr "આર્કિટેક્ચર"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
 #: src/rct/printing.py:52
 msgid "Tags"
 msgstr "ટૅગ"
@@ -1153,7 +1293,7 @@ msgstr ""
 # document keys
 #: src/rct/printing.py:89 src/subscription_manager/gui/allsubs.py:231
 #: src/subscription_manager/gui/contract_selection.py:139
-#: src/subscription_manager/managerlib.py:376
+#: src/subscription_manager/managerlib.py:382
 msgid "Unlimited"
 msgstr "અમર્યાદિત"
 
@@ -1291,7 +1431,7 @@ msgstr "Alt નામ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/printing.py:228 src/rhsmlib/services/entitlement.py:267
+#: src/rct/printing.py:228 src/rhsmlib/services/entitlement.py:274
 msgid "Not Available"
 msgstr "ઉપલબ્ધ નથી"
 
@@ -1568,7 +1708,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsmlib/services/entitlement.py:258
+#: src/rhsmlib/services/entitlement.py:265
 #: src/subscription_manager/cli_command/list.py:335
 #: src/subscription_manager/gui/mysubstab.py:301
 #: src/subscription_manager/gui/widgets.py:862
@@ -1577,7 +1717,7 @@ msgstr "વર્ચ્યુઅલ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsmlib/services/entitlement.py:260
+#: src/rhsmlib/services/entitlement.py:267
 #: src/subscription_manager/cli_command/list.py:337
 #: src/subscription_manager/gui/mysubstab.py:303
 #: src/subscription_manager/gui/widgets.py:861
@@ -1586,7 +1726,7 @@ msgstr "ભૌતિક"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rhsmlib/services/entitlement.py:263
+#: src/rhsmlib/services/entitlement.py:270
 #: src/subscription_manager/cli_command/list.py:340
 #: src/subscription_manager/gui/mysubstab.py:306
 msgid "Yes"
@@ -1594,32 +1734,32 @@ msgstr "હાં"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rhsmlib/services/entitlement.py:265
+#: src/rhsmlib/services/entitlement.py:272
 #: src/subscription_manager/cli_command/list.py:342
 #: src/subscription_manager/gui/mysubstab.py:308
 msgid "No"
 msgstr "ના"
 
-#: src/rhsmlib/services/entitlement.py:285
+#: src/rhsmlib/services/entitlement.py:292
 msgid "Subscription is current"
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:288
+#: src/rhsmlib/services/entitlement.py:295
 msgid "Subscription is expired"
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:290
+#: src/rhsmlib/services/entitlement.py:297
 msgid "Subscription has not begun"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rhsmlib/services/entitlement.py:292
+#: src/rhsmlib/services/entitlement.py:299
 #: src/subscription_manager/gui/mysubstab.py:294
 msgid "Subscription management service doesn't support Status Details."
 msgstr "ઉમેદવારી સંચાલન સેવા સ્થિતિ વિગતોને આધાર આપતુ નથી."
 
-#: src/rhsmlib/services/entitlement.py:439
+#: src/rhsmlib/services/entitlement.py:448
 msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
@@ -1627,42 +1767,42 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsmlib/services/entitlement.py:444
+#: src/rhsmlib/services/entitlement.py:453
 #: src/subscription_manager/cli_command/list.py:230
 msgid "Error: --all is only applicable with --available"
 msgstr "ભૂલ: --all એ ફક્ત --available સાથે લાગુ પડે તેમ છે"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsmlib/services/entitlement.py:448
+#: src/rhsmlib/services/entitlement.py:457
 #: src/subscription_manager/cli_command/list.py:232
 msgid "Error: --ondate is only applicable with --available"
 msgstr "ભૂલ : --ondate એ ફક્ત --available સાથે લાગુ પડે તેમ છે"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rhsmlib/services/entitlement.py:453
+#: src/rhsmlib/services/entitlement.py:462
 #: src/subscription_manager/cli_command/list.py:234
 msgid "Error: --servicelevel is only applicable with --available or --consumed"
 msgstr "ભૂલ: --servicelevel એ ફક્ત --available અથવા --consumed સાથે ફક્ત સક્ષમ છે"
 
-#: src/rhsmlib/services/entitlement.py:457
+#: src/rhsmlib/services/entitlement.py:466
 #: src/subscription_manager/cli_command/list.py:238
 msgid "Error: --match-installed is only applicable with --available"
 msgstr "ભૂલ: --match-installed એ ફક્ત --available સાથે સક્ષમ છે"
 
-#: src/rhsmlib/services/entitlement.py:461
+#: src/rhsmlib/services/entitlement.py:470
 #: src/subscription_manager/cli_command/list.py:240
 msgid "Error: --no-overlap is only applicable with --available"
 msgstr "ભૂલ: --no-overlap ફક્ત --available સાથે સક્ષમ છે"
 
-#: src/rhsmlib/services/entitlement.py:466
+#: src/rhsmlib/services/entitlement.py:475
 #: src/subscription_manager/cli_command/list.py:242
 msgid ""
 "Error: --pool-only is only applicable with --available and/or --consumed"
 msgstr "ભૂલ: --pool-only એ ફક્ત --available અને/અથવા --consumed સાથે વાપરેલ છે"
 
-#: src/rhsmlib/services/entitlement.py:469
+#: src/rhsmlib/services/entitlement.py:478
 msgid "Error: this system is not registered"
 msgstr ""
 
@@ -1888,22 +2028,12 @@ msgid ""
 "forgot_password"
 msgstr ""
 
-#: src/subscription_manager/cache.py:161
+#: src/subscription_manager/cache.py:164
 #, python-brace-format
 msgid ""
 "consumer_uuid={consumer_uuid} is not a valid consumer_uuid. Not attempting "
 "to sync {class_name} cache with server."
 msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
-#: src/subscription_manager/cache.py:186
-msgid ""
-"Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
-"more details."
-msgstr ""
-"સર્વર પર સિસ્ટમ માહિતીને સુધારી રહ્યા હોય ત્યારે ભૂલ, વધારે વિગતો માટે  /var/log/rhsm/"
-"rhsm.log જુઓ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
@@ -2705,13 +2835,6 @@ msgstr "ભવિષ્યની ઉમેદવારી"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/list.py:40
-#: src/subscription_manager/gui/installedtab.py:222
-msgid "Subscribed"
-msgstr "ઉમેદવારી થયેલ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
 #: src/subscription_manager/cli_command/list.py:41
 #: src/subscription_manager/gui/installedtab.py:231
 #: src/subscription_manager/gui/installedtab.py:232
@@ -3425,13 +3548,13 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/refresh.py:56
+#: src/subscription_manager/cli_command/refresh.py:61
 msgid "All local data refreshed"
 msgstr "તાજી થયેલ બધી સ્થાનિય માહિતી"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/refresh.py:61
+#: src/subscription_manager/cli_command/refresh.py:66
 #, fuzzy, python-brace-format
 #| msgid "Unable to perform refresh due to the following exception: %s"
 msgid "Unable to perform refresh due to the following exception: {e}"
@@ -3485,11 +3608,11 @@ msgstr "અપ્રચલિત, --auto-attach જુઓ"
 msgid "automatically attach compatible subscriptions to this system"
 msgstr "આ સિસ્ટમમાં સુસંગત ઉમેદવારીઓને આપમેળે જોડો"
 
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
 #: src/subscription_manager/cli_command/register.py:74
-msgid "register the system even if it is already registered"
-msgstr "સિસ્ટમને રજીસ્ટર કરો જો તે પહેલેથી જ રજીસ્ટર થયેલ હોય"
+msgid ""
+"include an implicit attempt to unregister before registering a new system "
+"identity"
+msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -4021,6 +4144,16 @@ msgstr ""
 #: src/subscription_manager/cli_command/syspurpose.py:56
 msgid "show current system purpose"
 msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#: src/subscription_manager/cli_command/unregister.py:39
+#: src/subscription_manager/gui/registergui.py:210
+#: src/subscription_manager/gui/registergui.py:454
+#: src/subscription_manager/gui/registergui.py:1579
+#: src/subscription_manager/utils.py:292
+msgid "This system is currently not registered."
+msgstr "આ સિસ્ટમ હાલમાં રજીસ્ટર થયેલ નથી."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
@@ -6106,12 +6239,6 @@ msgstr "મારી સ્થાપિત થયેલ પ્રોડક્ટ
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/gui/installedtab.py:324
-msgid "No installed products detected."
-msgstr "સ્થાપિત થયેલ પ્રોડક્ટ મળી નથી."
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
 #: src/subscription_manager/gui/installedtab.py:328
 #, python-format
 msgid "System is properly subscribed through %s."
@@ -7217,6 +7344,20 @@ msgstr "Red Hat ઉમેદવારી સંચાલક"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
+#~ msgid ""
+#~ "Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
+#~ "more details."
+#~ msgstr ""
+#~ "સર્વર પર સિસ્ટમ માહિતીને સુધારી રહ્યા હોય ત્યારે ભૂલ, વધારે વિગતો માટે  /var/log/"
+#~ "rhsm/rhsm.log જુઓ."
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#~ msgid "register the system even if it is already registered"
+#~ msgstr "સિસ્ટમને રજીસ્ટર કરો જો તે પહેલેથી જ રજીસ્ટર થયેલ હોય"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
 #~ msgid "Type: %s"
 #~ msgstr "પ્રકાર: %s"
 
@@ -7242,11 +7383,6 @@ msgstr "Red Hat ઉમેદવારી સંચાલક"
 # document keys
 #~ msgid "Stack of %s"
 #~ msgstr "%s નું સ્ટેક"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys, author swkothar
-#~ msgid "Unable to reach the server at %s:%s%s"
-#~ msgstr "%s:%s%s પર સર્વર સુધી પહોંચવાનુ અસમર્થ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
@@ -7410,9 +7546,6 @@ msgstr "Red Hat ઉમેદવારી સંચાલક"
 # document keys
 #~ msgid "No consumed subscription pools to list"
 #~ msgstr "યાદીમાં ઉમેદવારી પુલ વાપરેલ નથી"
-
-#~ msgid "Unable to continue migration!"
-#~ msgstr "સ્થળાંતર ચાલુ કરવાનું અસમર્થ!"
 
 #~ msgid "The following channels map to product ID %s:"
 #~ msgstr "નીચેની ચેનલોનું પ્રોડક્ટ ID %s સાથે માપાંકિત થાય છે:"
