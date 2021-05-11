@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-15 18:07+0200\n"
-"PO-Revision-Date: 2021-04-02 19:01+0000\n"
+"PO-Revision-Date: 2021-05-11 07:02+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-master/it/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5.3\n"
+"X-Generator: Weblate 4.6.2\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/optparse.py:146
@@ -161,7 +161,7 @@ msgstr "Pacchetti aggiuntivi:"
 
 #: cockpit/src/insights.jsx:154
 msgid "Removals:"
-msgstr ""
+msgstr "Da rimuovere:"
 
 #: cockpit/src/insights.jsx:160 cockpit/src/insights.jsx:393
 #: cockpit/src/insights.jsx:400
@@ -199,7 +199,7 @@ msgstr "Questo sistema non è connesso a $0."
 
 #: cockpit/src/insights.jsx:220
 msgid "Connect"
-msgstr ""
+msgstr "Connetti"
 
 #: cockpit/src/insights.jsx:313
 msgid "unknown"
@@ -207,7 +207,7 @@ msgstr "sconosciuto"
 
 #: cockpit/src/insights.jsx:366
 msgid "The last Insights data upload has failed."
-msgstr ""
+msgstr "L'ultimo invio dei dati di Insights è fallito."
 
 #: cockpit/src/insights.jsx:371
 msgid "Connected to Red Hat Insights"
@@ -215,15 +215,16 @@ msgstr "Connesso a Red Hat Insights"
 
 #: cockpit/src/insights.jsx:377
 msgid "Next Insights data upload"
-msgstr ""
+msgstr "Prossimo invio dei dati di Insights"
 
 #: cockpit/src/insights.jsx:382
 msgid "Last Insights data upload"
-msgstr ""
+msgstr "Ultimo invio dei dati di Insights"
 
 #: cockpit/src/insights.jsx:392
 msgid "Next Insights data upload could not be scheduled."
 msgstr ""
+"Non è stato possibile pianificare il prossimo invio dei dati di Insights."
 
 #: cockpit/src/insights.jsx:403 cockpit/src/insights.jsx:409
 msgid "Disconnect from Insights"
@@ -300,10 +301,8 @@ msgid "Not connected"
 msgstr "Non connesso"
 
 #: cockpit/src/insights.jsx:546
-#, fuzzy
-#| msgid "Insights"
 msgid "Insights: $0"
-msgstr "Insights"
+msgstr "Insights: $0"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: cockpit/src/subscriptions-client.js:48
@@ -492,16 +491,12 @@ msgstr "Scopo del sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:302
-#, fuzzy
-#| msgid "This system is currently not registered."
 msgid "Status: This system is currently not registered."
-msgstr "Questo sistema è attualmente non registrato."
+msgstr "Stato: questo sistema è attualmente non registrato."
 
 #: cockpit/src/subscriptions-view.jsx:308
-#, fuzzy
-#| msgid "Status: "
 msgid "Status: $0"
-msgstr "Stato: "
+msgstr "Stato: $0"
 
 #: cockpit/src/subscriptions-view.jsx:311
 msgid "Unregister"
@@ -516,10 +511,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: cockpit/src/subscriptions-view.jsx:359
-#, fuzzy
-#| msgid "Unable to reach the server at %s:%s%s"
 msgid "Unable to the reach the rhsm service."
-msgstr "Impossibile raggiungere il server su %s:%s%s"
+msgstr "Impossibile contattare il servizio rhsm."
 
 #: cockpit/src/subscriptions-view.jsx:362
 msgid "Updating"
@@ -531,11 +524,13 @@ msgstr "Recupero dello stato della sottoscrizione ..."
 
 #: cockpit/src/subscriptions-view.jsx:366
 msgid "Access denied"
-msgstr ""
+msgstr "Accesso negato"
 
 #: cockpit/src/subscriptions-view.jsx:367
 msgid "The current user isn't allowed to access system subscription status."
 msgstr ""
+"L'utente corrente non è autorizzato ad accedere allo stato della "
+"sottoscrizione del sistema."
 
 #: cockpit/src/subscriptions-view.jsx:370
 msgid "Unable to connect"
@@ -546,8 +541,8 @@ msgid ""
 "Couldn't get system subscription status. Please ensure subscription-manager "
 "is installed."
 msgstr ""
-"Impossibile ottenere lo stato dell'abbonamento di sistema. Assicurati che "
-"sia installato subscription-manager."
+"Impossibile ottenere lo stato della sottoscrizione del sistema. Assicurati "
+"che subscription-manager sia installato."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:389
@@ -2013,17 +2008,17 @@ msgstr[1] ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:214
-#, fuzzy, python-brace-format
-#| msgid "This org does not have any subscriptions with service levels."
+#, python-brace-format
 msgid ""
 "Warning: This org does not have any subscriptions with an available "
 "\"{attr}\" is empty."
-msgstr "Questa org non ha alcuna sottoscrizione con i livelli di servizio"
+msgstr ""
+"Avviso: questa organizzazione non ha alcuna sottoscrizione con valori "
+"disponibili di \"{attr}\"."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:218
-#, fuzzy, python-brace-format
-#| msgid "This org does not have any subscriptions with service levels."
+#, python-brace-format
 msgid ""
 "Warning: This org does not have any subscriptions with an available "
 "\"{attr}\""
@@ -2050,7 +2045,7 @@ msgstr "{attr} aggiornato."
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:316
 #, python-brace-format
 msgid "Current {name}: {val}"
-msgstr "attuale {name}: {val}"
+msgstr "{name} attuale: {val}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:319
 #, python-brace-format
@@ -2060,17 +2055,18 @@ msgstr "{name} non impostato."
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:337
 #, python-brace-format
 msgid "Available {syspurpose_attr}"
-msgstr ""
+msgstr "{syspurpose_attr} disponibile"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:347
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:349
-#, fuzzy, python-brace-format
-#| msgid "This org does not have any subscriptions with service levels."
+#, python-brace-format
 msgid ""
 "This org does not have any subscriptions with an available "
 "\"{syspurpose_attr}\""
-msgstr "Questa org non ha alcuna sottoscrizione con i livelli di servizio"
+msgstr ""
+"Questa organizzazione non ha alcuna sottoscrizione con valori disponibili di "
+"\"{syspurpose_attr}\""
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:367
 msgid "Unable to connect to server using token"
@@ -3171,9 +3167,8 @@ msgstr "Errore: il comando 'repo-override' non è supportato dal server."
 #: src/subscription_manager/cli_command/override.py:102
 #: src/subscription_manager/cli_command/repos.py:88
 #: src/subscription_manager/gui/reposgui.py:56
-#, fuzzy
 msgid "Repositories disabled by configuration."
-msgstr "Repository consumati per configurazione."
+msgstr "Repository disabilitati dalla configurazione."
 
 #: src/subscription_manager/cli_command/override.py:109
 msgid "This system does not have any content overrides applied to it."
@@ -3275,8 +3270,8 @@ msgstr ""
 #, fuzzy
 msgid "email address to notify when subscription redemption is complete"
 msgstr ""
-"indirizzo email da usare quando l'acquisizione della sottoscrizione è stata "
-"completata"
+"indirizzo di posta elettronica da usare quando l'acquisizione della "
+"sottoscrizione è stata completata"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/redeem.py:37
