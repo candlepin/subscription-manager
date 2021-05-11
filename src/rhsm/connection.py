@@ -180,18 +180,22 @@ class BaseConnection(object):
         else:
             info = utils.get_env_proxy_info()
 
-            self.proxy_hostname = proxy_hostname or \
-                                  config.get('server', 'proxy_hostname') or \
-                                  info['proxy_hostname']
-            self.proxy_port = proxy_port or \
-                              config.get('server', 'proxy_port') or \
-                              info['proxy_port']
-            self.proxy_user = proxy_user or \
-                              config.get('server', 'proxy_user') or \
-                              info['proxy_username']
-            self.proxy_password = proxy_password or \
-                                  config.get('server', 'proxy_password') or \
-                                  info['proxy_password']
+            if proxy_hostname is not None:
+                self.proxy_hostname = proxy_hostname
+            else:
+                self.proxy_hostname = config.get('server', 'proxy_hostname') or info['proxy_hostname']
+            if proxy_port is not None:
+                self.proxy_port = proxy_port
+            else:
+                self.proxy_port = config.get('server', 'proxy_port') or info['proxy_port']
+            if proxy_user is not None:
+                self.proxy_user = proxy_user
+            else:
+                self.proxy_user = config.get('server', 'proxy_user') or info['proxy_username']
+            if proxy_password is not None:
+                self.proxy_password = proxy_password
+            else:
+                self.proxy_password = config.get('server', 'proxy_password') or info['proxy_password']
 
         self.cert_file = cert_file
         self.key_file = key_file
