@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-01 21:07+0200\n"
-"PO-Revision-Date: 2021-02-16 16:39+0000\n"
+"PO-Revision-Date: 2021-04-12 18:02+0000\n"
 "Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-master/zh_CN/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.5.3\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/optparse.py:146
@@ -31,7 +31,7 @@ msgstr "没有此选项：%s"
 #: /usr/lib64/python3.9/optparse.py:157
 #, python-format
 msgid "ambiguous option: %s (%s?)"
-msgstr "模糊选项：%s (%s?)"
+msgstr "模糊选项：%s（%s?）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/optparse.py:381
@@ -146,15 +146,11 @@ msgid "The $0 package will be installed."
 msgstr "$0 软件包将被安装。"
 
 #: cockpit/src/insights.jsx:124
-#, fuzzy
-#| msgid "The $0 package and $1 other package will be installed."
 msgid "The $0 package and $1 other package will be installed."
 msgid_plural "The $0 package and $1 other packages will be installed."
 msgstr[0] "$0 软件包和 $1 个其他软件包将被安装。"
 
 #: cockpit/src/insights.jsx:132
-#, fuzzy
-#| msgid "$0 package needs to be removed."
 msgid "$0 package needs to be removed."
 msgid_plural "$0 packages need to be removed."
 msgstr[0] "$0 个软件包需要删除。"
@@ -461,8 +457,6 @@ msgid "Role:  "
 msgstr "角色：  "
 
 #: cockpit/src/subscriptions-view.jsx:270
-#, fuzzy
-#| msgid "Addons:  "
 msgid "Add-ons:  "
 msgstr "插件：  "
 
@@ -591,35 +585,22 @@ msgstr ""
 "要更新。如果您没有其他活跃订阅，则可以续订已过期订阅。  "
 
 #: src/dnf-plugins/subscription-manager.py:49
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "This system is not registered to Red Hat Subscription Management. You can "
-#| "use subscription-manager to register.\n"
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "subscription-manager to register.\n"
 msgstr ""
 "\n"
-"本系统尚未在 Red Hat Subscription Management 中注册。可使用 subscription-"
-"manager 进行注册。\n"
+"本系统尚未在权利服务器中注册。可使用 subscription-manager 进行注册。\n"
 
 #: src/dnf-plugins/subscription-manager.py:53
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "This system is registered to Red Hat Subscription Management, but is not "
-#| "receiving updates. You can use subscription-manager to assign "
-#| "subscriptions.\n"
 msgid ""
 "\n"
 "This system is registered with and entitlement server, but is not receiving "
 "updates. You can use subscription-manager to assign subscriptions.\n"
 msgstr ""
 "\n"
-"本系统已在 Red Hat Subscription Management 中注册，但没有接收更新。可使用 "
-"subscription-manager 分配订阅。\n"
+"本系统已在权利服务器中注册，但没有接收更新。可使用 subscription-manager 分配订阅。\n"
 
 #: src/dnf-plugins/subscription-manager.py:86
 msgid "Not root, Subscription Management repositories not updated"
@@ -688,17 +669,15 @@ msgstr "注册（_R）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:38
-#, fuzzy, python-format, python-brace-format
-#| msgid "%%prog %s [OPTIONS] CERT_FILE"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS] CERT_FILE"
-msgstr "%%prog %s [选项] CERT_FILE"
+msgstr "%(prog)s {name} [OPTIONS] CERT_FILE"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:46
-#, fuzzy, python-brace-format
-#| msgid "Unable to read certificate file '%s': %s"
+#, python-brace-format
 msgid "Unable to read certificate file '{certificate}': {exception}"
-msgstr "无法读取证书文件 '%s': %s"
+msgstr "无法读取证书文件 '{certificate}': {exception}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:52
@@ -733,35 +712,31 @@ msgstr "输出证书统计和大小"
 #: src/rct/cert_commands.py:89
 #, python-brace-format
 msgid "Type: {certificate_type}"
-msgstr ""
+msgstr "类型：{certificate_type}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:90
-#, fuzzy, python-brace-format
-#| msgid "Certificate Version"
+#, python-brace-format
 msgid "Version: {certificate_version}"
-msgstr "证书版本"
+msgstr "版本：{certificate_version}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:91
-#, fuzzy, python-brace-format
-#| msgid "DER size: %db"
+#, python-brace-format
 msgid "DER size: {size}b"
-msgstr "DER 大小：%db"
+msgstr "DER 大小：{size}b"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:95
-#, fuzzy, python-brace-format
-#| msgid "Subject Key ID size: %db"
+#, python-brace-format
 msgid "Subject Key ID size: {len_subject_key_id}b"
-msgstr "主题键 ID 大小：%db"
+msgstr "主题键 ID 大小：{len_subject_key_id}b"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:101
-#, fuzzy, python-brace-format
-#| msgid "Content sets: %s"
+#, python-brace-format
 msgid "Content sets: {content_length}"
-msgstr "内容：%s"
+msgstr "内容：{content_length}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:65
@@ -770,10 +745,9 @@ msgstr "清单压缩文件无效。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:85
-#, fuzzy, python-brace-format
-#| msgid "Unable to find file \"%s\" in manifest."
+#, python-brace-format
 msgid "Unable to find file \"{file_path}\" in manifest."
-msgstr "无法在清单中找到文件 \"%s\"。"
+msgstr "无法在清单中找到文件 \"{file_path}\"。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:109
@@ -787,10 +761,9 @@ msgstr "无法跟踪符号链接。可能是循环链接。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:141
-#, fuzzy, python-format, python-brace-format
-#| msgid "%%prog %s [OPTIONS] MANIFEST_FILE"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS] MANIFEST_FILE"
-msgstr "%%prog %s [选项] MANIFEST_FILE"
+msgstr "%(prog)s {name} [OPTIONS] MANIFEST_FILE"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:146
@@ -956,10 +929,9 @@ msgstr "证书文件"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:270
-#, fuzzy, python-brace-format
-#| msgid "Unable to read certificate file '%s': %s"
+#, python-brace-format
 msgid "Unable to read certificate file '{certificate_file}': {exception}"
-msgstr "无法读取证书文件 '%s': %s"
+msgstr "无法读取证书文件 '{certificate_file}': {exception}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:272
@@ -1006,10 +978,9 @@ msgstr "覆盖可能已存在的文件"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:328
-#, fuzzy, python-brace-format
-#| msgid "File \"%s\" exists. Use -f to force overwriting the file."
+#, python-brace-format
 msgid "File {filename} exists. Use -f to force overwriting the file."
-msgstr "文件 \"%s\" 已存在。请使用 -f 强制覆盖该文件。"
+msgstr "文件 {filename} 已存在。请使用 -f 强制覆盖该文件。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:331
@@ -1018,10 +989,9 @@ msgstr "无法写入清单："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:344
-#, fuzzy, python-brace-format
-#| msgid "The manifest has been dumped to the %s directory"
+#, python-brace-format
 msgid "The manifest has been dumped to the {destination} directory"
-msgstr "已将该清单转储至 %s 目录"
+msgstr "已将清单转储至 {destination} 目录"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:348
@@ -1259,43 +1229,37 @@ msgstr "只收集 sos 报告中不包含的数据"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm_debug/debug_commands.py:85
-#, fuzzy, python-format, python-brace-format
-#| msgid "%%prog %s [OPTIONS] "
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS] "
-msgstr "%%prog %s [选项] "
+msgstr "%(prog)s {name} [OPTIONS] "
 
 #: src/rhsm_debug/debug_commands.py:89
 msgid "The directory specified by '--destination' must already exist."
 msgstr "通过“--destination”指定的目录必须已经存在。"
 
 #: src/rhsm_debug/debug_commands.py:93
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "To use the no-archive option, the destination directory '%s' must exist "
-#| "on the same file system as the data assembly directory '%s'."
+#, python-brace-format
 msgid ""
 "To use the no-archive option, the destination directory '{destination}' must "
 "exist on the same file system as the data assembly directory '{assembly}'."
 msgstr ""
-"要使用 no-archive 选项，则必须在同一文件系统中有目的目录 '%s' 作为数据组合目"
-"录 '%s'。"
+"要使用 no-archive 选项，目标目录 '{destination}' 需要和数据组合目录 '{assembly}' 存在于相同的文件系统中。"
 
 #: src/rhsm_debug/debug_commands.py:191
 #, python-brace-format
 msgid "Wrote: {final_path}"
-msgstr ""
+msgstr "写入：{final_path}"
 
 #: src/rhsm_debug/debug_commands.py:205
 #, python-brace-format
 msgid "Wrote: {destination_dir_name}"
-msgstr ""
+msgstr "写入：{destination_dir_name}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm_debug/debug_commands.py:208
-#, fuzzy, python-brace-format
-#| msgid "Unable to create zip file of system information: %s"
+#, python-brace-format
 msgid "Unable to create zip file of system information: {error}"
-msgstr "无法生成系统信息的 zip 文件：%s"
+msgstr "无法生成系统信息的 zip 文件：{error}"
 
 #: src/rhsm_icon/rhsm_icon.c:79
 msgid "how often to check for validity (in seconds; default is one day)"
@@ -1401,47 +1365,37 @@ msgid "User %s is not member of any organization"
 msgstr "用户 %s 不是任何机构的成员"
 
 #: src/rhsmlib/dbus/objects/syspurpose.py:69
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Warning: A {attr} of \"{download_value}\" was recently set for this "
-#| "system by the entitlement server administrator.\n"
-#| "{advice}"
+#, python-brace-format
 msgid ""
 "Warning: The following field was recently set for this system by the "
 "entitlement server administrator: {conflict_msg}"
 msgid_plural ""
 "Warning: The following fields were recently set for this system by the "
 "entitlement server administrator: {conflict_msg}"
-msgstr[0] ""
-"警告：\"{download_value}\" 的 {attr} 当前已由权利服务器管理员为这个系统设"
-"置。\n"
-"{advice}"
+msgstr[0] "警告：这个系统的以下项已被权利服务器管理员设置：{conflict_msg}"
 
 #: src/rhsmlib/dbus/service_wrapper.py:45
 #, python-brace-format
 msgid "Error: Unable to load bus '{name}'"
-msgstr ""
+msgstr "错误：无法加载总线 '{name}'"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/facts/dmiinfo.py:91
-#, fuzzy, python-brace-format
-#| msgid "Error reading system DMI information: %s"
+#, python-brace-format
 msgid "Error reading system DMI information: {exception}"
-msgstr "读取系统 DMI 信息出错：%s"
+msgstr "读取系统 DMI 信息出错：{exception}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/facts/dmiinfo.py:100
-#, fuzzy, python-brace-format
-#| msgid "Error reading system DMI information with %s: %s"
+#, python-brace-format
 msgid "Error reading system DMI information with {function}: {exception}"
-msgstr "读取有 %s 的系统 DMI 信息时出错：%s"
+msgstr "读取有 {function} 的系统 DMI 信息时出错：{exception}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/facts/dmiinfo.py:131
-#, fuzzy, python-brace-format
-#| msgid "Error reading system DMI information: %s"
+#, python-brace-format
 msgid "Error reading system DMI information: {dmiwarnings}"
-msgstr "读取系统 DMI 信息出错：%s"
+msgstr "读取系统 DMI 信息出错：{dmiwarnings}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:53
@@ -1756,15 +1710,13 @@ msgstr ""
 "提示：忘记您的登录名或者密码？请访问 https://redhat.com/forgot_password"
 
 #: src/subscription_manager/cache.py:161
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "consumer_uuid=%s is not a valid consumer_uuid. Not attempting to sync %s "
-#| "cache with server."
+#, python-brace-format
 msgid ""
 "consumer_uuid={consumer_uuid} is not a valid consumer_uuid. Not attempting "
 "to sync {class_name} cache with server."
 msgstr ""
-"consumer_uuid=%s 不是有效 consumer_uuid。未尝试将 %s 缓存与服务器同步。"
+"consumer_uuid={consumer_uuid} 不是一个有效的 consumer_uuid。未尝试将 {class_name} "
+"缓存与服务器同步。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cache.py:186
@@ -1790,10 +1742,9 @@ msgstr "无效"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli.py:81
-#, fuzzy, python-format, python-brace-format
-#| msgid "%prog [OPTIONS]"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS]"
-msgstr "%prog [选项]"
+msgstr "%(prog)s {name} [OPTIONS]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli.py:112
@@ -1889,36 +1840,31 @@ msgstr "代理服务器连接失败，请检查您的设置。"
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:204
 #, python-brace-format
 msgid "\"{value}\""
-msgstr ""
+msgstr "\"{value}\""
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:207
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Warning: Provided value \"{val}\" is not included in the list of valid "
-#| "values"
+#, python-brace-format
 msgid ""
 "Warning: Provided value {vals} is not included in the list of valid values"
 msgid_plural ""
 "Warning: Provided values {vals} are not included in the list of valid values"
-msgstr[0] "警告：所提供的值 \"{val}\" 没有包括在有效值列表中"
+msgstr[0] "警告：提供的值 {vals} 没有包括在有效值列表中"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:214
-#, fuzzy, python-brace-format
-#| msgid "This org does not have any subscriptions with service levels."
+#, python-brace-format
 msgid ""
 "Warning: This org does not have any subscriptions with an available "
 "\"{attr}\" is empty."
-msgstr "这个机构没有任何使用服务等级的订阅。"
+msgstr "警告：这个机构没有任何带有可用的 \"{attr}\" 为空的订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:218
-#, fuzzy, python-brace-format
-#| msgid "This org does not have any subscriptions with service levels."
+#, python-brace-format
 msgid ""
 "Warning: This org does not have any subscriptions with an available "
 "\"{attr}\""
-msgstr "这个机构没有任何使用服务等级的订阅。"
+msgstr "警告：这个机构没有任何带有可用的 \"{attr}\"的订阅。"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:230
 #, python-brace-format
@@ -1954,12 +1900,11 @@ msgstr "可用 {syspurpose_attr}"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:347
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:349
-#, fuzzy, python-brace-format
-#| msgid "This org does not have any subscriptions with service levels."
+#, python-brace-format
 msgid ""
 "This org does not have any subscriptions with an available "
 "\"{syspurpose_attr}\""
-msgstr "这个机构没有任何使用服务等级的订阅。"
+msgstr "这个机构没有任何带有可用 \"{syspurpose_attr}\" 的订阅。"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:367
 msgid "Unable to connect to server using token"
@@ -1974,7 +1919,7 @@ msgstr "请注意：当前配置的权力服务器不支持系统目的 {attr}�
 
 #: src/subscription_manager/cli_command/addons.py:25
 msgid "Show or modify the system purpose addons setting"
-msgstr ""
+msgstr "显示或修改系统目的附加设置"
 
 #: src/subscription_manager/cli_command/attach.py:51
 msgid "The ID of the pool to attach (can be specified more than once)"
@@ -1988,7 +1933,7 @@ msgstr "要添加的订阅数。不能与 auto-attach 一同使用。"
 msgid ""
 "Automatically attach the best-matched compatible subscriptions to this "
 "system. This is the default action."
-msgstr ""
+msgstr "为这个系统自动附加最匹配的订阅。这是默认动作。"
 
 #: src/subscription_manager/cli_command/attach.py:59
 msgid ""
@@ -2039,16 +1984,14 @@ msgid "Error: Received data does not contain any pool IDs."
 msgstr "错误：收到的数据不包含任何池 ID。"
 
 #: src/subscription_manager/cli_command/attach.py:110
-#, fuzzy, python-brace-format
-#| msgid "Error: The file \"%s\" does not contain any pool IDs."
+#, python-brace-format
 msgid "Error: The file \"{file}\" does not contain any pool IDs."
-msgstr "错误：文件 \"%s\" 不包含任何池 ID。"
+msgstr "错误：文件 \"{file}\" 不包含任何池 ID。"
 
 #: src/subscription_manager/cli_command/attach.py:113
-#, fuzzy, python-brace-format
-#| msgid "Error: The file \"%s\" does not exist or cannot be read."
+#, python-brace-format
 msgid "Error: The file \"{file}\" does not exist or cannot be read."
-msgstr "错误：文件 \"%s\" 不存在或者无法读取。"
+msgstr "错误：文件 \"{file}\" 不存在或不可读。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/attach.py:150
@@ -2057,10 +2000,9 @@ msgstr "请输入有效数字池 ID。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/attach.py:157
-#, fuzzy, python-brace-format
-#| msgid "Successfully attached a subscription for: %s"
+#, python-brace-format
 msgid "Successfully attached a subscription for: {name}"
-msgstr "成功附加一个订阅：%s"
+msgstr "成功附加一个订阅用于：{name}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/attach.py:178
@@ -2084,10 +2026,8 @@ msgstr "错误：该服务器不支持 --servicelevel 选项。未完成您的�
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/attach.py:204
-#, fuzzy
-#| msgid "Service level set to: %s"
 msgid "Service level set to: {}"
-msgstr "将服务等级设定为：%s"
+msgstr "服务等级设定为：{}"
 
 #: src/subscription_manager/cli_command/attach.py:213
 msgid "Entitlement Certificate(s) update failed due to the following reasons:"
@@ -2193,10 +2133,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:249
-#, fuzzy
-#| msgid "cannot parse argument: %s"
 msgid "cannot parse argument: {}"
-msgstr "无法解析参数：%s"
+msgstr "无法解析参数：{}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:262
@@ -2210,10 +2148,9 @@ msgstr "解析 baseurl 出错："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:354
-#, fuzzy, python-brace-format
-#| msgid "Unable to reach the server at %s:%s%s"
+#, python-brace-format
 msgid "Unable to reach the server at {host}:{port}{handler}"
-msgstr "无法在 %s:%s%s 连接该服务器"
+msgstr "无法连接到服务器 {host}:{port}{handler}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:362
@@ -2226,16 +2163,11 @@ msgid "System certificates corrupted. Please reregister."
 msgstr "系统证书崩溃。请重新注册。"
 
 #: src/subscription_manager/cli_command/cli.py:386
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Consumer profile \"%s\" has been deleted from the server. You can use "
-#| "command clean or unregister to remove local profile."
+#, python-brace-format
 msgid ""
 "Consumer profile \"{uuid}\" has been deleted from the server. You can use "
 "command clean or unregister to remove local profile."
-msgstr ""
-"已将用户配置文件 \"%s\" 从服务器中删除。您可以使用 clean 或 unregister 命令删"
-"除本地配置文件。"
+msgstr "已将消费者配置集 \"{uuid}\" 从服务器中删除。您可以使用 clean 或 unregister 命令删除本地配置集。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:29
@@ -2254,10 +2186,9 @@ msgstr "根据 section.name 删除配置条目"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:42
-#, fuzzy, python-brace-format
-#| msgid "Section: %s, Name: %s"
+#, python-brace-format
 msgid "Section: {s}, Name: {name}"
-msgstr "Section: %s, Name: %s"
+msgstr "节：{s}，名称：{name}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:62
@@ -2275,10 +2206,9 @@ msgstr "错误：用于删除的配置条目必须具有如下格式 [section.na
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:92
-#, fuzzy, python-brace-format
-#| msgid "Error: Section %s and name %s does not exist."
+#, python-brace-format
 msgid "Error: Section {section} and name {name} does not exist."
-msgstr "错误：Section %s 和 name %s 不存在。"
+msgstr "错误：节 {section} 名称 {name} 不存在。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:115
@@ -2288,24 +2218,21 @@ msgstr "[] -- 使用默认值"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:124
 #: src/subscription_manager/cli_command/config.py:127
-#, fuzzy, python-brace-format
-#| msgid "You have removed the value for section %s and name %s."
+#, python-brace-format
 msgid "You have removed the value for section {section} and name {name}."
-msgstr "您已经删除 section %s 和 name %s 的值。"
+msgstr "您已删除了节 {section} 名称 {name} 的值。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:128
-#, fuzzy, python-brace-format
-#| msgid "The default value for %s will now be used."
+#, python-brace-format
 msgid "The default value for {name} will now be used."
-msgstr "现在将使用 %s 的缺省值。"
+msgstr "{name} 的默认值会被使用。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:130
-#, fuzzy, python-brace-format
-#| msgid "Section %s and name %s cannot be removed."
+#, python-brace-format
 msgid "Section {section} and name {name} cannot be removed."
-msgstr "Section %s 和 name %s 无法被删除。"
+msgstr "节 {section} 名称 {name} 无法被删除。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:36
@@ -2392,34 +2319,31 @@ msgstr "--token 只能与 --force 一起使用"
 #: src/subscription_manager/cli_command/identity.py:65
 #: src/subscription_manager/cli_command/identity.py:68
 #: src/subscription_manager/cli_command/version.py:34
-#, fuzzy, python-brace-format
-#| msgid "server type: %s"
+#, python-brace-format
 msgid "server type: {type}"
-msgstr "服务器类型：%s"
+msgstr "服务器类型：{type}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/identity.py:80
-#, fuzzy, python-brace-format
-#| msgid "system identity: %s"
+#, python-brace-format
 msgid "system identity: {consumerid}"
-msgstr "系统身份：%s"
+msgstr "系统身份：{consumerid}"
 
 #: src/subscription_manager/cli_command/identity.py:81
 #, python-brace-format
 msgid "name: {consumer_name}"
-msgstr ""
+msgstr "名称：{consumer_name}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/identity.py:82
-#, fuzzy, python-brace-format
-#| msgid "org name: %s"
+#, python-brace-format
 msgid "org name: {ownername}"
-msgstr "机构名称：%s"
+msgstr "机构名称：{ownername}"
 
 #: src/subscription_manager/cli_command/identity.py:83
 #, python-brace-format
 msgid "org ID: {ownerid}"
-msgstr ""
+msgstr "机构 ID：{ownerid}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/identity.py:92
@@ -2432,10 +2356,9 @@ msgstr "无"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/identity.py:93
-#, fuzzy, python-brace-format
-#| msgid "environment name: %s"
+#, python-brace-format
 msgid "environment name: {environment_name}"
-msgstr "环境名称： %s"
+msgstr "环境名称：{environment_name}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/identity.py:109
@@ -2472,17 +2395,15 @@ msgstr "错误：这个命令要求您使用 --certificate 指定一个证书。
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/import_cert.py:57
-#, fuzzy, python-brace-format
-#| msgid "Successfully imported certificate %s"
+#, python-brace-format
 msgid "Successfully imported certificate {file}"
-msgstr "成功地导入了证书 %s"
+msgstr "成功导入了证书 {file}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/import_cert.py:62
-#, fuzzy, python-brace-format
-#| msgid "%s is not a valid certificate file. Please use a valid certificate."
+#, python-brace-format
 msgid "{file} is not a valid certificate file. Please use a valid certificate."
-msgstr "%s 不是有效的证书文件。请使用有效的证书。"
+msgstr "{file} 不是有效的证书文件。请使用一个有效的证书。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/import_cert.py:68
@@ -2492,10 +2413,9 @@ msgid ""
 msgstr "导入该证书时出错。详情请检查日志文件。"
 
 #: src/subscription_manager/cli_command/import_cert.py:72
-#, fuzzy, python-brace-format
-#| msgid "%s: file not found."
+#, python-brace-format
 msgid "{file}: file not found."
-msgstr "%s：未找到文件。"
+msgstr "{file}：未找到文件。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:39
@@ -2778,14 +2698,11 @@ msgstr "和 --available 一起使用以确保返回所有订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:204
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "date to search on, defaults to today's date, only used with --available "
-#| "(example: %s)"
+#, python-brace-format
 msgid ""
 "date to search on, defaults to today's date, only used with --available "
 "(example: {example})"
-msgstr "要搜索的日期，默认为当天日期，只能与 --available 一同使用（例如：%s）"
+msgstr "要搜索的日期，默认为当天日期，只能与 --available 一同使用（例如：{example}）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:207
@@ -2828,14 +2745,11 @@ msgid ""
 msgstr "只列出可用或者已消耗订阅的池 ID，只能与 --available 及 --consumed 合用"
 
 #: src/subscription_manager/cli_command/list.py:225
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "show pools that are active on or after the given date; only used with --"
-#| "available (example: %s)"
+#, python-brace-format
 msgid ""
 "show pools that are active on or after the given date; only used with --"
 "available (example: {example})"
-msgstr "只列出在指定时间及以后激活的池，只能与 --available 合用（例如：%s）"
+msgstr "只列出在指定时间及以后激活的池，只能与 --available 合用（例如：{example}）"
 
 #: src/subscription_manager/cli_command/list.py:244
 msgid "Error: --afterdate is only applicable with --available"
@@ -2858,10 +2772,9 @@ msgid "    Installed Product Status"
 msgstr "    安装的产品状态"
 
 #: src/subscription_manager/cli_command/list.py:301
-#, fuzzy, python-brace-format
-#| msgid "No installed products were found matching the expression \"%s\"."
+#, python-brace-format
 msgid "No installed products were found matching the expression \"{filter}\"."
-msgstr "未找到符合表达式 \"%s\" 的已安装产品。"
+msgstr "未找到与表达式 \"{filter}\" 匹配的已安装产品。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:303
@@ -2874,33 +2787,25 @@ msgid "Available Subscriptions"
 msgstr "可用订阅"
 
 #: src/subscription_manager/cli_command/list.py:369
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No available subscription pools were found matching the expression \"%s\" "
-#| "and the service level \"%s\"."
+#, python-brace-format
 msgid ""
 "No available subscription pools were found matching the expression "
 "\"{filter}\" and the service level \"{level}\"."
-msgstr "未找到符合表达式 \"%s\" 以及服务等级 \"%s\" 的可用订阅池。"
+msgstr "未找到符合表达式 \"{filter}\" 以及服务等级 \"{level}\" 的可用订阅池。"
 
 #: src/subscription_manager/cli_command/list.py:374
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No available subscription pools were found matching the expression \"%s\"."
+#, python-brace-format
 msgid ""
 "No available subscription pools were found matching the expression "
 "\"{filter}\"."
-msgstr "未找到符合表达式 \"%s\" 的可用订阅池。"
+msgstr "未找到符合表达式 \"{filter}\" 的可用订阅池。"
 
 #: src/subscription_manager/cli_command/list.py:379
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No available subscription pools were found matching the service level \"%s"
-#| "\"."
+#, python-brace-format
 msgid ""
 "No available subscription pools were found matching the service level "
 "\"{level}\"."
-msgstr "未找到符合服务等级 \"%s\" 的可用订阅池。"
+msgstr "未找到符合服务等级 \"{level}\" 的可用订阅池。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:383
@@ -2913,33 +2818,25 @@ msgid "Consumed Subscriptions"
 msgstr "消耗的订阅"
 
 #: src/subscription_manager/cli_command/list.py:421
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No consumed subscription pools were found matching the expression \"%s\" "
-#| "and the service level \"%s\"."
+#, python-brace-format
 msgid ""
 "No consumed subscription pools were found matching the expression "
 "\"{filter}\" and the service level \"{level}\"."
-msgstr "未找到符合表达式 \"%s\" 以及服务等级 \"%s\" 的已消耗订阅池。"
+msgstr "未找到符合表达式 \"{filter}\" 以及服务等级 \"{level}\" 的已消耗订阅池。"
 
 #: src/subscription_manager/cli_command/list.py:426
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No consumed subscription pools were found matching the expression \"%s\"."
+#, python-brace-format
 msgid ""
 "No consumed subscription pools were found matching the expression "
 "\"{filter}\"."
-msgstr "未找到符合表达式 \"%s\" 的已消耗订阅池。"
+msgstr "未找到符合表达式 \"{filter}\" 的已消耗订阅池。"
 
 #: src/subscription_manager/cli_command/list.py:431
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No consumed subscription pools were found matching the service level \"%s"
-#| "\"."
+#, python-brace-format
 msgid ""
 "No consumed subscription pools were found matching the service level "
 "\"{level}\"."
-msgstr "未找到符合服务等级 \"%s\" 的已消耗订阅池。"
+msgstr "未找到符合服务等级 \"{level}\" 的已消耗订阅池。"
 
 #: src/subscription_manager/cli_command/list.py:435
 msgid "No consumed subscription pools were found."
@@ -3043,27 +2940,23 @@ msgstr "这个系统没有可用于它的内容覆盖。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:129
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Repository '%s' does not currently exist, but the override has been added."
+#, python-brace-format
 msgid ""
 "Repository '{repo}' does not currently exist, but the override has been "
 "added."
-msgstr "软件仓库 '%s' 目前不存在，但已添加该覆盖。"
+msgstr "软件仓库 '{repo}' 目前不存在，但已添加覆盖。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:153
-#, fuzzy, python-brace-format
-#| msgid "Nothing is known about '%s'"
+#, python-brace-format
 msgid "Nothing is known about '{r}'"
-msgstr "对 '%s' 一无所知"
+msgstr "对 '{r}' 一无所知"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:158
-#, fuzzy, python-brace-format
-#| msgid "Repository: %s"
+#, python-brace-format
 msgid "Repository: {repo}"
-msgstr "软件仓库：%s"
+msgstr "软件仓库：{repo}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/owners.py:35
@@ -3078,10 +2971,9 @@ msgstr "机构"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/owners.py:61
 #: src/subscription_manager/migrate/migrate.py:303
-#, fuzzy, python-brace-format
-#| msgid "%s cannot register with any organizations."
+#, python-brace-format
 msgid "{username} cannot register with any organizations."
-msgstr "%s 无法注册到任何机构。"
+msgstr "{username} 无法注册到任何机构。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/owners.py:68
@@ -3094,24 +2986,21 @@ msgstr "使用 'subscription-manager plugins' 查看和配置"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author leahliu
 #: src/subscription_manager/cli_command/plugins.py:31
-#, fuzzy, python-brace-format
-#| msgid "list %s plugins"
+#, python-brace-format
 msgid "list {SM} plugins"
-msgstr "列出 %s 插件"
+msgstr "列出 {SM} 插件"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author leahliu
 #: src/subscription_manager/cli_command/plugins.py:33
-#, fuzzy, python-brace-format
-#| msgid "list %s plugin slots"
+#, python-brace-format
 msgid "list {SM} plugin slots"
-msgstr "列出 %s 插件插槽"
+msgstr "列出 {SM} 插件槽"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author leahliu
 #: src/subscription_manager/cli_command/plugins.py:35
-#, fuzzy, python-brace-format
-#| msgid "list %s plugin hooks"
+#, python-brace-format
 msgid "list {SM} plugin hooks"
-msgstr "列出 %s 插件钩"
+msgstr "列出 {SM} 插件钩"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/plugins.py:38
@@ -3167,10 +3056,9 @@ msgstr "已刷新所有本地数据"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/refresh.py:61
-#, fuzzy, python-brace-format
-#| msgid "Unable to perform refresh due to the following exception: %s"
+#, python-brace-format
 msgid "Unable to perform refresh due to the following exception: {e}"
-msgstr "因为以下例外无法执行刷新：%s"
+msgstr "因为以下例外无法执行刷新：{e}"
 
 #: src/subscription_manager/cli_command/register.py:55
 msgid "base URL for content in form of https://hostname:port/prefix"
@@ -3257,47 +3145,41 @@ msgstr "错误: --type 参数已过时，可能无法使用。"
 
 #: src/subscription_manager/cli_command/register.py:173
 #: src/subscription_manager/cli_command/unregister.py:41
-#, fuzzy, python-brace-format
-#| msgid "Unregistering from: %s:%s%s"
+#, python-brace-format
 msgid "Unregistering from: {hostname}:{port}{prefix}"
-msgstr "取消注册：%s:%s%s"
+msgstr "取消注册：{hostname}:{port}{prefix}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:180
-#, fuzzy, python-brace-format
-#| msgid "The system with UUID %s has been unregistered"
+#, python-brace-format
 msgid "The system with UUID {old_uuid} has been unregistered"
-msgstr "UUID 为 %s 的系统已经被取消注册"
+msgstr "UUID 为 {old_uuid} 的系统已被取消注册"
 
 #: src/subscription_manager/cli_command/register.py:203
 #, python-brace-format
 msgid "Registering to: {hostname}:{port}{prefix}"
-msgstr ""
+msgstr "注册到：{hostname}:{port}{prefix}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:240
-#, fuzzy, python-brace-format
-#| msgid "Error during registration: %s"
+#, python-brace-format
 msgid "Error during registration: {e}"
-msgstr "注册时出错：%s"
+msgstr "注册时出错：{e}"
 
 #: src/subscription_manager/cli_command/register.py:243
-#, fuzzy, python-brace-format
-#| msgid "The system has been registered with ID: %s"
+#, python-brace-format
 msgid "The system has been registered with ID: {id}"
-msgstr "这个系统已使用 ID %s 进行了注册"
+msgstr "这个系统已使用 ID {id} 进行了注册"
 
 #: src/subscription_manager/cli_command/register.py:244
-#, fuzzy, python-brace-format
-#| msgid "The registered system name is: %s"
+#, python-brace-format
 msgid "The registered system name is: {name}"
-msgstr "注册的系统名是：%s"
+msgstr "注册的系统名是：{name}"
 
 #: src/subscription_manager/cli_command/register.py:246
-#, fuzzy, python-brace-format
-#| msgid "Service level set to: \"{val}\"."
+#, python-brace-format
 msgid "Service level set to: {level}"
-msgstr "服务等级设定为：“{val}”。"
+msgstr "服务等级设定为：{level}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:315
@@ -3306,31 +3188,27 @@ msgid "Environment: "
 msgstr "环境： "
 
 #: src/subscription_manager/cli_command/register.py:344
-#, fuzzy, python-brace-format
-#| msgid "Hint: Organization \"%s\" contains following environments: %s"
+#, python-brace-format
 msgid "Hint: Organization \"{key}\" contains following environments: {list}"
-msgstr "提示：组织“%s”包含以下环境： %s"
+msgstr "提示：组织“{key}”包含以下环境：{list}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:353
 #: src/subscription_manager/cli_command/register.py:363
-#, fuzzy, python-brace-format
-#| msgid "No such environment: %s"
+#, python-brace-format
 msgid "No such environment: {name}"
-msgstr "没有这个环境：%s"
+msgstr "没有这个环境：{name}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:372
-#, fuzzy, python-brace-format
-#| msgid "%s cannot register with any organizations."
+#, python-brace-format
 msgid "{name} cannot register with any organizations."
-msgstr "%s 无法注册到任何机构。"
+msgstr "{name} 无法注册到任何机构。"
 
 #: src/subscription_manager/cli_command/register.py:383
-#, fuzzy, python-brace-format
-#| msgid "Hint: User \"%s\" is member of following organizations: %s"
+#, python-brace-format
 msgid "Hint: User \"{name}\" is member of following organizations: {orgs}"
-msgstr "提示：用户 \"%s\" 是以下机构的成员：%s"
+msgstr "提示：用户 \"{name}\" 是以下机构的成员：{orgs}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/release.py:33
@@ -3364,10 +3242,9 @@ msgstr "错误：该完全不支持 'release' 命令。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/release.py:57
-#, fuzzy, python-brace-format
-#| msgid "Release: %s"
+#, python-brace-format
 msgid "Release: {release}"
-msgstr "发行版本：%s"
+msgstr "发行版本：{release}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/release.py:59
@@ -3381,19 +3258,16 @@ msgstr "已取消发行版本属性设置"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/release.py:95
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No releases match '%s'.  Consult 'release --list' for a full listing."
+#, python-brace-format
 msgid ""
 "No releases match '{release}'.  Consult 'release --list' for a full listing."
-msgstr "没有与 '%s' 映射的发行版本。查询 'release --list' 给出的完整列表。"
+msgstr "没有与 '{release}' 匹配的发行版本。使用 'release --list' 查看完整列表。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/release.py:99
-#, fuzzy, python-brace-format
-#| msgid "Release set to: %s"
+#, python-brace-format
 msgid "Release set to: {release}"
-msgstr "将发行版本设定为：%s"
+msgstr "将发行版本设定为：{release}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/release.py:109
@@ -3426,10 +3300,9 @@ msgstr "从这个系统中删除所有订阅或指定订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/remove.py:61
-#, fuzzy, python-brace-format
-#| msgid "Error: '%s' is not a valid serial number"
+#, python-brace-format
 msgid "Error: '{serial}' is not a valid serial number"
-msgstr "错误： '%s' 为无效序列号"
+msgstr "错误： '{serial}' 为无效的序列号"
 
 #: src/subscription_manager/cli_command/remove.py:68
 msgid ""
@@ -3484,24 +3357,21 @@ msgstr[0] "已从该服务器删除 %s 个订阅。"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/remove.py:143
 #: src/subscription_manager/cli_command/remove.py:168
-#, fuzzy, python-brace-format
-#| msgid "Unable to perform remove due to the following exception: %s"
+#, python-brace-format
 msgid "Unable to perform remove due to the following exception: {e}"
-msgstr "因为以下例外无法执行删除：%s"
+msgstr "因为以下例外无法执行删除：{e}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/remove.py:152
-#, fuzzy, python-brace-format
-#| msgid "%s subscriptions removed from this system."
+#, python-brace-format
 msgid "{total} subscriptions removed from this system."
-msgstr "从这个系统中删除 %s 订阅。"
+msgstr "从这个系统中删除了 {total} 个订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/remove.py:163
-#, fuzzy, python-brace-format
-#| msgid "Subscription with serial number %s removed from this system"
+#, python-brace-format
 msgid "Subscription with serial number {serial} removed from this system"
-msgstr "从这个系统中删除的序列号为 %s 的订阅"
+msgstr "序列号为 {serial} 的订阅从这个系统中删除"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/repos.py:37
@@ -3534,10 +3404,9 @@ msgstr "要禁用的软件仓库（一次可指定多个）。支持通配符（
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/repos.py:129
-#, fuzzy, python-brace-format
-#| msgid "    Available Repositories in %s"
+#, python-brace-format
 msgid "    Available Repositories in {file}"
-msgstr "    %s 中的可用软件仓库"
+msgstr "    {file} 中的可用软件仓库"
 
 #: src/subscription_manager/cli_command/repos.py:139
 msgid "There were no available repositories matching the specified criteria."
@@ -3550,36 +3419,31 @@ msgid "This system has no repositories available through subscriptions."
 msgstr "这个系统没有可通过订阅使用的库。"
 
 #: src/subscription_manager/cli_command/repos.py:167
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Error: '%s' does not match a valid repository ID. Use \"subscription-"
-#| "manager repos --list\" to see valid repositories."
+#, python-brace-format
 msgid ""
 "Error: '{repoid}' does not match a valid repository ID. Use \"subscription-"
 "manager repos --list\" to see valid repositories."
 msgstr ""
-"错误：'%s' 与有效软件仓库 ID 不匹配。请使用 \"subscription-manager repos --"
-"list\" 查看有效软件仓库。"
+"错误：'{repoid}' 与有效软件仓库 ID 不匹配。请使用 \"subscription-manager repos --list\" "
+"查看有效软件仓库。"
 
 #: src/subscription_manager/cli_command/repos.py:217
-#, fuzzy, python-brace-format
-#| msgid "Repository '%s' is enabled for this system."
+#, python-brace-format
 msgid "Repository '{repoid}' is enabled for this system."
-msgstr "为这个系统启用软件仓库 '%s'。"
+msgstr "为这个系统启用了软件仓库 '{repoid}'。"
 
 #: src/subscription_manager/cli_command/repos.py:219
-#, fuzzy, python-brace-format
-#| msgid "Repository '%s' is disabled for this system."
+#, python-brace-format
 msgid "Repository '{repoid}' is disabled for this system."
-msgstr "为这个系统禁用软件仓库 '%s'。"
+msgstr "为这个系统禁用了软件仓库 '{repoid}'。"
 
 #: src/subscription_manager/cli_command/role.py:24
 msgid "Show or modify the system purpose role setting"
-msgstr ""
+msgstr "显示或修改系统目的角色设置"
 
 #: src/subscription_manager/cli_command/service_level.py:40
 msgid "Show or modify the system purpose service-level setting"
-msgstr ""
+msgstr "显示或修改系统目的服务等级设置"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:42
@@ -3624,10 +3488,9 @@ msgstr "错误：该服务器不支持 service-level 命令。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:159
-#, fuzzy, python-brace-format
-#| msgid "Current service level: %s"
+#, python-brace-format
 msgid "Current service level: {level}"
-msgstr "当前服务等级：%s"
+msgstr "当前服务等级：{level}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:161
@@ -3641,11 +3504,9 @@ msgstr "可用服务等级"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:182
-#, fuzzy
-#| msgid "This org does not have any subscriptions with service levels."
 msgid ""
 "This org does not have any subscriptions with an available \"service level\"."
-msgstr "这个机构没有任何使用服务等级的订阅。"
+msgstr "这个机构没有带有可用”服务等级”的订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/status.py:40
@@ -3654,13 +3515,10 @@ msgstr "显示这个系统的订阅和产品状态信息"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/status.py:43
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "future date to check status on, defaults to today's date (example: %s)"
+#, python-brace-format
 msgid ""
 "future date to check status on, defaults to today's date (example: {example})"
-msgstr ""
-"查看将来某天的状态。如果没有使用这个参数，则默认查看今天的状态（例如：%s）"
+msgstr "查看将来某天的状态，默认为今天的日期（例如：{example}）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/status.py:56
@@ -3675,30 +3533,26 @@ msgstr ""
 "内容访问模式设置为简单内容访问。无论订阅状态如何，该主机都可以访问内容。\n"
 
 #: src/subscription_manager/cli_command/status.py:79
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Overall Status: %s\n"
-#| "%s"
+#, python-brace-format
 msgid ""
 "Overall Status: {status}\n"
 "{message}"
 msgstr ""
-"总体状态：%s\n"
-"%s"
+"总体状态：{status}\n"
+"{message}"
 
 #: src/subscription_manager/cli_command/status.py:97
-#, fuzzy, python-brace-format
-#| msgid "System Purpose Status: %s"
+#, python-brace-format
 msgid "System Purpose Status: {status}"
-msgstr "系统目的状态：%s"
+msgstr "系统目的状态：{status}"
 
 #: src/subscription_manager/cli_command/syspurpose.py:47
 msgid "Convenient module for managing all system purpose settings"
-msgstr ""
+msgstr "用于管理所有系统目的设置的方便模块"
 
 #: src/subscription_manager/cli_command/syspurpose.py:56
 msgid "show current system purpose"
-msgstr ""
+msgstr "显示当前系统目的"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/unregister.py:67
@@ -3707,7 +3561,7 @@ msgstr "系统已经被取消注册。"
 
 #: src/subscription_manager/cli_command/usage.py:25
 msgid "Show or modify the system purpose usage setting"
-msgstr ""
+msgstr "显示或修改系统目的使用设置"
 
 #: src/subscription_manager/cli_command/usage.py:26
 msgid "use set and unset to define the value for this field"
@@ -3744,16 +3598,14 @@ msgstr "输出版本信息"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/version.py:35
-#, fuzzy, python-brace-format
-#| msgid "subscription management server: %s"
+#, python-brace-format
 msgid "subscription management server: {version}"
-msgstr "订阅管理服务器：%s"
+msgstr "订阅管理服务器：{version}"
 
 #: src/subscription_manager/cli_command/version.py:36
-#, fuzzy, python-brace-format
-#| msgid "subscription management rules: %s"
+#, python-brace-format
 msgid "subscription management rules: {version}"
-msgstr "订阅管理规则：%s"
+msgstr "订阅管理规则：{version}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/entcertlib.py:308
@@ -3928,29 +3780,25 @@ msgstr "版权所有（c）2012 Red Hat, Inc."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author John Sefler
 #: src/subscription_manager/gui/about.py:76
-#, fuzzy, python-brace-format
-#| msgid "<b>%s version:</b> %s"
+#, python-brace-format
 msgid "<b>{name} version:</b> {version}"
-msgstr "<b>%s 版本:</b> %s"
+msgstr "<b>{name} 版本：</b>{version}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/about.py:78
-#, fuzzy, python-brace-format
-#| msgid "<b>subscription management service version:</b> %s"
+#, python-brace-format
 msgid "<b>subscription management service version:</b> {version}"
-msgstr "<b>订阅管理服务版本：</b> %s"
+msgstr "<b>订阅管理服务版本：</b> {version}"
 
 #: src/subscription_manager/gui/about.py:105
-#, fuzzy, python-brace-format
-#| msgid "<b>Next System Certificate Check:</b> %s"
+#, python-brace-format
 msgid "<b>Next System Certificate Check:</b> {check_date}"
-msgstr "<b>下一次系统证书检查：</b> %s"
+msgstr "<b>下一次系统证书检查：</b> {check_date}"
 
 #: src/subscription_manager/gui/about.py:112
-#, fuzzy, python-brace-format
-#| msgid "<b>Next System Auto Attach:</b> %s"
+#, python-brace-format
 msgid "<b>Next System Auto Attach:</b> {attach_date}"
-msgstr "<b>下一次自动附加：</b> %s"
+msgstr "<b>下一次自动附加：</b>{attach_date}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/allsubs.py:54
@@ -5691,11 +5539,10 @@ msgstr "安装的产品"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/mysubstab.py:133
-#, fuzzy, python-brace-format
-#| msgid "There was an error removing %s with serial number %s"
+#, python-brace-format
 msgid ""
 "There was an error removing {subscription} with serial number {serial_number}"
-msgstr "删除序列号为 %s 的 %s 时出错"
+msgstr "删除序列号为 {serial_number} 的 {subscription} 时出错"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/mysubstab.py:148
@@ -5709,23 +5556,21 @@ msgstr "正在删除，请稍候。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/mysubstab.py:169
-#, fuzzy, python-brace-format
-#| msgid "Are you sure you want to remove %s?"
+#, python-brace-format
 msgid "Are you sure you want to remove {subscription_text}?"
-msgstr "您确定要删除 %s 吗？"
+msgstr "您确定要删除 {subscription_text} 吗？"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/mysubstab.py:200
-#, fuzzy, python-brace-format
-#| msgid "Stack of %s and 1 other"
+#, python-brace-format
 msgid "Stack of {group_name} and 1 other"
 msgid_plural "Stack of {group_name} and {unique} others"
-msgstr[0] "%s 堆栈及 1 其他"
+msgstr[0] "{group_name} 堆栈及 1 个其他"
 
 #: src/subscription_manager/gui/mysubstab.py:204
 #, python-brace-format
 msgid "Stack of {group_name}"
-msgstr ""
+msgstr "{group_name} 堆栈"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/mysubstab.py:235
@@ -5803,10 +5648,9 @@ msgstr "注册过程中出错。"
 #: src/subscription_manager/gui/registergui.py:388
 #: src/subscription_manager/gui/registergui.py:441
 #: src/subscription_manager/migrate/migrate.py:726
-#, fuzzy, python-brace-format
-#| msgid "System '%s' successfully registered.\n"
+#, python-brace-format
 msgid "System '{identity_name}' successfully registered.\n"
-msgstr "成功注册系统 '%s'。\n"
+msgstr "成功注册系统 '{identity_name}'。\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/registergui.py:661
@@ -5819,10 +5663,9 @@ msgid "Subscription Attachment"
 msgstr "订阅附件"
 
 #: src/subscription_manager/gui/registergui.py:1039
-#, fuzzy, python-brace-format
-#| msgid "Registering to owner: %s environment: %s"
+#, python-brace-format
 msgid "Registering to owner: {owner} environment: {environment}"
-msgstr "正在注册为所有者：%s 环境：%s"
+msgstr "注册为所有者：{owner} 环境：{environment}"
 
 #: src/subscription_manager/gui/registergui.py:1063
 msgid "Unable to unregister"
@@ -5889,16 +5732,12 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/registergui.py:1317
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No available subscriptions at the current service level: %s. Please use "
-#| "the \"All Available Subscriptions\" tab to manually attach subscriptions."
+#, python-brace-format
 msgid ""
 "No available subscriptions at the current service level: "
 "{current_service_level}. Please use the \"All Available Subscriptions\" tab "
 "to manually attach subscriptions."
-msgstr ""
-"在当前的服务等级中没有可用订阅：%s。请使用“所有可用订阅”标签手动附加订阅。"
+msgstr "在当前的服务等级中没有可用订阅：{current_service_level}。请使用“所有可用订阅”标签手动附加订阅。"
 
 #: src/subscription_manager/gui/registergui.py:1340
 msgid ""
@@ -5921,10 +5760,9 @@ msgstr "附加可能的机构列表"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/registergui.py:1464
-#, fuzzy, python-brace-format
-#| msgid "<b>User %s is not able to register with any orgs.</b>"
+#, python-brace-format
 msgid "<b>User {username} is not able to register with any orgs.</b>"
-msgstr "<b>用户 %s 无法注册任何机构。</b>"
+msgstr "<b>用户 {username} 无法注册任何机构。</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/registergui.py:1539
@@ -5976,10 +5814,9 @@ msgstr "验证服务器时出错：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/registergui.py:1839
-#, fuzzy, python-brace-format
-#| msgid "Unable to reach the server at %s:%s%s"
+#, python-brace-format
 msgid "Unable to reach the server at {hostname}:{port}{prefix}"
-msgstr "无法在 %s:%s%s 连接该服务器"
+msgstr "无法连接到服务器 {hostname}:{port}{prefix}"
 
 #: src/subscription_manager/gui/registergui.py:1858
 msgid "Validating connection"
@@ -6109,17 +5946,15 @@ msgstr "点击调整数量"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/i18n_argparse.py:38
-#, fuzzy, python-format
-#| msgid "%prog [OPTIONS]"
+#, python-format
 msgid "%(prog)s [OPTIONS]"
-msgstr "%prog [选项]"
+msgstr "%(prog)s [OPTIONS]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/i18n_argparse.py:54
-#, fuzzy, python-brace-format
-#| msgid "%s: error: %s"
+#, python-brace-format
 msgid "{prog}: error: {msg}"
-msgstr "%s：错误：%s"
+msgstr "{prog}: 错误: {msg}"
 
 #: src/subscription_manager/migrate/migrate.py:53
 #: src/subscription_manager/migrate/migrate.py:55
@@ -6186,15 +6021,12 @@ msgid ""
 msgstr "这个系统已在 Red Hat Subscription Management 中注册。"
 
 #: src/subscription_manager/migrate/migrate.py:282
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Please visit https://access.redhat.com/management/consumers/%s to view "
-#| "the profile details."
+#, python-brace-format
 msgid ""
 "Please visit https://access.redhat.com/management/consumers/{identity_uuid} "
 "to view the  profile details."
 msgstr ""
-"请访问 https://access.redhat.com/management/consumers/%s 查看配置文件详情。"
+"请访问 https://access.redhat.com/management/consumers/{identity_uuid} 查看配置集详情。"
 
 #: src/subscription_manager/migrate/migrate.py:289
 msgid "The CA certificate for the destination server has not been installed."
@@ -6225,10 +6057,9 @@ msgid "Unable to authenticate to legacy server.  "
 msgstr "无法认证原有服务器。  "
 
 #: src/subscription_manager/migrate/migrate.py:394
-#, fuzzy, python-brace-format
-#| msgid "You do not have access to system %s.  "
+#, python-brace-format
 msgid "You do not have access to system {system_id}.  "
-msgstr "您没有 %s 系统的访问权限。  "
+msgstr "您没有系统 {system_id} 的访问权限。  "
 
 #: src/subscription_manager/migrate/migrate.py:401
 #: src/subscription_manager/migrate/migrate.py:411
@@ -6248,10 +6079,9 @@ msgid ""
 msgstr "您订阅了有冲突产品证书的频道。"
 
 #: src/subscription_manager/migrate/migrate.py:468
-#, fuzzy, python-brace-format
-#| msgid "Mapping product '%s' to certificate '%s'."
+#, python-brace-format
 msgid "Mapping product '{product_id}' to certificate '{certificate}'."
-msgstr "把产品 '%s' 映射到证书 '%s'。"
+msgstr "把产品 '{product_id}' 映射到证书 '{certificate}'。"
 
 #: src/subscription_manager/migrate/migrate.py:480
 #, python-format
@@ -6263,10 +6093,9 @@ msgstr ""
 "请查看是否安装了软件包 %(package)s。"
 
 #: src/subscription_manager/migrate/migrate.py:506
-#, fuzzy, python-brace-format
-#| msgid "Channels not available on %s:"
+#, python-brace-format
 msgid "Channels not available on {url}:"
-msgstr "%s 中不可用的频道："
+msgstr "{url} 中没有可用的频道："
 
 #: src/subscription_manager/migrate/migrate.py:511
 msgid "No product certificates are mapped to these legacy channels:"
@@ -6287,30 +6116,24 @@ msgstr "为这些原有频道安装产品证书："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/migrate/migrate.py:558
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "\n"
-#| "Product certificates installed successfully to %s."
+#, python-brace-format
 msgid ""
 "\n"
 "Product certificates installed successfully to {path}."
 msgstr ""
 "\n"
-"成功将产品证书安装到 %s。"
+"成功将产品证书安装到 {path}。"
 
 #: src/subscription_manager/migrate/migrate.py:630
 msgid "Could not remove system entitlement on legacy server.  "
 msgstr "无法从原有服务器中删除系统权利。  "
 
 #: src/subscription_manager/migrate/migrate.py:646
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Did not receive a completed unregistration message from legacy server for "
-#| "system %s."
+#, python-brace-format
 msgid ""
 "Did not receive a completed un-registration message from legacy server for "
 "system {system_id}."
-msgstr "未从原有服务器中收到系统 %s 的取消注册完成信息。"
+msgstr "未从原有服务器中收到系统 {system_id} 的取消注册完成信息。"
 
 #: src/subscription_manager/migrate/migrate.py:650
 msgid "Please investigate on the Customer Portal at https://access.redhat.com."
@@ -6329,10 +6152,9 @@ msgid "Could not retrieve system migration data from legacy server.  "
 msgstr "无法从原有服务器中检索系统迁移数据。  "
 
 #: src/subscription_manager/migrate/migrate.py:679
-#, fuzzy, python-brace-format
-#| msgid "Consumer %s doesn't exist.  Creating new consumer."
+#, python-brace-format
 msgid "Consumer {consumer_id} doesn't exist.  Creating new consumer."
-msgstr "客户 %s 不存在，请创建新客户。"
+msgstr "消费者 {consumer_id} 不存在，请创建新客户。"
 
 #: src/subscription_manager/migrate/migrate.py:686
 msgid "Attempting to register system to destination server..."
@@ -6356,16 +6178,13 @@ msgstr "无服务等级属性"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/migrate/migrate.py:755
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "\n"
-#| "Service level \"%s\" is not available."
+#, python-brace-format
 msgid ""
 "\n"
 "Service level \"{service_level}\" is not available."
 msgstr ""
 "\n"
-"服务等级 \"%s\" 不可用。"
+"服务等级 \"{service_level}\" 不可用。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/migrate/migrate.py:756
@@ -6382,14 +6201,11 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author leahliu
 #: src/subscription_manager/migrate/migrate.py:795
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Please ensure system has subscriptions attached, and see '%s' to enable "
-#| "additional repositories"
+#, python-brace-format
 msgid ""
 "Please ensure system has subscriptions attached, and see '{command}' to "
 "enable additional repositories"
-msgstr "请确定系统已附加了订阅，请查看 '%s' 启用额外的软件仓库"
+msgstr "请确定系统已附加了订阅，请查看 '{command}' 启用额外的软件仓库"
 
 #: src/subscription_manager/migrate/migrate.py:815
 msgid "Stopping and disabling legacy services..."
@@ -6435,11 +6251,10 @@ msgid "don't use legacy proxy settings with destination server"
 msgstr "不在目的服务器中使用原有代理服务器设置"
 
 #: src/subscription_manager/migrate/migrate.py:914
-#, fuzzy, python-brace-format
-#| msgid "state to leave system in on legacy server (default is '%s')"
+#, python-brace-format
 msgid ""
 "state to leave system in on legacy server (default is '{default_state}')"
-msgstr "声明将系统留在原有服务器中（默认为 '%s'）"
+msgstr "声明将系统留在原有服务器中（默认为 '{default_state}'）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/migrate/migrate.py:920
@@ -6620,23 +6435,17 @@ msgid "and"
 msgstr "和"
 
 #: src/syspurpose/files.py:465
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Warning: Provided value \"{val}\" is not included in the list of valid "
-#| "values"
+#, python-brace-format
 msgid ""
 "Warning: Provided value \"{val}\" is not included in the list of valid "
 "values for attribute {attr}:"
-msgstr "警告：所提供的值 \"{val}\" 没有包括在有效值列表中"
+msgstr "警告：提供的值 \"{val}\" 没有包括在属性 {attr} 的有效值列表中"
 
 #: src/syspurpose/files.py:472
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Warning: Provided value \"{val}\" is not included in the list of valid "
-#| "values"
+#, python-brace-format
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
-msgstr "警告：所提供的值 \"{val}\" 没有包括在有效值列表中"
+msgstr "警告：所提供的键 \"{key}\" 没有包括在有效键列表中"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: tmp/rhsm-icon.desktop.in.h:1
