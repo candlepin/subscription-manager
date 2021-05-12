@@ -1,10 +1,5 @@
-/*
- * Keep in sync with https://github.com/cockpit-project/cockpit/tree/master/src/base1/patternfly-overrides.scss
- */
-
 // Global Cockpit overrides for PatternFly variables
 
-// Fonts
 $font-family-base: "RedHatText", "Open Sans", Helvetica, Arial, sans-serif;
 $font-family-mono: SFMono-Regular, menlo, monaco, consolas, "Liberation Mono", Courier New, monospace;
 
@@ -18,26 +13,6 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     align-items: baseline;
   }
-}
-
-h1 {
-  font-size: var(--pf-global--FontSize--4xl);
-}
-
-h2 {
-  font-size: var(--pf-global--FontSize--3xl);
-}
-
-h3 {
-  font-size: var(--pf-global--FontSize--2xl);
-}
-
-h4 {
-  font-size: var(--pf-global--FontSize--xl);
-}
-
-h4 {
-  font-size: var(--pf-global--FontSize--lg);
 }
 
 // Restyle inputs & dropdowns
@@ -155,33 +130,6 @@ select.form-control {
   appearance: none;
   background: var(--dropdown-image) no-repeat 100% 50%, var(--dropdown-background) !important;
   padding-right: 2.5em !important;
-}
-
-// Adjust typeahead find style
-.rbt {
-  &-input {
-    // Support typehead hints
-    &-hint {
-      // Stretch the hint and its input child 100% tall
-      &,
-      > input {
-        height: 100%;
-      }
-
-      // Shave off the border and padding, as these misalign the elemnt
-      // (as this widget uses inline styles (ugh!), we _have to_ use !important)
-      > input {
-        border-width: 0 1px !important;
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-      }
-    }
-  }
-
-  // Adjust spinner position
-  &-aux {
-    right: 2rem !important;
-  }
 }
 
 // Adjust dropdown menus
@@ -478,36 +426,46 @@ select.form-control {
 
 // Standardize small font size to PF4 small font
 small {
-	font-size: var(--pf-global--FontSize--sm);
+  font-size: var(--pf-global--FontSize--sm);
+}
+
+// Bump content away from cards
+.content,
+.container {
+  --container-padding-x: var(--pf-global--spacer--md);
+  --container-padding-y: var(--pf-global--spacer--lg);
+  --container-padding: var(--container-padding-y) var(--container-padding-x);
+  padding: var(--container-padding);
+
+  .cards-pf + & {
+    padding-top: var(--pf-global--spacer--md);
+  }
 }
 
 @media screen and (min-width: 768px) {
   // Add PF4 padding to desktop mode
   .content,
-  .page-ct,
-  .container,
-  .container-fluid {
-    padding: 2rem 3rem;
+  .container {
+    --container-padding-x: var(--pf-global--spacer--lg);
+    --container-padding-y: var(--pf-global--spacer--xl);
 
     .breadcrumb,
     .breadcrumb + & {
       padding-top: 0;
     }
-
-    .cards-pf + & {
-      padding-top: 1rem;
-    }
-  }
-
-  // Rely on page-ct padding; don't duplicate
-  .page-ct .container,
-  .page-ct .container-fluid {
-    padding: 0;
   }
 
   // Remove excess padding from dialogs
   .modal-dialog .content {
     padding: 0;
+  }
+}
+
+// Bump content away from cards
+.content,
+.container {
+  .cards-pf + & {
+    padding-top: 1rem;
   }
 }
 
@@ -523,7 +481,7 @@ label {
 .info-table-ct > tbody > tr > td:first-child,
 th > label {
   font-weight: normal;
-  font-size: var(--font-size-s);
+  font-size: var(--pf-global--FontSize-s);
 }
 
 // Adjust labels in tables
@@ -538,7 +496,7 @@ th > label {
 
 // Adjust nav tab sizes
 .nav-tabs {
-  font-size: var(--font-size-s);
+  font-size: var(--pf-global--FontSize-s);
 
   > li {
 
@@ -561,6 +519,7 @@ th > label {
       }
 
       // listing-ct uses tertitiary nav, which has a bottom line
+      .pf-c-table__expandable-row &::before,
       .listing-ct-panel &::before {
         top: auto;
         bottom: 0;
@@ -711,12 +670,33 @@ th > label {
 
     /* Readjust the tooltip for our needs */
     .tooltip {
-        margin: -2.75rem 0 0 -2px !important;
-        /* Center horizontally based on its own width */
-        transform: translateX(-50%);
-        /* Don't trap mouse hovering */
-        pointer-events: none;
+      margin: -2.75rem 0 0 -2px !important;
+      /* Center horizontally based on its own width */
+      transform: translateX(-50%);
+      /* Don't trap mouse hovering */
+      pointer-events: none;
     }
+  }
+}
+
+/* Style tooltips to resemble PF4 */
+.tooltip {
+  // Make it 100% opaque
+  &.in { opacity: 1; }
+
+  // Recolor the arrows
+  &.top &-arrow { border-top-color: var(--pf-global--BackgroundColor--dark-100); }
+  &.right &-arrow { border-right-color: var(--pf-global--BackgroundColor--dark-100); }
+  &.bottom &-arrow { border-bottom-color: var(--pf-global--BackgroundColor--dark-100); }
+  &.left &-arrow { border-left-color: var(--pf-global--BackgroundColor--dark-100); }
+
+  // Match content background, padding, fonts, etc. to PF4 tooltips
+  &-inner {
+    background: var(--pf-global--BackgroundColor--dark-100);
+    font-size: var(--pf-global--FontSize--sm);
+    line-height: var(--pf-global--LineHeight--md);
+    padding: var(--pf-global--spacer--sm) var(--pf-global--spacer--md);
+    text-align: center;
   }
 }
 
@@ -750,4 +730,10 @@ th > label {
 
 :root {
   font-size: $font-size-base;
+}
+
+/* Reset PF3 margin for PF4; needs to be specificity of 2 to override PF3 and let PF4 set margins too */
+input.pf-c-checkbox__input,
+input.pf-c-radio__input {
+  margin: unset;
 }
