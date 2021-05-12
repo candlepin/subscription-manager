@@ -321,7 +321,7 @@ class TestSubscriptions(SubscriptionsCase):
         self.machine.execute("useradd junior; echo junior:foobar | chpasswd")
         self.login_and_go("/subscriptions", user="junior")
         self.browser.wait_in_text(".pf-c-empty-state__body", "current user isn't allowed to access system subscription")
-        self.allow_authorize_journal_messages()
+        self.allow_journal_messages("junior is not in the sudoers file.  This incident will be reported.")
 
     def testInsights(self):
         m = self.machine
