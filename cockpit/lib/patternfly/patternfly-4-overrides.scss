@@ -1,0 +1,133 @@
+/*** PF4 overrides ***/
+
+/* WORKAROUND: Navigation problems with Tertiary Nav widget on mobile */
+/* See: https://github.com/patternfly/patternfly-design/issues/840 */
+/* Helper mod to wrap pf-c-nav__tertiary */
+.ct-m-nav__tertiary-wrap {
+    .pf-c-nav__list {
+        flex-wrap: wrap;
+    }
+
+    .pf-c-nav__scroll-button {
+        display: none;
+    }
+}
+
+/* Helper mod to center pf-c-nav__tertiary when it wraps */
+.ct-m-nav__tertiary-center {
+    .pf-c-nav__list {
+        justify-content: center;
+    }
+}
+
+ul.pf-c-select__menu {
+    max-width: 20rem;
+    max-height: 20rem;
+    overflow-y: auto;
+}
+
+/* All SVGs used in PF4 have some inline style to align them
+ * https://github.com/patternfly/patternfly-react/issues/4767
+ */
+svg {
+    vertical-align: -0.125em;
+}
+
+// Patternfly horizontal lists should convert to vertical in small screens https://github.com/patternfly/patternfly/issues/3630
+@media (min-width: 640px) {
+    .pf-c-description-list {
+        --pf-c-description-list__group--GridTemplateColumns: var(--pf-c-description-list--m-horizontal__group--GridTemplateColumns);
+    }
+}
+
+// The default gap between the rows in horizonal lists is too large
+.pf-c-description-list.pf-m-horizontal {
+    --pf-c-description-list--RowGap: 1rem;
+}
+
+.pf-c-description-list {
+    // When using horizontal ruler inside description list it's just for the spacing - don't show it
+    > hr {
+        border-top: none;
+    }
+}
+
+.pf-c-modal-box.pf-m-align-top {
+    // We utilize custom footers in dialogs
+    // Make sure that the buttons always appear in the next line from the inline alerts
+    .pf-c-modal-box__footer {
+        flex-wrap: wrap;
+        gap: var(--pf-global--spacer--sm);
+
+        > div:not(.pf-c-button):not(.dialog-wait-ct) {
+            flex: 0 0 100%;
+        }
+    }
+}
+
+.pf-c-card {
+  // https://github.com/patternfly/patternfly/issues/3959
+  --pf-c-card__header-toggle--MarginTop: 0;
+  .pf-c-card__header {
+    // upstream fix (pending): https://github.com/patternfly/patternfly/pull/3714
+    flex-wrap: wrap;
+    row-gap: var(--pf-global--spacer--sm);
+    justify-content: space-between;
+
+    > .pf-c-card__actions {
+        flex-wrap: wrap;
+        row-gap: var(--pf-global--spacer--sm);
+
+        // PF4 CardActions act up when using buttons while the title is large of font
+        // https://github.com/patternfly/patternfly/issues/3713
+        margin: unset;
+        padding-left: unset;
+    }
+  }
+}
+
+
+// Alignment of checks is incorrect and inconsistent across browsers
+// Upstream issue: https://github.com/patternfly/patternfly/issues/3868
+.pf-c-check > .pf-c-check__input {
+    // Set the height of the input widget to be the same as its label
+    --pf-c-check__input--Height: var(--pf-c-check__label--FontSize);
+    // Offset by the top half of the difference between the height and the line height
+    --pf-c-check__input--MarginTop: calc((var(--pf-c-check__label--LineHeight) - 1) / 2 * var(--pf-c-check__input--Height));
+    // PF3 sets a margin which messes with PF4, so set PF4's rule again here (Cockpit-specific mix of PF3+PF4)
+    margin-top: var(--pf-c-check__input--MarginTop);
+}
+
+// Alignment of checks is incorrect and inconsistent across browsers
+// Upstream issue: https://github.com/patternfly/patternfly/issues/3868
+.pf-c-radio > .pf-c-radio__input {
+    // Set the height of the input widget to be the same as its label
+    --pf-c-radio__input--Height: var(--pf-c-radio__label--FontSize);
+    // Offset by the top half of the difference between the height and the line height
+    --pf-c-radio__input--MarginTop: calc((var(--pf-c-radio__label--LineHeight) - 1) / 2 * var(--pf-c-radio__input--Height));
+    // PF3 sets a margin which messes with PF4, so set PF4's rule again here (Cockpit-specific mix of PF3+PF4)
+    margin-top: var(--pf-c-radio__input--MarginTop);
+}
+
+// Add some spacing to nested form groups - PF4 does not support these yet
+// https://github.com/patternfly/patternfly-design/issues/1012
+.pf-c-form__group-control {
+    .pf-c-form__group, .pf-c-form__section {
+        padding-top: var(--pf-global--spacer--md);
+    }
+}
+
+// Make sure focus ring is not truncated when input group element is focused.
+// https://github.com/patternfly/patternfly/issues/3926
+.pf-c-input-group :focus {
+    z-index: 2;
+}
+
+// Alerts use elements that have fonts set in other frameworks (including PF3);
+// generally, this is an H4 that often has a font size and sometimes family set.
+// Therefore, it should inherit from the alert font set at the pf-c-alert level.
+// https://github.com/patternfly/patternfly/issues/4004
+.pf-c-alert__title {
+    font-size: inherit;
+    font-family: inherit;
+}
