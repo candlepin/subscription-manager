@@ -720,4 +720,4 @@ client.init = () => {
     configService.wait().then(updateConfig);
 };
 
-module.exports = client;
+export default client;
