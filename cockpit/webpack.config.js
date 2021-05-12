@@ -3,9 +3,9 @@ const copy = require("copy-webpack-plugin");
 const fs = require("fs");
 const TerserJSPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require("webpack");
 const CompressionPlugin = require("compression-webpack-plugin");
+const ESLintPlugin = require('eslint-webpack-plugin');
 const extract = require("mini-css-extract-plugin");
 const glob = require("glob");
 const po2json = require("po2json");
@@ -124,6 +124,7 @@ var plugins = [
     new Po2JSONPlugin(),
     new extract("[name].css"),
     new Po2JSONPlugin(),
+    new ESLintPlugin({ extensions: ["js", "jsx"], exclude: ["spec", "node_modules"] }),
 ];
 
 if (!production) {
@@ -175,28 +176,11 @@ module.exports = {
     resolve: {
         alias: { 'font-awesome': path.resolve(nodedir, 'font-awesome-sass/assets/stylesheets') },
     },
-    optimization: {
-        minimize: production,
-        minimizer: [
-            new UglifyJsPlugin({
-                uglifyOptions: {
-                    beautify: true,
-                    warnings: false
-                }
-            }),
-            new OptimizeCSSAssetsPlugin({})],
-    },
     externals: externals,
     output: output,
     devtool: production ? false : "source-map",
     module: {
         rules: [
-            {
-                enforce: 'pre',
-                test: /\.(js|jsx)$/,
-                exclude: /\/node_modules\/.*\//, // exclude external dependencies
-                loader: "eslint-loader"
-            },
             {
                 test: /\.js$/,
                 exclude: /\/node_modules\/.*\//, // exclude external dependencies
@@ -211,11 +195,6 @@ module.exports = {
                 exclude: /node_modules/,
                 loader: 'babel-loader',
                 test: /\.jsx$/
-            },
-            {
-                exclude: /node_modules/,
-                loader: 'babel-loader',
-                test: /\.es6$/
             },
             {
                 test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|eot|ttf|wav|mp3)$/,
