@@ -32,7 +32,7 @@ import * as Insights from './insights.jsx';
  *   - onChange  callback to signal when the data has changed
  *   - properties as in defaultRegisterDialogSettings()
  */
-class PatternDialogBody extends React.Component {
+class SubscriptionRegisterDialog extends React.Component {
     render() {
         let customURL;
         if (this.props.url === 'custom') {
@@ -201,6 +201,4 @@ class PatternDialogBody extends React.Component {
     }
 }
 
-module.exports = {
-    dialogBody: PatternDialogBody,
-};
+export default SubscriptionRegisterDialog;

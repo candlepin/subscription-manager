@@ -25,6 +25,13 @@ import { show_modal_dialog } from "../lib/cockpit-components-dialog.jsx";
 import * as service from "../lib/service.js";
 import * as PK from "../lib/packagekit";
 
+import { ExternalLinkAltIcon, WarningTriangleIcon } from '@patternfly/react-icons';
+import {
+    Button,
+    DescriptionListDescription, DescriptionListGroup, DescriptionListTerm,
+    Stack, StackItem,
+} from '@patternfly/react-core';
+
 import subscriptionsClient from './subscriptions-client';
 
 let _ = cockpit.gettext;
@@ -530,20 +537,28 @@ export class InsightsStatus extends React.Component {
             }
 
             status = (
-                <div style={{display: "inline-block", verticalAlign: "top" }}>
-                    <a onClick={left(show_status_dialog)}>{_("Connected to Insights")}</a>
-                    { warn && [ " ", <i className="pficon pficon-warning-triangle-o" /> ] }
-                    <br />
-                    <a href={url} target="_blank" rel="noopener noreferrer">
-                        {text} <i className="fa fa-external-link" />
-                    </a>
-                </div>
+                <Stack hasGutter>
+                    <StackItem>
+                        <Button variant="link" isInline icon={warn ? <WarningTriangleIcon color="orange" /> : null} onClick={left(show_status_dialog)}>{_("Connected to Insights")}</Button>
+                    </StackItem>
+                    <StackItem>
+                        <Button variant="link" isInline component="a" href={url}
+                                target="_blank" rel="noopener noreferrer"
+                                icon={<ExternalLinkAltIcon />}>
+                            { text }
+                        </Button>
+                    </StackItem>
+                </Stack>
             );
         } else {
-            status = <a onClick={left(show_connect_dialog)}>{_("Not connected")}</a>;
+            status = <Button variant="link" isInline onClick={left(show_connect_dialog)}>{_("Not connected")}</Button>;
         }
 
-        let status_string = arrfmt(_("Insights: $0"), status);
-        return <div><label>{status_string}</label></div>;
+        return (
+            <DescriptionListGroup>
+                <DescriptionListTerm>{_("Insights")}</DescriptionListTerm>
+                <DescriptionListDescription>{status}</DescriptionListDescription>
+            </DescriptionListGroup>
+        );
     }
 }

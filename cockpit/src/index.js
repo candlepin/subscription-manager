@@ -24,12 +24,12 @@ import ReactDOM from 'react-dom';
 import '../lib/patternfly/patternfly-cockpit.scss';
 
 import subscriptionsClient from './subscriptions-client';
-import subscriptionsRegister from './subscriptions-register.jsx';
-import subscriptionsView from './subscriptions-view.jsx';
+import SubscriptionRegisterDialog from './subscriptions-register.jsx';
+import SubscriptionsView from './subscriptions-view.jsx';
 import * as Insights from './insights.jsx';
 import * as Dialog from '../lib/cockpit-components-dialog.jsx';
 
-import './subscriptions.css';
+import './subscriptions.scss';
 
 let _ = cockpit.gettext;
 
@@ -106,7 +106,7 @@ function openRegisterDialog() {
                 let dialogProps = {
                     'id': 'register_dialog',
                     'title': _("Register System"),
-                    'body': React.createElement(subscriptionsRegister.dialogBody, registerDialogDetails),
+                    'body': React.createElement(SubscriptionRegisterDialog, registerDialogDetails),
                 };
 
                 if (renderDialog)
@@ -132,7 +132,7 @@ function initStore(rootElement) {
 
     dataStore.render = () => {
         ReactDOM.render(React.createElement(
-            subscriptionsView.page,
+            SubscriptionsView,
             {
                 status: subscriptionsClient.subscriptionStatus.status,
                 status_msg: subscriptionsClient.subscriptionStatus.status_msg,
