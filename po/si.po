@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-15 18:07+0200\n"
+"POT-Creation-Date: 2021-05-13 08:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -85,7 +85,7 @@ msgstr ""
 msgid "Options"
 msgstr ""
 
-#: cockpit/src/index.js:64 cockpit/src/subscriptions-view.jsx:305
+#: cockpit/src/index.js:64 cockpit/src/subscriptions-view.jsx:272
 #: src/subscription_manager/gui/data/glade/installed.glade:86
 #: src/subscription_manager/gui/data/ui/installed.ui:93
 #: src/subscription_manager/gui/registergui.py:249
@@ -282,9 +282,9 @@ msgid "Insights: $0"
 msgstr ""
 
 #: cockpit/src/subscriptions-client.js:48
-#: cockpit/src/subscriptions-client.js:554
-#: cockpit/src/subscriptions-view.jsx:396
-#: cockpit/src/subscriptions-view.jsx:402
+#: cockpit/src/subscriptions-client.js:561
+#: cockpit/src/subscriptions-view.jsx:358
+#: cockpit/src/subscriptions-view.jsx:364
 #: src/rhsmlib/services/entitlement.py:94
 #: src/rhsmlib/services/syspurpose.py:104
 #: src/subscription_manager/cert_sorter.py:282
@@ -305,45 +305,45 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-#: cockpit/src/subscriptions-client.js:300
+#: cockpit/src/subscriptions-client.js:307
 msgid "Starting registration service ..."
 msgstr ""
 
-#: cockpit/src/subscriptions-client.js:319
+#: cockpit/src/subscriptions-client.js:326
 msgid "Registering using activation key ..."
 msgstr ""
 
-#: cockpit/src/subscriptions-client.js:337
+#: cockpit/src/subscriptions-client.js:344
 msgid "Registering using username and password ..."
 msgstr ""
 
-#: cockpit/src/subscriptions-client.js:361
+#: cockpit/src/subscriptions-client.js:368
 msgid "Stopping registration service ..."
 msgstr ""
 
-#: cockpit/src/subscriptions-client.js:385
+#: cockpit/src/subscriptions-client.js:392
 msgid "Saving configuration ..."
 msgstr ""
 
-#: cockpit/src/subscriptions-client.js:401
+#: cockpit/src/subscriptions-client.js:408
 msgid "Attaching subscriptions ..."
 msgstr ""
 
-#: cockpit/src/subscriptions-client.js:449
+#: cockpit/src/subscriptions-client.js:456
 msgid "Updating status ..."
 msgstr ""
 
-#: cockpit/src/subscriptions-client.js:467
-#: cockpit/src/subscriptions-view.jsx:317
+#: cockpit/src/subscriptions-client.js:474
+#: cockpit/src/subscriptions-view.jsx:285
 #: src/subscription_manager/gui/registergui.py:1075
 msgid "Unregistering"
 msgstr ""
 
-#: cockpit/src/subscriptions-client.js:506
+#: cockpit/src/subscriptions-client.js:513
 msgid "not-found"
 msgstr ""
 
-#: cockpit/src/subscriptions-client.js:538
+#: cockpit/src/subscriptions-client.js:545
 msgid "Corrupted JSON with status"
 msgstr ""
 
@@ -415,7 +415,7 @@ msgid "Activation key"
 msgstr ""
 
 #: cockpit/src/subscriptions-register.jsx:189
-#: cockpit/src/subscriptions-view.jsx:326
+#: cockpit/src/subscriptions-view.jsx:294
 msgid "Subscriptions"
 msgstr ""
 
@@ -423,8 +423,8 @@ msgstr ""
 msgid "Attach automatically"
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:36 cockpit/src/subscriptions-view.jsx:54
-#: cockpit/src/subscriptions-view.jsx:60
+#: cockpit/src/subscriptions-view.jsx:38 cockpit/src/subscriptions-view.jsx:56
+#: cockpit/src/subscriptions-view.jsx:62
 #: src/subscription_manager/gui/data/glade/installed.glade:105
 #: src/subscription_manager/gui/data/glade/installed.glade:112
 #: src/subscription_manager/gui/data/ui/installed.ui:111
@@ -432,128 +432,128 @@ msgstr ""
 msgid "Auto-attach"
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:48
+#: cockpit/src/subscriptions-view.jsx:50
 msgid "Auto-attaching ..."
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:241
+#: cockpit/src/subscriptions-view.jsx:207
 msgid "Service Level:  "
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:251
+#: cockpit/src/subscriptions-view.jsx:217
 msgid "Usage:  "
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:261
+#: cockpit/src/subscriptions-view.jsx:227
 msgid "Role:  "
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:271
+#: cockpit/src/subscriptions-view.jsx:237
 msgid "Add-ons:  "
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:283
+#: cockpit/src/subscriptions-view.jsx:249
 msgid "Status: "
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:291
+#: cockpit/src/subscriptions-view.jsx:257
 msgid "System Purpose"
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:302
+#: cockpit/src/subscriptions-view.jsx:268
 msgid "Status: This system is currently not registered."
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:308
+#: cockpit/src/subscriptions-view.jsx:275
 msgid "Status: $0"
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:311
+#: cockpit/src/subscriptions-view.jsx:279
 msgid "Unregister"
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:356
+#: cockpit/src/subscriptions-view.jsx:323
 msgid ""
 "The rhsm service is unavailable. Make sure subscription-manager is installed "
 "and try reloading the page. Additionally, make sure that you have checked "
 "the 'Reuse my password for privileged tasks' checkbox on the login page."
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:359
+#: cockpit/src/subscriptions-view.jsx:326
 msgid "Unable to the reach the rhsm service."
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:362
+#: cockpit/src/subscriptions-view.jsx:329
 msgid "Updating"
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:363
+#: cockpit/src/subscriptions-view.jsx:330
 msgid "Retrieving subscription status..."
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:366
+#: cockpit/src/subscriptions-view.jsx:332
 msgid "Access denied"
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:367
+#: cockpit/src/subscriptions-view.jsx:333
 msgid "The current user isn't allowed to access system subscription status."
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:370
+#: cockpit/src/subscriptions-view.jsx:335
 msgid "Unable to connect"
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:371
+#: cockpit/src/subscriptions-view.jsx:336
 msgid ""
 "Couldn't get system subscription status. Please ensure subscription-manager "
 "is installed."
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:389
+#: cockpit/src/subscriptions-view.jsx:351
 #: src/subscription_manager/cli_command/list.py:40
 #: src/subscription_manager/gui/installedtab.py:222
 msgid "Subscribed"
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:392
+#: cockpit/src/subscriptions-view.jsx:354
 msgid "Not Subscribed (Not supported by a valid subscription.)"
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:417
+#: cockpit/src/subscriptions-view.jsx:379
 msgid "Product Name"
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:419
+#: cockpit/src/subscriptions-view.jsx:381
 msgid "Product ID"
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:421 src/rct/printing.py:50
+#: cockpit/src/subscriptions-view.jsx:383 src/rct/printing.py:50
 #: src/rct/printing.py:132 src/subscription_manager/gui/installedtab.py:91
 msgid "Version"
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:423 src/rct/printing.py:51
+#: cockpit/src/subscriptions-view.jsx:385 src/rct/printing.py:51
 msgid "Arch"
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:425
+#: cockpit/src/subscriptions-view.jsx:387
 #: src/subscription_manager/gui/installedtab.py:94
 msgid "Status"
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:427
+#: cockpit/src/subscriptions-view.jsx:389
 msgid "Starts"
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:429
+#: cockpit/src/subscriptions-view.jsx:391
 msgid "Ends"
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:443
+#: cockpit/src/subscriptions-view.jsx:405
 msgid "Installed products"
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:444
+#: cockpit/src/subscriptions-view.jsx:406
 #: src/subscription_manager/gui/installedtab.py:324
 msgid "No installed products detected."
 msgstr ""
@@ -5647,12 +5647,12 @@ msgstr ""
 msgid "Unable to update entitlement certificates and repositories"
 msgstr ""
 
-#: src/subscription_manager/scripts/subscription_manager_gui.py:175
+#: src/subscription_manager/scripts/subscription_manager_gui.py:176
 #, python-format
 msgid "%s is already running"
 msgstr ""
 
-#: src/subscription_manager/scripts/subscription_manager_gui.py:183
+#: src/subscription_manager/scripts/subscription_manager_gui.py:184
 msgid "launches the registration dialog on startup"
 msgstr ""
 
