@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-15 18:07+0200\n"
+"POT-Creation-Date: 2021-05-13 08:05+0200\n"
 "PO-Revision-Date: 2021-05-11 07:02+0000\n"
 "Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
@@ -104,7 +104,7 @@ msgid "Options"
 msgstr "옵션"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: cockpit/src/index.js:64 cockpit/src/subscriptions-view.jsx:305
+#: cockpit/src/index.js:64 cockpit/src/subscriptions-view.jsx:272
 #: src/subscription_manager/gui/data/glade/installed.glade:86
 #: src/subscription_manager/gui/data/ui/installed.ui:93
 #: src/subscription_manager/gui/registergui.py:249
@@ -305,9 +305,9 @@ msgstr "Insights: $0"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-client.js:48
-#: cockpit/src/subscriptions-client.js:554
-#: cockpit/src/subscriptions-view.jsx:396
-#: cockpit/src/subscriptions-view.jsx:402
+#: cockpit/src/subscriptions-client.js:561
+#: cockpit/src/subscriptions-view.jsx:358
+#: cockpit/src/subscriptions-view.jsx:364
 #: src/rhsmlib/services/entitlement.py:94
 #: src/rhsmlib/services/syspurpose.py:104
 #: src/subscription_manager/cert_sorter.py:282
@@ -328,45 +328,45 @@ msgstr "Insights: $0"
 msgid "Unknown"
 msgstr "알 수 없음"
 
-#: cockpit/src/subscriptions-client.js:300
+#: cockpit/src/subscriptions-client.js:307
 msgid "Starting registration service ..."
 msgstr "등록 서비스 시작 중..."
 
-#: cockpit/src/subscriptions-client.js:319
+#: cockpit/src/subscriptions-client.js:326
 msgid "Registering using activation key ..."
 msgstr "활성키를 사용하여 등록 중..."
 
-#: cockpit/src/subscriptions-client.js:337
+#: cockpit/src/subscriptions-client.js:344
 msgid "Registering using username and password ..."
 msgstr "사용자 이름과 암호를 사용하여 등록 중..."
 
-#: cockpit/src/subscriptions-client.js:361
+#: cockpit/src/subscriptions-client.js:368
 msgid "Stopping registration service ..."
 msgstr "등록 서비스 중지 중..."
 
-#: cockpit/src/subscriptions-client.js:385
+#: cockpit/src/subscriptions-client.js:392
 msgid "Saving configuration ..."
 msgstr "설정 저장 중..."
 
-#: cockpit/src/subscriptions-client.js:401
+#: cockpit/src/subscriptions-client.js:408
 msgid "Attaching subscriptions ..."
 msgstr "서브스크립션 첨부 중..."
 
-#: cockpit/src/subscriptions-client.js:449
+#: cockpit/src/subscriptions-client.js:456
 msgid "Updating status ..."
 msgstr "상태 업데이트 중 ..."
 
-#: cockpit/src/subscriptions-client.js:467
-#: cockpit/src/subscriptions-view.jsx:317
+#: cockpit/src/subscriptions-client.js:474
+#: cockpit/src/subscriptions-view.jsx:285
 #: src/subscription_manager/gui/registergui.py:1075
 msgid "Unregistering"
 msgstr "등록 해제 중"
 
-#: cockpit/src/subscriptions-client.js:506
+#: cockpit/src/subscriptions-client.js:513
 msgid "not-found"
 msgstr "찾을 수 없음"
 
-#: cockpit/src/subscriptions-client.js:538
+#: cockpit/src/subscriptions-client.js:545
 msgid "Corrupted JSON with status"
 msgstr "손상된 상태 포함 JSON"
 
@@ -441,7 +441,7 @@ msgid "Activation key"
 msgstr "활성키"
 
 #: cockpit/src/subscriptions-register.jsx:189
-#: cockpit/src/subscriptions-view.jsx:326
+#: cockpit/src/subscriptions-view.jsx:294
 msgid "Subscriptions"
 msgstr "서브스크립션"
 
@@ -450,8 +450,8 @@ msgid "Attach automatically"
 msgstr "자동 첨부"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: cockpit/src/subscriptions-view.jsx:36 cockpit/src/subscriptions-view.jsx:54
-#: cockpit/src/subscriptions-view.jsx:60
+#: cockpit/src/subscriptions-view.jsx:38 cockpit/src/subscriptions-view.jsx:56
+#: cockpit/src/subscriptions-view.jsx:62
 #: src/subscription_manager/gui/data/glade/installed.glade:105
 #: src/subscription_manager/gui/data/glade/installed.glade:112
 #: src/subscription_manager/gui/data/ui/installed.ui:111
@@ -459,82 +459,83 @@ msgstr "자동 첨부"
 msgid "Auto-attach"
 msgstr "자동 첨부"
 
-#: cockpit/src/subscriptions-view.jsx:48
+#: cockpit/src/subscriptions-view.jsx:50
 msgid "Auto-attaching ..."
 msgstr "자동 첨부 중 ..."
 
-#: cockpit/src/subscriptions-view.jsx:241
+#: cockpit/src/subscriptions-view.jsx:207
 msgid "Service Level:  "
 msgstr "서비스 수준:  "
 
-#: cockpit/src/subscriptions-view.jsx:251
+#: cockpit/src/subscriptions-view.jsx:217
 msgid "Usage:  "
 msgstr "사용법:  "
 
-#: cockpit/src/subscriptions-view.jsx:261
+#: cockpit/src/subscriptions-view.jsx:227
 msgid "Role:  "
 msgstr "역할:  "
 
-#: cockpit/src/subscriptions-view.jsx:271
+#: cockpit/src/subscriptions-view.jsx:237
 msgid "Add-ons:  "
 msgstr "추가-기능 :  "
 
-#: cockpit/src/subscriptions-view.jsx:283
+#: cockpit/src/subscriptions-view.jsx:249
 msgid "Status: "
 msgstr "상태: "
 
-#: cockpit/src/subscriptions-view.jsx:291
+#: cockpit/src/subscriptions-view.jsx:257
 msgid "System Purpose"
 msgstr "시스템 목적"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: cockpit/src/subscriptions-view.jsx:302
+#: cockpit/src/subscriptions-view.jsx:268
 msgid "Status: This system is currently not registered."
 msgstr "상태: 이 시스템은 현재 등록되어 있지 않습니다."
 
-#: cockpit/src/subscriptions-view.jsx:308
+#: cockpit/src/subscriptions-view.jsx:275
 msgid "Status: $0"
 msgstr "상태: $0"
 
-#: cockpit/src/subscriptions-view.jsx:311
+#: cockpit/src/subscriptions-view.jsx:279
 msgid "Unregister"
 msgstr "등록 해제"
 
-#: cockpit/src/subscriptions-view.jsx:356
+#: cockpit/src/subscriptions-view.jsx:323
 msgid ""
 "The rhsm service is unavailable. Make sure subscription-manager is installed "
 "and try reloading the page. Additionally, make sure that you have checked "
 "the 'Reuse my password for privileged tasks' checkbox on the login page."
 msgstr ""
-"rhsm 서비스를 사용 할 없습니다. 서브스크립션-매니저가 설치되었는지 확실히 하고 이 부분을 갱신해주세요. 추가적으로, 로그인 페이지에 "
-"‘권한 업무를 위한 내 비밀번호 재사용’ 점검상자를 선택했는지 확인해주기 바랍니다."
+"rhsm 서비스를 사용 할 없습니다. 서브스크립션-매니저가 설치되었는지 확실히 하"
+"고 이 부분을 갱신해주세요. 추가적으로, 로그인 페이지에 ‘권한 업무를 위한 내 "
+"비밀번호 재사용’ 점검상자를 선택했는지 확인해주기 바랍니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: cockpit/src/subscriptions-view.jsx:359
+#: cockpit/src/subscriptions-view.jsx:326
 msgid "Unable to the reach the rhsm service."
 msgstr "rhsm 서비스에 연결 할 수 없습니다."
 
-#: cockpit/src/subscriptions-view.jsx:362
+#: cockpit/src/subscriptions-view.jsx:329
 msgid "Updating"
 msgstr "업데이트 중"
 
-#: cockpit/src/subscriptions-view.jsx:363
+#: cockpit/src/subscriptions-view.jsx:330
 msgid "Retrieving subscription status..."
 msgstr "서브스크립션 상태 검색 중 ..."
 
-#: cockpit/src/subscriptions-view.jsx:366
+#: cockpit/src/subscriptions-view.jsx:332
 msgid "Access denied"
 msgstr "접근 거부됨"
 
-#: cockpit/src/subscriptions-view.jsx:367
+#: cockpit/src/subscriptions-view.jsx:333
 msgid "The current user isn't allowed to access system subscription status."
 msgstr "현재 사용자는 시스템 서브스크립션 상태에 접근 할 수 없습니다."
 
-#: cockpit/src/subscriptions-view.jsx:370
+#: cockpit/src/subscriptions-view.jsx:335
 msgid "Unable to connect"
 msgstr "연결할 수 없습니다"
 
-#: cockpit/src/subscriptions-view.jsx:371
+#: cockpit/src/subscriptions-view.jsx:336
 msgid ""
 "Couldn't get system subscription status. Please ensure subscription-manager "
 "is installed."
@@ -543,55 +544,55 @@ msgstr ""
 "어 있는지 확인하십시오."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: cockpit/src/subscriptions-view.jsx:389
+#: cockpit/src/subscriptions-view.jsx:351
 #: src/subscription_manager/cli_command/list.py:40
 #: src/subscription_manager/gui/installedtab.py:222
 msgid "Subscribed"
 msgstr "등록됨"
 
-#: cockpit/src/subscriptions-view.jsx:392
+#: cockpit/src/subscriptions-view.jsx:354
 msgid "Not Subscribed (Not supported by a valid subscription.)"
 msgstr "등록되어 있지 않음 (유효한 서브스크립션에 의해 지원되지 않음)"
 
-#: cockpit/src/subscriptions-view.jsx:417
+#: cockpit/src/subscriptions-view.jsx:379
 msgid "Product Name"
 msgstr "제품 이름"
 
-#: cockpit/src/subscriptions-view.jsx:419
+#: cockpit/src/subscriptions-view.jsx:381
 msgid "Product ID"
 msgstr "제품 ID"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: cockpit/src/subscriptions-view.jsx:421 src/rct/printing.py:50
+#: cockpit/src/subscriptions-view.jsx:383 src/rct/printing.py:50
 #: src/rct/printing.py:132 src/subscription_manager/gui/installedtab.py:91
 msgid "Version"
 msgstr "버전"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: cockpit/src/subscriptions-view.jsx:423 src/rct/printing.py:51
+#: cockpit/src/subscriptions-view.jsx:385 src/rct/printing.py:51
 msgid "Arch"
 msgstr "아키텍처"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: cockpit/src/subscriptions-view.jsx:425
+#: cockpit/src/subscriptions-view.jsx:387
 #: src/subscription_manager/gui/installedtab.py:94
 msgid "Status"
 msgstr "상태"
 
-#: cockpit/src/subscriptions-view.jsx:427
+#: cockpit/src/subscriptions-view.jsx:389
 msgid "Starts"
 msgstr "시작"
 
-#: cockpit/src/subscriptions-view.jsx:429
+#: cockpit/src/subscriptions-view.jsx:391
 msgid "Ends"
 msgstr "종료"
 
-#: cockpit/src/subscriptions-view.jsx:443
+#: cockpit/src/subscriptions-view.jsx:405
 msgid "Installed products"
 msgstr "설치된 제품"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: cockpit/src/subscriptions-view.jsx:444
+#: cockpit/src/subscriptions-view.jsx:406
 #: src/subscription_manager/gui/installedtab.py:324
 msgid "No installed products detected."
 msgstr "설치된 제품이 감지되지 않았습니다."
@@ -703,7 +704,8 @@ msgid ""
 "subscription-manager to register.\n"
 msgstr ""
 "\n"
-"이 시스템은 Red Hat 관리서버에 등록되어 있지 않습니다. subscription-manager를 사용하여 등록 할 수 있습니다.\n"
+"이 시스템은 Red Hat 관리서버에 등록되어 있지 않습니다. subscription-manager"
+"를 사용하여 등록 할 수 있습니다.\n"
 
 #: src/dnf-plugins/subscription-manager.py:54
 msgid ""
@@ -712,8 +714,8 @@ msgid ""
 "updates. You can use subscription-manager to assign subscriptions.\n"
 msgstr ""
 "\n"
-"이 시스템은 자격 서버로 등록되어 있지만 최신화를 받지 않습니다. subscription-manager를 사용하여 서브스크립션을 할당 할 "
-"수 있습니다.\n"
+"이 시스템은 자격 서버로 등록되어 있지만 최신화를 받지 않습니다. subscription-"
+"manager를 사용하여 서브스크립션을 할당 할 수 있습니다.\n"
 
 #: src/dnf-plugins/subscription-manager.py:87
 msgid "Not root, Subscription Management repositories not updated"
@@ -1393,8 +1395,9 @@ msgid ""
 "system must be registered with the Customer Portal. Please enter your Red "
 "Hat login to ensure your system is up-to-date."
 msgstr ""
-"서브스크립션 관리자가 시스템을 최신화하게 하려면 시스템을 반드시 RHN으로 등록해야 합니다. Red Hat 로그인을 입력하여 시스템이 "
-"최신화 되어 있는지 확인하십시오."
+"서브스크립션 관리자가 시스템을 최신화하게 하려면 시스템을 반드시 RHN으로 등록"
+"해야 합니다. Red Hat 로그인을 입력하여 시스템이 최신화 되어 있는지 확인하십시"
+"오."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm_icon/rhsm_icon.c:216
@@ -1778,8 +1781,8 @@ msgid ""
 "To learn how to unregister from either service please consult this Knowledge "
 "Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
-"서비스로 부터 등록 해제하는 방법을 습득하려면 기술 자료 문서를 참조하십시오: https://access.redhat.com/kb/"
-"docs/DOC-45563"
+"서비스로 부터 등록 해제하는 방법을 습득하려면 기술 자료 문서를 참조하십시오: "
+"https://access.redhat.com/kb/docs/DOC-45563"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:19
@@ -2053,7 +2056,9 @@ msgstr "할당할 서브스크립션 수입니다. auto-attach와 함께 사용 
 msgid ""
 "Automatically attach the best-matched compatible subscriptions to this "
 "system. This is the default action."
-msgstr "이 시스템에 가장 적합한 호환 가능한 서브스크립션을 자동 첨부합니다. 이는 기본 동작입니다."
+msgstr ""
+"이 시스템에 가장 적합한 호환 가능한 서브스크립션을 자동 첨부합니다. 이는 기"
+"본 동작입니다."
 
 #: src/subscription_manager/cli_command/attach.py:59
 msgid ""
@@ -2130,14 +2135,17 @@ msgstr "{name}: 을 위한 서브스크립션을 성공적으로 첨부했습니
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/attach.py:178
 msgid "No Installed products on system. No need to attach subscriptions."
-msgstr "시스템에 설치된 제품이 없습니다. 서브스크립션을 첨부 할 필요가 없습니다."
+msgstr ""
+"시스템에 설치된 제품이 없습니다. 서브스크립션을 첨부 할 필요가 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/attach.py:181
 msgid ""
 "All installed products are covered by valid entitlements. No need to update "
 "subscriptions at this time."
-msgstr "설치된 모든 제품에는 유효한 자격이 적용됩니다. 서브스크립션을 최신화 할 필요가 없습니다."
+msgstr ""
+"설치된 모든 제품에는 유효한 자격이 적용됩니다. 서브스크립션을 최신화 할 필요"
+"가 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/attach.py:190
@@ -2298,8 +2306,8 @@ msgid ""
 "Consumer profile \"{uuid}\" has been deleted from the server. You can use "
 "command clean or unregister to remove local profile."
 msgstr ""
-"소비자 프로파일 \"{uuid}\"이 서버에서 삭제되었습니다. 로컬 프로파일을 삭제하려면 clean 또는 unregister 명령을 "
-"사용합니다."
+"소비자 프로파일 \"{uuid}\"이 서버에서 삭제되었습니다. 로컬 프로파일을 삭제하"
+"려면 clean 또는 unregister 명령을 사용합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:29
@@ -2891,7 +2899,9 @@ msgstr ""
 msgid ""
 "show pools that are active on or after the given date; only used with --"
 "available (example: {example})"
-msgstr "지정된 날짜 이후에 활성화된 풀을 표시합니다; --available과 함께 만 사용 (예: {example})"
+msgstr ""
+"지정된 날짜 이후에 활성화된 풀을 표시합니다; --available과 함께 만 사용 (예: "
+"{example})"
 
 #: src/subscription_manager/cli_command/list.py:244
 msgid "Error: --afterdate is only applicable with --available"
@@ -2935,21 +2945,27 @@ msgstr "사용 가능한 서브스크립션"
 msgid ""
 "No available subscription pools were found matching the expression "
 "\"{filter}\" and the service level \"{level}\"."
-msgstr "표현식 \"{filter}\" 및 서비스 레벨 \"{level}\"에 일치하는 사용 가능한 서브스크립션 풀을 찾을 수 없습니다."
+msgstr ""
+"표현식 \"{filter}\" 및 서비스 레벨 \"{level}\"에 일치하는 사용 가능한 서브스"
+"크립션 풀을 찾을 수 없습니다."
 
 #: src/subscription_manager/cli_command/list.py:374
 #, python-brace-format
 msgid ""
 "No available subscription pools were found matching the expression "
 "\"{filter}\"."
-msgstr "표현식 \"{filter}\"에 일치하는 사용 가능한 서브스크립션 풀을 찾을 수 없습니다."
+msgstr ""
+"표현식 \"{filter}\"에 일치하는 사용 가능한 서브스크립션 풀을 찾을 수 없습니"
+"다."
 
 #: src/subscription_manager/cli_command/list.py:379
 #, python-brace-format
 msgid ""
 "No available subscription pools were found matching the service level "
 "\"{level}\"."
-msgstr "서비스 레벨 \"{level}\"에 일치하는 사용 가능한 서브스크립션 풀을 찾을 수 없습니다."
+msgstr ""
+"서비스 레벨 \"{level}\"에 일치하는 사용 가능한 서브스크립션 풀을 찾을 수 없습"
+"니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:383
@@ -2966,21 +2982,25 @@ msgstr "소비된 서브스크립션"
 msgid ""
 "No consumed subscription pools were found matching the expression "
 "\"{filter}\" and the service level \"{level}\"."
-msgstr "표현식 \"{filter}\"및 서비스 레벨 \"{level}\"에 일치하는 사용된 서브스크립션 풀을 찾을 수 없습니다."
+msgstr ""
+"표현식 \"{filter}\"및 서비스 레벨 \"{level}\"에 일치하는 사용된 서브스크립션 "
+"풀을 찾을 수 없습니다."
 
 #: src/subscription_manager/cli_command/list.py:426
 #, python-brace-format
 msgid ""
 "No consumed subscription pools were found matching the expression "
 "\"{filter}\"."
-msgstr "표현식 \"{filter}\"에 일치하는 사용된 서브스크립션 풀을 찾을 수 없습니다."
+msgstr ""
+"표현식 \"{filter}\"에 일치하는 사용된 서브스크립션 풀을 찾을 수 없습니다."
 
 #: src/subscription_manager/cli_command/list.py:431
 #, python-brace-format
 msgid ""
 "No consumed subscription pools were found matching the service level "
 "\"{level}\"."
-msgstr "서비스 레벨 \"{level}\"에 일치하는 사용된 서브스크립션 풀을 찾을 수 없습니다."
+msgstr ""
+"서비스 레벨 \"{level}\"에 일치하는 사용된 서브스크립션 풀을 찾을 수 없습니다."
 
 #: src/subscription_manager/cli_command/list.py:435
 msgid "No consumed subscription pools were found."
@@ -3182,7 +3202,8 @@ msgstr "서브스크립션 사용 완료 시 통지하기 위한 전자우편 �
 msgid ""
 "optional language to use for email notification when subscription redemption "
 "is complete (Examples: en-us, de-de)"
-msgstr "서브스크립션 사용 완료 시 전자우편 통지에 사용할 언어 선택 (예: en-us, de-de)"
+msgstr ""
+"서브스크립션 사용 완료 시 전자우편 통지에 사용할 언어 선택 (예: en-us, de-de)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/redeem.py:43
@@ -3255,7 +3276,8 @@ msgstr "이 시스템에 호환 가능한 서브스크립션을 자동 첨부합
 msgid ""
 "include an implicit attempt to unregister before registering a new system "
 "identity"
-msgstr "새로운 시스템 식별을 등록하기 전에 등록해제에 암묵적인 시도를 포함합니다"
+msgstr ""
+"새로운 시스템 식별을 등록하기 전에 등록해제에 암묵적인 시도를 포함합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:76
@@ -3412,7 +3434,9 @@ msgstr "릴리즈 환경 설정이 해제되었습니다"
 #, python-brace-format
 msgid ""
 "No releases match '{release}'.  Consult 'release --list' for a full listing."
-msgstr "'{release}'와 일치하는 출시가 없습니다. 전체 목록은 'release --list'로 확인합니다."
+msgstr ""
+"'{release}'와 일치하는 출시가 없습니다. 전체 목록은 'release --list'로 확인합"
+"니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/release.py:99
@@ -3579,8 +3603,8 @@ msgid ""
 "Error: '{repoid}' does not match a valid repository ID. Use \"subscription-"
 "manager repos --list\" to see valid repositories."
 msgstr ""
-"오류: '{repoid}'은 유효한 저장소 ID와 일치하지 않습니다. \"subscription-manager repos --list\"를"
-" 사용하여 유효한 저장소를 확인합니다."
+"오류: '{repoid}'은 유효한 저장소 ID와 일치하지 않습니다. \"subscription-"
+"manager repos --list\"를 사용하여 유효한 저장소를 확인합니다."
 
 #: src/subscription_manager/cli_command/repos.py:217
 #, python-brace-format
@@ -3689,7 +3713,8 @@ msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status.\n"
 msgstr ""
-"컨텐츠 액세스 모드가 단순 컨텐츠 접근으로 설정되어 있습니다. 이 호스트는 서브스크립션 상태에 관계없이 컨텐츠에 접근 할 수 있습니다.\n"
+"컨텐츠 액세스 모드가 단순 컨텐츠 접근으로 설정되어 있습니다. 이 호스트는 서브"
+"스크립션 상태에 관계없이 컨텐츠에 접근 할 수 있습니다.\n"
 
 #: src/subscription_manager/cli_command/status.py:79
 #, python-brace-format
@@ -4176,7 +4201,9 @@ msgstr "첨부"
 msgid ""
 "The subscription management service you register with will provide your "
 "system with updates and allow additional management."
-msgstr "등록에 사용한 서브스크립션 관리 서비스는 시스템에 최신화를 제공하고 추가 관리를 가능하게 합니다."
+msgstr ""
+"등록에 사용한 서브스크립션 관리 서비스는 시스템에 최신화를 제공하고 추가 관리"
+"를 가능하게 합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/choose_server.glade:31
@@ -4194,8 +4221,8 @@ msgid ""
 "Candlepin servers can be used to provide your system with updates and allow "
 "management through the selected server's interface."
 msgstr ""
-"고객 포털, 서브스크립션 자산 관리자, Satellite, Candlepin 서버에 등록하면 시스템에 최신화가 제공되어 선택한 서버의 "
-"연결장치를 통해 관리할 수 있습니다."
+"고객 포털, 서브스크립션 자산 관리자, Satellite, Candlepin 서버에 등록하면 시"
+"스템에 최신화가 제공되어 선택한 서버의 연결장치를 통해 관리할 수 있습니다."
 
 #: src/subscription_manager/gui/data/glade/choose_server.glade:93
 #: src/subscription_manager/gui/data/ui/choose_server.ui:93
@@ -4245,7 +4272,8 @@ msgid ""
 "system administrators to automatically register your system and attach all "
 "necessary subscriptions."
 msgstr ""
-"활성키는 시스템 관리자에 의해 사전 설정된 영숫자 문자열로 시스템을 자동으로 등록하고 필요한 모든 서브스크립션을 첨부 할 수 있습니다."
+"활성키는 시스템 관리자에 의해 사전 설정된 영숫자 문자열로 시스템을 자동으로 "
+"등록하고 필요한 모든 서브스크립션을 첨부 할 수 있습니다."
 
 #: src/subscription_manager/gui/data/glade/choose_server.glade:177
 #: src/subscription_manager/gui/data/ui/choose_server.ui:162
@@ -4910,8 +4938,8 @@ msgid ""
 "<small>If enabled, subscriptions are attached for any uncovered products on "
 "a schedule (default of daily).</small>"
 msgstr ""
-"<small>활성화 할 경우, 스케줄에서 서브스크립션이 적용되지 않은 모든 제품에 대해 서브스크립션이 첨부됩니다 (기본값: "
-"매일).</small>"
+"<small>활성화 할 경우, 스케줄에서 서브스크립션이 적용되지 않은 모든 제품에 대"
+"해 서브스크립션이 첨부됩니다 (기본값: 매일).</small>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/preferences.glade:141
@@ -5218,8 +5246,8 @@ msgid ""
 "Manage subscriptions and systems registered to Customer Portal via access."
 "redhat.com or through one of our other subscription management services."
 msgstr ""
-"access.redhat.com에서 고객 포털을 통해서나 또는 다른 서브스크립션 관리 서비스를 통해 등록된 서브스크립션 및 시스템을 "
-"관리합니다."
+"access.redhat.com에서 고객 포털을 통해서나 또는 다른 서브스크립션 관리 서비스"
+"를 통해 등록된 서브스크립션 및 시스템을 관리합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author eukim
 #: src/subscription_manager/gui/data/glade/registration_info.glade:580
@@ -5249,7 +5277,9 @@ msgstr "manage_repositories_dialog"
 msgid ""
 "Manage the repositories your subscriptions grant you access to by enabling, "
 "disabling and overriding certain fields."
-msgstr "특정 필드를 활성화, 비활성화, 재정의하여 서브스크립션을 통해 액세스가 허용된 저장소를 관리합니다."
+msgstr ""
+"특정 필드를 활성화, 비활성화, 재정의하여 서브스크립션을 통해 액세스가 허용된 "
+"저장소를 관리합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/repositories.glade:88
@@ -5897,7 +5927,9 @@ msgstr ""
 msgid ""
 "All installed products are covered by valid entitlements. No need to attach "
 "subscriptions at this time."
-msgstr "설치된 모든 제품에는 유효한 자격이 적용됩니다. 현재로서는 서브스크립션을 첨부 할 필요가 없습니다."
+msgstr ""
+"설치된 모든 제품에는 유효한 자격이 적용됩니다. 현재로서는 서브스크립션을 첨"
+"부 할 필요가 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/registergui.py:1272
@@ -6150,8 +6182,8 @@ msgid ""
 "Could not find up2date_client.config module! Perhaps this script was already "
 "executed with --remove-rhn-packages?"
 msgstr ""
-"up2date_client.config 모듈을 찾을 수 없습니다! 이 스크립트는 --remove-rhn-packages로 이미 실행되고 "
-"있을 수 있습니다?"
+"up2date_client.config 모듈을 찾을 수 없습니다! 이 스크립트는 --remove-rhn-"
+"packages로 이미 실행되고 있을 수 있습니다?"
 
 #: src/subscription_manager/migrate/migrate.py:73
 msgid "See /var/log/rhsm/rhsm.log for more details."
@@ -6619,13 +6651,13 @@ msgid "Unable to update entitlement certificates and repositories"
 msgstr "인타이틀먼트 인증서 및 리포지터리를 업데이트할 수 없음"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author eukim
-#: src/subscription_manager/scripts/subscription_manager_gui.py:175
+#: src/subscription_manager/scripts/subscription_manager_gui.py:176
 #, python-format
 msgid "%s is already running"
 msgstr "%s가 이미 실행되고 있습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/subscription_manager_gui.py:183
+#: src/subscription_manager/scripts/subscription_manager_gui.py:184
 msgid "launches the registration dialog on startup"
 msgstr "시작 시 등록 대화 상자를 실행"
 
