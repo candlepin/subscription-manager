@@ -258,7 +258,7 @@ option does not guarantee a successful registration.  For example, if the regist
 .B --force
 includes a different
 .B --serverurl
-than was used for the original registration, the implicit call to unregister from the original entitlement server will fail with invalid credentials and the registration with force will be aborted.  In this case, the user should explicity unregister from the original entitlement server.  If unregistering is not possible, then running subscription-manager clean will effectively abandon the original registration identity and entitlements.  Once cleaned, registering a new system identity should succeed with or without force.
+than was used for the original registration, the implicit call to unregister from the original entitlement server will fail with invalid credentials and the registration with force will be aborted.  In this case, the user should explicitly unregister from the original entitlement server.  If unregistering is not possible, then running subscription-manager clean will effectively abandon the original registration identity and entitlements.  Once cleaned, registering a new system identity should succeed with or without force.
 
 .TP
 .B --org=ORG
