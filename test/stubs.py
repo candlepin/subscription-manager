@@ -26,8 +26,8 @@ from rhsm import config
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.cache import EntitlementStatusCache, ProductStatusCache, \
         OverrideStatusCache, ProfileManager, InstalledProductsManager, ReleaseStatusCache, \
-        PoolStatusCache, ContentAccessModeCache, SupportedResourcesCache, AvailableEntitlementsCache, \
-        SyspurposeValidFieldsCache, CurrentOwnerCache
+        PoolStatusCache, ContentAccessModeCache, SupportedResourcesCache, \
+        SyspurposeValidFieldsCache, CurrentOwnerCache, AvailableEntitlementsCache
 from subscription_manager.facts import Facts
 from subscription_manager.lock import ActionLock
 from rhsm.certificate import GMT

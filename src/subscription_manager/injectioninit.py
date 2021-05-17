@@ -21,8 +21,8 @@ from subscription_manager.cache import ProductStatusCache, \
     EntitlementStatusCache, OverrideStatusCache, ProfileManager, \
     InstalledProductsManager, PoolTypeCache, ReleaseStatusCache, \
     RhsmIconCache, ContentAccessCache, PoolStatusCache, \
-    SyspurposeComplianceStatusCache, ContentAccessModeCache, \
-    SupportedResourcesCache, AvailableEntitlementsCache, \
+    SyspurposeComplianceStatusCache, SupportedResourcesCache, \
+    AvailableEntitlementsCache, ContentAccessModeCache, \
     CurrentOwnerCache, SyspurposeValidFieldsCache
 
 from subscription_manager.cert_sorter import CertSorter

@@ -96,6 +96,9 @@ class CacheManager(object):
     def _cache_exists(self):
         return os.path.exists(self.CACHE_FILE)
 
+    def exists(self):
+        return self._cache_exists()
+
     def write_cache(self, debug=True):
         """
         Write the current cache to disk. Should only be done after
@@ -940,31 +943,6 @@ class SyspurposeValidFieldsCache(ConsumerCache):
             return self.DEFAULT_VALUE
 
 
-class ContentAccessModeCache(CacheManager):
-    """
-    Cache the content access mode that is used for current identity.
-    """
-
-    CACHE_FILE = "/var/lib/rhsm/cache/content_access_mode.json"
-
-    def __init__(self, content_access_mode=None):
-        self.content_access_mode = content_access_mode or {}
-
-    def to_dict(self):
-        return self.content_access_mode
-
-    def _load_data(self, open_file):
-        try:
-            self.content_access_mode = json.loads(open_file.read()) or {}
-            return self.content_access_mode
-        except IOError as err:
-            log.error("Unable to read cache: %s" % self.CACHE_FILE)
-            log.exception(err)
-        except ValueError:
-            # Ignore json file parse error
-            pass
-
-
 class CurrentOwnerCache(ConsumerCache):
     """
     Cache information about current owner (organization)
@@ -996,6 +974,54 @@ class CurrentOwnerCache(ConsumerCache):
             return True
 
 
+class ContentAccessModeCache(ConsumerCache):
+    """
+    Cache information about current owner (organization), specifically, the content access mode.
+    This value is used independently.
+    """
+
+    # Grab the current owner (and hence the content_access_mode of that owner) at most, once per
+    # 4 hours
+    TIMEOUT = 60 * 60 * 4
+
+    CACHE_FILE = "/var/lib/rhsm/cache/content_access_mode.json"
+
+    def __init__(self, data=None):
+        super(ContentAccessModeCache, self).__init__(data=data)
+
+    def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
+        try:
+            current_owner = uep.getOwner(consumer_uuid)
+        except Exception:
+            log.debug("Error checking for content access mode,"
+                      "defaulting to assuming not in Simple Content Access mode")
+        else:
+            if "contentAccessMode" in current_owner:
+                return current_owner["contentAccessMode"]
+            else:
+                log.debug("The owner returned from the server did not contain a "
+                          "'content_access_mode'. Perhaps the connected Entitlement Server doesn't"
+                          "support 'content_access_mode'?")
+        return "unknown"
+
+    def _is_cache_obsoleted(self, uep, identity, *args, **kwargs):
+        """
+        We don't know if the cache is valid until we get valid response
+        :param uep: object representing connection to candlepin server
+        :param identity: consumer identity
+        :param args: other arguments
+        :param kwargs: other keyed arguments
+        :return: True, when cache is obsoleted or validity of cache is unknown.
+        """
+        if uep is None:
+            cp_provider = inj.require(inj.CP_PROVIDER)
+            uep = cp_provider.get_consumer_auth_cp()
+        if hasattr(uep.conn, 'is_consumer_cert_key_valid') and uep.conn.is_consumer_cert_key_valid is True:
+            return False
+        else:
+            return True
+
+
 class SupportedResourcesCache(ConsumerCache):
     """
     Cache supported resources of candlepin server for current identity
@@ -1004,7 +1030,6 @@ class SupportedResourcesCache(ConsumerCache):
     CACHE_FILE = "/var/lib/rhsm/cache/supported_resources.json"
 
     DEFAULT_VALUE = []
-
     # We will try to get new list of supported resources at leas once a day
     TIMEOUT = 60 * 60 * 24
 
