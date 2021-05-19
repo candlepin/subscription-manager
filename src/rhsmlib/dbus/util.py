@@ -12,10 +12,10 @@ from __future__ import print_function, division, absolute_import
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
+import inspect
 import logging
 import sys
 import six
-import decorator
 import dbus.service
 import json
 import re
@@ -30,35 +30,36 @@ __all__ = [
     'dbus_service_signal'
 ]
 
-
-@decorator.decorator
-def dbus_handle_exceptions(func, *args, **kwargs):
+def dbus_handle_exceptions(func):
     """Decorator to handle exceptions, log them, and wrap them if necessary"""
-    try:
-        ret = func(*args, **kwargs)
-        return ret
-    except Exception as err:
-        log.exception(err)
-        trace = sys.exc_info()[2]
+    def handler(*args, **kwargs):
+        try:
+            ret = func(*args, **kwargs)
+            return ret
+        except Exception as err:
+            log.exception(err)
+            trace = sys.exc_info()[2]
 
-        severity = "error"
-        # Remove "HTTP error (...): " string from the messages:
-        pattern = '^HTTP error \x28.*\x29: '
-        err_msg = re.sub(pattern, '', str(err))
-        # Modify severity of some exception here
-        if "Ignoring request to auto-attach. It is disabled for org" in err_msg:
-            severity = "warning"
-        if hasattr(err, 'severity'):
-            severity = err.severity
-        # Raise exception string as JSON string. Thus it can be parsed and printed properly.
-        error_msg = json.dumps(
-            {
-                "exception": type(err).__name__,
-                "severity": severity,
-                "message": err_msg
-            }
-        )
-        six.reraise(exceptions.RHSM1DBusException, exceptions.RHSM1DBusException(error_msg), trace)
+            severity = "error"
+            # Remove "HTTP error (...): " string from the messages:
+            pattern = '^HTTP error \x28.*\x29: '
+            err_msg = re.sub(pattern, '', str(err))
+            # Modify severity of some exception here
+            if "Ignoring request to auto-attach. It is disabled for org" in err_msg:
+                severity = "warning"
+            if hasattr(err, 'severity'):
+                severity = err.severity
+            # Raise exception string as JSON string. Thus it can be parsed and printed properly.
+            error_msg = json.dumps(
+                {
+                    "exception": type(err).__name__,
+                    "severity": severity,
+                    "message": err_msg
+                }
+            )
+            six.reraise(exceptions.RHSM1DBusException, exceptions.RHSM1DBusException(error_msg), trace)
+    handler.__signature__ = inspect.Signature.from_function(func)
+    return handler
 
 
 def dbus_service_method(*args, **kwargs):
