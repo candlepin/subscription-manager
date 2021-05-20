@@ -213,15 +213,15 @@ class Gettext(BaseCommand):
         shutil.rmtree('tmp')
 
 
-class GettextWithOptParse(Gettext):
+class GettextWithArgparse(Gettext):
     def find_py(self):
         # Can't use super since we're descended from a old-style class
         files = Gettext.find_py(self)
 
-        # We need to grab some strings out of optparse for translation
-        import optparse
-        optparse_source = "%s.py" % os.path.splitext(optparse.__file__)[0]
-        if not os.path.exists(optparse_source):
-            raise RuntimeError("Could not find optparse.py at %s" % optparse_source)
-        files.append(optparse_source)
+        # We need to grab some strings out of argparse for translation
+        import argparse
+        argparse_source = "%s.py" % os.path.splitext(argparse.__file__)[0]
+        if not os.path.exists(argparse_source):
+            raise RuntimeError("Could not find argparse.py at %s" % argparse_source)
+        files.append(argparse_source)
         return files
