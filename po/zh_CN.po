@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-13 08:05+0200\n"
+"POT-Creation-Date: 2021-05-20 17:38+0200\n"
 "PO-Revision-Date: 2021-04-12 18:02+0000\n"
 "Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
@@ -21,87 +21,177 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 4.5.3\n"
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/optparse.py:146
+#: /usr/lib64/python3.9/argparse.py:296
+#, fuzzy
+#| msgid "Usage:  "
+msgid "usage: "
+msgstr "用法：  "
+
+#: /usr/lib64/python3.9/argparse.py:854
+msgid ".__call__() not defined"
+msgstr ""
+
+#: /usr/lib64/python3.9/argparse.py:1197
 #, python-format
-msgid "no such option: %s"
-msgstr "没有此选项：%s"
+msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
+msgstr ""
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/optparse.py:157
+#: /usr/lib64/python3.9/argparse.py:1257
 #, python-format
-msgid "ambiguous option: %s (%s?)"
-msgstr "模糊选项：%s（%s?）"
+msgid "argument \"-\" with mode %r"
+msgstr ""
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/optparse.py:381
+#: /usr/lib64/python3.9/argparse.py:1266
 #, python-format
-msgid "Usage: %s\n"
-msgstr "使用：%s\n"
+msgid "can't open '%(filename)s': %(error)s"
+msgstr ""
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/optparse.py:400 src/rct/printing.py:85
-msgid "Usage"
-msgstr "使用"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/optparse.py:422 /usr/lib64/python3.9/optparse.py:423
-msgid "integer"
-msgstr "整数"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/optparse.py:424
-msgid "floating-point"
-msgstr "浮点"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/optparse.py:425
-msgid "complex"
-msgstr "结合的"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/optparse.py:433
+#: /usr/lib64/python3.9/argparse.py:1475
 #, python-format
-msgid "option %s: invalid %s value: %r"
-msgstr "选项 %s：无效值 %s：%r"
+msgid "cannot merge actions - two groups are named %r"
+msgstr ""
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/optparse.py:441
+#: /usr/lib64/python3.9/argparse.py:1513
+msgid "'required' is an invalid argument for positionals"
+msgstr ""
+
+#: /usr/lib64/python3.9/argparse.py:1535
 #, python-format
-msgid "option %s: invalid choice: %r (choose from %s)"
-msgstr "选项 %s：无效选择：%r（在 %s 中选择）"
+msgid ""
+"invalid option string %(option)r: must start with a character "
+"%(prefix_chars)r"
+msgstr ""
+
+#: /usr/lib64/python3.9/argparse.py:1553
+#, python-format
+msgid "dest= is required for options like %r"
+msgstr ""
+
+#: /usr/lib64/python3.9/argparse.py:1570
+#, python-format
+msgid "invalid conflict_resolution value: %r"
+msgstr ""
+
+#: /usr/lib64/python3.9/argparse.py:1588
+#, python-format
+msgid "conflicting option string: %s"
+msgid_plural "conflicting option strings: %s"
+msgstr[0] ""
+
+#: /usr/lib64/python3.9/argparse.py:1654
+msgid "mutually exclusive arguments must be optional"
+msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/optparse.py:1238
+#: /usr/lib64/python3.9/argparse.py:1721
+#, fuzzy
+#| msgid "%s option requires an argument"
+msgid "positional arguments"
+msgstr "%s 选项需要一个参数"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: /usr/lib64/python3.9/argparse.py:1722
+#, fuzzy
+#| msgid "%s option requires an argument"
+msgid "optional arguments"
+msgstr "%s 选项需要一个参数"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: /usr/lib64/python3.9/argparse.py:1737
 msgid "show this help message and exit"
 msgstr "显示此帮助信息并退出"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/optparse.py:1243
-msgid "show program's version number and exit"
-msgstr "显示程序版本数并退出"
+#: /usr/lib64/python3.9/argparse.py:1768
+#, fuzzy
+#| msgid "cannot parse argument: {}"
+msgid "cannot have multiple subparser arguments"
+msgstr "无法解析参数：{}"
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/optparse.py:1266
-msgid "%prog [options]"
-msgstr "%prog [选项]"
+#: /usr/lib64/python3.9/argparse.py:1820 /usr/lib64/python3.9/argparse.py:2331
+#, fuzzy, python-format
+#| msgid "Unknown arguments: %s"
+msgid "unrecognized arguments: %s"
+msgstr "未知的参数：%s"
 
-#: /usr/lib64/python3.9/optparse.py:1486 /usr/lib64/python3.9/optparse.py:1524
+#: /usr/lib64/python3.9/argparse.py:1921
+#, fuzzy, python-format
+#| msgid "Unknown arguments: %s"
+msgid "not allowed with argument %s"
+msgstr "未知的参数：%s"
+
+#: /usr/lib64/python3.9/argparse.py:1967 /usr/lib64/python3.9/argparse.py:1981
 #, python-format
-msgid "%(option)s option requires %(number)d argument"
-msgid_plural "%(option)s option requires %(number)d arguments"
-msgstr[0] "%(option)s 选项需要 %(number)d 参数"
+msgid "ignored explicit argument %r"
+msgstr ""
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/optparse.py:1496
+#: /usr/lib64/python3.9/argparse.py:2088
 #, python-format
-msgid "%s option does not take a value"
-msgstr "%s 选项没有数值"
+msgid "the following arguments are required: %s"
+msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/optparse.py:1612
-msgid "Options"
-msgstr "选项"
+#: /usr/lib64/python3.9/argparse.py:2103
+#, fuzzy, python-format
+#| msgid "Wrong number of arguments specified.\n"
+msgid "one of the arguments %s is required"
+msgstr "指定的参数数目错误。\n"
+
+#: /usr/lib64/python3.9/argparse.py:2146
+msgid "expected one argument"
+msgstr ""
+
+#: /usr/lib64/python3.9/argparse.py:2147
+msgid "expected at most one argument"
+msgstr ""
+
+#: /usr/lib64/python3.9/argparse.py:2148
+msgid "expected at least one argument"
+msgstr ""
+
+#: /usr/lib64/python3.9/argparse.py:2152
+#, python-format
+msgid "expected %s argument"
+msgid_plural "expected %s arguments"
+msgstr[0] ""
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: /usr/lib64/python3.9/argparse.py:2210
+#, fuzzy, python-format
+#| msgid "ambiguous option: %s (%s?)"
+msgid "ambiguous option: %(option)s could match %(matches)s"
+msgstr "模糊选项：%s（%s?）"
+
+#: /usr/lib64/python3.9/argparse.py:2274
+#, python-format
+msgid "unexpected option string: %s"
+msgstr ""
+
+#: /usr/lib64/python3.9/argparse.py:2471
+#, python-format
+msgid "%r is not callable"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: /usr/lib64/python3.9/argparse.py:2488
+#, fuzzy, python-format
+#| msgid "option %s: invalid %s value: %r"
+msgid "invalid %(type)s value: %(value)r"
+msgstr "选项 %s：无效值 %s：%r"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: /usr/lib64/python3.9/argparse.py:2499
+#, fuzzy, python-format
+#| msgid "option %s: invalid choice: %r (choose from %s)"
+msgid "invalid choice: %(value)r (choose from %(choices)s)"
+msgstr "选项 %s：无效选择：%r（在 %s 中选择）"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: /usr/lib64/python3.9/argparse.py:2575
+#, fuzzy, python-format
+#| msgid "{prog}: error: {msg}"
+msgid "%(prog)s: error: %(message)s\n"
+msgstr "{prog}: 错误: {msg}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/index.js:64 cockpit/src/subscriptions-view.jsx:272
@@ -1149,6 +1239,11 @@ msgstr "数字"
 #: src/rct/printing.py:83
 msgid "Roles"
 msgstr "角色"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: src/rct/printing.py:85
+msgid "Usage"
+msgstr "使用"
 
 #: src/rct/printing.py:86
 msgid "Add-ons"
@@ -6567,6 +6662,46 @@ msgid "Red Hat Subscription Manager"
 msgstr "Red Hat Subscription Manager"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "no such option: %s"
+#~ msgstr "没有此选项：%s"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Usage: %s\n"
+#~ msgstr "使用：%s\n"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "integer"
+#~ msgstr "整数"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "floating-point"
+#~ msgstr "浮点"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "complex"
+#~ msgstr "结合的"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "show program's version number and exit"
+#~ msgstr "显示程序版本数并退出"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "%prog [options]"
+#~ msgstr "%prog [选项]"
+
+#~ msgid "%(option)s option requires %(number)d argument"
+#~ msgid_plural "%(option)s option requires %(number)d arguments"
+#~ msgstr[0] "%(option)s 选项需要 %(number)d 参数"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "%s option does not take a value"
+#~ msgstr "%s 选项没有数值"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Options"
+#~ msgstr "选项"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #~ msgid ""
 #~ "Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
 #~ "more details."
@@ -6647,10 +6782,6 @@ msgstr "Red Hat Subscription Manager"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #~ msgid "long integer"
 #~ msgstr "长整数"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#~ msgid "%s option requires an argument"
-#~ msgstr "%s 选项需要一个参数"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #~ msgid "%s option requires %d arguments"
