@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-13 08:05+0200\n"
+"POT-Creation-Date: 2021-05-20 17:38+0200\n"
 "PO-Revision-Date: 2015-09-25 03:35-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -18,100 +18,189 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: /usr/lib64/python3.9/optparse.py:146
-#, python-format
-msgid "no such option: %s"
-msgstr "இதுபோல விருப்பம் இல்லை: %s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: /usr/lib64/python3.9/optparse.py:157
-#, python-format
-msgid "ambiguous option: %s (%s?)"
-msgstr "உறுதியற்ற விருப்பம்: %s (%s?)"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: /usr/lib64/python3.9/optparse.py:381
-#, python-format
-msgid "Usage: %s\n"
+#: /usr/lib64/python3.9/argparse.py:296
+#, fuzzy
+#| msgid "Usage: %s\n"
+msgid "usage: "
 msgstr "பயன்பாடு: %s\n"
 
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: /usr/lib64/python3.9/optparse.py:400 src/rct/printing.py:85
-msgid "Usage"
-msgstr "பயன்பாடு"
+#: /usr/lib64/python3.9/argparse.py:854
+msgid ".__call__() not defined"
+msgstr ""
 
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: /usr/lib64/python3.9/optparse.py:422 /usr/lib64/python3.9/optparse.py:423
-msgid "integer"
-msgstr "முழு எண்"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: /usr/lib64/python3.9/optparse.py:424
-msgid "floating-point"
-msgstr "மிதவை-புள்ளி"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: /usr/lib64/python3.9/optparse.py:425
-msgid "complex"
-msgstr "சிக்கல்"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: /usr/lib64/python3.9/optparse.py:433
+#: /usr/lib64/python3.9/argparse.py:1197
 #, python-format
-msgid "option %s: invalid %s value: %r"
-msgstr "விருப்பம் %s: தவறான %s மதிப்பு: %r"
+msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
+msgstr ""
 
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: /usr/lib64/python3.9/optparse.py:441
+#: /usr/lib64/python3.9/argparse.py:1257
 #, python-format
-msgid "option %s: invalid choice: %r (choose from %s)"
-msgstr "விருப்பம் %s: தவறான தேர்வு: %r (%s-இலிருந்து தேர்ந்தெடு)"
+msgid "argument \"-\" with mode %r"
+msgstr ""
+
+#: /usr/lib64/python3.9/argparse.py:1266
+#, python-format
+msgid "can't open '%(filename)s': %(error)s"
+msgstr ""
+
+#: /usr/lib64/python3.9/argparse.py:1475
+#, python-format
+msgid "cannot merge actions - two groups are named %r"
+msgstr ""
+
+#: /usr/lib64/python3.9/argparse.py:1513
+msgid "'required' is an invalid argument for positionals"
+msgstr ""
+
+#: /usr/lib64/python3.9/argparse.py:1535
+#, python-format
+msgid ""
+"invalid option string %(option)r: must start with a character "
+"%(prefix_chars)r"
+msgstr ""
+
+#: /usr/lib64/python3.9/argparse.py:1553
+#, python-format
+msgid "dest= is required for options like %r"
+msgstr ""
+
+#: /usr/lib64/python3.9/argparse.py:1570
+#, python-format
+msgid "invalid conflict_resolution value: %r"
+msgstr ""
+
+#: /usr/lib64/python3.9/argparse.py:1588
+#, python-format
+msgid "conflicting option string: %s"
+msgid_plural "conflicting option strings: %s"
+msgstr[0] ""
+msgstr[1] ""
+
+#: /usr/lib64/python3.9/argparse.py:1654
+msgid "mutually exclusive arguments must be optional"
+msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: /usr/lib64/python3.9/optparse.py:1238
+#: /usr/lib64/python3.9/argparse.py:1721
+#, fuzzy
+#| msgid "%s option requires an argument"
+msgid "positional arguments"
+msgstr "%s விருப்பத்திற்கு ஒரு அளவுரு தேவைப்படுகிறது"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#: /usr/lib64/python3.9/argparse.py:1722
+#, fuzzy
+#| msgid "%s option requires an argument"
+msgid "optional arguments"
+msgstr "%s விருப்பத்திற்கு ஒரு அளவுரு தேவைப்படுகிறது"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#: /usr/lib64/python3.9/argparse.py:1737
 msgid "show this help message and exit"
 msgstr "இந்த உதவி செய்தியை காட்டி வெளியேறு"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: /usr/lib64/python3.9/optparse.py:1243
-msgid "show program's version number and exit"
-msgstr "நிரலின் பதிப்பு எண்ணை காட்டி வெளியேறு"
+#: /usr/lib64/python3.9/argparse.py:1768
+#, fuzzy
+#| msgid "cannot parse argument: %s"
+msgid "cannot have multiple subparser arguments"
+msgstr "இந்த அளவுருவை அலச முடியாது: %s"
+
+#: /usr/lib64/python3.9/argparse.py:1820 /usr/lib64/python3.9/argparse.py:2331
+#, python-format
+msgid "unrecognized arguments: %s"
+msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: /usr/lib64/python3.9/optparse.py:1266
-msgid "%prog [options]"
-msgstr "%prog [விருப்பங்கள்]"
+#: /usr/lib64/python3.9/argparse.py:1921
+#, fuzzy, python-format
+#| msgid "cannot parse argument: %s"
+msgid "not allowed with argument %s"
+msgstr "இந்த அளவுருவை அலச முடியாது: %s"
 
-#: /usr/lib64/python3.9/optparse.py:1486 /usr/lib64/python3.9/optparse.py:1524
+#: /usr/lib64/python3.9/argparse.py:1967 /usr/lib64/python3.9/argparse.py:1981
 #, python-format
-msgid "%(option)s option requires %(number)d argument"
-msgid_plural "%(option)s option requires %(number)d arguments"
+msgid "ignored explicit argument %r"
+msgstr ""
+
+#: /usr/lib64/python3.9/argparse.py:2088
+#, python-format
+msgid "the following arguments are required: %s"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#: /usr/lib64/python3.9/argparse.py:2103
+#, fuzzy, python-format
+#| msgid "Wrong number of arguments specified.\n"
+msgid "one of the arguments %s is required"
+msgstr "குறிப்பிடப்பட்ட அளவுருக்களின் எண்ணிக்கை தவறு.\n"
+
+#: /usr/lib64/python3.9/argparse.py:2146
+msgid "expected one argument"
+msgstr ""
+
+#: /usr/lib64/python3.9/argparse.py:2147
+msgid "expected at most one argument"
+msgstr ""
+
+#: /usr/lib64/python3.9/argparse.py:2148
+msgid "expected at least one argument"
+msgstr ""
+
+#: /usr/lib64/python3.9/argparse.py:2152
+#, python-format
+msgid "expected %s argument"
+msgid_plural "expected %s arguments"
 msgstr[0] ""
 msgstr[1] ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: /usr/lib64/python3.9/optparse.py:1496
+#: /usr/lib64/python3.9/argparse.py:2210
+#, fuzzy, python-format
+#| msgid "ambiguous option: %s (%s?)"
+msgid "ambiguous option: %(option)s could match %(matches)s"
+msgstr "உறுதியற்ற விருப்பம்: %s (%s?)"
+
+#: /usr/lib64/python3.9/argparse.py:2274
 #, python-format
-msgid "%s option does not take a value"
-msgstr "%s விருப்பம் ஒரு மதிப்பை எடுக்கவில்லை"
+msgid "unexpected option string: %s"
+msgstr ""
+
+#: /usr/lib64/python3.9/argparse.py:2471
+#, python-format
+msgid "%r is not callable"
+msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: /usr/lib64/python3.9/optparse.py:1612
-msgid "Options"
-msgstr "விருப்பங்கள்"
+#: /usr/lib64/python3.9/argparse.py:2488
+#, fuzzy, python-format
+#| msgid "option %s: invalid %s value: %r"
+msgid "invalid %(type)s value: %(value)r"
+msgstr "விருப்பம் %s: தவறான %s மதிப்பு: %r"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#: /usr/lib64/python3.9/argparse.py:2499
+#, fuzzy, python-format
+#| msgid "option %s: invalid choice: %r (choose from %s)"
+msgid "invalid choice: %(value)r (choose from %(choices)s)"
+msgstr "விருப்பம் %s: தவறான தேர்வு: %r (%s-இலிருந்து தேர்ந்தெடு)"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#: /usr/lib64/python3.9/argparse.py:2575
+#, fuzzy, python-format
+#| msgid "%s: error: %s"
+msgid "%(prog)s: error: %(message)s\n"
+msgstr "%s: பிழை: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1294,6 +1383,12 @@ msgstr "எண்"
 #: src/rct/printing.py:83
 msgid "Roles"
 msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#: src/rct/printing.py:85
+msgid "Usage"
+msgstr "பயன்பாடு"
 
 #: src/rct/printing.py:86
 msgid "Add-ons"
@@ -7631,6 +7726,46 @@ msgstr "Red Hat சந்தாபடுத்தல் மேலாளர்"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
+#~ msgid "no such option: %s"
+#~ msgstr "இதுபோல விருப்பம் இல்லை: %s"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "integer"
+#~ msgstr "முழு எண்"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "floating-point"
+#~ msgstr "மிதவை-புள்ளி"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "complex"
+#~ msgstr "சிக்கல்"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "show program's version number and exit"
+#~ msgstr "நிரலின் பதிப்பு எண்ணை காட்டி வெளியேறு"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "%prog [options]"
+#~ msgstr "%prog [விருப்பங்கள்]"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "%s option does not take a value"
+#~ msgstr "%s விருப்பம் ஒரு மதிப்பை எடுக்கவில்லை"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Options"
+#~ msgstr "விருப்பங்கள்"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
 #~ msgid ""
 #~ "Error updating system data on the server, see /var/log/rhsm/rhsm.log for "
 #~ "more details."
@@ -7702,11 +7837,6 @@ msgstr "Red Hat சந்தாபடுத்தல் மேலாளர்"
 # document keys
 #~ msgid "long integer"
 #~ msgstr "நீண்ட முழு எண்"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#~ msgid "%s option requires an argument"
-#~ msgstr "%s விருப்பத்திற்கு ஒரு அளவுரு தேவைப்படுகிறது"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
