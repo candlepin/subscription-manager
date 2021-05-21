@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-20 17:38+0200\n"
-"PO-Revision-Date: 2021-05-11 07:02+0000\n"
+"PO-Revision-Date: 2021-05-20 20:46+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
-"subscription-manager/subscription-manager-master/it/>\n"
+"subscription-manager/subscription-manager-main/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,34 +19,32 @@ msgstr ""
 "X-Generator: Weblate 4.6.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
-#, fuzzy
-#| msgid "Usage:  "
 msgid "usage: "
-msgstr "Uso:  "
+msgstr "uso: "
 
 #: /usr/lib64/python3.9/argparse.py:854
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() non definito"
 
 #: /usr/lib64/python3.9/argparse.py:1197
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr ""
+msgstr "analizzatore %(parser_name)r sconosciuto (disponibili: %(choices)s)"
 
 #: /usr/lib64/python3.9/argparse.py:1257
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr ""
+msgstr "argomento \"-\" con modo %r"
 
 #: /usr/lib64/python3.9/argparse.py:1266
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
-msgstr ""
+msgstr "non è possibile aprire '%(filename)s': %(error)s"
 
 #: /usr/lib64/python3.9/argparse.py:1475
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "impossibile unire le azioni - due gruppi sono chiamati %r"
 
 #: /usr/lib64/python3.9/argparse.py:1513
 msgid "'required' is an invalid argument for positionals"
@@ -58,16 +56,18 @@ msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
 msgstr ""
+"stringa di opzione %(option)r non valida: deve iniziare con un carattere "
+"%(prefix_chars)r"
 
 #: /usr/lib64/python3.9/argparse.py:1553
 #, python-format
 msgid "dest= is required for options like %r"
-msgstr ""
+msgstr "dest= è richiesto per opzioni come %r"
 
 #: /usr/lib64/python3.9/argparse.py:1570
 #, python-format
 msgid "invalid conflict_resolution value: %r"
-msgstr ""
+msgstr "valore non valido di conflict_resolution: %r"
 
 #: /usr/lib64/python3.9/argparse.py:1588
 #, python-format
@@ -78,7 +78,7 @@ msgstr[1] ""
 
 #: /usr/lib64/python3.9/argparse.py:1654
 msgid "mutually exclusive arguments must be optional"
-msgstr ""
+msgstr "argomenti mutualmente esclusivi devono essere opzionali"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:1721
@@ -89,10 +89,8 @@ msgstr "L'opzione %s necessita di un argomento"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:1722
-#, fuzzy
-#| msgid "%s option requires an argument"
 msgid "optional arguments"
-msgstr "L'opzione %s necessita di un argomento"
+msgstr "argomenti opzionali"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:1737
@@ -107,52 +105,49 @@ msgid "cannot have multiple subparser arguments"
 msgstr "impossibile analizzare l'argomento: {}"
 
 #: /usr/lib64/python3.9/argparse.py:1820 /usr/lib64/python3.9/argparse.py:2331
-#, fuzzy, python-format
-#| msgid "Unknown arguments: %s"
+#, python-format
 msgid "unrecognized arguments: %s"
-msgstr "Argomenti sconosciuti: %s"
+msgstr "argomenti non riconosciuti: %s"
 
 #: /usr/lib64/python3.9/argparse.py:1921
-#, fuzzy, python-format
-#| msgid "Unknown arguments: %s"
+#, python-format
 msgid "not allowed with argument %s"
-msgstr "Argomenti sconosciuti: %s"
+msgstr "non permesso con argomento %s"
 
 #: /usr/lib64/python3.9/argparse.py:1967 /usr/lib64/python3.9/argparse.py:1981
 #, python-format
 msgid "ignored explicit argument %r"
-msgstr ""
+msgstr "ignorato argomento esplicito %r"
 
 #: /usr/lib64/python3.9/argparse.py:2088
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "gli argomenti seguenti sono richiesti: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2103
-#, fuzzy, python-format
-#| msgid "Wrong number of arguments specified.\n"
+#, python-format
 msgid "one of the arguments %s is required"
-msgstr "Specificato un numero errato di argomenti.\n"
+msgstr "uno degli argomenti %s è richiesto"
 
 #: /usr/lib64/python3.9/argparse.py:2146
 msgid "expected one argument"
-msgstr ""
+msgstr "atteso un argomento"
 
 #: /usr/lib64/python3.9/argparse.py:2147
 msgid "expected at most one argument"
-msgstr ""
+msgstr "atteso al più un argomento"
 
 #: /usr/lib64/python3.9/argparse.py:2148
 msgid "expected at least one argument"
-msgstr ""
+msgstr "atteso almeno un argomento"
 
 #: /usr/lib64/python3.9/argparse.py:2152
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "atteso %s argomento"
+msgstr[1] "attesi %s argomenti"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2210
@@ -164,7 +159,7 @@ msgstr "opzione ambigua: %s (%s?)"
 #: /usr/lib64/python3.9/argparse.py:2274
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "stringa di opzione non attesa: %s"
 
 #: /usr/lib64/python3.9/argparse.py:2471
 #, python-format
@@ -173,24 +168,21 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2488
-#, fuzzy, python-format
-#| msgid "option %s: invalid %s value: %r"
+#, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr "opzione %s: valore %s non valido: %r"
+msgstr "valore %(type)s non valido: %(value)r"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2499
-#, fuzzy, python-format
-#| msgid "option %s: invalid choice: %r (choose from %s)"
+#, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
-msgstr "opzione %s: selezione non valida: %r (scegliere da %s)"
+msgstr "selezione non valida: %(value)r (scegliere da %(choices)s)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2575
-#, fuzzy, python-format
-#| msgid "{prog}: error: {msg}"
+#, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr "{prog}: errore: {msg}"
+msgstr "%(prog)s: errore: %(message)s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/index.js:64 cockpit/src/subscriptions-view.jsx:272
