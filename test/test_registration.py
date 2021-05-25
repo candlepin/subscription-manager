@@ -82,7 +82,7 @@ class CliRegistrationTests(SubManFixture):
         with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
             self.stub_cp_provider.basic_auth_cp = mock_uep
             cmd = RegisterCommand()
-            cmd.main(['register', '--force', '--username', 'admin', '--password', 'admin', '--org', 'admin'])
+            cmd.main(['--force', '--username', 'admin', '--password', 'admin', '--org', 'admin'])
 
     @patch('subscription_manager.cli_command.cli.EntCertActionInvoker')
     def test_activation_keys_updates_certs_and_repos(self, mock_entcertlib):
@@ -93,7 +93,7 @@ class CliRegistrationTests(SubManFixture):
         mock_entcertlib = mock_entcertlib.return_value
         self._inject_ipm()
 
-        cmd.main(['register', '--activationkey=test_key', '--org=test_org'])
+        cmd.main(['--activationkey=test_key', '--org=test_org'])
         self.mock_register.register.assert_called_once()
         mock_entcertlib.update.assert_called_once()
 
@@ -106,7 +106,7 @@ class CliRegistrationTests(SubManFixture):
         mock_entcertlib = mock_entcertlib.return_value
         self._inject_ipm()
 
-        cmd.main(['register', '--consumerid=123456', '--username=testuser1', '--password=password', '--org=test_org'])
+        cmd.main(['--consumerid=123456', '--username=testuser1', '--password=password', '--org=test_org'])
         self.mock_register.register.assert_called_once_with(None, consumerid='123456')
         mock_entcertlib.update.assert_called_once()
 
@@ -120,7 +120,7 @@ class CliRegistrationTests(SubManFixture):
 
         with Capture(silent=True):
             with self.assertRaises(SystemExit) as e:
-                cmd.main(['register', '--consumerid=TaylorSwift', '--username=testuser1', '--password=password', '--org=test_org'])
+                cmd.main(['--consumerid=TaylorSwift', '--username=testuser1', '--password=password', '--org=test_org'])
                 self.assertEqual(e.code, os.EX_USAGE)
 
     def test_strip_username_and_password(self):
@@ -222,7 +222,7 @@ class CliRegistrationTests(SubManFixture):
             self.stub_cp_provider.basic_auth_cp = mock_uep
             cmd = RegisterCommand()
             with Capture() as cap:
-                cmd.main(['register', '--force', '--username', 'admin', '--password', 'admin', '--org', 'admin'])
+                cmd.main(['--force', '--username', 'admin', '--password', 'admin', '--org', 'admin'])
                 output = cap.out
                 self.assertTrue("The system has been registered with ID" in output)
                 self.assertTrue("The registered system name is:" in output)
@@ -236,5 +236,5 @@ class CliRegistrationTests(SubManFixture):
 
             with Capture(silent=True):
                 with self.assertRaises(SystemExit) as e:
-                    cmd.main(['register', '--type=candlepin'])
+                    cmd.main(['--type=candlepin'])
                     self.assertEqual(e.code, os.EX_USAGE)

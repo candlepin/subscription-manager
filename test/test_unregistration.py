@@ -33,7 +33,7 @@ class CliUnRegistrationTests(SubManFixture):
 
         # CacheManager.delete_cache = classmethod(lambda cls: None)
 
-        cmd.main(['unregister'])
+        cmd.main([])
         self.assertEqual(mock_injected_identity.uuid, cmd.cp.called_unregister_uuid)
 
     @patch('subscription_manager.managerlib.clean_all_data')
@@ -44,7 +44,7 @@ class CliUnRegistrationTests(SubManFixture):
             self._inject_mock_valid_consumer(uuid=112233)
 
             cmd = managercli.UnRegisterCommand()
-            cmd.main(['unregister'])
+            cmd.main([])
 
             self.assertTrue(mock_uep.unregisterConsumer.called)
             clean_data_mock.assert_called_once_with(backup=False)

@@ -31,21 +31,21 @@ class CliRemoveTests(fixture.SubManFixture):
         mock_identity = self._inject_mock_valid_consumer()
         managercli.EntCertActionInvoker = StubEntActionInvoker
 
-        cmd.main(['remove', '--all'])
+        cmd.main(['--all'])
         self.assertEqual(cmd.cp.called_unbind_uuid, mock_identity.uuid)
 
         serial1 = '123456'
-        cmd.main(['remove', '--serial=%s' % serial1])
+        cmd.main(['--serial=%s' % serial1])
         self.assertEqual(cmd.cp.called_unbind_serial, [serial1])
         cmd.cp.reset()
 
         serial2 = '789012'
-        cmd.main(['remove', '--serial=%s' % serial1, '--serial=%s' % serial2])
+        cmd.main(['--serial=%s' % serial1, '--serial=%s' % serial2])
         self.assertEqual(cmd.cp.called_unbind_serial, [serial1, serial2])
         cmd.cp.reset()
 
         pool_id1 = '39993922b'
-        cmd.main(['remove', '--serial=%s' % serial1, '--serial=%s' % serial2, '--pool=%s' % pool_id1, '--pool=%s' % pool_id1])
+        cmd.main(['--serial=%s' % serial1, '--serial=%s' % serial2, '--pool=%s' % pool_id1, '--pool=%s' % pool_id1])
         self.assertEqual(cmd.cp.called_unbind_serial, [serial1, serial2])
         self.assertEqual(cmd.cp.called_unbind_pool_id, [pool_id1])
 
@@ -59,7 +59,7 @@ class CliRemoveTests(fixture.SubManFixture):
 
         self._inject_mock_invalid_consumer()
 
-        cmd.main(['remove', '--all'])
+        cmd.main(['--all'])
         self.assertTrue(cmd.entitlement_dir.list_called)
         self.assertTrue(ent.is_deleted)
 
@@ -74,7 +74,7 @@ class CliRemoveTests(fixture.SubManFixture):
         inj.provide(inj.PROD_DIR, StubProductDirectory([]))
         cmd = managercli.RemoveCommand()
 
-        cmd.main(['remove', '--serial=%s' % ent1.serial, '--serial=%s' % ent3.serial, '--pool=%s' % ent4.pool.id])
+        cmd.main(['--serial=%s' % ent1.serial, '--serial=%s' % ent3.serial, '--pool=%s' % ent4.pool.id])
         self.assertTrue(cmd.entitlement_dir.list_called)
         self.assertTrue(ent1.is_deleted)
         self.assertFalse(ent2.is_deleted)

@@ -36,7 +36,7 @@ class TestConfigCommand(TestCliCommand):
         config_command.conf['rhsmd']['processtimeout'] = '300'
         with Capture() as cap:
             self.cc._do_command = self._orig_do_command
-            self.cc.main([""])
+            self.cc.main([])
             self.cc._validate_options()
         self.assertTrue(hostname in cap.out)
 
