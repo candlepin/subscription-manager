@@ -766,11 +766,14 @@ class SyspurposeCommand(CliCommand):
                         ))
                         self._print_valid_values(valid_fields)
                     else:
-                        print(_('Warning: the list of valid values for attribute "{attr}" is empty.').format(
+                        print(_('Warning: There are no available values for the system purpose "{attr}" '
+                                'from the available subscriptions in this organization.').format(
                             attr=self.attr
                         ))
                 else:
-                    print(_('Warning: No valid values provided for attribute "{attr}"').format(
+                    print(_('Warning: This organization does not have any subscriptions that provide a '
+                            'system purpose "{attr}".  This setting will not influence auto-attaching '
+                            'subscriptions.').format(
                         attr=self.attr
                     ))
 
@@ -899,9 +902,12 @@ class SyspurposeCommand(CliCommand):
                 # Print values
                 self._print_valid_values(valid_fields)
             else:
-                print(_('This org does not have any subscriptions with an available "{syspurpose_attr}".').format(syspurpose_attr=self.attr))
+                print(_('There are no available values for the system purpose "{syspurpose_attr}" '
+                        'from the available subscriptions in this '
+                        'organization.').format(syspurpose_attr=self.attr))
         else:
-            print(_('Unable to get list of valid values for "{syspurpose_attr}"').format(syspurpose_attr=self.attr))
+            print(_('This organization does not have any subscriptions that provide a system '
+                    'purpose "{syspurpose_attr}.').format(syspurpose_attr=self.attr))
 
     def sync(self):
         return syspurposelib.SyspurposeSyncActionCommand().perform(include_result=True)[1]
