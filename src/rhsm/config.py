@@ -18,6 +18,7 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 #
 
+import sys
 import os
 from iniparse import SafeConfigParser
 from iniparse.compat import NoOptionError, InterpolationMissingOptionError, NoSectionError
@@ -197,6 +198,20 @@ class RhsmConfigParser(SafeConfigParser):
             if not self.has_section(section):
                 self.add_section(section)
             super(RhsmConfigParser, self).set(section, name, value)
+        if section == "logging" and name == "default_log_level":
+            self.is_log_level_valid(value)
+
+    def is_log_level_valid(self, value):
+        valid = ['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG', 'NOSET']
+        if value not in valid:
+            print("Invalid Log Level: {lvl}, setting to INFO for this run.".format(lvl=value), file=sys.stderr)
+            print(
+                "Please use:  subscription-manager config --logging.default_log_level=<Log Level> to set the default_log_level to a valid value.",
+                file=sys.stderr)
+            valid_str = ", ".join(valid)
+            print("Valid Values: {valid_str}".format(valid_str=valid_str), file=sys.stderr)
+            return False
+        return True
 
     def get_int(self, section, prop):
         """Get a int value from the config.
