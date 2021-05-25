@@ -425,13 +425,11 @@ class CliCommand(AbstractCLICommand):
         config_changed = False
 
         # In testing we sometimes specify args, otherwise use the default:
-        if not args:
-            args = sys.argv[1:]
+        if args is None:
+            args = sys.argv[2:]
 
         (self.options, unknown_args) = self.parser.parse_known_args(args)
 
-        # we dont need argv[0] in this list...
-        self.args = self.args[1:]
         # check for unparsed arguments
         if unknown_args:
             message: str = _("{prog}: error: no such option: {args}").format(

@@ -441,7 +441,7 @@ class TestRefreshCommandWithDoCommand(SubManFixture):
         mock_content_access_mode_cache = Mock(spec=ContentAccessModeCache)
         mock_content_access_mode_cache.return_value.exists.return_value = True
         provide(CONTENT_ACCESS_MODE_CACHE, mock_content_access_mode_cache)
-        self.cc.main([""])
+        self.cc.main([])
         mock_content_access_cache.return_value.remove.assert_called_once()
         mock_content_access_mode_cache.return_value.delete_cache.assert_called_once()
         mock_content_access_cache.return_value.exists.assert_called_once()
@@ -1381,7 +1381,7 @@ class TestConfigCommand(TestCliCommand):
         managercli.conf['rhsmd']['processtimeout'] = '300'
         with Capture() as cap:
             self.cc._do_command = self._orig_do_command
-            self.cc.main([""])
+            self.cc.main([])
             self.cc._validate_options()
         self.assertTrue(hostname in cap.out)
 

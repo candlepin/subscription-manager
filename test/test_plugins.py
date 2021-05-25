@@ -180,7 +180,7 @@ class CliPluginsTests(SubManFixture):
         cmd.plugin_manager = self.manager
 
         with Capture() as cap:
-            cmd.main(['plugins', '--list'])
+            cmd.main(['--list'])
             output = cap.out
             self.assertTrue("PluginClass0" in output)
             self.assertTrue("PluginClass9" in output)
@@ -192,7 +192,7 @@ class CliPluginsTests(SubManFixture):
         cmd.plugin_manager = self.manager
 
         with Capture() as cap:
-            cmd.main(['plugins', '--listhooks'])
+            cmd.main(['--listhooks'])
             output = cap.out
             self.assertTrue("test_0" in output)
             self.assertTrue("test.test_plugins.PluginClass0.test_hook" in output)
@@ -206,7 +206,7 @@ class CliPluginsTests(SubManFixture):
         cmd.plugin_manager = self.manager
 
         with Capture() as cap:
-            cmd.main(['plugins', '--listslots'])
+            cmd.main(['--listslots'])
             output = cap.out
             self.assertTrue("test_0" in output)
             self.assertTrue("test_9" in output)
@@ -218,7 +218,7 @@ class CliPluginsTests(SubManFixture):
         cmd.plugin_manager = self.manager
 
         with Capture() as cap:
-            cmd.main(['plugins', '--verbose'])
+            cmd.main(['--verbose'])
             output = cap.out
             self.assertTrue("plugin_key: test.test_plugins.PluginClass0" in output)
             self.assertTrue("test.test_plugins.PluginClass0: enabled" in output)

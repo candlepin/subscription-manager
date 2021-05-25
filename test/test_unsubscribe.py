@@ -40,22 +40,22 @@ class CliUnSubscribeTests(SubManFixture):
         mock_identity = self._inject_mock_valid_consumer()
         managercli.EntCertActionInvoker = StubEntActionInvoker
 
-        cmd.main(['unsubscribe', '--all'])
+        cmd.main(['--all'])
         self.assertEqual(cmd.cp.called_unbind_uuid, mock_identity.uuid)
         cmd.cp.reset()
 
-        cmd.main(['unsubscribe', '--serial=%s' % ent1.serial])
+        cmd.main(['--serial=%s' % ent1.serial])
         self.assertEqual(cmd.cp.called_unbind_serial, ['%s' % ent1.serial])
         cmd.cp.reset()
 
-        code = cmd.main(['unsubscribe', '--serial=%s' % ent2.serial, '--serial=%s' % ent3.serial])
+        code = cmd.main(['--serial=%s' % ent2.serial, '--serial=%s' % ent3.serial])
         self.assertEqual(cmd.cp.called_unbind_serial, ['%s' % ent2.serial, '%s' % ent3.serial])
         self.assertEqual(code, 0)
 
         expected_exception = connection.RestlibException("Entitlement Certificate with serial number "
             "2300922701043065601 could not be found.")
         self.stub_cp_provider.get_consumer_auth_cp().unbindBySerial = mock.Mock(side_effect=expected_exception)
-        code = cmd.main(['unsubscribe', '--serial=%s' % '2300922701043065601'])
+        code = cmd.main(['--serial=%s' % '2300922701043065601'])
 
         # FIXME: this causes something to freak out deep in nosetests...
         #self.assertEquals(code, 1)
@@ -70,7 +70,7 @@ class CliUnSubscribeTests(SubManFixture):
 
         self._inject_mock_invalid_consumer()
 
-        cmd.main(['unsubscribe', '--all'])
+        cmd.main(['--all'])
         self.assertTrue(cmd.entitlement_dir.list_called)
         self.assertTrue(ent.is_deleted)
 
@@ -83,12 +83,12 @@ class CliUnSubscribeTests(SubManFixture):
         inj.provide(inj.PROD_DIR, StubProductDirectory([]))
         cmd = managercli.UnSubscribeCommand()
 
-        code = cmd.main(['unsubscribe', '--serial=%s' % ent1.serial, '--serial=%s' % ent3.serial])
+        code = cmd.main(['--serial=%s' % ent1.serial, '--serial=%s' % ent3.serial])
         self.assertTrue(cmd.entitlement_dir.list_called)
         self.assertTrue(ent1.is_deleted)
         self.assertFalse(ent2.is_deleted)
         self.assertTrue(ent3.is_deleted)
         self.assertEqual(code, 0)
 
-        code = cmd.main(['unsubscribe', '--serial=%s' % '33333333'])
+        code = cmd.main(['--serial=%s' % '33333333'])
         self.assertEqual(code, 1)
