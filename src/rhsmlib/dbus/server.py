@@ -39,8 +39,6 @@ log = logging.getLogger(__name__)
 parser = get_config_parser()
 conf = config.Config(parser)
 
-init_logger(parser)
-
 
 class Server(object):
     """
@@ -65,6 +63,8 @@ class Server(object):
         The object_classes argument is a list.  The list can contain either a class or a tuple consisting
         of a class and a dictionary of arguments to send that class's constructor.
         """
+
+        init_logger(parser)
 
         # Configure mainloop for threading.  We must do so in GLib and python-dbus.
         GLib.threads_init()
