@@ -14,6 +14,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+import json
 import logging
 import os
 import readline
@@ -125,7 +126,7 @@ class RegisterCommand(UserPassCommand):
         # Do not try to do auto-attach, when simple content access mode is used
         # Only print info message to stdout
         if is_simple_content_access(uep=self.cp, identity=self.identity):
-            self._print_ignore_auto_attach_mesage()
+            self._print_ignore_auto_attach_message()
             return
 
         if 'serviceLevel' not in consumer and self.options.service_level:
@@ -146,51 +147,37 @@ class RegisterCommand(UserPassCommand):
             log.exception("Auto-attach failed")
             raise
 
-    def _do_command(self):
+    def _do_unregister(self):
         """
-        Executes the command.
+        Method for unregistering system, when system is already registered and --force option i used
+        :return:
         """
+        # First let's try to un-register previous consumer; if this fails
+        # we'll let the error bubble up, so that we don't blindly re-register.
+        # managerlib.unregister handles the special case that the consumer has already been removed.
+        old_uuid = self.identity.uuid
 
-        self.log_client_version()
+        print(_("Unregistering from: {hostname}:{port}{prefix}").format(
+            hostname=conf["server"]["hostname"], port=conf["server"]["port"], prefix=conf["server"]["prefix"]))
+        try:
+            unregister.UnregisterService(self.cp).unregister()
+            self.entitlement_dir.__init__()
+            self.product_dir.__init__()
+            log.info("--force specified, unregistered old consumer: {old_uuid}".format(old_uuid=old_uuid))
+            print(_("The system with UUID {old_uuid} has been unregistered").format(old_uuid=old_uuid))
+        except ssl.SSLError as e:
+            # since the user can override serverurl for register, a common use case is to try to switch servers
+            # using register --force... However, this normally cannot successfully unregister since the servers
+            # are different.
+            handle_exception("Unregister failed: {e}".format(e=e), e)
+        except Exception as e:
+            handle_exception("Unregister failed", e)
 
-        # Always warn the user if registered to old RHN/Spacewalk
-        if ClassicCheck().is_registered_with_classic():
-            print(get_branding().REGISTERED_TO_OTHER_WARNING)
-
-        self._validate_options()
-
-        # gather installed products info
-        self.installed_mgr = inj.require(inj.INSTALLED_PRODUCTS_MANAGER)
-
-        previously_registered = False
-        if self.is_registered() and self.options.force:
-            previously_registered = True
-            # First let's try to un-register previous consumer; if this fails
-            # we'll let the error bubble up, so that we don't blindly re-register.
-            # managerlib.unregister handles the special case that the consumer has already been removed.
-            old_uuid = self.identity.uuid
-
-            print(_("Unregistering from: {hostname}:{port}{prefix}").format(
-                  hostname=conf["server"]["hostname"], port=conf["server"]["port"], prefix=conf["server"]["prefix"]))
-            try:
-                unregister.UnregisterService(self.cp).unregister()
-                self.entitlement_dir.__init__()
-                self.product_dir.__init__()
-                log.info("--force specified, unregistered old consumer: {old_uuid}".format(old_uuid=old_uuid))
-                print(_("The system with UUID {old_uuid} has been unregistered").format(old_uuid=old_uuid))
-            except ssl.SSLError as e:
-                # since the user can override serverurl for register, a common use case is to try to switch servers
-                # using register --force... However, this normally cannot successfully unregister since the servers
-                # are different.
-                handle_exception("Unregister failed: {e}".format(e=e), e)
-            except Exception as e:
-                handle_exception("Unregister failed", e)
-
-        self.cp_provider.clean()
-        if previously_registered:
-            print(_("All local data removed"))
-
-        # Proceed with new registration:
+    def _do_register(self):
+        """
+        Try to do own registration of the system
+        """
+        consumer = None
         try:
             if self.options.token:
                 admin_cp = self.cp_provider.get_keycloak_auth_cp(self.options.token)
@@ -244,16 +231,51 @@ class RegisterCommand(UserPassCommand):
             print(_("The registered system name is: {name}").format(name=consumer_info.getConsumerName()))
             if self.options.service_level:
                 print(_("Service level set to: {level}").format(level=self.options.service_level))
+        return consumer
 
-        # We have new credentials, restart virt-who
-        restart_virt_who()
+    def _do_check_activation_keys(self, consumer):
+        """
+        Try to check activation keys if autoAttach attribute is True and SCA mode is used. In this
+        case some warning have to be printed.
+        """
+        # List of dictionaries containing information about activation keys used for registration
+        activation_keys = []
+        if self.options.activation_keys:
+            if 'activationKeys' in consumer:
+                for activation_key in consumer['activationKeys']:
+                    activation_key_name = activation_key.get('activationKeyName', None)
+                    activation_key_id = activation_key.get('activationKeyId', None)
+                    if activation_key_name is not None and activation_key_id is not None:
+                        try:
+                            activation_key_json = self.cp.getActivationKey(activation_key_id)
+                        except connection.RestlibException as err:
+                            log.debug(
+                                f'Unable to get information about activation key "{activation_key_name}": {err}'
+                            )
+                        else:
+                            activation_key_info = json.loads(activation_key_json)
+                            activation_keys.append(activation_key_info)
+                    else:
+                        log.debug(f'Activation key {activation_key} does not have name or ID')
 
-        # get a new UEP as the consumer
-        self.cp = self.cp_provider.get_consumer_auth_cp()
+        auto_attach = False
+        for activation_key in activation_keys:
+            if 'autoAttach' in activation_key:
+                if activation_key['autoAttach'] is True:
+                    auto_attach = True
+                    break
 
-        # log the version of the server we registered to
-        self.log_server_version()
+        if auto_attach is True:
+            # Do not try to do auto-attach, when simple content access mode is used
+            # and auto-attach was enabled at least in one activation key used during
+            # registration. Only print info message to stdout
+            if is_simple_content_access(uep=self.cp, identity=self.identity):
+                self._print_ignore_auto_attach_message()
 
+    def _do_update_facts(self, consumer):
+        """
+        Try to update facts
+        """
         facts = inj.require(inj.FACTS)
 
         # FIXME: can these cases be replaced with invoking
@@ -273,9 +295,67 @@ class RegisterCommand(UserPassCommand):
         facts.write_cache()
         self.installed_mgr.update_check(self.cp, consumer['uuid'])
 
+    def _do_update_profile(self, consumer):
+        """
+        Try to update profile
+        """
+        try:
+            profile_mgr = inj.require(inj.PROFILE_MANAGER)
+            # 767265: always force an upload of the packages when registering
+            profile_mgr.update_check(self.cp, consumer['uuid'], True)
+        except RemoteServerException as err:
+            # When it is not possible to upload profile ATM, then print only error about this
+            # to rhsm.log. The rhsmcertd will try to upload it next time.
+            log.error("Unable to upload profile: {err}".format(err=str(err)))
+
+    def _do_command(self):
+        """
+        Executes the command.
+        """
+
+        self.log_client_version()
+
+        # Always warn the user if registered to old RHN/Spacewalk
+        if ClassicCheck().is_registered_with_classic():
+            print(get_branding().REGISTERED_TO_OTHER_WARNING)
+
+        self._validate_options()
+
+        # gather installed products info
+        self.installed_mgr = inj.require(inj.INSTALLED_PRODUCTS_MANAGER)
+
+        previously_registered = False
+        if self.is_registered() and self.options.force:
+            previously_registered = True
+            self._do_unregister()
+
+        self.cp_provider.clean()
+        if previously_registered:
+            print(_("All local data removed"))
+
+        # Proceed with new registration:
+        consumer = self._do_register()
+
+        if consumer is None:
+            return 0
+
+        # We have new credentials, restart virt-who
+        restart_virt_who()
+
+        # Create new connection, when we have new consumer certificates that could be used
+        # for authentication during TLS handshake
+        self.cp = self.cp_provider.get_consumer_auth_cp()
+
+        # log the version of the server we registered to
+        self.log_server_version()
+
+        self._do_update_facts(consumer)
+
         if self.options.release:
-            # TODO: grab the list of valid options, and check
             self.cp.updateConsumer(consumer['uuid'], release=self.options.release)
+
+        if self.options.activation_keys:
+            self._do_check_activation_keys(consumer)
 
         if self.autoattach:
             self._do_auto_attach(consumer)
@@ -289,14 +369,7 @@ class RegisterCommand(UserPassCommand):
             # FIXME: aside from the overhead, should this be cert_action_client.update?
             self.entcertlib.update()
 
-        try:
-            profile_mgr = inj.require(inj.PROFILE_MANAGER)
-            # 767265: always force an upload of the packages when registering
-            profile_mgr.update_check(self.cp, consumer['uuid'], True)
-        except RemoteServerException as err:
-            # When it is not possible to upload profile ATM, then print only error about this
-            # to rhsm.log. The rhsmcertd will try to upload it next time.
-            log.error("Unable to upload profile: {err}".format(err=str(err)))
+        self._do_update_profile(consumer)
 
         subscribed = 0
         if self.options.activation_keys or self.autoattach:

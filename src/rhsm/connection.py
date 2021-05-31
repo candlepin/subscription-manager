@@ -1388,6 +1388,58 @@ class UEPConnection(BaseConnection):
             method += '&hypervisor_id=%s' % self.sanitize(hypervisor_id)
         return self.conn.request_get(method)
 
+    def getActivationKey(self, activation_key_id):
+        """
+        Try to get information about activation key
+        :param activation_key_id: ID of activation key
+        :return: JSON document with information about activation key
+        """
+
+        # TODO: call REST API call, when issue in candlepin described in this BZ:
+        #       https://bugzilla.redhat.com/show_bug.cgi?id=1965306 is fixed.
+        # method = f'/activation_keys/{activation_key_id}'
+        # return self.conn.request_get(method)
+
+        # Mock response from candlepin server ATM
+        result = """
+{
+  "created" : "2021-05-27T09:04:28+0000",
+  "updated" : "2021-05-27T09:04:28+0000",
+  "id" : "ff80808179acee1a0179ad1164fa0b52",
+  "name" : "auto1-test",
+  "description" : null,
+  "owner" : {
+    "id" : "ff80808179acee1a0179acee52060003",
+    "key" : "snowwhite",
+    "displayName" : "Snow White",
+    "href" : "/owners/snowwhite"
+  },
+  "releaseVer" : {
+    "releaseVer" : null
+  },
+  "serviceLevel" : null,
+  "usage" : null,
+  "role" : null,
+  "addOns" : [ ],
+  "autoAttach" : true,
+  "pools" : [ ],
+  "products" : [ ],
+  "contentOverrides" : [ ]
+}
+        """
+        return result
+
+    def getOwnerActivationKeys(self, owner_key):
+        """
+        Try to get information about activation keys for given owner (organization).
+        Note: user has to have admin rights for give organization to be able to get
+        data from this REST API endpoint.
+        :param owner_key: ID of owner
+        :return: JSON document with information about activation keys
+        """
+        method = f'/owners/{owner_key}/activation_keys'
+        return self.conn.request_get(method)
+
     def unregisterConsumer(self, consumerId):
         """
          Deletes a consumer from candlepin server

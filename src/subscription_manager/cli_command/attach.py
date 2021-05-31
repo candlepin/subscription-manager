@@ -127,7 +127,7 @@ class AttachCommand(CliCommand):
         # BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1826300
         if self.auto_attach is True:
             if is_simple_content_access(uep=self.cp, identity=self.identity):
-                self._print_ignore_auto_attach_mesage()
+                self._print_ignore_auto_attach_message()
                 return 0
 
         installed_products_num = 0

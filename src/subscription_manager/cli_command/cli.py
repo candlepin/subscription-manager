@@ -108,7 +108,7 @@ class CliCommand(AbstractCLICommand):
 
         self.correlation_id = generate_correlation_id()
 
-    def _print_ignore_auto_attach_mesage(self):
+    def _print_ignore_auto_attach_message(self):
         """
         This message is shared by attach command and register command, because
         both commands can do auto-attach.
