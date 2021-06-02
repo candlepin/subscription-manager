@@ -14,43 +14,82 @@
 # in this software or its documentation.
 #
 
-# TODO: test Python3 syntax using flake8
-# flake8: noqa
-
 """
 This is module implementing detector and metadata collector of virtual machine running on Google Cloud Platform
 """
+
 import logging
 import time
+import base64
 
 from typing import Union
 
-from rhsmlib.cloud.detector import CloudDetector
-from rhsmlib.cloud.collector import CloudCollector
+from rhsmlib.cloud._base_provider import BaseCloudProvider
 
 
 log = logging.getLogger(__name__)
 
 
-class GCPCloudDetector(CloudDetector):
+class GCPCloudProvider(BaseCloudProvider):
     """
-    Detector of cloud provider
+    Class for GCP cloud provider
+
+    Collector of Google Cloud Platform metadata. Verification of instance identity is described in this document:
+
+    https://cloud.google.com/compute/docs/instances/verifying-instance-identity
     """
 
-    ID = 'gcp'
+    CLOUD_PROVIDER_ID = "gcp"
 
-    def __init__(self, hw_info):
+    # The "audience" should be some unique URI agreed upon by both the instance and the system verifying
+    # the instance's identity. For example, the audience could be a URL for the connection between the two systems.
+    # In fact this string could be anything. We could read the full URL from rhsm.conf
+    AUDIENCE = "https://subscription.rhsm.redhat.com:443/subscription"
+
+    # Google uses little bit different approach. It provides everything in JSON Web Token (JWT)
+    CLOUD_PROVIDER_METADATA_URL = None
+
+    CLOUD_PROVIDER_METADATA_URL_TEMPLATE = "http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?audience={audience}&format=full"
+
+    # Token (metadata) expires within one hour. Thus it is save to cache the token.
+    CLOUD_PROVIDER_METADATA_TTL = 3600
+
+    CLOUD_PROVIDER_TOKEN_TTL = CLOUD_PROVIDER_METADATA_TTL
+
+    CLOUD_PROVIDER_METADATA_TYPE = "text/html"
+
+    CLOUD_PROVIDER_SIGNATURE_URL = None
+
+    CLOUD_PROVIDER_SIGNATURE_TYPE = None
+
+    HTTP_HEADERS = {
+        'user-agent': 'RHSM/1.0',
+        'Metadata-Flavor': 'Google'
+    }
+
+    # Metadata are provided in JWT token and this token is valid for one hour.
+    # Thus it is save to cache this token (see CLOUD_PROVIDER_METADATA_TTL,
+    # self._metadata_token_ctime and self._metadata_token)
+    TOKEN_CACHE_FILE = "/var/lib/rhsm/cache/gcp_token.json"
+
+    # Nothing to cache for this cloud provider
+    SIGNATURE_CACHE_FILE = None
+
+    def __init__(self, hw_info, audience_url=None):
         """
         Initialize instance of GCPCloudDetector
         """
-        super(GCPCloudDetector, self).__init__(hw_info)
+        super(GCPCloudProvider, self).__init__(hw_info)
 
-    def is_vm(self):
-        """
-        Is system running on virtual machine or not
-        :return: True, when machine is running on VM; otherwise return False
-        """
-        return super(GCPCloudDetector, self).is_vm()
+        # Metadata URL can have default or custom "audience"
+        if audience_url is not None:
+            self.CLOUD_PROVIDER_METADATA_URL = self.CLOUD_PROVIDER_METADATA_URL_TEMPLATE.format(
+                audience=audience_url
+            )
+        else:
+            self.CLOUD_PROVIDER_METADATA_URL = self.CLOUD_PROVIDER_METADATA_URL_TEMPLATE.format(
+                audience=self.AUDIENCE
+            )
 
     def is_running_on_cloud(self):
         """
@@ -103,68 +142,18 @@ class GCPCloudDetector(CloudDetector):
 
         return probability
 
-
-class GCPCloudCollector(CloudCollector):
-    """
-    Collector of Google Cloud Platform metadata. Verification of instance identity is described in this document:
-
-    https://cloud.google.com/compute/docs/instances/verifying-instance-identity
-    """
-
-    CLOUD_PROVIDER_ID = "gcp"
-
-    # The "audience" should be some unique URI agreed upon by both the instance and the system verifying
-    # the instance's identity. For example, the audience could be a URL for the connection between the two systems.
-    # In fact this string could be anything. We could read the full URL from rhsm.conf
-    AUDIENCE = "https://subscription.rhsm.redhat.com:443/subscription"
-
-    # Google uses little bit different approach. It provides everything in JSON Web Token (JWT)
-    CLOUD_PROVIDER_METADATA_URL = None
-    CLOUD_PROVIDER_METADATA_URL_TEMPLATE = "http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?audience={audience}&format=full"
-
-    # Token (metadata) expires within one hour. Thus it is save to cache the token.
-    CLOUD_PROVIDER_METADATA_TTL = 3600
-    CLOUD_PROVIDER_TOKEN_TTL = CLOUD_PROVIDER_METADATA_TTL
-
-    CLOUD_PROVIDER_METADATA_TYPE = "text/html"
-
-    CLOUD_PROVIDER_SIGNATURE_URL = None
-
-    CLOUD_PROVIDER_SIGNATURE_TYPE = None
-
-    HTTP_HEADERS = {
-        'user-agent': 'RHSM/1.0',
-        'Metadata-Flavor': 'Google'
-    }
-
-    # Metadata are provided in JWT token and this token is valid for one hour.
-    # Thus it is save to cache this token (see CLOUD_PROVIDER_METADATA_TTL,
-    # self._metadata_token_ctime and self._metadata_token)
-    TOKEN_CACHE_FILE = "/var/lib/rhsm/cache/gcp_token.json"
-
-    # Nothing to cache for this cloud provider
-    SIGNATURE_CACHE_FILE = None
-
-    def __init__(self, audience_url=None):
-        super(GCPCloudCollector, self).__init__()
-        # Metadata URL can have default or custom "audience"
-        if audience_url is not None:
-            self.CLOUD_PROVIDER_METADATA_URL = self.CLOUD_PROVIDER_METADATA_URL_TEMPLATE.format(audience=audience_url)
-        else:
-            self.CLOUD_PROVIDER_METADATA_URL = self.CLOUD_PROVIDER_METADATA_URL_TEMPLATE.format(audience=self.AUDIENCE)
-
     def _get_metadata_from_cache(self) -> Union[str, None]:
         """
         Try to get metadata (JWT token) from the cache file
         :return: String with cached token or None
         """
-        return super(GCPCloudCollector, self)._get_token_from_cache_file()
+        return super(GCPCloudProvider, self)._get_token_from_cache_file()
 
     def _get_data_from_server(self, data_type, url) -> Union[str, None]:
         """
         Try to get data from metadata server
         """
-        return super(GCPCloudCollector, self)._get_data_from_server(data_type, url)
+        return super(GCPCloudProvider, self)._get_data_from_server(data_type, url)
 
     def _get_metadata_from_server(self) -> Union[str, None]:
         """
@@ -205,7 +194,41 @@ class GCPCloudCollector(CloudCollector):
         """
         if self._is_in_memory_cached_token_valid() is True:
             return self._token
-        return super(GCPCloudCollector, self).get_metadata()
+        return super(GCPCloudProvider, self).get_metadata()
+
+    @staticmethod
+    def decode_jwt(jwt_token: str) -> tuple:
+        """
+        Try to decode metadata stored in JWT token described in this RFC: https://tools.ietf.org/html/rfc7519
+        :param jwt_token: string representing JWT token
+        :return: tuple with: string representing header, string representing metadata and base64 encoded signature
+        """
+        # Get the actual payload part: [0] is JOSE header, [1] is metadata and [2] is signature
+        parts = jwt_token.split('.')
+        if len(parts) >= 3:
+            encoded_jose_header = parts[0]
+            encoded_metadata = parts[1]
+            encoded_signature = parts[2]
+            # Add some extra padding, JWT tokens have padding trimmed - see https://stackoverflow.com/a/49459036
+            encoded_jose_header += '==='
+            encoded_metadata += '==='
+            encoded_signature += '==='
+            # Decode only header and metadata, not signature
+            try:
+                jose_header = base64.b64decode(encoded_jose_header).decode('utf-8')
+            except UnicodeDecodeError as err:
+                log.error(f'Unable to decode JWT JOSE header: {err}')
+                jose_header = None
+            try:
+                metadata = base64.b64decode(encoded_metadata).decode('utf-8')
+            except UnicodeDecodeError as err:
+                log.error(f'Unable to decode JWT metadata: {err}')
+                metadata = None
+            return jose_header, metadata, encoded_signature
+        else:
+            log.warning('JWT token with wrong format')
+            return None, None, None
+
 
 # Note about GCP token
 # --------------------
@@ -263,18 +286,17 @@ def _smoke_test():
     facts = {}
     facts.update(HostCollector().get_all())
     facts.update(HardwareCollector().get_all())
-    gcp_cloud_detector = GCPCloudDetector(facts)
-    result = gcp_cloud_detector.is_running_on_cloud()
-    probability = gcp_cloud_detector.is_likely_running_on_cloud()
+    gcp_cloud_provider = GCPCloudProvider(facts)
+    result = gcp_cloud_provider.is_running_on_cloud()
+    probability = gcp_cloud_provider.is_likely_running_on_cloud()
     print('>>> debug <<< result: %s, %6.3f' % (result, probability))
     if result is True:
         # 1. using default audience
-        gcp_cloud_collector = GCPCloudCollector()
-        token = gcp_cloud_collector.get_metadata()
+        token = gcp_cloud_provider.get_metadata()
         print(f'>>> debug <<< 1. token: {token}')
         # 2. using some custom audience
-        gcp_cloud_collector = GCPCloudCollector(audience_url="https://localhost:8443/candlepin")
-        token = gcp_cloud_collector.get_metadata()
+        gcp_cloud_provider = GCPCloudProvider(facts, audience_url="https://localhost:8443/candlepin")
+        token = gcp_cloud_provider.get_metadata()
         print(f'>>> debug <<< 2. token: {token}')
 
 
