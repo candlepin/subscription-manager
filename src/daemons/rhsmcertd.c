@@ -409,10 +409,12 @@ get_int_from_config_file (GKeyFile * key_file, const char *group, const char *ke
         // handling trailing white space for a config file value. Since
         // we are on a lesser version, we have to deal with it ourselves
         // since by default it returns 0.
-        char *str_value =
-            g_key_file_get_string (key_file, group, key, NULL);
-        g_strchomp (str_value);
-        value = atoi (str_value);
+        char *str_value = g_key_file_get_string (key_file, group, key, NULL);
+        if(str_value != NULL) {
+            g_strchomp(str_value);
+            value = atoi(str_value);
+            free(str_value);
+        }
     }
     return value;
 }
