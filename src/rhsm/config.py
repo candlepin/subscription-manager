@@ -190,6 +190,8 @@ class RhsmConfigParser(SafeConfigParser):
                 raise er
 
     def set(self, section, name, value):
+        # get the current value from rhsm.conf
+        default_log_level = self.get('logging', 'default_log_level')
         try:
             # If the value doesn't exist, or isn't equal, write it
             if self.get(section, name) != value:
@@ -199,19 +201,26 @@ class RhsmConfigParser(SafeConfigParser):
                 self.add_section(section)
             super(RhsmConfigParser, self).set(section, name, value)
         if section == "logging" and name == "default_log_level":
-            self.is_log_level_valid(value)
+            valid_level, valid_str = self.is_level_valid(value)
+            valid_default, default_str = self.is_level_valid(default_log_level)
+            if valid_level and not valid_default:
+                print("The Log Level has been set to an Valid value.", file=sys.stderr)
+            elif not valid_level and valid_default:
+                self.print_invalid_log_level_msg(valid_level, valid_str)
+            elif not valid_level and not valid_default:
+                print("The Log Level has been set to an Invalid value.", file=sys.stderr)
 
-    def is_log_level_valid(self, value):
-        valid = ['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG', 'NOSET']
-        if value not in valid:
-            print("Invalid Log Level: {lvl}, setting to INFO for this run.".format(lvl=value), file=sys.stderr)
-            print(
-                "Please use:  subscription-manager config --logging.default_log_level=<Log Level> to set the default_log_level to a valid value.",
-                file=sys.stderr)
-            valid_str = ", ".join(valid)
-            print("Valid Values: {valid_str}".format(valid_str=valid_str), file=sys.stderr)
-            return False
-        return True
+    def is_level_valid(self, value):
+        valid = ['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG', 'NOTSET']
+        valid_str = ", ".join(valid)
+        return value in valid, valid_str
+
+    def print_invalid_log_level_msg(self, value, value_str):
+        print("Invalid Log Level: '{lvl}', setting to 'INFO' for this run.".format(lvl=value), file=sys.stderr)
+        print(
+            "Please use:  subscription-manager config --logging.default_log_level=<Log Level> to set the default_log_level to a valid value.",
+            file=sys.stderr)
+        print("Valid Values: {valid_str}".format(valid_str=value_str), file=sys.stderr)
 
     def get_int(self, section, prop):
         """Get a int value from the config.
