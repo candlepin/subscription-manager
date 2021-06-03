@@ -4,8 +4,8 @@ RHSM & Cloud
 This package contains modules for detecting cloud providers and collecting cloud metadata. The
 metadata then can be for example reported in system facts. Three main cloud providers are
 supported ATM: Amazon Web Services, Microsoft Azure and Google Cloud Platform. If you want to add
-support for another cloud provider, then add subclasses of CloudProvider, CloudCollector and
-CloudDetector to module in providers sub-package and modify list of supported classes in `utils.py`.
+support for another cloud provider, then add subclasses of CloudProvider to module in `providers`
+sub-package and modify list of supported classes in `provider.py`.
 
 Example: you want to add support for Foo Cloud Provider. You will create package `fcp.py` in
 folder `providers`. Content of `fcp.py` will look like this:
@@ -26,9 +26,6 @@ folder `providers`. Content of `fcp.py` will look like this:
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
-# TODO: test Python3 syntax using flake8
-# flake8: noqa
 
 """
 This is module implementing detector and metadata collector of virtual machine running on Foo Cloud Provider
@@ -76,14 +73,16 @@ class FooCloudProvider(BaseCloudProvider):
     def is_vm(self):
         """
         Is system running on virtual machine or not
+        Note: method of parent class parses output of virt-what. You probably
+              do not want to change this method.
         :return: True, when machine is running on VM; otherwise return False
         """
         return super(FooCloudProvider, self).is_vm()
 
     def is_running_on_cloud(self):
         """
-        Try to guess if cloud provider is Foo using collected hardware information (output of dmidecode,
-        virt-what, etc.)
+        Try to detect Foo cloud provider using strong signs from collected hardware information
+        (output of dmidecode, virt-what, etc.)
         :return: True, when we detected sign of Foo in hardware information; Otherwise return False
         """
 
@@ -101,12 +100,16 @@ class FooCloudProvider(BaseCloudProvider):
     def is_likely_running_on_cloud(self):
         """
         Return non-zero value, when the machine is virtual machine and it is running on Foo
-        hypervisor and some Foo string can be found in output of dmidecode
+        hypervisor and some Foo string can be found in output of dmidecode.
+        Note: this method uses some heuristics, when you don't have strong signs of
+              cloud provider under full control and cloud provider changed information provided
+              by SM BIOS. This method is used in fallback mode, when no cloud provider
+              cannot be detected using strong signs.
         :return: Float value representing probability that vm is running on Foo
         """
         probability = 0.0
 
-        # TODO: Check if this is true for Foo Cloud Provider 
+        # TODO: Check if this is true for Foo Cloud Provider
         if self.is_vm() is False:
             return 0.0
 
@@ -145,6 +148,8 @@ class FooCloudProvider(BaseCloudProvider):
     def _get_metadata_from_server(self) -> Union[str, None]:
         """
         Try to get metadata from server
+        Note: You probably do not want to change this method, when Foo cloud provider supports
+              only one version of IMDS.
         :return: String with metadata or None
         """
         return super(FooCloudProvider, self)._get_metadata_from_server()
@@ -158,20 +163,26 @@ class FooCloudProvider(BaseCloudProvider):
     def _get_signature_from_server(self) -> Union[str, None]:
         """
         Method for gathering signature of metadata from server
+        Note: You probably do not want to change this method, when Foo cloud provider supports
+              only one version of IMDS.
         :return: String containing signature or None
         """
         return super(FooCloudProvider, self)._get_signature_from_server()
 
     def get_signature(self) -> Union[str, None]:
         """
-        Public method for getting signature (cache file or server)
+        Public method for getting signature (cache file or server).
+        Note: You probably do not want to change this method, when Foo cloud provider supports
+              only one version of IMDS.
         :return: String containing signature or None
         """
         return super(FooCloudProvider, self).get_signature()
 
     def get_metadata(self) -> Union[str, None]:
         """
-        Public method for getting metadata (cache file or server)
+        Public method for getting metadata (cache file or server). You probabl
+        Note: You probably do not want to change this method, when Foo cloud provider supports
+              only one version of IMDS.
         :return: String containing metadata or None
         """
         return super(FooCloudProvider, self).get_metadata()

@@ -61,8 +61,8 @@ function registerSystem (update_progress) {
 let footerProps = {
     'actions': [
         { 'clicked': registerSystem,
-         'caption': _("Register"),
-         'style': 'primary',
+          'caption': _("Register"),
+          'style': 'primary',
         },
     ]
 };
@@ -125,9 +125,9 @@ function unregisterSystem() {
 
 function initStore(rootElement) {
     subscriptionsClient.addEventListener("dataChanged",
-        () => {
-            dataStore.render();
-        }
+                                         () => {
+                                             dataStore.render();
+                                         }
     );
 
     dataStore.render = () => {
@@ -146,7 +146,7 @@ function initStore(rootElement) {
                 register: openRegisterDialog,
                 unregister: unregisterSystem,
             }),
-            rootElement
+                        rootElement
         );
     };
     subscriptionsClient.init();

@@ -435,8 +435,8 @@ if HAS_DEB822:
             repo_dict['id'] = repo.id
             self.repos822.append(Deb822(repo_dict))
 
-        def delete(self, repo):
-            self.repos822[:] = [repo822 for repo822 in self.repos822 if repo822['id'] != repo.id]
+        def delete(self, repo_id):
+            self.repos822[:] = [repo822 for repo822 in self.repos822 if repo822['id'] != repo_id]
 
         def update(self, repo):
             repo_dict = dict([(str(k), str(v)) for (k, v) in repo.items()])
@@ -451,7 +451,7 @@ if HAS_DEB822:
                 return None
 
         def sections(self):
-            return [Repo(repo822) for repo822 in self.repos822]
+            return [repo822['id'] for repo822 in self.repos822]
 
         def fix_content(self, content):
             # Luckily apt ignores all Fields it does not recognize

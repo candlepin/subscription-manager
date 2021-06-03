@@ -33,7 +33,7 @@ class RefreshCommand(CliCommand):
 
         super(RefreshCommand, self).__init__("refresh", shortdesc, True)
 
-        self.parser.add_option("--force", action='store_true', help=_("force certificate regeneration"))
+        self.parser.add_argument("--force", action='store_true', help=_("force certificate regeneration"))
 
     def _do_command(self):
         self.assert_should_be_registered()
@@ -42,6 +42,11 @@ class RefreshCommand(CliCommand):
             content_access = inj.require(inj.CONTENT_ACCESS_CACHE)
             if content_access.exists():
                 content_access.remove()
+            # Also remove the content access mode cache to be sure we display
+            # SCA or regular mode correctly
+            content_access_mode = inj.require(inj.CONTENT_ACCESS_MODE_CACHE)
+            if content_access_mode.exists():
+                content_access_mode.delete_cache()
 
             if self.options.force is True:
                 # get current consumer identity

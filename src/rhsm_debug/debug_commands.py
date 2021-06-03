@@ -15,7 +15,7 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 #
 import errno
-import optparse
+import argparse
 import os
 import sys
 import shutil
@@ -54,14 +54,14 @@ class SystemCommand(CliCommand):
                  primary=True):
         CliCommand.__init__(self, name=name, shortdesc=shortdesc, primary=primary)
 
-        self.parser.add_option("--destination", dest="destination",
+        self.parser.add_argument("--destination", dest="destination",
                                default="/tmp", help=_("the destination location of the result; default is /tmp"))
         # default is to build an archive, this skips the archive and clean up,
         # just leaving the directory of debug info for sosreport to report
-        self.parser.add_option("--no-archive", action='store_false',
+        self.parser.add_argument("--no-archive", action='store_false',
                                default=True, dest="archive",
                                help=_("data will be in an uncompressed directory"))
-        self.parser.add_option("--sos", action='store_true',
+        self.parser.add_argument("--sos", action='store_true',
                                default=False, dest="sos",
                                help=_("only data not already included in sos report will be collected"))
         # These options don't do anything anymore, since current versions of
@@ -69,12 +69,12 @@ class SystemCommand(CliCommand):
         # So now they are hidden, and they are not hooked up to anything. This
         # avoids breaking existing scripts, since it also didn't do anything
         # before. See rhbz #1246680
-        self.parser.add_option("--no-subscriptions", action='store_true',
+        self.parser.add_argument("--no-subscriptions", action='store_true',
                                dest="placeholder_for_subscriptions_option",
-                               default=False, help=optparse.SUPPRESS_HELP)
-        self.parser.add_option("--subscriptions", action='store_true',
+                               default=False, help=argparse.SUPPRESS)
+        self.parser.add_argument("--subscriptions", action='store_true',
                                dest="placeholder_for_subscriptions_option",
-                               default=False, help=optparse.SUPPRESS_HELP)
+                               default=False, help=argparse.SUPPRESS)
 
         self.assemble_path = ASSEMBLE_DIR
 
@@ -82,7 +82,7 @@ class SystemCommand(CliCommand):
         self.final_destination_path = None
 
     def _get_usage(self):
-        return _("%%prog %s [OPTIONS] ") % self.name
+        return _("%(prog)s {name} [OPTIONS] ").format(name=self.name)
 
     def _validate_options(self):
         if self.options.destination and not os.path.exists(self.options.destination):
@@ -90,9 +90,10 @@ class SystemCommand(CliCommand):
         # no archive, check if we can safely copy to dest.
         if not self.options.archive:
             if not self._dirs_on_same_device(self.assemble_path, self.options.destination):
-                msg = _("To use the no-archive option, the destination directory '%s' "
+                msg = _("To use the no-archive option, the destination directory '{destination}' "
                         "must exist on the same file system as the "
-                        "data assembly directory '%s'.") % (self.options.destination, self.assemble_path)
+                        "data assembly directory '{assembly}'.").format(destination=self.options.destination,
+                                                                       assembly=self.assemble_path)
                 raise InvalidCLIOptionError(msg)
         # In case folks are using this in a script
         if self.options.placeholder_for_subscriptions_option:
@@ -187,7 +188,7 @@ class SystemCommand(CliCommand):
 
                 sfm = SaferFileMove()
                 sfm.move(tar_file_path, final_path)
-                print(_("Wrote: %s") % final_path)
+                print(_("Wrote: {final_path}").format(final_path=final_path))
             else:
                 # NOTE: this will fail across filesystems. We could add a force
                 # flag to for creation of a specific name with approriate
@@ -201,10 +202,10 @@ class SystemCommand(CliCommand):
                 # rename only works on the same filesystem, but it is atomic.
                 os.rename(content_path, dest_dir_name)
 
-                print(_("Wrote: %s") % dest_dir_name)
+                print(_("Wrote: {destination_dir_name}").format(destination_dir_name=dest_dir_name))
 
         except Exception as e:
-            handle_exception(_("Unable to create zip file of system information: %s") % e, e)
+            handle_exception(_("Unable to create zip file of system information: {error}").format(error=e), e)
             sys.exit(os.EX_SOFTWARE)
         finally:
             if content_path and os.path.isdir(content_path):

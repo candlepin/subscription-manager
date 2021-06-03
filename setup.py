@@ -355,17 +355,17 @@ class install_data(_install_data):
             self.data_files.append((icon_dir, icon_source_files))
 
 
-class GettextWithOptParse(i18n.Gettext):
+class GettextWithArgparse(i18n.Gettext):
     def find_py(self):
         # Can't use super since we're descended from a old-style class
         files = i18n.Gettext.find_py(self)
 
-        # We need to grab some strings out of optparse for translation
-        import optparse
-        optparse_source = "%s.py" % os.path.splitext(optparse.__file__)[0]
-        if not os.path.exists(optparse_source):
-            raise RuntimeError("Could not find optparse.py at %s" % optparse_source)
-        files.append(optparse_source)
+        # We need to grab some strings out of argparse for translation
+        import argparse
+        argparse_source = "%s.py" % os.path.splitext(argparse.__file__)[0]
+        if not os.path.exists(argparse_source):
+            raise RuntimeError("Could not find argparse.py at %s" % argparse_source)
+        files.append(argparse_source)
         return files
 
 
@@ -400,7 +400,7 @@ cmdclass = {
     'build_template': template.BuildTemplate,
     'update_trans': i18n.UpdateTrans,
     'uniq_trans': i18n.UniqTrans,
-    'gettext': GettextWithOptParse,
+    'gettext': GettextWithArgparse,
     'lint': lint.Lint,
     'lint_glade': lint.GladeLint,
     'lint_rpm': lint.RpmLint,
@@ -409,7 +409,7 @@ cmdclass = {
 
 setup(
     name="subscription-manager",
-    version='1.29.9',
+    version='1.29.12',
     url="http://www.candlepinproject.org",
     description="Manage subscriptions for Red Hat products.",
     license="GPLv2",

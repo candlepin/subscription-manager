@@ -1,13 +1,15 @@
 pipeline {
   agent { label 'subman' }
+  options {
+    timeout(time: 10, unit: 'MINUTES')
+  }
   stages {
     // stage('prepare') {steps {echo 'prepare'}}
     stage('Test') {
       parallel {
-        stage('Python 2 stylish') {
-          agent { label 'subman-centos7' }
+        stage('Python stylish') {
           steps {
-            sh readFile(file: 'jenkins/stylish-tests.sh')
+            sh readFile(file: 'jenkins/python3-stylish-tests.sh')
           }
         }
         stage('Fedora tito') {

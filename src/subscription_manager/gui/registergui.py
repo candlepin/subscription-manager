@@ -385,7 +385,7 @@ class RegisterWidget(widgets.SubmanBaseWidget):
         self.info.set_property('register-status', msg)
 
     def show_success_message(self):
-        msg = _("System '%s' successfully registered.\n") % self.info.identity.name
+        msg = _("System '{identity_name}' successfully registered.\n").format(identity_name=self.info.identity.name)
         self.info.set_property('register-status', msg)
 
     def do_register_finished(self):
@@ -438,7 +438,7 @@ class RegisterWidget(widgets.SubmanBaseWidget):
 
         if self.info.identity.is_valid():
             self.emit('register-finished')
-            msg = _("System '%s' successfully registered.\n") % self.info.identity.name
+            msg = _("System '{identity_name}' successfully registered.\n").format(identity_name=self.info.identity.name)
             self.info.set_property('register-status', msg.rstrip())
             # We are done if auto bind is being skipped ("Manually attach
             # to subscriptions" is clicked in the gui)
@@ -1036,9 +1036,9 @@ class PerformRegisterScreen(NoGuiScreen):
         return
 
     def pre(self):
-        msg = _("Registering to owner: %s environment: %s") % \
-                 (self.info.get_property('owner-key'),
-                  self.info.get_property('environment'))
+        msg = _("Registering to owner: {owner} environment: {environment}").format(
+            owner=self.info.get_property('owner-key'),
+            environment=self.info.get_property('environment'))
         self.info.set_property('register-status', msg)
 
         self.async_backend.register_consumer(self.info.get_property('consumername'),
@@ -1315,10 +1315,10 @@ class FindSuitableSubscriptions(NoGuiScreen):
                             "system after completing setup.")
                 else:
                     msg = _("No available subscriptions at "
-                            "the current service level: %s. "
+                            "the current service level: {current_service_level}. "
                             "Please use the \"All Available "
                             "Subscriptions\" tab to manually "
-                            "attach subscriptions.") % current_sla
+                            "attach subscriptions.").format(current_service_level=current_sla)
                 # TODO: add 'attach' state
                 self.emit('register-error', msg, REGISTERED_UNATTACHED)
                 self.emit('attach-finished')
@@ -1461,8 +1461,8 @@ class OrganizationScreen(Screen):
         owners = sorted(owners, key=lambda item: item[1])
 
         if len(owners) == 0:
-            msg = _("<b>User %s is not able to register with any orgs.</b>") % \
-                    self.info.get_property('username')
+            msg = _("<b>User {username} is not able to register with any orgs.</b>").format(
+                username=self.info.get_property('username'))
             self.emit('register-error', msg, None)
             self.pre_done()
             return
@@ -1836,9 +1836,8 @@ class ValidateServerScreen(NoGuiScreen):
             return
         elif not is_valid:
             self.emit('register-error',
-                      _("Unable to reach the server at %s:%s%s") %
-                      (hostname, port, prefix),
-                      None)
+                      _("Unable to reach the server at {hostname}:{port}{prefix}").format(
+                          hostname=hostname, port=port, prefix=prefix), None)
             self.pre_done()
             return
         conf['server']['hostname'] = hostname

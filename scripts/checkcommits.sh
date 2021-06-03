@@ -19,9 +19,9 @@ do
     echo "Checking branch: ${branch}"
     KNOWNFILE="scripts/.known.${branch}"
     if [ -f ${KNOWNFILE} ] ; then
-        RES=$(git checkcommits master "${ORIGIN}/${branch}" | grep -v -f "${KNOWNFILE}")
+        RES=$(git checkcommits main "${ORIGIN}/${branch}" | grep -v -f "${KNOWNFILE}")
     else
-        RES=$(git checkcommits master "${ORIGIN}/${branch}")
+        RES=$(git checkcommits main "${ORIGIN}/${branch}")
     fi
     if [ -n "${RES}" ] ; then
         FAIL="failed"

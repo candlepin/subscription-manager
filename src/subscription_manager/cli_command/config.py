@@ -29,16 +29,16 @@ class ConfigCommand(CliCommand):
         shortdesc = _("List, set, or remove the configuration parameters in use by this system")
         super(ConfigCommand, self).__init__("config", shortdesc, False)
 
-        self.parser.add_option("--list", action="store_true",
+        self.parser.add_argument("--list", action="store_true",
                                help=_("list the configuration for this system"))
-        self.parser.add_option("--remove", dest="remove", action="append",
+        self.parser.add_argument("--remove", dest="remove", action="append",
                                help=_("remove configuration entry by section.name"))
         for s in list(conf.keys()):
             section = conf[s]
             for name, _value in list(section.items()):
                 # Allow adding CLI options only for sections and names listed in defaults
                 if s in rhsm.config.DEFAULTS and name in rhsm.config.DEFAULTS[s]:
-                    self.parser.add_option("--" + s + "." + name, dest=(s + "." + name),
+                    self.parser.add_argument("--" + s + "." + name, dest=(s + "." + name),
                                            help=_("Section: {s}, Name: {name}").format(s=s, name=name))
 
     def _validate_options(self):

@@ -130,6 +130,7 @@ class SubscriptionsCase(MachineCase):
             self.candlepin.download("/home/admin/candlepin/generated_certs/%s.pem" % prod_id, filename)
             m.upload([filename], "/etc/pki/product")
 
+        m.execute("mkdir -p /etc/pki/product")
         download_product(PRODUCT_SNOWY)
         download_product(PRODUCT_SHARED)
 
@@ -150,13 +151,15 @@ class SubscriptionsCase(MachineCase):
 [insights-client]
 gpg=False
 auto_config=False
-base_url=127.0.0.1:8888/r/insights
+base_url=localhost:8888/r/insights
+cert_verify=False
 username=admin
 password=foobar
-insecure_connection=True
 """)
 
         m.upload(["files/mock-insights"], "/var/tmp")
+        # this re-uses cockpit ws certificate, so ensure that it exists
+        m.execute("systemctl start cockpit")
         m.spawn("/var/tmp/mock-insights", "mock-insights")
 
     def wait_subscription(self, product, is_subscribed):
@@ -317,7 +320,7 @@ class TestSubscriptions(SubscriptionsCase):
     def testUnpriv(self):
         self.machine.execute("useradd junior; echo junior:foobar | chpasswd")
         self.login_and_go("/subscriptions", user="junior")
-        self.browser.wait_in_text(".curtains-ct h1", "current user isn't allowed to access system subscription")
+        self.browser.wait_in_text(".pf-c-empty-state__body", "current user isn't allowed to access system subscription")
         self.allow_authorize_journal_messages()
 
     def testInsights(self):

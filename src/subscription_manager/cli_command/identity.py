@@ -40,9 +40,9 @@ class IdentityCommand(UserPassCommand):
 
         super(IdentityCommand, self).__init__("identity", shortdesc, False)
 
-        self.parser.add_option("--regenerate", action='store_true',
+        self.parser.add_argument("--regenerate", action='store_true',
                                help=_("request a new certificate be generated"))
-        self.parser.add_option("--force", action='store_true',
+        self.parser.add_argument("--force", action='store_true',
                                help=_("force certificate regeneration (requires username and password); "
                                       "Only used with --regenerate"))
 
@@ -115,7 +115,7 @@ class IdentityCommand(UserPassCommand):
             raise ge
         except connection.RestlibException as re:
             log.exception(re)
-            log.error(u"Error: Unable to generate a new identity for the system: {re}").format(re=re)
+            log.error("Error: Unable to generate a new identity for the system: {re}".format(re=re))
             system_exit(os.EX_SOFTWARE, str(re))
         except Exception as e:
             handle_exception(_("Error: Unable to generate a new identity for the system"), e)

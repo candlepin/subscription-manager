@@ -23,6 +23,8 @@ import subscriptionsClient from './subscriptions-client';
 import { ListView, ListViewItem, ListViewIcon } from 'patternfly-react';
 import { Row, Col } from 'react-bootstrap';
 import { InsightsStatus } from './insights.jsx';
+import { EmptyStatePanel } from "../lib/cockpit-components-empty-state.jsx";
+import { ExclamationCircleIcon } from '@patternfly/react-icons';
 
 import './subscriptions-view.scss';
 
@@ -48,18 +50,18 @@ class Listing extends React.Component {
                 attach_button_text: _("Auto-attaching ...")
             });
             this.props.autoAttach()
-                .done(function () {
-                    self.setState({
-                        attaching_in_progress: false,
-                        attach_button_text: _("Auto-attach")
+                    .done(function () {
+                        self.setState({
+                            attaching_in_progress: false,
+                            attach_button_text: _("Auto-attach")
+                        });
+                    })
+                    .fail(function () {
+                        self.setState({
+                            attaching_in_progress: false,
+                            attach_button_text: _("Auto-attach")
+                        });
                     });
-                })
-                .fail(function () {
-                    self.setState({
-                        attaching_in_progress: false,
-                        attach_button_text: _("Auto-attach")
-                    });
-                });
         }
     }
     render() {
@@ -86,42 +88,6 @@ class Listing extends React.Component {
                 </div>
             );
         }
-    }
-}
-
-/* 'Curtains' implements a subset of the PatternFly Empty State pattern
- * https://www.patternfly.org/patterns/empty-state/
- * Special values for icon property:
- *   - 'waiting' - display spinner
- *   - 'error'   - display error icon
- */
-class Curtains extends React.Component {
-    render() {
-        let description = null;
-        if (this.props.description)
-            description = <h1>{this.props.description}</h1>;
-
-        let message = null;
-        if (this.props.message)
-            message = <p>{this.props.message}</p>;
-
-        let curtains = "curtains-ct";
-
-        let icon = this.props.icon;
-        if (icon === 'waiting')
-            icon = <div className="spinner spinner-lg"/>;
-        else if (icon === 'error')
-            icon = <div className="pficon pficon-error-circle-o"/>;
-
-        return (
-            <div className={ curtains + " blank-slate-pf" }>
-                <div className="blank-slate-pf-icon">
-                    {icon}
-                </div>
-                {description}
-                {message}
-            </div>
-        );
     }
 }
 
@@ -169,7 +135,7 @@ class DismissableError extends React.Component {
                 <span className={classes_icon} />
                 <span>{this.props.children}</span>
                 <button type="button" className="close" aria-hidden="true" onClick={this.handleDismissError}>
-                    <span className="pficon pficon-close"/>
+                    <span className="pficon pficon-close" />
                 </button>
             </div>
         );
@@ -222,6 +188,7 @@ class SubscriptionStatus extends React.Component {
             );
         }
 
+        let text;
         let label;
         let action;
         let insights;
@@ -251,7 +218,7 @@ class SubscriptionStatus extends React.Component {
                         <span className="value">{ _(String(this.props.syspurpose["usage"])) }</span>
                     </label>
                 </div>
-        );
+            );
         }
         if (this.props.syspurpose["role"]) {
             role = (
@@ -267,7 +234,7 @@ class SubscriptionStatus extends React.Component {
             add_ons = (
                 <div>
                     <label>
-                        { _("Addons:  ") }
+                        { _("Add-ons:  ") }
                         <span className="value">
                             { _(String(subscriptionsClient.toArray(this.props.syspurpose["addons"]).join(", "))) }
                         </span>
@@ -298,19 +265,23 @@ class SubscriptionStatus extends React.Component {
             </div>
         );
         if (this.props.status === 'unknown') {
-            label = <label>{ `${_("Status")}: ${_("This system is currently not registered.")}` }</label>;
-            action = (<button className="btn btn-primary"
+            text = _("Status: This system is currently not registered.");
+            label = <label>{text}</label>;
+            action = (
+                <button className="btn btn-primary"
                               onClick={this.handleRegisterSystem}>{_("Register")}</button>
             );
         } else {
-            label = <label>{ `${_("Status")}: ${this.props.status_msg}` }</label>;
-            action = (<button className="btn btn-primary" disabled={isUnregistering}
+            text = cockpit.format(_("Status: $0"), this.props.status_msg);
+            label = <label>{text}</label>;
+            action = (
+                <button className="btn btn-primary" disabled={isUnregistering}
                               onClick={this.handleUnregisterSystem}>{_("Unregister")}</button>
             );
             if (isUnregistering) {
                 note = (
                     <div className="dialog-wait-ct">
-                        <div className="spinner spinner-sm"/>
+                        <div className="spinner spinner-sm" />
                         <span>{ _("Unregistering") }</span>
                     </div>
                 );
@@ -336,7 +307,7 @@ class SubscriptionStatus extends React.Component {
  * Expected properties:
  * status       subscription status ID
  * status_msg   subscription status message
- * error        error message to show (in Curtains if not connected, as a dismissable alert otherwise
+ * error        error message to show (in EmptyState if not connected, as a dismissable alert otherwise
  * dismissError callback, triggered for the dismissable error in connected state
  * products     subscribed products (properties as in subscriptions-client)
  * register     callback, triggered when user clicks on register
@@ -344,40 +315,36 @@ class SubscriptionStatus extends React.Component {
  */
 class SubscriptionsPage extends React.Component {
     renderCurtains() {
-        let icon;
+        let loading = false;
         let description;
         let message;
 
         if (this.props.status === "service-unavailable") {
-            icon = <div className="fa fa-exclamation-circle"/>;
             message = _("The rhsm service is unavailable. Make sure subscription-manager is installed " +
                 "and try reloading the page. Additionally, make sure that you have checked the " +
                 "'Reuse my password for privileged tasks' checkbox on the login page.");
             description = _("Unable to the reach the rhsm service.");
         } else if (this.props.status === undefined && !subscriptionsClient.config.loaded) {
-            icon = <div className="spinner spinner-lg" />;
+            loading = true;
             message = _("Updating");
             description = _("Retrieving subscription status...");
         } else if (this.props.status === 'access-denied') {
-            icon = <div className="fa fa-exclamation-circle" />;
             message = _("Access denied");
             description = _("The current user isn't allowed to access system subscription status.");
         } else {
-            icon = <div className="fa fa-exclamation-circle" />;
             message = _("Unable to connect");
             description = _("Couldn't get system subscription status. Please ensure subscription-manager is installed.");
         }
-        return (
-            <Curtains
-                icon={icon}
-                description={description}
-                message={message} />
-        );
+
+        return <EmptyStatePanel icon={loading ? null : ExclamationCircleIcon} paragraph={description} loading={loading} title={message} />;
     }
+
     renderSubscriptions() {
         let entries = this.props.products.map(function (itm) {
             let icon_name;
             let status_text;
+            let start_date_text;
+            let end_date_text;
 
             if (itm.status === 'subscribed') {
                 icon_name = "fa pficon-ok";
@@ -385,6 +352,18 @@ class SubscriptionsPage extends React.Component {
             } else {
                 icon_name = "fa pficon-error-circle-o";
                 status_text = _("Not Subscribed (Not supported by a valid subscription.)");
+            }
+
+            if (itm.starts.length === 0) {
+                start_date_text = _("Unknown");
+            } else {
+                start_date_text = new Date(Date.parse(itm.starts)).toLocaleDateString();
+            }
+
+            if (itm.ends.length === 0) {
+                end_date_text = _("Unknown");
+            } else {
+                end_date_text = new Date(Date.parse(itm.ends)).toLocaleDateString();
             }
 
             return (
@@ -408,9 +387,9 @@ class SubscriptionsPage extends React.Component {
                                     <dt>{ _("Status") }</dt>
                                     <dd>{ status_text }</dd>
                                     <dt>{ _("Starts") }</dt>
-                                    <dd>{ itm.starts }</dd>
+                                    <dd>{ start_date_text }</dd>
                                     <dt>{ _("Ends") }</dt>
-                                    <dd>{ itm.ends }</dd>
+                                    <dd>{ end_date_text }</dd>
                                 </dl>
                             </div>
                         </Col>
@@ -421,15 +400,15 @@ class SubscriptionsPage extends React.Component {
 
         return (
             <div className="container-fluid">
-            <SubscriptionStatus {...this.props }/>
-            <Listing {...this.props}
+                <SubscriptionStatus {...this.props } />
+                <Listing {...this.props}
                     title={ _("Installed products") }
                     emptyCaption={ _("No installed products detected.") }
-                    >
-                <ListView className="installed-products">
-                {entries}
-                </ListView>
-            </Listing>
+                >
+                    <ListView className="installed-products">
+                        {entries}
+                    </ListView>
+                </Listing>
             </div>
         );
     }

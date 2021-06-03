@@ -536,7 +536,6 @@ AZURE_API_VERSIONS = """{
 }
 """
 
-
 class TestAzureCloudProvider(unittest.TestCase):
     """
     Class used for testing of Azure cloud provider
@@ -1003,12 +1002,13 @@ class TestCloudProvider(unittest.TestCase):
         }
         hw_facts = {
             'dmi.bios.vendor': 'AWS',
-            'dmi.bios.version': '1.0'
+            'dmi.bios.version': '1.0',
+            'dmi.system.manufacturer': 'Amazon'
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         self.hw_fact_collector_instance.get_all.return_value = hw_facts
         detected_clouds = detect_cloud_provider()
-        self.assertEqual(detected_clouds, ['aws', 'gcp'])
+        self.assertEqual(detected_clouds, ['aws'])
 
     def test_detect_cloud_provider_gcp(self):
         """
@@ -1039,12 +1039,12 @@ class TestCloudProvider(unittest.TestCase):
         hw_facts = {
             'dmi.bios.vendor': 'Foo Company',
             'dmi.bios.version': '1.0',
-            'dmi.chassis.asset_tag': 'Google Cloud'
+            'dmi.chassis.asset_tag': 'Google Cloud',
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         self.hw_fact_collector_instance.get_all.return_value = hw_facts
         detected_clouds = detect_cloud_provider()
-        self.assertEqual(detected_clouds, ['gcp', 'aws'])
+        self.assertEqual(detected_clouds, ['gcp'])
 
     def test_detect_cloud_provider_azure(self):
         """
@@ -1082,7 +1082,7 @@ class TestCloudProvider(unittest.TestCase):
         self.host_fact_collector_instance.get_all.return_value = host_facts
         self.hw_fact_collector_instance.get_all.return_value = hw_facts
         detected_clouds = detect_cloud_provider()
-        self.assertEqual(detected_clouds, ['azure', 'gcp', 'aws'])
+        self.assertEqual(detected_clouds, ['azure'])
 
     def test_conclict_in_strong_signs(self):
         """
@@ -1097,14 +1097,47 @@ class TestCloudProvider(unittest.TestCase):
         }
         hw_facts = {
             'dmi.bios.vendor': 'Google',
-            'dmi.bios.version': 'Google',
+            'dmi.bios.version': 'Amazon EC2',
             'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77',
             'dmi.chassis.manufacturer': 'Microsoft'
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         self.hw_fact_collector_instance.get_all.return_value = hw_facts
         detected_clouds = detect_cloud_provider()
-        self.assertEqual(detected_clouds, ['gcp', 'azure', 'aws'])
+        detected_clouds.sort()
+        self.assertEqual(detected_clouds, ['aws', 'azure', 'gcp'])
+
+    def test_conclict_in_heuristics_detection(self):
+        """
+        Test the case, when cloud providers two cloud providers were
+        detected using heuristics with same probability.
+        """
+        host_facts = {
+            'virt.is_guest': True,
+            'virt.host_type': 'kvm',
+        }
+        hw_facts = {
+            'dmi.system.manufacturer': 'Google',
+            'dmi.chassis.manufacturer': 'Amazon EC2',
+        }
+        facts = {**host_facts, **hw_facts}
+
+        aws_cloud_provider = aws.AWSCloudProvider(facts)
+        azure_cloud_provider = azure.AzureCloudProvider(facts)
+        gcp_cloud_provider = gcp.GCPCloudProvider(facts)
+
+        probability_aws = aws_cloud_provider.is_likely_running_on_cloud()
+        self.assertEqual(probability_aws, 0.6)
+        probability_azure = azure_cloud_provider.is_likely_running_on_cloud()
+        self.assertEqual(probability_azure, 0.0)
+        probability_gcp = gcp_cloud_provider.is_likely_running_on_cloud()
+        self.assertEqual(probability_gcp, 0.6)
+
+        self.host_fact_collector_instance.get_all.return_value = host_facts
+        self.hw_fact_collector_instance.get_all.return_value = hw_facts
+        detected_clouds = detect_cloud_provider()
+        detected_clouds.sort()
+        self.assertEqual(detected_clouds, ['aws', 'gcp'])
 
     def test_collect_cloud_info_one_cloud_provider_detected(self):
         """

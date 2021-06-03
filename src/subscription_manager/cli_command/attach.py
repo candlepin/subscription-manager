@@ -29,7 +29,6 @@ from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.cli import CliCommand, handle_exception
 from subscription_manager.cli_command.list import show_autosubscribe_output
 from subscription_manager.i18n import ugettext as _
-from subscription_manager.managerlib import valid_quantity
 from subscription_manager.packageprofilelib import PackageProfileActionInvoker
 from subscription_manager.syspurposelib import save_sla_to_syspurpose_metadata
 from subscription_manager.utils import is_simple_content_access
@@ -48,17 +47,17 @@ class AttachCommand(CliCommand):
         self.product = None
         self.substoken = None
         self.auto_attach = True
-        self.parser.add_option("--pool", dest="pool", action='append',
+        self.parser.add_argument("--pool", dest="pool", action='append',
                                help=_("The ID of the pool to attach (can be specified more than once)"))
-        self.parser.add_option("--quantity", dest="quantity",
+        self.parser.add_argument("--quantity", dest="quantity", type=int,
                                help=_("Number of subscriptions to attach. May not be used with an auto-attach."))
-        self.parser.add_option("--auto", action='store_true',
+        self.parser.add_argument("--auto", action='store_true',
                                help=_(
                                    "Automatically attach the best-matched compatible subscriptions to this system. This is the default action."))
-        self.parser.add_option("--servicelevel", dest="service_level",
+        self.parser.add_argument("--servicelevel", dest="service_level",
                                help=_(
                                    "Automatically attach only subscriptions matching the specified service level; only used with --auto"))
-        self.parser.add_option("--file", dest="file",
+        self.parser.add_argument("--file", dest="file",
                                help=_(
                                    "A file from which to read pool IDs. If a hyphen is provided, pool IDs will be read from stdin."))
 
@@ -90,16 +89,12 @@ class AttachCommand(CliCommand):
             if self.options.service_level:
                 system_exit(os.EX_USAGE, _("Error: The --servicelevel option cannot be used when specifying pools."))
 
-        # Quantity must be a positive integer
-        # TODO: simplify with a optparse type="int"
-        quantity = self.options.quantity
-        if self.options.quantity:
-            if not valid_quantity(quantity):
+        # Quantity must be positive
+        if self.options.quantity is not None:
+            if self.options.quantity <= 0:
                 system_exit(os.EX_USAGE, _("Error: Quantity must be a positive integer."))
             elif self.options.auto or not (self.options.pool or self.options.file):
                 system_exit(os.EX_USAGE, _("Error: --quantity may not be used with an auto-attach"))
-            else:
-                self.options.quantity = int(self.options.quantity)
 
         # If a pools file was specified, process its contents and append it to options.pool
         if self.options.file:

@@ -28,10 +28,11 @@ class InstalledProducts(object):
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
         self.cp = cp
 
-    def list(self, filter_string=None):
+    def list(self, filter_string=None, iso_dates=False):
         """
         Method for listening installed products in the system.
         :param filter_string: String for filtering out products.
+        :param iso_dates: Whether output dates in ISO 8601 format.
         :return: List of installed products.
         """
         product_status = []
@@ -59,6 +60,13 @@ class InstalledProducts(object):
             ['product_name', 'product_id', 'version', 'arch', 'status', 'status_details', 'starts', 'ends']
         )
 
+        if iso_dates:
+            date_formatter = managerlib.format_iso8601_date
+        else:
+            # Format the date in user's local time as the date
+            # range is returned in GMT.
+            date_formatter = managerlib.format_date
+
         for installed_product in sorted(sorter.installed_products):
             product_cert = sorter.installed_products[installed_product]
 
@@ -69,10 +77,8 @@ class InstalledProducts(object):
                     prod_status_range = calculator.calculate(product.id)
 
                     if prod_status_range:
-                        # Format the date in user's local time as the date
-                        # range is returned in GMT.
-                        begin = managerlib.format_date(prod_status_range.begin())
-                        end = managerlib.format_date(prod_status_range.end())
+                        begin = date_formatter(prod_status_range.begin())
+                        end = date_formatter(prod_status_range.end())
 
                     product_status.append(ProductStatus(
                         product.name,

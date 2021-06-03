@@ -14,8 +14,6 @@
 # in this software or its documentation.
 #
 
-# TODO: test Python3 syntax using flake8
-# flake8: noqa
 
 """
 This is module implementing detector and metadata collector of virtual machine running on Azure
@@ -24,6 +22,8 @@ This is module implementing detector and metadata collector of virtual machine r
 import logging
 import json
 from typing import Union, List
+
+from typing import Union
 
 from rhsmlib.cloud._base_provider import BaseCloudProvider
 
@@ -73,13 +73,6 @@ class AzureCloudProvider(BaseCloudProvider):
         Initialize instance of AzureCloudDetector
         """
         super(AzureCloudProvider, self).__init__(hw_info)
-
-    def is_vm(self):
-        """
-        Is system running on virtual machine or not
-        :return: True, when machine is running on VM; otherwise return False
-        """
-        return super(AzureCloudProvider, self).is_vm()
 
     def is_running_on_cloud(self):
         """
@@ -293,6 +286,6 @@ def _smoke_tests():
 
 
 # Some temporary smoke testing code. You can test this module using:
-# sudo PYTHONPATH=./src:./syspurpose/src python3 -m rhsmlib.cloud.providers.azure
+# sudo PYTHONPATH=./src python3 -m rhsmlib.cloud.providers.azure
 if __name__ == '__main__':
     _smoke_tests()

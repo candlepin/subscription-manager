@@ -18,8 +18,8 @@ echo "GIT_COMMIT:" "${GIT_COMMIT}"
 
 sudo yum clean expire-cache
 sudo yum-builddep -y subscription-manager.spec || true # ensure we install any missing rpm deps
-virtualenv env -p python3 --system-site-packages || virtualenv env --system-site-packages || true
-source env/bin/activate
+virtualenv env-tests -p python3 --system-site-packages || virtualenv env-tests --system-site-packages || true
+source env-tests/bin/activate
 pip install -I -r test-requirements.txt
 
 # so we can run these all everytime, we don't actually fail on each step, so checkout for output

@@ -106,6 +106,7 @@ def system_exit(code, msgs=None):
             sys.stderr.write(str(msg) + '\n')
     sys.exit(code)
 
+
 BUS_NAME = "com.redhat.SubscriptionManagerGUI"
 BUS_PATH = "/gui"
 
@@ -145,8 +146,7 @@ try:
     inj.require(inj.DBUS_IFACE)
 
     from subscription_manager.gui import managergui
-    from subscription_manager.i18n_optparse import OptionParser, \
-        WrappedIndentedHelpFormatter, USAGE
+    from subscription_manager.i18n_argparse import ArgumentParser, USAGE
 except ImportError as e:
     log.exception(e)
     system_exit(2, "Unable to find Subscription Manager module.\n"
@@ -179,11 +179,10 @@ def already_running(bus):
 
 
 def main():
-    parser = OptionParser(usage=USAGE,
-                          formatter=WrappedIndentedHelpFormatter())
+    parser = ArgumentParser(usage=USAGE)
     parser.add_option("--register", action='store_true',
                       help=_("launches the registration dialog on startup"))
-    options, args = parser.parse_args(args=sys.argv)
+    options, args = parser.parse_known_args(args=sys.argv)
 
     log = logging.getLogger("rhsm-app.subscription-manager-gui")
 
@@ -231,6 +230,7 @@ def main():
     except Exception as e:
         log.exception(e)
         system_exit(1, e)
+
 
 if __name__ == '__main__':
     main()

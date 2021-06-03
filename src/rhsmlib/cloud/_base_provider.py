@@ -14,9 +14,6 @@
 # in this software or its documentation.
 #
 
-# TODO: test Python3 syntax using flake8
-# flake8: noqa
-
 """
 This module contains base class for generic cloud provider. This module
 should not be imported outside this package.

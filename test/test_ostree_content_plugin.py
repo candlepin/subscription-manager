@@ -30,7 +30,7 @@ from rhsm import certificate2
 
 
 class StubPluginManager(object):
-        pass
+    pass
 
 
 class TestOstreeRemoteNameFromSection(fixture.SubManFixture):

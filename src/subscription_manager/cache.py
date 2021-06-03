@@ -96,6 +96,9 @@ class CacheManager(object):
     def _cache_exists(self):
         return os.path.exists(self.CACHE_FILE)
 
+    def exists(self):
+        return self._cache_exists()
+
     def write_cache(self, debug=True):
         """
         Write the current cache to disk. Should only be done after
@@ -158,9 +161,9 @@ class CacheManager(object):
         # end up calling this with consumer_uuid=None if the system
         # is unregistered.
         if not consumer_uuid:
-            msg = _("consumer_uuid=%s is not a valid consumer_uuid. "
-                    "Not attempting to sync %s cache with server.") % \
-                (consumer_uuid, self.__class__.__name__)
+            msg = _("consumer_uuid={consumer_uuid} is not a valid consumer_uuid. "
+                    "Not attempting to sync {class_name} cache with server.").format(
+                    consumer_uuid=consumer_uuid, class_name=self.__class__.__name__)
             log.debug(msg)
 
             # Raising an exception here would be better, but that is just
@@ -180,11 +183,12 @@ class CacheManager(object):
                 return 1
             except connection.RestlibException as re:
                 raise re
+            except connection.ProxyException as pe:
+                raise pe
             except Exception as e:
                 log.error("Error updating system data on the server")
                 log.exception(e)
-                raise Exception(_("Error updating system data on the server, see /var/log/rhsm/rhsm.log "
-                                  "for more details."))
+                raise e
         else:
             log.debug("No changes.")
             return 0  # No updates performed.
@@ -231,7 +235,7 @@ class StatusCache(CacheManager):
             self.last_error = ex
             log.error("Bad identity, unable to connect to server")
             return None
-        # all of the abover are subclasses of ConnectionException that
+        # all of the above are subclasses of ConnectionException that
         # get handled first
         except (connection.ConnectionException, connection.RateLimitExceededException,
                 socket.error, connection.ProxyException) as ex:

@@ -14,9 +14,6 @@
 # in this software or its documentation.
 #
 
-# TODO: test Python3 syntax using flake8
-# flake8: noqa
-
 """
 This is module implementing detector and metadata collector of virtual machine running on Google Cloud Platform
 """
@@ -86,16 +83,13 @@ class GCPCloudProvider(BaseCloudProvider):
 
         # Metadata URL can have default or custom "audience"
         if audience_url is not None:
-            self.CLOUD_PROVIDER_METADATA_URL = self.CLOUD_PROVIDER_METADATA_URL_TEMPLATE.format(audience=audience_url)
+            self.CLOUD_PROVIDER_METADATA_URL = self.CLOUD_PROVIDER_METADATA_URL_TEMPLATE.format(
+                audience=audience_url
+            )
         else:
-            self.CLOUD_PROVIDER_METADATA_URL = self.CLOUD_PROVIDER_METADATA_URL_TEMPLATE.format(audience=self.AUDIENCE)
-
-    def is_vm(self):
-        """
-        Is system running on virtual machine or not
-        :return: True, when machine is running on VM; otherwise return False
-        """
-        return super(GCPCloudProvider, self).is_vm()
+            self.CLOUD_PROVIDER_METADATA_URL = self.CLOUD_PROVIDER_METADATA_URL_TEMPLATE.format(
+                audience=self.AUDIENCE
+            )
 
     def is_running_on_cloud(self):
         """

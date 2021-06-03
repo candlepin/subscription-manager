@@ -73,10 +73,10 @@ class AboutDialog(object):
         server_versions = get_server_versions(self.backend.cp_provider.get_consumer_auth_cp())
         client_versions = get_client_versions()
 
-        sub_man_version_label.set_markup(_("<b>%s version:</b> %s") %
-                                        ("subscription manager", client_versions['subscription-manager']))
-        backend_version_label.set_markup(_("<b>subscription management service version:</b> %s") %
-                                           server_versions['candlepin'])
+        sub_man_version_label.set_markup(_("<b>{name} version:</b> {version}").format(
+            name="subscription manager", version=client_versions['subscription-manager']))
+        backend_version_label.set_markup(_("<b>subscription management service version:</b> {version}").format(
+                                           version=server_versions['candlepin']))
 
         self.dialog.connect("response", self._handle_response)
         self.dialog.show_all()
@@ -102,15 +102,15 @@ class AboutDialog(object):
 
         if next_update:
             update_time = datetime.datetime.fromtimestamp(next_update)
-            next_update_label.set_markup(_('<b>Next System Certificate Check:</b> %s') %
-                update_time.strftime("%c"))
+            next_update_label.set_markup(_('<b>Next System Certificate Check:</b> {check_date}').format(
+                check_date=update_time.strftime("%c")))
             next_update_label.show()
         else:
             next_update_label.hide()
         if next_auto_attach:
             next_auto_attach = datetime.datetime.fromtimestamp(next_auto_attach)
-            next_auto_attach_label.set_markup(_('<b>Next System Auto Attach:</b> %s') %
-                next_auto_attach.strftime("%c"))
+            next_auto_attach_label.set_markup(_('<b>Next System Auto Attach:</b> {attach_date}').format(
+                attach_date=next_auto_attach.strftime("%c")))
             next_auto_attach_label.show()
         else:
             next_auto_attach_label.hide()

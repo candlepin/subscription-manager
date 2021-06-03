@@ -37,8 +37,7 @@ from subscription_manager.i18n import ugettext as _
 
 from subscription_manager import injection as inj
 from subscription_manager.cli import system_exit
-from subscription_manager.i18n_optparse import OptionParser, \
-        USAGE, WrappedIndentedHelpFormatter
+from subscription_manager.i18n_argparse import ArgumentParser, USAGE
 from subscription_manager.productid import ProductDatabase
 from subscription_manager import repolib
 from rhsm.utils import parse_url
@@ -280,7 +279,8 @@ class MigrationEngine(object):
                 msgs = [_("This system appears to already be registered to Satellite 6.")]
             else:
                 msgs = [_("This system appears to already be registered to Red Hat Subscription Management.")]
-                msgs.append(_("Please visit https://access.redhat.com/management/consumers/%s to view the profile details.") % identity.uuid)
+                msgs.append(_("Please visit https://access.redhat.com/management/consumers/{identity_uuid} to view the "
+                              " profile details.").format(identity_uuid=identity.uuid))
             system_exit(1, msgs)
 
         try:
@@ -300,7 +300,7 @@ class MigrationEngine(object):
             system_exit(os.EX_SOFTWARE, CONNECTION_FAILURE % e)
 
         if len(owner_list) == 0:
-            system_exit(1, _("%s cannot register with any organizations.") % username)
+            system_exit(1, _("{username} cannot register with any organizations.").format(username=username))
         else:
             if self.options.org:
                 org_input = self.options.org
@@ -391,7 +391,7 @@ class MigrationEngine(object):
             rpc_session.system.getDetails(session_key, self.system_id)
         except Exception as e:
             log.exception(e)
-            system_exit(1, _("You do not have access to system %s.  ") % self.system_id + SEE_LOG_FILE)
+            system_exit(1, _("You do not have access to system {system_id}.  ").format(system_id=self.system_id) + SEE_LOG_FILE)
 
     def resolve_base_channel(self, label, rpc_session, session_key):
         try:
@@ -465,7 +465,8 @@ class MigrationEngine(object):
         for prod_id, mappings in list(collisions.items()):
             single_key = sorted(mappings.keys())[0]
             applicable_certs[prod_id] = {single_key: mappings[single_key]}
-            print(_("Mapping product '%s' to certificate '%s'." % (prod_id, single_key)))
+            print(_("Mapping product '{product_id}' to certificate '{certificate}'.").format(product_id=prod_id,
+                                                                                             certificate=single_key))
 
     def deploy_prod_certificates(self, subscribed_channels):
         release = self.get_release()
@@ -502,7 +503,7 @@ class MigrationEngine(object):
                 unrecognized_channels.append(channel)
 
         if invalid_rhsm_channels:
-            self.print_banner(_("Channels not available on %s:") % self.options.destination_url)
+            self.print_banner(_("Channels not available on {url}:").format(url=self.options.destination_url))
             for i in invalid_rhsm_channels:
                 print(i)
 
@@ -554,7 +555,7 @@ class MigrationEngine(object):
 
         if db_modified:
             self.db.write()
-        print(_("\nProduct certificates installed successfully to %s.") % product_dir.path)
+        print(_("\nProduct certificates installed successfully to {path}.").format(path=product_dir.path))
 
     def clean_up(self, subscribed_channels):
         # Hack to address BZ 853233
@@ -642,7 +643,8 @@ class MigrationEngine(object):
             log.exception("Could not delete system %s from legacy server" % self.system_id)
             # If we time out or get a network error, log it and keep going.
             shutil.move(system_id_path, system_id_path + ".save")
-            print(_("Did not receive a completed unregistration message from legacy server for system %s.") % self.system_id)
+            print(_("Did not receive a completed un-registration message from legacy server for system {system_id}.")
+                  .format(system_id=self.system_id))
 
             if self.is_hosted:
                 print(_("Please investigate on the Customer Portal at https://access.redhat.com."))
@@ -674,13 +676,13 @@ class MigrationEngine(object):
             return True
         except Exception as e:
             log.exception(e)
-            print(_("Consumer %s doesn't exist.  Creating new consumer.") % consumer_id)
+            print(_("Consumer {consumer_id} doesn't exist.  Creating new consumer.").format(consumer_id=consumer_id))
             return False
 
     def register(self, credentials, org, environment):
         # For registering the machine, use the CLI tool to reuse the username/password (because the GUI will prompt for them again)
         # Prepended a \n so translation can proceed without hitch
-        print ("")
+        print("")
         print(_("Attempting to register system to destination server..."))
         cmd = ['subscription-manager', 'register']
 
@@ -721,7 +723,7 @@ class MigrationEngine(object):
         if not identity.is_valid():
             system_exit(2, _("\nUnable to register.\nFor further assistance, please contact Red Hat Global Support Services."))
 
-        print(_("System '%s' successfully registered.\n") % identity.name)
+        print(_("System '{identity_name}' successfully registered.\n").format(identity_name=identity.name))
         return identity
 
     def select_service_level(self, org, servicelevel):
@@ -750,7 +752,7 @@ class MigrationEngine(object):
         if servicelevel is None or \
             servicelevel.upper() not in (level.upper() for level in levels):
             if servicelevel is not None:
-                print(_("\nService level \"%s\" is not available.") % servicelevel)
+                print(_("\nService level \"{service_level}\" is not available.").format(service_level=servicelevel))
             menu = Menu(slas, _("Please select a service level agreement for this system."))
             servicelevel = menu.choose()
         return servicelevel
@@ -790,7 +792,8 @@ class MigrationEngine(object):
         except Exception:
             print(_("\nCouldn't enable extra repositories."))
             command = "subscription-manager repos --help"
-            print(_("Please ensure system has subscriptions attached, and see '%s' to enable additional repositories") % command)
+            print(_("Please ensure system has subscriptions attached, and see '{command}' to enable additional repositories")
+                  .format(command=command))
 
     def is_using_systemd(self):
         release_number = int(self.get_release().partition('-')[-1])
@@ -891,53 +894,54 @@ class MigrationEngine(object):
 
 def add_parser_options(parser, five_to_six_script=False):
     # Careful, the option is --no-auto but we are storing the opposite of its value.
-    parser.add_option("-n", "--no-auto", action="store_false", default=True, dest="auto",
+    parser.add_argument("-n", "--no-auto", action="store_false", default=True, dest="auto",
         help=_("don't execute the auto-attach option while registering with subscription manager"))
-    parser.add_option("-s", "--servicelevel", dest="service_level",
+    parser.add_argument("-s", "--servicelevel", dest="service_level",
         help=_("service level to follow when attaching subscriptions, for no service "
             "level use --servicelevel=\"\""))
-    parser.add_option("--remove-rhn-packages", action="store_true", default=False, dest="remove_legacy_packages",
+    parser.add_argument("--remove-rhn-packages", action="store_true", default=False, dest="remove_legacy_packages",
                       help=_("remove legacy packages"))
     # See BZ 915847 - some users want to connect to RHN with a proxy but to RHSM without a proxy
-    parser.add_option("--no-proxy", action="store_true", dest='noproxy',
+    parser.add_argument("--no-proxy", action="store_true", dest='noproxy',
         help=_("don't use legacy proxy settings with destination server"))
 
     if five_to_six_script:
         default_registration_state = "unentitle"
         valid_states = ["keep", "unentitle", "purge"]
 
-        parser.add_option("--registration-state", type="choice",
-            choices=valid_states, metavar=",".join(valid_states), default=default_registration_state,
-            help=_("state to leave system in on legacy server (default is '%s')") % default_registration_state)
+        parser.add_argument("--registration-state", choices=valid_states,
+            metavar=",".join(valid_states), default=default_registration_state,
+            help=_("state to leave system in on legacy server (default is '{default_state}')").format(
+                default_state=default_registration_state))
 
     else:
         # The consumerid provides these
-        parser.add_option("--org", dest='org',
+        parser.add_argument("--org", dest='org',
             help=_("organization to register to"))
-        parser.add_option("--environment", dest='environment',
+        parser.add_argument("--environment", dest='environment',
             help=_("environment to register to"))
-        parser.add_option("-f", "--force", action="store_true", default=False,
+        parser.add_argument("-f", "--force", action="store_true", default=False,
             help=_("ignore channels not available on destination server"))
         # Activation keys can't be used with previously registered IDs so no point in even
         # offering the option for 5to6
-        parser.add_option("--activation-key", action="append", dest="activation_keys",
+        parser.add_argument("--activation-key", action="append", dest="activation_keys",
             help=_("activation key to use for registration (can be specified more than once)"))
         # RHN Hosted doesn't allow the "unentitle" option, so instead of
         # using --registration-state with just two options, we'll use a
         # boolean-like option: --keep.
-        parser.add_option("--keep", action="store_const", const="keep",
+        parser.add_argument("--keep", action="store_const", const="keep",
             dest="registration_state", default="purge",
             help=_("leave system registered in legacy environment"))
 
-    parser.add_option("--legacy-user",
+    parser.add_argument("--legacy-user",
         help=_("specify the user name on the legacy server"))
-    parser.add_option("--legacy-password",
+    parser.add_argument("--legacy-password",
         help=_("specify the password on the legacy server"))
-    parser.add_option("--destination-url",
+    parser.add_argument("--destination-url",
         help=_("specify the subscription management server to migrate to"))
-    parser.add_option("--destination-user",
+    parser.add_argument("--destination-user",
         help=_("specify the user name on the destination server"))
-    parser.add_option("--destination-password",
+    parser.add_argument("--destination-password",
         help=_("specify the password on the destination server"))
 
 
@@ -981,7 +985,7 @@ def set_defaults(options, five_to_six_script):
 
 
 def main(args=None, five_to_six_script=False):
-    parser = OptionParser(usage=USAGE, formatter=WrappedIndentedHelpFormatter())
+    parser = ArgumentParser(usage=USAGE)
     add_parser_options(parser, five_to_six_script)
 
     # In testing we sometimes specify args, otherwise use the default:

@@ -302,7 +302,8 @@ def list_pools(uep, consumer_uuid, list_all=False, active_on=None, filter_string
 # necessary. Also some "view" specific things going on in here.
 def get_available_entitlements(get_all=False, active_on=None, overlapping=False,
                                uninstalled=False, text=None, filter_string=None,
-                               future=None, after_date=None, page=0, items_per_page=0):
+                               future=None, after_date=None, page=0, items_per_page=0,
+                               iso_dates=False):
     """
     Returns a list of entitlement pools from the server.
 
@@ -344,6 +345,11 @@ def get_available_entitlements(get_all=False, active_on=None, overlapping=False,
         items_per_page=items_per_page
     )
 
+    if iso_dates:
+        date_formatter = format_iso8601_date
+    else:
+        date_formatter = format_date
+
     for pool in dlist:
         pool_wrapper = PoolWrapper(pool)
         pool['providedProducts'] = pool_wrapper.get_provided_products()
@@ -377,8 +383,8 @@ def get_available_entitlements(get_all=False, active_on=None, overlapping=False,
         else:
             d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
 
-        d['startDate'] = format_date(isodate.parse_date(d['startDate']))
-        d['endDate'] = format_date(isodate.parse_date(d['endDate']))
+        d['startDate'] = date_formatter(isodate.parse_date(d['startDate']))
+        d['endDate'] = date_formatter(isodate.parse_date(d['endDate']))
         del d['consumed']
 
     return data
@@ -838,6 +844,17 @@ def format_date(dt):
             return dt.strftime("%x")
     else:
         return ""
+
+
+def format_iso8601_date(dateobj):
+    """
+    Format the specified datetime.date dateobj as ISO 8601, i.e. YYYY-MM-DD.
+
+    Return an empty string for an invalid object.
+    """
+    if dateobj:
+        return dateobj.strftime("%Y-%m-%d")
+    return ""
 
 
 # FIXME: move me to identity.py

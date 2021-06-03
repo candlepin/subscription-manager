@@ -250,9 +250,15 @@ Sets the preferred service level to use with subscriptions added to the system. 
 
 .TP
 .B --force
-Registers the system even if it is already registered. Normally, any register operations will fail if the system is already registered. With
+When the system is already registered, a new attempt to register will fail with a message reminding the user that the system is already registered. However, passing the
 .B --force,
-the existing system entry is unregistered first, all of its subscriptions are returned to the pool, and then the system is registered as a new entry.
+option will implicitly attempt to unregister the system first.  Beware that the
+.B --force
+option does not guarantee a successful registration.  For example, if the registration with
+.B --force
+includes a different
+.B --serverurl
+than was used for the original registration, the implicit call to unregister from the original entitlement server will fail with invalid credentials and the registration with force will be aborted.  In this case, the user should explicitly unregister from the original entitlement server.  If unregistering is not possible, then running subscription-manager clean will effectively abandon the original registration identity and entitlements.  Once cleaned, registering a new system identity should succeed with or without force.
 
 .TP
 .B --org=ORG
@@ -271,7 +277,7 @@ Shortcut for "release --set=VERSION"
 .SS UNREGISTER OPTIONS
 The
 .B unregister
-command removes a system's subscriptions and removes it from the subscription management service.
+command does two important things. Firstly, it will implicitly remove all of the currently attached subscriptions thereby returning the consumed quantity of entitlements back to their subscription pools making them available for other consumers. Secondly, it will remove the system's consumer identity thereby removing its contact with the currently configured subscription management service.
 
 .PP
 This command has no options.
@@ -641,7 +647,9 @@ The
 .B refresh
 command pulls the latest subscription data from the server. Normally, the system polls the subscription management service at a set interval (4 hours by default) to check for any changes in the available subscriptions. The
 .B refresh
-command checks with the subscription management service right then, outside the normal interval.
+command checks with the subscription management service right then, outside the normal interval. Use of the
+.B refresh
+command will clear caches related to the content access mode of the system and allow the system to retrieve fresh data as necessary.
 
 .TP
 .B --force

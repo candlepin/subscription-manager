@@ -20,9 +20,10 @@ import logging
 from subscription_manager.productid import ProductManager
 from subscription_manager.utils import chroot
 from subscription_manager.injectioninit import init_dep_injection
+from subscription_manager.i18n import ugettext as _
 from rhsm.certificate import create_from_pem
 
-from dnfpluginscore import _, logger
+from dnfpluginscore import logger
 import dnf
 import dnf.base
 import dnf.sack

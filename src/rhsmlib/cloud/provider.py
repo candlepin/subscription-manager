@@ -14,14 +14,11 @@
 # in this software or its documentation.
 #
 
-# TODO: test Python3 syntax using flake8
-# flake8: noqa
-
 """
 This module contains several utils used for VMs running on clouds
 """
 
-from typing import Union
+from typing import Union, Tuple, List
 
 import logging
 import base64
@@ -66,14 +63,12 @@ def _gather_system_facts() -> dict:
     return facts
 
 
-def get_cloud_provider(facts: dict = None) -> Union[
-    BaseCloudProvider, AWSCloudProvider, AzureCloudProvider, GCPCloudProvider, None
-]:
+def _get_cloud_providers(facts: dict = None, threshold: float = 0.5) -> Tuple[list, bool]:
     """
-    This method tries to detect cloud provider and return corresponding instance of
-    cloud provider.
+    This method tries to detect cloud providers and return list of possible cloud providers
     :param facts: Dictionary with system facts
-    :return: Instance of cloud provider or None
+    :param threshold: Threshold using for detection of cloud provider
+    :return: List of cloud providers
     """
     if facts is None:
         facts = _gather_system_facts()
@@ -94,12 +89,12 @@ def get_cloud_provider(facts: dict = None) -> Union[
     # When only one cloud provider was detected, then return this cloud provider
     # probability
     if len(cloud_list) == 1:
-        log.info('Detected one cloud provider using strong signs: {provider}'.format(
+        log.debug('Detected one cloud provider using strong signs: {provider}'.format(
             provider=cloud_list[0].CLOUD_PROVIDER_ID)
         )
-        return cloud_list[0]
+        return cloud_list, True
     elif len(cloud_list) == 0:
-        log.error('No cloud provider detected using strong signs')
+        log.debug('No cloud provider detected using strong signs')
     elif len(cloud_list) > 1:
         log.error('More than one cloud provider detected using strong signs ({providers})'.format(
             providers=", ".join([cloud_provider.CLOUD_PROVIDER_ID for cloud_provider in cloud_list])
@@ -110,35 +105,63 @@ def get_cloud_provider(facts: dict = None) -> Union[
     cloud_list = []
     for cloud_provider in cloud_providers:
         probability: float = cloud_provider.is_likely_running_on_cloud()
-        if probability > 0.0:
+        # We have to filter out VMs, where is low probability that it runs on public cloud,
+        # because it would cause further attempts to contact IMDS servers of cloud providers.
+        # Default value 0.5 was just estimated from observation of existing data returned
+        # by cloud providers.
+        log.debug(f'Cloud provider {cloud_provider.CLOUD_PROVIDER_ID} has probability: {probability}')
+        if probability > threshold:
             cloud_list.append((probability, cloud_provider))
-    # Sort list according probability (provider with highest probability first)
-    cloud_list.sort(reverse=True)
+    # Sort list according only probability (provider with highest probability first)
+    cloud_list.sort(key=lambda x: x[0], reverse=True)
+    # We care only about order, not probability in the result (filter probability out)
+    cloud_list = [item[1] for item in cloud_list]
 
     if len(cloud_list) == 0:
-        log.error('No cloud provider detected using heuristics')
+        log.debug('No cloud provider detected using heuristics')
     else:
         log.debug('Following cloud providers detected using heuristics: {providers}'.format(
-            providers=', '.join([cloud_provider.CLOUD_PROVIDER_ID for probability, cloud_provider in cloud_list])
+            providers=', '.join([cloud_provider.CLOUD_PROVIDER_ID for cloud_provider in cloud_list])
         ))
 
-    # Try to get metadata from cloud provider and return first cloud provider, which is
-    # able to get metadata. Note: gathered metadata are cached in-memory. Thus another attempt
-    # of gathering metadata will not hit server, but metadata will be read from in-memory cache.
-    for probability, cloud_provider in cloud_list:
-        metadata = cloud_provider.get_metadata()
-        if metadata is not None:
-            log.info('Metadata gathered from cloud provider detected using heuristics: {provider}'.format(
-                provider=cloud_provider.CLOUD_PROVIDER_ID)
-            )
-            return cloud_provider
+    return cloud_list, False
 
-    log.error('Unable to get metadata from any cloud provider detected using heuristics')
+
+def get_cloud_provider(facts: dict = None, threshold: float = 0.5) -> Union[
+    BaseCloudProvider, AWSCloudProvider, AzureCloudProvider, GCPCloudProvider, None
+]:
+    """
+    This method tries to detect cloud provider and return corresponding instance of
+    cloud provider.
+    :param facts: Dictionary with system facts
+    :param threshold: Threshold used for heuristic detection of cloud provider
+    :return: Instance of cloud provider or None
+    """
+    cloud_list, strong_sign = _get_cloud_providers(facts, threshold)
+
+    # When only one cloud provider detected using strong signs, then it is not
+    # necessary to try to gather metadata from cloud provider
+    if len(cloud_list) == 1 and strong_sign is True:
+        return cloud_list[0]
+
+    if len(cloud_list) > 0:
+        # Try to get metadata from cloud provider and return first cloud provider, which is
+        # able to get metadata. Note: gathered metadata are cached in-memory. Thus another attempt
+        # of gathering metadata will not hit server, but metadata will be read from in-memory cache.
+        for cloud_provider in cloud_list:
+            metadata = cloud_provider.get_metadata()
+            if metadata is not None:
+                log.info('Metadata gathered from cloud provider detected using heuristics: {provider}'.format(
+                    provider=cloud_provider.CLOUD_PROVIDER_ID)
+                )
+                return cloud_provider
+
+        log.debug('Unable to get metadata from any cloud provider detected using heuristics')
 
     return None
 
 
-def detect_cloud_provider(facts: dict = None) -> list:
+def detect_cloud_provider(facts: dict = None, threshold: float = 0.5) -> List[str]:
     """
     This method tries to detect cloud provider using hardware information provided by dmidecode.
     When there is strong sign that the VM is running on one of the cloud provider, then return
@@ -147,56 +170,14 @@ def detect_cloud_provider(facts: dict = None) -> list:
     list of all cloud providers sorted according detected probability
     :param facts: dictionary of facts. When no facts are provided, then hardware, virtualization
         and custom facts are gathered.
+    :param threshold: Threshold used for heuristic detection of cloud provider
     :return: List of string representing detected cloud providers. E.g. ['aws'] or ['aws', 'gcp']
     """
 
-    if facts is None:
-        facts = _gather_system_facts()
+    cloud_list, strong_sign = _get_cloud_providers(facts, threshold)
 
-    cloud_providers = [cls(facts) for cls in CLOUD_PROVIDERS]
-
-    log.debug('Trying to detect cloud provider')
-
-    # First try to detect cloud providers using strong signs
-    cloud_list = []
-    cloud_provider: BaseCloudProvider
-    for cloud_provider in cloud_providers:
-        cloud_detected = cloud_provider.is_running_on_cloud()
-        if cloud_detected is True:
-            cloud_list.append(cloud_provider.CLOUD_PROVIDER_ID)
-
-    # When only one cloud provider was detected, then return the list with
-    # one cloud provider. Print error in other cases and try to detect cloud providers
-    # using heuristics methods, because it will be necessary to sort the list according
-    # probability
-    if len(cloud_list) == 1:
-        log.info('Detected one cloud provider using strong signs: {provider}'.format(provider=cloud_list[0]))
-        return cloud_list
-    elif len(cloud_list) == 0:
-        log.error('No cloud provider detected using strong signs')
-    elif len(cloud_list) > 1:
-        log.error('More than one cloud provider detected using strong signs ({providers})'.format(
-            providers=", ".join(cloud_list)
-        ))
-
-    # When no cloud provider detected using strong signs, because behavior of cloud providers
-    # has changed, then try to detect cloud provider using some heuristics
-    cloud_list = []
-    for cloud_provider in cloud_providers:
-        probability: float = cloud_provider.is_likely_running_on_cloud()
-        if probability > 0.0:
-            cloud_list.append((probability, cloud_provider.CLOUD_PROVIDER_ID))
-    # Sort list according probability (provider with highest probability first)
-    cloud_list.sort(reverse=True)
-    # We care only about order, not probability in the result (filter probability out)
-    cloud_list = [item[1] for item in cloud_list]
-
-    if len(cloud_list) == 0:
-        log.error('No cloud provider detected using heuristics')
-    else:
-        log.info('Following list of cloud providers detected using heuristic: {providers}'.format(
-            providers=", ".join(cloud_list)
-        ))
+    # We care only about IDs of cloud providers in this method
+    cloud_list = [cloud_provider.CLOUD_PROVIDER_ID for cloud_provider in cloud_list]
 
     return cloud_list
 
@@ -258,7 +239,7 @@ def collect_cloud_info(cloud_list: list) -> dict:
 
 
 # Some temporary smoke testing code. You can test this module using:
-# sudo PYTHONPATH=./src:./syspurse/src python3 -m rhsmlib.cloud.provider
+# sudo PYTHONPATH=./src python3 -m rhsmlib.cloud.provider
 if __name__ == '__main__':
     import sys
 

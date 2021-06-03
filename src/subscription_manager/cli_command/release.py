@@ -33,14 +33,14 @@ class ReleaseCommand(CliCommand):
         shortdesc = _("Configure which operating system release to use")
         super(ReleaseCommand, self).__init__("release", shortdesc, True)
 
-        self.parser.add_option("--show", dest="show", action="store_true",
+        self.parser.add_argument("--show", dest="show", action="store_true",
                                help=_("shows current release setting; default command"))
-        self.parser.add_option("--list", dest="list", action="store_true",
+        self.parser.add_argument("--list", dest="list", action="store_true",
                                help=_("list available releases"))
-        self.parser.add_option("--set", dest="release", action="store",
+        self.parser.add_argument("--set", dest="release", action="store",
                                default=None,
                                help=_("set the release for this system"))
-        self.parser.add_option("--unset", dest="unset",
+        self.parser.add_argument("--unset", dest="unset",
                                action='store_true',
                                help=_("unset the release for this system"))
 

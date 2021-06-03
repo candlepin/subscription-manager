@@ -16,7 +16,6 @@
 #
 import logging
 import os
-import re
 
 from rhsm import connection
 from rhsm.connection import ProxyException
@@ -50,20 +49,20 @@ class AbstractSyspurposeCommand(CliCommand):
         self.store = None
 
         if 'set' in commands:
-            self.parser.add_option(
+            self.parser.add_argument(
                 "--set",
                 dest="set",
-                help=(_("set {attr} of system purpose").format(attr=attr))
+                help=_("set {attr} of system purpose").format(attr=attr)
             )
         if 'unset' in commands:
-            self.parser.add_option(
+            self.parser.add_argument(
                 "--unset",
                 dest="unset",
                 action="store_true",
-                help=(_("unset {attr} of system purpose").format(attr=attr))
+                help=_("unset {attr} of system purpose").format(attr=attr)
             )
         if 'add' in commands:
-            self.parser.add_option(
+            self.parser.add_argument(
                 "--add",
                 dest="to_add",
                 action="append",
@@ -71,7 +70,7 @@ class AbstractSyspurposeCommand(CliCommand):
                 help=_("add an item to the list ({attr}).").format(attr=attr)
             )
         if 'remove' in commands:
-            self.parser.add_option(
+            self.parser.add_argument(
                 "--remove",
                 dest="to_remove",
                 action="append",
@@ -79,14 +78,14 @@ class AbstractSyspurposeCommand(CliCommand):
                 help=_("remove an item from the list ({attr}).").format(attr=attr)
             )
         if 'show' in commands:
-            self.parser.add_option(
+            self.parser.add_argument(
                 "--show",
                 dest="show",
                 action='store_true',
                 help=_("show this system's current {attr}").format(attr=attr)
             )
         if 'list' in commands:
-            self.parser.add_option(
+            self.parser.add_argument(
                 "--list",
                 dest="list",
                 action='store_true',
@@ -182,12 +181,12 @@ class AbstractSyspurposeCommand(CliCommand):
         :return: list of invalid values
         """
 
-        # First check if the the value is in the valid_fields
+        # First check if the the value is in the valid_fields.  Comparison is case insensitive.
         invalid_values = []
         valid_fields = self._get_valid_fields()
         if self.attr in valid_fields:
             for value in values:
-                if value not in valid_fields[self.attr]:
+                if all([x.casefold() != value.casefold() for x in valid_fields[self.attr]]):
                     invalid_values.append(value)
         invalid_values_len = len(invalid_values)
 
@@ -212,11 +211,14 @@ class AbstractSyspurposeCommand(CliCommand):
                         ))
                         self._print_valid_values(valid_fields)
                     else:
-                        print(_('Warning: This org does not have any subscriptions with an available "{attr}" is empty.').format(
+                        print(_('Warning: There are no available values for the system purpose "{attr}" '
+                                'from the available subscriptions in this organization.').format(
                             attr=self.attr
                         ))
                 else:
-                    print(_('Warning: This org does not have any subscriptions with an available "{attr}"').format(
+                    print(_('Warning: This organization does not have any subscriptions that provide a '
+                            'system purpose "{attr}".  This setting will not influence auto-attaching '
+                            'subscriptions.').format(
                         attr=self.attr
                     ))
 
@@ -314,8 +316,8 @@ class AbstractSyspurposeCommand(CliCommand):
         if syspurpose is not None and self.attr in syspurpose and syspurpose[self.attr]:
             val = syspurpose[self.attr]
             values = val if not isinstance(val, list) else ", ".join(val)
-            print(_("Current {name}: {val}".format(name=self.name.capitalize(),
-                                                   val=values)))
+            print(_("Current {name}: {val}").format(name=self.name.capitalize(),
+                                                    val=values))
         else:
             print(_("{name} not set.").format(name=self.name.capitalize()))
 
@@ -345,9 +347,12 @@ class AbstractSyspurposeCommand(CliCommand):
                 # Print values
                 self._print_valid_values(valid_fields)
             else:
-                print(_('This org does not have any subscriptions with an available "{syspurpose_attr}"').format(syspurpose_attr=self.attr))
+                print(_('There are no available values for the system purpose "{syspurpose_attr}" '
+                        'from the available subscriptions in this '
+                        'organization.').format(syspurpose_attr=self.attr))
         else:
-            print(_('This org does not have any subscriptions with an available "{syspurpose_attr}"').format(syspurpose_attr=self.attr))
+            print(_('This organization does not have any subscriptions that provide a system '
+                    'purpose "{syspurpose_attr}.').format(syspurpose_attr=self.attr))
 
     def sync(self):
         return syspurposelib.SyspurposeSyncActionCommand().perform(include_result=True)[1]
@@ -374,7 +379,7 @@ class AbstractSyspurposeCommand(CliCommand):
                 if self.is_registered():
                     self.cp = self.cp_provider.get_consumer_auth_cp()
         except connection.RestlibException as err:
-            log.exception(re)
+            log.exception(err)
             if getattr(self.options, 'list', None):
                 log.error("Error: Unable to retrieve {attr} from server: {err}".format(attr=self.attr, err=err))
                 system_exit(os.EX_SOFTWARE, str(err))

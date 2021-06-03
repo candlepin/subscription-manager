@@ -14,8 +14,6 @@
 # in this software or its documentation.
 #
 
-# TODO: test Python3 syntax using flake8
-# flake8: noqa
 
 """
 This is module implementing detector and metadata collector of virtual machine running on AWS
@@ -68,13 +66,6 @@ class AWSCloudProvider(BaseCloudProvider):
         super(AWSCloudProvider, self).__init__(hw_info)
         # AWS IMDS server does not support keeping connection alive
         self._session = None
-
-    def is_vm(self) -> bool:
-        """
-        Is system running on virtual machine or not
-        :return: True, when machine is running on VM; otherwise return False
-        """
-        return super(AWSCloudProvider, self).is_vm()
 
     def is_running_on_cloud(self) -> bool:
         """

@@ -156,21 +156,21 @@ class CliCommand(AbstractCLICommand):
 
     def _add_url_options(self):
         """ Add options that allow the setting of the server URL."""
-        self.parser.add_option("--serverurl", dest="server_url",
+        self.parser.add_argument("--serverurl", dest="server_url",
                                default=None, help=_("server URL in the form of https://hostname:port/prefix"))
-        self.parser.add_option("--insecure", action="store_true",
+        self.parser.add_argument("--insecure", action="store_true",
                                 default=False, help=_("do not check the entitlement server SSL certificate against "
                                                       "available certificate authorities"))
 
     def _add_proxy_options(self):
         """ Add proxy options that apply to sub-commands that require network connections. """
-        self.parser.add_option("--proxy", dest="proxy_url",
+        self.parser.add_argument("--proxy", dest="proxy_url",
                                default=None, help=_("proxy URL in the form of proxy_hostname:proxy_port"))
-        self.parser.add_option("--proxyuser", dest="proxy_user",
+        self.parser.add_argument("--proxyuser", dest="proxy_user",
                                 default=None, help=_("user for HTTP proxy with basic authentication"))
-        self.parser.add_option("--proxypassword", dest="proxy_password",
+        self.parser.add_argument("--proxypassword", dest="proxy_password",
                                 default=None, help=_("password for HTTP proxy with basic authentication"))
-        self.parser.add_option('--noproxy', dest='no_proxy',
+        self.parser.add_argument('--noproxy', dest='no_proxy',
                                default=None, help=_("host suffixes that should bypass HTTP proxy"))
 
     def _do_command(self):
@@ -239,7 +239,7 @@ class CliCommand(AbstractCLICommand):
         if not args:
             args = sys.argv[1:]
 
-        (self.options, self.args) = self.parser.parse_args(args)
+        (self.options, self.args) = self.parser.parse_known_args(args)
 
         # we dont need argv[0] in this list...
         self.args = self.args[1:]
