@@ -156,10 +156,14 @@ def init_logger(config=None):
     if config is None:
         config = rhsm.config.get_config_parser()
 
-    default_log_level = config.get('logging', 'default_log_level')
-    if not config.is_log_level_valid(default_log_level):
+    read_log_level = config.get('logging', 'default_log_level')
+    valid, valid_str = config.is_level_valid(read_log_level)
+    if valid:
+        default_log_level = read_log_level
+    else:
         # This is not a valid logging level, set to INFO
         default_log_level = 'INFO'
+        config.print_invalid_log_level_msg(valid, valid_str)
 
     pending_error_messages = []
 
