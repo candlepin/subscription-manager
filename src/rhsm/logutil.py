@@ -156,10 +156,12 @@ def init_logger(config=None):
     if config is None:
         config = rhsm.config.get_config_parser()
 
-    default_log_level = config.get('logging', 'default_log_level')
-    if not config.is_log_level_valid(default_log_level):
+    read_log_level = config.get('logging', 'default_log_level')
+    if not config.is_log_level_valid(read_log_level):
         # This is not a valid logging level, set to INFO
         default_log_level = 'INFO'
+    else:
+        default_log_level = read_log_level
 
     pending_error_messages = []
 
@@ -196,6 +198,10 @@ def init_logger(config=None):
     # StreamHandler but not to the root logger).
     for error_message in pending_error_messages:
         log.error(error_message)
+
+    #read_log_level = config.get('logging', 'default_log_level')
+    if not config.is_log_level_valid(read_log_level):
+        config.print_invalid_log_level_msg(read_log_level)
 
 
 def init_logger_for_yum():

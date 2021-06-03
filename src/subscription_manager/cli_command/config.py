@@ -1,4 +1,5 @@
-#
+from __future__ import print_function, division, absolute_import
+
 # Subscription manager command line utility.
 #
 # Copyright (c) 2021 Red Hat, Inc.

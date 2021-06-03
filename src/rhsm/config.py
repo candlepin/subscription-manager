@@ -190,6 +190,8 @@ class RhsmConfigParser(SafeConfigParser):
                 raise er
 
     def set(self, section, name, value):
+        # first get the log_level from the conf file:
+        default_log_level = self.get('logging', 'default_log_level')
         try:
             # If the value doesn't exist, or isn't equal, write it
             if self.get(section, name) != value:
@@ -199,19 +201,28 @@ class RhsmConfigParser(SafeConfigParser):
                 self.add_section(section)
             super(RhsmConfigParser, self).set(section, name, value)
         if section == "logging" and name == "default_log_level":
-            self.is_log_level_valid(value)
+            if not self.is_log_level_valid(default_log_level) and self.is_log_level_valid(value):
+                print("The default_log_level is being set to a valid value '{value}'.  There should be no further action needed.".format(value=value),
+                      file=sys.stderr)
+            elif self.is_log_level_valid(default_log_level) and not self.is_log_level_valid(value):
+                self.print_invalid_log_level_msg(value)
+            elif not self.is_log_level_valid(default_log_level) and not self.is_log_level_valid(value):
+                print("The default_log_level is still being set to an invalid value '{value}', please try again.".format(value=value),
+                      file=sys.stderr)
 
     def is_log_level_valid(self, value):
-        valid = ['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG', 'NOSET']
+        valid = ['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG', 'NOTSET']
         if value not in valid:
-            print("Invalid Log Level: {lvl}, setting to INFO for this run.".format(lvl=value), file=sys.stderr)
-            print(
-                "Please use:  subscription-manager config --logging.default_log_level=<Log Level> to set the default_log_level to a valid value.",
-                file=sys.stderr)
-            valid_str = ", ".join(valid)
-            print("Valid Values: {valid_str}".format(valid_str=valid_str), file=sys.stderr)
             return False
         return True
+
+    def print_invalid_log_level_msg(self, value):
+        print("Invalid Log Level: '{lvl}', setting to 'INFO' for this run.".format(lvl=value), file=sys.stderr)
+        print(
+            "Please use:  subscription-manager config --logging.default_log_level=<Log Level> to set the default_log_level to a valid value.",
+            file=sys.stderr)
+        valid_str = ", ".join(['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG', 'NOTSET'])
+        print("Valid Values: {valid_str}\n".format(valid_str=valid_str), file=sys.stderr)
 
     def get_int(self, section, prop):
         """Get a int value from the config.
