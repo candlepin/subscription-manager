@@ -243,7 +243,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.16
+Version: 1.28.17
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1465,6 +1465,27 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Jun 07 2021 Christopher Snyder <csnyder@redhat.com> 1.28.17-1
+- 1920020: show error message when setting invalid default_log_level as well as
+  on every run until changed to a valid value (#2641)
+  (tmerry@redhat.com)
+- 1897767: improve wording for missing or empty syspurpose values
+  (ptoscano@redhat.com)
+- 1951057: Cherry Pick to Add in memory read of cache, delete SCA cert with not
+  needed. (#2618) (tmerry@redhat.com)
+- 1896715: Set proper read permissions on certs (wpoteat@redhat.com)
+- Update translation files (noreply@weblate.org)
+- 1956764: New extraction for translatable strings (ptoscano@redhat.com)
+- 1672805: 'Addons' is failing spell check and should be changed to 'Add-ons'
+  to match documentation (tmerry@redhat.com)
+- 1638080: surround the syspurpose feedback in quotes (tmerry@redhat.com)
+- 1949492: remove bogus %%changelog entries (ptoscano@redhat.com)
+- 1637083: remove the unset PROPERTY VALUE from the Generic Commands
+  (tmerry@redhat.com)
+- 1897767: what does 'No valid values provided for usage' mean to the user for
+  subscription-manager-1.28 branch (tmerry@redhat.com)
+- 1879856: suppress the warning message when setting syspurpose values (tmerry@redhat.com)
+
 * Mon Apr 26 2021 Christopher Snyder <csnyder@redhat.com> 1.28.16-1
 - 1950015: fix typos in syspurpose(8) (#2604) (ptoscano@redhat.com)
 - Updated translations for Korean and Italian from weblate (simmon@nplob.com)
