@@ -240,7 +240,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.29.12
+Version: 1.29.13
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1526,6 +1526,44 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Jun 07 2021 Christopher Snyder <csnyder@redhat.com> 1.29.13-1
+- Updated translations for Korean, Chinese (simiplified, zh_CN), Italian
+- Refactoring of cloud collector/detector and facts (#2515)
+  (jhnidek@redhat.com)
+- 1920020: show error message when setting invalid default_log_level as well as
+  on every run until changed to a valid value (tmerry@redhat.com)
+- 1959048: improve wording for missing or empty syspurpose values
+  (ptoscano@redhat.com)
+- Update translation files (noreply@weblate.org)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- 1960765: fix typo "explicity" in man page (ptoscano@redhat.com)
+- cockpit: Lower cockpit-ws dependency to Recommends (martin@piware.de)
+- test: Robustify and trim down cockpit-ws installation (martin@piware.de)
+- jenkins: switch stylish job to Python 3 (ptoscano@redhat.com)
+- flake8: add more locally found issues (ptoscano@redhat.com)
+- Remove extra whitespace before '(' (ptoscano@redhat.com)
+- 1952879: extract messages from argparse instead of optparse
+  (ptoscano@redhat.com)
+- po: set Project-Id-Version to rhsm (ptoscano@redhat.com)
+- po: fuzzy messages with invalid/missing placeholders (ptoscano@redhat.com)
+- po: ko: manually fix placeholder (ptoscano@redhat.com)
+- Update script reference to base branch to main (wpoteat@redhat.com)
+- 1896715: Set proper read permissions on certs (wpoteat@redhat.com)
+- cockpit: Use PF4 based empty state (mmarusak@redhat.com)
+- cockpit: Drop uglification (mmarusak@redhat.com)
+- cockpit: Use 'noreferrer' for external links (mmarusak@redhat.com)
+- cockpit: Add `standard-jsx` eslint plugin (mmarusak@redhat.com)
+- cockpit: Remove loaders for .es6 files (mmarusak@redhat.com)
+- cockpit: Add package-lock.json to .gitignore (mmarusak@redhat.com)
+- build: drop version requirements for pep8 and flake8 (ptoscano@redhat.com)
+- build: remove pyqver test requirement (ptoscano@redhat.com)
+- Add flake8 configuration (ptoscano@redhat.com)
+- Add missing second empty line after class/function (ptoscano@redhat.com)
+- Fix some over-indented code blocks (ptoscano@redhat.com)
+- jenkins: disambiguate virtualenv names (ptoscano@redhat.com)
+- 1956654: Fix issue with proxy and cockpit plugin (jhnidek@redhat.com)
+- Releaser for Centos (wpoteat@redhat.com)
+
 * Tue Apr 27 2021 Christopher Snyder <csnyder@redhat.com> 1.29.12-1
 - 1953069: bash: fix listing of config options (#2609) (ptoscano@redhat.com)
 - Cleanup old *.egg-info dirs in %%post (csnyder@redhat.com)
