@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-20 17:38+0200\n"
-"PO-Revision-Date: 2021-05-21 23:01+0000\n"
+"PO-Revision-Date: 2021-06-08 22:04+0000\n"
 "Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ko/>\n"
@@ -28,72 +28,68 @@ msgstr "사용법: "
 
 #: /usr/lib64/python3.9/argparse.py:854
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__ call __ () 정의되지 않음"
 
 #: /usr/lib64/python3.9/argparse.py:1197
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr ""
+msgstr "알지 못하는 파서 %(parser_name)r (선택기:%(choices)s)"
 
 #: /usr/lib64/python3.9/argparse.py:1257
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr ""
+msgstr "인수 \"-\" (방법 %r인)"
 
 #: /usr/lib64/python3.9/argparse.py:1266
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
-msgstr ""
+msgstr "'%(filename)s': %(error)s를 열 수 없습니다"
 
 #: /usr/lib64/python3.9/argparse.py:1475
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "병합 할 수 없습니다 - 두 그룹의 이름은 %r입니다"
 
 #: /usr/lib64/python3.9/argparse.py:1513
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "'필요한'은 위치에 대한 잘못된 인수입니다"
 
 #: /usr/lib64/python3.9/argparse.py:1535
 #, python-format
 msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
-msgstr ""
+msgstr "잘못된 선택 %(option)r 문자열 : %(prefix_chars)r 문자로 시작해야 합니다"
 
 #: /usr/lib64/python3.9/argparse.py:1553
 #, python-format
 msgid "dest= is required for options like %r"
-msgstr ""
+msgstr "dest= 는 %r과 같은 선택에 필요합니다"
 
 #: /usr/lib64/python3.9/argparse.py:1570
 #, python-format
 msgid "invalid conflict_resolution value: %r"
-msgstr ""
+msgstr "잘못된 충돌_해결 값: %r"
 
 #: /usr/lib64/python3.9/argparse.py:1588
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] ""
+msgstr[0] "충돌하는 선택 문자열: %s"
 
 #: /usr/lib64/python3.9/argparse.py:1654
 msgid "mutually exclusive arguments must be optional"
-msgstr ""
+msgstr "상호 배타적인 인수는 선택사항이어야만 합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:1721
-#, fuzzy
-#| msgid "%s option requires an argument"
 msgid "positional arguments"
-msgstr "%s 옵션에는 인수가 필요함"
+msgstr "위치 인수"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:1722
-#, fuzzy
-#| msgid "%s option requires an argument"
 msgid "optional arguments"
-msgstr "%s 옵션에는 인수가 필요함"
+msgstr "선택적인 인수"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:1737
@@ -102,95 +98,86 @@ msgstr "도움말 보기 및 종료"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:1768
-#, fuzzy
-#| msgid "cannot parse argument: {}"
 msgid "cannot have multiple subparser arguments"
-msgstr "인수를 구문 분석 할 수 없음: {}"
+msgstr "여러 하위 구문 분석기 인수를 가질 수 없습니다"
 
 #: /usr/lib64/python3.9/argparse.py:1820 /usr/lib64/python3.9/argparse.py:2331
-#, fuzzy, python-format
-#| msgid "Unknown arguments: %s"
+#, python-format
 msgid "unrecognized arguments: %s"
-msgstr "알 수 없는 인수: %s"
+msgstr "인식 할 수 없는 인수: %s"
 
 #: /usr/lib64/python3.9/argparse.py:1921
-#, fuzzy, python-format
-#| msgid "Unknown arguments: %s"
+#, python-format
 msgid "not allowed with argument %s"
-msgstr "알 수 없는 인수: %s"
+msgstr "인수 %s와 함께 허용하지 않습니다"
 
 #: /usr/lib64/python3.9/argparse.py:1967 /usr/lib64/python3.9/argparse.py:1981
 #, python-format
 msgid "ignored explicit argument %r"
-msgstr ""
+msgstr "명시적 인수 %r 무시"
 
 #: /usr/lib64/python3.9/argparse.py:2088
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "다음 인수가 필요합니다: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2103
-#, fuzzy, python-format
-#| msgid "Wrong number of arguments specified.\n"
+#, python-format
 msgid "one of the arguments %s is required"
-msgstr "잘못된 인수 번호가 지정되어 있습니다.\n"
+msgstr "인수 %s 중의 하나가 필요합니다"
 
 #: /usr/lib64/python3.9/argparse.py:2146
 msgid "expected one argument"
-msgstr ""
+msgstr "예상되는 하나의 인수"
 
 #: /usr/lib64/python3.9/argparse.py:2147
 msgid "expected at most one argument"
-msgstr ""
+msgstr "많으면 하나의 인수가 예상됩니다"
 
 #: /usr/lib64/python3.9/argparse.py:2148
 msgid "expected at least one argument"
-msgstr ""
+msgstr "적어도 하나의 인수가 예상됩니다"
 
 #: /usr/lib64/python3.9/argparse.py:2152
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
-msgstr[0] ""
+msgstr[0] "%s 인수가 예상됩니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2210
-#, fuzzy, python-format
-#| msgid "ambiguous option: %s (%s?)"
+#, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr "모호한 옵션: %s (%s?)"
+msgstr "모호한 선택: %(option)s은 %(matches)s와 일치 할 수 있습니다"
 
 #: /usr/lib64/python3.9/argparse.py:2274
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "예상되는 선택 문자열: %s"
 
 #: /usr/lib64/python3.9/argparse.py:2471
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%r은 호출 할 수 없습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2488
-#, fuzzy, python-format
-#| msgid "option %s: invalid %s value: %r"
+#, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr "옵션 %s: 유효하지 않은 %s 값: %r"
+msgstr "잘못된 %(type)s 값: %(value)r"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2499
-#, fuzzy, python-format
-#| msgid "option %s: invalid choice: %r (choose from %s)"
+#, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
-msgstr "옵션 %s: 유효하지 않은 선택: %r (%s에서 선택)"
+msgstr "잘못된 선택: %(value)r (%(choices)s에서 선택)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2575
-#, fuzzy, python-format
-#| msgid "{prog}: error: {msg}"
+#, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr "{prog}: 오류: {msg}"
+msgstr "%(prog)s}: 오류: %(message)s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/index.js:64 cockpit/src/subscriptions-view.jsx:272
