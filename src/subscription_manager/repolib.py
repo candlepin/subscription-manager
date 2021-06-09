@@ -231,10 +231,13 @@ class RepoActionInvoker(BaseActionInvoker):
 
     @classmethod
     def delete_repo_file(cls):
-        for repo_class, _dummy in get_repo_file_classes():
+        for repo_class, server_val_repo_class in get_repo_file_classes():
             repo_file = repo_class()
+            server_val_repo_file = server_val_repo_class()
             if os.path.exists(repo_file.path):
                 os.unlink(repo_file.path)
+            if os.path.exists(server_val_repo_file.path):
+                os.unlink(server_val_repo_file.path)
         # When the repo is removed, also remove the override tracker
         WrittenOverrideCache.delete_cache()
 
