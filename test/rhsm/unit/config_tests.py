@@ -15,11 +15,12 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 #
 from iniparse.compat import NoOptionError, InterpolationMissingOptionError, InterpolationDepthError, NoSectionError
+import os
 from tempfile import NamedTemporaryFile
 import unittest
 
 from mock import patch
-from rhsm.config import RhsmConfigParser, RhsmHostConfigParser
+from rhsm.config import RhsmConfigParser, RhsmHostConfigParser, in_container
 
 TEST_CONFIG = """
 [foo]
@@ -431,3 +432,16 @@ class NoCaCertDirTests(BaseConfigTests):
     def test_get_repo_ca_cert(self):
         value = self.cfgParser.get("rhsm", "repo_ca_cert")
         self.assertEqual("/etc/rhsm/ca/non_default.pem", value)
+
+
+class InContainerTests(unittest.TestCase):
+
+    def test_in_container_off(self):
+        # This must be set in the test environment by CI in order to know for
+        # sure one way or the other whether we really are in a container.
+        # It must NOT be set to something other than the truth of whether we are
+        # in a container otherwise this test will no longer be meaningful
+        really_in_container = True if os.environ.get("SUBMAN_TEST_IN_CONTAINER", False) else False
+        with patch.dict(os.environ, {"SMDEV_CONTAINER_OFF": "True"}):
+            self.assertFalse(in_container())
+        self.assertEqual(in_container(), really_in_container)
