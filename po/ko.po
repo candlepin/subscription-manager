@@ -5,13 +5,14 @@
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # Sundeep Anand <suanand@redhat.com>, 2021.
 # simmon <simmon@nplob.com>, 2021.
+# Ludek Janda <ljanda@redhat.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-07 02:57-0400\n"
-"PO-Revision-Date: 2021-04-20 14:02+0000\n"
-"Last-Translator: simmon <simmon@nplob.com>\n"
+"PO-Revision-Date: 2021-06-03 15:03+0000\n"
+"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ko/>\n"
 "Language: ko\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.6\n"
+"X-Generator: Weblate 4.6.2\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.6/optparse.py:146
@@ -469,10 +470,8 @@ msgid "Role:  "
 msgstr "역할:  "
 
 #: cockpit/src/subscriptions-view.jsx:271
-#, fuzzy
-#| msgid "Addons:  "
 msgid "Add-ons:  "
-msgstr "추가 기능 :  "
+msgstr "추가-기능 :  "
 
 #: cockpit/src/subscriptions-view.jsx:283
 msgid "Status: "
@@ -4638,19 +4637,15 @@ msgstr ""
 #: src/subscription_manager/managercli.py:759
 #, python-brace-format
 msgid "\"{value}\""
-msgstr ""
+msgstr "\"{value}\""
 
 #: src/subscription_manager/managercli.py:762
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Warning: Provided value \"{val}\" is not included in the list of valid "
-#| "values"
+#, python-brace-format
 msgid ""
 "Warning: Provided value {vals} is not included in the list of valid values"
 msgid_plural ""
 "Warning: Provided values {vals} are not included in the list of valid values"
-msgstr[0] ""
-"경고: 제공된 값 \"{val}\"은(는) 유효한 값 목록에 포함되어 있지 않습니다"
+msgstr[0] "경고: 제공된 값 {vals}는 유효한 값 목록에 포함되어 있지 않습니다"
 
 #: src/subscription_manager/managercli.py:769
 #, python-brace-format
@@ -4695,12 +4690,11 @@ msgstr "{syspurpose_attr} 사용 가능"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:902
-#, fuzzy, python-brace-format
-#| msgid "This org does not have any subscriptions with service levels."
+#, python-brace-format
 msgid ""
 "This org does not have any subscriptions with an available "
 "\"{syspurpose_attr}\"."
-msgstr "이 조직에는 서비스 레벨이 있는 서브스크립션이 없습니다."
+msgstr "이 조직에는 사용 가능한 \"{syspurpose_attr}\" 에 서브스크립션이 없습니다."
 
 #: src/subscription_manager/managercli.py:904
 #, python-brace-format
@@ -5027,11 +5021,9 @@ msgstr "사용 가능한 서비스 레벨"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1462
-#, fuzzy
-#| msgid "This org does not have any subscriptions with service levels."
 msgid ""
 "This org does not have any subscriptions with an available \"service-level\"."
-msgstr "이 조직에는 서비스 레벨이 있는 서브스크립션이 없습니다."
+msgstr "이 조직에는 사용 가능한 \"서비스-레벨\"에 서브스크립션이 없습니다."
 
 #: src/subscription_manager/managercli.py:1481
 msgid "Manage usage setting for this system"
