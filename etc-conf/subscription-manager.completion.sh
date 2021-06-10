@@ -35,7 +35,23 @@ _subscription_manager_attach()
 
 _subscription_manager_syspurpose()
 {
-  local opts="--show ${_subscription_manager_common_opts}"
+  local opts="addons role service-level usage --show ${_subscription_manager_common_opts}"
+
+  case "${2}" in
+      addons|\
+      role|\
+      usage)
+      "_subscription_manager_$2" "${1}" "${2}"
+      return 0
+      ;;
+      service-level)
+      "_subscription_manager_service_level" "${1}" "${2}"
+      return 0
+      ;;
+      *)
+      ;;
+  esac
+
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 

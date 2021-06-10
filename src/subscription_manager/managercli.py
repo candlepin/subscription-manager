@@ -202,6 +202,9 @@ SP_CONFLICT_MESSAGE = _("Warning: A {attr} of \"{download_value}\" was recently 
                         "by the entitlement server administrator.\n{advice}")
 SP_ADVICE = _("If you'd like to overwrite the server side change please run: {command}")
 
+# TRANSLATORS: this refers to a deprecated command
+DEPRECATED_COMMAND_MESSAGE = _("Deprecated, see 'syspurpose'")
+
 
 def handle_exception(msg, ex):
 
@@ -587,7 +590,14 @@ class AbstractSyspurposeCommand(CliCommand):
     Abstract command for manipulating an attribute of system purpose.
     """
 
-    def __init__(self, name, shortdesc=None, primary=False, attr=None, commands=('set', 'unset', 'show', 'list')):
+    def __init__(self, name, subparser, shortdesc=None, primary=False, attr=None, commands=('set', 'unset', 'show', 'list')):
+        # set 'subparser' before calling the parent constructor, as it will
+        # (indirectly) call _create_argparser(), which our reimplementation uses
+        self.subparser = subparser
+        if self.subparser is None:
+            # this syspurpose command is a deprecated top-level subcommand,
+            # so change its description to be a deprecated text
+            shortdesc = DEPRECATED_COMMAND_MESSAGE
         super(AbstractSyspurposeCommand, self).__init__(name, shortdesc=shortdesc, primary=primary)
         self.commands = commands
         self.attr = attr
@@ -644,6 +654,19 @@ class AbstractSyspurposeCommand(CliCommand):
             return SyncedStore(uep=self.cp, consumer_uuid=self.identity.uuid)
         except ImportError:
             return None
+
+    def __getattr__(self, name):
+        """
+        This custom __getattr__() reimplementation is used to lookup attributes
+        in the parent syspurpose command, if set; this is done in case the
+        current command is a subcommand of 'syspurpose', so
+        SyspurposeCommand._do_command() will set a reference to itself as
+        'syspurpose_command' attribute.
+        """
+        syspurpose_command = self.__dict__.get('syspurpose_command', None)
+        if syspurpose_command is not None:
+            return getattr(syspurpose_command, name)
+        raise AttributeError
 
     def _validate_options(self):
         to_set = getattr(self.options, 'set', None)
@@ -965,6 +988,19 @@ class AbstractSyspurposeCommand(CliCommand):
         else:
             self.show()
 
+    def _create_argparser(self):
+        if self.subparser is None:
+            # Without a subparser, which means it is a standalone command
+            return super(AbstractSyspurposeCommand, self)._create_argparser()
+
+        # This string is similar to what _get_usage() returns; we cannot use
+        # _get_usage() as it prints the subcommand name as well, and the created
+        # ArgumentParser is a subparser (so there is a parent parser already
+        # printing the subcommand).
+        usage = _("%(prog)s [OPTIONS]")
+        return self.subparser.add_parser(self.name, description=self.shortdesc,
+                                         usage=usage, help=self.shortdesc)
+
     def check_syspurpose_support(self, attr):
         if self.is_registered() and not self.cp.has_capability('syspurpose'):
             print(_("Note: The currently configured entitlement server does not support System Purpose {attr}.".format(attr=attr)))
@@ -1099,6 +1135,29 @@ class SyspurposeCommand(CliCommand):
             help=_("show current system purpose")
         )
 
+        # all the subcommands of 'syspurpose'; add them to this list to be
+        # registered as such
+        syspurpose_command_classes = [
+            AddonsCommand,
+            RoleCommand,
+            ServiceLevelCommand,
+            UsageCommand
+        ]
+        # create a subparser for all the subcommands: it is passed to all
+        # the subcommand classes, so they will create an ArgumentParser that
+        # is a child of the 'syspurpose' one, rather than as standalone
+        # parsers
+        subparser = self.parser.add_subparsers(
+            dest='subparser_name',
+            title=_('Syspurpose submodules'),
+            help='',  # trick argparse a bit to not show the {cmd1, cmd2, ..}
+            metavar=''  # trick argparse a bit to not show the {cmd1, cmd2, ..}
+        )
+        self.cli_commands = {}
+        for clazz in syspurpose_command_classes:
+            cmd = clazz(subparser)
+            self.cli_commands[cmd.name] = cmd
+
     def _get_synced_store(self):
         """
         Try to get SyncedStore.
@@ -1126,6 +1185,17 @@ class SyspurposeCommand(CliCommand):
         :return: None
         """
         self._validate_options()
+
+        # a subcommand was actually invoked, so dispatch it
+        if self.options.subparser_name is not None:
+            subcmd = self.cli_commands[self.options.subparser_name]
+            # set a reference to ourselves in the subcommand being executed;
+            # this way, everything we collected & created in main() is
+            # "forwarded" to the subcommand class (see
+            # AbstractSyspurposeCommand.__getattr__())
+            subcmd.syspurpose_command = self
+            subcmd._do_command()
+            return
 
         content = {}
         if self.options.syspurpose_show is True:
@@ -1426,11 +1496,12 @@ class AutohealCommand(CliCommand):
 
 class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
 
-    def __init__(self):
+    def __init__(self, subparser=None):
 
         shortdesc = _("Show or modify the system purpose service-level setting")
         super(ServiceLevelCommand, self).__init__(
             "service-level",
+            subparser,
             shortdesc,
             False,
             attr="service_level_agreement",
@@ -1602,10 +1673,11 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
 
 class UsageCommand(AbstractSyspurposeCommand, OrgCommand):
 
-    def __init__(self):
+    def __init__(self, subparser=None):
         shortdesc = _("Show or modify the system purpose usage setting")
         super(UsageCommand, self).__init__(
             "usage",
+            subparser,
             shortdesc,
             False,
             attr='usage',
@@ -2006,10 +2078,11 @@ class UnRegisterCommand(CliCommand):
 
 class AddonsCommand(AbstractSyspurposeCommand, OrgCommand):
 
-    def __init__(self):
+    def __init__(self, subparser=None):
         shortdesc = _("Show or modify the system purpose addons setting")
         super(AddonsCommand, self).__init__(
             "addons",
+            subparser,
             shortdesc=shortdesc,
             primary=False,
             attr='addons',
@@ -3371,10 +3444,11 @@ class OverrideCommand(CliCommand):
 
 
 class RoleCommand(AbstractSyspurposeCommand, OrgCommand):
-    def __init__(self):
+    def __init__(self, subparser=None):
         shortdesc = _("Show or modify the system purpose role setting")
         super(RoleCommand, self).__init__(
             "role",
+            subparser,
             shortdesc,
             primary=False,
             attr='role',
