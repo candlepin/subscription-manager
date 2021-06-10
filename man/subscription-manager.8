@@ -77,64 +77,52 @@ has specific options available for each command, depending on what operation is 
 6. release
 
 .IP
-7. addons
+7. import
 
 .IP
-8. role
+8. redeem
 
 .IP
-9. service-level
+9. list
 
 .IP
-10. usage
+10. refresh
 
 .IP
-11. import
+11. environments
 
 .IP
-12. redeem
+12. repos
 
 .IP
-13. list
+13. orgs
 
 .IP
-14. refresh
+14. plugins
 
 .IP
-15. environments
+15. identity
 
 .IP
-16. repos
+16. facts
 
 .IP
-17. orgs
+17. clean
 
 .IP
-18. plugins
+18. config
 
 .IP
-19. identity
+19. version
 
 .IP
-20. facts
+20. status
 
 .IP
-21. clean
+21. deprecated commands: addons, role, service-level, subscribe, unsubscribe, usage, and activate
 
 .IP
-22. config
-
-.IP
-23. version
-
-.IP
-24. status
-
-.IP
-25. deprecated commands: subscribe, unsubscribe, and activate
-
-.IP
-26. repo-override
+22. repo-override
 
 
 .SS COMMON OPTIONS
@@ -388,15 +376,34 @@ command displays the current configured syspurpose
 .I preferences
 for the system.
 
+.PP
+The
+.B syspurpose
+command has subcommands for all the various syspurpose preferences and attributes:
+
+.IP
+1. addons
+
+.IP
+2. role
+
+.IP
+3. service-level
+
+.IP
+4. usage
+
+
 .TP
 .B --show
 Shows the system's current set of syspurpose preference formatted as JSON. Single-valued entries for which there is no value will be included in the output with a value of "". List entries which have no value will be included in the output with a value of "[]" (less the quotes).
 
 
-.SS ADDONS OPTIONS
+.PP
+.SS addons options
 The
 .B addons
-command displays the current configured addons system purpose attribute
+subcommand displays the current configured addons system purpose attribute
 .I preference
 for products installed on the system. For example, if the addons preference is ADDON1, then a subscription with a ADDON1 addon is selected when auto-attaching subscriptions to the system.
 
@@ -437,10 +444,10 @@ Removes all addons from the list of requested addons.
 Identifies the organization for which the addons applies.
 
 
-.SS ROLE OPTIONS
+.SS role options
 The
 .B role
-command displays the current configured role
+subcommand displays the current configured role
 .I preference
 for products installed on the system. For example, if the role preference is "Red Hat Enterprise Linux Server", then a subscription with a "Red Hat Enterprise Linux Server" role is selected when auto-attaching subscriptions to the system.
 
@@ -477,10 +484,10 @@ Removes any previously set role preference.
 Identifies the organization for which the role applies.
 
 
-.SS SERVICE-LEVEL OPTIONS
+.SS service-level options
 The
 .B service-level
-command displays the current configured service level
+subcommand displays the current configured service level
 .I preference
 for products installed on the system. For example, if the service-level preference is standard, then a subscription with a standard service level is selected when auto-attaching subscriptions to the system.
 
@@ -521,10 +528,10 @@ Service level to apply to this system
 Removes any previously set service-level preference.
 
 
-.SS USAGE OPTIONS
+.SS usage options
 The
 .B usage
-command displays the current configured usage
+subcommand displays the current configured usage
 .I preference
 for products installed on the system. For example, if the usage preference is "Production", then a subscription with a "Production" usage is selected when auto-attaching subscriptions to the system.
 
@@ -981,6 +988,22 @@ This has been replaced with \fBremove\fP.
 .TP
 .B activate
 This has been replaced with \fBredeem\fP.
+
+.TP
+.B addons
+This has been replaced with \fBsyspurpose addons\fP.
+
+.TP
+.B role
+This has been replaced with \fBsyspurpose role\fP.
+
+.TP
+.B service-level
+This has been replaced with \fBsyspurpose service-level\fP.
+
+.TP
+.B usage
+This has been replaced with \fBsyspurpose usage\fP.
 
 .SH USAGE
 .B subscription-manager

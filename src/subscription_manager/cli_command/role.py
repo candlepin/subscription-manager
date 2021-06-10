@@ -20,10 +20,11 @@ from subscription_manager.i18n import ugettext as _
 
 
 class RoleCommand(AbstractSyspurposeCommand, OrgCommand):
-    def __init__(self):
+    def __init__(self, subparser=None):
         shortdesc = _("Show or modify the system purpose role setting")
         super(RoleCommand, self).__init__(
             "role",
+            subparser,
             shortdesc,
             primary=False,
             attr='role',

@@ -21,10 +21,11 @@ from subscription_manager.cli_command.org import OrgCommand
 
 class AddonsCommand(AbstractSyspurposeCommand, OrgCommand):
 
-    def __init__(self):
+    def __init__(self, subparser=None):
         shortdesc = _("Show or modify the system purpose addons setting")
         super(AddonsCommand, self).__init__(
             "addons",
+            subparser,
             shortdesc=shortdesc,
             primary=False,
             attr='addons',
