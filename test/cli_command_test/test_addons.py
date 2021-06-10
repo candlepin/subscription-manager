@@ -2,6 +2,7 @@
 
 import json
 import sys
+from contextlib import ExitStack
 
 from ..test_managercli import TestCliCommand
 from subscription_manager import syspurposelib
@@ -72,3 +73,11 @@ class TestAddonsCommand(TestCliCommand):
             with Capture() as cap:
                 self.assertEqual(self.cc._are_provided_values_valid(['test']), ['test'])
             self.assertIn('Warning: Provided value', cap.out)
+
+    def test_no_valid_values(self):
+        with ExitStack() as stack:
+            mock_get_valid_fields = stack.enter_context(patch.object(self.cc, '_get_valid_fields'))
+            cap = stack.enter_context(Capture())
+            mock_get_valid_fields.return_value = {'addons': []}
+            self.assertFalse(self.cc._is_provided_value_valid('test'))
+            self.assertIn('Warning: This organization does not have', cap.out)

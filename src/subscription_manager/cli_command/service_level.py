@@ -179,7 +179,9 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
                 for sla in slas:
                     print(sla)
             else:
-                print(_('This org does not have any subscriptions with an available "service level".'))
+                print(_('There are no available values for the system purpose "{syspurpose_attr}" '
+                        'from the available subscriptions in this '
+                        'organization.').format(syspurpose_attr="service_level"))
         except UnauthorizedException as e:
             raise e
         except connection.RemoteServerException as e:
