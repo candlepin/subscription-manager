@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-07 02:57-0400\n"
-"PO-Revision-Date: 2021-02-16 16:40+0000\n"
+"PO-Revision-Date: 2021-06-10 12:04+0000\n"
 "Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-1-28/zh_CN/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.6.2\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.6/optparse.py:146
@@ -146,15 +146,11 @@ msgid "The $0 package will be installed."
 msgstr "$0 软件包将被安装。"
 
 #: cockpit/src/insights.jsx:124
-#, fuzzy
-#| msgid "The $0 package and $1 other package will be installed."
 msgid "The $0 package and $1 other package will be installed."
 msgid_plural "The $0 package and $1 other packages will be installed."
 msgstr[0] "$0 软件包和 $1 个其他软件包将被安装。"
 
 #: cockpit/src/insights.jsx:132
-#, fuzzy
-#| msgid "$0 package needs to be removed."
 msgid "$0 package needs to be removed."
 msgid_plural "$0 packages need to be removed."
 msgstr[0] "$0 个软件包需要删除。"
@@ -217,16 +213,12 @@ msgid "Connected to Red Hat Insights"
 msgstr "已连接至 Red Hat Insights"
 
 #: cockpit/src/insights.jsx:377
-#, fuzzy
-#| msgid "The last Insights data upload has failed."
 msgid "Next Insights data upload"
-msgstr "最后一次 Insights 数据上传失败。"
+msgstr "下一个 Insights 数据上传"
 
 #: cockpit/src/insights.jsx:382
-#, fuzzy
-#| msgid "The last Insights data upload has failed."
 msgid "Last Insights data upload"
-msgstr "最后一次 Insights 数据上传失败。"
+msgstr "前一个 Insights 数据上传"
 
 #: cockpit/src/insights.jsx:403 cockpit/src/insights.jsx:409
 msgid "Disconnect from Insights"
@@ -300,10 +292,8 @@ msgid "Not connected"
 msgstr "未连接"
 
 #: cockpit/src/insights.jsx:546
-#, fuzzy
-#| msgid "Insights"
 msgid "Insights: $0"
-msgstr "Insights"
+msgstr "Insights: $0"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-client.js:48
@@ -476,8 +466,6 @@ msgid "Role:  "
 msgstr "角色：  "
 
 #: cockpit/src/subscriptions-view.jsx:271
-#, fuzzy
-#| msgid "Addons:  "
 msgid "Add-ons:  "
 msgstr "插件：  "
 
@@ -491,16 +479,12 @@ msgstr "系统目的"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:302
-#, fuzzy
-#| msgid "This system is currently not registered."
 msgid "Status: This system is currently not registered."
-msgstr "这个系统目前没有注册。"
+msgstr "状态：这个系统目前没有注册。"
 
 #: cockpit/src/subscriptions-view.jsx:308
-#, fuzzy
-#| msgid "Status: "
 msgid "Status: $0"
-msgstr "状态： "
+msgstr "状态：$0"
 
 #: cockpit/src/subscriptions-view.jsx:311
 msgid "Unregister"
@@ -678,35 +662,22 @@ msgstr ""
 "要更新。如果您没有其他活跃订阅，则可以续订已过期订阅。  "
 
 #: src/dnf-plugins/subscription-manager.py:50
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "This system is not registered to Red Hat Subscription Management. You can "
-#| "use subscription-manager to register.\n"
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "subscription-manager to register.\n"
 msgstr ""
 "\n"
-"本系统尚未在 Red Hat Subscription Management 中注册。可使用 subscription-"
-"manager 进行注册。\n"
+"本系统尚未在权利服务器中注册。可使用 subscription-manager 进行注册。\n"
 
 #: src/dnf-plugins/subscription-manager.py:54
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "This system is registered to Red Hat Subscription Management, but is not "
-#| "receiving updates. You can use subscription-manager to assign "
-#| "subscriptions.\n"
 msgid ""
 "\n"
 "This system is registered with an entitlement server, but is not receiving "
 "updates. You can use subscription-manager to assign subscriptions.\n"
 msgstr ""
 "\n"
-"本系统已在 Red Hat Subscription Management 中注册，但没有接收更新。可使用 "
-"subscription-manager 分配订阅。\n"
+"本系统已在权利服务器中注册，但没有接收更新。可使用 subscription-manager 分配订阅。\n"
 
 #: src/dnf-plugins/subscription-manager.py:87
 msgid "Not root, Subscription Management repositories not updated"
@@ -4611,18 +4582,15 @@ msgstr "错误：您必须注册或通过指定 --username 和 --password 来列
 #: src/subscription_manager/managercli.py:759
 #, python-brace-format
 msgid "\"{value}\""
-msgstr ""
+msgstr "\"{value}\""
 
 #: src/subscription_manager/managercli.py:762
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Warning: Provided value \"{val}\" is not included in the list of valid "
-#| "values"
+#, python-brace-format
 msgid ""
 "Warning: Provided value {vals} is not included in the list of valid values"
 msgid_plural ""
 "Warning: Provided values {vals} are not included in the list of valid values"
-msgstr[0] "警告：所提供的值 \"{val}\" 没有包括在有效值列表中"
+msgstr[0] "警告：提供的值 {vals} 没有包括在有效值列表中"
 
 #: src/subscription_manager/managercli.py:769
 #, python-brace-format
@@ -4667,12 +4635,11 @@ msgstr "可用 {syspurpose_attr}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:902
-#, fuzzy, python-brace-format
-#| msgid "This org does not have any subscriptions with service levels."
+#, python-brace-format
 msgid ""
 "This org does not have any subscriptions with an available "
 "\"{syspurpose_attr}\"."
-msgstr "这个机构没有任何使用服务等级的订阅。"
+msgstr "这个机构没有任何带有可用 \"{syspurpose_attr}\" 的订阅。"
 
 #: src/subscription_manager/managercli.py:904
 #, python-brace-format
@@ -4988,11 +4955,9 @@ msgstr "可用服务等级"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1462
-#, fuzzy
-#| msgid "This org does not have any subscriptions with service levels."
 msgid ""
 "This org does not have any subscriptions with an available \"service-level\"."
-msgstr "这个机构没有任何使用服务等级的订阅。"
+msgstr "这个机构没有带有可用”服务等级”的订阅。"
 
 #: src/subscription_manager/managercli.py:1481
 msgid "Manage usage setting for this system"

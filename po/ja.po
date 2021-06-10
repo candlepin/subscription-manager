@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-07 02:57-0400\n"
-"PO-Revision-Date: 2021-02-15 10:38+0000\n"
+"PO-Revision-Date: 2021-06-10 12:04+0000\n"
 "Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ja/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.6.2\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/optparse.py:146
@@ -149,15 +149,11 @@ msgid "The $0 package will be installed."
 msgstr "$0 パッケージがインストールされます。"
 
 #: cockpit/src/insights.jsx:124
-#, fuzzy
-#| msgid "The $0 package and $1 other package will be installed."
 msgid "The $0 package and $1 other package will be installed."
 msgid_plural "The $0 package and $1 other packages will be installed."
 msgstr[0] "$0 パッケージや $1 のその他のパッケージがインストールされます。"
 
 #: cockpit/src/insights.jsx:132
-#, fuzzy
-#| msgid "$0 package needs to be removed."
 msgid "$0 package needs to be removed."
 msgid_plural "$0 packages need to be removed."
 msgstr[0] "$0 パッケージは削除する必要があります。"
@@ -220,16 +216,12 @@ msgid "Connected to Red Hat Insights"
 msgstr "Red Hat Insights に接続済みです"
 
 #: cockpit/src/insights.jsx:377
-#, fuzzy
-#| msgid "The last Insights data upload has failed."
 msgid "Next Insights data upload"
-msgstr "最後の Insights データのアップロードに失敗しました。"
+msgstr "次の Insights データのアップロード"
 
 #: cockpit/src/insights.jsx:382
-#, fuzzy
-#| msgid "The last Insights data upload has failed."
 msgid "Last Insights data upload"
-msgstr "最後の Insights データのアップロードに失敗しました。"
+msgstr "最後の Insights データのアップロード"
 
 #: cockpit/src/insights.jsx:403 cockpit/src/insights.jsx:409
 msgid "Disconnect from Insights"
@@ -303,10 +295,8 @@ msgid "Not connected"
 msgstr "接続していません"
 
 #: cockpit/src/insights.jsx:546
-#, fuzzy
-#| msgid "Insights"
 msgid "Insights: $0"
-msgstr "Insights"
+msgstr "Insights: $0"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: cockpit/src/subscriptions-client.js:48
@@ -479,8 +469,6 @@ msgid "Role:  "
 msgstr "ロール:  "
 
 #: cockpit/src/subscriptions-view.jsx:271
-#, fuzzy
-#| msgid "Addons:  "
 msgid "Add-ons:  "
 msgstr "アドオン:  "
 
@@ -494,16 +482,12 @@ msgstr "システムの目的"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: cockpit/src/subscriptions-view.jsx:302
-#, fuzzy
-#| msgid "This system is currently not registered."
 msgid "Status: This system is currently not registered."
-msgstr "このシステムは現在登録されていません。"
+msgstr "ステータス: このシステムは現在登録されていません。"
 
 #: cockpit/src/subscriptions-view.jsx:308
-#, fuzzy
-#| msgid "Status: "
 msgid "Status: $0"
-msgstr "ステータス: "
+msgstr "ステータス: $0"
 
 #: cockpit/src/subscriptions-view.jsx:311
 msgid "Unregister"
@@ -686,36 +670,23 @@ msgstr ""
 "合は、有効期限の切れたサブスクリプションを更新してください。  "
 
 #: src/dnf-plugins/subscription-manager.py:50
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "This system is not registered to Red Hat Subscription Management. You can "
-#| "use subscription-manager to register.\n"
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "subscription-manager to register.\n"
 msgstr ""
 "\n"
-"このシステムは、Red Hat サブスクリプション管理に登録されていません。"
-"subscription-manager で登録できます。\n"
+"このシステムは、エンタイトルメントサーバーに登録されていません。subscription-manager で登録できます。\n"
 
 #: src/dnf-plugins/subscription-manager.py:54
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "This system is registered to Red Hat Subscription Management, but is not "
-#| "receiving updates. You can use subscription-manager to assign "
-#| "subscriptions.\n"
 msgid ""
 "\n"
 "This system is registered with an entitlement server, but is not receiving "
 "updates. You can use subscription-manager to assign subscriptions.\n"
 msgstr ""
 "\n"
-"このシステムは、Red Hat サブスクリプション管理に登録されていますが、更新は受"
-"信していません。subscription-manager でサブスクリプションを割り当てることがで"
-"きます。\n"
+"このシステムは、エンタイトルメントーバーに登録されていますが、更新は受信していません。subscription-manager "
+"でサブスクリプションを割り当てることができます。\n"
 
 #: src/dnf-plugins/subscription-manager.py:87
 msgid "Not root, Subscription Management repositories not updated"
@@ -1367,7 +1338,7 @@ msgstr "有効性チェックの頻度 (秒単位; デフォルトは 1 日)"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm_icon/rhsm_icon.c:83
 msgid "force display of the icon (expired, partial or warning)"
-msgstr "強制的にアイコンを表示（期限切れ、部分的、または警告）"
+msgstr "強制的にアイコンを表示 (期限切れ、部分的、または警告)"
 
 #: src/rhsm_icon/rhsm_icon.c:86
 msgid "run the first status check without delay (otherwise wait 4 minutes)"
@@ -4176,7 +4147,7 @@ msgstr "リポジトリーのデータをロード中"
 
 #: src/subscription_manager/gui/reposgui.py:166
 msgid "Retrieving repository data from server."
-msgstr "サーバーからリポジトリーのデータを取得中"
+msgstr "サーバーからリポジトリーのデータを取得中。"
 
 #: src/subscription_manager/gui/reposgui.py:178
 msgid "Unable to load repository data."
@@ -4654,18 +4625,15 @@ msgstr ""
 #: src/subscription_manager/managercli.py:759
 #, python-brace-format
 msgid "\"{value}\""
-msgstr ""
+msgstr "\"{value}\""
 
 #: src/subscription_manager/managercli.py:762
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Warning: Provided value \"{val}\" is not included in the list of valid "
-#| "values"
+#, python-brace-format
 msgid ""
 "Warning: Provided value {vals} is not included in the list of valid values"
 msgid_plural ""
 "Warning: Provided values {vals} are not included in the list of valid values"
-msgstr[0] "警告。指定された値 \"{val}\" は有効な値のリストに含まれていません"
+msgstr[0] "警告: 指定された値 {vals} は有効な値のリストに含まれていません"
 
 #: src/subscription_manager/managercli.py:769
 #, python-brace-format
@@ -4675,7 +4643,7 @@ msgstr "警告: 属性 \"{attr}\" の有効な値のリストは空です。"
 #: src/subscription_manager/managercli.py:773
 #, python-brace-format
 msgid "Warning: No valid values provided for attribute \"{attr}\""
-msgstr "警告。属性 \"{attr}\" に有効な値はありません"
+msgstr "警告: 属性 \"{attr}\" に有効な値はありません"
 
 #: src/subscription_manager/managercli.py:785
 #, python-brace-format
@@ -4710,13 +4678,11 @@ msgstr "利用可能な {syspurpose_attr}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:902
-#, fuzzy, python-brace-format
-#| msgid "This org does not have any subscriptions with service levels."
+#, python-brace-format
 msgid ""
 "This org does not have any subscriptions with an available "
 "\"{syspurpose_attr}\"."
-msgstr ""
-"この組織には、サービスレベルが設定されているサブスクリプションがありません。"
+msgstr "この組織には、利用できる {syspurpose_attr} のあるサブスクリプションがありません。"
 
 #: src/subscription_manager/managercli.py:904
 #, python-brace-format
@@ -5047,12 +5013,9 @@ msgstr "利用可能なサービスレベル"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1462
-#, fuzzy
-#| msgid "This org does not have any subscriptions with service levels."
 msgid ""
 "This org does not have any subscriptions with an available \"service-level\"."
-msgstr ""
-"この組織には、サービスレベルが設定されているサブスクリプションがありません。"
+msgstr "この組織には、利用できる \"service-level\" のあるサブスクリプションがありません。"
 
 #: src/subscription_manager/managercli.py:1481
 msgid "Manage usage setting for this system"

@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-07 02:57-0400\n"
-"PO-Revision-Date: 2021-02-16 16:40+0000\n"
+"PO-Revision-Date: 2021-06-10 12:04+0000\n"
 "Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/fr/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.6.2\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/optparse.py:146
@@ -153,20 +153,16 @@ msgid "The $0 package will be installed."
 msgstr "Le paquet $0 va être installé."
 
 #: cockpit/src/insights.jsx:124
-#, fuzzy
-#| msgid "The $0 package and $1 other package will be installed."
 msgid "The $0 package and $1 other package will be installed."
 msgid_plural "The $0 package and $1 other packages will be installed."
-msgstr[0] "Le paquet $0 et les $1autres paquets vont être installés."
-msgstr[1] "Le paquet $0 et les $1autres paquets vont être installés."
+msgstr[0] "Le paquet $0 et les $1 autres paquets vont être installés."
+msgstr[1] "Le paquet $0 et les $1 autres paquets vont être installés."
 
 #: cockpit/src/insights.jsx:132
-#, fuzzy
-#| msgid "$0 package needs to be removed."
 msgid "$0 package needs to be removed."
 msgid_plural "$0 packages need to be removed."
 msgstr[0] "Le paquet $0 doit être retiré."
-msgstr[1] "Le paquet $0 doit être retiré."
+msgstr[1] "Les paquets $0 doivent être retirés."
 
 #: cockpit/src/insights.jsx:146
 msgid "Additional packages:"
@@ -226,16 +222,12 @@ msgid "Connected to Red Hat Insights"
 msgstr "Connecté à Red Hat Insights"
 
 #: cockpit/src/insights.jsx:377
-#, fuzzy
-#| msgid "The last Insights data upload has failed."
 msgid "Next Insights data upload"
-msgstr "Le dernier téléchargement de données d'Insights a échoué."
+msgstr "Téléchargement des prochaines données d’ Insights"
 
 #: cockpit/src/insights.jsx:382
-#, fuzzy
-#| msgid "The last Insights data upload has failed."
 msgid "Last Insights data upload"
-msgstr "Le dernier téléchargement de données d'Insights a échoué."
+msgstr "Téléchargement des dernières données d’ Insights"
 
 #: cockpit/src/insights.jsx:403 cockpit/src/insights.jsx:409
 msgid "Disconnect from Insights"
@@ -314,10 +306,8 @@ msgid "Not connected"
 msgstr "Non connectée"
 
 #: cockpit/src/insights.jsx:546
-#, fuzzy
-#| msgid "Insights"
 msgid "Insights: $0"
-msgstr "Insights"
+msgstr "Insights: $0"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: cockpit/src/subscriptions-client.js:48
@@ -490,10 +480,8 @@ msgid "Role:  "
 msgstr "Rôle :  "
 
 #: cockpit/src/subscriptions-view.jsx:271
-#, fuzzy
-#| msgid "Addons:  "
 msgid "Add-ons:  "
-msgstr "Addons :  "
+msgstr "Add-ons :  "
 
 #: cockpit/src/subscriptions-view.jsx:283
 msgid "Status: "
@@ -505,16 +493,12 @@ msgstr "Objectif système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:302
-#, fuzzy
-#| msgid "This system is currently not registered."
 msgid "Status: This system is currently not registered."
-msgstr "Ce système n'est pas enregistré actuellement."
+msgstr "Statut : ce système n'est pas enregistré actuellement."
 
 #: cockpit/src/subscriptions-view.jsx:308
-#, fuzzy
-#| msgid "Status: "
 msgid "Status: $0"
-msgstr "Statut : "
+msgstr "Status: $0"
 
 #: cockpit/src/subscriptions-view.jsx:311
 msgid "Unregister"
@@ -699,36 +683,25 @@ msgstr ""
 "pouvez en faire le renouvellement.  "
 
 #: src/dnf-plugins/subscription-manager.py:50
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "This system is not registered to Red Hat Subscription Management. You can "
-#| "use subscription-manager to register.\n"
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "subscription-manager to register.\n"
 msgstr ""
 "\n"
-"Le système n'est pas enregistré avec Red Hat Subscription Management. "
-"Utilisez subscription-manager pour vous enregistrer.\n"
+"Le système n'est pas enregistré avec un serveur agréé. Utilisez subscription-"
+"manager pour vous enregistrer.\n"
 
 #: src/dnf-plugins/subscription-manager.py:54
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "This system is registered to Red Hat Subscription Management, but is not "
-#| "receiving updates. You can use subscription-manager to assign "
-#| "subscriptions.\n"
 msgid ""
 "\n"
 "This system is registered with an entitlement server, but is not receiving "
 "updates. You can use subscription-manager to assign subscriptions.\n"
 msgstr ""
 "\n"
-"Ce système est enregistré avec Red Hat Subscription Manager, mais il ne "
-"reçoit pas de mises à jour. Vous pouvez utiliser le subscription-manager "
-"pour allouer les abonnements.\n"
+"Ce système est enregistré avec un serveur agréé, mais il ne reçoit pas de "
+"mises à jour. Vous pouvez utiliser le subscription-manager pour allouer des "
+"abonnements.\n"
 
 #: src/dnf-plugins/subscription-manager.py:87
 msgid "Not root, Subscription Management repositories not updated"
@@ -4742,23 +4715,20 @@ msgstr ""
 #: src/subscription_manager/managercli.py:759
 #, python-brace-format
 msgid "\"{value}\""
-msgstr ""
+msgstr "\"{value}\""
 
 #: src/subscription_manager/managercli.py:762
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Warning: Provided value \"{val}\" is not included in the list of valid "
-#| "values"
+#, python-brace-format
 msgid ""
 "Warning: Provided value {vals} is not included in the list of valid values"
 msgid_plural ""
 "Warning: Provided values {vals} are not included in the list of valid values"
 msgstr[0] ""
-"Avertissement : La valeur fournie \"{val}\" ne figure pas dans la liste des "
+"Avertissement : La valeur fournie {vals} ne figure pas dans la liste des "
 "valeurs valides"
 msgstr[1] ""
-"Avertissement : La valeur fournie \"{val}\" ne figure pas dans la liste des "
-"valeurs valides"
+"Avertissement : Les valeurs fournies {vals} ne figurent pas dans la liste "
+"des valeurs valides"
 
 #: src/subscription_manager/managercli.py:769
 #, python-brace-format
@@ -4806,13 +4776,11 @@ msgstr "Disponible {syspurpose_attr}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:902
-#, fuzzy, python-brace-format
-#| msgid "This org does not have any subscriptions with service levels."
+#, python-brace-format
 msgid ""
 "This org does not have any subscriptions with an available "
 "\"{syspurpose_attr}\"."
-msgstr ""
-"Cette organisation ne possède aucun abonnement avec niveaux de service."
+msgstr "Cet org n'a pas d'abonnements avec un \"{syspurpose_attr}\" disponible"
 
 #: src/subscription_manager/managercli.py:904
 #, python-brace-format
@@ -5153,12 +5121,11 @@ msgstr "Tous les niveaux de service disponibles"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1462
-#, fuzzy
-#| msgid "This org does not have any subscriptions with service levels."
 msgid ""
 "This org does not have any subscriptions with an available \"service-level\"."
 msgstr ""
-"Cette organisation ne possède aucun abonnement avec niveaux de service."
+"Cette organisation ne possède aucun abonnement avec un «niveau de service» "
+"disponible."
 
 #: src/subscription_manager/managercli.py:1481
 msgid "Manage usage setting for this system"
