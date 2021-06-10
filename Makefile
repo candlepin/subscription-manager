@@ -63,7 +63,7 @@ INSTALL_OSTREE_PLUGIN ?= true
 INSTALL_CONTAINER_PLUGIN ?= true
 
 WITH_SYSTEMD ?= true
-WITH_SUBMAN_GUI ?= true
+WITH_SUBMAN_GUI ?= false
 WITH_COCKPIT ?= true
 WITH_SUBMAN_MIGRATION ?= true
 
@@ -123,13 +123,9 @@ STYLEFILES=$(PYFILES) $(BIN_FILES)
 # Install doesn't perform a build if it doesn't have too.  Best to clean out
 # any cruft so developers don't end up install old builds.
 ifeq ($(WITH_SUBMAN_GUI),true)
-    build: rhsmcertd rhsm-icon
-        EXCLUDE_PACKAGES:="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py clean --all
-        EXCLUDE_PACKAGES:="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
+    build: clean rhsmcertd rhsm-icon
 else
-    build: rhsmcertd
-        EXCLUDE_PACKAGES:="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py clean --all
-        EXCLUDE_PACKAGES:="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
+    build: clean rhsmcertd
 endif
 
 # we never "remake" this makefile, so add a target so

@@ -14,16 +14,17 @@
 #   we need to make /etc/pki/product and /etc/pki/entitlement
 
 echo "GIT_COMMIT:" "${GIT_COMMIT}"
-
+PROJECTROOT=$(git rev-parse --show-toplevel)
+WORKSPACE=${WORKSPACE:-$PROJECTROOT}
 cd $WORKSPACE
 
 sudo yum clean expire-cache
 sudo yum-builddep -y subscription-manager.spec || true  # ensure we install any missing rpm deps
-virtualenv env-stylish -p python3
+python3 -m venv env-stylish
 source env-stylish/bin/activate
 
 make install-pip-requirements
-
+    
 # build/test python-rhsm
 if [ -d $WORKSPACE/python-rhsm ]; then
   pushd $WORKSPACE/python-rhsm

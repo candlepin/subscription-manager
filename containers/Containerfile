@@ -2,6 +2,8 @@ FROM registry.fedoraproject.org/fedora-toolbox:34
 
 MAINTAINER "Candlepin Team" <candlepin@redhat.com>
 
+ENV SMDEV_CONTAINER_OFF='True'
+
 RUN yum install --disablerepo=updates -y \
     gettext \
     git \
@@ -10,6 +12,7 @@ RUN yum install --disablerepo=updates -y \
     bind-utils \
     dbus-glib \
     dbus-glib-devel \
+    dnf-utils \
     gcc \
     git \
     postfix \
@@ -31,6 +34,7 @@ RUN yum install --disablerepo=updates -y \
     openssl-devel \
     rarian-compat \
     rpmlint \
+    rpm-build \
     xorg-x11-server-Xvfb \
     # zanata-client \
     python3-devel \
@@ -50,6 +54,7 @@ RUN yum install --disablerepo=updates -y \
     python3-gobject-base \
     python3-ethtool \
     redhat-rpm-config \
+    subscription-manager-rhsm-certificates \
     && yum clean all
 
 RUN mkdir /build
@@ -60,3 +65,5 @@ RUN git clone https://github.com/candlepin/subscription-manager.git
 WORKDIR /build/subscription-manager
 RUN python3 ./setup.py build
 RUN python3 ./setup.py build_ext --inplace
+RUN yum-builddep -y ./subscription-manager.spec
+RUN echo "export SMDEV_CONTAINER_OFF='True'" >> /root/.bashrc && echo "export SMDEV_CONTAINER_OFF='True'" >> /root/.zshrc
