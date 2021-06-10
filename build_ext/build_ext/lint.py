@@ -64,8 +64,12 @@ class RpmLint(BaseCommand):
     description = "run rpmlint on spec files"
 
     def run(self):
-        for f in Utils.find_files_of_type('.', '*.spec'):
-            spawn(['rpmlint', '--file=rpmlint.config', f])
+        files = subprocess.run(['git', 'ls-files', '--full-name'],
+                               capture_output=True).stdout
+        files = files.decode().split('\n')
+        for f in files:
+            if fnmatch.fnmatch(f, "*.spec"):
+                spawn(['rpmlint', '--file=rpmlint.config', os.path.realpath(f)])
 
 
 class AstVisitor(object):
