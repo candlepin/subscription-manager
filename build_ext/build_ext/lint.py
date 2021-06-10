@@ -14,12 +14,14 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 import ast
+import fnmatch
+import os
 import re
+import subprocess
 import tokenize
 
 from distutils.spawn import spawn
 from distutils.text_file import TextFile
-
 from build_ext.utils import Utils, BaseCommand, memoize
 
 # These dependencies aren't available in build environments.  We won't need any
@@ -88,8 +90,12 @@ class RpmLint(BaseCommand):
     description = "run rpmlint on spec files"
 
     def run(self):
-        for f in Utils.find_files_of_type('.', '*.spec'):
-            spawn(['rpmlint', '--file=rpmlint.config', f])
+        files = subprocess.run(['git', 'ls-files', '--full-name'],
+                                capture_output=True).stdout
+        files = files.decode().split('\n')
+        for f in files:
+            if fnmatch.fnmatch(f, "*.spec"):
+                spawn(['rpmlint', '--file=rpmlint.config', os.path.realpath(f)])
 
 
 class FileLint(BaseCommand):
