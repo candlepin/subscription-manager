@@ -73,10 +73,13 @@ class TestCloudCollector(unittest.TestCase):
         self.assertEqual(facts["aws_account_id"], AWS_ACCOUNT_ID)
         self.assertIn("aws_billing_products", facts)
         self.assertEqual(facts["aws_billing_products"], AWS_BILLING_PRODUCTS)
+        self.assertIn("aws_marketplace_product_codes", facts)
+        self.assertIsNone(facts["aws_marketplace_product_codes"])
 
     def test_get_aws_facts_with_null_billing_products(self):
         """
-        Billing products could be null in some cases (not RHEL)
+        Billing products could be null in some cases (not RHEL systems
+        or systems installed from custom installation images)
         """
         self.collector = cloud_facts.CloudFactsCollector(
             collected_hw_info={
@@ -105,13 +108,18 @@ class TestCloudCollector(unittest.TestCase):
   "version" : "2017-09-30"
 }
         """
+
         self.aws_requests_mock.get = mock.Mock(return_value=mock_result)
         facts = self.collector.get_all()
+
         self.assertIn("aws_instance_id", facts)
         self.assertEqual(facts["aws_instance_id"], AWS_INSTANCE_ID)
         self.assertIn("aws_account_id", facts)
         self.assertEqual(facts["aws_account_id"], AWS_ACCOUNT_ID)
-        self.assertNotIn("aws_billing_products", facts)
+        self.assertIn("aws_billing_products", facts)
+        self.assertIsNone(facts["aws_billing_products"])
+        self.assertIn("aws_marketplace_product_codes", facts)
+        self.assertIsNone(facts["aws_marketplace_product_codes"])
 
     def test_get_azure_facts(self):
         """
