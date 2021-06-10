@@ -406,7 +406,7 @@ BuildRequires: systemd
 %endif
 
 %if !%{use_container_plugin}
-Obsoletes: subscription-manager-plugin-container
+Obsoletes: subscription-manager-plugin-container <= %{version}
 %endif
 
 %if %{use_dnf}
@@ -418,6 +418,9 @@ Requires: libdnf-plugin-subscription-manager = %{version}
 # The dnf plugin is now part of subscription-manager
 Obsoletes: dnf-plugin-subscription-manager < 1.29.0
 %endif
+%endif
+
+Obsoletes: %{py_package_prefix}-syspurpose <= %{version}
 
 %description
 The Subscription Manager package provides programs and libraries to allow users
