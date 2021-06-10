@@ -1,0 +1,313 @@
+@import "./_global-variables.scss";
+@import "@patternfly/patternfly/base/patternfly-themes.scss";
+@import "./patternfly/patternfly-4-overrides.scss";
+@import "@patternfly/patternfly/components/Page/page.scss";
+
+/* Globally resize headings */
+h1 {
+  font-size: var(--pf-global--FontSize--4xl);
+}
+
+h2 {
+  font-size: var(--pf-global--FontSize--3xl);
+}
+
+h3 {
+  font-size: var(--pf-global--FontSize--2xl);
+}
+
+h4 {
+  font-size: var(--pf-global--FontSize--xl);
+}
+
+h4 {
+  font-size: var(--pf-global--FontSize--lg);
+}
+/* End of headings resize */
+
+a {
+    cursor: pointer;
+}
+
+p + p {
+    // The mix of PF3 and PF4 removes margin from paragraphs.
+    // We want successive paragraphs to have spaces between each other.
+    margin-top: var(--pf-global--spacer--md);
+}
+
+.disabled {
+    pointer-events: auto;
+}
+
+.btn {
+    min-height: 26px;
+    min-width: 26px;
+}
+
+.btn.disabled, .pf-c-button.disabled {
+    pointer-events: auto;
+}
+
+.btn.disabled:hover, .pf-c-button.disabled:hover {
+  z-index: auto;
+}
+
+.btn-group, .btn-group-vertical {
+    /* Fix button groups from wrapping in narrow widths */
+    display: inline-flex;
+}
+
+.btn-group-vertical {
+    /* Vertical btn-groups should be vertical */
+    flex-direction: column;
+}
+
+a.disabled {
+    cursor: not-allowed !important;
+    text-decoration: none;
+    pointer-events: none;
+    color: #8b8d8f;
+}
+
+a.disabled:hover {
+    text-decoration: none;
+}
+
+.dropdown-menu > li > a.disabled,
+.dropdown-menu > li > a.disabled:hover,
+.dropdown-menu > li > a.disabled:focus {
+  color: var(--ct-color-subtle-copy);
+}
+
+.dropdown-menu > li > a.disabled:hover,
+.dropdown-menu > li > a.disabled:focus {
+  text-decoration: none;
+  background-color: transparent;
+  background-image: none;
+  border-color: transparent;
+  cursor: default;
+}
+
+/* Limit dropdown menus to 90% of the viewport size */
+.dropdown-menu {
+    height: auto;
+    overflow-y: auto;
+    max-height: 90vh;
+}
+
+/* Allow kebab menus to have a ^ with overflowing */
+/* Note: This means kebab menus cannot be _too_ long */
+.dropdown-kebab-pf > .dropdown-menu {
+    overflow: visible;
+}
+
+/* Align these buttons more nicely */
+.btn.fa-minus,
+.btn.fa-plus {
+    padding-top: 4px;
+}
+
+.highlight-ct {
+    background-color: var(--ct-color-link-hover-bg);
+}
+
+.curtains-ct {
+    top: 0px;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+}
+
+.panel .well {
+    margin-bottom: 0px;
+    border: none;
+    border-radius: 0px;
+    background-color: var(--pf-global--palette--black-200);
+}
+
+.well.blank-slate-pf {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05) inset;
+    padding-top: 40px;
+}
+
+.blank-slate-pf .spinner-lg {
+    height: 58px;
+    width: 58px;
+}
+
+/* Small list inside a dialog */
+/* Alert fixups */
+
+.modal-content .pf-c-alert {
+    text-align: left;
+    margin-bottom: 24px;
+}
+/* Dialog patterns */
+
+.dialog-wait-ct {
+    margin-top: 3px;
+    /* Right align footer idle messages after the buttons */
+    margin-left: auto;
+}
+
+.dialog-wait-ct .spinner {
+    display: inline-block;
+    /* Add spacing between possible messages and the spinner */
+    margin-left: var(--pf-global--spacer--md);
+}
+
+.dialog-wait-ct span {
+    vertical-align: 4px;
+    padding-left: 10px;
+}
+
+.dialog-list-ct {
+    max-height: 230px;
+    overflow-x: auto;
+    border: 1px solid var(--pf-global--palette--black-300);
+    margin-bottom: 0px;
+}
+
+/* HACK: https://github.com/patternfly/patternfly/issues/255 */
+input[type=number]:not(.pf-c-form-control) {
+  padding: 0 0 0 5px;
+}
+
+/* Make a dialog visible */
+.dialog-ct-visible {
+    display: block;
+}
+
+.ct-select {
+    --dropdown-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='8'%3E%3Cpath fill='%23151515' d='M18.804 1h8.392c.58 0 .87.701.46 1.112L23.46 6.31a.653.653 0 0 1-.922 0l-4.194-4.197A.651.651 0 0 1 18.805 1z'/%3E%3C/svg%3E");
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    --dropdown-background: var(--pf-global--BackgroundColor--100);
+    max-width: 100%;
+    padding: 0.25em 2.5em calc(0.25em - 1px) 0.5em;
+    border: 1px solid var(--pf-global--BorderColor--300);
+    border-bottom-color: var(--pf-global--Color--200);
+    background: var(--dropdown-image) no-repeat 100% 50%, var(--dropdown-background);
+    border-radius: 3px;
+    color: var(--pf-global--Color--100);
+    cursor: pointer;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    min-height: 2.25rem;
+    box-shadow: none;
+}
+
+@-moz-document url-prefix() {
+    /* Accommodate Firefox styling selects with slightly different padding. */
+    .ct-select {
+        padding-left: 0.25em;
+    }
+}
+
+.ct-select:active,
+.ct-select:focus,
+.ct-select:hover {
+    border-bottom-color: var(--pf-global--primary-color--100);
+    box-shadow: none;
+}
+
+.ct-select:active,
+.ct-select:focus {
+    border-bottom-width: 2px;
+    padding-bottom: calc(0.25rem - 2px);
+}
+
+.ct-select:disabled {
+    --dropdown-background: var(--pf-global--disabled-color--300);
+    color: var(--pf-global--disabled-color--100);
+    border: 1px solid var(--dropdown-background);
+    cursor: default;
+}
+
+.ct-select optgroup,
+.ct-select option {
+    background-color: var(--ct-color-bg);
+}
+
+.ct-select option:checked {
+    background-color: var(--pf-global--active-color--100);
+    color: var(--pf-global--Color--light-100);
+}
+
+:root {
+    /* Cockpit custom colors */
+    --ct-color-light-red: #f8cccc;
+    --ct-color-red-hat-red : #ee0000;
+
+    // Blend between --pf-global--palette--black-200 and 300
+    --ct-global--palette--black-250: #e6e6e6;
+
+    /* Semantic colors */
+    --ct-color-fg: var(--pf-global--color--100);
+    --ct-color-bg: var(--pf-global--BackgroundColor--100);
+    --ct-color-text: var(--ct-color-fg);
+
+    --ct-color-link        : var(--pf-global--active-color--100);
+    --ct-color-link-visited: var(--pf-global--active-color--100);
+
+    --ct-color-subtle-copy: var(--pf-global--disabled-color--100);
+
+    // General border color (semantic shortcut, instead of specifying the color directly)
+    --ct-color-border: var(--pf-global--BorderColor--100);
+
+    // Used for highlighting link blocks (with a light background blue)
+    --ct-color-link-hover-bg  : var(--pf-global--palette--light-blue-100);
+
+    /* Colors used for custom lists */
+    // as seen in Journal, Listing, Table widgets and pages like Machines, Updates, Services
+    --ct-color-list-text               : var(--ct-color-text);
+    --ct-color-list-link               : var(--ct-color-link);
+    --ct-color-list-bg                 : var(--ct-color-bg);
+    --ct-color-list-border             : var(--ct-color-border);
+    --ct-color-list-hover-text         : var(--ct-color-link);
+    --ct-color-list-hover-bg           : var(--pf-global--BackgroundColor--150);
+    --ct-color-list-hover-border       : var(--pf-global--BackgroundColor--150);
+    --ct-color-list-hover-icon         : var(--pf-global--palette--light-blue-400);
+    --ct-color-list-selected-text      : var(--ct-color-link);
+    --ct-color-list-selected-bg        : var(--pf-global--BackgroundColor--150);
+    --ct-color-list-selected-border    : var(--pf-global--BackgroundColor--150);
+    --ct-color-list-active-text        : var(--pf-global--palette--blue-500);
+    --ct-color-list-active-bg          : var(--ct-color-bg);
+    --ct-color-list-active-border      : var(--ct-color-list-border);
+    --ct-color-list-critical-bg        : var(--pf-global--palette--red-50);
+    --ct-color-list-critical-border    : #e6bcbc; // red-500 mixed with white @ 50%
+    --ct-color-list-critical-alert-text: var(--pf-global--palette--red-200);
+}
+
+[hidden] { display: none !important; }
+
+// Let PF4 handle the scrolling through page component otherwise we might get double scrollbar
+html:not(.index-page) body {
+  overflow-y: hidden;
+
+  // Ensure UI fills the entire page (and does not run over)
+  .ct-page-fill {
+    height: 100% !important;
+  }
+}
+
+/* Add some spacing to nested form groups - PF4 does not support them */
+/* https://github.com/patternfly/patternfly-react/issues/5023 */
+.pf-c-form__group-control {
+    > .pf-c-form__group, .pf-c-form__section {
+        padding-top: var(--pf-global--spacer--md);
+    }
+}
+
+// When there is an Alert above the Form add some spacing
+.pf-c-modal-box .pf-c-alert + .pf-c-form {
+    padding-top: var(--pf-global--FontSize--sm);
+}
+
+.ct-icon-exclamation-triangle {
+    color: var(--pf-global--warning-color--100);
+}
+
+.ct-icon-times-circle {
+    color: var(--pf-global--danger-color--100);
+}

@@ -182,19 +182,9 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.js$/,
-                exclude: /\/node_modules\/.*\//, // exclude external dependencies
-                loader: 'strict-loader' // Adds "use strict"
-            },
-            {
                 exclude: /node_modules/,
-                loader: 'babel-loader',
-                test: /\.js$/
-            },
-            {
-                exclude: /node_modules/,
-                loader: 'babel-loader',
-                test: /\.jsx$/
+                use: "babel-loader",
+                test: /\.(js|jsx)$/
             },
             {
                 test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|eot|ttf|wav|mp3)$/,
