@@ -80,12 +80,23 @@ class CloudFactsCollector(collector.FactsCollector):
             # BTW: There should be only two types of billing codes: bp-63a5400a and bp-6fa54006 in the list,
             # when RHEL is used. When the subscription-manager is used by some other Linux distribution,
             # then there could be different codes or it could be null
-            if 'billingProducts' in values and values['billingProducts'] is not None:
+            if 'billingProducts' in values:
                 billing_products = values['billingProducts']
                 if isinstance(billing_products, list):
-                    facts['aws_billing_products'] = " ".join(values['billingProducts'])
+                    facts['aws_billing_products'] = " ".join(billing_products)
+                elif billing_products is None:
+                    facts['aws_billing_products'] = billing_products
                 else:
-                    log.debug('AWS metadata attribute billingProducts has to be list')
+                    log.debug('AWS metadata attribute billingProducts has to be list or null')
+
+            if 'marketplaceProductCodes' in values:
+                marketplace_product_codes = values['marketplaceProductCodes']
+                if isinstance(marketplace_product_codes, list):
+                    facts['aws_marketplace_product_codes'] = " ".join(marketplace_product_codes)
+                elif marketplace_product_codes is None:
+                    facts['aws_marketplace_product_codes'] = marketplace_product_codes
+                else:
+                    log.debug('AWS metadata attribute marketplaceProductCodes has to be list or null')
 
             return facts
 
