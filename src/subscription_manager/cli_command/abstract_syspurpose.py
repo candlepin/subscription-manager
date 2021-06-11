@@ -198,23 +198,17 @@ class AbstractSyspurposeCommand(CliCommand):
             if self.is_registered() or \
                     (self.options.username and self.options.password) or \
                     self.options.token:
-                if self.attr in valid_fields:
-                    if len(valid_fields[self.attr]) > 0:
-                        # TRANSLATORS: this is used to quote a string
-                        quoted_values = [_("\"{value}\"").format(value=value)
-                                         for value in invalid_values]
-                        printable_values = friendly_join(quoted_values)
-                        print(ungettext('Warning: Provided value {vals} is not included in the list of valid values',
-                                        'Warning: Provided values {vals} are not included in the list of valid values',
-                                        invalid_values_len).format(
-                            vals=printable_values
-                        ))
-                        self._print_valid_values(valid_fields)
-                    else:
-                        print(_('Warning: There are no available values for the system purpose "{attr}" '
-                                'from the available subscriptions in this organization.').format(
-                            attr=self.attr
-                        ))
+                if len(valid_fields.get(self.attr, [])) > 0:
+                    # TRANSLATORS: this is used to quote a string
+                    quoted_values = [_("\"{value}\"").format(value=value)
+                                     for value in invalid_values]
+                    printable_values = friendly_join(quoted_values)
+                    print(ungettext('Warning: Provided value {vals} is not included in the list of valid values',
+                                    'Warning: Provided values {vals} are not included in the list of valid values',
+                                    invalid_values_len).format(
+                        vals=printable_values
+                    ))
+                    self._print_valid_values(valid_fields)
                 else:
                     print(_('Warning: This organization does not have any subscriptions that provide a '
                             'system purpose "{attr}".  This setting will not influence auto-attaching '
@@ -333,26 +327,22 @@ class AbstractSyspurposeCommand(CliCommand):
 
     def list(self):
         valid_fields = self._get_valid_fields()
-        if self.attr in valid_fields:
-            if len(valid_fields[self.attr]) > 0:
-                line = '+-------------------------------------------+'
-                print(line)
-                translated_string = _('Available {syspurpose_attr}').format(syspurpose_attr=self.attr)
-                # Print translated string (the length could be different) in the center of the line
-                line_len = len(line)
-                trans_str_len = len(translated_string)
-                empty_space_len = int((line_len - trans_str_len) / 2)
-                print(empty_space_len * ' ' + translated_string)
-                print(line)
-                # Print values
-                self._print_valid_values(valid_fields)
-            else:
-                print(_('There are no available values for the system purpose "{syspurpose_attr}" '
-                        'from the available subscriptions in this '
-                        'organization.').format(syspurpose_attr=self.attr))
+        if len(valid_fields.get(self.attr, [])) > 0:
+            line = '+-------------------------------------------+'
+            print(line)
+            translated_string = _('Available {syspurpose_attr}').format(syspurpose_attr=self.attr)
+            # Print translated string (the length could be different) in the center of the line
+            line_len = len(line)
+            trans_str_len = len(translated_string)
+            empty_space_len = int((line_len - trans_str_len) / 2)
+            print(empty_space_len * ' ' + translated_string)
+            print(line)
+            # Print values
+            self._print_valid_values(valid_fields)
         else:
-            print(_('This organization does not have any subscriptions that provide a system '
-                    'purpose "{syspurpose_attr}.').format(syspurpose_attr=self.attr))
+            print(_('There are no available values for the system purpose "{syspurpose_attr}" '
+                    'from the available subscriptions in this '
+                    'organization.').format(syspurpose_attr=self.attr))
 
     def sync(self):
         return syspurposelib.SyspurposeSyncActionCommand().perform(include_result=True)[1]
