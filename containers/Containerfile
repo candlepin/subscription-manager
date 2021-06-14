@@ -1,8 +1,8 @@
-FROM fedora:30
+FROM fedora:34
 
 MAINTAINER "Candlepin Team" <candlepin@redhat.com>
 
-RUN yum install --disablerepo=updates -y \
+RUN dnf install --disablerepo=updates -y \
     gettext \
     git \
     jss \
@@ -12,9 +12,7 @@ RUN yum install --disablerepo=updates -y \
     dbus-glib-devel \
     gcc \
     git \
-    m2crypto \
     postfix \
-    python2-pip \
     python3-pip \
     sudo \
     vim \
@@ -35,46 +33,27 @@ RUN yum install --disablerepo=updates -y \
     rarian-compat \
     rpmlint \
     xorg-x11-server-Xvfb \
-    zanata-client \
-    python2-devel \
     python3-devel \
-    python2-decorator \
     python3-decorator \
-    python2-six \
     python3-six \
-    python2-dateutil \
     python3-dateutil \
-    python2-iniparse \
     python3-iniparse \
-    python2-nose \
     python3-nose \
-    python2-coverage \
     python3-coverage \
-    python2-polib \
     python3-polib \
-    python2-decorator \
     python3-decorator \
-    python2-inotify \
     python3-inotify \
-    python2-simplejson \
     python3-simplejson \
-    python2-sphinx \
     python3-sphinx \
-    python2-unittest2 \
-    python3-unittest2 \
-    python2-rpm \
     python3-rpm \
-    python2-gobject-base \
     python3-gobject-base \
-    python2-ethtool \
     python3-ethtool \
     redhat-rpm-config \
-    && yum clean all
+    && dnf clean all
 
 RUN mkdir /build
 COPY requirements.txt dev-requirements.txt /build
 WORKDIR /build
-RUN pip2 install -r dev-requirements.txt 
 RUN pip3 install -r dev-requirements.txt
 RUN git clone https://github.com/candlepin/subscription-manager.git
 WORKDIR /build/subscription-manager

@@ -23,7 +23,7 @@ Create a containerized environment
 
 To create a containerized environment you can simply run following script:
 
-    $ ./build.sh
+    $ ./build
 
 Or you can build an image using:
 
