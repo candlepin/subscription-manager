@@ -52,6 +52,7 @@ class SyspurposeCommand(CliCommand):
         )
         self.parser.add_argument(
             "--show",
+            dest='syspurpose_show',
             action="store_true",
             help=_("show current system purpose")
         )
@@ -62,8 +63,8 @@ class SyspurposeCommand(CliCommand):
         :return: None
         """
         # When no CLI options are provided, then show current syspurpose values
-        if self.options.show is not True:
-            self.options.show = True
+        if self.options.syspurpose_show is not True:
+            self.options.syspurpose_show = True
 
     def _do_command(self):
         """
@@ -73,7 +74,7 @@ class SyspurposeCommand(CliCommand):
         self._validate_options()
 
         content = {}
-        if self.options.show is True:
+        if self.options.syspurpose_show is True:
             if self.is_registered():
                 try:
                     self.cp = self.cp_provider.get_consumer_auth_cp()
