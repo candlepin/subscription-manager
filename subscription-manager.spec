@@ -93,6 +93,12 @@
 %global use_inotify 0
 %endif
 
+# Do not ship initial-setup in RHEL 9 and on, as Anaconda can now register
+# during the installation.
+%if (0%{?rhel} && 0%{?rhel} < 9)
+%global use_initial_setup 0
+%endif
+
 %if (%{use_subman_gui} || %{use_initial_setup} || %{use_firstboot})
 %global use_rhsm_gtk 1
 %else
