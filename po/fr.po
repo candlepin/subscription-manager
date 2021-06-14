@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
 "PO-Revision-Date: 2023-05-10 05:37+0000\n"
-"Last-Translator: Jérôme Fenal <jfenal@free.fr>\n"
+"Last-Translator: Transtats <suanand@redhat.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/fr/>\n"
 "Language: fr\n"
@@ -57,8 +57,7 @@ msgstr "ne peut pas fusionner les actions - deux groupes sont nommés %r"
 
 #: /usr/lib64/python3.9/argparse.py:1520
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
-"Le terme \"requis\" n'est pas un argument valable pour les positionnels"
+msgstr "Le terme \"requis\" n'est pas un argument valable pour les positionnels"
 
 #: /usr/lib64/python3.9/argparse.py:1542
 #, python-format
@@ -916,9 +915,9 @@ msgid ""
 "Please use:  subscription-manager config --logging.default_log_level=<Log "
 "Level> to set the default_log_level to a valid value."
 msgstr ""
-"Veuillez utiliser : subscription-manager config --logging."
-"default_log_level=<Log Level> pour définir le niveau de journalisation par "
-"défaut à une valeur valide."
+"Veuillez utiliser : subscription-manager config --"
+"logging.default_log_level=<Log Level> pour définir le niveau de "
+"journalisation par défaut à une valeur valide."
 
 #: src/rhsm/config.py:276
 #, python-brace-format
@@ -2813,8 +2812,8 @@ msgid ""
 "No available subscription pools were found matching the service level "
 "\"{level}\"."
 msgstr ""
-"Aucun pool d'abonnement disponible correspondant au niveau de service "
-"« {level} » n'a été trouvé."
+"Aucun pool d'abonnement disponible correspondant au niveau de service « "
+"{level} » n'a été trouvé."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/list.py:488
@@ -2850,8 +2849,8 @@ msgid ""
 "No consumed subscription pools were found matching the service level "
 "\"{level}\"."
 msgstr ""
-"Aucun pool d'abonnement consommé correspondant au niveau de service "
-"« {level} » n'a été trouvé."
+"Aucun pool d'abonnement consommé correspondant au niveau de service « {level}"
+" » n'a été trouvé."
 
 #: src/subscription_manager/cli_command/list.py:552
 msgid "No consumed subscription pools were found."
@@ -3513,8 +3512,8 @@ msgid ""
 "Error: '{repoid}' does not match a valid repository ID. Use \"subscription-"
 "manager repos --list\" to see valid repositories."
 msgstr ""
-"Erreur : {repoid} n'est pas un ID de référentiel valide. Utilisez l'option -"
-"subscription-manager repos --list pour afficher les référentiels valides."
+"Erreur : {repoid} n'est pas un ID de référentiel valide. Utilisez l'option "
+"-subscription-manager repos --list pour afficher les référentiels valides."
 
 #: src/subscription_manager/cli_command/repos.py:265
 #, python-brace-format
