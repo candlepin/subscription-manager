@@ -266,7 +266,7 @@ class TestRoleCommand(TestCliProxyCommand):
         instance_syspurpose_store.sync.assert_called_once()
 
     def test_is_provided_value_valid(self):
-        self.cc = AbstractSyspurposeCommand("role", shortdesc="role", primary=False, attr="role")
+        self.cc = AbstractSyspurposeCommand("role", None, shortdesc="role", primary=False, attr="role")
         self.cc._get_valid_fields = Mock()
         self.cc._get_valid_fields.return_value = {"role": ["Welcome to the Machine"]}
         res = self.cc._is_provided_value_valid("wElcOme To The mAChiNE")

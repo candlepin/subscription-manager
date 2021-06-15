@@ -60,7 +60,7 @@ class AbstractCLICommand(object):
         self.primary = primary
         self.aliases = aliases or []
 
-        self.parser = ArgumentParser(usage=self._get_usage(), description=shortdesc)
+        self.parser = self._create_argparser()
 
     def main(self, args=None):
         raise NotImplementedError("Commands must implement: main(self, args=None)")
@@ -85,6 +85,16 @@ class AbstractCLICommand(object):
         Does the work that this command intends.
         """
         raise NotImplementedError("Commands must implement: _do_command(self)")
+
+    def _create_argparser(self):
+        """
+        Creates an argparse.ArgumentParser object for this command.
+
+        This is done as separate method so subclasses can provide their own
+        ArgumentParser, in case the one provided by this method is not
+        sufficient.
+        """
+        return ArgumentParser(usage=self._get_usage(), description=self.shortdesc)
 
 
 # taken wholseale from rho...

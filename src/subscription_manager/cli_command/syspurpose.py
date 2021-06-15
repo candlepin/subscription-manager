@@ -20,7 +20,11 @@ import logging
 from rhsm import connection
 
 from subscription_manager import syspurposelib
+from subscription_manager.cli_command.addons import AddonsCommand
 from subscription_manager.cli_command.cli import CliCommand
+from subscription_manager.cli_command.role import RoleCommand
+from subscription_manager.cli_command.service_level import ServiceLevelCommand
+from subscription_manager.cli_command.usage import UsageCommand
 from subscription_manager.i18n import ugettext as _
 
 from syspurpose.files import SyncedStore
@@ -52,9 +56,33 @@ class SyspurposeCommand(CliCommand):
         )
         self.parser.add_argument(
             "--show",
+            dest='syspurpose_show',
             action="store_true",
             help=_("show current system purpose")
         )
+
+        # all the subcommands of 'syspurpose'; add them to this list to be
+        # registered as such
+        syspurpose_command_classes = [
+            AddonsCommand,
+            RoleCommand,
+            ServiceLevelCommand,
+            UsageCommand
+        ]
+        # create a subparser for all the subcommands: it is passed to all
+        # the subcommand classes, so they will create an ArgumentParser that
+        # is a child of the 'syspurpose' one, rather than as standalone
+        # parsers
+        subparser = self.parser.add_subparsers(
+            dest='subparser_name',
+            title=_('Syspurpose submodules'),
+            help='',  # trick argparse a bit to not show the {cmd1, cmd2, ..}
+            metavar=''  # trick argparse a bit to not show the {cmd1, cmd2, ..}
+        )
+        self.cli_commands = {}
+        for clazz in syspurpose_command_classes:
+            cmd = clazz(subparser)
+            self.cli_commands[cmd.name] = cmd
 
     def _validate_options(self):
         """
@@ -62,8 +90,8 @@ class SyspurposeCommand(CliCommand):
         :return: None
         """
         # When no CLI options are provided, then show current syspurpose values
-        if self.options.show is not True:
-            self.options.show = True
+        if self.options.syspurpose_show is not True:
+            self.options.syspurpose_show = True
 
     def _do_command(self):
         """
@@ -72,8 +100,19 @@ class SyspurposeCommand(CliCommand):
         """
         self._validate_options()
 
+        # a subcommand was actually invoked, so dispatch it
+        if self.options.subparser_name is not None:
+            subcmd = self.cli_commands[self.options.subparser_name]
+            # set a reference to ourselves in the subcommand being executed;
+            # this way, everything we collected & created in main() is
+            # "forwarded" to the subcommand class (see
+            # AbstractSyspurposeCommand.__getattr__())
+            subcmd.syspurpose_command = self
+            subcmd._do_command()
+            return
+
         content = {}
-        if self.options.show is True:
+        if self.options.syspurpose_show is True:
             if self.is_registered():
                 try:
                     self.cp = self.cp_provider.get_consumer_auth_cp()
