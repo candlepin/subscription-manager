@@ -1,6 +1,6 @@
+[![Container Repository on Quay](https://quay.io/repository/candlepin/subscription-manager/status "Container Repository on Quay")](https://quay.io/repository/candlepin/subscription-manager)
 subscription-manager
 ====================
-
 The Subscription Manager package provides programs and libraries
 to allow users to manage subscriptions and yum repositories
 from the  Candlepin.
