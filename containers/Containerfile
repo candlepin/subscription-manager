@@ -56,6 +56,28 @@ RUN yum install --disablerepo=updates -y \
     redhat-rpm-config \
     subscription-manager-rhsm-certificates \
     python3-virtualenv \
+    glibc-common \
+    langpacks-as \
+    langpacks-bn \
+    langpacks-de \
+    langpacks-es \
+    langpacks-fr \
+    langpacks-gu \
+    langpacks-hi \
+    langpacks-it \
+    langpacks-ja \
+    langpacks-kn \
+    langpacks-ko \
+    langpacks-ml \
+    langpacks-mr \
+    langpacks-or \
+    langpacks-pa \
+    langpacks-pt_BR \
+    langpacks-ru \
+    langpacks-ta \
+    langpacks-te \
+    langpacks-zh_CN \
+    langpacks-zh_TW \
     && yum clean all
 
 RUN mkdir /build

@@ -32,6 +32,18 @@ python3 setup.py build_ext --inplace
 # not using "setup.py nosetests" yet
 # since they need a running candlepin
 
+
+if [ -z "$RHSM_USER"]; then
+    echo "Missing ENV VAR RHSM_USER, tests requiring a test candlepin instance will be skipped"
+fi
+
+if [ -z "$RHSM_PASS"]; then
+    echo "Missing ENV VAR RHSM_PASS, tests requiring a test candlepin instance will be skipped"
+fi
+
+if [ -z "$RHSM_URL"]; then
+    echo "Missing ENV VAR RHSM_URL, tests requiring a test candlepin instance will be skipped"
+fi
 # Run just the unit tests, functional needs a running candlepin
 #pushd test/unit
 # make sure we have a dbus session for the dbus tests
