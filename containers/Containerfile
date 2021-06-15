@@ -81,7 +81,7 @@ RUN yum install --disablerepo=updates -y \
     && yum clean all
 
 RUN mkdir /build
-COPY requirements.txt dev-requirements.txt /build
+COPY requirements.txt dev-requirements.txt /build/
 WORKDIR /build
 RUN pip3 install -r dev-requirements.txt
 RUN git clone https://github.com/candlepin/subscription-manager.git
