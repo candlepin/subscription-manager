@@ -55,6 +55,7 @@ RUN yum install --disablerepo=updates -y \
     python3-ethtool \
     redhat-rpm-config \
     subscription-manager-rhsm-certificates \
+    python3-virtualenv \
     && yum clean all
 
 RUN mkdir /build
