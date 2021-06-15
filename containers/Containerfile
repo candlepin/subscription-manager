@@ -36,7 +36,6 @@ RUN yum install --disablerepo=updates -y \
     rpmlint \
     rpm-build \
     xorg-x11-server-Xvfb \
-    # zanata-client \
     python3-devel \
     python3-decorator \
     python3-six \
@@ -49,7 +48,6 @@ RUN yum install --disablerepo=updates -y \
     python3-inotify \
     python3-simplejson \
     python3-sphinx \
-    # python3-unittest2 \
     python3-rpm \
     python3-gobject-base \
     python3-ethtool \
@@ -78,6 +76,7 @@ RUN yum install --disablerepo=updates -y \
     langpacks-te \
     langpacks-zh_CN \
     langpacks-zh_TW \
+    npm \
     && yum clean all
 
 RUN mkdir /build
