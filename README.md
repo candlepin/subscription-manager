@@ -1,6 +1,6 @@
-[![Container Repository on Quay](https://quay.io/repository/candlepin/subscription-manager/status "Container Repository on Quay")](https://quay.io/repository/candlepin/subscription-manager)
 subscription-manager
 ====================
+[![Docker Repository on Quay](https://quay.io/repository/candlepin/subscription-manager/status "Docker Repository on Quay")](https://quay.io/repository/candlepin/subscription-manager)
 The Subscription Manager package provides programs and libraries
 to allow users to manage subscriptions and yum repositories
 from the  Candlepin.
@@ -8,6 +8,56 @@ from the  Candlepin.
  - http://candlepinproject.org/
  - https://fedorahosted.org/subscription-manager/
  - https://github.com/candlepin/subscription-Manager
+
+
+Container Development Environment
+---------------------------------
+The current preferred and supported method for development and testing of
+subscription-manager is through the use of toolbox containers.
+
+To get started:
+```bash
+sudo dnf install -y toolbox
+# Here we are pulling main but check the quay.io repo for other branches that
+# are prebuilt
+toolbox create -i quay.io/candlepin/subscription-manager:main rhsm_main
+```
+
+Then everytime you'd like to begin development you can run:
+```bash
+
+toolbox enter rhsm_main
+```
+
+These containers are used both for development, testing, and for builds.
+From inside the toolbox container you should be able to run the following to
+get subscription-manager installed from source:
+```bash
+sudo make install
+```
+
+This can be run over and over again if there are any changes you make to the
+source to try out the new version.
+
+The source can be edited from inside or outside the toolbox container and
+changes will be reflected bidirectionally. This way you can use whatever IDE
+you'd like on your host system to make your changes and test / play around with
+it inside the container after a simple: `sudo make install`.
+
+You can also run all the unit/stylish/tito tests (all the tests run by our
+jenkins automation) within this toolbox container to help get consistent
+results whether run via automation or locally.
+
+To run the tests you can run the scripts directly from the ./jenkins folder.
+An example (from inside the container):
+```bash
+sh jenkins/python3-tests.sh
+sh jenkins/stylish-tests.sh
+sh jenkins/tito-tests.sh
+
+```
+
+
 
 Local Installation
 ------------------
@@ -38,99 +88,6 @@ PYTHONPATH=./src python -m subscription_manager.scripts.rhn_migrate_classic_to_r
 
 (You can also just export `PYTHONPATH` instead of setting it in each command).
 
-Vagrant
--------
-
-The setup that most developers are using is `vagrant-libvirt` with
-`vagrant-hostmanager` and `vagrant-sshfs` installed on Fedora via:
-
-```bash
-dnf install vagrant-libvirt vagrant-hostmanager vagrant-sshfs
-```
-
-If you are testing on RHEL CentOS you can install vagrant from https://www.vagrantup.com/downloads.html
-and then install the plugins using: 
-
-```bash
-vagrant plugin install vagrant-hostmanager
-vagrant plugin install vagrant-libvirt
-vagrant plugin install vagrant-sshfs
-```
-
-We are avoiding coupling to libvirt, but use of VirtualBox is less tested.
-If you'd like to ensure vagrant uses libvirt, you can set
-`VAGRANT_DEFAULT_PROVIDER=libvirt` in your environment.
-
-`vagrant up` can be used to spin up various VMs set up for development work.
-These VMs are all configured using the included ansible role "subman-devel".
-The python paths and `PATH` inside these environments are modified so that
-running `subscription-manager` or `subscription-manager-gui` will use
-scripts and modules from the source code.
-
-Cockpit can be accessed at port 9090 on the VM, for example:
-https://centos7.subman.example.com:9090/
-
-**NOTE**: Use of hostnames per above requires the vagrant hostmanager plugin.
-Cockpit credentials are the same as user credientials;
-i.e. User name: `vagrant` password: `vagrant`
-
-There are two links added in the cockpit interface: one for the
-subscription-manager cockpit plugin itself, and then one which runs integration
-tests for the D-Bus interface.
-
-Currently, the source is set up as a vagrant shared folder using sshfs. This
-means that it is necessary to install the `vagrant-sshfs` plugin to sync changes
- from the host to the guest.
-
-The ansible role that provisions the VMs tries to find the IP address of
-candlepin.example.com, so if the candlepin vagrant image is started first,
-then the box can resolve it. (If it is started later, `vagrant provision` can
-be used to update the VM's `hosts` file).
-
-Additionally, the `Vagrantfile` is set up for sharing base VMs with
-[katello/forklift](https://github.com/theforeman/forklift). Specifically,
-forklift plugins can be added to a subscription-manager checkout beneath
-`vagrant/plugins`in order to provide additional base images.
-
-If RHEL-based images are added, then the `Vagrantfile` uses the values of
-`SUBMAN_RHSM_USERNAME`, `SUBMAN_RHSM_PASSWORD`, `SUBMAN_RHSM_HOSTNAME`,
-`SUBMAN_RHSM_PORT`, and `SUBMAN_RHSM_INSECURE` to register and auto-attach
-during provisioning (best done in `.bashrc` or similar). If unspecified,
-hostname and port are left alone (i.e. whatever is in the VM's `rhsm.conf` will
-be untouched).
-
-To register against subscription.rhsm.redhat.com, `.bashrc` might contain:
-```bash
-export SUBMAN_RHSM_USERNAME=foobar
-export SUBMAN_RHSM_PASSWORD=password
-```
-(Replace username and password with actual values).
-
-To register against a local candlepin instance, `.bashrc` might contain:
-```bash
-export SUBMAN_RHSM_HOSTNAME=candlepin.example.com
-export SUBMAN_RHSM_PORT=443
-export SUBMAN_RHSM_INSECURE=1
-export SUBMAN_RHSM_USERNAME=foobar
-export SUBMAN_RHSM_PASSWORD=password
-```
-
-(Replace username and password with actual values).
-
-Note, however, since the registration is necessary to download RPMs to set up
-the VM for development, registering against a local candlepin might not be
-particularly useful (at least not for initial provisioning).
-
-
-> If you want use proxy server to play with subscription you can run it using vagrant:
->       vagrant up proxy-server
-
-The current info about proxy
-
-url | proxy-server.subman.example.com:3128
-username | proxyuser
-password | password
-
 Pipenv
 ------
 
@@ -146,13 +103,6 @@ We tested pipenv with Python 2 and Python 3. It is necessary to install followin
 packages to your system, because binary module have to be compiled in virtual
 environment:
 
-### Python 2
-
-```bash
-dnf install -y pipenv gcc make python2-devel \
-    openssl-devel intltool libnl3-devel
-```
-
 ### Python 3
 
 ```bash
@@ -162,15 +112,10 @@ dnf install -y pipenv gcc make python3-devel \
 
 You can create virtual environment using following steps:
 
-1. Create virtual environment using Python 2 or Python 3 and it is necessary to
+1. Create virtual environment using Python 3 and it is necessary to
    use `--site-packages` argument, because virtual environment has to
    use `rpm` Python package installed in your system. It is not possible
    to install `rpm` Python package to virtual environment using pip/pipenv.
-
-   Python 2:
-
-   ```bash
-   pipenv --site-packages --two
    ```
 
    Python 3:
@@ -182,7 +127,7 @@ You can create virtual environment using following steps:
 2. Install required Python packages defined in `Pipfile` into virtual environment:
 
    ```bash
-   pipevn install
+   pipenv install
    ```
 
 3. Start virtual environment:
@@ -238,7 +183,6 @@ can be used:
   plugin when necessary.
 
 See `cockpit/README.md` for more detailed information on cockpit development.
-
 
 syspurpose
 ---------
