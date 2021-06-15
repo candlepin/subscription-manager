@@ -14,16 +14,17 @@
 #   we need to make /etc/pki/product and /etc/pki/entitlement
 
 echo "GIT_COMMIT:" "${GIT_COMMIT}"
-
+PROJECTROOT=$(git rev-parse --show-toplevel)
+WORKSPACE=${WORKSPACE:-$PROJECTROOT}
 cd $WORKSPACE
 
 sudo yum clean expire-cache
 sudo yum-builddep -y subscription-manager.spec || true  # ensure we install any missing rpm deps
-virtualenv env -p python2
-source env/bin/activate
+python3 -m venv env-stylish
+source env-stylish/bin/activate
 
 make install-pip-requirements
-
+    
 # build/test python-rhsm
 if [ -d $WORKSPACE/python-rhsm ]; then
   pushd $WORKSPACE/python-rhsm
@@ -31,13 +32,13 @@ fi
 PYTHON_RHSM=$(pwd)
 
 # build the c modules
-python2 setup.py build
-python2 setup.py build_ext --inplace
+python3 setup.py build
+python3 setup.py build_ext --inplace
 
 pushd $WORKSPACE
 export PYTHONPATH="$PYTHON_RHSM"/src
 # export PYTHONPATH="$PYTHON_RHSM"/src:"$PYTHON_RHSM"/syspurpose/src
 
-make set-versions
+# make set-versions
 # capture exit status of 'make stylish' and not 'tee'
 ( set -o pipefail; make stylish | tee stylish_results.txt )

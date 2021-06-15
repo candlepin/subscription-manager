@@ -9,7 +9,7 @@ pipeline {
       parallel {
         stage('Python stylish') {
           steps {
-            sh readFile(file: 'jenkins/python3-stylish-tests.sh')
+            sh readFile(file: 'jenkins/stylish-tests.sh')
           }
         }
         stage('Fedora tito') {
