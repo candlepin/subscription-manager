@@ -109,6 +109,10 @@ def in_container():
     Assumes that if we see host rhsm configuration shared with us, we must
     be running in a container.
     """
+    # For development in containers we must be able to turn container detection
+    # off
+    if os.environ.get('SMDEV_CONTAINER_OFF', False):
+        return False
     if os.path.exists(HOST_CONFIG_DIR):
         return True
     return False
