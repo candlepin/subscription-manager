@@ -3,6 +3,9 @@
 
 echo "GIT_COMMIT:" "${GIT_COMMIT}"
 
+PROJECTROOT=$(git rev-parse --show-toplevel)
+WORKSPACE=${WORKSPACE:-$PROJECTROOT}
+
 pushd "${WORKSPACE}"
 mkdir tito/
 
