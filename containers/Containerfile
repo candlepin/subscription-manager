@@ -5,56 +5,23 @@ MAINTAINER "Candlepin Team" <candlepin@redhat.com>
 ENV SMDEV_CONTAINER_OFF='True'
 
 RUN yum install --disablerepo=updates -y \
-    gettext \
-    git \
-    jss \
-    openssl \
     bind-utils \
-    dbus-glib \
-    dbus-glib-devel \
-    dnf-utils \
-    gcc \
-    git \
-    postfix \
-    python3-pip \
-    sudo \
-    vim \
-    wget \
-    zsh \
     cmake \
     dbus-daemon \
+    dbus-glib \
+    dbus-glib-devel \
     desktop-file-utils \
+    dnf-utils \
+    gcc \
     GConf2-devel \
+    gettext \
+    git \
+    git \
+    glibc-common \
     gtk3-devel \
     intltool \
     json-c-devel \
-    libdnf-devel \
-    libnotify-devel \
-    make \
-    openssl-devel \
-    rarian-compat \
-    rpmlint \
-    rpm-build \
-    xorg-x11-server-Xvfb \
-    python3-devel \
-    python3-decorator \
-    python3-six \
-    python3-dateutil \
-    python3-iniparse \
-    python3-nose \
-    python3-coverage \
-    python3-polib \
-    python3-decorator \
-    python3-inotify \
-    python3-simplejson \
-    python3-sphinx \
-    python3-rpm \
-    python3-gobject-base \
-    python3-ethtool \
-    redhat-rpm-config \
-    subscription-manager-rhsm-certificates \
-    python3-virtualenv \
-    glibc-common \
+    jss \
     langpacks-as \
     langpacks-bn \
     langpacks-de \
@@ -76,7 +43,40 @@ RUN yum install --disablerepo=updates -y \
     langpacks-te \
     langpacks-zh_CN \
     langpacks-zh_TW \
+    libdnf-devel \
+    libnotify-devel \
+    make \
     npm \
+    openssl \
+    openssl-devel \
+    postfix \
+    python3-coverage \
+    python3-dateutil \
+    python3-decorator \
+    python3-decorator \
+    python3-devel \
+    python3-ethtool \
+    python3-gobject-base \
+    python3-iniparse \
+    python3-inotify \
+    python3-nose \
+    python3-pip \
+    python3-polib \
+    python3-rpm \
+    python3-simplejson \
+    python3-six \
+    python3-sphinx \
+    python3-virtualenv \
+    rarian-compat \
+    redhat-rpm-config \
+    rpm-build \
+    rpmlint \
+    subscription-manager-rhsm-certificates \
+    sudo \
+    vim \
+    wget \
+    xorg-x11-server-Xvfb \
+    zsh \
     && yum clean all
 
 RUN mkdir /build
