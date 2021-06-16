@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-20 17:38+0200\n"
+"POT-Creation-Date: 2021-06-15 18:32+0200\n"
 "PO-Revision-Date: 2015-09-25 02:52-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Assamese\n"
@@ -205,7 +205,7 @@ msgstr "%s: ত্ৰুটি: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: cockpit/src/index.js:64 cockpit/src/subscriptions-view.jsx:272
+#: cockpit/src/index.js:64 cockpit/src/subscriptions-view.jsx:266
 #: src/subscription_manager/gui/data/glade/installed.glade:86
 #: src/subscription_manager/gui/data/ui/installed.ui:93
 #: src/subscription_manager/gui/registergui.py:249
@@ -220,118 +220,118 @@ msgstr "ৰেজিস্টাৰ কৰক"
 msgid "Register System"
 msgstr "চিস্টেম ৰেজিস্টাৰ কৰা"
 
-#: cockpit/src/insights.jsx:57 cockpit/src/insights.jsx:260
+#: cockpit/src/insights.jsx:64 cockpit/src/insights.jsx:267
 msgid "The $0 package is not available from any repository."
 msgstr ""
 
-#: cockpit/src/insights.jsx:60
+#: cockpit/src/insights.jsx:67
 msgid ""
 "The system could not be connected to Insights because installing the $0 "
 "package requires the unexpected removal of other packages."
 msgstr ""
 
-#: cockpit/src/insights.jsx:73
+#: cockpit/src/insights.jsx:80
 msgid "Connecting to Insights"
 msgstr ""
 
-#: cockpit/src/insights.jsx:111
+#: cockpit/src/insights.jsx:118
 msgid ""
 "Proactively identify and remediate threats to security, performance, "
 "availability, and stability with Red Hat Insights — with predictive "
 "analytics, avoid problems and unplanned downtime in your Red Hat environment."
 msgstr ""
 
-#: cockpit/src/insights.jsx:122 cockpit/src/subscriptions-register.jsx:93
+#: cockpit/src/insights.jsx:129 cockpit/src/subscriptions-register.jsx:93
 msgid "The $0 package will be installed."
 msgstr ""
 
-#: cockpit/src/insights.jsx:124
+#: cockpit/src/insights.jsx:131
 msgid "The $0 package and $1 other package will be installed."
 msgid_plural "The $0 package and $1 other packages will be installed."
 msgstr[0] ""
 msgstr[1] ""
 
-#: cockpit/src/insights.jsx:132
+#: cockpit/src/insights.jsx:139
 msgid "$0 package needs to be removed."
 msgid_plural "$0 packages need to be removed."
 msgstr[0] ""
 msgstr[1] ""
 
-#: cockpit/src/insights.jsx:146
+#: cockpit/src/insights.jsx:153
 msgid "Additional packages:"
 msgstr ""
 
-#: cockpit/src/insights.jsx:154
+#: cockpit/src/insights.jsx:161
 msgid "Removals:"
 msgstr ""
 
-#: cockpit/src/insights.jsx:160 cockpit/src/insights.jsx:393
-#: cockpit/src/insights.jsx:400
+#: cockpit/src/insights.jsx:167 cockpit/src/insights.jsx:400
+#: cockpit/src/insights.jsx:407
 msgid "Details"
 msgstr ""
 
-#: cockpit/src/insights.jsx:171 cockpit/src/insights.jsx:182
-#: cockpit/src/insights.jsx:250
+#: cockpit/src/insights.jsx:178 cockpit/src/insights.jsx:189
+#: cockpit/src/insights.jsx:257
 msgid "Waiting for other software management operations to finish"
 msgstr ""
 
-#: cockpit/src/insights.jsx:173 cockpit/src/insights.jsx:252
+#: cockpit/src/insights.jsx:180 cockpit/src/insights.jsx:259
 msgid "Checking installed software"
 msgstr ""
 
-#: cockpit/src/insights.jsx:186
+#: cockpit/src/insights.jsx:193
 msgid "Downloading $0"
 msgstr ""
 
-#: cockpit/src/insights.jsx:188
+#: cockpit/src/insights.jsx:195
 msgid "Removing $0"
 msgstr ""
 
-#: cockpit/src/insights.jsx:190
+#: cockpit/src/insights.jsx:197
 msgid "Installing $0"
 msgstr ""
 
-#: cockpit/src/insights.jsx:207
+#: cockpit/src/insights.jsx:214
 msgid "Connect to Red Hat Insights"
 msgstr ""
 
-#: cockpit/src/insights.jsx:210
+#: cockpit/src/insights.jsx:217
 msgid "This system is not connected to $0."
 msgstr ""
 
-#: cockpit/src/insights.jsx:220
+#: cockpit/src/insights.jsx:227
 msgid "Connect"
 msgstr ""
 
-#: cockpit/src/insights.jsx:313
+#: cockpit/src/insights.jsx:320
 msgid "unknown"
 msgstr ""
 
-#: cockpit/src/insights.jsx:366
+#: cockpit/src/insights.jsx:373
 msgid "The last Insights data upload has failed."
 msgstr ""
 
-#: cockpit/src/insights.jsx:371
+#: cockpit/src/insights.jsx:378
 msgid "Connected to Red Hat Insights"
 msgstr ""
 
-#: cockpit/src/insights.jsx:377
+#: cockpit/src/insights.jsx:384
 msgid "Next Insights data upload"
 msgstr ""
 
-#: cockpit/src/insights.jsx:382
+#: cockpit/src/insights.jsx:389
 msgid "Last Insights data upload"
 msgstr ""
 
-#: cockpit/src/insights.jsx:392
+#: cockpit/src/insights.jsx:399
 msgid "Next Insights data upload could not be scheduled."
 msgstr ""
 
-#: cockpit/src/insights.jsx:403 cockpit/src/insights.jsx:409
+#: cockpit/src/insights.jsx:410 cockpit/src/insights.jsx:416
 msgid "Disconnect from Insights"
 msgstr ""
 
-#: cockpit/src/insights.jsx:406
+#: cockpit/src/insights.jsx:413
 msgid ""
 "If you disconnect this system from Insights, it will no longer report it's "
 "Insights status in Red Hat Cloud or Satellite."
@@ -339,7 +339,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: cockpit/src/insights.jsx:417 cockpit/src/insights.jsx:436
+#: cockpit/src/insights.jsx:424 cockpit/src/insights.jsx:443
 #: src/subscription_manager/gui/data/glade/factsdialog.glade:262
 #: src/subscription_manager/gui/data/glade/registration_info.glade:261
 #: src/subscription_manager/gui/data/glade/repositories.glade:276
@@ -351,68 +351,67 @@ msgstr "বন্ধ কৰক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: cockpit/src/insights.jsx:425
+#: cockpit/src/insights.jsx:432
 #: src/subscription_manager/gui/data/glade/redeem.glade:29
 #: src/subscription_manager/gui/data/ui/redeem.ui:29
 msgid "Cancel"
 msgstr "বাতিল কৰক"
 
-#: cockpit/src/insights.jsx:493
+#: cockpit/src/insights.jsx:500
 msgid "No rule hits"
 msgstr ""
 
-#: cockpit/src/insights.jsx:501
+#: cockpit/src/insights.jsx:508
 msgid "$0 critical hit"
 msgid_plural "$0 hits, including critical"
 msgstr[0] ""
 msgstr[1] ""
 
-#: cockpit/src/insights.jsx:506
+#: cockpit/src/insights.jsx:513
 msgid "$0 important hit"
 msgid_plural "$0 hits, including important"
 msgstr[0] ""
 msgstr[1] ""
 
-#: cockpit/src/insights.jsx:511
+#: cockpit/src/insights.jsx:518
 msgid "$0 moderate hit"
 msgid_plural "$0 hits, including moderate"
 msgstr[0] ""
 msgstr[1] ""
 
-#: cockpit/src/insights.jsx:516
+#: cockpit/src/insights.jsx:523
 msgid "$0 low severity hit"
 msgid_plural "$0 low severity hits"
 msgstr[0] ""
 msgstr[1] ""
 
-#: cockpit/src/insights.jsx:522
+#: cockpit/src/insights.jsx:529
 msgid "$0 hit"
 msgid_plural "$0 hits"
 msgstr[0] ""
 msgstr[1] ""
 
-#: cockpit/src/insights.jsx:529
+#: cockpit/src/insights.jsx:536
 msgid "View your Insights results"
 msgstr ""
 
-#: cockpit/src/insights.jsx:534
+#: cockpit/src/insights.jsx:542
 msgid "Connected to Insights"
 msgstr ""
 
-#: cockpit/src/insights.jsx:543
+#: cockpit/src/insights.jsx:554
 msgid "Not connected"
 msgstr ""
 
-#: cockpit/src/insights.jsx:546
-msgid "Insights: $0"
+#: cockpit/src/insights.jsx:559 cockpit/src/subscriptions-register.jsx:84
+msgid "Insights"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
 #: cockpit/src/subscriptions-client.js:48
 #: cockpit/src/subscriptions-client.js:561
-#: cockpit/src/subscriptions-view.jsx:358
-#: cockpit/src/subscriptions-view.jsx:364
+#: cockpit/src/subscriptions-view.jsx:90 cockpit/src/subscriptions-view.jsx:96
 #: src/rhsmlib/services/entitlement.py:94
 #: src/rhsmlib/services/syspurpose.py:104
 #: src/subscription_manager/cert_sorter.py:282
@@ -462,7 +461,7 @@ msgid "Updating status ..."
 msgstr ""
 
 #: cockpit/src/subscriptions-client.js:474
-#: cockpit/src/subscriptions-view.jsx:285
+#: cockpit/src/subscriptions-view.jsx:273
 #: src/subscription_manager/gui/registergui.py:1075
 msgid "Unregistering"
 msgstr ""
@@ -485,10 +484,6 @@ msgstr ""
 
 #: cockpit/src/subscriptions-register.jsx:64
 msgid "Proxy Password"
-msgstr ""
-
-#: cockpit/src/subscriptions-register.jsx:84
-msgid "Insights"
 msgstr ""
 
 #: cockpit/src/subscriptions-register.jsx:90
@@ -549,7 +544,6 @@ msgid "Activation key"
 msgstr ""
 
 #: cockpit/src/subscriptions-register.jsx:189
-#: cockpit/src/subscriptions-view.jsx:294
 msgid "Subscriptions"
 msgstr ""
 
@@ -559,8 +553,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: cockpit/src/subscriptions-view.jsx:38 cockpit/src/subscriptions-view.jsx:56
-#: cockpit/src/subscriptions-view.jsx:62
+#: cockpit/src/subscriptions-view.jsx:41 cockpit/src/subscriptions-view.jsx:60
+#: cockpit/src/subscriptions-view.jsx:66
 #: src/subscription_manager/gui/data/glade/installed.glade:105
 #: src/subscription_manager/gui/data/glade/installed.glade:112
 #: src/subscription_manager/gui/data/ui/installed.ui:111
@@ -568,59 +562,163 @@ msgstr ""
 msgid "Auto-attach"
 msgstr "স্ব-সংলগ্ন"
 
-#: cockpit/src/subscriptions-view.jsx:50
+#: cockpit/src/subscriptions-view.jsx:54
 msgid "Auto-attaching ..."
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:207
-msgid "Service Level:  "
-msgstr ""
-
-#: cockpit/src/subscriptions-view.jsx:217
-msgid "Usage:  "
-msgstr ""
-
-#: cockpit/src/subscriptions-view.jsx:227
-msgid "Role:  "
-msgstr ""
-
-#: cockpit/src/subscriptions-view.jsx:237
-msgid "Add-ons:  "
-msgstr ""
-
-#: cockpit/src/subscriptions-view.jsx:249
-msgid "Status: "
-msgstr ""
-
-#: cockpit/src/subscriptions-view.jsx:257
-msgid "System Purpose"
-msgstr ""
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author ngoswami
+#: cockpit/src/subscriptions-view.jsx:73 cockpit/src/subscriptions-view.jsx:117
+#, fuzzy
+#| msgid "Product Name:"
+msgid "Product name"
+msgstr "উৎপাদনৰ নাম:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: cockpit/src/subscriptions-view.jsx:268
+#: cockpit/src/subscriptions-view.jsx:82 cockpit/src/subscriptions-view.jsx:107
+#: src/subscription_manager/cli_command/list.py:40
+#: src/subscription_manager/gui/installedtab.py:222
+msgid "Subscribed"
+msgstr "স্বাক্ষৰীত"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#: cockpit/src/subscriptions-view.jsx:86
 #, fuzzy
-#| msgid "This system is currently not registered."
-msgid "Status: This system is currently not registered."
-msgstr "এই চিস্টেম বৰ্তমানত ৰেজিস্টাৰ নহয়।"
+#| msgid "1 installed product does not have a valid subscription."
+msgid "Not subscribed (Not supported by a valid subscription)"
+msgstr "১ টা ইনস্টল্ড উৎপাদনৰ এটা বৈধ স্বাক্ষৰণ নাই।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#: cockpit/src/subscriptions-view.jsx:107
+#, fuzzy
+#| msgid "Not Subscribed"
+msgid "Not subscribed"
+msgstr "স্বাক্ষৰীত নহয়"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: cockpit/src/subscriptions-view.jsx:275
+#: cockpit/src/subscriptions-view.jsx:121
 #, fuzzy
-#| msgid "Status:"
-msgid "Status: $0"
-msgstr "অৱস্থা:"
+#| msgid "Product ID:"
+msgid "Product ID"
+msgstr "উৎপাদন ID:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author ngoswami
+#: cockpit/src/subscriptions-view.jsx:125 src/rct/printing.py:50
+#: src/rct/printing.py:132 src/subscription_manager/gui/installedtab.py:91
+msgid "Version"
+msgstr "সংস্কৰণ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author ngoswami
+#: cockpit/src/subscriptions-view.jsx:129 src/rct/printing.py:51
+msgid "Arch"
+msgstr "স্থাপত্য"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: cockpit/src/subscriptions-view.jsx:279
+#: cockpit/src/subscriptions-view.jsx:133
+#: src/subscription_manager/gui/installedtab.py:94
+msgid "Status"
+msgstr "অৱস্থা"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author ngoswami
+#: cockpit/src/subscriptions-view.jsx:137
+#, fuzzy
+#| msgid "Starts:"
+msgid "Starts"
+msgstr "আৰম্ভ হয়:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author ngoswami
+#: cockpit/src/subscriptions-view.jsx:141
+#, fuzzy
+#| msgid "Ends:"
+msgid "Ends"
+msgstr "সমাপ্ত হয়:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#: cockpit/src/subscriptions-view.jsx:158
+#: cockpit/src/subscriptions-view.jsx:168
+#, fuzzy
+#| msgid "Installed Products"
+msgid "Installed products"
+msgstr "ইনস্টল হৈ থকা উৎপাদনসমূহ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#: cockpit/src/subscriptions-view.jsx:171
+#, fuzzy
+#| msgid "No installed products detected."
+msgid "No installed products detected"
+msgstr "কোনো ইনস্টল্ড উৎপাদন চিনাক্ত কৰা হোৱা নাই।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author ngoswami
+#: cockpit/src/subscriptions-view.jsx:224
+#, fuzzy
+#| msgid "System Type:"
+msgid "System purpose"
+msgstr "চিস্টেমৰ ধৰণ:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#: cockpit/src/subscriptions-view.jsx:232
+#, fuzzy
+#| msgid "Service Level"
+msgid "Service level"
+msgstr "সেৱা স্তৰ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#: cockpit/src/subscriptions-view.jsx:238 src/rct/printing.py:85
+msgid "Usage"
+msgstr "ব্যৱহাৰ"
+
+#: cockpit/src/subscriptions-view.jsx:244
+msgid "Role"
+msgstr ""
+
+#: cockpit/src/subscriptions-view.jsx:250 src/rct/printing.py:86
+msgid "Add-ons"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author ngoswami
+#: cockpit/src/subscriptions-view.jsx:264
+#, fuzzy
+#| msgid "System is not registered."
+msgid "Not registered"
+msgstr "চিস্টেম ৰেজিস্টাৰ্ড নহয়।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#: cockpit/src/subscriptions-view.jsx:273
 #, fuzzy
 #| msgid "_Unregister"
 msgid "Unregister"
 msgstr "আনৰেজিস্টাৰ কৰক (_U)"
 
-#: cockpit/src/subscriptions-view.jsx:323
+#: cockpit/src/subscriptions-view.jsx:280
+msgid "Overview"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#: cockpit/src/subscriptions-view.jsx:286
+#: src/subscription_manager/gui/allsubs.py:78
+#: src/subscription_manager/gui/mysubstab.py:77
+#: src/subscription_manager/gui/registergui.py:1189
+msgid "Subscription"
+msgstr "স্বাক্ষৰণ"
+
+#: cockpit/src/subscriptions-view.jsx:316
 msgid ""
 "The rhsm service is unavailable. Make sure subscription-manager is installed "
 "and try reloading the page. Additionally, make sure that you have checked "
@@ -629,7 +727,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: cockpit/src/subscriptions-view.jsx:326
+#: cockpit/src/subscriptions-view.jsx:319
 #, fuzzy
 #| msgid "Unable to reach the server at %s:%s%s"
 msgid "Unable to the reach the rhsm service."
@@ -637,120 +735,37 @@ msgstr "%s:%s%s ত চাৰ্ভাৰ প্ৰাপ্ত কৰিব ন
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: cockpit/src/subscriptions-view.jsx:329
+#: cockpit/src/subscriptions-view.jsx:322
 #, fuzzy
 #| msgid "Update"
 msgid "Updating"
 msgstr "আপডেইট কৰক"
 
-#: cockpit/src/subscriptions-view.jsx:330
+#: cockpit/src/subscriptions-view.jsx:323
 #, fuzzy
 #| msgid "Removing subscription. Please wait."
 msgid "Retrieving subscription status..."
 msgstr "স্বাক্ষৰণ আতৰোৱা হৈছে। অনুগ্ৰহ কৰি অপেক্ষা কৰক।"
 
-#: cockpit/src/subscriptions-view.jsx:332
+#: cockpit/src/subscriptions-view.jsx:325
 msgid "Access denied"
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:333
+#: cockpit/src/subscriptions-view.jsx:326
 msgid "The current user isn't allowed to access system subscription status."
 msgstr ""
 
-#: cockpit/src/subscriptions-view.jsx:335
+#: cockpit/src/subscriptions-view.jsx:328
 #, fuzzy
 #| msgid "Unable to continue migration!"
 msgid "Unable to connect"
 msgstr "প্ৰব্ৰজন অব্যাহত ৰাখিবলৈ অক্ষম!"
 
-#: cockpit/src/subscriptions-view.jsx:336
+#: cockpit/src/subscriptions-view.jsx:329
 msgid ""
 "Couldn't get system subscription status. Please ensure subscription-manager "
 "is installed."
 msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
-#: cockpit/src/subscriptions-view.jsx:351
-#: src/subscription_manager/cli_command/list.py:40
-#: src/subscription_manager/gui/installedtab.py:222
-msgid "Subscribed"
-msgstr "স্বাক্ষৰীত"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
-#: cockpit/src/subscriptions-view.jsx:354
-#, fuzzy
-#| msgid "1 installed product does not have a valid subscription."
-msgid "Not Subscribed (Not supported by a valid subscription.)"
-msgstr "১ টা ইনস্টল্ড উৎপাদনৰ এটা বৈধ স্বাক্ষৰণ নাই।"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys, author ngoswami
-#: cockpit/src/subscriptions-view.jsx:379
-#, fuzzy
-#| msgid "Product Name:"
-msgid "Product Name"
-msgstr "উৎপাদনৰ নাম:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys, author ngoswami
-#: cockpit/src/subscriptions-view.jsx:381
-#, fuzzy
-#| msgid "Product ID:"
-msgid "Product ID"
-msgstr "উৎপাদন ID:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys, author ngoswami
-#: cockpit/src/subscriptions-view.jsx:383 src/rct/printing.py:50
-#: src/rct/printing.py:132 src/subscription_manager/gui/installedtab.py:91
-msgid "Version"
-msgstr "সংস্কৰণ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys, author ngoswami
-#: cockpit/src/subscriptions-view.jsx:385 src/rct/printing.py:51
-msgid "Arch"
-msgstr "স্থাপত্য"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
-#: cockpit/src/subscriptions-view.jsx:387
-#: src/subscription_manager/gui/installedtab.py:94
-msgid "Status"
-msgstr "অৱস্থা"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys, author ngoswami
-#: cockpit/src/subscriptions-view.jsx:389
-#, fuzzy
-#| msgid "Starts:"
-msgid "Starts"
-msgstr "আৰম্ভ হয়:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys, author ngoswami
-#: cockpit/src/subscriptions-view.jsx:391
-#, fuzzy
-#| msgid "Ends:"
-msgid "Ends"
-msgstr "সমাপ্ত হয়:"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
-#: cockpit/src/subscriptions-view.jsx:405
-#, fuzzy
-#| msgid "Installed Products"
-msgid "Installed products"
-msgstr "ইনস্টল হৈ থকা উৎপাদনসমূহ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
-#: cockpit/src/subscriptions-view.jsx:406
-#: src/subscription_manager/gui/installedtab.py:324
-msgid "No installed products detected."
-msgstr "কোনো ইনস্টল্ড উৎপাদন চিনাক্ত কৰা হোৱা নাই।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
@@ -1375,16 +1390,6 @@ msgstr "সংখ্যা"
 
 #: src/rct/printing.py:83
 msgid "Roles"
-msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
-#: src/rct/printing.py:85
-msgid "Usage"
-msgstr "ব্যৱহাৰ"
-
-#: src/rct/printing.py:86
-msgid "Add-ons"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
@@ -2169,20 +2174,20 @@ msgstr "%prog [বিকল্পসমূহ]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli.py:112
+#: src/subscription_manager/cli.py:122
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 msgstr "ব্যৱহাৰ: %s মডিউল-নাম [মডিউল-বিকল্পসমূহ] [--help]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/cli.py:123
+#: src/subscription_manager/cli.py:133
 msgid "Primary Modules:"
 msgstr "প্ৰাথমিক মডিউলসমূহ:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli.py:124
+#: src/subscription_manager/cli.py:134
 msgid "Other Modules:"
 msgstr "অন্য মডিউলসমূহ:"
 
@@ -2199,71 +2204,80 @@ msgstr ""
 msgid "If you'd like to overwrite the server side change please run: {command}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:55
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author ngoswami
+#. TRANSLATORS: this refers to a deprecated command
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:39
+#, fuzzy
+#| msgid "Deprecated, see remove"
+msgid "Deprecated, see 'syspurpose'"
+msgstr "স্খলিত, remove চাওক"
+
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:65
 #, python-brace-format
 msgid "set {attr} of system purpose"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:62
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:72
 #, python-brace-format
 msgid "unset {attr} of system purpose"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:70
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:80
 #, python-brace-format
 msgid "add an item to the list ({attr})."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:78
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:88
 #, python-brace-format
 msgid "remove an item from the list ({attr})."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:85
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:95
 #, python-brace-format
 msgid "show this system's current {attr}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:92
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:102
 #, python-brace-format
 msgid "list all {attr} available"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:110
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:133
 msgid "--unset cannot be used with --set, --add, or --remove"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:112
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:135
 msgid "--add cannot be used with --remove"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:121
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:144
 msgid "Error: you can specify --username or --token not both"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:126
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:149
 #, python-brace-format
 msgid ""
 "Error: you must register or specify --username and --password to list {attr}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:146
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:157
-#: src/subscription_manager/cli_command/cli.py:350
-#: src/subscription_manager/cli_command/cli.py:364
-#: src/subscription_manager/cli_command/service_level.py:127
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:169
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:180
+#: src/subscription_manager/cli_command/cli.py:348
+#: src/subscription_manager/cli_command/cli.py:362
+#: src/subscription_manager/cli_command/service_level.py:128
 #: src/subscription_manager/gui/managergui.py:199
 #: src/subscription_manager/gui/registergui.py:1829
 msgid "Proxy connection failed, please check your settings."
 msgstr ""
 
 #. TRANSLATORS: this is used to quote a string
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:204
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:226
 #, python-brace-format
 msgid "\"{value}\""
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:207
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:229
 #, python-brace-format
 msgid ""
 "Warning: Provided value {vals} is not included in the list of valid values"
@@ -2274,71 +2288,68 @@ msgstr[1] ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:214
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:236
 #, fuzzy, python-brace-format
 #| msgid "This org does not have any subscriptions with service levels."
 msgid ""
-"Warning: This org does not have any subscriptions with an available "
-"\"{attr}\" is empty."
+"Warning: This organization does not have any subscriptions that provide a "
+"system purpose \"{attr}\".  This setting will not influence auto-attaching "
+"subscriptions."
 msgstr "এই সংঘঠনৰ সেৱা স্তৰসমূহৰ সৈতে কোনো স্বাক্ষৰণ নাই।"
 
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:218
-#, fuzzy, python-brace-format
-#| msgid "This org does not have any subscriptions with service levels."
-msgid ""
-"Warning: This org does not have any subscriptions with an available "
-"\"{attr}\""
-msgstr "এই সংঘঠনৰ সেৱা স্তৰসমূহৰ সৈতে কোনো স্বাক্ষৰণ নাই।"
-
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:230
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:250
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:247
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:267
 #, python-brace-format
 msgid "{attr} unset."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:264
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:287
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:284
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:307
 #, python-brace-format
 msgid "{attr} updated."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:316
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:336
 #, python-brace-format
 msgid "Current {name}: {val}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:319
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:339
 #, python-brace-format
 msgid "{name} not set."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:337
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:356
 #, python-brace-format
 msgid "Available {syspurpose_attr}"
 msgstr ""
 
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:347
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:349
-#, fuzzy, python-brace-format
-#| msgid "This org does not have any subscriptions with service levels."
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:366
+#: src/subscription_manager/cli_command/service_level.py:183
+#, python-brace-format
 msgid ""
-"This org does not have any subscriptions with an available "
-"\"{syspurpose_attr}\""
-msgstr "এই সংঘঠনৰ সেৱা স্তৰসমূহৰ সৈতে কোনো স্বাক্ষৰণ নাই।"
+"There are no available values for the system purpose \"{syspurpose_attr}\" "
+"from the available subscriptions in this organization."
+msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:367
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:386
 msgid "Unable to connect to server using token"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:404
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:430
+#: src/subscription_manager/i18n_argparse.py:38
+#, fuzzy, python-format
+#| msgid "%prog [OPTIONS]"
+msgid "%(prog)s [OPTIONS]"
+msgstr "%prog [বিকল্পসমূহ]"
+
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:436
 #, python-brace-format
 msgid ""
 "Note: The currently configured entitlement server does not support System "
@@ -2589,23 +2600,23 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/cli_command/cli.py:249
+#: src/subscription_manager/cli_command/cli.py:247
 #, fuzzy
 #| msgid "cannot parse argument: %s"
 msgid "cannot parse argument: {}"
 msgstr "তৰ্ক বিশ্লেষণ কৰিব নোৱাৰি: %s"
 
-#: src/subscription_manager/cli_command/cli.py:262
+#: src/subscription_manager/cli_command/cli.py:260
 msgid "Error parsing serverurl:"
 msgstr "serverurl বিশ্লেষণ কৰোতে ত্ৰুটি:"
 
-#: src/subscription_manager/cli_command/cli.py:278
+#: src/subscription_manager/cli_command/cli.py:276
 msgid "Error parsing baseurl:"
 msgstr "baseurl বিশ্লেষণ কৰোতে ত্ৰুটি:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/cli_command/cli.py:354
+#: src/subscription_manager/cli_command/cli.py:352
 #, fuzzy, python-brace-format
 #| msgid "Unable to reach the server at %s:%s%s"
 msgid "Unable to reach the server at {host}:{port}{handler}"
@@ -2613,17 +2624,17 @@ msgstr "%s:%s%s ত চাৰ্ভাৰ প্ৰাপ্ত কৰিব ন
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/cli_command/cli.py:362
+#: src/subscription_manager/cli_command/cli.py:360
 msgid "Error: CA certificate for subscription service has not been installed."
 msgstr "ত্ৰুটি: স্বাক্ষৰণ সেৱাৰ বাবে CA প্ৰমাণপত্ৰ ইনস্টল কৰা হোৱা নাই।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/cli.py:382
+#: src/subscription_manager/cli_command/cli.py:380
 msgid "System certificates corrupted. Please reregister."
 msgstr "চিস্টেমৰ প্ৰমাণপত্ৰসমূহ ক্ষতিগ্ৰস্থ। অনুগ্ৰহ কৰি পুনৰ ৰেজিস্টাৰ কৰক।"
 
-#: src/subscription_manager/cli_command/cli.py:386
+#: src/subscription_manager/cli_command/cli.py:384
 #, python-brace-format
 msgid ""
 "Consumer profile \"{uuid}\" has been deleted from the server. You can use "
@@ -4120,13 +4131,13 @@ msgstr ""
 "উপলব্ধ সেৱা স্তৰসমূহ তালিকাভুক্ত কৰোতে সংঘঠন কি' ব্যৱহাৰ কৰি এটা সংঘঠন ধাৰ্য্য কৰক, "
 "কেৱল --list ৰ সৈতে ব্যৱহৃত"
 
-#: src/subscription_manager/cli_command/service_level.py:68
+#: src/subscription_manager/cli_command/service_level.py:69
 msgid "Error: --org is only supported with the --list or --set option"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/cli_command/service_level.py:75
+#: src/subscription_manager/cli_command/service_level.py:76
 msgid ""
 "Error: you must register or specify --username and --password to list "
 "service levels"
@@ -4136,34 +4147,34 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/service_level.py:105
+#: src/subscription_manager/cli_command/service_level.py:106
 msgid "Error: Unable to retrieve service levels."
 msgstr "ত্ৰুটি: সেৱা স্তৰসমূহ উদ্ধাৰ কৰিবলে অক্ষম।"
 
-#: src/subscription_manager/cli_command/service_level.py:135
+#: src/subscription_manager/cli_command/service_level.py:136
 #, python-brace-format
 msgid "Service level set to: \"{val}\"."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/cli_command/service_level.py:143
+#: src/subscription_manager/cli_command/service_level.py:144
 msgid "Service level preference has been unset"
 msgstr "সেৱা স্তৰ পছন্দ অসংহতি কৰা হৈছে"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/cli_command/service_level.py:149
-#: src/subscription_manager/cli_command/service_level.py:156
-#: src/subscription_manager/cli_command/service_level.py:186
-#: src/subscription_manager/cli_command/service_level.py:191
+#: src/subscription_manager/cli_command/service_level.py:150
+#: src/subscription_manager/cli_command/service_level.py:157
+#: src/subscription_manager/cli_command/service_level.py:189
+#: src/subscription_manager/cli_command/service_level.py:194
 #: src/subscription_manager/migrate/migrate.py:730
 msgid "Error: The service-level command is not supported by the server."
 msgstr "ত্ৰুটি: service-level কমান্ড চাৰ্ভাৰ দ্বাৰা সমৰ্থিত নহয়।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/service_level.py:159
+#: src/subscription_manager/cli_command/service_level.py:160
 #, fuzzy, python-brace-format
 #| msgid "Current service level: %s"
 msgid "Current service level: {level}"
@@ -4171,24 +4182,15 @@ msgstr "বৰ্তমান সেৱা স্তৰ: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/cli_command/service_level.py:161
+#: src/subscription_manager/cli_command/service_level.py:162
 msgid "Service level preference not set"
 msgstr "সেৱা স্তৰ পছন্দ সংহতি কৰা হোৱা নাই"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/service_level.py:177
+#: src/subscription_manager/cli_command/service_level.py:178
 msgid "Available Service Levels"
 msgstr "উপলব্ধ সেৱা স্তৰসমূহ"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
-#: src/subscription_manager/cli_command/service_level.py:182
-#, fuzzy
-#| msgid "This org does not have any subscriptions with service levels."
-msgid ""
-"This org does not have any subscriptions with an available \"service level\"."
-msgstr "এই সংঘঠনৰ সেৱা স্তৰসমূহৰ সৈতে কোনো স্বাক্ষৰণ নাই।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
@@ -4236,12 +4238,16 @@ msgstr "সৰ্বমুঠ অৱস্থা: %s\n"
 msgid "System Purpose Status: {status}"
 msgstr "চিস্টেমৰ অৱস্থাৰ বিৱৰণসমূহ"
 
-#: src/subscription_manager/cli_command/syspurpose.py:47
+#: src/subscription_manager/cli_command/syspurpose.py:51
 msgid "Convenient module for managing all system purpose settings"
 msgstr ""
 
-#: src/subscription_manager/cli_command/syspurpose.py:56
+#: src/subscription_manager/cli_command/syspurpose.py:61
 msgid "show current system purpose"
+msgstr ""
+
+#: src/subscription_manager/cli_command/syspurpose.py:78
+msgid "Syspurpose submodules"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
@@ -4415,7 +4421,7 @@ msgstr "বেয়া CA প্ৰমাণপত্ৰ: %s"
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
 #: src/subscription_manager/exceptions.py:38
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:166
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:168
 msgid "Your identity certificate has expired"
 msgstr "আপোনাৰ পৰিচয় প্ৰমাণপত্ৰৰ অৱসান ঘটিছে"
 
@@ -4543,14 +4549,6 @@ msgstr ""
 #: src/subscription_manager/gui/allsubs.py:54
 msgid "All Subscriptions View"
 msgstr "সকলো স্বাক্ষৰণসমূহৰ দৰ্শন"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
-#: src/subscription_manager/gui/allsubs.py:78
-#: src/subscription_manager/gui/mysubstab.py:77
-#: src/subscription_manager/gui/registergui.py:1189
-msgid "Subscription"
-msgstr "স্বাক্ষৰণ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
@@ -6339,6 +6337,12 @@ msgstr "মই ইনস্টল কৰা উৎপাদনসমূহ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
+#: src/subscription_manager/gui/installedtab.py:324
+msgid "No installed products detected."
+msgstr "কোনো ইনস্টল্ড উৎপাদন চিনাক্ত কৰা হোৱা নাই।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
 #: src/subscription_manager/gui/installedtab.py:328
 #, python-format
 msgid "System is properly subscribed through %s."
@@ -6887,14 +6891,6 @@ msgstr "পৰিমাণ সংঘঠিত কৰিবলে ক্লিক
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/i18n_argparse.py:38
-#, fuzzy, python-format
-#| msgid "%prog [OPTIONS]"
-msgid "%(prog)s [OPTIONS]"
-msgstr "%prog [বিকল্পসমূহ]"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
 #: src/subscription_manager/i18n_argparse.py:54
 #, fuzzy, python-brace-format
 #| msgid "%s: error: %s"
@@ -7394,13 +7390,13 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:147
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:149
 msgid "Updating entitlement certificates & repositories"
 msgstr "অনুজ্ঞা প্ৰমাণপত্ৰসমূহ & ভঁৰালসমূহ আপডেইট কৰা হৈছে"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:225
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "অনুজ্ঞা প্ৰমাণপত্ৰসমূহ আৰু ভঁৰালসমূহ আপডেইট কৰিবলে অক্ষম"
 
@@ -7446,6 +7442,47 @@ msgstr "Red Hat স্বাক্ষৰণ বৈধতা এপ্লেট"
 #: tmp/subscription-manager-gui.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
 msgstr "Red Hat স্বাক্ষৰণ ব্যৱস্থাপক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#, fuzzy
+#~| msgid "This system is currently not registered."
+#~ msgid "Status: This system is currently not registered."
+#~ msgstr "এই চিস্টেম বৰ্তমানত ৰেজিস্টাৰ নহয়।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author ngoswami
+#, fuzzy
+#~| msgid "Status:"
+#~ msgid "Status: $0"
+#~ msgstr "অৱস্থা:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#, fuzzy
+#~| msgid "This org does not have any subscriptions with service levels."
+#~ msgid ""
+#~ "Warning: This org does not have any subscriptions with an available "
+#~ "\"{attr}\""
+#~ msgstr "এই সংঘঠনৰ সেৱা স্তৰসমূহৰ সৈতে কোনো স্বাক্ষৰণ নাই।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#, fuzzy
+#~| msgid "This org does not have any subscriptions with service levels."
+#~ msgid ""
+#~ "This org does not have any subscriptions with an available "
+#~ "\"{syspurpose_attr}\""
+#~ msgstr "এই সংঘঠনৰ সেৱা স্তৰসমূহৰ সৈতে কোনো স্বাক্ষৰণ নাই।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#, fuzzy
+#~| msgid "This org does not have any subscriptions with service levels."
+#~ msgid ""
+#~ "This org does not have any subscriptions with an available \"service level"
+#~ "\"."
+#~ msgstr "এই সংঘঠনৰ সেৱা স্তৰসমূহৰ সৈতে কোনো স্বাক্ষৰণ নাই।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -7548,11 +7585,6 @@ msgstr "Red Hat স্বাক্ষৰণ ব্যৱস্থাপক"
 # document keys, author ngoswami
 #~ msgid "Deprecated, see attach"
 #~ msgstr "স্খলিত, attach চাওক"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys, author ngoswami
-#~ msgid "Deprecated, see remove"
-#~ msgstr "স্খলিত, remove চাওক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
