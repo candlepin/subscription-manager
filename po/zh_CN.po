@@ -5,13 +5,14 @@
 # tfu <tfu@redhat.com>, 2018. #zanata
 # Ludek Janda <ljanda@redhat.com>, 2021.
 # Sundeep Anand <suanand@redhat.com>, 2021.
+# Pino Toscano <ptoscano@redhat.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-15 18:32+0200\n"
-"PO-Revision-Date: 2021-06-14 13:04+0000\n"
-"Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
+"PO-Revision-Date: 2021-06-15 18:55+0000\n"
+"Last-Translator: Pino Toscano <ptoscano@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-main/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -5756,7 +5757,7 @@ msgstr "您确定要删除 {subscription_text} 吗？"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/mysubstab.py:200
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Stack of {group_name} and 1 other"
 msgid_plural "Stack of {group_name} and {unique} others"
 msgstr[0] "{group_name} 堆栈及 1 个其他"
