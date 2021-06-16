@@ -10,91 +10,85 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-20 17:38+0200\n"
-"PO-Revision-Date: 2021-04-12 18:02+0000\n"
+"PO-Revision-Date: 2021-06-14 13:04+0000\n"
 "Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
-"projects/subscription-manager/subscription-manager-master/zh_CN/>\n"
+"projects/subscription-manager/subscription-manager-main/zh_CN/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5.3\n"
+"X-Generator: Weblate 4.6.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
-#, fuzzy
-#| msgid "Usage:  "
 msgid "usage: "
-msgstr "用法：  "
+msgstr "使用： "
 
 #: /usr/lib64/python3.9/argparse.py:854
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() 未定义"
 
 #: /usr/lib64/python3.9/argparse.py:1197
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr ""
+msgstr "未知解析器 %(parser_name)r（选择： %(choices)s）"
 
 #: /usr/lib64/python3.9/argparse.py:1257
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr ""
+msgstr "参数 \"-\" 带有模式 %r"
 
 #: /usr/lib64/python3.9/argparse.py:1266
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
-msgstr ""
+msgstr "无法打开 '%(filename)s': %(error)s"
 
 #: /usr/lib64/python3.9/argparse.py:1475
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "无法合并操作 - 两个组被命名为 %r"
 
 #: /usr/lib64/python3.9/argparse.py:1513
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "对于位置参数，’required' 是一个无效的参数"
 
 #: /usr/lib64/python3.9/argparse.py:1535
 #, python-format
 msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
-msgstr ""
+msgstr "无效的选项字符串 %(option)r: 必须以字符 %(prefix_chars)r 开头"
 
 #: /usr/lib64/python3.9/argparse.py:1553
 #, python-format
 msgid "dest= is required for options like %r"
-msgstr ""
+msgstr "如 %r 等选项需要 dest="
 
 #: /usr/lib64/python3.9/argparse.py:1570
 #, python-format
 msgid "invalid conflict_resolution value: %r"
-msgstr ""
+msgstr "无效的 conflict_resolution 值： %r"
 
 #: /usr/lib64/python3.9/argparse.py:1588
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] ""
+msgstr[0] "冲突的选项字符串： %s"
 
 #: /usr/lib64/python3.9/argparse.py:1654
 msgid "mutually exclusive arguments must be optional"
-msgstr ""
+msgstr "相互排斥的参数必须是可选的"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:1721
-#, fuzzy
-#| msgid "%s option requires an argument"
 msgid "positional arguments"
-msgstr "%s 选项需要一个参数"
+msgstr "位置参数"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:1722
-#, fuzzy
-#| msgid "%s option requires an argument"
 msgid "optional arguments"
-msgstr "%s 选项需要一个参数"
+msgstr "可选参数"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:1737
@@ -103,95 +97,86 @@ msgstr "显示此帮助信息并退出"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:1768
-#, fuzzy
-#| msgid "cannot parse argument: {}"
 msgid "cannot have multiple subparser arguments"
-msgstr "无法解析参数：{}"
+msgstr "不能有多个 subparser 参数"
 
 #: /usr/lib64/python3.9/argparse.py:1820 /usr/lib64/python3.9/argparse.py:2331
-#, fuzzy, python-format
-#| msgid "Unknown arguments: %s"
+#, python-format
 msgid "unrecognized arguments: %s"
-msgstr "未知的参数：%s"
+msgstr "无法识别的参数： %s"
 
 #: /usr/lib64/python3.9/argparse.py:1921
-#, fuzzy, python-format
-#| msgid "Unknown arguments: %s"
+#, python-format
 msgid "not allowed with argument %s"
-msgstr "未知的参数：%s"
+msgstr "不允许带有参数 %s"
 
 #: /usr/lib64/python3.9/argparse.py:1967 /usr/lib64/python3.9/argparse.py:1981
 #, python-format
 msgid "ignored explicit argument %r"
-msgstr ""
+msgstr "忽略的显式参数 %r"
 
 #: /usr/lib64/python3.9/argparse.py:2088
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "需要以下参数： %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2103
-#, fuzzy, python-format
-#| msgid "Wrong number of arguments specified.\n"
+#, python-format
 msgid "one of the arguments %s is required"
-msgstr "指定的参数数目错误。\n"
+msgstr "需要参数 %s 的一个"
 
 #: /usr/lib64/python3.9/argparse.py:2146
 msgid "expected one argument"
-msgstr ""
+msgstr "预期一个参数"
 
 #: /usr/lib64/python3.9/argparse.py:2147
 msgid "expected at most one argument"
-msgstr ""
+msgstr "预期最多一个参数"
 
 #: /usr/lib64/python3.9/argparse.py:2148
 msgid "expected at least one argument"
-msgstr ""
+msgstr "预期至少有一个参数"
 
 #: /usr/lib64/python3.9/argparse.py:2152
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
-msgstr[0] ""
+msgstr[0] "预期 %s 参数"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2210
-#, fuzzy, python-format
-#| msgid "ambiguous option: %s (%s?)"
+#, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr "模糊选项：%s（%s?）"
+msgstr "模糊选项： %(option)s 可能会匹配 %(matches)s"
 
 #: /usr/lib64/python3.9/argparse.py:2274
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "意外选项字符串： %s"
 
 #: /usr/lib64/python3.9/argparse.py:2471
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%r 不可调用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2488
-#, fuzzy, python-format
-#| msgid "option %s: invalid %s value: %r"
+#, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr "选项 %s：无效值 %s：%r"
+msgstr "无效 %(type)s 值：%(value)r"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2499
-#, fuzzy, python-format
-#| msgid "option %s: invalid choice: %r (choose from %s)"
+#, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
-msgstr "选项 %s：无效选择：%r（在 %s 中选择）"
+msgstr "无效选择： %(value)r（从 %(choices)s选择）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2575
-#, fuzzy, python-format
-#| msgid "{prog}: error: {msg}"
+#, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr "{prog}: 错误: {msg}"
+msgstr "%(prog)s: 错误: %(message)s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/index.js:64 cockpit/src/subscriptions-view.jsx:272
@@ -304,16 +289,12 @@ msgid "Connected to Red Hat Insights"
 msgstr "已连接至 Red Hat Insights"
 
 #: cockpit/src/insights.jsx:377
-#, fuzzy
-#| msgid "The last Insights data upload has failed."
 msgid "Next Insights data upload"
-msgstr "最后一次 Insights 数据上传失败。"
+msgstr "下一个 Insights 数据上传"
 
 #: cockpit/src/insights.jsx:382
-#, fuzzy
-#| msgid "The last Insights data upload has failed."
 msgid "Last Insights data upload"
-msgstr "最后一次 Insights 数据上传失败。"
+msgstr "前一个 Insights 数据上传"
 
 #: cockpit/src/insights.jsx:392
 msgid "Next Insights data upload could not be scheduled."
@@ -391,10 +372,8 @@ msgid "Not connected"
 msgstr "未连接"
 
 #: cockpit/src/insights.jsx:546
-#, fuzzy
-#| msgid "Insights"
 msgid "Insights: $0"
-msgstr "Insights"
+msgstr "Insights: $0"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-client.js:48
@@ -582,16 +561,12 @@ msgstr "系统目的"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:268
-#, fuzzy
-#| msgid "This system is currently not registered."
 msgid "Status: This system is currently not registered."
-msgstr "这个系统目前没有注册。"
+msgstr "状态：这个系统目前没有注册。"
 
 #: cockpit/src/subscriptions-view.jsx:275
-#, fuzzy
-#| msgid "Status: "
 msgid "Status: $0"
-msgstr "状态： "
+msgstr "状态：$0"
 
 #: cockpit/src/subscriptions-view.jsx:279
 msgid "Unregister"
@@ -603,13 +578,13 @@ msgid ""
 "and try reloading the page. Additionally, make sure that you have checked "
 "the 'Reuse my password for privileged tasks' checkbox on the login page."
 msgstr ""
+"rhsm 服务不可用。请确定已安装 subscription-manager 并尝试重新载入该页面。另外，请确保在登录页面中选择了\"Reuse my "
+"password for privileged tasks\"复选框。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:326
-#, fuzzy
-#| msgid "Unable to reach the server at %s:%s%s"
 msgid "Unable to the reach the rhsm service."
-msgstr "无法在 %s:%s%s 连接该服务器"
+msgstr "无法访问 rhsm 服务。"
 
 #: cockpit/src/subscriptions-view.jsx:329
 msgid "Updating"
@@ -621,11 +596,11 @@ msgstr "正在获取订阅状态..."
 
 #: cockpit/src/subscriptions-view.jsx:332
 msgid "Access denied"
-msgstr ""
+msgstr "访问被拒绝"
 
 #: cockpit/src/subscriptions-view.jsx:333
 msgid "The current user isn't allowed to access system subscription status."
-msgstr ""
+msgstr "当前用户不允许访问系统订阅状态。"
 
 #: cockpit/src/subscriptions-view.jsx:335
 msgid "Unable to connect"
@@ -3299,7 +3274,7 @@ msgstr "自动在这个系统中附加兼容的订阅"
 msgid ""
 "include an implicit attempt to unregister before registering a new system "
 "identity"
-msgstr ""
+msgstr "在注册一个新系统身份前包括一个隐式尝试来取消注册"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:76
@@ -5762,7 +5737,7 @@ msgstr "您确定要删除 {subscription_text} 吗？"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/mysubstab.py:200
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Stack of {group_name} and 1 other"
 msgid_plural "Stack of {group_name} and {unique} others"
 msgstr[0] "{group_name} 堆栈及 1 个其他"
