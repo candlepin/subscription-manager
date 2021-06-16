@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-15 12:35-0400\n"
 "PO-Revision-Date: 2021-06-16 12:37+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ko/>\n"
 "Language: ko\n"
@@ -3145,7 +3145,7 @@ msgstr "등록해야 하는 이유?"
 #: src/subscription_manager/gui/data/glade/registration_info.glade:117
 #: src/subscription_manager/gui/data/ui/registration_info.ui:175
 msgid "Why Should I Register?"
-msgstr "등록해야 하는 이유"
+msgstr "등록해야 하는 이유?"
 
 #: src/subscription_manager/gui/data/glade/registration_info.glade:148
 #: src/subscription_manager/gui/data/ui/registration_info.ui:204
@@ -4654,6 +4654,8 @@ msgid ""
 "system purpose \"{attr}\".  This setting will not influence auto-attaching "
 "subscriptions."
 msgstr ""
+"경고: 이 조직은 시스템 목적 \"{attr}\"를 제공하는 어떤 서브스크립션을 가지고 있지 않습니다.이 설정은 자동-첨부 서브스크립션에 "
+"영향을 주지 않을 것입니다."
 
 #: src/subscription_manager/managercli.py:782
 #, python-brace-format
@@ -4692,7 +4694,7 @@ msgstr "{syspurpose_attr} 사용 가능"
 msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
-msgstr ""
+msgstr "이 조직에는 사용가능한 서브스크립션에서 시스템 목적\"{syspurpose_attr}\"을 위해 사용 가능한 값이 없습니다."
 
 #: src/subscription_manager/managercli.py:919
 msgid "Unable to connect to server using token"
