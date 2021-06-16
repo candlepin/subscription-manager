@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-15 18:32+0200\n"
-"PO-Revision-Date: 2021-06-10 10:04+0000\n"
+"PO-Revision-Date: 2021-06-15 18:55+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/it/>\n"
@@ -541,8 +541,6 @@ msgid "Auto-attaching ..."
 msgstr ""
 
 #: cockpit/src/subscriptions-view.jsx:73 cockpit/src/subscriptions-view.jsx:117
-#, fuzzy
-#| msgid "Product Name"
 msgid "Product name"
 msgstr "Nome prodotto"
 
@@ -554,15 +552,11 @@ msgid "Subscribed"
 msgstr "Sottoscritte"
 
 #: cockpit/src/subscriptions-view.jsx:86
-#, fuzzy
-#| msgid "Not Subscribed (Not supported by a valid subscription.)"
 msgid "Not subscribed (Not supported by a valid subscription)"
-msgstr "Non sottoscritto (non supportato da una sottoscrizione valida)."
+msgstr "Non sottoscritto (non supportato da una sottoscrizione valida)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:107
-#, fuzzy
-#| msgid "Not Subscribed"
 msgid "Not subscribed"
 msgstr "Non sottoscritte"
 
@@ -602,21 +596,15 @@ msgstr "Prodotti installati"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:171
-#, fuzzy
-#| msgid "No installed products detected."
 msgid "No installed products detected"
-msgstr "Non è stato rilevato alcun prodotto installato."
+msgstr "Non è stato rilevato alcun prodotto installato"
 
 #: cockpit/src/subscriptions-view.jsx:224
-#, fuzzy
-#| msgid "System Purpose"
 msgid "System purpose"
 msgstr "Scopo del sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: cockpit/src/subscriptions-view.jsx:232
-#, fuzzy
-#| msgid "Service Level"
 msgid "Service level"
 msgstr "Livello del servizio"
 
@@ -626,10 +614,8 @@ msgid "Usage"
 msgstr "Utilizzo"
 
 #: cockpit/src/subscriptions-view.jsx:244
-#, fuzzy
-#| msgid "Roles"
 msgid "Role"
-msgstr "Ruoli"
+msgstr "Ruolo"
 
 #: cockpit/src/subscriptions-view.jsx:250 src/rct/printing.py:86
 msgid "Add-ons"
@@ -637,10 +623,8 @@ msgstr "Add-on"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: cockpit/src/subscriptions-view.jsx:264
-#, fuzzy
-#| msgid "System is not registered."
 msgid "Not registered"
-msgstr "Il sistema non è registrato."
+msgstr "Non è registrato"
 
 #: cockpit/src/subscriptions-view.jsx:273
 msgid "Unregister"
@@ -648,7 +632,7 @@ msgstr "Rimuovi-registrazione"
 
 #: cockpit/src/subscriptions-view.jsx:280
 msgid "Overview"
-msgstr ""
+msgstr "Panoramica"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:286
@@ -2029,10 +2013,8 @@ msgstr "Se desideri sovrascrivere sul server esegui: {command}"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #. TRANSLATORS: this refers to a deprecated command
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:39
-#, fuzzy
-#| msgid "Deprecated, see remove"
 msgid "Deprecated, see 'syspurpose'"
-msgstr "Deprecato, consultare remove"
+msgstr "Deprecato, consultare 'syspurpose'"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:65
 #, python-brace-format
