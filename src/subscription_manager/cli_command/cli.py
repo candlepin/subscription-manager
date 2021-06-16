@@ -165,7 +165,7 @@ class CliCommand(AbstractCLICommand):
     def _add_proxy_options(self):
         """ Add proxy options that apply to sub-commands that require network connections. """
         self.parser.add_argument("--proxy", dest="proxy_url",
-                               default=None, help=_("proxy URL in the form of proxy_hostname:proxy_port"))
+                               default=None, help=_("proxy URL in the form of hostname:port"))
         self.parser.add_argument("--proxyuser", dest="proxy_user",
                                 default=None, help=_("user for HTTP proxy with basic authentication"))
         self.parser.add_argument("--proxypassword", dest="proxy_password",
