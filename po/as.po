@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-07 02:57-0400\n"
+"POT-Creation-Date: 2021-06-15 12:35-0400\n"
 "PO-Revision-Date: 2015-09-25 02:52-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Assamese\n"
@@ -330,12 +330,12 @@ msgstr ""
 #: src/subscription_manager/managercli.py:403
 #: src/subscription_manager/managercli.py:404
 #: src/subscription_manager/managercli.py:405
-#: src/subscription_manager/managercli.py:2439
+#: src/subscription_manager/managercli.py:2442
 #: src/subscription_manager/reasons.py:109
-#: src/subscription_manager/utils.py:310 src/subscription_manager/utils.py:324
-#: src/subscription_manager/utils.py:326 src/subscription_manager/utils.py:345
-#: src/subscription_manager/utils.py:346 src/subscription_manager/utils.py:347
-#: src/subscription_manager/utils.py:366
+#: src/subscription_manager/utils.py:278 src/subscription_manager/utils.py:292
+#: src/subscription_manager/utils.py:294 src/subscription_manager/utils.py:313
+#: src/subscription_manager/utils.py:314 src/subscription_manager/utils.py:315
+#: src/subscription_manager/utils.py:334
 msgid "Unknown"
 msgstr "অজ্ঞাত"
 
@@ -1637,7 +1637,7 @@ msgstr ""
 #: src/rhsmlib/services/entitlement.py:265
 #: src/subscription_manager/gui/mysubstab.py:300
 #: src/subscription_manager/gui/widgets.py:862
-#: src/subscription_manager/managercli.py:3015
+#: src/subscription_manager/managercli.py:3018
 msgid "Virtual"
 msgstr "ভাৰছুৱেল"
 
@@ -1646,7 +1646,7 @@ msgstr "ভাৰছুৱেল"
 #: src/rhsmlib/services/entitlement.py:267
 #: src/subscription_manager/gui/mysubstab.py:302
 #: src/subscription_manager/gui/widgets.py:861
-#: src/subscription_manager/managercli.py:3017
+#: src/subscription_manager/managercli.py:3020
 msgid "Physical"
 msgstr "ভৌতিক"
 
@@ -1654,7 +1654,7 @@ msgstr "ভৌতিক"
 # document keys, author ngoswami
 #: src/rhsmlib/services/entitlement.py:270
 #: src/subscription_manager/gui/mysubstab.py:305
-#: src/subscription_manager/managercli.py:3020
+#: src/subscription_manager/managercli.py:3023
 msgid "Yes"
 msgstr "হয়"
 
@@ -1662,7 +1662,7 @@ msgstr "হয়"
 # document keys, author ngoswami
 #: src/rhsmlib/services/entitlement.py:272
 #: src/subscription_manager/gui/mysubstab.py:307
-#: src/subscription_manager/managercli.py:3022
+#: src/subscription_manager/managercli.py:3025
 msgid "No"
 msgstr "নহয়"
 
@@ -1694,36 +1694,36 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
 #: src/rhsmlib/services/entitlement.py:453
-#: src/subscription_manager/managercli.py:2911
+#: src/subscription_manager/managercli.py:2914
 msgid "Error: --all is only applicable with --available"
 msgstr "ত্ৰুটি: --all কেৱল --available লগত প্ৰযোজ্য"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
 #: src/rhsmlib/services/entitlement.py:457
-#: src/subscription_manager/managercli.py:2913
+#: src/subscription_manager/managercli.py:2916
 msgid "Error: --ondate is only applicable with --available"
 msgstr "ত্ৰুটি: --ondate কেৱল --available লগত প্ৰযোজ্য"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
 #: src/rhsmlib/services/entitlement.py:462
-#: src/subscription_manager/managercli.py:2915
+#: src/subscription_manager/managercli.py:2918
 msgid "Error: --servicelevel is only applicable with --available or --consumed"
 msgstr "ত্ৰুটি: --servicelevel কেৱল --available অথবা --consumed ৰ সৈতে প্ৰযোজ্য"
 
 #: src/rhsmlib/services/entitlement.py:466
-#: src/subscription_manager/managercli.py:2919
+#: src/subscription_manager/managercli.py:2922
 msgid "Error: --match-installed is only applicable with --available"
 msgstr "ত্ৰুটি: --match-installed কেৱল --available ৰ সৈতে প্ৰযোজ্য"
 
 #: src/rhsmlib/services/entitlement.py:470
-#: src/subscription_manager/managercli.py:2921
+#: src/subscription_manager/managercli.py:2924
 msgid "Error: --no-overlap is only applicable with --available"
 msgstr "ত্ৰুটি: --no-overlap কেৱল --available ৰ সৈতে প্ৰযোজ্য"
 
 #: src/rhsmlib/services/entitlement.py:475
-#: src/subscription_manager/managercli.py:2923
+#: src/subscription_manager/managercli.py:2926
 msgid ""
 "Error: --pool-only is only applicable with --available and/or --consumed"
 msgstr ""
@@ -1739,12 +1739,12 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
 #: src/rhsmlib/services/register.py:145
-#: src/subscription_manager/managercli.py:1529
+#: src/subscription_manager/managercli.py:1532
 msgid "Error: system name can not be empty."
 msgstr "ত্ৰুটি: চিস্টেমৰ নাম ৰিক্ত থাকিব নোৱাৰিব।"
 
 #: src/rhsmlib/services/register.py:147
-#: src/subscription_manager/managercli.py:1548
+#: src/subscription_manager/managercli.py:1551
 msgid ""
 "Error: Can not force registration while attempting to recover registration "
 "with consumerid. Please use --force without --consumerid to re-register or "
@@ -1754,21 +1754,21 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
 #: src/rhsmlib/services/register.py:155
-#: src/subscription_manager/managercli.py:1540
+#: src/subscription_manager/managercli.py:1543
 msgid "Error: Must specify an activation key"
 msgstr "ত্ৰুটি: এটা সক্ৰিয়কৰণ চাবি ধাৰ্য্য কৰিব লাগিব"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
 #: src/rhsmlib/services/register.py:157
-#: src/subscription_manager/managercli.py:1531
+#: src/subscription_manager/managercli.py:1534
 msgid "Error: Activation keys do not require user credentials."
 msgstr "ত্ৰুটি: সক্ৰিয়কৰণ কি'সমূহৰ ব্যৱহাৰকাৰী তথ্যসমূহৰ প্ৰয়োজন নাই।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
 #: src/rhsmlib/services/register.py:159
-#: src/subscription_manager/managercli.py:1533
+#: src/subscription_manager/managercli.py:1536
 msgid "Error: Activation keys can not be used with previously registered IDs."
 msgstr ""
 "ত্ৰুটি: সক্ৰিয়কৰণ কি'সমূহ পূৰ্বতে ৰেজিস্টাৰ্ড আইডিসমূহৰ সৈতে ব্যৱহাৰ কৰিব নোৱাৰি।"
@@ -1776,7 +1776,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
 #: src/rhsmlib/services/register.py:162
-#: src/subscription_manager/managercli.py:1535
+#: src/subscription_manager/managercli.py:1538
 msgid "Error: Activation keys do not allow environments to be specified."
 msgstr "ত্ৰুটি: সক্ৰিয়কৰণ কি'সমূহে পৰিৱেশসমূহ ধাৰ্য্য কৰাৰ অনুমতি নিদিয়ে।"
 
@@ -1827,7 +1827,7 @@ msgstr "এই চিস্টেম spacewalk ৰ সৈতে ৰেজিস�
 # document keys
 #: src/subscription_manager/branding/__init__.py:85
 #: src/subscription_manager/branding/redhat_branding.py:12
-#: src/subscription_manager/managercli.py:3362
+#: src/subscription_manager/managercli.py:3365
 #: src/subscription_manager/migrate/migrate.py:999
 msgid "WARNING"
 msgstr "সতৰ্কবাৰ্তা"
@@ -1961,7 +1961,7 @@ msgid ""
 "forgot_password"
 msgstr ""
 
-#: src/subscription_manager/cache.py:161
+#: src/subscription_manager/cache.py:164
 #, python-format
 msgid ""
 "consumer_uuid=%s is not a valid consumer_uuid. Not attempting to sync %s "
@@ -2014,7 +2014,7 @@ msgstr "অন্য মডিউলসমূহ:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/entcertlib.py:309
+#: src/subscription_manager/entcertlib.py:308
 #, python-format
 msgid "%s local certificate has been deleted."
 msgid_plural "%s local certificates have been deleted."
@@ -2023,35 +2023,35 @@ msgstr[1] "%s স্থানীয় প্ৰমাণপত্ৰসমূহ �
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/entcertlib.py:463
+#: src/subscription_manager/entcertlib.py:462
 #, python-format
 msgid "Total updates: %d"
 msgstr "সৰ্বমুঠ আপডেইটসমূহ: %d"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/entcertlib.py:464
+#: src/subscription_manager/entcertlib.py:463
 #, python-format
 msgid "Found (local) serial# %s"
 msgstr "পোৱা গৈছে (স্থানীয়) ক্ৰমিক# %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/entcertlib.py:465
+#: src/subscription_manager/entcertlib.py:464
 #, python-format
 msgid "Expected (UEP) serial# %s"
 msgstr "আকাংক্ষিত (UEP) ক্ৰমিক# %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/entcertlib.py:466
+#: src/subscription_manager/entcertlib.py:465
 #: src/subscription_manager/repolib.py:647
 msgid "Added (new)"
 msgstr "যোগ কৰা হৈছে (নতুন)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/entcertlib.py:467
+#: src/subscription_manager/entcertlib.py:466
 msgid "Deleted (rogue):"
 msgstr "মচি দিয়া হৈছে (ঠগ):"
 
@@ -3922,7 +3922,7 @@ msgstr ""
 # document keys
 #: src/subscription_manager/gui/factsgui.py:153
 #: src/subscription_manager/gui/widgets.py:514
-#: src/subscription_manager/managercli.py:1170
+#: src/subscription_manager/managercli.py:1171
 #: src/subscription_manager/printing_utils.py:167
 #: src/subscription_manager/printing_utils.py:186
 msgid "None"
@@ -4123,7 +4123,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:556
 #: src/subscription_manager/managercli.py:701
 #: src/subscription_manager/managercli.py:712
-#: src/subscription_manager/managercli.py:1410
+#: src/subscription_manager/managercli.py:1411
 msgid "Proxy connection failed, please check your settings."
 msgstr ""
 
@@ -4307,8 +4307,8 @@ msgstr "<b>চিস্টেম ৰেজিস্টাৰ কৰিবলে 
 #: src/subscription_manager/gui/registergui.py:210
 #: src/subscription_manager/gui/registergui.py:454
 #: src/subscription_manager/gui/registergui.py:1579
-#: src/subscription_manager/managercli.py:1850
-#: src/subscription_manager/utils.py:325
+#: src/subscription_manager/managercli.py:1853
+#: src/subscription_manager/utils.py:293
 msgid "This system is currently not registered."
 msgstr "এই চিস্টেম বৰ্তমানত ৰেজিস্টাৰ নহয়।"
 
@@ -4533,8 +4533,8 @@ msgstr "এটা সংলঘ্ন স্বাক্ষৰণৰ অবিহ
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
 #: src/subscription_manager/gui/reposgui.py:56
-#: src/subscription_manager/managercli.py:2634
-#: src/subscription_manager/managercli.py:3181
+#: src/subscription_manager/managercli.py:2637
+#: src/subscription_manager/managercli.py:3184
 msgid "Repositories disabled by configuration."
 msgstr "সংৰূপ দ্বাৰা ভঁৰালসমূহ অসামৰ্থবান কৰা হৈছে।"
 
@@ -5058,12 +5058,12 @@ msgid ""
 msgstr ""
 
 #. TRANSLATORS: this is used to quote a string
-#: src/subscription_manager/managercli.py:759
+#: src/subscription_manager/managercli.py:758
 #, python-brace-format
 msgid "\"{value}\""
 msgstr ""
 
-#: src/subscription_manager/managercli.py:762
+#: src/subscription_manager/managercli.py:761
 #, python-brace-format
 msgid ""
 "Warning: Provided value {vals} is not included in the list of valid values"
@@ -5072,67 +5072,58 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/subscription_manager/managercli.py:769
+#: src/subscription_manager/managercli.py:768
 #, python-brace-format
-msgid "Warning: the list of valid values for attribute \"{attr}\" is empty."
+msgid ""
+"Warning: This organization does not have any subscriptions that provide a "
+"system purpose \"{attr}\".  This setting will not influence auto-attaching "
+"subscriptions."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:773
-#, python-brace-format
-msgid "Warning: No valid values provided for attribute \"{attr}\""
-msgstr ""
-
-#: src/subscription_manager/managercli.py:785
+#: src/subscription_manager/managercli.py:782
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:802
+#: src/subscription_manager/managercli.py:799
 #, python-brace-format
 msgid "{attr} unset."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:819
-#: src/subscription_manager/managercli.py:842
+#: src/subscription_manager/managercli.py:816
+#: src/subscription_manager/managercli.py:839
 #, python-brace-format
 msgid "{attr} updated."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:871
+#: src/subscription_manager/managercli.py:868
 #, python-brace-format
 msgid "Current {name}: {val}"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:874
+#: src/subscription_manager/managercli.py:871
 #, python-brace-format
 msgid "{name} not set."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:892
+#: src/subscription_manager/managercli.py:888
 #, python-brace-format
 msgid "Available {syspurpose_attr}"
 msgstr ""
 
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
-#: src/subscription_manager/managercli.py:902
-#, fuzzy, python-brace-format
-#| msgid "This org does not have any subscriptions with service levels."
-msgid ""
-"This org does not have any subscriptions with an available "
-"\"{syspurpose_attr}\"."
-msgstr "এই সংঘঠনৰ সেৱা স্তৰসমূহৰ সৈতে কোনো স্বাক্ষৰণ নাই।"
-
-#: src/subscription_manager/managercli.py:904
+#: src/subscription_manager/managercli.py:898
+#: src/subscription_manager/managercli.py:1463
 #, python-brace-format
-msgid "Unable to get list of valid values for \"{syspurpose_attr}\""
+msgid ""
+"There are no available values for the system purpose \"{syspurpose_attr}\" "
+"from the available subscriptions in this organization."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:923
+#: src/subscription_manager/managercli.py:919
 msgid "Unable to connect to server using token"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:960
+#: src/subscription_manager/managercli.py:956
 #, python-brace-format
 msgid ""
 "Note: The currently configured entitlement server does not support System "
@@ -5141,95 +5132,95 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:988
+#: src/subscription_manager/managercli.py:984
 msgid "username to use when authorizing against the server"
 msgstr "চাৰ্ভাৰৰ সৈতে প্ৰমাণীকৰণৰ বাবে ব্যৱহাৰ কৰিব লগিয়া ব্যৱহাৰকাৰীনাম"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:990
+#: src/subscription_manager/managercli.py:986
 msgid "password to use when authorizing against the server"
 msgstr "চাৰ্ভাৰৰ সৈতে প্ৰমাণীকৰণৰ বাবে ব্যৱহাৰ কৰিব লগিয়া পাছৱৰ্ড"
 
-#: src/subscription_manager/managercli.py:992
+#: src/subscription_manager/managercli.py:988
 msgid "token to use when authorizing against the server"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1002
+#: src/subscription_manager/managercli.py:998
 msgid "Username: "
 msgstr "ব্যৱহাৰকাৰীৰ নাম: "
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1005
+#: src/subscription_manager/managercli.py:1001
 msgid "Password: "
 msgstr "পাছৱৰ্ড: "
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1037
+#: src/subscription_manager/managercli.py:1033
 msgid "specify organization"
 msgstr "সংঘঠন ধাৰ্য্য কৰক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1044
-#: src/subscription_manager/managercli.py:1833
+#: src/subscription_manager/managercli.py:1040
+#: src/subscription_manager/managercli.py:1836
 msgid "Organization: "
 msgstr "সংঘঠন: "
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1061
+#: src/subscription_manager/managercli.py:1057
 msgid ""
 "Remove all local system and subscription data without affecting the server"
 msgstr "চাৰ্ভাৰক প্ৰভাৱ নেপেলাই স্থানীয় চিস্টেম আৰু স্বাক্ষৰণ তথ্য আতৰাওক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1067
-#: src/subscription_manager/managercli.py:1635
+#: src/subscription_manager/managercli.py:1063
+#: src/subscription_manager/managercli.py:1638
 msgid "All local data removed"
 msgstr "সকলো স্থানীয় তথ্য গুচাই দিয়া হ'ল"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1080
+#: src/subscription_manager/managercli.py:1076
 msgid "Pull the latest subscription data from the server"
 msgstr "চাৰ্ভাৰৰ পৰা শেহতীয়া স্বাক্ষৰণ তথ্য টানি আনক"
 
-#: src/subscription_manager/managercli.py:1084
+#: src/subscription_manager/managercli.py:1080
 msgid "force certificate regeneration"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1104
+#: src/subscription_manager/managercli.py:1105
 msgid "All local data refreshed"
 msgstr "সকলো স্থানীয় তথ্য সতেজ কৰা হ'ল"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1109
+#: src/subscription_manager/managercli.py:1110
 #, python-format
 msgid "Unable to perform refresh due to the following exception: %s"
 msgstr "নিম্নলিখিত ব্যাতিক্ৰম: %s -ৰ কাৰণে সতেজ কৰিবলে অক্ষম"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1116
+#: src/subscription_manager/managercli.py:1117
 msgid "Display the identity certificate for this system or request a new one"
 msgstr "এই চিস্টেমৰ বাবে পৰিচয় প্ৰমাণপত্ৰ প্ৰদৰ্শন কৰক অথবা নতুন এটা অনুৰোধ কৰক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1122
+#: src/subscription_manager/managercli.py:1123
 msgid "request a new certificate be generated"
 msgstr "এটা নতুন প্ৰমাণপত্ৰ সৃজনৰ কাৰণে অনুৰোধ কৰক"
 
-#: src/subscription_manager/managercli.py:1124
+#: src/subscription_manager/managercli.py:1125
 msgid ""
 "force certificate regeneration (requires username and password); Only used "
 "with --regenerate"
@@ -5239,91 +5230,91 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1130
+#: src/subscription_manager/managercli.py:1131
 msgid "--force can only be used with --regenerate"
 msgstr "--force ক কেৱল --regenerate ৰ সৈতে ব্যৱহাৰ কৰিব পাৰি"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1132
+#: src/subscription_manager/managercli.py:1133
 msgid "--username and --password can only be used with --force"
 msgstr "--username আৰু --password কেৱল --force ৰ সৈতে ব্যৱহাৰ কৰিব পাৰি"
 
-#: src/subscription_manager/managercli.py:1134
+#: src/subscription_manager/managercli.py:1135
 msgid "--token can only be used with --force"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1143
-#: src/subscription_manager/managercli.py:1146
-#: src/subscription_manager/managercli.py:3265
+#: src/subscription_manager/managercli.py:1144
+#: src/subscription_manager/managercli.py:1147
+#: src/subscription_manager/managercli.py:3268
 #, python-format
 msgid "server type: %s"
 msgstr "চাৰ্ভাৰৰ ধৰণ: %s"
 
-#: src/subscription_manager/managercli.py:1158
+#: src/subscription_manager/managercli.py:1159
 #, python-format
 msgid "system identity: %s"
 msgstr "চিস্টেম পৰিচয়:  %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1159
+#: src/subscription_manager/managercli.py:1160
 #, python-format
 msgid "name: %s"
 msgstr "নাম: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1160
+#: src/subscription_manager/managercli.py:1161
 #, python-format
 msgid "org name: %s"
 msgstr "সংঘঠন নাম: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1161
+#: src/subscription_manager/managercli.py:1162
 #, python-format
 msgid "org ID: %s"
 msgstr "সংঘঠন ID: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1171
+#: src/subscription_manager/managercli.py:1172
 #, python-format
 msgid "environment name: %s"
 msgstr "পৰিৱেশৰ নাম: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1187
+#: src/subscription_manager/managercli.py:1188
 msgid "Identity certificate has been regenerated."
 msgstr "পৰিচয় প্ৰমাণপত্ৰ পুনৰ সৃজন কৰা হৈছে।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1199
+#: src/subscription_manager/managercli.py:1200
 msgid "Error: Unable to generate a new identity for the system"
 msgstr "ত্ৰুটি: চিস্টেমৰ বাবে এটা নতুন পৰিচয় সৃজন কৰিবলে অক্ষম"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1205
+#: src/subscription_manager/managercli.py:1206
 msgid "Display the organizations against which a user can register a system"
 msgstr ""
 "সংঘঠনসমূহ যাৰ বাবে এজন ব্যৱহাৰকাৰীয়ে এটা চিস্টেম ৰেজিস্টাৰ কৰিব পাৰে প্ৰদৰ্শন কৰক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1224
+#: src/subscription_manager/managercli.py:1225
 msgid "Organizations"
 msgstr "সংঘঠনসমূহ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1231
-#: src/subscription_manager/managercli.py:1816
+#: src/subscription_manager/managercli.py:1232
+#: src/subscription_manager/managercli.py:1819
 #: src/subscription_manager/migrate/migrate.py:303
 #, python-format
 msgid "%s cannot register with any organizations."
@@ -5331,95 +5322,95 @@ msgstr "%s এ কোনো সংগঠনৰ সৈতে ৰেজিস্�
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1238
+#: src/subscription_manager/managercli.py:1239
 msgid "Error: Unable to retrieve org list from server"
 msgstr "ত্ৰুটি: চাৰ্ভাৰৰ পৰা সংগঠন তালিকা উদ্ধাৰ কৰিবলে অক্ষম"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1244
+#: src/subscription_manager/managercli.py:1245
 msgid "Display the environments available for a user"
 msgstr "এজন ব্যৱহাৰকাৰীৰ বাবে উপলব্ধ পৰিৱেশসমূহ প্ৰদৰ্শন কৰে"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1245
+#: src/subscription_manager/managercli.py:1246
 msgid "specify organization for environment list, using organization key"
 msgstr "সংঘঠন কি' ব্যৱহাৰ কৰি, পৰিৱেশ তালিকাৰ বাবে সংঘঠন ধাৰ্য্য কৰক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1268
+#: src/subscription_manager/managercli.py:1269
 msgid "Environments"
 msgstr "পৰিৱেশসমূহ"
 
-#: src/subscription_manager/managercli.py:1274
+#: src/subscription_manager/managercli.py:1275
 msgid "This org does not have any environments."
 msgstr "এই সংঘঠনৰ কোনো পৰিৱেশ নাই।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1276
-#: src/subscription_manager/managercli.py:1803
+#: src/subscription_manager/managercli.py:1277
+#: src/subscription_manager/managercli.py:1806
 msgid "Error: Server does not support environments."
 msgstr "ত্ৰুটি: চাৰ্ভাৰে পৰিৱেশসমূহ সমৰ্থন নকৰে।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1284
+#: src/subscription_manager/managercli.py:1285
 msgid "Error: Unable to retrieve environment list from server"
 msgstr "ত্ৰুটি: চাৰ্ভাৰৰ পৰা পৰিৱেশ তালিকা উদ্ধাৰ কৰিবলে অক্ষম"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1292
+#: src/subscription_manager/managercli.py:1293
 msgid "Set if subscriptions are attached on a schedule (default of daily)"
 msgstr "যদি স্বাক্ষৰণসমূহ এটা সূচীত সংলগ্ন থাকে সংহতি কৰক (সদায় অবিকল্পিত)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1293
+#: src/subscription_manager/managercli.py:1294
 msgid "specify whether to enable or disable auto-attaching of subscriptions"
 msgstr "স্বাক্ষৰণসমূহৰ auto-attach সামৰ্থবান কৰা হব নে অসামৰ্থবান কৰা হ'ব ধাৰ্য্য কৰক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1298
+#: src/subscription_manager/managercli.py:1299
 msgid "try to attach subscriptions for uncovered products each check-in"
 msgstr ""
 "প্ৰতি চেক-ইনত অন্তৰ্ভুক্ত নকৰা উৎপাদনসমূহৰ বাবে স্বাক্ষৰণসমূহ সংলগ্ন কৰাৰ চেষ্টা কৰক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1300
+#: src/subscription_manager/managercli.py:1301
 msgid "do not try to automatically attach subscriptions each check-in"
 msgstr "প্ৰতি চেক-ইনত স্বাক্ষৰণসমূহ স্বচালিতভাৱে সংলগ্ন কৰাৰ চেষ্টা নকৰিব"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1302
+#: src/subscription_manager/managercli.py:1303
 msgid "show the current auto-attach preference"
 msgstr "বৰ্তমান auto-attach পছন্দ দেখুৱাওক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1314
+#: src/subscription_manager/managercli.py:1315
 msgid "Auto-attach preference: enabled"
 msgstr "Auto-attach পছন্দ: সামৰ্থবান"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1316
+#: src/subscription_manager/managercli.py:1317
 msgid "Auto-attach preference: disabled"
 msgstr "Auto-attach পছন্দ: অসামৰ্থবান"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1331
+#: src/subscription_manager/managercli.py:1332
 msgid "Manage service levels for this system"
 msgstr "এই চিস্টেমৰ বাবে সেৱা স্তৰসমূহ ব্যৱস্থাপনা কৰক"
 
-#: src/subscription_manager/managercli.py:1332
+#: src/subscription_manager/managercli.py:1333
 msgid ""
 "specify an organization when listing available service levels using the "
 "organization key, only used with --list"
@@ -5427,13 +5418,13 @@ msgstr ""
 "উপলব্ধ সেৱা স্তৰসমূহ তালিকাভুক্ত কৰোতে সংঘঠন কি' ব্যৱহাৰ কৰি এটা সংঘঠন ধাৰ্য্য কৰক, "
 "কেৱল --list ৰ সৈতে ব্যৱহৃত"
 
-#: src/subscription_manager/managercli.py:1358
+#: src/subscription_manager/managercli.py:1359
 msgid "Error: --org is only supported with the --list or --set option"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1363
+#: src/subscription_manager/managercli.py:1364
 msgid ""
 "Error: you must register or specify --username and --password to list "
 "service levels"
@@ -5443,86 +5434,77 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1388
+#: src/subscription_manager/managercli.py:1389
 msgid "Error: Unable to retrieve service levels."
 msgstr "ত্ৰুটি: সেৱা স্তৰসমূহ উদ্ধাৰ কৰিবলে অক্ষম।"
 
-#: src/subscription_manager/managercli.py:1418
+#: src/subscription_manager/managercli.py:1419
 #, python-brace-format
 msgid "Service level set to: \"{val}\"."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1426
+#: src/subscription_manager/managercli.py:1427
 msgid "Service level preference has been unset"
 msgstr "সেৱা স্তৰ পছন্দ অসংহতি কৰা হৈছে"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1432
-#: src/subscription_manager/managercli.py:1438
-#: src/subscription_manager/managercli.py:1466
-#: src/subscription_manager/managercli.py:1471
+#: src/subscription_manager/managercli.py:1433
+#: src/subscription_manager/managercli.py:1439
+#: src/subscription_manager/managercli.py:1469
+#: src/subscription_manager/managercli.py:1474
 #: src/subscription_manager/migrate/migrate.py:728
 msgid "Error: The service-level command is not supported by the server."
 msgstr "ত্ৰুটি: service-level কমান্ড চাৰ্ভাৰ দ্বাৰা সমৰ্থিত নহয়।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1441
+#: src/subscription_manager/managercli.py:1442
 #, python-format
 msgid "Current service level: %s"
 msgstr "বৰ্তমান সেৱা স্তৰ: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1443
+#: src/subscription_manager/managercli.py:1444
 msgid "Service level preference not set"
 msgstr "সেৱা স্তৰ পছন্দ সংহতি কৰা হোৱা নাই"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1457
+#: src/subscription_manager/managercli.py:1458
 msgid "Available Service Levels"
 msgstr "উপলব্ধ সেৱা স্তৰসমূহ"
 
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
-#: src/subscription_manager/managercli.py:1462
-#, fuzzy
-#| msgid "This org does not have any subscriptions with service levels."
-msgid ""
-"This org does not have any subscriptions with an available \"service-level\"."
-msgstr "এই সংঘঠনৰ সেৱা স্তৰসমূহৰ সৈতে কোনো স্বাক্ষৰণ নাই।"
-
-#: src/subscription_manager/managercli.py:1481
+#: src/subscription_manager/managercli.py:1484
 msgid "Manage usage setting for this system"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:1482
+#: src/subscription_manager/managercli.py:1485
 msgid "use set and unset to define the value for this field"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:1500
+#: src/subscription_manager/managercli.py:1503
 msgid "base URL for content in form of https://hostname:port/prefix"
 msgstr "https://hostname:port/prefix বিন্যাসত সমলৰ বাবে ভিত্তি URL"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1504
+#: src/subscription_manager/managercli.py:1507
 msgid "name of the system to register, defaults to the hostname"
 msgstr "ৰেজিস্টাৰ কৰিবলে চিস্টেমৰ নাম, হস্টনামলে অবিকল্পিত"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1506
+#: src/subscription_manager/managercli.py:1509
 msgid "the existing system data is pulled from the server"
 msgstr "অস্তিত্ববান চিস্টেম তথ্য চাৰ্ভাৰৰ পৰা প্ৰাপ্ত কৰা হয়"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1508
+#: src/subscription_manager/managercli.py:1511
 msgid ""
 "register with one of multiple organizations for the user, using organization "
 "key"
@@ -5531,37 +5513,37 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1510
+#: src/subscription_manager/managercli.py:1513
 msgid "register with a specific environment in the destination org"
 msgstr "গন্তব্য সংঘঠনত এটা বিশেষ পৰিৱেশৰ সৈতে ৰেজিস্টাৰ কৰক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1512
+#: src/subscription_manager/managercli.py:1515
 msgid "set a release version"
 msgstr "এটা উন্মোচন সংস্কৰণ সংহতি কৰক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1514
+#: src/subscription_manager/managercli.py:1517
 msgid "Deprecated, see --auto-attach"
 msgstr "স্খলিত, --auto-attach চাওক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1516
+#: src/subscription_manager/managercli.py:1519
 msgid "automatically attach compatible subscriptions to this system"
 msgstr "এই চিস্টেমলে সংগত স্বাক্ষৰণসমূহ স্বচালিতভাৱে সংলগ্ন কৰক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1518
+#: src/subscription_manager/managercli.py:1521
 msgid "register the system even if it is already registered"
 msgstr "চিস্টেমটো ৰেজিস্টাৰ কৰক যদিওবা ই আগতিয়াকৈ ৰেজিস্টাৰ্ড"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1520
+#: src/subscription_manager/managercli.py:1523
 #: src/subscription_manager/migrate/migrate.py:924
 msgid ""
 "activation key to use for registration (can be specified more than once)"
@@ -5569,7 +5551,7 @@ msgstr ""
 "ৰেজিস্ট্ৰেষণৰ বাবে ব্যৱহাৰ কৰিব লগিয়া সক্ৰিয়কৰণ কি' (এবাৰতকৈ বেছি ধাৰ্য্য কৰিব "
 "পাৰি)"
 
-#: src/subscription_manager/managercli.py:1522
+#: src/subscription_manager/managercli.py:1525
 msgid ""
 "system preference used when subscribing automatically, requires --auto-attach"
 msgstr ""
@@ -5577,36 +5559,36 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1527
+#: src/subscription_manager/managercli.py:1530
 msgid "This system is already registered. Use --force to override"
 msgstr "এই চিস্টেম আগতিয়াকৈ ৰেজিস্টাৰ্ড। অভাৰৰাইড কৰিবলে --force ব্যৱহাৰ কৰক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1537
+#: src/subscription_manager/managercli.py:1540
 msgid "Error: Activation keys cannot be used with --auto-attach."
 msgstr "ত্ৰুটি: সক্ৰিয়কৰণ কি'সমূহ --auto-attach ৰ সৈতে ব্যৱহাৰ কৰিব নোৱাৰি।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1542
+#: src/subscription_manager/managercli.py:1545
 msgid "Error: Must use --auto-attach with --servicelevel."
 msgstr "ত্ৰুটি: --servicelevel ৰ সৈতে --auto-attach ব্যৱহাৰ কৰিব লাগিব।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1544
+#: src/subscription_manager/managercli.py:1547
 msgid "Error: Must provide --org with activation keys."
 msgstr "ত্ৰুটি: সক্ৰিয়কৰণ কি'ৰ সৈতে --org প্ৰদান কৰিব লাগিব।"
 
-#: src/subscription_manager/managercli.py:1554
+#: src/subscription_manager/managercli.py:1557
 msgid "Error: The --type option has been deprecated and may not be used."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1579
-#: src/subscription_manager/managercli.py:2189
+#: src/subscription_manager/managercli.py:1582
+#: src/subscription_manager/managercli.py:2192
 msgid ""
 "Error: The --servicelevel option is not supported by the server. Did not "
 "complete your request."
@@ -5614,99 +5596,99 @@ msgstr ""
 "ত্ৰুটি: --servicelevel বিকল্প চাৰ্ভাৰ দ্বাৰা সমৰ্থিত নহয়। আপোনাৰ অনুৰোধ সম্পূৰ্ণ "
 "নকৰিলে।"
 
-#: src/subscription_manager/managercli.py:1617
-#: src/subscription_manager/managercli.py:1852
+#: src/subscription_manager/managercli.py:1620
+#: src/subscription_manager/managercli.py:1855
 #, python-format
 msgid "Unregistering from: %s:%s%s"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1624
+#: src/subscription_manager/managercli.py:1627
 #, python-format
 msgid "The system with UUID %s has been unregistered"
 msgstr "UUID %s থকা চিস্টেমটো আনৰাজিস্টাৰ কৰা হৈছে"
 
-#: src/subscription_manager/managercli.py:1647
+#: src/subscription_manager/managercli.py:1650
 #, python-format
 msgid "Registering to: %s:%s%s"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1684
+#: src/subscription_manager/managercli.py:1687
 #, python-format
 msgid "Error during registration: %s"
 msgstr "ৰেজিস্টাৰ কৰোতে ত্ৰুটি: %s"
 
-#: src/subscription_manager/managercli.py:1687
+#: src/subscription_manager/managercli.py:1690
 #, python-format
 msgid "The system has been registered with ID: %s"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:1688
+#: src/subscription_manager/managercli.py:1691
 #, python-format
 msgid "The registered system name is: %s"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1690
-#: src/subscription_manager/managercli.py:2203
+#: src/subscription_manager/managercli.py:1693
+#: src/subscription_manager/managercli.py:2206
 #, python-format
 msgid "Service level set to: %s"
 msgstr "সেৱা স্তৰ সংহতি কৰা হৈছে: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1759
+#: src/subscription_manager/managercli.py:1762
 #: src/subscription_manager/migrate/migrate.py:340
 msgid "Environment: "
 msgstr "পৰিৱেশ: "
 
-#: src/subscription_manager/managercli.py:1788
+#: src/subscription_manager/managercli.py:1791
 #, python-format
 msgid "Hint: Organization \"%s\" contains following environments: %s"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1797
-#: src/subscription_manager/managercli.py:1807
+#: src/subscription_manager/managercli.py:1800
+#: src/subscription_manager/managercli.py:1810
 #, python-format
 msgid "No such environment: %s"
 msgstr "এনে কোনো পৰিৱেশ নাই: %s"
 
-#: src/subscription_manager/managercli.py:1827
+#: src/subscription_manager/managercli.py:1830
 #, python-format
 msgid "Hint: User \"%s\" is member of following organizations: %s"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1878
+#: src/subscription_manager/managercli.py:1881
 msgid "System has been unregistered."
 msgstr "চিস্টেমক আনৰেজিস্টাৰ কৰা হৈছে।"
 
-#: src/subscription_manager/managercli.py:1884
+#: src/subscription_manager/managercli.py:1887
 msgid "Modify or view the addons attribute of the system purpose"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1897
+#: src/subscription_manager/managercli.py:1900
 msgid "Attempt to redeem a subscription for a preconfigured system"
 msgstr "এটা পূৰ্বসংৰূপীত চিস্টেমৰ বাবে এটা স্বাক্ষৰণ ঘুৰাই নিয়াৰ চেষ্টা"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1901
+#: src/subscription_manager/managercli.py:1904
 msgid "email address to notify when subscription redemption is complete"
 msgstr "যেতিয়া স্বাক্ষৰণ ঘুৰাই নিয়া সম্পূৰ্ণ হব অধিসূচনা দিবলে ই-মেইল ঠিকনা"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1904
+#: src/subscription_manager/managercli.py:1907
 msgid ""
 "optional language to use for email notification when subscription redemption "
 "is complete (Examples: en-us, de-de)"
@@ -5716,7 +5698,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1910
+#: src/subscription_manager/managercli.py:1913
 msgid ""
 "Error: This command requires that you specify an email address with --email."
 msgstr ""
@@ -5724,62 +5706,62 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1951
+#: src/subscription_manager/managercli.py:1954
 msgid "Configure which operating system release to use"
 msgstr "কোন অপাৰেটিং চিস্টেম উন্মোচন ব্যৱহাৰ কৰা হব সংৰূপণ কৰক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1955
+#: src/subscription_manager/managercli.py:1958
 msgid "shows current release setting; default command"
 msgstr "বৰ্তমান উন্মোচন সংহতিসমূহ দেখুৱায়; অবিকল্পিত কমান্ড"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:1957
+#: src/subscription_manager/managercli.py:1960
 msgid "list available releases"
 msgstr "উপলব্ধ উন্মোচনসমূহ তালিকাভুক্ত কৰক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1960
+#: src/subscription_manager/managercli.py:1963
 msgid "set the release for this system"
 msgstr "এই চিস্টেমৰ বাবে উন্মোচন সংহতি কৰক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1963
+#: src/subscription_manager/managercli.py:1966
 msgid "unset the release for this system"
 msgstr "এই চিস্টেমৰ বাবে উন্মোচন অসংহতি কৰক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1966
+#: src/subscription_manager/managercli.py:1969
 msgid "Error: The 'release' command is not supported by the server."
 msgstr "ত্ৰুটি: 'release' কমান্ড চাৰ্ভাৰ দ্বাৰা সমৰ্থিত নহয়।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1975
+#: src/subscription_manager/managercli.py:1978
 #, python-format
 msgid "Release: %s"
 msgstr "উন্মোচন: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1977
+#: src/subscription_manager/managercli.py:1980
 msgid "Release not set"
 msgstr "উন্মোচন সংহত নহয়"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:1997
+#: src/subscription_manager/managercli.py:2000
 msgid "Release preference has been unset"
 msgstr "উন্মোচন পছন্দ অসংহতি কৰা হৈছে"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2013
+#: src/subscription_manager/managercli.py:2016
 #, python-format
 msgid "No releases match '%s'.  Consult 'release --list' for a full listing."
 msgstr ""
@@ -5788,44 +5770,44 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2017
+#: src/subscription_manager/managercli.py:2020
 #, python-format
 msgid "Release set to: %s"
 msgstr "উন্মোচন সংহত: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2027
+#: src/subscription_manager/managercli.py:2030
 msgid "No release versions available, please check subscriptions."
 msgstr "কোনো উন্মোচন সংস্কৰণ উপলব্ধ নাই, অনুগ্ৰহ কৰি স্বাক্ষৰণসমূহ নীৰিক্ষণ কৰক।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2030
+#: src/subscription_manager/managercli.py:2033
 msgid "Available Releases"
 msgstr "উপলব্ধ উন্মোচনসমূহ"
 
-#: src/subscription_manager/managercli.py:2051
+#: src/subscription_manager/managercli.py:2054
 msgid "The ID of the pool to attach (can be specified more than once)"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2053
+#: src/subscription_manager/managercli.py:2056
 msgid "Number of subscriptions to attach. May not be used with an auto-attach."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2055
+#: src/subscription_manager/managercli.py:2058
 msgid ""
 "Automatically attach compatible subscriptions to this system. This is the "
 "default action."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2057
+#: src/subscription_manager/managercli.py:2060
 msgid ""
 "Automatically attach only subscriptions matching the specified service "
 "level; only used with --auto"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2059
+#: src/subscription_manager/managercli.py:2062
 msgid ""
 "A file from which to read pool IDs. If a hyphen is provided, pool IDs will "
 "be read from stdin."
@@ -5833,76 +5815,76 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2062
+#: src/subscription_manager/managercli.py:2065
 msgid "All installed products are covered by valid entitlements."
 msgstr "সকলো ইনস্টল কৰা উৎপাদন বৈধ অনুজ্ঞাসমূহ দ্বাৰা সুৰক্ষিত।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2063
+#: src/subscription_manager/managercli.py:2066
 msgid "No need to update subscriptions at this time."
 msgstr "এই সময়ত স্বাক্ষৰণসমূহ আপডেইট কৰাৰ প্ৰয়োজন নাই।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2074
+#: src/subscription_manager/managercli.py:2077
 msgid "Attach a specified subscription to the registered system"
 msgstr "ৰেজিস্টাৰ্ড চিস্টেমৰ সৈতে এটা ধাৰ্য্যত স্বাক্ষৰণ সংলগ্ন কৰক"
 
-#: src/subscription_manager/managercli.py:2085
+#: src/subscription_manager/managercli.py:2088
 msgid "Error: --auto may not be used when specifying pools."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2087
+#: src/subscription_manager/managercli.py:2090
 msgid "Error: The --servicelevel option cannot be used when specifying pools."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2094
+#: src/subscription_manager/managercli.py:2097
 msgid "Error: Quantity must be a positive integer."
 msgstr "ত্ৰুটি: পৰিমাণ এটা ধনাত্মক পূৰ্ণসংখ্যা হব লাগিব।"
 
-#: src/subscription_manager/managercli.py:2096
+#: src/subscription_manager/managercli.py:2099
 msgid "Error: --quantity may not be used with an auto-attach"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2108
+#: src/subscription_manager/managercli.py:2111
 msgid "Error: Received data does not contain any pool IDs."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2110
+#: src/subscription_manager/managercli.py:2113
 #, python-format
 msgid "Error: The file \"%s\" does not contain any pool IDs."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2112
+#: src/subscription_manager/managercli.py:2115
 #, python-format
 msgid "Error: The file \"%s\" does not exist or cannot be read."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2149
+#: src/subscription_manager/managercli.py:2152
 msgid "Please enter a valid numeric pool ID."
 msgstr "অনুগ্ৰহ কৰি এটা বৈধ সাংখ্যিক পুল ID সুমুৱাওক।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2156
+#: src/subscription_manager/managercli.py:2159
 #, python-format
 msgid "Successfully attached a subscription for: %s"
 msgstr "সফলভাৱে এটা স্বাক্ষৰণ সংলগ্ন কৰা হল: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2177
+#: src/subscription_manager/managercli.py:2180
 msgid "No Installed products on system. No need to attach subscriptions."
 msgstr "চিস্টেমত কোনো উৎপাদন ইনস্টল নাই। স্বাক্ষৰণসমূহ সংলগ্ন কৰাৰ প্ৰয়োজন নাই।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2180
+#: src/subscription_manager/managercli.py:2183
 msgid ""
 "All installed products are covered by valid entitlements. No need to update "
 "subscriptions at this time."
@@ -5910,90 +5892,90 @@ msgstr ""
 "সকলো ইনস্টল উৎপাদন বৈধ অনুজ্ঞাসমূহ দ্বাৰা সুৰক্ষিত। এই সময়ত স্বাক্ষৰণসমূহ আপডেইট কৰাৰ "
 "প্ৰয়োজন নাই।"
 
-#: src/subscription_manager/managercli.py:2212
+#: src/subscription_manager/managercli.py:2215
 msgid "Entitlement Certificate(s) update failed due to the following reasons:"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2246
+#: src/subscription_manager/managercli.py:2249
 msgid "Deprecated, see attach"
 msgstr "স্খলিত, attach চাওক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2264
+#: src/subscription_manager/managercli.py:2267
 msgid "certificate serial number to remove (can be specified more than once)"
 msgstr "আতৰাবলে প্ৰমাণপত্ৰ ক্ৰমিক সংখ্যা (এবাৰতকে অধিক ধাৰ্য্য কৰিব পাৰি)"
 
-#: src/subscription_manager/managercli.py:2266
+#: src/subscription_manager/managercli.py:2269
 msgid "the ID of the pool to remove (can be specified more than once)"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2268
+#: src/subscription_manager/managercli.py:2271
 msgid "remove all subscriptions from this system"
 msgstr "এই চিস্টেমৰ পৰা সকলো স্বাক্ষৰণ আতৰাওক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2271
+#: src/subscription_manager/managercli.py:2274
 msgid "Remove all or specific subscriptions from this system"
 msgstr "এই চিস্টেমৰ পৰা সকলো অথবা বিশেষ স্বাক্ষৰণসমূহ আতৰাওক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2284
+#: src/subscription_manager/managercli.py:2287
 #, python-format
 msgid "Error: '%s' is not a valid serial number"
 msgstr "ত্ৰুটি: '%s' এটা বৈধ ক্ৰমিক সংখ্যা নহয়"
 
-#: src/subscription_manager/managercli.py:2290
+#: src/subscription_manager/managercli.py:2293
 msgid ""
 "Error: The registered entitlement server does not support remove --pool.\n"
 "Instead, use the remove --serial option."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2293
+#: src/subscription_manager/managercli.py:2296
 msgid ""
 "Error: This command requires that you specify one of --serial, --pool or --"
 "all."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2298
+#: src/subscription_manager/managercli.py:2301
 msgid "The entitlement server successfully removed these pools:"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2300
+#: src/subscription_manager/managercli.py:2303
 msgid "The entitlement server successfully removed these serial numbers:"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2302
+#: src/subscription_manager/managercli.py:2305
 msgid "The entitlement server successfully removed these IDs:"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2307
+#: src/subscription_manager/managercli.py:2310
 msgid "The entitlement server failed to remove these pools:"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2309
+#: src/subscription_manager/managercli.py:2312
 msgid "The entitlement server failed to remove these serial numbers:"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2311
+#: src/subscription_manager/managercli.py:2314
 msgid "The entitlement server failed to remove these IDs:"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2329
+#: src/subscription_manager/managercli.py:2332
 msgid "All subscriptions have been removed at the server."
 msgstr "সকলো স্বাক্ষৰণ চাৰ্ভাৰৰ পৰা আতৰোৱা হৈছে।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2332
+#: src/subscription_manager/managercli.py:2335
 #, python-format
 msgid "%s subscription removed at the server."
 msgid_plural "%s subscriptions removed at the server."
@@ -6002,69 +5984,69 @@ msgstr[1] "%s স্বাক্ষৰণসমূহ চাৰ্ভাৰৰ �
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2362
-#: src/subscription_manager/managercli.py:2386
+#: src/subscription_manager/managercli.py:2365
+#: src/subscription_manager/managercli.py:2389
 #, python-format
 msgid "Unable to perform remove due to the following exception: %s"
 msgstr "নিম্নলিখিত ব্যাতিক্ৰমৰ বাবে আতৰাবলে অক্ষম: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2371
+#: src/subscription_manager/managercli.py:2374
 #, python-format
 msgid "%s subscriptions removed from this system."
 msgstr "এই চিস্টেমৰ পৰা %s স্বাক্ষৰণসমূহ আতৰোৱা হৈছে।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2381
+#: src/subscription_manager/managercli.py:2384
 #, python-format
 msgid "Subscription with serial number %s removed from this system"
 msgstr "ক্ৰমিক সংখ্যা %s ৰ সৈতে স্বাক্ষৰণক এই চিস্টেমৰ পৰা আতৰোৱা হৈছে"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2399
+#: src/subscription_manager/managercli.py:2402
 msgid "Deprecated, see remove"
 msgstr "স্খলিত, remove চাওক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2411
+#: src/subscription_manager/managercli.py:2414
 msgid "View or update the detected system information"
 msgstr "চিনাক্ত কৰা চিস্টেম তথ্য দৰ্শন কৰক অথবা আপডেইট কৰক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2415
+#: src/subscription_manager/managercli.py:2418
 msgid "list known facts for this system"
 msgstr "এই চিস্টেমৰ বাবে জনা তথ্যসমূহ দেখুৱাওক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2417
+#: src/subscription_manager/managercli.py:2420
 msgid "update the system facts"
 msgstr "চিস্টেম তথ্যসমূহ আপডেইট কৰা"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2452
+#: src/subscription_manager/managercli.py:2455
 msgid "Successfully updated the system facts."
 msgstr "চিস্টেম তথ্যসমূহ সফলভাৱে আপডেইট কৰা হল।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2457
+#: src/subscription_manager/managercli.py:2460
 msgid "Import certificates which were provided outside of the tool"
 msgstr "প্ৰমাণপত্ৰসমূহ যি সঁজুলিৰ বাহিৰ প্ৰদান কৰা হৈছিল ইমপোৰ্ট কৰক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2461
+#: src/subscription_manager/managercli.py:2464
 msgid "certificate file to import (can be specified more than once)"
 msgstr "ইমপোৰ্ট কৰিবলে প্ৰমাণপত্ৰ ফাইল (এবাৰতকে অধিক ধাৰ্য্য কৰিব পাৰি)"
 
-#: src/subscription_manager/managercli.py:2465
+#: src/subscription_manager/managercli.py:2468
 msgid ""
 "Error: You may not import certificates into a system that is registered to a "
 "subscription management service."
@@ -6072,7 +6054,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2467
+#: src/subscription_manager/managercli.py:2470
 msgid ""
 "Error: This command requires that you specify a certificate with --"
 "certificate."
@@ -6081,21 +6063,21 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2482
+#: src/subscription_manager/managercli.py:2485
 #, python-format
 msgid "Successfully imported certificate %s"
 msgstr "প্ৰমাণপত্ৰ %s সফলভাৱে ইমপোৰ্ট কৰা হল"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2488
+#: src/subscription_manager/managercli.py:2491
 #, python-format
 msgid "%s is not a valid certificate file. Please use a valid certificate."
 msgstr "%s এটা বৈধ প্ৰমাণপত্ৰ নথিপত্ৰ নহয়। অনুগ্ৰহ কৰি এটা বৈধ প্ৰমাণপত্ৰ ব্যৱহাৰ কৰক।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2494
+#: src/subscription_manager/managercli.py:2497
 msgid ""
 "An error occurred while importing the certificate. Please check log file for "
 "more information."
@@ -6103,73 +6085,73 @@ msgstr ""
 "প্ৰমাণপত্ৰ ইমপোৰ্ট কৰোতে এটা ত্ৰুটি দেখা দিলে। অধিক তথ্যৰ বাবে অনুগ্ৰহ কৰি লগ ফাইল "
 "নীৰিক্ষণ কৰক।"
 
-#: src/subscription_manager/managercli.py:2498
+#: src/subscription_manager/managercli.py:2501
 #, python-format
 msgid "%s: file not found."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2521
+#: src/subscription_manager/managercli.py:2524
 msgid "View and configure with 'subscription-manager plugins'"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2525
+#: src/subscription_manager/managercli.py:2528
 #, python-format
 msgid "list %s plugins"
 msgstr "%s প্লাগিনসমূহ দেখুৱাওক"
 
-#: src/subscription_manager/managercli.py:2527
+#: src/subscription_manager/managercli.py:2530
 #, python-format
 msgid "list %s plugin slots"
 msgstr "%s প্লাগিন স্লটসমূহ দেখুৱাওক"
 
-#: src/subscription_manager/managercli.py:2529
+#: src/subscription_manager/managercli.py:2532
 #, python-format
 msgid "list %s plugin hooks"
 msgstr "%s প্লাগিন হুকসমূহ দেখুৱাওক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2532
+#: src/subscription_manager/managercli.py:2535
 msgid "show verbose plugin info"
 msgstr "ভাৰভৌছ প্লাগিন তথ্য দেখুৱাওক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2546
+#: src/subscription_manager/managercli.py:2549
 msgid "disabled"
 msgstr "অসামৰ্থবান"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2548
+#: src/subscription_manager/managercli.py:2551
 msgid "enabled"
 msgstr "সামৰ্থবান"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2576
+#: src/subscription_manager/managercli.py:2579
 msgid "List the repositories which this system is entitled to use"
 msgstr "এই চিস্টেম দ্বাৰা ব্যৱহাৰ কৰিবলে অনুজ্ঞিত ভঁৰালসমূহ তালিকাভুক্ত কৰক"
 
-#: src/subscription_manager/managercli.py:2610
+#: src/subscription_manager/managercli.py:2613
 msgid "list all known repositories for this system"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2613
+#: src/subscription_manager/managercli.py:2616
 msgid "list known, enabled repositories for this system"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2616
+#: src/subscription_manager/managercli.py:2619
 msgid "list known, disabled repositories for this system"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2619
+#: src/subscription_manager/managercli.py:2622
 msgid ""
 "repository to enable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2622
+#: src/subscription_manager/managercli.py:2625
 msgid ""
 "repository to disable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
@@ -6177,68 +6159,68 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2675
+#: src/subscription_manager/managercli.py:2678
 #, python-format
 msgid "    Available Repositories in %s"
 msgstr "    %s ত উপলব্ধ ভঁৰালসমূহ"
 
-#: src/subscription_manager/managercli.py:2685
+#: src/subscription_manager/managercli.py:2688
 msgid "There were no available repositories matching the specified criteria."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2687
-#: src/subscription_manager/managercli.py:2706
+#: src/subscription_manager/managercli.py:2690
+#: src/subscription_manager/managercli.py:2709
 msgid "This system has no repositories available through subscriptions."
 msgstr "এই চিস্টেমৰ স্বাক্ষৰণসমূহ দ্বাৰা উপলব্ধ কোনো ভঁৰাল নাই।"
 
-#: src/subscription_manager/managercli.py:2713
+#: src/subscription_manager/managercli.py:2716
 #, python-format
 msgid ""
 "Error: '%s' does not match a valid repository ID. Use \"subscription-manager "
 "repos --list\" to see valid repositories."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2760
+#: src/subscription_manager/managercli.py:2763
 #, python-format
 msgid "Repository '%s' is enabled for this system."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2762
+#: src/subscription_manager/managercli.py:2765
 #, python-format
 msgid "Repository '%s' is disabled for this system."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2769
+#: src/subscription_manager/managercli.py:2772
 msgid "List, set, or remove the configuration parameters in use by this system"
 msgstr ""
 "এই চিস্টেম দ্বাৰা ব্যৱহৃত সংৰূপ প্ৰাচলসমূহ তালিকাভুক্ত কৰক, সংহতি কৰক, অথবা আতৰাওক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2773
+#: src/subscription_manager/managercli.py:2776
 msgid "list the configuration for this system"
 msgstr "এই চিস্টেমৰ বাবে সংৰূপ তালিকাভুক্ত কৰক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2775
+#: src/subscription_manager/managercli.py:2778
 msgid "remove configuration entry by section.name"
 msgstr "section.name -ৰে সংৰূপ প্ৰবিষ্টি আতৰাওক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2782
+#: src/subscription_manager/managercli.py:2785
 #, python-format
 msgid "Section: %s, Name: %s"
 msgstr "অংশ: %s, নাম: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2801
+#: src/subscription_manager/managercli.py:2804
 msgid ""
 "Error: --list should not be used with any other options for setting or "
 "removing configurations."
@@ -6248,7 +6230,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2820
+#: src/subscription_manager/managercli.py:2823
 msgid ""
 "Error: configuration entry designation for removal must be of format "
 "[section.name]"
@@ -6256,67 +6238,67 @@ msgstr "ত্ৰুটি: আতৰোৱাৰ বাবে সংৰূপ �
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2830
+#: src/subscription_manager/managercli.py:2833
 #, python-format
 msgid "Error: Section %s and name %s does not exist."
 msgstr "ত্ৰুটি: অংশ %s আৰু নাম %s ৰ অস্তিত্ব নাই।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2848
+#: src/subscription_manager/managercli.py:2851
 msgid "[] - Default value in use"
 msgstr "[] - ব্যৱহাৰত অবিকল্পিত মান"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2857
 #: src/subscription_manager/managercli.py:2860
+#: src/subscription_manager/managercli.py:2863
 #, python-format
 msgid "You have removed the value for section %s and name %s."
 msgstr "আপুনি অংশ %s আৰু নাম %s ৰ বাবে মান আতৰাই দিছে"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2861
+#: src/subscription_manager/managercli.py:2864
 #, python-format
 msgid "The default value for %s will now be used."
 msgstr "%s ৰ বাবে অবিকল্পিত মান এতিয়া ব্যৱহাৰ কৰা হব।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2863
+#: src/subscription_manager/managercli.py:2866
 #, python-format
 msgid "Section %s and name %s cannot be removed."
 msgstr "অংশ %s আৰু নাম %s আতৰাব নোৱাৰি।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2882
+#: src/subscription_manager/managercli.py:2885
 msgid "List subscription and product information for this system"
 msgstr "এই চিস্টেমৰ বাবে স্বাক্ষৰণ আৰু উৎপাদন তথ্য তালিকাভুক্ত কৰক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2886
+#: src/subscription_manager/managercli.py:2889
 msgid "list shows those products which are installed (default)"
 msgstr "তালিকায় কেৱল ইনস্টল্ড উৎপাদনসমূহ দেখুৱায় (অবিকল্পিত)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2888
+#: src/subscription_manager/managercli.py:2891
 msgid "show those subscriptions which are available"
 msgstr "কেৱল উপলব্ধ স্বাক্ষৰণসমূহ দেখুৱাওক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2890
+#: src/subscription_manager/managercli.py:2893
 msgid "used with --available to ensure all subscriptions are returned"
 msgstr ""
 "সকলো স্বাক্ষৰণ ঘুৰাই দিয়া হৈছে সুনিশ্চিত কৰিবলে --available ৰ সৈতে ব্যৱহাৰ কৰা হয়"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:2892
+#: src/subscription_manager/managercli.py:2895
 #, python-format
 msgid ""
 "date to search on, defaults to today's date, only used with --available "
@@ -6327,13 +6309,13 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2895
+#: src/subscription_manager/managercli.py:2898
 msgid "show the subscriptions being consumed by this system"
 msgstr "এই চিস্টেম দ্বাৰা উপভোগ কৰা স্বাক্ষৰণসমূহ দেখুৱাওক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2897
+#: src/subscription_manager/managercli.py:2900
 msgid ""
 "shows only subscriptions matching the specified service level; only used "
 "with --available and --consumed"
@@ -6341,7 +6323,7 @@ msgstr ""
 "কেৱল ধাৰ্য্যত সেৱা স্তৰৰ সৈতে মিল খোৱা স্বাক্ষৰণসমূহ দেখুৱায়; কেৱল --available আৰু --"
 "consumed ৰ সৈতে ব্যৱহৃত"
 
-#: src/subscription_manager/managercli.py:2899
+#: src/subscription_manager/managercli.py:2902
 msgid ""
 "shows pools which provide products that are not already covered; only used "
 "with --available"
@@ -6349,7 +6331,7 @@ msgstr ""
 "ইতিমধ্যে অন্তৰ্ভুক্ত নহোৱা উৎপাদনসমূহ প্ৰদান কৰা পুলসমূহ দেখুৱাওক; কেৱল --available ৰ "
 "সৈতে ব্যৱহৃত"
 
-#: src/subscription_manager/managercli.py:2901
+#: src/subscription_manager/managercli.py:2904
 msgid ""
 "shows only subscriptions matching products that are currently installed; "
 "only used with --available"
@@ -6357,35 +6339,35 @@ msgstr ""
 "বৰ্তমানে ইনস্টল্ড কেৱল স্বাক্ষৰণসমূহৰ সৈতে মিল খোৱা উৎপাদনসমূহ দেখুৱায়; কেৱল --"
 "available ৰ সৈতে ব্যৱহৃত"
 
-#: src/subscription_manager/managercli.py:2903
+#: src/subscription_manager/managercli.py:2906
 msgid ""
 "lists only subscriptions or products containing the specified expression in "
 "the subscription or product information, varying with the list requested and "
 "the server version (case-insensitive)."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2905
+#: src/subscription_manager/managercli.py:2908
 msgid ""
 "lists only the pool IDs for applicable available or consumed subscriptions; "
 "only used with --available and --consumed"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2907
+#: src/subscription_manager/managercli.py:2910
 #, python-format
 msgid ""
 "show pools that are active on or after the given date; only used with --"
 "available (example: %s)"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2925
+#: src/subscription_manager/managercli.py:2928
 msgid "Error: --afterdate is only applicable with --available"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2927
+#: src/subscription_manager/managercli.py:2930
 msgid "Error: --afterdate cannot be used with --ondate"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2942
+#: src/subscription_manager/managercli.py:2945
 #, python-brace-format
 msgid ""
 "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
@@ -6394,41 +6376,41 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2971
+#: src/subscription_manager/managercli.py:2974
 msgid "    Installed Product Status"
 msgstr "    ইনস্টল্ড উৎপাদনৰ অৱস্থা"
 
-#: src/subscription_manager/managercli.py:2981
+#: src/subscription_manager/managercli.py:2984
 #, python-format
 msgid "No installed products were found matching the expression \"%s\"."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:2983
+#: src/subscription_manager/managercli.py:2986
 msgid "No installed products to list"
 msgstr "তালিকাভুক্ত কৰিবলে কোনো ইনস্টল্ড উৎপাদন নাই"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:3010
+#: src/subscription_manager/managercli.py:3013
 msgid "Available Subscriptions"
 msgstr "উপলব্ধ স্বাক্ষৰণসমূহ"
 
-#: src/subscription_manager/managercli.py:3048
+#: src/subscription_manager/managercli.py:3051
 #, python-format
 msgid ""
 "No available subscription pools were found matching the expression \"%s\" "
 "and the service level \"%s\"."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:3053
+#: src/subscription_manager/managercli.py:3056
 #, python-format
 msgid ""
 "No available subscription pools were found matching the expression \"%s\"."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:3058
+#: src/subscription_manager/managercli.py:3061
 #, python-format
 msgid ""
 "No available subscription pools were found matching the service level \"%s\"."
@@ -6436,48 +6418,48 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:3062
+#: src/subscription_manager/managercli.py:3065
 msgid "No available subscription pools to list"
 msgstr "তালিকাভুক্ত কৰিবলে কোনো উপলব্ধ স্বাক্ষৰণ পুল নাই।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:3082
+#: src/subscription_manager/managercli.py:3085
 msgid "Consumed Subscriptions"
 msgstr "উপভোগ কৰা স্বাক্ষৰণসমূহ"
 
-#: src/subscription_manager/managercli.py:3098
+#: src/subscription_manager/managercli.py:3101
 #, python-format
 msgid ""
 "No consumed subscription pools were found matching the expression \"%s\" and "
 "the service level \"%s\"."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:3103
+#: src/subscription_manager/managercli.py:3106
 #, python-format
 msgid ""
 "No consumed subscription pools were found matching the expression \"%s\"."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:3108
+#: src/subscription_manager/managercli.py:3111
 #, python-format
 msgid ""
 "No consumed subscription pools were found matching the service level \"%s\"."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:3112
+#: src/subscription_manager/managercli.py:3115
 msgid "No consumed subscription pools were found."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:3117
+#: src/subscription_manager/managercli.py:3120
 msgid "Manage custom content repository settings"
 msgstr "স্বনিৰ্বাচিত সমল ভঁৰাল সংহতিসমূহ ব্যৱস্থাপনা কৰক"
 
-#: src/subscription_manager/managercli.py:3120
+#: src/subscription_manager/managercli.py:3123
 msgid "repository to modify (can be specified more than once)"
 msgstr "পৰিবৰ্তন কৰিবলৈ ভঁৰাল (এবাৰতকৈ বেছি ধাৰ্য্য কৰিব পাৰি)"
 
-#: src/subscription_manager/managercli.py:3122
+#: src/subscription_manager/managercli.py:3125
 msgid ""
 "name of the override to remove (can be specified more than once); used with "
 "--repo option."
@@ -6485,7 +6467,7 @@ msgstr ""
 "আতৰাবলৈ অভাৰৰাইডৰ নাম (এবাৰতকৈ বেছি ধাৰ্য্য কৰিব পাৰি); --repo বিকল্পৰ সৈতে "
 "ব্যৱহৃত।"
 
-#: src/subscription_manager/managercli.py:3125
+#: src/subscription_manager/managercli.py:3128
 msgid ""
 "name and value of the option to override separated by a colon (can be "
 "specified more than once); used with --repo option."
@@ -6493,126 +6475,126 @@ msgstr ""
 "অভাৰৰাইড কৰিবলৈ বিকল্পৰ নাম আৰু মান এটা কলন দ্বাৰা পৃথকিত (এবাৰতকৈ অধিক ধাৰ্য্য "
 "কৰিব পাৰি); --repo বিকল্পৰ সৈতে ব্যৱহৃত।"
 
-#: src/subscription_manager/managercli.py:3127
+#: src/subscription_manager/managercli.py:3130
 msgid ""
 "remove all overrides; can be specific to a repository by providing --repo"
 msgstr "সকলো অভাৰৰাইড আতৰাওক; --repo প্ৰদান কৰি এটা ভঁৰালৰ বাবে বিশেষ হব পাৰে"
 
-#: src/subscription_manager/managercli.py:3129
+#: src/subscription_manager/managercli.py:3132
 msgid "list all overrides; can be specific to a repository by providing --repo"
 msgstr ""
 "সকলো অভাৰৰাইড তালিকাভুক্ত কৰক; --repo প্ৰদান কৰি এটা ভঁৰালৰ বাবে বিশেষ হব পাৰে"
 
-#: src/subscription_manager/managercli.py:3135
+#: src/subscription_manager/managercli.py:3138
 msgid "You must specify an override in the form of \"name:value\" with --add."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:3139
+#: src/subscription_manager/managercli.py:3142
 msgid "--add arguments should be in the form of \"name:value\""
 msgstr "--add তৰ্কবোৰ \"name:value\" বিন্যাসত থাকিব লাগিব"
 
-#: src/subscription_manager/managercli.py:3146
+#: src/subscription_manager/managercli.py:3149
 msgid "Error: You must specify a repository to modify"
 msgstr "ত্ৰুটি: আপুনি পৰিবৰ্তন কৰিবলৈ এটা ভঁৰাল ধাৰ্য্য কৰিব লাগিব"
 
-#: src/subscription_manager/managercli.py:3148
+#: src/subscription_manager/managercli.py:3151
 msgid "Error: You may not use --add or --remove with --remove-all and --list"
 msgstr ""
 "ত্ৰুটি: আপুনি --remove-all আৰু --list ৰ সৈতে --add অথবা --remove ব্যৱহাৰ কৰিব "
 "নোৱাৰিব"
 
-#: src/subscription_manager/managercli.py:3150
+#: src/subscription_manager/managercli.py:3153
 msgid "Error: You may not use --list with --remove-all"
 msgstr "ত্ৰুটি: আপুনি --remove-all ৰ সৈতে --list ব্যৱহাৰ কৰিব নোৱাৰিব"
 
-#: src/subscription_manager/managercli.py:3153
+#: src/subscription_manager/managercli.py:3156
 msgid "Error: The --repo option must be used with --list or --add or --remove."
 msgstr ""
 "ত্ৰুটি: --repo বিকল্পক --list অথবা --add অথবা --remove ৰ সৈতে ব্যৱহাৰ কৰিব লাগিব।"
 
-#: src/subscription_manager/managercli.py:3157
+#: src/subscription_manager/managercli.py:3160
 msgid "Error: You must specify an override name with --remove."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:3170
+#: src/subscription_manager/managercli.py:3173
 msgid "Error: The 'repo-override' command is not supported by the server."
 msgstr "ত্ৰুটি: 'repo-override' কমান্ড চাৰ্ভাৰ দ্বাৰা সমৰ্থিত নহয়।"
 
-#: src/subscription_manager/managercli.py:3188
+#: src/subscription_manager/managercli.py:3191
 msgid "This system does not have any content overrides applied to it."
 msgstr "এই চিস্টেমত কোনো সমল অভাৰৰাইড প্ৰয়োগ কৰা হোৱা নাই।"
 
-#: src/subscription_manager/managercli.py:3207
+#: src/subscription_manager/managercli.py:3210
 #, python-format
 msgid ""
 "Repository '%s' does not currently exist, but the override has been added."
 msgstr "ভঁৰাল '%s' বৰ্তমানে অস্তিত্ববান নহয়, কিন্তু অভাৰৰাইড যোগ কৰা হৈছে।"
 
-#: src/subscription_manager/managercli.py:3231
+#: src/subscription_manager/managercli.py:3234
 #, python-format
 msgid "Nothing is known about '%s'"
 msgstr "'%s' ৰ বাবে একো জ্ঞাত নহয়"
 
-#: src/subscription_manager/managercli.py:3236
+#: src/subscription_manager/managercli.py:3239
 #, python-format
 msgid "Repository: %s"
 msgstr "ভঁৰাল: %s"
 
-#: src/subscription_manager/managercli.py:3246
+#: src/subscription_manager/managercli.py:3249
 msgid "Modify system purpose role"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:3259
+#: src/subscription_manager/managercli.py:3262
 msgid "Print version information"
 msgstr "প্ৰিন্ট সংস্কৰণ তথ্য"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/managercli.py:3266
+#: src/subscription_manager/managercli.py:3269
 #, python-format
 msgid "subscription management server: %s"
 msgstr "স্বাক্ষৰণ ব্যৱস্থাপনা চাৰ্ভাৰ: %s"
 
-#: src/subscription_manager/managercli.py:3267
+#: src/subscription_manager/managercli.py:3270
 #, python-format
 msgid "subscription management rules: %s"
 msgstr "স্বাক্ষৰণ ব্যৱস্থাপনাৰ নিয়মসমূহ: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:3274
+#: src/subscription_manager/managercli.py:3277
 msgid "Show status information for this system's subscriptions and products"
 msgstr "এই চিস্টেমৰ স্বাক্ষৰণসমূহ আৰু উৎপাদনসমূহৰ বাবে অৱস্থা তথ্য দেখুৱাওক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:3277
+#: src/subscription_manager/managercli.py:3280
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
 msgstr "অৱস্থা নিৰীক্ষণ কৰিবলৈ ভৱিষ্যত তাৰিখ, আজিৰ তাৰিখ অবিকল্পিত (উদাহৰণ: %s)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/managercli.py:3290
+#: src/subscription_manager/managercli.py:3293
 msgid "System Status Details"
 msgstr "চিস্টেমৰ অৱস্থাৰ বিৱৰণসমূহ"
 
-#: src/subscription_manager/managercli.py:3303
+#: src/subscription_manager/managercli.py:3306
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status.\n"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:3313
+#: src/subscription_manager/managercli.py:3316
 #, python-format
 msgid ""
 "Overall Status: %s\n"
 "%s"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:3331
+#: src/subscription_manager/managercli.py:3334
 #, python-format
 msgid "System Purpose Status: %s"
 msgstr ""
@@ -7115,7 +7097,7 @@ msgstr "আৰম্ভণিত ৰেজিস্ট্ৰেষণ ডাই�
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/utils.py:426
+#: src/subscription_manager/utils.py:394
 msgid "and"
 msgstr "আৰু"
 
@@ -7131,6 +7113,24 @@ msgstr "Red Hat স্বাক্ষৰণ বৈধতা এপ্লেট"
 #: tmp/subscription-manager-gui.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
 msgstr "Red Hat স্বাক্ষৰণ ব্যৱস্থাপক"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#, fuzzy
+#~| msgid "This org does not have any subscriptions with service levels."
+#~ msgid ""
+#~ "This org does not have any subscriptions with an available "
+#~ "\"{syspurpose_attr}\"."
+#~ msgstr "এই সংঘঠনৰ সেৱা স্তৰসমূহৰ সৈতে কোনো স্বাক্ষৰণ নাই।"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#, fuzzy
+#~| msgid "This org does not have any subscriptions with service levels."
+#~ msgid ""
+#~ "This org does not have any subscriptions with an available \"service-level"
+#~ "\"."
+#~ msgstr "এই সংঘঠনৰ সেৱা স্তৰসমূহৰ সৈতে কোনো স্বাক্ষৰণ নাই।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
