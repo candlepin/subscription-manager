@@ -246,7 +246,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.29.13
+Version: 1.29.14
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1532,6 +1532,27 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Jun 16 2021 Christopher Snyder <csnyder@redhat.com> 1.29.14-1
+- Drop more files/references of old standalone syspurpose tool
+  (ptoscano@redhat.com)
+- 1967780: improve placeholders in help text (ptoscano@redhat.com)
+- Update translation files (noreply@weblate.org)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- 1898563: move syspurpose subcommands within the 'syspurpose' command
+  (ptoscano@redhat.com)
+- Rename internal variable for syspurpose --show (ptoscano@redhat.com)
+- Drop command name from args when parsing them (ptoscano@redhat.com)
+- 1941904: disable initial-setup in RHEL >= 9 (ptoscano@redhat.com)
+- 1959048: improve wording for invalid syspurpose values (ptoscano@redhat.com)
+- Enable subman to run normally in containers for development/test
+  (csnyder@redhat.com)
+- Fixed reporting of AWS cloud facts (null value) (jhnidek@redhat.com)
+- cockpit: Test also system purpose (mmarusak@redhat.com)
+- cockpit: Use current PF4 components and design (mmarusak@redhat.com)
+- test: Update cockpit test/common library (mmarusak@redhat.com)
+- cockpit: Update babel (mmarusak@redhat.com)
+- cockpit: Sync lib/patternfly with Cockpit (mmarusak@redhat.com)
+
 * Mon Jun 07 2021 Christopher Snyder <csnyder@redhat.com> 1.29.13-1
 - Updated translations for Korean, Chinese (simiplified, zh_CN), Italian
 - Refactoring of cloud collector/detector and facts (#2515)
