@@ -240,14 +240,6 @@ can be used:
 See `cockpit/README.md` for more detailed information on cockpit development.
 
 
-syspurpose
----------
-The syspurpose utility manages certain user-definable values tracked in
-the /etc/rhsm/syspurpose/syspurpose.json file (in json format).
-
-See ./packages/syspurpose/README.md for details on getting started
-
-
 Testing
 -------
 We run tests using nose (see candlepinproject.org for details).  Some tests

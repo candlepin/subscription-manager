@@ -36,7 +36,6 @@ python3 setup.py build_ext --inplace
 
 pushd $WORKSPACE
 export PYTHONPATH="$PYTHON_RHSM"/src
-# export PYTHONPATH="$PYTHON_RHSM"/src:"$PYTHON_RHSM"/syspurpose/src
 
 # make set-versions
 # capture exit status of 'make stylish' and not 'tee'
