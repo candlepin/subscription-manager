@@ -3,10 +3,9 @@ pipeline {
   stages {
     stage('Test') {
       parallel {
-        stage('Python 2 stylish') {
-          agent { label 'subman-centos7' }
+        stage('Python stylish') {
           steps {
-            sh readFile(file: 'jenkins/stylish-tests.sh')
+            sh readFile(file: 'jenkins/python3-stylish-tests.sh')
           }
         }
         stage('tito') {

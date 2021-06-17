@@ -1,0 +1,64 @@
+[flake8]
+ignore =
+    # E117: over-indented
+    # mostly a consequence of W504 issues
+    E117,
+    # E121: continuation line under-indented for hanging indent
+    # wrong indentation of continuation lines
+    E121,
+    # E122: continuation line missing indentation or outdented
+    # wrong indentation of continuation lines
+    E122,
+    # E123: closing bracket does not match indentation of opening bracket's line
+    # mostly wrongly indented closing bracket
+    E123,
+    # E124: closing bracket does not match visual indentation
+    # mostly wrongly indented closing bracket
+    E124,
+    # E125: continuation line with same indent as next logical line
+    # wrong indentation of continuation lines
+    E125,
+    # E126: continuation line over-indented for hanging indent
+    # wrong indentation of continuation lines
+    E126,
+    # E127: continuation line over-indented for visual indent
+    # wrong indentation of continuation lines
+    E127,
+    # E128, continuation line under-indented for visual indent
+    # wrong indentation of continuation lines
+    E128,
+    # E131: continuation line unaligned for hanging indent
+    # wrong indentation of continuation lines
+    E131,
+    # E265: block comment should start with '# '
+    # comments and commented code need a space after '#'
+    E265,
+    # E402: module level import not at top of file
+    E402,
+    # E501: line too long (* > 300 characters)
+    # triggered by very long text string in tests
+    E501,
+    # E713 test for membership should be 'not in'
+    E713,
+    # E714 test for object identity should be 'is not'
+    E714,
+    # E722: do not use bare 'except'
+    # done a lot, needs to be fixed by catching all what is needed
+    E722,
+    # E731: do not assign a lambda expression, use a def
+    E731,
+    # E741: ambiguous variable name '*'
+    # mostly for variables 'l', which ought to get more specific names
+    E741,
+    # F821: undefined name '*'
+    F821,
+    # F841: local variable '*' is assigned to but never used
+    # possibly either mistakes (variables that were supposed to be used),
+    # or really no more needed variables
+    F841,
+    # W504: line break after binary operator
+    # we break after binary operators, newer style breaks before
+    W504,
+    # W605: invalid escape sequence '*'
+    # it is a DeprecationWarning since Python 3.6, will become SyntaxError
+    W605

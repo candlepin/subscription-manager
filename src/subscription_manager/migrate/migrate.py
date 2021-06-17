@@ -680,7 +680,7 @@ class MigrationEngine(object):
     def register(self, credentials, org, environment):
         # For registering the machine, use the CLI tool to reuse the username/password (because the GUI will prompt for them again)
         # Prepended a \n so translation can proceed without hitch
-        print ("")
+        print("")
         print(_("Attempting to register system to destination server..."))
         cmd = ['subscription-manager', 'register']
 

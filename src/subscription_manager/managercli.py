@@ -2706,7 +2706,7 @@ class ReposCommand(CliCommand):
         repos_to_modify = {}
 
         if not len(repos):
-            print (_("This system has no repositories available through subscriptions."))
+            print(_("This system has no repositories available through subscriptions."))
             return 1
 
         for (status, repoid) in repo_actions:
@@ -2849,7 +2849,7 @@ class ConfigCommand(CliCommand):
                     print('   %s = %s%s%s' % (name, indicator1, value, indicator2))
                 print()
             print(_("[] - Default value in use"))
-            print ("\n")
+            print("\n")
         elif self.options.remove:
             for r in self.options.remove:
                 section = r.split('.')[0]
