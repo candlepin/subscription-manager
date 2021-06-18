@@ -247,7 +247,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.29.14
+Version: 1.29.15
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1533,6 +1533,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Jun 18 2021 Christopher Snyder <csnyder@redhat.com> 1.29.15-1
+- 1941904: actually disable initial-setup in RHEL >= 9, and Fedora too (#2675)
+  (ptoscano@redhat.com)
+
 * Wed Jun 16 2021 Christopher Snyder <csnyder@redhat.com> 1.29.14-1
 - Drop more files/references of old standalone syspurpose tool
   (ptoscano@redhat.com)
