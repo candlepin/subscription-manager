@@ -93,9 +93,10 @@
 %global use_inotify 0
 %endif
 
-# Do not ship initial-setup in RHEL 9 and on, as Anaconda can now register
-# during the installation.
-%if (0%{?rhel} && 0%{?rhel} < 9)
+# Do not ship initial-setup in RHEL 9+ and Fedora:
+# - as Anaconda can now register during the installation
+# - it uses old Anaconda APIs that are not supported anymore
+%if 0%{?rhel} >= 9 || 0%{?fedora}
 %global use_initial_setup 0
 %endif
 
