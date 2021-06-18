@@ -156,7 +156,7 @@ def setup_arg_parser():
     """
     parser = argparse.ArgumentParser(prog="syspurpose", description="System Syspurpose Management Tool",
                                      epilog=_("The 'syspurpose' command is deprecated and will be removed in a future major release."
-                                                " Please use the 'subscription-manager syspurpose' command going forward."))
+                                                " Please use the subscription-manager modules going forward."))
 
     subparsers = parser.add_subparsers(help="sub-command help")
 
@@ -351,7 +351,7 @@ def main():
               "Please run syspurpose on the host.\n"))
 
     print(_("The 'syspurpose' command is deprecated and will be removed in a future major release."
-        " Please use the 'subscription-manager syspurpose' command going forward."), file=sys.stderr)
+        " Please use the subscription-manager modules going forward."), file=sys.stderr)
     try:
         from subscription_manager.identity import Identity
         from subscription_manager.cp_provider import CPProvider
