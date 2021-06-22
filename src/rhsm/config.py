@@ -205,15 +205,23 @@ class RhsmConfigParser(SafeConfigParser):
         if section == "logging" and name == "default_log_level":
             self.is_log_level_valid(value)
 
-    def is_log_level_valid(self, value):
+    def is_log_level_valid(self, value, print_warning=True):
+        """
+        Check if provided default_log_level value is valid or not
+        :param value: value of default_log_level
+        :param print_warning: print warning, when provided value is not valid
+        :return: True, when value is valid. Otherwise return False
+        """
         valid = ['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG', 'NOSET']
         if value not in valid:
-            print("Invalid Log Level: {lvl}, setting to INFO for this run.".format(lvl=value), file=sys.stderr)
-            print(
-                "Please use:  subscription-manager config --logging.default_log_level=<Log Level> to set the default_log_level to a valid value.",
-                file=sys.stderr)
-            valid_str = ", ".join(valid)
-            print("Valid Values: {valid_str}".format(valid_str=valid_str), file=sys.stderr)
+            if print_warning is True:
+                print("Invalid Log Level: {lvl}, setting to INFO for this run.".format(lvl=value), file=sys.stderr)
+                print(
+                    "Please use:  subscription-manager config --logging.default_log_level=<Log Level> to set "
+                    "the default_log_level to a valid value.",
+                    file=sys.stderr)
+                valid_str = ", ".join(valid)
+                print("Valid Values: {valid_str}".format(valid_str=valid_str), file=sys.stderr)
             return False
         return True
 

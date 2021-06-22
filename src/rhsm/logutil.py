@@ -156,10 +156,32 @@ def init_logger(config=None):
     if config is None:
         config = rhsm.config.get_config_parser()
 
-    default_log_level = config.get('logging', 'default_log_level')
-    if not config.is_log_level_valid(default_log_level):
-        # This is not a valid logging level, set to INFO
-        default_log_level = 'INFO'
+    # This is little bit hackish, because it will probably work only for subscription-manager,
+    # because only subscription-manager can set default_log_level using CLI option. If any
+    # other CLI will want to set default_log_level, then it has to use same CLI option as
+    # subscription-manager does (--logging.default_log_level)
+    default_log_level = None
+    for arg in sys.argv:
+        if arg.startswith('--logging.default_log_level'):
+            # It is possible to use --logging.default_log_level=VALUE and
+            # --logging.default_log_level VALUE
+            option_value = arg.split()
+            if len(option_value) == 1:
+                option_value = arg.split('=')
+
+            if len(option_value) == 2:
+                default_log_level = option_value[1]
+                # When not valid value is provided, then set default_log_level to None
+                # Warning message will be printed later, when not valid value will be
+                # saved to config file
+                if config.is_log_level_valid(default_log_level, print_warning=False) is False:
+                    default_log_level = None
+
+    if default_log_level is None:
+        default_log_level = config.get('logging', 'default_log_level')
+        if not config.is_log_level_valid(default_log_level):
+            # This is not a valid logging level, set to INFO
+            default_log_level = 'INFO'
 
     pending_error_messages = []
 
