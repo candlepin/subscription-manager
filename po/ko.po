@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-15 18:32+0200\n"
-"PO-Revision-Date: 2021-06-16 00:04+0000\n"
+"PO-Revision-Date: 2021-06-21 12:04+0000\n"
 "Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ko/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.6.2\n"
+"X-Generator: Weblate 4.7\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -198,7 +198,7 @@ msgstr "시스템 등록"
 
 #: cockpit/src/insights.jsx:64 cockpit/src/insights.jsx:267
 msgid "The $0 package is not available from any repository."
-msgstr "$0 패키지는 리포지터리에서 사용할 수 없습니다."
+msgstr "$0 패키지는 레포지터리에서 사용 할 수 없습니다."
 
 #: cockpit/src/insights.jsx:67
 msgid ""
@@ -536,8 +536,6 @@ msgid "Auto-attaching ..."
 msgstr "자동 첨부 중 ..."
 
 #: cockpit/src/subscriptions-view.jsx:73 cockpit/src/subscriptions-view.jsx:117
-#, fuzzy
-#| msgid "Product Name"
 msgid "Product name"
 msgstr "제품 이름"
 
@@ -549,15 +547,11 @@ msgid "Subscribed"
 msgstr "등록됨"
 
 #: cockpit/src/subscriptions-view.jsx:86
-#, fuzzy
-#| msgid "Not Subscribed (Not supported by a valid subscription.)"
 msgid "Not subscribed (Not supported by a valid subscription)"
 msgstr "등록되어 있지 않음 (유효한 서브스크립션에 의해 지원되지 않음)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:107
-#, fuzzy
-#| msgid "Not Subscribed"
 msgid "Not subscribed"
 msgstr "등록되지 않음"
 
@@ -597,21 +591,15 @@ msgstr "설치된 제품"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:171
-#, fuzzy
-#| msgid "No installed products detected."
 msgid "No installed products detected"
-msgstr "설치된 제품이 감지되지 않았습니다."
+msgstr "설치된 제품이 감지되지 않았습니다"
 
 #: cockpit/src/subscriptions-view.jsx:224
-#, fuzzy
-#| msgid "System Purpose"
 msgid "System purpose"
 msgstr "시스템 목적"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:232
-#, fuzzy
-#| msgid "Service Level"
 msgid "Service level"
 msgstr "서비스 레벨"
 
@@ -621,8 +609,6 @@ msgid "Usage"
 msgstr "사용법"
 
 #: cockpit/src/subscriptions-view.jsx:244
-#, fuzzy
-#| msgid "Roles"
 msgid "Role"
 msgstr "역할"
 
@@ -632,10 +618,8 @@ msgstr "애드온"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:264
-#, fuzzy
-#| msgid "System is not registered."
 msgid "Not registered"
-msgstr "시스템이 등록되어 있지 않습니다."
+msgstr "등록되어 있지 않습니다"
 
 #: cockpit/src/subscriptions-view.jsx:273
 msgid "Unregister"
@@ -792,9 +776,8 @@ msgstr ""
 "*** 경고 ***\n"
 "다음 제품의 서브스크립션이 만료되었습니다:\n"
 "%s\n"
-"이러한 제품을 제공하는 리포지터리에 더이상 액세스할 수 없습니다.  보안 및 기"
-"타 중요 업데이트에 액세스하려면 활성 서브스크립션이 필요합니다. 활성 서브스크"
-"립션이 없을 경우 만료된 서브스크립션을 갱신할 수 있습니다.  "
+"이러한 제품을 제공하는 레포지터리에 더이상 적근 할 수 없습니다.  보안 및 기타 중요 업데이트에 액세스하려면 활성 서브스크립션이 "
+"필요합니다. 활성 서브스크립션이 없을 경우 만료된 서브스크립션을 갱신할 수 있습니다.  "
 
 #: src/dnf-plugins/subscription-manager.py:50
 msgid ""
@@ -818,7 +801,7 @@ msgstr ""
 
 #: src/dnf-plugins/subscription-manager.py:87
 msgid "Not root, Subscription Management repositories not updated"
-msgstr "root가 아닙니다. 서브스크립션 관리 리포지터리가 업데이트되지 않습니다"
+msgstr "root가 아닙니다. 서브스크립션 관리 레포지터리가 업데이트되지 않습니다"
 
 #: src/dnf-plugins/subscription-manager.py:115
 #, python-format
@@ -826,12 +809,12 @@ msgid ""
 "subscription-manager plugin disabled %d system repositories with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
 msgstr ""
-"subscription-manager 플러그인이 /etc/dnf/plugins/subscription-manager.conf의 "
-"구성과 관련된 %d 시스템 리포지터리를 비활성화했습니다"
+"subscription-manager 플러그인이 /etc/dnf/plugins/subscription-manager.conf의 구성과 "
+"관련된 %d 시스템 레포지터리를 비활성화했습니다"
 
 #: src/dnf-plugins/subscription-manager.py:128
 msgid "Updating Subscription Management repositories."
-msgstr "서브스크립션 관리 리포지터리를 업데이트하고 있습니다."
+msgstr "서브스크립션 관리 레포지터리를 업데이트하고 있습니다."
 
 #: src/dnf-plugins/subscription-manager.py:133
 msgid "Unable to read consumer identity"
@@ -2025,7 +2008,7 @@ msgstr "사용할 수 있는 모든 {attr} 나열"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:133
 msgid "--unset cannot be used with --set, --add, or --remove"
-msgstr "--unset은 --set, --add, --remove와 함께 사용할 수 없습니다"
+msgstr "--unset은 --set, --add, 또는 --remove와 함께 사용 할 수 없습니다"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:135
 msgid "--add cannot be used with --remove"
@@ -2070,17 +2053,14 @@ msgstr[0] ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:236
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Warning: This org does not have any subscriptions with an available "
-#| "\"{attr}\" is empty."
+#, python-brace-format
 msgid ""
 "Warning: This organization does not have any subscriptions that provide a "
 "system purpose \"{attr}\".  This setting will not influence auto-attaching "
 "subscriptions."
 msgstr ""
-"경고: 이 조직에는 이용 가능한 \"{attr}\"이(가) 비어 있는 서브스크립션이 없습"
-"니다."
+"경고: 이 조직은 시스템 목적 \"{attr}\"를 제공하는 어떤 서브스크립션을 가지고 있지 않습니다.이 설정은 자동-첨부 서브스크립션에 "
+"영향을 주지 않을 것입니다."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:250
 #, python-brace-format
@@ -2119,7 +2099,7 @@ msgstr "{syspurpose_attr} 사용 가능"
 msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
-msgstr ""
+msgstr "이 조직에는 사용가능한 서브스크립션에서 시스템 목적\"{syspurpose_attr}\"을 위해 사용 가능한 값이 없습니다."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:386
 msgid "Unable to connect to server using token"
@@ -2840,17 +2820,17 @@ msgstr "인타이틀먼트 유형:"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:87
 msgid "Repo ID:"
-msgstr "리포지터리 ID:"
+msgstr "레포지터리 ID:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:88
 msgid "Repo Name:"
-msgstr "리포지터리 이름:"
+msgstr "레포지터리 이름:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:89
 msgid "Repo URL:"
-msgstr "리포지터리 URL:"
+msgstr "레포지터리 URL:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:90
@@ -3122,12 +3102,12 @@ msgstr "조직: "
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:32
 msgid "Manage custom content repository settings"
-msgstr "사용자 정의 컨텐츠 리포지터리 설정 관리"
+msgstr "사용자 정의 컨텐츠 레포지터리 설정 관리"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:35
 msgid "repository to modify (can be specified more than once)"
-msgstr "수정할 리포지터리 (하나 이상을 지정할 수 있음)"
+msgstr "수정할 레포지터리 (하나 이상을 지정할 수 있음)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:38
@@ -3143,22 +3123,18 @@ msgstr ""
 msgid ""
 "name and value of the option to override separated by a colon (can be "
 "specified more than once); used with --repo option."
-msgstr ""
-"재정의할 옵션 이름과 값을 콜론으로 구분합니다 (한번 이상 지정할 수 있음); --"
-"repo 옵션과 함께 사용됩니다."
+msgstr "재정의할 옵션 이름과 값을 쌍점(:)으로 구분합니다 (한번 이상 지정할 수 있음); --repo 선택과 함께 사용됩니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:43
 msgid ""
 "remove all overrides; can be specific to a repository by providing --repo"
-msgstr ""
-"모든 재정의를 삭제합니다; --repo를 사용하여 리포지터리에 지정할 수 있습니다"
+msgstr "모든 재정의를 삭제합니다; --repo를 사용하여 레포지터리에 지정 할 수 있습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:45
 msgid "list all overrides; can be specific to a repository by providing --repo"
-msgstr ""
-"모든 재정의를 나열합니다; --repo를 사용하여 리포지터리에 지정할 수 있습니다"
+msgstr "모든 재정의를 나열합니다; --repo를 사용하여 레포지터리에 지정 할 수 있습니다"
 
 #: src/subscription_manager/cli_command/override.py:52
 msgid "You must specify an override in the form of \"name:value\" with --add."
@@ -3172,7 +3148,7 @@ msgstr "--add 인수는 \"name:value\" 형식이어야 합니다"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:67
 msgid "Error: You must specify a repository to modify"
-msgstr "오류: 수정할 리포지터리를 지정해야 합니다"
+msgstr "오류: 수정할 레포지터리를 지정해야 합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:69
@@ -3204,7 +3180,7 @@ msgstr "오류: 'repo-override' 명령은 서버에서 지원하지 않습니다
 #: src/subscription_manager/cli_command/repos.py:88
 #: src/subscription_manager/gui/reposgui.py:56
 msgid "Repositories disabled by configuration."
-msgstr "설정에 의해 리포지터리가 비활성화되었습니다."
+msgstr "설정에 의해 레포지터리가 비활성화되었습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:109
@@ -3216,8 +3192,7 @@ msgstr "이 시스템에 적용되는 컨텐츠 재정의가 없습니다."
 msgid ""
 "Repository '{repo}' does not currently exist, but the override has been "
 "added."
-msgstr ""
-"현재 리포지터리 '{repo}'가 존재하지 않지만 덮어쓰기가 추가되어 있습니다."
+msgstr "현재 레포지터리 '{repo}'가 존재하지 않지만 덮어쓰기가 추가되어 있습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:153
@@ -3229,7 +3204,7 @@ msgstr "'{r}'에 대해 아무것도 알 수 없습니다"
 #: src/subscription_manager/cli_command/override.py:158
 #, python-brace-format
 msgid "Repository: {repo}"
-msgstr "리포지터리: {repo}"
+msgstr "레포지터리: {repo}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/owners.py:35
@@ -3466,7 +3441,7 @@ msgstr "환경: "
 #: src/subscription_manager/cli_command/register.py:344
 #, python-brace-format
 msgid "Hint: Organization \"{key}\" contains following environments: {list}"
-msgstr "팁 : 조직 \"{key}\"에는 다음 환경이 포함됩니다. {list}"
+msgstr "힌트: 조직 \"{key}\"는 다음 환경을 포함합니다: {list}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:353
@@ -3654,51 +3629,47 @@ msgstr "일련 번호 {serial}의 서브스크립션이 시스템에서 제거�
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/repos.py:37
 msgid "List the repositories which this system is entitled to use"
-msgstr "시스템이 사용할 권리가 있는 리포지터리를 나열합니다"
+msgstr "시스템이 사용할 권리가 있는 레포지터리를 나열합니다"
 
 #: src/subscription_manager/cli_command/repos.py:41
 msgid "list all known repositories for this system"
-msgstr "이 시스템에 대해 열려진 모든 리포지터리를 나열"
+msgstr "이 시스템에 대해 열려진 모든 레포지터리를 나열"
 
 #: src/subscription_manager/cli_command/repos.py:43
 msgid "list known, enabled repositories for this system"
-msgstr "이 시스템에 대해 알려진 활성화된 리포지터리를 나열"
+msgstr "이 시스템에 대해 알려진 활성화된 레포지터리를 나열"
 
 #: src/subscription_manager/cli_command/repos.py:45
 msgid "list known, disabled repositories for this system"
-msgstr "이 시스템에 대해 알려진 비활성화된 리포지터리를 나열"
+msgstr "이 시스템에 대해 알려진 비활성화된 레포지터리를 나열"
 
 #: src/subscription_manager/cli_command/repos.py:48
 msgid ""
 "repository to enable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
-msgstr ""
-"활성화할 리포지터리입니다. (한 번 이상 지정할 수 있음). 와일드 카드 (* 및 ?)"
-"가 지원됩니다."
+msgstr "활성화할 레포지터리입니다. (한 번 이상 지정할 수 있음). 와일드 카드 (* 및 ?)가 지원됩니다."
 
 #: src/subscription_manager/cli_command/repos.py:51
 msgid ""
 "repository to disable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
-msgstr ""
-"비활성화할 리포지터리입니다 (한 번 이상 지정할 수 있음). 와일드 카드 (* 및 ?)"
-"가 지원됩니다."
+msgstr "비활성화할 레포지터리입니다 (한 번 이상 지정할 수 있음). 와일드 카드 (* 및 ?)가 지원됩니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/repos.py:129
 #, python-brace-format
 msgid "    Available Repositories in {file}"
-msgstr "    {file}에서 사용 가능한 리포지터리"
+msgstr "    {file}에서 사용 가능한 레포지터리"
 
 #: src/subscription_manager/cli_command/repos.py:139
 msgid "There were no available repositories matching the specified criteria."
-msgstr "지정된 기준에 일치하는 사용 가능한 리포지터리가 없습니다."
+msgstr "지정된 기준에 일치하는 사용 가능한 레포지터리가 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/repos.py:141
 #: src/subscription_manager/cli_command/repos.py:160
 msgid "This system has no repositories available through subscriptions."
-msgstr "이 시스템에는 서브스크립션을 통해 사용 가능한 리포지터리가 없습니다."
+msgstr "이 시스템에는 서브스크립션을 통해 사용 가능한 레포지터리가 없습니다."
 
 #: src/subscription_manager/cli_command/repos.py:167
 #, python-brace-format
@@ -3706,19 +3677,18 @@ msgid ""
 "Error: '{repoid}' does not match a valid repository ID. Use \"subscription-"
 "manager repos --list\" to see valid repositories."
 msgstr ""
-"오류: '{repoid}'은/는 유효한 리포지터리 ID와 일치하지 않습니다. "
-"\"subscription-manager repos --list\"를 사용하여 유효한 리포지터리를 확인합니"
-"다."
+"오류: '{repoid}'은 유효한 레포지터리 ID와 일치하지 않습니다. \"subscription-manager repos --"
+"list\"를 사용하여 유효한 레포지터리를 확인합니다."
 
 #: src/subscription_manager/cli_command/repos.py:217
 #, python-brace-format
 msgid "Repository '{repoid}' is enabled for this system."
-msgstr "리포지터리 '{repoid}'이/가 이 시스템에 대해 활성화되어 있습니다."
+msgstr "레포지터리 '{repoid}'가 이 시스템에 대해 활성화되어 있습니다."
 
 #: src/subscription_manager/cli_command/repos.py:219
 #, python-brace-format
 msgid "Repository '{repoid}' is disabled for this system."
-msgstr "리포지터리 '{repoid}'이/가 이 시스템에 대해 비활성화되어 있습니다."
+msgstr "레포지터리 '{repoid}'가 이 시스템에 대해 비활성화되어 있습니다."
 
 #: src/subscription_manager/cli_command/role.py:24
 msgid "Show or modify the system purpose role setting"
@@ -4417,7 +4387,7 @@ msgstr "선택된 서브스크립션 표"
 #: src/subscription_manager/gui/data/glade/confirmsubs.glade:109
 #: src/subscription_manager/gui/data/ui/confirmsubs.ui:127
 msgid "Core repositories will be enabled for each product."
-msgstr "각 제품에 대해 주요 리포지터리가 활성화됩니다."
+msgstr "각 제품에 대해 주요 레포지터리가 활성화됩니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/contract_selection.glade:7
@@ -4494,7 +4464,7 @@ msgstr "등록 후 서브스크립션에 수동으로 연결(_M)"
 
 #: src/subscription_manager/gui/data/glade/done_box.glade:14
 msgid "Done!"
-msgstr "완료"
+msgstr "완료!"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/environment.glade:17
@@ -4773,7 +4743,7 @@ msgstr "시스템 정보 보기 (_F)"
 #: src/subscription_manager/gui/data/glade/mainwindow.glade:70
 #: src/subscription_manager/gui/data/ui/mainwindow.ui:166
 msgid "Repo_sitories"
-msgstr "리포지터리 (_S)"
+msgstr "레포지터리 (_S)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/mainwindow.glade:79
@@ -4849,7 +4819,7 @@ msgstr "<b>HTTP 프록시</b>"
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:44
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:117
 msgid "I would like to connect via an _HTTP proxy."
-msgstr "HTTP 프록시를 통해 연결하고자 합니다. (_H)"
+msgstr "HTTP 프락시를 통해 연결하고자 합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:53
@@ -4920,7 +4890,7 @@ msgstr "암호 텍스트"
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:258
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:323
 msgid "_Bypass the HTTP proxy for specific hosts/domains."
-msgstr "특정 호스트/도메인의 HTTP 프록시를 사용하지 않습니다. (_B)"
+msgstr "특정 호스트/도메인의 HTTP 프락시를 사용하지 않습니다."
 
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:267
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:332
@@ -5221,7 +5191,7 @@ msgstr "• 서브스크립션 관리 서비스 주소 (옵션)"
 #: src/subscription_manager/gui/data/glade/registration_info.glade:108
 #: src/subscription_manager/gui/data/ui/registration_info.ui:164
 msgid "_Why Should I Register?"
-msgstr "등록해야 하는 이유? (_W)"
+msgstr "등록해야 하는 이유?"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/registration_info.glade:117
@@ -5240,13 +5210,13 @@ msgstr "지금 시스템을 등록하시겠습니까? <b>(적극 권장)</b>"
 #: src/subscription_manager/gui/data/glade/registration_info.glade:160
 #: src/subscription_manager/gui/data/ui/registration_info.ui:231
 msgid "_Yes, I'd like to register now."
-msgstr "예, 지금 등록합니다.(_Y)"
+msgstr "예, 지금 등록합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/registration_info.glade:176
 #: src/subscription_manager/gui/data/ui/registration_info.ui:250
 msgid "_No, I prefer to register at a later time."
-msgstr "아니요, 나중에 등록합니다.(_N)"
+msgstr "아니요, 나중에 등록합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/registration_info.glade:208
@@ -5359,7 +5329,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/repositories.glade:8
 #: src/subscription_manager/gui/data/ui/repositories.ui:8
 msgid "Manage Repositories"
-msgstr "리포지터리 관리"
+msgstr "레포지터리 관리"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/repositories.glade:19
@@ -5373,15 +5343,13 @@ msgstr "manage_repositories_dialog"
 msgid ""
 "Manage the repositories your subscriptions grant you access to by enabling, "
 "disabling and overriding certain fields."
-msgstr ""
-"특정 필드를 활성화, 비활성화, 재정의하여 서브스크립션을 통해 액세스가 허용된 "
-"리포지터리를 관리합니다."
+msgstr "특정 필드를 활성화, 비활성화, 재정의하여 서브스크립션을 통해 액세스가 허용된 레포지터리를 관리합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/repositories.glade:88
 #: src/subscription_manager/gui/data/ui/repositories.ui:151
 msgid "<b>Repository Details</b>"
-msgstr "<b>리포지터리 정보</b>"
+msgstr "<b>레포지터리 정보</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/repositories.glade:109
@@ -5816,9 +5784,7 @@ msgstr ""
 msgid ""
 "Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
 "information."
-msgstr ""
-"리포지터리 대화에 오류가 발생했습니다. 자세한 내용은 /var/log/rhsm/rhsm.log에"
-"서 참조하십시오."
+msgstr "레포지터리 대화에 오류가 발생했습니다. 자세한 내용은 /var/log/rhsm/rhsm.log에서 참조하십시오."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/managergui.py:522
@@ -5874,10 +5840,10 @@ msgstr "정말로 {subscription_text}를 삭제하시겠습니까?"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/mysubstab.py:200
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Stack of {group_name} and 1 other"
 msgid_plural "Stack of {group_name} and {unique} others"
-msgstr[0] "{group_name} 스택 및 1 기타"
+msgstr[0] "{group_name} 과 {unique} 기타 스택"
 
 #: src/subscription_manager/gui/mysubstab.py:204
 #, python-brace-format
@@ -6159,12 +6125,12 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/reposgui.py:54
 msgid "Attached subscriptions do not provide any repositories."
-msgstr "첨부된 서브스크립션은 리포지터리를 제공하지 않습니다."
+msgstr "첨부된 서브스크립션은 레포지터리를 제공하지 않습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/reposgui.py:55
 msgid "No repositories are available without an attached subscription."
-msgstr "첨부된 서브스크립션이 없으면 사용 가능한 리포지터리가 없습니다."
+msgstr "첨부된 서브스크립션이 없으면 사용 가능한 레포지터리가 없습니다."
 
 #: src/subscription_manager/gui/reposgui.py:131
 msgid "Gpgcheck"
@@ -6173,7 +6139,7 @@ msgstr "Gpgcheck"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/reposgui.py:136
 msgid "Repository ID"
-msgstr "리포지터리 ID"
+msgstr "레포지터리 ID"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/reposgui.py:142
@@ -6182,15 +6148,15 @@ msgstr "수정됨"
 
 #: src/subscription_manager/gui/reposgui.py:166
 msgid "Loading Repository Data"
-msgstr "리포지터리 데이터 불러오기"
+msgstr "레포지터리 자료 불러오기"
 
 #: src/subscription_manager/gui/reposgui.py:166
 msgid "Retrieving repository data from server."
-msgstr "서버에서 리포지터리 데이터를 검색하고 있습니다."
+msgstr "서버에서 레포지터리 자료를 검색하고 있습니다."
 
 #: src/subscription_manager/gui/reposgui.py:178
 msgid "Unable to load repository data."
-msgstr "리포지터리 데이터를 불러올 수 없습니다."
+msgstr "레포지터리 자료를 불러올 수 없습니다."
 
 #: src/subscription_manager/gui/reposgui.py:312
 #, python-format
@@ -6203,24 +6169,24 @@ msgstr "모든 덮어쓰기 삭제 확인"
 
 #: src/subscription_manager/gui/reposgui.py:328
 msgid "Removing Repository Overrides"
-msgstr "리포지터리 덮어쓰기 삭제 중"
+msgstr "레포지터리 덮어쓰기 삭제 중"
 
 #: src/subscription_manager/gui/reposgui.py:328
 #, python-format
 msgid "Removing all overrides for repository <b>%s</b>"
-msgstr "리포지터리 <b>%s</b>의 모든 덮어쓰기 삭제 중"
+msgstr "레포지터리 <b>%s</b>의 모든 덮어쓰기 삭제 중"
 
 #: src/subscription_manager/gui/reposgui.py:362
 msgid "Unable to reset repository overrides."
-msgstr "리포지터리 덮어쓰기를 다시 설정할 수 없습니다."
+msgstr "레포지터리 덮어쓰기를 다시 설정할 수 없습니다."
 
 #: src/subscription_manager/gui/reposgui.py:398
 msgid "Applying override changes to repositories."
-msgstr "리포지터리에 덮어쓰기 변경 사항을 적용하고 있습니다."
+msgstr "레포지터리에 덮어쓰기 변경 사항을 적용하고 있습니다."
 
 #: src/subscription_manager/gui/reposgui.py:398
 msgid "Updating Repository Overrides"
-msgstr "리포지터리 덮어쓰기 업데이트 중"
+msgstr "레포지터리 덮어쓰기 업데이트 중"
 
 #: src/subscription_manager/gui/reposgui.py:407
 msgid "Unable to update overrides."
@@ -6228,7 +6194,7 @@ msgstr "덮어쓰기 사항을 업데이트할 수 없습니다."
 
 #: src/subscription_manager/gui/reposgui.py:417
 msgid "Repositories have changes. Save changes?"
-msgstr "리포지터리가 변경되었습니다. 변경 사항을 저장하시겠습니까?"
+msgstr "레포지터리가 변경되었습니다. 변경 사항을 저장하시겠습니까?"
 
 #: src/subscription_manager/gui/reposgui.py:418
 msgid "Save Changes"
@@ -6517,16 +6483,14 @@ msgid ""
 "Couldn't enable extra repositories."
 msgstr ""
 "\n"
-"추가 리포지터리를 활성화할 수 없습니다."
+"추가 레포지터리를 활성화 할 수 없습니다."
 
 #: src/subscription_manager/migrate/migrate.py:795
 #, python-brace-format
 msgid ""
 "Please ensure system has subscriptions attached, and see '{command}' to "
 "enable additional repositories"
-msgstr ""
-"시스템에 서브스크립션이 첨부되어 있는지 확인하십시오. 추가 리포지터리를 활성"
-"화하려면 '{command}'에서 참조하십시오"
+msgstr "시스템에 서브스크립션이 첨부되어 있는지 확인하십시오. 추가 레포지터리를 활성화하려면 '{command}'에서 참조하십시오"
 
 #: src/subscription_manager/migrate/migrate.py:815
 msgid "Stopping and disabling legacy services..."
@@ -6704,12 +6668,12 @@ msgstr ""
 
 #: src/subscription_manager/repolib.py:643
 msgid "Repo updates"
-msgstr "리포지터리 업데이트"
+msgstr "레포지터리 업데이트"
 
 #: src/subscription_manager/repolib.py:644
 #, python-format
 msgid "Total repo updates: %d"
-msgstr "총 리포지터리 업데이트: %d"
+msgstr "총 레포지터리 업데이트: %d"
 
 #: src/subscription_manager/repolib.py:645
 msgid "Updated"
@@ -6738,12 +6702,12 @@ msgstr "패키지 프로파일 업로드 중 오류 발생: %s\n"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:149
 msgid "Updating entitlement certificates & repositories"
-msgstr "인타이틀먼트 인증서 & 리포지터리 업데이트하기"
+msgstr "인타이틀먼트 인증서 & 레포지터리 업데이트하기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:227
 msgid "Unable to update entitlement certificates and repositories"
-msgstr "인타이틀먼트 인증서 및 리포지터리를 업데이트할 수 없음"
+msgstr "인타이틀먼트 인증서 및 레포지터리를 업데이트할 수 없음"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author eukim
 #: src/subscription_manager/scripts/subscription_manager_gui.py:176
