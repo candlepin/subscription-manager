@@ -56,7 +56,7 @@ class AWSCloudProvider(BaseCloudProvider):
     TOKEN_CACHE_FILE = "/var/lib/rhsm/cache/aws_token.json"
 
     HTTP_HEADERS = {
-        'user-agent': 'RHSM/1.0'
+        'User-Agent': 'RHSM/1.0'
     }
 
     def __init__(self, hw_info):
@@ -159,8 +159,14 @@ class AWSCloudProvider(BaseCloudProvider):
             'X-aws-ec2-metadata-token-ttl-seconds': str(self.CLOUD_PROVIDER_TOKEN_TTL),
             **self.HTTP_HEADERS
         }
+
+        http_req = requests.Request(method='PUT', url=self.CLOUD_PROVIDER_TOKEN_URL, headers=headers)
+        prepared_http_req = self._session.prepare_request(http_req)
+        if 'SUBMAN_DEBUG_PRINT_REQUEST' in os.environ:
+            self._debug_print_http_request(prepared_http_req)
+
         try:
-            response = requests.put(self.CLOUD_PROVIDER_TOKEN_URL, headers=headers)
+            response = self._session.send(prepared_http_req, timeout=self.TIMEOUT)
         except requests.ConnectionError as err:
             log.error(f'Unable to receive token from AWS: {err}')
         else:
@@ -204,24 +210,19 @@ class AWSCloudProvider(BaseCloudProvider):
         Try to get metadata from server using IMDSv1
         :return: String with metadata or None
         """
-        log.debug(f'Trying to get metadata from {self.CLOUD_PROVIDER_METADATA_URL} using IMDSv1')
+        log.debug(f'Trying to get AWS metadata from {self.CLOUD_PROVIDER_METADATA_URL} using IMDSv1')
 
-        try:
-            response = requests.get(self.CLOUD_PROVIDER_METADATA_URL, headers=self.HTTP_HEADERS)
-        except requests.ConnectionError as err:
-            log.debug(f'Unable to get AWS metadata using IMDSv1: {err}')
-        else:
-            if response.status_code == 200:
-                return response.text
-            else:
-                log.debug(f'Unable to get AWS metadata using IMDSv1: {response.status_code}')
+        return self._get_data_from_server(
+            data_type='metadata',
+            url=self.CLOUD_PROVIDER_METADATA_URL
+        )
 
     def _get_metadata_from_server_imds_v2(self) -> Union[str, None]:
         """
         Try to get metadata from server using IMDSv2
         :return: String with metadata or None
         """
-        log.debug(f'Trying to get metadata from {self.CLOUD_PROVIDER_METADATA_URL} using IMDSv2')
+        log.debug(f'Trying to get AWS metadata from {self.CLOUD_PROVIDER_METADATA_URL} using IMDSv2')
 
         token = self._get_token()
         if token is None:
@@ -231,16 +232,12 @@ class AWSCloudProvider(BaseCloudProvider):
             'X-aws-ec2-metadata-token': token,
             **self.HTTP_HEADERS
         }
-        try:
-            response = requests.get(self.CLOUD_PROVIDER_METADATA_URL, headers=headers)
-        except requests.ConnectionError as err:
-            log.error(f'Unable to get AWS metadata using IMDSv2: {err}')
-        else:
-            if response.status_code == 200:
-                return response.text
-            else:
-                log.error(f'Unable to get AWS metadata using IMDSv2; status code: {response.status_code}')
-        return None
+
+        return self._get_data_from_server(
+            data_type='metadata',
+            url=self.CLOUD_PROVIDER_METADATA_URL,
+            headers=headers
+        )
 
     def _get_metadata_from_server(self) -> Union[str, None]:
         """
@@ -276,24 +273,19 @@ class AWSCloudProvider(BaseCloudProvider):
         Try to get signature using IMDSv1
         :return: String of signature or None, when it wasn't possible to get signature from server
         """
-        log.debug(f'Trying to get signature from {self.CLOUD_PROVIDER_SIGNATURE_URL} using IMDSv1')
+        log.debug(f'Trying to get AWS signature from {self.CLOUD_PROVIDER_SIGNATURE_URL} using IMDSv1')
 
-        try:
-            response = requests.get(self.CLOUD_PROVIDER_SIGNATURE_URL, headers=self.HTTP_HEADERS)
-        except requests.ConnectionError as err:
-            log.debug(f'Unable to get AWS signature using IMDSv1: {err}')
-        else:
-            if response.status_code == 200:
-                return response.text
-            else:
-                log.debug(f'Unable to get AWS signature using IMDSv1: {response.status_code}')
+        return self._get_data_from_server(
+            data_type='signature',
+            url=self.CLOUD_PROVIDER_SIGNATURE_URL
+        )
 
     def _get_signature_from_server_imds_v2(self) -> Union[str, None]:
         """
         Try to get signature using IMDSv2
         :return: String of signature or None, when it wasn't possible to get signature from server
         """
-        log.debug(f'Trying to get signature from {self.CLOUD_PROVIDER_SIGNATURE_URL} using IMDSv2')
+        log.debug(f'Trying to get AWS signature from {self.CLOUD_PROVIDER_SIGNATURE_URL} using IMDSv2')
 
         token = self._get_token()
         if token is None:
@@ -303,16 +295,12 @@ class AWSCloudProvider(BaseCloudProvider):
             'X-aws-ec2-metadata-token': token,
             **self.HTTP_HEADERS
         }
-        try:
-            response = requests.get(self.CLOUD_PROVIDER_SIGNATURE_URL, headers=headers)
-        except requests.ConnectionError as err:
-            log.error(f'Unable to get AWS signature using IMDSv2: {err}')
-        else:
-            if response.status_code == 200:
-                return response.text
-            else:
-                log.error(f'Unable to get AWS signature using IMDSv2; status code: {response.status_code}')
-        return None
+
+        return self._get_data_from_server(
+            data_type='signature',
+            url=self.CLOUD_PROVIDER_SIGNATURE_URL,
+            headers=headers
+        )
 
     def _get_signature_from_server(self) -> Union[str, None]:
         """

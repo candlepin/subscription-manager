@@ -19,75 +19,66 @@ Module for testing Python all modules from Python package rhsmlib.cloud
 """
 
 import unittest
-from mock import patch, Mock
+from mock import patch, Mock, call
 import tempfile
 import time
 import base64
 import json
 
+import requests
+
 from rhsmlib.cloud.providers import aws, azure, gcp
 from rhsmlib.cloud.provider import detect_cloud_provider, collect_cloud_info, get_cloud_provider
 
 
-def get_only_imds_v2_is_supported(url, headers, *args, **kwargs):
+def send_only_imds_v2_is_supported(request, *args, **kwargs):
     """
     Mock result, when we try to get metadata using GET method against
     AWS metadata provider. This mock is for the case, when only IMDSv2
     is supported by instance.
-    :param url: URL
-    :param headers: HTTP headers
-    :param args: other position argument
-    :param kwargs: other keyed argument
+    :param request: HTTP request
     :return: Mock with result
     """
-    if 'X-aws-ec2-metadata-token' in headers.keys():
-        if headers['X-aws-ec2-metadata-token'] == AWS_TOKEN:
-            if url == aws.AWSCloudProvider.CLOUD_PROVIDER_METADATA_URL:
-                mock_result = Mock()
+    mock_result = Mock()
+
+    if request.method == 'PUT':
+        if request.url == aws.AWSCloudProvider.CLOUD_PROVIDER_TOKEN_URL:
+            if 'X-aws-ec2-metadata-token-ttl-seconds' in request.headers:
                 mock_result.status_code = 200
-                mock_result.text = AWS_METADATA
-            elif url == aws.AWSCloudProvider.CLOUD_PROVIDER_SIGNATURE_URL:
-                mock_result = Mock()
-                mock_result.status_code = 200
-                mock_result.text = AWS_SIGNATURE
+                mock_result.text = AWS_TOKEN
             else:
-                mock_result = Mock()
                 mock_result.status_code = 400
-                mock_result.text = 'Error: Invalid URL'
+                mock_result.text = 'Error: TTL for token not specified'
         else:
-            mock_result = Mock()
             mock_result.status_code = 400
-            mock_result.text = 'Error: Invalid metadata token provided'
+            mock_result.text = 'Error: Invalid URL'
+    elif request.method == 'GET':
+        if 'X-aws-ec2-metadata-token' in request.headers.keys():
+            if request.headers['X-aws-ec2-metadata-token'] == AWS_TOKEN:
+                if request.url == aws.AWSCloudProvider.CLOUD_PROVIDER_METADATA_URL:
+                    mock_result.status_code = 200
+                    mock_result.text = AWS_METADATA
+                elif request.url == aws.AWSCloudProvider.CLOUD_PROVIDER_SIGNATURE_URL:
+                    mock_result.status_code = 200
+                    mock_result.text = AWS_SIGNATURE
+                else:
+                    mock_result.status_code = 400
+                    mock_result.text = 'Error: Invalid URL'
+            else:
+                mock_result.status_code = 400
+                mock_result.text = 'Error: Invalid metadata token provided'
+        else:
+            mock_result.status_code = 400
+            mock_result.text = 'Error: IMDSv1 is not supported on this instance'
     else:
-        mock_result = Mock()
         mock_result.status_code = 400
-        mock_result.text = 'Error: IMDSv1 is not supported on this instance'
+        mock_result.text = 'Error: not supported request method'
+
     return mock_result
 
 
-def put_imds_v2_token(url, headers, *args, **kwargs):
-    """
-    Mock getting metadata token using PUT method against AWS metadata provider
-    :param url: URL
-    :param headers: HTTP header
-    :param args: other position arguments
-    :param kwargs: other keyed arguments
-    :return: Mock with response
-    """
-    if url == aws.AWSCloudProvider.CLOUD_PROVIDER_TOKEN_URL:
-        if 'X-aws-ec2-metadata-token-ttl-seconds' in headers:
-            mock_result = Mock()
-            mock_result.status_code = 200
-            mock_result.text = AWS_TOKEN
-        else:
-            mock_result = Mock()
-            mock_result.status_code = 400
-            mock_result.text = 'Error: TTL for token not specified'
-    else:
-        mock_result = Mock()
-        mock_result.status_code = 400
-        mock_result.text = 'Error: Invalid URL'
-    return mock_result
+def mock_prepare_request(request):
+    return request
 
 
 AWS_METADATA = """
@@ -137,14 +128,6 @@ class TestAWSCloudProvider(unittest.TestCase):
     """
     Class used for testing of AWS cloud provider
     """
-
-    def setUp(self):
-        """
-        Patch communication with metadata provider
-        """
-        requests_patcher = patch('rhsmlib.cloud.providers.aws.requests')
-        self.requests_mock = requests_patcher.start()
-        self.addCleanup(requests_patcher.stop)
 
     def test_aws_cloud_provider_id(self):
         """
@@ -245,28 +228,39 @@ class TestAWSCloudProvider(unittest.TestCase):
         probability = aws_detector.is_likely_running_on_cloud()
         self.assertEqual(probability, 0.1)
 
-    def test_get_metadata_from_server_imds_v1(self):
+    @patch('rhsmlib.cloud._base_provider.requests.Session')
+    def test_get_metadata_from_server_imds_v1(self, mock_session_class):
         """
         Test the case, when metadata are obtained from server using IMDSv1
         """
         mock_result = Mock()
         mock_result.status_code = 200
         mock_result.text = AWS_METADATA
-        self.requests_mock.get = Mock(return_value=mock_result)
+        mock_session = Mock()
+        mock_session.send = Mock(return_value=mock_result)
+        mock_session.prepare_request = Mock()
+        mock_session.hooks = {'response': []}
+        mock_session_class.return_value = mock_session
         aws_collector = aws.AWSCloudProvider({})
         # Mock that no metadata cache exists
         aws_collector._get_metadata_from_cache = Mock(return_value=None)
         metadata = aws_collector.get_metadata()
         self.assertEqual(metadata, AWS_METADATA)
 
-    def test_get_signature_from_server_imds_v1(self):
+    @patch('rhsmlib.cloud._base_provider.requests.Session')
+    def test_get_signature_from_server_imds_v1(self, mock_session_class):
         """
         Test the case, when metadata are obtained from server using IMDSv1
         """
         mock_result = Mock()
         mock_result.status_code = 200
         mock_result.text = AWS_SIGNATURE
-        self.requests_mock.get = Mock(return_value=mock_result)
+        mock_session = Mock()
+        mock_session.send = Mock(return_value=mock_result)
+        mock_session.prepare_request = Mock()
+        mock_session.hooks = {'response': []}
+        mock_session_class.return_value = mock_session
+
         aws_collector = aws.AWSCloudProvider({})
         # Mock that no metadata cache exists
         aws_collector._get_signature_from_cache = Mock(return_value=None)
@@ -274,30 +268,40 @@ class TestAWSCloudProvider(unittest.TestCase):
         signature = '-----BEGIN PKCS7-----\n' + AWS_SIGNATURE + '\n-----END PKCS7-----'
         self.assertEqual(signature, test_signature)
 
-    def test_get_metadata_from_server_imds2(self):
+    @patch('rhsmlib.cloud._base_provider.requests.Session')
+    def test_get_metadata_from_server_imds_v2(self, mock_session_class):
         """
         Test the case, when metadata are obtained from server using IMDSv2
         """
-        self.requests_mock.get = get_only_imds_v2_is_supported
-        self.requests_mock.put = put_imds_v2_token
+        mock_session = Mock()
+        mock_session.send = send_only_imds_v2_is_supported
+        mock_session.prepare_request = Mock(side_effect=mock_prepare_request)
+        mock_session.hooks = {'response': []}
+        mock_session_class.return_value = mock_session
 
-        aws_collector = aws.AWSCloudProvider({})
+        aws_provider = aws.AWSCloudProvider({})
         # Mock that no metadata cache exists
-        aws_collector._get_metadata_from_cache = Mock(return_value=None)
+        aws_provider._get_metadata_from_cache = Mock(return_value=None)
         # Mock that no token cache exists
-        aws_collector._get_token_from_cache_file = Mock(return_value=None)
+        aws_provider._get_token_from_cache_file = Mock(return_value=None)
         # Mock writing token to cache file
-        aws_collector._write_token_to_cache_file = Mock()
+        aws_provider._write_token_to_cache_file = Mock()
+        # Mock getting metadata using IMDSv1 is disabled by user
+        aws_provider._get_metadata_from_server_imds_v1 = Mock(return_value=None)
 
-        metadata = aws_collector.get_metadata()
+        metadata = aws_provider.get_metadata()
         self.assertEqual(metadata, AWS_METADATA)
 
-    def test_get_signature_from_server_imds2(self):
+    @patch('rhsmlib.cloud._base_provider.requests.Session')
+    def test_get_signature_from_server_imds_v2(self, mock_session_class):
         """
         Test the case, when signature is obtained from server using IMDSv2
         """
-        self.requests_mock.get = get_only_imds_v2_is_supported
-        self.requests_mock.put = put_imds_v2_token
+        mock_session = Mock()
+        mock_session.send = send_only_imds_v2_is_supported
+        mock_session.prepare_request = Mock(side_effect=mock_prepare_request)
+        mock_session.hooks = {'response': []}
+        mock_session_class.return_value = mock_session
 
         aws_collector = aws.AWSCloudProvider({})
         # Mock that no metadata cache exists
@@ -520,10 +524,15 @@ AZURE_METADATA = """
 }
 """
 
-
 AZURE_SIGNATURE = """
 {"encoding":"pkcs7","signature":"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"}
 """
+
+# Use something from far future
+SUPPORTED_AZURE_VERSIONS = ["2141-06-01", "2141-09-01", "2142-03-01"]
+
+# Real list is much more longer (about 15 items)
+AZURE_API_VERSIONS = json.dumps({"apiVersions": SUPPORTED_AZURE_VERSIONS})
 
 
 class TestAzureCloudProvider(unittest.TestCase):
@@ -610,39 +619,144 @@ class TestAzureCloudProvider(unittest.TestCase):
         """
         Test getting metadata from server, when there is no cache
         """
+        self.requests_mock.Request = Mock()
         mock_result = Mock()
         mock_result.status_code = 200
         mock_result.text = AZURE_METADATA
-        self.requests_mock.get = Mock(return_value=mock_result)
+        mock_session = Mock()
+        mock_session.send = Mock(return_value=mock_result)
+        mock_session.prepare_request = Mock()
+        mock_session.hooks = {'response': []}
+        self.requests_mock.Session = Mock(return_value=mock_session)
         azure_collector = azure.AzureCloudProvider({})
         metadata = azure_collector.get_metadata()
-        self.requests_mock.get.assert_called_once_with(
-            "http://169.254.169.254/metadata/instance?api-version=2020-09-01",
+        self.requests_mock.Request.assert_called_once_with(
+            method="GET",
+            url=f"http://169.254.169.254/metadata/instance?api-version={azure.AzureCloudProvider.API_VERSION}",
             headers={
-                'user-agent': 'RHSM/1.0',
+                'User-Agent': 'RHSM/1.0',
                 "Metadata": "true"
             }
         )
+        mock_session.send.assert_called_once()
         self.assertEqual(metadata, AZURE_METADATA)
+
+    def test_get_api_versions(self):
+        """
+        Test getting API versions
+        """
+        self.requests_mock.Request = Mock()
+        mock_result = Mock()
+        mock_result.status_code = 200
+        mock_result.text = AZURE_API_VERSIONS
+        mock_session = Mock()
+        mock_session.send = Mock(return_value=mock_result)
+        mock_session.prepare_request = Mock()
+        mock_session.hooks = {'response': []}
+        self.requests_mock.Session = Mock(return_value=mock_session)
+        azure_provider = azure.AzureCloudProvider({})
+        api_versions = azure_provider.get_api_versions()
+        self.requests_mock.Request.assert_called_once_with(
+            method="GET",
+            url="http://169.254.169.254/metadata/versions",
+            headers={
+                'User-Agent': 'RHSM/1.0',
+                "Metadata": "true"
+            }
+        )
+        mock_session.send.assert_called_once()
+        self.assertEqual(api_versions, SUPPORTED_AZURE_VERSIONS)
 
     def test_get_signature_from_server(self):
         """
         Test getting signature from server, when there is no cache file
         """
+        self.requests_mock.Request = Mock()
         mock_result = Mock()
         mock_result.status_code = 200
         mock_result.text = AZURE_SIGNATURE
-        self.requests_mock.get = Mock(return_value=mock_result)
+        mock_session = Mock()
+        mock_session.send = Mock(return_value=mock_result)
+        mock_session.prepare_request = Mock()
+        mock_session.hooks = {'response': []}
+        self.requests_mock.Session = Mock(return_value=mock_session)
         azure_collector = azure.AzureCloudProvider({})
         signature = azure_collector.get_signature()
-        self.requests_mock.get.assert_called_once_with(
-            "http://169.254.169.254/metadata/attested/document?api-version=2020-09-01",
+        self.requests_mock.Request.assert_called_once_with(
+            method="GET",
+            url=f"http://169.254.169.254/metadata/attested/document?api-version={azure.AzureCloudProvider.API_VERSION}",
             headers={
-                'user-agent': 'RHSM/1.0',
+                'User-Agent': 'RHSM/1.0',
                 "Metadata": "true"
             }
         )
+        mock_session.send.assert_called_once()
         self.assertEqual(signature, AZURE_SIGNATURE)
+
+    @staticmethod
+    def mock_send_azure_IMDS(request, *args, **kwargs):
+        """
+        Mock Azure IMDS supporting only few API versions
+        """
+        supported_api_version = False
+        for api_version in SUPPORTED_AZURE_VERSIONS:
+            if request.url.endswith(api_version):
+                supported_api_version = True
+
+        mock_result = Mock()
+        if supported_api_version is False:
+            mock_result.status_code = 400
+            mock_result.text = '{ "error": "Bad request. api-version is invalid or was not specified in the request." }'
+        else:
+            mock_result.status_code = 200
+            if '/metadata/instance' in request.url:
+                mock_result.text = AZURE_SIGNATURE
+            elif '/metadata/attested/document' in request.url:
+                mock_result.text = AZURE_SIGNATURE
+            else:
+                mock_result.text = ''
+
+        return mock_result
+
+    @patch('rhsmlib.cloud.providers.azure.AzureCloudProvider.get_api_versions')
+    def test_get_metadata_from_server_outdated_api_version(self, mock_get_api_versions):
+        """
+        Test getting metadata from server using outdated API version that is not supported
+        """
+        def _mock_prepare_request(mock_request, *args, **kwargs):
+            mock_prepared_request = Mock(spec=["method", "url", "headers"])
+            mock_prepared_request.method = mock_request.method
+            mock_prepared_request.url = mock_request.url
+            mock_prepared_request.headers = mock_request.headers
+            return mock_prepared_request
+
+        self.requests_mock.Request = Mock(wraps=requests.Request)
+        # We simple mock getting api versions, because this method is tested in another test method
+        mock_get_api_versions.return_value = SUPPORTED_AZURE_VERSIONS
+        mock_session = Mock()
+        mock_session.send = Mock(side_effect=self.mock_send_azure_IMDS)
+        mock_session.prepare_request = _mock_prepare_request
+        mock_session.hooks = {'response': []}
+        self.requests_mock.Session = Mock(return_value=mock_session)
+
+        azure_collector = azure.AzureCloudProvider({})
+        metadata = azure_collector.get_metadata()
+
+        request_calls = [
+            call(
+                method='GET',
+                headers={'User-Agent': 'RHSM/1.0', 'Metadata': 'true'},
+                url=f'http://169.254.169.254/metadata/instance?api-version={azure.AzureCloudProvider.API_VERSION}'
+            ),
+            call(
+                method='GET',
+                headers={'User-Agent': 'RHSM/1.0', 'Metadata': 'true'},
+                url=f'http://169.254.169.254/metadata/instance?api-version={SUPPORTED_AZURE_VERSIONS[-1]}'
+            )
+        ]
+        self.requests_mock.Request.assert_has_calls(calls=request_calls)
+        self.assertEqual(mock_session.send.call_count, 2)
+        self.assertIsNotNone(metadata)
 
 
 GCP_JWT_TOKEN = """eyJhbGciOiJSUzI1NiIsImtpZCI6IjZhOGJhNTY1MmE3MDQ0MTIxZDRmZWRhYzhmMTRkMTRjNTRlNDg5NWIiLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJodHRwczovL3N1YnNjcmlwdGlvbi5yaHNtLnJlZGhhdC5jb206NDQzL3N1YnNjcmlwdGlvbiIsImF6cCI6IjEwNDA3MDk1NTY4MjI5ODczNjE0OSIsImVtYWlsIjoiMTYxOTU4NDY1NjEzLWNvbXB1dGVAZGV2ZWxvcGVyLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZXhwIjoxNjE2NTk5ODIzLCJnb29nbGUiOnsiY29tcHV0ZV9lbmdpbmUiOnsiaW5zdGFuY2VfY3JlYXRpb25fdGltZXN0YW1wIjoxNjE2NTk1ODQ3LCJpbnN0YW5jZV9pZCI6IjI1ODkyMjExNDA2NzY3MTgwMjYiLCJpbnN0YW5jZV9uYW1lIjoiaW5zdGFuY2UtMSIsImxpY2Vuc2VfaWQiOlsiNTczMTAzNTA2NzI1NjkyNTI5OCJdLCJwcm9qZWN0X2lkIjoiZmFpci1raW5nZG9tLTMwODUxNCIsInByb2plY3RfbnVtYmVyIjoxNjE5NTg0NjU2MTMsInpvbmUiOiJ1cy1lYXN0MS1iIn19LCJpYXQiOjE2MTY1OTYyMjMsImlzcyI6Imh0dHBzOi8vYWNjb3VudHMuZ29vZ2xlLmNvbSIsInN1YiI6IjEwNDA3MDk1NTY4MjI5ODczNjE0OSJ9.XQKeqMAvsH2T2wsdN97jlm52DzLfix3DTMCu9QCuhSKLEk1xHYOYtvh5Yzn7j-tbZtV-siyPAfpGZO3Id87573OVGgohN3q7Exlf9CEIHa1-X7zLyiyIlyrnfQJ1aGHeH6y7gb_tWxHFLJRzhulfkfJxSDn5fEBSgBqbjzCr9unQgMkuzQ3uui2BbIbALmOpY6D-IT71mgMDZ_zm4G6q-Mh0nIMkDWhmQ8pa3RAVqqBMBYJninKLdCD8eQzIlDhtIzwmYGLrsJMktFF3pJFCqEFv1rKZy_OUyV4JOkOLtXbKnwxqmFTq-2SP0KtUWjDy1-U8GnVDptISjOf2O9FaLA
@@ -728,18 +842,26 @@ class TestGCPCloudProvider(unittest.TestCase):
         """
         Test getting GCP token, when default audience URL is used
         """
+        self.requests_mock.Request = Mock()
         mock_result = Mock()
         mock_result.status_code = 200
         mock_result.text = GCP_JWT_TOKEN
-        self.requests_mock.get = Mock(return_value=mock_result)
+        mock_session = Mock()
+        mock_session.send = Mock(return_value=mock_result)
+        mock_session.prepare_request = Mock()
+        mock_session.hooks = {'response': []}
+        self.requests_mock.Session = Mock(return_value=mock_session)
+
         gcp_collector = gcp.GCPCloudProvider({})
         gcp_collector._get_token_from_cache_file = Mock(return_value=None)
         gcp_collector._write_token_to_cache_file = Mock(return_value=None)
         token = gcp_collector.get_metadata()
-        self.requests_mock.get.assert_called_once_with(
-            'http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?audience=https://subscription.rhsm.redhat.com:443/subscription&format=full',
+        self.requests_mock.Request.assert_called_once_with(
+            method="GET",
+            url='http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?'
+                'audience=https://subscription.rhsm.redhat.com:443/subscription&format=full',
             headers={
-                'user-agent': 'RHSM/1.0',
+                'User-Agent': 'RHSM/1.0',
                 'Metadata-Flavor': 'Google'
             }
         )
@@ -749,21 +871,29 @@ class TestGCPCloudProvider(unittest.TestCase):
         """
         Test getting GCP token, when custom audience URL is used (e.g. Satellite or stage is used)
         """
+        self.requests_mock.Request = Mock()
         mock_result = Mock()
         mock_result.status_code = 200
         mock_result.text = GCP_JWT_TOKEN
-        self.requests_mock.get = Mock(return_value=mock_result)
+        mock_session = Mock()
+        mock_session.send = Mock(return_value=mock_result)
+        mock_session.prepare_request = Mock()
+        mock_session.hooks = {'response': []}
+        self.requests_mock.Session = Mock(return_value=mock_session)
         gcp_collector = gcp.GCPCloudProvider({}, audience_url="https://example.com:8443/rhsm")
         gcp_collector._get_token_from_cache_file = Mock(return_value=None)
         gcp_collector._write_token_to_cache_file = Mock(return_value=None)
         token = gcp_collector.get_metadata()
-        self.requests_mock.get.assert_called_once_with(
-            'http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?audience=https://example.com:8443/rhsm&format=full',
+        self.requests_mock.Request.assert_called_once_with(
+            method="GET",
+            url='http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?'
+                'audience=https://example.com:8443/rhsm&format=full',
             headers={
-                'user-agent': 'RHSM/1.0',
+                'User-Agent': 'RHSM/1.0',
                 'Metadata-Flavor': 'Google'
             }
         )
+        mock_session.send.assert_called_once()
         self.assertEqual(token, GCP_JWT_TOKEN)
 
     def test_decode_jwt(self):
@@ -839,16 +969,13 @@ class TestCloudProvider(unittest.TestCase):
         self.hardware_collector_mock.return_value = self.hw_fact_collector_instance
         self.addCleanup(hardware_collector_patcher.stop)
 
-        aws_requests_patcher = patch('rhsmlib.cloud.providers.aws.requests')
-        self.aws_requests_mock = aws_requests_patcher.start()
-        self.addCleanup(aws_requests_patcher.stop)
         write_cache_patcher = patch('rhsmlib.cloud.providers.aws.AWSCloudProvider._write_token_to_cache_file')
         self.write_cache_mock = write_cache_patcher.start()
         self.addCleanup(write_cache_patcher.stop)
 
-        azure_requests_patcher = patch('rhsmlib.cloud._base_provider.requests')
-        self.azure_requests_mock = azure_requests_patcher.start()
-        self.addCleanup(azure_requests_patcher.stop)
+        self.requests_patcher = patch('rhsmlib.cloud._base_provider.requests')
+        self.azure_requests_mock = self.requests_patcher.start()
+        self.addCleanup(self.requests_patcher.stop)
 
     def test_detect_cloud_provider_aws(self):
         """
@@ -1014,13 +1141,20 @@ class TestCloudProvider(unittest.TestCase):
         detected_clouds.sort()
         self.assertEqual(detected_clouds, ['aws', 'gcp'])
 
-    def test_collect_cloud_info_one_cloud_provider_detected(self):
+    @patch('rhsmlib.cloud.providers.aws.requests.Session')
+    def test_collect_cloud_info_one_cloud_provider_detected(self, mock_session_class):
         """
         Test the case, when we try to collect cloud info only for
         one detected cloud provider
         """
-        self.aws_requests_mock.get = get_only_imds_v2_is_supported
-        self.aws_requests_mock.put = put_imds_v2_token
+        mock_session = Mock()
+        mock_session.send = send_only_imds_v2_is_supported
+        mock_session.prepare_request = Mock(side_effect=mock_prepare_request)
+        mock_session.hooks = {'response': []}
+        mock_session_class.return_value = mock_session
+
+        # We will not need patch requests mock in this unit test, because Session is mocked
+        self.requests_patcher.stop()
 
         cloud_list = ['aws']
         cloud_info = collect_cloud_info(cloud_list)
@@ -1043,21 +1177,25 @@ class TestCloudProvider(unittest.TestCase):
             '-----BEGIN PKCS7-----\n' + AWS_SIGNATURE + '\n-----END PKCS7-----'
         )
 
-    def test_collect_cloud_info_more_cloud_providers_detected(self):
+    @patch('rhsmlib.cloud.providers.aws.requests.Session')
+    def test_collect_cloud_info_more_cloud_providers_detected(self, mock_session_class):
         """
         Test the case, when we try to collect cloud info only for
         more than one cloud providers, because more than one cloud
         providers were detected
         """
-        mock_result = Mock()
-        mock_result.status_code = 400
-        mock_result.text = 'Not Found 400'
-        self.azure_requests_mock.get = Mock(return_value=mock_result)
+        mock_session = Mock()
+        mock_session.send = send_only_imds_v2_is_supported
+        mock_session.prepare_request = Mock(side_effect=mock_prepare_request)
+        mock_session.hooks = {'response': []}
+        mock_session_class.return_value = mock_session
 
-        self.aws_requests_mock.get = get_only_imds_v2_is_supported
-        self.aws_requests_mock.put = put_imds_v2_token
+        # We will not need patch requests mock in this unit test, because Session is mocked
+        self.requests_patcher.stop()
 
+        # More cloud providers detected
         cloud_list = ['azure', 'aws']
+
         cloud_info = collect_cloud_info(cloud_list)
 
         self.assertIsNotNone(cloud_info)

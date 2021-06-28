@@ -63,7 +63,7 @@ class GCPCloudProvider(BaseCloudProvider):
     CLOUD_PROVIDER_SIGNATURE_TYPE = None
 
     HTTP_HEADERS = {
-        'user-agent': 'RHSM/1.0',
+        'User-Agent': 'RHSM/1.0',
         'Metadata-Flavor': 'Google'
     }
 
@@ -149,11 +149,11 @@ class GCPCloudProvider(BaseCloudProvider):
         """
         return super(GCPCloudProvider, self)._get_token_from_cache_file()
 
-    def _get_data_from_server(self, data_type, url) -> Union[str, None]:
+    def _get_data_from_server(self, data_type: str, url: str, headers: dict = None) -> Union[str, None]:
         """
         Try to get data from metadata server
         """
-        return super(GCPCloudProvider, self)._get_data_from_server(data_type, url)
+        return super(GCPCloudProvider, self)._get_data_from_server(data_type, url, headers)
 
     def _get_metadata_from_server(self) -> Union[str, None]:
         """
