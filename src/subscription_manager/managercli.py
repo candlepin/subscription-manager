@@ -1147,7 +1147,14 @@ class SyspurposeCommand(CliCommand):
         # the subcommand classes, so they will create an ArgumentParser that
         # is a child of the 'syspurpose' one, rather than as standalone
         # parsers
+        prog = os.path.basename(sys.argv[0])
         subparser = self.parser.add_subparsers(
+            # create an own 'prog' string that contains the actual program name
+            # followed by this command name; this way, the default 'prog'
+            # definition is not used, as it is based on the 'usage' string of
+            # the ArgumentParser (self.parser), which contains the '[OPTIONS]'
+            # help text (see AbstractCLICommand._get_usage())
+            prog=_("{prog} {name}").format(prog=prog, name=self.name),
             dest='subparser_name',
             title=_('Syspurpose submodules'),
             help='',  # trick argparse a bit to not show the {cmd1, cmd2, ..}
