@@ -14,8 +14,6 @@
 # in this software or its documentation.
 #
 
-# TODO: test Python3 syntax using flake8
-# flake8: noqa
 
 """
 This is module implementing detector and metadata collector of virtual machine running on AWS
@@ -28,32 +26,44 @@ import os
 
 from typing import Union
 
-from rhsmlib.cloud.detector import CloudDetector
-from rhsmlib.cloud.collector import CloudCollector
+from rhsmlib.cloud._base_provider import BaseCloudProvider
 
 
 log = logging.getLogger(__name__)
 
 
-class AWSCloudDetector(CloudDetector):
+class AWSCloudProvider(BaseCloudProvider):
     """
-    Detector of cloud machine
+    Base class for AWS cloud provider
     """
 
-    ID = 'aws'
+    CLOUD_PROVIDER_ID = "aws"
+
+    CLOUD_PROVIDER_METADATA_URL = "http://169.254.169.254/latest/dynamic/instance-identity/document"
+
+    CLOUD_PROVIDER_METADATA_TYPE = "application/json"
+
+    CLOUD_PROVIDER_TOKEN_URL = "http://169.254.169.254/latest/api/token"
+
+    CLOUD_PROVIDER_TOKEN_TTL = 3600  # the value is in seconds
+
+    CLOUD_PROVIDER_SIGNATURE_URL = "http://169.254.169.254/latest/dynamic/instance-identity/rsa2048"
+
+    CLOUD_PROVIDER_SIGNATURE_TYPE = "text/plain"
+
+    COLLECTOR_CONF_FILE = "/etc/rhsm/cloud/providers/aws.conf"
+
+    TOKEN_CACHE_FILE = "/var/lib/rhsm/cache/aws_token.json"
+
+    HTTP_HEADERS = {
+        'user-agent': 'RHSM/1.0'
+    }
 
     def __init__(self, hw_info):
         """
         Initialize instance of AWSCloudDetector
         """
-        super(AWSCloudDetector, self).__init__(hw_info)
-
-    def is_vm(self) -> bool:
-        """
-        Is system running on virtual machine or not
-        :return: True, when machine is running on VM; otherwise return False
-        """
-        return super(AWSCloudDetector, self).is_vm()
+        super(AWSCloudProvider, self).__init__(hw_info)
 
     def is_running_on_cloud(self) -> bool:
         """
@@ -125,43 +135,9 @@ class AWSCloudDetector(CloudDetector):
 
         return probability
 
-
-class AWSCloudCollector(CloudCollector):
-    """
-    Class implementing collecting metadata from AWS cloud provider
-    """
-
-    CLOUD_PROVIDER_ID = "aws"
-
-    CLOUD_PROVIDER_METADATA_URL = "http://169.254.169.254/latest/dynamic/instance-identity/document"
-
-    CLOUD_PROVIDER_METADATA_TYPE = "application/json"
-
-    CLOUD_PROVIDER_TOKEN_URL = "http://169.254.169.254/latest/api/token"
-
-    CLOUD_PROVIDER_TOKEN_TTL = 3600  # the value is in seconds
-
-    CLOUD_PROVIDER_SIGNATURE_URL = "http://169.254.169.254/latest/dynamic/instance-identity/rsa2048"
-
-    CLOUD_PROVIDER_SIGNATURE_TYPE = "text/plain"
-
-    COLLECTOR_CONF_FILE = "/etc/rhsm/cloud/providers/aws.conf"
-
-    TOKEN_CACHE_FILE = "/var/lib/rhsm/cache/aws_token.json"
-
-    HTTP_HEADERS = {
-        'user-agent': 'RHSM/1.0'
-    }
-
-    def __init__(self):
-        """
-        Initialize instance of AWSCloudCollector
-        """
-        super(AWSCloudCollector, self).__init__()
-
     def _get_metadata_from_cache(self) -> None:
         """
-        This cloud collector does not use cache for metadata
+        This cloud collector does not allow to use cache for metadata
         :return: None
         """
         return None
@@ -290,7 +266,7 @@ class AWSCloudCollector(CloudCollector):
 
     def _get_signature_from_cache_file(self) -> None:
         """
-        This cloud collector does not use cache for metadata
+        This cloud collector does not allow to use cache for signature
         :return: None
         """
         return None
@@ -369,7 +345,7 @@ class AWSCloudCollector(CloudCollector):
         get metadata from server.
         :return: String with metadata or None
         """
-        return super(AWSCloudCollector, self).get_metadata()
+        return super(AWSCloudProvider, self).get_metadata()
 
     def get_signature(self) -> Union[str, None]:
         """
@@ -377,7 +353,7 @@ class AWSCloudCollector(CloudCollector):
         get signature from server.
         :return: String with metadata or None
         """
-        return super(AWSCloudCollector, self).get_signature()
+        return super(AWSCloudProvider, self).get_signature()
 
 
 def _smoke_tests():
@@ -402,25 +378,24 @@ def _smoke_tests():
     facts = {}
     facts.update(HostCollector().get_all())
     facts.update(HardwareCollector().get_all())
-    aws_cloud_detector = AWSCloudDetector(facts)
-    result = aws_cloud_detector.is_running_on_cloud()
-    probability = aws_cloud_detector.is_likely_running_on_cloud()
+    aws_cloud_provider = AWSCloudProvider(facts)
+    result = aws_cloud_provider.is_running_on_cloud()
+    probability = aws_cloud_provider.is_likely_running_on_cloud()
     print(f'>>> debug <<< cloud provider: {result}, probability: {probability}')
 
     if result is True:
-        metadata_collector = AWSCloudCollector()
-        metadata = metadata_collector.get_metadata()
+        metadata = aws_cloud_provider.get_metadata()
         print(f'>>> debug <<< cloud metadata: {metadata}')
-        signature = metadata_collector.get_signature()
+        signature = aws_cloud_provider.get_signature()
         print(f'>>> debug <<< metadata signature: {signature}')
 
-        metadata_v2 = metadata_collector._get_metadata_from_server_imds_v2()
+        metadata_v2 = aws_cloud_provider._get_metadata_from_server_imds_v2()
         print(f'>>> debug <<< cloud metadata: {metadata_v2}')
-        signature_v2 = metadata_collector._get_signature_from_server_imds_v2()
+        signature_v2 = aws_cloud_provider._get_signature_from_server_imds_v2()
         print(f'>>> debug <<< cloud signature: {signature_v2}')
 
 
 # Some temporary smoke testing code. You can test this module using:
-# sudo PYTHONPATH=./src:./syspurpose/src python3 -m rhsmlib.cloud.providers.aws
+# sudo PYTHONPATH=./src python3 -m rhsmlib.cloud.providers.aws
 if __name__ == '__main__':
     _smoke_tests()
