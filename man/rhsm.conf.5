@@ -32,6 +32,8 @@ rhsm.conf \- Configuration file for the subscription\-manager tooling
 .SH "DESCRIPTION"
 .sp
 The rhsm\&.conf file is the configuration file for various subscription manager tooling\&. This includes \fBsubscription\-manager\fR, \fBsubscription\-manager\-gui\fR, \fBrhsmcertd\fR, and \fBvirt\-who\fR\&.
+.sp
+The format of this file is a simple INI-like structure, with keys and values inside sections. Duplicated keys in sections are not allowed, and only the last occurrence of each key is actually used. Duplicated section names are not allowed.
 .SH "[SERVER] OPTIONS"
 .PP
 hostname
