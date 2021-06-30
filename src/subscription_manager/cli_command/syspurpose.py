@@ -93,6 +93,13 @@ class SyspurposeCommand(CliCommand):
             cmd = clazz(subparser)
             self.cli_commands[cmd.name] = cmd
 
+    def _get_usage(self):
+        """
+        Reimplemented from AbstractCLICommand to mention the optional submodule
+        in the usage string.
+        """
+        return _("%(prog)s {name} [SUBMODULE] [OPTIONS]").format(name=self.name)
+
     def _validate_options(self):
         """
         Validate provided options
