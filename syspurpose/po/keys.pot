@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-07 02:57-0400\n"
+"POT-Creation-Date: 2021-06-30 02:22-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,96 +65,89 @@ msgstr ""
 msgid "{attr} unset."
 msgstr ""
 
-#: src/syspurpose/cli.py:158 src/syspurpose/cli.py:353
-msgid ""
-"The 'syspurpose' command is deprecated and will be removed in a future major "
-"release. Please use the 'subscription-manager syspurpose' command going "
-"forward."
-msgstr ""
-
-#: src/syspurpose/cli.py:183
+#: src/syspurpose/cli.py:181
 msgid "Sets the value for the given property"
 msgstr ""
 
-#: src/syspurpose/cli.py:189 src/syspurpose/cli.py:211
+#: src/syspurpose/cli.py:187 src/syspurpose/cli.py:209
 msgid "The name of the property to set/update"
 msgstr ""
 
-#: src/syspurpose/cli.py:195
+#: src/syspurpose/cli.py:193
 msgid "The value to set"
 msgstr ""
 
-#: src/syspurpose/cli.py:204
+#: src/syspurpose/cli.py:202
 msgid "Unsets (clears) the value for the given property"
 msgstr ""
 
-#: src/syspurpose/cli.py:218
+#: src/syspurpose/cli.py:216
 msgid "Adds the value(s) to the given property"
 msgstr ""
 
-#: src/syspurpose/cli.py:224 src/syspurpose/cli.py:246
+#: src/syspurpose/cli.py:222 src/syspurpose/cli.py:244
 msgid "The name of the property to update"
 msgstr ""
 
-#: src/syspurpose/cli.py:230
+#: src/syspurpose/cli.py:228
 msgid "The value(s) to add"
 msgstr ""
 
-#: src/syspurpose/cli.py:240
+#: src/syspurpose/cli.py:238
 msgid "Removes the value(s) from the given property"
 msgstr ""
 
-#: src/syspurpose/cli.py:252
+#: src/syspurpose/cli.py:250
 msgid "The value(s) to remove"
 msgstr ""
 
-#: src/syspurpose/cli.py:262
+#: src/syspurpose/cli.py:260
 msgid "Set the system role to the system syspurpose"
 msgstr ""
 
-#: src/syspurpose/cli.py:270
+#: src/syspurpose/cli.py:268
 msgid "Clear set role"
 msgstr ""
 
-#: src/syspurpose/cli.py:278
+#: src/syspurpose/cli.py:276
 msgid "Add addons to the system syspurpose"
 msgstr ""
 
-#: src/syspurpose/cli.py:286
+#: src/syspurpose/cli.py:284
 msgid "Remove addons from the system syspurpose"
 msgstr ""
 
-#: src/syspurpose/cli.py:293
+#: src/syspurpose/cli.py:291
 msgid "Clear set addons"
 msgstr ""
 
-#: src/syspurpose/cli.py:301
+#: src/syspurpose/cli.py:299
 msgid "Set the system sla"
 msgstr ""
 
-#: src/syspurpose/cli.py:308
+#: src/syspurpose/cli.py:306
 msgid "Clear set sla"
 msgstr ""
 
-#: src/syspurpose/cli.py:316
+#: src/syspurpose/cli.py:314
 msgid "Set the system usage"
 msgstr ""
 
-#: src/syspurpose/cli.py:324
+#: src/syspurpose/cli.py:322
 msgid "Clear set usage"
 msgstr ""
 
-#: src/syspurpose/cli.py:332
+#: src/syspurpose/cli.py:330
 msgid "Show the current system syspurpose"
 msgstr ""
 
-#: src/syspurpose/cli.py:350
+#: src/syspurpose/cli.py:348
 msgid ""
 "WARNING: Setting syspurpose in containers has no effect.\n"
 "Please run syspurpose on the host.\n"
 msgstr ""
 
-#: src/syspurpose/cli.py:364
+#: src/syspurpose/cli.py:360
 msgid ""
 "Warning: Unable to sync system purpose with subscription management server: "
 "subscription_manager module is not available."
