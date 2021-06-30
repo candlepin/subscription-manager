@@ -21,17 +21,22 @@ This module contains several utils used for VMs running on clouds
 from typing import Union, Tuple, List
 
 import logging
-import base64
 
-from rhsmlib.facts.host_collector import HostCollector
-from rhsmlib.facts.hwprobe import HardwareCollector
-from rhsmlib.facts.custom import CustomFactsCollector
+try:
+    # When subscription-manager is installed, then use facts collectors from this package
+    from rhsmlib.facts.host_collector import HostCollector
+    from rhsmlib.facts.custom import CustomFactsCollector
+except ImportError:
+    # When it is not possible to import host and custom collector,
+    # then import own minimalistic collectors
+    from cloud_what.fact_collector import MiniHostCollector as HostCollector
+    from cloud_what.fact_collector import MiniCustomFactsCollector as CustomFactsCollector
 
-from rhsmlib.cloud._base_provider import BaseCloudProvider
+from cloud_what._base_provider import BaseCloudProvider
 
-from rhsmlib.cloud.providers.aws import AWSCloudProvider
-from rhsmlib.cloud.providers.azure import AzureCloudProvider
-from rhsmlib.cloud.providers.gcp import GCPCloudProvider
+from cloud_what.providers.aws import AWSCloudProvider
+from cloud_what.providers.azure import AzureCloudProvider
+from cloud_what.providers.gcp import GCPCloudProvider
 
 
 # List of classes with supported cloud providers
@@ -45,16 +50,15 @@ CLOUD_PROVIDERS = [
 log = logging.getLogger(__name__)
 
 
-def _gather_system_facts() -> dict:
+def gather_system_facts() -> dict:
     """
-    Try to gather system facts
+    Try to gather system facts necessary for detection of cloud provider
     :return: Dictionary with system facts
     """
     facts = {}
 
-    # Gather only information about hardware, virtualization and custom facts
+    # Gather only basic information about hardware, virtualization and custom facts
     facts.update(HostCollector().get_all())
-    facts.update(HardwareCollector().get_all())
 
     # When cloud provider will change information provided by SM BIOS, then
     # customers will be able to create simple workaround using custom facts.
@@ -71,7 +75,7 @@ def _get_cloud_providers(facts: dict = None, threshold: float = 0.5) -> Tuple[li
     :return: List of cloud providers
     """
     if facts is None:
-        facts = _gather_system_facts()
+        facts = gather_system_facts()
 
     # Create instances of all supported cloud providers
     cloud_providers = [cls(facts) for cls in CLOUD_PROVIDERS]
@@ -182,64 +186,8 @@ def detect_cloud_provider(facts: dict = None, threshold: float = 0.5) -> List[st
     return cloud_list
 
 
-def collect_cloud_info(cloud_list: list) -> dict:
-    """
-    Try to collect cloud information: metadata and signature provided by cloud provider.
-    :param cloud_list: The list of detected cloud providers. In most cases the list contains only one item.
-    :return: The dictionary with metadata and signature (when signature is provided by cloud provider).
-        Metadata and signature are base64 encoded. Empty dictionary is returned, when it wasn't
-        possible to collect any metadata
-    """
-
-    # Create dispatcher dictionary from the list of supported cloud providers
-    cloud_providers = {
-        provider_cls.CLOUD_PROVIDER_ID: provider_cls for provider_cls in CLOUD_PROVIDERS
-    }
-
-    result = {}
-    # Go through the list of detected cloud providers and try to collect
-    # metadata. When metadata are gathered, then break the loop
-    for cloud_provider_id in cloud_list:
-        # hw_info is set to {}, because we do not need to detect cloud providers
-        cloud_provider: BaseCloudProvider = cloud_providers[cloud_provider_id](hw_info={})
-
-        # Try to get metadata first
-        metadata: Union[str, None] = cloud_provider.get_metadata()
-
-        # When it wasn't possible to get metadata for this cloud provider, then
-        # continue with next detected cloud provider
-        if metadata is None:
-            log.warning(f'No metadata gathered for cloud provider: {cloud_provider_id}')
-            continue
-
-        # Try to get signature
-        signature: Union[str, None] = cloud_provider.get_signature()
-
-        # When it is not possible to get signature for given cloud provider,
-        # then silently set signature to empty string, because some cloud
-        # providers does not provide signatures
-        if signature is None:
-            signature = ""
-
-        log.info(f'Metadata and signature gathered for cloud provider: {cloud_provider_id}')
-
-        # Encode metadata and signature using base64 encoding. Because base64.b64encode
-        # returns values as bytes, then we decode it to string using ASCII encoding.
-        b64_metadata: str = base64.b64encode(bytes(metadata, 'utf-8')).decode('ascii')
-        b64_signature: str = base64.b64encode(bytes(signature, 'utf-8')).decode('ascii')
-
-        result = {
-            'cloud_id': cloud_provider_id,
-            'metadata': b64_metadata,
-            'signature': b64_signature
-        }
-        break
-
-    return result
-
-
 # Some temporary smoke testing code. You can test this module using:
-# sudo PYTHONPATH=./src python3 -m rhsmlib.cloud.provider
+# sudo PYTHONPATH=./src python3 -m cloud_what.provider
 if __name__ == '__main__':
     import sys
 
@@ -252,8 +200,13 @@ if __name__ == '__main__':
     handler.setFormatter(formatter)
     root.addHandler(handler)
 
+    # Try to detect cloud provider with facts provided by rhsmlib.facts
     _detector_result = detect_cloud_provider()
     print(f'>>> debug <<< detector result: {_detector_result}')
-    if len(_detector_result) > 0:
-        _collector_result = collect_cloud_info(_detector_result)
-        print(f'>>> debug <<< collector result: {_collector_result}')
+
+    # Try to detect cloud provider using own detector
+    from cloud_what.fact_collector import MiniHostCollector
+    collector = MiniHostCollector()
+    facts = collector.get_all()
+    _detector_result = detect_cloud_provider(facts)
+    print(f'>>> debug <<< detector result (minimalistic): {_detector_result}')

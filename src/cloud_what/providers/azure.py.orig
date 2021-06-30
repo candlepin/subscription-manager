@@ -23,7 +23,7 @@ import logging
 import json
 from typing import Union, List
 
-from rhsmlib.cloud._base_provider import BaseCloudProvider
+from cloud_what._base_provider import BaseCloudProvider
 
 
 log = logging.getLogger(__name__)
@@ -62,7 +62,11 @@ class AzureCloudProvider(BaseCloudProvider):
 
     # HTTP header "Metadata" has to be equal to "true" to be able to get metadata
     HTTP_HEADERS = {
+<<<<<<< HEAD:src/cloud_what/providers/azure.py
+        'User-Agent': 'cloud-what/1.0',
+=======
         'User-Agent': 'RHSM/1.0',
+>>>>>>> main:src/rhsmlib/cloud/providers/azure.py
         "Metadata": "true"
     }
 
@@ -243,7 +247,6 @@ def _smoke_tests():
     """
     # Gather only information about hardware and virtualization
     from rhsmlib.facts.host_collector import HostCollector
-    from rhsmlib.facts.hwprobe import HardwareCollector
 
     import sys
 
@@ -258,7 +261,6 @@ def _smoke_tests():
 
     facts = {}
     facts.update(HostCollector().get_all())
-    facts.update(HardwareCollector().get_all())
     azure_cloud_provider = AzureCloudProvider(facts)
     result = azure_cloud_provider.is_running_on_cloud()
     probability = azure_cloud_provider.is_likely_running_on_cloud()
@@ -288,6 +290,6 @@ def _smoke_tests():
 
 
 # Some temporary smoke testing code. You can test this module using:
-# sudo PYTHONPATH=./src python3 -m rhsmlib.cloud.providers.azure
+# sudo PYTHONPATH=./src python3 -m cloud_what.providers.azure
 if __name__ == '__main__':
     _smoke_tests()

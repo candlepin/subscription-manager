@@ -30,6 +30,8 @@ if six.PY2:
 import signal
 import logging
 import dbus.mainloop.glib
+import base64
+from typing import Union
 
 import subscription_manager.injection as inj
 
@@ -50,12 +52,69 @@ from subscription_manager.utils import generate_correlation_id
 
 from subscription_manager.i18n import ugettext as _
 
-from rhsmlib.cloud.provider import detect_cloud_provider, collect_cloud_info
+from cloud_what.provider import detect_cloud_provider, CLOUD_PROVIDERS, BaseCloudProvider
 from rhsmlib.services.register import RegisterService
 
 
 def exit_on_signal(_signumber, _stackframe):
     sys.exit(0)
+
+
+def _collect_cloud_info(cloud_list: list, log) -> dict:
+    """
+    Try to collect cloud information: metadata and signature provided by cloud provider.
+    :param cloud_list: The list of detected cloud providers. In most cases the list contains only one item.
+    :param log: logging object
+    :return: The dictionary with metadata and signature (when signature is provided by cloud provider).
+        Metadata and signature are base64 encoded. Empty dictionary is returned, when it wasn't
+        possible to collect any metadata
+    """
+
+    # Create dispatcher dictionary from the list of supported cloud providers
+    cloud_providers = {
+        provider_cls.CLOUD_PROVIDER_ID: provider_cls for provider_cls in CLOUD_PROVIDERS
+    }
+
+    result = {}
+    # Go through the list of detected cloud providers and try to collect
+    # metadata. When metadata are gathered, then break the loop
+    for cloud_provider_id in cloud_list:
+        # hw_info is set to {}, because we do not need to detect cloud providers
+        cloud_provider: BaseCloudProvider = cloud_providers[cloud_provider_id](hw_info={})
+
+        # Try to get metadata first
+        metadata: Union[str, None] = cloud_provider.get_metadata()
+
+        # When it wasn't possible to get metadata for this cloud provider, then
+        # continue with next detected cloud provider
+        if metadata is None:
+            log.warning(f'No metadata gathered for cloud provider: {cloud_provider_id}')
+            continue
+
+        # Try to get signature
+        signature: Union[str, None] = cloud_provider.get_signature()
+
+        # When it is not possible to get signature for given cloud provider,
+        # then silently set signature to empty string, because some cloud
+        # providers does not provide signatures
+        if signature is None:
+            signature = ""
+
+        log.info(f'Metadata and signature gathered for cloud provider: {cloud_provider_id}')
+
+        # Encode metadata and signature using base64 encoding. Because base64.b64encode
+        # returns values as bytes, then we decode it to string using ASCII encoding.
+        b64_metadata: str = base64.b64encode(bytes(metadata, 'utf-8')).decode('ascii')
+        b64_signature: str = base64.b64encode(bytes(signature, 'utf-8')).decode('ascii')
+
+        result = {
+            'cloud_id': cloud_provider_id,
+            'metadata': b64_metadata,
+            'signature': b64_signature
+        }
+        break
+
+    return result
 
 
 def _auto_register(cp_provider, log):
@@ -84,7 +143,7 @@ def _auto_register(cp_provider, log):
 
     # When some cloud provider(s) was detected, then try to collect metadata
     # and signature
-    cloud_info = collect_cloud_info(cloud_list)
+    cloud_info = _collect_cloud_info(cloud_list, log)
     if len(cloud_info) == 0:
         log.warning('It was not possible to collect any cloud metadata. Unable to perform auto-registration')
         sys.exit(-1)

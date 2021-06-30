@@ -20,7 +20,7 @@ from __future__ import print_function, division, absolute_import
 import logging
 import json
 
-from rhsmlib.cloud.provider import get_cloud_provider
+from cloud_what.provider import get_cloud_provider
 from rhsmlib.facts import collector
 
 

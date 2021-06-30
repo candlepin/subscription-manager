@@ -321,8 +321,6 @@ Requires: python3-dbus
 Requires: %{?suse_version:dbus-1-python} %{!?suse_version:dbus-python}
 %endif
 
-Requires: python3-requests
-
 %if %{use_yum}
 Requires: %{?suse_version:yum} %{!?suse_version:yum >= 3.2.29-73}
 %endif
@@ -367,6 +365,8 @@ Requires: %{?suse_version:aaa_base} %{!?suse_version:chkconfig}
 Requires(post): %{?suse_version:aaa_base} %{!?suse_version:chkconfig}
 Requires(preun): %{?suse_version:aaa_base} %{!?suse_version:chkconfig, initscripts}
 %endif
+
+Requires: python3-cloud-what = %{version}-%{release}
 
 BuildRequires: %{?suse_version:python-devel >= 2.6} %{!?suse_version:%{py_package_prefix}-devel}
 BuildRequires: openssl-devel
@@ -698,6 +698,7 @@ Requires: subscription-manager-rhsm-certificates = %{version}-%{release}
 # Required by Fedora packaging guidelines
 %{?python_provide:%python_provide %{py_package_prefix}-rhsm}
 %if %{with python3}
+Requires: python3-cloud-what = %{version}-%{release}
 Requires: python3-rpm
 Provides: python3-rhsm = %{version}-%{release}
 Obsoletes: python3-rhsm <= 1.20.3-1
@@ -798,6 +799,21 @@ This package contains the desktop icons for the graphical interfaces provided fo
 of Red Hat subscriptions. There are many such interfaces, subscription-manager-gui,
 subscription-manager-initial-setup-addon, and subscription-manager-cockpit-plugin primarily.
 %endif
+
+
+%package -n python3-cloud-what
+Summary: Python package for detection of public cloud provider
+License: GPLv2
+BuildArch: noarch
+Requires: python3-requests
+%ifnarch aarch64 ppc ppc64 ppc64le s390 s390x
+Requires:  %{py_package_prefix}-dmidecode %{?dmidecode_version}
+%endif
+
+%description -n python3-cloud-what
+This package contains a Python module for detection and collection of public
+cloud metadata and signatures.
+
 
 %prep
 %setup -q
@@ -956,8 +972,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %endif
 
 %dir %{python_sitearch}/rhsmlib/candlepin
-%dir %{python_sitearch}/rhsmlib/cloud
-%dir %{python_sitearch}/rhsmlib/cloud/providers
 %dir %{python_sitearch}/rhsmlib/compat
 %dir %{python_sitearch}/rhsmlib/dbus
 %dir %{python_sitearch}/rhsmlib/dbus/facts
@@ -1121,8 +1135,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %dir %{python_sitearch}/rhsmlib
 %{python_sitearch}/rhsmlib/*.py*
 %{python_sitearch}/rhsmlib/candlepin/*.py*
-%{python_sitearch}/rhsmlib/cloud/*.py*
-%{python_sitearch}/rhsmlib/cloud/providers/*.py*
 %{python_sitearch}/rhsmlib/compat/*.py*
 %{python_sitearch}/rhsmlib/facts/*.py*
 %{python_sitearch}/rhsmlib/services/*.py*
@@ -1132,8 +1144,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %if %{with python3}
 %{python_sitearch}/rhsmlib/__pycache__
 %{python_sitearch}/rhsmlib/candlepin/__pycache__
-%{python_sitearch}/rhsmlib/cloud/__pycache__
-%{python_sitearch}/rhsmlib/cloud/providers/__pycache__
 %{python_sitearch}/rhsmlib/compat/__pycache__
 %{python_sitearch}/rhsmlib/dbus/__pycache__
 %{python_sitearch}/rhsmlib/dbus/facts/__pycache__
@@ -1370,6 +1380,16 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %defattr(-,root,root,-)
 %dir %{python2_sitearch}/rhsm
 %{python2_sitearch}/rhsm/*
+%endif
+
+%files -n python3-cloud-what
+%defattr(-,root,root,-)
+%dir %{python_sitearch}/cloud_what
+%dir %{python_sitearch}/cloud_what/providers
+%{python_sitearch}/cloud_what/*
+%if %{with python3}
+%{python_sitearch}/cloud_what/__pycache__
+%{python_sitearch}/cloud_what/providers/__pycache__
 %endif
 
 %files -n subscription-manager-rhsm-certificates

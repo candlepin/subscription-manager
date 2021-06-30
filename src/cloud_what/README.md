@@ -35,7 +35,7 @@ import logging
 
 from typing import Union
 
-from rhsmlib.cloud._base_provider import BaseCloudProvider
+from cloud_what._base_provider import BaseCloudProvider
 
 
 log = logging.getLogger(__name__)
@@ -61,7 +61,7 @@ class FooCloudProvider(BaseCloudProvider):
     SIGNATURE_CACHE_FILE = None
 
     HTTP_HEADERS = {
-        'user-agent': 'RHSM/1.0',
+        'user-agent': 'cloud-what/1.0',
     }
 
     TIMEOUT = 1.0
@@ -143,6 +143,7 @@ class FooCloudProvider(BaseCloudProvider):
         This method tries to get data from server using GET method
         :param data_type: string representation of data type used in log messages (e.g. "metadata", "signature")
         :param url: URL of GET request
+        :param headers: HTTP headers
         :return: String of body, when request was successful; otherwise return None
         """
         return super(FooCloudProvider, self)._get_data_from_server(data_type, url, headers)
@@ -191,7 +192,7 @@ class FooCloudProvider(BaseCloudProvider):
 ```
 
 When implementation of cloud provider is finished, then please modify list of providers
-in `rhsmlib/cloud/provider.py` accordingly:
+in `cloud_what/provider.py` accordingly:
 
 ```python
 # List of detector classes with supported cloud providers
@@ -202,4 +203,4 @@ CLOUD_PROVIDERS = [
 ```
 
 When implementation of your cloud detector and collector is finished, then please implement some unit tests in
-`test/rhsmlib_test/test_cloud.py` or you can implement tests first if you prefer test driven development.
+`test/cloud_what/test_cloud_what.py` or you can implement tests first if you prefer test driven development.

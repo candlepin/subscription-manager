@@ -64,11 +64,11 @@ class BaseCloudProvider(object):
     CLOUD_PROVIDER_SIGNATURE_TYPE = None
 
     # Default value of path to cache file holding metadata
-    # (e.g. /var/lib/rhsm/cache/cool_cloud_metadata.json)
+    # (e.g. /var/lib/cloud-what/cache/cool_cloud_metadata.json)
     METADATA_CACHE_FILE = None
 
     # Default value of path to holding signature of metadata
-    # (e.g. /var/lib/rhsm/cache/cool_cloud_signature.json)
+    # (e.g. /var/lib/cloud-what/cache/cool_cloud_signature.json)
     SIGNATURE_CACHE_FILE = None
 
     # Custom HTTP headers like user-agent
@@ -166,6 +166,13 @@ class BaseCloudProvider(object):
             "ttl": str(self._token_ttl),
             "token": self._token
         }
+
+        token_cache_dir = os.path.dirname(self.TOKEN_CACHE_FILE)
+        try:
+            os.makedirs(token_cache_dir, exist_ok=True)
+        except OSError as err_msg:
+            log.debug(f'Unable to create cache directory {token_cache_dir}: {err_msg}')
+            return
 
         log.debug(f'Writing {self.CLOUD_PROVIDER_ID} token to file {self.TOKEN_CACHE_FILE}')
 
