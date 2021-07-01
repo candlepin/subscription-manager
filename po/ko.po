@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-29 06:33+0200\n"
-"PO-Revision-Date: 2021-06-21 12:04+0000\n"
+"PO-Revision-Date: 2021-06-30 15:06+0000\n"
 "Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ko/>\n"
@@ -2105,12 +2105,11 @@ msgstr ""
 "해 사용 가능한 값이 없습니다."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:371
-#, fuzzy, python-brace-format
-#| msgid "Unable to get list of valid values for \"{syspurpose_attr}\""
+#, python-brace-format
 msgid ""
 "Unable to get the list of valid values for the system purpose "
 "\"{syspurpose_attr}\"."
-msgstr "\"{syspurpose_attr}\"를 위하여 유효 값 목록을 가져 올 수 없습니다"
+msgstr "시스템 용도 “{syspurpose_attr}”를 위한 유효한 값 목록을 가져올 수 없습니다."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:390
 msgid "Unable to connect to server using token"
@@ -2331,10 +2330,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:168
-#, fuzzy
-#| msgid "proxy URL in the form of proxy_hostname:proxy_port"
 msgid "proxy URL in the form of hostname:port"
-msgstr "proxy_hostname:proxy_port 형식의 프록시 URL"
+msgstr "hostname:port의 형식에서 프락시 URL"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:170
@@ -3830,10 +3827,9 @@ msgstr "현재 시스템 목적 표시"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/syspurpose.py:85
-#, fuzzy, python-brace-format
-#| msgid "{prog}: error: {msg}"
+#, python-brace-format
 msgid "{prog} {name}"
-msgstr "{prog}: 오류: {msg}"
+msgstr "{prog}:{msg}"
 
 #: src/subscription_manager/cli_command/syspurpose.py:87
 msgid "Syspurpose submodules"
