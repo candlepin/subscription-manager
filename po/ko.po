@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-30 16:41+0200\n"
-"PO-Revision-Date: 2021-06-30 15:06+0000\n"
+"PO-Revision-Date: 2021-07-01 17:12+0000\n"
 "Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ko/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7\n"
+"X-Generator: Weblate 4.7.1\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -3830,7 +3830,7 @@ msgstr "현재 시스템 목적 표시"
 #: src/subscription_manager/cli_command/syspurpose.py:85
 #, python-brace-format
 msgid "{prog} {name}"
-msgstr "{prog}:{msg}"
+msgstr "{prog} {name}"
 
 #: src/subscription_manager/cli_command/syspurpose.py:87
 msgid "Syspurpose submodules"
@@ -3838,10 +3838,9 @@ msgstr "Syspurpose 하위모듈"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/syspurpose.py:101
-#, fuzzy, python-format, python-brace-format
-#| msgid "%(prog)s {name} [OPTIONS]"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
-msgstr "%(prog)s {name} [옵션]"
+msgstr "%(prog)s {name} [SUBMODULE] [OPTIONS]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/unregister.py:39
