@@ -24,12 +24,18 @@ import logging
 import time
 import os
 
-from typing import Union
+from typing import Union, Any
 
 from cloud_what._base_provider import BaseCloudProvider
 
 
 log = logging.getLogger(__name__)
+
+# Instance from one region will be redirected to another region's CDS for content
+REDIRECT_MAP = {
+    'us-gov-west-1': 'us-west-2',
+    'us-gov-east-1': 'us-east-2'
+}
 
 
 class AWSCloudProvider(BaseCloudProvider):
@@ -132,6 +138,39 @@ class AWSCloudProvider(BaseCloudProvider):
             probability += 0.1
 
         return probability
+
+    @staticmethod
+    def fix_rhui_url_template(repo: Any, region: str) -> None:
+        """
+        Try to fix URL of RHUI repository on AWS
+        :param repo: DNF object of repository
+        :param region: string representing region
+        :return: None
+        """
+        if region in REDIRECT_MAP:
+            region = REDIRECT_MAP[region]
+
+        if repo.baseurl:
+            repo.baseurl = tuple(
+                url.replace('REGION', region, 1) for url in repo.baseurl
+            )
+        elif repo.mirrorlist:
+            repo.mirrorlist = repo.mirrorlist.replace('REGION', region, 1)
+        else:
+            raise ValueError(f"RHUI repository {repo.name} does not have any url")
+
+    @staticmethod
+    def rhui_repos(base: Any) -> Any:
+        """
+        Generator of RHUI repositories. Could be used e.g. in for loop
+        :param base: DNF base
+        :return: Yields RHUI repositories
+        """
+        for repo_name, repo in base.repos.items():
+            # TODO: we need more reliable mechanism for detection of RHUI repository, because
+            # CDN provides some repositories containing 'rhui-' in the repository name too.
+            if 'rhui-' in repo_name:
+                yield repo
 
     def _get_metadata_from_cache(self) -> None:
         """
