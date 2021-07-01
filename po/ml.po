@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-29 06:33+0200\n"
+"POT-Creation-Date: 2021-06-30 16:41+0200\n"
 "PO-Revision-Date: 2015-09-25 03:38-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Malayalam\n"
@@ -4376,6 +4376,14 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
+#: src/subscription_manager/cli_command/syspurpose.py:101
+#, fuzzy, python-format, python-brace-format
+#| msgid "%prog [OPTIONS]"
+msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
+msgstr "%prog [ഐച്ഛികങ്ങള്‍]"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
 #: src/subscription_manager/cli_command/unregister.py:39
 #: src/subscription_manager/gui/registergui.py:210
 #: src/subscription_manager/gui/registergui.py:454
@@ -4549,7 +4557,7 @@ msgstr "തെറ്റായ സിഎ സര്‍ട്ടിഫിക്ക�
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/exceptions.py:38
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:168
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
 msgid "Your identity certificate has expired"
 msgstr "നിങ്ങളുടെ തിരിച്ചറിയല്‍ സര്‍ട്ടിഫിക്കേറ്റിന്റെ കാലാവധി കഴിഞ്ഞിരിയ്ക്കുന്നു."
 
@@ -7624,13 +7632,13 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:149
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:208
 msgid "Updating entitlement certificates & repositories"
 msgstr "എന്റൈറ്റില്‍മെന്റ് സര്‍ട്ടിഫിക്കേറ്റുകളും റിപ്പോസിറ്ററികളും പരിഷ്കരിയ്ക്കുന്നു"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:286
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "എന്റൈറ്റില്‍മെന്റ് സര്‍ട്ടിഫിക്കേറ്റുകളും റിപ്പോസിറ്ററികളും പരിഷ്കരിയ്ക്കുവാന്‍ സാധ്യമല്ല"
 

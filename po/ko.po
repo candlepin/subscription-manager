@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-29 06:33+0200\n"
+"POT-Creation-Date: 2021-06-30 16:41+0200\n"
 "PO-Revision-Date: 2021-06-30 15:06+0000\n"
 "Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
@@ -2109,7 +2109,8 @@ msgstr ""
 msgid ""
 "Unable to get the list of valid values for the system purpose "
 "\"{syspurpose_attr}\"."
-msgstr "시스템 용도 “{syspurpose_attr}”를 위한 유효한 값 목록을 가져올 수 없습니다."
+msgstr ""
+"시스템 용도 “{syspurpose_attr}”를 위한 유효한 값 목록을 가져올 수 없습니다."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:390
 msgid "Unable to connect to server using token"
@@ -3836,6 +3837,13 @@ msgid "Syspurpose submodules"
 msgstr "Syspurpose 하위모듈"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: src/subscription_manager/cli_command/syspurpose.py:101
+#, fuzzy, python-format, python-brace-format
+#| msgid "%(prog)s {name} [OPTIONS]"
+msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
+msgstr "%(prog)s {name} [옵션]"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/unregister.py:39
 #: src/subscription_manager/gui/registergui.py:210
 #: src/subscription_manager/gui/registergui.py:454
@@ -3981,7 +3989,7 @@ msgstr "잘못된 CA 인증서: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:38
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:168
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
 msgid "Your identity certificate has expired"
 msgstr "ID 인증서가 만료되었습니다"
 
@@ -6731,12 +6739,12 @@ msgid "Error uploading package profile: %s\n"
 msgstr "패키지 프로파일 업로드 중 오류 발생: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:149
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:208
 msgid "Updating entitlement certificates & repositories"
 msgstr "인타이틀먼트 인증서 & 레포지터리 업데이트하기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:286
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "인타이틀먼트 인증서 및 레포지터리를 업데이트할 수 없음"
 

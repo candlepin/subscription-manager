@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-29 06:33+0200\n"
+"POT-Creation-Date: 2021-06-30 16:41+0200\n"
 "PO-Revision-Date: 2021-06-15 18:55+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
@@ -3948,6 +3948,13 @@ msgstr "{prog}: errore: {msg}"
 msgid "Syspurpose submodules"
 msgstr ""
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
+#: src/subscription_manager/cli_command/syspurpose.py:101
+#, fuzzy, python-format, python-brace-format
+#| msgid "%(prog)s {name} [OPTIONS]"
+msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
+msgstr "%(prog)s {name} [OPZIONI]"
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/unregister.py:39
 #: src/subscription_manager/gui/registergui.py:210
@@ -4098,7 +4105,7 @@ msgstr "Certificato CA errato: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/exceptions.py:38
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:168
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
 msgid "Your identity certificate has expired"
 msgstr "Il certificato d'identità è scaduto"
 
@@ -6874,12 +6881,12 @@ msgid "Error uploading package profile: %s\n"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:149
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:208
 msgid "Updating entitlement certificates & repositories"
 msgstr "Aggiornamento certificati per l'entitlement & repository in corso"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:286
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "Impossibile aggiornare i certificati per l'entitlement e repository"
 

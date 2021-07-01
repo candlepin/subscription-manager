@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-29 06:33+0200\n"
+"POT-Creation-Date: 2021-06-30 16:41+0200\n"
 "PO-Revision-Date: 2015-09-25 02:52-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Assamese\n"
@@ -4269,6 +4269,14 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
+#: src/subscription_manager/cli_command/syspurpose.py:101
+#, fuzzy, python-format, python-brace-format
+#| msgid "%prog [OPTIONS]"
+msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
+msgstr "%prog [বিকল্পসমূহ]"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
 #: src/subscription_manager/cli_command/unregister.py:39
 #: src/subscription_manager/gui/registergui.py:210
 #: src/subscription_manager/gui/registergui.py:454
@@ -4438,7 +4446,7 @@ msgstr "বেয়া CA প্ৰমাণপত্ৰ: %s"
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
 #: src/subscription_manager/exceptions.py:38
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:168
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
 msgid "Your identity certificate has expired"
 msgstr "আপোনাৰ পৰিচয় প্ৰমাণপত্ৰৰ অৱসান ঘটিছে"
 
@@ -7407,13 +7415,13 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:149
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:208
 msgid "Updating entitlement certificates & repositories"
 msgstr "অনুজ্ঞা প্ৰমাণপত্ৰসমূহ & ভঁৰালসমূহ আপডেইট কৰা হৈছে"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author ngoswami
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:286
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "অনুজ্ঞা প্ৰমাণপত্ৰসমূহ আৰু ভঁৰালসমূহ আপডেইট কৰিবলে অক্ষম"
 
