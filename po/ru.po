@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-15 18:32+0200\n"
+"POT-Creation-Date: 2021-06-29 06:33+0200\n"
 "PO-Revision-Date: 2019-02-08 09:49+0000\n"
 "Last-Translator: ljanda <ljanda@redhat.com>\n"
 "Language-Team: Russian\n"
@@ -2155,12 +2155,12 @@ msgstr "Текущий {name}: {val}"
 msgid "{name} not set."
 msgstr "{name} не установлен."
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:356
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:357
 #, python-brace-format
 msgid "Available {syspurpose_attr}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:366
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:367
 #: src/subscription_manager/cli_command/service_level.py:183
 #, python-brace-format
 msgid ""
@@ -2168,19 +2168,26 @@ msgid ""
 "from the available subscriptions in this organization."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:386
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:371
+#, python-brace-format
+msgid ""
+"Unable to get the list of valid values for the system purpose "
+"\"{syspurpose_attr}\"."
+msgstr ""
+
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:390
 msgid "Unable to connect to server using token"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:430
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:434
 #: src/subscription_manager/i18n_argparse.py:38
 #, fuzzy, python-format
 #| msgid "%prog [OPTIONS]"
 msgid "%(prog)s [OPTIONS]"
 msgstr "%prog [ПАРАМЕТРЫ]"
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:436
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:440
 #, python-brace-format
 msgid ""
 "Note: The currently configured entitlement server does not support System "
@@ -2393,7 +2400,9 @@ msgstr "не проверять SSL-сертификат сервера в до�
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:168
-msgid "proxy URL in the form of proxy_hostname:proxy_port"
+#, fuzzy
+#| msgid "proxy URL in the form of proxy_hostname:proxy_port"
+msgid "proxy URL in the form of hostname:port"
 msgstr "адрес прокси в формате proxy_hostname:proxy_port"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -3967,15 +3976,22 @@ msgstr ""
 msgid "System Purpose Status: {status}"
 msgstr "Состояние цели системы: %s\n"
 
-#: src/subscription_manager/cli_command/syspurpose.py:51
+#: src/subscription_manager/cli_command/syspurpose.py:53
 msgid "Convenient module for managing all system purpose settings"
 msgstr ""
 
-#: src/subscription_manager/cli_command/syspurpose.py:61
+#: src/subscription_manager/cli_command/syspurpose.py:63
 msgid "show current system purpose"
 msgstr ""
 
-#: src/subscription_manager/cli_command/syspurpose.py:78
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: src/subscription_manager/cli_command/syspurpose.py:85
+#, fuzzy, python-brace-format
+#| msgid "%s: error: %s"
+msgid "{prog} {name}"
+msgstr "%s: ошибка: %s"
+
+#: src/subscription_manager/cli_command/syspurpose.py:87
 msgid "Syspurpose submodules"
 msgstr ""
 
@@ -4072,7 +4088,7 @@ msgstr "Ожидаемый (UEP) серийный N %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/entcertlib.py:465
-#: src/subscription_manager/repolib.py:647
+#: src/subscription_manager/repolib.py:650
 msgid "Added (new)"
 msgstr "Добавлены (новые)"
 
@@ -6885,20 +6901,20 @@ msgstr ""
 "подпиской Red Hat. Если это нежелательно, используйте «subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0» для блокировки этого поведения."
 
-#: src/subscription_manager/repolib.py:643
+#: src/subscription_manager/repolib.py:646
 msgid "Repo updates"
 msgstr "Обновления репозиториев"
 
-#: src/subscription_manager/repolib.py:644
+#: src/subscription_manager/repolib.py:647
 #, python-format
 msgid "Total repo updates: %d"
 msgstr "Всего обновлений репозиториев: %d"
 
-#: src/subscription_manager/repolib.py:645
+#: src/subscription_manager/repolib.py:648
 msgid "Updated"
 msgstr "Обновлено"
 
-#: src/subscription_manager/repolib.py:649
+#: src/subscription_manager/repolib.py:652
 msgid "Deleted"
 msgstr "Удалено"
 

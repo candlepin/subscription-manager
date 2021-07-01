@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-15 18:32+0200\n"
+"POT-Creation-Date: 2021-06-29 06:33+0200\n"
 "PO-Revision-Date: 2015-09-25 03:30-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Bengali (India)\n"
@@ -2334,12 +2334,12 @@ msgstr ""
 msgid "{name} not set."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:356
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:357
 #, python-brace-format
 msgid "Available {syspurpose_attr}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:366
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:367
 #: src/subscription_manager/cli_command/service_level.py:183
 #, python-brace-format
 msgid ""
@@ -2347,20 +2347,27 @@ msgid ""
 "from the available subscriptions in this organization."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:386
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:371
+#, python-brace-format
+msgid ""
+"Unable to get the list of valid values for the system purpose "
+"\"{syspurpose_attr}\"."
+msgstr ""
+
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:390
 msgid "Unable to connect to server using token"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:430
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:434
 #: src/subscription_manager/i18n_argparse.py:38
 #, fuzzy, python-format
 #| msgid "%prog [OPTIONS]"
 msgid "%(prog)s [OPTIONS]"
 msgstr "%prog [বিকল্প]"
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:436
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:440
 #, python-brace-format
 msgid ""
 "Note: The currently configured entitlement server does not support System "
@@ -2584,7 +2591,9 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author bnin
 #: src/subscription_manager/cli_command/cli.py:168
-msgid "proxy URL in the form of proxy_hostname:proxy_port"
+#, fuzzy
+#| msgid "proxy URL in the form of proxy_hostname:proxy_port"
+msgid "proxy URL in the form of hostname:port"
 msgstr "proxy_hostname:proxy_port বিন্যাসে লেখা প্রক্সি URL"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
@@ -4295,15 +4304,23 @@ msgstr "সার্বিক স্ট্যাটাস: %s\n"
 msgid "System Purpose Status: {status}"
 msgstr "সিস্টেম স্ট্যাটাসের বিস্তারিত"
 
-#: src/subscription_manager/cli_command/syspurpose.py:51
+#: src/subscription_manager/cli_command/syspurpose.py:53
 msgid "Convenient module for managing all system purpose settings"
 msgstr ""
 
-#: src/subscription_manager/cli_command/syspurpose.py:61
+#: src/subscription_manager/cli_command/syspurpose.py:63
 msgid "show current system purpose"
 msgstr ""
 
-#: src/subscription_manager/cli_command/syspurpose.py:78
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#: src/subscription_manager/cli_command/syspurpose.py:85
+#, fuzzy, python-brace-format
+#| msgid "%s: error: %s"
+msgid "{prog} {name}"
+msgstr "%s: ত্রুটি: %s"
+
+#: src/subscription_manager/cli_command/syspurpose.py:87
 msgid "Syspurpose submodules"
 msgstr ""
 
@@ -4412,7 +4429,7 @@ msgstr "প্রত্যাশিত (UEP) সিরিয়াল# %s"
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
 #: src/subscription_manager/entcertlib.py:465
-#: src/subscription_manager/repolib.py:647
+#: src/subscription_manager/repolib.py:650
 msgid "Added (new)"
 msgstr "যোগ করা (নতুন)"
 
@@ -7426,20 +7443,20 @@ msgid ""
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
 
-#: src/subscription_manager/repolib.py:643
+#: src/subscription_manager/repolib.py:646
 msgid "Repo updates"
 msgstr ""
 
-#: src/subscription_manager/repolib.py:644
+#: src/subscription_manager/repolib.py:647
 #, python-format
 msgid "Total repo updates: %d"
 msgstr "সর্বমোট রেপো অাপডেট: %d"
 
-#: src/subscription_manager/repolib.py:645
+#: src/subscription_manager/repolib.py:648
 msgid "Updated"
 msgstr "আপডেট করা হয়েছে"
 
-#: src/subscription_manager/repolib.py:649
+#: src/subscription_manager/repolib.py:652
 msgid "Deleted"
 msgstr "মোছা হয়েছে"
 

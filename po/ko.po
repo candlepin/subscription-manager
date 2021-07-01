@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-15 18:32+0200\n"
+"POT-Creation-Date: 2021-06-29 06:33+0200\n"
 "PO-Revision-Date: 2021-06-21 12:04+0000\n"
 "Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
@@ -776,8 +776,9 @@ msgstr ""
 "*** 경고 ***\n"
 "다음 제품의 서브스크립션이 만료되었습니다:\n"
 "%s\n"
-"이러한 제품을 제공하는 레포지터리에 더이상 적근 할 수 없습니다.  보안 및 기타 중요 업데이트에 액세스하려면 활성 서브스크립션이 "
-"필요합니다. 활성 서브스크립션이 없을 경우 만료된 서브스크립션을 갱신할 수 있습니다.  "
+"이러한 제품을 제공하는 레포지터리에 더이상 적근 할 수 없습니다.  보안 및 기"
+"타 중요 업데이트에 액세스하려면 활성 서브스크립션이 필요합니다. 활성 서브스크"
+"립션이 없을 경우 만료된 서브스크립션을 갱신할 수 있습니다.  "
 
 #: src/dnf-plugins/subscription-manager.py:50
 msgid ""
@@ -809,8 +810,8 @@ msgid ""
 "subscription-manager plugin disabled %d system repositories with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
 msgstr ""
-"subscription-manager 플러그인이 /etc/dnf/plugins/subscription-manager.conf의 구성과 "
-"관련된 %d 시스템 레포지터리를 비활성화했습니다"
+"subscription-manager 플러그인이 /etc/dnf/plugins/subscription-manager.conf의 "
+"구성과 관련된 %d 시스템 레포지터리를 비활성화했습니다"
 
 #: src/dnf-plugins/subscription-manager.py:128
 msgid "Updating Subscription Management repositories."
@@ -2059,8 +2060,8 @@ msgid ""
 "system purpose \"{attr}\".  This setting will not influence auto-attaching "
 "subscriptions."
 msgstr ""
-"경고: 이 조직은 시스템 목적 \"{attr}\"를 제공하는 어떤 서브스크립션을 가지고 있지 않습니다.이 설정은 자동-첨부 서브스크립션에 "
-"영향을 주지 않을 것입니다."
+"경고: 이 조직은 시스템 목적 \"{attr}\"를 제공하는 어떤 서브스크립션을 가지고 "
+"있지 않습니다.이 설정은 자동-첨부 서브스크립션에 영향을 주지 않을 것입니다."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:250
 #, python-brace-format
@@ -2088,31 +2089,41 @@ msgstr "현재 {name}: {val}"
 msgid "{name} not set."
 msgstr "{name}은/는 설정되어 있지 않습니다."
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:356
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:357
 #, python-brace-format
 msgid "Available {syspurpose_attr}"
 msgstr "{syspurpose_attr} 사용 가능"
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:366
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:367
 #: src/subscription_manager/cli_command/service_level.py:183
 #, python-brace-format
 msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
-msgstr "이 조직에는 사용가능한 서브스크립션에서 시스템 목적\"{syspurpose_attr}\"을 위해 사용 가능한 값이 없습니다."
+msgstr ""
+"이 조직에는 사용가능한 서브스크립션에서 시스템 목적\"{syspurpose_attr}\"을 위"
+"해 사용 가능한 값이 없습니다."
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:386
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:371
+#, fuzzy, python-brace-format
+#| msgid "Unable to get list of valid values for \"{syspurpose_attr}\""
+msgid ""
+"Unable to get the list of valid values for the system purpose "
+"\"{syspurpose_attr}\"."
+msgstr "\"{syspurpose_attr}\"를 위하여 유효 값 목록을 가져 올 수 없습니다"
+
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:390
 msgid "Unable to connect to server using token"
 msgstr "토큰을 사용하여 서버에 연결할 수 없습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:430
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:434
 #: src/subscription_manager/i18n_argparse.py:38
 #, python-format
 msgid "%(prog)s [OPTIONS]"
 msgstr "%(prog)s [옵션]"
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:436
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:440
 #, python-brace-format
 msgid ""
 "Note: The currently configured entitlement server does not support System "
@@ -2320,7 +2331,9 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:168
-msgid "proxy URL in the form of proxy_hostname:proxy_port"
+#, fuzzy
+#| msgid "proxy URL in the form of proxy_hostname:proxy_port"
+msgid "proxy URL in the form of hostname:port"
 msgstr "proxy_hostname:proxy_port 형식의 프록시 URL"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -3123,18 +3136,22 @@ msgstr ""
 msgid ""
 "name and value of the option to override separated by a colon (can be "
 "specified more than once); used with --repo option."
-msgstr "재정의할 옵션 이름과 값을 쌍점(:)으로 구분합니다 (한번 이상 지정할 수 있음); --repo 선택과 함께 사용됩니다."
+msgstr ""
+"재정의할 옵션 이름과 값을 쌍점(:)으로 구분합니다 (한번 이상 지정할 수 있음); "
+"--repo 선택과 함께 사용됩니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:43
 msgid ""
 "remove all overrides; can be specific to a repository by providing --repo"
-msgstr "모든 재정의를 삭제합니다; --repo를 사용하여 레포지터리에 지정 할 수 있습니다"
+msgstr ""
+"모든 재정의를 삭제합니다; --repo를 사용하여 레포지터리에 지정 할 수 있습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:45
 msgid "list all overrides; can be specific to a repository by providing --repo"
-msgstr "모든 재정의를 나열합니다; --repo를 사용하여 레포지터리에 지정 할 수 있습니다"
+msgstr ""
+"모든 재정의를 나열합니다; --repo를 사용하여 레포지터리에 지정 할 수 있습니다"
 
 #: src/subscription_manager/cli_command/override.py:52
 msgid "You must specify an override in the form of \"name:value\" with --add."
@@ -3192,7 +3209,8 @@ msgstr "이 시스템에 적용되는 컨텐츠 재정의가 없습니다."
 msgid ""
 "Repository '{repo}' does not currently exist, but the override has been "
 "added."
-msgstr "현재 레포지터리 '{repo}'가 존재하지 않지만 덮어쓰기가 추가되어 있습니다."
+msgstr ""
+"현재 레포지터리 '{repo}'가 존재하지 않지만 덮어쓰기가 추가되어 있습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:153
@@ -3647,13 +3665,17 @@ msgstr "이 시스템에 대해 알려진 비활성화된 레포지터리를 나
 msgid ""
 "repository to enable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
-msgstr "활성화할 레포지터리입니다. (한 번 이상 지정할 수 있음). 와일드 카드 (* 및 ?)가 지원됩니다."
+msgstr ""
+"활성화할 레포지터리입니다. (한 번 이상 지정할 수 있음). 와일드 카드 (* 및 ?)"
+"가 지원됩니다."
 
 #: src/subscription_manager/cli_command/repos.py:51
 msgid ""
 "repository to disable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
-msgstr "비활성화할 레포지터리입니다 (한 번 이상 지정할 수 있음). 와일드 카드 (* 및 ?)가 지원됩니다."
+msgstr ""
+"비활성화할 레포지터리입니다 (한 번 이상 지정할 수 있음). 와일드 카드 (* 및 ?)"
+"가 지원됩니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/repos.py:129
@@ -3677,8 +3699,8 @@ msgid ""
 "Error: '{repoid}' does not match a valid repository ID. Use \"subscription-"
 "manager repos --list\" to see valid repositories."
 msgstr ""
-"오류: '{repoid}'은 유효한 레포지터리 ID와 일치하지 않습니다. \"subscription-manager repos --"
-"list\"를 사용하여 유효한 레포지터리를 확인합니다."
+"오류: '{repoid}'은 유효한 레포지터리 ID와 일치하지 않습니다. \"subscription-"
+"manager repos --list\"를 사용하여 유효한 레포지터리를 확인합니다."
 
 #: src/subscription_manager/cli_command/repos.py:217
 #, python-brace-format
@@ -3798,15 +3820,22 @@ msgstr ""
 msgid "System Purpose Status: {status}"
 msgstr "시스템 목적 상태: {status}"
 
-#: src/subscription_manager/cli_command/syspurpose.py:51
+#: src/subscription_manager/cli_command/syspurpose.py:53
 msgid "Convenient module for managing all system purpose settings"
 msgstr "모든 시스템 목적 설정을 관리할 수 있는 편리한 모듈"
 
-#: src/subscription_manager/cli_command/syspurpose.py:61
+#: src/subscription_manager/cli_command/syspurpose.py:63
 msgid "show current system purpose"
 msgstr "현재 시스템 목적 표시"
 
-#: src/subscription_manager/cli_command/syspurpose.py:78
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: src/subscription_manager/cli_command/syspurpose.py:85
+#, fuzzy, python-brace-format
+#| msgid "{prog}: error: {msg}"
+msgid "{prog} {name}"
+msgstr "{prog}: 오류: {msg}"
+
+#: src/subscription_manager/cli_command/syspurpose.py:87
 msgid "Syspurpose submodules"
 msgstr "Syspurpose 하위모듈"
 
@@ -3898,7 +3927,7 @@ msgstr "예상 (UEP) 일련 번호# %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/entcertlib.py:465
-#: src/subscription_manager/repolib.py:647
+#: src/subscription_manager/repolib.py:650
 msgid "Added (new)"
 msgstr "추가됨 (신규)"
 
@@ -5343,7 +5372,9 @@ msgstr "manage_repositories_dialog"
 msgid ""
 "Manage the repositories your subscriptions grant you access to by enabling, "
 "disabling and overriding certain fields."
-msgstr "특정 필드를 활성화, 비활성화, 재정의하여 서브스크립션을 통해 액세스가 허용된 레포지터리를 관리합니다."
+msgstr ""
+"특정 필드를 활성화, 비활성화, 재정의하여 서브스크립션을 통해 액세스가 허용된 "
+"레포지터리를 관리합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/repositories.glade:88
@@ -5784,7 +5815,9 @@ msgstr ""
 msgid ""
 "Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
 "information."
-msgstr "레포지터리 대화에 오류가 발생했습니다. 자세한 내용은 /var/log/rhsm/rhsm.log에서 참조하십시오."
+msgstr ""
+"레포지터리 대화에 오류가 발생했습니다. 자세한 내용은 /var/log/rhsm/rhsm.log에"
+"서 참조하십시오."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/managergui.py:522
@@ -6490,7 +6523,9 @@ msgstr ""
 msgid ""
 "Please ensure system has subscriptions attached, and see '{command}' to "
 "enable additional repositories"
-msgstr "시스템에 서브스크립션이 첨부되어 있는지 확인하십시오. 추가 레포지터리를 활성화하려면 '{command}'에서 참조하십시오"
+msgstr ""
+"시스템에 서브스크립션이 첨부되어 있는지 확인하십시오. 추가 레포지터리를 활성"
+"화하려면 '{command}'에서 참조하십시오"
 
 #: src/subscription_manager/migrate/migrate.py:815
 msgid "Stopping and disabling legacy services..."
@@ -6666,20 +6701,20 @@ msgstr ""
 "성화되었습니다. 활성화를 원하지 않을 경우 \"subscription-manager config --"
 "rhsm.auto_enable_yum_plugins=0\"을 사용하여 이 동작을 차단합니다."
 
-#: src/subscription_manager/repolib.py:643
+#: src/subscription_manager/repolib.py:646
 msgid "Repo updates"
 msgstr "레포지터리 업데이트"
 
-#: src/subscription_manager/repolib.py:644
+#: src/subscription_manager/repolib.py:647
 #, python-format
 msgid "Total repo updates: %d"
 msgstr "총 레포지터리 업데이트: %d"
 
-#: src/subscription_manager/repolib.py:645
+#: src/subscription_manager/repolib.py:648
 msgid "Updated"
 msgstr "업데이트됨"
 
-#: src/subscription_manager/repolib.py:649
+#: src/subscription_manager/repolib.py:652
 msgid "Deleted"
 msgstr "삭제됨"
 
@@ -6900,9 +6935,6 @@ msgstr "Red Hat 서브스크립션 관리자"
 
 #~ msgid "No valid values provided for \"{syspurpose_attr}\""
 #~ msgstr "\"{syspurpose_attr}\"을 위하여 유효 값이 제공되지 않습니다"
-
-#~ msgid "Unable to get list of valid values for \"{syspurpose_attr}\""
-#~ msgstr "\"{syspurpose_attr}\"를 위하여 유효 값 목록을 가져 올 수 없습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #~ msgid "name: %s"
