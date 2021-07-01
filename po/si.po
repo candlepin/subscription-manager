@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-15 18:32+0200\n"
+"POT-Creation-Date: 2021-06-30 16:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -1818,12 +1818,12 @@ msgstr ""
 msgid "{name} not set."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:356
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:357
 #, python-brace-format
 msgid "Available {syspurpose_attr}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:366
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:367
 #: src/subscription_manager/cli_command/service_level.py:183
 #, python-brace-format
 msgid ""
@@ -1831,17 +1831,24 @@ msgid ""
 "from the available subscriptions in this organization."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:386
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:371
+#, python-brace-format
+msgid ""
+"Unable to get the list of valid values for the system purpose "
+"\"{syspurpose_attr}\"."
+msgstr ""
+
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:390
 msgid "Unable to connect to server using token"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:430
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:434
 #: src/subscription_manager/i18n_argparse.py:38
 #, python-format
 msgid "%(prog)s [OPTIONS]"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:436
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:440
 #, python-brace-format
 msgid ""
 "Note: The currently configured entitlement server does not support System "
@@ -2010,7 +2017,7 @@ msgid ""
 msgstr ""
 
 #: src/subscription_manager/cli_command/cli.py:168
-msgid "proxy URL in the form of proxy_hostname:proxy_port"
+msgid "proxy URL in the form of hostname:port"
 msgstr ""
 
 #: src/subscription_manager/cli_command/cli.py:170
@@ -3249,16 +3256,26 @@ msgstr ""
 msgid "System Purpose Status: {status}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/syspurpose.py:51
+#: src/subscription_manager/cli_command/syspurpose.py:53
 msgid "Convenient module for managing all system purpose settings"
 msgstr ""
 
-#: src/subscription_manager/cli_command/syspurpose.py:61
+#: src/subscription_manager/cli_command/syspurpose.py:63
 msgid "show current system purpose"
 msgstr ""
 
-#: src/subscription_manager/cli_command/syspurpose.py:78
+#: src/subscription_manager/cli_command/syspurpose.py:85
+#, python-brace-format
+msgid "{prog} {name}"
+msgstr ""
+
+#: src/subscription_manager/cli_command/syspurpose.py:87
 msgid "Syspurpose submodules"
+msgstr ""
+
+#: src/subscription_manager/cli_command/syspurpose.py:101
+#, python-format, python-brace-format
+msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
 msgstr ""
 
 #: src/subscription_manager/cli_command/unregister.py:39
@@ -3338,7 +3355,7 @@ msgid "Expected (UEP) serial# %s"
 msgstr ""
 
 #: src/subscription_manager/entcertlib.py:465
-#: src/subscription_manager/repolib.py:647
+#: src/subscription_manager/repolib.py:650
 msgid "Added (new)"
 msgstr ""
 
@@ -3386,7 +3403,7 @@ msgid "Bad CA certificate: %s"
 msgstr ""
 
 #: src/subscription_manager/exceptions.py:38
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:168
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
 msgid "Your identity certificate has expired"
 msgstr ""
 
@@ -5682,20 +5699,20 @@ msgid ""
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
 
-#: src/subscription_manager/repolib.py:643
+#: src/subscription_manager/repolib.py:646
 msgid "Repo updates"
 msgstr ""
 
-#: src/subscription_manager/repolib.py:644
+#: src/subscription_manager/repolib.py:647
 #, python-format
 msgid "Total repo updates: %d"
 msgstr ""
 
-#: src/subscription_manager/repolib.py:645
+#: src/subscription_manager/repolib.py:648
 msgid "Updated"
 msgstr ""
 
-#: src/subscription_manager/repolib.py:649
+#: src/subscription_manager/repolib.py:652
 msgid "Deleted"
 msgstr ""
 
@@ -5714,11 +5731,11 @@ msgstr ""
 msgid "Error uploading package profile: %s\n"
 msgstr ""
 
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:149
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:208
 msgid "Updating entitlement certificates & repositories"
 msgstr ""
 
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:286
 msgid "Unable to update entitlement certificates and repositories"
 msgstr ""
 

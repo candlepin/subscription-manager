@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-15 18:32+0200\n"
+"POT-Creation-Date: 2021-06-30 16:41+0200\n"
 "PO-Revision-Date: 2021-06-15 18:55+0000\n"
 "Last-Translator: Pino Toscano <ptoscano@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
@@ -2130,12 +2130,12 @@ msgstr "現在の {name}: {val}"
 msgid "{name} not set."
 msgstr "{name} が設定されていません。"
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:356
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:357
 #, python-brace-format
 msgid "Available {syspurpose_attr}"
 msgstr "利用可能な {syspurpose_attr}"
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:366
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:367
 #: src/subscription_manager/cli_command/service_level.py:183
 #, python-brace-format
 msgid ""
@@ -2143,18 +2143,26 @@ msgid ""
 "from the available subscriptions in this organization."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:386
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:371
+#, fuzzy, python-brace-format
+#| msgid "Unable to get list of valid values for \"{syspurpose_attr}\""
+msgid ""
+"Unable to get the list of valid values for the system purpose "
+"\"{syspurpose_attr}\"."
+msgstr "{syspurpose_attr}\" の有効な値のリストを取得できません"
+
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:390
 msgid "Unable to connect to server using token"
 msgstr "トークンを使用してサーバーに接続できません"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:430
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:434
 #: src/subscription_manager/i18n_argparse.py:38
 #, python-format
 msgid "%(prog)s [OPTIONS]"
 msgstr "%(prog)s  [オプション]"
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:436
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:440
 #, python-brace-format
 msgid ""
 "Note: The currently configured entitlement server does not support System "
@@ -2372,7 +2380,9 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/cli_command/cli.py:168
-msgid "proxy URL in the form of proxy_hostname:proxy_port"
+#, fuzzy
+#| msgid "proxy URL in the form of proxy_hostname:proxy_port"
+msgid "proxy URL in the form of hostname:port"
 msgstr "proxy_hostname:proxy_port 形式のプロキシー URL"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
@@ -3876,17 +3886,31 @@ msgstr ""
 msgid "System Purpose Status: {status}"
 msgstr "システムの目的の状態: {status}"
 
-#: src/subscription_manager/cli_command/syspurpose.py:51
+#: src/subscription_manager/cli_command/syspurpose.py:53
 msgid "Convenient module for managing all system purpose settings"
 msgstr "すべてのシステム目的の設定を管理する便利なモジュール"
 
-#: src/subscription_manager/cli_command/syspurpose.py:61
+#: src/subscription_manager/cli_command/syspurpose.py:63
 msgid "show current system purpose"
 msgstr "現在のシステムの目的を表示"
 
-#: src/subscription_manager/cli_command/syspurpose.py:78
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: src/subscription_manager/cli_command/syspurpose.py:85
+#, fuzzy, python-brace-format
+#| msgid "{prog}: error: {msg}"
+msgid "{prog} {name}"
+msgstr "{prog}: エラー: {msg}"
+
+#: src/subscription_manager/cli_command/syspurpose.py:87
 msgid "Syspurpose submodules"
 msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: src/subscription_manager/cli_command/syspurpose.py:101
+#, fuzzy, python-format, python-brace-format
+#| msgid "%(prog)s {name} [OPTIONS]"
+msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
+msgstr "%(prog)s {name} [オプション]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/cli_command/unregister.py:39
@@ -3977,7 +4001,7 @@ msgstr "必要な (UEP) シリアル# %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/entcertlib.py:465
-#: src/subscription_manager/repolib.py:647
+#: src/subscription_manager/repolib.py:650
 msgid "Added (new)"
 msgstr "追加 (新規)"
 
@@ -4037,7 +4061,7 @@ msgstr "不正な CA 証明書です: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/exceptions.py:38
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:168
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
 msgid "Your identity certificate has expired"
 msgstr "ユーザーの識別証明書は期限が切れています"
 
@@ -6735,20 +6759,20 @@ msgstr ""
 "になりました。自動的に有効化しない場合は、\"subscription-manager config --"
 "rhsm.auto_enable_yum_plugins=0\" で無効にします。"
 
-#: src/subscription_manager/repolib.py:643
+#: src/subscription_manager/repolib.py:646
 msgid "Repo updates"
 msgstr "リポジトリーの更新"
 
-#: src/subscription_manager/repolib.py:644
+#: src/subscription_manager/repolib.py:647
 #, python-format
 msgid "Total repo updates: %d"
 msgstr "リポジトリー更新合計: %d"
 
-#: src/subscription_manager/repolib.py:645
+#: src/subscription_manager/repolib.py:648
 msgid "Updated"
 msgstr "更新済み"
 
-#: src/subscription_manager/repolib.py:649
+#: src/subscription_manager/repolib.py:652
 msgid "Deleted"
 msgstr "削除済み"
 
@@ -6769,12 +6793,12 @@ msgid "Error uploading package profile: %s\n"
 msgstr "パッケージプロファイルのアップロード中にエラー発生: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:149
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:208
 msgid "Updating entitlement certificates & repositories"
 msgstr "エンタイトルメント証明書とリポジトリーを更新中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:286
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "エンタイトルメント証明書とリポジトリーを更新できません"
 
@@ -6961,9 +6985,6 @@ msgstr "Red Hat サブスクリプションマネージャー"
 
 #~ msgid "No valid values provided for \"{syspurpose_attr}\""
 #~ msgstr "{syspurpose_attr}\" に有効な値はありません。"
-
-#~ msgid "Unable to get list of valid values for \"{syspurpose_attr}\""
-#~ msgstr "{syspurpose_attr}\" の有効な値のリストを取得できません"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #~ msgid "name: %s"
