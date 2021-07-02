@@ -406,6 +406,14 @@ BuildRequires: systemd-rpm-macros
 BuildRequires: systemd
 %endif
 
+%if !%{use_initial_setup}
+Obsoletes: subscription-manager-initial-setup-addon <= %{version}-%{release}
+%endif
+
+%if !%{use_rhsm_gtk}
+Obsoletes: rhsm-gtk <= %{version}-%{release}
+%endif
+
 %if !%{use_container_plugin}
 Obsoletes: subscription-manager-plugin-container
 %endif
@@ -652,7 +660,6 @@ Supplements: initial-setup-gui
 %description -n subscription-manager-initial-setup-addon
 This package contains the initial-setup screens for subscription-manager.
 %endif
-
 
 %if %has_ostree
 %package -n subscription-manager-plugin-ostree
@@ -1217,7 +1224,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/subscription_manager/gui/__pycache__
 %endif
 %endif
-
 
 %if %{use_subman_gui}
 %files -n subscription-manager-gui
