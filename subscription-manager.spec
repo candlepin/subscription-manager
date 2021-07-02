@@ -247,7 +247,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.29.15
+Version: 1.29.16
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1559,6 +1559,28 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Jul 02 2021 Christopher Snyder <csnyder@redhat.com> 1.29.16-1
+- 1941904: remove packages (#2692)
+  (31166354+tlhmerry9@users.noreply.github.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Update translation files (noreply@weblate.org)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Update translation files (noreply@weblate.org)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- Move cloud detector/collector to cloud-what package (#2680)
+  (jhnidek@redhat.com)
+- 1975552: add '[SUBMODULE]' in syspurpose usage string (ptoscano@redhat.com)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- 1973807: fix wording on error when listing syspurpose values (#2684)
+  (ptoscano@redhat.com)
+- 1975552: remove extra '[OPTIONS]' from syspurpose usage string (#2682)
+  (ptoscano@redhat.com)
+- Make Azure cloud collector more reliable (#2645) (jhnidek@redhat.com)
+- 1967210: Do not print warning, when valid value is provided
+  (jhnidek@redhat.com)
+- 1968420: improve description of rhsm.conf format (ptoscano@redhat.com)
+- Delete server repo file (suttner@atix.de)
+
 * Fri Jun 18 2021 Christopher Snyder <csnyder@redhat.com> 1.29.15-1
 - 1941904: actually disable initial-setup in RHEL >= 9, and Fedora too (#2675)
   (ptoscano@redhat.com)
