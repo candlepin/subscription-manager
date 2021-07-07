@@ -124,6 +124,19 @@ REDHAT_SUPPORT_PRODUCT_VERSION=42.0"""
 
 UPTIME = "1273.88 1133.34"
 
+LSCPU_HUMAN_READABLE_OUTPUT = """Architecture:                    x86_64
+CPU op-mode(s):                  32-bit, 64-bit
+Byte Order:                      Little Endian
+Address sizes:                   39 bits physical, 48 bits virtual
+"""
+
+LSCPU_HUMAN_READABLE_EXPECTED = {
+    'lscpu.architecture': 'x86_64',
+    'lscpu.cpu_op-mode(s)': '32-bit, 64-bit',
+    'lscpu.byte_order': 'Little Endian',
+    'lscpu.address_sizes': '39 bits physical, 48 bits virtual',
+}
+
 
 class TestParseRange(unittest.TestCase):
     def test_single(self):
@@ -823,3 +836,12 @@ class TestLscpu(unittest.TestCase):
         for key, value in facts.items():
             key.encode('ascii')
             value.encode('ascii')
+
+    @patch("rhsmlib.facts.hwprobe.compat_check_output")
+    @patch("os.access")
+    def test_mocked_human_output_parser(self, mock_access, mock_check_output):
+        mock_access.return_value = True
+        mock_check_output.return_value = LSCPU_HUMAN_READABLE_OUTPUT
+        hw_check = hwprobe.HardwareCollector()
+        facts = hw_check.get_ls_cpu_info()
+        self.assertEqual(LSCPU_HUMAN_READABLE_EXPECTED, facts)
