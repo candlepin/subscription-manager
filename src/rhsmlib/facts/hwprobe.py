@@ -96,6 +96,8 @@ class GenericPlatformSpecificInfoProvider(object):
 
 
 class HardwareCollector(collector.FactsCollector):
+    LSCPU_CMD = '/usr/bin/lscpu'
+
     def __init__(self, arch=None, prefix=None, testing=None, collected_hw_info=None):
         super(HardwareCollector, self).__init__(
             arch=arch,
@@ -554,21 +556,22 @@ class HardwareCollector(collector.FactsCollector):
         return cpu_info
 
     def get_ls_cpu_info(self):
-        lscpu_info = {}
-
-        LSCPU_CMD = '/usr/bin/lscpu'
-
         # if we have `lscpu`, let's use it for facts as well, under
         # the `lscpu` name space
-        if not os.access(LSCPU_CMD, os.R_OK):
-            return lscpu_info
+        if not os.access(self.LSCPU_CMD, os.R_OK):
+            return {}
 
         # copy of parent process environment
         lscpu_env = dict(os.environ)
 
         # # LANGUAGE trumps LC_ALL, LC_CTYPE, LANG. See rhbz#1225435, rhbz#1450210
         lscpu_env.update({'LANGUAGE': 'en_US.UTF-8'})
-        lscpu_cmd = [LSCPU_CMD]
+
+        return self._parse_lscpu_human_readable_output(lscpu_env)
+
+    def _parse_lscpu_human_readable_output(self, lscpu_env):
+        lscpu_info = {}
+        lscpu_cmd = [self.LSCPU_CMD]
 
         if self.testing:
             lscpu_cmd += ['-s', self.prefix]
