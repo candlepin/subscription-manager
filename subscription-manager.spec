@@ -811,7 +811,6 @@ subscription-manager-initial-setup-addon, and subscription-manager-cockpit-plugi
 %package -n python3-cloud-what
 Summary: Python package for detection of public cloud provider
 License: GPLv2
-BuildArch: noarch
 Requires: python3-requests
 %ifnarch aarch64 ppc ppc64 ppc64le s390 s390x
 Requires:  %{py_package_prefix}-dmidecode %{?dmidecode_version}
