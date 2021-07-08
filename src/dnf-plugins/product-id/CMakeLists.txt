@@ -55,6 +55,8 @@ file (COPY "${PROJECT_SOURCE_DIR}/test_data/corrupted_compressed_productid.pem.g
         DESTINATION "${PROJECT_BINARY_DIR}/test_data/")
 file (COPY "${PROJECT_SOURCE_DIR}/test_data/59803427316a729fb1d67fd08e7d0c8ccd2a4a5377729b747b76345851bdba6c-productid.gz"
         DESTINATION "${PROJECT_BINARY_DIR}/test_data/")
+file (COPY "${PROJECT_SOURCE_DIR}/test_data/cert_dir/71.pem"
+        DESTINATION "${PROJECT_BINARY_DIR}/test_data/cert_dir/")
 
 include_directories(${GLIB_INCLUDE_DIRS})
 include_directories(${GIO_INCLUDE_DIRS})
