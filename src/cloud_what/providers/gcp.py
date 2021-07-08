@@ -24,7 +24,7 @@ import base64
 
 from typing import Union
 
-from rhsmlib.cloud._base_provider import BaseCloudProvider
+from cloud_what._base_provider import BaseCloudProvider
 
 
 log = logging.getLogger(__name__)
@@ -43,7 +43,8 @@ class GCPCloudProvider(BaseCloudProvider):
 
     # The "audience" should be some unique URI agreed upon by both the instance and the system verifying
     # the instance's identity. For example, the audience could be a URL for the connection between the two systems.
-    # In fact this string could be anything. We could read the full URL from rhsm.conf
+    # In fact this string could be anything.
+    # TODO: use some more generic URL here and move setting this RHSM specific URL to subscription-manager
     AUDIENCE = "https://subscription.rhsm.redhat.com:443/subscription"
 
     # Google uses little bit different approach. It provides everything in JSON Web Token (JWT)
@@ -63,14 +64,14 @@ class GCPCloudProvider(BaseCloudProvider):
     CLOUD_PROVIDER_SIGNATURE_TYPE = None
 
     HTTP_HEADERS = {
-        'user-agent': 'RHSM/1.0',
+        'User-Agent': 'cloud-what/1.0',
         'Metadata-Flavor': 'Google'
     }
 
     # Metadata are provided in JWT token and this token is valid for one hour.
     # Thus it is save to cache this token (see CLOUD_PROVIDER_METADATA_TTL,
     # self._metadata_token_ctime and self._metadata_token)
-    TOKEN_CACHE_FILE = "/var/lib/rhsm/cache/gcp_token.json"
+    TOKEN_CACHE_FILE = "/var/cache/cloud-what/gcp_token.json"
 
     # Nothing to cache for this cloud provider
     SIGNATURE_CACHE_FILE = None
@@ -149,11 +150,11 @@ class GCPCloudProvider(BaseCloudProvider):
         """
         return super(GCPCloudProvider, self)._get_token_from_cache_file()
 
-    def _get_data_from_server(self, data_type, url) -> Union[str, None]:
+    def _get_data_from_server(self, data_type: str, url: str, headers: dict = None) -> Union[str, None]:
         """
         Try to get data from metadata server
         """
-        return super(GCPCloudProvider, self)._get_data_from_server(data_type, url)
+        return super(GCPCloudProvider, self)._get_data_from_server(data_type, url, headers)
 
     def _get_metadata_from_server(self) -> Union[str, None]:
         """
@@ -195,6 +196,15 @@ class GCPCloudProvider(BaseCloudProvider):
         if self._is_in_memory_cached_token_valid() is True:
             return self._token
         return super(GCPCloudProvider, self).get_metadata()
+
+    def set_audience(self, audience: str) -> None:
+        """
+        Set audience unique identifier (usually some URL). This ID is used in HTTP request
+        to GCP IMDS server
+        :param audience: unique identifier
+        :return: None
+        """
+        self.AUDIENCE = audience
 
     @staticmethod
     def decode_jwt(jwt_token: str) -> tuple:
@@ -251,7 +261,7 @@ class GCPCloudProvider(BaseCloudProvider):
 # Run following Python script:
 #
 # ```python
-# from rhsmlib.cloud.providers.gcp import GCPCloudCollector
+# from cloud_what.providers.gcp import GCPCloudCollector
 # # Import libraries for token verification
 # import google.auth.transport.requests
 # from google.oauth2 import id_token
@@ -270,7 +280,6 @@ def _smoke_test():
     """
     # Gather only information about hardware and virtualization
     from rhsmlib.facts.host_collector import HostCollector
-    from rhsmlib.facts.hwprobe import HardwareCollector
 
     import sys
 
@@ -285,7 +294,6 @@ def _smoke_test():
 
     facts = {}
     facts.update(HostCollector().get_all())
-    facts.update(HardwareCollector().get_all())
     gcp_cloud_provider = GCPCloudProvider(facts)
     result = gcp_cloud_provider.is_running_on_cloud()
     probability = gcp_cloud_provider.is_likely_running_on_cloud()
@@ -301,6 +309,6 @@ def _smoke_test():
 
 
 # Some temporary smoke testing code. You can test this module using:
-# sudo PYTHONPATH=./src:./syspurpose/src python3 -m rhsmlib.cloud.providers.gcp
+# sudo PYTHONPATH=./src python3 -m cloud_what.providers.gcp
 if __name__ == '__main__':
     _smoke_test()

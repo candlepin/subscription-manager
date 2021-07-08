@@ -64,11 +64,11 @@ class BaseCloudProvider(object):
     CLOUD_PROVIDER_SIGNATURE_TYPE = None
 
     # Default value of path to cache file holding metadata
-    # (e.g. /var/lib/rhsm/cache/cool_cloud_metadata.json)
+    # (e.g. /var/lib/cloud-what/cache/cool_cloud_metadata.json)
     METADATA_CACHE_FILE = None
 
     # Default value of path to holding signature of metadata
-    # (e.g. /var/lib/rhsm/cache/cool_cloud_signature.json)
+    # (e.g. /var/lib/cloud-what/cache/cool_cloud_signature.json)
     SIGNATURE_CACHE_FILE = None
 
     # Custom HTTP headers like user-agent
@@ -84,19 +84,24 @@ class BaseCloudProvider(object):
     # Time to live of in-memory cache for metadata and signature (value is in seconds)
     IN_MEMORY_CACHE_TTL = 10.0
 
+    # Timeout for connection with IMDS server. The value is in seconds. Default value 1.0 second
+    # should be enough, because IMDS server is usually in the same datacenter and delay should
+    # be in milliseconds
+    TIMEOUT = 1.0
+
     def __init__(self, hw_info: dict = None):
         """
         Initialize cloud provider
         :param hw_info: Dictionary with hardware information.
         """
         # In-memory cache of metadata
-        self._cached_metadata: str = None
+        self._cached_metadata: Union[str, None] = None
         # Time, when metadata was received. The value is in seconds (unix time)
-        self._cached_metadata_ctime: float = None
+        self._cached_metadata_ctime: Union[float, None] = None
         # In-memory cache of signature
-        self._cached_signature: str = None
+        self._cached_signature: Union[str, None] = None
         # Time, when signature was received. The value is in seconds (unix time)
-        self._cached_signature_ctime: float = None
+        self._cached_signature_ctime: Union[float, None] = None
 
         # Dictionary with hardware information
         if hw_info is None:
@@ -104,12 +109,17 @@ class BaseCloudProvider(object):
         else:
             self.hw_info: dict = hw_info
 
+        # HTTP Session
+        self._session = requests.Session()
+        if 'SUBMAN_DEBUG_PRINT_RESPONSE' in os.environ:
+            self._session.hooks['response'].append(self._cb_debug_print_http_response)
+
         # In-memory cache of token. The token is simple string
-        self._token: str = None
+        self._token: Union[str, None] = None
         # Time, when token was received. The value is in seconds (unix time)
-        self._token_ctime: float = None
+        self._token_ctime: Union[float, None] = None
         # Time to Live of token
-        self._token_ttl: float = None
+        self._token_ttl: Union[float, None] = None
 
     @staticmethod
     def collect_hw_facts() -> dict:
@@ -156,6 +166,13 @@ class BaseCloudProvider(object):
             "ttl": str(self._token_ttl),
             "token": self._token
         }
+
+        token_cache_dir = os.path.dirname(self.TOKEN_CACHE_FILE)
+        try:
+            os.makedirs(token_cache_dir, exist_ok=True)
+        except OSError as err_msg:
+            log.debug(f'Unable to create cache directory {token_cache_dir}: {err_msg}')
+            return
 
         log.debug(f'Writing {self.CLOUD_PROVIDER_ID} token to file {self.TOKEN_CACHE_FILE}')
 
@@ -280,17 +297,65 @@ class BaseCloudProvider(object):
         """
         raise NotImplementedError
 
-    def _get_data_from_server(self, data_type, url) -> Union[str, None]:
+    @staticmethod
+    def _debug_print_http_request(request: requests.PreparedRequest) -> None:
+        """
+        Print HTTP request that will be sent using requests Python package
+        :param request: prepared HTTP request
+        :return: None
+        """
+        yellow_col = '\033[93m'
+        blue_col = '\033[94m'
+        red_col = '\033[91m'
+        end_col = '\033[0m'
+        msg = blue_col + "Making request: " + end_col
+        msg += red_col + request.method + ' ' + request.url + end_col
+        if 'SUBMAN_DEBUG_PRINT_REQUEST_HEADER' in os.environ:
+            headers = ', '.join('{}: {}'.format(k, v) for k, v in request.headers.items())
+            msg += blue_col + " {{{headers}}}".format(headers=headers) + end_col
+        if 'SUBMAN_DEBUG_PRINT_REQUEST_BODY' in os.environ and request.body is not None:
+            msg += yellow_col + f" {request.body}" + end_col
+        print()
+        print(msg)
+        print()
+
+    @staticmethod
+    def _cb_debug_print_http_response(response: requests.Response, *args, **kwargs) -> requests.Response:
+        """
+        Callback method for printing HTTP response. It uses requests API.
+        :param response: Instance of response. The response is not altered
+        :param *args: Not used
+        :param **kwargs: Not used
+        :return: Instance of response
+        """
+        print('\n{code} {{{headers}}}\n{body}\n'.format(
+            code=response.status_code,
+            headers=', '.join('{key}: {value}'.format(key=k, value=v) for k, v in response.headers.items()),
+            body=response.text,
+        ))
+        return response
+
+    def _get_data_from_server(self, data_type: str, url: str, headers: dict = None) -> Union[str, None]:
         """
         Try to get some data from server using method GET
-        :data_type: string representing data type (metadata, signature, token)
+        :param data_type: string representing data type (metadata, signature, token, etc.)
         :param url: URL of the GET request
+        :param headers: optional headers parameters. When not set, then self.HTTP_HEADERS are used
         :return: String representing body, when status code is 200; Otherwise return None
         """
         log.debug(f'Trying to get {data_type} from {url}')
 
+        if headers is None:
+            headers = self.HTTP_HEADERS
+
+        http_req = requests.Request(method='GET', url=url, headers=headers)
+        prepared_http_req = self._session.prepare_request(http_req)
+
+        if 'SUBMAN_DEBUG_PRINT_REQUEST' in os.environ:
+            self._debug_print_http_request(prepared_http_req)
+
         try:
-            response = requests.get(url, headers=self.HTTP_HEADERS)
+            response = self._session.send(prepared_http_req, timeout=self.TIMEOUT)
         except requests.ConnectionError as err:
             log.debug(f'Unable to get {self.CLOUD_PROVIDER_ID} {data_type}: {err}')
         else:
