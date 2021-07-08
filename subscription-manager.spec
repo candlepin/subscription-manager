@@ -247,7 +247,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.29.16
+Version: 1.29.17
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1558,6 +1558,11 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Jul 08 2021 Christopher Snyder <csnyder@redhat.com> 1.29.17-1
+- Remove no arch from python3-cloud-what package (csnyder@redhat.com)
+- 1938878: Fix issues discovered by static code analyzers (#2644)
+  (jhnidek@redhat.com)
+
 * Fri Jul 02 2021 Christopher Snyder <csnyder@redhat.com> 1.29.16-1
 - 1941904: remove packages (#2692)
   (31166354+tlhmerry9@users.noreply.github.com)
