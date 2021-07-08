@@ -52,7 +52,7 @@ This system is not registered with an entitlement server. You can use subscripti
 """)
 
 no_subs_warning = _("""
-This system is registered with and entitlement server, but is not receiving updates. You can use \
+This system is registered with an entitlement server, but is not receiving updates. You can use \
 subscription-manager to assign subscriptions.
 """)
 
