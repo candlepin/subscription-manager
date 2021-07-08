@@ -150,6 +150,9 @@ void testReadFile(dbFixture *fixture, gconstpointer ignored) {
     g_file_delete(testJsonFile, NULL, NULL);
     g_object_unref(ioStream);
     g_object_unref(testJsonFile);
+    if(err != NULL) {
+        g_error_free(err);
+    }
 }
 
 void testReadCorruptedFile(dbFixture *fixture, gconstpointer ignored) {
@@ -226,6 +229,7 @@ void testWriteFile(dbFixture *fixture, gconstpointer ignored) {
     (void)ignored;
     ProductDb *db = fixture->db;
     GError *err = NULL;
+    gboolean ret;
 
     addRepoId(db, "69", "rhel");
     addRepoId(db, "69", "jboss");
@@ -235,7 +239,9 @@ void testWriteFile(dbFixture *fixture, gconstpointer ignored) {
     gchar *path = g_file_get_path(testJsonFile);
     db->path = path;
 
-    writeProductDb(db, &err);
+    ret = writeProductDb(db);
+
+    g_assert_true(ret);
 
     g_free(path);
     g_file_delete(testJsonFile, NULL, NULL);

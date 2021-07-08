@@ -66,6 +66,8 @@ PluginHandle *pluginInitHandle(int version, PluginMode mode, DnfPluginInitData *
         handle->version = version;
         handle->mode = mode;
         handle->context = pluginGetContext(initData);
+    } else {
+        error("Unable to allocate memory for plugin handle");
     }
 
     return handle;
@@ -471,10 +473,9 @@ int pluginHook(PluginHandle *handle, PluginHookId id, DnfPluginHookData *hookDat
 }
 
 void writeRepoMap(ProductDb *productDb) {
-    GError *err = NULL;
-    writeProductDb(productDb, &err);
+    int ret = writeProductDb(productDb);
 
-    if (err) {
+    if (ret != 0) {
         error("Unable to write productdb to file: %s", PRODUCTDB_FILE);
     }
 }
@@ -778,7 +779,7 @@ int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId) {
         printError("Unable to get information about CA certificate", tmp_err);
         tmp_err = NULL;
     } else {
-        if (client_cert) {
+        if (ca_cert) {
             debug("SSL CA cert: %s", ca_cert);
         } else {
             debug("SSL CA cert has not been used");

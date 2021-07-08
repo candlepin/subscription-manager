@@ -29,7 +29,7 @@ typedef struct {
 ProductDb * initProductDb();
 void freeProductDb(ProductDb *productDb);
 void readProductDb(ProductDb *productDb, GError **err);
-void writeProductDb(ProductDb *productDb, GError **err);
+gboolean writeProductDb(ProductDb *productDb);
 void addRepoId(ProductDb *productDb, const char *productId, const char *repoId);
 GSList *getRepoIds(ProductDb *productDb, const char *productId);
 gboolean removeProductId(ProductDb *productDb, const char *productId);
