@@ -18,11 +18,13 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+import json
 import logging
 import os
 import platform
 import re
 import socket
+import subprocess
 import sys
 
 from collections import defaultdict
@@ -96,6 +98,8 @@ class GenericPlatformSpecificInfoProvider(object):
 
 
 class HardwareCollector(collector.FactsCollector):
+    LSCPU_CMD = '/usr/bin/lscpu'
+
     def __init__(self, arch=None, prefix=None, testing=None, collected_hw_info=None):
         super(HardwareCollector, self).__init__(
             arch=arch,
@@ -554,21 +558,36 @@ class HardwareCollector(collector.FactsCollector):
         return cpu_info
 
     def get_ls_cpu_info(self):
-        lscpu_info = {}
-
-        LSCPU_CMD = '/usr/bin/lscpu'
-
         # if we have `lscpu`, let's use it for facts as well, under
         # the `lscpu` name space
-        if not os.access(LSCPU_CMD, os.R_OK):
-            return lscpu_info
+        if not os.access(self.LSCPU_CMD, os.R_OK):
+            return {}
 
         # copy of parent process environment
         lscpu_env = dict(os.environ)
 
         # # LANGUAGE trumps LC_ALL, LC_CTYPE, LANG. See rhbz#1225435, rhbz#1450210
         lscpu_env.update({'LANGUAGE': 'en_US.UTF-8'})
-        lscpu_cmd = [LSCPU_CMD]
+
+        if self._check_lscpu_json(lscpu_env):
+            return self._parse_lscpu_json_output(lscpu_env)
+
+        return self._parse_lscpu_human_readable_output(lscpu_env)
+
+    def _check_lscpu_json(self, lscpu_env):
+        lscpu_cmd = [self.LSCPU_CMD, '--help']
+
+        try:
+            output = subprocess.check_output(lscpu_cmd, env=lscpu_env)
+        except CalledProcessError as e:
+            log.warning('Failed to run \'lscpu --help\': %s', e)
+            return False
+
+        return b"--json" in output
+
+    def _parse_lscpu_human_readable_output(self, lscpu_env):
+        lscpu_info = {}
+        lscpu_cmd = [self.LSCPU_CMD]
 
         if self.testing:
             lscpu_cmd += ['-s', self.prefix]
@@ -601,6 +620,66 @@ class HardwareCollector(collector.FactsCollector):
             log.warning('Error reading system CPU information: %s', e)
         if errors:
             log.debug('Errors while parsing lscpu output: %s', errors)
+
+        return lscpu_info
+
+    def _parse_lscpu_json_output(self, lscpu_env):
+        lscpu_cmd = [self.LSCPU_CMD, '--json']
+        if self.testing:
+            lscpu_cmd += ['-s', self.prefix]
+
+        try:
+            output = subprocess.check_output(lscpu_cmd, env=lscpu_env)
+        except CalledProcessError as e:
+            log.warning('Failed to run \'lscpu --json\': %s', e)
+            return {}
+
+        log.debug('Parsing lscpu JSON: %s', output)
+
+        try:
+            output_json = json.loads(output)
+        except json.JSONDecodeError as e:
+            log.warning('Failed to load the lscpu JSON: %s', e)
+            return {}
+
+        try:
+            main_object = output_json['lscpu']
+        except KeyError:
+            log.warning('Failed to load the lscpu JSON: missing \'lscpu\' '
+                        'root object')
+            return {}
+
+        lscpu_info = {}
+
+        def parse_item(obj):
+            try:
+                # get 'field' and 'data', considering them mandatory, and thus
+                # ignoring this element and all its children if they are
+                # missing; note that 'data' can be null, see later on
+                key = obj['field']
+                value = obj['data']
+            except KeyError:
+                log.warning('Failed to load the lscpu JSON: object lacks '
+                            'missing \'field\' and \'data\' fields: %s', obj)
+                return
+            # 'data' is null, which means the field is an "header"; ignore it
+            if value is not None:
+                if key.endswith(':'):
+                    key = key[:-1]
+                nkey = '.'.join(["lscpu", key.lower().strip().replace(" ", "_")])
+                lscpu_info[nkey] = value.strip()
+            try:
+                children = obj['children']
+                parse_list(children)
+            except KeyError:
+                # no 'children' field available, which is OK
+                pass
+
+        def parse_list(json_list):
+            for list_item in json_list:
+                parse_item(list_item)
+
+        parse_list(main_object)
 
         return lscpu_info
 

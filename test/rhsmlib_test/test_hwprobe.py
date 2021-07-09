@@ -124,6 +124,119 @@ REDHAT_SUPPORT_PRODUCT_VERSION=42.0"""
 
 UPTIME = "1273.88 1133.34"
 
+LSCPU_HUMAN_READABLE_OUTPUT = """Architecture:                    x86_64
+CPU op-mode(s):                  32-bit, 64-bit
+Byte Order:                      Little Endian
+Address sizes:                   39 bits physical, 48 bits virtual
+"""
+
+LSCPU_HUMAN_READABLE_EXPECTED = {
+    'lscpu.architecture': 'x86_64',
+    'lscpu.cpu_op-mode(s)': '32-bit, 64-bit',
+    'lscpu.byte_order': 'Little Endian',
+    'lscpu.address_sizes': '39 bits physical, 48 bits virtual',
+}
+
+LSCPU_JSON_OUTPUT = """
+{
+   "lscpu": [
+      {
+         "field": "Architecture:",
+         "data": "x86_64",
+         "children": [
+            {
+               "field": "CPU op-mode(s):",
+               "data": "32-bit, 64-bit"
+            },{
+               "field": "Address sizes:",
+               "data": "46 bits physical, 48 bits virtual"
+            },{
+               "field": "Byte Order:",
+               "data": "Little Endian"
+            }
+         ]
+      },{
+         "field": "Vendor ID:",
+         "data": "GenuineIntel",
+         "children": [
+            {
+               "field": "BIOS Vendor ID:",
+               "data": "Bochs"
+            },{
+               "field": "Model name:",
+               "data": "Intel Core Processor (Broadwell)",
+               "children": [
+                  {
+                     "field": "CPU family:",
+                     "data": "6"
+                  },{
+                     "field": "Model:",
+                     "data": "61"
+                  },{
+                     "field": "Thread(s) per core:",
+                     "data": "1"
+                  },{
+                     "field": "Core(s) per socket:",
+                     "data": "1"
+                  },{
+                     "field": "Socket(s):",
+                     "data": "1"
+                  },{
+                     "field": "Stepping:",
+                     "data": "2"
+                  },{
+                     "field": "BogoMIPS:",
+                     "data": "3999.99"
+                  },{
+                     "field": "Flags:",
+                     "data": "fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl cpuid tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch invpcid_single pti fsgsbase bmi1 hle avx2 smep bmi2 erms invpcid rtm rdseed adx smap xsaveopt"
+                  }
+               ]
+            }
+         ]
+      },{
+         "field": "Virtualization features:",
+         "data": null,
+         "children": [
+            {
+               "field": "Hypervisor vendor:",
+               "data": "KVM"
+            },{
+               "field": "Virtualization type:",
+               "data": "full"
+            }
+         ]
+      }
+   ]
+}"""
+
+LSCPU_JSON_EXPECTED = {
+    'lscpu.architecture': 'x86_64',
+    'lscpu.cpu_op-mode(s)': '32-bit, 64-bit',
+    'lscpu.address_sizes': '46 bits physical, 48 bits virtual',
+    'lscpu.byte_order': 'Little Endian',
+    'lscpu.vendor_id': 'GenuineIntel',
+    'lscpu.bios_vendor_id': 'Bochs',
+    'lscpu.model_name': 'Intel Core Processor (Broadwell)',
+    'lscpu.cpu_family': '6',
+    'lscpu.model': '61',
+    'lscpu.thread(s)_per_core': '1',
+    'lscpu.core(s)_per_socket': '1',
+    'lscpu.socket(s)': '1',
+    'lscpu.stepping': '2',
+    'lscpu.bogomips': '3999.99',
+    'lscpu.flags': 'fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca '
+                   'cmov pat pse36 clflush mmx fxsr sse sse2 ss syscall nx '
+                   'pdpe1gb rdtscp lm constant_tsc rep_good nopl cpuid '
+                   'tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 '
+                   'sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave '
+                   'avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch '
+                   'invpcid_single pti fsgsbase bmi1 hle avx2 smep bmi2 erms '
+                   'invpcid rtm rdseed adx smap xsaveopt',
+    'lscpu.hypervisor_vendor': 'KVM',
+    'lscpu.virtualization_type': 'full'
+}
+
 
 class TestParseRange(unittest.TestCase):
     def test_single(self):
@@ -823,3 +936,25 @@ class TestLscpu(unittest.TestCase):
         for key, value in facts.items():
             key.encode('ascii')
             value.encode('ascii')
+
+    @patch("rhsmlib.facts.hwprobe.compat_check_output")
+    @patch.object(hwprobe.HardwareCollector, "_check_lscpu_json")
+    @patch("os.access")
+    def test_mocked_human_output_parser(self, mock_access, mock_check_json, mock_check_output):
+        mock_access.return_value = True
+        mock_check_json.return_value = False
+        mock_check_output.return_value = LSCPU_HUMAN_READABLE_OUTPUT
+        hw_check = hwprobe.HardwareCollector()
+        facts = hw_check.get_ls_cpu_info()
+        self.assertEqual(LSCPU_HUMAN_READABLE_EXPECTED, facts)
+
+    @patch("subprocess.check_output")
+    @patch.object(hwprobe.HardwareCollector, "_check_lscpu_json")
+    @patch("os.access")
+    def test_mocked_json_parser(self, mock_access, mock_check_json, mock_check_output):
+        mock_access.return_value = True
+        mock_check_json.return_value = True
+        mock_check_output.return_value = LSCPU_JSON_OUTPUT
+        hw_check = hwprobe.HardwareCollector()
+        facts = hw_check.get_ls_cpu_info()
+        self.assertEqual(LSCPU_JSON_EXPECTED, facts)
