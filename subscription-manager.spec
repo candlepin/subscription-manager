@@ -243,7 +243,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.17
+Version: 1.28.18
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1485,6 +1485,45 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Jul 12 2021 Christopher Snyder <csnyder@redhat.com> 1.28.18-1
+- Removed .orig files, which leaked into main branch (jhnidek@redhat.com)
+- Move cloud detector/collector to cloud-what package (jhnidek@redhat.com)
+- Make Azure cloud collector more reliable (jhnidek@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Update translation files (noreply@weblate.org)
+- Fixed reporting of AWS cloud facts (null value) (#2693) (jhnidek@redhat.com)
+- New extraction for translatable strings (#2688) (ptoscano@redhat.com)
+- Refactoring of cloud collector/detector and facts (#2657)
+  (jhnidek@redhat.com)
+- 1973731: fix wording on error when listing syspurpose values
+  (ptoscano@redhat.com)
+- 1971693: syspurpose: remove deprecation notices (#2683) (ptoscano@redhat.com)
+- 1968420: improve description of rhsm.conf format (ptoscano@redhat.com)
+- 1967210: Do not print warning, when valid value is provided
+  (jhnidek@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- 1971693: syspurpose: adjust deprecation messages (ptoscano@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Korean) (ljanda@redhat.com)
+- Update translation files (noreply@weblate.org)
+- Fixed white space before '(' (jhnidek@redhat.com)
+- flake8: add more locally found issues (ptoscano@redhat.com)
+- Remove extra whitespace before '(' (ptoscano@redhat.com)
+- 1967780: improve placeholders in help text (ptoscano@redhat.com)
+- Add missing second empty line after class/function (ptoscano@redhat.com)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- Add flake8 configuration (ptoscano@redhat.com)
+- build: drop version requirements for pep8 and flake8 (ptoscano@redhat.com)
+- build: remove pyqver test requirement (ptoscano@redhat.com)
+- jenkins: disambiguate virtualenv names (ptoscano@redhat.com)
+- jenkins: switch stylish job to Python 3 (ptoscano@redhat.com)
+- cockpit: Invoke setup.py with python3 (martin@piware.de)
+- 1897767: improve wording for invalid syspurpose values (ptoscano@redhat.com)
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (suanand@redhat.com)
+- Translated using Weblate (Korean) (ljanda@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Italian) (toscano.pino@tiscali.it)
+
 * Mon Jun 07 2021 Christopher Snyder <csnyder@redhat.com> 1.28.17-1
 - 1920020: show error message when setting invalid default_log_level as well as
   on every run until changed to a valid value (#2641)
