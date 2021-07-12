@@ -28,6 +28,12 @@ pipeline {
             // publishCoverage adapters: [jacocoAdapter('coverage.xml')]
           }
         }
+        // Unit tests of libdnf plugins
+        stage('Libdnf unit') {
+          steps {
+            sh readFile(file: 'jenkins/libdnf-tests.sh')
+          }
+        }
 //         stage('OpenSuSE 15') {
 //           agent { label 'opensuse15' }
 //           steps { sh readFile(file: 'jenkins/suse-tests.sh') }
