@@ -207,6 +207,6 @@ if __name__ == '__main__':
     # Try to detect cloud provider using own detector
     from cloud_what.fact_collector import MiniHostCollector
     collector = MiniHostCollector()
-    facts = collector.get_all()
-    _detector_result = detect_cloud_provider(facts)
+    _facts = collector.get_all()
+    _detector_result = detect_cloud_provider(_facts)
     print(f'>>> debug <<< detector result (minimalistic): {_detector_result}')
