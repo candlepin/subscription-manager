@@ -33,6 +33,7 @@ ROOT_NAMESPACES = ['subscription_manager',
                    'rhsm-app',
                    'rhsmlib',
                    'syspurpose',
+                   'cloud_what'
                    ]
 
 
