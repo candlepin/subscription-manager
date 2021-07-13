@@ -28,6 +28,7 @@ from subscription_manager.action_client import ProfileActionClient, ActionClient
 from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.cli import CliCommand, handle_exception
 from subscription_manager.cli_command.list import show_autosubscribe_output
+from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.packageprofilelib import PackageProfileActionInvoker
 from subscription_manager.syspurposelib import save_sla_to_syspurpose_metadata
@@ -159,12 +160,16 @@ class AttachCommand(CliCommand):
                             subscribed = True
                     except connection.RestlibException as re:
                         log.exception(re)
+
+                        exception_mapper = ExceptionMapper()
+                        mapped_message = exception_mapper.get_message(re)
+
                         if re.code == 403:
-                            print(str(re))  # already subscribed.
+                            print(mapped_message)  # already subscribed.
                         elif re.code == 400 or re.code == 404:
-                            print(str(re))  # no such pool.
+                            print(mapped_message)  # no such pool.
                         else:
-                            system_exit(os.EX_SOFTWARE, str(re))  # some other error.. don't try again
+                            system_exit(os.EX_SOFTWARE, mapped_message)  # some other error.. don't try again
                 if not subscribed:
                     return_code = 1
             # must be auto
