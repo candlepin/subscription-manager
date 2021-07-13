@@ -44,6 +44,7 @@ class CloudFactsCollector(collector.FactsCollector):
 
         # Try to detect cloud provider
         self.cloud_provider = get_cloud_provider(self._collected_hw_info)
+
         if self.cloud_provider is not None:
             # Create dispatcher for supported cloud providers
             cloud_provider_dispatcher = {
