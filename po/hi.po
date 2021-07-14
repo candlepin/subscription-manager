@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-30 16:41+0200\n"
+"POT-Creation-Date: 2021-07-09 12:30+0200\n"
 "PO-Revision-Date: 2015-09-25 02:52-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Hindi <kde-i18n-doc@kde.org>\n"
@@ -817,40 +817,40 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:452
+#: src/daemons/rhsmcertd.c:454
 #, c-format
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "अधिक जानकारी के लिए चलाएँ: rhsmcertd --help\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:512
+#: src/daemons/rhsmcertd.c:514
 msgid "Wrong number of arguments specified.\n"
 msgstr "निर्दिष्ट वितर्क की गलत संख्या.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:588
+#: src/daemons/rhsmcertd.c:590
 msgid "Invalid argument specified.\n"
 msgstr "अवैध वितर्क निर्दिष्ट.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:594
+#: src/daemons/rhsmcertd.c:596
 #, c-format
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "चेतावनी: पदावनत CLI वितर्क का प्रयोग हो रहा है.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:609
+#: src/daemons/rhsmcertd.c:611
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "अवैध विकल्प: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/daemons/rhsmcertd.c:623
+#: src/daemons/rhsmcertd.c:625
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "अवैध वितर्क निर्दिष्ट: %s\n"
@@ -885,12 +885,18 @@ msgid ""
 "subscription-manager to register.\n"
 msgstr "RHN Classic और Red Hat सदस्यता प्रबंधन के उपयोग से यह तंत्र पंजीकृत हुआ."
 
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author rajesh
 #: src/dnf-plugins/subscription-manager.py:54
+#, fuzzy
+#| msgid ""
+#| "This system is registered using both RHN Classic and Red Hat Subscription "
+#| "Management."
 msgid ""
 "\n"
-"This system is registered with and entitlement server, but is not receiving "
+"This system is registered with an entitlement server, but is not receiving "
 "updates. You can use subscription-manager to assign subscriptions.\n"
-msgstr ""
+msgstr "RHN Classic और Red Hat सदस्यता प्रबंधन के उपयोग से यह तंत्र पंजीकृत हुआ."
 
 #: src/dnf-plugins/subscription-manager.py:87
 msgid "Not root, Subscription Management repositories not updated"

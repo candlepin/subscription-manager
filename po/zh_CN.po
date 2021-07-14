@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-30 16:41+0200\n"
+"POT-Creation-Date: 2021-07-09 12:30+0200\n"
 "PO-Revision-Date: 2021-06-15 18:55+0000\n"
 "Last-Translator: Pino Toscano <ptoscano@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
@@ -732,35 +732,35 @@ msgid "try to perform auto-registration."
 msgstr "尝试进行自动注册。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:452
+#: src/daemons/rhsmcertd.c:454
 #, c-format
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "有关详情请运行：rhsmcertd --help\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:512
+#: src/daemons/rhsmcertd.c:514
 msgid "Wrong number of arguments specified.\n"
 msgstr "指定的参数数目错误。\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:588
+#: src/daemons/rhsmcertd.c:590
 msgid "Invalid argument specified.\n"
 msgstr "指定无效参数。\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:594
+#: src/daemons/rhsmcertd.c:596
 #, c-format
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "警告：使用过时的 CLI 参数。\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:609
+#: src/daemons/rhsmcertd.c:611
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "无效选项：%s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:623
+#: src/daemons/rhsmcertd.c:625
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "指定参数无效：%s\n"
@@ -798,9 +798,15 @@ msgstr ""
 "本系统尚未在权利服务器中注册。可使用 subscription-manager 进行注册。\n"
 
 #: src/dnf-plugins/subscription-manager.py:54
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "This system is registered with and entitlement server, but is not "
+#| "receiving updates. You can use subscription-manager to assign "
+#| "subscriptions.\n"
 msgid ""
 "\n"
-"This system is registered with and entitlement server, but is not receiving "
+"This system is registered with an entitlement server, but is not receiving "
 "updates. You can use subscription-manager to assign subscriptions.\n"
 msgstr ""
 "\n"
