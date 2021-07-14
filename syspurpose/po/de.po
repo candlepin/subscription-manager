@@ -1,18 +1,20 @@
 # ljanda <ljanda@redhat.com>, 2018. #zanata
+# CoconutNut <patrick.vollandt@mein-gym.de>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-13 14:02-0500\n"
-"PO-Revision-Date: 2018-11-21 02:39+0000\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2021-07-05 03:04+0000\n"
+"Last-Translator: CoconutNut <patrick.vollandt@mein-gym.de>\n"
+"Language-Team: German <https://translate.fedoraproject.org/projects/"
+"subscription-manager/syspurpose-1-28/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Zanata 4.6.2\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.7.1\n"
 
 #: src/syspurpose/cli.py:29
 #, python-brace-format
@@ -21,11 +23,16 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
+"Warnung: Ein {attr} von \"{download_value}\" wurde kürzlich vom "
+"Berechtigungsserver-Administrator für dieses System festgelegt.\n"
+"{advice}"
 
 #: src/syspurpose/cli.py:31
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
 msgstr ""
+"Wenn Sie die serverseitige Änderung überschreiben möchten, führen Sie bitte "
+"Folgendes aus: {command}"
 
 #: src/syspurpose/cli.py:47
 #, python-brace-format
@@ -40,7 +47,7 @@ msgstr ""
 #: src/syspurpose/cli.py:56 src/syspurpose/cli.py:85
 #, python-brace-format
 msgid "{attr} updated."
-msgstr ""
+msgstr "{attr} aktualisiert."
 
 #: src/syspurpose/cli.py:79
 #, python-brace-format
@@ -55,12 +62,12 @@ msgstr ""
 #: src/syspurpose/cli.py:108
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
-msgstr ""
+msgstr "{attr} auf \"{val}\" gesetzt."
 
 #: src/syspurpose/cli.py:129
 #, python-brace-format
 msgid "{attr} unset."
-msgstr ""
+msgstr "{attr} nicht gesetzt."
 
 #: src/syspurpose/cli.py:181
 msgid "Sets the value for the given property"
