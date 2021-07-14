@@ -3,20 +3,22 @@
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # John Sefler <jsefler@redhat.com>, 2019. #zanata
 # ljanda <ljanda@redhat.com>, 2019. #zanata
+# CoconutNut <patrick.vollandt@mein-gym.de>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-30 16:41+0200\n"
-"PO-Revision-Date: 2019-02-08 09:48+0000\n"
-"Last-Translator: ljanda <ljanda@redhat.com>\n"
-"Language-Team: German (Germany)\n"
+"PO-Revision-Date: 2021-07-08 01:04+0000\n"
+"Last-Translator: CoconutNut <patrick.vollandt@mein-gym.de>\n"
+"Language-Team: German <https://translate.fedoraproject.org/projects/"
+"subscription-manager/subscription-manager-main/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Zanata 4.6.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.7.1\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 #, fuzzy
@@ -209,17 +211,19 @@ msgstr "System registrieren"
 
 #: cockpit/src/insights.jsx:64 cockpit/src/insights.jsx:267
 msgid "The $0 package is not available from any repository."
-msgstr ""
+msgstr "Das $0 Paket ist in keinem Repository verfügbar."
 
 #: cockpit/src/insights.jsx:67
 msgid ""
 "The system could not be connected to Insights because installing the $0 "
 "package requires the unexpected removal of other packages."
 msgstr ""
+"Das System konnte nicht mit Insights verbunden werden, da die Installation "
+"des $0 Pakets das unerwartete Entfernen anderer Pakete erfordert."
 
 #: cockpit/src/insights.jsx:80
 msgid "Connecting to Insights"
-msgstr ""
+msgstr "Herstellen einer Verbindung mit Insights"
 
 #: cockpit/src/insights.jsx:118
 msgid ""
@@ -227,88 +231,92 @@ msgid ""
 "availability, and stability with Red Hat Insights — with predictive "
 "analytics, avoid problems and unplanned downtime in your Red Hat environment."
 msgstr ""
+"Erkennen und beheben Sie proaktiv Bedrohungen für Sicherheit, Leistung, "
+"Verfügbarkeit und Stabilität mit Red Hat Insights - vermeiden Sie mit "
+"vorausschauenden Analysen Probleme und ungeplante Ausfallzeiten in Ihrer Red "
+"Hat-Umgebung."
 
 #: cockpit/src/insights.jsx:129 cockpit/src/subscriptions-register.jsx:93
 msgid "The $0 package will be installed."
-msgstr ""
+msgstr "Das $0 Paket wird installiert."
 
 #: cockpit/src/insights.jsx:131
 msgid "The $0 package and $1 other package will be installed."
 msgid_plural "The $0 package and $1 other packages will be installed."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Das Paket $0 und das andere Paket $1 werden installiert."
+msgstr[1] "Das $0-Paket und $1 andere Pakete werden installiert."
 
 #: cockpit/src/insights.jsx:139
 msgid "$0 package needs to be removed."
 msgid_plural "$0 packages need to be removed."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "$0-Paket muss entfernt werden."
+msgstr[1] "$0 Pakete müssen entfernt werden."
 
 #: cockpit/src/insights.jsx:153
 msgid "Additional packages:"
-msgstr ""
+msgstr "Zusatzpakete:"
 
 #: cockpit/src/insights.jsx:161
 msgid "Removals:"
-msgstr ""
+msgstr "Umzüge:"
 
 #: cockpit/src/insights.jsx:167 cockpit/src/insights.jsx:400
 #: cockpit/src/insights.jsx:407
 msgid "Details"
-msgstr ""
+msgstr "Einzelheiten"
 
 #: cockpit/src/insights.jsx:178 cockpit/src/insights.jsx:189
 #: cockpit/src/insights.jsx:257
 msgid "Waiting for other software management operations to finish"
-msgstr ""
+msgstr "Warten, bis andere Softwareverwaltungsvorgänge abgeschlossen sind"
 
 #: cockpit/src/insights.jsx:180 cockpit/src/insights.jsx:259
 msgid "Checking installed software"
-msgstr ""
+msgstr "Überprüfen der installierten Software"
 
 #: cockpit/src/insights.jsx:193
 msgid "Downloading $0"
-msgstr ""
+msgstr "$0 herunterladen"
 
 #: cockpit/src/insights.jsx:195
 msgid "Removing $0"
-msgstr ""
+msgstr "$0 entfernen"
 
 #: cockpit/src/insights.jsx:197
 msgid "Installing $0"
-msgstr ""
+msgstr "$0 installieren"
 
 #: cockpit/src/insights.jsx:214
 msgid "Connect to Red Hat Insights"
-msgstr ""
+msgstr "Verbinden mit Red Hat Insights"
 
 #: cockpit/src/insights.jsx:217
 msgid "This system is not connected to $0."
-msgstr ""
+msgstr "Dieses System ist nicht mit $0 verbunden."
 
 #: cockpit/src/insights.jsx:227
 msgid "Connect"
-msgstr ""
+msgstr "Verbinden"
 
 #: cockpit/src/insights.jsx:320
 msgid "unknown"
-msgstr ""
+msgstr "Unbekannt"
 
 #: cockpit/src/insights.jsx:373
 msgid "The last Insights data upload has failed."
-msgstr ""
+msgstr "Der letzte Upload von Insights-Daten ist fehlgeschlagen."
 
 #: cockpit/src/insights.jsx:378
 msgid "Connected to Red Hat Insights"
-msgstr ""
+msgstr "Verbunden mit Red Hat Insights"
 
 #: cockpit/src/insights.jsx:384
 msgid "Next Insights data upload"
-msgstr ""
+msgstr "Nächster Insights-Daten-Upload"
 
 #: cockpit/src/insights.jsx:389
 msgid "Last Insights data upload"
-msgstr ""
+msgstr "Letzter Upload von Insights-Daten"
 
 #: cockpit/src/insights.jsx:399
 msgid "Next Insights data upload could not be scheduled."
@@ -316,13 +324,15 @@ msgstr ""
 
 #: cockpit/src/insights.jsx:410 cockpit/src/insights.jsx:416
 msgid "Disconnect from Insights"
-msgstr ""
+msgstr "Von Insights trennen"
 
 #: cockpit/src/insights.jsx:413
 msgid ""
 "If you disconnect this system from Insights, it will no longer report it's "
 "Insights status in Red Hat Cloud or Satellite."
 msgstr ""
+"Wenn Sie dieses System von Insights trennen, meldet es seinen Insights-"
+"Status nicht mehr an Red Hat Cloud oder Satellite."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/insights.jsx:424 cockpit/src/insights.jsx:443
@@ -344,53 +354,53 @@ msgstr "Abbrechen"
 
 #: cockpit/src/insights.jsx:500
 msgid "No rule hits"
-msgstr ""
+msgstr "Keine Regeltreffer"
 
 #: cockpit/src/insights.jsx:508
 msgid "$0 critical hit"
 msgid_plural "$0 hits, including critical"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "$0 kritischer Treffer"
+msgstr[1] "0 $ Treffer, einschließlich kritischer Treffer"
 
 #: cockpit/src/insights.jsx:513
 msgid "$0 important hit"
 msgid_plural "$0 hits, including important"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "$0 wichtiger Treffer"
+msgstr[1] "0 $ Treffer, einschließlich wichtiger"
 
 #: cockpit/src/insights.jsx:518
 msgid "$0 moderate hit"
 msgid_plural "$0 hits, including moderate"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "0 $ mittlerer Treffer"
+msgstr[1] "0 $ Treffer, einschließlich mäßiger Treffer"
 
 #: cockpit/src/insights.jsx:523
 msgid "$0 low severity hit"
 msgid_plural "$0 low severity hits"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "0 $ Treffer mit niedrigem Schweregrad"
+msgstr[1] "0 $ Treffer mit niedrigen Schweregraden"
 
 #: cockpit/src/insights.jsx:529
 msgid "$0 hit"
 msgid_plural "$0 hits"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "$0 Treffer"
+msgstr[1] "0 $ Treffer"
 
 #: cockpit/src/insights.jsx:536
 msgid "View your Insights results"
-msgstr ""
+msgstr "Sehen Sie sich Ihre Insights-Ergebnisse an"
 
 #: cockpit/src/insights.jsx:542
 msgid "Connected to Insights"
-msgstr ""
+msgstr "Verbunden mit Insights"
 
 #: cockpit/src/insights.jsx:554
 msgid "Not connected"
-msgstr ""
+msgstr "Nicht verbunden"
 
 #: cockpit/src/insights.jsx:559 cockpit/src/subscriptions-register.jsx:84
 msgid "Insights"
-msgstr ""
+msgstr "Insights"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: cockpit/src/subscriptions-client.js:48
@@ -418,31 +428,31 @@ msgstr "Unbekannt"
 
 #: cockpit/src/subscriptions-client.js:307
 msgid "Starting registration service ..."
-msgstr ""
+msgstr "Registrierungsservice starten ..."
 
 #: cockpit/src/subscriptions-client.js:326
 msgid "Registering using activation key ..."
-msgstr ""
+msgstr "Registrierung mit Aktivierungsschlüssel ..."
 
 #: cockpit/src/subscriptions-client.js:344
 msgid "Registering using username and password ..."
-msgstr ""
+msgstr "Registrierung mit Benutzername und Passwort ..."
 
 #: cockpit/src/subscriptions-client.js:368
 msgid "Stopping registration service ..."
-msgstr ""
+msgstr "Registrierungsdienst wird beendet..."
 
 #: cockpit/src/subscriptions-client.js:392
 msgid "Saving configuration ..."
-msgstr ""
+msgstr "Konfiguration speichern ..."
 
 #: cockpit/src/subscriptions-client.js:408
 msgid "Attaching subscriptions ..."
-msgstr ""
+msgstr "Abonnements anhängen..."
 
 #: cockpit/src/subscriptions-client.js:456
 msgid "Updating status ..."
-msgstr ""
+msgstr "Status wird aktualisiert..."
 
 #: cockpit/src/subscriptions-client.js:474
 #: cockpit/src/subscriptions-view.jsx:273
@@ -452,11 +462,11 @@ msgstr "Wird abgemeldet"
 
 #: cockpit/src/subscriptions-client.js:513
 msgid "not-found"
-msgstr ""
+msgstr "nicht gefunden"
 
 #: cockpit/src/subscriptions-client.js:545
 msgid "Corrupted JSON with status"
-msgstr ""
+msgstr "Beschädigtes JSON mit Status"
 
 #: cockpit/src/subscriptions-register.jsx:50
 msgid "Proxy Location"
@@ -472,11 +482,11 @@ msgstr "Proxy-Passwort"
 
 #: cockpit/src/subscriptions-register.jsx:90
 msgid "Connect this system to $0."
-msgstr ""
+msgstr "Verbinden Sie dieses System mit $0."
 
 #: cockpit/src/subscriptions-register.jsx:102
 msgid "Username"
-msgstr ""
+msgstr "Nutzername"
 
 #: cockpit/src/subscriptions-register.jsx:108
 msgid "Password"
@@ -508,11 +518,11 @@ msgstr "URL"
 
 #: cockpit/src/subscriptions-register.jsx:159
 msgid "Use proxy server"
-msgstr ""
+msgstr "Proxyserver verwenden"
 
 #: cockpit/src/subscriptions-register.jsx:163
 msgid "Method"
-msgstr ""
+msgstr "Methode"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-register.jsx:174 src/rct/manifest_commands.py:250
@@ -522,7 +532,7 @@ msgstr "Account"
 
 #: cockpit/src/subscriptions-register.jsx:183
 msgid "Activation key"
-msgstr ""
+msgstr "Aktivierungsschlüssel"
 
 #: cockpit/src/subscriptions-register.jsx:189
 msgid "Subscriptions"
@@ -530,7 +540,7 @@ msgstr "Subskriptionen"
 
 #: cockpit/src/subscriptions-register.jsx:195
 msgid "Attach automatically"
-msgstr ""
+msgstr "Automatisch anhängen"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:41 cockpit/src/subscriptions-view.jsx:60
@@ -544,7 +554,7 @@ msgstr "Automatische Verknüpfung"
 
 #: cockpit/src/subscriptions-view.jsx:54
 msgid "Auto-attaching ..."
-msgstr ""
+msgstr "Automatisches Anhängen ..."
 
 #: cockpit/src/subscriptions-view.jsx:73 cockpit/src/subscriptions-view.jsx:117
 #, fuzzy
@@ -640,7 +650,7 @@ msgstr "Rolle:  "
 
 #: cockpit/src/subscriptions-view.jsx:250 src/rct/printing.py:86
 msgid "Add-ons"
-msgstr ""
+msgstr "Add-ons"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: cockpit/src/subscriptions-view.jsx:264
@@ -681,11 +691,11 @@ msgstr "Server konnte unter %s:%s%s nicht erreicht werden"
 
 #: cockpit/src/subscriptions-view.jsx:322
 msgid "Updating"
-msgstr "Aktualisiere"
+msgstr "Aktualisierung"
 
 #: cockpit/src/subscriptions-view.jsx:323
 msgid "Retrieving subscription status..."
-msgstr "Abonnementstatus abrufen ..."
+msgstr "Abonnementstatus abrufen..."
 
 #: cockpit/src/subscriptions-view.jsx:325
 msgid "Access denied"
@@ -697,15 +707,15 @@ msgstr ""
 
 #: cockpit/src/subscriptions-view.jsx:328
 msgid "Unable to connect"
-msgstr "Kann keine Verbindung herstellen"
+msgstr "Verbindung konnte nicht hergestellt werden"
 
 #: cockpit/src/subscriptions-view.jsx:329
 msgid ""
 "Couldn't get system subscription status. Please ensure subscription-manager "
 "is installed."
 msgstr ""
-"Der Status des Systemabonnements konnte nicht erreicht werden. Bitte stellen "
-"Sie sicher, dass der subscription-manager installiert ist."
+"Der Status des Systemabonnements konnte nicht abgerufen werden. Bitte "
+"stellen Sie sicher, dass der Abonnement-Manager installiert ist."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/daemons/rhsmcertd.c:95
@@ -729,7 +739,7 @@ msgstr "Intervall zum Ausführen der automatischen Verknüpfung (in Minuten)"
 
 #: src/daemons/rhsmcertd.c:108
 msgid "interval to run auto-registration (in minutes)"
-msgstr ""
+msgstr "Intervall zum Ausführen der automatischen Registrierung (in Minuten)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/daemons/rhsmcertd.c:111
@@ -747,7 +757,7 @@ msgstr "die ersten Kontrollen keinen Versatz hinzufügen."
 
 #: src/daemons/rhsmcertd.c:119
 msgid "try to perform auto-registration."
-msgstr ""
+msgstr "Versuchen Sie, eine automatische Registrierung durchzuführen."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/daemons/rhsmcertd.c:452
@@ -810,17 +820,14 @@ msgstr ""
 "die abgelaufene Subskription verlängern.  "
 
 #: src/dnf-plugins/subscription-manager.py:50
-#, fuzzy
-#| msgid ""
-#| "This system is not registered to Red Hat Subscription Management. You can "
-#| "use subscription-manager to register."
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "subscription-manager to register.\n"
 msgstr ""
-"Dieses System ist nicht beim Red Hat Subscription Management registriert. "
-"Sie können subscription-manager zum Registrieren verwenden."
+"\n"
+"Dieses System ist nicht bei einem Berechtigungsserver registriert. Sie "
+"können sich mit dem Abo-Manager registrieren.\n"
 
 #: src/dnf-plugins/subscription-manager.py:54
 #, fuzzy
@@ -847,6 +854,8 @@ msgid ""
 "subscription-manager plugin disabled %d system repositories with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
 msgstr ""
+"Subscription-Manager-Plugin deaktiviert %d System-Repositorys in Bezug auf "
+"die Konfiguration in /etc/dnf/plugins/subscription-manager.conf"
 
 #: src/dnf-plugins/subscription-manager.py:128
 msgid "Updating Subscription Management repositories."
@@ -865,16 +874,20 @@ msgid ""
 "Upload combined profile to Satellite server (list of installed rpms, enabled "
 "repositories and modules"
 msgstr ""
+"Kombiniertes Profil auf den Satelliteserver hochladen (Liste der "
+"installierten RPMs, aktivierten Repositorys und Module"
 
 #: src/dnf-plugins/upload-profile.py:44
 #: src/subscription_manager/scripts/package_profile_upload.py:39
 msgid "Force package profile upload"
-msgstr ""
+msgstr "Paketprofil-Upload erzwingen"
 
 #: src/dnf-plugins/upload-profile.py:60
 #: src/subscription_manager/scripts/package_profile_upload.py:46
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
 msgstr ""
+"Keine Aktualisierungen durchgeführt. Weitere Informationen finden Sie unter /"
+"var/log/rhsm/rhsm.log."
 
 #: src/initial-setup/com_redhat_subscription_manager/gui/spokes/rhsm_gui.ui:8
 msgid "RHEL"
@@ -1276,7 +1289,7 @@ msgstr "Nummer"
 
 #: src/rct/printing.py:83
 msgid "Roles"
-msgstr ""
+msgstr "Rollen"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/printing.py:89 src/subscription_manager/gui/allsubs.py:231
@@ -1407,7 +1420,7 @@ msgstr "Pool-ID"
 
 #: src/rct/printing.py:235
 msgid "Authorized Content URLs:"
-msgstr ""
+msgstr "Autorisierte Inhalts-URLs:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/printing.py:256
@@ -1466,7 +1479,7 @@ msgstr "%%prog %s [OPTIONEN] "
 #: src/rhsm_debug/debug_commands.py:89
 msgid "The directory specified by '--destination' must already exist."
 msgstr ""
-"Das durch '--destination' angegebene Verzeichnis muss bereits vorhanden sein."
+"Das durch '--destination' angegebene Verzeichnis muss bereits existieren."
 
 #: src/rhsm_debug/debug_commands.py:93
 #, fuzzy, python-brace-format
@@ -1598,11 +1611,13 @@ msgstr "Optionsanalyse schlug fehl: %s\n"
 msgid ""
 "User %s is member of more organizations, but no organization was selected"
 msgstr ""
+"Benutzer %s ist Mitglied in mehreren Organisationen, aber es wurde keine "
+"Organisation ausgewählt"
 
 #: src/rhsmlib/dbus/objects/register.py:110
 #, python-format
 msgid "User %s is not member of any organization"
-msgstr ""
+msgstr "Benutzer %s ist kein Mitglied einer Organisation"
 
 #: src/rhsmlib/dbus/objects/syspurpose.py:69
 #, python-brace-format
@@ -1813,24 +1828,24 @@ msgstr "Fehler: Fehlende Benutzernamen oder Kennwort."
 
 #: src/rhsmlib/services/syspurpose.py:97 src/rhsmlib/services/syspurpose.py:100
 msgid "Matched"
-msgstr ""
+msgstr "Übereinstimmend"
 
 #: src/rhsmlib/services/syspurpose.py:98 src/rhsmlib/services/syspurpose.py:101
 msgid "Mismatched"
-msgstr ""
+msgstr "Nicht übereinstimmend"
 
 #: src/rhsmlib/services/syspurpose.py:99
 msgid "Partial"
-msgstr ""
+msgstr "Teilweise"
 
 #: src/rhsmlib/services/syspurpose.py:102
 msgid "Not Specified"
-msgstr ""
+msgstr "Unbestimmt"
 
 #: src/rhsmlib/services/syspurpose.py:103
 #: src/subscription_manager/cert_sorter.py:281
 msgid "Disabled"
-msgstr ""
+msgstr "Deaktiviert"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/branding/__init__.py:81
@@ -2032,6 +2047,9 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
+"Warnung: Ein {attr} von \"{download_value}\" wurde kürzlich vom "
+"Berechtigungsserver-Administrator für dieses System festgelegt.\n"
+"{advice}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:36
 #, python-brace-format
@@ -2051,32 +2069,32 @@ msgstr "Veraltet, siehe remove"
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:65
 #, python-brace-format
 msgid "set {attr} of system purpose"
-msgstr ""
+msgstr "setze {attr} des Systemzwecks"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:72
 #, python-brace-format
 msgid "unset {attr} of system purpose"
-msgstr ""
+msgstr "entferne {attr} des Systemzwecks"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:80
 #, python-brace-format
 msgid "add an item to the list ({attr})."
-msgstr ""
+msgstr "ein Element zur Liste hinzufügen ({attr})."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:88
 #, python-brace-format
 msgid "remove an item from the list ({attr})."
-msgstr ""
+msgstr "ein Element aus der Liste entfernen ({attr})."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:95
 #, python-brace-format
 msgid "show this system's current {attr}"
-msgstr ""
+msgstr "aktuelle {attr} dieses Systems anzeigen"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:102
 #, python-brace-format
 msgid "list all {attr} available"
-msgstr ""
+msgstr "alle verfügbaren {attr} auflisten"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:133
 msgid "--unset cannot be used with --set, --add, or --remove"
@@ -2084,17 +2102,19 @@ msgstr "--unset kann nicht mit --set, --add oder --remove verwendet werden"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:135
 msgid "--add cannot be used with --remove"
-msgstr "--add kann nicht mit --remove verwendet werden"
+msgstr "--add kann nicht mit --remove . verwendet werden"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:144
 msgid "Error: you can specify --username or --token not both"
-msgstr ""
+msgstr "Fehler: Sie können --username oder --token nicht beides angeben,"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:149
 #, python-brace-format
 msgid ""
 "Error: you must register or specify --username and --password to list {attr}"
 msgstr ""
+"Fehler: Sie müssen sich registrieren oder --username und --password angeben, "
+"um {attr} aufzulisten"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:169
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:180
@@ -2111,7 +2131,7 @@ msgstr ""
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:226
 #, python-brace-format
 msgid "\"{value}\""
-msgstr ""
+msgstr "{value}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:229
 #, python-brace-format
@@ -2120,33 +2140,39 @@ msgid ""
 msgid_plural ""
 "Warning: Provided values {vals} are not included in the list of valid values"
 msgstr[0] ""
+"Warnung: Der angegebene Wert {vals} ist nicht in der Liste der gültigen "
+"Werte enthalten"
 msgstr[1] ""
+"Warnung: Die angegebenen Werte {vals} sind nicht in der Liste der gültigen "
+"Werte enthalten"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:236
-#, fuzzy, python-brace-format
-#| msgid "This org does not have any subscriptions with service levels."
+#, python-brace-format
 msgid ""
 "Warning: This organization does not have any subscriptions that provide a "
 "system purpose \"{attr}\".  This setting will not influence auto-attaching "
 "subscriptions."
-msgstr "Diese Organisation hat keine Subskriptionen mit Servicelevels."
+msgstr ""
+"Warnung: Diese Organisation hat keine Abonnements, die einen Systemzweck \""
+"{attr}\" bereitstellen. Diese Einstellung hat keinen Einfluss auf das "
+"automatische Anhängen von Abonnements."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:250
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
-msgstr ""
+msgstr "{attr} auf \"{val}\" gesetzt."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:267
 #, python-brace-format
 msgid "{attr} unset."
-msgstr "{attr} unset"
+msgstr "{attr} nicht gesetzt."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:284
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:307
 #, python-brace-format
 msgid "{attr} updated."
-msgstr "{attr} aktualisierte."
+msgstr "{attr} aktualisiert."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:336
 #, python-brace-format
@@ -2156,12 +2182,12 @@ msgstr "Aktuell {name}: {val}"
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:339
 #, python-brace-format
 msgid "{name} not set."
-msgstr "{name} nicht eingestellt."
+msgstr "{name} nicht festgelegt."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:357
 #, python-brace-format
 msgid "Available {syspurpose_attr}"
-msgstr ""
+msgstr "Verfügbar {syspurpose_attr}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:367
 #: src/subscription_manager/cli_command/service_level.py:183
@@ -2170,6 +2196,8 @@ msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
 msgstr ""
+"Es sind keine Werte für den Systemzweck \"{syspurpose_attr}\" aus den "
+"verfügbaren Abonnements in dieser Organisation verfügbar."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:371
 #, python-brace-format
@@ -2177,10 +2205,12 @@ msgid ""
 "Unable to get the list of valid values for the system purpose "
 "\"{syspurpose_attr}\"."
 msgstr ""
+"Die Liste der gültigen Werte für den Systemzweck \"{syspurpose_attr}\" kann "
+"nicht abgerufen werden."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:390
 msgid "Unable to connect to server using token"
-msgstr ""
+msgstr "Verbindung zum Server mit Token nicht möglich"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:434
@@ -2196,8 +2226,8 @@ msgid ""
 "Note: The currently configured entitlement server does not support System "
 "Purpose {attr}."
 msgstr ""
-"Hinweis: Der derzeit konfigurierte Berechtigungsserver unterstützt keine "
-"Systemfunktion {attr}."
+"Hinweis: Der derzeit konfigurierte Berechtigungsserver unterstützt den "
+"Systemzweck {attr} nicht."
 
 #: src/subscription_manager/cli_command/addons.py:25
 msgid "Show or modify the system purpose addons setting"
@@ -2401,6 +2431,9 @@ msgid ""
 "Ignoring request to auto-attach. It is disabled for org \"{owner_id}\" "
 "because of the content access mode setting."
 msgstr ""
+"Anfrage zum automatischen Anhängen wird ignoriert. Sie ist für die "
+"Organisation \"{owner_id}\" aufgrund der Einstellung für den "
+"Inhaltszugriffsmodus deaktiviert."
 
 #: src/subscription_manager/cli_command/cli.py:160
 msgid "server URL in the form of https://hostname:port/prefix"
@@ -2416,10 +2449,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/subscription_manager/cli_command/cli.py:168
-#, fuzzy
-#| msgid "proxy URL in the form of proxy_hostname:proxy_port"
 msgid "proxy URL in the form of hostname:port"
-msgstr "Proxy-URL im Format proxy_hostname:proxy_port"
+msgstr "Proxy-URL in Form von Hostname:Port"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/subscription_manager/cli_command/cli.py:170
@@ -2651,7 +2682,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/identity.py:56
 msgid "--token can only be used with --force"
-msgstr ""
+msgstr "--token kann nur mit --force verwendet werden"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/identity.py:65
@@ -2909,7 +2940,7 @@ msgstr "Servicetyp:"
 #: src/subscription_manager/cli_command/list.py:68
 #: src/subscription_manager/cli_command/list.py:140
 msgid "Roles:"
-msgstr ""
+msgstr "Rollen:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/subscription_manager/cli_command/list.py:69
@@ -2922,12 +2953,12 @@ msgstr "Servicelevel:"
 #: src/subscription_manager/cli_command/list.py:70
 #: src/subscription_manager/cli_command/list.py:142
 msgid "Usage:"
-msgstr ""
+msgstr "Verwendung:"
 
 #: src/subscription_manager/cli_command/list.py:71
 #: src/subscription_manager/cli_command/list.py:143
 msgid "Add-ons:"
-msgstr ""
+msgstr "Erweiterungen:"
 
 #: src/subscription_manager/cli_command/list.py:72
 #: src/subscription_manager/cli_command/list.py:122
@@ -2938,7 +2969,7 @@ msgstr "Subskriptionstyp:"
 #: src/subscription_manager/cli_command/list.py:75
 #: src/subscription_manager/cli_command/list.py:148
 msgid "Entitlement Type:"
-msgstr ""
+msgstr "Berechtigungstyp:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/subscription_manager/cli_command/list.py:87
@@ -3118,7 +3149,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/list.py:244
 msgid "Error: --afterdate is only applicable with --available"
-msgstr "Fehler: --afterdate gilt nur zusammen mit --available"
+msgstr "Fehler: --afterdate ist nur anwendbar mit --available"
 
 #: src/subscription_manager/cli_command/list.py:246
 msgid "Error: --afterdate cannot be used with --ondate"
@@ -3459,7 +3490,7 @@ msgstr "Neueste Subskriptionsdaten vom Server abrufen"
 
 #: src/subscription_manager/cli_command/refresh.py:36
 msgid "force certificate regeneration"
-msgstr ""
+msgstr "Zertifikatsregeneration erzwingen"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/refresh.py:61
@@ -3920,7 +3951,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/service_level.py:69
 msgid "Error: --org is only supported with the --list or --set option"
-msgstr ""
+msgstr "Fehler: --org wird nur mit der Option --list oder --set unterstützt"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/subscription_manager/cli_command/service_level.py:76
@@ -3939,11 +3970,11 @@ msgstr "Fehler: Servicelevels konnten nicht abgerufen werden."
 #: src/subscription_manager/cli_command/service_level.py:136
 #, python-brace-format
 msgid "Service level set to: \"{val}\"."
-msgstr ""
+msgstr "Servicelevel eingestellt auf: \"{val}\"."
 
 #: src/subscription_manager/cli_command/service_level.py:144
 msgid "Service level preference has been unset"
-msgstr ""
+msgstr "Die Servicelevel-Präferenz wurde aufgehoben"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/subscription_manager/cli_command/service_level.py:150
@@ -3998,6 +4029,8 @@ msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status.\n"
 msgstr ""
+"Der Inhaltszugriffsmodus ist auf Einfacher Inhaltszugriff eingestellt. "
+"Dieser Host hat unabhängig vom Abonnementstatus Zugriff auf Inhalte.\n"
 
 #: src/subscription_manager/cli_command/status.py:79
 #, fuzzy, python-brace-format
@@ -4077,7 +4110,7 @@ msgstr "Passwort zur Autorisierung beim Server"
 
 #: src/subscription_manager/cli_command/user_pass.py:40
 msgid "token to use when authorizing against the server"
-msgstr ""
+msgstr "Token für die Autorisierung gegen den Server"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/user_pass.py:50
@@ -4172,7 +4205,7 @@ msgstr "Nicht autorisiert: Ungültige Anmeldeinformationen für Anfrage."
 
 #: src/subscription_manager/exceptions.py:34
 msgid "Token authentication not supported by the entitlement server"
-msgstr ""
+msgstr "Token-Authentifizierung wird vom Berechtigungsserver nicht unterstützt"
 
 #: src/subscription_manager/exceptions.py:35
 msgid "Forbidden: Invalid credentials for request."
@@ -6213,7 +6246,7 @@ msgstr "_Verknüpfen"
 
 #: src/subscription_manager/gui/registergui.py:1239
 msgid "Finding suitable subscriptions"
-msgstr ""
+msgstr "Passende Abos finden"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/registergui.py:1248
@@ -6949,10 +6982,10 @@ msgid ""
 "Hat Subscription Management. If not desired, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
-"Die yum / dnf-Plugins: %s wurden automatisch für das Red Hat Subscription "
-"Management aktiviert. Wenn nicht gewünscht, verwenden Sie \"subscription-"
-"manager config --rhsm.auto_enable_yum_plugins=0\", um dieses Verhalten zu "
-"blockieren."
+"Die yum/dnf-Plugins: %s wurden automatisch zum Nutzen von Red Hat "
+"Subscription Management aktiviert. Wenn nicht gewünscht, verwenden Sie "
+"\"subscription-manager config --rhsm.auto_enable_yum_plugins=0\", um dies zu "
+"blockieren"
 
 #: src/subscription_manager/repolib.py:646
 msgid "Repo updates"
@@ -6973,7 +7006,7 @@ msgstr "Gelöscht"
 
 #: src/subscription_manager/scripts/package_profile_upload.py:38
 msgid "Upload a package profile"
-msgstr ""
+msgstr "Laden Sie ein Paketprofil hoch"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/subscription_manager/scripts/package_profile_upload.py:62
@@ -6985,7 +7018,7 @@ msgstr "Benutzer hat den Prozess unterbrochen."
 #: src/subscription_manager/scripts/package_profile_upload.py:65
 #, python-format
 msgid "Error uploading package profile: %s\n"
-msgstr ""
+msgstr "Fehler beim Hochladen des Paketprofils: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author rgromans
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:208
