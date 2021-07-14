@@ -4,13 +4,14 @@
 # John Sefler <jsefler@redhat.com>, 2019. #zanata
 # ljanda <ljanda@redhat.com>, 2019. #zanata
 # CoconutNut <patrick.vollandt@mein-gym.de>, 2021.
+# Ludek Janda <ljanda@redhat.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-09 12:30+0200\n"
-"PO-Revision-Date: 2021-07-08 01:04+0000\n"
-"Last-Translator: CoconutNut <patrick.vollandt@mein-gym.de>\n"
+"PO-Revision-Date: 2021-07-14 13:04+0000\n"
+"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/de/>\n"
 "Language: de\n"
@@ -360,31 +361,31 @@ msgstr "Keine Regeltreffer"
 msgid "$0 critical hit"
 msgid_plural "$0 hits, including critical"
 msgstr[0] "$0 kritischer Treffer"
-msgstr[1] "0 $ Treffer, einschließlich kritischer Treffer"
+msgstr[1] "$0 Treffer, einschließlich kritischer Treffer"
 
 #: cockpit/src/insights.jsx:513
 msgid "$0 important hit"
 msgid_plural "$0 hits, including important"
 msgstr[0] "$0 wichtiger Treffer"
-msgstr[1] "0 $ Treffer, einschließlich wichtiger"
+msgstr[1] "$0 Treffer, einschließlich wichtiger"
 
 #: cockpit/src/insights.jsx:518
 msgid "$0 moderate hit"
 msgid_plural "$0 hits, including moderate"
-msgstr[0] "0 $ mittlerer Treffer"
-msgstr[1] "0 $ Treffer, einschließlich mäßiger Treffer"
+msgstr[0] "$0 mittlerer Treffer"
+msgstr[1] "$0 Treffer, einschließlich mäßiger Treffer"
 
 #: cockpit/src/insights.jsx:523
 msgid "$0 low severity hit"
 msgid_plural "$0 low severity hits"
-msgstr[0] "0 $ Treffer mit niedrigem Schweregrad"
-msgstr[1] "0 $ Treffer mit niedrigen Schweregraden"
+msgstr[0] "$0 Treffer mit niedrigem Schweregrad"
+msgstr[1] "$0 Treffer mit niedrigen Schweregraden"
 
 #: cockpit/src/insights.jsx:529
 msgid "$0 hit"
 msgid_plural "$0 hits"
 msgstr[0] "$0 Treffer"
-msgstr[1] "0 $ Treffer"
+msgstr[1] "$0 Treffer"
 
 #: cockpit/src/insights.jsx:536
 msgid "View your Insights results"
@@ -2106,7 +2107,7 @@ msgstr "--add kann nicht mit --remove . verwendet werden"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:144
 msgid "Error: you can specify --username or --token not both"
-msgstr "Fehler: Sie können --username oder --token nicht beides angeben,"
+msgstr "Fehler: Sie können --username oder --token nicht beides angeben"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:149
 #, python-brace-format
@@ -2131,7 +2132,7 @@ msgstr ""
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:226
 #, python-brace-format
 msgid "\"{value}\""
-msgstr "{value}"
+msgstr "\"{value}\""
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:229
 #, python-brace-format
@@ -2470,7 +2471,7 @@ msgstr "Host-Suffixe, die http-Proxy umgehen soll"
 msgid ""
 "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
-"Benutzeridentität ist entweder nicht vorhanden oder ist beschädigt. Try  "
+"Benutzeridentität ist entweder nicht vorhanden oder ist beschädigt. Try "
 "register --help"
 
 #: src/subscription_manager/cli_command/cli.py:234
@@ -2672,7 +2673,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/identity.py:52
 msgid "--force can only be used with --regenerate"
-msgstr "--force kann nur zusammen mit  --regenerate verwendet werden"
+msgstr "--force kann nur zusammen mit --regenerate verwendet werden"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/identity.py:54
@@ -3071,7 +3072,7 @@ msgstr "Zeigt die Liste verfügbarer Subskriptionen an"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/subscription_manager/cli_command/list.py:201
 msgid "used with --available to ensure all subscriptions are returned"
-msgstr "Verwendet mit  --available, um alle Subskriptionen auszugeben"
+msgstr "Verwendet mit --available, um alle Subskriptionen auszugeben"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/subscription_manager/cli_command/list.py:204
@@ -3122,7 +3123,7 @@ msgid ""
 "the subscription or product information, varying with the list requested and "
 "the server version (case-insensitive)."
 msgstr ""
-"Zeigt nur Subskriptionen oder Produkte an, die den angegebenen Ausdruck  in "
+"Zeigt nur Subskriptionen oder Produkte an, die den angegebenen Ausdruck in "
 "den Subskriptions- oder Produktinformationen enthalten, die sich je nach "
 "angeforderter List und der Serverversion unterscheiden (Groß- und "
 "Kleinschreibung wird ignoriert)."
@@ -3133,7 +3134,7 @@ msgid ""
 "only used with --available and --consumed"
 msgstr ""
 "Zeigt nur die Pool-IDs für passende verfügbare oder verbrauchte "
-"Subskriptionen an. Wird nur mit --available und --consumed verwendet."
+"Subskriptionen an. Wird nur mit --available und --consumed verwendet"
 
 #: src/subscription_manager/cli_command/list.py:225
 #, fuzzy, python-brace-format
@@ -3465,7 +3466,7 @@ msgstr ""
 #: src/subscription_manager/cli_command/redeem.py:34
 msgid "email address to notify when subscription redemption is complete"
 msgstr ""
-"Zu benachrichtigende E-Mail-Adresse, sobald Subskription eingelöst wurde."
+"Zu benachrichtigende E-Mail-Adresse, sobald Subskription eingelöst wurde"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/redeem.py:37
@@ -5104,7 +5105,7 @@ msgstr "<b>HTTP-Proxy</b>"
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:44
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:117
 msgid "I would like to connect via an _HTTP proxy."
-msgstr "Ich möchte über einen  _HTTP-Proxy verbinden."
+msgstr "Ich möchte über einen _HTTP-Proxy verbinden."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:53
@@ -5334,7 +5335,7 @@ msgid ""
 "automatically.</small>"
 msgstr ""
 "<small>Die Servicelevel-Einstellung Ihres Systems wird bei der automatischen "
-"Subskription berücksichtigt</small>"
+"Subskription berücksichtigt.</small>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/data/glade/progress.glade:8
@@ -5486,7 +5487,7 @@ msgid ""
 "recommended.)</b>"
 msgstr ""
 "Möchten Sie Ihr System zu diesem Zeitpunkt registrieren? <b>(dringend "
-"empfohlen)</b> ."
+"empfohlen.)</b>"
 
 #: src/subscription_manager/gui/data/glade/registration_info.glade:160
 #: src/subscription_manager/gui/data/ui/registration_info.ui:231
@@ -5889,7 +5890,7 @@ msgstr "Fehler: gelöschte UUID: %s"
 #: src/subscription_manager/gui/factsgui.py:142
 #, python-format
 msgid "Error: Wrong uuid: %s"
-msgstr "Fehler: falsche UUID:%s"
+msgstr "Fehler: falsche UUID: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/subscription_manager/gui/firstboot/rhsm_login.py:68
@@ -6111,12 +6112,11 @@ msgstr "Sind Sie sicher, dass Sie %s entfernen möchten?"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/mysubstab.py:200
-#, fuzzy, python-brace-format
-#| msgid "Stack of %s and 1 other"
+#, python-brace-format
 msgid "Stack of {group_name} and 1 other"
 msgid_plural "Stack of {group_name} and {unique} others"
-msgstr[0] "Bündel mit %s und 1 anderem"
-msgstr[1] "Bündel mit %s und 1 anderem"
+msgstr[0] "Bündel mit {group_name} und 1 anderem"
+msgstr[1] "Bündel mit {group_name} und {unique} anderem"
 
 #: src/subscription_manager/gui/mysubstab.py:204
 #, python-brace-format
@@ -6741,7 +6741,7 @@ msgstr "Verbraucher %s existiert nicht. Neuer Verbraucher wird erstellt."
 
 #: src/subscription_manager/migrate/migrate.py:686
 msgid "Attempting to register system to destination server..."
-msgstr "Registrierung des Systems beim Ziel-Server wird versucht …"
+msgstr "Registrierung des Systems beim Ziel-Server wird versucht…"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/migrate/migrate.py:724
@@ -6797,20 +6797,19 @@ msgid ""
 "enable additional repositories"
 msgstr ""
 "Bitte vergewissern Sie sich, dass dem System Subskriptionen zugewiesen sind, "
-"und werfen Sie einen Blick auf »%s«, um zusätzliche Repositorys zu "
-"aktivieren."
+"und werfen Sie einen Blick auf »%s«, um zusätzliche Repositorys zu aktivieren"
 
 #: src/subscription_manager/migrate/migrate.py:815
 msgid "Stopping and disabling legacy services..."
-msgstr "Veraltete Dienste werden gestoppt und deaktiviert …"
+msgstr "Veraltete Dienste werden gestoppt und deaktiviert…"
 
 #: src/subscription_manager/migrate/migrate.py:836
 msgid "Removing legacy packages..."
-msgstr "Veraltete Pakete werden entfernt …"
+msgstr "Veraltete Pakete werden entfernt…"
 
 #: src/subscription_manager/migrate/migrate.py:863
 msgid "Retrieving existing legacy subscription information..."
-msgstr "Informationen über vorhandene alte Subskriptionen werden abgerufen …"
+msgstr "Informationen über vorhandene alte Subskriptionen werden abgerufen…"
 
 #: src/subscription_manager/migrate/migrate.py:865
 msgid "System is currently subscribed to these legacy channels:"
@@ -6818,7 +6817,7 @@ msgstr "System subskribiert derzeit die folgenden alten Channels:"
 
 #: src/subscription_manager/migrate/migrate.py:877
 msgid "Preparing to unregister system from legacy server..."
-msgstr "Abmeldung des Systems von altem Server wird vorbereitet …"
+msgstr "Abmeldung des Systems von altem Server wird vorbereitet…"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/migrate/migrate.py:898
@@ -6827,7 +6826,7 @@ msgid ""
 "manager"
 msgstr ""
 "Bei der Registrierung mit Subscription Manager keine automatische "
-"Verknüpfung mit Subskriptionen durchführen."
+"Verknüpfung mit Subskriptionen durchführen"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/migrate/migrate.py:900
@@ -6875,25 +6874,25 @@ msgstr "System in alter Umgebung registriert lassen"
 
 #: src/subscription_manager/migrate/migrate.py:937
 msgid "specify the user name on the legacy server"
-msgstr "Geben Sie den Benutzername auf dem alten Server an."
+msgstr "Geben Sie den Benutzername auf dem alten Server an"
 
 #: src/subscription_manager/migrate/migrate.py:939
 msgid "specify the password on the legacy server"
-msgstr "Geben Sie das Passwort auf dem alten Server an."
+msgstr "Geben Sie das Passwort auf dem alten Server an"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/migrate/migrate.py:941
 msgid "specify the subscription management server to migrate to"
 msgstr ""
-"Geben Sie den Subscription Management Server an, zu dem migriert werden soll."
+"Geben Sie den Subscription Management Server an, zu dem migriert werden soll"
 
 #: src/subscription_manager/migrate/migrate.py:943
 msgid "specify the user name on the destination server"
-msgstr "Geben Sie den Benutzername auf dem Ziel-Server an."
+msgstr "Geben Sie den Benutzername auf dem Ziel-Server an"
 
 #: src/subscription_manager/migrate/migrate.py:945
 msgid "specify the password on the destination server"
-msgstr "Geben Sie das Passwort auf dem Ziel-Server an."
+msgstr "Geben Sie das Passwort auf dem Ziel-Server an"
 
 #: src/subscription_manager/migrate/migrate.py:951
 msgid "The --activation-key and --environment options cannot be used together."
@@ -6985,7 +6984,7 @@ msgstr ""
 "Die yum/dnf-Plugins: %s wurden automatisch zum Nutzen von Red Hat "
 "Subscription Management aktiviert. Wenn nicht gewünscht, verwenden Sie "
 "\"subscription-manager config --rhsm.auto_enable_yum_plugins=0\", um dies zu "
-"blockieren"
+"blockieren."
 
 #: src/subscription_manager/repolib.py:646
 msgid "Repo updates"
