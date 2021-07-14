@@ -243,7 +243,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.18
+Version: 1.28.19
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1484,6 +1484,13 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Jul 14 2021 Christopher Snyder <csnyder@redhat.com> 1.28.19-1
+- Translated using Weblate (German) (ljanda@redhat.com)
+- Translated using Weblate (German) (patrick.vollandt@mein-gym.de)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Remove no arch from python3-cloud-what package (csnyder@redhat.com)
+- 1976324: Added cloud_what to log root namespaces (#2704) (jhnidek@redhat.com)
+
 * Mon Jul 12 2021 Christopher Snyder <csnyder@redhat.com> 1.28.18-1
 - Removed .orig files, which leaked into main branch (jhnidek@redhat.com)
 - Move cloud detector/collector to cloud-what package (jhnidek@redhat.com)
