@@ -18,6 +18,8 @@
 Setup for cloud-what
 """
 
+# NOTE: This setup.py file currently not used for building
+
 from setuptools import setup
 
 setup(
@@ -49,5 +51,4 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     install_requires=['dmidecode', 'requests'],
-
 )
