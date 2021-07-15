@@ -247,7 +247,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.29.17
+Version: 1.29.18
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1558,6 +1558,16 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Jul 15 2021 Christopher Snyder <csnyder@redhat.com> 1.29.18-1
+- 1976324: Added cloud_what to log root namespaces (jhnidek@redhat.com)
+- 1976324: Added cloud_what to log root namespaces (jhnidek@redhat.com)
+- Slightly improve our container detection (#2611) (ptoscano@redhat.com)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- 1976225: read lscpu from its JSON output if available (#2699)
+  (ptoscano@redhat.com)
+- 1975589: Correct typo in dnf plugin message (wpoteat@redhat.com)
+- 1924126: Fix profile upload on AWS systems (jhnidek@redhat.com)
+
 * Thu Jul 08 2021 Christopher Snyder <csnyder@redhat.com> 1.29.17-1
 - Remove no arch from python3-cloud-what package (csnyder@redhat.com)
 - 1938878: Fix issues discovered by static code analyzers (#2644)
