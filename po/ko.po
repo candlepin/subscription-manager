@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-30 16:41+0200\n"
-"PO-Revision-Date: 2021-07-01 17:12+0000\n"
+"POT-Creation-Date: 2021-07-09 12:30+0200\n"
+"PO-Revision-Date: 2021-07-13 20:04+0000\n"
 "Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ko/>\n"
@@ -723,35 +723,35 @@ msgid "try to perform auto-registration."
 msgstr "자동 등록을 실행하십시오."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:452
+#: src/daemons/rhsmcertd.c:454
 #, c-format
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "자세한 정보를 보려면 rhsmcertd --help를 실행하십시오\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:512
+#: src/daemons/rhsmcertd.c:514
 msgid "Wrong number of arguments specified.\n"
 msgstr "잘못된 인수 번호가 지정되어 있습니다.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:588
+#: src/daemons/rhsmcertd.c:590
 msgid "Invalid argument specified.\n"
 msgstr "잘못된 인수가 지정되어 있습니다.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:594
+#: src/daemons/rhsmcertd.c:596
 #, c-format
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "경고: 사용권장되지 않는 CLI 인수가 사용되고 있습니다.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:609
+#: src/daemons/rhsmcertd.c:611
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "잘못된 옵션: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:623
+#: src/daemons/rhsmcertd.c:625
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "잘못된 인수가 지정됨: %s\n"
@@ -791,14 +791,20 @@ msgstr ""
 "를 사용하여 등록할 수 있습니다.\n"
 
 #: src/dnf-plugins/subscription-manager.py:54
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "This system is registered with and entitlement server, but is not "
+#| "receiving updates. You can use subscription-manager to assign "
+#| "subscriptions.\n"
 msgid ""
 "\n"
-"This system is registered with and entitlement server, but is not receiving "
+"This system is registered with an entitlement server, but is not receiving "
 "updates. You can use subscription-manager to assign subscriptions.\n"
 msgstr ""
 "\n"
-"이 시스템은 인타이틀먼트 서버로 등록되어 있지만 업데이트를 받지 않습니다. "
-"subscription-manager를 사용하여 서브스크립션을 할당할 수 있습니다.\n"
+"이 시스템은 자격 서버로 등록되어 있지만, 최신화를 받지 않습니다. subscription-manager를 사용하여 서브스크립션을 할당 "
+"할 수 있습니다.\n"
 
 #: src/dnf-plugins/subscription-manager.py:87
 msgid "Not root, Subscription Management repositories not updated"
@@ -2071,13 +2077,13 @@ msgstr "{attr}이/가 \"{val}\"로 설정되었습니다."
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:267
 #, python-brace-format
 msgid "{attr} unset."
-msgstr "{attr} 설정을 해제합니다."
+msgstr "{attr} 해제되었습니다."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:284
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:307
 #, python-brace-format
 msgid "{attr} updated."
-msgstr "{attr}이/가 업데이트되었습니다."
+msgstr "{attr}가 최신화되었습니다."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:336
 #, python-brace-format
@@ -3516,7 +3522,7 @@ msgstr "릴리즈: {release}"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/release.py:59
 msgid "Release not set"
-msgstr "릴리즈가 설정되지 않음"
+msgstr "출시가 설정되지 않음"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/release.py:79
@@ -3838,7 +3844,7 @@ msgstr "Syspurpose 하위모듈"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/syspurpose.py:101
-#, python-brace-format, python-format
+#, python-format, python-brace-format
 msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
 msgstr "%(prog)s {name} [SUBMODULE] [OPTIONS]"
 
