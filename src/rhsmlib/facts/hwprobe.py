@@ -516,7 +516,10 @@ class HardwareCollector(collector.FactsCollector):
             # for s390x with sysinfo topo, we use the sysinfo numbers except
             # for cpu_count, which takes offline cpus into account. This is
             # mostly just to match lscpu behaviour here
-            if cpu_info["cpu.topology_source"] != "s390x sysinfo":
+            # for aarch64, make the socket_count = cpu_count
+            if self.arch == 'aarch64':
+                socket_count = cpu_count
+            elif cpu_info["cpu.topology_source"] != "s390x sysinfo":
                 socket_count = cpu_count // cores_per_socket // threads_per_core
 
         # s390 etc
