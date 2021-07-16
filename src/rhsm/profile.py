@@ -21,6 +21,7 @@ import os.path
 from rhsm import ourjson as json
 from rhsm.utils import suppress_output
 from iniparse import SafeConfigParser, ConfigParser
+from cloud_what import provider
 
 try:
     import dnf
@@ -78,15 +79,59 @@ class ModulesProfile(object):
         return list(ret.values())
 
     @staticmethod
+    def fix_aws_rhui_repos(base) -> None:
+        """
+        Try to fix RHUI repos on AWS systems. When the system is running on AWS, then we have
+        to fix repository URL. See: https://bugzilla.redhat.com/show_bug.cgi?id=1924126
+        :param base: DNF base
+        :return: None
+        """
+        # First try to detect if system is running on AWS
+        cloud_provider = provider.get_cloud_provider()
+
+        if cloud_provider is None or cloud_provider.CLOUD_PROVIDER_ID != "aws":
+            log.debug("This system is not running on AWS. Skipping fixing of RHUI repos.")
+            return
+
+        log.debug("This system is running on AWS. Trying to collect AWS metadata")
+        metadata_str = cloud_provider.get_metadata()
+        if metadata_str is None:
+            log.debug("Unable to gather metadata from IMDS. Skipping fixing of RHUI repos.")
+            return
+
+        try:
+            metadata = json.loads(metadata_str)
+        except json.JSONDecodeError:
+            log.warning("AWS provided corrupted json metadata document. Skipping fixing of RHUI repos.")
+            return
+
+        if 'region' not in metadata:
+            log.debug("Region is not specified in AWS metadata. Skipping fixing of RHUI repos.")
+            return
+
+        region = metadata['region']
+        log.debug(f"Trying to fix URLs of RHUI repos using region: {region}")
+        for repo in cloud_provider.rhui_repos(base):
+            log.debug(f"Trying to fix repository: {repo.id}")
+            try:
+                cloud_provider.fix_rhui_url_template(repo, region)
+            except ValueError as error:
+                log.debug("Unable to fix RHUI URL: {error}".format(error=error))
+
     @suppress_output
-    def __generate():
+    def __generate(self):
         module_list = []
         if dnf is not None and libdnf is not None:
             base = dnf.Base()
+
             # Read yum/dnf variables from <install_root>/etc/yum/vars and <install_root>/etc/dnf/vars
             # See: https://bugzilla.redhat.com/show_bug.cgi?id=1863039
             base.conf.substitutions.update_from_etc(base.conf.installroot)
             base.read_all_repos()
+
+            # Try to fix repo names, when AWS cloud provider is detected
+            self.fix_aws_rhui_repos(base)
+
             try:
                 base.fill_sack()
             except dnf.exceptions.RepoError as err:
