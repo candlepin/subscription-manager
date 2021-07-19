@@ -280,7 +280,7 @@ class MigrationEngine(object):
             else:
                 msgs = [_("This system appears to already be registered to Red Hat Subscription Management.")]
                 msgs.append(_("Please visit https://access.redhat.com/management/consumers/{identity_uuid} to view the "
-                              " profile details.").format(identity_uuid=identity.uuid))
+                              "profile details.").format(identity_uuid=identity.uuid))
             system_exit(1, msgs)
 
         try:
