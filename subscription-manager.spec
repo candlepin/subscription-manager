@@ -93,6 +93,11 @@
 %global use_inotify 0
 %endif
 
+# Do not ship initial-setup in CentOS
+%if %{defined centos}
+%global use_initial_setup 0
+%endif
+
 %if (%{use_subman_gui} || %{use_initial_setup} || %{use_firstboot})
 %global use_rhsm_gtk 1
 %else
