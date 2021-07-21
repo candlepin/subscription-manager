@@ -127,10 +127,13 @@ class TestLogutil(fixture.SubManFixture):
 
         self.assertNotEqual(test_logger.getEffectiveLevel(), config_level)
 
-    def test_missing_log_directory(self):
+    @mock.patch("os.getuid")
+    def test_missing_root_log_directory(self, MockGetUID):
         """
-        Test creating directory for log directory
+        Test creating directory for root log directory
         """
+        MockGetUID.return_value = 0
+
         temp_dir_path = tempfile.mkdtemp()
 
         old_dir_path = logutil.LOGFILE_DIR
@@ -159,10 +162,49 @@ class TestLogutil(fixture.SubManFixture):
         logutil.LOGFILE_DIR = old_dir_path
         logutil.LOGFILE_PATH = old_file_path
 
-    def test_not_possible_to_create_log_dir_due_to_access_perm(self):
+    @mock.patch("os.getuid")
+    def test_missing_user_log_directory(self, MockGetUID):
+        """
+        Test creating directory for user log directory
+        """
+        MockGetUID.return_value = 1000
+
+        temp_dir_path = tempfile.mkdtemp()
+
+        old_dir_path = logutil.USER_LOGFILE_DIR
+        old_file_path = logutil.USER_LOGFILE_PATH
+
+        # Set logutil to uninitialized state
+        logutil._rhsm_log_handler = None
+        logutil._subman_debug_handler = None
+        logutil.USER_LOGFILE_DIR = temp_dir_path
+        logutil.USER_LOGFILE_PATH = os.path.join(temp_dir_path, "rhsm.log")
+
+        self.assertTrue(os.path.exists(temp_dir_path))
+
+        # Simulate deleting of directory $XDG_CACHE_HOME/rhsm
+        os.rmdir(temp_dir_path)
+
+        logutil.init_logger()
+
+        # init_logger should automatically create directory $XDG_CACHE_HOME/rhsm,
+        # when it doesn't exist
+        self.assertTrue(os.path.exists(temp_dir_path))
+
+        os.remove(logutil.USER_LOGFILE_PATH)
+        os.rmdir(logutil.USER_LOGFILE_DIR)
+
+        logutil.USER_LOGFILE_DIR = old_dir_path
+        logutil.USER_LOGFILE_PATH = old_file_path
+
+    @mock.patch("os.getuid")
+    def test_not_possible_to_create_root_log_dir_due_to_access_perm(self, MockGetUID):
         """
         Test that it is not possible to create log directory due to access permission
+        if the subscription-manager is run as root.
         """
+        MockGetUID.return_value = 0
+
         temp_dir_path = tempfile.mkdtemp()
         os.chmod(temp_dir_path, 444)
 
@@ -192,11 +234,51 @@ class TestLogutil(fixture.SubManFixture):
         logutil.LOGFILE_DIR = old_dir_path
         logutil.LOGFILE_PATH = old_file_path
 
-    def test_wrong_rhsm_log_priv(self):
+    @mock.patch("os.getuid")
+    def test_not_possible_to_create_user_log_dir_due_to_access_perm(self, MockGetUID):
+        """
+        Test that it is not possible to create log directory due to access permission
+        if the subscription-manager is not run as root.
+        """
+        MockGetUID.return_value = 1000
+
+        temp_dir_path = tempfile.mkdtemp()
+        os.chmod(temp_dir_path, 444)
+
+        old_dir_path = logutil.USER_LOGFILE_DIR
+        old_file_path = logutil.USER_LOGFILE_PATH
+
+        # Set logutil to uninitialized state
+        logutil._rhsm_log_handler = None
+        logutil._subman_debug_handler = None
+        logutil.USER_LOGFILE_DIR = os.path.join(temp_dir_path, "rhsm")
+        logutil.USER_LOGFILE_PATH = os.path.join(logutil.USER_LOGFILE_DIR, "rhsm.log")
+
+        self.assertTrue(os.path.exists(temp_dir_path))
+
+        with fixture.Capture() as cap:
+            logutil.init_logger()
+
+        self.assertTrue("Further logging output will be written to stderr" in cap.err)
+
+        # init_logger should not be able to automatically create directory /var/log/rhsm,
+        # when user does not have access permission for that
+        self.assertFalse(os.path.exists(logutil.USER_LOGFILE_DIR))
+
+        os.chmod(temp_dir_path, 744)
+        os.rmdir(temp_dir_path)
+
+        logutil.USER_LOGFILE_DIR = old_dir_path
+        logutil.USER_LOGFILE_PATH = old_file_path
+
+    @mock.patch("os.getuid")
+    def test_wrong_rhsm_log_priv(self, MockGetUID):
         """
         Test that error messages are not printed to stderr, when it is not possible
-        to print error messages to rhsm.log during initialization of logger
+        to print error messages to rhsm.log, during initialization of logger
         """
+        MockGetUID.return_value = 0
+
         # Create temporary log directory
         temp_dir_path = tempfile.mkdtemp()
         # Create temporary log file
@@ -214,7 +296,7 @@ class TestLogutil(fixture.SubManFixture):
         logutil._rhsm_log_handler = None
         logutil._subman_debug_handler = None
         logutil.LOGFILE_DIR = temp_dir_path
-        logutil.LOGFILE_PATH = os.path.join(temp_log_file)
+        logutil.LOGFILE_PATH = temp_log_file
 
         with fixture.Capture() as cap:
             logutil.init_logger()
