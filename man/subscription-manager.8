@@ -1499,6 +1499,16 @@ environment variable is set and the
 .B no_proxy
 configuration file option is set, then the value from the configuration file is the effective value.
 
+.SH LOG FILES
+Default log location of the
+.B subscription-manager
+is 
+.B /var/log/rhsm/rhsm.log.
+When the program is run under non-root user (e.g. as dnf plugin) the logs are written to
+.B $XDG_CACHE_HOME/rhsm/rhsm.log.
+
+If the directory isn't writable, the logs are printed to stderr.
+
 .SH FILES
 .IP
 * /etc/pki/consumer/*.pem
@@ -1510,6 +1520,8 @@ configuration file option is set, then the value from the configuration file is 
 * /etc/rhsm/rhsm.conf
 .IP
 * /etc/rhsm/facts/*.facts
+.IP
+* /var/log/rhsm/rhsm.log
 
 .SH AUTHORS
 Deon Lackey, <dlackey@redhat.com>, and Pradeep Kilambi, <pkilambi@redhat.com>
