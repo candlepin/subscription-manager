@@ -11,6 +11,8 @@ from __future__ import print_function, division, absolute_import
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 
+from typing import Optional, Tuple, Union
+
 import logging
 import logging.handlers
 import logging.config
@@ -19,8 +21,12 @@ import sys
 import rhsm.config
 
 LOGFILE_DIR = "/var/log/rhsm/"
-
 LOGFILE_PATH = os.path.join(LOGFILE_DIR, "rhsm.log")
+USER_LOGFILE_DIR = os.path.join(
+    os.path.expanduser(os.getenv("XDG_CACHE_HOME", "~/.cache")),
+    "rhsm",
+)
+USER_LOGFILE_PATH = os.path.join(USER_LOGFILE_DIR, "rhsm.log")
 
 LOG_FORMAT = u'%(asctime)s [%(levelname)s] %(cmd_name)s:%(process)d:' \
              u'%(threadName)s @%(filename)s:%(lineno)d - %(message)s'
@@ -67,22 +73,31 @@ class SubmanDebugLoggingFilter(object):
         return self.on
 
 
-def RHSMLogHandler(*args, **kwargs):
-    """Factory for Logging Handler for /var/log/rhsm/rhsm.log"""
-    err = None
+def RHSMLogHandler(root_log_file: str, user_log_file: str) -> Tuple[
+    Union[logging.handlers.RotatingFileHandler, logging.StreamHandler],
+    Optional[str]
+]:
+    """Factory for the file logging handler.
+
+    If the subscription-manager is run as root, log location of
+    /var/log/rhsm/rhsm.log is used. If it is run as non-root user,
+    $XDG_CACHE_HOME (~/.cache) is used.
+
+    If the directory is not writable, the messages will be written to stderr
+    instead.
+    """
+    err: Optional[str] = None
+    result: Union[logging.handlers.RotatingFileHandler, logging.StreamHandler]
+
+    log_file: str = root_log_file if os.getuid() == 0 else user_log_file
+
     try:
-        result = logging.handlers.RotatingFileHandler(*args, **kwargs)
-    except Exception as error:
+        os.makedirs(os.path.dirname(log_file), exist_ok=True)
+        result = logging.handlers.RotatingFileHandler(log_file)
+    except Exception as exc:
         result = logging.StreamHandler()
-        # Try to create log directory and try to set handle once again
-        if not os.path.exists(LOGFILE_DIR):
-            try:
-                os.makedirs(LOGFILE_DIR)
-                result = logging.handlers.RotatingFileHandler(*args, **kwargs)
-            except Exception as error:
-                err = "{error} - Further logging output will be written to stderr".format(error=error)
-        else:
-            err = "{error} - Further logging output will be written to stderr".format(error=error)
+        err = f"{exc} - Further logging output will be written to stderr"
+
     result.addFilter(ContextLoggingFilter(name=""))
     return result, err
 
@@ -132,7 +147,7 @@ def _get_default_rhsm_log_handler():
     global _rhsm_log_handler
     error = None
     if not _rhsm_log_handler:
-        _rhsm_log_handler, error = RHSMLogHandler(LOGFILE_PATH)
+        _rhsm_log_handler, error = RHSMLogHandler(LOGFILE_PATH, USER_LOGFILE_PATH)
         _rhsm_log_handler.setFormatter(logging.Formatter(LOG_FORMAT))
     return _rhsm_log_handler, error
 
