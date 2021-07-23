@@ -248,7 +248,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.19
+Version: 1.28.20
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1489,6 +1489,11 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Jul 23 2021 Christopher Snyder <csnyder@redhat.com> 1.28.20-1
+- 1876828: Try to suppress errors in stderr when not run as root
+  (mhorky@redhat.com)
+- 1924126: Fix profile upload on AWS systems (jhnidek@redhat.com)
+
 * Wed Jul 14 2021 Christopher Snyder <csnyder@redhat.com> 1.28.19-1
 - Translated using Weblate (German) (ljanda@redhat.com)
 - Translated using Weblate (German) (patrick.vollandt@mein-gym.de)
