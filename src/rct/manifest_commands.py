@@ -325,7 +325,7 @@ class DumpManifestCommand(RCTManifestCommand):
             # IOError/OSError base class
             if e.errno == errno.EEXIST:
                 # useful error for file already exists
-                print(_('File {filename} exists. Use -f to force overwriting the file.').format(filename=e.filename))
+                print(_('File "{filename}" exists. Use -f to force overwriting the file.').format(filename=e.filename))
             else:
                 # generic error for everything else
                 print(_("Manifest could not be written:"))
