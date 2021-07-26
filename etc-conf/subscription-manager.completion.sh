@@ -256,7 +256,16 @@ _subscription_manager()
   COMPREPLY=()
   first=${COMP_WORDS[1]}
   cur="${COMP_WORDS[COMP_CWORD]}"
-  prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+  # Because the 'prev' may be optional argument like '--list', we iterate from the end
+  # until we find string that doesn't start with dash. That is the subcommand which
+  # should be used for completion.
+  i=1
+  prev="${COMP_WORDS[COMP_CWORD-$i]}"
+  while [[ $prev == -* ]]; do
+    i=$((i+1))
+    prev="${COMP_WORDS[COMP_CWORD-$i]}"
+  done
 
   # top-level commands and options
   opts="addons attach auto-attach clean config environments facts identity import list orgs
