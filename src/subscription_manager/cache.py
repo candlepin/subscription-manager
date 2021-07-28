@@ -596,7 +596,8 @@ class InstalledProductsManager(CacheManager):
         for prod_cert in self.product_dir.list():
             prod = prod_cert.products[0]
             self.tags |= set(prod.provided_tags)
-            self._installed[prod.id] = {'productId': prod.id,
+            self._installed[prod.id] = {
+                'productId': prod.id,
                 'productName': prod.name,
                 'version': prod.version,
                 'arch': ','.join(prod.architectures)

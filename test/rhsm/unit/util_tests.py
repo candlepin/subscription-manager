@@ -57,7 +57,8 @@ class TestParseServerInfo(unittest.TestCase):
 
     def test_hostname_just_slash_with_defaults(self):
         local_url = "/"
-        (username, password, hostname, port, prefix) = parse_url(local_url,
+        (username, password, hostname, port, prefix) = parse_url(
+            local_url,
             default_hostname=DEFAULT_HOSTNAME,
             default_port=DEFAULT_PORT)
         self.assertEqual(DEFAULT_HOSTNAME, hostname)
@@ -117,7 +118,8 @@ class TestParseServerInfo(unittest.TestCase):
         # use default port and path. You could also argue it should
         # throw an error, especially if it's not a valid hostname
         local_url = "a"
-        (username, password, hostname, port, prefix) = parse_url(local_url,
+        (username, password, hostname, port, prefix) = parse_url(
+            local_url,
             default_port=DEFAULT_PORT, default_prefix=DEFAULT_PREFIX)
         self.assertEqual("a", hostname)
         self.assertEqual(DEFAULT_PORT, port)

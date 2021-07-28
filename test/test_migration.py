@@ -400,7 +400,8 @@ class TestMigration(SubManFixture):
         self.engine.rhsmcfg.__getitem__.return_value = section
 
         self.engine.transfer_http_proxy_settings()
-        expected = [call("proxy_hostname", "proxy.example.com"),
+        expected = [
+            call("proxy_hostname", "proxy.example.com"),
             call("proxy_port", "123"),
             call("proxy_user", ""),
             call("proxy_password", ""),
@@ -424,7 +425,8 @@ class TestMigration(SubManFixture):
         }
         self.engine.rhncfg = rhn_config
         self.engine.transfer_http_proxy_settings()
-        expected = [call("proxy_hostname", "proxy.example.com"),
+        expected = [
+            call("proxy_hostname", "proxy.example.com"),
             call("proxy_port", "123"),
             call("proxy_user", "foo"),
             call("proxy_password", "bar"),
@@ -467,7 +469,8 @@ class TestMigration(SubManFixture):
         section = MagicMock()
         self.engine.rhsmcfg.__getitem__.return_value = section
         self.engine.transfer_http_proxy_settings()
-        expected = [call("proxy_hostname", ""),
+        expected = [
+            call("proxy_hostname", ""),
             call("proxy_port", ""),
             call("proxy_user", ""),
             call("proxy_password", ""),
@@ -551,7 +554,8 @@ class TestMigration(SubManFixture):
         ])
         section.get_int = MagicMock(side_effect=[443])
 
-        expected = [call("hostname"),
+        expected = [
+            call("hostname"),
             call("prefix"),
         ]
 
@@ -858,7 +862,8 @@ class TestMigration(SubManFixture):
         self.assertRaises(SystemExit, self.engine.check_has_access, Mock(name="fake session"), None)
 
     def test_conflicting_channels(self):
-        channels = ["jbappplatform-4.3.0-i386-server-5-rpm",
+        channels = [
+            "jbappplatform-4.3.0-i386-server-5-rpm",
             "jbappplatform-5-i386-server-5-rpm",
         ]
         try:
@@ -881,7 +886,8 @@ class TestMigration(SubManFixture):
         self.assertEqual('a', chan['label'])
 
     def test_no_conflicting_channels(self):
-        channels = ["some-other-channel-i386-server-5-rpm",
+        channels = [
+            "some-other-channel-i386-server-5-rpm",
             "jbappplatform-5-i386-server-5-rpm",
         ]
         self.engine.check_for_conflicting_channels(channels)
@@ -916,7 +922,8 @@ class TestMigration(SubManFixture):
             self.assertTrue(re.search("3*cert-m-3.pem", output))
 
     def test_accept_channels_mapping_to_same_cert(self):
-        cmap = {'1': {'cert-a-1.pem': ['channel1', 'channel2']},
+        cmap = {
+            '1': {'cert-a-1.pem': ['channel1', 'channel2']},
             '2': {'cert-x-2.pem': ['channel3']}
         }
         try:
@@ -1053,7 +1060,8 @@ class TestMigration(SubManFixture):
         ]
         self.engine.disable_yum_rhn_plugin()
 
-        expected = [call('[channel]'),
+        expected = [
+            call('[channel]'),
             call('enabled = 1'),
             call('[main]'),
             call('enabled = 0'),  # Note that enabled is now 0.
@@ -1107,7 +1115,8 @@ class TestMigration(SubManFixture):
         self._inject_mock_valid_consumer()
         self.engine.register(credentials, "org", "env")
 
-        arg_list = ['subscription-manager',
+        arg_list = [
+            'subscription-manager',
             'register',
             '--username=foo',
             '--password=bar',
@@ -1135,7 +1144,8 @@ class TestMigration(SubManFixture):
         self._inject_mock_valid_consumer()
         self.engine.register(credentials, "org", "env")
 
-        arg_list = ['subscription-manager',
+        arg_list = [
+            'subscription-manager',
             'register',
             '--username=foo',
             '--password=bar',
@@ -1157,7 +1167,8 @@ class TestMigration(SubManFixture):
         self._inject_mock_valid_consumer()
         self.engine.register(credentials, "org", "env")
 
-        arg_list = ['subscription-manager',
+        arg_list = [
+            'subscription-manager',
             'register',
             '--activationkey=hello',
             '--activationkey=world',
@@ -1179,7 +1190,8 @@ class TestMigration(SubManFixture):
         self._inject_mock_valid_consumer()
         self.engine.register(credentials, "org", "env")
 
-        arg_list = ['subscription-manager',
+        arg_list = [
+            'subscription-manager',
             'register',
             '--username=foo',
             '--password=bar',
@@ -1220,7 +1232,8 @@ class TestMigration(SubManFixture):
             "productivity-rpms",
         ]
         self.engine.enable_extra_channels(subscribed_channels)
-        expected = [call("supplementary", "enabled", "1"),
+        expected = [
+            call("supplementary", "enabled", "1"),
             call("optional-rpms", "enabled", "1"),
             call("productivity-rpms", "enabled", "1")]
         self.assertTrue(mrf.set.call_args_list == expected)

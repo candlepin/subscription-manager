@@ -1155,7 +1155,8 @@ class TestGetAvailableEntitlements(SubManFixture):
         self.assertEqual(1, len(res))
 
     def build_pool_dict(self, pool_id, provided_products=[]):
-        return {'id': str(pool_id),
+        return {
+            'id': str(pool_id),
             # note things fail if any of these are not set, or
             # incorrect types
             'quantity': 5,

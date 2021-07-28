@@ -50,7 +50,8 @@ class ReasonsTests(unittest.TestCase):
     def setUp(self):
         self.sorter = Mock()
         self.sorter.valid_products = [INST_PID_1]
-        self.sorter.valid_entitlement_certs = [StubEntitlementCertificate(PROD_2, ent_id=ENT_ID_2),
+        self.sorter.valid_entitlement_certs = [
+            StubEntitlementCertificate(PROD_2, ent_id=ENT_ID_2),
             StubEntitlementCertificate(PROD_1, ent_id=ENT_ID_1),
             StubEntitlementCertificate(product=PROD_4, stacking_id=STACK_1,
                                        ent_id=ENT_ID_4),

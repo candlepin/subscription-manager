@@ -54,7 +54,8 @@ class ContainerContentUpdateActionCommand(object):
         unique_cert_paths = self._get_unique_paths(content_sets)
 
         for registry_hostname in self.registry_hostnames:
-            cert_dir = ContainerCertDir(report=report,
+            cert_dir = ContainerCertDir(
+                report=report,
                 registry=registry_hostname,
                 host_cert_dir=self.host_cert_dir)
             cert_dir.sync(unique_cert_paths)
