@@ -62,3 +62,6 @@ ignore =
     # W605: invalid escape sequence '*'
     # it is a DeprecationWarning since Python 3.6, will become SyntaxError
     W605
+per-file-ignores =
+    # cpinfo fake data as unindented """...""" block
+    test/test_utils.py: E122
