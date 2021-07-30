@@ -85,7 +85,7 @@ class V1EntCertTests(unittest.TestCase):
 
     def test_junk_contents_throws_exception(self):
         self.assertRaises(CertificateException, create_from_pem,
-                "DOESTHISLOOKLIKEACERTTOYOU?")
+                          "DOESTHISLOOKLIKEACERTTOYOU?")
 
     def test_factory_method_on_ent_cert(self):
         self.assertEqual("1.0", str(self.ent_cert.version))
@@ -95,7 +95,7 @@ class V1EntCertTests(unittest.TestCase):
         self.assertEqual("Awesome OS for x86_64", self.ent_cert.order.name)
         self.assertEqual(1, len(self.ent_cert.products))
         self.assertEqual('Awesome OS for x86_64 Bits',
-                self.ent_cert.products[0].name)
+                         self.ent_cert.products[0].name)
         self.assertEqual('ff80808138574bd20138574d85a50b2f', self.ent_cert.subject['CN'])
 
     def test_is_valid(self):
@@ -114,7 +114,7 @@ class V1EntCertTests(unittest.TestCase):
     def test_content(self):
         self.assertEqual(4, len(self.ent_cert.content))
         content = self._find_content_by_label(self.ent_cert.content,
-                "always-enabled-content")
+                                              "always-enabled-content")
         self.assertEqual("always-enabled-content", content.name)
         self.assertEqual(True, content.enabled)
         self.assertEqual("/foo/path/always/$releasever", content.url)
@@ -170,9 +170,9 @@ class V3CertTests(unittest.TestCase):
 
         self.assertEqual(1, len(self.ent_cert.products))
         self.assertEqual('Awesome OS for x86_64 Bits',
-                self.ent_cert.products[0].name)
+                         self.ent_cert.products[0].name)
         self.assertEqual('ff80808139d9e26c0139da23489a0066',
-                self.ent_cert.subject['CN'])
+                         self.ent_cert.subject['CN'])
 
     def test_factory_method_without_ent_data(self):
         data = certdata.ENTITLEMENT_CERT_V3_0.split('-----BEGIN ENTITLEMENT DATA-----')[0]
@@ -199,7 +199,7 @@ class V3CertTests(unittest.TestCase):
     def test_content_enabled(self):
         self.assertEqual(4, len(self.ent_cert.content))
         content = self._find_content_by_label(self.ent_cert.content,
-                "always-enabled-content")
+                                              "always-enabled-content")
         self.assertEqual("always-enabled-content", content.name)
         self.assertEqual(True, content.enabled)
         self.assertEqual(200, content.metadata_expire)
@@ -209,7 +209,7 @@ class V3CertTests(unittest.TestCase):
     def test_content_disabled(self):
         self.assertEqual(4, len(self.ent_cert.content))
         content = self._find_content_by_label(self.ent_cert.content,
-                "never-enabled-content")
+                                              "never-enabled-content")
         self.assertEqual("never-enabled-content", content.name)
         self.assertEqual(False, content.enabled)
 
@@ -263,7 +263,7 @@ class V3_2CertTests(unittest.TestCase):
         self.assertEqual("3.2", str(self.ent_cert.version))
         self.assertTrue(isinstance(self.ent_cert, EntitlementCertificate))
         self.assertEqual('8a8d01f53cda9dd0013cda9ed5100475',
-                self.ent_cert.pool.id)
+                         self.ent_cert.pool.id)
 
 
 class TestEntCertV1KeyPath(unittest.TestCase):
@@ -355,7 +355,7 @@ class ContentTests(unittest.TestCase):
         c = Content(content_type="yum", name="mycontent", label="mycontent", enabled="0")
         self.assertFalse(c.enabled)
         self.assertRaises(CertificateException, Content, content_type="yum",
-                name="mycontent", label="mycontent", enabled="5")
+                          name="mycontent", label="mycontent", enabled="5")
 
     def test_content_requires_type(self):
         self.assertRaises(CertificateException, Content, name="testcontent",

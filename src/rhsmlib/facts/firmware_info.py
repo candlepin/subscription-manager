@@ -67,7 +67,7 @@ class UuidFirmwareInfoCollector(collector.FactsCollector):
                 uuidinfo['dmi.system.uuid'] = uuid
         except ValueError as err:
             log.error('Wrong UUID value: %s read from: %s, error: %s' %
-                (uuid, ARCH_UUID_LOCATION[self.arch], err))
+                      (uuid, ARCH_UUID_LOCATION[self.arch], err))
         except Exception as e:
             log.warning("Error reading system uuid information: %s", e, exc_info=True)
         return uuidinfo

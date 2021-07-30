@@ -51,7 +51,7 @@ class PreferencesDialog(widgets.SubmanBaseWidget):
         self.release_backend = release.ReleaseBackend()
 
         self.inputs = [self.sla_combobox, self.release_combobox,
-                self.autoheal_checkbox, self.autoheal_event]
+                       self.autoheal_checkbox, self.autoheal_event]
 
         self.dialog.set_transient_for(parent)
         self.dialog.set_modal(True)
@@ -95,7 +95,7 @@ class PreferencesDialog(widgets.SubmanBaseWidget):
         update = utils.WidgetUpdate(self.dialog)
         method = self.backend.cp_provider.get_consumer_auth_cp().getConsumer
         self.async_updater.update(update, method,
-                args=[self.identity.uuid], callback=self.load_from_consumer_json)
+                                  args=[self.identity.uuid], callback=self.load_from_consumer_json)
 
     def load_from_consumer_json(self, consumer_json):
         self.allow_callbacks = False

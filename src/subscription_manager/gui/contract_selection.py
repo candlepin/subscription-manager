@@ -42,7 +42,7 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
         self.total_contracts = 0
 
         self.contract_selection_treeview.get_selection().connect("changed",
-            self._on_contract_selection)
+                                                                 self._on_contract_selection)
 
         self.subscription_name_label.set_line_wrap(True)
 
@@ -56,18 +56,18 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
 
     def get_type_map(self):
         return {
-                'contract_number': str,
-                'consumed_fraction': str,
-                'start_date': ga_GObject.TYPE_PYOBJECT,
-                'end_date': ga_GObject.TYPE_PYOBJECT,
-                'default_quantity': int,
-                'product_name': str,
-                'pool': ga_GObject.TYPE_PYOBJECT,
-                'is_virt_only': bool,
-                'multi_entitlement': bool,
-                'quantity_available': int,
-                'quantity_increment': int,
-                }
+            'contract_number': str,
+            'consumed_fraction': str,
+            'start_date': ga_GObject.TYPE_PYOBJECT,
+            'end_date': ga_GObject.TYPE_PYOBJECT,
+            'default_quantity': int,
+            'product_name': str,
+            'pool': ga_GObject.TYPE_PYOBJECT,
+            'is_virt_only': bool,
+            'multi_entitlement': bool,
+            'quantity_available': int,
+            'quantity_increment': int,
+        }
 
     def show(self):
         self.populate_treeview()
@@ -96,14 +96,14 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
         renderer = ga_Gtk.CellRendererText()
         renderer.set_property("xalign", 0.5)
         column = ga_Gtk.TreeViewColumn(_("Used / Total"),
-                                    renderer,
-                                    text=self.model['consumed_fraction'])
+                                       renderer,
+                                       text=self.model['consumed_fraction'])
         self.contract_selection_treeview.append_column(column)
 
         renderer = widgets.CellRendererDate()
         column = ga_Gtk.TreeViewColumn(_("Start Date"),
-                                    renderer,
-                                    date=self.model['start_date'])
+                                       renderer,
+                                       date=self.model['start_date'])
         column.set_sort_column_id(self.model['start_date'])
         self.model.set_sort_func(self.model['start_date'],
                                  self._sort_date, None)
@@ -111,8 +111,8 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
 
         renderer = widgets.CellRendererDate()
         column = ga_Gtk.TreeViewColumn(_("End Date"),
-                                    renderer,
-                                    date=self.model['end_date'])
+                                       renderer,
+                                       date=self.model['end_date'])
         column.set_sort_column_id(self.model['end_date'])
         self.model.set_sort_func(self.model['end_date'],
                                  self._sort_date,
@@ -120,10 +120,10 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
         self.contract_selection_treeview.append_column(column)
 
         column = widgets.QuantitySelectionColumn(_("Quantity"), self.model,
-                self.model['default_quantity'],
-                self.model['multi_entitlement'],
-                self.model['quantity_available'],
-                self.model['quantity_increment'])
+                                                 self.model['default_quantity'],
+                                                 self.model['multi_entitlement'],
+                                                 self.model['quantity_available'],
+                                                 self.model['quantity_increment'])
         self.contract_selection_treeview.append_column(column)
 
         self.edit_quantity_label.set_label(column.get_column_legend_text())
@@ -166,7 +166,7 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
             'multi_entitlement': allows_multi_entitlement(pool),
             'quantity_available': quantity_available,
             'quantity_increment': quantity_increment,
-            })
+        })
 
     def set_parent_window(self, window):
         self.log.debug('window %s', window)

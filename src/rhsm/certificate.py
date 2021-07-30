@@ -97,7 +97,7 @@ def deprecated(func):
     """
     def new_func(*args, **kwargs):
         warnings.warn("Call to deprecated function: %s" % func.__name__,
-                category=DeprecationWarning)
+                      category=DeprecationWarning)
         return func(*args, **kwargs)
     new_func.__name__ = func.__name__
     new_func.__doc__ = func.__doc__
@@ -176,7 +176,7 @@ class Certificate(object):
         :rtype: :class:`DateRange`
         """
         return DateRange(get_datetime_from_x509(self.x509.get_not_before()),
-                get_datetime_from_x509(self.x509.get_not_after()))
+                         get_datetime_from_x509(self.x509.get_not_after()))
 
     def valid(self, on_date=None):
         """
@@ -448,7 +448,7 @@ class EntitlementCertificate(ProductCertificate):
         :rtype: List of :class:`Entitlement`
         """
         return self.getContentEntitlements() \
-             + self.getRoleEntitlements()
+            + self.getRoleEntitlements()
 
     # TODO: Not a great name, this is just getting content, self is
     # the entitlement.

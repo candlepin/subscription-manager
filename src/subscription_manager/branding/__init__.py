@@ -81,17 +81,17 @@ class DefaultBranding(object):
         self.CLI_REGISTER = _("Register the system to the server")
         self.CLI_UNREGISTER = _("Unregister the system from the server")
         self.RHSMD_REGISTERED_TO_OTHER = \
-                _("This system is registered to spacewalk")
+            _("This system is registered to spacewalk")
         self.REGISTERED_TO_OTHER_WARNING = _("WARNING") + \
             "\n" + \
             _("You have already registered with spacewalk.")
 
         self.GUI_REGISTRATION_HEADER = \
-                _("Please enter your account information:")
+            _("Please enter your account information:")
         self.GUI_FORGOT_LOGIN_TIP = \
-                _("Contact your system administrator if you have forgotten your login or password")
+            _("Contact your system administrator if you have forgotten your login or password")
         self.REGISTERED_TO_SUBSCRIPTION_MANAGEMENT_SUMMARY = \
-                _("Red Hat Subscription Management")
+            _("Red Hat Subscription Management")
 
 
 class EmptyBranding(object):

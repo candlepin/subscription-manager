@@ -65,7 +65,7 @@ class PathTree(object):
         HuffmanNode.build_tree(path_leaves)
         path_dict = dict((node.code, node) for node in path_leaves)
         self.path_tree = self._generate_path_tree(
-                path_dict, path_leaves, word_dict, bitstream)
+            path_dict, path_leaves, word_dict, bitstream)
 
     def match_path(self, path):
         """

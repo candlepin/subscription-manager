@@ -24,7 +24,7 @@ log = logging.getLogger(__name__)
 
 class Filters(object):
     def __init__(self, show_compatible=False, show_no_overlapping=False,
-            show_installed=False, contains_text=""):
+                 show_installed=False, contains_text=""):
         self.show_compatible = show_compatible
         self.show_no_overlapping = show_no_overlapping
         self.show_installed = show_installed
@@ -62,7 +62,7 @@ class FilterOptionsWindow(widgets.SubmanBaseWidget):
             "on_compatible_checkbutton_toggled": self.update_filters,
             "on_installed_checkbutton_toggled": self.update_filters,
             "on_no_overlapping_checkbutton_toggled": self.update_filters,
-            })
+        })
 
     def clear_button_clicked(self, widget):
         self.compatible_checkbutton.set_active(False)

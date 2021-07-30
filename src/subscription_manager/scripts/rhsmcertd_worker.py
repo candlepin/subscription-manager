@@ -263,12 +263,12 @@ def main():
 
     parser = ArgumentParser(usage=USAGE)
     parser.add_argument("--autoheal", dest="autoheal", action="store_true",
-            default=False, help="perform an autoheal check")
+                        default=False, help="perform an autoheal check")
     parser.add_argument("--force", dest="force", action="store_true",
-            default=False, help=SUPPRESS)
+                        default=False, help=SUPPRESS)
     parser.add_argument(
-            "--auto-register", dest="auto_register", action="store_true",
-            default=False, help="perform auto-registration"
+        "--auto-register", dest="auto_register", action="store_true",
+        default=False, help="perform auto-registration"
     )
 
     (options, args) = parser.parse_known_args()

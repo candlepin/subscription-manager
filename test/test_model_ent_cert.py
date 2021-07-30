@@ -80,7 +80,7 @@ class TestEntitlementCertEntitlement(TestEntitlement):
         self.assertEqual(ece.contents[0].label, contents[0].label)
         self.assertEqual(ece.contents[0].gpg, contents[0].gpg)
         self.assertEqual(ece.contents[0].content_type,
-            contents[0].content_type)
+                         contents[0].content_type)
         self.assertEqual(len(ece.contents), 1)
 
         # for ostree content, gpg is likely to change

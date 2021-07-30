@@ -50,11 +50,11 @@ STACK_2 = '1'  # awesomeos 64
 
 PARTIAL_STACK_ID = STACK_1
 PROD_4 = StubProduct(INST_PID_4,
-        name="Multi-Attribute Stackable")
+                     name="Multi-Attribute Stackable")
 PROD_2 = StubProduct(INST_PID_2,
-        name="Awesome OS for ppc64")
+                     name="Awesome OS for ppc64")
 PROD_1 = StubProduct(INST_PID_1,
-        name="Awesome OS for x86_64")
+                     name="Awesome OS for x86_64")
 
 
 def stub_prod_cert(pid):
@@ -68,26 +68,26 @@ class CertSorterTests(SubManFixture):
         SubManFixture.setUp(self)
         # Setup mock product and entitlement certs:
         self.prod_dir = StubProductDirectory(
-                pids=[INST_PID_1, INST_PID_2, INST_PID_3, INST_PID_4])
+            pids=[INST_PID_1, INST_PID_2, INST_PID_3, INST_PID_4])
         self.ent_dir = StubEntitlementDirectory([
             StubEntitlementCertificate(PROD_2,
-                ent_id=ENT_ID_2),
+                                       ent_id=ENT_ID_2),
             StubEntitlementCertificate(PROD_1,
-                ent_id=ENT_ID_1),
+                                       ent_id=ENT_ID_1),
             StubEntitlementCertificate(product=PROD_4,
-                stacking_id=STACK_1,
-                ent_id=ENT_ID_4),
+                                       stacking_id=STACK_1,
+                                       ent_id=ENT_ID_4),
             # entitled, but not installed
             StubEntitlementCertificate(StubProduct('not_installed_product',
-                name="Some Product"),
-                ent_id="SomeSubId"),
-            ])
+                                       name="Some Product"),
+                                       ent_id="SomeSubId"),
+        ])
 
         self.mock_uep = StubUEP()
 
         self.status_mgr = EntitlementStatusCache()
         self.status_mgr.load_status = Mock(
-                return_value=SAMPLE_COMPLIANCE_JSON)
+            return_value=SAMPLE_COMPLIANCE_JSON)
         self.status_mgr.write_cache = Mock()
         inj.provide(inj.ENTITLEMENT_STATUS_CACHE, self.status_mgr)
         inj.provide(inj.PROD_DIR, self.prod_dir)
@@ -106,7 +106,7 @@ class CertSorterTests(SubManFixture):
     @patch('subscription_manager.cache.InstalledProductsManager.update_check')
     def test_no_usable_status(self, mock_update):
         self.status_mgr.load_status = Mock(
-                return_value=None)
+            return_value=None)
         self.status_mgr.server_status = None
         sorter = CertSorter()
         sorter.is_registered = Mock(return_value=True)
@@ -116,7 +116,7 @@ class CertSorterTests(SubManFixture):
     @patch('subscription_manager.cache.InstalledProductsManager.update_check')
     def test_deleted_consumer_status(self, mock_update):
         self.status_mgr.load_status = Mock(
-                return_value=None)
+            return_value=None)
         self.status_mgr.server_status = None
         sorter = CertSorter()
         sorter.is_registered = Mock(return_value=True)
@@ -127,7 +127,7 @@ class CertSorterTests(SubManFixture):
     @patch('subscription_manager.cache.InstalledProductsManager.update_check')
     def test_unregistered_system_status(self, mock_update):
         self.status_mgr.load_status = Mock(
-                return_value=None)
+            return_value=None)
         self.status_mgr.server_status = None
         sorter = CertSorter()
         sorter.is_registered = Mock(return_value=False)
@@ -146,9 +146,9 @@ class CertSorterTests(SubManFixture):
     def test_partially_valid_products(self):
         self.assertEqual(2, len(self.sorter.partially_valid_products))
         self.assertTrue(INST_PID_2 in
-                self.sorter.partially_valid_products)
+                        self.sorter.partially_valid_products)
         self.assertTrue(INST_PID_4 in
-                self.sorter.partially_valid_products)
+                        self.sorter.partially_valid_products)
 
     def test_installed_products(self):
         self.assertEqual(4, len(self.sorter.installed_products))
@@ -172,7 +172,7 @@ class CertSorterTests(SubManFixture):
         # Use a different product directory with something not present
         # in the response from the server as an unentitled product:
         prod_dir = StubProductDirectory(
-                pids=[INST_PID_1, INST_PID_2])
+            pids=[INST_PID_1, INST_PID_2])
         inj.provide(inj.PROD_DIR, prod_dir)
         sorter = CertSorter()
         self.assertFalse(INST_PID_3 in sorter.installed_products)
@@ -184,7 +184,7 @@ class CertSorterTests(SubManFixture):
     def test_missing_installed_product(self, mock_update):
         # Add a new installed product server doesn't know about:
         prod_dir = StubProductDirectory(pids=[INST_PID_1, INST_PID_2,
-            INST_PID_3, "product4"])
+                                              INST_PID_3, "product4"])
         inj.provide(inj.PROD_DIR, prod_dir)
         sorter = CertSorter()
         self.assertTrue('product4' in sorter.unentitled_products)
@@ -222,12 +222,12 @@ class CertSorterTests(SubManFixture):
             StubEntitlementCertificate(StubProduct("b")),
             StubEntitlementCertificate(StubProduct("c")),
             StubEntitlementCertificate(StubProduct("d"),
-                start_date=datetime.now() - timedelta(days=365),
-                end_date=datetime.now() - timedelta(days=2)),
+                                       start_date=datetime.now() - timedelta(days=365),
+                                       end_date=datetime.now() - timedelta(days=2)),
             StubEntitlementCertificate(StubProduct("e"),
-                start_date=datetime.now() + timedelta(days=365),
-                end_date=datetime.now() + timedelta(days=730)),
-            ])
+                                       start_date=datetime.now() + timedelta(days=365),
+                                       end_date=datetime.now() + timedelta(days=730)),
+        ])
 
         inj.provide(inj.PROD_DIR, prod_dir)
         inj.provide(inj.ENT_DIR, ent_dir)

@@ -212,10 +212,10 @@ class SyspurposeSyncActionReport(certlib.ActionReport):
         msg = None
         if change.in_base and not change.in_result:
             msg = "'{key}' removed by change from {source}".format(key=change.key,
-                                                                     source=source)
+                                                                   source=source)
         elif not change.in_base and change.in_result:
             msg = "'{key}' added with value '{value}' from change in {source}".format(
-                    key=change.key, value=change.new_value, source=source
+                key=change.key, value=change.new_value, source=source
             )
         elif change.in_base and change.previous_value != change.new_value:
             msg = "'{key}' updated from '{old_value}' to '{new_value}' due to change in {source}"\

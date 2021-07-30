@@ -163,7 +163,7 @@ class CacheManager(object):
         if not consumer_uuid:
             msg = _("consumer_uuid={consumer_uuid} is not a valid consumer_uuid. "
                     "Not attempting to sync {class_name} cache with server.").format(
-                    consumer_uuid=consumer_uuid, class_name=self.__class__.__name__)
+                        consumer_uuid=consumer_uuid, class_name=self.__class__.__name__)
             log.debug(msg)
 
             # Raising an exception here would be better, but that is just
@@ -596,11 +596,12 @@ class InstalledProductsManager(CacheManager):
         for prod_cert in self.product_dir.list():
             prod = prod_cert.products[0]
             self.tags |= set(prod.provided_tags)
-            self._installed[prod.id] = {'productId': prod.id,
-                    'productName': prod.name,
-                    'version': prod.version,
-                    'arch': ','.join(prod.architectures)
-                    }
+            self._installed[prod.id] = {
+                'productId': prod.id,
+                'productName': prod.name,
+                'version': prod.version,
+                'arch': ','.join(prod.architectures)
+            }
 
     def format_for_server(self):
         """
@@ -614,8 +615,8 @@ class InstalledProductsManager(CacheManager):
 
     def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
         uep.updateConsumer(consumer_uuid,
-                installed_products=self.format_for_server(),
-                content_tags=self.tags)
+                           installed_products=self.format_for_server(),
+                           content_tags=self.tags)
 
 
 class PoolStatusCache(StatusCache):
@@ -650,7 +651,7 @@ class PoolTypeCache(object):
 
     def requires_update(self):
         attached_pool_ids = set([ent.pool.id for ent in self.ent_dir.list()
-            if ent.pool and ent.pool.id])
+                                 if ent.pool and ent.pool.id])
         missing_types = attached_pool_ids - set(self.pooltype_map)
         return bool(missing_types)
 

@@ -246,7 +246,7 @@ class ComparableProduct(ComparableMixin):
 
     def __str__(self):
         return "<ComparableProduct id=%s version=%s name=%s product=%s>" % \
-                (self.product.id, self.product.version, self.product.name, self.product)
+            (self.product.id, self.product.version, self.product.name, self.product)
 
 
 class ComparableProductCert(ComparableMixin):
@@ -506,12 +506,12 @@ class ProductManager(object):
                 cmp_installed_product_cert = ComparableProductCert(installed_product_cert)
                 if cmp_product_cert > cmp_installed_product_cert:
                     log.debug("Updating installed product cert for %s %s to %s %s" %
-                            (installed_product.name, installed_product.version,
-                             p.name, p.version))
+                              (installed_product.name, installed_product.version,
+                               p.name, p.version))
                     products_to_update.append((p, cert))
                 else:
                     log.debug("Latest version of product cert for %s %s is already installed, not updating" %
-                            (p.name, p.version))
+                              (p.name, p.version))
 
             # look up what repo's we know about for that prod id
 
@@ -717,8 +717,8 @@ class ProductManager(object):
         # TODO: plugin hook for pre_product_id_delete
         for product, cert in certs_to_delete:
             log.debug("None of the repos for %s are active: %s",
-                     product.id,
-                     self.db.find_repos(product.id))
+                      product.id,
+                      self.db.find_repos(product.id))
             log.info("product cert %s for %s is being deleted" % (product.id, product.id))
             cert.delete()
             self.pdir.refresh()

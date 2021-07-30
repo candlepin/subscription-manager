@@ -149,7 +149,7 @@ class TestEntitlementService(InjectionMockingTest):
         self.mock_sorter_class.assert_called_once_with("some_date")
 
     def _build_options(self, pool_subsets=None, matches=None, pool_only=None, match_installed=None,
-            no_overlap=None, service_level=None, show_all=None, on_date=None):
+                       no_overlap=None, service_level=None, show_all=None, on_date=None):
         return {
             'pool_subsets': pool_subsets,
             'matches': matches,

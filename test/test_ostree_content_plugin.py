@@ -505,7 +505,7 @@ tls-client-key-path = /etc/pki/entitlement/12345-key.pem
         self.assertFalse(rf.section_is_remote('core'))
         # string from config file is "false", not boolean False yet
         self.assertEqual('false',
-                          rf.config_parser.get('remote "awesome-ostree-controller"', 'gpg-verify'))
+                         rf.config_parser.get('remote "awesome-ostree-controller"', 'gpg-verify'))
 
     @mock.patch('subscription_manager.plugin.ostree.config.RepoFile._get_config_parser')
     def test_section_set_remote(self, mock_get_config_parser):
@@ -724,12 +724,12 @@ class TestOsTreeContents(fixture.SubManFixture):
         ent_src._entitlements = [ent1, ent2]
 
         contents = find_content(ent_src,
-            content_type=action_invoker.OSTREE_CONTENT_TYPE)
+                                content_type=action_invoker.OSTREE_CONTENT_TYPE)
         self.assertEqual(len(contents), 1)
 
         for content in contents:
             self.assertEqual(content.content_type,
-                action_invoker.OSTREE_CONTENT_TYPE)
+                             action_invoker.OSTREE_CONTENT_TYPE)
 
     def test_ent_source_product_tags(self):
         yc = self.create_content("yum", "yum_content")
@@ -745,12 +745,12 @@ class TestOsTreeContents(fixture.SubManFixture):
         ent_src.product_tags = ['awesomeos-ostree-1', 'awesomeos-ostree-super']
 
         contents = find_content(ent_src,
-            content_type=action_invoker.OSTREE_CONTENT_TYPE)
+                                content_type=action_invoker.OSTREE_CONTENT_TYPE)
         self.assertEqual(len(contents), 1)
 
         for content in contents:
             self.assertEqual(content.content_type,
-                action_invoker.OSTREE_CONTENT_TYPE)
+                             action_invoker.OSTREE_CONTENT_TYPE)
 
     def test_ent_source_product_tags_and_content_tags(self):
         oc = self.create_content("ostree", "ostree_content")
@@ -765,13 +765,13 @@ class TestOsTreeContents(fixture.SubManFixture):
         ent_src.product_tags = ['awesomeos-ostree-1', 'awesomeos-ostree-super']
 
         contents = find_content(ent_src,
-            content_type=action_invoker.OSTREE_CONTENT_TYPE)
+                                content_type=action_invoker.OSTREE_CONTENT_TYPE)
         print("contents", contents)
         self.assertEqual(len(contents), 1)
 
         for content in contents:
             self.assertEqual(content.content_type,
-                action_invoker.OSTREE_CONTENT_TYPE)
+                             action_invoker.OSTREE_CONTENT_TYPE)
 
 
 class TestContentUpdateActionReport(fixture.SubManFixture):

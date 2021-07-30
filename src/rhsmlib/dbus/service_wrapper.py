@@ -30,8 +30,8 @@ log = logging.getLogger(__name__)
 def parse_argv(argv, default_dbus_name):
     parser = argparse.ArgumentParser(usage="usage: %(prog)s [options] [class name]")
     parser.add_argument("-b", "--bus",
-        action="store", dest="bus",
-        help="Bus to use (defaults to dbus.SystemBus)")
+                        action="store", dest="bus",
+                        help="Bus to use (defaults to dbus.SystemBus)")
     parser.add_argument("-n", "--bus-name", default=default_dbus_name)
     parser.add_argument("-v", "--verbose", action="store_true")
     (opts, args) = parser.parse_known_args(argv[1:])

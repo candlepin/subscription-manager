@@ -52,30 +52,30 @@ class RegisterCommand(UserPassCommand):
 
         self._add_url_options()
         self.parser.add_argument("--baseurl", dest="base_url",
-                               default=None, help=_("base URL for content in form of https://hostname:port/prefix"))
+                                 default=None, help=_("base URL for content in form of https://hostname:port/prefix"))
         self.parser.add_argument("--type", dest="consumertype", default="system", metavar="UNITTYPE",
-                               help=SUPPRESS)
+                                 help=SUPPRESS)
         self.parser.add_argument("--name", dest="consumername", metavar="SYSTEMNAME",
-                               help=_("name of the system to register, defaults to the hostname"))
+                                 help=_("name of the system to register, defaults to the hostname"))
         self.parser.add_argument("--consumerid", dest="consumerid", metavar="SYSTEMID",
-                               help=_("the existing system data is pulled from the server"))
+                                 help=_("the existing system data is pulled from the server"))
         self.parser.add_argument("--org", dest="org", metavar="ORG_KEY",
-                               help=_(
-                                   "register with one of multiple organizations for the user, using organization key"))
+                                 help=_(
+                                     "register with one of multiple organizations for the user, using organization key"))
         self.parser.add_argument("--environment", dest="environment",
-                               help=_("register with a specific environment in the destination org"))
+                                 help=_("register with a specific environment in the destination org"))
         self.parser.add_argument("--release", dest="release",
-                               help=_("set a release version"))
+                                 help=_("set a release version"))
         self.parser.add_argument("--autosubscribe", action='store_true',
-                               help=_("Deprecated, see --auto-attach"))
+                                 help=_("Deprecated, see --auto-attach"))
         self.parser.add_argument("--auto-attach", action='store_true', dest="autoattach",
-                               help=_("automatically attach compatible subscriptions to this system"))
+                                 help=_("automatically attach compatible subscriptions to this system"))
         self.parser.add_argument("--force", action='store_true',
-                               help=_("include an implicit attempt to unregister before registering a new system identity"))
+                                 help=_("include an implicit attempt to unregister before registering a new system identity"))
         self.parser.add_argument("--activationkey", action='append', dest="activation_keys",
-                               help=_("activation key to use for registration (can be specified more than once)"))
+                                 help=_("activation key to use for registration (can be specified more than once)"))
         self.parser.add_argument("--servicelevel", dest="service_level",
-                               help=_("system preference used when subscribing automatically, requires --auto-attach"))
+                                 help=_("system preference used when subscribing automatically, requires --auto-attach"))
 
     def _validate_options(self):
         self.autoattach = self.options.autosubscribe or self.options.autoattach

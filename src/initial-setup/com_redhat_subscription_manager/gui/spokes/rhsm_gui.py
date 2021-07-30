@@ -129,7 +129,7 @@ class RHSMSpoke(NormalSpoke):
 
         # update the 'next/register button on page change'
         self.register_widget.connect('notify::register-button-label',
-                                       self._on_register_button_label_change)
+                                     self._on_register_button_label_change)
 
         self.register_widget.connect('notify::screen-ready',
                                      self._on_register_screen_ready_change)

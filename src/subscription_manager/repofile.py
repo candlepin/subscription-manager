@@ -55,21 +55,21 @@ HAS_YUM = "yum" in sys.modules
 class Repo(dict):
     # (name, mutable, default) - The mutability information is only used in disconnected cases
     PROPERTIES = {
-            'name': (0, None),
-            'baseurl': (0, None),
-            'enabled': (1, '1'),
-            'gpgcheck': (1, '1'),
-            'gpgkey': (0, None),
-            'sslverify': (1, '1'),
-            'sslcacert': (0, None),
-            'sslclientkey': (0, None),
-            'sslclientcert': (0, None),
-            'metadata_expire': (1, None),
-            'enabled_metadata': (1, '0'),
-            'proxy': (0, None),
-            'proxy_username': (0, None),
-            'proxy_password': (0, None),
-            'ui_repoid_vars': (0, None)}
+        'name': (0, None),
+        'baseurl': (0, None),
+        'enabled': (1, '1'),
+        'gpgcheck': (1, '1'),
+        'gpgkey': (0, None),
+        'sslverify': (1, '1'),
+        'sslcacert': (0, None),
+        'sslclientkey': (0, None),
+        'sslclientcert': (0, None),
+        'metadata_expire': (1, None),
+        'enabled_metadata': (1, '0'),
+        'proxy': (0, None),
+        'proxy_username': (0, None),
+        'proxy_password': (0, None),
+        'ui_repoid_vars': (0, None)}
 
     def __init__(self, repo_id, existing_values=None):
         # existing_values is a list of 2-tuples
@@ -413,7 +413,7 @@ if HAS_DEB822:
         def read(self):
             if not self.manage_repos:
                 log.debug("Skipping read due to manage_repos setting: %s" %
-                        self.path)
+                          self.path)
                 return
             with open(self.path, 'r') as f:
                 for repo822 in Deb822.iter_paragraphs(f, shared_storage=False):
@@ -422,7 +422,7 @@ if HAS_DEB822:
         def write(self):
             if not self.manage_repos:
                 log.debug("Skipping write due to manage_repos setting: %s" %
-                        self.path)
+                          self.path)
                 return
             with open(self.path, 'w') as f:
                 f.write(self.REPOFILE_HEADER)
@@ -518,7 +518,7 @@ class YumRepoFile(RepoFileBase, ConfigParser):
     def write(self):
         if not self.manage_repos:
             log.debug("Skipping write due to manage_repos setting: %s" %
-                    self.path)
+                      self.path)
             return
         if self._has_changed():
             with open(self.path, 'w') as f:

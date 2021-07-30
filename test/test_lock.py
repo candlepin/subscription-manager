@@ -48,7 +48,7 @@ class TestLock(unittest.TestCase):
         self.other_process = subprocess.Popen([sys.executable, __file__, lockfile_path],
                                               close_fds=True,
                                               stdin=subprocess.PIPE,
-                                               env={'PYTHONPATH': sys_path})
+                                              env={'PYTHONPATH': sys_path})
 
         # make sure other process has had time to create the lock file
         while True:

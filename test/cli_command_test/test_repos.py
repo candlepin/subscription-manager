@@ -183,7 +183,7 @@ class TestReposCommand(TestCliCommand):
         # JSON passed in to setContentOverrides is what we expect.
         match_dict_list = Matcher(self.assert_items_equals, expected_overrides)
         self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
-                match_dict_list)
+                                                               match_dict_list)
         self.assertTrue(repolib_instance.update.called)
 
     @patch("subscription_manager.cli_command.repos.RepoActionInvoker")
@@ -210,7 +210,7 @@ class TestReposCommand(TestCliCommand):
 
         repos = [Repo('zoo'), Repo('zebra'), Repo('zip')]
         items = [('0', '*'), ('1', 'zoo'),
-            ('1', 'zip')]
+                 ('1', 'zip')]
         self.cc.use_overrides = True
         self.cc._set_repo_status(repos, repolib_instance, items)
 
@@ -224,7 +224,7 @@ class TestReposCommand(TestCliCommand):
         ]
         match_dict_list = Matcher(self.assert_items_equals, expected_overrides)
         self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
-                match_dict_list)
+                                                               match_dict_list)
         self.assertTrue(repolib_instance.update.called)
 
     @patch("subscription_manager.cli_command.repos.RepoActionInvoker")
@@ -234,7 +234,7 @@ class TestReposCommand(TestCliCommand):
 
         repos = [Repo('zoo'), Repo('zebra'), Repo('zip')]
         items = [('1', '*'), ('0', 'zoo'),
-            ('0', 'zip')]
+                 ('0', 'zip')]
         self.cc.use_overrides = True
         self.cc._set_repo_status(repos, repolib_instance, items)
 
@@ -248,7 +248,7 @@ class TestReposCommand(TestCliCommand):
         ]
         match_dict_list = Matcher(self.assert_items_equals, expected_overrides)
         self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
-                match_dict_list)
+                                                               match_dict_list)
         self.assertTrue(repolib_instance.update.called)
 
     @patch("subscription_manager.cli_command.repos.RepoActionInvoker")
@@ -271,7 +271,7 @@ class TestReposCommand(TestCliCommand):
         ]
         match_dict_list = Matcher(self.assert_items_equals, expected_overrides)
         self.cc.cp.setContentOverrides.assert_called_once_with('fake_id',
-                match_dict_list)
+                                                               match_dict_list)
         self.assertTrue(repolib_instance.update.called)
 
     @patch("subscription_manager.cli_command.repos.YumRepoFile")

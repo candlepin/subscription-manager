@@ -39,9 +39,9 @@ log = logging.getLogger(__name__)
 
 class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
     widget_names = widgets.SubscriptionManagerTab.widget_names + \
-                       ['details_box', 'date_picker_hbox', 'subscribe_button',
-                        'edit_quantity_label', 'scrolledwindow',
-                        'filter_options_button', 'applied_filters_label']
+        ['details_box', 'date_picker_hbox', 'subscribe_button',
+         'edit_quantity_label', 'scrolledwindow',
+         'filter_options_button', 'applied_filters_label']
     gui_file = "allsubs"
 
     def __init__(self, backend, parent_win):
@@ -53,7 +53,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         # Add at-spi because we no longer create this widget from glade
         self.top_view.get_accessible().set_name(_("All Subscriptions View"))
         self.widget_switcher = widgets.WidgetSwitcher(self.scrolledwindow,
-                self.no_subs_label_viewport, self.top_view)
+                                                      self.no_subs_label_viewport, self.top_view)
         self.widget_switcher.set_active(0)
 
         self.parent_win = parent_win
@@ -76,8 +76,8 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         title_text_renderer = ga_Gtk.CellRendererText()
         title_text_renderer.set_property('xalign', 0.0)
         subscription_column = ga_Gtk.TreeViewColumn(_('Subscription'),
-                                        title_text_renderer,
-                                        markup=self.store['product_name_formatted'])
+                                                    title_text_renderer,
+                                                    markup=self.store['product_name_formatted'])
         subscription_column.set_expand(True)
         self.top_view.append_column(subscription_column)
         cols = []
@@ -197,18 +197,18 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         # etc., but think of it like "if show_compatible is true, then
         # filter out all the incompatible products."
         merged_pools = self.pool_stash.merge_pools(
-                incompatible=self.filters.show_compatible,
-                overlapping=self.filters.show_no_overlapping,
-                uninstalled=self.filters.show_installed,
-                subscribed=True,
-                text=self.get_filter_text())
+            incompatible=self.filters.show_compatible,
+            overlapping=self.filters.show_no_overlapping,
+            uninstalled=self.filters.show_installed,
+            subscribed=True,
+            text=self.get_filter_text())
 
         if self.pool_stash.all_pools_size() == 0:
             self.sub_details.clear()
             # If the date is None (now), use current time
             on_date = self.date_picker.date or datetime.datetime.now()
             self.display_message(_("No subscriptions are available on %s.") %
-                                   on_date.strftime("%Y-%m-%d"))
+                                 on_date.strftime("%Y-%m-%d"))
             return
 
         if len(merged_pools) == 0:
@@ -322,23 +322,23 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
     def _create_parent_map(self, title):
         return {
-                    'virt_only': False,
-                    'product_name': title,
-                    'product_name_formatted': apply_highlight(title, self.get_filter_text()),
-                    'quantity_to_consume': 0,
-                    'available': "",
-                    'product_id': "",
-                    'pool_id': "",  # not displayed, just for lookup later
-                    'merged_pools': None,  # likewise not displayed, for subscription
-                    'align': 0.5,
-                    'multi-entitlement': False,
-                    'background': None,
-                    'quantity_available': 0,
-                    'support_level': "",
-                    'support_type': "",
-                    'quantity_increment': 1,
-                    'pool_type': ''
-                }
+            'virt_only': False,
+            'product_name': title,
+            'product_name_formatted': apply_highlight(title, self.get_filter_text()),
+            'quantity_to_consume': 0,
+            'available': "",
+            'product_id': "",
+            'pool_id': "",  # not displayed, just for lookup later
+            'merged_pools': None,  # likewise not displayed, for subscription
+            'align': 0.5,
+            'multi-entitlement': False,
+            'background': None,
+            'quantity_available': 0,
+            'support_level': "",
+            'support_type': "",
+            'quantity_increment': 1,
+            'pool_type': ''
+        }
 
     def get_label(self):
         return _("All Available Subscriptions")
@@ -367,7 +367,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             async_stash.refresh(self.date_picker.date, self._update_display)
         except Exception as e:
             handle_gui_exception(e, _("Error fetching subscriptions from server:  %s"),
-                    self.parent_win)
+                                 self.parent_win)
 
     def _clear_progress_bar(self):
         if self.pb:
@@ -381,7 +381,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         if error:
             handle_gui_exception(error, _("Unable to search for subscriptions:  %s"),
-                    self.parent_win)
+                                 self.parent_win)
         else:
             self.display_pools()
 
@@ -403,7 +403,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
         # Start the progress bar
         self.pb = progress.Progress(_("Attaching"),
-                _("Attaching subscription. Please wait."))
+                                    _("Attaching subscription. Please wait."))
         self.timer = ga_GObject.timeout_add(100, self.pb.pulse)
         self.pb.set_transient_for(self.parent_win)
         # Spin off a thread to handle binding the selected pool.
@@ -411,9 +411,9 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
         # subs will be refreshed, but we won't re-run compliance
         # until we have serialized the certificates
         self.async_bind.bind(pool, quantity,
-                bind_callback=self._async_bind_callback,
-                cert_callback=self.backend.cs.force_cert_check,
-                except_callback=self._async_bind_exception_callback)
+                             bind_callback=self._async_bind_callback,
+                             cert_callback=self.backend.cs.force_cert_check,
+                             except_callback=self._async_bind_exception_callback)
 
     def _contract_selection_cancelled(self):
         if self.contract_selection:
@@ -422,7 +422,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
 
     def update_applied_filters_label(self):
         self.applied_filters_label.set_text(_("%s applied") %
-                                              self.filters.get_applied_count())
+                                            self.filters.get_applied_count())
 
     def filter_options_button_clicked(self, button):
         self.filter_dialog.show()
@@ -440,7 +440,7 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             return
 
         self.contract_selection = ContractSelectionWindow(
-                self._contract_selected, self._contract_selection_cancelled)
+            self._contract_selected, self._contract_selection_cancelled)
 
         self.contract_selection.set_parent_window(self.parent_win)
         #self.log.debug("user_data %s", pw.get_user_data())
@@ -469,10 +469,10 @@ class AllSubscriptionsTab(widgets.SubscriptionManagerTab):
             provided = self.pool_stash.lookup_provided_products(pool_id)
 
             self.sub_details.show(product_name, products=provided,
-                    highlight=self.get_filter_text(),
-                    support_level=support_level, support_type=support_type,
-                    sku=selection['product_id'],
-                    pool_type=selection['pool_type'])
+                                  highlight=self.get_filter_text(),
+                                  support_level=support_level, support_type=support_type,
+                                  sku=selection['product_id'],
+                                  pool_type=selection['pool_type'])
         else:
             self.sub_details.clear()
 

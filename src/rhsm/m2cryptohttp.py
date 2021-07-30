@@ -220,7 +220,7 @@ class HTTPSConnection(object):
         self.host = host
         self.ssl_port = int(port) if port else None
         self._connection = _RhsmProxyHTTPSConnection(proxy_host, proxy_port, *self.args, proxy_headers=headers,
-                                                    **self.kwargs)
+                                                     **self.kwargs)
 
     def close(self, *args, **kwargs):
         return self._connection.close(*args, **kwargs)

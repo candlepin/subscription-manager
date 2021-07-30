@@ -33,22 +33,22 @@ from subscription_manager.ga import GObject as ga_GObject
 import rhsm.config as base_config
 from rhsm.utils import ServerUrlParseError
 from rhsm.connection import GoneException, RestlibException, UEPConnection, \
-        ProxyException
+    ProxyException
 
 from subscription_manager.branding import get_branding
 from subscription_manager.action_client import ActionClient
 from subscription_manager.gui import networkConfig
 from subscription_manager.gui import widgets
 from subscription_manager.injection import IDENTITY, PLUGIN_MANAGER, require, \
-        INSTALLED_PRODUCTS_MANAGER, PROFILE_MANAGER, FACTS, ENT_DIR
+    INSTALLED_PRODUCTS_MANAGER, PROFILE_MANAGER, FACTS, ENT_DIR
 from subscription_manager import managerlib
 from subscription_manager.utils import is_valid_server_info, MissingCaCertException, \
-        parse_server_info, restart_virt_who, is_simple_content_access
+    parse_server_info, restart_virt_who, is_simple_content_access
 
 from subscription_manager.gui import utils as gui_utils
 from subscription_manager.gui.autobind import DryRunResult, \
-        ServiceLevelNotSupportedException, AllProductsCoveredException, \
-        NoProductsException
+    ServiceLevelNotSupportedException, AllProductsCoveredException, \
+    NoProductsException
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.gui.networkConfig import reset_resolver
 
@@ -105,14 +105,14 @@ class RemoteUnregisterException(Exception):
 
 def server_info_from_config(config):
     return {
-            "host": conf['server']['hostname'],
-            "ssl_port": conf['server'].get_int('port'),
-            "handler": conf['server']['prefix'],
-            "proxy_hostname": conf['server']['proxy_hostname'],
-            "proxy_port": conf['server'].get_int('proxy_port'),
-            "proxy_user": conf['server']['proxy_user'],
-            "proxy_password": conf['server']['proxy_password']
-           }
+        "host": conf['server']['hostname'],
+        "ssl_port": conf['server'].get_int('port'),
+        "handler": conf['server']['prefix'],
+        "proxy_hostname": conf['server']['proxy_hostname'],
+        "proxy_port": conf['server'].get_int('proxy_port'),
+        "proxy_user": conf['server']['proxy_user'],
+        "proxy_password": conf['server']['proxy_password']
+    }
 
 
 # FIXME: TODO: subclass collections.MutableSequence
@@ -718,7 +718,7 @@ class RegisterDialog(widgets.SubmanBaseWidget):
 
         # update the 'next/register button on page change'
         self.register_widget.connect('notify::register-button-label',
-                                self._on_register_button_label_change)
+                                     self._on_register_button_label_change)
         self.register_widget.connect('notify::screen-ready',
                                      self._on_register_screen_ready_change)
 
@@ -733,7 +733,7 @@ class RegisterDialog(widgets.SubmanBaseWidget):
 
         # update window title on register state changes
         self.reg_info.connect('notify::register-state',
-                               self._on_register_state_change)
+                              self._on_register_state_change)
 
         self.window = self.register_dialog
         self.back_button.set_sensitive(False)
@@ -1042,10 +1042,10 @@ class PerformRegisterScreen(NoGuiScreen):
         self.info.set_property('register-status', msg)
 
         self.async_backend.register_consumer(self.info.get_property('consumername'),
-                                     self.info.get_property('owner-key'),
-                                     self.info.get_property('environment'),
-                                     self.info.get_property('activation-keys'),
-                                     self._on_registration_finished_cb)
+                                             self.info.get_property('owner-key'),
+                                             self.info.get_property('environment'),
+                                             self.info.get_property('activation-keys'),
+                                             self._on_registration_finished_cb)
 
         return True
 
@@ -1080,8 +1080,8 @@ class PerformUnregisterScreen(NoGuiScreen):
         # Unregister if we have gotten here with a valid identity and have old server info
         if self.info.identity.is_valid() and self.info.get_property('server-info') and self.info.get_property('enable-unregister'):
             self.async_backend.unregister_consumer(self.info.identity.uuid,
-                                           self.info.get_property('server-info'),
-                                           self._on_unregistration_finished_cb)
+                                                   self.info.get_property('server-info'),
+                                                   self._on_unregistration_finished_cb)
             return True
 
         self.emit('move-to-screen', OWNER_SELECT_PAGE)
@@ -1138,7 +1138,7 @@ class PerformPackageProfileSyncScreen(NoGuiScreen):
 
     def pre(self):
         self.async_backend.update_package_profile(self.info.identity.uuid,
-                                          self._on_update_package_profile_finished_cb)
+                                                  self._on_update_package_profile_finished_cb)
         return True
 
 
@@ -1164,9 +1164,9 @@ class PerformSubscribeScreen(NoGuiScreen):
         self.info.set_property('details-label-txt', self.pre_message)
         self.info.set_property('register-state', RegisterState.SUBSCRIBING)
         self.async_backend.subscribe(self.info.identity.uuid,
-                             self.info.get_property('current-sla'),
-                             self.info.get_property('dry-run-result'),
-                             self._on_subscribing_finished_cb)
+                                     self.info.get_property('current-sla'),
+                                     self.info.get_property('dry-run-result'),
+                                     self._on_subscribing_finished_cb)
 
         return True
 
@@ -1433,7 +1433,7 @@ class EnvironmentScreen(Screen):
         self.environment_treeview.set_model(environment_model)
 
         self.environment_treeview.get_selection().select_iter(
-                environment_model.get_iter_first())
+            environment_model.get_iter_first())
 
 
 class OrganizationScreen(Screen):
@@ -1506,7 +1506,7 @@ class OrganizationScreen(Screen):
         self.owner_treeview.set_model(owner_model)
 
         self.owner_treeview.get_selection().select_iter(
-                owner_model.get_iter_first())
+            owner_model.get_iter_first())
 
 
 class CredentialsScreen(Screen):
@@ -1523,10 +1523,10 @@ class CredentialsScreen(Screen):
 
         self._initialize_consumer_name()
         self.registration_tip_label.set_label("<small>%s</small>" %
-                                          get_branding().GUI_FORGOT_LOGIN_TIP)
+                                              get_branding().GUI_FORGOT_LOGIN_TIP)
 
         self.registration_header_label.set_label("<b>%s</b>" %
-                                             get_branding().GUI_REGISTRATION_HEADER)
+                                                 get_branding().GUI_REGISTRATION_HEADER)
 
     def _initialize_consumer_name(self):
         if not self.consumer_name.get_text():
@@ -1748,8 +1748,8 @@ class ChooseServerScreen(Screen):
         # Default port and prefix are fine, so we can be concise and just
         # put the hostname for RHN:
         self.server_entry.set_text("%s:%s%s" % (base_config.DEFAULT_HOSTNAME,
-            base_config.DEFAULT_PORT,
-            base_config.DEFAULT_PREFIX))
+                                                base_config.DEFAULT_PORT,
+                                                base_config.DEFAULT_PREFIX))
 
     def _on_proxy_button_clicked(self, widget):
         # proxy dialog may attempt to resolve proxy and server names, so
@@ -1822,12 +1822,12 @@ class ValidateServerScreen(NoGuiScreen):
             if isinstance(error, tuple):
                 if isinstance(error[1], MissingCaCertException):
                     self.emit('register-error',
-                      _("CA certificate for subscription service has not been installed."),
-                      None)
+                              _("CA certificate for subscription service has not been installed."),
+                              None)
                 if isinstance(error[1], ProxyException):
                     self.emit('register-error',
-                      _("Proxy connection failed, please check your settings."),
-                      None)
+                              _("Proxy connection failed, please check your settings."),
+                              None)
             else:
                 self.emit('register-error',
                           _("Error validating server: %s"),
@@ -1929,13 +1929,13 @@ class AsyncBackend(object):
             # If environments aren't supported, don't bother trying to list:
             if self.backend.cp_provider.get_basic_auth_cp().supports_resource('environments'):
                 log.debug("Server supports environments, checking for "
-                         "environment to register with.")
+                          "environment to register with.")
                 retval = []
                 for env in self.backend.cp_provider.get_basic_auth_cp().getEnvironmentList(owner_key):
                     retval.append(env)
                 if len(retval) == 0:
                     raise Exception(_("Server supports environments, but "
-                        "none are available."))
+                                      "none are available."))
 
             self.queue.put((callback, retval, None))
         except Exception:
@@ -2048,7 +2048,7 @@ class AsyncBackend(object):
         """
         try:
             log.debug("Binding to subscriptions at service level: %s" %
-                    dry_run_result.service_level)
+                      dry_run_result.service_level)
             expected_pool_ids = set()
             for pool_quantity in dry_run_result.json:
                 pool_id = pool_quantity['pool']['id']
@@ -2104,7 +2104,7 @@ class AsyncBackend(object):
         self.backend.update()
 
         consumer_json = self.backend.cp_provider.get_consumer_auth_cp().getConsumer(
-                consumer_uuid)
+            consumer_uuid)
 
         if 'serviceLevel' not in consumer_json:
             raise ServiceLevelNotSupportedException()

@@ -202,8 +202,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'subscription-manager.tex', u'subscription-manager Documentation',
-   u'Adrian Likins', 'manual'),
+    ('index', 'subscription-manager.tex', u'subscription-manager Documentation',
+     u'Adrian Likins', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -246,9 +246,9 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'subscription-manager', u'subscription-manager Documentation',
-   u'Adrian Likins', 'subscription-manager', 'One line description of project.',
-   'Miscellaneous'),
+    ('index', 'subscription-manager', u'subscription-manager Documentation',
+     u'Adrian Likins', 'subscription-manager', 'One line description of project.',
+     'Miscellaneous'),
 ]
 
 # Documents to append as an appendix to all manuals.

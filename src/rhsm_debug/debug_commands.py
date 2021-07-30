@@ -55,26 +55,26 @@ class SystemCommand(CliCommand):
         CliCommand.__init__(self, name=name, shortdesc=shortdesc, primary=primary)
 
         self.parser.add_argument("--destination", dest="destination",
-                               default="/tmp", help=_("the destination location of the result; default is /tmp"))
+                                 default="/tmp", help=_("the destination location of the result; default is /tmp"))
         # default is to build an archive, this skips the archive and clean up,
         # just leaving the directory of debug info for sosreport to report
         self.parser.add_argument("--no-archive", action='store_false',
-                               default=True, dest="archive",
-                               help=_("data will be in an uncompressed directory"))
+                                 default=True, dest="archive",
+                                 help=_("data will be in an uncompressed directory"))
         self.parser.add_argument("--sos", action='store_true',
-                               default=False, dest="sos",
-                               help=_("only data not already included in sos report will be collected"))
+                                 default=False, dest="sos",
+                                 help=_("only data not already included in sos report will be collected"))
         # These options don't do anything anymore, since current versions of
         # RHSM api doesn't support it, and previously they failed silently.
         # So now they are hidden, and they are not hooked up to anything. This
         # avoids breaking existing scripts, since it also didn't do anything
         # before. See rhbz #1246680
         self.parser.add_argument("--no-subscriptions", action='store_true',
-                               dest="placeholder_for_subscriptions_option",
-                               default=False, help=argparse.SUPPRESS)
+                                 dest="placeholder_for_subscriptions_option",
+                                 default=False, help=argparse.SUPPRESS)
         self.parser.add_argument("--subscriptions", action='store_true',
-                               dest="placeholder_for_subscriptions_option",
-                               default=False, help=argparse.SUPPRESS)
+                                 dest="placeholder_for_subscriptions_option",
+                                 default=False, help=argparse.SUPPRESS)
 
         self.assemble_path = ASSEMBLE_DIR
 
@@ -93,7 +93,7 @@ class SystemCommand(CliCommand):
                 msg = _("To use the no-archive option, the destination directory '{destination}' "
                         "must exist on the same file system as the "
                         "data assembly directory '{assembly}'.").format(destination=self.options.destination,
-                                                                       assembly=self.assemble_path)
+                                                                        assembly=self.assemble_path)
                 raise InvalidCLIOptionError(msg)
         # In case folks are using this in a script
         if self.options.placeholder_for_subscriptions_option:
@@ -230,7 +230,7 @@ class SystemCommand(CliCommand):
             rel_path = src_path[1:]
         if ignore_pats is not None:
             shutil.copytree(src_path, os.path.join(dest_path, rel_path),
-                ignore=ignore_patterns(*ignore_pats))
+                            ignore=ignore_patterns(*ignore_pats))
         else:
             shutil.copytree(src_path, os.path.join(dest_path, rel_path))
 

@@ -49,57 +49,57 @@ DEFAULT_ENT_CERT_DIR = '/etc/pki/entitlement'
 HOST_ENT_CERT_DIR = '/etc/pki/entitlement-host'
 
 SERVER_DEFAULTS = {
-        'hostname': DEFAULT_HOSTNAME,
-        'prefix': DEFAULT_PREFIX,
-        'port': DEFAULT_PORT,
-        'server_timeout': DEFAULT_SERVER_TIMEOUT,
-        'insecure': '0',
-        'ssl_verify_depth': '3',
-        'proxy_hostname': '',
-        'proxy_scheme': 'http',
-        'proxy_user': '',
-        'proxy_port': '',
-        'proxy_password': '',
-        'no_proxy': '',
-        }
+    'hostname': DEFAULT_HOSTNAME,
+    'prefix': DEFAULT_PREFIX,
+    'port': DEFAULT_PORT,
+    'server_timeout': DEFAULT_SERVER_TIMEOUT,
+    'insecure': '0',
+    'ssl_verify_depth': '3',
+    'proxy_hostname': '',
+    'proxy_scheme': 'http',
+    'proxy_user': '',
+    'proxy_port': '',
+    'proxy_password': '',
+    'no_proxy': '',
+}
 RHSM_DEFAULTS = {
-        'baseurl': 'https://' + DEFAULT_CDN_HOSTNAME,
-        'repomd_gpg_url': '',
-        'ca_cert_dir': DEFAULT_CA_CERT_DIR,
-        'repo_ca_cert': '%(ca_cert_dir)sredhat-uep.pem',
-        'productcertdir': '/etc/pki/product',
-        'entitlementcertdir': DEFAULT_ENT_CERT_DIR,
-        'consumercertdir': '/etc/pki/consumer',
-        'manage_repos': '1',
-        'full_refresh_on_yum': '0',
-        'report_package_profile': '1',
-        'plugindir': '/usr/share/rhsm-plugins',
-        'pluginconfdir': '/etc/rhsm/pluginconf.d',
-        'auto_enable_yum_plugins': '1',
-        'package_profile_on_trans': '0',
-        'inotify': '1'
-        }
+    'baseurl': 'https://' + DEFAULT_CDN_HOSTNAME,
+    'repomd_gpg_url': '',
+    'ca_cert_dir': DEFAULT_CA_CERT_DIR,
+    'repo_ca_cert': '%(ca_cert_dir)sredhat-uep.pem',
+    'productcertdir': '/etc/pki/product',
+    'entitlementcertdir': DEFAULT_ENT_CERT_DIR,
+    'consumercertdir': '/etc/pki/consumer',
+    'manage_repos': '1',
+    'full_refresh_on_yum': '0',
+    'report_package_profile': '1',
+    'plugindir': '/usr/share/rhsm-plugins',
+    'pluginconfdir': '/etc/rhsm/pluginconf.d',
+    'auto_enable_yum_plugins': '1',
+    'package_profile_on_trans': '0',
+    'inotify': '1'
+}
 
 RHSMCERTD_DEFAULTS = {
-        'certcheckinterval': '240',
-        'autoattachinterval': '1440',
-        'splay': '1',
-        'disable': '0',
-        'auto_registration': '0',
-        'auto_registration_interval': '60'
-        }
+    'certcheckinterval': '240',
+    'autoattachinterval': '1440',
+    'splay': '1',
+    'disable': '0',
+    'auto_registration': '0',
+    'auto_registration_interval': '60'
+}
 
 LOGGING_DEFAULTS = {
-        'default_log_level': 'INFO'
-        }
+    'default_log_level': 'INFO'
+}
 
 # Defaults are applied to each section in the config file.
 DEFAULTS = {
-        'server': SERVER_DEFAULTS,
-        'rhsm': RHSM_DEFAULTS,
-        'rhsmcertd': RHSMCERTD_DEFAULTS,
-        'logging': LOGGING_DEFAULTS
-        }
+    'server': SERVER_DEFAULTS,
+    'rhsm': RHSM_DEFAULTS,
+    'rhsmcertd': RHSMCERTD_DEFAULTS,
+    'logging': LOGGING_DEFAULTS
+}
 
 
 def in_container():

@@ -25,7 +25,7 @@ class RCTCliCommand(AbstractCLICommand):
 
     def __init__(self, name="cli", aliases=None, shortdesc=None, primary=False):
         AbstractCLICommand.__init__(self, name=name, aliases=aliases,
-                shortdesc=shortdesc, primary=primary)
+                                    shortdesc=shortdesc, primary=primary)
 
     def main(self, args=None):
         # In testing we sometimes specify args, otherwise use the default:

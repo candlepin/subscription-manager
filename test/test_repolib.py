@@ -32,10 +32,10 @@ import os
 from iniparse import ConfigParser
 
 from .stubs import StubProductCertificate, \
-        StubProduct, StubEntitlementCertificate, StubContent, \
-        StubProductDirectory, StubConsumerIdentity, StubEntitlementDirectory
+    StubProduct, StubEntitlementCertificate, StubContent, \
+    StubProductDirectory, StubConsumerIdentity, StubEntitlementDirectory
 from subscription_manager.repolib import RepoActionInvoker, \
-        RepoUpdateActionCommand, YumReleaseverSource, YumPluginManager
+    RepoUpdateActionCommand, YumReleaseverSource, YumPluginManager
 from subscription_manager.repofile import Repo, TidyWriter, YumRepoFile
 from subscription_manager import injection as inj
 from rhsm.config import RhsmConfigParser
@@ -282,13 +282,13 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         inj.provide(inj.PROD_DIR, prod_dir)
 
         stub_content = [
-                StubContent("c1", required_tags="", gpg=None),   # no required tags
-                StubContent("c2", required_tags="TAG1", gpg=""),
-                StubContent("c3", required_tags="TAG1,TAG2,TAG3"),  # should get skipped
-                StubContent("c4", required_tags="TAG1,TAG2,TAG4,TAG5,TAG6",
-                    gpg="/gpg.key", url="/$some/$path"),
-                StubContent("c5", content_type="file", required_tags="", gpg=None),
-                StubContent("c6", content_type="file", required_tags="", gpg=None),
+            StubContent("c1", required_tags="", gpg=None),   # no required tags
+            StubContent("c2", required_tags="TAG1", gpg=""),
+            StubContent("c3", required_tags="TAG1,TAG2,TAG3"),  # should get skipped
+            StubContent("c4", required_tags="TAG1,TAG2,TAG4,TAG5,TAG6",
+                        gpg="/gpg.key", url="/$some/$path"),
+            StubContent("c5", content_type="file", required_tags="", gpg=None),
+            StubContent("c6", content_type="file", required_tags="", gpg=None),
         ]
         self.stub_ent_cert = StubEntitlementCertificate(stub_prod, content=stub_content)
         ent_dir = StubEntitlementDirectory([self.stub_ent_cert])
@@ -444,7 +444,7 @@ class RepoUpdateActionTests(fixture.SubManFixture):
     def test_ui_repoid_vars(self):
         update_action = RepoUpdateActionCommand()
         content = update_action.get_all_content(baseurl="http://example.com",
-                                            ca_cert=None)
+                                                ca_cert=None)
         c4 = self._find_content(content, 'c4')
         self.assertEqual('some path', c4['ui_repoid_vars'])
         c2 = self._find_content(content, 'c2')

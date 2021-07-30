@@ -32,7 +32,7 @@ class RCTCertCommand(RCTCliCommand):
 
     def __init__(self, name="cli", aliases=None, shortdesc=None, primary=False):
         RCTCliCommand.__init__(self, name=name, aliases=aliases,
-                shortdesc=shortdesc, primary=primary)
+                               shortdesc=shortdesc, primary=primary)
 
     def _get_usage(self):
         return _("%(prog)s {name} [OPTIONS] CERT_FILE").format(name=self.name)
@@ -43,8 +43,8 @@ class RCTCertCommand(RCTCliCommand):
             return certificate.create_from_file(cert_file)
         except certificate.CertificateException as ce:
             raise InvalidCLIOptionError(
-                    _("Unable to read certificate file '{certificate}': {exception}").format(
-                        certificate=cert_file, exception=ce))
+                _("Unable to read certificate file '{certificate}': {exception}").format(
+                    certificate=cert_file, exception=ce))
 
     def _validate_options(self):
         cert_file = self._get_file_from_args()
@@ -63,9 +63,9 @@ class CatCertCommand(RCTCertCommand):
                                primary=True)
 
         self.parser.add_argument("--no-products", dest="no_products", action="store_true",
-                               help=_("do not show the cert's product information"))
+                                 help=_("do not show the cert's product information"))
         self.parser.add_argument("--no-content", dest="no_content", action="store_true",
-                               help=_("do not show the cert's content info"))
+                                 help=_("do not show the cert's content info"))
 
     def _do_command(self):
         """

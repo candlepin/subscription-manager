@@ -27,7 +27,7 @@ class StubDirectory(certdirectory.Directory):
 
 class TestComparableProductEquality(unittest.TestCase):
     product_info = {'id': 70, 'name': "Awesome OS", 'arch': ["ALL"],
-             'tags': "awesomeos-1, awesomeos-1-server"}
+                    'tags': "awesomeos-1, awesomeos-1-server"}
 
     older = "1.0"
     newer = "1.1"
@@ -219,8 +219,8 @@ class TestComparableProductCert(TestComparableProduct):
 
     def _create_cert(self, product_id, label, version, provided_tags):
         cert = stubs.StubProductCertificate(
-                stubs.StubProduct(product_id, label, version=version,
-                                   provided_tags=provided_tags))
+            stubs.StubProduct(product_id, label, version=version,
+                              provided_tags=provided_tags))
         cert.delete = Mock()
         cert.write = Mock()
         return cert
@@ -338,11 +338,11 @@ class TestProductDatabase(unittest.TestCase):
         self.assertTrue(isinstance(product2_repos, collections.Iterable))
         self.assertTrue(isinstance(product3_repos, collections.Iterable))
         self.assertEqual(["product1-repo1", "product1-repo2"],
-                          product1_repos)
+                         product1_repos)
         self.assertEqual(["product2-repo1", "product2-repo2"],
-                          product2_repos)
+                         product2_repos)
         self.assertEqual(['product3-repo1'],
-                          product3_repos)
+                         product3_repos)
 
     def test_delete(self):
         self.pdb.add("product", "repo")
@@ -365,7 +365,7 @@ class TestProductManager(SubManFixture):
         self.prod_dir = stubs.StubProductDirectory([])
         self.prod_db_mock = Mock()
         self.prod_mgr = productid.ProductManager(product_dir=self.prod_dir,
-                product_db=self.prod_db_mock)
+                                                 product_db=self.prod_db_mock)
 
     def assert_nothing_happened(self):
         self.assertFalse(self.prod_db_mock.delete.called)
@@ -787,7 +787,7 @@ class TestProductManager(SubManFixture):
             "69": ['rhel-6-server-rpms']
         }
         self.prod_db_mock.find_repos = Mock(
-                side_effect=self.find_repos_side_effect)
+            side_effect=self.find_repos_side_effect)
         enabled = [(jboss_cert, 'some-other-repo'),
                    (server_cert, 'rhel-6-server-rpms')]
         # There should be no active repos because in this case we are
@@ -795,7 +795,7 @@ class TestProductManager(SubManFixture):
         active = set([])
         temp_disabled_repos = ['rhel-6-server-rpms']
         self.prod_mgr.find_temp_disabled_repos = Mock(
-                return_value=temp_disabled_repos)
+            return_value=temp_disabled_repos)
 
         self.prod_mgr.update(enabled, active, tracks_repos=True)
 
@@ -996,8 +996,8 @@ class TestProductManager(SubManFixture):
 
     def _create_cert(self, product_id, label, version, provided_tags, prod_default=False):
         cert = stubs.StubProductCertificate(
-                stubs.StubProduct(product_id, label, version=version,
-                                   provided_tags=provided_tags))
+            stubs.StubProduct(product_id, label, version=version,
+                              provided_tags=provided_tags))
         cert.delete = Mock()
         cert.write = Mock()
         if prod_default:
@@ -1116,8 +1116,8 @@ class TestProductManager(SubManFixture):
 
         # Desktop comes first in this scenario:
         enabled = [
-                (desktop_cert, 'repo1'),
-                (workstation_cert, 'repo2'),
+            (desktop_cert, 'repo1'),
+            (workstation_cert, 'repo2'),
         ]
 
         self.prod_mgr.update_installed(enabled, ['repo1', 'repo2'])
@@ -1146,9 +1146,9 @@ class TestProductManager(SubManFixture):
 
         # Workstation comes first in this scenario:
         enabled = [
-                (workstation_cert, 'repo2'),
-                (desktop_cert, 'repo1'),
-                (some_other_cert, 'repo3'),
+            (workstation_cert, 'repo2'),
+            (desktop_cert, 'repo1'),
+            (some_other_cert, 'repo3'),
         ]
 
         self.prod_mgr.update_installed(enabled, ['repo1', 'repo2', 'repo3'])
@@ -1175,8 +1175,8 @@ class TestProductManager(SubManFixture):
 
         # Desktop comes first in this scenario:
         enabled = [
-                (desktop_cert, 'repo1'),
-                (workstation_cert, 'repo2'),
+            (desktop_cert, 'repo1'),
+            (workstation_cert, 'repo2'),
         ]
 
         products_installed, products_updated = self.prod_mgr.update_installed(enabled, ['repo1', 'repo2'])

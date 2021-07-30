@@ -206,7 +206,7 @@ class moduleClass(module.Module, object):
         # space it can.
         title_label.set_line_wrap(True)
         title_label.connect('size-allocate',
-                             lambda label, size: label.set_size_request(size.width - 1, -1))
+                            lambda label, size: label.set_size_request(size.width - 1, -1))
 
     def shouldAppear(self):
         """

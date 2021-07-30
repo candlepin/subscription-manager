@@ -52,7 +52,7 @@ class ConnectionTests(unittest.TestCase):
         # is to mock the actual server responses and just test logic in the
         # UEPConnection:
         self.cp = UEPConnection(username="dummy", password="dummy",
-                handler="/Test/", insecure=True)
+                                handler="/Test/", insecure=True)
         self.temp_ent_dir = mkdtemp()
 
     def tearDown(self):
@@ -60,7 +60,7 @@ class ConnectionTests(unittest.TestCase):
 
     def test_accepts_a_timeout(self):
         self.cp = UEPConnection(username="dummy", password="dummy",
-                handler="/Test/", insecure=True, timeout=3)
+                                handler="/Test/", insecure=True, timeout=3)
 
     def test_load_manager_capabilities(self):
         expected_capabilities = ['hypervisors_async', 'cores']
@@ -75,10 +75,10 @@ class ConnectionTests(unittest.TestCase):
         # status
         original_getStatus = self.cp.getStatus
         self.cp.getStatus = Mock(side_effect=[proper_status,
-                                                     improper_status])
+                                              improper_status])
         actual_capabilities = self.cp._load_manager_capabilities()
         self.assertEqual(sorted(actual_capabilities),
-                          sorted(expected_capabilities))
+                         sorted(expected_capabilities))
         self.assertEqual([], self.cp._load_manager_capabilities())
         self.cp.getStatus = original_getStatus
 
@@ -120,14 +120,14 @@ class ConnectionTests(unittest.TestCase):
         self.cp.conn.request_get = Mock(return_value=[])
         self.cp.getEnvironment(owner_key="myorg", name="env name__++=*&")
         self.cp.conn.request_get.assert_called_with(
-                "/owners/myorg/environments?name=env+name__%2B%2B%3D%2A%26")
+            "/owners/myorg/environments?name=env+name__%2B%2B%3D%2A%26")
 
     def test_entitle_date(self):
         self.cp.conn = Mock()
         self.cp.conn.request_post = Mock(return_value=[])
         self.cp.bind("abcd", date(2011, 9, 2))
         self.cp.conn.request_post.assert_called_with(
-                "/consumers/abcd/entitlements?entitle_date=2011-09-02")
+            "/consumers/abcd/entitlements?entitle_date=2011-09-02")
 
     def test_no_entitle_date(self):
         self.cp.conn = Mock()
@@ -164,7 +164,7 @@ class ConnectionTests(unittest.TestCase):
         with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host:4444'}):
             with patch.object(connection.config, 'get', self.mock_config_without_proxy_settings):
                 uep = UEPConnection(username="dummy", password="dummy",
-                     handler="/Test/", insecure=True)
+                                    handler="/Test/", insecure=True)
                 self.assertEqual("u", uep.proxy_user)
                 self.assertEqual("p", uep.proxy_password)
                 self.assertEqual("host", uep.proxy_hostname)
@@ -176,7 +176,7 @@ class ConnectionTests(unittest.TestCase):
                                        'http_proxy': 'http://notme:orme@host:2222'}):
             with patch.object(connection.config, 'get', self.mock_config_without_proxy_settings):
                 uep = UEPConnection(username="dummy", password="dummy",
-                     handler="/Test/", insecure=True)
+                                    handler="/Test/", insecure=True)
                 self.assertEqual("u", uep.proxy_user)
                 self.assertEqual("p", uep.proxy_password)
                 self.assertEqual("host", uep.proxy_hostname)
@@ -186,7 +186,7 @@ class ConnectionTests(unittest.TestCase):
         with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host'}):
             with patch.object(connection.config, 'get', self.mock_config_without_proxy_settings):
                 uep = UEPConnection(username="dummy", password="dummy",
-                     handler="/Test/", insecure=True)
+                                    handler="/Test/", insecure=True)
                 self.assertEqual("u", uep.proxy_user)
                 self.assertEqual("p", uep.proxy_password)
                 self.assertEqual("host", uep.proxy_hostname)
@@ -196,7 +196,7 @@ class ConnectionTests(unittest.TestCase):
         with patch.dict('os.environ', {'HTTPS_PROXY': 'http://host:1111'}):
             with patch.object(connection.config, 'get', self.mock_config_without_proxy_settings):
                 uep = UEPConnection(username="dummy", password="dummy",
-                     handler="/Test/", insecure=True)
+                                    handler="/Test/", insecure=True)
                 self.assertEqual(None, uep.proxy_user)
                 self.assertEqual(None, uep.proxy_password)
                 self.assertEqual("host", uep.proxy_hostname)
@@ -488,7 +488,7 @@ class ConnectionTests(unittest.TestCase):
         options = Options('tester')
         self.cp.hypervisorHeartbeat("owner", options=options)
         self.cp.conn.request_put.assert_called_with(
-                "/hypervisors/owner/heartbeat?reporter_id=tester")
+            "/hypervisors/owner/heartbeat?reporter_id=tester")
 
     def test_hypervisor_check_in_no_capability(self):
         self.cp.conn = Mock()
@@ -588,7 +588,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
             self.assertEqual(self.request_type, e.request_type)
             self.assertEqual("401", e.code)
             expected_str = "Server error attempting a GET to https://server/path returned status 401\n" \
-                       "Unauthorized: Invalid credentials for request."
+                           "Unauthorized: Invalid credentials for request."
             self.assertEqual(expected_str, str(e))
         else:
             self.fail("Should have raised UnauthorizedException")
@@ -601,7 +601,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
             self.assertEqual(self.request_type, e.request_type)
             self.assertEqual("401", e.code)
             expected_str = "Server error attempting a GET to https://server/path returned status 401\n" \
-                       "Unauthorized: Invalid credentials for request."
+                           "Unauthorized: Invalid credentials for request."
             self.assertEqual(expected_str, str(e))
         else:
             self.fail("Should have raised UnauthorizedException")
@@ -616,7 +616,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
             self.assertEqual(self.request_type, e.request_type)
             self.assertEqual("401", e.code)
             expected_str = "Server error attempting a GET to https://server/path returned status 401\n" \
-                       "Unauthorized: Invalid credentials for request."
+                           "Unauthorized: Invalid credentials for request."
             self.assertEqual(expected_str, str(e))
         else:
             self.fail("Should have raised UnauthorizedException")
@@ -638,7 +638,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
             self.assertEqual(self.request_type, e.request_type)
             self.assertEqual("403", e.code)
             expected_str = "Server error attempting a GET to https://server/path returned status 403\n" \
-                       "Forbidden: Invalid credentials for request."
+                           "Forbidden: Invalid credentials for request."
             self.assertEqual(expected_str, str(e))
         else:
             self.fail("Should have raised ForbiddenException")
@@ -926,7 +926,7 @@ class DatetimeFormattingTests(unittest.TestCase):
         # is to mock the actual server responses and just test logic in the
         # UEPConnection:
         self.cp = UEPConnection(username="dummy", password="dummy",
-                handler="/Test/", insecure=True)
+                                handler="/Test/", insecure=True)
 
     def tearDown(self):
         locale.resetlocale()

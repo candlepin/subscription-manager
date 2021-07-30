@@ -37,9 +37,9 @@ class ImportSubDialog(object):
         self._parent = None
 
         self.dialog = ga_Gtk.FileChooserDialog(_("Import Certificates"),
-                None, ga_Gtk.FileChooserAction.OPEN,
-                (ga_Gtk.STOCK_CANCEL, ga_Gtk.ResponseType.CANCEL,
-                 _("Import").encode('utf-8', 'replace'), ga_Gtk.ResponseType.OK))
+                                               None, ga_Gtk.FileChooserAction.OPEN,
+                                               (ga_Gtk.STOCK_CANCEL, ga_Gtk.ResponseType.CANCEL,
+                                               _("Import").encode('utf-8', 'replace'), ga_Gtk.ResponseType.OK))
         self.dialog.set_default_response(ga_Gtk.ResponseType.OK)
         self.dialog.set_modal(True)
 
@@ -98,7 +98,7 @@ class ImportSubDialog(object):
                     if not extractor.verify_valid_entitlement():
                         log.error("Invalid X509 entitlement certificate.")
                         log.error("Error parsing manually imported entitlement "
-                            "certificate: %s" % cert_file)
+                                  "certificate: %s" % cert_file)
                         invalid_certs.append(cert_file)
                     else:
                         extractor.write_to_disk()
@@ -137,7 +137,7 @@ class ImportSubDialog(object):
         else:
             #if we get to this point, the import was successful
             messageWindow.InfoDialog(_("Certificate import was successful."),
-                    parent=self._parent)
+                                     parent=self._parent)
         self.dialog.hide()
         self.dialog.unselect_all()
 

@@ -200,7 +200,7 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
         if self.enableProxyBypassButton.get_active():
             if self.noProxyEntry.get_text() is not None:
                 self.cfg.set("server", "no_proxy",
-                         str(self.noProxyEntry.get_text()))
+                             str(self.noProxyEntry.get_text()))
         else:
             self.cfg.set("server", "no_proxy", "")
 
@@ -210,7 +210,7 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
         except Exception:
             show_error_window(_("There was an error saving your configuration.") +
                               _("Make sure that you own %s.") % self.cfg.fileName,
-                                parent=self.networkConfigDialog)
+                              parent=self.networkConfigDialog)
 
     def show(self):
         self.set_initial_values()
@@ -258,11 +258,11 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
 
     def test_connection(self, proxy_host, proxy_port, proxy_user, proxy_password, no_proxy):
         cp = connection.UEPConnection(
-                    proxy_hostname=proxy_host,
-                    proxy_port=proxy_port,
-                    proxy_user=proxy_user,
-                    proxy_password=proxy_password,
-                    no_proxy=no_proxy)
+            proxy_hostname=proxy_host,
+            proxy_port=proxy_port,
+            proxy_user=proxy_user,
+            proxy_password=proxy_password,
+            no_proxy=no_proxy)
         try:
             socket.setdefaulttimeout(10)
             cp.getStatus()
@@ -273,15 +273,15 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
         except (connection.RemoteServerException,
                 connection.RestlibException) as e:
             log.warn("Reporting proxy connection as good despite %s" %
-             e)
+                     e)
             return True
         except connection.NetworkException as e:
             log.warn("%s when attempting to connect through %s:%s" %
-             (e.code, proxy_host, proxy_port))
+                     (e.code, proxy_host, proxy_port))
             return False
         except Exception as e:
             log.exception("'%s' when attempting to connect through %s:%s" %
-                      (e, proxy_host, proxy_port))
+                          (e, proxy_host, proxy_port))
             return False
         else:
             return True
@@ -371,9 +371,9 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
             self.enableProxyBypassButton.set_sensitive(button.get_active())
             # Proxy authentication should only be active if proxy is also enabled
             self.proxyUserEntry.set_sensitive(button.get_active() and
-                    self.enableProxyAuthButton.get_active())
+                                              self.enableProxyAuthButton.get_active())
             self.proxyPasswordEntry.set_sensitive(button.get_active() and
-                    self.enableProxyAuthButton.get_active())
+                                                  self.enableProxyAuthButton.get_active())
         elif button.get_name() == "enableProxyAuthButton":
             self.proxyUserEntry.set_sensitive(button.get_active())
             self.proxyPasswordEntry.set_sensitive(button.get_active())

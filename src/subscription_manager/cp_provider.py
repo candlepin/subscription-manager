@@ -69,17 +69,17 @@ class CPProvider(object):
     # Reread the config file and prefer arguments over config values
     # then recreate connections
     def set_connection_info(self,
-                host=None,
-                ssl_port=None,
-                handler=None,
-                cert_file=None,
-                key_file=None,
-                proxy_hostname_arg=None,
-                proxy_port_arg=None,
-                proxy_user_arg=None,
-                proxy_password_arg=None,
-                no_proxy_arg=None,
-                restlib_class=connection.Restlib):
+                            host=None,
+                            ssl_port=None,
+                            handler=None,
+                            cert_file=None,
+                            key_file=None,
+                            proxy_hostname_arg=None,
+                            proxy_port_arg=None,
+                            proxy_user_arg=None,
+                            proxy_password_arg=None,
+                            no_proxy_arg=None,
+                            restlib_class=connection.Restlib):
         self.cert_file = ConsumerIdentity.certpath()
         self.key_file = ConsumerIdentity.keypath()
 
@@ -142,18 +142,18 @@ class CPProvider(object):
     def get_consumer_auth_cp(self):
         if not self.consumer_auth_cp:
             self.consumer_auth_cp = connection.UEPConnection(
-                    host=self.server_hostname,
-                    ssl_port=self.server_port,
-                    handler=self.server_prefix,
-                    proxy_hostname=self.proxy_hostname,
-                    proxy_port=self.proxy_port,
-                    proxy_user=self.proxy_user,
-                    proxy_password=self.proxy_password,
-                    cert_file=self.cert_file, key_file=self.key_file,
-                    correlation_id=self.correlation_id,
-                    no_proxy=self.no_proxy,
-                    restlib_class=self.restlib_class,
-                    client_version=self.get_client_version()
+                host=self.server_hostname,
+                ssl_port=self.server_port,
+                handler=self.server_prefix,
+                proxy_hostname=self.proxy_hostname,
+                proxy_port=self.proxy_port,
+                proxy_user=self.proxy_user,
+                proxy_password=self.proxy_password,
+                cert_file=self.cert_file, key_file=self.key_file,
+                correlation_id=self.correlation_id,
+                no_proxy=self.no_proxy,
+                restlib_class=self.restlib_class,
+                client_version=self.get_client_version()
             )
         return self.consumer_auth_cp
 
@@ -182,6 +182,26 @@ class CPProvider(object):
         self.set_token(access_token)
 
         self.keycloak_auth_cp = connection.UEPConnection(
+            host=self.server_hostname,
+            ssl_port=self.server_port,
+            handler=self.server_prefix,
+            proxy_hostname=self.proxy_hostname,
+            proxy_port=self.proxy_port,
+            proxy_user=self.proxy_user,
+            proxy_password=self.proxy_password,
+            username=None,
+            password=None,
+            correlation_id=self.correlation_id,
+            no_proxy=self.no_proxy,
+            restlib_class=self.restlib_class,
+            token=self.token,
+            client_version=self.get_client_version()
+        )
+        return self.keycloak_auth_cp
+
+    def get_basic_auth_cp(self):
+        if not self.basic_auth_cp:
+            self.basic_auth_cp = connection.UEPConnection(
                 host=self.server_hostname,
                 ssl_port=self.server_port,
                 handler=self.server_prefix,
@@ -189,49 +209,29 @@ class CPProvider(object):
                 proxy_port=self.proxy_port,
                 proxy_user=self.proxy_user,
                 proxy_password=self.proxy_password,
-                username=None,
-                password=None,
+                username=self.username,
+                password=self.password,
                 correlation_id=self.correlation_id,
                 no_proxy=self.no_proxy,
                 restlib_class=self.restlib_class,
-                token=self.token,
                 client_version=self.get_client_version()
-        )
-        return self.keycloak_auth_cp
-
-    def get_basic_auth_cp(self):
-        if not self.basic_auth_cp:
-            self.basic_auth_cp = connection.UEPConnection(
-                    host=self.server_hostname,
-                    ssl_port=self.server_port,
-                    handler=self.server_prefix,
-                    proxy_hostname=self.proxy_hostname,
-                    proxy_port=self.proxy_port,
-                    proxy_user=self.proxy_user,
-                    proxy_password=self.proxy_password,
-                    username=self.username,
-                    password=self.password,
-                    correlation_id=self.correlation_id,
-                    no_proxy=self.no_proxy,
-                    restlib_class=self.restlib_class,
-                    client_version=self.get_client_version()
             )
         return self.basic_auth_cp
 
     def get_no_auth_cp(self):
         if not self.no_auth_cp:
             self.no_auth_cp = connection.UEPConnection(
-                    host=self.server_hostname,
-                    ssl_port=self.server_port,
-                    handler=self.server_prefix,
-                    proxy_hostname=self.proxy_hostname,
-                    proxy_port=self.proxy_port,
-                    proxy_user=self.proxy_user,
-                    proxy_password=self.proxy_password,
-                    correlation_id=self.correlation_id,
-                    no_proxy=self.no_proxy,
-                    restlib_class=self.restlib_class,
-                    client_version=self.get_client_version()
+                host=self.server_hostname,
+                ssl_port=self.server_port,
+                handler=self.server_prefix,
+                proxy_hostname=self.proxy_hostname,
+                proxy_port=self.proxy_port,
+                proxy_user=self.proxy_user,
+                proxy_password=self.proxy_password,
+                correlation_id=self.correlation_id,
+                no_proxy=self.no_proxy,
+                restlib_class=self.restlib_class,
+                client_version=self.get_client_version()
             )
         return self.no_auth_cp
 

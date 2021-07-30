@@ -77,7 +77,7 @@ class OstreeContentUpdateActionCommand(object):
 
         # update repo configs
         report = self.update_config(ostree_repo_config,
-                                     contents=entitled_contents)
+                                    contents=entitled_contents)
 
         # reload the new config, so we have fresh remotes, etc
         self.load_config(ostree_repo_config)

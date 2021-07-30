@@ -150,7 +150,7 @@ try:
 except ImportError as e:
     log.exception(e)
     system_exit(2, "Unable to find Subscription Manager module.\n"
-                  "Error: %s" % e)
+                   "Error: %s" % e)
 
 
 class SubscriptionManagerService(dbus.service.Object):

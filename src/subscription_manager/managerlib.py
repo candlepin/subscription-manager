@@ -31,9 +31,9 @@ import subscription_manager.cache as cache
 from subscription_manager.cert_sorter import StackingGroupSorter, ComplianceManager
 from subscription_manager import identity
 from subscription_manager.injection import require, CERT_SORTER, \
-        IDENTITY, ENTITLEMENT_STATUS_CACHE, SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE, \
-        PROD_STATUS_CACHE, ENT_DIR, PROD_DIR, CP_PROVIDER, OVERRIDE_STATUS_CACHE, \
-        POOLTYPE_CACHE, RELEASE_STATUS_CACHE, FACTS, POOL_STATUS_CACHE
+    IDENTITY, ENTITLEMENT_STATUS_CACHE, SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE, \
+    PROD_STATUS_CACHE, ENT_DIR, PROD_DIR, CP_PROVIDER, OVERRIDE_STATUS_CACHE, \
+    POOLTYPE_CACHE, RELEASE_STATUS_CACHE, FACTS, POOL_STATUS_CACHE
 from subscription_manager import isodate
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.repolib import RepoActionInvoker
@@ -235,7 +235,7 @@ class PoolFilter(object):
         return [pool for pool in pools if pool not in not_overlapping]
 
     def filter_subscribed_pools(self, pools, subscribed_pool_ids,
-            compatible_pools):
+                                compatible_pools):
         """
         Filter the given list of pools, removing those for which the system
         already has a subscription, unless the pool can be subscribed to again
@@ -461,7 +461,7 @@ def merge_pools(pools):
     for pool in pools:
         if not pool['productId'] in merged_pools:
             merged_pools[pool['productId']] = MergedPools(pool['productId'],
-                    pool['productName'])
+                                                          pool['productName'])
         merged_pools[pool['productId']].add_pool(pool)
 
     # Just return a list of the MergedPools objects, without the product ID
@@ -520,7 +520,7 @@ class PoolStash(object):
         self.compatible_pools = {}
         log.debug("Refreshing pools from server...")
         for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
-                self.identity.uuid, active_on=active_on):
+                               self.identity.uuid, active_on=active_on):
             self.compatible_pools[pool['id']] = pool
             self.all_pools[pool['id']] = pool
 
@@ -528,7 +528,7 @@ class PoolStash(object):
         # Sadly this currently requires a second query to the server.
         self.incompatible_pools = {}
         for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
-                self.identity.uuid, list_all=True, active_on=active_on):
+                               self.identity.uuid, list_all=True, active_on=active_on):
             if not pool['id'] in self.compatible_pools:
                 self.incompatible_pools[pool['id']] = pool
                 self.all_pools[pool['id']] = pool
@@ -591,7 +591,7 @@ class PoolStash(object):
         return [ent.pool.id for ent in require(ENT_DIR).list()]
 
     def _filter_pools(self, incompatible, overlapping, uninstalled, subscribed,
-            text):
+                      text):
         """
         Return a list of pool hashes, filtered according to the given options.
 
@@ -605,17 +605,17 @@ class PoolStash(object):
         else:
             pools = list(self.compatible_pools.values())
             log.debug("\tRemoved %d incompatible pools" %
-                       len(self.incompatible_pools))
+                      len(self.incompatible_pools))
 
         pool_filter = PoolFilter(require(PROD_DIR),
-                require(ENT_DIR), self.sorter)
+                                 require(ENT_DIR), self.sorter)
 
         # Filter out products that are not installed if necessary:
         if uninstalled:
             prev_length = len(pools)
             pools = pool_filter.filter_out_uninstalled(pools)
             log.debug("\tRemoved %d pools for not installed products" %
-                       (prev_length - len(pools)))
+                      (prev_length - len(pools)))
 
         if overlapping:
             prev_length = len(pools)
@@ -633,7 +633,7 @@ class PoolStash(object):
         if subscribed:
             prev_length = len(pools)
             pools = pool_filter.filter_subscribed_pools(pools,
-                    self.subscribed_pool_ids, self.compatible_pools)
+                                                        self.subscribed_pool_ids, self.compatible_pools)
             log.debug("\tRemoved %d pools that we're already subscribed to" %
                       (prev_length - len(pools)))
 
@@ -643,7 +643,7 @@ class PoolStash(object):
         return pools
 
     def merge_pools(self, incompatible=False, overlapping=False,
-            uninstalled=False, subscribed=False, text=None):
+                    uninstalled=False, subscribed=False, text=None):
         """
         Return a merged view of pools filtered according to the given options.
         Pools for the same product will be merged into a MergedPool object.
@@ -652,7 +652,7 @@ class PoolStash(object):
         number of results.
         """
         pools = self._filter_pools(incompatible, overlapping, uninstalled,
-                subscribed, text)
+                                   subscribed, text)
         merged_pools = merge_pools(pools)
         return merged_pools
 
@@ -702,7 +702,7 @@ class ImportFileExtractor(object):
     _REGEX_CONTENT_GROUP = "content"
     _REGEX_END_GROUP = "end"
     _REGEX = "(?P<%s>[-]*BEGIN[\w\ ]*[-]*)(?P<%s>[^-]*)(?P<%s>[-]*END[\w\ ]*[-]*)" % \
-                (_REGEX_START_GROUP, _REGEX_CONTENT_GROUP, _REGEX_END_GROUP)
+        (_REGEX_START_GROUP, _REGEX_CONTENT_GROUP, _REGEX_END_GROUP)
     _PATTERN = re.compile(_REGEX)
 
     _CERT_DICT_TAG = "CERTIFICATE"

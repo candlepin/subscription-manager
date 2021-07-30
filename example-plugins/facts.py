@@ -61,7 +61,7 @@ class FactsPlugin(SubManPlugin):
 
         if return_code != 0:
             conduit.log.error("\"%s\" exit status indicated an error: %s" % (" ".join(facter_cli),
-                                                                           facter_err))
+                                                                             facter_err))
             return
 
         if facter_out is None:

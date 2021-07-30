@@ -76,9 +76,9 @@ def parse_server_info(local_server_entry, config=None):
         port = config["server"]["port"]
         prefix = config["server"]["prefix"]
     return parse_url(local_server_entry,
-                      hostname or DEFAULT_HOSTNAME,
-                      port or DEFAULT_PORT,
-                      prefix or DEFAULT_PREFIX)[2:]
+                     hostname or DEFAULT_HOSTNAME,
+                     port or DEFAULT_PORT,
+                     prefix or DEFAULT_PREFIX)[2:]
 
 
 def parse_baseurl_info(local_server_entry):
@@ -102,11 +102,11 @@ def format_baseurl(hostname, port, prefix):
     # default
     if port == DEFAULT_CDN_PORT:
         return "https://%s%s" % (hostname,
-                                  prefix)
+                                 prefix)
 
     return "https://%s:%s%s" % (hostname,
-                                 port,
-                                 prefix)
+                                port,
+                                prefix)
 
 
 def url_base_join(base, url):
@@ -245,9 +245,9 @@ def get_terminal_width():
                 import struct
                 import termios
                 cr = struct.unpack('hh',
-                                fcntl.ioctl(fd,
-                                    termios.TIOCGWINSZ,
-                                    '1234'))
+                                   fcntl.ioctl(fd,
+                                               termios.TIOCGWINSZ,
+                                               '1234'))
             except Exception:
                 return
             return cr

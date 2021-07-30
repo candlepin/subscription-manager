@@ -306,7 +306,7 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
 
         self.assertRaises(plugins.PluginConfigException,
                           self.base_manager.add_plugins_from_module,
-                           mock_module)
+                          mock_module)
 
         # we try to load a plugin class for this module, so it should
         # be in the list of tracked modules
@@ -475,7 +475,7 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
         self.assertTrue('post_facts_collection' in self.base_manager._slot_to_funcs)
         self.assertTrue('post_facts_collection' in self.base_manager._slot_to_conduit)
         self.assertEqual(plugins.FactsConduit,
-                          self.base_manager._slot_to_conduit['post_facts_collection'])
+                         self.base_manager._slot_to_conduit['post_facts_collection'])
 
         # we should be in _plugins, since this plugin was enabled
         self.assertTrue(PluginClass.get_plugin_key() in self.base_manager._plugins)
@@ -529,7 +529,7 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
         self.assertTrue('post_facts_collection' in self.base_manager._slot_to_funcs)
         self.assertTrue('post_facts_collection' in self.base_manager._slot_to_conduit)
         self.assertEqual(plugins.FactsConduit,
-                          self.base_manager._slot_to_conduit['post_facts_collection'])
+                         self.base_manager._slot_to_conduit['post_facts_collection'])
 
         # we should be in _plugins, since this plugin was enabled
         self.assertTrue(PluginClass.get_plugin_key() in self.base_manager._plugins)
@@ -579,7 +579,7 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
         self.assertTrue('post_facts_collection' in self.base_manager._slot_to_funcs)
         self.assertTrue('post_facts_collection' in self.base_manager._slot_to_conduit)
         self.assertEqual(plugins.FactsConduit,
-                          self.base_manager._slot_to_conduit['post_facts_collection'])
+                         self.base_manager._slot_to_conduit['post_facts_collection'])
 
         # we should be in _plugins, since this plugin was enabled
         self.assertTrue(PluginClass.get_plugin_key() in self.base_manager._plugins)
@@ -606,13 +606,13 @@ class TestPluginManager(unittest.TestCase):
         module = os.path.join(self.module_dir, "no_api_version.py")
         self.assertRaises(plugins.PluginModuleImportApiVersionMissingException,
                           self.manager._load_plugin_module_file,
-                           module)
+                          module)
 
     def test_load_plugin_with_old_api_version(self):
         module = os.path.join(self.module_dir, "old_api_version.py")
         self.assertRaises(plugins.PluginModuleImportApiVersionException,
                           self.manager._load_plugin_module_file,
-                        module)
+                          module)
 
     def test_load_plugin(self):
         module = os.path.join(self.module_dir, "dummy_plugin.py")
@@ -623,7 +623,7 @@ class TestPluginManager(unittest.TestCase):
         self.assertRaises(plugins.PluginConfigException,
                           plugins.PluginConfig,
                           "config_plugin.BadConfigPlugin",
-                           self.module_dir)
+                          self.module_dir)
 
     def test_bad_config_plugin(self):
         self.assertRaises(plugins.PluginConfigException,
@@ -682,7 +682,7 @@ class TestPluginManagerLoadPluginsFromModule(unittest.TestCase):
         self.manager.add_plugins_from_module(module)
         self.assertRaises(plugins.SlotNameException,
                           self.manager.run,
-                        'this_is_a_slot_that_doesnt_exist')
+                          'this_is_a_slot_that_doesnt_exist')
 
 
 # sub class for testing just for easier init
@@ -700,7 +700,7 @@ class TestPluginManagerConfigMap(unittest.TestCase):
     def setUp(self):
         self.manager = plugins.BasePluginManager()
         self.plugin_config = PluginConfigForTest(self.PluginClass.get_plugin_key(),
-                                           enabled='1')
+                                                 enabled='1')
         self.plugin_to_config_map = {self.PluginClass.get_plugin_key(): self.plugin_config}
 
     def test_plugin_no_config_in_map(self):
@@ -760,7 +760,7 @@ class TestPluginManagerReporting(unittest.TestCase):
         for plugin_class_name in plugin_class_names:
             plugin_class = type('PluginClass%s' % plugin_class_name,
                                 (base_plugin.SubManPlugin,),
-                                 {'test_%s_hook' % plugin_class_name: test_hook})
+                                {'test_%s_hook' % plugin_class_name: test_hook})
             conduit_class = type('Conduit%s' % plugin_class_name,
                                  (plugins.BaseConduit,),
                                  {'slots': ['test_%s' % plugin_class_name]})
@@ -807,7 +807,7 @@ class TestPluginManagerRun(unittest.TestCase):
     def test_bad_conduit(self):
         self.assertRaises(TypeError, self.manager.run,
                           "post_product_id_install",
-                           not_an_actual_arg=None)
+                          not_an_actual_arg=None)
 
     def test_hook_raises_exception(self):
         class ExceptionalPluginClass(base_plugin.SubManPlugin):
@@ -910,7 +910,7 @@ class TestBaseConduitEmptyUsesDefaults(BaseConduitTest):
     def test_bad_default_boolean(self):
         self.assertRaises(ValueError,
                           self.conduit.conf_bool,
-                           "main", "enabled", "not a bool")
+                          "main", "enabled", "not a bool")
 
     def test_boolean_no_section(self):
         self.assertRaises(ValueError,
@@ -982,7 +982,7 @@ bool_value=True
     def test_bad_default_boolean(self):
         self.assertRaises(ValueError,
                           self.conduit.conf_bool,
-                           "main", "notabool", "not a bool")
+                          "main", "notabool", "not a bool")
 
     def test_boolean_no_section(self):
         self.assertRaises(ValueError,

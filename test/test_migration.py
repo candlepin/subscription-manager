@@ -45,7 +45,7 @@ class TestMenu(unittest.TestCase):
         self.menu = migrate.Menu([
             ("displayed-hello", "Hello"),
             ("displayed-world", "World"),
-            ], "")
+        ], "")
 
     def test_enter_negative(self):
         self.assertRaises(migrate.InvalidChoiceError, self.menu._get_item, -1)
@@ -144,7 +144,7 @@ class TestMigration(SubManFixture):
             "rhel-x86_64-client-dts-5-beta-debuginfo",
             "rhel-x86_64-server-dts-5-beta",
             "rhel-x86_64-server-dts-5-beta-debuginfo",
-            )
+        )
         self.single_mapped_channels = (
             "rhel-i386-client-dts-5",
             "rhel-i386-client-dts-5-debuginfo",
@@ -154,7 +154,7 @@ class TestMigration(SubManFixture):
             "rhel-i386-server-dts-5-debuginfo",
             "rhel-x86_64-server-dts-5",
             "rhel-x86_64-server-dts-5-debuginfo",
-            )
+        )
 
     def tearDown(self):
         patch.stopall()
@@ -394,13 +394,14 @@ class TestMigration(SubManFixture):
             "enableProxy": True,
             "httpProxy": "proxy.example.com:123",
             "enableProxyAuth": False,
-            }
+        }
         self.engine.rhncfg = rhn_config
         section = MagicMock()
         self.engine.rhsmcfg.__getitem__.return_value = section
 
         self.engine.transfer_http_proxy_settings()
-        expected = [call("proxy_hostname", "proxy.example.com"),
+        expected = [
+            call("proxy_hostname", "proxy.example.com"),
             call("proxy_port", "123"),
             call("proxy_user", ""),
             call("proxy_password", ""),
@@ -424,7 +425,8 @@ class TestMigration(SubManFixture):
         }
         self.engine.rhncfg = rhn_config
         self.engine.transfer_http_proxy_settings()
-        expected = [call("proxy_hostname", "proxy.example.com"),
+        expected = [
+            call("proxy_hostname", "proxy.example.com"),
             call("proxy_port", "123"),
             call("proxy_user", "foo"),
             call("proxy_password", "bar"),
@@ -440,7 +442,7 @@ class TestMigration(SubManFixture):
             "enableProxy": True,
             "httpProxy": "http://proxy.example.com:123",
             "enableProxyAuth": False,
-            }
+        }
         self.engine.rhncfg = rhn_config
         section = MagicMock()
         self.engine.rhsmcfg.__getitem__.return_value = section
@@ -462,16 +464,17 @@ class TestMigration(SubManFixture):
             "enableProxy": True,
             "httpProxy": "proxy.example.com:123",
             "enableProxyAuth": False,
-            }
+        }
         self.engine.rhncfg = rhn_config
         section = MagicMock()
         self.engine.rhsmcfg.__getitem__.return_value = section
         self.engine.transfer_http_proxy_settings()
-        expected = [call("proxy_hostname", ""),
+        expected = [
+            call("proxy_hostname", ""),
             call("proxy_port", ""),
             call("proxy_user", ""),
             call("proxy_password", ""),
-            ]
+        ]
         self.assertTrue(section.__setitem__.call_args_list == expected)
         self.assertEqual("proxy.example.com", self.engine.proxy_host)
         self.assertEqual("123", self.engine.proxy_port)
@@ -505,7 +508,7 @@ class TestMigration(SubManFixture):
         mock_channels.return_value.channels.return_value = [
             {"label": "foo"},
             {"label": "bar"},
-            ]
+        ]
         results = self.engine.get_subscribed_channels_list(mock_server, key)
         self.assertEqual(["foo", "bar"], results)
 
@@ -517,7 +520,7 @@ class TestMigration(SubManFixture):
         channel_list = [
             {"label": "foo"},
             {"label": "bar"},
-            ]
+        ]
         mock_channels.return_value.channels.return_value = channel_list
         self.engine.resolve_base_channel = Mock(side_effect=channel_list)
 
@@ -551,7 +554,8 @@ class TestMigration(SubManFixture):
         ])
         section.get_int = MagicMock(side_effect=[443])
 
-        expected = [call("hostname"),
+        expected = [
+            call("hostname"),
             call("prefix"),
         ]
 
@@ -564,9 +568,9 @@ class TestMigration(SubManFixture):
     def test_bad_server_url_basic_auth(self):
         self.engine.options = self.create_options(destination_url='http://')
         self.assertRaises(SystemExit,
-                self.engine.get_candlepin_connection,
-                "some_username",
-                "some_password")
+                          self.engine.get_candlepin_connection,
+                          "some_username",
+                          "some_password")
 
     def test_no_auth_connection_returned(self):
         conn = self.engine.get_candlepin_connection(None, None)
@@ -627,7 +631,7 @@ class TestMigration(SubManFixture):
         self.engine.cp.getOwnerList.return_value = [
             {"key": "my_org", "displayName": "My Org"},
             {"key": "second_org", "displayName": "Second Org"},
-            ]
+        ]
         mock_input.return_value = "my_org"
         org = self.engine.get_org("some_username")
         self.assertEqual(org, "my_org")
@@ -639,7 +643,7 @@ class TestMigration(SubManFixture):
         self.engine.cp.getOwnerList.return_value = [
             {"key": "my_org", "displayName": "My Org"},
             {"key": "second_org", "displayName": "Second Org"},
-            ]
+        ]
         mock_input.return_value = "My Org"
         org = self.engine.get_org("some_username")
         self.assertEqual(org, "my_org")
@@ -651,7 +655,7 @@ class TestMigration(SubManFixture):
         self.engine.cp.getOwnerList.return_value = [
             {"key": "my_org", "displayName": "My Org"},
             {"key": "second_org", "displayName": "Second Org"},
-            ]
+        ]
         mock_input.return_value = "Some other org"
         try:
             self.engine.get_org("some_username")
@@ -666,7 +670,7 @@ class TestMigration(SubManFixture):
         self.engine.cp.getOwnerList.return_value = [
             {"key": "my_org", "displayName": "My Org"},
             {"key": "second_org", "displayName": "Second Org"},
-            ]
+        ]
         org = self.engine.get_org("some_username")
         self.assertEqual(org, "my_org")
 
@@ -676,7 +680,7 @@ class TestMigration(SubManFixture):
         self.engine.cp.getOwnerList.return_value = [
             {"key": "my_org", "displayName": "My Org"},
             {"key": "second_org", "displayName": "Second Org"},
-            ]
+        ]
         try:
             self.engine.get_org("some_username")
         except SystemExit as e:
@@ -708,7 +712,7 @@ class TestMigration(SubManFixture):
         self.engine.cp.getEnvironmentList = MagicMock()
         self.engine.cp.getEnvironmentList.return_value = [
             {"name": "My Environment", "label": "my_environment"}
-            ]
+        ]
 
         env = self.engine.get_environment("some_org")
         self.assertEqual(env, "My Environment")
@@ -723,7 +727,7 @@ class TestMigration(SubManFixture):
         self.engine.cp.getEnvironmentList.return_value = [
             {"name": "My Environment"},
             {"name": "Another Environment"},
-            ]
+        ]
 
         mock_input.return_value = "My Environment"
         env = self.engine.get_environment("some_org")
@@ -739,7 +743,7 @@ class TestMigration(SubManFixture):
         self.engine.cp.getEnvironmentList.return_value = [
             {"name": "My Environment", "label": "my_environment"},
             {"name": "Another Environment", "label": "another_environment"},
-            ]
+        ]
 
         mock_input.return_value = "my_environment"
         env = self.engine.get_environment("some_org")
@@ -755,7 +759,7 @@ class TestMigration(SubManFixture):
         self.engine.cp.getEnvironmentList.return_value = [
             {"name": "My Environment", "displayName": "my_environment"},
             {"name": "Another Environment", "displayName": "another_environment"},
-            ]
+        ]
 
         mock_input.return_value = "my_environment"
         env = self.engine.get_environment("some_org")
@@ -770,7 +774,7 @@ class TestMigration(SubManFixture):
         self.engine.cp.getEnvironmentList.return_value = [
             {"name": "My Environment", "label": "my_environment"},
             {"name": "Another Environment", "label": "another_environment"},
-            ]
+        ]
 
         mock_input.return_value = "something else"
         try:
@@ -788,7 +792,7 @@ class TestMigration(SubManFixture):
         self.engine.cp.getEnvironmentList.return_value = [
             {"name": "My Environment", "label": "my_environment"},
             {"name": "Another Environment", "label": "another_environment"},
-            ]
+        ]
 
         env = self.engine.get_environment("some_org")
         self.assertEqual(env, "My Environment")
@@ -801,7 +805,7 @@ class TestMigration(SubManFixture):
         self.engine.cp.getEnvironmentList.return_value = [
             {"name": "My Environment", "label": "my_environment"},
             {"name": "Another Environment", "label": "another_environment"},
-            ]
+        ]
         try:
             self.engine.get_environment("some_org")
         except SystemExit as e:
@@ -827,7 +831,7 @@ class TestMigration(SubManFixture):
             "enableProxy": True,
             "enableProxyAuth": True,
             "sslCACert": "/some/path/here",
-            }
+        }
         self.engine.rhncfg = rhn_config
         self.engine.proxy_user = "proxy_user"
         self.engine.proxy_pass = "proxy_pass"
@@ -858,9 +862,10 @@ class TestMigration(SubManFixture):
         self.assertRaises(SystemExit, self.engine.check_has_access, Mock(name="fake session"), None)
 
     def test_conflicting_channels(self):
-        channels = ["jbappplatform-4.3.0-i386-server-5-rpm",
+        channels = [
+            "jbappplatform-4.3.0-i386-server-5-rpm",
             "jbappplatform-5-i386-server-5-rpm",
-            ]
+        ]
         try:
             self.engine.check_for_conflicting_channels(channels)
         except SystemExit as e:
@@ -870,10 +875,10 @@ class TestMigration(SubManFixture):
 
     def test_base_channel_resolution(self):
         channel_chain = [
-                {'clone_original': 'c', 'label': 'd'},
-                {'clone_original': 'b', 'label': 'c'},
-                {'clone_original': 'a', 'label': 'b'},
-                {'clone_original': '', 'label': 'a'}
+            {'clone_original': 'c', 'label': 'd'},
+            {'clone_original': 'b', 'label': 'c'},
+            {'clone_original': 'a', 'label': 'b'},
+            {'clone_original': '', 'label': 'a'}
         ]
         mock_sc = Mock()
         mock_sc.channel.software.getDetails.side_effect = channel_chain
@@ -881,9 +886,10 @@ class TestMigration(SubManFixture):
         self.assertEqual('a', chan['label'])
 
     def test_no_conflicting_channels(self):
-        channels = ["some-other-channel-i386-server-5-rpm",
+        channels = [
+            "some-other-channel-i386-server-5-rpm",
             "jbappplatform-5-i386-server-5-rpm",
-            ]
+        ]
         self.engine.check_for_conflicting_channels(channels)
 
     @patch(OPEN_FUNCTION, autospec=True)
@@ -897,15 +903,15 @@ class TestMigration(SubManFixture):
         mock_open.return_value.readlines.return_value = [
             "xyz: abc\n",
             "#some comment\n",
-            ]
+        ]
         data_dict = self.engine.read_channel_cert_mapping(None)
         self.assertEqual(data_dict, {"xyz": "abc"})
 
     def test_handle_collisions(self):
         cmap = {
-                '1': {'cert-a-1.pem': ['chan1', 'chan2'], 'cert-b-1.pem': ['chan3']},
-                '2': {'cert-x-2.pem': ['chan4', 'chan5']},
-                '3': {'cert-m-3.pem': ['chanA'], 'cert-n-3.pem': ['chanB'], 'cert-o-3.pem': ['chanC']}
+            '1': {'cert-a-1.pem': ['chan1', 'chan2'], 'cert-b-1.pem': ['chan3']},
+            '2': {'cert-x-2.pem': ['chan4', 'chan5']},
+            '3': {'cert-m-3.pem': ['chanA'], 'cert-n-3.pem': ['chanB'], 'cert-o-3.pem': ['chanC']}
         }
 
         with Capture() as cap:
@@ -916,8 +922,9 @@ class TestMigration(SubManFixture):
             self.assertTrue(re.search("3*cert-m-3.pem", output))
 
     def test_accept_channels_mapping_to_same_cert(self):
-        cmap = {'1': {'cert-a-1.pem': ['channel1', 'channel2']},
-                '2': {'cert-x-2.pem': ['channel3']}
+        cmap = {
+            '1': {'cert-a-1.pem': ['channel1', 'channel2']},
+            '2': {'cert-x-2.pem': ['channel3']}
         }
         try:
             self.engine.handle_collisions(cmap)
@@ -936,7 +943,7 @@ class TestMigration(SubManFixture):
         self.engine.handle_collisions(cmap)
         self.assertTrue(len(cmap['71'].items()) == 1)
         self.assertTrue(cmap['71'] == {'Workstation-Workstation-x86_64-06b84075cc00-71.pem':
-                                        ['rhel-x86_64-workstation-supplementary-7',
+                                       ['rhel-x86_64-workstation-supplementary-7',
                                         'rhn-tools-rhel-x86_64-workstation-7',
                                         'rhel-x86_64-workstation-optional-7']}
         )
@@ -1008,7 +1015,7 @@ class TestMigration(SubManFixture):
         self.engine.clean_up([
             "rhel-i386-client-dts-5-beta",
             "rhel-i386-client-dts-5",
-            ])
+        ])
         mock_remove.assert_called_with("/some/path/180.pem")
         self.engine.db.delete.assert_called_with("180")
         self.engine.db.write.assert_called_with()
@@ -1050,14 +1057,15 @@ class TestMigration(SubManFixture):
             "enabled = 1",
             "[main]",
             "enabled = 1",
-            ]
+        ]
         self.engine.disable_yum_rhn_plugin()
 
-        expected = [call('[channel]'),
+        expected = [
+            call('[channel]'),
             call('enabled = 1'),
             call('[main]'),
             call('enabled = 0'),  # Note that enabled is now 0.
-            ]
+        ]
         self.assertTrue(mo.write.call_args_list == expected)
 
     @patch("os.remove", autospec=True)
@@ -1107,7 +1115,8 @@ class TestMigration(SubManFixture):
         self._inject_mock_valid_consumer()
         self.engine.register(credentials, "org", "env")
 
-        arg_list = ['subscription-manager',
+        arg_list = [
+            'subscription-manager',
             'register',
             '--username=foo',
             '--password=bar',
@@ -1117,7 +1126,7 @@ class TestMigration(SubManFixture):
             '--org=org',
             '--consumerid=id',
             '--servicelevel=y',
-            ]
+        ]
 
         self.engine.consumer_exists.assert_called_once_with(self.engine.consumer_id)
         self.engine.select_service_level.assert_called_once_with("org", "x")
@@ -1135,13 +1144,14 @@ class TestMigration(SubManFixture):
         self._inject_mock_valid_consumer()
         self.engine.register(credentials, "org", "env")
 
-        arg_list = ['subscription-manager',
+        arg_list = [
+            'subscription-manager',
             'register',
             '--username=foo',
             '--password=bar',
             '--environment=env',
             '--org=org',
-            ]
+        ]
 
         mock_subprocess.assert_called_once_with(arg_list)
 
@@ -1157,13 +1167,14 @@ class TestMigration(SubManFixture):
         self._inject_mock_valid_consumer()
         self.engine.register(credentials, "org", "env")
 
-        arg_list = ['subscription-manager',
+        arg_list = [
+            'subscription-manager',
             'register',
             '--activationkey=hello',
             '--activationkey=world',
             '--serverurl=foobar',
             '--org=org',
-            ]
+        ]
 
         mock_subprocess.assert_called_with(arg_list)
 
@@ -1179,7 +1190,8 @@ class TestMigration(SubManFixture):
         self._inject_mock_valid_consumer()
         self.engine.register(credentials, "org", "env")
 
-        arg_list = ['subscription-manager',
+        arg_list = [
+            'subscription-manager',
             'register',
             '--username=foo',
             '--password=bar',
@@ -1187,7 +1199,7 @@ class TestMigration(SubManFixture):
             '--auto-attach',
             '--serverurl=foobar',
             '--org=org',
-            ]
+        ]
 
         mock_subprocess.assert_called_with(arg_list)
 
@@ -1213,14 +1225,15 @@ class TestMigration(SubManFixture):
             "rhel-i386-client-supplementary-5",
             "rhel-i386-client-optional-6",
             "rhel-i386-server-productivity-5",
-            ]
+        ]
         mrf.sections.return_value = [
             "supplementary",
             "optional-rpms",
             "productivity-rpms",
-            ]
+        ]
         self.engine.enable_extra_channels(subscribed_channels)
-        expected = [call("supplementary", "enabled", "1"),
+        expected = [
+            call("supplementary", "enabled", "1"),
             call("optional-rpms", "enabled", "1"),
             call("productivity-rpms", "enabled", "1")]
         self.assertTrue(mrf.set.call_args_list == expected)

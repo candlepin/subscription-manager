@@ -201,8 +201,8 @@ class TestYumProductManager(fixture.SubManFixture):
 
     def _create_cert(self, product_id, label, version, provided_tags):
         cert = stubs.StubProductCertificate(
-                stubs.StubProduct(product_id, label, version=version,
-                                   provided_tags=provided_tags))
+            stubs.StubProduct(product_id, label, version=version,
+                              provided_tags=provided_tags))
         cert.delete = mock.Mock()
         cert.write = mock.Mock()
         return cert

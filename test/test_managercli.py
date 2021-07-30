@@ -16,15 +16,15 @@ import six
 from subscription_manager import syspurposelib
 from subscription_manager import managercli, managerlib
 from subscription_manager.injection import provide, \
-        CERT_SORTER, PROD_DIR
+    CERT_SORTER, PROD_DIR
 from rhsmlib.services.products import InstalledProducts
 from subscription_manager.cli_command.cli import handle_exception, system_exit
 from subscription_manager.cli_command import cli
 
 from .stubs import StubEntitlementCertificate, StubUEP, StubProductDirectory, \
-        StubCertSorter
+    StubCertSorter
 from .fixture import FakeException, FakeLogger, SubManFixture, \
-        Capture
+    Capture
 
 from mock import patch, MagicMock
 from nose import SkipTest
@@ -63,7 +63,7 @@ class InstalledProductStatusTests(SubManFixture):
 
     def test_expired_entitlement_for_installed_product_shows_expired(self):
         ent_cert = StubEntitlementCertificate('product1',
-                end_date=(datetime.now() - timedelta(days=2)))
+                                              end_date=(datetime.now() - timedelta(days=2)))
 
         product_directory = StubProductDirectory(pids=['product1'])
         provide(PROD_DIR, product_directory)
@@ -92,7 +92,7 @@ class InstalledProductStatusTests(SubManFixture):
         product_directory = StubProductDirectory(pids=['product1'])
         provide(PROD_DIR, product_directory)
         ent_cert = StubEntitlementCertificate('product1',
-                    start_date=(datetime.now() + timedelta(days=1365)))
+                                              start_date=(datetime.now() + timedelta(days=1365)))
         stub_sorter = StubCertSorter()
         stub_sorter.future_products['product1'] = [ent_cert]
         provide(CERT_SORTER, stub_sorter)
@@ -103,7 +103,7 @@ class InstalledProductStatusTests(SubManFixture):
 
     def test_one_product_with_two_entitlements_lists_product_twice(self):
         ent_cert = StubEntitlementCertificate('product1',
-            ['product2', 'product3'], sockets=10)
+                                              ['product2', 'product3'], sockets=10)
         product_directory = StubProductDirectory(pids=['product1'])
         provide(PROD_DIR, product_directory)
         stub_sorter = StubCertSorter()
@@ -117,7 +117,7 @@ class InstalledProductStatusTests(SubManFixture):
 
     def test_one_subscription_with_bundled_products_lists_once(self):
         ent_cert = StubEntitlementCertificate('product1',
-            ['product2', 'product3'], sockets=10)
+                                              ['product2', 'product3'], sockets=10)
         product_directory = StubProductDirectory(pids=['product1'])
         provide(PROD_DIR, product_directory)
         stub_sorter = StubCertSorter()
@@ -135,7 +135,7 @@ class InstalledProductStatusTests(SubManFixture):
 
     def test_one_subscription_with_bundled_products_lists_once_part_two(self):
         ent_cert = StubEntitlementCertificate('product1',
-            ['product2', 'product3'], sockets=10)
+                                              ['product2', 'product3'], sockets=10)
 
         prod_dir = StubProductDirectory(pids=['product1', 'product2'])
         provide(PROD_DIR, prod_dir)
@@ -447,7 +447,7 @@ class HandleExceptionTests(unittest.TestCase):
 
     def test_he_restlib_exception_unicode(self):
         e = connection.RestlibException(404,
-            "Ошибка при обновлении системных данных (см. /var/log/rhsm/rhsm.log")
+                                        "Ошибка при обновлении системных данных (см. /var/log/rhsm/rhsm.log")
         try:
             handle_exception("обновлении", e)
         except SystemExit as e:
@@ -485,8 +485,8 @@ class HandleExceptionTests(unittest.TestCase):
         if not six.PY2:
             raise SkipTest("M2Crypto-specific interface. Not used with Python 3.")
         e = SSL.Checker.WrongHost("expectedHost.example.com",
-                                   "actualHost.example.com",
-                                   "subjectAltName")
+                                  "actualHost.example.com",
+                                  "subjectAltName")
         try:
             handle_exception("huh", e)
         except SystemExit as e:

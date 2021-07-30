@@ -38,11 +38,11 @@ STACK_2 = '1'  # awesomeos 64
 
 PARTIAL_STACK_ID = STACK_1
 PROD_4 = StubProduct(INST_PID_4,
-        name="Multi-Attribute Stackable")
+                     name="Multi-Attribute Stackable")
 PROD_2 = StubProduct(INST_PID_2,
-        name="Awesome OS for ppc64")
+                     name="Awesome OS for ppc64")
 PROD_1 = StubProduct(INST_PID_1,
-        name="Awesome OS for x86_64")
+                     name="Awesome OS for x86_64")
 
 
 class ReasonsTests(unittest.TestCase):
@@ -50,44 +50,45 @@ class ReasonsTests(unittest.TestCase):
     def setUp(self):
         self.sorter = Mock()
         self.sorter.valid_products = [INST_PID_1]
-        self.sorter.valid_entitlement_certs = [StubEntitlementCertificate(PROD_2, ent_id=ENT_ID_2),
-                StubEntitlementCertificate(PROD_1, ent_id=ENT_ID_1),
-                StubEntitlementCertificate(product=PROD_4, stacking_id=STACK_1,
-                    ent_id=ENT_ID_4),
-                StubEntitlementCertificate(StubProduct('not_installed_product',
-                    name="Some Product"),
-                    ent_id="SomeSubId")]
+        self.sorter.valid_entitlement_certs = [
+            StubEntitlementCertificate(PROD_2, ent_id=ENT_ID_2),
+            StubEntitlementCertificate(PROD_1, ent_id=ENT_ID_1),
+            StubEntitlementCertificate(product=PROD_4, stacking_id=STACK_1,
+                                       ent_id=ENT_ID_4),
+            StubEntitlementCertificate(StubProduct('not_installed_product',
+                                       name="Some Product"),
+                                       ent_id="SomeSubId")]
         reason_list = []
         reason_list.append(self.build_reason('NOTCOVERED',
-            'Not covered by a valid subscription.',
-            {'product_id': '801',
-             'name': 'RAM Limiting Product'}))
+                                             'Not covered by a valid subscription.',
+                                             {'product_id': '801',
+                                              'name': 'RAM Limiting Product'}))
         reason_list.append(self.build_ent_reason_with_attrs('CORES',
-            'Only covers 16 of 32 cores.',
-            '32', '16', name='Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)',
-            stack='multiattr-stack-test'))
+                                                            'Only covers 16 of 32 cores.',
+                                                            '32', '16', name='Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)',
+                                                            stack='multiattr-stack-test'))
         reason_list.append(self.build_ent_reason_with_attrs('SOCKETS',
-            'Only covers 4 of 8 sockets.',
-            '8', '4', name='Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)',
-            stack='multiattr-stack-test'))
+                                                            'Only covers 4 of 8 sockets.',
+                                                            '8', '4', name='Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)',
+                                                            stack='multiattr-stack-test'))
         reason_list.append(self.build_ent_reason_with_attrs('RAM',
-            'Only covers 8GB of 31GB of RAM.',
-            '31', '8', name='Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)',
-            stack='multiattr-stack-test'))
+                                                            'Only covers 8GB of 31GB of RAM.',
+                                                            '31', '8', name='Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)',
+                                                            stack='multiattr-stack-test'))
         reason_list.append(self.build_ent_reason_with_attrs('RAM',
-            'A different way to say Only covers 8GB of 31GB of RAM.',
-            '31', '8', name='Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)',
-            stack='multiattr-stack-test'))
+                                                            'A different way to say Only covers 8GB of 31GB of RAM.',
+                                                            '31', '8', name='Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)',
+                                                            stack='multiattr-stack-test'))
         # This is a dupe of the above, since reasons.py has code for detecting
         # dupe messages or names.
         reason_list.append(self.build_ent_reason_with_attrs('RAM',
-            'Only covers 8GB of 31GB of RAM.',
-            '31', '8', name='Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)',
-            stack='multiattr-stack-test'))
+                                                            'Only covers 8GB of 31GB of RAM.',
+                                                            '31', '8', name='Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)',
+                                                            stack='multiattr-stack-test'))
         reason_list.append(self.build_ent_reason_with_attrs('ARCH',
-            'Covers architecture ppc64 but the system is x86_64.',
-            'x86_64', 'ppc64', name='Awesome OS for ppc64',
-            ent=ENT_ID_2))
+                                                            'Covers architecture ppc64 but the system is x86_64.',
+                                                            'x86_64', 'ppc64', name='Awesome OS for ppc64',
+                                                            ent=ENT_ID_2))
 
         self.sorter.reasons = Reasons(reason_list, self.sorter)
 
@@ -117,7 +118,7 @@ class ReasonsTests(unittest.TestCase):
         self.assertEqual(expected, messages[0])
 
         reason = self.build_ent_reason_with_attrs('SOCKETS', 'some message', '8', '6',
-                prod=INST_PID_1, name="Awesome OS for x86_64")
+                                                  prod=INST_PID_1, name="Awesome OS for x86_64")
         self.sorter.reasons.reasons.append(reason)
         messages = self.sorter.reasons.get_product_reasons(PROD_1)
         self.assertEqual(0, len(messages))
@@ -171,12 +172,12 @@ class ReasonsTests(unittest.TestCase):
                                              name='Awesome OS for ppc64',
                                              ent=ENT_ID_2)
         another_stack_reason = \
-        self.build_ent_reason_with_attrs(key='SOCKETS',
-                                         message='Only covers 4 of 8 sockets.',
-                                         has='8',
-                                         covered='4',
-                                         name='Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)',
-                                         stack='multiattr-stack-test')
+            self.build_ent_reason_with_attrs(key='SOCKETS',
+                                             message='Only covers 4 of 8 sockets.',
+                                             has='8',
+                                             covered='4',
+                                             name='Multi-Attribute Stackable (16 cores, 4 sockets, 8GB RAM)',
+                                             stack='multiattr-stack-test')
 
         self.sorter.reasons.reasons.append(reason_expired_entid)
         self.sorter.reasons.reasons.append(reason_expired_entid_2)
@@ -187,15 +188,15 @@ class ReasonsTests(unittest.TestCase):
 
     def test_get_reason_id(self):
         reason = self.build_ent_reason_with_attrs(
-                'SOCKETS', 'some message', '8', '6', ent='1234')
+            'SOCKETS', 'some message', '8', '6', ent='1234')
         reason_id = self.sorter.reasons.get_reason_id(reason)
         self.assertEqual("Subscription 1234", reason_id)
         reason = self.build_ent_reason_with_attrs(
-                'SOCKETS', 'some message', '8', '6', stack='1234')
+            'SOCKETS', 'some message', '8', '6', stack='1234')
         reason_id = self.sorter.reasons.get_reason_id(reason)
         self.assertEqual("Stack 1234", reason_id)
         reason = self.build_ent_reason_with_attrs(
-                'SOCKETS', 'some message', '8', '6', prod='1234')
+            'SOCKETS', 'some message', '8', '6', prod='1234')
         reason_id = self.sorter.reasons.get_reason_id(reason)
         self.assertEqual("Product 1234", reason_id)
 
@@ -219,9 +220,9 @@ class ReasonsTests(unittest.TestCase):
             'SOCKETS', 'some message', '8', '6', ent='3345', name='testing'))
 
     def build_ent_reason_with_attrs(self, key, message, has,
-            covered, name=None, ent=None, stack=None, prod=None):
+                                    covered, name=None, ent=None, stack=None, prod=None):
         attrs = {'has': has,
-                'covered': covered}
+                 'covered': covered}
         if name:
             attrs['name'] = name
         if ent:

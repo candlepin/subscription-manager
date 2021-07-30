@@ -222,7 +222,7 @@ class EntitlementCertificatePrinter(ProductCertificatePrinter):
                     s.append("\n%s" % content_printer.as_str(c))
 
         return "%s\n%s%s" % (ProductCertificatePrinter.cert_to_str(self, cert),
-                           order_printer.as_str(cert.order), "\n".join(s))
+                             order_printer.as_str(cert.order), "\n".join(s))
 
     def _append_to_cert_section(self, cert, str_parts_list):
         pool_id = _("Not Available")

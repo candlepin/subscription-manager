@@ -194,7 +194,7 @@ class ComplianceManager(object):
                     self.partially_valid_products and pid not in \
                     unentitled_pids:
                 log.warning("Installed product %s not present in response from "
-                         "server." % pid)
+                            "server." % pid)
                 unentitled_pids.append(pid)
 
         for unentitled_pid in unentitled_pids:
@@ -202,7 +202,7 @@ class ComplianceManager(object):
             # Ignore anything server thinks we have but we don't.
             if prod_cert is None:
                 log.warning("Server reported installed product not on system: %s" %
-                         unentitled_pid)
+                            unentitled_pid)
                 continue
             self.unentitled_products[unentitled_pid] = prod_cert
 
@@ -467,7 +467,7 @@ class StackingGroupSorter(object):
             if stacking_id:
                 if stacking_id not in stacking_groups:
                     group = EntitlementGroup(entitlement,
-                            self._get_identity_name(entitlement))
+                                             self._get_identity_name(entitlement))
                     self.groups.append(group)
                     stacking_groups[stacking_id] = group
                 else:
@@ -481,7 +481,7 @@ class StackingGroupSorter(object):
 
     def _get_identity_name(self, entitlement):
         raise NotImplementedError(
-                "Subclasses must implement: _get_identity_name")
+            "Subclasses must implement: _get_identity_name")
 
 
 class EntitlementGroup(object):

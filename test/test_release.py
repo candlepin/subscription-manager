@@ -72,7 +72,7 @@ class TestCdnReleaseVerionProvider(fixture.SubManFixture):
     def setUp(self):
         fixture.SubManFixture.setUp(self)
         stub_content = stubs.StubContent("c1", required_tags='rhel-6',
-                                           gpg=None, enabled="1")
+                                         gpg=None, enabled="1")
 
         # this content should be ignored since it's not enabled
         stub_content_2 = stubs.StubContent("c2", required_tags='rhel-6',
@@ -100,8 +100,8 @@ class TestCdnReleaseVerionProvider(fixture.SubManFixture):
         # fixtures prod_dir
         self.prod_dir = stubs.StubProductDirectory(
             [stubs.StubProductCertificate(
-                    stubs.StubProduct("rhel-6",
-                                      provided_tags="rhel-6,rhel-6-stub"),)])
+                stubs.StubProduct("rhel-6",
+                                  provided_tags="rhel-6,rhel-6-stub"),)])
 
         # FIXME: should just mock this
         # fixture knows to stub this for contentConnection
@@ -123,8 +123,8 @@ class TestCdnReleaseVerionProvider(fixture.SubManFixture):
     def test_get_releases_no_rhel(self):
         self.prod_dir = stubs.StubProductDirectory(
             [stubs.StubProductCertificate(
-                    stubs.StubProduct("rhel-6-something",
-                                      provided_tags="rhel-6-something,rhel-6-stub"),)])
+                stubs.StubProduct("rhel-6-something",
+                                  provided_tags="rhel-6-something,rhel-6-stub"),)])
 
         cdn_rv_provider = self._get_cdn_rv_provider()
         releases = cdn_rv_provider.get_releases()
@@ -133,8 +133,8 @@ class TestCdnReleaseVerionProvider(fixture.SubManFixture):
     def test_get_releases_more_rhels(self):
         self.prod_dir = stubs.StubProductDirectory(
             [stubs.StubProductCertificate(
-                    stubs.StubProduct("rhel-6",
-                                      provided_tags="rhel-6,rhel-6-stub"),),
+                stubs.StubProduct("rhel-6",
+                                  provided_tags="rhel-6,rhel-6-stub"),),
                 stubs.StubProductCertificate(
                     stubs.StubProduct("rhel-7",
                                       provided_tags="rhel-7,rhel-7-stub"), )
@@ -210,17 +210,17 @@ class TestCdnReleaseVerionProvider(fixture.SubManFixture):
         # mock content_connection so we can verify it's calls
         with mock.patch.object(cdn_rv_provider, 'content_connection') as mock_cc:
             mock_cc.get_versions.side_effect = \
-                    six.moves.http_client.BadStatusLine("some bogus status")
+                six.moves.http_client.BadStatusLine("some bogus status")
             releases = cdn_rv_provider.get_releases()
             self.assertEqual([], releases)
 
             mock_cc.get_versions.side_effect = \
-                    socket.error()
+                socket.error()
             releases = cdn_rv_provider.get_releases()
             self.assertEqual([], releases)
 
             mock_cc.get_versions.side_effect = \
-                    ssl.SSLError()
+                ssl.SSLError()
             releases = cdn_rv_provider.get_releases()
             self.assertEqual([], releases)
 
@@ -322,12 +322,12 @@ class TestReleaseIsCorrectRhel(fixture.SubManFixture):
     def test_build_listing_path(self):
         # /content/dist/rhel/server/6/6Server/x86_64/os/
         content_url = \
-                "/content/dist/rhel/server/6/$releasever/$basearch/os/"
+            "/content/dist/rhel/server/6/$releasever/$basearch/os/"
         listing_path = self.cdn_rv_provider._build_listing_path(content_url)
         self.assertEqual(listing_path, u"/content/dist/rhel/server/6//listing")
 
         # /content/beta/rhel/server/6/$releasever/$basearch/optional/os
         content_url = \
-                "/content/beta/rhel/server/6/$releasever/$basearch/optional/os"
+            "/content/beta/rhel/server/6/$releasever/$basearch/optional/os"
         listing_path = self.cdn_rv_provider._build_listing_path(content_url)
         self.assertEqual(listing_path, u"/content/beta/rhel/server/6//listing")

@@ -40,7 +40,7 @@ class StatusCommand(CliCommand):
         shortdesc = _("Show status information for this system's subscriptions and products")
         super(StatusCommand, self).__init__("status", shortdesc, True)
         self.parser.add_argument("--ondate", dest="on_date",
-                               help=_("future date to check status on, defaults to today's date (example: {example})").format(
+                                 help=_("future date to check status on, defaults to today's date (example: {example})").format(
                                      example=strftime("%Y-%m-%d", localtime())))
 
     def _do_command(self):

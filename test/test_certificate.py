@@ -59,14 +59,14 @@ class EntitlementCertificateTests(unittest.TestCase):
 
     def test_valid_order_date_gives_valid_cert(self):
         cert = StubEntitlementCertificate(StubProduct('product'),
-                start_date=datetime(2010, 7, 27),
-                end_date=datetime(2050, 7, 26))
+                                          start_date=datetime(2010, 7, 27),
+                                          end_date=datetime(2050, 7, 26))
 
         self.assertTrue(cert.is_valid())
 
     def test_expired_order_date_gives_invalid_cert(self):
         cert = StubEntitlementCertificate(StubProduct('product'),
-                start_date=datetime(2010, 7, 27),
-                end_date=yesterday())
+                                          start_date=datetime(2010, 7, 27),
+                                          end_date=yesterday())
 
         self.assertFalse(cert.is_valid())

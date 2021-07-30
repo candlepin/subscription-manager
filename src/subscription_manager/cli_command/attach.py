@@ -49,18 +49,18 @@ class AttachCommand(CliCommand):
         self.substoken = None
         self.auto_attach = True
         self.parser.add_argument("--pool", dest="pool", action='append',
-                               help=_("The ID of the pool to attach (can be specified more than once)"))
+                                 help=_("The ID of the pool to attach (can be specified more than once)"))
         self.parser.add_argument("--quantity", dest="quantity", type=int,
-                               help=_("Number of subscriptions to attach. May not be used with an auto-attach."))
+                                 help=_("Number of subscriptions to attach. May not be used with an auto-attach."))
         self.parser.add_argument("--auto", action='store_true',
-                               help=_(
-                                   "Automatically attach the best-matched compatible subscriptions to this system. This is the default action."))
+                                 help=_(
+                                     "Automatically attach the best-matched compatible subscriptions to this system. This is the default action."))
         self.parser.add_argument("--servicelevel", dest="service_level",
-                               help=_(
-                                   "Automatically attach only subscriptions matching the specified service level; only used with --auto"))
+                                 help=_(
+                                     "Automatically attach only subscriptions matching the specified service level; only used with --auto"))
         self.parser.add_argument("--file", dest="file",
-                               help=_(
-                                   "A file from which to read pool IDs. If a hyphen is provided, pool IDs will be read from stdin."))
+                                 help=_(
+                                     "A file from which to read pool IDs. If a hyphen is provided, pool IDs will be read from stdin."))
 
         # re bz #864207
         _("All installed products are covered by valid entitlements.")

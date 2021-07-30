@@ -625,7 +625,7 @@ VARIANT_ID=server
     @patch("ethtool.get_devices")
     @patch("ethtool.get_interfaces_info")
     def test_network_interfaces_just_lo_ethtool_no_get_ipv4_addresses(self,
-        MockGetInterfacesInfo, MockGetDevices):
+                                                                      MockGetInterfacesInfo, MockGetDevices):
 
         hw = hwprobe.HardwareCollector()
         MockGetDevices.return_value = ['lo']

@@ -39,10 +39,10 @@ class DbusIface(object):
 
             self.bus = dbus.SystemBus()
             validity_obj = self._get_validity_object(self.service_name,
-                    '/EntitlementStatus',
-                    follow_name_owner_changes=self.has_main_loop)
+                                                     '/EntitlementStatus',
+                                                     follow_name_owner_changes=self.has_main_loop)
             self.validity_iface = dbus.Interface(validity_obj,
-                    dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus')
+                                                 dbus_interface='com.redhat.SubscriptionManager.EntitlementStatus')
 
             # Activate methods now that we're connected
             # Avoids some messy exception handling if dbus isn't installed
@@ -58,8 +58,8 @@ class DbusIface(object):
     def _update(self):
         try:
             self.validity_iface.update_status(
-                    inj.require(inj.CERT_SORTER).get_status_for_icon(),
-                    ignore_reply=self.has_main_loop)
+                inj.require(inj.CERT_SORTER).get_status_for_icon(),
+                ignore_reply=self.has_main_loop)
         except dbus.DBusException as e:
             # Should be unreachable in the gui
             log.debug("Failed to update")

@@ -298,12 +298,12 @@ class Package(object):
     def to_dict(self):
         """ Returns a dict representation of this packages info. """
         return {
-                'name': self._normalize_string(self.name),
-                'version': self._normalize_string(self.version),
-                'release': self._normalize_string(self.release),
-                'arch': self._normalize_string(self.arch),
-                'epoch': self._normalize_string(self.epoch),
-                'vendor': self._normalize_string(self.vendor),  # bz1519512 handle vendors that aren't utf-8
+            'name': self._normalize_string(self.name),
+            'version': self._normalize_string(self.version),
+            'release': self._normalize_string(self.release),
+            'arch': self._normalize_string(self.arch),
+            'epoch': self._normalize_string(self.epoch),
+            'vendor': self._normalize_string(self.vendor),  # bz1519512 handle vendors that aren't utf-8
         }
 
     def __eq__(self, other):

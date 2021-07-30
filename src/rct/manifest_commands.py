@@ -135,7 +135,7 @@ class RCTManifestCommand(RCTCliCommand):
 
     def __init__(self, name="cli", aliases=None, shortdesc=None, primary=False):
         RCTCliCommand.__init__(self, name=name, aliases=aliases,
-                shortdesc=shortdesc, primary=primary)
+                               shortdesc=shortdesc, primary=primary)
 
     def _get_usage(self):
         return _("%(prog)s {name} [OPTIONS] MANIFEST_FILE").format(name=self.name)
@@ -170,11 +170,11 @@ class CatManifestCommand(RCTManifestCommand):
 
     def __init__(self):
         RCTManifestCommand.__init__(self, name="cat-manifest", aliases=['cm'],
-                               shortdesc=_("Print manifest information"),
-                               primary=True)
+                                    shortdesc=_("Print manifest information"),
+                                    primary=True)
         self.parser.add_argument("--no-content", action="store_true",
-                               default=False,
-                               help=_("skip printing Content Sets"))
+                                 default=False,
+                                 help=_("skip printing Content Sets"))
 
     def _print_section(self, title, items, indent=1, whitespace=True):
         # Allow a bit of customization of the tabbing
@@ -267,8 +267,8 @@ class CatManifestCommand(RCTManifestCommand):
                 cert = certificate.create_from_pem(zip_archive._read_file(cert_file).decode('utf-8'))
             except certificate.CertificateException as ce:
                 raise certificate.CertificateException(
-                        _("Unable to read certificate file '{certificate_file}': {exception}").format(
-                            certificate_file=cert_file, exception=ce))
+                    _("Unable to read certificate file '{certificate_file}': {exception}").format(
+                        certificate_file=cert_file, exception=ce))
             to_print.append((_("Certificate Version"), cert.version))
 
             self._print_section(_("Subscription:"), to_print, 1, False)
@@ -309,14 +309,14 @@ class DumpManifestCommand(RCTManifestCommand):
 
     def __init__(self):
         RCTManifestCommand.__init__(self, name="dump-manifest", aliases=['dm'],
-                               shortdesc=_("Dump the contents of a manifest"),
-                               primary=True)
+                                    shortdesc=_("Dump the contents of a manifest"),
+                                    primary=True)
 
         self.parser.add_argument("--destination", dest="destination",
-                               help=_("directory to extract the manifest to"))
+                                 help=_("directory to extract the manifest to"))
         self.parser.add_argument("-f", "--force", action="store_true",
-                               dest="overwrite_files", default=False,
-                               help=_("overwrite files which may exist"))
+                                 dest="overwrite_files", default=False,
+                                 help=_("overwrite files which may exist"))
 
     def _extract(self, destination, overwrite):
         try:
