@@ -96,7 +96,8 @@ ENABLED_MODULES = [
         "arch": "noarch",
         "profiles": ["default"],
         "installed_profiles": [],
-        "status": "enabled"
+        "status": "enabled",
+        "active": True
     },
     {
         "name": "flipper",
@@ -106,7 +107,8 @@ ENABLED_MODULES = [
         "arch": "x86_64",
         "profiles": ["default", "server"],
         "installed_profiles": ["server"],
-        "status": "unknown"
+        "status": "unknown",
+        "active": True
     }
 ]
 
@@ -449,7 +451,8 @@ class TestProfileManager(unittest.TestCase):
                 "arch": "noarch",
                 "profiles": ["default"],
                 "installed_profiles": [],
-                "status": "enabled"
+                "status": "enabled",
+                "active": True
             },
             {
                 "name": "duck",
@@ -459,7 +462,8 @@ class TestProfileManager(unittest.TestCase):
                 "arch": "noarch",
                 "profiles": ["default", "server"],
                 "installed_profiles": ["server"],
-                "status": "unknown"
+                "status": "unknown",
+                "active": True
             }
 
         ]
@@ -467,6 +471,48 @@ class TestProfileManager(unittest.TestCase):
         self.assertEqual(modules_input, ModulesProfile._uniquify(modules_input))
         # now test dup modules
         self.assertEqual(modules_input, ModulesProfile._uniquify(modules_input + [modules_input[0]]))
+
+    def test_module_md_uniquify_active_and_inactive(self):
+        modules_input = [
+            {
+                "name": "duck",
+                "stream": 0,
+                "version": "20180730233102",
+                "context": "deadbeef",
+                "arch": "noarch",
+                "profiles": ["default"],
+                "installed_profiles": [],
+                "status": "enabled",
+                "active": False
+            },
+            {
+                "name": "duck",
+                "stream": 0,
+                "version": "20180730233102",
+                "context": "deadbeef",
+                "arch": "noarch",
+                "profiles": ["default"],
+                "installed_profiles": [],
+                "status": "enabled",
+                "active": True
+            }
+        ]
+
+        expected_output = [
+            {
+                "name": "duck",
+                "stream": 0,
+                "version": "20180730233102",
+                "context": "deadbeef",
+                "arch": "noarch",
+                "profiles": ["default"],
+                "installed_profiles": [],
+                "status": "enabled",
+                "active": True
+            }
+        ]
+
+        self.assertEqual(expected_output, ModulesProfile._uniquify(modules_input))
 
     @staticmethod
     def _mock_pkg_profile(packages, repo_file, enabled_modules):

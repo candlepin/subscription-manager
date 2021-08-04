@@ -75,7 +75,14 @@ class ModulesProfile(object):
         ret = {}
         for module in module_list:
             key = (module["name"], module["stream"], module["version"], module["context"], module["arch"])
-            ret[key] = module
+            # Prefer duplicates that are Active.
+            # There are "enabled" duplicates from dnf that are marked as inactive.
+            if key not in ret:
+                ret[key] = module
+            else:
+                if ret[key].get("active", False) is False and module.get("active", False) is True:
+                    ret[key] = module
+
         return list(ret.values())
 
     @staticmethod
@@ -147,8 +154,11 @@ class ModulesProfile(object):
 
             for module_pkg in all_module_list:
                 status = "unknown"
+                active = False
                 if modules.isEnabled(module_pkg.getName(), module_pkg.getStream()):
                     status = "enabled"
+                    if modules.isModuleActive(module_pkg.getId()):
+                        active = True
                 elif modules.isDisabled(module_pkg.getName()):
                     status = "disabled"
                 installed_profiles = []
@@ -164,7 +174,8 @@ class ModulesProfile(object):
                     "arch": module_pkg.getArch(),
                     "profiles": [profile.getName() for profile in module_pkg.getProfiles()],
                     "installed_profiles": installed_profiles,
-                    "status": status
+                    "status": status,
+                    "active": active
                 })
 
         return ModulesProfile._uniquify(module_list)
