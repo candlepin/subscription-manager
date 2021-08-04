@@ -695,11 +695,15 @@ Lists all of the disabled repositories that are provided by the content service 
 
 .TP
 .B --enable=REPO_ID
-Enables the specified repository, which is made available by the content sources identified in the system subscriptions. To enable multiple repositories, use this argument multiple times. Wild cards * and ? are supported.
+Enables the specified repository, which is made available by the content sources identified in the system subscriptions. To enable multiple repositories, use this argument multiple times. Wild cards * and ? are supported. The repositories enabled by this option and disabled by
+.B --disable
+are processed in the same order they are specified.
 
 .TP
 .B --disable=REPO_ID
-Disables the specified repository, which is made available by the content sources identified in the system subscriptions. To disable multiple repositories, use this argument multiple times. Wild cards * and ? are supported.
+Disables the specified repository, which is made available by the content sources identified in the system subscriptions. To disable multiple repositories, use this argument multiple times. Wild cards * and ? are supported. The repositories disabled by this option and enabled by
+.B --enable
+are processed in the same order they are specified.
 
 
 .SS ORGS OPTIONS
