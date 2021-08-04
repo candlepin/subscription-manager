@@ -14,6 +14,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+import argparse
 import fnmatch
 import logging
 import subscription_manager.injection as inj
@@ -31,6 +32,29 @@ from subscription_manager.utils import get_supported_resources
 log = logging.getLogger(__name__)
 
 
+class ReposAddRemoveAction(argparse.Action):
+    """
+    Store our repos to enable and disable in a combined, ordered list of
+    tuples. (enabled, value)
+
+    This allows us to have our expected behaviour when we do things like
+    --disable="*" --enable="1" --enable="2".
+    """
+
+    def __init__(self, option_strings, **kwargs):
+        super(ReposAddRemoveAction, self).__init__(option_strings, **kwargs)
+        self.status_string = "1" if "--enable" in option_strings else "0"
+
+    def __call__(self, parser, namespace, value, option_string=None):
+        """
+        Update the argparse.Namespace 'namespace' object adding the new
+        action as new element to the destination variable.
+        """
+        new_values = getattr(namespace, self.dest) or []
+        new_values.append((self.status_string, value))
+        setattr(namespace, self.dest, new_values)
+
+
 class ReposCommand(CliCommand):
 
     def __init__(self):
@@ -43,10 +67,10 @@ class ReposCommand(CliCommand):
                                  help=_("list known, enabled repositories for this system"))
         self.parser.add_argument("--list-disabled", action='store_true', dest="list_disabled",
                                  help=_("list known, disabled repositories for this system"))
-        self.parser.add_argument("--enable", dest="enable", action='append', metavar="REPOID",
+        self.parser.add_argument("--enable", dest="repo_actions", action=ReposAddRemoveAction, metavar="REPOID",
                                  help=_(
                                      "repository to enable (can be specified more than once). Wildcards (* and ?) are supported."))
-        self.parser.add_argument("--disable", dest="disable", action='append', metavar="REPOID",
+        self.parser.add_argument("--disable", dest="repo_actions", action=ReposAddRemoveAction, metavar="REPOID",
                                  help=_(
                                      "repository to disable (can be specified more than once). Wildcards (* and ?) are supported."))
 
@@ -59,29 +83,12 @@ class ReposCommand(CliCommand):
         """
         # covers the default case if no list options are specified
         default_list = not(self.options.list or self.options.list_enabled or self.options.list_disabled)
-        repo_actions = hasattr(self.options, 'repo_actions')
+        repo_actions = self.options.repo_actions is not None
         self.list_enabled = (self.options.list or self.options.list_enabled or default_list) and not repo_actions
         self.list_disabled = (self.options.list or self.options.list_disabled or default_list) and not repo_actions
         self.list = (self.options.list or self.options.list_enabled or self.options.list_disabled or default_list) and not repo_actions
 
-    def _compile_repo_changes(self):
-        """
-        Store our repos to enable and disable in a combined, ordered list of
-        tuples. (enabled, repoid)
-
-        This allows us to have our expected behaviour when we do things like
-        --disable="*" --enable="1" --enable="2".
-        """
-        if not self.options.enable and not self.options.disable:
-            return
-        self.options.repo_actions = []
-        for repo in self.options.enable or []:
-            self.options.repo_actions.append(('1', repo))
-        for repo in self.options.disable or []:
-            self.options.repo_actions.append(('0', repo))
-
     def _do_command(self):
-        self._compile_repo_changes()
         self._reconcile_list_options()
         rc = 0
         if not manage_repos_enabled():
@@ -104,7 +111,7 @@ class ReposCommand(CliCommand):
         rl = RepoActionInvoker()
         repos = rl.get_repos()
 
-        if hasattr(self.options, 'repo_actions'):
+        if self.options.repo_actions is not None:
             rc = self._set_repo_status(repos, rl, self.options.repo_actions)
 
         if self.identity.is_valid():
