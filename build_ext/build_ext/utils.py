@@ -78,13 +78,13 @@ class Utils(object):
 
     @staticmethod
     def run_if_new(src, dest, callback):
-        Utils.create_dest_dir(dest)
         src_mtime = os.stat(src)[8]
         try:
             dest_mtime = os.stat(dest)[8]
         except OSError:
             dest_mtime = 0
         if src_mtime > dest_mtime:
+            Utils.create_dest_dir(dest)
             callback(src, dest)
 
     @staticmethod
