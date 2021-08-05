@@ -40,6 +40,20 @@ class TestReposCommand(TestCliCommand):
 
         return tuple(searches)
 
+    def check_output_for_repos_enabled_disabled(self, output, repos):
+        """
+        Checks that the given output string has the sequence of
+        "Repository X is enabled/disabled" lines matching the requested repos.
+        """
+        lines_set = set(output.splitlines())
+        repos_set = set()
+        for (repo_name, repo_enabled) in repos:
+            if repo_enabled:
+                repos_set.add(f"Repository '{repo_name}' is enabled for this system.")
+            else:
+                repos_set.add(f"Repository '{repo_name}' is disabled for this system.")
+        self.assertEqual(repos_set, lines_set)
+
     @patch("subscription_manager.cli_command.repos.RepoActionInvoker")
     def test_default(self, mock_invoker):
         self.cc.main()
@@ -161,6 +175,40 @@ class TestReposCommand(TestCliCommand):
     def test_disable(self):
         self.cc.main(["--disable", "one", "--disable", "two"])
         self.cc._validate_options()
+
+    @patch("subscription_manager.cli_command.repos.RepoActionInvoker")
+    def test_list_enable_and_disable(self, mock_invoker):
+        self._inject_mock_invalid_consumer()
+        self.cc.main(["--disable", "x", "--enable", "x",
+                      "--enable", "z", "--disable", "z"])
+        self.cc._validate_options()
+
+        repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]),
+                 Repo("z", [("enabled", "0")])]
+        mock_invoker.return_value.get_repos.return_value = repos
+
+        with Capture() as cap:
+            self.cc._do_command()
+
+        repos_changes = [("x", True), ("z", False)]
+        self.check_output_for_repos_enabled_disabled(cap.out, repos_changes)
+
+    @patch("subscription_manager.cli_command.repos.RepoActionInvoker")
+    def test_list_enable_and_disable_wildcards(self, mock_invoker):
+        self._inject_mock_invalid_consumer()
+        self.cc.main(["--disable", "*",
+                      "--enable", "z"])
+        self.cc._validate_options()
+
+        repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "1")]),
+                 Repo("z", [("enabled", "1")])]
+        mock_invoker.return_value.get_repos.return_value = repos
+
+        with Capture() as cap:
+            self.cc._do_command()
+
+        repos_changes = [("x", False), ("y", False), ("z", True)]
+        self.check_output_for_repos_enabled_disabled(cap.out, repos_changes)
 
     @patch("subscription_manager.cli_command.repos.RepoActionInvoker")
     def test_set_repo_status(self, mock_repolib):
