@@ -49,8 +49,7 @@ class BuildTemplate(BaseCommand):
         template = string.Template(template_text)
 
         base_directory = os.path.dirname(dest)
-        if not os.path.exists(base_directory):
-            os.makedirs(base_directory)
+        os.makedirs(base_directory, exist_ok=True)
 
         with open(dest, 'w') as output:
             output_text = template.substitute(self.vars)
