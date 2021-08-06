@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # run git-checkcommits against known branches and look
-# for commits that haven't been merged to master
+# for commits that haven't been merged to main
 # add a branch name to ".branches" file to have
 # it checked by the script
 #
