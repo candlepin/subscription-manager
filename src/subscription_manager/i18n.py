@@ -90,8 +90,6 @@ def configure_gettext():
     Since Glade internally uses gettext, we need to use the C-level bindings in locale to adjust the encoding.
 
     See https://docs.python.org/2/library/locale.html#access-to-message-catalogs
-
-    Exposed as its own function so that it can be called safely in the initial-setup case.
     """
     gettext.bindtextdomain(APP, DIR)
     gettext.textdomain(APP)

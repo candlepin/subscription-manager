@@ -400,10 +400,6 @@ class TestCmdName(unittest.TestCase):
         argv = ['/sbin/subscription-manager-gui']
         self.assertEqual("subscription-manager-gui", cmd_name(argv))
 
-    def test_initial_setup(self):
-        argv = ['/usr/lib/python2.7/site-packages/initial_setup/__main__.py']
-        self.assertEqual("initial-setup", cmd_name(argv))
-
     def test_yum(self):
         argv = ['/bin/yum', 'install', 'zsh']
         self.assertEqual("yum", cmd_name(argv))

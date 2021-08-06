@@ -265,18 +265,7 @@ def cmd_name(argv):
     This handles cases where argv[0] isn't helpful (for
     example, '/usr/bin/python' or '__main__.py'.
     """
-    argv0 = os.path.basename(argv[0])
-    argvdir = os.path.dirname(argv[0])
-    head, tail = os.path.split(argvdir)
-
-    cmd_name_string = argv0
-    # initial-setup is launched as 'python -m initial_setup', so
-    # sys.argv looks like
-    # ['/usr/lib/python2.7/site-packages/initial_setup/__main__.py'],
-    # so we look for initial_setup in the exe path.
-    if tail == "initial_setup":
-        cmd_name_string = "initial-setup"
-
+    cmd_name_string = os.path.basename(argv[0])
     return cmd_name_string
 
 

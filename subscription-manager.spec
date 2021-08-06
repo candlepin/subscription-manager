@@ -3,7 +3,6 @@
 # For optional building of ostree-plugin sub package. Unrelated to systemd
 # but the same versions apply at the moment.
 %global has_ostree %use_systemd && 0%{?suse_version} == 0
-%global use_initial_setup 1
 %global use_inotify 1
 %global py2_package_prefix python2
 
@@ -79,20 +78,12 @@
 %endif
 
 %if 0%{?suse_version}
-%global use_initial_setup 0
 %global use_subman_gui 0
 %global use_container_plugin 0
 %global use_inotify 0
 %endif
 
-# Do not ship initial-setup in RHEL 9+ and Fedora:
-# - as Anaconda can now register during the installation
-# - it uses old Anaconda APIs that are not supported anymore
-%if 0%{?rhel} >= 9 || 0%{?fedora}
-%global use_initial_setup 0
-%endif
-
-%if (%{use_subman_gui} || %{use_initial_setup})
+%if %{use_subman_gui}
 %global use_rhsm_gtk 1
 %else
 %global use_rhsm_gtk 0
@@ -140,15 +131,8 @@
 %global gtk_version GTK_VERSION=2
 %endif
 
-%if %{use_initial_setup}
-%global post_boot_tool INSTALL_INITIAL_SETUP=true
-%else
-%global post_boot_tool INSTALL_INITIAL_SETUP=false
-%endif
-
 %if 0%{?suse_version}
 %global install_zypper_plugins INSTALL_ZYPPER_PLUGINS=true
-%global post_boot_tool INSTALL_INITIAL_SETUP=false
 %else
 %global install_zypper_plugins INSTALL_ZYPPER_PLUGINS=false
 %endif
@@ -394,10 +378,6 @@ BuildRequires: systemd-rpm-macros
 BuildRequires: systemd
 %endif
 
-%if !%{use_initial_setup}
-Obsoletes: subscription-manager-initial-setup-addon <= %{version}-%{release}
-%endif
-
 %if !%{use_rhsm_gtk}
 Obsoletes: rhsm-gtk <= %{version}-%{release}
 %endif
@@ -442,7 +422,7 @@ from the server. Populates /etc/docker/certs.d appropriately.
 
 %if %{use_rhsm_gtk}
 %package -n rhsm-gtk
-Summary: GTK+ widgets used by subscription-manager-gui and initial_setup
+Summary: GTK+ widgets used by subscription-manager-gui
 %if 0%{?suse_version}
 Group: Productivity/Networking/System
 %else
@@ -463,8 +443,7 @@ Requires: %{?suse_version:dejavu} %{!?suse_version:dejavu-sans-fonts}
 
 
 %description -n rhsm-gtk
-This package contains GUI and widgets used by subscription-manager-gui
-and RHSM initial_setup module for Anaconda.
+This package contains GUI and widgets used by subscription-manager-gui.
 %endif
 
 %if %{use_subman_gui}
@@ -611,25 +590,6 @@ package or when debugging this package.
 %endif
 
 
-%if %use_initial_setup
-%package -n subscription-manager-initial-setup-addon
-Summary: initial-setup screens for subscription-manager
-%if 0%{?suse_version}
-Group: Productivity/Networking/System
-%else
-Group: System Environment/Base
-%endif
-Requires: rhsm-gtk = %{version}-%{release}
-Requires: initial-setup-gui >= 0.3.9.24-1
-Obsoletes: subscription-manager-firstboot < 1.15.3-1
-%if (0%{?rhel} >= 8)
-Supplements: initial-setup-gui
-%endif
-
-%description -n subscription-manager-initial-setup-addon
-This package contains the initial-setup screens for subscription-manager.
-%endif
-
 %if %has_ostree
 %package -n subscription-manager-plugin-ostree
 Summary: A plugin for handling OSTree content.
@@ -772,8 +732,7 @@ Conflicts: subscription-manager-cockpit < 1.26.7
 
 %description -n rhsm-icons
 This package contains the desktop icons for the graphical interfaces provided for management
-of Red Hat subscriptions. There are many such interfaces, subscription-manager-gui,
-subscription-manager-initial-setup-addon, and subscription-manager-cockpit-plugin primarily.
+of Red Hat subscriptions: subscription-manager-gui, subscription-manager-cockpit-plugin.
 %endif
 
 
@@ -821,7 +780,7 @@ make -f Makefile install VERSION=%{version}-%{release} \
     OS_VERSION=%{?fedora}%{?rhel}%{?suse_version} OS_DIST=%{dist} \
     COMPLETION_DIR=%{completion_dir} \
     RUN_DIR=%{run_dir} \
-    %{?install_ostree} %{?install_container} %{?post_boot_tool} %{?gtk_version} \
+    %{?install_ostree} %{?install_container} %{?gtk_version} \
     %{?install_yum_plugins} %{?install_dnf_plugins} \
     %{?install_zypper_plugins} \
     %{?with_systemd} \
@@ -1239,27 +1198,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %doc LICENSE
 %endif
 
-
-%if %use_initial_setup
-
-%files -n subscription-manager-initial-setup-addon
-%defattr(-,root,root,-)
-%dir %{_datadir}/anaconda/addons/com_redhat_subscription_manager/
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/*.py*
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/*.py*
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/*.ui
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/*.py*
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/categories/*.py*
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/ks/*.py*
-%if %{with python3}
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/__pycache__
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/__pycache__
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/gui/spokes/__pycache__
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/categories/__pycache__
-%{_datadir}/anaconda/addons/com_redhat_subscription_manager/ks/__pycache__
-%endif
-
-%endif
 
 %if 0%{?use_subscription_manager_migration}
 %files -n subscription-manager-migration
