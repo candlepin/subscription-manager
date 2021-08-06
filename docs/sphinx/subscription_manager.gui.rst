@@ -52,14 +52,6 @@ subscription_manager.gui.filter module
     :undoc-members:
     :show-inheritance:
 
-subscription_manager.gui.firstboot_base module
-----------------------------------------------
-
-.. automodule:: subscription_manager.gui.firstboot_base
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 subscription_manager.gui.importsub module
 -----------------------------------------
 

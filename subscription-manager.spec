@@ -4,7 +4,6 @@
 # but the same versions apply at the moment.
 %global has_ostree %use_systemd && 0%{?suse_version} == 0
 %global use_initial_setup 1
-%global use_firstboot 0
 %global use_inotify 1
 %global py2_package_prefix python2
 
@@ -81,13 +80,11 @@
 
 %if 0%{?rhel} == 6
 %global use_initial_setup 0
-%global use_firstboot 1
 %global use_inotify 0
 %endif
 
 %if 0%{?suse_version}
 %global use_initial_setup 0
-%global use_firstboot 0
 %global use_subman_gui 0
 %global use_container_plugin 0
 %global use_inotify 0
@@ -100,7 +97,7 @@
 %global use_initial_setup 0
 %endif
 
-%if (%{use_subman_gui} || %{use_initial_setup} || %{use_firstboot})
+%if (%{use_subman_gui} || %{use_initial_setup})
 %global use_rhsm_gtk 1
 %else
 %global use_rhsm_gtk 0
@@ -149,18 +146,14 @@
 %endif
 
 %if %{use_initial_setup}
-%global post_boot_tool INSTALL_INITIAL_SETUP=true INSTALL_FIRSTBOOT=false
+%global post_boot_tool INSTALL_INITIAL_SETUP=true
 %else
-%if %{use_firstboot}
-%global post_boot_tool INSTALL_INITIAL_SETUP=false INSTALL_FIRSTBOOT=true
-%else
-%global post_boot_tool INSTALL_INITIAL_SETUP=false INSTALL_FIRSTBOOT=false
-%endif
+%global post_boot_tool INSTALL_INITIAL_SETUP=false
 %endif
 
 %if 0%{?suse_version}
 %global install_zypper_plugins INSTALL_ZYPPER_PLUGINS=true
-%global post_boot_tool INSTALL_INITIAL_SETUP=false INSTALL_FIRSTBOOT=false
+%global post_boot_tool INSTALL_INITIAL_SETUP=false
 %else
 %global install_zypper_plugins INSTALL_ZYPPER_PLUGINS=false
 %endif
@@ -620,25 +613,6 @@ This package provides debug information for package libdnf-plugin-subscription-m
 Debug information is useful when developing applications that use this
 package or when debugging this package.
 
-%endif
-
-
-%if %use_firstboot
-%package -n subscription-manager-firstboot
-Summary: Firstboot screens for subscription manager
-%if 0%{?suse_version}
-Group: Productivity/Networking/System
-%else
-Group: System Environment/Base
-%endif
-Requires: rhsm-gtk = %{version}-%{release}
-Requires: rhn-setup-gnome
-
-# Fedora can figure this out automatically, but RHEL cannot:
-Requires: librsvg2
-
-%description -n subscription-manager-firstboot
-This package contains the firstboot screens for subscription-manager.
 %endif
 
 
@@ -1342,20 +1316,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/subscription_manager/plugin/ostree/__pycache__
 %{rhsm_plugins_dir}/__pycache__/*ostree*
 %endif
-%endif
-
-
-%if %use_firstboot
-%files -n subscription-manager-firstboot
-%defattr(-,root,root,-)
-%if 0%{?suse_version}
-%dir %{_datadir}/rhn
-%dir %{_datadir}/rhn/up2date_client
-%dir %{_datadir}/rhn/up2date_client/firstboot
-%endif
-# Not explicitly byte compiling this as we do not support firstboot
-# on newer versions of fedora
-%{_datadir}/rhn/up2date_client/firstboot/rhsm_login.py*
 %endif
 
 

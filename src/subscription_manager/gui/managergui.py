@@ -412,8 +412,7 @@ class MainWindow(widgets.SubmanBaseWidget):
 
     def _get_window(self):
         """
-        Return the window containing this widget (might be different for
-        firstboot).
+        Return the window containing this widget.
         """
         return self.main_window
 
