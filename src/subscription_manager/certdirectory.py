@@ -186,8 +186,8 @@ class ProductCertificateDirectory(CertificateDirectory):
 
     def get_provided_tags(self):
         """
-        Iterates all product certificates in the directory and extracts a master
-        set of all tags they provide.
+        Iterates all product certificates in the directory and extracts a set
+        of all tags they provide.
         """
         tags = set()
         for prod_cert in self.list_valid():

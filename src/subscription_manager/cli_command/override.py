@@ -117,7 +117,7 @@ class OverrideCommand(CliCommand):
                 results = overrides.add_overrides(self.identity.uuid, to_add)
             except connection.RestlibException as ex:
                 if ex.code == 400:
-                    # black listed overrides specified.
+                    # blocklisted overrides specified.
                     # Print message and return a less severe code.
                     system_exit(1, ex)
                 else:
