@@ -20,7 +20,6 @@ import subprocess
 
 from subscription_manager.ga import Gtk as ga_Gtk
 
-from subscription_manager.gui.utils import get_running_as_firstboot
 from subscription_manager.utils import get_client_versions, get_server_versions
 
 from subscription_manager.i18n import ugettext as _
@@ -50,8 +49,7 @@ class AboutDialog(object):
         self.dialog.set_name(_("Subscription Manager"))
         self.dialog.set_license(LICENSE)
         self.dialog.set_wrap_license(True)
-        if not get_running_as_firstboot():
-            self.dialog.set_website("https://fedorahosted.org/subscription-manager/")
+        self.dialog.set_website("https://fedorahosted.org/subscription-manager/")
         self.dialog.set_copyright(_("Copyright (c) 2012 Red Hat, Inc."))
         self.dialog.set_logo_icon_name("subscription-manager")
         self.dialog.set_icon_name("subscription-manager")

@@ -832,20 +832,6 @@ class AutoBindWidget(RegisterWidget):
         return False
 
 
-class FirstbootWidget(RegisterWidget):
-    # A RegisterWidget for use in firstboot.
-    # This widget, along with the PerformUnregisterScreen, will ensure that
-    # all screens are shown, and the user is allowed to register again.
-    __gtype_name__ = "FirstbootWidget"
-
-    initial_screen = CHOOSE_SERVER_PAGE
-
-    def choose_initial_screen(self):
-        self.current_screen.emit('move-to-screen', self.initial_screen)
-        self.register_widget.show_all()
-        return False
-
-
 class AutobindWizardDialog(RegisterDialog):
     __gtype_name__ = "AutobindWizardDialog"
 
@@ -2274,50 +2260,3 @@ class DoneScreen(Screen):
         # TODO: We could start cleanup tasks here.
         self.pre_done()
         return False
-
-
-class InfoScreen(Screen):
-    """
-    An informational screen taken from rhn-client-tools and only displayed
-    in firstboot when we're not working alongside that package. (i.e.
-    Fedora or RHEL 7 and beyond)
-
-    Also allows the user to skip registration if they wish.
-    """
-    widget_names = Screen.widget_names + [
-        'register_radio',
-        'skip_radio',
-        'why_register_dialog'
-    ]
-    gui_file = "registration_info"
-
-    def __init__(self, reg_info, async_backend, parent_window):
-        super(InfoScreen, self).__init__(reg_info, async_backend, parent_window)
-        self.button_label = _("_Next")
-        callbacks = {"on_why_register_button_clicked":
-                     self._on_why_register_button_clicked,
-                     "on_back_to_reg_button_clicked":
-                     self._on_back_to_reg_button_clicked
-                     }
-
-        self.connect_signals(callbacks)
-
-    def pre(self):
-        self.pre_done()
-        return False
-
-    def apply(self):
-        self.stay()
-        if self.register_radio.get_active():
-            self.emit('move-to-screen', CHOOSE_SERVER_PAGE)
-            return True
-
-        else:
-            self.emit('move-to-screen', FINISH)
-            return True
-
-    def _on_why_register_button_clicked(self, button):
-        self.why_register_dialog.show()
-
-    def _on_back_to_reg_button_clicked(self, button):
-        self.why_register_dialog.hide()

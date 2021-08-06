@@ -67,23 +67,8 @@ WITH_SUBMAN_GUI ?= true
 WITH_COCKPIT ?= true
 WITH_SUBMAN_MIGRATION ?= true
 
-# if OS is empty string, we're on el6 or sles11
-ifeq ($(OS),)
-   GTK_VERSION?=2
-   INSTALL_FIRSTBOOT?=true
-   INSTALL_INITIAL_SETUP?=false
-else
-   GTK_VERSION?=3
-   INSTALL_FIRSTBOOT?=false
-   INSTALL_INITIAL_SETUP?=true
-endif
-
-# /usr/share/rhn location for el6, suse
-ifeq ($(filter-out sles opensuse,$(OS)),)
-   FIRSTBOOT_MODULES_DIR?=$(PREFIX)/share/rhn/up2date_client/firstboot
-else
-   FIRSTBOOT_MODULES_DIR?=$(PREFIX)/share/firstboot/modules
-endif
+GTK_VERSION?=3
+INSTALL_INITIAL_SETUP?=true
 
 # always true until fedora is just dnf
 INSTALL_YUM_PLUGINS ?= true
@@ -279,18 +264,6 @@ install-example-plugins: install-plugins
 	install -m 644 -p example-plugins/*.py $(DESTDIR)/$(RHSM_PLUGIN_DIR)
 	install -m 644 -p example-plugins/*.conf $(DESTDIR)/$(RHSM_PLUGIN_CONF_DIR)
 
-.PHONY: install-firstboot
-ifeq ($(INSTALL_FIRSTBOOT),true)
-install-firstboot:
-	$(info Installing firstboot to $(FIRSTBOOT_MODULES_DIR))
-	install -d $(DESTDIR)/$(FIRSTBOOT_MODULES_DIR)
-	install -m 644 $(SRC_DIR)/gui/firstboot/*.py* $(DESTDIR)/$(FIRSTBOOT_MODULES_DIR)
-else
-install-firstboot:
-	# Override INSTALL_FIRSTBOOT variable on command line if needed
-	$(info firstboot is not configured to be install)
-endif
-
 # initial-setup, as in the 'initial-setup' rpm that runs at first boot.
 .PHONY: install-initial-setup
 ifeq ($(INSTALL_INITIAL_SETUP),true)
@@ -311,7 +284,7 @@ install-initial-setup:
 endif
 
 .PHONY: install-post-boot
-install-post-boot: install-firstboot install-initial-setup
+install-post-boot: install-initial-setup
 
 .PHONY: install-via-setup
 install-via-setup: install-subpackages-via-setup

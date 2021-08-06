@@ -1033,10 +1033,10 @@ to a subscription management service -- which makes all of the subscriptions ava
 The default subscription management service in the Subscription Manager configuration is the Customer Portal Subscription Management service. The configuration file can be edited before the system is registered to point to an on-premise subscription management service like Subscription Asset Manager.
 
 .PP
-Systems are usually registered to a subscription management service as part of their initial configuration, such as the firstboot or kickstart process. However, systems can be registered manually after they are configured, can be removed from a content service, or re-registered.
+Systems are usually registered to a subscription management service as part of their initial configuration, such as the kickstart process. However, systems can be registered manually after they are configured, can be removed from a content service, or re-registered.
 
 .PP
-If a system has never been registered (not even during firstboot), then the
+If a system has never been registered, then the
 .B register
 command will register the system with whatever subscription management service is configured in the
 .B /etc/rhsm/rhsm.conf
