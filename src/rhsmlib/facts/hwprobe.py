@@ -856,23 +856,26 @@ class HardwareCollector(collector.FactsCollector):
                         netinfdict[key] = attr
                 # otherwise we are ipv6 and we handled that already
 
-                # bonded slave devices can have their hwaddr changed
+                # Bonded devices can have their hardware address changed.
                 #
-                # "master" here refers to the slave's master device.
-                # If we find a master link, we are a  slave, and we need
-                # to check the /proc/net/bonding info to see what the
-                # "permanent" hw address are for this slave
+                # Here the 'bond_interface' refers to the name of device bonding other
+                # network interfaces under single virtual one.
+                #
+                # If we find the bond link (if the file exists), we are a bonded device
+                # and we need to check the /proc/net/bonding information to see what the
+                # 'permanent' hardware address for this bonded device is.
+                bond_interface: Optional[str]
                 try:
-                    master = os.readlink('/sys/class/net/%s/master' % info.device)
+                    bond_link: str = os.readlink('/sys/class/net/%s/master' % info.device)
+                    bond_interface = os.path.basename(bond_link)
                 # FIXME
                 except Exception:
-                    master = None
+                    bond_interface = None
 
-                if master:
-                    master_interface = os.path.basename(master)
-                    permanent_mac_addr = self._get_slave_hwaddr(master_interface, info.device)
-                    key = '.'.join(['net.interface', info.device, "permanent_mac_address"])
-                    netinfdict[key] = permanent_mac_addr
+                if bond_interface:
+                    address: str = self._get_permanent_hardware_address(bond_interface, info.device)
+                    key: str = '.'.join(['net.interface', info.device, "permanent_mac_address"])
+                    netinfdict[key] = address
 
         except Exception as e:
             log.exception(e)
@@ -881,26 +884,26 @@ class HardwareCollector(collector.FactsCollector):
 
     # from rhn-client-tools  hardware.py
     # see bz#785666
-    def _get_slave_hwaddr(self, master, slave):
-        hwaddr = ""
+    def _get_permanent_hardware_address(self, bond_interface: str, seeked_interface: str) -> str:
+        address: str = ""
         try:
-            bonding = open('/proc/net/bonding/%s' % master, "r")
+            bond_interface_file: str = open('/proc/net/bonding/%s' % bond_interface, "r")
         except:
-            return hwaddr
+            return address
 
-        slave_found = False
-        for line in bonding.readlines():
-            if slave_found and line.find("Permanent HW addr: ") != -1:
-                hwaddr = line.split()[3].upper()
+        permanent_interface_found: bool = False
+        for line in bond_interface_file.readlines():
+            if permanent_interface_found and line.find("Permanent HW addr: ") != -1:
+                address = line.split()[3].upper()
                 break
 
             if line.find("Slave Interface: ") != -1:
-                ifname = line.split()[2]
-                if ifname == slave:
-                    slave_found = True
+                interface_name: str = line.split()[2]
+                if interface_name == seeked_interface:
+                    permanent_interface_found = True
 
-        bonding.close()
-        return hwaddr
+        bond_interface_file.close()
+        return address
 
 
 if __name__ == '__main__':
