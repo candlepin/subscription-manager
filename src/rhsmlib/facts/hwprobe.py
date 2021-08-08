@@ -233,7 +233,7 @@ class HardwareCollector(collector.FactsCollector):
             uptime = float(open("/proc/uptime", "r").read().split()[0])
             uptime_delta = timedelta(seconds=uptime)
             now = datetime.utcnow()
-            last_boot_date = now - uptime_delta
+            last_boot_date = now - uptime_delta:267
             last_boot = last_boot_date.strftime("%Y-%m-%d %H:%M:%S")
         except Exception as e:
             log.warning("Error reading uptime information %s", e)
