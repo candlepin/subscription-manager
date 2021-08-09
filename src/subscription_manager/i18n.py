@@ -36,8 +36,6 @@ LOCALE = local()
 LOCALE.language = None
 LOCALE.lang = None
 
-BLACKLISTED_LOCALES = ['turkish', 'tr_TR', 'tr_CY', 'ku_TR']
-
 log = logging.getLogger(__name__)
 
 
@@ -64,18 +62,6 @@ def configure_i18n():
             print('You are attempting to use a locale: "%s" that is not fully supported by this system.' % _locale)
         os.environ['LC_ALL'] = 'C.UTF-8'
         locale.setlocale(locale.LC_ALL, 'C.UTF-8')
-
-    # We have to set locale to C for blacklisted locales, because result of str.lower() and str.upper()
-    # methods is influenced by locale. E.g. character 'I' is not converted to 'i' by lower() for Turkish
-    # language, but it is converted to 'ı'. Character 'i' is converted to 'İ' by upper(). There other
-    # strange cases, when tr_TR
-    # See this BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1703054#c10
-    if six.PY2 and current_locale is not None:
-        base_current_locale = current_locale.split('.')[0]
-        if base_current_locale in BLACKLISTED_LOCALES:
-            print("You are attempting to use forbidden locale: %s. Resetting to default locale." % current_locale)
-            os.environ['LC_ALL'] = 'C.UTF-8'
-            locale.setlocale(locale.LC_ALL, 'C.UTF-8')
 
     configure_gettext()
     # RHBZ 1642271  Don't set a None lang

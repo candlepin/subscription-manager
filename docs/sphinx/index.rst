@@ -1,4 +1,4 @@
-.. subscription-manager documentation master file, created by
+.. subscription-manager documentation main file, created by
    sphinx-quickstart on Tue May 13 23:24:51 2014.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.

@@ -556,7 +556,7 @@ class ProductManager(object):
     def install_product_certs(self, product_certs):
         # collect info, then do the needful later, so we can hook
         # up a plugin in between and let it munge these lists, so a plugin
-        # could blacklist a product cert for example.
+        # could block a product cert for example.
         self.plugin_manager.run('pre_product_id_install', product_list=product_certs)
         # ProductCertDb.install()
         #  -> for each ProductCert:

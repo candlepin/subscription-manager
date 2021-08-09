@@ -21,7 +21,7 @@ import cockpit from "cockpit";
 
 const _ = cockpit.gettext;
 
-// see https://github.com/hughsie/PackageKit/blob/master/lib/packagekit-glib2/pk-enum.h
+// see https://github.com/PackageKit/PackageKit/blob/main/lib/packagekit-glib2/pk-enum.h
 export const Enum = {
     EXIT_SUCCESS: 1,
     EXIT_FAILED: 2,

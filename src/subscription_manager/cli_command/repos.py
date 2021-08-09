@@ -151,9 +151,8 @@ class ReposCommand(CliCommand):
 
     def _set_repo_status(self, repos, repo_action_invoker, repo_actions):
         """
-        Given a list of repo actions (tuple of enable/disable and
-        repo ID), build the master list (without duplicates) to send to the
-        server.
+        Given a list of repo actions (tuple of enable/disable and repo ID),
+        build a list without duplicates to send to the server.
         """
         rc = 0
 

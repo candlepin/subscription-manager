@@ -674,7 +674,7 @@ VARIANT_ID=server
     def test_get_slave_hwaddr_rr(self, MockOpen):
         MockOpen.return_value = six.StringIO(PROC_BONDING_RR)
         hw = hwprobe.HardwareCollector()
-        slave_hw = hw._get_slave_hwaddr("bond0", "eth0")
+        slave_hw = hw._get_permanent_hardware_address("bond0", "eth0")
         # note we .upper the result
         self.assertEqual("52:54:00:07:03:BA", slave_hw)
 
@@ -682,7 +682,7 @@ VARIANT_ID=server
     def test_get_slave_hwaddr_alb(self, MockOpen):
         MockOpen.return_value = six.StringIO(PROC_BONDING_ALB)
         hw = hwprobe.HardwareCollector()
-        slave_hw = hw._get_slave_hwaddr("bond0", "eth0")
+        slave_hw = hw._get_permanent_hardware_address("bond0", "eth0")
         # note we .upper the result
         self.assertEqual("52:54:00:07:03:BA", slave_hw)
 
