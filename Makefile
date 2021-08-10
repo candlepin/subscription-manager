@@ -60,13 +60,6 @@ WITH_SYSTEMD ?= true
 WITH_COCKPIT ?= true
 WITH_SUBMAN_MIGRATION ?= true
 
-# if OS is empty string, we're on el6 or sles11
-ifeq ($(OS),)
-   GTK_VERSION?=2
-else
-   GTK_VERSION?=3
-endif
-
 # for fc22 or newer
 INSTALL_DNF_PLUGINS ?= false
 DNF_PLUGINS_SRC_DIR := src/plugins
@@ -98,7 +91,7 @@ STYLEFILES=$(PYFILES) $(BIN_FILES)
 
 build: rhsmcertd
     EXCLUDE_PACKAGES:="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py clean --all
-    EXCLUDE_PACKAGES:="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
+    EXCLUDE_PACKAGES:="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py build --quiet --rpm-version=$(VERSION)
 
 # we never "remake" this makefile, so add a target so
 # we stop searching for implicit rules on how to remake it
@@ -157,12 +150,6 @@ install-conf:
 	install -m 644 etc-conf/dbus/polkit/com.redhat.RHSM1.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
 	install -m 644 etc-conf/dbus/polkit/com.redhat.RHSM1.Facts.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
 	install -m 644 etc-conf/syspurpose/valid_fields.json $(DESTDIR)/etc/rhsm/syspurpose/valid_fields.json; \
-	if [[ "$(WITH_SUBMAN_GUI)" == "true" ]]; then \
-	    install -m 644 etc-conf/dbus/polkit/com.redhat.SubscriptionManager.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR); \
-		install -m 644 etc-conf/subscription-manager-gui.appdata.xml $(DESTDIR)/$(INSTALL_DIR)/appdata/subscription-manager-gui.appdata.xml; \
-		install -m 644 etc-conf/subscription-manager-gui.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/subscription-manager-gui; \
-		install -m 644 etc-conf/rhsm-icon.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/rhsm-icon; \
-	fi;
 	if [[ "$(WITH_SUBMAN_MIGRATION)" == "true" ]]; then \
 	    install -m 644 etc-conf/rhn-migrate-classic-to-rhsm.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/rhn-migrate-classic-to-rhsm; \
 	fi;
@@ -214,19 +201,10 @@ install-plugins:
 	fi;
 
 .PHONY: install-ga
-ifeq ($(GTK_VERSION),2)
 install-ga:
-	$(info Using GTK $(GTK_VERSION))
-	install -d $(DESTDIR)/$(PYTHON_INST_DIR)/ga_impls/ga_gtk2
-	install -m 644 -p $(SRC_DIR)/ga_impls/__init__.py* $(DESTDIR)/$(PYTHON_INST_DIR)/ga_impls
-	install -m 644 -p $(SRC_DIR)/ga_impls/ga_gtk2/*.py $(DESTDIR)/$(PYTHON_INST_DIR)/ga_impls/ga_gtk2
-else
-install-ga:
-	$(info Using GTK $(GTK_VERSION))
 	install -d $(DESTDIR)/$(PYTHON_INST_DIR)/ga_impls
 	install -m 644 -p $(SRC_DIR)/ga_impls/__init__.py* $(DESTDIR)/$(PYTHON_INST_DIR)/ga_impls
 	install -m 644 -p $(SRC_DIR)/ga_impls/ga_gtk3.py* $(DESTDIR)/$(PYTHON_INST_DIR)/ga_impls
-endif
 
 .PHONY: install-example-plugins
 install-example-plugins: install-plugins
@@ -235,7 +213,7 @@ install-example-plugins: install-plugins
 
 .PHONY: install-via-setup
 install-via-setup: install-subpackages-via-setup
-	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py install --root $(DESTDIR) --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION) --prefix=$(PREFIX) \
+	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py install --root $(DESTDIR) --rpm-version=$(VERSION) --prefix=$(PREFIX) \
 	--with-systemd=$(WITH_SYSTEMD) --with-cockpit-desktop-entry=${WITH_COCKPIT} \
 	--with-subman-migration=${WITH_SUBMAN_MIGRATION} $(SETUP_PY_INSTALL_PARAMS)
 	mkdir -p $(DESTDIR)/$(PREFIX)/sbin/
@@ -244,11 +222,6 @@ install-via-setup: install-subpackages-via-setup
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsmcertd-worker $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-service $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-facts-service $(DESTDIR)/$(LIBEXEC_DIR)/
-	if [[ "$(WITH_SUBMAN_GUI)" == "true" ]]; then \
-		mv $(DESTDIR)/$(PREFIX)/bin/subscription-manager-gui $(DESTDIR)/$(PREFIX)/sbin/; \
-	else \
-		rm $(DESTDIR)/$(PREFIX)/bin/subscription-manager-gui; \
-	fi; \
 	if [[ "$(WITH_SUBMAN_MIGRATION)" == "true" ]]; then \
 	    mv $(DESTDIR)/$(PREFIX)/bin/rhn-migrate-classic-to-rhsm $(DESTDIR)/$(PREFIX)/sbin/; \
 	else \

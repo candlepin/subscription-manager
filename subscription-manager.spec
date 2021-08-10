@@ -66,11 +66,6 @@
 # on recent Fedora and RHEL 7, let's not use m2crypto
 %global use_m2crypto (0%{?fedora} < 23 && 0%{?rhel} < 7)
 
-%if %{use_systemd}
-# Note that the global gtk3 will be undefined if it's not used
-%global gtk3 1
-%endif
-
 %if 0%{?rhel} == 6
 %global use_inotify 0
 %endif
@@ -79,8 +74,6 @@
 %global use_container_plugin 0
 %global use_inotify 0
 %endif
-
-%global use_rhsm_gtk 0
 
 %global use_dnf (%{with python3} && (0%{?fedora} || (0%{?rhel}))) || (0%{?rhel} >= 7)
 %global create_libdnf_rpm (0%{?fedora} > 32 || 0%{?rhel} > 8)
@@ -114,13 +107,6 @@
 %global install_container INSTALL_CONTAINER_PLUGIN=true
 %else
 %global install_container INSTALL_CONTAINER_PLUGIN=false
-%endif
-
-# makefile will guess, but be specific.
-%if 0%{?gtk3}
-%global gtk_version GTK_VERSION=3
-%else
-%global gtk_version GTK_VERSION=2
 %endif
 
 %if 0%{?suse_version}
@@ -176,10 +162,6 @@
 
 # add new exclude packages items after me
 
-%if !%{use_rhsm_gtk}
-%global exclude_packages %{exclude_packages}subscription_manager.gui,
-%endif
-
 %if !%{use_container_plugin}
 %global exclude_packages %{exclude_packages}*.plugin.container,
 %endif
@@ -193,9 +175,9 @@
 %global exclude_packages %{exclude_packages}"
 
 # Moving our shared icon dependancies to their own package
-# Both our cockpit plugin and the rhsm-gtk package require an overlapping
-# set of icons.
-%global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
+# Cockpit plugin requires these icons. They are placed in separate package
+# because they have been shared with subscription-manager-gui in RHEL < 9.
+%global use_rhsm_icons 0%{use_cockpit}
 
 Name: subscription-manager
 Version: 1.29.18
@@ -282,16 +264,11 @@ Requires: dnf-plugin-subscription-manager = %{version}
 %endif
 %endif
 
-# Support GTK2 and GTK3 on both SUSE and RHEL...
 %if 0%{?suse_version}
-Requires: %{?gtk3:python-gobject} %{!?gtk3:python-gobject2, libzypp, zypp-plugin-python, python-zypp}
+Requires: python-gobject2, libzypp, zypp-plugin-python, python-zypp
 %else
 Requires:  usermode
-%if %{with python3}
 Requires: python3-gobject-base
-%else
-Requires:  %{?gtk3:gobject-introspection, pygobject3-base} %{!?gtk3:pygobject2}
-%endif
 # There's no dmi to read on these arches, so don't pull in this dep.
 # Additionally, dmidecode isn't packaged at all on SUSE
 %ifnarch aarch64 ppc ppc64 ppc64le s390 s390x
@@ -348,9 +325,7 @@ BuildRequires: systemd
 
 Obsoletes: subscription-manager-initial-setup-addon <= %{version}-%{release}
 
-%if !%{use_rhsm_gtk}
 Obsoletes: rhsm-gtk <= %{version}-%{release}
-%endif
 
 %if !%{use_container_plugin}
 Obsoletes: subscription-manager-plugin-container
@@ -388,32 +363,6 @@ Requires: %{name} = %{version}-%{release}
 %description -n subscription-manager-plugin-container
 Enables handling of content of type 'containerImage' in any certificates
 from the server. Populates /etc/docker/certs.d appropriately.
-%endif
-
-%if %{use_rhsm_gtk}
-%package -n rhsm-gtk
-Summary: GTK+ widgets used by subscription-manager-gui
-%if 0%{?suse_version}
-Group: Productivity/Networking/System
-%else
-Group: System Environment/Base
-%endif
-Requires: %{?gtk3:%{py_package_prefix}-gobject, gtk3} %{!?gtk3:pygtk2, pygtk2-libglade}
-Requires: usermode-gtk
-# Fedora can figure this out automatically, but RHEL cannot:
-# See #987071
-Requires: librsvg2%{?_isa}
-Requires: rhsm-icons
-
-%if 0%{?gtk3}
-Requires: font(cantarell)
-%else
-Requires: %{?suse_version:dejavu} %{!?suse_version:dejavu-sans-fonts}
-%endif
-
-
-%description -n rhsm-gtk
-This package contains GUI and widgets used by subscription-manager-gui.
 %endif
 
 %if %{use_subscription_manager_migration}
@@ -694,11 +643,10 @@ cloud metadata and signatures.
 %build
 make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
     LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" \
-    %{?gtk_version} %{?subpackages} \
-    %{exclude_packages} %{?with_subman_migration}
+    %{?subpackages} %{exclude_packages} %{?with_subman_migration}
 
 %if %{with python2_rhsm}
-python2 ./setup.py build --quiet --gtk-version=%{?gtk3:3}%{?!gtk3:2} --rpm-version=%{version}-%{release}
+python2 ./setup.py build --quiet --rpm-version=%{version}-%{release}
 %endif
 
 %if %{use_dnf}
@@ -719,7 +667,7 @@ make -f Makefile install VERSION=%{version}-%{release} \
     OS_VERSION=%{?fedora}%{?rhel}%{?suse_version} OS_DIST=%{dist} \
     COMPLETION_DIR=%{completion_dir} \
     RUN_DIR=%{run_dir} \
-    %{?install_ostree} %{?install_container} %{?gtk_version} \
+    %{?install_ostree} %{?install_container} \
     %{?install_dnf_plugins} \
     %{?install_zypper_plugins} \
     %{?with_systemd} \
@@ -934,19 +882,11 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/subscription_manager/scripts/__pycache__
 %endif
 
-# our gtk2/gtk3 compat modules
+# dconf modules
 %dir %{python_sitearch}/subscription_manager/ga_impls
 %{python_sitearch}/subscription_manager/ga_impls/__init__.py*
-%if %{with python3}
 %{python_sitearch}/subscription_manager/ga_impls/__pycache__
-%endif
-
-%if 0%{?gtk3}
 %{python_sitearch}/subscription_manager/ga_impls/ga_gtk3.py*
-%else
-%dir %{python_sitearch}/subscription_manager/ga_impls/ga_gtk2
-%{python_sitearch}/subscription_manager/ga_impls/ga_gtk2/*.py*
-%endif
 
 # subscription-manager plugins
 %dir %{rhsm_plugins_dir}
@@ -1035,19 +975,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{_mandir}/man5/rhsm.conf.5*
 %doc LICENSE
 
-
-%if %{use_rhsm_gtk}
-%files -n rhsm-gtk
-%defattr(-,root,root,-)
-%dir %{python_sitearch}/subscription_manager/gui
-%{python_sitearch}/subscription_manager/gui/*.py*
-%{python_sitearch}/subscription_manager/gui/data/ui/*.ui
-%{python_sitearch}/subscription_manager/gui/data/glade/*.glade
-%{python_sitearch}/subscription_manager/gui/data/icons/*.svg
-%if %{with python3}
-%{python_sitearch}/subscription_manager/gui/__pycache__
-%endif
-%endif
 %if 0%{?use_subscription_manager_migration}
 %files -n subscription-manager-migration
 %defattr(-,root,root,-)

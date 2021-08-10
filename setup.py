@@ -16,7 +16,6 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 import os
 import sys
-import re
 import subprocess
 
 from glob import glob
@@ -53,41 +52,32 @@ exclude_packages.extend(
 
 
 RPM_VERSION = None
-GTK_VERSION = None
 
 
-# subclass build_py so we can generate
-# version.py based on either args passed
-# in (--rpm-version, --gtk-version) or
+# subclass build_py so we can generate version.py based on --rpm-version or
 # from a guess generated from 'git describe'
 class rpm_version_release_build_py(_build_py):
     user_options = _build_py.user_options + [
-        ('gtk-version=', None, 'GTK version this is built for'),
         ('rpm-version=', None, 'version and release of the RPM this is built for')]
 
     def initialize_options(self):
         _build_py.initialize_options(self)
         self.rpm_version = None
-        self.gtk_version = None
         self.versioned_packages = []
 
     def finalize_options(self):
-        # When --gtk-version and --rpm-version was provided ac command line
-        # option of install command, then get these values from global variables
+        # When --rpm-version was provided as command line
+        # option of install command, then get this value from global variables
         if self.rpm_version is None and RPM_VERSION is not None:
             self.rpm_version = RPM_VERSION
-        if self.gtk_version is None and GTK_VERSION is not None:
-            self.gtk_version = GTK_VERSION
         _build_py.finalize_options(self)
         self.set_undefined_options(
             'build',
             ('rpm_version', 'rpm_version'),
-            ('gtk_version', 'gtk_version')
         )
 
     def run(self):
-        log.debug("Building with GTK_VERSION=%s, RPM_VERSION=%s" %
-                  (self.gtk_version, self.rpm_version))
+        log.debug("Building with RPM_VERSION=%s" % self.rpm_version)
         _build_py.run(self)
         # create a "version.py" that includes the rpm version
         # info passed to our new build_py args
@@ -100,7 +90,6 @@ class rpm_version_release_build_py(_build_py):
                     with open(version_file, 'r') as f:
                         for l in f.readlines():
                             l = l.replace("RPM_VERSION", str(self.rpm_version))
-                            l = l.replace("GTK_VERSION", str(self.gtk_version))
                             lines.append(l)
 
                     with open(version_file, 'w') as f:
@@ -112,7 +101,6 @@ class rpm_version_release_build_py(_build_py):
 
 class install(_install):
     user_options = _install.user_options + [
-        ('gtk-version=', None, 'GTK version this is built for'),
         ('rpm-version=', None, 'version and release of the RPM this is built for'),
         ('with-systemd=', None, 'whether to install w/ systemd support or not'),
         ('with-subman-migration=', None, 'whether to install subman migration or not'),
@@ -122,53 +110,43 @@ class install(_install):
     def initialize_options(self):
         _install.initialize_options(self)
         self.rpm_version = None
-        self.gtk_version = None
         self.with_systemd = None
         self.with_subman_migration = None
         self.with_cockpit_desktop_entry = None
 
     def finalize_options(self):
-        global RPM_VERSION, GTK_VERSION
+        global RPM_VERSION
         if self.rpm_version is not None:
             RPM_VERSION = self.rpm_version
-        if self.gtk_version is not None:
-            GTK_VERSION = self.gtk_version
         _install.finalize_options(self)
         self.set_undefined_options(
             'build',
             ('rpm_version', 'rpm_version'),
-            ('gtk_version', 'gtk_version')
         )
 
 
 class build(_build):
     user_options = _build.user_options + [
-        ('gtk-version=', None, 'GTK version this is built for'),
         ('rpm-version=', None, 'version and release of the RPM this is built for')
     ]
 
     def initialize_options(self):
         _build.initialize_options(self)
         self.rpm_version = None
-        self.gtk_version = None
         self.git_tag_prefix = "subscription-manager-"
 
     def finalize_options(self):
-        # When --gtk-version and --rpm-version was provided as command line
-        # option of install command, then get these values from global variables
+        # When --rpm-version was provided as command line
+        # option of install command, then get this value from global variables
         if self.rpm_version is None and RPM_VERSION is not None:
             self.rpm_version = RPM_VERSION
-        if self.gtk_version is None and GTK_VERSION is not None:
-            self.gtk_version = GTK_VERSION
 
         _build.finalize_options(self)
 
-        # When the gtk/rpm-version were not provided as command line options,
+        # When the rpm-version was not provided as command line options,
         # then try to get such information from .git or rpm
         if not self.rpm_version:
             self.rpm_version = self.get_git_describe()
-        if not self.gtk_version:
-            self.gtk_version = self.get_gtk_version()
 
     def get_git_describe(self):
         try:
@@ -181,17 +159,6 @@ class build(_build):
             # When building the RPM there won't be a git repo to introspect so
             # builders *must* specify the version via the --rpm-version option
             return "unknown"
-
-    def get_gtk_version(self):
-        cmd = ['rpm', '--eval=%dist']
-        try:
-            process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-        except:
-            return "3"  # in cases where we can't use RPM to discover, assume GTK3
-        output = process.communicate()[0].decode('utf-8').strip()
-        if re.search('el6', output):
-            return "2"
-        return "3"
 
     def has_po_files(self):
         try:
@@ -272,20 +239,6 @@ class install_data(_install_data):
         data_files = dict(self.data_files)
         man8_pages = data_files['share/man/man8']
         man8_pages = man8_pages.union(set(['man/rhn-migrate-classic-to-rhsm.8']))
-        data_files['share/man/man8'] = man8_pages
-        self.data_files = [(item, value) for item, value in data_files.items()]
-
-    def add_gui_doc_files(self):
-        """
-        Add documentation for subscription-manager-gui and rhsm-icon
-        """
-        self.data_files.append(('share/gnome/help/subscription-manager/C', glob('docs/*.xml')))
-        self.data_files.append(('share/gnome/help/subscription-manager/C/figures', glob('docs/figures/*.png')))
-        self.data_files.append(('share/omf/subscription-manager', glob('docs/*.omf')))
-        # Add manual pages for subman-gui na rhsm-icon
-        data_files = dict(self.data_files)
-        man8_pages = data_files['share/man/man8']
-        man8_pages = man8_pages.union(set(['man/subscription-manager-gui.8', 'man/rhsm-icon.8']))
         data_files['share/man/man8'] = man8_pages
         self.data_files = [(item, value) for item, value in data_files.items()]
 
