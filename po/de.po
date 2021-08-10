@@ -1,7 +1,7 @@
 # ljanda <ljanda@redhat.com>, 2017. #zanata
-# John Sefler <jsefler@redhat.com>, 2018. #zanata, 2021.
+# John Sefler <jsefler@redhat.com>, 2018. #zanata, 2021, 2023.
 # ljanda <ljanda@redhat.com>, 2018. #zanata
-# John Sefler <jsefler@redhat.com>, 2019. #zanata, 2021.
+# John Sefler <jsefler@redhat.com>, 2019. #zanata, 2021, 2023.
 # ljanda <ljanda@redhat.com>, 2019. #zanata
 # CoconutNut <patrick.vollandt@mein-gym.de>, 2021, 2023.
 # Ludek Janda <ljanda@redhat.com>, 2021, 2023.
@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
 "PO-Revision-Date: 2023-05-10 05:37+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/de/>\n"
 "Language: de\n"
@@ -379,8 +379,7 @@ msgstr "%(prog)s {name} [OPTIONEN] ZERTIFIKATSDATEI"
 #, fuzzy, python-brace-format
 #| msgid "Unable to read certificate file '%s': %s"
 msgid "Unable to read certificate file '{certificate}': {exception}"
-msgstr ""
-"Zertifikatsdatei »{certificate}« kann nicht gelesen werden: {exception}"
+msgstr "Zertifikatsdatei »{certificate}« kann nicht gelesen werden: {exception}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/cert_commands.py:49
