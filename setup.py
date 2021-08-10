@@ -115,7 +115,6 @@ class install(_install):
         ('gtk-version=', None, 'GTK version this is built for'),
         ('rpm-version=', None, 'version and release of the RPM this is built for'),
         ('with-systemd=', None, 'whether to install w/ systemd support or not'),
-        ('with-subman-gui=', None, 'whether to install subman GUI or not'),
         ('with-subman-migration=', None, 'whether to install subman migration or not'),
         ('with-cockpit-desktop-entry=', None, 'whether to install desktop entry for subman cockpit plugin or not'),
     ]
@@ -125,7 +124,6 @@ class install(_install):
         self.rpm_version = None
         self.gtk_version = None
         self.with_systemd = None
-        self.with_subman_gui = None
         self.with_subman_migration = None
         self.with_cockpit_desktop_entry = None
 
@@ -211,7 +209,6 @@ class install_data(_install_data):
     """
     user_options = _install_data.user_options + [
         ('with-systemd=', None, 'whether to install w/ systemd support or not'),
-        ('with-subman-gui=', None, 'whether to install subman GUI or not'),
         ('with-subman-migration=', None, 'whether to install subman migration or not'),
         ('with-cockpit-desktop-entry=', None, 'whether to install desktop entry for subman cockpit plugin or not'),
     ]
@@ -219,7 +216,6 @@ class install_data(_install_data):
     def initialize_options(self):
         _install_data.initialize_options(self)
         self.with_systemd = None
-        self.with_subman_gui = None
         self.with_subman_migration = None
         self.with_cockpit_desktop_entry = None
         # Can't use super() because Command isn't a new-style class.
@@ -227,35 +223,22 @@ class install_data(_install_data):
     def finalize_options(self):
         _install_data.finalize_options(self)
         self.set_undefined_options('install', ('with_systemd', 'with_systemd'))
-        self.set_undefined_options('install', ('with_subman_gui', 'with_subman_gui'))
         self.set_undefined_options('install', ('with_subman_migration', 'with_subman_migration'))
         self.set_undefined_options('install', ('with_cockpit_desktop_entry', 'with_cockpit_desktop_entry'))
         if self.with_systemd is None:
             self.with_systemd = True  # default to True
         else:
             self.with_systemd = self.with_systemd == 'true'
-        if self.with_subman_gui is None:
-            self.with_subman_gui = False  # default to False
-        else:
-            self.with_subman_gui = self.with_subman_gui == 'true'
         # Set self.with_subman_migration to True, when self.with_subman_migration is equal to 'true'
         self.with_subman_migration = self.with_subman_migration == 'true'
-        # Enable creating desktop entry for cockpit plugin only in case that subman gui will not be
-        # installed
-        if self.with_subman_gui is False:
-            if self.with_cockpit_desktop_entry is None:
-                self.with_cockpit_desktop_entry = True  # default to True
-            else:
-                self.with_cockpit_desktop_entry = self.with_cockpit_desktop_entry == 'true'
+        # Set self.with_cockpit_desktop_entry to True when it is equal to 'true'
+        if self.with_cockpit_desktop_entry is None:
+            self.with_cockpit_desktop_entry = True  # default to True
         else:
-            self.with_cockpit_desktop_entry = False
+            self.with_cockpit_desktop_entry = self.with_cockpit_desktop_entry == 'true'
 
     def run(self):
         self.add_messages()
-        if self.with_subman_gui:
-            self.add_desktop_files()
-            self.add_icons()
-            self.add_gui_doc_files()
         if self.with_cockpit_desktop_entry:
             self.add_cockpit_desktop_entry()
             self.add_icons()
@@ -281,17 +264,6 @@ class install_data(_install_data):
 
     def add_cockpit_desktop_entry(self):
         self.__add_desktop_entry('subscription-manager-cockpit.desktop')
-
-    def add_desktop_files(self):
-        self.__add_desktop_entry('subscription-manager-gui.desktop')
-
-        # Installing files outside of the "prefix" with setuptools looks to be flakey:
-        # See https://github.com/pypa/setuptools/issues/460.  However, this seems to work
-        # so I'm making an exception to the "everything outside the prefix should be handled
-        # by make" policy.
-        autostart_dir = self.join('/etc', 'xdg', 'autostart')
-        autostart_file = self.join('build', 'autostart', 'rhsm-icon.desktop')
-        self.data_files.append((autostart_dir, [autostart_file]))
 
     def add_migration_doc_files(self):
         """
@@ -417,9 +389,6 @@ setup(
     cmdclass=cmdclass,
     packages=find_packages('src', exclude=exclude_packages),
     package_dir={'': 'src'},
-    package_data={
-        'subscription_manager.gui': ['data/glade/*.glade', 'data/ui/*.ui', 'data/icons/*.svg'],
-    },
     entry_points={
         'console_scripts': [
             'subscription-manager = subscription_manager.scripts.subscription_manager:main',
@@ -430,9 +399,6 @@ setup(
             'rhsm-service = subscription_manager.scripts.rhsm_service:main',
             'rhsmcertd-worker = subscription_manager.scripts.rhsmcertd_worker:main',
         ],
-        'gui_scripts': [
-            'subscription-manager-gui = subscription_manager.scripts.subscription_manager_gui:main',
-        ],
     },
     data_files=[
         # sat5to6 is packaged separately
@@ -441,7 +407,6 @@ setup(
             'share/man/man8',
             set(glob('man/*.8')) - \
                 set(['man/sat5to6.8']) - \
-                set(['man/subscription-manager-gui.8', 'man/rhsm-icon.8']) - \
                 set(['man/rhn-migrate-classic-to-rhsm.8'])
         ),
         ('share/man/man5', glob('man/*.5')),

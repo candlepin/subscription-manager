@@ -43,12 +43,6 @@
 %bcond_without python2_rhsm
 %endif
 
-%if %{with python3} || 0%{?suse_version}
-%global use_subman_gui 0
-%else
-%global use_subman_gui 1
-%endif
-
 # Install subscription-manager-migration only for rhel8 and lower
 %if 0%{?rhel} && 0%{?rhel} <= 8
 %global use_subscription_manager_migration 1
@@ -82,16 +76,11 @@
 %endif
 
 %if 0%{?suse_version}
-%global use_subman_gui 0
 %global use_container_plugin 0
 %global use_inotify 0
 %endif
 
-%if %{use_subman_gui}
-%global use_rhsm_gtk 1
-%else
 %global use_rhsm_gtk 0
-%endif
 
 %global use_dnf (%{with python3} && (0%{?fedora} || (0%{?rhel}))) || (0%{?rhel} >= 7)
 %global create_libdnf_rpm (0%{?fedora} > 32 || 0%{?rhel} > 8)
@@ -153,19 +142,13 @@
 %global with_systemd WITH_SYSTEMD=false
 %endif
 
-%if %{use_subman_gui}
-%global with_subman_gui WITH_SUBMAN_GUI=true
-%else
-%global with_subman_gui WITH_SUBMAN_GUI=false
-%endif
-
 %if %{use_subscription_manager_migration}
 %global with_subman_migration WITH_SUBMAN_MIGRATION=true
 %else
 %global with_subman_migration WITH_SUBMAN_MIGRATION=false
 %endif
 
-%if %{use_cockpit} && !0%{use_subman_gui}
+%if %{use_cockpit}
 %global with_cockpit WITH_COCKPIT=true
 %else
 %global with_cockpit WITH_COCKPIT=false
@@ -341,7 +324,7 @@ BuildRequires: intltool
 BuildRequires: libnotify-devel
 BuildRequires: %{py_package_prefix}-six
 
-%if %{use_subman_gui} || %{use_cockpit}
+%if %{use_cockpit}
 BuildRequires: desktop-file-utils
 %endif
 
@@ -353,13 +336,6 @@ BuildRequires: %{?suse_version:distribution-release} %{!?suse_version:system-rel
 
 %if 0%{?suse_version}
 BuildRequires: libzypp
-%endif
-
-%if %{use_subman_gui}
-BuildRequires: %{?suse_version:gconf2-devel} %{!?suse_version:GConf2-devel}
-BuildRequires: %{?suse_version:update-desktop-files} %{!?suse_version:scrollkeeper}
-BuildRequires: %{?suse_version:dbus-1-glib-devel} %{!?suse_version:dbus-glib-devel}
-BuildRequires: %{?gtk3:gtk3-devel} %{!?gtk3:gtk2-devel}
 %endif
 
 %if %use_systemd
@@ -439,37 +415,6 @@ Requires: %{?suse_version:dejavu} %{!?suse_version:dejavu-sans-fonts}
 %description -n rhsm-gtk
 This package contains GUI and widgets used by subscription-manager-gui.
 %endif
-
-%if %{use_subman_gui}
-%package -n subscription-manager-gui
-Summary: A GUI interface to manage Red Hat product subscriptions
-%if 0%{?suse_version}
-Group: Productivity/Networking/System
-%else
-Group: System Environment/Base
-%endif
-Requires: %{name} = %{version}-%{release}
-Requires: gnome-icon-theme
-
-# We need pygtk3 and gtk2 until rhsm-icon is ported to gtk3
-Requires: rhsm-gtk = %{version}-%{release}
-
-# Renamed from -gnome, so obsolete it properly
-Obsoletes: %{name}-gnome < 1.0.3-1
-Provides: %{name}-gnome = %{version}-%{release}
-
-%if !0%{?suse_version}
-Requires(post): scrollkeeper
-Requires(postun): scrollkeeper
-%else
-%endif
-
-%description -n subscription-manager-gui
-This package contains a GTK+ graphical interface for configuring and
-registering a system with a Red Hat Entitlement platform and manage
-subscriptions.
-%endif
-
 
 %if %{use_subscription_manager_migration}
 %package -n subscription-manager-migration
@@ -750,7 +695,7 @@ cloud metadata and signatures.
 make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
     LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" \
     %{?gtk_version} %{?subpackages} \
-    %{exclude_packages} %{?with_subman_gui} %{?with_subman_migration}
+    %{exclude_packages} %{?with_subman_migration}
 
 %if %{with python2_rhsm}
 python2 ./setup.py build --quiet --gtk-version=%{?gtk3:3}%{?!gtk3:2} --rpm-version=%{version}-%{release}
@@ -778,7 +723,6 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?install_dnf_plugins} \
     %{?install_zypper_plugins} \
     %{?with_systemd} \
-    %{?with_subman_gui} \
     %{?with_subman_migration} \
     %{?with_cockpit} \
     %{?subpackages} \
@@ -803,21 +747,9 @@ python2 ./setup.py build_ext --build-lib %{buildroot}%{python2_sitearch} --quiet
 cp %{buildroot}%{python_sitearch}/rhsm/*.py %{buildroot}%{python2_sitearch}/rhsm/
 %endif
 
-%if 0%{?suse_version}
-%if %use_subman_gui
-%suse_update_desktop_file -n -r subscription-manager-gui Settings PackageManager
-%endif
-%endif
-
-%if %use_subman_gui
-desktop-file-validate %{buildroot}/etc/xdg/autostart/rhsm-icon.desktop
-desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-gui.desktop
-%else
 
 %if %use_cockpit
 desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-cockpit.desktop
-%endif
-
 %endif
 
 %find_lang rhsm
@@ -981,10 +913,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{completion_dir}/rhn-migrate-classic-to-rhsm
 %endif
 
-%if %use_subman_gui
-%{completion_dir}/rhsm-icon
-%endif
-
 %dir %{python_sitearch}/subscription_manager
 
 # code, python modules and packages
@@ -1120,54 +1048,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/subscription_manager/gui/__pycache__
 %endif
 %endif
-
-%if %{use_subman_gui}
-%files -n subscription-manager-gui
-%defattr(-,root,root,-)
-%attr(755,root,root) %{_sbindir}/subscription-manager-gui
-%if 0%{?suse_version}
-%dir %{python_sitearch}/subscription_manager/gui/data
-%dir %{python_sitearch}/subscription_manager/gui/data/glade
-%dir %{python_sitearch}/subscription_manager/gui/data/icons
-%dir %{python_sitearch}/subscription_manager/gui/data/ui
-%dir %{_datadir}/appdata
-%dir %{_datadir}/gnome
-%dir %{_datadir}/gnome/help
-%dir %{_datadir}/gnome/help/subscription-manager
-%dir %{_datadir}/gnome/help/subscription-manager/C
-%dir %{_datadir}/gnome/help/subscription-manager/C/figures
-%dir %{_datadir}/omf
-%dir %{_datadir}/omf/subscription-manager
-%else
-# symlink to console-helper
-%{_bindir}/subscription-manager-gui
-%endif
-
-%{_bindir}/rhsm-icon
-
-%doc %{_datadir}/gnome/help/subscription-manager/C/figures/*.png
-%doc %{_datadir}/gnome/help/subscription-manager/C/*.xml
-%{_datadir}/omf/subscription-manager/subscription-manager-C.omf
-
-%{_datadir}/applications/subscription-manager-gui.desktop
-%{_datadir}/appdata/subscription-manager-gui.appdata.xml
-
-# desktop config files
-%{_sysconfdir}/xdg/autostart/rhsm-icon.desktop
-%if !0%{?suse_version}
-%{_sysconfdir}/pam.d/subscription-manager-gui
-%{_sysconfdir}/security/console.apps/subscription-manager-gui
-%endif
-
-%{completion_dir}/subscription-manager-gui
-
-%doc
-%{_mandir}/man8/subscription-manager-gui.8*
-%{_mandir}/man8/rhsm-icon.8*
-%doc LICENSE
-%endif
-
-
 %if 0%{?use_subscription_manager_migration}
 %files -n subscription-manager-migration
 %defattr(-,root,root,-)
@@ -1277,9 +1157,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{_datadir}/cockpit/subscription-manager/po.*.js
 %{_datadir}/cockpit/subscription-manager/po.js
 %{_datadir}/metainfo/org.candlepinproject.subscription_manager.metainfo.xml
-%if ! %use_subman_gui
 %{_datadir}/applications/subscription-manager-cockpit.desktop
-%endif
 %endif
 
 %if %use_rhsm_icons
@@ -1340,13 +1218,6 @@ if [ "$1" = "2" ] ; then
 fi
 %endif
 
-%if %{use_subman_gui}
-%post -n subscription-manager-gui
-touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
-%if !0%{?suse_version}
-scrollkeeper-update -q -o %{_datadir}/omf/%{name} || :
-%endif
-%endif
 
 %if !0%{?suse_version}
 %if %{use_container_plugin}
@@ -1399,25 +1270,6 @@ fi
 # due to this BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1927245
 rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-empty
 
-%if %{use_subman_gui}
-%postun -n subscription-manager-gui
-if [ $1 -eq 0 ] ; then
-    %if (0%{?fedora} < 30 || 0%{?rhel} < 8)
-    touch --no-create %{_datadir}/icons/hicolor &>/dev/null
-    gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
-    %endif
-
-    %if !0%{?suse_version}
-    scrollkeeper-update -q || :
-    %endif
-fi
-%posttrans -n subscription-manager-gui
-%if (0%{?fedora} < 30 || 0%{?rhel} < 8)
-touch --no-create %{_datadir}/icons/hicolor &>/dev/null
-gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
-%endif
-
-%endif
 
 %changelog
 * Thu Jul 15 2021 Christopher Snyder <csnyder@redhat.com> 1.29.18-1
