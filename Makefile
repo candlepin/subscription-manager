@@ -41,15 +41,10 @@ RHSM_ICON_SRC_DIR := src/rhsm_icon
 DAEMONS_SRC_DIR := src/daemons
 CONTENT_PLUGINS_SRC_DIR := src/content_plugins/
 
-ANACONDA_ADDON_NAME = com_redhat_subscription_manager
-ANACONDA_ADDON_MODULE_SRC_DIR := src/initial-setup/$(ANACONDA_ADDON_NAME)
-
 # dirs we install to
 SYSTEMD_INST_DIR := $(PREFIX)/lib/systemd/system
 RHSM_PLUGIN_DIR := $(PREFIX)/share/rhsm-plugins/
 RHSM_PLUGIN_CONF_DIR := /etc/rhsm/pluginconf.d/
-ANACONDA_ADDON_INST_DIR := $(PREFIX)/share/anaconda/addons
-INITIAL_SETUP_INST_DIR := $(ANACONDA_ADDON_INST_DIR)/$(ANACONDA_ADDON_NAME)
 POLKIT_ACTIONS_INST_DIR := $(INSTALL_DIR)/polkit-1/actions
 COMPLETION_DIR ?= $(INSTALL_DIR)/bash-completion/completions/
 LIBEXEC_DIR ?= $(shell rpm --eval='%_libexecdir')
@@ -70,19 +65,8 @@ WITH_SUBMAN_MIGRATION ?= true
 # if OS is empty string, we're on el6 or sles11
 ifeq ($(OS),)
    GTK_VERSION?=2
-   INSTALL_FIRSTBOOT?=true
-   INSTALL_INITIAL_SETUP?=false
 else
    GTK_VERSION?=3
-   INSTALL_FIRSTBOOT?=false
-   INSTALL_INITIAL_SETUP?=true
-endif
-
-# /usr/share/rhn location for el6, suse
-ifeq ($(filter-out sles opensuse,$(OS)),)
-   FIRSTBOOT_MODULES_DIR?=$(PREFIX)/share/rhn/up2date_client/firstboot
-else
-   FIRSTBOOT_MODULES_DIR?=$(PREFIX)/share/firstboot/modules
 endif
 
 # always true until fedora is just dnf
@@ -279,40 +263,6 @@ install-example-plugins: install-plugins
 	install -m 644 -p example-plugins/*.py $(DESTDIR)/$(RHSM_PLUGIN_DIR)
 	install -m 644 -p example-plugins/*.conf $(DESTDIR)/$(RHSM_PLUGIN_CONF_DIR)
 
-.PHONY: install-firstboot
-ifeq ($(INSTALL_FIRSTBOOT),true)
-install-firstboot:
-	$(info Installing firstboot to $(FIRSTBOOT_MODULES_DIR))
-	install -d $(DESTDIR)/$(FIRSTBOOT_MODULES_DIR)
-	install -m 644 $(SRC_DIR)/gui/firstboot/*.py* $(DESTDIR)/$(FIRSTBOOT_MODULES_DIR)
-else
-install-firstboot:
-	# Override INSTALL_FIRSTBOOT variable on command line if needed
-	$(info firstboot is not configured to be install)
-endif
-
-# initial-setup, as in the 'initial-setup' rpm that runs at first boot.
-.PHONY: install-initial-setup
-ifeq ($(INSTALL_INITIAL_SETUP),true)
-install-initial-setup:
-	$(info Installing initial-setup to $(INITIAL_SETUP_INST_DIR))
-	install -d $(DESTDIR)/$(ANACONDA_ADDON_INST_DIR)
-	install -d $(DESTDIR)/$(INITIAL_SETUP_INST_DIR)/gui/spokes
-	install -d $(DESTDIR)/$(INITIAL_SETUP_INST_DIR)/{categories,ks}
-	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/*.py $(DESTDIR)/$(INITIAL_SETUP_INST_DIR)/
-	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/*.py $(DESTDIR)/$(INITIAL_SETUP_INST_DIR)/gui/
-	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/categories/*.py $(DESTDIR)/$(INITIAL_SETUP_INST_DIR)/categories/
-	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/gui/spokes/{*.py,*.ui} $(DESTDIR)/$(INITIAL_SETUP_INST_DIR)/gui/spokes/
-	install -m 644 -p $(ANACONDA_ADDON_MODULE_SRC_DIR)/ks/*.py $(DESTDIR)/$(INITIAL_SETUP_INST_DIR)/ks/
-else
-install-initial-setup:
-	# Set INSTALL_INITIAL_SETUP variable on command line if needed.
-	$(info initial-setup is not configured to be installed)
-endif
-
-.PHONY: install-post-boot
-install-post-boot: install-firstboot install-initial-setup
-
 .PHONY: install-via-setup
 install-via-setup: install-subpackages-via-setup
 	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py install --root $(DESTDIR) --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION) --prefix=$(PREFIX) \
@@ -351,7 +301,7 @@ install: install-via-setup install-files
 
 
 .PHONY: install-files
-install-files: dbus-install install-conf install-plugins install-post-boot install-ga
+install-files: dbus-install install-conf install-plugins install-ga
 	install -d $(DESTDIR)/var/log/rhsm
 	install -d $(DESTDIR)/var/spool/rhsm/debug
 	install -d $(DESTDIR)${RUN_DIR}/rhsm
