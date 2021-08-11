@@ -1282,7 +1282,7 @@ class UEPConnection(BaseConnection):
     def updateCombinedProfile(self, consumer_uuid, profile):
         """
         Updates the costumers' combined profile containing package profile,
-        enabled repositories and dnf/yum modules.
+        enabled repositories and dnf modules.
         :param consumer_uuid: UUID of consumer
         :param profile: Combined profile
         :return: Dict containing response from HTTP server

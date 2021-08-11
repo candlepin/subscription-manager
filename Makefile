@@ -69,10 +69,6 @@ else
    GTK_VERSION?=3
 endif
 
-# always true until fedora is just dnf
-INSTALL_YUM_PLUGINS ?= true
-YUM_PLUGINS_SRC_DIR := src/plugins
-
 # for fc22 or newer
 INSTALL_DNF_PLUGINS ?= false
 DNF_PLUGINS_SRC_DIR := src/plugins
@@ -198,14 +194,6 @@ install-plugins:
 	install -d $(DESTDIR)/$(RHSM_PLUGIN_CONF_DIR)
 	install -d $(DESTDIR)/etc/rhsm/ca
 	install -m 644 -p etc-conf/redhat-entitlement-authority.pem $(DESTDIR)/etc/rhsm/ca/redhat-entitlement-authority.pem
-
-	if [ "$(INSTALL_YUM_PLUGINS)" = "true" ] ; then \
-		echo "Installing Yum plugins" ; \
-		install -d $(DESTDIR)/etc/yum/pluginconf.d/ ; \
-		install -d $(DESTDIR)/$(PREFIX)/lib/yum-plugins/ ; \
-		install -m 644 -p src/plugins/*.py $(DESTDIR)/$(PREFIX)/lib/yum-plugins/ ; \
-		install -m 644 etc-conf/plugin/*.conf $(DESTDIR)/etc/yum/pluginconf.d/ ; \
-	fi;
 
 	if [ "$(INSTALL_ZYPPER_PLUGINS)" = "true" ] ; then \
 	  echo "Installing zypper plugins" ; \
