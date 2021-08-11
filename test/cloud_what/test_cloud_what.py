@@ -128,6 +128,22 @@ class TestAWSCloudProvider(unittest.TestCase):
     Class used for testing of AWS cloud provider
     """
 
+    def setUp(self) -> None:
+        """
+        Destroy instance of singleton and set instance not initialized
+        """
+        aws.AWSCloudProvider._instance = None
+        aws.AWSCloudProvider._initialized = False
+
+    def test_aws_instance_is_singleton(self):
+        """
+        Any subclass of BaseCloudProvider should behave as singleton
+        """
+        aws_cloud_provider_01 = aws.AWSCloudProvider({})
+        self.assertEqual(aws_cloud_provider_01._initialized, True)
+        aws_cloud_provider_02 = aws.AWSCloudProvider({})
+        self.assertEqual(id(aws_cloud_provider_01), id(aws_cloud_provider_02))
+
     def test_aws_cloud_provider_id(self):
         """
         Test of CLOUD_PROVIDER_ID
@@ -313,6 +329,47 @@ class TestAWSCloudProvider(unittest.TestCase):
         test_signature = aws_collector.get_signature()
         signature = '-----BEGIN PKCS7-----\n' + AWS_SIGNATURE + '\n-----END PKCS7-----'
         self.assertEqual(signature, test_signature)
+
+    @patch('cloud_what._base_provider.requests.Session')
+    def test_metadata_in_memory_cache(self, mock_session_class):
+        """
+        Test that metadata is read from in-memory cache
+        """
+        # First mock reading metadata from server
+        mock_session = Mock()
+        mock_session.send = Mock(side_effect=send_only_imds_v2_is_supported)
+        mock_session.prepare_request = Mock(side_effect=mock_prepare_request)
+        mock_session.hooks = {'response': []}
+        mock_session_class.return_value = mock_session
+
+        aws_provider = aws.AWSCloudProvider({})
+        # Mock that no metadata cache exists
+        aws_provider._get_metadata_from_cache = Mock(return_value=None)
+        # Mock that no token cache exists
+        aws_provider._get_token_from_cache_file = Mock(return_value=None)
+        # Mock writing token to cache file
+        aws_provider._write_token_to_cache_file = Mock()
+        # Mock getting metadata using IMDSv1 is disabled by user
+        aws_provider._get_metadata_from_server_imds_v1 = Mock(return_value=None)
+
+        # Try to get metadata from server
+        metadata = aws_provider.get_metadata()
+
+        self.assertEqual(metadata, AWS_METADATA)
+        # There should be two calls to IMDS server (put and get)
+        self.assertEqual(mock_session.send.call_count, 2)
+
+        # Test that metadata are stored in in-memory cache
+        self.assertEqual(metadata, aws_provider._cached_metadata)
+
+        # Try to get metadata once again
+        new_metadata = aws_provider.get_metadata()
+
+        # Metadata have to be still the same
+        self.assertEqual(new_metadata, AWS_METADATA)
+        # There should not be more calls to IMDS server
+        # (still only two calls from previous communication)
+        self.assertEqual(mock_session.send.call_count, 2)
 
     def test_reading_valid_cached_token(self):
         """
@@ -543,6 +600,8 @@ class TestAzureCloudProvider(unittest.TestCase):
         """
         Patch communication with metadata provider
         """
+        azure.AzureCloudProvider._instance = None
+        azure.AzureCloudProvider._initialized = False
         requests_patcher = patch('cloud_what._base_provider.requests')
         self.requests_mock = requests_patcher.start()
         self.addCleanup(requests_patcher.stop)
@@ -778,6 +837,8 @@ class TestGCPCloudProvider(unittest.TestCase):
         """
         Patch communication with metadata provider
         """
+        gcp.GCPCloudProvider._instance = None
+        gcp.GCPCloudProvider._initialized = False
         requests_patcher = patch('cloud_what._base_provider.requests')
         self.requests_mock = requests_patcher.start()
         self.addCleanup(requests_patcher.stop)
@@ -956,6 +1017,13 @@ class TestCloudProvider(unittest.TestCase):
         """
         Set up two mocks that are used in all tests
         """
+        aws.AWSCloudProvider._instance = None
+        aws.AWSCloudProvider._initialized = False
+        azure.AzureCloudProvider._instance = None
+        azure.AzureCloudProvider._initialized = False
+        gcp.GCPCloudProvider._instance = None
+        gcp.GCPCloudProvider._initialized = False
+
         host_collector_patcher = patch('cloud_what.provider.HostCollector')
         self.host_collector_mock = host_collector_patcher.start()
         self.host_fact_collector_instance = Mock()

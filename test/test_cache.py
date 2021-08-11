@@ -218,6 +218,11 @@ class TestProfileManager(unittest.TestCase):
         mock_db.conf.substitutions = {'releasever': '1', 'basearch': 'x86_64'}
         dnf_mock.dnf.Base = Mock(return_value=mock_db)
 
+        provider_patcher = patch('rhsm.profile.provider')
+        provider_mock = provider_patcher.start()
+        provider_mock.get_cloud_provider = Mock(return_value=None)
+        self.addCleanup(provider_patcher.stop)
+
         self.current_profile = self._mock_pkg_profile(current_pkgs, repo_file_name, ENABLED_MODULES)
         self.profile_mgr = ProfileManager()
         self.profile_mgr.current_profile = self.current_profile

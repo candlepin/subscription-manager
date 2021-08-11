@@ -23,6 +23,8 @@ import requests
 
 from rhsmlib.facts import cloud_facts
 
+from cloud_what.providers import aws, azure, gcp
+
 from subscription_manager import injection as inj
 
 AWS_METADATA = """
@@ -159,6 +161,12 @@ def mock_prepare_request(request):
 
 class TestCloudCollector(unittest.TestCase):
     def setUp(self):
+        aws.AWSCloudProvider._instance = None
+        aws.AWSCloudProvider._initialized = False
+        azure.AzureCloudProvider._instance = None
+        azure.AzureCloudProvider._initialized = False
+        gcp.GCPCloudProvider._instance = None
+        gcp.GCPCloudProvider._initialized = False
         super(TestCloudCollector, self).setUp()
         self.mock_facts = mock.Mock()
         inj.provide(inj.FACTS, self.mock_facts)
