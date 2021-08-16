@@ -200,12 +200,6 @@ install-plugins:
 		install -m 644 $(CONTENT_PLUGINS_SRC_DIR)/container_content.py $(DESTDIR)/$(RHSM_PLUGIN_DIR) ;\
 	fi;
 
-.PHONY: install-ga
-install-ga:
-	install -d $(DESTDIR)/$(PYTHON_INST_DIR)/ga_impls
-	install -m 644 -p $(SRC_DIR)/ga_impls/__init__.py* $(DESTDIR)/$(PYTHON_INST_DIR)/ga_impls
-	install -m 644 -p $(SRC_DIR)/ga_impls/ga_gtk3.py* $(DESTDIR)/$(PYTHON_INST_DIR)/ga_impls
-
 .PHONY: install-example-plugins
 install-example-plugins: install-plugins
 	install -m 644 -p example-plugins/*.py $(DESTDIR)/$(RHSM_PLUGIN_DIR)
@@ -244,7 +238,7 @@ install: install-via-setup install-files
 
 
 .PHONY: install-files
-install-files: dbus-install install-conf install-plugins install-ga
+install-files: dbus-install install-conf install-plugins
 	install -d $(DESTDIR)/var/log/rhsm
 	install -d $(DESTDIR)/var/spool/rhsm/debug
 	install -d $(DESTDIR)${RUN_DIR}/rhsm

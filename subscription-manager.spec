@@ -882,12 +882,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/subscription_manager/scripts/__pycache__
 %endif
 
-# dconf modules
-%dir %{python_sitearch}/subscription_manager/ga_impls
-%{python_sitearch}/subscription_manager/ga_impls/__init__.py*
-%{python_sitearch}/subscription_manager/ga_impls/__pycache__
-%{python_sitearch}/subscription_manager/ga_impls/ga_gtk3.py*
-
 # subscription-manager plugins
 %dir %{rhsm_plugins_dir}
 %dir %{_sysconfdir}/rhsm/pluginconf.d

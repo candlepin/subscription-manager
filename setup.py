@@ -43,8 +43,6 @@ from build_ext import i18n, lint, template, utils
 exclude_packages = [x.strip() for x in os.environ.get('EXCLUDE_PACKAGES', '').split(',') if x != '']
 exclude_packages.extend(
     [
-        '*.ga_impls',
-        '*.ga_impls.*',
         '*.plugin.ostree',
         '*.services.examples'
     ]

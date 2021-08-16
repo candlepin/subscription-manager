@@ -21,9 +21,7 @@ import threading
 
 from rhsmlib.dbus import constants
 
-from subscription_manager import ga_loader
-ga_loader.init_ga()
-from subscription_manager.ga import GLib
+from gi.repository import GLib
 from functools import partial
 from rhsmlib.services import config
 from rhsm.config import get_config_parser

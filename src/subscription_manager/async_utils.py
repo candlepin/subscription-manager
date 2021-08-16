@@ -22,7 +22,7 @@ import sys
 
 from six.moves import queue
 
-from subscription_manager.ga import GObject as ga_GObject
+from gi.repository import GObject as ga_GObject
 from subscription_manager.entcertlib import Disconnected
 from subscription_manager.managerlib import fetch_certificates
 from subscription_manager.injection import IDENTITY, \

@@ -21,7 +21,7 @@ from . import fixture
 
 import mock
 
-from subscription_manager.ga import GObject as ga_GObject
+from gi.repository import GObject as ga_GObject
 import subscription_manager.injection as inj
 from subscription_manager.injection import provide
 from subscription_manager import async_utils
