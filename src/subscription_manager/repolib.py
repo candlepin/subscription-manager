@@ -51,10 +51,10 @@ ALLOWED_CONTENT_TYPES = ["yum", "deb"]
 
 class YumPluginManager(object):
     """
-    Instance of this class is used for automatic enabling of yum plugins.
+    Instance of this class is used for automatic enabling of dnf plugins
+    (formerly for yum plugins, hence the name).
     """
 
-    YUM_PLUGIN_DIR = '/etc/yum/pluginconf.d'
     DNF_PLUGIN_DIR = '/etc/dnf/plugins'
 
     # List of yum plugins in YUM_PLUGIN_DIR which are automatically enabled
@@ -177,8 +177,6 @@ class YumPluginManager(object):
         enabled_plugins = []
 
         enabled_plugins.extend(cls._enable_plugins("dnf", cls.DNF_PLUGIN_DIR))
-
-        enabled_plugins.extend(cls._enable_plugins("yum", cls.YUM_PLUGIN_DIR))
 
         return enabled_plugins
 

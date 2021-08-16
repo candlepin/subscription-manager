@@ -2,7 +2,7 @@ Internationalization
 --------------------
 
 All parts of subscription-manager uses gettext to support internationalization
-(subscription-manager CLI tool, cockpit plugin, yum/dnf plugins, etc.).
+(subscription-manager CLI tool, cockpit plugin, dnf plugins, etc.).
 
 Translated strings for supported languages can be found in *.po files. These
 files are translated by translated by translators on this address:

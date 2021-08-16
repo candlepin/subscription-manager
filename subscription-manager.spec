@@ -95,7 +95,6 @@
 
 %global use_dnf (%{with python3} && (0%{?fedora} || (0%{?rhel}))) || (0%{?rhel} >= 7)
 %global create_libdnf_rpm (0%{?fedora} > 32 || 0%{?rhel} > 8)
-%global use_yum (0%{?rhel} && 0%{?rhel} <= 7)
 %global use_cockpit 0%{?fedora} || 0%{?rhel} >= 7
 
 %if %{with python3}
@@ -146,13 +145,6 @@
 %global install_dnf_plugins INSTALL_DNF_PLUGINS=true
 %else
 %global install_dnf_plugins INSTALL_DNF_PLUGINS=false
-%endif
-
-# makefile defaults to INSTALL_YUM_PLUGINS=true
-%if %{use_yum}
-%global install_yum_plugins INSTALL_YUM_PLUGINS=true
-%else
-%global install_yum_plugins INSTALL_YUM_PLUGINS=false
 %endif
 
 %if %{use_systemd}
@@ -295,10 +287,6 @@ Requires:  %{py_package_prefix}-setuptools
 Requires: python3-dbus
 %else
 Requires: %{?suse_version:dbus-1-python} %{!?suse_version:dbus-python}
-%endif
-
-%if %{use_yum}
-Requires: %{?suse_version:yum} %{!?suse_version:yum >= 3.2.29-73}
 %endif
 
 %if %{use_dnf}
@@ -787,7 +775,7 @@ make -f Makefile install VERSION=%{version}-%{release} \
     COMPLETION_DIR=%{completion_dir} \
     RUN_DIR=%{run_dir} \
     %{?install_ostree} %{?install_container} %{?gtk_version} \
-    %{?install_yum_plugins} %{?install_dnf_plugins} \
+    %{?install_dnf_plugins} \
     %{?install_zypper_plugins} \
     %{?with_systemd} \
     %{?with_subman_gui} \
@@ -835,7 +823,7 @@ desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-c
 %find_lang rhsm
 
 # fake out the redhat.repo file
-%if %{use_yum} || %{use_dnf}
+%if %{use_dnf}
     mkdir %{buildroot}%{_sysconfdir}/yum.repos.d
     touch %{buildroot}%{_sysconfdir}/yum.repos.d/redhat.repo
 %endif
@@ -890,13 +878,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %dir %{_prefix}/share/polkit-1/actions
 
 # Suse specific
-%if %{use_yum}
-    %dir %{_sysconfdir}/yum
-    %dir %{_sysconfdir}/yum/pluginconf.d
-    %dir %{_prefix}/lib/yum-plugins/
-%endif
-
-# Suse specific
 %if %{use_dnf}
     %dir %{_sysconfdir}/dnf
     %dir %{_sysconfdir}/dnf/plugins
@@ -904,7 +885,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %endif
 
 # Suse specific
-%if %{use_yum} || %{use_dnf}
+%if %{use_dnf}
     %dir %{_sysconfdir}/yum.repos.d
 %endif
 
@@ -968,16 +949,8 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{_sysconfdir}/security/console.apps/subscription-manager
 %endif
 
-%if %{use_yum} || %{use_dnf}
+%if %{use_dnf}
     %ghost %{_sysconfdir}/yum.repos.d/redhat.repo
-%endif
-
-# yum plugin config
-%if %{use_yum}
-    # remove the repo file when we are deleted
-    %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/subscription-manager.conf
-    %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/product-id.conf
-    %config(noreplace) %attr(644,root,root) %{_sysconfdir}/yum/pluginconf.d/search-disabled-repos.conf
 %endif
 
 # dnf plugin config
@@ -1050,15 +1023,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 # subscription-manager plugins
 %dir %{rhsm_plugins_dir}
 %dir %{_sysconfdir}/rhsm/pluginconf.d
-
-# yum plugins
-# Using _prefix + lib here instead of libdir as that evaluates to /usr/lib64 on x86_64,
-# but yum plugins seem to normally be sent to /usr/lib/:
-%if %{use_yum}
-    %{_prefix}/lib/yum-plugins/subscription-manager.py*
-    %{_prefix}/lib/yum-plugins/product-id.py*
-    %{_prefix}/lib/yum-plugins/search-disabled-repos.py*
-%endif
 
 # When libdnf rpm is created, then dnf plugin is part of subscription-manager rpm
 %if %{create_libdnf_rpm}
