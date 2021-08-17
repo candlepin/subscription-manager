@@ -294,6 +294,7 @@ install-files: dbus-install install-conf install-plugins install-ga
 	install -d $(DESTDIR)/var/spool/rhsm/debug
 	install -d $(DESTDIR)${RUN_DIR}/rhsm
 	install -d -m 750 $(DESTDIR)/var/lib/rhsm/{cache,facts,packages,repo_server_val}
+	install -d -m 750 $(DESTDIR)/var/cache/cloud-what
 
 	# Set up rhsmcertd daemon. Installation location depends on distro...
 	# if WITH_SYSTEMD == true: sles12, opensuse42, el7+, or fedora
