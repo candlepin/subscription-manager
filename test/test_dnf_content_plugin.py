@@ -19,10 +19,10 @@ from . import fixture
 
 
 # Yeah, this is weird. The yum plugins aren't on sys.path, nor are they in the
-# local src path that nosetest searches for modules. src/plugins is also not a
+# local src path that nosetest searches for modules. src/plugins/dnf is also not a
 # package dir (no __init__). And to top it off, the module name isn't a valid
 # python module name ('product-id.py', ie with an invalid '-').
-rel_path = "../src/dnf-plugins/product-id.py"
+rel_path = "../src/plugins/dnf/product-id.py"
 plugin_file_path = os.path.join(os.path.dirname(__file__), rel_path)
 plugin_file = open(plugin_file_path, 'r')
 
