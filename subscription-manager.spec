@@ -757,7 +757,7 @@ python2 ./setup.py build --quiet --gtk-version=%{?gtk3:3}%{?!gtk3:2} --rpm-versi
 %endif
 
 %if %{use_dnf}
-pushd src/dnf-plugins/product-id
+pushd src/plugins/libdnf
 %cmake -DCMAKE_BUILD_TYPE="Release"
 %if (0%{?rhel} && 0%{?rhel} <= 8)
 %make_build
@@ -785,7 +785,7 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?exclude_packages}
 
 %if %{use_dnf}
-pushd src/dnf-plugins/product-id
+pushd src/plugins/libdnf
 mkdir -p %{buildroot}%{_libdir}/libdnf/plugins
 %if (0%{?rhel} && 0%{?rhel} <= 8)
 %make_install
