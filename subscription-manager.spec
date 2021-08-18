@@ -244,7 +244,7 @@
 
 Name: subscription-manager
 Version: 1.28.13
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
 Group:   Productivity/Networking/System
@@ -1453,6 +1453,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Aug 18 2021 Christopher Snyder <csnyder@redhat.com> 1.28.13-4
+- 1993897 - [RFE] subscription-manager should return a module stream's
+  "activity" in the modular profile (wpoteat@redhat.com)
+
 * Tue Jun 08 2021 Christopher Snyder <csnyder@redhat.com> 1.28.13-3
 - 1951053: Fix issue with dnf/yum variables (jhnidek@redhat.com)
 
