@@ -1251,6 +1251,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
 %files -n python3-cloud-what
 %defattr(-,root,root,-)
+%attr(750,root,root) %dir %{_var}/cache/cloud-what
 %dir %{python_sitearch}/cloud_what
 %dir %{python_sitearch}/cloud_what/providers
 %{python_sitearch}/cloud_what/*
