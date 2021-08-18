@@ -101,7 +101,6 @@ class install(_install):
     user_options = _install.user_options + [
         ('rpm-version=', None, 'version and release of the RPM this is built for'),
         ('with-systemd=', None, 'whether to install w/ systemd support or not'),
-        ('with-subman-migration=', None, 'whether to install subman migration or not'),
         ('with-cockpit-desktop-entry=', None, 'whether to install desktop entry for subman cockpit plugin or not'),
     ]
 
@@ -109,7 +108,6 @@ class install(_install):
         _install.initialize_options(self)
         self.rpm_version = None
         self.with_systemd = None
-        self.with_subman_migration = None
         self.with_cockpit_desktop_entry = None
 
     def finalize_options(self):
@@ -174,28 +172,23 @@ class install_data(_install_data):
     """
     user_options = _install_data.user_options + [
         ('with-systemd=', None, 'whether to install w/ systemd support or not'),
-        ('with-subman-migration=', None, 'whether to install subman migration or not'),
         ('with-cockpit-desktop-entry=', None, 'whether to install desktop entry for subman cockpit plugin or not'),
     ]
 
     def initialize_options(self):
         _install_data.initialize_options(self)
         self.with_systemd = None
-        self.with_subman_migration = None
         self.with_cockpit_desktop_entry = None
         # Can't use super() because Command isn't a new-style class.
 
     def finalize_options(self):
         _install_data.finalize_options(self)
         self.set_undefined_options('install', ('with_systemd', 'with_systemd'))
-        self.set_undefined_options('install', ('with_subman_migration', 'with_subman_migration'))
         self.set_undefined_options('install', ('with_cockpit_desktop_entry', 'with_cockpit_desktop_entry'))
         if self.with_systemd is None:
             self.with_systemd = True  # default to True
         else:
             self.with_systemd = self.with_systemd == 'true'
-        # Set self.with_subman_migration to True, when self.with_subman_migration is equal to 'true'
-        self.with_subman_migration = self.with_subman_migration == 'true'
         # Set self.with_cockpit_desktop_entry to True when it is equal to 'true'
         if self.with_cockpit_desktop_entry is None:
             self.with_cockpit_desktop_entry = True  # default to True
@@ -207,8 +200,6 @@ class install_data(_install_data):
         if self.with_cockpit_desktop_entry:
             self.add_cockpit_desktop_entry()
             self.add_icons()
-        if self.with_subman_migration:
-            self.add_migration_doc_files()
         self.add_dbus_service_files()
         self.add_systemd_services()
         _install_data.run(self)
@@ -229,16 +220,6 @@ class install_data(_install_data):
 
     def add_cockpit_desktop_entry(self):
         self.__add_desktop_entry('subscription-manager-cockpit.desktop')
-
-    def add_migration_doc_files(self):
-        """
-        Add documentation for subscription-manager-migration
-        """
-        data_files = dict(self.data_files)
-        man8_pages = data_files['share/man/man8']
-        man8_pages = man8_pages.union(set(['man/rhn-migrate-classic-to-rhsm.8']))
-        data_files['share/man/man8'] = man8_pages
-        self.data_files = [(item, value) for item, value in data_files.items()]
 
     def add_dbus_service_files(self):
         """
@@ -343,7 +324,6 @@ setup(
     entry_points={
         'console_scripts': [
             'subscription-manager = subscription_manager.scripts.subscription_manager:main',
-            'rhn-migrate-classic-to-rhsm = subscription_manager.scripts.rhn_migrate_classic_to_rhsm:main',
             'rct = subscription_manager.scripts.rct:main',
             'rhsm-debug = subscription_manager.scripts.rhsm_debug:main',
             'rhsm-facts-service = subscription_manager.scripts.rhsm_facts_service:main',
@@ -352,13 +332,10 @@ setup(
         ],
     },
     data_files=[
-        # sat5to6 is packaged separately
         # man pages for gui are added in add_gui_doc_files(), when GUI package is created
         (
             'share/man/man8',
-            set(glob('man/*.8')) - \
-                set(['man/sat5to6.8']) - \
-                set(['man/rhn-migrate-classic-to-rhsm.8'])
+            set(glob('man/*.8'))
         ),
         ('share/man/man5', glob('man/*.5')),
     ],

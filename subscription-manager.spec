@@ -43,13 +43,6 @@
 %bcond_without python2_rhsm
 %endif
 
-# Install subscription-manager-migration only for rhel8 and lower
-%if 0%{?rhel} && 0%{?rhel} <= 8
-%global use_subscription_manager_migration 1
-%else
-%global use_subscription_manager_migration 0
-%endif
-
 %if 0%{?suse_version} && 0%{?suse_version} < 1200
 %global completion_dir %{_sysconfdir}/bash_completion.d
 %else
@@ -128,12 +121,6 @@
 %global with_systemd WITH_SYSTEMD=false
 %endif
 
-%if %{use_subscription_manager_migration}
-%global with_subman_migration WITH_SUBMAN_MIGRATION=true
-%else
-%global with_subman_migration WITH_SUBMAN_MIGRATION=false
-%endif
-
 %if %{use_cockpit}
 %global with_cockpit WITH_COCKPIT=true
 %else
@@ -164,10 +151,6 @@
 
 %if !%{use_container_plugin}
 %global exclude_packages %{exclude_packages}*.plugin.container,
-%endif
-
-%if !%{use_subscription_manager_migration}
-%global exclude_packages %{exclude_packages}subscription_manager.migrate,
 %endif
 
 # add new exclude_packages items before me
@@ -363,28 +346,6 @@ Requires: %{name} = %{version}-%{release}
 %description -n subscription-manager-plugin-container
 Enables handling of content of type 'containerImage' in any certificates
 from the server. Populates /etc/docker/certs.d appropriately.
-%endif
-
-%if %{use_subscription_manager_migration}
-%package -n subscription-manager-migration
-Summary: Migration scripts for moving to certificate based subscriptions
-%if 0%{?suse_version}
-Group: Productivity/Networking/System
-%else
-Group: System Environment/Base
-%endif
-Requires: %{name} = %{version}-%{release}
-Requires: rhnlib
-
-# Since the migration data package is not in Fedora, we can only require it
-# on RHEL.
-%if 0%{?rhel}
-Requires: subscription-manager-migration-data
-%endif
-
-%description -n subscription-manager-migration
-This package contains scripts that aid in moving to certificate based
-subscriptions
 %endif
 
 %if %{use_dnf}
@@ -643,7 +604,7 @@ cloud metadata and signatures.
 %build
 make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
     LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" \
-    %{?subpackages} %{exclude_packages} %{?with_subman_migration}
+    %{?subpackages} %{exclude_packages}
 
 %if %{with python2_rhsm}
 python2 ./setup.py build --quiet --rpm-version=%{version}-%{release}
@@ -671,7 +632,6 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?install_dnf_plugins} \
     %{?install_zypper_plugins} \
     %{?with_systemd} \
-    %{?with_subman_migration} \
     %{?with_cockpit} \
     %{?subpackages} \
     %{?exclude_packages}
@@ -857,10 +817,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{completion_dir}/rhsm-debug
 %{completion_dir}/rhsmcertd
 
-%if %{use_subscription_manager_migration}
-%{completion_dir}/rhn-migrate-classic-to-rhsm
-%endif
-
 %dir %{python_sitearch}/subscription_manager
 
 # code, python modules and packages
@@ -968,24 +924,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{_mandir}/man8/rhsm-debug.8*
 %{_mandir}/man5/rhsm.conf.5*
 %doc LICENSE
-
-%if 0%{?use_subscription_manager_migration}
-%files -n subscription-manager-migration
-%defattr(-,root,root,-)
-%dir %{python_sitearch}/subscription_manager/migrate
-%{python_sitearch}/subscription_manager/migrate/*.py*
-%if %{with python3}
-%{python_sitearch}/subscription_manager/migrate/__pycache__
-%endif
-%attr(755,root,root) %{_sbindir}/rhn-migrate-classic-to-rhsm
-
-%doc
-%{_mandir}/man8/rhn-migrate-classic-to-rhsm.8*
-%doc LICENSE
-%if 0%{?fedora}
-%doc README.Fedora
-%endif
-%endif
 
 %if %{use_container_plugin}
 %files -n subscription-manager-plugin-container

@@ -8,7 +8,6 @@ Subpackages
 
     subscription_manager.branding
     subscription_manager.gui
-    subscription_manager.migrate
     subscription_manager.plugin
 
 Submodules
