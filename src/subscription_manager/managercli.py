@@ -1034,7 +1034,7 @@ class OrgCommand(UserPassCommand):
         super(OrgCommand, self).__init__(name, shortdesc, primary)
         self._org = None
         if not hasattr(self, "_org_help_text"):
-            self._org_help_text = _("specify organization")
+            self._org_help_text = _("specify an organization")
         self.parser.add_option("--org", dest="org", metavar="ORG_KEY",
             help=self._org_help_text)
 
@@ -1334,7 +1334,6 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
     def __init__(self):
 
         shortdesc = _("Manage service levels for this system")
-        self._org_help_text = _("specify an organization when listing available service levels using the organization key, only used with --list")
         super(ServiceLevelCommand, self).__init__(
             "service-level",
             shortdesc,
@@ -1486,7 +1485,6 @@ class UsageCommand(SyspurposeCommand, OrgCommand):
 
     def __init__(self):
         shortdesc = _("Manage usage setting for this system")
-        self._org_help_text = _("use set and unset to define the value for this field")
         super(UsageCommand, self).__init__(
             "usage",
             shortdesc,
