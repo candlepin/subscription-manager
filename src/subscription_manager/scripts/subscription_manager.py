@@ -71,8 +71,6 @@ try:
     from subscription_manager import managercli
     from subscription_manager.cli_command.cli import handle_exception
 
-    from subscription_manager import ga_loader
-    ga_loader.init_ga()
 
 except KeyboardInterrupt:
     system_exit(0, "\nUser interrupted process.")

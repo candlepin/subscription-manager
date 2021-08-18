@@ -31,7 +31,6 @@ from subscription_manager.cache import EntitlementStatusCache, ProductStatusCach
 from subscription_manager.facts import Facts
 from subscription_manager.lock import ActionLock
 from rhsm.certificate import GMT
-from subscription_manager.gui.utils import AsyncWidgetUpdater, handle_gui_exception
 from rhsm.certificate2 import Version
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 
@@ -770,20 +769,6 @@ class StubPool(object):
 
     def __init__(self, poolid):
         self.id = poolid
-
-
-class StubAsyncUpdater(AsyncWidgetUpdater):
-
-    def update(self, widget_update, backend_method, args=[], kwargs={}, exception_msg=None, callback=None):
-        try:
-            result = backend_method(*args, **kwargs)
-            if callback:
-                callback(result)
-        except Exception as e:
-            message = exception_msg or str(e)
-            handle_gui_exception(e, message, self.parent_window)
-        finally:
-            widget_update.finished()
 
 
 class StubInstalledProductsManager(InstalledProductsManager):

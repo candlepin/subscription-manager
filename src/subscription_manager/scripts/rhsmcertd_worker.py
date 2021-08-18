@@ -37,9 +37,6 @@ import subscription_manager.injection as inj
 
 from rhsm import connection, config, logutil
 
-from subscription_manager import ga_loader
-ga_loader.init_ga()
-
 from subscription_manager.injectioninit import init_dep_injection
 init_dep_injection()
 
