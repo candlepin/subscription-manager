@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-30 02:22-0400\n"
-"PO-Revision-Date: 2021-07-14 13:04+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"PO-Revision-Date: 2021-07-30 16:04+0000\n"
+"Last-Translator: CoconutNut <patrick.vollandt@mein-gym.de>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/de/>\n"
 "Language: de\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.1\n"
+"X-Generator: Weblate 4.7.2\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/optparse.py:146
@@ -697,8 +697,9 @@ msgid ""
 "updates. You can use subscription-manager to assign subscriptions.\n"
 msgstr ""
 "\n"
-"Dieses System ist bei einem Berechtigungsserver registriert, empfängt jedoch "
-"keine Updates. Mit dem Abonnement-Manager können Sie Abonnements zuweisen.\n"
+"Dieses System ist beim Red Hat Subscription Management registriert, erhält "
+"jedoch keine Aktualisierungen. Sie können subscription-manager zum Zuweisen "
+"von Subskriptionen verwenden.\n"
 
 #: src/dnf-plugins/subscription-manager.py:87
 msgid "Not root, Subscription Management repositories not updated"
@@ -1037,7 +1038,7 @@ msgstr "Zertifikatsversion"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/rct/manifest_commands.py:274
 msgid "Subscription:"
-msgstr "Subskription:"
+msgstr "Abonnement:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/rct/manifest_commands.py:279
@@ -3042,7 +3043,7 @@ msgid ""
 "automatically.</small>"
 msgstr ""
 "<small>Die Servicelevel-Einstellung Ihres Systems wird bei der automatischen "
-"Subskription berücksichtigt.</small>"
+"Subskription berücksichtigt</small>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/data/glade/progress.glade:8
@@ -3193,8 +3194,7 @@ msgid ""
 "Would you like to register your system at this time? <b>(Strongly "
 "recommended.)</b>"
 msgstr ""
-"Möchten Sie Ihr System zu diesem Zeitpunkt registrieren? <b>(dringend "
-"empfohlen.)</b>"
+"Möchten Sie Ihr System jetzt registrieren? <b>(dringend empfohlen)</b> ."
 
 #: src/subscription_manager/gui/data/glade/registration_info.glade:160
 #: src/subscription_manager/gui/data/ui/registration_info.ui:231
@@ -4570,7 +4570,7 @@ msgstr "Host-Suffixe, die http-Proxy umgehen soll"
 msgid ""
 "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
-"Benutzeridentität ist entweder nicht vorhanden oder ist beschädigt. Try "
+"Benutzeridentität ist entweder nicht vorhanden oder ist beschädigt. Versuche "
 "register --help"
 
 #: src/subscription_manager/managercli.py:426
@@ -5261,7 +5261,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:1908
 msgid "email address to notify when subscription redemption is complete"
 msgstr ""
-"Zu benachrichtigende E-Mail-Adresse, sobald Subskription eingelöst wurde"
+"Zu benachrichtigende E-Mail-Adresse, sobald das Abonnement eingelöst wurde"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1911
