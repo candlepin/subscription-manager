@@ -58,7 +58,6 @@ INSTALL_CONTAINER_PLUGIN ?= true
 
 WITH_SYSTEMD ?= true
 WITH_COCKPIT ?= true
-WITH_SUBMAN_MIGRATION ?= true
 
 # for fc22 or newer
 INSTALL_DNF_PLUGINS ?= false
@@ -80,10 +79,6 @@ PYFILES := `find src/ test/ -name "*.py"`
 BIN_FILES := bin/subscription-manager \
 			 bin/rct \
 			 bin/rhsm-debug
-
-ifeq ($(WITH_SUBMAN_MIGRATION),true)
-    BIN_FILES := bin/rhn-migrate-classic-to-rhsm
-endif
 
 STYLEFILES=$(PYFILES) $(BIN_FILES)
 
@@ -150,9 +145,6 @@ install-conf:
 	install -m 644 etc-conf/dbus/polkit/com.redhat.RHSM1.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
 	install -m 644 etc-conf/dbus/polkit/com.redhat.RHSM1.Facts.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
 	install -m 644 etc-conf/syspurpose/valid_fields.json $(DESTDIR)/etc/rhsm/syspurpose/valid_fields.json; \
-	if [[ "$(WITH_SUBMAN_MIGRATION)" == "true" ]]; then \
-	    install -m 644 etc-conf/rhn-migrate-classic-to-rhsm.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/rhn-migrate-classic-to-rhsm; \
-	fi;
 	if [ "$(INSTALL_ZYPPER_PLUGINS)" = "true" ] ; then \
 	    install -m 644 etc-conf/zypper.conf $(DESTDIR)/etc/rhsm/; \
 	fi;
@@ -209,18 +201,13 @@ install-example-plugins: install-plugins
 install-via-setup: install-subpackages-via-setup
 	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py install --root $(DESTDIR) --rpm-version=$(VERSION) --prefix=$(PREFIX) \
 	--with-systemd=$(WITH_SYSTEMD) --with-cockpit-desktop-entry=${WITH_COCKPIT} \
-	--with-subman-migration=${WITH_SUBMAN_MIGRATION} $(SETUP_PY_INSTALL_PARAMS)
+	$(SETUP_PY_INSTALL_PARAMS)
 	mkdir -p $(DESTDIR)/$(PREFIX)/sbin/
 	mkdir -p $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/subscription-manager $(DESTDIR)/$(PREFIX)/sbin/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsmcertd-worker $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-service $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-facts-service $(DESTDIR)/$(LIBEXEC_DIR)/
-	if [[ "$(WITH_SUBMAN_MIGRATION)" == "true" ]]; then \
-	    mv $(DESTDIR)/$(PREFIX)/bin/rhn-migrate-classic-to-rhsm $(DESTDIR)/$(PREFIX)/sbin/; \
-	else \
-	    rm $(DESTDIR)/$(PREFIX)/bin/rhn-migrate-classic-to-rhsm; \
-	fi;
 	find $(DESTDIR)/$(PYTHON_SITELIB) -name requires.txt -exec sed -i '/dbus-python/d' {} \;
 
 
