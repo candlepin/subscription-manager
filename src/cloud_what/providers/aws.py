@@ -249,10 +249,13 @@ class AWSCloudProvider(BaseCloudProvider):
         """
         log.debug(f'Trying to get AWS metadata from {self.CLOUD_PROVIDER_METADATA_URL} using IMDSv1')
 
-        return self._get_data_from_server(
+        self._cached_metadata = self._get_data_from_server(
             data_type='metadata',
             url=self.CLOUD_PROVIDER_METADATA_URL
         )
+        if self._cached_metadata is not None:
+            self._cached_metadata_ctime = time.time()
+        return self._cached_metadata
 
     def _get_metadata_from_server_imds_v2(self) -> Union[str, None]:
         """
@@ -270,11 +273,15 @@ class AWSCloudProvider(BaseCloudProvider):
             **self.HTTP_HEADERS
         }
 
-        return self._get_data_from_server(
+        self._cached_metadata = self._get_data_from_server(
             data_type='metadata',
             url=self.CLOUD_PROVIDER_METADATA_URL,
             headers=headers
         )
+
+        if self._cached_metadata is not None:
+            self._cached_metadata_ctime = time.time()
+        return self._cached_metadata
 
     def _get_metadata_from_server(self) -> Union[str, None]:
         """
@@ -362,11 +369,16 @@ class AWSCloudProvider(BaseCloudProvider):
         if signature is not None:
             signature = f'-----BEGIN PKCS7-----\n{signature}\n-----END PKCS7-----'
 
+        # Save signature in in-memory cache
+        if signature is not None:
+            self._cached_signature = signature
+            self._cached_signature_ctime = time.time()
+
         return signature
 
     def get_metadata(self) -> Union[str, None]:
         """
-        Try to get metadata from the cache file first. When the cache file is not available, then try to
+        Try to get metadata from the in-memory cache first. When the in-memory cache is not valid, then try to
         get metadata from server.
         :return: String with metadata or None
         """
@@ -374,7 +386,7 @@ class AWSCloudProvider(BaseCloudProvider):
 
     def get_signature(self) -> Union[str, None]:
         """
-        Try to get signature from the cache file first. When the cache file is not available, then try to
+        Try to get signature from the in-memory cache first. When the in-memory cache is not valid, then try to
         get signature from server.
         :return: String with metadata or None
         """

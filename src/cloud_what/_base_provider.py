@@ -89,11 +89,35 @@ class BaseCloudProvider(object):
     # be in milliseconds
     TIMEOUT = 1.0
 
+    # Instances of BaseCloudProviders and subclasses behave as singletons to be able
+    # to use in-memory cache
+    _instance = None
+
+    # Instance of singleton is initialized only once, when instance is created
+    _initialized = False
+
+    def __new__(cls, *args, **kwargs):
+        """
+        Instance of cloud provider is singleton
+        :param args:
+        :param kwargs:
+        """
+        if not isinstance(cls._instance, cls):
+            # When there is not existing instance, then create first one
+            cls._instance = object.__new__(cls)
+        return cls._instance
+
     def __init__(self, hw_info: dict = None):
         """
         Initialize cloud provider
         :param hw_info: Dictionary with hardware information.
         """
+
+        # When instance of singleton have been already initialized, then
+        # it is not necessary to initialize instance anymore
+        if self._initialized is True:
+            return
+
         # In-memory cache of metadata
         self._cached_metadata: Union[str, None] = None
         # Time, when metadata was received. The value is in seconds (unix time)
@@ -120,6 +144,8 @@ class BaseCloudProvider(object):
         self._token_ctime: Union[float, None] = None
         # Time to Live of token
         self._token_ttl: Union[float, None] = None
+
+        self._initialized = True
 
     @staticmethod
     def collect_hw_facts() -> dict:
@@ -364,12 +390,16 @@ class BaseCloudProvider(object):
             else:
                 log.debug(f'Unable to get {self.CLOUD_PROVIDER_ID} {data_type}: {response.status_code}')
 
-    def _get_metadata_from_server(self) -> Union[str, None]:
+    def _get_metadata_from_server(self, headers: dict = None) -> Union[str, None]:
         """
         Method for gathering metadata from server
         :return: String containing metadata or None
         """
-        self._cached_metadata = self._get_data_from_server("metadata", self.CLOUD_PROVIDER_METADATA_URL)
+        self._cached_metadata = self._get_data_from_server(
+            data_type="metadata",
+            url=self.CLOUD_PROVIDER_METADATA_URL,
+            headers=headers
+        )
         if self._cached_metadata is not None:
             self._cached_metadata_ctime = time.time()
         return self._cached_metadata
@@ -414,6 +444,7 @@ class BaseCloudProvider(object):
         """
         signature = self._get_signature_from_in_memory_cache()
         if signature is not None:
+            log.debug('Using signature from in-memory cache')
             return signature
 
         signature = self._get_signature_from_cache_file()
@@ -429,6 +460,7 @@ class BaseCloudProvider(object):
         """
         metadata = self._get_metadata_from_in_memory_cache()
         if metadata is not None:
+            log.debug('Using metadata from in-memory cache')
             return metadata
 
         metadata = self._get_metadata_from_cache()

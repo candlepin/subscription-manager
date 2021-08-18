@@ -24,7 +24,7 @@ from mock import patch, Mock
 
 from subscription_manager.scripts.rhsmcertd_worker import _collect_cloud_info
 from .rhsmlib_test.test_cloud_facts import AWS_METADATA
-from cloud_what.providers import aws
+from cloud_what.providers import aws, azure, gcp
 
 AWS_SIGNATURE = """ABCDEFGHIJKLMNOPQRSTVWXYZabcdefghijklmnopqrstvwxyz01234567899w0BBwGggCSABIIB
 73sKICAiYWNjb3VudElkIiA6ICI1NjcwMTQ3ODY4OTAiLAogICJhcmNoaXRlY3R1cmUiIDogIng4
@@ -100,6 +100,15 @@ def mock_prepare_request(request):
 
 
 class TestAutomaticRegistration(unittest.TestCase):
+
+    def setUp(self):
+        aws.AWSCloudProvider._instance = None
+        aws.AWSCloudProvider._initialized = False
+        azure.AzureCloudProvider._instance = None
+        azure.AzureCloudProvider._initialized = False
+        gcp.GCPCloudProvider._instance = None
+        gcp.GCPCloudProvider._initialized = False
+
     @patch('cloud_what.providers.aws.requests.Session')
     def test_collect_cloud_info_one_cloud_provider_detected(self, mock_session_class):
         """
