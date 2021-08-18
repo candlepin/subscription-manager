@@ -332,12 +332,10 @@ setup(
         ],
     },
     data_files=[
-        # sat5to6 is packaged separately
         # man pages for gui are added in add_gui_doc_files(), when GUI package is created
         (
             'share/man/man8',
-            set(glob('man/*.8')) - \
-                set(['man/sat5to6.8'])
+            set(glob('man/*.8'))
         ),
         ('share/man/man5', glob('man/*.5')),
     ],

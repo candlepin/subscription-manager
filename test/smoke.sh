@@ -206,8 +206,6 @@ run_rhsm_debug () {
     run_tool "${RHSM_DEBUG}" "$@"
 }
 
-#run_sat5to6 () { run_tool "${SAT5TO6}" "$@" }
-
 run_rhsmcertd () {
     run_tool "${RHSMCERTD}" "$@"
 }
