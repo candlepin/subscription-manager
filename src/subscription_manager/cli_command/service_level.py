@@ -38,8 +38,6 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
     def __init__(self, subparser=None):
 
         shortdesc = _("Show or modify the system purpose service-level setting")
-        self._org_help_text = _(
-            "specify an organization when listing available service levels using the organization key, only used with --list")
         super(ServiceLevelCommand, self).__init__(
             "service-level",
             subparser,

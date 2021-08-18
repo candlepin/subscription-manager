@@ -23,7 +23,6 @@ class UsageCommand(AbstractSyspurposeCommand, OrgCommand):
 
     def __init__(self, subparser=None):
         shortdesc = _("Show or modify the system purpose usage setting")
-        self._org_help_text = _("use set and unset to define the value for this field")
         super(UsageCommand, self).__init__(
             "usage",
             subparser,
