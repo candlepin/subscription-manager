@@ -134,7 +134,6 @@ install-conf:
 	install -d $(DESTDIR)/etc/rhsm/{facts,syspurpose}
 	install -d $(DESTDIR)/etc/security/console.apps
 	install -m 644 etc-conf/rhsm.conf $(DESTDIR)/etc/rhsm/
-	install -T etc-conf/logging.conf $(DESTDIR)/etc/rhsm/logging.conf
 	install -m 644 etc-conf/logrotate.conf $(DESTDIR)/etc/logrotate.d/subscription-manager
 	install -m 644 etc-conf/subscription-manager.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/subscription-manager
 	install -m 644 etc-conf/rct.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/rct
