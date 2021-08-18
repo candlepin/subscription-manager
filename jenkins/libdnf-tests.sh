@@ -2,7 +2,7 @@ echo "GIT_COMMIT:" "${GIT_COMMIT}"
 
 export BUILD_DIR='./build'
 
-cd './src/dnf-plugins/product-id'
+cd './src/plugins/libdnf'
 rm -rf "${BUILD_DIR}"
 mkdir "${BUILD_DIR}"
 cd "${BUILD_DIR}"

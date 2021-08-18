@@ -199,14 +199,14 @@ install-plugins:
 	  echo "Installing zypper plugins" ; \
 		install -d $(DESTDIR)/etc/rhsm/zypper.repos.d ; \
 		install -d $(DESTDIR)/$(PREFIX)/lib/zypp/plugins/services ; \
-		install -m 755 -p src/zypper/services/* $(DESTDIR)/$(PREFIX)/lib/zypp/plugins/services ; \
+		install -m 755 -p src/plugins/zypper/services/* $(DESTDIR)/$(PREFIX)/lib/zypp/plugins/services ; \
 	fi;
 
 	if [ "$(INSTALL_DNF_PLUGINS)" = "true" ] ; then \
 		echo "Installing DNF plugins" ; \
 		install -d $(DESTDIR)/$(DNF_PLUGIN_PYTHON_SITELIB)/dnf-plugins/ ; \
 		install -d $(DESTDIR)/etc/dnf/plugins/ ; \
-		install -m 644 -p src/dnf-plugins/*.py $(DESTDIR)/$(DNF_PLUGIN_PYTHON_SITELIB)/dnf-plugins/ ; \
+		install -m 644 -p src/plugins/dnf/*.py $(DESTDIR)/$(DNF_PLUGIN_PYTHON_SITELIB)/dnf-plugins/ ; \
 		install -m 644 etc-conf/plugin/product-id.conf $(DESTDIR)/etc/dnf/plugins/ ; \
 		install -m 644 etc-conf/plugin/subscription-manager.conf $(DESTDIR)/etc/dnf/plugins/ ; \
 	fi;
