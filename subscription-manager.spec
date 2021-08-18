@@ -248,7 +248,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.20
+Version: 1.28.21
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1490,6 +1490,15 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Aug 18 2021 Christopher Snyder <csnyder@redhat.com> 1.28.21-1
+- Updated translations from weblate
+- 1922151: Add /var/cache/cloud-what to python3-cloud-what RPM.
+  (jhnidek@redhat.com)
+- 1922151: Use in-memory cache on AWS too (jhnidek@redhat.com)
+- hwprobe.py: Fix counting cores per cpu for Fujitsu A64FX CPU
+  (m.mizuma@jp.fujitsu.com)
+- 1980418: Add 'active' field to module stream profile (ianballou67@gmail.com)
+
 * Fri Jul 23 2021 Christopher Snyder <csnyder@redhat.com> 1.28.20-1
 - 1876828: Try to suppress errors in stderr when not run as root
   (mhorky@redhat.com)
