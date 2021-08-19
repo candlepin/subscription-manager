@@ -392,15 +392,19 @@ Lists the available addons system purpose values.
 
 .TP
 .B --username=USERNAME
-Gives the username for the account to use to connect to the organization account [Use with --list when unregistered].
+Gives the username for the account to use to connect to the organization account [Usable with --list on unregistered systems].
 
 .TP
 .B --password=PASSWORD
-Gives the user account password [Use with --list when unregistered].
+Gives the user account password [Usable with --list on unregistered systems].
 
 .TP
 .B --token=TOKEN
-Token to use when authorizing against the server [Use with --list when unregistered].
+Token to use when authorizing against the server [Usable with --list on unregistered systems].
+
+.TP
+.B --org=ORG
+Identifies the organization for which the addons applies [Usable with --list on unregistered systems].
 
 .TP
 .B --add=ADDON
@@ -413,10 +417,6 @@ Remove the addon from the list of requested addons.
 .TP
 .B --unset
 Removes all addons from the list of requested addons.
-
-.TP
-.B --org=ORG
-Identifies the organization for which the addons applies.
 
 
 .SS ROLE OPTIONS
@@ -436,15 +436,19 @@ Lists the available role system purpose values.
 
 .TP
 .B --username=USERNAME
-Gives the username for the account to use to connect to the organization account [Use with --list when unregistered].
+Gives the username for the account to use to connect to the organization account [Usable with --list on unregistered systems].
 
 .TP
 .B --password=PASSWORD
-Gives the user account password [Use with --list when unregistered].
+Gives the user account password [Usable with --list on unregistered systems].
 
 .TP
 .B --token=TOKEN
-Token to use when authorizing against the server [Use with --list when unregistered].
+Token to use when authorizing against the server [Usable with --list on unregistered systems].
+
+.TP
+.B --org=ORG
+Identifies the organization for which the role applies [Usable with --list on unregistered systems].
 
 .TP
 .B --set=ROLE
@@ -453,10 +457,6 @@ Role to apply to this system
 .TP
 .B --unset
 Removes any previously set role preference.
-
-.TP
-.B --org=ORG
-Identifies the organization for which the role applies.
 
 
 .SS SERVICE-LEVEL OPTIONS
@@ -484,15 +484,19 @@ Lists the available service levels.
 
 .TP
 .B --username=USERNAME
-Gives the username for the account to use to connect to the organization account [Use with --list when unregistered].
+Gives the username for the account to use to connect to the organization account [Usable with --list on unregistered systems].
 
 .TP
 .B --password=PASSWORD
-Gives the user account password [Use with --list when unregistered].
+Gives the user account password [Usable with --list on unregistered systems].
 
 .TP
 .B --token=TOKEN
-Token to use when authorizing against the server [Use with --list when unregistered].
+Token to use when authorizing against the server [Usable with --list on unregistered systems].
+
+.TP
+.B --org=ORG
+Identifies the organization for which the role applies [Usable with --list on unregistered systems].
 
 .TP
 .B --set=SERVICE_LEVEL
@@ -520,15 +524,19 @@ Lists the available usage system purpose values.
 
 .TP
 .B --username=USERNAME
-Gives the username for the account to use to connect to the organization account [Use with --list when unregistered].
+Gives the username for the account to use to connect to the organization account [Usable with --list on unregistered systems].
 
 .TP
 .B --password=PASSWORD
-Gives the user account password [Use with --list when unregistered].
+Gives the user account password [Usable with --list on unregistered systems].
 
 .TP
 .B --token=TOKEN
-Token to use when authorizing against the server [Use with --list when unregistered].
+Token to use when authorizing against the server [Usable with --list on unregistered systems].
+
+.TP
+.B --org=ORG
+Identifies the organization for which the role applies [Usable with --list on unregistered systems].
 
 .TP
 .B --set=USAGE
@@ -537,10 +545,6 @@ Usage to apply to this system
 .TP
 .B --unset
 Removes any previously set usage preference.
-
-.TP
-.B --org=ORG
-Identifies the organization for which the usage applies.
 
 
 .SS IMPORT OPTIONS

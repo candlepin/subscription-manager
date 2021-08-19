@@ -687,6 +687,17 @@ class SyspurposeCommand(CliCommand):
             else:
                 system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
 
+        if self.is_registered() and (
+            getattr(self.options, "username", None) or
+            getattr(self.options, "password", None) or
+            getattr(self.options, "token", None) or
+            getattr(self.options, "org", None)
+        ):
+            system_exit(os.EX_USAGE, _(
+                "Error: --username, --password, --token and --org "
+                "can be used only on unregistered systems"
+            ))
+
     def _get_valid_fields(self):
         """
         Try to get valid fields from server
@@ -1369,6 +1380,17 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
                 pass  # RHBZ 1632248 : User should be able to set/unset while not registered.
             else:
                 system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
+
+        if self.is_registered() and (
+            getattr(self.options, "username", None) or
+            getattr(self.options, "password", None) or
+            getattr(self.options, "token", None) or
+            getattr(self.options, "org", None)
+        ):
+            system_exit(os.EX_USAGE, _(
+                "Error: --username, --password, --token and --org "
+                "can be used only on unregistered systems"
+            ))
 
     def _do_command(self):
         self._validate_options()
