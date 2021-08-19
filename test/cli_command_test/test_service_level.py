@@ -54,6 +54,7 @@ class TestServiceLevelCommand(TestCliProxyCommand):
             self.assertEqual(e.code, os.EX_USAGE)
 
     def test_set_allows_list_good(self):
+        self.cc.is_registered = Mock(return_value=False)
         self.cc.main(["--set", "two", "--org", "test"])
         self.cc._validate_options()
 
@@ -109,3 +110,67 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         self.cc.cp.updateConsumer.assert_has_calls(
             [call('fixture_identity_mock_uuid', service_level='JRJAR')]
         )
+
+    def test_username_on_registered_system(self):
+        """Argument --username cannot be used on registered system."""
+        self.cc.is_registered = Mock(return_value=True)
+        self.cc.options = Mock()
+        self.cc.options.set = None
+        self.cc.options.unset = None
+        self.cc.options.to_add = None
+        self.cc.options.to_remove = None
+        self.cc.options.show = None
+        self.cc.options.list = True
+        self.cc.options.username = "admin"
+        try:
+            self.cc._validate_options()
+        except SystemExit as e:
+            self.assertEqual(e.code, os.EX_USAGE)
+
+    def test_password_on_registered_system(self):
+        """Argument --password cannot be used on registered system."""
+        self.cc.is_registered = Mock(return_value=True)
+        self.cc.options = Mock()
+        self.cc.options.set = None
+        self.cc.options.unset = None
+        self.cc.options.to_add = None
+        self.cc.options.to_remove = None
+        self.cc.options.show = None
+        self.cc.options.list = True
+        self.cc.options.password = "secret"
+        try:
+            self.cc._validate_options()
+        except SystemExit as e:
+            self.assertEqual(e.code, os.EX_USAGE)
+
+    def test_token_on_registered_system(self):
+        """Argument --token cannot be used on registered system."""
+        self.cc.is_registered = Mock(return_value=True)
+        self.cc.options = Mock()
+        self.cc.options.set = None
+        self.cc.options.unset = None
+        self.cc.options.to_add = None
+        self.cc.options.to_remove = None
+        self.cc.options.show = None
+        self.cc.options.list = True
+        self.cc.options.token = "TOKEN"
+        try:
+            self.cc._validate_options()
+        except SystemExit as e:
+            self.assertEqual(e.code, os.EX_USAGE)
+
+    def test_org_on_registered_system(self):
+        """Argument --org cannot be used on registered system."""
+        self.cc.is_registered = Mock(return_value=True)
+        self.cc.options = Mock()
+        self.cc.options.set = None
+        self.cc.options.unset = None
+        self.cc.options.to_add = None
+        self.cc.options.to_remove = None
+        self.cc.options.show = None
+        self.cc.options.list = True
+        self.cc.options.org = "organization"
+        try:
+            self.cc._validate_options()
+        except SystemExit as e:
+            self.assertEqual(e.code, os.EX_USAGE)
