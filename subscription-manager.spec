@@ -249,7 +249,7 @@
 
 Name: subscription-manager
 Version: 1.28.21
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
 Group:   Productivity/Networking/System
@@ -1490,6 +1490,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Aug 19 2021 Christopher Snyder <csnyder@redhat.com> 1.28.21-2
+- 1922151: Revert "hwprobe.py: Fix counting cores per cpu for Fujitsu A64FX CPU"
+  (ptoscano@redhat.com)
+
 * Wed Aug 18 2021 Christopher Snyder <csnyder@redhat.com> 1.28.21-1
 - Updated translations from weblate
 - 1922151: Add /var/cache/cloud-what to python3-cloud-what RPM.
