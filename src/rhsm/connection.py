@@ -310,9 +310,12 @@ class RestlibException(ConnectionException):
         self.msg = msg or ""
         self.headers = headers or {}
 
+    @property
+    def title(self):
+        return httplib.responses.get(self.code, "Unknown")
+
     def __str__(self):
-        error_title = httplib.responses.get(self.code, "Unknown")
-        return "HTTP error (%s - %s): %s" % (self.code, error_title, self.msg)
+        return f"HTTP error ({self.code} - {self.title}): {self.msg}"
 
 
 class GoneException(RestlibException):

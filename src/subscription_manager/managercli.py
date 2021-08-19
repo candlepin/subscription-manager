@@ -2185,12 +2185,16 @@ class AttachCommand(CliCommand):
                             subscribed = True
                     except connection.RestlibException as re:
                         log.exception(re)
+
+                        exception_mapper = ExceptionMapper()
+                        mapped_message = exception_mapper.get_message(re)
+
                         if re.code == 403:
-                            print(re.msg)  # already subscribed.
+                            print(mapped_message)  # already subscribed.
                         elif re.code == 400 or re.code == 404:
-                            print(re.msg)  # no such pool.
+                            print(mapped_message)  # no such pool.
                         else:
-                            system_exit(os.EX_SOFTWARE, re.msg)  # some other error.. don't try again
+                            system_exit(os.EX_SOFTWARE, mapped_message)  # some other error.. don't try again
                 if not subscribed:
                     return_code = 1
             # must be auto
