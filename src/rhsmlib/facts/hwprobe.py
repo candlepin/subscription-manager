@@ -260,25 +260,6 @@ class HardwareCollector(collector.FactsCollector):
         # that field was empty
         return None
 
-    def is_a64fx(self):
-        if self.arch != "aarch64":
-            return False
-        try:
-            # MIDR_EL1 register shows the identifer of ARM64 CPU.
-            # MIDR_EL1 of A64FX is as follows:
-            # FX700:  0x00000000461f0010
-            # FX1000: 0x00000000460f0010
-            f = open("/sys/devices/system/cpu/cpu0/regs/identification/midr_el1", 'r')
-        except IOError:
-            return False
-
-        midr = f.read().rstrip('\n')
-        f.close()
-        if midr == "0x00000000461f0010" or midr == "0x00000000460f0010":
-            return True
-
-        return False
-
     # replace/add with getting CPU Totals for s390x
     def _parse_s390x_sysinfo_topology(self, cpu_count, sysinfo):
         # to quote lscpu.c:
@@ -460,12 +441,7 @@ class HardwareCollector(collector.FactsCollector):
         # but lscpu makes the same assumption
 
         threads_per_core = self.count_cpumask_entries(cpu_files[0], 'thread_siblings_list')
-        if self.is_a64fx():
-            # core_siblings_list of A64FX shows the cpu mask which is in a same CMG,
-            # not the socket. A64FX has always 4 CMGs on the socket.
-            cores_per_cpu = self.count_cpumask_entries(cpu_files[0], 'core_siblings_list') * 4
-        else:
-            cores_per_cpu = self.count_cpumask_entries(cpu_files[0], 'core_siblings_list')
+        cores_per_cpu = self.count_cpumask_entries(cpu_files[0], 'core_siblings_list')
 
         # if we find valid values in cpu/cpuN/topology/*siblings_list
         # sometimes it's not there, particularly on rhel5
