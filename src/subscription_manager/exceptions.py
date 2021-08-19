@@ -25,7 +25,6 @@ from subscription_manager.cp_provider import TokenAuthUnsupportedException
 from subscription_manager.entcertlib import Disconnected
 
 from subscription_manager.i18n import ugettext as _
-from subscription_manager.printing_utils import to_unicode_or_bust
 
 SOCKET_MESSAGE = _('Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.')
 NETWORK_MESSAGE = _('Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.')
@@ -45,9 +44,9 @@ PERROR_SCHEME_MESSAGE = _("Server URL has an invalid scheme. http:// and https:/
 RATE_LIMIT_MESSAGE = _("The server rate limit has been exceeded, please try again later.")
 RATE_LIMIT_EXPIRATION = _("The server rate limit has been exceeded, please try again later. (Expires in %s seconds)")
 
-# TRANSLATORS: example: "HTTP error code 500: Error on the server" (the portion after the colon will
-# originate on the server)
-RESTLIB_MESSAGE = _(u"HTTP error code %s: %s")
+# TRANSLATORS: example: "You don't have permission to perform this action (HTTP error code 403: Forbidden)"
+# (the part before the opening bracket originates on the server)
+RESTLIB_MESSAGE = _("{message} (HTTP error code {code}: {title})")
 
 
 class ExceptionMapper(object):
@@ -87,7 +86,11 @@ class ExceptionMapper(object):
         return message_template % ssl_error
 
     def format_restlib_exception(self, restlib_exception, message_template):
-        return message_template % (restlib_exception.code, to_unicode_or_bust(restlib_exception.msg))
+        return message_template.format(
+            message=restlib_exception.msg,
+            code=restlib_exception.code,
+            title=restlib_exception.title
+        )
 
     def format_rate_limit_exception(self, rate_limit_exception, _):
         if rate_limit_exception.retry_after is not None:
