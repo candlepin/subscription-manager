@@ -25,11 +25,9 @@ from build_ext.utils import Utils, BaseCommand, memoize
 # These dependencies aren't available in build environments.  We won't need any
 # linting functionality there though, so just create a dummy class so we can proceed.
 try:
-    # These dependencies aren't available in build environments.  We won't need any
-    # linting functionality there though, so just create a dummy class so we can proceed.
-    import pep8
+    import pycodestyle
 except ImportError:
-    pep8 = None
+    pycodestyle = None
 
 try:
     import pkg_resources
@@ -403,7 +401,7 @@ def detect_overindent(logical_line, tokens, indent_level, hang_closing, indent_c
     """Flag lines that are overindented.  This includes lines that are indented solely to align
     vertically with an opening brace.  This rule allows continuation lines to be relatively
     indented up to 8 spaces and closes braces to be relatively indented up to 4 spaces.  Heavily
-    adapted from pep8's continued_indentation method
+    adapted from pycodestyle's continued_indentation method
 
     Okay: foo = my_func('hello',
               'world'
@@ -441,7 +439,7 @@ def detect_overindent(logical_line, tokens, indent_level, hang_closing, indent_c
         newline = row < start[0] - first_row
         if newline:
             row = start[0] - first_row
-            newline = not last_token_multiline and token_type not in pep8.NEWLINE
+            newline = not last_token_multiline and token_type not in pycodestyle.NEWLINE
 
         if newline:
             # this is the beginning of a continuation line.
@@ -450,7 +448,7 @@ def detect_overindent(logical_line, tokens, indent_level, hang_closing, indent_c
                 print("... " + line.rstrip())
 
             # record the initial indent.
-            rel_indent[row] = pep8.expand_indent(line) - indent_level
+            rel_indent[row] = pycodestyle.expand_indent(line) - indent_level
 
             # identify closing bracket
             close_bracket = (token_type == tokenize.OP and text in ']})')
