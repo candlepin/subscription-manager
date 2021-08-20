@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  test:
+    # GitHub only supports Ubuntu, unfortunately
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        # Test with two versions of Python:
+        # - The lowest one this branch of subscription-manager supports
+        # - The highest Python version officialy supported
+        python-version: [3.6, 3.9]
+        # Test with multiple versions of system
+        container-image: ["fedora:34", "centos8"]
+
+    container:
+      image: ${{ matrix.container-image }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+        # By using cache the installation should be a bit faster
+      - name: Use pip cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('requirements*') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('requirements*') }}
+            ${{ runner.os }}-${{ matrix.python-version }}-
+            ${{ runner.os }}-
+
+      - name: Stylish
+        run: |
+          sh jenkins/python3-stylish-tests.sh
+
+      - name: Tests
+        run: |
+          sh jenkins/python3-tests.sh
