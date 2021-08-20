@@ -20,9 +20,7 @@ test_require = [
 ]
 
 install_requires = [
-    'pep8',
     'flake8',
-    'pyflakes',
     'lxml'
 ]
 
