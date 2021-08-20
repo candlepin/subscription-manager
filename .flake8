@@ -9,9 +9,6 @@ ignore =
     # E125: continuation line with same indent as next logical line
     # wrong indentation of continuation lines
     E125,
-    # E131: continuation line unaligned for hanging indent
-    # wrong indentation of continuation lines
-    E131,
     # E265: block comment should start with '# '
     # comments and commented code need a space after '#'
     E265,
@@ -22,8 +19,6 @@ ignore =
     E501,
     # E713 test for membership should be 'not in'
     E713,
-    # E714 test for object identity should be 'is not'
-    E714,
     # E722: do not use bare 'except'
     # done a lot, needs to be fixed by catching all what is needed
     E722,
