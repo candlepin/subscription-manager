@@ -224,8 +224,8 @@ class RhsmConfigParser(SafeConfigParser):
         :param print_warning: print warning, when provided value is not valid
         :return: True, when value is valid. Otherwise return False
         """
-        valid = ['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG', 'NOSET']
-        if value not in valid:
+        valid = ['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG']
+        if value not in valid + ["NOTSET"]:
             if print_warning is True:
                 print("Invalid Log Level: {lvl}, setting to INFO for this run.".format(lvl=value), file=sys.stderr)
                 print(
