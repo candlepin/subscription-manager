@@ -14,11 +14,11 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 #
 import rhsm.config
-import collections
+import collections.abc
 import six
 
 
-class Config(collections.MutableMapping):
+class Config(collections.abc.MutableMapping):
     def __init__(self, parser=None, auto_persist=False):
         if parser:
             self._parser = parser
@@ -94,7 +94,7 @@ class Config(collections.MutableMapping):
         return "%s" % result
 
 
-class ConfigSection(collections.MutableMapping):
+class ConfigSection(collections.abc.MutableMapping):
     def __init__(self, wrapper, parser, section, auto_persist=False):
         self._wrapper = wrapper
         self._parser = parser

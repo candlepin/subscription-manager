@@ -13,14 +13,14 @@ from __future__ import print_function, division, absolute_import
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 from datetime import datetime
-import collections
+import collections.abc
 import logging
 
 log = logging.getLogger(__name__)
 
 
 # TODO: Likely a bit much for this case
-class FactsDict(collections.MutableMapping):
+class FactsDict(collections.abc.MutableMapping):
     """A dict for facts that ignores items in 'graylist' on compares."""
 
     graylist = set(['cpu.cpu_mhz', 'lscpu.cpu_mhz'])
