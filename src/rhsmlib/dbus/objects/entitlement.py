@@ -23,6 +23,7 @@ from rhsmlib.services.entitlement import EntitlementService
 from subscription_manager.injectioninit import init_dep_injection
 from subscription_manager.i18n import Locale
 
+
 init_dep_injection()
 
 log = logging.getLogger(__name__)
@@ -44,6 +45,7 @@ class EntitlementDBusObject(base_object.BaseObject):
         in_signature='ss',
         out_signature='s'
     )
+    @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def GetStatus(self, on_date, locale, sender=None):
         """
@@ -63,8 +65,8 @@ class EntitlementDBusObject(base_object.BaseObject):
         Locale.set(locale)
 
         try:
-            # get_status doesn't need a Candlepin connection
-            status = EntitlementService(None).get_status(on_date=on_date, force=True)
+            cp = self.build_uep(options={})
+            status = EntitlementService(cp).get_status(on_date=on_date, force=True)
         except Exception as e:
             log.exception(e)
             raise dbus.DBusException(str(e))
@@ -90,6 +92,7 @@ class EntitlementDBusObject(base_object.BaseObject):
         in_signature='a{sv}a{sv}s',
         out_signature='s'
     )
+    @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def GetPools(self, options, proxy_options, locale, sender=None):
         """
@@ -141,6 +144,7 @@ class EntitlementDBusObject(base_object.BaseObject):
         in_signature='a{sv}s',
         out_signature='s'
     )
+    @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def RemoveAllEntitlements(self, proxy_options, locale, sender=None):
         """
@@ -164,6 +168,7 @@ class EntitlementDBusObject(base_object.BaseObject):
         in_signature='asa{sv}s',
         out_signature='s'
     )
+    @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def RemoveEntitlementsByPoolIds(self, pool_ids, proxy_options, locale, sender=None):
         """
@@ -191,6 +196,7 @@ class EntitlementDBusObject(base_object.BaseObject):
         in_signature='asa{sv}s',
         out_signature='s'
     )
+    @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def RemoveEntitlementsBySerials(self, serials, proxy_options, locale, sender=None):
         """
@@ -213,7 +219,8 @@ class EntitlementDBusObject(base_object.BaseObject):
 
         return json.dumps(removed_serials)
 
-    def reload(self):
+    @staticmethod
+    def reload():
         entitlement_service = EntitlementService()
         # TODO: find better solution
         entitlement_service.identity.reload()

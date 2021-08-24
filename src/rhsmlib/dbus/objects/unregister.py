@@ -50,6 +50,7 @@ class UnregisterDBusObject(base_object.BaseObject):
         constants.UNREGISTER_INTERFACE,
         in_signature='a{sv}s',
         out_signature='')
+    @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def Unregister(self, proxy_options, locale, sender=None):
         """
