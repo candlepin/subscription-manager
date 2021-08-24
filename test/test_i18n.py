@@ -1,6 +1,5 @@
 from __future__ import print_function, division, absolute_import
 
-from nose.plugins.attrib import attr
 from mock import patch
 
 try:
@@ -15,6 +14,8 @@ import os
 from subscription_manager.i18n import configure_i18n
 from subscription_manager.unicode_width import textual_width
 
+from test import subman_marker_functional, subman_marker_slow_timeout
+
 
 class TestI18N(unittest.TestCase):
     def test_configure_i18n(self):
@@ -23,7 +24,8 @@ class TestI18N(unittest.TestCase):
     # Long running test, requires python-kitchen to run
     # determines if python-kitchen replacement gives the
     # same result
-    @attr('functional')
+    @subman_marker_functional
+    @subman_marker_slow_timeout
     def test_text_width(self):
         from kitchen.text.display import textual_width as kitchen_textual_width
         for po_file in glob.glob('po/*.po'):

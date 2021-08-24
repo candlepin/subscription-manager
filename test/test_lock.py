@@ -13,9 +13,9 @@ import tempfile
 import threading
 import time
 
-from nose import SkipTest
-
 from subscription_manager import lock
+
+import pytest
 
 
 class TestLock(unittest.TestCase):
@@ -82,14 +82,12 @@ class TestLock(unittest.TestCase):
         self.close_lock_holder()
         self.fail("timeoutsdfsdf")
 
+    @pytest.mark.skip("This test is unreliable.")
     def test_two_pids_blocking_none_blocks(self):
         # This test will either fail occasionally, or have to wait an
         # unreasonable time period, which just slows down the test suite.
         # Left in code since it is a useful test if changing lock behavior,
         # but too troublesome in general.
-        skip_test = True
-        if skip_test:
-            raise SkipTest('Skipping lock.test_two_pids_blocking_none_blocks')
 
         lock_path = self._lock_path()
         # start a different proc that holds the lock, that times out after 3

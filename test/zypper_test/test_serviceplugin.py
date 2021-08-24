@@ -6,22 +6,17 @@ import os
 import subprocess
 import tempfile
 
-from nose.plugins.attrib import attr
+from test import subman_marker_functional, subman_marker_needs_envvars, subman_marker_zypper
 
 
-@attr('zypper')
+@subman_marker_functional
+@subman_marker_zypper
+@subman_marker_needs_envvars('RHSM_USER', 'RHSM_PASSWORD', 'RHSM_URL', 'RHSM_POOL', 'RHSM_TEST_REPO', 'RHSM_TEST_PACKAGE')
 class TestServicePlugin(TestCase):
 
     SUB_MAN = "python -m subscription_manager.scripts.subscription_manager"
 
     def setUp(self):
-        missing = []
-        for name in ['RHSM_USER', 'RHSM_PASSWORD', 'RHSM_URL', 'RHSM_POOL', 'RHSM_TEST_REPO', 'RHSM_TEST_PACKAGE']:
-            if name not in os.environ:
-                missing.append(name)
-        if missing:
-            raise EnvironmentError('Missing {0} environment variables'.format(str(missing)))
-
         # start in a non-registered state
         subprocess.call('{sub_man} unregister'.format(sub_man=self.SUB_MAN), shell=True)
 
