@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-09 12:30+0200\n"
-"PO-Revision-Date: 2021-07-14 13:04+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"PO-Revision-Date: 2021-07-30 16:04+0000\n"
+"Last-Translator: CoconutNut <patrick.vollandt@mein-gym.de>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/de/>\n"
 "Language: de\n"
@@ -19,13 +19,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.1\n"
+"X-Generator: Weblate 4.7.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
-#, fuzzy
-#| msgid "Usage:  "
 msgid "usage: "
-msgstr "Aufruf:  "
+msgstr "Verwendung: "
 
 #: /usr/lib64/python3.9/argparse.py:854
 msgid ".__call__() not defined"
@@ -110,16 +108,14 @@ msgid "cannot have multiple subparser arguments"
 msgstr "Argument konnte nicht analysiert werden: %s"
 
 #: /usr/lib64/python3.9/argparse.py:1820 /usr/lib64/python3.9/argparse.py:2331
-#, fuzzy, python-format
-#| msgid "Unknown arguments: %s"
+#, python-format
 msgid "unrecognized arguments: %s"
-msgstr "Unbekannte Argumente: %s"
+msgstr "Unerkannte Argumente: %s"
 
 #: /usr/lib64/python3.9/argparse.py:1921
-#, fuzzy, python-format
-#| msgid "Unknown arguments: %s"
+#, python-format
 msgid "not allowed with argument %s"
-msgstr "Unbekannte Argumente: %s"
+msgstr "nicht erlaubt mit dem Aurgument: %s"
 
 #: /usr/lib64/python3.9/argparse.py:1967 /usr/lib64/python3.9/argparse.py:1981
 #, python-format
@@ -133,10 +129,9 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2103
-#, fuzzy, python-format
-#| msgid "Wrong number of arguments specified.\n"
+#, python-format
 msgid "one of the arguments %s is required"
-msgstr "Falsche Anzahl an Argumenten angegeben.\n"
+msgstr "eines der Argumente %s ist benötigt"
 
 #: /usr/lib64/python3.9/argparse.py:2146
 msgid "expected one argument"
@@ -644,10 +639,8 @@ msgid "Usage"
 msgstr "Verbrauch"
 
 #: cockpit/src/subscriptions-view.jsx:244
-#, fuzzy
-#| msgid "Role:  "
 msgid "Role"
-msgstr "Rolle:  "
+msgstr "Rolle"
 
 #: cockpit/src/subscriptions-view.jsx:250 src/rct/printing.py:86
 msgid "Add-ons"
@@ -831,19 +824,15 @@ msgstr ""
 "können sich mit dem Abo-Manager registrieren.\n"
 
 #: src/dnf-plugins/subscription-manager.py:54
-#, fuzzy
-#| msgid ""
-#| "This system is registered to Red Hat Subscription Management, but is not "
-#| "receiving updates. You can use subscription-manager to assign "
-#| "subscriptions."
 msgid ""
 "\n"
 "This system is registered with an entitlement server, but is not receiving "
 "updates. You can use subscription-manager to assign subscriptions.\n"
 msgstr ""
+"\n"
 "Dieses System ist beim Red Hat Subscription Management registriert, erhält "
 "jedoch keine Aktualisierungen. Sie können subscription-manager zum Zuweisen "
-"von Subskriptionen verwenden."
+"von Subskriptionen verwenden.\n"
 
 #: src/dnf-plugins/subscription-manager.py:87
 msgid "Not root, Subscription Management repositories not updated"
@@ -1196,7 +1185,7 @@ msgstr "Zertifikatsversion"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/rct/manifest_commands.py:274
 msgid "Subscription:"
-msgstr "Subskription"
+msgstr "Abonnement:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/rct/manifest_commands.py:279
@@ -2471,7 +2460,7 @@ msgstr "Host-Suffixe, die http-Proxy umgehen soll"
 msgid ""
 "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
-"Benutzeridentität ist entweder nicht vorhanden oder ist beschädigt. Try "
+"Benutzeridentität ist entweder nicht vorhanden oder ist beschädigt. Versuche "
 "register --help"
 
 #: src/subscription_manager/cli_command/cli.py:234
@@ -3466,7 +3455,7 @@ msgstr ""
 #: src/subscription_manager/cli_command/redeem.py:34
 msgid "email address to notify when subscription redemption is complete"
 msgstr ""
-"Zu benachrichtigende E-Mail-Adresse, sobald Subskription eingelöst wurde"
+"Zu benachrichtigende E-Mail-Adresse, sobald das Abonnement eingelöst wurde"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/redeem.py:37
@@ -5335,7 +5324,7 @@ msgid ""
 "automatically.</small>"
 msgstr ""
 "<small>Die Servicelevel-Einstellung Ihres Systems wird bei der automatischen "
-"Subskription berücksichtigt.</small>"
+"Subskription berücksichtigt</small>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/data/glade/progress.glade:8
@@ -5486,8 +5475,7 @@ msgid ""
 "Would you like to register your system at this time? <b>(Strongly "
 "recommended.)</b>"
 msgstr ""
-"Möchten Sie Ihr System zu diesem Zeitpunkt registrieren? <b>(dringend "
-"empfohlen.)</b>"
+"Möchten Sie Ihr System jetzt registrieren? <b>(dringend empfohlen)</b> ."
 
 #: src/subscription_manager/gui/data/glade/registration_info.glade:160
 #: src/subscription_manager/gui/data/ui/registration_info.ui:231
@@ -6049,7 +6037,7 @@ msgid ""
 "Error in preferences dialog.Please see /var/log/rhsm/rhsm.log for more "
 "information."
 msgstr ""
-"Fehler im Einstellungsdialog. Siehe /var/log/rhsm/rhsm.log  für weitere "
+"Fehler im Einstellungsdialog. Siehe /var/log/rhsm/rhsm.log für weitere "
 "Informationen."
 
 #: src/subscription_manager/gui/managergui.py:505
