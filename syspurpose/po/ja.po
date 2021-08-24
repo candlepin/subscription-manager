@@ -1,12 +1,13 @@
 # kemorigu <kemorigu@redhat.com>, 2018. #zanata
 # Sundeep Anand <suanand@redhat.com>, 2021.
+# Ludek Janda <ljanda@redhat.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-13 14:02-0500\n"
-"PO-Revision-Date: 2021-01-30 16:40+0000\n"
-"Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
+"PO-Revision-Date: 2021-08-23 17:04+0000\n"
+"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/syspurpose-1-28/ja/>\n"
 "Language: ja\n"
@@ -14,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.8\n"
 
 #: src/syspurpose/cli.py:29
 #, python-brace-format
@@ -174,13 +175,13 @@ msgstr ""
 msgid ""
 "Warning: Provided value \"{val}\" is not included in the list of valid "
 "values for attribute {attr}:"
-msgstr "警告: 指定された値 \"{val}\" は、属性 {attr} の有効な値のリストに含まれていません。"
+msgstr "警告: 指定された値 \"{val}\" は、属性 {attr} の有効な値のリストに含まれていません:"
 
 #: src/syspurpose/files.py:438
 #, python-brace-format
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
-msgstr "警告: 指定された値 \"{key}\" は有効なキーのリストに含まれていません。"
+msgstr "警告: 指定されたキー \"{key}\" は有効なキーのリストに含まれていません:"
 
 #: src/syspurpose/main.py:32
 msgid "User interrupted process"
