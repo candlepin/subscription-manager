@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-09 12:30+0200\n"
-"PO-Revision-Date: 2021-06-15 18:55+0000\n"
+"PO-Revision-Date: 2021-08-04 23:04+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/it/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6.2\n"
+"X-Generator: Weblate 4.7.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -2381,10 +2381,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/cli.py:168
-#, fuzzy
-#| msgid "proxy URL in the form of proxy_hostname:proxy_port"
 msgid "proxy URL in the form of hostname:port"
-msgstr "URL del proxy con un formato nomehost_proxy:porta_proxy"
+msgstr "URL del proxy con un formato nomehost:porta"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/cli.py:170
@@ -3939,10 +3937,9 @@ msgstr "mostra lo scopo di sistema corrente"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/syspurpose.py:85
-#, fuzzy, python-brace-format
-#| msgid "{prog}: error: {msg}"
+#, python-brace-format
 msgid "{prog} {name}"
-msgstr "{prog}: errore: {msg}"
+msgstr "{prog} {name}"
 
 #: src/subscription_manager/cli_command/syspurpose.py:87
 msgid "Syspurpose submodules"
