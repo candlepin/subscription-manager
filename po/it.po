@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-23 11:23+0200\n"
-"PO-Revision-Date: 2021-08-04 23:04+0000\n"
+"PO-Revision-Date: 2021-08-24 02:04+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/it/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 4.8\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -1139,11 +1139,11 @@ msgstr "sovrascrivi i file esistenti"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/rct/manifest_commands.py:328
-#, fuzzy, python-brace-format
-#| msgid "File {filename} exists. Use -f to force overwriting the file."
+#, python-brace-format
 msgid "File \"{filename}\" exists. Use -f to force overwriting the file."
 msgstr ""
-"Il file {filename} esiste. Usare -f per forzare la sovrascrittura del file."
+"Il file \"{filename}\" esiste. Usare -f per forzare la sovrascrittura del "
+"file."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/rct/manifest_commands.py:331
@@ -1321,7 +1321,7 @@ msgstr "ID del pool"
 
 #: src/rct/printing.py:235
 msgid "Authorized Content URLs:"
-msgstr ""
+msgstr "URL di contenuti autorizzati:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/printing.py:256
@@ -1902,6 +1902,8 @@ msgid ""
 "Error: --username, --password, --token and --org can be used only on "
 "unregistered systems"
 msgstr ""
+"Errore: --username, --password, --token e --org possono essere usati solo in "
+"sistemi non registrati"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:180
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:191
@@ -3003,8 +3005,6 @@ msgstr "Nessun pool di sottoscrizione consumato è stato trovato."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/org.py:32
-#, fuzzy
-#| msgid "specify organization"
 msgid "specify an organization"
 msgstr "specifica l'organizzazione"
 
@@ -3969,7 +3969,7 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:49
 #, python-brace-format
 msgid "{message} (HTTP error code {code}: {title})"
-msgstr ""
+msgstr "{message} (codice d'errore HTTP {code}: {title})"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/i18n_argparse.py:54
