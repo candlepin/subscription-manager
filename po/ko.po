@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-23 11:23+0200\n"
-"PO-Revision-Date: 2021-08-02 14:11+0000\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2021-08-23 19:04+0000\n"
+"Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ko/>\n"
 "Language: ko\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 4.8\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -814,9 +814,7 @@ msgstr "패키지 프로필 업로드 작업을 강제 실행합니다"
 #: src/plugins/dnf/upload-profile.py:60
 #: src/subscription_manager/scripts/package_profile_upload.py:46
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
-msgstr ""
-"실행된 업데이트가 없습니다. 보다 자세한 내용은 /var/log/rhsm/rhsm.log에서 참"
-"조하십시오."
+msgstr "실행된 최신화가 없습니다. 보다 자세한 내용은 /var/log/rhsm/rhsm.log에서 참조하십시오."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:38
@@ -972,7 +970,7 @@ msgstr "UUID"
 
 #: src/rct/manifest_commands.py:214
 msgid "Content Access Mode"
-msgstr "컨텐츠 액세스 모드"
+msgstr "내용 접근 방식"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:215 src/rct/printing.py:109
@@ -1116,11 +1114,9 @@ msgstr "덮어쓰기 파일이 존재할 수 있습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:328
-#, fuzzy, python-brace-format
-#| msgid "File {filename} exists. Use -f to force overwriting the file."
+#, python-brace-format
 msgid "File \"{filename}\" exists. Use -f to force overwriting the file."
-msgstr ""
-"파일 {filename}이 존재합니다. -f를 사용하여 파일을 강제로 덮어쓰기합니다."
+msgstr "파일 \"{filename}\"이 존재합니다. -f 를 사용하여 파일 덮어쓰기를 강제합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:331
@@ -1866,7 +1862,7 @@ msgstr ""
 msgid ""
 "Error: --username, --password, --token and --org can be used only on "
 "unregistered systems"
-msgstr ""
+msgstr "오류: --username, --password, --token과 --org는 등록되지 않은 시스템에서만 사용 할 수 있습니다"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:180
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:191
@@ -2932,10 +2928,8 @@ msgstr "소비된 서브스크립션 풀을 찾을 수 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/org.py:32
-#, fuzzy
-#| msgid "specify organization"
 msgid "specify an organization"
-msgstr "조직 지정"
+msgstr "조직을 지정합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/org.py:43
@@ -3854,7 +3848,7 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:49
 #, python-brace-format
 msgid "{message} (HTTP error code {code}: {title})"
-msgstr ""
+msgstr "{message} (HTTP error code {code}: {title})"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/i18n_argparse.py:54
