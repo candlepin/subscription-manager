@@ -2,20 +2,22 @@
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # John Sefler <jsefler@redhat.com>, 2019. #zanata
 # ljanda <ljanda@redhat.com>, 2019. #zanata
+# Emilio Herrera <ehespinosa57@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-09 12:30+0200\n"
-"PO-Revision-Date: 2019-02-08 09:34+0000\n"
-"Last-Translator: ljanda <ljanda@redhat.com>\n"
-"Language-Team: Spanish (Spain)\n"
+"PO-Revision-Date: 2021-07-27 19:04+0000\n"
+"Last-Translator: Emilio Herrera <ehespinosa57@gmail.com>\n"
+"Language-Team: Spanish <https://translate.fedoraproject.org/projects/"
+"subscription-manager/subscription-manager-main/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Zanata 4.6.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.7.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 #, fuzzy
@@ -208,17 +210,19 @@ msgstr "Registrar sistema"
 
 #: cockpit/src/insights.jsx:64 cockpit/src/insights.jsx:267
 msgid "The $0 package is not available from any repository."
-msgstr ""
+msgstr "El paquete $0 no está disponible desde ningún repositorio."
 
 #: cockpit/src/insights.jsx:67
 msgid ""
 "The system could not be connected to Insights because installing the $0 "
 "package requires the unexpected removal of other packages."
 msgstr ""
+"El sistema podría no estar conectado a Insights puesto que la instalación "
+"del paquete $0 requiere el borrado inesperado de otros paquetes."
 
 #: cockpit/src/insights.jsx:80
 msgid "Connecting to Insights"
-msgstr ""
+msgstr "Conectando a Insights"
 
 #: cockpit/src/insights.jsx:118
 msgid ""
@@ -226,16 +230,20 @@ msgid ""
 "availability, and stability with Red Hat Insights — with predictive "
 "analytics, avoid problems and unplanned downtime in your Red Hat environment."
 msgstr ""
+"Identifique y repare de forma proactiva las amenazas a la seguridad, el "
+"rendimiento, la disponibilidad y la estabilidad con Red Hat Insights — con "
+"los análisis predictivos, evite problemas y tiempos de inactividad no "
+"planeados en su entorno Red Hat."
 
 #: cockpit/src/insights.jsx:129 cockpit/src/subscriptions-register.jsx:93
 msgid "The $0 package will be installed."
-msgstr ""
+msgstr "Se instalará el paquete $0."
 
 #: cockpit/src/insights.jsx:131
 msgid "The $0 package and $1 other package will be installed."
 msgid_plural "The $0 package and $1 other packages will be installed."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "El paquete $0 y $1 otro paquetes será instalado."
+msgstr[1] "El paquetes $0 y $1 otros paquetes serán instalados."
 
 #: cockpit/src/insights.jsx:139
 msgid "$0 package needs to be removed."
