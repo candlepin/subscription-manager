@@ -1,7 +1,7 @@
 # ljanda <ljanda@redhat.com>, 2017. #zanata
-# John Sefler <jsefler@redhat.com>, 2018. #zanata
+# John Sefler <jsefler@redhat.com>, 2018. #zanata, 2021.
 # ljanda <ljanda@redhat.com>, 2018. #zanata
-# John Sefler <jsefler@redhat.com>, 2019. #zanata
+# John Sefler <jsefler@redhat.com>, 2019. #zanata, 2021.
 # ljanda <ljanda@redhat.com>, 2019. #zanata
 # CoconutNut <patrick.vollandt@mein-gym.de>, 2021.
 # Ludek Janda <ljanda@redhat.com>, 2021.
@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-09 12:30+0200\n"
-"PO-Revision-Date: 2021-07-30 16:04+0000\n"
-"Last-Translator: CoconutNut <patrick.vollandt@mein-gym.de>\n"
+"PO-Revision-Date: 2021-08-11 00:04+0000\n"
+"Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/de/>\n"
 "Language: de\n"
@@ -913,7 +913,7 @@ msgstr "%%prog %s [OPTIONEN] ZERT_DATEI"
 #, fuzzy, python-brace-format
 #| msgid "Unable to read certificate file '%s': %s"
 msgid "Unable to read certificate file '{certificate}': {exception}"
-msgstr "Zertifikatsdatei »%s« kann nicht gelesen werden: %s"
+msgstr "Zertifikatsdatei »{certificate}« kann nicht gelesen werden: {exception}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/cert_commands.py:52
@@ -3604,7 +3604,7 @@ msgstr "Das System mit der UUID %s wurde abgemeldet"
 #: src/subscription_manager/cli_command/register.py:203
 #, python-brace-format
 msgid "Registering to: {hostname}:{port}{prefix}"
-msgstr ""
+msgstr "Registrieren bei: {hostname}:{port}{prefix}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:240
