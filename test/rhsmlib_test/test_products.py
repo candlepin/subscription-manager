@@ -32,6 +32,8 @@ from rhsmlib.dbus.objects import ProductsDBusObject
 from rhsmlib.dbus import constants
 from rhsmlib.services import products
 
+from test import subman_marker_dbus
+
 
 START_DATE = datetime.datetime.now() - datetime.timedelta(days=100)
 NOW_DATE = datetime.datetime.now()
@@ -315,6 +317,7 @@ class TestProductService(InjectionMockingTest):
         self.assertEqual(expected_result, result)
 
 
+@subman_marker_dbus
 class TestProductsDBusObject(DBusObjectTest, InjectionMockingTest):
     def setUp(self):
         super(TestProductsDBusObject, self).setUp()

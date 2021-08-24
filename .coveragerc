@@ -1,9 +1,4 @@
 [run]
 branch = True
-source = subscription_manager
-         rct
-         rhsm
-         rhsm_debug
-         content_plugins
-[report]
-include = src/*
+source = src/
+command_line = -m pytest test/

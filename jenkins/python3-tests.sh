@@ -29,13 +29,8 @@ pip install -I -r test-requirements.txt
 python3 setup.py build
 python3 setup.py build_ext --inplace
 
-# not using "setup.py nosetests" yet
-# since they need a running candlepin
-
-# Run just the unit tests, functional needs a running candlepin
-#pushd test/unit
 # make sure we have a dbus session for the dbus tests
-dbus-run-session nosetests --with-xunit --with-cover --cover-package rhsm --cover-package subscription_manager --cover-erase
+dbus-run-session coverage run
 
-coverage3 html
-coverage3 xml
+coverage report
+coverage xml

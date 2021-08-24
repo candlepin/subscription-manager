@@ -5,9 +5,9 @@
 # immediately available.
 -e ./build_ext
 
-nose
-nose-capturestderr
-nose-randomly
+pytest
+pytest-randomly
+pytest-timeout
 coverage
 polib
 pyinotify
@@ -15,4 +15,3 @@ simplejson
 mock
 Sphinx==1.8.5;python_version<="2.7"
 Sphinx>=1.8.5;python_version>="3.0"
-git+https://github.com/awood/nose-xvfb.git#egg=nose-xvfb

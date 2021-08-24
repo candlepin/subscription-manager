@@ -30,6 +30,8 @@ from rhsmlib.dbus.objects import AttachDBusObject
 from rhsmlib.dbus import constants
 from rhsmlib.services import attach
 
+from test import subman_marker_dbus
+
 CONTENT_JSON = [{
     "id": "19ec0d4f93ae47e18233b2590b3e71f3",
     "consumer": {
@@ -163,6 +165,7 @@ class TestAttachService(InjectionMockingTest):
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
 
 
+@subman_marker_dbus
 class TestAttachDBusObject(DBusObjectTest, InjectionMockingTest):
     def setUp(self):
         super(TestAttachDBusObject, self).setUp()
