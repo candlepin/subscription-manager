@@ -15,8 +15,8 @@ import ast
 from distutils.spawn import spawn
 
 from build_ext.utils import Utils, BaseCommand
-import os
 import subprocess
+import os
 # These dependencies aren't available in build environments.  We won't need any
 # linting functionality there though, so just create a dummy class so we can proceed.
 try:

@@ -4,21 +4,40 @@ pipeline {
     timeout(time: 10, unit: 'MINUTES')
   }
   stages {
-    // stage('prepare') {steps {echo 'prepare'}}
+    stage('Build Container') {
+      environment {
+        QUAY_CREDS=credentials('candlepin-quay-bot')
+      }
+      steps {
+        sh './containers/build_and_push.sh'
+      }
+    }
     stage('Test') {
       parallel {
-        stage('Python stylish') {
+        stage('stylish') {
           steps {
-            sh readFile(file: 'jenkins/python3-stylish-tests.sh')
+            sh (
+              script: './jenkins/toolbox-run.sh stylish jenkins/stylish.sh',
+              returnStatus: false
+            )
           }
         }
-        stage('Fedora tito') {
-          agent { label 'rpmbuild' }
-          steps { sh readFile(file: 'jenkins/tito-tests.sh') }
-        }
-        stage('Fedora unit') {
+        stage('tito') {
           steps {
-            sh readFile(file: 'jenkins/python3-tests.sh')
+            sh (
+              script: './jenkins/toolbox-run.sh tito jenkins/tito.sh',
+              returnStatus: false
+            )
+          }
+        }
+        // TODO: figure if this is needed and implement
+        // stage('RHEL8 unit') {steps {echo 'nose'}}
+        stage('unit') {
+          steps {
+            sh (
+              script: './jenkins/toolbox-run.sh unit jenkins/unit.sh',
+              returnStatus: false
+            )
             junit('coverage.xml')
             // TODO: find the correct adapter or generate coverage tests that can be
             //       parsed by an existing adapter:
@@ -27,9 +46,12 @@ pipeline {
           }
         }
         // Unit tests of libdnf plugins
-        stage('Libdnf unit') {
+        stage('libdnf') {
           steps {
-            sh readFile(file: 'jenkins/libdnf-tests.sh')
+            sh (
+              script: './jenkins/toolbox-run.sh libdnf jenkins/libdnf.sh',
+              returnStatus: false
+            )
           }
         }
       }
