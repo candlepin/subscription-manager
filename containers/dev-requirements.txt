@@ -1,0 +1,12 @@
+-r requirements.txt
+
+nose-capturestderr
+nose-randomly
+coverage
+polib
+pyinotify
+simplejson
+mock
+Sphinx>=1.8.5
+git+https://github.com/alikins/pyqver.git#egg=pyqver
+git+https://github.com/wottop/tito.git#egg=tito
