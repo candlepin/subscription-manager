@@ -1,25 +1,38 @@
 pipeline {
   agent { label 'subman' }
   options {
-    timeout(time: 10, unit: 'MINUTES')
+    timeout(time: 15, unit: 'MINUTES')
+  }
+  environment {
+    REGISTRY_URL = 'quay.io/candlepin'
+    GIT_HASH = sh(returnStdout: true, script: "git rev-parse HEAD").trim()
+    PODMAN_USERNS = 'keep-id'
   }
   stages {
+    stage('Build Container') {
+      environment {
+        QUAY_CREDS = credentials('candlepin-quay-bot')
+      }
+      steps {
+        sh('./scripts/build_and_push.sh')
+      }
+    }
     stage('Test') {
       parallel {
         stage('stylish') {
+          agent { label 'subman' }
           steps {
-            sh('./jenkins/stylish.sh')
+            sh('./jenkins/run.sh stylish jenkins/stylish.sh')
           }
         }
         stage('tito') {
-          agent { label 'rpmbuild' }
           steps {
-            sh('./jenkins/tito.sh')
+            sh('./jenkins/run.sh tito jenkins/tito.sh')
           }
         }
         stage('unit') {
           steps {
-            sh('./jenkins/unit.sh')
+            sh('./jenkins/run.sh unit jenkins/unit.sh')
           }
           post {
             always {
@@ -44,7 +57,7 @@ pipeline {
         // Unit tests of libdnf plugins
         stage('libdnf') {
           steps {
-            sh('./jenkins/libdnf.sh')
+            sh('./jenkins/run.sh libdnf jenkins/libdnf.sh')
           }
         }
       }
