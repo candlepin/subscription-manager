@@ -1,0 +1,91 @@
+FROM registry.fedoraproject.org/fedora-toolbox:34
+
+MAINTAINER "Candlepin Team" <candlepin@redhat.com>
+
+ENV SMDEV_CONTAINER_OFF='True'
+
+RUN yum install --disablerepo=updates -y \
+    bind-utils \
+    cmake \
+    dbus-daemon \
+    dbus-glib \
+    dbus-glib-devel \
+    desktop-file-utils \
+    dnf-utils \
+    gcc \
+    GConf2-devel \
+    gettext \
+    git \
+    git \
+    glibc-common \
+    gtk3-devel \
+    intltool \
+    json-c-devel \
+    jss \
+    langpacks-as \
+    langpacks-bn \
+    langpacks-de \
+    langpacks-es \
+    langpacks-fr \
+    langpacks-gu \
+    langpacks-hi \
+    langpacks-it \
+    langpacks-ja \
+    langpacks-kn \
+    langpacks-ko \
+    langpacks-ml \
+    langpacks-mr \
+    langpacks-or \
+    langpacks-pa \
+    langpacks-pt_BR \
+    langpacks-ru \
+    langpacks-ta \
+    langpacks-te \
+    langpacks-zh_CN \
+    langpacks-zh_TW \
+    libdnf-devel \
+    libnotify-devel \
+    make \
+    npm \
+    openssl \
+    openssl-devel \
+    postfix \
+    python3-coverage \
+    python3-dateutil \
+    python3-decorator \
+    python3-decorator \
+    python3-devel \
+    python3-ethtool \
+    python3-gobject-base \
+    python3-iniparse \
+    python3-inotify \
+    python3-nose \
+    python3-pip \
+    python3-polib \
+    python3-rpm \
+    python3-simplejson \
+    python3-six \
+    python3-sphinx \
+    python3-virtualenv \
+    rarian-compat \
+    redhat-rpm-config \
+    rpm-build \
+    rpmlint \
+    subscription-manager-rhsm-certificates \
+    sudo \
+    vim \
+    wget \
+    xorg-x11-server-Xvfb \
+    zsh \
+    && yum clean all
+
+RUN mkdir /build
+COPY requirements.txt dev-requirements.txt /build/
+WORKDIR /build
+RUN pip3 install -r dev-requirements.txt
+RUN git clone https://github.com/candlepin/subscription-manager.git
+WORKDIR /build/subscription-manager
+RUN python3 ./setup.py build
+RUN python3 ./setup.py build_ext --inplace
+RUN yum-builddep -y ./subscription-manager.spec
+RUN echo "export SMDEV_CONTAINER_OFF='True'" >> /root/.bashrc && echo "export SMDEV_CONTAINER_OFF='True'" >> /root/.zshrc
