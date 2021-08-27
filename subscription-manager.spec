@@ -56,8 +56,6 @@
 %endif
 
 %global rhsm_plugins_dir  /usr/share/rhsm-plugins
-# on recent Fedora and RHEL 7, let's not use m2crypto
-%global use_m2crypto (0%{?fedora} < 23 && 0%{?rhel} < 7)
 
 %if 0%{?rhel} == 6
 %global use_inotify 0
@@ -468,9 +466,6 @@ Group: Development/Libraries/Python
 Group: Development/Libraries
 %endif
 
-%if %use_m2crypto
-Requires: %{?suse_version:python-m2crypto} %{!?suse_version:m2crypto}
-%endif
 %if 0%{?suse_version} >= 1500
 Requires:  %{py_package_prefix}-python-dateutil
 %else
@@ -512,9 +507,6 @@ Group: Development/Libraries
 
 BuildRequires: python2-devel
 
-%if %use_m2crypto
-Requires: %{?suse_version:python-m2crypto} %{!?suse_version:m2crypto}
-%endif
 Requires: %{py2_package_prefix}-dateutil
 Requires: %{py2_package_prefix}-iniparse
 # rpm-python is an old name for python2-rpm but RHEL6 uses the old name

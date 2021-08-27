@@ -29,7 +29,7 @@
  * behaviour of the libraries or commands changes across versions.
  *
  * Our specific need is to read non-standard extension values, as either
- * UTF8 strings,  or binary octets. M2Crypto and openssl itself default to
+ * UTF8 strings,  or binary octets. openssl itself defaults to
  * assuming that the extension payload is a printable string value, and
  * giving you that. This is why you see ".." in front of most extension values.
  * Those are non printable characters that make up the DER encoded header of

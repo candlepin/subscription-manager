@@ -575,8 +575,7 @@ class BaseRestLib(object):
             log.warning("Unable to load any CA certificate from: %s" % self.ca_dir)
 
     def _create_connection(self, cert_file=None, key_file=None):
-        # See M2Crypto/SSL/Context.py in m2crypto source and
-        # https://www.openssl.org/docs/ssl/SSL_CTX_new.html
+        # See https://www.openssl.org/docs/ssl/SSL_CTX_new.html
         # This ends up invoking SSLv23_method, which is the catch all
         # "be compatible" protocol, even though it explicitly is not
         # using sslv2. This will by default potentially include sslv3

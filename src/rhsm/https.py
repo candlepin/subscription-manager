@@ -1,6 +1,7 @@
 from __future__ import print_function, division, absolute_import
 
-# A compatibility wrapper that provides httplib and ssl using either standard libs or m2crypto.
+# A wrapper that provides httplib and ssl using the standard libs,
+# checking for the required parts of them.
 #
 # Copyright (c) 2016 Red Hat, Inc.
 #
@@ -18,7 +19,6 @@ from __future__ import print_function, division, absolute_import
 
 import logging
 import ssl as _ssl
-import os
 
 log = logging.getLogger(__name__)
 
@@ -49,17 +49,11 @@ if using_stdlibs:
         if not hasattr(_SslContext, _feature):
             using_stdlibs = False
 
-if 'RHSM_USE_M2CRYPTO' in os.environ:
-    using_stdlibs = os.environ['RHSM_USE_M2CRYPTO'].lower() not in ['true', '1', 'yes']
+if not using_stdlibs:
+    log.critical('Missing features in the standard ssl library, exiting')
+    sys.exit('Missing features in the standard ssl library, exiting')
 
-if using_stdlibs:
-    log.debug('Using standard libs to provide httplib and ssl')
-    import six.moves.http_client as _httplib
-    ssl = _ssl
-    httplib = _httplib
-else:
-    log.debug('Using m2crypto wrappers to provide httplib and ssl')
-    import rhsm.m2cryptossl
-    import rhsm.m2cryptohttp
-    ssl = rhsm.m2cryptossl
-    httplib = rhsm.m2cryptohttp
+log.debug('Using standard libs to provide httplib and ssl')
+import six.moves.http_client as _httplib
+ssl = _ssl
+httplib = _httplib
