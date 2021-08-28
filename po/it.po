@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-23 11:23+0200\n"
-"PO-Revision-Date: 2021-08-24 02:04+0000\n"
+"PO-Revision-Date: 2021-08-28 22:04+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/it/>\n"
@@ -48,7 +48,7 @@ msgstr "impossibile unire le azioni - due gruppi sono chiamati %r"
 
 #: /usr/lib64/python3.9/argparse.py:1513
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "'required' è un argomento non valido per parametri posizionali"
 
 #: /usr/lib64/python3.9/argparse.py:1535
 #, python-format
@@ -73,8 +73,8 @@ msgstr "valore non valido di conflict_resolution: %r"
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "stringa di opzione in conflitto: %s"
+msgstr[1] "stringhe di opzioni in conflitto: %s"
 
 #: /usr/lib64/python3.9/argparse.py:1654
 msgid "mutually exclusive arguments must be optional"
@@ -149,10 +149,9 @@ msgstr[1] "attesi %s argomenti"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2210
-#, fuzzy, python-format
-#| msgid "ambiguous option: %s (%s?)"
+#, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr "opzione ambigua: %s (%s?)"
+msgstr "opzione ambigua: %(option)s può corrispondere a %(matches)s"
 
 #: /usr/lib64/python3.9/argparse.py:2274
 #, python-format
@@ -162,7 +161,7 @@ msgstr "stringa di opzione non attesa: %s"
 #: /usr/lib64/python3.9/argparse.py:2471
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%r non è chiamabile"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2488
@@ -358,7 +357,7 @@ msgstr[1] ""
 
 #: cockpit/src/insights.jsx:536
 msgid "View your Insights results"
-msgstr ""
+msgstr "Vedi i tuoi risultati di Insights"
 
 #: cockpit/src/insights.jsx:542
 msgid "Connected to Insights"
@@ -407,7 +406,7 @@ msgstr "Registrazione usando un nome utente e una password..."
 
 #: cockpit/src/subscriptions-client.js:368
 msgid "Stopping registration service ..."
-msgstr ""
+msgstr "Arresto del servizio di registrazione..."
 
 #: cockpit/src/subscriptions-client.js:392
 msgid "Saving configuration ..."
@@ -621,6 +620,10 @@ msgid ""
 "and try reloading the page. Additionally, make sure that you have checked "
 "the 'Reuse my password for privileged tasks' checkbox on the login page."
 msgstr ""
+"Il servizio rhsm non è disponibile. Assicurati che subscription-manager sia "
+"installato e prova a ricaricare la pagina. Inoltre, assicurati di aver "
+"attivato la casella \"Riutilizza la mia password per attività privilegiate\" "
+"nella pagina di accesso."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: cockpit/src/subscriptions-view.jsx:319
@@ -795,7 +798,7 @@ msgstr ""
 "Non si è root, i repository di Subscription Management non vengono aggiornati"
 
 #: src/plugins/dnf/subscription-manager.py:115
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repositories with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
@@ -2793,9 +2796,8 @@ msgstr "Nessun prodotto installato."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/list.py:174
-#, fuzzy
 msgid "Installed Product Current Status:"
-msgstr "Stato corrente del prodotto installato:"
+msgstr "Stato attuale dei prodotti installati:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/list.py:185
@@ -3746,6 +3748,8 @@ msgstr "Stato scopo del sistema: {status}"
 #: src/subscription_manager/cli_command/syspurpose.py:53
 msgid "Convenient module for managing all system purpose settings"
 msgstr ""
+"Modulo dedicato per la gestione di tutte le impostazioni dello scopo di "
+"sistema"
 
 #: src/subscription_manager/cli_command/syspurpose.py:63
 msgid "show current system purpose"
