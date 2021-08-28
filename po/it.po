@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-29 12:56-0400\n"
-"PO-Revision-Date: 2021-08-24 02:04+0000\n"
+"PO-Revision-Date: 2021-08-28 22:04+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-27/it/>\n"
@@ -155,19 +155,19 @@ msgstr "Sarà installato il pacchetto $0."
 
 #: cockpit/src/insights.jsx:124
 msgid "The $0 package and $1 other package will be installed."
-msgstr ""
+msgstr "Il pacchetto $0 e $1 altro pacchetto saranno installati."
 
 #: cockpit/src/insights.jsx:125
 msgid "The $0 package and $1 other packages will be installed."
-msgstr ""
+msgstr "Il pacchetto $0 e altri $1 pacchetti saranno installati."
 
 #: cockpit/src/insights.jsx:132
 msgid "$0 package needs to be removed."
-msgstr "Il pacchetto $0 deve essere rimosso."
+msgstr "$0 pacchetto deve essere rimosso."
 
 #: cockpit/src/insights.jsx:133
 msgid "$0 packages need to be removed."
-msgstr ""
+msgstr "$0 pacchetti devono essere rimossi."
 
 #: cockpit/src/insights.jsx:146
 msgid "Additional packages:"
@@ -290,7 +290,7 @@ msgstr[1] ""
 
 #: cockpit/src/insights.jsx:529
 msgid "View your Insights results"
-msgstr ""
+msgstr "Vedi i tuoi risultati di Insights"
 
 #: cockpit/src/insights.jsx:534
 msgid "Connected to Insights"
@@ -314,7 +314,7 @@ msgstr "Registrazione usando un nome utente e una password..."
 
 #: cockpit/src/subscriptions-client.js:360
 msgid "Stopping registration service ..."
-msgstr ""
+msgstr "Arresto del servizio di registrazione..."
 
 #: cockpit/src/subscriptions-client.js:384
 msgid "Saving configuration ..."
@@ -676,7 +676,7 @@ msgstr ""
 "Non si è root, i repository di Subscription Management non vengono aggiornati"
 
 #: src/dnf-plugins/subscription-manager.py:114
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repositories with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
@@ -1290,7 +1290,7 @@ msgstr "%%prog %s [OPZIONI] "
 
 #: src/rhsm_debug/debug_commands.py:90
 msgid "The directory specified by '--destination' must already exist."
-msgstr ""
+msgstr "La directory specificata da \"--destination\" deve già esistere."
 
 #: src/rhsm_debug/debug_commands.py:94
 #, python-format
@@ -4475,9 +4475,8 @@ msgstr "Nessun prodotto installato."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:250
-#, fuzzy
 msgid "Installed Product Current Status:"
-msgstr "Stato corrente del prodotto installato:"
+msgstr "Stato attuale dei prodotti installati:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:261
