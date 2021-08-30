@@ -9,7 +9,7 @@ pipeline {
         QUAY_CREDS=credentials('candlepin-quay-bot')
       }
       steps {
-        sh readFile(file: 'containers/build_and_push.sh')
+        sh './containers/build_and_push.sh'
       }
     }
     stage('Test') {
