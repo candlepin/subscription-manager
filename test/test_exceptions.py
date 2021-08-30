@@ -41,7 +41,7 @@ class TestExceptionMapper(unittest.TestCase):
     def test_single_mapped_exception(self):
         expected_message = "Single Exception Message"
         mapper = ExceptionMapper()
-        mapper.message_map[RuntimeError] = (expected_message, mapper.format_default)
+        mapper.message_map[RuntimeError] = (expected_message, mapper.format_using_template)
 
         err = RuntimeError("Testing")
         self.assertEqual(expected_message, mapper.get_message(err))
@@ -49,7 +49,7 @@ class TestExceptionMapper(unittest.TestCase):
     def test_subclass_mapped_by_base_class(self):
         expected_message = "Single Exception Message"
         mapper = ExceptionMapper()
-        mapper.message_map[RuntimeError] = (expected_message, mapper.format_default)
+        mapper.message_map[RuntimeError] = (expected_message, mapper.format_using_template)
 
         err = MyRuntimeError("Testing base class")
         self.assertEqual(expected_message, mapper.get_message(err))
@@ -57,9 +57,9 @@ class TestExceptionMapper(unittest.TestCase):
     def test_subclass_preferred_over_base_class(self):
         expected_message = "Subclass Exception Message"
         mapper = ExceptionMapper()
-        mapper.message_map[RuntimeError] = ("RuntimeError message", mapper.format_default)
-        mapper.message_map[MyRuntimeErrorBase] = ("MyRuntimeErrorBase message", mapper.format_default)
-        mapper.message_map[MyRuntimeError] = (expected_message, mapper.format_default)
+        mapper.message_map[RuntimeError] = ("RuntimeError message", mapper.format_using_template)
+        mapper.message_map[MyRuntimeErrorBase] = ("MyRuntimeErrorBase message", mapper.format_using_template)
+        mapper.message_map[MyRuntimeError] = (expected_message, mapper.format_using_template)
 
         err = MyRuntimeError("Logged Only")
         self.assertEqual(expected_message, mapper.get_message(err))
@@ -67,9 +67,9 @@ class TestExceptionMapper(unittest.TestCase):
     def test_can_map_middle_sub_class(self):
         expected_message = "MyRuntimeErrorBase message"
         mapper = ExceptionMapper()
-        mapper.message_map[RuntimeError] = ("RuntimeError message", mapper.format_default)
-        mapper.message_map[MyRuntimeErrorBase] = (expected_message, mapper.format_default)
-        mapper.message_map[MyRuntimeError] = ("MyRuntimeError message", mapper.format_default)
+        mapper.message_map[RuntimeError] = ("RuntimeError message", mapper.format_using_template)
+        mapper.message_map[MyRuntimeErrorBase] = (expected_message, mapper.format_using_template)
+        mapper.message_map[MyRuntimeError] = ("MyRuntimeError message", mapper.format_using_template)
 
         err = MyRuntimeErrorBase("Logged Only")
         self.assertEqual(expected_message, mapper.get_message(err))
@@ -78,7 +78,7 @@ class TestExceptionMapper(unittest.TestCase):
         mapper = ExceptionMapper()
         expected_message = "RuntimeError message"
 
-        mapper.message_map[RuntimeError] = (expected_message, mapper.format_default)
+        mapper.message_map[RuntimeError] = (expected_message, mapper.format_using_template)
         err = MyRuntimeError("Logged Only")
         self.assertEqual(expected_message, mapper.get_message(err))
 
@@ -89,14 +89,17 @@ class TestExceptionMapper(unittest.TestCase):
         err = RestlibException(404, expected_message)
         self.assertEqual(f"{expected_message} (HTTP error code 404: Not Found)", mapper.get_message(err))
 
-    def test_returns_none_when_no_mapped_exception_present(self):
+    def test_return_str_when_no_mapped_exception(self):
+        expected_message = "Expected message"
         mapper = ExceptionMapper()
-        self.assertEqual(None, mapper.get_message(RuntimeError()))
+
+        err = RuntimeError(expected_message)
+        self.assertEqual(expected_message, mapper.get_message(err))
 
     def test_can_support_old_style_classes(self):
         expected_message = "Old style class"
         mapper = ExceptionMapper()
-        mapper.message_map[OldStyleClass] = (expected_message, mapper.format_default)
+        mapper.message_map[OldStyleClass] = (expected_message, mapper.format_using_template)
 
         err = OldStyleClass()
         self.assertEqual(expected_message, mapper.get_message(err))
