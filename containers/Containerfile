@@ -16,7 +16,6 @@ RUN yum install --disablerepo=updates -y \
     GConf2-devel \
     gettext \
     git \
-    git \
     glibc-common \
     gtk3-devel \
     intltool \
@@ -52,7 +51,6 @@ RUN yum install --disablerepo=updates -y \
     postfix \
     python3-coverage \
     python3-dateutil \
-    python3-decorator \
     python3-decorator \
     python3-devel \
     python3-ethtool \
