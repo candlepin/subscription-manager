@@ -939,7 +939,8 @@ class SyspurposeCommand(CliCommand):
             log.exception(re)
             if getattr(self.options, 'list', None):
                 log.error("Error: Unable to retrieve %s from server: %s" % (self.attr, err))
-                system_exit(os.EX_SOFTWARE, err.msg)
+                mapped_message: str = ExceptionMapper().get_message(err)
+                system_exit(os.EX_SOFTWARE, mapped_message)
             else:
                 log.debug("Error: Unable to retrieve %s from server: %s" % (self.attr, err))
         except Exception as err:
@@ -1116,7 +1117,8 @@ class RefreshCommand(CliCommand):
             print(_("All local data refreshed"))
         except connection.RestlibException as re:
             log.error(re)
-            system_exit(os.EX_SOFTWARE, re.msg)
+            mapped_message: str = ExceptionMapper().get_message(re)
+            system_exit(os.EX_SOFTWARE, mapped_message)
         except Exception as e:
             handle_exception(_("Unable to perform refresh due to the following exception: %s") % e, e)
 
@@ -1206,7 +1208,8 @@ class IdentityCommand(UserPassCommand):
         except connection.RestlibException as re:
             log.exception(re)
             log.error(u"Error: Unable to generate a new identity for the system: %s" % re)
-            system_exit(os.EX_SOFTWARE, re.msg)
+            mapped_message: str = ExceptionMapper().get_message(re)
+            system_exit(os.EX_SOFTWARE, mapped_message)
         except Exception as e:
             handle_exception(_("Error: Unable to generate a new identity for the system"), e)
 
@@ -1245,7 +1248,8 @@ class OwnersCommand(UserPassCommand):
         except connection.RestlibException as re:
             log.exception(re)
             log.error(u"Error: Unable to retrieve org list from server: %s" % re)
-            system_exit(os.EX_SOFTWARE, re.msg)
+            mapped_message: str = ExceptionMapper().get_message(re)
+            system_exit(os.EX_SOFTWARE, mapped_message)
         except Exception as e:
             handle_exception(_("Error: Unable to retrieve org list from server"), e)
 
@@ -1291,7 +1295,8 @@ class EnvironmentsCommand(OrgCommand):
         except connection.RestlibException as re:
             log.exception(re)
             log.error(u"Error: Unable to retrieve environment list from server: %s" % re)
-            system_exit(os.EX_SOFTWARE, re.msg)
+            mapped_message: str = ExceptionMapper().get_message(re)
+            system_exit(os.EX_SOFTWARE, mapped_message)
         except Exception as e:
             handle_exception(_("Error: Unable to retrieve environment list from server"), e)
 
@@ -1405,7 +1410,8 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
         except connection.RestlibException as re:
             log.exception(re)
             log.error(u"Error: Unable to retrieve service levels: %s" % re)
-            system_exit(os.EX_SOFTWARE, re.msg)
+            mapped_message: str = ExceptionMapper().get_message(re)
+            system_exit(os.EX_SOFTWARE, mapped_message)
         except Exception as e:
             handle_exception(_("Error: Unable to retrieve service levels."), e)
         else:
@@ -1427,7 +1433,8 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
             except connection.RestlibException as re_err:
                 log.exception(re_err)
                 log.error(u"Error: Unable to retrieve service levels: %s" % re_err)
-                system_exit(os.EX_SOFTWARE, re_err.msg)
+                mapped_message: str = ExceptionMapper().get_message(re_err)
+                system_exit(os.EX_SOFTWARE, mapped_message)
             except ProxyException:
                 system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
 
@@ -1494,7 +1501,8 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
             if e.code == 404 and e.msg.find('/servicelevels') > 0:
                 system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
             elif e.code == 404:
-                system_exit(os.EX_DATAERR, _(e.msg))
+                mapped_message: str = ExceptionMapper().get_message(e)
+                system_exit(os.EX_DATAERR, mapped_message)
             else:
                 raise e
 
@@ -1608,7 +1616,8 @@ class RegisterCommand(UserPassCommand):
             # set during service.register() call
             attach.AttachService(self.cp).attach_auto(service_level=None)
         except connection.RestlibException as rest_lib_err:
-            print_error(rest_lib_err.msg)
+            mapped_message: str = ExceptionMapper().get_message(rest_lib_err)
+            print_error(mapped_message)
         except Exception:
             log.exception("Auto-attach failed")
             raise
@@ -1702,7 +1711,8 @@ class RegisterCommand(UserPassCommand):
                 )
         except (connection.RestlibException, exceptions.ServiceError) as re:
             log.exception(re)
-            system_exit(os.EX_SOFTWARE, re)
+            mapped_message: str = ExceptionMapper().get_message(re)
+            system_exit(os.EX_SOFTWARE, mapped_message)
         except Exception as e:
             handle_exception(_("Error during registration: %s") % e, e)
         else:
@@ -2181,10 +2191,7 @@ class AttachCommand(CliCommand):
                             subscribed = True
                     except connection.RestlibException as re:
                         log.exception(re)
-
-                        exception_mapper = ExceptionMapper()
-                        mapped_message = exception_mapper.get_message(re)
-
+                        mapped_message: str = ExceptionMapper().get_message(re)
                         if re.code == 403:
                             print(mapped_message)  # already subscribed.
                         elif re.code == 400 or re.code == 404:
@@ -2384,7 +2391,8 @@ class RemoveCommand(CliCommand):
                 raise ge
             except connection.RestlibException as err:
                 log.error(err)
-                system_exit(os.EX_SOFTWARE, err.msg)
+                mapped_message: str = ExceptionMapper().get_message(err)
+                system_exit(os.EX_SOFTWARE, mapped_message)
             except Exception as e:
                 handle_exception(_("Unable to perform remove due to the following exception: %s") % e, e)
         else:
@@ -2474,7 +2482,8 @@ class FactsCommand(CliCommand):
                 raise ge
             except connection.RestlibException as re:
                 log.exception(re)
-                system_exit(os.EX_SOFTWARE, re.msg)
+                mapped_message: str = ExceptionMapper().get_message(re)
+                system_exit(os.EX_SOFTWARE, mapped_message)
             log.debug("Succesfully updated the system facts.")
             print(_("Successfully updated the system facts."))
 
