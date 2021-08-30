@@ -82,7 +82,7 @@ WORKDIR /build
 RUN pip3 install -r dev-requirements.txt
 RUN git clone https://github.com/candlepin/subscription-manager.git
 WORKDIR /build/subscription-manager
+RUN yum-builddep -y ./subscription-manager.spec
 RUN python3 ./setup.py build
 RUN python3 ./setup.py build_ext --inplace
-RUN yum-builddep -y ./subscription-manager.spec
 RUN echo "export SMDEV_CONTAINER_OFF='True'" >> /root/.bashrc && echo "export SMDEV_CONTAINER_OFF='True'" >> /root/.zshrc
