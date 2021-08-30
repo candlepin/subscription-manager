@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-29 13:05-0400\n"
-"PO-Revision-Date: 2021-08-23 16:04+0000\n"
+"PO-Revision-Date: 2021-08-27 12:04+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/syspurpose-1-27/ja/>\n"
@@ -30,7 +30,7 @@ msgstr ""
 #, python-brace-format
 msgid ""
 "If you'd like to overwrite the server side change please run: {command}"
-msgstr "サーバー側の変更を上書きする場合は、次を実行してください: {command}"
+msgstr "サーバー側の変更を上書きする場合は、以下を実行します: {command}"
 
 #: src/syspurpose/cli.py:47
 #, python-brace-format
@@ -50,12 +50,12 @@ msgstr "{attr} を更新しました。"
 #: src/syspurpose/cli.py:79
 #, python-brace-format
 msgid "Removed \"{val}\" from {name}."
-msgstr "{{val}} を {{name}} から削除しました。"
+msgstr "\"{val}\" を {name} から削除しました。"
 
 #: src/syspurpose/cli.py:81
 #, python-brace-format
 msgid "Not removing value \"{val}\" from {name}; it was not there."
-msgstr "値 {{val}} を {{name}} から削除しません。その値はそこにありませんでした。"
+msgstr "値\" {val}\" を {name} から削除しません。その値はそこにありませんでした。"
 
 #: src/syspurpose/cli.py:108
 #, python-brace-format
