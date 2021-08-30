@@ -41,8 +41,7 @@ This means that for any PR which has had the jenkins tests complete
 the jenkins test results (for example if the unit tests failed):
 
     $ git checkout origin pr/XXXX
-    $ toolbox create -i quay.io/candlepin/subscription-manager:PR-XXXX -c
-    pr-XXXX
+    $ toolbox create -i quay.io/candlepin/subscription-manager:PR-XXXX -c pr-XXXX
     $ toolbox run -c pr-XXXX ./jenkins/unit.sh
 
 Running the following will let you work like normal from within the environment
