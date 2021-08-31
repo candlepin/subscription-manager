@@ -239,6 +239,18 @@ class TestCliCommand(SubManFixture):
             # 2 == no args given
             self.assertEqual(e.code, 2)
 
+    def test_unknown_args_cause_exit(self):
+        with Capture() as cap, patch.object(
+            sys, 'argv',
+            # test with some subcommand; sub-man prints help without it
+            ['subscription-manager', 'attach', '--foo', 'bar', 'baz'],
+        ):
+            try:
+                self.cc.main()
+            except SystemExit as e:
+                self.assertEqual(e.code, os.EX_USAGE)
+            self.assertEqual("subscription-manager: error: no such option: --foo bar baz\n", cap.err)
+
     def test_command_has_correlation_id(self):
         self.assertIsNotNone(self.cc.correlation_id)
 
