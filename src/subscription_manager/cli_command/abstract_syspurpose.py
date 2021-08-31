@@ -23,6 +23,7 @@ from rhsm.connection import ProxyException
 from subscription_manager import syspurposelib
 from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.cli import CliCommand, ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG
+from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.i18n import ungettext, ugettext as _
 from subscription_manager.syspurposelib import get_syspurpose_valid_fields
 from subscription_manager.utils import friendly_join
@@ -410,7 +411,8 @@ class AbstractSyspurposeCommand(CliCommand):
             log.exception(err)
             if getattr(self.options, 'list', None):
                 log.error("Error: Unable to retrieve {attr} from server: {err}".format(attr=self.attr, err=err))
-                system_exit(os.EX_SOFTWARE, str(err))
+                mapped_message: str = ExceptionMapper().get_message(re)
+                system_exit(os.EX_SOFTWARE, mapped_message)
             else:
                 log.debug("Error: Unable to retrieve {attr} from server: {err}".format(attr=self.attr, err=err))
         except Exception as err:

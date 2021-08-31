@@ -22,6 +22,7 @@ import subscription_manager.injection as inj
 
 from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.cli import CliCommand
+from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
@@ -69,6 +70,8 @@ class FactsCommand(CliCommand):
                 raise ge
             except connection.RestlibException as re:
                 log.exception(re)
-                system_exit(os.EX_SOFTWARE, str(re))
+
+                mapped_message: str = ExceptionMapper().get_message(re)
+                system_exit(os.EX_SOFTWARE, mapped_message)
             log.debug("Succesfully updated the system facts.")
             print(_("Successfully updated the system facts."))

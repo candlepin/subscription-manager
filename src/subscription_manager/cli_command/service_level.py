@@ -26,6 +26,7 @@ from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.abstract_syspurpose import AbstractSyspurposeCommand
 from subscription_manager.cli_command.cli import ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG, handle_exception
 from subscription_manager.cli_command.org import OrgCommand
+from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.i18n import ugettext as _
 
 from syspurpose.files import SyncedStore
@@ -110,7 +111,9 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
         except connection.RestlibException as re:
             log.exception(re)
             log.error(u"Error: Unable to retrieve service levels: {re}".format(re=re))
-            system_exit(os.EX_SOFTWARE, str(re))
+
+            mapped_message: str = ExceptionMapper().get_message(re)
+            system_exit(os.EX_SOFTWARE, mapped_message)
         except Exception as e:
             handle_exception(_("Error: Unable to retrieve service levels."), e)
         else:
@@ -132,7 +135,9 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
             except connection.RestlibException as re_err:
                 log.exception(re_err)
                 log.error(u"Error: Unable to retrieve service levels: {err}".format(err=re_err))
-                system_exit(os.EX_SOFTWARE, str(re_err))
+
+                mapped_message: str = ExceptionMapper().get_message(re_err)
+                system_exit(os.EX_SOFTWARE, mapped_message)
             except ProxyException:
                 system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
 
@@ -202,6 +207,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
             if e.code == 404 and e.msg.find('/servicelevels') > 0:
                 system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
             elif e.code == 404:
-                system_exit(os.EX_DATAERR, _(str(e)))
+                mapped_message: str = ExceptionMapper().get_message(e)
+                system_exit(os.EX_DATAERR, mapped_message)
             else:
                 raise e

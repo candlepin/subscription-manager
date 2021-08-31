@@ -23,6 +23,7 @@ from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.cli import handle_exception
 from subscription_manager.cli_command.list import ORG_LIST
 from subscription_manager.cli_command.user_pass import UserPassCommand
+from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.printing_utils import columnize, echo_columnize_callback
 
@@ -63,6 +64,8 @@ class OwnersCommand(UserPassCommand):
         except connection.RestlibException as re:
             log.exception(re)
             log.error("Error: Unable to retrieve org list from server: {re}".format(re=re))
-            system_exit(os.EX_SOFTWARE, str(re))
+
+            mapped_message: str = ExceptionMapper().get_message(re)
+            system_exit(os.EX_SOFTWARE, mapped_message)
         except Exception as e:
             handle_exception(_("Error: Unable to retrieve org list from server"), e)
