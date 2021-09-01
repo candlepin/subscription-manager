@@ -1,12 +1,13 @@
 # tfu <tfu@redhat.com>, 2018. #zanata
 # Sundeep Anand <suanand@redhat.com>, 2021.
+# Ludek Janda <ljanda@redhat.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-13 14:02-0500\n"
-"PO-Revision-Date: 2021-01-30 16:40+0000\n"
-"Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
+"PO-Revision-Date: 2021-08-27 12:04+0000\n"
+"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/syspurpose-1-28/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -14,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.8\n"
 
 #: src/syspurpose/cli.py:29
 #, python-brace-format
@@ -29,7 +30,7 @@ msgstr ""
 #: src/syspurpose/cli.py:31
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
-msgstr "如果您想覆盖服务器端的更改，请运行：{command}"
+msgstr "如果需要覆盖服务器端的改变，请运行：{command}"
 
 #: src/syspurpose/cli.py:47
 #, python-brace-format
@@ -178,7 +179,7 @@ msgstr "警告：提供的值 \"{val}\" 没有包括在属性{attr} 的有效值
 #, python-brace-format
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
-msgstr "警告：提供的键 \"{key}\" 没有包括在有效键列表中。"
+msgstr "警告：提供的键 \"{key}\" 没有包括在有效键列表中："
 
 #: src/syspurpose/main.py:32
 msgid "User interrupted process"

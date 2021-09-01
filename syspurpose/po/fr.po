@@ -1,12 +1,13 @@
 # croe <croe@redhat.com>, 2018. #zanata
 # Sundeep Anand <suanand@redhat.com>, 2021.
+# Ludek Janda <ljanda@redhat.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-13 14:02-0500\n"
-"PO-Revision-Date: 2021-01-30 16:40+0000\n"
-"Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
+"PO-Revision-Date: 2021-08-27 12:04+0000\n"
+"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/syspurpose-1-28/fr/>\n"
 "Language: fr\n"
@@ -14,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.8\n"
 
 #: src/syspurpose/cli.py:29
 #, python-brace-format
@@ -57,7 +58,7 @@ msgstr "\"{val}\" retiré de {name}."
 #: src/syspurpose/cli.py:81
 #, python-brace-format
 msgid "Not removing value \"{val}\" from {name}; it was not there."
-msgstr "\"{val}\" non retiré de {name}; n’était pas présent."
+msgstr "\"{val}\" non retiré de {name} ; n’était pas présent."
 
 #: src/syspurpose/cli.py:108
 #, python-brace-format
@@ -183,15 +184,15 @@ msgid ""
 "values for attribute {attr}:"
 msgstr ""
 "Avertissement : La valeur fournie \"{val}\" ne figure pas dans la liste des "
-"valeurs valides de l’attribut {attr}:"
+"valeurs valides de l’attribut {attr} :"
 
 #: src/syspurpose/files.py:438
 #, python-brace-format
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
 msgstr ""
-"Avertissement : La valeur fournie \"{key}\" ne figure pas dans la liste des "
-"valeurs valides :"
+"Avertissement : La clé fournie \"{key}\" ne figure pas dans la liste des "
+"clés valides :"
 
 #: src/syspurpose/main.py:32
 msgid "User interrupted process"

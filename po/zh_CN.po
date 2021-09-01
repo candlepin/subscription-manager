@@ -4,13 +4,14 @@
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # tfu <tfu@redhat.com>, 2018. #zanata
 # Sundeep Anand <suanand@redhat.com>, 2021.
+# Ludek Janda <ljanda@redhat.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-30 02:22-0400\n"
-"PO-Revision-Date: 2021-06-10 12:04+0000\n"
-"Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
+"PO-Revision-Date: 2021-09-01 14:04+0000\n"
+"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-1-28/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.6.2\n"
+"X-Generator: Weblate 4.8\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.6/optparse.py:146
@@ -3815,12 +3816,12 @@ msgstr "当前订阅"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/mysubstab.py:289
 msgid "Subscription is expired."
-msgstr "过期订阅"
+msgstr "过期订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/mysubstab.py:291
 msgid "Subscription has not begun."
-msgstr "订阅还未开始"
+msgstr "订阅还未开始。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/networkConfig.py:211
@@ -4467,10 +4468,8 @@ msgstr "不需要根据有效证书授权机构检查权利服务器 SSL 证书"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:360
-#, fuzzy
-#| msgid "proxy URL in the form of proxy_hostname:proxy_port"
 msgid "proxy URL in the form of hostname:port"
-msgstr "代理服务器 URL 的格式为 proxy_hostname:proxy_port"
+msgstr "代理 URL 的格式为 hostname:port"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:362
@@ -4601,7 +4600,7 @@ msgid ""
 "Warning: This organization does not have any subscriptions that provide a "
 "system purpose \"{attr}\".  This setting will not influence auto-attaching "
 "subscriptions."
-msgstr ""
+msgstr "警告：这个机构没有提供系统目的为 \"{attr}\" 的订阅。这个设置不会影响到自动附加订阅。"
 
 #: src/subscription_manager/managercli.py:782
 #, python-brace-format
@@ -4640,15 +4639,14 @@ msgstr "可用 {syspurpose_attr}"
 msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
-msgstr ""
+msgstr "在这个机构的可用订阅中没有系统目的 \"{syspurpose_attr}\" 的可用值。"
 
 #: src/subscription_manager/managercli.py:903
-#, fuzzy, python-brace-format
-#| msgid "Unable to get list of valid values for \"{syspurpose_attr}\""
+#, python-brace-format
 msgid ""
 "Unable to get the list of valid values for the system purpose "
 "\"{syspurpose_attr}\"."
-msgstr "无法获取 \"{syspurpose_attr}\" 的有效值列表"
+msgstr "无法为系统目的 \"{syspurpose_attr}\" 获得有效值列表。"
 
 #: src/subscription_manager/managercli.py:923
 msgid "Unable to connect to server using token"
