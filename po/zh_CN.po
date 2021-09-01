@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
-"PO-Revision-Date: 2023-05-09 12:20+0000\n"
+"PO-Revision-Date: 2023-05-10 05:38+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-main/zh_CN/>\n"
@@ -295,8 +295,8 @@ msgid ""
 "updates. You can use subscription-manager to assign subscriptions.\n"
 msgstr ""
 "\n"
-"本系统已在权利服务器中注册，但没有接收更新。可使用 subscription-manager 分配"
-"订阅。\n"
+"本系统已在权利服务器中注册，但没有接收更新。可使用 subscription-manager "
+"分配订阅。\n"
 
 #: src/plugins/dnf/subscription-manager.py:87
 msgid "Not root, Subscription Management repositories not updated"
@@ -1585,8 +1585,7 @@ msgstr "错误：您必须注册或指定 --username 和 --password 来列出 {a
 msgid ""
 "Error: --username, --password, --token and --org can be used only on "
 "unregistered systems"
-msgstr ""
-"错误： --username、--password、--token 和 --org 只能在未注册的系统上使用"
+msgstr "错误： --username、--password、--token 和 --org 只能在未注册的系统上使用"
 
 #. TRANSLATORS: this is used to quote a string
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:251
@@ -1609,9 +1608,8 @@ msgid ""
 "Warning: This organization does not have any subscriptions that provide a "
 "system purpose \"{attr}\".  This setting will not influence auto-attaching "
 "subscriptions."
-msgstr ""
-"警告：这个机构没有提供系统目的为 \"{attr}\" 的订阅。这个设置不会影响到自动附"
-"加订阅。"
+msgstr "警告：这个机构没有提供系统目的为 \"{attr}\" "
+"的订阅。这个设置不会影响到自动附加订阅。"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:278
 #, python-brace-format
@@ -2543,8 +2541,7 @@ msgstr "显示这个系统消耗的订阅"
 msgid ""
 "shows only subscriptions matching the specified service level; only used "
 "with --available and --consumed"
-msgstr ""
-"只显示与指定服务等级相匹配的订阅。只能与 --available 和 --consumed 合用"
+msgstr "只显示与指定服务等级相匹配的订阅。只能与 --available 和 --consumed 合用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:251
@@ -2936,8 +2933,7 @@ msgid ""
 "register with a specific environment (single value) or multiple environments "
 "(a comma-separated list) in the destination org. The ability to use multiple "
 "environments is controlled by the entitlement server"
-msgstr ""
-"在目标机构中注册特定环境（单个值）或多个环境（以逗号分隔的列表）。使用多个环"
+msgstr "在目标机构中注册特定环境（单个值）或多个环境（以逗号分隔的列表）。使用多个环"
 "境的能力由授权服务器控制"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -3321,9 +3317,8 @@ msgstr "错误：您必须注册或指定 --username 和 --password 方可列出
 msgid ""
 "Error: --username, --password, --token, --org and --serverurl can be used "
 "only on unregistered systems"
-msgstr ""
-"错误: --username、--password、-token、--org 和 --serverurl 只能在未注册的系统"
-"上使用"
+msgstr "错误: --username、--password、-token、--org 和 --serverurl "
+"只能在未注册的系统上使用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:126
@@ -3384,8 +3379,7 @@ msgstr "系统状态详情"
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status.\n"
-msgstr ""
-"内容访问模式设置为简单内容访问。无论订阅状态如何，该主机都可以访问内容。\n"
+msgstr "内容访问模式设置为简单内容访问。无论订阅状态如何，该主机都可以访问内容。\n"
 
 #: src/subscription_manager/cli_command/status.py:111
 #, python-brace-format
