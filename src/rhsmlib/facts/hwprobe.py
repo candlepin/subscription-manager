@@ -32,6 +32,8 @@ from datetime import datetime, timedelta
 from rhsmlib.facts import cpuinfo
 from rhsmlib.facts import collector
 
+from typing import Optional
+
 log = logging.getLogger(__name__)
 
 # There is no python3 version of python-ethtool

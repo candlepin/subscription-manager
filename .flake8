@@ -27,8 +27,6 @@ ignore =
     # E741: ambiguous variable name '*'
     # mostly for variables 'l', which ought to get more specific names
     E741,
-    # F821: undefined name '*'
-    F821,
     # W504: line break after binary operator
     # we break after binary operators, newer style breaks before
     W504,

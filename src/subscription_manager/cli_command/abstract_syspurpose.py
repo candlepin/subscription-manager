@@ -411,7 +411,7 @@ class AbstractSyspurposeCommand(CliCommand):
             log.exception(err)
             if getattr(self.options, 'list', None):
                 log.error("Error: Unable to retrieve {attr} from server: {err}".format(attr=self.attr, err=err))
-                mapped_message: str = ExceptionMapper().get_message(re)
+                mapped_message: str = ExceptionMapper().get_message(err)
                 system_exit(os.EX_SOFTWARE, mapped_message)
             else:
                 log.debug("Error: Unable to retrieve {attr} from server: {err}".format(attr=self.attr, err=err))
