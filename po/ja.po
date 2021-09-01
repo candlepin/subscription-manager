@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-30 02:22-0400\n"
 "PO-Revision-Date: 2021-09-01 09:43+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28-21/ja/>\n"
 "Language: ja\n"
@@ -4462,7 +4462,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:202
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
-msgstr "サーバー側の変更を上書きする場合は、以下を実行します: {command}"
+msgstr "サーバー側の変更を上書きするには次のコマンドを実行してください: {command}"
 
 # translation auto-copied from project subscription-manager, version 1.13.X, document keys
 #: src/subscription_manager/managercli.py:247
@@ -4503,10 +4503,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/managercli.py:360
-#, fuzzy
-#| msgid "proxy URL in the form of proxy_hostname:proxy_port"
 msgid "proxy URL in the form of hostname:port"
-msgstr "proxy_hostname:proxy_port 形式のプロキシー URL"
+msgstr "hostname:port の形式のプロキシー URL"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/managercli.py:362
@@ -4644,6 +4642,7 @@ msgid ""
 "system purpose \"{attr}\".  This setting will not influence auto-attaching "
 "subscriptions."
 msgstr ""
+"警告: この組織には、システム目的「{attr}」を提供するサブスクリプションがありません。この設定は、自動割り当てサブスクリプションには影響しません。"
 
 #: src/subscription_manager/managercli.py:782
 #, python-brace-format
@@ -4653,7 +4652,7 @@ msgstr "{attr} を \"{val}\" に設定しました。"
 #: src/subscription_manager/managercli.py:799
 #, python-brace-format
 msgid "{attr} unset."
-msgstr "{attr} の設定を解除しました。"
+msgstr "{attr} の設定が解除されました。"
 
 #: src/subscription_manager/managercli.py:816
 #: src/subscription_manager/managercli.py:839
@@ -4682,15 +4681,14 @@ msgstr "利用可能な {syspurpose_attr}"
 msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
-msgstr ""
+msgstr "この組織には、利用可能なサブスクリプションからシステム目的の「{syspurpose_attr}」に使用できる値がありません。"
 
 #: src/subscription_manager/managercli.py:903
-#, fuzzy, python-brace-format
-#| msgid "Unable to get list of valid values for \"{syspurpose_attr}\""
+#, python-brace-format
 msgid ""
 "Unable to get the list of valid values for the system purpose "
 "\"{syspurpose_attr}\"."
-msgstr "{syspurpose_attr}\" の有効な値のリストを取得できません"
+msgstr "システム目的「{syspurpose_attr}」の有効な値のリストを取得できません。"
 
 #: src/subscription_manager/managercli.py:923
 msgid "Unable to connect to server using token"
