@@ -4,7 +4,12 @@ PROJECT_ROOT=$(git rev-parse --show-toplevel)
 # Run one of our tests inside a newly created toolbox container
 
 if (( $# != 2)); then
-    >&2 echo -e "This script requires two arguments.\nUsage: $0 [END_OF_TAG] [PATH_TO_SCRIPT_TO_RUN_IN_CONTAINER]\nThis script will create a toolbox container, run the script provided in it, and forcefully destroy the toolbox container."
+    >&2 cat << EOF
+    This script requires two arguments.
+
+    Usage: $0 [END_OF_TAG] [PATH_TO_SCRIPT_TO_RUN_IN_CONTAINER]
+    This script will create a toolbox container, run the script provided in it, and forcefully destroy the toolbox container.
+EOF
     exit
 fi
 
