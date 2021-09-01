@@ -3233,7 +3233,8 @@ class OverrideCommand(CliCommand):
                 if ex.code == 400:
                     # black listed overrides specified.
                     # Print message and return a less severe code.
-                    system_exit(1, ex)
+                    mapped_message: str = ExceptionMapper().get_message(ex)
+                    system_exit(1, mapped_message)
                 else:
                     raise ex
 
