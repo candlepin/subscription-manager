@@ -24,9 +24,6 @@ ignore =
     E722,
     # E731: do not assign a lambda expression, use a def
     E731,
-    # E741: ambiguous variable name '*'
-    # mostly for variables 'l', which ought to get more specific names
-    E741,
     # W504: line break after binary operator
     # we break after binary operators, newer style breaks before
     W504,

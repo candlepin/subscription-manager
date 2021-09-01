@@ -52,8 +52,8 @@ class TestLocale(unittest.TestCase):
 
     def test_pos(self):
         for lang in self.test_locales:
-            l = "%s.utf8" % lang
-            with fixture.locale_context(l):
+            test_locale = "%s.utf8" % lang
+            with fixture.locale_context(test_locale):
                 '%s' % _("Unable to find available subscriptions for all your installed products.")
 
 

@@ -85,14 +85,14 @@ class rpm_version_release_build_py(_build_py):
                 version_file = os.path.join(version_dir, 'version.py')
                 try:
                     lines = []
-                    with open(version_file, 'r') as f:
-                        for l in f.readlines():
-                            l = l.replace("RPM_VERSION", str(self.rpm_version))
-                            lines.append(l)
+                    with open(version_file, 'r') as file:
+                        for line in file.readlines():
+                            line = line.replace("RPM_VERSION", str(self.rpm_version))
+                            lines.append(line)
 
-                    with open(version_file, 'w') as f:
-                        for l in lines:
-                            f.write(l)
+                    with open(version_file, 'w') as file:
+                        for line in lines:
+                            file.write(line)
                 except EnvironmentError:
                     raise
 

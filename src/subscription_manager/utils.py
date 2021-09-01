@@ -574,7 +574,7 @@ def print_error(message):
     sys.stderr.write("\n")
 
 
-def unique_list_items(l, hash_function=lambda x: x):
+def unique_list_items(items, hash_function=lambda x: x):
     """
     Accepts a list of items.
     Returns a list of the unique items in the input.
@@ -582,7 +582,7 @@ def unique_list_items(l, hash_function=lambda x: x):
     """
     observed = set()
     unique_items = []
-    for item in l:
+    for item in items:
         item_key = hash_function(item)
         if item_key in observed:
             continue

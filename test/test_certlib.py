@@ -27,18 +27,18 @@ from subscription_manager import certlib
 
 class TestLocker(fixture.SubManFixture):
     def test(self):
-        l = certlib.Locker()
+        locker = certlib.Locker()
         # we inject threading.RLock as the lock implementation in
         # the fixture init. RLock() is actually a factory method
         # that returns a _RLock
-        self.assertTrue(isinstance(l.lock, type(threading.RLock())))
+        self.assertTrue(isinstance(locker.lock, type(threading.RLock())))
 
     def test_run(self):
         def return_four():
             return 4
 
-        l = certlib.Locker()
-        res = l.run(return_four)
+        locker = certlib.Locker()
+        res = locker.run(return_four)
         self.assertEqual(4, res)
 
 

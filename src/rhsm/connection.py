@@ -454,19 +454,19 @@ class ContentConnection(BaseConnection):
 
 
 def _get_locale():
-    l = None
+    new_locale = None
     try:
-        l = locale.getlocale()
+        new_locale = locale.getlocale()
     except (locale.Error, ValueError):
         try:
-            l = locale.getdefaultlocale()
+            new_locale = locale.getdefaultlocale()
         except locale.Error:
             pass
         except ValueError:
             pass
 
-    if l and l != (None, None):
-        return l[0]
+    if new_locale and new_locale != (None, None):
+        return new_locale[0]
 
     return None
 
