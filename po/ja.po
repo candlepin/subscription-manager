@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-30 02:22-0400\n"
-"PO-Revision-Date: 2021-09-01 09:43+0000\n"
-"Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
+"PO-Revision-Date: 2021-09-01 14:04+0000\n"
+"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28-21/ja/>\n"
 "Language: ja\n"
@@ -4462,7 +4462,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:202
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
-msgstr "サーバー側の変更を上書きするには次のコマンドを実行してください: {command}"
+msgstr "サーバー側の変更を上書きする場合は、以下を実行します: {command}"
 
 # translation auto-copied from project subscription-manager, version 1.13.X, document keys
 #: src/subscription_manager/managercli.py:247
@@ -4652,7 +4652,7 @@ msgstr "{attr} を \"{val}\" に設定しました。"
 #: src/subscription_manager/managercli.py:799
 #, python-brace-format
 msgid "{attr} unset."
-msgstr "{attr} の設定が解除されました。"
+msgstr "{attr} の設定を解除しました。"
 
 #: src/subscription_manager/managercli.py:816
 #: src/subscription_manager/managercli.py:839
@@ -4699,9 +4699,7 @@ msgstr "トークンを使用してサーバーに接続できません"
 msgid ""
 "Note: The currently configured entitlement server does not support System "
 "Purpose {attr}."
-msgstr ""
-"注: 現在せっていされているエンタイトルメントサーバーはシステムの目的 {attr} "
-"をサポートしません。"
+msgstr "注: 現在せっていされているエンタイトルメントサーバーはシステムの目的 {attr} をサポートしません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/managercli.py:988
@@ -5103,9 +5101,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1551
 msgid "Error: Must provide --org with activation keys."
-msgstr ""
-"エラー: --org を指定する場合は、アクティベーションキーを指定する必要がありま"
-"す。"
+msgstr "エラー: --org を指定する場合は、アクティベーションキーを指定する必要があります。"
 
 #: src/subscription_manager/managercli.py:1561
 msgid "Error: The --type option has been deprecated and may not be used."
@@ -5848,9 +5844,7 @@ msgstr ""
 msgid ""
 "show pools that are active on or after the given date; only used with --"
 "available (example: %s)"
-msgstr ""
-"特定の日付以降にアクティブなプールを表示します。--available と併用する場合の"
-"み使用できます (例: %s)"
+msgstr "特定の日付以降にアクティブなプールを表示します。--available と併用する場合のみ使用できます (例: %s)"
 
 #: src/subscription_manager/managercli.py:2932
 msgid "Error: --afterdate is only applicable with --available"
@@ -6538,9 +6532,8 @@ msgid ""
 "Hat Subscription Management. If not desired, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
-"yum/dnf プラグイン: Red Hat サブスクリプション管理に対して %s が自動的に有効"
-"になりました。自動的に有効化しない場合は、\"subscription-manager config --"
-"rhsm.auto_enable_yum_plugins=0\" で無効にします。"
+"yum/dnf プラグイン: Red Hat サブスクリプション管理に対して %s が自動的に有効になりました。自動的に有効化しない場合は"
+"、\"subscription-manager config --rhsm.auto_enable_yum_plugins=0\" で無効にします。"
 
 #: src/subscription_manager/repolib.py:643
 msgid "Repo updates"
