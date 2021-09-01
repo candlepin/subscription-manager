@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-13 14:02-0500\n"
-"PO-Revision-Date: 2021-08-23 17:04+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"PO-Revision-Date: 2021-09-01 09:26+0000\n"
+"Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/syspurpose-1-28-21/ja/>\n"
 "Language: ja\n"
@@ -23,13 +23,13 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
-"警告: \"{attr}\" の {download_value} は最近、エンタイトルメントサーバー管理者によってこのシステムに設定されました。\n"
+"警告: \"{download_value}\" の {attr} は最近、エンタイトルメントサーバー管理者によってこのシステムに設定されました。\n"
 "{advice}"
 
 #: src/syspurpose/cli.py:31
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
-msgstr "サーバー側の変更を上書きする場合は、次を実行してください: {command}"
+msgstr "サーバー側の変更を上書きする場合は、以下を実行します: {command}"
 
 #: src/syspurpose/cli.py:47
 #, python-brace-format
@@ -49,12 +49,12 @@ msgstr "{attr} を更新しました。"
 #: src/syspurpose/cli.py:79
 #, python-brace-format
 msgid "Removed \"{val}\" from {name}."
-msgstr "{{val}} を {{name}} から削除しました。"
+msgstr "{val} を {name} から削除しました。"
 
 #: src/syspurpose/cli.py:81
 #, python-brace-format
 msgid "Not removing value \"{val}\" from {name}; it was not there."
-msgstr "値 {{val}} を {{name}} から削除しません。その値はそこにありませんでした。"
+msgstr "値 \"{val}\" を {name} から削除しません。その値はそこにありませんでした。"
 
 #: src/syspurpose/cli.py:108
 #, python-brace-format
@@ -132,7 +132,7 @@ msgstr "SLA の設定を削除"
 
 #: src/syspurpose/cli.py:314
 msgid "Set the system usage"
-msgstr "システムの使用方法を設定します"
+msgstr "システムの使用方法を設定"
 
 #: src/syspurpose/cli.py:322
 msgid "Clear set usage"
@@ -140,7 +140,7 @@ msgstr "使用方法の設定を削除"
 
 #: src/syspurpose/cli.py:330
 msgid "Show the current system syspurpose"
-msgstr "現行システムの syspurpose を表示します"
+msgstr "現行システムの syspurpose を表示"
 
 #: src/syspurpose/cli.py:348
 msgid ""
@@ -180,11 +180,11 @@ msgstr "警告: 指定された値 \"{val}\" は、属性 {attr} の有効な値
 #, python-brace-format
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
-msgstr "警告: 指定されたキー \"{key}\" は有効なキーのリストに含まれていません:"
+msgstr "警告: 指定された値 \"{key}\" は有効なキーのリストに含まれていません:"
 
 #: src/syspurpose/main.py:32
 msgid "User interrupted process"
-msgstr "ユーザーによる割り込みプロセスです"
+msgstr "ユーザーによる割り込みプロセス"
 
 #: src/syspurpose/utils.py:59
 msgid ""
