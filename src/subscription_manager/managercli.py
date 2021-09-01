@@ -220,12 +220,8 @@ def handle_exception(msg, ex):
 
     exception_mapper = ExceptionMapper()
 
-    mapped_message = exception_mapper.get_message(ex)
-
-    if mapped_message:
-        system_exit(os.EX_SOFTWARE, mapped_message)
-    else:
-        system_exit(os.EX_SOFTWARE, ex)
+    mapped_message: str = exception_mapper.get_message(ex)
+    system_exit(os.EX_SOFTWARE, mapped_message)
 
 
 def show_autosubscribe_output(uep, identity):
