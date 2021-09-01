@@ -72,7 +72,6 @@ RUN yum install --disablerepo=updates -y \
     sudo \
     vim \
     wget \
-    xorg-x11-server-Xvfb \
     zsh \
     && yum clean all
 
