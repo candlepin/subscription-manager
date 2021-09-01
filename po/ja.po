@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-29 12:56-0400\n"
-"PO-Revision-Date: 2021-08-27 12:04+0000\n"
+"PO-Revision-Date: 2021-09-01 14:04+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-27/ja/>\n"
@@ -450,7 +450,7 @@ msgstr "サービスレベル:  "
 
 #: cockpit/src/subscriptions-view.jsx:245
 msgid "Usage:  "
-msgstr "使用方法:  "
+msgstr "使用法:  "
 
 #: cockpit/src/subscriptions-view.jsx:255
 msgid "Role:  "
@@ -462,7 +462,7 @@ msgstr "アドオン:  "
 
 #: cockpit/src/subscriptions-view.jsx:277
 msgid "Status: "
-msgstr "状態: "
+msgstr "ステータス: "
 
 #: cockpit/src/subscriptions-view.jsx:285
 msgid "System Purpose"
@@ -496,7 +496,7 @@ msgstr "更新中"
 
 #: cockpit/src/subscriptions-view.jsx:353
 msgid "Retrieving subscription status..."
-msgstr "サブスクリプションのステータスを取得中..."
+msgstr "サブスクリプションステータスを再取得中 ..."
 
 #: cockpit/src/subscriptions-view.jsx:360
 msgid "Unable to connect"
@@ -507,7 +507,7 @@ msgid ""
 "Couldn't get system subscription status. Please ensure subscription-manager "
 "is installed."
 msgstr ""
-"システムのサブスクリプションステータスを取得できませんでした。subscription-manager がインストールされていることを確認してください。"
+"システムサブスクリプションステータスを取得できませんでした。subscription-manager がインストールされていることを確認してください。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:377
@@ -1280,7 +1280,7 @@ msgstr "%%prog %s [オプション] "
 
 #: src/rhsm_debug/debug_commands.py:90
 msgid "The directory specified by '--destination' must already exist."
-msgstr "'--destination' で指定されたディレクトリーはすでに存在しているはずです。"
+msgstr "'--destination' で指定したディレクトリーが必要です。"
 
 #: src/rhsm_debug/debug_commands.py:94
 #, python-format
@@ -1308,7 +1308,7 @@ msgstr "有効性チェックの頻度 (秒単位; デフォルトは 1 日)"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm_icon/rhsm_icon.c:83
 msgid "force display of the icon (expired, partial or warning)"
-msgstr "強制的にアイコンを表示（期限切れ、部分的、または警告）"
+msgstr "強制的にアイコンを表示 (期限切れ、部分的、または警告)"
 
 #: src/rhsm_icon/rhsm_icon.c:86
 msgid "run the first status check without delay (otherwise wait 4 minutes)"
@@ -1901,7 +1901,7 @@ msgstr "サーバーレートの制限を超えました。後で再試行して
 #: src/subscription_manager/exceptions.py:50
 #, python-format
 msgid "HTTP error code %s: %s"
-msgstr "HTTP のエラーコード %s: %s"
+msgstr "HTTP エラーコード %s: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/gui/about.py:28
@@ -2458,7 +2458,7 @@ msgstr "フィルターオプション"
 #: src/subscription_manager/gui/data/glade/filters.glade:28
 #: src/subscription_manager/gui/data/ui/filters.ui:29
 msgid "Only show subscriptions that:"
-msgstr "次のサブスクリプションのみを表示する"
+msgstr "次のサブスクリプションのみを表示する:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/data/glade/filters.glade:36
@@ -2702,7 +2702,7 @@ msgstr "<b>HTTP プロキシー</b>"
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:44
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:117
 msgid "I would like to connect via an _HTTP proxy."
-msgstr "HTTP プロキシー経由で接続する (_H)"
+msgstr "HTTP プロキシー経由で接続する (_H)。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:53
@@ -2738,7 +2738,7 @@ msgstr "プロキシーの場所のテキスト"
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:151
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:223
 msgid "Use Au_thentication with HTTP Proxy:"
-msgstr "HTTP プロキシー認証を使用する (_T)"
+msgstr "HTTP プロキシー認証を使用する (_T):"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:160
@@ -2773,7 +2773,7 @@ msgstr "パスワードテキスト"
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:258
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:323
 msgid "_Bypass the HTTP proxy for specific hosts/domains."
-msgstr "特定ホスト/ドメインについては HTTP プロキシーをバイパスする (_B)"
+msgstr "特定ホスト/ドメインについては HTTP プロキシーをバイパスする (_B)。"
 
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:267
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:332
@@ -3038,7 +3038,7 @@ msgid ""
 "the following to register:"
 msgstr ""
 "ソフトウェア更新などのサービスをご利用頂くため、お使いのシステムを Red Hat "
-"に登録する手順を案内していきます。登録するには次のものが必要となります。"
+"に登録する手順を案内していきます。登録するには次のものが必要となります:"
 
 #: src/subscription_manager/gui/data/glade/registration_info.glade:53
 #: src/subscription_manager/gui/data/ui/registration_info.ui:89
@@ -4448,7 +4448,7 @@ msgstr "一覧 ({attr}) からアイテムを削除します。"
 
 #: src/subscription_manager/managercli.py:629
 msgid "--unset cannot be used with --set, --add, or --remove"
-msgstr "--unset は、--set、--add、または --remove と併用できません"
+msgstr "--unset は --set、--add または --remove と併用できません"
 
 #: src/subscription_manager/managercli.py:631
 msgid "--add cannot be used with --remove"
@@ -4478,14 +4478,14 @@ msgstr "現在の {name}: {val}"
 #: src/subscription_manager/managercli.py:719
 #, python-brace-format
 msgid "{name} not set."
-msgstr "{name} は設定されていません。"
+msgstr "{name} が設定されていません。"
 
 #: src/subscription_manager/managercli.py:740
 #, python-brace-format
 msgid ""
 "Note: The currently configured entitlement server does not support System "
 "Purpose {attr}."
-msgstr "注記: 現在設定されているエンタイトルメントサーバーは、システムの目的をサポートしません {attr}。"
+msgstr "注: 現在せっていされているエンタイトルメントサーバーはシステムの目的 {attr} をサポートしません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/managercli.py:768
@@ -4798,11 +4798,11 @@ msgstr "この組織には、サービスレベルが設定されているサブ
 
 #: src/subscription_manager/managercli.py:1250
 msgid "Manage usage setting for this system"
-msgstr "このシステムの使用設定を管理します"
+msgstr "このシステムの使用状況に関する設定を管理します"
 
 #: src/subscription_manager/managercli.py:1251
 msgid "use set and unset to define the value for this field"
-msgstr "設定および設定解除を使用して、このフィールドの値を定義します"
+msgstr "このフィールドの値を定義するには、set および unset を使用します"
 
 #: src/subscription_manager/managercli.py:1263
 msgid "base URL for content in form of https://hostname:port/prefix"
@@ -4881,7 +4881,7 @@ msgstr "エラー: --auto-attach を使用する場合は、--servicelevel も�
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1307
 msgid "Error: Must provide --org with activation keys."
-msgstr "エラー: --org を指定する場合は、アクティベーションキーを指定する必要があります"
+msgstr "エラー: --org を指定する場合は、アクティベーションキーを指定する必要があります。"
 
 #: src/subscription_manager/managercli.py:1317
 msgid "Error: The --type option has been deprecated and may not be used."
@@ -5572,15 +5572,15 @@ msgstr ""
 msgid ""
 "show pools that are active on or after the given date; only used with --"
 "available (example: %s)"
-msgstr "指定された日付以降にアクティブなプールを表示します (%s など、--available と併用したものだけを表示)"
+msgstr "特定の日付以降にアクティブなプールを表示します。--available と併用する場合のみ使用できます (例: %s)"
 
 #: src/subscription_manager/managercli.py:2638
 msgid "Error: --afterdate is only applicable with --available"
-msgstr "エラー: --afterdate は --available との併用でのみ適用可能"
+msgstr "エラー: --afterdate は、--available との併用でのみ適用可能"
 
 #: src/subscription_manager/managercli.py:2640
 msgid "Error: --afterdate cannot be used with --ondate"
-msgstr "エラー: --afterdate は --ondate と併用できません"
+msgstr "エラー: --afterdate は、--ondate と併用することはできません"
 
 #: src/subscription_manager/managercli.py:2655
 #, python-brace-format
@@ -5747,7 +5747,7 @@ msgstr "リポジトリー: %s"
 
 #: src/subscription_manager/managercli.py:2958
 msgid "Modify system purpose role"
-msgstr "システムの目的のロールを変更します"
+msgstr "システムの目的ロールを変更します"
 
 #: src/subscription_manager/managercli.py:2965
 msgid ""
@@ -5797,7 +5797,8 @@ msgstr ""
 #, python-format
 msgid "Overall Status: %s\n"
 "%s"
-msgstr "全体的な状態: %s\n"
+msgstr ""
+"全体のステータス: %s\n"
 "%s"
 
 #: src/subscription_manager/managercli.py:3043
@@ -6213,9 +6214,8 @@ msgid ""
 "Hat Subscription Management. If not desired, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
-"yum/dnf プラグイン: %s は、Red Hat Subscription Management "
-"のために自動的に有効化されました。必要ない場合は、\"subscription-manager config --rhsm."
-"auto_enable_yum_plugins=0\" を使用してこの動作をブロックしてください。"
+"yum/dnf プラグイン: Red Hat サブスクリプション管理に対して %s が自動的に有効になりました。自動的に有効化しない場合は"
+"、\"subscription-manager config --rhsm.auto_enable_yum_plugins=0\" で無効にします。"
 
 #: src/subscription_manager/repolib.py:643
 msgid "Repo updates"
