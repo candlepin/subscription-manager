@@ -193,7 +193,7 @@ class TestCompileCommand(TestCliCommand):
         try:
             os.makedirs(path1)
             os.makedirs(path2)
-        except os.error as e:
+        except os.error:
             # dir exists (or possibly can't be created) either of
             # which will fail shortly.
             pass

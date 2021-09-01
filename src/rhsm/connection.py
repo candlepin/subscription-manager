@@ -564,7 +564,7 @@ class BaseRestLib(object):
                     loaded_ca_certs.append(cert_file)
                     if res == 0:
                         raise BadCertificateException(cert_path)
-        except ssl.SSLError as e:
+        except ssl.SSLError:
             raise BadCertificateException(cert_path)
         except OSError as e:
             raise ConnectionSetupException(e.strerror)

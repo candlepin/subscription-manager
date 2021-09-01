@@ -39,7 +39,7 @@ class TestImportCertCommand(TestCliCommand):
         try:
             self.cc._validate_options()
             self.fail("No exception raised")
-        except Exception as e:
+        except Exception:
             pass
         except SystemExit as e:
             # there seems to be an optparse issue

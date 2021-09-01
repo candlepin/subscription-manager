@@ -56,7 +56,7 @@ class UnRegisterCommand(CliCommand):
             # is not useful
             cleanup_certmgr = UnregisterActionClient()
             cleanup_certmgr.update()
-        except Exception as e:
+        except Exception:
             pass
 
         self._request_validity_check()

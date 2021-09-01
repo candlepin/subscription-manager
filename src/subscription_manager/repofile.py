@@ -30,7 +30,7 @@ import sys
 try:
     from debian.deb822 import Deb822
     HAS_DEB822 = True
-except ImportError as e:
+except ImportError:
     HAS_DEB822 = False
 
 from subscription_manager import utils

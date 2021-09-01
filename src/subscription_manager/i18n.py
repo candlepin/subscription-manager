@@ -45,9 +45,8 @@ def configure_i18n():
     called once per invocation. (once for CLI, once for GUI)
     """
     import locale
-    current_locale = None
     try:
-        current_locale = locale.setlocale(category=locale.LC_ALL, locale='')
+        locale.setlocale(category=locale.LC_ALL, locale='')
     except locale.Error:
         # Following message could be little bit confusing. Why? When environment variable
         # LANG is set to e.g. es_ES.UTF-8, then we can show localized message for this language,

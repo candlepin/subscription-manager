@@ -29,10 +29,6 @@ ignore =
     E741,
     # F821: undefined name '*'
     F821,
-    # F841: local variable '*' is assigned to but never used
-    # possibly either mistakes (variables that were supposed to be used),
-    # or really no more needed variables
-    F841,
     # W504: line break after binary operator
     # we break after binary operators, newer style breaks before
     W504,

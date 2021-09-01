@@ -38,7 +38,7 @@ log = logging.getLogger(__name__)
 ethtool = None
 try:
     import ethtool
-except ImportError as e:
+except ImportError:
     log.warning("Unable to import the 'ethtool' module.")
 
 # For python2.6 that doesn't have subprocess.check_output
