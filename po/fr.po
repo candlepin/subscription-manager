@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-23 11:23+0200\n"
-"PO-Revision-Date: 2021-08-27 12:04+0000\n"
+"PO-Revision-Date: 2021-09-01 13:26+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/fr/>\n"
@@ -800,12 +800,6 @@ msgstr ""
 "manager pour vous enregistrer.\n"
 
 #: src/plugins/dnf/subscription-manager.py:54
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "This system is registered with and entitlement server, but is not "
-#| "receiving updates. You can use subscription-manager to assign "
-#| "subscriptions.\n"
 msgid ""
 "\n"
 "This system is registered with an entitlement server, but is not receiving "
@@ -813,7 +807,7 @@ msgid ""
 msgstr ""
 "\n"
 "Ce système est enregistré avec un serveur agréé, mais il ne reçoit pas de "
-"mises à jour. Vous pouvez utiliser le subscription-manager pour allouer les "
+"mises à jour. Vous pouvez utiliser le subscription-manager pour allouer des "
 "abonnements.\n"
 
 #: src/plugins/dnf/subscription-manager.py:87
@@ -1983,15 +1977,15 @@ msgstr[1] ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:247
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Warning: This org does not have any subscriptions with an available "
-#| "\"{attr}\" is empty."
+#, python-brace-format
 msgid ""
 "Warning: This organization does not have any subscriptions that provide a "
 "system purpose \"{attr}\".  This setting will not influence auto-attaching "
 "subscriptions."
-msgstr "Avertissement : Cet org n'a pas d'abonnements - \"{attr}\" est vide."
+msgstr ""
+"Avertissement : Cette organisation n'a pas d'abonnements qui fournissent un "
+"objectif système \"{attr}\".  Ce paramètre n'aura aucune incidence sur les "
+"abonnements à auto-atttaching pour les attachements automatique."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:261
 #, python-brace-format
@@ -2031,15 +2025,18 @@ msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
 msgstr ""
+"Il n'y a pas de valeurs disponibles pour l'objectif du système \""
+"{syspurpose_attr}\" parmi les abonnements disponibles dans cette "
+"organisation."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:382
-#, fuzzy, python-brace-format
-#| msgid "Unable to get list of valid values for \"{syspurpose_attr}\""
+#, python-brace-format
 msgid ""
 "Unable to get the list of valid values for the system purpose "
 "\"{syspurpose_attr}\"."
 msgstr ""
-"Impossible d'obtenir la liste des valeurs valables pour \"{syspurpose_attr}\""
+"Impossible d'obtenir la liste des valeurs valides pour l'objet du système \""
+"{syspurpose_attr}\"."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:401
 msgid "Unable to connect to server using token"
@@ -2277,10 +2274,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/cli_command/cli.py:168
-#, fuzzy
-#| msgid "proxy URL in the form of proxy_hostname:proxy_port"
 msgid "proxy URL in the form of hostname:port"
-msgstr "URL du proxy est sous la forme proxy_hostname:proxy_port"
+msgstr "URL du proxy sous la forme nom hôte:port"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/cli_command/cli.py:170
@@ -4001,7 +3996,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/exceptions.py:41
 msgid "Server URL can not be None"
-msgstr "L'URL du serveur ne peut pas être Aucun"
+msgstr "L'URL du serveur ne peut pas être « Aucun »"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/exceptions.py:42

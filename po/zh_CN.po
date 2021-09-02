@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-23 11:23+0200\n"
-"PO-Revision-Date: 2021-08-27 12:04+0000\n"
+"PO-Revision-Date: 2021-09-01 13:26+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-main/zh_CN/>\n"
@@ -1892,15 +1892,12 @@ msgstr[0] "警告：提供的值 {vals} 没有包括在有效值列表中"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:247
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Warning: This org does not have any subscriptions with an available "
-#| "\"{attr}\" is empty."
+#, python-brace-format
 msgid ""
 "Warning: This organization does not have any subscriptions that provide a "
 "system purpose \"{attr}\".  This setting will not influence auto-attaching "
 "subscriptions."
-msgstr "警告：这个机构没有任何带有可用的 \"{attr}\" 为空的订阅。"
+msgstr "警告：这个机构没有提供系统目的为 \"{attr}\" 的订阅。这个设置不会影响到自动附加订阅。"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:261
 #, python-brace-format
@@ -1939,15 +1936,14 @@ msgstr "可用 {syspurpose_attr}"
 msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
-msgstr ""
+msgstr "在这个机构的可用订阅中没有系统目的 \"{syspurpose_attr}\" 的可用值。"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:382
-#, fuzzy, python-brace-format
-#| msgid "Unable to get list of valid values for \"{syspurpose_attr}\""
+#, python-brace-format
 msgid ""
 "Unable to get the list of valid values for the system purpose "
 "\"{syspurpose_attr}\"."
-msgstr "无法获取 \"{syspurpose_attr}\" 的有效值列表"
+msgstr "无法为系统目的 \"{syspurpose_attr}\" 获得有效值列表。"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:401
 msgid "Unable to connect to server using token"
@@ -2152,10 +2148,8 @@ msgstr "不需要根据有效证书授权机构检查权利服务器 SSL 证书"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:168
-#, fuzzy
-#| msgid "proxy URL in the form of proxy_hostname:proxy_port"
 msgid "proxy URL in the form of hostname:port"
-msgstr "代理服务器 URL 的格式为 proxy_hostname:proxy_port"
+msgstr "代理 URL 的格式为 hostname:port"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:170

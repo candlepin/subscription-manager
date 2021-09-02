@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-23 11:23+0200\n"
-"PO-Revision-Date: 2021-08-27 12:04+0000\n"
+"PO-Revision-Date: 2021-09-01 13:26+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ja/>\n"
@@ -1935,16 +1935,13 @@ msgstr[0] "警告: 指定された値 {vals} は有効な値のリストに含�
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:247
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Warning: This org does not have any subscriptions with an available "
-#| "\"{attr}\" is empty."
+#, python-brace-format
 msgid ""
 "Warning: This organization does not have any subscriptions that provide a "
 "system purpose \"{attr}\".  This setting will not influence auto-attaching "
 "subscriptions."
 msgstr ""
-"警告: この組織には、利用できる {attr} が空のサブスクリプションがありません。"
+"警告: この組織には、システム目的「{attr}」を提供するサブスクリプションがありません。この設定は、自動割り当てサブスクリプションには影響しません。"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:261
 #, python-brace-format
@@ -1983,15 +1980,14 @@ msgstr "利用可能な {syspurpose_attr}"
 msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
-msgstr ""
+msgstr "この組織には、利用可能なサブスクリプションからシステム目的の「{syspurpose_attr}」に使用できる値がありません。"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:382
-#, fuzzy, python-brace-format
-#| msgid "Unable to get list of valid values for \"{syspurpose_attr}\""
+#, python-brace-format
 msgid ""
 "Unable to get the list of valid values for the system purpose "
 "\"{syspurpose_attr}\"."
-msgstr "{syspurpose_attr}\" の有効な値のリストを取得できません"
+msgstr "システム目的「{syspurpose_attr}」の有効な値のリストを取得できません。"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:401
 msgid "Unable to connect to server using token"
@@ -2222,10 +2218,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/cli_command/cli.py:168
-#, fuzzy
-#| msgid "proxy URL in the form of proxy_hostname:proxy_port"
 msgid "proxy URL in the form of hostname:port"
-msgstr "proxy_hostname:proxy_port 形式のプロキシー URL"
+msgstr "hostname:port の形式のプロキシー URL"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/cli_command/cli.py:170
