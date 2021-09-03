@@ -53,31 +53,36 @@ class ExceptionMapper(object):
     def __init__(self):
 
         self.message_map = {
-            socket_error: (SOCKET_MESSAGE, self.format_default),
-            Disconnected: (SOCKET_MESSAGE, self.format_default),
-            connection.ProxyException: (PROXY_MESSAGE, self.format_default),
-            connection.NetworkException: (NETWORK_MESSAGE, self.format_default),
-            connection.UnauthorizedException: (UNAUTHORIZED_MESSAGE, self.format_default),
-            connection.ForbiddenException: (FORBIDDEN_MESSAGE, self.format_default),
-            connection.RemoteServerException: (REMOTE_SERVER_MESSAGE, self.format_default),
+            socket_error: (SOCKET_MESSAGE, self.format_using_template),
+            Disconnected: (SOCKET_MESSAGE, self.format_using_template),
+            connection.ProxyException: (PROXY_MESSAGE, self.format_using_template),
+            connection.NetworkException: (NETWORK_MESSAGE, self.format_using_template),
+            connection.UnauthorizedException: (UNAUTHORIZED_MESSAGE, self.format_using_template),
+            connection.ForbiddenException: (FORBIDDEN_MESSAGE, self.format_using_template),
+            connection.RemoteServerException: (REMOTE_SERVER_MESSAGE, self.format_using_template),
             connection.BadCertificateException: (BAD_CA_CERT_MESSAGE, self.format_bad_ca_cert_exception),
-            connection.ExpiredIdentityCertException: (EXPIRED_ID_CERT_MESSAGE, self.format_default),
-            utils.ServerUrlParseErrorEmpty: (PERROR_EMPTY_MESSAGE, self.format_default),
-            utils.ServerUrlParseErrorJustScheme: (PERROR_JUST_SCHEME_MESSAGE, self.format_default),
-            utils.ServerUrlParseErrorNone: (PERROR_NONE_MESSAGE, self.format_default),
-            utils.ServerUrlParseErrorPort: (PERROR_PORT_MESSAGE, self.format_default),
-            utils.ServerUrlParseErrorScheme: (PERROR_SCHEME_MESSAGE, self.format_default),
+            connection.ExpiredIdentityCertException: (EXPIRED_ID_CERT_MESSAGE, self.format_using_template),
+            utils.ServerUrlParseErrorEmpty: (PERROR_EMPTY_MESSAGE, self.format_using_template),
+            utils.ServerUrlParseErrorJustScheme: (PERROR_JUST_SCHEME_MESSAGE, self.format_using_template),
+            utils.ServerUrlParseErrorNone: (PERROR_NONE_MESSAGE, self.format_using_template),
+            utils.ServerUrlParseErrorPort: (PERROR_PORT_MESSAGE, self.format_using_template),
+            utils.ServerUrlParseErrorScheme: (PERROR_SCHEME_MESSAGE, self.format_using_template),
             ssl.SSLError: (SSL_MESSAGE, self.format_ssl_error),
             # The message template will always be none since the RestlibException's
             # message is already translated server-side.
             connection.RestlibException: (RESTLIB_MESSAGE, self.format_restlib_exception),
             connection.RateLimitExceededException: (None, self.format_rate_limit_exception),
-            httplib.BadStatusLine: (REMOTE_SERVER_MESSAGE, self.format_default),
-            TokenAuthUnsupportedException: (TOKEN_AUTH_UNSUPPORTED_MESSAGE, self.format_default),
+            httplib.BadStatusLine: (REMOTE_SERVER_MESSAGE, self.format_using_template),
+            TokenAuthUnsupportedException: (TOKEN_AUTH_UNSUPPORTED_MESSAGE, self.format_using_template),
         }
 
-    def format_default(self, e, message):
+    def format_using_template(self, _: Exception, message: str) -> str:
+        """Return unaltered message template."""
         return message
+
+    def format_using_error(self, exc: Exception, _: str) -> str:
+        """Return string representation of the error."""
+        return str(exc)
 
     def format_bad_ca_cert_exception(self, bad_ca_cert_error, message_template):
         return message_template % bad_ca_cert_error.cert_path
@@ -98,11 +103,20 @@ class ExceptionMapper(object):
         else:
             return RATE_LIMIT_MESSAGE
 
-    def get_message(self, ex):
+    def get_message(self, exception) -> str:
+        """Get string representation of an exception.
+
+        The exception may have special handler (to allow us to fill in
+        variables into the message), or it may only use custom string template
+        (so we can display translated version).
+
+        If the message does not have any handler defined its string
+        representation is returned.
+        """
         # Lookup by __class__ instead of type to support old style classes
-        classes = inspect.getmro(ex.__class__)
-        for next_class in classes:
-            if next_class in self.message_map:
-                message_template, formatter = self.message_map[next_class]
-                return formatter(ex, message_template)
-        return None
+        exception_classes = inspect.getmro(exception.__class__)
+        for exception_class in exception_classes:
+            if exception_class in self.message_map:
+                message_template, formatter = self.message_map[exception_class]
+                return formatter(exception, message_template)
+        return self.format_using_error(exception, None)
