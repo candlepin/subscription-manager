@@ -5,21 +5,14 @@ MAINTAINER "Candlepin Team" <candlepin@redhat.com>
 ENV SMDEV_CONTAINER_OFF='True'
 
 RUN yum install --disablerepo=updates -y \
-    bind-utils \
     cmake \
     dbus-daemon \
-    dbus-glib \
-    dbus-glib-devel \
-    desktop-file-utils \
     dnf-utils \
     gcc \
-    GConf2-devel \
     gettext \
     git \
-    glibc-common \
     intltool \
     json-c-devel \
-    jss \
     langpacks-as \
     langpacks-bn \
     langpacks-de \
@@ -47,7 +40,6 @@ RUN yum install --disablerepo=updates -y \
     npm \
     openssl \
     openssl-devel \
-    postfix \
     python3-coverage \
     python3-dateutil \
     python3-decorator \
@@ -62,9 +54,7 @@ RUN yum install --disablerepo=updates -y \
     python3-rpm \
     python3-simplejson \
     python3-six \
-    python3-sphinx \
     python3-virtualenv \
-    rarian-compat \
     redhat-rpm-config \
     rpm-build \
     rpmlint \
@@ -72,7 +62,6 @@ RUN yum install --disablerepo=updates -y \
     sudo \
     vim \
     wget \
-    zsh \
     && yum clean all
 
 RUN mkdir /build
