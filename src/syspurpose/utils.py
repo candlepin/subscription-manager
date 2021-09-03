@@ -24,7 +24,6 @@ import json
 import os
 import errno
 import logging
-import six
 
 log = logging.getLogger(__name__)
 
@@ -72,16 +71,16 @@ def create_file(path, contents):
 def make_utf8(obj):
     """
     Transforms the provided string into unicode if it is not already
+
+    Previously there was a logic which converted the input.
+    Now the six.PY2 is never true and we can directly return the input.
+
+    It should be removed with other Python 2 utils.
+
     :param obj: the string to decode
     :return: the unicode format of the string
     """
-    if six.PY3:
-        return obj
-    elif obj is not None and isinstance(obj, str) and not isinstance(obj, unicode):
-        obj = obj.decode('utf-8')
-        return obj
-    else:
-        return obj
+    return obj
 
 
 def write_to_file_utf8(file, data):

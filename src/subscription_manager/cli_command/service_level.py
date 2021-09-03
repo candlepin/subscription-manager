@@ -199,7 +199,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
                         'organization.').format(syspurpose_attr="service_level"))
         except UnauthorizedException as e:
             raise e
-        except connection.RemoteServerException as e:
+        except connection.RemoteServerException:
             system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
         except connection.GoneException as ge:
             raise ge

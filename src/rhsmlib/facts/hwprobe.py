@@ -32,13 +32,15 @@ from datetime import datetime, timedelta
 from rhsmlib.facts import cpuinfo
 from rhsmlib.facts import collector
 
+from typing import Optional
+
 log = logging.getLogger(__name__)
 
 # There is no python3 version of python-ethtool
 ethtool = None
 try:
     import ethtool
-except ImportError as e:
+except ImportError:
     log.warning("Unable to import the 'ethtool' module.")
 
 # For python2.6 that doesn't have subprocess.check_output

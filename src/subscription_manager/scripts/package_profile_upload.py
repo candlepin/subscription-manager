@@ -12,12 +12,7 @@ from __future__ import print_function, division, absolute_import
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
-import six
 import sys
-
-if six.PY2:
-    reload(sys)
-    sys.setdefaultencoding('utf-8')
 
 import argparse
 
