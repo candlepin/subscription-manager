@@ -22,13 +22,15 @@ import fileinput
 import fnmatch
 import getpass
 import logging
-from optparse import OptionValueError, SUPPRESS_HELP
+import argparse
+from argparse import SUPPRESS
 import os
 import re
 import readline
 import socket
 import six.moves
 import sys
+import json
 from time import localtime, strftime, strptime
 
 from rhsm.certificate import CertificateException
@@ -38,7 +40,7 @@ from rhsm.https import ssl
 import rhsm.config
 import rhsm.connection as connection
 from rhsm.connection import ProxyException, UnauthorizedException, ConnectionException, RemoteServerException
-from rhsm.utils import remove_scheme, ServerUrlParseError
+from rhsm.utils import cmd_name, remove_scheme, ServerUrlParseError
 
 from subscription_manager import identity
 from subscription_manager.branding import get_branding
@@ -52,7 +54,6 @@ from rhsmlib.facts.hwprobe import ClassicCheck
 import subscription_manager.injection as inj
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager import managerlib
-from subscription_manager.managerlib import valid_quantity
 from subscription_manager.release import ReleaseBackend, MultipleReleaseProductsError
 from subscription_manager.repolib import RepoActionInvoker, YumRepoFile, YumPluginManager, manage_repos_enabled
 from subscription_manager.utils import parse_server_info, \
@@ -201,6 +202,9 @@ SP_CONFLICT_MESSAGE = _("Warning: A {attr} of \"{download_value}\" was recently 
                         "by the entitlement server administrator.\n{advice}")
 SP_ADVICE = _("If you'd like to overwrite the server side change please run: {command}")
 
+# TRANSLATORS: this refers to a deprecated command
+DEPRECATED_COMMAND_MESSAGE = _("Deprecated, see 'syspurpose'")
+
 
 def handle_exception(msg, ex):
 
@@ -344,21 +348,21 @@ class CliCommand(AbstractCLICommand):
 
     def _add_url_options(self):
         """ Add options that allow the setting of the server URL."""
-        self.parser.add_option("--serverurl", dest="server_url",
+        self.parser.add_argument("--serverurl", dest="server_url",
                                default=None, help=_("server URL in the form of https://hostname:port/prefix"))
-        self.parser.add_option("--insecure", action="store_true",
+        self.parser.add_argument("--insecure", action="store_true",
                                 default=False, help=_("do not check the entitlement server SSL certificate against "
                                                       "available certificate authorities"))
 
     def _add_proxy_options(self):
         """ Add proxy options that apply to sub-commands that require network connections. """
-        self.parser.add_option("--proxy", dest="proxy_url",
+        self.parser.add_argument("--proxy", dest="proxy_url",
                                default=None, help=_("proxy URL in the form of hostname:port"))
-        self.parser.add_option("--proxyuser", dest="proxy_user",
+        self.parser.add_argument("--proxyuser", dest="proxy_user",
                                 default=None, help=_("user for HTTP proxy with basic authentication"))
-        self.parser.add_option("--proxypassword", dest="proxy_password",
+        self.parser.add_argument("--proxypassword", dest="proxy_password",
                                 default=None, help=_("password for HTTP proxy with basic authentication"))
-        self.parser.add_option('--noproxy', dest='no_proxy',
+        self.parser.add_argument('--noproxy', dest='no_proxy',
                                default=None, help=_("host suffixes that should bypass HTTP proxy"))
 
     def _do_command(self):
@@ -424,18 +428,18 @@ class CliCommand(AbstractCLICommand):
         config_changed = False
 
         # In testing we sometimes specify args, otherwise use the default:
-        if not args:
-            args = sys.argv[1:]
+        if args is None:
+            args = sys.argv[2:]
 
-        (self.options, self.args) = self.parser.parse_args(args)
+        (self.options, unknown_args) = self.parser.parse_known_args(args)
 
-        # we dont need argv[0] in this list...
-        self.args = self.args[1:]
         # check for unparsed arguments
-        if self.args:
-            for arg in self.args:
-                print(_("cannot parse argument: %s") % arg)
-            system_exit(os.EX_USAGE)
+        if unknown_args:
+            message: str = _("{prog}: error: no such option: {args}").format(
+                prog=cmd_name(sys.argv),
+                args=" ".join(unknown_args),
+            )
+            system_exit(os.EX_USAGE, message)
 
         if hasattr(self.options, "insecure") and self.options.insecure:
             conf["server"]["insecure"] = "1"
@@ -581,33 +585,40 @@ class CliCommand(AbstractCLICommand):
             handle_exception("exception caught in subscription-manager", err)
 
 
-class SyspurposeCommand(CliCommand):
+class AbstractSyspurposeCommand(CliCommand):
     """
     Abstract command for manipulating an attribute of system purpose.
     """
 
-    def __init__(self, name, shortdesc=None, primary=False, attr=None, commands=('set', 'unset', 'show', 'list')):
-        super(SyspurposeCommand, self).__init__(name, shortdesc=shortdesc, primary=primary)
+    def __init__(self, name, subparser, shortdesc=None, primary=False, attr=None, commands=('set', 'unset', 'show', 'list')):
+        # set 'subparser' before calling the parent constructor, as it will
+        # (indirectly) call _create_argparser(), which our reimplementation uses
+        self.subparser = subparser
+        if self.subparser is None:
+            # this syspurpose command is a deprecated top-level subcommand,
+            # so change its description to be a deprecated text
+            shortdesc = DEPRECATED_COMMAND_MESSAGE
+        super(AbstractSyspurposeCommand, self).__init__(name, shortdesc=shortdesc, primary=primary)
         self.commands = commands
         self.attr = attr
 
         self.store = None
 
         if 'set' in commands:
-            self.parser.add_option(
+            self.parser.add_argument(
                 "--set",
                 dest="set",
-                help=(_("set {attr} of system purpose").format(attr=attr))
+                help=_("set {attr} of system purpose").format(attr=attr)
             )
         if 'unset' in commands:
-            self.parser.add_option(
+            self.parser.add_argument(
                 "--unset",
                 dest="unset",
                 action="store_true",
-                help=(_("unset {attr} of system purpose").format(attr=attr))
+                help=_("unset {attr} of system purpose").format(attr=attr)
             )
         if 'add' in commands:
-            self.parser.add_option(
+            self.parser.add_argument(
                 "--add",
                 dest="to_add",
                 action="append",
@@ -615,7 +626,7 @@ class SyspurposeCommand(CliCommand):
                 help=_("add an item to the list ({attr}).").format(attr=attr)
             )
         if 'remove' in commands:
-            self.parser.add_option(
+            self.parser.add_argument(
                 "--remove",
                 dest="to_remove",
                 action="append",
@@ -623,14 +634,14 @@ class SyspurposeCommand(CliCommand):
                 help=_("remove an item from the list ({attr}).").format(attr=attr)
             )
         if 'show' in commands:
-            self.parser.add_option(
+            self.parser.add_argument(
                 "--show",
                 dest="show",
                 action='store_true',
                 help=_("show this system's current {attr}").format(attr=attr)
             )
         if 'list' in commands:
-            self.parser.add_option(
+            self.parser.add_argument(
                 "--list",
                 dest="list",
                 action='store_true',
@@ -644,11 +655,25 @@ class SyspurposeCommand(CliCommand):
         except ImportError:
             return None
 
+    def __getattr__(self, name):
+        """
+        This custom __getattr__() reimplementation is used to lookup attributes
+        in the parent syspurpose command, if set; this is done in case the
+        current command is a subcommand of 'syspurpose', so
+        SyspurposeCommand._do_command() will set a reference to itself as
+        'syspurpose_command' attribute.
+        """
+        syspurpose_command = self.__dict__.get('syspurpose_command', None)
+        if syspurpose_command is not None:
+            return getattr(syspurpose_command, name)
+        raise AttributeError
+
     def _validate_options(self):
         to_set = getattr(self.options, 'set', None)
         to_unset = getattr(self.options, 'unset', None)
         to_add = getattr(self.options, 'to_add', None)
         to_remove = getattr(self.options, 'to_remove', None)
+        to_show = getattr(self.options, 'show', None)
 
         if to_set:
             self.options.set = self.options.set.strip()
@@ -678,7 +703,7 @@ class SyspurposeCommand(CliCommand):
                             attr=self.attr
                         )
                     )
-            elif to_unset or to_set or to_add or to_remove:
+            elif to_unset or to_set or to_add or to_remove or to_show:
                 pass
             else:
                 system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
@@ -963,6 +988,19 @@ class SyspurposeCommand(CliCommand):
         else:
             self.show()
 
+    def _create_argparser(self):
+        if self.subparser is None:
+            # Without a subparser, which means it is a standalone command
+            return super(AbstractSyspurposeCommand, self)._create_argparser()
+
+        # This string is similar to what _get_usage() returns; we cannot use
+        # _get_usage() as it prints the subcommand name as well, and the created
+        # ArgumentParser is a subparser (so there is a parent parser already
+        # printing the subcommand).
+        usage = _("%(prog)s [OPTIONS]")
+        return self.subparser.add_parser(self.name, description=self.shortdesc,
+                                         usage=usage, help=self.shortdesc)
+
     def check_syspurpose_support(self, attr):
         if self.is_registered() and not self.cp.has_capability('syspurpose'):
             print(_("Note: The currently configured entitlement server does not support System Purpose {attr}.".format(attr=attr)))
@@ -992,11 +1030,11 @@ class UserPassCommand(CliCommand):
         self._username = None
         self._password = None
 
-        self.parser.add_option("--username", dest="username",
+        self.parser.add_argument("--username", dest="username",
                                help=_("username to use when authorizing against the server"))
-        self.parser.add_option("--password", dest="password",
+        self.parser.add_argument("--password", dest="password",
                                help=_("password to use when authorizing against the server"))
-        self.parser.add_option("--token", dest="token",
+        self.parser.add_argument("--token", dest="token",
                                help=_("token to use when authorizing against the server"))
 
     @staticmethod
@@ -1043,8 +1081,12 @@ class OrgCommand(UserPassCommand):
         self._org = None
         if not hasattr(self, "_org_help_text"):
             self._org_help_text = _("specify an organization")
-        self.parser.add_option("--org", dest="org", metavar="ORG_KEY",
-            help=self._org_help_text)
+        self.parser.add_argument(
+            "--org",
+            dest="org",
+            metavar="ORG_KEY",
+            help=self._org_help_text
+        )
 
     @staticmethod
     def _get_org(org):
@@ -1062,6 +1104,131 @@ class OrgCommand(UserPassCommand):
             else:
                 self._org = self._get_org(self.options.org)
         return self._org
+
+
+class SyspurposeCommand(CliCommand):
+    """
+    Syspurpose command for generic actions. This command will be used for all
+    syspurpose actions in the future and it will replace addons, role,
+    service-level and usage commands. It will be possible to set service-type
+    using this command.
+
+    Note: when the system is not registered, then it doesn't make any sense to
+    synchronize syspurpose values with candlepin server, because consumer
+    does not exist.
+    """
+
+    def __init__(self):
+        """
+        Initialize the syspurpose command
+        """
+        short_desc = _("Convenient module for managing all system purpose settings")
+        super(SyspurposeCommand, self).__init__(
+            "syspurpose",
+            short_desc,
+            primary=False
+        )
+        self.parser.add_argument(
+            "--show",
+            dest='syspurpose_show',
+            action="store_true",
+            help=_("show current system purpose")
+        )
+
+        # all the subcommands of 'syspurpose'; add them to this list to be
+        # registered as such
+        syspurpose_command_classes = [
+            AddonsCommand,
+            RoleCommand,
+            ServiceLevelCommand,
+            UsageCommand
+        ]
+        # create a subparser for all the subcommands: it is passed to all
+        # the subcommand classes, so they will create an ArgumentParser that
+        # is a child of the 'syspurpose' one, rather than as standalone
+        # parsers
+        prog = os.path.basename(sys.argv[0])
+        subparser = self.parser.add_subparsers(
+            # create an own 'prog' string that contains the actual program name
+            # followed by this command name; this way, the default 'prog'
+            # definition is not used, as it is based on the 'usage' string of
+            # the ArgumentParser (self.parser), which contains the '[OPTIONS]'
+            # help text (see AbstractCLICommand._get_usage())
+            prog=_("{prog} {name}").format(prog=prog, name=self.name),
+            dest='subparser_name',
+            title=_('Syspurpose submodules'),
+            help='',  # trick argparse a bit to not show the {cmd1, cmd2, ..}
+            metavar=''  # trick argparse a bit to not show the {cmd1, cmd2, ..}
+        )
+        self.cli_commands = {}
+        for clazz in syspurpose_command_classes:
+            cmd = clazz(subparser)
+            self.cli_commands[cmd.name] = cmd
+
+    def _get_usage(self):
+        """
+        Reimplemented from AbstractCLICommand to mention the optional submodule
+        in the usage string.
+        """
+        return _("%(prog)s {name} [SUBMODULE] [OPTIONS]").format(name=self.name)
+
+    def _get_synced_store(self):
+        """
+        Try to get SyncedStore.
+        TODO: refactor (remove) this, when AbstractSyspurposeCommand is merged to SyspurposeCommand
+        :return: Instance of SyncedStore or None
+        """
+        try:
+            from syspurpose.files import SyncedStore
+            return SyncedStore(uep=self.cp, consumer_uuid=self.identity.uuid)
+        except ImportError:
+            return None
+
+    def _validate_options(self):
+        """
+        Validate provided options
+        :return: None
+        """
+        # When no CLI options are provided, then show current syspurpose values
+        if self.options.syspurpose_show is not True:
+            self.options.syspurpose_show = True
+
+    def _do_command(self):
+        """
+        Own implementation of all actions
+        :return: None
+        """
+        self._validate_options()
+
+        # a subcommand was actually invoked, so dispatch it
+        if self.options.subparser_name is not None:
+            subcmd = self.cli_commands[self.options.subparser_name]
+            # set a reference to ourselves in the subcommand being executed;
+            # this way, everything we collected & created in main() is
+            # "forwarded" to the subcommand class (see
+            # AbstractSyspurposeCommand.__getattr__())
+            subcmd.syspurpose_command = self
+            subcmd._do_command()
+            return
+
+        content = {}
+        if self.options.syspurpose_show is True:
+            if self.is_registered():
+                try:
+                    self.cp = self.cp_provider.get_consumer_auth_cp()
+                except connection.RestlibException as err:
+                    log.exception(re)
+                    log.debug("Error: Unable to retrieve system purpose from server")
+                except Exception as err:
+                    log.debug("Error: Unable to retrieve system purpose from server: %s" % err)
+                else:
+                    self.store = self._get_synced_store()
+                    if self.store is not None:
+                        sync_result = self.store.sync()
+                        content = sync_result.result
+            else:
+                content = syspurposelib.read_syspurpose()
+            print(json.dumps(content, indent=2, ensure_ascii=False, sort_keys=True))
 
 
 class CleanCommand(CliCommand):
@@ -1089,7 +1256,7 @@ class RefreshCommand(CliCommand):
 
         super(RefreshCommand, self).__init__("refresh", shortdesc, True)
 
-        self.parser.add_option("--force", action='store_true', help=_("force certificate regeneration"))
+        self.parser.add_argument("--force", action='store_true', help=_("force certificate regeneration"))
 
     def _do_command(self):
         self.assert_should_be_registered()
@@ -1132,9 +1299,9 @@ class IdentityCommand(UserPassCommand):
 
         super(IdentityCommand, self).__init__("identity", shortdesc, False)
 
-        self.parser.add_option("--regenerate", action='store_true',
+        self.parser.add_argument("--regenerate", action='store_true',
                                help=_("request a new certificate be generated"))
-        self.parser.add_option("--force", action='store_true',
+        self.parser.add_argument("--force", action='store_true',
                                help=_("force certificate regeneration (requires username and password); "
                                       "Only used with --regenerate"))
 
@@ -1311,11 +1478,11 @@ class AutohealCommand(CliCommand):
         super(AutohealCommand, self).__init__("auto-attach", shortdesc,
                                                 False)
 
-        self.parser.add_option("--enable", dest="enable", action='store_true',
+        self.parser.add_argument("--enable", dest="enable", action='store_true',
                 help=_("try to attach subscriptions for uncovered products each check-in"))
-        self.parser.add_option("--disable", dest="disable", action='store_true',
+        self.parser.add_argument("--disable", dest="disable", action='store_true',
                 help=_("do not try to automatically attach subscriptions each check-in"))
-        self.parser.add_option("--show", dest="show", action='store_true',
+        self.parser.add_argument("--show", dest="show", action='store_true',
                 help=_("show the current auto-attach preference"))
 
     def _toggle(self, autoheal):
@@ -1341,13 +1508,14 @@ class AutohealCommand(CliCommand):
             self._toggle(self.options.enable or False)
 
 
-class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
+class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
 
-    def __init__(self):
+    def __init__(self, subparser=None):
 
-        shortdesc = _("Manage service levels for this system")
+        shortdesc = _("Show or modify the system purpose service-level setting")
         super(ServiceLevelCommand, self).__init__(
             "service-level",
+            subparser,
             shortdesc,
             False,
             attr="service_level_agreement",
@@ -1376,9 +1544,14 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
         if not self.is_registered():
             if self.options.list:
                 if not (self.options.username and self.options.password) and not self.options.token:
-                    system_exit(os.EX_USAGE, _("Error: you must register or specify --username and --password to list service levels"))
+                    system_exit(
+                        os.EX_USAGE,
+                        _("Error: you must register or specify --username and --password to list service levels")
+                    )
             elif self.options.unset or self.options.set:
                 pass  # RHBZ 1632248 : User should be able to set/unset while not registered.
+            elif self.options.show:
+                pass  # When system is not registered, then user should have ability to display current value
             else:
                 system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
 
@@ -1404,6 +1577,8 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
             elif self.options.username and self.options.password:
                 self.cp_provider.set_user_pass(self.username, self.password)
                 self.cp = self.cp_provider.get_basic_auth_cp()
+            elif not self.is_registered() and self.options.show:
+                pass
             else:
                 # get an UEP as consumer
                 self.cp = self.cp_provider.get_consumer_auth_cp()
@@ -1462,14 +1637,17 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
         self.cp.updateConsumer(self.identity.uuid, service_level=service_level)
 
     def show_service_level(self):
-        consumer = self.cp.getConsumer(self.identity.uuid)
-        if 'serviceLevel' not in consumer:
-            system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
-        service_level = consumer['serviceLevel'] or ""
-        if service_level:
-            print(_("Current service level: %s") % service_level)
+        if self.is_registered():
+            consumer = self.cp.getConsumer(self.identity.uuid)
+            if 'serviceLevel' not in consumer:
+                system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
+            service_level = consumer['serviceLevel'] or ""
+            if service_level:
+                print(_("Current service level: %s") % service_level)
+            else:
+                print(_("Service level preference not set"))
         else:
-            print(_("Service level preference not set"))
+            super(ServiceLevelCommand, self).show()
 
     def list_service_levels(self):
         org_key = self.options.org
@@ -1507,12 +1685,13 @@ class ServiceLevelCommand(SyspurposeCommand, OrgCommand):
                 raise e
 
 
-class UsageCommand(SyspurposeCommand, OrgCommand):
+class UsageCommand(AbstractSyspurposeCommand, OrgCommand):
 
-    def __init__(self):
-        shortdesc = _("Manage usage setting for this system")
+    def __init__(self, subparser=None):
+        shortdesc = _("Show or modify the system purpose usage setting")
         super(UsageCommand, self).__init__(
             "usage",
+            subparser,
             shortdesc,
             False,
             attr='usage',
@@ -1527,29 +1706,29 @@ class RegisterCommand(UserPassCommand):
         super(RegisterCommand, self).__init__("register", shortdesc, True)
 
         self._add_url_options()
-        self.parser.add_option("--baseurl", dest="base_url",
+        self.parser.add_argument("--baseurl", dest="base_url",
                               default=None, help=_("base URL for content in form of https://hostname:port/prefix"))
-        self.parser.add_option("--type", dest="consumertype", default="system", metavar="UNITTYPE",
-                               help=SUPPRESS_HELP)
-        self.parser.add_option("--name", dest="consumername", metavar="SYSTEMNAME",
+        self.parser.add_argument("--type", dest="consumertype", default="system", metavar="UNITTYPE",
+                               help=SUPPRESS)
+        self.parser.add_argument("--name", dest="consumername", metavar="SYSTEMNAME",
                                help=_("name of the system to register, defaults to the hostname"))
-        self.parser.add_option("--consumerid", dest="consumerid", metavar="SYSTEMID",
+        self.parser.add_argument("--consumerid", dest="consumerid", metavar="SYSTEMID",
                                help=_("the existing system data is pulled from the server"))
-        self.parser.add_option("--org", dest="org", metavar="ORG_KEY",
+        self.parser.add_argument("--org", dest="org", metavar="ORG_KEY",
                                help=_("register with one of multiple organizations for the user, using organization key"))
-        self.parser.add_option("--environment", dest="environment",
+        self.parser.add_argument("--environment", dest="environment",
                                help=_("register with a specific environment in the destination org"))
-        self.parser.add_option("--release", dest="release",
+        self.parser.add_argument("--release", dest="release",
                                help=_("set a release version"))
-        self.parser.add_option("--autosubscribe", action='store_true',
+        self.parser.add_argument("--autosubscribe", action='store_true',
                                help=_("Deprecated, see --auto-attach"))
-        self.parser.add_option("--auto-attach", action='store_true', dest="autoattach",
+        self.parser.add_argument("--auto-attach", action='store_true', dest="autoattach",
                                help=_("automatically attach compatible subscriptions to this system"))
-        self.parser.add_option("--force", action='store_true',
+        self.parser.add_argument("--force", action='store_true',
                                help=_("register the system even if it is already registered"))
-        self.parser.add_option("--activationkey", action='append', dest="activation_keys",
+        self.parser.add_argument("--activationkey", action='append', dest="activation_keys",
                                help=_("activation key to use for registration (can be specified more than once)"))
-        self.parser.add_option("--servicelevel", dest="service_level",
+        self.parser.add_argument("--servicelevel", dest="service_level",
                                help=_("system preference used when subscribing automatically, requires --auto-attach"))
 
     def _validate_options(self):
@@ -1911,12 +2090,13 @@ class UnRegisterCommand(CliCommand):
         print(_("System has been unregistered."))
 
 
-class AddonsCommand(SyspurposeCommand, OrgCommand):
+class AddonsCommand(AbstractSyspurposeCommand, OrgCommand):
 
-    def __init__(self):
-        shortdesc = _("Modify or view the addons attribute of the system purpose")
+    def __init__(self, subparser=None):
+        shortdesc = _("Show or modify the system purpose addons setting")
         super(AddonsCommand, self).__init__(
             "addons",
+            subparser,
             shortdesc=shortdesc,
             primary=False,
             attr='addons',
@@ -1930,10 +2110,10 @@ class RedeemCommand(CliCommand):
         shortdesc = _("Attempt to redeem a subscription for a preconfigured system")
         super(RedeemCommand, self).__init__("redeem", shortdesc, False)
 
-        self.parser.add_option("--email", dest="email", action='store',
+        self.parser.add_argument("--email", dest="email", action='store',
                                help=_("email address to notify when "
                                "subscription redemption is complete"))
-        self.parser.add_option("--locale", dest="locale", action='store',
+        self.parser.add_argument("--locale", dest="locale", action='store',
                                help=_("optional language to use for email "
                                "notification when subscription redemption is "
                                "complete (Examples: en-us, de-de)"))
@@ -1984,14 +2164,14 @@ class ReleaseCommand(CliCommand):
         shortdesc = _("Configure which operating system release to use")
         super(ReleaseCommand, self).__init__("release", shortdesc, True)
 
-        self.parser.add_option("--show", dest="show", action="store_true",
+        self.parser.add_argument("--show", dest="show", action="store_true",
                                help=_("shows current release setting; default command"))
-        self.parser.add_option("--list", dest="list", action="store_true",
+        self.parser.add_argument("--list", dest="list", action="store_true",
                                help=_("list available releases"))
-        self.parser.add_option("--set", dest="release", action="store",
+        self.parser.add_argument("--set", dest="release", action="store",
                                default=None,
                                help=_("set the release for this system"))
-        self.parser.add_option("--unset", dest="unset",
+        self.parser.add_argument("--unset", dest="unset",
                                action='store_true',
                                help=_("unset the release for this system"))
 
@@ -2080,15 +2260,15 @@ class AttachCommand(CliCommand):
         self.product = None
         self.substoken = None
         self.auto_attach = True
-        self.parser.add_option("--pool", dest="pool", action='append',
+        self.parser.add_argument("--pool", dest="pool", action='append',
                                help=_("The ID of the pool to attach (can be specified more than once)"))
-        self.parser.add_option("--quantity", dest="quantity",
+        self.parser.add_argument("--quantity", dest="quantity", type=int,
             help=_("Number of subscriptions to attach. May not be used with an auto-attach."))
-        self.parser.add_option("--auto", action='store_true',
+        self.parser.add_argument("--auto", action='store_true',
             help=_("Automatically attach compatible subscriptions to this system. This is the default action."))
-        self.parser.add_option("--servicelevel", dest="service_level",
+        self.parser.add_argument("--servicelevel", dest="service_level",
                                help=_("Automatically attach only subscriptions matching the specified service level; only used with --auto"))
-        self.parser.add_option("--file", dest="file",
+        self.parser.add_argument("--file", dest="file",
                                 help=_("A file from which to read pool IDs. If a hyphen is provided, pool IDs will be read from stdin."))
 
         # re bz #864207
@@ -2119,16 +2299,12 @@ class AttachCommand(CliCommand):
             if self.options.service_level:
                 system_exit(os.EX_USAGE, _("Error: The --servicelevel option cannot be used when specifying pools."))
 
-        # Quantity must be a positive integer
-        # TODO: simplify with a optparse type="int"
-        quantity = self.options.quantity
-        if self.options.quantity:
-            if not valid_quantity(quantity):
+        # Quantity must be positive
+        if self.options.quantity is not None:
+            if self.options.quantity <= 0:
                 system_exit(os.EX_USAGE, _("Error: Quantity must be a positive integer."))
             elif self.options.auto or not (self.options.pool or self.options.file):
                 system_exit(os.EX_USAGE, _("Error: --quantity may not be used with an auto-attach"))
-            else:
-                self.options.quantity = int(self.options.quantity)
 
         # If a pools file was specified, process its contents and append it to options.pool
         if self.options.file:
@@ -2294,11 +2470,11 @@ class RemoveCommand(CliCommand):
             self._short_description(),
             self._primary())
 
-        self.parser.add_option("--serial", action='append', dest="serials", metavar="SERIAL",
+        self.parser.add_argument("--serial", action='append', dest="serials", metavar="SERIAL",
                        help=_("certificate serial number to remove (can be specified more than once)"))
-        self.parser.add_option("--pool", action='append', dest="pool_ids", metavar="POOL_ID",
+        self.parser.add_argument("--pool", action='append', dest="pool_ids", metavar="POOL_ID",
                        help=_("the ID of the pool to remove (can be specified more than once)"))
-        self.parser.add_option("--all", dest="all", action="store_true",
+        self.parser.add_argument("--all", dest="all", action="store_true",
                                help=_("remove all subscriptions from this system"))
 
     def _short_description(self):
@@ -2446,9 +2622,9 @@ class FactsCommand(CliCommand):
         shortdesc = _("View or update the detected system information")
         super(FactsCommand, self).__init__("facts", shortdesc, False)
 
-        self.parser.add_option("--list", action="store_true",
+        self.parser.add_argument("--list", action="store_true",
                                help=_("list known facts for this system"))
-        self.parser.add_option("--update", action="store_true",
+        self.parser.add_argument("--update", action="store_true",
                                help=_("update the system facts"))
 
     def _validate_options(self):
@@ -2493,7 +2669,7 @@ class ImportCertCommand(CliCommand):
         shortdesc = _("Import certificates which were provided outside of the tool")
         super(ImportCertCommand, self).__init__("import", shortdesc, False)
 
-        self.parser.add_option("--certificate", action="append", dest="certificate_file",
+        self.parser.add_argument("--certificate", action="append", dest="certificate_file",
                                help=_("certificate file to import (can be specified more than once)"))
 
     def _validate_options(self):
@@ -2557,13 +2733,13 @@ class PluginsCommand(CliCommand):
         shortdesc = _("View and configure with 'subscription-manager plugins'")
         super(PluginsCommand, self).__init__("plugins", shortdesc, False)
 
-        self.parser.add_option("--list", action="store_true",
+        self.parser.add_argument("--list", action="store_true",
                                 help=_("list %s plugins") % SM)
-        self.parser.add_option("--listslots", action="store_true",
+        self.parser.add_argument("--listslots", action="store_true",
                                 help=_("list %s plugin slots") % SM)
-        self.parser.add_option("--listhooks", action="store_true",
+        self.parser.add_argument("--listhooks", action="store_true",
                                 help=_("list %s plugin hooks") % SM)
-        self.parser.add_option("--verbose", action="store_true",
+        self.parser.add_argument("--verbose", action="store_true",
                                default=False,
                                help=_("show verbose plugin info"))
 
@@ -2606,65 +2782,64 @@ class PluginsCommand(CliCommand):
                     print("\t%s.%s" % (hook_key, hook.__name__))
 
 
+class ReposAddRemoveAction(argparse.Action):
+    """
+    Store our repos to enable and disable in a combined, ordered list of
+    tuples. (enabled, value)
+
+    This allows us to have our expected behaviour when we do things like
+    --disable="*" --enable="1" --enable="2".
+    """
+
+    def __init__(self, option_strings, **kwargs):
+        super(ReposAddRemoveAction, self).__init__(option_strings, **kwargs)
+        self.status_string = "1" if "--enable" in option_strings else "0"
+
+    def __call__(self, parser, namespace, value, option_string=None):
+        """
+        Update the argparse.Namespace 'namespace' object adding the new
+        action as new element to the destination variable.
+        """
+        new_values = getattr(namespace, self.dest) or []
+        new_values.append((self.status_string, value))
+        setattr(namespace, self.dest, new_values)
+
+
 class ReposCommand(CliCommand):
 
     def __init__(self):
         shortdesc = _("List the repositories which this system is entitled to use")
         super(ReposCommand, self).__init__("repos", shortdesc, False)
 
-        def repo_callback(option, opt, repoid, parser):
-            """
-            Store our repos to enable and disable in a combined, ordered list of
-            tuples. (enabled, repoid)
+        self.parser.add_argument("--list", action='store_true', dest="list",
+                                 help=_("list all known repositories for this system"))
+        self.parser.add_argument("--list-enabled", action='store_true', dest="list_enabled",
+                                 help=_("list known, enabled repositories for this system"))
+        self.parser.add_argument("--list-disabled", action='store_true', dest="list_disabled",
+                                 help=_("list known, disabled repositories for this system"))
+        self.parser.add_argument("--enable", dest="repo_actions", action=ReposAddRemoveAction, metavar="REPOID",
+                                 help=_(
+                                     "repository to enable (can be specified more than once). Wildcards (* and ?) are supported."))
+        self.parser.add_argument("--disable", dest="repo_actions", action=ReposAddRemoveAction, metavar="REPOID",
+                                 help=_(
+                                     "repository to disable (can be specified more than once). Wildcards (* and ?) are supported."))
 
-            This allows us to have our expected behaviour when we do things like
-            --disable="*" --enable="1" --enable="2".
-            """
-            status = '0'
-            if opt == '--enable':
-                status = '1'
-            vars(parser.values).setdefault('repo_actions',
-                []).append((status, repoid))
+    def _reconcile_list_options(self):
+        """
+        Handles setting both enabled/disabled filter options when the --list argument is
+        provided.
 
-        def list_callback(option, opt, repoid, parser):
-            """
-            Handles setting both enabled/disabled filter options when the --list argument is
-            provided.
-
-            Allows for --list to perform identically to --list-enabled --list-disabled
-            """
-            parser.values.list = True
-
-            if opt in ("--list", "--list-enabled"):
-                parser.values.list_enabled = True
-
-            if opt in ("--list", "--list-disabled"):
-                parser.values.list_disabled = True
-
-        self.parser.add_option("--list",
-                               action="callback", callback=list_callback, dest="list", default=False,
-                               help=_("list all known repositories for this system"))
-        self.parser.add_option("--list-enabled",
-                               action="callback", callback=list_callback, dest="list_enabled", default=False,
-                               help=_("list known, enabled repositories for this system"))
-        self.parser.add_option("--list-disabled",
-                               action="callback", callback=list_callback, dest="list_disabled", default=False,
-                               help=_("list known, disabled repositories for this system"))
-        self.parser.add_option("--enable", dest="enable", type="str",
-                               action='callback', callback=repo_callback, metavar="REPOID",
-                               help=_("repository to enable (can be specified more than once). Wildcards (* and ?) are supported."))
-        self.parser.add_option("--disable", dest="disable", type="str",
-                               action='callback', callback=repo_callback, metavar="REPOID",
-                               help=_("repository to disable (can be specified more than once). Wildcards (* and ?) are supported."))
-
-    def _validate_options(self):
-        if not (self.options.list or hasattr(self.options, 'repo_actions')):
-            self.options.list = True
-            self.options.list_enabled = True
-            self.options.list_disabled = True
+        Allows for --list to perform identically to --list-enabled --list-disabled
+        """
+        # covers the default case if no list options are specified
+        default_list = not(self.options.list or self.options.list_enabled or self.options.list_disabled)
+        repo_actions = self.options.repo_actions is not None
+        self.list_enabled = (self.options.list or self.options.list_enabled or default_list) and not repo_actions
+        self.list_disabled = (self.options.list or self.options.list_disabled or default_list) and not repo_actions
+        self.list = (self.options.list or self.options.list_enabled or self.options.list_disabled or default_list) and not repo_actions
 
     def _do_command(self):
-        self._validate_options()
+        self._reconcile_list_options()
         rc = 0
         if not manage_repos_enabled():
             print(_("Repositories disabled by configuration."))
@@ -2686,21 +2861,21 @@ class ReposCommand(CliCommand):
         rl = RepoActionInvoker()
         repos = rl.get_repos()
 
-        if hasattr(self.options, 'repo_actions'):
+        if self.options.repo_actions is not None:
             rc = self._set_repo_status(repos, rl, self.options.repo_actions)
 
         if self.identity.is_valid():
             profile_action_client = ProfileActionClient()
             profile_action_client.update()
 
-        if self.options.list:
+        if self.list:
             if len(repos):
                 # TODO: Perhaps this should be abstracted out as well...?
                 def filter_repos(repo):
                     disabled_values = ['false', '0']
                     repo_enabled = repo['enabled'].lower()
-                    show_enabled = (self.options.list_enabled and repo_enabled not in disabled_values)
-                    show_disabled = (self.options.list_disabled and repo_enabled in disabled_values)
+                    show_enabled = (self.list_enabled and repo_enabled not in disabled_values)
+                    show_disabled = (self.list_disabled and repo_enabled in disabled_values)
 
                     return show_enabled or show_disabled
 
@@ -2805,16 +2980,16 @@ class ConfigCommand(CliCommand):
         shortdesc = _("List, set, or remove the configuration parameters in use by this system")
         super(ConfigCommand, self).__init__("config", shortdesc, False)
 
-        self.parser.add_option("--list", action="store_true",
+        self.parser.add_argument("--list", action="store_true",
                                help=_("list the configuration for this system"))
-        self.parser.add_option("--remove", dest="remove", action="append",
+        self.parser.add_argument("--remove", dest="remove", action="append",
                                help=_("remove configuration entry by section.name"))
         for s in list(conf.keys()):
             section = conf[s]
             for name, _value in list(section.items()):
                 # Allow adding CLI options only for sections and names listed in defaults
                 if s in rhsm.config.DEFAULTS and name in rhsm.config.DEFAULTS[s]:
-                    self.parser.add_option("--" + s + "." + name, dest=(s + "." + name),
+                    self.parser.add_argument("--" + s + "." + name, dest=(s + "." + name),
                                            help=_("Section: %s, Name: %s") % (s, name))
 
     def _validate_options(self):
@@ -2919,28 +3094,28 @@ class ListCommand(CliCommand):
         super(ListCommand, self).__init__("list", shortdesc, True)
         self.available = None
         self.consumed = None
-        self.parser.add_option("--installed", action='store_true', help=_("list shows those products which are installed (default)"))
-        self.parser.add_option("--available", action='store_true',
+        self.parser.add_argument("--installed", action='store_true', help=_("list shows those products which are installed (default)"))
+        self.parser.add_argument("--available", action='store_true',
                                help=_("show those subscriptions which are available"))
-        self.parser.add_option("--all", action='store_true',
+        self.parser.add_argument("--all", action='store_true',
                                help=_("used with --available to ensure all subscriptions are returned"))
-        self.parser.add_option("--ondate", dest="on_date",
-                                help=(_("date to search on, defaults to today's date, only used with --available (example: %s)")
-                                      % strftime("%Y-%m-%d", localtime())))
-        self.parser.add_option("--consumed", action='store_true',
+        self.parser.add_argument("--ondate", dest="on_date",
+                                help=_("date to search on, defaults to today's date, only used with --available (example: %s)")
+                                      % strftime("%Y-%m-%d", localtime()))
+        self.parser.add_argument("--consumed", action='store_true',
                                help=_("show the subscriptions being consumed by this system"))
-        self.parser.add_option("--servicelevel", dest="service_level",
+        self.parser.add_argument("--servicelevel", dest="service_level",
                                help=_("shows only subscriptions matching the specified service level; only used with --available and --consumed"))
-        self.parser.add_option("--no-overlap", action='store_true',
+        self.parser.add_argument("--no-overlap", action='store_true',
                                help=_("shows pools which provide products that are not already covered; only used with --available"))
-        self.parser.add_option("--match-installed", action="store_true",
+        self.parser.add_argument("--match-installed", action="store_true",
                                help=_("shows only subscriptions matching products that are currently installed; only used with --available"))
-        self.parser.add_option("--matches", dest="filter_string",
+        self.parser.add_argument("--matches", dest="filter_string",
                                help=_("lists only subscriptions or products containing the specified expression in the subscription or product information, varying with the list requested and the server version (case-insensitive)."))
-        self.parser.add_option("--pool-only", dest="pid_only", action="store_true",
+        self.parser.add_argument("--pool-only", dest="pid_only", action="store_true",
                                help=_("lists only the pool IDs for applicable available or consumed subscriptions; only used with --available and --consumed"))
-        self.parser.add_option('--afterdate', dest="after_date",
-                help=(_("show pools that are active on or after the given date; only used with --available (example: %s)") % strftime("%Y-%m-%d", localtime())))
+        self.parser.add_argument('--afterdate', dest="after_date",
+                help=_("show pools that are active on or after the given date; only used with --available (example: %s)") % strftime("%Y-%m-%d", localtime()))
 
     def _validate_options(self):
         if self.options.all and not self.options.available:
@@ -3152,31 +3327,35 @@ class OverrideCommand(CliCommand):
     def __init__(self):
         shortdesc = _("Manage custom content repository settings")
         super(OverrideCommand, self).__init__("repo-override", shortdesc, False)
-        self.parser.add_option("--repo", dest="repos", action="append", metavar="REPOID",
+        self.parser.add_argument("--repo", dest="repos", action="append", metavar="REPOID",
             help=_("repository to modify (can be specified more than once)"))
-        self.parser.add_option("--remove", dest="removals", action="append", metavar="NAME",
+        self.parser.add_argument("--remove", dest="removals", action="append", metavar="NAME",
             help=_("name of the override to remove (can be specified more than once); used with --repo option."))
-        self.parser.add_option("--add", dest="additions", action="callback", callback=self._colon_split,
-            type="string", metavar="NAME:VALUE",
+        self.parser.add_argument("--add", dest="additions", action='append', metavar="NAME:VALUE",
             help=_("name and value of the option to override separated by a colon (can be specified more than once); used with --repo option."))
-        self.parser.add_option("--remove-all", action="store_true",
+        self.parser.add_argument("--remove-all", action="store_true",
             help=_("remove all overrides; can be specific to a repository by providing --repo"))
-        self.parser.add_option("--list", action="store_true",
+        self.parser.add_argument("--list", action="store_true",
             help=_("list all overrides; can be specific to a repository by providing --repo"))
 
-    def _colon_split(self, option, opt_str, value, parser):
-        if parser.values.additions is None:
-            parser.values.additions = {}
-        if value.strip() == '':
-            raise OptionValueError(_("You must specify an override in the form of \"name:value\" with --add."))
+    def _additions_colon_split(self):
+        additions = {}
+        for value in self.options.additions or {}:
+            if value.strip() == '':
+                system_exit(os.EX_USAGE, _(
+                    "You must specify an override in the form of \"name:value\" with --add."))
 
-        k, _colon, v = value.partition(':')
-        if not v or not k:
-            raise OptionValueError(_("--add arguments should be in the form of \"name:value\""))
+            k, _colon, v = value.partition(':')
+            if not v or not k:
+                system_exit(os.EX_USAGE, _(
+                    "--add arguments should be in the form of \"name:value\""))
 
-        parser.values.additions[k] = v
+            additions[k] = v
+        self.options.additions = additions
 
     def _validate_options(self):
+        if self.options.additions:
+            self._additions_colon_split()
         if self.options.additions or self.options.removals:
             if not self.options.repos:
                 system_exit(os.EX_USAGE, _("Error: You must specify a repository to modify"))
@@ -3278,11 +3457,12 @@ class OverrideCommand(CliCommand):
             print(columnize(names, echo_columnize_callback, *values, indent=2) + "\n")
 
 
-class RoleCommand(SyspurposeCommand, OrgCommand):
-    def __init__(self):
-        shortdesc = _("Modify system purpose role")
+class RoleCommand(AbstractSyspurposeCommand, OrgCommand):
+    def __init__(self, subparser=None):
+        shortdesc = _("Show or modify the system purpose role setting")
         super(RoleCommand, self).__init__(
             "role",
+            subparser,
             shortdesc,
             primary=False,
             attr='role',
@@ -3310,9 +3490,9 @@ class StatusCommand(CliCommand):
     def __init__(self):
         shortdesc = _("Show status information for this system's subscriptions and products")
         super(StatusCommand, self).__init__("status", shortdesc, True)
-        self.parser.add_option("--ondate", dest="on_date",
-                                help=(_("future date to check status on, defaults to today's date (example: %s)")
-                                      % strftime("%Y-%m-%d", localtime())))
+        self.parser.add_argument("--ondate", dest="on_date",
+                                help=_("future date to check status on, defaults to today's date (example: %s)")
+                                      % strftime("%Y-%m-%d", localtime()))
 
     def _do_command(self):
         # list status and all reasons it is not valid
@@ -3387,7 +3567,8 @@ class ManagerCLI(CLI):
                     RedeemCommand, ReposCommand, ReleaseCommand, StatusCommand,
                     EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand,
                     VersionCommand, RemoveCommand, AttachCommand, PluginsCommand,
-                    AutohealCommand, OverrideCommand, RoleCommand, UsageCommand]
+                    AutohealCommand, OverrideCommand, RoleCommand, UsageCommand,
+                    SyspurposeCommand]
         CLI.__init__(self, command_classes=commands)
 
     def main(self):

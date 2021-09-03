@@ -33,6 +33,29 @@ _subscription_manager_attach()
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
+_subscription_manager_syspurpose()
+{
+  local opts="addons role service-level usage --show ${_subscription_manager_common_opts}"
+
+  case "${2}" in
+      addons|\
+      role|\
+      usage)
+      "_subscription_manager_$2" "${1}" "${2}"
+      return 0
+      ;;
+      service-level)
+      "_subscription_manager_service_level" "${1}" "${2}"
+      return 0
+      ;;
+      *)
+      ;;
+  esac
+
+  COMPREPLY=($(compgen -W "${opts}" -- ${1}))
+}
+
+
 _subscription_manager_role()
 {
   local opts="--list --org --set --show
@@ -93,7 +116,7 @@ _subscription_manager_clean()
 _subscription_manager_config()
 {
   # TODO: we could probably generate the options from the help
-  CONFIG_OPTS=$(LANG=C subscription-manager config --help | sed -ne "s|\s*\(\-\-.*\..*\)\=.*\..*|\1|p")
+  CONFIG_OPTS=$(LANG=C subscription-manager config --help | sed -ne "s|\s*\(\-\-.*\..*\)\s.*|\1|p")
   local opts="--list --remove
               ${CONFIG_OPTS}
               -h --help"
@@ -233,7 +256,16 @@ _subscription_manager()
   COMPREPLY=()
   first=${COMP_WORDS[1]}
   cur="${COMP_WORDS[COMP_CWORD]}"
-  prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+  # Because the 'prev' may be optional argument like '--list', we iterate from the end
+  # until we find string that doesn't start with dash. That is the subcommand which
+  # should be used for completion.
+  i=1
+  prev="${COMP_WORDS[COMP_CWORD-$i]}"
+  while [[ $prev == -* ]]; do
+    i=$((i+1))
+    prev="${COMP_WORDS[COMP_CWORD-$i]}"
+  done
 
   # top-level commands and options
   opts="addons attach auto-attach clean config environments facts identity import list orgs
@@ -258,6 +290,7 @@ _subscription_manager()
       repos|\
       role|\
       status|\
+      syspurpose|\
       unregister|\
       usage|\
       version)

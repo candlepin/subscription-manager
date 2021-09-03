@@ -94,26 +94,28 @@ def get_sys_purpose_store():
     return store
 
 
-def read_syspurpose(raise_on_error=False):
+def read_syspurpose(synced_store=None, raise_on_error=False):
     """
     Reads the system purpose from the correct location on the file system.
     Makes an attempt to use a SyspurposeStore if available falls back to reading the json directly.
     :return: A dictionary containing the total syspurpose.
     """
     if SyncedStore is not None:
+        if synced_store is None:
+            synced_store = SyncedStore(None)
         try:
-            syspurpose = SyncedStore(None).get_local_contents()
+            content = synced_store.get_local_contents()
         except (OSError, IOError):
-            syspurpose = {}
+            content = {}
     else:
         try:
-            syspurpose = json.load(open(USER_SYSPURPOSE))
+            content = json.load(open(USER_SYSPURPOSE))
         except (os.error, ValueError, IOError):
             # In the event this file could not be read treat it as empty
             if raise_on_error:
                 raise
-            syspurpose = {}
-    return syspurpose
+            content = {}
+    return content
 
 
 def write_syspurpose(values):

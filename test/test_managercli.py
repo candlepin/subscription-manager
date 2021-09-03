@@ -239,6 +239,18 @@ class TestCliCommand(SubManFixture):
             # 2 == no args given
             self.assertEqual(e.code, 2)
 
+    def test_unknown_args_cause_exit(self):
+        with Capture() as cap, patch.object(
+            sys, 'argv',
+            # test with some subcommand; sub-man prints help without it
+            ['subscription-manager', 'attach', '--foo', 'bar', 'baz'],
+        ):
+            try:
+                self.cc.main()
+            except SystemExit as e:
+                self.assertEqual(e.code, os.EX_USAGE)
+            self.assertEqual("subscription-manager: error: no such option: --foo bar baz\n", cap.err)
+
     def test_command_has_correlation_id(self):
         self.assertIsNotNone(self.cc.correlation_id)
 
@@ -429,7 +441,7 @@ class TestRefreshCommandWithDoCommand(SubManFixture):
         mock_content_access_mode_cache = Mock(spec=ContentAccessModeCache)
         mock_content_access_mode_cache.return_value.exists.return_value = True
         provide(CONTENT_ACCESS_MODE_CACHE, mock_content_access_mode_cache)
-        self.cc.main([""])
+        self.cc.main([])
         mock_content_access_cache.return_value.remove.assert_called_once()
         mock_content_access_mode_cache.return_value.delete_cache.assert_called_once()
         mock_content_access_cache.return_value.exists.assert_called_once()
@@ -1050,6 +1062,20 @@ class TestReposCommand(TestCliCommand):
 
         return tuple(searches)
 
+    def check_output_for_repos_enabled_disabled(self, output, repos):
+        """
+        Checks that the given output string has the sequence of
+        "Repository X is enabled/disabled" lines matching the requested repos.
+        """
+        lines_set = set(output.splitlines())
+        repos_set = set()
+        for (repo_name, repo_enabled) in repos:
+            if repo_enabled:
+                repos_set.add(f"Repository '{repo_name}' is enabled for this system.")
+            else:
+                repos_set.add(f"Repository '{repo_name}' is disabled for this system.")
+        self.assertEqual(repos_set, lines_set)
+
     @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_default(self, mock_invoker):
         self.cc.main()
@@ -1171,6 +1197,40 @@ class TestReposCommand(TestCliCommand):
     def test_disable(self):
         self.cc.main(["--disable", "one", "--disable", "two"])
         self.cc._validate_options()
+
+    @patch("subscription_manager.managercli.RepoActionInvoker")
+    def test_list_enable_and_disable(self, mock_invoker):
+        self._inject_mock_invalid_consumer()
+        self.cc.main(["--disable", "x", "--enable", "x",
+                      "--enable", "z", "--disable", "z"])
+        self.cc._validate_options()
+
+        repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "0")]),
+                 Repo("z", [("enabled", "0")])]
+        mock_invoker.return_value.get_repos.return_value = repos
+
+        with Capture() as cap:
+            self.cc._do_command()
+
+        repos_changes = [("x", True), ("z", False)]
+        self.check_output_for_repos_enabled_disabled(cap.out, repos_changes)
+
+    @patch("subscription_manager.managercli.RepoActionInvoker")
+    def test_list_enable_and_disable_wildcards(self, mock_invoker):
+        self._inject_mock_invalid_consumer()
+        self.cc.main(["--disable", "*",
+                      "--enable", "z"])
+        self.cc._validate_options()
+
+        repos = [Repo("x", [("enabled", "1")]), Repo("y", [("enabled", "1")]),
+                 Repo("z", [("enabled", "1")])]
+        mock_invoker.return_value.get_repos.return_value = repos
+
+        with Capture() as cap:
+            self.cc._do_command()
+
+        repos_changes = [("x", False), ("y", False), ("z", True)]
+        self.check_output_for_repos_enabled_disabled(cap.out, repos_changes)
 
     @patch("subscription_manager.managercli.RepoActionInvoker")
     def test_set_repo_status(self, mock_repolib):
@@ -1321,7 +1381,7 @@ class TestConfigCommand(TestCliCommand):
         managercli.conf['rhsmd']['processtimeout'] = '300'
         with Capture() as cap:
             self.cc._do_command = self._orig_do_command
-            self.cc.main([""])
+            self.cc.main([])
             self.cc._validate_options()
         self.assertTrue(hostname in cap.out)
 
@@ -1433,7 +1493,13 @@ class TestAttachCommand(TestCliProxyCommand):
         self._test_quantity_exception("-1")
 
     def test_text_quantity(self):
-        self._test_quantity_exception("JarJarBinks")
+        try:
+            self.cc.main(["--quantity", "JarJarBinks"])
+            self.cc._validate_options()
+        except SystemExit as e:
+            self.assertEqual(e.code, 2)
+        else:
+            self.fail("No Exception Raised")
 
     def test_positive_quantity(self):
         self.cc.main(["--pool", "test-pool-id", "--quantity", "1"])
@@ -1444,7 +1510,13 @@ class TestAttachCommand(TestCliProxyCommand):
         self.cc._validate_options()
 
     def test_positive_quantity_as_float(self):
-        self._test_quantity_exception("2.0")
+        try:
+            self.cc.main(["--quantity", "2.0"])
+            self.cc._validate_options()
+        except SystemExit as e:
+            self.assertEqual(e.code, 2)
+        else:
+            self.fail("No Exception Raised")
 
     def _test_pool_file_processing(self, f, expected):
         self.cc.main(["--file", f])
@@ -1807,6 +1879,23 @@ class TestReleaseCommand(TestCliProxyCommand):
                 mock_repo_invoker.update.assert_called_with()
 
 
+class TestSyspurposeCommand(TestCliProxyCommand):
+    command_class = managercli.RoleCommand
+
+    def setUp(self):
+        syspurpose_patch = patch('syspurpose.files.SyncedStore')
+        sp_patch = syspurpose_patch.start()
+        self.addCleanup(sp_patch.stop)
+        super(TestSyspurposeCommand, self).setUp(False)
+        self.cc = self.command_class()
+        self.cc.cp = StubUEP()
+        self.cc.cp.registered_consumer_info['role'] = None
+        self.cc.cp._capabilities = ["syspurpose"]
+
+    def test_show_option(self):
+        self.cc.main(["--show"])
+
+
 class TestRoleCommand(TestCliProxyCommand):
     command_class = managercli.RoleCommand
 
@@ -1880,7 +1969,7 @@ class TestRoleCommand(TestCliProxyCommand):
         instance_syspurpose_store = mock_syspurpose.read.return_value
         instance_syspurpose_store.local_contents = {'role': 'Foo'}
 
-        with patch.object(managercli.SyspurposeCommand, 'check_syspurpose_support', Mock(return_value=None)):
+        with patch.object(managercli.AbstractSyspurposeCommand, 'check_syspurpose_support', Mock(return_value=None)):
             super(TestRoleCommand, self).test_main_no_args()
 
     @patch("subscription_manager.syspurposelib.SyncedStore")
@@ -1891,7 +1980,7 @@ class TestRoleCommand(TestCliProxyCommand):
         instance_syspurpose_store = mock_syspurpose.read.return_value
         instance_syspurpose_store.local_contents = {'role': 'Foo'}
 
-        with patch.object(managercli.SyspurposeCommand, 'check_syspurpose_support', Mock(return_value=None)):
+        with patch.object(managercli.AbstractSyspurposeCommand, 'check_syspurpose_support', Mock(return_value=None)):
             super(TestRoleCommand, self).test_main_empty_args()
 
     @patch("subscription_manager.syspurposelib.SyncedStore")
@@ -2044,7 +2133,7 @@ class TestRoleCommand(TestCliProxyCommand):
         instance_syspurpose_store.sync.assert_called_once()
 
     def test_is_provided_value_valid(self):
-        self.cc = managercli.SyspurposeCommand("role", shortdesc="role", primary=False, attr="role")
+        self.cc = managercli.AbstractSyspurposeCommand("role", None, shortdesc="role", primary=False, attr="role")
         self.cc._get_valid_fields = Mock()
         self.cc._get_valid_fields.return_value = {"role": ["Welcome to the Machine"]}
         res = self.cc._is_provided_value_valid("wElcOme To The mAChiNE")
@@ -2131,8 +2220,8 @@ class TestOverrideCommand(TestCliProxyCommand):
         self.assertRaises(SystemExit, self.cc._validate_options)
 
     def test_bad_add_format(self):
-        self.assertRaises(SystemExit, self.cc.main, ["--add", "hello"])
-        self.assertRaises(SystemExit, self.cc.main, ["--add", "hello:"])
+        self._test_exception(["--add", "hello"])
+        self._test_exception(["--add", "hello:"])
 
     def test_add_and_remove_with_no_repo(self):
         self._test_exception(["--add", "hello:world"])
@@ -2182,13 +2271,13 @@ class TestOverrideCommand(TestCliProxyCommand):
         self._test_exception(["--repo", "x", "--remove", "foo", "--remove", ""])
 
     def test_add_empty_arg(self):
-        self.assertRaises(SystemExit, self.cc.main, ["--repo", "x", "--add", ""])
+        self._test_exception(["--repo", "x", "--add", ""])
 
     def test_add_empty_name(self):
-        self.assertRaises(SystemExit, self.cc.main, ["--repo", "x", "--add", ":foo"])
+        self._test_exception(["--repo", "x", "--add", ":foo"])
 
     def test_add_multiple_args_empty_arg(self):
-        self.assertRaises(SystemExit, self.cc.main, ["--repo", "x", "--add", "foo:bar", "--add", ""])
+        self._test_exception(["--repo", "x", "--add", "foo:bar", "--add", ""])
 
     def test_list_and_remove_all_work_with_repos(self):
         self.cc.main(["--repo", "x", "--list"])

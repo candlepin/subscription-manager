@@ -21,7 +21,7 @@ import logging
 import six
 
 from subscription_manager.printing_utils import columnize, echo_columnize_callback
-from subscription_manager.i18n_optparse import OptionParser, WrappedIndentedHelpFormatter
+from subscription_manager.i18n_argparse import ArgumentParser
 from subscription_manager.utils import print_error
 
 from subscription_manager.i18n import ugettext as _
@@ -60,10 +60,7 @@ class AbstractCLICommand(object):
         self.primary = primary
         self.aliases = aliases or []
 
-        # include our own HelpFormatter that doesn't try to break
-        # long words, since that fails on multibyte words
-        self.parser = OptionParser(usage=self._get_usage(), description=shortdesc,
-                                   formatter=WrappedIndentedHelpFormatter())
+        self.parser = self._create_argparser()
 
     def main(self, args=None):
         raise NotImplementedError("Commands must implement: main(self, args=None)")
@@ -81,13 +78,23 @@ class AbstractCLICommand(object):
         Usage format strips any leading 'usage' so
         do not include it
         """
-        return _("%%prog %s [OPTIONS]") % self.name
+        return _("%(prog)s {name} [OPTIONS]").format(name=self.name)
 
     def _do_command(self):
         """
         Does the work that this command intends.
         """
         raise NotImplementedError("Commands must implement: _do_command(self)")
+
+    def _create_argparser(self):
+        """
+        Creates an argparse.ArgumentParser object for this command.
+
+        This is done as separate method so subclasses can provide their own
+        ArgumentParser, in case the one provided by this method is not
+        sufficient.
+        """
+        return ArgumentParser(usage=self._get_usage(), description=self.shortdesc)
 
 
 # taken wholseale from rho...
