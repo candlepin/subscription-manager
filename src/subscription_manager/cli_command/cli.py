@@ -26,7 +26,7 @@ import subscription_manager.injection as inj
 from rhsm.certificate import CertificateException
 from rhsm.connection import ProxyException
 from rhsm.https import ssl
-from rhsm.utils import ServerUrlParseError, remove_scheme
+from rhsm.utils import cmd_name, ServerUrlParseError, remove_scheme
 
 from rhsmlib.services import config
 
@@ -235,13 +235,15 @@ class CliCommand(AbstractCLICommand):
         if args is None:
             args = sys.argv[2:]
 
-        (self.options, self.args) = self.parser.parse_known_args(args)
+        (self.options, unknown_args) = self.parser.parse_known_args(args)
 
         # check for unparsed arguments
-        if self.args:
-            for arg in self.args:
-                print(_("cannot parse argument: {}").format(arg))
-            system_exit(os.EX_USAGE)
+        if unknown_args:
+            message: str = _("{prog}: error: no such option: {args}").format(
+                prog=cmd_name(sys.argv),
+                args=" ".join(unknown_args),
+            )
+            system_exit(os.EX_USAGE, message)
 
         if hasattr(self.options, "insecure") and self.options.insecure:
             conf["server"]["insecure"] = "1"
