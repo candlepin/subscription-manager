@@ -1025,6 +1025,69 @@ class TestListCommand(TestCliProxyCommand):
             self.assertFalse("Usage:" in captured.out)
             self.assertFalse("Roles:" in captured.out)
 
+    def test_list_installed(self):
+        """
+        Test output of 'subscription-manager list --installed'
+        """
+        installed_product_certs = [
+            StubProductCertificate(product=StubProduct(name="test product", product_id="8675309")),
+            StubProductCertificate(product=StubProduct(name="another test product", product_id="123456"))
+        ]
+
+        stub_sorter = StubCertSorter()
+
+        for product_cert in installed_product_certs:
+            product = product_cert.products[0]
+            stub_sorter.installed_products[product.id] = product_cert
+
+        provide(CERT_SORTER, stub_sorter)
+
+        with Capture() as captured:
+            list_command = managercli.ListCommand()
+            list_command.main(["--installed"])
+            assert "Product Name:" in captured.out
+            assert "Product ID:" in captured.out
+            assert "Version:" in captured.out
+            assert "Arch:" in captured.out
+            assert "Status:" in captured.out
+            assert "Status Details:" in captured.out
+            assert "Starts:" in captured.out
+            assert "Ends:" in captured.out
+
+    @patch('subscription_manager.managercli.is_simple_content_access')
+    def test_list_installed_sca_mode(self, is_simple_content_access_mock):
+        """
+        Test output of 'subscription-manager list --installed', when SCA mode is used
+        """
+        is_simple_content_access_mock.return_value = True
+
+        installed_product_certs = [
+            StubProductCertificate(product=StubProduct(name="test product", product_id="8675309")),
+            StubProductCertificate(product=StubProduct(name="another test product", product_id="123456"))
+        ]
+
+        stub_sorter = StubCertSorter()
+
+        for product_cert in installed_product_certs:
+            product = product_cert.products[0]
+            stub_sorter.installed_products[product.id] = product_cert
+
+        provide(CERT_SORTER, stub_sorter)
+
+        with Capture() as captured:
+            list_command = managercli.ListCommand()
+            list_command.main(["--installed"])
+            assert "Product Name:" in captured.out
+            assert "Product ID:" in captured.out
+            assert "Version:" in captured.out
+            assert "Arch:" in captured.out
+            # Following attributes should not be printed in SCA mode, because it does not make
+            # any sense to print them in SCA mode
+            assert "Status:" not in captured.out
+            assert "Status Details:" not in captured.out
+            assert "Starts:" not in captured.out
+            assert "Ends:" not in captured.out
+
 
 class TestUnRegisterCommand(TestCliProxyCommand):
     command_class = managercli.UnRegisterCommand
