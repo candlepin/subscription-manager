@@ -139,7 +139,7 @@ class handler(BaseHTTPRequestHandler):
 
 def insights_server(port):
     httpd = HTTPServer(('', port), handler)
-    httpd.socket = ssl.wrap_socket(httpd.socket, certfile='/etc/cockpit/ws-certs.d/0-self-signed.cert', server_side=True)
+    httpd.socket = ssl.wrap_socket(httpd.socket, certfile='/etc/cockpit/ws-certs.d/0-self-signed.cert', keyfile='/etc/cockpit/ws-certs.d/0-self-signed.key', server_side=True)
     httpd.serve_forever()
 
 
