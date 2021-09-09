@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eux
 
-dnf install -y cockpit-ws python3-devel openssl-devel intltool
+dnf install -y cockpit-ws python3-devel openssl-devel intltool gcc
 
 cd /var/tmp
 
