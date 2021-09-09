@@ -188,6 +188,8 @@ class AbstractSyspurposeCommand(CliCommand):
                 server_response = self.cp.getOwnerSyspurposeValidFields(org_key)
             except connection.RestlibException as rest_err:
                 log.warning("Unable to get list of valid fields using REST API: {rest_err}".format(rest_err=rest_err))
+                mapped_message: str = ExceptionMapper().get_message(rest_err)
+                system_exit(os.EX_SOFTWARE, mapped_message)
             except ProxyException:
                 system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
             else:
