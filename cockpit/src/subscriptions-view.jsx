@@ -28,7 +28,7 @@ import {
     Alert, AlertGroup, AlertActionCloseButton, Button,
     Card, CardActions, CardBody, CardHeader, CardHeaderMain, CardTitle,
     DescriptionList, DescriptionListDescription, DescriptionListGroup, DescriptionListTerm,
-    Gallery, Label, Page, PageSection, Split, SplitItem, Text, TextVariants,
+    Gallery, Label, Page, PageSection, Split, SplitItem, Text, TextVariants, Popover, Divider
 } from '@patternfly/react-core';
 
 let _ = cockpit.gettext;
@@ -71,11 +71,38 @@ class InstalledProducts extends React.Component {
 
     render() {
         let columnTitles = [_("Product name")];
+
+        let sca_mode;
+
+        sca_mode = false;
+        if (this.props.org) {
+            if ("contentAccessMode" in this.props.org) {
+                if (this.props.org.contentAccessMode === "org_environment") {
+                    sca_mode = true;
+                }
+            }
+        }
+
+        let card_actions;
+        if (sca_mode === false) {
+            card_actions = (
+                <CardActions>
+                    <Button
+                            isDisabled={this.state.attaching_in_progress || this.props.status === 'unknown'}
+                            onClick={this.handleAutoAttach}>
+                        { this.state.attach_button_text }
+                    </Button>
+                </CardActions>
+            )
+        }
+
         let entries = this.props.products.map(function (itm) {
             let subscribed;
             let status_text;
             let start_date_text;
             let end_date_text;
+            let body;
+            let columns;
 
             if (itm.status === 'subscribed') {
                 subscribed = true;
@@ -98,49 +125,74 @@ class InstalledProducts extends React.Component {
                 end_date_text = new Date(Date.parse(itm.ends)).toLocaleDateString();
             }
 
-            const columns = [
-                { title: (<Split>
-                    <SplitItem isFilled>
-                        {itm.productName}
-                    </SplitItem>
-                    <SplitItem>
-                        <Label color={subscribed ? "green" : "red"}>{subscribed ? _("Subscribed") : _("Not subscribed")}</Label>
-                    </SplitItem>
-                </Split>),
-                  header: true,
-                }
+            if (sca_mode) {
+                columns = [
+                    {
+                        title: (<Split>
+                            <SplitItem isFilled>
+                                {itm.productName}
+                            </SplitItem>
+                        </Split>),
+                        header: true,
+                    }
+                ];
+            } else {
+                columns = [
+                    {
+                        title: (<Split>
+                            <SplitItem isFilled>
+                                {itm.productName}
+                            </SplitItem>
+                            <SplitItem>
+                                <Label
+                                    color={subscribed ? "green" : "red"}>{subscribed ? _("Subscribed") : _("Not subscribed")}</Label>
+                            </SplitItem>
+                        </Split>),
+                        header: true,
+                    }
+                ];
+            }
+
+            let attr_list;
+            attr_list = [
+                <DescriptionListGroup key="product_name">
+                    <DescriptionListTerm>{_("Product name")}</DescriptionListTerm>
+                    <DescriptionListDescription>{itm.productName}</DescriptionListDescription>
+                </DescriptionListGroup>,
+                <DescriptionListGroup key="product_id">
+                    <DescriptionListTerm>{_("Product ID")}</DescriptionListTerm>
+                    <DescriptionListDescription>{itm.productId}</DescriptionListDescription>
+                </DescriptionListGroup>,
+                <DescriptionListGroup key="product_version">
+                    <DescriptionListTerm>{_("Version")}</DescriptionListTerm>
+                    <DescriptionListDescription>{itm.version}</DescriptionListDescription>
+                </DescriptionListGroup>,
+                <DescriptionListGroup key="product_arch">
+                    <DescriptionListTerm>{_("Arch")}</DescriptionListTerm>
+                    <DescriptionListDescription>{itm.arch}</DescriptionListDescription>
+                </DescriptionListGroup>
             ];
 
-            const body = (
-                <DescriptionList isHorizontal>
-                    <DescriptionListGroup>
-                        <DescriptionListTerm>{_("Product name")}</DescriptionListTerm>
-                        <DescriptionListDescription>{itm.productName}</DescriptionListDescription>
-                    </DescriptionListGroup>
-                    <DescriptionListGroup>
-                        <DescriptionListTerm>{_("Product ID")}</DescriptionListTerm>
-                        <DescriptionListDescription>{itm.productId}</DescriptionListDescription>
-                    </DescriptionListGroup>
-                    <DescriptionListGroup>
-                        <DescriptionListTerm>{_("Version")}</DescriptionListTerm>
-                        <DescriptionListDescription>{itm.version}</DescriptionListDescription>
-                    </DescriptionListGroup>
-                    <DescriptionListGroup>
-                        <DescriptionListTerm>{_("Arch")}</DescriptionListTerm>
-                        <DescriptionListDescription>{itm.arch}</DescriptionListDescription>
-                    </DescriptionListGroup>
-                    <DescriptionListGroup>
+            if (! sca_mode) {
+                attr_list.push(
+                    <DescriptionListGroup key="product_status">
                         <DescriptionListTerm>{_("Status")}</DescriptionListTerm>
                         <DescriptionListDescription>{status_text}</DescriptionListDescription>
-                    </DescriptionListGroup>
-                    <DescriptionListGroup>
+                    </DescriptionListGroup>,
+                    <DescriptionListGroup key="product_start_date">
                         <DescriptionListTerm>{_("Starts")}</DescriptionListTerm>
                         <DescriptionListDescription>{start_date_text}</DescriptionListDescription>
-                    </DescriptionListGroup>
-                    <DescriptionListGroup>
+                    </DescriptionListGroup>,
+                    <DescriptionListGroup key="product_end_date">
                         <DescriptionListTerm>{_("Ends")}</DescriptionListTerm>
                         <DescriptionListDescription>{end_date_text}</DescriptionListDescription>
                     </DescriptionListGroup>
+                );
+            }
+
+            body = (
+                <DescriptionList isHorizontal>
+                    {attr_list}
                 </DescriptionList>
             );
 
@@ -156,13 +208,7 @@ class InstalledProducts extends React.Component {
             <Card id="products" className="products" key="products">
                 <CardHeader>
                     <CardTitle><Text component={TextVariants.h2}>{_("Installed products")}</Text></CardTitle>
-                    <CardActions>
-                        <Button
-                                isDisabled={this.state.attaching_in_progress || this.props.status === 'unknown'}
-                                onClick={this.handleAutoAttach}>
-                            { this.state.attach_button_text }
-                        </Button>
-                    </CardActions>
+                    { card_actions }
                 </CardHeader>
                 <CardBody className="contains-list">
                     <ListingTable aria-label={_("Installed products")}
@@ -214,19 +260,70 @@ class SubscriptionStatus extends React.Component {
     }
 
     render() {
+        // Try to detect SCA mode first
+        let sca_mode;
+        let org_name;
+        sca_mode = false;
+        if (this.props.org === undefined) {
+            org_name = '';
+        } else {
+            // Organization name
+            if ('displayName' in this.props.org) {
+                org_name = this.props.org['displayName'];
+            } else {
+                org_name = '';
+            }
+            // SCA mode tooltip
+            if ('contentAccessMode' in this.props.org) {
+                if (this.props.org['contentAccessMode'] === 'org_environment') {
+                    sca_mode = true;
+                }
+            }
+        }
+
+        // Display system purpose only in the case, when it make sense
         let syspurpose = null;
         const p = this.props.syspurpose;
-        if (p["service_level_agreement"] || p["usage"] || p["role"] || p["addons"]) {
+        if ( p["service_level_agreement"] || p["usage"] || p["role"] || p["addons"] ) {
+            let syspurpose_status_element;
+            if (sca_mode) {
+                const syspurpose_status_tooltip = (
+                    <div>{_("Content Access Mode is set to Simple Content Access. This host has access to content, regardless of system purpose status.")}</div>
+                );
+                syspurpose_status_element = (
+                    <div>
+                        <span> { this.props.syspurpose_status } </span>
+                        <Popover
+                            aria-label="Popover with explanation of SCA mode"
+                            showClose={false}
+                            bodyContent={syspurpose_status_tooltip}
+                            withFocusTrap={false}
+                        >
+                            <span className="fa fa-md fa-info-circle subscriptions-info" />
+                        </Popover>
+                    </div>
+                );
+            } else {
+                syspurpose_status_element = (
+                    <div>
+                        <span> { this.props.syspurpose_status } </span>
+                    </div>
+                );
+            }
             syspurpose = (
                 <Card id="syspurpose" key="syspurpose" className="ct-card-info">
                     <CardHeader>
                         <CardHeaderMain>
                             <Text className="purpose-header" component={TextVariants.h2}>{_("System purpose")}</Text>
-                            {"(" + this.props.syspurpose_status + ")"}
                         </CardHeaderMain>
                     </CardHeader>
                     <CardBody>
                         <DescriptionList isHorizontal>
+                            <DescriptionListGroup>
+                                <DescriptionListTerm>{_("Status")}</DescriptionListTerm>
+                                <DescriptionListDescription>{ syspurpose_status_element }</DescriptionListDescription>
+                            </DescriptionListGroup>
+                            <Divider />
                             {p["service_level_agreement"] &&
                                 <DescriptionListGroup>
                                     <DescriptionListTerm>{_("Service level")}</DescriptionListTerm>
@@ -257,22 +354,46 @@ class SubscriptionStatus extends React.Component {
             );
         }
 
-        let label;
+        let status_text;
         let action;
+        let status_element;
 
         if (this.props.status === 'unknown') {
-            label = _("Not registered");
+            status_text = _("Not registered");
             action = (
                 <Button onClick={this.handleRegisterSystem}>{_("Register")}</Button>
             );
         } else {
             const isUnregistering = (this.props.status === "unregistering");
-            label = this.props.status_msg;
+            status_text = this.props.status_msg;
             action = (
                 <Button isDisabled={isUnregistering} isLoading={isUnregistering}
                               onClick={this.handleUnregisterSystem}>{isUnregistering ? _("Unregistering"): _("Unregister")}</Button>
             );
         }
+
+        // Display tooltip over "Disabled" with simple explanation, when SCA mode is used
+        if (sca_mode) {
+            const status_tooltip = (
+                <div>{_("Content Access Mode is set to Simple Content Access. This host has access to content, regardless of subscription status.")}</div>
+            );
+            status_element = (
+                <div>
+                    <span> {status_text} </span>
+                    <Popover
+                        aria-label="Popover with explanation of SCA mode"
+                        showClose={false}
+                        bodyContent={status_tooltip}
+                        withFocusTrap={false}
+                    >
+                        <span className="fa fa-md fa-info-circle subscriptions-info" />
+                    </Popover>
+                </div>
+            );
+        } else {
+            status_element = status_text;
+        }
+
         return (
             <>
                 <Card id="overview" key="overview" className={ syspurpose !== null ? "ct-card-info" : "" }>
@@ -283,9 +404,17 @@ class SubscriptionStatus extends React.Component {
                     <CardBody>
                         <DescriptionList isHorizontal>
                             <DescriptionListGroup>
-                                <DescriptionListTerm>{_("Subscription")}</DescriptionListTerm>
-                                <DescriptionListDescription>{label}</DescriptionListDescription>
+                                <DescriptionListTerm>{_("Subscription status")}</DescriptionListTerm>
+                                <DescriptionListDescription>
+                                    {status_element}
+                                </DescriptionListDescription>
                             </DescriptionListGroup>
+                            {org_name &&
+                                <DescriptionListGroup>
+                                    <DescriptionListTerm>{_("Organization")}</DescriptionListTerm>
+                                    <DescriptionListDescription>{org_name}</DescriptionListDescription>
+                                </DescriptionListGroup>
+                            }
                             {(this.props.insights_available && this.props.status !== 'unknown') && <InsightsStatus />}
                         </DescriptionList>
                     </CardBody>

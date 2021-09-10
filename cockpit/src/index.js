@@ -142,6 +142,7 @@ function initStore(rootElement) {
                 syspurpose_status: subscriptionsClient.syspurposeStatus.status,
                 insights_available: subscriptionsClient.insightsAvailable,
                 autoAttach: subscriptionsClient.autoAttach,
+                org: subscriptionsClient.org,
                 dismissError: dismissStatusError,
                 register: openRegisterDialog,
                 unregister: unregisterSystem,
