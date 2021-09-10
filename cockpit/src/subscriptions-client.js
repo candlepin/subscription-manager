@@ -48,6 +48,7 @@ client.subscriptionStatus = {
     status_msg: _('Unknown'),
     products: [],
     error: undefined,
+    org: undefined,
 };
 
 client.config = {
@@ -512,6 +513,11 @@ function requestSubscriptionStatusUpdate() {
             .catch(ex => statusUpdateFailed(ex));
 }
 
+function requestCurrentOrgUpdate() {
+    return client.getCurrentOrg()
+            .catch(ex => statusUpdateFailed(ex));
+}
+
 function requestSyspurposeStatusUpdate() {
     return client.getSyspurposeStatus()
             .catch(ex => statusUpdateFailed(ex));
@@ -556,6 +562,41 @@ client.getSubscriptionStatus = function() {
                 .then(() => {
                     getSubscriptionDetails();
                     needRender();
+                });
+    });
+    return dfd.promise();
+};
+
+/**
+ * Method for getting current organization (owner), when system is already
+ * registered. When calling D-Bus method GetOrg is successful, then store
+ * returned JSON document in client.org.
+ */
+client.getCurrentOrg = function () {
+    let dfd = cockpit.defer();
+    safeDBusCall(consumerService, () => {
+        console.debug('Trying to get current organization...');
+        consumerService.GetOrg(userLang)
+                .then(result => {
+                    let parsed;
+                    console.debug('Current organization:', result);
+                    try {
+                        client.org = JSON.parse(result);
+                        parsed = true;
+                    } catch (err) {
+                        console.error('Error: parsing JSON with organization', err.message);
+                        parsed = false;
+                    }
+                    if (parsed) {
+                        dfd.resolve();
+                        needRender();
+                    }
+                })
+                .catch(error => {
+                    client.subscriptionStatus.error = {
+                        'severity': parseErrorSeverity(error),
+                        'msg': parseErrorMessage(error)
+                    };
                 });
     });
     return dfd.promise();
@@ -696,6 +737,11 @@ client.init = () => {
     productsService.addEventListener("InstalledProductsChanged", requestSubscriptionStatusUpdate);
     consumerService.addEventListener("ConsumerChanged", requestSubscriptionStatusUpdate);
 
+    // When consumer changed (system was registered/unregistered, then it is necessary to
+    // get current organization)
+    consumerService.addEventListener("ConsumerChanged", requestCurrentOrgUpdate);
+    entitlementService.addEventListener("EntitlementChanged", requestCurrentOrgUpdate);
+
     configService.addEventListener("ConfigChanged", updateConfig);
     syspurposeService.addEventListener("SyspurposeChanged", requestSyspurposeUpdate);
 
@@ -706,6 +752,7 @@ client.init = () => {
     consumerService.addEventListener("ConsumerChanged", requestSyspurposeStatusUpdate);
 
     // get initial status
+    requestCurrentOrgUpdate();
     requestSubscriptionStatusUpdate();
     requestSyspurposeUpdate();
     requestSyspurposeStatusUpdate();
