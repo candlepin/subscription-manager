@@ -1,5 +1,3 @@
-from __future__ import print_function, division, absolute_import
-
 correct_manifest_output = """
 +-------------------------------------------+
 \tManifest

@@ -1,5 +1,3 @@
-from __future__ import print_function, division, absolute_import
-
 # A wrapper that provides httplib and ssl using the standard libs,
 # checking for the required parts of them.
 #

@@ -1,6 +1,3 @@
-from __future__ import print_function, division, absolute_import
-
-#
 # Read and parse /proc/cpuinfo
 #
 # Copyright (c) 2015 Red Hat, Inc.

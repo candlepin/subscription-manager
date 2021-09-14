@@ -1,6 +1,3 @@
-from __future__ import print_function, division, absolute_import
-
-#
 # Subscription manager command line utility. This script is a modified version of
 # cp_client.py from candlepin scripts
 #

@@ -1,6 +1,3 @@
-from __future__ import print_function, division, absolute_import
-
-#
 # Get the right platform specific provider or a null provider
 #
 # Copyright (c) 2010-2016 Red Hat, Inc.

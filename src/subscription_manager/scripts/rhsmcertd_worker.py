@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 # ^ is to prevent selinux denials trying to load modules from unintended
 #   paths. See https://bugzilla.redhat.com/show_bug.cgi?id=1136163
-from __future__ import print_function, division, absolute_import
-
 #
 # Copyright (c) 2012 Red Hat, Inc.
 #

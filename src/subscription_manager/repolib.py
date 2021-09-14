@@ -1,7 +1,4 @@
-#
 # -*- coding: utf-8 -*-#
-from __future__ import print_function, division, absolute_import
-
 # Copyright (c) 2010 Red Hat, Inc.
 #
 # Authors: Jeff Ortel <jortel@redhat.com>

@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, division, absolute_import
-
 # import subman fixture
 # override plugin manager with one that provides
 #  the ostree content plugin

@@ -1,6 +1,3 @@
-from __future__ import print_function, division, absolute_import
-
-#
 # Make argparse friendlier to i18n/l10n
 #
 # Copyright (c) 2010 Red Hat, Inc.

@@ -1,5 +1,3 @@
-from __future__ import print_function, division, absolute_import
-
 from subscription_manager.i18n import ugettext as _
 
 
