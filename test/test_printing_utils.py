@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import unittest
 
 from subscription_manager.cli_command.list import AVAILABLE_SUBS_MATCH_COLUMNS

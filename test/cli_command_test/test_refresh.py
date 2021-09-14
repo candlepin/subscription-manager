@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from ..fixture import SubManFixture
 from ..test_managercli import TestCliProxyCommand
 from mock import Mock

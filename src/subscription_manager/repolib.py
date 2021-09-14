@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-#
 # Copyright (c) 2010 Red Hat, Inc.
 #
 # Authors: Jeff Ortel <jortel@redhat.com>

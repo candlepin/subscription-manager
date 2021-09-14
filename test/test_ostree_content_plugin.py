@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 # import subman fixture
 # override plugin manager with one that provides
 #  the ostree content plugin

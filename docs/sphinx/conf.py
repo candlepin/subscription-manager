@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # subscription-manager documentation build configuration file, created by
 # sphinx-quickstart on Tue May 13 23:24:51 2014.
 #

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # Subscription manager command line utility.
 #
 # Copyright (c) 2010 Red Hat, Inc.

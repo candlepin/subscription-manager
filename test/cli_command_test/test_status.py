@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from subscription_manager import managercli
 
 from ..stubs import StubConsumerIdentity, StubUEP

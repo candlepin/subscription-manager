@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-#
 # wrapper for subscription Manager commandline tool.
 #
 # Copyright (c) 2010 Red Hat, Inc.
