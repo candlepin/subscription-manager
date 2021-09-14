@@ -423,16 +423,15 @@ class TestProfileManager(unittest.TestCase):
         json_str = json.dumps(data)  # to json
         data = json.loads(json_str)  # and back to an object
         for attr in ['name', 'version', 'release', 'arch', 'vendor']:
-            self.assertEqual(u'\ufffd', data[attr])
+            self.assertEqual('\ufffd', data[attr])
 
     def test_package_json_as_unicode_type(self):
-        # note that the data type at time of writing is bytes, so this is just defensive coding
-        package = Package(name=u'Björk', version=u'Björk', release=u'Björk', arch=u'Björk', vendor=u'Björk')
+        package = Package(name='Björk', version='Björk', release='Björk', arch='Björk', vendor='Björk')
         data = package.to_dict()
         json_str = json.dumps(data)  # to json
         data = json.loads(json_str)  # and back to an object
         for attr in ['name', 'version', 'release', 'arch', 'vendor']:
-            self.assertEqual(u'Björk', data[attr])
+            self.assertEqual('Björk', data[attr])
 
     def test_package_json_missing_attributes(self):
         package = Package(name=None, version=None, release=None, arch=None, vendor=None)

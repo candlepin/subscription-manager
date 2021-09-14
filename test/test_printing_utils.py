@@ -165,12 +165,12 @@ class TestColumnize(unittest.TestCase):
 
     @patch('subscription_manager.printing_utils.get_terminal_width')
     def test_columnize_multibyte(self, term_width_mock):
-        multibyte_str = u"このシステム用に"
+        multibyte_str = "このシステム用に"
         term_width_mock.return_value = 40
         result = columnize([multibyte_str], echo_columnize_callback, multibyte_str)
-        expected = u"このシステム用に このシステム用に"
+        expected = "このシステム用に このシステム用に"
         self.assertEqual(result, expected)
         term_width_mock.return_value = 14
         result = columnize([multibyte_str], echo_columnize_callback, multibyte_str)
-        expected = u"このシ\nステム\n用に   このシ\n       ステム\n       用に"
+        expected = "このシ\nステム\n用に   このシ\n       ステム\n       用に"
         self.assertEqual(result, expected)

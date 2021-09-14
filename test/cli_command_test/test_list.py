@@ -429,8 +429,8 @@ class TestListCommand(TestCliProxyCommand):
         product = StubProduct("product1")
         ent_cert = StubEntitlementCertificate(product)
         ent_cert.order.usage = "Development"
-        ent_cert.order.roles = [u"SP Server", u"SP Starter"]
-        ent_cert.order.addons = [u"ADDON1", u"ADDON2"]
+        ent_cert.order.roles = ["SP Server", "SP Starter"]
+        ent_cert.order.addons = ["ADDON1", "ADDON2"]
         ent_cert.version = MagicMock()
         ent_cert.version.major = 3
         ent_cert.version.minor = 4

@@ -446,7 +446,7 @@ class ProductCertificateFilter(CertificateFilter):
             '?': '.',
         }
 
-        expression = u"""
+        expression = """
             ((?:                # A captured, non-capture group :)
                 [^*?\\\\]*        # Character literals and other uninteresting junk (greedy)
                 (?:\\\\.?)*       # Anything escaped with a backslash, or just a trailing backslash

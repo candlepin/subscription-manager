@@ -243,20 +243,20 @@ class TestProductService(InjectionMockingTest):
 
         expected_result = [
             (
-                u'Red Hat Enterprise Linux Server',
+                'Red Hat Enterprise Linux Server',
                 '69',
-                u'7.4',
-                u'x86_64',
+                '7.4',
+                'x86_64',
                 'subscribed',
                 [],
                 '{d.day}.{d.month}.{d.year}'.format(d=START_DATE),
                 '{d.day}.{d.month}.{d.year}'.format(d=END_DATE)
             ),
             (
-                u'Red Hat Enterprise Linux Server - Extended Update Support',
+                'Red Hat Enterprise Linux Server - Extended Update Support',
                 '70',
-                u'7.2',
-                u'x86_64',
+                '7.2',
+                'x86_64',
                 'subscribed',
                 [],
                 '{d.day}.{d.month}.{d.year}'.format(d=START_DATE),
@@ -294,10 +294,10 @@ class TestProductService(InjectionMockingTest):
 
         expected_result = [
             (
-                u'Red Hat Enterprise Linux Server - Extended Update Support',
+                'Red Hat Enterprise Linux Server - Extended Update Support',
                 '70',
-                u'7.2',
-                u'x86_64',
+                '7.2',
+                'x86_64',
                 'subscribed',
                 [],
                 '{d.day}.{d.month}.{d.year}'.format(d=START_DATE),
@@ -344,20 +344,20 @@ class TestProductsDBusObject(DBusObjectTest, InjectionMockingTest):
     def test_list_installed_products_without_filter(self):
         expected_result = [
             (
-                u'Red Hat Enterprise Linux Server',
+                'Red Hat Enterprise Linux Server',
                 '69',
-                u'7.4',
-                u'x86_64',
+                '7.4',
+                'x86_64',
                 'subscribed',
                 [],
                 START_DATE.strftime("%Y-%m-%d"),
                 END_DATE.strftime("%Y-%m-%d")
             ),
             (
-                u'Red Hat Enterprise Linux Server - Extended Update Support',
+                'Red Hat Enterprise Linux Server - Extended Update Support',
                 '70',
-                u'7.2',
-                u'x86_64',
+                '7.2',
+                'x86_64',
                 'subscribed',
                 [],
                 START_DATE.strftime("%Y-%m-%d"),

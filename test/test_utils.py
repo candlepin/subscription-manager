@@ -559,7 +559,7 @@ class TestFriendlyJoin(fixture.SubManFixture):
         self.assertTrue(res in ["One and Two", "Two and One"])
 
         self.assertEqual("1, 2, 3, 4, 5, 6, and fish",
-                         friendly_join([1, 2, u"3", 4, "5", 6, "fish"]))
+                         friendly_join([1, 2, "3", 4, "5", 6, "fish"]))
 
 
 class TestTrueValue(fixture.SubManFixture):

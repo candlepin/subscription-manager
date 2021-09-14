@@ -178,7 +178,7 @@ class CdnReleaseVersionProvider(object):
         listing_parts = content_url.split('$releasever', 1)
         listing_base = listing_parts[0]
         # FIXME: cleanup paths ("//"'s, etc)
-        return u"%s/listing" % listing_base  # FIXME(khowell): ensure that my changes here don't break earlier fix
+        return "%s/listing" % listing_base  # FIXME(khowell): ensure that my changes here don't break earlier fix
 
     # require tags provided by installed products?
 

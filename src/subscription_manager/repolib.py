@@ -600,7 +600,7 @@ class RepoUpdateActionCommand(object):
 @six.python_2_unicode_compatible
 class RepoActionReport(ActionReport):
     """Report class for reporting yum repo updates."""
-    name = u"Repo Updates"
+    name = "Repo Updates"
 
     def __init__(self):
         super(RepoActionReport, self).__init__()
@@ -615,20 +615,19 @@ class RepoActionReport(ActionReport):
     def format_repos_info(self, repos, formatter):
         indent = '    '
         if not repos:
-            return u'%s<NONE>' % indent
+            return '%s<NONE>' % indent
 
         r = []
         for repo in repos:
-            r.append(u"%s%s" % (indent, formatter(repo)))
-        return u'\n'.join(r)
+            r.append("%s%s" % (indent, formatter(repo)))
+        return '\n'.join(r)
 
     def repo_format(self, repo):
-        msg = u"[id:%s %s]" % (repo.id,
-                               repo['name'])
+        msg = "[id:%s %s]" % (repo.id, repo['name'])
         return msg.encode('utf8')
 
     def section_format(self, section):
-        return u"[%s]" % section
+        return "[%s]" % section
 
     def format_repos(self, repos):
         return self.format_repos_info(repos, self.repo_format)
@@ -646,4 +645,4 @@ class RepoActionReport(ActionReport):
         s.append(_('Deleted'))
         # deleted are former repo sections, but they are the same type
         s.append(self.format_sections(self.repo_deleted))
-        return u'\n'.join(s)
+        return '\n'.join(s)

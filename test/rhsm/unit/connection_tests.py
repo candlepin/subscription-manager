@@ -535,7 +535,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
 
     def test_200_json(self):
         # no exceptions
-        content = u'{"something": "whatever"}'
+        content = '{"something": "whatever"}'
         self.vr("200", content)
 
     # 202 ACCEPTED
@@ -546,7 +546,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
         self.vr("202", None)
 
     def test_202_json(self):
-        content = u'{"something": "whatever"}'
+        content = '{"something": "whatever"}'
         self.vr("202", content)
 
     # 204 NO CONTENT
@@ -587,7 +587,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
             self.fail("Should have raised UnauthorizedException")
 
     def test_401_invalid_json(self):
-        content = u'{this is not json</> dfsdf"" '
+        content = '{this is not json</> dfsdf"" '
         try:
             self.vr("401", content)
         except UnauthorizedException as e:
@@ -602,7 +602,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
     @patch("rhsm.connection.json.loads")
     def test_401_json_exception(self, mock_json_loads):
         mock_json_loads.side_effect = Exception
-        content = u'{"errors": ["Forbidden message"]}'
+        content = '{"errors": ["Forbidden message"]}'
         try:
             self.vr("401", content)
         except UnauthorizedException as e:
@@ -615,7 +615,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
             self.fail("Should have raised UnauthorizedException")
 
     def test_403_valid(self):
-        content = u'{"errors": ["Forbidden message"]}'
+        content = '{"errors": ["Forbidden message"]}'
         try:
             self.vr("403", content)
         except RestlibException as e:
@@ -637,7 +637,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
             self.fail("Should have raised ForbiddenException")
 
     def test_401_valid(self):
-        content = u'{"errors": ["Unauthorized message"]}'
+        content = '{"errors": ["Unauthorized message"]}'
         try:
             self.vr("401", content)
         except RestlibException as e:
@@ -657,7 +657,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
             self.fails("Should have raise RemoteServerException")
 
     def test_404_valid_but_irrelevant_json(self):
-        content = u'{"something": "whatever"}'
+        content = '{"something": "whatever"}'
         try:
             self.vr("404", content)
         except RestlibException as e:
@@ -667,7 +667,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
             self.fails("Should have raised a RemoteServerException")
 
     def test_404_valid_body_old_style(self):
-        content = u'{"displayMessage": "not found"}'
+        content = '{"displayMessage": "not found"}'
         try:
             self.vr("404", content)
         except RestlibException as e:
@@ -679,7 +679,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
             self.fail("RestlibException expected")
 
     def test_404_valid_body(self):
-        content = u'{"errors": ["not found", "still not found"]}'
+        content = '{"errors": ["not found", "still not found"]}'
         try:
             self.vr("404", content)
         except RestlibException as e:
@@ -700,7 +700,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
             self.fail("RemoteServerException expected")
 
     def test_410_body(self):
-        content = u'{"displayMessage": "foo", "deletedId": "12345"}'
+        content = '{"displayMessage": "foo", "deletedId": "12345"}'
         # self.assertRaises(GoneException, self.vr, "410", content)
         try:
             self.vr("410", content)
@@ -720,7 +720,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
             self.fail("Should have raised a RateLimitExceededException")
 
     def test_429_body(self):
-        content = u'{"errors": ["TooFast"]}'
+        content = '{"errors": ["TooFast"]}'
         headers = {'retry-after': 20}
         try:
             self.vr("429", content, headers)
@@ -748,7 +748,7 @@ class RestlibTests(unittest.TestCase):
 
     def test_json_uft8_encoding(self):
         # A unicode string containing JSON
-        test_json = u"""
+        test_json = """
             {
                 "firstName": "John",
                 "message": "こんにちは世界",
@@ -762,9 +762,9 @@ class RestlibTests(unittest.TestCase):
             }
         """
         data = json.loads(test_json)
-        self.assertTrue(isinstance(data["message"], type(u"")))
+        self.assertTrue(isinstance(data["message"], type("")))
         # Access a value deep in the structure to make sure we recursed down.
-        self.assertTrue(isinstance(data["phoneNumbers"][0][0]["type"], type(u"")))
+        self.assertTrue(isinstance(data["phoneNumbers"][0][0]["type"], type("")))
 
 
 # see #830767 and #842885 for examples of why this is
@@ -778,9 +778,9 @@ class ExceptionTest(unittest.TestCase):
         # FIXME: validate results are strings, unicode, etc
         # but just looking for exceptions atm
         # - no assertIsInstance on 2.4/2.6
-        self.assertTrue(isinstance("%s" % e, str) or isinstance("%s" % e, type(u"")))
-        self.assertTrue(isinstance("%s" % str(e), str) or isinstance("%s" % str(e), type(u"")))
-        self.assertTrue(isinstance("%s" % repr(e), str) or isinstance("%s" % repr(e), type(u"")))
+        self.assertTrue(isinstance("%s" % e, str) or isinstance("%s" % e, type("")))
+        self.assertTrue(isinstance("%s" % str(e), str) or isinstance("%s" % str(e), type("")))
+        self.assertTrue(isinstance("%s" % repr(e), str) or isinstance("%s" % repr(e), type("")))
 
     def _create_exception(self, *args, **kwargs):
         return self.exception(args, kwargs)

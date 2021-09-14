@@ -382,7 +382,7 @@ class TestSystemExit(unittest.TestCase):
         self.assertEqual("%s\n\n" % msgs[0], cap.err)
 
     def test_msg_unicode(self):
-        msgs = [u"\u2620 \u2603 \u203D"]
+        msgs = ["\u2620 \u2603 \u203D"]
         with Capture() as cap:
             try:
                 system_exit(1, msgs)
@@ -392,7 +392,7 @@ class TestSystemExit(unittest.TestCase):
             captured = cap.err.decode('utf-8')
         else:
             captured = cap.err
-        self.assertEqual(u"%s\n" % msgs[0], captured)
+        self.assertEqual("%s\n" % msgs[0], captured)
 
     def test_msg_and_exception_str(self):
         class StrException(Exception):

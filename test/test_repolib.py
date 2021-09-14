@@ -174,12 +174,12 @@ class RepoTests(unittest.TestCase):
         self.assertEqual(repo_id, repo.id)
 
     def test_valid_unicode_just_ascii_label_for_id(self):
-        repo_id = u'valid-label'
+        repo_id = 'valid-label'
         repo = Repo(repo_id)
         self.assertEqual(repo_id, repo.id)
 
     def test_invalid_unicode_label_for_id(self):
-        repo_id = u'valid-不明-label'
+        repo_id = 'valid-不明-label'
         repo = Repo(repo_id)
         expected = 'valid----label'
         self.assertEqual(expected, repo.id)
@@ -238,11 +238,11 @@ class RepoTests(unittest.TestCase):
 class RepoActionReportTests(fixture.SubManFixture):
     def test(self):
         report = repolib.RepoActionReport()
-        repo = self._repo(u'a-unicode-content-label', u'A unicode repo name')
+        repo = self._repo('a-unicode-content-label', 'A unicode repo name')
         report.repo_updates.append(repo)
         report.repo_added.append(repo)
-        deleted_section = u'einige-repo-name'
-        deleted_section_2 = u'一些回購名稱'
+        deleted_section = 'einige-repo-name'
+        deleted_section_2 = '一些回購名稱'
         report.repo_deleted = [deleted_section, deleted_section_2]
 
         str(report)

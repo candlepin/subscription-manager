@@ -59,7 +59,7 @@ class TestUnicodeGettext(TestLocale):
     def test_ja_not_serial(self):
         with fixture.locale_context('ja_JP.UTF-8'):
             msg = _("'%s' is not a valid serial number") % "123123"
-            six.text_type(to_unicode_or_bust(msg)) + u'\n'
+            six.text_type(to_unicode_or_bust(msg)) + '\n'
 
     def test_system_exit(self):
         with fixture.locale_context('ja_JP.UTF-8'):
