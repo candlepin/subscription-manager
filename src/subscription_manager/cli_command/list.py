@@ -55,6 +55,13 @@ INSTALLED_PRODUCT_STATUS = [
     _("Ends:")
 ]
 
+INSTALLED_PRODUCT_STATUS_SCA = [
+    _("Product Name:"),
+    _("Product ID:"),
+    _("Version:"),
+    _("Arch:")
+]
+
 AVAILABLE_SUBS_LIST = [
     _("Subscription Name:"),
     _("Provides:"),
@@ -291,10 +298,33 @@ class ListCommand(CliCommand):
                 print("+-------------------------------------------+")
 
                 for product in installed_products:
-                    status = STATUS_MAP[product[4]]
-                    print(columnize(INSTALLED_PRODUCT_STATUS, none_wrap_columnize_callback,
-                                    product[0], product[1], product[2], product[3],
-                                    status, product[5], product[6], product[7]) + "\n")
+                    if is_simple_content_access(self.cp, self.identity):
+                        print(
+                            columnize(
+                                INSTALLED_PRODUCT_STATUS_SCA,
+                                none_wrap_columnize_callback,
+                                product[0],  # Name
+                                product[1],  # ID
+                                product[2],  # Version
+                                product[3]   # Arch
+                            ) + "\n"
+                        )
+                    else:
+                        status = STATUS_MAP[product[4]]
+                        print(
+                            columnize(
+                                INSTALLED_PRODUCT_STATUS,
+                                none_wrap_columnize_callback,
+                                product[0],  # Name
+                                product[1],  # ID
+                                product[2],  # Version
+                                product[3],  # Arch
+                                status,      # Status
+                                product[5],  # Status details
+                                product[6],  # Start
+                                product[7]   # End
+                            ) + "\n"
+                        )
             else:
                 if self.options.filter_string:
                     print(_(
