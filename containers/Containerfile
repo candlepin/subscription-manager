@@ -4,7 +4,7 @@ MAINTAINER "Candlepin Team" <candlepin@redhat.com>
 
 ENV SMDEV_CONTAINER_OFF='True'
 
-RUN yum install --disablerepo=updates -y \
+RUN dnf install --disablerepo=updates -y \
     cmake \
     dbus-daemon \
     dnf-utils \
@@ -62,7 +62,7 @@ RUN yum install --disablerepo=updates -y \
     sudo \
     vim \
     wget \
-    && yum clean all
+    && dnf clean all
 
 RUN mkdir /build
 COPY requirements.txt dev-requirements.txt /build/
@@ -70,7 +70,7 @@ WORKDIR /build
 RUN pip3 install -r dev-requirements.txt
 RUN git clone https://github.com/candlepin/subscription-manager.git
 WORKDIR /build/subscription-manager
-RUN yum-builddep -y ./subscription-manager.spec
+RUN dnf builddep -y ./subscription-manager.spec
 RUN python3 ./setup.py build
 RUN python3 ./setup.py build_ext --inplace
 RUN echo "export SMDEV_CONTAINER_OFF='True'" >> /root/.bashrc && echo "export SMDEV_CONTAINER_OFF='True'" >> /root/.zshrc
