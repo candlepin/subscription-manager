@@ -21,7 +21,7 @@ pipeline {
         stage('Fedora unit') {
           steps {
             sh readFile(file: 'jenkins/python3-tests.sh')
-            junit('nosetests.xml')
+            junit('coverage.xml')
             // TODO: find the correct adapter or generate coverage tests that can be
             //       parsed by an existing adapter:
             //       https://plugins.jenkins.io/code-coverage-api/

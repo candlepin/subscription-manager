@@ -48,6 +48,8 @@ from subscription_manager import injection as inj
 
 from subscription_manager import isodate, cache
 
+from test import subman_marker_slow, subman_marker_slow_timeout
+
 log = logging.getLogger(__name__)
 
 
@@ -1143,6 +1145,8 @@ class TestSupportedResourcesCache(SubManFixture):
         data = self.cache.read_data(uep=mock_uep, identity=mock_identity)
         self.assertEqual(data, self.MOCK_SUPPORTED_RESOURCES_RESPONSE)
 
+    @subman_marker_slow
+    @subman_marker_slow_timeout
     def test_cache_is_obsoleted_by_timeout(self):
         old_timeout = self.cache.TIMEOUT
         self.cache.TIMEOUT = 1

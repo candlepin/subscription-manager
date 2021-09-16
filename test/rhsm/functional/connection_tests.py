@@ -20,7 +20,7 @@ import random
 import string
 import unittest
 
-from nose.plugins.attrib import attr
+from test import subman_marker_functional
 
 from rhsm.connection import ContentConnection, UEPConnection, Restlib,\
     UnauthorizedException, ForbiddenException, RestlibException
@@ -34,7 +34,7 @@ def random_string(name, target_length=32):
     return name
 
 
-@attr('functional')
+@subman_marker_functional
 class ConnectionTests(unittest.TestCase):
 
     def setUp(self):
@@ -143,7 +143,7 @@ class ConnectionTests(unittest.TestCase):
         self.cp.unregisterConsumer(self.consumer_uuid)
 
 
-@attr('functional')
+@subman_marker_functional
 class EntitlementRegenerationTests(unittest.TestCase):
     def setUp(self):
         self.cp = UEPConnection(username="admin", password="admin", insecure=True)
@@ -200,7 +200,7 @@ class EntitlementRegenerationTests(unittest.TestCase):
         self.cp.unregisterConsumer(self.consumer_uuid)
 
 
-@attr('functional')
+@subman_marker_functional
 class BindRequestTests(unittest.TestCase):
     def setUp(self):
         self.cp = UEPConnection(username="admin", password="admin", insecure=True)
@@ -235,7 +235,7 @@ class BindRequestTests(unittest.TestCase):
                 self.assertEqual(None, kwargs['body'])
 
 
-@attr('functional')
+@subman_marker_functional
 class ContentConnectionTests(unittest.TestCase):
 
     def testInsecure(self):
@@ -290,7 +290,7 @@ class ContentConnectionTests(unittest.TestCase):
         assert 'no_proxy' not in os.environ and 'https_proxy' not in os.environ
 
 
-@attr('functional')
+@subman_marker_functional
 class HypervisorCheckinTests(unittest.TestCase):
 
     def setUp(self):
@@ -307,7 +307,7 @@ class HypervisorCheckinTests(unittest.TestCase):
             self.assertEqual(len(response['created']), 0)
 
 
-@attr('functional')
+@subman_marker_functional
 class RestlibTests(unittest.TestCase):
 
     def setUp(self):
@@ -376,7 +376,7 @@ class RestlibTests(unittest.TestCase):
             self.assertEqual(expected_error_code, ex.code)
 
 
-@attr('functional')
+@subman_marker_functional
 class OwnerInfoTests(unittest.TestCase):
     def setUp(self):
         self.cp = UEPConnection(username="admin", password="admin",

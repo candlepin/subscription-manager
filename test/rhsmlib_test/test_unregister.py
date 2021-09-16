@@ -31,6 +31,8 @@ from rhsmlib.services import unregister
 
 from rhsm import connection
 
+from test import subman_marker_dbus
+
 
 class TestUnregisterService(InjectionMockingTest):
     def setUp(self):
@@ -58,6 +60,7 @@ class TestUnregisterService(InjectionMockingTest):
         self.assertIsNone(result)
 
 
+@subman_marker_dbus
 class TestUnregisterDBusObject(DBusObjectTest, InjectionMockingTest):
     def setUp(self):
         super(TestUnregisterDBusObject, self).setUp()

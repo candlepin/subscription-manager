@@ -108,7 +108,7 @@ class DBusObjectTest(unittest.TestCase):
         self.addCleanup(self.stop_server)
         sender_patcher = mock.patch("rhsmlib.client_info.DBusSender.get_cmd_line")
         self.mock_sender_get_cmd_line = sender_patcher.start()
-        self.mock_sender_get_cmd_line.return_value = "nose-unit-test"
+        self.mock_sender_get_cmd_line.return_value = "unit-test"
 
     def stop_server(self):
         self.server_thread.stop()
