@@ -19,6 +19,7 @@ from rhsmlib.facts import hwprobe
 from rhsmlib.facts import insights
 from rhsmlib.facts import kpatch
 from rhsmlib.facts import cloud_facts
+from rhsmlib.facts import pkg_arches
 
 
 class AllFactsCollector(collector.FactsCollector):
@@ -30,7 +31,8 @@ class AllFactsCollector(collector.FactsCollector):
             custom.CustomFactsCollector,
             insights.InsightsCollector,
             kpatch.KPatchCollector,
-            cloud_facts.CloudFactsCollector
+            cloud_facts.CloudFactsCollector,
+            pkg_arches.SupportedArchesCollector
         ]
 
     def get_all(self):

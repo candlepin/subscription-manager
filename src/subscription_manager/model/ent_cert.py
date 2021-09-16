@@ -34,7 +34,8 @@ class EntitlementCertContent(Content):
                    url=ent_cert_content.url, gpg=ent_cert_content.gpg,
                    tags=ent_cert_content.required_tags, cert=cert,
                    enabled=ent_cert_content.enabled,
-                   metadata_expire=ent_cert_content.metadata_expire)
+                   metadata_expire=ent_cert_content.metadata_expire,
+                   arches=ent_cert_content.arches)
 
 
 class EntitlementCertEntitlement(Entitlement):

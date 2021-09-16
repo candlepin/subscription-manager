@@ -72,6 +72,9 @@ class Repo(dict):
         'ui_repoid_vars': (0, None)}
 
     def __init__(self, repo_id, existing_values=None):
+        if HAS_DEB822 is True:
+            self.PROPERTIES['arches'] = (1, None)
+
         # existing_values is a list of 2-tuples
         existing_values = existing_values or []
         self.id = self._clean_id(repo_id)
@@ -151,6 +154,8 @@ class Repo(dict):
         repo['sslclientcert'] = content.cert.path
         repo['sslcacert'] = ca_cert
         repo['metadata_expire'] = content.metadata_expire
+        if 'arches' in repo and len(content.arches) > 0:
+            repo['arches'] = content.arches
 
         repo = Repo._set_proxy_info(repo)
 
@@ -469,6 +474,14 @@ if HAS_DEB822:
             apt_cont['Suites'] = 'default'
             apt_cont['Components'] = 'all'
             apt_cont['Trusted'] = 'yes'
+
+            if apt_cont['arches'] is None:
+                apt_cont['arches'] = 'none'
+            else:
+                arches_str = ", ".join(apt_cont['arches'])
+                apt_cont['arches'] = arches_str
+                apt_cont['Architectures'] = arches_str
+
             return apt_cont
 
 
