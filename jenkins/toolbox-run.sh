@@ -1,7 +1,13 @@
 #!/bin/bash -x
 PROJECT_ROOT="$(git rev-parse --show-toplevel)"
 
+if [ -z "$CHANGE_ID"]; then
+    TAG="latest"
+else
+    TAG="PR-$CHANGE_ID"
+fi
 # Run one of our tests inside a newly created toolbox container
+echo "Using container image tag: $TAG"
 
 if (( $# != 2)); then
     >&2 cat << EOF
@@ -14,9 +20,9 @@ EOF
 fi
 
 pushd "$PROJECT_ROOT" || exit 1
-toolbox create -i "quay.io/candlepin/subscription-manager:PR-$CHANGE_ID" -c "PR-$CHANGE_ID-$1"
-toolbox run -c "PR-$CHANGE_ID-$1" sh "$2"
+toolbox create -i "quay.io/candlepin/subscription-manager:$TAG" -c "$TAG-$1"
+toolbox run -c "$TAG-$1" sh "$2"
 RETVAL=$?
-toolbox rm --force "PR-$CHANGE_ID-$1"
+toolbox rm --force "$TAG-$1"
 popd
 exit "$RETVAL"
