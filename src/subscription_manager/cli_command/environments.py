@@ -20,13 +20,17 @@ import os
 import rhsm.connection as connection
 
 from subscription_manager.cli import system_exit
-from subscription_manager.cli_command.cli import handle_exception
+from subscription_manager.cli_command.cli import handle_exception, ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG
 from subscription_manager.cli_command.org import OrgCommand
 from subscription_manager.cli_command.list import ENVIRONMENT_LIST
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.i18n import ugettext as _
+from subscription_manager.i18n import ungettext
 from subscription_manager.printing_utils import columnize, echo_columnize_callback
 from subscription_manager.utils import get_supported_resources
+
+from subscription_manager.injection import require, IDENTITY
+
 
 log = logging.getLogger(__name__)
 
@@ -40,9 +44,25 @@ class EnvironmentsCommand(OrgCommand):
         super(EnvironmentsCommand, self).__init__("environments", shortdesc,
                                                   False)
         self._add_url_options()
+        self.parser.add_argument("--set", dest="set",
+                                 help=_("set a comma-separated list of environments for this consumer"))
+        self.parser.add_argument("--list", action="store_true",
+                                 default=False, help=_("list all environments for the organization"))
+        self.parser.add_argument("--list-enabled", action="store_true", dest="enabled",
+                                 default=False, help=_("list the environments enabled for this consumer"))
+        self.parser.add_argument("--list-disabled", action="store_true", dest="disabled",
+                                 default=False, help=_("list the environments not enabled for this consumer"))
 
     def _get_environments(self, org):
         return self.cp.getEnvironmentList(org)
+
+    def _validate_options(self):
+        if self.identity.is_valid():
+            if self.options.org:
+                system_exit(os.EX_USAGE, _("You may not specify an --org for environments when registered."))
+        else:
+            if self.options.enabled or self.options.disabled:
+                system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
 
     def _do_command(self):
         self._validate_options()
@@ -50,25 +70,19 @@ class EnvironmentsCommand(OrgCommand):
             if self.options.token:
                 self.cp = self.cp_provider.get_keycloak_auth_cp(self.options.token)
             else:
-                self.cp_provider.set_user_pass(self.username, self.password)
-                self.cp = self.cp_provider.get_basic_auth_cp()
+                if not self.options.enabled:
+                    print(_("This operation requires user crendentials"))
+                    self.cp_provider.set_user_pass(self.username, self.password)
+                    self.cp = self.cp_provider.get_basic_auth_cp()
             supported_resources = get_supported_resources()
             if 'environments' in supported_resources:
-                environments = self._get_environments(self.org)
-
-                if len(environments):
-                    print("+-------------------------------------------+")
-                    print("          {env}".format(env=_('Environments')))
-                    print("+-------------------------------------------+")
-                    for env in environments:
-                        print(columnize(ENVIRONMENT_LIST, echo_columnize_callback, env['name'],
-                                        env['description'] or "") + "\n")
+                self.identity = require(IDENTITY)
+                if self.options.set:
+                    self._set_environments()
                 else:
-                    print(_("This org does not have any environments."))
+                    self._list_environments()
             else:
                 system_exit(os.EX_UNAVAILABLE, _("Error: Server does not support environments."))
-
-            log.debug("Successfully retrieved environment list from server.")
         except connection.RestlibException as re:
             log.exception(re)
             log.error("Error: Unable to retrieve environment list from server: {re}".format(re=re))
@@ -77,3 +91,80 @@ class EnvironmentsCommand(OrgCommand):
             system_exit(os.EX_SOFTWARE, mapped_message)
         except Exception as e:
             handle_exception(_("Error: Unable to retrieve environment list from server"), e)
+
+    def _set_environments(self):
+        if self.cp.has_capability("multi_environment"):
+            if not self.identity.is_valid():
+                system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
+            self.cp.updateConsumer(
+                self.identity.uuid,
+                environments=self._process_environments(
+                    self.cp,
+                    self.cp.getOwner(self.identity.uuid)['key'],
+                    self.options
+                )
+            )
+            print(_("Environments updated."))
+        else:
+            system_exit(os.EX_UNAVAILABLE, _("Error: Server does not support environment updates."))
+
+    def _list_environments(self):
+        environments = []
+        if self.options.enabled:
+            environments = self.cp.getConsumer(self.identity.uuid)['environments']
+        else:
+            org_environments = self._get_environments(self.org)
+            if self.options.disabled:
+                consumer_id_list = []
+                for env in self.cp.getConsumer(self.identity.uuid)['environments']:
+                    consumer_id_list.append(env['id'])
+                for env in org_environments:
+                    if env['id'] not in consumer_id_list:
+                        environments.append(env)
+            else:
+                environments = org_environments
+
+        if len(environments):
+            print("+-------------------------------------------+")
+            print("          {env}".format(env=_('Environments')))
+            print("+-------------------------------------------+")
+            for env in environments:
+                print(columnize(ENVIRONMENT_LIST, echo_columnize_callback, env['name'],
+                                env['description'] or "") + "\n")
+        else:
+            print(_("This list operation does not have any environments to report."))
+
+    def _process_environments(self, admin_cp, owner_key, options):
+        all_env_list = admin_cp.getEnvironmentList(owner_key)
+        return check_set_environment_names(all_env_list, options.set)
+
+    @property
+    def org(self):
+        self.identity = require(IDENTITY)
+        if self.identity.is_valid():
+            self._org = self.cp.getOwner(self.identity.uuid)['key']
+            return self._org
+        elif self.options.org:
+            self._org = self.options.org
+            return self._org
+        else:
+            if not self.options.username:
+                self.options.username = self._username
+            return super().org
+
+
+def check_set_environment_names(all_env_list, name_string):
+    names = name_string.split(",")
+    if len(names) > len(set(names)):
+        system_exit(os.EX_DATAERR,
+                    _("Error: The same environment may not be listed more than once. "))
+
+    all_names_ids = dict((environment['name'], environment['id']) for environment in all_env_list)
+    missing_names = [name for name in names if name not in all_names_ids.keys()]
+    if len(missing_names) > 0:
+        msg = ungettext("No such environment: {names}",
+                        "No such environments: {names}",
+                        len(missing_names)).format(names=', '.join(missing_names))
+        system_exit(os.EX_DATAERR, msg)
+
+    return ','.join([all_names_ids[name] for name in names])

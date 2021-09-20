@@ -29,6 +29,7 @@ from subscription_manager.cli_command.cli import handle_exception
 from subscription_manager.cli_command.user_pass import UserPassCommand
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.i18n import ugettext as _
+from subscription_manager.i18n import ungettext
 from subscription_manager.utils import get_current_owner, get_supported_resources
 
 log = logging.getLogger(__name__)
@@ -86,12 +87,15 @@ class IdentityCommand(UserPassCommand):
                 supported_resources = get_supported_resources(self.cp, self.identity)
                 if 'environments' in supported_resources:
                     consumer = self.cp.getConsumer(consumerid)
-                    environment = consumer['environment']
-                    if environment:
-                        environment_name = environment['name']
+                    environments = consumer['environments']
+                    if environments:
+                        environment_name = (','.join([environment['name'] for environment in environments]))
                     else:
                         environment_name = _("None")
-                    print(_('environment name: {environment_name}').format(environment_name=environment_name))
+                        environments = []
+                    print(ungettext('environment name: {environment_name}',
+                                    'environment names: {environment_name}',
+                                    len(environments)).format(environment_name=environment_name))
             else:
                 if self.options.force:
                     # get an UEP with basic auth or keycloak auth

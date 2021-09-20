@@ -65,7 +65,7 @@ CONSUMER_CONTENT_JSON = '''{"hypervisorId": null,
         "facts": {}, "id": "ff808081550d997c015511b0406d1065",
         "uuid": "c1b8648c-6f0a-4aa5-b34e-b9e62c0e4364",
         "guestIds": null, "capabilities": null,
-        "environment": null, "installedProducts": null,
+        "environments": null, "installedProducts": null,
         "canActivate": false, "type": {"manifest": false,
         "id": "1000", "label": "system"}, "annotations": null,
         "username": "admin", "updated": "2016-06-02T15:16:51+0000",
@@ -187,13 +187,13 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_cp.registerConsumer.return_value = expected_consumer
 
         register_service = register.RegisterService(self.mock_cp)
-        register_service.register("org", name="name", environment="environment")
+        register_service.register("org", name="name", environments="environment")
 
         self.mock_cp.registerConsumer.assert_called_once_with(
             name="name",
             facts={},
             owner="org",
-            environment="environment",
+            environments="environment",
             keys=None,
             installed_products=[],
             jwt_token=None,
@@ -263,13 +263,13 @@ class RegisterServiceTest(InjectionMockingTest):
 
         self.assertIsNotNone(org)
 
-        register_service.register(org, name="name", environment="environment")
+        register_service.register(org, name="name", environments="environment")
 
         self.mock_cp.registerConsumer.assert_called_once_with(
             name="name",
             facts={},
             owner="snowwhite",
-            environment="environment",
+            environments="environment",
             keys=None,
             installed_products=[],
             jwt_token=None,
@@ -308,7 +308,7 @@ class RegisterServiceTest(InjectionMockingTest):
             name="name",
             facts={},
             owner="org",
-            environment=None,
+            environments=None,
             keys=[1],
             installed_products=[],
             jwt_token=None,
@@ -353,10 +353,10 @@ class RegisterServiceTest(InjectionMockingTest):
         ]
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
 
-    def _build_options(self, activation_keys=None, environment=None, force=None, name=None, consumerid=None):
+    def _build_options(self, activation_keys=None, environments=None, force=None, name=None, consumerid=None):
         return {
             'activation_keys': activation_keys,
-            'environment': environment,
+            'environments': environments,
             'force': force,
             'name': name,
             'consumerid': consumerid
@@ -393,7 +393,7 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_cp.registerConsumer.assert_called_once_with(
             addons=["addon1"],
             content_tags=[],
-            environment=None,
+            environments=None,
             facts={},
             installed_products=[],
             jwt_token=None,
@@ -425,7 +425,7 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_cp.password = None
 
         self.mock_identity.is_valid.return_value = False
-        options = self._build_options(activation_keys=[1], environment='environment')
+        options = self._build_options(activation_keys=[1], environments='environment')
         with self.assertRaisesRegex(exceptions.ValidationError, r'.*do not allow environments.*'):
             register.RegisterService(self.mock_cp).validate_options(options)
 
