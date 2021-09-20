@@ -39,5 +39,4 @@ pushd $WORKSPACE
 export PYTHONPATH="$PYTHON_RHSM"/src
 
 # make set-versions
-# capture exit status of 'make stylish' and not 'tee'
-( set -o pipefail; make stylish | tee stylish_results.txt )
+make stylish
