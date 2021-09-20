@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-29 12:56-0400\n"
-"PO-Revision-Date: 2021-08-28 22:04+0000\n"
+"PO-Revision-Date: 2021-09-17 12:04+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-27/it/>\n"
@@ -4604,7 +4604,7 @@ msgstr "\"{attr}\" impostato a \"{val}\"."
 #: src/subscription_manager/managercli.py:650
 #, python-brace-format
 msgid "{attr} unset."
-msgstr ""
+msgstr "{attr} disinserito."
 
 #: src/subscription_manager/managercli.py:664
 #: src/subscription_manager/managercli.py:687
@@ -6074,6 +6074,8 @@ msgstr ""
 msgid "Overall Status: %s\n"
 "%s"
 msgstr ""
+"Stato generale: %s\n"
+"%s"
 
 #: src/subscription_manager/managercli.py:3043
 #, python-format
@@ -6532,6 +6534,10 @@ msgid ""
 "Hat Subscription Management. If not desired, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
+"I plugin yum / dnf: %s sono stati abilitati automaticamente a vantaggio di "
+"Red Hat Subscription Management. Se non lo si desidera, utilizzare "
+"\"subscription-manager config --rhsm.auto_enable_yum_plugins=0\" per "
+"bloccare questo comportamento."
 
 #: src/subscription_manager/repolib.py:643
 msgid "Repo updates"
