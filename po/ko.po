@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-16 11:56-0400\n"
-"PO-Revision-Date: 2021-08-23 17:04+0000\n"
+"PO-Revision-Date: 2021-09-18 14:05+0000\n"
 "Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ko/>\n"
@@ -23,79 +23,73 @@ msgstr ""
 "X-Generator: Weblate 4.8\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
-#, fuzzy
-#| msgid "Usage:  "
 msgid "usage: "
-msgstr "사용법:  "
+msgstr "사용법: "
 
 #: /usr/lib64/python3.6/argparse.py:830
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__ call __ () 정의되지 않음"
 
 #: /usr/lib64/python3.6/argparse.py:1127
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr ""
+msgstr "알지 못하는 구문 분석기 %(parser_name)r (선택기:%(choices)s)"
 
 #: /usr/lib64/python3.6/argparse.py:1181
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr ""
+msgstr "인수 \"-\" (방법 %r인)"
 
 #: /usr/lib64/python3.6/argparse.py:1189
 #, python-format
 msgid "can't open '%s': %s"
-msgstr ""
+msgstr "열 수 없습니다 '%s': %s"
 
 #: /usr/lib64/python3.6/argparse.py:1393
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "병합 할 수 없습니다 - 두 그룹의 이름은 %r입니다"
 
 #: /usr/lib64/python3.6/argparse.py:1431
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "'필요한'은 위치에 대한 잘못된 인수입니다"
 
 #: /usr/lib64/python3.6/argparse.py:1453
 #, python-format
 msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
-msgstr ""
+msgstr "잘못된 선택 문자열 %(option)r: 문자 %(prefix_chars)r로 시작해야 합니다"
 
 #: /usr/lib64/python3.6/argparse.py:1473
 #, python-format
 msgid "dest= is required for options like %r"
-msgstr ""
+msgstr "dest= 는 %r과 같은 선택에 필요합니다"
 
 #: /usr/lib64/python3.6/argparse.py:1490
 #, python-format
 msgid "invalid conflict_resolution value: %r"
-msgstr ""
+msgstr "잘못된 충돌_해결 값: %r"
 
 #: /usr/lib64/python3.6/argparse.py:1508
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] ""
+msgstr[0] "충돌 하는 선택 문자열 : %s"
 
 #: /usr/lib64/python3.6/argparse.py:1574
 msgid "mutually exclusive arguments must be optional"
-msgstr ""
+msgstr "상호 배타적인 인수는 선택사항이어야만 합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.6/argparse.py:1637
-#, fuzzy
-#| msgid "%s option requires an argument"
 msgid "positional arguments"
-msgstr "%s 옵션에는 인수가 필요함"
+msgstr "위치 인수"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.6/argparse.py:1638
-#, fuzzy
-#| msgid "%s option requires an argument"
 msgid "optional arguments"
-msgstr "%s 옵션에는 인수가 필요함"
+msgstr "선택적인 인수"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.6/argparse.py:1653
@@ -104,96 +98,87 @@ msgstr "도움말 보기 및 종료"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.6/argparse.py:1684
-#, fuzzy
-#| msgid "cannot parse argument: %s"
 msgid "cannot have multiple subparser arguments"
-msgstr "인수를 해석할 수 없음: %s"
+msgstr "여러 하위 구문 분석기 인수를 가질 수 없습니다"
 
 #: /usr/lib64/python3.6/argparse.py:1736
-#, fuzzy, python-format
-#| msgid "Unknown arguments: %s"
+#, python-format
 msgid "unrecognized arguments: %s"
-msgstr "알 수 없는 인수: %s"
+msgstr "인식 할 수 없는 인수: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.6/argparse.py:1833
-#, fuzzy, python-format
-#| msgid "cannot parse argument: %s"
+#, python-format
 msgid "not allowed with argument %s"
-msgstr "인수를 해석할 수 없음: %s"
+msgstr "인수 %s와 함께 허용하지 않습니다"
 
 #: /usr/lib64/python3.6/argparse.py:1879 /usr/lib64/python3.6/argparse.py:1893
 #, python-format
 msgid "ignored explicit argument %r"
-msgstr ""
+msgstr "명시적 인수 %r 무시"
 
 #: /usr/lib64/python3.6/argparse.py:2000
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "다음 인수가 필요합니다: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2015
-#, fuzzy, python-format
-#| msgid "Wrong number of arguments specified.\n"
+#, python-format
 msgid "one of the arguments %s is required"
-msgstr "잘못된 인수 번호가 지정되어 있습니다.\n"
+msgstr "인수 %s 중 하나가 필요합니다"
 
 #: /usr/lib64/python3.6/argparse.py:2058
 msgid "expected one argument"
-msgstr ""
+msgstr "예상되는 하나의 인수"
 
 #: /usr/lib64/python3.6/argparse.py:2059
 msgid "expected at most one argument"
-msgstr ""
+msgstr "많으면 하나의 인수가 예상됩니다"
 
 #: /usr/lib64/python3.6/argparse.py:2060
 msgid "expected at least one argument"
-msgstr ""
+msgstr "적어도 하나의 인수가 예상됩니다"
 
 #: /usr/lib64/python3.6/argparse.py:2062
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
-msgstr[0] ""
+msgstr[0] "%s 인수가 예상됩니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2122
-#, fuzzy, python-format
-#| msgid "ambiguous option: %s (%s?)"
+#, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr "모호한 옵션: %s (%s?)"
+msgstr "모호한 선택: %(option)s은 %(matches)s와 일치 할 수 있습니다"
 
 #: /usr/lib64/python3.6/argparse.py:2185
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "예상되는 선택 문자열: %s"
 
 #: /usr/lib64/python3.6/argparse.py:2289
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%r은 호출 할 수 없습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2306
-#, fuzzy, python-format
-#| msgid "option %s: invalid %s value: %r"
+#, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr "옵션 %s: 유효하지 않은 %s 값: %r"
+msgstr "잘못된 %(type)s 값: %(value)r"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2317
-#, fuzzy, python-format
-#| msgid "option %s: invalid choice: %r (choose from %s)"
+#, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
-msgstr "옵션 %s: 유효하지 않은 선택: %r (%s에서 선택)"
+msgstr "잘못된 선택: %(value)r (%(choices)s에서 선택)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2393
-#, fuzzy, python-format
-#| msgid "%s: error: %s"
+#, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr "%s: 오류: %s"
+msgstr "%(prog)s: 오류: %(message)s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/index.js:64 cockpit/src/subscriptions-view.jsx:305
@@ -243,7 +228,7 @@ msgstr "$0 패키지가 설치됩니다."
 #: cockpit/src/insights.jsx:124
 msgid "The $0 package and $1 other package will be installed."
 msgid_plural "The $0 package and $1 other packages will be installed."
-msgstr[0] "$0 꾸러미 및 $1 다른 꾸러미들이 설치됩니다."
+msgstr[0] "$0 꾸러미와 $1 다른 꾸러미들이 설치됩니다."
 
 #: cockpit/src/insights.jsx:132
 msgid "$0 package needs to be removed."
@@ -252,7 +237,7 @@ msgstr[0] "$0 꾸러미들을 제거해야 합니다."
 
 #: cockpit/src/insights.jsx:146
 msgid "Additional packages:"
-msgstr "추가 꾸러미 :"
+msgstr "추가 꾸러미:"
 
 #: cockpit/src/insights.jsx:154
 msgid "Removals:"
@@ -766,8 +751,7 @@ msgid ""
 "subscription-manager to register.\n"
 msgstr ""
 "\n"
-"이 시스템은 Red Hat 관리서버에 등록되어 있지 않습니다. subscription-manager"
-"를 사용하여 등록 할 수 있습니다.\n"
+"이 시스템은 Red Hat 관리서버에 등록되어 있지 않습니다. subscription-manager를 사용하여 등록 할 수 있습니다.\n"
 
 #: src/dnf-plugins/subscription-manager.py:54
 msgid ""
@@ -848,10 +832,9 @@ msgstr "등록 (_R)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:38
-#, fuzzy, python-format, python-brace-format
-#| msgid "%%prog %s [OPTIONS] CERT_FILE"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS] CERT_FILE"
-msgstr "%%prog %s [옵션] CERT_FILE"
+msgstr "%(prog)s {name} [OPTIONS] CERT_FILE"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:46 src/rct/manifest_commands.py:270
@@ -941,10 +924,9 @@ msgid "Unable to trace symbolic link.  Possibly circular linkage."
 msgstr "심볼릭 링크를 추적할 수 없습니다. 순환 링크일 가능성이 있습니다."
 
 #: src/rct/manifest_commands.py:141
-#, fuzzy, python-format, python-brace-format
-#| msgid "%%prog %s [OPTIONS] MANIFEST_FILE"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS] MANIFEST_FILE"
-msgstr "%%prog %s [옵션] MANIFEST_FILE"
+msgstr "%(prog)s {name} [OPTIONS] MANIFEST_FILE"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:146
@@ -1400,10 +1382,9 @@ msgstr "SOS 보고서에 아직 포함되지 않은 데이터만 수집합니다
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm_debug/debug_commands.py:86
-#, fuzzy, python-format, python-brace-format
-#| msgid "%%prog %s [OPTIONS] "
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS] "
-msgstr "%%prog %s [옵션] "
+msgstr "%(prog)s {name} [선택(옵션)] "
 
 #: src/rhsm_debug/debug_commands.py:90
 msgid "The directory specified by '--destination' must already exist."
@@ -1539,7 +1520,7 @@ msgstr "사용자 %s은(는) 조직의 멤버가 아닙니다"
 #: src/rhsmlib/dbus/service_wrapper.py:45
 #, python-brace-format
 msgid "Error: Unable to load bus '{name}'"
-msgstr ""
+msgstr "오류: bus '{name}'을 적재 할 수 없음"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/facts/dmiinfo.py:91 src/rhsmlib/facts/dmiinfo.py:130
@@ -1898,10 +1879,9 @@ msgstr "유효하지 않음"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli.py:81
-#, fuzzy, python-format, python-brace-format
-#| msgid "%prog [OPTIONS]"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS]"
-msgstr "%prog [옵션]"
+msgstr "%(prog)s {name} [선택(옵션)]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli.py:122
@@ -2057,7 +2037,7 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:49
 #, python-brace-format
 msgid "{message} (HTTP error code {code}: {title})"
-msgstr ""
+msgstr "{message} (HTTP 오류 코드 {code}: {title})"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/about.py:28
@@ -4349,17 +4329,15 @@ msgstr "수량 조정을 위해 클릭"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/i18n_argparse.py:38
 #: src/subscription_manager/managercli.py:1002
-#, fuzzy, python-format
-#| msgid "%prog [OPTIONS]"
+#, python-format
 msgid "%(prog)s [OPTIONS]"
-msgstr "%prog [옵션]"
+msgstr "%(prog)s [OPTIONS]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/i18n_argparse.py:54
-#, fuzzy, python-brace-format
-#| msgid "%s: error: %s"
+#, python-brace-format
 msgid "{prog}: error: {msg}"
-msgstr "%s: 오류: %s"
+msgstr "{prog}: 오류: {msg}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:98
@@ -4592,10 +4570,8 @@ msgstr "서버 측 변경 사항을 덮어 쓰려면 다음 명령을 실행하�
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #. TRANSLATORS: this refers to a deprecated command
 #: src/subscription_manager/managercli.py:206
-#, fuzzy
-#| msgid "Deprecated, see remove"
 msgid "Deprecated, see 'syspurpose'"
-msgstr "사용 권장되지 않음, remove 참조"
+msgstr "더 이상 사용 되지 않음, 'syspurpose' 참조"
 
 # translation auto-copied from project subscription-manager, version 1.13.X, document keys
 #: src/subscription_manager/managercli.py:247
@@ -4667,10 +4643,9 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:438
-#, fuzzy, python-brace-format
-#| msgid "no such option: %s"
+#, python-brace-format
 msgid "{prog}: error: no such option: {args}"
-msgstr "해당 선택이 없음: %s"
+msgstr "{prog}: 오류: 그런 선택(옵션)이 없습니다: {args}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:454
@@ -4756,7 +4731,7 @@ msgstr ""
 msgid ""
 "Error: --username, --password, --token and --org can be used only on "
 "unregistered systems"
-msgstr ""
+msgstr "오류: --username, --password, --token과 --org는 등록되지 않은 시스템에서만 사용 할 수 있습니다"
 
 #. TRANSLATORS: this is used to quote a string
 #: src/subscription_manager/managercli.py:792
@@ -4871,10 +4846,8 @@ msgstr "암호: "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1085
-#, fuzzy
-#| msgid "specify organization"
 msgid "specify an organization"
-msgstr "조직 지정"
+msgstr "조직을 지정합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1096
@@ -4884,27 +4857,25 @@ msgstr "조직: "
 
 #: src/subscription_manager/managercli.py:1127
 msgid "Convenient module for managing all system purpose settings"
-msgstr ""
+msgstr "모든 시스템 목적 설정을 관리 할 수 있는 편리한 모듈"
 
 #: src/subscription_manager/managercli.py:1137
-#, fuzzy
-#| msgid "set {attr} of system purpose"
 msgid "show current system purpose"
-msgstr "시스템 목적 {attr} 설정"
+msgstr "현재 시스템 목적 표시"
 
 #: src/subscription_manager/managercli.py:1159
 #, python-brace-format
 msgid "{prog} {name}"
-msgstr ""
+msgstr "{prog} {name}"
 
 #: src/subscription_manager/managercli.py:1161
 msgid "Syspurpose submodules"
-msgstr ""
+msgstr "Syspurpose 하위모듈"
 
 #: src/subscription_manager/managercli.py:1175
 #, python-format, python-brace-format
 msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
-msgstr ""
+msgstr "%(prog)s {name} [SUBMODULE] [OPTIONS]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1238
@@ -5112,10 +5083,8 @@ msgstr "자동 첨부 설정: 비활성화됨"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1517
-#, fuzzy
-#| msgid "show this system's current service level"
 msgid "Show or modify the system purpose service-level setting"
-msgstr "시스템의 현재 서비스 레벨을 표시"
+msgstr "시스템 목적의 서비스-수준 설정을 보여주거나 변경합니다"
 
 #: src/subscription_manager/managercli.py:1544
 msgid "Error: --org is only supported with the --list or --set option"
@@ -5170,10 +5139,8 @@ msgid "Available Service Levels"
 msgstr "사용 가능한 서비스 레벨"
 
 #: src/subscription_manager/managercli.py:1693
-#, fuzzy
-#| msgid "Modify system purpose role"
 msgid "Show or modify the system purpose usage setting"
-msgstr "시스템 용도 역할을 변경합니다"
+msgstr "시스템 목적 사용법 설정을 표시 또는 수정합니다"
 
 #: src/subscription_manager/managercli.py:1712
 msgid "base URL for content in form of https://hostname:port/prefix"
@@ -5337,10 +5304,8 @@ msgid "System has been unregistered."
 msgstr "시스템이 등록 취소되었습니다."
 
 #: src/subscription_manager/managercli.py:2098
-#, fuzzy
-#| msgid "Modify system purpose role"
 msgid "Show or modify the system purpose addons setting"
-msgstr "시스템 용도 역할을 변경합니다"
+msgstr "시스템 목적 추가구성 설정을 표시 또는 수정합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:2112
@@ -6173,10 +6138,8 @@ msgid "Repository: %s"
 msgstr "레포지터리: %s"
 
 #: src/subscription_manager/managercli.py:3464
-#, fuzzy
-#| msgid "Modify system purpose role"
 msgid "Show or modify the system purpose role setting"
-msgstr "시스템 용도 역할을 변경합니다"
+msgstr "시스템 목적 역할 설정을 표시 또는 수정합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:3478
