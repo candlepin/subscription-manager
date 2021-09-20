@@ -125,7 +125,7 @@ _subscription_manager_config()
 
 _subscription_manager_environments()
 {
-  local opts="--org --password --username --token
+  local opts="--org --password --username --token --set --list --list-enabled --list-disabled
               ${_subscription_manager_common_url_opts}
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
@@ -204,7 +204,7 @@ _subscription_manager_refresh()
 _subscription_manager_register()
 {
   local opts="--activationkey --auto-attach --autosubscribe --baseurl --consumerid
-              --environment --force --name --org --password --release
+              --environments --force --name --org --password --release
               --servicelevel --username --token
               ${_subscription_manager_common_url_opts}
               ${_subscription_manager_common_opts}"
