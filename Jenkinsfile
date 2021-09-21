@@ -38,7 +38,7 @@ pipeline {
               script: './jenkins/toolbox-run.sh unit jenkins/unit.sh',
               returnStatus: false
             )
-            junit('nosetests.xml')
+            junit('coverage.xml')
             // TODO: find the correct adapter or generate coverage tests that can be
             //       parsed by an existing adapter:
             //       https://plugins.jenkins.io/code-coverage-api/
