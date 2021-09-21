@@ -18,7 +18,7 @@ pipeline {
           steps {
             sh (
               script: './jenkins/toolbox-run.sh stylish jenkins/stylish.sh',
-              returnStatus: true
+              returnStatus: false
             )
           }
         }
@@ -26,7 +26,7 @@ pipeline {
           steps {
             sh (
               script: './jenkins/toolbox-run.sh tito jenkins/tito.sh',
-              returnStatus: true
+              returnStatus: false
             )
           }
         }
@@ -36,7 +36,7 @@ pipeline {
           steps {
             sh (
               script: './jenkins/toolbox-run.sh unit jenkins/unit.sh',
-              returnStatus: true
+              returnStatus: false
             )
             junit('nosetests.xml')
             // TODO: find the correct adapter or generate coverage tests that can be
@@ -50,7 +50,7 @@ pipeline {
           steps {
             sh (
               script: './jenkins/toolbox-run.sh libdnf jenkins/libdnf.sh',
-              returnStatus: true
+              returnStatus: false
             )
           }
         }
