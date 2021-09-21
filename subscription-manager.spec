@@ -309,7 +309,7 @@ Obsoletes: subscription-manager-initial-setup-addon <= %{version}-%{release}
 Obsoletes: rhsm-gtk <= %{version}-%{release}
 
 %if !%{use_container_plugin}
-Obsoletes: subscription-manager-plugin-container
+Obsoletes: subscription-manager-plugin-container <= %{version}
 %endif
 
 %if %{use_dnf}
@@ -323,7 +323,7 @@ Obsoletes: dnf-plugin-subscription-manager < 1.29.0
 %endif
 %endif
 
-Obsoletes: %{py_package_prefix}-syspurpose
+Obsoletes: %{py_package_prefix}-syspurpose <= %{version}
 
 %description
 The Subscription Manager package provides programs and libraries to allow users
