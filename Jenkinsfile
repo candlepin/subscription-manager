@@ -18,7 +18,7 @@ pipeline {
           steps {
             sh (
               script: './jenkins/toolbox-run.sh stylish jenkins/stylish.sh',
-              returnStatus: true
+              returnStatus: false
             )
           }
         }
