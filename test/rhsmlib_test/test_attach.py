@@ -13,7 +13,6 @@
 import dbus
 import json
 import mock
-import six
 
 from test.rhsmlib_test.base import DBusObjectTest, InjectionMockingTest
 
@@ -273,13 +272,13 @@ class TestAttachDBusObject(DBusObjectTest, InjectionMockingTest):
     def test_must_be_registered_pool(self):
         self.mock_identity.is_valid.return_value = False
         pool_method_args = [['x', 'y'], 1, {}, '']
-        with six.assertRaisesRegex(self, dbus.DBusException, r'requires the consumer to be registered.*'):
+        with self.assertRaisesRegex(dbus.DBusException, r'requires the consumer to be registered.*'):
             self.dbus_request(None, self.interface.PoolAttach, pool_method_args)
 
     def test_must_be_registered_auto(self):
         self.mock_identity.is_valid.return_value = False
         auto_method_args = ['service_level', {}, '']
-        with six.assertRaisesRegex(self, dbus.DBusException, r'requires the consumer to be registered.*'):
+        with self.assertRaisesRegex(dbus.DBusException, r'requires the consumer to be registered.*'):
             self.dbus_request(None, self.interface.AutoAttach, auto_method_args)
 
     def test_auto_attach(self):

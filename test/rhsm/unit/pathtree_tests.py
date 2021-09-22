@@ -14,7 +14,6 @@
 from collections import deque
 import os
 import unittest
-import six
 
 from rhsm.bitstream import GhettoBitStream
 from rhsm.huffman import HuffmanNode
@@ -107,7 +106,7 @@ class TestPathTree(unittest.TestCase):
             '/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/7Server/$basearch/sat-tools/6.3/os'
         ]
         # Assert the lists contain the same items regardless of order
-        six.assertCountEqual(self, expected, paths)
+        self.assertCountEqual(expected, paths)
 
     def test_match_path_listing(self):
         tree = {'foo': [{'path': [{'bar': [{PATH_END: None}]}]}]}
