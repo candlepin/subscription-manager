@@ -15,8 +15,6 @@ import os
 import sys
 import logging
 
-import six
-
 from subscription_manager.printing_utils import columnize, echo_columnize_callback
 from subscription_manager.i18n_argparse import ArgumentParser
 from subscription_manager.utils import print_error
@@ -210,10 +208,7 @@ def system_exit(code, msgs=None):
             if isinstance(msg, Exception):
                 msg = "%s" % msg
 
-            if isinstance(msg, six.text_type) and six.PY2:
-                print_error(msg.encode("utf8"))
-            else:
-                print_error(msg)
+            print_error(msg)
 
     # Try to flush all outputs, see BZ: 1350402
     flush_stdout_stderr()

@@ -18,8 +18,6 @@ from threading import local
 
 import os
 
-import six
-
 # Localization domain:
 APP = 'rhsm'
 # Directory where translations are deployed:
@@ -79,29 +77,17 @@ def configure_gettext():
 
 
 def ugettext(*args, **kwargs):
-    if six.PY2:
-        if hasattr(LOCALE, 'lang') and LOCALE.lang is not None:
-            return LOCALE.lang.ugettext(*args, **kwargs)
-        else:
-            return TRANSLATION.ugettext(*args, **kwargs)
+    if hasattr(LOCALE, 'lang') and LOCALE.lang is not None:
+        return LOCALE.lang.gettext(*args, **kwargs)
     else:
-        if hasattr(LOCALE, 'lang') and LOCALE.lang is not None:
-            return LOCALE.lang.gettext(*args, **kwargs)
-        else:
-            return TRANSLATION.gettext(*args, **kwargs)
+        return TRANSLATION.gettext(*args, **kwargs)
 
 
 def ungettext(*args, **kwargs):
-    if six.PY2:
-        if hasattr(LOCALE, 'lang') and LOCALE.lang is not None:
-            return LOCALE.lang.ungettext(*args, **kwargs)
-        else:
-            return TRANSLATION.ungettext(*args, **kwargs)
+    if hasattr(LOCALE, 'lang') and LOCALE.lang is not None:
+        return LOCALE.lang.ngettext(*args, **kwargs)
     else:
-        if hasattr(LOCALE, 'lang') and LOCALE.lang is not None:
-            return LOCALE.lang.ngettext(*args, **kwargs)
-        else:
-            return TRANSLATION.ngettext(*args, **kwargs)
+        return TRANSLATION.ngettext(*args, **kwargs)
 
 
 class Locale(object):

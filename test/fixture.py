@@ -31,10 +31,7 @@ from rhsmlib.services import config
 # use instead of the normal pid file based ActionLock
 from threading import RLock
 
-if six.PY2:
-    OPEN_FUNCTION = '__builtin__.open'
-else:
-    OPEN_FUNCTION = 'builtins.open'
+OPEN_FUNCTION = 'builtins.open'
 
 
 @contextmanager
@@ -75,10 +72,7 @@ def open_mock_many(file_content_map=None, **kwargs):
         try:
             rv, file_contents, content_out = file_content_map[path]
         except KeyError:
-            if six.PY2:
-                raise IOError(2, 'No such file or directory')
-            else:
-                raise OSError(2, 'No such file or directory')
+            raise OSError(2, 'No such file or directory')
 
         rv = rv.return_value
         rv.write = lambda x: content_out.write(x)

@@ -8,8 +8,6 @@ import sys
 import socket
 import os
 
-import six
-
 from subscription_manager import syspurposelib
 from subscription_manager import managercli, managerlib
 from subscription_manager.injection import provide, \
@@ -388,10 +386,7 @@ class TestSystemExit(unittest.TestCase):
                 system_exit(1, msgs)
             except SystemExit:
                 pass
-        if six.PY2:
-            captured = cap.err.decode('utf-8')
-        else:
-            captured = cap.err
+        captured = cap.err
         self.assertEqual("%s\n" % msgs[0], captured)
 
     def test_msg_and_exception_str(self):

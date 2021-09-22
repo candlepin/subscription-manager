@@ -16,10 +16,7 @@ import inspect
 import logging
 import os
 import six
-if six.PY2:
-    import imp
-else:
-    import importlib.util
+import importlib.util
 
 from iniparse import SafeConfigParser
 from iniparse.compat import NoSectionError, NoOptionError
@@ -937,16 +934,9 @@ class PluginManager(BasePluginManager):
         module_name = module_name.split(".py")[0]
 
         try:
-            if six.PY2:
-                fp, pathname, description = imp.find_module(module_name, [dir_path])
-                try:
-                    loaded_module = imp.load_module(module_name, fp, pathname, description)
-                finally:
-                    fp.close()
-            else:
-                spec = importlib.util.spec_from_file_location(module_name, module_file)
-                loaded_module = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(loaded_module)
+            spec = importlib.util.spec_from_file_location(module_name, module_file)
+            loaded_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(loaded_module)
         # we could catch BaseException too for system exit
         except Exception as e:
             log.exception(e)
