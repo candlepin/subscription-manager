@@ -31,18 +31,18 @@ from rhsmlib.facts import collector
 
 from typing import Optional
 
+# For python2.6 that doesn't have subprocess.check_output
+from rhsmlib.compat import check_output as compat_check_output
+from subprocess import CalledProcessError
+
 log = logging.getLogger(__name__)
 
 # There is no python3 version of python-ethtool
-ethtool = None
 try:
     import ethtool
 except ImportError:
     log.warning("Unable to import the 'ethtool' module.")
-
-# For python2.6 that doesn't have subprocess.check_output
-from rhsmlib.compat import check_output as compat_check_output
-from subprocess import CalledProcessError
+    ethtool = None
 
 
 class ClassicCheck(object):

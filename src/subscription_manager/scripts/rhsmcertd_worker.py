@@ -28,7 +28,6 @@ import subscription_manager.injection as inj
 from rhsm import connection, config, logutil
 
 from subscription_manager.injectioninit import init_dep_injection
-init_dep_injection()
 
 from subscription_manager.action_client import HealingActionClient, ActionClient
 from subscription_manager import managerlib
@@ -41,6 +40,9 @@ from subscription_manager.i18n import ugettext as _
 
 from cloud_what.provider import detect_cloud_provider, CLOUD_PROVIDERS, BaseCloudProvider
 from rhsmlib.services.register import RegisterService
+
+
+init_dep_injection()
 
 
 def exit_on_signal(_signumber, _stackframe):

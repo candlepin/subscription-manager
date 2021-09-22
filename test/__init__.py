@@ -3,6 +3,8 @@ import pathlib
 import sys
 from typing import Callable, List
 
+import pytest
+
 from . import rhsm_display
 rhsm_display.set_display()
 
@@ -10,7 +12,6 @@ rhsm_display.set_display()
 rootdir = pathlib.Path(__file__).parent.parent
 sys.path.insert(0, str(rootdir / "src"))
 
-import pytest
 
 subman_marker_dbus = pytest.mark.dbus
 subman_marker_functional = pytest.mark.functional

@@ -18,6 +18,9 @@ All reasonable efforts will be made to maintain compatibility.
 from functools import wraps
 from rhsm import logutil
 
+from subscription_manager.version import rpm_version as version
+
+
 injected = False
 
 
@@ -38,9 +41,7 @@ def request_injection(func):
     return func_wrapper
 
 
-from .repos import disable_yum_repositories, enable_yum_repositories
-
-from subscription_manager.version import rpm_version as version
+from .repos import disable_yum_repositories, enable_yum_repositories  # noqa: E402
 
 __all__ = [
     'request_injection',

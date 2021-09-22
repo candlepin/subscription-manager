@@ -15,16 +15,14 @@ import sys
 import argparse
 
 from subscription_manager.injectioninit import init_dep_injection
-init_dep_injection()
-
 from subscription_manager.i18n import configure_i18n, ugettext as _
-configure_i18n()
+from subscription_manager import packageprofilelib
 
 from rhsm import logutil
 
+init_dep_injection()
+configure_i18n()
 logutil.init_logger()
-
-from subscription_manager import packageprofilelib
 
 
 def main():

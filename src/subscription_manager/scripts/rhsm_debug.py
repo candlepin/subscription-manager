@@ -18,21 +18,18 @@
 import sys
 import os
 
-from subscription_manager.i18n import configure_i18n, ugettext as _
-configure_i18n()
-
 from rhsm import logutil
-
-logutil.init_logger()
-
 from rhsm_debug.cli import RhsmDebugCLI
 from subscription_manager.cli import system_exit
+from subscription_manager.i18n import configure_i18n, ugettext as _
+
+configure_i18n()
+logutil.init_logger()
 
 
 try:
     from subscription_manager.injectioninit import init_dep_injection
     init_dep_injection()
-
 except KeyboardInterrupt:
     system_exit(0, "\nUser interrupted process.")
 except ImportError as err:

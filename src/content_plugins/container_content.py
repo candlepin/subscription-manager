@@ -17,10 +17,11 @@ A subscription-manager plugin to watch for docker content in
 entitlement certificates, and correctly configure to use them.
 """
 from subscription_manager import base_plugin
-requires_api_version = "1.1"
 
 from subscription_manager.plugin.container import \
     ContainerContentUpdateActionCommand
+
+requires_api_version = "1.1"
 
 
 class ContainerContentPlugin(base_plugin.SubManPlugin):
