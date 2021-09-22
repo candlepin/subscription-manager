@@ -199,7 +199,7 @@ class ContainerCertDir(object):
             fullpath = os.path.join(self.path, f)
             if os.path.isfile(fullpath) and \
                 os.path.splitext(f)[1] in self.MANAGED_EXTENSIONS and \
-                not f in expected_files:
+                f not in expected_files:
                     log.info("Cleaning up old certificate: %s" % f)
                     os.remove(fullpath)
                     self.report.removed.append(fullpath)
