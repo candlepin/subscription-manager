@@ -28,7 +28,8 @@ import {
     Alert, AlertGroup, AlertActionCloseButton, Button,
     Card, CardActions, CardBody, CardHeader, CardHeaderMain, CardTitle,
     DescriptionList, DescriptionListDescription, DescriptionListGroup, DescriptionListTerm,
-    Gallery, Label, Page, PageSection, Split, SplitItem, Text, TextVariants, Popover, Divider
+    Gallery, Label, Page, PageSection, Split, SplitItem, Text, TextVariants, Popover, Divider,
+    EmptyState, EmptyStateVariant, EmptyStateBody
 } from '@patternfly/react-core';
 
 let _ = cockpit.gettext;
@@ -283,80 +284,104 @@ class SubscriptionStatus extends React.Component {
 
         // Display system purpose only in the case, when it make sense
         let syspurpose = null;
-        const p = this.props.syspurpose;
-        if ( p["service_level_agreement"] || p["usage"] || p["role"] || p["addons"] ) {
-            let syspurpose_status_element;
-            if (sca_mode) {
-                const syspurpose_status_tooltip = (
-                    <div>{_("Content Access Mode is set to Simple Content Access. This host has access to content, regardless of system purpose status.")}</div>
-                );
-                syspurpose_status_element = (
-                    <div>
-                        <span> { this.props.syspurpose_status } </span>
-                        <Popover
-                            aria-label={_("Popover with explanation of SCA mode")}
-                            showClose={false}
-                            bodyContent={syspurpose_status_tooltip}
-                            withFocusTrap={false}
-                        >
-                            <button className="pf-c-form__group-label-help ct-icon-info-circle"
-                                    type="button"
-                                    aria-label={_("Subscriptions information")}>
-                                <InfoCircleIcon />
-                            </button>
-                        </Popover>
-                    </div>
-                );
-            } else {
-                syspurpose_status_element = (
-                    <div>
-                        <span> { this.props.syspurpose_status } </span>
-                    </div>
-                );
-            }
-            syspurpose = (
-                <Card id="syspurpose" key="syspurpose" className="ct-card-info">
-                    <CardHeader>
-                        <CardHeaderMain>
-                            <Text className="purpose-header" component={TextVariants.h2}>{_("System purpose")}</Text>
-                        </CardHeaderMain>
-                    </CardHeader>
-                    <CardBody>
-                        <DescriptionList isHorizontal>
-                            <DescriptionListGroup>
-                                <DescriptionListTerm>{_("Status")}</DescriptionListTerm>
-                                <DescriptionListDescription>{ syspurpose_status_element }</DescriptionListDescription>
-                            </DescriptionListGroup>
-                            <Divider />
-                            {p["service_level_agreement"] &&
-                                <DescriptionListGroup>
-                                    <DescriptionListTerm>{_("Service level")}</DescriptionListTerm>
-                                    <DescriptionListDescription>{p["service_level_agreement"]}</DescriptionListDescription>
-                                </DescriptionListGroup>
-                            }
-                            {p["usage"] &&
-                                <DescriptionListGroup>
-                                    <DescriptionListTerm>{_("Usage")}</DescriptionListTerm>
-                                    <DescriptionListDescription>{p["usage"]}</DescriptionListDescription>
-                                </DescriptionListGroup>
-                            }
-                            {p["role"] &&
-                                <DescriptionListGroup>
-                                    <DescriptionListTerm>{_("Role")}</DescriptionListTerm>
-                                    <DescriptionListDescription>{p["role"]}</DescriptionListDescription>
-                                </DescriptionListGroup>
-                            }
-                            {p["addons"] &&
-                                <DescriptionListGroup>
-                                    <DescriptionListTerm>{_("Add-ons")}</DescriptionListTerm>
-                                    <DescriptionListDescription>{p["addons"]}</DescriptionListDescription>
-                                </DescriptionListGroup>
-                            }
-                        </DescriptionList>
-                    </CardBody>
-                </Card>
+        let syspurpose_card_body;
+
+        let syspurpose_status_element;
+        if (sca_mode) {
+            const syspurpose_status_tooltip = (
+                <div>{_("Content Access Mode is set to Simple Content Access. This host has access to content, regardless of system purpose status.")}</div>
+            );
+            syspurpose_status_element = (
+                <div>
+                    <span> { this.props.syspurpose_status } </span>
+                    <Popover
+                        aria-label={_("Popover with explanation of SCA mode")}
+                        showClose={false}
+                        bodyContent={syspurpose_status_tooltip}
+                        withFocusTrap={false}
+                    >
+                        <button className="pf-c-form__group-label-help ct-icon-info-circle"
+                                type="button"
+                                aria-label={_("Subscriptions information")}>
+                            <InfoCircleIcon />
+                        </button>
+                    </Popover>
+                </div>
+            );
+        } else {
+            syspurpose_status_element = (
+                <div>
+                    <span> { this.props.syspurpose_status } </span>
+                </div>
             );
         }
+
+        const p = this.props.syspurpose;
+        if ( p["service_level_agreement"] || p["usage"] || p["role"] || p["addons"] ) {
+            syspurpose_card_body = (
+                <DescriptionList isHorizontal>
+                    <DescriptionListGroup>
+                        <DescriptionListTerm>{_("Status")}</DescriptionListTerm>
+                        <DescriptionListDescription>{ syspurpose_status_element }</DescriptionListDescription>
+                    </DescriptionListGroup>
+                    <Divider />
+                    {p["service_level_agreement"] &&
+                        <DescriptionListGroup>
+                            <DescriptionListTerm>{_("Service level")}</DescriptionListTerm>
+                            <DescriptionListDescription>{p["service_level_agreement"]}</DescriptionListDescription>
+                        </DescriptionListGroup>
+                    }
+                    {p["usage"] &&
+                        <DescriptionListGroup>
+                            <DescriptionListTerm>{_("Usage")}</DescriptionListTerm>
+                            <DescriptionListDescription>{p["usage"]}</DescriptionListDescription>
+                        </DescriptionListGroup>
+                    }
+                    {p["role"] &&
+                        <DescriptionListGroup>
+                            <DescriptionListTerm>{_("Role")}</DescriptionListTerm>
+                            <DescriptionListDescription>{p["role"]}</DescriptionListDescription>
+                        </DescriptionListGroup>
+                    }
+                    {p["addons"] &&
+                        <DescriptionListGroup>
+                            <DescriptionListTerm>{_("Add-ons")}</DescriptionListTerm>
+                            <DescriptionListDescription>{p["addons"]}</DescriptionListDescription>
+                        </DescriptionListGroup>
+                    }
+                </DescriptionList>
+            );
+        } else {
+            syspurpose_card_body = (
+                <div>
+                    <DescriptionList isHorizontal>
+                        <DescriptionListGroup>
+                            <DescriptionListTerm>{_("Status")}</DescriptionListTerm>
+                            <DescriptionListDescription>{ syspurpose_status_element }</DescriptionListDescription>
+                        </DescriptionListGroup>
+                        <Divider />
+                    </DescriptionList>
+                    <EmptyState variant={EmptyStateVariant.small}>
+                        <EmptyStateBody>
+                            {_("No system purpose attributes set")}
+                        </EmptyStateBody>
+                    </EmptyState>
+                </div>
+            );
+        }
+
+        syspurpose = (
+            <Card id="syspurpose" key="syspurpose" className="ct-card-info">
+                <CardHeader>
+                    <CardHeaderMain>
+                        <Text className="purpose-header" component={TextVariants.h2}>{_("System purpose")}</Text>
+                    </CardHeaderMain>
+                </CardHeader>
+                <CardBody>
+                    {syspurpose_card_body}
+                </CardBody>
+            </Card>
+        );
 
         let status_text;
         let action;
