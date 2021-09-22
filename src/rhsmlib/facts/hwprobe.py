@@ -911,7 +911,7 @@ class HardwareCollector(collector.FactsCollector):
         address: str = ""
         try:
             bond_interface_file: str = open('/proc/net/bonding/%s' % bond_interface, "r")
-        except:
+        except OSError:
             return address
 
         permanent_interface_found: bool = False

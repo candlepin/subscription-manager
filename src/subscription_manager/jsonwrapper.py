@@ -70,7 +70,7 @@ class PoolWrapper(object):
 
         try:
             result = int(self.data['calculatedAttributes']['suggested_quantity'])
-        except:
+        except (ValueError, KeyError):
             pass
 
         return result
