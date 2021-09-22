@@ -1,5 +1,5 @@
 import os
-import six
+import io
 from tito.tagger.main import VersionTagger
 from tito.common import info_out, debug, replace_version, run_command
 
@@ -36,7 +36,7 @@ class MultiPythonPackageVersionTagger(VersionTagger):
         py_new_version = new_version.split('-')[0]
 
         f = open(setup_file, 'r')
-        buf = six.StringIO()
+        buf = io.StringIO()
         for line in f.readlines():
             buf.write(replace_version(line, py_new_version))
         f.close()

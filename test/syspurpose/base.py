@@ -16,7 +16,7 @@ import pprint
 import unittest
 import tempfile
 import shutil
-import six
+import io
 import sys
 import traceback
 
@@ -103,7 +103,7 @@ class SyspurposeTestBase(unittest.TestCase):
 class Capture(object):
     class Tee(object):
         def __init__(self, stream, silent):
-            self.buf = six.StringIO()
+            self.buf = io.StringIO()
             self.stream = stream
             self.silent = silent
 

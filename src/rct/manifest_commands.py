@@ -15,7 +15,7 @@ import errno
 import os
 import sys
 
-from six import BytesIO
+from io import BytesIO
 from zipfile import ZipFile, BadZipfile
 
 from rhsm import certificate

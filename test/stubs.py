@@ -15,6 +15,7 @@
 from collections import defaultdict
 from datetime import datetime, timedelta
 import six
+import io
 import mock
 import random
 import tempfile
@@ -83,7 +84,7 @@ class StubConfig(config.RhsmConfigParser):
 
     # instead of reading a file, let's use the stringio
     def read(self, filename):
-        self.readfp(six.StringIO(cfg_buf), "foo.conf")
+        self.readfp(io.StringIO(cfg_buf), "foo.conf")
 
     # this way our test can put some values in and have them used during the run
     def get(self, section, key):
