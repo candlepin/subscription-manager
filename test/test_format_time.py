@@ -1,5 +1,3 @@
-from __future__ import print_function, division, absolute_import
-
 try:
     import unittest2 as unittest
 except ImportError:
@@ -24,7 +22,7 @@ class TestFormatTime(unittest.TestCase):
 
     @patch('subscription_manager.managerlib.tzlocal')
     def test_system_dst(self, mock_tz):
-        mock_tz.return_value = tzstr(u'EST5EDT')
+        mock_tz.return_value = tzstr('EST5EDT')
         test = datetime(2014, 12, 21, 4, 59, 0, tzinfo=tzutc())
         self.assertEqual(managerlib.format_date(test), '12/20/2014')
         self.assertEqual(managerlib.format_iso8601_date(test), '2014-12-21')
@@ -65,7 +63,7 @@ class TestFormatTime(unittest.TestCase):
 
     @patch('subscription_manager.managerlib.tzlocal')
     def test_system_est(self, mock_tz):
-        mock_tz.return_value = tzstr(u'EST5EDT')
+        mock_tz.return_value = tzstr('EST5EDT')
         test = datetime(2014, 12, 21, 4, 59, 0, tzinfo=tzutc())
         self.assertEqual(managerlib.format_date(test), '12/20/2014')
         self.assertEqual(managerlib.format_iso8601_date(test), '2014-12-21')

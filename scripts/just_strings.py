@@ -1,7 +1,5 @@
 #!/usr/bin/python
 
-from __future__ import print_function, division, absolute_import
-
 # dump out the msg keys by themselves, newline seperated
 #
 # require's polib from https://bitbucket.org/izi/polib/wiki/Home

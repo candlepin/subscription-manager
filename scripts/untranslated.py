@@ -1,6 +1,4 @@
 #!/usr/bin/python
-from __future__ import print_function, division, absolute_import
-
 # sort of kind of a translation lint
 #
 # require's polib from https://bitbucket.org/izi/polib/wiki/Home

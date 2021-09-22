@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-#
-
-from __future__ import print_function, division, absolute_import
-
-#
 # Copyright (c) 2012 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -47,8 +42,8 @@ class TestingUpdateAction(entcertlib.EntCertUpdateAction):
 class TestEntCertUpdateReport(fixture.SubManFixture):
     def test(self):
         r = entcertlib.EntCertUpdateReport()
-        r.expected = u'12312'
-        r.valid = [u'2342∰']
+        r.expected = '12312'
+        r.valid = ['2342∰']
         r.added.append(self._stub_cert())
         r.rogue.append(self._stub_cert())
 
@@ -61,8 +56,8 @@ class TestEntCertUpdateReport(fixture.SubManFixture):
             '%s' % r
 
     def _stub_cert(self):
-        stub_ent_cert = StubEntitlementCertificate(StubProduct(u"ஒரு அற்புதமான இயங்கு"))
-        stub_ent_cert.order.name = u'一些秩序'
+        stub_ent_cert = StubEntitlementCertificate(StubProduct("ஒரு அற்புதமான இயங்கு"))
+        stub_ent_cert.order.name = '一些秩序'
         return stub_ent_cert
 
 

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # Copyright (c) 2020 ATIX AG
 #
 # This software is licensed to you under the GNU General Public License,

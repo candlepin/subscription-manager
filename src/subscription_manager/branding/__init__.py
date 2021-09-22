@@ -1,6 +1,3 @@
-from __future__ import print_function, division, absolute_import
-
-#
 # branding - default localizable strings that can be overridden for app branding
 #
 # Copyright (c) 2011 Red Hat, Inc.

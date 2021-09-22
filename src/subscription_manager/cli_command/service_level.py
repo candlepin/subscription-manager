@@ -110,7 +110,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
                 self.cp = self.cp_provider.get_consumer_auth_cp()
         except connection.RestlibException as re:
             log.exception(re)
-            log.error(u"Error: Unable to retrieve service levels: {re}".format(re=re))
+            log.error("Error: Unable to retrieve service levels: {re}".format(re=re))
 
             mapped_message: str = ExceptionMapper().get_message(re)
             system_exit(os.EX_SOFTWARE, mapped_message)
@@ -134,7 +134,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
                 raise ge
             except connection.RestlibException as re_err:
                 log.exception(re_err)
-                log.error(u"Error: Unable to retrieve service levels: {err}".format(err=re_err))
+                log.error("Error: Unable to retrieve service levels: {err}".format(err=re_err))
 
                 mapped_message: str = ExceptionMapper().get_message(re_err)
                 system_exit(os.EX_SOFTWARE, mapped_message)

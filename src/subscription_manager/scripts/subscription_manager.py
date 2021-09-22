@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import print_function, division, absolute_import
-
-#
 # wrapper for subscription Manager commandline tool.
 #
 # Copyright (c) 2010 Red Hat, Inc.
@@ -22,7 +17,7 @@ from __future__ import print_function, division, absolute_import
 #
 
 # hack to allow bytes/strings to be interpolated w/ unicode values (gettext gives us bytes)
-# Without this, for example, "Формат: %s\n" % u"foobar" will fail with UnicodeDecodeError
+# Without this, for example, "Формат: %s\n" % "foobar" will fail with UnicodeDecodeError
 # See http://stackoverflow.com/a/29832646/6124862 for more details
 import sys
 import os

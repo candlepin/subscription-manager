@@ -1,6 +1,3 @@
-from __future__ import print_function, division, absolute_import
-
-#
 # Copyright (c) 2012 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -449,7 +446,7 @@ class ProductCertificateFilter(CertificateFilter):
             '?': '.',
         }
 
-        expression = u"""
+        expression = """
             ((?:                # A captured, non-capture group :)
                 [^*?\\\\]*        # Character literals and other uninteresting junk (greedy)
                 (?:\\\\.?)*       # Anything escaped with a backslash, or just a trailing backslash

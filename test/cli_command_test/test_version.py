@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from ..test_managercli import TestCliCommand
 from subscription_manager import managercli
 

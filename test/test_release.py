@@ -1,5 +1,3 @@
-from __future__ import print_function, division, absolute_import
-
 # Copyright (c) 2012 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -324,10 +322,10 @@ class TestReleaseIsCorrectRhel(fixture.SubManFixture):
         content_url = \
             "/content/dist/rhel/server/6/$releasever/$basearch/os/"
         listing_path = self.cdn_rv_provider._build_listing_path(content_url)
-        self.assertEqual(listing_path, u"/content/dist/rhel/server/6//listing")
+        self.assertEqual(listing_path, "/content/dist/rhel/server/6//listing")
 
         # /content/beta/rhel/server/6/$releasever/$basearch/optional/os
         content_url = \
             "/content/beta/rhel/server/6/$releasever/$basearch/optional/os"
         listing_path = self.cdn_rv_provider._build_listing_path(content_url)
-        self.assertEqual(listing_path, u"/content/beta/rhel/server/6//listing")
+        self.assertEqual(listing_path, "/content/beta/rhel/server/6//listing")

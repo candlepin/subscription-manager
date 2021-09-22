@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import print_function, division, absolute_import
-#
 # Copyright (c) 2018 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -67,7 +63,7 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         The SyspurposeStore.read_file method should return True if the file with unicode content was successfully read.
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
-        test_data = {'key1': u'Νίκος', 'key2': [u'value_with_ř']}
+        test_data = {'key1': 'Νίκος', 'key2': ['value_with_ř']}
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
 
@@ -193,7 +189,7 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         in the store.
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
-        test_data = {u'ονόματα': [u'Νίκος']}
+        test_data = {'ονόματα': ['Νίκος']}
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
 
@@ -202,8 +198,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
 
         # Add to an already seen existing key
         res = self.assertRaisesNothing(syspurpose_store.add, 'ονόματα', 'Κώστας')
-        self.assertIn(u'ονόματα', syspurpose_store.contents)
-        self.assertEqual(syspurpose_store.contents[u'ονόματα'], [u'Νίκος', u'Κώστας'])
+        self.assertIn('ονόματα', syspurpose_store.contents)
+        self.assertEqual(syspurpose_store.contents['ονόματα'], ['Νίκος', 'Κώστας'])
         self.assertTrue(res, "The add method should return true when the store has changed")
 
     def test_add_does_not_duplicate_existing_value(self):
@@ -271,7 +267,7 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         in the store.
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
-        test_data = {u'ονόματα': [u'Νίκος', u'Κώστας']}
+        test_data = {'ονόματα': ['Νίκος', 'Κώστας']}
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
 
@@ -280,8 +276,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
 
         # Remove from an already seen existing key
         res = self.assertRaisesNothing(syspurpose_store.remove, 'ονόματα', 'Κώστας')
-        self.assertIn(u'ονόματα', syspurpose_store.contents)
-        self.assertEqual(syspurpose_store.contents[u'ονόματα'], [u'Νίκος'])
+        self.assertIn('ονόματα', syspurpose_store.contents)
+        self.assertEqual(syspurpose_store.contents['ονόματα'], ['Νίκος'])
         self.assertTrue(res, "The add method should return true when the store has changed")
 
     def test_unset(self):
@@ -310,7 +306,7 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         in the store.
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
-        test_data = {u'ονόματα': [u'Νίκος']}
+        test_data = {'ονόματα': ['Νίκος']}
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
 
@@ -320,12 +316,12 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         res = self.assertRaisesNothing(syspurpose_store.unset, "ονόματα")
         # We expect a value of true from this method when the store was changed
         self.assertTrue(res, "The unset method should return true when the store has changed")
-        self.assertNotIn(u'ονόματα', syspurpose_store.contents, msg="Expected the key to no longer be present")
+        self.assertNotIn('ονόματα', syspurpose_store.contents, msg="Expected the key to no longer be present")
 
         res = self.assertRaisesNothing(syspurpose_store.unset, 'άκυρο_κλειδί')
         # We expect falsey values when the store was not modified
         self.assertFalse(res, "The unset method should return false when the store has not changed")
-        self.assertNotIn(u'άκυρο_κλειδί', syspurpose_store.contents, msg="The key passed to unset, has been added to the store")
+        self.assertNotIn('άκυρο_κλειδί', syspurpose_store.contents, msg="The key passed to unset, has been added to the store")
 
     def test_unset_sla(self):
         """
@@ -377,7 +373,7 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         Verify the operation of the set method of SyspurposeStore when using unicode strings
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
-        test_data = {u'ονόματα': u'Νίκος'}
+        test_data = {'ονόματα': 'Νίκος'}
 
         syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
         syspurpose_store.contents = dict(**test_data)
@@ -385,20 +381,20 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         # Check the behaviour of manipulating an existing key with an identical value (no update)
         res = self.assertRaisesNothing(syspurpose_store.set, 'ονόματα', 'Νίκος')
         self.assertFalse(res, "When a value is not actually changed, set should return false")
-        self.assertIn(u'ονόματα', syspurpose_store.contents)
-        self.assertEqual(syspurpose_store.contents[u'ονόματα'], u'Νίκος')
+        self.assertIn('ονόματα', syspurpose_store.contents)
+        self.assertEqual(syspurpose_store.contents['ονόματα'], 'Νίκος')
 
         # Modify existing item
         res = self.assertRaisesNothing(syspurpose_store.set, 'ονόματα', 'Κώστας')
         self.assertTrue(res, "When an item is set to a new value, set should return true")
-        self.assertIn(u'ονόματα', syspurpose_store.contents)
-        self.assertEqual(syspurpose_store.contents[u'ονόματα'], u'Κώστας')
+        self.assertIn('ονόματα', syspurpose_store.contents)
+        self.assertEqual(syspurpose_store.contents['ονόματα'], 'Κώστας')
 
         # Add new item set to a new value
         res = self.assertRaisesNothing(syspurpose_store.set, 'καινούργιο', 'Άλεξανδρος')
         self.assertTrue(res, "When an item is set to a new value, set should return true")
-        self.assertIn(u'καινούργιο', syspurpose_store.contents)
-        self.assertEqual(syspurpose_store.contents[u'καινούργιο'], u'Άλεξανδρος')
+        self.assertIn('καινούργιο', syspurpose_store.contents)
+        self.assertEqual(syspurpose_store.contents['καινούργιο'], 'Άλεξανδρος')
 
     def test_write(self):
         """
@@ -421,7 +417,7 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         Verify that the SyspurposeStore can write changes that include unicode strings to the expected file.
         """
         temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
-        test_data = {u'όνομα': u'Νίκος'}
+        test_data = {'όνομα': 'Νίκος'}
         syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
@@ -459,7 +455,7 @@ class TestSyncedStore(SyspurposeTestBase):
         "role": None,
         "usage": None,
         "addOns": [],
-        "serviceLevel": u""
+        "serviceLevel": ""
     }
 
     def setUp(self):
@@ -821,21 +817,21 @@ class TestSyncedStore(SyspurposeTestBase):
 
     def test_values_not_known_server_side_are_left_alone(self):
         cache_contents = {
-            u'role': u'initial_role',
-            u'usage': u'initial_usage',
-            u'service_level_agreement': u'',
-            u'addons': []
+            'role': 'initial_role',
+            'usage': 'initial_usage',
+            'service_level_agreement': '',
+            'addons': []
         }
         local_contents = {
-            u'role': cache_contents[u'role'],
-            u'usage': cache_contents[u'usage'],
-            u'made_up_key': u'arbitrary_value'  # this key was added and is not known
+            'role': cache_contents['role'],
+            'usage': cache_contents['usage'],
+            'made_up_key': 'arbitrary_value'  # this key was added and is not known
         }
         remote_contents = {
-            u'role': u'remote_role',
-            u'usage': u'',  # Usage has been reset on the server side, should be removed locally
-            u'serviceLevel': u'',
-            u'addOns': []
+            'role': 'remote_role',
+            'usage': '',  # Usage has been reset on the server side, should be removed locally
+            'serviceLevel': '',
+            'addOns': []
         }
 
         self.uep.getConsumer.return_value = remote_contents
@@ -853,15 +849,15 @@ class TestSyncedStore(SyspurposeTestBase):
         cache_result = json.load(io.open(self.cache_syspurpose_file, 'r'))
 
         expected_local = {
-            u'role': remote_contents['role'],
-            u'made_up_key': local_contents['made_up_key']
+            'role': remote_contents['role'],
+            'made_up_key': local_contents['made_up_key']
         }
         expected_cache = {
-            u'role': remote_contents['role'],
-            u'usage': remote_contents['usage'],
-            u'made_up_key': local_contents['made_up_key'],
-            u'addons': [],
-            u'service_level_agreement': u''
+            'role': remote_contents['role'],
+            'usage': remote_contents['usage'],
+            'made_up_key': local_contents['made_up_key'],
+            'addons': [],
+            'service_level_agreement': ''
         }
 
         self.assert_equal_dict(expected_local, local_result)
@@ -869,19 +865,19 @@ class TestSyncedStore(SyspurposeTestBase):
 
     def test_same_values_not_synced_with_server(self):
         cache_contents = {
-            u'role': u'initial_role',
-            u'usage': u'initial_usage',
-            u'service_level_agreement': u'initial_sla'
+            'role': 'initial_role',
+            'usage': 'initial_usage',
+            'service_level_agreement': 'initial_sla'
         }
         local_contents = {
-            u'role': u'initial_role',
-            u'usage': u'initial_usage',
-            u'service_level_agreement': u'initial_sla'
+            'role': 'initial_role',
+            'usage': 'initial_usage',
+            'service_level_agreement': 'initial_sla'
         }
         remote_contents = {
-            u'role': u'initial_role',
-            u'usage': u'initial_usage',
-            u'serviceLevel': u'initial_sla'
+            'role': 'initial_role',
+            'usage': 'initial_usage',
+            'serviceLevel': 'initial_sla'
         }
 
         self.uep.getConsumer.return_value = remote_contents
@@ -901,15 +897,15 @@ class TestSyncedStore(SyspurposeTestBase):
         cache_result = json.load(io.open(self.cache_syspurpose_file, 'r'))
 
         expected_local = {
-            u'role': u'initial_role',
-            u'usage': u'initial_usage',
-            u'service_level_agreement': u'initial_sla'
+            'role': 'initial_role',
+            'usage': 'initial_usage',
+            'service_level_agreement': 'initial_sla'
         }
         expected_cache = {
-            u'role': u'initial_role',
-            u'usage': u'initial_usage',
-            u'service_level_agreement': u'initial_sla',
-            u'addons': None
+            'role': 'initial_role',
+            'usage': 'initial_usage',
+            'service_level_agreement': 'initial_sla',
+            'addons': None
         }
 
         self.assert_equal_dict(expected_cache, cache_result)
@@ -919,7 +915,7 @@ class TestSyncedStore(SyspurposeTestBase):
         # This is how we detect if we have syspurpose support
         self.uep.has_capability = mock.Mock(side_effect=lambda x: x in [])
 
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {u'role': u'initial'})
+        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'role': 'initial'})
         write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
@@ -927,7 +923,7 @@ class TestSyncedStore(SyspurposeTestBase):
         remote_content = synced_store.get_remote_contents()
         self.assertEqual(remote_content, {})
 
-        self.assertRaisesNothing(synced_store.set, u'role', u'new_role')
+        self.assertRaisesNothing(synced_store.set, 'role', 'new_role')
         result = self.assertRaisesNothing(synced_store.sync)
 
         self.assertTrue(isinstance(result, SyncResult))
@@ -937,30 +933,30 @@ class TestSyncedStore(SyspurposeTestBase):
 
         # The cache should not be updated at all
         self.assert_equal_dict({}, cache_result)
-        self.assert_equal_dict({u'role': u'new_role'}, local_result)
+        self.assert_equal_dict({'role': 'new_role'}, local_result)
 
         self.uep.updateConsumer.assert_not_called()
 
     def test_server_setting_unsupported_value(self):
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {u'role': u''})
+        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'role': ''})
         write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something", use_valid_fields=True)
 
         with Capture() as captured:
-            synced_store.set(u'role', u'new_role')
+            synced_store.set('role', 'new_role')
             self.assertTrue('Warning: Provided value "new_role" is not included in the list of valid values for attribute role' in captured.out)
             self.assertTrue("SP Starter" in captured.out)
             self.assertTrue("SP Server" in captured.out)
 
     def test_server_setting_unsupported_key(self):
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {u'role': u''})
+        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'role': ''})
         write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something", use_valid_fields=True)
 
         with Capture() as captured:
-            synced_store.set(u'foo', u'bar')
+            synced_store.set('foo', 'bar')
             self.assertTrue('Warning: Provided key "foo" is not included in the list of valid keys' in captured.out)
             self.assertTrue("addons" in captured.out)
             self.assertTrue("usage" in captured.out)
@@ -973,7 +969,7 @@ class TestSyncedStore(SyspurposeTestBase):
         # values
 
         self.uep.has_capability = mock.Mock(side_effect=lambda x: x in [])
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {u'role': u'initial'})
+        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'role': 'initial'})
         write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
@@ -984,7 +980,7 @@ class TestSyncedStore(SyspurposeTestBase):
         local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
         cache_result = json.load(io.open(self.cache_syspurpose_file, 'r'))
 
-        self.assert_equal_dict({u'role': u'initial'}, local_result)
+        self.assert_equal_dict({'role': 'initial'}, local_result)
         self.assert_equal_dict({}, cache_result)
 
         # Now the "fake" upgrade
@@ -1001,27 +997,27 @@ class TestSyncedStore(SyspurposeTestBase):
         cache_result = json.load(io.open(self.cache_syspurpose_file, 'r'))
 
         expected_cache = {
-            u'role': u'initial',  # This was set locally before and should still be
-            u'usage': self.default_remote_values['usage'],
-            u'service_level_agreement': self.default_remote_values['serviceLevel'],
-            u'addons': self.default_remote_values['addOns']
+            'role': 'initial',  # This was set locally before and should still be
+            'usage': self.default_remote_values['usage'],
+            'service_level_agreement': self.default_remote_values['serviceLevel'],
+            'addons': self.default_remote_values['addOns']
         }
 
-        self.assert_equal_dict({u'role': u'initial'}, local_result)
+        self.assert_equal_dict({'role': 'initial'}, local_result)
         self.assert_equal_dict(expected_cache, cache_result)
 
     def test_user_deletes_syspurpose_file(self):
         cache_contents = {
-            u'role': u'initial_role',
-            u'usage': u'initial_usage',
-            u'service_level_agreement': u'',
-            u'addons': []
+            'role': 'initial_role',
+            'usage': 'initial_usage',
+            'service_level_agreement': '',
+            'addons': []
         }
         remote_contents = {
-            u'role': u'initial_role',
-            u'usage': u'initial_usage',
-            u'serviceLevel': u'',
-            u'addOns': []
+            'role': 'initial_role',
+            'usage': 'initial_usage',
+            'serviceLevel': '',
+            'addOns': []
         }
         consumer_uuid = "something"
         self.uep.getConsumer.return_value = remote_contents
@@ -1032,8 +1028,8 @@ class TestSyncedStore(SyspurposeTestBase):
         synced_store = SyncedStore(self.uep, consumer_uuid=consumer_uuid)
         self.assertRaisesNothing(synced_store.sync)
 
-        expected_cache = {u'service_level_agreement': u'',
-                          u'addons': []}
+        expected_cache = {'service_level_agreement': '',
+                          'addons': []}
         expected_local = {}
 
         local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
@@ -1042,9 +1038,9 @@ class TestSyncedStore(SyspurposeTestBase):
         self.assert_equal_dict(expected_local, local_result)
         self.assert_equal_dict(expected_cache, cache_result)
         self.uep.updateConsumer.assert_called_once_with(consumer_uuid,
-                                                        role=u"",
-                                                        usage=u"",
-                                                        service_level=u"",
+                                                        role="",
+                                                        usage="",
+                                                        service_level="",
                                                         addons=[])
 
     def test_read_file_non_existent_directory(self):

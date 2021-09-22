@@ -1,6 +1,3 @@
-from __future__ import print_function, division, absolute_import
-
-#
 # Copyright (c) 2013 Red Hat, Inc.
 #
 #

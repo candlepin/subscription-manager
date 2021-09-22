@@ -1,6 +1,3 @@
-from __future__ import print_function, division, absolute_import
-
-#
 # Copyright (c) 2005-2010 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -28,8 +25,8 @@ USER_LOGFILE_DIR = os.path.join(
 )
 USER_LOGFILE_PATH = os.path.join(USER_LOGFILE_DIR, "rhsm.log")
 
-LOG_FORMAT = u'%(asctime)s [%(levelname)s] %(cmd_name)s:%(process)d:' \
-             u'%(threadName)s @%(filename)s:%(lineno)d - %(message)s'
+LOG_FORMAT = '%(asctime)s [%(levelname)s] %(cmd_name)s:%(process)d:' \
+             '%(threadName)s @%(filename)s:%(lineno)d - %(message)s'
 
 _rhsm_log_handler = None
 _subman_debug_handler = None
@@ -128,7 +125,7 @@ class PyWarningsLoggingFilter(object):
         self.name = name
 
     def filter(self, record):
-        record.msg = u'%s %s' % (self.label, record.msg)
+        record.msg = '%s %s' % (self.label, record.msg)
         return True
 
 

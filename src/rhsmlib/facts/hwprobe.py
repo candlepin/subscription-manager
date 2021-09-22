@@ -1,6 +1,3 @@
-from __future__ import print_function, division, absolute_import
-
-#
 # Module to probe Hardware info from the system
 #
 # Copyright (c) 2010 Red Hat, Inc.

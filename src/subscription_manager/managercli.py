@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import print_function, division, absolute_import
-
-#
 # Subscription manager command line utility.
 #
 # Copyright (c) 2010 Red Hat, Inc.

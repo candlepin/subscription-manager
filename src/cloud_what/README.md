@@ -11,8 +11,6 @@ Example: you want to add support for Foo Cloud Provider. You will create package
 folder `providers`. Content of `fcp.py` will look like this:
 
 ```python
-# -*- coding: utf-8 -*-
-#
 # Copyright (c) 2021 Foo Company
 #
 # This software is licensed to you under the GNU General Public License,

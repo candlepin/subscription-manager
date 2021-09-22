@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import print_function, division, absolute_import
-
-#
 # Copyright (c) 2016 Red Hat, Inc.
 #
 # This software is licensed to you under the GNU General Public License,
@@ -24,7 +19,7 @@ log = logging.getLogger('')
 log.setLevel(logging.INFO)
 
 # hack to allow bytes/strings to be interpolated w/ unicode values (gettext gives us bytes)
-# Without this, for example, "Формат: %s\n" % u"foobar" will fail with UnicodeDecodeError
+# Without this, for example, "Формат: %s\n" % "foobar" will fail with UnicodeDecodeError
 # See http://stackoverflow.com/a/29832646/6124862 for more details
 import sys
 
