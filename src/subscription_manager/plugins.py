@@ -489,7 +489,7 @@ class PluginHookRunner(object):
             raise
 
 
-#NOTE: need to be super paranoid here about existing of cfg variables
+# NOTE: need to be super paranoid here about existing of cfg variables
 # BasePluginManager with our default config info
 class BasePluginManager(object):
     """Finds, load, and provides acccess to subscription-manager plugins."""

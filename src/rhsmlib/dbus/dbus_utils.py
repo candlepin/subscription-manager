@@ -129,7 +129,6 @@ def dbus_to_python(obj, expected_type=None):
     elif isinstance(obj, dbus.Struct):
         python_obj = tuple([dbus_to_python(x) for x in obj])
     elif isinstance(obj, dbus.Dictionary):
-        #python_obj = {dbus_to_python(k): dbus_to_python(v) for k, v in obj.items()}
         python_obj = dict([dbus_to_python(k), dbus_to_python(v)] for k, v in list(obj.items()))
     elif isinstance(obj, bool) or \
         isinstance(obj, str) or isinstance(obj, bytes) or \

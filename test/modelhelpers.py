@@ -29,7 +29,7 @@ except ImportError:
     import md5
 
 
-#grumble, no hashblib on 2.4 and
+# grumble, no hashblib on 2.4 and
 # md5 is deprecated on 2.6
 def md5sum(buf):
     if isinstance(buf, six.text_type):

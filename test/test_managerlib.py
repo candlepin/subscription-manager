@@ -36,9 +36,9 @@ from mock import Mock, patch
 cfg = rhsm.config.get_config_parser()
 ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
 
-#[-]*BEGIN [\w\ ]*[-]* - Find all begin lines
-#[-]*BEGIN[\w\ ]*[-]*|[-]*END[\w\ ]*[-]* - Find all BEGIN END lines
-#(?P<start>[-]*BEGIN[\w\ ]*[-]*)(?P<content>[^-]*)(?P<end>[-]*END[\w\ ]*[-]*)
+# [-]*BEGIN [\w\ ]*[-]* - Find all begin lines
+# [-]*BEGIN[\w\ ]*[-]*|[-]*END[\w\ ]*[-]* - Find all BEGIN END lines
+# (?P<start>[-]*BEGIN[\w\ ]*[-]*)(?P<content>[^-]*)(?P<end>[-]*END[\w\ ]*[-]*)
 
 EXPECTED_CERT_CONTENT = """-----BEGIN CERTIFICATE-----
 MIIJwTCCCSqgAwIBAgIIRW4yerC04nIwDQYJKoZIhvcNAQEFBQAwNDETMBEGA1UE

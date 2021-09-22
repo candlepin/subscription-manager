@@ -19,7 +19,6 @@ from . import fixture
 
 
 from subscription_manager import certlib
-#from subscription_manager import injection as inj
 
 
 class TestLocker(fixture.SubManFixture):

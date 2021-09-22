@@ -349,7 +349,7 @@ last_key = blippy
         self.assertTrue(len(updates.new.remotes))
         self.assertTrue(isinstance(updates.new.remotes[0], model.OstreeRemote))
         self.assertEqual(updates.new.remotes[0].url, mock_content.url)
-        #self.assertEquals(updates.new.remotes[0].name, mock_content.name)
+        # self.assertEquals(updates.new.remotes[0].name, mock_content.name)
         self.assertEqual(updates.new.remotes[0].gpg_verify, True)
 
 

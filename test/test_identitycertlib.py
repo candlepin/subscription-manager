@@ -77,8 +77,8 @@ class TestIdentityUpdateAction(fixture.SubManFixture):
     @mock.patch("subscription_manager.managerlib.persist_consumer_cert")
     def test_idcertlib_noops_when_serialnum_is_same(self, mock_persist):
         id_update_action = identitycertlib.IdentityUpdateAction()
-        #certlib.ConsumerIdentity = stubs.StubConsumerIdentity
-        #certlib.ConsumerIdentity.getSerialNumber = getSerialNumber
+        # certlib.ConsumerIdentity = stubs.StubConsumerIdentity
+        # certlib.ConsumerIdentity.getSerialNumber = getSerialNumber
 
         inj.provide(inj.IDENTITY, InvalidIdentity())
 

@@ -18,7 +18,7 @@ class TestReleaseCommand(TestCliProxyCommand):
             self._orig_do_command()
 
             # FIXME: too many stubs atm to make this meaningful
-            #self.assertEquals(proxy_host, self.cc.cp_provider.content_connection.proxy_hostname)
+            # self.assertEquals(proxy_host, self.cc.cp_provider.content_connection.proxy_hostname)
 
             self.assertEqual(proxy_url, self.cc.options.proxy_url)
             self.assertEqual(type(proxy_url), type(self.cc.options.proxy_url))

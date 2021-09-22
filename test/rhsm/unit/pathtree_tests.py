@@ -160,7 +160,7 @@ class TestPathTree(unittest.TestCase):
         trees = [tree1, tree2, tree3, tree4]
         data = open(DATA, 'rb').read()
         pt = PathTree(data)
-        #just swap out the pre-cooked data with out with
+        # just swap out the pre-cooked data with out with
         for tree in trees:
             pt.path_tree = tree
             self.assertTrue(pt.match_path('/foo/path/bar'))

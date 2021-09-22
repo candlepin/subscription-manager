@@ -94,8 +94,8 @@ class ValidProductDateRangeCalculatorTests(SubManFixture):
             self.assertTrue(self.calculator.calculate(pid) is None)
 
     def test_product_with_status(self):
-        #"startDate" : "2013-02-26T00:00:00.000+0000",
-        #"endDate" : "2014-02-26T00:00:00.000+0000"
+        # "startDate" : "2013-02-26T00:00:00.000+0000",
+        # "endDate" : "2014-02-26T00:00:00.000+0000"
         date_range = self.calculator.calculate(INST_PID_1)
         self.assertEqual(datetime(2013, 2, 26, 0, 0, 0, 0, GMT()), date_range.begin())
         self.assertEqual(datetime(2014, 2, 26, 0, 0, 0, 0, GMT()), date_range.end())

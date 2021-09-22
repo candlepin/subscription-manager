@@ -447,7 +447,7 @@ class TestProductManager(SubManFixture):
         enabled = [(cert, 'rhel-6-server')]
         active = set(['rhel-6-server'])
 
-        #self.prod_repo_map = {'69': 'rhel-6-server'}
+        # self.prod_repo_map = {'69': 'rhel-6-server'}
         self.prod_repo_map = {}
         self.prod_db_mock.find_repos = Mock(side_effect=self.find_repos_side_effect)
 
@@ -860,8 +860,8 @@ class TestProductManager(SubManFixture):
         self.assertFalse(cert.delete.called)
         self.assertFalse(self.prod_db_mock.delete.called)
 
-#TODO: test update_installed with a installed product cert, enabled, but not active
-#       because the packages were installed from anaconda
+# TODO: test update_installed with a installed product cert, enabled, but not active
+# because the packages were installed from anaconda
 
     def test_update_removed_no_packages_no_repos_no_active_no_certs(self):
         self.prod_mgr.update_removed(set([]))
@@ -1166,7 +1166,7 @@ class TestProductManager(SubManFixture):
 
         desktop_cert = self._create_desktop_cert()
         workstation_cert = self._create_workstation_cert()
-        #self.prod_dir.certs.append(workstation_cert)
+        # self.prod_dir.certs.append(workstation_cert)
 
         self.prod_repo_map = {}
         self.prod_db_mock.find_repos = Mock(side_effect=self.find_repos_side_effect)

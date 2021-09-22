@@ -47,6 +47,6 @@ class ArgumentParser(_ArgumentParser):
         prints command usage, then the error string, and exits.
         """
         self.print_usage(sys.stderr)
-        #translators: arg 1 is the program name, arg 2 is the error message
+        # translators: arg 1 is the program name, arg 2 is the error message
         print((_("{prog}: error: {msg}")).format(prog=self.prog, msg=msg))
         self.exit(2)
