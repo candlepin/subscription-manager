@@ -248,7 +248,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.21
+Version: 1.28.22
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1490,6 +1490,48 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Sep 23 2021 Christopher Snyder <csnyder@redhat.com> 1.28.22-1
+- 1924338: [1.28] list prints no status and dates in SCA mode
+  (jhnidek@redhat.com)
+- Update translation files (noreply@weblate.org)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- 2000867: syspurpose: show deprecation notices (ptoscano@redhat.com)
+- build: switch to os.makedirs(..., exist_ok=True) (ptoscano@redhat.com)
+- build: call create_dest_dir() only when running callback
+  (ptoscano@redhat.com)
+- [1.28] 1859157: Display better error message on incorrect --org
+  (mhorky@redhat.com)
+- Add 'syspurpose' to list of commands in manpage (mhorky@redhat.com)
+- 1974641: Fix tab completion with multiple optional commands
+  (mhorky@redhat.com)
+- 1975552: add '[SUBMODULE]' in syspurpose usage string (ptoscano@redhat.com)
+- 1975552: remove extra '[OPTIONS]' from syspurpose usage string (#2682)
+  (ptoscano@redhat.com)
+- 2000883: move syspurpose subcommands within the 'syspurpose' command
+  (ptoscano@redhat.com)
+- Rename internal variable for syspurpose --show (ptoscano@redhat.com)
+- Drop command name from args when parsing them (ptoscano@redhat.com)
+- 1983144: More useful feedback on unknown argument (mhorky@redhat.com)
+- repos: document order of --enable & --disable (ptoscano@redhat.com)
+- 1984133: repos: respect order of --enable & --disable (ptoscano@redhat.com)
+- 1953069: bash: fix listing of config options (#2609) (ptoscano@redhat.com)
+- 1952879: extract messages from argparse instead of optparse
+  (ptoscano@redhat.com)
+- Replace optparse with argparse (wpoteat@redhat.com)
+- Fixup syspurpose module help text / bash completion (csnyder@redhat.com)
+- Added new syspurpose command; ENT-3060 (jhnidek@redhat.com)
+- [1.28] ENT-4228: Format rhsmlib exception (mhorky@redhat.com)
+- [1.28] ENT-4228: Always format restlib exceptions (mhorky@redhat.com)
+- Update exception handling (mhorky@redhat.com)
+- 1983074: Remove invalid log level (mhorky@redhat.com)
+- adding timoeout to jenkins pipeline (#2585) (jmolet@redhat.com)
+- [1.28] 1976240: Improve HTTP code/message reporting in error strings
+  (mhorky@redhat.com)
+- [1.28] 1859569: Abort on invalid username/token argument in syspurpose
+  (mhorky@redhat.com)
+- [1.28] ENT-4168: Unify description of --org in syspurpose subcommands
+  (mhorky@redhat.com)
+
 * Wed Aug 18 2021 Christopher Snyder <csnyder@redhat.com> 1.28.21-1
 - Updated translations from weblate
 - 1922151: Add /var/cache/cloud-what to python3-cloud-what RPM.
