@@ -18,12 +18,12 @@ import os
 from threading import RLock as Mutex
 import time
 
+import logging
+log = logging.getLogger(__name__)
+
 # how long to sleep before rechecking if we can
 # acquire the lock.
 LOCK_WAIT_DURATION = 0.5
-
-import logging
-log = logging.getLogger(__name__)
 
 
 class LockFile(object):

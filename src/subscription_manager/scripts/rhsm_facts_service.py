@@ -11,16 +11,16 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+import sys
+from rhsmlib.dbus import service_wrapper
+from rhsmlib.dbus.facts import base, constants
+
 import logging
 
 # Init logging very early so we can log any issues that occur at import time
 logging.basicConfig(level=logging.DEBUG, format="%(levelname)5s [%(name)s:%(lineno)s] %(message)s")
 log = logging.getLogger('')
 log.setLevel(logging.INFO)
-
-import sys
-from rhsmlib.dbus import service_wrapper
-from rhsmlib.dbus.facts import base, constants
 
 
 def main():

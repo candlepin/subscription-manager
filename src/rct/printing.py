@@ -16,11 +16,10 @@ import signal
 import six
 
 from rhsm.certificate2 import EntitlementCertificate, ProductCertificate, IdentityCertificate
+from subscription_manager.i18n import ugettext as _
 
 # BZ 973938 python doesn't correctly handle SIGPIPE
 signal.signal(signal.SIGPIPE, signal.SIG_DFL)
-
-from subscription_manager.i18n import ugettext as _
 
 
 # TODO: to be extra paranoid, we could ask to print

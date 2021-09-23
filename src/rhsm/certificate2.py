@@ -19,8 +19,6 @@ import re
 import six
 import zlib
 
-log = logging.getLogger(__name__)
-
 from datetime import datetime, timedelta
 
 from rhsm import _certificate
@@ -30,6 +28,8 @@ from rhsm.certificate import Extensions, OID, DateRange, GMT, \
     get_datetime_from_x509, parse_tags, CertificateException
 from rhsm.pathtree import PathTree
 from rhsm import ourjson as json
+
+log = logging.getLogger(__name__)
 
 REDHAT_OID_NAMESPACE = "1.3.6.1.4.1.2312.9"
 ORDER_NAMESPACE = "4"

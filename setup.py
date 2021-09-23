@@ -33,7 +33,7 @@ from distutils.command.build_py import build_py as _build_py
 # that don't set up a proper development environment.
 build_ext_home = os.path.abspath(os.path.join(os.path.dirname(__file__), "./build_ext"))
 sys.path.append(build_ext_home)
-from build_ext import i18n, lint, template, utils
+from build_ext import i18n, lint, template, utils  # noqa: E402
 
 
 # Read packages we should exclude from the environment

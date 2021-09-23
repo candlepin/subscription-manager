@@ -19,6 +19,8 @@ import logging
 import ssl as _ssl
 import sys
 
+import six.moves.http_client as _httplib
+
 log = logging.getLogger(__name__)
 
 _SSL_REQUIRED_FEATURES = [
@@ -53,6 +55,5 @@ if not using_stdlibs:
     sys.exit('Missing features in the standard ssl library, exiting')
 
 log.debug('Using standard libs to provide httplib and ssl')
-import six.moves.http_client as _httplib
 ssl = _ssl
 httplib = _httplib

@@ -20,11 +20,10 @@ import logging
 import os
 import six
 
+from rhsmlib.facts import collector
 from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
-
-from rhsmlib.facts import collector
 
 FIRMWARE_DUMP_FILENAME = "dmi.dump"
 

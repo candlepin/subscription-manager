@@ -10,13 +10,6 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
-#
-import logging
-
-# Init logging very early so we can log any issues that occur at import time
-logging.basicConfig(level=logging.DEBUG, format="%(levelname)5s [%(name)s:%(lineno)s] %(message)s")
-log = logging.getLogger('')
-log.setLevel(logging.INFO)
 
 # hack to allow bytes/strings to be interpolated w/ unicode values (gettext gives us bytes)
 # Without this, for example, "Формат: %s\n" % "foobar" will fail with UnicodeDecodeError
@@ -25,6 +18,14 @@ import sys
 
 from rhsmlib.dbus import service_wrapper
 from rhsmlib.dbus import objects
+
+
+import logging
+
+# Init logging very early so we can log any issues that occur at import time
+logging.basicConfig(level=logging.DEBUG, format="%(levelname)5s [%(name)s:%(lineno)s] %(message)s")
+log = logging.getLogger('')
+log.setLevel(logging.INFO)
 
 
 def main():

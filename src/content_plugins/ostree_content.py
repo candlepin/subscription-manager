@@ -13,10 +13,11 @@
 #
 
 from subscription_manager import base_plugin
-requires_api_version = "1.1"
 
 # install our helper modules here
 from subscription_manager.plugin.ostree import action_invoker
+
+requires_api_version = "1.1"
 
 
 class OstreeContentPlugin(base_plugin.SubManPlugin):
