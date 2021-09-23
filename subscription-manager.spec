@@ -161,7 +161,7 @@
 %global use_rhsm_icons 0%{use_cockpit}
 
 Name: subscription-manager
-Version: 1.29.18
+Version: 1.29.19
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1123,6 +1123,94 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 
 
 %changelog
+* Thu Sep 23 2021 Christopher Snyder <csnyder@redhat.com> 1.29.19-1
+- ENT-4083: Fix flake8 error E402 (mhorky@redhat.com)
+- ENT-4085: Fix flake8 error E713 (mhorky@redhat.com)
+- 2003777: Show available organizations before asking for input
+  (mhorky@redhat.com)
+- ENT-4302: Remove "u" prefix from strings (mhorky@redhat.com)
+- ENT-4326: Drop "-*- coding" comment (mhorky@redhat.com)
+- ENT-4277: Drop __future__ imports (mhorky@redhat.com)
+- 1979323: Cockpit - do not show red red icon in SCA mode (jhnidek@redhat.com)
+- Remove outdated comments from the coverage Jenkins job (mhorky@redhat.com)
+- ENT-4252: Migrate from nose to pytest (mhorky@redhat.com)
+- Debian / Ubuntu multi-architectures support
+  (sbernhard@users.noreply.github.com)
+- Translated using Weblate (Spanish) (ehespinosa57@gmail.com)
+- 1859157: Display better error message on incorrect --org (mhorky@redhat.com)
+- New D-Bus method GetOrg() (jhnidek@redhat.com)
+- 1924338: list prints not status and dates in SCA mode (jhnidek@redhat.com)
+- 1983144: More useful feedback on unknown argument (mhorky@redhat.com)
+- ENT-4089: Fix flake8 error E741 (mhorky@redhat.com)
+- ENT-4090: Fix flake8 error F821 (mhorky@redhat.com)
+- Translated using Weblate (Italian) (toscano.pino@tiscali.it)
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (ljanda@redhat.com)
+- ENT-4091: Fix flake8 error F841 (mhorky@redhat.com)
+- ENT-4228: Format rhsmlib exception (mhorky@redhat.com)
+- ENT-4228: Always format restlib exceptions (mhorky@redhat.com)
+- Update exception handling (mhorky@redhat.com)
+- Drop unused M2Crypto bits (ptoscano@redhat.com)
+- 1995465: Do not use deprecated collections.MutableMapping
+  (jhnidek@redhat.com)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- 1983074: Remove invalid log level (mhorky@redhat.com)
+- ENT-4213: Remove deprecated pep8 package (mhorky@redhat.com)
+- build: switch to os.makedirs(..., exist_ok=True) (ptoscano@redhat.com)
+- build: call create_dest_dir() only when running callback
+  (ptoscano@redhat.com)
+- flake8: enable E131, E714 (ptoscano@redhat.com)
+- 1859569: Abort on invalid username/token option in syspurpose commands
+  (mhorky@redhat.com)
+- Drop logging.conf (ptoscano@redhat.com)
+- Drop long-dead sat5to6 script (ptoscano@redhat.com)
+- Drop RHN migration (ptoscano@redhat.com)
+- 1922151: Add /var/cache/cloud-what to python3-cloud-what RPM.
+  (jhnidek@redhat.com)
+- ENT-164: Remove ga_loader importer (mhorky@redhat.com)
+- ENT-164: Drop rhsm-gtk (mhorky@redhat.com)
+- ENT-164: Drop subscription-manager-gui & rhsm-icon (mhorky@redhat.com)
+- Add minimal documentation for the plugins directories (ptoscano@redhat.com)
+- ENT-4168: Unify description of --org in syspurpose subcommands
+  (mhorky@redhat.com)
+- 1922151: Use in-memory cache on AWS too (jhnidek@redhat.com)
+- Move zypper plugins to an own directory (ptoscano@redhat.com)
+- Move dnf plugins to an own directory (ptoscano@redhat.com)
+- Move libdnf plugins to an own directory (ptoscano@redhat.com)
+- Drop support for YUM plugins (ptoscano@redhat.com)
+- Drop YUM plugins (ptoscano@redhat.com)
+- Add 'syspurpose' to list of commands in manpage (mhorky@redhat.com)
+- ENT-4152: Drop initial-setup addon (mhorky@redhat.com)
+- ENT-4136: Drop firstboot support (mhorky@redhat.com)
+- ENT-3764: Change comments to follow Conscious language initiative
+  (mhorky@redhat.com)
+- ENT-3764: Update variable names in hwprobe.py (mhorky@redhat.com)
+- ENT-3764: Update project URLs to new versions (mhorky@redhat.com)
+- ENT-3764: Remove BLACKLISTED_LOCALES (mhorky@redhat.com)
+- 1980418: Add 'active' field to module stream profile (ianballou67@gmail.com)
+- repos: document order of --enable & --disable (ptoscano@redhat.com)
+- 1984133: repos: respect order of --enable & --disable (ptoscano@redhat.com)
+- Include D-Bus sender in User-Agent http header; Singleton
+  (jhnidek@redhat.com)
+- hwprobe.py: Fix counting cores per cpu for Fujitsu A64FX CPU
+  (m.mizuma@jp.fujitsu.com)
+- flake8: enable E121, E122, E123, E126, E127, E128 (ptoscano@redhat.com)
+- flake8: disable E122 for test/test_utils.py (ptoscano@redhat.com)
+- Wrap first argument/element in function calls & containers
+  (ptoscano@redhat.com)
+- Fix indentation of some continuation lines (ptoscano@redhat.com)
+- 1974641: Fix tab completion with multiple optional commands
+  (mhorky@redhat.com)
+- 1876828: Try to suppress errors in stderr when not run as root
+  (mhorky@redhat.com)
+- 1977452: typo in string format change Add quotes to a {filename} and remove
+  an extra space. (tmerry@redhat.com)
+- Update translation files (noreply@weblate.org)
+- 1976240: Improve HTTP code/message reporting in error strings
+  (mhorky@redhat.com)
+- Added new stage for running libdnf unit tests. (jhnidek@redhat.com)
+- make sure gpg key download doesn't fail because of private certs
+  (sbernhard@users.noreply.github.com)
+
 * Thu Jul 15 2021 Christopher Snyder <csnyder@redhat.com> 1.29.18-1
 - 1976324: Added cloud_what to log root namespaces (jhnidek@redhat.com)
 - 1976324: Added cloud_what to log root namespaces (jhnidek@redhat.com)
