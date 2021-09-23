@@ -16,7 +16,6 @@ import logging
 import os
 import errno
 import threading
-import six
 
 from rhsm.certificate import create_from_pem
 from rhsm.config import get_config_parser
@@ -141,10 +140,7 @@ class Identity(object):
             # existsAndValid did, so this is better.
             except (CertificateException, IOError) as err:
                 self.consumer = None
-                if six.PY2:
-                    err_msg = str(err).decode('utf-8')
-                else:
-                    err_msg = err
+                err_msg = err
                 msg = "Reload of consumer identity cert %s raised an exception with msg: %s" \
                     % (ConsumerIdentity.certpath(), err_msg)
                 if isinstance(err, IOError) and err.errno == errno.ENOENT:

@@ -27,7 +27,6 @@ import pkg_resources
 
 from six.moves import urllib
 from rhsm.https import ssl
-import six
 
 from subscription_manager.branding import get_branding
 from subscription_manager.certdirectory import Path
@@ -397,8 +396,6 @@ def is_true_value(test_string):
 
 def system_log(message, priority=syslog.LOG_NOTICE):
     syslog.openlog("subscription-manager")
-    if six.PY2:
-        message = message.encode("utf-8")
     syslog.syslog(priority, message)
 
 

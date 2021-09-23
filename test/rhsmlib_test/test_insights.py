@@ -20,7 +20,6 @@ from ..fixture import open_mock_many
 from rhsmlib.facts import insights
 from mock import patch
 import tempfile
-import six
 
 INSIGHT_FUTURE_UUID = "250878c1-a8a2-4c44-8a29-5736dc4094c7"
 INSIGHT_TEST_UUID = "2d05f031-d20c-40c9-9cee-2a1d7e823ab6"
@@ -32,10 +31,7 @@ class TestInsightsCollector(unittest.TestCase):
     def setUp(self):
         self.collector = insights.InsightsCollector()
         self.machine_id_fp = tempfile.NamedTemporaryFile()
-        if six.PY3:
-            self.machine_id_fp.write(bytes(INSIGHT_TEST_UUID, 'UTF-8'))
-        else:
-            self.machine_id_fp.write(INSIGHT_TEST_UUID)
+        self.machine_id_fp.write(bytes(INSIGHT_TEST_UUID, 'UTF-8'))
         self.machine_id_fp.flush()
 
     def tearDown(self):

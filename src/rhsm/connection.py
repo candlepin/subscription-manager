@@ -766,10 +766,7 @@ class BaseRestLib(object):
                                             err))
                 raise
             except (socket.error, OSError) as err:
-                if six.PY2:
-                    code = httplib.PROXY_AUTHENTICATION_REQUIRED
-                else:
-                    code = httplib.PROXY_AUTHENTICATION_REQUIRED.value
+                code = httplib.PROXY_AUTHENTICATION_REQUIRED.value
                 if str(code) in str(err):
                     raise ProxyException(err)
                 raise

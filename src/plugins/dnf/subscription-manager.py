@@ -13,7 +13,6 @@
 #
 
 import os
-import six
 import logging
 
 from subscription_manager import injection as inj
@@ -30,10 +29,7 @@ from rhsm import config
 from dnfpluginscore import logger
 import dnf
 
-if six.PY3:
-    from configparser import ConfigParser
-else:
-    from ConfigParser import ConfigParser
+from configparser import ConfigParser
 
 expired_warning = _("""
 *** WARNING ***

@@ -24,8 +24,6 @@ import xml.etree.ElementTree as Et
 import dbus
 import six
 
-PY2 = six.PY2
-
 log = logging.getLogger(__name__)
 
 
@@ -109,8 +107,6 @@ def dbus_to_python(obj, expected_type=None):
     elif isinstance(obj, dbus.Boolean):
         python_obj = bool(obj)
     elif isinstance(obj, dbus.String):
-        python_obj = obj.encode('utf-8') if PY2 else str(obj)
-    elif PY2 and isinstance(obj, dbus.UTF8String):  # Python3 has no UTF8String
         python_obj = str(obj)
     elif isinstance(obj, dbus.ObjectPath):
         python_obj = str(obj)
