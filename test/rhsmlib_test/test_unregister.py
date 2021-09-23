@@ -14,7 +14,6 @@
 
 import dbus
 import mock
-import six
 
 from test.rhsmlib_test.base import DBusObjectTest, InjectionMockingTest
 
@@ -88,5 +87,5 @@ class TestUnregisterDBusObject(DBusObjectTest, InjectionMockingTest):
     def test_must_be_registered_unregister(self):
         self.mock_identity.is_valid.return_value = False
         unregister_method_args = [{}, '']
-        with six.assertRaisesRegex(self, dbus.DBusException, r'requires the consumer to be registered.*'):
+        with self.assertRaisesRegex(dbus.DBusException, r'requires the consumer to be registered.*'):
             self.dbus_request(None, self.interface.Unregister, unregister_method_args)
