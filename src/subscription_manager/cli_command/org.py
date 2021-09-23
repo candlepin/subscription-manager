@@ -51,5 +51,10 @@ class OrgCommand(UserPassCommand):
             if len(owners) == 1:
                 self._org = owners[0]['key']
             else:
+                # Print list of owners to the console
+                org_keys = [owner['key'] for owner in owners]
+                print(_('Hint: User "{name}" is member of following organizations: {orgs}').format(
+                    name=self.username, orgs=', '.join(org_keys)
+                ))
                 self._org = self._get_org(self.options.org)
         return self._org
