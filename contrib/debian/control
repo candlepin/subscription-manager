@@ -15,7 +15,6 @@ X-Python3-Version: >= 3.2
 Package: python-subscription-manager
 Architecture: amd64
 Depends: ${python:Depends}, ${misc:Depends}, python-dbus, python-rpm, virt-what, python-debian, python-gobject, python-decorator, apt-transport-katello (>= ${source:Version})
-Suggests: python-subscription-manager-doc
 Description: RHSM subscription-manager (Python 2)
  .
  RHSM is client side software that allows hosts to register with Red Hat
@@ -28,7 +27,6 @@ Description: RHSM subscription-manager (Python 2)
 #Package: python3-subscription-manager
 #Architecture: amd64
 #Depends: ${python3:Depends}, ${misc:Depends}, virt-what
-#Suggests: python-subscription-manager-doc
 #Description: RHSM subscription-manager (Python 3)
 # .
 # RHSM is client side software that allows hosts to register with Red Hat
@@ -37,19 +35,6 @@ Description: RHSM subscription-manager (Python 2)
 # management system.
 # .
 # This package installs the library for Python 3.
-
-Package: python-subscription-manager-doc
-Architecture: all
-Section: doc
-Depends: ${sphinxdoc:Depends}, ${misc:Depends}
-Description: RHSM subscription-manager (common documentation)
- .
- RHSM is client side software that allows hosts to register with Red Hat
- subscription management services. In particular, this package is intended to
- enable Debian and Ubuntu hosts to register with the Foreman/Katello content
- management system.
- .
- This is the common documentation package.
 
 Package: apt-transport-katello
 Architecture: all

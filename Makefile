@@ -97,7 +97,7 @@ clean:
 	rm -f *.pyc *.pyo *~ *.bak *.tar.gz
 	rm -f bin/rhsmcertd
 	$(PYTHON) ./setup.py clean --all
-	rm -rf cover/ htmlcov/ docs/sphinx/_build/ build/ dist/
+	rm -rf cover/ htmlcov/ build/ dist/
 
 .PHONY: mkdir-bin
 mkdir-bin:
@@ -278,10 +278,6 @@ ifdef ghprbPullId
 else
 	$(PYTHON) -m coverage run -m pytest test/
 endif
-
-.PHONY: docs
-docs:
-	$(PYTHON) setup.py build_sphinx
 
 .PHONY: gettext
 gettext:
