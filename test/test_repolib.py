@@ -16,8 +16,8 @@ try:
 except ImportError:
     import unittest
 
+import io
 import re
-import six
 from importlib import reload
 from . import fixture
 
@@ -65,7 +65,7 @@ class ConfigFromString(config.Config):
 class RhsmConfigParserFromString(RhsmConfigParser):
     def __init__(self, config_string):
         SafeConfigParser.__init__(self)
-        self.stringio = six.StringIO(config_string)
+        self.stringio = io.StringIO(config_string)
         self.readfp(self.stringio)
 
 
@@ -687,7 +687,7 @@ class RepoUpdateActionTests(fixture.SubManFixture):
 class TidyWriterTests(unittest.TestCase):
 
     def test_just_newlines_compressed_to_one(self):
-        output = six.StringIO()
+        output = io.StringIO()
         tidy_writer = TidyWriter(output)
 
         tidy_writer.write("\n\n\n\n")
@@ -696,7 +696,7 @@ class TidyWriterTests(unittest.TestCase):
         self.assertEqual("\n", output.getvalue())
 
     def test_newline_added_to_eof(self):
-        output = six.StringIO()
+        output = io.StringIO()
         tidy_writer = TidyWriter(output)
 
         tidy_writer.write("a line\n")
@@ -706,7 +706,7 @@ class TidyWriterTests(unittest.TestCase):
         self.assertEqual("a line\nanother line\n", output.getvalue())
 
     def test_newline_preserved_on_eof(self):
-        output = six.StringIO()
+        output = io.StringIO()
         tidy_writer = TidyWriter(output)
 
         tidy_writer.write("a line\n")
@@ -716,7 +716,7 @@ class TidyWriterTests(unittest.TestCase):
         self.assertEqual("a line\nanother line\n", output.getvalue())
 
     def test_compression_preserves_a_single_blank_line(self):
-        output = six.StringIO()
+        output = io.StringIO()
         tidy_writer = TidyWriter(output)
 
         tidy_writer.write("test stuff\n\ntest\n")
@@ -725,7 +725,7 @@ class TidyWriterTests(unittest.TestCase):
         self.assertEqual("test stuff\n\ntest\n", output.getvalue())
 
     def test_newlines_compressed_in_single_write(self):
-        output = six.StringIO()
+        output = io.StringIO()
         tidy_writer = TidyWriter(output)
 
         tidy_writer.write("test stuff\n\n\ntest\n")
@@ -734,7 +734,7 @@ class TidyWriterTests(unittest.TestCase):
         self.assertEqual("test stuff\n\ntest\n", output.getvalue())
 
     def test_newlines_compressed_across_writes(self):
-        output = six.StringIO()
+        output = io.StringIO()
         tidy_writer = TidyWriter(output)
 
         tidy_writer.write("test stuff\n\n")
@@ -744,7 +744,7 @@ class TidyWriterTests(unittest.TestCase):
         self.assertEqual("test stuff\n\ntest\n", output.getvalue())
 
         # now try the other split
-        output = six.StringIO()
+        output = io.StringIO()
         tidy_writer = TidyWriter(output)
 
         tidy_writer.write("test stuff\n")

@@ -1,4 +1,5 @@
 import difflib
+import io
 import locale
 import os
 import pprint
@@ -36,10 +37,10 @@ OPEN_FUNCTION = 'builtins.open'
 
 @contextmanager
 def open_mock(content=None, **kwargs):
-    content_out = six.StringIO()
+    content_out = io.StringIO()
     m = mock_open(read_data=content)
     with patch(OPEN_FUNCTION, m, create=True, **kwargs) as mo:
-        stream = six.StringIO(content)
+        stream = io.StringIO(content)
         rv = mo.return_value
         rv.write = lambda x: content_out.write(x)
         rv.content_out = lambda: content_out.getvalue()
@@ -58,7 +59,7 @@ def open_mock_many(file_content_map=None, **kwargs):
     """
     file_content_map = file_content_map or {}
     for key, value in file_content_map.items():
-        file_content_map[key] = (mock_open(read_data=value), value, six.StringIO())
+        file_content_map[key] = (mock_open(read_data=value), value, io.StringIO())
 
     def get_file(path, *args, **kwargs):
         """
@@ -407,7 +408,7 @@ class SubManFixture(unittest.TestCase):
 class Capture(object):
     class Tee(object):
         def __init__(self, stream, silent):
-            self.buf = six.StringIO()
+            self.buf = io.StringIO()
             self.stream = stream
             self.silent = silent
 
