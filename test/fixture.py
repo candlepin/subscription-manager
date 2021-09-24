@@ -3,7 +3,6 @@ import io
 import locale
 import os
 import pprint
-import six
 import sys
 import tempfile
 
