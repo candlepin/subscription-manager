@@ -547,7 +547,7 @@ class ProductManager(object):
         products_installed = self.install_product_certs(products_to_install)
         products_updated = self.update_product_certs(products_to_update)
 
-        #FIXME: nothing uses the return value here
+        # FIXME: nothing uses the return value here
         return (products_installed, products_updated)
 
     def install_product_certs(self, product_certs):

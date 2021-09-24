@@ -21,7 +21,7 @@ class TestLocale(unittest.TestCase):
     test_locales = [
         # as_IN is kind of busted in RHEL6, and seemingly
         # very busted in 14
-        #"as_IN",   # Assamese
+        # "as_IN",   # Assamese
         "bn_IN",  # Bengali
         "de_DE",  # German
         "es_ES",  # Spanish
@@ -37,11 +37,11 @@ class TestLocale(unittest.TestCase):
         "or_IN",  # Oriya
         "pa_IN",  # Punjabi
         # "ne_IN",  # Nepali
-        #"se_IN", # Sinhala
-        #"br_IN", # Maithili
+        # "se_IN", # Sinhala
+        # "br_IN", # Maithili
         "pt_BR",  # Portugese
         "ru_RU",  # Russian
-        #"si_LK",   # Sri Lankan
+        # "si_LK",   # Sri Lankan
         "ta_IN",  # Tamil
         "te_IN",  # telgu
         "zh_CN",  # Chinese Simplified

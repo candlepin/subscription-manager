@@ -29,7 +29,7 @@ class CleanupCollector(collector.FactsCollector):
 
     def explain_lack_of_virt_uuid(self):
         # No virt.uuid equiv is available for guests on these hypervisors
-        #virt_is_guest = self._collected_hw_info['virt.is_guest']
+        # virt_is_guest = self._collected_hw_info['virt.is_guest']
         if not self._is_a_virt_host_type_with_virt_uuids():
             log.debug("we don't sell virt uuids here")
 

@@ -62,7 +62,6 @@ class DbusEventPlugin(SubManPlugin):
         # choose a name for ourselves on that bus
         self.bus_name = dbus.service.BusName("com.redhat.SubscriptionManager.PluginEvent", self.system_bus)
         self.dbus_object = SubManEventDbus(self.bus_name)
-        #self.called_as = None
 
     def _dbus_event(self, message, conduit):
         conduit.log.debug("sending dbus event: %s" % message)

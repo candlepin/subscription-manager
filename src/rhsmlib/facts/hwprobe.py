@@ -972,8 +972,6 @@ if __name__ == '__main__':
         value_0 = int(hw_dict.get(cpu_item[0], -1))
         value_1 = int(hw_dict.get(cpu_item[1], -1))
 
-        #print "%s/%s: %s %s" % (cpu_item[0], cpu_item[1], value_0, value_1)
-
         if value_0 != value_1 and ((value_0 != -1) and (value_1 != -1)):
             failed_list.append((cpu_item[0], cpu_item[1], value_0, value_1))
 

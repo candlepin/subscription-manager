@@ -145,7 +145,7 @@ class TestFacts(fixture.SubManFixture):
         self.assertEqual(cached_facts["test.attr"], "blippy2")
 
     def test_facts_last_update(self):
-        #FIXME: verify the date is correct
+        # FIXME: verify the date is correct
         self.f.get_last_update()
 
     @patch('subscription_manager.facts.Facts.get_facts',

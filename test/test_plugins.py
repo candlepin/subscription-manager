@@ -23,6 +23,8 @@ import six
 from subscription_manager import plugins
 from subscription_manager import base_plugin
 
+from test import subman_marker_functional
+
 
 # SubManPlugin
 # plugin_key
@@ -785,7 +787,7 @@ class TestPluginManagerReporting(unittest.TestCase):
         self.assertEqual(10, len(self.manager.get_slots()))
 
 
-#functional
+@subman_marker_functional
 class TestPluginManagerRun(unittest.TestCase):
     def setUp(self):
         self.module_dir = os.path.join(os.path.dirname(__file__), "plugins")

@@ -66,8 +66,8 @@ class ActionClientTestBase(SubManFixture):
     def setUp(self):
         SubManFixture.setUp(self)
         # we have to have a reference to the patchers
-        #self.patcher2 = mock.patch.object(entcertlib.EntCertUpdateAction, '_get_consumer_id')
-        #self.entcertlib_updateaction_getconsumerid = self.patcher2.start()
+        # self.patcher2 = mock.patch.object(entcertlib.EntCertUpdateAction, '_get_consumer_id')
+        # self.entcertlib_updateaction_getconsumerid = self.patcher2.start()
 
         self.patcher3 = mock.patch.object(repolib.RepoUpdateActionCommand, 'perform')
         self.repolib_updateaction_perform = self.patcher3.start()
@@ -258,7 +258,7 @@ class TestActionClient(ActionClientTestBase):
 
         report = actionclient.entcertlib.report
         # the expired certs should be delete/rogue and expired
-        #report = self.update_action_syslog_mock.call_args[0][0]
+        # report = self.update_action_syslog_mock.call_args[0][0]
         self.assertTrue(self.stub_ent1 in report.rogue)
 
     @mock.patch.object(entcertlib.EntitlementCertBundleInstaller, 'build_cert')

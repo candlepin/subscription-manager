@@ -17,7 +17,6 @@ except ImportError:
     import unittest
 
 from subscription_manager.branding import Branding
-#from subscription_manager.managerlib import configure_i18n
 
 
 class TestBranding(object):

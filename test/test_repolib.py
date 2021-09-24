@@ -756,8 +756,8 @@ class TidyWriterTests(unittest.TestCase):
 
 class YumReleaseverSourceTest(fixture.SubManFixture):
     def test_init(self):
-        #inj.provide(inj.RELEASE_STATUS_CACHE, Mock())
-        #override_cache_mock = inj.require(inj.OVERRIDE_STATUS_CACHE)
+        # inj.provide(inj.RELEASE_STATUS_CACHE, Mock())
+        # override_cache_mock = inj.require(inj.OVERRIDE_STATUS_CACHE)
 
         release_source = YumReleaseverSource()
         self.assertEqual(release_source._expansion, None)

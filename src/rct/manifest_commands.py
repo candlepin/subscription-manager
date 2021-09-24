@@ -104,7 +104,7 @@ class ZipExtractAll(ZipFile):
         new_path = os.path.abspath(new_file)
         if not new_path.startswith(base_path):
             raise Exception(_('Manifest zip attempted to extract outside of the base directory.'))
-        #traces symlink to source, and checks that it is valid
+        # traces symlink to source, and checks that it is valid
         real_new_path = os.path.realpath(new_path)
         if real_new_path != new_path:
             self._is_secure(base, real_new_path)
@@ -254,7 +254,7 @@ class CatManifestCommand(RCTManifestCommand):
 
             entitlement_file = os.path.join("export", "entitlements", "%s.json" % data["id"])
             to_print.append((_("Entitlement File"), entitlement_file))
-            #Get the certificate to get the version
+            # Get the certificate to get the version
             serial = data["certificates"][0]["serial"]["id"]
 
             cert_file = os.path.join("export", "entitlement_certificates", "%s.pem" % serial)

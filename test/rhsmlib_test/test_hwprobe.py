@@ -870,7 +870,7 @@ VARIANT_ID=server
         def count_cpumask(cpu, field):
             vals = {
                 'thread_siblings_list': 1,
-                #'core_siblings_list': 2,
+                # 'core_siblings_list': 2,
                 'core_siblings_list': 2000,
                 'book_siblings_list': None
             }
@@ -902,7 +902,7 @@ VARIANT_ID=server
         def count_cpumask(cpu, field):
             vals = {
                 'thread_siblings_list': 1,
-                #'core_siblings_list': 2,
+                # 'core_siblings_list': 2,
                 'core_siblings_list': 4,
                 'book_siblings_list': None
             }

@@ -98,7 +98,7 @@ class RCTManifestCommandTests(SubManFixture):
         mancommand = DumpManifestCommand()
         mancommand.args = [_build_valid_manifest()]
 
-        #This makes sure there is a 'None' at 'self.options.destination'
+        # This makes sure there is a 'None' at 'self.options.destination'
         mancommand.options = mancommand
         mancommand.destination = None
         mancommand.overwrite_files = False
@@ -113,7 +113,7 @@ class RCTManifestCommandTests(SubManFixture):
         mancommand = DumpManifestCommand()
         mancommand.args = [_build_valid_manifest()]
 
-        #This makes sure the temp directory is referenced at 'self.options.destination'
+        # This makes sure the temp directory is referenced at 'self.options.destination'
         mancommand.options = mancommand
         mancommand.destination = new_directory
         mancommand.overwrite_files = False
@@ -127,7 +127,7 @@ class RCTManifestCommandTests(SubManFixture):
         mancommand = DumpManifestCommand()
         mancommand.args = [_build_valid_manifest()]
 
-        #This makes sure the temp directory is referenced at 'self.options.destination'
+        # This makes sure the temp directory is referenced at 'self.options.destination'
         mancommand.options = mancommand
         mancommand.destination = new_directory
         mancommand.overwrite_files = True
@@ -143,7 +143,7 @@ class RCTManifestCommandTests(SubManFixture):
         mancommand = DumpManifestCommand()
         mancommand.args = [_build_valid_manifest()]
 
-        #This makes sure the temp directory is referenced at 'self.options.destination'
+        # This makes sure the temp directory is referenced at 'self.options.destination'
         mancommand.options = mancommand
         mancommand.destination = new_directory
         mancommand.overwrite_files = True
@@ -160,7 +160,7 @@ class RCTManifestCommandTests(SubManFixture):
         mancommand = DumpManifestCommand()
         mancommand.args = [_build_valid_manifest()]
 
-        #This makes sure the temp directory is referenced at 'self.options.destination'
+        # This makes sure the temp directory is referenced at 'self.options.destination'
         mancommand.options = mancommand
         mancommand.destination = new_directory
         mancommand.overwrite_files = True
