@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-30 02:22-0400\n"
-"PO-Revision-Date: 2021-09-07 16:04+0000\n"
+"PO-Revision-Date: 2021-09-28 21:05+0000\n"
 "Last-Translator: Emilio Herrera <ehespinosa57@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28-21/es/>\n"
@@ -158,8 +158,8 @@ msgstr[1] "El paquetes $0 y $1 otros paquetes serán instalados."
 #: cockpit/src/insights.jsx:132
 msgid "$0 package needs to be removed."
 msgid_plural "$0 packages need to be removed."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "es necesario quitar paquete $0."
+msgstr[1] "es necesario quitar paquetes $0."
 
 #: cockpit/src/insights.jsx:146
 msgid "Additional packages:"
@@ -181,61 +181,63 @@ msgstr ""
 
 #: cockpit/src/insights.jsx:173 cockpit/src/insights.jsx:252
 msgid "Checking installed software"
-msgstr ""
+msgstr "Comprobando el software instalado"
 
 #: cockpit/src/insights.jsx:186
 msgid "Downloading $0"
-msgstr ""
+msgstr "Descargando $0"
 
 #: cockpit/src/insights.jsx:188
 msgid "Removing $0"
-msgstr ""
+msgstr "Quitando $0"
 
 #: cockpit/src/insights.jsx:190
 msgid "Installing $0"
-msgstr ""
+msgstr "Instalando $0"
 
 #: cockpit/src/insights.jsx:207
 msgid "Connect to Red Hat Insights"
-msgstr ""
+msgstr "Conectar a Red Hat Insights"
 
 #: cockpit/src/insights.jsx:210
 msgid "This system is not connected to $0."
-msgstr ""
+msgstr "El sistema no puede conectarse a $0."
 
 #: cockpit/src/insights.jsx:220
 msgid "Connect"
-msgstr ""
+msgstr "Conectar"
 
 #: cockpit/src/insights.jsx:313
 msgid "unknown"
-msgstr ""
+msgstr "desconocido"
 
 #: cockpit/src/insights.jsx:366
 msgid "The last Insights data upload has failed."
-msgstr ""
+msgstr "Ha fallado la última subida de datos a Insights ."
 
 #: cockpit/src/insights.jsx:371
 msgid "Connected to Red Hat Insights"
-msgstr ""
+msgstr "Conectado a Red Hat Insights"
 
 #: cockpit/src/insights.jsx:377
 msgid "Next Insights data upload"
-msgstr ""
+msgstr "Siguiente subida de datos a Insights"
 
 #: cockpit/src/insights.jsx:382
 msgid "Last Insights data upload"
-msgstr ""
+msgstr "Últimos datos subidos a Insights"
 
 #: cockpit/src/insights.jsx:403 cockpit/src/insights.jsx:409
 msgid "Disconnect from Insights"
-msgstr ""
+msgstr "Desconectar desde Insights"
 
 #: cockpit/src/insights.jsx:406
 msgid ""
 "If you disconnect this system from Insights, it will no longer report it's "
 "Insights status in Red Hat Cloud or Satellite."
 msgstr ""
+"Si desconecta este sistema de Insights, ya no informará su estado de "
+"Insights en Red Hat Cloud o Satellite."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/insights.jsx:417
