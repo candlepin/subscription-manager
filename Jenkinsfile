@@ -30,8 +30,6 @@ pipeline {
             )
           }
         }
-        // TODO: figure if this is needed and implement
-        // stage('RHEL8 unit') {steps {echo 'nose'}}
         stage('unit') {
           steps {
             sh (
