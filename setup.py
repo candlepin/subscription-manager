@@ -28,7 +28,7 @@ from distutils.command.build import build as _build
 from distutils.command.build_py import build_py as _build_py
 
 # Note that importing build_ext alone won't be enough to make certain tasks (like lint) work
-# those tasks require that some dependencies (e.g. lxml) be installed.  Munging the syspath
+# those tasks require that some dependencies be installed.  Munging the syspath
 # here is just so that setup.py will be able to load and run in Jenkins jobs and RPM builds
 # that don't set up a proper development environment.
 build_ext_home = os.path.abspath(os.path.join(os.path.dirname(__file__), "./build_ext"))
@@ -289,7 +289,6 @@ test_require = [
     'coverage',
     'polib',
     'flake8',
-    'lxml',
 ] + install_requires + setup_requires
 
 cmdclass = {

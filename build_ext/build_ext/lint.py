@@ -36,14 +36,6 @@ except ImportError:
         def __init__(self, *args, **kwargs):
             raise NotImplementedError("flake8 could not be imported")
 
-try:
-    from lxml import etree as ElementTree
-except ImportError:
-    class ElementTree(object):
-        @staticmethod
-        def parse(*args, **kwargs):
-            raise NotImplementedError("lxml could not be imported")
-
 
 class Lint(BaseCommand):
     description = "examine code for errors"
