@@ -11,7 +11,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 import ast
-import tokenize
 
 from distutils.spawn import spawn
 
@@ -197,110 +196,6 @@ class AstChecker(object):
 
         ret = (lineno, col_offset, msg, self)
         return ret
-
-
-def detect_overindent(logical_line, tokens, indent_level, hang_closing, indent_char, noqa, verbose):
-    """Flag lines that are overindented.  This includes lines that are indented solely to align
-    vertically with an opening brace.  This rule allows continuation lines to be relatively
-    indented up to 8 spaces and closes braces to be relatively indented up to 4 spaces.  Heavily
-    adapted from pycodestyle's continued_indentation method
-
-    Okay: foo = my_func('hello',
-              'world'
-              )
-    Okay: foo = my_func('hello',
-                  'world')
-
-    Okay: foo = my_func('hello',
-              )
-
-    E198: foo = my_func('hello',
-                       )
-    E199: foo = my_func('hello',
-                        'world')
-    """
-    first_row = tokens[0][2][0]
-    nrows = 1 + tokens[-1][2][0] - first_row
-    if noqa or nrows == 1:
-        return
-
-    row = depth = 0
-
-    # relative indents of physical lines
-    rel_indent = [0] * nrows
-    open_rows = [[0]]
-    last_indent = tokens[0][2]
-    indent = [last_indent[1]]
-
-    last_token_multiline = False
-
-    if verbose >= 3:
-        print(">>> " + tokens[0][4].rstrip())
-
-    for token_type, text, start, end, line in tokens:
-        newline = row < start[0] - first_row
-        if newline:
-            row = start[0] - first_row
-            newline = not last_token_multiline and token_type not in pycodestyle.NEWLINE
-
-        if newline:
-            # this is the beginning of a continuation line.
-            last_indent = start
-            if verbose >= 3:
-                print("... " + line.rstrip())
-
-            # record the initial indent.
-            rel_indent[row] = pycodestyle.expand_indent(line) - indent_level
-
-            # identify closing bracket
-            close_bracket = (token_type == tokenize.OP and text in ']})')
-
-            # is the indent relative to an opening bracket line?
-            for open_row in reversed(open_rows[depth]):
-                hang = rel_indent[row] - rel_indent[open_row]
-
-            if not close_bracket and hang > 8:
-                yield start, "E199 continuation line over-indented"
-
-            if close_bracket and hang > 4:
-                yield (start, "E198 closing bracket over-indented")
-
-        # Keep track of bracket depth to check for proper indentation in nested
-        # brackets
-        # E.g.
-        # Okay: foo = [[
-        #           '1'
-        #       ]]
-        #
-        # but even though we are nested twice, we should only allow one level of indentation, so:
-        #
-        # E199: foo = [[
-        #               '1'
-        #       ]]
-
-        if token_type == tokenize.OP:
-            if text in '([{':
-                depth += 1
-                indent.append(0)
-                if len(open_rows) == depth:
-                    open_rows.append([])
-                open_rows[depth].append(row)
-                if verbose >= 4:
-                    print("bracket depth %s seen, col %s, visual min = %s" %
-                          (depth, start[1], indent[depth]))
-            elif text in ')]}' and depth > 0:
-                # parent indents should not be more than this one
-                prev_indent = indent.pop() or last_indent[1]
-                for d in range(depth):
-                    if indent[d] > prev_indent:
-                        indent[d] = 0
-                del open_rows[depth + 1:]
-                depth -= 1
-            assert len(indent) == depth + 1
-
-        last_token_multiline = (start[0] != end[0])
-        if last_token_multiline:
-            rel_indent[end[0] - first_row] = rel_indent[row]
 
 
 class PluginLoadingFlake8(Flake8):
