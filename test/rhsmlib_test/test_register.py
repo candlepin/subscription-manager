@@ -365,7 +365,7 @@ class RegisterServiceTest(InjectionMockingTest):
     def test_fails_when_previously_registered(self):
         self.mock_identity.is_valid.return_value = True
 
-        with self.assertRaisesRegexp(exceptions.ValidationError, r'.*system is already registered.*'):
+        with self.assertRaisesRegex(exceptions.ValidationError, r'.*system is already registered.*'):
             register.RegisterService(self.mock_cp).validate_options(self._build_options())
 
     def test_allows_force(self):
@@ -417,7 +417,7 @@ class RegisterServiceTest(InjectionMockingTest):
     def test_does_not_allow_basic_auth_with_activation_keys(self):
         self.mock_identity.is_valid.return_value = False
         options = self._build_options(activation_keys=[1])
-        with self.assertRaisesRegexp(exceptions.ValidationError, r'.*do not require user credentials.*'):
+        with self.assertRaisesRegex(exceptions.ValidationError, r'.*do not require user credentials.*'):
             register.RegisterService(self.mock_cp).validate_options(options)
 
     def test_does_not_allow_environment_with_activation_keys(self):
@@ -426,7 +426,7 @@ class RegisterServiceTest(InjectionMockingTest):
 
         self.mock_identity.is_valid.return_value = False
         options = self._build_options(activation_keys=[1], environment='environment')
-        with self.assertRaisesRegexp(exceptions.ValidationError, r'.*do not allow environments.*'):
+        with self.assertRaisesRegex(exceptions.ValidationError, r'.*do not allow environments.*'):
             register.RegisterService(self.mock_cp).validate_options(options)
 
     def test_does_not_allow_environment_with_consumerid(self):
@@ -435,7 +435,7 @@ class RegisterServiceTest(InjectionMockingTest):
 
         self.mock_identity.is_valid.return_value = False
         options = self._build_options(activation_keys=[1], consumerid='consumerid')
-        with self.assertRaisesRegexp(exceptions.ValidationError, r'.*previously registered.*'):
+        with self.assertRaisesRegex(exceptions.ValidationError, r'.*previously registered.*'):
             register.RegisterService(self.mock_cp).validate_options(options)
 
     def test_requires_basic_auth_for_normal_registration(self):
@@ -444,7 +444,7 @@ class RegisterServiceTest(InjectionMockingTest):
 
         self.mock_identity.is_valid.return_value = False
         options = self._build_options(consumerid='consumerid')
-        with self.assertRaisesRegexp(exceptions.ValidationError, r'.*Missing username.*'):
+        with self.assertRaisesRegex(exceptions.ValidationError, r'.*Missing username.*'):
             register.RegisterService(self.mock_cp).validate_options(options)
 
 

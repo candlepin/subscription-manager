@@ -72,7 +72,6 @@ def configure_gettext():
     """
     gettext.bindtextdomain(APP, DIR)
     gettext.textdomain(APP)
-    gettext.bind_textdomain_codeset(APP, 'UTF-8')
     locale.bind_textdomain_codeset(APP, 'UTF-8')
 
 

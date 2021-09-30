@@ -242,7 +242,7 @@ class StatusCache(CacheManager):
                 log.error("Server unreachable, registered, but no cache exists.")
                 return None
 
-            log.warn("Unable to reach server, using cached status.")
+            log.warning("Unable to reach server, using cached status.")
             return self._read_cache()
         except connection.RestlibException as ex:
             # Indicates we may be talking to a very old candlepin server

@@ -178,13 +178,13 @@ class TestEntitlementService(InjectionMockingTest):
     def test_only_accepts_correct_pool_subsets(self):
         service = EntitlementService()
         options = self._build_options(pool_subsets=['foo'])
-        with self.assertRaisesRegexp(exceptions.ValidationError, r'.*invalid listing type.*'):
+        with self.assertRaisesRegex(exceptions.ValidationError, r'.*invalid listing type.*'):
             service.validate_options(options)
 
     def test_show_all_requires_available(self):
         service = EntitlementService()
         options = self._build_options(pool_subsets=['installed'], show_all=True)
-        with self.assertRaisesRegexp(exceptions.ValidationError, r'.*only applicable with --available'):
+        with self.assertRaisesRegex(exceptions.ValidationError, r'.*only applicable with --available'):
             service.validate_options(options)
         options['pool_subsets'].append('available')
         service.validate_options(options)
@@ -193,7 +193,7 @@ class TestEntitlementService(InjectionMockingTest):
         service = EntitlementService()
         on_date = datetime.date.today().strftime('%Y-%m-%d')
         options = self._build_options(pool_subsets=['installed', 'consumed'], on_date=on_date)
-        with self.assertRaisesRegexp(exceptions.ValidationError, r'.*only applicable with --available'):
+        with self.assertRaisesRegex(exceptions.ValidationError, r'.*only applicable with --available'):
             service.validate_options(options)
         options['pool_subsets'].append('available')
         service.validate_options(options)
@@ -201,7 +201,7 @@ class TestEntitlementService(InjectionMockingTest):
     def test_service_level_requires_consumed_or_available(self):
         service = EntitlementService()
         options = self._build_options(pool_subsets=['installed'], service_level='foo')
-        with self.assertRaisesRegexp(exceptions.ValidationError, r'.*only applicable with --available'):
+        with self.assertRaisesRegex(exceptions.ValidationError, r'.*only applicable with --available'):
             service.validate_options(options)
         options['pool_subsets'].append('available')
         service.validate_options(options)
@@ -209,7 +209,7 @@ class TestEntitlementService(InjectionMockingTest):
     def test_match_installed_requires_available(self):
         service = EntitlementService()
         options = self._build_options(pool_subsets=['installed', 'consumed'], match_installed=True)
-        with self.assertRaisesRegexp(exceptions.ValidationError, r'.*only applicable with --available'):
+        with self.assertRaisesRegex(exceptions.ValidationError, r'.*only applicable with --available'):
             service.validate_options(options)
         options['pool_subsets'].append('available')
         service.validate_options(options)
@@ -217,7 +217,7 @@ class TestEntitlementService(InjectionMockingTest):
     def test_no_overlap_requires_available(self):
         service = EntitlementService()
         options = self._build_options(pool_subsets=['installed', 'consumed'], no_overlap=True)
-        with self.assertRaisesRegexp(exceptions.ValidationError, r'.*only applicable with --available'):
+        with self.assertRaisesRegex(exceptions.ValidationError, r'.*only applicable with --available'):
             service.validate_options(options)
         options['pool_subsets'].append('available')
         service.validate_options(options)
@@ -225,7 +225,7 @@ class TestEntitlementService(InjectionMockingTest):
     def test_pool_only_requires_consumed_or_available(self):
         service = EntitlementService()
         options = self._build_options(pool_subsets=['installed'], pool_only=True)
-        with self.assertRaisesRegexp(exceptions.ValidationError, r'.*only applicable with --available'):
+        with self.assertRaisesRegex(exceptions.ValidationError, r'.*only applicable with --available'):
             service.validate_options(options)
         options['pool_subsets'].append('available')
         service.validate_options(options)
@@ -234,7 +234,7 @@ class TestEntitlementService(InjectionMockingTest):
         service = EntitlementService()
         self.mock_identity.is_valid.return_value = False
         options = self._build_options(pool_subsets=['available'])
-        with self.assertRaisesRegexp(exceptions.ValidationError, r'.*not registered.*'):
+        with self.assertRaisesRegex(exceptions.ValidationError, r'.*not registered.*'):
             service.validate_options(options)
 
     @mock.patch('rhsmlib.services.entitlement.managerlib')
