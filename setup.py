@@ -230,12 +230,7 @@ class install_data(_install_data):
         else:
             source_dir = self.join('build', 'dbus', 'system-services')
         for template_file in os.listdir(source_dir):
-            if template_file == 'com.redhat.SubscriptionManager.service' and not self.with_subman_gui:
-                # com.redhat.SubscriptionManager.service contains definition of the service to be started
-                # for D-Bus service: com.redhat.SubscriptionManager. It is necessary only for sub-man-gui.
-                print('Skipping %s, because subscription-manager-gui will not be installed' % template_file)
-            else:
-                self.data_files.append((dbus_service_directory, [self.join(source_dir, template_file)]))
+            self.data_files.append((dbus_service_directory, [self.join(source_dir, template_file)]))
 
     def add_systemd_services(self):
         """
