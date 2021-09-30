@@ -125,5 +125,5 @@ class DmiFirmwareInfoCollector(collector.FactsCollector):
     def log_warnings(self, dmidecode):
         dmiwarnings = dmidecode.get_warnings()
         if dmiwarnings:
-            log.warn(_("Error reading system DMI information: {dmiwarnings}").format(dmiwarnings=dmiwarnings), exc_info=True)
+            log.warning(_("Error reading system DMI information: {dmiwarnings}").format(dmiwarnings=dmiwarnings), exc_info=True)
             dmidecode.clear_warnings()

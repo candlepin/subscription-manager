@@ -74,7 +74,7 @@ class HealingUpdateAction(object):
         consumer = self.uep.getConsumer(uuid)
 
         if 'autoheal' not in consumer or not consumer['autoheal']:
-            log.warn("Auto-heal disabled on server, skipping.")
+            log.warning("Auto-heal disabled on server, skipping.")
             return 0
 
         try:
@@ -92,8 +92,7 @@ class HealingUpdateAction(object):
 
             cert_updater = entcertlib.EntCertActionInvoker()
             if not cs.is_valid():
-                log.warn("Found invalid entitlements for today: %s" %
-                         today)
+                log.warning("Found invalid entitlements for today: %s" % today)
                 self.plugin_manager.run("pre_auto_attach", consumer_uuid=uuid)
                 ents = self.uep.bind(uuid, today)
                 self.plugin_manager.run("post_auto_attach", consumer_uuid=uuid,
@@ -110,10 +109,9 @@ class HealingUpdateAction(object):
                     # Edge case here, not even sure this can happen as we
                     # should have a compliant until date if we're valid
                     # today, but just in case:
-                    log.warn("Got valid status from server but no valid until date.")
+                    log.warning("Got valid status from server but no valid until date.")
                 elif tomorrow > cs.compliant_until:
-                    log.warn("Entitlements will be invalid by tomorrow: %s" %
-                             tomorrow)
+                    log.warning("Entitlements will be invalid by tomorrow: %s" % tomorrow)
                     self.plugin_manager.run("pre_auto_attach", consumer_uuid=uuid)
                     ents = self.uep.bind(uuid, tomorrow)
                     self.plugin_manager.run("post_auto_attach", consumer_uuid=uuid,

@@ -296,7 +296,7 @@ class EntCertUpdateAction(object):
                 self.report.rogue.append(cert)
             except OSError as er:
                 log.exception(er)
-                log.warn("Failed to delete cert")
+                log.warning("Failed to delete cert")
 
         # If we just deleted certs, we need to refresh the now stale
         # entitlement directory before we go to delete expired certs.

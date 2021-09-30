@@ -65,7 +65,7 @@ class ValidProductDateRangeCalculator(object):
                                  parse_date(prod['endDate']))
             else:
                 # If startDate / endDate not supported
-                log.warn("Server does not support product date ranges.")
+                log.warning("Server does not support product date ranges.")
                 return None
 
         # At this point, we haven't found the installed product that was

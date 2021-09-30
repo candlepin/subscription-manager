@@ -993,8 +993,8 @@ class TestGetProcessNamesAndIsProcessRunning(fixture.SubManFixture):
         mopen.side_effect = new_open
         res = get_process_names()
         res = list(res)
-        self.assertEquals(res, [fake_process_name],
-                          "Expected a list containing '%s', Actual: %s" % (fake_process_name, res))
+        self.assertEqual(res, [fake_process_name],
+                         "Expected a list containing '%s', Actual: %s" % (fake_process_name, res))
 
     def test_get_process_names_ioerror(self):
         """
@@ -1017,4 +1017,4 @@ class TestGetProcessNamesAndIsProcessRunning(fixture.SubManFixture):
         mopen.side_effect = new_open
         res = get_process_names()
         res = list(res)
-        self.assertEquals(res, [fake_process_name], "Expected an empty list, Actual: %s" % res)
+        self.assertEqual(res, [fake_process_name], "Expected an empty list, Actual: %s" % res)
