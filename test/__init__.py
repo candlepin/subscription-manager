@@ -5,9 +5,6 @@ from typing import Callable, List
 
 import pytest
 
-from . import rhsm_display
-rhsm_display.set_display()
-
 # Hijack sys.path, so we don't have to use 'PYTHONPATH=src/' prefix
 rootdir = pathlib.Path(__file__).parent.parent
 sys.path.insert(0, str(rootdir / "src"))
