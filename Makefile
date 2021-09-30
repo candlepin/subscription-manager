@@ -153,7 +153,7 @@ clean:
 	rm -f bin/rhsmcertd
 	rm -f bin/rhsm-icon
 	$(PYTHON) ./setup.py clean --all
-	rm -rf cover/ htmlcov/ docs/sphinx/_build/ build/ dist/
+	rm -rf cover/ htmlcov/ build/ dist/
 
 .PHONY: mkdir-bin
 mkdir-bin:
@@ -431,10 +431,6 @@ ifdef ghprbPullId
 else
 	$(PYTHON) ./setup.py -q nosetests -c playpen/noserc.ci
 endif
-
-.PHONY: docs
-docs:
-	$(PYTHON) setup.py build_sphinx
 
 .PHONY: gettext
 gettext:
