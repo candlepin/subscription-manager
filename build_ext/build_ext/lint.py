@@ -11,13 +11,11 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 import ast
-import re
 import tokenize
 
 from distutils.spawn import spawn
-from distutils.text_file import TextFile
 
-from build_ext.utils import Utils, BaseCommand, memoize
+from build_ext.utils import Utils, BaseCommand
 
 # These dependencies aren't available in build environments.  We won't need any
 # linting functionality there though, so just create a dummy class so we can proceed.
@@ -53,13 +51,6 @@ class Lint(BaseCommand):
     def has_pure_modules(self):
         return self.distribution.has_pure_modules()
 
-    def has_glade_files(self):
-        try:
-            next(Utils.find_files_of_type('src', '*.glade'))
-            return True
-        except StopIteration:
-            return False
-
     def has_spec_file(self):
         try:
             next(Utils.find_files_of_type('.', '*.spec'))
@@ -73,7 +64,6 @@ class Lint(BaseCommand):
 
     # Defined at the end since it references unbound methods
     sub_commands = [
-        ('lint_glade', has_glade_files),
         ('lint_rpm', has_spec_file),
         ('flake8', has_pure_modules),
     ]
@@ -85,52 +75,6 @@ class RpmLint(BaseCommand):
     def run(self):
         for f in Utils.find_files_of_type('.', '*.spec'):
             spawn(['rpmlint', '--file=rpmlint.config', f])
-
-
-class FileLint(BaseCommand):
-    def scan_file(self, f, regexs):
-        # Use TextFile since it has a nice function to print a warning with the
-        # offending line's number.
-        text_file = TextFile(f)
-
-        # Thanks to http://stackoverflow.com/a/17502838/6124862
-        contents = '\n'.join(text_file.readlines())
-        for r in regexs:
-            regex = re.compile(r, flags=re.MULTILINE | re.DOTALL)
-            for match in regex.finditer(contents):
-                lineno = contents.count('\n', 0, match.start())
-                text_file.warn("Found '%s' match" % r, lineno)
-        text_file.close()
-
-    def scan_xml(self, f, xpath_expressions, namespaces=None):
-        if not namespaces:
-            namespaces = {}
-
-        text_file = TextFile(f)
-        tree = ElementTree.parse(f)
-
-        for x in xpath_expressions:
-            # Python 2.6's element tree doesn't support findall with namespaces
-            # we aren't currently using namespaces so put in a shim to be compatible
-            # If we ever need to specify namespaces, we are not going to be able
-            # to run this code on 2.6
-            if namespaces:
-                elements = tree.findall(x, namespaces)
-            else:
-                elements = tree.findall(x)
-
-            for e in elements:
-                text_file.warn("Found '%s' match" % x, e.sourceline)
-        text_file.close()
-
-
-class GladeLint(FileLint):
-    """See BZ #826874.  Certain attributes cause issues on older libglade."""
-    description = "check Glade files for common errors"
-
-    def run(self):
-        for f in Utils.find_files_of_type('src', '*.glade'):
-            self.scan_xml(f, [".//property[@name='orientation']", ".//*[@swapped='no']"])
 
 
 class AstVisitor(object):
@@ -161,73 +105,6 @@ class AstVisitor(object):
                         self.visit(item)
             elif isinstance(value, ast.AST):
                 self.visit(value)
-
-
-class WidgetVisitor(AstVisitor):
-    """Look for widgets that are used in code but not declared in the Glade files."""
-    codes = ['X100']
-
-    class StrVisitor(AstVisitor):
-        def visit_Str(self, node):
-            return node.s
-
-    class NameVisitor(AstVisitor):
-        def visit_Name(self, node):
-            return node.id
-
-    def __init__(self, defined_widgets=None):
-        super(WidgetVisitor, self).__init__()
-        if not defined_widgets:
-            defined_widgets = []
-
-        self.defined_widgets = set(defined_widgets)
-
-    def visit_Assign(self, node):
-        # Likely not necessary but prudent
-        self.generic_visit(node)
-
-        for target in node.targets:
-            names = self.NameVisitor().visit(target)
-            for name in names:
-                if name in ['widget', 'widget_names']:
-                    widgets = set(self.StrVisitor().visit(node.value))
-                    widgets.difference_update(self.defined_widgets)
-                    if widgets:
-                        return (node, "X100 widgets %s are not defined in the Glade files" % list(widgets))
-
-
-class SignalVisitor(AstVisitor):
-    """Look for signals that are used in code but not declared in the Glade files."""
-    codes = ['X101']
-
-    class DictVisitor(AstVisitor):
-        def visit_Dict(self, node):
-            # Note this will break if someone uses a Name for a key instead of an Str
-            # Hopefully no one will do that because we wouldn't be able to get at the value
-            # the Name holds
-            return [k.s for k in node.keys]
-
-    def __init__(self, defined_handlers=None):
-        super(SignalVisitor, self).__init__()
-        if not defined_handlers:
-            defined_handlers = []
-
-        self.defined_handlers = set(defined_handlers)
-
-    def visit_Call(self, node):
-        self.generic_visit(node)
-
-        func = node.func
-        if not isinstance(func, ast.Attribute):
-            return
-
-        if func.attr == 'connect_signals':
-            keys = self.DictVisitor().visit(node.args[0])
-            # Flatten the list of lists
-            handlers = set([item for sublist in keys for item in sublist])
-            handlers.difference_update(self.defined_handlers)
-            if handlers:
-                return (node, "X101 handlers %s are not defined in the Glade files" % list(handlers))
 
 
 class DebugImportVisitor(AstVisitor):
@@ -298,50 +175,10 @@ class AstChecker(object):
         self.tree = tree
         self.filename = filename
 
-        widgets = []
-        handlers = []
-        for f in Utils.find_files_of_type('src', '*.glade', '*.ui'):
-            # Note that we are sending in the file name rather than a file handle.  By using
-            # the file name, we can take advantage of memoizing on the name instead of on an
-            # instance of a file handle
-            widgets.extend(self.scan_widgets(f))
-            handlers.extend(self.scan_handlers(f))
-
         self.visitors = [
             (GettextVisitor, {}),
             (DebugImportVisitor, {}),
-            (WidgetVisitor, {'defined_widgets': widgets}),
-            (SignalVisitor, {'defined_handlers': handlers}),
         ]
-
-    @staticmethod
-    @memoize
-    def scan_widgets(f):
-        """Scan a file for object elements with a class and id attribute.  Return
-        the value of the id attribute.
-        """
-
-        # We cache all the results because this class gets instantiated for every
-        # source file and this method scans every Glade file.  That would be a lot
-        # of redundant XML parsing (N source files * M Glade files) if we didn't memoize it.
-        widgets = []
-        with open(f, 'r') as f:
-            tree = ElementTree.parse(f)
-        elements = tree.findall(".//object[@class][@id]")
-        for e in elements:
-            widgets.append(e.attrib['id'])
-        return widgets
-
-    @staticmethod
-    @memoize
-    def scan_handlers(f):
-        handlers = []
-        with open(f, 'r') as f:
-            tree = ElementTree.parse(f)
-        elements = tree.findall(".//signal[@name][@handler]")
-        for e in elements:
-            handlers.append(e.attrib['handler'])
-        return handlers
 
     def run(self):
         if self.tree:

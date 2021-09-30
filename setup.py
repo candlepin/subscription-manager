@@ -304,7 +304,6 @@ cmdclass = {
     'uniq_trans': i18n.UniqTrans,
     'gettext': GettextWithArgparse,
     'lint': lint.Lint,
-    'lint_glade': lint.GladeLint,
     'lint_rpm': lint.RpmLint,
     'flake8': lint.PluginLoadingFlake8
 }

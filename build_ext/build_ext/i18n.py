@@ -137,12 +137,6 @@ class Gettext(BaseCommand):
         files.extend(list(Utils.find_files_of_type('tmp', '*.h')))
         return files
 
-    def find_glade(self):
-        files = []
-        for src in self.src_dirs.values():
-            files.extend(list(Utils.find_files_of_type(src, '*.ui', '*.glade')))
-        return files
-
     def find_js(self):
         files = []
         files.extend(list(Utils.find_files_of_type('cockpit/src', '*.js', '*.jsx')))
@@ -188,7 +182,6 @@ class Gettext(BaseCommand):
             # _() and N_() functions.
             ('%s.c_files', self.find_c, 'C', ['-k_', '-kN_']),
             ('%s.py_files', self.find_py, 'Python', []),
-            ('%s.glade_files', self.find_glade, 'Glade', []),
             ('%s.js_files', self.find_js, 'JavaScript', []),
         ]
 
