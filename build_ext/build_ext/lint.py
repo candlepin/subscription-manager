@@ -11,13 +11,10 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 import ast
-import re
-import tokenize
 
 from distutils.spawn import spawn
-from distutils.text_file import TextFile
 
-from build_ext.utils import Utils, BaseCommand, memoize
+from build_ext.utils import Utils, BaseCommand
 
 # These dependencies aren't available in build environments.  We won't need any
 # linting functionality there though, so just create a dummy class so we can proceed.
@@ -38,27 +35,12 @@ except ImportError:
         def __init__(self, *args, **kwargs):
             raise NotImplementedError("flake8 could not be imported")
 
-try:
-    from lxml import etree as ElementTree
-except ImportError:
-    class ElementTree(object):
-        @staticmethod
-        def parse(*args, **kwargs):
-            raise NotImplementedError("lxml could not be imported")
-
 
 class Lint(BaseCommand):
     description = "examine code for errors"
 
     def has_pure_modules(self):
         return self.distribution.has_pure_modules()
-
-    def has_glade_files(self):
-        try:
-            next(Utils.find_files_of_type('src', '*.glade'))
-            return True
-        except StopIteration:
-            return False
 
     def has_spec_file(self):
         try:
@@ -73,7 +55,6 @@ class Lint(BaseCommand):
 
     # Defined at the end since it references unbound methods
     sub_commands = [
-        ('lint_glade', has_glade_files),
         ('lint_rpm', has_spec_file),
         ('flake8', has_pure_modules),
     ]
@@ -85,52 +66,6 @@ class RpmLint(BaseCommand):
     def run(self):
         for f in Utils.find_files_of_type('.', '*.spec'):
             spawn(['rpmlint', '--file=rpmlint.config', f])
-
-
-class FileLint(BaseCommand):
-    def scan_file(self, f, regexs):
-        # Use TextFile since it has a nice function to print a warning with the
-        # offending line's number.
-        text_file = TextFile(f)
-
-        # Thanks to http://stackoverflow.com/a/17502838/6124862
-        contents = '\n'.join(text_file.readlines())
-        for r in regexs:
-            regex = re.compile(r, flags=re.MULTILINE | re.DOTALL)
-            for match in regex.finditer(contents):
-                lineno = contents.count('\n', 0, match.start())
-                text_file.warn("Found '%s' match" % r, lineno)
-        text_file.close()
-
-    def scan_xml(self, f, xpath_expressions, namespaces=None):
-        if not namespaces:
-            namespaces = {}
-
-        text_file = TextFile(f)
-        tree = ElementTree.parse(f)
-
-        for x in xpath_expressions:
-            # Python 2.6's element tree doesn't support findall with namespaces
-            # we aren't currently using namespaces so put in a shim to be compatible
-            # If we ever need to specify namespaces, we are not going to be able
-            # to run this code on 2.6
-            if namespaces:
-                elements = tree.findall(x, namespaces)
-            else:
-                elements = tree.findall(x)
-
-            for e in elements:
-                text_file.warn("Found '%s' match" % x, e.sourceline)
-        text_file.close()
-
-
-class GladeLint(FileLint):
-    """See BZ #826874.  Certain attributes cause issues on older libglade."""
-    description = "check Glade files for common errors"
-
-    def run(self):
-        for f in Utils.find_files_of_type('src', '*.glade'):
-            self.scan_xml(f, [".//property[@name='orientation']", ".//*[@swapped='no']"])
 
 
 class AstVisitor(object):
@@ -161,73 +96,6 @@ class AstVisitor(object):
                         self.visit(item)
             elif isinstance(value, ast.AST):
                 self.visit(value)
-
-
-class WidgetVisitor(AstVisitor):
-    """Look for widgets that are used in code but not declared in the Glade files."""
-    codes = ['X100']
-
-    class StrVisitor(AstVisitor):
-        def visit_Str(self, node):
-            return node.s
-
-    class NameVisitor(AstVisitor):
-        def visit_Name(self, node):
-            return node.id
-
-    def __init__(self, defined_widgets=None):
-        super(WidgetVisitor, self).__init__()
-        if not defined_widgets:
-            defined_widgets = []
-
-        self.defined_widgets = set(defined_widgets)
-
-    def visit_Assign(self, node):
-        # Likely not necessary but prudent
-        self.generic_visit(node)
-
-        for target in node.targets:
-            names = self.NameVisitor().visit(target)
-            for name in names:
-                if name in ['widget', 'widget_names']:
-                    widgets = set(self.StrVisitor().visit(node.value))
-                    widgets.difference_update(self.defined_widgets)
-                    if widgets:
-                        return (node, "X100 widgets %s are not defined in the Glade files" % list(widgets))
-
-
-class SignalVisitor(AstVisitor):
-    """Look for signals that are used in code but not declared in the Glade files."""
-    codes = ['X101']
-
-    class DictVisitor(AstVisitor):
-        def visit_Dict(self, node):
-            # Note this will break if someone uses a Name for a key instead of an Str
-            # Hopefully no one will do that because we wouldn't be able to get at the value
-            # the Name holds
-            return [k.s for k in node.keys]
-
-    def __init__(self, defined_handlers=None):
-        super(SignalVisitor, self).__init__()
-        if not defined_handlers:
-            defined_handlers = []
-
-        self.defined_handlers = set(defined_handlers)
-
-    def visit_Call(self, node):
-        self.generic_visit(node)
-
-        func = node.func
-        if not isinstance(func, ast.Attribute):
-            return
-
-        if func.attr == 'connect_signals':
-            keys = self.DictVisitor().visit(node.args[0])
-            # Flatten the list of lists
-            handlers = set([item for sublist in keys for item in sublist])
-            handlers.difference_update(self.defined_handlers)
-            if handlers:
-                return (node, "X101 handlers %s are not defined in the Glade files" % list(handlers))
 
 
 class DebugImportVisitor(AstVisitor):
@@ -298,50 +166,10 @@ class AstChecker(object):
         self.tree = tree
         self.filename = filename
 
-        widgets = []
-        handlers = []
-        for f in Utils.find_files_of_type('src', '*.glade', '*.ui'):
-            # Note that we are sending in the file name rather than a file handle.  By using
-            # the file name, we can take advantage of memoizing on the name instead of on an
-            # instance of a file handle
-            widgets.extend(self.scan_widgets(f))
-            handlers.extend(self.scan_handlers(f))
-
         self.visitors = [
             (GettextVisitor, {}),
             (DebugImportVisitor, {}),
-            (WidgetVisitor, {'defined_widgets': widgets}),
-            (SignalVisitor, {'defined_handlers': handlers}),
         ]
-
-    @staticmethod
-    @memoize
-    def scan_widgets(f):
-        """Scan a file for object elements with a class and id attribute.  Return
-        the value of the id attribute.
-        """
-
-        # We cache all the results because this class gets instantiated for every
-        # source file and this method scans every Glade file.  That would be a lot
-        # of redundant XML parsing (N source files * M Glade files) if we didn't memoize it.
-        widgets = []
-        with open(f, 'r') as f:
-            tree = ElementTree.parse(f)
-        elements = tree.findall(".//object[@class][@id]")
-        for e in elements:
-            widgets.append(e.attrib['id'])
-        return widgets
-
-    @staticmethod
-    @memoize
-    def scan_handlers(f):
-        handlers = []
-        with open(f, 'r') as f:
-            tree = ElementTree.parse(f)
-        elements = tree.findall(".//signal[@name][@handler]")
-        for e in elements:
-            handlers.append(e.attrib['handler'])
-        return handlers
 
     def run(self):
         if self.tree:
@@ -368,110 +196,6 @@ class AstChecker(object):
 
         ret = (lineno, col_offset, msg, self)
         return ret
-
-
-def detect_overindent(logical_line, tokens, indent_level, hang_closing, indent_char, noqa, verbose):
-    """Flag lines that are overindented.  This includes lines that are indented solely to align
-    vertically with an opening brace.  This rule allows continuation lines to be relatively
-    indented up to 8 spaces and closes braces to be relatively indented up to 4 spaces.  Heavily
-    adapted from pycodestyle's continued_indentation method
-
-    Okay: foo = my_func('hello',
-              'world'
-              )
-    Okay: foo = my_func('hello',
-                  'world')
-
-    Okay: foo = my_func('hello',
-              )
-
-    E198: foo = my_func('hello',
-                       )
-    E199: foo = my_func('hello',
-                        'world')
-    """
-    first_row = tokens[0][2][0]
-    nrows = 1 + tokens[-1][2][0] - first_row
-    if noqa or nrows == 1:
-        return
-
-    row = depth = 0
-
-    # relative indents of physical lines
-    rel_indent = [0] * nrows
-    open_rows = [[0]]
-    last_indent = tokens[0][2]
-    indent = [last_indent[1]]
-
-    last_token_multiline = False
-
-    if verbose >= 3:
-        print(">>> " + tokens[0][4].rstrip())
-
-    for token_type, text, start, end, line in tokens:
-        newline = row < start[0] - first_row
-        if newline:
-            row = start[0] - first_row
-            newline = not last_token_multiline and token_type not in pycodestyle.NEWLINE
-
-        if newline:
-            # this is the beginning of a continuation line.
-            last_indent = start
-            if verbose >= 3:
-                print("... " + line.rstrip())
-
-            # record the initial indent.
-            rel_indent[row] = pycodestyle.expand_indent(line) - indent_level
-
-            # identify closing bracket
-            close_bracket = (token_type == tokenize.OP and text in ']})')
-
-            # is the indent relative to an opening bracket line?
-            for open_row in reversed(open_rows[depth]):
-                hang = rel_indent[row] - rel_indent[open_row]
-
-            if not close_bracket and hang > 8:
-                yield start, "E199 continuation line over-indented"
-
-            if close_bracket and hang > 4:
-                yield (start, "E198 closing bracket over-indented")
-
-        # Keep track of bracket depth to check for proper indentation in nested
-        # brackets
-        # E.g.
-        # Okay: foo = [[
-        #           '1'
-        #       ]]
-        #
-        # but even though we are nested twice, we should only allow one level of indentation, so:
-        #
-        # E199: foo = [[
-        #               '1'
-        #       ]]
-
-        if token_type == tokenize.OP:
-            if text in '([{':
-                depth += 1
-                indent.append(0)
-                if len(open_rows) == depth:
-                    open_rows.append([])
-                open_rows[depth].append(row)
-                if verbose >= 4:
-                    print("bracket depth %s seen, col %s, visual min = %s" %
-                          (depth, start[1], indent[depth]))
-            elif text in ')]}' and depth > 0:
-                # parent indents should not be more than this one
-                prev_indent = indent.pop() or last_indent[1]
-                for d in range(depth):
-                    if indent[d] > prev_indent:
-                        indent[d] = 0
-                del open_rows[depth + 1:]
-                depth -= 1
-            assert len(indent) == depth + 1
-
-        last_token_multiline = (start[0] != end[0])
-        if last_token_multiline:
-            rel_indent[end[0] - first_row] = rel_indent[row]
 
 
 class PluginLoadingFlake8(Flake8):

@@ -23,7 +23,6 @@ test_require = [
 
 install_requires = [
     'flake8',
-    'lxml'
 ]
 
 setup(

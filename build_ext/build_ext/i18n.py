@@ -64,8 +64,6 @@ class BuildTrans(BaseCommand):
             output_file = os.path.basename("%s" % os.path.splitext(desktop_file)[0])
 
             dest_path = os.path.join(self.build_base, 'applications')
-            if output_file == 'rhsm-icon.desktop':
-                dest_path = os.path.join(self.build_base, 'autostart')
             dest = os.path.join(dest_path, output_file)
             Utils.run_if_new(desktop_file, dest, self.merge_desktop)
 
@@ -137,12 +135,6 @@ class Gettext(BaseCommand):
         files.extend(list(Utils.find_files_of_type('tmp', '*.h')))
         return files
 
-    def find_glade(self):
-        files = []
-        for src in self.src_dirs.values():
-            files.extend(list(Utils.find_files_of_type(src, '*.ui', '*.glade')))
-        return files
-
     def find_js(self):
         files = []
         files.extend(list(Utils.find_files_of_type('cockpit/src', '*.js', '*.jsx')))
@@ -188,7 +180,6 @@ class Gettext(BaseCommand):
             # _() and N_() functions.
             ('%s.c_files', self.find_c, 'C', ['-k_', '-kN_']),
             ('%s.py_files', self.find_py, 'Python', []),
-            ('%s.glade_files', self.find_glade, 'Glade', []),
             ('%s.js_files', self.find_js, 'JavaScript', []),
         ]
 

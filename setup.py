@@ -28,7 +28,7 @@ from distutils.command.build import build as _build
 from distutils.command.build_py import build_py as _build_py
 
 # Note that importing build_ext alone won't be enough to make certain tasks (like lint) work
-# those tasks require that some dependencies (e.g. lxml) be installed.  Munging the syspath
+# those tasks require that some dependencies be installed.  Munging the syspath
 # here is just so that setup.py will be able to load and run in Jenkins jobs and RPM builds
 # that don't set up a proper development environment.
 build_ext_home = os.path.abspath(os.path.join(os.path.dirname(__file__), "./build_ext"))
@@ -230,12 +230,7 @@ class install_data(_install_data):
         else:
             source_dir = self.join('build', 'dbus', 'system-services')
         for template_file in os.listdir(source_dir):
-            if template_file == 'com.redhat.SubscriptionManager.service' and not self.with_subman_gui:
-                # com.redhat.SubscriptionManager.service contains definition of the service to be started
-                # for D-Bus service: com.redhat.SubscriptionManager. It is necessary only for sub-man-gui.
-                print('Skipping %s, because subscription-manager-gui will not be installed' % template_file)
-            else:
-                self.data_files.append((dbus_service_directory, [self.join(source_dir, template_file)]))
+            self.data_files.append((dbus_service_directory, [self.join(source_dir, template_file)]))
 
     def add_systemd_services(self):
         """
@@ -289,7 +284,6 @@ test_require = [
     'coverage',
     'polib',
     'flake8',
-    'lxml',
 ] + install_requires + setup_requires
 
 cmdclass = {
@@ -304,7 +298,6 @@ cmdclass = {
     'uniq_trans': i18n.UniqTrans,
     'gettext': GettextWithArgparse,
     'lint': lint.Lint,
-    'lint_glade': lint.GladeLint,
     'lint_rpm': lint.RpmLint,
     'flake8': lint.PluginLoadingFlake8
 }
