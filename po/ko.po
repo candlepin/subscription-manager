@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-16 11:56-0400\n"
-"PO-Revision-Date: 2021-09-18 14:05+0000\n"
+"PO-Revision-Date: 2021-10-01 02:05+0000\n"
 "Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ko/>\n"
@@ -1388,7 +1388,7 @@ msgstr "%(prog)s {name} [선택(옵션)] "
 
 #: src/rhsm_debug/debug_commands.py:90
 msgid "The directory specified by '--destination' must already exist."
-msgstr "'--destination'에서 지정된 디렉토리가 이미 존재해야만 합니다."
+msgstr "'--destination'으로 지정된 디렉토리가 이미 존재해야 합니다."
 
 #: src/rhsm_debug/debug_commands.py:94
 #, python-format
@@ -1804,7 +1804,7 @@ msgid ""
 "To learn how to unregister from either service please consult this Knowledge "
 "Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
-"서비스로 부터 등록 해제하는 방법을 습득하려면 기술 자료 문서를 참조하십시오: "
+"서비스로부터 등록 해제하는 방법을 습득하려면 지식 기반 문서(Knowledge Base Article)를 참조하세요: "
 "https://access.redhat.com/kb/docs/DOC-45563"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -2007,7 +2007,7 @@ msgstr "서버 URL은 단순한 스키마입니다. 호스트이름, 포트 및 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:41
 msgid "Server URL can not be None"
-msgstr "서버 URL이 없을 수 없음"
+msgstr "서버 URL을 빈 칸으로 둘 수 없음"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:42
@@ -4558,14 +4558,13 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
-"경고 : 최근 인타이틀먼트 서버 관리자가 \"{download_value}\"의 {attr}를 이 시"
-"스템에 설정했습니다.\n"
+"경고: 최근 자격 서버 관리자가 \"{download_value}\"의 {attr}를 이 시스템에 설정했습니다.\n"
 "{advice}"
 
 #: src/subscription_manager/managercli.py:203
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
-msgstr "서버 측 변경 사항을 덮어 쓰려면 다음 명령을 실행하십시오: {command}"
+msgstr "서버 측 변경 사항을 덮어 쓰기 하려면 다음을 실행하세요: {command}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #. TRANSLATORS: this refers to a deprecated command
@@ -4761,7 +4760,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:816
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
-msgstr "{attr}이/가 \"{val}\"로 설정되었습니다."
+msgstr "{attr}이 \"{val}\"로 설정되었습니다."
 
 #: src/subscription_manager/managercli.py:833
 #, python-brace-format
@@ -4828,7 +4827,7 @@ msgstr "서버 인증시 사용할 사용자 이름"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1038
 msgid "password to use when authorizing against the server"
-msgstr "서버 인증시 사용 할 암호"
+msgstr "서버 인증시 사용 할 비밀번호"
 
 #: src/subscription_manager/managercli.py:1040
 msgid "token to use when authorizing against the server"
@@ -5406,7 +5405,7 @@ msgstr "할당할 풀 ID (한 번 이상 지정할 수 있음)"
 
 #: src/subscription_manager/managercli.py:2268
 msgid "Number of subscriptions to attach. May not be used with an auto-attach."
-msgstr "할당할 서브스크립션 수입니다. auto-attach와 함께 사용 할 수 없습니다."
+msgstr "할당 할 서브스크립션 수입니다. auto-attach와 함께 사용 할 수 없습니다."
 
 #: src/subscription_manager/managercli.py:2270
 msgid ""
@@ -6178,8 +6177,7 @@ msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status.\n"
 msgstr ""
-"컨텐츠 액세스 모드가 단순 컨텐츠 접근으로 설정되어 있습니다. 이 호스트는 서브"
-"스크립션 상태에 관계없이 컨텐츠에 접근 할 수 있습니다.\n"
+"컨텐츠 접근 방식이 단순 컨텐츠 접근으로 설정되어 있습니다. 이 호스트는 서브스크립션 상태에 관계없이 컨텐츠에 접근 할 수 있습니다.\n"
 
 #: src/subscription_manager/managercli.py:3532
 #, python-format
