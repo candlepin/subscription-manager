@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-16 11:56-0400\n"
-"PO-Revision-Date: 2021-09-07 16:04+0000\n"
+"PO-Revision-Date: 2021-09-28 21:05+0000\n"
 "Last-Translator: Emilio Herrera <ehespinosa57@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/es/>\n"
@@ -20,38 +20,36 @@ msgstr ""
 "X-Generator: Weblate 4.8\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
-#, fuzzy
-#| msgid "Usage:  "
 msgid "usage: "
-msgstr "Uso:  "
+msgstr "uso: "
 
 #: /usr/lib64/python3.6/argparse.py:830
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() no definido"
 
 #: /usr/lib64/python3.6/argparse.py:1127
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr ""
+msgstr "analizador desconocido %(parser_name)r (opciones: %(choices)s)"
 
 #: /usr/lib64/python3.6/argparse.py:1181
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr ""
+msgstr "argumento \"-\" con modo %r"
 
 #: /usr/lib64/python3.6/argparse.py:1189
 #, python-format
 msgid "can't open '%s': %s"
-msgstr ""
+msgstr "no se puede abrir '%s': %s"
 
 #: /usr/lib64/python3.6/argparse.py:1393
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "no se pueden fusionar acciones - hay dos grupos llamados %r"
 
 #: /usr/lib64/python3.6/argparse.py:1431
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "'required' en un argumento no válido para posicionales"
 
 #: /usr/lib64/python3.6/argparse.py:1453
 #, python-format
@@ -59,41 +57,39 @@ msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
 msgstr ""
+"opción de cadena no válida %(option)r: debe empezar con un carácter "
+"%(prefix_chars)r"
 
 #: /usr/lib64/python3.6/argparse.py:1473
 #, python-format
 msgid "dest= is required for options like %r"
-msgstr ""
+msgstr "dest= se requiere para opciones como %r"
 
 #: /usr/lib64/python3.6/argparse.py:1490
 #, python-format
 msgid "invalid conflict_resolution value: %r"
-msgstr ""
+msgstr "valor no válido de conflict_resolution: %r"
 
 #: /usr/lib64/python3.6/argparse.py:1508
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "cadena de opciones en conflicto: %s"
+msgstr[1] "cadenas de opciones en conflicto: %s"
 
 #: /usr/lib64/python3.6/argparse.py:1574
 msgid "mutually exclusive arguments must be optional"
-msgstr ""
+msgstr "los argumentos mutuamente excluyentes deben ser opcionales"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:1637
-#, fuzzy
-#| msgid "%s option requires an argument"
 msgid "positional arguments"
-msgstr "opción %s requiere un argumento"
+msgstr "Argumentos posicionales"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:1638
-#, fuzzy
-#| msgid "%s option requires an argument"
 msgid "optional arguments"
-msgstr "opción %s requiere un argumento"
+msgstr "Argumentos opcionales"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:1653
@@ -102,97 +98,88 @@ msgstr "mostrar este mensaje de ayuda y salir"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: /usr/lib64/python3.6/argparse.py:1684
-#, fuzzy
-#| msgid "cannot parse argument: %s"
 msgid "cannot have multiple subparser arguments"
-msgstr "No se puede leer argumento: %s"
+msgstr "no se pueden tener varios argumento de sub analizador"
 
 #: /usr/lib64/python3.6/argparse.py:1736
-#, fuzzy, python-format
-#| msgid "Unknown arguments: %s"
+#, python-format
 msgid "unrecognized arguments: %s"
-msgstr "Argumentos desconocidos: %s"
+msgstr "Argumentos no reconocidos: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: /usr/lib64/python3.6/argparse.py:1833
-#, fuzzy, python-format
-#| msgid "cannot parse argument: %s"
+#, python-format
 msgid "not allowed with argument %s"
-msgstr "No se puede leer argumento: %s"
+msgstr "no permitido con argumento: %s"
 
 #: /usr/lib64/python3.6/argparse.py:1879 /usr/lib64/python3.6/argparse.py:1893
 #, python-format
 msgid "ignored explicit argument %r"
-msgstr ""
+msgstr "argumento explícito ignorado %r"
 
 #: /usr/lib64/python3.6/argparse.py:2000
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "se requieren los siguientes argumentos: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2015
-#, fuzzy, python-format
-#| msgid "Wrong number of arguments specified.\n"
+#, python-format
 msgid "one of the arguments %s is required"
-msgstr "Número de argumentos especificados incorrectos.\n"
+msgstr "se requiere uno de los argumentos %s"
 
 #: /usr/lib64/python3.6/argparse.py:2058
 msgid "expected one argument"
-msgstr ""
+msgstr "se espera un argumento"
 
 #: /usr/lib64/python3.6/argparse.py:2059
 msgid "expected at most one argument"
-msgstr ""
+msgstr "se espera como máximo un argumento"
 
 #: /usr/lib64/python3.6/argparse.py:2060
 msgid "expected at least one argument"
-msgstr ""
+msgstr "se espera al menos un argumento"
 
 #: /usr/lib64/python3.6/argparse.py:2062
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "argumento esperado %s"
+msgstr[1] "argumentos esperados %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2122
-#, fuzzy, python-format
-#| msgid "ambiguous option: %s (%s?)"
+#, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr "opción ambigua: %s (%s?)"
+msgstr "opción ambigua: %(option)s podría coincidir %(matches)s"
 
 #: /usr/lib64/python3.6/argparse.py:2185
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "cadena de opción inesperada: %s"
 
 #: /usr/lib64/python3.6/argparse.py:2289
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%r no es invocable"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2306
-#, fuzzy, python-format
-#| msgid "option %s: invalid %s value: %r"
+#, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr "opción %s: valor de %s inválido: %r"
+msgstr "no válido %(type)s de valor: %(value)r"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2317
-#, fuzzy, python-format
-#| msgid "option %s: invalid choice: %r (choose from %s)"
+#, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
-msgstr "opción %s: elección inválida: %r (elija de %s)"
+msgstr "opción no válida: %(value)r (escoja de %(choices)s)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2393
-#, fuzzy, python-format
-#| msgid "%s: error: %s"
+#, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr "%s: error: %s"
+msgstr "%(prog)s: error: %(message)s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/index.js:64 cockpit/src/subscriptions-view.jsx:305
@@ -249,8 +236,8 @@ msgstr[1] "El paquetes $0 y $1 otros paquetes serán instalados."
 #: cockpit/src/insights.jsx:132
 msgid "$0 package needs to be removed."
 msgid_plural "$0 packages need to be removed."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "es necesario quitar paquete $0."
+msgstr[1] "es necesario quitar paquetes $0."
 
 #: cockpit/src/insights.jsx:146
 msgid "Additional packages:"
@@ -272,61 +259,63 @@ msgstr ""
 
 #: cockpit/src/insights.jsx:173 cockpit/src/insights.jsx:252
 msgid "Checking installed software"
-msgstr ""
+msgstr "Comprobando el software instalado"
 
 #: cockpit/src/insights.jsx:186
 msgid "Downloading $0"
-msgstr ""
+msgstr "Descargando $0"
 
 #: cockpit/src/insights.jsx:188
 msgid "Removing $0"
-msgstr ""
+msgstr "Quitando $0"
 
 #: cockpit/src/insights.jsx:190
 msgid "Installing $0"
-msgstr ""
+msgstr "Instalando $0"
 
 #: cockpit/src/insights.jsx:207
 msgid "Connect to Red Hat Insights"
-msgstr ""
+msgstr "Conectar a Red Hat Insights"
 
 #: cockpit/src/insights.jsx:210
 msgid "This system is not connected to $0."
-msgstr ""
+msgstr "El sistema no puede conectarse a $0."
 
 #: cockpit/src/insights.jsx:220
 msgid "Connect"
-msgstr ""
+msgstr "Conectar"
 
 #: cockpit/src/insights.jsx:313
 msgid "unknown"
-msgstr ""
+msgstr "desconocido"
 
 #: cockpit/src/insights.jsx:366
 msgid "The last Insights data upload has failed."
-msgstr ""
+msgstr "Ha fallado la última subida de datos a Insights ."
 
 #: cockpit/src/insights.jsx:371
 msgid "Connected to Red Hat Insights"
-msgstr ""
+msgstr "Conectado a Red Hat Insights"
 
 #: cockpit/src/insights.jsx:377
 msgid "Next Insights data upload"
-msgstr ""
+msgstr "Siguiente subida de datos a Insights"
 
 #: cockpit/src/insights.jsx:382
 msgid "Last Insights data upload"
-msgstr ""
+msgstr "Últimos datos subidos a Insights"
 
 #: cockpit/src/insights.jsx:403 cockpit/src/insights.jsx:409
 msgid "Disconnect from Insights"
-msgstr ""
+msgstr "Desconectar desde Insights"
 
 #: cockpit/src/insights.jsx:406
 msgid ""
 "If you disconnect this system from Insights, it will no longer report it's "
 "Insights status in Red Hat Cloud or Satellite."
 msgstr ""
+"Si desconecta este sistema de Insights, ya no informará su estado de "
+"Insights en Red Hat Cloud o Satellite."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/insights.jsx:417
