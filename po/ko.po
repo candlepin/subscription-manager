@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
 "PO-Revision-Date: 2023-05-10 05:37+0000\n"
-"Last-Translator: Transtats <suanand@redhat.com>\n"
+"Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ko/>\n"
 "Language: ko\n"
@@ -279,9 +279,9 @@ msgstr ""
 "*** 경고 ***\n"
 "다음 제품의 서브스크립션이 만료되었습니다:\n"
 "%s\n"
-"이러한 제품을 제공하는 저장소에 더 이상 접근 할 수 없습니다.  보안 및 기타 중"
-"대한 최신화에 접근하려면 활성 서브스크립션이 필요합니다. 활성 서브스크립션이 "
-"없을 경우, 만료된 서브스크립션을 갱신 할 수 있습니다.  "
+"이러한 제품을 제공하는 저장소에 더 이상 접근 할 수 없습니다.  보안 및 기타 "
+"중대한 최신화에 접근하려면 활성 서브스크립션이 필요합니다. 활성 "
+"서브스크립션이 없을 경우, 만료된 서브스크립션을 갱신 할 수 있습니다.  "
 
 #: src/plugins/dnf/subscription-manager.py:46
 msgid ""
@@ -290,8 +290,8 @@ msgid ""
 "subscription-manager to register.\n"
 msgstr ""
 "\n"
-"이 시스템은 Red Hat 관리서버에 등록되어 있지 않습니다. subscription-manager"
-"를 사용하여 등록 할 수 있습니다.\n"
+"이 시스템은 Red Hat 관리서버에 등록되어 있지 않습니다. subscription-"
+"manager를 사용하여 등록 할 수 있습니다.\n"
 
 #: src/plugins/dnf/subscription-manager.py:52
 msgid ""
@@ -346,9 +346,8 @@ msgstr "꾸러미 프로필 업로드 작업을 강제 실행합니다"
 #: src/plugins/dnf/upload-profile.py:66
 #: src/subscription_manager/scripts/package_profile_upload.py:37
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
-msgstr ""
-"실행된 최신화가 없습니다. 보다 자세한 내용은 /var/log/rhsm/rhsm.log에서 참조"
-"하십시오."
+msgstr "실행된 최신화가 없습니다. 보다 자세한 내용은 /var/log/rhsm/rhsm.log에서 "
+"참조하십시오."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:33
@@ -655,8 +654,7 @@ msgstr "존재 할 수 있는 파일 덮어쓰기"
 #: src/rct/manifest_commands.py:348
 #, python-brace-format
 msgid "File \"{filename}\" exists. Use -f to force overwriting the file."
-msgstr ""
-"파일 \"{filename}\"이 존재합니다. -f 를 사용하여 파일 덮어쓰기를 강제합니다."
+msgstr "파일 \"{filename}\"이 존재합니다. -f 를 사용하여 파일 덮어쓰기를 강제합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:354
@@ -1275,9 +1273,8 @@ msgstr "오류: 이 시스템은 등록되어 있지 않습니다"
 
 #: src/rhsmlib/services/register.py:192
 msgid "This system is already registered. Add force to options to override."
-msgstr ""
-"이 시스템은 이미 등록되어 있습니다. 덮어쓰기 하려면 옵션에 force를 추가합니"
-"다."
+msgstr "이 시스템은 이미 등록되어 있습니다. 덮어쓰기 하려면 옵션에 force를 "
+"추가합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/register.py:195
@@ -1531,8 +1528,8 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
-"경고: 최근 자격 서버 관리자가 \"{download_value}\"의 {attr}를 이 시스템에 설"
-"정했습니다.\n"
+"경고: 최근 자격 서버 관리자가 \"{download_value}\"의 {attr}를 이 시스템에 "
+"설정했습니다.\n"
 "{advice}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:38
@@ -1599,9 +1596,8 @@ msgstr "오류: {attr}을(를) 나열하려면 --username 및 --password를 등�
 msgid ""
 "Error: --username, --password, --token and --org can be used only on "
 "unregistered systems"
-msgstr ""
-"오류: --username, --password, --token과 --org는 등록되지 않은 시스템에서만 사"
-"용 할 수 있습니다"
+msgstr "오류: --username, --password, --token과 --org는 등록되지 않은 시스템에서만 "
+"사용 할 수 있습니다"
 
 #. TRANSLATORS: this is used to quote a string
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:251
@@ -1665,17 +1661,15 @@ msgstr "{syspurpose_attr} 사용 가능"
 msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
-msgstr ""
-"이 조직에는 사용가능한 서브스크립션에서 시스템 목적\"{syspurpose_attr}\"을 위"
-"해 사용 가능한 값이 없습니다."
+msgstr "이 조직에는 사용가능한 서브스크립션에서 시스템 목적\"{syspurpose_attr}\"을 "
+"위해 사용 가능한 값이 없습니다."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:409
 #, python-brace-format
 msgid ""
 "Unable to get the list of valid values for the system purpose "
 "\"{syspurpose_attr}\"."
-msgstr ""
-"시스템 용도 “{syspurpose_attr}”를 위한 유효한 값 목록을 가져올 수 없습니다."
+msgstr "시스템 용도 “{syspurpose_attr}”를 위한 유효한 값 목록을 가져올 수 없습니다."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:435
 msgid "Unable to connect to server using token"
@@ -1693,8 +1687,7 @@ msgstr "%(prog)s [옵션]"
 msgid ""
 "Note: The currently configured entitlement server does not support System "
 "Purpose {attr}."
-msgstr ""
-"참고: 현재 설정되어 있는 자격 서버는 시스템 용도 {attr}를 지원하지 않습니다."
+msgstr "참고: 현재 설정되어 있는 자격 서버는 시스템 용도 {attr}를 지원하지 않습니다."
 
 #: src/subscription_manager/cli_command/addons.py:24
 msgid "Show or modify the system purpose addons setting"
@@ -1744,9 +1737,8 @@ msgstr "현재로서는 서브스크립션을 최신화 할 필요가 없습니�
 msgid ""
 "Attach a specified subscription to the registered system, when system does "
 "not use Simple Content Access mode"
-msgstr ""
-"시스템이 단순 컨텐츠 접근 방식을 사용하지 않을 경우 등록된 시스템에 지정된 서"
-"브스크립션을 첨부"
+msgstr "시스템이 단순 컨텐츠 접근 방식을 사용하지 않을 경우 등록된 시스템에 지정된 "
+"서브스크립션을 첨부"
 
 #: src/subscription_manager/cli_command/attach.py:111
 msgid "Error: --auto may not be used when specifying pools."
@@ -1802,17 +1794,15 @@ msgstr "서브스크립션을 제대로 첨부했습니다: {name}"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/attach.py:239
 msgid "No Installed products on system. No need to attach subscriptions."
-msgstr ""
-"시스템에 설치된 제품이 없습니다. 서브스크립션을 첨부 할 필요가 없습니다."
+msgstr "시스템에 설치된 제품이 없습니다. 서브스크립션을 첨부 할 필요가 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/attach.py:243
 msgid ""
 "All installed products are covered by valid entitlements. No need to update "
 "subscriptions at this time."
-msgstr ""
-"설치된 모든 제품에는 유효한 자격이 적용됩니다. 서브스크립션을 최신화 할 필요"
-"가 없습니다."
+msgstr "설치된 모든 제품에는 유효한 자격이 적용됩니다. 서브스크립션을 최신화 할 "
+"필요가 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/attach.py:257
@@ -1886,8 +1876,8 @@ msgid ""
 "Ignoring the request to auto-attach. Attaching subscriptions is disabled for "
 "organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
 msgstr ""
-"자동-첨부 요청을 무시합니다. 첨부된 서브스크립션은 단순 컨텐츠 접근(SCA)가 활"
-"성화 되었기 때문에 조직 \"{owner_id}\"를 위해 비활성화되어 있습니다."
+"자동-첨부 요청을 무시합니다. 첨부된 서브스크립션은 단순 컨텐츠 접근(SCA)가 "
+"활성화 되었기 때문에 조직 \"{owner_id}\"를 위해 비활성화되어 있습니다."
 
 #: src/subscription_manager/cli_command/cli.py:152
 msgid "server URL in the form of https://hostname:port/prefix"
@@ -1932,8 +1922,8 @@ msgid ""
 "subscription-manager is disabled when running inside a container. Please "
 "refer to your host system for subscription management.\n"
 msgstr ""
-"컨테이너 내부에서 실행하면 subscription-manager가 비활성화됩니다. 서브스크립"
-"션 관리의 경우 호스트 시스템에서 참조하십시오.\n"
+"컨테이너 내부에서 실행하면 subscription-manager가 비활성화됩니다. "
+"서브스크립션 관리의 경우 호스트 시스템에서 참조하십시오.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:282
@@ -2002,9 +1992,8 @@ msgstr "섹션: {s}, 이름: {name}"
 msgid ""
 "Error: --list should not be used with any other options for setting or "
 "removing configurations."
-msgstr ""
-"오류: --list는 설정 구성 또는 삭제를 위한 다른 옵션과 함께 사용 할 수 없습니"
-"다."
+msgstr "오류: --list는 설정 구성 또는 삭제를 위한 다른 옵션과 함께 사용 할 수 "
+"없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:93
@@ -2754,31 +2743,27 @@ msgstr "수정하려는 저장소 (두 번 이상을 지정 할 수 있음)"
 msgid ""
 "name of the override to remove (can be specified more than once); used with "
 "--repo option."
-msgstr ""
-"제거할 재정의 이름입니다 (한 번 이상 지정 할 수 있음); --repo 옵션과 함께 사"
-"용합니다."
+msgstr "제거할 재정의 이름입니다 (한 번 이상 지정 할 수 있음); --repo 옵션과 함께 "
+"사용합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:56
 msgid ""
 "name and value of the option to override separated by a colon (can be "
 "specified more than once); used with --repo option."
-msgstr ""
-"재정의할 옵션 이름과 값을 쌍점(:)으로 구분합니다 (한번 이상 지정 할 수 있"
-"음); --repo 선택과 함께 사용됩니다."
+msgstr "재정의할 옵션 이름과 값을 쌍점(:)으로 구분합니다 (한번 이상 지정 할 수 있음);"
+" --repo 선택과 함께 사용됩니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:63
 msgid ""
 "remove all overrides; can be specific to a repository by providing --repo"
-msgstr ""
-"모든 재정의를 제거합니다; --repo를 제공하여 저장소를 지정 할 수 있습니다"
+msgstr "모든 재정의를 제거합니다; --repo를 제공하여 저장소를 지정 할 수 있습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:68
 msgid "list all overrides; can be specific to a repository by providing --repo"
-msgstr ""
-"모든 재정의를 나열합니다; --repo를 제공하여 저장소에 지정 할 수 있습니다"
+msgstr "모든 재정의를 나열합니다; --repo를 제공하여 저장소에 지정 할 수 있습니다"
 
 #: src/subscription_manager/cli_command/override.py:76
 msgid "You must specify an override in the form of \"name:value\" with --add."
@@ -2921,8 +2906,7 @@ msgstr "서브스크립션 사용 완료 시 통지하기 위한 전자우편 �
 msgid ""
 "optional language to use for email notification when subscription redemption "
 "is complete (Examples: en-us, de-de)"
-msgstr ""
-"서브스크립션 사용 완료 시 전자우편 통지에 사용할 언어 선택 (예: en-us, de-de)"
+msgstr "서브스크립션 사용 완료 시 전자우편 통지에 사용할 언어 선택 (예: en-us, de-de)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/redeem.py:52
@@ -2982,8 +2966,8 @@ msgid ""
 "(a comma-separated list) in the destination org. The ability to use multiple "
 "environments is controlled by the entitlement server"
 msgstr ""
-"대상 조직에서 특정 환경 (단일 값) 또는 다중 환경(쉼표로-구분된 목록)에 등록합"
-"니다. 다중 환경을 사용하는 기능은 자격 부여 서버에 의해 제어됩니다"
+"대상 조직에서 특정 환경 (단일 값) 또는 다중 환경(쉼표로-구분된 목록)에 "
+"등록합니다. 다중 환경을 사용하는 기능은 자격 부여 서버에 의해 제어됩니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:107
@@ -3299,17 +3283,15 @@ msgstr "이 시스템을 위해 알려진, 비활성화된 저장소를 나열�
 msgid ""
 "repository to enable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
-msgstr ""
-"활성화하려는 저장소(두 번 이상 지정 할 수 있음). 와일드카드(* 과 ?)가 지원됩"
-"니다."
+msgstr "활성화하려는 저장소(두 번 이상 지정 할 수 있음). 와일드카드(* 과 ?)가 "
+"지원됩니다."
 
 #: src/subscription_manager/cli_command/repos.py:96
 msgid ""
 "repository to disable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
-msgstr ""
-"비활성화하는 저장소(두 번 이상 지정 할 수 있음). 와일드카드(* 과 ?)가 지원됩"
-"니다."
+msgstr "비활성화하는 저장소(두 번 이상 지정 할 수 있음). 와일드카드(* 과 ?)가 "
+"지원됩니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/repos.py:165
@@ -3372,8 +3354,8 @@ msgid ""
 "Error: --username, --password, --token, --org and --serverurl can be used "
 "only on unregistered systems"
 msgstr ""
-"오류: --username, --password, --token, --org과 --serverurl은 등록되지 않은 시"
-"스템에서만 사용 할 수 있습니다"
+"오류: --username, --password, --token, --org과 --serverurl은 등록되지 않은 "
+"시스템에서만 사용 할 수 있습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:126
@@ -3435,8 +3417,8 @@ msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status.\n"
 msgstr ""
-"컨텐츠 접근 방식이 단순 컨텐츠 접근으로 설정되어 있습니다. 이 호스트는 서브스"
-"크립션 상태에 관계없이 컨텐츠에 접근 할 수 있습니다.\n"
+"컨텐츠 접근 방식이 단순 컨텐츠 접근으로 설정되어 있습니다. 이 호스트는 "
+"서브스크립션 상태에 관계없이 컨텐츠에 접근 할 수 있습니다.\n"
 
 #: src/subscription_manager/cli_command/status.py:111
 #, python-brace-format
@@ -3610,8 +3592,7 @@ msgstr "알지 못하는 서버 응답 (HTTP 오류 코드 {code}: {title})"
 #, python-brace-format
 msgid ""
 "Proxy error: unable to connect to {hostname}: {message} (error code {code})"
-msgstr ""
-"프락시 오류: {hostname}: {message} (오류 코드 {code})에 연결 할 수 없습니다"
+msgstr "프락시 오류: {hostname}: {message} (오류 코드 {code})에 연결 할 수 없습니다"
 
 #: src/subscription_manager/exceptions.py:41
 #, python-brace-format
@@ -3793,8 +3774,8 @@ msgid ""
 "Hat Subscription Management. If not desired, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
-"yum 플러그인: %s이 Red Hat 서브스크립션 관리를 통해 자동으로 활성화되었습니"
-"다. 원하지 않을 경우 \"subscription-manager config --rhsm."
+"yum 플러그인: %s이 Red Hat 서브스크립션 관리를 통해 자동으로 "
+"활성화되었습니다. 원하지 않을 경우 \"subscription-manager config --rhsm."
 "auto_enable_yum_plugins=0\"을 사용하여 이 동작을 차단하십시오."
 
 #: src/subscription_manager/repolib.py:678
