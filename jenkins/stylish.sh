@@ -1,17 +1,4 @@
-# needs xorg-x11-server-Xvfb rpm installed
-# needs python-rhsm
-
-# "make jenkins" will install these via `pip install -r test-requirements.txt'
-#  if it can
-#  (either user pip config, or virtualenvs)
-# needs python-nose installed
-# needs polib installed, http://pypi.python.org/pypi/polib
-# probably will need coverage tools installed
-# needs mock  (easy_install mock)
-# needs PyXML installed
-# needs pyflakes insalled
-# if we haven't installed/ran subsctiption-manager (or installed it)
-#   we need to make /etc/pki/product and /etc/pki/entitlement
+#!/bin/bash
 
 echo "GIT_COMMIT:" "${GIT_COMMIT}"
 WORKSPACE="$(git rev-parse --show-toplevel)"

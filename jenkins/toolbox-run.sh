@@ -1,4 +1,5 @@
-#!/bin/bash -x
+#!/bin/bash
+
 PROJECT_ROOT="$(git rev-parse --show-toplevel)"
 
 if [ -z "$CHANGE_ID" ]; then
@@ -20,6 +21,7 @@ EOF
 fi
 
 pushd "$PROJECT_ROOT" || exit 1
+toolbox rm --force "$TAG-$1"
 toolbox create -i "quay.io/candlepin/subscription-manager:$TAG" -c "$TAG-$1"
 toolbox run -c "$TAG-$1" sh jenkins/run.sh "$1" "$2"
 RETVAL="$(tail -1 test_results/$1.txt | awk '{ print $2 }')"
