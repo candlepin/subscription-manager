@@ -471,6 +471,10 @@ class ProfileManager(CacheManager):
         Check if packages have changed, and push an update if so.
         """
 
+        # Don't query the server if nothing has changed
+        if not force and not self.has_changed():
+            return 0
+
         # If the server doesn't support packages, don't try to send the profile:
         supported_resources = get_supported_resources()
         if PACKAGES_RESOURCE not in supported_resources:
@@ -715,9 +719,18 @@ class ContentAccessCache(object):
                     err=err
                 ))
                 last_update = None
+                data = None
         else:
             last_update = None
-        return self._query_for_update(if_modified_since=last_update)
+            data = None
+
+        response = self._query_for_update(if_modified_since=last_update)
+        # Candlpin 4 bug 2010251. if_modified_since is not reliable so
+        # we double checks whether or not the sca certificate is changed.
+        if data is not None and data == response:
+           log.debug("Content access certificate is up-to-date.")
+           return None
+        return response
 
     @staticmethod
     def update_cert(cert, data):
