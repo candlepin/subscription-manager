@@ -419,6 +419,7 @@ class ProfileManager(CacheManager):
         # we're sure we actually need the data.
         self._current_profile = None
         self.report_package_profile = self.profile_reporting_enabled()
+        self.identity = inj.require(inj.IDENTITY)
 
     def profile_reporting_enabled(self):
         # If profile reporting is disabled from the environment, that overrides the setting in the conf file
@@ -469,7 +470,7 @@ class ProfileManager(CacheManager):
         """
 
         # If the server doesn't support packages, don't try to send the profile:
-        supported_resources = get_supported_resources()
+        supported_resources = get_supported_resources(uep=None, identity=self.identity)
         if PACKAGES_RESOURCE not in supported_resources:
             log.warning("Server does not support packages, skipping profile upload.")
             return 0
@@ -703,6 +704,7 @@ class ContentAccessCache(object):
         return os.remove(self.CACHE_FILE)
 
     def check_for_update(self):
+        data = None
         if self.exists():
             try:
                 data = json.loads(self.read())
@@ -715,7 +717,14 @@ class ContentAccessCache(object):
                 last_update = None
         else:
             last_update = None
-        return self._query_for_update(if_modified_since=last_update)
+
+        response = self._query_for_update(if_modified_since=last_update)
+        # Candlepin 4 bug 2010251. if_modified_since is not reliable so
+        # we double checks whether or not the sca certificate is changed.
+        if data is not None and data == response:
+            log.debug("Content access certificate is up-to-date.")
+            return None
+        return response
 
     @staticmethod
     def update_cert(cert, data):
