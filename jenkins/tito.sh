@@ -13,9 +13,9 @@ NPM_REGISTRY="$(ping -c1 -W1 repository.engineering.redhat.com > /dev/null 2>&1 
        	echo 'https://registry.npmjs.org')"
 npm config set registry $NPM_REGISTRY
 
-if [ "$NPM_REGISTRY" =~ "redhat" ]; then
+if [[ "$NPM_REGISTRY" =~ "redhat" ]]; then
     export NODE_TLS_REJECT_UNAUTHORIZED=0
-    npm config set ssl-strict=false
+    npm config set strict-ssl false
 fi
 
 sudo yum-builddep subscription-manager.spec -y || true
