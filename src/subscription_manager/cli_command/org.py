@@ -50,11 +50,13 @@ class OrgCommand(UserPassCommand):
             owners = self.cp.getOwnerList(self.options.username)
             if len(owners) == 1:
                 self._org = owners[0]['key']
-            else:
-                # Print list of owners to the console
+            elif self.options.org is None:
+                # Get a list of valid owners. Since no owner was specified,
+                # print a hint message showing available owners, before asking
+                # to enter one.
                 org_keys = [owner['key'] for owner in owners]
-                print(_('Hint: User "{name}" is member of following organizations: {orgs}').format(
-                    name=self.username, orgs=', '.join(org_keys)
-                ))
+                print(_(
+                    'Hint: User "{name}" is member of following organizations: {orgs}'
+                ).format(name=self.username, orgs=', '.join(org_keys)))
                 self._org = self._get_org(self.options.org)
         return self._org
