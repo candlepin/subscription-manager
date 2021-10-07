@@ -113,8 +113,7 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
         self.top_view.connect("row_activated",
                               widgets.expand_collapse_on_row_activated_callback)
 
-        # Don't update the icon in the first run, we don't have real compliance data yet
-        self.update_subscriptions(update_dbus=False)
+        self.update_subscriptions()
 
         self.connect_signals({'on_unsubscribe_button_clicked': self.unsubscribe_button_clicked})
 
@@ -169,12 +168,10 @@ class MySubscriptionsTab(widgets.SubscriptionManagerTab):
                 self.content.get_toplevel())
         prompt.connect('response', self._on_unsubscribe_prompt_response, selection)
 
-    def update_subscriptions(self, update_dbus=True, update_gui=True):
+    def update_subscriptions(self, update_gui=True):
         self.pooltype_cache.update()
         if update_gui:
             self.refresh()
-        if update_dbus:
-            inj.require(inj.DBUS_IFACE).update()
 
     def refresh(self):
         sorter = EntitlementCertStackingGroupSorter(self.entitlement_dir.list())
