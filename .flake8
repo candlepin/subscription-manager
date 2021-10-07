@@ -12,9 +12,6 @@ ignore =
     # E501: line too long (* > 300 characters)
     # triggered by very long text string in tests
     E501,
-    # E722: do not use bare 'except'
-    # done a lot, needs to be fixed by catching all what is needed
-    E722,
     # E731: do not assign a lambda expression, use a def
     E731,
     # W504: line break after binary operator

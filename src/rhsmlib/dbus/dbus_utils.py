@@ -85,7 +85,8 @@ def context_of_sender(bus, sender):
 
     try:
         context = dbus_iface.GetConnectionSELinuxSecurityContext(sender)
-    except:
+    except Exception as exc:
+        log.debug(f"Could not get SELinux context: {exc}")
         return None
 
     return "".join(map(chr, dbus_to_python(context)))

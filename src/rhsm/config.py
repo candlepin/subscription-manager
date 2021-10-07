@@ -207,7 +207,7 @@ class RhsmConfigParser(SafeConfigParser):
             # If the value doesn't exist, or isn't equal, write it
             if self.get(section, name) != value:
                 raise NoOptionError
-        except:
+        except Exception:
             if not self.has_section(section):
                 self.add_section(section)
             super(RhsmConfigParser, self).set(section, name, value)

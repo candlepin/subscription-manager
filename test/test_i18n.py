@@ -61,7 +61,7 @@ class TestI18N(unittest.TestCase):
         with patch.dict(os.environ, clear=True):
             try:
                 configure_i18n()
-            except:
+            except Exception:
                 self.fail()
 
         locale.set.assert_not_called()

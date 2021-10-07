@@ -130,7 +130,8 @@ def get_firmware_collector(arch, prefix=None, testing=None,
         try:
             import dmidecode  # noqa
             firmware_provider_class = dmiinfo.DmiFirmwareInfoCollector
-        except:
+        except ImportError as exc:
+            log.debug(f"Cannot import dmidecode: {exc}")
             firmware_provider_class = NullFirmwareInfoCollector
 
     firmware_provider = firmware_provider_class(

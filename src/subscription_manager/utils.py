@@ -523,7 +523,7 @@ class EntitlementCertificateFilter(ProductCertificateFilter):
             try:
                 self._sl_filter = '' + service_level.lower()
                 output = True
-            except:
+            except (TypeError, AttributeError):
                 # Likely not a string or otherwise bad input.
                 pass
 
