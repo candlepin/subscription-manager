@@ -18,6 +18,7 @@ from __future__ import print_function, division, absolute_import
 #
 import logging
 import string
+import os
 
 from rhsmlib.facts import collector
 
@@ -122,18 +123,24 @@ class VirtUuidCollector(collector.FactsCollector):
         (In contrast to use of DMI on x86_64).
         """
 
-        vm_uuid_path = "%s/proc/device-tree/vm,uuid" % self.prefix
+        uuid_paths = [
+            f"{self.prefix}/proc/device-tree/vm,uuid",
+        ]
 
-        try:
-            with open(vm_uuid_path) as fo:
-                contents = fo.read()
-                # Apparently ppc64 can report a virt uuid with a null byte at the end.
-                # See BZ 1405125.
-                vm_uuid = contents.strip(string.whitespace + "\0")
-                return vm_uuid
-        except IOError as e:
-            log.warn("Tried to read %s but there was an error: %s", vm_uuid_path, e)
+        for uuid_path in uuid_paths:
+            if not os.path.isfile(uuid_path):
+                continue
+            try:
+                with open(uuid_path) as fo:
+                    contents = fo.read()
+                    # Apparently ppc64 can report a virt uuid with a null byte at the end.
+                    # See BZ 1405125.
+                    vm_uuid = contents.strip(string.whitespace + "\0")
+                    return vm_uuid
+            except IOError as e:
+                log.warn("Tried to read %s but there was an error: %s", uuid_path, e)
 
+        log.warn("No available file for UUID on %s", self.arch)
         return None
 
 

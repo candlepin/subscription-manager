@@ -78,7 +78,11 @@ class VirtCollectorTest(test.fixture.SubManFixture):
 
 
 class VirtUuidCollectorTest(unittest.TestCase):
-    def test_strips_null_byte_on_uuid(self):
+    @patch("os.path.isfile")
+    def test_strips_null_byte_on_uuid_vm_uuid(self, mock_isfile):
+        def is_uuid_file(path):
+            return path.endswith('/vm,uuid')
+        mock_isfile.side_effect = is_uuid_file
         with test.fixture.open_mock(content="123\0"):
             collector = virt.VirtUuidCollector(arch='ppc64')
             uuid = collector._get_devicetree_uuid()
