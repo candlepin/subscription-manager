@@ -117,11 +117,15 @@ class VirtUuidCollector(collector.FactsCollector):
         For ppc64/ppc64le systems running KVM or PowerKVM, the
         virt uuid is found in /proc/device-tree/vm,uuid.
 
+        For ppc64/ppc64le LPARs, the UUID is found in
+        /proc/device-tree/ibm,partition-uuid.
+
         (In contrast to use of DMI on x86_64).
         """
 
         uuid_paths = [
             f"{self.prefix}/proc/device-tree/vm,uuid",
+            f"{self.prefix}/proc/device-tree/ibm,partition-uuid",
         ]
 
         for uuid_path in uuid_paths:
