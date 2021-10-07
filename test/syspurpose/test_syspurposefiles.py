@@ -85,7 +85,7 @@ class SyspurposeStoreTests(SyspurposeTestBase):
             if file_contents and not isinstance(file_contents, str):
                 utils.write_to_file_utf8(f, file_contents)
             else:
-                f.write(utils.make_utf8(file_contents or ''))
+                f.write(file_contents or '')
             f.flush()
         self.assertTrue(os.path.exists(temp_dir), "Unable to create test file in temp dir")
 
