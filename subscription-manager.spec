@@ -579,7 +579,12 @@ of Red Hat subscriptions: subscription-manager-gui, subscription-manager-cockpit
 
 %package -n python3-cloud-what
 Summary: Python package for detection of public cloud provider
+%if 0%{?suse_version}
+Group: Productivity/Networking/System
+License: GPL-2.0
+%else
 License: GPLv2
+%endif
 Requires: python3-requests
 %ifnarch aarch64 ppc ppc64 ppc64le s390 s390x
 Requires:  %{py_package_prefix}-dmidecode %{?dmidecode_version}
@@ -708,6 +713,8 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %dir %{_sysconfdir}/pki
 %dir %{_prefix}/share/polkit-1
 %dir %{_prefix}/share/polkit-1/actions
+%dir %{_sysconfdir}/dbus-1
+%dir %{_sysconfdir}/dbus-1/system.d
 
 # Suse specific
 %if %{use_dnf}
@@ -866,7 +873,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
 # syspurpose
 %dir %{python_sitearch}/syspurpose
-%{python_sitearch}/syspurpose/*.py
+%{python_sitearch}/syspurpose/*.py*
 %if %{with python3}
 %{python_sitearch}/syspurpose/__pycache__
 %endif
