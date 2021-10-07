@@ -32,8 +32,8 @@ from email.utils import formatdate
 
 from rhsm.https import httplib, ssl
 
-from six.moves.urllib.request import proxy_bypass
-from six.moves.urllib.parse import urlencode, quote, quote_plus
+from urllib.request import proxy_bypass
+from urllib.parse import urlencode, urlparse, quote, quote_plus
 
 from rhsm.config import get_config_parser
 from rhsm import ourjson as json
@@ -279,9 +279,9 @@ class KeycloakConnection(BaseConnection):
     """
 
     def __init__(self, realm, auth_url, resource, **kwargs):
-        host = six.moves.urllib.parse.urlparse(auth_url).hostname or ''
-        handler = six.moves.urllib.parse.urlparse(auth_url).path
-        ssl_port = six.moves.urllib.parse.urlparse(auth_url).port or 443
+        host = urlparse(auth_url).hostname or ''
+        handler = urlparse(auth_url).path
+        ssl_port = urlparse(auth_url).port or 443
         super(KeycloakConnection, self).__init__(host=host, ssl_port=ssl_port, handler=handler, **kwargs)
         self.realm = realm
         self.resource = resource
@@ -708,7 +708,7 @@ class BaseRestLib(object):
         if headers is not None and \
                 'Content-type' in headers and \
                 headers['Content-type'] == 'application/x-www-form-urlencoded':
-            body = six.moves.urllib.parse.urlencode(info).encode('utf-8')
+            body = urlencode(info).encode('utf-8')
         elif info is not None:
             body = json.dumps(info, default=json.encode)
         else:

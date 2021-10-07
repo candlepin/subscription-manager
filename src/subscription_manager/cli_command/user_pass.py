@@ -16,7 +16,6 @@
 #
 import getpass
 import readline
-import six.moves
 
 from subscription_manager.cli_command.cli import CliCommand
 from subscription_manager.i18n import ugettext as _
@@ -47,7 +46,7 @@ class UserPassCommand(CliCommand):
         not be prompted for.
         """
         while not username:
-            username = six.moves.input(_("Username: "))
+            username = input(_("Username: "))
             readline.clear_history()
         while not password:
             password = getpass.getpass(_("Password: "))

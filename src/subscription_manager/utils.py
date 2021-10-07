@@ -25,7 +25,7 @@ import syslog
 import uuid
 import pkg_resources
 
-from six.moves import urllib
+import urllib
 from rhsm.https import ssl
 
 from subscription_manager.branding import get_branding

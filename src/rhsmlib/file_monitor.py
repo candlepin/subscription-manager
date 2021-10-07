@@ -13,7 +13,7 @@
 
 from rhsm.config import get_config_parser
 from rhsmlib.services import config
-from six.moves import configparser
+import configparser
 import logging
 import os.path
 import fnmatch

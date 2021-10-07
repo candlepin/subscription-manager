@@ -19,7 +19,7 @@ import logging
 import ssl as _ssl
 import sys
 
-import six.moves.http_client as _httplib
+import http.client as _httplib
 
 log = logging.getLogger(__name__)
 

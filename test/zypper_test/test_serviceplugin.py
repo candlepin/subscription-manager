@@ -1,4 +1,4 @@
-from six.moves import configparser
+import configparser
 from unittest import TestCase
 import os
 import subprocess

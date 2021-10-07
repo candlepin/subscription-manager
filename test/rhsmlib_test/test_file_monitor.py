@@ -12,7 +12,7 @@
 # in this software or its documentation.
 
 from rhsmlib import file_monitor
-from six.moves import configparser
+import configparser
 from mock import Mock, patch
 from test import fixture
 from threading import Thread

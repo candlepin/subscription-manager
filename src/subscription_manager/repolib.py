@@ -29,7 +29,7 @@ from subscription_manager.utils import get_supported_resources
 from rhsm.config import get_config_parser, in_container
 from rhsm import connection
 import six
-from six.moves import configparser
+import configparser
 
 # FIXME: local imports
 

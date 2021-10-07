@@ -15,7 +15,6 @@
 # in this software or its documentation.
 #
 import readline
-import six.moves
 
 from subscription_manager.cli_command.user_pass import UserPassCommand
 from subscription_manager.i18n import ugettext as _
@@ -40,7 +39,7 @@ class OrgCommand(UserPassCommand):
     @staticmethod
     def _get_org(org):
         while not org:
-            org = six.moves.input(_("Organization: "))
+            org = input(_("Organization: "))
             readline.clear_history()
         return org
 
