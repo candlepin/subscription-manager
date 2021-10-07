@@ -9,7 +9,7 @@
 
 # test constructing from Content models
 # ignores wrong content type
-from six.moves import configparser
+import configparser
 
 import six
 import mock

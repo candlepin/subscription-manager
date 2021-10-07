@@ -19,7 +19,7 @@ import logging
 import socket
 import six
 
-import six.moves.http_client
+import http.client
 from rhsm.https import ssl
 from rhsm.connection import NoValidEntitlement
 
@@ -152,7 +152,7 @@ class CdnReleaseVersionProvider(object):
                     cert_key_pairs=ent_cert_key_pairs
                 )
             except (socket.error,
-                    six.moves.http_client.HTTPException,
+                    http.client.HTTPException,
                     ssl.SSLError,
                     NoValidEntitlement) as e:
                 # content connection doesn't handle any exceptions

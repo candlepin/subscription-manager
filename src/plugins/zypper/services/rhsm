@@ -27,7 +27,7 @@ from subscription_manager.injectioninit import init_dep_injection
 from rhsm import connection, logutil
 from rhsm import config
 
-from six.moves.configparser import ConfigParser
+from configparser import ConfigParser
 
 reload(sys)
 sys.setdefaultencoding('UTF8')

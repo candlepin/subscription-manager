@@ -14,7 +14,7 @@
 import logging
 
 # rhsm.conf->iniparse->configParser can raise ConfigParser exceptions
-from six.moves import configparser
+import configparser
 
 from subscription_manager import certlib
 from subscription_manager.model import find_content

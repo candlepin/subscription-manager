@@ -31,8 +31,8 @@ except ImportError:
 
 from subscription_manager import utils
 from subscription_manager.certdirectory import Path
-from six.moves import configparser
-from six.moves.urllib.parse import parse_qs, urlparse, urlunparse, urlencode
+import configparser
+from urllib.parse import parse_qs, urlparse, urlunparse, urlencode
 
 from rhsm.config import get_config_parser
 

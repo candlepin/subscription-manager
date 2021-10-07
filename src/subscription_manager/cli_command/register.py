@@ -17,7 +17,6 @@
 import logging
 import os
 import readline
-import six.moves
 
 import rhsm.connection as connection
 import subscription_manager.injection as inj
@@ -316,7 +315,7 @@ class RegisterCommand(UserPassCommand):
         """
         By breaking this code out, we can write cleaner tests
         """
-        environment = six.moves.input(_("Environment: ")).strip()
+        environment = input(_("Environment: ")).strip()
         readline.clear_history()
         return environment or self._prompt_for_environment()
 
@@ -390,6 +389,6 @@ class RegisterCommand(UserPassCommand):
         # Read the owner key from stdin
         owner_key = None
         while not owner_key:
-            owner_key = six.moves.input(_("Organization: "))
+            owner_key = input(_("Organization: "))
             readline.clear_history()
         return owner_key

@@ -31,7 +31,7 @@ import threading
 import time
 import six
 
-from six.moves import queue
+import queue
 from rhsmlib.dbus import constants, server
 from subscription_manager.identity import Identity
 
