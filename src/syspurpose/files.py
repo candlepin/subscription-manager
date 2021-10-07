@@ -22,7 +22,7 @@ import os
 import errno
 import io
 
-from syspurpose.utils import create_dir, create_file, make_utf8, write_to_file_utf8
+from syspurpose.utils import create_dir, create_file, write_to_file_utf8
 from subscription_manager.i18n import ugettext as _
 
 # Constants for locations of the two system syspurpose files
@@ -127,8 +127,6 @@ class SyspurposeStore(object):
         :param value: The value to append to the list
         :return: None
         """
-        value = make_utf8(value)
-        key = make_utf8(key)
         try:
             current_value = self.contents[key]
             if current_value is not None and not isinstance(current_value, list):
@@ -153,8 +151,6 @@ class SyspurposeStore(object):
         :param value: The value to attempt to remove
         :return: True if the value was in the list, False if it was not
         """
-        value = make_utf8(value)
-        key = make_utf8(key)
         try:
             current_value = self.contents[key]
             if current_value is not None and not isinstance(current_value, list) and current_value == value:
@@ -175,8 +171,6 @@ class SyspurposeStore(object):
         :param key: The key to unset
         :return: boolean
         """
-        key = make_utf8(key)
-
         # Special handling is required for the SLA, since it deviates from the typical CP
         # empty => null semantics
         if key == 'service_level_agreement':
@@ -196,9 +190,7 @@ class SyspurposeStore(object):
         :param value: The value to set that parameter to
         :return: Whether any change was made
         """
-        value = make_utf8(value)
-        key = make_utf8(key)
-        org = make_utf8(self.contents.get(key, None))
+        org = self.contents.get(key, None)
         self.contents[key] = value
         return org != value or org is None
 
@@ -479,8 +471,6 @@ class SyncedStore(object):
         :param value: The value to append to the list
         :return: None
         """
-        value = make_utf8(value)
-        key = make_utf8(key)
         try:
             # When existing value was set using set() method, then the
             # existing valus is not list, but simple value. We have to convert
@@ -522,8 +512,6 @@ class SyncedStore(object):
         :param value: The value to attempt to remove
         :return: True if the value was in the list, False if it was not
         """
-        value = make_utf8(value)
-        key = make_utf8(key)
         try:
             current_values = self.local_contents[key]
             if current_values is not None and not isinstance(current_values, list) and current_values == value:
@@ -554,8 +542,6 @@ class SyncedStore(object):
         :param key: The key to unset
         :return: boolean
         """
-        key = make_utf8(key)
-
         # Special handling is required for the SLA, since it deviates from the typical CP
         # empty => null semantics
         if key == 'service_level_agreement':
@@ -586,9 +572,7 @@ class SyncedStore(object):
         :param value: The value to set that parameter to
         :return: Whether any change was made
         """
-        value = make_utf8(value)
-        key = make_utf8(key)
-        current_value = make_utf8(self.local_contents.get(key, None))
+        current_value = self.local_contents.get(key, None)
         self.local_contents[key] = value
 
         if current_value != value or current_value is None:

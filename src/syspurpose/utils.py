@@ -64,21 +64,6 @@ def create_file(path, contents):
     return True
 
 
-def make_utf8(obj):
-    """
-    Transforms the provided string into unicode if it is not already
-
-    Previously there was a logic which converted the input.
-    Now the six.PY2 is never true and we can directly return the input.
-
-    It should be removed with other Python 2 utils.
-
-    :param obj: the string to decode
-    :return: the unicode format of the string
-    """
-    return obj
-
-
 def write_to_file_utf8(file, data):
     """
     Writes out the provided data to the specified file, with user-friendly indentation,
@@ -87,4 +72,4 @@ def write_to_file_utf8(file, data):
     :param data: The data to be written
     :return:
     """
-    file.write(make_utf8(json.dumps(data, indent=2, ensure_ascii=False, sort_keys=True)))
+    file.write(json.dumps(data, indent=2, ensure_ascii=False, sort_keys=True))
