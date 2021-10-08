@@ -19,26 +19,11 @@ log = logging.getLogger(__name__)
 
 
 class CleanupCollector(collector.FactsCollector):
-    no_uuid_platforms = ['powervm_lx86', 'xen-dom0', 'ibm_systemz']
-
     def get_all(self):
         cleanup_facts = {}
         dmi_socket_info = self.replace_socket_count_with_dmi()
         cleanup_facts.update(dmi_socket_info)
         return cleanup_facts
-
-    def explain_lack_of_virt_uuid(self):
-        # No virt.uuid equiv is available for guests on these hypervisors
-        # virt_is_guest = self._collected_hw_info['virt.is_guest']
-        if not self._is_a_virt_host_type_with_virt_uuids():
-            log.debug("we don't sell virt uuids here")
-
-    def _is_a_virt_host_type_with_virt_uuids(self):
-        virt_host_type = self._collected_hw_info['virt.host_type']
-        for no_uuid_platform in self.no_uuid_platforms:
-            if virt_host_type.find(no_uuid_platform) > -1:
-                return False
-        return True
 
     def replace_socket_count_with_dmi(self):
         cleanup_info = {}
