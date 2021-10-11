@@ -480,7 +480,9 @@ The
 .B refresh
 command pulls the latest subscription data from the server. Normally, the system polls the subscription management service at a set interval (4 hours by default) to check for any changes in the available subscriptions. The
 .B refresh
-command checks with the subscription management service right then, outside the normal interval.
+command checks with the subscription management service right then, outside the normal interval. Use of the
+.B refresh
+command will clear caches related to the content access mode of the system and allow the system to retrieve fresh data as necessary.
 
 .PP
 This command has no options.
