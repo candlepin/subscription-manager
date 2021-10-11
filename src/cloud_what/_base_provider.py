@@ -200,11 +200,14 @@ class BaseCloudProvider(object):
 
         log.debug(f'Writing {self.CLOUD_PROVIDER_ID} token to file {self.TOKEN_CACHE_FILE}')
 
-        with open(self.TOKEN_CACHE_FILE, "w") as token_cache_file:
-            json.dump(token_cache_content, token_cache_file)
-
-        # Only owner (root) should be able to read the token file
-        os.chmod(self.TOKEN_CACHE_FILE, 0o600)
+        try:
+            with open(self.TOKEN_CACHE_FILE, "w") as token_cache_file:
+                json.dump(token_cache_content, token_cache_file)
+        except IOError as err_msg:
+            log.error(f'Unable to write token to cache file: {self.TOKEN_CACHE_FILE}: {err_msg}')
+        else:
+            # Only owner (root) should be able to read the token file
+            os.chmod(self.TOKEN_CACHE_FILE, 0o600)
 
     @staticmethod
     def _is_in_memory_cache_valid(cache, ctime: float, ttl: float) -> bool:
