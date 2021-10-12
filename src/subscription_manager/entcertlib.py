@@ -119,6 +119,7 @@ class EntCertUpdateAction(object):
             log.error('Cannot modify subscriptions while disconnected')
             raise Disconnected()
 
+        cert_changed = False
         missing_serials = self._find_missing_serials(local, expected)
         rogue_serials = self._find_rogue_serials(local, expected)
 
@@ -128,14 +129,31 @@ class EntCertUpdateAction(object):
         log.info('certs updated:\n%s', self.report)
         self.syslog_results()
 
-        if missing_serials or rogue_serials:
+        # We call EntCertlibActionInvoker.update() solo from
+        # the 'attach' cli instead of an ActionClient. So
+        # we need to refresh the ent_dir object before calling
+        # content updating actions.
+        self.ent_dir.refresh()
 
-            # We call EntCertlibActionInvoker.update() solo from
-            # the 'attach' cli instead of an ActionClient. So
-            # we need to refresh the ent_dir object before calling
-            # content updating actions.
-            self.ent_dir.refresh()
-            self.content_access_hook()
+        if missing_serials or rogue_serials:
+            cert_changed = True
+
+        if self.uep.has_capability(CONTENT_ACCESS_CERT_CAPABILITY):
+            content_access_certs = self._find_content_access_certs()
+            if len(content_access_certs) > 0:
+                # This addresses BZs: 1448855, 1450862
+                obsolete_certs = []
+                for cont_access_cert in content_access_certs:
+                    if cont_access_cert.serial not in expected:
+                        obsolete_certs.append(cont_access_cert)
+                if len(obsolete_certs) > 0:
+                    log.info('Deleting obsolete content access certificate')
+                    self.delete(obsolete_certs)
+            update_data = self.content_access_hook()
+            if update_data is not None:
+                cert_changed = True
+
+        if cert_changed:
             self.repo_hook()
 
             # NOTE: Since we have the yum repos defined here now
@@ -145,24 +163,6 @@ class EntCertUpdateAction(object):
 
             # reload certs and update branding
             self.branding_hook()
-
-        if self.uep.has_capability(CONTENT_ACCESS_CERT_CAPABILITY):
-            content_access_certs = self._find_content_access_certs()
-            update_data = None
-            if len(content_access_certs) > 0:
-                # This addresses BZs: 1448855, 1450862
-                obsolete_certs = []
-                for cont_access_cert in content_access_certs:
-                    if cont_access_cert.serial not in expected:
-                        obsolete_certs.append(cont_access_cert)
-                log.info('Deleting obsolete content access certificate')
-                self.delete(obsolete_certs)
-                update_data = self.content_access_cache.check_for_update()
-                for content_access_cert in content_access_certs:
-                    self.content_access_cache.update_cert(content_access_cert, update_data)
-            if update_data is not None:
-                self.ent_dir.refresh()
-                self.repo_hook()
 
         # if we want the full report, we can get it, but
         # this makes CertLib.update() have same sig as reset
@@ -194,6 +194,7 @@ class EntCertUpdateAction(object):
             self.content_access_cache.remove()
         if update_data is not None:
             self.ent_dir.refresh()
+        return update_data
 
     def branding_hook(self):
         """Update branding info based on entitlement cert changes."""
@@ -245,7 +246,9 @@ class EntCertUpdateAction(object):
         # grace period
         # XXX since we don't use grace period, this might not be needed
         self.ent_dir.refresh()
-        for valid in self.ent_dir.list():
+        ent_certs = self.ent_dir.list() + self.ent_dir.list_with_content_access()
+        ent_certs = list(set(ent_certs))
+        for valid in ent_certs:
             sn = valid.serial
             self.report.valid.append(sn)
             local[sn] = valid
