@@ -172,6 +172,8 @@ class InotifyFilesystemWatcher(FilesystemWatcher):
                 if dir_watch.temporary_disabled is True:
                     dir_watch.update_temporary_disabled_watcher()
 
+        self.remove_watches()
+
     def handle_event(self, event):
         """
         default process function for pyinotify notifier
@@ -192,10 +194,10 @@ class InotifyFilesystemWatcher(FilesystemWatcher):
 
     def add_watches(self):
         """
-        adds watches to the watch manager
+        Add watches to the watch manager
         """
         for dir_watch in self.dir_watches.values():
-            log.debug('Added i-notifier watcher for: %s with mask: %s' %
+            log.debug('Adding i-notifier watcher for: %s with mask: %s' %
                       (dir_watch.path, dir_watch.mask))
             if dir_watch.is_file:
                 # watch for any changes in the directory, but only be notified of the specific path
@@ -214,6 +216,14 @@ class InotifyFilesystemWatcher(FilesystemWatcher):
                     proc_fun=self.handle_event,
                     do_glob=dir_watch.is_glob
                 )
+
+    def remove_watches(self):
+        """
+        Remove all watches from the watch manager
+        """
+        for dir_watch in self.dir_watches.values():
+            log.debug(f'Removing i-notifier watcher for: {dir_watch.path}')
+            self.watch_manager.rm_watch(dir_watch.path, rec=True)
 
 
 class DirectoryWatch(object):
