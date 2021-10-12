@@ -5,6 +5,7 @@
 # immediately available.
 -e ./build_ext
 
+flake8<4
 pytest
 pytest-randomly
 pytest-timeout
