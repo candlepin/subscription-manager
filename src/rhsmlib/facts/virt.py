@@ -15,6 +15,7 @@
 #
 import logging
 import string
+import os
 
 from rhsmlib.facts import collector
 
@@ -90,12 +91,11 @@ class VirtUuidCollector(collector.FactsCollector):
         if self._collected_hw_info and 'dmi.system.uuid' in self._collected_hw_info:
             virt_uuid_dict['virt.uuid'] = self._collected_hw_info['dmi.system.uuid']
 
-        # For ppc64, virt uuid is in /proc/device-tree/vm,uuid
-        # just the uuid in txt, one line
-
         # ie, ppc64/ppc64le
         if self.arch in self.devicetree_vm_uuid_arches:
-            virt_uuid_dict.update(self._get_devicetree_vm_uuid())
+            uuid = self._get_devicetree_uuid()
+            if uuid is not None:
+                virt_uuid_dict['virt.uuid'] = uuid
 
         # potentially override DMI-determined UUID with
         # what is on the file system (xen para-virt)
@@ -110,29 +110,39 @@ class VirtUuidCollector(collector.FactsCollector):
 
         return virt_uuid_dict
 
-    def _get_devicetree_vm_uuid(self):
-        """Collect the virt.uuid fact from device-tree/vm,uuid
+    def _get_devicetree_uuid(self):
+        """
+        Collect the virt.uuid fact from device-tree.
 
         For ppc64/ppc64le systems running KVM or PowerKVM, the
         virt uuid is found in /proc/device-tree/vm,uuid.
 
-        (In contrast to use of DMI on x86_64)."""
+        For ppc64/ppc64le LPARs, the UUID is found in
+        /proc/device-tree/ibm,partition-uuid.
 
-        virt_dict = {}
+        (In contrast to use of DMI on x86_64).
+        """
 
-        vm_uuid_path = "%s/proc/device-tree/vm,uuid" % self.prefix
+        uuid_paths = [
+            f"{self.prefix}/proc/device-tree/vm,uuid",
+            f"{self.prefix}/proc/device-tree/ibm,partition-uuid",
+        ]
 
-        try:
-            with open(vm_uuid_path) as fo:
-                contents = fo.read()
-                # Apparently ppc64 can report a virt uuid with a null byte at the end.
-                # See BZ 1405125.
-                vm_uuid = contents.strip(string.whitespace + "\0")
-                virt_dict['virt.uuid'] = vm_uuid
-        except IOError as e:
-            log.warn("Tried to read %s but there was an error: %s", vm_uuid_path, e)
+        for uuid_path in uuid_paths:
+            if not os.path.isfile(uuid_path):
+                continue
+            try:
+                with open(uuid_path) as fo:
+                    contents = fo.read()
+                    # Apparently ppc64 can report a virt uuid with a null byte at the end.
+                    # See BZ 1405125.
+                    vm_uuid = contents.strip(string.whitespace + "\0")
+                    return vm_uuid
+            except IOError as e:
+                log.warn("Tried to read %s but there was an error: %s", uuid_path, e)
 
-        return virt_dict
+        log.warn("No available file for UUID on %s", self.arch)
+        return None
 
 
 class VirtCollector(collector.FactsCollector):
