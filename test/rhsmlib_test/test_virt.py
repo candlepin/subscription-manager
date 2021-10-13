@@ -78,11 +78,25 @@ class VirtCollectorTest(test.fixture.SubManFixture):
 
 
 class VirtUuidCollectorTest(unittest.TestCase):
-    def test_strips_null_byte_on_uuid(self):
+    @patch("os.path.isfile")
+    def test_strips_null_byte_on_uuid_vm_uuid(self, mock_isfile):
+        def is_uuid_file(path):
+            return path.endswith('/vm,uuid')
+        mock_isfile.side_effect = is_uuid_file
         with test.fixture.open_mock(content="123\0"):
             collector = virt.VirtUuidCollector(arch='ppc64')
-            fact = collector._get_devicetree_vm_uuid()
-            self.assertEqual('123', fact['virt.uuid'])
+            uuid = collector._get_devicetree_uuid()
+            self.assertEqual('123', uuid)
+
+    @patch("os.path.isfile")
+    def test_strips_null_byte_on_uuid_ibm_partition_uuid(self, mock_isfile):
+        def is_uuid_file(path):
+            return path.endswith('/ibm,partition-uuid')
+        mock_isfile.side_effect = is_uuid_file
+        with test.fixture.open_mock(content="123\0"):
+            collector = virt.VirtUuidCollector(arch='ppc64')
+            uuid = collector._get_devicetree_uuid()
+            self.assertEqual('123', uuid)
 
     def test_default_virt_uuid_physical(self):
         """Check that physical systems dont set an 'Unknown' virt.uuid."""
