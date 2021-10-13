@@ -1616,72 +1616,87 @@
       }
     },
     "@patternfly/patternfly": {
-      "version": "4.102.2",
-      "resolved": "https://registry.npmjs.org/@patternfly/patternfly/-/patternfly-4.102.2.tgz",
-      "integrity": "sha512-n51n3iW/lRHCvModGYDCEzeLJO+x4Z9ZRkdz6HtUqrStfjIRFHCKbKlpyPvpWacdQEC5Mx1oNIrHmNASmm/Zgw==",
+      "version": "4.135.2",
+      "resolved": "https://registry.npmjs.org/@patternfly/patternfly/-/patternfly-4.135.2.tgz",
+      "integrity": "sha512-oxLGfGdQNN5yGzvOSH51XR6AuoLjxajteLIOzXJKllqDSQgVP6nZQRCjjB0sUYuin5cUue7lRLqr7clzYd6Zbw==",
       "dev": true
     },
     "@patternfly/react-core": {
-      "version": "4.115.2",
-      "resolved": "https://registry.npmjs.org/@patternfly/react-core/-/react-core-4.115.2.tgz",
-      "integrity": "sha512-lnA+WmTQ0IyJIuSSUH0mjMUujAb6sYGNFMwkGDy4BpJjeu0aredVEmM0kAe/rFAurjSen/JpOhET2V3NiMGKtA==",
+      "version": "4.157.3",
+      "resolved": "https://registry.npmjs.org/@patternfly/react-core/-/react-core-4.157.3.tgz",
+      "integrity": "sha512-vP4/lZLTy0U4jmVP7ZO8I7EX1qSyVyFFbay01Pj1pVGHo74gP7yaUFwMvAvURGYmNeWdAhxgIBfYV8VimkSwLg==",
       "dev": true,
       "requires": {
-        "@patternfly/react-icons": "^4.10.2",
-        "@patternfly/react-styles": "^4.10.2",
-        "@patternfly/react-tokens": "^4.11.3",
+        "@patternfly/react-icons": "^4.11.17",
+        "@patternfly/react-styles": "^4.11.16",
+        "@patternfly/react-tokens": "^4.12.18",
         "focus-trap": "6.2.2",
         "react-dropzone": "9.0.0",
         "tippy.js": "5.1.2",
-        "tslib": "1.13.0"
-      },
-      "dependencies": {
-        "tslib": {
-          "version": "1.13.0",
-          "resolved": "https://registry.npmjs.org/tslib/-/tslib-1.13.0.tgz",
-          "integrity": "sha512-i/6DQjL8Xf3be4K/E6Wgpekn5Qasl1usyw++dAA35Ue5orEn65VIxOA+YvNNl9HV3qv70T7CNwjODHZrLwvd1Q==",
-          "dev": true
-        }
+        "tslib": "^2.0.0"
       }
     },
     "@patternfly/react-icons": {
-      "version": "4.10.2",
-      "resolved": "https://registry.npmjs.org/@patternfly/react-icons/-/react-icons-4.10.2.tgz",
-      "integrity": "sha512-mSkBRaEFukpaAoLDyd3nI+6Cj0z2/5DgJTA2i7By/UW1wJifKnBWW8NRO2SsJQVQIUtuuAunjUrjzKHdcxs5IQ==",
+      "version": "4.13.0",
+      "resolved": "https://registry.npmjs.org/@patternfly/react-icons/-/react-icons-4.13.0.tgz",
+      "integrity": "sha512-Z8bdqY4DWZJ1E3J2sM/eUEH5FihKrZsoRCpFAz+XZ0hOmMTMwYT/bjQ/Z47udtMkAI0SqndrTZQPh0heASFbog==",
       "dev": true
     },
     "@patternfly/react-styles": {
-      "version": "4.10.2",
-      "resolved": "https://registry.npmjs.org/@patternfly/react-styles/-/react-styles-4.10.2.tgz",
-      "integrity": "sha512-cGvDFAISGrt+RAkX5NVyILCjWV1l9PCUpnMq6v4/6jBJOEHTBnRjaIGa92dw3OrLh407cBOIC0ugweRnocRmPw==",
+      "version": "4.11.16",
+      "resolved": "https://registry.npmjs.org/@patternfly/react-styles/-/react-styles-4.11.16.tgz",
+      "integrity": "sha512-4ZFynQuJmRF7VbZeQSs44MX6MEvW7l7ZR8lMeChd8mxnQpG8pWtVUbcHdj9FFHPZVa+sPrgrZQl8QmhbqYyOsg==",
       "dev": true
     },
     "@patternfly/react-table": {
-      "version": "4.26.7",
-      "resolved": "https://registry.npmjs.org/@patternfly/react-table/-/react-table-4.26.7.tgz",
-      "integrity": "sha512-rG6ZrkOf9sDGoKFP5VuntmB2DiOr2CyStZ4TKSFpH55ZIIIQB9FtuaDmX58cTE0xDpP4YW/NPEKkWHDVo7t76Q==",
+      "version": "4.31.3",
+      "resolved": "https://registry.npmjs.org/@patternfly/react-table/-/react-table-4.31.3.tgz",
+      "integrity": "sha512-c4Pk0FZAT2C9rHvScSKj+iq9ALEPYhQAbkumbU7kQN2Sxf9vmbuzECPS/21+yYuVdVUjUmxWgSqUfCDAAfdV7Q==",
       "dev": true,
       "requires": {
-        "@patternfly/react-core": "^4.115.2",
-        "@patternfly/react-icons": "^4.10.2",
-        "@patternfly/react-styles": "^4.10.2",
-        "@patternfly/react-tokens": "^4.11.3",
+        "@patternfly/react-core": "^4.161.2",
+        "@patternfly/react-icons": "^4.12.3",
+        "@patternfly/react-styles": "^4.12.3",
+        "@patternfly/react-tokens": "^4.13.4",
         "lodash": "^4.17.19",
-        "tslib": "1.13.0"
+        "tslib": "^2.0.0"
       },
       "dependencies": {
-        "tslib": {
-          "version": "1.13.0",
-          "resolved": "https://registry.npmjs.org/tslib/-/tslib-1.13.0.tgz",
-          "integrity": "sha512-i/6DQjL8Xf3be4K/E6Wgpekn5Qasl1usyw++dAA35Ue5orEn65VIxOA+YvNNl9HV3qv70T7CNwjODHZrLwvd1Q==",
+        "@patternfly/react-core": {
+          "version": "4.168.8",
+          "resolved": "https://registry.npmjs.org/@patternfly/react-core/-/react-core-4.168.8.tgz",
+          "integrity": "sha512-wfG52saibeAXRoBYytzMgVGANoInbPuhUK0y6AynVp3/QKAPCKHpaI4nCh9ytNZ+UjiT2KGOcunhavsOw5+iMA==",
+          "dev": true,
+          "requires": {
+            "@patternfly/react-icons": "^4.19.8",
+            "@patternfly/react-styles": "^4.18.8",
+            "@patternfly/react-tokens": "^4.20.8",
+            "focus-trap": "6.2.2",
+            "react-dropzone": "9.0.0",
+            "tippy.js": "5.1.2",
+            "tslib": "^2.0.0"
+          },
+          "dependencies": {
+            "@patternfly/react-icons": {
+              "version": "4.19.8",
+              "resolved": "https://registry.npmjs.org/@patternfly/react-icons/-/react-icons-4.19.8.tgz",
+              "integrity": "sha512-JBBcVntRLspe857JnGo8lFaZfy+WOR/IYe2E9W3Rknqm1T8WO6oXpeEnrr5r9bpYDFUa4ttcb/acuQXc1xypxg==",
+              "dev": true
+            }
+          }
+        },
+        "@patternfly/react-styles": {
+          "version": "4.18.8",
+          "resolved": "https://registry.npmjs.org/@patternfly/react-styles/-/react-styles-4.18.8.tgz",
+          "integrity": "sha512-136N/Whs0qXDtPpsh5JeNJld5BeFPsbmmcgI5LlMQ+P9dioddh24rTqaaOIea67tHiXUB7orxaqKpBBILXqcPQ==",
           "dev": true
         }
       }
     },
     "@patternfly/react-tokens": {
-      "version": "4.11.3",
-      "resolved": "https://registry.npmjs.org/@patternfly/react-tokens/-/react-tokens-4.11.3.tgz",
-      "integrity": "sha512-7VbmT+aOwxk1DYzwer+wZgcbvkSsUUTKMKJDzhMvm5xi9nDeW8qI7laxQbWC9PDfsI5tiPxI2+BSuHnZpV/eRg==",
+      "version": "4.20.8",
+      "resolved": "https://registry.npmjs.org/@patternfly/react-tokens/-/react-tokens-4.20.8.tgz",
+      "integrity": "sha512-OFlgTknFBNAETWVYYoLdISJBjPMQ8e3tcLpWb3h/KgKk/Tn1NR+P7Pl1gQGvTL/9liBZfS/HKDD5+P8c70w+2Q==",
       "dev": true
     },
     "@types/c3": {
@@ -2474,14 +2489,6 @@
       "dev": true,
       "requires": {
         "core-js": "^2.5.0"
-      },
-      "dependencies": {
-        "core-js": {
-          "version": "2.6.12",
-          "resolved": "https://registry.npmjs.org/core-js/-/core-js-2.6.12.tgz",
-          "integrity": "sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==",
-          "dev": true
-        }
       }
     },
     "axe-core": {
@@ -3279,6 +3286,12 @@
         "p-limit": "^1.0.0",
         "serialize-javascript": "^1.4.0"
       }
+    },
+    "core-js": {
+      "version": "2.6.12",
+      "resolved": "https://registry.npmjs.org/core-js/-/core-js-2.6.12.tgz",
+      "integrity": "sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==",
+      "dev": true
     },
     "core-js-compat": {
       "version": "3.19.1",
@@ -5059,14 +5072,6 @@
       "dev": true,
       "requires": {
         "tslib": "^2.0.1"
-      },
-      "dependencies": {
-        "tslib": {
-          "version": "2.2.0",
-          "resolved": "https://registry.npmjs.org/tslib/-/tslib-2.2.0.tgz",
-          "integrity": "sha512-gS9GVHRU+RGn5KQM2rllAlR3dU6m7AcpJKdtH8gFvQiC4Otgk98XnmMU+nZenHt/+VhnBPWwgrJsyrdcw6i23w==",
-          "dev": true
-        }
       }
     },
     "find-cache-dir": {
@@ -8780,9 +8785,9 @@
       }
     },
     "tabbable": {
-      "version": "5.2.0",
-      "resolved": "https://registry.npmjs.org/tabbable/-/tabbable-5.2.0.tgz",
-      "integrity": "sha512-0uyt8wbP0P3T4rrsfYg/5Rg3cIJ8Shl1RJ54QMqYxm1TLdWqJD1u6+RQjr2Lor3wmfT7JRHkirIwy99ydBsyPg==",
+      "version": "5.2.1",
+      "resolved": "https://registry.npmjs.org/tabbable/-/tabbable-5.2.1.tgz",
+      "integrity": "sha512-40pEZ2mhjaZzK0BnI+QGNjJO8UYx9pP5v7BGe17SORTO0OEuuaAwQTkAp8whcZvqon44wKFOikD+Al11K3JICQ==",
       "dev": true
     },
     "table": {
@@ -8983,6 +8988,12 @@
           "dev": true
         }
       }
+    },
+    "tslib": {
+      "version": "2.3.1",
+      "resolved": "https://registry.npmjs.org/tslib/-/tslib-2.3.1.tgz",
+      "integrity": "sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==",
+      "dev": true
     },
     "type-check": {
       "version": "0.4.0",
