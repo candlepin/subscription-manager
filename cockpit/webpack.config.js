@@ -2,13 +2,13 @@ const path = require("path");
 const copy = require("copy-webpack-plugin");
 const fs = require("fs");
 const TerserJSPlugin = require('terser-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const webpack = require("webpack");
 const CompressionPlugin = require("compression-webpack-plugin");
 const ESLintPlugin = require('eslint-webpack-plugin');
-const extract = require("mini-css-extract-plugin");
 const glob = require("glob");
 const po2json = require("po2json");
+const miniCssExtractPlugin = require('mini-css-extract-plugin');
 
 var externals = {
     "cockpit": "cockpit",
@@ -123,8 +123,7 @@ var plugins = [
         'jQuery': 'jquery',
     }),
     new Po2JSONPlugin(),
-    new extract("[name].css"),
-    new Po2JSONPlugin(),
+    new miniCssExtractPlugin({ filename: "[name].css" }),
     new ESLintPlugin({ extensions: ["js", "jsx"], exclude: ["spec", "node_modules", "src/lib"] }),
 ];
 
@@ -164,7 +163,6 @@ if (production) {
     output.filename = "[name].min.js";
 
     plugins.unshift(new CompressionPlugin({
-        asset: "[path].gz[query]",
         test: /\.(js|html)$/,
         minRatio: 0.9,
         deleteOriginalAssets: true
@@ -182,6 +180,7 @@ module.exports = {
         modules: [ nodedir, libdir ],
     },
     externals: externals,
+
     output: output,
     devtool: production ? false : "source-map",
     module: {
@@ -191,35 +190,13 @@ module.exports = {
                 use: "babel-loader",
                 test: /\.(js|jsx)$/
             },
-            {
-                test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|eot|ttf|wav|mp3)$/,
-                options: {
-                    name: '[path][name].[ext]'
-                },
-                loader: 'file-loader',
-            },
-            {
-                exclude: /node_modules/,
-                use: [
-                    extract.loader,
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            sourceMap: true,
-                            url: false,
-                        },
-                    },
-                    'less-loader',
-                ],
-                test: /\.less$/
-            },
             /* HACK: remove unwanted fonts from PatternFly's css */
             /* The following rule will bundle the patternfly-cockpit.scss file included from index.js */
             /* Since Patternfly 4 includes more fonts than we are interested in do some fonts filtering here */
             {
                 test: /patternfly-cockpit.scss$/,
                 use: [
-                    extract.loader,
+                    miniCssExtractPlugin.loader,
                     {
                         loader: 'css-loader',
                         options: {
@@ -276,7 +253,7 @@ module.exports = {
                 test: /\.s?css$/,
                 exclude: /patternfly-cockpit.scss/,
                 use: [
-                    extract.loader,
+                    miniCssExtractPlugin.loader,
                     {
                         loader: 'css-loader',
                         options: {
