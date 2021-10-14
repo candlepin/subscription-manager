@@ -18,7 +18,7 @@
  */
 
 const cockpit = require("cockpit");
-import * as PK from "../lib/packagekit";
+import * as PK from "packagekit";
 
 const _ = cockpit.gettext;
 

@@ -1,4 +1,7 @@
-all:
+# one example file in src/lib to check if it was already checked out
+LIB_TEST=src/lib/cockpit-po-plugin.js
+
+all: $(LIB_TEST)
 	NODE_ENV=$(NODE_ENV) npm run build
 
 clean:
@@ -39,3 +42,9 @@ rpm: dist-gzip
 	  subscription-manager-cockpit.spec
 	find `pwd`/output -name '*.rpm' -printf '%f\n' -exec mv {} . \;
 	rm -r "`pwd`/rpmbuild"
+
+# checkout Cockpit's PF/React/build library; again this has no API stability guarantee, so check out a stable tag
+$(LIB_TEST):
+	git clone -b 253 --depth=1 https://github.com/cockpit-project/cockpit.git tmp/cockpit
+	mv tmp/cockpit/pkg/lib src/
+	rm -rf tmp/cockpit
