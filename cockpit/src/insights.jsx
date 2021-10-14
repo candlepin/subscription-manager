@@ -21,9 +21,9 @@ import cockpit from "cockpit";
 import React from "react";
 import moment from "moment";
 
-import { show_modal_dialog } from "../lib/cockpit-components-dialog.jsx";
-import * as service from "../lib/service.js";
-import * as PK from "../lib/packagekit";
+import { show_modal_dialog } from "cockpit-components-dialog.jsx";
+import * as service from "service.js";
+import * as PK from "packagekit";
 
 import { ExternalLinkAltIcon, WarningTriangleIcon } from '@patternfly/react-icons';
 import {

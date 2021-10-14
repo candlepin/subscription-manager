@@ -21,8 +21,8 @@ import cockpit from 'cockpit';
 import React from 'react';
 import subscriptionsClient from './subscriptions-client';
 import { InsightsStatus } from './insights.jsx';
-import { EmptyStatePanel } from "../lib/cockpit-components-empty-state.jsx";
-import { ListingTable } from "../lib/cockpit-components-table.jsx";
+import { EmptyStatePanel } from "cockpit-components-empty-state.jsx";
+import { ListingTable } from "cockpit-components-table.jsx";
 import { ExclamationCircleIcon } from '@patternfly/react-icons';
 import {
     Alert, AlertGroup, AlertActionCloseButton, Button,

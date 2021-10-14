@@ -20,6 +20,7 @@ const builddir = (process.env.SRCDIR || __dirname);
 const distdir = builddir + path.sep + "dist";
 const section = process.env.ONLYDIR || null;
 const nodedir = path.resolve((process.env.SRCDIR || __dirname), "node_modules");
+const libdir = srcdir + path.sep + "lib";
 
 /* A standard nodejs and webpack pattern */
 var production = process.env.NODE_ENV === 'production';
@@ -124,7 +125,7 @@ var plugins = [
     new Po2JSONPlugin(),
     new extract("[name].css"),
     new Po2JSONPlugin(),
-    new ESLintPlugin({ extensions: ["js", "jsx"], exclude: ["spec", "node_modules"] }),
+    new ESLintPlugin({ extensions: ["js", "jsx"], exclude: ["spec", "node_modules", "src/lib"] }),
 ];
 
 if (!production) {
@@ -174,7 +175,11 @@ module.exports = {
     mode: production ? 'production' : 'development',
     entry: info.entries,
     resolve: {
+        modules: [ nodedir, libdir ],
         alias: { 'font-awesome': path.resolve(nodedir, 'font-awesome-sass/assets/stylesheets') },
+    },
+    resolveLoader: {
+        modules: [ nodedir, libdir ],
     },
     externals: externals,
     output: output,

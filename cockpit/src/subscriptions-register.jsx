@@ -22,7 +22,7 @@ var _ = cockpit.gettext;
 
 var React = require("react");
 import Select from "./Select/Select.jsx";
-import '../lib/form-layout.less';
+import 'form-layout.scss';
 
 import subscriptionsClient from './subscriptions-client';
 import * as Insights from './insights.jsx';
