@@ -21,8 +21,9 @@ var cockpit = require("cockpit");
 var _ = cockpit.gettext;
 
 var React = require("react");
-import Select from "./Select/Select.jsx";
 import 'form-layout.scss';
+
+import { FormSelect, FormSelectOption } from '@patternfly/react-core';
 
 import subscriptionsClient from './subscriptions-client';
 import * as Insights from './insights.jsx';
@@ -147,11 +148,11 @@ class SubscriptionRegisterDialog extends React.Component {
                     <label className="control-label" htmlFor="subscription-register-url">
                         {_("URL")}
                     </label>
-                    <Select key='urlSource' onChange={value => this.props.onChange('url', value)}
+                    <FormSelect key='urlSource' onChange={value => this.props.onChange('url', value)}
                             id="subscription-register-url" value={this.props.url}>
-                        <option value="default">{ urlEntries['default'] }</option>
-                        <option value="custom">{ urlEntries['custom'] }</option>
-                    </Select>
+                        <FormSelectOption value="default" label={urlEntries['default']} />
+                        <FormSelectOption value="custom" label={urlEntries['custom']} />
+                    </FormSelect>
                     {customURL}
                     <label className="checkbox-inline">
                         <input id="subscription-proxy-use" type="checkbox" checked={this.props.proxy}
