@@ -29,6 +29,7 @@ import { ExclamationTriangleIcon, ExternalLinkAltIcon, WarningTriangleIcon } fro
 import {
     Button,
     DescriptionListDescription, DescriptionListGroup, DescriptionListTerm,
+    ExpandableSection,
     Stack, StackItem,
 } from '@patternfly/react-core';
 
@@ -170,7 +171,7 @@ function install_data_summary(data) {
             );
 
         summary = [ <p>{summary}</p>,
-            <Revealer summary={_("Details")}>{extra_details}{remove_details}</Revealer>
+            <ExpandableSection toggleText={_("Details")}>{extra_details}{remove_details}</ExpandableSection>
         ];
     }
 
@@ -287,25 +288,6 @@ function show_connect_dialog() {
     });
 }
 
-class Revealer extends React.Component {
-    constructor() {
-        super();
-        this.state = { revealed: false };
-    }
-
-    render() {
-        return (
-            <div>
-                <a onClick={event => { if (event.button == 0) this.setState({ revealed: !this.state.revealed }); }}>
-                    {this.props.summary}
-                </a> <i className={this.state.revealed ? "fa fa-angle-down" : "fa fa-angle-right"} />
-                <br />
-                {this.state.revealed && this.props.children}
-            </div>
-        );
-    }
-}
-
 const get_monotonic_start = cockpit.spawn(
     [ "/usr/libexec/platform-python", "-c",
         "import time; print(time.clock_gettime(time.CLOCK_REALTIME) - time.clock_gettime(time.CLOCK_MONOTONIC))"
@@ -413,7 +395,7 @@ function show_status_dialog() {
                             <a onClick={left(jump_to_service)}>{_("Details")}</a>
                         </div>
                         }
-                        <Revealer summary={_("Disconnect from Insights")}>
+                        <ExpandableSection toggleText={_("Disconnect from Insights")}>
                             <div className="alert alert-warning"
                                  style={{ "padding": "14px", "marginTop": "1ex", "marginBottom": "0px" }}>
                                 <p>{_("If you disconnect this system from Insights, it will no longer report it's Insights status in Red Hat Cloud or Satellite.")}</p>
@@ -422,7 +404,7 @@ function show_status_dialog() {
                                     {_("Disconnect from Insights")}
                                 </button>
                             </div>
-                        </Revealer>
+                        </ExpandableSection>
                     </div>
                 )
             },
