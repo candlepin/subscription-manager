@@ -63,7 +63,6 @@ class Server(object):
         init_logger(parser)
 
         # Configure mainloop for threading.  We must do so in GLib and python-dbus.
-        GLib.threads_init()
         dbus.mainloop.glib.threads_init()
 
         self.bus_name = bus_name or constants.BUS_NAME
