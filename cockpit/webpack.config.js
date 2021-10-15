@@ -118,10 +118,6 @@ var plugins = [
         }
     }),
     new copy(info.files),
-    new webpack.ProvidePlugin({
-        '$': 'jquery',
-        'jQuery': 'jquery',
-    }),
     new Po2JSONPlugin(),
     new miniCssExtractPlugin({ filename: "[name].css" }),
     new ESLintPlugin({ extensions: ["js", "jsx"], exclude: ["spec", "node_modules", "src/lib"] }),
