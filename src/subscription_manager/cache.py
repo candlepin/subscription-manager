@@ -421,6 +421,7 @@ class ProfileManager(CacheManager):
         self._current_profile = None
         self.report_package_profile = self.profile_reporting_enabled()
         self.identity = inj.require(inj.IDENTITY)
+        self.conduit = None
 
     def profile_reporting_enabled(self):
         # If profile reporting is disabled from the environment, that overrides the setting in the conf file
@@ -448,7 +449,7 @@ class ProfileManager(CacheManager):
     def current_profile(self):
         if not self._current_profile:
             rpm_profile = get_profile('rpm').collect()
-            enabled_repos = get_profile('enabled_repos').collect()
+            enabled_repos = get_profile('enabled_repos', conduit=self.conduit).collect()
             module_profile = get_profile('modulemd').collect()
             combined_profile = self._assembly_profile(rpm_profile, enabled_repos, module_profile)
             self._current_profile = combined_profile

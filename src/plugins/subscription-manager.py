@@ -228,7 +228,7 @@ def posttrans_hook(conduit):
     if '1' == cfg.get('rhsm', 'package_profile_on_trans'):
         conduit.info(3, "Updating package profile")
         package_profile_client = ProfileActionClient()
-        package_profile_client.update()
+        package_profile_client.profilelib._do_update(conduit=conduit)
     else:
         # do nothing
         return

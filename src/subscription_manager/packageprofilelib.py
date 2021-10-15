@@ -21,8 +21,8 @@ class PackageProfileActionInvoker(certlib.BaseActionInvoker):
     """Used by rhsmcertd to update the profile
     periodically.
     """
-    def _do_update(self):
-        action = PackageProfileActionCommand()
+    def _do_update(self, conduit=None):
+        action = PackageProfileActionCommand(conduit=conduit)
         return action.perform()
 
 
@@ -31,14 +31,16 @@ class PackageProfileActionCommand(object):
 
     Returns a PackageProfileActionReport.
     """
-    def __init__(self):
+    def __init__(self, conduit=None):
         self.report = PackageProfileActionReport()
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = self.cp_provider.get_consumer_auth_cp()
+        self.conduit = conduit
 
     def perform(self, force_upload=False):
         profile_mgr = inj.require(inj.PROFILE_MANAGER)
         consumer_identity = inj.require(inj.IDENTITY)
+        profile_mgr.conduit = self.conduit
         ret = profile_mgr.update_check(self.uep, consumer_identity.uuid, force=force_upload)
         self.report._status = ret
         return self.report

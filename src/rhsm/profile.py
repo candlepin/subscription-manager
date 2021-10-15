@@ -139,13 +139,15 @@ class EnabledRepos(object):
                 break
         return enabled_repos
 
-    def __init__(self, repo_file):
+    def __init__(self, repo_file, conduit=None):
         """
         :param path: A .repo file path used to filter the report.
         :type path: str
         """
         if dnf is not None:
             self.db = dnf.dnf.Base()
+        elif yum is not None and conduit:
+            self.yb = conduit._base
         elif yum is not None:
             self.yb = yum.YumBase()
 
@@ -191,8 +193,8 @@ class EnabledReposProfile(object):
     Collect information about enabled repositories
     """
 
-    def __init__(self, repo_file=REPOSITORY_PATH):
-        self._enabled_repos = EnabledRepos(repo_file)
+    def __init__(self, repo_file=REPOSITORY_PATH, conduit=None):
+        self._enabled_repos = EnabledRepos(repo_file, conduit=conduit)
 
     def __eq__(self, other):
         return self._enabled_repos.content == other._enabled_repos.content
@@ -345,7 +347,7 @@ class RPMProfile(object):
         return True
 
 
-def get_profile(profile_type):
+def get_profile(profile_type, conduit=None):
     """
     Returns an instance of a Profile object
     @param profile_type: profile type
@@ -354,7 +356,11 @@ def get_profile(profile_type):
     """
     if profile_type not in PROFILE_MAP:
         raise InvalidProfileType('Could not find profile for type [%s]', profile_type)
-    profile = PROFILE_MAP[profile_type]()
+
+    if profile_type == 'enabled_repos':
+        profile = PROFILE_MAP[profile_type](conduit=conduit)
+    else:
+        profile = PROFILE_MAP[profile_type]()
     return profile
 
 
