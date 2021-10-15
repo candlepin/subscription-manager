@@ -314,6 +314,9 @@ class TestSubscriptions(SubscriptionsCase):
         m = self.machine
         b = self.browser
 
+        if m.image.startswith('rhel-9-'):
+            self.skipTest("insights-client is currently broken in RHEL 9")
+
         self.login_and_go("/subscriptions")
 
         b.click("button:contains('Register')")
@@ -362,6 +365,9 @@ class TestSubscriptions(SubscriptionsCase):
     def testSubAndInAndFail(self):
         m = self.machine
         b = self.browser
+
+        if m.image.startswith('rhel-9-'):
+            self.skipTest("insights-client is currently broken in RHEL 9")
 
         self.login_and_go("/subscriptions")
 
