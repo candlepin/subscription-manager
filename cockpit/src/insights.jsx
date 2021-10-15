@@ -25,7 +25,7 @@ import { show_modal_dialog } from "cockpit-components-dialog.jsx";
 import * as service from "service.js";
 import * as PK from "packagekit";
 
-import { ExternalLinkAltIcon, WarningTriangleIcon } from '@patternfly/react-icons';
+import { ExclamationTriangleIcon, ExternalLinkAltIcon, WarningTriangleIcon } from '@patternfly/react-icons';
 import {
     Button,
     DescriptionListDescription, DescriptionListGroup, DescriptionListTerm,
@@ -117,8 +117,14 @@ function left(func) {
 export const blurb =
     _("Proactively identify and remediate threats to security, performance, availability, and stability with Red Hat Insights \u2014 with predictive analytics, avoid problems and unplanned downtime in your Red Hat environment.");
 
-export const link =
-    <a href="https://www.redhat.com/en/technologies/management/insights" target="_blank" rel="noopener noreferrer">Red Hat Insights <i className="fa fa-external-link" /></a>;
+export const link = (
+    <Button variant="link"
+            component='a'
+            href="https://www.redhat.com/en/technologies/management/insights" target="_blank" rel="noopener noreferrer"
+            icon={<ExternalLinkAltIcon />} iconPosition="right">
+        Red Hat Insights
+    </Button>
+);
 
 function install_data_summary(data) {
     if (!data || data.missing_names.length == 0)
@@ -135,7 +141,7 @@ function install_data_summary(data) {
         summary = [
             {summary},
             <br />,
-            <span className="pficon pficon-warning-triangle-o" />, "\n",
+            <ExclamationTriangleIcon className="ct-exclamation-triangle" />, "\n",
             cockpit.format(cockpit.ngettext("$0 package needs to be removed.",
                                             "$0 packages need to be removed.",
                                             data.remove_names.length),
@@ -395,14 +401,14 @@ function show_status_dialog() {
                         <br />
                         { insights_timer.state == "failed" &&
                         <div className="alert alert-warning">
-                            <span className="pficon pficon-warning-triangle-o" />
+                            <ExclamationTriangleIcon className="ct-exclamation-triangle" />,
                             {_("Next Insights data upload could not be scheduled.")}{" "}
                             <a onClick={left(jump_to_timer)}>{_("Details")}</a>
                         </div>
                         }
                         { insights_service.state == "failed" && failed_text &&
                         <div className="alert alert-warning">
-                            <span className="pficon pficon-warning-triangle-o" />
+                            <ExclamationTriangleIcon className="ct-exclamation-triangle" />,
                             {failed_text}{" "}
                             <a onClick={left(jump_to_service)}>{_("Details")}</a>
                         </div>
