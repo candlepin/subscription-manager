@@ -19,6 +19,7 @@
 
 from http.server import *
 import json
+import os
 import re
 import ssl
 
@@ -139,7 +140,23 @@ class handler(BaseHTTPRequestHandler):
 
 def insights_server(port):
     httpd = HTTPServer(('', port), handler)
-    httpd.socket = ssl.wrap_socket(httpd.socket, certfile='/etc/cockpit/ws-certs.d/0-self-signed.cert', server_side=True)
+    certfile = '/etc/cockpit/ws-certs.d/0-self-signed.cert'
+    keyfile = '/etc/cockpit/ws-certs.d/0-self-signed.key'
+    ssl_args = {
+        'certfile': certfile,
+        'server_side': True,
+    }
+    # take into account a behaviour change in the way cockpit generates its
+    # self-signed bits:
+    # - cockpit < 242: the .cert file contains both certificate *and* key
+    # - cockpit >= 242: separate .cert and .key files
+    # hence, if the separate .key file exists, use it as keyfile,
+    # otherwise use the .cert for that
+    if os.path.isfile(keyfile):
+        ssl_args['keyfile'] = keyfile
+    else:
+        ssl_args['keyfile'] = certfile
+    httpd.socket = ssl.wrap_socket(httpd.socket, **ssl_args)
     httpd.serve_forever()
 
 
