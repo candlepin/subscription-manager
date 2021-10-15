@@ -74,7 +74,11 @@
 %global python_sitearch %python3_sitearch
 %global python_sitelib %python3_sitelib
 %global __python %__python3
+%if 0%{?suse_version}
+%global py_package_prefix python3
+%else
 %global py_package_prefix python%{python3_pkgversion}
+%endif
 %global rhsm_package_name %{py_package_prefix}-subscription-manager-rhsm
 %else
 %if 0%{?suse_version} >= 1500
@@ -219,6 +223,7 @@ BuildRequires:  %{py_package_prefix}-python-dateutil
 Requires:  %{py_package_prefix}-python-dateutil
 %else
 BuildRequires: %{py_package_prefix}-dateutil
+BuildRequires: python-rpm-macros
 Requires: %{py_package_prefix}-dateutil
 %endif
 
@@ -230,7 +235,7 @@ Requires:  %{py_package_prefix}-setuptools
 %endif
 
 %if %{with python3}
-Requires: python3-dbus
+Requires: %{?suse_version:dbus-1-%{py_package_prefix}} %{!?suse_version:%{py_package_prefix}-dbus}
 %else
 Requires: %{?suse_version:dbus-1-python} %{!?suse_version:dbus-python}
 %endif
@@ -246,7 +251,16 @@ Requires: dnf-plugin-subscription-manager = %{version}
 %endif
 
 %if 0%{?suse_version}
-Requires: python-gobject2, libzypp, zypp-plugin-python, python-zypp
+Requires: python-gobject2, libzypp
+%if %{with python3}
+Requires: %{py_package_prefix}-zypp-plugin
+%else
+%if 0%{?suse_version} >= 1500
+Requires: %{py_package_prefix}-zypp-plugin
+%else
+Requires: zypp-plugin-python, python-zypp
+%endif
+%endif
 %else
 Requires:  usermode
 Requires: python3-gobject-base
@@ -273,7 +287,15 @@ Requires(preun): %{?suse_version:aaa_base} %{!?suse_version:chkconfig, initscrip
 
 Requires: python3-cloud-what = %{version}-%{release}
 
-BuildRequires: %{?suse_version:python-devel >= 2.6} %{!?suse_version:%{py_package_prefix}-devel}
+%if 0%{?suse_version}
+%if %{with python3}
+BuildRequires: %{py_package_prefix}-devel
+%else
+BuildRequires: python-devel >= 2.6
+%endif
+%else
+BuildRequires: %{py_package_prefix}-devel
+%endif
 BuildRequires: openssl-devel
 BuildRequires: gcc
 BuildRequires: %{py_package_prefix}-setuptools
@@ -688,8 +710,10 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-uep.pem %{buildroot}/
 # fix timestamps on our byte compiled files so they match across arches
 find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
+%if 0%{!?suse_version}
 %if %{with python3}
 %py_byte_compile %{__python3} %{buildroot}%{rhsm_plugins_dir}/
+%endif
 %endif
 
 # symlink services to /usr/sbin/ when building for SUSE distributions
