@@ -58,6 +58,9 @@ import sys
 import time
 import requests
 
+sys.stderr.write("Waiting 5 seconds for %s\\n" % sys.argv[1])
+sys.stderr.flush()
+time.sleep(5)
 for i in range(1,200):
   try:
      sys.stderr.write("Waiting for %s\\n" % sys.argv[1])
