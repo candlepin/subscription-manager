@@ -121,6 +121,7 @@ export const blurb =
 
 export const link = (
     <Button variant="link"
+            isInline
             component='a'
             href="https://www.redhat.com/en/technologies/management/insights" target="_blank" rel="noopener noreferrer"
             icon={<ExternalLinkAltIcon />} iconPosition="right">

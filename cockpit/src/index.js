@@ -88,17 +88,9 @@ function openRegisterDialog() {
 
             // show dialog to register
             let renderDialog;
-            let updatedData = function(prop, data) {
+            let updatedData = function(prop, value) {
                 if (prop) {
-                    if (data.target) {
-                        if (data.target.type === "checkbox") {
-                            registerDialogDetails[prop] = data.target.checked;
-                        } else {
-                            registerDialogDetails[prop] = data.target.value;
-                        }
-                    } else {
-                        registerDialogDetails[prop] = data;
-                    }
+                    registerDialogDetails[prop] = value;
                 }
 
                 registerDialogDetails.onChange = updatedData;
