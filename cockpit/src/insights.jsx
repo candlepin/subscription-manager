@@ -27,6 +27,7 @@ import * as PK from "packagekit";
 
 import { ExclamationTriangleIcon, ExternalLinkAltIcon, WarningTriangleIcon } from '@patternfly/react-icons';
 import {
+    Alert,
     Button,
     DescriptionListDescription, DescriptionListGroup, DescriptionListTerm,
     ExpandableSection,
@@ -384,28 +385,22 @@ function show_status_dialog() {
                         </table>
                         <br />
                         { insights_timer.state == "failed" &&
-                        <div className="alert alert-warning">
-                            <ExclamationTriangleIcon className="ct-exclamation-triangle" />,
-                            {_("Next Insights data upload could not be scheduled.")}{" "}
-                            <a onClick={left(jump_to_timer)}>{_("Details")}</a>
-                        </div>
+                        <Alert variant='warning'>
+                            <Button variant='link' isInline onClick={left(jump_to_timer)}>{_("Details")}</Button>
+                        </Alert>
                         }
                         { insights_service.state == "failed" && failed_text &&
-                        <div className="alert alert-warning">
-                            <ExclamationTriangleIcon className="ct-exclamation-triangle" />,
-                            {failed_text}{" "}
-                            <a onClick={left(jump_to_service)}>{_("Details")}</a>
-                        </div>
+                        <Alert variant='warning' title={failed_text}>
+                            <Button variant='link' isInline onClick={left(jump_to_service)}>{_("Details")}</Button>
+                        </Alert>
                         }
                         <ExpandableSection toggleText={_("Disconnect from Insights")}>
-                            <div className="alert alert-warning"
-                                 style={{ "padding": "14px", "marginTop": "1ex", "marginBottom": "0px" }}>
-                                <p>{_("If you disconnect this system from Insights, it will no longer report it's Insights status in Red Hat Cloud or Satellite.")}</p>
-                                <br />
-                                <button className="btn btn-danger" onClick={left(disconnect)}>
+                            <Alert isInline variant='warning'
+                                   title={_("If you disconnect this system from Insights, it will no longer report it's Insights status in Red Hat Cloud or Satellite.")}>
+                                <Button variant='danger' onClick={left(disconnect)}>
                                     {_("Disconnect from Insights")}
-                                </button>
-                            </div>
+                                </Button>
+                            </Alert>
                         </ExpandableSection>
                     </div>
                 )
