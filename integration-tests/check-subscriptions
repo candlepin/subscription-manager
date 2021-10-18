@@ -188,7 +188,7 @@ class TestSubscriptions(SubscriptionsCase):
         b.set_input_text("#subscription-register-password", "wrongpass")
 
         # try to register
-        dialog_register_button_sel = "div.modal-footer .btn-primary"
+        dialog_register_button_sel = "footer .pf-m-primary"
         b.click(dialog_register_button_sel)
 
         # wait for message that we used wrong credentials
@@ -249,7 +249,7 @@ class TestSubscriptions(SubscriptionsCase):
         b.set_input_text("#subscription-register-key", "awesome_os_pool")
         b.set_input_text("#subscription-register-org", "admin")
 
-        dialog_register_button_sel = "div.modal-footer .btn-primary"
+        dialog_register_button_sel = "footer .pf-m-primary"
         b.click(dialog_register_button_sel)
 
         # dialog should disappear
@@ -290,7 +290,7 @@ class TestSubscriptions(SubscriptionsCase):
 
         b.click("#subscription-auto-attach-use" )
 
-        dialog_register_button_sel = "div.modal-footer .btn-primary"
+        dialog_register_button_sel = "footer .pf-m-primary"
         b.click(dialog_register_button_sel)
 
         # dialog should disappear
@@ -327,15 +327,15 @@ class TestSubscriptions(SubscriptionsCase):
         b.set_input_text("#subscription-register-username", "admin")
         b.set_input_text("#subscription-register-password", "admin")
         b.set_input_text("#subscription-register-org", "admin")
-        dialog_register_button_sel = "div.modal-footer .btn-primary"
+        dialog_register_button_sel = "footer .pf-m-primary"
         b.click(dialog_register_button_sel)
         b.wait_not_present(dialog_register_button_sel)
 
         b.click("button:contains('Not connected')")
-        b.wait_visible('.modal-body:contains("This system is not connected")')
-        b.click('.modal-footer button.apply')
+        b.wait_visible('.pf-c-modal-box__body:contains("This system is not connected")')
+        b.click('footer button.apply')
         with b.wait_timeout(360):
-            b.wait_not_present('.modal-dialog')
+            b.wait_not_present('.pf-c-modal-box')
 
         # HACK - this should eventually not be necessary
         m.execute("insights-client --check-results")
@@ -354,11 +354,11 @@ class TestSubscriptions(SubscriptionsCase):
         b.wait_in_text("#syspurpose", "Red Hat Enterprise Linux Workstation")
 
         b.click("button:contains('Connected to Insights')")
-        b.wait_visible('.modal-body:contains("Next Insights data upload")')
-        b.wait_visible('.modal-body:contains("Last Insights data upload")')
-        b.click("a:contains('Disconnect from Insights')")
-        b.click("button:contains('Disconnect from Insights')")
-        b.wait_not_present('.modal-dialog')
+        b.wait_visible('.pf-c-modal-box__body:contains("Next Insights data upload")')
+        b.wait_visible('.pf-c-modal-box__body:contains("Last Insights data upload")')
+        b.click("button.pf-c-expandable-section__toggle:contains('Disconnect from Insights')")
+        b.click("button.pf-m-danger:contains('Disconnect from Insights')")
+        b.wait_not_present('.pf-c-modal-box')
 
         b.wait_visible("button:contains('Not connected')")
 
@@ -380,7 +380,7 @@ class TestSubscriptions(SubscriptionsCase):
         b.set_input_text("#subscription-register-password", "admin")
         b.set_input_text("#subscription-register-org", "admin")
         b.set_checked("#subscription-insights", True)
-        dialog_register_button_sel = "div.modal-footer .btn-primary"
+        dialog_register_button_sel = "footer .pf-m-primary"
         b.click(dialog_register_button_sel)
         with b.wait_timeout(360):
             b.wait_not_present(dialog_register_button_sel)
@@ -394,7 +394,7 @@ class TestSubscriptions(SubscriptionsCase):
         b.wait_visible("button .pf-c-button__icon svg[fill='orange']")
 
         b.click("button:contains('Connected to Insights')")
-        b.wait_visible('.modal-body:contains("The last Insights data upload has failed")')
+        b.wait_visible('.pf-c-modal-box__body:contains("The last Insights data upload has failed")')
         b.click("button.cancel")
 
         # Unbreak it and retry.
@@ -435,10 +435,10 @@ class TestSubscriptionsPackages(SubscriptionsCase, PackageCase):
         b.set_input_text("#subscription-register-password", "admin")
         b.set_input_text("#subscription-register-org", "admin")
         b.set_checked("#subscription-insights", True)
-        b.wait_visible('.modal-body:contains("The insights-client package will be installed")')
-        b.click('.modal-footer button.apply')
+        b.wait_visible('.pf-c-modal-box__body:contains("The insights-client package will be installed")')
+        b.click('footer button.apply')
         with b.wait_timeout(360):
-            b.wait_not_present(".modal-dialog")
+            b.wait_not_present(".pf-c-modal-box")
 
         # Connecting to Insights will not have worked because the
         # insights-client binary is not actually there.
@@ -452,12 +452,12 @@ class TestSubscriptionsPackages(SubscriptionsCase, PackageCase):
         m.execute("pkcon refresh")
 
         b.click("button:contains('Not connected')")
-        b.wait_visible('.modal-body:contains("This system is not connected")')
-        b.wait_visible('.modal-body:contains("The insights-client package will be installed")')
-        b.click('.modal-footer button.apply')
+        b.wait_visible('.pf-c-modal-box__body:contains("This system is not connected")')
+        b.wait_visible('.pf-c-modal-box__body:contains("The insights-client package will be installed")')
+        b.click('footer button.apply')
         with b.wait_timeout(360):
-            b.wait_visible('.modal-footer:contains("not-found")')
-        b.click('.modal-footer button.cancel')
+            b.wait_visible('footer:contains("not-found")')
+        b.click('footer button.cancel')
 
         m.execute("test -f /stamp-insights-client-999-1")
 
