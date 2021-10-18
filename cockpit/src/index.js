@@ -21,7 +21,7 @@ import cockpit from 'cockpit';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import 'patternfly/patternfly-cockpit.scss';
+import 'patternfly/patternfly-4-cockpit.scss';
 
 import subscriptionsClient from './subscriptions-client';
 import SubscriptionRegisterDialog from './subscriptions-register.jsx';

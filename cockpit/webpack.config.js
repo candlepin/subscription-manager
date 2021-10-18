@@ -187,10 +187,8 @@ module.exports = {
                 test: /\.(js|jsx)$/
             },
             /* HACK: remove unwanted fonts from PatternFly's css */
-            /* The following rule will bundle the patternfly-cockpit.scss file included from index.js */
-            /* Since Patternfly 4 includes more fonts than we are interested in do some fonts filtering here */
             {
-                test: /patternfly-cockpit.scss$/,
+                test: /patternfly-4-cockpit.scss$/,
                 use: [
                     miniCssExtractPlugin.loader,
                     {
@@ -204,18 +202,6 @@ module.exports = {
                         loader: 'string-replace-loader',
                         options: {
                             multiple: [
-                                {
-                                    search: /src:url[(]"patternfly-icons-fake-path\/glyphicons-halflings-regular[^}]*/g,
-                                    replace: 'font-display:block; src:url("../base1/fonts/glyphicons.woff") format("woff");',
-                                },
-                                {
-                                    search: /src:url[(]"patternfly-fonts-fake-path\/PatternFlyIcons[^}]*/g,
-                                    replace: 'src:url("../base1/fonts/patternfly.woff") format("woff");',
-                                },
-                                {
-                                    search: /src:url[(]"patternfly-fonts-fake-path\/fontawesome[^}]*/,
-                                    replace: 'font-display:block; src:url("../base1/fonts/fontawesome.woff?v=4.2.0") format("woff");',
-                                },
                                 {
                                     search: /src:url\("patternfly-icons-fake-path\/pficon[^}]*/g,
                                     replace: 'src:url("../base1/fonts/patternfly.woff") format("woff");',
@@ -231,12 +217,6 @@ module.exports = {
                         loader: 'sass-loader',
                         options: {
                             sassOptions: {
-                                includePaths: [
-                                    // Teach webpack to resolve these references in order to build PF3 scss
-                                    path.resolve(nodedir, 'font-awesome-sass', 'assets', 'stylesheets'),
-                                    path.resolve(nodedir, 'patternfly', 'dist', 'sass'),
-                                    path.resolve(nodedir, 'bootstrap-sass', 'assets', 'stylesheets'),
-                                ],
                                 outputStyle: 'compressed',
                             },
                             sourceMap: true,
@@ -244,10 +224,10 @@ module.exports = {
                     },
                 ]
             },
-            /* This rule will handle scss and css stylesheets apart from pattenrfly-cockpit.scss which is handled just above */
+            /* This rule will handle scss and css stylesheets apart from pattenrfly-4-cockpit.scss which is handled just above */
             {
                 test: /\.s?css$/,
-                exclude: /patternfly-cockpit.scss/,
+                exclude: /patternfly-4-cockpit.scss/,
                 use: [
                     miniCssExtractPlugin.loader,
                     {

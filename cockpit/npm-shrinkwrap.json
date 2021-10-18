@@ -1690,264 +1690,6 @@
       "resolved": "https://registry.npmjs.org/@patternfly/react-tokens/-/react-tokens-4.20.8.tgz",
       "integrity": "sha512-OFlgTknFBNAETWVYYoLdISJBjPMQ8e3tcLpWb3h/KgKk/Tn1NR+P7Pl1gQGvTL/9liBZfS/HKDD5+P8c70w+2Q=="
     },
-    "@types/c3": {
-      "version": "0.6.4",
-      "resolved": "https://registry.npmjs.org/@types/c3/-/c3-0.6.4.tgz",
-      "integrity": "sha512-W7i7oSmHsXYhseZJsIYexelv9HitGsWdQhx3mcy4NWso+GedpCYr02ghpkNvnZ4oTIjNeISdrOnM70s7HiuV+g==",
-      "optional": true,
-      "requires": {
-        "@types/d3": "^4"
-      }
-    },
-    "@types/d3": {
-      "version": "4.13.12",
-      "resolved": "https://registry.npmjs.org/@types/d3/-/d3-4.13.12.tgz",
-      "integrity": "sha512-/bbFtkOBc04gGGN8N9rMG5ps3T0eIj5I8bnYe9iIyeM5qoOrydPCbFYlEPUnj2h9ibc2i+QZfDam9jY5XTrTxQ==",
-      "optional": true,
-      "requires": {
-        "@types/d3-array": "^1",
-        "@types/d3-axis": "^1",
-        "@types/d3-brush": "^1",
-        "@types/d3-chord": "^1",
-        "@types/d3-collection": "*",
-        "@types/d3-color": "^1",
-        "@types/d3-dispatch": "^1",
-        "@types/d3-drag": "^1",
-        "@types/d3-dsv": "^1",
-        "@types/d3-ease": "^1",
-        "@types/d3-force": "^1",
-        "@types/d3-format": "^1",
-        "@types/d3-geo": "^1",
-        "@types/d3-hierarchy": "^1",
-        "@types/d3-interpolate": "^1",
-        "@types/d3-path": "^1",
-        "@types/d3-polygon": "^1",
-        "@types/d3-quadtree": "^1",
-        "@types/d3-queue": "*",
-        "@types/d3-random": "^1",
-        "@types/d3-request": "*",
-        "@types/d3-scale": "^1",
-        "@types/d3-selection": "^1",
-        "@types/d3-shape": "^1",
-        "@types/d3-time": "^1",
-        "@types/d3-time-format": "^2",
-        "@types/d3-timer": "^1",
-        "@types/d3-transition": "^1",
-        "@types/d3-voronoi": "*",
-        "@types/d3-zoom": "^1"
-      }
-    },
-    "@types/d3-array": {
-      "version": "1.2.8",
-      "resolved": "https://registry.npmjs.org/@types/d3-array/-/d3-array-1.2.8.tgz",
-      "integrity": "sha512-wWV0wT6oLUGprrOR5LMK7Dh8EBiondhnqINsvazv6UucYfTdb2oaFF4knlqzZV2RKB9ZC9G7G1Iojt8b/wolsw==",
-      "optional": true
-    },
-    "@types/d3-axis": {
-      "version": "1.0.14",
-      "resolved": "https://registry.npmjs.org/@types/d3-axis/-/d3-axis-1.0.14.tgz",
-      "integrity": "sha512-wZAKX/dtFT5t5iuCaiU0QL0BWB19TE6h7C7kgfBVyoka7zidQWvf8E9zQTJ5bNPBQxd0+JmplNqwy1M8O8FOjA==",
-      "optional": true,
-      "requires": {
-        "@types/d3-selection": "^1"
-      }
-    },
-    "@types/d3-brush": {
-      "version": "1.1.4",
-      "resolved": "https://registry.npmjs.org/@types/d3-brush/-/d3-brush-1.1.4.tgz",
-      "integrity": "sha512-2t8CgWaha9PsPdSZJ9m6Jl4awqf3DGIXek2e7gfheyfP2R0a/18MX+wuLHx+LyI1Ad7lxDsPWcswKD0XhQEjmg==",
-      "optional": true,
-      "requires": {
-        "@types/d3-selection": "^1"
-      }
-    },
-    "@types/d3-chord": {
-      "version": "1.0.10",
-      "resolved": "https://registry.npmjs.org/@types/d3-chord/-/d3-chord-1.0.10.tgz",
-      "integrity": "sha512-U6YojfET6ITL1/bUJo+/Lh3pMV9XPAfOWwbshl3y3RlgAX9VO/Bxa13IMAylZIDY4VsA3Gkh29kZP1AcAeyoYA==",
-      "optional": true
-    },
-    "@types/d3-collection": {
-      "version": "1.0.10",
-      "resolved": "https://registry.npmjs.org/@types/d3-collection/-/d3-collection-1.0.10.tgz",
-      "integrity": "sha512-54Fdv8u5JbuXymtmXm2SYzi1x/Svt+jfWBU5junkhrCewL92VjqtCBDn97coBRVwVFmYNnVTNDyV8gQyPYfm+A==",
-      "optional": true
-    },
-    "@types/d3-color": {
-      "version": "1.4.1",
-      "resolved": "https://registry.npmjs.org/@types/d3-color/-/d3-color-1.4.1.tgz",
-      "integrity": "sha512-xkPLi+gbgUU9ED6QX4g6jqYL2KCB0/3AlM+ncMGqn49OgH0gFMY/ITGqPF8HwEiLzJaC+2L0I+gNwBgABv1Pvg==",
-      "optional": true
-    },
-    "@types/d3-dispatch": {
-      "version": "1.0.9",
-      "resolved": "https://registry.npmjs.org/@types/d3-dispatch/-/d3-dispatch-1.0.9.tgz",
-      "integrity": "sha512-zJ44YgjqALmyps+II7b1mZLhrtfV/FOxw9owT87mrweGWcg+WK5oiJX2M3SYJ0XUAExBduarysfgbR11YxzojQ==",
-      "optional": true
-    },
-    "@types/d3-drag": {
-      "version": "1.2.5",
-      "resolved": "https://registry.npmjs.org/@types/d3-drag/-/d3-drag-1.2.5.tgz",
-      "integrity": "sha512-7NeTnfolst1Js3Vs7myctBkmJWu6DMI3k597AaHUX98saHjHWJ6vouT83UrpE+xfbSceHV+8A0JgxuwgqgmqWw==",
-      "optional": true,
-      "requires": {
-        "@types/d3-selection": "^1"
-      }
-    },
-    "@types/d3-dsv": {
-      "version": "1.2.1",
-      "resolved": "https://registry.npmjs.org/@types/d3-dsv/-/d3-dsv-1.2.1.tgz",
-      "integrity": "sha512-LLmJmjiqp/fTNEdij5bIwUJ6P6TVNk5hKM9/uk5RPO2YNgEu9XvKO0dJ7Iqd3psEdmZN1m7gB1bOsjr4HmO2BA==",
-      "optional": true
-    },
-    "@types/d3-ease": {
-      "version": "1.0.10",
-      "resolved": "https://registry.npmjs.org/@types/d3-ease/-/d3-ease-1.0.10.tgz",
-      "integrity": "sha512-fMFTCzd8DOwruE9zlu2O8ci5ct+U5jkGcDS+cH+HCidnJlDs0MZ+TuSVCFtEzh4E5MasItwy+HvgoFtxPHa5Cw==",
-      "optional": true
-    },
-    "@types/d3-force": {
-      "version": "1.2.2",
-      "resolved": "https://registry.npmjs.org/@types/d3-force/-/d3-force-1.2.2.tgz",
-      "integrity": "sha512-TN7KO7sk0tJauedIt0q20RQRFo4V3v97pJKO/TDK40X3LaPM1aXRM2+zFF+nRMtseEiszg4KffudhjR8a3+4cg==",
-      "optional": true
-    },
-    "@types/d3-format": {
-      "version": "1.4.1",
-      "resolved": "https://registry.npmjs.org/@types/d3-format/-/d3-format-1.4.1.tgz",
-      "integrity": "sha512-ss9G2snEKmp2In5Z3T0Jpqv8QaDBc2xHltBw83KjnV5B5w+Iwphbvq5ph/Xnu4d03fmmsdt+o1aWch379rxIbA==",
-      "optional": true
-    },
-    "@types/d3-geo": {
-      "version": "1.12.1",
-      "resolved": "https://registry.npmjs.org/@types/d3-geo/-/d3-geo-1.12.1.tgz",
-      "integrity": "sha512-8+gyGFyMCXIHtnMNKQDT++tZ4XYFXgiP5NK7mcv34aYXA16GQFiBBITjKzxghpO8QNVceOd9rUn1JY92WLNGQw==",
-      "optional": true,
-      "requires": {
-        "@types/geojson": "*"
-      }
-    },
-    "@types/d3-hierarchy": {
-      "version": "1.1.7",
-      "resolved": "https://registry.npmjs.org/@types/d3-hierarchy/-/d3-hierarchy-1.1.7.tgz",
-      "integrity": "sha512-fvht6DOYKzqmXjMb/+xfgkmrWM4SD7rMA/ZbM+gGwr9ZTuIDfky95J8CARtaJo/ExeWyS0xGVdL2gqno2zrQ0Q==",
-      "optional": true
-    },
-    "@types/d3-interpolate": {
-      "version": "1.4.2",
-      "resolved": "https://registry.npmjs.org/@types/d3-interpolate/-/d3-interpolate-1.4.2.tgz",
-      "integrity": "sha512-ylycts6llFf8yAEs1tXzx2loxxzDZHseuhPokrqKprTQSTcD3JbJI1omZP1rphsELZO3Q+of3ff0ZS7+O6yVzg==",
-      "optional": true,
-      "requires": {
-        "@types/d3-color": "^1"
-      }
-    },
-    "@types/d3-path": {
-      "version": "1.0.9",
-      "resolved": "https://registry.npmjs.org/@types/d3-path/-/d3-path-1.0.9.tgz",
-      "integrity": "sha512-NaIeSIBiFgSC6IGUBjZWcscUJEq7vpVu7KthHN8eieTV9d9MqkSOZLH4chq1PmcKy06PNe3axLeKmRIyxJ+PZQ==",
-      "optional": true
-    },
-    "@types/d3-polygon": {
-      "version": "1.0.8",
-      "resolved": "https://registry.npmjs.org/@types/d3-polygon/-/d3-polygon-1.0.8.tgz",
-      "integrity": "sha512-1TOJPXCBJC9V3+K3tGbTqD/CsqLyv/YkTXAcwdsZzxqw5cvpdnCuDl42M4Dvi8XzMxZNCT9pL4ibrK2n4VmAcw==",
-      "optional": true
-    },
-    "@types/d3-quadtree": {
-      "version": "1.0.8",
-      "resolved": "https://registry.npmjs.org/@types/d3-quadtree/-/d3-quadtree-1.0.8.tgz",
-      "integrity": "sha512-FuqYiexeSQZlc+IcGAVK8jSJKDFKHcSf/jx8rqJUUVx6rzv7ecQiXKyatrLHHh3W4CAvgNeVI23JKgk4+x2wFg==",
-      "optional": true
-    },
-    "@types/d3-queue": {
-      "version": "3.0.8",
-      "resolved": "https://registry.npmjs.org/@types/d3-queue/-/d3-queue-3.0.8.tgz",
-      "integrity": "sha512-1FWOiI/MYwS5Z1Sa9EvS1Xet3isiVIIX5ozD6iGnwHonGcqL+RcC1eThXN5VfDmAiYt9Me9EWNEv/9J9k9RIKQ==",
-      "optional": true
-    },
-    "@types/d3-random": {
-      "version": "1.1.3",
-      "resolved": "https://registry.npmjs.org/@types/d3-random/-/d3-random-1.1.3.tgz",
-      "integrity": "sha512-XXR+ZbFCoOd4peXSMYJzwk0/elP37WWAzS/DG+90eilzVbUSsgKhBcWqylGWe+lA2ubgr7afWAOBaBxRgMUrBQ==",
-      "optional": true
-    },
-    "@types/d3-request": {
-      "version": "1.0.6",
-      "resolved": "https://registry.npmjs.org/@types/d3-request/-/d3-request-1.0.6.tgz",
-      "integrity": "sha512-4nRKDUBg3EBx8VowpMvM3NAVMiMMI1qFUOYv3OJsclGjHX6xjtu09nsWhRQ0fvSUla3MEjb5Ch4IeaYarMEi1w==",
-      "optional": true,
-      "requires": {
-        "@types/d3-dsv": "^1"
-      }
-    },
-    "@types/d3-scale": {
-      "version": "1.0.15",
-      "resolved": "https://registry.npmjs.org/@types/d3-scale/-/d3-scale-1.0.15.tgz",
-      "integrity": "sha512-gUF0UUAOzhKZjBRSiRaKXuNc1DO3GMRDRJQKkWSb2MpO+NJNs2HSEG69au0IU2IqmLBy2vpVrwMQvVKargrgKw==",
-      "optional": true,
-      "requires": {
-        "@types/d3-time": "^1"
-      }
-    },
-    "@types/d3-selection": {
-      "version": "1.4.3",
-      "resolved": "https://registry.npmjs.org/@types/d3-selection/-/d3-selection-1.4.3.tgz",
-      "integrity": "sha512-GjKQWVZO6Sa96HiKO6R93VBE8DUW+DDkFpIMf9vpY5S78qZTlRRSNUsHr/afDpF7TvLDV7VxrUFOWW7vdIlYkA==",
-      "optional": true
-    },
-    "@types/d3-shape": {
-      "version": "1.3.5",
-      "resolved": "https://registry.npmjs.org/@types/d3-shape/-/d3-shape-1.3.5.tgz",
-      "integrity": "sha512-aPEax03owTAKynoK8ZkmkZEDZvvT4Y5pWgii4Jp4oQt0gH45j6siDl9gNDVC5kl64XHN2goN9jbYoHK88tFAcA==",
-      "optional": true,
-      "requires": {
-        "@types/d3-path": "^1"
-      }
-    },
-    "@types/d3-time": {
-      "version": "1.1.1",
-      "resolved": "https://registry.npmjs.org/@types/d3-time/-/d3-time-1.1.1.tgz",
-      "integrity": "sha512-ULX7LoqXTCYtM+tLYOaeAJK7IwCT+4Gxlm2MaH0ErKLi07R5lh8NHCAyWcDkCCmx1AfRcBEV6H9QE9R25uP7jw==",
-      "optional": true
-    },
-    "@types/d3-time-format": {
-      "version": "2.3.1",
-      "resolved": "https://registry.npmjs.org/@types/d3-time-format/-/d3-time-format-2.3.1.tgz",
-      "integrity": "sha512-fck0Z9RGfIQn3GJIEKVrp15h9m6Vlg0d5XXeiE/6+CQiBmMDZxfR21XtjEPuDeg7gC3bBM0SdieA5XF3GW1wKA==",
-      "optional": true
-    },
-    "@types/d3-timer": {
-      "version": "1.0.10",
-      "resolved": "https://registry.npmjs.org/@types/d3-timer/-/d3-timer-1.0.10.tgz",
-      "integrity": "sha512-ZnAbquVqy+4ZjdW0cY6URp+qF/AzTVNda2jYyOzpR2cPT35FTXl78s15Bomph9+ckOiI1TtkljnWkwbIGAb6rg==",
-      "optional": true
-    },
-    "@types/d3-transition": {
-      "version": "1.3.1",
-      "resolved": "https://registry.npmjs.org/@types/d3-transition/-/d3-transition-1.3.1.tgz",
-      "integrity": "sha512-U9CpMlTL/NlqdGXBlHYxTZwbmy/vN1cFv8TuAIFPX+xOW/1iChbeJBY2xmINhDQfkGJbgkH4IovafCwI1ZDrgg==",
-      "optional": true,
-      "requires": {
-        "@types/d3-selection": "^1"
-      }
-    },
-    "@types/d3-voronoi": {
-      "version": "1.1.9",
-      "resolved": "https://registry.npmjs.org/@types/d3-voronoi/-/d3-voronoi-1.1.9.tgz",
-      "integrity": "sha512-DExNQkaHd1F3dFPvGA/Aw2NGyjMln6E9QzsiqOcBgnE+VInYnFBHBBySbZQts6z6xD+5jTfKCP7M4OqMyVjdwQ==",
-      "optional": true
-    },
-    "@types/d3-zoom": {
-      "version": "1.8.2",
-      "resolved": "https://registry.npmjs.org/@types/d3-zoom/-/d3-zoom-1.8.2.tgz",
-      "integrity": "sha512-rU0LirorUxkLxEHSzkFs7pPC0KWsxRGc0sHrxEDR0/iQq+7/xpNkKuuOOwthlgvOtpOvtTLJ2JFOD6Kr0Si4Uw==",
-      "optional": true,
-      "requires": {
-        "@types/d3-interpolate": "^1",
-        "@types/d3-selection": "^1"
-      }
-    },
     "@types/eslint": {
       "version": "7.2.10",
       "resolved": "https://registry.npmjs.org/@types/eslint/-/eslint-7.2.10.tgz",
@@ -1973,12 +1715,6 @@
       "resolved": "https://registry.npmjs.org/@types/estree/-/estree-0.0.47.tgz",
       "integrity": "sha512-c5ciR06jK8u9BstrmJyO97m+klJrrhCf9u3rLu3DEAJBirxRqSCvDQoYKmxuYwQI5SZChAWu+tq9oVlGRuzPAg==",
       "dev": true
-    },
-    "@types/geojson": {
-      "version": "7946.0.7",
-      "resolved": "https://registry.npmjs.org/@types/geojson/-/geojson-7946.0.7.tgz",
-      "integrity": "sha512-wE2v81i4C4Ol09RtsWFAqg3BUitWbHSpSlIo+bNdsCJijO9sjme+zm+73ZMCa/qMC8UEERxzGbvmr1cffo2SiQ==",
-      "optional": true
     },
     "@types/json-schema": {
       "version": "7.0.6",
@@ -2597,48 +2333,6 @@
       "integrity": "sha1-aN/1++YMUes3cl6p4+0xDcwed24=",
       "dev": true
     },
-    "bootstrap-datepicker": {
-      "version": "1.9.0",
-      "resolved": "https://registry.npmjs.org/bootstrap-datepicker/-/bootstrap-datepicker-1.9.0.tgz",
-      "integrity": "sha512-9rYYbaVOheGYxjOr/+bJCmRPihfy+LkLSg4fIFMT9Od8WwWB/MB50w0JO1eBgKUMbb7PFHQD5uAfI3ArAxZRXA==",
-      "optional": true,
-      "requires": {
-        "jquery": ">=1.7.1 <4.0.0"
-      }
-    },
-    "bootstrap-sass": {
-      "version": "3.4.1",
-      "resolved": "https://registry.npmjs.org/bootstrap-sass/-/bootstrap-sass-3.4.1.tgz",
-      "integrity": "sha512-p5rxsK/IyEDQm2CwiHxxUi0MZZtvVFbhWmyMOt4lLkA4bujDA1TGoKT0i1FKIWiugAdP+kK8T5KMDFIKQCLYIA==",
-      "optional": true
-    },
-    "bootstrap-select": {
-      "version": "1.12.2",
-      "resolved": "https://registry.npmjs.org/bootstrap-select/-/bootstrap-select-1.12.2.tgz",
-      "integrity": "sha1-WNCVs/1YSzFEOGb745tv3U5OEqQ=",
-      "optional": true,
-      "requires": {
-        "jquery": ">=1.8"
-      }
-    },
-    "bootstrap-slider": {
-      "version": "9.10.0",
-      "resolved": "https://registry.npmjs.org/bootstrap-slider/-/bootstrap-slider-9.10.0.tgz",
-      "integrity": "sha1-EQPWvADPv6jPyaJZmrUYxVZD2j8=",
-      "optional": true
-    },
-    "bootstrap-switch": {
-      "version": "3.3.4",
-      "resolved": "https://registry.npmjs.org/bootstrap-switch/-/bootstrap-switch-3.3.4.tgz",
-      "integrity": "sha1-cOCusqh3wNx2aZHeEI4hcPwpov8=",
-      "optional": true
-    },
-    "bootstrap-touchspin": {
-      "version": "3.1.1",
-      "resolved": "https://registry.npmjs.org/bootstrap-touchspin/-/bootstrap-touchspin-3.1.1.tgz",
-      "integrity": "sha1-l3nerHKq9Xfl52K4USx0fIcdlZc=",
-      "optional": true
-    },
     "brace-expansion": {
       "version": "1.1.11",
       "resolved": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.11.tgz",
@@ -2693,15 +2387,6 @@
       "resolved": "https://registry.npmjs.org/buffer-from/-/buffer-from-1.1.1.tgz",
       "integrity": "sha512-MQcXEUbCKtEo7bhqEs6560Hyd4XaovZlO/k9V3hjVUF/zwW7KBVdSK4gIt/bzwS9MbR5qob+F5jusZsb0YQK2A==",
       "dev": true
-    },
-    "c3": {
-      "version": "0.4.24",
-      "resolved": "https://registry.npmjs.org/c3/-/c3-0.4.24.tgz",
-      "integrity": "sha512-mVCFtN5ZWUT5UE7ilFQ7KBQ7TUCdKIq6KsDt1hH/1m6gC1tBjvzFTO7fqhaiWHfhNOjjM7makschdhg6DkWQMA==",
-      "optional": true,
-      "requires": {
-        "d3": "~3.5.0"
-      }
     },
     "cacache": {
       "version": "10.0.4",
@@ -3933,67 +3618,11 @@
       "integrity": "sha1-WW6WmP0MgOEgOMK4LW6xs1tiJNk=",
       "dev": true
     },
-    "d3": {
-      "version": "3.5.17",
-      "resolved": "https://registry.npmjs.org/d3/-/d3-3.5.17.tgz",
-      "integrity": "sha1-vEZ0gAQ3iyGjYMn8fPUjF5B2L7g=",
-      "optional": true
-    },
     "damerau-levenshtein": {
       "version": "1.0.7",
       "resolved": "https://registry.npmjs.org/damerau-levenshtein/-/damerau-levenshtein-1.0.7.tgz",
       "integrity": "sha512-VvdQIPGdWP0SqFXghj79Wf/5LArmreyMsGLa6FG6iC4t3j7j5s71TrwWmT/4akbDQIqjfACkLZmjXhA7g2oUZw==",
       "dev": true
-    },
-    "datatables.net": {
-      "version": "1.10.24",
-      "resolved": "https://registry.npmjs.org/datatables.net/-/datatables.net-1.10.24.tgz",
-      "integrity": "sha512-CwXixvOdinvBCLXvcTloDinWiEM7Geaz+GwyjPrZL+MXIGPcLv4Op1bbWn8ErsI1JWMIWC8Cuf1rnDU2RrFV5w==",
-      "optional": true,
-      "requires": {
-        "jquery": ">=1.7"
-      }
-    },
-    "datatables.net-bs": {
-      "version": "1.10.24",
-      "resolved": "https://registry.npmjs.org/datatables.net-bs/-/datatables.net-bs-1.10.24.tgz",
-      "integrity": "sha512-tV8MAZtUw8DJJhplDaIp0cBa9r6jjZ1wcJx3aMJ0m4Mbyqx3g71UL4mY2NqTOuoDYHvh0lhKF5ZGA3Ol8c86uQ==",
-      "optional": true,
-      "requires": {
-        "datatables.net": "1.10.24",
-        "jquery": ">=1.7"
-      }
-    },
-    "datatables.net-colreorder": {
-      "version": "1.5.3",
-      "resolved": "https://registry.npmjs.org/datatables.net-colreorder/-/datatables.net-colreorder-1.5.3.tgz",
-      "integrity": "sha512-OPMP5hG60cOVALk68Q2FQrsPQ6oOnwmsxipbq1FKm3JdR9I80j3wI3Zv9Q5KbehK5YkwE+DDJVDS1V/ikUVKHA==",
-      "optional": true,
-      "requires": {
-        "datatables.net": "^1.10.15",
-        "jquery": ">=1.7"
-      }
-    },
-    "datatables.net-colreorder-bs": {
-      "version": "1.3.3",
-      "resolved": "https://registry.npmjs.org/datatables.net-colreorder-bs/-/datatables.net-colreorder-bs-1.3.3.tgz",
-      "integrity": "sha1-Op3LCN7r612FQHlZHgbkk615OlM=",
-      "optional": true,
-      "requires": {
-        "datatables.net-bs": ">=1.10.9",
-        "datatables.net-colreorder": ">=1.2.0",
-        "jquery": ">=1.7"
-      }
-    },
-    "datatables.net-select": {
-      "version": "1.2.7",
-      "resolved": "https://registry.npmjs.org/datatables.net-select/-/datatables.net-select-1.2.7.tgz",
-      "integrity": "sha512-C3XDi7wpruGjDXV36dc9hN/FrAX9GOFvBZ7+KfKJTBNkGFbbhdzHS91SMeGiwRXPYivAyxfPTcVVndVaO83uBQ==",
-      "optional": true,
-      "requires": {
-        "datatables.net": "^1.10.15",
-        "jquery": ">=1.7"
-      }
     },
     "debug": {
       "version": "2.6.9",
@@ -4080,15 +3709,6 @@
         "is-obj": "^2.0.0"
       }
     },
-    "drmonty-datatables-colvis": {
-      "version": "1.1.2",
-      "resolved": "https://registry.npmjs.org/drmonty-datatables-colvis/-/drmonty-datatables-colvis-1.1.2.tgz",
-      "integrity": "sha1-lque37SGQ8wu3aP4e4iTPN7oEnw=",
-      "optional": true,
-      "requires": {
-        "jquery": ">=1.7.0"
-      }
-    },
     "duplexify": {
       "version": "3.7.1",
       "resolved": "https://registry.npmjs.org/duplexify/-/duplexify-3.7.1.tgz",
@@ -4167,26 +3787,6 @@
       "resolved": "https://registry.npmjs.org/envinfo/-/envinfo-7.8.1.tgz",
       "integrity": "sha512-/o+BXHmB7ocbHEAs6F2EnG0ogybVVUdkRunTT2glZU9XAaGmhqskrvKwqXuDfNjEO0LZKWdejEEpnq8aM0tOaw==",
       "dev": true
-    },
-    "eonasdan-bootstrap-datetimepicker": {
-      "version": "4.17.49",
-      "resolved": "https://registry.npmjs.org/eonasdan-bootstrap-datetimepicker/-/eonasdan-bootstrap-datetimepicker-4.17.49.tgz",
-      "integrity": "sha512-7KZeDpkj+A6AtPR3XjX8gAnRPUkPSfW0OmMANG1dkUOPMtLSzbyoCjDIdEcfRtQPU5X0D9Gob7wWKn0h4QWy7A==",
-      "optional": true,
-      "requires": {
-        "bootstrap": "^3.3",
-        "jquery": "^3.5.1",
-        "moment": "^2.10",
-        "moment-timezone": "^0.4.0"
-      },
-      "dependencies": {
-        "bootstrap": {
-          "version": "3.4.1",
-          "resolved": "https://registry.npmjs.org/bootstrap/-/bootstrap-3.4.1.tgz",
-          "integrity": "sha512-yN5oZVmRCwe5aKwzRj6736nSmKDX7pLYwsXiCj/EYmo16hODaBiT4En5btW/jhBF/seV+XMx3aYwukYC3A49DA==",
-          "optional": true
-        }
-      }
     },
     "error-ex": {
       "version": "1.3.2",
@@ -5079,17 +4679,6 @@
         "tabbable": "^5.1.4"
       }
     },
-    "font-awesome": {
-      "version": "4.7.0",
-      "resolved": "https://registry.npmjs.org/font-awesome/-/font-awesome-4.7.0.tgz",
-      "integrity": "sha1-j6jPBBGhoxr9B7BtKQK7n8gVoTM="
-    },
-    "font-awesome-sass": {
-      "version": "4.7.0",
-      "resolved": "https://registry.npmjs.org/font-awesome-sass/-/font-awesome-sass-4.7.0.tgz",
-      "integrity": "sha1-TtppPpFQCc4Asijglk3F7Km8NOE=",
-      "optional": true
-    },
     "from2": {
       "version": "2.3.0",
       "resolved": "https://registry.npmjs.org/from2/-/from2-2.3.0.tgz",
@@ -5215,12 +4804,6 @@
         "pify": "^3.0.0",
         "slash": "^1.0.0"
       }
-    },
-    "google-code-prettify": {
-      "version": "1.0.5",
-      "resolved": "https://registry.npmjs.org/google-code-prettify/-/google-code-prettify-1.0.5.tgz",
-      "integrity": "sha1-n0d/Ik2/piNy5e+AOn4VdBBAAIQ=",
-      "optional": true
     },
     "graceful-fs": {
       "version": "4.2.4",
@@ -5679,18 +5262,6 @@
         }
       }
     },
-    "jquery": {
-      "version": "3.5.1",
-      "resolved": "https://registry.npmjs.org/jquery/-/jquery-3.5.1.tgz",
-      "integrity": "sha512-XwIBPqcMn57FxfT+Go5pzySnm4KWkT1Tv7gjrpT1srtf8Weynl6R273VJ5GjkRb51IzMp5nbaPjJXMWeju2MKg==",
-      "optional": true
-    },
-    "jquery-match-height": {
-      "version": "0.7.2",
-      "resolved": "https://registry.npmjs.org/jquery-match-height/-/jquery-match-height-0.7.2.tgz",
-      "integrity": "sha1-+NnzulMU2qsQnPB0CGdL4gS+Xw4=",
-      "optional": true
-    },
     "js-tokens": {
       "version": "4.0.0",
       "resolved": "https://registry.npmjs.org/js-tokens/-/js-tokens-4.0.0.tgz",
@@ -6027,17 +5598,7 @@
     "moment": {
       "version": "2.29.1",
       "resolved": "https://registry.npmjs.org/moment/-/moment-2.29.1.tgz",
-      "integrity": "sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==",
-      "optional": true
-    },
-    "moment-timezone": {
-      "version": "0.4.1",
-      "resolved": "https://registry.npmjs.org/moment-timezone/-/moment-timezone-0.4.1.tgz",
-      "integrity": "sha1-gfWYw61eIs2teWtn7NjYjQ9bqgY=",
-      "optional": true,
-      "requires": {
-        "moment": ">= 2.6.0"
-      }
+      "integrity": "sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ=="
     },
     "move-concurrently": {
       "version": "1.0.1",
@@ -6387,74 +5948,6 @@
       "dev": true,
       "requires": {
         "pify": "^3.0.0"
-      }
-    },
-    "patternfly": {
-      "version": "3.59.5",
-      "resolved": "https://registry.npmjs.org/patternfly/-/patternfly-3.59.5.tgz",
-      "integrity": "sha512-SMQynv9eFrWWG0Ujta5+jPjxHdQB3xkTLiDW5VP8XXc0nGUxXb4EnZh21qiMeGGJYaKpu9CzaPEpCvuBxgYWHQ==",
-      "requires": {
-        "@types/c3": "^0.6.0",
-        "bootstrap": "~3.4.1",
-        "bootstrap-datepicker": "^1.7.1",
-        "bootstrap-sass": "^3.4.0",
-        "bootstrap-select": "1.12.2",
-        "bootstrap-slider": "^9.9.0",
-        "bootstrap-switch": "3.3.4",
-        "bootstrap-touchspin": "~3.1.1",
-        "c3": "~0.4.11",
-        "d3": "~3.5.17",
-        "datatables.net": "^1.10.15",
-        "datatables.net-colreorder": "^1.4.1",
-        "datatables.net-colreorder-bs": "~1.3.2",
-        "datatables.net-select": "~1.2.0",
-        "drmonty-datatables-colvis": "~1.1.2",
-        "eonasdan-bootstrap-datetimepicker": "^4.17.47",
-        "font-awesome": "^4.7.0",
-        "font-awesome-sass": "^4.7.0",
-        "google-code-prettify": "~1.0.5",
-        "jquery": "~3.4.1",
-        "jquery-match-height": "^0.7.2",
-        "moment": "^2.19.1",
-        "moment-timezone": "^0.4.1",
-        "patternfly-bootstrap-combobox": "~1.1.7",
-        "patternfly-bootstrap-treeview": "~2.1.10"
-      },
-      "dependencies": {
-        "bootstrap": {
-          "version": "3.4.1",
-          "resolved": "https://registry.npmjs.org/bootstrap/-/bootstrap-3.4.1.tgz",
-          "integrity": "sha512-yN5oZVmRCwe5aKwzRj6736nSmKDX7pLYwsXiCj/EYmo16hODaBiT4En5btW/jhBF/seV+XMx3aYwukYC3A49DA=="
-        },
-        "jquery": {
-          "version": "3.4.1",
-          "resolved": "https://registry.npmjs.org/jquery/-/jquery-3.4.1.tgz",
-          "integrity": "sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw=="
-        }
-      }
-    },
-    "patternfly-bootstrap-combobox": {
-      "version": "1.1.7",
-      "resolved": "https://registry.npmjs.org/patternfly-bootstrap-combobox/-/patternfly-bootstrap-combobox-1.1.7.tgz",
-      "integrity": "sha1-al48zRFwwhs8S0qhaKdBPh3btuE=",
-      "optional": true
-    },
-    "patternfly-bootstrap-treeview": {
-      "version": "2.1.10",
-      "resolved": "https://registry.npmjs.org/patternfly-bootstrap-treeview/-/patternfly-bootstrap-treeview-2.1.10.tgz",
-      "integrity": "sha512-P9+iFu34CwX+R5Fd7/EWbxTug0q9mDj53PnZIIh5ie54KX2kD0+54lCWtpD9SVylDwDtDv3n3A6gbFVkx7HsuA==",
-      "optional": true,
-      "requires": {
-        "bootstrap": "^3.4.1",
-        "jquery": "^3.4.1"
-      },
-      "dependencies": {
-        "bootstrap": {
-          "version": "3.4.1",
-          "resolved": "https://registry.npmjs.org/bootstrap/-/bootstrap-3.4.1.tgz",
-          "integrity": "sha512-yN5oZVmRCwe5aKwzRj6736nSmKDX7pLYwsXiCj/EYmo16hODaBiT4En5btW/jhBF/seV+XMx3aYwukYC3A49DA==",
-          "optional": true
-        }
       }
     },
     "picocolors": {
