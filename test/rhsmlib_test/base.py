@@ -47,7 +47,8 @@ class TestUtilsMixin(object):
             self.fail("%s != %s" % (a, b))
         return True
 
-    def write_temp_file(self, data):
+    @staticmethod
+    def write_temp_file(data):
         # create a temp file for use as a config file. This should get cleaned
         # up magically when it is closed so make sure to close it!
         fid = NamedTemporaryFile(mode='w+', suffix='.tmp')
@@ -65,7 +66,9 @@ class InjectionMockingTest(unittest.TestCase):
         self.mock_require.side_effect = self.injection_definitions
 
     def injection_definitions(self, *args, **kwargs):
-        '''Override this method to control what the injector returns'''
+        """
+        Override this method to control what the injector returns
+        """
         raise NotImplementedError("Subclasses should define injected objects")
 
 
@@ -112,7 +115,6 @@ class DBusObjectTest(unittest.TestCase):
         self.addCleanup(self.stop_server)
 
     def stop_server(self):
-        log.debug('Stopping thread of ')
         self.server_thread.stop()
         self.stopped_event.wait()
 
@@ -264,7 +266,8 @@ class DBusRequestThread(threading.Thread):
             self.proxy(
                 *self.proxy_args,
                 reply_handler=self.reply_handler,
-                error_handler=self.error_handler)
+                error_handler=self.error_handler
+            )
         except Exception as e:
             # If the proxy is messed up some how, we still need to push the error to the main thread
             log.exception(e)
