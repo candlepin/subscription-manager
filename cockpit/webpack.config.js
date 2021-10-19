@@ -69,7 +69,7 @@ function vpath(/* ... */) {
 
 class Po2JSONPlugin {
     apply(compiler) {
-        compiler.plugin('emit', function(compilation, callback) {
+        compiler.hooks.emit.tapAsync('Po2JSONPlugin', function(compilation, callback) {
             const files = glob.sync('../po/*.po');
             files.forEach(function(file) {
                 const dataFileName = `po.${/([^/]*).po$/.exec(file)[1]}.js`;
