@@ -244,7 +244,7 @@
 
 Name: subscription-manager
 Version: 1.28.13
-Release: 5%{?dist}
+Release: 6%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
 Group:   Productivity/Networking/System
@@ -1453,6 +1453,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Oct 20 2021 Christopher Snyder <csnyder@redhat.com> 1.28.13-6
+  (csnyder@redhat.com)
+- build: pin flake8 to < 4 (ptoscano@redhat.com)
+
 * Wed Oct 20 2021 Christopher Snyder <csnyder@redhat.com> 1.28.13-5
 - 2011843: Actually delete SCA cert (csnyder@redhat.com)
 - 2011843: Clear content access mode cache on refresh (csnyder@redhat.com)
