@@ -6,6 +6,7 @@
 -e ./build_ext
 -e ./syspurpose
 
+flake8<4
 nose
 nose-capturestderr
 nose-randomly
