@@ -185,7 +185,7 @@ f"""
 gpg=False
 auto_config=False
 base_url={hostname}:8888/r/insights
-cert_verify=False
+cert_verify=/etc/cockpit/ws-certs.d/0-self-signed-ca.pem
 username=admin
 password=foobar
 """)
