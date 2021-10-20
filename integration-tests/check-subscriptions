@@ -343,7 +343,7 @@ class TestSubscriptions(SubscriptionsCase):
         b.wait_visible("#subscription-register-url")
 
         b.set_val("#subscription-register-url", "custom")
-        b.set_input_text("#subscription-register-url-custom", CANDLEPIN_ADDR + ":8443/candlepin")
+        b.set_input_text("#subscription-register-url-custom", CANDLEPIN_URL)
         b.set_input_text("#subscription-register-username", "admin")
         b.set_input_text("#subscription-register-password", "admin")
         b.set_input_text("#subscription-register-org", "admin")
@@ -396,7 +396,7 @@ class TestSubscriptions(SubscriptionsCase):
         b.wait_visible("#subscription-register-url")
 
         b.set_val("#subscription-register-url", "custom")
-        b.set_input_text("#subscription-register-url-custom", CANDLEPIN_ADDR + ":8443/candlepin")
+        b.set_input_text("#subscription-register-url-custom", CANDLEPIN_URL)
         b.set_input_text("#subscription-register-username", "admin")
         b.set_input_text("#subscription-register-password", "admin")
         b.set_input_text("#subscription-register-org", "admin")
@@ -452,7 +452,7 @@ class TestSubscriptionsPackages(SubscriptionsCase, PackageCase):
         b.wait_visible("#subscription-register-url")
 
         b.set_val("#subscription-register-url", "custom")
-        b.set_input_text("#subscription-register-url-custom", "10.111.112.100:8443/candlepin")
+        b.set_input_text("#subscription-register-url-custom", CANDLEPIN_URL)
         b.set_input_text("#subscription-register-username", "admin")
         b.set_input_text("#subscription-register-password", "admin")
         b.set_input_text("#subscription-register-org", "admin")
