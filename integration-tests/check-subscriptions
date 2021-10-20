@@ -176,13 +176,15 @@ class SubscriptionsCase(MachineCase):
         # Wait for the web service to be accessible
         machine_python(self.machine, WAIT_SCRIPT, CANDLEPIN_URL)
 
+        hostname = m.execute("hostname").rstrip()
+
         if m.image.startswith('rhel-'):
             m.write("/etc/insights-client/insights-client.conf",
-"""
+f"""
 [insights-client]
 gpg=False
 auto_config=False
-base_url=localhost:8888/r/insights
+base_url={hostname}:8888/r/insights
 cert_verify=False
 username=admin
 password=foobar
