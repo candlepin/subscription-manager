@@ -132,7 +132,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.48
+Version: 1.24.49
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1161,6 +1161,10 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Oct 20 2021 Christopher Snyder <csnyder@redhat.com> 1.24.49-1
+- 2010137: Fix redundant API calls to Candlepin (hyu@redhat.com)
+- [1.24] Added support for marketplace ID on RHEL7. (jhnidek@redhat.com)
+
 * Thu Apr 15 2021 Christopher Snyder <csnyder@redhat.com> 1.24.48-1
 - 1886772: check is_consumer_cert_key_valid (csnyder@redhat.com)
 
