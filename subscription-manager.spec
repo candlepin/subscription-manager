@@ -244,7 +244,7 @@
 
 Name: subscription-manager
 Version: 1.28.13
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
 Group:   Productivity/Networking/System
@@ -1453,6 +1453,18 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Oct 20 2021 Christopher Snyder <csnyder@redhat.com> 1.28.13-5
+- 2011843: Actually delete SCA cert (csnyder@redhat.com)
+- 2011843: Clear content access mode cache on refresh (csnyder@redhat.com)
+- cockpit: Enable TLS for mock insights server (martin@piware.de)
+- cockpit: Replace obsolete wait_present() with wait_visible()
+  (martin@piware.de)
+- cockpit: Adjust for changed services image (martin@piware.de)
+- 1930037: cockpit: ensure /etc/pki/product exist (ptoscano@redhat.com)
+- cockpit: Invoke setup.py with python3 (martin@piware.de)
+- cockpit: Update test API to 236 (martin@piware.de)
+
+
 * Wed Aug 18 2021 Christopher Snyder <csnyder@redhat.com> 1.28.13-4
 - 1993897 - [RFE] subscription-manager should return a module stream's
   "activity" in the modular profile (wpoteat@redhat.com)
