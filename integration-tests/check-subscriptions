@@ -90,6 +90,7 @@ requests.post(key_url, auth=("admin","admin"), verify=False)
 
 CLIENT_ADDR = "10.111.112.1"
 CANDLEPIN_ADDR = "10.111.112.100"
+CANDLEPIN_HOSTNAME = "services.cockpit.lan"
 CANDLEPIN_URL = "https://%s:8443/candlepin" % CANDLEPIN_ADDR
 
 PRODUCT_SNOWY = {
@@ -141,6 +142,9 @@ class SubscriptionsCase(MachineCase):
         # wait for candlepin to be active and verify
         # this changed in https://github.com/cockpit-project/bots/pull/1768
         self.candlepin.execute("if [ -x /root/run-candlepin ]; then /root/run-candlepin; else systemctl start tomcat; fi")
+
+        # make sure the cockpit machine can resolve the service machine hostname
+        m.execute(f"echo '{CANDLEPIN_ADDR} {CANDLEPIN_HOSTNAME}' >> /etc/hosts")
 
         # download product info from the candlepin machine
         def download_product(product):
