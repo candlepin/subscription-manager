@@ -63,6 +63,7 @@
 %global py_package_prefix python%{python3_pkgversion}
 %global rhsm_package_name %{py_package_prefix}-subscription-manager-rhsm
 %else
+%global __python %__python2
 %global py_package_prefix python
 %global rhsm_package_name subscription-manager-rhsm
 %endif
