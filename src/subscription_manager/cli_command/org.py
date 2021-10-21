@@ -58,4 +58,6 @@ class OrgCommand(UserPassCommand):
                     'Hint: User "{name}" is member of following organizations: {orgs}'
                 ).format(name=self.username, orgs=', '.join(org_keys)))
                 self._org = self._get_org(self.options.org)
+            else:
+                self._org = self.options.org
         return self._org
