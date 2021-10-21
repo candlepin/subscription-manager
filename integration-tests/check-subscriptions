@@ -16,8 +16,10 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Cockpit; If not, see <http://www.gnu.org/licenses/>.
 
+import functools
 import os
 import sys
+import unittest
 
 # import Cockpit's machinery for test VMs and its browser test API
 TEST_DIR = os.path.dirname(__file__)
@@ -107,6 +109,22 @@ def shell_escape(s):
 
 def machine_python(machine, script, arg=""):
     return machine.execute("python3 -c %s %s" % (shell_escape(script), shell_escape(arg)))
+
+
+def skipUnlessDistroFamily(distro, reason):
+    """
+    Skip the current test function with the specified [reason]
+    unless the distribution of the machine is part of the specified
+    family [distro] (i.e. it starts as "distro-").
+    """
+    def distro_wrapper(func):
+        @functools.wraps(func)
+        def wrapper(obj):
+            if not obj.machine.image.startswith(distro + '-'):
+                raise unittest.SkipTest(reason)
+            return func(obj)
+        return wrapper
+    return distro_wrapper
 
 
 class SubscriptionsCase(MachineCase):
@@ -310,6 +328,7 @@ class TestSubscriptions(SubscriptionsCase):
         self.browser.wait_in_text(".pf-c-empty-state__body", "current user isn't allowed to access system subscription")
         self.allow_journal_messages("junior is not in the sudoers file.  This incident will be reported.")
 
+    @skipUnlessDistroFamily("rhel", "Insights support is specific to RHEL")
     def testInsights(self):
         m = self.machine
         b = self.browser
@@ -362,6 +381,7 @@ class TestSubscriptions(SubscriptionsCase):
 
         b.wait_visible("button:contains('Not connected')")
 
+    @skipUnlessDistroFamily("rhel", "Insights support is specific to RHEL")
     def testSubAndInAndFail(self):
         m = self.machine
         b = self.browser
