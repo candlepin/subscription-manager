@@ -165,7 +165,8 @@ class SubscriptionsCase(MachineCase):
         # Wait for the web service to be accessible
         machine_python(self.machine, WAIT_SCRIPT, CANDLEPIN_URL)
 
-        m.write("/etc/insights-client/insights-client.conf",
+        if m.image.startswith('rhel-'):
+            m.write("/etc/insights-client/insights-client.conf",
 """
 [insights-client]
 gpg=False
@@ -438,7 +439,8 @@ class TestSubscriptionsPackages(SubscriptionsCase, PackageCase):
         m = self.machine
         b = self.browser
 
-        m.execute("pkcon remove -y insights-client")
+        if m.image.startswith('rhel-'):
+            m.execute("pkcon remove -y insights-client")
 
         self.createPackage("insights-client", "999", "1")
         self.enableRepo()
