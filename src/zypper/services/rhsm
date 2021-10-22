@@ -29,8 +29,9 @@ from rhsm import config
 
 from six.moves.configparser import ConfigParser
 
-reload(sys)
-sys.setdefaultencoding('UTF8')
+if sys.version_info.major < 3:
+    reload(sys)
+    sys.setdefaultencoding('UTF8')
 
 c_rehash = '/usr/bin/c_rehash'
 

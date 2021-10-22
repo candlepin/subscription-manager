@@ -33,13 +33,13 @@
 
 
 # borrowed from dnf spec file & tweaked
-%if (0%{?rhel} && 0%{?rhel} <= 7) || 0%{?suse_version}
+%if (0%{?rhel} && 0%{?rhel} <= 7) || (0%{?suse_version} && 0%{?suse_version} < 1500)
 %bcond_with python3
 %else
 %bcond_without python3
 %endif
 
-%if !(0%{?fedora} < 30 && %{with python3}) || 0%{?rhel} >= 8
+%if !(0%{?fedora} < 30 && %{with python3}) || 0%{?rhel} >= 8 || 0%{?suse_version} >= 1500
 %bcond_with python2_rhsm
 %else
 %bcond_without python2_rhsm
@@ -115,14 +115,16 @@
 %global python_sitearch %python3_sitearch
 %global python_sitelib %python3_sitelib
 %global __python %__python3
+
+%if 0%{?suse_version} >= 1500
+%global py_package_prefix python3
+%else
 %global py_package_prefix python%{python3_pkgversion}
+%endif
+
 %global rhsm_package_name %{py_package_prefix}-subscription-manager-rhsm
 %else
-%if 0%{?suse_version} >= 1500
-%global py_package_prefix python2
-%else
 %global py_package_prefix python
-%endif
 %global rhsm_package_name subscription-manager-rhsm
 %endif
 
@@ -270,7 +272,7 @@ Source0: %{name}-%{version}.tar.gz
 %if %{use_cockpit}
 Source1: %{name}-cockpit-%{version}.tar.gz
 %endif
-%if (0%{?suse_version} && 0%{?suse_version} < 1500)
+%if 0%{?suse_version}
 Source2: subscription-manager-rpmlintrc
 %endif
 
@@ -316,7 +318,7 @@ Requires:  %{py_package_prefix}-setuptools
 %endif
 
 %if %{with python3}
-Requires: python3-dbus
+Requires: %{?suse_version:python3-dbus-python} %{!?suse_version:python3-dbus}
 %else
 Requires: %{?suse_version:dbus-1-python} %{!?suse_version:dbus-python}
 %endif
@@ -337,10 +339,26 @@ Requires: dnf-plugin-subscription-manager = %{version}
 %endif
 %endif
 
+%if 0%{?suse_version}
+%if %{with python3}
+Requires: libzypp, python3-zypp-plugin
+%else
+Requires: libzypp, python2-zypp-plugin
+%endif
+%endif
+
 # Support GTK2 and GTK3 on both SUSE and RHEL...
 %if 0%{?suse_version}
-Requires: %{?gtk3:python-gobject} %{!?gtk3:python-gobject2, libzypp, zypp-plugin-python, python-zypp}
+%if 0%{?gtk3}
+%if %{with python3}
+Requires: python3-gobject
 %else
+Requires: python-gobject
+%endif
+%else # else gtk3
+Requires: python-gobject2
+%endif
+%else # else suse
 Requires:  usermode
 %if %{with python3}
 Requires: python3-gobject-base
@@ -368,7 +386,11 @@ Requires(post): %{?suse_version:aaa_base} %{!?suse_version:chkconfig}
 Requires(preun): %{?suse_version:aaa_base} %{!?suse_version:chkconfig, initscripts}
 %endif
 
-BuildRequires: %{?suse_version:python-devel >= 2.6} %{!?suse_version:%{py_package_prefix}-devel}
+%if 0%{?suse_version} < 1500
+BuildRequires: python-devel >= 2.6
+%else
+BuildRequires: %{py_package_prefix}-devel
+%endif
 BuildRequires: openssl-devel
 BuildRequires: gcc
 BuildRequires: %{py_package_prefix}-setuptools
@@ -907,19 +929,23 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-uep.pem %{buildroot}/
 # fix timestamps on our byte compiled files so they match across arches
 find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
-%if %{with python3}
+%if %{with python3} && !0%{?suse_version}
 %py_byte_compile %{__python3} %{buildroot}%{rhsm_plugins_dir}/
 %py_byte_compile %{__python3} %{buildroot}%{_datadir}/anaconda/addons/com_redhat_subscription_manager/
 %endif
 
-# symlink services to /usr/sbin/ when building for SUSE distributions
 %if 0%{?suse_version}
+    # symlink services to /usr/sbin/ when building for SUSE distributions
     %if %{use_systemd}
         ln -s %{_sbindir}/service %{buildroot}/%{_sbindir}/rcrhsm
         ln -s %{_sbindir}/service %{buildroot}/%{_sbindir}/rcrhsm-facts
         ln -s %{_sbindir}/service %{buildroot}/%{_sbindir}/rcrhsmcertd
     %else
        ln -s %{_initrddir}/rhsmcertd %{buildroot}%{_sbindir}/rcrhsmcertd
+    %endif
+
+    %if 0%{?suse_version} >= 1500
+      sed "s:env python:env python3:" %{buildroot}/%{_prefix}/lib/zypp/plugins/services/rhsm
     %endif
 %endif
 
@@ -1083,7 +1109,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 # our gtk2/gtk3 compat modules
 %dir %{python_sitearch}/subscription_manager/ga_impls
 %{python_sitearch}/subscription_manager/ga_impls/__init__.py*
-%if %{with python3}
+%if %{with python3} && !0%{?suse_version}
 %{python_sitearch}/subscription_manager/ga_impls/__pycache__
 %endif
 
@@ -1149,6 +1175,8 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/syspurpose/__pycache__
 %endif
 
+%dir %{_sysconfdir}/dbus-1/
+%dir %{_sysconfdir}/dbus-1/system.d/
 %{_datadir}/polkit-1/actions/com.redhat.*.policy
 %{_datadir}/dbus-1/system-services/com.redhat.*.service
 %attr(755,root,root) %{_libexecdir}/rhsm*-service
