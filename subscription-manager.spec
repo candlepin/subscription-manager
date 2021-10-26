@@ -1,30 +1,30 @@
-# Prefer systemd over sysv on Fedora and RHEL 7+
-%global use_systemd 0%{?fedora} || (0%{?rhel} && 0%{?rhel} >= 7) || 0%{?suse_version}
+# Prefer systemd over sysv on Fedora and RHEL
+%global use_systemd 0%{?fedora} || 0%{?rhel} || 0%{?suse_version}
 # For optional building of ostree-plugin sub package. Unrelated to systemd
 # but the same versions apply at the moment.
 %global has_ostree %use_systemd && 0%{?suse_version} == 0
 %global use_inotify 1
 %global py2_package_prefix python2
 
-# Plugin for container (docker, podman) is not supported on RHEL 8 and higher
-%if (0%{?rhel} && 0%{?rhel} >= 8)
+# Plugin for container (docker, podman) is not supported on RHEL
+%if 0%{?rhel}
 %global use_container_plugin 0
 %else
 %global use_container_plugin 1
 %endif
 
-%if (0%{?rhel} >= 7 || 0%{?fedora})
+%if (0%{?rhel} || 0%{?fedora})
 %global dmidecode_version >= 3.12.2-2
 %endif
 
 # borrowed from dnf spec file & tweaked
-%if (0%{?rhel} && 0%{?rhel} <= 7) || 0%{?suse_version}
+%if 0%{?suse_version}
 %bcond_with python3
 %else
 %bcond_without python3
 %endif
 
-%if !(0%{?fedora} < 30 && %{with python3}) || 0%{?rhel} >= 8
+%if !(0%{?fedora} < 30 && %{with python3}) || 0%{?rhel}
 %bcond_with python2_rhsm
 %else
 %bcond_without python2_rhsm
@@ -32,26 +32,18 @@
 
 %global completion_dir %{_datadir}/bash-completion/completions
 
-%if 0%{?suse_version} || 0%{?rhel} >= 7 || 0%{?fedora}
 %global run_dir /run
-%else
-%global run_dir /var/run
-%endif
 
 %global rhsm_plugins_dir  /usr/share/rhsm-plugins
-
-%if 0%{?rhel} == 6
-%global use_inotify 0
-%endif
 
 %if 0%{?suse_version}
 %global use_container_plugin 0
 %global use_inotify 0
 %endif
 
-%global use_dnf (%{with python3} && (0%{?fedora} || (0%{?rhel}))) || (0%{?rhel} >= 7)
+%global use_dnf (%{with python3} && (0%{?fedora} || (0%{?rhel}))) || (0%{?rhel})
 %global create_libdnf_rpm (0%{?fedora} > 32 || 0%{?rhel} > 8)
-%global use_cockpit 0%{?fedora} || 0%{?rhel} >= 7
+%global use_cockpit 0%{?fedora} || 0%{?rhel}
 
 %if %{with python3}
 %global python_sitearch %python3_sitearch
@@ -360,7 +352,7 @@ Group: Productivity/Networking/System
 Group: System Environment/Base
 %endif
 
-%if (0%{?fedora} >= 29 || 0%{?rhel} >= 8)
+%if (0%{?fedora} >= 29 || 0%{?rhel})
 BuildRequires: cmake
 BuildRequires: gcc
 BuildRequires: json-c-devel
@@ -370,7 +362,7 @@ Requires: libdnf >= 0.22.5
 %endif
 
 # See BZ 1581410 - avoid a circular dependency
-%if (0%{?rhel} < 8 || 0%{?fedora} < 29)
+%if (0%{?fedora} < 29)
 Requires: %{name} >= %{version}-%{release}
 %endif
 
@@ -382,11 +374,7 @@ Requires: python3-librepo
 %else
 
 Requires: python2-dnf-plugins-core
-%if (0%{?rhel} == 7)
-Requires: python-librepo
-%else
 Requires: python2-librepo
-%endif
 
 %endif
 
@@ -1028,7 +1016,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 # When subscription-manager is upgraded on RHEL 8 (from RHEL 8.2 to RHEL 8.3), then kill
 # instance of rhsmd, because it is not necessary anymore and it can cause issues.
 # See: https://bugzilla.redhat.com/show_bug.cgi?id=1840364
-%if ( 0%{?rhel} >= 8 || 0%{?fedora} )
+%if ( 0%{?rhel} || 0%{?fedora} )
 if [ "$1" = "2" ] ; then
     killall rhsmd 2> /dev/null || true
 fi
