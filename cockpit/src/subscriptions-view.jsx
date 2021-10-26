@@ -294,7 +294,7 @@ class SubscriptionStatus extends React.Component {
                     <div>
                         <span> { this.props.syspurpose_status } </span>
                         <Popover
-                            aria-label="Popover with explanation of SCA mode"
+                            aria-label={_("Popover with explanation of SCA mode")}
                             showClose={false}
                             bodyContent={syspurpose_status_tooltip}
                             withFocusTrap={false}
@@ -381,7 +381,7 @@ class SubscriptionStatus extends React.Component {
                 <div>
                     <span> {status_text} </span>
                     <Popover
-                        aria-label="Popover with explanation of SCA mode"
+                        aria-label={_("Popover with explanation of SCA mode")}
                         showClose={false}
                         bodyContent={status_tooltip}
                         withFocusTrap={false}
