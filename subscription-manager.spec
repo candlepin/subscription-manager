@@ -1,5 +1,5 @@
 # Prefer systemd over sysv on Fedora and RHEL 7+
-%global use_systemd 0%{?fedora} || (0%{?rhel} && 0%{?rhel} >= 7) || (0%{?suse_version} && 0%{?suse_version} >= 1315)
+%global use_systemd 0%{?fedora} || (0%{?rhel} && 0%{?rhel} >= 7) || 0%{?suse_version}
 # For optional building of ostree-plugin sub package. Unrelated to systemd
 # but the same versions apply at the moment.
 %global has_ostree %use_systemd && 0%{?suse_version} == 0
@@ -17,19 +17,6 @@
 %global dmidecode_version >= 3.12.2-2
 %endif
 
-# We use the tmpfiles_create macro from systemd-rpm-macros rpm.
-# Because of an incorrect version labelling of that rpm in SLES 12 which
-# contains the necessary macro definition, we are not able to simply require
-# a certain version of systemd-rpm-macros which will definitely contain this
-# macro. To keep our SLES builds working we define the macro here for ourselves.
-%if !0%{?tmpfiles_create:1}
-%define tmpfiles_create() \
-[ -x /usr/bin/systemd-tmpfiles ] && \
-       /usr/bin/systemd-tmpfiles --create %{?*} >/dev/null 2>&1 || : \
-%{nil}
-%endif
-
-
 # borrowed from dnf spec file & tweaked
 %if (0%{?rhel} && 0%{?rhel} <= 7) || 0%{?suse_version}
 %bcond_with python3
@@ -43,13 +30,9 @@
 %bcond_without python2_rhsm
 %endif
 
-%if 0%{?suse_version} && 0%{?suse_version} < 1200
-%global completion_dir %{_sysconfdir}/bash_completion.d
-%else
 %global completion_dir %{_datadir}/bash-completion/completions
-%endif
 
-%if 0%{?suse_version} > 1110 || 0%{?rhel} >= 7 || 0%{?fedora}
+%if 0%{?suse_version} || 0%{?rhel} >= 7 || 0%{?fedora}
 %global run_dir /run
 %else
 %global run_dir /var/run
@@ -77,7 +60,7 @@
 %global py_package_prefix python%{python3_pkgversion}
 %global rhsm_package_name %{py_package_prefix}-subscription-manager-rhsm
 %else
-%if 0%{?suse_version} >= 1500
+%if 0%{?suse_version}
 %global py_package_prefix python2
 %else
 %global py_package_prefix python
@@ -184,13 +167,6 @@ Source0: %{name}-%{version}.tar.gz
 %if %{use_cockpit}
 Source1: %{name}-cockpit-%{version}.tar.gz
 %endif
-%if (0%{?suse_version} && 0%{?suse_version} < 1500)
-Source2: subscription-manager-rpmlintrc
-%endif
-
-%if (0%{?suse_version} && 0%{?suse_version} < 1200)
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-%endif
 
 # The following macro examples are preceeded by '%' to stop macro expansion
 # in the comments. (See https://bugzilla.redhat.com/show_bug.cgi?id=1224660 for
@@ -214,7 +190,7 @@ Requires:  cron
 %endif
 Requires:  %{rhsm_package_name} = %{version}
 Requires:  %{py_package_prefix}-six
-%if 0%{?suse_version} >= 1500
+%if 0%{?suse_version}
 BuildRequires:  %{py_package_prefix}-python-dateutil
 Requires:  %{py_package_prefix}-python-dateutil
 %else
@@ -286,10 +262,10 @@ BuildRequires: %{py_package_prefix}-six
 BuildRequires: desktop-file-utils
 %endif
 
-%if 0%{?suse_version} <= 1110
-BuildRequires: %{?suse_version:sles-release} %{!?suse_version:system-release}
+%if 0%{?suse_version}
+BuildRequires: distribution-release
 %else
-BuildRequires: %{?suse_version:distribution-release} %{!?suse_version:system-release}
+BuildRequires: system-release
 %endif
 
 %if 0%{?suse_version}
@@ -298,7 +274,7 @@ BuildRequires: libzypp
 
 %if %use_systemd
 # We need the systemd RPM macros
-%if 0%{?suse_version} >= 1210
+%if 0%{?suse_version}
 BuildRequires: systemd-rpm-macros
 %endif
 BuildRequires: systemd
@@ -466,7 +442,7 @@ Group: Development/Libraries/Python
 Group: Development/Libraries
 %endif
 
-%if 0%{?suse_version} >= 1500
+%if 0%{?suse_version}
 Requires:  %{py_package_prefix}-python-dateutil
 %else
 Requires: %{py_package_prefix}-dateutil
@@ -745,11 +721,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %dir %{python_sitearch}/subscription_manager/plugin
 %dir %{python_sitearch}/subscription_manager/scripts
 %dir %{_var}/spool/rhsm
-
-%if 0%{?suse_version} && 0%{?suse_version} < 1315
-%dir %{_prefix}/share/locale/ta_IN
-%dir %{_prefix}/share/locale/ta_IN/LC_MESSAGES
-%endif
 
 %attr(755,root,root) %{_sbindir}/subscription-manager
 
