@@ -23,7 +23,7 @@ import subscriptionsClient from './subscriptions-client';
 import { InsightsStatus } from './insights.jsx';
 import { EmptyStatePanel } from "cockpit-components-empty-state.jsx";
 import { ListingTable } from "cockpit-components-table.jsx";
-import { ExclamationCircleIcon } from '@patternfly/react-icons';
+import { InfoCircleIcon, ExclamationCircleIcon } from '@patternfly/react-icons';
 import {
     Alert, AlertGroup, AlertActionCloseButton, Button,
     Card, CardActions, CardBody, CardHeader, CardHeaderMain, CardTitle,
@@ -299,7 +299,11 @@ class SubscriptionStatus extends React.Component {
                             bodyContent={syspurpose_status_tooltip}
                             withFocusTrap={false}
                         >
-                            <span className="fa fa-md fa-info-circle subscriptions-info" />
+                            <button className="pf-c-form__group-label-help ct-icon-info-circle"
+                                    type="button"
+                                    aria-label={_("Subscriptions information")}>
+                                <InfoCircleIcon />
+                            </button>
                         </Popover>
                     </div>
                 );
@@ -386,7 +390,11 @@ class SubscriptionStatus extends React.Component {
                         bodyContent={status_tooltip}
                         withFocusTrap={false}
                     >
-                        <span className="fa fa-md fa-info-circle subscriptions-info" />
+                        <button className="pf-c-form__group-label-help ct-icon-info-circle"
+                                type="button"
+                                aria-label={_("Subscriptions information")}>
+                            <InfoCircleIcon />
+                        </button>
                     </Popover>
                 </div>
             );
