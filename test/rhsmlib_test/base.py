@@ -47,7 +47,8 @@ class TestUtilsMixin(object):
             self.fail("%s != %s" % (a, b))
         return True
 
-    def write_temp_file(self, data):
+    @staticmethod
+    def write_temp_file(data):
         # create a temp file for use as a config file. This should get cleaned
         # up magically when it is closed so make sure to close it!
         fid = NamedTemporaryFile(mode='w+', suffix='.tmp')
@@ -65,12 +66,15 @@ class InjectionMockingTest(unittest.TestCase):
         self.mock_require.side_effect = self.injection_definitions
 
     def injection_definitions(self, *args, **kwargs):
-        '''Override this method to control what the injector returns'''
+        """
+        Override this method to control what the injector returns
+        """
         raise NotImplementedError("Subclasses should define injected objects")
 
 
 class DBusObjectTest(unittest.TestCase):
-    '''Subclass of unittest.TestCase use for testing DBus methods in the same process.  During setUp this
+    """
+    Subclass of unittest.TestCase use for testing DBus methods in the same process.  During setUp this
     class starts a thread that makes a DBus connection and exposes some objects on the bus.  The main thread
     blocks until the connection has completed.
 
@@ -79,7 +83,7 @@ class DBusObjectTest(unittest.TestCase):
     starts another thread that makes an async call to the thread serving the objects under test and then
     blocks the main thread (the DBus call must be asynchronous to avoid deadlock).  The function passed to
     dbus_request is run and then dbus_request unblocks the main thread.
-    '''
+    """
     def setUp(self):
         super(DBusObjectTest, self).setUp()
         self.started_event = threading.Event()
@@ -89,6 +93,11 @@ class DBusObjectTest(unittest.TestCase):
         self.mock_identity = mock.Mock(spec=Identity, name="Identity").return_value
         self.mock_identity.cert_dir_path = "path.txt"  # must be a string, otherwise it is set as a mock object
         # and os.path throws type error, causing tests to hang
+
+        sender_patcher = mock.patch("rhsmlib.client_info.DBusSender.get_cmd_line")
+        self.mock_sender_get_cmd_line = sender_patcher.start()
+        self.mock_sender_get_cmd_line.return_value = "unit-test"
+        self.addCleanup(sender_patcher.stop)
 
         # If we don't use a BusConnection and use say dbus.SessionBus() directly, each test will end up
         # getting old bus connections since the dbus bindings cache bus connections.  You can use the private
@@ -104,9 +113,6 @@ class DBusObjectTest(unittest.TestCase):
         self.started_event.wait()
         self.result_queue = queue.Queue(maxsize=1)
         self.addCleanup(self.stop_server)
-        sender_patcher = mock.patch("rhsmlib.client_info.DBusSender.get_cmd_line")
-        self.mock_sender_get_cmd_line = sender_patcher.start()
-        self.mock_sender_get_cmd_line.return_value = "unit-test"
 
     def stop_server(self):
         self.server_thread.stop()
@@ -123,10 +129,12 @@ class DBusObjectTest(unittest.TestCase):
         return dbus.bus.BusConnection(**self.bus_kwargs).get_object(self.bus_name(), path)
 
     def dbus_request(self, reply_handler, proxy, proxy_args=None, error_handler=None):
-        '''This method makes an async request to the server thread and *does not* block.  Not blocking means
+        """
+        This method makes an async request to the server thread and *does not* block.  Not blocking means
         that the rest of your test case will run potentially before the async callback finishes.  If you
         use this method, you will need to call self.handler_complete_event.wait() at the end of your
-        test so that the test runner itself will block until the async callback finishes.'''
+        test so that the test runner itself will block until the async callback finishes.
+        """
 
         DBusRequestThread(kwargs={
             'proxy': proxy,
@@ -145,15 +153,18 @@ class DBusObjectTest(unittest.TestCase):
             six.reraise(*result)
 
     def dbus_objects(self):
-        '''This method should return a list of DBus service classes that need to be instantiated in the
+        """
+        This method should return a list of DBus service classes that need to be instantiated in the
         server thread.  Generally this should just be a list containing the class under test.
         In that list, you can also pass in a tuple composed of the object class and a dictionary of keyword
         arguments for the object's constructor
-        '''
+        """
         raise NotImplementedError('Subclasses should define what DBus objects to test')
 
     def bus_name(self):
-        '''This method should return the bus name that the server thread should use'''
+        """
+        This method should return the bus name that the server thread should use
+        """
         return constants.BUS_NAME
 
 
@@ -255,7 +266,8 @@ class DBusRequestThread(threading.Thread):
             self.proxy(
                 *self.proxy_args,
                 reply_handler=self.reply_handler,
-                error_handler=self.error_handler)
+                error_handler=self.error_handler
+            )
         except Exception as e:
             # If the proxy is messed up some how, we still need to push the error to the main thread
             log.exception(e)

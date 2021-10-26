@@ -63,7 +63,6 @@ class Server(object):
         init_logger(parser)
 
         # Configure mainloop for threading.  We must do so in GLib and python-dbus.
-        GLib.threads_init()
         dbus.mainloop.glib.threads_init()
 
         self.bus_name = bus_name or constants.BUS_NAME
@@ -170,12 +169,12 @@ class Server(object):
             if stopped_event:
                 stopped_event.set()
 
-    def notify_started(self, started_event):
+    @staticmethod
+    def notify_started(started_event):
         """
         This callback will be run once the mainloop is up and running. It's only purpose is to alert
         other blocked threads that the mainloop is ready.
         """
-        log.debug("Start notification sent")
         if started_event:
             started_event.set()
         # Only run this callback once
@@ -199,9 +198,10 @@ class Server(object):
         # here.  This will create a problem if you attempt to reacquire the BusName since python-dbus will
         # give you a stale reference.  Use dbus.Connection.BusConnection to avoid this problem.
         # See http://stackoverflow.com/questions/17446414/dbus-object-lifecycle
-        for o in self.objects:
-            o.remove_from_connection()
+        for obj in self.objects:
+            obj.remove_from_connection()
 
+        log.debug(f'Releasing Bus name: {self.bus_name}')
         self.bus.release_name(self.bus_name)
 
 
