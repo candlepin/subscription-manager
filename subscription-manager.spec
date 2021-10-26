@@ -4,7 +4,6 @@
 # but the same versions apply at the moment.
 %global has_ostree %use_systemd && 0%{?suse_version} == 0
 %global use_inotify 1
-%global py2_package_prefix python2
 
 # Plugin for container (docker, podman) is not supported on RHEL
 %if 0%{?rhel}
@@ -15,19 +14,6 @@
 
 %if (0%{?rhel} || 0%{?fedora})
 %global dmidecode_version >= 3.12.2-2
-%endif
-
-# borrowed from dnf spec file & tweaked
-%if 0%{?suse_version}
-%bcond_with python3
-%else
-%bcond_without python3
-%endif
-
-%if 0%{?fedora} || 0%{?rhel}
-%bcond_with python2_rhsm
-%else
-%bcond_without python2_rhsm
 %endif
 
 %global completion_dir %{_datadir}/bash-completion/completions
@@ -41,24 +27,15 @@
 %global use_inotify 0
 %endif
 
-%global use_dnf (%{with python3} && (0%{?fedora} || (0%{?rhel}))) || (0%{?rhel})
+%global use_dnf (0%{?fedora} || (0%{?rhel}))
 %global create_libdnf_rpm (0%{?fedora} || 0%{?rhel} > 8)
 %global use_cockpit 0%{?fedora} || 0%{?rhel}
 
-%if %{with python3}
 %global python_sitearch %python3_sitearch
 %global python_sitelib %python3_sitelib
 %global __python %__python3
 %global py_package_prefix python%{python3_pkgversion}
 %global rhsm_package_name %{py_package_prefix}-subscription-manager-rhsm
-%else
-%if 0%{?suse_version}
-%global py_package_prefix python2
-%else
-%global py_package_prefix python
-%endif
-%global rhsm_package_name subscription-manager-rhsm
-%endif
 
 %global _hardened_build 1
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
@@ -197,11 +174,7 @@ Requires:  platform-python-setuptools
 Requires:  %{py_package_prefix}-setuptools
 %endif
 
-%if %{with python3}
 Requires: python3-dbus
-%else
-Requires: %{?suse_version:dbus-1-python} %{!?suse_version:dbus-python}
-%endif
 
 %if %{use_dnf}
 %if %{create_libdnf_rpm}
@@ -361,17 +334,8 @@ Requires: json-c
 Requires: libdnf >= 0.22.5
 %endif
 
-%if %{with python3}
-
 Requires: python3-dnf-plugins-core
 Requires: python3-librepo
-
-%else
-
-Requires: python2-dnf-plugins-core
-Requires: python2-librepo
-
-%endif
 
 Requires: dnf >= 1.0.0
 %description -n dnf-plugin-subscription-manager
@@ -431,57 +395,22 @@ Requires:  %{py_package_prefix}-python-dateutil
 Requires: %{py_package_prefix}-dateutil
 %endif
 Requires: %{py_package_prefix}-iniparse
-# rpm-python is an old name for python2-rpm but RHEL6 uses the old name
 Requires: %{py_package_prefix}-six
 Requires: subscription-manager-rhsm-certificates = %{version}-%{release}
 # Required by Fedora packaging guidelines
 %{?python_provide:%python_provide %{py_package_prefix}-rhsm}
-%if %{with python3}
 Requires: python3-cloud-what = %{version}-%{release}
 Requires: python3-rpm
 Provides: python3-rhsm = %{version}-%{release}
 Obsoletes: python3-rhsm <= 1.20.3-1
 Provides: python-rhsm = %{version}-%{release}
 Obsoletes: python-rhsm <= 1.20.3-1
-%else
-Requires: rpm-python
-Provides: python-rhsm = %{version}-%{release}
-Obsoletes: python-rhsm <= 1.20.3-1
-%endif
 
 %description -n %{rhsm_package_name}
 A small library for communicating with the REST interface of a Red Hat Unified
 Entitlement Platform. This interface is used for the management of system
 entitlements, certificates, and access to content.
 
-
-%if %{with python2_rhsm}
-%package -n python2-subscription-manager-rhsm
-Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
-%if 0%{?suse_version}
-Group: Development/Libraries/Python
-%else
-Group: Development/Libraries
-%endif
-
-BuildRequires: python2-devel
-
-Requires: %{py2_package_prefix}-dateutil
-Requires: %{py2_package_prefix}-iniparse
-# rpm-python is an old name for python2-rpm but RHEL6 uses the old name
-Requires: %{py2_package_prefix}-six
-Requires: subscription-manager-rhsm-certificates = %{version}-%{release}
-# Required by Fedora packaging guidelines
-%{?python_provide:%python_provide %{py2_package_prefix}-rhsm}
-Requires: rpm-python
-Provides: python-rhsm = %{version}-%{release}
-Obsoletes: python-rhsm <= 1.20.3-1
-
-%description -n python2-subscription-manager-rhsm
-A small library for communicating with the REST interface of a Red Hat Unified
-Entitlement Platform. This interface is used for the management of system
-entitlements, certificates, and access to content.
-%endif
 
 %package -n subscription-manager-rhsm-certificates
 Summary: Certificates required to communicate with a Red Hat Unified Entitlement Platform
@@ -562,10 +491,6 @@ make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
     LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" \
     %{?subpackages} %{exclude_packages}
 
-%if %{with python2_rhsm}
-python2 ./setup.py build --quiet --rpm-version=%{version}-%{release}
-%endif
-
 %if %{use_dnf}
 pushd src/plugins/libdnf
 %cmake -DCMAKE_BUILD_TYPE="Release"
@@ -603,15 +528,6 @@ mkdir -p %{buildroot}%{_libdir}/libdnf/plugins
 popd
 %endif
 
-%if %{with python2_rhsm}
-mkdir -p %{buildroot}%{python2_sitearch}/rhsm
-# Build binary extension in Python2 site-packages directory
-python2 ./setup.py build_ext --build-lib %{buildroot}%{python2_sitearch} --quiet
-# Copy all *.py file from Python3 to Python2 directory
-cp %{buildroot}%{python_sitearch}/rhsm/*.py %{buildroot}%{python2_sitearch}/rhsm/
-%endif
-
-
 %if %use_cockpit
 desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-cockpit.desktop
 %endif
@@ -647,9 +563,7 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-uep.pem %{buildroot}/
 # fix timestamps on our byte compiled files so they match across arches
 find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
-%if %{with python3}
 %py_byte_compile %{__python3} %{buildroot}%{rhsm_plugins_dir}/
-%endif
 
 # symlink services to /usr/sbin/ when building for SUSE distributions
 %if 0%{?suse_version}
@@ -780,7 +694,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/subscription_manager/model/*.py*
 %{python_sitearch}/subscription_manager/plugin/__init__.py*
 %{python_sitearch}/subscription_manager/scripts/*.py*
-%if %{with python3}
 %{python_sitearch}/subscription_manager/__pycache__
 %{python_sitearch}/subscription_manager/api/__pycache__
 %{python_sitearch}/subscription_manager/branding/__pycache__
@@ -788,7 +701,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/subscription_manager/model/__pycache__
 %{python_sitearch}/subscription_manager/plugin/__pycache__
 %{python_sitearch}/subscription_manager/scripts/__pycache__
-%endif
 
 # subscription-manager plugins
 %dir %{rhsm_plugins_dir}
@@ -814,7 +726,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/rhsmlib/dbus/*.py*
 %{python_sitearch}/rhsmlib/dbus/facts/*.py*
 %{python_sitearch}/rhsmlib/dbus/objects/*.py*
-%if %{with python3}
 %{python_sitearch}/rhsmlib/__pycache__
 %{python_sitearch}/rhsmlib/candlepin/__pycache__
 %{python_sitearch}/rhsmlib/compat/__pycache__
@@ -823,14 +734,11 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/rhsmlib/dbus/objects/__pycache__
 %{python_sitearch}/rhsmlib/facts/__pycache__
 %{python_sitearch}/rhsmlib/services/__pycache__
-%endif
 
 # syspurpose
 %dir %{python_sitearch}/syspurpose
 %{python_sitearch}/syspurpose/*.py*
-%if %{with python3}
 %{python_sitearch}/syspurpose/__pycache__
-%endif
 
 %{_datadir}/polkit-1/actions/com.redhat.*.policy
 %{_datadir}/dbus-1/system-services/com.redhat.*.service
@@ -856,17 +764,13 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 # Incude rt CLI tool
 %dir %{python_sitearch}/rct
 %{python_sitearch}/rct/*.py*
-%if %{with python3}
 %{python_sitearch}/rct/__pycache__
-%endif
 %attr(755,root,root) %{_bindir}/rct
 
 # Include consumer debug CLI tool
 %dir %{python_sitearch}/rhsm_debug
 %{python_sitearch}/rhsm_debug/*.py*
-%if %{with python3}
 %{python_sitearch}/rhsm_debug/__pycache__
-%endif
 %attr(755,root,root) %{_bindir}/rhsm-debug
 
 %doc
@@ -888,10 +792,8 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %endif
 %{_sysconfdir}/rhsm/pluginconf.d/container_content.ContainerContentPlugin.conf
 %{rhsm_plugins_dir}/container_content.py*
-%if %{with python3}
 %{rhsm_plugins_dir}/__pycache__/*container*
 %{python_sitearch}/subscription_manager/plugin/container/__pycache__
-%endif
 %{python_sitearch}/subscription_manager/plugin/container/*.py*
 
 # Copying Red Hat CA cert into each directory:
@@ -905,10 +807,8 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{_sysconfdir}/rhsm/pluginconf.d/ostree_content.OstreeContentPlugin.conf
 %{rhsm_plugins_dir}/ostree_content.py*
 %{python_sitearch}/subscription_manager/plugin/ostree/*.py*
-%if %{with python3}
 %{python_sitearch}/subscription_manager/plugin/ostree/__pycache__
 %{rhsm_plugins_dir}/__pycache__/*ostree*
-%endif
 %endif
 
 
@@ -933,23 +833,14 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %dir %{python_sitearch}/rhsm
 %{python_sitearch}/rhsm/*
 
-%if %{with python2_rhsm}
-%files -n python2-subscription-manager-rhsm
-%defattr(-,root,root,-)
-%dir %{python2_sitearch}/rhsm
-%{python2_sitearch}/rhsm/*
-%endif
-
 %files -n python3-cloud-what
 %defattr(-,root,root,-)
 %attr(750,root,root) %dir %{_var}/cache/cloud-what
 %dir %{python_sitearch}/cloud_what
 %dir %{python_sitearch}/cloud_what/providers
 %{python_sitearch}/cloud_what/*
-%if %{with python3}
 %{python_sitearch}/cloud_what/__pycache__
 %{python_sitearch}/cloud_what/providers/__pycache__
-%endif
 
 %files -n subscription-manager-rhsm-certificates
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm
