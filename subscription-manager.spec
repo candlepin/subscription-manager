@@ -24,7 +24,7 @@
 %bcond_without python3
 %endif
 
-%if !(0%{?fedora} < 30 && %{with python3}) || 0%{?rhel}
+%if 0%{?fedora} || 0%{?rhel}
 %bcond_with python2_rhsm
 %else
 %bcond_without python2_rhsm
@@ -42,7 +42,7 @@
 %endif
 
 %global use_dnf (%{with python3} && (0%{?fedora} || (0%{?rhel}))) || (0%{?rhel})
-%global create_libdnf_rpm (0%{?fedora} > 32 || 0%{?rhel} > 8)
+%global create_libdnf_rpm (0%{?fedora} || 0%{?rhel} > 8)
 %global use_cockpit 0%{?fedora} || 0%{?rhel}
 
 %if %{with python3}
@@ -352,18 +352,13 @@ Group: Productivity/Networking/System
 Group: System Environment/Base
 %endif
 
-%if (0%{?fedora} >= 29 || 0%{?rhel})
+%if (0%{?fedora} || 0%{?rhel})
 BuildRequires: cmake
 BuildRequires: gcc
 BuildRequires: json-c-devel
 BuildRequires: libdnf-devel >= 0.22.5
 Requires: json-c
 Requires: libdnf >= 0.22.5
-%endif
-
-# See BZ 1581410 - avoid a circular dependency
-%if (0%{?fedora} < 29)
-Requires: %{name} >= %{version}-%{release}
 %endif
 
 %if %{with python3}
