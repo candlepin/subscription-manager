@@ -17,8 +17,8 @@
  * along with Cockpit; If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import '../lib/page.scss';
-@import '../lib/ct-card.scss';
+@import 'page.scss';
+@import 'ct-card.scss';
 
 #app .pf-c-card {
     @extend .ct-card;
@@ -27,59 +27,4 @@
 .purpose-header {
     display: inline-block;
     padding-right: 0.5rem;
-}
-
-.subscriptions-info {
-    cursor: pointer;
-}
-
-#register_dialog .modal-footer .alert{
-    text-align: left;
-    padding-left: 37px;
-}
-
-#register_dialog .modal-footer .alert .fa-exclamation-triangle {
-    margin-right: 4px;
-}
-
-#subscription-register-url {
-    margin-bottom: 3px;
-}
-
-#subscriptions-registering > span {
-    margin-left: 7px;
-}
-
-#subscription-proxy-use {
-    vertical-align: sub;
-}
-
-#subscription-register-proxy-form {
-    margin-bottom: 4px;
-}
-
-.proxy-settings-form .ct-form-layout {
-    background: #f4f4f4;
-    border-width: 1px;
-    border-style: solid;
-    border-color: #bababa;
-    padding: 10px 4px 4px 4px;
-    width: 100%;
-}
-
-/* Make a dialog visible */
-.dialog-ct-visible {
-    display: block;
-}
-
-.rhsm-register-method #subscription-register-activation-key-method {
-    margin-left: 10px;
-}
-
-.rhsm-register-method input {
-    margin: 5px 5px 5px 0px;
-}
-
-.register-method-value {
-    vertical-align: text-bottom;
 }

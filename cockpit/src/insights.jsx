@@ -21,14 +21,17 @@ import cockpit from "cockpit";
 import React from "react";
 import moment from "moment";
 
-import { show_modal_dialog } from "../lib/cockpit-components-dialog.jsx";
-import * as service from "../lib/service.js";
-import * as PK from "../lib/packagekit";
+import { show_modal_dialog } from "cockpit-components-dialog.jsx";
+import * as service from "service.js";
+import * as PK from "packagekit";
 
-import { ExternalLinkAltIcon, WarningTriangleIcon } from '@patternfly/react-icons';
+import { ExclamationTriangleIcon, ExternalLinkAltIcon, WarningTriangleIcon } from '@patternfly/react-icons';
 import {
+    Alert,
     Button,
     DescriptionListDescription, DescriptionListGroup, DescriptionListTerm,
+    ExpandableSection,
+    Spinner,
     Stack, StackItem,
 } from '@patternfly/react-core';
 
@@ -117,8 +120,15 @@ function left(func) {
 export const blurb =
     _("Proactively identify and remediate threats to security, performance, availability, and stability with Red Hat Insights \u2014 with predictive analytics, avoid problems and unplanned downtime in your Red Hat environment.");
 
-export const link =
-    <a href="https://www.redhat.com/en/technologies/management/insights" target="_blank" rel="noopener noreferrer">Red Hat Insights <i className="fa fa-external-link" /></a>;
+export const link = (
+    <Button variant="link"
+            isInline
+            component='a'
+            href="https://www.redhat.com/en/technologies/management/insights" target="_blank" rel="noopener noreferrer"
+            icon={<ExternalLinkAltIcon />} iconPosition="right">
+        Red Hat Insights
+    </Button>
+);
 
 function install_data_summary(data) {
     if (!data || data.missing_names.length == 0)
@@ -135,7 +145,7 @@ function install_data_summary(data) {
         summary = [
             {summary},
             <br />,
-            <span className="pficon pficon-warning-triangle-o" />, "\n",
+            <ExclamationTriangleIcon className="ct-exclamation-triangle" />, "\n",
             cockpit.format(cockpit.ngettext("$0 package needs to be removed.",
                                             "$0 packages need to be removed.",
                                             data.remove_names.length),
@@ -164,7 +174,7 @@ function install_data_summary(data) {
             );
 
         summary = [ <p>{summary}</p>,
-            <Revealer summary={_("Details")}>{extra_details}{remove_details}</Revealer>
+            <ExpandableSection toggleText={_("Details")}>{extra_details}{remove_details}</ExpandableSection>
         ];
     }
 
@@ -232,7 +242,7 @@ function show_connect_dialog() {
                     disabled: checking_install,
                 }
             ],
-            idle_message: progress_message && <div><div className="spinner spinner-sm" /><span>{ progress_message }</span></div>,
+            idle_message: progress_message && <div><Spinner isSVG className="dialog-wait-ct-spinner" size="md" /><span>{ progress_message }</span></div>,
             static_error: error_message,
             dialog_done: f => { if (!f && cancel) cancel(); }
         };
@@ -279,25 +289,6 @@ function show_connect_dialog() {
                     });
         }
     });
-}
-
-class Revealer extends React.Component {
-    constructor() {
-        super();
-        this.state = { revealed: false };
-    }
-
-    render() {
-        return (
-            <div>
-                <a onClick={event => { if (event.button == 0) this.setState({ revealed: !this.state.revealed }); }}>
-                    {this.props.summary}
-                </a> <i className={this.state.revealed ? "fa fa-angle-down" : "fa fa-angle-right"} />
-                <br />
-                {this.state.revealed && this.props.children}
-            </div>
-        );
-    }
 }
 
 const get_monotonic_start = cockpit.spawn(
@@ -394,29 +385,23 @@ function show_status_dialog() {
                         </table>
                         <br />
                         { insights_timer.state == "failed" &&
-                        <div className="alert alert-warning">
-                            <span className="pficon pficon-warning-triangle-o" />
-                            {_("Next Insights data upload could not be scheduled.")}{" "}
-                            <a onClick={left(jump_to_timer)}>{_("Details")}</a>
-                        </div>
+                        <Alert variant='warning'>
+                            <Button variant='link' isInline onClick={left(jump_to_timer)}>{_("Details")}</Button>
+                        </Alert>
                         }
                         { insights_service.state == "failed" && failed_text &&
-                        <div className="alert alert-warning">
-                            <span className="pficon pficon-warning-triangle-o" />
-                            {failed_text}{" "}
-                            <a onClick={left(jump_to_service)}>{_("Details")}</a>
-                        </div>
+                        <Alert variant='warning' title={failed_text}>
+                            <Button variant='link' isInline onClick={left(jump_to_service)}>{_("Details")}</Button>
+                        </Alert>
                         }
-                        <Revealer summary={_("Disconnect from Insights")}>
-                            <div className="alert alert-warning"
-                                 style={{ "padding": "14px", "marginTop": "1ex", "marginBottom": "0px" }}>
-                                <p>{_("If you disconnect this system from Insights, it will no longer report it's Insights status in Red Hat Cloud or Satellite.")}</p>
-                                <br />
-                                <button className="btn btn-danger" onClick={left(disconnect)}>
+                        <ExpandableSection toggleText={_("Disconnect from Insights")}>
+                            <Alert isInline variant='warning'
+                                   title={_("If you disconnect this system from Insights, it will no longer report it's Insights status in Red Hat Cloud or Satellite.")}>
+                                <Button variant='danger' onClick={left(disconnect)}>
                                     {_("Disconnect from Insights")}
-                                </button>
-                            </div>
-                        </Revealer>
+                                </Button>
+                            </Alert>
+                        </ExpandableSection>
                     </div>
                 )
             },
@@ -431,7 +416,7 @@ function show_status_dialog() {
                 {
                     cancel_caption: _("Cancel"),
                     actions: [ ],
-                    idle_message: <div className="spinner spinner-sm" />
+                    idle_message: <Spinner isSVG className="dialog-wait-ct-spinner" size="md" />,
                 });
             unregister().then(
                 () => {

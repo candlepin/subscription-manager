@@ -21,13 +21,13 @@ import cockpit from 'cockpit';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import '../lib/patternfly/patternfly-cockpit.scss';
+import 'patternfly/patternfly-4-cockpit.scss';
 
 import subscriptionsClient from './subscriptions-client';
 import SubscriptionRegisterDialog from './subscriptions-register.jsx';
 import SubscriptionsView from './subscriptions-view.jsx';
 import * as Insights from './insights.jsx';
-import * as Dialog from '../lib/cockpit-components-dialog.jsx';
+import * as Dialog from 'cockpit-components-dialog.jsx';
 
 import './subscriptions.scss';
 
@@ -88,17 +88,9 @@ function openRegisterDialog() {
 
             // show dialog to register
             let renderDialog;
-            let updatedData = function(prop, data) {
+            let updatedData = function(prop, value) {
                 if (prop) {
-                    if (data.target) {
-                        if (data.target.type === "checkbox") {
-                            registerDialogDetails[prop] = data.target.checked;
-                        } else {
-                            registerDialogDetails[prop] = data.target.value;
-                        }
-                    } else {
-                        registerDialogDetails[prop] = data;
-                    }
+                    registerDialogDetails[prop] = value;
                 }
 
                 registerDialogDetails.onChange = updatedData;

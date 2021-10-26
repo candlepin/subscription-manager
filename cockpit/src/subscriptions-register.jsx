@@ -21,8 +21,15 @@ var cockpit = require("cockpit");
 var _ = cockpit.gettext;
 
 var React = require("react");
-import Select from "./Select/Select.jsx";
-import '../lib/form-layout.less';
+
+import {
+    Checkbox,
+    Flex,
+    Form, FormGroup,
+    FormSelect, FormSelectOption,
+    Radio,
+    TextInput,
+} from '@patternfly/react-core';
 
 import subscriptionsClient from './subscriptions-client';
 import * as Insights from './insights.jsx';
@@ -37,37 +44,32 @@ class SubscriptionRegisterDialog extends React.Component {
         let customURL;
         if (this.props.url === 'custom') {
             customURL = (
-                <input id="subscription-register-url-custom" className="form-control" type="text"
-                 value={this.props.server_url} onChange={value => this.props.onChange('server_url', value)} />
+                <TextInput id="subscription-register-url-custom"
+                           value={this.props.server_url} onChange={value => this.props.onChange('server_url', value)} />
             );
         }
         let proxy;
         if (this.props.proxy) {
             proxy = (
-                <div className="proxy-settings-form">
-                    <form className="ct-form-layout" id="subscription-register-proxy-form">
-                        <label className="control-label" htmlFor="subscription-proxy-server">
-                            {_("Proxy Location")}
-                        </label>
-                        <input className="form-control" id="subscription-proxy-server" type="text"
-                               placeholder="hostname:port" value={this.props.proxy_server}
-                               onChange={value => this.props.onChange('proxy_server', value)} />
+                <>
+                    <FormGroup fieldId="subscription-proxy-server" label={_("Proxy Location")}>
+                        <TextInput id="subscription-proxy-server"
+                                    placeholder="hostname:port" value={this.props.proxy_server}
+                                    onChange={value => this.props.onChange('proxy_server', value)} />
+                    </FormGroup>
 
-                        <label className="control-label" htmlFor="subscription-proxy-user">
-                            {_("Proxy Username")}
-                        </label>
-                        <input className="form-control" id="subscription-proxy-user" type="text"
-                               value={this.props.proxy_user}
-                               onChange={value => this.props.onChange('proxy_user', value)} />
+                    <FormGroup fieldId="subscription-proxy-user" label={_("Proxy Username")}>
+                        <TextInput id="subscription-proxy-user"
+                                   value={this.props.proxy_user}
+                                   onChange={value => this.props.onChange('proxy_user', value)} />
+                    </FormGroup>
 
-                        <label className="control-label" htmlFor="subscription-proxy-password">
-                            {_("Proxy Password")}
-                        </label>
-                        <input className="form-control" id="subscription-proxy-password" type="password"
-                               value={this.props.proxy_password}
-                               onChange={value => this.props.onChange('proxy_password', value)} />
-                    </form>
-                </div>
+                    <FormGroup fieldId="subscription-proxy-password" label={_("Proxy Password")}>
+                        <TextInput id="subscription-proxy-password" type="password"
+                                   value={this.props.proxy_password}
+                                   onChange={value => this.props.onChange('proxy_password', value)} />
+                    </FormGroup>
+                </>
             );
         }
         let insights;
@@ -80,60 +82,50 @@ class SubscriptionRegisterDialog extends React.Component {
             }
         }
         insights = [
-            <label key="0" className="control-label" htmlFor="subscription-insights">
-                {_("Insights")}
-            </label>,
-            <label key="1" className="checkbox-inline">
-                <input id="subscription-insights" type="checkbox" checked={this.props.insights}
-                       disabled={ insights_checkbox_disabled } onChange={value => this.props.onChange('insights', value)} />
-                <span>
-                    { Insights.arrfmt(_("Connect this system to $0."), Insights.link) }
-                </span>
-            </label>,
-            (this.props.insights && !this.props.insights_detected) && <p>{ Insights.arrfmt(_("The $0 package will be installed."), <strong>{subscriptionsClient.insightsPackage}</strong>)}</p>
+            <FormGroup key="0" fieldId="subscription-insights" label={_("Insights")} hasNoPaddingTop>
+                <Checkbox id="subscription-insights" isChecked={this.props.insights}
+                          label={ Insights.arrfmt(_("Connect this system to $0."), Insights.link) }
+                          isDisabled={ insights_checkbox_disabled } onChange={value => this.props.onChange('insights', value)} />
+                {(this.props.insights && !this.props.insights_detected) && <p>{ Insights.arrfmt(_("The $0 package will be installed."), <strong>{subscriptionsClient.insightsPackage}</strong>)}</p>}
+            </FormGroup>,
         ];
 
 
         let credentials;
         if (this.props.register_method === "account") {
             credentials = (
-                <div className="ct-form-layout" id="subscription-credentials">
-                    <label className="control-label" htmlFor="subscription-register-username">
-                        {_("Username")}
-                    </label>
-                    <input id="subscription-register-username" className="form-control" type="text"
-                           value={this.props.user}
-                           onChange={value => this.props.onChange('user', value)} />
-                    <label className="control-label" htmlFor="subscription-register-password">
-                        {_("Password")}
-                    </label>
-                    <input id="subscription-register-password" className="form-control" type="password"
-                           value={this.props.password}
-                           onChange={value => this.props.onChange('password', value)} />
-                    <label className="control-label" htmlFor="subscription-register-org">
-                        {_("Organization")}
-                    </label>
-                    <input id="subscription-register-org" className="form-control" type="text"
-                           value={this.props.org}
-                           onChange={value => this.props.onChange('org', value)} />
-                </div>
+                <>
+                    <FormGroup fieldId="subscription-register-username" label={_("Username")}>
+                        <TextInput id="subscription-register-username"
+                                   value={this.props.user}
+                                   onChange={value => this.props.onChange('user', value)} />
+                    </FormGroup>
+                    <FormGroup fieldId="subscription-register-password" label={_("Password")}>
+                        <TextInput id="subscription-register-password" type="password"
+                                   value={this.props.password}
+                                   onChange={value => this.props.onChange('password', value)} />
+                    </FormGroup>
+                    <FormGroup fieldId="subscription-register-org" label={_("Organization")}>
+                        <TextInput id="subscription-register-org"
+                                   value={this.props.org}
+                                   onChange={value => this.props.onChange('org', value)} />
+                    </FormGroup>
+                </>
             );
         } else {
             credentials = (
-                <div className="ct-form-layout" id="subscription-credentials">
-                    <label className="control-label" htmlFor="subscription-register-key">
-                        {_("Activation Key")}
-                    </label>
-                    <input id="subscription-register-key" className="form-control" type="text"
-                        placeholder="key_one,key_two" value={this.props.activation_keys}
-                        onChange={value => this.props.onChange('activation_keys', value)} />
-                    <label className="control-label" htmlFor="subscription-register-org">
-                        {_("Organization")}
-                    </label>
-                    <input id="subscription-register-org" className="form-control" type="text"
-                           value={this.props.org}
-                           onChange={value => this.props.onChange('org', value)} />
-                </div>
+                <>
+                    <FormGroup fieldId="subscription-register-key" label={_("Activation Key")}>
+                        <TextInput id="subscription-register-key"
+                                   placeholder="key_one,key_two" value={this.props.activation_keys}
+                                   onChange={value => this.props.onChange('activation_keys', value)} />
+                    </FormGroup>
+                    <FormGroup fieldId="subscription-register-org" label={_("Organization")}>
+                        <TextInput id="subscription-register-org"
+                                   value={this.props.org}
+                                   onChange={value => this.props.onChange('org', value)} />
+                    </FormGroup>
+                </>
             );
         }
 
@@ -142,61 +134,42 @@ class SubscriptionRegisterDialog extends React.Component {
             'custom': _("Custom URL"),
         };
         return (
-            <div className="modal-body">
-                <form className="ct-form-layout">
-                    <label className="control-label" htmlFor="subscription-register-url">
-                        {_("URL")}
-                    </label>
-                    <Select key='urlSource' onChange={value => this.props.onChange('url', value)}
+            <Form isHorizontal>
+                <FormGroup fieldId="subscription-register-url" label={_("URL")} isStack>
+                    <FormSelect key='urlSource' onChange={value => this.props.onChange('url', value)}
                             id="subscription-register-url" value={this.props.url}>
-                        <option value="default">{ urlEntries['default'] }</option>
-                        <option value="custom">{ urlEntries['custom'] }</option>
-                    </Select>
+                        <FormSelectOption value="default" label={urlEntries['default']} />
+                        <FormSelectOption value="custom" label={urlEntries['custom']} />
+                    </FormSelect>
                     {customURL}
-                    <label className="checkbox-inline">
-                        <input id="subscription-proxy-use" type="checkbox" checked={this.props.proxy}
-                               onChange={value => this.props.onChange('proxy', value)} />
-                        {_("Use proxy server")}
-                    </label>
+                    <Checkbox id="subscription-proxy-use" isChecked={this.props.proxy}
+                              label={_("Use proxy server")}
+                              onChange={value => this.props.onChange('proxy', value)} />
                     {proxy}
-                    <label className="control-label" htmlFor="subscription-register-method">
-                        {_("Method")}
-                    </label>
-                    <label className="checkbox-inline">
-                        <div className="rhsm-register-method">
-                            <label id="account-method-label">
-                                <input id="subscription-register-account-method" type="radio"
-                                       name="subscription-register-account-method"
-                                       radioGroup="subscription-register-method" value="account"
-                                       onChange={value => this.props.onChange('register_method', value)}
-                                       checked={this.props.register_method === 'account'}
-                                />
-                                <span className="register-method-value">{_("Account")}</span>
-                            </label>
-                            <label id="activation-key-method-label">
-                                <input id="subscription-register-activation-key-method" type="radio"
-                                       name="subscription-register-activation-key-method"
-                                       radioGroup="subscription-register-method" value="activation-key"
-                                       onChange={value => this.props.onChange('register_method', value)}
-                                       checked={this.props.register_method === 'activation-key'}
-                                />
-                                <span className="register-method-value">{_("Activation key")}</span>
-                            </label>
-                        </div>
-                    </label>
+                </FormGroup>
+                <FormGroup fieldId="subscription-register-method" label={_("Method")} isStack hasNoPaddingTop>
+                    <Flex>
+                        <Radio id="subscription-register-account-method"
+                               name="subscription-register-account-method"
+                               label={_("Account")}
+                               onChange={() => this.props.onChange('register_method', 'account')}
+                               isChecked={this.props.register_method === 'account'} />
+                        <Radio id="subscription-register-activation-key-method"
+                               name="subscription-register-activation-key-method"
+                               label={_("Activation key")}
+                               onChange={() => this.props.onChange('register_method', 'activation-key')}
+                               isChecked={this.props.register_method === 'activation-key'} />
+                    </Flex>
                     { credentials }
-                    <label className="control-label">
-                        {_("Subscriptions")}
-                    </label>
-                    <label className="checkbox-inline">
-                        <input id="subscription-auto-attach-use" type="checkbox" checked={this.props.auto_attach}
-                               onChange={value => this.props.onChange('auto_attach', value)}
-                        />
-                        {_("Attach automatically")}
-                    </label>
-                    { insights }
-                </form>
-            </div>
+                </FormGroup>
+                <FormGroup className="control-label" label={_("Subscriptions")} hasNoPaddingTop>
+                    <Checkbox id="subscription-auto-attach-use" isChecked={this.props.auto_attach}
+                              label={_("Attach automatically")}
+                              onChange={value => this.props.onChange('auto_attach', value)}
+                    />
+                </FormGroup>
+                { insights }
+            </Form>
         );
     }
 }
