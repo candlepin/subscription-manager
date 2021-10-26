@@ -1,8 +1,6 @@
-# Prefer systemd over sysv on Fedora and RHEL
-%global use_systemd 0%{?fedora} || 0%{?rhel} || 0%{?suse_version}
 # For optional building of ostree-plugin sub package. Unrelated to systemd
 # but the same versions apply at the moment.
-%global has_ostree %use_systemd && 0%{?suse_version} == 0
+%global has_ostree 0%{?suse_version} == 0
 %global use_inotify 1
 
 # Plugin for container (docker, podman) is not supported on RHEL
@@ -65,11 +63,7 @@
 %global install_dnf_plugins INSTALL_DNF_PLUGINS=false
 %endif
 
-%if %{use_systemd}
 %global with_systemd WITH_SYSTEMD=true
-%else
-%global with_systemd WITH_SYSTEMD=false
-%endif
 
 %if %{use_cockpit}
 %global with_cockpit WITH_COCKPIT=true
@@ -202,15 +196,9 @@ Requires:  %{py_package_prefix}-dmidecode %{?dmidecode_version}
 Requires:  %{py_package_prefix}-inotify
 %endif
 
-%if %use_systemd
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
-%else
-Requires: %{?suse_version:aaa_base} %{!?suse_version:chkconfig}
-Requires(post): %{?suse_version:aaa_base} %{!?suse_version:chkconfig}
-Requires(preun): %{?suse_version:aaa_base} %{!?suse_version:chkconfig, initscripts}
-%endif
 
 Requires: python3-cloud-what = %{version}-%{release}
 
@@ -237,13 +225,11 @@ BuildRequires: system-release
 BuildRequires: libzypp
 %endif
 
-%if %use_systemd
 # We need the systemd RPM macros
 %if 0%{?suse_version}
 BuildRequires: systemd-rpm-macros
 %endif
 BuildRequires: systemd
-%endif
 
 Obsoletes: subscription-manager-initial-setup-addon <= %{version}-%{release}
 
@@ -567,13 +553,9 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
 # symlink services to /usr/sbin/ when building for SUSE distributions
 %if 0%{?suse_version}
-    %if %{use_systemd}
-        ln -s %{_sbindir}/service %{buildroot}/%{_sbindir}/rcrhsm
-        ln -s %{_sbindir}/service %{buildroot}/%{_sbindir}/rcrhsm-facts
-        ln -s %{_sbindir}/service %{buildroot}/%{_sbindir}/rcrhsmcertd
-    %else
-       ln -s %{_initrddir}/rhsmcertd %{buildroot}%{_sbindir}/rcrhsmcertd
-    %endif
+    ln -s %{_sbindir}/service %{buildroot}/%{_sbindir}/rcrhsm
+    ln -s %{_sbindir}/service %{buildroot}/%{_sbindir}/rcrhsm-facts
+    ln -s %{_sbindir}/service %{buildroot}/%{_sbindir}/rcrhsmcertd
 %endif
 
 # base/cli tools use the gettext domain 'rhsm', while the
@@ -746,15 +728,11 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
 # Despite the name similarity dbus-1/system.d has nothing to do with systemd
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.*.conf
-%if %use_systemd
-    %attr(644,root,root) %{_unitdir}/*.service
-    %attr(644,root,root) %{_tmpfilesdir}/%{name}.conf
-    %if 0%{?suse_version}
-        %{_sbindir}/rcrhsm
-        %{_sbindir}/rcrhsm-facts
-    %endif
-%else
-    %attr(755,root,root) %{_initrddir}/rhsmcertd
+%attr(644,root,root) %{_unitdir}/*.service
+%attr(644,root,root) %{_tmpfilesdir}/%{name}.conf
+%if 0%{?suse_version}
+    %{_sbindir}/rcrhsm
+    %{_sbindir}/rcrhsm-facts
 %endif
 
 %if 0%{?suse_version}
@@ -873,30 +851,20 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %pre
 
 
-%if %use_systemd
-    %if 0%{?suse_version}
-        %service_add_pre rhsm.service
-        %service_add_pre rhsm-facts.service
-        %service_add_pre rhsmcertd.service
-    %endif
+%if 0%{?suse_version}
+    %service_add_pre rhsm.service
+    %service_add_pre rhsm-facts.service
+    %service_add_pre rhsmcertd.service
 %endif
 
 %post
-%if %use_systemd
-    %if 0%{?suse_version}
-        %service_add_post rhsmcertd.service
-        %service_add_post rhsm.service
-        %service_add_post rhsm-facts.service
-        %tmpfiles_create %{_tmpfilesdir}/subscription-manager.conf
-    %else
-        %systemd_post rhsmcertd.service
-    %endif
+%if 0%{?suse_version}
+    %service_add_post rhsmcertd.service
+    %service_add_post rhsm.service
+    %service_add_post rhsm-facts.service
+    %tmpfiles_create %{_tmpfilesdir}/subscription-manager.conf
 %else
-    %if 0%{?suse_version}
-        %fillup_and_insserv -f rhsmcertd
-    %else
-        chkconfig --add rhsmcertd
-    %endif
+    %systemd_post rhsmcertd.service
 %endif
 
 # When subscription-manager is upgraded on RHEL 8 (from RHEL 8.2 to RHEL 8.3), then kill
@@ -915,12 +883,6 @@ if [ -x /bin/dbus-send ] ; then
     dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig > /dev/null 2>&1 || :
 fi
 
-%if !%use_systemd
-if [ "$1" = "2" ] ; then
-    /sbin/service rhsmcertd condrestart >/dev/null 2>&1 || :
-fi
-%endif
-
 
 %if !0%{?suse_version}
 %if %{use_container_plugin}
@@ -931,21 +893,12 @@ fi
 
 %preun
 if [ $1 -eq 0 ] ; then
-    %if %use_systemd
-        %if 0%{?suse_version}
-            %service_del_preun rhsm.service
-            %service_del_preun rhsm-facts.service
-            %service_del_preun rhsmcertd.service
-        %else
-            %systemd_preun rhsmcertd.service
-        %endif
+    %if 0%{?suse_version}
+        %service_del_preun rhsm.service
+        %service_del_preun rhsm-facts.service
+        %service_del_preun rhsmcertd.service
     %else
-        %if 0%{?suse_version}
-            %stop_on_removal %{_initrddir}/rhsmcertd
-        %else
-            /sbin/service rhsmcertd stop >/dev/null 2>&1
-            /sbin/chkconfig --del rhsmcertd
-        %endif
+        %systemd_preun rhsmcertd.service
     %endif
 
     if [ -x /bin/dbus-send ] ; then
@@ -954,18 +907,12 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %postun
-%if %use_systemd
-    %if 0%{?suse_version}
-        %service_del_postun rhsmcertd.service
-        %service_del_postun rhsm.service
-        %service_del_postun rhsm-facts.service
-    %else
-        %systemd_postun_with_restart rhsmcertd.service
-    %endif
+%if 0%{?suse_version}
+    %service_del_postun rhsmcertd.service
+    %service_del_postun rhsm.service
+    %service_del_postun rhsm-facts.service
 %else
-    %if 0%{?suse_version}
-        %insserv_cleanup %{_initrddir}/rhsmcertd
-    %endif
+    %systemd_postun_with_restart rhsmcertd.service
 %endif
 
 %posttrans
