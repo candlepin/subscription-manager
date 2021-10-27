@@ -26,7 +26,7 @@ from . import stubs
 from mock import patch, NonCallableMock, MagicMock, Mock, call
 from rhsm.https import ssl
 from .fixture import Capture, SubManFixture, temp_file, OPEN_FUNCTION
-from optparse import OptionParser
+from argparse import ArgumentParser
 from textwrap import dedent
 
 from nose import SkipTest
@@ -38,6 +38,10 @@ except ImportError:
     raise SkipTest("Couldn't import rhn modules for migration tests")
 
 from subscription_manager.certdirectory import ProductDirectory
+
+
+def parser_has_option(parser, optname):
+    return any(optname in a.option_strings for a in parser._actions[:])
 
 
 class TestMenu(unittest.TestCase):
@@ -74,11 +78,11 @@ class TestMigration(SubManFixture):
         For example, if the option is --my-option, the destination (unless customized) will be
         my_option.
         """
-        p = OptionParser()
+        p = ArgumentParser()
         migrate.add_parser_options(p)
 
         # Set the list of acceptable attributes for this Mock.
-        valid_options = [x for x in p.option_list if x.dest is not None]
+        valid_options = [x for x in p._actions[:] if x.dest is not None]
         mock_opts = Mock(spec=[o.dest for o in valid_options])
 
         # Set everything to the default
@@ -161,15 +165,15 @@ class TestMigration(SubManFixture):
 
     def test_5to6_options(self):
         five_to_six = True
-        parser = OptionParser()
+        parser = ArgumentParser()
         migrate.add_parser_options(parser, five_to_six)
-        self.assertTrue(parser.has_option("--registration-state"))
-        self.assertFalse(parser.has_option("--org"))
-        self.assertFalse(parser.has_option("--environment"))
-        self.assertFalse(parser.has_option("--force"))
-        self.assertFalse(parser.has_option("--activation-key"))
-        self.assertTrue(parser.has_option("--remove-rhn-packages"))
-        (opts, args) = parser.parse_args([])
+        self.assertTrue(parser_has_option(parser, "--registration-state"))
+        self.assertFalse(parser_has_option(parser, "--org"))
+        self.assertFalse(parser_has_option(parser, "--environment"))
+        self.assertFalse(parser_has_option(parser, "--force"))
+        self.assertFalse(parser_has_option(parser, "--activation-key"))
+        self.assertTrue(parser_has_option(parser, "--remove-rhn-packages"))
+        opts = parser.parse_args([])
         migrate.set_defaults(opts, five_to_six)
         self.assertTrue(opts.five_to_six)
         self.assertEqual(None, opts.org)
@@ -177,64 +181,64 @@ class TestMigration(SubManFixture):
         self.assertTrue(opts.force)
 
     def test_classic_migration_options(self):
-        parser = OptionParser()
+        parser = ArgumentParser()
         migrate.add_parser_options(parser)
-        self.assertTrue(parser.has_option("--keep"))
-        self.assertTrue(parser.has_option("--org"))
-        self.assertTrue(parser.has_option("--environment"))
-        self.assertTrue(parser.has_option("--force"))
-        self.assertTrue(parser.has_option("--activation-key"))
-        self.assertTrue(parser.has_option("--remove-rhn-packages"))
-        (opts, args) = parser.parse_args([])
+        self.assertTrue(parser_has_option(parser, "--keep"))
+        self.assertTrue(parser_has_option(parser, "--org"))
+        self.assertTrue(parser_has_option(parser, "--environment"))
+        self.assertTrue(parser_has_option(parser, "--force"))
+        self.assertTrue(parser_has_option(parser, "--activation-key"))
+        self.assertTrue(parser_has_option(parser, "--remove-rhn-packages"))
+        opts = parser.parse_args([])
         migrate.set_defaults(opts, five_to_six_script=False)
         self.assertFalse(opts.five_to_six)
         self.assertEqual("purge", opts.registration_state)
 
     def test_choices_for_registration_state(self):
-        parser = OptionParser()
+        parser = ArgumentParser()
         migrate.add_parser_options(parser, five_to_six_script=True)
         valid = ["keep", "unentitle", "purge"]
         for opt in valid:
-            (options, args) = parser.parse_args(["--registration-state", opt])
+            options = parser.parse_args(["--registration-state", opt])
 
-        parser = OptionParser()
+        parser = ArgumentParser()
         migrate.add_parser_options(parser, five_to_six_script=False)
-        (options, args) = parser.parse_args(["--keep"])
+        options = parser.parse_args(["--keep"])
         self.assertEqual("keep", options.registration_state)
 
-        (options, args) = parser.parse_args([""])
+        options = parser.parse_args([])
         self.assertEqual("purge", options.registration_state)
 
     def test_registration_state_default(self):
-        parser = OptionParser()
+        parser = ArgumentParser()
         migrate.add_parser_options(parser, five_to_six_script=True)
-        (options, args) = parser.parse_args([])
+        options = parser.parse_args([])
         self.assertEqual("unentitle", options.registration_state)
 
     def test_mutually_exclusive_auto_service_level_options(self):
-        parser = OptionParser()
+        parser = ArgumentParser()
         migrate.add_parser_options(parser)
-        (options, args) = parser.parse_args(["--no-auto", "--servicelevel", "foo"])
+        options = parser.parse_args(["--no-auto", "--servicelevel", "foo"])
         self.assertRaises(SystemExit, migrate.validate_options, (options))
 
     def test_mutually_exclusive_activation_keys_and_environment(self):
-        parser = OptionParser()
+        parser = ArgumentParser()
         migrate.add_parser_options(parser)
-        (options, args) = parser.parse_args(["--environment", "foo", "--activation-key", "bar"])
+        options = parser.parse_args(["--environment", "foo", "--activation-key", "bar"])
         self.assertRaises(SystemExit, migrate.validate_options, (options))
 
     def test_activation_keys_require_org(self):
-        parser = OptionParser()
+        parser = ArgumentParser()
         migrate.add_parser_options(parser)
-        (options, args) = parser.parse_args(["--activation-key", "bar"])
+        options = parser.parse_args(["--activation-key", "bar"])
         self.assertRaises(SystemExit, migrate.validate_options, (options))
 
     def test_activation_key_forbids_destination_credentials(self):
-        parser = OptionParser()
+        parser = ArgumentParser()
         migrate.add_parser_options(parser)
-        (options, args) = parser.parse_args(["--activation-key", "bar", "--destination-user", "x"])
+        options = parser.parse_args(["--activation-key", "bar", "--destination-user", "x"])
         self.assertRaises(SystemExit, migrate.validate_options, (options))
-        (options, args) = parser.parse_args(["--activation-key", "bar", "--destination-password", "y"])
+        options = parser.parse_args(["--activation-key", "bar", "--destination-password", "y"])
         self.assertRaises(SystemExit, migrate.validate_options, (options))
 
     @patch.object(stubs.StubConfig, "get", autospec=True)
@@ -1247,15 +1251,15 @@ class TestMigration(SubManFixture):
         self.assertEqual(123, system_id)
 
     def test_remove_rhn_packages_option_default(self):
-        parser = OptionParser()
+        parser = ArgumentParser()
         migrate.add_parser_options(parser)
-        (opts, args) = parser.parse_args([])
+        opts = parser.parse_args([])
         self.assertFalse(opts.remove_legacy_packages)
 
     def test_remove_rhn_packages_option(self):
-        parser = OptionParser()
+        parser = ArgumentParser()
         migrate.add_parser_options(parser)
-        (opts, args) = parser.parse_args(["--remove-rhn-packages"])
+        opts = parser.parse_args(["--remove-rhn-packages"])
         self.assertTrue(opts.remove_legacy_packages)
 
     @patch(OPEN_FUNCTION, autospec=True)

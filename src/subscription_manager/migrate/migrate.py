@@ -987,7 +987,7 @@ def main(args=None, five_to_six_script=False):
     if not args:
         args = sys.argv[1:]
 
-    (options, args) = parser.parse_args(args)
+    options = parser.parse_args(args)
     set_defaults(options, five_to_six_script)
     validate_options(options)
     MigrationEngine(options).main()
