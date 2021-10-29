@@ -44,6 +44,12 @@ class TestServiceLevelCommand(TestCliProxyCommand):
     def test_insecure(self):
         self.cc.main(["--insecure"])
 
+    def test_show(self):
+        self.cc.main(["--show"])
+
+    def test_no_arg(self):
+        self.cc.main([])
+
     def test_org_requires_list_error(self):
         try:
             self.cc.main(["--org", "one"])
@@ -70,7 +76,7 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         self.cc._set('JRJAR')
 
     @patch("subscription_manager.cli_command.service_level.SyncedStore")
-    def test_service_level_creates_syspurpose_dir_and_file(self, mock_syspurpose):
+    def test_service_level_set_creates_syspurpose_dir_and_file(self, mock_syspurpose):
         # create a mock /etc/rhsm/ directory, and set the value of a mock USER_SYSPURPOSE under that
         old_capabilities = self.cc.cp._capabilities
         self.cc.cp._capabilities = ['syspurpose']

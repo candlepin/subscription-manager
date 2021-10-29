@@ -125,9 +125,9 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
                 elif self.options.list:
                     self.list_service_levels()
                 elif self.options.show:
-                    self.show_service_level()
+                    self.show()
                 else:
-                    self.show_service_level()
+                    self.show()
             except UnauthorizedException as uex:
                 handle_exception(_(str(uex)), uex)
             except connection.GoneException as ge:
@@ -164,18 +164,22 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
                         _("Error: The service-level command is not supported by the server."))
         self.cp.updateConsumer(self.identity.uuid, service_level=service_level)
 
-    def show_service_level(self):
-        if self.is_registered():
-            consumer = self.cp.getConsumer(self.identity.uuid)
-            if 'serviceLevel' not in consumer:
-                system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
-            service_level = consumer['serviceLevel'] or ""
-            if service_level:
-                print(_("Current service level: {level}").format(level=service_level))
-            else:
-                print(_("Service level preference not set"))
-        else:
+    def show(self):
+        if self.cp.has_capability("syspurpose"):
+            self.store = SyncedStore(uep=self.cp, consumer_uuid=self.identity.uuid)
             super(ServiceLevelCommand, self).show()
+        else:
+            self.show_service_level()
+
+    def show_service_level(self):
+        consumer = self.cp.getConsumer(self.identity.uuid)
+        if 'serviceLevel' not in consumer:
+            system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
+        service_level = consumer['serviceLevel'] or ""
+        if service_level:
+            print(_("Current service level: {level}").format(level=service_level))
+        else:
+            print(_("Service level preference not set"))
 
     def list_service_levels(self):
         org_key = self.options.org
