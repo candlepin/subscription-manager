@@ -1064,7 +1064,7 @@ fi
 %endif
 
 # Make all entitlement certificates and keys files readable by group and other
-chmod go+r /etc/pki/entitlement/*.pem || true
+find /etc/pki/entitlement -mindepth 1 -maxdepth 1 -name '*.pem' | xargs --no-run-if-empty chmod go+r
 
 if [ -x /bin/dbus-send ] ; then
     dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig > /dev/null 2>&1 || :
