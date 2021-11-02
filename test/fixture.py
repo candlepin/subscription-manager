@@ -276,13 +276,6 @@ class SubManFixture(unittest.TestCase):
         is_valid_server_mock = self.is_valid_server_patcher.start()
         is_valid_server_mock.return_value = True
 
-        # No tests should be trying to test the proxy connection
-        # so really, everything needs this mock. May need to be in __init__, or
-        # better, all test classes need to use SubManFixture
-        self.test_proxy_connection_patcher = patch("subscription_manager.managercli.CliCommand.test_proxy_connection")
-        test_proxy_connection_mock = self.test_proxy_connection_patcher.start()
-        test_proxy_connection_mock.return_value = True
-
         self.syncedstore_patcher = patch('subscription_manager.syspurposelib.SyncedStore')
         syncedstore_mock = self.syncedstore_patcher.start()
 
