@@ -1,89 +1,39 @@
-# Prefer systemd over sysv on Fedora and RHEL 7+
-%global use_systemd 0%{?fedora} || (0%{?rhel} && 0%{?rhel} >= 7) || (0%{?suse_version} && 0%{?suse_version} >= 1315)
 # For optional building of ostree-plugin sub package. Unrelated to systemd
 # but the same versions apply at the moment.
-%global has_ostree %use_systemd && 0%{?suse_version} == 0
+%global has_ostree 0%{?suse_version} == 0
 %global use_inotify 1
-%global py2_package_prefix python2
 
-# Plugin for container (docker, podman) is not supported on RHEL 8 and higher
-%if (0%{?rhel} && 0%{?rhel} >= 8)
+# Plugin for container (docker, podman) is not supported on RHEL
+%if 0%{?rhel}
 %global use_container_plugin 0
 %else
 %global use_container_plugin 1
 %endif
 
-%if (0%{?rhel} >= 7 || 0%{?fedora})
+%if (0%{?rhel} || 0%{?fedora})
 %global dmidecode_version >= 3.12.2-2
 %endif
 
-# We use the tmpfiles_create macro from systemd-rpm-macros rpm.
-# Because of an incorrect version labelling of that rpm in SLES 12 which
-# contains the necessary macro definition, we are not able to simply require
-# a certain version of systemd-rpm-macros which will definitely contain this
-# macro. To keep our SLES builds working we define the macro here for ourselves.
-%if !0%{?tmpfiles_create:1}
-%define tmpfiles_create() \
-[ -x /usr/bin/systemd-tmpfiles ] && \
-       /usr/bin/systemd-tmpfiles --create %{?*} >/dev/null 2>&1 || : \
-%{nil}
-%endif
-
-
-# borrowed from dnf spec file & tweaked
-%if (0%{?rhel} && 0%{?rhel} <= 7) || 0%{?suse_version}
-%bcond_with python3
-%else
-%bcond_without python3
-%endif
-
-%if !(0%{?fedora} < 30 && %{with python3}) || 0%{?rhel} >= 8
-%bcond_with python2_rhsm
-%else
-%bcond_without python2_rhsm
-%endif
-
-%if 0%{?suse_version} && 0%{?suse_version} < 1200
-%global completion_dir %{_sysconfdir}/bash_completion.d
-%else
 %global completion_dir %{_datadir}/bash-completion/completions
-%endif
 
-%if 0%{?suse_version} > 1110 || 0%{?rhel} >= 7 || 0%{?fedora}
 %global run_dir /run
-%else
-%global run_dir /var/run
-%endif
 
 %global rhsm_plugins_dir  /usr/share/rhsm-plugins
-
-%if 0%{?rhel} == 6
-%global use_inotify 0
-%endif
 
 %if 0%{?suse_version}
 %global use_container_plugin 0
 %global use_inotify 0
 %endif
 
-%global use_dnf (%{with python3} && (0%{?fedora} || (0%{?rhel}))) || (0%{?rhel} >= 7)
-%global create_libdnf_rpm (0%{?fedora} > 32 || 0%{?rhel} > 8)
-%global use_cockpit 0%{?fedora} || 0%{?rhel} >= 7
+%global use_dnf (0%{?fedora} || (0%{?rhel}))
+%global create_libdnf_rpm (0%{?fedora} || 0%{?rhel} > 8)
+%global use_cockpit 0%{?fedora} || 0%{?rhel}
 
-%if %{with python3}
 %global python_sitearch %python3_sitearch
 %global python_sitelib %python3_sitelib
 %global __python %__python3
 %global py_package_prefix python%{python3_pkgversion}
 %global rhsm_package_name %{py_package_prefix}-subscription-manager-rhsm
-%else
-%if 0%{?suse_version} >= 1500
-%global py_package_prefix python2
-%else
-%global py_package_prefix python
-%endif
-%global rhsm_package_name subscription-manager-rhsm
-%endif
 
 %global _hardened_build 1
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
@@ -113,11 +63,7 @@
 %global install_dnf_plugins INSTALL_DNF_PLUGINS=false
 %endif
 
-%if %{use_systemd}
 %global with_systemd WITH_SYSTEMD=true
-%else
-%global with_systemd WITH_SYSTEMD=false
-%endif
 
 %if %{use_cockpit}
 %global with_cockpit WITH_COCKPIT=true
@@ -184,13 +130,6 @@ Source0: %{name}-%{version}.tar.gz
 %if %{use_cockpit}
 Source1: %{name}-cockpit-%{version}.tar.gz
 %endif
-%if (0%{?suse_version} && 0%{?suse_version} < 1500)
-Source2: subscription-manager-rpmlintrc
-%endif
-
-%if (0%{?suse_version} && 0%{?suse_version} < 1200)
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-%endif
 
 # The following macro examples are preceeded by '%' to stop macro expansion
 # in the comments. (See https://bugzilla.redhat.com/show_bug.cgi?id=1224660 for
@@ -214,7 +153,7 @@ Requires:  cron
 %endif
 Requires:  %{rhsm_package_name} = %{version}
 Requires:  %{py_package_prefix}-six
-%if 0%{?suse_version} >= 1500
+%if 0%{?suse_version}
 BuildRequires:  %{py_package_prefix}-python-dateutil
 Requires:  %{py_package_prefix}-python-dateutil
 %else
@@ -229,11 +168,7 @@ Requires:  platform-python-setuptools
 Requires:  %{py_package_prefix}-setuptools
 %endif
 
-%if %{with python3}
 Requires: python3-dbus
-%else
-Requires: %{?suse_version:dbus-1-python} %{!?suse_version:dbus-python}
-%endif
 
 %if %{use_dnf}
 %if %{create_libdnf_rpm}
@@ -261,15 +196,9 @@ Requires:  %{py_package_prefix}-dmidecode %{?dmidecode_version}
 Requires:  %{py_package_prefix}-inotify
 %endif
 
-%if %use_systemd
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
-%else
-Requires: %{?suse_version:aaa_base} %{!?suse_version:chkconfig}
-Requires(post): %{?suse_version:aaa_base} %{!?suse_version:chkconfig}
-Requires(preun): %{?suse_version:aaa_base} %{!?suse_version:chkconfig, initscripts}
-%endif
 
 Requires: python3-cloud-what = %{version}-%{release}
 
@@ -286,23 +215,21 @@ BuildRequires: %{py_package_prefix}-six
 BuildRequires: desktop-file-utils
 %endif
 
-%if 0%{?suse_version} <= 1110
-BuildRequires: %{?suse_version:sles-release} %{!?suse_version:system-release}
+%if 0%{?suse_version}
+BuildRequires: distribution-release
 %else
-BuildRequires: %{?suse_version:distribution-release} %{!?suse_version:system-release}
+BuildRequires: system-release
 %endif
 
 %if 0%{?suse_version}
 BuildRequires: libzypp
 %endif
 
-%if %use_systemd
 # We need the systemd RPM macros
-%if 0%{?suse_version} >= 1210
+%if 0%{?suse_version}
 BuildRequires: systemd-rpm-macros
 %endif
 BuildRequires: systemd
-%endif
 
 Obsoletes: subscription-manager-initial-setup-addon <= %{version}-%{release}
 
@@ -384,7 +311,7 @@ Group: Productivity/Networking/System
 Group: System Environment/Base
 %endif
 
-%if (0%{?fedora} >= 29 || 0%{?rhel} >= 8)
+%if (0%{?fedora} || 0%{?rhel})
 BuildRequires: cmake
 BuildRequires: gcc
 BuildRequires: json-c-devel
@@ -393,26 +320,8 @@ Requires: json-c
 Requires: libdnf >= 0.22.5
 %endif
 
-# See BZ 1581410 - avoid a circular dependency
-%if (0%{?rhel} < 8 || 0%{?fedora} < 29)
-Requires: %{name} >= %{version}-%{release}
-%endif
-
-%if %{with python3}
-
 Requires: python3-dnf-plugins-core
 Requires: python3-librepo
-
-%else
-
-Requires: python2-dnf-plugins-core
-%if (0%{?rhel} == 7)
-Requires: python-librepo
-%else
-Requires: python2-librepo
-%endif
-
-%endif
 
 Requires: dnf >= 1.0.0
 %description -n dnf-plugin-subscription-manager
@@ -466,63 +375,28 @@ Group: Development/Libraries/Python
 Group: Development/Libraries
 %endif
 
-%if 0%{?suse_version} >= 1500
+%if 0%{?suse_version}
 Requires:  %{py_package_prefix}-python-dateutil
 %else
 Requires: %{py_package_prefix}-dateutil
 %endif
 Requires: %{py_package_prefix}-iniparse
-# rpm-python is an old name for python2-rpm but RHEL6 uses the old name
 Requires: %{py_package_prefix}-six
 Requires: subscription-manager-rhsm-certificates = %{version}-%{release}
 # Required by Fedora packaging guidelines
 %{?python_provide:%python_provide %{py_package_prefix}-rhsm}
-%if %{with python3}
 Requires: python3-cloud-what = %{version}-%{release}
 Requires: python3-rpm
 Provides: python3-rhsm = %{version}-%{release}
 Obsoletes: python3-rhsm <= 1.20.3-1
 Provides: python-rhsm = %{version}-%{release}
 Obsoletes: python-rhsm <= 1.20.3-1
-%else
-Requires: rpm-python
-Provides: python-rhsm = %{version}-%{release}
-Obsoletes: python-rhsm <= 1.20.3-1
-%endif
 
 %description -n %{rhsm_package_name}
 A small library for communicating with the REST interface of a Red Hat Unified
 Entitlement Platform. This interface is used for the management of system
 entitlements, certificates, and access to content.
 
-
-%if %{with python2_rhsm}
-%package -n python2-subscription-manager-rhsm
-Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
-%if 0%{?suse_version}
-Group: Development/Libraries/Python
-%else
-Group: Development/Libraries
-%endif
-
-BuildRequires: python2-devel
-
-Requires: %{py2_package_prefix}-dateutil
-Requires: %{py2_package_prefix}-iniparse
-# rpm-python is an old name for python2-rpm but RHEL6 uses the old name
-Requires: %{py2_package_prefix}-six
-Requires: subscription-manager-rhsm-certificates = %{version}-%{release}
-# Required by Fedora packaging guidelines
-%{?python_provide:%python_provide %{py2_package_prefix}-rhsm}
-Requires: rpm-python
-Provides: python-rhsm = %{version}-%{release}
-Obsoletes: python-rhsm <= 1.20.3-1
-
-%description -n python2-subscription-manager-rhsm
-A small library for communicating with the REST interface of a Red Hat Unified
-Entitlement Platform. This interface is used for the management of system
-entitlements, certificates, and access to content.
-%endif
 
 %package -n subscription-manager-rhsm-certificates
 Summary: Certificates required to communicate with a Red Hat Unified Entitlement Platform
@@ -603,10 +477,6 @@ make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
     LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" \
     %{?subpackages} %{exclude_packages}
 
-%if %{with python2_rhsm}
-python2 ./setup.py build --quiet --rpm-version=%{version}-%{release}
-%endif
-
 %if %{use_dnf}
 pushd src/plugins/libdnf
 %cmake -DCMAKE_BUILD_TYPE="Release"
@@ -644,15 +514,6 @@ mkdir -p %{buildroot}%{_libdir}/libdnf/plugins
 popd
 %endif
 
-%if %{with python2_rhsm}
-mkdir -p %{buildroot}%{python2_sitearch}/rhsm
-# Build binary extension in Python2 site-packages directory
-python2 ./setup.py build_ext --build-lib %{buildroot}%{python2_sitearch} --quiet
-# Copy all *.py file from Python3 to Python2 directory
-cp %{buildroot}%{python_sitearch}/rhsm/*.py %{buildroot}%{python2_sitearch}/rhsm/
-%endif
-
-
 %if %use_cockpit
 desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-cockpit.desktop
 %endif
@@ -688,19 +549,13 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-uep.pem %{buildroot}/
 # fix timestamps on our byte compiled files so they match across arches
 find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
-%if %{with python3}
 %py_byte_compile %{__python3} %{buildroot}%{rhsm_plugins_dir}/
-%endif
 
 # symlink services to /usr/sbin/ when building for SUSE distributions
 %if 0%{?suse_version}
-    %if %{use_systemd}
-        ln -s %{_sbindir}/service %{buildroot}/%{_sbindir}/rcrhsm
-        ln -s %{_sbindir}/service %{buildroot}/%{_sbindir}/rcrhsm-facts
-        ln -s %{_sbindir}/service %{buildroot}/%{_sbindir}/rcrhsmcertd
-    %else
-       ln -s %{_initrddir}/rhsmcertd %{buildroot}%{_sbindir}/rcrhsmcertd
-    %endif
+    ln -s %{_sbindir}/service %{buildroot}/%{_sbindir}/rcrhsm
+    ln -s %{_sbindir}/service %{buildroot}/%{_sbindir}/rcrhsm-facts
+    ln -s %{_sbindir}/service %{buildroot}/%{_sbindir}/rcrhsmcertd
 %endif
 
 # base/cli tools use the gettext domain 'rhsm', while the
@@ -745,11 +600,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %dir %{python_sitearch}/subscription_manager/plugin
 %dir %{python_sitearch}/subscription_manager/scripts
 %dir %{_var}/spool/rhsm
-
-%if 0%{?suse_version} && 0%{?suse_version} < 1315
-%dir %{_prefix}/share/locale/ta_IN
-%dir %{_prefix}/share/locale/ta_IN/LC_MESSAGES
-%endif
 
 %attr(755,root,root) %{_sbindir}/subscription-manager
 
@@ -826,7 +676,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/subscription_manager/model/*.py*
 %{python_sitearch}/subscription_manager/plugin/__init__.py*
 %{python_sitearch}/subscription_manager/scripts/*.py*
-%if %{with python3}
 %{python_sitearch}/subscription_manager/__pycache__
 %{python_sitearch}/subscription_manager/api/__pycache__
 %{python_sitearch}/subscription_manager/branding/__pycache__
@@ -834,7 +683,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/subscription_manager/model/__pycache__
 %{python_sitearch}/subscription_manager/plugin/__pycache__
 %{python_sitearch}/subscription_manager/scripts/__pycache__
-%endif
 
 # subscription-manager plugins
 %dir %{rhsm_plugins_dir}
@@ -860,7 +708,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/rhsmlib/dbus/*.py*
 %{python_sitearch}/rhsmlib/dbus/facts/*.py*
 %{python_sitearch}/rhsmlib/dbus/objects/*.py*
-%if %{with python3}
 %{python_sitearch}/rhsmlib/__pycache__
 %{python_sitearch}/rhsmlib/candlepin/__pycache__
 %{python_sitearch}/rhsmlib/compat/__pycache__
@@ -869,14 +716,11 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/rhsmlib/dbus/objects/__pycache__
 %{python_sitearch}/rhsmlib/facts/__pycache__
 %{python_sitearch}/rhsmlib/services/__pycache__
-%endif
 
 # syspurpose
 %dir %{python_sitearch}/syspurpose
 %{python_sitearch}/syspurpose/*.py*
-%if %{with python3}
 %{python_sitearch}/syspurpose/__pycache__
-%endif
 
 %{_datadir}/polkit-1/actions/com.redhat.*.policy
 %{_datadir}/dbus-1/system-services/com.redhat.*.service
@@ -884,15 +728,11 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
 # Despite the name similarity dbus-1/system.d has nothing to do with systemd
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.*.conf
-%if %use_systemd
-    %attr(644,root,root) %{_unitdir}/*.service
-    %attr(644,root,root) %{_tmpfilesdir}/%{name}.conf
-    %if 0%{?suse_version}
-        %{_sbindir}/rcrhsm
-        %{_sbindir}/rcrhsm-facts
-    %endif
-%else
-    %attr(755,root,root) %{_initrddir}/rhsmcertd
+%attr(644,root,root) %{_unitdir}/*.service
+%attr(644,root,root) %{_tmpfilesdir}/%{name}.conf
+%if 0%{?suse_version}
+    %{_sbindir}/rcrhsm
+    %{_sbindir}/rcrhsm-facts
 %endif
 
 %if 0%{?suse_version}
@@ -902,17 +742,13 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 # Incude rt CLI tool
 %dir %{python_sitearch}/rct
 %{python_sitearch}/rct/*.py*
-%if %{with python3}
 %{python_sitearch}/rct/__pycache__
-%endif
 %attr(755,root,root) %{_bindir}/rct
 
 # Include consumer debug CLI tool
 %dir %{python_sitearch}/rhsm_debug
 %{python_sitearch}/rhsm_debug/*.py*
-%if %{with python3}
 %{python_sitearch}/rhsm_debug/__pycache__
-%endif
 %attr(755,root,root) %{_bindir}/rhsm-debug
 
 %doc
@@ -934,10 +770,8 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %endif
 %{_sysconfdir}/rhsm/pluginconf.d/container_content.ContainerContentPlugin.conf
 %{rhsm_plugins_dir}/container_content.py*
-%if %{with python3}
 %{rhsm_plugins_dir}/__pycache__/*container*
 %{python_sitearch}/subscription_manager/plugin/container/__pycache__
-%endif
 %{python_sitearch}/subscription_manager/plugin/container/*.py*
 
 # Copying Red Hat CA cert into each directory:
@@ -951,10 +785,8 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{_sysconfdir}/rhsm/pluginconf.d/ostree_content.OstreeContentPlugin.conf
 %{rhsm_plugins_dir}/ostree_content.py*
 %{python_sitearch}/subscription_manager/plugin/ostree/*.py*
-%if %{with python3}
 %{python_sitearch}/subscription_manager/plugin/ostree/__pycache__
 %{rhsm_plugins_dir}/__pycache__/*ostree*
-%endif
 %endif
 
 
@@ -979,23 +811,14 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %dir %{python_sitearch}/rhsm
 %{python_sitearch}/rhsm/*
 
-%if %{with python2_rhsm}
-%files -n python2-subscription-manager-rhsm
-%defattr(-,root,root,-)
-%dir %{python2_sitearch}/rhsm
-%{python2_sitearch}/rhsm/*
-%endif
-
 %files -n python3-cloud-what
 %defattr(-,root,root,-)
 %attr(750,root,root) %dir %{_var}/cache/cloud-what
 %dir %{python_sitearch}/cloud_what
 %dir %{python_sitearch}/cloud_what/providers
 %{python_sitearch}/cloud_what/*
-%if %{with python3}
 %{python_sitearch}/cloud_what/__pycache__
 %{python_sitearch}/cloud_what/providers/__pycache__
-%endif
 
 %files -n subscription-manager-rhsm-certificates
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm
@@ -1028,36 +851,26 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %pre
 
 
-%if %use_systemd
-    %if 0%{?suse_version}
-        %service_add_pre rhsm.service
-        %service_add_pre rhsm-facts.service
-        %service_add_pre rhsmcertd.service
-    %endif
+%if 0%{?suse_version}
+    %service_add_pre rhsm.service
+    %service_add_pre rhsm-facts.service
+    %service_add_pre rhsmcertd.service
 %endif
 
 %post
-%if %use_systemd
-    %if 0%{?suse_version}
-        %service_add_post rhsmcertd.service
-        %service_add_post rhsm.service
-        %service_add_post rhsm-facts.service
-        %tmpfiles_create %{_tmpfilesdir}/subscription-manager.conf
-    %else
-        %systemd_post rhsmcertd.service
-    %endif
+%if 0%{?suse_version}
+    %service_add_post rhsmcertd.service
+    %service_add_post rhsm.service
+    %service_add_post rhsm-facts.service
+    %tmpfiles_create %{_tmpfilesdir}/subscription-manager.conf
 %else
-    %if 0%{?suse_version}
-        %fillup_and_insserv -f rhsmcertd
-    %else
-        chkconfig --add rhsmcertd
-    %endif
+    %systemd_post rhsmcertd.service
 %endif
 
 # When subscription-manager is upgraded on RHEL 8 (from RHEL 8.2 to RHEL 8.3), then kill
 # instance of rhsmd, because it is not necessary anymore and it can cause issues.
 # See: https://bugzilla.redhat.com/show_bug.cgi?id=1840364
-%if ( 0%{?rhel} >= 8 || 0%{?fedora} )
+%if ( 0%{?rhel} || 0%{?fedora} )
 if [ "$1" = "2" ] ; then
     killall rhsmd 2> /dev/null || true
 fi
@@ -1070,12 +883,6 @@ if [ -x /bin/dbus-send ] ; then
     dbus-send --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig > /dev/null 2>&1 || :
 fi
 
-%if !%use_systemd
-if [ "$1" = "2" ] ; then
-    /sbin/service rhsmcertd condrestart >/dev/null 2>&1 || :
-fi
-%endif
-
 
 %if !0%{?suse_version}
 %if %{use_container_plugin}
@@ -1086,21 +893,12 @@ fi
 
 %preun
 if [ $1 -eq 0 ] ; then
-    %if %use_systemd
-        %if 0%{?suse_version}
-            %service_del_preun rhsm.service
-            %service_del_preun rhsm-facts.service
-            %service_del_preun rhsmcertd.service
-        %else
-            %systemd_preun rhsmcertd.service
-        %endif
+    %if 0%{?suse_version}
+        %service_del_preun rhsm.service
+        %service_del_preun rhsm-facts.service
+        %service_del_preun rhsmcertd.service
     %else
-        %if 0%{?suse_version}
-            %stop_on_removal %{_initrddir}/rhsmcertd
-        %else
-            /sbin/service rhsmcertd stop >/dev/null 2>&1
-            /sbin/chkconfig --del rhsmcertd
-        %endif
+        %systemd_preun rhsmcertd.service
     %endif
 
     if [ -x /bin/dbus-send ] ; then
@@ -1109,18 +907,12 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %postun
-%if %use_systemd
-    %if 0%{?suse_version}
-        %service_del_postun rhsmcertd.service
-        %service_del_postun rhsm.service
-        %service_del_postun rhsm-facts.service
-    %else
-        %systemd_postun_with_restart rhsmcertd.service
-    %endif
+%if 0%{?suse_version}
+    %service_del_postun rhsmcertd.service
+    %service_del_postun rhsm.service
+    %service_del_postun rhsm-facts.service
 %else
-    %if 0%{?suse_version}
-        %insserv_cleanup %{_initrddir}/rhsmcertd
-    %endif
+    %systemd_postun_with_restart rhsmcertd.service
 %endif
 
 %posttrans
