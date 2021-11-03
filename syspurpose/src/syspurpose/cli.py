@@ -154,7 +154,7 @@ def setup_arg_parser():
     Sets up argument parsing for the syspurpose tool.
     :return: An argparse.ArgumentParser ready to use to parse_args
     """
-    parser = argparse.ArgumentParser(prog="syspurpose", description="System Syspurpose Management Tool",
+    parser = argparse.ArgumentParser(prog="syspurpose", description=_("System Syspurpose Management Tool"),
                                      epilog=_("The 'syspurpose' command is deprecated and will be removed in a future major release."
                                                 " Please use the 'subscription-manager syspurpose' command going forward."))
 
@@ -162,15 +162,15 @@ def setup_arg_parser():
 
     # Arguments shared by subcommands
     add_options = argparse.ArgumentParser(add_help=False)
-    add_options.add_argument("values", help="The value(s) to add", nargs='+')
+    add_options.add_argument("values", help=_("The value(s) to add"), nargs='+')
     add_options.set_defaults(func=add_command, requires_sync=True)
 
     remove_options = argparse.ArgumentParser(add_help=False)
-    remove_options.add_argument("values", help="The value(s) to remove", nargs='+')
+    remove_options.add_argument("values", help=_("The value(s) to remove"), nargs='+')
     remove_options.set_defaults(func=remove_command, requires_sync=True)
 
     set_options = argparse.ArgumentParser(add_help=False)
-    set_options.add_argument("value", help="The value to set", action="store")
+    set_options.add_argument("value", help=_("The value to set"), action="store")
     set_options.set_defaults(func=set_command, requires_sync=True)
 
     unset_options = argparse.ArgumentParser(add_help=False)
