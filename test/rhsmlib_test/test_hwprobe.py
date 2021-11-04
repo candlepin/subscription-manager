@@ -121,7 +121,7 @@ REDHAT_SUPPORT_PRODUCT_VERSION=42.0"""
 
 UPTIME = "1273.88 1133.34"
 
-LSCPU_HUMAN_READABLE_OUTPUT = """Architecture:                    x86_64
+LSCPU_HUMAN_READABLE_OUTPUT = b"""Architecture:                    x86_64
 CPU op-mode(s):                  32-bit, 64-bit
 Byte Order:                      Little Endian
 Address sizes:                   39 bits physical, 48 bits virtual
@@ -134,7 +134,7 @@ LSCPU_HUMAN_READABLE_EXPECTED = {
     'lscpu.address_sizes': '39 bits physical, 48 bits virtual',
 }
 
-LSCPU_JSON_OUTPUT = """
+LSCPU_JSON_OUTPUT = b"""
 {
    "lscpu": [
       {
@@ -934,7 +934,7 @@ class TestLscpu(unittest.TestCase):
             key.encode('ascii')
             value.encode('ascii')
 
-    @patch("rhsmlib.facts.hwprobe.compat_check_output")
+    @patch("subprocess.check_output")
     @patch.object(hwprobe.HardwareCollector, "_check_lscpu_json")
     @patch("os.access")
     def test_mocked_human_output_parser(self, mock_access, mock_check_json, mock_check_output):

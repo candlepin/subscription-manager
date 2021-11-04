@@ -15,12 +15,10 @@
 #
 import logging
 import string
+import subprocess
 import os
 
 from rhsmlib.facts import collector
-
-# For python2.6 that doesn't have subprocess.check_output
-from rhsmlib.compat import check_output as compat_check_output
 
 log = logging.getLogger(__name__)
 
@@ -34,7 +32,8 @@ class VirtWhatCollector(collector.FactsCollector):
         virt_dict = {}
 
         try:
-            host_type = compat_check_output('/usr/sbin/virt-what')
+            host_type_raw: bytes = subprocess.check_output('/usr/sbin/virt-what')
+            host_type: str = host_type_raw.decode("utf-8")
             # BZ1018807 xen can report xen and xen-hvm.
             # Force a single line
             host_type = ", ".join(host_type.splitlines())

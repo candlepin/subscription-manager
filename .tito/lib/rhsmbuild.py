@@ -35,21 +35,11 @@ class ScriptBuilder(Builder):
         if not os.path.exists(self.script):
             return retval
 
-        if hasattr(subprocess, 'check_output'):
-            try:
-                output = subprocess.check_output(self.script, shell=True).decode('utf-8')
-            except subprocess.CalledProcessError as e:
-                print(e.output.decode('utf-8'))
-                raise
-        else:
-            print("Running script_builder_script ...")
-            # Run command in subprocess
-            process = subprocess.Popen(self.script, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            # Print output of command
-            output = ""
-            for line in process.stdout.readlines():
-                output += line
-            retval = process.wait()
+        try:
+            output = subprocess.check_output(self.script, shell=True).decode('utf-8')
+        except subprocess.CalledProcessError as e:
+            print(e.output.decode('utf-8'))
+            raise
 
         print(output)
         additional_tgz = []
