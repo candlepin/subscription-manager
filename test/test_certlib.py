@@ -74,10 +74,14 @@ class TestActionReport(fixture.SubManFixture):
     def test_format_exceptions(self):
         ar = certlib.ActionReport()
         exc_list = [Exception("foo"),
-                    IOError("blip")]
+                    IOError("blip"),
+                    Exception("HttpError(403) - Error in task 87a4cc11-f821-4a29-b289-b6f2411d96d2")]
 
+        exc_list_formatted = ["foo", "blip", "Error in task 87a4cc11-f821-4a29-b289-b6f2411d96d2"]
         for exc in exc_list:
             ar._exceptions.append(exc)
 
-        for exc in exc_list:
-            self.assertTrue(exc in ar._exceptions)
+        formatted = ar.format_exceptions()
+        for exc in exc_list_formatted:
+            self.assertTrue(exc in formatted)
+        self.assertTrue("HttpError" not in formatted)
