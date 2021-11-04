@@ -6,10 +6,7 @@ import pprint
 import sys
 import tempfile
 
-try:
-    import unittest2 as unittest
-except ImportError:
-    import unittest
+import unittest
 
 
 # just log py.warnings (and pygtk warnings in particular)

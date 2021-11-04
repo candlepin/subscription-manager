@@ -9,10 +9,7 @@
 # have received a copy of GPLv2 along with this software; if not, see
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
-try:
-    import unittest2 as unittest
-except ImportError:
-    import unittest
+import unittest
 
 from subscription_manager.exceptions import ExceptionMapper
 from rhsm.connection import RestlibException
