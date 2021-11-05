@@ -15,10 +15,7 @@
 Unit tests for module rhsmlib.utils.
 """
 
-try:
-    import unittest2 as unittest
-except ImportError:
-    import unittest
+import unittest
 
 import threading
 import time
