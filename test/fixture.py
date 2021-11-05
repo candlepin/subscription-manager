@@ -242,7 +242,6 @@ class SubManFixture(unittest.TestCase):
         plugin_manager_mock = MagicMock(name='FixturePluginManagerMock')
         plugin_manager_mock.runiter.return_value = iter([])
         inj.provide(inj.PLUGIN_MANAGER, plugin_manager_mock)
-        inj.provide(inj.DBUS_IFACE, Mock(name='FixtureDbusIfaceMock'))
 
         pooltype_cache = Mock()
         inj.provide(inj.POOLTYPE_CACHE, pooltype_cache)

@@ -84,11 +84,3 @@ def init_dep_injection():
 
     # see what happens with non singleton, callable
     inj.provide(inj.FACTS, Facts)
-
-    try:
-        # This catch fixes the product-id module on anaconda
-        # Anaconda does not have dbus module, which is imported in dbus_interface
-        from subscription_manager.dbus_interface import DbusIface
-        inj.provide(inj.DBUS_IFACE, DbusIface, singleton=True)
-    except ImportError:
-        pass
