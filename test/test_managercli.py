@@ -303,39 +303,6 @@ class TestCliCommand(SubManFixture):
             self.fail("Exception Raised")
 
 
-class TestProxyConnection(SubManFixture):
-    """
-    This class is used for testing test_proxy_connection from class CliCommand
-    """
-
-    def setUp(self):
-        super(TestProxyConnection, self).setUp()
-        # Temporary stop patcher of test_proxy_connection, because we need to test behavior of
-        # original function
-        self.test_proxy_connection_patcher.stop()
-
-    def tearDown(self):
-        # Start patcher again
-        self.test_proxy_connection_patcher.start()
-        super(TestProxyConnection, self).tearDown()
-
-    @patch('socket.socket')
-    def test_proxy_connection_hostname_and_port(self, sock):
-        """
-        Test functionality of test_proxy_connection()
-        """
-        sock_instance = sock.return_value
-        sock_instance.settimeout = MagicMock()
-        sock_instance.connect_ex = MagicMock(return_value=0)
-        sock_instance.close = MagicMock()
-
-        cli = managercli.CliCommand()
-        cli.test_proxy_connection()
-
-        # Expected values are from fake configuration file (see stub.py)
-        sock_instance.connect_ex.assert_called_once_with(('notaproxy.grimlock.usersys.redhat.com', 4567))
-
-
 class TestStatusCommand(SubManFixture):
     command_class = managercli.StatusCommand
 
