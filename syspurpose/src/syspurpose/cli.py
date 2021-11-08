@@ -422,4 +422,4 @@ def check_result(syspurposestore, expectation, success_msg, command, attr):
             ))
         )
     else:
-        print(_(success_msg))
+        print(success_msg)
