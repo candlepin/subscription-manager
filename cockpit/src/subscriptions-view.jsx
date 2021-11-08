@@ -20,15 +20,20 @@
 import cockpit from 'cockpit';
 import React from 'react';
 import subscriptionsClient from './subscriptions-client';
-import { ListView, ListViewItem, ListViewIcon } from 'patternfly-react';
-import { Row, Col } from 'react-bootstrap';
 import { InsightsStatus } from './insights.jsx';
-
-import './subscriptions-view.scss';
+import { EmptyStatePanel } from "cockpit-components-empty-state.jsx";
+import { ListingTable } from "cockpit-components-table.jsx";
+import { InfoCircleIcon, ExclamationCircleIcon } from '@patternfly/react-icons';
+import {
+    Alert, AlertGroup, AlertActionCloseButton, Button,
+    Card, CardActions, CardBody, CardHeader, CardHeaderMain, CardTitle,
+    DescriptionList, DescriptionListDescription, DescriptionListGroup, DescriptionListTerm,
+    Gallery, Label, Page, PageSection, Split, SplitItem, Text, TextVariants, Popover, Divider
+} from '@patternfly/react-core';
 
 let _ = cockpit.gettext;
 
-class Listing extends React.Component {
+class InstalledProducts extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -37,6 +42,7 @@ class Listing extends React.Component {
         };
         this.handleAutoAttach = this.handleAutoAttach.bind(this);
     }
+
     handleAutoAttach(event) {
         // only consider primary mouse button
         if (!event || event.button !== 0)
@@ -48,130 +54,171 @@ class Listing extends React.Component {
                 attach_button_text: _("Auto-attaching ...")
             });
             this.props.autoAttach()
-                .done(function () {
-                    self.setState({
-                        attaching_in_progress: false,
-                        attach_button_text: _("Auto-attach")
+                    .done(function () {
+                        self.setState({
+                            attaching_in_progress: false,
+                            attach_button_text: _("Auto-attach")
+                        });
+                    })
+                    .fail(function () {
+                        self.setState({
+                            attaching_in_progress: false,
+                            attach_button_text: _("Auto-attach")
+                        });
                     });
-                })
-                .fail(function () {
-                    self.setState({
-                        attaching_in_progress: false,
-                        attach_button_text: _("Auto-attach")
-                    });
-                });
         }
     }
+
     render() {
-        if (this.props.children) {
-            let auto_attach_btn_disabled;
-            auto_attach_btn_disabled = this.state.attaching_in_progress || this.props.status === 'unknown';
-            return (
-                <div>
-                    <div className="installed-products-line">
-                        <h2 className="installed-products-title">{this.props.title}</h2>
-                        <button className="btn btn-default auto-attach-btn"
-                                disabled={ auto_attach_btn_disabled }
-                                onClick={ event => this.handleAutoAttach(event) }>
-                            { this.state.attach_button_text }
-                        </button>
-                    </div>
-                    {this.props.children}
-                </div>
-            );
-        } else {
-            return (
-                <div>
-                    <h2>{this.props.emptyCaption}</h2>
-                </div>
-            );
+        let columnTitles = [_("Product name")];
+
+        let sca_mode;
+
+        sca_mode = false;
+        if (this.props.org) {
+            if ("contentAccessMode" in this.props.org) {
+                if (this.props.org.contentAccessMode === "org_environment") {
+                    sca_mode = true;
+                }
+            }
         }
-    }
-}
 
-/* 'Curtains' implements a subset of the PatternFly Empty State pattern
- * https://www.patternfly.org/patterns/empty-state/
- * Special values for icon property:
- *   - 'waiting' - display spinner
- *   - 'error'   - display error icon
- */
-class Curtains extends React.Component {
-    render() {
-        let description = null;
-        if (this.props.description)
-            description = <h1>{this.props.description}</h1>;
+        let card_actions;
+        if (sca_mode === false) {
+            card_actions = (
+                <CardActions>
+                    <Button
+                            isDisabled={this.state.attaching_in_progress || this.props.status === 'unknown'}
+                            onClick={this.handleAutoAttach}>
+                        { this.state.attach_button_text }
+                    </Button>
+                </CardActions>
+            )
+        }
 
-        let message = null;
-        if (this.props.message)
-            message = <p>{this.props.message}</p>;
+        let entries = this.props.products.map(function (itm) {
+            let subscribed;
+            let status_text;
+            let start_date_text;
+            let end_date_text;
+            let body;
+            let columns;
 
-        let curtains = "curtains-ct";
+            if (itm.status === 'subscribed') {
+                subscribed = true;
+                status_text = _("Subscribed");
 
-        let icon = this.props.icon;
-        if (icon === 'waiting')
-            icon = <div className="spinner spinner-lg"/>;
-        else if (icon === 'error')
-            icon = <div className="pficon pficon-error-circle-o"/>;
+            } else {
+                subscribed = false;
+                status_text = _("Not subscribed (Not supported by a valid subscription)");
+            }
+
+            if (itm.starts.length === 0) {
+                start_date_text = _("Unknown");
+            } else {
+                start_date_text = new Date(Date.parse(itm.starts)).toLocaleDateString();
+            }
+
+            if (itm.ends.length === 0) {
+                end_date_text = _("Unknown");
+            } else {
+                end_date_text = new Date(Date.parse(itm.ends)).toLocaleDateString();
+            }
+
+            if (sca_mode) {
+                columns = [
+                    {
+                        title: (<Split>
+                            <SplitItem isFilled>
+                                {itm.productName}
+                            </SplitItem>
+                        </Split>),
+                        header: true,
+                    }
+                ];
+            } else {
+                columns = [
+                    {
+                        title: (<Split>
+                            <SplitItem isFilled>
+                                {itm.productName}
+                            </SplitItem>
+                            <SplitItem>
+                                <Label
+                                    color={subscribed ? "green" : "red"}>{subscribed ? _("Subscribed") : _("Not subscribed")}</Label>
+                            </SplitItem>
+                        </Split>),
+                        header: true,
+                    }
+                ];
+            }
+
+            let attr_list;
+            attr_list = [
+                <DescriptionListGroup key="product_name">
+                    <DescriptionListTerm>{_("Product name")}</DescriptionListTerm>
+                    <DescriptionListDescription>{itm.productName}</DescriptionListDescription>
+                </DescriptionListGroup>,
+                <DescriptionListGroup key="product_id">
+                    <DescriptionListTerm>{_("Product ID")}</DescriptionListTerm>
+                    <DescriptionListDescription>{itm.productId}</DescriptionListDescription>
+                </DescriptionListGroup>,
+                <DescriptionListGroup key="product_version">
+                    <DescriptionListTerm>{_("Version")}</DescriptionListTerm>
+                    <DescriptionListDescription>{itm.version}</DescriptionListDescription>
+                </DescriptionListGroup>,
+                <DescriptionListGroup key="product_arch">
+                    <DescriptionListTerm>{_("Arch")}</DescriptionListTerm>
+                    <DescriptionListDescription>{itm.arch}</DescriptionListDescription>
+                </DescriptionListGroup>
+            ];
+
+            if (! sca_mode) {
+                attr_list.push(
+                    <DescriptionListGroup key="product_status">
+                        <DescriptionListTerm>{_("Status")}</DescriptionListTerm>
+                        <DescriptionListDescription>{status_text}</DescriptionListDescription>
+                    </DescriptionListGroup>,
+                    <DescriptionListGroup key="product_start_date">
+                        <DescriptionListTerm>{_("Starts")}</DescriptionListTerm>
+                        <DescriptionListDescription>{start_date_text}</DescriptionListDescription>
+                    </DescriptionListGroup>,
+                    <DescriptionListGroup key="product_end_date">
+                        <DescriptionListTerm>{_("Ends")}</DescriptionListTerm>
+                        <DescriptionListDescription>{end_date_text}</DescriptionListDescription>
+                    </DescriptionListGroup>
+                );
+            }
+
+            body = (
+                <DescriptionList isHorizontal>
+                    {attr_list}
+                </DescriptionList>
+            );
+
+            return ({
+                props: { key: itm.productId, 'data-row-id': itm.productName },
+                columns,
+                hasPadding: true,
+                expandedContent: body,
+            });
+        });
 
         return (
-            <div className={ curtains + " blank-slate-pf" }>
-                <div className="blank-slate-pf-icon">
-                    {icon}
-                </div>
-                {description}
-                {message}
-            </div>
-        );
-    }
-}
-
-/* Component to show a dismissable error, message as child text
- * dismissError callback function triggered when the close button is pressed
- */
-class DismissableError extends React.Component {
-    constructor(props) {
-        super(props);
-        // This binding is necessary to make `this` work in the callback
-        this.handleDismissError = this.handleDismissError.bind(this);
-    }
-    handleDismissError(err) {
-        // only consider primary mouse button
-        if (!err || err.button !== 0)
-            return;
-        if (this.props.dismissError) {
-            this.props.dismissError();
-        }
-        err.stopPropagation();
-    }
-    render() {
-        let debug_str = JSON.stringify(this.props.children);
-        console.debug(debug_str);
-        let classes_div = "alert alert-danger alert-dismissable alert-ct-top";
-        let classes_icon = "pficon pficon-error-circle-o";
-
-        console.debug(this.props.severity);
-
-        if (this.props.severity === "error") {
-            classes_div = "alert alert-danger alert-dismissable alert-ct-top";
-            classes_icon = "pficon pficon-error-circle-o";
-        }
-        if (this.props.severity === "warning") {
-            classes_div = "alert alert-warning alert-dismissable alert-ct-top";
-            classes_icon = "pficon pficon-warning-triangle-o"
-        }
-        if (this.props.severity === "info") {
-            classes_div = "alert alert-info alert-dismissable alert-ct-top";
-            classes_icon = "pficon pficon-info"
-        }
-
-        return (
-            <div className={classes_div}>
-                <span className={classes_icon} />
-                <span>{this.props.children}</span>
-                <button type="button" className="close" aria-hidden="true" onClick={this.handleDismissError}>
-                    <span className="pficon pficon-close"/>
-                </button>
-            </div>
+            <Card id="products" className="products" key="products">
+                <CardHeader>
+                    <CardTitle><Text component={TextVariants.h2}>{_("Installed products")}</Text></CardTitle>
+                    { card_actions }
+                </CardHeader>
+                <CardBody className="contains-list">
+                    <ListingTable aria-label={_("Installed products")}
+                      variant='compact'
+                      showHeader={false}
+                      emptyCaption={_("No installed products detected")}
+                      columns={columnTitles}
+                      rows={entries} />
+                </CardBody>
+            </Card>
         );
     }
 }
@@ -190,11 +237,10 @@ class DismissableError extends React.Component {
 class SubscriptionStatus extends React.Component {
     constructor(props) {
         super(props);
-        // React components using ES6 classes no longer autobind this to non React
-        // methods.
         this.handleRegisterSystem = this.handleRegisterSystem.bind(this);
         this.handleUnregisterSystem = this.handleUnregisterSystem.bind(this);
     }
+
     handleRegisterSystem(err) {
         // only consider primary mouse button
         if (!err || err.button !== 0)
@@ -203,6 +249,7 @@ class SubscriptionStatus extends React.Component {
             this.props.register();
         err.stopPropagation();
     }
+
     handleUnregisterSystem(e) {
         // only consider primary mouse button
         if (!e || e.button !== 0)
@@ -211,126 +258,177 @@ class SubscriptionStatus extends React.Component {
             this.props.unregister();
         e.stopPropagation();
     }
+
     render() {
-        let errorMessage;
-        if (this.props.error) {
-            errorMessage = (
-                <DismissableError dismissError={this.props.dismissError}
-                                  severity={this.props.error.severity}>
-                    {this.props.error.msg.toString()}
-                </DismissableError>
-            );
+        // Try to detect SCA mode first
+        let sca_mode;
+        let org_name;
+        sca_mode = false;
+        if (this.props.org === undefined) {
+            org_name = '';
+        } else {
+            // Organization name
+            if ('displayName' in this.props.org) {
+                org_name = this.props.org['displayName'];
+            } else {
+                org_name = '';
+            }
+            // SCA mode tooltip
+            if ('contentAccessMode' in this.props.org) {
+                if (this.props.org['contentAccessMode'] === 'org_environment') {
+                    sca_mode = true;
+                }
+            }
         }
 
-        let text;
-        let label;
-        let action;
-        let insights;
-        let note;
-        let syspurpose;
-        let sla;
-        let usage;
-        let role;
-        let add_ons;
-        let syspurpose_status;
-        let isUnregistering = (this.props.status === "unregistering");
-        if (this.props.syspurpose["service_level_agreement"]) {
-            sla = (
-                <div>
-                    <label>
-                        { _("Service Level:  ") }
-                        <span className="value">{ _(String(this.props.syspurpose["service_level_agreement"])) }</span>
-                    </label>
-                </div>
-            );
-        }
-        if (this.props.syspurpose["usage"]) {
-            usage = (
-                <div>
-                    <label>
-                        { _("Usage:  ") }
-                        <span className="value">{ _(String(this.props.syspurpose["usage"])) }</span>
-                    </label>
-                </div>
-        );
-        }
-        if (this.props.syspurpose["role"]) {
-            role = (
-                <div>
-                    <label>
-                        { _("Role:  ") }
-                        <span className="value">{ _(String(this.props.syspurpose["role"])) }</span>
-                    </label>
-                </div>
-            );
-        }
-        if (this.props.syspurpose["addons"]) {
-            add_ons = (
-                <div>
-                    <label>
-                        { _("Add-ons:  ") }
-                        <span className="value">
-                            { _(String(subscriptionsClient.toArray(this.props.syspurpose["addons"]).join(", "))) }
-                        </span>
-                    </label>
-                </div>
-            );
-        }
-        if (this.props.syspurpose_status) {
-            syspurpose_status = (
-                <div>
-                    <label>
-                        { _("Status: ") }
-                        <span className="value">{ _(String(this.props.syspurpose_status)) }</span>
-                    </label>
-                </div>
-            );
-        }
-        syspurpose = (
-            <div>
-                <h2>{_("System Purpose")}</h2>
-                <div className="dl-horizontal">
-                    {syspurpose_status}
-                    {sla}
-                    {usage}
-                    {role}
-                    {add_ons}
-                </div>
-            </div>
-        );
-        if (this.props.status === 'unknown') {
-            text = _("Status: This system is currently not registered.");
-            label = <label>{text}</label>;
-            action = (<button className="btn btn-primary"
-                              onClick={this.handleRegisterSystem}>{_("Register")}</button>
-            );
-        } else {
-            text = cockpit.format(_("Status: $0"), this.props.status_msg);
-            label = <label>{text}</label>;
-            action = (<button className="btn btn-primary" disabled={isUnregistering}
-                              onClick={this.handleUnregisterSystem}>{_("Unregister")}</button>
-            );
-            if (isUnregistering) {
-                note = (
-                    <div className="dialog-wait-ct">
-                        <div className="spinner spinner-sm"/>
-                        <span>{ _("Unregistering") }</span>
+        // Display system purpose only in the case, when it make sense
+        let syspurpose = null;
+        const p = this.props.syspurpose;
+        if ( p["service_level_agreement"] || p["usage"] || p["role"] || p["addons"] ) {
+            let syspurpose_status_element;
+            if (sca_mode) {
+                const syspurpose_status_tooltip = (
+                    <div>{_("Content Access Mode is set to Simple Content Access. This host has access to content, regardless of system purpose status.")}</div>
+                );
+                syspurpose_status_element = (
+                    <div>
+                        <span> { this.props.syspurpose_status } </span>
+                        <Popover
+                            aria-label={_("Popover with explanation of SCA mode")}
+                            showClose={false}
+                            bodyContent={syspurpose_status_tooltip}
+                            withFocusTrap={false}
+                        >
+                            <button className="pf-c-form__group-label-help ct-icon-info-circle"
+                                    type="button"
+                                    aria-label={_("Subscriptions information")}>
+                                <InfoCircleIcon />
+                            </button>
+                        </Popover>
+                    </div>
+                );
+            } else {
+                syspurpose_status_element = (
+                    <div>
+                        <span> { this.props.syspurpose_status } </span>
                     </div>
                 );
             }
-            if (this.props.insights_available)
-                insights = <InsightsStatus />;
+            syspurpose = (
+                <Card id="syspurpose" key="syspurpose" className="ct-card-info">
+                    <CardHeader>
+                        <CardHeaderMain>
+                            <Text className="purpose-header" component={TextVariants.h2}>{_("System purpose")}</Text>
+                        </CardHeaderMain>
+                    </CardHeader>
+                    <CardBody>
+                        <DescriptionList isHorizontal>
+                            <DescriptionListGroup>
+                                <DescriptionListTerm>{_("Status")}</DescriptionListTerm>
+                                <DescriptionListDescription>{ syspurpose_status_element }</DescriptionListDescription>
+                            </DescriptionListGroup>
+                            <Divider />
+                            {p["service_level_agreement"] &&
+                                <DescriptionListGroup>
+                                    <DescriptionListTerm>{_("Service level")}</DescriptionListTerm>
+                                    <DescriptionListDescription>{p["service_level_agreement"]}</DescriptionListDescription>
+                                </DescriptionListGroup>
+                            }
+                            {p["usage"] &&
+                                <DescriptionListGroup>
+                                    <DescriptionListTerm>{_("Usage")}</DescriptionListTerm>
+                                    <DescriptionListDescription>{p["usage"]}</DescriptionListDescription>
+                                </DescriptionListGroup>
+                            }
+                            {p["role"] &&
+                                <DescriptionListGroup>
+                                    <DescriptionListTerm>{_("Role")}</DescriptionListTerm>
+                                    <DescriptionListDescription>{p["role"]}</DescriptionListDescription>
+                                </DescriptionListGroup>
+                            }
+                            {p["addons"] &&
+                                <DescriptionListGroup>
+                                    <DescriptionListTerm>{_("Add-ons")}</DescriptionListTerm>
+                                    <DescriptionListDescription>{p["addons"]}</DescriptionListDescription>
+                                </DescriptionListGroup>
+                            }
+                        </DescriptionList>
+                    </CardBody>
+                </Card>
+            );
         }
+
+        let status_text;
+        let action;
+        let status_element;
+
+        if (this.props.status === 'unknown') {
+            status_text = _("Not registered");
+            action = (
+                <Button onClick={this.handleRegisterSystem}>{_("Register")}</Button>
+            );
+        } else {
+            const isUnregistering = (this.props.status === "unregistering");
+            status_text = this.props.status_msg;
+            action = (
+                <Button isDisabled={isUnregistering} isLoading={isUnregistering}
+                              onClick={this.handleUnregisterSystem}>{isUnregistering ? _("Unregistering"): _("Unregister")}</Button>
+            );
+        }
+
+        // Display tooltip over "Disabled" with simple explanation, when SCA mode is used
+        if (sca_mode) {
+            const status_tooltip = (
+                <div>{_("Content Access Mode is set to Simple Content Access. This host has access to content, regardless of subscription status.")}</div>
+            );
+            status_element = (
+                <div>
+                    <span> {status_text} </span>
+                    <Popover
+                        aria-label={_("Popover with explanation of SCA mode")}
+                        showClose={false}
+                        bodyContent={status_tooltip}
+                        withFocusTrap={false}
+                    >
+                        <button className="pf-c-form__group-label-help ct-icon-info-circle"
+                                type="button"
+                                aria-label={_("Subscriptions information")}>
+                            <InfoCircleIcon />
+                        </button>
+                    </Popover>
+                </div>
+            );
+        } else {
+            status_element = status_text;
+        }
+
         return (
-            <div className="subscription-status-ct">
-                <h2>{_("Subscriptions")}</h2>
-                {errorMessage}
-                {label}
-                {action}
-                {insights}
+            <>
+                <Card id="overview" key="overview" className={ syspurpose !== null ? "ct-card-info" : "" }>
+                    <CardHeader>
+                        <CardTitle><Text component={TextVariants.h2}>{_("Overview")}</Text></CardTitle>
+                        <CardActions>{action}</CardActions>
+                    </CardHeader>
+                    <CardBody>
+                        <DescriptionList isHorizontal>
+                            <DescriptionListGroup>
+                                <DescriptionListTerm>{_("Subscription status")}</DescriptionListTerm>
+                                <DescriptionListDescription>
+                                    {status_element}
+                                </DescriptionListDescription>
+                            </DescriptionListGroup>
+                            {org_name &&
+                                <DescriptionListGroup>
+                                    <DescriptionListTerm>{_("Organization")}</DescriptionListTerm>
+                                    <DescriptionListDescription>{org_name}</DescriptionListDescription>
+                                </DescriptionListGroup>
+                            }
+                            {(this.props.insights_available && this.props.status !== 'unknown') && <InsightsStatus />}
+                        </DescriptionList>
+                    </CardBody>
+                </Card>
                 {syspurpose}
-                {note}
-            </div>
+            </>
         );
     }
 }
@@ -339,117 +437,65 @@ class SubscriptionStatus extends React.Component {
  * Expected properties:
  * status       subscription status ID
  * status_msg   subscription status message
- * error        error message to show (in Curtains if not connected, as a dismissable alert otherwise
+ * error        error message to show (in EmptyState if not connected, as a dismissable alert otherwise
  * dismissError callback, triggered for the dismissable error in connected state
  * products     subscribed products (properties as in subscriptions-client)
  * register     callback, triggered when user clicks on register
  * unregister   callback, triggered when user clicks on unregister
  */
-class SubscriptionsPage extends React.Component {
+class SubscriptionsView extends React.Component {
     renderCurtains() {
-        let icon;
+        let loading = false;
         let description;
         let message;
 
         if (this.props.status === "service-unavailable") {
-            icon = <div className="fa fa-exclamation-circle"/>;
             message = _("The rhsm service is unavailable. Make sure subscription-manager is installed " +
                 "and try reloading the page. Additionally, make sure that you have checked the " +
                 "'Reuse my password for privileged tasks' checkbox on the login page.");
             description = _("Unable to the reach the rhsm service.");
         } else if (this.props.status === undefined && !subscriptionsClient.config.loaded) {
-            icon = <div className="spinner spinner-lg" />;
+            loading = true;
             message = _("Updating");
             description = _("Retrieving subscription status...");
         } else if (this.props.status === 'access-denied') {
-            icon = <div className="fa fa-exclamation-circle" />;
             message = _("Access denied");
             description = _("The current user isn't allowed to access system subscription status.");
         } else {
-            icon = <div className="fa fa-exclamation-circle" />;
             message = _("Unable to connect");
             description = _("Couldn't get system subscription status. Please ensure subscription-manager is installed.");
         }
-        return (
-            <Curtains
-                icon={icon}
-                description={description}
-                message={message} />
-        );
+
+        return <EmptyStatePanel icon={loading ? null : ExclamationCircleIcon} paragraph={description} loading={loading} title={message} />;
     }
+
     renderSubscriptions() {
-        let entries = this.props.products.map(function (itm) {
-            let icon_name;
-            let status_text;
-            let start_date_text;
-            let end_date_text;
-
-            if (itm.status === 'subscribed') {
-                icon_name = "fa pficon-ok";
-                status_text = _("Subscribed");
-            } else {
-                icon_name = "fa pficon-error-circle-o";
-                status_text = _("Not Subscribed (Not supported by a valid subscription.)");
-            }
-
-            if (itm.starts.length === 0) {
-                start_date_text = _("Unknown");
-            } else {
-                start_date_text = new Date(Date.parse(itm.starts)).toLocaleDateString();
-            }
-
-            if (itm.ends.length === 0) {
-                end_date_text = _("Unknown");
-            } else {
-                end_date_text = new Date(Date.parse(itm.ends)).toLocaleDateString();
-            }
-
-            return (
-                <ListViewItem
-                    leftContent={<ListViewIcon icon={ icon_name } />}
-                    heading={ itm.productName }
-                    key={itm.productId}
-                >
-                    <Row>
-                        <Col sm={11}>
-                            <div className="col-md-11">
-                                <dl className="dl-horizontal">
-                                    <dt>{ _("Product Name") }</dt>
-                                    <dd>{ itm.productName }</dd>
-                                    <dt>{ _("Product ID") }</dt>
-                                    <dd>{ itm.productId }</dd>
-                                    <dt>{ _("Version") }</dt>
-                                    <dd>{ itm.version }</dd>
-                                    <dt>{ _("Arch") }</dt>
-                                    <dd>{ itm.arch }</dd>
-                                    <dt>{ _("Status") }</dt>
-                                    <dd>{ status_text }</dd>
-                                    <dt>{ _("Starts") }</dt>
-                                    <dd>{ start_date_text }</dd>
-                                    <dt>{ _("Ends") }</dt>
-                                    <dd>{ end_date_text }</dd>
-                                </dl>
-                            </div>
-                        </Col>
-                    </Row>
-                </ListViewItem>
+        let error = null;
+        if (this.props.error) {
+            let severity = this.props.error.severity || "danger";
+            if (severity === "error")
+                severity = "danger";
+            error = (
+                <AlertGroup isToast>
+                    <Alert isLiveRegion variant={severity} title={this.props.error.msg.toString()}
+                        actionClose={<AlertActionCloseButton onClose={this.props.dismissError} />} />
+                </AlertGroup>
             );
-        });
+        }
 
         return (
-            <div className="container-fluid">
-            <SubscriptionStatus {...this.props }/>
-            <Listing {...this.props}
-                    title={ _("Installed products") }
-                    emptyCaption={ _("No installed products detected.") }
-                    >
-                <ListView className="installed-products">
-                {entries}
-                </ListView>
-            </Listing>
-            </div>
+            <Page>
+                <PageSection>
+                    {error}
+                    <Gallery className='ct-cards-grid' hasGutter>
+                        <SubscriptionStatus { ...this.props } />
+                        <InstalledProducts { ...this.props } />
+                    </Gallery>
+                </PageSection>
+            </Page>
         );
     }
+
     render() {
         if (this.props.status === undefined ||
             this.props.status === 'not-found' ||
@@ -462,6 +508,4 @@ class SubscriptionsPage extends React.Component {
     }
 }
 
-module.exports = {
-    page: SubscriptionsPage,
-};
+export default SubscriptionsView;

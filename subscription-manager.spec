@@ -716,8 +716,9 @@ BuildArch: noarch
 Requires: subscription-manager
 Requires: cockpit-bridge
 Requires: cockpit-shell
-Requires: cockpit-ws
 Requires: rhsm-icons
+# Used by desktop UI, but not necessary for web UI
+Recommends: cockpit-ws
 
 %description -n subscription-manager-cockpit
 Subscription Manager Cockpit UI

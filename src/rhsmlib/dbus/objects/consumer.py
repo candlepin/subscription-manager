@@ -21,12 +21,14 @@ It uses interface: com.redhat.RHSM1.Consumer and path:
 
 import dbus
 import logging
+import json
 
 from rhsmlib.dbus import constants, base_object, util, dbus_utils
 from rhsmlib.services.consumer import Consumer
 
 from subscription_manager.injectioninit import init_dep_injection
 from subscription_manager.i18n import Locale
+from subscription_manager.utils import get_current_owner
 
 init_dep_injection()
 
@@ -67,6 +69,25 @@ class ConsumerDBusObject(base_object.BaseObject):
             raise dbus.DBusException(str(err))
 
         return str(uuid)
+
+    @util.dbus_service_method(
+        constants.CONSUMER_INTERFACE,
+        in_signature='s',
+        out_signature='s')
+    @util.dbus_handle_exceptions
+    def GetOrg(self, locale, sender=None):
+        """
+        D-Bus method for getting current organization (owner)
+        :param locale: string with locale
+        :param sender: not used
+        :return:
+        """
+        locale = dbus_utils.dbus_to_python(locale, expected_type=str)
+        Locale.set(locale)
+
+        org = get_current_owner()
+
+        return json.dumps(org)
 
     @util.dbus_service_signal(
         constants.CONSUMER_INTERFACE,

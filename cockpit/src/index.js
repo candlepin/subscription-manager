@@ -21,15 +21,15 @@ import cockpit from 'cockpit';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import '../lib/patternfly/patternfly-cockpit.scss';
+import 'patternfly/patternfly-4-cockpit.scss';
 
 import subscriptionsClient from './subscriptions-client';
-import subscriptionsRegister from './subscriptions-register.jsx';
-import subscriptionsView from './subscriptions-view.jsx';
+import SubscriptionRegisterDialog from './subscriptions-register.jsx';
+import SubscriptionsView from './subscriptions-view.jsx';
 import * as Insights from './insights.jsx';
-import * as Dialog from '../lib/cockpit-components-dialog.jsx';
+import * as Dialog from 'cockpit-components-dialog.jsx';
 
-import './subscriptions.css';
+import './subscriptions.scss';
 
 let _ = cockpit.gettext;
 
@@ -61,8 +61,8 @@ function registerSystem (update_progress) {
 let footerProps = {
     'actions': [
         { 'clicked': registerSystem,
-         'caption': _("Register"),
-         'style': 'primary',
+          'caption': _("Register"),
+          'style': 'primary',
         },
     ]
 };
@@ -88,17 +88,9 @@ function openRegisterDialog() {
 
             // show dialog to register
             let renderDialog;
-            let updatedData = function(prop, data) {
+            let updatedData = function(prop, value) {
                 if (prop) {
-                    if (data.target) {
-                        if (data.target.type === "checkbox") {
-                            registerDialogDetails[prop] = data.target.checked;
-                        } else {
-                            registerDialogDetails[prop] = data.target.value;
-                        }
-                    } else {
-                        registerDialogDetails[prop] = data;
-                    }
+                    registerDialogDetails[prop] = value;
                 }
 
                 registerDialogDetails.onChange = updatedData;
@@ -106,7 +98,7 @@ function openRegisterDialog() {
                 let dialogProps = {
                     'id': 'register_dialog',
                     'title': _("Register System"),
-                    'body': React.createElement(subscriptionsRegister.dialogBody, registerDialogDetails),
+                    'body': React.createElement(SubscriptionRegisterDialog, registerDialogDetails),
                 };
 
                 if (renderDialog)
@@ -125,14 +117,14 @@ function unregisterSystem() {
 
 function initStore(rootElement) {
     subscriptionsClient.addEventListener("dataChanged",
-        () => {
-            dataStore.render();
-        }
+                                         () => {
+                                             dataStore.render();
+                                         }
     );
 
     dataStore.render = () => {
         ReactDOM.render(React.createElement(
-            subscriptionsView.page,
+            SubscriptionsView,
             {
                 status: subscriptionsClient.subscriptionStatus.status,
                 status_msg: subscriptionsClient.subscriptionStatus.status_msg,
@@ -142,11 +134,12 @@ function initStore(rootElement) {
                 syspurpose_status: subscriptionsClient.syspurposeStatus.status,
                 insights_available: subscriptionsClient.insightsAvailable,
                 autoAttach: subscriptionsClient.autoAttach,
+                org: subscriptionsClient.org,
                 dismissError: dismissStatusError,
                 register: openRegisterDialog,
                 unregister: unregisterSystem,
             }),
-            rootElement
+                        rootElement
         );
     };
     subscriptionsClient.init();

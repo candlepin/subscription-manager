@@ -99,7 +99,7 @@ PRODUCT_SNOWY = {
 
 PRODUCT_SHARED = {
     "id": "88888",
-    "name": "Shared File System Bits"
+    "name": "Shared File System Bits (no content)"
 }
 
 
@@ -166,18 +166,7 @@ password=foobar
         m.spawn("/var/tmp/mock-insights", "mock-insights")
 
     def wait_subscription(self, product, is_subscribed):
-        b = self.browser
-        product_selector = ".list-group-item-heading:contains('%s')" % product["name"]
-        # expand
-        b.click(product_selector)
-        details_selector = ".list-group-item-container:contains('%s')" % product["name"]
-        b.wait_in_text(details_selector, product["id"])
-        if is_subscribed:
-            b.wait_not_in_text(details_selector, "Not Subscribed")
-        else:
-            b.wait_in_text(details_selector, "Not Subscribed")
-        # collapse again
-        b.click(product_selector)
+        self.browser.wait_text("tr[data-row-id='%s'] .pf-c-label" % product["name"], "Subscribed" if is_subscribed else "Not subscribed")
 
 
 class TestSubscriptions(SubscriptionsCase):
@@ -186,8 +175,8 @@ class TestSubscriptions(SubscriptionsCase):
 
         self.login_and_go("/subscriptions")
 
-        register_button_sel = "label:contains('Status') + button:contains('Register')"
-        unregister_button_sel = "label:contains('Status') + button:contains('Unregister')"
+        register_button_sel = "button:contains('Register')"
+        unregister_button_sel = "button:contains('Unregister')"
 
         # wait until we can open the registration dialog
         b.click(register_button_sel)
@@ -201,7 +190,7 @@ class TestSubscriptions(SubscriptionsCase):
         b.set_input_text("#subscription-register-password", "wrongpass")
 
         # try to register
-        dialog_register_button_sel = "div.modal-footer .btn-primary"
+        dialog_register_button_sel = "footer .pf-m-primary"
         b.click(dialog_register_button_sel)
 
         # wait for message that we used wrong credentials
@@ -236,14 +225,16 @@ class TestSubscriptions(SubscriptionsCase):
         with b.wait_timeout(360):
             b.click(unregister_button_sel)
 
+        b.wait_visible(register_button_sel)
+
     def testRegisterWithKey(self):
         b = self.browser
 
         self.login_and_go("/subscriptions")
 
         # wait until we can open the registration dialog
-        register_button_sel = "button.btn-primary:contains('Register')"
-        unregister_button_sel = "label:contains('Status') + button:contains('Unregister')"
+        register_button_sel = "button:contains('Register')"
+        unregister_button_sel = "button:contains('Unregister')"
         b.click(register_button_sel)
 
         # enter server data
@@ -260,7 +251,7 @@ class TestSubscriptions(SubscriptionsCase):
         b.set_input_text("#subscription-register-key", "awesome_os_pool")
         b.set_input_text("#subscription-register-org", "admin")
 
-        dialog_register_button_sel = "div.modal-footer .btn-primary"
+        dialog_register_button_sel = "footer .pf-m-primary"
         b.click(dialog_register_button_sel)
 
         # dialog should disappear
@@ -275,9 +266,6 @@ class TestSubscriptions(SubscriptionsCase):
         # unregister
         b.click(unregister_button_sel)
 
-        # dialog should disappear
-        b.wait_not_present(unregister_button_sel)
-
         # make sure this product isn't subscribed
         self.wait_subscription(PRODUCT_SNOWY, False)
 
@@ -290,7 +278,7 @@ class TestSubscriptions(SubscriptionsCase):
         self.login_and_go("/subscriptions")
 
         # wait until we can open the registration dialog
-        register_button_sel = "button.btn-primary:contains('Register')"
+        register_button_sel = "button:contains('Register')"
         b.click(register_button_sel)
 
         b.wait_visible("#subscription-register-url")
@@ -302,10 +290,9 @@ class TestSubscriptions(SubscriptionsCase):
         b.set_input_text("#subscription-register-password", "password")
         b.set_input_text("#subscription-register-org", "snowwhite")
 
-        checkbox_attach_automatically = "#subscription-auto-attach-use"
-        b.click(checkbox_attach_automatically)
+        b.click("#subscription-auto-attach-use" )
 
-        dialog_register_button_sel = "div.modal-footer .btn-primary"
+        dialog_register_button_sel = "footer .pf-m-primary"
         b.click(dialog_register_button_sel)
 
         # dialog should disappear
@@ -314,8 +301,7 @@ class TestSubscriptions(SubscriptionsCase):
         # this product should not be subscribed ATM, because auto-attach was skipped
         self.wait_subscription(PRODUCT_SHARED, False)
 
-        auto_attach_button = "button.auto-attach-btn"
-        b.click(auto_attach_button)
+        b.click("button:contains('Auto-attach')")
 
         # find another one that is subscribed
         self.wait_subscription(PRODUCT_SHARED, True)
@@ -323,8 +309,8 @@ class TestSubscriptions(SubscriptionsCase):
     def testUnpriv(self):
         self.machine.execute("useradd junior; echo junior:foobar | chpasswd")
         self.login_and_go("/subscriptions", user="junior")
-        self.browser.wait_in_text(".curtains-ct h1", "current user isn't allowed to access system subscription")
-        self.allow_authorize_journal_messages()
+        self.browser.wait_in_text(".pf-c-empty-state__body", "current user isn't allowed to access system subscription")
+        self.allow_journal_messages("junior is not in the sudoers file.  This incident will be reported.")
 
     def testInsights(self):
         m = self.machine
@@ -332,7 +318,7 @@ class TestSubscriptions(SubscriptionsCase):
 
         self.login_and_go("/subscriptions")
 
-        b.click("label:contains('Status') + button:contains('Register')")
+        b.click("button:contains('Register')")
         b.wait_visible("#subscription-register-url")
 
         b.set_val("#subscription-register-url", "custom")
@@ -340,30 +326,40 @@ class TestSubscriptions(SubscriptionsCase):
         b.set_input_text("#subscription-register-username", "admin")
         b.set_input_text("#subscription-register-password", "admin")
         b.set_input_text("#subscription-register-org", "admin")
-        dialog_register_button_sel = "div.modal-footer .btn-primary"
+        dialog_register_button_sel = "footer .pf-m-primary"
         b.click(dialog_register_button_sel)
         b.wait_not_present(dialog_register_button_sel)
 
-        b.click("label:contains('Insights') a:contains('Not connected')")
-        b.wait_visible('.modal-body:contains("This system is not connected")')
-        b.click('.modal-footer button.apply')
+        b.click("button:contains('Not connected')")
+        b.wait_visible('.pf-c-modal-box__body:contains("This system is not connected")')
+        b.click('footer button.apply')
         with b.wait_timeout(360):
-            b.wait_not_present('.modal-dialog')
+            b.wait_not_present('.pf-c-modal-box')
 
         # HACK - this should eventually not be necessary
         m.execute("insights-client --check-results")
 
-        b.wait_visible("label:contains('Insights') a[href='http://cloud.redhat.com/insights/inventory/123-nice-id']")
-        b.wait_visible("label:contains('Insights') a:contains('3 hits, including important')")
+        b.wait_visible("#overview a[href='http://cloud.redhat.com/insights/inventory/123-nice-id']")
+        b.wait_visible("#overview a:contains('3 hits, including important')")
 
-        b.click("label:contains('Insights') a:contains('Connected to Insights')")
-        b.wait_visible('.modal-body:contains("Next Insights data upload")')
-        b.wait_visible('.modal-body:contains("Last Insights data upload")')
-        b.click("a:contains('Disconnect from Insights')")
-        b.click("button:contains('Disconnect from Insights')")
-        b.wait_not_present('.modal-dialog')
+        # test system purpose
+        # nothing set up, card is not present
+        b.wait_not_present("#syspurpose")
+        m.execute("subscription-manager role --set 'Red Hat Enterprise Linux Workstation'")
+        m.execute("subscription-manager usage --set 'Development/Test'")
+        m.execute("subscription-manager service-level --set 'Standard'")
+        b.wait_in_text("#syspurpose", "Standard")
+        b.wait_in_text("#syspurpose", "Development/Test")
+        b.wait_in_text("#syspurpose", "Red Hat Enterprise Linux Workstation")
 
-        b.wait_visible("label:contains('Insights') a:contains('Not connected')")
+        b.click("button:contains('Connected to Insights')")
+        b.wait_visible('.pf-c-modal-box__body:contains("Next Insights data upload")')
+        b.wait_visible('.pf-c-modal-box__body:contains("Last Insights data upload")')
+        b.click("button.pf-c-expandable-section__toggle:contains('Disconnect from Insights')")
+        b.click("button.pf-m-danger:contains('Disconnect from Insights')")
+        b.wait_not_present('.pf-c-modal-box')
+
+        b.wait_visible("button:contains('Not connected')")
 
     def testSubAndInAndFail(self):
         m = self.machine
@@ -371,7 +367,7 @@ class TestSubscriptions(SubscriptionsCase):
 
         self.login_and_go("/subscriptions")
 
-        b.click("label:contains('Status') + button:contains('Register')")
+        b.click("button:contains('Register')")
         b.wait_visible("#subscription-register-url")
 
         b.set_val("#subscription-register-url", "custom")
@@ -380,21 +376,21 @@ class TestSubscriptions(SubscriptionsCase):
         b.set_input_text("#subscription-register-password", "admin")
         b.set_input_text("#subscription-register-org", "admin")
         b.set_checked("#subscription-insights", True)
-        dialog_register_button_sel = "div.modal-footer .btn-primary"
+        dialog_register_button_sel = "footer .pf-m-primary"
         b.click(dialog_register_button_sel)
         with b.wait_timeout(360):
             b.wait_not_present(dialog_register_button_sel)
 
-        b.wait_visible("label:contains('Insights') a:contains('Connected to Insights')")
+        b.wait_visible("button:contains('Connected to Insights')")
 
         # Break the next upload and expect the warning triangle to tell us about it
         m.execute("mv /etc/insights-client/machine-id /etc/insights-client/machine-id.lost")
         m.execute("systemctl start insights-client")
 
-        b.wait_visible("label:contains('Insights') i.pficon-warning-triangle-o")
+        b.wait_visible("button .pf-c-button__icon svg[fill='orange']")
 
-        b.click("label:contains('Insights') a:contains('Connected to Insights')")
-        b.wait_visible('.modal-body:contains("The last Insights data upload has failed")')
+        b.click("button:contains('Connected to Insights')")
+        b.wait_visible('.pf-c-modal-box__body:contains("The last Insights data upload has failed")')
         b.click("button.cancel")
 
         # Unbreak it and retry.
@@ -406,10 +402,10 @@ class TestSubscriptions(SubscriptionsCase):
         # It seems to randomly run out of its TasksMax=20 limit, for
         # example.
         if m.execute("systemctl is-failed insights-client || true").strip() != "failed":
-            b.wait_not_present("label:contains('Insights') i.pficon-warning-triangle-o")
+            b.wait_not_present("button .pf-c-button__icon svg[fill='orange']")
 
-        b.click("label:contains('Status') + button:contains('Unregister')")
-        b.wait_not_present("label:contains('Insights')")
+        b.click("button:contains('Unregister')")
+        b.wait_not_in_text("#overview", "Insights")
         m.execute("test -f /etc/insights-client/.unregistered")
 
 
@@ -426,7 +422,7 @@ class TestSubscriptionsPackages(SubscriptionsCase, PackageCase):
 
         self.login_and_go("/subscriptions")
 
-        b.click("label:contains('Status') + button:contains('Register')")
+        b.click("button:contains('Register')")
         b.wait_visible("#subscription-register-url")
 
         b.set_val("#subscription-register-url", "custom")
@@ -435,15 +431,15 @@ class TestSubscriptionsPackages(SubscriptionsCase, PackageCase):
         b.set_input_text("#subscription-register-password", "admin")
         b.set_input_text("#subscription-register-org", "admin")
         b.set_checked("#subscription-insights", True)
-        b.wait_visible('.modal-body:contains("The insights-client package will be installed")')
-        b.click('.modal-footer button.apply')
+        b.wait_visible('.pf-c-modal-box__body:contains("The insights-client package will be installed")')
+        b.click('footer button.apply')
         with b.wait_timeout(360):
-            b.wait_not_present(".modal-dialog")
+            b.wait_not_present(".pf-c-modal-box")
 
         # Connecting to Insights will not have worked because the
         # insights-client binary is not actually there.
 
-        b.wait_visible(".alert-danger:contains('not-found')")
+        b.wait_visible(".pf-c-alert:contains('not-found')")
 
         # Try again with the connection dialog.
 
@@ -451,13 +447,13 @@ class TestSubscriptionsPackages(SubscriptionsCase, PackageCase):
         m.execute("pkcon remove -y insights-client")
         m.execute("pkcon refresh")
 
-        b.click("label:contains('Insights') a:contains('Not connected')")
-        b.wait_visible('.modal-body:contains("This system is not connected")')
-        b.wait_visible('.modal-body:contains("The insights-client package will be installed")')
-        b.click('.modal-footer button.apply')
+        b.click("button:contains('Not connected')")
+        b.wait_visible('.pf-c-modal-box__body:contains("This system is not connected")')
+        b.wait_visible('.pf-c-modal-box__body:contains("The insights-client package will be installed")')
+        b.click('footer button.apply')
         with b.wait_timeout(360):
-            b.wait_visible('.modal-footer:contains("not-found")')
-        b.click('.modal-footer button.cancel')
+            b.wait_visible('footer:contains("not-found")')
+        b.click('footer button.cancel')
 
         m.execute("test -f /stamp-insights-client-999-1")
 

@@ -1,11 +1,7 @@
 #!/bin/sh
 set -eux
 
-if [ ! -f /usr/libexec/cockpit-ws ]; then
-    dnf install -y cockpit
-fi
-
-dnf install -y python3-devel openssl-devel intltool
+dnf install -y cockpit-ws python3-devel openssl-devel intltool
 
 cd /var/tmp
 

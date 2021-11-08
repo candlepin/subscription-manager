@@ -18,7 +18,7 @@
  */
 
 const cockpit = require("cockpit");
-import * as PK from "../lib/packagekit";
+import * as PK from "packagekit";
 
 const _ = cockpit.gettext;
 
@@ -48,6 +48,7 @@ client.subscriptionStatus = {
     status_msg: _('Unknown'),
     products: [],
     error: undefined,
+    org: undefined,
 };
 
 client.config = {
@@ -142,10 +143,10 @@ function parseErrorSeverity(error) {
  */
 function safeDBusCall(serviceProxy, delegateMethod) {
     return serviceProxy.wait()
-        .then(delegateMethod)
-        .fail(ex => {
-            console.debug(ex);
-        });
+            .then(delegateMethod)
+            .fail(ex => {
+                console.debug(ex);
+            });
 }
 
 let gettingDetails = false;
@@ -162,21 +163,21 @@ function getSubscriptionDetails() {
     gettingDetails = true;
     safeDBusCall(productsService, () => {
         productsService.ListInstalledProducts('', {}, userLang) // FIXME: use proxy settings
-        .then(result => {
-            client.subscriptionStatus.products = parseProducts(result);
-        })
-        .catch(error => {
-            client.subscriptionStatus.error = {
-                                    'severity': parseErrorSeverity(error),
-                                    'msg': parseErrorMessage(error)
-                                };
-        })
-        .then(() => {
-            gettingDetails = false;
-            if (getDetailsRequested)
-                getSubscriptionDetails();
-            needRender();
-        });
+                .then(result => {
+                    client.subscriptionStatus.products = parseProducts(result);
+                })
+                .catch(error => {
+                    client.subscriptionStatus.error = {
+                        'severity': parseErrorSeverity(error),
+                        'msg': parseErrorMessage(error)
+                    };
+                })
+                .then(() => {
+                    gettingDetails = false;
+                    if (getDetailsRequested)
+                        getSubscriptionDetails();
+                    needRender();
+                });
     });
 }
 
@@ -300,164 +301,164 @@ client.registerSystem = (subscriptionDetails, update_progress) => {
             update_progress(_("Starting registration service ..."), null);
         let registered = false;
         registerServer.Start(userLang)
-            .then(socket => {
-                console.debug('Opening private bus interface at ' + socket);
-                const private_interface = cockpit.dbus(
-                    null,
+                .then(socket => {
+                    console.debug('Opening private bus interface at ' + socket);
+                    const private_interface = cockpit.dbus(
+                        null,
                         {
                             bus: 'none',
                             address: socket,
                             superuser: 'require'
                         }
                     );
-                const registerService = private_interface.proxy(
-                    'com.redhat.RHSM1.Register',
-                    '/com/redhat/RHSM1/Register'
-                );
-                if (subscriptionDetails.activation_keys) {
-                    if (update_progress)
-                        update_progress(_("Registering using activation key ..."), null);
-                    console.debug('registering using activation key');
-                    let result = registerService.call(
-                        'RegisterWithActivationKeys',
-                        [
-                            subscriptionDetails.org,
-                            subscriptionDetails.activation_keys.split(','),
-                            {},
-                            connection_options,
-                            userLang
-                        ]
+                    const registerService = private_interface.proxy(
+                        'com.redhat.RHSM1.Register',
+                        '/com/redhat/RHSM1/Register'
                     );
-                    registered = true;
-                    return result;
-                }
-                else {
-                    console.debug('registering using username and password');
+                    if (subscriptionDetails.activation_keys) {
+                        if (update_progress)
+                            update_progress(_("Registering using activation key ..."), null);
+                        console.debug('registering using activation key');
+                        let result = registerService.call(
+                            'RegisterWithActivationKeys',
+                            [
+                                subscriptionDetails.org,
+                                subscriptionDetails.activation_keys.split(','),
+                                {},
+                                connection_options,
+                                userLang
+                            ]
+                        );
+                        registered = true;
+                        return result;
+                    }
+                    else {
+                        console.debug('registering using username and password');
+                        if (update_progress)
+                            update_progress(_("Registering using username and password ..."), null);
+                        let result = registerService.call(
+                            'Register',
+                            [
+                                subscriptionDetails.org,
+                                subscriptionDetails.user,
+                                subscriptionDetails.password,
+                                {},
+                                connection_options,
+                                userLang
+                            ]
+                        );
+                        registered = true;
+                        return result;
+                    }
+                })
+                .catch(error => {
+                    console.error('error registering', error);
+                    isRegistering = false;
+                    registered = false;
+                    dfd.reject(parseErrorMessage(error));
+                })
+                .then(() => {
                     if (update_progress)
-                        update_progress(_("Registering using username and password ..."), null);
-                    let result = registerService.call(
-                        'Register',
-                        [
-                            subscriptionDetails.org,
-                            subscriptionDetails.user,
-                            subscriptionDetails.password,
-                            {},
-                            connection_options,
-                            userLang
-                        ]
-                    );
-                    registered = true;
-                    return result;
-                }
-            })
-            .catch(error => {
-                console.error('error registering', error);
-                isRegistering = false;
-                registered = false;
-                dfd.reject(parseErrorMessage(error));
-            })
-            .then(() => {
-        if (update_progress)
-            update_progress(_("Stopping registration service ..."), null);
-                console.debug('stopping registration server');
-                return registerServer.Stop(userLang);
-            })
-            .catch(error => {
-                console.error('error stopping registration bus', error);
-                isRegistering = false;
-                dfd.reject(parseErrorMessage(error));
-            })
-            .then(() => {
-                if (registered) {
+                        update_progress(_("Stopping registration service ..."), null);
+                    console.debug('stopping registration server');
+                    return registerServer.Stop(userLang);
+                })
+                .catch(error => {
+                    console.error('error stopping registration bus', error);
+                    isRegistering = false;
+                    dfd.reject(parseErrorMessage(error));
+                })
+                .then(() => {
+                    if (registered) {
                     // Dictionary (key: client.config / rhsm.conf options, value are
                     // attributes of connection_options) ... ('handler' and 'host' are different)
                     // Note: only options from [server] section are supported
-                    let dict = {
-                        'hostname': 'host',
-                        'port': 'port',
-                        'prefix': 'handler',
-                        'proxy_hostname': 'proxy_hostname',
-                        'proxy_port': 'proxy_port',
-                        'proxy_user': 'proxy_user',
-                        'proxy_password': 'proxy_password',
-                    };
-                    if (update_progress)
-                        update_progress(_("Saving configuration ..."), null);
-                    Object.keys(dict).forEach(function (key) {
-                        // Is config option in dialog different from  rhsm.conf
-                        if (client.config[key] !== connection_options[dict[key]].v) {
-                            console.debug('saving: server.' + key, connection_options[dict[key]]);
-                            configService.Set('server.' + key, connection_options[dict[key]], userLang)
-                                .catch(error => {
-                                    console.error('unable to save server.' + key, error);
-                                });
-                        }
-                    });
-
-                    // When system is registered and config options are saved,
-                    // then we can try to auto-attach, when user decided to do so
-                    if (subscriptionDetails.auto_attach) {
+                        let dict = {
+                            'hostname': 'host',
+                            'port': 'port',
+                            'prefix': 'handler',
+                            'proxy_hostname': 'proxy_hostname',
+                            'proxy_port': 'proxy_port',
+                            'proxy_user': 'proxy_user',
+                            'proxy_password': 'proxy_password',
+                        };
                         if (update_progress)
-                            update_progress(_("Attaching subscriptions ..."), null);
-                        console.debug('auto-attaching');
-                        if (connection_options.proxy_hostname.v) {
-                            let proxy_options = {};
-                            proxy_options.proxy_hostname = connection_options.proxy_hostname;
-                            if (connection_options.proxy_port.v) {
+                            update_progress(_("Saving configuration ..."), null);
+                        Object.keys(dict).forEach(function (key) {
+                        // Is config option in dialog different from  rhsm.conf
+                            if (client.config[key] !== connection_options[dict[key]].v) {
+                                console.debug('saving: server.' + key, connection_options[dict[key]]);
+                                configService.Set('server.' + key, connection_options[dict[key]], userLang)
+                                        .catch(error => {
+                                            console.error('unable to save server.' + key, error);
+                                        });
+                            }
+                        });
+
+                        // When system is registered and config options are saved,
+                        // then we can try to auto-attach, when user decided to do so
+                        if (subscriptionDetails.auto_attach) {
+                            if (update_progress)
+                                update_progress(_("Attaching subscriptions ..."), null);
+                            console.debug('auto-attaching');
+                            if (connection_options.proxy_hostname.v) {
+                                let proxy_options = {};
+                                proxy_options.proxy_hostname = connection_options.proxy_hostname;
+                                if (connection_options.proxy_port.v) {
                                 // FIXME: change D-Bus implementation to be able to use string too
-                                proxy_options.proxy_port = {
-                                    't': 'i',
-                                    'v': Number(connection_options.proxy_port.v)
-                                };
-                            }
-                            if (connection_options.proxy_user.v) {
-                                proxy_options.proxy_user = connection_options.proxy_user;
-                            }
-                            if (connection_options.proxy_password.v) {
-                                proxy_options.proxy_password = connection_options.proxy_password;
-                            }
-                            attachService.AutoAttach('', proxy_options, userLang)
-                                .catch(error => {
-                                    console.error('error during auto-attach (using proxy)', error);
-                                    client.subscriptionStatus.error = {
-                                        'severity': parseErrorSeverity(error),
-                                        'msg': parseErrorMessage(error)
+                                    proxy_options.proxy_port = {
+                                        't': 'i',
+                                        'v': Number(connection_options.proxy_port.v)
                                     };
-                                    dfd.resolve();
-                                });
-                        } else {
-                            attachService.AutoAttach('', {}, userLang)
-                                .catch(error => {
-                                    console.error('error during auto-attach', error);
-                                    client.subscriptionStatus.error = {
-                                        'severity': parseErrorSeverity(error),
-                                        'msg': parseErrorMessage(error)
-                                    };
-                                    dfd.resolve();
-                                });
+                                }
+                                if (connection_options.proxy_user.v) {
+                                    proxy_options.proxy_user = connection_options.proxy_user;
+                                }
+                                if (connection_options.proxy_password.v) {
+                                    proxy_options.proxy_password = connection_options.proxy_password;
+                                }
+                                attachService.AutoAttach('', proxy_options, userLang)
+                                        .catch(error => {
+                                            console.error('error during auto-attach (using proxy)', error);
+                                            client.subscriptionStatus.error = {
+                                                'severity': parseErrorSeverity(error),
+                                                'msg': parseErrorMessage(error)
+                                            };
+                                            dfd.resolve();
+                                        });
+                            } else {
+                                attachService.AutoAttach('', {}, userLang)
+                                        .catch(error => {
+                                            console.error('error during auto-attach', error);
+                                            client.subscriptionStatus.error = {
+                                                'severity': parseErrorSeverity(error),
+                                                'msg': parseErrorMessage(error)
+                                            };
+                                            dfd.resolve();
+                                        });
+                            }
                         }
                     }
-                }
-            })
-            .catch(error => {
-                console.error('error during auto-attach', error);
-                isRegistering = false;
-                dfd.reject(parseErrorMessage(error));
-            })
-            .then(() => {
-                if (update_progress)
-                    update_progress(_("Updating status ..."), null);
-                client.closeRegisterDialog = true;
-                isRegistering = false;
-                console.debug('requesting update of subscription status');
-                requestSubscriptionStatusUpdate().always(() => {
-                    dfd.resolve();
+                })
+                .catch(error => {
+                    console.error('error during auto-attach', error);
+                    isRegistering = false;
+                    dfd.reject(parseErrorMessage(error));
+                })
+                .then(() => {
+                    if (update_progress)
+                        update_progress(_("Updating status ..."), null);
+                    client.closeRegisterDialog = true;
+                    isRegistering = false;
+                    console.debug('requesting update of subscription status');
+                    requestSubscriptionStatusUpdate().always(() => {
+                        dfd.resolve();
+                    });
+                    console.debug('requesting update of syspurpose status');
+                    requestSyspurposeStatusUpdate().always(() => {
+                        dfd.resolve();
+                    });
                 });
-                console.debug('requesting update of syspurpose status');
-                requestSyspurposeStatusUpdate().always(() => {
-                    dfd.resolve();
-                });
-            });
     });
     return dfd.promise();
 };
@@ -468,17 +469,17 @@ client.unregisterSystem = () => {
     needRender();
     unregisterService.wait(() => {
         unregisterService.Unregister({}, userLang) // FIXME: use proxy settings
-            .catch(error => {
-                console.error('error unregistering system', error);
-                client.subscriptionStatus.error = {
-                                    'severity': parseErrorSeverity(error),
-                                    'msg': parseErrorMessage(error)
-                                };
-            })
-            .always(() => {
-                console.debug('requesting update');
-                requestSubscriptionStatusUpdate();
-            });
+                .catch(error => {
+                    console.error('error unregistering system', error);
+                    client.subscriptionStatus.error = {
+                        'severity': parseErrorSeverity(error),
+                        'msg': parseErrorMessage(error)
+                    };
+                })
+                .always(() => {
+                    console.debug('requesting update');
+                    requestSubscriptionStatusUpdate();
+                });
     });
 };
 
@@ -486,17 +487,17 @@ client.autoAttach = () => {
     const dfd = cockpit.defer();
     console.debug('auto-attaching ...');
     attachService.AutoAttach('', {}, userLang)
-        .catch(error => {
-            console.error('error during auto-attach', error);
-            client.subscriptionStatus.error = {
-                'severity': parseErrorSeverity(error),
-                'msg': parseErrorMessage(error)
-            };
-        })
-        .then(() => {
-            dfd.resolve();
-            needRender();
-        });
+            .catch(error => {
+                console.error('error during auto-attach', error);
+                client.subscriptionStatus.error = {
+                    'severity': parseErrorSeverity(error),
+                    'msg': parseErrorMessage(error)
+                };
+            })
+            .then(() => {
+                dfd.resolve();
+                needRender();
+            });
     return dfd.promise();
 };
 
@@ -509,17 +510,22 @@ function statusUpdateFailed(reason) {
 
 function requestSubscriptionStatusUpdate() {
     return client.getSubscriptionStatus()
-        .catch(ex => statusUpdateFailed(ex));
+            .catch(ex => statusUpdateFailed(ex));
+}
+
+function requestCurrentOrgUpdate() {
+    return client.getCurrentOrg()
+            .catch(ex => statusUpdateFailed(ex));
 }
 
 function requestSyspurposeStatusUpdate() {
     return client.getSyspurposeStatus()
-        .catch(ex => statusUpdateFailed(ex));
+            .catch(ex => statusUpdateFailed(ex));
 }
 
 function requestSyspurposeUpdate() {
     return client.getSyspurpose()
-        .catch(ex => statusUpdateFailed(ex));
+            .catch(ex => statusUpdateFailed(ex));
 }
 
 /* get subscription summary */
@@ -527,36 +533,71 @@ client.getSubscriptionStatus = function() {
     let dfd = cockpit.defer();
     safeDBusCall(entitlementService, () => {
         entitlementService.GetStatus('', userLang)
-        .then(result => {
-            let parsed = false;
-            let system_status;
-            try {
-                system_status = JSON.parse(result);
-                parsed = true;
-            } catch (err) {
-                client.subscriptionStatus.status = "unknown";
-                client.subscriptionStatus.status_msg = _("Corrupted JSON with status");
-            }
-            if (parsed === true) {
-                /* status contains ID of status */
-                client.subscriptionStatus.status = system_status.status_id;
-                /* status contains string that can be localized */
-                client.subscriptionStatus.status_msg = system_status.status;
-                if (client.closeRegisterDialog) {
-                    client.closeRegisterDialog = false;
-                }
-                dfd.resolve();
-            }
-        })
-        .catch(ex => {
-            console.debug(ex);
-            client.subscriptionStatus.status = "unknown";
-            client.subscriptionStatus.status_msg = _("Unknown");
-        })
-        .then(() => {
-            getSubscriptionDetails();
-            needRender();
-        });
+                .then(result => {
+                    let parsed = false;
+                    let system_status;
+                    try {
+                        system_status = JSON.parse(result);
+                        parsed = true;
+                    } catch (err) {
+                        client.subscriptionStatus.status = "unknown";
+                        client.subscriptionStatus.status_msg = _("Corrupted JSON with status");
+                    }
+                    if (parsed === true) {
+                        /* status contains ID of status */
+                        client.subscriptionStatus.status = system_status.status_id;
+                        /* status contains string that can be localized */
+                        client.subscriptionStatus.status_msg = system_status.status;
+                        if (client.closeRegisterDialog) {
+                            client.closeRegisterDialog = false;
+                        }
+                        dfd.resolve();
+                    }
+                })
+                .catch(ex => {
+                    console.debug(ex);
+                    client.subscriptionStatus.status = "unknown";
+                    client.subscriptionStatus.status_msg = _("Unknown");
+                })
+                .then(() => {
+                    getSubscriptionDetails();
+                    needRender();
+                });
+    });
+    return dfd.promise();
+};
+
+/**
+ * Method for getting current organization (owner), when system is already
+ * registered. When calling D-Bus method GetOrg is successful, then store
+ * returned JSON document in client.org.
+ */
+client.getCurrentOrg = function () {
+    let dfd = cockpit.defer();
+    safeDBusCall(consumerService, () => {
+        console.debug('Trying to get current organization...');
+        consumerService.GetOrg(userLang)
+                .then(result => {
+                    let parsed;
+                    console.debug('Current organization:', result);
+                    try {
+                        client.org = JSON.parse(result);
+                        parsed = true;
+                    } catch (err) {
+                        console.error('Error: parsing JSON with organization', err.message);
+                        parsed = false;
+                    }
+                    if (parsed) {
+                        dfd.resolve();
+                        needRender();
+                    }
+                })
+                .catch(error => {
+                    client.subscriptionStatus.error = {
+                        'severity': parseErrorSeverity(error),
+                        'msg': parseErrorMessage(error)
+                    };
+                });
     });
     return dfd.promise();
 };
@@ -565,15 +606,15 @@ client.getSyspurposeStatus = () => {
     let dfd = cockpit.defer();
     if (isRegistering) { return dfd.promise(); }
     return safeDBusCall(syspurposeService, () => {
-        syspurposeService.GetSyspurposeStatus()
-        .then(result => {
-            client.syspurposeStatus.status = result;
-        })
-        .catch(ex => {
-                console.debug(ex);
-                client.syspurposeStatus.status = null; // TODO: change to something meaningful
-        })
-        .then(needRender);
+        syspurposeService.GetSyspurposeStatus(userLang)
+                .then(result => {
+                    client.syspurposeStatus.status = result;
+                })
+                .catch(ex => {
+                    console.debug(ex);
+                    client.syspurposeStatus.status = null; // TODO: change to something meaningful
+                })
+                .then(needRender);
     });
 };
 
@@ -582,15 +623,15 @@ client.getSyspurpose = function() {
 
     safeDBusCall(syspurposeService, () => {
         syspurposeService.GetSyspurpose(userLang)
-        .then(result => {
-            client.syspurposeStatus.info = JSON.parse(result);
-            dfd.resolve();
-        })
-        .catch(ex => {
-            console.debug(ex);
-            client.syspurposeStatus.info = 'Unknown'; // TODO: change to something meaningful
-        })
-        .then(needRender);
+                .then(result => {
+                    client.syspurposeStatus.info = JSON.parse(result);
+                    dfd.resolve();
+                })
+                .catch(ex => {
+                    console.debug(ex);
+                    client.syspurposeStatus.info = 'Unknown'; // TODO: change to something meaningful
+                })
+                .then(needRender);
     });
 
     return dfd.promise();
@@ -652,21 +693,21 @@ client.readConfig = function() {
 };
 
 client.toArray = obj => {
-        /*
+    /*
         checks if object passed in is an iterable or not
         see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
         for more info
          */
-        if (obj == null) {
-            return [];
-        }
-        if (typeof obj === 'string') {
-            return [obj];
-        }
-        if (typeof obj[Symbol.iterator] === 'function' ) {
-            return Array.from(obj);
-        }
-    };
+    if (obj == null) {
+        return [];
+    }
+    if (typeof obj === 'string') {
+        return [obj];
+    }
+    if (typeof obj[Symbol.iterator] === 'function' ) {
+        return Array.from(obj);
+    }
+};
 
 const detectInsights = () => {
     return cockpit.spawn([ "which", "insights-client" ], { err: "ignore" }).then(
@@ -696,6 +737,11 @@ client.init = () => {
     productsService.addEventListener("InstalledProductsChanged", requestSubscriptionStatusUpdate);
     consumerService.addEventListener("ConsumerChanged", requestSubscriptionStatusUpdate);
 
+    // When consumer changed (system was registered/unregistered, then it is necessary to
+    // get current organization)
+    consumerService.addEventListener("ConsumerChanged", requestCurrentOrgUpdate);
+    entitlementService.addEventListener("EntitlementChanged", requestCurrentOrgUpdate);
+
     configService.addEventListener("ConfigChanged", updateConfig);
     syspurposeService.addEventListener("SyspurposeChanged", requestSyspurposeUpdate);
 
@@ -706,6 +752,7 @@ client.init = () => {
     consumerService.addEventListener("ConsumerChanged", requestSyspurposeStatusUpdate);
 
     // get initial status
+    requestCurrentOrgUpdate();
     requestSubscriptionStatusUpdate();
     requestSyspurposeUpdate();
     requestSyspurposeStatusUpdate();
@@ -713,4 +760,4 @@ client.init = () => {
     configService.wait().then(updateConfig);
 };
 
-module.exports = client;
+export default client;
