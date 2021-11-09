@@ -53,7 +53,7 @@ class ActionReport(object):
     def format_exceptions(self):
         buf = ''
         for e in self._exceptions:
-            buf += ' '.join(str(e).split('-')[1:]).strip()
+            buf += str(e).split('-', maxsplit=1)[-1].strip()
             buf += '\n'
         return buf
 
