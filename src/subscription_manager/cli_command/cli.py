@@ -16,7 +16,6 @@
 #
 import logging
 import os
-import socket
 import sys
 
 import rhsm.config
@@ -124,26 +123,6 @@ class CliCommand(AbstractCLICommand):
 
     def _get_logger(self):
         return logging.getLogger("rhsm-app.{module}.{name}".format(module=self.__module__, name=self.__class__.__name__))
-
-    def test_proxy_connection(self):
-        if not self.proxy_hostname and not conf["server"]["proxy_hostname"]:
-            return True
-        try:
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.settimeout(10)
-            result = s.connect_ex((
-                self.proxy_hostname or conf["server"]["proxy_hostname"],
-                int(self.proxy_port or conf["server"]["proxy_port"] or rhsm.config.DEFAULT_PROXY_PORT)
-            ))
-        except Exception as e:
-            log.error("Attempted bad proxy: {e}".format(e=e))
-            return False
-        finally:
-            s.close()
-        if result:
-            return False
-        else:
-            return True
 
     def _request_validity_check(self):
         # Make sure the sorter is fresh (low footprint if it is)
@@ -340,10 +319,6 @@ class CliCommand(AbstractCLICommand):
 
             if config_changed:
                 try:
-                    # catch host/port issues; does not catch auth issues
-                    if not self.test_proxy_connection():
-                        system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
-
                     # this tries to actually connect to the server and ping it
                     if not is_valid_server_info(self.no_auth_cp):
                         system_exit(os.EX_UNAVAILABLE, _("Unable to reach the server at {host}:{port}{handler}").format(
