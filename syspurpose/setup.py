@@ -68,7 +68,7 @@ cmdclass = {
     'install_data': install_data,
     'update_trans': i18n.UpdateTrans,
     'uniq_trans': i18n.UniqTrans,
-    'gettext': i18n.Gettext,
+    'gettext': i18n.GettextWithArgparse,
     'clean': utils.clean,
 }
 setup_requires = []
