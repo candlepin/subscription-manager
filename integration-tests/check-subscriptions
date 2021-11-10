@@ -67,7 +67,7 @@ for i in range(1,200):
   try:
      sys.stderr.write("Waiting for %s\\n" % sys.argv[1])
      sys.stderr.flush()
-     res = requests.get(sys.argv[1], verify=False)
+     res = requests.get(sys.argv[1])
      break
   except:
      time.sleep(1)
@@ -78,19 +78,20 @@ import sys
 import json
 import requests
 
-data = requests.get(sys.argv[1] + "/activation_keys", auth=("admin","admin"), verify=False).json()
+data = requests.get(sys.argv[1] + "/activation_keys", auth=("admin","admin")).json()
 key = [e['id'] for e in data if e['name'] == 'awesome_os_pool' and e['owner']['displayName'] == 'Admin Owner'][0]
 
-data = requests.get(sys.argv[1] + "/pools", auth=("admin","admin"), verify=False).json()
+data = requests.get(sys.argv[1] + "/pools", auth=("admin","admin")).json()
 pool = [ e['id'] for e in data if e['owner']['key'] == 'admin' and e['contractNumber'] == '0' and [p for p in e['providedProducts'] if p['productId'] == '88888'] ][0]
 
 key_url = sys.argv[1] + "/activation_keys/{key}/pools/{pool}".format(key=key, pool=pool)
-requests.post(key_url, auth=("admin","admin"), verify=False)
+requests.post(key_url, auth=("admin","admin"))
 """
 
 CLIENT_ADDR = "10.111.112.1"
 CANDLEPIN_ADDR = "10.111.112.100"
-CANDLEPIN_URL = "https://%s:8443/candlepin" % CANDLEPIN_ADDR
+CANDLEPIN_HOSTNAME = "services.cockpit.lan"
+CANDLEPIN_URL = "https://%s:8443/candlepin" % CANDLEPIN_HOSTNAME
 
 PRODUCT_SNOWY = {
     "id": "6050",
@@ -142,6 +143,9 @@ class SubscriptionsCase(MachineCase):
         # this changed in https://github.com/cockpit-project/bots/pull/1768
         self.candlepin.execute("if [ -x /root/run-candlepin ]; then /root/run-candlepin; else systemctl start tomcat; fi")
 
+        # make sure the cockpit machine can resolve the service machine hostname
+        m.execute(f"echo '{CANDLEPIN_ADDR} {CANDLEPIN_HOSTNAME}' >> /etc/hosts")
+
         # download product info from the candlepin machine
         def download_product(product):
             prod_id = product["id"]
@@ -153,8 +157,15 @@ class SubscriptionsCase(MachineCase):
         download_product(PRODUCT_SNOWY)
         download_product(PRODUCT_SHARED)
 
-        # make sure that rhsm skips certificate checks for the server
-        m.execute("sed -i -e 's/insecure = 0/insecure = 1/g' /etc/rhsm/rhsm.conf")
+        # download the candlepin CA certificate
+        candlepin_ca_filename = "candlepin-ca.pem"
+        candlepin_ca_tmpfile = os.path.join(self.tmpdir, candlepin_ca_filename)
+        self.candlepin.download("/home/admin/candlepin/certs/candlepin-ca.crt", candlepin_ca_tmpfile)
+        # make it available for the system, updating the system certificate store
+        m.upload([candlepin_ca_tmpfile], f"/etc/pki/ca-trust/source/anchors/{candlepin_ca_filename}")
+        m.execute("update-ca-trust extract")
+        # make it available for subscription-manager too
+        m.upload([candlepin_ca_tmpfile], f"/etc/rhsm/ca/{candlepin_ca_filename}")
 
         # Apply some extra cleanups on rhel-atomic.  These cleanups
         # are necessary because all changes to /etc after a "atomic
@@ -165,14 +176,16 @@ class SubscriptionsCase(MachineCase):
         # Wait for the web service to be accessible
         machine_python(self.machine, WAIT_SCRIPT, CANDLEPIN_URL)
 
+        hostname = m.execute("hostname").rstrip()
+
         if m.image.startswith('rhel-'):
             m.write("/etc/insights-client/insights-client.conf",
-"""
+f"""
 [insights-client]
 gpg=False
 auto_config=False
-base_url=localhost:8888/r/insights
-cert_verify=False
+base_url={hostname}:8888/r/insights
+cert_verify=/etc/cockpit/ws-certs.d/0-self-signed-ca.pem
 username=admin
 password=foobar
 """)
@@ -343,7 +356,7 @@ class TestSubscriptions(SubscriptionsCase):
         b.wait_visible("#subscription-register-url")
 
         b.set_val("#subscription-register-url", "custom")
-        b.set_input_text("#subscription-register-url-custom", CANDLEPIN_ADDR + ":8443/candlepin")
+        b.set_input_text("#subscription-register-url-custom", CANDLEPIN_URL)
         b.set_input_text("#subscription-register-username", "admin")
         b.set_input_text("#subscription-register-password", "admin")
         b.set_input_text("#subscription-register-org", "admin")
@@ -396,7 +409,7 @@ class TestSubscriptions(SubscriptionsCase):
         b.wait_visible("#subscription-register-url")
 
         b.set_val("#subscription-register-url", "custom")
-        b.set_input_text("#subscription-register-url-custom", CANDLEPIN_ADDR + ":8443/candlepin")
+        b.set_input_text("#subscription-register-url-custom", CANDLEPIN_URL)
         b.set_input_text("#subscription-register-username", "admin")
         b.set_input_text("#subscription-register-password", "admin")
         b.set_input_text("#subscription-register-org", "admin")
@@ -452,7 +465,7 @@ class TestSubscriptionsPackages(SubscriptionsCase, PackageCase):
         b.wait_visible("#subscription-register-url")
 
         b.set_val("#subscription-register-url", "custom")
-        b.set_input_text("#subscription-register-url-custom", "10.111.112.100:8443/candlepin")
+        b.set_input_text("#subscription-register-url-custom", CANDLEPIN_URL)
         b.set_input_text("#subscription-register-username", "admin")
         b.set_input_text("#subscription-register-password", "admin")
         b.set_input_text("#subscription-register-org", "admin")
