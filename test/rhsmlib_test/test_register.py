@@ -42,6 +42,9 @@ from rhsmlib.dbus.objects import RegisterDBusObject
 
 from rhsmlib.services import register, exceptions
 
+from test import subman_marker_dbus
+
+
 CONSUMER_CONTENT_JSON = '''{"hypervisorId": null,
         "serviceLevel": "",
         "autoheal": true,
@@ -450,6 +453,7 @@ class RegisterServiceTest(InjectionMockingTest):
             register.RegisterService(self.mock_cp).validate_options(options)
 
 
+@subman_marker_dbus
 class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
     def dbus_objects(self):
         return [RegisterDBusObject]

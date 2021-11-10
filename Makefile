@@ -413,7 +413,7 @@ install-files: dbus-install install-conf install-plugins install-post-boot insta
 
 .PHONY: check
 check:
-	$(PYTHON) setup.py -q nosetests -c playpen/noserc.dev
+	pytest test/
 
 .PHONY: version_check
 version_check:
@@ -427,9 +427,9 @@ coverage:
 ifdef ghprbPullId
 	# Pull the PR id from the Jenkins environment and use it as a seed so that each PR
 	# uses a consistant test ordering.
-	$(PYTHON) ./setup.py -q nosetests --randomly-seed=$(ghprbPullId) -c playpen/noserc.ci
+	$(PYTHON) -m coverage run -m pytest --randomly-seed=$(ghprbPullId) test/
 else
-	$(PYTHON) ./setup.py -q nosetests -c playpen/noserc.ci
+	$(PYTHON) -m coverage run -m pytest test/
 endif
 
 .PHONY: gettext
