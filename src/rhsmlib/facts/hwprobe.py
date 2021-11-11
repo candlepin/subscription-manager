@@ -31,10 +31,6 @@ from rhsmlib.facts import collector
 
 from typing import Optional
 
-# For python2.6 that doesn't have subprocess.check_output
-from rhsmlib.compat import check_output as compat_check_output
-from subprocess import CalledProcessError
-
 log = logging.getLogger(__name__)
 
 # There is no python3 version of python-ethtool
@@ -602,7 +598,7 @@ class HardwareCollector(collector.FactsCollector):
 
         try:
             output = subprocess.check_output(lscpu_cmd, env=lscpu_env)
-        except CalledProcessError as e:
+        except subprocess.CalledProcessError as e:
             log.warning('Failed to run \'lscpu --help\': %s', e)
             return False
 
@@ -619,9 +615,9 @@ class HardwareCollector(collector.FactsCollector):
         lscpu_cmd_string = ' '.join(lscpu_cmd)
 
         try:
-            lscpu_out = compat_check_output(lscpu_cmd,
-                                            env=lscpu_env)
-        except CalledProcessError as e:
+            lscpu_out_raw: bytes = subprocess.check_output(lscpu_cmd, env=lscpu_env)
+            lscpu_out: str = lscpu_out_raw.decode("utf-8")
+        except subprocess.CalledProcessError as e:
             log.exception(e)
             log.warning('Error with lscpu (%s) subprocess: %s', lscpu_cmd_string, e)
             return lscpu_info
@@ -653,7 +649,7 @@ class HardwareCollector(collector.FactsCollector):
 
         try:
             output = subprocess.check_output(lscpu_cmd, env=lscpu_env)
-        except CalledProcessError as e:
+        except subprocess.CalledProcessError as e:
             log.warning('Failed to run \'lscpu --json\': %s', e)
             return {}
 

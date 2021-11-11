@@ -22,7 +22,7 @@ class VirtCollectorTest(test.fixture.SubManFixture):
     @patch('subprocess.Popen')
     def test_virt_bare_metal(self, MockPopen):
         mock_process = MagicMock()
-        mock_process.communicate.return_value = ['', None]
+        mock_process.communicate.return_value = [b'', None]
         mock_process.poll.return_value = 0
         mock_process.__enter__.return_value = mock_process
         MockPopen.return_value = mock_process
@@ -33,7 +33,7 @@ class VirtCollectorTest(test.fixture.SubManFixture):
     @patch('subprocess.Popen')
     def test_virt_error(self, MockPopen):
         mock_process = MagicMock()
-        mock_process.communicate.return_value = ['', None]
+        mock_process.communicate.return_value = [b'', None]
         mock_process.poll.return_value = 255
         mock_process.__enter__.return_value = mock_process
         MockPopen.return_value = mock_process
@@ -45,7 +45,7 @@ class VirtCollectorTest(test.fixture.SubManFixture):
     @patch('subprocess.Popen')
     def test_command_valid(self, MockPopen):
         mock_process = MagicMock()
-        mock_process.communicate.return_value = ['this is valid', None]
+        mock_process.communicate.return_value = [b'this is valid', None]
         mock_process.poll.return_value = 0
         mock_process.__enter__.return_value = mock_process
         MockPopen.return_value = mock_process
@@ -57,7 +57,7 @@ class VirtCollectorTest(test.fixture.SubManFixture):
     @patch('subprocess.Popen')
     def test_virt_guest(self, MockPopen):
         mock_process = MagicMock()
-        mock_process.communicate.return_value = ['kvm', None]
+        mock_process.communicate.return_value = [b'kvm', None]
         mock_process.poll.return_value = 0
         mock_process.__enter__.return_value = mock_process
         MockPopen.return_value = mock_process

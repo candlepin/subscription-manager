@@ -586,7 +586,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %endif
 
 %dir %{python_sitearch}/rhsmlib/candlepin
-%dir %{python_sitearch}/rhsmlib/compat
 %dir %{python_sitearch}/rhsmlib/dbus
 %dir %{python_sitearch}/rhsmlib/dbus/facts
 %dir %{python_sitearch}/rhsmlib/dbus/objects
@@ -702,7 +701,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %dir %{python_sitearch}/rhsmlib
 %{python_sitearch}/rhsmlib/*.py*
 %{python_sitearch}/rhsmlib/candlepin/*.py*
-%{python_sitearch}/rhsmlib/compat/*.py*
 %{python_sitearch}/rhsmlib/facts/*.py*
 %{python_sitearch}/rhsmlib/services/*.py*
 %{python_sitearch}/rhsmlib/dbus/*.py*
@@ -710,7 +708,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/rhsmlib/dbus/objects/*.py*
 %{python_sitearch}/rhsmlib/__pycache__
 %{python_sitearch}/rhsmlib/candlepin/__pycache__
-%{python_sitearch}/rhsmlib/compat/__pycache__
 %{python_sitearch}/rhsmlib/dbus/__pycache__
 %{python_sitearch}/rhsmlib/dbus/facts/__pycache__
 %{python_sitearch}/rhsmlib/dbus/objects/__pycache__
