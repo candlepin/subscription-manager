@@ -765,6 +765,15 @@ class BaseRestLib(object):
                                             err))
                 raise
             except (socket.error, OSError) as err:
+                # If we get a ConnectionError here and we are using a proxy,
+                # then the issue was the connection to the proxy, not to the
+                # destination host.
+                if isinstance(err, ConnectionError) \
+                    and self.proxy_hostname and self.proxy_port:
+                    raise ProxyException("Unable to connect to: %s:%s %s "
+                                         % (normalized_host(self.proxy_hostname),
+                                            safe_int(self.proxy_port),
+                                            err))
                 if six.PY2:
                     code = httplib.PROXY_AUTHENTICATION_REQUIRED
                 else:
