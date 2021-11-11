@@ -107,7 +107,7 @@
 %global use_rhsm_icons 0%{use_cockpit}
 
 Name: subscription-manager
-Version: 1.29.20
+Version: 1.29.21
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -919,6 +919,11 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 
 
 %changelog
+* Thu Nov 11 2021 Christopher Snyder <csnyder@redhat.com> 1.29.21-1
+- 2020248: handle server-side consumer deletion in syspurpose commands
+  (ptoscano@redhat.com)
+- connection: recognize proxy errors (ptoscano@redhat.com)
+
 * Thu Nov 11 2021 Christopher Snyder <csnyder@redhat.com> 1.29.20-1
 - ENT-4279: Switch away from rhsmlib.compat.subprocess_compat
   (mhorky@redhat.com)
