@@ -386,7 +386,7 @@ class AbstractSyspurposeCommand(CliCommand):
                     '"{syspurpose_attr}".').format(syspurpose_attr=self.attr))
 
     def sync(self):
-        return syspurposelib.SyspurposeSyncActionCommand().perform(include_result=True)[1]
+        return syspurposelib.SyspurposeSyncActionCommand().perform(include_result=True, passthrough_gone=True)[1]
 
     def _do_command(self):
         self._validate_options()

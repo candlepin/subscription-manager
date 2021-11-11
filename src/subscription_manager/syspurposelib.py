@@ -17,7 +17,7 @@ This module is an interface to syspurpose's SyncedStore class from subscription-
 It contains methods for accessing/manipulating the local syspurpose.json metadata file through SyncedStore.
 """
 
-from rhsm.connection import ConnectionException
+from rhsm.connection import ConnectionException, GoneException
 from subscription_manager import certlib
 from subscription_manager import injection as inj
 from syspurpose.files import SyncedStore, USER_SYSPURPOSE, CACHED_SYSPURPOSE
@@ -245,7 +245,7 @@ class SyspurposeSyncActionCommand(object):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = self.cp_provider.get_consumer_auth_cp()
 
-    def perform(self, include_result=False):
+    def perform(self, include_result=False, passthrough_gone=False):
         """
         Perform the action that this Command represents.
         :return:
@@ -261,6 +261,11 @@ class SyspurposeSyncActionCommand(object):
             )
             result = store.sync()
         except ConnectionException as e:
+            # In case the error is GoneException (i.e. the consumer no more
+            # exists), then reraise it only if GoneException is handled in
+            # its own way rather than checking SyspurposeSyncActionReport.
+            if isinstance(e, GoneException) and passthrough_gone:
+                raise
             self.report._exceptions.append('Unable to sync syspurpose with server: %s' % str(e))
             self.report._status = 'Failed to sync system purpose'
         self.report._updates = "\n\t\t ".join(self.report._updates)
