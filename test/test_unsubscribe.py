@@ -57,9 +57,6 @@ class CliUnSubscribeTests(SubManFixture):
         self.stub_cp_provider.get_consumer_auth_cp().unbindBySerial = mock.Mock(side_effect=expected_exception)
         code = cmd.main(['--serial=%s' % '2300922701043065601'])
 
-        # FIXME: this causes something to freak out deep in nosetests...
-        #self.assertEquals(code, 1)
-
     def test_unsubscribe_unregistered(self):
         prod = StubProduct('stub_product')
         ent = StubEntitlementCertificate(prod)

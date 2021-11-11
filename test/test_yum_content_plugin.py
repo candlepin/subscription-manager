@@ -7,12 +7,12 @@ import types
 
 
 import mock
-from nose.plugins.skip import SkipTest
+import pytest
 
 try:
     import yum
 except ImportError as e:
-    raise SkipTest(e)
+    pytest.skip(f"YUM dependency could not be imported: {e}", allow_module_level=True)
 
 
 from . import fixture

@@ -22,6 +22,7 @@ import os
 import re
 import six
 from . import stubs
+import pytest
 
 from mock import patch, NonCallableMock, MagicMock, Mock, call
 from rhsm.https import ssl
@@ -29,13 +30,11 @@ from .fixture import Capture, SubManFixture, temp_file, OPEN_FUNCTION
 from argparse import ArgumentParser
 from textwrap import dedent
 
-from nose import SkipTest
-
 from subscription_manager import injection as inj
 try:
     from subscription_manager.migrate import migrate
 except ImportError:
-    raise SkipTest("Couldn't import rhn modules for migration tests")
+    pytest.skip("Couldn't import rhn modules for migration tests", allow_module_level=True)
 
 from subscription_manager.certdirectory import ProductDirectory
 

@@ -12,14 +12,8 @@ sys.path.insert(0, str(rootdir / "src"))
 
 from subscription_manager import ga_loader
 ga_loader.init_ga()
-import six
 from . import rhsm_display
 rhsm_display.set_display()
-
-if six.PY2:
-    import sys
-    reload(sys)
-    sys.setdefaultencoding('utf-8')
 
 import pytest
 

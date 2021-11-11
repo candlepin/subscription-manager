@@ -39,7 +39,7 @@ from .fixture import FakeException, FakeLogger, SubManFixture, \
         Capture, Matcher, set_up_mock_sp_store
 
 from mock import patch, Mock, MagicMock, call
-from nose import SkipTest
+import pytest
 
 # for some exceptions
 from rhsm import connection
@@ -2513,7 +2513,7 @@ class HandleExceptionTests(unittest.TestCase):
 
     def test_he_ssl_wrong_host(self):
         if not six.PY2:
-            raise SkipTest("M2Crypto-specific interface. Not used with Python 3.")
+            raise pytest.skip("M2Crypto-specific interface. Not used with Python 3.")
         e = SSL.Checker.WrongHost("expectedHost.example.com",
                                    "actualHost.example.com",
                                    "subjectAltName")
