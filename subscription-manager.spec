@@ -248,7 +248,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.22
+Version: 1.28.23
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1491,6 +1491,73 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Nov 11 2021 Christopher Snyder <csnyder@redhat.com> 1.28.23-1
+- 2021982: Fix syspurpose bash completion (mhorky@redhat.com)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- syspurpose: remove redundant _() (ptoscano@redhat.com)
+- syspurpose: translate more UI strings (ptoscano@redhat.com)
+- syspurpose: include argparse string in message catalog (ptoscano@redhat.com)
+- 1719690: Update to message formatting (wpoteat@redhat.com)
+- cockpit: port subscriptions info icons to PF4 icons (kkoukiou@redhat.com)
+- cockpit: translate some untranslated aria-labels (kkoukiou@redhat.com)
+- cockpit: Port Po2JSONPlugin to webpack 5 (kkoukiou@redhat.com)
+- cockpit: stop including PF3 - it's not used anymore (kkoukiou@redhat.com)
+- cockpit: port Insights dialog remaining non PF4 parts (kkoukiou@redhat.com)
+- cockpit: port subscriptions register dialog to Patternfly 4
+  (kkoukiou@redhat.com)
+- cockpit: port spinners to PF4 spinners (kkoukiou@redhat.com)
+- cockpit: replace custom Revealer component with 'ExpandableSection' from PF4
+  (kkoukiou@redhat.com)
+- cockpit: replace pficon and fa classes with svgs form react-icons
+  (kkoukiou@redhat.com)
+- cockpit: remove jquery unused dependency (kkoukiou@redhat.com)
+- cockpit: patternfly is a normal dependency - not just dev
+  (kkoukiou@redhat.com)
+- cockpit: update patternfly modules and explicitely specify react-icons
+  dependency (kkoukiou@redhat.com)
+- cockpit: clean up package.json from unused dependencies and move to webpack 5
+  (kkoukiou@redhat.com)
+- webpack: Use relative resolve path for npm 7 compatibility
+  (kkoukiou@redhat.com)
+- cockpit: Stop using a custom Select, use the one from PF instead
+  (kkoukiou@redhat.com)
+- cockpit: checkout Cockpit's PF/React/build library instead of keeping a
+  direct copy of it locally (kkoukiou@redhat.com)
+- 1979323: Cockpit - do not show red red icon in SCA mode (jhnidek@redhat.com)
+- New D-Bus method GetOrg() (jhnidek@redhat.com)
+- cockpit: Test also system purpose (mmarusak@redhat.com)
+- cockpit: Use current PF4 components and design (mmarusak@redhat.com)
+- test: Update cockpit test/common library (mmarusak@redhat.com)
+- cockpit: Update babel (mmarusak@redhat.com)
+- cockpit: Sync lib/patternfly with Cockpit (mmarusak@redhat.com)
+- cockpit: Use PF4 based empty state (mmarusak@redhat.com)
+- cockpit: Drop uglification (mmarusak@redhat.com)
+- cockpit: Add `standard-jsx` eslint plugin (mmarusak@redhat.com)
+- cockpit: Use 'noreferrer' for external links (mmarusak@redhat.com)
+- cockpit: Remove loaders for .es6 files (mmarusak@redhat.com)
+- cockpit: Add package-lock.json to .gitignore (mmarusak@redhat.com)
+- cockpit: Lower cockpit-ws dependency to Recommends (martin@piware.de)
+- test: Robustify and trim down cockpit-ws installation (martin@piware.de)
+- 1859529: Remove proxy server test as it is unnecessary (wpoteat@redhat.com)
+- 2015173: chmod /etc/pki/entitlement/*.pem only when existing
+  (ptoscano@redhat.com)
+- Fix redundant API calls to Candlepin (hyu@redhat.com)
+- 2014646: fix rhn-migrate-classic-to-rhsm & its tests for argparse
+  (ptoscano@redhat.com)
+- cockpit: Move from obsolete node-sass to Dart sass (martin@piware.de)
+- cockpit: wait 5 seconds for candlepin at first (ptoscano@redhat.com)
+- cockpit: use the self-signed key in mock-insights (ptoscano@redhat.com)
+- 1989955: use /proc/device-tree/ibm,partition-uuid on POWER LPARs
+  (ptoscano@redhat.com)
+- facts: prepare _get_devicetree_uuid() for multiple files
+  (ptoscano@redhat.com)
+- facts: refactor device-tree parts of VirtUuidCollector (ptoscano@redhat.com)
+- build: pin flake8 to < 4 (ptoscano@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Spanish) (ehespinosa57@gmail.com)
+- ENT-4289: Drop Sphinx (mhorky@redhat.com)
+
 * Thu Sep 23 2021 Christopher Snyder <csnyder@redhat.com> 1.28.22-1
 - 1924338: [1.28] list prints no status and dates in SCA mode
   (jhnidek@redhat.com)
