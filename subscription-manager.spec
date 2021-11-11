@@ -107,7 +107,7 @@
 %global use_rhsm_icons 0%{use_cockpit}
 
 Name: subscription-manager
-Version: 1.29.19
+Version: 1.29.20
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -919,6 +919,106 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 
 
 %changelog
+* Thu Nov 11 2021 Christopher Snyder <csnyder@redhat.com> 1.29.20-1
+- ENT-4279: Switch away from rhsmlib.compat.subprocess_compat
+  (mhorky@redhat.com)
+- 2021578: Remove proxy server test as it is unnecessary (wpoteat@redhat.com)
+- cockpit: validate SSL connection to mock-insights (ptoscano@redhat.com)
+- cockpit: fix hostname of the fake Insights server (ptoscano@redhat.com)
+- cockpit: validate the SSL connection to candlepin (ptoscano@redhat.com)
+- cockpit: resolve hostname of service machine (ptoscano@redhat.com)
+- cockpit: use CANDLEPIN_URL consistently (ptoscano@redhat.com)
+- 1719690: Update to message formatting (wpoteat@redhat.com)
+- cockpit: account for missing insights-client on non-RHEL systems
+  (ptoscano@redhat.com)
+- cockpit: skip Insights tests on non-RHEL OSes (ptoscano@redhat.com)
+- ENT-4370: Drop old dbus_interface.py (mhorky@redhat.com)
+- ENT-4278: Drop unittest2 imports (mhorky@redhat.com)
+- 1985845: Fix sub-man service-level --show (jhnidek@redhat.com)
+- spec: drop non-systemd support (ptoscano@redhat.com)
+- spec: drop support for Python < 3 (ptoscano@redhat.com)
+- spec: drop support for Fedora < 33 (ptoscano@redhat.com)
+- spec: drop support for RHEL < 8 (ptoscano@redhat.com)
+- spec: drop support for SUSE < 15 (ptoscano@redhat.com)
+- 2015173: chmod /etc/pki/entitlement/*.pem only when existing
+  (ptoscano@redhat.com)
+- cockpit: port subscriptions info icons to PF4 icons (kkoukiou@redhat.com)
+- cockpit: translate some untranslated aria-labels (kkoukiou@redhat.com)
+- cockpit: Port Po2JSONPlugin to webpack 5 (kkoukiou@redhat.com)
+- cockpit: stop including PF3 - it's not used anymore (kkoukiou@redhat.com)
+- cockpit: port Insights dialog remaining non PF4 parts (kkoukiou@redhat.com)
+- cockpit: port subscriptions register dialog to Patternfly 4
+  (kkoukiou@redhat.com)
+- cockpit: make default TEST_OS rhel-8-4 (kkoukiou@redhat.com)
+- cockpit: port spinners to PF4 spinners (kkoukiou@redhat.com)
+- cockpit: replace custom Revealer component with 'ExpandableSection' from PF4
+  (kkoukiou@redhat.com)
+- cockpit: replace pficon and fa classes with svgs form react-icons
+  (kkoukiou@redhat.com)
+- cockpit: remove jquery unused dependency (kkoukiou@redhat.com)
+- cockpit: patternfly is a normal dependency - not just dev
+  (kkoukiou@redhat.com)
+- cockpit: update patternfly modules and explicitely specify react-icons
+  dependency (kkoukiou@redhat.com)
+- cockpit: clean up package.json from unused dependencies and move to webpack 5
+  (kkoukiou@redhat.com)
+- webpack: Use relative resolve path for npm 7 compatibility
+  (kkoukiou@redhat.com)
+- cockpit: Stop using a custom Select, use the one from PF instead
+  (kkoukiou@redhat.com)
+- cockpit: checkout Cockpit's PF/React/build library instead of keeping a
+  direct copy of it locally (kkoukiou@redhat.com)
+- cockpit: update npmshrinkwrap file (kkoukiou@redhat.com)
+- Use pytest --forked for D-Bus unit tests (jhnidek@redhat.com)
+- Support of python3 of zypper rhsm script (suttner@atix.de)
+- 2003777: Fix organizations hint in syspurpose commands (mhorky@redhat.com)
+- Small style changes of d-bus server and d-bus unit tests (jhnidek@redhat.com)
+- * Removed GLib.threads_init() (jhnidek@redhat.com)
+- Added cleanup for one patcher; fixed some comments. (jhnidek@redhat.com)
+- cockpit: skip RHEL 9 tests using insights-client (ptoscano@redhat.com)
+- cockpit: fix system installation of subscription-manager
+  (ptoscano@redhat.com)
+- cockpit: wait 5 seconds for candlepin at first (ptoscano@redhat.com)
+- cockpit: use the self-signed key in mock-insights (ptoscano@redhat.com)
+- test: Building requires gcc (mmarusak@redhat.com)
+- test: Tell tests about rhel-9 package manager (mmarusak@redhat.com)
+- facts: drop dead/unused code from CleanupCollector (ptoscano@redhat.com)
+- 1989955: use /proc/device-tree/ibm,partition-uuid on POWER LPARs
+  (ptoscano@redhat.com)
+- facts: prepare _get_devicetree_uuid() for multiple files
+  (ptoscano@redhat.com)
+- facts: refactor device-tree parts of VirtUuidCollector (ptoscano@redhat.com)
+- cockpit: Move from obsolete node-sass to Dart sass (martin@piware.de)
+- Cloud-what: Make saving token file more robust (jhnidek@redhat.com)
+- Fix redundant API calls to Candlepin (hyu@redhat.com)
+- Remove i-notify watchers on the end of the loop (jhnidek@redhat.com)
+- build: pin flake8 to < 4 (ptoscano@redhat.com)
+- Only rpmlint our specfiles (csnyder@redhat.com)
+- Version our obsoletes of syspurpose and the container plugin
+  (csnyder@redhat.com)
+- Remove unnecessary comment and sles/suse tests (csnyder@redhat.com)
+- ENT-4273: Drop usage of six.moves (mhorky@redhat.com)
+- ENT-4379: Remove function make_utf8 (mhorky@redhat.com)
+- ENT-4087: Fix flake8 error E722 (mhorky@redhat.com)
+- make spec file SUSE / Open Build Service compliant (p.seiler@linuxmail.org)
+- 2003777: Only hint organizations if it's needed (mhorky@redhat.com)
+- Drop old GUI docs leftovers (ptoscano@redhat.com)
+- tests: drop no more needed rhsm_display (ptoscano@redhat.com)
+- build: remove old specific check for GUI file (ptoscano@redhat.com)
+- Drop async_utils & its tests (ptoscano@redhat.com)
+- Remove rhsm-icon leftovers (ptoscano@redhat.com)
+- build: remove unused detect_overindent function (ptoscano@redhat.com)
+- build: drop lxml leftovers (ptoscano@redhat.com)
+- build: drop Glade leftovers (ptoscano@redhat.com)
+- Add rhsm proxy support to apt-transport-katello (suttner@atix.de)
+- ENT-4289: Drop Sphinx (mhorky@redhat.com)
+- ENT-4340: Resolve deprecation warnings (mhorky@redhat.com)
+- Fixed one unused import of six (jhnidek@redhat.com)
+- ENT-4272: Remove Python 2 conditionals (mhorky@redhat.com)
+- ENT-4274: Remove six.assert* methods (mhorky@redhat.com)
+- ENT-4275: Switch away from six.BytesIO and six.StringIO (mhorky@redhat.com)
+- ENT-4082: Fix flake8 error E265 (mhorky@redhat.com)
+
 * Thu Sep 23 2021 Christopher Snyder <csnyder@redhat.com> 1.29.19-1
 - ENT-4083: Fix flake8 error E402 (mhorky@redhat.com)
 - ENT-4085: Fix flake8 error E713 (mhorky@redhat.com)
