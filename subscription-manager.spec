@@ -32,7 +32,11 @@
 %global python_sitearch %python3_sitearch
 %global python_sitelib %python3_sitelib
 %global __python %__python3
+%if 0%{?suse_version}
+%global py_package_prefix python3
+%else
 %global py_package_prefix python%{python3_pkgversion}
+%endif
 %global rhsm_package_name %{py_package_prefix}-subscription-manager-rhsm
 
 %global _hardened_build 1
@@ -131,6 +135,11 @@ Source0: %{name}-%{version}.tar.gz
 Source1: %{name}-cockpit-%{version}.tar.gz
 %endif
 
+# Especially for the OpenSuse Build Service we need to have another lint config
+%if 0%{?suse_version}
+Source2: subscription-manager-rpmlintrc
+%endif
+
 # The following macro examples are preceeded by '%' to stop macro expansion
 # in the comments. (See https://bugzilla.redhat.com/show_bug.cgi?id=1224660 for
 # why this is necessary)
@@ -147,18 +156,27 @@ Requires:  %{py_package_prefix}-ethtool
 Requires:  %{py_package_prefix}-iniparse
 Requires:  %{py_package_prefix}-decorator
 Requires:  virt-what
-%if 0%{?suse_version}
-Requires:  logrotate
-Requires:  cron
-%endif
 Requires:  %{rhsm_package_name} = %{version}
 Requires:  %{py_package_prefix}-six
+
 %if 0%{?suse_version}
-BuildRequires:  %{py_package_prefix}-python-dateutil
-Requires:  %{py_package_prefix}-python-dateutil
+Requires: %{py_package_prefix}-python-dateutil
+Requires: %{py_package_prefix}-dbus-python
+Requires: logrotate
+Requires: cron
+Requires: %{py_package_prefix}-gobject2
+Requires: libzypp
+Requires: %{py_package_prefix}-zypp-plugin
 %else
-BuildRequires: %{py_package_prefix}-dateutil
 Requires: %{py_package_prefix}-dateutil
+Requires: %{py_package_prefix}-dbus
+Requires: usermode
+Requires: python3-gobject-base
+# There's no dmi to read on these arches, so don't pull in this dep.
+# Additionally, dmidecode isn't packaged at all on SUSE
+%ifnarch aarch64 ppc ppc64 ppc64le s390 s390x
+Requires: %{py_package_prefix}-dmidecode %{?dmidecode_version}
+%endif
 %endif
 
 # rhel 8 has different naming for setuptools going forward
@@ -168,8 +186,6 @@ Requires:  platform-python-setuptools
 Requires:  %{py_package_prefix}-setuptools
 %endif
 
-Requires: python3-dbus
-
 %if %{use_dnf}
 %if %{create_libdnf_rpm}
 Requires: dnf >= 1.0.0
@@ -177,18 +193,6 @@ Requires: python3-dnf-plugins-core
 Requires: python3-librepo
 %else
 Requires: dnf-plugin-subscription-manager = %{version}
-%endif
-%endif
-
-%if 0%{?suse_version}
-Requires: python-gobject2, libzypp, zypp-plugin-python, python-zypp
-%else
-Requires:  usermode
-Requires: python3-gobject-base
-# There's no dmi to read on these arches, so don't pull in this dep.
-# Additionally, dmidecode isn't packaged at all on SUSE
-%ifnarch aarch64 ppc ppc64 ppc64le s390 s390x
-Requires:  %{py_package_prefix}-dmidecode %{?dmidecode_version}
 %endif
 %endif
 
@@ -202,7 +206,7 @@ Requires(postun): systemd
 
 Requires: python3-cloud-what = %{version}-%{release}
 
-BuildRequires: %{?suse_version:python-devel >= 2.6} %{!?suse_version:%{py_package_prefix}-devel}
+BuildRequires: %{py_package_prefix}-devel
 BuildRequires: openssl-devel
 BuildRequires: gcc
 BuildRequires: %{py_package_prefix}-setuptools
@@ -217,18 +221,15 @@ BuildRequires: desktop-file-utils
 
 %if 0%{?suse_version}
 BuildRequires: distribution-release
+BuildRequires: libzypp
+BuildRequires: systemd-rpm-macros
+BuildRequires: python3-rpm-macros
+BuildRequires: %{py_package_prefix}-python-dateutil
 %else
 BuildRequires: system-release
+BuildRequires: %{py_package_prefix}-dateutil
 %endif
 
-%if 0%{?suse_version}
-BuildRequires: libzypp
-%endif
-
-# We need the systemd RPM macros
-%if 0%{?suse_version}
-BuildRequires: systemd-rpm-macros
-%endif
 BuildRequires: systemd
 
 Obsoletes: subscription-manager-initial-setup-addon <= %{version}-%{release}
@@ -261,11 +262,7 @@ platform.
 %if %{use_container_plugin}
 %package -n subscription-manager-plugin-container
 Summary: A plugin for handling container content
-%if 0%{?suse_version}
-Group: Productivity/Networking/System
-%else
 Group: System Environment/Base
-%endif
 Requires: %{name} = %{version}-%{release}
 
 %description -n subscription-manager-plugin-container
@@ -279,12 +276,7 @@ from the server. Populates /etc/docker/certs.d appropriately.
 %if %{create_libdnf_rpm}
 %package -n libdnf-plugin-subscription-manager
 Summary: Subscription Manager plugin for libdnf
-%if 0%{?suse_version}
-Group: Productivity/Networking/System
-%else
 Group: System Environment/Base
-%endif
-
 BuildRequires: cmake
 BuildRequires: gcc
 BuildRequires: json-c-devel
@@ -305,11 +297,7 @@ e.g. microdnf.
 # RPM containing DNF plugin
 %package -n dnf-plugin-subscription-manager
 Summary: Subscription Manager plugins for DNF
-%if 0%{?suse_version}
-Group: Productivity/Networking/System
-%else
 Group: System Environment/Base
-%endif
 
 %if (0%{?fedora} || 0%{?rhel})
 BuildRequires: cmake
@@ -349,11 +337,7 @@ package or when debugging this package.
 %if %has_ostree
 %package -n subscription-manager-plugin-ostree
 Summary: A plugin for handling OSTree content.
-%if 0%{?suse_version}
-Group: Productivity/Networking/System
-%else
 Group: System Environment/Base
-%endif
 
 Requires: %{py_package_prefix}-gobject-base
 # plugin needs a slightly newer version of python-iniparse for 'tidy'
@@ -549,7 +533,9 @@ install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-uep.pem %{buildroot}/
 # fix timestamps on our byte compiled files so they match across arches
 find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
+%if !0%{?suse_version}
 %py_byte_compile %{__python3} %{buildroot}%{rhsm_plugins_dir}/
+%endif
 
 # symlink services to /usr/sbin/ when building for SUSE distributions
 %if 0%{?suse_version}
@@ -563,25 +549,30 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %files -f rhsm.lang
 %defattr(-,root,root,-)
 
-# Make some unusual directories for suse part of subscription-manager
+# Make some unusual directories and files for suse part of subscription-manager
 %if 0%{?suse_version}
+
 %dir %{_sysconfdir}/pki
 %dir %{_prefix}/share/polkit-1
 %dir %{_prefix}/share/polkit-1/actions
 %dir %{_sysconfdir}/dbus-1
 %dir %{_sysconfdir}/dbus-1/system.d
+%attr(755,root,root) %dir %{_sysconfdir}/rhsm/zypper.repos.d
+%attr(644,root,root) %config(noreplace) %{_sysconfdir}/rhsm/zypper.conf
+# zypper plugin
+%{_prefix}/lib/zypp/plugins/services/rhsm
+# links to /usr/sbin/service
+%{_sbindir}/rcrhsm
+%{_sbindir}/rcrhsm-facts
+%{_sbindir}/rcrhsmcertd
 
-# Suse specific
-%if %{use_dnf}
-    %dir %{_sysconfdir}/dnf
-    %dir %{_sysconfdir}/dnf/plugins
-    %dir %{_prefix}/lib/dnf-plugins/
-%endif
+%else
 
-# Suse specific
-%if %{use_dnf}
-    %dir %{_sysconfdir}/yum.repos.d
-%endif
+# symlink to console-helper
+%{_bindir}/subscription-manager
+# PAM config
+%{_sysconfdir}/pam.d/subscription-manager
+%{_sysconfdir}/security/console.apps/subscription-manager
 
 %endif
 
@@ -602,11 +593,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
 %attr(755,root,root) %{_sbindir}/subscription-manager
 
-# symlink to console-helper
-%if !0%{?suse_version}
-%{_bindir}/subscription-manager
-%endif
-
 %attr(755,root,root) %{_bindir}/rhsmcertd
 %attr(755,root,root) %{_libexecdir}/rhsmcertd-worker
 
@@ -620,21 +606,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm/syspurpose
 %attr(644,root,root) %{_sysconfdir}/rhsm/syspurpose/valid_fields.json
 
-%if 0%{?suse_version}
-%attr(755,root,root) %dir %{_sysconfdir}/rhsm/zypper.repos.d
-%endif
-
 %attr(644,root,root) %config(noreplace) %{_sysconfdir}/rhsm/rhsm.conf
-
-%if 0%{?suse_version}
-    %attr(644,root,root) %config(noreplace) %{_sysconfdir}/rhsm/zypper.conf
-%endif
-
-# PAM config
-%if !0%{?suse_version}
-%{_sysconfdir}/pam.d/subscription-manager
-%{_sysconfdir}/security/console.apps/subscription-manager
-%endif
 
 %if %{use_dnf}
     %ghost %{_sysconfdir}/yum.repos.d/redhat.repo
@@ -692,11 +664,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitelib}/dnf-plugins/*
 %endif
 
-# zypper plugins
-%if 0%{?suse_version}
-%{_prefix}/lib/zypp/plugins/services/rhsm
-%endif
-
 # rhsmlib
 %dir %{python_sitearch}/rhsmlib
 %{python_sitearch}/rhsmlib/*.py*
@@ -727,14 +694,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/com.redhat.*.conf
 %attr(644,root,root) %{_unitdir}/*.service
 %attr(644,root,root) %{_tmpfilesdir}/%{name}.conf
-%if 0%{?suse_version}
-    %{_sbindir}/rcrhsm
-    %{_sbindir}/rcrhsm-facts
-%endif
-
-%if 0%{?suse_version}
-    %{_sbindir}/rcrhsmcertd
-%endif
 
 # Incude rt CLI tool
 %dir %{python_sitearch}/rct
@@ -759,12 +718,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %if %{use_container_plugin}
 %files -n subscription-manager-plugin-container
 %defattr(-,root,root,-)
-%if 0%{?suse_version}
-%dir %{_sysconfdir}/docker
-%dir %{_sysconfdir}/docker/certs.d
-%dir %{_sysconfdir}/rhsm/ca
-%dir %{python_sitearch}/subscription_manager/plugin
-%endif
 %{_sysconfdir}/rhsm/pluginconf.d/container_content.ContainerContentPlugin.conf
 %{rhsm_plugins_dir}/container_content.py*
 %{rhsm_plugins_dir}/__pycache__/*container*
@@ -881,11 +834,9 @@ if [ -x /bin/dbus-send ] ; then
 fi
 
 
-%if !0%{?suse_version}
 %if %{use_container_plugin}
 %post -n subscription-manager-plugin-container
 %{__python} %{rhsm_plugins_dir}/container_content.py || :
-%endif
 %endif
 
 %preun
