@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-23 11:23+0200\n"
-"PO-Revision-Date: 2021-09-07 16:05+0000\n"
+"PO-Revision-Date: 2021-10-27 22:05+0000\n"
 "Last-Translator: Emilio Herrera <ehespinosa57@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/es/>\n"
@@ -20,24 +20,22 @@ msgstr ""
 "X-Generator: Weblate 4.8\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
-#, fuzzy
-#| msgid "Usage:  "
 msgid "usage: "
-msgstr "Uso:  "
+msgstr "uso: "
 
 #: /usr/lib64/python3.9/argparse.py:854
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() no definido"
 
 #: /usr/lib64/python3.9/argparse.py:1197
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr ""
+msgstr "analizador desconocido %(parser_name)r (opciones: %(choices)s)"
 
 #: /usr/lib64/python3.9/argparse.py:1257
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr ""
+msgstr "argumento \"-\" con modo %r"
 
 #: /usr/lib64/python3.9/argparse.py:1266
 #, python-format
@@ -47,11 +45,11 @@ msgstr ""
 #: /usr/lib64/python3.9/argparse.py:1475
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "no se pueden fusionar acciones - hay dos grupos llamados %r"
 
 #: /usr/lib64/python3.9/argparse.py:1513
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "'required' en un argumento no válido para posicionales"
 
 #: /usr/lib64/python3.9/argparse.py:1535
 #, python-format
@@ -59,41 +57,39 @@ msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
 msgstr ""
+"opción de cadena no válida %(option)r: debe empezar con un carácter "
+"%(prefix_chars)r"
 
 #: /usr/lib64/python3.9/argparse.py:1553
 #, python-format
 msgid "dest= is required for options like %r"
-msgstr ""
+msgstr "dest= se requiere para opciones como %r"
 
 #: /usr/lib64/python3.9/argparse.py:1570
 #, python-format
 msgid "invalid conflict_resolution value: %r"
-msgstr ""
+msgstr "valor no válido de conflict_resolution: %r"
 
 #: /usr/lib64/python3.9/argparse.py:1588
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "cadena de opciones en conflicto: %s"
+msgstr[1] "cadenas de opciones en conflicto: %s"
 
 #: /usr/lib64/python3.9/argparse.py:1654
 msgid "mutually exclusive arguments must be optional"
-msgstr ""
+msgstr "los argumentos mutuamente excluyentes deben ser opcionales"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:1721
-#, fuzzy
-#| msgid "%s option requires an argument"
 msgid "positional arguments"
-msgstr "opción %s requiere un argumento"
+msgstr "Argumentos posicionales"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:1722
-#, fuzzy
-#| msgid "%s option requires an argument"
 msgid "optional arguments"
-msgstr "opción %s requiere un argumento"
+msgstr "Argumentos opcionales"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:1737
@@ -102,96 +98,87 @@ msgstr "mostrar este mensaje de ayuda y salir"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: /usr/lib64/python3.9/argparse.py:1768
-#, fuzzy
-#| msgid "cannot parse argument: %s"
 msgid "cannot have multiple subparser arguments"
-msgstr "No se puede leer argumento: %s"
+msgstr "no se pueden tener varios argumento de sub analizador"
 
 #: /usr/lib64/python3.9/argparse.py:1820 /usr/lib64/python3.9/argparse.py:2331
-#, fuzzy, python-format
-#| msgid "Unknown arguments: %s"
+#, python-format
 msgid "unrecognized arguments: %s"
-msgstr "Argumentos desconocidos: %s"
+msgstr "Argumentos no reconocidos: %s"
 
 #: /usr/lib64/python3.9/argparse.py:1921
-#, fuzzy, python-format
-#| msgid "Unknown arguments: %s"
+#, python-format
 msgid "not allowed with argument %s"
-msgstr "Argumentos desconocidos: %s"
+msgstr "no permitido con argumento: %s"
 
 #: /usr/lib64/python3.9/argparse.py:1967 /usr/lib64/python3.9/argparse.py:1981
 #, python-format
 msgid "ignored explicit argument %r"
-msgstr ""
+msgstr "argumento explícito ignorado %r"
 
 #: /usr/lib64/python3.9/argparse.py:2088
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "se requieren los siguientes argumentos: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2103
-#, fuzzy, python-format
-#| msgid "Wrong number of arguments specified.\n"
+#, python-format
 msgid "one of the arguments %s is required"
-msgstr "Número de argumentos especificados incorrectos.\n"
+msgstr "se requiere uno de los argumentos %s"
 
 #: /usr/lib64/python3.9/argparse.py:2146
 msgid "expected one argument"
-msgstr ""
+msgstr "se espera un argumento"
 
 #: /usr/lib64/python3.9/argparse.py:2147
 msgid "expected at most one argument"
-msgstr ""
+msgstr "se espera como máximo un argumento"
 
 #: /usr/lib64/python3.9/argparse.py:2148
 msgid "expected at least one argument"
-msgstr ""
+msgstr "se espera al menos un argumento"
 
 #: /usr/lib64/python3.9/argparse.py:2152
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "argumento esperado %s"
+msgstr[1] "argumentos esperados %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2210
-#, fuzzy, python-format
-#| msgid "ambiguous option: %s (%s?)"
+#, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr "opción ambigua: %s (%s?)"
+msgstr "opción ambigua: %(option)s podría coincidir %(matches)s"
 
 #: /usr/lib64/python3.9/argparse.py:2274
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "cadena de opción inesperada: %s"
 
 #: /usr/lib64/python3.9/argparse.py:2471
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%r no es invocable"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2488
-#, fuzzy, python-format
-#| msgid "option %s: invalid %s value: %r"
+#, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr "opción %s: valor de %s inválido: %r"
+msgstr "no válido %(type)s de valor: %(value)r"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2499
-#, fuzzy, python-format
-#| msgid "option %s: invalid choice: %r (choose from %s)"
+#, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
-msgstr "opción %s: elección inválida: %r (elija de %s)"
+msgstr "opción no válida: %(value)r (escoja de %(choices)s)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2575
-#, fuzzy, python-format
-#| msgid "%s: error: %s"
+#, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr "%s: error: %s"
+msgstr "%(prog)s: error: %(message)s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/index.js:64 cockpit/src/subscriptions-view.jsx:266
@@ -243,8 +230,8 @@ msgstr[1] "El paquetes $0 y $1 otros paquetes serán instalados."
 #: cockpit/src/insights.jsx:139
 msgid "$0 package needs to be removed."
 msgid_plural "$0 packages need to be removed."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "es necesario quitar paquete $0."
+msgstr[1] "es necesario quitar paquetes $0."
 
 #: cockpit/src/insights.jsx:153
 msgid "Additional packages:"
@@ -267,51 +254,51 @@ msgstr ""
 
 #: cockpit/src/insights.jsx:180 cockpit/src/insights.jsx:259
 msgid "Checking installed software"
-msgstr ""
+msgstr "Comprobando el software instalado"
 
 #: cockpit/src/insights.jsx:193
 msgid "Downloading $0"
-msgstr ""
+msgstr "Descargando $0"
 
 #: cockpit/src/insights.jsx:195
 msgid "Removing $0"
-msgstr ""
+msgstr "Quitando $0"
 
 #: cockpit/src/insights.jsx:197
 msgid "Installing $0"
-msgstr ""
+msgstr "Instalando $0"
 
 #: cockpit/src/insights.jsx:214
 msgid "Connect to Red Hat Insights"
-msgstr ""
+msgstr "Conectar a Red Hat Insights"
 
 #: cockpit/src/insights.jsx:217
 msgid "This system is not connected to $0."
-msgstr ""
+msgstr "El sistema no puede conectarse a $0."
 
 #: cockpit/src/insights.jsx:227
 msgid "Connect"
-msgstr ""
+msgstr "Conectar"
 
 #: cockpit/src/insights.jsx:320
 msgid "unknown"
-msgstr ""
+msgstr "desconocido"
 
 #: cockpit/src/insights.jsx:373
 msgid "The last Insights data upload has failed."
-msgstr ""
+msgstr "Ha fallado la última subida de datos a Insights ."
 
 #: cockpit/src/insights.jsx:378
 msgid "Connected to Red Hat Insights"
-msgstr ""
+msgstr "Conectado a Red Hat Insights"
 
 #: cockpit/src/insights.jsx:384
 msgid "Next Insights data upload"
-msgstr ""
+msgstr "Siguiente subida de datos a Insights"
 
 #: cockpit/src/insights.jsx:389
 msgid "Last Insights data upload"
-msgstr ""
+msgstr "Últimos datos subidos a Insights"
 
 #: cockpit/src/insights.jsx:399
 msgid "Next Insights data upload could not be scheduled."
@@ -319,13 +306,15 @@ msgstr ""
 
 #: cockpit/src/insights.jsx:410 cockpit/src/insights.jsx:416
 msgid "Disconnect from Insights"
-msgstr ""
+msgstr "Desconectar desde Insights"
 
 #: cockpit/src/insights.jsx:413
 msgid ""
 "If you disconnect this system from Insights, it will no longer report it's "
 "Insights status in Red Hat Cloud or Satellite."
 msgstr ""
+"Si desconecta este sistema de Insights, ya no informará su estado de "
+"Insights en Red Hat Cloud o Satellite."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/insights.jsx:424 cockpit/src/insights.jsx:443
@@ -339,53 +328,53 @@ msgstr "Cancelar"
 
 #: cockpit/src/insights.jsx:500
 msgid "No rule hits"
-msgstr ""
+msgstr "No hay reglas de golpeo"
 
 #: cockpit/src/insights.jsx:508
 msgid "$0 critical hit"
 msgid_plural "$0 hits, including critical"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "$0 golpe crítico"
+msgstr[1] "$0 golpes, incluyendo crítico"
 
 #: cockpit/src/insights.jsx:513
 msgid "$0 important hit"
 msgid_plural "$0 hits, including important"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "$0 golpe importante"
+msgstr[1] "$0 golpes, incluyendo importante"
 
 #: cockpit/src/insights.jsx:518
 msgid "$0 moderate hit"
 msgid_plural "$0 hits, including moderate"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "$0 golpe moderado"
+msgstr[1] "$0 golpes, incluyendo moderado"
 
 #: cockpit/src/insights.jsx:523
 msgid "$0 low severity hit"
 msgid_plural "$0 low severity hits"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "$0 golpe de baja gravedad"
+msgstr[1] "$0 golpes de baja gravedad"
 
 #: cockpit/src/insights.jsx:529
 msgid "$0 hit"
 msgid_plural "$0 hits"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "$0 golpe"
+msgstr[1] "$0 golpes"
 
 #: cockpit/src/insights.jsx:536
 msgid "View your Insights results"
-msgstr ""
+msgstr "Visualizar sus resultados Insights"
 
 #: cockpit/src/insights.jsx:542
 msgid "Connected to Insights"
-msgstr ""
+msgstr "Conectando a Insights"
 
 #: cockpit/src/insights.jsx:554
 msgid "Not connected"
-msgstr ""
+msgstr "No conectado"
 
 #: cockpit/src/insights.jsx:559 cockpit/src/subscriptions-register.jsx:84
 msgid "Insights"
-msgstr ""
+msgstr "Insights"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: cockpit/src/subscriptions-client.js:48
@@ -410,31 +399,31 @@ msgstr "Desconocido"
 
 #: cockpit/src/subscriptions-client.js:307
 msgid "Starting registration service ..."
-msgstr ""
+msgstr "Iniciando el servicio de registro ..."
 
 #: cockpit/src/subscriptions-client.js:326
 msgid "Registering using activation key ..."
-msgstr ""
+msgstr "Registrar utilizando clave de activación ..."
 
 #: cockpit/src/subscriptions-client.js:344
 msgid "Registering using username and password ..."
-msgstr ""
+msgstr "Registrar usando nombre de usuario y contraseña ..."
 
 #: cockpit/src/subscriptions-client.js:368
 msgid "Stopping registration service ..."
-msgstr ""
+msgstr "Parando el servicio de registro ..."
 
 #: cockpit/src/subscriptions-client.js:392
 msgid "Saving configuration ..."
-msgstr ""
+msgstr "Guardando configuración ..."
 
 #: cockpit/src/subscriptions-client.js:408
 msgid "Attaching subscriptions ..."
-msgstr ""
+msgstr "Vincular suscripciones ..."
 
 #: cockpit/src/subscriptions-client.js:456
 msgid "Updating status ..."
-msgstr ""
+msgstr "Actualizando el estado ..."
 
 #: cockpit/src/subscriptions-client.js:474
 #: cockpit/src/subscriptions-view.jsx:273
@@ -443,11 +432,11 @@ msgstr "Cancelando el registro"
 
 #: cockpit/src/subscriptions-client.js:513
 msgid "not-found"
-msgstr ""
+msgstr "no encontrado"
 
 #: cockpit/src/subscriptions-client.js:545
 msgid "Corrupted JSON with status"
-msgstr ""
+msgstr "JSON corrompido con estado"
 
 #: cockpit/src/subscriptions-register.jsx:50
 msgid "Proxy Location"
@@ -463,11 +452,11 @@ msgstr "Contraseña de Proxy"
 
 #: cockpit/src/subscriptions-register.jsx:90
 msgid "Connect this system to $0."
-msgstr ""
+msgstr "Conectar este sistema a $0."
 
 #: cockpit/src/subscriptions-register.jsx:102
 msgid "Username"
-msgstr ""
+msgstr "Nombre de usuario"
 
 #: cockpit/src/subscriptions-register.jsx:108
 msgid "Password"
@@ -498,11 +487,11 @@ msgstr "URL"
 
 #: cockpit/src/subscriptions-register.jsx:159
 msgid "Use proxy server"
-msgstr ""
+msgstr "Usar servidor proxy"
 
 #: cockpit/src/subscriptions-register.jsx:163
 msgid "Method"
-msgstr ""
+msgstr "Método"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: cockpit/src/subscriptions-register.jsx:174 src/rct/manifest_commands.py:250
@@ -512,7 +501,7 @@ msgstr "Cuenta"
 
 #: cockpit/src/subscriptions-register.jsx:183
 msgid "Activation key"
-msgstr ""
+msgstr "Clave de activación"
 
 #: cockpit/src/subscriptions-register.jsx:189
 msgid "Subscriptions"
@@ -520,7 +509,7 @@ msgstr "Suscripciones"
 
 #: cockpit/src/subscriptions-register.jsx:195
 msgid "Attach automatically"
-msgstr ""
+msgstr "Vincular automáticamente"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: cockpit/src/subscriptions-view.jsx:41 cockpit/src/subscriptions-view.jsx:60
@@ -530,7 +519,7 @@ msgstr "Autovincular"
 
 #: cockpit/src/subscriptions-view.jsx:54
 msgid "Auto-attaching ..."
-msgstr ""
+msgstr "Auto vinculando ..."
 
 #: cockpit/src/subscriptions-view.jsx:73 cockpit/src/subscriptions-view.jsx:117
 #, fuzzy
@@ -709,7 +698,7 @@ msgstr "intervalo (en minutos) para ejecutar auto-attach"
 
 #: src/daemons/rhsmcertd.c:108
 msgid "interval to run auto-registration (in minutes)"
-msgstr ""
+msgstr "intérvalo para autoregistro (en minutos)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/daemons/rhsmcertd.c:111
@@ -727,7 +716,7 @@ msgstr "no añadir un offset a los controles iniciales."
 
 #: src/daemons/rhsmcertd.c:119
 msgid "try to perform auto-registration."
-msgstr ""
+msgstr "intentar llevar a cabo autoregistro."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/daemons/rhsmcertd.c:454
@@ -790,32 +779,25 @@ msgstr ""
 "ha expirado.  "
 
 #: src/plugins/dnf/subscription-manager.py:50
-#, fuzzy
-#| msgid ""
-#| "This system is not registered to Red Hat Subscription Management. You can "
-#| "use subscription-manager to register."
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "subscription-manager to register.\n"
 msgstr ""
-"Este sistema no está registrado a Red Hat Subscription Management. Utilice "
-"subscription-manager para registrarse."
+"\n"
+"Este sistema no está registrado con un servidor de derechos. Puede usar el "
+"administrador de registro para registrar.\n"
 
 #: src/plugins/dnf/subscription-manager.py:54
-#, fuzzy
-#| msgid ""
-#| "This system is registered to Red Hat Subscription Management, but is not "
-#| "receiving updates. You can use subscription-manager to assign "
-#| "subscriptions."
 msgid ""
 "\n"
 "This system is registered with an entitlement server, but is not receiving "
 "updates. You can use subscription-manager to assign subscriptions.\n"
 msgstr ""
-"Este sistema está registrado a Red Hat Subscription Management, pero no está "
-"recibiendo actualizaciones. Utilice subscription-manager para asignar "
-"suscripciones."
+"\n"
+"Este sistema está registrado con un servidor de derechos, pero no está "
+"recibiendo actualizaciones. Puede usar el administrador de suscripción para "
+"asignar suscripciones.\n"
 
 #: src/plugins/dnf/subscription-manager.py:87
 msgid "Not root, Subscription Management repositories not updated"
@@ -828,6 +810,8 @@ msgid ""
 "subscription-manager plugin disabled %d system repositories with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
 msgstr ""
+"plugin subscription-manager deshabilita %d repositorios de sistema con "
+"respecto de la configuración en /etc/dnf/plugins/subscription-manager.conf"
 
 #: src/plugins/dnf/subscription-manager.py:128
 msgid "Updating Subscription Management repositories."
