@@ -87,22 +87,20 @@ class EntitlementDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.ENTITLEMENT_INTERFACE,
-        in_signature='a{sv}a{sv}s',
+        in_signature='a{sv}s',
         out_signature='s'
     )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
-    def GetPools(self, options, proxy_options, locale, sender=None):
+    def GetPools(self, options, locale, sender=None):
         """
         Try to get pools installed/available/consumed at this system
         :param options: D-Bus object storing options of query
-        :param proxy_options: D-Bus object with proxy configuration
         :param locale: String with locale (e.g. de_DE.UTF-8)
         :param sender: Not used argument
         :return: String with JSON dump
         """
         options = dbus_utils.dbus_to_python(options, expected_type=dict)
-        proxy_options = dbus_utils.dbus_to_python(proxy_options, expected_type=dict)
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
 
         Locale.set(locale)
@@ -119,7 +117,7 @@ class EntitlementDBusObject(base_object.BaseObject):
         if future != "":
             options["future"] = future
 
-        cp = self.build_uep(proxy_options, proxy_only=True)
+        cp = self.build_uep()
         entitlement_service = EntitlementService(cp)
         pools = entitlement_service.get_pools(**options)
         return json.dumps(pools)
@@ -139,21 +137,19 @@ class EntitlementDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.ENTITLEMENT_INTERFACE,
-        in_signature='a{sv}s',
+        in_signature='s',
         out_signature='s'
     )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
-    def RemoveAllEntitlements(self, proxy_options, locale, sender=None):
+    def RemoveAllEntitlements(self, locale, sender=None):
         """
         Try to remove all entitlements (subscriptions) from the system
-        :param proxy_options: Settings of proxy
         :param locale: String with locale (e.g. de_DE.UTF-8)
         :param sender: Not used argument
         :return: Json string containing response
         """
-        proxy_options = dbus_utils.dbus_to_python(proxy_options, expected_type=dict)
-        cp = self.build_uep(proxy_options, proxy_only=True)
+        cp = self.build_uep()
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
         Locale.set(locale)
 
@@ -163,27 +159,25 @@ class EntitlementDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.ENTITLEMENT_INTERFACE,
-        in_signature='asa{sv}s',
+        in_signature='ass',
         out_signature='s'
     )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
-    def RemoveEntitlementsByPoolIds(self, pool_ids, proxy_options, locale, sender=None):
+    def RemoveEntitlementsByPoolIds(self, pool_ids, locale, sender=None):
         """
         Try to remove entitlements (subscriptions) by pool_ids
         :param pool_ids: List of pool IDs
-        :param proxy_options: Settings of proxy
         :param locale: String with locale (e.g. de_DE.UTF-8)
         :param sender: Not used argument
         :return: Json string representing list of serial numbers
         """
         pool_ids = dbus_utils.dbus_to_python(pool_ids, expected_type=list)
-        proxy_options = dbus_utils.dbus_to_python(proxy_options, expected_type=dict)
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
 
         Locale.set(locale)
 
-        cp = self.build_uep(proxy_options, proxy_only=True)
+        cp = self.build_uep()
         entitlement_service = EntitlementService(cp)
         removed_pools, unremoved_pools, removed_serials = entitlement_service.remove_entilements_by_pool_ids(pool_ids)
 
@@ -191,27 +185,25 @@ class EntitlementDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.ENTITLEMENT_INTERFACE,
-        in_signature='asa{sv}s',
+        in_signature='ass',
         out_signature='s'
     )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
-    def RemoveEntitlementsBySerials(self, serials, proxy_options, locale, sender=None):
+    def RemoveEntitlementsBySerials(self, serials, locale, sender=None):
         """
         Try to remove entitlements (subscriptions) by serials
         :param serials: List of serial numbers of subscriptions
-        :param proxy_options: Settings of proxy
         :param locale: String with locale (e.g. de_DE.UTF-8)
         :param sender: Not used argument
         :return: Json string representing list of serial numbers
         """
         serials = dbus_utils.dbus_to_python(serials, expected_type=list)
-        proxy_options = dbus_utils.dbus_to_python(proxy_options, expected_type=dict)
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
 
         Locale.set(locale)
 
-        cp = self.build_uep(proxy_options, proxy_only=True)
+        cp = self.build_uep()
         entitlement_service = EntitlementService(cp)
         removed_serials, unremoved_serials = entitlement_service.remove_entitlements_by_serials(serials)
 
