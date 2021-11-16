@@ -727,34 +727,48 @@ class TestReleaseStatusCache(SubManFixture):
         self.release_cache._cache_exists = Mock(return_value=True)
         self.assertEqual(dummy_release, self.release_cache.read_status(uep, "SOMEUUID"))
 
-    def test_server_network_works_with_cache(self):
+    def test_server_not_needed_with_cache(self):
         uep = Mock()
         dummy_release = {'releaseVer': 'MockServer'}
         uep.getRelease = Mock(return_value=dummy_release)
 
         self.release_cache._cache_exists = Mock(return_value=True)
         self.release_cache._read_cache = Mock(return_value=dummy_release)
-        self.assertEqual(dummy_release, self.release_cache.read_status(uep, "SOMEUUID"))
-        self.assertEqual(1, self.release_cache.write_cache.call_count)
-        self.assertEqual(0, self.release_cache._read_cache.call_count)
-
-        self.assertEqual(dummy_release, self.release_cache.read_status(uep, "SOMEUUID"))
-        self.assertEqual(1, uep.getRelease.call_count)
+        release = self.release_cache.read_status(uep, "SOMEUUID")
+        self.assertEqual(dummy_release, release)
+        self.assertEqual(1, self.release_cache._read_cache.call_count)
+        self.assertEqual(0, uep.getRelease.call_count)
 
     def test_server_network_works_cache_caches(self):
         uep = Mock()
         dummy_release = {'releaseVer': 'MockServer'}
         uep.getRelease = Mock(return_value=dummy_release)
+        self.release_cache.write_cache = Mock()
 
+        # Mock that cache does not exist
         self.release_cache._cache_exists = Mock(return_value=False)
         self.release_cache.server_status = None
-        self.release_cache._read_cache = Mock(return_value=dummy_release)
-        self.assertEqual(dummy_release, self.release_cache.read_status(uep, "SOMEUUID"))
-        self.assertEqual(1, self.release_cache.write_cache.call_count)
-        self.assertEqual(0, self.release_cache._read_cache.call_count)
+        self.release_cache._read_cache = Mock(return_value=None)
 
+        # Try to read status
+        release = self.release_cache.read_status(uep, "SOMEUUID")
+
+        # Assert that status was read from server and result was written
+        # to cache file
+        self.assertEqual(dummy_release, release)
+        self.assertEqual(1, uep.getRelease.call_count)
+        self.assertEqual(1, self.release_cache.write_cache.call_count)
+        self.assertEqual(1, self.release_cache._read_cache.call_count)
+
+        # Mock that cache file exists now
         self.release_cache._cache_exists = Mock(return_value=True)
-        self.assertEqual(dummy_release, self.release_cache.read_status(uep, "SOMEUUID"))
+        self.release_cache._read_cache = Mock(return_value=dummy_release)
+
+        # Try to get release once again
+        release = self.release_cache.read_status(uep, "SOMEUUID")
+
+        # Assert that release was read from cache and not from server
+        self.assertEqual(dummy_release, release)
         self.assertEqual(1, self.release_cache.write_cache.call_count)
         self.assertEqual(1, uep.getRelease.call_count)
 
