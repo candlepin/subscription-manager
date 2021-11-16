@@ -146,7 +146,10 @@ class Server(object):
             PRODUCT_WATCHER: products_dir_watch,
             SYSPURPOSE_WATCHER: syspurpose_dir_watch,
         })
-        self._thread = threading.Thread(target=self.filesystem_watcher.loop)
+        self._thread = threading.Thread(
+            target=self.filesystem_watcher.loop,
+            name='Thread-FileSystemWatcher',
+        )
         self._thread.start()
 
     def run(self, started_event=None, stopped_event=None):

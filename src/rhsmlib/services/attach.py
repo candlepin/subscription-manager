@@ -23,8 +23,11 @@ class AttachService(object):
         self.identity = inj.require(inj.IDENTITY)
         self.cp = cp
 
-    def attach_auto(self, service_level):
+    def attach_auto(self, service_level=None):
 
+        # FIXME: First check if current service_level is the same as provided in
+        # argument and if not then try to set something new. Otherwise it is useless
+        # and it only cause unnecessary REST API call
         if service_level is not None:
             self.cp.updateConsumer(self.identity.uuid, service_level=service_level)
             log.debug("Service level set to: %s" % service_level)
