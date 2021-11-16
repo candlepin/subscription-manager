@@ -18,15 +18,55 @@ import logging
 import threading
 import dbus
 import dbus.service
+from typing import Union
 
 from rhsmlib.dbus import constants, exceptions, dbus_utils, base_object, server, util
 from rhsmlib.services.register import RegisterService
+from rhsmlib.services.attach import AttachService
+from rhsmlib.services.entitlement import EntitlementService
+from rhsmlib.client_info import DBusSender
 
 from subscription_manager.i18n import Locale
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.entcertlib import EntCertActionInvoker
 
 log = logging.getLogger(__name__)
+
+
+def temporary_disable_dir_watchers(watcher_set: set = None) -> None:
+    """
+    This function temporary disables file system directory watchers
+    :param watcher_set: Set of watchers. If the watcher is None, then all watchers are disabled
+    :return: None
+    """
+    server_instance = server.Server.INSTANCE
+    if server_instance is None:
+        return
+
+    # Temporary disable watchers
+    for dir_watcher_id, dir_watcher in server_instance.filesystem_watcher.dir_watches.items():
+        # When watcher_set is not empty, then check if watcher_id is
+        # included in the set
+        if watcher_set is not None and dir_watcher_id not in watcher_set:
+            continue
+        log.debug(f'Disabling directory watcher: {dir_watcher_id}')
+        dir_watcher.temporary_disable()
+
+
+def enable_dir_watchers(watcher_set: set = None) -> None:
+    """
+    This function enables file system directory watchers
+    :param watcher_set: Set of watcher. If the watcher is None, then all watchers are enabled
+    :return: None
+    """
+    server_instance = server.Server.INSTANCE
+    if server_instance is None:
+        return
+    for dir_watcher_id, dir_watcher in server_instance.filesystem_watcher.dir_watches.items():
+        if watcher_set is not None and dir_watcher_id not in watcher_set:
+            continue
+        log.debug(f'Enabling directory watcher: {dir_watcher_id}')
+        dir_watcher.enable()
 
 
 class RegisterDBusObject(base_object.BaseObject):
@@ -194,6 +234,31 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         # We return None here, because we cannot know what will be selected by user
         return None
 
+    def _enable_content(self, cp, consumer: dict) -> Union[dict, None]:
+        """
+        Try to enable content. Try to do auto-attach in non-SCA mode or try to do refresh SCA mode.
+        :param cp: Object representing connection to candlepin server
+        :param consumer: Dictionary representing consumer
+        :return: Dictionary with result of enablement of content or None
+        """
+        content_access_mode = consumer['owner']['contentAccessMode']
+
+        if content_access_mode == 'entitlement':
+            log.debug('Auto-attaching due to enable_content option')
+            attach_service = AttachService(cp)
+            return attach_service.attach_auto()
+        elif content_access_mode == 'org_environment':
+            log.debug('Refreshing due to enabled_content option and simple content access mode')
+            entitlement_service = EntitlementService(cp)
+            # TODO: try get anything useful from refresh result. It is not possible atm.
+            entitlement_service.refresh(remove_cache=False, force=False)
+            return None
+        else:
+            log.error(f"Unable to enable content due to unsupported content access mode: "
+                      f"{content_access_mode}")
+
+        return None
+
     @dbus.service.method(
         dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
         in_signature='sssa{sv}a{sv}s',
@@ -240,7 +305,36 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         if not org:
             raise OrgNotSpecifiedException(username=connection_options['username'])
 
-        consumer = register_service.register(org, **options)
+            # Remove 'enable_content' option, because it will not be processed in register service
+            if 'enable_content' in options:
+                log.debug(
+                    f"Value and type of enable_content: '{options['enable_content']}' "
+                    f"({type(options['enable_content'])})"
+                )
+                enable_content = bool(options.pop('enable_content'))
+                log.debug(f"Value of converted enable_content: {enable_content}")
+            else:
+                enable_content = False
+
+            # Temporary disable all watchers, because registering system will create some files
+            # and it would be useless to call related callbacks in this case
+            temporary_disable_dir_watchers()
+
+            consumer = register_service.register(org, **options)
+
+            # When consumer is created, then we can try to enabled content, when it was
+            # requested in options.
+            if enable_content is True:
+                enabled_content = self._enable_content(cp, consumer)
+                # When it was possible to enable content, then extend consumer
+                # with information about enabled content
+                if enabled_content is not None:
+                    consumer['enabledContent'] = enabled_content
+
+            # We can enable watchers again
+            enable_dir_watchers()
+
+            dbus_sender.reset_cmd_line()
 
         return json.dumps(consumer)
 
