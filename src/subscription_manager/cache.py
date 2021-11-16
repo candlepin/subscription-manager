@@ -267,8 +267,9 @@ class StatusCache(CacheManager):
         the disk cache to the in-memory cache to avoid reading again.
         """
         if self.server_status is None:
-            log.debug('Trying to read status from %s file' % self.CACHE_FILE)
-            self.server_status = super(StatusCache, self)._read_cache()
+            if self._cache_exists():
+                log.debug('Trying to read status from %s file' % self.CACHE_FILE)
+                self.server_status = super(StatusCache, self)._read_cache()
         else:
             log.debug('Reading status from in-memory cache of %s file' % self.CACHE_FILE)
         return self.server_status
@@ -297,7 +298,9 @@ class StatusCache(CacheManager):
         """
 
         if self.server_status is None:
-            self.server_status = self.load_status(uep, uuid, on_date)
+            self.server_status = self._read_cache()
+            if self.server_status is None:
+                self.server_status = self.load_status(uep, uuid, on_date)
         else:
             log.debug('Reading status from in-memory cache of %s file' % self.CACHE_FILE)
         return self.server_status
