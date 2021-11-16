@@ -554,3 +554,27 @@ class EntitlementService(object):
         log.debug('Clearing in-memory cache of file %s' % status_cache.CACHE_FILE)
         status_cache.server_status = None
         sorter.load()
+
+    def refresh(self, remove_cache=False, force=False):
+        """
+        Try to refresh entitlement certificate(s) from candlepin server
+        :return: Report of EntCertActionInvoker
+        """
+
+        if remove_cache is True:
+            # remove content_access cache, ensuring we get it fresh
+            content_access = inj.require(inj.CONTENT_ACCESS_CACHE)
+            if content_access.exists():
+                content_access.remove()
+            # Also remove the content access mode cache to be sure we display
+            # SCA or regular mode correctly
+            content_access_mode = inj.require(inj.CONTENT_ACCESS_MODE_CACHE)
+            if content_access_mode.exists():
+                content_access_mode.delete_cache()
+
+        if force is True:
+            # Force a regen of the entitlement certs for this consumer
+            if not self.cp.regenEntitlementCertificates(self.identity.uuid, True):
+                log.debug("Warning: Unable to refresh entitlement certificates; service likely unavailable")
+
+        return self.entcertlib.update()
