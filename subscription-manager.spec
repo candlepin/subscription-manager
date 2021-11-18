@@ -248,7 +248,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.23
+Version: 1.28.24
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1491,6 +1491,13 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Nov 18 2021 Christopher Snyder <csnyder@redhat.com> 1.28.24-1
+- 1995465: Do not use deprecated collections.MutableMapping
+  (jhnidek@redhat.com)
+- connection: recognize proxy errors (ptoscano@redhat.com)
+- 2020284: handle server-side consumer deletion in syspurpose commands
+  (ptoscano@redhat.com)
+
 * Thu Nov 11 2021 Christopher Snyder <csnyder@redhat.com> 1.28.23-1
 - 2021982: Fix syspurpose bash completion (mhorky@redhat.com)
 - New extraction for translatable strings (ptoscano@redhat.com)
