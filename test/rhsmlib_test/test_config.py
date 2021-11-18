@@ -35,7 +35,6 @@ hostname = server.example.com
 prefix = /candlepin
 port = 8443
 insecure = 1
-ssl_verify_depth = 3
 proxy_hostname =
 proxy_port =
 proxy_user =

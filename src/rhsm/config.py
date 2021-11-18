@@ -51,7 +51,6 @@ SERVER_DEFAULTS = {
     'port': DEFAULT_PORT,
     'server_timeout': DEFAULT_SERVER_TIMEOUT,
     'insecure': '0',
-    'ssl_verify_depth': '3',
     'proxy_hostname': '',
     'proxy_scheme': 'http',
     'proxy_user': '',
