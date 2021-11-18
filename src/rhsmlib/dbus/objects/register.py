@@ -241,30 +241,53 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         # We return None here, because we cannot know what will be selected by user
         return None
 
-    def _enable_content(self, cp, consumer: dict) -> Union[dict, None]:
+    @staticmethod
+    def _enable_content(cp, consumer: dict) -> None:
         """
         Try to enable content. Try to do auto-attach in non-SCA mode or try to do refresh SCA mode.
         :param cp: Object representing connection to candlepin server
         :param consumer: Dictionary representing consumer
-        :return: Dictionary with result of enablement of content or None
+        :return: None
         """
         content_access_mode = consumer['owner']['contentAccessMode']
+        enabled_content = None
 
         if content_access_mode == 'entitlement':
             log.debug('Auto-attaching due to enable_content option')
             attach_service = AttachService(cp)
-            return attach_service.attach_auto()
+            enabled_content = attach_service.attach_auto()
         elif content_access_mode == 'org_environment':
             log.debug('Refreshing due to enabled_content option and simple content access mode')
             entitlement_service = EntitlementService(cp)
             # TODO: try get anything useful from refresh result. It is not possible atm.
             entitlement_service.refresh(remove_cache=False, force=False)
-            return None
         else:
             log.error(f"Unable to enable content due to unsupported content access mode: "
                       f"{content_access_mode}")
 
-        return None
+        # When it was possible to enable content, then extend consumer
+        # with information about enabled content
+        if enabled_content is not None:
+            consumer['enabledContent'] = enabled_content
+
+    @staticmethod
+    def _remove_enable_content_option(options: dict) -> bool:
+        """
+        Try to remove enable_content option from options used in Register() and
+        RegisterWithActivationKeys() methods
+        :param options: dictionary with options
+        :return: Value of enable_options
+        """
+        if 'enable_content' in options:
+            log.debug(
+                f"Value and type of enable_content: '{options['enable_content']}' "
+                f"({type(options['enable_content'])})"
+            )
+            enable_content = bool(options.pop('enable_content'))
+            log.debug(f"Value of converted enable_content: {enable_content}")
+        else:
+            enable_content = False
+        return enable_content
 
     @dbus.service.method(
         dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
@@ -314,16 +337,8 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
             if not org:
                 raise OrgNotSpecifiedException(username=connection_options['username'])
 
-            # Remove 'enable_content' option, because it will not be processed in register service
-            if 'enable_content' in options:
-                log.debug(
-                    f"Value and type of enable_content: '{options['enable_content']}' "
-                    f"({type(options['enable_content'])})"
-                )
-                enable_content = bool(options.pop('enable_content'))
-                log.debug(f"Value of converted enable_content: {enable_content}")
-            else:
-                enable_content = False
+            # Remove 'enable_content' option, because it will not be proceed in register service
+            enable_content = self._remove_enable_content_option(options)
 
             # Temporary disable all watchers, because registering system will create some files
             # and it would be useless to call related callbacks in this case
@@ -334,11 +349,7 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
             # When consumer is created, then we can try to enabled content, when it was
             # requested in options.
             if enable_content is True:
-                enabled_content = self._enable_content(cp, consumer)
-                # When it was possible to enable content, then extend consumer
-                # with information about enabled content
-                if enabled_content is not None:
-                    consumer['enabledContent'] = enabled_content
+                self._enable_content(cp, consumer)
 
             # We can enable watchers again
             enable_dir_watchers()
@@ -371,8 +382,9 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
             consumer = register_service.register(org, **options)
 
             log.debug("System registered, updating entitlements if needed")
-            entcertlib = EntCertActionInvoker()
-            entcertlib.update()
+            ent_cert_lib = EntCertActionInvoker()
+            ent_cert_lib.update()
+
             dbus_sender.reset_cmd_line()
 
         return json.dumps(consumer)
