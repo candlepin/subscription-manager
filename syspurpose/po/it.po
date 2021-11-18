@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-13 14:02-0500\n"
+"POT-Creation-Date: 2021-11-09 12:25-0500\n"
 "PO-Revision-Date: 2021-09-17 12:04+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
@@ -16,6 +16,156 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.8\n"
+
+#: /usr/lib64/python3.6/argparse.py:295
+msgid "usage: "
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:830
+msgid ".__call__() not defined"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:1127
+#, python-format
+msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:1181
+#, python-format
+msgid "argument \"-\" with mode %r"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:1189
+#, python-format
+msgid "can't open '%s': %s"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:1393
+#, python-format
+msgid "cannot merge actions - two groups are named %r"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:1431
+msgid "'required' is an invalid argument for positionals"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:1453
+#, python-format
+msgid ""
+"invalid option string %(option)r: must start with a character "
+"%(prefix_chars)r"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:1473
+#, python-format
+msgid "dest= is required for options like %r"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:1490
+#, python-format
+msgid "invalid conflict_resolution value: %r"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:1508
+#, python-format
+msgid "conflicting option string: %s"
+msgid_plural "conflicting option strings: %s"
+msgstr[0] ""
+msgstr[1] ""
+
+#: /usr/lib64/python3.6/argparse.py:1574
+msgid "mutually exclusive arguments must be optional"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:1637
+msgid "positional arguments"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:1638
+msgid "optional arguments"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:1653
+msgid "show this help message and exit"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:1684
+msgid "cannot have multiple subparser arguments"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:1736
+#, python-format
+msgid "unrecognized arguments: %s"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:1833
+#, python-format
+msgid "not allowed with argument %s"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:1879 /usr/lib64/python3.6/argparse.py:1893
+#, python-format
+msgid "ignored explicit argument %r"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:2000
+#, python-format
+msgid "the following arguments are required: %s"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:2015
+#, python-format
+msgid "one of the arguments %s is required"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:2058
+msgid "expected one argument"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:2059
+msgid "expected at most one argument"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:2060
+msgid "expected at least one argument"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:2062
+#, python-format
+msgid "expected %s argument"
+msgid_plural "expected %s arguments"
+msgstr[0] ""
+msgstr[1] ""
+
+#: /usr/lib64/python3.6/argparse.py:2122
+#, python-format
+msgid "ambiguous option: %(option)s could match %(matches)s"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:2185
+#, python-format
+msgid "unexpected option string: %s"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:2289
+#, python-format
+msgid "%r is not callable"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:2306
+#, python-format
+msgid "invalid %(type)s value: %(value)r"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:2317
+#, python-format
+msgid "invalid choice: %(value)r (choose from %(choices)s)"
+msgstr ""
+
+#: /usr/lib64/python3.6/argparse.py:2393
+#, python-format
+msgid "%(prog)s: error: %(message)s\n"
+msgstr ""
 
 #: src/syspurpose/cli.py:29
 #, python-brace-format
@@ -31,13 +181,15 @@ msgid "If you'd like to overwrite the server side change please run: {command}"
 msgstr "Se desideri sovrascrivere sul server esegui: {command}"
 
 #: src/syspurpose/cli.py:47
-#, python-brace-format
-msgid "Added {value} to {prop_name}."
+#, fuzzy, python-brace-format
+#| msgid "Added {value} to {prop_name}."
+msgid "Added \"{value}\" to {prop_name}."
 msgstr "Aggunto \"{value}\" a \"{prop_name}\"."
 
 #: src/syspurpose/cli.py:50
-#, python-brace-format
-msgid "Not adding value {value} to {prop_name}; it already exists."
+#, fuzzy, python-brace-format
+#| msgid "Not adding value {value} to {prop_name}; it already exists."
+msgid "Not adding value \"{value}\" to {prop_name}; it already exists."
 msgstr "Non viene aggiunto \"{value}\" a \"{prop_name}\": esiste già."
 
 #: src/syspurpose/cli.py:56 src/syspurpose/cli.py:85
@@ -65,91 +217,106 @@ msgstr "\"{attr}\" impostato a \"{val}\"."
 msgid "{attr} unset."
 msgstr "{attr} disinserito."
 
-#: src/syspurpose/cli.py:181
-msgid "Sets the value for the given property"
-msgstr "Imposta il valore per la proprietà data"
+#: src/syspurpose/cli.py:157
+msgid "System Syspurpose Management Tool"
+msgstr ""
 
-#: src/syspurpose/cli.py:187 src/syspurpose/cli.py:209
-msgid "The name of the property to set/update"
-msgstr "Il nome della proprietà da impostare/aggiornare"
+#: src/syspurpose/cli.py:158 src/syspurpose/cli.py:353
+msgid ""
+"The 'syspurpose' command is deprecated and will be removed in a future major "
+"release. Please use the 'subscription-manager syspurpose' command going "
+"forward."
+msgstr ""
 
-#: src/syspurpose/cli.py:193
-msgid "The value to set"
-msgstr "Il valore da impostare"
-
-#: src/syspurpose/cli.py:202
-msgid "Unsets (clears) the value for the given property"
-msgstr "Annulla (cancella) il valore per la proprietà data"
-
-#: src/syspurpose/cli.py:216
-msgid "Adds the value(s) to the given property"
-msgstr "Aggiunge valori alla proprietà data"
-
-#: src/syspurpose/cli.py:222 src/syspurpose/cli.py:244
-msgid "The name of the property to update"
-msgstr "Il nome della proprietà da aggiornare"
-
-#: src/syspurpose/cli.py:228
+#: src/syspurpose/cli.py:165 src/syspurpose/cli.py:230
 msgid "The value(s) to add"
 msgstr "Il valori da aggiungere"
 
-#: src/syspurpose/cli.py:238
-msgid "Removes the value(s) from the given property"
-msgstr "Rimuove i valori dalla proprietà data"
-
-#: src/syspurpose/cli.py:250
+#: src/syspurpose/cli.py:169 src/syspurpose/cli.py:252
 msgid "The value(s) to remove"
 msgstr "I valori da rimuovere"
 
-#: src/syspurpose/cli.py:260
+#: src/syspurpose/cli.py:173 src/syspurpose/cli.py:195
+msgid "The value to set"
+msgstr "Il valore da impostare"
+
+#: src/syspurpose/cli.py:183
+msgid "Sets the value for the given property"
+msgstr "Imposta il valore per la proprietà data"
+
+#: src/syspurpose/cli.py:189 src/syspurpose/cli.py:211
+msgid "The name of the property to set/update"
+msgstr "Il nome della proprietà da impostare/aggiornare"
+
+#: src/syspurpose/cli.py:204
+msgid "Unsets (clears) the value for the given property"
+msgstr "Annulla (cancella) il valore per la proprietà data"
+
+#: src/syspurpose/cli.py:218
+msgid "Adds the value(s) to the given property"
+msgstr "Aggiunge valori alla proprietà data"
+
+#: src/syspurpose/cli.py:224 src/syspurpose/cli.py:246
+msgid "The name of the property to update"
+msgstr "Il nome della proprietà da aggiornare"
+
+#: src/syspurpose/cli.py:240
+msgid "Removes the value(s) from the given property"
+msgstr "Rimuove i valori dalla proprietà data"
+
+#: src/syspurpose/cli.py:262
 msgid "Set the system role to the system syspurpose"
 msgstr ""
 
-#: src/syspurpose/cli.py:268
+#: src/syspurpose/cli.py:270
 msgid "Clear set role"
 msgstr ""
 
-#: src/syspurpose/cli.py:276
+#: src/syspurpose/cli.py:278
 msgid "Add addons to the system syspurpose"
 msgstr ""
 
-#: src/syspurpose/cli.py:284
+#: src/syspurpose/cli.py:286
 msgid "Remove addons from the system syspurpose"
 msgstr ""
 
-#: src/syspurpose/cli.py:291
+#: src/syspurpose/cli.py:293
 msgid "Clear set addons"
 msgstr ""
 
-#: src/syspurpose/cli.py:299
+#: src/syspurpose/cli.py:301
 msgid "Set the system sla"
 msgstr "Imposta SLA di sistema"
 
-#: src/syspurpose/cli.py:306
+#: src/syspurpose/cli.py:308
 msgid "Clear set sla"
 msgstr "Cancella SLA impostata"
 
-#: src/syspurpose/cli.py:314
+#: src/syspurpose/cli.py:316
 msgid "Set the system usage"
 msgstr "Imposta l'utilizzo del sistema"
 
-#: src/syspurpose/cli.py:322
+#: src/syspurpose/cli.py:324
 msgid "Clear set usage"
 msgstr ""
 
-#: src/syspurpose/cli.py:330
+#: src/syspurpose/cli.py:332
 msgid "Show the current system syspurpose"
 msgstr "Mostra il sistema attuale condiviso"
 
-#: src/syspurpose/cli.py:348
+#: src/syspurpose/cli.py:350
+#, fuzzy
+#| msgid ""
+#| "WARNING: Setting syspurpose in containers has no effect.Please run "
+#| "syspurpose on the host.\n"
 msgid ""
-"WARNING: Setting syspurpose in containers has no effect.Please run "
-"syspurpose on the host.\n"
+"WARNING: Setting syspurpose in containers has no effect.\n"
+"Please run syspurpose on the host.\n"
 msgstr ""
 "AVVISO: l'impostazione di syspurpose nei container non ha alcun effetto. "
 "Eseguire syspurpose sull'host.\n"
 
-#: src/syspurpose/cli.py:360
+#: src/syspurpose/cli.py:364
 msgid ""
 "Warning: Unable to sync system purpose with subscription management server: "
 "subscription_manager module is not available."
