@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-09 12:25-0500\n"
-"PO-Revision-Date: 2021-09-17 12:04+0000\n"
+"PO-Revision-Date: 2021-11-11 22:31+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/it/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.8.1\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -39,7 +39,7 @@ msgstr "argomento \"-\" con modo %r"
 #: /usr/lib64/python3.6/argparse.py:1189
 #, python-format
 msgid "can't open '%s': %s"
-msgstr ""
+msgstr "impossibile aprire \"%s\": %s"
 
 #: /usr/lib64/python3.6/argparse.py:1393
 #, python-format
@@ -533,8 +533,6 @@ msgid "Auto-attaching ..."
 msgstr ""
 
 #: cockpit/src/subscriptions-view.jsx:73 cockpit/src/subscriptions-view.jsx:159
-#, fuzzy
-#| msgid "Product Name"
 msgid "Product name"
 msgstr "Nome prodotto"
 
@@ -547,10 +545,8 @@ msgid "Subscribed"
 msgstr "Sottoscritte"
 
 #: cockpit/src/subscriptions-view.jsx:113
-#, fuzzy
-#| msgid "Not Subscribed (Not supported by a valid subscription.)"
 msgid "Not subscribed (Not supported by a valid subscription)"
-msgstr "Non sottoscritto (non supportato da una sottoscrizione valida)."
+msgstr "Non sottoscritto (non supportato da una sottoscrizione valida)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:148
@@ -583,10 +579,8 @@ msgstr "Prodotti installati"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:217
-#, fuzzy
-#| msgid "No installed products detected."
 msgid "No installed products detected"
-msgstr "Non è stato rilevato alcun prodotto installato."
+msgstr "Non è stato rilevato alcun prodotto installato"
 
 #: cockpit/src/subscriptions-view.jsx:291
 #, fuzzy
@@ -615,15 +609,11 @@ msgid "Subscriptions information"
 msgstr "Registrazione sottoscrizione"
 
 #: cockpit/src/subscriptions-view.jsx:321
-#, fuzzy
-#| msgid "System Purpose"
 msgid "System purpose"
 msgstr "Scopo del sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: cockpit/src/subscriptions-view.jsx:333
-#, fuzzy
-#| msgid "Service Level"
 msgid "Service level"
 msgstr "Livello del servizio"
 
@@ -633,10 +623,8 @@ msgid "Usage"
 msgstr "Utilizzo"
 
 #: cockpit/src/subscriptions-view.jsx:345
-#, fuzzy
-#| msgid "Roles"
 msgid "Role"
-msgstr "Ruoli"
+msgstr "Ruolo"
 
 #: cockpit/src/subscriptions-view.jsx:351 src/rct/printing.py:86
 msgid "Add-ons"
@@ -644,10 +632,8 @@ msgstr "Add-on"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: cockpit/src/subscriptions-view.jsx:366
-#, fuzzy
-#| msgid "System is not registered."
 msgid "Not registered"
-msgstr "Il sistema non è registrato."
+msgstr "Non è registrato"
 
 #: cockpit/src/subscriptions-view.jsx:375
 msgid "Unregister"
@@ -668,7 +654,7 @@ msgstr ""
 
 #: cockpit/src/subscriptions-view.jsx:409
 msgid "Overview"
-msgstr ""
+msgstr "Panoramica"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: cockpit/src/subscriptions-view.jsx:415
@@ -686,10 +672,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: cockpit/src/subscriptions-view.jsx:456
-#, fuzzy
-#| msgid "Unable to reach the server at %s:%s%s"
 msgid "Unable to the reach the rhsm service."
-msgstr "Impossibile raggiungere il server su %s:%s%s"
+msgstr "Impossibile contattare il servizio rhsm."
 
 #: cockpit/src/subscriptions-view.jsx:459
 msgid "Updating"
@@ -701,11 +685,13 @@ msgstr "Recupero dello stato della sottoscrizione ..."
 
 #: cockpit/src/subscriptions-view.jsx:462
 msgid "Access denied"
-msgstr ""
+msgstr "Accesso negato"
 
 #: cockpit/src/subscriptions-view.jsx:463
 msgid "The current user isn't allowed to access system subscription status."
 msgstr ""
+"L'utente corrente non è autorizzato ad accedere allo stato della "
+"sottoscrizione del sistema."
 
 #: cockpit/src/subscriptions-view.jsx:465
 msgid "Unable to connect"
@@ -4957,8 +4943,6 @@ msgstr "Password: "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:1067
-#, fuzzy
-#| msgid "specify organization"
 msgid "specify an organization"
 msgstr "specifica l'organizzazione"
 

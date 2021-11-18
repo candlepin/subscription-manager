@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-09 12:25-0500\n"
-"PO-Revision-Date: 2021-09-17 12:04+0000\n"
+"PO-Revision-Date: 2021-11-11 22:31+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/syspurpose-1-28/it/>\n"
@@ -15,39 +15,39 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.8.1\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
-msgstr ""
+msgstr "uso: "
 
 #: /usr/lib64/python3.6/argparse.py:830
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() non definito"
 
 #: /usr/lib64/python3.6/argparse.py:1127
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr ""
+msgstr "analizzatore %(parser_name)r sconosciuto (disponibili: %(choices)s)"
 
 #: /usr/lib64/python3.6/argparse.py:1181
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr ""
+msgstr "argomento \"-\" con modo %r"
 
 #: /usr/lib64/python3.6/argparse.py:1189
 #, python-format
 msgid "can't open '%s': %s"
-msgstr ""
+msgstr "impossibile aprire \"%s\": %s"
 
 #: /usr/lib64/python3.6/argparse.py:1393
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "impossibile unire le azioni - due gruppi sono chiamati %r"
 
 #: /usr/lib64/python3.6/argparse.py:1431
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "'required' è un argomento non valido per parametri posizionali"
 
 #: /usr/lib64/python3.6/argparse.py:1453
 #, python-format
@@ -55,39 +55,41 @@ msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
 msgstr ""
+"stringa di opzione %(option)r non valida: deve iniziare con un carattere "
+"%(prefix_chars)r"
 
 #: /usr/lib64/python3.6/argparse.py:1473
 #, python-format
 msgid "dest= is required for options like %r"
-msgstr ""
+msgstr "dest= è richiesto per opzioni come %r"
 
 #: /usr/lib64/python3.6/argparse.py:1490
 #, python-format
 msgid "invalid conflict_resolution value: %r"
-msgstr ""
+msgstr "valore non valido di conflict_resolution: %r"
 
 #: /usr/lib64/python3.6/argparse.py:1508
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "stringa di opzione in conflitto: %s"
+msgstr[1] "stringhe di opzioni in conflitto: %s"
 
 #: /usr/lib64/python3.6/argparse.py:1574
 msgid "mutually exclusive arguments must be optional"
-msgstr ""
+msgstr "argomenti mutualmente esclusivi devono essere opzionali"
 
 #: /usr/lib64/python3.6/argparse.py:1637
 msgid "positional arguments"
-msgstr ""
+msgstr "argomenti posizionali"
 
 #: /usr/lib64/python3.6/argparse.py:1638
 msgid "optional arguments"
-msgstr ""
+msgstr "argomenti opzionali"
 
 #: /usr/lib64/python3.6/argparse.py:1653
 msgid "show this help message and exit"
-msgstr ""
+msgstr "mostra questo messaggio d'aiuto ed esci"
 
 #: /usr/lib64/python3.6/argparse.py:1684
 msgid "cannot have multiple subparser arguments"
@@ -96,76 +98,76 @@ msgstr ""
 #: /usr/lib64/python3.6/argparse.py:1736
 #, python-format
 msgid "unrecognized arguments: %s"
-msgstr ""
+msgstr "argomenti non riconosciuti: %s"
 
 #: /usr/lib64/python3.6/argparse.py:1833
 #, python-format
 msgid "not allowed with argument %s"
-msgstr ""
+msgstr "non permesso con argomento %s"
 
 #: /usr/lib64/python3.6/argparse.py:1879 /usr/lib64/python3.6/argparse.py:1893
 #, python-format
 msgid "ignored explicit argument %r"
-msgstr ""
+msgstr "ignorato argomento esplicito %r"
 
 #: /usr/lib64/python3.6/argparse.py:2000
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "gli argomenti seguenti sono richiesti: %s"
 
 #: /usr/lib64/python3.6/argparse.py:2015
 #, python-format
 msgid "one of the arguments %s is required"
-msgstr ""
+msgstr "uno degli argomenti %s è richiesto"
 
 #: /usr/lib64/python3.6/argparse.py:2058
 msgid "expected one argument"
-msgstr ""
+msgstr "atteso un argomento"
 
 #: /usr/lib64/python3.6/argparse.py:2059
 msgid "expected at most one argument"
-msgstr ""
+msgstr "atteso al più un argomento"
 
 #: /usr/lib64/python3.6/argparse.py:2060
 msgid "expected at least one argument"
-msgstr ""
+msgstr "atteso almeno un argomento"
 
 #: /usr/lib64/python3.6/argparse.py:2062
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "atteso %s argomento"
+msgstr[1] "attesi %s argomenti"
 
 #: /usr/lib64/python3.6/argparse.py:2122
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr ""
+msgstr "opzione ambigua: %(option)s può corrispondere a %(matches)s"
 
 #: /usr/lib64/python3.6/argparse.py:2185
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "stringa di opzione non attesa: %s"
 
 #: /usr/lib64/python3.6/argparse.py:2289
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%r non è chiamabile"
 
 #: /usr/lib64/python3.6/argparse.py:2306
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr ""
+msgstr "valore %(type)s non valido: %(value)r"
 
 #: /usr/lib64/python3.6/argparse.py:2317
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
-msgstr ""
+msgstr "selezione non valida: %(value)r (scegliere da %(choices)s)"
 
 #: /usr/lib64/python3.6/argparse.py:2393
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr ""
+msgstr "%(prog)s: errore: %(message)s\n"
 
 #: src/syspurpose/cli.py:29
 #, python-brace-format
@@ -181,14 +183,12 @@ msgid "If you'd like to overwrite the server side change please run: {command}"
 msgstr "Se desideri sovrascrivere sul server esegui: {command}"
 
 #: src/syspurpose/cli.py:47
-#, fuzzy, python-brace-format
-#| msgid "Added {value} to {prop_name}."
+#, python-brace-format
 msgid "Added \"{value}\" to {prop_name}."
 msgstr "Aggunto \"{value}\" a \"{prop_name}\"."
 
 #: src/syspurpose/cli.py:50
-#, fuzzy, python-brace-format
-#| msgid "Not adding value {value} to {prop_name}; it already exists."
+#, python-brace-format
 msgid "Not adding value \"{value}\" to {prop_name}; it already exists."
 msgstr "Non viene aggiunto \"{value}\" a \"{prop_name}\": esiste già."
 
@@ -305,15 +305,11 @@ msgid "Show the current system syspurpose"
 msgstr "Mostra il sistema attuale condiviso"
 
 #: src/syspurpose/cli.py:350
-#, fuzzy
-#| msgid ""
-#| "WARNING: Setting syspurpose in containers has no effect.Please run "
-#| "syspurpose on the host.\n"
 msgid ""
 "WARNING: Setting syspurpose in containers has no effect.\n"
 "Please run syspurpose on the host.\n"
 msgstr ""
-"AVVISO: l'impostazione di syspurpose nei container non ha alcun effetto. "
+"AVVISO: l'impostazione di syspurpose nei container non ha alcun effetto.\n"
 "Eseguire syspurpose sull'host.\n"
 
 #: src/syspurpose/cli.py:364
