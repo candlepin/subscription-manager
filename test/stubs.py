@@ -49,7 +49,6 @@ hostname = server.example.conf
 prefix = /candlepin
 port = 8443
 insecure = 1
-ssl_verify_depth = 3
 ca_cert_dir = /etc/rhsm/ca/
 proxy_hostname = notaproxy.grimlock.usersys.redhat.com
 proxy_port = 4567

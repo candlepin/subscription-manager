@@ -34,11 +34,6 @@ insecure::
   This flag enables or disables certification verification using the
   certificate authorities which are installed in /etc/rhsm/ca.
 
-ssl_verify_depth::
-  Sets the number of certificates which should be used to verify the
-  servers identity. This is an advanced control which can be used to
-  secure on premise installations.
-
 proxy_hostname::
   Set this to a non-blank value if *subscription-manager* should use a
   reverse proxy to access the subscription service. This sets the host

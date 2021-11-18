@@ -202,7 +202,6 @@ class BaseConnection(object):
         self.token = token
 
         self.ca_dir = ca_dir or config.get('rhsm', 'ca_cert_dir')
-        self.ssl_verify_depth = safe_int(config.get('server', 'ssl_verify_depth'))
 
         self.insecure = insecure
         if insecure is None:
@@ -245,7 +244,7 @@ class BaseConnection(object):
                                   proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
                                   proxy_user=self.proxy_user, proxy_password=self.proxy_password,
                                   ca_dir=self.ca_dir, insecure=self.insecure, cert_dir=cert_dir,
-                                  ssl_verify_depth=self.ssl_verify_depth, timeout=self.timeout,
+                                  timeout=self.timeout,
                                   correlation_id=correlation_id, user_agent=user_agent)
 
         if using_keycloak_auth:
@@ -483,7 +482,7 @@ class BaseRestLib(object):
                  proxy_hostname=None, proxy_port=None,
                  proxy_user=None, proxy_password=None,
                  cert_file=None, key_file=None, cert_dir=None,
-                 ca_dir=None, insecure=False, ssl_verify_depth=1, timeout=None,
+                 ca_dir=None, insecure=False, timeout=None,
                  correlation_id=None, token=None, user_agent=None):
         self.host = host
         self.ssl_port = ssl_port
@@ -507,7 +506,6 @@ class BaseRestLib(object):
         self.username = username
         self.password = password
         self.timeout = timeout
-        self.ssl_verify_depth = ssl_verify_depth
         self.proxy_hostname = proxy_hostname
         self.proxy_port = proxy_port
         self.proxy_user = proxy_user
