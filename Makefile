@@ -134,13 +134,13 @@ build-subpackages:
 # Install doesn't perform a build if it doesn't have too.  Best to clean out
 # any cruft so developers don't end up install old builds.
 ifeq ($(WITH_SUBMAN_GUI),true)
-    build: rhsmcertd rhsm-icon build-subpackages
-        EXCLUDE_PACKAGES:="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py clean --all
-        EXCLUDE_PACKAGES:="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
+build: rhsmcertd rhsm-icon build-subpackages
+	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py clean --all
+	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
 else
-    build: rhsmcertd build-subpackages
-        EXCLUDE_PACKAGES:="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py clean --all
-        EXCLUDE_PACKAGES:="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
+build: rhsmcertd build-subpackages
+	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py clean --all
+	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
 endif
 
 # we never "remake" this makefile, so add a target so
