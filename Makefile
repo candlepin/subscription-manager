@@ -85,8 +85,8 @@ STYLEFILES=$(PYFILES) $(BIN_FILES)
 .DEFAULT_GOAL := build
 
 build: rhsmcertd
-    EXCLUDE_PACKAGES:="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py clean --all
-    EXCLUDE_PACKAGES:="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py build --quiet --rpm-version=$(VERSION)
+	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py clean --all
+	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py build --quiet --rpm-version=$(VERSION)
 
 # we never "remake" this makefile, so add a target so
 # we stop searching for implicit rules on how to remake it
