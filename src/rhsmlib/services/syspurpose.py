@@ -63,8 +63,8 @@ class Syspurpose(object):
         :param syspurpose_values: Dictionary with system purpose values
         :return: Dictionary with local result
         """
+        Server.temporary_disable_dir_watchers({SYSPURPOSE_WATCHER})
         if self.identity.is_valid() and self.cp.has_capability("syspurpose"):
-            temporary_disable_dir_watcher()
             local_result = merge_syspurpose_values(
                 local=syspurpose_values,
                 uep=self.cp,
@@ -78,6 +78,7 @@ class Syspurpose(object):
             local_result = merge_syspurpose_values(local=syspurpose_values, remote={}, base={})
             write_syspurpose(local_result)
             result = local_result
+        Server.enable_dir_watchers({SYSPURPOSE_WATCHER})
 
         return result
 
@@ -102,14 +103,3 @@ class Syspurpose(object):
             'unknown': _('Unknown')
         }
         return status_map.get(status, status_map['unknown'])
-
-
-def temporary_disable_dir_watcher():
-    """
-    This method temporary disables file system directory watcher for syspurpose.json
-    """
-
-    if Server.INSTANCE is not None:
-        server = Server.INSTANCE
-        dir_watcher = server.filesystem_watcher.dir_watches[SYSPURPOSE_WATCHER]
-        dir_watcher.temporary_disable()

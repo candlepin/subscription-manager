@@ -207,6 +207,42 @@ class Server(object):
         log.debug(f'Releasing Bus name: {self.bus_name}')
         self.bus.release_name(self.bus_name)
 
+    @classmethod
+    def temporary_disable_dir_watchers(cls, watcher_set: set = None) -> None:
+        """
+        This function temporary disables file system directory watchers
+        :param watcher_set: Set of watchers. If the watcher is None, then all watchers are disabled
+        :return: None
+        """
+        server_instance = cls.INSTANCE
+        if server_instance is None:
+            return
+
+        # Temporary disable watchers
+        for dir_watcher_id, dir_watcher in server_instance.filesystem_watcher.dir_watches.items():
+            # When watcher_set is not empty, then check if watcher_id is
+            # included in the set
+            if watcher_set is not None and dir_watcher_id not in watcher_set:
+                continue
+            log.debug(f'Disabling directory watcher: {dir_watcher_id}')
+            dir_watcher.temporary_disable()
+
+    @classmethod
+    def enable_dir_watchers(cls, watcher_set: set = None) -> None:
+        """
+        This function enables file system directory watchers
+        :param watcher_set: Set of watcher. If the watcher is None, then all watchers are enabled
+        :return: None
+        """
+        server_instance = cls.INSTANCE
+        if server_instance is None:
+            return
+        for dir_watcher_id, dir_watcher in server_instance.filesystem_watcher.dir_watches.items():
+            if watcher_set is not None and dir_watcher_id not in watcher_set:
+                continue
+            log.debug(f'Enabling directory watcher: {dir_watcher_id}')
+            dir_watcher.enable()
+
 
 class DomainSocketServer(object):
     """This class sets up a DBus server on a domain socket. That server can then be used to perform
