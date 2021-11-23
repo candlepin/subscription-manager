@@ -89,10 +89,12 @@ class ConfigDBusObject(base_object.BaseObject):
         # Try to temporary disable dir watcher, because 'self.config.persist()' writes configuration
         # file and it would trigger file system monitor callback function and saved values would be
         # read again. It can cause race conditions, when Set() is called multiple times
-        temporary_disable_dir_watcher()
+        Server.temporary_disable_dir_watchers({CONFIG_WATCHER})
 
         # Write new config value to configuration file
         self.config.persist()
+
+        Server.enable_dir_watchers({CONFIG_WATCHER})
 
         # When anything in logging section was just chnaged, then we have to re-initialize logger
         if logging_changed is True:
@@ -135,12 +137,14 @@ class ConfigDBusObject(base_object.BaseObject):
         # Try to temporary disable dir watcher, because 'self.config.persist()' writes configuration
         # file and it would trigger file system monitor callback function and saved values would be
         # read again. It can cause race conditions, when SetAll() is called multiple times
-        temporary_disable_dir_watcher()
+        Server.temporary_disable_dir_watchers({CONFIG_WATCHER})
 
         # Write new config value to configuration file
         self.config.persist()
 
-        # When anything in logging section was just chnaged, then we have to re-initialize logger
+        Server.enable_dir_watchers({CONFIG_WATCHER})
+
+        # When anything in logging section was just changed, then we have to re-initialize logger
         if logging_changed is True:
             parser = rhsm.config.get_config_parser()
             self.config = Config(parser)
@@ -213,14 +217,3 @@ class ConfigDBusObject(base_object.BaseObject):
             log.debug("Configuration file: %s reloaded: %s" % (parser.config_file, str(self.config)))
         else:
             log.warning("Unable to read configuration file: %s" % parser.config_file)
-
-
-def temporary_disable_dir_watcher():
-    """
-    This method temporary disables file system directory watcher for rhsm.conf
-    """
-
-    if Server.INSTANCE is not None:
-        server = Server.INSTANCE
-        dir_watcher = server.filesystem_watcher.dir_watches[CONFIG_WATCHER]
-        dir_watcher.temporary_disable()

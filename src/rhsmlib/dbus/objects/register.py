@@ -33,42 +33,6 @@ from subscription_manager.entcertlib import EntCertActionInvoker
 log = logging.getLogger(__name__)
 
 
-def temporary_disable_dir_watchers(watcher_set: set = None) -> None:
-    """
-    This function temporary disables file system directory watchers
-    :param watcher_set: Set of watchers. If the watcher is None, then all watchers are disabled
-    :return: None
-    """
-    server_instance = server.Server.INSTANCE
-    if server_instance is None:
-        return
-
-    # Temporary disable watchers
-    for dir_watcher_id, dir_watcher in server_instance.filesystem_watcher.dir_watches.items():
-        # When watcher_set is not empty, then check if watcher_id is
-        # included in the set
-        if watcher_set is not None and dir_watcher_id not in watcher_set:
-            continue
-        log.debug(f'Disabling directory watcher: {dir_watcher_id}')
-        dir_watcher.temporary_disable()
-
-
-def enable_dir_watchers(watcher_set: set = None) -> None:
-    """
-    This function enables file system directory watchers
-    :param watcher_set: Set of watcher. If the watcher is None, then all watchers are enabled
-    :return: None
-    """
-    server_instance = server.Server.INSTANCE
-    if server_instance is None:
-        return
-    for dir_watcher_id, dir_watcher in server_instance.filesystem_watcher.dir_watches.items():
-        if watcher_set is not None and dir_watcher_id not in watcher_set:
-            continue
-        log.debug(f'Enabling directory watcher: {dir_watcher_id}')
-        dir_watcher.enable()
-
-
 class RegisterDBusObject(base_object.BaseObject):
     default_dbus_path = constants.REGISTER_DBUS_PATH
     interface_name = constants.REGISTER_INTERFACE
@@ -331,19 +295,12 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
             # Remove 'enable_content' option, because it will not be proceed in register service
             enable_content = self._remove_enable_content_option(options)
 
-            # Temporary disable all watchers, because registering system will create some files
-            # and it would be useless to call related callbacks in this case
-            temporary_disable_dir_watchers()
-
             consumer = register_service.register(org, **options)
 
             # When consumer is created, then we can try to enabled content, when it was
             # requested in options.
             if enable_content is True:
                 self._enable_content(cp, consumer)
-
-            # We can enable watchers again
-            enable_dir_watchers()
 
             dbus_sender.reset_cmd_line()
 
