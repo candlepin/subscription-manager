@@ -7,7 +7,6 @@
 # systemctl stop vncserver@:3.service
 # needs python-rhsm
 # needs mock  (easy_install mock)
-# needs PyXML installed
 # needs pyflakes insalled
 # if we haven't installed/ran subsctiption-manager (or installed it)
 #   we need to make /etc/pki/product and /etc/pki/entitlement

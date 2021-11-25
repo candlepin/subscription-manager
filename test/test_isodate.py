@@ -25,8 +25,6 @@ from subscription_manager import isodate
 from dateutil.tz import tzlocal
 
 
-# two classes for this, one that sets up for dateutil, one for
-# for pyxml
 class TestParseDate(unittest.TestCase):
 
     def _test_local_tz(self):
@@ -98,25 +96,17 @@ class TestParseDate(unittest.TestCase):
         if isodate.parse_date_impl_name == 'dateutil':
             self._dateutil_overflow(parsed)
         else:
-            self._pyxml_overflow(parsed)
+            self.fail(f"unsupported parse_date_impl_name: {isodate.parse_date_impl_name}")
 
     def test_10000_bug(self):
         # dateutil is okay up to 9999, so we just return
         # 9999-9-6 after that since that's what datetime/dateutil do
-        # on RHEL5, y10k breaks pyxml with a value error
+        # on RHEL5
         parsed = isodate.parse_date("10000-09-06T00:00:00.000+0000")
         if isodate.parse_date_impl_name == 'dateutil':
             self._dateutil_overflow(parsed)
         else:
-            self._pyxml_overflow(parsed)
+            self.fail(f"unsupported parse_date_impl_name: {isodate.parse_date_impl_name}")
 
     def _dateutil_overflow(self, parsed):
         self.assertEqual(9999, parsed.year)
-
-    # Simulated a 32-bit date overflow, date should have been
-    # replaced by one that does not overflow:
-    def _pyxml_overflow(self, parsed):
-        # the expected result here is different for 32bit or 64 bit
-        # platforms, so except either
-        if (parsed.year != 2038) and (parsed.year != 9999):
-            self.fail("parsed year should be 2038 on 32bit, or 9999 on 64bit")
