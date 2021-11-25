@@ -15,6 +15,7 @@
 #
 
 
+import datetime
 import dateutil.parser
 import logging
 
@@ -25,6 +26,13 @@ def _parse_date_dateutil(date):
     # see comment for _parse_date_pyxml
     try:
         dt = dateutil.parser.parse(date)
+        # the datetime.datetime objects returned by dateutil use the own
+        # dateutil.tz.tzutc object for UTC, rather than the datetime own;
+        # switch the tzinfo object of UTC dates to datetime.timezone.utc:
+        # this is done because classes in the standard Python library
+        # explicitly check for that object for UTC checks
+        if dt.tzinfo.tzname(dt) == 'UTC':
+            dt = dt.replace(tzinfo=datetime.timezone.utc)
     except ValueError:
         log.warning("Date overflow: %s, using 9999-09-06 instead." % date)
         return dateutil.parser.parse("9999-09-06T00:00:00.000+0000")
