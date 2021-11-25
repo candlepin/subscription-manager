@@ -23,7 +23,6 @@ log = logging.getLogger(__name__)
 
 
 def _parse_date_dateutil(date):
-    # see comment for _parse_date_pyxml
     try:
         dt = dateutil.parser.parse(date)
         # the datetime.datetime objects returned by dateutil use the own
