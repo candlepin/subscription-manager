@@ -30,7 +30,7 @@ import time
 import traceback
 import tempfile
 
-from email.utils import formatdate
+from email.utils import format_datetime
 
 from rhsm.https import httplib, ssl
 
@@ -938,7 +938,7 @@ class BaseRestLib(object):
         """
         Format a datetime to HTTP-date as described by RFC 7231.
         """
-        return formatdate(time.mktime(dt.timetuple()), usegmt=True)
+        return format_datetime(dt, usegmt=True)
 
 
 # FIXME: it would be nice if the ssl server connection stuff
