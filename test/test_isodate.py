@@ -72,8 +72,8 @@ class TestParseDate(unittest.TestCase):
         # sample date from json response from server
         server_date = "2012-04-10T00:00:00.000+0000"
         dt = isodate.parse_date(server_date)
-        # no dst
-        self.assertEqual(datetime.timedelta(seconds=0), dt.tzinfo.dst(dt))
+        # it's a datetime.timezone.utc object, not a dateutil one
+        self.assertEqual(datetime.timezone.utc, dt.tzinfo)
         # it's a utc date, no offset
         self.assertEqual(datetime.timedelta(seconds=0), dt.tzinfo.utcoffset(dt))
 

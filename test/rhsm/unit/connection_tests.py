@@ -842,7 +842,7 @@ class DatetimeFormattingTests(unittest.TestCase):
         }
         timestamp = 1234567890
         self.cp.conn = Mock()
-        self.cp.getAccessibleContent(consumerId='bob', if_modified_since=datetime.datetime.fromtimestamp(timestamp))
+        self.cp.getAccessibleContent(consumerId='bob', if_modified_since=datetime.datetime.fromtimestamp(timestamp, datetime.timezone.utc))
         self.cp.conn.request_get.assert_called_with('/consumers/bob/accessible_content', headers=expected_headers)
 
 
