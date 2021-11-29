@@ -166,7 +166,16 @@ password=foobar
         m.spawn("/var/tmp/mock-insights", "mock-insights")
 
     def wait_subscription(self, product, is_subscribed):
-        self.browser.wait_text("tr[data-row-id='%s'] .pf-c-label" % product["name"], "Subscribed" if is_subscribed else "Not subscribed")
+        if is_subscribed is True:
+            self.browser.wait_text(
+                "tr[data-row-id='%s'] .pf-c-label" % product["name"],
+                "Subscribed"
+            )
+        elif is_subscribed is False:
+            self.browser.wait_text_not(
+                "tr[data-row-id='%s'] .pf-c-label" % product["name"],
+                "Subscribed"
+            )
 
 
 class TestSubscriptions(SubscriptionsCase):
