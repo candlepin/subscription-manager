@@ -96,6 +96,7 @@ function parseProducts(text) {
             'version': product[2],
             'arch': product[3],
             'status': product[4],
+            'status_details': product[5],
             'starts': product[6],
             'ends': product[7]
         };
