@@ -32,7 +32,7 @@ from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.packageprofilelib import PackageProfileActionInvoker
 from subscription_manager.syspurposelib import save_sla_to_syspurpose_metadata
-from subscription_manager.utils import is_simple_content_access
+from subscription_manager.utils import is_simple_content_access, get_current_owner
 
 log = logging.getLogger(__name__)
 
@@ -54,13 +54,16 @@ class AttachCommand(CliCommand):
                                  help=_("Number of subscriptions to attach. May not be used with an auto-attach."))
         self.parser.add_argument("--auto", action='store_true',
                                  help=_(
-                                     "Automatically attach the best-matched compatible subscriptions to this system. This is the default action."))
+                                     "Automatically attach the best-matched compatible subscriptions to this system. "
+                                     "This is the default action."))
         self.parser.add_argument("--servicelevel", dest="service_level",
                                  help=_(
-                                     "Automatically attach only subscriptions matching the specified service level; only used with --auto"))
+                                     "Automatically attach only subscriptions matching the specified service level; "
+                                     "only used with --auto"))
         self.parser.add_argument("--file", dest="file",
                                  help=_(
-                                     "A file from which to read pool IDs. If a hyphen is provided, pool IDs will be read from stdin."))
+                                     "A file from which to read pool IDs. If a hyphen is provided, pool IDs will be "
+                                     "read from stdin."))
 
         # re bz #864207
         _("All installed products are covered by valid entitlements.")
@@ -75,7 +78,10 @@ class AttachCommand(CliCommand):
                 self.options.pool.append(pool)
 
     def _short_description(self):
-        return _("Attach a specified subscription to the registered system")
+        return _(
+            "Attach a specified subscription to the registered system, when system does not use "
+            "Simple Content Access mode"
+        )
 
     def _command_name(self):
         return "attach"
@@ -113,6 +119,20 @@ class AttachCommand(CliCommand):
                 system_exit(os.EX_DATAERR,
                             _("Error: The file \"{file}\" does not exist or cannot be read.").format(file=self.options.file))
 
+    def _print_ignore_attach_message(self):
+        """
+        Print message about ignoring attach request
+        :return: None
+        """
+        owner = get_current_owner(self.cp, self.identity)
+        owner_id = owner['key']
+        print(
+            _(
+                'Ignoring request to attach. '
+                'It is disabled for org "{owner_id}" because of the content access mode setting.'
+            ).format(owner_id=owner_id)
+        )
+
     def _do_command(self):
         """
         Executes the command.
@@ -126,10 +146,13 @@ class AttachCommand(CliCommand):
 
         # Do not try to do auto-attach, when simple content access mode is used
         # BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1826300
-        if self.auto_attach is True:
-            if is_simple_content_access(uep=self.cp, identity=self.identity):
+        #
+        if is_simple_content_access(uep=self.cp, identity=self.identity):
+            if self.auto_attach is True:
                 self._print_ignore_auto_attach_mesage()
-                return 0
+            else:
+                self._print_ignore_attach_message()
+            return 0
 
         installed_products_num = 0
         return_code = 0
