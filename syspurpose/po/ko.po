@@ -24,7 +24,8 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
-"경고: 최근 자격 서버 관리자가 \"{download_value}\"의 {attr}를 이 시스템에 설정했습니다.\n"
+"경고: 최근 자격 서버 관리자가 \"{download_value}\"의 {attr}를 이 시스템에 설"
+"정했습니다.\n"
 "{advice}"
 
 #: src/syspurpose/cli.py:31
@@ -67,79 +68,84 @@ msgstr "{attr}이 \"{val}\"로 설정되었습니다."
 msgid "{attr} unset."
 msgstr "{attr} 해제되었습니다."
 
-#: src/syspurpose/cli.py:181
+#: src/syspurpose/cli.py:181 src/syspurpose/cli.py:183
 msgid "Sets the value for the given property"
 msgstr "주어진 속성에 대한 값 설정"
 
 #: src/syspurpose/cli.py:187 src/syspurpose/cli.py:209
+#: src/syspurpose/cli.py:189 src/syspurpose/cli.py:211
 msgid "The name of the property to set/update"
 msgstr "설정/업데이트할 속성 이름"
 
-#: src/syspurpose/cli.py:193
+#: src/syspurpose/cli.py:193 src/syspurpose/cli.py:195
+#: src/syspurpose/cli.py:173
 msgid "The value to set"
 msgstr "설정할 값"
 
-#: src/syspurpose/cli.py:202
+#: src/syspurpose/cli.py:202 src/syspurpose/cli.py:204
 msgid "Unsets (clears) the value for the given property"
 msgstr "주어진 속성에 대한 설정 취소 (설정 지우기)"
 
-#: src/syspurpose/cli.py:216
+#: src/syspurpose/cli.py:216 src/syspurpose/cli.py:218
 msgid "Adds the value(s) to the given property"
 msgstr "주어진 속성에 대한 값 추가"
 
 #: src/syspurpose/cli.py:222 src/syspurpose/cli.py:244
+#: src/syspurpose/cli.py:224 src/syspurpose/cli.py:246
 msgid "The name of the property to update"
 msgstr "업데이트할 속성 이름"
 
-#: src/syspurpose/cli.py:228
+#: src/syspurpose/cli.py:228 src/syspurpose/cli.py:230
+#: src/syspurpose/cli.py:165
 msgid "The value(s) to add"
 msgstr "추가할 값"
 
-#: src/syspurpose/cli.py:238
+#: src/syspurpose/cli.py:238 src/syspurpose/cli.py:240
 msgid "Removes the value(s) from the given property"
 msgstr "주어진 속성에서 값을 제거합니다"
 
-#: src/syspurpose/cli.py:250
+#: src/syspurpose/cli.py:250 src/syspurpose/cli.py:252
+#: src/syspurpose/cli.py:169
 msgid "The value(s) to remove"
 msgstr "삭제할 값"
 
-#: src/syspurpose/cli.py:260
+#: src/syspurpose/cli.py:260 src/syspurpose/cli.py:262
 msgid "Set the system role to the system syspurpose"
 msgstr "시스템 역할을 시스템 syspurpose로 설정"
 
-#: src/syspurpose/cli.py:268
+#: src/syspurpose/cli.py:268 src/syspurpose/cli.py:270
 msgid "Clear set role"
 msgstr "역할 설정 삭제"
 
-#: src/syspurpose/cli.py:276
+#: src/syspurpose/cli.py:276 src/syspurpose/cli.py:278
 msgid "Add addons to the system syspurpose"
 msgstr "시스템 syspurpose에 애드온 추가"
 
-#: src/syspurpose/cli.py:284
+#: src/syspurpose/cli.py:284 src/syspurpose/cli.py:286
 msgid "Remove addons from the system syspurpose"
 msgstr "시스템 syspurpose에서 애드온 제거"
 
-#: src/syspurpose/cli.py:291
+#: src/syspurpose/cli.py:291 src/syspurpose/cli.py:293
 msgid "Clear set addons"
 msgstr "애드온 설정 삭제"
 
-#: src/syspurpose/cli.py:299
+#: src/syspurpose/cli.py:299 src/syspurpose/cli.py:301
 msgid "Set the system sla"
 msgstr "시스템의 SLA 설정"
 
-#: src/syspurpose/cli.py:306
+#: src/syspurpose/cli.py:306 src/syspurpose/cli.py:308
 msgid "Clear set sla"
 msgstr "SLA 설정 해제"
 
-#: src/syspurpose/cli.py:314
+#: src/syspurpose/cli.py:314 src/syspurpose/cli.py:316
 msgid "Set the system usage"
 msgstr "시스템의 사용 방법 설정"
 
-#: src/syspurpose/cli.py:322
+#: src/syspurpose/cli.py:322 src/syspurpose/cli.py:324
 msgid "Clear set usage"
 msgstr "사용 방법 설정 삭제"
 
-#: src/syspurpose/cli.py:330
+#: src/syspurpose/cli.py:330 src/syspurpose/cli.py:332
 msgid "Show the current system syspurpose"
 msgstr "현재 시스템의 syspurpose 표시"
 
@@ -147,15 +153,17 @@ msgstr "현재 시스템의 syspurpose 표시"
 msgid ""
 "WARNING: Setting syspurpose in containers has no effect.Please run "
 "syspurpose on the host.\n"
-msgstr "경고: 컨테이너에 syspurpose를 설정해도 작동하지 않습니다. 호스트에서 syspurpose를 실행하십시오.\n"
+msgstr ""
+"경고: 컨테이너에 syspurpose를 설정해도 작동하지 않습니다. 호스트에서 "
+"syspurpose를 실행하십시오.\n"
 
-#: src/syspurpose/cli.py:360
+#: src/syspurpose/cli.py:360 src/syspurpose/cli.py:364
 msgid ""
 "Warning: Unable to sync system purpose with subscription management server: "
 "subscription_manager module is not available."
 msgstr ""
-"경고: 서브스크립션 관리 서버와 syspurpose를 동기화 할 수 없음: subscription_manager 모듈을 사용 할 수 "
-"없습니다."
+"경고: 서브스크립션 관리 서버와 syspurpose를 동기화 할 수 없음: "
+"subscription_manager 모듈을 사용 할 수 없습니다."
 
 #: src/syspurpose/files.py:106
 msgid "Error: Malformed data in file {}; please review and correct."
@@ -201,6 +209,185 @@ msgid ""
 msgstr ""
 "파일 {}을 만들 수 없습니다.\n"
 "root 사용자입니까?"
+
+#: src/syspurpose/cli.py:47
+#, python-brace-format
+msgid "Added \"{value}\" to {prop_name}."
+msgstr "{value}가 {prop_name}에 추가되었습니다."
+
+#: src/syspurpose/cli.py:50
+#, python-brace-format
+msgid "Not adding value \"{value}\" to {prop_name}; it already exists."
+msgstr "\"{value}\" 값이 {prop_name}에 추가되지 않았습니다; 이미 존재합니다."
+
+#: src/syspurpose/cli.py:158 src/syspurpose/cli.py:353
+msgid ""
+"The 'syspurpose' command is deprecated and will be removed in a future major "
+"release. Please use the 'subscription-manager syspurpose' command going "
+"forward."
+msgstr ""
+"'syspurpose' 명령은 더 이상 사용되지 않으며 향후 주요 출시에서 제거될 것입니"
+"다. 앞으로 'subscription-manager syspurpose' 명령을 사용하세요."
+
+#: src/syspurpose/cli.py:350
+msgid ""
+"WARNING: Setting syspurpose in containers has no effect.\n"
+"Please run syspurpose on the host.\n"
+msgstr ""
+"경고: 컨테이너에 syspurpose를 설정해도 작동하지 않습니다. \n"
+"호스트에서 syspurpose를 실행하세요.\n"
+
+#: /usr/lib64/python3.6/argparse.py:295
+msgid "usage: "
+msgstr "사용법: "
+
+#: /usr/lib64/python3.6/argparse.py:830
+msgid ".__call__() not defined"
+msgstr ".__ call __ () 정의되지 않음"
+
+#: /usr/lib64/python3.6/argparse.py:1127
+#, python-format
+msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
+msgstr "알지 못하는 구문 분석기 %(parser_name)r (선택기:%(choices)s)"
+
+#: /usr/lib64/python3.6/argparse.py:1181
+#, python-format
+msgid "argument \"-\" with mode %r"
+msgstr "인수 \"-\" (방법 %r인)"
+
+#: /usr/lib64/python3.6/argparse.py:1189
+#, python-format
+msgid "can't open '%s': %s"
+msgstr "열 수 없습니다 '%s': %s"
+
+#: /usr/lib64/python3.6/argparse.py:1393
+#, python-format
+msgid "cannot merge actions - two groups are named %r"
+msgstr "병합 할 수 없습니다 - 두 그룹의 이름은 %r입니다"
+
+#: /usr/lib64/python3.6/argparse.py:1431
+msgid "'required' is an invalid argument for positionals"
+msgstr "'필요한'은 위치에 대한 잘못된 인수입니다"
+
+#: /usr/lib64/python3.6/argparse.py:1453
+#, python-format
+msgid ""
+"invalid option string %(option)r: must start with a character "
+"%(prefix_chars)r"
+msgstr "잘못된 선택 문자열 %(option)r: 문자 %(prefix_chars)r로 시작해야 합니다"
+
+#: /usr/lib64/python3.6/argparse.py:1473
+#, python-format
+msgid "dest= is required for options like %r"
+msgstr "dest= 는 %r과 같은 선택에 필요합니다"
+
+#: /usr/lib64/python3.6/argparse.py:1490
+#, python-format
+msgid "invalid conflict_resolution value: %r"
+msgstr "잘못된 충돌_해결 값: %r"
+
+#: /usr/lib64/python3.6/argparse.py:1508
+#, python-format
+msgid "conflicting option string: %s"
+msgid_plural "conflicting option strings: %s"
+msgstr[0] "충돌 하는 선택 문자열: %s"
+
+#: /usr/lib64/python3.6/argparse.py:1574
+msgid "mutually exclusive arguments must be optional"
+msgstr "상호 배타적인 인수는 선택사항이어야만 합니다"
+
+#: /usr/lib64/python3.6/argparse.py:1637
+msgid "positional arguments"
+msgstr "위치 인수"
+
+#: /usr/lib64/python3.6/argparse.py:1638
+msgid "optional arguments"
+msgstr "선택적인 인수"
+
+#: /usr/lib64/python3.6/argparse.py:1653
+msgid "show this help message and exit"
+msgstr "도움말 보기 및 종료"
+
+#: /usr/lib64/python3.6/argparse.py:1684
+msgid "cannot have multiple subparser arguments"
+msgstr "여러 하위 구문 분석기 인수를 가질 수 없습니다"
+
+#: /usr/lib64/python3.6/argparse.py:1736
+#, python-format
+msgid "unrecognized arguments: %s"
+msgstr "인식 할 수 없는 인수: %s"
+
+#: /usr/lib64/python3.6/argparse.py:1833
+#, python-format
+msgid "not allowed with argument %s"
+msgstr "인수 %s와 함께 허용하지 않습니다"
+
+#: /usr/lib64/python3.6/argparse.py:1879 /usr/lib64/python3.6/argparse.py:1893
+#, python-format
+msgid "ignored explicit argument %r"
+msgstr "명시적 인수 %r 무시"
+
+#: /usr/lib64/python3.6/argparse.py:2000
+#, python-format
+msgid "the following arguments are required: %s"
+msgstr "다음 인수가 필요합니다: %s"
+
+#: /usr/lib64/python3.6/argparse.py:2015
+#, python-format
+msgid "one of the arguments %s is required"
+msgstr "인수 %s 중 하나가 필요합니다"
+
+#: /usr/lib64/python3.6/argparse.py:2058
+msgid "expected one argument"
+msgstr "예상되는 하나의 인수"
+
+#: /usr/lib64/python3.6/argparse.py:2059
+msgid "expected at most one argument"
+msgstr "많으면 하나의 인수가 예상됩니다"
+
+#: /usr/lib64/python3.6/argparse.py:2060
+msgid "expected at least one argument"
+msgstr "적어도 하나의 인수가 예상됩니다"
+
+#: /usr/lib64/python3.6/argparse.py:2062
+#, python-format
+msgid "expected %s argument"
+msgid_plural "expected %s arguments"
+msgstr[0] "%s 인수가 예상됩니다"
+
+#: /usr/lib64/python3.6/argparse.py:2122
+#, python-format
+msgid "ambiguous option: %(option)s could match %(matches)s"
+msgstr "모호한 선택: %(option)s은 %(matches)s와 일치 할 수 있습니다"
+
+#: /usr/lib64/python3.6/argparse.py:2185
+#, python-format
+msgid "unexpected option string: %s"
+msgstr "예상되는 선택 문자열: %s"
+
+#: /usr/lib64/python3.6/argparse.py:2289
+#, python-format
+msgid "%r is not callable"
+msgstr "%r은 호출 할 수 없습니다"
+
+#: /usr/lib64/python3.6/argparse.py:2306
+#, python-format
+msgid "invalid %(type)s value: %(value)r"
+msgstr "잘못된 %(type)s 값: %(value)r"
+
+#: /usr/lib64/python3.6/argparse.py:2317
+#, python-format
+msgid "invalid choice: %(value)r (choose from %(choices)s)"
+msgstr "잘못된 선택: %(value)r (%(choices)s에서 선택)"
+
+#: /usr/lib64/python3.6/argparse.py:2393
+#, python-format
+msgid "%(prog)s: error: %(message)s\n"
+msgstr "%(prog)s: 오류: %(message)s\n"
+
+#: src/syspurpose/cli.py:157
+msgid "System Syspurpose Management Tool"
+msgstr "시스템 Syspurpose 관리 도구"
 
 #~ msgid "Added {} to {}"
 #~ msgstr "{}에 {}을/를 추가했습니다 "
