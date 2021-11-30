@@ -324,10 +324,6 @@ client.registerSystem = (subscriptionDetails, update_progress) => {
                         'com.redhat.RHSM1.Register',
                         '/com/redhat/RHSM1/Register'
                     );
-                    const registration_options = {
-                        "enable_content": dbus_bool(subscriptionDetails.auto_attach)
-                    };
-                    console.log('registration_options:', registration_options);
                     if (subscriptionDetails.activation_keys) {
                         if (update_progress)
                             update_progress(_("Registering using activation key ..."), null);
@@ -337,7 +333,7 @@ client.registerSystem = (subscriptionDetails, update_progress) => {
                             [
                                 subscriptionDetails.org,
                                 subscriptionDetails.activation_keys.split(','),
-                                registration_options,
+                                {},
                                 connection_options,
                                 userLang
                             ]
@@ -347,6 +343,10 @@ client.registerSystem = (subscriptionDetails, update_progress) => {
                     }
                     else {
                         console.debug('registering using username and password');
+                        const registration_options = {
+                            "enable_content": dbus_bool(subscriptionDetails.auto_attach)
+                        };
+                        console.log('registration_options:', registration_options);
                         if (update_progress)
                             update_progress(_("Registering using username and password ..."), null);
                         let result = registerService.call(
