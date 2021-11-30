@@ -16,7 +16,6 @@ import logging
 import threading
 import dbus
 import dbus.service
-from typing import Union
 
 from rhsmlib.dbus import constants, exceptions, dbus_utils, base_object, server, util
 from rhsmlib.services.register import RegisterService
