@@ -3,9 +3,10 @@ import os
 from ..test_managercli import TestCliProxyCommand
 from subscription_manager import managercli
 from subscription_manager.cli_command.abstract_syspurpose import AbstractSyspurposeCommand
+import subscription_manager.injection as inj
 
 from ..stubs import StubUEP
-from ..fixture import Capture
+from ..fixture import Capture, SubManFixture
 
 from mock import patch, Mock, MagicMock
 
@@ -332,3 +333,85 @@ class TestRoleCommand(TestCliProxyCommand):
         self.cc._get_valid_fields.return_value = {"role": ["Welcome to the Machine"]}
         res = self.cc._is_provided_value_valid("wElcOme To The mAChiNE")
         self.assertTrue(res)
+
+
+class InvalidOrg(Exception):
+    """
+    Small Exception to be used in TestRoleOrgCheckingCommand; it will be
+    passed through handle_exception().
+    """
+    def __init__(self, org_key):
+        self.org_key = org_key
+
+
+class OrgCheckingStubUEP(StubUEP):
+    """
+    An improved StubUEP that returns a specific list of valid organizations,
+    and raises InvalidOrg in getOwnerSyspurposeValidFields() in case the
+    requested organization is not one of the allowed ones. This will allow us
+    to check which AbstractSyspurposeCommand._get_valid_fields() is actually
+    passing to UEP.
+
+    The extra implementation on top of StubUEP is the minimal one to check
+    AbstractSyspurposeCommand in TestRoleOrgCheckingCommand.
+    """
+    def __init__(self, allowed_orgs):
+        super(OrgCheckingStubUEP, self).__init__()
+        self.allowed_orgs = allowed_orgs
+
+    def getOwnerList(self, username):
+        return [{'key': org} for org in self.allowed_orgs]
+
+    def getOwnerSyspurposeValidFields(self, org_key):
+        if org_key not in self.allowed_orgs:
+            raise InvalidOrg(org_key)
+        return super(OrgCheckingStubUEP, self).getOwnerSyspurposeValidFields(org_key)
+
+
+class TestRoleOrgCheckingCommand(SubManFixture):
+    common_args = ['--list', '--username', 'test', '--password', 'test']
+
+    def do_reraise(self, *args, **kwargs):
+        # handle_exception() was called with (msg, ex); we need to reraise
+        # 'ex', effectively bypassing handle_exception()
+        if len(args) >= 2:
+            raise args[1] from None
+
+    def set_orgs_for_stub_cp_provider(self, orgs):
+        cp_provider = inj.require(inj.CP_PROVIDER)
+        cp_provider.consumer_auth_cp = OrgCheckingStubUEP(orgs)
+        cp_provider.basic_auth_cp = OrgCheckingStubUEP(orgs)
+        cp_provider.no_auth_cp = OrgCheckingStubUEP(orgs)
+
+    def setUp(self):
+        synced_store_patch = patch('subscription_manager.cli_command.abstract_syspurpose.SyncedStore')
+        self.synced_store_mock = synced_store_patch.start()
+        self.addCleanup(self.synced_store_mock)
+        syspurpose_patch = patch('syspurpose.files.SyncedStore')
+        sp_patch = syspurpose_patch.start()
+        self.addCleanup(sp_patch.stop)
+        handle_exception_patch = patch('subscription_manager.cli_command.cli.handle_exception')
+        self.handle_exception_mock = handle_exception_patch.start()
+        self.handle_exception_mock.side_effect = self.do_reraise
+        self.addCleanup(self.handle_exception_mock)
+        super(TestRoleOrgCheckingCommand, self).setUp()
+        self.cc = managercli.RoleCommand()
+        self.cc.is_registered = Mock(return_value=False)
+
+    def test_single_org_same(self):
+        self.set_orgs_for_stub_cp_provider(['org1'])
+        self.cc.main(self.common_args + ['--org', 'org1'])
+
+    def test_single_org_different(self):
+        self.set_orgs_for_stub_cp_provider(['org1'])
+        with self.assertRaises(InvalidOrg):
+            self.cc.main(self.common_args + ['--org', 'foo'])
+
+    def test_multiple_orgs_same(self):
+        self.set_orgs_for_stub_cp_provider(['org1', 'org2'])
+        self.cc.main(self.common_args + ['--org', 'org1'])
+
+    def test_multiple_orgs_different(self):
+        self.set_orgs_for_stub_cp_provider(['org1', 'org2'])
+        with self.assertRaises(InvalidOrg):
+            self.cc.main(self.common_args + ['--org', 'foo'])
