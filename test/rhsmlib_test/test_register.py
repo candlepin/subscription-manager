@@ -21,7 +21,7 @@ import socket
 
 import subscription_manager.injection as inj
 
-from subscription_manager.cache import InstalledProductsManager
+from subscription_manager.cache import InstalledProductsManager, ContentAccessModeCache
 from subscription_manager.cp_provider import CPProvider
 from subscription_manager.facts import Facts
 from subscription_manager.identity import Identity
@@ -59,8 +59,52 @@ CONSUMER_CONTENT_JSON = '''{"hypervisorId": null,
           "created" : "2017-04-25T18:03:07+0000",
           "updated" : "2017-04-25T18:03:07+0000"
         },
-        "owner": {"href": "/owners/admin", "displayName": "Admin Owner",
-        "id": "ff808081550d997c01550d9adaf40003", "key": "admin"},
+        "owner": {
+          "href": "/owners/admin",
+          "displayName": "Admin Owner",
+          "id": "ff808081550d997c01550d9adaf40003",
+          "key": "admin",
+          "contentAccessMode": "entitlement"
+        },
+        "href": "/consumers/c1b8648c-6f0a-4aa5-b34e-b9e62c0e4364",
+        "facts": {}, "id": "ff808081550d997c015511b0406d1065",
+        "uuid": "c1b8648c-6f0a-4aa5-b34e-b9e62c0e4364",
+        "guestIds": null, "capabilities": null,
+        "environment": null, "installedProducts": null,
+        "canActivate": false, "type": {"manifest": false,
+        "id": "1000", "label": "system"}, "annotations": null,
+        "username": "admin", "updated": "2016-06-02T15:16:51+0000",
+        "lastCheckin": null, "entitlementCount": 0, "releaseVer":
+        {"releaseVer": null}, "entitlementStatus": "valid", "name":
+        "test.example.com", "created": "2016-06-02T15:16:51+0000",
+        "contentTags": null, "dev": false}'''
+
+# Following consumer do not contain information about content access mode
+OLD_CONSUMER_CONTENT_JSON = '''{"hypervisorId": null,
+        "serviceLevel": "",
+        "autoheal": true,
+        "idCert": {
+          "key": "FAKE_KEY",
+          "cert": "FAKE_CERT",
+          "serial" : {
+            "id" : 5196045143213189102,
+            "revoked" : false,
+            "collected" : false,
+            "expiration" : "2033-04-25T18:03:06+0000",
+            "serial" : 5196045143213189102,
+            "created" : "2017-04-25T18:03:06+0000",
+            "updated" : "2017-04-25T18:03:06+0000"
+          },
+          "id" : "8a8d011e5ba64700015ba647fbd20b88",
+          "created" : "2017-04-25T18:03:07+0000",
+          "updated" : "2017-04-25T18:03:07+0000"
+        },
+        "owner": {
+          "href": "/owners/admin",
+          "displayName": "Admin Owner",
+          "id": "ff808081550d997c01550d9adaf40003",
+          "key": "admin"
+        },
         "href": "/consumers/c1b8648c-6f0a-4aa5-b34e-b9e62c0e4364",
         "facts": {}, "id": "ff808081550d997c015511b0406d1065",
         "uuid": "c1b8648c-6f0a-4aa5-b34e-b9e62c0e4364",
@@ -146,6 +190,13 @@ class RegisterServiceTest(InjectionMockingTest):
         # Add a mock cp_provider
         self.mock_cp_provider = mock.Mock(spec=CPProvider, name="CPProvider")
 
+        # Add a mock for content access mode cache
+        self.mock_content_access_mode_cache = mock.Mock(
+            spec=ContentAccessModeCache,
+            name="ContentAccessModeCache"
+        )
+        self.mock_content_access_mode_cache.read_data = mock.Mock(return_value='entitlement')
+
         # For the tests in which it's used, the consumer_auth cp and basic_auth cp can be the same
         self.mock_cp_provider.get_consumer_auth_cp.return_value = self.mock_cp
         self.mock_cp_provider.get_basic_auth_cp.return_value = self.mock_cp
@@ -174,6 +225,8 @@ class RegisterServiceTest(InjectionMockingTest):
             return self.mock_facts
         elif args[0] == inj.CP_PROVIDER:
             return self.mock_cp_provider
+        elif args[0] == inj.CONTENT_ACCESS_MODE_CACHE:
+            return self.mock_content_access_mode_cache
         else:
             return None
 
@@ -212,6 +265,90 @@ class RegisterServiceTest(InjectionMockingTest):
             mock.call('post_register_consumer', consumer=expected_consumer, facts={})
         ]
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
+
+    @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
+    @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
+    def test_register_normally_old_candlepin(self, mock_persist_consumer, mock_write_cache):
+        """
+        Test for the case, when candlepin server returns consumer without information about
+        content access mode.
+        """
+        self.mock_identity.is_valid.return_value = False
+        self.mock_installed_products.format_for_server.return_value = []
+        self.mock_installed_products.tags = []
+        expected_consumer = json.loads(OLD_CONSUMER_CONTENT_JSON)
+        self.mock_cp.registerConsumer.return_value = expected_consumer
+
+        register_service = register.RegisterService(self.mock_cp)
+        consumer = register_service.register("org", name="name", environment="environment")
+
+        self.mock_cp.registerConsumer.assert_called_once_with(
+            name="name",
+            facts={},
+            owner="org",
+            environment="environment",
+            keys=None,
+            installed_products=[],
+            jwt_token=None,
+            content_tags=[],
+            type="system",
+            role="",
+            addons=[],
+            service_level="",
+            usage="")
+        self.mock_installed_products.write_cache.assert_called()
+
+        mock_persist_consumer.assert_called_once_with(expected_consumer)
+        mock_write_cache.assert_called_once()
+        expected_plugin_calls = [
+            mock.call('pre_register_consumer', name='name', facts={}),
+            mock.call('post_register_consumer', consumer=expected_consumer, facts={})
+        ]
+        self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
+        assert 'owner' in consumer
+        assert 'contentAccessMode' in consumer['owner']
+        assert 'entitlement' == consumer['owner']['contentAccessMode']
+
+    @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
+    @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
+    def test_register_normally_no_owner(self, mock_persist_consumer, mock_write_cache):
+        """
+        Test for the case, when candlepin server returns consumer without owner
+        """
+        self.mock_identity.is_valid.return_value = False
+        self.mock_installed_products.format_for_server.return_value = []
+        self.mock_installed_products.tags = []
+        expected_consumer = json.loads(OLD_CONSUMER_CONTENT_JSON)
+        del expected_consumer['owner']
+        self.mock_cp.registerConsumer.return_value = expected_consumer
+
+        register_service = register.RegisterService(self.mock_cp)
+        consumer = register_service.register("org", name="name", environment="environment")
+
+        self.mock_cp.registerConsumer.assert_called_once_with(
+            name="name",
+            facts={},
+            owner="org",
+            environment="environment",
+            keys=None,
+            installed_products=[],
+            jwt_token=None,
+            content_tags=[],
+            type="system",
+            role="",
+            addons=[],
+            service_level="",
+            usage="")
+        self.mock_installed_products.write_cache.assert_called()
+
+        mock_persist_consumer.assert_called_once_with(expected_consumer)
+        mock_write_cache.assert_called_once()
+        expected_plugin_calls = [
+            mock.call('pre_register_consumer', name='name', facts={}),
+            mock.call('post_register_consumer', consumer=expected_consumer, facts={})
+        ]
+        self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
+        assert 'owner' not in consumer
 
     @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
     @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")

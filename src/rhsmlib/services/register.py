@@ -133,6 +133,26 @@ class RegisterService(object):
         # Save syspurpose attributes from consumer to cache file
         syspurposelib.write_syspurpose_cache(syspurpose_dict)
 
+        content_access_mode_cache = inj.require(inj.CONTENT_ACCESS_MODE_CACHE)
+
+        # Is information about content access mode included in consumer
+        if 'owner' not in consumer:
+            log.warning('Consumer does not contain any information about owner.')
+        elif 'contentAccessMode' in consumer['owner']:
+            log.debug('Saving content access mode from consumer object to cache file.')
+            # When we know content access mode from consumer, then write it to cache file
+            content_access_mode = consumer['owner']['contentAccessMode']
+            content_access_mode_cache.set_data(content_access_mode, self.identity)
+            content_access_mode_cache.write_cache()
+        else:
+            # If not, then we have to do another REST API call to get this information
+            # It will not be included in cache file. When cache file is empty, then
+            # it will trigger accessing REST API and saving result in cache file.
+            log.debug('Information about content access mode is not included in consumer')
+            content_access_mode = content_access_mode_cache.read_data()
+            # Add information about content access mode to consumer
+            consumer['owner']['contentAccessMode'] = content_access_mode
+
         return consumer
 
     def validate_options(self, options):
