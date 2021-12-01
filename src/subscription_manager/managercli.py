@@ -1644,12 +1644,10 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
             super(ServiceLevelCommand, self).show()
 
     def list_service_levels(self):
-        org_key = self.options.org
-        if not org_key:
-            if self.is_registered():
-                org_key = self.cp.getOwner(self.identity.uuid)['key']
-            else:
-                org_key = self.org
+        if self.is_registered():
+            org_key = self.cp.getOwner(self.identity.uuid)['key']
+        else:
+            org_key = self.org
 
         try:
             slas = self.cp.getServiceLevelList(org_key)
