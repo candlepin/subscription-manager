@@ -39,4 +39,5 @@ podman run -t \
   sh "$2"
 
 RETVAL="$?"
+echo "Test script returned: $RETVAL"
 exit "$RETVAL"
