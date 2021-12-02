@@ -98,20 +98,35 @@ class InstalledProducts extends React.Component {
         }
 
         let entries = this.props.products.map(function (itm) {
-            let subscribed;
+            let status_color;
             let status_text;
+            let label_status_text;
             let start_date_text;
             let end_date_text;
             let body;
             let columns;
 
             if (itm.status === 'subscribed') {
-                subscribed = true;
-                status_text = _("Subscribed");
-
+                status_color = "green";
+                label_status_text = _("Subscribed");
+                status_text = label_status_text;
+            } else if (itm.status === 'partially_subscribed') {
+                status_color = "orange";
+                label_status_text = _("Partially subscribed");
+                status_text = cockpit.format(
+                    _("Partially subscribed ($0)"), itm.status_details.join(',')
+                );
+            } else if (itm.status === 'not_subscribed') {
+                status_color = "red";
+                label_status_text = _("Not subscribed");
+                status_text = cockpit.format(
+                    _("Not subscribed ($0)"), itm.status_details.join(',')
+                );
             } else {
-                subscribed = false;
-                status_text = _("Not subscribed (Not supported by a valid subscription)");
+                console.debug('Other state:', itm.status);
+                status_color = "red";
+                label_status_text = _("Unknown status");
+                status_text = label_status_text;
             }
 
             if (itm.starts.length === 0) {
@@ -146,7 +161,7 @@ class InstalledProducts extends React.Component {
                             </SplitItem>
                             <SplitItem>
                                 <Label
-                                    color={subscribed ? "green" : "red"}>{subscribed ? _("Subscribed") : _("Not subscribed")}</Label>
+                                    color={status_color}>{label_status_text}</Label>
                             </SplitItem>
                         </Split>),
                         header: true,
