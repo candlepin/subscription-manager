@@ -14,9 +14,9 @@
 
 import logging
 import os
+import shutil
 
 from rhsmlib.facts import collector
-from rhsm.utils import which
 
 log = logging.getLogger(__name__)
 
@@ -57,7 +57,7 @@ class KPatchCollector(collector.FactsCollector):
         Check if kpatch is installed
         :return: Return true, when kpatch CLI tool is installed. Otherwise return False
         """
-        return which('kpatch') is not None
+        return shutil.which('kpatch') is not None
 
     def _get_installed_live_kernel_patches(self):
         """
