@@ -7,7 +7,7 @@ from rhsm.utils import remove_scheme, get_env_proxy_info, \
     ServerUrlParseErrorEmpty, ServerUrlParseErrorNone, \
     ServerUrlParseErrorPort, ServerUrlParseErrorScheme, \
     ServerUrlParseErrorJustScheme, has_bad_scheme, has_good_scheme, \
-    parse_url, cmd_name, which
+    parse_url, cmd_name
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME
 
 
@@ -417,23 +417,3 @@ class TestCmdName(unittest.TestCase):
     def test_virt_who(self):
         argv = ['/usr/share/virt-who/virtwho.py']
         self.assertEqual("virtwho.py", cmd_name(argv))
-
-
-class TestWhich(unittest.TestCase):
-    def test_which_python(self):
-        """Some python command just has to exist :-)"""
-        cmd_path = which('python')
-        self.assertIsNotNone(cmd_path)
-
-    def test_which_bin_sh(self):
-        """Assumed that Linux is used and some /bin/sh exist"""
-        cmd_path = which('/bin/sh')
-        self.assertIsNotNone(cmd_path)
-
-    def test_which_not_existing_command(self):
-        cmd_path = which('not-existing-command')
-        self.assertIsNone(cmd_path)
-
-    def test_which_not_existing_command_path(self):
-        cmd_path = which('/not/existing/command/path/not-existing-command')
-        self.assertIsNone(cmd_path)
