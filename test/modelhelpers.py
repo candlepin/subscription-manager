@@ -21,25 +21,14 @@ from datetime import timedelta, datetime
 
 from rhsm.certificate import GMT
 
-hashlib = None
-md5 = None
-try:
-    import hashlib
-except ImportError:
-    import md5
+import hashlib
 
 
-# grumble, no hashblib on 2.4 and
-# md5 is deprecated on 2.6
 def md5sum(buf):
     if isinstance(buf, six.text_type):
         buf = buf.encode('utf-8')
-    if hashlib:
-        md = hashlib.md5(buf)
-        return md.hexdigest()
-    m = md5.new()
-    m.update(buf)
-    return m.hexdigest()
+    md = hashlib.md5(buf)
+    return md.hexdigest()
 
 
 def create_pool(product_id, product_name, quantity=10, consumed=0, provided_products=None,
