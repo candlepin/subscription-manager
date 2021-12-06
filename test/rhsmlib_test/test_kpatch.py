@@ -37,14 +37,14 @@ class TestKPatchCollector(unittest.TestCase):
         shutil.rmtree(self.DIRS_WITH_LOADED_MODULE[1])
         shutil.rmtree(self.DIR_WITH_INSTALLED_KPATCH_MODULES)
 
-    @patch('rhsmlib.facts.kpatch.which')
+    @patch('shutil.which')
     def test_kpatch_is_not_installed(self, which):
         which.return_value = None
         collector = kpatch.KPatchCollector()
         kpatch_facts = collector.get_all()
         self.assertEqual(kpatch_facts, {})
 
-    @patch('rhsmlib.facts.kpatch.which')
+    @patch('shutil.which')
     def test_get_kpatch_facts(self, which):
         which.return_value = '/usr/sbin/kpatch'
         collector = kpatch.KPatchCollector()
