@@ -15,7 +15,6 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-import datetime
 import locale
 import socket
 import unittest
@@ -32,7 +31,10 @@ from rhsm.connection import UEPConnection, Restlib, ConnectionException, Connect
     RemoteServerException, drift_check, ExpiredIdentityCertException, UnauthorizedException, \
     ForbiddenException, AuthenticationException, RateLimitExceededException, ContentConnection, NoValidEntitlement
 
-from mock import Mock, mock, patch
+from subscription_manager.cache import ContentAccessCache
+import subscription_manager.injection as inj
+
+from mock import Mock, mock, patch, mock_open
 from datetime import date
 from time import strftime, gmtime
 from rhsm import ourjson as json
@@ -825,6 +827,13 @@ class ExpiredIdentityCertTest(ExceptionTest):
 
 
 class DatetimeFormattingTests(unittest.TestCase):
+    MOCK_CONTENT = {
+        "lastUpdate": "2016-12-01T21:56:35+0000",
+        "contentListing": {"42": ["cert-part1", "cert-part2"]}
+    }
+
+    MOCK_OPEN_CACHE = mock_open(read_data=json.dumps(MOCK_CONTENT))
+
     def setUp(self):
         # NOTE: this won't actually work, idea for this suite of unit tests
         # is to mock the actual server responses and just test logic in the
@@ -835,14 +844,25 @@ class DatetimeFormattingTests(unittest.TestCase):
     def tearDown(self):
         locale.resetlocale()
 
+    @patch('subscription_manager.cache.open', MOCK_OPEN_CACHE)
     def test_date_formatted_properly_with_japanese_locale(self):
         locale.setlocale(locale.LC_ALL, 'ja_JP.UTF8')
-        expected_headers = {
-            'If-Modified-Since': 'Fri, 13 Feb 2009 23:31:30 GMT'
-        }
-        timestamp = 1234567890
+        cp_provider = Mock()
+        cp_provider.get_consumer_auth_cp = Mock(return_value=self.cp)
+        identity = Mock(uuid='bob')
+        inj.provide(inj.IDENTITY, identity, singleton=True)
+        inj.provide(inj.CP_PROVIDER, cp_provider)
+        cache = ContentAccessCache()
+        cache.cp_provider = cp_provider
+        cache.identity = identity
+        mock_exists = Mock(return_value=True)
         self.cp.conn = Mock()
-        self.cp.getAccessibleContent(consumerId='bob', if_modified_since=datetime.datetime.fromtimestamp(timestamp))
+        self.cp.conn.request_get = Mock(return_value=self.MOCK_CONTENT)
+        expected_headers = {
+            'If-Modified-Since': 'Thu, 01 Dec 2016 21:56:35 GMT'
+        }
+        with patch('os.path.exists', mock_exists):
+            cache.check_for_update()
         self.cp.conn.request_get.assert_called_with('/consumers/bob/accessible_content', headers=expected_headers)
 
 
