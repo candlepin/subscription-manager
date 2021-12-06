@@ -343,8 +343,6 @@ class TestSubscriptions(SubscriptionsCase):
         b.wait_visible("#overview a:contains('3 hits, including important')")
 
         # test system purpose
-        # nothing set up, card is not present
-        b.wait_not_present("#syspurpose")
         m.execute("subscription-manager role --set 'Red Hat Enterprise Linux Workstation'")
         m.execute("subscription-manager usage --set 'Development/Test'")
         m.execute("subscription-manager service-level --set 'Standard'")
