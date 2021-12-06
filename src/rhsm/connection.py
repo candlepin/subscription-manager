@@ -28,7 +28,7 @@ import time
 import traceback
 import tempfile
 
-from email.utils import formatdate
+from email.utils import format_datetime
 
 from rhsm.https import httplib, ssl
 
@@ -929,6 +929,13 @@ class BaseRestLib(object):
     def request_delete(self, method, params=None, headers=None):
         return self._request("DELETE", method, params, headers=headers)
 
+    @staticmethod
+    def _format_http_date(dt):
+        """
+        Format a datetime to HTTP-date as described by RFC 7231.
+        """
+        return format_datetime(dt, usegmt=True)
+
 
 # FIXME: it would be nice if the ssl server connection stuff
 # was decomposed from the api handling parts
@@ -1430,7 +1437,7 @@ class UEPConnection(BaseConnection):
         method = "/consumers/%s/accessible_content" % consumerId
         headers = {}
         if if_modified_since:
-            timestamp = formatdate(time.mktime(if_modified_since.timetuple()), usegmt=True)
+            timestamp = BaseRestLib._format_http_date(if_modified_since)
             headers["If-Modified-Since"] = timestamp
         return self.conn.request_get(method, headers=headers)
 

@@ -1,7 +1,6 @@
 # needs polib installed, http://pypi.python.org/pypi/polib
 # probably will need coverage tools installed
 # needs python-rhsm
-# needs PyXML installed
 # if we haven't installed/ran subsctiption-manager (or installed it)
 #   we need to make /etc/pki/product and /etc/pki/entitlement
 
