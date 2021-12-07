@@ -93,7 +93,7 @@ def write_syspurpose(values: dict) -> bool:
     else:
         # Simple backup in case the syspurpose tooling is not installed.
         try:
-            json.dump(values, open(USER_SYSPURPOSE), ensure_ascii=True, indent=2)
+            json.dump(values, open(USER_SYSPURPOSE, "w"), ensure_ascii=True, indent=2)
         except OSError:
             log.warning("Could not write syspurpose to %s" % USER_SYSPURPOSE)
             return False
