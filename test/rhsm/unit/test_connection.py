@@ -23,7 +23,7 @@ import os
 import ssl
 from tempfile import mkdtemp
 
-from nose.plugins.skip import SkipTest
+import pytest
 
 from rhsm import connection
 from rhsm.connection import UEPConnection, Restlib, ConnectionException, ConnectionSetupException, \
@@ -878,4 +878,4 @@ class M2CryptoHttpTests(unittest.TestCase):
                 self.assertRaises(socket.error, conn.request, '/foo', '/bar')
 
         except ImportError:
-            raise SkipTest('m2crypto not supported on python3')
+            raise pytest.skip('m2crypto not supported on python3')

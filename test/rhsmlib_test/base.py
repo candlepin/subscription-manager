@@ -72,7 +72,8 @@ class InjectionMockingTest(unittest.TestCase):
 
 
 class DBusObjectTest(unittest.TestCase):
-    '''Subclass of unittest.TestCase use for testing DBus methods in the same process.  During setUp this
+    """
+    Subclass of unittest.TestCase use for testing DBus methods in the same process.  During setUp this
     class starts a thread that makes a DBus connection and exposes some objects on the bus.  The main thread
     blocks until the connection has completed.
 
@@ -81,7 +82,7 @@ class DBusObjectTest(unittest.TestCase):
     starts another thread that makes an async call to the thread serving the objects under test and then
     blocks the main thread (the DBus call must be asynchronous to avoid deadlock).  The function passed to
     dbus_request is run and then dbus_request unblocks the main thread.
-    '''
+    """
     def setUp(self):
         super(DBusObjectTest, self).setUp()
         self.started_event = threading.Event()
@@ -108,6 +109,7 @@ class DBusObjectTest(unittest.TestCase):
         self.addCleanup(self.stop_server)
 
     def stop_server(self):
+        log.debug('Stopping thread of ')
         self.server_thread.stop()
         self.stopped_event.wait()
 
@@ -122,10 +124,12 @@ class DBusObjectTest(unittest.TestCase):
         return dbus.bus.BusConnection(**self.bus_kwargs).get_object(self.bus_name(), path)
 
     def dbus_request(self, reply_handler, proxy, proxy_args=None, error_handler=None):
-        '''This method makes an async request to the server thread and *does not* block.  Not blocking means
+        """
+        This method makes an async request to the server thread and *does not* block.  Not blocking means
         that the rest of your test case will run potentially before the async callback finishes.  If you
         use this method, you will need to call self.handler_complete_event.wait() at the end of your
-        test so that the test runner itself will block until the async callback finishes.'''
+        test so that the test runner itself will block until the async callback finishes.
+        """
 
         DBusRequestThread(kwargs={
             'proxy': proxy,
@@ -144,15 +148,18 @@ class DBusObjectTest(unittest.TestCase):
             six.reraise(*result)
 
     def dbus_objects(self):
-        '''This method should return a list of DBus service classes that need to be instantiated in the
+        """
+        This method should return a list of DBus service classes that need to be instantiated in the
         server thread.  Generally this should just be a list containing the class under test.
         In that list, you can also pass in a tuple composed of the object class and a dictionary of keyword
         arguments for the object's constructor
-        '''
+        """
         raise NotImplementedError('Subclasses should define what DBus objects to test')
 
     def bus_name(self):
-        '''This method should return the bus name that the server thread should use'''
+        """
+        This method should return the bus name that the server thread should use
+        """
         return constants.BUS_NAME
 
 

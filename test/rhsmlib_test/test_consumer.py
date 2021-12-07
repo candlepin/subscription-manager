@@ -24,6 +24,8 @@ from subscription_manager import injection as inj
 from subscription_manager.identity import Identity
 from test.rhsmlib_test.base import InjectionMockingTest, DBusObjectTest
 
+from test import subman_marker_dbus
+
 
 class TestConsumerService(InjectionMockingTest):
     def setUp(self):
@@ -58,6 +60,7 @@ class TestConsumerService(InjectionMockingTest):
         self.assertEqual(uuid, "")
 
 
+@subman_marker_dbus
 class TestConsumerDBusObject(DBusObjectTest, InjectionMockingTest):
     def setUp(self):
         super(TestConsumerDBusObject, self).setUp()

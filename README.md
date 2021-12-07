@@ -250,14 +250,7 @@ See ./packages/syspurpose/README.md for details on getting started
 
 Testing
 -------
-We run tests using nose (see candlepinproject.org for details).  Some tests
-are not run by default. For example, since we are not maintaining the GTK GUI
-for all platforms, they are not run by default. They can be included via
-`-a gui` option for the nose command. It is recommended if you run the GUI
-tests to also use `--with-xvfb` in order to use Xvfb instead of spawning
-GTK windows in your desktop session (ex. `nosetests -a gui --with-xvfb`).
-
-[More details about testing](./TESTING.md)
+We run tests using pytest. [See TESTING.md for more details.](./TESTING.md)
 
 Troubleshooting
 ---------------

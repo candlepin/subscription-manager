@@ -7,12 +7,12 @@
 -e ./syspurpose
 
 flake8<4
-nose
-nose-capturestderr
-nose-randomly
+pytest
+pytest-randomly
+pytest-timeout
+pytest-forked
 coverage
 polib
 pyinotify
 simplejson
 mock
-git+https://github.com/awood/nose-xvfb.git#egg=nose-xvfb

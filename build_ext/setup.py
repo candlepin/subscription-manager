@@ -15,7 +15,9 @@
 from setuptools import setup, find_packages
 
 test_require = [
-    'nose',
+    'pytest',
+    'pytest-randomly',
+    'pytest-timeout',
     'mock'
 ]
 
@@ -37,5 +39,4 @@ setup(
     packages=find_packages(),
     tests_require=test_require,
     install_requires=install_requires,
-    test_suite='nose.collector',
 )

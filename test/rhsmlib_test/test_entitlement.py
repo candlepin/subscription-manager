@@ -35,6 +35,8 @@ from rhsmlib.dbus.objects import EntitlementDBusObject
 from rhsmlib.services import exceptions
 from rhsmlib.services.entitlement import EntitlementService
 
+from test import subman_marker_dbus
+
 
 class TestEntitlementService(InjectionMockingTest):
     def setUp(self):
@@ -509,6 +511,7 @@ class TestEntitlementService(InjectionMockingTest):
         self.assertRaises(ValueError, ent_service.parse_date, on_date)
 
 
+@subman_marker_dbus
 class TestEntitlementDBusObject(DBusObjectTest, InjectionMockingTest):
     def setUp(self):
         super(TestEntitlementDBusObject, self).setUp()

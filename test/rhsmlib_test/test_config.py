@@ -27,6 +27,8 @@ from rhsmlib.dbus.objects.config import ConfigDBusObject
 from rhsmlib.services.config import Config, ConfigSection
 from test.rhsmlib_test.base import DBusObjectTest, TestUtilsMixin
 
+from test import subman_marker_dbus
+
 TEST_CONFIG = """
 [foo]
 bar =
@@ -184,6 +186,7 @@ class TestConfigSection(BaseConfigTest):
         self.assertNotIn("missing", self.config['foo'])
 
 
+@subman_marker_dbus
 class TestConfigDBusObject(DBusObjectTest, TestUtilsMixin):
     def setUp(self):
         super(TestConfigDBusObject, self).setUp()
