@@ -109,7 +109,7 @@ def write_syspurpose(values):
     else:
         # Simple backup in case the syspurpose tooling is not installed.
         try:
-            json.dump(values, open(USER_SYSPURPOSE), ensure_ascii=True, indent=2)
+            json.dump(values, open(USER_SYSPURPOSE, 'w'), ensure_ascii=True, indent=2)
         except OSError:
             log.warning('Could not write syspurpose to %s' % USER_SYSPURPOSE)
             return False
@@ -252,6 +252,9 @@ class SyspurposeSyncActionCommand(object):
         """
         result = {}
         consumer_uuid = inj.require(inj.IDENTITY).uuid
+
+        if SyncedStore is None:
+            return {}
 
         try:
             store = SyncedStore(
