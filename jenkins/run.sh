@@ -26,17 +26,32 @@ else
 fi
 
 echo "Using container name: $TAG"
-
-podman run -t \
-  -u $JUID:$JGID \
-  -v /run/user/$JUID/bus:/tmp/bus \
-  -w $WORKSPACE \
-  -v $WORKSPACE:$WORKSPACE:rw,z \
-  -v $WORKSPACE@tmp:$WORKSPACE@tmp:rw,z \
-  --name "$TAG" \
-  --rm \
-  quay.io/candlepin/subscription-manager:$GIT_HASH \
-  sh "$2"
+if [ -d $WORKSPACE@tmp ]; then
+    podman run -it \
+      -u $JUID:$JGID \
+      -v /run/user/$JUID/bus:/tmp/bus \
+      -w $WORKSPACE \
+      -v $WORKSPACE:$WORKSPACE:rw,z \
+      -v $WORKSPACE@tmp:$WORKSPACE@tmp:rw,z \
+      --name "$TAG" \
+      --rm \
+      --userns keep-id \
+      --group-add wheel \
+      quay.io/candlepin/subscription-manager:$GIT_HASH \
+      sh "$2"
+else
+    podman run -it \
+      -u $JUID:$JGID \
+      -v /run/user/$JUID/bus:/tmp/bus \
+      -w $WORKSPACE \
+      -v $WORKSPACE:$WORKSPACE:rw,z \
+      --name "$TAG" \
+      --rm \
+      --userns keep-id \
+      --group-add wheel \
+      quay.io/candlepin/subscription-manager:$GIT_HASH \
+      sh "$2"
+fi
 
 RETVAL="$?"
 echo "Test script returned: $RETVAL"
