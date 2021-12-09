@@ -25,6 +25,7 @@ import string
 import sys
 
 try:
+    import apt
     from debian.deb822 import Deb822
 except ImportError:
     apt = None
