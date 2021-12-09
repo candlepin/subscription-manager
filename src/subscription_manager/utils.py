@@ -18,7 +18,7 @@ import os
 import pprint
 import re
 import sys
-
+import shutil
 import signal
 import socket
 import syslog
@@ -224,42 +224,15 @@ def get_version(versions, package_name):
     return "%s%s" % (package_version, package_release)
 
 
-# This code was modified by from
-# http://stackoverflow.com/questions/566746/how-to-get-console-window-width-in-python
 def get_terminal_width():
     """
     Attempt to determine the current terminal size.
     """
     if not sys.stdout.isatty():
         return None
-    dim = None
-    try:
-        def ioctl_gwinsz(fd):
-            try:
-                import fcntl
-                import struct
-                import termios
-                cr = struct.unpack('hh',
-                                   fcntl.ioctl(fd,
-                                               termios.TIOCGWINSZ,
-                                               '1234'))
-            except Exception:
-                return
-            return cr
-
-        dim = ioctl_gwinsz(0) or ioctl_gwinsz(1) or ioctl_gwinsz(2)
-        if not dim:
-            try:
-                fd = os.open(os.ctermid(), os.O_RDONLY)
-                dim = ioctl_gwinsz(fd)
-                os.close(fd)
-            except Exception:
-                pass
-    except Exception:
-        pass
-
-    if dim:
-        return int(dim[1])
+    dim = shutil.get_terminal_size(fallback=(None, None))
+    if dim.columns is not None:
+        return dim.columns
     else:
         # This allows tests to run
         return 1000
