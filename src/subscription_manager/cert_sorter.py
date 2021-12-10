@@ -125,14 +125,16 @@ class ComplianceManager(object):
         self._parse_server_status()
 
     def get_compliance_status(self):
-        # Defaults to now
-        if self.status is None:
-            try:
-                self.status = self.cp_provider.get_consumer_auth_cp().getCompliance(self.identity.uuid, self.on_date)
-            except Exception as e:
-                log.warning("Failed to get compliance data from the server")
-                log.exception(e)
-                self.status = None
+        """
+        Try to get compliance status from server to get fresh information about compliance status.
+        :return: Compliance status, when server of cache is available. Otherwise None is returned.
+        """
+        status_cache = inj.require(inj.ENTITLEMENT_STATUS_CACHE)
+        self.status = status_cache.load_status(
+            self.cp_provider.get_consumer_auth_cp(),
+            self.identity.uuid,
+            self.on_date
+        )
         return self.status
 
     def _parse_server_status(self):
@@ -381,14 +383,6 @@ class CertSorter(ComplianceManager):
         # Note: no timer is setup to poll file_monitor by cert_sorter itself,
         # the gui can add one.
         self.cert_monitor = file_monitor.FilesystemWatcher(cert_dir_monitors)
-
-    def get_compliance_status(self):
-        status_cache = inj.require(inj.ENTITLEMENT_STATUS_CACHE)
-        return status_cache.read_status(
-            self.cp_provider.get_consumer_auth_cp(),
-            self.identity.uuid,
-            self.on_date
-        )
 
     def update_product_manager(self):
         if self.is_registered():
