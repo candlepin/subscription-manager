@@ -257,14 +257,14 @@ _subscription_manager()
   first=${COMP_WORDS[1]}
   cur="${COMP_WORDS[COMP_CWORD]}"
 
-  # Because the 'prev' may be optional argument like '--list', we iterate from the end
-  # until we find string that doesn't start with dash. That is the subcommand which
-  # should be used for completion.
-  i=1
-  prev="${COMP_WORDS[COMP_CWORD-$i]}"
-  while [[ $prev == -* ]]; do
-    i=$((i+1))
-    prev="${COMP_WORDS[COMP_CWORD-$i]}"
+  # Because the 'prev' may be optional argument like '--list', we iterate from the start
+  # until we find string that starts with a dash. The word before is the subcommand
+  # which should be used for completion.
+  for word in ${COMP_WORDS[@]}; do
+    if [[ $word == -* ]]; then
+      break;
+    fi
+    prev=$word
   done
 
   # top-level commands and options
