@@ -995,15 +995,14 @@ class AptRepoFileTest(unittest.TestCase):
         assert open("/etc/apt/sources.list.d/rhsm.sources").read() == "data"
         mock_file.assert_called_with("/etc/apt/sources.list.d/rhsm.sources")
         exp_params = {
-            'arches': 'all',
-            'Architectures': 'all',
+            'arches': 'none',
             'URIs': 'https://example.site.org/',
             'sslclientcert': 'mypem.pem'
         }
         ar = self._helper_stub_repofile()
         repo_mock = self._helper_stub_repo('mock', existing_values=[('baseurl', exp_params['URIs']),
                                                                     ('sslclientcert', exp_params['sslclientcert']),
-                                                                    ('arches', ['all'])])
+                                                                    ('arches', ['ALL'])])
         # Modify data
         act_content = ar.fix_content(repo_mock)
         # Test modification by comparing with expected values

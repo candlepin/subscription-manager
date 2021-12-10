@@ -471,7 +471,7 @@ if HAS_DEB822:
             apt_cont['Components'] = 'all'
             apt_cont['Trusted'] = 'yes'
 
-            if apt_cont['arches'] is None:
+            if apt_cont['arches'] is None or apt_cont['arches'] == ['ALL']:
                 apt_cont['arches'] = 'none'
             else:
                 arches_str = " ".join(apt_cont['arches'])
