@@ -56,7 +56,8 @@ class InstalledProducts(object):
             cert_filter = utils.ProductCertificateFilter(filter_string)
 
         # Instead of a dictionary because some legacy methods unpack this as a list
-        ProductStatus = collections.namedtuple('ProductStatus',
+        ProductStatus = collections.namedtuple(
+            'ProductStatus',
             ['product_name', 'product_id', 'version', 'arch', 'status', 'status_details', 'starts', 'ends']
         )
 
