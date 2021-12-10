@@ -474,7 +474,7 @@ if HAS_DEB822:
             if apt_cont['arches'] is None:
                 apt_cont['arches'] = 'none'
             else:
-                arches_str = ", ".join(apt_cont['arches'])
+                arches_str = " ".join(apt_cont['arches'])
                 apt_cont['arches'] = arches_str
                 apt_cont['Architectures'] = arches_str
 
