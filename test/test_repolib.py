@@ -1017,8 +1017,8 @@ class AptRepoFileTest(unittest.TestCase):
         assert open("/etc/apt/sources.list.d/rhsm.sources").read() == "data"
         mock_file.assert_called_with("/etc/apt/sources.list.d/rhsm.sources")
         exp_params = {
-            'arches': 'amd64, i386',
-            'Architectures': 'amd64, i386',
+            'arches': 'amd64 i386',
+            'Architectures': 'amd64 i386',
             'URIs': 'https://example.site.org/',
             'sslclientcert': 'mypem.pem'
         }
