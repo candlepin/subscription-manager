@@ -1,12 +1,13 @@
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # John Sefler <jsefler@redhat.com>, 2021.
+# Emilio Herrera <ehespinosa57@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-09 12:25-0500\n"
-"PO-Revision-Date: 2021-02-11 01:40+0000\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2021-12-13 23:16+0000\n"
+"Last-Translator: Emilio Herrera <ehespinosa57@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/"
 "subscription-manager/syspurpose-1-28/es/>\n"
 "Language: es\n"
@@ -14,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.9.1\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -42,11 +43,11 @@ msgstr ""
 #: /usr/lib64/python3.6/argparse.py:1393
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "no se pueden fusionar acciones - hay dos grupos llamados %r"
 
 #: /usr/lib64/python3.6/argparse.py:1431
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "'required' es un argumento no válido para posicionales"
 
 #: /usr/lib64/python3.6/argparse.py:1453
 #, python-format
@@ -63,7 +64,7 @@ msgstr ""
 #: /usr/lib64/python3.6/argparse.py:1490
 #, python-format
 msgid "invalid conflict_resolution value: %r"
-msgstr ""
+msgstr "valor no válido de conflict_resolution: %r"
 
 #: /usr/lib64/python3.6/argparse.py:1508
 #, python-format
@@ -119,11 +120,11 @@ msgstr ""
 
 #: /usr/lib64/python3.6/argparse.py:2058
 msgid "expected one argument"
-msgstr ""
+msgstr "se espera un argumento"
 
 #: /usr/lib64/python3.6/argparse.py:2059
 msgid "expected at most one argument"
-msgstr ""
+msgstr "se espera como máximo un argumento"
 
 #: /usr/lib64/python3.6/argparse.py:2060
 msgid "expected at least one argument"
@@ -173,6 +174,9 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
+"Advertencia: Un {attr} de \"{download_value}\" se estableció recientemente "
+"para este sistema por el administrador del servidor de derechos.\n"
+"{advice}"
 
 #: src/syspurpose/cli.py:31
 #, python-brace-format
@@ -208,7 +212,7 @@ msgstr ""
 #: src/syspurpose/cli.py:108
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
-msgstr ""
+msgstr "{attr} fijado a \"{val}\"."
 
 #: src/syspurpose/cli.py:129
 #, python-brace-format
