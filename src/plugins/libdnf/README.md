@@ -100,11 +100,11 @@ When plugin is compiled from source code, then you can install plugin to the sys
 Testing of product-id plugin
 ----------------------------
 
-You can test libdnf product-id plugin with candlepin server (e.g. in VM created
-using vagrant). You have to deploy candlepin server with option `-r` like this:
+You can test libdnf product-id plugin with candlepin server (e.g. in VM).
+You have to deploy candlepin server with option `-r` like this:
 
 ```
-[root@candlepin /vagrant] ./server/bin/deploy -gtar
+[root@candlepin ~] ./server/bin/deploy -gtar
 ```
 
 To use testing repository you have to do several steps:
