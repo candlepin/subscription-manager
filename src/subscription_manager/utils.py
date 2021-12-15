@@ -170,7 +170,6 @@ def is_simple_content_access(uep=None, identity=None, owner=None):
     This function has three optional arguments that can be reused for getting required information.
     :param uep: connection to candlepin server
     :param identity: reference on current identity
-    :param owner: reference on current owner
     :return: True, when current owner uses contentAccesMode equal to org_environment. False otherwise.
     """
 

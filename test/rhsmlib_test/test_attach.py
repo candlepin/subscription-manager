@@ -183,6 +183,11 @@ class TestAttachDBusObject(DBusObjectTest, InjectionMockingTest):
         self.mock_identity.is_valid.return_value = True
         self.mock_identity.uuid = "id"
 
+        is_simple_content_access_patcher = mock.patch('rhsmlib.dbus.objects.attach.is_simple_content_access')
+        self.mock_is_simple_content_access = is_simple_content_access_patcher.start()
+        self.mock_is_simple_content_access.return_value = False
+        self.addCleanup(is_simple_content_access_patcher.stop)
+
     def injection_definitions(self, *args, **kwargs):
         if args[0] == inj.IDENTITY:
             return self.mock_identity
@@ -284,7 +289,13 @@ class TestAttachDBusObject(DBusObjectTest, InjectionMockingTest):
         with six.assertRaisesRegex(self, dbus.DBusException, r'requires the consumer to be registered.*'):
             self.dbus_request(None, self.interface.AutoAttach, auto_method_args)
 
-    def test_auto_attach(self):
+    @mock.patch('rhsmlib.dbus.objects.attach.is_simple_content_access')
+    def test_auto_attach(self, mock_is_simple_content_access):
+        """
+        Test calling AutoAttach method in non-SCA mode
+        """
+        mock_is_simple_content_access.return_value = False
+
         def assertions(*args):
             result = args[0]
             self.assertEqual(result, json.dumps(CONTENT_JSON))
@@ -293,3 +304,27 @@ class TestAttachDBusObject(DBusObjectTest, InjectionMockingTest):
 
         dbus_method_args = ['service_level', {}, '']
         self.dbus_request(assertions, self.interface.AutoAttach, dbus_method_args)
+
+    def test_auto_attach_sca(self):
+        """
+        Test that calling AutoAttach method raises exception, when system is in SCA mode
+        """
+        self.mock_is_simple_content_access.return_value = True
+
+        self.mock_attach.attach_auto.return_value = CONTENT_JSON
+
+        dbus_method_args = ['service_level', {}, '']
+        with self.assertRaises(dbus.exceptions.DBusException):
+            self.dbus_request(None, self.interface.AutoAttach, dbus_method_args)
+
+    def test_attach_pool_sca(self):
+        """
+        Test that calling PoolAttach method raises exception in SCA mode
+        """
+        self.mock_is_simple_content_access.return_value = True
+
+        self.mock_attach.attach_pool.return_value = CONTENT_JSON
+        dbus_method_args = [['x', 'y'], 1, {}, '']
+
+        with self.assertRaises(dbus.exceptions.DBusException):
+            self.dbus_request(None, self.interface.PoolAttach, dbus_method_args)

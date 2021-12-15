@@ -1627,6 +1627,34 @@ class TestAttachCommand(TestCliProxyCommand):
         else:
             self.fail("No Exception Raised")
 
+    @patch('subscription_manager.managercli.is_simple_content_access')
+    def test_auto_attach_sca_mode(self, mock_is_simple_content_access):
+        """
+        Test the case, when SCA mode is used. Auto-attach is not possible in this case
+        """
+        mock_is_simple_content_access.return_value = True
+        try:
+            self.cc.main("--auto")
+            self.cc._validate_options()
+        except SystemExit as e:
+            self.assertEqual(e.code, os.EX_USAGE)
+        else:
+            self.fail("No Exception Raised")
+
+    @patch('subscription_manager.managercli.is_simple_content_access')
+    def test_attach_sca_mode(self, mock_is_simple_content_access):
+        """
+        Test the case, when SCA mode is used. Attaching of pool is not possible in this case
+        """
+        mock_is_simple_content_access.return_value = True
+        try:
+            self.cc.main("--pool 123456789")
+            self.cc._validate_options()
+        except SystemExit as e:
+            self.assertEqual(e.code, os.EX_USAGE)
+        else:
+            self.fail("No Exception Raised")
+
 
 # Test Attach and Subscribe are the same
 class TestSubscribeCommand(TestAttachCommand):
