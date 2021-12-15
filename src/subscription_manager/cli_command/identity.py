@@ -26,6 +26,7 @@ from subscription_manager import managerlib
 from subscription_manager.branding import get_branding
 from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.cli import handle_exception
+from subscription_manager.cli_command.environments import MULTI_ENV
 from subscription_manager.cli_command.user_pass import UserPassCommand
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.i18n import ugettext as _
@@ -87,15 +88,18 @@ class IdentityCommand(UserPassCommand):
                 supported_resources = get_supported_resources(self.cp, self.identity)
                 if 'environments' in supported_resources:
                     consumer = self.cp.getConsumer(consumerid)
-                    environments = consumer['environments']
+                    evn_key = 'environments' if self.cp.has_capability(MULTI_ENV) else 'environment'
+                    environments = consumer[evn_key]
                     if environments:
-                        environment_name = (','.join([environment['name'] for environment in environments]))
+                        if evn_key == 'environment':
+                            environment_names = environments['name']
+                        else:
+                            environment_names = (','.join([environment['name'] for environment in environments]))
                     else:
-                        environment_name = _("None")
-                        environments = []
+                        environment_names = _("None")
                     print(ungettext('environment name: {environment_name}',
                                     'environment names: {environment_name}',
-                                    len(environments)).format(environment_name=environment_name))
+                                    len(environment_names.split(','))).format(environment_name=environment_names))
             else:
                 if self.options.force:
                     # get an UEP with basic auth or keycloak auth

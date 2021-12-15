@@ -280,13 +280,13 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_cp.registerConsumer.return_value = expected_consumer
 
         register_service = register.RegisterService(self.mock_cp)
-        consumer = register_service.register("org", name="name", environment="environment")
+        consumer = register_service.register("org", name="name", environments="environment")
 
         self.mock_cp.registerConsumer.assert_called_once_with(
             name="name",
             facts={},
             owner="org",
-            environment="environment",
+            environments="environment",
             keys=None,
             installed_products=[],
             jwt_token=None,
@@ -323,13 +323,13 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_cp.registerConsumer.return_value = expected_consumer
 
         register_service = register.RegisterService(self.mock_cp)
-        consumer = register_service.register("org", name="name", environment="environment")
+        consumer = register_service.register("org", name="name", environments="environment")
 
         self.mock_cp.registerConsumer.assert_called_once_with(
             name="name",
             facts={},
             owner="org",
-            environment="environment",
+            environments="environment",
             keys=None,
             installed_products=[],
             jwt_token=None,

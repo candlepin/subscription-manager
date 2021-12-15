@@ -224,6 +224,30 @@ class CliRegistrationTests(SubManFixture):
             expected = "1234,5678"
             self.assertEqual(expected, env_id)
 
+    def test_validate_multi_capable_multi_entry(self):
+        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+            rc = RegisterCommand()
+            rc.cp = mock_uep
+            rc.is_registered = Mock(return_value=False)
+            rc.options = Mock()
+            rc.options.activation_keys = None
+            rc.options.force = None
+            rc.options.consumertype = None
+            rc.options.environments = 'One,Two'
+
+            mock_uep.has_capability = Mock(return_value=False)
+            try:
+                rc._validate_options()
+                self.fail("No Exception Raised")
+            except SystemExit as e:
+                self.assertEqual(e.code, os.EX_USAGE)
+
+            mock_uep.has_capability = Mock(return_value=True)
+            try:
+                rc._validate_options()
+            except SystemExit:
+                self.fail("Exception Raised")
+
     def test_set_duplicate_multi_environment(self):
         def env_list(*args, **kwargs):
             return [{"id": "1234", "name": "somename"},

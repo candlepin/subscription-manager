@@ -46,6 +46,7 @@ except ImportError:
     subman_version = "unknown"
 
 config = get_config_parser()
+MULTI_ENV = "multi_environment"
 
 
 def safe_int(value, safe_value=None):
@@ -1114,7 +1115,7 @@ class UEPConnection(BaseConnection):
             params['usage'] = usage
         if service_level is not None:
             params['serviceLevel'] = service_level
-        if environments is not None:
+        if environments is not None and self.has_capability(MULTI_ENV):
             env_list = []
             for environment in environments.split(','):
                 env_list.append({"id": environment})
@@ -1125,7 +1126,9 @@ class UEPConnection(BaseConnection):
             headers['Authorization'] = 'Bearer {jwt_token}'.format(jwt_token=jwt_token)
 
         url = "/consumers"
-        if owner:
+        if environments and not self.has_capability(MULTI_ENV):
+            url = "/environments/%s/consumers" % self.sanitize(environments)
+        elif owner:
             query_param = urlencode({"owner": owner})
             url = "%s?%s" % (url, query_param)
             prepend = ""
