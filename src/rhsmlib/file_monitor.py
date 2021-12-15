@@ -181,7 +181,7 @@ class InotifyFilesystemWatcher(FilesystemWatcher):
         """
         log.debug(
             'Thread %s: Some event occurred: %s (%s)' %
-            (threading.current_thread().getName(), event.path, event.pathname)
+            (threading.current_thread().name, event.path, event.pathname)
         )
 
         for dir_watch in self.dir_watches.values():
