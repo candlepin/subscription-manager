@@ -1045,7 +1045,7 @@ class ContentAccessModeCache(ConsumerCache):
         if hasattr(uep.conn, 'is_consumer_cert_key_valid'):
             if uep.conn.is_consumer_cert_key_valid is None:
                 log.debug(
-                    f'Cache file {self.CACHE_FILE} cannot be considered as valid, because no connection has not '
+                    f'Cache file {self.CACHE_FILE} cannot be considered as valid, because no connection has '
                     'been created yet'
                 )
                 return True
