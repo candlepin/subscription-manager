@@ -14,8 +14,10 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+import os
 import readline
 
+from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.user_pass import UserPassCommand
 from subscription_manager.i18n import ugettext as _
 
@@ -50,7 +52,14 @@ class OrgCommand(UserPassCommand):
                 self._org = self.options.org
             else:
                 owners = self.cp.getOwnerList(self.options.username)
-                if len(owners) == 1:
+                if len(owners) == 0:
+                    system_exit(
+                        os.EX_DATAERR,
+                        _("Error: User {username} is not member of any organization.").format(
+                            username=self.options.username
+                        )
+                    )
+                elif len(owners) == 1:
                     self._org = owners[0]['key']
                 else:
                     # Get a list of valid owners. Since no owner was specified,

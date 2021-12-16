@@ -398,6 +398,11 @@ class TestRoleOrgCheckingCommand(SubManFixture):
         self.cc = managercli.RoleCommand()
         self.cc.is_registered = Mock(return_value=False)
 
+    def test_no_org(self):
+        self.set_orgs_for_stub_cp_provider([])
+        with self.assertRaises(InvalidOrg):
+            self.cc.main(self.common_args + ['--org', 'foo'])
+
     def test_single_org_same(self):
         self.set_orgs_for_stub_cp_provider(['org1'])
         self.cc.main(self.common_args + ['--org', 'org1'])
