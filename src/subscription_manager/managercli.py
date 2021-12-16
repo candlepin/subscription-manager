@@ -1086,7 +1086,14 @@ class OrgCommand(UserPassCommand):
                 self._org = self.options.org
             else:
                 owners = self.cp.getOwnerList(self.options.username)
-                if len(owners) == 1:
+                if len(owners) == 0:
+                    system_exit(
+                        os.EX_DATAERR,
+                        _("Error: User {username} is not member of any organization.").format(
+                            username=self.options.username
+                        )
+                    )
+                elif len(owners) == 1:
                     self._org = owners[0]['key']
                 else:
                     # Get a list of valid owners. Since no owner was specified,
