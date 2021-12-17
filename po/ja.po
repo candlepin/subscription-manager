@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-15 10:29+0100\n"
-"PO-Revision-Date: 2021-09-01 13:26+0000\n"
+"PO-Revision-Date: 2021-12-14 13:16+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ja/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.9.1\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -513,8 +513,6 @@ msgid "Auto-attaching ..."
 msgstr "オートアタッチしています..."
 
 #: cockpit/src/subscriptions-view.jsx:73 cockpit/src/subscriptions-view.jsx:159
-#, fuzzy
-#| msgid "Product Name"
 msgid "Product name"
 msgstr "製品名"
 
@@ -526,18 +524,13 @@ msgid "Subscribed"
 msgstr "サブスクライブ済み"
 
 #: cockpit/src/subscriptions-view.jsx:113
-#, fuzzy
-#| msgid "Not Subscribed (Not supported by a valid subscription.)"
 msgid "Not subscribed (Not supported by a valid subscription)"
-msgstr ""
-"サブスクライブなし (有効なサブスクリプションではサポートされていません)"
+msgstr "サブスクライブなし (有効なサブスクリプションではサポートされていません)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:148
-#, fuzzy
-#| msgid "Not Subscribed"
 msgid "Not subscribed"
-msgstr "サブスクライブなし"
+msgstr "サブスクライブされていない"
 
 #: cockpit/src/subscriptions-view.jsx:163
 msgid "Product ID"
@@ -575,47 +568,34 @@ msgstr "インストール済みの製品"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:217
-#, fuzzy
-#| msgid "No installed products detected."
 msgid "No installed products detected"
-msgstr "インストール済みの製品は検出されませんでした。"
+msgstr "インストール済みの製品は検出されませんでした"
 
 #: cockpit/src/subscriptions-view.jsx:291
-#, fuzzy
-#| msgid ""
-#| "Content Access Mode is set to Simple Content Access. This host has access "
-#| "to content, regardless of subscription status.\n"
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of system purpose status."
 msgstr ""
-"コンテンツアクセスモードは、シンプルコンテンツアクセスに設定されています。こ"
-"のホストは、サブスクリプションのステータスに関係なく、コンテンツにアクセスで"
-"きます。\n"
+"コンテンツアクセスモードは、シンプルコンテンツアクセスに設定されています。このホストは、システムの目的のステータスに関係なく、コンテンツにアクセスできます"
+"。"
 
 #: cockpit/src/subscriptions-view.jsx:297
 #: cockpit/src/subscriptions-view.jsx:388
 msgid "Popover with explanation of SCA mode"
-msgstr ""
+msgstr "SCA モードの説明のあるポップアップ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: cockpit/src/subscriptions-view.jsx:304
 #: cockpit/src/subscriptions-view.jsx:395
-#, fuzzy
-#| msgid "Subscription Registration"
 msgid "Subscriptions information"
-msgstr "サブスクリプションの登録"
+msgstr "サブスクリプション情報"
 
 #: cockpit/src/subscriptions-view.jsx:321
-#, fuzzy
-#| msgid "System Purpose"
 msgid "System purpose"
 msgstr "システムの目的"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:333
-#, fuzzy
-#| msgid "Service Level"
 msgid "Service level"
 msgstr "サービスレベル"
 
@@ -625,8 +605,6 @@ msgid "Usage"
 msgstr "使用方法"
 
 #: cockpit/src/subscriptions-view.jsx:345
-#, fuzzy
-#| msgid "Roles"
 msgid "Role"
 msgstr "ロール"
 
@@ -636,38 +614,29 @@ msgstr "アドオン"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: cockpit/src/subscriptions-view.jsx:366
-#, fuzzy
-#| msgid "System is not registered."
 msgid "Not registered"
-msgstr "システムは登録されていません。"
+msgstr "登録されていません"
 
 #: cockpit/src/subscriptions-view.jsx:375
 msgid "Unregister"
 msgstr "登録解除"
 
 #: cockpit/src/subscriptions-view.jsx:382
-#, fuzzy
-#| msgid ""
-#| "Content Access Mode is set to Simple Content Access. This host has access "
-#| "to content, regardless of subscription status.\n"
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status."
 msgstr ""
-"コンテンツアクセスモードは、シンプルコンテンツアクセスに設定されています。こ"
-"のホストは、サブスクリプションのステータスに関係なく、コンテンツにアクセスで"
-"きます。\n"
+"コンテンツアクセスモードは、シンプルコンテンツアクセスに設定されています。このホストは、サブスクリプションのステータスに関係なく、コンテンツにアクセスでき"
+"ます。"
 
 #: cockpit/src/subscriptions-view.jsx:409
 msgid "Overview"
-msgstr ""
+msgstr "概要"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: cockpit/src/subscriptions-view.jsx:415
-#, fuzzy
-#| msgid "Subscription "
 msgid "Subscription status"
-msgstr "サブスクリプション "
+msgstr "サブスクリプションのステータス"
 
 #: cockpit/src/subscriptions-view.jsx:453
 msgid ""
@@ -1888,10 +1857,8 @@ msgstr "サーバー側の変更を上書きする場合は、以下を実行し
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. TRANSLATORS: this refers to a deprecated command
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:40
-#, fuzzy
-#| msgid "Deprecated, see remove"
 msgid "Deprecated, see 'syspurpose'"
-msgstr "廃止予定。remove を参照してください"
+msgstr "非推奨です。「syspurpose」を参照してください"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:66
 #, python-brace-format
@@ -1950,7 +1917,7 @@ msgstr ""
 msgid ""
 "Error: --username, --password, --token and --org can be used only on "
 "unregistered systems"
-msgstr ""
+msgstr "エラー: --username、--password、--token、--org は、未登録のシステムでのみ使用できます"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:181
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:194
@@ -2041,7 +2008,7 @@ msgstr "トークンを使用してサーバーに接続できません"
 #: src/subscription_manager/i18n_argparse.py:35
 #, python-format
 msgid "%(prog)s [OPTIONS]"
-msgstr "%(prog)s  [オプション]"
+msgstr "%(prog)s [オプション]"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:455
 #, python-brace-format
@@ -2295,10 +2262,9 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/cli.py:220
-#, fuzzy, python-brace-format
-#| msgid "{prog}: error: {msg}"
+#, python-brace-format
 msgid "{prog}: error: no such option: {args}"
-msgstr "{prog}: エラー: {msg}"
+msgstr "{prog}: そのようなオプションはありません: {args}"
 
 #: src/subscription_manager/cli_command/cli.py:236
 msgid "Error parsing serverurl:"
@@ -3036,10 +3002,8 @@ msgstr "使用済みサブスクリプションプールは見つかりません
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/cli_command/org.py:31
-#, fuzzy
-#| msgid "specify organization"
 msgid "specify an organization"
-msgstr "組織の指定"
+msgstr "組織を指定"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/cli_command/org.py:42
@@ -3763,21 +3727,19 @@ msgstr "現在のシステムの目的を表示"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/syspurpose.py:85
-#, fuzzy, python-brace-format
-#| msgid "{prog}: error: {msg}"
+#, python-brace-format
 msgid "{prog} {name}"
-msgstr "{prog}: エラー: {msg}"
+msgstr "{prog} {name}"
 
 #: src/subscription_manager/cli_command/syspurpose.py:87
 msgid "Syspurpose submodules"
-msgstr ""
+msgstr "syspurpose サブモジュール"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/syspurpose.py:101
-#, fuzzy, python-format, python-brace-format
-#| msgid "%(prog)s {name} [OPTIONS]"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
-msgstr "%(prog)s {name} [オプション]"
+msgstr "%(prog)s {name} [SUBMODULE] [OPTIONS]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/cli_command/unregister.py:39
@@ -3979,7 +3941,7 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:46
 #, python-brace-format
 msgid "{message} (HTTP error code {code}: {title})"
-msgstr ""
+msgstr "{message} (HTTP エラーコード{code}: {title})"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/i18n_argparse.py:51

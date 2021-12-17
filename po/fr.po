@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-15 10:29+0100\n"
-"PO-Revision-Date: 2021-09-01 13:26+0000\n"
+"PO-Revision-Date: 2021-12-14 13:16+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/fr/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.9.1\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -524,8 +524,6 @@ msgid "Auto-attaching ..."
 msgstr "Attachement automatique ..."
 
 #: cockpit/src/subscriptions-view.jsx:73 cockpit/src/subscriptions-view.jsx:159
-#, fuzzy
-#| msgid "Product Name"
 msgid "Product name"
 msgstr "Nom du produit"
 
@@ -537,15 +535,11 @@ msgid "Subscribed"
 msgstr "Abonné"
 
 #: cockpit/src/subscriptions-view.jsx:113
-#, fuzzy
-#| msgid "Not Subscribed (Not supported by a valid subscription.)"
 msgid "Not subscribed (Not supported by a valid subscription)"
-msgstr "Non pris en charge (par un abonnement valide)."
+msgstr "Non abonné (non pris en charge par un abonnement valide)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:148
-#, fuzzy
-#| msgid "Not Subscribed"
 msgid "Not subscribed"
 msgstr "Non abonné"
 
@@ -585,46 +579,34 @@ msgstr "Produits installés"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:217
-#, fuzzy
-#| msgid "No installed products detected."
 msgid "No installed products detected"
-msgstr "Aucun produit installé détecté."
+msgstr "Aucun produit installé n'a été détecté"
 
 #: cockpit/src/subscriptions-view.jsx:291
-#, fuzzy
-#| msgid ""
-#| "Content Access Mode is set to Simple Content Access. This host has access "
-#| "to content, regardless of subscription status.\n"
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of system purpose status."
 msgstr ""
-"Le mode d'accès au contenu est réglé sur Accès au contenu simple. Cet hôte a "
-"accès au contenu, quel que soit le statut de l'abonnement.\n"
+"Le mode d'accès au contenu est réglé sur Simple Content Access. Cet hôte a "
+"accès au contenu, quel que soit l'état d'utilisation du système."
 
 #: cockpit/src/subscriptions-view.jsx:297
 #: cockpit/src/subscriptions-view.jsx:388
 msgid "Popover with explanation of SCA mode"
-msgstr ""
+msgstr "Popover avec explication du mode SCA"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: cockpit/src/subscriptions-view.jsx:304
 #: cockpit/src/subscriptions-view.jsx:395
-#, fuzzy
-#| msgid "Subscription Registration"
 msgid "Subscriptions information"
-msgstr "Enregistrement d'abonnements"
+msgstr "Informations sur les abonnements"
 
 #: cockpit/src/subscriptions-view.jsx:321
-#, fuzzy
-#| msgid "System Purpose"
 msgid "System purpose"
-msgstr "Objectif système"
+msgstr "Objectif du système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:333
-#, fuzzy
-#| msgid "Service Level"
 msgid "Service level"
 msgstr "Niveau de service"
 
@@ -634,10 +616,8 @@ msgid "Usage"
 msgstr "Utilisation"
 
 #: cockpit/src/subscriptions-view.jsx:345
-#, fuzzy
-#| msgid "Roles"
 msgid "Role"
-msgstr "Les rôles"
+msgstr "Role"
 
 #: cockpit/src/subscriptions-view.jsx:351 src/rct/printing.py:78
 msgid "Add-ons"
@@ -645,37 +625,29 @@ msgstr "Add-ons"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: cockpit/src/subscriptions-view.jsx:366
-#, fuzzy
-#| msgid "System is not registered."
 msgid "Not registered"
-msgstr "Le système n'est pas enregistré."
+msgstr "Non inscrit"
 
 #: cockpit/src/subscriptions-view.jsx:375
 msgid "Unregister"
 msgstr "Désenregistrer"
 
 #: cockpit/src/subscriptions-view.jsx:382
-#, fuzzy
-#| msgid ""
-#| "Content Access Mode is set to Simple Content Access. This host has access "
-#| "to content, regardless of subscription status.\n"
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status."
 msgstr ""
 "Le mode d'accès au contenu est réglé sur Accès au contenu simple. Cet hôte a "
-"accès au contenu, quel que soit le statut de l'abonnement.\n"
+"accès au contenu, quel que soit le statut de l'abonnement."
 
 #: cockpit/src/subscriptions-view.jsx:409
 msgid "Overview"
-msgstr ""
+msgstr "Aperçu"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: cockpit/src/subscriptions-view.jsx:415
-#, fuzzy
-#| msgid "Subscription "
 msgid "Subscription status"
-msgstr "Abonnement "
+msgstr "État de l'abonnement"
 
 #: cockpit/src/subscriptions-view.jsx:453
 msgid ""
@@ -1589,9 +1561,8 @@ msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
 msgstr ""
-"Erreur : type de listing non valide. Valeurs autorisées: « "
-"installés » (installed) « consommés » (consumed) ou "
-"« disponibles » (available)"
+"Erreur : type de listing non valide. Valeurs autorisées : « installés » "
+"(installed) « consommés » (consumed) ou « disponibles » (available)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsmlib/services/entitlement.py:451
@@ -1922,10 +1893,8 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. TRANSLATORS: this refers to a deprecated command
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:40
-#, fuzzy
-#| msgid "Deprecated, see remove"
 msgid "Deprecated, see 'syspurpose'"
-msgstr "Déprécié, voir remove (suppression)"
+msgstr "Déprécié, voir 'syspurpose'."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:66
 #, python-brace-format
@@ -1983,6 +1952,8 @@ msgid ""
 "Error: --username, --password, --token and --org can be used only on "
 "unregistered systems"
 msgstr ""
+"Erreur : --username, --password, --token et --org ne peuvent être utilisés "
+"que sur des systèmes non enregistrés"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:181
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:194
@@ -2346,10 +2317,9 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/cli.py:220
-#, fuzzy, python-brace-format
-#| msgid "{prog}: error: {msg}"
+#, python-brace-format
 msgid "{prog}: error: no such option: {args}"
-msgstr "{prog} : erreur : {msg}"
+msgstr "{prog}erreur : option inexistante : {args}"
 
 #: src/subscription_manager/cli_command/cli.py:236
 msgid "Error parsing serverurl:"
@@ -3009,7 +2979,7 @@ msgid ""
 "{dateexample})"
 msgstr ""
 "La date saisie n'est pas valide. La date doit être sous le format YYYY-MM-DD "
-"(exemple: {dateexample})"
+"(exemple : {dateexample})"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/list.py:297
@@ -3103,8 +3073,6 @@ msgstr "Aucun pool d'abonnement consommé n'a été trouvé."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/cli_command/org.py:31
-#, fuzzy
-#| msgid "specify organization"
 msgid "specify an organization"
 msgstr "spécifier une organisation"
 
@@ -3852,21 +3820,19 @@ msgstr "montrer l'objectif système actuel"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/syspurpose.py:85
-#, fuzzy, python-brace-format
-#| msgid "{prog}: error: {msg}"
+#, python-brace-format
 msgid "{prog} {name}"
-msgstr "{prog} : erreur : {msg}"
+msgstr "{prog} {name}"
 
 #: src/subscription_manager/cli_command/syspurpose.py:87
 msgid "Syspurpose submodules"
-msgstr ""
+msgstr "Sous-modules polyvalents"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/syspurpose.py:101
-#, fuzzy, python-format, python-brace-format
-#| msgid "%(prog)s {name} [OPTIONS]"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
-msgstr "%(prog)s {name} [OPTIONS]"
+msgstr "%(prog)s {name} [SOUS-MODULE] [OPTIONS]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/unregister.py:39
@@ -4074,7 +4040,7 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:46
 #, python-brace-format
 msgid "{message} (HTTP error code {code}: {title})"
-msgstr ""
+msgstr "{message} (Code d'erreur HTTP {code} : {title})"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/i18n_argparse.py:51

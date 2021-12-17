@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-15 10:29+0100\n"
-"PO-Revision-Date: 2021-09-01 13:26+0000\n"
+"PO-Revision-Date: 2021-12-14 13:16+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-main/zh_CN/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.9.1\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -507,8 +507,6 @@ msgid "Auto-attaching ..."
 msgstr "自动附加..."
 
 #: cockpit/src/subscriptions-view.jsx:73 cockpit/src/subscriptions-view.jsx:159
-#, fuzzy
-#| msgid "Product Name"
 msgid "Product name"
 msgstr "产品名称"
 
@@ -520,17 +518,13 @@ msgid "Subscribed"
 msgstr "已订阅"
 
 #: cockpit/src/subscriptions-view.jsx:113
-#, fuzzy
-#| msgid "Not Subscribed (Not supported by a valid subscription.)"
 msgid "Not subscribed (Not supported by a valid subscription)"
-msgstr "没有订阅（不被一个有效的订阅支持）"
+msgstr "未订阅（有效订阅不支持）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:148
-#, fuzzy
-#| msgid "Not Subscribed"
 msgid "Not subscribed"
-msgstr "未订阅的"
+msgstr "未订阅"
 
 #: cockpit/src/subscriptions-view.jsx:163
 msgid "Product ID"
@@ -568,47 +562,34 @@ msgstr "安装的产品"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:217
-#, fuzzy
-#| msgid "No installed products detected."
 msgid "No installed products detected"
-msgstr "没有探测到安装的产品。"
+msgstr "没有检测到安装的产品"
 
 #: cockpit/src/subscriptions-view.jsx:291
-#, fuzzy
-#| msgid ""
-#| "Content Access Mode is set to Simple Content Access. This host has access "
-#| "to content, regardless of subscription status.\n"
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of system purpose status."
-msgstr ""
-"内容访问模式设置为简单内容访问。无论订阅状态如何，该主机都可以访问内容。\n"
+msgstr "内容访问模式设置为简单内容访问。无论系统用途状态如何，该主机都可以访问内容。"
 
 #: cockpit/src/subscriptions-view.jsx:297
 #: cockpit/src/subscriptions-view.jsx:388
 msgid "Popover with explanation of SCA mode"
-msgstr ""
+msgstr "带有 SCA 模式说明的弹窗"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:304
 #: cockpit/src/subscriptions-view.jsx:395
-#, fuzzy
-#| msgid "Subscription Registration"
 msgid "Subscriptions information"
-msgstr "订阅注册"
+msgstr "订阅信息"
 
 #: cockpit/src/subscriptions-view.jsx:321
-#, fuzzy
-#| msgid "System Purpose"
 msgid "System purpose"
-msgstr "系统目的"
+msgstr "系统用途"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:333
-#, fuzzy
-#| msgid "Service Level"
 msgid "Service level"
-msgstr "服务等级"
+msgstr "服务级别"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:339 src/rct/printing.py:77
@@ -616,8 +597,6 @@ msgid "Usage"
 msgstr "使用"
 
 #: cockpit/src/subscriptions-view.jsx:345
-#, fuzzy
-#| msgid "Roles"
 msgid "Role"
 msgstr "角色"
 
@@ -627,36 +606,27 @@ msgstr "附加组件"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:366
-#, fuzzy
-#| msgid "System is not registered."
 msgid "Not registered"
-msgstr "这个系统尚未注册。"
+msgstr "没有注册"
 
 #: cockpit/src/subscriptions-view.jsx:375
 msgid "Unregister"
 msgstr "取消注册"
 
 #: cockpit/src/subscriptions-view.jsx:382
-#, fuzzy
-#| msgid ""
-#| "Content Access Mode is set to Simple Content Access. This host has access "
-#| "to content, regardless of subscription status.\n"
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status."
-msgstr ""
-"内容访问模式设置为简单内容访问。无论订阅状态如何，该主机都可以访问内容。\n"
+msgstr "内容访问模式设置为简单内容访问。无论订阅状态如何，该主机都可以访问内容。"
 
 #: cockpit/src/subscriptions-view.jsx:409
 msgid "Overview"
-msgstr ""
+msgstr "概览"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:415
-#, fuzzy
-#| msgid "Subscription "
 msgid "Subscription status"
-msgstr "订阅 "
+msgstr "订阅状态"
 
 #: cockpit/src/subscriptions-view.jsx:453
 msgid ""
@@ -1845,10 +1815,8 @@ msgstr "如果需要覆盖服务器端的改变，请运行：{command}"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #. TRANSLATORS: this refers to a deprecated command
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:40
-#, fuzzy
-#| msgid "Deprecated, see remove"
 msgid "Deprecated, see 'syspurpose'"
-msgstr "已弃用，请查看 remove"
+msgstr "已弃用，请参阅 'syspurpose'"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:66
 #, python-brace-format
@@ -1896,14 +1864,14 @@ msgstr "错误：可以指定--username 或 --token，但不能同时指定它�
 #, python-brace-format
 msgid ""
 "Error: you must register or specify --username and --password to list {attr}"
-msgstr "错误：您必须注册或通过指定 --username 和 --password 来列出 {attr}"
+msgstr "错误：您必须注册或指定 --username 和 --password 来列出 {attr}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:166
 #: src/subscription_manager/cli_command/service_level.py:91
 msgid ""
 "Error: --username, --password, --token and --org can be used only on "
 "unregistered systems"
-msgstr ""
+msgstr "错误： --username、--password、--token 和 --org 只能在未注册的系统上使用"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:181
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:194
@@ -2156,7 +2124,7 @@ msgstr "Auro-attach 属性：禁用"
 #: src/subscription_manager/cli_command/clean.py:25
 msgid ""
 "Remove all local system and subscription data without affecting the server"
-msgstr "删除所有本地系统和订阅数据（不会影响到服务器）"
+msgstr "删除所有本地系统和订阅数据，而不会影响到服务器"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/clean.py:31
@@ -2217,10 +2185,9 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:220
-#, fuzzy, python-brace-format
-#| msgid "{prog}: error: {msg}"
+#, python-brace-format
 msgid "{prog}: error: no such option: {args}"
-msgstr "{prog}: 错误: {msg}"
+msgstr "{prog}: 错误: 无此选项：{args}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:236
@@ -2925,8 +2892,6 @@ msgstr "没有找到消耗的订阅池。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/org.py:31
-#, fuzzy
-#| msgid "specify organization"
 msgid "specify an organization"
 msgstr "指定机构"
 
@@ -3624,21 +3589,19 @@ msgstr "显示当前系统目的"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/syspurpose.py:85
-#, fuzzy, python-brace-format
-#| msgid "{prog}: error: {msg}"
+#, python-brace-format
 msgid "{prog} {name}"
-msgstr "{prog}: 错误: {msg}"
+msgstr "{prog} {name}"
 
 #: src/subscription_manager/cli_command/syspurpose.py:87
 msgid "Syspurpose submodules"
-msgstr ""
+msgstr "syspurpose 子模块"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/syspurpose.py:101
-#, fuzzy, python-format, python-brace-format
-#| msgid "%(prog)s {name} [OPTIONS]"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
-msgstr "%(prog)s {name} [OPTIONS]"
+msgstr "%(prog)s {name} [SUBMODULE] [OPTIONS]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/unregister.py:39
@@ -3830,7 +3793,7 @@ msgstr "已超过该服务器速率限制，请稍后再试（%s 秒后即超过
 #: src/subscription_manager/exceptions.py:46
 #, python-brace-format
 msgid "{message} (HTTP error code {code}: {title})"
-msgstr ""
+msgstr "{message} （HTTP 错误码 {code} ：{title}）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/i18n_argparse.py:51

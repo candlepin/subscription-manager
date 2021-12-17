@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-15 10:29+0100\n"
-"PO-Revision-Date: 2021-10-03 14:05+0000\n"
+"PO-Revision-Date: 2021-11-16 14:16+0000\n"
 "Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ko/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.9\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -192,7 +192,7 @@ msgstr "시스템 등록"
 
 #: cockpit/src/insights.jsx:67 cockpit/src/insights.jsx:277
 msgid "The $0 package is not available from any repository."
-msgstr "$0 패키지는 레포지터리에서 사용 할 수 없습니다."
+msgstr "$0 꾸러미는 저장소에서 사용 할 수 없습니다."
 
 #: cockpit/src/insights.jsx:70
 msgid ""
@@ -570,29 +570,21 @@ msgid "No installed products detected"
 msgstr "설치된 제품이 감지되지 않았습니다"
 
 #: cockpit/src/subscriptions-view.jsx:291
-#, fuzzy
-#| msgid ""
-#| "Content Access Mode is set to Simple Content Access. This host has access "
-#| "to content, regardless of subscription status.\n"
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of system purpose status."
-msgstr ""
-"컨텐츠 접근 방식이 단순 컨텐츠 접근으로 설정되어 있습니다. 이 호스트는 서브스"
-"크립션 상태에 관계없이 컨텐츠에 접근 할 수 있습니다.\n"
+msgstr "내용 접근 방식이 단순 내용 접근으로 설정되어 있습니다. 이 호스트는 서브스크립션 상태에 관계없이 내용에 접근 할 수 있습니다."
 
 #: cockpit/src/subscriptions-view.jsx:297
 #: cockpit/src/subscriptions-view.jsx:388
 msgid "Popover with explanation of SCA mode"
-msgstr ""
+msgstr "SCA 방식의 설명을 갖는 팝오버(Popover)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:304
 #: cockpit/src/subscriptions-view.jsx:395
-#, fuzzy
-#| msgid "Subscription Registration"
 msgid "Subscriptions information"
-msgstr "서브스크립션 등록"
+msgstr "서브스크립션 정보"
 
 #: cockpit/src/subscriptions-view.jsx:321
 msgid "System purpose"
@@ -626,16 +618,10 @@ msgid "Unregister"
 msgstr "등록 해제"
 
 #: cockpit/src/subscriptions-view.jsx:382
-#, fuzzy
-#| msgid ""
-#| "Content Access Mode is set to Simple Content Access. This host has access "
-#| "to content, regardless of subscription status.\n"
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status."
-msgstr ""
-"컨텐츠 접근 방식이 단순 컨텐츠 접근으로 설정되어 있습니다. 이 호스트는 서브스"
-"크립션 상태에 관계없이 컨텐츠에 접근 할 수 있습니다.\n"
+msgstr "내용 접근 방식이 단순 내용 접근으로 설정되어 있습니다. 이 호스트는 서브스크립션 상태에 관계없이 내용에 접근 할 수 있습니다."
 
 #: cockpit/src/subscriptions-view.jsx:409
 msgid "Overview"
@@ -643,10 +629,8 @@ msgstr "개요"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:415
-#, fuzzy
-#| msgid "Subscription "
 msgid "Subscription status"
-msgstr "서브스크립션 "
+msgstr "서브스크립션 상태"
 
 #: cockpit/src/subscriptions-view.jsx:453
 msgid ""
@@ -769,7 +753,7 @@ msgstr "잘못된 인수가 지정됨: %s\n"
 
 #: src/plugins/dnf/product-id.py:76
 msgid "Installed products updated."
-msgstr "설치된 제품이 업데이트되었습니다."
+msgstr "설치된 제품이 최신화되었습니다."
 
 #: src/plugins/dnf/subscription-manager.py:34
 #, python-format
@@ -2240,10 +2224,9 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:220
-#, fuzzy, python-brace-format
-#| msgid "{prog}: error: {msg}"
+#, python-brace-format
 msgid "{prog}: error: no such option: {args}"
-msgstr "{prog}: 오류: {msg}"
+msgstr "{prog}: 오류: 그런 선택이 없습니다: {args}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:236
