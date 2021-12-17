@@ -26,6 +26,7 @@ from subscription_manager.i18n import ugettext as _
 SOCKET_MESSAGE = _(
     "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information."
 )
+CONNECTION_MESSAGE = _("Connection error: {message} (error code {code})")
 NETWORK_MESSAGE = _(
     "Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."
 )
@@ -60,6 +61,7 @@ class ExceptionMapper(object):
 
         self.message_map = {
             socket_error: (SOCKET_MESSAGE, self.format_using_template),
+            ConnectionError: (CONNECTION_MESSAGE, self.format_generic_oserror),
             Disconnected: (SOCKET_MESSAGE, self.format_using_template),
             connection.ProxyException: (PROXY_MESSAGE, self.format_using_template),
             connection.NetworkException: (NETWORK_MESSAGE, self.format_using_template),
@@ -89,6 +91,9 @@ class ExceptionMapper(object):
     def format_using_error(self, exc: Exception, _: str) -> str:
         """Return string representation of the error."""
         return str(exc)
+
+    def format_generic_oserror(self, exc: Exception, message_template: str):
+        return message_template.format(message=exc.strerror, code=exc.errno)
 
     def format_bad_ca_cert_exception(
         self, bad_ca_cert_error: connection.BadCertificateException, message_template: str

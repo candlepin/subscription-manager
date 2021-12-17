@@ -9,6 +9,7 @@
 # have received a copy of GPLv2 along with this software; if not, see
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
+import errno
 import unittest
 
 from subscription_manager.exceptions import ExceptionMapper
@@ -105,3 +106,14 @@ class TestExceptionMapper(unittest.TestCase):
         sslerr = ssl.SSLError(5, expected_message)
         err = BadCertificateException("foo.pem", sslerr)
         self.assertEqual(f"Bad CA certificate: foo.pem: {expected_message}", mapper.get_message(err))
+
+    def test_connectionerror(self):
+        expected_message = "Expected MESSAGE"
+        expected_errno = errno.ECONNREFUSED
+        mapper = ExceptionMapper()
+
+        err = ConnectionRefusedError(expected_errno, expected_message)
+        self.assertEqual(
+            f"Connection error: {expected_message} (error code {expected_errno})",
+            mapper.get_message(err),
+        )
