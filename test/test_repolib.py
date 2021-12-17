@@ -725,7 +725,7 @@ class RepoUpdateActionTests(fixture.SubManFixture):
     def test_with_ssl_verify_ProxyException(self, mock_get_consumer_auth_cp):
         """Test that proxy exception is handled and does not use SSL verification."""
         mock_cp = Mock()
-        mock_cp.has_capability = Mock(side_effect=rhsm.connection.ProxyException)
+        mock_cp.has_capability = Mock(side_effect=rhsm.connection.ProxyException(hostname="host", port=1234))
         mock_get_consumer_auth_cp.return_value = mock_cp
 
         update_action = RepoUpdateActionCommand()
