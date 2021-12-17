@@ -10,6 +10,7 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 import errno
+import socket
 import unittest
 
 from subscription_manager.exceptions import ExceptionMapper
@@ -115,5 +116,16 @@ class TestExceptionMapper(unittest.TestCase):
         err = ConnectionRefusedError(expected_errno, expected_message)
         self.assertEqual(
             f"Connection error: {expected_message} (error code {expected_errno})",
+            mapper.get_message(err),
+        )
+
+    def test_socket_gaierror(self):
+        expected_message = "Expected MESSAGE"
+        expected_errno = socket.EAI_NONAME
+        mapper = ExceptionMapper()
+
+        err = socket.gaierror(expected_errno, expected_message)
+        self.assertEqual(
+            f"Network error: {expected_message} (error code {expected_errno})",
             mapper.get_message(err),
         )
