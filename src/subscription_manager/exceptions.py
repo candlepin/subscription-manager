@@ -16,7 +16,7 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 #
 import inspect
-from socket import error as socket_error
+from socket import error as socket_error, gaierror as socket_gaierror
 from rhsm.https import ssl, httplib
 
 from rhsm import connection, utils
@@ -27,6 +27,7 @@ from subscription_manager.entcertlib import Disconnected
 from subscription_manager.i18n import ugettext as _
 
 SOCKET_MESSAGE = _('Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.')
+GAI_MESSAGE = _("Network error: {message} (error code {code})")
 CONNECTION_MESSAGE = _("Connection error: {message} (error code {code})")
 NETWORK_MESSAGE = _('Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.')
 PROXY_MESSAGE = _("Proxy error, unable to connect to proxy server.")
@@ -55,6 +56,7 @@ class ExceptionMapper(object):
 
         self.message_map = {
             socket_error: (SOCKET_MESSAGE, self.format_using_template),
+            socket_gaierror: (GAI_MESSAGE, self.format_generic_oserror),
             ConnectionError: (CONNECTION_MESSAGE, self.format_generic_oserror),
             Disconnected: (SOCKET_MESSAGE, self.format_using_template),
             connection.ProxyException: (PROXY_MESSAGE, self.format_using_template),
