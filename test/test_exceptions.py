@@ -12,7 +12,8 @@
 import unittest
 
 from subscription_manager.exceptions import ExceptionMapper
-from rhsm.connection import RestlibException
+from rhsm.connection import RestlibException, BadCertificateException
+from rhsm.https import ssl
 
 
 class MyRuntimeErrorBase(RuntimeError):
@@ -96,3 +97,11 @@ class TestExceptionMapper(unittest.TestCase):
 
         err = OldStyleClass()
         self.assertEqual(expected_message, mapper.get_message(err))
+
+    def test_bad_certificate_exception(self):
+        expected_message = "Expected MESSAGE"
+        mapper = ExceptionMapper()
+
+        sslerr = ssl.SSLError(5, expected_message)
+        err = BadCertificateException("foo.pem", sslerr)
+        self.assertEqual(f"Bad CA certificate: foo.pem: {expected_message}", mapper.get_message(err))
