@@ -28,6 +28,7 @@ import socket
 import sys
 import time
 import traceback
+from typing import Optional
 from pathlib import Path
 
 from email.utils import format_datetime
@@ -114,7 +115,29 @@ class ConnectionException(Exception):
 
 
 class ProxyException(Exception):
-    pass
+    """
+    Thrown in case of errors related to the proxy server.
+    """
+
+    def __init__(self, hostname: str = None, port: int = None, exc: Optional[Exception] = None):
+        self._hostname = hostname
+        self.port = port
+        self.exc = exc
+
+    @property
+    def hostname(self) -> str:
+        return normalized_host(self._hostname)
+
+    @property
+    def address(self) -> str:
+        return f"{self.hostname}:{self.port}"
+
+    def __str__(self) -> str:
+        addr = self.address
+        err = f"Proxy error at {addr}"
+        if self.exc is not None:
+            err = f"{err}: {self.exc}"
+        return err
 
 
 class ConnectionSetupException(ConnectionException):
@@ -774,10 +797,7 @@ class BaseRestLib(object):
                     raise
             except socket.gaierror as err:
                 if self.proxy_hostname and self.proxy_port:
-                    raise ProxyException("Unable to connect to: %s:%s %s "
-                                         % (normalized_host(self.proxy_hostname),
-                                            safe_int(self.proxy_port),
-                                            err))
+                    raise ProxyException(hostname=self.proxy_hostname, port=self.proxy_port, exc=err)
                 raise
             except (socket.error, OSError) as err:
                 # If we get a ConnectionError here and we are using a proxy,
@@ -785,16 +805,13 @@ class BaseRestLib(object):
                 # destination host.
                 if isinstance(err, ConnectionError) \
                     and self.proxy_hostname and self.proxy_port:
-                    raise ProxyException("Unable to connect to: %s:%s %s "
-                                         % (normalized_host(self.proxy_hostname),
-                                            safe_int(self.proxy_port),
-                                            err))
+                    raise ProxyException(hostname=self.proxy_hostname, port=self.proxy_port, exc=err)
                 if six.PY2:
                     code = httplib.PROXY_AUTHENTICATION_REQUIRED
                 else:
                     code = httplib.PROXY_AUTHENTICATION_REQUIRED.value
                 if str(code) in str(err):
-                    raise ProxyException(err)
+                    raise ProxyException(hostname=self.proxy_hostname, port=self.proxy_port, exc=err)
                 raise
 
         else:
@@ -866,7 +883,7 @@ class BaseRestLib(object):
                                         parsed['deletedId'])
 
                 elif str(response['status']) == str(httplib.PROXY_AUTHENTICATION_REQUIRED):
-                    raise ProxyException
+                    raise ProxyException(hostname=self.proxy_hostname, port=self.proxy_port)
 
                 # I guess this is where we would have an exception mapper if we
                 # had more meaningful exceptions. We've gotten a response from
@@ -913,7 +930,7 @@ class BaseRestLib(object):
                                                      headers=response.get('headers'))
 
                 elif str(response['status']) == str(httplib.PROXY_AUTHENTICATION_REQUIRED):
-                    raise ProxyException
+                    raise ProxyException(hostname=self.proxy_hostname, port=self.proxy_port)
 
                 else:
                     # unexpected with no valid content
