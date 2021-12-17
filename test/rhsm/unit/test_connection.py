@@ -833,6 +833,7 @@ class BadCertificateExceptionTest(ExceptionTest):
 
     def _create_exception(self, *args, **kwargs):
         kwargs['cert_path'] = "/etc/sdfsd"
+        kwargs["ssl_exc"] = ssl.SSLError(5, "some ssl error")
         return self.exception(*args, **kwargs)
 
 

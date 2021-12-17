@@ -124,9 +124,10 @@ class ConnectionSetupException(ConnectionException):
 class BadCertificateException(ConnectionException):
     """ Thrown when an error parsing a certificate is encountered. """
 
-    def __init__(self, cert_path):
+    def __init__(self, cert_path, ssl_exc):
         """ Pass the full path to the bad certificate. """
         self.cert_path = cert_path
+        self.ssl_exc = ssl_exc
 
     def __str__(self):
         return "Bad certificate at %s" % self.cert_path
@@ -563,8 +564,8 @@ class BaseRestLib(object):
                     cert_path = os.path.join(self.ca_dir, cert_file)
                     context.load_verify_locations(cert_path)
                     loaded_ca_certs.append(cert_file)
-        except ssl.SSLError as e:
-            raise BadCertificateException(cert_path)
+        except ssl.SSLError as exc:
+            raise BadCertificateException(cert_path, exc)
         except OSError as e:
             raise ConnectionSetupException(e.strerror)
 
