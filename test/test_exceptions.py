@@ -14,7 +14,7 @@ import socket
 import unittest
 
 from subscription_manager.exceptions import ExceptionMapper
-from rhsm.connection import RestlibException, BadCertificateException
+from rhsm.connection import RestlibException, BadCertificateException, ProxyException
 from rhsm.https import ssl
 
 
@@ -127,5 +127,44 @@ class TestExceptionMapper(unittest.TestCase):
         err = socket.gaierror(expected_errno, expected_message)
         self.assertEqual(
             f"Network error: {expected_message} (error code {expected_errno})",
+            mapper.get_message(err),
+        )
+
+    def test_proxyexception_with_exception_oserror(self):
+        expected_message = "Expected MESSAGE"
+        expected_errno = errno.ECONNREFUSED
+        expected_hostname = "hostname"
+        expected_port = 1234
+        mapper = ExceptionMapper()
+
+        oserr = ConnectionRefusedError(expected_errno, expected_message)
+        err = ProxyException(expected_hostname, expected_port, oserr)
+        self.assertEqual(
+            f"Proxy error: unable to connect to {expected_hostname}:{expected_port}: "
+            f"{expected_message} (error code {expected_errno})",
+            mapper.get_message(err),
+        )
+
+    def test_proxyexception_with_exception_non_oserror(self):
+        expected_message = "Expected MESSAGE"
+        expected_hostname = "hostname"
+        expected_port = 1234
+        mapper = ExceptionMapper()
+
+        genericerr = Exception(expected_message)
+        err = ProxyException(expected_hostname, expected_port, genericerr)
+        self.assertEqual(
+            f"Proxy error: unable to connect to {expected_hostname}:{expected_port}: {expected_message}",
+            mapper.get_message(err),
+        )
+
+    def test_proxyexception_without_exception(self):
+        expected_hostname = "hostname"
+        expected_port = 1234
+        mapper = ExceptionMapper()
+
+        err = ProxyException(expected_hostname, expected_port)
+        self.assertEqual(
+            f"Proxy error: unable to connect to {expected_hostname}:{expected_port}",
             mapper.get_message(err),
         )

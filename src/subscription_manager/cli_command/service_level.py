@@ -147,11 +147,8 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
                 log.error("Error: Unable to retrieve service levels: {err}".format(err=re_err))
 
                 system_exit(os.EX_SOFTWARE, re_err)
-            except ProxyException:
-                system_exit(
-                    os.EX_UNAVAILABLE,
-                    _("Proxy connection failed, please check your settings."),
-                )
+            except ProxyException as exc:
+                system_exit(os.EX_UNAVAILABLE, exc)
 
     def set(self):
         if self.cp.has_capability("syspurpose"):
