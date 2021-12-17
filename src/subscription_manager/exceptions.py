@@ -30,7 +30,11 @@ SOCKET_MESSAGE = _('Network error, unable to connect to server. Please see /var/
 GAI_MESSAGE = _("Network error: {message} (error code {code})")
 CONNECTION_MESSAGE = _("Connection error: {message} (error code {code})")
 NETWORK_MESSAGE = _('Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.')
-PROXY_MESSAGE = _("Proxy error, unable to connect to proxy server.")
+PROXY_ADDRESS_REASON_OSERROR_MESSAGE = _(
+    "Proxy error: unable to connect to {hostname}: {message} (error code {code})"
+)
+PROXY_ADDRESS_REASON_MESSAGE = _("Proxy error: unable to connect to {hostname}: {message}")
+PROXY_ADDRESS_MESSAGE = _("Proxy error: unable to connect to {hostname}")
 UNAUTHORIZED_MESSAGE = _("Unauthorized: Invalid credentials for request.")
 TOKEN_AUTH_UNSUPPORTED_MESSAGE = _("Token authentication not supported by the entitlement server")
 FORBIDDEN_MESSAGE = _("Forbidden: Invalid credentials for request.")
@@ -59,7 +63,7 @@ class ExceptionMapper(object):
             socket_gaierror: (GAI_MESSAGE, self.format_generic_oserror),
             ConnectionError: (CONNECTION_MESSAGE, self.format_generic_oserror),
             Disconnected: (SOCKET_MESSAGE, self.format_using_template),
-            connection.ProxyException: (PROXY_MESSAGE, self.format_using_template),
+            connection.ProxyException: (None, self.format_proxy_exception),
             connection.NetworkException: (NETWORK_MESSAGE, self.format_using_template),
             connection.UnauthorizedException: (UNAUTHORIZED_MESSAGE, self.format_using_template),
             connection.ForbiddenException: (FORBIDDEN_MESSAGE, self.format_using_template),
@@ -90,6 +94,22 @@ class ExceptionMapper(object):
 
     def format_generic_oserror(self, exc: Exception, message_template: str):
         return message_template.format(message=exc.strerror, code=exc.errno)
+
+    def format_proxy_exception(self, exc: connection.ProxyException, _: str) -> str:
+        proxy_address = exc.address
+        # catches gaierror and socket.error
+        if isinstance(exc.exc, OSError):
+            return PROXY_ADDRESS_REASON_OSERROR_MESSAGE.format(
+                hostname=proxy_address,
+                message=exc.exc.strerror,
+                code=exc.exc.errno,
+            )
+        if exc.exc is not None:
+            return PROXY_ADDRESS_REASON_MESSAGE.format(
+                hostname=proxy_address,
+                message=exc.exc,
+            )
+        return PROXY_ADDRESS_MESSAGE.format(hostname=proxy_address)
 
     def format_bad_ca_cert_exception(
         self, bad_ca_cert_error: connection.BadCertificateException, message_template: str
