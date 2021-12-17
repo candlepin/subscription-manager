@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-09 12:25-0500\n"
-"PO-Revision-Date: 2021-09-01 14:04+0000\n"
+"PO-Revision-Date: 2021-12-14 12:57+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ja/>\n"
@@ -19,82 +19,76 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.9.1\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
-#, fuzzy
-#| msgid "Usage:  "
 msgid "usage: "
-msgstr "使用法:  "
+msgstr "使用方法: "
 
 #: /usr/lib64/python3.6/argparse.py:830
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() が定義されていません"
 
 #: /usr/lib64/python3.6/argparse.py:1127
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr ""
+msgstr "不明なパーサー %(parser_name)r (選択肢: %(choices)s)"
 
 #: /usr/lib64/python3.6/argparse.py:1181
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr ""
+msgstr "%r モードでは引数 \"-\""
 
 #: /usr/lib64/python3.6/argparse.py:1189
 #, python-format
 msgid "can't open '%s': %s"
-msgstr ""
+msgstr "'%s' を開くことができません: %s"
 
 #: /usr/lib64/python3.6/argparse.py:1393
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "動作をマージできません: 2 つのグループの名は、%r と命名されています"
 
 #: /usr/lib64/python3.6/argparse.py:1431
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "'required' は、位置引数の無効な引数です"
 
 #: /usr/lib64/python3.6/argparse.py:1453
 #, python-format
 msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
-msgstr ""
+msgstr "無効なオプション文字列 %(option)r: 文字 %(prefix_chars)r で始まる必要があります"
 
 #: /usr/lib64/python3.6/argparse.py:1473
 #, python-format
 msgid "dest= is required for options like %r"
-msgstr ""
+msgstr "dest= は、%r のようにオプションに必要です"
 
 #: /usr/lib64/python3.6/argparse.py:1490
 #, python-format
 msgid "invalid conflict_resolution value: %r"
-msgstr ""
+msgstr "無効な conflict_resolution の値: %r"
 
 #: /usr/lib64/python3.6/argparse.py:1508
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] ""
+msgstr[0] "競合するオプションの文字列: %s"
 
 #: /usr/lib64/python3.6/argparse.py:1574
 msgid "mutually exclusive arguments must be optional"
-msgstr ""
+msgstr "相互排他的引数は任意です"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:1637
-#, fuzzy
-#| msgid "%s option requires an argument"
 msgid "positional arguments"
-msgstr "%s オプションは引数を必要とします"
+msgstr "位置引数"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:1638
-#, fuzzy
-#| msgid "%s option requires an argument"
 msgid "optional arguments"
-msgstr "%s オプションは引数を必要とします"
+msgstr "オプションの引数"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:1653
@@ -103,96 +97,87 @@ msgstr "ヘルプメッセージを表示して終了します"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: /usr/lib64/python3.6/argparse.py:1684
-#, fuzzy
-#| msgid "cannot parse argument: %s"
 msgid "cannot have multiple subparser arguments"
-msgstr "引数を解析できません: %s"
+msgstr "複数の subparser 引数を指定できません"
 
 #: /usr/lib64/python3.6/argparse.py:1736
-#, fuzzy, python-format
-#| msgid "Unknown arguments: %s"
+#, python-format
 msgid "unrecognized arguments: %s"
-msgstr "不明な引数です: %s"
+msgstr "認識されない引数: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: /usr/lib64/python3.6/argparse.py:1833
-#, fuzzy, python-format
-#| msgid "cannot parse argument: %s"
+#, python-format
 msgid "not allowed with argument %s"
-msgstr "引数を解析できません: %s"
+msgstr "引数 %s では許可されていません"
 
 #: /usr/lib64/python3.6/argparse.py:1879 /usr/lib64/python3.6/argparse.py:1893
 #, python-format
 msgid "ignored explicit argument %r"
-msgstr ""
+msgstr "無視された明示的な引数 %r"
 
 #: /usr/lib64/python3.6/argparse.py:2000
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "以下の引数は必須です: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2015
-#, fuzzy, python-format
-#| msgid "Wrong number of arguments specified.\n"
+#, python-format
 msgid "one of the arguments %s is required"
-msgstr "無効な引数番号が指定されています。\n"
+msgstr "引数 %s のいずれかが必要です"
 
 #: /usr/lib64/python3.6/argparse.py:2058
 msgid "expected one argument"
-msgstr ""
+msgstr "1 つの引数が必要です"
 
 #: /usr/lib64/python3.6/argparse.py:2059
 msgid "expected at most one argument"
-msgstr ""
+msgstr "少なくとも 1 つの引数が必要です"
 
 #: /usr/lib64/python3.6/argparse.py:2060
 msgid "expected at least one argument"
-msgstr ""
+msgstr "少なくとも 1 つの引数が必要です"
 
 #: /usr/lib64/python3.6/argparse.py:2062
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
-msgstr[0] ""
+msgstr[0] "%s 引数が必要です"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2122
-#, fuzzy, python-format
-#| msgid "ambiguous option: %s (%s?)"
+#, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr "曖昧なオプション: %s (%s?)"
+msgstr "あいまいなオプション: %(option)s は %(matches)s に一致する可能性があります"
 
 #: /usr/lib64/python3.6/argparse.py:2185
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "予期せぬオプションの文字列: %s"
 
 #: /usr/lib64/python3.6/argparse.py:2289
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%r は呼び出しできません"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2306
-#, fuzzy, python-format
-#| msgid "option %s: invalid %s value: %r"
+#, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr "オプション%s: 無効な %s 値: %r"
+msgstr "無効な %(type)s 値: %(value)r"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2317
-#, fuzzy, python-format
-#| msgid "option %s: invalid choice: %r (choose from %s)"
+#, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
-msgstr "オプション %s: 無効な選択: %r (%s から選択)"
+msgstr "無効な選択: %(value)r (%(choices)s から選択)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2393
-#, fuzzy, python-format
-#| msgid "%s: error: %s"
+#, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr "%s: エラー: %s"
+msgstr "%(prog)s: エラー: %(message)s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/index.js:64 cockpit/src/subscriptions-view.jsx:368
@@ -542,8 +527,6 @@ msgid "Auto-attaching ..."
 msgstr "オートアタッチしています..."
 
 #: cockpit/src/subscriptions-view.jsx:73 cockpit/src/subscriptions-view.jsx:159
-#, fuzzy
-#| msgid "Product Name"
 msgid "Product name"
 msgstr "製品名"
 
@@ -556,18 +539,13 @@ msgid "Subscribed"
 msgstr "サブスクライブ済み"
 
 #: cockpit/src/subscriptions-view.jsx:113
-#, fuzzy
-#| msgid "Not Subscribed (Not supported by a valid subscription.)"
 msgid "Not subscribed (Not supported by a valid subscription)"
-msgstr ""
-"サブスクライブなし (有効なサブスクリプションではサポートされていません)"
+msgstr "サブスクライブなし (有効なサブスクリプションではサポートされていません)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:148
-#, fuzzy
-#| msgid "Not Subscribed"
 msgid "Not subscribed"
-msgstr "サブスクライブなし"
+msgstr "サブスクライブされていない"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:167 src/rct/printing.py:50
@@ -593,47 +571,34 @@ msgstr "インストール済みの製品"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:217
-#, fuzzy
-#| msgid "No installed products detected."
 msgid "No installed products detected"
-msgstr "インストール済みの製品は検出されませんでした。"
+msgstr "インストール済みの製品は検出されませんでした"
 
 #: cockpit/src/subscriptions-view.jsx:291
-#, fuzzy
-#| msgid ""
-#| "Content Access Mode is set to Simple Content Access. This host has access "
-#| "to content, regardless of subscription status.\n"
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of system purpose status."
 msgstr ""
-"コンテンツアクセスモードは、シンプルコンテンツアクセスに設定されています。こ"
-"のホストは、サブスクリプションのステータスに関係なく、コンテンツにアクセスで"
-"きます。\n"
+"コンテンツアクセスモードは、シンプルコンテンツアクセスに設定されています。このホストは、システムの目的のステータスに関係なく、コンテンツにアクセスできます"
+"。"
 
 #: cockpit/src/subscriptions-view.jsx:297
 #: cockpit/src/subscriptions-view.jsx:388
 msgid "Popover with explanation of SCA mode"
-msgstr ""
+msgstr "SCA モードの説明のあるポップアップ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: cockpit/src/subscriptions-view.jsx:304
 #: cockpit/src/subscriptions-view.jsx:395
-#, fuzzy
-#| msgid "Subscription Registration"
 msgid "Subscriptions information"
-msgstr "サブスクリプションの登録"
+msgstr "サブスクリプション情報"
 
 #: cockpit/src/subscriptions-view.jsx:321
-#, fuzzy
-#| msgid "System Purpose"
 msgid "System purpose"
 msgstr "システムの目的"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:333
-#, fuzzy
-#| msgid "Service Level"
 msgid "Service level"
 msgstr "サービスレベル"
 
@@ -643,8 +608,6 @@ msgid "Usage"
 msgstr "使用方法"
 
 #: cockpit/src/subscriptions-view.jsx:345
-#, fuzzy
-#| msgid "Roles"
 msgid "Role"
 msgstr "ロール"
 
@@ -654,38 +617,29 @@ msgstr "アドオン"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: cockpit/src/subscriptions-view.jsx:366
-#, fuzzy
-#| msgid "System is not registered."
 msgid "Not registered"
-msgstr "システムは登録されていません。"
+msgstr "登録されていません"
 
 #: cockpit/src/subscriptions-view.jsx:375
 msgid "Unregister"
 msgstr "登録解除"
 
 #: cockpit/src/subscriptions-view.jsx:382
-#, fuzzy
-#| msgid ""
-#| "Content Access Mode is set to Simple Content Access. This host has access "
-#| "to content, regardless of subscription status.\n"
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status."
 msgstr ""
-"コンテンツアクセスモードは、シンプルコンテンツアクセスに設定されています。こ"
-"のホストは、サブスクリプションのステータスに関係なく、コンテンツにアクセスで"
-"きます。\n"
+"コンテンツアクセスモードは、シンプルコンテンツアクセスに設定されています。このホストは、サブスクリプションのステータスに関係なく、コンテンツにアクセスでき"
+"ます。"
 
 #: cockpit/src/subscriptions-view.jsx:409
 msgid "Overview"
-msgstr ""
+msgstr "概要"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: cockpit/src/subscriptions-view.jsx:415
-#, fuzzy
-#| msgid "Subscription "
 msgid "Subscription status"
-msgstr "サブスクリプション "
+msgstr "サブスクリプションのステータス"
 
 #: cockpit/src/subscriptions-view.jsx:453
 msgid ""
@@ -693,13 +647,14 @@ msgid ""
 "and try reloading the page. Additionally, make sure that you have checked "
 "the 'Reuse my password for privileged tasks' checkbox on the login page."
 msgstr ""
+"rhsm サービスは利用できません。subscription-manager "
+"がインストールされ、ページを再読み込みを試行します。さらにはログインページの「Reuse my password for privileged "
+"tasks」チェックボックスにチェックを入れてください。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: cockpit/src/subscriptions-view.jsx:456
-#, fuzzy
-#| msgid "Unable to reach the server at %s:%s%s"
 msgid "Unable to the reach the rhsm service."
-msgstr "%s:%s%s にあるサーバーに接続できません"
+msgstr "rhsm サービスに到達できません。"
 
 #: cockpit/src/subscriptions-view.jsx:459
 msgid "Updating"
@@ -711,11 +666,11 @@ msgstr "サブスクリプションステータスを再取得中 ..."
 
 #: cockpit/src/subscriptions-view.jsx:462
 msgid "Access denied"
-msgstr ""
+msgstr "アクセスは拒否されました"
 
 #: cockpit/src/subscriptions-view.jsx:463
 msgid "The current user isn't allowed to access system subscription status."
-msgstr ""
+msgstr "現在のユーザーには、システムサブスクリプションステータスへのアクセスが許可されていません。"
 
 #: cockpit/src/subscriptions-view.jsx:465
 msgid "Unable to connect"
@@ -921,10 +876,9 @@ msgstr "登録 (_R)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/cert_commands.py:38
-#, fuzzy, python-format, python-brace-format
-#| msgid "%%prog %s [OPTIONS] CERT_FILE"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS] CERT_FILE"
-msgstr "%%prog %s [オプション] CERT_FILE"
+msgstr "%(prog)s {name} [オプション] CERT_FILE"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/cert_commands.py:46 src/rct/manifest_commands.py:270
@@ -1017,10 +971,9 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/rct/manifest_commands.py:141
-#, fuzzy, python-format, python-brace-format
-#| msgid "%%prog %s [OPTIONS] MANIFEST_FILE"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS] MANIFEST_FILE"
-msgstr "%%prog %s [オプション] MANIFEST_FILE"
+msgstr "%(prog)s {name} [オプション] MANIFEST_FILE"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/rct/manifest_commands.py:146
@@ -1470,10 +1423,9 @@ msgid "only data not already included in sos report will be collected"
 msgstr "SOS レポートに含まれていないデータだけを収集します"
 
 #: src/rhsm_debug/debug_commands.py:86
-#, fuzzy, python-format, python-brace-format
-#| msgid "%%prog %s [OPTIONS] "
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS] "
-msgstr "%%prog %s [オプション] "
+msgstr "%(prog)s {name} [オプション] "
 
 #: src/rhsm_debug/debug_commands.py:90
 msgid "The directory specified by '--destination' must already exist."
@@ -1610,7 +1562,7 @@ msgstr "ユーザー %s は、いかなる組織のメンバーでもありま�
 #: src/rhsmlib/dbus/service_wrapper.py:45
 #, python-brace-format
 msgid "Error: Unable to load bus '{name}'"
-msgstr ""
+msgstr "エラー: バス '{name}' をロードできません"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsmlib/facts/dmiinfo.py:91 src/rhsmlib/facts/dmiinfo.py:130
@@ -1978,10 +1930,9 @@ msgstr "無効"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli.py:81
-#, fuzzy, python-format, python-brace-format
-#| msgid "%prog [OPTIONS]"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS]"
-msgstr "%prog [オプション]"
+msgstr "%(prog)s {name} [オプション]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/cli.py:122
@@ -2144,7 +2095,7 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:49
 #, python-brace-format
 msgid "{message} (HTTP error code {code}: {title})"
-msgstr ""
+msgstr "{message} (HTTP エラーコード{code}: {title})"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/gui/about.py:28
@@ -4405,17 +4356,15 @@ msgstr "クリックして数量を調節"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/i18n_argparse.py:38
 #: src/subscription_manager/managercli.py:984
-#, fuzzy, python-format
-#| msgid "%prog [OPTIONS]"
+#, python-format
 msgid "%(prog)s [OPTIONS]"
-msgstr "%prog [オプション]"
+msgstr "%(prog)s [オプション]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/i18n_argparse.py:54
-#, fuzzy, python-brace-format
-#| msgid "%s: error: %s"
+#, python-brace-format
 msgid "{prog}: error: {msg}"
-msgstr "%s: エラー: %s"
+msgstr "{prog}: エラー: {msg}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/managercli.py:97
@@ -4651,10 +4600,8 @@ msgstr "サーバー側の変更を上書きする場合は、以下を実行し
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. TRANSLATORS: this refers to a deprecated command
 #: src/subscription_manager/managercli.py:212
-#, fuzzy
-#| msgid "Deprecated, see remove"
 msgid "Deprecated, see 'syspurpose'"
-msgstr "廃止予定。remove を参照してください"
+msgstr "非推奨です。「syspurpose」を参照してください"
 
 # translation auto-copied from project subscription-manager, version 1.13.X, document keys
 #: src/subscription_manager/managercli.py:253
@@ -4729,10 +4676,9 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:424
-#, fuzzy, python-brace-format
-#| msgid "no such option: %s"
+#, python-brace-format
 msgid "{prog}: error: no such option: {args}"
-msgstr "そのようなオプションはありません: %s"
+msgstr "{prog}: そのようなオプションはありません: {args}"
 
 #: src/subscription_manager/managercli.py:440
 msgid "Error parsing serverurl:"
@@ -4819,7 +4765,7 @@ msgstr ""
 msgid ""
 "Error: --username, --password, --token and --org can be used only on "
 "unregistered systems"
-msgstr ""
+msgstr "エラー: --username、--password、--token、--org は、未登録のシステムでのみ使用できます"
 
 #. TRANSLATORS: this is used to quote a string
 #: src/subscription_manager/managercli.py:774
@@ -4932,10 +4878,8 @@ msgstr "パスワード: "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/managercli.py:1067
-#, fuzzy
-#| msgid "specify organization"
 msgid "specify an organization"
-msgstr "組織の指定"
+msgstr "組織を指定"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/managercli.py:1078
@@ -4945,27 +4889,25 @@ msgstr "組織: "
 
 #: src/subscription_manager/managercli.py:1109
 msgid "Convenient module for managing all system purpose settings"
-msgstr ""
+msgstr "すべてのシステム目的の設定を管理する便利なモジュール"
 
 #: src/subscription_manager/managercli.py:1119
-#, fuzzy
-#| msgid "set {attr} of system purpose"
 msgid "show current system purpose"
-msgstr "システムの目的の {attr} を設定"
+msgstr "現在のシステムの目的を表示"
 
 #: src/subscription_manager/managercli.py:1141
 #, python-brace-format
 msgid "{prog} {name}"
-msgstr ""
+msgstr "{prog} {name}"
 
 #: src/subscription_manager/managercli.py:1143
 msgid "Syspurpose submodules"
-msgstr ""
+msgstr "syspurpose サブモジュール"
 
 #: src/subscription_manager/managercli.py:1157
 #, python-format, python-brace-format
 msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
-msgstr ""
+msgstr "%(prog)s {name} [SUBMODULE] [OPTIONS]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1220
@@ -5176,10 +5118,8 @@ msgstr "自動割り当ての設定: 無効"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/managercli.py:1499
-#, fuzzy
-#| msgid "show this system's current service level"
 msgid "Show or modify the system purpose service-level setting"
-msgstr "このシステムの現在のサービスレベルを表示します"
+msgstr "システム目的のサービスレベルの設定の表示または変更"
 
 #: src/subscription_manager/managercli.py:1526
 msgid "Error: --org is only supported with the --list or --set option"
@@ -5236,10 +5176,8 @@ msgid "Available Service Levels"
 msgstr "利用可能なサービスレベル"
 
 #: src/subscription_manager/managercli.py:1675
-#, fuzzy
-#| msgid "Modify system purpose role"
 msgid "Show or modify the system purpose usage setting"
-msgstr "システムの目的ロールを変更します"
+msgstr "システムの目的の使用設定を表示または変更します"
 
 #: src/subscription_manager/managercli.py:1694
 msgid "base URL for content in form of https://hostname:port/prefix"
@@ -5412,10 +5350,8 @@ msgid "System has been unregistered."
 msgstr "システムの登録は解除されました。"
 
 #: src/subscription_manager/managercli.py:2080
-#, fuzzy
-#| msgid "Modify system purpose role"
 msgid "Show or modify the system purpose addons setting"
-msgstr "システムの目的ロールを変更します"
+msgstr "システム目的のアドオン設定の表示または変更"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:2094
@@ -6262,10 +6198,8 @@ msgid "Repository: %s"
 msgstr "リポジトリー: %s"
 
 #: src/subscription_manager/managercli.py:3470
-#, fuzzy
-#| msgid "Modify system purpose role"
 msgid "Show or modify the system purpose role setting"
-msgstr "システムの目的ロールを変更します"
+msgstr "システム目的のアドオン設定の表示または変更"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/managercli.py:3484

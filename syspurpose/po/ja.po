@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-09 12:25-0500\n"
-"PO-Revision-Date: 2021-09-01 14:04+0000\n"
+"PO-Revision-Date: 2021-12-14 12:57+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/syspurpose-1-28/ja/>\n"
@@ -15,155 +15,155 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.9.1\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
-msgstr ""
+msgstr "使用方法: "
 
 #: /usr/lib64/python3.6/argparse.py:830
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() が定義されていません"
 
 #: /usr/lib64/python3.6/argparse.py:1127
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr ""
+msgstr "不明なパーサー %(parser_name)r (選択肢: %(choices)s)"
 
 #: /usr/lib64/python3.6/argparse.py:1181
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr ""
+msgstr "%r モードでは引数 \"-\""
 
 #: /usr/lib64/python3.6/argparse.py:1189
 #, python-format
 msgid "can't open '%s': %s"
-msgstr ""
+msgstr "'%s' を開くことができません: %s"
 
 #: /usr/lib64/python3.6/argparse.py:1393
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "動作をマージできません: 2 つのグループの名は、%r と命名されています"
 
 #: /usr/lib64/python3.6/argparse.py:1431
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "'required' は、位置引数の無効な引数です"
 
 #: /usr/lib64/python3.6/argparse.py:1453
 #, python-format
 msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
-msgstr ""
+msgstr "無効なオプション文字列 %(option)r: 文字 %(prefix_chars)r で始まる必要があります"
 
 #: /usr/lib64/python3.6/argparse.py:1473
 #, python-format
 msgid "dest= is required for options like %r"
-msgstr ""
+msgstr "dest= は、%r のようにオプションに必要です"
 
 #: /usr/lib64/python3.6/argparse.py:1490
 #, python-format
 msgid "invalid conflict_resolution value: %r"
-msgstr ""
+msgstr "無効な conflict_resolution の値: %r"
 
 #: /usr/lib64/python3.6/argparse.py:1508
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] ""
+msgstr[0] "競合するオプションの文字列: %s"
 
 #: /usr/lib64/python3.6/argparse.py:1574
 msgid "mutually exclusive arguments must be optional"
-msgstr ""
+msgstr "相互排他的引数は任意です"
 
 #: /usr/lib64/python3.6/argparse.py:1637
 msgid "positional arguments"
-msgstr ""
+msgstr "位置引数"
 
 #: /usr/lib64/python3.6/argparse.py:1638
 msgid "optional arguments"
-msgstr ""
+msgstr "オプションの引数"
 
 #: /usr/lib64/python3.6/argparse.py:1653
 msgid "show this help message and exit"
-msgstr ""
+msgstr "ヘルプメッセージを表示して終了します"
 
 #: /usr/lib64/python3.6/argparse.py:1684
 msgid "cannot have multiple subparser arguments"
-msgstr ""
+msgstr "複数の subparser 引数を指定できません"
 
 #: /usr/lib64/python3.6/argparse.py:1736
 #, python-format
 msgid "unrecognized arguments: %s"
-msgstr ""
+msgstr "認識されない引数: %s"
 
 #: /usr/lib64/python3.6/argparse.py:1833
 #, python-format
 msgid "not allowed with argument %s"
-msgstr ""
+msgstr "引数 %s では許可されていません"
 
 #: /usr/lib64/python3.6/argparse.py:1879 /usr/lib64/python3.6/argparse.py:1893
 #, python-format
 msgid "ignored explicit argument %r"
-msgstr ""
+msgstr "無視された明示的な引数 %r"
 
 #: /usr/lib64/python3.6/argparse.py:2000
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "以下の引数は必須です: %s"
 
 #: /usr/lib64/python3.6/argparse.py:2015
 #, python-format
 msgid "one of the arguments %s is required"
-msgstr ""
+msgstr "引数 %s のいずれかが必要です"
 
 #: /usr/lib64/python3.6/argparse.py:2058
 msgid "expected one argument"
-msgstr ""
+msgstr "1 つの引数が必要です"
 
 #: /usr/lib64/python3.6/argparse.py:2059
 msgid "expected at most one argument"
-msgstr ""
+msgstr "少なくとも 1 つの引数が必要です"
 
 #: /usr/lib64/python3.6/argparse.py:2060
 msgid "expected at least one argument"
-msgstr ""
+msgstr "少なくとも 1 つの引数が必要です"
 
 #: /usr/lib64/python3.6/argparse.py:2062
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
-msgstr[0] ""
+msgstr[0] "%s 引数が必要です"
 
 #: /usr/lib64/python3.6/argparse.py:2122
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr ""
+msgstr "あいまいなオプション: %(option)s は %(matches)s に一致する可能性があります"
 
 #: /usr/lib64/python3.6/argparse.py:2185
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "予期せぬオプションの文字列: %s"
 
 #: /usr/lib64/python3.6/argparse.py:2289
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%r は呼び出しできません"
 
 #: /usr/lib64/python3.6/argparse.py:2306
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr ""
+msgstr "無効な %(type)s 値: %(value)r"
 
 #: /usr/lib64/python3.6/argparse.py:2317
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
-msgstr ""
+msgstr "無効な選択: %(value)r (%(choices)s から選択)"
 
 #: /usr/lib64/python3.6/argparse.py:2393
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr ""
+msgstr "%(prog)s: エラー: %(message)s\n"
 
 #: src/syspurpose/cli.py:29
 #, python-brace-format
@@ -182,16 +182,14 @@ msgid "If you'd like to overwrite the server side change please run: {command}"
 msgstr "サーバー側の変更を上書きする場合は、以下を実行します: {command}"
 
 #: src/syspurpose/cli.py:47
-#, fuzzy, python-brace-format
-#| msgid "Added {value} to {prop_name}."
+#, python-brace-format
 msgid "Added \"{value}\" to {prop_name}."
 msgstr "{value} を {prop_name} に追加しました。"
 
 #: src/syspurpose/cli.py:50
-#, fuzzy, python-brace-format
-#| msgid "Not adding value {value} to {prop_name}; it already exists."
+#, python-brace-format
 msgid "Not adding value \"{value}\" to {prop_name}; it already exists."
-msgstr "値 {value} を {prop_name} に追加しません。すでに存在します。"
+msgstr "値 {value} は {prop_name} に追加しません。すでに存在します。"
 
 #: src/syspurpose/cli.py:56 src/syspurpose/cli.py:85
 #, python-brace-format
@@ -221,7 +219,7 @@ msgstr "{attr} の設定を解除しました。"
 
 #: src/syspurpose/cli.py:157
 msgid "System Syspurpose Management Tool"
-msgstr ""
+msgstr "システム Syspurpose 管理ツール"
 
 #: src/syspurpose/cli.py:158 src/syspurpose/cli.py:353
 msgid ""
@@ -229,6 +227,8 @@ msgid ""
 "release. Please use the 'subscription-manager syspurpose' command going "
 "forward."
 msgstr ""
+"syspurpose コマンドは非推奨となり、今後のメジャーリリースで削除されます。今後は subscription-manager "
+"syspurpose コマンドを使用してください。"
 
 #: src/syspurpose/cli.py:165 src/syspurpose/cli.py:230
 msgid "The value(s) to add"
@@ -307,16 +307,12 @@ msgid "Show the current system syspurpose"
 msgstr "現行システムの syspurpose を表示"
 
 #: src/syspurpose/cli.py:350
-#, fuzzy
-#| msgid ""
-#| "WARNING: Setting syspurpose in containers has no effect.Please run "
-#| "syspurpose on the host.\n"
 msgid ""
 "WARNING: Setting syspurpose in containers has no effect.\n"
 "Please run syspurpose on the host.\n"
 msgstr ""
-"警告: syspurpose をコンテナーに設定しても効果がありません。syspurpose をホス"
-"ト上で実行してください。\n"
+"警告: syspurpose をコンテナーに設定しても効果がありません。\n"
+"syspurpose をホスト上で実行してください。\n"
 
 #: src/syspurpose/cli.py:364
 msgid ""
