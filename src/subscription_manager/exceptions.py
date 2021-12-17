@@ -33,7 +33,7 @@ UNAUTHORIZED_MESSAGE = _("Unauthorized: Invalid credentials for request.")
 TOKEN_AUTH_UNSUPPORTED_MESSAGE = _("Token authentication not supported by the entitlement server")
 FORBIDDEN_MESSAGE = _("Forbidden: Invalid credentials for request.")
 REMOTE_SERVER_MESSAGE = _("Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.")
-BAD_CA_CERT_MESSAGE = _("Bad CA certificate: %s")
+BAD_CA_CERT_MESSAGE = _("Bad CA certificate: {file}: {reason}")
 EXPIRED_ID_CERT_MESSAGE = _("Your identity certificate has expired")
 SSL_MESSAGE = _('Unable to verify server\'s identity: %s')
 PERROR_EMPTY_MESSAGE = _("Server URL can not be empty")
@@ -84,8 +84,12 @@ class ExceptionMapper(object):
         """Return string representation of the error."""
         return str(exc)
 
-    def format_bad_ca_cert_exception(self, bad_ca_cert_error, message_template):
-        return message_template % bad_ca_cert_error.cert_path
+    def format_bad_ca_cert_exception(
+        self, bad_ca_cert_error: connection.BadCertificateException, message_template: str
+    ):
+        return message_template.format(
+            file=bad_ca_cert_error.cert_path, reason=str(bad_ca_cert_error.ssl_exc)
+        )
 
     def format_ssl_error(self, ssl_error, message_template):
         return message_template % ssl_error
