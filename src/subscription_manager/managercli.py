@@ -1082,11 +1082,28 @@ class OrgCommand(UserPassCommand):
     @property
     def org(self):
         if not self._org:
-            owners = self.cp.getOwnerList(self.options.username)
-            if len(owners) == 1:
-                self._org = owners[0]['key']
+            if self.options.org is not None:
+                self._org = self.options.org
             else:
-                self._org = self._get_org(self.options.org)
+                owners = self.cp.getOwnerList(self.options.username)
+                if len(owners) == 0:
+                    system_exit(
+                        os.EX_DATAERR,
+                        _("Error: User {username} is not member of any organization.").format(
+                            username=self.options.username
+                        )
+                    )
+                elif len(owners) == 1:
+                    self._org = owners[0]['key']
+                else:
+                    # Get a list of valid owners. Since no owner was specified,
+                    # print a hint message showing available owners, before asking
+                    # to enter one.
+                    org_keys = [owner['key'] for owner in owners]
+                    print(_(
+                        'Hint: User "{name}" is member of following organizations: {orgs}'
+                    ).format(name=self.username, orgs=', '.join(org_keys)))
+                    self._org = self._get_org(self.options.org)
         return self._org
 
 
@@ -1634,12 +1651,10 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
             super(ServiceLevelCommand, self).show()
 
     def list_service_levels(self):
-        org_key = self.options.org
-        if not org_key:
-            if self.is_registered():
-                org_key = self.cp.getOwner(self.identity.uuid)['key']
-            else:
-                org_key = self.org
+        if self.is_registered():
+            org_key = self.cp.getOwner(self.identity.uuid)['key']
+        else:
+            org_key = self.org
 
         try:
             slas = self.cp.getServiceLevelList(org_key)
