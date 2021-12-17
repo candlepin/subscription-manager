@@ -388,7 +388,8 @@ class HandleExceptionTests(unittest.TestCase):
             self.assertEqual(e.code, os.EX_SOFTWARE)
 
     def test_he_bad_certificate(self):
-        e = connection.BadCertificateException("/road/to/nowhwere")
+        sslerr = ssl.SSLError(5, "some ssl error")
+        e = connection.BadCertificateException("/road/to/nowhwere", sslerr)
         try:
             handle_exception("huh", e)
         except SystemExit as e:
