@@ -297,7 +297,7 @@ class TestRoleCommand(TestCliProxyCommand):
             cap.err
         )
         self.assertIn(
-            'If you\'d like to overwrite the server side change please run: subscription-manager role --set "Bar"',
+            'If you\'d like to overwrite the server side change please run: subscription-manager syspurpose role --set "Bar"',
             cap.err
         )
 
