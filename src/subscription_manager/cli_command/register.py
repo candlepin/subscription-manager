@@ -33,6 +33,7 @@ from subscription_manager import identity
 from subscription_manager.branding import get_branding
 from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.cli import handle_exception, conf
+from subscription_manager.cli_command.environments import MULTI_ENV
 from subscription_manager.cli_command.list import show_autosubscribe_output
 from subscription_manager.cli_command.user_pass import UserPassCommand
 from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_CAPABILITY
@@ -64,7 +65,9 @@ class RegisterCommand(UserPassCommand):
                                  help=_(
                                      "register with one of multiple organizations for the user, using organization key"))
         self.parser.add_argument("--environments", dest="environments",
-                                 help=_("register with specific environments in the destination org as a comma-separated list"))
+                                 help=_("register with a specific environment (single value) or multiple environments "
+                                        "(a comma-separated list) in the destination org. The ability to use multiple "
+                                        "environments is controlled by the entitlement server"))
         self.parser.add_argument("--release", dest="release",
                                  help=_("set a release version"))
         self.parser.add_argument("--autosubscribe", action='store_true',
@@ -109,6 +112,9 @@ class RegisterCommand(UserPassCommand):
         elif self.options.consumertype and not \
                 (self.options.consumertype.lower() == 'rhui' or self.options.consumertype == 'system'):
             system_exit(os.EX_USAGE, _("Error: The --type option has been deprecated and may not be used."))
+        if self.options.environments:
+            if not self.cp.has_capability(MULTI_ENV) and ',' in self.options.environments:
+                system_exit(os.EX_USAGE, _("The entitlement server does not allow multiple environments"))
 
     def persist_server_options(self):
         """
@@ -316,7 +322,10 @@ class RegisterCommand(UserPassCommand):
         """
         By breaking this code out, we can write cleaner tests
         """
-        environment = input(_("Environments: ")).replace(" ", "")
+        if self.cp.has_capability(MULTI_ENV):
+            environment = input(_("Environments: ")).replace(" ", "")
+        else:
+            environment = input(_("Environment: ")).strip()
         readline.clear_history()
         return environment or self._prompt_for_environment()
 

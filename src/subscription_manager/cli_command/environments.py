@@ -33,6 +33,7 @@ from subscription_manager.injection import require, IDENTITY
 
 
 log = logging.getLogger(__name__)
+MULTI_ENV = "multi_environment"
 
 
 class EnvironmentsCommand(OrgCommand):
@@ -66,6 +67,9 @@ class EnvironmentsCommand(OrgCommand):
 
     def _do_command(self):
         self._validate_options()
+        supported_resources = get_supported_resources()
+        if 'environments' not in supported_resources:
+            system_exit(os.EX_UNAVAILABLE, _("Error: Server does not support environments."))
         try:
             if self.options.token:
                 self.cp = self.cp_provider.get_keycloak_auth_cp(self.options.token)
@@ -74,15 +78,11 @@ class EnvironmentsCommand(OrgCommand):
                     print(_("This operation requires user crendentials"))
                     self.cp_provider.set_user_pass(self.username, self.password)
                     self.cp = self.cp_provider.get_basic_auth_cp()
-            supported_resources = get_supported_resources()
-            if 'environments' in supported_resources:
-                self.identity = require(IDENTITY)
-                if self.options.set:
-                    self._set_environments()
-                else:
-                    self._list_environments()
+            self.identity = require(IDENTITY)
+            if self.options.set:
+                self._set_environments()
             else:
-                system_exit(os.EX_UNAVAILABLE, _("Error: Server does not support environments."))
+                self._list_environments()
         except connection.RestlibException as re:
             log.exception(re)
             log.error("Error: Unable to retrieve environment list from server: {re}".format(re=re))
@@ -93,7 +93,7 @@ class EnvironmentsCommand(OrgCommand):
             handle_exception(_("Error: Unable to retrieve environment list from server"), e)
 
     def _set_environments(self):
-        if self.cp.has_capability("multi_environment"):
+        if self.cp.has_capability(MULTI_ENV):
             if not self.identity.is_valid():
                 system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
             self.cp.updateConsumer(
@@ -109,6 +109,8 @@ class EnvironmentsCommand(OrgCommand):
             system_exit(os.EX_UNAVAILABLE, _("Error: Server does not support environment updates."))
 
     def _list_environments(self):
+        if not self.cp.has_capability(MULTI_ENV) and (self.options.enabled or self.options.disabled):
+            system_exit(os.EX_UNAVAILABLE, _("Error: Server does not support multi-environment operations."))
         environments = []
         if self.options.enabled:
             environments = self.cp.getConsumer(self.identity.uuid)['environments']
