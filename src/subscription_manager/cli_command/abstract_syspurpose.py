@@ -265,8 +265,10 @@ class AbstractSyspurposeCommand(CliCommand):
         self._check_result(
             expectation=lambda res: res.get(self.attr) == self.options.set,
             success_msg=success_msg,
-            command='subscription-manager {name} --set "{val}"'.format(name=self.name,
-                                                                       val=self.options.set),
+            command='subscription-manager syspurpose {name} --set "{val}"'.format(
+                name=self.name,
+                val=self.options.set
+            ),
             attr=self.attr
         )
 
@@ -282,7 +284,7 @@ class AbstractSyspurposeCommand(CliCommand):
         self._check_result(
             expectation=lambda res: res.get(self.attr) in ["", None, []],
             success_msg=success_msg,
-            command='subscription-manager {name} --unset'.format(name=self.name),
+            command='subscription-manager syspurpose {name} --unset'.format(name=self.name),
             attr=self.attr
         )
 
@@ -290,7 +292,7 @@ class AbstractSyspurposeCommand(CliCommand):
         if self.store:
             self.store.unset(self.attr)
         else:
-            log.debug('Not unsetting syspurpose attribute  (store not set)' % self.attr)
+            log.debug('Not unsetting syspurpose attribute {attr} (store not set)'.format(attr=self.attr))
 
     def add(self):
         self._add(self.options.to_add)
@@ -300,7 +302,7 @@ class AbstractSyspurposeCommand(CliCommand):
         # subscription-manager command --add opt1 --add opt2
         options = ['"' + option + '"' for option in self.options.to_add]
         to_add = "--add " + " --add ".join(options)
-        command = "subscription-manager {name} ".format(name=self.name) + to_add
+        command = "subscription-manager syspurpose {name} ".format(name=self.name) + to_add
         self._check_result(
             expectation=lambda res: all(x in res.get('addons', []) for x in self.options.to_add),
             success_msg=success_msg,
@@ -315,15 +317,17 @@ class AbstractSyspurposeCommand(CliCommand):
         if self.store:
             for item in to_add:
                 self.store.add(self.attr, item)
+        else:
+            log.debug("Not adding syspurpose attribute {attr} (store not set)".format(attr=self.attr))
 
     def remove(self):
         self._remove(self.options.to_remove)
         success_msg = _("{attr} updated.").format(attr=self.name.capitalize())
         options = ['"' + option + '"' for option in self.options.to_remove]
         # When there is several options to remove, then format of command is following
-        # subscription-manager command --remove opt1 --remove opt2
+        # subscription-manager syspurpose command --remove opt1 --remove opt2
         to_remove = "--remove " + " --remove ".join(options)
-        command = "subscription-manager {name} ".format(name=self.name) + to_remove
+        command = "subscription-manager syspurpose {name} ".format(name=self.name) + to_remove
         self._check_result(
             expectation=lambda res: all(x not in res.get('addons', []) for x in self.options.to_remove),
             success_msg=success_msg,
@@ -338,6 +342,8 @@ class AbstractSyspurposeCommand(CliCommand):
         if self.store:
             for item in to_remove:
                 self.store.remove(self.attr, item)
+        else:
+            log.debug("Not removing syspurpose attribute {attr} (store not set)".format(attr=self.attr))
 
     def show(self):
         if self.is_registered():

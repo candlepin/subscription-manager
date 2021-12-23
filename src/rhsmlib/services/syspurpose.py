@@ -39,7 +39,7 @@ class Syspurpose(object):
     def get_syspurpose_status(self, on_date=None):
         """
         Get syspurpose status from candlepin server
-        :param on_date: Date of the statatus
+        :param on_date: Date of the status
         :return: string code with status
         """
         if self.identity.is_valid() and self.cp.has_capability("syspurpose"):
