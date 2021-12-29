@@ -5,13 +5,14 @@
 # ljanda <ljanda@redhat.com>, 2019. #zanata
 # CoconutNut <patrick.vollandt@mein-gym.de>, 2021.
 # Ludek Janda <ljanda@redhat.com>, 2021.
+# Ettore Atalan <atalanttore@googlemail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-09 12:25-0500\n"
-"PO-Revision-Date: 2021-07-30 16:04+0000\n"
-"Last-Translator: CoconutNut <patrick.vollandt@mein-gym.de>\n"
+"PO-Revision-Date: 2021-12-28 02:16+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/de/>\n"
 "Language: de\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 #, fuzzy
@@ -29,7 +30,7 @@ msgstr "Verwendung:  "
 
 #: /usr/lib64/python3.6/argparse.py:830
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() nicht definiert"
 
 #: /usr/lib64/python3.6/argparse.py:1127
 #, python-format
@@ -85,17 +86,13 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:1637
-#, fuzzy
-#| msgid "%s option requires an argument"
 msgid "positional arguments"
-msgstr "%s Option erfordert einen Parameter"
+msgstr "positionale Argumente"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:1638
-#, fuzzy
-#| msgid "%s option requires an argument"
 msgid "optional arguments"
-msgstr "%s Option erfordert einen Parameter"
+msgstr "zusätzliche Argumente"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:1653
@@ -125,12 +122,12 @@ msgstr "Argument konnte nicht analysiert werden: %s"
 #: /usr/lib64/python3.6/argparse.py:1879 /usr/lib64/python3.6/argparse.py:1893
 #, python-format
 msgid "ignored explicit argument %r"
-msgstr ""
+msgstr "ignoriertes explizites Argument %r"
 
 #: /usr/lib64/python3.6/argparse.py:2000
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "die folgenden Argumente sind erforderlich: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2015
@@ -141,22 +138,22 @@ msgstr "Falsche Anzahl an Argumenten angegeben.\n"
 
 #: /usr/lib64/python3.6/argparse.py:2058
 msgid "expected one argument"
-msgstr ""
+msgstr "erwartet ein Argument"
 
 #: /usr/lib64/python3.6/argparse.py:2059
 msgid "expected at most one argument"
-msgstr ""
+msgstr "erwartet höchstens ein Argument"
 
 #: /usr/lib64/python3.6/argparse.py:2060
 msgid "expected at least one argument"
-msgstr ""
+msgstr "erwartet mindestens ein Argument"
 
 #: /usr/lib64/python3.6/argparse.py:2062
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "erwartet %s Argument"
+msgstr[1] "erwartet %s Argumente"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2122
@@ -168,19 +165,18 @@ msgstr "mehrdeutige Option: %s (%s?)"
 #: /usr/lib64/python3.6/argparse.py:2185
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "unerwartete Optionszeichenkette: %s"
 
 #: /usr/lib64/python3.6/argparse.py:2289
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%r ist nicht aufrufbar"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2306
-#, fuzzy, python-format
-#| msgid "option %s: invalid %s value: %r"
+#, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr "Option %s: ungültiger %s Wert: %r"
+msgstr "ungültiger %(type)s Wert: %(value)r"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2317
@@ -191,10 +187,9 @@ msgstr "Option %s: ungültige Auswahl: %r (wählen Sie aus %s)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2393
-#, fuzzy, python-format
-#| msgid "%s: error: %s"
+#, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr "%s: Fehler: %s"
+msgstr "%(prog)s: Fehler: %(message)s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/index.js:64 cockpit/src/subscriptions-view.jsx:368
@@ -552,8 +547,6 @@ msgid "Auto-attaching ..."
 msgstr "Automatisches Anhängen ..."
 
 #: cockpit/src/subscriptions-view.jsx:73 cockpit/src/subscriptions-view.jsx:159
-#, fuzzy
-#| msgid "Product Name"
 msgid "Product name"
 msgstr "Produktname"
 
@@ -603,10 +596,8 @@ msgstr "Installierte Produkte"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:217
-#, fuzzy
-#| msgid "No installed products detected."
 msgid "No installed products detected"
-msgstr "Keine installierten Produkte gefunden."
+msgstr "Keine installierten Produkte erkannt."
 
 #: cockpit/src/subscriptions-view.jsx:291
 #, fuzzy
@@ -628,14 +619,10 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: cockpit/src/subscriptions-view.jsx:304
 #: cockpit/src/subscriptions-view.jsx:395
-#, fuzzy
-#| msgid "Subscription Registration"
 msgid "Subscriptions information"
-msgstr "Subskriptionsregistrierung"
+msgstr "Subskriptionsinformation"
 
 #: cockpit/src/subscriptions-view.jsx:321
-#, fuzzy
-#| msgid "System Purpose"
 msgid "System purpose"
 msgstr "Systemzweck"
 
@@ -663,10 +650,8 @@ msgstr "Add-ons"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: cockpit/src/subscriptions-view.jsx:366
-#, fuzzy
-#| msgid "System is not registered."
 msgid "Not registered"
-msgstr "System ist nicht registriert."
+msgstr "Nicht registriert"
 
 #: cockpit/src/subscriptions-view.jsx:375
 msgid "Unregister"
@@ -686,14 +671,12 @@ msgstr ""
 
 #: cockpit/src/subscriptions-view.jsx:409
 msgid "Overview"
-msgstr ""
+msgstr "Überblick"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author rgromans
 #: cockpit/src/subscriptions-view.jsx:415
-#, fuzzy
-#| msgid "Subscription "
 msgid "Subscription status"
-msgstr "Subskription "
+msgstr "Subskriptionsstatus"
 
 #: cockpit/src/subscriptions-view.jsx:453
 msgid ""
@@ -704,10 +687,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: cockpit/src/subscriptions-view.jsx:456
-#, fuzzy
-#| msgid "Unable to reach the server at %s:%s%s"
 msgid "Unable to the reach the rhsm service."
-msgstr "Server konnte unter %s:%s%s nicht erreicht werden"
+msgstr ""
 
 #: cockpit/src/subscriptions-view.jsx:459
 msgid "Updating"
@@ -719,7 +700,7 @@ msgstr "Abonnementstatus abrufen..."
 
 #: cockpit/src/subscriptions-view.jsx:462
 msgid "Access denied"
-msgstr ""
+msgstr "Zugriff verweigert"
 
 #: cockpit/src/subscriptions-view.jsx:463
 msgid "The current user isn't allowed to access system subscription status."
@@ -929,10 +910,9 @@ msgstr "_Registrieren"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/cert_commands.py:38
-#, fuzzy, python-format, python-brace-format
-#| msgid "%%prog %s [OPTIONS] CERT_FILE"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS] CERT_FILE"
-msgstr "%%prog %s [OPTIONEN] ZERT_DATEI"
+msgstr "%(prog)s {name} [OPTIONEN] ZERTIFIKATSDATEI"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/cert_commands.py:46 src/rct/manifest_commands.py:270
@@ -1024,10 +1004,9 @@ msgstr "Kann symbolischem Link nicht folgen. Möglicherweise Zirkelbezug."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/rct/manifest_commands.py:141
-#, fuzzy, python-format, python-brace-format
-#| msgid "%%prog %s [OPTIONS] MANIFEST_FILE"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS] MANIFEST_FILE"
-msgstr "%%prog %s [OPTIONEN] MANIFEST_DATEI"
+msgstr "%(prog)s {name} [OPTIONEN] MANIFESTDATEI"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/rct/manifest_commands.py:146
@@ -1478,10 +1457,9 @@ msgstr ""
 "Nur Daten, die noch nicht im sos-Bericht enthalten sind, werden gesammelt"
 
 #: src/rhsm_debug/debug_commands.py:86
-#, fuzzy, python-format, python-brace-format
-#| msgid "%%prog %s [OPTIONS] "
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS] "
-msgstr "%%prog %s [OPTIONEN] "
+msgstr "%(prog)s {name} [OPTIONEN] "
 
 #: src/rhsm_debug/debug_commands.py:90
 msgid "The directory specified by '--destination' must already exist."
@@ -1994,10 +1972,9 @@ msgstr "Ungültig"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli.py:81
-#, fuzzy, python-format, python-brace-format
-#| msgid "%prog [OPTIONS]"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS]"
-msgstr "%prog [OPTIONEN]"
+msgstr "%(prog)s {name} [OPTIONEN]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli.py:122
@@ -2162,7 +2139,7 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:49
 #, python-brace-format
 msgid "{message} (HTTP error code {code}: {title})"
-msgstr ""
+msgstr "{message} (HTTP-Fehlercode {code}: {title})"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/subscription_manager/gui/about.py:28
@@ -4444,17 +4421,15 @@ msgstr "Klicken Sie, um die Anzahl anzupassen"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/i18n_argparse.py:38
 #: src/subscription_manager/managercli.py:984
-#, fuzzy, python-format
-#| msgid "%prog [OPTIONS]"
+#, python-format
 msgid "%(prog)s [OPTIONS]"
-msgstr "%prog [OPTIONEN]"
+msgstr "%(prog)s [OPTIONEN]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/i18n_argparse.py:54
-#, fuzzy, python-brace-format
-#| msgid "%s: error: %s"
+#, python-brace-format
 msgid "{prog}: error: {msg}"
-msgstr "%s: Fehler: %s"
+msgstr "{prog}: Fehler: {msg}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/subscription_manager/managercli.py:97
@@ -4772,10 +4747,9 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:424
-#, fuzzy, python-brace-format
-#| msgid "no such option: %s"
+#, python-brace-format
 msgid "{prog}: error: no such option: {args}"
-msgstr "unbekannte Option: %s"
+msgstr "{prog}: Fehler: keine solche Option: {args}"
 
 #: src/subscription_manager/managercli.py:440
 msgid "Error parsing serverurl:"
@@ -4980,10 +4954,8 @@ msgstr "Passwort: "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/subscription_manager/managercli.py:1067
-#, fuzzy
-#| msgid "specify organization"
 msgid "specify an organization"
-msgstr "Organisation angeben"
+msgstr "Eine Organisation angeben"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/subscription_manager/managercli.py:1078
@@ -4993,18 +4965,16 @@ msgstr "Organisation: "
 
 #: src/subscription_manager/managercli.py:1109
 msgid "Convenient module for managing all system purpose settings"
-msgstr ""
+msgstr "Praktisches Modul zur Verwaltung aller Systemzweckeinstellungen"
 
 #: src/subscription_manager/managercli.py:1119
-#, fuzzy
-#| msgid "set {attr} of system purpose"
 msgid "show current system purpose"
-msgstr "setze {attr} des Systemzwecks"
+msgstr "aktuellen Systemzweck anzeigen"
 
 #: src/subscription_manager/managercli.py:1141
 #, python-brace-format
 msgid "{prog} {name}"
-msgstr ""
+msgstr "{prog} {name}"
 
 #: src/subscription_manager/managercli.py:1143
 msgid "Syspurpose submodules"
@@ -5013,7 +4983,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:1157
 #, python-format, python-brace-format
 msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
-msgstr ""
+msgstr "%(prog)s {name} [SUBMODUL] [OPTIONEN]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1220
