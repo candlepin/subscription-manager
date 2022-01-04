@@ -36,6 +36,7 @@ class CliEnvironmentTests(SubManFixture):
         with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
             mock_identity = self._inject_mock_valid_consumer()
             mock_uep.getEnvironmentList = self.env_list
+            mock_uep.supports_resource = Mock(return_value=True)
             mock_uep.has_capability = Mock(return_value=True)
             mock_uep.updateConsumer = Mock()
             self.stub_cp_provider.basic_auth_cp = mock_uep
@@ -49,6 +50,7 @@ class CliEnvironmentTests(SubManFixture):
         with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
             mock_identity = self._inject_mock_valid_consumer()
             mock_uep.getEnvironmentList = self.env_list
+            mock_uep.supports_resource = Mock(return_value=True)
             mock_uep.has_capability = Mock(return_value=True)
             mock_uep.updateConsumer = Mock()
             self.stub_cp_provider.basic_auth_cp = mock_uep
@@ -56,6 +58,20 @@ class CliEnvironmentTests(SubManFixture):
 
             serial1 = '1234,5678'
             cmd.main(['--set=somename,othername', '--username', 'foo', '--password', 'bar'])
+            cmd.cp.updateConsumer.assert_called_once_with(mock_identity.uuid, environments=serial1)
+
+    def test_update_environments_multiple_handles_spaces(self):
+        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+            mock_identity = self._inject_mock_valid_consumer()
+            mock_uep.getEnvironmentList = self.env_list
+            mock_uep.supports_resource = Mock(return_value=True)
+            mock_uep.has_capability = Mock(return_value=True)
+            mock_uep.updateConsumer = Mock()
+            self.stub_cp_provider.basic_auth_cp = mock_uep
+            cmd = EnvironmentsCommand()
+
+            serial1 = '1234,5678'
+            cmd.main(['--set=somename, othername', '--username', 'foo', '--password', 'bar'])
             cmd.cp.updateConsumer.assert_called_once_with(mock_identity.uuid, environments=serial1)
 
     def test_update_environments_repeated(self):

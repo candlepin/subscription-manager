@@ -176,6 +176,7 @@ class CliRegistrationTests(SubManFixture):
             self.stub_cp_provider.basic_auth_cp = mock_uep
 
             rc = RegisterCommand()
+            rc.cp = mock_uep
             rc.options = Mock()
             rc.options.activation_keys = None
             rc.options.environments = None
@@ -196,6 +197,7 @@ class CliRegistrationTests(SubManFixture):
             self.stub_cp_provider.basic_auth_cp = mock_uep
 
             rc = RegisterCommand()
+            rc.cp = mock_uep
             rc.options = Mock()
             rc.options.activation_keys = None
             rc.options.environments = None
@@ -213,9 +215,11 @@ class CliRegistrationTests(SubManFixture):
         with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
             mock_uep.getEnvironmentList = env_list
             mock_uep.supports_resource = Mock(return_value=True)
+            mock_uep.has_capability = Mock(return_value=True)
             self.stub_cp_provider.basic_auth_cp = mock_uep
 
             rc = RegisterCommand()
+            rc.cp = mock_uep
             rc.options = Mock()
             rc.options.activation_keys = None
             rc.options.environments = None
@@ -259,6 +263,7 @@ class CliRegistrationTests(SubManFixture):
             self.stub_cp_provider.basic_auth_cp = mock_uep
 
             rc = RegisterCommand()
+            rc.cp = mock_uep
             rc.options = Mock()
             rc.options.activation_keys = None
             rc.options.environments = None

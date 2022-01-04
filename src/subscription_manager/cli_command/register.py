@@ -330,6 +330,10 @@ class RegisterCommand(UserPassCommand):
         return environment or self._prompt_for_environment()
 
     def _process_environments(self, admin_cp, owner_key, options):
+        """
+        Confirms that environment(s) have been chosen if they are supported
+        and a choice needs to be made
+        """
         supported_resources = get_supported_resources()
         supports_environments = 'environments' in supported_resources
 
@@ -354,6 +358,8 @@ class RegisterCommand(UserPassCommand):
                 print(_('Hint: Organization "{key}" contains following environments: {list}').format(
                       key=owner_key, list=", ".join(env_name_list)))
                 environments = self._prompt_for_environment()
+                if not self.cp.has_capability(MULTI_ENV) and ',' in environments:
+                    system_exit(os.EX_USAGE, _("The entitlement server does not allow multiple environments"))
 
             return check_set_environment_names(all_env_list, environments)
 

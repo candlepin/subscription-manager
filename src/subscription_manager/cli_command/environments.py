@@ -75,7 +75,8 @@ class EnvironmentsCommand(OrgCommand):
                 self.cp = self.cp_provider.get_keycloak_auth_cp(self.options.token)
             else:
                 if not self.options.enabled:
-                    print(_("This operation requires user crendentials"))
+                    if self.options.username is None or self.options.password is None:
+                        print(_("This operation requires user credentials"))
                     self.cp_provider.set_user_pass(self.username, self.password)
                     self.cp = self.cp_provider.get_basic_auth_cp()
             self.identity = require(IDENTITY)
@@ -93,6 +94,9 @@ class EnvironmentsCommand(OrgCommand):
             handle_exception(_("Error: Unable to retrieve environment list from server"), e)
 
     def _set_environments(self):
+        """
+        Updates the environments for the consumer if that is a capability at the server
+        """
         if self.cp.has_capability(MULTI_ENV):
             if not self.identity.is_valid():
                 system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
@@ -109,6 +113,10 @@ class EnvironmentsCommand(OrgCommand):
             system_exit(os.EX_UNAVAILABLE, _("Error: Server does not support environment updates."))
 
     def _list_environments(self):
+        """
+        List the environments based on the option selected in the command line
+        enabled/disabled/all
+        """
         if not self.cp.has_capability(MULTI_ENV) and (self.options.enabled or self.options.disabled):
             system_exit(os.EX_UNAVAILABLE, _("Error: Server does not support multi-environment operations."))
         environments = []
@@ -137,11 +145,19 @@ class EnvironmentsCommand(OrgCommand):
             print(_("This list operation does not have any environments to report."))
 
     def _process_environments(self, admin_cp, owner_key, options):
+        """
+        Gather environment list from server and pass to method to
+        validate the environment input against it
+        """
         all_env_list = admin_cp.getEnvironmentList(owner_key)
         return check_set_environment_names(all_env_list, options.set)
 
     @property
     def org(self):
+        """
+        An override is needed here because we need to use the org from the
+        identity for this command if this system is already registered
+        """
         self.identity = require(IDENTITY)
         if self.identity.is_valid():
             self._org = self.cp.getOwner(self.identity.uuid)['key']
@@ -156,7 +172,11 @@ class EnvironmentsCommand(OrgCommand):
 
 
 def check_set_environment_names(all_env_list, name_string):
-    names = name_string.split(",")
+    """
+    Checks the environment name(s) input for duplicates and
+    inclusion in the full list
+    """
+    names = [name.strip() for name in name_string.split(',')]
     if len(names) > len(set(names)):
         system_exit(os.EX_DATAERR,
                     _("Error: The same environment may not be listed more than once. "))
