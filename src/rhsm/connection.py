@@ -21,7 +21,6 @@ import dateutil.parser
 import locale
 import logging
 import os
-import six
 import socket
 import sys
 import time
@@ -1230,7 +1229,7 @@ class UEPConnection(BaseConnection):
         if addons is not None:
             if isinstance(addons, list):
                 params['addOns'] = addons
-            elif isinstance(addons, six.text_type):
+            elif isinstance(addons, str):
                 params['addOns'] = [addons]
         if usage is not None:
             params['usage'] = usage
@@ -1246,7 +1245,7 @@ class UEPConnection(BaseConnection):
         return ret
 
     def addOrUpdateGuestId(self, uuid, guestId):
-        if isinstance(guestId, six.string_types):
+        if isinstance(guestId, str):
             guest_uuid = guestId
             guestId = {}
         else:
@@ -1270,7 +1269,7 @@ class UEPConnection(BaseConnection):
         return [self.sanitizeGuestId(guestId) for guestId in guestIds or []]
 
     def sanitizeGuestId(self, guestId):
-        if isinstance(guestId, six.string_types):
+        if isinstance(guestId, str):
             return guestId
         elif isinstance(guestId, dict) and "guestId" in list(guestId.keys()):
             if self.supports_resource('guestids'):

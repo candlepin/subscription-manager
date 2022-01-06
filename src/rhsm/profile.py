@@ -13,7 +13,6 @@ import logging
 
 import imp
 import rpm
-import six
 import os.path
 from rhsm import ourjson as json
 from rhsm.utils import suppress_output
@@ -337,7 +336,7 @@ class Package(object):
     # added in support of bz1519512, bz1543639
     @staticmethod
     def _normalize_string(value):
-        if type(value) is six.binary_type:
+        if type(value) is bytes:
             return value.decode('utf-8', 'replace')
         return value
 

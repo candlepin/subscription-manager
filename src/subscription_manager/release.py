@@ -17,7 +17,6 @@
 
 import logging
 import socket
-import six
 
 import http.client
 from rhsm.https import ssl
@@ -184,8 +183,8 @@ class CdnReleaseVersionProvider(object):
 
     def _is_correct_rhel(self, product_tags, content_tags):
         # easy to pass a string instead of a list
-        assert not isinstance(product_tags, six.string_types)
-        assert not isinstance(content_tags, six.string_types)
+        assert not isinstance(product_tags, str)
+        assert not isinstance(content_tags, str)
 
         for product_tag in product_tags:
             # we are comparing the lists to see if they

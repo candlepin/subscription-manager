@@ -25,7 +25,7 @@ import hashlib
 
 
 def md5sum(buf):
-    if isinstance(buf, six.text_type):
+    if isinstance(buf, str):
         buf = buf.encode('utf-8')
     md = hashlib.md5(buf)
     return md.hexdigest()

@@ -14,7 +14,6 @@
 import collections
 import datetime
 import logging
-import six
 import time
 
 from subscription_manager import injection as inj
@@ -106,7 +105,7 @@ class EntitlementService(object):
         if kwargs:
             raise exceptions.ValidationError(_("Unknown arguments: %s") % kwargs.keys())
 
-        if isinstance(pool_subsets, six.string_types):
+        if isinstance(pool_subsets, str):
             pool_subsets = [pool_subsets]
 
         # [] or None means look at all pools

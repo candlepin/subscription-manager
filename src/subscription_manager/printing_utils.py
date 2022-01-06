@@ -14,7 +14,6 @@
 import fnmatch
 import re
 import logging
-import six
 
 from subscription_manager.unicode_width import textual_width as utf8_width
 from subscription_manager.utils import get_terminal_width
@@ -87,9 +86,9 @@ def format_name(name, indent, max_length):
     it a columned effect.  Assumes the first line is already
     properly indented.
     """
-    if not name or not max_length or (max_length - indent) <= 2 or not isinstance(name, six.string_types):
+    if not name or not max_length or (max_length - indent) <= 2 or not isinstance(name, str):
         return name
-    if not isinstance(name, six.text_type):
+    if not isinstance(name, str):
         name = name.decode("utf-8")
     words = name.split()
     lines = []
@@ -191,11 +190,3 @@ def echo_columnize_callback(template_str, *args, **kwargs):
     this is a callback meant to be used by columnize().
     """
     return template_str % tuple(args)
-
-
-# from http://farmdev.com/talks/unicode/
-def to_unicode_or_bust(obj, encoding='utf-8'):
-    if isinstance(obj, six.string_types):
-        if not isinstance(obj, six.text_type):
-            obj = six.text_type(obj, encoding)
-    return obj
