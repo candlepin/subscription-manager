@@ -248,7 +248,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.24
+Version: 1.28.25
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1491,6 +1491,49 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Jan 06 2022 Christopher Snyder <csnyder@redhat.com> 1.28.25-1
+- syspurpose: handle users w/o organizations (ptoscano@redhat.com)
+- service-level: drop useless check (ptoscano@redhat.com)
+- 2026286: consider user-specified --org in any case (ptoscano@redhat.com)
+- 2003777: Fix organizations hint in syspurpose commands (mhorky@redhat.com)
+- 2003777: Only hint organizations if it's needed (mhorky@redhat.com)
+- 2003777: Show available organizations before asking for input
+  (mhorky@redhat.com)
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (ljanda@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Spanish) (ehespinosa57@gmail.com)
+- cache: fix typo in debug message (ptoscano@redhat.com)
+- 2017795: Disallowed attaching using D-Bus in SCA mode (jhnidek@redhat.com)
+- 2017795: Disallowed attaching pool in SCA mode: (jhnidek@redhat.com)
+- Extended D-Bus API - syspurpose methods; ENT-2373 (jhnidek@redhat.com)
+- 2029384: Fix bash autocompletion (mhorky@redhat.com)
+- Try to use --forked for all unit tests. (jhnidek@redhat.com)
+- Updates to cherry pick for pytest (wpoteat@redhat.com)
+- test: rename tests to default pytest filename pattern (ptoscano@redhat.com)
+- Use pytest --forked for D-Bus unit tests (jhnidek@redhat.com)
+- Added cleanup for one patcher; fixed some comments. (jhnidek@redhat.com)
+- Remove i-notify watchers on the end of the loop (jhnidek@redhat.com)
+- Remove outdated comments from the coverage Jenkins job (mhorky@redhat.com)
+- ENT-4252: Migrate from nose to pytest (mhorky@redhat.com)
+- WIP: removed unit tests for GUI (jhnidek@redhat.com)
+- Remove PyXML leftovers (ptoscano@redhat.com)
+- 2024589: fix format of HTTP-date headers (ptoscano@redhat.com)
+- connection: move HTTP-date formatting to own helper (ptoscano@redhat.com)
+- Ensure datetime.timezone.utc objects for parsed UTC dates
+  (ptoscano@redhat.com)
+- Cockpit plugin: display syspurpose card without attributes
+  (jhnidek@redhat.com)
+- 2000326: Fixed partially subscribed product in Cockpit plugin
+  (jhnidek@redhat.com)
+- Translated using Weblate (Italian) (toscano.pino@tiscali.it)
+- Update translation files (noreply@weblate.org)
+- Translated using Weblate (Spanish) (ehespinosa57@gmail.com)
+- Translated using Weblate (Korean) (ljanda@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- 2024930: build: fix build on 'build' target (ptoscano@redhat.com)
+- Add 8.6 releaser (csnyder@redhat.com)
+- 2023392: libdnf: respect environment CFLAGS (ptoscano@redhat.com)
+
 * Thu Nov 18 2021 Christopher Snyder <csnyder@redhat.com> 1.28.24-1
 - 1995465: Do not use deprecated collections.MutableMapping
   (jhnidek@redhat.com)
