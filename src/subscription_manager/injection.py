@@ -79,7 +79,7 @@ class FeatureBroker(object):
         except KeyError:
             raise KeyError("Unknown feature: %r" % feature)
 
-        if isinstance(provider, (type, six.class_types)):
+        if isinstance(provider, type):
             self.providers[feature] = provider(*args, **kwargs)
         elif six.callable(provider):
             return provider(*args, **kwargs)
@@ -111,6 +111,6 @@ def require(feature, *args, **kwargs):
 
 def provide(feature, provider, singleton=False):
     global FEATURES
-    if not singleton and isinstance(provider, (type, six.class_types)):
+    if not singleton and isinstance(provider, type):
         provider = nonSingleton(provider)
     return FEATURES.provide(feature, provider)

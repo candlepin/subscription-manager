@@ -11,7 +11,6 @@
 # ignores wrong content type
 import configparser
 
-import six
 import mock
 from . import fixture
 
@@ -124,7 +123,7 @@ class TestOstreeRemote(fixture.SubManFixture):
             model.OstreeRemote.from_config_section(self.section_name,
                                                    items)
         repr_str = repr(ostree_remote)
-        self.assertTrue(isinstance(repr_str, six.string_types))
+        self.assertTrue(isinstance(repr_str, str))
         self.assertTrue('name' in repr_str)
         self.assertTrue('gpg_verify' in repr_str)
         self.assertTrue(self.example_url in repr_str)
@@ -401,7 +400,7 @@ class BaseOstreeRepoFileTest(BaseOstreeKeyFileTest):
         self.assertTrue(rf_cfg.has_option(remote_section, 'url'))
         url = rf_cfg.get(remote_section, 'url')
         self.assertTrue(url is not None)
-        self.assertTrue(isinstance(url, six.string_types))
+        self.assertTrue(isinstance(url, str))
         self.assertTrue(' ' not in url)
 
         self.assertTrue(rf_cfg.has_option(remote_section, 'gpg-verify'))
