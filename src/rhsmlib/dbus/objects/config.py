@@ -13,7 +13,6 @@
 #
 import dbus
 import logging
-import six
 from iniparse import ini
 
 import rhsm
@@ -167,9 +166,9 @@ class ConfigDBusObject(base_object.BaseObject):
         Locale.set(locale)
 
         d = dbus.Dictionary({}, signature='sv')
-        for k, v in six.iteritems(self.config):
+        for k, v in self.config.items():
             d[k] = dbus.Dictionary({}, signature='ss')
-            for kk, vv in six.iteritems(v):
+            for kk, vv in v.items():
                 d[k][kk] = vv
 
         return d

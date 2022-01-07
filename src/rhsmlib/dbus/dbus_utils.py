@@ -22,7 +22,6 @@ import pwd
 import xml.etree.ElementTree as Et
 
 import dbus
-import six
 
 log = logging.getLogger(__name__)
 
@@ -206,7 +205,7 @@ def add_properties(xml, interface, props):
 
 def dict_to_variant_dict(in_dict):
     # Handle creating dbus.Dictionaries with signatures of 'sv'
-    for key, value in six.iteritems(in_dict):
+    for key, value in in_dict.items():
         if isinstance(value, dict):
             in_dict[key] = dict_to_variant_dict(value)
     return dbus.Dictionary(in_dict, signature="sv")
