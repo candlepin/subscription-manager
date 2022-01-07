@@ -12,7 +12,6 @@
 # in this software or its documentation.
 #
 import logging
-import six
 import dbus.service
 
 from rhsmlib.dbus import constants, exceptions, util
@@ -45,7 +44,7 @@ class BaseObject(dbus.service.Object):
 
     def validate_only_proxy_options(self, proxy_options):
         error_msg = None
-        for k in six.iterkeys(proxy_options):
+        for k in proxy_options.keys():
             if k not in ['proxy_hostname', 'proxy_port', 'proxy_user', 'proxy_password', 'no_proxy']:
                 error_msg = "Error: %s is not a valid proxy option" % k
                 break

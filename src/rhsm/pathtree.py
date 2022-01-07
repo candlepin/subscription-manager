@@ -13,7 +13,6 @@
 
 import itertools
 import zlib
-import six
 
 from rhsm.bitstream import GhettoBitStream
 from rhsm.huffman import HuffmanNode
@@ -105,7 +104,7 @@ class PathTree(object):
         if isinstance(tree, dict):
             tree = [tree]
         for branch in tree:
-            for k, v in six.iteritems(branch):
+            for k, v in branch.items():
                 if k == PATH_END:
                     acc.append(curr_path)
                 else:

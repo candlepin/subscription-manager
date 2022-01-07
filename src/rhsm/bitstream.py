@@ -10,12 +10,10 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
-import six
-
 from collections import deque
 
 
-class GhettoBitStream(six.Iterator):
+class GhettoBitStream:
     """
     Accepts binary data and makes it available as a stream of bits or one byte
     at a time. Python does not provide a built-in way to read a stream of bits,
