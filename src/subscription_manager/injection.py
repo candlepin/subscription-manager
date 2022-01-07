@@ -11,9 +11,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
-import six
-
 # Supported Features:
 IDENTITY = "IDENTITY"
 CERT_SORTER = "CERT_SORTER"
@@ -81,7 +78,7 @@ class FeatureBroker(object):
 
         if isinstance(provider, type):
             self.providers[feature] = provider(*args, **kwargs)
-        elif six.callable(provider):
+        elif callable(provider):
             return provider(*args, **kwargs)
 
         return self.providers[feature]

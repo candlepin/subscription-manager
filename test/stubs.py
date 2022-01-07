@@ -14,7 +14,6 @@
 
 from collections import defaultdict
 from datetime import datetime, timedelta
-import six
 import io
 import mock
 import random
@@ -486,7 +485,7 @@ class StubUEP(object):
     def getConsumer(self, consumerId, username=None, password=None):
         if hasattr(self, 'consumer') and self.consumer:
             return self.consumer
-        if six.callable(self.registered_consumer_info):
+        if callable(self.registered_consumer_info):
             return self.registered_consumer_info()
         return self.registered_consumer_info
 
