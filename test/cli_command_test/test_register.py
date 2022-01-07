@@ -41,7 +41,7 @@ class TestRegisterCommand(TestCliProxyCommand):
         self._test_exception(["--username", "bob", "--activationkey", "key"])
 
     def test_keys_and_environments(self):
-        self._test_exception(["--environment", "JarJar", "--activationkey", "Binks"])
+        self._test_exception(["--environments", "JarJar", "--activationkey", "Binks"])
 
     def test_env_and_org(self):
         self._test_no_exception(["--env", "env", "--org", "org"])

@@ -46,6 +46,7 @@ except ImportError:
     subman_version = "unknown"
 
 config = get_config_parser()
+MULTI_ENV = "multi_environment"
 
 
 def safe_int(value, safe_value=None):
@@ -1085,7 +1086,7 @@ class UEPConnection(BaseConnection):
         )
 
     def registerConsumer(self, name="unknown", type="system", facts={},
-                         owner=None, environment=None, keys=None,
+                         owner=None, environments=None, keys=None,
                          installed_products=None, uuid=None, hypervisor_id=None,
                          content_tags=None, role=None, addons=None, service_level=None, usage=None,
                          jwt_token=None):
@@ -1114,14 +1115,19 @@ class UEPConnection(BaseConnection):
             params['usage'] = usage
         if service_level is not None:
             params['serviceLevel'] = service_level
+        if environments is not None and self.has_capability(MULTI_ENV):
+            env_list = []
+            for environment in environments.split(','):
+                env_list.append({"id": environment})
+            params['environments'] = env_list
 
         headers = {}
         if jwt_token:
             headers['Authorization'] = 'Bearer {jwt_token}'.format(jwt_token=jwt_token)
 
         url = "/consumers"
-        if environment:
-            url = "/environments/%s/consumers" % self.sanitize(environment)
+        if environments and not self.has_capability(MULTI_ENV):
+            url = "/environments/%s/consumers" % self.sanitize(environments)
         elif owner:
             query_param = urlencode({"owner": owner})
             url = "%s?%s" % (url, query_param)
@@ -1195,7 +1201,7 @@ class UEPConnection(BaseConnection):
     def updateConsumer(self, uuid, facts=None, installed_products=None,
                        guest_uuids=None, service_level=None, release=None,
                        autoheal=None, hypervisor_id=None, content_tags=None, role=None, addons=None,
-                       usage=None):
+                       usage=None, environments=None):
         """
         Update a consumer on the server.
 
@@ -1234,6 +1240,11 @@ class UEPConnection(BaseConnection):
                 params['addOns'] = [addons]
         if usage is not None:
             params['usage'] = usage
+        if environments is not None:
+            env_list = []
+            for environment in environments.split(','):
+                env_list.append({"id": environment})
+            params['environments'] = env_list
 
         # The server will reject a service level that is not available
         # in the consumer's organization, so no need to check if it's safe

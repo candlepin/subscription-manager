@@ -33,6 +33,7 @@ from subscription_manager import identity
 from subscription_manager.branding import get_branding
 from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.cli import handle_exception, conf
+from subscription_manager.cli_command.environments import MULTI_ENV
 from subscription_manager.cli_command.list import show_autosubscribe_output
 from subscription_manager.cli_command.user_pass import UserPassCommand
 from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_CAPABILITY
@@ -40,6 +41,7 @@ from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.utils import restart_virt_who, print_error, get_supported_resources, \
     is_simple_content_access
+from subscription_manager.cli_command.environments import check_set_environment_names
 
 log = logging.getLogger(__name__)
 
@@ -62,8 +64,10 @@ class RegisterCommand(UserPassCommand):
         self.parser.add_argument("--org", dest="org", metavar="ORG_KEY",
                                  help=_(
                                      "register with one of multiple organizations for the user, using organization key"))
-        self.parser.add_argument("--environment", dest="environment",
-                                 help=_("register with a specific environment in the destination org"))
+        self.parser.add_argument("--environments", dest="environments",
+                                 help=_("register with a specific environment (single value) or multiple environments "
+                                        "(a comma-separated list) in the destination org. The ability to use multiple "
+                                        "environments is controlled by the entitlement server"))
         self.parser.add_argument("--release", dest="release",
                                  help=_("set a release version"))
         self.parser.add_argument("--autosubscribe", action='store_true',
@@ -87,7 +91,7 @@ class RegisterCommand(UserPassCommand):
             system_exit(os.EX_USAGE, _("Error: Activation keys do not require user credentials."))
         elif self.options.consumerid and self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Activation keys can not be used with previously registered IDs."))
-        elif self.options.environment and self.options.activation_keys:
+        elif self.options.environments and self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Activation keys do not allow environments to be specified."))
         elif self.autoattach and self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Activation keys cannot be used with --auto-attach."))
@@ -108,6 +112,9 @@ class RegisterCommand(UserPassCommand):
         elif self.options.consumertype and not \
                 (self.options.consumertype.lower() == 'rhui' or self.options.consumertype == 'system'):
             system_exit(os.EX_USAGE, _("Error: The --type option has been deprecated and may not be used."))
+        if self.options.environments:
+            if not self.cp.has_capability(MULTI_ENV) and ',' in self.options.environments:
+                system_exit(os.EX_USAGE, _("The entitlement server does not allow multiple environments"))
 
     def persist_server_options(self):
         """
@@ -224,11 +231,11 @@ class RegisterCommand(UserPassCommand):
                         get_owner_cb=self._get_owner_cb,
                         no_owner_cb=self._no_owner_cb
                     )
-                environment_id = self._get_environment_id(admin_cp, owner_key, self.options.environment)
+                environment_ids = self._process_environments(admin_cp, owner_key, self.options)
                 consumer = service.register(
                     owner_key,
                     activation_keys=self.options.activation_keys,
-                    environment=environment_id,
+                    environments=environment_ids,
                     force=self.options.force,
                     name=self.options.consumername,
                     type=self.options.consumertype,
@@ -315,56 +322,46 @@ class RegisterCommand(UserPassCommand):
         """
         By breaking this code out, we can write cleaner tests
         """
-        environment = input(_("Environment: ")).strip()
+        if self.cp.has_capability(MULTI_ENV):
+            environment = input(_("Environments: ")).replace(" ", "")
+        else:
+            environment = input(_("Environment: ")).strip()
         readline.clear_history()
         return environment or self._prompt_for_environment()
 
-    def _get_environment_id(self, cp, owner_key, environment_name):
-        # If none specified on CLI and the server doesn't support environments,
-        # return None, the registration method will skip environment specification.
-
-        # Activation keys may not be used with environment for registration.
-        # We use a no-auth cp, so we cannot look up environment ids by name
-        if self.options.activation_keys:
-            return None
-
+    def _process_environments(self, admin_cp, owner_key, options):
+        """
+        Confirms that environment(s) have been chosen if they are supported
+        and a choice needs to be made
+        """
         supported_resources = get_supported_resources()
         supports_environments = 'environments' in supported_resources
-        if not environment_name:
-            if supports_environments:
-                env_list = cp.getEnvironmentList(owner_key)
 
-                # If there aren't any environments, don't prompt for one
-                if not env_list:
-                    return environment_name
-
-                # If the envronment list is len 1, pick that environment
-                if len(env_list) == 1:
-                    log.debug("Using the only available environment: \"{name}\"".format(name=env_list[0]["name"]))
-                    return env_list[0]['id']
-
-                env_name_list = [env['name'] for env in env_list]
-                print(_('Hint: Organization "{key}" contains following environments: {list}').format(
-                      key=owner_key, list=", ".join(env_name_list)))
-
-                environment_name = self._prompt_for_environment()
-
-                # Should only ever be len 0 or 1
-                env_matches = [env['id'] for env in env_list if env['name'] == environment_name]
-                if env_matches:
-                    return env_matches[0]
-                system_exit(os.EX_DATAERR, _("No such environment: {name}").format(name=environment_name))
-
-            # Server doesn't support environments
-            return environment_name
-
-        if not supports_environments:
+        if not supports_environments and self.options.environments is not None:
             system_exit(os.EX_UNAVAILABLE, _("Error: Server does not support environments."))
 
-        env = cp.getEnvironment(owner_key=owner_key, name=environment_name)
-        if not env:
-            system_exit(os.EX_DATAERR, _("No such environment: {name}").format(name=environment_name))
-        return env['id']
+        if supports_environments:
+            all_env_list = admin_cp.getEnvironmentList(owner_key)
+            if self.options.environments:
+                environments = options.environments
+            else:
+                # If there aren't any environments, don't prompt for one
+                if not all_env_list:
+                    return None
+
+                # If the envronment list is len 1, pick that environment
+                if len(all_env_list) == 1:
+                    log.debug("Using the only available environment: \"{name}\"".format(name=all_env_list[0]["name"]))
+                    return all_env_list[0]['id']
+
+                env_name_list = [env['name'] for env in all_env_list]
+                print(_('Hint: Organization "{key}" contains following environments: {list}').format(
+                      key=owner_key, list=", ".join(env_name_list)))
+                environments = self._prompt_for_environment()
+                if not self.cp.has_capability(MULTI_ENV) and ',' in environments:
+                    system_exit(os.EX_USAGE, _("The entitlement server does not allow multiple environments"))
+
+            return check_set_environment_names(all_env_list, environments)
 
     @staticmethod
     def _no_owner_cb(username):
