@@ -85,10 +85,11 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
             getattr(self.options, "username", None) or
             getattr(self.options, "password", None) or
             getattr(self.options, "token", None) or
-            getattr(self.options, "org", None)
+            getattr(self.options, "org", None) or
+            getattr(self.options, "server_url", None)
         ):
             system_exit(os.EX_USAGE, _(
-                "Error: --username, --password, --token and --org "
+                "Error: --username, --password, --token, --org and --serverurl "
                 "can be used only on unregistered systems"
             ))
 
