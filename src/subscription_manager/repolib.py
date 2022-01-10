@@ -28,7 +28,6 @@ from subscription_manager.utils import get_supported_resources
 
 from rhsm.config import get_config_parser, in_container
 from rhsm import connection
-import six
 import configparser
 
 # FIXME: local imports
@@ -597,7 +596,6 @@ class RepoUpdateActionCommand(object):
         self.report.repo_deleted.append(section)
 
 
-@six.python_2_unicode_compatible
 class RepoActionReport(ActionReport):
     """Report class for reporting yum repo updates."""
     name = "Repo Updates"
