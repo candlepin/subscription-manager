@@ -228,6 +228,9 @@ class TestSubscriptions(SubscriptionsCase):
         b.set_input_text("#subscription-register-username", "doc")
         b.set_input_text("#subscription-register-password", "wrongpass")
 
+        # Do not try to connect to insights
+        b.set_checked("#subscription-insights", False)
+
         # try to register
         dialog_register_button_sel = "footer .pf-m-primary"
         b.click(dialog_register_button_sel)
@@ -280,6 +283,9 @@ class TestSubscriptions(SubscriptionsCase):
         b.wait_visible("#subscription-register-url")
         b.set_val("#subscription-register-url", "custom")
         b.set_input_text("#subscription-register-url-custom", CANDLEPIN_URL)
+
+        # Do not try to connect to insights
+        b.set_checked("#subscription-insights", False)
 
         # select registration method "activation key"
         activation_key_checkbox = "#subscription-register-activation-key-method"
@@ -369,6 +375,10 @@ class TestSubscriptions(SubscriptionsCase):
         b.set_input_text("#subscription-register-username", "admin")
         b.set_input_text("#subscription-register-password", "admin")
         b.set_input_text("#subscription-register-org", "admin")
+
+        # Do not try to connect to insights
+        b.set_checked("#subscription-insights", False)
+
         dialog_register_button_sel = "footer .pf-m-primary"
         b.click(dialog_register_button_sel)
         b.wait_not_present(dialog_register_button_sel)
