@@ -112,7 +112,7 @@ class DmiFirmwareInfoCollector(collector.FactsCollector):
                     self._socket_designation.append(value1)
 
                 nkey = ''.join([tag, key1.lower()]).replace(" ", "_")
-                ddict[nkey] = str(value1)
+                ddict[nkey] = str(value1, 'utf-8')
 
         # Populate how many socket descriptions we saw in a faux-fact, so we can
         # use it to munge lscpu info later if needed.
