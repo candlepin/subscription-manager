@@ -85,8 +85,17 @@ class SubscriptionRegisterDialog extends React.Component {
             <FormGroup key="0" fieldId="subscription-insights" label={_("Insights")} hasNoPaddingTop>
                 <Checkbox id="subscription-insights" isChecked={this.props.insights}
                           label={ Insights.arrfmt(_("Connect this system to $0."), Insights.link) }
-                          isDisabled={ insights_checkbox_disabled } onChange={value => this.props.onChange('insights', value)} />
-                {(this.props.insights && !this.props.insights_detected) && <p>{ Insights.arrfmt(_("The $0 package will be installed."), <strong>{subscriptionsClient.insightsPackage}</strong>)}</p>}
+                          isDisabled={ insights_checkbox_disabled }
+                          onChange={value => this.props.onChange('insights', value)}
+                />
+                {(this.props.insights && !this.props.insights_detected) &&
+                    <p>
+                        { Insights.arrfmt(
+                            _("The $0 package will be installed."),
+                            <strong>{subscriptionsClient.insightsPackage}</strong>
+                        )}
+                    </p>
+                }
             </FormGroup>,
         ];
 
@@ -165,7 +174,10 @@ class SubscriptionRegisterDialog extends React.Component {
                 <FormGroup className="control-label" label={_("Subscriptions")} hasNoPaddingTop>
                     <Checkbox id="subscription-auto-attach-use" isChecked={this.props.auto_attach}
                               label={_("Attach automatically")}
-                              onChange={value => this.props.onChange('auto_attach', value)}
+                              onChange={value => {
+                                  this.props.onChange('auto_attach', value);
+                                  this.props.insights && !value && this.props.onChange('insights', value);
+                              }}
                     />
                 </FormGroup>
                 { insights }
