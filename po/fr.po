@@ -8,7 +8,7 @@
 # John Sefler <jsefler@redhat.com>, 2021.
 # Sundeep Anand <suanand@redhat.com>, 2021.
 # Julien Humbert <julroy67@gmail.com>, 2022.
-# Jérôme Fenal <jfenal@free.fr>, 2022.
+# Jérôme Fenal <jfenal@free.fr>, 2022, 2023.
 # Transtats <suanand@redhat.com>, 2022, 2023.
 # blutch112 <vincent.lefebvre59@gmail.com>, 2022.
 msgid ""
@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
 "PO-Revision-Date: 2023-05-10 05:37+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Jérôme Fenal <jfenal@free.fr>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/fr/>\n"
 "Language: fr\n"
@@ -1265,9 +1265,8 @@ msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
 msgstr ""
-"Erreur : type de listing non valide. Valeurs autorisées : "
-"« installés » (installed) « consommés » (consumed) ou "
-"« disponibles » (available)"
+"Erreur : type de listing non valide. Valeurs autorisées : « installés » "
+"(installed) « consommés » (consumed) ou « disponibles » (available)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsmlib/services/entitlement.py:497
@@ -1594,8 +1593,8 @@ msgstr ""
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
 msgstr ""
-"Si vous souhaitez remplacer des données au niveau serveur, veuillez "
-"exécuter : {command}"
+"Si vous souhaitez remplacer des données au niveau serveur, veuillez exécuter "
+": {command}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. TRANSLATORS: this refers to a deprecated command
@@ -1689,8 +1688,8 @@ msgid ""
 "subscriptions."
 msgstr ""
 "Avertissement : Cette organisation n'a pas d'abonnements qui fournissent un "
-"objet de système « {attr} ».  Ce paramètre n'aura aucune incidence sur "
-"l'auto-assignation des abonnements."
+"objet de système « {attr} ».  Ce paramètre n'aura aucune incidence sur l"
+"'auto-assignation des abonnements."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:278
 #, python-brace-format
@@ -1730,8 +1729,8 @@ msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
 msgstr ""
-"Il n'y a pas de valeurs disponibles pour l'objet du système "
-"\"{syspurpose_attr}\" parmi les abonnements disponibles dans cette "
+"Il n'y a pas de valeurs disponibles pour l'objet du système \""
+"{syspurpose_attr}\" parmi les abonnements disponibles dans cette "
 "organisation."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:409
@@ -4002,9 +4001,9 @@ msgid ""
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
 "Les greffons yum : %s ont été activées automatiquement au bénéfice de Red "
-"Hat Subscription Management. Si vous ne le souhaitez pas, utiliser "
-"« subscription-manager config --rhsm.auto_enable_yum_plugins=0 » pour "
-"bloquer ce comportement."
+"Hat Subscription Management. Si vous ne le souhaitez pas, utiliser « "
+"subscription-manager config --rhsm.auto_enable_yum_plugins=0 » pour bloquer "
+"ce comportement."
 
 #: src/subscription_manager/repolib.py:678
 msgid "Repo updates"
