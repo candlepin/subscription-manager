@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-15 10:29+0100\n"
-"PO-Revision-Date: 2021-12-13 23:16+0000\n"
+"PO-Revision-Date: 2021-12-29 03:16+0000\n"
 "Last-Translator: Emilio Herrera <ehespinosa57@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9.1\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -166,7 +166,7 @@ msgstr "%r no es invocable"
 #: /usr/lib64/python3.9/argparse.py:2490
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr "no válido %(type)s de valor: %(value)r"
+msgstr "%(type)s no válido valor: %(value)r"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2501
@@ -689,7 +689,7 @@ msgid ""
 "Couldn't get system subscription status. Please ensure subscription-manager "
 "is installed."
 msgstr ""
-"No podría obtener el estado del sistema de suscripción. Por favor asegura "
+"No podría obtener el estado de la suscripción del sistema. Por favor asegura "
 "que subscription-manager está instalado."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
@@ -1772,7 +1772,7 @@ msgstr "RHN Classic"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/branding/redhat_branding.py:20
 msgid "Please enter your Red Hat account information:"
-msgstr "Por favor ingrese la información de su cuenta de Red Hat."
+msgstr "Por favor ingrese la información de su cuenta de Red Hat:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:22
@@ -1988,7 +1988,7 @@ msgstr "{attr} fijado a \"{val}\"."
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:281
 #, python-brace-format
 msgid "{attr} unset."
-msgstr "{attr} desarmado"
+msgstr "{attr} desarmado."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:298
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:321
@@ -2004,7 +2004,7 @@ msgstr "Corriente {name}: {val}"
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:353
 #, python-brace-format
 msgid "{name} not set."
-msgstr "{name} no establecido"
+msgstr "{name} no establecido."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:371
 #, python-brace-format
@@ -2103,7 +2103,7 @@ msgstr "Vincular una suscripción especificada al sistema registrado"
 
 #: src/subscription_manager/cli_command/attach.py:89
 msgid "Error: --auto may not be used when specifying pools."
-msgstr "Error: --auto no puede utilizarse para especificar grupos"
+msgstr "Error: --auto no puede utilizarse para especificar grupos."
 
 #: src/subscription_manager/cli_command/attach.py:91
 msgid "Error: The --servicelevel option cannot be used when specifying pools."
@@ -2729,7 +2729,7 @@ msgstr "ID de grupo:"
 #: src/subscription_manager/cli_command/list.py:123
 #: src/subscription_manager/cli_command/list.py:143
 msgid "Provides Management:"
-msgstr "iProporciona administración"
+msgstr "Proporciona Administración:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: src/subscription_manager/cli_command/list.py:72
@@ -2811,7 +2811,7 @@ msgstr "Nombre:"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/list.py:107
 msgid "Description:"
-msgstr "Descripción"
+msgstr "Descripción:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/list.py:112
@@ -2828,7 +2828,7 @@ msgstr "Cuenta:"
 #: src/subscription_manager/cli_command/list.py:121
 #: src/subscription_manager/cli_command/list.py:141
 msgid "Serial:"
-msgstr "Serial:"
+msgstr "Serie:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/list.py:124
@@ -2960,7 +2960,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/list.py:251
 msgid "Error: --afterdate is only applicable with --available"
-msgstr "Error: --afterdate solamente se aplica con --available"
+msgstr "Error: --afterdate solamente es aplicable con --available"
 
 #: src/subscription_manager/cli_command/list.py:253
 msgid "Error: --afterdate cannot be used with --ondate"
@@ -3275,7 +3275,7 @@ msgstr "Intente redimir una suscripción para un sistema preconfigurado"
 msgid "email address to notify when subscription redemption is complete"
 msgstr ""
 "Dirección de correo-e para notificar cuando se redima la suscripción "
-"completamente."
+"completamente"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/redeem.py:37
@@ -3291,7 +3291,7 @@ msgstr ""
 msgid ""
 "Error: This command requires that you specify an email address with --email."
 msgstr ""
-"Error: Este comando requiere que usted especifique una dirección con --email"
+"Error: Este comando requiere que usted especifique una dirección con --email."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/refresh.py:33
@@ -3481,8 +3481,7 @@ msgstr "Configure el lanzamiento del sistema operativo a utilizar"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/release.py:37
 msgid "shows current release setting; default command"
-msgstr ""
-"Muestra la configuración del lanzamiento actual. Comando predeterminado."
+msgstr "muestra la configuración de la versión actual; comando predeterminado"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/release.py:39
@@ -3793,7 +3792,7 @@ msgstr "Niveles de servicio disponibles"
 msgid "Show status information for this system's subscriptions and products"
 msgstr ""
 "Muestre la información de estatus para los productos y suscripciones de este "
-"sistema."
+"sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: src/subscription_manager/cli_command/status.py:43
@@ -3927,7 +3926,7 @@ msgstr "reglas de administración de suscripciones: %s"
 msgid "%s local certificate has been deleted."
 msgid_plural "%s local certificates have been deleted."
 msgstr[0] "%s certificado local ha sido borrado."
-msgstr[1] "%s certificado local ha sido borrado."
+msgstr[1] "%s certificados locales han sido borrados."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/entcertlib.py:462
@@ -4124,7 +4123,7 @@ msgid ""
 "Hat Subscription Management. If not desired, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
-"Los plugins yum / dnf: %s se habilitaron automáticamente en beneficio de Red "
+"Los plugins yum/dnf: %s se habilitaron automáticamente en beneficio de Red "
 "Hat Subscription Management. Si no lo desea, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" para bloquear este comportamiento."
 
