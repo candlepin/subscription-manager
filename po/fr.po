@@ -7,13 +7,14 @@
 # Ludek Janda <ljanda@redhat.com>, 2021.
 # John Sefler <jsefler@redhat.com>, 2021.
 # Sundeep Anand <suanand@redhat.com>, 2021.
+# Julien Humbert <julroy67@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-15 10:29+0100\n"
-"PO-Revision-Date: 2021-12-20 06:29+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"PO-Revision-Date: 2022-01-13 10:16+0000\n"
+"Last-Translator: Julien Humbert <julroy67@gmail.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/fr/>\n"
 "Language: fr\n"
@@ -21,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.10\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -1172,8 +1173,7 @@ msgstr "écraser les fichiers qui pourraient exister"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rct/manifest_commands.py:325
-#, fuzzy, python-brace-format
-#| msgid "File {filename} exists. Use -f to force overwriting the file."
+#, python-brace-format
 msgid "File \"{filename}\" exists. Use -f to force overwriting the file."
 msgstr ""
 "Le fichier « {filename} » existe. Veuillez utiliser -f pour forcer "
