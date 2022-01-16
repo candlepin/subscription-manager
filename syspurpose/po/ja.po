@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-13 14:02-0500\n"
+"POT-Creation-Date: 2021-06-30 02:22-0400\n"
 "PO-Revision-Date: 2021-09-01 14:04+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
@@ -23,7 +23,8 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
-"警告: \"{download_value}\" の {attr} は最近、エンタイトルメントサーバー管理者によってこのシステムに設定されました。\n"
+"警告: \"{download_value}\" の {attr} は最近、エンタイトルメントサーバー管理者"
+"によってこのシステムに設定されました。\n"
 "{advice}"
 
 #: src/syspurpose/cli.py:31
@@ -32,13 +33,15 @@ msgid "If you'd like to overwrite the server side change please run: {command}"
 msgstr "サーバー側の変更を上書きする場合は、以下を実行します: {command}"
 
 #: src/syspurpose/cli.py:47
-#, python-brace-format
-msgid "Added {value} to {prop_name}."
+#, fuzzy, python-brace-format
+#| msgid "Added {value} to {prop_name}."
+msgid "Added \"{value}\" to {prop_name}."
 msgstr "{value} を {prop_name} に追加しました。"
 
 #: src/syspurpose/cli.py:50
-#, python-brace-format
-msgid "Not adding value {value} to {prop_name}; it already exists."
+#, fuzzy, python-brace-format
+#| msgid "Not adding value {value} to {prop_name}; it already exists."
+msgid "Not adding value \"{value}\" to {prop_name}; it already exists."
 msgstr "値 {value} を {prop_name} に追加しません。すでに存在します。"
 
 #: src/syspurpose/cli.py:56 src/syspurpose/cli.py:85
@@ -54,7 +57,8 @@ msgstr "\"{val}\" を {name} から削除しました。"
 #: src/syspurpose/cli.py:81
 #, python-brace-format
 msgid "Not removing value \"{val}\" from {name}; it was not there."
-msgstr "値 \"{val}\" を {name} から削除しません。その値はそこにありませんでした。"
+msgstr ""
+"値 \"{val}\" を {name} から削除しません。その値はそこにありませんでした。"
 
 #: src/syspurpose/cli.py:108
 #, python-brace-format
@@ -143,9 +147,13 @@ msgid "Show the current system syspurpose"
 msgstr "現行システムの syspurpose を表示"
 
 #: src/syspurpose/cli.py:348
+#, fuzzy
+#| msgid ""
+#| "WARNING: Setting syspurpose in containers has no effect.Please run "
+#| "syspurpose on the host.\n"
 msgid ""
-"WARNING: Setting syspurpose in containers has no effect.Please run "
-"syspurpose on the host.\n"
+"WARNING: Setting syspurpose in containers has no effect.\n"
+"Please run syspurpose on the host.\n"
 msgstr ""
 "警告: syspurpose をコンテナーに設定しても効果がありません。syspurpose をホス"
 "ト上で実行してください。\n"
@@ -155,11 +163,13 @@ msgid ""
 "Warning: Unable to sync system purpose with subscription management server: "
 "subscription_manager module is not available."
 msgstr ""
-"警告: syspurpose をサブスクリプション管理サーバーと同期できません: subscription_manager モジュールを利用できません。"
+"警告: syspurpose をサブスクリプション管理サーバーと同期できません: "
+"subscription_manager モジュールを利用できません。"
 
 #: src/syspurpose/files.py:106
 msgid "Error: Malformed data in file {}; please review and correct."
-msgstr "エラー: ファイル {} に不正形式のデータがあります; 確認して修正してください。"
+msgstr ""
+"エラー: ファイル {} に不正形式のデータがあります; 確認して修正してください。"
 
 #: src/syspurpose/files.py:112
 msgid ""
@@ -174,7 +184,9 @@ msgstr ""
 msgid ""
 "Warning: Provided value \"{val}\" is not included in the list of valid "
 "values for attribute {attr}:"
-msgstr "警告: 指定された値 \"{val}\" は、属性 {attr} の有効な値のリストに含まれていません:"
+msgstr ""
+"警告: 指定された値 \"{val}\" は、属性 {attr} の有効な値のリストに含まれていま"
+"せん:"
 
 #: src/syspurpose/files.py:438
 #, python-brace-format

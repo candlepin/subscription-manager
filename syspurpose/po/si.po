@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-04 14:55-0500\n"
+"POT-Creation-Date: 2021-06-30 02:22-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -30,12 +30,12 @@ msgstr ""
 
 #: src/syspurpose/cli.py:47
 #, python-brace-format
-msgid "Added {value} to {prop_name}."
+msgid "Added \"{value}\" to {prop_name}."
 msgstr ""
 
 #: src/syspurpose/cli.py:50
 #, python-brace-format
-msgid "Not adding value {value} to {prop_name}; it already exists."
+msgid "Not adding value \"{value}\" to {prop_name}; it already exists."
 msgstr ""
 
 #: src/syspurpose/cli.py:56 src/syspurpose/cli.py:85
@@ -141,8 +141,8 @@ msgstr ""
 
 #: src/syspurpose/cli.py:348
 msgid ""
-"WARNING: Setting syspurpose in containers has no effect.Please run "
-"syspurpose on the host.\n"
+"WARNING: Setting syspurpose in containers has no effect.\n"
+"Please run syspurpose on the host.\n"
 msgstr ""
 
 #: src/syspurpose/cli.py:360

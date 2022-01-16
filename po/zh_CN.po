@@ -4599,7 +4599,9 @@ msgid ""
 "Warning: This organization does not have any subscriptions that provide a "
 "system purpose \"{attr}\".  This setting will not influence auto-attaching "
 "subscriptions."
-msgstr "警告：这个机构没有提供系统目的为 \"{attr}\" 的订阅。这个设置不会影响到自动附加订阅。"
+msgstr ""
+"警告：这个机构没有提供系统目的为 \"{attr}\" 的订阅。这个设置不会影响到自动附"
+"加订阅。"
 
 #: src/subscription_manager/managercli.py:782
 #, python-brace-format
@@ -5690,7 +5692,8 @@ msgstr "显示这个系统消耗的订阅"
 msgid ""
 "shows only subscriptions matching the specified service level; only used "
 "with --available and --consumed"
-msgstr "只显示与指定服务等级相匹配的订阅。只能与 --available 和 --consumed 合用"
+msgstr ""
+"只显示与指定服务等级相匹配的订阅。只能与 --available 和 --consumed 合用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:2906
@@ -6251,7 +6254,8 @@ msgstr "使用 Subscription Manager 注册时请不要执行 auto-attach 选项"
 msgid ""
 "service level to follow when attaching subscriptions, for no service level "
 "use --servicelevel=\"\""
-msgstr "附加订阅时遵守的服务等级。如果没有服务等级，请使用 --service-level=\"\""
+msgstr ""
+"附加订阅时遵守的服务等级。如果没有服务等级，请使用 --service-level=\"\""
 
 #: src/subscription_manager/migrate/migrate.py:900
 msgid "remove legacy packages"
@@ -6381,8 +6385,9 @@ msgid ""
 "Hat Subscription Management. If not desired, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
-"yum/dnf plugins: %s 会为 Red Hat Subscription Management 自动启用。如果不需要，使用 "
-"\"subscription-manager config --rhsm.auto_enable_yum_plugins=0\" 来禁用它。"
+"yum/dnf plugins: %s 会为 Red Hat Subscription Management 自动启用。如果不需"
+"要，使用 \"subscription-manager config --rhsm.auto_enable_yum_plugins=0\" 来"
+"禁用它。"
 
 #: src/subscription_manager/repolib.py:643
 msgid "Repo updates"

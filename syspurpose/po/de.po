@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-13 14:02-0500\n"
+"POT-Creation-Date: 2021-06-30 02:22-0400\n"
 "PO-Revision-Date: 2021-07-05 03:04+0000\n"
 "Last-Translator: CoconutNut <patrick.vollandt@mein-gym.de>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/"
@@ -35,13 +35,14 @@ msgstr ""
 "Folgendes aus: {command}"
 
 #: src/syspurpose/cli.py:47
-#, python-brace-format
-msgid "Added {value} to {prop_name}."
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Added {} to {}"
+msgid "Added \"{value}\" to {prop_name}."
+msgstr "Hinzugefügt {} zu {}"
 
 #: src/syspurpose/cli.py:50
 #, python-brace-format
-msgid "Not adding value {value} to {prop_name}; it already exists."
+msgid "Not adding value \"{value}\" to {prop_name}; it already exists."
 msgstr ""
 
 #: src/syspurpose/cli.py:56 src/syspurpose/cli.py:85
@@ -146,9 +147,13 @@ msgid "Show the current system syspurpose"
 msgstr "Zeigt den aktuellen Systemzweck an"
 
 #: src/syspurpose/cli.py:348
+#, fuzzy
+#| msgid ""
+#| "WARNING: Setting syspurpose in containers has no effect.Please run "
+#| "syspurpose on the host.\n"
 msgid ""
-"WARNING: Setting syspurpose in containers has no effect.Please run "
-"syspurpose on the host.\n"
+"WARNING: Setting syspurpose in containers has no effect.\n"
+"Please run syspurpose on the host.\n"
 msgstr ""
 "WARNUNG: Das Setzen von syspurpose in Containern hat keine Auswirkung, bitte "
 "führen Sie syspurpose auf dem Host aus.\n"
@@ -203,9 +208,6 @@ msgid ""
 msgstr ""
 "Datei kann nicht erstellt werden {}\n"
 "Sind Sie root?"
-
-#~ msgid "Added {} to {}"
-#~ msgstr "Hinzugefügt {} zu {}"
 
 #~ msgid "Removed {} from {}"
 #~ msgstr "{} aus {} entfernt"

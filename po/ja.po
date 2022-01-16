@@ -510,7 +510,8 @@ msgid ""
 "Couldn't get system subscription status. Please ensure subscription-manager "
 "is installed."
 msgstr ""
-"システムサブスクリプションステータスを取得できませんでした。subscription-manager がインストールされていることを確認してください。"
+"システムサブスクリプションステータスを取得できませんでした。subscription-"
+"manager がインストールされていることを確認してください。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:389
@@ -3125,8 +3126,8 @@ msgid ""
 "with Red Hat to receive software updates and other benefits. You will need "
 "the following to register:"
 msgstr ""
-"ソフトウェア更新などのサービスをご利用頂くため、お使いのシステムを Red Hat "
-"に登録する手順を案内していきます。登録するには次のものが必要となります:"
+"ソフトウェア更新などのサービスをご利用頂くため、お使いのシステムを Red Hat に"
+"登録する手順を案内していきます。登録するには次のものが必要となります:"
 
 #: src/subscription_manager/gui/data/glade/registration_info.glade:53
 #: src/subscription_manager/gui/data/ui/registration_info.ui:89
@@ -4642,7 +4643,8 @@ msgid ""
 "system purpose \"{attr}\".  This setting will not influence auto-attaching "
 "subscriptions."
 msgstr ""
-"警告: この組織には、システム目的「{attr}」を提供するサブスクリプションがありません。この設定は、自動割り当てサブスクリプションには影響しません。"
+"警告: この組織には、システム目的「{attr}」を提供するサブスクリプションがあり"
+"ません。この設定は、自動割り当てサブスクリプションには影響しません。"
 
 #: src/subscription_manager/managercli.py:782
 #, python-brace-format
@@ -4681,7 +4683,9 @@ msgstr "利用可能な {syspurpose_attr}"
 msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
-msgstr "この組織には、利用可能なサブスクリプションからシステム目的の「{syspurpose_attr}」に使用できる値がありません。"
+msgstr ""
+"この組織には、利用可能なサブスクリプションからシステム目的の"
+"「{syspurpose_attr}」に使用できる値がありません。"
 
 #: src/subscription_manager/managercli.py:903
 #, python-brace-format
@@ -4699,7 +4703,9 @@ msgstr "トークンを使用してサーバーに接続できません"
 msgid ""
 "Note: The currently configured entitlement server does not support System "
 "Purpose {attr}."
-msgstr "注: 現在せっていされているエンタイトルメントサーバーはシステムの目的 {attr} をサポートしません。"
+msgstr ""
+"注: 現在せっていされているエンタイトルメントサーバーはシステムの目的 {attr} "
+"をサポートしません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/managercli.py:988
@@ -5101,7 +5107,9 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1551
 msgid "Error: Must provide --org with activation keys."
-msgstr "エラー: --org を指定する場合は、アクティベーションキーを指定する必要があります。"
+msgstr ""
+"エラー: --org を指定する場合は、アクティベーションキーを指定する必要がありま"
+"す。"
 
 #: src/subscription_manager/managercli.py:1561
 msgid "Error: The --type option has been deprecated and may not be used."
@@ -5844,7 +5852,9 @@ msgstr ""
 msgid ""
 "show pools that are active on or after the given date; only used with --"
 "available (example: %s)"
-msgstr "特定の日付以降にアクティブなプールを表示します。--available と併用する場合のみ使用できます (例: %s)"
+msgstr ""
+"特定の日付以降にアクティブなプールを表示します。--available と併用する場合の"
+"み使用できます (例: %s)"
 
 #: src/subscription_manager/managercli.py:2932
 msgid "Error: --afterdate is only applicable with --available"
@@ -6532,8 +6542,9 @@ msgid ""
 "Hat Subscription Management. If not desired, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
-"yum/dnf プラグイン: Red Hat サブスクリプション管理に対して %s が自動的に有効になりました。自動的に有効化しない場合は"
-"、\"subscription-manager config --rhsm.auto_enable_yum_plugins=0\" で無効にします。"
+"yum/dnf プラグイン: Red Hat サブスクリプション管理に対して %s が自動的に有効"
+"になりました。自動的に有効化しない場合は、\"subscription-manager config --"
+"rhsm.auto_enable_yum_plugins=0\" で無効にします。"
 
 #: src/subscription_manager/repolib.py:643
 msgid "Repo updates"
