@@ -4,12 +4,13 @@
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # tfu <tfu@redhat.com>, 2018. #zanata
 # Sundeep Anand <suanand@redhat.com>, 2021.
+# Ludek Janda <ljanda@redhat.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-30 02:22-0400\n"
-"PO-Revision-Date: 2021-09-01 14:04+0000\n"
+"PO-Revision-Date: 2021-12-14 13:16+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-1-28-21/zh_CN/>\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.9.1\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.6/optparse.py:146
@@ -4577,7 +4578,7 @@ msgstr "错误：可以指定--username 或 --token，但不能同时指定它�
 #, python-brace-format
 msgid ""
 "Error: you must register or specify --username and --password to list {attr}"
-msgstr "错误：您必须注册或通过指定 --username 和 --password 来列出 {attr}"
+msgstr "错误：您必须注册或指定 --username 和 --password 来列出 {attr}"
 
 #. TRANSLATORS: this is used to quote a string
 #: src/subscription_manager/managercli.py:758
@@ -4699,7 +4700,7 @@ msgstr "机构： "
 #: src/subscription_manager/managercli.py:1061
 msgid ""
 "Remove all local system and subscription data without affecting the server"
-msgstr "删除所有本地系统和订阅数据（不会影响到服务器）"
+msgstr "删除所有本地系统和订阅数据，而不会影响到服务器"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1067

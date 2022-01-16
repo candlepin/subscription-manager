@@ -1,11 +1,12 @@
 # croe <croe@redhat.com>, 2018. #zanata
 # Sundeep Anand <suanand@redhat.com>, 2021.
+# Ludek Janda <ljanda@redhat.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-30 02:22-0400\n"
-"PO-Revision-Date: 2021-08-27 12:04+0000\n"
+"PO-Revision-Date: 2021-12-14 13:16+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/syspurpose-1-28-21/fr/>\n"
@@ -14,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.9.1\n"
 
 #: src/syspurpose/cli.py:29
 #, python-brace-format
@@ -35,16 +36,14 @@ msgstr ""
 "{command}"
 
 #: src/syspurpose/cli.py:47
-#, fuzzy, python-brace-format
-#| msgid "Added {value} to {prop_name}."
+#, python-brace-format
 msgid "Added \"{value}\" to {prop_name}."
-msgstr "{value} ajouté à {prop_name}."
+msgstr "Ajout de «{value} » à {prop_name}."
 
 #: src/syspurpose/cli.py:50
-#, fuzzy, python-brace-format
-#| msgid "Not adding value {value} to {prop_name}; it already exists."
+#, python-brace-format
 msgid "Not adding value \"{value}\" to {prop_name}; it already exists."
-msgstr "Ne pas ajouter {value} à {prop_name} ; il existe déjà."
+msgstr "Ne pas ajouter la valeur «{value} » à {prop_name} ; elle existe déjà."
 
 #: src/syspurpose/cli.py:56 src/syspurpose/cli.py:85
 #, python-brace-format
@@ -148,16 +147,13 @@ msgid "Show the current system syspurpose"
 msgstr "Afficher syspurpose du système actuel"
 
 #: src/syspurpose/cli.py:348
-#, fuzzy
-#| msgid ""
-#| "WARNING: Setting syspurpose in containers has no effect.Please run "
-#| "syspurpose on the host.\n"
 msgid ""
 "WARNING: Setting syspurpose in containers has no effect.\n"
 "Please run syspurpose on the host.\n"
 msgstr ""
-"ATTENTION : l'installation de syspurpose dans les conteneurs n'a aucun "
-"effet. Veuillez exécuter syspurpose sur l'hôte.\n"
+"AVERTISSEMENT : La définition de syspurpose dans les conteneurs n'a aucun "
+"effet. \n"
+"Exécutez syspurpose sur l'hôte.\n"
 
 #: src/syspurpose/cli.py:360
 msgid ""
