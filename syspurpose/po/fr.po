@@ -1,12 +1,13 @@
 # Ondřej Januš <ojanus@redhat.com>, 2019. #zanata
 # Ludek Janda <ljanda@redhat.com>, 2020. #zanata, 2021.
+# Jérôme Fenal <jfenal@free.fr>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-29 13:05-0400\n"
-"PO-Revision-Date: 2021-08-27 12:04+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"PO-Revision-Date: 2022-01-16 20:19+0000\n"
+"Last-Translator: Jérôme Fenal <jfenal@free.fr>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/syspurpose-1-27/fr/>\n"
 "Language: fr\n"
@@ -14,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: src/syspurpose/cli.py:29
 #, python-brace-format
@@ -32,8 +33,8 @@ msgstr ""
 msgid ""
 "If you'd like to overwrite the server side change please run: {command}"
 msgstr ""
-"Si vous souhaitez écraser le changement côté du serveur, veuillez exécuter : "
-"{command}"
+"Si vous souhaitez remplacer des données au niveau serveur, veuillez exécuter "
+": {command}"
 
 #: src/syspurpose/cli.py:47
 #, python-brace-format
@@ -116,11 +117,11 @@ msgstr "Supprimer le rôle défini"
 
 #: src/syspurpose/cli.py:276
 msgid "Add addons to the system syspurpose"
-msgstr "Ajout d'extensions au syspurpose système"
+msgstr "Ajoute les extensions au syspurpose du système"
 
 #: src/syspurpose/cli.py:284
 msgid "Remove addons from the system syspurpose"
-msgstr "Ajout d'extensions en provenance du syspurpose système"
+msgstr "Supprime les extensions en provenance du syspurpose système"
 
 #: src/syspurpose/cli.py:291
 msgid "Clear set addons"
@@ -159,8 +160,8 @@ msgid ""
 "Warning: Unable to sync system purpose with subscription management server: "
 "subscription_manager module is not available."
 msgstr ""
-"Avertissement : impossible de synchroniser le syspurpose système avec le "
-"serveur de gestion des abonnements : le module subscription_manager n'est "
+"Avertissement : impossible de synchroniser le syspurpose du système avec le "
+"serveur de gestion des abonnements : le module subscription_manager n'est "
 "pas disponible."
 
 #: src/syspurpose/files.py:88
