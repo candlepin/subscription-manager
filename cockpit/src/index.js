@@ -43,7 +43,7 @@ let registerDialogDetails = {
     proxy_server: '',
     proxy_user: '',
     proxy_password: '',
-    insights: false
+    insights: true
 };
 
 function dismissStatusError() {
@@ -76,7 +76,7 @@ function openRegisterDialog() {
             password: '',
             activation_keys: '',
             org: '',
-            insights: false,
+            insights: true,
             insights_available: subscriptionsClient.insightsAvailable,
             insights_detected: false,
             register_method: 'account',
