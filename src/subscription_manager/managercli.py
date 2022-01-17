@@ -1262,11 +1262,6 @@ class RefreshCommand(CliCommand):
     def _do_command(self):
         self.assert_should_be_registered()
         try:
-            # remove content_access cache, ensuring we get it fresh
-            content_access = inj.require(inj.CONTENT_ACCESS_CACHE)
-            if content_access.exists():
-                content_access.remove()
-
             # Also remove the content access mode cache to be sure we display
             # SCA or regular mode correctly
             content_access_mode = inj.require(inj.CONTENT_ACCESS_MODE_CACHE)
